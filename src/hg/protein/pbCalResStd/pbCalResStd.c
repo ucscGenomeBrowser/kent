@@ -1,5 +1,8 @@
 /* pbCalResStd- Calculate the avg frequency and standard deviation of each AA residue for the proteins in a specific genome*/
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #define MAXN 1000000
 #define MAXRES 23
 

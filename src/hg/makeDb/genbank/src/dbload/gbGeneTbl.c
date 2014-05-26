@@ -1,5 +1,8 @@
 /* gbGeneTbl - loading of genePred tables derived from alignment tables.
  * This defines per-table objects that handling loading and updating. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "gbGeneTbl.h"
 #include "gbAlignTbl.h"

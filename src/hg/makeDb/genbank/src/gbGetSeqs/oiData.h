@@ -1,4 +1,7 @@
 /* Get mRNA/EST orientation information */
+
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef OIDATA_H
 #define OIDATA_H
 

@@ -2,6 +2,9 @@
  * generated cartDb.h and cartDb.sql.  This module links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 
 /*
  *  TODO REMOVE AFTER AUTOUPGRADE COMPLETE: (added 2014-03-09)

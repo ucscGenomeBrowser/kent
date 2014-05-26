@@ -2,6 +2,9 @@
  * The id that almost every routine uses is the image.id
  * field. */
 
+/* Copyright (C) 2006 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef VISIGENE_H
 #define VISIGENE_H
 

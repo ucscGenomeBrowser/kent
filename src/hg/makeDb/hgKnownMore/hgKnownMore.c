@@ -1,4 +1,7 @@
 /* hgKnownMore - Create the knownMore table from a variety of sources.. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "knownMore.h"
 #include "linefile.h"

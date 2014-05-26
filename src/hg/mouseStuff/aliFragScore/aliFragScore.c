@@ -1,5 +1,8 @@
 /* aliFragScore - For all possible dna fragments up to n long, figure out score of all 
  * places they hit in target.. */
+
+/* Copyright (C) 2005 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

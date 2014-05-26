@@ -1,6 +1,9 @@
 /* dnaMarkov - stuff to build 1st, 2nd, 3rd, and coding
  * 3rd degree Markov models for DNA. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "dnautil.h"
 #include "dnaseq.h"

@@ -1,5 +1,8 @@
 /* Download the coordinates for a range of human coordinates of
    form chrN:1-100. Designed for getting probe values for exons. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hdb.h"
 #include "jksql.h"

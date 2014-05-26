@@ -1,5 +1,8 @@
 /* txCdsCluster - Cluster transcripts purely in the CDS regions, only putting things together 
  * if they share same frame as well as a genomic region. */
+
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "memalloc.h"
 #include "linefile.h"

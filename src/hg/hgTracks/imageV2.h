@@ -1,5 +1,8 @@
 // imageV2 - API for creating the image V2 features.
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef IMAGEV2_H
 #define IMAGEV2_H
 

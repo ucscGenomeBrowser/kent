@@ -1,6 +1,9 @@
 /* wigBedToBinary - Convert a BED file, formatted <chrom><start><end><value> to
  *                      wiggle binary format */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 
 #include "common.h"
 #include	"options.h"

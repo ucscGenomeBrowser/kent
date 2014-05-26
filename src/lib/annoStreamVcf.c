@@ -1,5 +1,8 @@
 /* annoStreamVcf -- subclass of annoStreamer for VCF files */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "annoStreamVcf.h"
 #include "twoBit.h"
 #include "vcf.h"

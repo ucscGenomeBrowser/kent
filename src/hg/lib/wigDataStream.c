@@ -1,6 +1,9 @@
 /*	wigDataStream - an object to access wiggle data values from
  *	either a DB access or from a .wig text file (==custom track)
  */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "memalloc.h"
 #include "wiggle.h"

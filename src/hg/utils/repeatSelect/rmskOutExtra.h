@@ -1,5 +1,8 @@
 /* This keeps a rmskOut plus a score. Oh isn't it grand? */
 
+/* Copyright (C) 2006 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef RMSKOUTEXTRA_H
 #define RMSKOUTEXTRA_H
 

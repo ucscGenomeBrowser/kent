@@ -1,5 +1,8 @@
 /* Various genbank related constants and some functions that operate on them.
  * these are uses by many modules and don't really make sense anywhere. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef GBDEFS_H
 #define GBDEFS_H
 

@@ -1,5 +1,8 @@
 /* tdbRewriteReduceReplaces - Rewrite trackDb system to reduce the amount of replacement records and increase the number of override records.. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

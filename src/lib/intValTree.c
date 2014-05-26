@@ -1,6 +1,9 @@
 /* intValTree - a binary tree with integer keys and void values.  This is based on the 
  * red/black self-balancing binary tree algorithm in the rbTree module. */
 
+/* Copyright (C) 2008 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "localmem.h"
 #include "rbTree.h"

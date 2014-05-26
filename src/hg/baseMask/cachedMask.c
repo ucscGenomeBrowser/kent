@@ -1,5 +1,8 @@
 /* cachedMask - cache and then process baseMasks - 'and' or 'or' two baseMasks together */
 
+/* Copyright (C) 2008 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>

@@ -2,6 +2,9 @@
  * generated ld2.c and ld2.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef LD2_H
 #define LD2_H
 

@@ -1,5 +1,8 @@
 /* Load the status table and determine the state of each entry.  Also,
  * various operators base on state. */
+
+/* Copyright (C) 2005 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef GBBUILDSTATE_H
 
 struct sqlConnection;

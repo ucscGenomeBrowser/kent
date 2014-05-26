@@ -1,3 +1,6 @@
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 
 /* mysqlSecurityCheck - The primary reason this utility has been created is to verify that
  * access by CGI database connections to the mysql database is not allowed.

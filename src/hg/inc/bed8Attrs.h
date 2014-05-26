@@ -2,6 +2,9 @@
  * generated bed8Attrs.c and bed8Attrs.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef BED8ATTRS_H
 #define BED8ATTRS_H
 

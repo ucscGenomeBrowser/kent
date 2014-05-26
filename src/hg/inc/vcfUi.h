@@ -1,5 +1,8 @@
 /* vcfUi - Variant Call Format user interface controls that are shared
  * between more than one CGI. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef VCFUI_H
 #define VCFUI_H
 

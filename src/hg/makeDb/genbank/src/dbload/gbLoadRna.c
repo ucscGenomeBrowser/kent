@@ -3,6 +3,9 @@
  * This loads all partitions in one call to speed up initial load.  by loading
  * gbSeq, etc in a single load data.
  */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "options.h"
 #include "hdb.h"

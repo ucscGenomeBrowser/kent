@@ -1,4 +1,7 @@
 /* bamToFastq - converts a BAM file to Fastq. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

@@ -2,6 +2,9 @@
  * memory.   Just a light wrapper around an array of strings. 
  * Also some routines to convert slLines to tabRows. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "tabRow.h"
 

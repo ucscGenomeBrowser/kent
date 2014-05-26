@@ -2,6 +2,9 @@
  * generated gencodeIntron.c and gencodeIntron.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef GENCODEINTRON_H
 #define GENCODEINTRON_H
 

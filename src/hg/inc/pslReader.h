@@ -1,4 +1,7 @@
 /* pslReader - object to read psl objects from database tables or files.  */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef PSLREADER_H
 #define PSLREADER_H
 

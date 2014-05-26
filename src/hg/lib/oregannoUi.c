@@ -1,4 +1,7 @@
 /* oregannoUi.c - char arrays for oreganno UI features */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "oregannoUi.h"
 #include "common.h"
 

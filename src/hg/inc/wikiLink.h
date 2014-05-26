@@ -1,5 +1,8 @@
 /* wikiLink - interoperate with a wiki site (share user identities). */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef WIKILINK_H
 #define WIKILINK_H
 

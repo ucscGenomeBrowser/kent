@@ -1,5 +1,8 @@
 /* cds.h - code for coloring of bases, codons, or alignment differences. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef CDS_H
 #define CDS_H
 

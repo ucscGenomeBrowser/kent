@@ -1,6 +1,9 @@
 /* printCaption - query database for info and print it out
  * in a caption. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "dystring.h"

@@ -3,6 +3,9 @@
 /* use Illumina data if not found */
 /* This program is adopted from Heather's illuminaLookup2.c, with substantial simplyfication */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "hdb.h"

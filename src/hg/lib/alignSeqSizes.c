@@ -1,5 +1,8 @@
 /* alignSeqSizes - Parse and store query and target sequence sizes for use
  * when converting or parsing alignments */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "alignSeqSizes.h"
 #include "linefile.h"

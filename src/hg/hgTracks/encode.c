@@ -1,5 +1,8 @@
 /* encode.c - hgTracks routines that are specific to the ENCODE project */
 
+/* Copyright (C) 2012 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"

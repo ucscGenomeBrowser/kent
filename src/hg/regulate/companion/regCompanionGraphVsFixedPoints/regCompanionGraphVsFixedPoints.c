@@ -1,5 +1,8 @@
 /* regCompanionGraphVsFixedPoints - Given a bunch of fixed point in genome as input 
  * (promoters perhaps) help make graphs of many features in bins relative to that point. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

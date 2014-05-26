@@ -1,6 +1,9 @@
 /* txCommon - contains routines shared by various programs in
  * the txXxx family (which is used to make the UCSC gene set */
 
+/* Copyright (C) 2008 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef TXCOMMON_H
 #define TXCOMMON_H
 

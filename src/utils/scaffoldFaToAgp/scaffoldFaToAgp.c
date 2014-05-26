@@ -1,3 +1,6 @@
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* scaffoldFaToAgp - read a file containing FA scaffold records and generate */
 /*                   an AGP file, gap file and a lift file */
 /* This utility is used when working with genomes that consist

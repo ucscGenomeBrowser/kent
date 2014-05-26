@@ -4,6 +4,9 @@
  * The unaligned exon sequence are shown in red. Intron sequences are shown in black.
  * It is modified from pslShow.c */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 
 #include "common.h"
 #include "dnaseq.h"

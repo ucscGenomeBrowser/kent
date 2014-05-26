@@ -1,5 +1,8 @@
 /* Object to store metadata from database for use in verification, also
  * a few shared functions. */
+
+/* Copyright (C) 2006 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef METADATA_H
 #define METADATA_H
 

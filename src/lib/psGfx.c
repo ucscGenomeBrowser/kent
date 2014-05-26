@@ -3,6 +3,9 @@
  * a postScript file.  Perhaps the most important thing it
  * does is convert 0,0 from being at the bottom left to
  * being at the top left. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "psPoly.h"
 #include "psGfx.h"

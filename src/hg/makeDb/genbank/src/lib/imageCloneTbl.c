@@ -1,4 +1,7 @@
 /* Code to create and access the imageClone table */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "imageCloneTbl.h"
 #include "sqlUpdater.h"
 #include "jksql.h"

@@ -1,5 +1,8 @@
 /* mafRanges - Extract ranges of target (or query) coverage from maf and 
  * output as BED 3 (intended for further processing by featureBits). */
+
+/* Copyright (C) 2004 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

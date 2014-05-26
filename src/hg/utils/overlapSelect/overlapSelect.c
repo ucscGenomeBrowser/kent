@@ -1,5 +1,8 @@
 /* overlapSelect - select records based on overlap of chromosome ranges */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "selectTable.h"
 #include "coordCols.h"

@@ -1,4 +1,7 @@
 /* snp125Ui.c - enums & char arrays for snp UI features and shared util code */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "snp125Ui.h"
 #include "snp125.h"
 #include "common.h"

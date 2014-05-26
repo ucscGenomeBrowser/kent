@@ -8,6 +8,9 @@
  * as the most significant part of a two-part key, and the base position as the least 
  * significant part of the key. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "localmem.h"
 #include "sig.h"

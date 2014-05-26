@@ -1,5 +1,8 @@
 /* annoOption -- optionSpec-style param plus its value */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "annoOption.h"
 
 struct annoOption *annoOptionCloneList(struct annoOption *list)

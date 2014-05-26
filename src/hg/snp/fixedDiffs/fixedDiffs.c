@@ -1,3 +1,6 @@
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 
 /* fixedDiffs - look for bases that are different between human and neanderthal, and not a known SNP in human. */
 #include "common.h"

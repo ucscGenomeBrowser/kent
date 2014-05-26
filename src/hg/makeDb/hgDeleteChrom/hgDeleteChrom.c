@@ -1,5 +1,8 @@
 /* hgDeleteChrom - output SQL commands to yank a chromosome from chromInfo and
    all positional tables.  Handy for those assemblies still in flux... */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "portable.h"
 #include "dystring.h"

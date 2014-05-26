@@ -1,4 +1,7 @@
 /* analyzeCpG - cluster CpG regions from an input bed file and perform some analysis on them. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

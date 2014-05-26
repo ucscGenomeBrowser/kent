@@ -1,5 +1,8 @@
 /* soTerm.h --- a subset of locally used Sequence Ontology terms */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 // To explore the full tree of SO terms and their relationships, try the MISO browser:
 // http://www.sequenceontology.org/browser/obob.cgi
 

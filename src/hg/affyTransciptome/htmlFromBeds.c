@@ -1,4 +1,7 @@
 /* htmlFromBeds - htmlFromBeds - This program creates a web page with a series of hyperlinks to the beds in the bed track. This is useful when a bed track is sparse and you want to just zoom to items instead of scrolling around.\n. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

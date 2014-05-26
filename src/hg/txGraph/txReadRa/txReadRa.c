@@ -1,4 +1,7 @@
 /* txReadRa - Read ra files from genbank and parse out relevant info into some tab-separated files.. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

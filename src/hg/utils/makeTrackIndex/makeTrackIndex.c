@@ -1,5 +1,8 @@
 /* Make a track ixIxx file for the given to be used in the track search tool. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "options.h"
 #include "hdb.h"

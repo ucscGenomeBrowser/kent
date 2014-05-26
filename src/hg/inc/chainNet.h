@@ -1,6 +1,9 @@
 /* chainNet - read/write and free nets which are constructed
  * of chains of genomic alignments. */
 
+/* Copyright (C) 2003 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef CHAINNET_H
 #define CHAINNET_H
 

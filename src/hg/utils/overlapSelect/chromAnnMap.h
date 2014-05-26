@@ -1,4 +1,7 @@
 /* Object the maps ranges to chromAnn objects */
+
+/* Copyright (C) 2010 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef CHROMANNMAP_H
 #define CHROMANNMAP_H
 struct chromAnnMap;

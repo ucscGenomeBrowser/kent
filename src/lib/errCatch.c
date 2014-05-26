@@ -1,3 +1,6 @@
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* errCatch - help catch errors so that errAborts aren't
  * fatal, and warn's don't necessarily get printed immediately. 
  * Note that error conditions caught this way will tend to

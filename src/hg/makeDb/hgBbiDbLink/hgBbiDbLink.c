@@ -1,4 +1,7 @@
 /* hgBbiDbLink - Add table that just contains a pointer to a bbiFile to database.  This program is used to add bigWigs and bigBeds.. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

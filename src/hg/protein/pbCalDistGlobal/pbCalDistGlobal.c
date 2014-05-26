@@ -1,4 +1,7 @@
 /* pbCalDistGlobal - Create tab delimited data files to be used by Proteome Browser stamps */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hash.h"
 #include "hCommon.h"
