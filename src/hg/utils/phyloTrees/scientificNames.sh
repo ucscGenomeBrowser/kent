@@ -52,6 +52,7 @@ s/octDeg1/Octodon_degus/;
 s/odoRosDiv1/Odobenus_rosmarus_divergens/;
 s/lepWed1/Leptonychotes_weddellii/;
 s/orcOrc1/Orcinus_orca/;
+s/phyCat1/Physeter_catodon/;
 s/balAcu1/Balaenoptera acutorostrata scammoni/;
 s/oryAfe1/Orycteropus_afer/;
 s/oviAri3/Ovis_aries/;
