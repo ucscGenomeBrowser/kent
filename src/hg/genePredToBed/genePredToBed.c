@@ -39,6 +39,12 @@ for (gp = gpList; gp != NULL; gp = gp->next)
     fprintf(f, "%s\t", gp->name);
     fprintf(f, "%u\t", 0);
     fprintf(f, "%s\t", gp->strand);
+    
+    // genePred sets cdsStart==cdsEnd==txEnd if there is no CDS
+    // bed sets thickStart==thickEnd==txStart if there is no CDS (see https://www.biostars.org/p/73452/)
+    if (gp->cdsStart==gp->cdsEnd && gp->cdsEnd==gp->txEnd)
+        gp->cdsStart = gp->cdsEnd = gp->txStart;
+
     fprintf(f, "%u\t", gp->cdsStart);
     fprintf(f, "%u\t", gp->cdsEnd);
     fprintf(f, "%u\t", 0);
