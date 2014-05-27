@@ -1,0 +1,176 @@
+################################################################
+# panPan1 - Bonobo - Pan paniscus - primate - primate - 245
+################################################################
+track chainNetPanPan1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 215.30
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+matrixHeader A, C, G, T
+otherDb panPan1
+chainMinScore 5000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetPanPan1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetPanPan1
+    spectrum on
+
+        track chainPanPan1
+        release alpha
+        parent chainNetPanPan1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain panPan1
+        html chainNet
+
+    track chainNetPanPan1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetPanPan1
+
+        track netPanPan1
+        release alpha
+        parent chainNetPanPan1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign panPan1 chainPanPan1
+        html chainNet
+
+################################################################
+# macFas5 - Crab-eating macaque - Macaca fascicularis - primate - primate - 380
+################################################################
+track chainNetMacFas5
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 245.30
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+matrixHeader A, C, G, T
+otherDb macFas5
+chainMinScore 5000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetMacFas5Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetMacFas5
+    spectrum on
+
+        track chainMacFas5
+        release alpha
+        parent chainNetMacFas5Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain macFas5
+        html chainNet
+
+    track chainNetMacFas5Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetMacFas5
+
+        track netMacFas5
+        release alpha
+        parent chainNetMacFas5Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign macFas5 chainMacFas5
+        html chainNet
+
+################################################################
+# tupChi1 - Chinese tree shrew - Tupaia chinensis - primate - scandentia - 510
+################################################################
+track chainNetTupChi1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 305.30
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb tupChi1
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetTupChi1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetTupChi1
+    spectrum on
+
+        track chainTupChi1
+        release alpha
+        parent chainNetTupChi1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain tupChi1
+        html chainNet
+
+    track chainNetTupChi1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetTupChi1
+
+        track netTupChi1
+        release alpha
+        parent chainNetTupChi1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign tupChi1 chainTupChi1
+        html chainNet
