@@ -58,6 +58,65 @@ html chainNet
         html chainNet
 
 ################################################################
+# chlSab1 - Green monkey - Chlorocebus sabaeus - primate - primate - 340
+################################################################
+track chainNetChlSab1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 237.80
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+matrixHeader A, C, G, T
+otherDb chlSab1
+chainMinScore 5000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetChlSab1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetChlSab1
+    spectrum on
+
+        track chainChlSab1
+        release alpha
+        parent chainNetChlSab1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain chlSab1
+        html chainNet
+
+    track chainNetChlSab1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetChlSab1
+
+        track netChlSab1
+        release alpha
+        parent chainNetChlSab1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign chlSab1 chainChlSab1
+        html chainNet
+
+################################################################
 # macFas5 - Crab-eating macaque - Macaca fascicularis - primate - primate - 380
 ################################################################
 track chainNetMacFas5
