@@ -1,3 +1,6 @@
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* regCompanionPickEnhancers - Pick enhancer regions by a number of criteria. 
  *  o Start with the top 50,000 DNAse peaks for the cell line.
  *  o No overlap with CTCF peak.

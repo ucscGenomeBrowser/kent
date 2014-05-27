@@ -2,6 +2,9 @@
  * generated cgh.h and cgh.sql.  This module links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "jksql.h"

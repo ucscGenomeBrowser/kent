@@ -1,4 +1,7 @@
 /* Parse genbank metadata from RA files. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "gbMDParse.h"
 #include "common.h"
 #include "hash.h"

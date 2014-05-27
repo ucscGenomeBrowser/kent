@@ -1,5 +1,8 @@
 /* baseMask - process baseMasks - 'and' or 'or' two baseMasks together */
 
+/* Copyright (C) 2008 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "rangeTreeFile.h"
 #include "genomeRangeTreeFile.h"

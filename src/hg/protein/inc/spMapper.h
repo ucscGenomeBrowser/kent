@@ -1,6 +1,9 @@
 /* spMapper - map swissprot accessions to KnownGene ids.  Intended to use in
  * building gene sorter tables.  Can optionally map uniref entry ids.  Used
  * to collect results so that duplication of entries can be avoided.  */
+
+/* Copyright (C) 2005 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef SPMAPPER_H
 #define SPMAPPER_H
 

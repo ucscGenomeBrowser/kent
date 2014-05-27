@@ -3,6 +3,9 @@
  *   - tracking offsets of records in files
  *   - optimized selective copying of records.
  */
+
+/* Copyright (C) 2005 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef GBFA_H
 #define GBFA_H
 

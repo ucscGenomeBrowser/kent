@@ -1,4 +1,7 @@
 /* geneOverlap - find genes were exons are shared. */
+
+/* Copyright (C) 2003 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "localmem.h"

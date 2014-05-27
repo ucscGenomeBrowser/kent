@@ -1,6 +1,9 @@
 /* read_malign.h - header file for shared procedures to handle multiple
 *  alignments */
 
+/* Copyright (C) 2003 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* Return a multiple alignment contained in a file.  The first line contains
 *  two integers, namely the number of rows (nrow) followed by the number of
 *  columns (ncol).  The next nrow lines contain the names of the sequences.

@@ -1,4 +1,7 @@
 /* Get mRNA/EST meta data in ra format */
+
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "raData.h"
 #include "dystring.h"

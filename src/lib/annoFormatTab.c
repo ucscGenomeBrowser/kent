@@ -1,5 +1,8 @@
 /* annoFormatTab -- collect fields from all inputs and print them out, tab-separated. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "annoFormatTab.h"
 #include "annoGratorQuery.h"
 #include "dystring.h"

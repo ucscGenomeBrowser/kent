@@ -1,5 +1,8 @@
 /* Objects to find genePreds given similarity in genome bases annotated.  This
  * is used to relate genes between two gene sets. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "geneSimilarities.h"
 #include "genePred.h"

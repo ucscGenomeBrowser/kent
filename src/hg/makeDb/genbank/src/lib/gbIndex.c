@@ -7,6 +7,10 @@
  *  - we don't use autoSql because it doesn't support long long needed
  *    for file offsets or localmem allocation.
  */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "gbIndex.h"
 #include "gbEntry.h"
 #include "gbRelease.h"

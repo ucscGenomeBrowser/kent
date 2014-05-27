@@ -1,3 +1,6 @@
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* trackHub - supports collections of tracks hosted on a remote site.
  * The basic layout of a data hub is:
  *        hub.ra - contains information about the hub itself
@@ -92,7 +95,7 @@ char *trackHubRelativeUrl(char *hubUrl, char *path);
 void trackHubGenomeFree(struct trackHubGenome **pGenome);
 /* Free up genome info. */
 
-void trackHubGenomeFreeList(struct trackHubGenome **pList);
+void trackHubGenomeFreeList(struct trackHub *hub);
 /* Free a list of dynamically allocated trackHubGenome's. */
 
 int trackHubCheck(char *hubUrl, struct dyString *errors, 

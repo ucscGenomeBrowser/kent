@@ -1,6 +1,9 @@
 /* edwReallyRemoveFiles - Remove files from data warehouse.  Generally you want to depricate 
  * them instead. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

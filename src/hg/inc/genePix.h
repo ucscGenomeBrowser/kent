@@ -1,5 +1,8 @@
 /* genePix.h - Interface to genePix database. */
 
+/* Copyright (C) 2005 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef GENEPIX_H
 #define GENEPIX_H
 

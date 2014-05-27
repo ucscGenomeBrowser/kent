@@ -2,6 +2,9 @@
  * This can be useful if the psl went through pslMap, or if you've added 
  * lower-case repeat masking after the fact. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

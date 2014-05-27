@@ -2,6 +2,9 @@
  * Cricket caught this because a bunch of them ended up with the same md5 sum.  This program 
  * regenerates them all. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

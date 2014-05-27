@@ -1,6 +1,9 @@
 /* edwBamFileFromRa - fill in a edwBamFile from a .ra file.  This file largely 
  * generated automatically with raToStructGen. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef EDWBAMFILEFROMRA_H
 
 struct raToStructReader *edwBamFileRaReader();

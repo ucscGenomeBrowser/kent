@@ -1,6 +1,9 @@
 /* gisaidTable.h - interfaces to plug columns into gisaidTable.  The must important
  * thing here is the column structure. */
 
+/* Copyright (C) 2009 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef gisaidTable_H
 #define gisaidTable_H
 

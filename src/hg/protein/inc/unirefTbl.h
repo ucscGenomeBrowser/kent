@@ -1,4 +1,7 @@
 /* unirefTbl - load and manage uniref data. */
+
+/* Copyright (C) 2005 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef UNIREFTBL_H
 #define UNIREFTBL_H
 

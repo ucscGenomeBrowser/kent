@@ -1,4 +1,7 @@
 /* option shared by all dbload modules */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef GBLOADOPTIONS_H
 #define GBLOADOPTIONS_H
 

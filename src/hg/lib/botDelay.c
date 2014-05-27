@@ -2,6 +2,9 @@
  * for a little bit if IP address looks like it is
  * being just too demanding. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "net.h"
 #include "portable.h"

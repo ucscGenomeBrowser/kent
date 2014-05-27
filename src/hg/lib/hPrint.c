@@ -1,6 +1,9 @@
 /* hPrint - turning html printing on and off, which is useful
  * when postscript and PDF images are being drawn  */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "hPrint.h"
 #include "htmshell.h"
 

@@ -2,6 +2,9 @@
  * generated snp125.c and snp125.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef SNP125_H
 #define SNP125_H
 

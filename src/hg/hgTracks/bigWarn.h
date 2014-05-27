@@ -1,5 +1,8 @@
 /* bigWarn -- shared handlers for displaying big/udc warn/error messages */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef BIGWARN_H
 #define BIGWARN_H
 

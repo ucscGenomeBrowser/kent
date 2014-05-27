@@ -1,6 +1,9 @@
 /* randFrag - Grab one or more fragments of DNA of a desired length */
 /* at random from some where in the genome. Optionally avoid N's.   */
 
+/* Copyright (C) 2006 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "options.h"

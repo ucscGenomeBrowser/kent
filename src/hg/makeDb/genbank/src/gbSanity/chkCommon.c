@@ -1,4 +1,7 @@
 /* chkCommon - common function used by various modules */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "chkCommon.h"
 

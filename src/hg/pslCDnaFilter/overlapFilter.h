@@ -1,4 +1,7 @@
 /* overlapFilter - filter overlapping alignments */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef OVERLAPFILTER_H
 #define OVERLAPFILTER_H
 

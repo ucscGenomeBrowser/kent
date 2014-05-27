@@ -1,4 +1,7 @@
 /* kgXref2 - create new Known Gene cross reference table kgXref.tab file */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"

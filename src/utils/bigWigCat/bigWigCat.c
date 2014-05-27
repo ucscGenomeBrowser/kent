@@ -1,5 +1,8 @@
 /* bigWigCat - Merge a collection of non-overlapping bigWig files 
  * directly into binary big wig format.. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "obscure.h"
 #include "linefile.h"

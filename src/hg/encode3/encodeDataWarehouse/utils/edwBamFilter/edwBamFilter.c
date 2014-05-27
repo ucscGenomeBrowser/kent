@@ -1,5 +1,8 @@
 /* edwBamFilter - Remove reads from a BAM file based on a number of criteria.. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* version history: 
  *    1 - initial release 
  */

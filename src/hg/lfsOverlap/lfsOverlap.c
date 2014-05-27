@@ -1,4 +1,7 @@
 /* lfsOverlap - remove overlapping records from lfs file keeping highest scoring one in each case.  */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "options.h"
 #include "linefile.h"

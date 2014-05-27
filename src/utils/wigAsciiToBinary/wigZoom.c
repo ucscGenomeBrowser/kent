@@ -1,3 +1,6 @@
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* wigZoom - process two column wiggle data and compress for zoom views
  *
  *	The ascii data file is simply two columns, white space separated:

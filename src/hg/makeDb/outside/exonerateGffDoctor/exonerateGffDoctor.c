@@ -1,5 +1,8 @@
 /* Make the exonerate GFF format into a genePred */
 
+/* Copyright (C) 2006 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "dystring.h"
 #include "options.h"

@@ -1,6 +1,9 @@
 /* wigCommon.h - common items to the two graphing types of tracks
  *	type wig and type bedGraph
  */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef WIGCOMMON_H
 #define WIGCOMMON_H
 

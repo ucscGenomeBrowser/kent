@@ -1,3 +1,6 @@
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef CGAPSAGEFIND_H
 #define CGAPSAGEFIND_H
 

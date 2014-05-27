@@ -1,5 +1,8 @@
 /* alignSeqSizes - Parse and store query and target sequence sizes for use
  * when converting or parsing alignments */
+
+/* Copyright (C) 2004 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef ALIGNSEQSIZES_H
 #define ALIGNSEQSIZES_H
 

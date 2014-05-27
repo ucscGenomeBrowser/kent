@@ -1,6 +1,9 @@
 /* pbCommon - contains data shared within the pb* family of programs
  * (which are used in building the Proteome Browser and data */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef PBCOMMON_H
 #define PBCOMMON_H
 

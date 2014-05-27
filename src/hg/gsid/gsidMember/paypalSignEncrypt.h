@@ -1,5 +1,8 @@
 /* paypalSignEncrypt.h - routines to sign and encrypt button data using openssl */
 
+/* Copyright (C) 2009 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef PPSIGNENCRYPT_H
 #define PPSIGNENCRYPT_H
 

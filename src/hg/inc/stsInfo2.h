@@ -2,6 +2,9 @@
  * generated stsInfo2.c and stsInfo2.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2002 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef STSINFO2_H
 #define STSINFO2_H
 

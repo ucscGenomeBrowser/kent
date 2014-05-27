@@ -2,6 +2,9 @@
 //                  Discovering and analyzing common gene haplotype alleles, but ultimately
 //                  haplotypes can represent any collection of variant alleles that are found as a
 //                  a set in on a single chromosome.
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef HAPLOTYPES_H
 #define HAPLOTYPES_H
 

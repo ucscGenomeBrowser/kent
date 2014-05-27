@@ -1,6 +1,9 @@
 /* raToStruct - stuff to help read ra files into C structures.  Works with raToStructGen
  * which makes parsers based on .as files. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"

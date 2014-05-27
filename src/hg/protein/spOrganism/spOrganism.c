@@ -1,4 +1,7 @@
 /* spOrganism - Produce a .tab file of SWISS-PROT display ID/NCBI taxonomy ID pairs */
+
+/* Copyright (C) 2009 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 
 void usage()

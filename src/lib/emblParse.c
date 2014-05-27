@@ -1,3 +1,6 @@
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* Parse EMBL formatted files. EMBL files are basically line
  * oriented.  Each line begins with a short (usually two letter)
  * type word.  Adjacent lines with the same type are generally

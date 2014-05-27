@@ -2,6 +2,9 @@
    different.  Initially designed for chr21 and chr22 which are starting
    to accumulate ticky tack changes. A fair bit of this code was stolen from
    hgLoadBed. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "agpFrag.h"
 #include "linefile.h"

@@ -1,6 +1,9 @@
 /* Handle escaping for XML files.  Deal with things like
  * &amp; and &quot. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "xmlEscape.h"

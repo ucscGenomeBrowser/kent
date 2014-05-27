@@ -1,6 +1,9 @@
 /* Microarray code common to hgc, hgTracks, and hgNear. */
 /* Also use in loaders like hgRatioMicroarray and hgMedianMicroarray. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef MICROARRAY_H
 #define MICROARRAY_H
 

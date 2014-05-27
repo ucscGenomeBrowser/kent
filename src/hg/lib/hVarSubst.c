@@ -2,6 +2,9 @@
  * labels. See trackDb/README for descriptions of values that can be
  * substitute.  This code needs to do a special handle to remain compatibility
  * with behavior of the old substitution mechanism. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "trackDb.h"
 #include "hdb.h"

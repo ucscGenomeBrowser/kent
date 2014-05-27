@@ -1,5 +1,8 @@
 /* txGeneSeparateNoncoding - Separate genes into four piles - coding, non-coding 
  * that overlap coding, antisense to coding, and independent non-coding. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
