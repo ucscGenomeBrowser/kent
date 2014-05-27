@@ -46,6 +46,7 @@ BAD_DIRS = \
 	wikiPlot
 
 # can not build this on Mac OSX - has functions not supported
+UNAME_S := $(shell uname -s) 
 ifeq ($(UNAME_S),Darwin)
   buildRefresh=
 else
