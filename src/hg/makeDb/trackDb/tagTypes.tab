@@ -336,7 +336,7 @@ snpSeqFile bed
 snpTable bed
 snpVersion bed
 sortOrder *
-sourceTable factorSource
+sourceTable factorSource bed
 spanList *
 speciesCodonDefault wigMafProt wigMaf
 speciesDefaultOff wigMaf

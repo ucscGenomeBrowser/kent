@@ -802,25 +802,44 @@ cat  << 'EOF' > link.csh
     # paste this on to bed
     multi-tissue.master.ntypes.simple.names.hg19.txt
 
+    # create source table:  id  name
+    #tr ';' '\n' < multi*.txt | sort | uniq > cells.txt
+    #wc -l cells.txt
+    #125 cells.txt
+
     # Format to use: BED5 +
     # 
     # chr start end name score floatScore sourceCount sources (cellId1, cellId2...)
-    autoSql -dbLink -addBin bed5Sources.as bed5Sources
+    autoSql -addBin -dbLink bed5Sources.as bed5Sources
 
-    # reformat to narrowPeak
-    # cd ..
-    # set file = wgEncodeAwgDnaseMaster.narrowPeak
-    # awk -v OFS="\t" '{print $1, $2, $3, $4, 0, ".", $5, -1, -1, -1}' ebi/*.simple*.bed > $file
-    # hgLoadBed -noNameIx -fillInScore=signalValue -trimSqlTable -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg19 $track $file
-    # Read 2890742 elements of size 10 from wgEncodeAwgDnaseMaster.narrowPeak
+    # Paste together bed and sources, trim MCV- from item name to leave just the count
+    # of cell types (Bob Thurman suggestion), replace semi-colons in source list with commas, 
+    # and add score field
 
+    awk '{sub(/MCV-/,"",$4); printf("%s\t%u\t%u\t%u\t%d\t%.2f\n", $1,$2,$3,$4,0,$5)}' \
+        ebi/multi-tissue.master.ntypes.simple.hg19.bed > dhs.bed
+    sed -e 's/;/,/g' multi-tissue.master.ntypes.simple.names.hg19.txt | \
+        paste dhs.bed - > dhs.sources.bed
+
+# Create files for loading database tables: track table (bed5Sources) 
+    # and sourceTable (idName).  Use new tool to split above format (bed5 + floatScore + sources)
     # Name field has count of cell types having DHS overlapping the master site
 
-    hgLoadBed -fillInScore=floatScore -noNameIx \
-        -type=bed5+2 -sqlTable=$HOME/kent/src/hg/lib/bed5Sources.sql -renameSqlTable -as=$HOME/kent/src/hg/lib/bed5Sources.sql \
-            hg19 $track $file
+    hgBedSources dhs.sources.bed wgEncodeAwgDnaseCombined
+
+    # Sources table
+    autoSql $HOME/kent/src/hg/lib/idName.as idName
+    hgLoadSqlTab hg19 wgEncodeAwgDnaseCombinedSources idName.sql wgEncodeAwgDnaseCombinedSources.tab
+
+    # BED table
+    hgLoadBed -fillInScore=floatScore -noNameIx -type=bed5+3 \
+        -sqlTable=$HOME/kent/src/hg/lib/bed5Sources.sql \
+        -renameSqlTable -as=$HOME/kent/src/hg/lib/bed5Sources.as \
+            hg19 wgEncodeAwgDnaseCombinedSites wgEncodeAwgDnaseCombined.bed
+    # Read 2890742 elements of size 8 from wgEncodeAwgDnaseCombined.bed
 
     #TODO: better scores (e.g. log transform)
+
 
 ###############################################
 # DNAseI Fingerprinting  (in progress Kate)
