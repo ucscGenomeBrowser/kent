@@ -1,4 +1,7 @@
 /* seqCheck - check that extFile references in seq table are valid. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hdb.h"
 

@@ -1,4 +1,7 @@
 /* hprd.h autoXml generated file */
+
+/* Copyright (C) 2009 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef HPRD_H
 #define HPRD_H
 

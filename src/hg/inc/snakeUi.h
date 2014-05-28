@@ -1,5 +1,8 @@
 /* snakeUi - Snake Format user interface controls that are shared
  * between more than one CGI. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef SNAKEUI_H
 #define SNAKEUI_H
 

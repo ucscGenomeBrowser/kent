@@ -3,6 +3,9 @@
    with unique, comma separated fxn_class values. */
 /* This assumes that the SNPs are in order!!! 
    errAbort if this is violated. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 
 #include "hdb.h"

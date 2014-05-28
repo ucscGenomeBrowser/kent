@@ -2,6 +2,9 @@
  * generated encodeDataWarehouse.c and encodeDataWarehouse.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef ENCODEDATAWAREHOUSE_H
 #define ENCODEDATAWAREHOUSE_H
 

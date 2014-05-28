@@ -1,5 +1,8 @@
 /* $Id: util.h,v 1.1 2003/02/15 06:15:52 kent Exp $ */
 
+/* Copyright (C) 2003 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef PIPLIB_UTIL
 #define PIPLIB_UTIL
 

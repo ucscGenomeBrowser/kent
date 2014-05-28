@@ -1,4 +1,7 @@
 /* hgCert - hgCert parses cerfification data file and generates an html file and a .tab file */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hCommon.h"
 

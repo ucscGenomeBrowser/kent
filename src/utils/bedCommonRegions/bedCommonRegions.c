@@ -1,6 +1,9 @@
 /* bedCommonRegions - Create a bed file (just bed3) that contains the regions common 
  * to all input beds.  Regions are common only if exactly the same chromosome, starts, 
  * and end.  Mere overlap is not enough. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

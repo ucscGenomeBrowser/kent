@@ -1,5 +1,8 @@
 /* annoStreamBigWig -- subclass of annoStreamer for bigWig file or URL */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "annoStreamBigWig.h"
 #include "bigWig.h"
 

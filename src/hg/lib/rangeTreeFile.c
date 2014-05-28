@@ -7,6 +7,9 @@
  * Beware the several static/global variables which can be
  * changed by various function calls. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "limits.h"
 #include "localmem.h"

@@ -3,6 +3,9 @@
  * This also handles axt's, mostly by convincing them they
  * are really mafs.... */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"

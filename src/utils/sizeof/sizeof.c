@@ -2,6 +2,9 @@
  *	sizeof - show size of various C types for reference
  *	$Id: sizeof.c,v 1.3 2005/12/02 19:21:42 hiram Exp $
  */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include <stdio.h>
 
 int main()

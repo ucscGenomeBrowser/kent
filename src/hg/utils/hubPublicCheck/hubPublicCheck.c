@@ -1,4 +1,7 @@
 /* hubPublicCheck - checks that the labels in hubPublic match what is in the hub labels. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

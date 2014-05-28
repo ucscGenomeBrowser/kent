@@ -1,5 +1,8 @@
 /* gpFx --- routines to calculate the effect of variation on a genePred */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef GPFX_H
 #define GPFX_H
 
@@ -52,6 +55,9 @@ struct gpFx *gpFxPredEffect(struct variant *variant, struct genePred *pred,
 
 // number of bases up or downstream that we flag
 #define GPRANGE 5000
+
+boolean hasAltAllele(struct allele *alleles);
+/* Return TRUE if alleles include at least one non-reference allele. */
 
 char *firstAltAllele(struct allele *alleles);
 /* Ensembl always reports an alternate allele, even if that allele is not being used

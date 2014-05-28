@@ -1,5 +1,8 @@
 /* annoGrateWigDb -- subclass of annoGrator for wiggle database table & file */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef ANNOGRATEWIGDB_H
 #define ANNOGRATEWIGDB_H
 

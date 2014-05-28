@@ -1,4 +1,7 @@
 /* edwWebSubmit - A small self-contained CGI for submitting data to the ENCODE Data Warehouse.. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -296,12 +299,16 @@ void doMiddle()
 /* doMiddle - put up middle part of web page, not including http and html headers/footers */
 {
 pushWarnHandler(localWarn);
-printf("<FORM ACTION=\"../cgi-bin/edwWebSubmit\" METHOD=GET>\n");
 edwWebSubmitMenuItem(TRUE);
+printf("<FORM ACTION=\"../cgi-bin/edwWebSubmit\" METHOD=GET>\n");
 struct sqlConnection *conn = edwConnectReadWrite(edwDatabase);
 userEmail = edwGetEmailAndVerify();
 if (userEmail == NULL)
+    {
+    edwWebSubmitMenuItem(FALSE);
+    edwWebBrowseMenuItem(FALSE);
     logIn();
+    }
 else if (cgiVarExists(stopButtonName))
     {
     stopUpload(conn);

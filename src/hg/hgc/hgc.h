@@ -1,6 +1,9 @@
 /* hgc - Human Genome Click processor - gets called when user clicks
  * on something in human tracks display. This file contains stuff
  * shared with other modules in hgc,  but not in other programs. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef HGC_H
 #define HGC_H
 

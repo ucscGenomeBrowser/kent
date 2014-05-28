@@ -1,4 +1,7 @@
 /* tempLift - Program to lift BED files temporarily while putting in centromeres.. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "jksql.h"
 #include "hash.h"

@@ -2,6 +2,9 @@
  * A basic script that reads in a text file and breaks
  * into word frequencies. */
 
+/* Copyright (C) 2012 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 /* includes basic utilities for script */
 #include "linefile.h"

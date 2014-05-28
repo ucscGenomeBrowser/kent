@@ -2,6 +2,9 @@
 /* Also create exceptions table from exceptions files. */
 /* Get chroms from UCSC chromInfo. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* Reorder columns. */
 /* Add bin. */
 /* Add 'rs' in front of snp_id. */

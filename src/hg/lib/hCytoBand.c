@@ -1,6 +1,9 @@
 /* hCytoBand - stuff to help draw chromosomes where we have
  * banding data. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hvGfx.h"
 #include "hCommon.h"

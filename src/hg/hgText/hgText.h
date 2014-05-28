@@ -3,6 +3,9 @@
  *	$Id: hgText.h,v 1.6 2004/04/28 22:07:12 hiram Exp $
  */
 
+/* Copyright (C) 2004 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef HGTEXT_H
 #define HGTEXT_H
 

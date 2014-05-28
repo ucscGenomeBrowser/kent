@@ -1,3 +1,6 @@
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* encodeRenameObj - a program to rename mdb obj including many related entries as detailed below: 
  *
  * During pass 0,  it validates for oldObj 

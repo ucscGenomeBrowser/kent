@@ -1,6 +1,9 @@
 /* bigWigToWig - Convert bigWig to wig.  This will keep more of the same structure of the 
  * original wig than bigWigToBedGraph does, but still will break up large stepped sections into 
  * smaller ones. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

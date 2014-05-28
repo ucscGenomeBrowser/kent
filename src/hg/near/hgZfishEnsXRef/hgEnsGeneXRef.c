@@ -1,5 +1,8 @@
 /* hgEnsGeneXRef - Create table that links Ensembl Transcript ID to IDs */
 /* from other databases and a gene description. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

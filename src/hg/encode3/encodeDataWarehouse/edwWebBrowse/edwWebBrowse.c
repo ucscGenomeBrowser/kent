@@ -1,4 +1,7 @@
 /* edwWebBrowse - Browse ENCODE data warehouse.. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -399,9 +402,11 @@ if (userEmail == NULL)
 else
     printf("<H3>Browse submissions</H3>\n");
 
+edwWebBrowseMenuItem(FALSE);
 printf("<div id=\"userId\">");
 if (userEmail == NULL)
     {
+    edwWebSubmitMenuItem(FALSE);
     printf("Please sign in with Persona&nbsp;");
     printf("<INPUT TYPE=SUBMIT NAME=\"signIn\" VALUE=\"sign in\" id=\"signin\">");
     }
@@ -416,9 +421,11 @@ if (userEmail != NULL)
     }
 printf("</FORM>\n");
 
+#ifdef AUTO_REFRESH
 // auto-refresh page
 if (userEmail != NULL && !cgiOptionalString("noRefresh"))
     edwWebAutoRefresh(5000);
+#endif
 }
 
 int main(int argc, char *argv[])
@@ -431,7 +438,6 @@ if (cgiVarExists("maxSubCount"))
     htmlSetCookie("edwWeb.maxSubCount", cgiString("maxSubCount"), NULL, NULL, NULL, FALSE);
 edwWebHeaderWithPersona("");
 // TODO: find a better place for menu update
-edwWebBrowseMenuItem(FALSE);
 htmEmptyShell(doMiddle, NULL);
 edwWebFooterWithPersona();
 return 0;

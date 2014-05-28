@@ -2,6 +2,9 @@
  * field. This is a handy way of storing small-to-medium tab-separated files that begin
  * with a "#list of fields" line among other things. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "localmem.h"
 #include "linefile.h"

@@ -1,6 +1,9 @@
 /* vGfx private - stuff that the implementers of 
  * a vGfx need to know about, but not the clients. */
 
+/* Copyright (C) 2010 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 
 struct vGfx *vgHalfInit(int width, int height);
 /* Return a partially initialized vGfx structure. 

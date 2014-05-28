@@ -1,4 +1,7 @@
 /* Get RefSeq peptides using ra and pep.fa files */
+
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hash.h"
 #include "pepData.h"

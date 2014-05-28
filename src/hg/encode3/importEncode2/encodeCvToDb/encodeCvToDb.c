@@ -1,5 +1,8 @@
 /* encodeCvToDb - Make a relational database version of cv.ra. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* Currently this is implemented in three main steps:
  *    1) Read in cv.ra into a list of stanzaTypes.
  *    2) Rearrange stanzaTypes a bit to reduce redundancy and standardize names. 

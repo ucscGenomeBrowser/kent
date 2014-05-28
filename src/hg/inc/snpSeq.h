@@ -2,6 +2,9 @@
  * generated snpSeq.c and snpSeq.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef SNPSEQ_H
 #define SNPSEQ_H
 

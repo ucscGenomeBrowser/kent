@@ -1,3 +1,6 @@
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* hgEncodeApi - a web API to selected ENCODE resources
 
 The API requests here are intended to follow the REST architectural approach.  

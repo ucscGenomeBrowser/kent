@@ -2,6 +2,9 @@
  * Variant Effect Predictor to fileName, interpreting input rows according to config.
  * See http://uswest.ensembl.org/info/docs/variation/vep/vep_formats.html */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef ANNOFORMATVEP_H
 #define ANNOFORMATVEP_H
 

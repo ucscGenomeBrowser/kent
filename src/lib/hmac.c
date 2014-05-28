@@ -5,6 +5,9 @@
 // SHA1 needed 20 characters, MD5 needed 16 characters.
 // Change the length accordingly with your choosen hash engine
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifdef USE_SSL 
 #include "openssl/hmac.h"
 #include "openssl/evp.h"

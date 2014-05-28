@@ -1,3 +1,6 @@
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* gbSanity - validate genbank data on disk and in a database. Checks the
  * following:
  *   - consistency of the gbIndex files

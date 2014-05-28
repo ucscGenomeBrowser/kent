@@ -1,6 +1,9 @@
 /* oneTrack: load and draw a single track.  This is written for use in 
  * GBrowse plugins but could find other uses. */
 
+/* Copyright (C) 2008 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef ONETRACK_H
 #define ONETRACK_H
 

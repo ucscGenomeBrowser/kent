@@ -1,6 +1,9 @@
 /* genoLay - genome layout. Arranges chromosomes so that they
  * tend to fit together nicely on a single page. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "jksql.h"

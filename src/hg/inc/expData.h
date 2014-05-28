@@ -2,6 +2,9 @@
  * generated expData.c and expData.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2006 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef EXPDATA_H
 #define EXPDATA_H
 

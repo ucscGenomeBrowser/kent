@@ -1,6 +1,9 @@
 /* kgPutBack - From the initial gene candidates, */
 /* go through various criteria on gene-check results and keep the ones that pass the criteria */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"

@@ -2,6 +2,9 @@
  * generated snpExtFile.c and snpExtFile.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2006 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef SNPEXTFILE_H
 #define SNPEXTFILE_H
 

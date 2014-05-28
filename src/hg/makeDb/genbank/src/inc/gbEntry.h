@@ -3,6 +3,9 @@
  * is associated with a single accession, and tracks the versions and
  * files associated with it.
  */
+
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef GBENTRY_H
 #define GBENTRY_H
 

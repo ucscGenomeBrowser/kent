@@ -1,6 +1,9 @@
 /* variation.c - hgTracks routines that are specific to the tracks in
  * the variation group */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "variation.h"
 #include "imageV2.h"
 

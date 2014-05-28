@@ -1,4 +1,7 @@
 /* Create process pipeline as input or output files */
+
+/* Copyright (C) 2004 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "gbPipeline.h"
 #include "common.h"
 #include "dystring.h"

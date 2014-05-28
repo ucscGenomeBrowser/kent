@@ -1,5 +1,8 @@
 /* annoStreamTab -- subclass of annoStreamer for tab-separated text files/URLs */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "annoStreamTab.h"
 #include "linefile.h"
 #include "net.h"

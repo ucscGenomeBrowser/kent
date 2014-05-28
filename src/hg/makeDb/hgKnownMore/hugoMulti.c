@@ -2,6 +2,9 @@
  * generated hugoMulti.h and hugoMulti.sql.  This module links the database and the RAM 
  * representation of objects. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "jksql.h"
 #include "hugoMulti.h"

@@ -1,5 +1,8 @@
 // Search code which is shared between different CGIs: hgFileSearch and hgTracks(Track Search)
 
+/* Copyright (C) 2012 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef SEARCH_H
 #define SEARCH_H
 

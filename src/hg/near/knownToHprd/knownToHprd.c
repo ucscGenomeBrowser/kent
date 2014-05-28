@@ -6,6 +6,9 @@
 [hgwdev:FLAT_FILES> head HPRD_ID_MAPPINGS.txt
 00001   ALDH1A1 NM_000689.3     NP_000680.2     216     100640  P00352  Aldehyde dehydrogenase 1
  */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

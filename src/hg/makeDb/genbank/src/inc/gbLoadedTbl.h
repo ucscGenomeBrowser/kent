@@ -3,6 +3,9 @@
  * have been loaded for a release and update.  This saves a huge amount of
  * time over checking for individual sequences.
  */
+
+/* Copyright (C) 2006 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef GBLOADEDTBL_H
 #define GBLOADEDTBL_H
 

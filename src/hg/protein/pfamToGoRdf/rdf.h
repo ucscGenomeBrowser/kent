@@ -1,4 +1,7 @@
 /* rdf.h autoXml generated file */
+
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef RDF_H
 #define RDF_H
 

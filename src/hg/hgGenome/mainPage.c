@@ -1,6 +1,9 @@
 /* mainPage - draws the main hgGenome page, including some controls
  * on the top and the graphic. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "psGfx.h"
 #include "pscmGfx.h"

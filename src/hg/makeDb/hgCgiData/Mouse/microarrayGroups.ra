@@ -193,3 +193,14 @@ description Arrays Grouped By Tissue Median
 expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,
 groupSizes 3,3,3,3,3,3,3,3,3,3,3,
 names brain,embryo,heart,kidney,liver,lung,muscle,ovary,spleen,testicle,thymus,
+
+name facebase31_AllGroups
+type groupings
+all facebase31_All
+
+name facebase31_All
+type all
+description facebase31_All
+expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,
+groupSizes 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+names Univ_Univ,e8.5_ParaxMesoderm,e8.5_NeuroEpith_FloorPlate,e8.5_NeuroEpith_HindBrain,e8.5_NeuroEpith_nonFloorPlate,e9.5_OlfacPlacod,e9.5_OticVesic,e9.5_FaceMesenchy,e9.5_MandibArch,e9.5_MaxilArch,e9.5_NeuroEpith_OverFaceMesench,e10.5_RathkePouch,e10.5_Nasal_Pit,e10.5_MandibArch,e10.5_MaxilArch,e10.5_ColumEpith_Mandib,e10.5_ColumEpith_Maxil,e10.5_Emin_LateralNasal,e10.5_Emin_MedialNasal,e10.5_NeuroEpith_CentrlOverEmin,e10.5_NeuroEpith_FlankLateral,e10.5_NeuroEpith_LateralEmin,e10.5_NeuroEpith_MedialEmin,e11.5_Emin_MedNasl_SingCel,

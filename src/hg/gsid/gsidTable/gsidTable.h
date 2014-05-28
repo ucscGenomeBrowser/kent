@@ -1,6 +1,9 @@
 /* gsidTable.h - interfaces to plug columns into gsidTable.  The must important
  * thing here is the column structure. */
 
+/* Copyright (C) 2009 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef gsidTable_H
 #define gsidTable_H
 

@@ -1,6 +1,9 @@
 /* chromGraphFactory - turn user-uploaded track in chromGraph format
  * into a customTrack. */
 
+/* Copyright (C) 2009 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef CHROMGRAPHFACTORY_H
 #define CHROMGRAPHFACTORY_H
 

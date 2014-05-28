@@ -1,6 +1,9 @@
 /* makeItemsTrack.c - supports tracks of type makeItems.  Users can drag to create an item
  * and click to edit one. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"

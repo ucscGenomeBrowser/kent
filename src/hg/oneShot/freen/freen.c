@@ -1,4 +1,8 @@
 /* freen - My Pet Freen. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -9,22 +13,52 @@
 void usage()
 {
 errAbort("freen - test some hairbrained thing.\n"
-         "usage:  freen fileName\n");
+         "usage:  freen fileList\n");
 }
 
 static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void freen(char *string)
+boolean containsCopyright(char *fileName, int maxLines)
+/* Look for the string 'copyright' or '(C)' regardless of case in up
+ * to maxLines of file.  Return TRUE if it is found, FALSE otherwise. */
 {
-uglyf("%d ',' in %s\n", countChars(string, ','), string);
-int count = chopByChar(cloneString(string), ',', NULL, 0);
-uglyf("Count by chopByChar is %d\n", count);
-char **array;
-int arraySize;
-sqlStringDynamicArray(cloneString(string), &array, &arraySize);
-uglyf("sqlStringDynamicArray yields %d\n", arraySize);
+boolean result = FALSE;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+int i;
+for (i=0; i<maxLines; ++i)
+    {
+    char *line;
+    if (!lineFileNext(lf, &line, NULL))
+        break;
+    strLower(line);
+    if (stringIn("copyright", line) != NULL || stringIn("(c)", line) != NULL)
+        {
+	result = TRUE;
+	break;
+	}
+    }
+lineFileClose(&lf);
+return result;
+}
+
+void freen(char *fileList)
+/* Do something, who knows what really */
+{
+struct lineFile *lf = lineFileOpen(fileList, TRUE);
+char *line;
+int size;
+while (lineFileNext(lf, &line, &size))
+    {
+    verbose(1, "%d %s\n", lf->lineIx, line);
+    char *word;
+    while ((word = nextWordRespectingQuotes(&line)) != NULL)
+        {
+	if (containsCopyright(word, 10))
+	    printf("%s\n", word);
+	}
+    }
 }
 
 

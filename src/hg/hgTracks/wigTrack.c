@@ -2,6 +2,9 @@
  * wig type tracks in browser. Wigs are arbitrary data graphs
  */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "obscure.h"
 #include "hash.h"

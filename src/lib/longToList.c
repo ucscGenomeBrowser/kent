@@ -6,6 +6,9 @@
  * Under the hood this uses a balanced binary tree to handle the key/list
  * association. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "localmem.h"
 #include "rbTree.h"

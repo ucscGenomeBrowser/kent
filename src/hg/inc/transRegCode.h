@@ -2,6 +2,9 @@
  * generated transRegCode.c and transRegCode.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2004 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef TRANSREGCODE_H
 #define TRANSREGCODE_H
 

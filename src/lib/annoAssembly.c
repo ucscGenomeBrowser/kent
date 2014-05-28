@@ -1,5 +1,8 @@
 /* annoAssembly -- basic metadata about an assembly for the annoGrator framework. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "annoAssembly.h"
 #include "obscure.h"
 #include "twoBit.h"

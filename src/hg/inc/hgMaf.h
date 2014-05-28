@@ -1,5 +1,8 @@
 /* hgMaf.h - Stuff to load up mafs from the browser database.
  *           Also, items for maf track display */
+
+/* Copyright (C) 2012 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef HGMAF_H
 #define HGMAF_H
 

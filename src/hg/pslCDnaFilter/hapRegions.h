@@ -1,5 +1,8 @@
 /* hapRegions - mapping between sequences containing haplotype regions and
  * reference chromosomes */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef HAPREGIONS_H
 #define HAPREGIONS_H
 

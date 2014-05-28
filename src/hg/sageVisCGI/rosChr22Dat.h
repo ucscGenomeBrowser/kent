@@ -2,6 +2,9 @@
  * generated rosChr22Dat.c and rosChr22Dat.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2005 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef ROSCHR22DAT_H
 #define ROSCHR22DAT_H
 

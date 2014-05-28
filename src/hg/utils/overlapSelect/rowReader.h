@@ -1,4 +1,7 @@
 /* rowReader - read rows from tab files or databases without length restrictions */
+
+/* Copyright (C) 2010 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef ROWREADER_H
 #define ROWREADER_H
 

@@ -1,3 +1,6 @@
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* wigAsciiToBinary - convert ascii Wiggle data to binary file
  *	plus, produces file read for load into database
  *

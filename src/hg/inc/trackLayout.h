@@ -1,6 +1,9 @@
 /* trackLayout - this controls the dimensions of the graphic
  * for the genome browser.  Also used for the genome view. */
 
+/* Copyright (C) 2012 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef TRACKLAYOUT_H
 #define TRACKLAYOUT_H
 
