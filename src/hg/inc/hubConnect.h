@@ -41,7 +41,6 @@
 #define hgHubDoSearch      hgHubDo "search"
 #define hgHubDoDeleteSearch      hgHubDo "deleteSearch"
 #define hgHubDoDisconnect  hgHubDo "disconnect"
-#define hgHubDoConnect     hgHubDo "connect"
 
 boolean isHubTrack(char *trackName);
 /* Return TRUE if it's a hub track. */
