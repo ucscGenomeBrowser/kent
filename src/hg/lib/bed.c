@@ -69,15 +69,8 @@ AllocVar(bed);
 bed->chrom = cloneString(genePred->chrom);
 bed->chromStart = chromStart = genePred->txStart;
 bed->chromEnd = genePred->txEnd;
-// noncoding genes are expressed with both cdsStart/cdsEnd set to txEnd in genePred
-// but with both thickStart/thickEnd set to chromStart in bed
-if (genePred->cdsStart == genePred->cdsEnd && genePred->cdsEnd == genePred->txEnd)
-    bed->thickStart = bed->thickEnd = bed->chromStart;
-else 
-    {
-    bed->thickStart = genePred->cdsStart;
-    bed->thickEnd = genePred->cdsEnd;
-    }
+bed->thickStart = genePred->cdsStart;
+bed->thickEnd = genePred->cdsEnd;
 bed->score = 0;
 strncpy(bed->strand,  genePred->strand, sizeof(bed->strand));
 bed->blockCount = blockCount = genePred->exonCount;

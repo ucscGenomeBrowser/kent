@@ -10162,13 +10162,10 @@ TMPDIR=/scratch/tmp
 	-syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-XXX running - Fri May 23 14:49:15 PDT 2014
-    #	real    596m55.622s
+    #	real    257m21.255s
+
     cat fb.mm10.chainRheMac2Link.txt
-    #	900117108 bases of 2652783500 (33.931%) in intersection
-    # set sym link to indicate this is the lastz for this genome:
-    cd /hive/data/genomes/mm10/bed
-    ln -s lastzRheMac2.2014-05-23 lastz.rheMac2
+    #	895296744 bases of 2652783500 (33.749%) in intersection
 
     mkdir /hive/data/genomes/rheMac2/bed/blastz.mm10.swap
     cd /hive/data/genomes/rheMac2/bed/blastz.mm10.swap
@@ -10177,11 +10174,9 @@ XXX running - Fri May 23 14:49:15 PDT 2014
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #	real    69m5.839s
+    #	real    74m36.098s
+
     cat fb.rheMac2.chainMm10Link.txt
-    #	883164992 bases of 2639145830 (33.464%) in intersection
-    # set sym link to indicate this is the lastz for this genome:
-    cd /hive/data/genomes/rheMac2/bed
-    ln -s blastz.mm10.swap lastz.mm10
+    #	875700775 bases of 2646704109 (33.086%) in intersection
 
 ##############################################################################

@@ -1,0 +1,353 @@
+################################################################
+# chiLan1 - Chinchilla - Chinchilla lanigera - rodent - glires - 1700
+################################################################
+track chainNetChiLan1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 326.96
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb chiLan1
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetChiLan1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetChiLan1
+    spectrum on
+
+        track chainChiLan1
+        release alpha
+        parent chainNetChiLan1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain chiLan1
+        html chainNet
+
+    track chainNetChiLan1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetChiLan1
+
+        track netChiLan1
+        release alpha
+        parent chainNetChiLan1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign chiLan1 chainChiLan1
+        html chainNet
+
+################################################################
+# jacJac1 - Lesser Egyptian jerboa - Jaculus jaculus - rodent - glires - 1590
+################################################################
+track chainNetJacJac1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 358.65
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb jacJac1
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetJacJac1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetJacJac1
+    spectrum on
+
+        track chainJacJac1
+        release alpha
+        parent chainNetJacJac1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain jacJac1
+        html chainNet
+
+    track chainNetJacJac1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetJacJac1
+
+        track netJacJac1
+        release alpha
+        parent chainNetJacJac1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign jacJac1 chainJacJac1
+        html chainNet
+
+################################################################
+# mesAur1 - Golden hamster - Mesocricetus auratus - rodent - glires - 1620
+################################################################
+track chainNetMesAur1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 351.97
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb mesAur1
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetMesAur1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetMesAur1
+    spectrum on
+
+        track chainMesAur1
+        release alpha
+        parent chainNetMesAur1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain mesAur1
+        html chainNet
+
+    track chainNetMesAur1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetMesAur1
+
+        track netMesAur1
+        release alpha
+        parent chainNetMesAur1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign mesAur1 chainMesAur1
+        html chainNet
+
+################################################################
+# micOch1 - Prairie vole - Microtus ochrogaster - rodent - glires - 1600
+################################################################
+track chainNetMicOch1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 355.31
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb micOch1
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetMicOch1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetMicOch1
+    spectrum on
+
+        track chainMicOch1
+        release alpha
+        parent chainNetMicOch1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain micOch1
+        html chainNet
+
+    track chainNetMicOch1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetMicOch1
+
+        track netMicOch1
+        release alpha
+        parent chainNetMicOch1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign micOch1 chainMicOch1
+        html chainNet
+
+################################################################
+# ochPri3 - Pika - Ochotona princeps - rodent - glires - 1929
+################################################################
+track chainNetOchPri3
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 310.3
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb ochPri3
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetOchPri3Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetOchPri3
+    spectrum on
+
+        track chainOchPri3
+        release alpha
+        parent chainNetOchPri3Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain ochPri3
+        html chainNet
+
+    track chainNetOchPri3Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetOchPri3
+
+        track netOchPri3
+        release alpha
+        parent chainNetOchPri3Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign ochPri3 chainOchPri3
+        html chainNet
+
+################################################################
+# octDeg1 - Brush-tailed rat - Octodon degus - rodent - glires - 1575
+################################################################
+track chainNetOctDeg1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 323.63
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb octDeg1
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetOctDeg1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetOctDeg1
+    spectrum on
+
+        track chainOctDeg1
+        release alpha
+        parent chainNetOctDeg1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain octDeg1
+        html chainNet
+
+    track chainNetOctDeg1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetOctDeg1
+
+        track netOctDeg1
+        release alpha
+        parent chainNetOctDeg1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign octDeg1 chainOctDeg1
+        html chainNet
