@@ -142,20 +142,23 @@ void drawPointSmear(struct hvGfx *hvg, int xOff, int yOff, int height,
 {
 int i, size = sv->size;
 double *vals = sv->vals;
+
+// Min becomes max after valToY because graph flipped
+int yMin = valToY(midClipMax, maxExp, height); 
+int yMax = valToY(midClipMin, maxExp, height);
 for (i=0; i<size; ++i)
     {
     double exp = vals[i];
-    if (exp < midClipMin || exp > midClipMax)
+    int y = valToY(exp, maxExp, height);
+    if (y < yMin || y > yMax)
 	{
-	int y = valToY(exp, maxExp, height) + yOff;
-	uglyf("%d ", round(exp));
+	y += yOff;
 	hvGfxDot(hvg, xOff-1, y, colorIx);
 	hvGfxDot(hvg, xOff+1, y, colorIx);
 	hvGfxDot(hvg, xOff, y-1, colorIx);
 	hvGfxDot(hvg, xOff, y+1, colorIx);
 	}
     }
-uglyf("\n");
 }
 
 double sampleValsMax(struct sampleVals *sv)
@@ -231,7 +234,7 @@ if (sv->size > 1)
 	    fillColorIx, lineColorIx);
 #endif /* OLD_BAR_GRAPH */
     hvGfxBox(hvg, x, y + yMedian, tukWidth, 1, medianColorIx);
-    drawPointSmear(hvg, xCen, y, tukHeight, sv, maxExp, lineColorIx, q1, q3);
+    drawPointSmear(hvg, xCen, y, tukHeight, sv, maxExp, lineColorIx, whisk1, whisk2);
     }
 }
 
@@ -265,8 +268,8 @@ float *expVals = NULL;
 if (!hgExpLoadVals(NULL, conn, NULL, "1007_s_at", "gnfHumanAtlas2Median", &expCount, &expVals))
     errAbort("Can't load data");
 
-if (expCount > 20)
-    expCount = 20;
+if (expCount > 50)
+    expCount = 50;
 setImageDims(expCount);
 
 /* Open graphics and draw boxes for boundaries of total region and drawable. */
