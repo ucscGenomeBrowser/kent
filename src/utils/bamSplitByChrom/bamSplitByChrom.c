@@ -39,6 +39,32 @@ strcat(result,s2);
 return result;
 }
 
+bool isUnderscore(char c)
+/* checks if the character is an underscore */
+{
+if (c == '_')
+    {
+    return(TRUE);
+    }
+return(FALSE);
+}
+
+char * removeUnderscores(char * input)
+/* Removes the Underscores fromo a string */
+{
+int i, j=0;
+char *result = needMem(strlen(input)+1); 
+for (i = 0; input[i] != '\0'; ++i)
+   {
+   if (!isUnderscore(input[i]))
+       {
+       result[j] = input[i];
+       ++j;
+       }
+   }
+return(result);
+}
+
 void bamSplitByChrom(char *inBam)
 /* bamSplitByChrom -  Splits a bam file into multiple bam files based on chromosome . */
 {
@@ -51,6 +77,7 @@ int i =0;
 for (i=0; i<head->n_targets; ++i)
 /* Loop through each chromosome. */   
     {
+    //head->target_name[i] = removeUnderscores(head->target_name[i]);
     samfile_t *in = samMustOpen(inBam, "rb", NULL);
     char *outBam = head->target_name[i];  
     char *bam = ".bam";
@@ -64,7 +91,11 @@ for (i=0; i<head->n_targets; ++i)
 	    break;
 	    }
 	if (head->target_name[one.core.tid]==outBam)
+	//if (strcmp(head->target_name[one.core.tid],outBam)==0)
+            /* Seems to be dropping certain chromosomes (with underscores in names) */
 	    {
+	    
+	    printf("seems to be working");
             samwrite(out, &one);
             }
         }
