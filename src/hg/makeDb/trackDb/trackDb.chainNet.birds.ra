@@ -1,0 +1,530 @@
+################################################################
+# anaPla1 - Mallard duck - Anas platyrhynchos - vertebrate - aves - 4357
+################################################################
+track chainNetAnaPla1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 572.30
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb anaPla1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetAnaPla1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetAnaPla1
+    spectrum on
+
+        track chainAnaPla1
+        release alpha
+        parent chainNetAnaPla1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain anaPla1
+        html chainNet
+
+    track chainNetAnaPla1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetAnaPla1
+
+        track netAnaPla1
+        release alpha
+        parent chainNetAnaPla1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign anaPla1 chainAnaPla1
+        html chainNet
+
+################################################################
+# colLiv1 - Rock pigeon - Columba livia - vertebrate - aves - 3680
+################################################################
+track chainNetColLiv1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 573.16
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb colLiv1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetColLiv1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetColLiv1
+    spectrum on
+
+        track chainColLiv1
+        release alpha
+        parent chainNetColLiv1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain colLiv1
+        html chainNet
+
+    track chainNetColLiv1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetColLiv1
+
+        track netColLiv1
+        release alpha
+        parent chainNetColLiv1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign colLiv1 chainColLiv1
+        html chainNet
+
+################################################################
+# araMac1 - Scarlet macaw - Ara macao - vertebrate - aves - 4320
+################################################################
+track chainNetAraMac1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 574.59
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb araMac1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetAraMac1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetAraMac1
+    spectrum on
+
+        track chainAraMac1
+        release alpha
+        parent chainNetAraMac1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain araMac1
+        html chainNet
+
+    track chainNetAraMac1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetAraMac1
+
+        track netAraMac1
+        release alpha
+        parent chainNetAraMac1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign araMac1 chainAraMac1
+        html chainNet
+
+################################################################
+# amaVit1 - Puerto Rican parrot - Amazona vittata - vertebrate - aves - 4310
+################################################################
+track chainNetAmaVit1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 576.02
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb amaVit1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetAmaVit1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetAmaVit1
+    spectrum on
+
+        track chainAmaVit1
+        release alpha
+        parent chainNetAmaVit1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain amaVit1
+        html chainNet
+
+    track chainNetAmaVit1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetAmaVit1
+
+        track netAmaVit1
+        release alpha
+        parent chainNetAmaVit1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign amaVit1 chainAmaVit1
+        html chainNet
+
+################################################################
+# pseHum1 - Tibetan ground jay - Pseudopodoces humilis - vertebrate - aves - 4358
+################################################################
+track chainNetPseHum1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 578.88
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb pseHum1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetPseHum1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetPseHum1
+    spectrum on
+
+        track chainPseHum1
+        release alpha
+        parent chainNetPseHum1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain pseHum1
+        html chainNet
+
+    track chainNetPseHum1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetPseHum1
+
+        track netPseHum1
+        release alpha
+        parent chainNetPseHum1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign pseHum1 chainPseHum1
+        html chainNet
+
+################################################################
+# zonAlb1 - White-throated sparrow - Zonotrichia albicollis - vertebrate - aves - 4359
+################################################################
+track chainNetZonAlb1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 583.16
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb zonAlb1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetZonAlb1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetZonAlb1
+    spectrum on
+
+        track chainZonAlb1
+        release alpha
+        parent chainNetZonAlb1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain zonAlb1
+        html chainNet
+
+    track chainNetZonAlb1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetZonAlb1
+
+        track netZonAlb1
+        release alpha
+        parent chainNetZonAlb1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign zonAlb1 chainZonAlb1
+        html chainNet
+
+################################################################
+# ficAlb2 - Collared flycatcher - Ficedula albicollis - vertebrate - aves - 3689
+################################################################
+track chainNetFicAlb2
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 586.02
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb ficAlb2
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetFicAlb2Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetFicAlb2
+    spectrum on
+
+        track chainFicAlb2
+        release alpha
+        parent chainNetFicAlb2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain ficAlb2
+        html chainNet
+
+    track chainNetFicAlb2Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetFicAlb2
+
+        track netFicAlb2
+        release alpha
+        parent chainNetFicAlb2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign ficAlb2 chainFicAlb2
+        html chainNet
+
+################################################################
+# falPer1 - Peregrine falcon - Falco peregrinus - vertebrate - aves - 3670
+################################################################
+track chainNetFalPer1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 587.45
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb falPer1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetFalPer1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetFalPer1
+    spectrum on
+
+        track chainFalPer1
+        release alpha
+        parent chainNetFalPer1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain falPer1
+        html chainNet
+
+    track chainNetFalPer1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetFalPer1
+
+        track netFalPer1
+        release alpha
+        parent chainNetFalPer1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign falPer1 chainFalPer1
+        html chainNet
+
+################################################################
+# falChe1 - Saker falcon - Falco cherrug - vertebrate - aves - 3660
+################################################################
+track chainNetFalChe1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 588.88
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb falChe1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetFalChe1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetFalChe1
+    spectrum on
+
+        track chainFalChe1
+        release alpha
+        parent chainNetFalChe1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain falChe1
+        html chainNet
+
+    track chainNetFalChe1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetFalChe1
+
+        track netFalChe1
+        release alpha
+        parent chainNetFalChe1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign falChe1 chainFalChe1
+        html chainNet

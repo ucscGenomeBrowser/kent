@@ -1,6 +1,15 @@
 #	"$Id: trackDb.ra,v 1.643 2010/06/11 22:12:18 mary Exp $";
 
 include trackDb.chainNet.ra
+
+include trackDb.chainNet.primates.ra
+include trackDb.chainNet.euarchontoglires.ra
+include trackDb.chainNet.laurasiatheria.ra
+include trackDb.chainNet.afrotheria.ra
+include trackDb.chainNet.birds.ra
+include trackDb.chainNet.sarcopterygii.ra
+include trackDb.chainNet.fish.ra
+
 include trackDb.nt.ra
 include trackDb.genbank.ra beta,public
 include trackDb.genbank.new.ra alpha

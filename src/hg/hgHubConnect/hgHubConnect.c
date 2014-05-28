@@ -619,7 +619,6 @@ puts("</FORM>");
 printf("<FORM ACTION=\"%s\" NAME=\"connectHubForm\">\n",  "../cgi-bin/hgGateway");
 cgiMakeHiddenVar("hubUrl", "");
 cgiMakeHiddenVar("db", "");
-cgiMakeHiddenVar(hgHubDoConnect, "on");
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 puts("</FORM>");
 
@@ -674,7 +673,7 @@ cartWebEnd();
 }
 
 char *excludeVars[] = {"Submit", "submit", "hc_one_url", 
-    hgHubDoReset, hgHubDoClear, hgHubDoDisconnect,hgHubDoConnect, hgHubDataText, 
+    hgHubDoReset, hgHubDoClear, hgHubDoDisconnect, hgHubDataText, 
     hgHubConnectRemakeTrackHub, NULL};
 
 int main(int argc, char *argv[])

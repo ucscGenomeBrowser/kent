@@ -633,6 +633,7 @@ if (id != NULL)
     }
 
 cartRemove(cart, "hubId");
+cartRemove(cart, hgHubDoDisconnect);
 }
 
 struct cart *cartNew(char *userId, char *sessionId,
