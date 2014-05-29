@@ -858,7 +858,6 @@ type bed 4 +
 
 track cpgIslandSuper
 superTrack on
-release alpha,beta
 shortLabel CpG Islands
 longLabel CpG Islands (Islands < 300 Bases are Light Green)
 group regulation
@@ -869,7 +868,6 @@ type bed 4 +
 html cpgIslandSuper
 
     track cpgIslandExt
-    release alpha,beta
     superTrack cpgIslandSuper pack
     shortLabel CpG Islands
     longLabel CpG Islands (Islands < 300 Bases are Light Green)
@@ -877,7 +875,6 @@ html cpgIslandSuper
     html cpgIslandSuper
 
     track cpgIslandExtUnmasked
-    release alpha,beta
     superTrack cpgIslandSuper hide
     shortLabel Unmasked CpG
     longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
