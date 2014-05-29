@@ -305,8 +305,13 @@ char *hubSearchTerms = cartOptionalString(cart, hgHubSearchTerms);
 boolean haveTrixFile = fileExists(trixFile);
 struct hash *urlSearchHash = NULL;
 
+printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
+
 if (haveTrixFile && !isEmpty(hubSearchTerms))
+    {
+    strLower(hubSearchTerms);
     urlSearchHash = getUrlSearchHash(trixFile, hubSearchTerms);
+    }
 
 // if we have search terms, put out the line telling the user so
 if (!isEmpty(hubSearchTerms))
@@ -366,7 +371,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	{
 	/* output header */
-	printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
 
 	printf("<table id=\"publicHubsTable\"> "
 	    "<thead><tr> "
@@ -452,10 +456,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 
 if (gotAnyRows)
-    {
     printf("</TR></tbody></TABLE>\n");
-    printf("</div>");
-    }
+
+printf("</div>");
 return publicHash;
 }
 
@@ -619,7 +622,6 @@ puts("</FORM>");
 printf("<FORM ACTION=\"%s\" NAME=\"connectHubForm\">\n",  "../cgi-bin/hgGateway");
 cgiMakeHiddenVar("hubUrl", "");
 cgiMakeHiddenVar("db", "");
-cgiMakeHiddenVar(hgHubDoConnect, "on");
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 puts("</FORM>");
 
@@ -674,7 +676,7 @@ cartWebEnd();
 }
 
 char *excludeVars[] = {"Submit", "submit", "hc_one_url", 
-    hgHubDoReset, hgHubDoClear, hgHubDoDisconnect,hgHubDoConnect, hgHubDataText, 
+    hgHubDoReset, hgHubDoClear, hgHubDoDisconnect, hgHubDataText, 
     hgHubConnectRemakeTrackHub, NULL};
 
 int main(int argc, char *argv[])

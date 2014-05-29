@@ -32,10 +32,16 @@ static void asvSetRegion(struct annoStreamer *vSelf, char *chrom, uint regionSta
 {
 annoStreamerSetRegion(vSelf, chrom, regionStart, regionEnd);
 struct annoStreamVcf *self = (struct annoStreamVcf *)vSelf;
-if (self->isTabix)
-    lineFileSetTabixRegion(self->vcff->lf, chrom, regionStart, regionEnd);
 self->indelQ = self->nextPosQ = NULL;
 self->eof = FALSE;
+if (self->isTabix)
+    {
+    // If this region is not in tabix index, set self->eof so we won't keep grabbing rows
+    // from the old position.
+    boolean gotRegion = lineFileSetTabixRegion(self->vcff->lf, chrom, regionStart, regionEnd);
+    if (! gotRegion)
+	self->eof = TRUE;
+    }
 }
 
 static char *asvGetHeader(struct annoStreamer *vSelf)
@@ -134,6 +140,8 @@ if (regionChrom != NULL && words != NULL)
 	uint regionEnd = sSelf->regionEnd;
 	if (minChrom != NULL && sSelf->chrom == NULL)
 	    regionEnd = annoAssemblySeqSize(sSelf->assembly, minChrom);
+	// If lineFileSetTabixRegion fails, just keep the current file position
+	// -- hopefully we'll just be skipping to the next row after region{Chrom,Start,End}.
 	lineFileSetTabixRegion(self->vcff->lf, regionChrom, regionStart, regionEnd);
 	}
     while (words != NULL &&
