@@ -223,7 +223,10 @@ RefSeq Genes, GenBank mRNAs, and others. These GenBank tracks are updated every 
 automatic process. The GBiB is setup to automatically update itself on start up and every four hours.
 When it updates itself, it will update all of the files in the GBiB, including software and tracks
 that you have mirrored. The updates will not affect your custom tracks, user accounts or sessions.
-This auto-update process ensures that you will always have the newest data and features.
+This auto-update process ensures that you will always have the newest data and features. If you are
+using a DSL line, we recommend turning off these automatic updates. Over a slow internet connection,
+it could take hours for your GBiB to complete the update process, meaning that the GBiB would be
+unusable during that time.
 </P>
 
 <P>
@@ -249,9 +252,12 @@ GBiB terminal:
 </P>
 
 <P>
-If for some reason your GBiB stops working, you can re-download the ZIP
-file and extract only the file browserbox-disk1.vmdk. Do not extract and overwrite browserbox-disk2.vmdk,
-as it contains your track and session settings and mirrored tracks.
+If, for some reason, your GBiB stops working, there are a few ways you can fix it. Your first option
+is to update the GBiB using the <tt>updateBrowser</tt> command. This method may only help if you had
+turned off the automatic updates at some point. This update process may take several hours over a slow
+internet connection. Your other option is to re-download the ZIP file and extract only the file
+browserbox-disk1.vmdk. Do not extract and overwrite browserbox-disk2.vmdk, as it contains you track
+and session settings and mirrored tracks.
 </P>
 </div><!-- .sectionContent -->
 </div><!-- .section -->
