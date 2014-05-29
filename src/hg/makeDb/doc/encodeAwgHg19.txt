@@ -796,7 +796,7 @@ cat  << 'EOF' > link.csh
     # These are z-scores (by my reading of the Chromatin landscape supplementary inf)
 
     # histogram recommends log transform when filling in score
-    # TODO: truncate to reasonable significant digits
+    # Truncate to reasonable significant digits (%.2f)
 
     # From Bob Thurman, UW, a file with cell sources for each DHS site:
     # paste this on to bed
