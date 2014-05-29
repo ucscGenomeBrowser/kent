@@ -2762,3 +2762,10 @@ visibility hide
 type bed 4 .
 color 255,123,89
 # iframeUrl http://www.animalgenome.org/cgi-bin/QTLdb/GG/qdetails?QTL_ID=$p
+
+searchTable animalQtl
+searchType bed
+termRegex ^[A-Z_0-9-]+:[0-9]+ 
+searchMethod fuzzy
+searchPriority 50
+
