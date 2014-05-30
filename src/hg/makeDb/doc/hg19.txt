@@ -28697,17 +28697,18 @@ cp clinvarCnv.bb /hive/data/genomes/hg19/bed/clinvar/
 
 
 #########################################################################
-# LOCUS REFERENCE GENOME (LRG) REGIONS AND TRANSCRIPTS (DONE 11/11/13 angie)
+# LOCUS REFERENCE GENOME (LRG) REGIONS AND TRANSCRIPTS (DONE 5/29/14 angie)
     screen -S lrg -t lrg
     set today = `date +%Y_%m_%d`
     mkdir -p /hive/data/genomes/hg19/bed/lrg/$today
     cd /hive/data/genomes/hg19/bed/lrg/$today
-    wget --timestamping ftp://ftp.ebi.ac.uk/pub/databases/lrgex/\*
+    wget ftp://ftp.ebi.ac.uk/pub/databases/lrgex/LRG_public_xml_files.zip
+    unzip LRG_public_xml_files.zip
     # The .atree file is useful for getting a handle on the hierarchy and types of nodes:
     autoDtd LRG_1.xml lrg.dtd lrg.stats -atree=lrg.atree
 
     # Run script to convert LRG*.xml files to BED+ for regions and genePredExt+fa for transcripts:
-    ~/kent/src/hg/utils/automation/parseLrgXml.pl
+    ~/kent/src/hg/utils/automation/parseLrgXml.pl GRCh37
     genePredCheck lrgTranscriptsUnmapped.gp
     # If there are complaints e.g. about exonFrame, look for inconsistencies in the
     # affected transcript's coding_region/coordinates vs. exon/intron info in xml.
@@ -28718,6 +28719,7 @@ cp clinvarCnv.bb /hive/data/genomes/hg19/bed/clinvar/
     # Load LRG regions:
     bedToBigBed lrg.bed /hive/data/genomes/hg19/chrom.sizes lrg.bb \
       -tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name
+    rm -f /gbdb/hg19/bbi/lrg.bb
     ln -s `pwd`/lrg.bb /gbdb/hg19/bbi/lrg.bb
     hgBbiDbLink hg19 lrg /gbdb/hg19/bbi/lrg.bb
 
@@ -28758,7 +28760,8 @@ cp clinvarCnv.bb /hive/data/genomes/hg19/bed/clinvar/
     cut -f 1-14 lrgTLiftOver.gp > t2
     diff t1 t2 | less
     # Hopefully there won't be differences aside from the ones liftOver couldn't map.
-    
+    rm t1 t2
+
 
 #########################################################################
 # phastBias gBGC track (2013-10-29 - Galt)
