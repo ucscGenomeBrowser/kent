@@ -408,10 +408,17 @@ for (submit = submitList; submit != NULL; submit = submit->next)
 sqlSafef(query, sizeof(query),
     "select * from edwSubmit where userId=%d "
     "and oldFiles != 0 and newFiles = 0 "
+    "and not(metaChangeCount != 0 or errorMessage is not NULL or fileIdInTransit != 0) "
     " order by id desc limit %d", userId, maxSubCount - printedSubCount);
 struct edwSubmit  *oldSubmitList = edwSubmitLoadByQuery(conn, query);
+boolean  noNewFilePrinted = FALSE;
 for (submit = oldSubmitList; submit != NULL; submit = submit->next)
     {
+    if (!noNewFilePrinted)
+	{	
+	printf("<HR><H3>Submissions without new data:</H3>\n");
+	noNewFilePrinted = TRUE;
+	}
     /* Figure out and print upload time */
     sqlSafef(query, sizeof(query),
         "select from_unixtime(startUploadTime) from edwSubmit where id=%u", submit->id);
