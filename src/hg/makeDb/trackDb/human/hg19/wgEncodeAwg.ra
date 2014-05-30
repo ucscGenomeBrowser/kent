@@ -4,10 +4,10 @@
 track wgEncodeAwgDnaseCombinedSites
 superTrack wgEncodeDNAseSuper dense
 release alpha
-sourceTable wgEncodeAwgDnaseCombinedSources
 shortLabel DNase HS Sites
-longLabel Digital DNaseI Hypersensitivity Combined Sites from ENCODE/Analysis
+longLabel Digital DNaseI Hypersensitivity Combined Sites (125 cell types) from ENCODE/Analysis
 type bed 5 +
+bedNameLabel Number of cell types
 visibility dense
 group regulation
 priority 3.6
@@ -15,6 +15,8 @@ minGrayLevel 3
 spectrum on
 scoreMax 1000
 scoreMin 100
+sourceTable wgEncodeAwgDnaseCombinedSources
+urls sourceIds="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&deprecated=true&term=$$"
 wgEncode 1
 
 track wgEncodeAwgDnaseMaster
