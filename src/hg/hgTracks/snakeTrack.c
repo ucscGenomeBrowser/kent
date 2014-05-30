@@ -1092,7 +1092,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	// now draw the lines between blocks
 	if ((!((lastX == sx) && (y1 == y2))) &&
 	    (sf->drawn  || ((prevSf != NULL) && (prevSf->drawn))) &&
-	    (((lastE > winStart) && (lastE < winEnd)) || 
+	    (((lastE >= winStart) && (lastE <= winEnd)) || 
 	    ((s > winStart) && (s < winEnd))))
 	    {
 	    if (lastLevel == sf->level)
