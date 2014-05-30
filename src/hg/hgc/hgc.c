@@ -1484,6 +1484,39 @@ if (mf != NULL)
     }
 }
 
+char **getIdNameMap(struct trackDb *tdb, struct asColumn *col, int *size)
+/* Allocate and fill an array mapping id to name.  Currently limited to specific columns. */
+{
+char *idNameTable = trackDbSetting(tdb, "sourceTable");
+if (!idNameTable || differentString("sourceIds", col->name))
+    return NULL;
+
+struct sqlResult *sr;
+char query[256];
+char **row;
+char **idNames;
+
+sqlSafef(query, sizeof(query), "select max(id) from %s", idNameTable);
+struct sqlConnection *conn = hAllocConnTrack(database, tdb);
+int maxId = sqlQuickNum(conn, query);
+AllocArray(idNames, maxId+1);
+sqlSafef(query, sizeof(query), "select id, name from %s", idNameTable);
+sr = sqlGetResult(conn, query);
+int id;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    id = sqlUnsigned(row[0]);
+    if (id > maxId)
+        errAbort("Internal error:  id %d > maxId %d in %s", id, maxId, idNameTable);
+    idNames[id] = cloneString(row[1]);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+if (size)
+    *size = maxId+1;
+return idNames;
+}
+
 void printIdOrLinks(struct asColumn *col, struct hash *fieldToUrl, struct trackDb *tdb, char *idList)
 /* if trackDb does not contain a "urls" entry for current column name, just print idList as it is.
  * Otherwise treat idList as a comma-sep list of IDs and print one row per id, with a link to url,
@@ -1492,56 +1525,40 @@ void printIdOrLinks(struct asColumn *col, struct hash *fieldToUrl, struct trackD
 {
 // try to find a fieldName=url setting in the "urls" tdb statement, print id if not found
 char *url = NULL;
-if (fieldToUrl!=NULL)
+if (fieldToUrl != NULL)
     url = (char*)hashFindVal(fieldToUrl, col->name);
-if (url==NULL)
+if (url == NULL)
     {
     printf("<td>%s</td></tr>\n", idList);
     return;
     }
 
-// handle id->name mapping for multi-source items
-char **idNames = NULL;
-char *idNameTable = trackDbSetting(tdb, "sourceTable");
-if (sameString("sourceIds", col->name) && idNameTable)
-    {
-    struct sqlResult *sr;
-    char query[256];
-    char **row;
-    sqlSafef(query, sizeof(query), "select max(id) from %s", idNameTable);
-    struct sqlConnection *conn = hAllocConnTrack(database, tdb);
-    int maxId = sqlQuickNum(conn, query);
-    AllocArray(idNames, maxId+1);
-    sqlSafef(query, sizeof(query), "select id, name from %s", idNameTable);
-    sr = sqlGetResult(conn, query);
-    int id;
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        id = sqlUnsigned(row[0]);
-        if (id > maxId)
-            errAbort("Internal error:  id %d > maxId %d in %s", id, maxId, idNameTable);
-        idNames[id] = cloneString(row[1]);
-        }
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
-    }
-
 // split the id into parts and print each part as a link
 struct slName *slIds = slNameListFromComma(idList);
 struct slName *itemId = NULL;
+
+// handle id->name mapping for multi-source items
+int nameCount;
+char **idNames = getIdNameMap(tdb, col, &nameCount);
+
 printf("<td>");
 for (itemId = slIds; itemId!=NULL; itemId = itemId->next) 
     {
-    if (itemId!=slIds)
+    if (itemId != slIds)
         printf(", ");
     char *itemName = itemId->name;
     if (idNames)
-        itemName = idNames[sqlUnsigned(itemName)];
+        {
+        unsigned int id = sqlUnsigned(itemName);
+        if (id < nameCount)
+            itemName = idNames[sqlUnsigned(itemName)];
+        }
     char *idUrl = replaceInUrl(tdb, url, trimSpaces(itemName), TRUE);
     printf("<a href=\"%s\" target=\"_blank\">%s</a>", idUrl, itemName);
     } 
 printf("</td></tr>\n");
 freeMem(slIds);
+//freeMem(idNames);
 }
 
 int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount)
