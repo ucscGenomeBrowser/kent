@@ -4,7 +4,7 @@
 track wgEncodeAwgDnaseCombinedSites
 superTrack wgEncodeDNAseSuper dense
 release alpha
-shortLabel DNase HS Sites
+shortLabel DNaseI HS Sites
 longLabel Digital DNaseI Hypersensitivity Combined Sites (125 cell types) from ENCODE/Analysis
 type bed 5 +
 bedNameLabel Number of cell types
