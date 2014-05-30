@@ -1,0 +1,471 @@
+################################################################
+# lepOcu1 - Spotted gar - Lepisosteus oculatus - vertebrate - neopterygii - 4793
+################################################################
+track chainNetLepOcu1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 595.30
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb lepOcu1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetLepOcu1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetLepOcu1
+    spectrum on
+
+        track chainLepOcu1
+        release alpha
+        parent chainNetLepOcu1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain lepOcu1
+        html chainNet
+
+    track chainNetLepOcu1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetLepOcu1
+
+        track netLepOcu1
+        release alpha
+        parent chainNetLepOcu1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign lepOcu1 chainLepOcu1
+        html chainNet
+
+################################################################
+# astMex1 - Mexican tetra (cavefish) - Astyanax mexicanus - vertebrate - teleostei - 4790
+################################################################
+track chainNetAstMex1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 597.80
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb astMex1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetAstMex1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetAstMex1
+    spectrum on
+
+        track chainAstMex1
+        release alpha
+        parent chainNetAstMex1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain astMex1
+        html chainNet
+
+    track chainNetAstMex1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetAstMex1
+
+        track netAstMex1
+        release alpha
+        parent chainNetAstMex1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign astMex1 chainAstMex1
+        html chainNet
+
+################################################################
+# xipMac1 - Southern platyfish - Xiphophorus maculatus - vertebrate - percomorpha - 4740
+################################################################
+track chainNetXipMac1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 617.80
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb xipMac1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetXipMac1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetXipMac1
+    spectrum on
+
+        track chainXipMac1
+        release alpha
+        parent chainNetXipMac1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain xipMac1
+        html chainNet
+
+    track chainNetXipMac1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetXipMac1
+
+        track netXipMac1
+        release alpha
+        parent chainNetXipMac1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign xipMac1 chainXipMac1
+        html chainNet
+
+################################################################
+# punNye1 - Pundamilia nyererei - Pundamilia nyererei - vertebrate - percomorpha - 4665
+################################################################
+track chainNetPunNye1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 621.55
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb punNye1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetPunNye1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetPunNye1
+    spectrum on
+
+        track chainPunNye1
+        release alpha
+        parent chainNetPunNye1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain punNye1
+        html chainNet
+
+    track chainNetPunNye1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetPunNye1
+
+        track netPunNye1
+        release alpha
+        parent chainNetPunNye1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign punNye1 chainPunNye1
+        html chainNet
+
+################################################################
+# mayZeb1 - Zebra mbuna - Maylandia zebra - vertebrate - percomorpha - 4660
+################################################################
+track chainNetMayZeb1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 622.80
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb mayZeb1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetMayZeb1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetMayZeb1
+    spectrum on
+
+        track chainMayZeb1
+        release alpha
+        parent chainNetMayZeb1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain mayZeb1
+        html chainNet
+
+    track chainNetMayZeb1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetMayZeb1
+
+        track netMayZeb1
+        release alpha
+        parent chainNetMayZeb1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign mayZeb1 chainMayZeb1
+        html chainNet
+
+################################################################
+# hapBur1 - Burton's mouthbreeder - Haplochromis burtoni - vertebrate - percomorpha - 4650
+################################################################
+track chainNetHapBur1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 624.05
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb hapBur1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetHapBur1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetHapBur1
+    spectrum on
+
+        track chainHapBur1
+        release alpha
+        parent chainNetHapBur1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain hapBur1
+        html chainNet
+
+    track chainNetHapBur1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetHapBur1
+
+        track netHapBur1
+        release alpha
+        parent chainNetHapBur1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign hapBur1 chainHapBur1
+        html chainNet
+
+################################################################
+# neoBri1 - Princess of Burundi - Neolamprologus brichardi - vertebrate - percomorpha - 4680
+################################################################
+track chainNetNeoBri1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 625.30
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb neoBri1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetNeoBri1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetNeoBri1
+    spectrum on
+
+        track chainNeoBri1
+        release alpha
+        parent chainNetNeoBri1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain neoBri1
+        html chainNet
+
+    track chainNetNeoBri1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetNeoBri1
+
+        track netNeoBri1
+        release alpha
+        parent chainNetNeoBri1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign neoBri1 chainNeoBri1
+        html chainNet
+
+################################################################
+# takFla1 - Yellowbelly pufferfish - Takifugu flavidus - vertebrate - tetraodontidae - 4640
+################################################################
+track chainNetTakFla1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 629.05
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb takFla1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetTakFla1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetTakFla1
+    spectrum on
+
+        track chainTakFla1
+        release alpha
+        parent chainNetTakFla1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain takFla1
+        html chainNet
+
+    track chainNetTakFla1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetTakFla1
+
+        track netTakFla1
+        release alpha
+        parent chainNetTakFla1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign takFla1 chainTakFla1
+        html chainNet

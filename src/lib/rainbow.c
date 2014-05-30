@@ -1,4 +1,6 @@
-/* rainbow - stuff to generate rainbow colors. */
+/* rainbow - stuff to generate rainbow colors. 
+ * This file is copyright 1984-2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #include "common.h"
 #include "memgfx.h"
