@@ -2512,5 +2512,30 @@ mysql> select count(*), exception from snp125Exceptions group by exception;
     ssh hgwdev
     cd /cluster/genbank/genbank
     ./bin/gbDbLoadStep -drop -initialLoad panTro1
-############################################################################
 
+############################################################################
+# CPG Islands Unmasked track (DONE - 2014-04-24 - Hiram)
+    mkdir /hive/data/genomes/panTro1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/panTro1/bed/cpgIslandsUnmasked
+    time doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
+     -tableName=cpgIslandExtUnmasked -dbHost=hgwdev -smallClusterHub=ku \
+        -workhorse=hgwdev \
+          -maskedSeq=/hive/data/genomes/panTro1/panTro1.unmasked.2bit \
+            panTro1 > do.log 2>&1
+    # real    2m6.970s
+    cat fb.panTro1.cpgIslandExtUnmasked.txt
+    # 61507517 bases of 2192103426 (2.806%) in intersection
+
+##############################################################################
+# CPG Islands (DONE - 2014-04-24 - Hiram)
+    mkdir /hive/data/genomes/panTro1/bed/cpgIslandsExt
+    cd /hive/data/genomes/panTro1/bed/cpgIslandsExt
+    time doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
+     -tableName=cpgIslandExt -dbHost=hgwdev -smallClusterHub=ku \
+        -workhorse=hgwdev panTro1 > do.log 2>&1
+    # real    2m7.936s
+
+    cat fb.panTro1.cpgIslandExt.txt
+    # 17633873 bases of 2733948177 (0.645%) in intersection
+
+##############################################################################
