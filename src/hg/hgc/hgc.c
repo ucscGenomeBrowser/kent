@@ -1500,6 +1500,32 @@ if (url==NULL)
     return;
     }
 
+// handle id->name mapping for multi-source items
+char **idNames = NULL;
+char *idNameTable = trackDbSetting(tdb, "sourceTable");
+if (sameString("sourceIds", col->name) && idNameTable)
+    {
+    struct sqlResult *sr;
+    char query[256];
+    char **row;
+    sqlSafef(query, sizeof(query), "select max(id) from %s", idNameTable);
+    struct sqlConnection *conn = hAllocConnTrack(database, tdb);
+    int maxId = sqlQuickNum(conn, query);
+    AllocArray(idNames, maxId+1);
+    sqlSafef(query, sizeof(query), "select id, name from %s", idNameTable);
+    sr = sqlGetResult(conn, query);
+    int id;
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        id = sqlUnsigned(row[0]);
+        if (id > maxId)
+            errAbort("Internal error:  id %d > maxId %d in %s", id, maxId, idNameTable);
+        idNames[id] = cloneString(row[1]);
+        }
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+
 // split the id into parts and print each part as a link
 struct slName *slIds = slNameListFromComma(idList);
 struct slName *itemId = NULL;
@@ -1508,10 +1534,11 @@ for (itemId = slIds; itemId!=NULL; itemId = itemId->next)
     {
     if (itemId!=slIds)
         printf(", ");
-    char* itemName = itemId->name;
-    itemName = trimSpaces(itemName);
-    char *idUrl = replaceInUrl(tdb, url, itemName, TRUE);
-    printf("<a href=\"%s\" target=\"_blank\">%s</a>", idUrl, itemId->name);
+    char *itemName = itemId->name;
+    if (idNames)
+        itemName = idNames[sqlUnsigned(itemName)];
+    char *idUrl = replaceInUrl(tdb, url, trimSpaces(itemName), TRUE);
+    printf("<a href=\"%s\" target=\"_blank\">%s</a>", idUrl, itemName);
     } 
 printf("</td></tr>\n");
 freeMem(slIds);
