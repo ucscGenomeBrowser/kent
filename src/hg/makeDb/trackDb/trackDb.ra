@@ -6,6 +6,7 @@ include trackDb.chainNet.primates.ra
 include trackDb.chainNet.euarchontoglires.ra
 include trackDb.chainNet.laurasiatheria.ra
 include trackDb.chainNet.afrotheria.ra
+include trackDb.chainNet.mammal.ra
 include trackDb.chainNet.birds.ra
 include trackDb.chainNet.sarcopterygii.ra
 include trackDb.chainNet.fish.ra
