@@ -23,7 +23,7 @@ O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
     font/mgHelveticaBold34.o font/mgHelveticaBold8.o font/mgSixhi6.o font/mgSail8.o \
     font/mgTimes10.o font/mgTimes12.o font/mgTimes14.o font/mgTimes18.o \
     font/mgTimes24.o font/mgTimes34.o font/mgTimes8.o font/mgMenlo12.o \
-    fuzzyShow.o \
+    fq.o fuzzyShow.o \
     gapCalc.o gdf.o gemfont.o genomeRangeTree.o \
     gfNet.o gff.o gff3.o gfxPoly.o gifLabel.o \
     hacTree.o hash.o hex.o histogram.o hmmPfamParse.o hmmstats.o htmlPage.o htmshell.o \
