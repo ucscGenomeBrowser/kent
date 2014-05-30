@@ -604,9 +604,6 @@ if (survey && differentWord(survey, "off"))
     hPrintf("<span style='background-color:yellow;'><A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n", survey, surveyLabel ? surveyLabel : "Take survey");
 hPutc('\n');
 
-// check to see if we have any new hubs
-hubCheckForNew(cart);
-
 // grab all the hubs that are listed in the cart
 struct hubConnectStatus *hubList =  hubConnectStatusListFromCartAll(cart);
 
@@ -615,6 +612,7 @@ checkTrackDbs(hubList);
 // here's a little form for the add new hub button
 printf("<FORM ACTION=\"%s\" NAME=\"addHubForm\">\n",  "../cgi-bin/hgGateway");
 cgiMakeHiddenVar("hubUrl", "");
+cgiMakeHiddenVar( hgHubDoFirstDb, "on");
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 puts("</FORM>");
 
