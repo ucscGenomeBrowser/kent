@@ -2843,13 +2843,16 @@ done > jobList
         -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-fileServer=hgwdev \
         -chainMinScore=3000 -chainLinearGap=medium > chainMerge.log 2>&1
-XXX - running - Mon Feb 10 08:52:43 PST 2014
+
     time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
 	-verbose=2 \
         -continue=load -stop=load `pwd`/DEF \
         -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-fileServer=hgwdev \
         -chainMinScore=3000 -chainLinearGap=medium > load.log 2>&1
+
+    hgLoadChain -normScore -tIndex hg38 chainSelf hg38.hg38.all.chain.gz
+    #  Loading 104815249 chains into hg38.chainSelf
 
     cat fb.hg38.chainSelfLink.txt
     #   392419010 bases of 3049335806 (12.869%) in intersection
@@ -3442,7 +3445,7 @@ TMPDIR=/dev/shm
     # filter with doRecipBest.pl
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg38 panTro4) > rbest.log 2>&1
-XXX - running - Tue May 27 12:50:57 PDT 2014
+    # real    57m55.320s
 
     # running the swap
     mkdir /hive/data/genomes/panTro4/bed/blastz.hg38.swap
@@ -3458,9 +3461,10 @@ XXX - running - Tue May 27 12:50:57 PDT 2014
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         panTro4 hg38) > rbest.log 2>&1
+    # real    64m33.812s
 
 #############################################################################
-# Opossum Lastz run (WORKING - 2014-05-27 - Hiram)
+# Opossum Lastz run (DONE - 2014-05-27 - Hiram)
     screen -S hg38MonDom5      # use a screen to manage this longish running job
     mkdir /hive/data/genomes/hg38/bed/lastzMonDom5.2014-05-27
     cd /hive/data/genomes/hg38/bed/lastzMonDom5.2014-05-27
@@ -3503,26 +3507,37 @@ TMPDIR=/dev/shm
         -chainMinScore=5000 -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -syntenicNet) > do.log 2>&1
-XXX - running - Tue May 27 09:34:29 PDT 2014
+    # real    670m13.280s
+    # one failed chain run for hg19, finished manually on hgwdev, then:
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -continue=chainMerge -chainMinScore=5000 -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > chainMerge.log 2>&1
+    # real    164m28.822s
 
     cat fb.hg38.chainMonDom5Link.txt
-#2760526412 bases of 2897316137 (95.279%) in intersection
+    # 438195373 bases of 3049335806 (14.370%) in intersection
 
     # filter with doRecipBest.pl
-    doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
-        hg38 monDom5 >& rbest.log & tail -f rbest.log
+    time (/cluster/bin/scripts/doRecipBest.pl -buildDir=`pwd` \
+        -dbHost=hgwdev -workhorse=hgwdev hg38 monDom5) > rbest.log 2>&1
+    # real    130m22.825s
 
     # running the swap
     mkdir /hive/data/genomes/monDom5/bed/blastz.hg38.swap
     cd /hive/data/genomes/monDom5/bed/blastz.hg38.swap
-    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
-        -swap /hive/data/genomes/hg38/bed/lastzMonDom5.2014-05-27/DEF \
-        -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        -syntenicNet >& swap.log & tail -f swap.log
-    cat fb.monDom5.chainHg38Link.txt
-#2773561724 bases of 2902338967 (95.563%) in intersection
+    time (doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg38/bed/lastzMonDom5.2014-05-27/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+    # real    102m41.443s
 
+    cat fb.monDom5.chainHg38Link.txt
+    # 420069915 bases of 3501660299 (11.996%) in intersection
+    time (/cluster/bin/scripts/doRecipBest.pl -buildDir=`pwd` \
+        -dbHost=hgwdev -workhorse=hgwdev monDom5 hg38) > rbest.log 2>&1
+    #  real    90m56.189s
 
 #############################################################################
 # LOCUS REFERENCE GENOME (LRG) REGIONS AND TRANSCRIPTS (DONE 5/29/14 angie)

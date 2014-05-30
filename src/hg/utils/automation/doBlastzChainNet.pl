@@ -1547,6 +1547,8 @@ foreach f (axtChain/synNet/*.net)
 end
 rm -fr $runDir/synNet
 rm -fr $runDir/chain
+cd mafSynNet
+md5sum *.maf.gz > md5sum.txt
 _EOF_
       );
   } else {
@@ -1561,6 +1563,7 @@ netToAxt $tDb.$qDb.syn.net.gz $tDb.$qDb.all.chain.gz \\
     $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} \\
     stdout \\
 | gzip -c > $tDb.$qDb.synNet.maf.gz
+md5sum $tDb.$qDb.syn.net.gz $tDb.$qDb.synNet.maf.gz > synNet.md5sum.txt
 _EOF_
       );
   }
