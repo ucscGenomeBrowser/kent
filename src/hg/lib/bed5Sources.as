@@ -6,7 +6,7 @@ table bed5Sources
     uint   chromEnd;   "End position in chromosome"
     string name;       "Name of item"
     uint   score;      "Display score (0-1000)"
-    float  floatScore; "Data score (signal, p-value, z-score, etc.)"
-    uint sourceCount;   "Number of sources contributing to this item"
-    uint[sourceCount] sourceIds; "Comma separated list of source ids"
+    float  floatScore; "Data value"
+    uint sourceCount;   "Number of sources"
+    uint[sourceCount] sourceIds; "Source ids"
     )
