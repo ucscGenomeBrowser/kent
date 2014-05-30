@@ -386,7 +386,7 @@ foreach my $db (@dbs) {
   my $sqlFile = "$db.tableDescriptions.sql";
   open(SQL, ">$sqlFile") || die "Can't open $sqlFile for writing";
   print SQL "use $db;\n";
-  print SQL "drop table if exists tableDescriptions_kate;";
+  print SQL "drop table if exists tableDescriptions;";
   open(F, "$kentSrc/hg/lib/tableDescriptions.sql")
     || die "Can't open $kentSrc/hg/lib/tableDescriptions.sql";
   while (<F>) {
@@ -442,13 +442,13 @@ foreach my $db (@dbs) {
     #*** should complain about gbdD tables not in any active db.
     my $asd = (defined $as) ? $as->{autoSql} : "";
     $asd =~ s/'/\\'/g;
-    print SQL "INSERT INTO tableDescriptions_kate (tableName, autoSqlDef, gbdAnchor)"
+    print SQL "INSERT INTO tableDescriptions (tableName, autoSqlDef, gbdAnchor)"
       . " values ('$table', '$asd', '$anchor');\n";
   }
   close(SQL);
   if (! $noLoad) {
     (! system("/cluster/bin/x86_64/hgsql $db < $sqlFile")) || die "hgsql error for $sqlFile";
-    print "Loaded $db.tableDescriptions_kate.\n";
+    print "Loaded $db.tableDescriptions.\n";
     unlink($sqlFile);
   }
 }
