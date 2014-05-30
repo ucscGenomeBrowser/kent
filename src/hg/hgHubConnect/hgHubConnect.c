@@ -194,7 +194,6 @@ printf(
 	"<th>Hub Name</th> "
 	"<th>Description</th> "
 	"<th>Assemblies</th> "
-	"<th>URL</th> "
     "</tr>\n"
     "</thead>\n");
 
@@ -236,10 +235,7 @@ for(hub = unlistedHubList; hub; hub = hub->next)
 	}
     if (hub->trackHub != NULL)
 	{
-	if (hub->trackHub->descriptionUrl != NULL)
-	    ourPrintCellLink(hub->trackHub->shortLabel, hub->trackHub->descriptionUrl);
-	else
-	    ourPrintCell(hub->trackHub->shortLabel);
+	ourPrintCellLink(hub->trackHub->shortLabel, hub->hubUrl);
 	}
     else
 	ourPrintCell("");
@@ -249,7 +245,12 @@ for(hub = unlistedHubList; hub; hub = hub->next)
 	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>\n", 
 	    hub->errorMessage);
     else if (hub->trackHub != NULL)
-	ourPrintCell(hub->trackHub->longLabel);
+	{
+	if (hub->trackHub->descriptionUrl != NULL)
+	    ourPrintCellLink(hub->trackHub->longLabel, hub->trackHub->descriptionUrl);
+	else
+	    ourPrintCell(hub->trackHub->longLabel);
+	}
     else
 	ourPrintCell("");
 
@@ -257,7 +258,6 @@ for(hub = unlistedHubList; hub; hub = hub->next)
 	printGenomes(hub->trackHub, count);
     else
 	ourPrintCell("");
-    ourPrintCell(hub->hubUrl);
     }
 
 printf("</TR></tbody></TABLE>\n");
@@ -438,12 +438,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	errAbort("cannot get id for hub with url %s\n", url);
 
-    if (hasDescription && !isEmpty(descriptionUrl))
-	ourPrintCellLink(shortLabel, descriptionUrl);
-    else
-	ourPrintCell(shortLabel);
+    ourPrintCellLink(shortLabel, url);
+
     if (isEmpty(errorMessage))
-	ourPrintCell(longLabel);
+	{
+	if (hasDescription && !isEmpty(descriptionUrl))
+	    ourPrintCellLink(longLabel, descriptionUrl);
+	else
+	    ourPrintCell(longLabel);
+	}
     else
 	printf("<TD><span class=\"hubError\">ERROR: %s </span>"
 	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>", 
