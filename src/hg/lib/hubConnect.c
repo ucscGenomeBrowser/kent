@@ -283,7 +283,7 @@ assert(trackName != NULL);
 return trackName + 1;
 }
 
-struct trackHub *trackHubFromId(unsigned hubId)
+struct hubConnectStatus *hubFromId(unsigned hubId)
 /* Given a hub ID number, return corresponding trackHub structure. 
  * ErrAbort if there's a problem. */
 {
@@ -294,11 +294,7 @@ if (status == NULL)
     errAbort("The hubId %d was not found", hubId);
 if (!isEmpty(status->errorMessage))
     errAbort("%s", status->errorMessage);
-char hubName[16];
-safef(hubName, sizeof(hubName), "hub_%u", hubId);
-struct trackHub *hub = trackHubOpen(status->hubUrl, hubName);
-hubConnectStatusFree(&status);
-return hub;
+return status;
 }
 
 static struct trackDb *findSuperTrack(struct trackDb *tdbList, char *trackName)
@@ -331,9 +327,9 @@ void hubConnectAddDescription(char *database, struct trackDb *tdb)
  * and store in tdb->html. */
 {
 unsigned hubId = hubIdFromTrackName(tdb->track);
-struct trackHub *hub = trackHubFromId(hubId);
-struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
-trackHubPolishTrackNames(hub, tdb);
+struct hubConnectStatus *hub = hubFromId(hubId);
+struct trackHubGenome *hubGenome = trackHubFindGenome(hub->trackHub, database);
+trackHubPolishTrackNames(hub->trackHub, tdb);
 trackHubAddDescription(hubGenome->trackDbFile, tdb);
 }
 
@@ -345,12 +341,12 @@ struct trackDb *hubConnectAddHubForTrackAndFindTdb( char *database,
  * but just for that track and it's parents. */ 
 {
 unsigned hubId = hubIdFromTrackName(trackName);
-struct trackHub *hub = trackHubFromId(hubId);
-struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
-struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
+struct hubConnectStatus *hub = hubFromId(hubId);
+struct trackHubGenome *hubGenome = trackHubFindGenome(hub->trackHub, database);
+struct trackDb *tdbList = trackHubTracksForGenome(hub->trackHub, hubGenome);
 tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = trackDbPolishAfterLinkup(tdbList, database);
-trackHubPolishTrackNames(hub, tdbList);
+trackHubPolishTrackNames(hub->trackHub, tdbList);
 char *fixTrackName = cloneString(trackName);
 trackHubFixName(fixTrackName);
 rAddTrackListToHash(trackHash, tdbList, NULL, FALSE);
@@ -362,14 +358,13 @@ if (tdb == NULL)
     tdb = findSuperTrack(tdbList, fixTrackName);
 
 if (tdb == NULL) 
-    errAbort("Can't find track %s in %s", fixTrackName, hub->url);
+    errAbort("Can't find track %s in %s", fixTrackName, hub->trackHub->url);
 
 /* Add html for track and parents. */
 /* Note: this does NOT add the HTML for supertrack kids */
 struct trackDb *parent;
 for (parent = tdb; parent != NULL; parent = parent->parent)
     trackHubAddDescription(hubGenome->trackDbFile, parent);
-trackHubClose(&hub);
 
 return tdb;
 }
@@ -444,7 +439,7 @@ hDisconnectCentral(&conn);
 return id;
 }
 
-static void getAndSetHubStatus( struct cart *cart, char *url, 
+static struct hubConnectStatus *getAndSetHubStatus( struct cart *cart, char *url, 
     boolean set)
 /* make sure url is in hubStatus table, fetch the hub to get latest
  * labels and db information.
@@ -488,7 +483,7 @@ if (set)
     cartSetString(cart, hubName, "1");
     }
 
-hubConnectStatusFree(&hub);
+return hub;
 }
 
 unsigned hubFindOrAddUrlInStatusTable(char *database, struct cart *cart,
@@ -510,16 +505,27 @@ if ((id = getHubId(url, errorMessage)) == 0)
 return id;
 }
 
-void hubCheckForNew( struct cart *cart)
+static char  *checkForNew( struct cart *cart)
 /* see if the user just typed in a new hub url, return id if so */
 {
+struct hubConnectStatus *hub;
 char *url = cartOptionalString(cart, hgHubDataText);
+char *newDatabase = NULL;
 
-if (url != NULL)
+if (url == NULL)
+    return NULL;
+
+trimSpaces(url);
+hub = getAndSetHubStatus( cart, url, TRUE);
+cartRemove(cart, hgHubDataText);
+
+char *wantFirstDb = cartOptionalString(cart, hgHubDoFirstDb);
+if (wantFirstDb != NULL)
     {
-    trimSpaces(url);
-    getAndSetHubStatus( cart, url, TRUE);
+    newDatabase = hub->trackHub->defaultDb;
+    fprintf(stderr, "getting defaultDb %s\n", newDatabase);
     }
+return newDatabase;
 }
 
 unsigned hubResetError(char *url)
@@ -710,13 +716,13 @@ struct hubConnectStatus *hubConnectGetHubs()
 return globalHubList;
 }
 
-struct hubConnectStatus * hubConnectLoadHubs(struct cart *cart)
+char *hubConnectLoadHubs(struct cart *cart)
 /* load the track data hubs.  Set a static global to remember them */
 {
-hubCheckForNew( cart);
+char *newDatabase = checkForNew( cart);
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 struct hubConnectStatus  *hubList =  hubConnectStatusListFromCart(cart);
 globalHubList = hubList;
 
-return hubList;
+return newDatabase;
 }

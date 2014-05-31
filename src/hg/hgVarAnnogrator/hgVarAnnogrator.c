@@ -1531,7 +1531,6 @@ hPrintf("</FORM>\n");
 /* Hidden form for jumping to track hub manager CGI. */
 hPrintf("<FORM ACTION='%s' NAME='trackHubForm'>", hgHubConnectName());
 //#*** well, almost verbatim... we should have an hgThisCgiName().
-cgiMakeHiddenVar(hgHubConnectCgiDestUrl, hgVarAnnogratorName());
 cartSaveSession(cart);
 hPrintf("</FORM>\n");
 //#*** ------------------ end verbatim ---------------

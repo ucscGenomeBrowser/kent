@@ -41,6 +41,8 @@
 #define hgHubDoSearch      hgHubDo "search"
 #define hgHubDoDeleteSearch      hgHubDo "deleteSearch"
 #define hgHubDoDisconnect  hgHubDo "disconnect"
+#define hgHubDoFirstDb     hgHubDo "firstDb"
+#define hgHubDoDecorateDb  hgHubDo "decorateDb"
 
 boolean isHubTrack(char *trackName);
 /* Return TRUE if it's a hub track. */
@@ -76,9 +78,6 @@ struct hubConnectStatus *hubConnectStatusListFromCartAll(struct cart *cart);
 
 #define hubConnectTrackHubsVarName "trackHubs"
 /* Name of cart variable with list of track hubs. */
-
-#define hgHubConnectCgiDestUrl "hgHubConnect.destUrl"
-/* Cart variable to tell hgHubConnect where to go on submit. */
 
 #define hgHubConnectRemakeTrackHub "hgHubConnect.remakeTrackHub"
 /* Cart variable to indicate trackHub cart variable needs refreshing. */
@@ -129,13 +128,6 @@ void hubDisconnect(struct cart *cart, char *url);
 /* drop the information about this url from the hubStatus table, and 
  * the cart variable the references this hub */
 
-void hubCheckForNew( struct cart *cart);
-/* see if the user just typed in a new hub url, add to cart and hubStatus */
-
-struct trackHub *trackHubFromId(unsigned hubId);
-/* Given a hub ID number, return corresponding trackHub structure. 
- * ErrAbort if there's a problem. */
-
 void hubUpdateStatus(char *errorMessage, struct hubConnectStatus *hub);
 /* set the error message in the hubStatus table */
 
@@ -146,7 +138,7 @@ struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database);
 /* Load up stuff from data hub and append to list. The hubUrl points to
  * a trackDb.ra format file.  */
 
-struct hubConnectStatus *hubConnectLoadHubs(struct cart *cart);
+char *hubConnectLoadHubs(struct cart *cart);
 /* load the track data hubs.  Set a static global to remember them */
 
 struct hubConnectStatus *hubConnectGetHubs();
