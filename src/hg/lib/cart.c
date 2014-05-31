@@ -699,10 +699,16 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 /* wire up the assembly hubs so we can operate without sql */
 setUdcTimeout(cart);
 if (cartVarExists(cart, hgHubDoDisconnect))
-    {
     doDisconnectHub(cart);
+
+char *newDatabase = hubConnectLoadHubs(cart);
+
+if (newDatabase != NULL)
+    {
+    cartSetString(cart,"db", newDatabase);
+    // this is some magic to use the defaultPosition */
+    cartSetString(cart,"position", "genome");
     }
-hubConnectLoadHubs(cart);
 
 if (exclude != NULL)
     {

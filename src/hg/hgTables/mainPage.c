@@ -1001,7 +1001,6 @@ hPrintf("</FORM>\n");
 
 /* Hidden form for jumping to track hub manager CGI. */
 hPrintf("<FORM ACTION='%s' NAME='trackHubForm'>", hgHubConnectName());
-cgiMakeHiddenVar(hgHubConnectCgiDestUrl, "../cgi-bin/hgTables");
 cartSaveSession(cart);
 hPrintf("</FORM>\n");
 
