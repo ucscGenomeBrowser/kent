@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "bamFile.h"
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -39,69 +40,64 @@ strcat(result,s2);
 return result;
 }
 
-bool isUnderscore(char c)
-/* checks if the character is an underscore */
+void openOutput(struct hash *hash, bam_header_t *head)
 {
-if (c == '_')
+int i;
+for ( i = 0; i < head->n_targets; ++i )
     {
-    return(TRUE);
+    char *fileName =concat(head->target_name[i], ".bam");
+    samfile_t *outBam = bamMustOpenLocal(fileName, "wb", head);
+    hashAdd(hash, head->target_name[i], outBam);
     }
-return(FALSE);
 }
 
-char * removeUnderscores(char * input)
-/* Removes the Underscores fromo a string */
+void closeOutput(struct hash *hash, bam_header_t *head)
 {
-int i, j=0;
-char *result = needMem(strlen(input)+1); 
-for (i = 0; input[i] != '\0'; ++i)
-   {
-   if (!isUnderscore(input[i]))
-       {
-       result[j] = input[i];
-       ++j;
-       }
-   }
-return(result);
+int i;
+for ( i = 0; i < head->n_targets; ++i )
+    {
+    samclose(hashFindVal(hash, head->target_name[i]));
+    }
+}
+
+void writeOutput(samfile_t *input, struct hash *hash)
+{
+bam_header_t *head = input ->header;
+bam1_t one;
+ZeroVar(&one);
+samfile_t *unmapped = bamMustOpenLocal("unmapped.bam", "wb", head);
+for (;;)
+    {
+    if (samread (input, &one) < 0)
+        {
+	break;
+	}
+	if (one.core.tid > 0)
+	    {
+            samwrite(hashFindVal(hash, head->target_name[one.core.tid]), &one);    
+            }
+        else 
+	    {
+	    samwrite(unmapped, &one);
+	    }
+    }
+samclose(unmapped);    
 }
 
 void bamSplitByChrom(char *inBam)
-/* bamSplitByChrom -  Splits a bam file into multiple bam files based on chromosome . */
 {
-/* Open file and get header for it. */
-samfile_t *input = samMustOpen(inBam, "rb", NULL);
-bam_header_t *head = input->header;
-bam1_t one;
-ZeroVar(&one);	// This seems to be necessary!
-int i =0;
-for (i=0; i<head->n_targets; ++i)
-/* Loop through each chromosome. */   
-    {
-    //head->target_name[i] = removeUnderscores(head->target_name[i]);
-    samfile_t *in = samMustOpen(inBam, "rb", NULL);
-    char *outBam = head->target_name[i];  
-    char *bam = ".bam";
-    samfile_t *out = bamMustOpenLocal(concat(outBam,bam), "wb", head);
-    /* Open an output bam file. */
-    for (;;)
-    /* Loop through the input bam file. */
-        {
-        if (samread(in, &one) < 0)
-            {
-	    break;
-	    }
-	if (head->target_name[one.core.tid]==outBam)
-	//if (strcmp(head->target_name[one.core.tid],outBam)==0)
-            /* Seems to be dropping certain chromosomes (with underscores in names) */
-	    {
-	    
-	    printf("seems to be working");
-            samwrite(out, &one);
-            }
-        }
-    samclose(out);
-    samclose(in);
-    }
+struct hash *hash = hashNew(0);
+samfile_t *input = bamMustOpenLocal(inBam, "rb", NULL);
+bam_header_t *head = input ->header;
+openOutput(hash, head);
+/* Open up file, loop through header, and make up a hash with chromosome names for keys,
+ * and FILE * for values. */
+writeOutput(input, hash);
+/* Loop through each record of BAM file, looking up chromosome, getting file from hash,
+ * and adding record to appropriate file */
+closeOutput(hash, head);
+samclose(input);
+/* Loop through each files nad close it */
 }
 
 int main(int argc, char *argv[])
