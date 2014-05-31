@@ -23,29 +23,20 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-samfile_t *samMustOpen(char *fileName, char *mode, void *extraHeader)
-/* Open up samfile or die trying. */
-{
-samfile_t *sf = samopen(fileName, mode, extraHeader);
-if (sf == NULL)
-    errnoAbort("Couldn't open %s.\n", fileName);
-return sf;
-}
 
 void bamMerge(char *fileNames[], int files)
-/* bamMerge -  Merges multiple bam files into a single bam file . */
+/* bamMerge -  Merges multiple bam files into a single bam file. */
 {
-samfile_t *chromHead =samMustOpen(fileNames[1], "rb", NULL);
-char *outBam = "merged.bam";
+samfile_t *chromHead = bamMustOpenLocal(fileNames[1], "rb", NULL);
 bam_header_t *head = chromHead->header;
-samfile_t *out = bamMustOpenLocal(outBam, "wb", head);
+samfile_t *out = bamMustOpenLocal("merged.bam", "wb", head);
 samclose(chromHead);
 /* Opens the output and sets the header to be the same as the first input. */
 int i;
-for (i = 1; i<files; ++i)
+for (i = 1; i < files; ++i)
 /* Loop through all input files */
     {
-    samfile_t *in = samMustOpen(fileNames[i], "rb", NULL);
+    samfile_t *in = bamMustOpenLocal(fileNames[i], "rb", NULL);
     bam1_t one;
     ZeroVar(&one);	// This seems to be necessary!
     /* Open an input file */
