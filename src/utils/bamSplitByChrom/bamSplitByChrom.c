@@ -1,4 +1,5 @@
-/* bamSplitByChrom -  Splits a bam file into multiple bam files based on chromosome . */
+/* bamSplitByChrom -  Splits a bam file into multiple bam files based on chromosome.
+ * Unmapped reads are written to the file unmapped.bam */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -23,6 +24,8 @@ static struct optionSpec options[] = {
 };
 
 void openOutput(struct hash *hash, bam_header_t *head)
+/* Loops through the input bam's header, opening an output file
+ * for each chromosome in the input file */
 {
 int i;
 for ( i = 0; i < head->n_targets; ++i )
@@ -33,7 +36,8 @@ for ( i = 0; i < head->n_targets; ++i )
     }
 }
 
-void closeOutput(struct hash *hash, bam_header_t *head)
+void closeOutput(struct hash *hash, bam_header_t *head)i
+/* Loops through the output files and closes them. */
 {
 int i;
 for ( i = 0; i < head->n_targets; ++i )
@@ -43,6 +47,8 @@ for ( i = 0; i < head->n_targets; ++i )
 }
 
 void writeOutput(samfile_t *input, struct hash *hash)
+/* Reads through the input bam and writes each alignment to the correct output file.
+ * Unmapped reads are written to unmapped.bam " 
 {
 bam_header_t *head = input ->header;
 bam1_t one;
@@ -67,19 +73,20 @@ samclose(unmapped);
 }
 
 void bamSplitByChrom(char *inBam)
+/* Splits the input bam into multiple output bam's based on chromosome. "
 {
 struct hash *hash = hashNew(0);
 samfile_t *input = bamMustOpenLocal(inBam, "rb", NULL);
 bam_header_t *head = input ->header;
 openOutput(hash, head);
 /* Open up file, loop through header, and make up a hash with chromosome names for keys,
- * and FILE * for values. */
+ * and samfile_t for values. */
 writeOutput(input, hash);
 /* Loop through each record of BAM file, looking up chromosome, getting file from hash,
  * and adding record to appropriate file */
 closeOutput(hash, head);
 samclose(input);
-/* Loop through each files nad close it */
+/* Loop through each output file and close it */
 }
 
 int main(int argc, char *argv[])
