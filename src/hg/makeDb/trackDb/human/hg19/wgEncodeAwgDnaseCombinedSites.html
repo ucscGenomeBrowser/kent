@@ -1,45 +1,49 @@
 <h2>Description</h2>
-DNase I hypersensitive sites (DHSs) are markers of regulatory DNA and have underpinned the discovery of all classes of cis-regulatory elements including enhancers, promoters, insulators, silencers and locus control regions. Here we present the first extensive map of human DHSs identified through genome-wide profiling in 125 diverse cell and tissue types. We identify ~2.9 million DHSs that encompass virtually all known experimentally validated cis-regulatory sequences and expose a vast trove of novel elements, most with highly cell-selective regulation. 
+<p>
+DNaseI hypersensitive sites (DHSs) are markers of regulatory DNA and have underpinned the discovery of all 
+classes of cis-regulatory elements including enhancers, promoters, insulators, silencers and locus control regions.  
+This track displays an extensive map of human DHSs (~2.9 million) identified through genome-wide profiling 
+in <a target=_blank href="http://encodeproject.org/ENCODE/cellTypes.html">125 diverse cell and tissue types</a> 
+by the ENCODE Consortium between September 2007 and January 2011, with follow-on analysis and results results 
+reported in September 2012.</p>
+<p>
+The data underlying this track was produced by two ENCODE production groups (University of Washington and Duke University).
+Uniform processing of the individual experiments was performed by the ENCODE Analysis Working Group, and is
+displayed in the 
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodewgEncodeAwgDnaseUniform">ENCODE Uniform DNaseI HS</a>
+browser track. 
+The <a target=_blank href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeDnaseClusteredV2">DNaseI HS Clusters</a>
+tracks provides another view of this data.</p>
 
 <h2>Display Conventions and Configuration</h2>
+<p>
+The display for this track shows DHS locations and score as grayscale-colored items where
+higher scores correspond to darker-colored blocks.  The label displayed to the left of each item indicates
+the number of cell types with DnaseI sensitivity detected at the site.  Clicking on a displayed block shows
+a details page that lists the cell types.</p>
 
 <h2>Methods</h2>
-
-Intro
 <p>
-Two ENCODE production centres (University of Washington and Duke University) profiled DNase I sensitivity genome-wide using massively parallel sequencing7, 8, 9 in a total of 125 human cell and tissue types including normal differentiated primary cells (n = 71), immortalized primary cells (n = 16), malignancy-derived cell lines (n = 30) and multipotent and pluripotent progenitor cells (n = 8) (Supplementary Table 1). The density of mapped DNase I cleavages as a function of genome position provides a continuous quantitative measure of chromatin accessibility, in which DHSs appear as prominent peaks within the signal data from each cell type (Fig. 1a and Supplementary Figs 1 and 2). Analysis using a common algorithm (see Methods) identified 2,890,742 distinct high-confidence DHSs (false discovery rate (FDR) of 1%; see Methods), each of which was active in one or more cell types. Of these DHSs, 970,100 were specific to a single cell type, 1,920,642 were active in 2 or more cell types, and a small minority (3,692) was detected in all cell types. 
+DNaseI hypersensitivity mapping was performed using protocols developed by Duke University or University of Washington.
+Data sets were sequenced on Illumina instruments to an average depth of 30 million uniquely mapping sequence tags (27bp for University of Washington and 20bp for Duke University) per replicate. 
+For uniformity of analysis, some cell-type data sets that exceeded 40M tag depth were randomly subsampled 
+to a depth of 30 million tags. 
+Sequence reads were mapped using the Bowtie aligner, allowing a maximum of two mismatches. 
+Only reads mapping uniquely to the genome were used in the analyses. 
+Mappings were to male or female versions of hg19/GRCh37, depending on cell type, with random regions omitted. 
+Data were analysed jointly using a single algorithm to identify sites.</p>
 <p>
-Methods
+The <em>hotspot</em> algorithm (John et. al 2011) was applied uniformly to datasets from both protocols.
+Briefly, <em>hotspot</em> is a scan statistic that uses the binomial distribution to gauge enrichment of tags 
+based on a local background model estimated around every tag. General-sized regions of enrichment are identified as hotspots, and then 150-bp peaks within hotspots are called by looking for local maxima in the tag density profile (sliding window tag count in 150-bp windows, stepping every 20 bp). Further stringencies are applied to the local maxima detection to prevent overcalling of spurious peaks. Hostpot also includes an FDR (false discovery rate) estimation procedure for thresholding hotspots and peaks, based on a simulation approach. Random reads are generated at the same sequencing depth as the target sample, hotspots are called on the simulated data, and the random and observed hotspots are compared via their z-scores (based on the binomial model) to estimate the FDR. Using this procedure, DHSs were identified at an FDR of 1%. </p>
 <p>
-DNase I hypersensitivity mapping was performed using protocols developed by Duke University7 or University of Washington8 on a total of 125 cell types (Supplementary Table 1). Data sets were sequenced to an average depth of 30 million uniquely mapping sequence tags (27–36 bp for University of Washington and 20 bp for Duke University) per replicate. For uniformity of analysis, some cell-type data sets that exceeded 40M tag depth were randomly subsampled to a depth of 30 million tags. Sequence reads were mapped using the Bowtie aligner, allowing a maximum of two mismatches. Only reads mapping uniquely to the genome were used in our analyses. Mappings were to male or female versions of hg19/GRCh37, depending on cell type, with random regions omitted. Data were analysed jointly using a single algorithm7 (Supplementary Methods) to localize DNase I hypersensitive sites. 
-<p>
-Supplement:
-<p>
-DNaseI protocols 
-<p>
-DNaseI assays were performed using two different protocols (Duke and UW) on a total of 125 cell-types (85 from UW and 54 from Duke, with 14 cell-types shared; see Supplementary Table 1). Both protocols involve treatment of intact nuclei with the small enzyme DNaseI which is able to penetrate the nuclear pore and cleave exposed DNA. In the Duke protocol10, 11, DNA is isolated following lysis of nuclei, linkers added, and the library sequenced directly on an Illumina instrument. In the UW protocol12, small (300-1000 bp) fragments are isolated from lysed nuclei following DNaseI treatment, linkers are added, and sequencing of the library is performed on an Illumina instrument.
-<p>
-
-Sequence reads were mapped using aligner Bowtie, allowing a maximum of two mismatches. Only reads mapping uniquely to the genome were utilized in the analysis. Mapping was to male or female versions, depending on cell type, of hg19/GRCh37, with random regions omitted. UW samples were typically sequenced to a depth of 25-35 million tags per replicate. Two replicates were produced for each cell type, and we chose the top-quality replicate of each for all downstream analyses. All UW replicates are screened for quality by measuring the percent of their tags falling in hotspots genome-wide. A “top-quality replicate” is the replicate with the highest such score for the given cell type. UW replicates tend to be very reproducible, with two replicates’ tag densities across chromosome 19, expressed as linear vectors, usually achieving correlations ≥0.9. Supplementary Table 10 lists the quality scores and chr19 tag-density correlations for all DNaseI replicates obtained by UW. The Duke data was more variable in the depth to which libraries were sequenced; consequently we combined all replicates for each cell type and subsampled to a depth of 30 million tags. This made the Duke data approximately match the UW datasets. We then identified DNaseI hypersensitive regions of chromatin accessibility (hotspots) and more highly accessible DNaseI hypersensitive sites (DHSs, or peaks) within the hotspots, using the hotspot algorithm (John et. al., 2011), applied uniformly to datasets from both protocols. Briefly, the hotspot algorithm is a scan statistic that uses the binomial distribution to gauge enrichment of tags based on a local background model estimated around every tag. General-sized regions of enrichment are identified as hotspots, and then 150-bp peaks within hotspots are called by looking for local maxima in the tag density profile (sliding window tag count in 150-bp windows, stepping every 20 bp). Further stringencies are applied to the local maxima detection to prevent overcalling of spurious peaks. Hostpot also includes an FDR (false discovery rate) estimation procedure for thresholding hotspots and peaks, based on a simulation approach. Random reads are generated at the same sequencing depth as the target sample, hotspots are called on the simulated data, and the random and observed hotspots are compared via their z-scores (based on the binomial model) to estimate the FDR.
-<p>
-Using the above procedure, we identified DHSs at an FDR of 1%. For the 14 cell-types assayed by both UW and Duke, we consolidated the two peak sets by taking the union of peaks. For any two overlapping peaks, we retained the one with the higher z-score; we consolidated hotspots by simply merging the hotspot regions between the two datasets. See section 1.2 below for DHS dataset availability.
-
-<p>
-
-DHS Master List and its annotation
-<p>
-The DHSs called on individual cell-types were consolidated into a master list of 2,890,742 unique, non-overlapping DHS positions by first merging the FDR 1% peaks across all cell-types. Then, for each resulting interval of merged sites, the DHS with the highest z-score was selected for the master list. Any DHSs overlapping the peaks selected for the master list were then discarded. The remaining DHSs were then merged and the process repeated until each original DHS was either in the master list, or discarded. 
-<p>
+The DHSs called on individual cell-types were consolidated into a master list of 2,890,742 unique, 
+    non-overlapping DHS positions by first merging the FDR 1% peaks across all cell-types. 
+    Then, for each resulting interval of merged sites, the DHS with the highest z-score was selected for the master list. 
+Any DHSs overlapping the peaks selected for the master list were then discarded. The remaining DHSs were then merged and the process repeated until each original DHS was either in the master list, or discarded. 
+Of these DHSs, 970,100 were specific to a single cell type, 1,920,642 were active in 2 or more cell types, and a small minority (3,692) was detected in all cell types.
 Each master list DHS is annotated with the number of cell-types whose original DHSs overlap the 
-master list DHS. This is called the cell-type number for that DHS. Plots in Fig. 1c (made using the R 
-function "beanplot" from the "beanplot" package) summarize the distribution of cell-type numbers 
-for various categories of DHS annotations. Repeat categories for the LINE, SINE, LTR, and DNA W W W. N A T U R E . C O M / N A T U R E | 4 9
- repeat classes were taken from UCSC RepeatMasker track annotations. We required that 50% of an 
- individual master list DHS be contained in a repeat element in order to belong to its category. See 
- below for the annotations used for the miRNA TSS category, for which 405 master-list DHSs were 
- within 100 bp. The promoter category is as described above; the distal category refers to the 
- intergenic DHSs (as defined in panel Fig. 1b) located at least 10 kb away from any TSS. 
-
+master list DHS.</p>
 
 <h2>Credits</h2>
 
