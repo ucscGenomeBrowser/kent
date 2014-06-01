@@ -581,7 +581,8 @@ return x;
 
 void preDrawWindowFunction(struct preDrawElement *preDraw, int preDrawSize,
 	enum wiggleWindowingEnum windowingFunction,
-	enum wiggleTransformFuncEnum transformFunc)
+	enum wiggleTransformFuncEnum transformFunc,
+	boolean doNegative)
 /*	apply windowing function to the values in preDraw array	*/
 {
 int i;
@@ -615,7 +616,15 @@ for (i = 0; i < preDrawSize; ++i)
 		    dataValue = preDraw[i].max;
 		break;
 	    }
+
 	dataValue = doTransform(dataValue, transformFunc);
+	if (doNegative)
+	    {
+	    dataValue = -dataValue;
+	    int swap = preDraw[i].min;
+	    preDraw[i].min = -preDraw[i].max;
+	    preDraw[i].max = -swap;
+	    }
 	preDraw[i].plotValue = dataValue;
 	preDraw[i].smooth = dataValue;
 	}
@@ -1233,7 +1242,7 @@ struct preDrawElement *preDraw = preContainer->preDraw;
 if (preContainer->smoothingDone == FALSE)
     {
     preDrawWindowFunction(preDraw, preDrawSize, wigCart->windowingFunction,
-	    wigCart->transformFunc);
+	    wigCart->transformFunc, wigCart->doNegative);
     preDrawSmoothing(preDraw, preDrawSize, wigCart->smoothingWindow);
     graphRange = preDrawAutoScale(preDraw, preDrawZero, width,
 	wigCart->autoScale, wigCart->windowingFunction,
@@ -1642,6 +1651,7 @@ wigCart->yLineMark = yLineMark;
 wigCart->yLineOnOff = wigFetchYLineMarkWithCart(cart,tdb,tdb->track, (char **) NULL);
 wigCart->alwaysZero = (enum wiggleAlwaysZeroEnum)wigFetchAlwaysZeroWithCart(cart,tdb,tdb->track, (char **) NULL);
 wigCart->transformFunc = (enum wiggleTransformFuncEnum)wigFetchTransformFuncWithCart(cart,tdb,tdb->track, (char **) NULL);
+wigCart->doNegative = wigFetchDoNegativeWithCart(cart,tdb,tdb->track, (char **) NULL);
 
 wigCart->maxHeight = maxHeight;
 wigCart->defaultHeight = defaultHeight;
