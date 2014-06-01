@@ -22,30 +22,12 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-samfile_t *samMustOpen(char *fileName, char *mode, void *extraHeader)
-/* Open up samfile or die trying. */
-{
-samfile_t *sf = samopen(fileName, mode, extraHeader);
-if (sf == NULL)
-    errnoAbort("Couldn't open %s.\n", fileName);
-return sf;
-}
-
-char *concat(char *s1, char *s2)
-/* A simple concatenate function. */
-{
-char *result = needMem(strlen(s1)+strlen(s2) +1);
-strcpy(result,s1);
-strcat(result,s2);
-return result;
-}
-
 void openOutput(struct hash *hash, bam_header_t *head)
 {
 int i;
 for ( i = 0; i < head->n_targets; ++i )
     {
-    char *fileName =concat(head->target_name[i], ".bam");
+    char *fileName =catTwoStrings(head->target_name[i], ".bam");
     samfile_t *outBam = bamMustOpenLocal(fileName, "wb", head);
     hashAdd(hash, head->target_name[i], outBam);
     }
