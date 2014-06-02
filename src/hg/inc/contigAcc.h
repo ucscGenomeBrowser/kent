@@ -2,6 +2,9 @@
  * generated contigAcc.c and contigAcc.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2004 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef CONTIGACC_H
 #define CONTIGACC_H
 

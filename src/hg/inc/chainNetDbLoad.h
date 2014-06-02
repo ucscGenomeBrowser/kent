@@ -2,6 +2,9 @@
  * a net into a chainNet representation.  Also helps database
  * representation of chain into chain. */
 
+/* Copyright (C) 2002 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef CHAINNETDBLOAD_H
 #define CHAINNETDBLOAD_H
 

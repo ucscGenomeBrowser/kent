@@ -2,6 +2,9 @@
    at 4d sites. The zoo alignments are read in using Webb's routine from read_malign.h 
    Trevor Bruen 2002 */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "util.h"
 #include "ctype.h"
 #include "string.h"

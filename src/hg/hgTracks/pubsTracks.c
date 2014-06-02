@@ -1,4 +1,7 @@
 /* pubsTracks - code for the publications tracks */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hgTracks.h"
 #include "hgFind.h"

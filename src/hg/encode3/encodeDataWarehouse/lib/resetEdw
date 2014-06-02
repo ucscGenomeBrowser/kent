@@ -1,5 +1,8 @@
 #!/bin/tcsh -efx
 
+# Kill any running daemons
+killall edwRunDaemon
+
 # Destroy current encodeDataWarehouse and make a fresh one
 hgsql encodeDataWarehouse -e "drop database encodeDataWarehouse"
 
@@ -72,9 +75,6 @@ edwAddAssembly 7227 dm3 dm3 /gbdb/dm3/dm3.2bit -symLink=4ec509b470010829be44ed8e
 edwAddAssembly 559292 sacCer3 sacCer3 /gbdb/sacCer3/sacCer3.2bit -symLink=880201a7d1ec95c0185b0b4783c80411
 edwAddAssembly 6239 ce10 ce10 /gbdb/ce10/ce10.2bit -symLink=3d0bab4bc255fc5b3276a476e13d230c
 edwAddAssembly 562 escCol1 escCol1 /hive/groups/encode/encode3/encValData/escCol1/escCol1.2bit
-edwAddAssembly 9606 hg38 hg38 /gbdb/hg38/hg38.2bit -symLink=dcc3ea27079aa6dc3f9deccd7275e0f8
-edwAddAssembly 9606 female.hg38 female.hg38 /hive/groups/encode/encode3/encValData/female.hg38/female.hg38.2bit -symLink=a1666014df1f8a27e94f7aec56883bc3
-edwAddAssembly 9606 male.hg38 male.hg38 /hive/groups/encode/encode3/encValData/male.hg38/male.hg38.2bit -symLink=8c0d7fe26540718c381a8d458274f270
 edwAddQaEnrichTarget open hg19 /hive/groups/encode/encode3/encValData/hg19/regions/open.bb
 edwAddQaEnrichTarget exon hg19 /hive/groups/encode/encode3/encValData/hg19/regions/exon.bb
 edwAddQaEnrichTarget promoter hg19 /hive/groups/encode/encode3/encValData/hg19/regions/promoter.bb
@@ -140,14 +140,9 @@ hgsql encodeDataWarehouse -e 'load data local infile "../oneShot/rsyncEdwExpData
 hgsql encodeDataWarehouse -e 'load data local infile "../oneShot/edwFakeBiosample/jan3.tab" into table edwBiosample'
 
 
-## Need to rework software reload ... possibly move it into an eap setup script instead of here.
-##Load up analysis software and steps tables
-#hgsql encodeDataWarehouse -e 'load data local infile "software.tab" into table edwAnalysisSoftware'
-#hgsql encodeDataWarehouse -e 'load data local infile "steps.tab" into table edwAnalysisStep'
+## Add eap tables and run eap setup script
+hgsql encodeDataWarehouse < ../../eap/lib/eapDb.sql
+../../eap/lib/addSoftware
 
 # Relaunch edwRunDaemons.  Send them initial wake up message
-edwRunDaemon encodeDataWarehouse edwSubmitJob 8 $subFifo -log=edwSubmit.log
-echo hi > $subFifo
-edwRunDaemon encodeDataWarehouse edwJob 10 $qaFifo -log=edwQaAgent.log
-echo hi > $qaFifo
-
+restartDeamons

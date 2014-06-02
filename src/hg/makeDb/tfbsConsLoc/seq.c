@@ -1,5 +1,8 @@
 /* seq.c -- procedures for reading a file of DNA sequences */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "util.h"
 #include "seq.h"
 #include <errno.h>

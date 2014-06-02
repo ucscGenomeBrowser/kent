@@ -1,5 +1,8 @@
 /* ensFace - stuff to manage interface to Ensembl web site. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "dystring.h"
 #include "ensFace.h"

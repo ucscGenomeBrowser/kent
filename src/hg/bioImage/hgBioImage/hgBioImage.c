@@ -1,4 +1,7 @@
 /* hgBioImage - CGI script to display things from bioImage database on web. */
+
+/* Copyright (C) 2008 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

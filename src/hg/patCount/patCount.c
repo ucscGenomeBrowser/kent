@@ -2,6 +2,9 @@
  * oligo of a fixed size (up to 13) in input sequence.
  * Writes all patterns that are overrepresented according
  * to a threshold to output. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "dnaseq.h"
 #include "fa.h"

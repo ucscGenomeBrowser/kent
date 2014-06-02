@@ -1,6 +1,9 @@
 /* chromInserts - this module helps handle centromeres, heterochromatic regions
  * and other large gaps in chromosomes. */
 
+/* Copyright (C) 2003 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef CHROMINSERTS_H
 #define CHROMINSERTS_H
 

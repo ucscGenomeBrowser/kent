@@ -1,4 +1,7 @@
 /* replaceTextBetween - Replaces a section of text in the middle of a file.. */
+
+/* Copyright (C) 2012 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

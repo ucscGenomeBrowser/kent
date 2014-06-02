@@ -1,3 +1,6 @@
+/* Copyright (C) 2003 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 bool get_argval(int, int *);
 bool get_fargval(int, double *);
 bool get_cargval(int, char **);

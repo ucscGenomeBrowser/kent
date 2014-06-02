@@ -3,6 +3,9 @@
 /* write to deletions.tab */
 /* use a zero score column to preserve BED 6 */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* assuming input already filtered on class = 'deletion' */
 /* assert end >= start */
 /* checking format of observed string */

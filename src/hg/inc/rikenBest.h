@@ -2,6 +2,9 @@
  * generated rikenBest.c and rikenBest.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2002 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef RIKENBEST_H
 #define RIKENBEST_H
 

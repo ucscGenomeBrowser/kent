@@ -1,5 +1,8 @@
 /* annoStreamer -- returns items sorted by genomic position to successive nextRow calls */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "annoStreamer.h"
 #include "errabort.h"
 

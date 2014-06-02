@@ -1,6 +1,9 @@
 /* chain - pairwise alignments that can include gaps in both
  * sequences at once.  This is similar in many ways to psl,
  * but more suitable to cross species genomic comparisons. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

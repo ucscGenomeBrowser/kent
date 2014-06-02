@@ -1,5 +1,8 @@
 /* jpegSize - read a jpeg header and figure out dimensions of image.
  * Adapted by Galt Barber from Matthias Wandel's jhead program */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "jpegSize.h"
 

@@ -1,5 +1,8 @@
 /* usage - functions that display helpful usage info text go here. -jk)*/
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hPrint.h"
 

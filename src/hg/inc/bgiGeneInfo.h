@@ -2,6 +2,9 @@
  * generated bgiGeneInfo.c and bgiGeneInfo.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2004 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef BGIGENEINFO_H
 #define BGIGENEINFO_H
 

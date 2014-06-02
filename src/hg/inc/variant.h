@@ -1,5 +1,8 @@
 /* variant.h -- a generic variant.  Meant to capture information that's in VCF or pgSNP. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef VARIANT_H
 #define VARIANT_H
 

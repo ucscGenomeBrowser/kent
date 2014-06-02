@@ -1,6 +1,9 @@
 /* Load the status table and determine the state of each entry.  Also,
  * various operators base on state. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "gbBuildState.h"
 #include "dystring.h"

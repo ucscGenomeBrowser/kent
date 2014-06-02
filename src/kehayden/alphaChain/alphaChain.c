@@ -1,5 +1,8 @@
 /* alphaChain - Predicts faux centromere sequences using a probablistic model. */
 
+/* Copyright (C) 2012 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

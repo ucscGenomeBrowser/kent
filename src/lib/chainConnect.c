@@ -1,6 +1,9 @@
 /* chainConnect - Stuff to cope with connect costs and overlaps when 
  * making chains. This works closely with the chainBlock module. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "chain.h"
 #include "axt.h"

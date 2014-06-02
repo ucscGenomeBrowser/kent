@@ -1,5 +1,8 @@
 /* geneCheckWidget - output HTML tables to display geneCheck or
  * geneCheckDetails with browser links */
+
+/* Copyright (C) 2006 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef GENECHECKWIDGET_H
 #define GENECHECKWIDGET_H
 

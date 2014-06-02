@@ -1,6 +1,9 @@
 // matt-maf.h - Multiple alignment format, header file stolen from Jim Kent and
 // abused
 
+/* Copyright (C) 2004 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include <stdio.h>
 
 struct mafFile

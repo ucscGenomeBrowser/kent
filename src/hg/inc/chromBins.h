@@ -1,4 +1,7 @@
 /* chromBins - object for storing per-chrom binKeeper objects */
+
+/* Copyright (C) 2005 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef CHROMBINS_H
 #define CHROMBINS_H
 struct slName;

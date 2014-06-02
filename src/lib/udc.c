@@ -1,3 +1,6 @@
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* udc - url data cache - a caching system that keeps blocks of data fetched from URLs in
  * sparse local files for quick use the next time the data is needed. 
  *

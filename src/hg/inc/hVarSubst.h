@@ -1,6 +1,9 @@
 /** Handle variable substitutions in strings from trackDb and other
  * labels. See trackDb/README for descriptions of values that 
  * can be substitute. */
+
+/* Copyright (C) 2009 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef hVarSubst_h
 #define hVarSubst_h
 struct trackDb;

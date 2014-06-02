@@ -1,3 +1,6 @@
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /** \page orthoPickIntron.c Pick an intron for exploratory PCR using mouse transcript data.
 
 <h2>Overview:</h2> <p>Mouse mRNAs and ESTs were summarized in a more

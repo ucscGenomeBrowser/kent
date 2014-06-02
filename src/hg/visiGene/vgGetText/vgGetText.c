@@ -2,6 +2,9 @@
  * This is just the kgRef.description for known genes associated
  * with the visiGene genes. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

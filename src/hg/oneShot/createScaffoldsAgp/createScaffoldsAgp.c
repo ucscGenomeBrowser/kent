@@ -2,6 +2,9 @@
 an AGP of contigs mapped to scaffolds and creates an AGP file of scaffolds 
 mapped to chromosomes. This program was written specifically to handle
 AGP files for the zebrafish Zv7 assembly (danRer5). */
+
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

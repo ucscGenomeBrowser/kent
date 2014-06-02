@@ -1,5 +1,8 @@
 /* checkTableCoords - Check several invariants on genomic coordinates of 
  * each item in all table in the specified db (or just the specified table). */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "options.h"
 #include "verbose.h"

@@ -1,6 +1,9 @@
 /* snpFunctionCheck - compare ContigLocusIdFilter.mrna_acc to refGenes. */
 /* First check for entries in ContigLocusIdFilter that we don't use. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 
 #include "hash.h"

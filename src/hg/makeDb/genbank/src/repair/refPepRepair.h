@@ -1,4 +1,7 @@
 /* refPepRepair - repair refseq peptide links */
+
+/* Copyright (C) 2006 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef REFPEPREPAIR_H
 #define REFPEPREPAIR_H
 

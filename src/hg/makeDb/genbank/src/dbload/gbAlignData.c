@@ -1,6 +1,9 @@
 /* Sorting and loading of PSL align records into the database.  This module
  * functions as a singlton object, with global state that can be reset.
  * Refer to the doc/database-update-step.html before modifying. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "gbAlignData.h"
 #include "gbAlignTbl.h"

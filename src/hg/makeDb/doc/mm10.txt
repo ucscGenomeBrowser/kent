@@ -7746,7 +7746,7 @@ std: 0.942808
 	    -db=mm10 phyloP60wayVertebrate > histogram.data 2>&1
     #   real    3m26.565s
     # to see yrange:
-    grep -v "^#" histogram.data | ave -col=5 stdin
+    egrep -v "^#|udcfileOpen" histogram.data  | ave -col=5 stdin
 
     #	create plot of histogram:
 
@@ -7762,7 +7762,7 @@ set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
 set y2range [0:1]
 set y2tics
-set yrange [0:0.0913]
+set yrange [0:0.1123]
 set xrange [-2.5:2.5]
 
 plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
@@ -10129,4 +10129,54 @@ EOF
     mkdir -p $pd
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
-    }#############################################################################
+##############################################################################
+# LASTZ Rhesus rheMac2 (DONE - 2014-05-23 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzRheMac2.2014-05-23
+    cd /hive/data/genomes/mm10/bed/lastzRheMac2.2014-05-23
+
+    cat << '_EOF_' > DEF
+# rhesus vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Rhesus RheMac2
+SEQ2_DIR=/scratch/data/rheMac2/rheMac2.2bit
+SEQ2_LEN=/scratch/data/rheMac2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=300
+
+BASE=/hive/data/genomes/mm10/bed/lastzRheMac2.2014-05-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen -S mm10RheMac2
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #	real    257m21.255s
+
+    cat fb.mm10.chainRheMac2Link.txt
+    #	895296744 bases of 2652783500 (33.749%) in intersection
+
+    mkdir /hive/data/genomes/rheMac2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/rheMac2/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzRheMac2.2014-05-23/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    74m36.098s
+
+    cat fb.rheMac2.chainMm10Link.txt
+    #	875700775 bases of 2646704109 (33.086%) in intersection
+
+##############################################################################

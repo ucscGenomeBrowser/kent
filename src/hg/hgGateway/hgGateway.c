@@ -1,4 +1,7 @@
 /* hgGateway - Human Genome Browser Gateway. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -81,7 +84,6 @@ puts("<FORM ACTION='../cgi-bin/hgTracks' NAME='mainForm' METHOD='GET' style='dis
      "<CENTER>"
      "<table style='background-color:#FFFEF3; border: 1px solid #CCCC99;'>\n"
      "<tr><td>\n");
-cgiMakeHiddenVar(hgHubConnectCgiDestUrl, "../cgi-bin/hgTracks");
 
 puts("<table><tr>");
 if (gotClade)

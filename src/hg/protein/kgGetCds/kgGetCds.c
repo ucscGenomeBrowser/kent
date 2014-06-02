@@ -1,5 +1,8 @@
 /* kgGetCds - create a gene candidate table with CDS info */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "genePred.h"
 #include "genePredReader.h"

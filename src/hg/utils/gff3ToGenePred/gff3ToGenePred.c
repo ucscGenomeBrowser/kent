@@ -1,4 +1,7 @@
 /* gff3ToGenePred - convert a GFF3 file to a genePred file. */
+
+/* Copyright (C) 2012 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include <limits.h>
 #include "linefile.h"

@@ -1,5 +1,8 @@
 /* encodePatchTdb - Lay a trackDb.ra file from the pipeline gently on top of the trackDb system. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef ENCODEPATCHTDB_H
 #define ENCODEPATCHTDB_H
 

@@ -2,6 +2,9 @@
  * generated sample.c and sample.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2003 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef SAMPLE_H
 #define SAMPLE_H
 

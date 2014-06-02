@@ -2,6 +2,9 @@
  * generated hapmapSnps.c and hapmapSnps.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2009 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef HAPMAPSNPS_H
 #define HAPMAPSNPS_H
 

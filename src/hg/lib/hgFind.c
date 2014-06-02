@@ -1,4 +1,7 @@
 /* hgFind.c - Find things in human genome annotations. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "regexHelper.h"
 #include "obscure.h"

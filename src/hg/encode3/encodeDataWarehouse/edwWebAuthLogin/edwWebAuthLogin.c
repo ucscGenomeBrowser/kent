@@ -3,6 +3,9 @@
  * against the persona verifier web service.  If it checks out it sets a cookie called
  * 'email' with the email address the user logged with Persona. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "cheapcgi.h"

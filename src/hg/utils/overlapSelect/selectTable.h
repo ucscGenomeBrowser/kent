@@ -1,5 +1,8 @@
 /* selectTable - module that contains ranges use to select.  This module
  * functions as a global object. */
+
+/* Copyright (C) 2010 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef SELECT_TABLE_H
 #define SELECT_TABLE_H
 #include "binRange.h"

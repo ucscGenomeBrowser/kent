@@ -1,5 +1,8 @@
 /* ccCp - copy file to the cluster efficiently.  Uses file lock
  * mechanism. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "obscure.h"
 #include "portable.h"

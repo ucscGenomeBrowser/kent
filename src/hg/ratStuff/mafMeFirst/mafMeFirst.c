@@ -1,6 +1,9 @@
 /* mafMeFirst - Move component to top if it is one of the named ones.  Useful 
  * in conjunction with mafFrags when you don't want the one with the gene name 
  * to be in the middle.. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

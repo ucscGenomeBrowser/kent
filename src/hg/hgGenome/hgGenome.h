@@ -3,6 +3,9 @@
  * a graphic with all chromosomes in genome, and a graph or two
  * on top of them. */
 
+/* Copyright (C) 2010 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef HGGENOME_H
 #define HGGENOME_H
 

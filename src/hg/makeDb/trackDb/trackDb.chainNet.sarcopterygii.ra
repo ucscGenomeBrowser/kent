@@ -1,0 +1,471 @@
+################################################################
+# chrPic1 - Painted turtle - Chrysemys picta bellii - vertebrate - testudines - 4405
+################################################################
+track chainNetChrPic1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 195.3
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 89,-156,-79,-178,-156,100,-183,-79,-79,-183,100,-156,-178,-79,-156,89
+matrixHeader A, C, G, T
+otherDb chrPic1
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetChrPic1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetChrPic1
+    spectrum on
+
+        track chainChrPic1
+        release alpha
+        parent chainNetChrPic1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain chrPic1
+        html chainNet
+
+    track chainNetChrPic1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetChrPic1
+
+        track netChrPic1
+        release alpha
+        parent chainNetChrPic1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign chrPic1 chainChrPic1
+        html chainNet
+
+################################################################
+# allMis1 - American alligator - Alligator mississippiensis - vertebrate - sauria - 4380
+################################################################
+track chainNetAllMis1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 213.66
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 100,-170,-114,-276,-170,58,-98,-114,-114,-98,58,-170,-276,-114,-170,100
+matrixHeader A, C, G, T
+otherDb allMis1
+chainMinScore 1000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetAllMis1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetAllMis1
+    spectrum on
+
+        track chainAllMis1
+        release alpha
+        parent chainNetAllMis1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain allMis1
+        html chainNet
+
+    track chainNetAllMis1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetAllMis1
+
+        track netAllMis1
+        release alpha
+        parent chainNetAllMis1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign allMis1 chainAllMis1
+        html chainNet
+
+################################################################
+# apaSpi1 - Spiny softshell turtle - Apalone spinifera - vertebrate - testudines - 4403
+################################################################
+track chainNetApaSpi1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 562.80
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb apaSpi1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetApaSpi1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetApaSpi1
+    spectrum on
+
+        track chainApaSpi1
+        release alpha
+        parent chainNetApaSpi1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain apaSpi1
+        html chainNet
+
+    track chainNetApaSpi1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetApaSpi1
+
+        track netApaSpi1
+        release alpha
+        parent chainNetApaSpi1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign apaSpi1 chainApaSpi1
+        html chainNet
+
+################################################################
+# pelSin1 - Chinese softshell turtle - Pelodiscus sinensis - vertebrate - testudines - 4400
+################################################################
+track chainNetPelSin1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 564.05
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb pelSin1
+chainMinScore 3000
+chainLinearGap medium
+spectrum on
+html chainNet
+
+    track chainNetPelSin1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetPelSin1
+    spectrum on
+
+        track chainPelSin1
+        release alpha
+        parent chainNetPelSin1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain pelSin1
+        html chainNet
+
+    track chainNetPelSin1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetPelSin1
+
+        track netPelSin1
+        release alpha
+        parent chainNetPelSin1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign pelSin1 chainPelSin1
+        html chainNet
+
+################################################################
+# allSin1 - Chinese alligator - Alligator sinensis - vertebrate - sauria - 4382
+################################################################
+track chainNetAllSin1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 565.30
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb allSin1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetAllSin1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetAllSin1
+    spectrum on
+
+        track chainAllSin1
+        release alpha
+        parent chainNetAllSin1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain allSin1
+        html chainNet
+
+    track chainNetAllSin1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetAllSin1
+
+        track netAllSin1
+        release alpha
+        parent chainNetAllSin1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign allSin1 chainAllSin1
+        html chainNet
+
+################################################################
+# cheMyd1 - Green seaturtle - Chelonia mydas - vertebrate - testudines - 4395
+################################################################
+track chainNetCheMyd1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 565.30
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+otherDb cheMyd1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetCheMyd1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetCheMyd1
+    spectrum on
+
+        track chainCheMyd1
+        release alpha
+        parent chainNetCheMyd1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain cheMyd1
+        html chainNet
+
+    track chainNetCheMyd1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetCheMyd1
+
+        track netCheMyd1
+        release alpha
+        parent chainNetCheMyd1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign cheMyd1 chainCheMyd1
+        html chainNet
+
+################################################################
+# xenTro7 - Frog (X. tropicalis) - Xenopus tropicalis - vertebrate - tetrapoda - 4439
+################################################################
+track chainNetXenTro7
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 590.3
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb xenTro7
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetXenTro7Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetXenTro7
+    spectrum on
+
+        track chainXenTro7
+        release alpha
+        parent chainNetXenTro7Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain xenTro7
+        html chainNet
+
+    track chainNetXenTro7Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetXenTro7
+
+        track netXenTro7
+        release alpha
+        parent chainNetXenTro7Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign xenTro7 chainXenTro7
+        html chainNet
+
+################################################################
+# letCam1 - Arctic lamprey - Lethenteron camtschaticum - vertebrate - hyperoartia - 4820
+################################################################
+track chainNetLetCam1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 646.96
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb letCam1
+chainMinScore 5000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetLetCam1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetLetCam1
+    spectrum on
+
+        track chainLetCam1
+        release alpha
+        parent chainNetLetCam1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain letCam1
+        html chainNet
+
+    track chainNetLetCam1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetLetCam1
+
+        track netLetCam1
+        release alpha
+        parent chainNetLetCam1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign letCam1 chainLetCam1
+        html chainNet

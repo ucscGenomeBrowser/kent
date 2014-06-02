@@ -1,5 +1,8 @@
 /* mkMafFrames - build mafFrames objects for exons, this does not handle
  * issues of linking mafFrames. */
+
+/* Copyright (C) 2006 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "genePred.h"
 #include "frameIncr.h"

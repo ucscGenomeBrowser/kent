@@ -3,6 +3,9 @@
  * See GFF3 specification for details of file format:
  *   http://www.sequenceontology.org/gff3.shtml
  */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "gff3.h"
 #include <limits.h>

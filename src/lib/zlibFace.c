@@ -1,5 +1,8 @@
 /* Wrappers around zlib to make interfacing to it a bit easier. */
 
+/* Copyright (C) 2009 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include <zlib.h>
 

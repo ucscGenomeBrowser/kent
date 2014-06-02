@@ -1738,7 +1738,7 @@ done > ensToUcsc.lift
     cat fb.rn5.chainHg38Link.txt
     #   934256475 bases of 2572853723 (36.312%) in intersection
 ##############################################################################
-## 13-Way Multiz (WORKING - 2014-04-02 - Pauline)
+## 13-Way Multiz (DONE - 2014-04-02 - Pauline)
 
     mkdir /hive/data/genomes/rn5/bed/multiz13way
     cd /hive/data/genomes/rn5/bed/multiz13way
@@ -2867,12 +2867,13 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
       /usr/local/apache/htdocs-hgdownload/goldenPath/rn5/phyloP13way
 
     ############################################################################
-    # creating upstream mafs (WORKING - 2014-05-08 - Pauline)
+    # creating upstream mafs (DONE - 2014-05-08 - Pauline)
     ssh hgwdev
     mkdir /hive/data/genomes/rn5/goldenPath/multiz13way
     cd /hive/data/genomes/rn5/goldenPath/multiz13way
     # run this bash script
     cat << '_EOF_' > mkUpstream.sh
+#!/bin/sh
 DB=rn5
 GENE=ensGene
 NWAY=multiz13way
@@ -2894,10 +2895,16 @@ done
     chmod +x mkUpstream.sh
     time ./mkUpstream.sh
     #   real    57m14.100s
-XXX Thu May  8 15:04:36 PDT 2014
+
     # FIXUP/VERIFY the genbank.conf file to indicate this gene choice for the
     #   upstream automatic generation
+    kent/src/hg/makeDb/genbank/etc/genbank.conf
+    # +rn5.upstreamGeneTbl = ensGene
+    # +rn5.upstreamMaf = multiz13way /hive/data/genomes/rn5/bed/multiz13way/species.list.txt
 
+    git commit -m "Adding to the genbank.conf file to indicate this gene choice. refs #8212" genbank.conf
+    git push
+    make etc-update
 #############################################################################
 # hgPal downloads (DONE - 2014-05-08 - Pauline) 
 #   FASTA from 13way for ensGene

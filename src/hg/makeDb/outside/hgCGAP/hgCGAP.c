@@ -1,5 +1,8 @@
 /* This program parse CGAP data file */
 
+/* Copyright (C) 2009 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #define      ALIAS	1
 #define   BIOCARTA	2
 #define   CYTOBAND	3

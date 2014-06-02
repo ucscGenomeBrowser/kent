@@ -2,6 +2,9 @@
  * generated visiGene.c and visiGene.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2006 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef VISIGENE_H
 #define VISIGENE_H
 

@@ -1,6 +1,9 @@
 /* hgBam -- interface to binary alignment format files using Heng Li's samtools lib. */
 /* these are the components that link to MySQL */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef HGBAM_H
 #define HGBAM_H
 

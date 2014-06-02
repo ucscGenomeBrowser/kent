@@ -1,6 +1,9 @@
 /* wigCommon.h - common items to the two graphing types of tracks
  *	type wig and type bedGraph
  */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef WIGCOMMON_H
 #define WIGCOMMON_H
 
@@ -29,6 +32,7 @@ struct wigCartOptions
     boolean bedGraph;	/*	is this a bedGraph track ?	*/
     boolean isMultiWig;	/*      If true it's a multi-wig. */
     enum wiggleAggregateFunctionEnum aggregateFunction;	/*  NONE/TRANSPARENT/STACKED	*/
+    boolean doNegative; /*      should we negate the values */
     };
 
 struct wigCartOptions *wigCartOptionsNew(struct cart *cart, struct trackDb *tdb, int wordCount, char *words[]);
@@ -95,7 +99,8 @@ struct preDrawContainer *initPreDrawContainer(int width);
 
 void preDrawWindowFunction(struct preDrawElement *preDraw, int preDrawSize,
 	enum wiggleWindowingEnum windowingFunction,
-	enum wiggleTransformFuncEnum transformFunc);
+	enum wiggleTransformFuncEnum transformFunc,
+	boolean doNegative);
 /*	apply windowing function to the values in preDraw array	*/
 
 void preDrawSmoothing(struct preDrawElement *preDraw, int preDrawSize,

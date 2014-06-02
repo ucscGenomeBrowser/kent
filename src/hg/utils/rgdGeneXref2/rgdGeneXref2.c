@@ -1,5 +1,8 @@
 /* rgdGeneXref2 - from all mRNAs in a genome (e.g. rn3) referenced by SWISS-PROT 
           generate a list of proteins and a list of protein/mRNA pairs */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
