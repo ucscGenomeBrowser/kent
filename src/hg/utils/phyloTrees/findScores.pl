@@ -87,7 +87,7 @@ while (my $line = <FH>) {
 	    printf "%s\n", $a[$i];
 	    if ( $a[$i] =~ m/-scoreScheme/ ) {
 		if ( -s $value ) {
-		    my $matrix=`cat $value | egrep -v "A|O" | xargs echo | sed -e "s/ /,/g"`;
+		    my $matrix=`tail -5 $value | sed -e 's/^[ACGT] //' | egrep -v "A|O" | xargs echo | sed -e "s/ /,/g"`;
 		    chomp($matrix);
 		    printf "matrix 16 %s\n", $matrix;
 		}
