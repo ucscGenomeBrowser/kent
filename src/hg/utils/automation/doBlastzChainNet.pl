@@ -1496,6 +1496,7 @@ _EOF_
   if ($doSymLink) {
     $bossScript->add(<<_EOF_
 cd $dirName
+rm -f lastz.$qDb
 ln -s $baseName lastz.$qDb
 _EOF_
       );
