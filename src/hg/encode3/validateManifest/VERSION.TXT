@@ -1,6 +1,6 @@
 validateManifest (vm) Versions Log
 
-1.9 (Developing)
+1.9 (Testing)
     Added bedMethyl format (just a copy of bedRrbs with a different name)
     Added support for plain BED (non-bigBed) types by using the usual format with a "bed_" prefix.
     Added bedLogR format.
