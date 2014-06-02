@@ -1050,8 +1050,8 @@ rmdir --ignore-fail-on-non-empty /dev/shm/$outputFN
     # fetch all the ideogram files:
     rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/pub/gdp/ ./
 
-    mkdir /hive/data/genomes/hg38/bed/cytoband
-    cd /hive/data/genomes/hg38/bed/cytoband
+    mkdir /hive/data/genomes/hg38/bed/cytoBand
+    cd /hive/data/genomes/hg38/bed/cytoBand
 
     # Create bed file
     $HOME/kent/src/utils/ncbi/createNcbiCytoBand.pl \
