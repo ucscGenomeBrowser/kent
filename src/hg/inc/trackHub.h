@@ -36,6 +36,7 @@ struct trackHub
     char *shortLabel;	/* Hub short label. Not allocated here. */
     char *longLabel;	/* Hub long label. Not allocated here. */
     char *genomesFile;	/* URL to genome.ra file. Not allocated here. */
+    char *defaultDb;    /* the default database  */
 
     char *name;	/* Symbolic name of hub in cart, etc.  From trackHubOpen hubName parameter. */
 

@@ -194,7 +194,6 @@ printf(
 	"<th>Hub Name</th> "
 	"<th>Description</th> "
 	"<th>Assemblies</th> "
-	"<th>URL</th> "
     "</tr>\n"
     "</thead>\n");
 
@@ -236,10 +235,7 @@ for(hub = unlistedHubList; hub; hub = hub->next)
 	}
     if (hub->trackHub != NULL)
 	{
-	if (hub->trackHub->descriptionUrl != NULL)
-	    ourPrintCellLink(hub->trackHub->shortLabel, hub->trackHub->descriptionUrl);
-	else
-	    ourPrintCell(hub->trackHub->shortLabel);
+	ourPrintCellLink(hub->trackHub->shortLabel, hub->hubUrl);
 	}
     else
 	ourPrintCell("");
@@ -249,7 +245,12 @@ for(hub = unlistedHubList; hub; hub = hub->next)
 	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>\n", 
 	    hub->errorMessage);
     else if (hub->trackHub != NULL)
-	ourPrintCell(hub->trackHub->longLabel);
+	{
+	if (hub->trackHub->descriptionUrl != NULL)
+	    ourPrintCellLink(hub->trackHub->longLabel, hub->trackHub->descriptionUrl);
+	else
+	    ourPrintCell(hub->trackHub->longLabel);
+	}
     else
 	ourPrintCell("");
 
@@ -257,7 +258,6 @@ for(hub = unlistedHubList; hub; hub = hub->next)
 	printGenomes(hub->trackHub, count);
     else
 	ourPrintCell("");
-    ourPrintCell(hub->hubUrl);
     }
 
 printf("</TR></tbody></TABLE>\n");
@@ -305,8 +305,13 @@ char *hubSearchTerms = cartOptionalString(cart, hgHubSearchTerms);
 boolean haveTrixFile = fileExists(trixFile);
 struct hash *urlSearchHash = NULL;
 
+printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
+
 if (haveTrixFile && !isEmpty(hubSearchTerms))
+    {
+    strLower(hubSearchTerms);
     urlSearchHash = getUrlSearchHash(trixFile, hubSearchTerms);
+    }
 
 // if we have search terms, put out the line telling the user so
 if (!isEmpty(hubSearchTerms))
@@ -366,7 +371,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	{
 	/* output header */
-	printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
 
 	printf("<table id=\"publicHubsTable\"> "
 	    "<thead><tr> "
@@ -434,12 +438,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	errAbort("cannot get id for hub with url %s\n", url);
 
-    if (hasDescription && !isEmpty(descriptionUrl))
-	ourPrintCellLink(shortLabel, descriptionUrl);
-    else
-	ourPrintCell(shortLabel);
+    ourPrintCellLink(shortLabel, url);
+
     if (isEmpty(errorMessage))
-	ourPrintCell(longLabel);
+	{
+	if (hasDescription && !isEmpty(descriptionUrl))
+	    ourPrintCellLink(longLabel, descriptionUrl);
+	else
+	    ourPrintCell(longLabel);
+	}
     else
 	printf("<TD><span class=\"hubError\">ERROR: %s </span>"
 	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>", 
@@ -452,10 +459,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 
 if (gotAnyRows)
-    {
     printf("</TR></tbody></TABLE>\n");
-    printf("</div>");
-    }
+
+printf("</div>");
 return publicHash;
 }
 
@@ -601,9 +607,6 @@ if (survey && differentWord(survey, "off"))
     hPrintf("<span style='background-color:yellow;'><A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n", survey, surveyLabel ? surveyLabel : "Take survey");
 hPutc('\n');
 
-// check to see if we have any new hubs
-hubCheckForNew(cart);
-
 // grab all the hubs that are listed in the cart
 struct hubConnectStatus *hubList =  hubConnectStatusListFromCartAll(cart);
 
@@ -612,6 +615,7 @@ checkTrackDbs(hubList);
 // here's a little form for the add new hub button
 printf("<FORM ACTION=\"%s\" NAME=\"addHubForm\">\n",  "../cgi-bin/hgGateway");
 cgiMakeHiddenVar("hubUrl", "");
+cgiMakeHiddenVar( hgHubDoFirstDb, "on");
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 puts("</FORM>");
 

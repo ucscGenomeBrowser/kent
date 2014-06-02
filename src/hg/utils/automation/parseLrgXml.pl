@@ -10,7 +10,21 @@ use Encode;  # Of the UTF-8 sort, not the ENCODE project. :)
 use XML::LibXML;
 use Data::Dumper; #print Data::Dumper->Dump([$dom], [qw(dom)]);
 
-my $assemblyPrefix = "GRCh37";
+my $assemblyPrefix = shift @ARGV;
+
+sub usage {
+  my ($status) = @_;
+  my $base = $0;
+  $base =~ s/^(.*\/)?//;
+  print STDERR "
+usage: $base assemblyPrefix
+    Parses LRG_*.xml files in current directory into BED (LRG regions)
+    and genePred+Cdna+Pep (transcripts in LRG coordinates.)
+    assemblyPrefix is something like \"GRCh37\" to match GRCh37.p5 etc.
+
+";
+  exit $status;
+} # usage
 
 sub findAssemblyMapping {
   # Return the dom node of the <mapping> for the desired assembly (disregarding GRC patch suffix)
@@ -24,13 +38,15 @@ sub findAssemblyMapping {
     if ($name eq "LRG") {
       my @mappingNodes = $s->findnodes("mapping");
       foreach my $m (@mappingNodes) {
+	# Check the assembly name and make sure this is for a chrom, not patch etc.
 	my $assembly = $m->findvalue('@coord_system');
-	return $m if ($assembly =~ /^$assemblyPrefix/);
+	my $otherId = $m->findvalue('@other_id');
+	return $m if ($assembly =~ /^$assemblyPrefix/ && $otherId =~ /^NC_/);
       }
     }
   }
   return undef;
-}
+} # findAssemblyMapping
 
 sub utf8ToHtml {
   my ($word) = @_;
@@ -45,6 +61,7 @@ sub utf8ToHtml {
   }
   return $word;
 } # utf8ToHtml
+
 
 sub parseOneLrg {
   my ($xmlIn, $bedF, $gpF, $cdnaF, $pepF) = @_;
@@ -65,7 +82,7 @@ sub parseOneLrg {
   die 'Unusual number of mapping_spans' if (@mappingSpans != 1);
   my $span = $mappingSpans[0];
   my $lrgStart = $span->findvalue('@lrg_start') - 1;
-  die "Unexpected $assemblyPrefix mapping_span lrgStart" if ($lrgStart != 0);
+  die "$xmlIn: Unexpected $assemblyPrefix mapping_span lrgStart $lrgStart" if ($lrgStart != 0);
   my $lrgEnd = $span->findvalue('@lrg_end');
   my $strand = $span->findvalue('@strand');
   $strand = ($strand == 1 ? '+' : '-');
@@ -76,6 +93,8 @@ sub parseOneLrg {
   my @mismatches = ();
   my @indels = ();
   my @diffs = $refMapping->findnodes('mapping_span/diff');
+  # Sort @diffs by ascending assembly start coords, so the loop below has sorted inputs:
+  @diffs = sort { $a->findvalue('@other_start') <=> $b->findvalue('@other_start') } @diffs;
   foreach my $d (@diffs) {
     my $lrgStart = $d->findvalue('@lrg_start') - 1;
     my $lrgEnd = $d->findvalue('@lrg_end');
@@ -121,6 +140,10 @@ sub parseOneLrg {
   $lrgSource = utf8ToHtml($lrgSource);
   my $lrgSourceUrl = $dom->findvalue('/lrg/fixed_annotation/source/url');
   my $creationDate = $dom->findvalue('/lrg/fixed_annotation/creation_date');
+
+  # watch out for stray tab chars:
+  $lrgSource =~ s/^\s*(.*?)\s*$/$1/;
+  $lrgSourceUrl =~ s/^\s*(.*?)\s*$/$1/;
 
   print $bedF join("\t", $seq, $start, $end, $lrgName, 0, $strand, $start, $end, 0,
 		   $blockCount, $blockSizesStr, $blockStartsStr,
@@ -198,6 +221,10 @@ sub parseOneLrg {
 } # parseOneLrg
 
 ################################ MAIN #################################
+
+if (! $assemblyPrefix) {
+  usage(1);
+}
 
 my @xmlFiles = <LRG_*.xml>;
 if (@xmlFiles == 0) {

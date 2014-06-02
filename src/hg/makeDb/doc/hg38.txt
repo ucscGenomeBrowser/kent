@@ -1050,8 +1050,8 @@ rmdir --ignore-fail-on-non-empty /dev/shm/$outputFN
     # fetch all the ideogram files:
     rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/pub/gdp/ ./
 
-    mkdir /hive/data/genomes/hg38/bed/cytoband
-    cd /hive/data/genomes/hg38/bed/cytoband
+    mkdir /hive/data/genomes/hg38/bed/cytoBand
+    cd /hive/data/genomes/hg38/bed/cytoBand
 
     # Create bed file
     $HOME/kent/src/utils/ncbi/createNcbiCytoBand.pl \
@@ -2843,13 +2843,16 @@ done > jobList
         -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-fileServer=hgwdev \
         -chainMinScore=3000 -chainLinearGap=medium > chainMerge.log 2>&1
-XXX - running - Mon Feb 10 08:52:43 PST 2014
+
     time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
 	-verbose=2 \
         -continue=load -stop=load `pwd`/DEF \
         -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-fileServer=hgwdev \
         -chainMinScore=3000 -chainLinearGap=medium > load.log 2>&1
+
+    hgLoadChain -normScore -tIndex hg38 chainSelf hg38.hg38.all.chain.gz
+    #  Loading 104815249 chains into hg38.chainSelf
 
     cat fb.hg38.chainSelfLink.txt
     #   392419010 bases of 3049335806 (12.869%) in intersection
@@ -3442,7 +3445,7 @@ TMPDIR=/dev/shm
     # filter with doRecipBest.pl
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg38 panTro4) > rbest.log 2>&1
-XXX - running - Tue May 27 12:50:57 PDT 2014
+    # real    57m55.320s
 
     # running the swap
     mkdir /hive/data/genomes/panTro4/bed/blastz.hg38.swap
@@ -3458,9 +3461,10 @@ XXX - running - Tue May 27 12:50:57 PDT 2014
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         panTro4 hg38) > rbest.log 2>&1
+    # real    64m33.812s
 
 #############################################################################
-# Opossum Lastz run (WORKING - 2014-05-27 - Hiram)
+# Opossum Lastz run (DONE - 2014-05-27 - Hiram)
     screen -S hg38MonDom5      # use a screen to manage this longish running job
     mkdir /hive/data/genomes/hg38/bed/lastzMonDom5.2014-05-27
     cd /hive/data/genomes/hg38/bed/lastzMonDom5.2014-05-27
@@ -3503,25 +3507,84 @@ TMPDIR=/dev/shm
         -chainMinScore=5000 -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -syntenicNet) > do.log 2>&1
-XXX - running - Tue May 27 09:34:29 PDT 2014
+    # real    670m13.280s
+    # one failed chain run for hg19, finished manually on hgwdev, then:
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -continue=chainMerge -chainMinScore=5000 -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > chainMerge.log 2>&1
+    # real    164m28.822s
 
     cat fb.hg38.chainMonDom5Link.txt
-#2760526412 bases of 2897316137 (95.279%) in intersection
+    # 438195373 bases of 3049335806 (14.370%) in intersection
 
     # filter with doRecipBest.pl
-    doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
-        hg38 monDom5 >& rbest.log & tail -f rbest.log
+    time (/cluster/bin/scripts/doRecipBest.pl -buildDir=`pwd` \
+        -dbHost=hgwdev -workhorse=hgwdev hg38 monDom5) > rbest.log 2>&1
+    # real    130m22.825s
 
     # running the swap
     mkdir /hive/data/genomes/monDom5/bed/blastz.hg38.swap
     cd /hive/data/genomes/monDom5/bed/blastz.hg38.swap
-    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
-        -swap /hive/data/genomes/hg38/bed/lastzMonDom5.2014-05-27/DEF \
-        -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        -syntenicNet >& swap.log & tail -f swap.log
+    time (doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg38/bed/lastzMonDom5.2014-05-27/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+    # real    102m41.443s
+
     cat fb.monDom5.chainHg38Link.txt
-#2773561724 bases of 2902338967 (95.563%) in intersection
+    # 420069915 bases of 3501660299 (11.996%) in intersection
+    time (/cluster/bin/scripts/doRecipBest.pl -buildDir=`pwd` \
+        -dbHost=hgwdev -workhorse=hgwdev monDom5 hg38) > rbest.log 2>&1
+    #  real    90m56.189s
+
+#############################################################################
+# LOCUS REFERENCE GENOME (LRG) REGIONS AND TRANSCRIPTS (DONE 5/29/14 angie)
+    set today = `date +%Y_%m_%d`
+    mkdir -p /hive/data/genomes/hg38/bed/lrg/$today
+    cd /hive/data/genomes/hg38/bed/lrg/$today
+    wget ftp://ftp.ebi.ac.uk/pub/databases/lrgex/LRG_public_xml_files.zip
+    unzip LRG_public_xml_files.zip
+
+    # Run script to convert LRG*.xml files to BED+ for regions and genePredExt+fa for transcripts:
+    ~/kent/src/hg/utils/automation/parseLrgXml.pl GRCh38
+    genePredCheck lrgTranscriptsUnmapped.gp
+    # If there are complaints e.g. about exonFrame, look for inconsistencies in the
+    # affected transcript's coding_region/coordinates vs. exon/intron info in xml.
+    # Contact Variation team leader Fiona Cunningham @EBI to resolve in the background
+    # (missing exonFrame info doesn't affect our track representation because we end up using
+    # psl).
+
+    # Load LRG regions:
+    bedToBigBed lrg.bed /hive/data/genomes/hg38/chrom.sizes lrg.bb \
+      -tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name
+    rm -f /gbdb/hg38/bbi/lrg.bb
+    ln -s `pwd`/lrg.bb /gbdb/hg38/bbi/lrg.bb
+    hgBbiDbLink hg38 lrg /gbdb/hg38/bbi/lrg.bb
+
+    # Map LRG fixed_annotation transcripts from LRG coords to hg38 coords (HT MarkD):
+    lrgToPsl lrg.bed /hive/data/genomes/hg38/chrom.sizes lrg.psl
+    pslCheck lrg.psl
+    awk '{print $10 "\t" $11;}' lrg.psl > lrg.sizes
+    genePredToFakePsl -chromSize=lrg.sizes placeholder \
+      lrgTranscriptsUnmapped.gp lrgTranscriptsFakePsl.psl lrgTranscripts.cds
+    pslMap lrgTranscriptsFakePsl.psl lrg.psl lrgTranscriptsHg38.psl
+    mrnaToGene -genePredExt -cdsFile=lrgTranscripts.cds -keepInvalid \
+      lrgTranscriptsHg38.psl lrgTranscriptsHg38NoName2.gp
+    # It's OK if mrnaToGene complains about "no CDS" for a non-coding tx e.g. LRG_163t1.
+    # The resulting genePredExt from that process is missing the name2 column from
+    # the original; add it back:
+    cut -f 1,12 lrgTranscriptsUnmapped.gp > txName2
+    join -j 1 -a 1 -t'	' \
+      -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,2.2,1.13,1.14,1.15 \
+      lrgTranscriptsHg38NoName2.gp txName2 > lrgTranscriptsHg38.gp
+
+    # Load PSL, CDS and sequences.
+    hgLoadPsl hg38 -table=lrgTranscriptAli lrgTranscriptsHg38.psl
+    hgLoadSqlTab hg38 lrgCds ~/kent/src/hg/lib/cdsSpec.sql lrgTranscripts.cds
+    hgPepPred hg38 tab lrgCdna lrgCdna.tab
+    hgPepPred hg38 tab lrgPep lrgPep.tab
 
 
 #############################################################################

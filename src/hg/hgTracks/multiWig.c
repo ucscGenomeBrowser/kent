@@ -309,7 +309,7 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	if (pre != NULL)  // pre maybe null if the load fails
 	    {
 	    preDrawWindowFunction(pre->preDraw, pre->preDrawSize, wigCart->windowingFunction,
-		    wigCart->transformFunc);
+		    wigCart->transformFunc, wigCart->doNegative);
 	    preDrawSmoothing(pre->preDraw, pre->preDrawSize, wigCart->smoothingWindow);
 	    pre->smoothingDone = TRUE;
 	    refAdd(&refList, pre);
