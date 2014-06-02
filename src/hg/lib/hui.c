@@ -4640,6 +4640,7 @@ wigFetchWindowingFunctionWithCart(cart,tdb,name, &windowingFunction);
 wigFetchSmoothingWindowWithCart(cart,tdb,name, &smoothingWindow);
 wigFetchYLineMarkWithCart(cart,tdb,name, &yLineMarkOnOff);
 wigFetchYLineMarkValueWithCart(cart,tdb,name, &yLineMark);
+boolean doNegative = wigFetchDoNegativeWithCart(cart,tdb,tdb->track, (char **) NULL);
 
 printf("<TABLE BORDER=0>");
 
@@ -4713,6 +4714,10 @@ printf("<th align=right>Smoothing window:</th><td align=left>");
 safef(option, sizeof(option), "%s.%s", name, SMOOTHINGWINDOW );
 wiggleSmoothingDropDown(option, smoothingWindow);
 puts("&nbsp;pixels</TD></TR>");
+
+printf("<th align=right>Negate values:</th><td align=left>");
+safef(option, sizeof(option), "%s.%s", name, DONEGATIVEMODE );
+cgiMakeCheckBox(option, doNegative);
 
 printf("<TR valign=center><td align=right><b>Draw y indicator lines:</b>"
        "<td align=left colspan=2>");
