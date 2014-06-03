@@ -98,6 +98,7 @@ function normed(thing)
 {   // RETURNS undefined, the lone member of the set or the full set if more than one member.
     // Used for normalizing returns from jquery DOM selects (e.g. $('tr.track').children('td.data'))
     // jquery returns an "array like 'object'" with 0 or more entries.  
+    // May be used on non-jquery objects and will reduce single element arrays to the element.
     // Use this to treat 0 entries the same as undefined and 1 entry as the item itself
     if (thing === undefined || thing === null
     ||  (thing.length !== undefined && thing.length === 0)  // Empty array (or 'array like object')
@@ -201,8 +202,8 @@ function parseUrlAndUpdateVars(theForm,href)  // DEAD CODE?
 
 function postTheForm(formName,href)
 {   // posts the form with a passed in href
-    var goodForm=$("form[name='"+formName+"']");
-    if (goodForm.length === 1) {
+    var goodForm = normed($("form[name='"+formName+"']"));
+    if (goodForm) {
         if (href && href.length > 0) {
             $(goodForm).attr('action',href); // just attach the straight href
         }
@@ -214,8 +215,8 @@ function postTheForm(formName,href)
 }
 function setVarAndPostForm(aName,aValue,formName)
 {   // Sets a specific variable then posts
-    var goodForm=$("form[name='"+formName+"']");
-    if (goodForm.length === 1) {
+    var goodForm = normed($("form[name='"+formName+"']"));
+    if (goodForm) {
         updateOrMakeNamedVariable(goodForm,aName,aValue);
     }
     return postTheForm(formName,window.location.href);
@@ -302,7 +303,7 @@ function validateInt(obj,min,max)
         title = "Value";
     var popup=( $.browser.msie === false );
     for (;;) {
-        if ((obj.value === undefined || obj.value === null || obj.value === "") 
+        if ((!obj.value || obj.value === "") 
         &&  isInteger(obj.defaultValue))
             obj.value = obj.defaultValue;
         if (!isInteger(obj.value)) {
@@ -369,7 +370,7 @@ function validateFloat(obj,min,max)
         title = "Value";
     var popup=( $.browser.msie === false );
     for (;;) {
-        if ((obj.value === undefined || obj.value === null || obj.value === "") 
+        if ((!obj.value || obj.value === "") 
         &&  isFloat(obj.defaultValue))
             obj.value = obj.defaultValue;
         if (!isFloat(obj.value)) {
@@ -860,7 +861,7 @@ function getHgsid()
         return hgsid;
 
     // This may be moved to 1st position as the most likely source
-    if (typeof(common) !== "undefined" && common.hgsid !== undefined && common.hgsid !== null)
+    if (common && common.hgsid !== undefined && common.hgsid !== null)
         return common.hgsid;
 
     hgsid = normed($("input#hgsid").first());
@@ -881,7 +882,7 @@ function getDb()
         return db;
 
     // This may be moved to 1st position as the most likely source
-    if (typeof(common) !== "undefined" && common.db !== undefined && common.db !== null)
+    if (common && common.db)
         return common.db;
 
     db = normed($("input#db").first());
@@ -902,7 +903,7 @@ function getTrack()
         return track;
 
     // This may be moved to 1st position as the most likely source
-    if (typeof(common) !== "undefined" && common.track !== undefined && common.track !== null)
+    if (common && common.track)
         return common.track;
 
     track = normed($("input#g").first());
@@ -1060,23 +1061,9 @@ function _launchWaitOnFunction()
 
     if (!func || !jQuery.isFunction(func))
         warn("_launchWaitOnFunction called without a function");
-    else {
-        if (funcArgs.length === 0)
-            func();
-        else if (funcArgs.length === 1)
-            func(funcArgs[0]);
-        else if (funcArgs.length === 2)
-            func(funcArgs[0],funcArgs[1]);
-        else if (funcArgs.length === 3)
-            func(funcArgs[0],funcArgs[1],funcArgs[2]);
-        else if (funcArgs.length === 4)
-            func(funcArgs[0],funcArgs[1],funcArgs[2],funcArgs[3]);
-        else if (funcArgs.length === 5)
-            func(funcArgs[0],funcArgs[1],funcArgs[2],funcArgs[3],funcArgs[4]);
-        else
-            warn("_launchWaitOnFunction called with " + funcArgs.length + 
-                                                             " arguments.  Only 5 are supported.");
-    }
+    else
+        func.apply(this, funcArgs);
+
     // Special if the first var is a button that can visually be inset
     if (funcArgs.length > 0 && funcArgs[0].type) {
         if (funcArgs[0].type === 'button' && $(funcArgs[0]).hasClass('inOutButton')) {
@@ -1100,16 +1087,11 @@ function waitOnFunction(func)
         warn("waitOnFunction called but already waiting on a function");
         return false;
     }
-    if (arguments.length > 6) {
-        warn("waitOnFunction called with " + arguments.length - 1 + 
-                                                             " arguments.  Only 5 are supported.");
-        return false;
-    }
 
     waitMaskSetup(0);  // Find or create waitMask (which masks whole page) but gives up after 5sec
 
     // Special if the first var is a button that can visually be inset
-    if (arguments.length > 1 && arguments[1].type !== undefined && arguments[1].type !== null) {
+    if (arguments.length > 1 && arguments[1].type) {
         if (arguments[1].type === 'button' && $(arguments[1]).hasClass('inOutButton')) {
             $(arguments[1]).css( 'borderStyle',"inset");
         }
@@ -1831,7 +1813,7 @@ var sortTable = {
     {   // Creates a sortColumns struct from entries in the 'tr.sortable' heading row of the table
         this.inheritFrom = sortTable.columnsFromSortOrder;
         var sortOrder = sortTable.orderFromTr(tr);
-        if (sortOrder.length === 0 && (silent === undefined || silent === null)) {
+        if (sortOrder.length === 0 && !silent) {
             // developer needs to know something is wrong
             warn("Unable to obtain sortOrder from sortable table.");   
             return;
@@ -1852,7 +1834,7 @@ var sortTable = {
                 }
             }
         }
-        if (this.cellIxs.length === 0 && (silent === undefined || silent === null)) {
+        if (this.cellIxs.length === 0 && !silent) {
             warn("Unable to find any sortOrder.cells for sortable table.  ths.length:"+ths.length + 
                  " tags.length:"+this.tags.length + " sortOrder:["+sortOrder+"]");
             return;
@@ -2072,7 +2054,7 @@ var sortTable = {
                 //warn("Added class='sortable sort"+(ix+1)+"' to th:"+this.innerHTML);
             });
             sortColumns = new sortTable.columnsFromTr(tr,"silent");
-            if (sortColumns === undefined || sortColumns.cellIxs.length === 0) {
+            if (!sortColumns || sortColumns.cellIxs.length === 0) {
                 warn("sortable table's header row contains no sort columns.");
                 return;
             }
