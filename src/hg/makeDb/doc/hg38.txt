@@ -3871,3 +3871,238 @@ done >> multiz7way.maf
     rm multiz7way*.tab
 
 ##############################################################################
+# GAP ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE - 2014-06-03 - Hiram)
+    # mafAddIRows has to be run on single chromosome maf files, it does not
+    #	function correctly when more than one reference sequence
+    #	are in a single file.  Need to split of the maf file into individual
+    #   maf files
+    mkdir -p /hive/data/genomes/hg38/bed/multiz7way/anno/mafSplit
+    cd /hive/data/genomes/hg38/bed/multiz7way/anno/mafSplit
+
+    time mafSplit -outDirDepth=1 -byTarget -useFullSequenceName \
+        /dev/null . ../../multiz7way.maf
+    #   real    4m8.617s
+
+    find . -type f | wc -l
+    #   353
+
+    # check for N.bed files everywhere:
+    cd /hive/data/genomes/hg38/bed/multiz7way/anno
+    for DB in `cat ../species.list`
+do
+    if [ ! -s /hive/data/genomes/${DB}/${DB}.N.bed ]; then
+        echo "MISS: ${DB}"
+#        cd /hive/data/genomes/${DB}
+#        twoBitInfo -nBed ${DB}.2bit ${DB}.N.bed
+    else
+        echo "  OK: ${DB}"
+    fi
+done
+
+    cd /hive/data/genomes/hg38/bed/multiz7way/anno
+    for DB in `cat ../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+    # make sure they all are successful symLinks:
+    ls -ogrtL
+
+    screen -S hg38      # use a screen to control this longish job
+    ssh ku
+    cd /hive/data/genomes/hg38/bed/multiz7way/anno
+    mkdir result
+    for D in `ls mafSplit`
+do
+    echo mkdir result/${D}
+    mkdir result/${D}
+done
+    cat << '_EOF_' > template
+#LOOP
+mafAddIRows -nBeds=nBeds mafSplit/$(path1) /hive/data/genomes/hg38/hg38.2bit {check out exists+ result/$(path1)}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    find ./mafSplit -type f | sed -e 's#^./mafSplit/##' > maf.list
+    gensub2 maf.list single template jobList
+    # limit jobs on a node with the ram=32g requirement because they go fast
+    para -ram=32g create jobList
+    para try ... check ... push ...
+# Completed: 353 of 353 jobs
+# CPU time in finished jobs:        530s       8.83m     0.15h    0.01d  0.000 y
+# IO & Wait Time:                  1057s      17.62m     0.29h    0.01d  0.000 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest finished job:              63s       1.05m     0.02h    0.00d
+# Submission to last job:           220s       3.67m     0.06h    0.00d
+
+    # verify all result files have some content, look for 0 size files:
+    find ./result -type f -size 0
+    # should see none
+    # or in this manner:
+    find ./result -type f | xargs ls -og | sort -k3nr | tail
+
+    # combine into one file  (the 1>&2 redirect sends the echo to stderr)
+    head -q -n 1 result/0/chr8.maf > hg38.7way.maf
+    find ./result -type f | while read F
+do
+    echo "${F}" 1>&2
+    grep -h -v "^#" ${F}
+done >> hg38.7way.maf
+
+    #	these maf files do not have the end marker, this does nothing:
+    #	tail -q -n 1 result/0/chr8.maf >> hg38.7way.maf
+    # How about an official end marker:
+    echo "##eof maf" >> hg38.7way.maf
+    ls -og
+# -rw-rw-r--  1 17795297196 Jun  3 14:01 hg38.7way.maf
+
+    du -hsc hg38.7way.maf
+    # 17G     hg38.7way.maf
+
+    # construct symlinks to get the individual maf files into gbdb:
+    rm /gbdb/hg38/multiz7way/multiz7way.maf   # remove previous results
+    ln -s `pwd`/hg38.7way.maf /gbdb/hg38/multiz7way/multiz7way.maf
+
+    # Load into database
+    cd /dev/shm
+    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/hg38/multiz7way \
+        hg38 multiz7way
+    # Loaded 10359242 mafs in 1 files from /gbdb/hg38/multiz7way
+    # real    4m21.862s
+
+    time hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 hg38 multiz7waySummary \
+        /gbdb/hg38/multiz7way/multiz7way.maf
+#  Created 1260918 summary blocks from 35384988 components
+#  and 10359242 mafs from /gbdb/hg38/multiz7way/multiz7way.maf
+#  real    6m6.583s
+
+# -rw-rw-r-- 1 530538267 Jun  3 14:05 multiz7way.tab
+# -rw-rw-r-- 1  60616616 Jun  3 14:15 multiz7waySummary.tab
+
+    rm multiz7way*.tab
+
+######################################################################
+# MULTIZ7WAY MAF FRAMES (DONE - 2014-06-03 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/hg38/bed/multiz7way/frames
+    cd /hive/data/genomes/hg38/bed/multiz7way/frames
+#   survey all the genomes to find out what kinds of gene tracks they have
+    cat << '_EOF_' > showGenes.csh
+#!/bin/csh -fe
+foreach db (`cat ../species.list`)
+    echo -n "${db}: "
+    set tables = `hgsql $db -N -e "show tables like '%Gene%'"`
+    foreach table ($tables)
+        if ($table == "ensGene" || $table == "refGene" || \
+           $table == "mgcGenes" || $table == "knownGene" || \
+           $table == "xenoRefGene" ) then
+           set count = `hgsql $db -N -e "select count(*) from $table"`
+            echo -n "${table}: ${count}, "
+        endif
+    end
+    set orgName = `hgsql hgcentraltest -N -e \
+            "select scientificName from dbDb where name='$db'"`
+    set orgId = `hgsql hg19 -N -e \
+            "select id from organism where name='$orgName'"`
+    if ($orgId == "") then
+        echo "Mrnas: 0"
+    else
+        set count = `hgsql hg19 -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
+        echo "Mrnas: ${count}"
+    endif
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./showGenes.csh
+    time ./showGenes.csh
+# hg38: knownGene: 104178, mgcGenes: 34081, refGene: 54852, xenoRefGene: 172740, Mrnas: 10723716
+# panTro4: ensGene: 29160, refGene: 2622, xenoRefGene: 280516, Mrnas: 11163
+# rheMac3: refGene: 6369, xenoRefGene: 275096, Mrnas: 443642
+# mm10: ensGene: 94647, knownGene: 61642, mgcGenes: 26768, refGene: 33765, xenoRefGene: 161178, Mrnas: 5224613
+# rn5: ensGene: 29188, mgcGenes: 6924, refGene: 18567, xenoRefGene: 175416, Mrnas: 1247500
+# canFam3: ensGene: 29884, refGene: 1582, xenoRefGene: 253196, Mrnas: 387195
+# monDom5: ensGene: 24882, refGene: 492, xenoRefGene: 248251,  Mrnas: 2461
+
+    # from that summary, use these gene sets:
+    # refGene - rheMac3
+    # ensGene - panTro4 rn5 canFam3 monDom5
+    # knownGene - hg38 mm10
+
+    mkdir genes
+    #   1. knownGene: hg38 mm10
+    for DB in hg38 mm10
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > genes/${DB}.gp.gz
+done
+    #   2. ensGene:
+    for DB in panTro4 rn5 canFam3 monDom5
+do
+hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+    #   3. refGene
+    for DB in rheMac3
+do
+hgsql -N -e "select * from refGene" ${DB} | cut -f2- \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+# genes/canFam3.gp.gz: 19507
+# genes/hg38.gp.gz: 21887
+# genes/mm10.gp.gz: 21013
+# genes/monDom5.gp.gz: 21033
+# genes/panTro4.gp.gz: 18657
+# genes/rheMac3.gp.gz: 5614
+# genes/rn5.gp.gz: 22863
+
+    time (cat ../anno/hg38.7way.maf \
+	| nice -n +19 genePredToMafFrames hg38 stdin stdout \
+	    `sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g" ../species.list` \
+		| gzip > multiz7wayFrames.bed.gz)
+    #   real    3m44.591s
+
+    # verify there are frames on everything, should be 7 species:
+    zcat multiz7wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c
+# 265160 canFam3
+# 208941 hg38
+# 253323 mm10
+# 574521 monDom5
+# 200156 panTro4
+#  49802 rheMac3
+# 244731 rn5
+
+    #   load the resulting file
+    ssh hgwdev
+    cd /hive/data/genomes/hg38/bed/multiz7way/frames
+    time hgLoadMafFrames hg38 multiz7wayFrames multiz7wayFrames.bed.gz
+    #   real    0m19.959s
+
+    time featureBits -countGaps hg38 multiz7wayFrames
+    #   52686177 bases of 3209286105 (1.642%) in intersection
+    #   real    0m12.593s
+
+    #   enable the trackDb entries:
+# frames multiz7wayFrames
+# irows on
+    #   appears to work OK
+
+#########################################################################
