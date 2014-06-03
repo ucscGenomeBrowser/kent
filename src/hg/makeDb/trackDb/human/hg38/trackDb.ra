@@ -228,3 +228,5 @@ group x
     longLabel Maf Mappings to the Alternate Sequences/Haplotypes
     type maf
     html altSequence
+
+include trackDb.7way.ra
