@@ -1345,9 +1345,8 @@ function visTriggersHiddenSelect(obj)
     return true;
 }
 
-function setCheckboxList(list, value)  // DEAD CODE?
-{
-// set value of all checkboxes in semicolon delimited list
+function setCheckboxList(list, value)
+{ // set value of all checkboxes in semicolon delimited list
     var names = list.split(";");
     for (var i=0; i < names.length; i++) {
         $("input[name='" + names[i] + "']").attr('checked', value);
