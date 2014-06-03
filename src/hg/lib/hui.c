@@ -5213,7 +5213,7 @@ if (filterSettings)
                 }
         #endif///ndef EXTRA_FIELDS_SUPPORT
             char label[128];
-            safef(label,sizeof(label),"Minimum %s",field);
+            safef(label,sizeof(label),"%s",field);
             showScoreFilter(cart,tdb,opened,boxed,parentLevel,name,title,label,scoreName,isFloat);
             freeMem(scoreName);
             count++;

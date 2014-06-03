@@ -16,6 +16,9 @@ spectrum on
 scoreMax 1000
 scoreMin 100
 sourceTable wgEncodeAwgDnaseCombinedSources
+sourceCountFilter 1:125
+sourceCountFilterLimits 1:125
+sourceCountFilterByRange on
 urls sourceIds="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&deprecated=true&term=$$"
 wgEncode 1
 
