@@ -99,7 +99,7 @@ var suggestBox = {
         // working, which is a major annoyance.
         // $('#positionInput').focus();
         $("#positionInput").change(function(event) {
-            if (!lastSelected || lastSelected != $('#positionInput').val()) {
+            if (!lastSelected || lastSelected !== $('#positionInput').val()) {
                 // This handles case where user typed or edited something rather than choosing from a suggest list;
                 // in this case, we only change the position hidden; we do NOT update the displayed coordinates.
                 var val = $('#positionInput').val();
