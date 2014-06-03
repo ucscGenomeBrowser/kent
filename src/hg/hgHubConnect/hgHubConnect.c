@@ -218,7 +218,7 @@ for(hub = unlistedHubList; hub; hub = hub->next)
 		"onClick="
 		"\" document.disconnectHubForm.elements['hubId'].value= '%d';"
 		"document.disconnectHubForm.submit();return true;\" "
-		"class=\"hubField\" type=\"button\" value=\"Disconnect\">\n", hub->id);
+		"class=\"hubDisconnectButton\" type=\"button\" value=\"Disconnect\">\n", hub->id);
 	ourCellEnd();
 	}
     else
@@ -321,7 +321,7 @@ if (!isEmpty(hubSearchTerms))
 	"onClick="
 	"\" document.searchHubForm.elements['hubSearchTerms'].value=\'\';"
 	"document.searchHubForm.submit();return true;\" "
-	"class=\"hubField\" type=\"button\" value=\"Delete Search Terms\">\n");
+	"class=\"hubField\" type=\"button\" value=\"Show All Hubs\">\n");
     printf("<BR>\n");
     }
 
@@ -398,7 +398,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		"onClick="
 		"\" document.disconnectHubForm.elements['hubId'].value= '%d';"
 		"document.disconnectHubForm.submit();return true;\" "
-		"class=\"hubField\" type=\"button\" value=\"Disconnect\">\n", id);
+		"class=\"hubDisconnectButton\" type=\"button\" value=\"Disconnect\">\n", id);
 	else
 	    {
 	    // get first name off of list of supported databases
@@ -418,7 +418,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		"\" document.connectHubForm.elements['hubUrl'].value= '%s';"
 		"document.connectHubForm.elements['db'].value= '%s';"
 		"document.connectHubForm.submit();return true;\" "
-		"class=\"hubField\" type=\"button\" value=\"Connect\">\n", url,name);
+		"class=\"hubConnectButton\" type=\"button\" value=\"Connect\">\n", url,name);
 	    }
 
 	ourCellEnd();
