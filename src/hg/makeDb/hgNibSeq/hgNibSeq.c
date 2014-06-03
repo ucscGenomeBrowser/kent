@@ -1,4 +1,7 @@
 /* hgNibSeq - convert DNA to nibble-a-base and store location in database. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "portable.h"
 #include "dystring.h"

@@ -1,0 +1,77 @@
+<H2>Description</H2>
+
+<!--#insert file="omimDescriptionText.html"-->
+
+<P>
+This track shows the genomic positions of all <B>gene entries</B> in the Online Mendelian
+Inheritance in Man (<A HREF="http://www.omim.org/" TARGET=_blank>OMIM</A>) database.
+</P>
+
+<H2>Display Conventions and Configuration</H2>
+
+<P>Genomic locations of OMIM gene entries are displayed as solid blocks.  The entries are colored
+according to the associated OMIM phenotype map key (if any):
+<UL>
+<LI><B><FONT COLOR="#AAC4AA">Lighter Green</FONT></B> for phenotype map key 1 OMIM records
+-  the disorder has been placed on the map based on its association with
+a gene, but the underlying defect is not known.
+<LI><B><FONT COLOR="#669666">Light Green</FONT></B> for phenotype map key 2 OMIM records
+- the disorder has been placed on the map by linkage; no mutation has
+been found.
+<LI><B><FONT COLOR="#005000">Dark Green</FONT></B> for phenotype map key 3 OMIM records
+- the molecular basis for the disorder is known; a mutation has been
+found in the gene.
+<LI><B><FONT COLOR="#69329B">Purple</FONT></B> for phenotype map key 4 OMIM records
+- a contiguous gene deletion or duplication syndrome; multiple genes
+are deleted or duplicated causing the phenotype.
+<LI><B><FONT COLOR="#BEBEBE">Light Gray</FONT></B> for Others
+- no associated OMIM phenotype map key info available.
+</UL>
+<P> Gene symbol and disease information, when available, are displayed on the details page for an
+item, and links to related RefSeq Genes and UCSC Genes are given.
+</P>
+<P>The descriptions of the OMIM entries are shown on the main browser display when Full display
+mode is chosen.  In Pack mode, the descriptions are shown when mousing over each entry. Items
+displayed can be filtered according to phenotype map key on the track controls page. 
+</P>
+
+<H2>Methods</H2>
+<P>
+The mappings displayed in this track are based on OMIM gene entries, their Entrez Gene IDs, and
+the corresponding RefSeq Gene locations:
+<UL>
+<LI>The data file <TT>genemap.txt</TT> from OMIM was loaded into the MySQL table <TT>omimGeneMap</TT>.
+<LI>The data file <TT>mim2gene.txt</TT> from OMIM was processed and loaded into the MySQL table <TT>omim2gene</TT>.
+<LI>Entries in <TT>genemap.txt</TT> having disorder info were parsed and loaded into the 
+<TT>omimPhenotype</TT> table.
+<LI>For each OMIM gene in the <TT>omim2gene</TT> table, the
+<A HREF="http://www.ncbi.nlm.nih.gov/gene" TARGET=_blank>Entrez Gene ID</A> was used to get the
+corresponding <A HREF="http://www.ncbi.nlm.nih.gov/RefSeq/" TARGET=_blank>RefSeq Gene ID</A> via
+the <TT>refLink</TT> table, and the RefSeq ID was used to get the genomic location from the
+<TT>refGene</TT> table.* The OMIM gene IDs and corresponding RefSeq Gene locations were loaded into
+the <TT>omimGene2</tt> table, the primary table for this track.
+</P>
+</UL>
+<P>
+*The locations in the <TT>refGene</TT> table are from alignments of RefSeq Genes to the reference
+genome using BLAT.
+</P>
+
+<H2>Credits</H2>
+<P>
+Thanks to OMIM and NCBI for the use of their data. This track was
+constructed by Fan Hsu, Robert Kuhn, and Brooke Rhead of the UCSC Genome Bioinformatics Group.</P> 
+
+<H2>References</H2>
+<P>Amberger J, Bocchini CA, Scott AF, Hamosh A.  
+<A HREF="http://nar.oxfordjournals.org/cgi/content/full/37/suppl_1/D793"
+TARGET=_blank>McKusick's Online Mendelian Inheritance in Man (OMIM&#174;)</A>.  
+<EM>Nucleic Acids Res.</EM> 2009 Jan;37(Database issue):D793-6. Epub 2008 Oct 8.
+</P>
+<P>
+Hamosh A, Scott AF, Amberger JS, Bocchini CA, McKusick VA. 
+<A HREF="http://nar.oxfordjournals.org/cgi/content/full/33/suppl_1/D514"
+TARGET=_blank>Online Mendelian Inheritance in Man (OMIM), a knowledgebase of 
+human genes and genetic disorders</A>. 
+<em>Nucleic Acids Res</em>. 2005 Jan 1;33(Database issue):D514-7.
+</P>

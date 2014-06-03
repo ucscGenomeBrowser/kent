@@ -1,6 +1,9 @@
 /* vgLoadJax - Load visiGene database from jackson database. More 
  * specifically create a directory full of .ra and .tab files from
  * jackson database that can be loaded into visiGene with visiGeneLoad. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

@@ -2,6 +2,9 @@
  * generated switchDbTss.c and switchDbTss.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef SWITCHDBTSS_H
 #define SWITCHDBTSS_H
 

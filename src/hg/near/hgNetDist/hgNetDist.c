@@ -3,6 +3,9 @@
    This code assumes the network is bi-directional (undirected).
 */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include <stdio.h>
 #include "common.h"
 #include "linefile.h"

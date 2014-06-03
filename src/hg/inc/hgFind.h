@@ -1,5 +1,8 @@
 /* hgFind.h - Find things in human genome annotations. */
 
+/* Copyright (C) 2010 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef HGFIND_H
 #define HGFIND_H
 

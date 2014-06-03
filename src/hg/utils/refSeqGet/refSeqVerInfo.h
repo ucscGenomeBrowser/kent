@@ -1,4 +1,7 @@
 /* object to track refseqs that are to be retrieved */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef refSeqVerInfo_h
 #define refSeqVerInfo_h
 struct sqlConnection;

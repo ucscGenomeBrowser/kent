@@ -1,6 +1,9 @@
 /* snpSplitByChrom - second step in dbSNP processing.
  * Split the ContigLocFilter table by distinct chrom from ContigInfo. 
  * ContigLocFilter contains chrom (added by snpContigLocFilter, the first step) */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 
 #include "dystring.h"

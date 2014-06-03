@@ -1,4 +1,7 @@
 /* checkCoverageGaps - Check for biggest gap in coverage for a list of tracks.. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "localmem.h"
 #include "linefile.h"

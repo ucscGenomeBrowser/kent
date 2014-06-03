@@ -1,6 +1,9 @@
 /*
  * Object per release update (full or daily)
  */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef GBUPDATE_H
 #define GBUPDATE_H
 #include "common.h"

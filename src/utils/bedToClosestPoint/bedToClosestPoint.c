@@ -1,5 +1,8 @@
 /* bedToClosestPoint - Given a bed file, and a list of unique points (often promoters) in genome, 
  * assign each bed to the closest point. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

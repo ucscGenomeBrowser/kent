@@ -1,6 +1,9 @@
 /* chimpChromContigAgp - create chrom to contig AGP, 
    using chrom-scaf and scaf-contig AGP's */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"

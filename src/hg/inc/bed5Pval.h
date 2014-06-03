@@ -2,6 +2,9 @@
  * generated bed5Pval.c and bed5Pval.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2006 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef BED5PVAL_H
 #define BED5PVAL_H
 

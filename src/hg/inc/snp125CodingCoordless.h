@@ -2,6 +2,9 @@
  * generated snp125CodingCoordless.c and snp125CodingCoordless.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2012 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef SNP125CODINGCOORDLESS_H
 #define SNP125CODINGCOORDLESS_H
 

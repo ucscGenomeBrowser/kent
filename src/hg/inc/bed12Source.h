@@ -2,6 +2,9 @@
  * generated bed12Source.c and bed12Source.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2006 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef BED12SOURCE_H
 #define BED12SOURCE_H
 

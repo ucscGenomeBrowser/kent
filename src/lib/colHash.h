@@ -1,5 +1,8 @@
 /* colHash - stuff for fast lookup of index given an
  * rgb value. */
+
+/* Copyright (C) 2002 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef COLHASH_H
 #define COLHASH_H
 

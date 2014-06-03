@@ -1,6 +1,9 @@
 /* bestThreshold - Given a set of numbers for positive examples and one 
  * for negative examples, figure out threshold that best separates the 
  * two sets. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

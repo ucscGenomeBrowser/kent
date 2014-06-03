@@ -1,5 +1,8 @@
 /* testTableExists - Experiments with ways to test for table existence ... */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include <stdio.h>
 #include <stdlib.h>
 

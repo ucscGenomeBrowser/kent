@@ -1,4 +1,7 @@
 /* chainOneTwo - keep track of two highest scores. */
+
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

@@ -1,4 +1,7 @@
 /* Code to create and access the mgcStatus table */
+
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef MGCSTATUSTBL_H
 #define MGCSTATUSTBL_H
 #include "common.h"

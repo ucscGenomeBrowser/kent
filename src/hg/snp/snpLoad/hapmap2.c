@@ -2,6 +2,9 @@
 /* create hapmapSnpsCombined table, given 4 hapmapSnpsPop tables */
 /* relies on hashes so will consume memory! */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* This program relies on passing around hashes, there might be a better way */
 
 /* Check for multiple alignments when building hash for each pop. Not expecting any. */

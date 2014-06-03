@@ -2,6 +2,9 @@
  *	wiggle trackDb optional settings and the same values that may be
  *	in the cart.
  */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "jksql.h"
 #include "trackDb.h"
@@ -397,6 +400,18 @@ else
 	}
     }
 return(cloneString(ret));
+}
+
+boolean wigFetchDoNegativeWithCart(struct cart *theCart, struct trackDb *tdb, char *name,char **optString)
+/*	doNegative - false by default **********************************/
+{
+boolean parentLevel = isNameAtParentLevel(tdb,name);
+char *doNegative = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, DONEGATIVEMODE));
+
+if (doNegative == NULL)
+    return FALSE;
+
+return sameString(doNegative, "1");
 }
 
 enum wiggleGridOptEnum wigFetchTransformFuncWithCart(struct cart *theCart,

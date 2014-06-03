@@ -1,6 +1,9 @@
 /* infrastructure -- Code shared by all tracks.  Separating this out from
  * hgTracks.c allows a standalone main to make track images. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* NOTE: This code was imported from hgTracks.c 1.1469, May 19 2008,
  * so a lot of revision history has been obscured.  To see code history
  * from before this file was created, run this:
@@ -9611,9 +9614,17 @@ void pgSnpLeftLabels(struct track *tg, int seqStart, int seqEnd,
 		     struct hvGfx *hvg, int xOff, int yOff, int width, int height,
 		     boolean withCenterLabels, MgFont *font, Color color,
 		     enum trackVisibility vis)
-/* pgSnp draws its own left labels when it draws the item; this is a placeholder so the
- * default full-mode left labels aren't drawn too. */
+/* pgSnp draws its own left labels when it draws the item in pack or full mode.
+ * We don't want the default left labels when in full mode because they can overlap
+ * with the item-drawing labels, but we do still need dense mode left labels. */
 {
+if (tg->visibility == tvDense)
+    {
+    if (isCenterLabelIncluded(tg))
+	yOff += mgFontLineHeight(font);
+    hvGfxTextRight(hvg, leftLabelX, yOff, leftLabelWidth-1, tg->lineHeight,
+		   color, font, tg->shortLabel);
+    }
 }
 
 void pgSnpMethods (struct track *tg)

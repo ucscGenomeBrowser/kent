@@ -2,6 +2,9 @@
  * generated encodePeak.c and encodePeak.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2008 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef ENCODEPEAK_H
 #define ENCODEPEAK_H
 

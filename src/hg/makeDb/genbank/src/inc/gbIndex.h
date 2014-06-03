@@ -1,3 +1,6 @@
+/* Copyright (C) 2003 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /*
  * Object used to load flat-file indices of contents of the genbank/refseq
  * release heirarchies.  Only select sections (processed, aligned) of the

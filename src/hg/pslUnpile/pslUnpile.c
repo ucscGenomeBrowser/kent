@@ -1,5 +1,8 @@
 /* pslUnpile - Removes huge piles of alignments from sorted psl files 
  * (due to unmasked repeats presumably).. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "cheapcgi.h"
 #include "psl.h"

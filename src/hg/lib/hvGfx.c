@@ -2,6 +2,9 @@
  * providing genome browser-specific features.  It was added to handle
  * reverse-complement display. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hvGfx.h"
 #include "obscure.h"

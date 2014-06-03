@@ -1,5 +1,8 @@
 /* bioImage.h - Interface to bioImage database. */
 
+/* Copyright (C) 2005 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef BIOIMAGE_H
 #define BIOIMAGE_H
 

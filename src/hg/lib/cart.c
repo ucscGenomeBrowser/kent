@@ -1,3 +1,6 @@
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hCommon.h"
 #include "obscure.h"
@@ -618,6 +621,21 @@ if (exclude != NULL)
 return cart;
 }
 
+static void doDisconnectHub(struct cart *cart)
+{
+char *id = cartOptionalString(cart, "hubId");
+
+if (id != NULL)
+    {
+    char buffer[1024];
+    safef(buffer, sizeof buffer, "hgHubConnect.hub.%s", id);
+    cartRemove(cart, buffer);
+    }
+
+cartRemove(cart, "hubId");
+cartRemove(cart, hgHubDoDisconnect);
+}
+
 struct cart *cartNew(char *userId, char *sessionId,
                      char **exclude, struct hash *oldVars)
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
@@ -680,7 +698,17 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 
 /* wire up the assembly hubs so we can operate without sql */
 setUdcTimeout(cart);
-hubConnectLoadHubs(cart);
+if (cartVarExists(cart, hgHubDoDisconnect))
+    doDisconnectHub(cart);
+
+char *newDatabase = hubConnectLoadHubs(cart);
+
+if (newDatabase != NULL)
+    {
+    cartSetString(cart,"db", newDatabase);
+    // this is some magic to use the defaultPosition */
+    cartSetString(cart,"position", "genome");
+    }
 
 if (exclude != NULL)
     {

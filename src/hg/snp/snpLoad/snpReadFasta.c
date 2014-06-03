@@ -4,6 +4,9 @@
  * Do lookups into snpFasta hashes for class, observed, molType. 
  * Use UCSC chromInfo. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* Could drop refUCSCReverseComp here. */
 /* Dropping ctg_id at this point. */
 

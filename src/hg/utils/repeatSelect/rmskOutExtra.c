@@ -1,3 +1,6 @@
+/* Copyright (C) 2006 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "rmskOutExtra.h"
 
 void rmskOutExtraFree(struct rmskOutExtra **pThing)

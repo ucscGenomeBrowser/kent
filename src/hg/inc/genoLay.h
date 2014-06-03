@@ -1,6 +1,9 @@
 /* genoLay - genome layout. Arranges chromosomes so that they
  * tend to fit together nicely on a single page. */
 
+/* Copyright (C) 2009 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef GENOLAY_H
 #define GENOLAY_H
 

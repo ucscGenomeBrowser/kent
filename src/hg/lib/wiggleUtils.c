@@ -1,6 +1,9 @@
 /*	wiggleUtils - operations to fetch data from .wib files
  *	first used in hgText
  */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "jksql.h"
 #include "dystring.h"

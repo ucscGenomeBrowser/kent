@@ -1,4 +1,7 @@
 /* snpUi.h - enums and char arrays for snp UI features */
+
+/* Copyright (C) 2004 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef SNPUI_H
 #define SNPUI_H
 

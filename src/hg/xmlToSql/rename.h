@@ -1,5 +1,8 @@
 /* rename - Rename things to avoid symbol conflicts. */
 
+/* Copyright (C) 2005 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef RENAME_H
 #define RENAME_H
 

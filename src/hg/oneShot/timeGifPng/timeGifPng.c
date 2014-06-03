@@ -1,4 +1,7 @@
 /* timeGifPng - program to do some GIF and PNG timing. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "png.h"
 #include "common.h"
 #include "linefile.h"

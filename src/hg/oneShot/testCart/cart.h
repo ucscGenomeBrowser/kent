@@ -2,6 +2,9 @@
  * one invocation of a cgi script to another (variables
  * that are carted around).  */
 
+/* Copyright (C) 2001 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef CART_H
 #define CART_H
 

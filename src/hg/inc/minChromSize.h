@@ -3,6 +3,9 @@
  * Generally this is helpful when constructing binKeepers
  * for random access to annotations. */
 
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef MINCHROMSIZE_H
 #define MINCHROMSIZE_H
 

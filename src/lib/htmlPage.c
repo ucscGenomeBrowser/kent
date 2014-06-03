@@ -1,3 +1,6 @@
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* htmlPage - stuff to read, parse, and submit  htmlPages and forms. 
  *
  * typical usage is:

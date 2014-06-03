@@ -1,4 +1,7 @@
 /* edwSolexaToSangerFastq - Subtract 31 from each quality to get from solexe to sanger format.. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -22,54 +25,6 @@ errAbort(
 static struct optionSpec options[] = {
    {NULL, 0},
 };
-
-struct fq3 *fq3ReadNext(struct lineFile *lf)
-/* Read next record, return it as fq3. */
-{
-struct fq3 *fq3;
-AllocVar(fq3);
-char *line;
-
-/* Deal with initial line starting with '@' */
-if (!lineFileNextReal(lf, &line))
-    return FALSE;
-if (line[0] != '@')
-    {
-    errAbort("Expecting line starting with '@' got %s line %d of %s", 
-	line, lf->lineIx, lf->fileName);
-    }
-fq3->atLine = cloneString(line);
-
-/* Deal with line containing sequence. */
-if (!lineFileNext(lf, &line,  NULL))
-    errAbort("%s truncated in middle of record", lf->fileName);
-fq3->seqLine = cloneString(line);
-
-/* Check for + line */
-if (!lineFileNext(lf, &line,  NULL))
-    errAbort("%s truncated in middle of record", lf->fileName);
-if (line[0] != '+')
-    errAbort("Expecting + line %d of %s", lf->lineIx, lf->fileName);
-
-/* Get quality line */
-if (!lineFileNext(lf, &line,  NULL))
-    errAbort("%s truncated in middle of record", lf->fileName);
-fq3->qualLine = cloneString(line);
-return fq3;
-}
-
-void fq3Free(struct fq3 **pFq3)
-/* Read next record, return it as fq3. */
-{
-struct fq3 *fq3 = *pFq3;
-if (fq3 != NULL)
-    {
-    freeMem(fq3->atLine);
-    freeMem(fq3->seqLine);
-    freeMem(fq3->qualLine);
-    freez(pFq3);
-    }
-}
 
 void fixSolexaQual(char *qual)
 /* Subtract 31 from solexa qual to get it into our range */
@@ -97,17 +52,17 @@ void edwSolexaToSangerFastq(char *inSolexa, char *outSanger)
 {
 struct lineFile *lf = lineFileOpen(inSolexa, TRUE);
 FILE *f = mustOpen(outSanger, "w");
-struct fq3  *fq3;
-while ((fq3 = fq3ReadNext(lf)) != NULL)
+struct fq  *fq;
+while ((fq = fqReadNext(lf)) != NULL)
     {
-    if (!isAllSolexa(fq3->qualLine))
+    if (!isAllSolexa(fq->quality))
         errAbort("Quality line %d of %s has non-Solexa scores", lf->lineIx, lf->fileName);
     else
-        fixSolexaQual(fq3->qualLine);
-    fprintf(f, "%s\n%s\n+\n%s\n", fq3->atLine, fq3->seqLine, fq3->qualLine);
+        fixSolexaQual(fq->quality);
+    fprintf(f, "%s\n%s\n+\n%s\n", fq->header, fq->dna, fq->quality);
     if (ferror(f))
 	errAbort("Write error %s", outSanger);
-    fq3Free(&fq3);
+    fqFree(&fq);
     }
 carefulClose(&f);
 }

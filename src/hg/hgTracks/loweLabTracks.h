@@ -1,5 +1,8 @@
 /**** Lowe lab declarations ***/
 
+/* Copyright (C) 2008 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 Color gbGeneColor(struct track *tg, void *item, struct hvGfx *hvg);
 void archaeaGeneMethods(struct track *tg);
 void gbGeneMethods(struct track *tg);

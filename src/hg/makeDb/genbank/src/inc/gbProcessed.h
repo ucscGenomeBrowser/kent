@@ -1,6 +1,9 @@
 /*
  * Information about genbank accessions that have been processed.
  */
+
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef GBPROCESSED_H
 #define GBPROCESSED_H
 

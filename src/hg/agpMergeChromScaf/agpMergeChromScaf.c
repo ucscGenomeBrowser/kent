@@ -1,3 +1,6 @@
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* agpMergeChromScaf - Combines chrom.agp and scaffold.agp 
  *  Galt Barber 2009-06-19
  *  Produces a combined agp file from the chrom.agp and 

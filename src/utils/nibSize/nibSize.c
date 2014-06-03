@@ -1,4 +1,7 @@
 /* nibSize - print out nib sizes */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "nib.h"
 #include "options.h"

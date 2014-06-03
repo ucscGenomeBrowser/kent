@@ -3,6 +3,9 @@
 /* It looks only at rows where all 4 populations have data and the major allele is mixed */
 /* It reports counts where 3 populations have a certain allele and the 4th is different */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 
 #include "hapmapSnpsCombined.h"

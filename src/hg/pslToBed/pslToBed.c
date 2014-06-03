@@ -1,5 +1,8 @@
 /* pslToBed -- tranform a psl format file to a bed format file */
 
+/* Copyright (C) 2012 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "psl.h"
 #include "bed.h"
@@ -20,8 +23,8 @@ errAbort("pslToBed: tranform a psl format file to a bed format file.\n"
 	 "These coordinates are assumed to be in the query coordinate system\n"
 	 "of the psl, like those that are created from genePredToFakePsl\n"
 	 "    -posName\n"
-	 "write the full position in chrom:start-end format into the name field\n"
-	 "(can be used to create links to source position on details page)\n"
+	 "changes the qName field to qName:qStart-qEnd\n"
+	 "(can be used to create links to query position on details page)\n"
          );
 
 } 

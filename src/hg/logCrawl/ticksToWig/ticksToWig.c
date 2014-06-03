@@ -1,4 +1,7 @@
 /* ticksToWig - Convert tab-delimited file of Unix time ticks, and possibly also numerical values to wig file(s).. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

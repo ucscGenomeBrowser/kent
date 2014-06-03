@@ -1333,6 +1333,7 @@ TMPDIR=/scratch/tmp
 
     checkTableCoords bosTau7 animalQtl
     # no results - yay!
+    #added entries in trackDb for track and search 
                                                                                                                       614,23        Bot
 ##############################################################################
 # Farm Animal Cytoband track (IN PROGRESS - 2014-02-04 - Pauline)

@@ -1,6 +1,9 @@
 /* domains - do protein domains section. */
 /* This module is adopted from the domains module of hgGene. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"

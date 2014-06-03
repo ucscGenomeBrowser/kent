@@ -1,5 +1,8 @@
 /* eapFinish - Look for analysis jobs that have completed and integrate results into 
  * database. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include <uuid/uuid.h>
 #include "common.h"
 #include "linefile.h"

@@ -2,6 +2,9 @@
  * Mostly just links to bed code, but handles a few things itself, like the dense
  * drawing code. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"

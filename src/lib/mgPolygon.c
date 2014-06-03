@@ -5,7 +5,9 @@
  * case for convex polygons - is only 1/3 of the module, so I'm leaving
  * it in.  I've lightly adapted the code to current conventions, but
  * you can still see some relics in the local and static variable names of 
- * other coding conventions.  */
+ * other coding conventions.  
+ * This file is copyright 1984-2002 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #include "common.h"
 #include "bits.h"

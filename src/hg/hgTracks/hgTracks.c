@@ -4,6 +4,9 @@
  * routine got moved to create a new entry point to the bulk of the code for the
  * hgRenderTracks web service.  See mainMain.c for the main used by the hgTracks CGI. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include <pthread.h>
 #include "common.h"
 #include "hCommon.h"
@@ -5006,7 +5009,6 @@ hPrintf("</FORM>\n");
 
 /* hidden form for track hub CGI */
 hPrintf("<FORM ACTION='%s' NAME='trackHubForm'>", hgHubConnectName());
-cgiMakeHiddenVar(hgHubConnectCgiDestUrl, "../cgi-bin/hgTracks");
 cartSaveSession(cart);
 hPrintf("</FORM>\n");
 
@@ -5692,12 +5694,6 @@ cartCheckout(&oldCart);
 cgiVarExcludeExcept(except);
 }
 
-static void addDataHubs(struct cart *cart)
-{
-hubCheckForNew(cart);
-cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
-}
-
 void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
@@ -5719,12 +5715,6 @@ if (measureTiming)
 state = cgiUrlString();
 printf("State: %s\n", state->string);
 #endif
-
-/* check for new data/assembly hub */
-if (cartVarExists(cart, hgHubDataText))
-    {
-    addDataHubs(cart);
-    }
 
 getDbAndGenome(cart, &database, &organism, oldVars);
 

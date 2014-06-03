@@ -2,6 +2,9 @@
  * generated wgEncodeGencodeAnnotationRemark.c and wgEncodeGencodeAnnotationRemark.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef WGENCODEGENCODEANNOTATIONREMARK_H
 #define WGENCODEGENCODEANNOTATIONREMARK_H
 

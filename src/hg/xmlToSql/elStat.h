@@ -1,5 +1,8 @@
 /* Parse a statistics file from autoDtd. */
 
+/* Copyright (C) 2005 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef ELSTAT_H
 #define ELSTAT_H
 

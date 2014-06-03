@@ -1,4 +1,7 @@
 /* lav.c - common lav file reading routines */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "lav.h"
 
 static void unexpectedEof(struct lineFile *lf)

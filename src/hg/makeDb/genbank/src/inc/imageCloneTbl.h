@@ -1,4 +1,7 @@
 /* Code to create and access the imageClone table */
+
+/* Copyright (C) 2003 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef IMAGECLONETBL_H
 #define IMAGECLONETBL_H
 #include "common.h"

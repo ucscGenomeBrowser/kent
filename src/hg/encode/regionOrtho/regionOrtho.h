@@ -1,4 +1,7 @@
 /* regionOrtho - create HTML files to compare syntenic predictions from liftOver and Mercator */
+
+/* Copyright (C) 2004 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "jksql.h"
 #include "dystring.h"

@@ -1,3 +1,6 @@
+/* Copyright (C) 2003 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef ORTHOEVAL_H
 #define ORTHOEVAL_H
 

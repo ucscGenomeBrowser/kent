@@ -1,6 +1,9 @@
 /* spacedColumn - stuff to handle parsing text files where fields are
  * fixed width rather than tab delimited. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "spacedColumn.h"

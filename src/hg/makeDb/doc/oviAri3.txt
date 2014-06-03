@@ -571,7 +571,7 @@ oviAri3.upstreamGeneTbl = refGene
     cd /hive/data/genomes/oviAri3/bed
     ln -s blastz.hg19.swap lastz.hg19
 
-##############################################################################
+#m############################################################################
 # fixup search rule for assembly track/gold table (DONE - 2013-08-06 - Hiram)
     hgsql -N -e "select frag from gold;" oviAri3 | sort | head -1
 AMGL01000001.1
@@ -603,3 +603,19 @@ searchPriority 8
 
     wget http://www.animalgenome.org/QTLdb/tmp/QTL_OAR_3.1.ubed.txt.gz 
     zcat QTL_OAR_3.1.ubed.txt.gz >> oviAri3.animalQtl.bed
+
+##############################################################################
+# Farm Animal QTL track (DONE - 2014-05-30 - Pauline)
+    mkdir /hive/data/genomes/oviAri3/bed/animalQtl
+    cd /hive/data/genomes/oviAri3/bed/animalQtl
+
+    wget http://www.animalgenome.org/QTLdb/tmp/QTL_OAR_3.1.ubed.txt.gz
+
+    zcat QTL_OAR_3.1.ubed.txt.gz >> oviAri3.animalQtl.bed
+    cut -f1-4 oviAri3.animalQtl.bed > oviAri3.animalQtl.bed4
+    hgLoadBed oviAri3 animalQtl oviAri3.animalQtl.bed4
+
+    checkTableCoords oviAri3 animalQtl
+    # no results - yay!
+
+    #added entries in trackDb for track and search 

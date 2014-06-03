@@ -1,6 +1,9 @@
 // cv.c stands for Controlled Vocabullary and this file contains the
 // library APIs for reading and making sense of the contents of cv.ra.
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include <regex.h>
 #include "common.h"
 #include "linefile.h"

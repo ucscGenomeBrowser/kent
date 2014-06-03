@@ -5,6 +5,9 @@
   Description: Update stsInfo file with new information from NCBI
 */
 
+/* Copyright (C) 2009 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "memalloc.h"
