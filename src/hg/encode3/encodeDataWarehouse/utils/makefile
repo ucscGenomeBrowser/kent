@@ -3,14 +3,17 @@
 include ../../../../inc/common.mk
 
 UTIL_DIRS = \
-    edwBamFilter \
-    edwBamRemoveChrom \
-    edwBamStats \
     edwComparePeaks \
     edwReplicatedPeaks \
     edwSamPairedEndStats \
-    edwSamRepeatAnalysis \
     edwSolexaToSangerFastq 
+
+ifeq (${USE_BAM},1)
+  UTIL_DIRS += edwBamFilter \
+    edwBamRemoveChrom \
+    edwBamStats \
+    edwSamRepeatAnalysis
+endif
 
 buildUtils: $(UTIL_DIRS:%=%.buildUtils)
 %.buildUtils:

@@ -713,7 +713,7 @@ if(chain == NULL)
 chainSubSetForRegion(chain, ag->tStart-1, ag->tEnd+1, &workingChain, &workingChainFree);
 if(workingChain == NULL)
     return NULL;
-if ((chain->qStrand == '-'))
+if (chain->qStrand == '-')
     reverse = TRUE;
 agNew = altGraphXClone(ag);
 freez(&agNew->tName);
@@ -1000,7 +1000,7 @@ struct genePred *orthoBedFromGene(struct sqlConnection *conn, char *db, char *or
 {
 struct genePred *synGene= NULL;
 int i;
-unsigned *blockSizes;
+int *blockSizes;
 struct chain *chain = NULL;
 int diff = 0;
 AllocArray(blockSizes, gene->exonCount);
@@ -1009,7 +1009,7 @@ for(i=0; i<gene->exonCount; i++)
 
 chain = chainForBlocks(conn, db, netTable, 
 		       gene->chrom, gene->txStart, gene->txEnd,
-		       gene->exonStarts, blockSizes, gene->exonCount);
+		       (int *)gene->exonStarts, blockSizes, gene->exonCount);
 if(chain == NULL)
     return NULL;
 fillInGene(chain, gene, &synGene);
