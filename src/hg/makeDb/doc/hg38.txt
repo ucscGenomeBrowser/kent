@@ -3588,3 +3588,286 @@ TMPDIR=/dev/shm
 
 
 #############################################################################
+## 7-Way Multiz (DONE - 2014-06-02 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/hg38/bed/multiz7way
+    cd /hive/data/genomes/hg38/bed/multiz7way
+
+    # from the 63-way in the source tree, select out the 7 used here:
+    /cluster/bin/phast/tree_doctor \
+        --prune-all-but hg19,panTro4,rheMac3,mm10,rn5,canFam3,monDom5 \
+        /cluster/home/hiram/kent/src/hg/utils/phyloTrees/130way.nh \
+          | sed -e 's/hg19/hg38/' > hg38.7way.nh
+
+    #	what that looks like:
+    ~/kent/src/hg/utils/phyloTrees/asciiTree.pl hg38.7way.nh
+# (((((hg38:0.006550,
+#     panTro4:0.006840):0.027424,
+#    rheMac3:0.037601):0.109934,
+#   (mm10:0.084509,
+#   rn5:0.091589):0.271974):0.020593,
+#  canFam3:0.165928):0.258392,
+# monDom5:0.340786);
+
+    # extract species list from that .nh file
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+        hg38.7way.nh | xargs echo | sed 's/ //g; s/,/ /g' \
+        | sed 's/[()]//g; s/,/ /g' | tr '[ ]' '[\n]' > species.list.txt
+
+    # construct db to name translation list:
+    cat species.list.txt | while read DB
+do
+hgsql -N -e "select name,organism from dbDb where name=\"${DB}\";" hgcentraltest
+done | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
+        > db.to.name.txt
+
+    # construct a common name .nh file:
+    /cluster/bin/phast/tree_doctor --rename \
+    "`cat db.to.name.txt`" hg38.7way.nh | sed -e 's/00*)/)/g; s/00*,/,/g' \
+        > hg38.7way.commonNames.nh
+    ~/kent/src/hg/utils/phyloTrees/asciiTree.pl hg38.7way.commonNames.nh
+# (((((Human:0.00655,
+#     Chimp:0.00684):0.027424,
+#    Rhesus:0.037601):0.109934,
+#   (Mouse:0.084509,
+#   Rat:0.091589):0.271974):0.020593,
+#  Dog:0.165928):0.258392,
+# Opossum:0.340786);
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a png image for src/hg/htdocs/images/phylo/hg38_7way.png
+
+    /cluster/bin/phast/all_dists hg38.7way.nh | grep hg38 \
+        | sed -e "s/hg38.//" | sort -k2n > 7way.distances.txt
+    #	Use this output to create the table below
+    head 7way.distances.txt
+# taeGut1 0.075718
+# melUnd1 0.220312
+# galGal4 0.507021
+# melGal1 0.509140
+# hg19    1.175433
+# mm10    1.383071
+
+    cat << '_EOF_' > sizeStats.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "<7way.distances.txt") or
+        die "can not read 7way.distances.txt";
+
+my $count = 0;
+while (my $line = <FH>) {
+    chomp $line;
+    my ($D, $dist) = split('\s+', $line);
+    my $chain = "chain" . ucfirst($D);
+    my $B="/hive/data/genomes/hg38/bed/lastz.$D/fb.hg38." .
+        $chain . "Link.txt";
+    my $chainLinkMeasure =
+        `awk '{print \$5}' ${B} 2> /dev/null | sed -e "s/(//; s/)//"`;
+    chomp $chainLinkMeasure;
+    $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
+    $chainLinkMeasure =~ s/\%//;
+    my $swapFile="/hive/data/genomes/${D}/bed/lastz.hg38/fb.${D}.chainHg38Link.txt";
+    my $swapMeasure = "N/A";
+    if ( -s $swapFile ) {
+	$swapMeasure =
+	    `awk '{print \$5}' ${swapFile} 2> /dev/null | sed -e "s/(//; s/)//"`;
+	chomp $swapMeasure;
+	$swapMeasure = 0.0 if (length($swapMeasure) < 1);
+	$swapMeasure =~ s/\%//;
+    }
+    my $orgName=
+    `hgsql -N -e "select organism from dbDb where name='$D';" hgcentraltest`;
+    chomp $orgName;
+    if (length($orgName) < 1) {
+        $orgName="N/A";
+    }
+    ++$count;
+    printf "# %02d  %.4f (%% %06.3f) (%% %06.3f) - %s %s\n", $count, $dist,
+        $chainLinkMeasure, $swapMeasure, $orgName, $D;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./sizeStats.pl
+    ./sizeStats.pl
+#
+
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+
+#       featureBits chainLink measures
+#               chainLink
+#  N distance  on hg38  on other     other species
+# 01  0.0134 (% 93.112) (% 95.664) - Chimp panTro4
+# 02  0.0716 (% 79.729) (% 86.715) - Rhesus rheMac3
+# 03  0.3304 (% 49.978) (% 60.083) - Dog canFam3
+# 04  0.5004 (% 31.629) (% 35.323) - Mouse mm10
+# 05  0.5075 (% 30.788) (% 36.312) - Rat rn5
+# 06  0.7637 (% 14.370) (% 11.996) - Opossum monDom5
+
+# None of this concern for distances matters in building the first step, the
+# maf files.
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	hg38.7way.nh | xargs echo | sed 's/ //g; s/,/ /g' > tree.nh
+
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+    #   hg38 panTro4 rheMac3 mm10 rn5 canFam3 monDom5
+
+    #	bash shell syntax here ...
+    cd /hive/data/genomes/hg38/bed/multiz7way
+    export H=/hive/data/genomes/hg38/bed
+    mkdir mafLinks
+    # want syntenic net for: panTro4 rheMac3 mm10 rn5 canFam3
+    # and unfiltered maf net for: monDom5
+    for G in panTro4 rheMac3 mm10 rn5 canFam3
+    do
+      mkdir mafLinks/$G
+      echo ln -s ${H}/lastz.$G/axtChain/hg38.${G}.synNet.maf.gz ./mafLinks/$G
+      ln -s ${H}/lastz.$G/axtChain/hg38.${G}.synNet.maf.gz ./mafLinks/$G
+    done
+
+    mkdir mafLinks/monDom5
+    echo ln -s ${H}/lastz.monDom5/mafNet/*.maf.gz ./mafLinks/monDom5
+    ln -s ${H}/lastz.monDom5/mafNet/*.maf.gz ./mafLinks/monDom5
+    # verify the symLinks are good:
+    ls -ogrtL mafLinks/*/*
+#-rw-rw-r-- 1  709500062 Jan 25 12:15 mafLinks/mm10/hg38.mm10.synNet.maf.gz
+#-rw-rw-r-- 1 1089643630 Jan 27 19:15 mafLinks/canFam3/hg38.canFam3.synNet.maf.gz
+#-rw-rw-r-- 1 1277455681 Jan 28 21:52 mafLinks/rheMac3/hg38.rheMac3.synNet.maf.gz
+#-rw-rw-r-- 1  687500679 Mar  1 12:27 mafLinks/rn5/hg38.rn5.synNet.maf.gz
+#-rw-rw-r-- 1 1463969868 May 27 11:41 mafLinks/panTro4/hg38.panTro4.synNet.maf.gz
+#-rw-rw-r-- 1  323347908 May 29 12:38 mafLinks/monDom5/hg38.monDom5.net.maf.gz
+
+    # split the maf files into a set of hashed named files
+    # this hash named split keeps the same chr/contig names in the same
+    # named hash file.
+    mkdir /hive/data/genomes/hg38/bed/multiz7way/mafSplit
+    cd /hive/data/genomes/hg38/bed/multiz7way/mafSplit
+    for D in `sed -e "s/hg38 //" ../species.list`
+do
+    echo "${D}"
+    mkdir $D
+    cd $D
+    echo "mafSplit -byTarget -useHashedName=8 /dev/null . ../../mafLinks/${D}/*.maf.gz"
+    mafSplit -byTarget -useHashedName=8 /dev/null . \
+	../../mafLinks/${D}/*.maf.gz
+    cd ..
+done
+
+    # construct a list of all possible maf file names.
+    # they do not all exist in each of the species directories
+    find . -type f | wc -l
+    # 641
+    find . -type f | grep ".maf$" | xargs -L 1 basename | sort -u > maf.list
+    wc -l maf.list
+    # 118 maf.list
+
+    mkdir /hive/data/genomes/hg38/bed/multiz7way/splitRun
+    cd /hive/data/genomes/hg38/bed/multiz7way/splitRun
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/autoMZ penn
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = hg38
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /dev/shm/$db/multiz.$c
+set pairs = /hive/data/genomes/hg38/bed/multiz7way/mafSplit
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../../tree.nh ../../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //" species.list`)
+    set in = $pairs/$s/$c
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+        if (! -s $out) then
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c \
+        > /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c $result
+/bin/rm -fr $tmp
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(file1) {check out line+ /hive/data/genomes/hg38/bed/multiz7way/splitRun/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    ln -s ../../mafSplit/maf.list maf.list
+    ssh ku
+    cd /hive/data/genomes/hg38/bed/multiz7way/splitRun/run
+    gensub2 maf.list single template stdout > jobList
+    para -ram=8g create jobList
+# Completed: 118 of 118 jobs
+# CPU time in finished jobs:     118241s    1970.69m    32.84h    1.37d  0.004 y
+# IO & Wait Time:                   682s      11.36m     0.19h    0.01d  0.000 y
+# Average job time:                1008s      16.80m     0.28h    0.01d
+# Longest finished job:           10068s     167.80m     2.80h    0.12d
+# Submission to last job:         10076s     167.93m     2.80h    0.12d
+
+    # combine into one file  (the 1>&2 redirect sends the echo to stderr)
+    cd /hive/data/genomes/hg38/bed/multiz7way
+    head -1 splitRun/maf/017.maf > multiz7way.maf
+    for F in splitRun/maf/*.maf
+do
+    echo "${F}" 1>&2
+    egrep -v "^#" ${F}
+done >> multiz7way.maf
+    tail -1 splitRun/maf/017.maf >> multiz7way.maf
+# -rw-rw-r-- 1 15635828403 Jun  3 11:49 multiz7way.maf
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/hg38/bed/multiz7way
+    mkdir /gbdb/hg38/multiz7way
+    ln -s `pwd`/multiz7way.maf /gbdb/hg38/multiz7way
+    cd /dev/shm
+    time nice -n +17 hgLoadMaf hg38 multiz7way
+    # Loaded 10270624 mafs in 1 files from /gbdb/hg38/multiz7way
+    # real    3m51.265s
+
+    time nice -n +17 hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 hg38 multiz7waySummary \
+	/gbdb/hg38/multiz7way/multiz7way.maf
+    # Created 1260918 summary blocks from 35384988 components
+    # and 10270624 mafs from /gbdb/hg38/multiz7way/multiz7way.maf
+    # real    5m39.388s
+
+
+    wc -l multiz7way*.tab
+    # 10270624 multiz7way.tab
+    # 1260918 multiz7waySummary.tab
+    # 11531542 total
+
+    rm multiz7way*.tab
+
+##############################################################################
