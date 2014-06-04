@@ -1,7 +1,10 @@
-/* ErrAbort.c - our error handler.
+/* errabort.c - our error handler.
  *
  * This maintains two stacks - a warning message printer
  * stack, and a "abort handler" stack.
+ *
+ * Note that the abort function always calls the warn handler first.
+ * This is so that the message gets sent.
  *
  * By default the warnings will go to stderr, and
  * aborts will exit the program.  You can push a
