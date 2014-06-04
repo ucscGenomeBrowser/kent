@@ -68,20 +68,27 @@ if (dot != NULL)
     under = strchr(dot, '_');
     dash = strchr(dot, '-');
     }
-if ((dot == NULL) || (dash == NULL))
-    errAbort("can't parse accession from srcId: %s", mi->pg->name);
+else 
+    dash = strchr(id, '-');
+
+/* if there is no dash, then this is not the correct type of id so report error
+   but no dot is acceptable */ 
+if (dash == NULL)
+    errAbort("Can't parse accession from srcId: %s", mi->pg->name);
 mi->indirect = (colon != NULL);
 
 /* id used to get sequence is before `-'.  For direct, it excludes
- * genbank version */
+   genbank version so only perform this if the version number is present */
+
 *dash = '\0';
-if (!mi->indirect)
+if ((!mi->indirect) && (dot != NULL))
     *dot = '\0';
 safef(mi->seqId, sizeof(mi->seqId), "%s", id);
 
 /* now pull out genbank accession for obtaining description */
 id = (colon != NULL) ? colon+1 : id;
-*dot = '\0';
+if (dot != NULL)
+    *dot = '\0';
 
 safef(mi->gbAcc, sizeof(mi->gbAcc), "%s", id);
 if (under != NULL)
