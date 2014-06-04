@@ -100,7 +100,7 @@ function normed(thing)
     // jquery returns an "array like 'object'" with 0 or more entries.  
     // May be used on non-jquery objects and will reduce single element arrays to the element.
     // Use this to treat 0 entries the same as undefined and 1 entry as the item itself
-    if (thing === undefined || thing === null
+    if (typeof(thing) === 'undefined' || thing === null
     ||  (thing.length !== undefined && thing.length === 0)  // Empty array (or 'array like object')
     ||  ($.isPlainObject(thing) && $.isEmptyObject(thing))) // Empty simple object
         return undefined;
@@ -861,7 +861,8 @@ function getHgsid()
         return hgsid;
 
     // This may be moved to 1st position as the most likely source
-    if (common && common.hgsid !== undefined && common.hgsid !== null)
+    if (typeof(common) !== 'undefined' && typeof(common.hgsid) !== 'undefined'
+    && common.hgsid !== null)
         return common.hgsid;
 
     hgsid = normed($("input#hgsid").first());
@@ -882,7 +883,7 @@ function getDb()
         return db;
 
     // This may be moved to 1st position as the most likely source
-    if (common && common.db)
+    if (typeof(common) !== 'undefined' && typeof(common.db) !== 'undefined')
         return common.db;
 
     db = normed($("input#db").first());
@@ -903,7 +904,7 @@ function getTrack()
         return track;
 
     // This may be moved to 1st position as the most likely source
-    if (common && common.track)
+    if (typeof(common) !== 'undefined' && typeof(common.track) !== 'undefined')
         return common.track;
 
     track = normed($("input#g").first());
