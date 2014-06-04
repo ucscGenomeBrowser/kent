@@ -55,3 +55,11 @@ if (fq != NULL)
     }
 }
 
+void fqWriteNext(struct fq *input, FILE *f)
+/*  Writes a single fastq structure to the file provided. */
+{
+fprintf(f,"%s\n",input->header);
+fprintf(f,"%s\n",input->dna);
+fprintf(f,"%s\n","+");
+fprintf(f,"%s\n",input->quality);
+}

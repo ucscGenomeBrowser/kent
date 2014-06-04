@@ -1,11 +1,11 @@
 /* fastqMottTrim - mott. 
-* Applies Richard Mott's trimming algorithm to the 
-* three prime end of each sequence. 
-* Cuttoff is the lowest desired quality score in phred scores, 
-* Set by default to a 50%  chance of mismatch. 
-* Base corresponds to any additions to the ASCII quality scheme. 
-* Minlength specifies the minimum sequence length for the output. 
-* For paired and unpaired data. */
+ * Applies Richard Mott's trimming algorithm to the 
+ * three prime end of each sequence. 
+ * Cuttoff is the lowest desired quality score in phred scores, 
+ * Set by default to a 50%  chance of mismatch. 
+ * Base corresponds to any additions to the ASCII quality scheme. 
+ * Minlength specifies the minimum sequence length for the output. 
+ * For paired and unpaired data. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
@@ -24,16 +24,16 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "fastqMottTrim - applies Mott's trimming algorithm to a fastq file\n"
-  " trims the 3 prime end based on cumulative quality \n"
+  "fastqMottTrim - Applies Mott's trimming algorithm to a fastq file.\n"
+  "Trims the 3 prime end based on cumulative quality \n"
   "usage:\n"
   "   fastqMottTrim input.fq output.fq\n"
-  "for paired end use \n"
+  "for paired end use; \n"
   "   fastqMottTrim pair1.fq pair2.fq output1.fq output2.fq \n"
   "options:\n"
-  " -minLength=N the minimum length allowed for a trimmed sequence default 20  \n"
-  " -isIllumina TRUE for illumina, FALSE for Sanger \n"
-  " -cutoff=N  the lowest desired phred score, default 30 \n"
+  " -minLength = int The minimum length allowed for a trimmed sequence, the default is 30\n"
+  " -isIllumina bool TRUE for illumina, FALSE for Sanger. Sanger is the default \n"
+  " -cutoff = int The lowest desired phred score, the default is 3.\n"
   );
 }
 
@@ -48,9 +48,9 @@ static struct optionSpec options[] = {
 
 boolean  mottTrim(struct fq *input, int minLength, boolean isIllumina, int cutoff)
 /* Applies mott's trimming algorithm to the fastq input. 
-* Trims from the 3 prime end based on 
-* The sum of (quality score - cutoff value ). 
-* Returns true if the trimmed sequence is larger than the minimum sequence length. */
+ * Trims from the 3 prime end based on 
+ * The sum of (quality score - cutoff value ). 
+ * Returns true if the trimmed sequence is larger than the minimum sequence length. */
 {
 int base = 33;
 int index = -1;
@@ -65,7 +65,7 @@ for(; i >= 0; --i)
     int qualScore = input->quality[i] - base;
     scoreValue += (qualScore - cutoff);
     /* Convert the quality scores to their ascii values. 
-    * Calculate the sum of the (quality score - cutoff value)'s. */
+     * Calculate the sum of the (quality score - cutoff value)'s. */
     if(scoreValue < minValue)
         {
         minValue = scoreValue;
@@ -88,8 +88,8 @@ return(FALSE);
 void trimPairedFastqFiles(char *input, char *output,
             char *input2, char *output2, int minLength, boolean isIllumina, int cutoff )
 /* Goes through fastq sequences in a fastq file; 
-* Parses, stores, mottTrims,  prints, then frees each fastq sequence. 
-* For paired data. */
+ * Parses, stores, mottTrims,  prints, then frees each fastq sequence. 
+ * For paired data. */
 {
 FILE *f = mustOpen(output, "w");
 FILE *f2 = mustOpen(output2, "w");
@@ -115,8 +115,8 @@ carefulClose(&f2);
 
 
 void trimSingleFastqFile(char *input, char *output, int minLength, boolean isIllumina, int cutoff )
-/* Goes through fastq sequences in a fastq file; */
-/* Parses, stores, mottTrims,  prints, then frees each fastq sequence. */
+/* Goes through fastq sequences in a fastq file; 
+ * Parses, stores, mottTrims,  prints, then frees each fastq sequence. */
 {
 FILE *f = mustOpen(output, "w");
 struct lineFile *lf = lineFileOpen(input, TRUE);
@@ -144,12 +144,12 @@ if(argc != 3 && argc != 5)
     {
     usage();
     }
-if(argc==3)
+if(argc == 3)
     {
     trimSingleFastqFile(argv[1], argv[2], clMinLength, clIsIllumina, clCutoff);
     }
     
-if(argc==5)
+if(argc == 5)
     {
     trimPairedFastqFiles(argv[1], argv[3], argv[2], argv[4], clMinLength, clIsIllumina, clCutoff);
     }
