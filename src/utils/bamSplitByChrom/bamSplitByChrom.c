@@ -1,5 +1,5 @@
 /* bamSplitByChrom -  Splits a bam file into multiple bam files based on chromosome.
- * Unmapped reads are written to the file unmapped.bam */
+ * Unmapped reads are written to the file 'unmapped.bam' if requested. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -16,7 +16,7 @@ errAbort(
   "usage:\n"
   "   bamSplitByChrom input.bam\n"
   "options:\n"
-  "  -unmapped Creates a file for the unmapped reads. \n"
+  "  -unmapped Creates a file 'unmapped.bam' for the unmapped reads. \n"
   );
 }
 
@@ -28,12 +28,12 @@ static struct optionSpec options[] = {
 
 void openOutput(struct hash *hash, bam_header_t *head)
 /* Loops through the input bam's header, opening an output file
- * for each chromosome in the input file */
+ * for each chromosome in the input file. */
 {
 int i;
-for ( i = 0; i < head->n_targets; ++i )
+for (i = 0; i < head->n_targets; ++i )
     {
-    char *fileName =catTwoStrings(head->target_name[i], ".bam");
+    char *fileName = catTwoStrings(head->target_name[i], ".bam");
     samfile_t *outBam = bamMustOpenLocal(fileName, "wb", head);
     hashAdd(hash, head->target_name[i], outBam);
     }
@@ -43,7 +43,7 @@ void closeOutput(struct hash *hash, bam_header_t *head)
 /* Loops through the output files and closes them. */
 {
 int i;
-for ( i = 0; i < head->n_targets; ++i )
+for (i = 0; i < head->n_targets; ++i )
     {
     samclose(hashFindVal(hash, head->target_name[i]));
     }
@@ -51,12 +51,17 @@ for ( i = 0; i < head->n_targets; ++i )
 
 void writeOutput(samfile_t *input, struct hash *hash, boolean unmapped)
 /* Reads through the input bam and writes each alignment to the correct output file.
- * Unmapped reads are written to unmapped.bam */ 
+ * Unmapped reads are written to 'unmapped.bam' */ 
 {
 bam_header_t *head = input ->header;
 bam1_t one;
 ZeroVar(&one);
 samfile_t *unmap = bamMustOpenLocal("unmapped.bam", "wb", head);
+if (!unmapped)
+    /* Removes the 'unmapped.bam' file if it is not requested. */
+    {
+    remove("unmapped.bam");
+    }
 for (;;)
     {
     if (samread (input, &one) < 0)
@@ -69,34 +74,29 @@ for (;;)
             }
         else 
 	    {
-	    if (!unmapped)
+	    if (unmapped)
 	        {
 	        samwrite(unmap, &one);
 	        }
 	    }
     }
-if (!unmapped)
-    {
-    remove("unmapped.bam");
-    }
 samclose(unmap);
 }
 
 void bamSplitByChrom(char *inBam, boolean unmapped)
-/* Splits the bam file into multiple bam files based on chromosome */
+/* Splits the bam file into multiple bam files based on chromosome. */
 {
 struct hash *hash = hashNew(0);
 samfile_t *input = bamMustOpenLocal(inBam, "rb", NULL);
 bam_header_t *head = input ->header;
-/* open the input bam */
+/* Open the input bam. */
 openOutput(hash, head);
-/* open the output bam */
+/* Open the output bam files. */
 writeOutput(input, hash, unmapped);
-/* write the alignments to the correct output file */
+/* Write each alignment to the correct output file. */
 closeOutput(hash, head);
-/* close the output files */
+/* Close the output files. */
 samclose(input);
-
 }
 
 int main(int argc, char *argv[])
