@@ -12360,4 +12360,18 @@ TMPDIR=/scratch/tmp
     cat fb.mm9.cpgIslandExt.txt
     #  10496250 bases of 2620346127 (0.401%) in intersection
 
+############################################################################
+# FaceBase Microarray track (DONE - 2014-05-21 - Pauline)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm9
+    mkdir /hive/data/genomes/mm9/bed/FaceBase24SampleTypesAvg
+    cd /hive/data/genomes/mm9/bed/FaceBase24SampleTypesAvg
+
+    wget --timestamping http://genomebrowser.facebase.org/myHub/mm9/FaceBase_24Samp_Types_Averaged.bed
+    wget --timestamping http://genomebrowser.facebase.org/myHub/mm9/FaceBase_24Samp_Types_Averaged.html
+
+    hgLoadBed mm9 FaceBase24SampleTypesAvg FaceBase_24Samp_Types_Averaged.bed
+
+    #For microarray tracks also need to add a section to
+    #/cluster/home/pauline/kent/src/hg/makeDb/hgCgiData/Mouse/microarrayGroups.ra
 ##############################################################################

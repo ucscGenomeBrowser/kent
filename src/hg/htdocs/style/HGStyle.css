@@ -424,6 +424,8 @@ span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
 #hubURL {line-height: 0.9em; color: #1c1d22;}
 .hubList input {margin: 3px; font-size: 0.8em;}
 .submitHub {margin: 10px;}
+.hubConnectButton {background-color: #ffffff;}
+.hubDisconnectButton { background-color: #bfbfb2;}
 
 .tabFooter {
     font-size: 100%;
