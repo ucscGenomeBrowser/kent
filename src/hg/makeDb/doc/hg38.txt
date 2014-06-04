@@ -4106,3 +4106,120 @@ done
     #   appears to work OK
 
 #########################################################################
+# Phylogenetic tree from 7-way (DONE - 2014-06-03 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/multiz7way/4d
+    cd /hive/data/genomes/hg38/bed/multiz7way/4d
+
+    # the annotated maf is:
+    ../anno/hg38.7way.maf
+
+    # using knownGene for hg38
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" hg38 > hg38.knownGene.gp
+
+    genePredSingleCover hg38.knownGene.gp stdout | sort > hg38.knownGeneNR.gp
+    wc -l hg38.knownGeneNR.gp
+    #	21887 hg38.knownGeneNR.gp
+
+    mkdir annoSplit
+    cd annoSplit
+    time mafSplit -verbose=2 -outDirDepth=1 -byTarget -useFullSequenceName \
+        /dev/null . ../../anno/hg38.7way.maf
+    # real    5m14.770s
+
+    find . -type f | wc -l
+    #   353
+    ssh ku
+    mkdir /hive/data/genomes/hg38/bed/multiz7way/4d/run
+    cd /hive/data/genomes/hg38/bed/multiz7way/4d/run
+    mkdir ../mfa
+
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+    cat << '_EOF_' > 4d.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set r = "/hive/data/genomes/hg38/bed/multiz7way"
+set c = $1:r
+set infile = $r/4d/annoSplit/$2
+set outDir = $r/4d/mfa/$3:h
+set outfile = $r/4d/mfa/$3
+/bin/mkdir -p $outDir
+cd /scratch/tmp
+/bin/awk -v C=$c '$2 == C {print}' $r/4d/hg38.knownGeneNR.gp | sed -e "s/\t$c\t/\thg38.$c\t/" > $c.gp
+set NL=`wc -l $c.gp| gawk '{print $1}'`
+echo $NL
+if ("$NL" != "0") then
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $infile -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $outfile
+else
+    echo "" > $outfile
+endif
+/bin/rm -f $c.gp $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4d.csh
+
+    find ../annoSplit -type f | sed -e "s#../annoSplit/##" > maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+4d.csh $(file1) $(path1) {check out line+ ../mfa/$(dir1)/$(root1).mfa}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check
+    para time
+# Completed: 353 of 353 jobs
+# CPU time in finished jobs:        836s      13.93m     0.23h    0.01d  0.000 y
+# IO & Wait Time:                  1172s      19.54m     0.33h    0.01d  0.000 y
+# Average job time:                   6s       0.09m     0.00h    0.00d
+# Longest finished job:              72s       1.20m     0.02h    0.00d
+# Submission to last job:            89s       1.48m     0.02h    0.00d
+
+    # Not all results have contents, that is OK
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/hg38/bed/multiz7way/4d
+    # remove the broken empty files, size 0 and size 1:
+    find ./mfa -type f -size 0 | xargs rm -f
+    # most interesting, this did not identify files of size 1:
+#    find ./mfa -type f -size 1
+    find ./mfa -type f | xargs ls -og | awk '$3 == 1' | awk '{print $NF}' \
+        > empty.list
+    cat empty.list | xargs rm -f
+    #want comma-less species.list
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ../species.list`" mfa/*/*.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # check they are all in there:
+    grep "^>" 4d.all.mfa
+    #    >hg38
+    #    >panTro4
+    #    >rheMac3
+    #    >mm10
+    #    >rn5
+    #    >canFam3
+    #    >monDom5
+
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	../hg38.7way.nh | xargs echo | sed -e 's/ //g' > tree_commas.nh
+    # tree_commas.nh looks like:
+    #   (((((hg38,panTro4),rheMac3),(mm10,rn5)),canFam3),monDom5)
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time nice -n +19 \
+	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree tree_commas.nh 4d.all.mfa
+    #   real    0m6.583s
+
+
+    mv phyloFit.mod all.mod
+
+    grep TREE all.mod
+# TREE: (((((hg38:0.00673596,panTro4:0.00686169):0.0248146,rheMac3:0.0357598):0.0970072,(mm10:0.081661,rn5:0.0874126):0.246527):0.0264964,canFam3:0.156769):0.303241,monDom5:0.303241);
+
+#########################################################################
