@@ -10179,4 +10179,16 @@ TMPDIR=/scratch/tmp
     cat fb.rheMac2.chainMm10Link.txt
     #	875700775 bases of 2646704109 (33.086%) in intersection
 
+############################################################################
+# FaceBase Microarray track (DONE - 2014-05-21 - Pauline)
+    # establish a screen to control this job with a name to indicate what it is
+    mkdir /hive/data/genomes/mm10/bed/FaceBase24SampleTypesAvg
+    cd /hive/data/genomes/mm10/bed/FaceBase24SampleTypesAvg
+
+    wget --timestamping http://genomebrowser.facebase.org/myHub/mm10/FaceBase_24Samp_Types_Averaged.bed
+    hgLoadBed mm10 FaceBase24SampleTypesAvg FaceBase_24Samp_Types_Averaged.bed
+
+    #For microarray tracks also need to add a section to
+    #/cluster/home/pauline/kent/src/hg/makeDb/hgCgiData/Mouse/microarrayGroups.ra
+
 ##############################################################################
