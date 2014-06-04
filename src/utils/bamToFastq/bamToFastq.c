@@ -16,8 +16,6 @@ errAbort(
   "bamToFastq - Converts a bam file to fastq format.\n"
   "usage:\n"
   "   bamToFastq input.bam output.fastq\n"
-  "options:\n"
-  "   "
   );
 }
 
