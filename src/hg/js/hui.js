@@ -1236,7 +1236,7 @@ var mat = { // Beginings of matrix object
                 }
                 if (cell.title.length > 0)
                     cell.title += " and ";
-                cell.title += $("th."+classList[ix]).first().text();
+                cell.title += $("th."+classList[cIx]).first().text();
             }
         }
     },
