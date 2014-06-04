@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "options.h"
 #include "dystring.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "psl.h"
 #include "sqlNum.h"
 #include "dnautil.h"

@@ -1,4 +1,4 @@
-/* errabort.c - our error handler.
+/* errAbort.c - our error handler.
  *
  * This maintains two stacks - a warning message printer
  * stack, and a "abort handler" stack.
@@ -26,7 +26,7 @@
 #include "common.h"
 #include "hash.h"
 #include "dystring.h"
-#include "errabort.h"
+#include "errAbort.h"
 
 
 

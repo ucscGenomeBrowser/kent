@@ -6,7 +6,7 @@
 #include "internet.h"
 #include "rudp.h"
 #include "paraMessage.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "log.h"
 
 void pmInit(struct paraMessage *pm, rudpHost ipAddress, bits16 port)

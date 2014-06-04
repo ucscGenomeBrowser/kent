@@ -1,7 +1,7 @@
 #include "paraCommon.h"
 #include <sys/utsname.h>
 #include "options.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "net.h"
 #include "portable.h"
 #include "internet.h"

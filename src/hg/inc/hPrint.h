@@ -8,7 +8,7 @@
 #define HPRINT_H
 
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "cheapcgi.h"
 
 void hPrintf(char *format, ...)

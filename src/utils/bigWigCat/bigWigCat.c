@@ -11,7 +11,7 @@
 #include "bigWig.h"
 #include "bwgInternal.h"
 #include "zlibFace.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "sqlNum.h"
 #include "sig.h"
 #include "bPlusTree.h"

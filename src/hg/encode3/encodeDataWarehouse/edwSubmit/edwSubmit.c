@@ -8,7 +8,7 @@
 #include "localmem.h"
 #include "net.h"
 #include "options.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "dystring.h"
 #include "errCatch.h"
 #include "sqlNum.h"

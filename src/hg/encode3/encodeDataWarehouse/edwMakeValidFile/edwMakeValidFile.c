@@ -9,7 +9,7 @@
 #include "options.h"
 #include "errCatch.h"
 #include "localmem.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "sqlNum.h"
 #include "cheapcgi.h"
 #include "obscure.h"

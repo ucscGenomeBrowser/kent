@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "linefile.h"
 #include "portable.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "hash.h"
 #include "cheapcgi.h"
 #include "imreClone.h"

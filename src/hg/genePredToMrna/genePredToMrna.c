@@ -8,7 +8,7 @@
 #include "bits.h"
 #include "memgfx.h"
 #include "portable.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "dystring.h"
 #include "nib.h"
 #include "jksql.h"

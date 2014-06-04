@@ -8,7 +8,7 @@
 #include "metaData.h"
 #include "common.h"
 #include "localmem.h"
-#include "errabort.h"
+#include "errAbort.h"
 
 
 struct metaDataTbls

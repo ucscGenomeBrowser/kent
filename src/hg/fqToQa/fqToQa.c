@@ -5,7 +5,7 @@
  * See README in this or parent directory for licensing information. */
 
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "portable.h"
 #include "hash.h"
 #include "linefile.h"

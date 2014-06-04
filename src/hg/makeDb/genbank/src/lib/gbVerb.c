@@ -3,7 +3,7 @@
 
 #include "gbVerb.h"
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "jksql.h"
 #include <time.h>
 #include <sys/types.h>
