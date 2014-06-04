@@ -30,7 +30,7 @@ priority 103.29
 	type wigMaf 0.0 1.0
 	speciesCodonDefault rn5
 	speciesGroups mammal vertebrate
-        sGroup_mammal rn5 mm10 cavPor3 hg38 panTro4 rheMac3 bosTau7 canFam3 ailMel1 monDom5
+        sGroup_mammal mm10 cavPor3 hg38 panTro4 rheMac3 bosTau7 canFam3 ailMel1 monDom5
 	sGroup_vertebrate galGal4 melGal1 danRer7 
         itemFirstCharCase noChange
 	treeImage phylo/rn5_13way.png
