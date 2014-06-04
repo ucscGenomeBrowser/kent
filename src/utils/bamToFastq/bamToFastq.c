@@ -1,4 +1,4 @@
-/* bamToFastq - converts a BAM file to Fastq. */
+/* bamToFastq - Converts a bam file to fastq format. */
 
 /* Copyright (C) 2014 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
@@ -13,7 +13,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "bamToFastq - converts a BAM file to Fastq\n"
+  "bamToFastq - Converts a bam file to fastq format.\n"
   "usage:\n"
   "   bamToFastq input.bam output.fastq\n"
   "options:\n"
@@ -27,23 +27,23 @@ static struct optionSpec options[] = {
 };
 
 void fixQuality(struct fq *seq)
-/* The bam quality reader returns a format that is not FASTQ. */
+/* The bam quality reader returns a format that is not fastq. */
 /* This function updates the bam quality to a fastq quality. */
 {
 int size = strlen(seq->dna);
 int i = 0;
-for (i=0; i < size; ++i)
+for (i = 0; i < size; ++i)
     {
     seq->quality[i] += 33;
     }
-seq->quality[size]='\0';
+seq->quality[size] = '\0';
 }
 
 void bamToFastq(char *inBam, char *outFastq)
-/* bamToFastq - converts a BAM file to Fastq. */
+/* bamToFastq - converts a bam file to Fastq. */
 {
 samfile_t *in = bamMustOpenLocal(inBam, "rb", NULL);
-/* Open up the BAM input  and a fastq sequence */
+/* Open up the bam input  and a fastq sequence */
 FILE *f = mustOpen(outFastq, "w");
 bam1_t one;
 ZeroVar(&one);	// This seems to be necessary!
@@ -57,11 +57,15 @@ for (;;)
     seq.header = catTwoStrings("@",bam1_qname(&one));
     seq.dna = bamGetQuerySequence(&one, TRUE);
     seq.quality = bamGetQueryQuals(&one, TRUE);
-    /* enter in the required fastqSeq values */
+    /* Enter in the required fq values. */
     fixQuality(&seq); 
     fqWriteNext(&seq, f);
-    /* print the fasqSeq to file */
+    /* Print the fq to file. */
+    freez(&seq.header);
+    freez(&seq.dna);
+    freez(&seq.quality);
     }
+
 samclose(in);
 }
 

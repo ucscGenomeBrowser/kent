@@ -6,6 +6,8 @@
 #include "options.h"
 #include "bamFile.h"
 
+boolean clUnmapped = FALSE;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -14,12 +16,13 @@ errAbort(
   "usage:\n"
   "   bamSplitByChrom input.bam\n"
   "options:\n"
-  "   \n"
+  "  -unmapped Creates a file for the unmapped reads. \n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"unmapped",OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -36,7 +39,7 @@ for ( i = 0; i < head->n_targets; ++i )
     }
 }
 
-void closeOutput(struct hash *hash, bam_header_t *head)i
+void closeOutput(struct hash *hash, bam_header_t *head)
 /* Loops through the output files and closes them. */
 {
 int i;
@@ -46,14 +49,14 @@ for ( i = 0; i < head->n_targets; ++i )
     }
 }
 
-void writeOutput(samfile_t *input, struct hash *hash)
+void writeOutput(samfile_t *input, struct hash *hash, boolean unmapped)
 /* Reads through the input bam and writes each alignment to the correct output file.
- * Unmapped reads are written to unmapped.bam " 
+ * Unmapped reads are written to unmapped.bam */ 
 {
 bam_header_t *head = input ->header;
 bam1_t one;
 ZeroVar(&one);
-samfile_t *unmapped = bamMustOpenLocal("unmapped.bam", "wb", head);
+samfile_t *unmap = bamMustOpenLocal("unmapped.bam", "wb", head);
 for (;;)
     {
     if (samread (input, &one) < 0)
@@ -66,35 +69,43 @@ for (;;)
             }
         else 
 	    {
-	    samwrite(unmapped, &one);
+	    if (!unmapped)
+	        {
+	        samwrite(unmap, &one);
+	        }
 	    }
     }
-samclose(unmapped);    
+if (!unmapped)
+    {
+    remove("unmapped.bam");
+    }
+samclose(unmap);
 }
 
-void bamSplitByChrom(char *inBam)
-/* Splits the input bam into multiple output bam's based on chromosome. "
+void bamSplitByChrom(char *inBam, boolean unmapped)
+/* Splits the bam file into multiple bam files based on chromosome */
 {
 struct hash *hash = hashNew(0);
 samfile_t *input = bamMustOpenLocal(inBam, "rb", NULL);
 bam_header_t *head = input ->header;
+/* open the input bam */
 openOutput(hash, head);
-/* Open up file, loop through header, and make up a hash with chromosome names for keys,
- * and samfile_t for values. */
-writeOutput(input, hash);
-/* Loop through each record of BAM file, looking up chromosome, getting file from hash,
- * and adding record to appropriate file */
+/* open the output bam */
+writeOutput(input, hash, unmapped);
+/* write the alignments to the correct output file */
 closeOutput(hash, head);
+/* close the output files */
 samclose(input);
-/* Loop through each output file and close it */
+
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+clUnmapped = optionExists("unmapped");
 if (argc != 2)
     usage();
-bamSplitByChrom(argv[1]);
+bamSplitByChrom(argv[1], clUnmapped);
 return 0;
 }
