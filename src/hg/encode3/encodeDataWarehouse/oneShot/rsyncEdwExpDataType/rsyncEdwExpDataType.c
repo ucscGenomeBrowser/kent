@@ -56,8 +56,7 @@ char *getTextViaHttps(char *url, char *userId, char *password)
 {
 verbose(2, "getTextViaHttps(%s %s %s)\n", url, userId, password);
 char fullUrl[1024];
-// certificate expired safef(fullUrl, sizeof(fullUrl), "https://%s:%s@%s\n", userId, password, url);  
-safef(fullUrl, sizeof(fullUrl), "http://%s:%s@%s\n", userId, password, url);
+safef(fullUrl, sizeof(fullUrl), "https://%s:%s@%s\n", userId, password, url);
 verbose(2, "full url:\n %s", fullUrl);
 struct htmlPage *page = htmlPageGet(fullUrl);
 if (page == NULL)
@@ -117,8 +116,7 @@ char *getStanfordJson(char *table, char *accession, char *userId, char *password
 /* Get json text associated with an object */
 {
 char url[512];
-// possibly use 'www.encodedcc.org' instead of 'submit.encodedcc.org' in the future.
-safef(url, sizeof(url), "submit.encodedcc.org/%s%s/?format=json&limit=all", table, accession);
+safef(url, sizeof(url), "www.encodedcc.org/%s%s/?format=json&limit=all", table, accession);
 verbose(1, "Fetching from %s\n", url);
 return getTextViaHttps(url, userId, password);
 }
