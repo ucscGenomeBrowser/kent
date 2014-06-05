@@ -2,7 +2,7 @@
  * every now and again. */
 
 #include "paraCommon.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "net.h"
 #include "paraHub.h"
 

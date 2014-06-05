@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "options.h"
 #include "dystring.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "obscure.h"

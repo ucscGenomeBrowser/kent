@@ -13,7 +13,7 @@
 
 #include "common.h"
 #include "obscure.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "htmshell.h"
 #include "jksql.h"
 #include "coordConv.h"

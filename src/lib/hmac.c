@@ -41,7 +41,7 @@ return cloneStringZ(hmacStr, sizeof(hmacStr));
 #else // --------- no USE_SSL ==> errAbort with message that openssl is required --------------
 
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #define NEED_OPENSSL "kent/src must be recompiled with openssl libs and USE_SSL=1 in order for this to work."
 
 char *hmacSha1(char *key, char *data)

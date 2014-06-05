@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "localmem.h"
 #include "gbFileOps.h"
-#include "errabort.h"
+#include "errAbort.h"
 
 
 struct sqlUpdateCmd 

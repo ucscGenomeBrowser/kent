@@ -6,7 +6,7 @@
 #include "hCommon.h"
 #include "obscure.h"
 #include "dnautil.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "htmshell.h"
 #include "web.h"
 #include "hPrint.h"

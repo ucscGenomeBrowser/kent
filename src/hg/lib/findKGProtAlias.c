@@ -5,7 +5,7 @@
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "kgProtAlias.h"
 
 static void addKGProtAlias(struct sqlConnection *conn, struct dyString *query,

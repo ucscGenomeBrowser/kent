@@ -9,7 +9,7 @@
 #include "common.h"
 #include "gff3.h"
 #include <limits.h>
-#include "errabort.h"
+#include "errAbort.h"
 #include "localmem.h"
 #include "hash.h"
 #include "linefile.h"

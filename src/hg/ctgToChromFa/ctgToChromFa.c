@@ -8,7 +8,7 @@
 #include "portable.h"
 #include "hash.h"
 #include "chromInserts.h"
-#include "errabort.h"
+#include "errAbort.h"
 
 
 void usage()

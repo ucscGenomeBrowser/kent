@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "htmshell.h"
 #include "options.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "portable.h"
 #include "cheapcgi.h"
 #include "ra.h"

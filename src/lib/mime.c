@@ -13,7 +13,7 @@
 #include "linefile.h"
 #include "cheapcgi.h"
 #include "portable.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "mime.h"
 
 /* 

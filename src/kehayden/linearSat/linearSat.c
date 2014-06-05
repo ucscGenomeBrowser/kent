@@ -12,7 +12,7 @@
 #include "dystring.h"
 #include "dlist.h"
 #include "obscure.h"
-#include "errabort.h"
+#include "errAbort.h"
 
 /* Global vars - all of which can be set by command line options. */
 int pseudoCount = 1;

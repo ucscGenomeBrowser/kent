@@ -5,7 +5,7 @@
 #include "gbPipeline.h"
 #include "common.h"
 #include "dystring.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "portable.h"
 #include <sys/types.h>
 #include <unistd.h>

@@ -2752,7 +2752,7 @@ color 255,123,89
 
 searchTable animalQtl
 searchType bed
-termRegex ^[A-Z_0-9-]+:[0-9]+ 
+termRegex ^[a-zA-Z0-9]+([a-zA-Z0-9:/.-]+[a-zA-Z0-9:/.-_%]+)*
 searchMethod fuzzy
 searchPriority 50
 

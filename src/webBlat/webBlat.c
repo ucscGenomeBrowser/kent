@@ -4,7 +4,7 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "errCatch.h"
 #include "portable.h"
 #include "htmshell.h"

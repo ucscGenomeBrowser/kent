@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "options.h"
 #include "dystring.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 

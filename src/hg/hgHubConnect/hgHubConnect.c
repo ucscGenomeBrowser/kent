@@ -6,7 +6,7 @@
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "errCatch.h"
 #include "hCommon.h"
 #include "dystring.h"

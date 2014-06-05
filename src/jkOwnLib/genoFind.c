@@ -10,7 +10,7 @@
 #include "twoBit.h"
 #include "fa.h"
 #include "dystring.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "sig.h"
 #include "ooc.h"
 #include "genoFind.h"

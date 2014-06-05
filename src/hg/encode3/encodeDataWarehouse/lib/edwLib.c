@@ -8,7 +8,7 @@
 #include "hex.h"
 #include "dystring.h"
 #include "jksql.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "openssl/sha.h"
 #include "base64.h"
 #include "basicBed.h"
