@@ -1392,7 +1392,7 @@ type bed 4 .
 track genomicSuperDups
 shortLabel Segmental Dups
 longLabel Duplications of >1000 Bases of Non-RepeatMasked Sequence
-group rep
+group varRep
 visibility hide
 type bed 6 .
 noScoreFilter .
