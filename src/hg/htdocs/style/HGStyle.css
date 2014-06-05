@@ -424,8 +424,16 @@ span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
 #hubURL {line-height: 0.9em; color: #1c1d22;}
 .hubList input {margin: 3px; font-size: 0.8em;}
 .submitHub {margin: 10px;}
-.hubConnectButton {background-color: #ffffff;}
-.hubDisconnectButton { background-color: #bfbfb2;}
+.hubButton {background-color: #ffffff; width: 100px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    }
+.hubDisconnectButton { background-color: #bfbfb2; width: 100px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    }
 
 .tabFooter {
     font-size: 100%;

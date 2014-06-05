@@ -227,9 +227,9 @@ for(hub = unlistedHubList; hub; hub = hub->next)
 	ourCellStart();
 	printf(
 	"<input name=\"hubClearButton\""
-	    "onClick=\"document.resetHubForm.elements['hubUrl'].value='%s';"
+	    "onClick=\"document.resetHubForm.elements['hubCheckUrl'].value='%s';"
 		"document.resetHubForm.submit();return true;\" "
-		"class=\"hubField\" type=\"button\" value=\"check hub\">\n"
+		"class=\"hubButton\" type=\"button\" value=\"Check Hub\">\n"
 		, hub->hubUrl);
 	ourCellEnd();
 	}
@@ -302,45 +302,46 @@ static struct hash *outputPublicTable(struct sqlConnection *conn, char *publicTa
 {
 char *trixFile = cfgOptionEnvDefault("HUBSEARCHTRIXFILE", "hubSearchTrixFile", "/gbdb/hubs/public.ix");
 char *hubSearchTerms = cartOptionalString(cart, hgHubSearchTerms);
+char *cleanSearchTerms = cloneString(hubSearchTerms);
 boolean haveTrixFile = fileExists(trixFile);
 struct hash *urlSearchHash = NULL;
 
 printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
 
-if (haveTrixFile && !isEmpty(hubSearchTerms))
+// if we have a trix file, draw the search box
+if (haveTrixFile)
     {
-    strLower(hubSearchTerms);
-    urlSearchHash = getUrlSearchHash(trixFile, hubSearchTerms);
+    puts("Enter search terms to find in public track hub description pages:<BR>"
+	"<input name=\"hubSearchTerms\" id=\"hubSearchTerms\" class=\"hubField\""
+	"type=\"text\" size=\"65\"> \n"
+	"<input name=\"hubSearchButton\""
+	    "onClick="
+		"\" document.searchHubForm.elements['hubSearchTerms'].value=hubSearchTerms.value;"
+		"document.searchHubForm.submit();return true;\" "
+	    "class=\"hubField\" type=\"button\" value=\"Search Public Hubs\">\n");
+    puts("<BR><BR>\n");
     }
 
 // if we have search terms, put out the line telling the user so
-if (!isEmpty(hubSearchTerms))
+if (haveTrixFile && !isEmpty(hubSearchTerms))
     {
-    printf("<BR>List restricted by search terms : %s\n", hubSearchTerms);
+    printf("List restricted by search terms : %s\n", hubSearchTerms);
     puts("<input name=\"hubDeleteSearchButton\""
 	"onClick="
 	"\" document.searchHubForm.elements['hubSearchTerms'].value=\'\';"
 	"document.searchHubForm.submit();return true;\" "
 	"class=\"hubField\" type=\"button\" value=\"Show All Hubs\">\n");
-    printf("<BR>\n");
+    puts("<BR><BR>\n");
+
+    strLower(cleanSearchTerms);
+    urlSearchHash = getUrlSearchHash(trixFile, cleanSearchTerms);
     }
 
-// if we have a trix file, draw the search box
-if (haveTrixFile)
-    {
-    puts("<input name=\"hubSearchTerms\" id=\"hubSearchTerms\" class=\"hubField\""
-	"type=\"text\" size=\"65\"> \n"
-    "<input name=\"hubSearchButton\""
-	"onClick="
-	"\" document.searchHubForm.elements['hubSearchTerms'].value=hubSearchTerms.value;"
-	    "document.searchHubForm.submit();return true;\" "
-	    "class=\"hubField\" type=\"button\" value=\"Search Public Hubs\">\n");
-    }
-
+puts("<I>Pressing Connect button will take you to the gateway page with the default assembly for that hub selected.</I><BR>");
 // make sure all the public hubs are in the hubStatus table.
 addPublicHubsToHubStatus(conn, publicTable, statusTable);
 
-struct hash *publicHash = NULL;
+struct hash *publicHash = newHash(5);
 char query[512];
 bool hasDescription = sqlColumnExists(conn, publicTable, "descriptionUrl");
 if (hasDescription)
@@ -361,6 +362,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     	  *dbList = row[3], *errorMessage = row[4], *descriptionUrl = row[6];
     int id = atoi(row[5]);
 
+    hashStore(publicHash, url);
     if ((urlSearchHash != NULL) && (hashLookup(urlSearchHash, url) == NULL))
 	continue;
 
@@ -383,9 +385,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	// start first row
 	printf("<tbody> <tr>");
 	gotAnyRows = TRUE;
-
-	// allocate the hash to store hubUrl's
-	publicHash = newHash(5);
 	}
 
     if ((id != 0) && isEmpty(errorMessage)) 
@@ -418,7 +417,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		"\" document.connectHubForm.elements['hubUrl'].value= '%s';"
 		"document.connectHubForm.elements['db'].value= '%s';"
 		"document.connectHubForm.submit();return true;\" "
-		"class=\"hubConnectButton\" type=\"button\" value=\"Connect\">\n", url,name);
+		"class=\"hubButton\" type=\"button\" value=\"Connect\">\n", url,name);
 	    }
 
 	ourCellEnd();
@@ -429,9 +428,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	ourCellStart();
 	printf(
 	"<input name=\"hubClearButton\""
-	    "onClick=\"document.resetHubForm.elements['hubUrl'].value='%s';"
+	    "onClick=\"document.resetHubForm.elements['hubCheckUrl'].value='%s';"
 		"document.resetHubForm.submit();return true;\" "
-		"class=\"hubField\" type=\"button\" value=\"check hub\">"
+		"class=\"hubButton\" type=\"button\" value=\"Check Hub\">"
 		, url);
 	ourCellEnd();
 	}
@@ -453,8 +452,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    errorMessage);
 
     printGenomeList(dbListNames, count); 
-
-    hashStore(publicHash, url);
     }
 sqlFreeResult(&sr);
 
@@ -509,10 +506,11 @@ hDisconnectCentral(&conn);
 
 static void doResetHub(struct cart *theCart)
 {
-char *url = cartOptionalString(cart, hgHubDataText);
+char *url = cartOptionalString(cart, hgHubCheckUrl);
 
 if (url != NULL)
     {
+    udcSetCacheTimeout(1);
     unsigned id = hubResetError(url);
     tryHubOpen(id);
     }
@@ -567,7 +565,7 @@ if (cartVarExists(cart, hgHubDoClear))
     return;
     }
 
-if (cartVarExists(cart, hgHubDoReset))
+if (cartVarExists(cart, hgHubCheckUrl))
     {
     doResetHub(cart);
     }
@@ -636,9 +634,7 @@ puts("</FORM>");
 
 // this is the form for the reset hub button
 printf("<FORM ACTION=\"%s\" NAME=\"resetHubForm\">\n",  "../cgi-bin/hgHubConnect");
-cgiMakeHiddenVar("hubUrl", "");
-cgiMakeHiddenVar(hgHubDoReset, "on");
-cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
+cgiMakeHiddenVar(hgHubCheckUrl, "");
 puts("</FORM>");
 
 // this is the form for the search hub button
@@ -677,7 +673,7 @@ cartWebEnd();
 }
 
 char *excludeVars[] = {"Submit", "submit", "hc_one_url", 
-    hgHubDoReset, hgHubDoClear, hgHubDoDisconnect, hgHubDataText, 
+    hgHubCheckUrl, hgHubDoClear, hgHubDoDisconnect, hgHubDataText, 
     hgHubConnectRemakeTrackHub, NULL};
 
 int main(int argc, char *argv[])
