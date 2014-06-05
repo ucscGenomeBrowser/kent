@@ -491,7 +491,7 @@ if (pslList != NULL && *table )
             mi->gbAcc);
     }
 else
-    printf("missing alignment %s chr %s:%d-%d from table %s<br>\n",
+    printf("missing alignment %s %s:%d-%d from table %s<br>\n",
              mi->gbAcc, pg->gChrom, pg->gStart, pg->gEnd, table);
 }
 
