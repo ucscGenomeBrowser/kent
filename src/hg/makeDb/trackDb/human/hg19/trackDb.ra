@@ -823,6 +823,14 @@ priority 2
         type bed 5 .
         priority 23
 
+track genomicSuperDups override
+shortLabel Segmental Dups
+longLabel Duplications of >1000 Bases of Non-RepeatMasked Sequence
+group rep
+visibility hide
+type bed 6 .
+noScoreFilter .
+
 track snp137Common override
 snpSeqFile /gbdb/hg19/snp/snp137.fa
 chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
