@@ -613,11 +613,27 @@ while ((c = *s++) != 0)
 return TRUE;
 }
          
-char *edwSupportedFormats[] = {"unknown", "fastq", "bam", "bed", "gtf", 
-    "bigWig", "bigBed", "bedLogR", "bedRnaElements", "bedRrbs", "broadPeak", 
-    "narrowPeak", "openChromCombinedPeaks", "peptideMapping", "shortFrags", 
-    "rcc", "idat", "fasta", "customTrack"};
-int edwSupportedFormatsCount = ArraySize(edwSupportedFormats);
+boolean isSupportedFormat(char *format)
+/* Return TRUE if this is one of our supported formats */
+{
+/* First deal with non bigBed */
+static char *otherSupportedFormats[] = {"unknown", "fastq", "bam", "bed", "gtf", 
+    "bigWig", "bigBed", 
+    "bedLogR", "bedRrbs", "bedMethyl", "broadPeak", "narrowPeak", 
+    "bed_bedLogR", "bed_bedRrbs", "bed_bedMethyl", "bed_broadPeak", "bed_narrowPeak",
+    "bedRnaElements", "openChromCombinedPeaks", "peptideMapping", "shortFrags", 
+    "rcc", "idat", "fasta", "customTrack",
+    };
+static int otherSupportedFormatsCount = ArraySize(otherSupportedFormats);
+if (stringArrayIx(format, otherSupportedFormats, otherSupportedFormatsCount) >= 0)
+    return TRUE;
+
+/* If starts with bed_ then skip over prefix.  It will be caught by bigBed */
+if (startsWith("bed_", format))
+    format += 4;
+return edwIsSupportedBigBedFormat(format);
+}
+
 
 boolean isEmptyOrNa(char *s)
 /* Return TRUE if string is NULL, "", "n/a", or "N/A" */
@@ -670,7 +686,7 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
     char *fileName = row[fileIx];
     allGoodFileNameChars(fileName);
     char *format = row[formatIx];
-    if (stringArrayIx(format, edwSupportedFormats, edwSupportedFormatsCount) < 0)
+    if (!isSupportedFormat(format))
 	errAbort("Format %s is not supported", format);
     allGoodSymbolChars(row[outputIx]);
     char *experiment = row[experimentIx];
