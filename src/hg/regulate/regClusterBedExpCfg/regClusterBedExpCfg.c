@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 #include "hmmstats.h"
-#include "errabort.h"
+#include "errAbort.h"
 
 
 boolean encodeList = FALSE;

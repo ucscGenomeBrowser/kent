@@ -8,7 +8,7 @@
 #include "hex.h"
 #include "dystring.h"
 #include "jksql.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "openssl/sha.h"
 #include "base64.h"
 #include "basicBed.h"
@@ -22,6 +22,7 @@
 #include "bamFile.h"
 #include "raToStruct.h"
 #include "web.h"
+#include "encode3/encode3Valid.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 #include "edwFastqFileFromRa.h"
@@ -780,11 +781,13 @@ return grt;
 boolean edwIsSupportedBigBedFormat(char *format)
 /* Return TRUE if it's one of the bigBed formats we support. */
 {
-return sameString(format, "broadPeak") || sameString(format, "narrowPeak") || 
-	 sameString(format, "bedLogR") || sameString(format, "bigBed") ||
-	 sameString(format, "bedRnaElements") || sameString(format, "bedRrbs") ||
-	 sameString(format, "openChromCombinedPeaks") || sameString(format, "peptideMapping") ||
-	 sameString(format, "shortFrags");
+int i;
+for (i=0; i<encode3BedTypeCount; ++i)
+    {
+    if (sameString(format, encode3BedTypeTable[i].name))
+        return TRUE;
+    }
+return FALSE;
 }
 
 void edwWriteErrToTable(struct sqlConnection *conn, char *table, int id, char *err)
@@ -1265,6 +1268,13 @@ void edwBwaIndexPath(struct edwAssembly *assembly, char indexPath[PATH_LEN])
 {
 safef(indexPath, PATH_LEN, "%s%s/bwaData/%s.fa", 
     edwValDataDir, assembly->ucscDb, assembly->ucscDb);
+}
+
+void edwAsPath(char *format, char path[PATH_LEN])
+/* Convert something like "narrowPeak" in format to fill path involving
+ * encValDir/as/narrowPeak.as */
+{
+safef(path, PATH_LEN, "%sas/%s.as", edwValDataDir, format);
 }
 
 void edwAlignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,

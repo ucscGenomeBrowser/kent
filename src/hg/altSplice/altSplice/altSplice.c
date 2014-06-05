@@ -72,7 +72,7 @@
 #include "options.h"
 #include "binRange.h"
 #include "obscure.h"
-#include "errabort.h"
+#include "errAbort.h"
 #define USUAL
 //#define AFFYSPLICE
 

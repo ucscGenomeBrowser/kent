@@ -68,7 +68,7 @@
 #include "options.h"
 #include "linefile.h"
 #include "hash.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "dystring.h"
 #include "dlist.h"
 #include "net.h"

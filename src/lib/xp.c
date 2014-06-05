@@ -8,7 +8,7 @@
 
 #include "common.h"
 #include "dystring.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "hash.h"
 #include "xp.h"
 #include "xmlEscape.h"

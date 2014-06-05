@@ -10,7 +10,7 @@
 #include "dystring.h"
 #include "obscure.h"
 #include "portable.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "ra.h"
 #include "rql.h"
 

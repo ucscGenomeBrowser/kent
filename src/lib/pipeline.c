@@ -8,7 +8,7 @@
 #include "common.h"
 #include "sqlNum.h"
 #include "dystring.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "portable.h"
 #include "linefile.h"
 #include <sys/types.h>

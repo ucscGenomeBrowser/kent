@@ -6,7 +6,7 @@
 #include "common.h"
 #include "gbGeneTbl.h"
 #include "gbAlignTbl.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "hash.h"
 #include "portable.h"
 #include "linefile.h"

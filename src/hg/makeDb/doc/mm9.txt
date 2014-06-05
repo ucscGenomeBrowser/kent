@@ -12335,7 +12335,7 @@ TMPDIR=/scratch/tmp
 	-smallClusterHub=encodek > load.log 2>&1 &
     # and the synteny step too, same error
     #	real    121m21.029s
-    cat fb.rn5.chainMm9Link.txt 
+    cat fb.rn5.chainMm9Link.txt
     #   1795345063 bases of 2572853723 (69.780%) in intersection
     # FYI, rn4 was:
     #   1711034941 bases of 2571531505 (66.538%) in intersection
@@ -12345,3 +12345,33 @@ TMPDIR=/scratch/tmp
     ln -s blastz.mm9.swap lastz.mm9
 
 #########################################################################
+# CPG Islands Unmasked track (DONE - 2014-04-24 - Hiram)
+    mkdir /hive/data/genomes/mm9/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/mm9/bed/cpgIslandsUnmasked
+    time doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
+     -tableName=cpgIslandExtUnmasked -dbHost=hgwdev -smallClusterHub=ku \
+        -workhorse=hgwdev \
+          -maskedSeq=/hive/data/genomes/mm9/mm9.unmasked.2bit mm9 > do.log 2>&1
+    # real    12m1.437s
+
+    cat fb.mm9.cpgIslandExtUnmasked.txt
+    # 14243186 bases of 2620346127 (0.544%) in intersection
+    # the 'masked' version is:
+    cat fb.mm9.cpgIslandExt.txt
+    #  10496250 bases of 2620346127 (0.401%) in intersection
+
+############################################################################
+# FaceBase Microarray track (DONE - 2014-05-21 - Pauline)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm9
+    mkdir /hive/data/genomes/mm9/bed/FaceBase24SampleTypesAvg
+    cd /hive/data/genomes/mm9/bed/FaceBase24SampleTypesAvg
+
+    wget --timestamping http://genomebrowser.facebase.org/myHub/mm9/FaceBase_24Samp_Types_Averaged.bed
+    wget --timestamping http://genomebrowser.facebase.org/myHub/mm9/FaceBase_24Samp_Types_Averaged.html
+
+    hgLoadBed mm9 FaceBase24SampleTypesAvg FaceBase_24Samp_Types_Averaged.bed
+
+    #For microarray tracks also need to add a section to
+    #/cluster/home/pauline/kent/src/hg/makeDb/hgCgiData/Mouse/microarrayGroups.ra
+##############################################################################

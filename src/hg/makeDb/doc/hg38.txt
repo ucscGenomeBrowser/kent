@@ -1050,8 +1050,8 @@ rmdir --ignore-fail-on-non-empty /dev/shm/$outputFN
     # fetch all the ideogram files:
     rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/pub/gdp/ ./
 
-    mkdir /hive/data/genomes/hg38/bed/cytoband
-    cd /hive/data/genomes/hg38/bed/cytoband
+    mkdir /hive/data/genomes/hg38/bed/cytoBand
+    cd /hive/data/genomes/hg38/bed/cytoBand
 
     # Create bed file
     $HOME/kent/src/utils/ncbi/createNcbiCytoBand.pl \
@@ -2843,13 +2843,16 @@ done > jobList
         -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-fileServer=hgwdev \
         -chainMinScore=3000 -chainLinearGap=medium > chainMerge.log 2>&1
-XXX - running - Mon Feb 10 08:52:43 PST 2014
+
     time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
 	-verbose=2 \
         -continue=load -stop=load `pwd`/DEF \
         -syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-fileServer=hgwdev \
         -chainMinScore=3000 -chainLinearGap=medium > load.log 2>&1
+
+    hgLoadChain -normScore -tIndex hg38 chainSelf hg38.hg38.all.chain.gz
+    #  Loading 104815249 chains into hg38.chainSelf
 
     cat fb.hg38.chainSelfLink.txt
     #   392419010 bases of 3049335806 (12.869%) in intersection
@@ -3442,7 +3445,7 @@ TMPDIR=/dev/shm
     # filter with doRecipBest.pl
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg38 panTro4) > rbest.log 2>&1
-XXX - running - Tue May 27 12:50:57 PDT 2014
+    # real    57m55.320s
 
     # running the swap
     mkdir /hive/data/genomes/panTro4/bed/blastz.hg38.swap
@@ -3458,9 +3461,10 @@ XXX - running - Tue May 27 12:50:57 PDT 2014
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         panTro4 hg38) > rbest.log 2>&1
+    # real    64m33.812s
 
 #############################################################################
-# Opossum Lastz run (WORKING - 2014-05-27 - Hiram)
+# Opossum Lastz run (DONE - 2014-05-27 - Hiram)
     screen -S hg38MonDom5      # use a screen to manage this longish running job
     mkdir /hive/data/genomes/hg38/bed/lastzMonDom5.2014-05-27
     cd /hive/data/genomes/hg38/bed/lastzMonDom5.2014-05-27
@@ -3503,25 +3507,719 @@ TMPDIR=/dev/shm
         -chainMinScore=5000 -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -syntenicNet) > do.log 2>&1
-XXX - running - Tue May 27 09:34:29 PDT 2014
+    # real    670m13.280s
+    # one failed chain run for hg19, finished manually on hgwdev, then:
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -continue=chainMerge -chainMinScore=5000 -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > chainMerge.log 2>&1
+    # real    164m28.822s
 
     cat fb.hg38.chainMonDom5Link.txt
-#2760526412 bases of 2897316137 (95.279%) in intersection
+    # 438195373 bases of 3049335806 (14.370%) in intersection
 
     # filter with doRecipBest.pl
-    doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
-        hg38 monDom5 >& rbest.log & tail -f rbest.log
+    time (/cluster/bin/scripts/doRecipBest.pl -buildDir=`pwd` \
+        -dbHost=hgwdev -workhorse=hgwdev hg38 monDom5) > rbest.log 2>&1
+    # real    130m22.825s
 
     # running the swap
     mkdir /hive/data/genomes/monDom5/bed/blastz.hg38.swap
     cd /hive/data/genomes/monDom5/bed/blastz.hg38.swap
-    ~/kent/src/hg/utils/automation/doBlastzChainNet.pl -verbose=2 \
-        -swap /hive/data/genomes/hg38/bed/lastzMonDom5.2014-05-27/DEF \
-        -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        -syntenicNet >& swap.log & tail -f swap.log
+    time (doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg38/bed/lastzMonDom5.2014-05-27/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+    # real    102m41.443s
+
     cat fb.monDom5.chainHg38Link.txt
-#2773561724 bases of 2902338967 (95.563%) in intersection
+    # 420069915 bases of 3501660299 (11.996%) in intersection
+    time (/cluster/bin/scripts/doRecipBest.pl -buildDir=`pwd` \
+        -dbHost=hgwdev -workhorse=hgwdev monDom5 hg38) > rbest.log 2>&1
+    #  real    90m56.189s
+
+#############################################################################
+# LOCUS REFERENCE GENOME (LRG) REGIONS AND TRANSCRIPTS (DONE 5/29/14 angie)
+    set today = `date +%Y_%m_%d`
+    mkdir -p /hive/data/genomes/hg38/bed/lrg/$today
+    cd /hive/data/genomes/hg38/bed/lrg/$today
+    wget ftp://ftp.ebi.ac.uk/pub/databases/lrgex/LRG_public_xml_files.zip
+    unzip LRG_public_xml_files.zip
+
+    # Run script to convert LRG*.xml files to BED+ for regions and genePredExt+fa for transcripts:
+    ~/kent/src/hg/utils/automation/parseLrgXml.pl GRCh38
+    genePredCheck lrgTranscriptsUnmapped.gp
+    # If there are complaints e.g. about exonFrame, look for inconsistencies in the
+    # affected transcript's coding_region/coordinates vs. exon/intron info in xml.
+    # Contact Variation team leader Fiona Cunningham @EBI to resolve in the background
+    # (missing exonFrame info doesn't affect our track representation because we end up using
+    # psl).
+
+    # Load LRG regions:
+    bedToBigBed lrg.bed /hive/data/genomes/hg38/chrom.sizes lrg.bb \
+      -tab -type=bed12+ -as=$HOME/kent/src/hg/lib/lrg.as -extraIndex=name
+    rm -f /gbdb/hg38/bbi/lrg.bb
+    ln -s `pwd`/lrg.bb /gbdb/hg38/bbi/lrg.bb
+    hgBbiDbLink hg38 lrg /gbdb/hg38/bbi/lrg.bb
+
+    # Map LRG fixed_annotation transcripts from LRG coords to hg38 coords (HT MarkD):
+    lrgToPsl lrg.bed /hive/data/genomes/hg38/chrom.sizes lrg.psl
+    pslCheck lrg.psl
+    awk '{print $10 "\t" $11;}' lrg.psl > lrg.sizes
+    genePredToFakePsl -chromSize=lrg.sizes placeholder \
+      lrgTranscriptsUnmapped.gp lrgTranscriptsFakePsl.psl lrgTranscripts.cds
+    pslMap lrgTranscriptsFakePsl.psl lrg.psl lrgTranscriptsHg38.psl
+    mrnaToGene -genePredExt -cdsFile=lrgTranscripts.cds -keepInvalid \
+      lrgTranscriptsHg38.psl lrgTranscriptsHg38NoName2.gp
+    # It's OK if mrnaToGene complains about "no CDS" for a non-coding tx e.g. LRG_163t1.
+    # The resulting genePredExt from that process is missing the name2 column from
+    # the original; add it back:
+    cut -f 1,12 lrgTranscriptsUnmapped.gp > txName2
+    join -j 1 -a 1 -t'	' \
+      -o 1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,1.10,1.11,2.2,1.13,1.14,1.15 \
+      lrgTranscriptsHg38NoName2.gp txName2 > lrgTranscriptsHg38.gp
+
+    # Load PSL, CDS and sequences.
+    hgLoadPsl hg38 -table=lrgTranscriptAli lrgTranscriptsHg38.psl
+    hgLoadSqlTab hg38 lrgCds ~/kent/src/hg/lib/cdsSpec.sql lrgTranscripts.cds
+    hgPepPred hg38 tab lrgCdna lrgCdna.tab
+    hgPepPred hg38 tab lrgPep lrgPep.tab
 
 
 #############################################################################
+## 7-Way Multiz (DONE - 2014-06-02 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/hg38/bed/multiz7way
+    cd /hive/data/genomes/hg38/bed/multiz7way
+
+    # from the 63-way in the source tree, select out the 7 used here:
+    /cluster/bin/phast/tree_doctor \
+        --prune-all-but hg19,panTro4,rheMac3,mm10,rn5,canFam3,monDom5 \
+        /cluster/home/hiram/kent/src/hg/utils/phyloTrees/130way.nh \
+          | sed -e 's/hg19/hg38/' > hg38.7way.nh
+
+    #	what that looks like:
+    ~/kent/src/hg/utils/phyloTrees/asciiTree.pl hg38.7way.nh
+# (((((hg38:0.006550,
+#     panTro4:0.006840):0.027424,
+#    rheMac3:0.037601):0.109934,
+#   (mm10:0.084509,
+#   rn5:0.091589):0.271974):0.020593,
+#  canFam3:0.165928):0.258392,
+# monDom5:0.340786);
+
+    # extract species list from that .nh file
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+        hg38.7way.nh | xargs echo | sed 's/ //g; s/,/ /g' \
+        | sed 's/[()]//g; s/,/ /g' | tr '[ ]' '[\n]' > species.list.txt
+
+    # construct db to name translation list:
+    cat species.list.txt | while read DB
+do
+hgsql -N -e "select name,organism from dbDb where name=\"${DB}\";" hgcentraltest
+done | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
+        > db.to.name.txt
+
+    # construct a common name .nh file:
+    /cluster/bin/phast/tree_doctor --rename \
+    "`cat db.to.name.txt`" hg38.7way.nh | sed -e 's/00*)/)/g; s/00*,/,/g' \
+        > hg38.7way.commonNames.nh
+    ~/kent/src/hg/utils/phyloTrees/asciiTree.pl hg38.7way.commonNames.nh
+# (((((Human:0.00655,
+#     Chimp:0.00684):0.027424,
+#    Rhesus:0.037601):0.109934,
+#   (Mouse:0.084509,
+#   Rat:0.091589):0.271974):0.020593,
+#  Dog:0.165928):0.258392,
+# Opossum:0.340786);
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a png image for src/hg/htdocs/images/phylo/hg38_7way.png
+
+    /cluster/bin/phast/all_dists hg38.7way.nh | grep hg38 \
+        | sed -e "s/hg38.//" | sort -k2n > 7way.distances.txt
+    #	Use this output to create the table below
+    head 7way.distances.txt
+# taeGut1 0.075718
+# melUnd1 0.220312
+# galGal4 0.507021
+# melGal1 0.509140
+# hg19    1.175433
+# mm10    1.383071
+
+    cat << '_EOF_' > sizeStats.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "<7way.distances.txt") or
+        die "can not read 7way.distances.txt";
+
+my $count = 0;
+while (my $line = <FH>) {
+    chomp $line;
+    my ($D, $dist) = split('\s+', $line);
+    my $chain = "chain" . ucfirst($D);
+    my $B="/hive/data/genomes/hg38/bed/lastz.$D/fb.hg38." .
+        $chain . "Link.txt";
+    my $chainLinkMeasure =
+        `awk '{print \$5}' ${B} 2> /dev/null | sed -e "s/(//; s/)//"`;
+    chomp $chainLinkMeasure;
+    $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
+    $chainLinkMeasure =~ s/\%//;
+    my $swapFile="/hive/data/genomes/${D}/bed/lastz.hg38/fb.${D}.chainHg38Link.txt";
+    my $swapMeasure = "N/A";
+    if ( -s $swapFile ) {
+	$swapMeasure =
+	    `awk '{print \$5}' ${swapFile} 2> /dev/null | sed -e "s/(//; s/)//"`;
+	chomp $swapMeasure;
+	$swapMeasure = 0.0 if (length($swapMeasure) < 1);
+	$swapMeasure =~ s/\%//;
+    }
+    my $orgName=
+    `hgsql -N -e "select organism from dbDb where name='$D';" hgcentraltest`;
+    chomp $orgName;
+    if (length($orgName) < 1) {
+        $orgName="N/A";
+    }
+    ++$count;
+    printf "# %02d  %.4f (%% %06.3f) (%% %06.3f) - %s %s\n", $count, $dist,
+        $chainLinkMeasure, $swapMeasure, $orgName, $D;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./sizeStats.pl
+    ./sizeStats.pl
+#
+
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+
+#       featureBits chainLink measures
+#               chainLink
+#  N distance  on hg38  on other     other species
+# 01  0.0134 (% 93.112) (% 95.664) - Chimp panTro4
+# 02  0.0716 (% 79.729) (% 86.715) - Rhesus rheMac3
+# 03  0.3304 (% 49.978) (% 60.083) - Dog canFam3
+# 04  0.5004 (% 31.629) (% 35.323) - Mouse mm10
+# 05  0.5075 (% 30.788) (% 36.312) - Rat rn5
+# 06  0.7637 (% 14.370) (% 11.996) - Opossum monDom5
+
+# None of this concern for distances matters in building the first step, the
+# maf files.
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	hg38.7way.nh | xargs echo | sed 's/ //g; s/,/ /g' > tree.nh
+
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+    #   hg38 panTro4 rheMac3 mm10 rn5 canFam3 monDom5
+
+    #	bash shell syntax here ...
+    cd /hive/data/genomes/hg38/bed/multiz7way
+    export H=/hive/data/genomes/hg38/bed
+    mkdir mafLinks
+    # want syntenic net for: panTro4 rheMac3 mm10 rn5 canFam3
+    # and unfiltered maf net for: monDom5
+    for G in panTro4 rheMac3 mm10 rn5 canFam3
+    do
+      mkdir mafLinks/$G
+      echo ln -s ${H}/lastz.$G/axtChain/hg38.${G}.synNet.maf.gz ./mafLinks/$G
+      ln -s ${H}/lastz.$G/axtChain/hg38.${G}.synNet.maf.gz ./mafLinks/$G
+    done
+
+    mkdir mafLinks/monDom5
+    echo ln -s ${H}/lastz.monDom5/mafNet/*.maf.gz ./mafLinks/monDom5
+    ln -s ${H}/lastz.monDom5/mafNet/*.maf.gz ./mafLinks/monDom5
+    # verify the symLinks are good:
+    ls -ogrtL mafLinks/*/*
+#-rw-rw-r-- 1  709500062 Jan 25 12:15 mafLinks/mm10/hg38.mm10.synNet.maf.gz
+#-rw-rw-r-- 1 1089643630 Jan 27 19:15 mafLinks/canFam3/hg38.canFam3.synNet.maf.gz
+#-rw-rw-r-- 1 1277455681 Jan 28 21:52 mafLinks/rheMac3/hg38.rheMac3.synNet.maf.gz
+#-rw-rw-r-- 1  687500679 Mar  1 12:27 mafLinks/rn5/hg38.rn5.synNet.maf.gz
+#-rw-rw-r-- 1 1463969868 May 27 11:41 mafLinks/panTro4/hg38.panTro4.synNet.maf.gz
+#-rw-rw-r-- 1  323347908 May 29 12:38 mafLinks/monDom5/hg38.monDom5.net.maf.gz
+
+    # split the maf files into a set of hashed named files
+    # this hash named split keeps the same chr/contig names in the same
+    # named hash file.
+    mkdir /hive/data/genomes/hg38/bed/multiz7way/mafSplit
+    cd /hive/data/genomes/hg38/bed/multiz7way/mafSplit
+    for D in `sed -e "s/hg38 //" ../species.list`
+do
+    echo "${D}"
+    mkdir $D
+    cd $D
+    echo "mafSplit -byTarget -useHashedName=8 /dev/null . ../../mafLinks/${D}/*.maf.gz"
+    mafSplit -byTarget -useHashedName=8 /dev/null . \
+	../../mafLinks/${D}/*.maf.gz
+    cd ..
+done
+
+    # construct a list of all possible maf file names.
+    # they do not all exist in each of the species directories
+    find . -type f | wc -l
+    # 641
+    find . -type f | grep ".maf$" | xargs -L 1 basename | sort -u > maf.list
+    wc -l maf.list
+    # 118 maf.list
+
+    mkdir /hive/data/genomes/hg38/bed/multiz7way/splitRun
+    cd /hive/data/genomes/hg38/bed/multiz7way/splitRun
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/autoMZ penn
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = hg38
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /dev/shm/$db/multiz.$c
+set pairs = /hive/data/genomes/hg38/bed/multiz7way/mafSplit
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../../tree.nh ../../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //" species.list`)
+    set in = $pairs/$s/$c
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+        if (! -s $out) then
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c \
+        > /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c $result
+/bin/rm -fr $tmp
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(file1) {check out line+ /hive/data/genomes/hg38/bed/multiz7way/splitRun/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    ln -s ../../mafSplit/maf.list maf.list
+    ssh ku
+    cd /hive/data/genomes/hg38/bed/multiz7way/splitRun/run
+    gensub2 maf.list single template stdout > jobList
+    para -ram=8g create jobList
+# Completed: 118 of 118 jobs
+# CPU time in finished jobs:     118241s    1970.69m    32.84h    1.37d  0.004 y
+# IO & Wait Time:                   682s      11.36m     0.19h    0.01d  0.000 y
+# Average job time:                1008s      16.80m     0.28h    0.01d
+# Longest finished job:           10068s     167.80m     2.80h    0.12d
+# Submission to last job:         10076s     167.93m     2.80h    0.12d
+
+    # combine into one file  (the 1>&2 redirect sends the echo to stderr)
+    cd /hive/data/genomes/hg38/bed/multiz7way
+    head -1 splitRun/maf/017.maf > multiz7way.maf
+    for F in splitRun/maf/*.maf
+do
+    echo "${F}" 1>&2
+    egrep -v "^#" ${F}
+done >> multiz7way.maf
+    tail -1 splitRun/maf/017.maf >> multiz7way.maf
+# -rw-rw-r-- 1 15635828403 Jun  3 11:49 multiz7way.maf
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/hg38/bed/multiz7way
+    mkdir /gbdb/hg38/multiz7way
+    ln -s `pwd`/multiz7way.maf /gbdb/hg38/multiz7way
+    cd /dev/shm
+    time nice -n +17 hgLoadMaf hg38 multiz7way
+    # Loaded 10270624 mafs in 1 files from /gbdb/hg38/multiz7way
+    # real    3m51.265s
+
+    time nice -n +17 hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 hg38 multiz7waySummary \
+	/gbdb/hg38/multiz7way/multiz7way.maf
+    # Created 1260918 summary blocks from 35384988 components
+    # and 10270624 mafs from /gbdb/hg38/multiz7way/multiz7way.maf
+    # real    5m39.388s
+
+
+    wc -l multiz7way*.tab
+    # 10270624 multiz7way.tab
+    # 1260918 multiz7waySummary.tab
+    # 11531542 total
+
+    rm multiz7way*.tab
+
+##############################################################################
+# GAP ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE - 2014-06-03 - Hiram)
+    # mafAddIRows has to be run on single chromosome maf files, it does not
+    #	function correctly when more than one reference sequence
+    #	are in a single file.  Need to split of the maf file into individual
+    #   maf files
+    mkdir -p /hive/data/genomes/hg38/bed/multiz7way/anno/mafSplit
+    cd /hive/data/genomes/hg38/bed/multiz7way/anno/mafSplit
+
+    time mafSplit -outDirDepth=1 -byTarget -useFullSequenceName \
+        /dev/null . ../../multiz7way.maf
+    #   real    4m8.617s
+
+    find . -type f | wc -l
+    #   353
+
+    # check for N.bed files everywhere:
+    cd /hive/data/genomes/hg38/bed/multiz7way/anno
+    for DB in `cat ../species.list`
+do
+    if [ ! -s /hive/data/genomes/${DB}/${DB}.N.bed ]; then
+        echo "MISS: ${DB}"
+#        cd /hive/data/genomes/${DB}
+#        twoBitInfo -nBed ${DB}.2bit ${DB}.N.bed
+    else
+        echo "  OK: ${DB}"
+    fi
+done
+
+    cd /hive/data/genomes/hg38/bed/multiz7way/anno
+    for DB in `cat ../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+    # make sure they all are successful symLinks:
+    ls -ogrtL
+
+    screen -S hg38      # use a screen to control this longish job
+    ssh ku
+    cd /hive/data/genomes/hg38/bed/multiz7way/anno
+    mkdir result
+    for D in `ls mafSplit`
+do
+    echo mkdir result/${D}
+    mkdir result/${D}
+done
+    cat << '_EOF_' > template
+#LOOP
+mafAddIRows -nBeds=nBeds mafSplit/$(path1) /hive/data/genomes/hg38/hg38.2bit {check out exists+ result/$(path1)}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    find ./mafSplit -type f | sed -e 's#^./mafSplit/##' > maf.list
+    gensub2 maf.list single template jobList
+    # limit jobs on a node with the ram=32g requirement because they go fast
+    para -ram=32g create jobList
+    para try ... check ... push ...
+# Completed: 353 of 353 jobs
+# CPU time in finished jobs:        530s       8.83m     0.15h    0.01d  0.000 y
+# IO & Wait Time:                  1057s      17.62m     0.29h    0.01d  0.000 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest finished job:              63s       1.05m     0.02h    0.00d
+# Submission to last job:           220s       3.67m     0.06h    0.00d
+
+    # verify all result files have some content, look for 0 size files:
+    find ./result -type f -size 0
+    # should see none
+    # or in this manner:
+    find ./result -type f | xargs ls -og | sort -k3nr | tail
+
+    # combine into one file  (the 1>&2 redirect sends the echo to stderr)
+    head -q -n 1 result/0/chr8.maf > hg38.7way.maf
+    find ./result -type f | while read F
+do
+    echo "${F}" 1>&2
+    grep -h -v "^#" ${F}
+done >> hg38.7way.maf
+
+    #	these maf files do not have the end marker, this does nothing:
+    #	tail -q -n 1 result/0/chr8.maf >> hg38.7way.maf
+    # How about an official end marker:
+    echo "##eof maf" >> hg38.7way.maf
+    ls -og
+# -rw-rw-r--  1 17795297196 Jun  3 14:01 hg38.7way.maf
+
+    du -hsc hg38.7way.maf
+    # 17G     hg38.7way.maf
+
+    # construct symlinks to get the individual maf files into gbdb:
+    rm /gbdb/hg38/multiz7way/multiz7way.maf   # remove previous results
+    ln -s `pwd`/hg38.7way.maf /gbdb/hg38/multiz7way/multiz7way.maf
+
+    # Load into database
+    cd /dev/shm
+    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/hg38/multiz7way \
+        hg38 multiz7way
+    # Loaded 10359242 mafs in 1 files from /gbdb/hg38/multiz7way
+    # real    4m21.862s
+
+    time hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 hg38 multiz7waySummary \
+        /gbdb/hg38/multiz7way/multiz7way.maf
+#  Created 1260918 summary blocks from 35384988 components
+#  and 10359242 mafs from /gbdb/hg38/multiz7way/multiz7way.maf
+#  real    6m6.583s
+
+# -rw-rw-r-- 1 530538267 Jun  3 14:05 multiz7way.tab
+# -rw-rw-r-- 1  60616616 Jun  3 14:15 multiz7waySummary.tab
+
+    rm multiz7way*.tab
+
+######################################################################
+# MULTIZ7WAY MAF FRAMES (DONE - 2014-06-03 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/hg38/bed/multiz7way/frames
+    cd /hive/data/genomes/hg38/bed/multiz7way/frames
+#   survey all the genomes to find out what kinds of gene tracks they have
+    cat << '_EOF_' > showGenes.csh
+#!/bin/csh -fe
+foreach db (`cat ../species.list`)
+    echo -n "${db}: "
+    set tables = `hgsql $db -N -e "show tables like '%Gene%'"`
+    foreach table ($tables)
+        if ($table == "ensGene" || $table == "refGene" || \
+           $table == "mgcGenes" || $table == "knownGene" || \
+           $table == "xenoRefGene" ) then
+           set count = `hgsql $db -N -e "select count(*) from $table"`
+            echo -n "${table}: ${count}, "
+        endif
+    end
+    set orgName = `hgsql hgcentraltest -N -e \
+            "select scientificName from dbDb where name='$db'"`
+    set orgId = `hgsql hg19 -N -e \
+            "select id from organism where name='$orgName'"`
+    if ($orgId == "") then
+        echo "Mrnas: 0"
+    else
+        set count = `hgsql hg19 -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
+        echo "Mrnas: ${count}"
+    endif
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./showGenes.csh
+    time ./showGenes.csh
+# hg38: knownGene: 104178, mgcGenes: 34081, refGene: 54852, xenoRefGene: 172740, Mrnas: 10723716
+# panTro4: ensGene: 29160, refGene: 2622, xenoRefGene: 280516, Mrnas: 11163
+# rheMac3: refGene: 6369, xenoRefGene: 275096, Mrnas: 443642
+# mm10: ensGene: 94647, knownGene: 61642, mgcGenes: 26768, refGene: 33765, xenoRefGene: 161178, Mrnas: 5224613
+# rn5: ensGene: 29188, mgcGenes: 6924, refGene: 18567, xenoRefGene: 175416, Mrnas: 1247500
+# canFam3: ensGene: 29884, refGene: 1582, xenoRefGene: 253196, Mrnas: 387195
+# monDom5: ensGene: 24882, refGene: 492, xenoRefGene: 248251,  Mrnas: 2461
+
+    # from that summary, use these gene sets:
+    # refGene - rheMac3
+    # ensGene - panTro4 rn5 canFam3 monDom5
+    # knownGene - hg38 mm10
+
+    mkdir genes
+    #   1. knownGene: hg38 mm10
+    for DB in hg38 mm10
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > genes/${DB}.gp.gz
+done
+    #   2. ensGene:
+    for DB in panTro4 rn5 canFam3 monDom5
+do
+hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+    #   3. refGene
+    for DB in rheMac3
+do
+hgsql -N -e "select * from refGene" ${DB} | cut -f2- \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+# genes/canFam3.gp.gz: 19507
+# genes/hg38.gp.gz: 21887
+# genes/mm10.gp.gz: 21013
+# genes/monDom5.gp.gz: 21033
+# genes/panTro4.gp.gz: 18657
+# genes/rheMac3.gp.gz: 5614
+# genes/rn5.gp.gz: 22863
+
+    time (cat ../anno/hg38.7way.maf \
+	| nice -n +19 genePredToMafFrames hg38 stdin stdout \
+	    `sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g" ../species.list` \
+		| gzip > multiz7wayFrames.bed.gz)
+    #   real    3m44.591s
+
+    # verify there are frames on everything, should be 7 species:
+    zcat multiz7wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c
+# 265160 canFam3
+# 208941 hg38
+# 253323 mm10
+# 574521 monDom5
+# 200156 panTro4
+#  49802 rheMac3
+# 244731 rn5
+
+    #   load the resulting file
+    ssh hgwdev
+    cd /hive/data/genomes/hg38/bed/multiz7way/frames
+    time hgLoadMafFrames hg38 multiz7wayFrames multiz7wayFrames.bed.gz
+    #   real    0m19.959s
+
+    time featureBits -countGaps hg38 multiz7wayFrames
+    #   52686177 bases of 3209286105 (1.642%) in intersection
+    #   real    0m12.593s
+
+    #   enable the trackDb entries:
+# frames multiz7wayFrames
+# irows on
+    #   appears to work OK
+
+#########################################################################
+# Phylogenetic tree from 7-way (DONE - 2014-06-03 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/multiz7way/4d
+    cd /hive/data/genomes/hg38/bed/multiz7way/4d
+
+    # the annotated maf is:
+    ../anno/hg38.7way.maf
+
+    # using knownGene for hg38
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" hg38 > hg38.knownGene.gp
+
+    genePredSingleCover hg38.knownGene.gp stdout | sort > hg38.knownGeneNR.gp
+    wc -l hg38.knownGeneNR.gp
+    #	21887 hg38.knownGeneNR.gp
+
+    mkdir annoSplit
+    cd annoSplit
+    time mafSplit -verbose=2 -outDirDepth=1 -byTarget -useFullSequenceName \
+        /dev/null . ../../anno/hg38.7way.maf
+    # real    5m14.770s
+
+    find . -type f | wc -l
+    #   353
+    ssh ku
+    mkdir /hive/data/genomes/hg38/bed/multiz7way/4d/run
+    cd /hive/data/genomes/hg38/bed/multiz7way/4d/run
+    mkdir ../mfa
+
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+    cat << '_EOF_' > 4d.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set r = "/hive/data/genomes/hg38/bed/multiz7way"
+set c = $1:r
+set infile = $r/4d/annoSplit/$2
+set outDir = $r/4d/mfa/$3:h
+set outfile = $r/4d/mfa/$3
+/bin/mkdir -p $outDir
+cd /scratch/tmp
+/bin/awk -v C=$c '$2 == C {print}' $r/4d/hg38.knownGeneNR.gp | sed -e "s/\t$c\t/\thg38.$c\t/" > $c.gp
+set NL=`wc -l $c.gp| gawk '{print $1}'`
+echo $NL
+if ("$NL" != "0") then
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $infile -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $outfile
+else
+    echo "" > $outfile
+endif
+/bin/rm -f $c.gp $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4d.csh
+
+    find ../annoSplit -type f | sed -e "s#../annoSplit/##" > maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+4d.csh $(file1) $(path1) {check out line+ ../mfa/$(dir1)/$(root1).mfa}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check
+    para time
+# Completed: 353 of 353 jobs
+# CPU time in finished jobs:        836s      13.93m     0.23h    0.01d  0.000 y
+# IO & Wait Time:                  1172s      19.54m     0.33h    0.01d  0.000 y
+# Average job time:                   6s       0.09m     0.00h    0.00d
+# Longest finished job:              72s       1.20m     0.02h    0.00d
+# Submission to last job:            89s       1.48m     0.02h    0.00d
+
+    # Not all results have contents, that is OK
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/hg38/bed/multiz7way/4d
+    # remove the broken empty files, size 0 and size 1:
+    find ./mfa -type f -size 0 | xargs rm -f
+    # most interesting, this did not identify files of size 1:
+#    find ./mfa -type f -size 1
+    find ./mfa -type f | xargs ls -og | awk '$3 == 1' | awk '{print $NF}' \
+        > empty.list
+    cat empty.list | xargs rm -f
+    #want comma-less species.list
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ../species.list`" mfa/*/*.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # check they are all in there:
+    grep "^>" 4d.all.mfa
+    #    >hg38
+    #    >panTro4
+    #    >rheMac3
+    #    >mm10
+    #    >rn5
+    #    >canFam3
+    #    >monDom5
+
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	../hg38.7way.nh | xargs echo | sed -e 's/ //g' > tree_commas.nh
+    # tree_commas.nh looks like:
+    #   (((((hg38,panTro4),rheMac3),(mm10,rn5)),canFam3),monDom5)
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time nice -n +19 \
+	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree tree_commas.nh 4d.all.mfa
+    #   real    0m6.583s
+
+
+    mv phyloFit.mod all.mod
+
+    grep TREE all.mod
+# TREE: (((((hg38:0.00673596,panTro4:0.00686169):0.0248146,rheMac3:0.0357598):0.0970072,(mm10:0.081661,rn5:0.0874126):0.246527):0.0264964,canFam3:0.156769):0.303241,monDom5:0.303241);
+
+#########################################################################

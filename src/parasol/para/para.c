@@ -1,6 +1,6 @@
 /* para - para - manage a batch of jobs in parallel on a compute cluster.. */
 #include "paraCommon.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "linefile.h"
 #include "options.h"
 #include "hash.h"

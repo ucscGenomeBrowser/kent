@@ -6,7 +6,7 @@
 #include "dnaseq.h"
 #include "genoFind.h"
 #include "gfInternal.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "nib.h"
 #include "twoBit.h"
 

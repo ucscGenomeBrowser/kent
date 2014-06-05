@@ -10,27 +10,10 @@
 #include "rainbow.h"
 #include "math.h"
 
-/* Dimensions of a image parts */
-int tukWidth = 11;
-int tukHeight = 400;
-int tukPad = 2;
-int margin = 50;
-
-/* Dimensions of image overall and our portion within it. */
-int imageWidth, imageHeight, innerWidth, innerHeight, innerXoff, innerYoff;
-
-void setImageDims(int expCount)
-/* Set up image according to count */
-{
-innerHeight = tukHeight + 2*tukPad;
-innerWidth = tukPad + expCount*(tukPad + tukWidth);
-imageWidth = innerWidth + 2*margin;
-imageHeight = innerHeight + 2*margin;
-innerXoff = margin;
-innerYoff = margin;
-}
-
-
+boolean sortVal = FALSE;
+int barWidth = 13;
+int graphHeight = 400;
+int margin = 1;
 
 void usage()
 /* Explain usage and exit. */
@@ -38,16 +21,43 @@ void usage()
 errAbort(
   "tryGtexBoxPlot - Test program to make box plots for GTEx\n"
   "usage:\n"
-  "   tryGtexBoxPlot input.txt output.png\n"
+  "   tryGtexBoxPlot style geneNumber output.png\n"
+  "Where style is either 'Tukay' or 'Bar' or 'barDown' and geneNumber is between 0 and 20000\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -sortVal - if TRUE sort values first\n"
+  "   -barWidth=N - set width of bar in pixels, default %d\n"
+  "   -height=N - set height of graph in pixels, default %d\n"
+  "   -margin=N - blank margin area around graph, default %d\n"
+  , barWidth, graphHeight, margin
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"sortVal", OPTION_BOOLEAN},
+   {"barWidth", OPTION_INT},
+   {"height", OPTION_INT},
+   {"margin", OPTION_INT},
    {NULL, 0},
 };
+
+
+/* Dimensions of a image parts */
+int tukPad = 2;
+
+/* Dimensions of image overall and our portion within it. */
+int imageWidth, imageHeight, innerWidth, innerHeight, innerXoff, innerYoff;
+
+void setImageDims(int expCount)
+/* Set up image according to count */
+{
+innerHeight = graphHeight + 2*tukPad;
+innerWidth = tukPad + expCount*(tukPad + barWidth);
+imageWidth = innerWidth + 2*margin;
+imageHeight = innerHeight + 2*margin;
+innerXoff = margin;
+innerYoff = margin;
+}
 
 float maxFloat(int count, float *array)
 /* Return max value in array */
@@ -95,6 +105,7 @@ struct sampleVals
     struct sampleVals *next;
     int size;	   /* # of values. */
     double *vals;  /* Sample values, alloced to be size big */
+    double q1,q3,median, minVal, maxVal;   /* Stats we gather */
     };
 
 double sampleValsMean(struct sampleVals *sv)
@@ -107,6 +118,13 @@ for (i=0; i<size; ++i)
     sum += vals[i];
 return sum/size;
 }
+
+void svCalcStats(struct sampleVals *sv)
+/* Fill in stats portion of sv. */
+{
+doubleBoxWhiskerCalc(sv->size, sv->vals, &sv->minVal, &sv->q1, &sv->median, &sv->q3, &sv->maxVal);
+}
+
 
 struct sampleVals *randomAround(double mean, double radius, int count)
 /* Make count sample vals around given mean with offset no further than radius */
@@ -122,9 +140,13 @@ for (i=0; i<count; ++i)
    if (i&1)
        r = -r;
    double x = mean + r;
+   if ((rand() & 0x3f) == 0)
+        x += 10*r;
+       
    if (x < 0) x = 0;
    vals[i] = x;
    }
+svCalcStats(sv);
 return sv;
 }
 
@@ -191,54 +213,98 @@ for (sv = svList; sv != NULL; sv = sv->next)
 return val;
 }
 
+void svBar(struct hvGfx *hvg, int fillColorIx, int lineColorIx, int x, int y, 
+    struct sampleVals *sv, double maxExp)
+/* Draw a bar graph bar up to median value. */
+{
+int yMedian = valToY(sv->median, maxExp, graphHeight) + y;
+int yZero = valToY(0, maxExp, graphHeight) + y;
+drawOutlinedBox(hvg, x, yMedian, barWidth, yZero - yMedian, 
+	fillColorIx, lineColorIx);
+}
+
+void svBarDown(struct hvGfx *hvg, int fillColorIx, int lineColorIx, int x, int y, 
+    struct sampleVals *sv, double maxExp)
+/* Draw a bar graph bar up to median value. */
+{
+double scaled = sv->median/maxExp;
+int yMedian = scaled * (graphHeight-1);
+drawOutlinedBox(hvg, x, y, barWidth, yMedian, 
+	fillColorIx, lineColorIx);
+}
+
+int svCmpMedianRev(const void *va, const void *vb)
+/* Compare two slNames, ignore case. Big medians end up first*/
+{
+const struct sampleVals *a = *((struct sampleVals **)va);
+const struct sampleVals *b = *((struct sampleVals **)vb);
+double diff = b->median - a->median;
+if (diff < 0)
+    return -1;
+else if (diff > 0)
+    return 1;
+else
+    return 0;
+}
+
+
 void svTukay(struct hvGfx *hvg, int fillColorIx, int lineColorIx, int x, int y, 
     struct sampleVals *sv, double maxExp)
 /* Draw a Tukey-type box plot */
 {
 int medianColorIx = lineColorIx;
 int whiskColorIx = lineColorIx;
-double q1 = 0,q3 = 0,median = 0, minVal, maxVal;
-doubleBoxWhiskerCalc(sv->size, sv->vals, &minVal, &q1, &median, &q3, &maxVal);
-double xCen = x + tukWidth/2;
-uglyf("N %d\tq1 %g\tmedian %g\tq3 %g\tsamples %d\n", sv->size, q1, median, q3, sv->size);
+double xCen = x + barWidth/2;
 if (sv->size > 1)
     {
-    int yQ1 = valToY(q1, maxExp, tukHeight) + y;
-    int yQ3 = valToY(q3, maxExp, tukHeight) + y;
-    int yMedian = valToY(median, maxExp, tukHeight);
+    /* Cache a few fields from sv in local variables */
+    double q1 = sv->q1, q3 = sv->q3,  median = sv->median;
+
+    /* Figure out position of first quarter, median, and third quarter in screen Y coordinates */
+    int yQ1 = valToY(q1, maxExp, graphHeight) + y;
+    int yQ3 = valToY(q3, maxExp, graphHeight) + y;
+    int yMedian = valToY(median, maxExp, graphHeight);
+
+    /* Draw a filled box that covers the middle two quarters */
+    int qHeight = yQ1 - yQ3 + 1;
+    drawOutlinedBox(hvg, x,  yQ3, barWidth, qHeight, fillColorIx, lineColorIx);
+    
+    /* Figure out whiskers as 1.5x distance from median to nearest quarter */
     double iq3 = q3 - median;
     double iq1 = median - q1;
-    int qHeight = yQ1 - yQ3 + 1;
-    drawOutlinedBox(hvg, x,  yQ3, tukWidth, qHeight, fillColorIx, lineColorIx);
-#ifdef SOON
-#endif /* SOON */
     double whisk1 = q1 - 1.5 * iq1;
     double whisk2 = q3 + 1.5 * iq3;
-    if (whisk1 < minVal)
-        whisk1 = minVal;
-    if (whisk2 > maxVal)
-        whisk2 = maxVal;
-    int yWhisk1 = valToY(whisk1, maxExp, tukHeight) + y;
-    int yWhisk2 = valToY(whisk2, maxExp, tukHeight) + y;
+
+    /* If whiskers extend past min or max point, clip them */
+    if (whisk1 < sv->minVal)
+        whisk1 = sv->minVal;
+    if (whisk2 > sv->maxVal)
+        whisk2 = sv->maxVal;
+
+    /* Convert whiskers to screen coordinates and do some sanity checks */
+    int yWhisk1 = valToY(whisk1, maxExp, graphHeight) + y;
+    int yWhisk2 = valToY(whisk2, maxExp, graphHeight) + y;
     assert(yQ1 <= yWhisk1);
     assert(yQ3 >= yWhisk2);
+
+    /* Draw horizontal lines of whiskers and median */
+    hvGfxBox(hvg, x, yWhisk1, barWidth, 1, whiskColorIx);
+    hvGfxBox(hvg, x, yWhisk2, barWidth, 1, whiskColorIx);
+
+    /* Draw median, 2 thick */
+    hvGfxBox(hvg, x, y + yMedian-1, barWidth, 2, medianColorIx);
+
+    /* Draw lines from mid quarters to whiskers */
     hvGfxBox(hvg, xCen, yWhisk2, 1, yQ3 - yWhisk2, whiskColorIx);
     hvGfxBox(hvg, xCen, yQ1, 1, yWhisk1 - yQ1, whiskColorIx);
-#ifdef SOON
-#endif /* SOON */
-    hvGfxBox(hvg, x, yWhisk1, tukWidth, 1, whiskColorIx);
-    hvGfxBox(hvg, x, yWhisk2, tukWidth, 1, whiskColorIx);
 
-#ifdef OLD_BAR_GRAPH
-    drawOutlinedBox(hvg, x, y + tukHeight - expHeight, tukWidth, expHeight, 
-	    fillColorIx, lineColorIx);
-#endif /* OLD_BAR_GRAPH */
-    hvGfxBox(hvg, x, y + yMedian, tukWidth, 1, medianColorIx);
-    drawPointSmear(hvg, xCen, y, tukHeight, sv, maxExp, lineColorIx, whisk1, whisk2);
+    /* Draw any outliers outside of whiskers */
+    drawPointSmear(hvg, xCen, y, graphHeight, sv, maxExp, lineColorIx, whisk1, whisk2);
     }
 }
 
-void plotVals(struct hvGfx *hvg, int xOff, int yOff, struct sampleVals *svList, double maxExp)
+void plotVals(struct hvGfx *hvg, int xOff, int yOff, char *style,
+    struct sampleVals *svList, double maxExp)
 /* Plot rainbow bar graphs */
 {
 int x=xOff, y=yOff;
@@ -253,23 +319,45 @@ for (i=0; i<expCount; ++i, sv = sv->next)
     double colPos = invExpCount * i;
     struct rgbColor fillColor = saturatedRainbowAtPos(colPos);
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
-    svTukay(hvg, fillColorIx, lineColorIx, x, y, sv, maxExp);
-    x += tukWidth + tukPad;
+    if (sameWord(style, "tukay")) 
+	svTukay(hvg, fillColorIx, lineColorIx, x, y, sv, maxExp);
+    else if (sameWord(style, "bar"))
+	svBar(hvg, fillColorIx, lineColorIx, x, y, sv, maxExp);
+    else if (sameWord(style, "barDown"))
+	svBarDown(hvg, fillColorIx, lineColorIx, x, y, sv, maxExp);
+    else
+        errAbort("Unrecognized style %s", style);
+    x += barWidth + tukPad;
     }
 }
 
-void tryGtexBoxPlot(char *inFile, char *outPng)
+void tryGtexBoxPlot(char *style, char *geneNumberString, char *outPng)
 /* tryGtexBoxPlot - Test program to make box plots for GTEx. */
 {
-/* Get a data row */
+/* Get gene name - either directly or by lookup */
 struct sqlConnection *conn = sqlConnect("hgFixed");
+char *geneName = geneNumberString;
+if (!endsWith(geneName, "_at"))
+    {
+    int geneNumber = sqlUnsigned(geneNumberString);
+    /* Convert gene number to gene name */
+    char query[512];
+    sqlSafef(query, sizeof(query), "select name from gnfHumanAtlas2Median limit 1 offset %d", 
+	geneNumber);
+    uglyf("query %s\n", query);
+    geneName = sqlQuickString(conn, query);
+    uglyf("GeneNumber %d, geneName %s\n", geneNumber, geneName);
+    }
+
+
+/* Get a data row */
 int expCount = 0;
 float *expVals = NULL;
-if (!hgExpLoadVals(NULL, conn, NULL, "1007_s_at", "gnfHumanAtlas2Median", &expCount, &expVals))
+if (!hgExpLoadVals(NULL, conn, NULL, geneName, "gnfHumanAtlas2Median", &expCount, &expVals))
     errAbort("Can't load data");
 
-if (expCount > 50)
-    expCount = 50;
+if (expCount > 45)
+    expCount = 45;
 setImageDims(expCount);
 
 /* Open graphics and draw boxes for boundaries of total region and drawable. */
@@ -282,16 +370,19 @@ struct sampleVals *svList = NULL, *sv;
 int i;
 for (i=0; i<expCount; ++i)
     {
-    int rCount = rand() % 7 + 2;
+    int rCount = rand() % 8 + 3;
     int rRad = rand() % 2000 + 100;
     sv = randomAround(expVals[i], rRad, rCount);
+    svCalcStats(sv);
     slAddHead(&svList, sv);
     }
 slReverse(&svList);
+if (sortVal)
+    slSort(&svList, svCmpMedianRev);
 
 double maxExp = sampleValsListMax(svList);
 uglyf("Got %d values, max is %g\n", expCount, maxExp);
-plotVals(hvg, innerXoff + tukPad, innerYoff + tukPad, svList, maxExp);
+plotVals(hvg, innerXoff + tukPad, innerYoff + tukPad, style, svList, maxExp);
 
 hvGfxClose(&hvg);
 sqlDisconnect(&conn);
@@ -301,8 +392,12 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
-tryGtexBoxPlot(argv[1], argv[2]);
+sortVal = optionExists("sortVal");
+barWidth = optionInt("barWidth", barWidth);
+graphHeight = optionInt("height", graphHeight);
+margin = optionInt("margin", margin);
+tryGtexBoxPlot(argv[1], argv[2], argv[3]);
 return 0;
 }

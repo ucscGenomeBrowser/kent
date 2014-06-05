@@ -6,6 +6,7 @@ include trackDb.chainNet.primates.ra
 include trackDb.chainNet.euarchontoglires.ra
 include trackDb.chainNet.laurasiatheria.ra
 include trackDb.chainNet.afrotheria.ra
+include trackDb.chainNet.mammal.ra
 include trackDb.chainNet.birds.ra
 include trackDb.chainNet.sarcopterygii.ra
 include trackDb.chainNet.fish.ra
@@ -2751,7 +2752,7 @@ color 255,123,89
 
 searchTable animalQtl
 searchType bed
-termRegex ^[A-Z_0-9-]+:[0-9]+ 
+termRegex ^[a-zA-Z0-9]+([a-zA-Z0-9:/.-]+[a-zA-Z0-9:/.-_%]+)*
 searchMethod fuzzy
 searchPriority 50
 

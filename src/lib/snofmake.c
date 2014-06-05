@@ -6,7 +6,7 @@
 #include "common.h"
 #include "localmem.h"
 #include "snofmake.h"
-#include "errabort.h"
+#include "errAbort.h"
 
 
 static jmp_buf errRecover;

@@ -11,7 +11,7 @@
 #include "gbIgnore.h"
 #include "hash.h"
 #include "localmem.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "linefile.h"
 
 

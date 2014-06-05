@@ -102,25 +102,12 @@ sqlSafef(query, sizeof(query),
 return sqlQuickNum(conn, query) != 0;
 }
 
-void doEnrichmentsFromSampleBed(struct sqlConnection *conn, 
+void doEnrichmentsFromBed3Sample(struct bed3 *sampleList,
+    struct sqlConnection *conn,
     struct edwFile *ef, struct edwValidFile *vf, 
     struct edwAssembly *assembly, struct target *targetList)
-/* Figure out enrichments from sample bed file. */
+/* Given a bed3 list,  calculate enrichments for targets */
 {
-char *sampleBed = vf->sampleBed;
-if (isEmpty(sampleBed))
-    {
-    warn("No sample bed for %s", ef->edwFileName);
-    return;
-    }
-
-/* Load sample bed, make a range tree to track unique coverage, and get list of all chroms .*/
-struct bed3 *sample, *sampleList = bed3LoadAll(sampleBed);
-if (sampleList == NULL)
-    {
-    warn("Sample bed is empty for %s", ef->edwFileName);
-    return;
-    }
 struct genomeRangeTree *sampleGrt = edwMakeGrtFromBed3List(sampleList);
 struct hashEl *chrom, *chromList = hashElListHash(sampleGrt->hash);
 
@@ -151,6 +138,7 @@ for (target = targetList; target != NULL; target = target->next)
     /* Figure out how much we overlap allowing same bases in genome
      * to part of more than one overlap. */ 
     long long overlapBases = 0;
+    struct bed3 *sample;
     for (sample = sampleList; sample != NULL; sample = sample->next)
         {
 	int overlap = genomeRangeTreeOverlapSize(grt, 
@@ -165,8 +153,41 @@ for (target = targetList; target != NULL; target = target->next)
     edwQaEnrichFree(&enrich);
     }
 genomeRangeTreeFree(&sampleGrt);
-bed3FreeList(&sampleList);
 hashElFreeList(&chromList);
+}
+
+void doEnrichmentsFromSampleBed(struct sqlConnection *conn, 
+    struct edwFile *ef, struct edwValidFile *vf, 
+    struct edwAssembly *assembly, struct target *targetList)
+/* Figure out enrichments from sample bed file. */
+{
+char *sampleBed = vf->sampleBed;
+if (isEmpty(sampleBed))
+    {
+    warn("No sample bed for %s", ef->edwFileName);
+    return;
+    }
+/* Load sample bed, make a range tree to track unique coverage, and get list of all chroms .*/
+struct bed3 *sampleList = bed3LoadAll(sampleBed);
+if (sampleList == NULL)
+    {
+    warn("Sample bed is empty for %s", ef->edwFileName);
+    return;
+    }
+doEnrichmentsFromBed3Sample(sampleList, conn, ef, vf, assembly, targetList);
+bed3FreeList(&sampleList);
+}
+
+void doEnrichmentsFromBed(struct sqlConnection *conn,
+    struct edwFile *ef, struct edwValidFile *vf, 
+    struct edwAssembly *assembly, struct target *targetList)
+/* Figure out enrichments from a bed file. */
+{
+char *bedPath = edwPathForFileId(conn, ef->id);
+struct bed3 *sampleList = bed3LoadAll(bedPath);
+doEnrichmentsFromBed3Sample(sampleList, conn, ef, vf, assembly, targetList);
+bed3FreeList(&sampleList);
+freez(&bedPath);
 }
 
 void doEnrichmentsFromBigBed(struct sqlConnection *conn, 
@@ -457,6 +478,8 @@ if (!isEmpty(vf->enrichedIn) && !sameWord(vf->ucscDb, "unknown")
 	    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
 	else if (sameString(format, "bigWig"))
 	    doEnrichmentsFromBigWig(conn, ef, vf, assembly, targetList);
+	else if (startsWith("bed_", format))
+	    doEnrichmentsFromBed(conn, ef, vf, assembly, targetList);
 	else if (edwIsSupportedBigBedFormat(format))
 	    doEnrichmentsFromBigBed(conn, ef, vf, assembly, targetList);
 	else if (sameString(format, "gtf"))
