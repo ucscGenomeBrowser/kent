@@ -1432,14 +1432,14 @@ var dragReorder = {
 
     dragHandleMouseOver: function ()
     {   // Highlights a single row when mouse over a dragHandle column (sideLabel and buttons)
-        if ( ! jQuery.tableDnD ) {
+        if ( typeof(jQuery.tableDnD) === 'undefined' ) {
             //var handle = $("td.dragHandle");
             //$(handle)
             //    .unbind('mouseenter')//, jQuery.tableDnD.mousemove);
             //    .unbind('mouseleave');//, jQuery.tableDnD.mouseup);
             return;
         }
-        if ( ! jQuery.tableDnD.dragObject ) {
+        if ( jQuery.tableDnD.dragObject === null ) {
             $( this ).parents("tr.trDraggable").addClass("trDrag");
         }
     },
@@ -1451,12 +1451,12 @@ var dragReorder = {
 
     buttonMouseOver: function ()
     {   // Highlights a composite set of buttons, regarless of whether tracks are adjacent
-        if ( ! jQuery.tableDnD || ! jQuery.tableDnD.dragObject ) {
+        if ( typeof(jQuery.tableDnD) === 'undefined' || jQuery.tableDnD.dragObject === null ) {
             var classList = $( this ).attr("class").split(" ");
             var btns = $( "p." + classList[0] );
             $( btns ).removeClass('btnGrey');
             $( btns ).addClass('btnBlue');
-            if (jQuery.tableDnD) {
+            if (typeof(jQuery.tableDnD) !== 'undefined') {
                 var rows = dragReorder.getContiguousRowSet($(this).parents('tr.trDraggable')[0]);
                 if (rows)
                     $( rows ).addClass("trDrag");
@@ -1470,7 +1470,7 @@ var dragReorder = {
         var btns = $( "p." + classList[0] );
         $( btns ).removeClass('btnBlue');
         $( btns ).addClass('btnGrey');
-        if (jQuery.tableDnD) {
+        if (typeof(jQuery.tableDnD) !== 'undefined') {
             var rows = dragReorder.getContiguousRowSet($(this).parents('tr.trDraggable')[0]);
             if (rows)
             $( rows ).removeClass("trDrag");
@@ -1912,7 +1912,7 @@ var rightClick = {
     makeMapItem: function (id)
     {   // Create a dummy mapItem on the fly
         // (for objects that don't have corresponding entry in the map).
-        if (id && id.length > 0 && hgTracks.trackDb) {
+        if (id && id.length > 0 && typeof(hgTracks.trackDb) !== 'undefined') {
             var title;
             var rec = hgTracks.trackDb[id];
             if (rec) {

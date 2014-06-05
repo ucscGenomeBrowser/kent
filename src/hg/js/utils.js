@@ -158,8 +158,8 @@ function makeHiddenInput(theForm,aName,aValue)
 
 function updateOrMakeNamedVariable(theForm,aName,aValue)
 {   // Store a value to a named input.  Will make the input if necessary
-    var inp = $(theForm).find("input[name='"+aName+"']:last");
-    if (inp && inp.length > 0) {
+    var inp = normed($(theForm).find("input[name='"+aName+"']:last"));
+    if (inp) {
         inp.val(aValue);
         inp.disabled = false;
     } else
@@ -168,8 +168,8 @@ function updateOrMakeNamedVariable(theForm,aName,aValue)
 
 function disableNamedVariable(theForm,aName)
 {   // Store a value to a named input.  Will make the input if necessary
-    var inp = $(theForm).find("input[name='"+aName+"']:last");
-    if (inp && inp.length > 0)
+    var inp = normed($(theForm).find("input[name='"+aName+"']:last"));
+    if (inp)
         inp.disabled = true;
 }
 
@@ -303,7 +303,7 @@ function validateInt(obj,min,max)
         title = "Value";
     var popup=( $.browser.msie === false );
     for (;;) {
-        if ((!obj.value || obj.value === "") 
+        if ((typeof(obj.value) === 'undefined' || obj.value === "") 
         &&  isInteger(obj.defaultValue))
             obj.value = obj.defaultValue;
         if (!isInteger(obj.value)) {
@@ -370,7 +370,7 @@ function validateFloat(obj,min,max)
         title = "Value";
     var popup=( $.browser.msie === false );
     for (;;) {
-        if ((!obj.value || obj.value === "") 
+        if ((typeof(obj.value) === 'undefined' || obj.value === "") 
         &&  isFloat(obj.defaultValue))
             obj.value = obj.defaultValue;
         if (!isFloat(obj.value)) {
@@ -443,8 +443,8 @@ function validateUrl(url)
 
 function metadataIsVisible(trackName)
 {
-    var divit = $("#div_"+trackName+"_meta");
-    if (!divit || divit.length === 0)
+    var divit = normed($("#div_"+trackName+"_meta"));
+    if (!divit)
         return false;
     return ($(divit).css('display') !== 'none');
 }
@@ -453,12 +453,11 @@ function metadataShowHide(trackName,showLonglabel,showShortLabel)
 {
 // Will show subtrack specific configuration controls
 // Config controls not matching name will be hidden
-    var divit = $("#div_"+trackName+"_meta");
-    if (!divit || divit.length === 0)
+    var divit = normed($("#div_"+trackName+"_meta"));
+    if (!divit)
         return false;
-    var img = $(divit).prev('a').find("img");
-    if (img && $(img).length === 1) {
-        img = $(img)[0];
+    var img = normed($(divit).prev('a').find("img"));
+    if (img) {
         if ($(divit).css('display') === 'none')
             $(img).attr('src','../images/upBlue.png');
         else
@@ -500,8 +499,8 @@ function setTableRowVisibility(button, prefix, hiddenPrefix, titleDesc, doAjax)
 // This code also modifies the corresponding hidden field (cart variable) and the
 // src of the +/- img button.
     var retval = true;
-    var hidden = $("input[name='"+hiddenPrefix+"_"+prefix+"_close']");
-    if (button && hidden && $(hidden).length > 0) {
+    var hidden = normed($("input[name='"+hiddenPrefix+"_"+prefix+"_close']"));
+    if (button && hidden) {
 	var newVal = -1;
         if (arguments.length > 5)
             newVal = arguments[5] ? 0 : 1;
@@ -577,12 +576,12 @@ function warnBoxJsSetup()
 
 function warn(msg)
 { // adds warnings to the warnBox
-    var warnList = $('#warnList'); // warnBox contains warnList
-    if (!warnList || $(warnList).length === 0) {
+    var warnList = normed($('#warnList')); // warnBox contains warnList
+    if (!warnList) {
         warnBoxJsSetup();
-        warnList = $('#warnList');
+        warnList = normed($('#warnList'));
     }
-    if ($(warnList).length === 0)
+    if (!warnList)
         alert(msg);
     else {
         $( warnList ).append('<li>'+msg+'</li>');
@@ -1030,11 +1029,11 @@ function waitMaskSetup(timeOutInMs)
 { // Sets up the waitMask to block page manipulation until cleared
 
     // Find or create the waitMask (which masks the whole page)
-    var  waitMask = $('#waitMask');
-    if (!waitMask || waitMask.length !== 1) {
+    var  waitMask = normed($('#waitMask'));
+    if (!waitMask) {
         // create the waitMask
         $("body").append("<div id='waitMask' class='waitMask');'></div>");
-        waitMask = $('#waitMask');
+        waitMask = normed($('#waitMask'));
     }
     $(waitMask).css({opacity:0.0,display:'block',top: '0px', 
                         height: $(document).height().toString() + 'px' });
@@ -1066,7 +1065,7 @@ function _launchWaitOnFunction()
         func.apply(this, funcArgs);
 
     // Special if the first var is a button that can visually be inset
-    if (funcArgs.length > 0 && funcArgs[0].type) {
+    if (funcArgs.length > 0 && typeof(funcArgs[0].type) !== 'undefined') {
         if (funcArgs[0].type === 'button' && $(funcArgs[0]).hasClass('inOutButton')) {
             $(funcArgs[0]).css('borderStyle',"outset");
         }
@@ -1092,7 +1091,7 @@ function waitOnFunction(func)
     waitMaskSetup(0);  // Find or create waitMask (which masks whole page) but gives up after 5sec
 
     // Special if the first var is a button that can visually be inset
-    if (arguments.length > 1 && arguments[1].type) {
+    if (arguments.length > 1 && typeof(arguments[1].type) !== 'undefined') {
         if (arguments[1].type === 'button' && $(arguments[1]).hasClass('inOutButton')) {
             $(arguments[1]).css( 'borderStyle',"inset");
         }
@@ -1781,7 +1780,7 @@ var sortTable = {
                     }
                 }
                 if (sortIx >= 0) {
-                    if (this.id && this.id.length > 0)
+                    if (typeof(this.id) !== 'undefined' && this.id.length > 0)
                         fields[sortIx] = this.id + "=" + (reverse ? "-":"+");
                     else
                         fields[sortIx] = this.cellIndex + "=" + (reverse ? "-":"+");
@@ -2062,7 +2061,7 @@ var sortTable = {
         }
         // Can wrap all columnn headers with link
         $(tr).find("th.sortable").each(function (ix) {
-            if ( ! $(this).attr('onclick') ) {
+            if ( typeof($(this).attr('onclick')) === 'undefined') {
                 $(this).click( function () { sortTable.sortOnButtonPress(this);} );
             }
             if ($.browser.msie) { // Special case for IE since CSS :hover doesn't work
@@ -2289,10 +2288,10 @@ var findTracks = {
         var hiddenVis = $("input[name='"+trackName+"']");
         var tr = $(selCb).parents('tr.found');
         var tdb = tdbGetJsonRecord(trackName);
-        var needSel = (tdb.parentTrack !== undefined && tdb.parentTrack !== null);
+        var needSel = (typeof(tdb.parentTrack) === 'string' && tdb.parentTrack !== '');
         var shouldPack = tdb.canPack && tdb.kindOfParent === 0; // If parent then not pack but full
         if (shouldPack
-        && tdb.shouldPack !== undefined && tdb.shouldPack !== null && !tdb.shouldPack)
+        &&  typeof(tdb.shouldPack) !== 'undefined' && tdb.shouldPack !== null && !tdb.shouldPack)
             shouldPack = false;
         var checked = $(selCb).attr('checked');
 
