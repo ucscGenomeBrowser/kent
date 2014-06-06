@@ -3624,7 +3624,23 @@ done | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
     # construct a common name .nh file:
     /cluster/bin/phast/tree_doctor --rename \
     "`cat db.to.name.txt`" hg38.7way.nh | sed -e 's/00*)/)/g; s/00*,/,/g' \
-        > hg38.7way.commonNames.nh
+       | $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+         > hg38.7way.commonNames.nh
+
+    $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl hg38.7way.nh > t.nh
+    $HOME/kent/src/hg/utils/phyloTrees/scientificNames.sh t.nh \
+       | $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+          > hg38.7way.scientificNames.nh
+    rm -f t.nh
+    cat hg38.7way.scientificNames.nh
+# (((((Homo_sapiens:0.00655,
+#     Pan_troglodytes:0.00684):0.027424,
+#    Macaca_mulatta:0.037601):0.109934,
+#   (Mus_musculus:0.084509,
+#   Rattus_norvegicus:0.091589):0.271974):0.020593,
+#  Canis_lupus_familiaris:0.165928):0.258392,
+# Monodelphis_domestica:0.340786);
+
     ~/kent/src/hg/utils/phyloTrees/asciiTree.pl hg38.7way.commonNames.nh
 # (((((Human:0.00655,
 #     Chimp:0.00684):0.027424,
@@ -4778,7 +4794,7 @@ do
         | gzip -c > upstream${S}.${geneTbl}.maf.gz
     echo "done upstream${S}.${geneTbl}.maf.gz"
 done
-    #   real    0m36.527s
+    #   real    60m16.631s
 
     md5sum upstream*.gz >> md5sum.txt
 
