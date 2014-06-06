@@ -99,6 +99,7 @@ eleEdw1 -> Cape_elephant_shrew ;
 oryAfe1 -> Aardvark ;
 chrAsi1 -> Cape_golden_mole ;
 orcOrc1 -> Killer_whale ;
+phyCat1 -> Sperm_whale ;
 balAcu1 -> Minke_whale ;
 proCap1 -> Rock_hyrax ;
 echTel1 -> Tenrec ;

@@ -1,3 +1,6 @@
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* snpClassAndObserved -- new seventh step
  * Hash the UniVariation table, storing subsnp_class and var_str.
  * subsnp_class is a number from 0-8.

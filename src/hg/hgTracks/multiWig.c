@@ -1,5 +1,8 @@
 /* A container for multiple wiggles with a couple of options for combining them. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"
@@ -306,7 +309,7 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	if (pre != NULL)  // pre maybe null if the load fails
 	    {
 	    preDrawWindowFunction(pre->preDraw, pre->preDrawSize, wigCart->windowingFunction,
-		    wigCart->transformFunc);
+		    wigCart->transformFunc, wigCart->doNegative);
 	    preDrawSmoothing(pre->preDraw, pre->preDrawSize, wigCart->smoothingWindow);
 	    pre->smoothingDone = TRUE;
 	    refAdd(&refList, pre);

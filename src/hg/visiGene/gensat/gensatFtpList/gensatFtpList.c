@@ -1,5 +1,8 @@
 /* gensatFtpList - Given CHECKSUM.MD5 file with the file names munged, 
  * convert to names can actually download from ftp.ncbi.nlm.gov/pub/gensat. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

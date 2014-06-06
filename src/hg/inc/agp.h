@@ -1,5 +1,8 @@
 /* Process an AGP file */
 
+/* Copyright (C) 2005 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 struct agp {
     /* represents a line of an AGP file -- either a fragment or a gap */
     struct agp *next;

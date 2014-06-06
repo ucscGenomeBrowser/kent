@@ -1,8 +1,11 @@
 /* annoGratorQuery -- framework for integrating genomic annotations from many sources */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "annoGratorQuery.h"
 #include "dystring.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "obscure.h"
 
 struct annoGratorQuery

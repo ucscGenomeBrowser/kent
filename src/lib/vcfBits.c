@@ -6,9 +6,12 @@
  * bit maps from variant bit maps.  There is one haplotype bit map for each haplotype
  * (subject chromosome) with one (or two) bits for each variant location in the set of records. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "dnautil.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include <limits.h>
 #include "localmem.h"
 #include "net.h"

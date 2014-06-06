@@ -1,3 +1,6 @@
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifdef USE_HAL
 /* snakeTrack - stuff to load and display snake type tracks in browser.  */
 
@@ -1089,7 +1092,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	// now draw the lines between blocks
 	if ((!((lastX == sx) && (y1 == y2))) &&
 	    (sf->drawn  || ((prevSf != NULL) && (prevSf->drawn))) &&
-	    (((lastE > winStart) && (lastE < winEnd)) || 
+	    (((lastE >= winStart) && (lastE <= winEnd)) || 
 	    ((s > winStart) && (s < winEnd))))
 	    {
 	    if (lastLevel == sf->level)

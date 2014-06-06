@@ -2,6 +2,9 @@
  * generated rnaGroup.c and rnaGroup.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2002 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef RNAGROUP_H
 #define RNAGROUP_H
 

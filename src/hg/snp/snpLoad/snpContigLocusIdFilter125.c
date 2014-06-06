@@ -2,6 +2,9 @@
  * Filter the ContigLocusId table to remove contigs that aren't the reference assembly.
    Save only the fxn_class column. 
    Create the ContigLocusIdFilter table. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 
 #include "hash.h"

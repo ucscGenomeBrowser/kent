@@ -1,5 +1,8 @@
 /* bio.h - routines to fetch https url using openssl */
 
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef BIO_H
 #define BIO_H
 

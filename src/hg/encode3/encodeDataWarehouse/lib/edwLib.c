@@ -1,11 +1,14 @@
 /* edwLib - routines shared by various encodeDataWarehouse programs.    See also encodeDataWarehouse
  * module for tables and routines to access structs built on tables. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hex.h"
 #include "dystring.h"
 #include "jksql.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "openssl/sha.h"
 #include "base64.h"
 #include "basicBed.h"
@@ -19,6 +22,7 @@
 #include "bamFile.h"
 #include "raToStruct.h"
 #include "web.h"
+#include "encode3/encode3Valid.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 #include "edwFastqFileFromRa.h"
@@ -777,11 +781,13 @@ return grt;
 boolean edwIsSupportedBigBedFormat(char *format)
 /* Return TRUE if it's one of the bigBed formats we support. */
 {
-return sameString(format, "broadPeak") || sameString(format, "narrowPeak") || 
-	 sameString(format, "bedLogR") || sameString(format, "bigBed") ||
-	 sameString(format, "bedRnaElements") || sameString(format, "bedRrbs") ||
-	 sameString(format, "openChromCombinedPeaks") || sameString(format, "peptideMapping") ||
-	 sameString(format, "shortFrags");
+int i;
+for (i=0; i<encode3BedTypeCount; ++i)
+    {
+    if (sameString(format, encode3BedTypeTable[i].name))
+        return TRUE;
+    }
+return FALSE;
 }
 
 void edwWriteErrToTable(struct sqlConnection *conn, char *table, int id, char *err)
@@ -1264,6 +1270,13 @@ safef(indexPath, PATH_LEN, "%s%s/bwaData/%s.fa",
     edwValDataDir, assembly->ucscDb, assembly->ucscDb);
 }
 
+void edwAsPath(char *format, char path[PATH_LEN])
+/* Convert something like "narrowPeak" in format to fill path involving
+ * encValDir/as/narrowPeak.as */
+{
+safef(path, PATH_LEN, "%sas/%s.as", edwValDataDir, format);
+}
+
 void edwAlignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,
     char *fastqPath, struct edwValidFile *vf, FILE *bedF,
     double *retMapRatio,  double *retDepth,  double *retSampleCoverage, 
@@ -1635,11 +1648,11 @@ void edwWebAutoRefresh(int msec)
 if (msec > 0)
     {
     // set timeout to refresh page (saving/restoring scroll position via cookie)
-    printf("<script>var edwRefresh = setTimeout(function() { $.cookie('edwWeb.scrollTop', $(window).scrollTop()); $('form').submit(); }, %d);</script>", msec);
-    puts("<script>$(document).ready(function() {$(document).scrollTop($.cookie('edwWeb.scrollTop'))});</script>");
+    printf("<script type='text/javascript'>var edwRefresh = setTimeout(function() { $.cookie('edwWeb.scrollTop', $(window).scrollTop()); $('form').submit(); }, %d);</script>", msec);
+    puts("<script type='text/javascript'>$(document).ready(function() {$(document).scrollTop($.cookie('edwWeb.scrollTop'))});</script>");
 
     // disable autorefresh when user is changing page settings
-    puts("<script>$('form').click(function() {clearTimeout(edwRefresh); $.cookie('edwWeb.scrollTop', null);});</script>");
+    puts("<script type='text/javascript'>$('form').click(function() {clearTimeout(edwRefresh); $.cookie('edwWeb.scrollTop', null);});</script>");
     }
 else if (msec == 0)
     puts("clearTimeout(edwRefresh);</script>");
@@ -1669,13 +1682,12 @@ puts("</div></div></div>");
 void edwWebBrowseMenuItem(boolean on)
 /* Toggle visibility of 'Browse submissions' link on navigation menu */
 {
-printf("<script>$('#edw-browse').%s();</script>", on ? "show" : "hide");
+printf("<script type='text/javascript'>$('#edw-browse').%s();</script>", on ? "show" : "hide");
 }
 
 void edwWebSubmitMenuItem(boolean on)
 /* Toggle visibility of 'Submit data' link on navigation menu */
 {
-printf("<script>$('#edw-submit').%s();</script>", on ? "show" : "hide");
+printf("<script type='text/javascript'>$('#edw-submit').%s();</script>", on ? "show" : "hide");
 }
-
 

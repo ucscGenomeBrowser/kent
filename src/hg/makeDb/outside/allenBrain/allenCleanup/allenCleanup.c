@@ -1,3 +1,6 @@
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* allenCleanup - Clean up the .tab file and image files before running allenCollectSeq and vgLoadAllen 
  *    Each image must exist, must have tiles, must have a unique gene-name (up to the first "_"),
  *    and must have a unique refseq value.  I could have also checked the prboe sequences,

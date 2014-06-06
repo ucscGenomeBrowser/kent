@@ -2,6 +2,9 @@
  * generated rnaGenes.c and rnaGenes.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2004 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef RNAGENES_H
 #define RNAGENES_H
 

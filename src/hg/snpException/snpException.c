@@ -1,6 +1,9 @@
 /* snpException.c - Get exceptions to snp invariant rules */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "linefile.h"
 #include "obscure.h"
 #include "dystring.h"

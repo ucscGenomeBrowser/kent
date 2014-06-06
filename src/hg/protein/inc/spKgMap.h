@@ -1,4 +1,7 @@
 /* spKgMap - map swissprot accs to known gene ids */
+
+/* Copyright (C) 2005 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef SPKGMAP_H
 #define SPKGMAP_H
 #include "common.h"

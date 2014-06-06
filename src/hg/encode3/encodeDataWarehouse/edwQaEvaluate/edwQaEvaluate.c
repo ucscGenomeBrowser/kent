@@ -1,11 +1,14 @@
 /* edwQaEvaluate - Consider available evidence and set edwValidFile.*QaStatus. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
 #include "dystring.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 

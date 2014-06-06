@@ -1,6 +1,9 @@
 /* eapRunAddJson - Add json string to eapRun record.. */
 /* THIS MODULE IS OBSOLETE AND IS JUST HERE TO BE CANNIBALIZED FOR PARTS */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

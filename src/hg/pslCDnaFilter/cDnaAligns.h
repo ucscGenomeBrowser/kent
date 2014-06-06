@@ -1,5 +1,8 @@
 /* cDnaAligns - Objects to read and score sets of cDNA alignments. Filtering decissions are
  * not made here*/
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef CDNAALIGNS_H
 #define CDNAALIGNS_H
 

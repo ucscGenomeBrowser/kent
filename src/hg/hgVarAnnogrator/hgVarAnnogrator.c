@@ -1,4 +1,7 @@
 /* hgVarAnnogrator - User interface for variant annotation integrator tool. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "asParse.h"
 #include "linefile.h"
@@ -1528,7 +1531,6 @@ hPrintf("</FORM>\n");
 /* Hidden form for jumping to track hub manager CGI. */
 hPrintf("<FORM ACTION='%s' NAME='trackHubForm'>", hgHubConnectName());
 //#*** well, almost verbatim... we should have an hgThisCgiName().
-cgiMakeHiddenVar(hgHubConnectCgiDestUrl, hgVarAnnogratorName());
 cartSaveSession(cart);
 hPrintf("</FORM>\n");
 //#*** ------------------ end verbatim ---------------

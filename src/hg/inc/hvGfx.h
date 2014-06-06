@@ -1,5 +1,8 @@
  /* hvGfx - browser graphics interface.  This is a thin layer on top of vGfx
  * providing genome browser-specific features.*/
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef BRGFX_H
 #define BRGFX_H
 #include "vGfx.h"

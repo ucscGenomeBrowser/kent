@@ -1,5 +1,8 @@
 /* bamFile -- interface to binary alignment format files using Heng Li's samtools lib. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "portable.h"
 #include "bamFile.h"
@@ -128,8 +131,25 @@ if (fh == NULL || fh->header == NULL)
 return fh;
 }
 
+samfile_t *bamMustOpenLocal(char *fileName, char *mode, void *extraHeader)
+/* Open up sam or bam file or die trying.  The mode parameter is 
+ *    "r" - open SAM to read
+ *    "rb" - open BAM to read
+ *    "w" - open SAM to write
+ *    "wb" - open BAM to write
+ * The extraHeader is generally NULL in the read case, and the write case
+ * contains a pointer to a bam_header_t with information about the header.
+ * The implementation is just a wrapper around samopen from the samtools library
+ * that aborts with error message if there's a problem with the open. */
+{
+samfile_t *sf = samopen(fileName, mode, extraHeader);
+if (sf == NULL)
+    errnoAbort("Couldn't open %s.\n", fileName);
+return sf;
+}
+
 void bamClose(samfile_t **pSamFile)
-/* Close down a samefile_t */
+/* Close down a samfile_t */
 {
 if (pSamFile != NULL)
     {
@@ -614,6 +634,21 @@ samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName)
 /* Return an open bam file */
 {
 warn(COMPILE_WITH_SAMTOOLS, "bamOpen");
+return FALSE;
+}
+
+samfile_t *bamMustOpenLocal(char *fileName, char *mode, void *extraHeader)
+/* Open up sam or bam file or die trying.  The mode parameter is 
+ *    "r" - open SAM to read
+ *    "rb" - open BAM to read
+ *    "w" - open SAM to write
+ *    "wb" - open BAM to write
+ * The extraHeader is generally NULL in the read case, and the write case
+ * contains a pointer to a bam_header_t with information about the header.
+ * The implementation is just a wrapper around samopen from the samtools library
+ * that aborts with error message if there's a problem with the open. */
+{
+warn(COMPILE_WITH_SAMTOOLS, "bamMustOpenLocal");
 return FALSE;
 }
 

@@ -2,6 +2,9 @@
  * Information about a genome assembly that genbank entries are aligned
  * against.
  */
+
+/* Copyright (C) 2003 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef GBGENOME_H
 #define GBGENOME_H
 #include <stdio.h>

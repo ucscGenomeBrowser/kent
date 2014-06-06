@@ -5,6 +5,9 @@
  * initialize Chimera for the specific PDB and SNP set.  This also includes
  * interfacing to LS-SNP/PDB, which is used to label Chimera images.
  */
+
+/* Copyright (C) 2009 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef lsSnpPdbChimera_h
 #define lsSnpPdbChimera_h
 struct sqlConnection;

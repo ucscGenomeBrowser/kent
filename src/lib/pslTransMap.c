@@ -1,5 +1,8 @@
 /* pslTransMap - transitive mapping of an alignment another sequence, via a
  * common alignment */
+
+/* Copyright (C) 2009 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "pslTransMap.h"
 #include "psl.h"

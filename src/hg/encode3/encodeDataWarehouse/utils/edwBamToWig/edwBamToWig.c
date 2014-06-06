@@ -1,4 +1,7 @@
 /* edwBamToWig - Convert a bam file to a wig file by measuring depth of coverage, optionally adjusting hit size to average for library.. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

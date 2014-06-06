@@ -1,6 +1,9 @@
 /* edwWebAuthLogout - A tiny little program to help manage Persona logouts.  Specifically
  * a little CGI that unsets the email cookie. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 
 int main(int argc, char *argv[])

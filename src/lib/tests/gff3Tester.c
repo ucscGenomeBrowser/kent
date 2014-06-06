@@ -1,5 +1,8 @@
 /* gff3Tester - tester for GFF3 objects */
 
+/* Copyright (C) 2009 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "gff3.h"
 

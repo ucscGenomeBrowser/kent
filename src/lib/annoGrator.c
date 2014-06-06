@@ -1,5 +1,8 @@
 /* annoGrator -- join two inputs on position, keeping all original fields intact. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "annoGrator.h"
 
 INLINE void agCheckPrimarySorting(struct annoGrator *self, struct annoRow *primaryRow)

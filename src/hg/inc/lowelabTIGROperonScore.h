@@ -2,6 +2,9 @@
  * generated lowelabTIGROperonScore.c and lowelabTIGROperonScore.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef LOWELABTIGROPERONSCORE_H
 #define LOWELABTIGROPERONSCORE_H
 

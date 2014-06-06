@@ -2,6 +2,9 @@
  * generated hgdpGeo.c and hgdpGeo.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2009 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef HGDPGEO_H
 #define HGDPGEO_H
 

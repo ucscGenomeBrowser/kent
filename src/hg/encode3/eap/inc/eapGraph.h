@@ -1,6 +1,9 @@
 /* eapGraph - stuff to help traverse the graph defined by the eapRun, eapInput, and eapOutput
  * tables that define what files were used to produce what other files */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef EAPGRAPH_H
 #define EAPGRAPH_H
 

@@ -1,4 +1,7 @@
 /* hgLoadAxt - Load an axt file index into the database. */
+
+/* Copyright (C) 2008 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

@@ -1,4 +1,7 @@
 /* encodeSynteny - create HTML files to compare syntenic predictions from liftOver and Mercator */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "regionOrtho.h"
 
 void usage()

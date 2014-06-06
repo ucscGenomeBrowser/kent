@@ -1,5 +1,8 @@
 /* splitMultiMappings - split genes that mapped to multiple locations or have rearranged
  * exons into separate gene objects. */
+
+/* Copyright (C) 2006 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "splitMultiMappings.h"
 #include "orgGenes.h"

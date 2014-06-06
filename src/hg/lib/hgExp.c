@@ -1,5 +1,8 @@
 /* hgExp - help browse expression data. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "jksql.h"
@@ -143,7 +146,7 @@ char expName[64];
 struct sqlResult *sr;
 char **row;
 boolean ok = FALSE;
-if (!sameWord(lookupTable, "null"))
+if (lookupTable != NULL && !sameWord(lookupTable, "null"))
     {
     sqlSafef(query, sizeof(query), "select value from %s where name = '%s'", 
 	  lookupTable, name);

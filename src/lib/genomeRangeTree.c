@@ -7,6 +7,9 @@
  * so it should be able to handle genomes with a very large 
  * number of scaffolds. See rangeTree for more information. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "sig.h"
 #include "localmem.h"
@@ -39,15 +42,19 @@ return genomeRangeTreeNewSize(0);
 void genomeRangeTreeFree(struct genomeRangeTree **pTree)
 /* Free up genomeRangeTree.  */
 {
-/* need to manually free object due to thee way rbTreeNewDetailed is done */
-struct hashCookie hc = hashFirst((*pTree)->hash);
-struct hashEl *hel;
-while ((hel = hashNext(&hc)) != NULL)
-    freeMem(hel->val);
+struct genomeRangeTree *grt = *pTree;
+if (grt != NULL)
+    {
+    /* need to manually free object due to thee way rbTreeNewDetailed is done */
+    struct hashCookie hc = hashFirst(grt->hash);
+    struct hashEl *hel;
+    while ((hel = hashNext(&hc)) != NULL)
+	freeMem(hel->val);
 
-lmCleanup(&((*pTree)->lm));  /* clean up all the memory for all nodes for all trees */
-freeHash(&((*pTree)->hash)); /* free the hash table including names (trees are freed by lmCleanup) */
-freez(pTree);                /* free this */
+    lmCleanup(&(grt->lm));  /* clean up all the memory for all nodes for all trees */
+    freeHash(&(grt->hash)); /* free the hash table including names (trees are freed by lmCleanup) */
+    freez(pTree);                /* free this */
+    }
 }
 
 struct rbTree *genomeRangeTreeFindRangeTree(struct genomeRangeTree *tree, char *chrom)

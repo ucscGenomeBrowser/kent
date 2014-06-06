@@ -3,6 +3,9 @@
 /* Another option is to do it within SQL. */
 /* assume panTro2/rheMac2, or discover it? */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 
 #include "hash.h"

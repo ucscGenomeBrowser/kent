@@ -1,6 +1,9 @@
 /* snpFunction: eighth step in dbSnp processing.
  * Add fxn_class values (can be more than one) to chrN_snpTmp.
  * Create a hash from ContigLocusIdCondense table. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 
 #include "hash.h"

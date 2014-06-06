@@ -1,3 +1,6 @@
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* Stuff to display details on tracks that are clusters of peaks (items) in other tracks. 
  * In particular peaks in either ENCODE narrowPeak or broadPeak settings, and residing in
  * composite tracks. 

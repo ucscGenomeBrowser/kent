@@ -2,13 +2,16 @@
  * one invocation of a cgi script to another (variables
  * that are carted around).  */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef CART_H
 #define CART_H
 
 struct cart;         // forward definition for use in trackDb.h
 
 #include "jksql.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "dystring.h"
 #include "linefile.h"
 #include "trackDb.h"

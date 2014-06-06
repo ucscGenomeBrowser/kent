@@ -2,6 +2,9 @@
  * an output consisting only of peaks that replicate.  Scores are averaged between replicates as 
  * are peak boundaries. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

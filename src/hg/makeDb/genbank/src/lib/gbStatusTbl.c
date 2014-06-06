@@ -1,3 +1,6 @@
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "gbStatusTbl.h"
 #include "gbDefs.h"
 #include "gbEntry.h"
@@ -7,7 +10,7 @@
 #include "hash.h"
 #include "dystring.h"
 #include "localmem.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "jksql.h"
 
 

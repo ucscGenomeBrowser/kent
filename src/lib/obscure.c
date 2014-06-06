@@ -177,6 +177,7 @@ while (lineFileNext(lf, &line, NULL))
      el = newSlName(line);
      slAddHead(&list, el);
      }
+lineFileClose(&lf);
 slReverse(&list);
 return list;
 }

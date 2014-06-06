@@ -3,6 +3,9 @@
     - Overlap with native mRNAs/ESTs via altGraphX track.
     - Intron consensus sites.
 */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hdb.h"
 #include "linefile.h"

@@ -2,6 +2,9 @@
  * generated singleNucDiff.c and singleNucDiff.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2003 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef SINGLENUCDIFF_H
 #define SINGLENUCDIFF_H
 

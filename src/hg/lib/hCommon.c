@@ -1,11 +1,14 @@
 /* hCommon.c - routines used by many files in hgap project. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hCommon.h"
 #include "chromInfo.h"
 #include "portable.h"
 #include "hgConfig.h"
-#include "errabort.h"
+#include "errAbort.h"
 
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */

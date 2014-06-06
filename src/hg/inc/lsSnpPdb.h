@@ -2,6 +2,9 @@
  * generated lsSnpPdb.c and lsSnpPdb.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2008 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef LSSNPPDB_H
 #define LSSNPPDB_H
 

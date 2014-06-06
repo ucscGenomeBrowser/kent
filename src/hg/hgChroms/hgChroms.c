@@ -1,4 +1,7 @@
 /* hgChroms - print chromosomes for a genome. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hdb.h"
 #include "options.h"

@@ -2,6 +2,9 @@
  * generated cnpIafrate2.c and cnpIafrate2.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef CNPIAFRATE2_H
 #define CNPIAFRATE2_H
 

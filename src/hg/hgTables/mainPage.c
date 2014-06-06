@@ -1,5 +1,8 @@
 /* mainPage - stuff to put up the first table browser page. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -998,7 +1001,6 @@ hPrintf("</FORM>\n");
 
 /* Hidden form for jumping to track hub manager CGI. */
 hPrintf("<FORM ACTION='%s' NAME='trackHubForm'>", hgHubConnectName());
-cgiMakeHiddenVar(hgHubConnectCgiDestUrl, "../cgi-bin/hgTables");
 cartSaveSession(cart);
 hPrintf("</FORM>\n");
 

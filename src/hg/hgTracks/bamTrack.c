@@ -1,6 +1,9 @@
 /* bamTrack -- handlers for alignments in BAM format (produced by MAQ,
  * BWA and some other short-read alignment tools). */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifdef USE_BAM
 
 #include "common.h"

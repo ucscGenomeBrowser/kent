@@ -1,5 +1,8 @@
 /* Stuff shared across modules. */
 
+/* Copyright (C) 2008 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 struct linkedBeds
 /* A list of beds that are from the same transcript with
  * possible soft edges between them. */

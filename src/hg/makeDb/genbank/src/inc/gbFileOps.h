@@ -2,6 +2,9 @@
  * Various file operations used by the genbank update code.  Also a bit of a
  * dumping ground for a few other routines.
  */
+
+/* Copyright (C) 2004 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef GBFILEOPS_H
 #define GBFILEOPS_H
 

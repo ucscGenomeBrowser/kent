@@ -1,5 +1,8 @@
 /* gs.c autoXml generated file */
 
+/* Copyright (C) 2005 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "xap.h"
 #include "gs.h"

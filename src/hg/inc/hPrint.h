@@ -1,11 +1,14 @@
 /* hPrint - turning html printing on and off, which is useful
  * when postscript and PDF images are being drawn  */
 
+/* Copyright (C) 2010 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef HPRINT_H
 #define HPRINT_H
 
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "cheapcgi.h"
 
 void hPrintf(char *format, ...)

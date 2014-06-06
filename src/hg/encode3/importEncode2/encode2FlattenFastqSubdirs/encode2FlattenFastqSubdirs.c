@@ -1,6 +1,9 @@
 /* encode2FlattenFastqSubdirs - Look at directory.  Move all files in subdirs to root dir and 
  * destroy subdirs.  Complain and die if any of non-dir files are anything but fastq.. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

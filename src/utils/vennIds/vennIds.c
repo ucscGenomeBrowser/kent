@@ -1,5 +1,8 @@
 /* vennIds - From two lists of unique IDs, calculate number shared between each list and number 
  * only in each list.. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

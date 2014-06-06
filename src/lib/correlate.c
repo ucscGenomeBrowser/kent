@@ -4,6 +4,9 @@
  * a linear function of the other variable's variation.  Beware
  * the weight of extreme outliers though! */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "correlate.h"
 

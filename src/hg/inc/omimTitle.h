@@ -2,6 +2,9 @@
  * generated omimTitle.c and omimTitle.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2005 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef OMIMTITLE_H
 #define OMIMTITLE_H
 

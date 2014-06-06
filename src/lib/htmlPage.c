@@ -1,3 +1,6 @@
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* htmlPage - stuff to read, parse, and submit  htmlPages and forms. 
  *
  * typical usage is:
@@ -11,7 +14,7 @@
  */
 
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "errCatch.h"
 #include "memalloc.h"
 #include "linefile.h"

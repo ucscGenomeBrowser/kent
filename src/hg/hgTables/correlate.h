@@ -1,6 +1,9 @@
 /* correlate.h - a help text string for correlate.c */
 /*	and communication between correlate.c and correlatePlot.c	*/
 
+/* Copyright (C) 2009 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef CORRELATE_H
 #define CORRELATE_H
 

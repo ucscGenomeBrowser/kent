@@ -1,3 +1,6 @@
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* rudp - (semi) reliable UDP communication.  This adds an
  * acknowledgement and resend layer on top of UDP. 
  *
@@ -53,7 +56,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <pthread.h>
-#include "errabort.h"
+#include "errAbort.h"
 #include "hash.h"
 #include "dlist.h"
 #include "obscure.h"

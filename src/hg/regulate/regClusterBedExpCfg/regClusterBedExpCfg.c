@@ -1,4 +1,7 @@
 /* regClusterBedExpCfg - Create config file for hgBedsToBedExps from list of files.. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -6,7 +9,7 @@
 #include "obscure.h"
 #include "sqlNum.h"
 #include "hmmstats.h"
-#include "errabort.h"
+#include "errAbort.h"
 
 
 boolean encodeList = FALSE;

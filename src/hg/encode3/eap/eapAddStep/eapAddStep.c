@@ -1,4 +1,7 @@
 /* eapAddStep - Add a step to eapStep and related tables.  This is just a small shortcut for doing it in SQL.  You can only add steps defined in C code.. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -94,7 +97,7 @@ struct stepInit steps[] =
     {
     "hotspot", 1,
     "Call hotspots, peaks, and generate a signal plot from DNAse bam file using hotspot",
-    "eap_run_hotspot,hotspot.py,starch,unstarch,hotspot,bedtools,eap_broadPeak_to_bigBed,eap_narrowPeak_to_bigBed,bedToBigBed,bedGraphToBigWig,bedmap,bedGraphPack",
+    "eap_run_hotspot,hotspot.py,edwBamFilter,starch,unstarch,hotspot,bedtools,eap_broadPeak_to_bigBed,eap_narrowPeak_to_bigBed,bedToBigBed,bedGraphToBigWig,bedmap,bedGraphPack",
     "alignments", "bam",
     "Alignments of reads with cuts on 5-prime ends in bam format",
     "hotspot_broad_peaks,hotspot_narrow_peaks,hotspot_signal",
@@ -146,7 +149,7 @@ struct stepInit steps[] =
     {
     "replicated_hotspot", 1,
     "Pool together two replicates and run hotspot on them",
-    "eap_pool_hotspot,eap_run_hotspot,hotspot.py,starch,unstarch,hotspot,bedtools,eap_broadPeak_to_bigBed,eap_narrowPeak_to_bigBed,bedToBigBed,bedGraphToBigWig,bedmap,bedGraphPack",
+    "eap_pool_hotspot,eap_run_hotspot,edwBamFilter,hotspot.py,starch,unstarch,hotspot,bedtools,eap_broadPeak_to_bigBed,eap_narrowPeak_to_bigBed,bedToBigBed,bedGraphToBigWig,bedmap,bedGraphPack",
     "alignments", "bam",
     "Alignments in bam format",
     "hotspot_broad_peaks,hotspot_narrow_peaks,hotspot_signal",
@@ -168,7 +171,7 @@ struct stepInit steps[] =
     {
     "dnase_stats", 1,
     "Subsample bam file to 5M mapped reads, run hotspot, and collect a bunch of statistics.",
-    "eap_dnase_stats,edwBamStats,bigBedToBed,bigWigAverageOverBed,eap_run_phantom_peak_spp,Rscript,eap_run_hotspot,hotspot.py,starch,unstarch,hotspot,bedtools,eap_broadPeak_to_bigBed,eap_narrowPeak_to_bigBed,bedToBigBed,bedGraphToBigWig,bedmap,bedGraphPack",
+    "eap_dnase_stats,edwBamStats,bigBedToBed,edwBamFilter,bigWigAverageOverBed,eap_run_phantom_peak_spp,Rscript,eap_run_hotspot,hotspot.py,starch,unstarch,hotspot,bedtools,eap_broadPeak_to_bigBed,eap_narrowPeak_to_bigBed,bedToBigBed,bedGraphToBigWig,bedmap,bedGraphPack",
     "alignments", "bam",
     "Alignments from a DNAse hypersensitivity assay in BAM format",
     "", "", "",

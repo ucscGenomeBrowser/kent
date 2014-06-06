@@ -1,7 +1,11 @@
 /* seg.c - read/write seg format. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "obscure.h"
 #include "seg.h"
 #include "hash.h"

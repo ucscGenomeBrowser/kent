@@ -3,6 +3,9 @@
  * type name.  The code here is a simpler version of the "lookup" column,
  * which just looks up a gene in a database table. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"

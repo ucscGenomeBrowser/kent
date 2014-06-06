@@ -1,4 +1,7 @@
 /* gvUi.h - enums and char arrays for gv UI features */
+
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef GENOMEVARUI_H
 #define GENOMEVARUI_H
 

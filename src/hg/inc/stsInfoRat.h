@@ -2,6 +2,9 @@
  * generated stsInfoRat.c and stsInfoRat.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2003 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef STSINFORAT_H
 #define STSINFORAT_H
 

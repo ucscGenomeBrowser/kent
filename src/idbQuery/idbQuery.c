@@ -3,7 +3,7 @@
  * things that match what the user has set up in idbQuery.html. */
 #include "common.h"
 #include "portable.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "localmem.h"
 #include "wormdna.h"
 #include "cheapcgi.h"

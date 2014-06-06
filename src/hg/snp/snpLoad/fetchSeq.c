@@ -4,6 +4,9 @@
 /* The key thing here is doing a reverse complement for data on the negative strand. */
 /* Not checking for coords off the end of the chrom. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "dnaseq.h"
 #include "linefile.h"

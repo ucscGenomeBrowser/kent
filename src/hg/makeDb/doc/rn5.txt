@@ -1738,7 +1738,7 @@ done > ensToUcsc.lift
     cat fb.rn5.chainHg38Link.txt
     #   934256475 bases of 2572853723 (36.312%) in intersection
 ##############################################################################
-## 13-Way Multiz (WORKING - 2014-04-02 - Pauline)
+## 13-Way Multiz (DONE - 2014-04-02 - Pauline)
 
     mkdir /hive/data/genomes/rn5/bed/multiz13way
     cd /hive/data/genomes/rn5/bed/multiz13way
@@ -2867,12 +2867,13 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
       /usr/local/apache/htdocs-hgdownload/goldenPath/rn5/phyloP13way
 
     ############################################################################
-    # creating upstream mafs (WORKING - 2014-05-08 - Pauline)
+    # creating upstream mafs (DONE - 2014-05-08 - Pauline)
     ssh hgwdev
     mkdir /hive/data/genomes/rn5/goldenPath/multiz13way
     cd /hive/data/genomes/rn5/goldenPath/multiz13way
     # run this bash script
     cat << '_EOF_' > mkUpstream.sh
+#!/bin/sh
 DB=rn5
 GENE=ensGene
 NWAY=multiz13way
@@ -2894,10 +2895,16 @@ done
     chmod +x mkUpstream.sh
     time ./mkUpstream.sh
     #   real    57m14.100s
-XXX Thu May  8 15:04:36 PDT 2014
+
     # FIXUP/VERIFY the genbank.conf file to indicate this gene choice for the
     #   upstream automatic generation
+    kent/src/hg/makeDb/genbank/etc/genbank.conf
+    # +rn5.upstreamGeneTbl = ensGene
+    # +rn5.upstreamMaf = multiz13way /hive/data/genomes/rn5/bed/multiz13way/species.list.txt
 
+    git commit -m "Adding to the genbank.conf file to indicate this gene choice. refs #8212" genbank.conf
+    git push
+    make etc-update
 #############################################################################
 # hgPal downloads (DONE - 2014-05-08 - Pauline) 
 #   FASTA from 13way for ensGene
@@ -2952,3 +2959,31 @@ XXX Thu May  8 15:04:36 PDT 2014
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
     ln -s `pwd`/md5sum.txt $pd/
+
+#############################################################################
+# wiki page for 13-way (DONE - 2014-06-04 - Hiram)
+    mkdir /hive/users/hiram/bigWays/rn5.13way
+    cd /hive/users/hiram/bigWays
+    echo "rn5" > rn5.13way/ordered.list
+    grep -i rn5 /hive/data/genomes/rn5/bed/multiz13way/13way.distances.txt \
+        | sort -k3,3n | sed -e 's/rn5//' | awk '{print $1}' \
+           >> rn5.13way/ordered.list
+    ./sizeStats.sh rn5.13way/ordered.list 
+    ./dbDb.sh rn5 13way
+    ./sizeStats.pl rn5 13way
+    # needed to construct symlinks for defCheck.pl:
+    cd /hive/data/genomes/rn5/bed/lastz.hg19
+    ln -s /hive/data/genomes/hg19/bed/lastzRn5.2012-06-27/DEF .
+    cd /hive/data/genomes/rn5/bed/lastz.mm10
+    ln -s /hive/data/genomes/mm10/bed/lastzRn5.2012-03-23/DEF .
+
+    ./defCheck.pl rn5 13way
+
+    # this constructs the html pages in rn5.13way/:
+# -rw-rw-r-- 1 7328 Jun  4 16:10 Rn5_conservation_alignment.html
+# -rw-rw-r-- 1 9646 Jun  4 16:11 Rn5_Genome_size_statistics.html
+# -rw-rw-r-- 1 5634 Jun  4 16:16 Rn5_conservation_lastz_parameters.html
+
+    # add those pages to the genomewiki.
+
+#############################################################################

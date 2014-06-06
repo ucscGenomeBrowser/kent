@@ -1,4 +1,7 @@
 /* check procesed data to detect data problems as early as possible */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "gbIndex.h"
 #include "gbEntry.h"
 #include "gbGenome.h"

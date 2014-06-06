@@ -2,6 +2,9 @@
  * generated bToBeCfg.c and bToBeCfg.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2010 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef BTOBECFG_H
 #define BTOBECFG_H
 

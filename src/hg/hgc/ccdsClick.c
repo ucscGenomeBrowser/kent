@@ -1,4 +1,7 @@
 /* ccdsClick - click handling for CCDS track and related functions  */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hgc.h"
 #include "ccdsClick.h"

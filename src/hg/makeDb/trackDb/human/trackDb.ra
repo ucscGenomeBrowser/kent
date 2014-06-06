@@ -82,6 +82,7 @@ baseColorUseSequence lrg
 indelDoubleInsert on
 indelQueryInsert on
 showDiffBasesAllScales .
+color 72,167,38
 
 track gad
 shortLabel GAD View
@@ -1725,7 +1726,7 @@ type bed 3 .
 track chainSelf
 shortLabel Self Chain
 longLabel Chained Self-Alignments
-group varRep
+group rep
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -2238,6 +2239,7 @@ showDiffBasesAllScales .
 showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
+color 54,125,29
 urlLabel Link to LRG transcript:
 url ftp://ftp.ebi.ac.uk/pub/databases/lrgex/$$.xml#transcripts_anchor
 

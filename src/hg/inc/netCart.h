@@ -1,5 +1,8 @@
 /* netCart.h - cart settings for net color and level options */
 
+/* Copyright (C) 2012 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef NETCART_H
 #define NETCART_H
 

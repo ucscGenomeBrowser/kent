@@ -1,8 +1,11 @@
 /* findKGProtAlias finds Known Gene entries using protein alias table */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "kgProtAlias.h"
 
 static void addKGProtAlias(struct sqlConnection *conn, struct dyString *query,

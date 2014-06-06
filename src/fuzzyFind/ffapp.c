@@ -1,6 +1,6 @@
 #include "common.h"
 #include "memalloc.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "dnautil.h"
 #include "fa.h"
 #include "dnaseq.h"

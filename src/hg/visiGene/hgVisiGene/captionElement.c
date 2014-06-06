@@ -3,6 +3,9 @@
  * (panes) in a file, and which need to be reported
  * separately for each image. */
 
+/* Copyright (C) 2005 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "captionElement.h"
 

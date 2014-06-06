@@ -1,4 +1,7 @@
 /* edwWebBrowse - Browse ENCODE data warehouse.. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -125,6 +128,29 @@ else   /* Upload not complete. */
 	dyStringFree(&time);
 	}
     }
+}
+
+void printSubmitSummary(struct edwSubmit *submit, struct sqlConnection *conn)
+/* Print a little summary information about the submission overall */
+{
+if (!isEmpty(submit->errorMessage))
+    printf("<B>%s</B><BR>\n", submit->errorMessage);
+
+printf("%d files in validated.txt including %d already in warehouse<BR>\n",
+    submit->fileCount, submit->oldFiles);
+if (submit->newFiles > 0)
+    printf("%d of %d new files are uploaded<BR>\n", submit->newFiles,
+        submit->fileCount-submit->oldFiles);
+else
+    printf("No file in validated.txt has been uploaded or validated again<BR>\n");
+
+if (submit->metaChangeCount != 0)
+    printf("%d of %d old files have updated tags<BR>\n",
+        submit->metaChangeCount, submit->oldFiles);
+int newValid = edwSubmitCountNewValid(submit, conn);
+if (submit->newFiles > 0)
+    printf("%d of %d uploaded files are validated<BR>\n", newValid, submit->newFiles);
+
 }
 
 struct edwValidFile *newReplicatesList(struct edwSubmit *submit, struct sqlConnection *conn)
@@ -298,8 +324,9 @@ sqlSafef(query, sizeof(query),
     "and (newFiles != 0 or metaChangeCount != 0 or errorMessage is not NULL or fileIdInTransit != 0)"
     " order by id desc limit %d", userId, maxSubCount);
 struct edwSubmit *submit, *submitList = edwSubmitLoadByQuery(conn, query);
+int printedSubCount = 0;
 
-if (noPrevSubmission || !submitList)
+if (noPrevSubmission)
     {
     printf("<H4>There are no files submitted by %s</H4>\n",user);
     return;
@@ -316,23 +343,12 @@ for (submit = submitList; submit != NULL; submit = submit->next)
                 dateTime, cgiEncode(submit->url), submit->url);
     printSubmitState(submit, conn);
     printf("</H4>\n");
+    printedSubCount += 1;
 
     /* Print a little summary information about the submission overall before getting down to the
      * file by file info. */
-    if (!isEmpty(submit->errorMessage))
-        printf("<B>%s</B><BR>\n", submit->errorMessage);
+    printSubmitSummary(submit, conn);
 
-    printf("%d files in validated.txt including %d already in warehouse<BR>\n", 
-	submit->fileCount, submit->oldFiles);
-    if (submit->newFiles > 0)
-	printf("%d of %d new files are uploaded<BR>\n", submit->newFiles, 
-	    submit->fileCount-submit->oldFiles);
-    if (submit->metaChangeCount != 0)
-        printf("%d of %d old files have updated tags<BR>\n",  
-	    submit->metaChangeCount, submit->oldFiles);
-    int newValid = edwSubmitCountNewValid(submit, conn);
-    if (submit->newFiles > 0)
-	printf("%d of %d uploaded files are validated<BR>\n", newValid, submit->newFiles);
     struct edwValidFile *replicatesList = newReplicatesList(submit, conn);
     if (replicatesList != NULL)
 	{
@@ -387,6 +403,35 @@ for (submit = submitList; submit != NULL; submit = submit->next)
 	, submit->id);
     queryIntoTable(conn, query, "Correlation between replicates in target areas", experimentWrap);
     }
+/* Print validation information for submission which contains only files
+ * that have been validated already. */
+sqlSafef(query, sizeof(query),
+    "select * from edwSubmit where userId=%d "
+    "and oldFiles != 0 and newFiles = 0 "
+    "and not(metaChangeCount != 0 or errorMessage is not NULL or fileIdInTransit != 0) "
+    " order by id desc limit %d", userId, maxSubCount - printedSubCount);
+struct edwSubmit  *oldSubmitList = edwSubmitLoadByQuery(conn, query);
+boolean  noNewFilePrinted = FALSE;
+for (submit = oldSubmitList; submit != NULL; submit = submit->next)
+    {
+    if (!noNewFilePrinted)
+	{	
+	printf("<HR><H3>Submissions without new data:</H3>\n");
+	noNewFilePrinted = TRUE;
+	}
+    /* Figure out and print upload time */
+    sqlSafef(query, sizeof(query),
+        "select from_unixtime(startUploadTime) from edwSubmit where id=%u", submit->id);
+    char *dateTime = sqlQuickString(conn, query);
+
+    printf("<HR><H4>%s <A HREF=\"edwWebSubmit?url=%s&monitor=on\">%s</A> ",
+                dateTime, cgiEncode(submit->url), submit->url);
+    printSubmitState(submit, conn);
+    printf("</H4>\n");
+
+    /* Print a little summary information about the submission overall */
+    printSubmitSummary(submit, conn);
+    }
 }
 
 void doMiddle()
@@ -399,9 +444,11 @@ if (userEmail == NULL)
 else
     printf("<H3>Browse submissions</H3>\n");
 
+edwWebBrowseMenuItem(FALSE);
 printf("<div id=\"userId\">");
 if (userEmail == NULL)
     {
+    edwWebSubmitMenuItem(FALSE);
     printf("Please sign in with Persona&nbsp;");
     printf("<INPUT TYPE=SUBMIT NAME=\"signIn\" VALUE=\"sign in\" id=\"signin\">");
     }
@@ -416,9 +463,11 @@ if (userEmail != NULL)
     }
 printf("</FORM>\n");
 
+#ifdef AUTO_REFRESH
 // auto-refresh page
 if (userEmail != NULL && !cgiOptionalString("noRefresh"))
     edwWebAutoRefresh(5000);
+#endif
 }
 
 int main(int argc, char *argv[])
@@ -431,7 +480,6 @@ if (cgiVarExists("maxSubCount"))
     htmlSetCookie("edwWeb.maxSubCount", cgiString("maxSubCount"), NULL, NULL, NULL, FALSE);
 edwWebHeaderWithPersona("");
 // TODO: find a better place for menu update
-edwWebBrowseMenuItem(FALSE);
 htmEmptyShell(doMiddle, NULL);
 edwWebFooterWithPersona();
 return 0;

@@ -1,4 +1,7 @@
 /* hgVai - Variant Annotation Integrator. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -231,7 +234,6 @@ printf("</FORM>\n");
 /* Hidden form for jumping to track hub manager CGI. */
 printf("<FORM ACTION='%s' NAME='trackHubForm'>", hgHubConnectName());
 //#*** well, almost verbatim... lib version should use cgiScriptName.
-cgiMakeHiddenVar(hgHubConnectCgiDestUrl, cgiScriptName());
 cartSaveSession(cart);
 printf("</FORM>\n");
 
@@ -1816,10 +1818,7 @@ struct trackDb *varTdb = tdbForTrack(database, variantTrack, &fullTrackList);
 if (varTdb == NULL)
     {
     if (isHubTrack(variantTrack))
-	warn("Can't find hub track '%s'; try the \"check hub\" button in "
-	     "<A href=\"%s?%s&%s=%s\">Track Data Hubs</A>.",
-	     variantTrack,
-	     hgHubConnectName(), cartSidUrlString(cart), hgHubConnectCgiDestUrl, cgiScriptName());
+	warn("Can't find hub track '%s'", variantTrack);
     else
 	warn("Can't find tdb for variant track '%s'", variantTrack);
     }

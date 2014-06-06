@@ -5,6 +5,9 @@
  * Rename chrMT_snpTmp to chrM_snpTmp before running this.
  * Use UCSC chromInfo.  */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* Check for coords larger than chromSize; log as errors. */
 
 #include "common.h"

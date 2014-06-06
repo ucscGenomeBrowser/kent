@@ -1,4 +1,7 @@
 /* functions for searching gene aliases */
+
+/* Copyright (C) 2005 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef FINDKGALIAS_H
 #define FINDKGALIAS_H
 

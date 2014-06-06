@@ -1,3 +1,6 @@
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* joiner - information about what fields in what tables
  * in what databases can fruitfully be related together
  * or joined.  Another way of looking at it is this
