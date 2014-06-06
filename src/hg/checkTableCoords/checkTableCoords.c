@@ -41,6 +41,12 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
+// Currently we do per-chrom queries to check coords, but for scaffold-based assemblies
+// with many thousands of sequences that's too slow.  So... we just don't check those.
+// This should be rewritten to do whole-table query when a table is not split.
+// Using annoStreamDb would keep the memory usage reasonable.
+#define MAX_SEQS_SUPPORTED 1000
+
 /* Err strings for reportErrors(), all formatted with a %s followed by a %d */
 #define START_LT_ZERO "%s.%s has %d records with start < 0.\n"
 #define END_LT_START "%s.%s has %d records with end < start.\n"
@@ -450,7 +456,7 @@ for (curTable = tableList;  curTable != NULL;  curTable = curTable->next)
         /* items with bad chrom will be invisible to hGetBedRange(), so 
 	 * catch them here by SQL query. */
 	/* The SQL query is too huge for scaffold-based db's, check count: */
-	if (hChromCount(db) <= HDB_MAX_SEQS_FOR_SPLIT)
+	if (hChromCount(db) <= MAX_SEQS_SUPPORTED)
 	    {
 	    if (isNotEmpty(hti->chromField))
 		{
