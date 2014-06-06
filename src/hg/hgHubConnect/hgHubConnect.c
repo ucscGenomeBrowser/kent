@@ -325,7 +325,7 @@ if (haveTrixFile)
 // if we have search terms, put out the line telling the user so
 if (haveTrixFile && !isEmpty(hubSearchTerms))
     {
-    printf("List restricted by search terms : %s\n", hubSearchTerms);
+    printf("Displayed list restricted by search terms: %s\n", hubSearchTerms);
     puts("<input name=\"hubDeleteSearchButton\""
 	"onClick="
 	"\" document.searchHubForm.elements['hubSearchTerms'].value=\'\';"
