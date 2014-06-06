@@ -4789,8 +4789,8 @@ done
         /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz7way
 
 #############################################################################
-# hgPal downloads (DONE - 2013-09-20 - Hiram)
-#   FASTA from 100-way for knownGene
+# hgPal downloads (DONE - 2014-06-06 - Hiram)
+#   FASTA from 7-way for knownGene, refGene and knownCanonical
 
     ssh hgwdev
     screen -S hg38HgPal
@@ -4836,6 +4836,114 @@ done
     ln -s `pwd`/md5sum.txt $pd/
 
     rm -rf exonAA exonNuc
+
+    ### need other gene track alignments also
+    # running up refGene
+    cd /hive/data/genomes/hg38/bed/multiz7way/pal
+    export mz=multiz7way
+    export gp=refGene
+    export db=hg38
+    export I=0
+    mkdir exonAA exonNuc
+    for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
+    do
+        I=`echo $I | awk '{print $1+1}'`
+	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc/$C.exonNuc.fa.gz &"
+	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA/$C.exonAA.fa.gz &"
+        if [ $I -gt 6 ]; then
+            echo "date"
+            echo "wait"
+            I=0
+        fi
+    done > $gp.jobs
+    echo "date" >> $gp.jobs
+    echo "wait" >> $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1
+    #   real    15m15.424s
+
+    export mz=multiz7way
+    export gp=refGene
+    export db=hg38
+    time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    #   real    0m23.119s
+    time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    #   real    1m15.547s
+
+    du -hsc exonAA exonNuc refGene*.fa.gz
+    #  59M     exonAA
+    #  101M    exonNuc
+    #  59M     refGene.multiz7way.exonAA.fa.gz
+    #  101M    refGene.multiz7way.exonNuc.fa.gz
+    #  317M    total
+
+    rm -rf exonAA exonNuc
+
+    # we're only distributing exons at the moment
+    export mz=multiz7way
+    export gp=refGene
+    export db=hg38
+    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    md5sum *.fa.gz > md5sum.txt
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/
+
+    ### And knownCanonical
+    cd /hive/data/genomes/hg38/bed/multiz7way/pal
+    export mz=multiz7way
+    export gp=knownCanonical
+    export db=hg38
+    mkdir exonAA exonNuc ppredAA ppredNuc knownCanonical
+
+    cut -f1 ../../../chrom.sizes | while read C
+    do
+        echo $C
+	hgsql hg38 -N -e "select chrom, chromStart, chromEnd, transcript from knownCanonical where chrom='$C'" > knownCanonical/$C.known.bed
+    done
+
+    ls knownCanonical/*.known.bed | while read F
+    do
+      if [ -s $F ]; then
+         echo $F | sed -e 's#knownCanonical/##; s/.known.bed//'
+      fi
+    done | while read C
+    do
+	echo "date"
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed  $db $mz knownGene order.list stdout | \
+	    gzip -c > ppredAA/$C.ppredAA.fa.gz"
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -noTrans $db $mz knownGene order.list stdout | \
+	    gzip -c > ppredNuc/$C.ppredNuc.fa.gz"
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons -noTrans $db $mz knownGene order.list stdout | \
+	    gzip -c > exonNuc/$C.exonNuc.fa.gz"
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons $db $mz knownGene order.list stdout | \
+	    gzip -c > exonAA/$C.exonAA.fa.gz"
+    done > $gp.$mz.jobs
+
+    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1
+    # real    72m58.133s
+
+    rm *.known.bed
+    mz=multiz7way
+    gp=knownCanonical
+    db=hg38
+    zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz &
+    zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz &
+    zcat ppredAA/c*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz &
+    zcat ppredNuc/c*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    mz=multiz7way
+    gp=knownCanonical
+    db=hg38
+    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    cd  $pd
+    md5sum *.exon*.fa.gz > md5sum.txt
 
 #############################################################################
 # wiki page for 7-way (DONE - 2014-06-04 - Hiram)
