@@ -297,7 +297,7 @@ for ( ; tsList != NULL; tsList = tsList->next)
 return urlSearchHash;
 }
 
-static struct hash *outputPublicTable(struct sqlConnection *conn, char *publicTable, char *statusTable)
+static boolean outputPublicTable(struct sqlConnection *conn, char *publicTable, char *statusTable, struct hash **pHash)
 /* Put up the list of public hubs and other controls for the page. */
 {
 char *trixFile = cfgOptionEnvDefault("HUBSEARCHTRIXFILE", "hubSearchTrixFile", "/gbdb/hubs/public.ix");
@@ -337,7 +337,6 @@ if (haveTrixFile && !isEmpty(hubSearchTerms))
     urlSearchHash = getUrlSearchHash(trixFile, cleanSearchTerms);
     }
 
-puts("<I>Clicking Connect redirects to the gateway page of the selected hub's default assembly.</I><BR>");
 // make sure all the public hubs are in the hubStatus table.
 addPublicHubsToHubStatus(conn, publicTable, statusTable);
 
@@ -374,6 +373,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	{
 	/* output header */
 
+	puts("<I>Clicking Connect redirects to the gateway page of the selected hub's default assembly.</I><BR>");
 	printf("<table id=\"publicHubsTable\"> "
 	    "<thead><tr> "
 		"<th>Display</th> "
@@ -459,7 +459,8 @@ if (gotAnyRows)
     printf("</TR></tbody></TABLE>\n");
 
 printf("</div>");
-return publicHash;
+*pHash = publicHash;
+return gotAnyRows;
 }
 
 
@@ -473,10 +474,10 @@ char *publicTable = cfgOptionEnvDefault("HGDB_HUB_PUBLIC_TABLE",
 char *statusTable = cfgOptionEnvDefault("HGDB_HUB_STATUS_TABLE", 
 	hubStatusTableConfVariable, defaultHubStatusTableName);
 if (!(sqlTableExists(conn, publicTable) && 
-	(retHash = outputPublicTable(conn, publicTable,statusTable)) != NULL ))
+	outputPublicTable(conn, publicTable,statusTable, &retHash)) )
     {
     printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
-    printf("No Public Track Hubs<BR>");
+    printf("No Public Track Hubs found that match search criteria.<BR>");
     printf("</div>");
     }
 hDisconnectCentral(&conn);
