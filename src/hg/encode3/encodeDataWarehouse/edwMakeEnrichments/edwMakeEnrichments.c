@@ -480,7 +480,7 @@ if (!isEmpty(vf->enrichedIn) && !sameWord(vf->ucscDb, "unknown")
 	    doEnrichmentsFromBigWig(conn, ef, vf, assembly, targetList);
 	else if (startsWith("bed_", format))
 	    doEnrichmentsFromBed(conn, ef, vf, assembly, targetList);
-	else if (edwIsSupportedBigBedFormat(format))
+	else if (edwIsSupportedBigBedFormat(format) || sameString(format, "bigBed"))
 	    doEnrichmentsFromBigBed(conn, ef, vf, assembly, targetList);
 	else if (sameString(format, "gtf"))
 	    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
