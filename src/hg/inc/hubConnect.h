@@ -25,6 +25,9 @@
 #define hgHubConnectTimeToCheck "hub.timeToCheck"
 /* the number of seconds to wait before checking the hub again */
 
+#define hgHubCheckUrl      "hubCheckUrl"
+/* name of cgi variable containing hub name to check */
+
 #define hgHubDataText      "hubUrl"
 /* name of cgi variable containing new hub name */
 
@@ -37,7 +40,6 @@
 #define hgHub             "hgHub_"  /* prefix for all control variables */
 #define hgHubDo            hgHub   "do_"    /* prefix for all commands */
 #define hgHubDoClear       hgHubDo "clear"
-#define hgHubDoReset       hgHubDo "reset"
 #define hgHubDoSearch      hgHubDo "search"
 #define hgHubDoDeleteSearch      hgHubDo "deleteSearch"
 #define hgHubDoDisconnect  hgHubDo "disconnect"
