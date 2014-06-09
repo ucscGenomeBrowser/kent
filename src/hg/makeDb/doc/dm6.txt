@@ -135,19 +135,6 @@ taxId 7227
     time nice -n +19 makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
        -fileServer=hgwdev -continue=trackDb dm6.config.ra > trackDb.log 2>&1
     # real    0m4.552s
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-Got error in trackDb.log:
-mkdir -p /gbdb/dm6/html
-rm -f /gbdb/dm6/html/description.html
-ln -s /cluster/data/dm6/html/description.html /gbdb/dm6/html/
-./loadTracks trackDb_chinhli hgFindSpec_chinhli dm6
-hgTrackDb dm6 dm6 trackDb_chinhli ../../lib/trackDb.sql .
-Couldn't open ./trackDb.chainNet.primates.ra
-Command failed:
-ssh -x -o 'StrictHostKeyChecking = no' -o 'BatchMode = yes' hgwdev nice /cluster/data/dm6/jkStuff/makeTrackDb.csh
-~                                     
-Per Hiram's instruction, use good old manual way to do it:
-XXXXXXXXXXXXXXXX
     convert -geometry "190x300" Drosophila_melanogaster.jpg New-Drosophila_melanogaster.jpg
     cp New-Drosophila_melanogaster.jpg /cluster/home/chinhli/kent/src/hg/htdocs/images/Drosophila_melanogaster
     mkdir -p /cluster/home/chinhli/kent/src/hg/makeDb/trackDb/drosophila/dm6
@@ -162,13 +149,6 @@ XXXXXXXXXXXXXXXX
    time nice -n +19 makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
        -fileServer=hgwdev -continue=dbDb dm6.config.ra > dbDb.log 2>&1
     # real    0m36.707s
-
-XXXXXXXXXXXXXXXXXXX 2014-06-04 2:50PM
-browser is up, but get
-Can't open /gbdb/dm6/dm6.2bit to read: No such file or directory
-so, quess need to finish the last step.
-Need to run the simpleRepeat mask first
-XXXXXXXXXXXXXXXXXXXXXXXXXX
 
 ##########################################################################
 # running repeat masker (DONE - 2014-06-04 - Chin)
@@ -361,43 +341,21 @@ XXXXXXXXXXXXXXXXXXXXXXXXXX
     #      2 no
     #    568 yes
 
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-lift flyBase from dm3 to dm6 prep-work
 #########################################################################
-# MAKE 11.OOC FILE FOR BLAT (DONE 8/18/06 angie - REDONE 6/19/07)
+# MAKE 11.OOC FILE FOR BLAT (DONE 2014-06-07 - Chin)
+# dm3 11.ooc is needed to lift flyBase from dm3 to dm6 for encode3 submission
+
     # Use -repMatch=100 (based on size -- for human we use 1024, and 
     # fly size is ~4.4% of human judging by gapless dm1 genome size from 
     # featureBits -- we would use 45, but bump that up a bit to be more 
     # conservative).
-    ssh kolossus
-    blat /cluster/data/dm3/dm3.2bit /dev/null /dev/null -tileSize=11 \
-      -makeOoc=/cluster/bluearc/dm3/11.ooc -repMatch=100
-#Wrote 7657 overused 11-mers to /cluster/bluearc/dm3/11.ooc
-    # More than twice as many as dm2... probably due to chrUextra.
-
-    # 6/19/07 -- That seems to be adversely affecting genbank alignments,
-    # so bump up repMatch to get a .ooc count similar to dm2's 3031.
-    # repMatch  #overused
-    # 100       7657
-    # 150       3709
-    # 165       3152 <-- close enough
-    # 180       2688
-    # 200       2242
-    blat /cluster/data/dm3/dm3.2bit /dev/null /dev/null -tileSize=11 \
-      -makeOoc=/cluster/bluearc/dm3/11.scaled.ooc -repMatch=165
-#Wrote 3152 overused 11-mers to /cluster/bluearc/dm3/11.scaled.ooc
-    # MarkD did a test run, results look good, so I'll replace the 
-    # original .ooc.  Also, Mark requested moving the ooc to the same
-    # dir as the genbank .2bit (iscratch).
-    mv /cluster/bluearc/dm3/11.scaled.ooc /cluster/bluearc/dm3/11.ooc
-    foreach i (1 2 3 4 6 7)
-      rsync -av /cluster/bluearc/dm3/11.ooc kkr${i}u00:/iscratch/i/dm3/
-    end
-    # Edited makeDb/genbank/etc/genbank.conf to specify new ooc location.
-
+    cd /hive/data/genomes/dm3
+    blat dm3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/dm3.11.ooc -repMatch=100
+    # Wrote 7657 overused 11-mers to /hive/data/genomes/dm3/11.ooc
 
 #########################################################################
-# dm3 LIFTOVER to dm6 (working - 2014-06-06 - Chin)
+# dm3 LIFTOVER to dm6 (DONE - 2014-06-07 - Chin)
 # will move steps to dm3.txt when dm6 is released.
     sh hgwdev
     cd /hive/data/genomes/dm3
@@ -408,45 +366,45 @@ lift flyBase from dm3 to dm6 prep-work
 
     time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         dm3 dm6 > doLiftOverTodm6.log 2>&1 &
-    # real    3m21.410s
+         dm3 dm6 > doLiftOverToDm6.log 2>&1 &
+    # real    19m13.611s
     # hold on the following steps until ready to release 
     # pushd /usr/local/apache/htdocs-hgdownload/goldenPath/dm3/liftOver/
     # md5sum dm3Todm6.over.chain.gz >> md5sum.txt
     # popd
+
 #########################################################################
-# LIFTOVER FLYBASE 4.2 ANNOTATIONS FROM DM1 (TEMPORARY) (DONE 8/18/06 angie)
-    # Until FlyBase releases Release 5 annotations, liftOver'd 4.2 genes 
-    # will be better than nothing.
+# LIFTOVER FLYBASE 5.12 ANNOTATIONS FROM DM3 (working 2014-06-09 - Chin)
+# NOTE:
+# In order to make flyBase gene ui to work, more steps are needed, other wise,
+# hgc will shows errors like "Doh, no go for CG3727-RB from flyBasePep" 
+# all the time. Major objevtive here is to create flyBaseGene tables 
+# so that we can do featureBits on it for encode3 submission.
     ssh hgwdev
-    mkdir /cluster/data/dm3/bed/flybase4.2.liftOver
-    cd /cluster/data/dm3/bed/flybase4.2.liftOver
-    hgsql dm2 -N -e 'select * from flyBaseGene' > dm2.flyBaseGene.tab
-    hgsql dm2 -N -e 'select * from flyBaseNoncoding' > dm2.flyBaseNoncoding.tab
-    liftOver -genePred dm2.flyBaseGene.tab \
-      /cluster/data/dm2/bed/liftOver/dm2ToDm3.over.chain.gz \
+    mkdir /hive/data/genomes/dm6/bed/flybase5.12.liftOver
+    cd /hive/data/genomes/dm6/bed/flybase5.12.liftOver
+    hgsql dm3 -N -e 'select * from flyBaseGene' | cut -f2- > dm3.flyBaseGene.tab
+    liftOver -genePred dm3.flyBaseGene.tab \
+      /hive/data/genomes/dm3/bed/liftOver/dm3ToDm6.over.chain.gz \
       flyBaseLiftGene.tab flyBaseLiftGene.unmapped.tab
-    liftOver -bedPlus=12 -hasBin dm2.flyBaseNoncoding.tab \
-      /cluster/data/dm2/bed/liftOver/dm2ToDm3.over.chain.gz \
-      flyBaseLiftNoncoding.tab flyBaseLiftNoncoding.unmapped.tab
-    # Not quite perfect but not bad:
     wc -l *.tab
-#  19178 dm2.flyBaseGene.tab
-#    727 dm2.flyBaseNoncoding.tab
-#  19173 flyBaseLiftGene.tab
-#     10 flyBaseLiftGene.unmapped.tab
-#    727 flyBaseLiftNoncoding.tab
-#      0 flyBaseLiftNoncoding.unmapped.tab
-    ldHgGene -predTab dm3 flyBaseLiftGene flyBaseLiftGene.tab
-    hgLoadBed -hasBin dm3 flyBaseLiftNoncoding flyBaseLiftNoncoding.tab
-    # Copy pep table from dm2:
-    hgPepPred dm3 tab flyBaseLiftGenePep \
-      /cluster/data/dm2/bed/flybase4.2/flyBasePep.tab
+    #  21243 dm3.flyBaseGene.tab
+    #  21216 flyBaseLiftGene.tab
+    #     54 flyBaseLiftGene.unmapped.tab
+
+    ldHgGene -predTab dm6 flyBaseGene flyBaseLiftGene.tab
+
+############################################################################
+# set same default position asm dm3 (DONE - 2014-06-09 - Chin)
+    hgsql -e \
+'update dbDb set defaultPos="chr2L:826,001-851,000" where name="dm6";' \
+     hgcentraltest
+
 
 
 
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-2014-06-06 
+2014-06-09 
 Stopped here, since we are not sure how genbank auto update will work with
 dm6 which is in the middle of genbank submission.
 #########################################################################
@@ -516,11 +474,6 @@ dm6.perChromTables = no
     git push
     make etc-update
 
-############################################################################
-# set default position on DHFR gene displays  (DONE - 2014-04-11 - Hiram)
-    hgsql -e \
-'update dbDb set defaultPos="KE382584:3834159-3887734" where name="dm6";' \
-	hgcentraltest
 
 #########################################################################
 # create ucscToINSDC name mapping (DONE - 2014-04-11 - Hiram)
@@ -616,4 +569,4 @@ termRegex [AN][MC][D_][S0]0[0-9]+(\.1)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
-assemblyLabel ????Beijing Genomics Institution-Shenzhen#########################################################################
+#########################################################################
