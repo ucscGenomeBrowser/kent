@@ -13,51 +13,32 @@
 void usage()
 {
 errAbort("freen - test some hairbrained thing.\n"
-         "usage:  freen fileList\n");
+         "usage:  freen input\n");
 }
 
 static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-boolean containsCopyright(char *fileName, int maxLines)
-/* Look for the string 'copyright' or '(C)' regardless of case in up
- * to maxLines of file.  Return TRUE if it is found, FALSE otherwise. */
-{
-boolean result = FALSE;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-int i;
-for (i=0; i<maxLines; ++i)
-    {
-    char *line;
-    if (!lineFileNext(lf, &line, NULL))
-        break;
-    strLower(line);
-    if (stringIn("copyright", line) != NULL || stringIn("(c)", line) != NULL)
-        {
-	result = TRUE;
-	break;
-	}
-    }
-lineFileClose(&lf);
-return result;
-}
 
-void freen(char *fileList)
+void freen(char *input)
 /* Do something, who knows what really */
 {
-struct lineFile *lf = lineFileOpen(fileList, TRUE);
+struct lineFile *lf = lineFileOpen(input, TRUE);
 char *line;
-int size;
-while (lineFileNext(lf, &line, &size))
+int maxCount = 4;
+while (lineFileNext(lf, &line, NULL))
     {
-    verbose(1, "%d %s\n", lf->lineIx, line);
-    char *word;
-    while ((word = nextWordRespectingQuotes(&line)) != NULL)
-        {
-	if (containsCopyright(word, 10))
-	    printf("%s\n", word);
-	}
+    uglyf("line: %s\n", line);
+    char *word = nextWord(&line);
+    uglyf("word = %s\n", word);
+    if (--maxCount == 0)
+        break;
+    }
+lineFileSeek(lf, 0, SEEK_SET);
+while (lineFileNext(lf, &line, NULL))
+    {
+    uglyf("line: %s\n", line);
     }
 }
 
