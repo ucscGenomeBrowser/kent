@@ -8,7 +8,8 @@ all:	${txGVScripts}
 	@for T in ${txGVScripts}; do \
 	  ( rm -f ${SCRIPTS}/$$T ) ; \
 	done
-	cp ${txGVScripts} ${SCRIPTS}
+	${MKDIR} ${SCRIPTS}
+	cp ${txGVScripts} ${SCRIPTS}/
 
 clean:
 
