@@ -84,6 +84,11 @@ ifeq (${PNGLIB},)
   endif
 endif
 ifeq (${PNGLIB},)
+  ifneq ($(wildcard /usr/local/lib/libpng.a),)
+      PNGLIB=/usr/local/lib/libpng.a
+  endif
+endif
+ifeq (${PNGLIB},)
       PNGLIB := $(shell libpng-config --ldflags  || true)
 endif
 ifeq (${PNGLIB},)
