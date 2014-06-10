@@ -276,7 +276,7 @@ int *wiggleSpanList(struct sqlConnection *conn, struct trackDb *tdb);
 #define HORIZGRID "horizGrid"
 #define GRIDDEFAULT "gridDefault"
 #define TRANSFORMFUNC "transformFunc"
-#define DONEGATIVEMODE "doNegative"
+#define DONEGATIVEMODE "negateValues"
 #define ALWAYSZERO "alwaysZero"
 #define AUTOSCALE "autoScale"
 #define AUTOSCALEDEFAULT "autoScaleDefault"
