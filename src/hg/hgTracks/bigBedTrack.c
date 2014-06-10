@@ -2,6 +2,9 @@
  * Mostly just links to bed code, but handles a few things itself, like the dense
  * drawing code. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"
@@ -19,6 +22,7 @@
 #include "bigWarn.h"
 #include "errCatch.h"
 #include "trackHub.h"
+#include "net.h"
 
 struct bbiFile *fetchBbiForTrack(struct track *track)
 /* Fetch bbiFile from track, opening it if it is not already open. */
@@ -39,6 +43,11 @@ if (bbi == NULL)
 	fileName = bbiNameFromSettingOrTable(track->tdb, conn, track->table);
 	hFreeConn(&conn);
 	}
+    
+    #ifdef USE_GBIB_PWD
+    #include "gbib.c"
+    #endif
+
     bbi = track->bbiFile = bigBedFileOpen(fileName);
     }
 return bbi;

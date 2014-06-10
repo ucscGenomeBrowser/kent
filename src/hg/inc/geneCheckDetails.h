@@ -2,6 +2,9 @@
  * generated geneCheckDetails.c and geneCheckDetails.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2006 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef GENECHECKDETAILS_H
 #define GENECHECKDETAILS_H
 

@@ -1,5 +1,8 @@
 /* Put some common stuff in here for hgTrackUi CGI. */
 
+/* Copyright (C) 2008 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef HGTRACKUI_H
 #define HGTRACKUI_H
 

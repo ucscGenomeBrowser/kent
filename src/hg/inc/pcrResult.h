@@ -1,5 +1,8 @@
 /* pcrResult -- support for internal track of hgPcr results. */
 
+/* Copyright (C) 2008 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef PCRRESULT_H
 #define PCRRESULT_H
 

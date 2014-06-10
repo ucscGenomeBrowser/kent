@@ -1,4 +1,7 @@
 /* hgGoldGapGl - Put chromosome .agp and .gl files into browser database.. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "portable.h"
 #include "linefile.h"

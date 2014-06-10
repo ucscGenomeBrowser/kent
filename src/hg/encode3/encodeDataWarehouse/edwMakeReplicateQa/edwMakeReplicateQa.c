@@ -1,5 +1,8 @@
 /* edwMakeReplicateQa - Do qa level comparisons of replicates.. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -72,14 +75,12 @@ double enrichment2 = covYounger/((double)sam->elderSampleBases/assembly->realBas
 sam->sampleSampleEnrichment = 0.5 * (enrichment1+enrichment2);
 }
 
-void doSampleReplicate(struct sqlConnection *conn, char *format, struct edwAssembly *assembly,
-    struct edwFile *elderEf, struct edwValidFile *elderVf,
-    struct edwFile *youngerEf, struct edwValidFile *youngerVf)
-/* Do correlation analysis between elder and younger and save result to
+void doBed3Replicate(struct sqlConnection *conn, char *format, struct edwAssembly *assembly,
+    struct edwFile *elderEf, struct edwValidFile *elderVf, struct bed3 *elderBedList,
+    struct edwFile *youngerEf, struct edwValidFile *youngerVf, struct bed3 *youngerBedList)
+/* Do correlation analysis between elder and younger bedLists and save result to
  * a new edwQaPairSampleOverlap record. Do this for a format where we have a bed3 sample file. */
 {
-if (pairExists(conn, elderEf->id, youngerEf->id, "edwQaPairSampleOverlap"))
-    return;
 struct edwQaPairSampleOverlap *sam;
 AllocVar(sam);
 sam->elderFileId = elderVf->fileId;
@@ -88,12 +89,11 @@ sam->elderSampleBases = elderVf->basesInSample;
 sam->youngerSampleBases = youngerVf->basesInSample;
 
 /* Load up elder into genome range tree. */
-struct bed3 *elderBedList = edwLoadSampleBed3(conn, elderVf);
 struct genomeRangeTree *elderGrt = edwMakeGrtFromBed3List(elderBedList);
 
 /* Load up younger as bed, and loop through to get overlap */
 long long totalOverlap = 0;
-struct bed3 *bed, *youngerBedList = edwLoadSampleBed3(conn, youngerVf);
+struct bed3 *bed;
 for (bed = youngerBedList; bed != NULL; bed = bed->next)
     {
     int overlap = genomeRangeTreeOverlapSize(elderGrt, 
@@ -107,9 +107,51 @@ setSampleSampleEnrichment(sam, format, assembly, elderVf, youngerVf);
 edwQaPairSampleOverlapSaveToDb(conn, sam, "edwQaPairSampleOverlap", 128);
 freez(&sam);
 genomeRangeTreeFree(&elderGrt);
+}
+
+void doSampleReplicate(struct sqlConnection *conn, char *format, struct edwAssembly *assembly,
+    struct edwFile *elderEf, struct edwValidFile *elderVf,
+    struct edwFile *youngerEf, struct edwValidFile *youngerVf)
+/* Do correlation analysis between elder and younger and save result to
+ * a new edwQaPairSampleOverlap record. Do this for a format where we have a bed3 sample file. */
+{
+if (pairExists(conn, elderEf->id, youngerEf->id, "edwQaPairSampleOverlap"))
+    return;
+struct bed3 *elderBedList = edwLoadSampleBed3(conn, elderVf);
+struct bed3 *youngerBedList = edwLoadSampleBed3(conn, youngerVf);
+doBed3Replicate(conn, format, assembly, elderEf, elderVf, elderBedList,
+		youngerEf, youngerVf, youngerBedList);
 bed3FreeList(&elderBedList);
 bed3FreeList(&youngerBedList);
 }
+
+void doBedReplicate(struct sqlConnection *conn, char *format, struct edwAssembly *assembly,
+    struct edwFile *elderEf, struct edwValidFile *elderVf,
+    struct edwFile *youngerEf, struct edwValidFile *youngerVf)
+/* Do correlation analysis between elder and younger and save result to
+ * a new edwQaPairCorrelation record. Do this for a format where we have a bigBed file. */
+{
+/* If got both pairs, work is done already */
+if (pairExists(conn, elderEf->id, youngerEf->id, "edwQaPairSampleOverlap"))
+    return;
+
+/* Get files for both younger and older. */
+char *elderPath = edwPathForFileId(conn, elderEf->id);
+char *youngerPath = edwPathForFileId(conn, youngerEf->id);
+
+/* Do replicate calcs on bed3 lists from files. */
+struct bed3 *elderBedList = bed3LoadAll(elderPath);
+struct bed3 *youngerBedList = bed3LoadAll(youngerPath);
+doBed3Replicate(conn, format, assembly, elderEf, elderVf, elderBedList,
+		youngerEf, youngerVf, youngerBedList);
+
+/* Clean up. */
+bed3FreeList(&elderBedList);
+bed3FreeList(&youngerBedList);
+freez(&youngerPath);
+freez(&elderPath);
+}
+
 
 boolean getDoubleValAt(char *s, int tabsBefore)
 /* Skip # of tabs before in s, and the return field there as a double */
@@ -283,6 +325,7 @@ freez(&youngerPath);
 freez(&elderPath);
 }
 
+
 static void addBwCorrelations(struct bbiChromInfo *chrom, struct genomeRangeTree *targetGrt,
     struct bigWigValsOnChrom *aVals, struct bigWigValsOnChrom *bVals,
     struct bbiFile *aBbi, struct bbiFile *bBbi, 
@@ -400,6 +443,10 @@ if (sameString(format, "fastq") || sameString(format, "bam") || sameString(forma
 else if (edwIsSupportedBigBedFormat(format))
     {
     doBigBedReplicate(conn, format, assembly, elderEf, elderVf, youngerEf, youngerVf);
+    }
+else if (startsWith("bed_", format) && edwIsSupportedBigBedFormat(format+4))
+    {
+    doBedReplicate(conn, format+4, assembly, elderEf, elderVf, youngerEf, youngerVf);
     }
 else if (sameString(format, "bigWig"))
     {

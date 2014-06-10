@@ -1,3 +1,6 @@
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* htmlPage - stuff to read, parse, and submit  htmlPages and forms. 
  *
  * typical usage is:
@@ -11,7 +14,7 @@
  */
 
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "errCatch.h"
 #include "memalloc.h"
 #include "linefile.h"
@@ -678,6 +681,15 @@ return sameWord(type, "BUTTON") || sameWord(type, "SUBMIT")
 	|| sameWord(type, "IMAGE");
 }
 
+static boolean areMixableInputTypes(char *type1, char *type2)
+/* Return TRUE if type1 and type 2 can be safely mixed, i.e.
+ * if type1 and type2 both pass isMixableInputType, OR
+ * if type1 or type2 is HIDDEN. */
+{
+return sameWord(type1, "HIDDEN") || sameWord(type2, "HIDDEN")
+    || (isMixableInputType(type1) && isMixableInputType(type2));
+}
+
 static void htmlFormVarAddValue(struct htmlFormVar *var, char *value)
 /* Add value to list of predefined values for var. */
 {
@@ -718,7 +730,7 @@ for (tag = form->startTag->next; tag != form->endTag; tag = tag->next)
 	var = findOrMakeVar(page, varName, hash, tag, &varList); 
 	if (var->type != NULL && !sameWord(var->type, type))
 	    {
-	    if (!isMixableInputType(var->type) || !isMixableInputType(type))
+	    if (!areMixableInputTypes(var->type, type))
 		tagWarn(page, tag, "Mixing input types %s and %s", var->type, type);
 	    }
 	var->type = type;

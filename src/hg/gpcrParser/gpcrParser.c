@@ -1,4 +1,7 @@
 /** gpcrParser.c - Parses transmembrane cooridnates, outputs to xml file. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "memalloc.h"
 #include "dystring.h"

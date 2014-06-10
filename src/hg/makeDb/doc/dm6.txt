@@ -1,0 +1,572 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the dm6
+# Drosophila melanogaster -- BDGP Release 6.0 (Jan, 2014)
+
+
+# DATE:   
+# ORGANISM:
+# TAXID:  
+# ASSEMBLY LONG NAME: 
+# ASSEMBLY SHORT NAME:
+# ASSEMBLY SUBMITTER:
+# ASSEMBLY TYPE:  
+# NUMBER OF ASSEMBLY-UNITS:
+# ASSEMBLY ACCESSION:     
+
+# FTP-RELEASE DATE: 
+
+
+#       rsync:
+
+#	Mitochondrial sequence: 
+
+#############################################################################
+# fetch sequence from pre-genbank place (DONE - 2014-05-21 - Chin)
+    mkdir -p /hive/data/outside/ncbi/.dmel_RELEASE6
+    cd /hive/data/outside/ncbi/.dmel_RELEASE6
+    wget --timestamping -r --cut-dirs=6 --level=0 -nH -x         --no-remove-listing -np "ftp://ftp.ncbi.nlm.nih.gov/pub/murphyte/.dmel_RELEASE6/RELEASE6_GENBANK.tar.gz"
+
+    mkdir -p /hive/data/genomes/dm6/genbank
+    cp -p RELEASE6_GENBANK.tar.gz /hive/data/genomes/dm6/genbank/
+    cd /hive/data/genomes/dm6/genbank
+    tar xvfz RELEASE6_GENBANK.tar.gz
+
+    # measure sequence to be used here
+    faSize RELEASE6_GENBANK/na*.fsa
+    # 137547960 bases (490385 N's 137057575 real 137057575 upper 0 lower) 
+    # in 7 sequences in 7 files
+    # Total size: mean 19649708.6 sd 12099037.5 
+    # min 1348131 (gnl|FlyBase|4|gb|AE014135|) 
+    # max 32079331 (gnl|FlyBase|3R|gb|AE014297|) 
+    # median 23542271
+   
+    faSize scaffolds.RELEASE6.fsa
+    # 6158518 bases (662593 N's 5495925 real 5495925 upper 0 lower) 
+    # in 1862 sequences in 1 files
+    # Total size: mean 3307.5 sd 7108.2 
+    # min 544 (gnl|FlyBase|211000022279089|gb|DS485566|) 
+    # max 88768 (gnl|FlyBase|Unmapped_Scaffold_8_D1580_D1567|gb|CP007081|) 
+    # median 1567
+ 
+#############################################################################
+# fixup names for UCSC standards (DONE 2014-05-22 - Chin)
+
+    # Follow FlyBase's lead on the chromosome names, but still use our
+    # "chr" prefix:
+    cd /hive/data/genomes/dm6/genbank/RELEASE6_GENBANK
+    mkdir ../ucscChr
+    for f in na_*.dmel.RELEASE6.fsa ;  do
+        chr=`echo $f | sed -r -e 's/^na_(arm)/chr/' -e 's/\.dmel\.RELEASE6\.fsa//'`
+        echo $chr
+	rec=`grep '^>' $f | wc -l`
+	if [ $rec != 1 ] 
+	then
+            echo $f does not have exactly one fasta record\!
+            break
+        fi
+        sed -e 's/^>.*/>'$chr'/' $f > ../ucscChr/$chr.fa
+    done
+
+    faSize ../ucscChr/*.fa
+    # 137547960 bases (490385 N's 137057575 real 137057575 upper 0 lower) 
+    # in 7 sequences in 7 files
+    # Total size: mean 19649708.6 sd 12099037.5 
+    # min 1348131 (chr4) 
+    # max 32079331 (chr3R) median 23542271
+
+    # handle the unplaced scaffolds
+    cat scaffolds.RELEASE6.fsa \
+        | sed -e "s#^>.*|gb|#>chrUn_#; s#|.*##" \
+        | sed -e "s/\.1$//" \
+        > ../ucscChr/chrUn.fa
+    faSize ../ucscChr/chrUn.fa
+    # 6158518 bases (662593 N's 5495925 real 5495925 upper 0 lower) 
+    # in 1862 sequences in 1 files
+    # Total size: mean 3307.5 sd 7108.2 
+    # min 544 (chrUn_DS485566) 
+    # max 88768 (chrUn_CP007081) median 1567
+
+#############################################################################
+#  Initial database build (working - 2014-06-04 - Chin)
+
+    cd /hive/data/genomes/dm6
+    cat << '_EOF_' > dm6.config.ra
+# Config parameters for makeGenomeDb.pl:
+db dm6
+clade insect
+genomeCladePriority 10
+scientificName Drosophila melanogaster
+commonName D. melanogaster
+assemblyDate Jan. 2014
+assemblyLabel Berkeley Drosophila Genome Project
+assemblyShortLabel BDGP Release 6
+orderKey 9060
+mitoAcc NC_001709.1
+fastaFiles /hive/data/genomes/dm6/genbank/ucscChr/*.fa
+fakeAgpMinContigGap 20
+fakeAgpMinScaffoldGap 50000
+dbDbSpeciesDir dm6
+photoCreditURL http://commons.wikimedia.org/wiki/File:Drosophila_melanogaster.jpg
+photoCreditName Wikimedia Commons
+ncbiGenomeId 246754
+ncbiAssemblyId ????TBD
+ncbiAssemblyName ????TBD
+ncbiBioProject 246754
+genBankAccessionID ????TBD
+taxId 7227
+'_EOF_'
+    # << happy emacs
+
+    # stepwise to verify sequence and AGP file
+    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+	-stop=seq dm6.config.ra > seq.log 2>&1
+
+    # verify sequence and AGP are OK:
+    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+	-continue=agp -stop=agp dm6.config.ra > agp.log 2>&1
+
+    # then finish it off:
+    time nice -n +19 makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db dm6.config.ra > db.log 2>&1
+    # real    1m18.915s
+
+    cp Drosophila_melanogaster.jpg /usr/local/apache/htdocs/image
+    time nice -n +19 makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=trackDb dm6.config.ra > trackDb.log 2>&1
+    # real    0m4.552s
+    convert -geometry "190x300" Drosophila_melanogaster.jpg New-Drosophila_melanogaster.jpg
+    cp New-Drosophila_melanogaster.jpg /cluster/home/chinhli/kent/src/hg/htdocs/images/Drosophila_melanogaster
+    mkdir -p /cluster/home/chinhli/kent/src/hg/makeDb/trackDb/drosophila/dm6
+    cp /cluster/data/dm6/TemporaryTrackDbCheckout/kent/src/hg/makeDb/trackDb/dm6/dm6/* /cluster/home/chinhli/kent/src/hg/makeDb/trackDb/drosophila/dm6
+    cd /cluster/home/chinhli/kent/src/hg/makeDb/trackDb
+
+    # - Run make update DBS=dm6 and make alpha when done.
+    # Checkin all dm6 filr to git
+    # - (optional) Clean up /cluster/data/felCat4/TemporaryTrackDbCheckout
+    make update DBS=dm6
+
+   time nice -n +19 makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=dbDb dm6.config.ra > dbDb.log 2>&1
+    # real    0m36.707s
+
+##########################################################################
+# running repeat masker (DONE - 2014-06-04 - Chin)
+    mkdir /hive/data/genomes/dm6/bed/repeatMasker
+    cd /hive/data/genomes/dm6/bed/repeatMasker
+    time  doRepeatMasker.pl -buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=ku dm6 > do.log 2>&1 &
+    # Elapsed time: 49m17s
+
+    cat faSize.rmsk.txt
+    # 143725995 bases (1152978 N's 142573017 real 112610688 
+    # upper 29962329 lower) in 1870 sequences in 1 files
+    # Total size: mean 76858.8 sd 1382100.2 min 544 (chrUn_DS485566) 
+    #    max 32079331 (chr3R) median 1577
+    # %20.85 masked total, %21.02 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131; 
+
+    featureBits -countGaps dm6 rmsk
+    # 29968041 bases of 143725995 (20.851%) in intersection
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE 2014-06-05 - Chin)
+    mkdir /hive/data/genomes/dm6/bed/simpleRepeat
+    cd /hive/data/genomes/dm6/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+	dm6 > do.log 2>&1 &
+    #  real    23m20.727s
+
+    cat fb.simpleRepeat 
+    #  3925767 bases of 142573040 (2.754%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/dm6
+    twoBitMask dm6.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed dm6.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa dm6.2bit stdout | faSize stdin > faSize.dm6.2bit.txt
+    cat faSize.dm6.2bit.txt
+    # 143725995 bases (1152978 N's 142573017 real 112531010 upper 
+    #    30042007 lower) in 1870 sequences in 1 files
+    # Total size: mean 76858.8 sd 1382100.2 min 544 (chrUn_DS485566) 
+    #    max 32079331 (chr3R) median 1577
+    # %20.90 masked total, %21.07 masked real
+
+    rm /gbdb/dm6/dm6.2bit
+    ln -s `pwd`/dm6.2bit /gbdb/dm6/dm6.2bit
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE 2014-06-05 - Chin)
+    mkdir /hive/data/genomes/dm6/bed/gap
+    cd /hive/data/genomes/dm6/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../dm6.unmasked.2bit > findMotif.txt 2>&1
+    #	real    0m1.290s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    time featureBits -countGaps dm6 -not gap -bed=notGap.bed
+    # 142573040 bases of 143725995 (99.198%) in intersection
+    featureBits dm6 -not gap -bed=notGap.bed allGaps.bed
+    time featureBits -countGaps dm6 allGaps.bed notGap.bed -bed=new.gaps.bed
+    # 142573040 bases of 142573040 (100.000%) in intersection
+    time featureBits -countGaps dm6 allGaps.bed notGap.bed -bed=new.gaps.bed
+    # 23 bases of 143725995 (0.000%) in intersection
+    # real    0m2.017s
+
+    # nothing to do here, take a look at felCat5.txt for an example
+    # of what to do here with the new gaps
+    # felCat5 has 39382069 bases of 2403678276 (1.638%) in intersection
+
+##########################################################################
+## WINDOWMASKER (DONE - 2014-06-05 - Chin)
+    mkdir /hive/data/genomes/dm6/bed/windowMasker
+    cd /hive/data/genomes/dm6/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev dm6 > do.log 2>&1 &
+    #  real    5m34.507s
+
+    # Masking statistics
+    cat faSize.dm6.cleanWMSdust.txt
+    # 143725995 bases (1152978 N's 142573017 real 108961420 upper 
+    #    33611597 lower) in 1870 sequences in 1 files
+    # Total size: mean 76858.8 sd 1382100.2 min 544 (chrUn_DS485566) 
+    #    max 32079331 (chr3R) median 1577
+    # %23.39 masked total, %23.58 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    # if RM finished before this got here, the answer is in:
+    cat fb.dm6.rmsk.windowmaskerSdust.txt
+    # 16809756 bases of 143725995 (11.696%) in intersection
+
+    # or, if WM finished first, that failed, and this was the last
+    # step of the procedure:
+    featureBits -countGaps dm6 rmsk windowmaskerSdust
+    # 16809756 bases of 143725995 (11.696%) in intersection
+
+    # plus, if it failed, run the clean step to completely finish WM
+
+#############################################################################
+# cytoBandIdeo - (NEED more work 2014-06-05 - Chin)
+    mkdir /hive/data/genomes/dm6/bed/cytoBand
+    cd /hive/data/genomes/dm6/bed/cytoBand
+    makeCytoBandIdeo.csh dm6
+
+##########################################################################
+# cpgIslands - (DONE - 2014-06-05 - Chin)
+    mkdir /hive/data/genomes/dm6/bed/cpgIslands
+    cd /hive/data/genomes/dm6/bed/cpgIslands
+    time doCpgIslands.pl dm6 > do.log 2>&1 &
+    # real    2m22.751s
+
+    cat fb.dm6.cpgIslandExt.txt
+    #   15067148 bases of 142573040 (10.568%) in intersection
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2014-06-05 - Chin)
+    mkdir /hive/data/genomes/dm6/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/dm6/bed/cpgIslandsUnmasked
+
+    # run stepwise so the loading can be done in a different table
+    time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -stop=makeBed \
+          -maskedSeq=/hive/data/genomes/dm6/dm6.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku dm6 > makeBed.log 2>&1
+    #  real    1m31.640s
+
+    # debug load step so it can be loaded into a separate table:
+    time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -debug -continue=load \
+          -maskedSeq=/hive/data/genomes/dm6/dm6.unmasked.2bit \
+        -workhorse=hgwdev -smallClusterHub=ku dm6
+    
+    # edit and change the table name cpgIslandExt to cpgIslandExtUnmasked
+    # in doLoadCpg.csh.  also drop the  -noload option
+    chmod +x doLoadCpg.csh
+    time ./doLoadCpg.csh > load.log 2>&1
+    #   Read 27513 elements of size 10 from cpgIsland.bed
+    #   real    0m1.238s
+
+    cat fb.dm6.cpgIslandExtUnmasked.txt 
+    # 21347147 bases of 142573040 (14.973%) in intersection
+
+    time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -continue=cleanup \
+          -maskedSeq=/hive/data/genomes/dm6/dm6.unmasked.2bit \
+        -workhorse=hgwdev -smallClusterHub=ku dm6
+    # real    0m9.842s
+
+#########################################################################
+# genscan - (DONE 2014-06-05 - Chin)
+    mkdir /hive/data/genomes/dm6/bed/genscan
+    cd /hive/data/genomes/dm6/bed/genscan
+    time doGenscan.pl dm6 > do.log 2>&1  &
+    # real    21m0.104s
+
+    cat fb.dm6.genscan.txt
+    #  24277318 bases of 142573040 (17.028%) in intersection 
+    cat fb.dm6.genscanSubopt.txt
+    #   676185 bases of 142573040 (0.474%) in intersection 
+
+########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE 2014-06-06 - Chin)
+    # Use -repMatch=100 (based on size -- for human we use 1024, and 
+    # fly size is ~4.96% of human judging by gapless dm1 genome size from 
+    # featureBits -- we would use 50, but bump that up to 100 
+    # a bit to be more  conservative).
+    calc \( 2301325917 / 2897316137 \) \* 1024
+    # ( 143725995 / 2897316137 ) * 1024 = 50.797156
+    # round up to 100
+
+    cd /hive/data/genomes/dm6
+    blat dm6.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/dm6.11.ooc -repMatch=100
+    #	Wrote 4574 overused 11-mers to jkStuff/dm6.11.ooc
+
+
+
+    # there are *only* bridged gaps, no lift file needed for genbank
+    # Ignore the 2 yes non-bridged gap
+    hgsql -N -e "select bridge from gap;" dm6 | sort | uniq -c
+    #      2 no
+    #    568 yes
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE 2014-06-07 - Chin)
+# dm3 11.ooc is needed to lift flyBase from dm3 to dm6 for encode3 submission
+
+    # Use -repMatch=100 (based on size -- for human we use 1024, and 
+    # fly size is ~4.4% of human judging by gapless dm1 genome size from 
+    # featureBits -- we would use 45, but bump that up a bit to be more 
+    # conservative).
+    cd /hive/data/genomes/dm3
+    blat dm3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/dm3.11.ooc -repMatch=100
+    # Wrote 7657 overused 11-mers to /hive/data/genomes/dm3/11.ooc
+
+#########################################################################
+# dm3 LIFTOVER to dm6 (DONE - 2014-06-07 - Chin)
+# will move steps to dm3.txt when dm6 is released.
+    sh hgwdev
+    cd /hive/data/genomes/dm3
+    ln -s jkStuff/dm3.11.ooc 11.ooc
+    
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug dm3 dm6
+
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         dm3 dm6 > doLiftOverToDm6.log 2>&1 &
+    # real    19m13.611s
+    # hold on the following steps until ready to release 
+    # pushd /usr/local/apache/htdocs-hgdownload/goldenPath/dm3/liftOver/
+    # md5sum dm3Todm6.over.chain.gz >> md5sum.txt
+    # popd
+
+#########################################################################
+# LIFTOVER FLYBASE 5.12 ANNOTATIONS FROM DM3 (working 2014-06-09 - Chin)
+# NOTE:
+# In order to make flyBase gene ui to work, more steps are needed, other wise,
+# hgc will shows errors like "Doh, no go for CG3727-RB from flyBasePep" 
+# all the time. Major objevtive here is to create flyBaseGene tables 
+# so that we can do featureBits on it for encode3 submission.
+    ssh hgwdev
+    mkdir /hive/data/genomes/dm6/bed/flybase5.12.liftOver
+    cd /hive/data/genomes/dm6/bed/flybase5.12.liftOver
+    hgsql dm3 -N -e 'select * from flyBaseGene' | cut -f2- > dm3.flyBaseGene.tab
+    liftOver -genePred dm3.flyBaseGene.tab \
+      /hive/data/genomes/dm3/bed/liftOver/dm3ToDm6.over.chain.gz \
+      flyBaseLiftGene.tab flyBaseLiftGene.unmapped.tab
+    wc -l *.tab
+    #  21243 dm3.flyBaseGene.tab
+    #  21216 flyBaseLiftGene.tab
+    #     54 flyBaseLiftGene.unmapped.tab
+
+    ldHgGene -predTab dm6 flyBaseGene flyBaseLiftGene.tab
+
+############################################################################
+# set same default position asm dm3 (DONE - 2014-06-09 - Chin)
+    hgsql -e \
+'update dbDb set defaultPos="chr2L:826,001-851,000" where name="dm6";' \
+     hgcentraltest
+
+
+
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+2014-06-09 
+Stopped here, since we are not sure how genbank auto update will work with
+dm6 which is in the middle of genbank submission.
+#########################################################################
+# AUTO UPDATE GENBANK (WORKING - 2014-04-02 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism                mrnaCnt estCnt  refSeqCnt
+# Cricetulus griseus      90126   13      325
+
+
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+    # this appears that dm6 has plenty of native est's
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add dm6 just before the mouse entries
+# dm6 (Chinese hamster)
+dm6.serverGenome = /hive/data/genomes/dm6/dm6.2bit
+dm6.clusterGenome = /hive/data/genomes/dm6/dm6.2bit
+dm6.ooc = /hive/data/genomes/dm6/jkStuff/dm6.11.ooc
+dm6.lift = no
+dm6.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+dm6.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+dm6.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+dm6.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+dm6.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+dm6.refseq.mrna.native.load = yes
+dm6.refseq.mrna.xeno.load = yes
+dm6.genbank.mrna.xeno.load = no
+dm6.genbank.est.native.load = yes
+dm6.genbank.mrna.native.load = yes
+dm6.genbank.mrna.native.loadDesc = no
+dm6.downloadDir = dm6
+dm6.perChromTables = no
+
+    # end of section added to etc/genbank.conf
+    # and edit src/lib/gbGenome.c to add new species.
+    git commit -m "adding dm6 Chinese hamster refs #6506" \
+        etc/genbank.conf src/lib/gbGenome.c
+    git push
+    make etc-update
+    make install-server
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen			# long running job managed in screen
+    cd /cluster/data/genbank
+    time ./bin/gbAlignStep -initial dm6 &
+    #  logFIle: var/build/logs/2014.04.10-11:17:35.dm6.initalign.log
+    #  real    163m50.612s
+
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad dm6
+    #	logFile: var/dbload/hgwdev/logs/2014.04.10-15:04:01.dm6.dbload.log
+    #	about 18 minutes
+
+    # enable daily alignment and update of hgwdev (TBD - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add dm6 to: etc/align.dbs etc/hgwdev.dbs
+    vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added dm6 to daily hgwdev build refs #6506" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+
+#########################################################################
+# create ucscToINSDC name mapping (DONE - 2014-04-11 - Hiram)
+    mkdir /hive/data/genomes/dm6/bed/ucscToINSDC
+    cd /hive/data/genomes/dm6/bed/ucscToINSDC
+
+    # this script has been maturing over time, it is close to complete.
+    # to find a latest copy of it:
+    # ls -ogrt /hive/data/genomes/*/bed/ucscToINSDC/translateNames.sh
+
+    cp -p /hive/data/genomes/papAnu2/bed/ucscToINSDC/translateNames.sh .
+    ./translateNames.sh
+    # it says:
+# need to find chrM accessions
+    # so add this one:
+    echo -e 'chrM\tNC_007936.1' >> ucscToINSDC.txt
+    # needs to be sorted to work with join
+    sort ucscToINSDC.txt > ucscToINSDC.tab
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes | sort \
+        > name.coordinate.tab
+
+    join name.coordinate.tab ucscToINSDC.tab | tr '[ ]' '[\t]' > ucscToINSDC.bed
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+# 12
+
+    # use the 12 in this sed:
+    sed -e "s/21/12/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+        | hgLoadSqlTab dm6 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords dm6 ucscToINSDC
+    # should cover all bases
+    featureBits -countGaps dm6 ucscToINSDC
+    # 2360146428 bases of 2360146428 (100.000%) in intersection
+
+##############################################################################
+# construct download files (DONE - 2014-04-11 - Hiram)
+    # after db name has been added to all.joiner and
+    # joinerCheck -database=dm6 -keys all.joiner
+    # is clean
+
+    cd /hive/data/genomes/dm6
+    time makeDownloads.pl -workhorse=hgwdev -dbHost=hgwdev dm6 \
+       > downloads.log 2>&1
+    # real    25m45.426s
+
+##############################################################################
+# pushQ entry (DONE - 2014-04-11 - Hiram)
+    mkdir /hive/data/genomes/dm6/pushQ
+    cd /hive/data/genomes/dm6/pushQ
+    # Mark says don't let the transMap track get there
+    time makePushQSql.pl dm6 2> stderr.txt | grep -v transMap > dm6.sql
+    #   real    1m50.349s
+
+    scp -p dm6.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta './bin/x86_64/hgsql qapushq < /tmp/dm6.sql'
+
+###########################################################################
+## blat server turned on (DONE - 2014-04-17 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("dm6", "blat4b", "17852", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("dm6", "blat4b", "17853", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+# fixup search rule for assembly track/gold table (DONE - 2014-05-01 - Hiram)
+    hgsql -N -e "select frag from gold;" dm6 | sort | head -1
+AMDS01000001.1
+
+    hgsql -N -e "select frag from gold;" dm6 | sort | tail -2
+AMDS01218862.1
+NC_007936
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" dm6 | wc -l
+    # 218863
+
+    hgsql -N -e "select frag from gold;" dm6 | egrep -e '[AN][MC][D_][S0]0[0-9]+(\.1)?' | wc -l
+    # 218863
+
+    hgsql -N -e "select frag from gold;" dm6 | egrep -v -e '[AN][MC][D_][S0]0[0-9]+(\.1)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/criGri/dm6/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [AN][MC][D_][S0]0[0-9]+(\.1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+#########################################################################

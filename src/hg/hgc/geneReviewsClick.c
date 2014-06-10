@@ -1,4 +1,7 @@
 /* geneReviewsClick - hgc code to display geneReviews track item detail page */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hgc.h"
 #include "geneReviewsClick.h"
@@ -97,13 +100,13 @@ while ((row = sqlNextRow(sr)) != NULL)
           firstTime = FALSE;
        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/%s\" TARGET=_blank><B>%s</B></A>", NBKid, grShort);
         printf(" (");
-       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/%s\" TARGET=_blank>%s</A>", NBKid, grTitle);
+       printf("%s", grTitle);
        printf(")");
         } else {
           printf(", ");
        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
        printf(" (");
-       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/%s\" TARGET=_blank>%s</A>", NBKid, grTitle);
+       printf("%s", grTitle);
        printf(")");
         }
      }

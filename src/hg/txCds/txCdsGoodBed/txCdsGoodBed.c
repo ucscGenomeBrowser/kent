@@ -1,6 +1,9 @@
 /* txCdsGoodBed - Create positive example training set for SVM. This is based on
  * the refSeq reviewed genes, but we fragment a certain percentage of them so as 
  * not to end up with a SVM that *requires* a complete transcript. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

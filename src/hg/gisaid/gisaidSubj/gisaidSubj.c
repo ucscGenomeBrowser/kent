@@ -1,4 +1,7 @@
 /* gisaidSubj - A CGI script to display the subject details page.. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hCommon.h"
 #include "linefile.h"

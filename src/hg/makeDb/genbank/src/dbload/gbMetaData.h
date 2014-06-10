@@ -2,6 +2,9 @@
  * associated unique string tables.  This module functions as a singlton
  * object, with global state that can be reset.  Refer to the
  * doc/database-update-step.html before modifying. */
+
+/* Copyright (C) 2008 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef GBMETADATA_H
 #define GBMETADATA_H
 

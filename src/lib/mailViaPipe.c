@@ -4,6 +4,9 @@
  * Currently, RR never return exit or error status to the browser 
  * after sendmail, so the implementation here does not handle any 
  * error condition at all, and will return 0 regardless. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
  
 #include "pipeline.h"
 #include "common.h"

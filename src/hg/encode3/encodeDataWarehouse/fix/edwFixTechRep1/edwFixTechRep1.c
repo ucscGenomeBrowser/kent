@@ -1,5 +1,8 @@
 /* edwFixTechRep1 - Parse edwFile.tags and if there's technical_replicate or paired_end add 
  * it to edwValidFile.. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

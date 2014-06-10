@@ -1,11 +1,14 @@
 /* edwLib - routines shared by various encodeDataWarehouse programs.    See also encodeDataWarehouse
  * module for tables and routines to access structs built on tables. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hex.h"
 #include "dystring.h"
 #include "jksql.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "openssl/sha.h"
 #include "base64.h"
 #include "basicBed.h"
@@ -18,6 +21,8 @@
 #include "obscure.h"
 #include "bamFile.h"
 #include "raToStruct.h"
+#include "web.h"
+#include "encode3/encode3Valid.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 #include "edwFastqFileFromRa.h"
@@ -280,24 +285,30 @@ if (owner == NULL)
 return cloneString(owner->email);
 }
 
+int edwFindUserIdFromEmail(struct sqlConnection *conn, char *userEmail)
+/* Return true id of this user */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select id from edwUser where email = '%s'", userEmail);
+return sqlQuickNum(conn, query);
+}
+
 boolean edwUserIsAdmin(struct sqlConnection *conn, char *userEmail)
 /* Return true if the user is an admin */
 {
 char query[256];
 sqlSafef(query, sizeof(query), "select isAdmin from edwUser where email = '%s'", userEmail);
-int id = sqlQuickNum(conn, query);
-if (id == 1) return TRUE;
+int isAdmin = sqlQuickNum(conn, query);
+if (isAdmin == 1) return TRUE;
 return FALSE;
 }
 
 void edwWarnUnregisteredUser(char *email)
 /* Put up warning message about unregistered user and tell them how to register. */
 {
-warn("No user exists with email %s.  If you need an account please contact your "
-	 "ENCODE DCC data wrangler, or someone you know who already does have an "
-	 "ENCODE Data Warehouse account, and have them create an account for you with "
-	 "http://%s/cgi-bin/edwWebCreateUser"
-	 , email, getenv("SERVER_NAME"));
+warn("No user exists with email %s. If you need an account please contact your "
+	 "ENCODE DCC data wrangler and have them create an account for you."
+	 , email);
 }
 
 
@@ -734,7 +745,7 @@ char *edwSimpleAssemblyName(char *assembly)
 {
 /* If it ends with one of our common assembly suffix, then do enrichment calcs
  * in that space, rather than some subspace such as male, female, etc. */
-static char *specialAsm[] = {".hg19",".hg38",".mm9",".mm10"};
+static char *specialAsm[] = {".hg19",".hg38",".mm9",".mm10",".dm3",".ce10"};
 int i;
 for (i=0; i<ArraySize(specialAsm); ++i)
     {
@@ -770,11 +781,13 @@ return grt;
 boolean edwIsSupportedBigBedFormat(char *format)
 /* Return TRUE if it's one of the bigBed formats we support. */
 {
-return sameString(format, "broadPeak") || sameString(format, "narrowPeak") || 
-	 sameString(format, "bedLogR") || sameString(format, "bigBed") ||
-	 sameString(format, "bedRnaElements") || sameString(format, "bedRrbs") ||
-	 sameString(format, "openChromCombinedPeaks") || sameString(format, "peptideMapping") ||
-	 sameString(format, "shortFrags");
+int i;
+for (i=0; i<encode3BedTypeCount; ++i)
+    {
+    if (sameString(format, encode3BedTypeTable[i].name))
+        return TRUE;
+    }
+return FALSE;
 }
 
 void edwWriteErrToTable(struct sqlConnection *conn, char *table, int id, char *err)
@@ -941,18 +954,32 @@ printf("Content-Type:text/html\r\n");
 printf("\r\n\r\n");
 puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
 	      "\"http://www.w3.org/TR/html4/loose.dtd\">");
-printf("<HTML><HEAD><TITLE>%s</TITLE>\n", title);
+printf("<HTML><HEAD><TITLE>%s</TITLE>\n", "ENCODE Data Warehouse");
 puts("<meta http-equiv='X-UA-Compatible' content='IE=Edge'>");
+
+// Use Stanford ENCODE3 CSS for common look
+puts("<link rel='stylesheet' href='/style/encode3.css' type='text/css'>");
+puts("<link rel='stylesheet' href='/style/encode3Ucsc.css' type='text/css'>");
+// external link icon (box with arrow) is from FontAwesome (fa-external-link)
+puts("<link href='//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css' rel='stylesheet'>");
+
 puts("<script type='text/javascript' SRC='/js/jquery.js'></script>");
 puts("<script type='text/javascript' SRC='/js/jquery.cookie.js'></script>");
 puts("<script type='text/javascript' src='https://login.persona.org/include.js'></script>");
 puts("<script type='text/javascript' src='/js/edwPersona.js'></script>");
-puts("</HEAD><BODY>");
+puts("</HEAD>");
+
+/* layout with navigation bar */
+puts("<BODY>\n");
+
+edwWebNavBarStart();
 }
+
 
 void edwWebFooterWithPersona()
 /* Print out end tags and persona script stuff */
 {
+edwWebNavBarEnd();
 htmlEnd();
 }
 
@@ -1241,6 +1268,13 @@ void edwBwaIndexPath(struct edwAssembly *assembly, char indexPath[PATH_LEN])
 {
 safef(indexPath, PATH_LEN, "%s%s/bwaData/%s.fa", 
     edwValDataDir, assembly->ucscDb, assembly->ucscDb);
+}
+
+void edwAsPath(char *format, char path[PATH_LEN])
+/* Convert something like "narrowPeak" in format to fill path involving
+ * encValDir/as/narrowPeak.as */
+{
+safef(path, PATH_LEN, "%sas/%s.as", edwValDataDir, format);
 }
 
 void edwAlignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,
@@ -1603,3 +1637,57 @@ for (i=0; i<ArraySize(places); ++i)
 	}
     }
 }
+
+/***/
+/* Shared functions for EDW web CGI's.
+   Mostly wrappers for javascript tweaks */
+
+void edwWebAutoRefresh(int msec)
+/* Refresh page after msec.  Use 0 to cancel autorefresh */
+{
+if (msec > 0)
+    {
+    // set timeout to refresh page (saving/restoring scroll position via cookie)
+    printf("<script type='text/javascript'>var edwRefresh = setTimeout(function() { $.cookie('edwWeb.scrollTop', $(window).scrollTop()); $('form').submit(); }, %d);</script>", msec);
+    puts("<script type='text/javascript'>$(document).ready(function() {$(document).scrollTop($.cookie('edwWeb.scrollTop'))});</script>");
+
+    // disable autorefresh when user is changing page settings
+    puts("<script type='text/javascript'>$('form').click(function() {clearTimeout(edwRefresh); $.cookie('edwWeb.scrollTop', null);});</script>");
+    }
+else if (msec == 0)
+    puts("clearTimeout(edwRefresh);</script>");
+
+// Negative msec ignored
+}
+
+/***/
+/* Navigation bar */
+
+void edwWebNavBarStart()
+/* Layout navigation bar */
+{
+puts("<div id='layout'>");
+puts("<div id='navbar' class='navbar navbar-fixed-top navbar-inverse'>");
+webIncludeFile("/inc/edwNavBar.html");
+puts("</div>");
+puts("<div id='content' class='container'><div>");
+}
+
+void edwWebNavBarEnd()
+/* Close layout after navigation bar */
+{
+puts("</div></div></div>");
+}
+
+void edwWebBrowseMenuItem(boolean on)
+/* Toggle visibility of 'Browse submissions' link on navigation menu */
+{
+printf("<script type='text/javascript'>$('#edw-browse').%s();</script>", on ? "show" : "hide");
+}
+
+void edwWebSubmitMenuItem(boolean on)
+/* Toggle visibility of 'Submit data' link on navigation menu */
+{
+printf("<script type='text/javascript'>$('#edw-submit').%s();</script>", on ? "show" : "hide");
+}
+

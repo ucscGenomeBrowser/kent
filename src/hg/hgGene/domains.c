@@ -1,5 +1,8 @@
 /* domains - do protein domains section. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "trashDir.h"
 #include "hash.h"
@@ -115,7 +118,7 @@ if (kgVersion == KG_III)
 	    description = sqlQuickString(conn, query);
 	    if (description == NULL)
 	    	description = cloneString("n/a");
-	    hPrintf("<A HREF=\"http://scop.berkeley.edu/search.cgi?sunid=%s\" TARGET=_blank>", 
+	    hPrintf("<A HREF=\"http://scop.berkeley.edu/sunid=%s\" TARGET=_blank>", 
 	    	    el->name);
 	    hPrintf("%s</A> - %s<BR>\n", el->name, description);
 	    freez(&description);

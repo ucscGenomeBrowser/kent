@@ -1,4 +1,5 @@
 /* gfxPoly - two dimensional polygon. */
+
 #include "common.h"
 #include "gfxPoly.h"
 

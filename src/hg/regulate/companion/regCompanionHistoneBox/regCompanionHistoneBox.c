@@ -1,5 +1,8 @@
 /* regCompanionHistoneBox - Run a filter that looks for something peaky surrounded by something 
  * squishy.  Good for looking at DNAse and txn factor ChIP peaks surrounded by histone marks.. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

@@ -1,5 +1,8 @@
 /* agxToIntronBeds.c - Program to transform an altGraphX record into a 
    series of introns. */
+
+/* Copyright (C) 2004 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "bed.h"
 #include "altGraphX.h"

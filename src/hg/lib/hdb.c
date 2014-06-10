@@ -1,4 +1,7 @@
 /* hdb - human genome browser database. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "obscure.h"
 #include "hash.h"
@@ -959,7 +962,7 @@ return ci->size;
 void hNibForChrom(char *db, char *chromName, char retNibName[HDB_MAX_PATH_STRING])
 /* Get .nib file associated with chromosome. */
 {
-if (cfgOptionBooleanDefault("allowNib", TRUE) == FALSE)
+if (cfgOptionBooleanDefault("forceTwoBit", FALSE) == TRUE)
     {
     char buf[HDB_MAX_PATH_STRING];
     safef(buf, HDB_MAX_PATH_STRING, "/gbdb/%s/%s.2bit", db, db);
@@ -2179,6 +2182,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 dyStringFree(&query);
 slReverse(&bedList);
+sqlFreeResult(&sr);
 hFreeConn(&conn);
 return(bedList);
 }

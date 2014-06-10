@@ -2,6 +2,9 @@
  * generated cnpSharp.c and cnpSharp.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2005 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef CNPSHARP_H
 #define CNPSHARP_H
 

@@ -1,5 +1,8 @@
 /* regStartSampleEmbl - Make up a EMBL format file (because it's an easy way to do 
  * structured multiline text) with a sample of genes to annotate.. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

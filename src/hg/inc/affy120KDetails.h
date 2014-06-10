@@ -2,6 +2,9 @@
  * generated affy120KDetails.c and affy120KDetails.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef AFFY120KDETAILS_H
 #define AFFY120KDETAILS_H
 

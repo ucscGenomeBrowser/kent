@@ -1,3 +1,6 @@
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /**
    cgi program to convert coordinates from one draft of the
    genome to another. Cool place to test is: chr1:126168504-126599722
@@ -7,9 +10,10 @@
    Note: This now should do conversion between zoo species based on tracks in each zoo database.
    Note: Troubleshooting features have not been fully implemented for Zoo conversions.
 */
+
 #include "common.h"
 #include "obscure.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "htmshell.h"
 #include "jksql.h"
 #include "coordConv.h"

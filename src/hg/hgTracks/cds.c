@@ -1,4 +1,7 @@
 /* cds.c - code for coloring of bases, codons, or alignment differences. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hCommon.h"
 #include "hash.h"
@@ -1770,11 +1773,11 @@ if (initedTrack == NULL || differentString(tg->track, initedTrack))
     {
     int overallStart, overallEnd;
     boolean isSeries = FALSE;
-    if ((tg->drawItems == linkedFeaturesSeriesDraw)
 #ifdef USE_BAM
-        || (tg->drawItems == bamLinkedFeaturesSeriesDraw))
+    if (tg->drawItems == linkedFeaturesSeriesDraw
+        || tg->drawItems == bamLinkedFeaturesSeriesDraw)
 #else
-	)
+    if (tg->drawItems == linkedFeaturesSeriesDraw)
 #endif
 	isSeries = TRUE;
     else if (!baseColorCanDraw(tg))

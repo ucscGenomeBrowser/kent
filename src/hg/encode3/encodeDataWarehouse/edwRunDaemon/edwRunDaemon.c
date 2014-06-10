@@ -3,6 +3,9 @@
  * sent a signal (anything ending with a newline actually) that tells it to go look
  * at database now. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* Version history -
  *  v2 - making it so daemon only keeps current job in memory consulting db table always
  *       for next job.  This simplifies code and allows the daemon to respond to changes 
@@ -186,7 +189,9 @@ if ((childId = mustFork()) == 0)
         errnoAbort("Can't dup2 stderr to %s", tempFileName);
     int status = system(job->commandLine);
     if (status != 0)
-        exit(-1);
+	{
+	errAbort("Error: status %d from system of %s", status, job->commandLine);
+	}
     else
 	exit(0);
     }

@@ -59,6 +59,9 @@
 				PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/24227676" 
 				target="_blank">24227676</a>
 				</p>
+  				<b><a HREF="hubQuickStart.html">Hub Quick Start Guide</a></b>
+                                </p>
+				</p>
   				<b><a HREF="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs">Assembly Hubs Wiki</a></b>
                                 </p>
 				<p>
@@ -463,7 +466,7 @@ directory hierarchy. The location of a track file is defined by its
 
 <P><B>Step 4. Create the hub.txt file</B><BR>
 Within the hub directory, create a hub.txt file containing a single stanza 
-with five fields that define properties of the track hub: </p>
+with up to six fields that define properties of the track hub: </p>
 
 <BLOCKQUOTE><TT>
 <B>hub</B> <em>hub_name</em> <BR>
@@ -471,6 +474,7 @@ with five fields that define properties of the track hub: </p>
 <B>longLabel</B> <em>hub_long_label</em><BR>
 <B>genomesFile</B> <em>genomes_filelist</em><BR>
 <B>email</B> <em>email_address</em><BR>
+<B>descriptionUrl</B> <em>descriptionUrl</em><BR>
 </TT>
 </BLOCKQUOTE>
 
@@ -497,6 +501,12 @@ file is located in the same directory as the hub.txt file.</p>
 <em>email</em> - the contact to whom questions regarding the track hub
 should be directed.</p>
 
+<P>
+<em>descriptionUrl</em> - URL to HTML page with a description of the hub's contents. This can be
+relative to the directory which holds hub.txt. This file is assumed to be HTML, and if the hub is a UCSC public
+hub, this HTML will be crawled nightly by UCSC to build an index with which public hubs can be searched.
+If present, clicks on the shortLabel will open this HTML in a new tab. This field is optional.</p>
+
 <P><B><em>Example 2:</em></B> Sample hub.txt file defining attributes for the track
 hub shown in <em>Example 1</em>.</p>
 
@@ -506,6 +516,7 @@ hub shown in <em>Example 1</em>.</p>
 <B>longLabel</B> UCSC Genome Informatics Hub for human DNase and RNAseq data<BR>
 <B>genomesFile</B> genomes.txt<BR>
 <B>email</B> genome@soe.ucsc.edu<BR>
+<B>descriptionUrl</B> ucscHub.html<BR>
 </TT></BLOCKQUOTE>
 
 

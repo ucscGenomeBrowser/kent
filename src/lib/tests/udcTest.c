@@ -1,12 +1,15 @@
 /* udcTest -- test the URL data cache */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 // suggestions from Mark: 1. try setvbuf, to make FILE * unbuffered -- does that help?
 //                        2. *if* need to do own buffering, consider mmap()
 //                           (kernel handles buffering)
 
 #include <sys/wait.h>
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "options.h"
 #include "portable.h"
 #include "udc.h"

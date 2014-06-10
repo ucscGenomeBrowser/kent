@@ -12,7 +12,7 @@ BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert hgHubConnect \
 	encode/hgEncodeDataVersions \
 	encode/hgEncodeVocab encode/hgEncodeApi \
 	phyloGif hgCustom hgPal hgFileUi hgFileSearch\
-	makeDb/hgCgiData js htdocs/style
+	makeDb/hgCgiData js htdocs/style hgMirror
 
 ifdef LOWELAB
     BROWSER_BINS += $(HOME)/lowelab/src/browser/tooltip $(HOME)/lowelab/src/browser/chooseorg
@@ -44,6 +44,14 @@ BAD_DIRS = \
 	synMap \
 	encode \
 	wikiPlot
+
+# can not build this on Mac OSX - has functions not supported
+UNAME_S := $(shell uname -s) 
+ifeq ($(UNAME_S),Darwin)
+  buildRefresh=
+else
+  buildRefresh=encode3
+endif
 
 # List of directories to build for userApps
 UTILS_APPLIST = \
@@ -121,7 +129,7 @@ UTIL_DIRS = \
 	ctgFaToFa \
 	ctgToChromFa \
 	embossToPsl \
-	encode3 \
+	${buildRefresh} \
 	fakeFinContigs \
 	fakeOut \
 	ffaToFa \

@@ -1,7 +1,10 @@
 /* hgUserSuggestion - CGI-script to collect user's suggestion. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "hCommon.h"
 #include "jksql.h"
 #include "portable.h"

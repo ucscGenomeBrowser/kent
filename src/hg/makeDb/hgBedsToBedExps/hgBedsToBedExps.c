@@ -1,4 +1,7 @@
 /* hgBedsToBedExps - Convert multiple bed files to a single bedExp.. */
+
+/* Copyright (C) 2012 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -7,7 +10,7 @@
 #include "bed.h"
 #include "bedGraph.h"
 #include "rangeTree.h"
-#include "errabort.h"
+#include "errAbort.h"
 
 
 boolean dupeLetterOk = FALSE;

@@ -11,6 +11,7 @@ CREATE TABLE hubPublic (
     registrationTime varchar(255) not null,	# Time first registered
     dbCount int unsigned not null,	# Number of databases hub has data for.
     dbList varchar(255) not null,	# Comma separated list of databases.
+    descriptionUrl longblob not null,	# URL to description HTML
               #Indices
     PRIMARY KEY(hubUrl(255))
 );

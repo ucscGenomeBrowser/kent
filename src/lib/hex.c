@@ -2,6 +2,9 @@
  *   If you don't want to use printf
  */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 
 char hexTab[16] = {'0', '1', '2', '3', '4', '5', '6', '7', 

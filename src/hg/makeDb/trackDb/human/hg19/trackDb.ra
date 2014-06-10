@@ -823,6 +823,9 @@ priority 2
         type bed 5 .
         priority 23
 
+track genomicSuperDups override
+group rep
+
 track snp137Common override
 snpSeqFile /gbdb/hg19/snp/snp137.fa
 chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
@@ -1229,7 +1232,6 @@ origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track evsEsp6500
-release alpha
 shortLabel EVS Variants
 longLabel NHLBI GO Exome Sequencing Project (ESP) - Variants from 6,503 Exomes
 type vcfTabix
@@ -1237,10 +1239,8 @@ group varRep
 visibility hide
 maxWindowToDraw 5000000
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
-url http://evs.gs.washington.edu/EVS/PopStatsServlet?searchBy=rsID&target=$$&x=0&y=0
+url http://evs.gs.washington.edu/EVS/PopStatsServlet?searchBy=rsOrChrom&target=$$&chromosome=$s&chromoStart=$[&chromoEnd=$]&x=0&y=0
 urlLabel Exome Variant Server:
-#url2 http://evs.gs.washington.edu/EVS/PopStatsServlet?searchBy=chromosome&chromosome=$s&chromoStart=$]&chromoEnd=$]&x=0&y=0
-#url2Label ESP Variant Details:
 
 
 searchTable nscanGene

@@ -1050,8 +1050,8 @@ to find Genome Browser tracks that match specific selection criteria.
 <P>
 <B>Download sequence and annotation data:</B>
 <UL>
+<LI><A HREF="../goldenPath/help/ftp.html">Using rsync</A> (recommended)
 <LI><A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/">Using FTP</A>
-(recommended)
 <LI><A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#$anchorRoot">Using HTTP</A>
 <LI><A HREF="../goldenPath/credits.html#${anchorRoot}_credits">Data use conditions and
 restrictions</A>
@@ -1124,10 +1124,10 @@ This track shows the gaps in the $assemblyDate $em\$organism$noEm genome assembl
 <P>
 Genome assembly procedures are covered in the NCBI
 <A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
-TARGET=_blank>assembly documentation.</A><BR>
+TARGET=_blank>assembly documentation</A>.<BR>
 NCBI also provides
 <A HREF="http://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId"
-TARGET="_blank">specific information about this assembly.</A>
+TARGET="_blank">specific information about this assembly</A>.
 </P>
 <P>
 The definition of the gaps in this assembly is from the
@@ -1226,10 +1226,10 @@ This track shows the sequences used in the $assemblyDate $em\$organism$noEm geno
 <P>
 Genome assembly procedures are covered in the NCBI
 <A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
-TARGET=_blank>assembly documentation.</A><BR>
+TARGET=_blank>assembly documentation</A>.<BR>
 NCBI also provides
 <A HREF="http://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId"
-TARGET="_blank">specific information about this assembly.</A>
+TARGET="_blank">specific information about this assembly</A>.
 </P>
 <P>
 The definition of this assembly is from the
@@ -1248,7 +1248,7 @@ blocks.  The relative order and orientation of the contigs
 within a scaffold is always known; therefore, a line is drawn in the graphical
 display to bridge the blocks.</P>
 <P>
-Component types found in this track (with counts of that type in parenthesis):
+Component types found in this track (with counts of that type in parentheses):
 <UL>
 _EOF_
     ;
@@ -1340,6 +1340,14 @@ $HgAutomate::git archive --remote=git://genome-source.cse.ucsc.edu/kent.git \\
   --prefix=kent/ HEAD src/hg/makeDb/trackDb/loadTracks \\
 src/hg/makeDb/trackDb/$dbDbSpeciesDir \\
 src/hg/makeDb/trackDb/trackDb.chainNet.ra \\
+src/hg/makeDb/trackDb/trackDb.chainNet.primates.ra \\
+src/hg/makeDb/trackDb/trackDb.chainNet.euarchontoglires.ra \\
+src/hg/makeDb/trackDb/trackDb.chainNet.laurasiatheria.ra \\
+src/hg/makeDb/trackDb/trackDb.chainNet.afrotheria.ra \\
+src/hg/makeDb/trackDb/trackDb.chainNet.mammal.ra \\
+src/hg/makeDb/trackDb/trackDb.chainNet.birds.ra \\
+src/hg/makeDb/trackDb/trackDb.chainNet.sarcopterygii.ra \\
+src/hg/makeDb/trackDb/trackDb.chainNet.fish.ra \\
 src/hg/makeDb/trackDb/chainNetPetMar1.ra \\
 src/hg/makeDb/trackDb/chainNetPetMar2.ra \\
 src/hg/makeDb/trackDb/trackDb.nt.ra \\

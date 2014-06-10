@@ -1,10 +1,13 @@
 /* edwWebCreateUser - Allows one user to create another - vampire mode - over web.. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
 #include "cheapcgi.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "htmshell.h"
 #include "edwLib.h"
 
@@ -36,17 +39,13 @@ else if (cgiVarExists("newUser"))
     printf("Note %s will need to create a Persona account as well if they don't have one. ", 
 	newUser);
     printf("They will be led through the process when they sign in.<BR>");
-    printf("<INPUT TYPE=BUTTON NAME=\"signOut\" VALUE=\"sign out %s\" id=\"signout\">", 
-	oldUserEmail);
     printf(" ");
     cgiMakeButton("submit", "Add another user");
-    edwPrintLogOutButton();
     }
 else
     {
     struct sqlConnection *conn = sqlConnect(edwDatabase);
     struct edwUser *user = edwUserFromEmail(conn, oldUserEmail);
-    edwPrintLogOutButton();
     if (user != NULL && edwUserIsAdmin(conn, oldUserEmail)) 
 	{
 	printf("%s is authorized to create a new user<BR>\n", oldUserEmail);

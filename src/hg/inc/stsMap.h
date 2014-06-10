@@ -2,6 +2,9 @@
  * generated stsMap.c and stsMap.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2004 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef STSMAP_H
 #define STSMAP_H
 

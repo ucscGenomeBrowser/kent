@@ -2393,3 +2393,30 @@ XXXX - running 2007-01-11 20:55
     gzip axtChrom/*.axt 
     # removed about 0.9 G of data
 
+#########################################################################
+# CPG Islands Unmasked track (DONE - 2014-04-24 - Hiram)
+    mkdir /hive/data/genomes/fr1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/fr1/bed/cpgIslandsUnmasked
+    time doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
+     -tableName=cpgIslandExtUnmasked -dbHost=hgwdev -smallClusterHub=ku \
+        -workhorse=hgwdev \
+          -maskedSeq=/hive/data/genomes/fr1/fr1.unmasked.2bit \
+            fr1 > do.log 2>&1
+
+    # real    1m54.490s
+    cat fb.fr1.cpgIslandExtUnmasked.txt
+    # 28071734 bases of 315518167 (8.897%) in intersection
+
+##############################################################################
+# CPG Islands track (DONE - 2014-04-24 - Hiram)
+    mkdir /hive/data/genomes/fr1/bed/cpgIslandsExt
+    cd /hive/data/genomes/fr1/bed/cpgIslandsExt
+    time doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
+     -tableName=cpgIslandExt -dbHost=hgwdev -smallClusterHub=ku \
+        -workhorse=hgwdev fr1 > do.log 2>&1
+
+    # real    1m53.968s
+    cat fb.fr1.cpgIslandExt.txt
+    #  25850122 bases of 315518167 (8.193%) in intersection
+
+##############################################################################

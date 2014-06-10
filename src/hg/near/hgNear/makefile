@@ -12,6 +12,7 @@ O = $A.o advFilter.o afiAli.o association.o colTemplate.o configure.o \
 include ../../../inc/cgi_build_rules.mk
 
 my::
+	rm -fr ${CGI_BIN}-${USER}/hgNearData
 	rsync -aO --exclude=CVS/ --exclude=.svn/ --delete hgNearData ${CGI_BIN}-${USER}/
 	chmod -R a+rX ${CGI_BIN}-${USER}/hgNearData
 

@@ -7,7 +7,7 @@
 
 #include "common.h"
 #include "xap.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "xp.h"
 
 

@@ -5,6 +5,9 @@
  *   adapted into local conventions: Jim Kent
  *   extended to support merging of overlaps: Angie Hinrichs
  */
+
+/* Copyright (C) 2004 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef RBMTREE_H
 #define RBMTREE_H
 

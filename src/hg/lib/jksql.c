@@ -12,7 +12,7 @@
 
 #include "common.h"
 #include "portable.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include <mysql.h>
 #include "dlist.h"
 #include "dystring.h"

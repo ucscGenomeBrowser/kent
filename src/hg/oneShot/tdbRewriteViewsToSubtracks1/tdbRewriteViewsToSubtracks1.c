@@ -1,6 +1,9 @@
 /* tdbRewriteViewsToSubtracks1 - Convert views to subtracks with sub-sub-tracks.. 
  * This code is a slight modification of tdbRewriteViewsToSubtracks.  It works on 
  * a single file rather than the whole directory, but */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -9,7 +12,7 @@
 #include "dystring.h"
 #include "obscure.h"
 #include "portable.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "ra.h"
 
 

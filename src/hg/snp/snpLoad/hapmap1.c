@@ -1,3 +1,6 @@
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* hapmap1 -- first step after reading genotype files. */
 /* Determine 2 alleles */
 /* Input is:

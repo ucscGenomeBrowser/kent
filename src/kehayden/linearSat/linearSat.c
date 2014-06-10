@@ -2,6 +2,9 @@
  * been parsed into various repeat monomer variants.  Cycles of these variants tend to
  * form higher order repeats. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -9,7 +12,7 @@
 #include "dystring.h"
 #include "dlist.h"
 #include "obscure.h"
-#include "errabort.h"
+#include "errAbort.h"
 
 /* Global vars - all of which can be set by command line options. */
 int pseudoCount = 1;

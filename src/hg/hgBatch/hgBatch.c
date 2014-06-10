@@ -1,5 +1,8 @@
 /* hgBatch - Use to do batch queries of genome database over web, 
  * now it sends user to Table Browser which has incorporated its functions. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "options.h"
 #include "htmshell.h"

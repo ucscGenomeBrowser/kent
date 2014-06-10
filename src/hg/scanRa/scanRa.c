@@ -1,5 +1,8 @@
 /* scanRa - scan through ra files counting or printing 
  * ones that meet a certain criteria. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hash.h"
 #include "obscure.h"

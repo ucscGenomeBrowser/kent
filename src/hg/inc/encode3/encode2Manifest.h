@@ -1,6 +1,9 @@
 /* encode2Manifest - manipulate a line of a manifest file of the type
  * used for importing data from encode2 into encode3 */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef ENCODE2MANIFEST_H
 #define ENCODE2MANIFEST_H
 

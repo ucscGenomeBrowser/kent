@@ -1,6 +1,9 @@
 /* hgGene.h - important structures and interfaces between
  * modules of the gene details viewer. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef CART_H
 #include "cart.h"
 #endif 

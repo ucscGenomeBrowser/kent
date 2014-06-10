@@ -1,4 +1,7 @@
 /* edwRsyncEdwUser - Update edwUser table using user information from encodedcc. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "dystring.h"
 #include "options.h"
@@ -52,13 +55,13 @@ fprintf(f, "%d user records processed.\n%d new user added to edwUser table.\nedw
     procN, addedN, prevN, postN, updateN);
 }
 
-char *getTextViaHttp(char *url, char *userId, char *password)
-/* getTextViaHttp - Fetch text from url that is http password protected. This
+char *getTextViaHttps(char *url, char *userId, char *password)
+/* getTextViaHttps - Fetch text from url that is https password protected. This
  * will return a NULL rather than aborting if URL not found. */
 /* TODO: Move to edwLib.c */
 {
 char fullUrl[1024];
-safef(fullUrl, sizeof(fullUrl), "http://%s:%s@%s", userId, password, url);
+safef(fullUrl, sizeof(fullUrl), "https://%s:%s@%s", userId, password, url);
 struct htmlPage *page = htmlPageGet(fullUrl);
 if (page == NULL)
     return NULL;
@@ -74,21 +77,21 @@ char *getUserJson(char *sUrl, char *uuid, char *userId, char *password)
 /* Get detail user information associated with this uuid */
 {
 char url[512];
-safef(url, sizeof(url), "%s/users/%s/?format=json", sUrl, uuid);
-return getTextViaHttp(url, userId, password);
+safef(url, sizeof(url), "%s/users/%s/?format=json&datastore=database", sUrl, uuid);
+return getTextViaHttps(url, userId, password);
 }
 
 char *getAllUsersJson(char *sUrl, char *userId, char *password)
 /* Get the userTable in JSON format from encodedcc using REST API
  * similar to the curl command  --
     curl --header "accept:application/json" -u "uid:pwd"
-        http://submit.encodedcc.org/users/?format=json&limit=all
+        https://www.encodedcc.org/users/?format=json&limit=all
 */
 {
 char url[512];
 safef(url, sizeof(url), "%s/users/?format=json&limit=all", sUrl);
 //verbose(1, "Fetching all users from\n  %s\n", url);
-return getTextViaHttp(url, userId, password);
+return getTextViaHttps(url, userId, password);
 }
 
 void maybeDoUpdate(struct sqlConnection *conn, char *query, boolean really, FILE *f)

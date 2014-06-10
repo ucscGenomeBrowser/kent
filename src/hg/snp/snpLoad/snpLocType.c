@@ -2,6 +2,9 @@
  * Read the chrN_snpTmp tables created by snpSplitSimple and handle locType.
  * Rewrite to new chrN_snpTmp tables.  Get chromInfo from ContigInfo.  */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 
 #include "dystring.h"

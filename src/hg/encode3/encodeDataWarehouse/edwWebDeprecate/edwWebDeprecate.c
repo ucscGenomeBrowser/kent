@@ -1,10 +1,13 @@
 /* edwWebDeprecate - A cgi script to mark files as deprecated.. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
 #include "htmshell.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "cheapcgi.h"
 #include "jksql.h"
 #include "encodeDataWarehouse.h"
@@ -75,7 +78,6 @@ if (okToShowAllowBox(conn, userEmail))
     printf("<BR>");
     }
 cgiMakeButton("submit", "submit");
-edwPrintLogOutButton();
 }
 
 static void localWarn(char *format, va_list args)

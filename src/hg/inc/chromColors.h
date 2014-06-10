@@ -1,6 +1,9 @@
 /*
  *	Definitions of chromosome colors for Synteny displays
  */
+
+/* Copyright (C) 2003 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef CHROM_COLORS_H
 #define CHROM_COLORS_H
 

@@ -1,5 +1,8 @@
 // imageV2 - API for creating the image V2 features.
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef IMAGEV2_H
 #define IMAGEV2_H
 
@@ -351,6 +354,14 @@ struct imgSlice *imgTrackSliceUpdateOrAdd(struct imgTrack *imgTrack,enum sliceTy
                                           struct image *img,char *title,int width,int height,
                                           int offsetX,int offsetY);
 // Updates the slice or adds it
+
+int imgTrackCoordinates(struct imgTrack *imgTrack, int *leftX,int *topY,int *rightX,int *bottomY);
+// Fills in topLeft x,y and bottomRight x,y coordinates, returning topY.
+#define imgTrackTopY(imgTrack) imgTrackCoordinates(imgTrack,NULL,NULL,NULL,NULL)
+// Returns the Y coordinate of the top of the track.
+
+int imgTrackBottomY(struct imgTrack *imgTrack);
+// Returns the Y coordinate of the bottom of the track.
 
 struct mapSet *imgTrackGetMapByType(struct imgTrack *imgTrack,enum sliceType type);
 // Gets the map assocated with a specific slice belonging to the imgTrack

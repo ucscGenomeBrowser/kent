@@ -1,4 +1,7 @@
 /* tdbQuery - Query the trackDb system using SQL syntax.. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -7,7 +10,7 @@
 #include "dystring.h"
 #include "obscure.h"
 #include "portable.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "trackDb.h"
 #include "tdbRecord.h"
 #include "ra.h"

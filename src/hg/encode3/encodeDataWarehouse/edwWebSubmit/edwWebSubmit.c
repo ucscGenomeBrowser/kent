@@ -1,10 +1,13 @@
 /* edwWebSubmit - A small self-contained CGI for submitting data to the ENCODE Data Warehouse.. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
 #include "dystring.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "obscure.h"
@@ -30,24 +33,29 @@ errAbort(
 void logIn()
 /* Put up name.  No password for now. */
 {
-printf("Welcome to the prototype ENCODE Data Warehouse submission site.<BR>");
-printf("Please sign in via Persona");
-printf("<INPUT TYPE=BUTTON NAME=\"signIn\" VALUE=\"sign in\" id=\"signin\">");
+printf("<DIV>");
+printf("<H3>Welcome to the ENCODE data submission site</H3>");
+printf("Please sign in using Persona&nbsp;");
+printf("<INPUT TYPE=BUTTON NAME=\"signIn\" CLASS=\"btn\" VALUE=\"Sign in\" id=\"signin\"</H5>");
+printf("</DIV>");
 }
 
 void getUrl(struct sqlConnection *conn)
 /* Put up URL. */
 {
-edwMustGetUserFromEmail(conn, userEmail);
-printf("Please enter a URL for a validated manifest file:<BR>");
-printf("URL ");
+printf("<H3>Submit data</H3>");
+
+printf("<P CLASS='title'>Enter the URL of a validated manifest file:<P>");
+
+puts("<DIV CLASS=\"input-append\">");
 cgiMakeTextVar("url", emptyForNull(cgiOptionalString("url")), 80);
-cgiMakeButton("submitUrl", "submit");
-printf("<BR>\n");
+cgiMakeButton("submitUrl", "Submit");
+puts("</DIV>");
+
+puts("<DIV>");
 cgiMakeCheckBox("update", FALSE);
-printf(" Update information associated with files that have already been uploaded.");
-printf("<BR>Submission by %s", userEmail);
-edwPrintLogOutButton();
+printf(" Update information for files previously submitted");
+puts("</DIV>");
 }
 
 static char *stopButtonName = "stopUpload";
@@ -64,7 +72,7 @@ paraFetchReadStatus(path, &pcList, &url, &fileSize, &dateString, &totalDownloade
 return totalDownloaded;
 }
 
-void monitorSubmission(struct sqlConnection *conn)
+void monitorSubmission(struct sqlConnection *conn, boolean autoRefresh)
 /* Write out information about submission. */
 {
 char *url = trimSpaces(cgiString("url"));
@@ -195,22 +203,43 @@ else
 	else
 	    {
 	    printf("<B>submission time:</B> %s<BR>\n", duration->string);
-	    cgiMakeButton("getUrl", "submit another data set");
 	    }
 	}
     }
-cgiMakeButton("monitor", "refresh status");
 if (endUploadTime == 0 && isEmpty(sub->errorMessage))
     cgiMakeButton(stopButtonName, "stop upload");
-printf(" <input type=\"button\" value=\"browse submissions\" "
-       "onclick=\"window.location.href='edwWebBrowse';\">\n");
 
-edwPrintLogOutButton();
+if (autoRefresh && isEmpty(sub->errorMessage))
+    {
+    cgiMakeHiddenVar("monitor", "monitor");
+    edwWebAutoRefresh(EDW_WEB_REFRESH_5_SEC);
+    }
+}
+
+boolean okToResubmitThisUrl(struct sqlConnection *conn, char *url)
+/* Return true if the user is an administrator or the original submitter */
+{
+if (edwUserIsAdmin(conn,userEmail)) 
+    return TRUE; 
+if (!sqlRowExists(conn, "edwSubmit", "url", url))
+    return TRUE;
+/* url exists, find out who is the original submitter */
+int uId = edwFindUserIdFromEmail(conn, userEmail);
+char  query[256];
+sqlSafef(query, sizeof(query),
+    "select distinct userId from edwSubmit where url='%s'", url);
+struct slInt *idList = sqlQuickNumList(conn, query);
+struct slInt *id;
+for (id = idList; id != NULL; id = id->next)
+    {
+    if (id->val == uId)
+    return TRUE;
+    }
+return FALSE;
 }
 
 void submitUrl(struct sqlConnection *conn)
-/* Submit validated manifest if it is not already in process.  Show
- * progress once it is in progress. */
+/* Submit validated manifest if it is not already in process. */
 {
 /* Parse email and URL out of CGI vars. Do a tiny bit of error checking. */
 char *url = trimSpaces(cgiString("url"));
@@ -222,11 +251,11 @@ edwMustGetUserFromEmail(conn, userEmail);
 int sd = netUrlMustOpenPastHeader(url);
 close(sd);
 
-edwAddSubmitJob(conn, userEmail, url, cgiBoolean("update"));
+/* Check is it OK for the user to resubmit the url or update its information */
+if (!okToResubmitThisUrl(conn, url))
+    errAbort("The url was previously submitted by another user, you cannot submit it again nor update its information.");
 
-/* Give the system a half second to react and then put up status info about submission */
-sleep1000(1000);
-monitorSubmission(conn);
+edwAddSubmitJob(conn, userEmail, url, cgiBoolean("update"));
 }
 
 void stopUpload(struct sqlConnection *conn)
@@ -255,7 +284,6 @@ else
 	"update edwSubmit set errorMessage='Stopped by user.' where id=%u", sub->id);
     sqlUpdate(conn, query);
     }
-monitorSubmission(conn);
 }
 
 
@@ -271,21 +299,39 @@ void doMiddle()
 /* doMiddle - put up middle part of web page, not including http and html headers/footers */
 {
 pushWarnHandler(localWarn);
+edwWebSubmitMenuItem(TRUE);
 printf("<FORM ACTION=\"../cgi-bin/edwWebSubmit\" METHOD=GET>\n");
 struct sqlConnection *conn = edwConnectReadWrite(edwDatabase);
 userEmail = edwGetEmailAndVerify();
 if (userEmail == NULL)
+    {
+    edwWebSubmitMenuItem(FALSE);
+    edwWebBrowseMenuItem(FALSE);
     logIn();
+    }
 else if (cgiVarExists(stopButtonName))
+    {
     stopUpload(conn);
+    monitorSubmission(conn, FALSE);
+    }
 else if (cgiVarExists("submitUrl"))
+    {
     submitUrl(conn);
+    sleep1000(1000);
+    monitorSubmission(conn, TRUE);
+    }
 else if (cgiVarExists("monitor"))
-    monitorSubmission(conn);
+    {
+    monitorSubmission(conn, TRUE);
+    }
 else
+    {
     getUrl(conn);
+    edwWebSubmitMenuItem(FALSE);
+    }
 printf("</FORM>");
 }
+
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -295,7 +341,7 @@ if (!isFromWeb && !cgiSpoof(&argc, argv))
     usage();
 
 /* Put out HTTP header and HTML HEADER all the way through <BODY> */
-edwWebHeaderWithPersona("Submit data to ENCODE Data Warehouse");
+edwWebHeaderWithPersona("");
 
 /* Call error handling wrapper that catches us so we write /BODY and /HTML to close up page
  * even through an errAbort. */

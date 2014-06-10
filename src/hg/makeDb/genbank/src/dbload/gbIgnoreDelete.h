@@ -1,5 +1,8 @@
 /* Delete ignored entries from the database.  Also handled deleting of
  * accessions to explictly reloadd */
+
+/* Copyright (C) 2008 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef GBIGNOREDELETE_H
 #define GBIGNOREDELETE_H
 struct dbLoadOptions;

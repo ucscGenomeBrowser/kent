@@ -1,5 +1,8 @@
 /* GeneReviews - print out GeneReviews for this gene. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "hdb.h"
@@ -46,7 +49,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         }
        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/%s\" TARGET=_blank><B>%s</B></A>",row[2], row[1]);
        printf(" ("); 
-       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/%s\" TARGET=_blank>%s</A>", row[2], row[3]);
+       printf("%s", row[3]);
        printf(")<BR>");
      }
      sqlFreeResult(&sr);

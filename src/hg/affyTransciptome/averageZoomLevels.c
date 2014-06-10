@@ -1,4 +1,7 @@
 /* Take a sample file and create averages at different levels for display in the browser when zoomed out. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "sample.h"
 #include "hdb.h"

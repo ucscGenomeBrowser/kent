@@ -6,7 +6,7 @@
 #include "common.h"
 #include "options.h"
 #include "dystring.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "hash.h"
 #include "cheapcgi.h"
 #include "mime.h"

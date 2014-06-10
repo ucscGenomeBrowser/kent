@@ -2,6 +2,9 @@
  * generated jaxQTL3.c and jaxQTL3.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2007 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef JAXQTL3_H
 #define JAXQTL3_H
 

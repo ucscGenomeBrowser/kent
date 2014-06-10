@@ -1,15 +1,14 @@
 <H2>Description</H2>
 <P>
-The UCSC Genes track is a set of gene predictions based on data from RefSeq, GenBank, CCDS,
-Rfam, and the <a href="hgTrackUi?db=hg19&g=tRNAs">tRNA Genes</a> track. The track
+The UCSC Genes track is a set of gene predictions based on data from RefSeq, GenBank, 
+Rfam, and the <a href="hgTrackUi?db=hg38&g=tRNAs">tRNA Genes</a> track. The track
 includes both protein-coding genes and
 non-coding RNA genes. Both types of genes can produce non-coding transcripts, but non-coding
 RNA genes do not produce protein-coding transcripts. This is a moderately conservative set of
 predictions.  Transcripts of protein-coding genes require the support of one RefSeq RNA, or one
 GenBank RNA sequence plus at least one additional line of evidence. Transcripts of non-coding RNA
 genes require the support of one Rfam or tRNA prediction.  Compared to RefSeq, this gene set has
-generally about 10% more protein-coding genes, approximately four times as many putative non-coding
-genes, and about twice as many splice variants.</P>
+generally about 50% more protein-coding transcripts, approximately three times as many putative non-coding transcripts, and about twice as many splice variants.</P>
 
 <H2>Display Conventions and Configuration</H2>
 <P>
@@ -22,7 +21,7 @@ while those for coding open reading frames are thicker. The following color key 
 <li><span style="font-weight: bold;">Black</span> -- feature has a corresponding entry in the Protein
  Data Bank (PDB)</li>
 <li><span style="color: #0C0C78; font-weight: bold;">Dark blue</span> -- transcript has been reviewed
- or validated by either the RefSeq, SwissProt or CCDS staff</li>
+ or validated by either the RefSeq or SwissProt staff</li>
 <li><span style="color: #5050A0; font-weight: bold;">Medium blue</span> -- other RefSeq transcripts</li>
 <li><span style="color: #8282D2; font-weight: bold;">Light blue</span> -- non-RefSeq transcripts</li>
 </ul>
@@ -43,8 +42,8 @@ progressively relaxed for longer sequences.</LI>
 <LI>Alignments are broken up at non-intronic gaps, with small isolated fragments thrown out.</LI>
 <LI>A splicing graph is created for each set of overlapping alignments. This graph has an edge
 for each exon or intron, and a vertex for each splice site, start, and end. Each RNA that
-contributes to an edge is kept as evidence for that edge. Gene models from the Consensus CDS project
-(CCDS) are also added to the graph.</LI>
+contributes to an edge is kept as evidence for that edge. 
+</LI>
 <LI>A similar splicing graph is created in the mouse, based on mouse RNA and ESTs. If the mouse
 graph has an edge that is orthologous to an edge in the human graph, that is added to the evidence
 for the human edge.</LI>
@@ -56,16 +55,16 @@ initial RNAs to avoid a combinatorial explosion in alternative splicing. All Ref
 output. For other multi-exon transcripts to be output, an edge supported by at least one additional
 line of evidence beyond the RNA is required.  Single-exon genes require either two RNAs or two 
 additional lines of evidence beyond the single RNA.</LI>
-<LI>Alignments are merged in from the hg19
-<A HREF="hgTrackUi?db=hg19&g=tRNAs">tRNA Genes</A> track and from Rfam
-in regions that are syntenic with the mm9 mouse genome.</LI> 
+<LI>Alignments are merged in from the hg38
+<A HREF="hgTrackUi?db=hg38&g=tRNAs">tRNA Genes</A> track and from Rfam
+in regions that are syntenic with the mm10 mouse genome.</LI> 
 <LI>Protein predictions are generated. For non-RefSeq transcripts we use the txCdsPredict program to
 determine if the transcript is protein-coding, and if so, the locations of the start and stop codons. 
 The program weighs as positive evidence the length of the protein, the presence of a Kozak consensus
 sequence at the start codon, and the length of the orthologous predicted protein in other species.
 As negative evidence it considers nonsense-mediated decay and start codons in any frame upstream of
 the predicted start codon. For RefSeq transcripts the RefSeq protein prediction is used directly
-instead of this procedure.  For CCDS proteins the CCDS protein is used directly.</LI>
+instead of this procedure.  
 <LI>The corresponding UniProt protein is found, if any.</LI>
 <LI>The transcript is assigned a permanent &quot;uc&quot; accession. If the transcript was not in
 the previous release of UCSC Genes, the accession ends with the suffix &quot;.1&quot; indicating
@@ -80,7 +79,7 @@ incremented.</LI>
 <H2>Related Data</H2>
 <P>
 The UCSC Genes transcripts are annotated in numerous tables, each of which is also available as a
-<a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/">downloadable file</a>.  These
+<a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg38/database/">downloadable file</a>.  These
 include tables that link UCSC Genes transcripts to external datasets (such as
 <I>knownToLocusLink</I>, which maps UCSC Genes transcripts to Entrez identifiers, previously known
 as Locus Link identifiers), and tables that detail some property of UCSC Genes transcript sequences
@@ -118,15 +117,14 @@ this is the longest isoform.</LI>
 <H2>Credits</H2>
 <P>
 The UCSC Genes track was produced at UCSC using a computational pipeline developed by Jim Kent,
-Chuck Sugnet, Melissa Cline and Mark Diekhans. It is based on data from NCBI
+Chuck Sugnet, Melissa Cline, Brian Raney, and Mark Diekhans. It is based on data from NCBI
 <A HREF="http://www.ncbi.nlm.nih.gov/RefSeq/" TARGET=_blank>RefSeq</A>,
 <A HREF="http://www.uniprot.org/" TARGET=_blank>UniProt</A> 
-(including TrEMBL and TrEMBL-NEW), 
-<A HREF="http://www.ncbi.nlm.nih.gov/CCDS/" TARGET=_blank>CCDS</A>, and
+(including TrEMBL and TrEMBL-NEW), and 
 <A HREF="http://www.ncbi.nlm.nih.gov/Genbank/index.html"
 TARGET=_blank>GenBank</A> as well as data from 
-<A HREF="http://rfam.sanger.ac.uk/">Rfam</A> and
-<A HREF="http://lowelab.ucsc.edu/">the Todd Lowe lab</A>.
+<A HREF="http://rfam.sanger.ac.uk/" TARGET=_blank>Rfam</A> and
+<A HREF="http://lowelab.ucsc.edu/" TARGET=_blank>the Todd Lowe lab</A>.
 Our thanks to the people running these databases and to the scientists worldwide who have made
 contributions to them.</P>
 

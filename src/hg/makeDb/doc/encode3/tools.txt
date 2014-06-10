@@ -1,0 +1,371 @@
+# Notes about installing packages.
+# Use tools.ra as the one true definition of tools currently installed and used.
+
+# The path to these tools is:  /hive/groups/encode/encode3/tools (aka $EAP_TOOLS_DIR)
+# All tools used directly by pipeline should be in $EAP_TOOLS_DIR/tools.ra
+# NOTE: toolsRaCheck.py will check validity and -fix will fix some issues of tools.ra
+
+# 2014-03-25 downloaded gencode.v19.annotations.gtf.gz from ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz
+# moved to: /hive/groups/encode/encode3/encValData/hg19 and gunzipped.
+
+# Needed but part of encode-01 install
+tool java
+installed /usr/bin/java
+version 1.6.0_24
+
+# cd Python/Python-2.7.6
+# ./configure --prefix=/hive/groups/encode/encode3/tools/Python; make; make install
+
+# cd Python/pysam.0.7.4
+# Had to edit setup.py to change line 169 to:   include_os = [ "/hive/groups/encode/encode3/tools/Python/include/python2.7" ]
+# ../bin/python2.7 setup.py build; ../bin/python2.7 setup.py install --prefix=/hive/groups/encode/encode3/tools/Python 
+
+# cd Python/numpy-1.6.2
+# ../bin/python2.7 setup.py build; ../bin/python2.7 setup.py install --prefix=/hive/groups/encode/encode3/tools/Python 
+
+# cd Python/scipy-0.12.0
+# setup.py install --prefix=/hive/groups/encode/encode3/tools/Python
+
+# phantomTools R dependencies
+# (from tools) R-2.15.2/bin/R...; install.packages('caTools',dependencies=TRUE); install.packages('snow',dependencies=TRUE)
+# cd phantompeakqualtools; ../R-2.15.2/bin/R CMD INSTALL spp_1.10.1.tar.gz
+
+# MACS2
+# ../../python2.7 setup.py build; ../../python2.7 setup.py install --prefix=/hive/groups/encode/encode3/tools/Python
+
+- Rscript ./configure, make (no install!).  Performed on hgwdev to get F77 (fortran).  Hope it works fine running on encode-01 !!
+
+
+###############
+# STAR install
+# https://github.com/alexdobin/STAR/archive/ENCODE_2014-03-16_2.3.1z1.tar.gz
+# Note: this was after v2.3.0e which worked fine.  However RNA-seq working group prefers 2.3.1
+# tar -xzf STAR-ENCODE_2014-03-16_2.3.1z1.tar.gz; cd STAR-ENCODE_2014-03-16_2.3.1z1/; make
+# cd ..; mv STAR-ENCODE_2014-03-16_2.3.1z1.tar.gz STAR-ENCODE_2014-03-16_2.3.1z1/
+# ln -sf STAR-ENCODE_2014-03-16_2.3.1z1/STAR STAR
+# edit tools.ra
+
+# STAR: making genome indexes
+# Note this was after pervios star version and previous gencode.v16 annotations
+cd /hive/groups/encode/encode3/encValData/female.hg19/
+mkdir starData; cd starData; mkdir ERCC; cd ERCC
+STAR --runMode genomeGenerate \
+  --genomeDir ${EAP_REF_DIR}/female.hg19/starData/ERCC/ \
+  --sjdbGTFfile ${EAP_REF_DIR}/hg19/gencode.v19.annotation.gtf \
+  --sjdbOverhang 100 \
+  --genomeFastaFiles ${EAP_REF_DIR}/female.hg19/female.hg19.fa \
+    ${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTP.fasta \
+  --runThreadN 6 > ${EAP_REF_DIR}/female.hg19/starData/ERCC/command.v19.log 2>&1
+Mar 27 00:50:49 ..... Started STAR run
+Mar 27 00:50:49 ... Starting to generate Genome files
+Mar 27 00:52:42 ... finished processing splice junctions database ...
+Mar 27 00:53:20 ... starting to sort  Suffix Array. This may take a long time...
+Mar 27 00:53:54 ... sorting Suffix Array chunks and saving them to disk...
+Mar 27 01:25:46 ... loading chunks from disk, packing SA...
+Mar 27 01:27:56 ... writing Suffix Array to disk ...
+Mar 27 01:29:20 ... Finished generating suffix array
+Mar 27 01:29:20 ... starting to generate Suffix Array index...
+Mar 27 01:59:20 ... writing SAindex to disk
+Mar 27 01:59:26 ..... Finished successfully
+cd ..; mkdir WSC; cd WSC
+STAR --runMode genomeGenerate \
+  --genomeDir ${EAP_REF_DIR}/female.hg19/starData/WSC/ \
+  --sjdbGTFfile ${EAP_REF_DIR}/hg19/gencode.v19.annotation.gtf \
+  --sjdbOverhang 100 \
+  --genomeFastaFiles ${EAP_REF_DIR}/female.hg19/female.hg19.fa \
+    ${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTO.fasta \
+  --runThreadN 6 > ${EAP_REF_DIR}/female.hg19/starData/WSC/command.v19.log 2>&1
+Mar 27 00:51:26 ..... Started STAR run
+Mar 27 00:51:26 ... Starting to generate Genome files
+Mar 27 00:53:20 ... finished processing splice junctions database ...
+Mar 27 00:53:59 ... starting to sort  Suffix Array. This may take a long time...
+Mar 27 00:54:33 ... sorting Suffix Array chunks and saving them to disk...
+Mar 27 01:29:15 ... loading chunks from disk, packing SA...
+Mar 27 01:33:06 ... writing Suffix Array to disk ...
+Mar 27 01:34:34 ... Finished generating suffix array
+Mar 27 01:34:34 ... starting to generate Suffix Array index...
+Mar 27 02:03:50 ... writing SAindex to disk
+Mar 27 02:03:56 ..... Finished successfully
+cd /hive/groups/encode/encode3/encValData/male.hg19/
+mkdir starData; cd starData; mkdir ERCC; cd ERCC
+STAR --runMode genomeGenerate \
+  --genomeDir ${EAP_REF_DIR}/male.hg19/starData/ERCC/ \
+  --sjdbGTFfile ${EAP_REF_DIR}/hg19/gencode.v19.annotation.gtf \
+  --sjdbOverhang 100 \
+  --genomeFastaFiles ${EAP_REF_DIR}/male.hg19/male.hg19.fa \
+    ${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTP.fasta \
+  --runThreadN 6 > ${EAP_REF_DIR}/male.hg19/starData/ERCC/command.v19.log 2>&1
+Mar 26 21:42:26 ..... Started STAR run
+Mar 26 21:42:26 ... Starting to generate Genome files
+Mar 26 21:44:21 ... finished processing splice junctions database ...
+Mar 26 21:44:59 ... starting to sort  Suffix Array. This may take a long time...
+Mar 26 21:45:34 ... sorting Suffix Array chunks and saving them to disk...
+Mar 26 22:17:02 ... loading chunks from disk, packing SA...
+Mar 26 22:19:40 ... writing Suffix Array to disk ...
+Mar 26 22:21:08 ... Finished generating suffix array
+Mar 26 22:21:08 ... starting to generate Suffix Array index...
+Mar 26 22:48:41 ... writing SAindex to disk
+Mar 26 22:48:44 ..... Finished successfully
+cd ..; mkdir WSC; cd WSC
+STAR --runMode genomeGenerate \
+  --genomeDir ${EAP_REF_DIR}/male.hg19/starData/WSC/ \
+  --sjdbGTFfile ${EAP_REF_DIR}/hg19/gencode.v19.annotation.gtf \
+  --sjdbOverhang 100 \
+  --genomeFastaFiles ${EAP_REF_DIR}/male.hg19/male.hg19.fa \
+    ${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTO.fasta \
+  --runThreadN 6 > ${EAP_REF_DIR}/male.hg19/starData/WSC/command.v19.log 2>&1
+Mar 27 00:49:47 ..... Started STAR run
+Mar 27 00:49:47 ... Starting to generate Genome files
+Mar 27 00:51:36 ... finished processing splice junctions database ...
+Mar 27 00:52:15 ... starting to sort  Suffix Array. This may take a long time...
+Mar 27 00:52:53 ... sorting Suffix Array chunks and saving them to disk...
+Mar 27 01:28:13 ... loading chunks from disk, packing SA...
+Mar 27 01:31:59 ... writing Suffix Array to disk ...
+Mar 27 01:33:18 ... Finished generating suffix array
+Mar 27 01:33:19 ... starting to generate Suffix Array index...
+Mar 27 02:01:46 ... writing SAindex to disk
+Mar 27 02:01:49 ..... Finished successfully
+# ln -sf ${EAP_REF_DIR}/male.hg19/starData ${EAP_REF_DIR}/hg19/starData
+# Write starData/README
+
+
+###############
+# tophat install (precompiled linux version)
+# http://tophat.cbcb.umd.edu/downloads/tophat-2.0.8.Linux_x86_64.tar.gz
+# Note: this was after trying several other versions (2.0.11) which crashed 30hrs into alignment run
+# tar -xzf tophat-2.0.8.Linux_x86_64.tar.gz; NO make REQUIRED
+# mv tophat-2.0.8.Linux_x86_64.tar.gz tophat-2.0.8.Linux_x86_64/
+# ln -sf tophat-2.0.8.Linux_x86_64/tophat tophat
+# edit tools.ra
+
+# Bowtie2 install (precompiled linux version) (required by tophat)
+# http://sourceforge.net/projects/bowtie-bio/files/bowtie2/2.1.0/bowtie2-2.1.0-linux-x86_64.zip/download
+# Note: this was after trying bowtie2-2.2.1, which with tophat-2.0.11 crashed 30hrs into alignment
+# unzip bowtie2-2.1.0-linux-x86_64.zip; # no make required
+# cd bowtie2-2.1.0-linux-x86_64.zip bowtie2-2.1.0
+# Installed the precompiled linux version
+# ln -sf bowtie2-2.1.0/bowtie2-align bowtie2-align
+# ln -sf bowtie2-2.1.0/bowtie2-build bowtie2-build
+# ln -sf bowtie2-2.1.0/bowtie2-inspect bowtie2-inspect
+# edit tools.ra
+
+# tophat/bowtie2: making genome indexes
+# Note this was after pervious tophat/bowtie2 versions and previous gencode.v16 annotations
+cd /hive/groups/encode/encode3/encValData/female.hg19/
+mkdir tophatData; cd tophatData
+bowtie2-build --offrate 3 -f ${EAP_REF_DIR}/female.hg19/female.hg19.fa,${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTP.fasta \
+    ${EAP_REF_DIR}/female.hg19/tophatData/ERCC > ERCC_command.log 2>&1 
+tail ERCC_command.log
+    sideSz: 64
+    sideBwtSz: 48
+    sideBwtLen: 192
+    numSides: 14769670
+    numLines: 14769670
+    ebwtTotLen: 945258880
+    ebwtTotSz: 945258880
+    color: 0
+    reverse: 1
+Total time for backward call to driver() for mirror index: 01:27:47
+bowtie2-build --offrate 3 -f ${EAP_REF_DIR}/female.hg19/female.hg19.fa,${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTO.fasta \
+    ${EAP_REF_DIR}/female.hg19/tophatData/WSC > WSC_command.log 2>&1
+tail WSC_command.log
+    sideSz: 64
+    sideBwtSz: 48
+    sideBwtLen: 192
+    numSides: 14769358
+    numLines: 14769358
+    ebwtTotLen: 945238912
+    ebwtTotSz: 945238912
+    color: 0
+    reverse: 1
+Total time for backward call to driver() for mirror index: 01:33:27
+mkdir annotation; cd annotation
+# Because I don't know the bowtie command and tophat doesn't support creating this directly, 
+# I created it with a mini run from the testing dir
+tophat --no-discordant --no-mixed -p 8 -z0 --min-intron-length 20 --max-intron-length 1000000 \
+           --read-mismatches 4 --read-edit-dist 4 --max-multihits 20 --library-type fr-firststrand \
+           --GTF ${EAP_REF_DIR}/hg19/gencode.v19.annotation.gtf \
+           --transcriptome-index ${EAP_REF_DIR}/female.hg19/tophatData/annotation/gencode.v19 \
+       --min-anchor-length 8 --splice-mismatches 0 --read-gap-length 2 \
+       --mate-inner-dist 50 --mate-std-dev 20 --segment-length 25 \
+       --b2-L 20 --b2-N 0 --b2-D 15 --b2-R 2 \
+           ${EAP_REF_DIR}/female.hg19/tophatData/ERCC tmpR1.fq.gz tmpR2.fq.gz > $1.log 2>&1 &
+cd /hive/groups/encode/encode3/encValData/male.hg19/
+mkdir tophatData; cd tophatData
+bowtie2-build --offrate 3 -f ${EAP_REF_DIR}/male.hg19/male.hg19.fa,${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTP.fasta \
+    ${EAP_REF_DIR}/male.hg19/tophatData/ERCC > ERCC_command.log 2>&1
+tail ERCC_command.log
+    sideSz: 64
+    sideBwtSz: 48
+    sideBwtLen: 192
+    numSides: 14889381
+    numLines: 14889381
+    ebwtTotLen: 952920384
+    ebwtTotSz: 952920384
+    color: 0
+    reverse: 1
+Total time for backward call to driver() for mirror index: 01:25:48
+bowtie2-build --offrate 3 -f ${EAP_REF_DIR}/male.hg19/male.hg19.fa,${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTO.fasta \
+    ${EAP_REF_DIR}/male.hg19/tophatData/WSC > WSC_command.log 2>&1
+tail WSC_command.log
+    sideSz: 64
+    sideBwtSz: 48
+    sideBwtLen: 192
+    numSides: 14889069
+    numLines: 14889069
+    ebwtTotLen: 952900416
+    ebwtTotSz: 952900416
+    color: 0
+    reverse: 1
+Total time for backward call to driver() for mirror index: 01:28:23
+mkdir annotation; cd annotation
+# Because I don't know the bowtie command and tophat doesn't support creating this directly, 
+# I created it with a mini run from the testing dir
+tophat --no-discordant --no-mixed -p 8 -z0 --min-intron-length 20 --max-intron-length 1000000 \
+           --read-mismatches 4 --read-edit-dist 4 --max-multihits 20 --library-type fr-firststrand \
+           --GTF ${EAP_REF_DIR}/hg19/gencode.v19.annotation.gtf \
+           --transcriptome-index ${EAP_REF_DIR}/male.hg19/tophatData/annotation/gencode.v19 \
+       --min-anchor-length 8 --splice-mismatches 0 --read-gap-length 2 \
+       --mate-inner-dist 50 --mate-std-dev 20 --segment-length 25 \
+       --b2-L 20 --b2-N 0 --b2-D 15 --b2-R 2 \
+           ${EAP_REF_DIR}/male.hg19/tophatData/ERCC tmpR1.fq.gz tmpR2.fq.gz > $1.log 2>&1 &
+# ln -sf ${EAP_REF_DIR}/male.hg19/tophatData ${EAP_REF_DIR}/hg19/tophatData
+# Write tophatData/README
+# Note that the first run of each tophat alignment first recreates the fa file 
+# (combined genome and spike-ins) from index files.  To avoid this in the future, 
+# I copied the recreated/combined fa file into the appropriate reference dir.
+
+# tophat_bam_xsA_tag_fix.pl install (tophat alignments still need to be patched up)
+# https://github.com/xweigit/xweiEncodeScripts/archive/v1.0.tar.gz
+# tar -xzf xweiEncodeScripts-1.0.tar.gz; mv xweiEncodeScripts-1.0.tar.gz xweiEncodeScripts-1.0/
+# ln -sf xweiEncodeScripts-1.0/tophat_bam_xsA_tag_fix.pl tophat_bam_xsA_tag_fix.pl
+# edit tools.ra
+
+###############
+# makewigglefromBAM-NH.py install (Georgi script to make filtered bigWigs from bams)
+# https://github.com/georgimarinov/GeorgiScripts.git
+# No release!
+# unzip GeorgiScripts-master.zip; mv GeorgiScripts-master.zip GeorgiScripts/
+# ln -sf GeorgiScripts/makewigglefromBAM-NH.py makewigglefromBAM-NH.py
+# edit tools.ra
+
+###############
+# RSEM install (quantify RNA-seq known transcript results)
+# https://github.com/bli25wisc/RSEM/archive/v1.2.12.tar.gz
+# tar -xzf RSEM-1.2.12.tar.gz; mv RSEM-1.2.12.tar.gz RSEM-1.2.12/; cd RSEM-1.2.12/; make
+# cd ..; ln -sf RSEM-1.2.12/rsem-calculate-expression rsem-calculate-expression
+# edit tools.ra
+
+# RSEM/bowtie2: making genome indexes
+cd /hive/groups/encode/encode3/encValData/female.hg19/
+mkdir rsemData; cd rsemData
+${EAP_TOOLS_DIR}/RSEM-1.2.12/rsem-prepare-reference --no-polyA \
+             --bowtie2 --bowtie2-path ${EAP_TOOLS_DIR}/bowtie2-2.1.0 \
+             --gtf ${EAP_REF_DIR}/hg19/gencode.v19.annotation.gtf \
+             ${EAP_REF_DIR}/hg19/female.hg19.fa,${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTO.fasta \
+             ${EAP_REF_DIR}/female.hg19/rsemData/WSC > WSC_command.log 2>&1 
+tail ERCC_command.log
+    sideBwtSz: 48
+    sideBwtLen: 192
+    numSides: 1490815
+    numLines: 1490815
+    ebwtTotLen: 95412160
+    ebwtTotSz: 95412160
+    color: 0
+    reverse: 1
+Total time for backward call to driver() for mirror index: 00:19:40
+${EAP_TOOLS_DIR}/RSEM-1.2.12/rsem-prepare-reference --no-polyA \
+             --bowtie2 --bowtie2-path ${EAP_TOOLS_DIR}/bowtie2-2.1.0 \
+             --gtf ${EAP_REF_DIR}/hg19/gencode.v19.annotation.gtf \
+             ${EAP_REF_DIR}/hg19/female.hg19.fa,${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTO.fasta \
+             ${EAP_REF_DIR}/female.hg19/rsemData/WSC > WSC_command.log 2>&1 
+tail WSC_command.log
+    sideBwtSz: 48
+    sideBwtLen: 192
+    numSides: 1490815
+    numLines: 1490815
+    ebwtTotLen: 95412160
+    ebwtTotSz: 95412160
+    color: 0
+    reverse: 1
+Total time for backward call to driver() for mirror index: 00:20:30
+cd /hive/groups/encode/encode3/encValData/male.hg19/
+mkdir rsemData; cd rsemData
+${EAP_TOOLS_DIR}/RSEM-1.2.12/rsem-prepare-reference --no-polyA \
+             --bowtie2 --bowtie2-path ${EAP_TOOLS_DIR}/bowtie2-2.1.0 \
+             --gtf ${EAP_REF_DIR}/hg19/gencode.v19.annotation.gtf \
+             ${EAP_REF_DIR}/hg19/male.hg19.fa,${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTP.fasta \
+             ${EAP_REF_DIR}/male.hg19/rsemData/ERCC > ERCC_command.log 2>&1 
+tail ERCC_command.log 
+    sideBwtSz: 48
+    sideBwtLen: 192
+    numSides: 1495360
+    numLines: 1495360
+    ebwtTotLen: 95703040
+    ebwtTotSz: 95703040
+    color: 0
+    reverse: 1
+Total time for backward call to driver() for mirror index: 00:21:16
+${EAP_TOOLS_DIR}/RSEM-1.2.12/rsem-prepare-reference --no-polyA \
+             --bowtie2 --bowtie2-path ${EAP_TOOLS_DIR}/bowtie2-2.1.0 \
+             --gtf ${EAP_REF_DIR}/hg19/gencode.v19.annotation.gtf \
+             ${EAP_REF_DIR}/hg19/male.hg19.fa,${EAP_REF_DIR}/hg19/rnaSpikeIns.ENCFF001RTO.fasta \
+             ${EAP_REF_DIR}/male.hg19/rsemData/WSC > WSC_command.log 2>&1 
+tail WSC_command.log
+    sideBwtSz: 48
+    sideBwtLen: 192
+    numSides: 1495360
+    numLines: 1495360
+    ebwtTotLen: 95703040
+    ebwtTotSz: 95703040
+    color: 0
+    reverse: 1
+Total time for backward call to driver() for mirror index: 00:20:27
+# ln -sf ${EAP_REF_DIR}/male.hg19/rsemData ${EAP_REF_DIR}/hg19/rsemData
+# Write rsemData/README
+
+
+###############
+# ChIP-seq peak callers
+#
+# Installation procedure followed from existing tools:
+#
+# mkdir tool-rel
+# ln -s tool-rel tool
+# cd tool
+# ftp package
+# uncompress and untar package
+
+# There are 3:  SPP (Park lab, Harvard), PeakSeq (Gerstein lab, Yale), GEM (Gifford lab, MIT)
+
+# SPP (Peter Parchenk), modified by Anshul Kundaje for use with IDR
+# http://compbio.med.harvard.edu/Supplements/ChIP-seq/tutorial.html
+# https://sites.google.com/site/anshulkundaje/projects/idr#TOC-CALL-PEAKS-ON-INDIVIDUAL-REPLICATES
+# https://sites.google.com/site/anshulkundaje/projects/idr#TOC-CALL-PEAKS-ON-POOLED-REPLICATES
+# https://code.google.com/p/phantompeakqualtools/
+
+# PeakSeq (Joel Rozowsky)
+# http://wiki.encodedcc.org/index.php/PeakSeq
+# http://info.gersteinlab.org/PeakSeq
+
+# GEM
+# http://wiki.encodedcc.org/index.php/GPS/GEM
+# http://www.psrg.csail.mit.edu/gem/
+
+mkdir gem.v2.4.1
+http://www.psrg.csail.mit.edu/gem/download/gem.v2.4.1.tar.gz
+cd gem
+
+java -jar -Xmx10G gem.jar
+# Example: java -Xmx10G -jar gem.jar --d Read_Distribution_default.txt --g mm8.info --genome your_path/mm8 --s 2000000000 --expt SRX000540_mES_CTCF.bed --ctrl SRX000543_mES_GFP.bed --f BED --out mouseCTCF --k_min 6 --k_max 13
+# ENCODE example: java -Xmx15G -jar gem.jar --g hg19.info --d Read_Distribution_default.txt --s 2400000000 --expt wgEncodeSydhTfbsGm12878Ctcfsc15914c20StdAlnRep1.bam --expt wgEncodeSydhTfbsGm12878Ctcfsc15914c20StdAlnRep2.bam --ctrl wgEncodeSydhTfbsGm12878InputIggrabAlnRep1.bam --f SAM --out CTCF_GM12878 --genome /yourpath/hg19 --k_min 6 --k_max 13 --outNP
+# For use with IDR (relaxed peaks), add -q 0
+
+# QUESTIONS:  
+#   Why both replicates in example -- is this for pooled results ? (try it)
+# NOTE: -t to specify #cpus (default is number of cpu's on host?)
+# Curious what is default -q value ? (significance threshold)
+
+# required params:  --d, --exptX
+# use --f SAM for BAM input
+# use --outNP for narrowPeak output

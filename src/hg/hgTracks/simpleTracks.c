@@ -1,6 +1,9 @@
 /* infrastructure -- Code shared by all tracks.  Separating this out from
  * hgTracks.c allows a standalone main to make track images. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* NOTE: This code was imported from hgTracks.c 1.1469, May 19 2008,
  * so a lot of revision history has been obscured.  To see code history
  * from before this file was created, run this:
@@ -3071,7 +3074,6 @@ static void genericDrawItem(struct track *tg, struct spaceNode *sn,
 /* draw one non-overflow item */
 {
 struct slList *item = sn->val;
-boolean withLabels = (withLeftLabels && (vis == tvPack) && !tg->drawName);
 int s = tg->itemStart(tg, item);
 int e = tg->itemEnd(tg, item);
 int sClp = (s < winStart) ? winStart : s;
@@ -3089,8 +3091,9 @@ if (tg->itemNameColor != NULL)
     }
 int y = yOff + tg->lineHeight * sn->row;
 tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
-/* pgSnp tracks may change flags between items */
-withLabels = (withLeftLabels && withIndividualLabels && (vis == tvPack) && !tg->drawName);
+
+/* pgSnpDrawAt may change withIndividualLabels between items */
+boolean withLabels = (withLeftLabels && withIndividualLabels && (vis == tvPack) && !tg->drawName);
 if (withLabels)
     {
     char *name = tg->itemName(tg, item);
@@ -3664,7 +3667,7 @@ struct linkedFeatures *lfFromBed(struct bed *bed)
 return lfFromBedExtra(bed, 0, 1000);
 }
 
-struct linkedFeaturesSeries *lfsFromBed(struct lfs *lfsbed)
+struct linkedFeaturesSeries *lfsFromBed(struct lfs *lfsbed, char *tdbPslTable)
 /* Create linked feature series object from database bed record */
 {
 struct sqlConnection *conn = hAllocConn(database);
@@ -3685,7 +3688,13 @@ for (i = 0; i < lfsbed->lfCount; i++)
     {
     AllocVar(lf);
     sqlSafefFrag(rest, sizeof rest, "qName = '%s'", lfsbed->lfNames[i]);
-    sr = hRangeQuery(conn, lfsbed->pslTable, lfsbed->chrom, lfsbed->lfStarts[i],
+    
+    // use psl table from trackDb, if specified there
+    char *pslTable = lfsbed->pslTable;
+    if (tdbPslTable != NULL)
+        pslTable = tdbPslTable;
+
+    sr = hRangeQuery(conn, pslTable, lfsbed->chrom, lfsbed->lfStarts[i],
                      lfsbed->lfStarts[i] + lfsbed->lfSizes[i], rest, &rowOffset);
     if ((row = sqlNextRow(sr)) != NULL)
         {
@@ -3702,10 +3711,11 @@ lfs->features = lfList;
 return lfs;
 }
 
-static struct linkedFeaturesSeries *lfsFromBedsInRange(char *table, int start, int end,
+static struct linkedFeaturesSeries *lfsFromBedsInRange(struct track *tg, int start, int end,
                                                        char *chromName)
 /* Return linked features from range of table. */
 {
+char *table = tg->track;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
@@ -3729,10 +3739,12 @@ else
     sr = hOrderedRangeQuery(conn, table, chromName, start, end,
 	NULL, &rowOffset);
     }
+
+char *pslTable = trackDbSetting(tg->tdb, "lfPslTable");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct lfs *lfsbed = lfsLoad(row+rowOffset);
-    lfs = lfsFromBed(lfsbed);
+    lfs = lfsFromBed(lfsbed, pslTable);
     slAddHead(&lfsList, lfs);
     lfsFree(&lfsbed);
     }
@@ -3746,7 +3758,7 @@ return lfsList;
 void loadBacEndPairs(struct track *tg)
 /* Load up bac end pairs from table into track items. */
 {
-tg->items = lfsFromBedsInRange("bacEndPairs", winStart, winEnd, chromName);
+tg->items = lfsFromBedsInRange(tg, winStart, winEnd, chromName);
 }
 
 static Color dbRIPColor(struct track *tg, void *item, struct hvGfx *hvg)
@@ -3921,116 +3933,6 @@ linkedFeaturesSeriesMethods(tg);
 tg->loadItems = loadBacEndPairs;
 }
 
-
-void loadBacEndPairsBad(struct track *tg)
-/* Load up fosmid end pairs from table into track items. */
-{
-tg->items = lfsFromBedsInRange("bacEndPairsBad", winStart, winEnd, chromName);
-}
-
-
-void bacEndPairsBadMethods(struct track *tg)
-/* Fill in track methods for linked features.series */
-{
-linkedFeaturesSeriesMethods(tg);
-tg->loadItems = loadBacEndPairsBad;
-}
-
-void loadBacEndPairsLong(struct track *tg)
-/* Load up BAC end pairs from table into track items. */
-{
-tg->items = lfsFromBedsInRange("bacEndPairsLong", winStart, winEnd, chromName);
-}
-
-
-void bacEndPairsLongMethods(struct track *tg)
-/* Fill in track methods for linked features.series */
-{
-linkedFeaturesSeriesMethods(tg);
-tg->loadItems = loadBacEndPairsLong;
-}
-
-void loadBacEndSingles(struct track *tg)
-/* Load up BAC end pairs from table into track items. */
-{
-tg->items = lfsFromBedsInRange("bacEndSingles", winStart, winEnd, chromName);
-}
-
-void bacEndSinglesMethods(struct track *tg)
-/* Fill in track methods for linked features.series */
-{
-linkedFeaturesSeriesMethods(tg);
-tg->loadItems = loadBacEndSingles;
-}
-
-void loadFosEndPairs(struct track *tg)
-/* Load up fosmid end pairs from table into track items. */
-{
-tg->items = lfsFromBedsInRange("fosEndPairs", winStart, winEnd, chromName);
-}
-
-void fosEndPairsMethods(struct track *tg)
-/* Fill in track methods for linked features.series */
-{
-linkedFeaturesSeriesMethods(tg);
-tg->loadItems = loadFosEndPairs;
-}
-
-void loadFosEndPairsBad(struct track *tg)
-/* Load up fosmid end pairs from table into track items. */
-{
-tg->items = lfsFromBedsInRange("fosEndPairsBad", winStart, winEnd, chromName);
-}
-
-
-void fosEndPairsBadMethods(struct track *tg)
-/* Fill in track methods for linked features.series */
-{
-linkedFeaturesSeriesMethods(tg);
-tg->loadItems = loadFosEndPairsBad;
-}
-
-void loadFosEndPairsLong(struct track *tg)
-/* Load up fosmid end pairs from table into track items. */
-{
-tg->items = lfsFromBedsInRange("fosEndPairsLong", winStart, winEnd, chromName);
-}
-
-
-void fosEndPairsLongMethods(struct track *tg)
-/* Fill in track methods for linked features.series */
-{
-linkedFeaturesSeriesMethods(tg);
-tg->loadItems = loadFosEndPairsLong;
-}
-
-void loadEarlyRep(struct track *tg)
-/* Load up early replication cosmid  pairs from table into track items. */
-{
-tg->items = lfsFromBedsInRange("earlyRep", winStart, winEnd, chromName);
-}
-
-void earlyRepMethods(struct track *tg)
-/* Fill in track methods for linked features.series */
-{
-linkedFeaturesSeriesMethods(tg);
-tg->loadItems = loadEarlyRep;
-}
-
-
-void loadEarlyRepBad(struct track *tg)
-/* Load up bad early replication pairs from table into track items. */
-{
-tg->items = lfsFromBedsInRange("earlyRepBad", winStart, winEnd, chromName);
-}
-
-
-void earlyRepBadMethods(struct track *tg)
-/* Fill in track methods for linked features.series */
-{
-linkedFeaturesSeriesMethods(tg);
-tg->loadItems = loadEarlyRepBad;
-}
 #endif /* GBROWSE */
 
 
@@ -9708,6 +9610,23 @@ mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->track,
 freeDyString(&ds);
 }
 
+void pgSnpLeftLabels(struct track *tg, int seqStart, int seqEnd,
+		     struct hvGfx *hvg, int xOff, int yOff, int width, int height,
+		     boolean withCenterLabels, MgFont *font, Color color,
+		     enum trackVisibility vis)
+/* pgSnp draws its own left labels when it draws the item in pack or full mode.
+ * We don't want the default left labels when in full mode because they can overlap
+ * with the item-drawing labels, but we do still need dense mode left labels. */
+{
+if (tg->visibility == tvDense)
+    {
+    if (isCenterLabelIncluded(tg))
+	yOff += mgFontLineHeight(font);
+    hvGfxTextRight(hvg, leftLabelX, yOff, leftLabelWidth-1, tg->lineHeight,
+		   color, font, tg->shortLabel);
+    }
+}
+
 void pgSnpMethods (struct track *tg)
 /* Personal Genome SNPs: show two alleles with stacked color bars for base alleles and
  * (if available) allele counts in mouseover. */
@@ -9721,6 +9640,7 @@ tg->drawItemAt = pgSnpDrawAt;
 tg->mapItem = pgSnpMapItem;
 tg->nextItemButtonable = TRUE;
 tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
+tg->drawLeftLabels = pgSnpLeftLabels;
 }
 
 void loadBlatz(struct track *tg)
@@ -12684,6 +12604,18 @@ for( ; (handler == NULL) && (tdb->parent != NULL);  )
     handler = lookupTrackHandler(tdb->table);
     }
 
+// if nothing found, try the "trackHandler" statement
+if (handler == NULL)
+    {
+    char *handlerName = trackDbSetting(tdb, "trackHandler");
+    if (handlerName != NULL)
+        {
+        handler = lookupTrackHandler(handlerName);
+        if (handler==NULL)
+            errAbort("track %s defined a trackHandler in trackDb which does not exist", tdb->track);
+        }
+    }
+
 return handler;
 }
 
@@ -12695,15 +12627,17 @@ registerTrackHandler("rgdGene", rgdGeneMethods);
 registerTrackHandler("cgapSage", cgapSageMethods);
 registerTrackHandler("cytoBand", cytoBandMethods);
 registerTrackHandler("cytoBandIdeo", cytoBandIdeoMethods);
+
 registerTrackHandler("bacEndPairs", bacEndPairsMethods);
-registerTrackHandler("bacEndPairsBad", bacEndPairsBadMethods);
-registerTrackHandler("bacEndPairsLong", bacEndPairsLongMethods);
-registerTrackHandler("bacEndSingles", bacEndSinglesMethods);
-registerTrackHandler("fosEndPairs", fosEndPairsMethods);
-registerTrackHandler("fosEndPairsBad", fosEndPairsBadMethods);
-registerTrackHandler("fosEndPairsLong", fosEndPairsLongMethods);
-registerTrackHandler("earlyRep", earlyRepMethods);
-registerTrackHandler("earlyRepBad", earlyRepBadMethods);
+registerTrackHandler("bacEndPairsBad", bacEndPairsMethods);
+registerTrackHandler("bacEndPairsLong", bacEndPairsMethods);
+registerTrackHandler("bacEndSingles", bacEndPairsMethods);
+registerTrackHandler("fosEndPairs", bacEndPairsMethods);
+registerTrackHandler("fosEndPairsBad", bacEndPairsMethods);
+registerTrackHandler("fosEndPairsLong", bacEndPairsMethods);
+registerTrackHandler("earlyRep", bacEndPairsMethods);
+registerTrackHandler("earlyRepBad", bacEndPairsMethods);
+
 registerTrackHandler("genMapDb", genMapDbMethods);
 registerTrackHandler("cgh", cghMethods);
 registerTrackHandler("mcnBreakpoints", mcnBreakpointsMethods);

@@ -1,13 +1,20 @@
 /* edwFakeBiosample - Fake up biosample table from meld of encode3 and encode2 sources.. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "portable.h"
+#include "obscure.h"
 #include "encodeDataWarehouse.h"
 #include "edwLib.h"
 #include "htmlPage.h"
 #include "jsonParse.h"
 
+char *jsonOutFile = NULL;
 char *cacheName = NULL;
 
 void usage()
@@ -20,6 +27,8 @@ errAbort(
   "Where cellTypeSlim.tab is the result of running the command on hgwdev\n"
   "    hgsql -e 'select term,sex,organism from cellType' -N encode2Meta\n"
   "and also lives in the source tree.  The output is intended for the edwBiosample table.\n"
+  "The url is something like www.encodedcc.org/biosamples/?format=json&limit=all\n"
+  "but with user name and password sent in the https fashion.\n"
   "options:\n"
   "   -cache=cacheName - get JSON list from cache rather than from database where possible\n"
   );
@@ -36,8 +45,9 @@ char *getTextViaHttps(char *url, char *userId, char *password)
  * will return a NULL rather than aborting if URL not found. */
 {
 char fullUrl[1024];
-safef(fullUrl, sizeof(fullUrl), "http://%s:%s@%s", userId, password, url);
+safef(fullUrl, sizeof(fullUrl), "https://%s:%s@%s", userId, password, url);
 struct htmlPage *page = htmlPageGet(fullUrl);
+uglyf("getTextViaHttps %s page=%p\n", fullUrl, page);
 if (page == NULL)
     return NULL;
 char *text = NULL;
@@ -46,6 +56,30 @@ if (st->status == 200)
     text = cloneString(page->htmlText);
 htmlPageFree(&page);
 return text;
+}
+
+char *getCachedText(char *name, char *url, char *userId, char *password)
+/* Get file from cache if possible,   if not from URL, and then save to cache */
+{
+if (cacheName != NULL)
+    {
+    char fileName[PATH_LEN];
+    safef(fileName, PATH_LEN, "%s/%s.json", cacheName, name);
+    if (fileExists(fileName))
+        {
+	char *jsonText;
+	readInGulp(fileName, &jsonText, NULL);
+	return jsonText;
+	}
+    else
+        {
+	char *jsonText = getTextViaHttps(url, userId, password);
+        writeGulp(fileName, jsonText, strlen(jsonText));
+	return jsonText;
+	}
+    }
+else
+    return getTextViaHttps(url, userId, password);
 }
 
 int stanfordSexed = 0;
@@ -70,8 +104,8 @@ void saveStanfordBiosample(char *userId, char *password, char *term, char *acc, 
 /* Try and figure out a line for out tab separated output by asking stanford. */
 {
 char url[1024];
-safef(url, sizeof(url), "submit.encodedcc.org/biosamples/%s/?format=json", acc);
-char *text = getTextViaHttps(url, userId, password);
+safef(url, sizeof(url), "www.encodedcc.org/biosamples/%s/?format=json", acc);
+char *text = getCachedText(acc, url, userId, password);
 struct jsonElement *json = jsonParse(text);
 // Fish out biosample_term_id - typically something like "UBERON:002107"
 struct jsonElement *donor = jsonFindNamedField(json, url, "donor");
@@ -114,10 +148,11 @@ verbose(1, "Read %d from %s\n", biosampleHash->elCount, input);
 
 /* Process Stanford biosample list into hash */
 struct hash *stanfordAccHash = hashNew(0);  // Keyed by term, value is ENCBS #
-char *jsonText = getTextViaHttps(url, userId, password);
+char *jsonText = getCachedText("biosamples", url, userId, password);
 if (jsonText == NULL)
      errAbort("Couldn't get text response from %s\nUser %s, password %s\n", url, userId, password);
 struct jsonElement *jsonRoot = jsonParse(jsonText);
+    
 char *bioListName = "@graph";
 struct jsonElement *jsonBioList = jsonMustFindNamedField(jsonRoot, "", bioListName);
 struct slRef *ref, *refList = jsonListVal(jsonBioList, bioListName);
@@ -168,6 +203,8 @@ optionInit(&argc, argv, options);
 if (argc != 6)
     usage();
 cacheName = optionVal("cache", cacheName);
+if (cacheName)
+    makeDirsOnPath(cacheName);
 edwFakeBiosample(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;
 }

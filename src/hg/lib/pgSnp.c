@@ -2,6 +2,9 @@
  * generated pgSnp.h and pgSnp.sql.  This module links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "dystring.h"
@@ -306,34 +309,37 @@ for (i=i0; (iInc*i)<(iInc*iN); i=i+iInc)
 	    //freeDnaSeq(&s);
 	    }
         /* check following exons, chrom order */
-        if (posStrand && rv->cdEnd >= codStart + gene->blockSizes[i])
-            {
-            int st = codStart + gene->blockSizes[i] + 1;
-            int end = rv->cdEnd;
-            cStart = gene->chromStart + gene->chromStarts[i+1] - 1;
-            cEnd = gene->chromStart + gene->chromStarts[i+1] + (end - st + 1);
-	    if (cStart < cEnd)
+	if (i+1 < gene->blockCount)
+	    {
+	    if (posStrand && rv->cdEnd >= codStart + gene->blockSizes[i])
 		{
-		struct dnaSeq *s = hDnaFromSeq(db, gene->chrom, cStart, cEnd, dnaUpper);
-		dyStringPrintf(seq, "%s", s->dna);
-		//freeDnaSeq(&s);
+		int st = codStart + gene->blockSizes[i] + 1;
+		int end = rv->cdEnd;
+		cStart = gene->chromStart + gene->chromStarts[i+1] - 1;
+		cEnd = gene->chromStart + gene->chromStarts[i+1] + (end - st + 1);
+		if (cStart < cEnd)
+		    {
+		    struct dnaSeq *s = hDnaFromSeq(db, gene->chrom, cStart, cEnd, dnaUpper);
+		    dyStringPrintf(seq, "%s", s->dna);
+		    //freeDnaSeq(&s);
+		    }
 		}
-            }
-        else if (!posStrand && rv->cdStart < (codStart - 1))
-            {
-            int st = rv->cdStart;
-            int end = codStart - 1;
-            cStart = gene->chromStart + gene->chromStarts[i+1];
-            cEnd = gene->chromStart + gene->chromStarts[i+1] + (end - st);
+	    else if (!posStrand && rv->cdStart < (codStart - 1))
+		{
+		int st = rv->cdStart;
+		int end = codStart - 1;
+		cStart = gene->chromStart + gene->chromStarts[i+1];
+		cEnd = gene->chromStart + gene->chromStarts[i+1] + (end - st);
 //printf("TESTING fetching sequence for %s:%d-%d\n", gene->chrom, cStart, cEnd);
-	    if (cStart < cEnd)
-		{
-		struct dnaSeq *s = hDnaFromSeq(db, gene->chrom, cStart, cEnd, dnaUpper);
-		dyStringPrintf(seq, "%s", s->dna);
-		//freeDnaSeq(&s);
+		if (cStart < cEnd)
+		    {
+		    struct dnaSeq *s = hDnaFromSeq(db, gene->chrom, cStart, cEnd, dnaUpper);
+		    dyStringPrintf(seq, "%s", s->dna);
+		    //freeDnaSeq(&s);
 //printf("TESTING got seq=%s<br>\n", s->dna);
+		    }
 		}
-            }
+	    }
         rv->seq = dyStringCannibalize(&seq);
         break;
         }
@@ -422,7 +428,7 @@ for (el = th; el != NULL; el = el->next)
     strncpy(old, cod->seq+(cod->regStart - cod->cdStart), (cod->regEnd - cod->regStart));
     old[cod->regEnd - cod->regStart] = '\0';
     char b[512];
-    safef(b, sizeof(b), "<B>%s</B>", old);
+    safef(b, sizeof(b), "<B>%s</B>", isEmpty(old) ? "-" : old);
     char *bold = replaceString(cod->seq, (cod->regStart - cod->cdStart), (cod->regEnd - cod->cdStart), b);
     char *nameCopy = cloneString(item->name);
     char *allele[8];

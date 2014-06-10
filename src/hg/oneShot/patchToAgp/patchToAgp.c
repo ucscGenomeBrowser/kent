@@ -1,4 +1,7 @@
 /* patchToAgp - Convert Elia's patch file that describe NT clone position to AGP file. */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"

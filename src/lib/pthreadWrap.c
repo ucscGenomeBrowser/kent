@@ -3,8 +3,11 @@
  * fatal, but shouldn't happen unless the kernal or
  * the program is hosed. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "pthreadWrap.h"
 
 

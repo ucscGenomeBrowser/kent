@@ -1,4 +1,7 @@
 /* geneBins - objects used to hold gene related data */
+
+/* Copyright (C) 2006 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef GENEBINS
 #define GENEBINS
 #include "mafFrames.h"

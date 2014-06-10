@@ -3,8 +3,11 @@
  *   can utilize the -minLen paramater to change the minimum ungapped
  *   length required to define an anchor. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "hash.h"
 #include "linefile.h"
 #include "maf.h"

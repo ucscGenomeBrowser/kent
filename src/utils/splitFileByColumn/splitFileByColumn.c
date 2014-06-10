@@ -1,4 +1,7 @@
 /* splitFileByColumn - Split text input into files named by column value. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -122,7 +125,7 @@ else if (hel->val == NULL)
 	if (prevHel != NULL)
 	    carefulClose((FILE **)&(prevHel->val));
 	}
-    f = mustOpen(outFileName, "a");
+    hel->val = f = mustOpen(outFileName, "a");
     freez(&outFileName);
     }
 else if (!sameString(baseName, prevBaseName))
@@ -157,8 +160,8 @@ if (tailerText != NULL)
 	{
 	char *outFileName = getFileName(hel->name);
 	hel->val = f = mustOpen(outFileName, "a");
-	fprintf(f, "%s", tailerText);
 	}
+    fprintf(f, "%s", tailerText);
     }
 carefulClose((FILE **)&(hel->val));
 }

@@ -2,6 +2,9 @@
  * This module is from Webb Miller at PSU. 
  * Some description of maf scoring is included in hgLoadMaf.c comments*/
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "maf.h"
 

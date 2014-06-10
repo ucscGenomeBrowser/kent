@@ -3,9 +3,12 @@
  * http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-41
  */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "dnautil.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include <limits.h>
 #include "localmem.h"
 #include "net.h"
@@ -687,18 +690,30 @@ if (vcff->genotypeCount > 0)
 return record;
 }
 
+static int checkWordCount(struct vcfFile *vcff, char **words, int wordCount)
+// Compensate for error in 1000 Genomes Phase 1 file
+// ALL.chr21.integrated_phase1_v3.20101123.snps_indels_svs.genotypes.vcf.gz
+// which has some lines that have an extra "\t" at the end of line,
+// causing the wordCount to be too high by 1:
+{
+int expected = 8;
+if (vcff->genotypeCount > 0)
+    expected = 9 + vcff->genotypeCount;
+if (wordCount == expected+1 && words[expected][0] == '\0')
+    wordCount--;
+lineFileExpectWords(vcff->lf, expected, wordCount);
+return wordCount;
+}
+
 struct vcfRecord *vcfNextRecord(struct vcfFile *vcff)
 /* Parse the words in the next line from vcff into a vcfRecord. Return NULL at end of file.
  * Note: this does not store record in vcff->records! */
 {
 char *words[VCF_MAX_COLUMNS];
 int wordCount;
-if ((wordCount = lineFileChop(vcff->lf, words)) <= 0)
+if ((wordCount = lineFileChopTab(vcff->lf, words)) <= 0)
     return NULL;
-int expected = 8;
-if (vcff->genotypeCount > 0)
-    expected = 9 + vcff->genotypeCount;
-lineFileExpectWords(vcff->lf, expected, wordCount);
+wordCount = checkWordCount(vcff, words, wordCount);
 return vcfRecordFromRow(vcff, words);
 }
 
@@ -911,10 +926,7 @@ if (vcff && chrom != NULL)
 	safecpy(lineCopy, sizeof(lineCopy), line);
 	char *words[VCF_MAX_COLUMNS];
 	int wordCount = chopTabs(lineCopy, words);
-	int expected = 8;
-	if (vcff->genotypeCount > 0)
-	    expected = 9 + vcff->genotypeCount;
-	lineFileExpectWords(vcff->lf, expected, wordCount);
+	wordCount = checkWordCount(vcff, words, wordCount);
 	struct vcfRecord *record = vcfRecordFromRow(vcff, words);
 	if (chromsMatch(chrom, record->chrom))
 	    {

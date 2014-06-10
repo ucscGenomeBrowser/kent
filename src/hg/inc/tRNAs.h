@@ -2,6 +2,9 @@
  * generated tRNAs.c and tRNAs.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2010 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef TRNAS_H
 #define TRNAS_H
 

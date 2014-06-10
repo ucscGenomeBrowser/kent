@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "obscure.h"
 #include "portable.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "nt4.h"

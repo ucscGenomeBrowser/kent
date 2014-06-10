@@ -1,8 +1,11 @@
 /* hgConvert - CGI-script to convert browser window coordinates
  * using chain files */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hash.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "jksql.h"
 #include "linefile.h"
 #include "hCommon.h"

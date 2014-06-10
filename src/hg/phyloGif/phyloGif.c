@@ -1,3 +1,6 @@
+/* Copyright (C) 2012 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* phyloGif.c for parsing phylo tree and outputting a gif.
  *
  *  Author: Galt Barber 2006 
@@ -53,7 +56,7 @@
 #include "dystring.h"
 #include "net.h"
 #include "cheapcgi.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "phyloTree.h"
 #include "portable.h"
 #include "memgfx.h"
@@ -64,7 +67,7 @@
 #include "web.h"
 
 
-#include "errabort.h"
+#include "errAbort.h"
 #include "errCatch.h"
 
 

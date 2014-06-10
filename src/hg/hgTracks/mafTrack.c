@@ -3,6 +3,9 @@
  * This also handles axt's, mostly by convincing them they
  * are really mafs.... */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"
@@ -606,8 +609,8 @@ for (full = mafList; full != NULL; full = full->next)
             }
 	if (mcMaster->strand == '-')
 	    mafFlipStrand(maf);
-        x1 = round((double)((int)mcMaster->start-seqStart-1)*scale) + xOff;
-        x2 = round((double)((int)mcMaster->start-seqStart + mcMaster->size)*scale) + xOff;
+        x1 = floor((double)((int)mcMaster->start-seqStart)*scale) + xOff;
+        x2 = ceil((double)((int)mcMaster->start-seqStart + mcMaster->size)*scale) + xOff;
 	w = x2-x1+1;
         if (mc->size == 0)
             {

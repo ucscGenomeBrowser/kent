@@ -1,5 +1,8 @@
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "bed.h"
 #include "cart.h"
 #include "cheapcgi.h"

@@ -1,8 +1,11 @@
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hCommon.h"
 #include "obscure.h"
 #include "linefile.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "hash.h"
 #include "cheapcgi.h"
 #include "cartDb.h"
@@ -446,14 +449,6 @@ hashElFreeList(&helList);
 assert(hashNumEntries(hash) == 0);
 }
 
-INLINE char *getDb(struct cart *cart, struct hash *oldVars)
-/* Quick wrapper around getDbGenomeClade for when we only want db. */
-{
-char *db=NULL, *ignoreOrg, *ignoreClade;
-getDbGenomeClade(cart, &db, &ignoreOrg, &ignoreClade, oldVars);
-return db;
-}
-
 #ifndef GBROWSE
 void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
 			 char *sessionName, struct cart *cart,
@@ -626,11 +621,27 @@ if (exclude != NULL)
 return cart;
 }
 
+static void doDisconnectHub(struct cart *cart)
+{
+char *id = cartOptionalString(cart, "hubId");
+
+if (id != NULL)
+    {
+    char buffer[1024];
+    safef(buffer, sizeof buffer, "hgHubConnect.hub.%s", id);
+    cartRemove(cart, buffer);
+    }
+
+cartRemove(cart, "hubId");
+cartRemove(cart, hgHubDoDisconnect);
+}
+
 struct cart *cartNew(char *userId, char *sessionId,
                      char **exclude, struct hash *oldVars)
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
  * strings to not include */
 {
+cgiApoptosisSetup();
 struct cart *cart;
 struct sqlConnection *conn = cartDefaultConnector();
 char *ex;
@@ -687,7 +698,17 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 
 /* wire up the assembly hubs so we can operate without sql */
 setUdcTimeout(cart);
-hubConnectLoadHubs(cart);
+if (cartVarExists(cart, hgHubDoDisconnect))
+    doDisconnectHub(cart);
+
+char *newDatabase = hubConnectLoadHubs(cart);
+
+if (newDatabase != NULL)
+    {
+    cartSetString(cart,"db", newDatabase);
+    // this is some magic to use the defaultPosition */
+    cartSetString(cart,"position", "genome");
+    }
 
 if (exclude != NULL)
     {
@@ -1693,7 +1714,6 @@ void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName,
  * oldVars - those in cart that are overlayed by cgi-vars are
  * put in optional hash oldVars. */
 {
-cgiApoptosisSetup();
 struct cart *cart = cartAndCookie(cookieName, exclude, oldVars);
 setThemeFromCart(cart);
 cartWarnCatcher(doMiddle, cart, cartEarlyWarningHandler);

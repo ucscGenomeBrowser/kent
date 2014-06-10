@@ -1,5 +1,8 @@
 /* encode.c - hgTracks routines that are specific to the ENCODE project */
 
+/* Copyright (C) 2012 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
@@ -241,7 +244,7 @@ if ((exonArrows != NULL) && sameString(exonArrows, "on"))
     drawArrows = TRUE;
 Color rangeColor = shadesOfGray[lf->grayIx];
 Color peakColor = (tg->ixColor != blackIndex()) ? tg->ixColor : getOrangeColor();
-if (drawArrows)
+if (drawArrows || lf->tallStart == 0)
     {
     shortOff = 0;
     shortHeight = heightPer;

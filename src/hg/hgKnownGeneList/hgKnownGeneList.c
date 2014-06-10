@@ -1,4 +1,7 @@
 /* hgKnownGeneList - Generate Known Genes List HTML pages to be indexed by Google. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hdb.h"
 #include "dbDb.h"

@@ -1,6 +1,9 @@
 /* edwLib - routines shared by various encodeDataWarehouse programs.    See also encodeDataWarehouse
  * module for tables and routines to access structs built on tables. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef EDWLIB_H
 #define EDWLIB_H
 
@@ -27,6 +30,8 @@ extern char *edwDaemonEmail; /* Email address of our automatic user. */
 extern int edwSingleFileTimeout;   // How many seconds we give ourselves to fetch a single file
 
 #define edwMinMapQual 3	//Above this -10log10 theshold we have >50% chance of being right
+
+#define EDW_WEB_REFRESH_5_SEC 5000
 
 struct sqlConnection *edwConnect();
 /* Returns a read only connection to database. */
@@ -85,6 +90,9 @@ struct edwUser *edwFindUserFromFileId(struct sqlConnection *conn, int fId);
 
 char *edwFindOwnerNameFromFileId(struct sqlConnection *conn, int fId);
 /* Return name of submitter. Return "an unknown user" if name is NULL */
+
+int edwFindUserIdFromEmail(struct sqlConnection *conn, char *userEmail);
+/* Return true id of this user */
 
 boolean edwUserIsAdmin(struct sqlConnection *conn, char *userEmail);
 /* Return true if the user is an admin */
@@ -268,6 +276,10 @@ void edwReserveTempFile(char *path);
 void edwBwaIndexPath(struct edwAssembly *assembly, char indexPath[PATH_LEN]);
 /* Fill in path to BWA index. */
 
+void edwAsPath(char *format, char path[PATH_LEN]);
+/* Convert something like "narrowPeak" in format to fill path involving
+ * encValDir/as/narrowPeak.as */
+
 void edwAlignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,
     char *fastqPath, struct edwValidFile *vf, FILE *bedF,
     double *retMapRatio,  double *retDepth,  double *retSampleCoverage,
@@ -331,5 +343,27 @@ void edwOneLineSystemResult(char *command, char *line, int maxLineSize);
 
 boolean edwOneLineSystemAttempt(char *command, char *line, int maxLineSize);
 /* Execute system command and return one line result from it in line */
+
+/***/
+/* Shared functions for EDW web CGI's.
+   Mostly wrappers for javascript tweaks */
+
+void edwWebAutoRefresh(int msec);
+/* Refresh page after msec.  Use 0 to cancel autorefresh */
+
+/***/
+/* Navigation bar */
+
+void edwWebNavBarStart();
+/* Layout navigation bar */
+
+void edwWebNavBarEnd();
+/* Close layout after navigation bar */
+
+void edwWebBrowseMenuItem(boolean on);
+/* Toggle visibility of 'Browse submissions' link on navigation menu */
+
+void edwWebSubmitMenuItem(boolean on);
+/* Toggle visibility of 'Submit data' link on navigation menu */
 
 #endif /* EDWLIB_H */

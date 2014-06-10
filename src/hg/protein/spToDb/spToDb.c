@@ -1,4 +1,7 @@
 /* spToDb - Create a relational database out of SwissProt/trEMBL flat files. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -1006,6 +1009,7 @@ for (;;)
 	char *gn;
 	stripLastPeriod(s);
 	fprintf(geneLogic, "%s\t%s\n", acc, s);
+        int isPrimary = 1; /* first is primary gene name, other synonyms */
 	for (hel = spr->gnList; hel != NULL; hel = hel->next)
 	    {
 	    gn = (char *) hel->val;
@@ -1015,7 +1019,8 @@ for (;;)
 	    	word = nextGeneWord(&gn);
 	    	if (word == NULL)
 	            break;
-	    	fprintf(gene, "%s\t%s\n", acc, word);
+	    	fprintf(gene, "%s\t%s\t%d\n", acc, word, isPrimary);
+                isPrimary = 0;
 	    	}
 	    }
  	}

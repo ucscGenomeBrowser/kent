@@ -1,5 +1,8 @@
 /* eapFreen - Little program to help test things and figure them out.  It has no permanent one fixed purpose.. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -13,7 +16,6 @@
 #include "eapDb.h"
 #include "eapLib.h"
 #include "eapGraph.h"
-#include "longList.h"
 
 char *submitUrl = "hgwdev-kent.cse.ucsc.edu/cgi-bin/edwScriptSubmit";
 char *statusUrl = "hgwdev-kent.cse.ucsc.edu/cgi-bin/edwScriptSubmitStatus";

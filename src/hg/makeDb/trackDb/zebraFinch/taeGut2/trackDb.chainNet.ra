@@ -1,0 +1,29 @@
+track chainNetGeoFor1 override
+priority 200.93
+visibility dense
+
+track chainNetMelUnd1 override
+priority 204.93
+visibility dense
+
+track chainNetMelGal1 override
+priority 205.3
+visibility dense
+chainMinScore 3000
+chainLinearGap medium
+
+track chainNetGalGal4 override
+priority 210.3
+visibility dense
+
+track chainNetFalPer1 override
+priority 214.3
+visibility dense
+
+track chainNetFalChe1 override
+priority 216.3
+visibility dense
+
+track chainNetHg19 override
+priority 580.3
+visibility dense

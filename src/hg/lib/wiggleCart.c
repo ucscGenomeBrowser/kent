@@ -2,6 +2,9 @@
  *	wiggle trackDb optional settings and the same values that may be
  *	in the cart.
  */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "jksql.h"
 #include "trackDb.h"
@@ -220,14 +223,6 @@ if (defaultViewLimits != NULL)
     }
 else if (missingAbsMin || missingAbsMax)
     {
-    // I would like to make this an errAbort, but too many tracks are afflicted
-    // to do that until hgTrackDb helps to enforce:
-    if (hIsPrivateHost())
-	warn("trackDb %s, and no default view limits are specified for track %s",
-	     (isBedGraph ? MIN_LIMIT " and/or " MAX_LIMIT " is not specified" :
-			   "'type wig' line is missing min and/or max data value"),
-	     tdb->track);
-    // When that becomes an errAbort, remove these defines from wiggle.h:
     if (isBedGraph)
 	{
 	absMin = DEFAULT_MIN_BED_GRAPH;
@@ -405,6 +400,22 @@ else
 	}
     }
 return(cloneString(ret));
+}
+
+boolean wigFetchDoNegativeWithCart(struct cart *theCart, struct trackDb *tdb, char *name,char **optString)
+/*	doNegative - false by default **********************************/
+{
+boolean parentLevel = isNameAtParentLevel(tdb,name);
+char *doNegativeDefault = trackDbSettingClosestToHome(tdb, DONEGATIVEMODE);
+char *doNegative = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, DONEGATIVEMODE));
+
+if ((doNegative == NULL) && (doNegativeDefault != NULL))
+    doNegative = cloneString(doNegativeDefault);
+
+if (doNegative == NULL)
+    return FALSE;
+
+return sameString(doNegative, "1") || sameString(doNegative, "on");
 }
 
 enum wiggleGridOptEnum wigFetchTransformFuncWithCart(struct cart *theCart,
@@ -599,6 +610,58 @@ if (optString)
 ret = wiggleWindowingStringToEnum(windowingFunction);
 freeMem(windowingFunction);
 return(ret);
+}
+
+enum wiggleAggregateFunctionEnum wigFetchAggregateFunctionWithCart(struct cart *theCart,
+                                               struct trackDb *tdb, char *name, char **optString)
+/****** windowingFunction - Whiskers by default **************************/
+{
+char *Default = wiggleAggregateFunctionEnumToString(wiggleAggregateTransparent);
+boolean parentLevel = isNameAtParentLevel(tdb,name);
+char *aggregateFunction = NULL;
+enum wiggleAggregateFunctionEnum ret;
+
+aggregateFunction = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, 
+                                                                AGGREGATE));
+
+/*      If windowingFunction is a string, it came from the cart, otherwise
+ *      see if it is specified in the trackDb option, finally
+ *	return the default.
+ */
+if (!aggregateFunction)
+    {
+    char * tdbDefault =
+        trackDbSettingClosestToHomeOrDefault(tdb, AGGREGATE, Default);
+
+    freeMem(aggregateFunction);
+    if (differentWord(Default,tdbDefault))
+        aggregateFunction = cloneString(tdbDefault);
+    else
+	{
+	struct hashEl *hel;
+	/*	no aggregateFunction from trackDb, maybe it is in tdb->settings
+	 *	(custom tracks keep settings here)
+	 */
+	aggregateFunction = cloneString(Default);
+	if ((tdb->settings != (char *)NULL) &&
+	    (tdb->settingsHash != (struct hash *)NULL))
+	    {
+	    if ((hel =hashLookup(tdb->settingsHash, AGGREGATE)) !=NULL)
+		if (differentWord(Default,(char *)hel->val))
+		    {
+		    freeMem(aggregateFunction);
+		    aggregateFunction = cloneString((char *)hel->val);
+		    }
+	    }
+	}
+    }
+
+if (optString)
+    *optString = cloneString(aggregateFunction);
+
+ret = wiggleAggregateFunctionStringToEnum(aggregateFunction);
+freeMem(aggregateFunction);
+return(ret);
 }       /*      enum wiggleWindowingEnum wigFetchWindowingFunctionWithCart() */
 
 enum wiggleSmoothingEnum wigFetchSmoothingWindowWithCart(struct cart *theCart, struct trackDb *tdb, 
@@ -738,12 +801,6 @@ void wigFetchMinMaxLimitsWithCart(struct cart *theCart, struct trackDb *tdb, cha
 {
 wigFetchMinMaxYWithCart(theCart,tdb,name,min,max,tDbMin,tDbMax,0,NULL);
 }       /*      void wigFetchMinMaxYWithCart()  */
-
-char *wigFetchAggregateValWithCart(struct cart *cart, struct trackDb *tdb)
-/* Return aggregate value for track. */
-{
-return cartOrTdbString(cart, tdb, "aggregate", WIG_AGGREGATE_NONE);
-}
 
 boolean wigIsOverlayTypeAggregate(char *aggregate)
 /* Return TRUE if aggregater type is one of the overlay ones. */

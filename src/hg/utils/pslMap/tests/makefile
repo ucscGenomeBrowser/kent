@@ -10,7 +10,7 @@ chainSwap = ${DESTBINDIR}/chainSwap
 all:
 
 test:	gapBoth mrnaMrnaMap mrnaMrnaXMap mrnaMapOver mrnaMapOverSwap \
-	mrnaMapOverChain mrnaMapOverChainSwap
+	mrnaMapOverChain mrnaMapOverChainSwap testMapFileWithInQName
 
 # things with large files that we want to remove their big history from cvs
 # but soon will replace with short versions and no big history.
@@ -92,6 +92,12 @@ retroParent: mkdirs
 	${pslCheck} -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.mapinfo output/$@.mapinfo
+
+# -mapFileWithInQName
+testMapFileWithInQName: mkdirs
+	${pslMap} -mapFileWithInQName input/gencode.src.psl input/gencode.blocks.qName-psl output/$@.psl
+	${pslCheck} -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
 
 clean::
 	rm -rf output

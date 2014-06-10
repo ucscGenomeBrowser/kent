@@ -1,4 +1,7 @@
 /* genbank.h - Various functions for dealing with genbank data */
+
+/* Copyright (C) 2008 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef GENBANK_H
 #define GENBANK_H
 

@@ -1,5 +1,8 @@
 /* encodeCvTerm - print the RA stanza for an ENCODE Controlled Vocabulary term */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "dystring.h"
 #include "cv.h"

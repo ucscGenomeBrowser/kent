@@ -1,6 +1,9 @@
 /* trix - text retrieval index.  Stuff for fast two level index
  * of text for fast word searches. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"
@@ -409,6 +412,8 @@ if (hitList == NULL)
     {
     struct trixHitPos *oneHitList;
     off_t ixPos = trixFindIndexStartLine(trix, searchWord);
+    // make sure we're seeking
+    ourSeek(trix, 0);
     ourSeek(trix, ixPos);
     while (ourReadLine(trix, trix->lf, &line))
 	{

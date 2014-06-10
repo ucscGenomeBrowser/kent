@@ -1,3 +1,6 @@
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "gbAligned.h"
 #include "gbIndex.h"
 #include "gbUpdate.h"
@@ -8,7 +11,7 @@
 #include "gbIgnore.h"
 #include "hash.h"
 #include "localmem.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "linefile.h"
 
 

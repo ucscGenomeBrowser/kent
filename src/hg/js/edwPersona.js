@@ -1,15 +1,15 @@
 /* edwPersona.js - Hooks up signin and signout buttons to Persona authentication. */
 
 $(function () {
-    var email = $.cookie("email");
-    var signInLink = document.getElementById('signin');
-    if (signInLink) {
-        signInLink.onclick = function() { navigator.id.request(); };
-    }
+    var email = $.cookie('email');
+    $('#signin').click(function(){ navigator.id.request(); });
+    $('#signout').click(function(){ navigator.id.logout(); });
 
-    var signOutLink = document.getElementById('signout');
-    if (signOutLink) {
-        signOutLink.onclick = function() { navigator.id.logout(); };
+    // update navigation bar to show email of logged in user
+    if (email) {
+        $('#edw-user').text(email);
+    } else {
+        $('#signout').hide();
     }
 
     navigator.id.watch({

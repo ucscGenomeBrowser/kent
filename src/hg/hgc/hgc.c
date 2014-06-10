@@ -1,6 +1,9 @@
 /* hgc - Human Genome Click processor - gets called when user clicks
  * on something in human tracks display. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "obscure.h"
 #include "hCommon.h"
@@ -11,7 +14,7 @@
 #include "hvGfx.h"
 #include "portable.h"
 #include "regexHelper.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "dystring.h"
 #include "nib.h"
 #include "cheapcgi.h"
@@ -442,6 +445,12 @@ static void printCloneDbUrl(FILE *f, char *clone)
 /* Print URL for Clone Registry at NCBI for a clone */
 {
 fprintf(f, "\"%s%s\"", cloneDbScript, clone);
+}
+
+static void printTraceTiUrl(FILE *f, char *name)
+/* Print URL for Trace Archive at NCBI for a trace id (TI) */
+{
+fprintf(f, "\"%s%s\"", traceScript, name);
 }
 
 static void printTraceUrl(FILE *f, char *idType, char *name)
@@ -1475,6 +1484,39 @@ if (mf != NULL)
     }
 }
 
+char **getIdNameMap(struct trackDb *tdb, struct asColumn *col, int *size)
+/* Allocate and fill an array mapping id to name.  Currently limited to specific columns. */
+{
+char *idNameTable = trackDbSetting(tdb, "sourceTable");
+if (!idNameTable || differentString("sourceIds", col->name))
+    return NULL;
+
+struct sqlResult *sr;
+char query[256];
+char **row;
+char **idNames;
+
+sqlSafef(query, sizeof(query), "select max(id) from %s", idNameTable);
+struct sqlConnection *conn = hAllocConnTrack(database, tdb);
+int maxId = sqlQuickNum(conn, query);
+AllocArray(idNames, maxId+1);
+sqlSafef(query, sizeof(query), "select id, name from %s", idNameTable);
+sr = sqlGetResult(conn, query);
+int id;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    id = sqlUnsigned(row[0]);
+    if (id > maxId)
+        errAbort("Internal error:  id %d > maxId %d in %s", id, maxId, idNameTable);
+    idNames[id] = cloneString(row[1]);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+if (size)
+    *size = maxId+1;
+return idNames;
+}
+
 void printIdOrLinks(struct asColumn *col, struct hash *fieldToUrl, struct trackDb *tdb, char *idList)
 /* if trackDb does not contain a "urls" entry for current column name, just print idList as it is.
  * Otherwise treat idList as a comma-sep list of IDs and print one row per id, with a link to url,
@@ -1483,9 +1525,9 @@ void printIdOrLinks(struct asColumn *col, struct hash *fieldToUrl, struct trackD
 {
 // try to find a fieldName=url setting in the "urls" tdb statement, print id if not found
 char *url = NULL;
-if (fieldToUrl!=NULL)
+if (fieldToUrl != NULL)
     url = (char*)hashFindVal(fieldToUrl, col->name);
-if (url==NULL)
+if (url == NULL)
     {
     printf("<td>%s</td></tr>\n", idList);
     return;
@@ -1494,18 +1536,29 @@ if (url==NULL)
 // split the id into parts and print each part as a link
 struct slName *slIds = slNameListFromComma(idList);
 struct slName *itemId = NULL;
+
+// handle id->name mapping for multi-source items
+int nameCount;
+char **idNames = getIdNameMap(tdb, col, &nameCount);
+
 printf("<td>");
 for (itemId = slIds; itemId!=NULL; itemId = itemId->next) 
     {
-    if (itemId!=slIds)
+    if (itemId != slIds)
         printf(", ");
-    char* itemName = itemId->name;
-    itemName = trimSpaces(itemName);
-    char *idUrl = replaceInUrl(tdb, url, itemName, TRUE);
-    printf("<a href=\"%s\" target=\"_blank\">%s</a>", idUrl, itemId->name);
+    char *itemName = itemId->name;
+    if (idNames)
+        {
+        unsigned int id = sqlUnsigned(itemName);
+        if (id < nameCount)
+            itemName = idNames[sqlUnsigned(itemName)];
+        }
+    char *idUrl = replaceInUrl(tdb, url, trimSpaces(itemName), TRUE);
+    printf("<a href=\"%s\" target=\"_blank\">%s</a>", idUrl, itemName);
     } 
 printf("</td></tr>\n");
 freeMem(slIds);
+//freeMem(idNames);
 }
 
 int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount)
@@ -4021,12 +4074,6 @@ else if (wordCount > 0)
     else if (sameString(type, "bam"))
 	doBamDetails(tdb, item);
 #endif // USE_BAM
-#ifdef USE_TABIX
-    else if (sameString(type, "vcfTabix"))
-	doVcfTabixDetails(tdb, item);
-#endif // USE_TABIX
-    else if (sameString(type, "vcf"))
-	doVcfDetails(tdb, item);
     }
 if (imagePath)
     {
@@ -18452,6 +18499,13 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+bool matchTableOrHandler(char *word, struct trackDb *tdb)
+/* return true if word matches either the table name or the trackHandler setting of the tdb struct */
+{
+char* handler = trackDbSetting(tdb, "trackHandler");
+return (sameWord(word, tdb->table) || (handler==NULL || sameWord(word, handler)));
+}
+
 void doLinkedFeaturesSeries(char *track, char *clone, struct trackDb *tdb)
 /* Create detail page for linked features series tracks */
 {
@@ -18473,58 +18527,64 @@ struct psl *pslList = NULL, *psl;
 boolean hasBin = hOffsetPastBin(database, seqName, track);
 
 /* Determine type */
-if (sameString("bacEndPairs", track))
+if (matchTableOrHandler("bacEndPairs", tdb))
     {
     safef(title, sizeof title, "Location of %s using BAC end sequences", clone);
     lfLabel = "BAC ends";
     table = track;
     }
-if (sameString("bacEndSingles", track))
+if (matchTableOrHandler("bacEndSingles", tdb))
      {
      safef(title, sizeof title, "Location of %s using BAC end sequences", clone);
      lfLabel = "BAC ends";
      table = track;
      }
-if (sameString("bacEndPairsBad", track))
+if (matchTableOrHandler("bacEndPairsBad", tdb))
     {
     safef(title, sizeof title, "Location of %s using BAC end sequences", clone);
     lfLabel = "BAC ends";
     table = track;
     }
-if (sameString("bacEndPairsLong", track))
+if (matchTableOrHandler("bacEndPairsLong", tdb))
     {
     safef(title, sizeof title, "Location of %s using BAC end sequences", clone);
     lfLabel = "BAC ends";
     table = track;
     }
-if (sameString("fosEndPairs", track))
+if (matchTableOrHandler("fosEndPairs", tdb))
     {
     safef(title, sizeof title, "Location of %s using fosmid end sequences", clone);
     lfLabel = "Fosmid ends";
     table = track;
     }
-if (sameString("fosEndPairsBad", track))
+if (matchTableOrHandler("fosEndPairsBad", tdb))
     {
     safef(title, sizeof title, "Location of %s using fosmid end sequences", clone);
     lfLabel = "Fosmid ends";
     table = track;
     }
-if (sameString("fosEndPairsLong", track))
+if (matchTableOrHandler("fosEndPairsLong", tdb))
     {
     safef(title, sizeof title, "Location of %s using fosmid end sequences", clone);
     lfLabel = "Fosmid ends";
     table = track;
     }
-if (sameString("earlyRep", track))
+if (matchTableOrHandler("earlyRep", tdb))
     {
     safef(title, sizeof title, "Location of %s using cosmid end sequences", clone);
     lfLabel = "Early Replication Cosmid Ends";
     table = track;
     }
-if (sameString("earlyRepBad", track))
+if (matchTableOrHandler("earlyRepBad", tdb))
     {
     safef(title, sizeof title, "Location of %s using cosmid end sequences", clone);
     lfLabel = "Early Replication Cosmid Ends";
+    table = track;
+    }
+if (trackDbSetting(tdb, "lfPslTable"))
+    {
+    safef(title, sizeof title, "Location of %s using clone end sequences", clone);
+    lfLabel = "Clone ends";
     table = track;
     }
 
@@ -18579,6 +18639,10 @@ if (row != NULL)
 	    {
 	    printf("<H2>%s</H2>\n", clone);
 	    }
+        else if (startsWith(tdb->track, "trace"))
+            {
+            printTraceUrl(stdout, "clone_id", clone);
+            }
         else
             {
 	    printf("<H2><A HREF=");
@@ -18586,11 +18650,18 @@ if (row != NULL)
 	    printf(" TARGET=_BLANK>%s</A></H2>\n", clone);
 	    }
         }
+    else if (trackDbSetting(tdb, "lfPslTable"))
+        {
+        printf("<H2><A HREF=");
+        printCloneDbUrl(stdout, clone);
+        printf(" TARGET=_BLANK>%s</A></H2>\n", clone);
+
+        }
     else
 	{
 	printf("<B>%s</B>\n", clone);
 	}
-    /*printf("<H2>%s - %s</H2>\n", type, clone);*/
+
     printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
     printf("<TR><TH ALIGN=left>Chromosome:</TH><TD>%s</TD></TR>\n",seqName);
     printf("<TR><TH ALIGN=left>Start:</TH><TD>%d</TD></TR>\n",start+1);
@@ -18598,6 +18669,7 @@ if (row != NULL)
     printf("<TR><TH ALIGN=left>Length:</TH><TD>%d</TD></TR>\n",length);
     printf("<TR><TH ALIGN=left>Strand:</TH><TD>%s</TD></TR>\n", lfs->strand);
     printf("<TR><TH ALIGN=left>Score:</TH><TD>%d</TD></TR>\n", lfs->score);
+
     if ((sameString("Zebrafish", organism)) && ((sameString("bacEndPairs", track)) || (sameString("bacEndSingles", track))) )
         {
         /* print Sanger FPC name (internal name) */
@@ -18675,6 +18747,12 @@ if (row != NULL)
 	    else if (trackDbSetting(tdb, "notNCBI"))
 		{
 		printf("<H3>%s</H3>\n", lfs->lfNames[i]);
+		}
+	    else if (trackDbSetting(tdb, "lfPslTable"))
+		{
+                printf("<H3><A HREF=");
+                printTraceTiUrl(stdout, lfs->lfNames[i]);
+                printf(" TARGET=_BLANK>%s</A></H3>\n",lfs->lfNames[i]);
 		}
             else
                 {
@@ -24113,6 +24191,48 @@ int newQe = qCenter + qWidth/2;
 printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=\"_blank\"><B>Link to same window size in other species</A><BR>\n", otherDb, qName, newQs, newQe,hubName,trackHubSkipHubName(database));
 } 
 
+bool vsameWords(char *a, va_list args)
+/* returns true if a is sameWord as any arg, all args must be char*  */
+{
+bool found = FALSE;
+char *b;
+while ((b = va_arg(args, char *)) != NULL)
+    {
+    if (sameWord(a, b))
+        {
+        found = TRUE;
+        break;
+        }
+    }
+return found;
+}
+
+bool sameAltWords(char *a, char *b, ...)
+/* returns true if a is sameWord as any of the variables or b is sameWord as any of them */
+{
+va_list args;
+va_start(args, b);
+bool res = vsameWords(a, args);
+va_end(args);
+
+if (!res && (b != NULL))
+    {
+    va_start(args, b);
+    res = vsameWords(b, args);
+    va_end(args);
+    }
+return res;
+}
+
+bool sameWords(char *a, ...)
+/* returns true if a is equal to any b */
+{
+va_list args;
+va_start(args, a);
+bool res = vsameWords(a, args);
+va_end(args);
+return res;
+}
 
 void doMiddle()
 /* Generate body of HTML. */
@@ -24212,6 +24332,8 @@ if ((!isCustomTrack(track) && dbIsFound)
 	    }
 	}
     }
+
+char* handler = trackDbSetting(tdb, "trackHandler");
 
 /* Start of 1000+ line dispatch on table involving 100+ if/elses. */
 char *table = (tdb ? tdb->table : track);
@@ -24813,7 +24935,11 @@ else if (sameWord(table, "tigrGeneIndex"))
     {
     doTigrGeneIndex(tdb, item);
     }
-else if ((sameWord(table, "bacEndPairs")) || (sameWord(table, "bacEndPairsBad")) || (sameWord(table, "bacEndPairsLong")) || (sameWord(table, "bacEndSingles")))
+//else if ((sameWord(table, "bacEndPairs")) || (sameWord(table, "bacEndPairsBad")) || (sameWord(table, "bacEndPairsLong")) || (sameWord(table, "bacEndSingles")))
+    //{
+    //doLinkedFeaturesSeries(table, item, tdb);
+    //}
+else if (sameAltWords(table, handler, "bacEndPairs", "bacEndPairsBad", "bacEndPairsLong", "bacEndSingles", NULL))
     {
     doLinkedFeaturesSeries(table, item, tdb);
     }
@@ -25357,6 +25483,16 @@ else if (sameWord(table, "htcLrgCdna"))
 else if (isHubTrack(table) && startsWith("snake", trackHubSkipHubName(table)))
     {
     doSnakeClick(tdb, item);
+    }
+#ifdef USE_TABIX
+else if (tdb != NULL && startsWithWord("vcfTabix", tdb->type))
+    {
+    doVcfTabixDetails(tdb, item);
+    }
+#endif // USE_TABIX
+else if (tdb != NULL && startsWithWord("vcf", tdb->type))
+    {
+    doVcfDetails(tdb, item);
     }
 
 else if (tdb != NULL)

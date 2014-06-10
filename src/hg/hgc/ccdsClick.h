@@ -1,4 +1,7 @@
 /* ccdsClick - click handling for CCDS track and related functions  */
+
+/* Copyright (C) 2012 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef CCDSCLICK_H
 #define CCDSCLICK_H
 

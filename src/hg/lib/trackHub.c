@@ -1,3 +1,6 @@
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* trackHub - supports collections of tracks hosted on a remote site.
  * The basic layout of a data hub is:
  *        hub.txt - contains information about the hub itself
@@ -47,7 +50,8 @@
 static struct hash *hubCladeHash;  // mapping of clade name to hub pointer
 static struct hash *hubAssemblyHash; // mapping of assembly name to genome struct
 static struct hash *hubOrgHash;   // mapping from organism name to hub pointer
-struct trackHub *globalAssemblyHubList; // list of trackHubs in the user's cart
+static struct trackHub *globalAssemblyHubList; // list of trackHubs in the user's cart
+static struct hash *trackHubHash;
 
 char *trackHubRelativeUrl(char *hubUrl, char *path)
 /* Return full path (in URL form if it's a remote hub) given
@@ -381,11 +385,21 @@ if ((hubOrgHash != NULL) && (hel = hashLookup(hubOrgHash, genome)) != NULL)
 return NULL;
 }
 
+static void deleteAssembly(char *name, struct trackHubGenome *genome, struct trackHub *hub)
+/* delete this assembly from the assembly caches */
+{
+hashRemove(hubCladeHash, hub->name);
+slRemoveEl(&globalAssemblyHubList, hub);
+
+hashRemove(hubOrgHash, genome->organism);
+
+hashRemove(hubAssemblyHash, genome->name);
+}
+
 static void addAssembly(char *name, struct trackHubGenome *genome, struct trackHub *hub)
 /* Add a new assembly hub database to our global list. */
 {
 struct hashEl *hel;
-
 
 if (hubCladeHash == NULL)
     hubCladeHash = newHash(5);
@@ -437,6 +451,8 @@ while ((ra = raNextRecord(lf)) != NULL)
 	genome = addHubName(hashFindVal(ra, "genome"), hub->name);
     else
 	genome = hashFindVal(ra, "genome");
+    if (hub->defaultDb == NULL)
+	hub->defaultDb = genome;
     if (genome == NULL)
         badGenomeStanza(lf);
     if (hashLookup(hash, genome) != NULL)
@@ -500,10 +516,42 @@ if (val == NULL)
 return val;
 }
 
+static struct trackHub *grabHashedHub(char *hubName)
+/* see if a trackHub with this name is in the cache */
+{
+if ( trackHubHash == NULL)
+    trackHubHash = newHash(5);
+
+return  (struct trackHub *)hashFindVal(trackHubHash, hubName); 
+}
+
+static void cacheHub(struct trackHub *hub)
+{
+/* put this trackHub in the trackHub hash */
+if ( trackHubHash == NULL)
+    trackHubHash = newHash(5);
+
+hashAdd(trackHubHash, hub->name, hub);
+}
+
+void uncacheHub(struct trackHub *hub)
+/* take this trackHub out of the trackHub hash */
+{
+if ( trackHubHash == NULL)
+    return;
+
+hashMustRemove(trackHubHash, hub->name);
+}
+
 struct trackHub *trackHubOpen(char *url, char *hubName)
 /* Open up a track hub from url.  Reads and parses hub.txt and the genomesFile. 
  * The hubName is generally just the asciified ID number. */
 {
+struct trackHub *hub = grabHashedHub(hubName);
+
+if (hub != NULL)
+    return hub;
+
 struct lineFile *lf = udcWrapShortLineFile(url, NULL, 256*1024);
 struct hash *hubRa = raNextRecord(lf);
 if (hubRa == NULL)
@@ -512,7 +560,6 @@ if (raNextRecord(lf) != NULL)
     errAbort("multiple records in %s", url);
 
 /* Allocate hub and fill in settings field and url. */
-struct trackHub *hub;
 AllocVar(hub);
 hub->url = cloneString(url);
 hub->name = cloneString(hubName);
@@ -524,6 +571,9 @@ trackHubRequiredSetting(hub, "email");
 hub->shortLabel = trackHubRequiredSetting(hub, "shortLabel");
 hub->longLabel = trackHubRequiredSetting(hub, "longLabel");
 hub->genomesFile = trackHubRequiredSetting(hub, "genomesFile");
+char *descriptionUrl = trackHubSetting(hub, "descriptionUrl");
+if (descriptionUrl != NULL)
+    hub->descriptionUrl = trackHubRelativeUrl(hub->url, descriptionUrl);
 
 lineFileClose(&lf);
 char *genomesUrl = trackHubRelativeUrl(hub->url, hub->genomesFile);
@@ -532,6 +582,7 @@ hub->genomeHash = hashNew(8);
 hub->genomeList = trackHubGenomeReadRa(genomesUrl, hub);
 freez(&genomesUrl);
 
+cacheHub(hub);
 return hub;
 }
 
@@ -541,10 +592,11 @@ void trackHubClose(struct trackHub **pHub)
 struct trackHub *hub = *pHub;
 if (hub != NULL)
     {
-    trackHubGenomeFreeList(&hub->genomeList);
+    trackHubGenomeFreeList(hub);
     freeMem(hub->url);
     hashFree(&hub->settings);
     hashFree(&hub->genomeHash);
+    uncacheHub(hub);
     freez(pHub);
     }
 }
@@ -561,17 +613,19 @@ if (genome != NULL)
     }
 }
 
-void trackHubGenomeFreeList(struct trackHubGenome **pList)
+void trackHubGenomeFreeList(struct trackHub *hub)
 /* Free a list of dynamically allocated trackHubGenome's */
 {
 struct trackHubGenome *el, *next;
 
-for (el = *pList; el != NULL; el = next)
+for (el = hub->genomeList; el != NULL; el = next)
     {
     next = el->next;
+    if (el->twoBitPath != NULL)
+	deleteAssembly(el->name, el, hub);
     trackHubGenomeFree(&el);
     }
-*pList = NULL;
+hub->genomeList = NULL;
 }
 
 static char *requiredSetting(struct trackHub *hub, struct trackHubGenome *genome,
@@ -1044,10 +1098,25 @@ if (hub == NULL)
 
 verbose(2, "hub %s\nshortLabel %s\nlongLabel %s\n", hubUrl, hub->shortLabel, hub->longLabel);
 verbose(2, "%s has %d elements\n", hub->genomesFile, slCount(hub->genomeList));
+
+if (searchFp != NULL)
+    {
+    if (hub->descriptionUrl != NULL)
+	{
+	char *html = netReadTextFileIfExists(hub->descriptionUrl);
+	char *stripHtml =htmlTextStripTags(html);
+	strSwapChar(stripHtml, '\n', ' ');
+	strSwapChar(stripHtml, '\t', ' ');
+	fprintf(searchFp, "%s\t%s\t%s\t%s\n",hub->url, hub->shortLabel, hub->longLabel, stripHtml);
+	}
+
+    return 0;
+    }
+
 struct trackHubGenome *genome;
 for (genome = hub->genomeList; genome != NULL; genome = genome->next)
     {
-    retVal |= hubCheckGenome(hub, genome, errors, checkTracks, searchFp);
+    retVal |= hubCheckGenome(hub, genome, errors, checkTracks, NULL);
     }
 trackHubClose(&hub);
 

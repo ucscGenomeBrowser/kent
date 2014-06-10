@@ -1,4 +1,7 @@
 /* hgSanger20 - Load extra info from Sanger Chromosome 20 annotations.. */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

@@ -2,6 +2,9 @@
  * generated ecAttributeCode.c and ecAttributeCode.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2005 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef ECATTRIBUTECODE_H
 #define ECATTRIBUTECODE_H
 

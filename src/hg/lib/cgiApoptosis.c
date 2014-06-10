@@ -1,5 +1,8 @@
 /* functions to auto-kill CGIs after a certain amount of time has passed */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include <utime.h>
 #include <signal.h>
 #include "htmlPage.h"
@@ -109,6 +112,8 @@ if (scriptName && ip)  /* will not be true from command line execution */
 #include "versionInfo.h"
 	    char url[1024];
             char *browserName = "browser.v";
+            if (hIsBrowserbox())
+                browserName = "browserbox.v";
 
 	    safef(url, sizeof(url), "%s%s%s%s%s%s%s", "http://",
 	"genomewiki.", "ucsc.edu/", "cgi-bin/useCount?", "version=", browserName,

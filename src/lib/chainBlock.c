@@ -3,6 +3,9 @@
  * varient of an algorithm suggested by Webb Miller and further
  * developed by Jim Kent. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "localmem.h"
 #include "linefile.h"

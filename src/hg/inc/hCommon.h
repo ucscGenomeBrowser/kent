@@ -1,5 +1,8 @@
 /* hCommon.h - routines used by many files in hgap project. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef HCOMMON_H
 #define HCOMMON_H
 

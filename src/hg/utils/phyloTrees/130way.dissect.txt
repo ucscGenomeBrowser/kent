@@ -1,0 +1,1813 @@
+Node 0:
+	parent = -1
+	lchild = 1
+	rchild = 256
+	name = ''
+	dparent = 0.000000
+
+Node 1:
+	parent = 0
+	lchild = 2
+	rchild = 255
+	name = ''
+	dparent = 0.100000
+
+Node 2:
+	parent = 1
+	lchild = 3
+	rchild = 214
+	name = ''
+	dparent = 0.100000
+
+Node 3:
+	parent = 2
+	lchild = 4
+	rchild = 213
+	name = ''
+	dparent = 0.111354
+
+Node 4:
+	parent = 3
+	lchild = 5
+	rchild = 212
+	name = ''
+	dparent = 0.100000
+
+Node 5:
+	parent = 4
+	lchild = 6
+	rchild = 159
+	name = ''
+	dparent = 0.050000
+
+Node 6:
+	parent = 5
+	lchild = 7
+	rchild = 158
+	name = ''
+	dparent = 0.109504
+
+Node 7:
+	parent = 6
+	lchild = 8
+	rchild = 153
+	name = ''
+	dparent = 0.071664
+
+Node 8:
+	parent = 7
+	lchild = 9
+	rchild = 136
+	name = ''
+	dparent = 0.234728
+
+Node 9:
+	parent = 8
+	lchild = 10
+	rchild = 73
+	name = ''
+	dparent = 0.023664
+
+Node 10:
+	parent = 9
+	lchild = 11
+	rchild = 44
+	name = ''
+	dparent = 0.020593
+
+Node 11:
+	parent = 10
+	lchild = 12
+	rchild = 41
+	name = ''
+	dparent = 0.002000
+
+Node 12:
+	parent = 11
+	lchild = 13
+	rchild = 38
+	name = ''
+	dparent = 0.013494
+
+Node 13:
+	parent = 12
+	lchild = 14
+	rchild = 37
+	name = ''
+	dparent = 0.020520
+
+Node 14:
+	parent = 13
+	lchild = 15
+	rchild = 34
+	name = ''
+	dparent = 0.052090
+
+Node 15:
+	parent = 14
+	lchild = 16
+	rchild = 27
+	name = ''
+	dparent = 0.021830
+
+Node 16:
+	parent = 15
+	lchild = 17
+	rchild = 26
+	name = ''
+	dparent = 0.012040
+
+Node 17:
+	parent = 16
+	lchild = 18
+	rchild = 25
+	name = ''
+	dparent = 0.003471
+
+Node 18:
+	parent = 17
+	lchild = 19
+	rchild = 24
+	name = ''
+	dparent = 0.009693
+
+Node 19:
+	parent = 18
+	lchild = 20
+	rchild = 23
+	name = ''
+	dparent = 0.001000
+
+Node 20:
+	parent = 19
+	lchild = 21
+	rchild = 22
+	name = ''
+	dparent = 0.001220
+
+Node 21:
+	parent = 20
+	lchild = -1
+	rchild = -1
+	name = 'hg19'
+	dparent = 0.006550
+
+Node 22:
+	parent = 20
+	lchild = -1
+	rchild = -1
+	name = 'panTro4'
+	dparent = 0.006840
+
+Node 23:
+	parent = 19
+	lchild = -1
+	rchild = -1
+	name = 'panPan1'
+	dparent = 0.007840
+
+Node 24:
+	parent = 18
+	lchild = -1
+	rchild = -1
+	name = 'gorGor3'
+	dparent = 0.008964
+
+Node 25:
+	parent = 17
+	lchild = -1
+	rchild = -1
+	name = 'ponAbe2'
+	dparent = 0.018940
+
+Node 26:
+	parent = 16
+	lchild = -1
+	rchild = -1
+	name = 'nomLeu3'
+	dparent = 0.022270
+
+Node 27:
+	parent = 15
+	lchild = 28
+	rchild = 33
+	name = ''
+	dparent = 0.010000
+
+Node 28:
+	parent = 27
+	lchild = 29
+	rchild = 32
+	name = ''
+	dparent = 0.019610
+
+Node 29:
+	parent = 28
+	lchild = 30
+	rchild = 31
+	name = ''
+	dparent = 0.003000
+
+Node 30:
+	parent = 29
+	lchild = -1
+	rchild = -1
+	name = 'rheMac3'
+	dparent = 0.004991
+
+Node 31:
+	parent = 29
+	lchild = -1
+	rchild = -1
+	name = 'macFas5'
+	dparent = 0.004991
+
+Node 32:
+	parent = 28
+	lchild = -1
+	rchild = -1
+	name = 'papHam1'
+	dparent = 0.008042
+
+Node 33:
+	parent = 27
+	lchild = -1
+	rchild = -1
+	name = 'chlSab2'
+	dparent = 0.027000
+
+Node 34:
+	parent = 14
+	lchild = 35
+	rchild = 36
+	name = ''
+	dparent = 0.019650
+
+Node 35:
+	parent = 34
+	lchild = -1
+	rchild = -1
+	name = 'calJac3'
+	dparent = 0.050000
+
+Node 36:
+	parent = 34
+	lchild = -1
+	rchild = -1
+	name = 'saiBol1'
+	dparent = 0.010350
+
+Node 37:
+	parent = 13
+	lchild = -1
+	rchild = -1
+	name = 'tarSyr1'
+	dparent = 0.111400
+
+Node 38:
+	parent = 12
+	lchild = 39
+	rchild = 40
+	name = ''
+	dparent = 0.020520
+
+Node 39:
+	parent = 38
+	lchild = -1
+	rchild = -1
+	name = 'micMur1'
+	dparent = 0.085600
+
+Node 40:
+	parent = 38
+	lchild = -1
+	rchild = -1
+	name = 'otoGar3'
+	dparent = 0.119400
+
+Node 41:
+	parent = 11
+	lchild = 42
+	rchild = 43
+	name = ''
+	dparent = 0.004937
+
+Node 42:
+	parent = 41
+	lchild = -1
+	rchild = -1
+	name = 'tupChi1'
+	dparent = 0.170000
+
+Node 43:
+	parent = 41
+	lchild = -1
+	rchild = -1
+	name = 'tupBel1'
+	dparent = 0.186203
+
+Node 44:
+	parent = 10
+	lchild = 45
+	rchild = 70
+	name = ''
+	dparent = 0.015313
+
+Node 45:
+	parent = 44
+	lchild = 46
+	rchild = 63
+	name = ''
+	dparent = 0.025746
+
+Node 46:
+	parent = 45
+	lchild = 47
+	rchild = 48
+	name = ''
+	dparent = 0.022992
+
+Node 47:
+	parent = 46
+	lchild = -1
+	rchild = -1
+	name = 'speTri2'
+	dparent = 0.125468
+
+Node 48:
+	parent = 46
+	lchild = 49
+	rchild = 50
+	name = ''
+	dparent = 0.050000
+
+Node 49:
+	parent = 48
+	lchild = -1
+	rchild = -1
+	name = 'dipOrd1'
+	dparent = 0.171759
+
+Node 50:
+	parent = 48
+	lchild = 51
+	rchild = 52
+	name = ''
+	dparent = 0.050000
+
+Node 51:
+	parent = 50
+	lchild = -1
+	rchild = -1
+	name = 'jacJac1'
+	dparent = 0.100000
+
+Node 52:
+	parent = 50
+	lchild = 53
+	rchild = 60
+	name = ''
+	dparent = 0.060150
+
+Node 53:
+	parent = 52
+	lchild = 54
+	rchild = 55
+	name = ''
+	dparent = 0.030000
+
+Node 54:
+	parent = 53
+	lchild = -1
+	rchild = -1
+	name = 'perManBai1'
+	dparent = 0.080000
+
+Node 55:
+	parent = 53
+	lchild = 56
+	rchild = 57
+	name = ''
+	dparent = 0.030000
+
+Node 56:
+	parent = 55
+	lchild = -1
+	rchild = -1
+	name = 'micOch1'
+	dparent = 0.080000
+
+Node 57:
+	parent = 55
+	lchild = 58
+	rchild = 59
+	name = ''
+	dparent = 0.040000
+
+Node 58:
+	parent = 57
+	lchild = -1
+	rchild = -1
+	name = 'criGri1'
+	dparent = 0.040000
+
+Node 59:
+	parent = 57
+	lchild = -1
+	rchild = -1
+	name = 'mesAur1'
+	dparent = 0.040000
+
+Node 60:
+	parent = 52
+	lchild = 61
+	rchild = 62
+	name = ''
+	dparent = 0.047773
+
+Node 61:
+	parent = 60
+	lchild = -1
+	rchild = -1
+	name = 'mm10'
+	dparent = 0.084509
+
+Node 62:
+	parent = 60
+	lchild = -1
+	rchild = -1
+	name = 'rn5'
+	dparent = 0.091589
+
+Node 63:
+	parent = 45
+	lchild = 64
+	rchild = 65
+	name = ''
+	dparent = 0.060150
+
+Node 64:
+	parent = 63
+	lchild = -1
+	rchild = -1
+	name = 'hetGla2'
+	dparent = 0.100000
+
+Node 65:
+	parent = 63
+	lchild = 66
+	rchild = 67
+	name = ''
+	dparent = 0.050000
+
+Node 66:
+	parent = 65
+	lchild = -1
+	rchild = -1
+	name = 'cavPor3'
+	dparent = 0.065629
+
+Node 67:
+	parent = 65
+	lchild = 68
+	rchild = 69
+	name = ''
+	dparent = 0.060000
+
+Node 68:
+	parent = 67
+	lchild = -1
+	rchild = -1
+	name = 'chiLan1'
+	dparent = 0.060000
+
+Node 69:
+	parent = 67
+	lchild = -1
+	rchild = -1
+	name = 'octDeg1'
+	dparent = 0.100000
+
+Node 70:
+	parent = 44
+	lchild = 71
+	rchild = 72
+	name = ''
+	dparent = 0.101463
+
+Node 71:
+	parent = 70
+	lchild = -1
+	rchild = -1
+	name = 'oryCun2'
+	dparent = 0.114227
+
+Node 72:
+	parent = 70
+	lchild = -1
+	rchild = -1
+	name = 'ochPri3'
+	dparent = 0.201069
+
+Node 73:
+	parent = 9
+	lchild = 74
+	rchild = 131
+	name = ''
+	dparent = 0.021227
+
+Node 74:
+	parent = 73
+	lchild = 75
+	rchild = 98
+	name = ''
+	dparent = 0.011671
+
+Node 75:
+	parent = 74
+	lchild = 76
+	rchild = 77
+	name = ''
+	dparent = 0.020000
+
+Node 76:
+	parent = 75
+	lchild = -1
+	rchild = -1
+	name = 'susScr3'
+	dparent = 0.120000
+
+Node 77:
+	parent = 75
+	lchild = 78
+	rchild = 81
+	name = ''
+	dparent = 0.020335
+
+Node 78:
+	parent = 77
+	lchild = 79
+	rchild = 80
+	name = ''
+	dparent = 0.040000
+
+Node 79:
+	parent = 78
+	lchild = -1
+	rchild = -1
+	name = 'vicPac2'
+	dparent = 0.047275
+
+Node 80:
+	parent = 78
+	lchild = -1
+	rchild = -1
+	name = 'camFer1'
+	dparent = 0.040000
+
+Node 81:
+	parent = 77
+	lchild = 82
+	rchild = 89
+	name = ''
+	dparent = 0.025153
+
+Node 82:
+	parent = 81
+	lchild = 83
+	rchild = 84
+	name = ''
+	dparent = 0.010000
+
+Node 83:
+	parent = 82
+	lchild = -1
+	rchild = -1
+	name = 'balAcu1'
+	dparent = 0.050000
+
+Node 84:
+	parent = 82
+	lchild = 85
+	rchild = 86
+	name = ''
+	dparent = 0.010000
+
+Node 85:
+	parent = 84
+	lchild = -1
+	rchild = -1
+	name = 'lipVex1'
+	dparent = 0.040000
+
+Node 86:
+	parent = 84
+	lchild = 87
+	rchild = 88
+	name = ''
+	dparent = 0.010000
+
+Node 87:
+	parent = 86
+	lchild = -1
+	rchild = -1
+	name = 'turTru2'
+	dparent = 0.034688
+
+Node 88:
+	parent = 86
+	lchild = -1
+	rchild = -1
+	name = 'orcOrc1'
+	dparent = 0.034688
+
+Node 89:
+	parent = 81
+	lchild = 90
+	rchild = 91
+	name = ''
+	dparent = 0.013592
+
+Node 90:
+	parent = 89
+	lchild = -1
+	rchild = -1
+	name = 'panHod1'
+	dparent = 0.100000
+
+Node 91:
+	parent = 89
+	lchild = 92
+	rchild = 95
+	name = ''
+	dparent = 0.010000
+
+Node 92:
+	parent = 91
+	lchild = 93
+	rchild = 94
+	name = ''
+	dparent = 0.050000
+
+Node 93:
+	parent = 92
+	lchild = -1
+	rchild = -1
+	name = 'bosTau7'
+	dparent = 0.050000
+
+Node 94:
+	parent = 92
+	lchild = -1
+	rchild = -1
+	name = 'bubBub1'
+	dparent = 0.050000
+
+Node 95:
+	parent = 91
+	lchild = 96
+	rchild = 97
+	name = ''
+	dparent = 0.050000
+
+Node 96:
+	parent = 95
+	lchild = -1
+	rchild = -1
+	name = 'oviAri3'
+	dparent = 0.050000
+
+Node 97:
+	parent = 95
+	lchild = -1
+	rchild = -1
+	name = 'capHir1'
+	dparent = 0.050000
+
+Node 98:
+	parent = 74
+	lchild = 99
+	rchild = 118
+	name = ''
+	dparent = 0.004508
+
+Node 99:
+	parent = 98
+	lchild = 100
+	rchild = 103
+	name = ''
+	dparent = 0.006219
+
+Node 100:
+	parent = 99
+	lchild = 101
+	rchild = 102
+	name = ''
+	dparent = 0.050000
+
+Node 101:
+	parent = 100
+	lchild = -1
+	rchild = -1
+	name = 'equCab2'
+	dparent = 0.059397
+
+Node 102:
+	parent = 100
+	lchild = -1
+	rchild = -1
+	name = 'cerSim1'
+	dparent = 0.050000
+
+Node 103:
+	parent = 99
+	lchild = 104
+	rchild = 107
+	name = ''
+	dparent = 0.049845
+
+Node 104:
+	parent = 103
+	lchild = 105
+	rchild = 106
+	name = ''
+	dparent = 0.040000
+
+Node 105:
+	parent = 104
+	lchild = -1
+	rchild = -1
+	name = 'felCat5'
+	dparent = 0.058612
+
+Node 106:
+	parent = 104
+	lchild = -1
+	rchild = -1
+	name = 'panTig1'
+	dparent = 0.050000
+
+Node 107:
+	parent = 103
+	lchild = 108
+	rchild = 111
+	name = ''
+	dparent = 0.020000
+
+Node 108:
+	parent = 107
+	lchild = 109
+	rchild = 110
+	name = ''
+	dparent = 0.030000
+
+Node 109:
+	parent = 108
+	lchild = -1
+	rchild = -1
+	name = 'canFam3'
+	dparent = 0.022458
+
+Node 110:
+	parent = 108
+	lchild = -1
+	rchild = -1
+	name = 'canLup1'
+	dparent = 0.020000
+
+Node 111:
+	parent = 107
+	lchild = 112
+	rchild = 113
+	name = ''
+	dparent = 0.030000
+
+Node 112:
+	parent = 111
+	lchild = -1
+	rchild = -1
+	name = 'musFur1'
+	dparent = 0.050000
+
+Node 113:
+	parent = 111
+	lchild = 114
+	rchild = 115
+	name = ''
+	dparent = 0.030000
+
+Node 114:
+	parent = 113
+	lchild = -1
+	rchild = -1
+	name = 'ailMel1'
+	dparent = 0.020000
+
+Node 115:
+	parent = 113
+	lchild = 116
+	rchild = 117
+	name = ''
+	dparent = 0.020000
+
+Node 116:
+	parent = 115
+	lchild = -1
+	rchild = -1
+	name = 'odoRosDiv1'
+	dparent = 0.020000
+
+Node 117:
+	parent = 115
+	lchild = -1
+	rchild = -1
+	name = 'lepWed1'
+	dparent = 0.020000
+
+Node 118:
+	parent = 98
+	lchild = 119
+	rchild = 122
+	name = ''
+	dparent = 0.033706
+
+Node 119:
+	parent = 118
+	lchild = 120
+	rchild = 121
+	name = ''
+	dparent = 0.050000
+
+Node 120:
+	parent = 119
+	lchild = -1
+	rchild = -1
+	name = 'pteAle1'
+	dparent = 0.050000
+
+Node 121:
+	parent = 119
+	lchild = -1
+	rchild = -1
+	name = 'pteVam1'
+	dparent = 0.063399
+
+Node 122:
+	parent = 118
+	lchild = 123
+	rchild = 124
+	name = ''
+	dparent = 0.020000
+
+Node 123:
+	parent = 122
+	lchild = -1
+	rchild = -1
+	name = 'rhiFer1'
+	dparent = 0.050000
+
+Node 124:
+	parent = 122
+	lchild = 125
+	rchild = 126
+	name = ''
+	dparent = 0.030000
+
+Node 125:
+	parent = 124
+	lchild = -1
+	rchild = -1
+	name = 'eptFus1'
+	dparent = 0.020000
+
+Node 126:
+	parent = 124
+	lchild = 127
+	rchild = 128
+	name = ''
+	dparent = 0.050000
+
+Node 127:
+	parent = 126
+	lchild = -1
+	rchild = -1
+	name = 'myoDav1'
+	dparent = 0.040000
+
+Node 128:
+	parent = 126
+	lchild = 129
+	rchild = 130
+	name = ''
+	dparent = 0.020000
+
+Node 129:
+	parent = 128
+	lchild = -1
+	rchild = -1
+	name = 'myoBra1'
+	dparent = 0.020000
+
+Node 130:
+	parent = 128
+	lchild = -1
+	rchild = -1
+	name = 'myoLuc2'
+	dparent = 0.022540
+
+Node 131:
+	parent = 73
+	lchild = 132
+	rchild = 133
+	name = ''
+	dparent = 0.056393
+
+Node 132:
+	parent = 131
+	lchild = -1
+	rchild = -1
+	name = 'eriEur2'
+	dparent = 0.221785
+
+Node 133:
+	parent = 131
+	lchild = 134
+	rchild = 135
+	name = ''
+	dparent = 0.100000
+
+Node 134:
+	parent = 133
+	lchild = -1
+	rchild = -1
+	name = 'sorAra2'
+	dparent = 0.169562
+
+Node 135:
+	parent = 133
+	lchild = -1
+	rchild = -1
+	name = 'conCri1'
+	dparent = 0.100000
+
+Node 136:
+	parent = 8
+	lchild = 137
+	rchild = 150
+	name = ''
+	dparent = 0.006717
+
+Node 137:
+	parent = 136
+	lchild = 138
+	rchild = 149
+	name = ''
+	dparent = 0.020000
+
+Node 138:
+	parent = 137
+	lchild = 139
+	rchild = 146
+	name = ''
+	dparent = 0.030000
+
+Node 139:
+	parent = 138
+	lchild = 140
+	rchild = 145
+	name = ''
+	dparent = 0.049697
+
+Node 140:
+	parent = 139
+	lchild = 141
+	rchild = 144
+	name = ''
+	dparent = 0.026990
+
+Node 141:
+	parent = 140
+	lchild = 142
+	rchild = 143
+	name = ''
+	dparent = 0.020000
+
+Node 142:
+	parent = 141
+	lchild = -1
+	rchild = -1
+	name = 'loxAfr3'
+	dparent = 0.002242
+
+Node 143:
+	parent = 141
+	lchild = -1
+	rchild = -1
+	name = 'eleEdw1'
+	dparent = 0.050000
+
+Node 144:
+	parent = 140
+	lchild = -1
+	rchild = -1
+	name = 'proCap1'
+	dparent = 0.145358
+
+Node 145:
+	parent = 139
+	lchild = -1
+	rchild = -1
+	name = 'triMan1'
+	dparent = 0.100000
+
+Node 146:
+	parent = 138
+	lchild = 147
+	rchild = 148
+	name = ''
+	dparent = 0.010000
+
+Node 147:
+	parent = 146
+	lchild = -1
+	rchild = -1
+	name = 'chrAsi1'
+	dparent = 0.030000
+
+Node 148:
+	parent = 146
+	lchild = -1
+	rchild = -1
+	name = 'echTel2'
+	dparent = 0.235936
+
+Node 149:
+	parent = 137
+	lchild = -1
+	rchild = -1
+	name = 'oryAfe1'
+	dparent = 0.030000
+
+Node 150:
+	parent = 136
+	lchild = 151
+	rchild = 152
+	name = ''
+	dparent = 0.053145
+
+Node 151:
+	parent = 150
+	lchild = -1
+	rchild = -1
+	name = 'dasNov3'
+	dparent = 0.116664
+
+Node 152:
+	parent = 150
+	lchild = -1
+	rchild = -1
+	name = 'choHof1'
+	dparent = 0.096357
+
+Node 153:
+	parent = 7
+	lchild = 154
+	rchild = 155
+	name = ''
+	dparent = 0.215100
+
+Node 154:
+	parent = 153
+	lchild = -1
+	rchild = -1
+	name = 'monDom5'
+	dparent = 0.125686
+
+Node 155:
+	parent = 153
+	lchild = 156
+	rchild = 157
+	name = ''
+	dparent = 0.050000
+
+Node 156:
+	parent = 155
+	lchild = -1
+	rchild = -1
+	name = 'sarHar1'
+	dparent = 0.100000
+
+Node 157:
+	parent = 155
+	lchild = -1
+	rchild = -1
+	name = 'macEug2'
+	dparent = 0.072008
+
+Node 158:
+	parent = 6
+	lchild = -1
+	rchild = -1
+	name = 'ornAna1'
+	dparent = 0.456592
+
+Node 159:
+	parent = 5
+	lchild = 160
+	rchild = 209
+	name = ''
+	dparent = 0.122000
+
+Node 160:
+	parent = 159
+	lchild = 161
+	rchild = 202
+	name = ''
+	dparent = 0.010000
+
+Node 161:
+	parent = 160
+	lchild = 162
+	rchild = 195
+	name = ''
+	dparent = 0.045143
+
+Node 162:
+	parent = 161
+	lchild = 163
+	rchild = 194
+	name = ''
+	dparent = 0.160000
+
+Node 163:
+	parent = 162
+	lchild = 164
+	rchild = 187
+	name = ''
+	dparent = 0.050000
+
+Node 164:
+	parent = 163
+	lchild = 165
+	rchild = 186
+	name = ''
+	dparent = 0.050000
+
+Node 165:
+	parent = 164
+	lchild = 166
+	rchild = 169
+	name = ''
+	dparent = 0.050000
+
+Node 166:
+	parent = 165
+	lchild = 167
+	rchild = 168
+	name = ''
+	dparent = 0.030000
+
+Node 167:
+	parent = 166
+	lchild = -1
+	rchild = -1
+	name = 'falChe1'
+	dparent = 0.100000
+
+Node 168:
+	parent = 166
+	lchild = -1
+	rchild = -1
+	name = 'falPer1'
+	dparent = 0.100000
+
+Node 169:
+	parent = 165
+	lchild = 170
+	rchild = 181
+	name = ''
+	dparent = 0.074703
+
+Node 170:
+	parent = 169
+	lchild = 171
+	rchild = 180
+	name = ''
+	dparent = 0.025000
+
+Node 171:
+	parent = 170
+	lchild = 172
+	rchild = 173
+	name = ''
+	dparent = 0.052066
+
+Node 172:
+	parent = 171
+	lchild = -1
+	rchild = -1
+	name = 'ficAlb2'
+	dparent = 0.060000
+
+Node 173:
+	parent = 171
+	lchild = 174
+	rchild = 179
+	name = ''
+	dparent = 0.010000
+
+Node 174:
+	parent = 173
+	lchild = 175
+	rchild = 178
+	name = ''
+	dparent = 0.015000
+
+Node 175:
+	parent = 174
+	lchild = 176
+	rchild = 177
+	name = ''
+	dparent = 0.010000
+
+Node 176:
+	parent = 175
+	lchild = -1
+	rchild = -1
+	name = 'serCan1'
+	dparent = 0.024000
+
+Node 177:
+	parent = 175
+	lchild = -1
+	rchild = -1
+	name = 'zonAlb1'
+	dparent = 0.024457
+
+Node 178:
+	parent = 174
+	lchild = -1
+	rchild = -1
+	name = 'geoFor1'
+	dparent = 0.041261
+
+Node 179:
+	parent = 173
+	lchild = -1
+	rchild = -1
+	name = 'taeGut2'
+	dparent = 0.060000
+
+Node 180:
+	parent = 170
+	lchild = -1
+	rchild = -1
+	name = 'pseHum1'
+	dparent = 0.060000
+
+Node 181:
+	parent = 169
+	lchild = 182
+	rchild = 183
+	name = ''
+	dparent = 0.030000
+
+Node 182:
+	parent = 181
+	lchild = -1
+	rchild = -1
+	name = 'melUnd1'
+	dparent = 0.046985
+
+Node 183:
+	parent = 181
+	lchild = 184
+	rchild = 185
+	name = ''
+	dparent = 0.020000
+
+Node 184:
+	parent = 183
+	lchild = -1
+	rchild = -1
+	name = 'amaVit1'
+	dparent = 0.026000
+
+Node 185:
+	parent = 183
+	lchild = -1
+	rchild = -1
+	name = 'araMac1'
+	dparent = 0.026000
+
+Node 186:
+	parent = 164
+	lchild = -1
+	rchild = -1
+	name = 'colLiv1'
+	dparent = 0.100000
+
+Node 187:
+	parent = 163
+	lchild = 188
+	rchild = 189
+	name = ''
+	dparent = 0.020000
+
+Node 188:
+	parent = 187
+	lchild = -1
+	rchild = -1
+	name = 'anaPla1'
+	dparent = 0.100000
+
+Node 189:
+	parent = 187
+	lchild = 190
+	rchild = 193
+	name = ''
+	dparent = 0.036045
+
+Node 190:
+	parent = 189
+	lchild = 191
+	rchild = 192
+	name = ''
+	dparent = 0.080000
+
+Node 191:
+	parent = 190
+	lchild = -1
+	rchild = -1
+	name = 'galGal4'
+	dparent = 0.036254
+
+Node 192:
+	parent = 190
+	lchild = -1
+	rchild = -1
+	name = 'cotJap1'
+	dparent = 0.040000
+
+Node 193:
+	parent = 189
+	lchild = -1
+	rchild = -1
+	name = 'melGal1'
+	dparent = 0.150718
+
+Node 194:
+	parent = 162
+	lchild = -1
+	rchild = -1
+	name = 'strCam1'
+	dparent = 0.040000
+
+Node 195:
+	parent = 161
+	lchild = 196
+	rchild = 199
+	name = ''
+	dparent = 0.100000
+
+Node 196:
+	parent = 195
+	lchild = 197
+	rchild = 198
+	name = ''
+	dparent = 0.050000
+
+Node 197:
+	parent = 196
+	lchild = -1
+	rchild = -1
+	name = 'allMis1'
+	dparent = 0.100000
+
+Node 198:
+	parent = 196
+	lchild = -1
+	rchild = -1
+	name = 'allSin1'
+	dparent = 0.100000
+
+Node 199:
+	parent = 195
+	lchild = 200
+	rchild = 201
+	name = ''
+	dparent = 0.050000
+
+Node 200:
+	parent = 199
+	lchild = -1
+	rchild = -1
+	name = 'croPor1'
+	dparent = 0.050000
+
+Node 201:
+	parent = 199
+	lchild = -1
+	rchild = -1
+	name = 'gavGan1'
+	dparent = 0.050000
+
+Node 202:
+	parent = 160
+	lchild = 203
+	rchild = 206
+	name = ''
+	dparent = 0.040000
+
+Node 203:
+	parent = 202
+	lchild = 204
+	rchild = 205
+	name = ''
+	dparent = 0.050000
+
+Node 204:
+	parent = 203
+	lchild = -1
+	rchild = -1
+	name = 'cheMyd1'
+	dparent = 0.100000
+
+Node 205:
+	parent = 203
+	lchild = -1
+	rchild = -1
+	name = 'chrPic2'
+	dparent = 0.100000
+
+Node 206:
+	parent = 202
+	lchild = 207
+	rchild = 208
+	name = ''
+	dparent = 0.050000
+
+Node 207:
+	parent = 206
+	lchild = -1
+	rchild = -1
+	name = 'pelSin1'
+	dparent = 0.100000
+
+Node 208:
+	parent = 206
+	lchild = -1
+	rchild = -1
+	name = 'apaSpi1'
+	dparent = 0.100000
+
+Node 209:
+	parent = 159
+	lchild = 210
+	rchild = 211
+	name = ''
+	dparent = 0.200000
+
+Node 210:
+	parent = 209
+	lchild = -1
+	rchild = -1
+	name = 'pytBiv1'
+	dparent = 0.200000
+
+Node 211:
+	parent = 209
+	lchild = -1
+	rchild = -1
+	name = 'anoCar2'
+	dparent = 0.247000
+
+Node 212:
+	parent = 4
+	lchild = -1
+	rchild = -1
+	name = 'xenTro7'
+	dparent = 0.977944
+
+Node 213:
+	parent = 3
+	lchild = -1
+	rchild = -1
+	name = 'latCha1'
+	dparent = 0.977944
+
+Node 214:
+	parent = 2
+	lchild = 215
+	rchild = 254
+	name = ''
+	dparent = 0.326688
+
+Node 215:
+	parent = 214
+	lchild = 216
+	rchild = 249
+	name = ''
+	dparent = 0.143632
+
+Node 216:
+	parent = 215
+	lchild = 217
+	rchild = 248
+	name = ''
+	dparent = 0.225640
+
+Node 217:
+	parent = 216
+	lchild = 218
+	rchild = 245
+	name = ''
+	dparent = 0.020000
+
+Node 218:
+	parent = 217
+	lchild = 219
+	rchild = 244
+	name = ''
+	dparent = 0.010000
+
+Node 219:
+	parent = 218
+	lchild = 220
+	rchild = 237
+	name = ''
+	dparent = 0.030000
+
+Node 220:
+	parent = 219
+	lchild = 221
+	rchild = 226
+	name = ''
+	dparent = 0.097590
+
+Node 221:
+	parent = 220
+	lchild = 222
+	rchild = 223
+	name = ''
+	dparent = 0.097590
+
+Node 222:
+	parent = 221
+	lchild = -1
+	rchild = -1
+	name = 'tetNig2'
+	dparent = 0.124159
+
+Node 223:
+	parent = 221
+	lchild = 224
+	rchild = 225
+	name = ''
+	dparent = 0.100000
+
+Node 224:
+	parent = 223
+	lchild = -1
+	rchild = -1
+	name = 'fr3'
+	dparent = 0.103847
+
+Node 225:
+	parent = 223
+	lchild = -1
+	rchild = -1
+	name = 'takFla1'
+	dparent = 0.100000
+
+Node 226:
+	parent = 220
+	lchild = 227
+	rchild = 228
+	name = ''
+	dparent = 0.100000
+
+Node 227:
+	parent = 226
+	lchild = -1
+	rchild = -1
+	name = 'oreNil2'
+	dparent = 0.100000
+
+Node 228:
+	parent = 226
+	lchild = 229
+	rchild = 230
+	name = ''
+	dparent = 0.050000
+
+Node 229:
+	parent = 228
+	lchild = -1
+	rchild = -1
+	name = 'cynSem1'
+	dparent = 0.050000
+
+Node 230:
+	parent = 228
+	lchild = 231
+	rchild = 232
+	name = ''
+	dparent = 0.050000
+
+Node 231:
+	parent = 230
+	lchild = -1
+	rchild = -1
+	name = 'neoBri1'
+	dparent = 0.050000
+
+Node 232:
+	parent = 230
+	lchild = 233
+	rchild = 234
+	name = ''
+	dparent = 0.050000
+
+Node 233:
+	parent = 232
+	lchild = -1
+	rchild = -1
+	name = 'hapBur1'
+	dparent = 0.050000
+
+Node 234:
+	parent = 232
+	lchild = 235
+	rchild = 236
+	name = ''
+	dparent = 0.050000
+
+Node 235:
+	parent = 234
+	lchild = -1
+	rchild = -1
+	name = 'mayZeb1'
+	dparent = 0.050000
+
+Node 236:
+	parent = 234
+	lchild = -1
+	rchild = -1
+	name = 'punNye1'
+	dparent = 0.050000
+
+Node 237:
+	parent = 219
+	lchild = 238
+	rchild = 239
+	name = ''
+	dparent = 0.200000
+
+Node 238:
+	parent = 237
+	lchild = -1
+	rchild = -1
+	name = 'oryLat2'
+	dparent = 0.281970
+
+Node 239:
+	parent = 237
+	lchild = 240
+	rchild = 241
+	name = ''
+	dparent = 0.100000
+
+Node 240:
+	parent = 239
+	lchild = -1
+	rchild = -1
+	name = 'xipMac1'
+	dparent = 0.200000
+
+Node 241:
+	parent = 239
+	lchild = 242
+	rchild = 243
+	name = ''
+	dparent = 0.100000
+
+Node 242:
+	parent = 241
+	lchild = -1
+	rchild = -1
+	name = 'poeFor1'
+	dparent = 0.100000
+
+Node 243:
+	parent = 241
+	lchild = -1
+	rchild = -1
+	name = 'poeRet1'
+	dparent = 0.100000
+
+Node 244:
+	parent = 218
+	lchild = -1
+	rchild = -1
+	name = 'gasAcu1'
+	dparent = 0.346413
+
+Node 245:
+	parent = 217
+	lchild = 246
+	rchild = 247
+	name = ''
+	dparent = 0.200000
+
+Node 246:
+	parent = 245
+	lchild = -1
+	rchild = -1
+	name = 'sebNig1'
+	dparent = 0.200000
+
+Node 247:
+	parent = 245
+	lchild = -1
+	rchild = -1
+	name = 'sebRub1'
+	dparent = 0.200000
+
+Node 248:
+	parent = 216
+	lchild = -1
+	rchild = -1
+	name = 'gadMor1'
+	dparent = 0.350000
+
+Node 249:
+	parent = 215
+	lchild = 250
+	rchild = 251
+	name = ''
+	dparent = 0.200000
+
+Node 250:
+	parent = 249
+	lchild = -1
+	rchild = -1
+	name = 'angJap1'
+	dparent = 0.450000
+
+Node 251:
+	parent = 249
+	lchild = 252
+	rchild = 253
+	name = ''
+	dparent = 0.100000
+
+Node 252:
+	parent = 251
+	lchild = -1
+	rchild = -1
+	name = 'danRer7'
+	dparent = 0.430752
+
+Node 253:
+	parent = 251
+	lchild = -1
+	rchild = -1
+	name = 'astMex1'
+	dparent = 0.400000
+
+Node 254:
+	parent = 214
+	lchild = -1
+	rchild = -1
+	name = 'lepOcu1'
+	dparent = 0.400000
+
+Node 255:
+	parent = 1
+	lchild = -1
+	rchild = -1
+	name = 'calMil1'
+	dparent = 0.750000
+
+Node 256:
+	parent = 0
+	lchild = 257
+	rchild = 258
+	name = ''
+	dparent = 0.575747
+
+Node 257:
+	parent = 256
+	lchild = -1
+	rchild = -1
+	name = 'petMar2'
+	dparent = 0.400000
+
+Node 258:
+	parent = 256
+	lchild = -1
+	rchild = -1
+	name = 'letCam1'
+	dparent = 0.400000
+

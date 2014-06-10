@@ -5,6 +5,9 @@
 // SHA1 needed 20 characters, MD5 needed 16 characters.
 // Change the length accordingly with your choosen hash engine
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifdef USE_SSL 
 #include "openssl/hmac.h"
 #include "openssl/evp.h"
@@ -38,7 +41,7 @@ return cloneStringZ(hmacStr, sizeof(hmacStr));
 #else // --------- no USE_SSL ==> errAbort with message that openssl is required --------------
 
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #define NEED_OPENSSL "kent/src must be recompiled with openssl libs and USE_SSL=1 in order for this to work."
 
 char *hmacSha1(char *key, char *data)

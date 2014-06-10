@@ -1,5 +1,8 @@
 /* edwBamStats - Collect some info on a BAM file. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 /* version history: 
  *    1 - initial release 
  *    2 - added sampleBam option
@@ -151,15 +154,6 @@ for (tp = oldList; tp != NULL; tp = next)
 *pB = bList;
 }
 
-samfile_t *samMustOpen(char *fileName, char *mode, void *extraHeader)
-/* Open up samfile or die trying */
-{
-samfile_t *sf = samopen(fileName, mode, extraHeader);
-if (sf == NULL)
-    errnoAbort("Couldn't open %s.\n", fileName);
-return sf;
-}
-
 void subsampleMappedFromBam(char *inBam, long long inMappedCount, 
     char *sampleBam, long long outMappedCount)
 /* Create a sam file that is a robustly sampled subset of the mapping portion
@@ -176,10 +170,10 @@ memset(map+outSize, 0, inMappedCount - outSize);
 shuffleArrayOfChars(map, inMappedCount);
 
 /* Open up bam file */
-samfile_t *in = samMustOpen(inBam, "rb", NULL);
+samfile_t *in = bamMustOpenLocal(inBam, "rb", NULL);
 
 /* Open up sam output and write header */
-samfile_t *out = samMustOpen(sampleBam, "wb", in->header);
+samfile_t *out = bamMustOpenLocal(sampleBam, "wb", in->header);
 
 /* Loop through bam items, writing them to sam or not according to map. */
 int mapIx = 0;
@@ -210,7 +204,7 @@ samclose(out);
 void openSamReadHeader(char *fileName, samfile_t **retSf, bam_header_t **retHead)
 /* Open file and check header.  Abort with error message if a problem. */
 {
-samfile_t *sf = samMustOpen(fileName, "rb", NULL);
+samfile_t *sf = bamMustOpenLocal(fileName, "rb", NULL);
 bam_header_t *head = sf->header;
 if (head == NULL)
     errAbort("Aborting ... Bad BAM header in file: %s", fileName);
@@ -218,6 +212,68 @@ if (head == NULL)
 *retHead = head;
 }
 
+
+void statsWriteHeaderInfo(FILE *f, bam_header_t *head)
+// Write to stats file, useful information discovered in bam header.
+{
+// Try to determine the aligner.  It would be good to not hard-code expected aligners,
+// But with 0 or more @PG lines in a header, it might be hard to discover a simple answer.
+if (strcasestr(head->text,"\n@PG\tID:bwa") != NULL)
+    fprintf(f, "alignedBy bwa\n");
+else if (strcasestr(head->text,"\n@PG\tID:TopHat") != NULL)
+    fprintf(f, "alignedBy TopHat\n");
+else if (strcasestr(head->text,"\n@PG\tID:STAR") != NULL)
+    fprintf(f, "alignedBy STAR\n");
+else if (strcasestr(head->text,"\n@PG\tID:RSEM") != NULL)
+    fprintf(f, "alignedBy RSEM\n");
+else
+    {
+    //fprintf(f, "alignedBy unknown\n");
+    if (strcasestr(head->text,"\n@PG\tID:BEDTools_bedToBam") != NULL)
+        fprintf(f, "createdBy BEDTools_bedToBam\n");
+    }
+
+// See if any CO lines can be discovered (e.g. "@CO     REFID:ENCFF001RGS")
+#define CO_PREFIX "\n@CO\t"
+char *p = head->text;
+for (;;)
+    {
+    // Find "CO" at beginning of line
+    if ((p = stringIn(CO_PREFIX,p)) == NULL)
+        break;
+    p += strlen(CO_PREFIX);
+    char *coPair = cloneNextWordByDelimiter(&p,' ');
+    p -= 1; // cloneNextWord skips past delimiter, which we still need
+    if (coPair == NULL || *coPair == '\0')
+        continue;
+
+    // Only support expected CO lines at this time
+    char *words[2];
+    if (chopString(coPair, ":", words, ArraySize(words)) != 2)
+        continue;  // mangled line so skip it
+    if (sameString(words[0], "REFID") || sameString(words[0], "ANNID")
+    ||  sameString(words[0], "LIBID") || sameString(words[0], "SPIKEID"))
+        {
+        // Overkill: camelCase theId
+        strLower(words[0]);
+        words[0][strlen(words[0])-2] = 'I';
+        }
+    else
+        continue;
+
+    // print RA style "var val ..." pair
+    fprintf(f, "%s %s",words[0],words[1]);
+    if (*p != '\n')  // Perhaps there is more to the line?
+        {
+        char *restOf = cloneNextWordByDelimiter(&p,'\n');
+        p -= 1; // cloneNextWord skips past delimiter, which we still need
+        fprintf(f, " %s",restOf);
+        //freeMem(restOf); // spill
+        }
+    //freeMem(coPair); // spill
+    fputc('\n', f);
+    }
+}
 
 
 void edwBamStats(char *inBam, char *outRa)
@@ -323,6 +379,7 @@ verbose(1, "Scanned %lld reads in %s\n", readCount, inBam);
 
 
 FILE *f = mustOpen(outRa, "w");
+statsWriteHeaderInfo(f,head);
 fprintf(f, "isPaired %d\n", isPaired);
 fprintf(f, "isSortedByTarget %d\n", sortedByChrom);
 fprintf(f, "readCount %lld\n", readCount);

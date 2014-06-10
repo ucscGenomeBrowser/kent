@@ -52,6 +52,7 @@ s/octDeg1/Octodon_degus/;
 s/odoRosDiv1/Odobenus_rosmarus_divergens/;
 s/lepWed1/Leptonychotes_weddellii/;
 s/orcOrc1/Orcinus_orca/;
+s/phyCat1/Physeter_catodon/;
 s/balAcu1/Balaenoptera acutorostrata scammoni/;
 s/oryAfe1/Orycteropus_afer/;
 s/oviAri3/Ovis_aries/;
@@ -85,6 +86,7 @@ s/cynSem1/Cynoglossus_semilaevis/;
 s/sebNig1/Sebastes_nigrocinctus/;
 s/sebRub1/Sebastes_rubrivinctus/;
 s/poeFor1/Poecilia_formosa/;
+s/poeReg1/Poecilia_reticulata/;
 s/xipMac1/Xiphophorus_maculatus/;'
 }
 

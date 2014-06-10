@@ -1,3 +1,6 @@
+/* Copyright (C) 2010 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifdef USE_JPG2000
 
 /****************************************************
@@ -225,7 +228,7 @@ NCSecwShutdown();
 
 #include <stdarg.h>
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 
 void jp2DecInit(char *jp2Path, int *retWidth, int *retHeight)
 {

@@ -1,9 +1,12 @@
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include <regex.h>
 #include "hCommon.h"
 #include "obscure.h"
 #include "dnautil.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "htmshell.h"
 #include "web.h"
 #include "hPrint.h"

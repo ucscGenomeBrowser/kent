@@ -1,5 +1,8 @@
 /* Things to do with ENCODE 3 validation. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hex.h"
 #include "linefile.h"
@@ -123,3 +126,37 @@ boolean encode3CheckEnrichedIn(char *enriched)
 {
 return (stringArrayIx(enriched, edwSupportedEnrichedIn, edwSupportedEnrichedInCount) >= 0);
 }
+
+struct encode3BedType encode3BedTypeTable[] = {
+    {"bedLogR", 9, 1},
+    {"bedRnaElements", 6, 3},
+    {"bedRrbs", 9, 2},
+    {"bedMethyl", 9, 2},
+    {"narrowPeak", 6, 4},
+    {"broadPeak", 6, 3},
+};
+
+int encode3BedTypeCount = ArraySize(encode3BedTypeTable);
+
+struct encode3BedType *encode3BedTypeMayFind(char *name)
+/* Return encode3BedType of given name, just return NULL if not found. */
+{
+int i;
+for (i=0; i<encode3BedTypeCount; ++i)
+    {
+    if (sameString(name, encode3BedTypeTable[i].name))
+        return &encode3BedTypeTable[i];
+    }
+return NULL;
+}
+
+struct encode3BedType *encode3BedTypeFind(char *name)
+/* Return encode3BedType of given name.  Abort if not found */
+{
+struct encode3BedType *bedType = encode3BedTypeMayFind(name);
+if (bedType == NULL)
+    errAbort("Couldn't find bed format %s", name);
+return bedType;
+}
+
+

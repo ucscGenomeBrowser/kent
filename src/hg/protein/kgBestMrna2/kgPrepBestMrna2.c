@@ -2,6 +2,9 @@
  *	kgPrepBestMrna - prepare input files for blat run to
  *	select best mRNA for each protein
  */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include <limits.h>
 #include "common.h"
 #include "hCommon.h"

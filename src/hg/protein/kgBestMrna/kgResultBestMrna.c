@@ -1,5 +1,8 @@
 /* kgBestMrna - driver program to call blat to select best mRNA for each protein */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include	<sys/param.h>
 #include "common.h"
 #include "hCommon.h"

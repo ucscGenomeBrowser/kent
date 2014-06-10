@@ -1,4 +1,7 @@
 /* baseMaskCommon - functions to create genomeRangeTree baseMask files to/from database tracks. */
+
+/* Copyright (C) 2008 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef BASEMASKCOMMON_H
 #define BASEMASKCOMMON_H
 

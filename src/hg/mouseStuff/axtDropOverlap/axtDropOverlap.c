@@ -1,4 +1,7 @@
 /* used for cleaning up self alignments - deletes all overlapping self alignments */
+
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "axt.h"

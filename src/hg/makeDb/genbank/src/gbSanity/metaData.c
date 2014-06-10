@@ -1,11 +1,14 @@
 /* Object to store metadata from database for use in verification, also
  * a few shared functions. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 
 #include "metaData.h"
 #include "common.h"
 #include "localmem.h"
-#include "errabort.h"
+#include "errAbort.h"
 
 
 struct metaDataTbls

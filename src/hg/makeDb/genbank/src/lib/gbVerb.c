@@ -1,6 +1,9 @@
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "gbVerb.h"
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "jksql.h"
 #include <time.h>
 #include <sys/types.h>

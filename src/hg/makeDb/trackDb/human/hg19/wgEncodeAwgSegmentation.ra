@@ -14,7 +14,7 @@ subGroup2 cellType Cell_Line t1GM12878=GM12878&nbsp;(Tier_1) t1H1HESC=H1-hESC&nb
 subGroup3 method Method ChromHMM=ChromHMM Segway=Segway Combined=Combined
 dimensions dimX=method dimY=cellType
 sortOrder tier=+ cellType=+ method=+
-fileSortOrder cell=Cell_Line dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line fileSize=Size fileType=File_Type 
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell
 priority 0
@@ -140,21 +140,21 @@ filterBy reserved:Segment_Type=\
     type bed 9 .
 
     track wgEncodeAwgSegmentationCombinedHelas3
-    parent wgEncodeAwgSegmentation on
+    parent wgEncodeAwgSegmentation off
     shortLabel HeLa-S3 Combined
     longLabel HeLa-S3 Genome Segmentation by Combined Segway+ChromHMM from ENCODE/Analysis
     subGroups tier=t2 cellType=t2HELAS3 method=Combined
     type bed 9 .
 
     track wgEncodeAwgSegmentationCombinedHepg2
-    parent wgEncodeAwgSegmentation on
+    parent wgEncodeAwgSegmentation off
     shortLabel HepG2 Combined
     longLabel HepG2 Genome Segmentation by Combined Segway+ChromHMM from ENCODE/Analysis
     subGroups tier=t2 cellType=t2HEPG2 method=Combined
     type bed 9 .
 
     track wgEncodeAwgSegmentationCombinedHuvec
-    parent wgEncodeAwgSegmentation on
+    parent wgEncodeAwgSegmentation off
     shortLabel HUVEC Combined
     longLabel HUVEC Genome Segmentation by Combined Segway+ChromHMM from ENCODE/Analysis
     subGroups tier=t2 cellType=t2HUVEC method=Combined

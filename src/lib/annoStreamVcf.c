@@ -1,5 +1,8 @@
 /* annoStreamVcf -- subclass of annoStreamer for VCF files */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "annoStreamVcf.h"
 #include "twoBit.h"
 #include "vcf.h"
@@ -29,10 +32,16 @@ static void asvSetRegion(struct annoStreamer *vSelf, char *chrom, uint regionSta
 {
 annoStreamerSetRegion(vSelf, chrom, regionStart, regionEnd);
 struct annoStreamVcf *self = (struct annoStreamVcf *)vSelf;
-if (self->isTabix)
-    lineFileSetTabixRegion(self->vcff->lf, chrom, regionStart, regionEnd);
 self->indelQ = self->nextPosQ = NULL;
 self->eof = FALSE;
+if (self->isTabix)
+    {
+    // If this region is not in tabix index, set self->eof so we won't keep grabbing rows
+    // from the old position.
+    boolean gotRegion = lineFileSetTabixRegion(self->vcff->lf, chrom, regionStart, regionEnd);
+    if (! gotRegion)
+	self->eof = TRUE;
+    }
 }
 
 static char *asvGetHeader(struct annoStreamer *vSelf)
@@ -125,16 +134,19 @@ if (minChrom != NULL)
 char **words = nextRowRaw(self);
 if (regionChrom != NULL && words != NULL)
     {
-    if (self->isTabix && strcmp(getProperChromName(self, words[0]), regionChrom) < 0)
+    char *rowChrom = getProperChromName(self, words[0]);
+    if (self->isTabix && strcmp(rowChrom, regionChrom) < 0)
 	{
 	uint regionEnd = sSelf->regionEnd;
 	if (minChrom != NULL && sSelf->chrom == NULL)
 	    regionEnd = annoAssemblySeqSize(sSelf->assembly, minChrom);
+	// If lineFileSetTabixRegion fails, just keep the current file position
+	// -- hopefully we'll just be skipping to the next row after region{Chrom,Start,End}.
 	lineFileSetTabixRegion(self->vcff->lf, regionChrom, regionStart, regionEnd);
 	}
     while (words != NULL &&
-	   (strcmp(getProperChromName(self, words[0]), regionChrom) < 0 ||
-	    (sameString(words[0], regionChrom) && self->record->chromEnd < regionStart)))
+	   (strcmp(rowChrom, regionChrom) < 0 ||
+	    (sameString(rowChrom, regionChrom) && self->record->chromEnd < regionStart)))
 	words = nextRowRaw(self);
     }
 // Tabix doesn't give us any rows past end of region, but if not using tabix,

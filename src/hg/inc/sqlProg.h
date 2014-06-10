@@ -1,5 +1,8 @@
 /* sqlProg - functions for building command line programs to deal with
  * sql databases.*/
+
+/* Copyright (C) 2010 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef SQLPROG_H
 #define SQLPROG_H
 

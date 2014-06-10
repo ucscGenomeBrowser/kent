@@ -415,6 +415,19 @@ taxId   59729
     cat fb.taeGut2.cpgIslandExt.txt
     #   16473980 bases of 1222864691 (1.347%) in intersection
 
+#############################################################################
+# CPG Islands Unmasked track
+
+mkdir /hive/data/genomes/taeGut2/bed/cpgIslandsUnmasked
+cd /hive/data/genomes/taeGut2/bed/cpgIslandsUnmasked
+time doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
+   -tableName=cpgIslandExtUnmasked -dbHost=hgwdev -smallClusterHub=ku \
+    -workhorse=hgwdev \
+    -maskedSeq=/hive/data/genomes/taeGut2/taeGut2.unmasked.2bit \
+        taeGut2 > do.log 2>&1
+
+#############################################################################
+
 #########################################################################
 # genscan - (DONE - 2013-06-06 - Hiram)
     mkdir /hive/data/genomes/taeGut2/bed/genscan
@@ -529,7 +542,7 @@ taeGut2.upstreamGeneTbl = refGene
 #########################################################################
 # set default position similar to taeGut1 (DONE - 2013-06-19 - Hiram)
     hgsql -e \
-'update dbDb set defaultPos="chrZ:56287176-56342404" where name="taeGut2";' \
+'update dbDb set defaultPos="chrZ:56283356-56343168" where name="taeGut2";' \
 	hgcentraltest
 
 #########################################################################
@@ -555,19 +568,18 @@ taeGut2.upstreamGeneTbl = refGene
     # documentation for this step is in taeGut1 -  been done
 
 ############################################################################
-# downloads and pushQ entry (DONE - 2013-03-08 - Pauline)
+# downloads and pushQ entry (DONE - 2014-04-16 - Hiram)
     # after adding taeGut2 to the all.joiner file and verifying that
     #   joinerCheck is clean (i.e. run joinerCheck w -times and -keys flags
     #   to make sure there are no errors), can construct the downloads:
     cd /hive/data/genomes/taeGut2
-    /usr/bin/time -p makeDownloads.pl -workhorse=hgwdev taeGut2
-    #   real 1400.59
+    time  makeDownloads.pl -workhorse=hgwdev taeGut2
+    #   real 14m53.730s
 
     mkdir /hive/data/genomes/taeGut2/pushQ
     cd /hive/data/genomes/taeGut2/pushQ
-    # Mark says don't let the transMap track get there
     time makePushQSql.pl taeGut2 2> stderr.txt > taeGut2.sql
-    #  real	2m55.404s
+    #  real	2m4.300s
 
     # check the stderr.txt for bad stuff, these kinds of warnings are OK:
 # WARNING: hgwdev does not have /gbdb/taeGut2/wib/gc5Base.wib
@@ -577,8 +589,8 @@ taeGut2.upstreamGeneTbl = refGene
 # WARNING: taeGut2 does not have extFile
 # WARNING: taeGut2 does not have estOrientInfo
 
-    scp -p taeGut2.sql hgwbeta:/tmp/
-    ssh hgwbeta "hgsql qapushq < /tmp/taeGut2.sql"
+    scp -p taeGut2.sql qateam@hgwbeta:/tmp/
+    ssh qateam@hgwbeta hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/taeGut2.sql"
 
 ############################################################################
 #  BLASTZ/CHAIN/NET Zebra finch vs Turkey (DONE - 2013-10-18,25 - Hiram)
@@ -756,5 +768,71 @@ hgsql -e 'INSERT INTO trackVersion \
     hgLoadSqlTab taeGut2 ensemblSource \
        /hive/data/genomes/taeGut1/bed/ensGene.73/process/ensemblSource.sql \
            ensemblSource.tab
+
+#########################################################################
+# create ucscToINSDC name mapping (DONE - 2014-04-15 - Hiram)
+    mkdir /hive/data/genomes/taeGut2/bed/ucscToINSDC
+    cd /hive/data/genomes/taeGut2/bed/ucscToINSDC
+
+    # this script has been maturing over time, it is close to complete.
+    # to find a latest copy of it:
+    # ls -ogrt /hive/data/genomes/*/bed/ucscToINSDC/translateNames.sh
+
+    cp -p /hive/data/genomes/eriEur2/bed/ucscToINSDC/translateNames.sh .
+    ./translateNames.sh
+    # it says:
+# need to find chrM accessions
+    # so add this one:
+    echo -e 'chrM\tNC_007897.1' >> ucscToINSDC.txt
+    # needs to be sorted to work with join
+    sort ucscToINSDC.txt > ucscToINSDC.tab
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes | sort \
+        > name.coordinate.tab
+
+    join name.coordinate.tab ucscToINSDC.tab | tr '[ ]' '[\t]' > ucscToINSDC.bed
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+# 28
+
+    # use the 28 in this sed:
+    sed -e "s/21/28/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+        | hgLoadSqlTab taeGut2 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords taeGut2 ucscToINSDC
+    # should cover all bases
+    featureBits -countGaps taeGut2 ucscToINSDC
+    # 1232135591 bases of 1232135591 (100.000%) in intersection
+
+##############################################################################
+# cytoBandIdeo - (DONE - 2014-04-15 - Hiram)
+    mkdir /hive/data/genomes/taeGut2/bed/cytoBand
+    cd /hive/data/genomes/taeGut2/bed/cytoBand
+    makeCytoBandIdeo.csh taeGut2
+
+##############################################################################
+# fixup search rule for assembly track/gold table (DONE - 2014-05-01 - Hiram)
+    hgsql -N -e "select frag from gold;" taeGut2 | sort | head -1
+ABQF01000001.1
+
+    hgsql -N -e "select frag from gold;" taeGut2 | sort | tail -2
+ABQF01124805.1
+NC_007897
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" taeGut2 | wc -l
+    # 124806
+
+    hgsql -N -e "select frag from gold;" taeGut2 | egrep -e '[AN][BC][Q_][F0]0[0-9]+(\.1)?' | wc -l
+    # 124806
+
+    hgsql -N -e "select frag from gold;" taeGut2 | egrep -v -e '[AN][BC][Q_][F0]0[0-9]+(\.1)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/zebraFinch/taeGut2/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [AN][BC][Q_][F0]0[0-9]+(\.1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
 
 #########################################################################

@@ -1,4 +1,7 @@
 /* Verbose tracing. */
+
+/* Copyright (C) 2004 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef GBVERB_H
 #define GBVERB_H
 

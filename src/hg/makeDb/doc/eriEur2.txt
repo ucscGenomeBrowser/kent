@@ -421,8 +421,6 @@ eriEur2.perChromTables = no
     # 2715720925 bases of 2715720925 (100.000%) in intersection
 
 ##############################################################################
-
-############################################################################
 # construct download files (DONE - 2014-04-11 - Hiram)
     # after db name has been added to all.joiner and
     # joinerCheck -database=eriEur2 -keys all.joiner
@@ -445,3 +443,43 @@ eriEur2.perChromTables = no
     ssh qateam@hgwbeta './bin/x86_64/hgsql qapushq < /tmp/eriEur2.sql'
 
 ###########################################################################
+# genscan track (DONE - 2013-09-12 - Hiram)
+
+    cd /hive/data/genomes/eriEur2/bed/genscan
+    doGenscan.pl -buildDir=/hive/data/genomes/eriEur2/bed/genscan \
+       -bigClusterHub=ku  -workhorse=hgwdev \
+           -dbHost=hgwdev eriEur2 > do.log 2>&1
+    #  Elapsed time: 65m12s
+
+    cat fb.eriEur2.genscan.txt
+    #  45444338 bases of 2333073535 (1.948%) in intersection
+    cat fb.eriEur2.genscanSubopt.txt
+    #  44934986 bases of 2333073535 (1.926%) in intersection
+
+#############################################################################
+# fixup search rule for assembly track/gold table (DONE - 2014-05-01 - Hiram)
+    hgsql -N -e "select frag from gold;" eriEur2 | sort | head -1
+AMDU01000001.1
+
+    hgsql -N -e "select frag from gold;" eriEur2 | sort | tail -2
+AMDU01225566.1
+NC_002080
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" eriEur2 | wc -l
+    # 225567
+
+    hgsql -N -e "select frag from gold;" eriEur2 | egrep -e '[AN][MC][D_][U0]0[0-9]+(\.1)?' | wc -l
+    # 225567
+
+    hgsql -N -e "select frag from gold;" eriEur2 | egrep -v -e '[AN][MC][D_][U0]0[0-9]+(\.1)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/hedgehog/eriEur2/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [AN][MC][D_][U0]0[0-9]+(\.1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+#########################################################################

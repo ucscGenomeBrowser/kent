@@ -1,5 +1,8 @@
 /* goldTrack - also known as assembly track. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"
@@ -104,6 +107,10 @@ for (frag = tg->items; frag != NULL; frag = frag->next)
     {
     x1 = round((double)((int)frag->chromStart-winStart)*scale) + xOff;
     x2 = round((double)((int)frag->chromEnd-winStart)*scale) + xOff;
+    if (x1 < insideX)
+        x1 = insideX;
+    if (x2 > insideX+width)
+        x2 = insideX+width;
     w = x2-x1;
     color =  ((ix&1) ? gold : brown);
     pink = ((ix&1) ? pink1 : pink2);
@@ -121,7 +128,7 @@ for (frag = tg->items; frag != NULL; frag = frag->next)
 	    frag->strand,
 	    frag->chrom, frag->chromStart, frag->chromEnd);
 
-	mapBoxHc(hvg, frag->chromStart, frag->chromEnd, x1,y,w,heightPer, tg->track, 
+	mapBoxHc(hvg, frag->chromStart, frag->chromEnd, x1,y,w,heightPer, tg->track,
 	    frag->frag, status);
 	}
     ++ix;

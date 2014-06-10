@@ -1,7 +1,10 @@
 /* hgPcr - In-silico PCR CGI for UCSC. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "hash.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "errCatch.h"
 #include "hCommon.h"
 #include "dystring.h"

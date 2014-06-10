@@ -1,4 +1,7 @@
 /* eapUpdateSoftware - Get a new version of software.. */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -8,7 +11,7 @@
 
 char *clVersion = NULL;
 char *clMd5 = NULL;
-int redoPriority = -1;
+enum eapRedoPriority redoPriority = erpNoRedo;
 
 void usage()
 /* Explain usage and exit. */

@@ -1,4 +1,7 @@
 /* pbCalPi - Calculate pI values from a list of protein IDs */
+
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "pbCalPi.h"
 #include "math.h"
 

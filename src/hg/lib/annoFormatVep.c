@@ -2,6 +2,9 @@
  * Variant Effect Predictor to fileName, interpreting input rows according to config.
  * See http://uswest.ensembl.org/info/docs/variation/vep/vep_formats.html */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "annoFormatVep.h"
 #include "annoGratorGpVar.h"
 #include "annoGratorQuery.h"

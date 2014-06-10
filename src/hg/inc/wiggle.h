@@ -2,6 +2,9 @@
  * generated wiggle.c and wiggle.sql.  This header links the database and
  * the RAM representation of objects. */
 
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #ifndef WIGGLE_H
 #define WIGGLE_H
 
@@ -192,6 +195,11 @@ void wigFetchMinMaxPixelsWithCart(struct cart *cart, struct trackDb *tdb, char *
         wigFetchMinMaxPixelsWithCart(cart,(tdb),(tdb)->track,(Min),(Max),(Default))
 /* return pixels heights allowable from trackDb or cart */
 
+boolean wigFetchDoNegativeWithCart(struct cart *cart, struct trackDb *tdb, 
+                                                     char *name,char **optString);
+#define wigFetchDoNegative(tdb,optString) \
+        wigFetchDoNegativeWithCart(cart,(tdb),(tdb)->track,(optString))
+
 enum wiggleGridOptEnum wigFetchTransformFuncWithCart(struct cart *cart, struct trackDb *tdb, 
                                                      char *name,char **optString);
 #define wigFetchTransformFunc(tdb,optString) \
@@ -222,6 +230,9 @@ enum wiggleGraphOptEnum wigFetchGraphTypeWithCart(struct cart *cart, struct trac
         wigFetchGraphTypeWithCart(cart,(tdb),(tdb)->track,(optString))
 /* return graph type, line(points) or bar graph	*/
 
+enum wiggleAggregateFunctionEnum wigFetchAggregateFunctionWithCart(struct cart *cart, struct trackDb *tdb, 
+                                                           char *name, char **optString);
+
 enum wiggleWindowingEnum wigFetchWindowingFunctionWithCart(struct cart *cart, struct trackDb *tdb, 
                                                            char *name, char **optString);
 #define wigFetchWindowingFunction(tdb,optString) \
@@ -246,9 +257,6 @@ void wigFetchYLineMarkValueWithCart(struct cart *cart,struct trackDb *tdb, char 
         wigFetchYLineMarkValueWithCart(cart,(tdb),(tdb)->track,(tDbYMark))
 /* return value for the y line marker to be drawn   */
 
-char *wigFetchAggregateValWithCart(struct cart *cart, struct trackDb *tdb);
-/* Return aggregate value for track. */
-
 boolean wigIsOverlayTypeAggregate(char *aggregate);
 /* Return TRUE if aggregater type is one of the overlay ones. */
 
@@ -268,6 +276,7 @@ int *wiggleSpanList(struct sqlConnection *conn, struct trackDb *tdb);
 #define HORIZGRID "horizGrid"
 #define GRIDDEFAULT "gridDefault"
 #define TRANSFORMFUNC "transformFunc"
+#define DONEGATIVEMODE "negateValues"
 #define ALWAYSZERO "alwaysZero"
 #define AUTOSCALE "autoScale"
 #define AUTOSCALEDEFAULT "autoScaleDefault"

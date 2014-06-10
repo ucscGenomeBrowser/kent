@@ -1,5 +1,8 @@
 /* ffScore - stuff to score ffAli alignments. */
 
+/* Copyright (C) 2011 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "dnautil.h"
 #include "obscure.h"

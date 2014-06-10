@@ -1,11 +1,14 @@
 /* fastaToPsl - Convert FASTA alignments to PSL format. */
+
+/* Copyright (C) 2010 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "fa.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
 #include "dystring.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "psl.h"
 #include "sqlNum.h"
 #include "obscure.h"

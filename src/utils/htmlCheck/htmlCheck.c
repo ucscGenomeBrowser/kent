@@ -1,7 +1,10 @@
 /* htmlCheck - Do a little reading and verification of html file. */
 
+/* Copyright (C) 2013 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "memalloc.h"
 #include "linefile.h"
 #include "hash.h"

@@ -8,6 +8,9 @@
 //
 // Output goes to STDOUT unless a single alternative out file is registered.
 
+/* Copyright (C) 2012 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "dyOut.h"
 

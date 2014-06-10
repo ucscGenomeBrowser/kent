@@ -1,6 +1,9 @@
 /* wigCommon.h - common items to the two graphing types of tracks
  *	type wig and type bedGraph
  */
+
+/* Copyright (C) 2014 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 #ifndef WIGCOMMON_H
 #define WIGCOMMON_H
 
@@ -28,8 +31,8 @@ struct wigCartOptions
     int graphColumn;	/*	column to be graphing (bedGraph tracks)	*/
     boolean bedGraph;	/*	is this a bedGraph track ?	*/
     boolean isMultiWig;	/*      If true it's a multi-wig. */
-    boolean overlay;	/*      Overlay multiple wigs on top of each other? */
-    boolean transparent;  /* Doing transparency? */
+    enum wiggleAggregateFunctionEnum aggregateFunction;	/*  NONE/TRANSPARENT/STACKED	*/
+    boolean doNegative; /*      should we negate the values */
     };
 
 struct wigCartOptions *wigCartOptionsNew(struct cart *cart, struct trackDb *tdb, int wordCount, char *words[]);
@@ -44,6 +47,8 @@ struct preDrawContainer
     int preDrawZero;		/* Offset from start of predraw array to data requested.  We
                                  * get more because of smoothing */
     int width;			/* Passed in width, number of pixels to display without smooth */
+    double graphUpperLimit, graphLowerLimit; /* limits to the smoothed value */
+    boolean smoothingDone;      /* did we already do the smoothing? */
     };
 
 struct preDrawElement
@@ -77,7 +82,12 @@ struct wigGraphOutput
    WigVerticalLineVirtual vLine;
    void *image;	    /* Some type in reality that goes with vLine. */
    int xOff, yOff;  /* Where to offset output within image. */
+   double *yOffsets; /* if not NULL, points to yOffsets for stacked bars */
+   int numTrack;   /* the index of this track */
    };
+
+struct wigGraphOutput *wigGraphOutputStack(int xOff, int yOff, int width, int numTracks,  struct hvGfx *image);
+/* Get appropriate wigGraphOutput for non-transparent stacked rendering */
 
 struct wigGraphOutput *wigGraphOutputSolid(int xOff, int yOff, struct hvGfx *image);
 /* Get appropriate wigGraphOutput for non-transparent rendering */
@@ -89,7 +99,8 @@ struct preDrawContainer *initPreDrawContainer(int width);
 
 void preDrawWindowFunction(struct preDrawElement *preDraw, int preDrawSize,
 	enum wiggleWindowingEnum windowingFunction,
-	enum wiggleTransformFuncEnum transformFunc);
+	enum wiggleTransformFuncEnum transformFunc,
+	boolean doNegative);
 /*	apply windowing function to the values in preDraw array	*/
 
 void preDrawSmoothing(struct preDrawElement *preDraw, int preDrawSize,
@@ -102,9 +113,9 @@ double preDrawLimits(struct preDrawElement *preDraw, int preDrawZero,
 
 double preDrawAutoScale(struct preDrawElement *preDraw, int preDrawZero,
     int width, enum wiggleScaleOptEnum autoScale,
-    double *overallUpperLimit, double *overallLowerLimit,
+    enum wiggleWindowingEnum windowingFunction,
     double *graphUpperLimit, double *graphLowerLimit,
-    double *overallRange, double *epsilon, int lineHeight,
+    double *epsilon, int lineHeight,
     double maxY, double minY, enum wiggleAlwaysZeroEnum alwaysZero);
 /*	if autoScaling, scan preDraw array and determine limits */
 

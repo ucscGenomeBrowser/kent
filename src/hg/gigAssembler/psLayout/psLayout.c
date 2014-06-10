@@ -7,7 +7,7 @@
 #include "linefile.h"
 #include "obscure.h"
 #include "portable.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "fa.h"
