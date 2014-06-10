@@ -297,7 +297,7 @@ for ( ; tsList != NULL; tsList = tsList->next)
 return urlSearchHash;
 }
 
-static struct hash *outputPublicTable(struct sqlConnection *conn, char *publicTable, char *statusTable)
+static boolean outputPublicTable(struct sqlConnection *conn, char *publicTable, char *statusTable, struct hash **pHash)
 /* Put up the list of public hubs and other controls for the page. */
 {
 char *trixFile = cfgOptionEnvDefault("HUBSEARCHTRIXFILE", "hubSearchTrixFile", "/gbdb/hubs/public.ix");
@@ -325,7 +325,7 @@ if (haveTrixFile)
 // if we have search terms, put out the line telling the user so
 if (haveTrixFile && !isEmpty(hubSearchTerms))
     {
-    printf("List restricted by search terms : %s\n", hubSearchTerms);
+    printf("Displayed list restricted by search terms: %s\n", hubSearchTerms);
     puts("<input name=\"hubDeleteSearchButton\""
 	"onClick="
 	"\" document.searchHubForm.elements['hubSearchTerms'].value=\'\';"
@@ -337,7 +337,6 @@ if (haveTrixFile && !isEmpty(hubSearchTerms))
     urlSearchHash = getUrlSearchHash(trixFile, cleanSearchTerms);
     }
 
-puts("<I>Pressing Connect button will take you to the gateway page with the default assembly for that hub selected.</I><BR>");
 // make sure all the public hubs are in the hubStatus table.
 addPublicHubsToHubStatus(conn, publicTable, statusTable);
 
@@ -374,6 +373,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	{
 	/* output header */
 
+	puts("<I>Clicking Connect redirects to the gateway page of the selected hub's default assembly.</I><BR>");
 	printf("<table id=\"publicHubsTable\"> "
 	    "<thead><tr> "
 		"<th>Display</th> "
@@ -459,7 +459,8 @@ if (gotAnyRows)
     printf("</TR></tbody></TABLE>\n");
 
 printf("</div>");
-return publicHash;
+*pHash = publicHash;
+return gotAnyRows;
 }
 
 
@@ -473,10 +474,10 @@ char *publicTable = cfgOptionEnvDefault("HGDB_HUB_PUBLIC_TABLE",
 char *statusTable = cfgOptionEnvDefault("HGDB_HUB_STATUS_TABLE", 
 	hubStatusTableConfVariable, defaultHubStatusTableName);
 if (!(sqlTableExists(conn, publicTable) && 
-	(retHash = outputPublicTable(conn, publicTable,statusTable)) != NULL ))
+	outputPublicTable(conn, publicTable,statusTable, &retHash)) )
     {
     printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
-    printf("No Public Track Hubs<BR>");
+    printf("No Public Track Hubs found that match search criteria.<BR>");
     printf("</div>");
     }
 hDisconnectCentral(&conn);
@@ -583,16 +584,14 @@ jsIncludeFile("jquery.cookie.js", NULL);
 
 printf("<div id=\"hgHubConnectUI\"> <div id=\"description\"> \n");
 printf(
-   "<P>Track data hubs are collections of tracks from outside of UCSC that "
-   "can be imported into the Genome Browser.  To import a public hub check "
-   "the box in the list below. "
-   "After import the hub will show up as a group of tracks with its own blue "
-   "bar and label underneath the main browser graphic, and in the "
-   "configure page. For more information, see the "
-   "<A HREF=\"../goldenPath/help/hgTrackHubHelp.html\" TARGET=_blank>"
-   "User's Guide</A>.</P>\n"
-   "<P><B>NOTE: Because Track Hubs are created and maintained by external sources,"
-   " UCSC is not responsible for their content.</B></P>"
+    "<P>Track data hubs are collections of external tracks that can be imported into the UCSC Genome Browser. "
+    "Hub tracks show up under the hub's own blue label bar on the main browser page, "
+    "as well as on the configure page. For more information, see the "
+    "<A HREF=\"../goldenPath/help/hgTrackHubHelp.html\" TARGET=_blank>"
+    "User's Guide</A>."
+    "To import a public hub click its \"Connect\" button below.</P>"
+    "<P><B>NOTE: Because Track Hubs are created and maintained by external sources,"
+    " UCSC is not responsible for their content.</B></P>"
    );
 printf("</div>\n");
 
@@ -625,8 +624,7 @@ cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 puts("</FORM>");
 
 // this is the form for the disconnect hub button
-printf("<FORM ACTION=\"%s\" NAME=\"disconnectHubForm\">\n",  "../cgi-bin/hgGateway");
-cgiMakeHiddenVar("db", "hg19");
+printf("<FORM ACTION=\"%s\" NAME=\"disconnectHubForm\">\n",  "../cgi-bin/hgHubConnect");
 cgiMakeHiddenVar("hubId", "");
 cgiMakeHiddenVar(hgHubDoDisconnect, "on");
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");

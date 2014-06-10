@@ -406,12 +406,16 @@ boolean wigFetchDoNegativeWithCart(struct cart *theCart, struct trackDb *tdb, ch
 /*	doNegative - false by default **********************************/
 {
 boolean parentLevel = isNameAtParentLevel(tdb,name);
+char *doNegativeDefault = trackDbSettingClosestToHome(tdb, DONEGATIVEMODE);
 char *doNegative = cloneString(cartOptionalStringClosestToHome(theCart, tdb, parentLevel, DONEGATIVEMODE));
+
+if ((doNegative == NULL) && (doNegativeDefault != NULL))
+    doNegative = cloneString(doNegativeDefault);
 
 if (doNegative == NULL)
     return FALSE;
 
-return sameString(doNegative, "1");
+return sameString(doNegative, "1") || sameString(doNegative, "on");
 }
 
 enum wiggleGridOptEnum wigFetchTransformFuncWithCart(struct cart *theCart,
