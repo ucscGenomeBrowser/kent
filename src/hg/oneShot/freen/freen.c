@@ -7,58 +7,39 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
-#include "htmlPage.h"
+#include "jksql.h"
+#include "expData.h"
 #include "sqlList.h"
 
 void usage()
 {
 errAbort("freen - test some hairbrained thing.\n"
-         "usage:  freen fileList\n");
+         "usage:  freen output\n");
 }
 
 static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-boolean containsCopyright(char *fileName, int maxLines)
-/* Look for the string 'copyright' or '(C)' regardless of case in up
- * to maxLines of file.  Return TRUE if it is found, FALSE otherwise. */
-{
-boolean result = FALSE;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-int i;
-for (i=0; i<maxLines; ++i)
-    {
-    char *line;
-    if (!lineFileNext(lf, &line, NULL))
-        break;
-    strLower(line);
-    if (stringIn("copyright", line) != NULL || stringIn("(c)", line) != NULL)
-        {
-	result = TRUE;
-	break;
-	}
-    }
-lineFileClose(&lf);
-return result;
-}
 
-void freen(char *fileList)
+void freen(char *output)
 /* Do something, who knows what really */
 {
-struct lineFile *lf = lineFileOpen(fileList, TRUE);
-char *line;
-int size;
-while (lineFileNext(lf, &line, &size))
+FILE *f = mustOpen(output, "w");
+struct sqlConnection *conn = sqlConnect("hgFixed");
+char query[512];
+sqlSafef(query, sizeof(query), "select * from gnfHumanAtlas2Median limit 2");
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
     {
-    verbose(1, "%d %s\n", lf->lineIx, line);
-    char *word;
-    while ((word = nextWordRespectingQuotes(&line)) != NULL)
-        {
-	if (containsCopyright(word, 10))
-	    printf("%s\n", word);
-	}
+    struct expData *exp = expDataLoad(row);
+    fprintf(f, "%s %d\n", exp->name, exp->expCount);
+    int i;
+    for (i=0; i<exp->expCount; ++i)
+        fprintf(f, "    %g\n", exp->expScores[i]);
     }
+carefulClose(&f);
 }
 
 
