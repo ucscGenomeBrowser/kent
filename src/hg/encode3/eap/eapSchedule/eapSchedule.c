@@ -425,7 +425,7 @@ return AllocVar(cache);
 }
 
 void preloadCache(struct sqlConnection *conn, struct cache *cache)
-/* If there's anything that needs precashing, return a command line
+/* If there's anything that needs precaching, return a command line
  * with a semicolon at the end to precache.  Otherwise return blank. */
 {
 if (dry)
@@ -964,18 +964,23 @@ void scheduleHotspot(struct sqlConnection *conn,
     struct edwFile *ef, struct edwValidFile *vf, struct edwExperiment *exp)
 /* If it hasn't already been done schedule hotspot analysis of the file. */
 {
-/* Not ready for hg38 yet */
-if (sameString("hg38", vf->ucscDb) || endsWith(vf->ucscDb, ".hg38"))
-    {
-    verbose(2, "Skipping hotspot on %s %s\n", vf->ucscDb, ef->edwFileName);
-    return;
-    }
-
 /* Make sure that we don't schedule it again and again */
 char *analysisStep = "hotspot";
 struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
 if (alreadyTakenCareOf(conn, assembly, analysisStep, ef->id))
     return;
+
+/*  Just do ones where it's an output of previous analysis. */
+    {
+    char query[512];
+    sqlSafef(query, sizeof(query), "select count(*) from eapOutput where fileId=%u", ef->id);
+    if (sqlQuickNum(conn, query) == 0)
+        {
+	uglyf("Skipping fileId %u,  not an EAP output", ef->id);
+	return;
+	}
+    }
+
 
 verbose(2, "schedulingHotspot on %s step %s\n", ef->edwFileName, analysisStep);
 /* Make command line */
@@ -1101,7 +1106,6 @@ void runFastqAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edw
 /* Run fastq analysis, at least on the data types where we can handle it. */
 {
 char *dataType = exp->dataType;
-uglyf("runFastqAnalysis %s on %u %s\n", dataType, ef->id, ef->submitFileName);
 if (sameString(dataType, "DNase-seq") || sameString(dataType, "ChIP-seq") || 
     sameString(dataType, "ChiaPet") || sameString(dataType, "DnaPet") )
     {
@@ -1132,7 +1136,6 @@ void runBamAnalysis(struct sqlConnection *conn, struct edwFile *ef, struct edwVa
     struct edwExperiment *exp)
 /* Run fastq analysis, at least on the data types where we can handle it. */
 {
-#ifdef SOON
 if (sameString(exp->dataType, "DNase-seq"))
     {
     scheduleMacsDnase(conn, ef, vf, exp);
@@ -1143,10 +1146,11 @@ if (sameString(exp->dataType, "DNase-seq"))
 else if (sameString(exp->dataType, "ChIP-seq"))
     {
     scheduleSppChip(conn, ef, vf, exp);
-#ifdef SOON
     scheduleMacsChip(conn, ef, vf, exp);
+#ifdef SOON
 #endif /* SOON */
     }
+#ifdef SOON
 #endif /* SOON */
 }
 

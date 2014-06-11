@@ -17,7 +17,7 @@
  *
  */
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "jksql.h"
 #include "dnautil.h"
 #include "fa.h"

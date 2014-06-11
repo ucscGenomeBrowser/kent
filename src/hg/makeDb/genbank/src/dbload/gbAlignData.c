@@ -9,7 +9,7 @@
 #include "gbAlignTbl.h"
 #include "gbGeneTbl.h"
 #include "gbConf.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "hash.h"
 #include "portable.h"
 #include "linefile.h"

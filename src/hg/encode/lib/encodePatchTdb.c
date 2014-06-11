@@ -8,7 +8,7 @@
 #include "localmem.h"
 #include "options.h"
 #include "obscure.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "dystring.h"
 #include "portable.h"
 #include "ra.h"

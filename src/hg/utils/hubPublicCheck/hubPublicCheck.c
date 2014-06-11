@@ -107,6 +107,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	printf("update %s set descriptionUrl=\"%s\" where hubUrl=\"%s\";\n",table, tHub->descriptionUrl, url);
 	}
 
+    trackHubClose(&tHub);
     }
 return differences;
 }

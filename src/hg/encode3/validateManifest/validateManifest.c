@@ -313,46 +313,6 @@ safef(cmdLine, sizeof cmdLine, "%svalidateFiles -type=%s%d+%d -as=%s -chromInfo=
 return runCmdLine(cmdLine);
 }
 
-
-
-
-boolean validateBedLogR(char *fileName, char *format, boolean plainBed)
-/* Validate bedLogR file */
-{
-return validateBedNP(fileName, format, plainBed, 9, 1);
-}
-
-boolean validateBedRnaElements(char *fileName, char *format, boolean plainBed)
-/* Validate bedRnaElements file */
-{
-return validateBedNP(fileName, format, plainBed, 6, 3);
-}
-
-boolean validateBedRrbs(char *fileName, char *format, boolean plainBed)
-/* Validate bedRrbs file */
-{
-return validateBedNP(fileName, format, plainBed, 9, 2);
-}
-
-boolean validateBedMethyl(char *fileName, char *format, boolean plainBed)
-/* Validate bedMethyl file (bedMethyl is jut bedRrbs renamed) */
-{
-return validateBedNP(fileName, format, plainBed, 9, 2);
-}
-
-boolean validateNarrowPeak(char *fileName, char *format, boolean plainBed)
-/* Validate narrowPeak file */
-{
-return validateBedNP(fileName, format, plainBed, 6, 4);
-}
-
-boolean validateBroadPeak(char *fileName, char *format, boolean plainBed)
-/* Validate broadPeak file */
-{
-return validateBedNP(fileName, format, plainBed, 6, 3);
-}
-
-
 boolean validateBigBed(char *fileName)
 /* Validate bigBed file */
 {
@@ -465,18 +425,6 @@ if (startsWith("bed_", format))
 // Call the handler based on format
 if (sameString(format,"bam"))
     result = validateBam(fileName);
-else if (startsWith(format,"bedLogR"))
-    result = validateBedLogR(fileName, format, plainBed);
-else if (startsWith(format,"bedRnaElements"))
-    result = validateBedRnaElements(fileName, format, plainBed);
-else if (startsWith(format,"bedRrbs"))
-    result = validateBedRrbs(fileName, format, plainBed);
-else if (startsWith(format,"bedMethyl"))
-    result = validateBedMethyl(fileName, format, plainBed);
-else if (startsWith(format,"narrowPeak"))
-    result = validateNarrowPeak(fileName, format, plainBed);
-else if (startsWith(format,"broadPeak"))
-    result = validateBroadPeak(fileName, format, plainBed);
 else if (startsWith(format,"bigBed")) // Actually this generic type will be rejected.
     result = validateBigBed(fileName);
 else if (startsWith(format,"bigWig"))
@@ -493,10 +441,19 @@ else if (startsWith(format,"fasta"))
     result = validateFasta(fileName);
 else if (startsWith(format,"unknown"))
     result = validateUnknown(fileName);
-else
+else 
     {
-    warn("Unrecognized format: %s", format);
-    result = FALSE;
+    struct encode3BedType *bedType = encode3BedTypeMayFind(format);
+    if (bedType != NULL)
+        {
+	result = validateBedNP(fileName, format, plainBed, 
+	    bedType->bedFields, bedType->extraFields);
+	}
+    else
+        {
+	warn("Unrecognized format: %s", format);
+	result = FALSE;
+	}
     }
 return result;
 }

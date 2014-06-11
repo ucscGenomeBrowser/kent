@@ -7,7 +7,7 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "sqlNum.h"
 #include "sig.h"
 #include "zlibFace.h"

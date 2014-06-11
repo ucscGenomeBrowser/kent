@@ -4,7 +4,7 @@
  * See README in this or parent directory for licensing information. */
 #include <math.h>
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "linefile.h"
 #include "obscure.h"
 #include "dystring.h"

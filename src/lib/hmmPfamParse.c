@@ -5,7 +5,7 @@
 
 #include "common.h"
 #include "linefile.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "spacedColumn.h"
 #include "hmmPfamParse.h"
 

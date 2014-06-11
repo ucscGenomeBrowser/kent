@@ -9,13 +9,15 @@
 #include "options.h"
 #include "errCatch.h"
 #include "localmem.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "sqlNum.h"
 #include "cheapcgi.h"
 #include "obscure.h"
 #include "jksql.h"
+#include "asParse.h"
 #include "twoBit.h"
 #include "genomeRangeTree.h"
+#include "basicBed.h"
 #include "bigWig.h"
 #include "bigBed.h"
 #include "bamFile.h"
@@ -200,6 +202,49 @@ vf->sampleCoverage = (double)sum.validCount/assembly->baseCount;
 vf->depth = (double)sum.sumData/assembly->baseCount;
 vf->mapRatio = 1.0;
 bigBedFileClose(&bbi);
+}
+
+void makeValidBed( struct sqlConnection *conn, char *path, struct edwFile *ef, 
+	struct edwAssembly *assembly, char *format, char *asRoot, struct edwValidFile *vf)
+/* Fill in fields of vf based on bed and grind through file checking it. */
+{
+/* Get structure with info about which fields are true bed. */
+struct encode3BedType *bedType = encode3BedTypeFind(asRoot);
+int bedFieldCount = bedType->bedFields;
+
+/* Load up as file to check against */
+char asPath[PATH_LEN];
+edwAsPath(asRoot, asPath);
+struct asObject *as = asParseFile(asPath);
+
+/* Create a row one bigger than expected (so can detect rows too big as well 
+ * as too small. */
+int colCount = slCount(as->columnList);
+int colAlloc = colCount+1;
+char *row[colAlloc];
+
+/* Loop through file validating each line and collecting statistics. */
+struct lineFile *lf = lineFileOpen(path, TRUE);
+struct bed bed = {};
+char *line;
+int itemCount = 0;
+long long baseCount = 0;
+while (lineFileNextReal(lf, &line))
+    {
+    int wordsRead = chopByWhite(line, row, colAlloc);
+    lineFileExpectWords(lf, colCount, wordsRead);
+    loadAndValidateBed(row, bedFieldCount, colCount, lf, &bed, as, FALSE);
+    ++itemCount;
+    baseCount += bed.chromEnd - bed.chromStart;
+    }
+
+asObjectFreeList(&as);
+
+/* Fill in fields of vf based on statistics */
+vf->sampleCount = vf->itemCount = itemCount;
+vf->basesInSample = vf->basesInItems = baseCount;
+vf->sampleCoverage = vf->depth = (double)baseCount/assembly->baseCount;
+vf->mapRatio = 1.0;
 }
 
 void makeValidBigWig(struct sqlConnection *conn, char *path, struct edwFile *ef, 
@@ -422,6 +467,8 @@ vf->sampleBed = "";
 
 if (vf->format && vf->validKey)	// We only can validate if we have something for format 
     {
+    uglyf("Validating %s\n", vf->format);
+
     /* Check validation key */
     char *validKey = encode3CalcValidationKey(ef->md5, ef->size);
     if (!sameString(validKey, vf->validKey))
@@ -447,6 +494,10 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
     char *format = vf->format;
     char *suffix = edwFindDoubleFileSuffix(path);
     char suffixBuf[128];
+
+    char *bedPrefix = "bed_";
+    int bedPrefixSize = 4;
+
     if (sameString(format, "fastq"))
 	{
 	needAssembly(ef, format, assembly);
@@ -464,6 +515,14 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
 	    safef(suffixBuf, sizeof(suffixBuf), ".%s.bigBed", format);
 	    suffix = suffixBuf;
 	    }
+	}
+    else if (startsWith(bedPrefix, format) && edwIsSupportedBigBedFormat(format+bedPrefixSize))
+        {
+	char *formatNoBed = format + bedPrefixSize;
+	needAssembly(ef, format, assembly);
+	makeValidBed(conn, path, ef, assembly, format, formatNoBed, vf);
+	safef(suffixBuf, sizeof(suffixBuf), ".%s.bed", format);
+	suffix = suffixBuf;
 	}
     else if (sameString(format, "bigWig"))
         {

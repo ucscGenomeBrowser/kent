@@ -172,7 +172,7 @@ highlightColor genePred
 html *
 htmlFile customTracks
 htmlUrl customTracks
-idInUrlSql altGraphX genePred chain factorSource
+idInUrlSql altGraphX genePred chain factorSource bed
 idXref genePred
 iframeUrl *
 iframeOptions *
@@ -237,6 +237,7 @@ motifMaxWindow factorSource
 motifDrawDefault factorSource
 msaTable wig wigMafProt wigMaf
 ncbiAccXref bed
+negateValues wigMaf bigWig bedGraph wig
 nextExonText *
 nextItemButton *
 noColorTag bam
@@ -336,7 +337,7 @@ snpSeqFile bed
 snpTable bed
 snpVersion bed
 sortOrder *
-sourceTable factorSource
+sourceTable factorSource bed
 spanList *
 speciesCodonDefault wigMafProt wigMaf
 speciesDefaultOff wigMaf
@@ -385,7 +386,7 @@ url2 bed genePred
 url2Label bed genePred
 urlLabel *
 urlName genePred psl
-urls bigBed
+urls bigBed bed
 useScore *
 view *
 viewLimits *

@@ -5,7 +5,7 @@
 #include "common.h"
 #include "hash.h"
 #include "options.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "memalloc.h"
 #include "dnautil.h"
 #include "dnaseq.h"

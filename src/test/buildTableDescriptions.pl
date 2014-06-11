@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 #
-# hgTest.pl: parameterizable test for hg CGI tools.
+# buildTableDescriptions.pl - read .as files in a directory tree and use them to
+#       create the tableDescriptions table used by hg CGI's 
 # See usage for a description of parameters.
 #
 

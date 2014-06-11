@@ -11,7 +11,7 @@
 
 #include "common.h"
 #include "dnautil.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include <limits.h>
 #include "localmem.h"
 #include "net.h"

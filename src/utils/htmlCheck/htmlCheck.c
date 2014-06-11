@@ -4,7 +4,7 @@
  * See README in this or parent directory for licensing information. */
 
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "memalloc.h"
 #include "linefile.h"
 #include "hash.h"

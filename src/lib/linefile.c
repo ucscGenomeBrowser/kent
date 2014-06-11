@@ -9,7 +9,7 @@
 #include <fcntl.h>
 #include <signal.h>
 #include "dystring.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "linefile.h"
 #include "pipeline.h"
 #include "localmem.h"
@@ -379,17 +379,9 @@ if (lf->udcFile)
     udcSeek(lf->udcFile, offset);
     return;
     }
-if (whence == SEEK_SET && offset >= lf->bufOffsetInFile
-	&& offset < lf->bufOffsetInFile + lf->bytesInBuf)
-    {
-    lf->lineStart = lf->lineEnd = offset - lf->bufOffsetInFile;
-    }
-else
-    {
-    lf->lineStart = lf->lineEnd = lf->bytesInBuf = 0;
-    if ((lf->bufOffsetInFile = lseek(lf->fd, offset, whence)) == -1)
-	errnoAbort("Couldn't lineFileSeek %s", lf->fileName);
-    }
+lf->lineStart = lf->lineEnd = lf->bytesInBuf = 0;
+if ((lf->bufOffsetInFile = lseek(lf->fd, offset, whence)) == -1)
+    errnoAbort("Couldn't lineFileSeek %s", lf->fileName);
 }
 
 void lineFileRewind(struct lineFile *lf)

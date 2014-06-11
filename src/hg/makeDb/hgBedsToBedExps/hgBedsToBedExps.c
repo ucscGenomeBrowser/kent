@@ -10,7 +10,7 @@
 #include "bed.h"
 #include "bedGraph.h"
 #include "rangeTree.h"
-#include "errabort.h"
+#include "errAbort.h"
 
 
 boolean dupeLetterOk = FALSE;

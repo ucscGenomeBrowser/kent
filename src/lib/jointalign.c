@@ -4,7 +4,7 @@
  * granted for all use - public, private or commercial. */
 
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "jointalign.h"
 
 

@@ -613,8 +613,59 @@ susScr3.genbank.est.native.load = yes
     checkTableCoords susScr3 animalQtl
     # no results - yay!
 
+    #had to reload to pickup new identifier syntax
     cut -f1-4  QTL_OAR_3.1.ubed.txt > susScr3.animalQtlTEST.bed4
     hgLoadBed susScr3 animalQtl susScr3.animalQtlTEST.bed4
+
+    #added entries in trackDb for track and search 
+
+
+    #script to determine what to include in search rule:
+
+cat > findNames <<EOF 
+#!/bin/sh
+hgsql -N -e 'select name from animalQtl;' bosTau7  > /tmp/bosTau7.animalQtl.name.txt
+hgsql -N -e 'select name from animalQtl;' galGal4  >> /tmp/bosTau7.animalQtl.name.txt
+hgsql -N -e 'select name from animalQtl;' susScr3  >> /tmp/bosTau7.animalQtl.name.txt
+hgsql -N -e 'select name from animalQtl;' oviAri3  >> /tmp/bosTau7.animalQtl.name.txt
+export maxLen=`awk '{print length($0)}' /tmp/bosTau7.animalQtl.name.txt | sort -rn | head -1`
+echo "scan to column: $maxLen"
+
+export C=1
+while [ $C -le $maxLen ];
+do
+echo -n " $C: "
+sort -u /tmp/bosTau7.animalQtl.name.txt | awk '{ print substr($0,'$C',1) }' | sort -u | xargs echo | sed -e 's/ //g'
+C=`echo $C | awk '{print $1+1}'`
+done
+
+#rm -f /tmp/bosTau7.animalQtl.name.txt
+mv /tmp/bosTau7.animalQtl.name.txt .
+EOF
+
+#script output:
+ 1: 12346ABCDEFGHIJKLMNOPQRSTUVWYZcdfmpu
+ 2: -/0123456789:ABCDEFGHIJKLMNOPQRSTUVWXYacdeimort
+ 3: %-01234568:ABCDEFGHIKLMNOPRSTUVWXYZ_abcdefnost
+ 4: %-/0123456789:ABCDEFGHIKLMNOPRSTUVWYZ_abdehilnqrt
+ 5: -0123456789:ABCDEFGHIJKLMNOPQRSTUVWYZ_abcdiklnorstw
+ 6: %-.0123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZ_bcdhimnoprstw
+ 7: -0123456789:ABCDEFGHIKLMNOPRSTVW_abcent
+ 8: 0123456789:ABCDEFGHILMNPRSTV_abeflo
+ 9: 0123456789:BCEFMOPTW_adeklnt
+ 10: 0123456789:CHLcdfirt
+ 11: -0123456789:aln
+ 12: 0123456789git
+ 13: 0123456789:
+ 14: 0123456789
+ 15: 0123456789
+ 16: 0123456789
+ 17: 012346
+ 18: 023456
+
+#rule constructed based on script output - set termregex to this in trackDb
+#search stanza
+^[a-zA-Z0-9]+[a-zA-Z0-9:/-]+[a-zA-Z0-9:/-_%]+
 
 ############################################################################
 # DBSNP B138 / SNP138 (DONE 1/29/14 angie)

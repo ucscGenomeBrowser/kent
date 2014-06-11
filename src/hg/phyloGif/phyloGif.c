@@ -56,7 +56,7 @@
 #include "dystring.h"
 #include "net.h"
 #include "cheapcgi.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "phyloTree.h"
 #include "portable.h"
 #include "memgfx.h"
@@ -67,7 +67,7 @@
 #include "web.h"
 
 
-#include "errabort.h"
+#include "errAbort.h"
 #include "errCatch.h"
 
 

@@ -1,7 +1,7 @@
 /* ameme - The central part of AmphetaMeme, which finds patterns in DNA */
 #include "common.h"
 #include "memalloc.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "obscure.h"
 #include "hash.h"
 #include "dnautil.h"

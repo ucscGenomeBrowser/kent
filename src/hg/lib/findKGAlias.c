@@ -4,7 +4,7 @@
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "kgAlias.h"
 
 static void addKgAlias(struct sqlConnection *conn, struct dyString *query,

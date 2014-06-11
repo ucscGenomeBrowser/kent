@@ -9,7 +9,7 @@
 #include "ra.h"
 #include "portable.h"
 #include "obscure.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "asParse.h"
 
 /* Command line options. */

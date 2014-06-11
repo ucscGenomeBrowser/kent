@@ -13,7 +13,7 @@
 #include "common.h"
 #include "linefile.h"
 #include "memalloc.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "hash.h"
 #include "psl.h"
 #include "lfs.h"

@@ -2,7 +2,7 @@
 #include "paraCommon.h"
 #include "net.h"
 #include "linefile.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "dystring.h"
 #include "hash.h"
 #include "options.h"

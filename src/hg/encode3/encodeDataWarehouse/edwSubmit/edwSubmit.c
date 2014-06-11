@@ -8,7 +8,7 @@
 #include "localmem.h"
 #include "net.h"
 #include "options.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "dystring.h"
 #include "errCatch.h"
 #include "sqlNum.h"
@@ -613,11 +613,27 @@ while ((c = *s++) != 0)
 return TRUE;
 }
          
-char *edwSupportedFormats[] = {"unknown", "fastq", "bam", "bed", "gtf", 
-    "bigWig", "bigBed", "bedLogR", "bedRnaElements", "bedRrbs", "broadPeak", 
-    "narrowPeak", "openChromCombinedPeaks", "peptideMapping", "shortFrags", 
-    "rcc", "idat", "fasta", "customTrack"};
-int edwSupportedFormatsCount = ArraySize(edwSupportedFormats);
+boolean isSupportedFormat(char *format)
+/* Return TRUE if this is one of our supported formats */
+{
+/* First deal with non bigBed */
+static char *otherSupportedFormats[] = {"unknown", "fastq", "bam", "bed", "gtf", 
+    "bigWig", "bigBed", 
+    "bedLogR", "bedRrbs", "bedMethyl", "broadPeak", "narrowPeak", 
+    "bed_bedLogR", "bed_bedRrbs", "bed_bedMethyl", "bed_broadPeak", "bed_narrowPeak",
+    "bedRnaElements", "openChromCombinedPeaks", "peptideMapping", "shortFrags", 
+    "rcc", "idat", "fasta", "customTrack",
+    };
+static int otherSupportedFormatsCount = ArraySize(otherSupportedFormats);
+if (stringArrayIx(format, otherSupportedFormats, otherSupportedFormatsCount) >= 0)
+    return TRUE;
+
+/* If starts with bed_ then skip over prefix.  It will be caught by bigBed */
+if (startsWith("bed_", format))
+    format += 4;
+return edwIsSupportedBigBedFormat(format);
+}
+
 
 boolean isEmptyOrNa(char *s)
 /* Return TRUE if string is NULL, "", "n/a", or "N/A" */
@@ -670,7 +686,7 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
     char *fileName = row[fileIx];
     allGoodFileNameChars(fileName);
     char *format = row[formatIx];
-    if (stringArrayIx(format, edwSupportedFormats, edwSupportedFormatsCount) < 0)
+    if (!isSupportedFormat(format))
 	errAbort("Format %s is not supported", format);
     allGoodSymbolChars(row[outputIx]);
     char *experiment = row[experimentIx];
@@ -875,6 +891,17 @@ void doValidatedEmail(struct edwSubmit *submit, boolean isComplete)
 struct sqlConnection *conn = edwConnect();
 struct edwUser *user = edwUserFromId(conn, submit->userId);
 struct dyString *message = dyStringNew(0);
+/* Is this submission has no new file at all */
+if ((submit->oldFiles != 0) && (submit->newFiles == 0) &&
+    (submit->metaChangeCount == 0)  && isEmpty(submit->errorMessage)
+     && (submit->fileIdInTransit == 0))
+    {
+    dyStringPrintf(message, "Your submission from %s is completed, but validation was not performed for this submission since all files in validate.txt have been previously submitted and validated.\n", submit->url);
+    mailViaPipe(user->email, "EDW Validation Results", message->string, edwDaemonEmail);
+    sqlDisconnect(&conn);
+    dyStringFree(&message);
+    return;
+    }
 
 if (isComplete)
     dyStringPrintf(message, "Your submission from %s is completely validated\n", submit->url);
