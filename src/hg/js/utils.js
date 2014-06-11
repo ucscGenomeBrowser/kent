@@ -303,7 +303,7 @@ function validateInt(obj,min,max)
         title = "Value";
     var popup=( $.browser.msie === false );
     for (;;) {
-        if ((typeof(obj.value) === 'undefined' || obj.value === "") 
+        if ((obj.value === undefined || obj.value === null || obj.value === "") 
         &&  isInteger(obj.defaultValue))
             obj.value = obj.defaultValue;
         if (!isInteger(obj.value)) {
@@ -370,7 +370,7 @@ function validateFloat(obj,min,max)
         title = "Value";
     var popup=( $.browser.msie === false );
     for (;;) {
-        if ((typeof(obj.value) === 'undefined' || obj.value === "") 
+        if ((obj.value === undefined || obj.value === null || obj.value === "") 
         &&  isFloat(obj.defaultValue))
             obj.value = obj.defaultValue;
         if (!isFloat(obj.value)) {
@@ -860,8 +860,7 @@ function getHgsid()
         return hgsid;
 
     // This may be moved to 1st position as the most likely source
-    if (typeof(common) !== 'undefined' && typeof(common.hgsid) !== 'undefined'
-    && common.hgsid !== null)
+    if (typeof(common) !== 'undefined' && common.hgsid !== undefined && common.hgsid !== null)
         return common.hgsid;
 
     hgsid = normed($("input#hgsid").first());
@@ -882,7 +881,7 @@ function getDb()
         return db;
 
     // This may be moved to 1st position as the most likely source
-    if (typeof(common) !== 'undefined' && typeof(common.db) !== 'undefined')
+    if (typeof(common) !== 'undefined' && common.db)
         return common.db;
 
     db = normed($("input#db").first());
@@ -903,7 +902,7 @@ function getTrack()
         return track;
 
     // This may be moved to 1st position as the most likely source
-    if (typeof(common) !== 'undefined' && typeof(common.track) !== 'undefined')
+    if (typeof(common) !== 'undefined' && common.track)
         return common.track;
 
     track = normed($("input#g").first());
@@ -1065,7 +1064,7 @@ function _launchWaitOnFunction()
         func.apply(this, funcArgs);
 
     // Special if the first var is a button that can visually be inset
-    if (funcArgs.length > 0 && typeof(funcArgs[0].type) !== 'undefined') {
+    if (funcArgs.length > 0 && funcArgs[0].type) {
         if (funcArgs[0].type === 'button' && $(funcArgs[0]).hasClass('inOutButton')) {
             $(funcArgs[0]).css('borderStyle',"outset");
         }
@@ -1091,7 +1090,7 @@ function waitOnFunction(func)
     waitMaskSetup(0);  // Find or create waitMask (which masks whole page) but gives up after 5sec
 
     // Special if the first var is a button that can visually be inset
-    if (arguments.length > 1 && typeof(arguments[1].type) !== 'undefined') {
+    if (arguments.length > 1 && arguments[1].type) {
         if (arguments[1].type === 'button' && $(arguments[1]).hasClass('inOutButton')) {
             $(arguments[1]).css( 'borderStyle',"inset");
         }
@@ -1780,7 +1779,7 @@ var sortTable = {
                     }
                 }
                 if (sortIx >= 0) {
-                    if (typeof(this.id) !== 'undefined' && this.id.length > 0)
+                    if (this.id && this.id.length > 0)
                         fields[sortIx] = this.id + "=" + (reverse ? "-":"+");
                     else
                         fields[sortIx] = this.cellIndex + "=" + (reverse ? "-":"+");
@@ -2061,7 +2060,7 @@ var sortTable = {
         }
         // Can wrap all columnn headers with link
         $(tr).find("th.sortable").each(function (ix) {
-            if ( typeof($(this).attr('onclick')) === 'undefined') {
+            if ( ! $(this).attr('onclick') ) {
                 $(this).click( function () { sortTable.sortOnButtonPress(this);} );
             }
             if ($.browser.msie) { // Special case for IE since CSS :hover doesn't work
@@ -2139,7 +2138,7 @@ var findTracks = {
                 var val = $("select[name='hgt_mdbVar" + ix + "']").val();  
                 var text = $("select[name='hgt_mdbVar" + ix + "'] option:selected").text();
                 helpLink.html("&nbsp;"); // Do not want this with length === 0 later!
-                if (typeof(disabled[val]) === 'undefined') {
+                if ( ! disabled[val] ) {
                     var str;
                     if (val === 'cell') {
                         if (db.substr(0, 2) === "mm") {
@@ -2291,7 +2290,7 @@ var findTracks = {
         var needSel = (typeof(tdb.parentTrack) === 'string' && tdb.parentTrack !== '');
         var shouldPack = tdb.canPack && tdb.kindOfParent === 0; // If parent then not pack but full
         if (shouldPack
-        &&  typeof(tdb.shouldPack) !== 'undefined' && tdb.shouldPack !== null && !tdb.shouldPack)
+        &&  tdb.shouldPack !== undefined && tdb.shouldPack !== null && !tdb.shouldPack)
             shouldPack = false;
         var checked = $(selCb).attr('checked');
 
