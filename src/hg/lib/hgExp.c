@@ -146,7 +146,7 @@ char expName[64];
 struct sqlResult *sr;
 char **row;
 boolean ok = FALSE;
-if (!sameWord(lookupTable, "null"))
+if (lookupTable != NULL && !sameWord(lookupTable, "null"))
     {
     sqlSafef(query, sizeof(query), "select value from %s where name = '%s'", 
 	  lookupTable, name);

@@ -5,7 +5,7 @@
 struct sqlConnection;
 #include "options.h"
 #include "linefile.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "hash.h"
 #include "psl.h"
 #include "estOrientInfo.h"

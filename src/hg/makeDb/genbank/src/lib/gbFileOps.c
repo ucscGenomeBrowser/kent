@@ -3,7 +3,7 @@
 
 #include "gbFileOps.h"
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "portable.h"
 #include "gbPipeline.h"
 #include <time.h>

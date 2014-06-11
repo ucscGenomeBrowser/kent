@@ -237,6 +237,7 @@ motifMaxWindow factorSource
 motifDrawDefault factorSource
 msaTable wig wigMafProt wigMaf
 ncbiAccXref bed
+negateValues wigMaf bigWig bedGraph wig
 nextExonText *
 nextItemButton *
 noColorTag bam

@@ -10,7 +10,7 @@
 #include <sys/time.h>
 #include <pthread.h>
 #include "internet.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "hash.h"
 #include "net.h"
 #include "linefile.h"

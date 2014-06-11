@@ -2,7 +2,7 @@
 
 #include "paraCommon.h"
 #include <grp.h>
-#include "errabort.h"
+#include "errAbort.h"
 #include "dystring.h"
 #include "dlist.h"
 #include "hash.h"

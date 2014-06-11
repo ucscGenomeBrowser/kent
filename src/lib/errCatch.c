@@ -18,7 +18,7 @@
  */
 
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "dystring.h"
 #include "hash.h"
 #include <pthread.h>
@@ -79,6 +79,7 @@ static void errCatchWarnHandler(char *format, va_list args)
 /* Write an error to top of errCatchStack. */
 {
 struct errCatch **pErrCatchStack = getStack(), *errCatchStack = *pErrCatchStack;
+errCatchStack->gotWarning = TRUE;
 dyStringVaPrintf(errCatchStack->message, format, args);
 dyStringAppendC(errCatchStack->message, '\n');
 }
@@ -104,6 +105,16 @@ if (errCatch != errCatchStack)
 *pErrCatchStack = errCatch->next;
 }
 
+void errCatchReWarn(struct errCatch *errCatch)
+/* Re-warn any warnings that happened even though no abort happened 
+ * to make them visible. */
+{
+if (errCatch->gotWarning && !errCatch->gotError)
+    {
+    warn("%s", errCatch->message->string);
+    }
+}
+
 boolean errCatchFinish(struct errCatch **pErrCatch)
 /* Finish up error catching.  Report error if there is a
  * problem and return FALSE.  If no problem return TRUE.
@@ -119,6 +130,8 @@ if (errCatch != NULL)
 	ok = FALSE;
 	warn("%s", errCatch->message->string);
 	}
+    else
+	errCatchReWarn(errCatch);
     errCatchFree(pErrCatch);
     }
 return ok;

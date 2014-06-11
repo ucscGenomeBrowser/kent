@@ -6,9 +6,10 @@ txGVScripts = checkRandomLinesExist.py \
 
 all:	${txGVScripts}
 	@for T in ${txGVScripts}; do \
-	  ( rm -f ${SCRIPTS}/$$T ) ; \
+	  ( rm -f ${DESTDIR}${SCRIPTS}/$$T ) ; \
 	done
-	cp ${txGVScripts} ${SCRIPTS}
+	${MKDIR} ${DESTDIR}${SCRIPTS}
+	cp ${txGVScripts} ${DESTDIR}${SCRIPTS}/
 
 clean:
 

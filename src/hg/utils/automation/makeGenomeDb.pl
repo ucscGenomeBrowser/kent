@@ -1340,6 +1340,14 @@ $HgAutomate::git archive --remote=git://genome-source.cse.ucsc.edu/kent.git \\
   --prefix=kent/ HEAD src/hg/makeDb/trackDb/loadTracks \\
 src/hg/makeDb/trackDb/$dbDbSpeciesDir \\
 src/hg/makeDb/trackDb/trackDb.chainNet.ra \\
+src/hg/makeDb/trackDb/trackDb.chainNet.primates.ra \\
+src/hg/makeDb/trackDb/trackDb.chainNet.euarchontoglires.ra \\
+src/hg/makeDb/trackDb/trackDb.chainNet.laurasiatheria.ra \\
+src/hg/makeDb/trackDb/trackDb.chainNet.afrotheria.ra \\
+src/hg/makeDb/trackDb/trackDb.chainNet.mammal.ra \\
+src/hg/makeDb/trackDb/trackDb.chainNet.birds.ra \\
+src/hg/makeDb/trackDb/trackDb.chainNet.sarcopterygii.ra \\
+src/hg/makeDb/trackDb/trackDb.chainNet.fish.ra \\
 src/hg/makeDb/trackDb/chainNetPetMar1.ra \\
 src/hg/makeDb/trackDb/chainNetPetMar2.ra \\
 src/hg/makeDb/trackDb/trackDb.nt.ra \\

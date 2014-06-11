@@ -5,7 +5,7 @@
 
 #include "annoGratorQuery.h"
 #include "dystring.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "obscure.h"
 
 struct annoGratorQuery

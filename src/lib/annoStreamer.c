@@ -4,7 +4,7 @@
  * See README in this or parent directory for licensing information. */
 
 #include "annoStreamer.h"
-#include "errabort.h"
+#include "errAbort.h"
 
 // ----------------------- annoStreamer base methods --------------------------
 

@@ -27,6 +27,7 @@ struct errCatch
     jmp_buf jmpBuf;		 /* Where to jump back to for recovery. */
     struct dyString *message; /* Error message if any */
     boolean gotError;		 /* Some sort of error was caught. */
+    boolean gotWarning;		 /* Some sort of error warning was raised. */
     };
 
 struct errCatch *errCatchNew();
@@ -47,6 +48,10 @@ boolean errCatchPushHandlers(struct errCatch *errCatch);
 
 void errCatchEnd(struct errCatch *errCatch);
 /* Restore error handlers and pop self off of catching stack. */
+
+void errCatchReWarn(struct errCatch *errCatch);
+/* Re-warn any warnings that happened even though no abort happened 
+ * to make them visible. */
 
 boolean errCatchFinish(struct errCatch **pErrCatch);
 /* Finish up error catching.  Report error if there is a

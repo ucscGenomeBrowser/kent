@@ -15,7 +15,7 @@
 #include "hash.h"
 #include "options.h"
 #include "portable.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include <stdio.h>
 
 

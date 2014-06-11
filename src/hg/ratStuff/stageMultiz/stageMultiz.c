@@ -9,7 +9,7 @@
 #include "binRange.h"
 #include "axt.h"
 #include "portable.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "dnautil.h"
 #include "maf.h"
 

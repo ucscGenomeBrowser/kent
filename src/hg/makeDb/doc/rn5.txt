@@ -2959,3 +2959,31 @@ done
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
     ln -s `pwd`/md5sum.txt $pd/
+
+#############################################################################
+# wiki page for 13-way (DONE - 2014-06-04 - Hiram)
+    mkdir /hive/users/hiram/bigWays/rn5.13way
+    cd /hive/users/hiram/bigWays
+    echo "rn5" > rn5.13way/ordered.list
+    grep -i rn5 /hive/data/genomes/rn5/bed/multiz13way/13way.distances.txt \
+        | sort -k3,3n | sed -e 's/rn5//' | awk '{print $1}' \
+           >> rn5.13way/ordered.list
+    ./sizeStats.sh rn5.13way/ordered.list 
+    ./dbDb.sh rn5 13way
+    ./sizeStats.pl rn5 13way
+    # needed to construct symlinks for defCheck.pl:
+    cd /hive/data/genomes/rn5/bed/lastz.hg19
+    ln -s /hive/data/genomes/hg19/bed/lastzRn5.2012-06-27/DEF .
+    cd /hive/data/genomes/rn5/bed/lastz.mm10
+    ln -s /hive/data/genomes/mm10/bed/lastzRn5.2012-03-23/DEF .
+
+    ./defCheck.pl rn5 13way
+
+    # this constructs the html pages in rn5.13way/:
+# -rw-rw-r-- 1 7328 Jun  4 16:10 Rn5_conservation_alignment.html
+# -rw-rw-r-- 1 9646 Jun  4 16:11 Rn5_Genome_size_statistics.html
+# -rw-rw-r-- 1 5634 Jun  4 16:16 Rn5_conservation_lastz_parameters.html
+
+    # add those pages to the genomewiki.
+
+#############################################################################

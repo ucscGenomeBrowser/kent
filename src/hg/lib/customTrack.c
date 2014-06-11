@@ -9,7 +9,7 @@
 #include "obscure.h"
 #include "memalloc.h"
 #include "portable.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "errCatch.h"
 #include "linefile.h"
 #include "sqlList.h"

@@ -142,6 +142,7 @@ type bed 4
 
 track chainSelf override
 longLabel $Organism Chained Self Alignments
+group rep
 chainColor Normalized Score
 matrixHeader A, C, G, T
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
@@ -228,3 +229,5 @@ group x
     longLabel Maf Mappings to the Alternate Sequences/Haplotypes
     type maf
     html altSequence
+
+include trackDb.7way.ra
