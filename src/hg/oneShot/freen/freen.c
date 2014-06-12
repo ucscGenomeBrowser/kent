@@ -7,13 +7,14 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
-#include "htmlPage.h"
+#include "jksql.h"
+#include "expData.h"
 #include "sqlList.h"
 
 void usage()
 {
 errAbort("freen - test some hairbrained thing.\n"
-         "usage:  freen input\n");
+         "usage:  freen output\n");
 }
 
 static struct optionSpec options[] = {
@@ -21,25 +22,31 @@ static struct optionSpec options[] = {
 };
 
 
-void freen(char *input)
+void freen(char *output)
 /* Do something, who knows what really */
 {
-struct lineFile *lf = lineFileOpen(input, TRUE);
-char *line;
-int maxCount = 4;
-while (lineFileNext(lf, &line, NULL))
+FILE *f = mustOpen(output, "w");
+struct sqlConnection *conn = sqlConnect("hgFixed");
+char query[512];
+sqlSafef(query, sizeof(query), "select * from gnfHumanAtlas2Median limit 2");
+uglyf("query: %s\n", query);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+struct expData *list = NULL;
+while ((row = sqlNextRow(sr)) != NULL)
     {
-    uglyf("line: %s\n", line);
-    char *word = nextWord(&line);
-    uglyf("word = %s\n", word);
-    if (--maxCount == 0)
-        break;
+    struct expData *exp = expDataLoad(row);
+    fprintf(f, "%s %d\n", exp->name, exp->expCount);
+    int i;
+    for (i=0; i<exp->expCount; ++i)
+        fprintf(f, "    %g\n", exp->expScores[i]);
+    slAddHead(&list, exp);
     }
-lineFileSeek(lf, 0, SEEK_SET);
-while (lineFileNext(lf, &line, NULL))
-    {
-    uglyf("line: %s\n", line);
-    }
+slReverse(&list);
+
+uglyf("%d on list\n", slCount(list));
+expDataFreeList(&list);
+carefulClose(&f);
 }
 
 

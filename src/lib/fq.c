@@ -38,7 +38,7 @@ if (line[0] != '+')
 /* Get quality line */
 if (!lineFileNext(lf, &line,  NULL))
     errAbort("%s truncated in middle of record", lf->fileName);
-fq->quality = cloneString(line);
+fq->quality = (unsigned char *)cloneString(line);
 return fq;
 }
 
@@ -55,3 +55,11 @@ if (fq != NULL)
     }
 }
 
+void fqWriteNext(struct fq *input, FILE *f)
+/*  Writes a single fastq structure to the file provided. */
+{
+fprintf(f,"%s\n",input->header);
+fprintf(f,"%s\n",input->dna);
+fprintf(f,"%s\n","+");
+fprintf(f,"%s\n",input->quality);
+}
