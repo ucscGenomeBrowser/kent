@@ -22,7 +22,6 @@ static struct optionSpec options[] = {
 };
 
 
-
 void freen(char *output)
 /* Do something, who knows what really */
 {
@@ -30,8 +29,10 @@ FILE *f = mustOpen(output, "w");
 struct sqlConnection *conn = sqlConnect("hgFixed");
 char query[512];
 sqlSafef(query, sizeof(query), "select * from gnfHumanAtlas2Median limit 2");
+uglyf("query: %s\n", query);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
+struct expData *list = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct expData *exp = expDataLoad(row);
@@ -39,7 +40,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     int i;
     for (i=0; i<exp->expCount; ++i)
         fprintf(f, "    %g\n", exp->expScores[i]);
+    slAddHead(&list, exp);
     }
+slReverse(&list);
+
+uglyf("%d on list\n", slCount(list));
+expDataFreeList(&list);
 carefulClose(&f);
 }
 
