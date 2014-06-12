@@ -38,7 +38,7 @@ if (line[0] != '+')
 /* Get quality line */
 if (!lineFileNext(lf, &line,  NULL))
     errAbort("%s truncated in middle of record", lf->fileName);
-fq->quality = cloneString(line);
+fq->quality = (unsigned char *)cloneString(line);
 return fq;
 }
 
