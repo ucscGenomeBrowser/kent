@@ -221,7 +221,7 @@
     dataHub.  Typically this is the MySQL table name or remote data
     file root name (without path or suffix).  Must begin with a letter
     and contain only the following chars:
-    [<code>a-zA-Z0-9-_</code>].</P>
+    [<code>a-zA-Z0-9_</code>].</P>
     <P><B>Example:</B></P>
     <pre>   track myFirstTrack</pre>
 </DIV>

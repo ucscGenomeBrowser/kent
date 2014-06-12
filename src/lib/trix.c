@@ -412,8 +412,6 @@ if (hitList == NULL)
     {
     struct trixHitPos *oneHitList;
     off_t ixPos = trixFindIndexStartLine(trix, searchWord);
-    // make sure we're seeking
-    ourSeek(trix, 0);
     ourSeek(trix, ixPos);
     while (ourReadLine(trix, trix->lf, &line))
 	{
