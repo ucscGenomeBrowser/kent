@@ -1834,3 +1834,16 @@ wait
     # verify the track link to INSDC functions
 
 ##############################################################################
+## Lamprey genes from (DONE - 2013-05-11 - Hiram)
+   mkdir /hive/data/genomes/petMar2/bed/lampreyGenes
+   cd /hive/data/genomes/petMar2/bed/lampreyGenes
+   wget --timestamping \
+     http://derringer.genetics.utah.edu/data/Pmarinus_7.0.66_final.tgz
+   tar xvzf Pmarinus_7.0.66_final.tgz
+   gff3ToGenePred Pmarinus_7.0.66_final/Pmarinus_7.0.66.all.protein_coding.gff \
+       proteinCoding.gp
+   hgLoadGenePred petMar2 lampreyGene proteinCoding.gp
+   genePredCheck -db=petMar2 lampreyGene
+   # checked: 23393 failed: 0
+
+##############################################################################

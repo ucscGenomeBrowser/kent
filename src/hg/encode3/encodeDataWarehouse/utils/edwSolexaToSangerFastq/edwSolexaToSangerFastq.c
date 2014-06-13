@@ -26,10 +26,10 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void fixSolexaQual(char *qual)
+void fixSolexaQual(unsigned char *qual)
 /* Subtract 31 from solexa qual to get it into our range */
 {
-char q;
+unsigned char q;
 while ((q = *qual) != 0)
     {
     *qual = q - 31;
@@ -37,10 +37,10 @@ while ((q = *qual) != 0)
     }
 }
 
-boolean isAllSolexa(char *qual)
+boolean isAllSolexa(unsigned char *qual)
 /* Return TRUE if plausibly all solexa format quals. */
 {
-char q;
+unsigned char q;
 while ((q = *qual++) != 0)
     if (q <= 58)
         return FALSE;
