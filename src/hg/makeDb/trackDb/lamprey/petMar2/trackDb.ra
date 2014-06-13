@@ -30,6 +30,7 @@ baseColorDefault genomicCodons
 searchName lampreyGene
 searchTable lampreyGene
 searchType genePred
+searchMethod prefix
 shortCircuit 1
-termRegex PMZ_00[0-9]+(\-R[A-Z]*)?
+termRegex PMZ_00[0-9]+(\-[A-Z]*)?
 searchPriority 50
