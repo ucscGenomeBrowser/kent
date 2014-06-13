@@ -25,6 +25,12 @@ export DB=calMil1
 mkdir -p /hive/data/genomes/${DB}/genbank
 cd /hive/data/genomes/${DB}/genbank
 
+# Verify this FTP directory appears to be correct:
+
+grep `echo $DB | sed -e 's/[0-9][0-9]*//'` $HOME/kent/src/hg/utils/phyloTrees/db.ncbiTaxId.tab  | sort | cut -f5 | tail -1 | sed -e 's#/ASSEMB.*##'
+
+# if that looks good, then let it be used:
+
 grep `echo $DB | sed -e 's/[0-9][0-9]*//'` $HOME/kent/src/hg/utils/phyloTrees/db.ncbiTaxId.tab  | sort | cut -f5 | tail -1 | sed -e 's#/ASSEMB.*##' | while read ftpDir
 do
   time rsync -a -P \
@@ -62,11 +68,19 @@ export mSize=`faCount chrM.fa | grep total | awk '{print $2}'`
 
 # then, combine this chrM.agp and chrM.fa sequence with the unplaced
 # agp and fa files
-# move the existing agp and fa.gz aside, zcat the fa.gz together
-#  with the chrM.fa into a new fa.gz
-# cat the existing agp and chrM.agp together into a new agp
+mv ${DB}.ucsc.fa.gz ${DB}.ucsc.fa.0.gz
+(zcat ${DB}.ucsc.fa.0.gz; cat chrM.fa) | gzip -c > ${DB}.ucsc.fa.gz
+
+mv ${DB}.ucsc.agp ${DB}.ucsc.0.agp
+cat ${DB}.ucsc.0.agp chrM.agp > ${DB}.ucsc.agp
+
 # faToTwoBit on the new sequence, checkAgpAndFa with the new agp
 # replace the ${DB}.unmasked.2bit and ${DB}.agp at the top
+faToTwoBit ${DB}.ucsc.fa.gz ../${DB}.unmasked.2bit
+twoBitInfo ../${DB}.unmasked.2bit stdout | sort -k2nr > ../chrom.sizes
+checkAgpAndFa ${DB}.ucsc.agp ../${DB}.unmasked.2bit 2>&1 | tail
+# if OK, remove the old ones:
+rm ${DB}.ucsc.fa.0.gz ${DB}.ucsc.0.agp
 
 # setup the scientific name:
 cd /hive/data/genomes/${DB}
@@ -118,7 +132,7 @@ cd /hive/data/genomes/${DB}/dbDb
 export asmInfoPath="/hive/data/genomes/${DB}/genbank/ASSEMBLY_INFO"
 export dbDbInfo="${HOME}/kent/src/hg/utils/phyloTrees/dbCommonScientificCladeOrderkey.tab"
 export chromSizes="/hive/data/genomes/${DB}/chrom.sizes"
-export asmDate=`grep "^DATE:" ${asmInfoPath} | cut -f2 | sed -e 's/^[0-9]+-//; s/-/ /;'`
+export asmDate=`grep "^DATE:" ${asmInfoPath} | cut -f2 | sed -e 's/^[0-9]+-//; s/-/ /g;'`
 
 export asmShortLabel=`grep "^ASSEMBLY SHORT NAME:" ${asmInfoPath} | cut -f2`;
 export asmSciName=`grep "^ORGANISM:" ${asmInfoPath} | cut -f2`;
@@ -204,25 +218,8 @@ cd /hive/data/genomes/${DB}/bed/windowMasker
 time doWindowMasker.pl -buildDir=`pwd` \
    -workhorse=hgwdev ${DB} > do.log 2>&1 &
 
-   # after gaps are done below, clean this result, do not mark
-   # gaps as masked:
-awk '{print $3-$2,$0}' ../gap/notGap.bed > notGap.sizes.txt
-# biggest contiguous sequence
-max=`sort -rn notGap.sizes.txt | head -1 | awk '{print $1}'`
-minCover=`echo $max | awk '{printf "%15.10f", 1/(2*$1)}' | sed -e 's/ //g'`
-
-bedIntersect -minCoverage=$minCover windowmasker.sdust.bed \
-   ../gap/notGap.bed stdout | sort -k1,1 -k2,2n | gzip -c > cleanWMask.bed.gz
-
-zcat cleanWMask.bed.gz | twoBitMask ../../${DB}.unmasked.2bit \
-   stdin -type=.bed ${DB}.cleanWMSdust.2bit
-twoBitToFa ${DB}.cleanWMSdust.2bit stdout | faSize stdin \
-   > faSize.${DB}.cleanWMSdust.txt 2>&1
-
-cat faSize.${DB}.cleanWMSdust.txt
-
 #############################################################################
-# check gaps - the above windowMasker needs this
+# check gaps
 
 mkdir /hive/data/genomes/${DB}/bed/gap
 cd /hive/data/genomes/${DB}/bed/gap
