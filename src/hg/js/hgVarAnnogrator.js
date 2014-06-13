@@ -1,21 +1,11 @@
 // hgVarAnnogrator functions: ajax updating plus building a query representation from page el's
 
-// jslint settings and list of globals for jslint to ignore:
-/*jslint
-  browse: true,  devel: true,
-  onevar: false,  plusplus: false,  regexp: false,  white: false */
-/*global
-  $: false,
-  activeFilterList: false, availableFilterList: false,
-  loadingImage: false,
-  setCartVar: false, setCartVars: false, warn: false, catchErrorOrDispatch: false */
-
-// Tell jslint and browser to use strict mode for this file:
-"use strict";
-
 var hgva = // result of invoking:
 (function()
 {
+    // Tell jslint and browser to use strict mode for this:
+    "use strict";
+
     // Private data and methods
     var requestData = "";
 
@@ -85,7 +75,7 @@ var hgva = // result of invoking:
 	newHtml += optionHtml('afGT', '&gt;', sel);
 	newHtml += "</select>\n";
 	newHtml += "<input type='text' name='num1' size=20 " + updateCartOnChange;
-	if (typeof filterSpec.values === 'list') {
+	if ($.isArray(filterSpec.values)) {
 	    newHtml += " value='" + filterSpec.values[0] + "'";
 	} else if (typeof filterSpec.values === 'number') {
 	    newHtml += " value='" + filterSpec.values + "'";
@@ -93,7 +83,7 @@ var hgva = // result of invoking:
 	newHtml += "/>\n";
 	newHtml += "<input type='text' name='num2' size=20 style='display: none;' ";
 	newHtml += updateCartOnChange;
-	if (typeof filterSpec.values === 'list' && typeof filterSpec.values[1] === 'number') {
+	if ($.isArray(filterSpec.values) && typeof filterSpec.values[1] === 'number') {
 	    newHtml += " value='" + filterSpec.values[1] + "'";
 	}
 	newHtml +="/>\n";

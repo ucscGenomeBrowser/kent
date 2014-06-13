@@ -146,7 +146,7 @@ jQuery.tableDnD = {
                     config.dragStartIndex = $(jQuery.tableDnD.dragObject).attr('rowIndex');
                     if (config.onDragStart) {
                         // Call the onDrop method if there is one
-                        config.onDragStart(ev, table, this.parentNode);
+                        config.onDragStart(ev, table, this.parentNode);  // UCSC
                     }
 
                     /////// UCSC
@@ -260,8 +260,9 @@ jQuery.tableDnD = {
     },
 
     mousemove: function(ev) {
-        if(jQuery.tableDnD == undefined
-        || jQuery.tableDnD.dragObject == null) {  //// UCSC Binding should occur at dragStart
+        /* jshint -W014 */  // Don't complain about line break before '||' etc:
+        if(jQuery.tableDnD === undefined
+        || jQuery.tableDnD.dragObject === null) {  //// UCSC Binding should occur at dragStart
             jQuery(document)
                 .unbind('mousemove')//, jQuery.tableDnD.mousemove);
                 .unbind('mouseup');//, jQuery.tableDnD.mouseup);
@@ -353,14 +354,16 @@ jQuery.tableDnD = {
                     var targetRowIx = $( currentRow ).attr('rowIndex');
                     if (targetRowIx >= 0 && targetRowIx < rows.length) {
 
+                        var plusIx=0;
+                        var rIx;
                         if (movingDown) { // && config.dragObjects[config.dragObjects.length - 1] != currentRow) {
                             // A whole new tack:  since movingUp never fails, always move target (and others) up
                             if ((lastDragRowIx - firstDragRowIx) == (config.dragObjects.length - 1)
                             &&  firstDragRowIx >= 0
                             &&  lastDragRowIx < targetRowIx) {
-                                var plusIx=0;
-                                for(var ix=lastDragRowIx+1; ix <= targetRowIx; ix++) {
-                                    $( rows[ix] ).insertBefore( $( rows[firstDragRowIx + plusIx] ) );
+                                plusIx=0;
+                                for(rIx=lastDragRowIx+1; rIx <= targetRowIx; rIx++) {
+                                    $( rows[rIx] ).insertBefore( $( rows[firstDragRowIx + plusIx] ) );
                                     plusIx++;
                                 }
                             }
@@ -368,9 +371,9 @@ jQuery.tableDnD = {
                             if ((lastDragRowIx - firstDragRowIx) == (config.dragObjects.length - 1)
                             &&  firstDragRowIx >= 0
                             &&  firstDragRowIx > targetRowIx) {
-                                var plusIx=0;
-                                for(var ix=firstDragRowIx; ix <= lastDragRowIx; ix++) {
-                                    $(rows[ix]).insertBefore( rows[targetRowIx + plusIx] );
+                                plusIx=0;
+                                for(rIx=firstDragRowIx; rIx <= lastDragRowIx; rIx++) {
+                                    $(rows[rIx]).insertBefore( rows[targetRowIx + plusIx] );
                                     plusIx++;
                                 }
                             }
