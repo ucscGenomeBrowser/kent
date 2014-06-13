@@ -213,7 +213,8 @@
             wrapper.insertAfter(sourceSelect);
 
 			// Watch for a window resize and adjust the control if open
-            if ($.browser.msie != true) { ///// UCSC Stop ugly bug in IE where onChange gets called on every selection.
+            ///// UCSC Stop ugly bug in IE where onChange gets called on every selection.
+            if ($.browser.msie !== true) {  ///// UCSC
                 $(window).resize(function() {
                     if (!self.disabled && self.dropWrapper.isOpen) {
                             // Reopen yourself to get the position right
@@ -739,8 +740,10 @@
             self.initialMultiple = sourceSelect.attr("multiple");
             self.isMultiple = self.initialMultiple;
             if (options.forceMultiple != null) { self.isMultiple = options.forceMultiple; }
-            if(!self.initialMultiple && self.isMultiple)    ////// UCSC as suggested in issue 176 on DDCL website (not fixed in 1.4)
-                sourceSelect.attr("multiple", true);        ////// This fixes chrome problem of only selecting the first item
+            ////// UCSC as suggested in issue 176 on DDCL website (not fixed in 1.4)
+            ////// This fixes chrome problem of only selecting the first item
+            if (!self.initialMultiple && self.isMultiple) ///// UCSC
+                sourceSelect.attr("multiple", true);      ///// UCSC
             self.sourceSelect = sourceSelect;
 
             // append the control that resembles a single selection select

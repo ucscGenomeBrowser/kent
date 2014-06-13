@@ -74,7 +74,7 @@ return pathRelativeToFile(hubUrl, path);
 static void badGenomeStanza(struct lineFile *lf)
 /* Put up semi-informative error message about a genome stanza being bad. */
 {
-errAbort("Genome stanza should have exactly two lines, one with 'genome' and one with 'trackDb'\n"
+errAbort("Genome stanza should have at least two lines, one with 'genome' and one with 'trackDb'\n"
          "Bad stanza format ending line %d of %s", lf->lineIx, lf->fileName);
 }
 
@@ -925,6 +925,11 @@ if (errCatchStart(errCatch))
 	    char *stripHtml =htmlTextStripTags(tdb->html);
 	    strSwapChar(stripHtml, '\n', ' ');
 	    strSwapChar(stripHtml, '\t', ' ');
+	    strSwapChar(stripHtml, '\r', ' ');
+	    strSwapChar(stripHtml, ')', ' ');
+	    strSwapChar(stripHtml, '(', ' ');
+	    strSwapChar(stripHtml, '[', ' ');
+	    strSwapChar(stripHtml, ']', ' ');
 	    fprintf(searchFp, "%s.%s\t%s\t%s\t%s\n",hub->url, tdb->track, 
 		tdb->shortLabel, tdb->longLabel, stripHtml);
 	    }
@@ -1119,6 +1124,11 @@ if (searchFp != NULL)
 	char *stripHtml =htmlTextStripTags(html);
 	strSwapChar(stripHtml, '\n', ' ');
 	strSwapChar(stripHtml, '\t', ' ');
+	strSwapChar(stripHtml, '\015', ' ');
+	strSwapChar(stripHtml, ')', ' ');
+	strSwapChar(stripHtml, '(', ' ');
+	strSwapChar(stripHtml, '[', ' ');
+	strSwapChar(stripHtml, ']', ' ');
 	fprintf(searchFp, "%s\t%s\t%s\t%s\n",hub->url, hub->shortLabel, hub->longLabel, stripHtml);
 	}
 
@@ -1275,3 +1285,28 @@ else
 findPosInTdbList(tdbList, term, hgp);
 }
 
+boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost, char **pPort)
+{
+char *hostPort;
+
+if (isTrans)
+    {
+    hostPort = trackHubAssemblyField(database, "transBlat");
+    }
+else
+    {
+    hostPort = trackHubAssemblyField(database, "blat");
+    }
+
+if (hostPort == NULL)
+    return FALSE;
+   
+hostPort = cloneString(hostPort);
+
+*pHost = nextWord(&hostPort);
+if (hostPort == NULL)
+    return FALSE;
+*pPort = hostPort;
+
+return TRUE;
+}
