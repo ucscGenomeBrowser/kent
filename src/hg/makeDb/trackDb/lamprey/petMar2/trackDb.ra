@@ -21,8 +21,15 @@ shortLabel Lamprey Genes
 longLabel Lamprey protein coding genes
 group genes
 priority 34.5
-visibility hide
+visibility pack
 color 12,120,12
 type genePred
 baseColorUseCds given
 baseColorDefault genomicCodons
+
+searchName lampreyGene
+searchTable lampreyGene
+searchType genePred
+shortCircuit 1
+termRegex PMZ_00[0-9]+(\-R[A-Z]*)?
+searchPriority 50
