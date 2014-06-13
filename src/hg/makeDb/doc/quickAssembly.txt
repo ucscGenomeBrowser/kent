@@ -25,15 +25,18 @@ export DB=calMil1
 mkdir -p /hive/data/genomes/${DB}/genbank
 cd /hive/data/genomes/${DB}/genbank
 
-time rsync -a -P \
-  rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Callorhinchus_milii/Callorhinchus_milii-6.1.3/ \
-    ./
+grep `echo $DB | sed -e 's/[0-9][0-9]*//'` $HOME/kent/src/hg/utils/phyloTrees/db.ncbiTaxId.tab  | sort | cut -f5 | tail -1 | sed -e 's#/ASSEMB.*##' | while read ftpDir
+do
+  time rsync -a -P \
+    rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/${ftpDir}/ ./
+done
 
 #############################################################################
 # establish UCSC naming scheme
 #    When the assembly is composed only of unplaced scaffolds:
 
 cd /hive/data/genomes/${DB}
+
 time ~/kent/src/hg/utils/automation/unplacedScaffolds.pl ${DB} > step1.log 2>&1
 # this constructs the files and directory:
 # -rw-rw-r-- 1 244682665 Mar  4 12:30 calMil1.unmasked.2bit
