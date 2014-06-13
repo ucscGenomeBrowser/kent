@@ -640,6 +640,15 @@ if (val == NULL)
 return val;
 }
 
+static void forbidSetting(struct trackHub *hub, struct trackHubGenome *genome,
+    struct trackDb *tdb, char *setting)
+/* Abort if forbidden setting found. */
+{
+if (trackDbSetting(tdb, setting))
+    errAbort("Forbidden setting '%s' in hub %s genome %s track %s", setting,
+        hub->url, genome->name, tdb->track);
+}
+
 static void expandBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome,
 	struct trackDb *tdb)
 /* Expand bigDataUrls so that no longer relative to genome->trackDbFile */
@@ -675,6 +684,9 @@ static void validateOneTrack( struct trackHub *hub,
 /* Check for existence of fields required in all tracks */
 requiredSetting(hub, genome, tdb, "shortLabel");
 requiredSetting(hub, genome, tdb, "longLabel");
+
+/* Forbid any dangerous settings that should not be allowed */
+forbidSetting(hub, genome, tdb, "idInUrlSql");
 
 // subtracks is not NULL if a track said we were its parent
 if (tdb->subtracks != NULL)

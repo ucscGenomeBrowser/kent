@@ -2,23 +2,36 @@ include ../../inc/common.mk
 
 # recursive target to do install to DEST, with extra excludes EXCL.
 
-JQUERY_FILES=jquery.js jquery.tablednd.js \
+# UCSC js files must pass jshint
+UCSC_JS_FILES=ajax.js alleles.js autocomplete.js edwPersona.js \
+    hgCustom.js hgGateway.js hgHubConnect.js hgTracks.js \
+    hgVarAnnogrator.js hui.js utils.js ddcl.js subCfg.js \
+    encodeProject.js encodeDataSummary.js encodeDataMatrix.js encodeChipMatrix.js encodeMatrix.js
+    
+# STATIC files must pass jshint
+STATIC_FILES=staticDoc.js
+
+# JQUERY files and other third pary files which have NOT BEEN TOUCHED by UCSC
+JQUERY_FILES_UNTOUCHED=jquery.js jquery.tablednd.js \
     jquery.imgareaselect.js jquery-ui.js jquery.contextmenu.js \
     ui.dropdownchecklist.js \
     jquery.cookie.js jquery.watermarkinput.js \
     jquery.floatheader.js jquery.rotateTableCellContent.js jquery.plugins.js \
     jquery.validate.min.js jquery.history.js
-    
-JS_FILES=ajax.js alleles.js autocomplete.js edwPersona.js \
-    hgCustom.js hgGateway.js hgHubConnect.js hgTracks.js \
-    hgVarAnnogrator.js hui.js utils.js ddcl.js subCfg.js \
-    encodeProject.js encodeDataSummary.js encodeDataMatrix.js encodeChipMatrix.js encodeMatrix.js \
-    ${JQUERY_FILES}
 
-STATIC_FILES=staticDoc.js
+# JQUERY or other third pary files which HAVE BEEN MODIFIED by UCSC
+JQUERY_FILES_MODIFIED=jquery.tablednd.js ui.dropdownchecklist.js
+
+JQUERY_FILES=${JQUERY_FILES_UNTOUCHED} ${JQUERY_FILES_MODIFIED}
+
+# SYMLINKED files are include in CGIs via a version or timestamped symlink
+#           to force client side updates
+SYMLINKED_FILES=${UCSC_JS_FILES} ${JQUERY_FILES}
 
 ifdef LOWELAB
-    JS_FILES += lowetooltip.js loweautocomplete.js
+    # LOWE lab files should be forced through jshint (but currently aren't)
+    #UCSC_JS_FILES += lowetooltip.js loweautocomplete.js
+    SYMLINKED_FILES += lowetooltip.js loweautocomplete.js
 endif
 
 user:
@@ -43,9 +56,13 @@ compile:
 install:
 	${MAKE} doInstall DEST=${DOCUMENTROOT}/js
 
-doInstall:
+jshint:
+	${JSHINT} ${UCSC_JS_FILES} ${STATIC_FILES}
+
+doInstall: jshint
 	@mkdir -p ${DEST}/
-	../utils/cpAndLinkToResourceFiles.pl ${extra} -exclude='makefile' -versionFile=../inc/versionInfo.h -destDir=${DEST} ${JS_FILES}
+	../utils/cpAndLinkToResourceFiles.pl ${extra} -exclude='makefile' \
+			-versionFile=../inc/versionInfo.h -destDir=${DEST} ${SYMLINKED_FILES}
 	for file in ${STATIC_FILES}; do \
 	    rsync -a $$file ${DEST}/; \
 	done

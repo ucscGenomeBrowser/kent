@@ -1042,6 +1042,41 @@ rmdir --ignore-fail-on-non-empty /dev/shm/$outputFN
 #  200 chr12       123443533       123443733        chr12.10
 
 #########################################################################
+## CYTOBAND - fixing the ideogram track (DONE - 2014-06-11 - Hiram)
+    ## the file we used before was broken
+    mkdir -p /hive/data/outside/ncbi/ideogram/2014-06
+    cd /hive/data/outside/ncbi/ideogram/2014-06
+    # fetch all the ideogram files:
+    rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/pub/gdp/ ./
+    mkdir /hive/data/genomes/hg38/bed/cytoBandUpdate
+    cd /hive/data/genomes/hg38/bed/cytoBandUpdate
+
+    # Create bed file
+    $HOME/kent/src/utils/ncbi/createNcbiCytoBand.pl \
+/hive/data/outside/ncbi/ideogram/2014-06/ideogram_9606_GCF_000001305.14_850_V1
+
+    # add in the other genome data:
+    hgsql -N -e 'select * from cytoBand;' hg38 \
+        | egrep "chrU|chrM|_alt|_random" >> cytoBand.bed
+
+    $HOME/kent/src/utils/ncbi/cytoBandVerify.pl
+    #   everything checks out OK on 455 chroms
+
+    # Load the bed file
+    hgLoadBed -tab -noBin -sqlTable=$HOME/kent/src/hg/lib/cytoBand.sql \
+	hg38 cytoBand cytoBand.bed
+    cut -f1 cytoBand.bed | sort -u | awk '{print length($1)}' | sort -rn | head
+    #  23
+    sed -e 's/12/23/' $HOME/kent/src/hg/lib/cytoBand.sql > cytoBand.sql
+    sort -k1,1 -k2,2n cytoBand.bed \
+	| hgLoadSqlTab hg38 cytoBand cytoBand.sql stdin
+
+    # Make cytoBandIdeo track for ideogram gif on hgTracks page.
+    # cytoBandIdeo is just a replicate of the cytoBand track.
+    hgsql -e "drop table cytoBandIdeo;" hg38
+    hgsql hg38 -e "create table cytoBandIdeo (index(chrom(23),chromStart)) as select * from cytoBand;"
+
+#########################################################################
 ##  CYTOBAND - ideogram track (DONE - 2014-03-04 - Hiram)
     ssh hgwdev
     mkdir -p /hive/data/outside/ncbi/ideogram/2014-03
