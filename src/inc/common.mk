@@ -6,6 +6,16 @@ endif
 ifeq (${CFLAGS},)
     CFLAGS=
 endif
+ifeq (${MACHTYPE},)
+    MACHTYPE:=$(shell uname -m)
+#    $(info MACHTYPE was empty, set to: ${MACHTYPE})
+endif
+ifneq (,$(findstring -,$(MACHTYPE)))
+#    $(info MACHTYPE has - sign ${MACHTYPE})
+    MACHTYPE:=$(shell uname -m)
+#    $(info MACHTYPE has - sign set to: ${MACHTYPE})
+endif
+
 HG_DEFS=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -DMACHTYPE_${MACHTYPE}
 HG_INC=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../inc
 
