@@ -1877,6 +1877,12 @@
     should be queried to give the detailed signal numbers.</P>
 </DIV>
 
+<DIV class="negateValues"><span class="types wig bigWig bedGraph"></span>
+<div class="format"><code>negateValues &lt;on&gt;</code></div>
+    <P>Negate the values in the wiggle, meaning that positive values become negative and vice-versa.
+    This is useful for wiggles representing transcription or other activities on the Crick strand.  Be aware that wiggles with negative values are drawn in <B>altColor</B>  not <B>color</B> as positive values are.
+</DIV>
+
 <DIV class="spanList"><span class="types wig"></span>
 <div class="format"><code>spanList &lt;s1&gt;[,s2&hellip;]</code></div>
     <P><I>NOT FOR HUBS.  For wig tracks only.</I></P>

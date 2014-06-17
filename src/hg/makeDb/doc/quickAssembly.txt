@@ -39,10 +39,12 @@ done
 
 #############################################################################
 # establish UCSC naming scheme
-#    When the assembly is composed only of unplaced scaffolds:
 
+# setup the scientific name:
 cd /hive/data/genomes/${DB}
+grep ORGANISM: genbank/ASSEMBLY_INFO  | cut -f2 > species.name.txt
 
+#    When the assembly is composed only of unplaced scaffolds:
 time ~/kent/src/hg/utils/automation/unplacedScaffolds.pl ${DB} > step1.log 2>&1
 # this constructs the files and directory:
 # -rw-rw-r-- 1 244682665 Mar  4 12:30 calMil1.unmasked.2bit
@@ -81,10 +83,6 @@ twoBitInfo ../${DB}.unmasked.2bit stdout | sort -k2nr > ../chrom.sizes
 checkAgpAndFa ${DB}.ucsc.agp ../${DB}.unmasked.2bit 2>&1 | tail
 # if OK, remove the old ones:
 rm ${DB}.ucsc.fa.0.gz ${DB}.ucsc.0.agp
-
-# setup the scientific name:
-cd /hive/data/genomes/${DB}
-grep ORGANISM: genbank/ASSEMBLY_INFO  | cut -f2 > species.name.txt
 
 cp -p ucsc/${DB}.ucsc.agp ./${DB}.agp
 
@@ -175,6 +173,9 @@ echo "INSERT INTO genomeClade (genome, clade, priority) VALUES (\"${commonName}\
 echo "INSERT INTO genomeClade (genome, clade, priority) VALUES (\"${commonName}\", \"$clade\", \"40\");"
     ;;
   "vertebrate")
+echo "INSERT INTO genomeClade (genome, clade, priority) VALUES (\"${commonName}\", \"$clade\", \"70\");"
+    ;;
+  "insect")
 echo "INSERT INTO genomeClade (genome, clade, priority) VALUES (\"${commonName}\", \"$clade\", \"70\");"
     ;;
 esac > ${DB}.genomeClade.sql
