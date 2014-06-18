@@ -37,6 +37,7 @@
 #include "trackHub.h"
 #include "udc.h"
 #include "hubConnect.h"
+#include "bigBedFind.h"
 
 
 // Exhaustive searches can lead to timeouts on CGIs (#11626).
@@ -2622,6 +2623,15 @@ if (relativeFlag)
 }
 #endif
 
+static boolean findBigBed(char *db, struct hgFindSpec *hfs, char *spec,
+			    struct hgPositions *hgp)
+/* Look up items in bigBed  */
+{
+struct trackDb *tdb = tdbFindOrCreate(db, NULL, hfs->searchTable);
+
+return findBigBedPosInTdbList(db, tdb, spec, hgp);
+}
+
 static boolean searchSpecial(char *db, struct hgFindSpec *hfs, char *term, int limitResults,
 			     struct hgPositions *hgp, boolean relativeFlag,
 			     int relStart, int relEnd, boolean *retFound)
@@ -2649,6 +2659,10 @@ if (sameString(hfs->searchType, "knownGene"))
 else if (sameString(hfs->searchType, "refGene"))
     {
     found = findRefGenes(db, hfs, term, hgp);
+    }
+else if (sameString(hfs->searchType, "bigBed"))
+    {
+    found = findBigBed(db, hfs, term, hgp);
     }
 else if (sameString(hfs->searchType, "cytoBand"))
     {
