@@ -4200,28 +4200,6 @@ char *hTrackOpenVis(char *db, char *trackName)
 return hTrackCanPack(db, trackName) ? "pack" : "full";
 }
 
-char *hGetParent(char *db, char *subtrackName)
-/* Given a subtrack table, find its parent */
-{
-// TODO--- hub tracks can have parents.  This is only called from
-// item search, but it should work there too.   We should be able
-// to grab these out of the settings hash, but then why doesn't
-// this happen for mySQL tracks?  It would be a lot faster methinks
-if (isHubTrack(subtrackName))
-    return NULL;
-
-struct sqlConnection *conn = hAllocConn(db);
-struct trackDb *tdb = hMaybeTrackInfo(conn, subtrackName);
-char *ret = NULL;
-if (tdb != NULL)
-    {
-    ret = firstWordInLine( trackDbLocalSetting(tdb, "parent"));
-    trackDbFree(&tdb);
-    }
-hFreeConn(&conn);
-return ret;
-}
-
 static struct hash *makeTrackSettingsHash(char *db)
 /* Create  a hash of hashes with all track settings for database.
  * The returned hash is keyed by track.   The contained hashes
