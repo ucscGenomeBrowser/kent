@@ -1045,4 +1045,208 @@ TMPDIR=/dev/shm
     cat fb.anoGam1.chainDm6Link.txt
     # 22157618 bases of 278268413 (7.963%) in intersection
 
+###########################################################################
+# LASTZ D. pseudoobscura DroPse3 (DONE 2014-06-19 - Chin)
+    screen -S droPse3-dm6
+    mkdir /hive/data/genomes/dm6/bed/lastzDroPse3.2014-06-19
+    cd /hive/data/genomes/dm6/bed/lastzDroPse3.2014-06-19
+
+    cat << '_EOF_' > DEF
+# D. melanogaster vs. D. pseudoobscura
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/hive/data/genomes/dm6/dm6.2bit
+SEQ1_CHUNK=5000000
+SEQ1_LAP=10000
+SEQ1_LEN=/hive/data/genomes/dm6/chrom.sizes
+
+# QUERY - D. pseudoobscura
+SEQ2_DIR=/hive/data/genomes/droPse3/droPse3.2bit
+SEQ2_CHUNK=5000000
+SEQ2_LAP=10000
+SEQ2_LEN=/hive/data/genomes/droPse3/chrom.sizes
+
+BASE=/hive/data/genomes/dm6/bed/lastzDroPse3.2014-06-19
+TMPDIR=/dev/shm
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+        `pwd`/DEF \
+        -syntenicNet -fileServer=hgwdev \
+        -chainMinScore=3000  -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
+    # real    10m23.069s
+    cat fb.dm6.chainDroPse3Link.txt    
+    # 85310414 bases of 142573040 (59.836%) in intersection
+
+    #   running the swap
+    mkdir /hive/data/genomes/droPse3/bed/blastz.dm6.swap
+    cd /hive/data/genomes/droPse3/bed/blastz.dm6.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/dm6/bed/lastzDroPse3.2014-06-19/DEF \
+        -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
+    # real    6m22.337s
+    cat fb.droPse3.chainDm6Link.txt
+    # 89188881 bases of 149047912 (59.839%) in intersection
+
+###########################################################################
+# LASTZ D. willistoni DroWil2 (DONE 2014-06-19 - Chin)
+    screen -S droWil2-dm6
+    mkdir /hive/data/genomes/dm6/bed/lastzDroWil2.2014-06-19
+    cd /hive/data/genomes/dm6/bed/lastzDroWil2.2014-06-19
+
+    cat << '_EOF_' > DEF
+# D. melanogaster vs. D. willistoni
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/hive/data/genomes/dm6/dm6.2bit
+SEQ1_CHUNK=5000000
+SEQ1_LAP=10000
+SEQ1_LEN=/hive/data/genomes/dm6/chrom.sizes
+
+# QUERY - D. willistoni
+SEQ2_DIR=/hive/data/genomes/droWil2/droWil2.2bit
+SEQ2_CHUNK=5000000
+SEQ2_LAP=10000
+SEQ2_LEN=/hive/data/genomes/droWil2/chrom.sizes
+
+BASE=/hive/data/genomes/dm6/bed/lastzDroWil2.2014-06-19
+TMPDIR=/dev/shm
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+        `pwd`/DEF \
+        -syntenicNet -fileServer=hgwdev \
+        -chainMinScore=3000  -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
+    # real    12m46.450s
+    cat fb.dm6.chainDroWil2Link.txt    
+    # 73329892 bases of 142573040 (51.433%) in intersection
+
+    #   running the swap
+    mkdir /hive/data/genomes/droWil2/bed/blastz.dm6.swap
+    cd /hive/data/genomes/droWil2/bed/blastz.dm6.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/dm6/bed/lastzDroWil2.2014-06-19/DEF \
+        -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1 & 
+    # real    7m15.452s
+    cat fb.droWil2.chainDm6Link.txt
+    # 90406265 bases of 223610028 (40.430%) in intersection
+
+###########################################################################
+# LASTZ D. yakuba DroYak3 (DONE 2014-06-19 - Chin)
+    screen -S droYak3-dm6
+    mkdir /hive/data/genomes/dm6/bed/lastzDroYak3.2014-06-19
+    cd /hive/data/genomes/dm6/bed/lastzDroYak3.2014-06-19
+
+    cat << '_EOF_' > DEF
+# D. melanogaster vs. D. yakuba
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/hive/data/genomes/dm6/dm6.2bit
+SEQ1_CHUNK=5000000
+SEQ1_LAP=10000
+SEQ1_LEN=/hive/data/genomes/dm6/chrom.sizes
+
+# QUERY - D. yakuba
+SEQ2_DIR=/hive/data/genomes/droYak3/droYak3.2bit
+SEQ2_CHUNK=5000000
+SEQ2_LAP=10000
+SEQ2_LEN=/hive/data/genomes/droYak3/chrom.sizes
+
+BASE=/hive/data/genomes/dm6/bed/lastzDroYak3.2014-06-19
+TMPDIR=/dev/shm
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+        `pwd`/DEF \
+        -syntenicNet -fileServer=hgwdev \
+        -chainMinScore=3000  -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
+    # real    14m53.775s
+    cat fb.dm6.chainDroYak3Link.txt    
+    # 114859321 bases of 142573040 (80.562%) in intersection
+
+    #   running the swap
+    mkdir /hive/data/genomes/droYak3/bed/blastz.dm6.swap
+    cd /hive/data/genomes/droYak3/bed/blastz.dm6.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/dm6/bed/lastzDroYak3.2014-06-19/DEF \
+        -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1 & 
+    # real    8m16.261s
+    cat fb.droYak3.chainDm6Link.txt
+    # 131647876 bases of 162598019 (80.965%) in intersection
+
+###########################################################################
+# LASTZ A. mellifera ApiMel4 (DONE 2014-06-19 - Chin)
+    screen -S apiMel4-dm6
+    mkdir /hive/data/genomes/dm6/bed/lastzApiMel4.2014-06-19
+    cd /hive/data/genomes/dm6/bed/lastzApiMel4.2014-06-19
+
+    cat << '_EOF_' > DEF
+# D. melanogaster vs. A. mellifera
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/hive/data/genomes/dm6/dm6.2bit
+SEQ1_CHUNK=5000000
+SEQ1_LAP=10000
+SEQ1_LEN=/hive/data/genomes/dm6/chrom.sizes
+
+# QUERY - A. mellifera
+SEQ2_DIR=/hive/data/genomes/apiMel4/apiMel4.2bit
+SEQ2_CHUNK=5000000
+SEQ2_LAP=10000
+SEQ2_LEN=/hive/data/genomes/apiMel4/chrom.sizes
+
+BASE=/hive/data/genomes/dm6/bed/lastzApiMel4.2014-06-19
+TMPDIR=/dev/shm
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
+        `pwd`/DEF \
+        -syntenicNet -fileServer=hgwdev \
+        -chainMinScore=3000  -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
+    # real    7m19.448s
+    cat fb.dm6.chainApiMel4Link.txt    
+    # 11666989 bases of 142573040 (8.183%) in intersection
+
+    #   running the swap
+    mkdir /hive/data/genomes/apiMel4/bed/blastz.dm6.swap
+    cd /hive/data/genomes/apiMel4/bed/blastz.dm6.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/dm6/bed/lastzApiMel4.2014-06-19/DEF \
+        -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1 & 
+    # real    1m18.504s
+    cat fb.apiMel4.chainDm6Link.txt
+    # 12244317 bases of 229123650 (5.344%) in intersection
+
 #########################################################################
