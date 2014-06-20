@@ -48,6 +48,7 @@ balAcu1	Minke whale	Balaenoptera acutorostrata scammoni	mammal	cetartiodactyla	2
 oviAri3	Sheep	Ovis aries	mammal	cetartiodactyla	2369
 capHir1	Domestic goat	Capra hircus	mammal	cetartiodactyla	2375
 bosTau7	Cow	Bos taurus	mammal	cetartiodactyla	2379
+bosMut1	Wild yak	Bos mutus	mammal	cetartiodactyla	2381
 bubBub1	Water buffalo	Bubalus bubalis	mammal	cetartiodactyla	2383
 equCab2	Horse	Equus caballus	mammal	perissodactyla	2409
 equPrz1	Przewalski horse	Equus przewalskii	mammal	perissodactyla	 2409
@@ -106,7 +107,7 @@ melGal1	Turkey	Meleagris gallopavo	vertebrate	aves	4360
 strCam1	Ostrich	Struthio camelus	vertebrate	aves	4363
 acaChl1	Rifleman	Acanthisitta chloris	vertebrate	aves	4363
 aptFor1	Emperor penguin	Aptenodytes forsteri	vertebrate	aves	4363
-aquChrCan1	Golden eagle	Aquila chrysaetos canadensis	vertebrate	aves	4363
+aquChr1	Golden eagle	Aquila chrysaetos canadensis	vertebrate	aves	4363
 calAnn1	Anna's hummingbird	Calypte anna	vertebrate	aves	4363
 capCar1	Chuck-will's-widow	Caprimulgus carolinensis	vertebrate	aves	4363
 carCri1	Red-legged seriema	Cariama cristata	vertebrate	aves	4363
