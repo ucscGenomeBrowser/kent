@@ -2446,6 +2446,10 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 	char *tableName = table->name;
 	if (startsWith("all_", tableName))
 	    tableName += strlen("all_");
+
+	// clear the tdb cache if this track is a hub track
+	if (isHubTrack(tableName))
+	    tdbList = NULL;
 	struct trackDb *tdb = tdbForTrack(db, tableName, &tdbList);
 	if (!tdb)
             errAbort("no track for table \"%s\" found via a findSpec", tableName);

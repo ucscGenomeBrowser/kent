@@ -5,6 +5,7 @@
 #include "hgFind.h"
 #include "trix.h"
 #include "trackHub.h"
+#include "hubConnect.h"
 #include "hdb.h"
 
 static struct hgPos *bigBedIntervalListToHgPositions(struct bbiFile *bbi, char *term, struct bigBedInterval *intervalList, char *description)
@@ -100,12 +101,16 @@ boolean found = FALSE;
 for(tdb=tdbList; tdb; tdb = tdb->next)
     {
     char *indexField = trackDbSetting(tdb, "searchIndex");
+    char *fileName = NULL;
 
-    struct sqlConnection *conn = NULL;
-    if (!trackHubDatabase(db))
-	conn = hAllocConnTrack(db, tdb);
-    char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
-    hFreeConn(&conn);
+    if (isHubTrack(tdb->table))
+	fileName = trackDbSetting(tdb, "bigDataUrl");
+    else
+	{
+	struct sqlConnection *conn = hAllocConnTrack(db, tdb);
+	fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
+	hFreeConn(&conn);
+	}
 
     if (!(indexField && fileName))
 	continue;
