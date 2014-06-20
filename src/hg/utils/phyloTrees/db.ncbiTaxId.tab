@@ -36,6 +36,7 @@ anoSin	74873	Anopheles sinensis	2014-06-16 12:06:09	invertebrates/Anopheles_sine
 anoSte	30069	Anopheles stephensi	2014-06-16 12:06:09	invertebrates/Anopheles_stephensi/ASM30077v2/ASSEMBLY_INFO
 anoSte	30069	Anopheles stephensi	2014-06-16 12:06:09	invertebrates/Anopheles_stephensi/Anop_step_SDA-500_V1/ASSEMBLY_INFO
 apaSpi	55534	Apalone spinifera	2013-06-08 13:19:06	vertebrates_other/Apalone_spinifera/ASM38561v1/ASSEMBLY_INFO
+apaVit	57397	Apaloderma vittatum	2014-06-18 10:23:16	vertebrates_other/Apaloderma_vittatum/ASM70340v1/ASSEMBLY_INFO
 apiDor	7462	Apis dorsata	2014-06-16 12:06:09	invertebrates/Apis_dorsata/Apis_dorsata_1.3/ASSEMBLY_INFO
 apiFlo	7463	Apis florea	2014-06-16 12:06:09	invertebrates/Apis_florea/Aflo_1.0/ASSEMBLY_INFO
 apiMel	7460	Apis mellifera	2014-06-16 12:06:09	invertebrates/Apis_mellifera/Amel_4.5/ASSEMBLY_INFO
@@ -93,6 +94,7 @@ cerBir	443821	Cerapachys biroi	2014-06-16 12:06:09	invertebrates/Cerapachys_biro
 cerCap	7213	Ceratitis capitata	2014-06-16 12:06:09	invertebrates/Ceratitis_capitata/Ccap_1.0/ASSEMBLY_INFO
 cerSim	73337	Ceratotherium simum simum	2012-11-14 10:16:14	vertebrates_mammals/Ceratotherium_simum/CerSimSim1.0/ASSEMBLY_INFO
 cerSol	326594	Ceratosolen solmsi marchali	2014-06-16 12:06:09	invertebrates/Ceratosolen_solmsi/CerSol_1.0/ASSEMBLY_INFO
+chaVoc	50402	Charadrius vociferus	2014-06-17 10:23:06	vertebrates_other/Charadrius_vociferus/ASM70802v1/ASSEMBLY_INFO
 cheMyd	8469	Chelonia mydas	2013-03-21 11:19:24	vertebrates_other/Chelonia_mydas/CheMyd_1.0/ASSEMBLY_INFO
 chiLan	34839	Chinchilla lanigera	2012-11-14 10:16:14	vertebrates_mammals/Chinchilla_lanigera/ChiLan1.0/ASSEMBLY_INFO
 chlSab	60711	Chlorocebus sabaeus	2013-07-14 16:35:15	vertebrates_mammals/Chlorocebus_sabaeus/Chlorocebus_sabeus_1.0/ASSEMBLY_INFO
@@ -114,6 +116,7 @@ craGig	29159	Crassostrea gigas	2014-06-16 12:06:09	invertebrates/Crassostrea_gig
 criGri	10029	Cricetulus griseus	2012-11-14 10:16:14	vertebrates_mammals/Cricetulus_griseus/CriGri_1.0/ASSEMBLY_INFO
 criGri	10029	Cricetulus griseus	2013-07-31 16:27:38	vertebrates_mammals/Cricetulus_griseus/C_griseus_v1.0/ASSEMBLY_INFO
 criGri	10029	Cricetulus griseus	2013-09-03 10:23:25	vertebrates_mammals/Cricetulus_griseus/Cgr1.0/ASSEMBLY_INFO
+cucCan	55661	Cuculus canorus	2014-06-18 10:23:16	vertebrates_other/Cuculus_canorus/ASM70932v1/ASSEMBLY_INFO
 cynSem	244447	Cynoglossus semilaevis	2014-02-03 10:23:03	vertebrates_other/Cynoglossus_semilaevis/Cse_v1.0/ASSEMBLY_INFO
 danPle	13037	Danaus plexippus	2014-06-16 12:06:09	invertebrates/Danaus_plexippus/DanPle_1.0/ASSEMBLY_INFO
 danRer	7955	Danio rerio	2012-11-14 10:16:19	vertebrates_other/Danio_rerio/Zv9/ASSEMBLY_INFO
@@ -285,6 +288,7 @@ nasVit	7425	Nasonia vitripennis	2014-06-16 12:06:09	invertebrates/Nasonia_vitrip
 nasVit	7425	Nasonia vitripennis	2014-06-16 12:06:09	invertebrates/Nasonia_vitripennis/Nvit_2.1/ASSEMBLY_INFO
 necAme	51031	Necator americanus	2014-06-16 12:06:09	invertebrates/Necator_americanus/N_americanus_v1/ASSEMBLY_INFO
 neoBri	32507	Neolamprologus brichardi	2012-11-14 10:16:20	vertebrates_other/Neolamprologus_brichardi/NeoBri1.0/ASSEMBLY_INFO
+nipNip	128390	Nipponia nippon	2014-06-17 10:23:06	vertebrates_other/Nipponia_nippon/ASM70822v1/ASSEMBLY_INFO
 nomLeu	61853	Nomascus leucogenys	2012-11-14 10:16:18	vertebrates_mammals/Nomascus_leucogenys/Nleu1.0/ASSEMBLY_INFO
 nomLeu	61853	Nomascus leucogenys	2012-11-14 10:16:18	vertebrates_mammals/Nomascus_leucogenys/Nleu1.1/ASSEMBLY_INFO
 nomLeu	61853	Nomascus leucogenys	2013-01-03 06:25:12	vertebrates_mammals/Nomascus_leucogenys/Nleu_3.0/ASSEMBLY_INFO
@@ -322,6 +326,7 @@ pelCri	36300	Pelecanus crispus	2014-06-04 10:23:03	vertebrates_other/Pelecanus_c
 pelSin	13735	Pelodiscus sinensis	2012-11-14 10:16:20	vertebrates_other/Pelodiscus_sinensis/PelSin_1.0/ASSEMBLY_INFO
 perMan	230844	Peromyscus maniculatus bairdii	2013-12-06 10:23:20	vertebrates_mammals/Peromyscus_maniculatus/Pman_1.0/ASSEMBLY_INFO
 petMar	7757	Petromyzon marinus	2012-11-14 10:16:20	vertebrates_other/Petromyzon_marinus/Petromyzon_marinus-7.0/ASSEMBLY_INFO
+phaCar	9209	Phalacrocorax carbo	2014-06-18 10:23:16	vertebrates_other/Phalacrocorax_carbo/ASM70892v1/ASSEMBLY_INFO
 phaLep	97097	Phaethon lepturus	2014-06-04 10:23:03	vertebrates_other/Phaethon_lepturus/ASM68728v1/ASSEMBLY_INFO
 phlPap	29031	Phlebotomus papatasi	2014-06-16 12:06:09	invertebrates/Phlebotomus_papatasi/Ppap_1.0/ASSEMBLY_INFO
 phoRub	9218	Phoenicopterus ruber ruber	2014-06-04 10:23:03	vertebrates_other/Phoenicopterus_ruber/ASM68726v1/ASSEMBLY_INFO
