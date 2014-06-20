@@ -200,5 +200,6 @@ searchTable lincRNAsTranscripts
 searchMethod exact
 searchType genePred
 semiShortCircuit 1
-termRegex (TCONS_.*|H[0-9]+)
+termRegex TCONS_.*
+dontCheck H19
 searchPriority 50
