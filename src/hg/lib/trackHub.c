@@ -1100,7 +1100,7 @@ struct trackHub *hub = NULL;
 int retVal = 0;
 
 if (errCatchStart(errCatch))
-    hub = trackHubOpen(hubUrl, "");
+    hub = trackHubOpen(hubUrl, "hub_0");
 errCatchEnd(errCatch);
 
 if (errCatch->gotError)
@@ -1118,6 +1118,12 @@ verbose(2, "%s has %d elements\n", hub->genomesFile, slCount(hub->genomeList));
 
 if (searchFp != NULL)
     {
+    struct trackHubGenome *genomeList = hub->genomeList;
+
+    for(; genomeList ; genomeList = genomeList->next)
+	fprintf(searchFp, "%s\t%s\n",hub->url,  trackHubSkipHubName(genomeList->name));
+    fprintf(searchFp, "%s\t%s\t%s\n",hub->url, hub->shortLabel, hub->longLabel);
+
     if (hub->descriptionUrl != NULL)
 	{
 	char *html = netReadTextFileIfExists(hub->descriptionUrl);
@@ -1129,7 +1135,7 @@ if (searchFp != NULL)
 	strSwapChar(stripHtml, '(', ' ');
 	strSwapChar(stripHtml, '[', ' ');
 	strSwapChar(stripHtml, ']', ' ');
-	fprintf(searchFp, "%s\t%s\t%s\t%s\n",hub->url, hub->shortLabel, hub->longLabel, stripHtml);
+	fprintf(searchFp, "%s\t%s\n",hub->url,  stripHtml);
 	}
 
     return 0;
