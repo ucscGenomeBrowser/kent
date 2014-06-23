@@ -160,7 +160,7 @@ function updateOrMakeNamedVariable(theForm,aName,aValue)
 {   // Store a value to a named input.  Will make the input if necessary
     var inp = normed($(theForm).find("input[name='"+aName+"']:last"));
     if (inp) {
-        inp.val(aValue);
+        $(inp).val(aValue);
         inp.disabled = false;
     } else
         makeHiddenInput(theForm,aName,aValue);
