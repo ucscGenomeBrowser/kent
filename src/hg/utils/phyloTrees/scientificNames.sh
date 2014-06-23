@@ -24,10 +24,13 @@ s/capHir1/Capra_hircus/;
 s/equPrz1/Equus_przewalskii/;
 s/chrAsi1/Chrysochloris_asiatica/;
 s/colLiv1/Columba_livia/;
+s/apaVit1/Apaloderma_vittatum/;
 s/phoRub1/Phoenicopterus_ruber_ruber/;
 s/opiHoa1/Opisthocomus_hoazin/;
 s/fulGla1/Fulmarus_glacialis/;
+s/chaVoc1/Charadrius_vociferus/;
 s/calAnn1/Calypte_anna/;
+s/cucCan1/Cuculus_canorus/;
 s/conCri1/Condylura_cristata/;
 s/criGri1/Cricetulus_griseus/;
 s/mesAur1/Mesocricetus_auratus/;
@@ -48,8 +51,10 @@ s/cotJap1/Coturnix_japonica/;
 s/lepDis1/Leptosomus_discolor/;
 s/merNub1/Merops_nubicus/;
 s/pelCri1/Pelecanus_crispus/;
+s/phaCar1/Phalacrocorax_carbo/;
 s/phaLep1/Phaethon_lepturus/;
 s/pteGut1/Pterocles_gutturalis/;
+s/nipNip1/Nipponia_nippon/;
 s/egrGar1/Egretta_garzetta/;
 s/pygAde1/Pygoscelis_adeliae/;
 s/aptFor1/Aptenodytes_forsteri/;
@@ -140,7 +145,3 @@ done | tail -1 | while read treeDocString
 do
     /cluster/bin/phast/tree_doctor -r "${treeDocString}" ${F}
 done | sed -e "s/00*)/)/g; s/00*,/,/g"
-
-# petMar2 -> Lamprey ;" \
-#	${F} | sed -e "s/X_trop/X._trop/; s/Burton_s/Burton's/; s/David_s/David's/;"
-

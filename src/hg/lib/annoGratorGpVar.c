@@ -17,12 +17,11 @@ struct annoGratorGpVar
     struct annoGrator grator;	// external annoGrator/annoStreamer interface
     struct lm *lm;		// localmem scratch storage
     struct dyString *dyScratch;	// dyString for local temporary use
-    struct dnaSeq *curChromSeq;	// sequence cache, to avoid repeated calls to twoBitReadSeqFrag
     struct annoGratorGpVarFuncFilter *funcFilter; // Which categories of effect should we output?
     enum annoGratorOverlap gpVarOverlapRule;	  // Should we set RJFail if no overlap?
 
-	struct variant *(*variantFromRow)(struct annoGratorGpVar *self, struct annoRow *row,
-					  char *refAllele);
+    struct variant *(*variantFromRow)(struct annoGratorGpVar *self, struct annoRow *row,
+				      char *refAllele);
     // Translate row from whatever format it is (pgSnp or VCF) into generic variant.
     };
 
@@ -227,7 +226,8 @@ return annoRowFromStringArray(rowIn->chrom, rowIn->start, rowIn->end, rowIn->rig
 			      wordsOut, sSelf->numCols, callerLm);
 }
 
-struct dnaSeq *genePredToGenomicSequence(struct genePred *pred, char *chromSeq, struct lm *lm)
+struct dnaSeq *genePredToGenomicSequence(struct genePred *pred, struct annoAssembly *aa,
+					 struct lm *lm)
 /* Return concatenated genomic sequence of exons of pred. */
 {
 int txLen = 0;
@@ -238,10 +238,10 @@ char *seq = lmAlloc(lm, txLen + 1);
 int offset = 0;
 for (i=0; i < pred->exonCount; i++)
     {
-    int blockStart = pred->exonStarts[i];
-    int blockSize = pred->exonEnds[i] - blockStart;
-    memcpy(seq+offset, chromSeq+blockStart, blockSize*sizeof(*seq));
-    offset += blockSize;
+    int exonStart = pred->exonStarts[i];
+    int exonEnd = pred->exonEnds[i];
+    annoAssemblyGetSeq(aa, pred->chrom, exonStart, exonEnd, seq+offset, txLen+1-offset);
+    offset += (exonEnd - exonStart);
     }
 if(pred->strand[0] == '-')
     reverseComplement(seq, txLen);
@@ -253,19 +253,13 @@ txSeq->size = txLen;
 return txSeq;
 }
 
-char *getGenomicSequence(char *chromSeq, uint start, uint end, struct lm *lm)
-/* Return genomic sequence from start to end. */
-{
-return lmCloneStringZ(lm, chromSeq+start, (end - start));
-}
-
 static struct annoRow *aggvGenRows( struct annoGratorGpVar *self, struct variant *variant,
 				    struct genePred *pred, struct annoRow *inRow,
 				    struct lm *callerLm)
 // put out annoRows for all the gpFx that arise from variant and pred
 {
-struct dnaSeq *transcriptSequence = genePredToGenomicSequence(pred, self->curChromSeq->dna,
-							      self->lm);
+struct annoStreamer *sSelf = (struct annoStreamer *)self;
+struct dnaSeq *transcriptSequence = genePredToGenomicSequence(pred, sSelf->assembly, self->lm);
 struct gpFx *effects = gpFxPredEffect(variant, pred, transcriptSequence, self->lm);
 struct annoRow *rows = NULL;
 
@@ -314,30 +308,14 @@ static struct variant *variantFromPgSnpRow(struct annoGratorGpVar *self, struct 
 					   char *refAllele)
 /* Translate pgSnp array of words into variant. */
 {
-struct pgSnp pgSnp;
-pgSnpStaticLoad(row->data, &pgSnp);
-struct variant *var = variantFromPgSnp(&pgSnp, refAllele, self->lm);
-return var;
+return variantFromPgSnpAnnoRow(row, refAllele, self->lm);
 }
 
 static struct variant *variantFromVcfRow(struct annoGratorGpVar *self, struct annoRow *row,
 					 char *refAllele)
 /* Translate vcf array of words into variant. */
 {
-char **words = row->data;
-char *alStr = vcfGetSlashSepAllelesFromWords(words, self->dyScratch);
-// The reference allele is the first allele in alStr -- and it may be trimmed on both ends with
-// respect to the raw VCF ref allele in words[3], so copy vcfRefAllele back out of alStr.
-// That ensures that variantNew will get the reference allele that matches the slash-separated
-// allele string.
-int refLen = strlen(alStr);
-char *p = strchr(alStr, '/');
-if (p)
-    refLen = p - alStr;
-char vcfRefAllele[refLen + 1];
-safencpy(vcfRefAllele, sizeof(vcfRefAllele), alStr, refLen);
-unsigned alCount = countChars(alStr, '/') + 1;
-return variantNew(row->chrom, row->start, row->end, alCount, alStr, vcfRefAllele, self->lm);
+return variantFromVcfAnnoRow(row, refAllele, self->lm, self->dyScratch);
 }
 
 static void setVariantFromRow(struct annoGratorGpVar *self, struct annoStreamRows *primaryData)
@@ -357,6 +335,7 @@ struct annoRow *annoGratorGpVarIntegrate(struct annoGrator *gSelf,
 // needed to capture all the changes
 {
 struct annoGratorGpVar *self = (struct annoGratorGpVar *)gSelf;
+struct annoStreamer *sSelf = &(gSelf->streamer);
 lmCleanup(&(self->lm));
 self->lm = lmInit(0);
 // Temporarily tweak primaryRow's start and end to find upstream/downstream overlap:
@@ -373,12 +352,6 @@ primaryRow->end = pEnd;
 
 if (self->variantFromRow == NULL)
     setVariantFromRow(self, primaryData);
-if (self->curChromSeq == NULL || differentString(self->curChromSeq->name, primaryRow->chrom))
-    {
-    dnaSeqFree(&self->curChromSeq);
-    struct twoBitFile *tbf = self->grator.streamer.assembly->tbf;
-    self->curChromSeq = twoBitReadSeqFragLower(tbf, primaryRow->chrom, 0, 0);
-    }
 // TODO Performance improvement: instead of creating the transcript sequence for each
 // variant that intersects the transcript, cache transcript sequence; possibly
 // an slPair with a concatenation of {chrom, txStart, txEnd, cdsStart, cdsEnd,
@@ -386,8 +359,10 @@ if (self->curChromSeq == NULL || differentString(self->curChromSeq->name, primar
 // the list is no longer in the list of rows from the internal annoGratorIntegrate call,
 // drop it.
 // BETTER YET: make a callback for gpFx to get CDS sequence only when it needs it.
-char *refAllele = getGenomicSequence(self->curChromSeq->dna, primaryRow->start, primaryRow->end,
-				     self->lm);
+int refAlBufSize = primaryRow->end - primaryRow->start + 1;
+char refAllele[refAlBufSize];
+annoAssemblyGetSeq(sSelf->assembly, primaryRow->chrom, primaryRow->start, primaryRow->end,
+		   refAllele, sizeof(refAllele));
 struct variant *variant = self->variantFromRow(self, primaryRow, refAllele);
 
 if (rows == NULL)

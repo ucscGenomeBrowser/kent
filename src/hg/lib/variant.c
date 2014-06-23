@@ -5,6 +5,7 @@
  * See README in this or parent directory for licensing information. */
 
 #include "common.h"
+#include "annoRow.h"
 #include "variant.h"
 
 struct allele  *alleleClip(struct allele *allele, int sx, int ex, struct lm *lm)
@@ -115,10 +116,33 @@ slReverse(&variant->alleles);
 return variant;
 }
 
-struct variant *variantFromPgSnp(struct pgSnp *pgSnp, char *refAllele, struct lm *lm)
-/* convert pgSnp record to variant record */
+struct variant *variantFromPgSnpAnnoRow(struct annoRow *row, char *refAllele, struct lm *lm)
+/* Translate pgSnp annoRow into variant (allocated by lm). */
 {
-return variantNew(pgSnp->chrom, pgSnp->chromStart, pgSnp->chromEnd, pgSnp->alleleCount,
-		  pgSnp->name, refAllele, lm);
+struct pgSnp pgSnp;
+pgSnpStaticLoad(row->data, &pgSnp);
+return variantNew(pgSnp.chrom, pgSnp.chromStart, pgSnp.chromEnd, pgSnp.alleleCount,
+		  pgSnp.name, refAllele, lm);
+}
+
+struct variant *variantFromVcfAnnoRow(struct annoRow *row, char *refAllele, struct lm *lm,
+				      struct dyString *dyScratch)
+/* Translate vcf array of words into variant (allocated by lm, overwriting dyScratch
+ * as temporary scratch string). */
+{
+char **words = row->data;
+char *alStr = vcfGetSlashSepAllelesFromWords(words, dyScratch);
+// The reference allele is the first allele in alStr -- and it may be trimmed on both ends with
+// respect to the raw VCF ref allele in words[3], so copy vcfRefAllele back out of alStr.
+// That ensures that variantNew will get the reference allele that matches the slash-separated
+// allele string.
+int refLen = strlen(alStr);
+char *p = strchr(alStr, '/');
+if (p)
+    refLen = p - alStr;
+char vcfRefAllele[refLen + 1];
+safencpy(vcfRefAllele, sizeof(vcfRefAllele), alStr, refLen);
+unsigned alCount = countChars(alStr, '/') + 1;
+return variantNew(row->chrom, row->start, row->end, alCount, alStr, vcfRefAllele, lm);
 }
 
