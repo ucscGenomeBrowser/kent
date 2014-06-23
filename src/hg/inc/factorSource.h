@@ -60,5 +60,8 @@ void factorSourceOutput(struct factorSource *el, FILE *f, char sep, char lastSep
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+struct asObject *factorSourceAsObj();
+/* Return asObject describing fields of factorSource */
+
 #endif /* FACTORSOURCE_H */
 
