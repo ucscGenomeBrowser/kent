@@ -319,7 +319,7 @@ if (doAllTests || sameString(test, vepOut))
     struct annoStreamer *snpSource = gpVarSource->next;
     struct annoFormatter *vepOut = annoFormatVepNew("stdout", FALSE, primary, "vepSamplePgSnp",
 						    gpVarSource, "UCSC Genes ...",
-						    snpSource, "just dbSNP 135");
+						    snpSource, "just dbSNP 135", assembly);
     struct annoGratorQuery *query = annoGratorQueryNew(assembly, primary, gratorList, vepOut);
     annoGratorQuerySetRegion(query, "chr1", 876900, 886920);
     annoGratorQueryExecute(query);
@@ -345,7 +345,7 @@ if (doAllTests || sameString(test, vepOutIndelTrim))
     struct annoStreamer *gpVarSource = (struct annoStreamer *)gratorList;
     struct annoFormatter *vepOut = annoFormatVepNew("stdout", FALSE, primary, "indelTrimVcf",
 						    gpVarSource, "EnsemblGenes ...",
-						    NULL, NULL);
+						    NULL, NULL, assembly);
     struct annoGratorQuery *query = annoGratorQueryNew(assembly, primary, gratorList, vepOut);
     annoGratorQuerySetRegion(query, "chr11", 0, 0);
     annoGratorQueryExecute(query);
@@ -384,7 +384,7 @@ if (doAllTests || sameString(test, gpFx))
     struct annoStreamer *dbNsfpSource = snpSource->next->next;
     struct annoFormatter *vepOut = annoFormatVepNew("stdout", FALSE, primary, "some more variants",
 						    gpVarSource, "UCSC Genes of course",
-						    snpSource, "now snp137.");
+						    snpSource, "now snp137.", assembly);
     annoFormatVepAddExtraItem(vepOut, dbNsfpSource, "SIFT", "SIFT score from dbNSFP", "");
     struct annoGratorQuery *query = annoGratorQueryNew(assembly, primary, gratorList, vepOut);
     annoGratorQuerySetRegion(query, "chr19", 45405960, 45419476);

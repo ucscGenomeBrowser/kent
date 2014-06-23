@@ -26,6 +26,7 @@ struct annoFormatVepExtraItem
     char *description;				// Text description for output header
     int rowIx;					// Offset of column in row from data source
 						// (N/A for wig sources)
+    boolean isRegulatory;			// TRUE if overlap implies regulatory_region
     };
 
 struct annoFormatVep;
@@ -65,6 +66,7 @@ struct annoFormatVep
     FILE *f;				// Output file handle
     struct lm *lm;			// localmem for scratch storage
     struct dyString *dyScratch;		// dyString for local temporary use
+    struct annoAssembly *assembly;	// Reference assembly (for sequence)
     int lmRowCount;			// counter for periodic localmem cleanup
     int varNameIx;			// Index of name column from variant source, or -1 if N/A
     int varAllelesIx;			// Index of alleles column from variant source, or -1
@@ -201,8 +203,9 @@ if (!doHtml)
     afVepLineBreak(f, doHtml);
     }
 struct annoFormatVepConfig *config = self->config;
-fprintf(f, "%sVariants:%s %s (%s)", bStart, bEnd,
-	config->variantDescription, config->variantSource->name);
+fprintf(f, "%sVariants:%s %s", bStart, bEnd, config->variantDescription);
+if (! strstr(config->variantSource->name, "/trash/"))
+    fprintf(f, " (%s)", config->variantSource->name);
 afVepLineBreak(f, doHtml);
 fprintf(f, "%sTranscripts:%s %s (%s)", bStart, bEnd,
 	config->gpVarDescription, config->gpVarSource->name);
@@ -254,24 +257,32 @@ while ((p = strchr(p, '-')) != NULL)
     }
 }
 
-static void afVepPrintNameAndLoc(struct annoFormatVep *self, struct annoRow *varRow)
-/* Print variant name and position in genome. */
+static char *afVepGetAlleles(struct annoFormatVep *self, struct annoRow *varRow)
+/* Return a string with slash-separated alleles.  Result is alloc'd by self->lm. */
 {
 char **varWords = (char **)(varRow->data);
 char *alleles = NULL;
 if (self->primaryIsVcf)
-    alleles = vcfGetSlashSepAllelesFromWords(varWords, self->dyScratch);
+    alleles = lmCloneString(self->lm, vcfGetSlashSepAllelesFromWords(varWords, self->dyScratch));
+else if (self->varAllelesIx >= 0)
+    alleles = lmCloneString(self->lm, varWords[self->varAllelesIx]);
+else
+    errAbort("annoFormatVep: afVepSetConfig didn't specify how to get alleles");
+compressDashes(alleles);
+return alleles;
+}
+
+static void afVepPrintNameAndLoc(struct annoFormatVep *self, struct annoRow *varRow)
+/* Print variant name and position in genome. */
+{
+char **varWords = (char **)(varRow->data);
 uint start1Based = varRow->start + 1;
 // Use variant name if available, otherwise construct an identifier:
 if (self->varNameIx >= 0 && !sameString(varWords[self->varNameIx], "."))
     fputs(varWords[self->varNameIx], self->f);
 else
     {
-    if (self->varAllelesIx >= 0)
-	alleles = varWords[self->varAllelesIx];
-    else if (!self->primaryIsVcf)
-	errAbort("annoFormatVep: afVepSetConfig didn't specify how to get alleles");
-    compressDashes(alleles);
+    char *alleles = afVepGetAlleles(self, varRow);
     fprintf(self->f, "%s_%u_%s", varRow->chrom, start1Based, alleles);
     }
 afVepNextColumn(self->f, self->doHtml);
@@ -304,7 +315,11 @@ else
 
 #define afVepPrintPlaceholder(f, doHtml) afVepPrintPlaceholders(f, 1, doHtml)
 
-#define placeholderForEmpty(val) (isEmpty(val) ? "-" : val)
+INLINE char *placeholderForEmpty(char *val)
+/* Return VEP placeholder "-" if val is empty, otherwise return val. */
+{
+return (isEmpty(val) ? "-" : val);
+}
 
 
 static void afVepPrintGene(struct annoFormatVep *self, struct annoRow *gpvRow)
@@ -1036,7 +1051,7 @@ for (extraSrc = extras;  extraSrc != NULL;  extraSrc = extraSrc->next)
 	}
     }
 // VEP automatically adds DISTANCE for upstream/downstream variants
-if (gpFx->soNumber == upstream_gene_variant || gpFx->soNumber == downstream_gene_variant)
+if (gpFx && (gpFx->soNumber == upstream_gene_variant || gpFx->soNumber == downstream_gene_variant))
     {
     afVepNewExtra(self, pGotExtra);
     // In order to really understand the boundary conditions of Ensembl's DISTANCE function,
@@ -1055,7 +1070,7 @@ if (gpFx->soNumber == upstream_gene_variant || gpFx->soNumber == downstream_gene
     fprintf(self->f, "DISTANCE=%d", distance);
     }
 boolean includeExonNumber = TRUE;  //#*** optional in VEP
-if (includeExonNumber)
+if (includeExonNumber && gpFx)
     {
     // Add Exon or intron number if applicable
     enum detailType deType = gpFx->detailType;
@@ -1081,6 +1096,7 @@ if (!*pGotExtra)
 }
 
 static void afVepLmCleanup(struct annoFormatVep *self)
+/* Clean out localmem every 1k rows. */
 {
 self->lmRowCount++;
 if (self->lmRowCount > 1024)
@@ -1091,11 +1107,11 @@ if (self->lmRowCount > 1024)
     }
 }
 
-static void afVepPrintOneLine(struct annoFormatVep *self, struct annoStreamRows *varData,
-			      struct annoRow *gpvRow,
-			      struct annoStreamRows gratorData[], int gratorCount)
-/* Print one line of VEP: a variant, an allele, functional consequences of that allele,
- * and whatever else is included in the config. */
+static void afVepPrintOneLineGpVar(struct annoFormatVep *self, struct annoStreamRows *varData,
+				   struct annoRow *gpvRow,
+				   struct annoStreamRows gratorData[], int gratorCount)
+/* Print one line of VEP with a coding gene consequence: a variant, an allele,
+ * functional consequences of that allele, and whatever else is included in the config. */
 {
 afVepLmCleanup(self);
 struct annoRow *varRow = varData->rowList;
@@ -1110,6 +1126,78 @@ afVepPrintExtrasOther(self, varRow, gpvRow, gpFx, gratorData, gratorCount, &gotE
 afVepEndRow(self->f, self->doHtml);
 }
 
+static boolean afVepIsRegulatory(struct annoFormatVep *self,
+				 struct annoStreamRows gratorData[], int gratorCount)
+/* Return TRUE if one of the extraSource items is a regulatory region. */
+{
+struct annoFormatVepExtraSource *extras = self->config->extraSources, *extraSrc;
+for (extraSrc = extras;  extraSrc != NULL;  extraSrc = extraSrc->next)
+    {
+    struct annoRow *extraRows = getRowsFromSource(extraSrc->source, gratorData, gratorCount);
+    if (extraRows != NULL)
+	{
+	struct annoFormatVepExtraItem *extraItem;
+	for (extraItem = extraSrc->items;  extraItem != NULL;  extraItem = extraItem->next)
+	    {
+	    if (extraItem->isRegulatory)
+		return TRUE;
+	    }
+	}
+    }
+return FALSE;
+}
+
+static char *afVepGetFirstAltAllele(struct annoFormatVep *self, struct annoRow *varRow)
+/* For VEP we must print out some alternate allele, whether the alternate allele is
+ * related to any other info (like coding changes) or not.  Pick the first non-reference
+ * allele. */
+{
+int refAlBufSize = varRow->end - varRow->start + 1;
+char refAllele[refAlBufSize];
+annoAssemblyGetSeq(self->assembly, varRow->chrom, varRow->start, varRow->end,
+		   refAllele, sizeof(refAllele));
+struct variant *variant = NULL;
+if (self->primaryIsVcf)
+    variant = variantFromVcfAnnoRow(varRow, refAllele, self->lm, self->dyScratch);
+else
+    variant = variantFromPgSnpAnnoRow(varRow, refAllele, self->lm);
+return firstAltAllele(variant->alleles);
+}
+
+static void afVepPrintPredictionsReg(struct annoFormatVep *self, struct annoRow *varRow)
+/* Print VEP allele, placeholder gene and item names, 'RegulatoryFeature',
+ * 'regulatory_region_variant', and placeholder coding effect columns. */
+{
+fprintf(self->f, "%s", afVepGetFirstAltAllele(self, varRow));
+afVepNextColumn(self->f, self->doHtml);
+afVepPrintPlaceholders(self->f, 2, self->doHtml);
+fputs("RegulatoryFeature", self->f);
+afVepNextColumn(self->f, self->doHtml);
+fputs(soTermToString(regulatory_region_variant), self->f);
+afVepNextColumn(self->f, self->doHtml);
+// Coding effect columns are N/A:
+afVepPrintPlaceholders(self->f, 5, self->doHtml);
+}
+
+static void afVepPrintRegulatory(struct annoFormatVep *self, struct annoStreamRows *varData,
+				 struct annoStreamRows gratorData[], int gratorCount)
+/* If there are EXTRAS column sources that imply regulatory_region_variant, print out
+ * lines with that consequence (no gpFx/dbNSFP). */
+{
+if (afVepIsRegulatory(self, gratorData, gratorCount))
+    {
+    afVepLmCleanup(self);
+    struct annoRow *varRow = varData->rowList;
+    afVepStartRow(self->f, self->doHtml);
+    afVepPrintNameAndLoc(self, varRow);
+    afVepPrintPredictionsReg(self, varRow);
+    afVepPrintExistingVar(self, varRow, gratorData, gratorCount);
+    boolean gotExtra = FALSE;
+    afVepPrintExtrasOther(self, varRow, NULL, NULL, gratorData, gratorCount, &gotExtra);
+    afVepEndRow(self->f, self->doHtml);
+    }
+}
+
 static void afVepFormatOne(struct annoFormatter *fSelf, struct annoStreamRows *primaryData,
 			   struct annoStreamRows gratorData[], int gratorCount)
 /* Print one variant's VEP (possibly multiple lines) using collected rows. */
@@ -1117,7 +1205,8 @@ static void afVepFormatOne(struct annoFormatter *fSelf, struct annoStreamRows *p
 struct annoFormatVep *self = (struct annoFormatVep *)fSelf;
 struct annoRow *gpVarRows = gratorData[0].rowList, *gpvRow;
 for (gpvRow = gpVarRows;  gpvRow != NULL;  gpvRow = gpvRow->next)
-    afVepPrintOneLine(self, primaryData, gpvRow, gratorData, gratorCount);
+    afVepPrintOneLineGpVar(self, primaryData, gpvRow, gratorData, gratorCount);
+afVepPrintRegulatory(self, primaryData, gratorData, gratorCount);
 }
 
 static void afVepEndHtml(struct annoFormatVep *self)
@@ -1204,7 +1293,8 @@ struct annoFormatter *annoFormatVepNew(char *fileName, boolean doHtml,
 				       struct annoStreamer *gpVarSource,
 				       char *gpVarDescription,
 				       struct annoStreamer *snpSource,
-				       char *snpDescription)
+				       char *snpDescription,
+				       struct annoAssembly *assembly)
 /* Return a formatter that will write functional predictions in the same format as Ensembl's
  * Variant Effect Predictor to fileName (can be "stdout").
  * variantSource and gpVarSource must be provided; snpSource can be NULL. */
@@ -1224,6 +1314,7 @@ self->lm = lmInit(0);
 self->dyScratch = dyStringNew(0);
 self->needHeader = TRUE;
 self->doHtml = doHtml;
+self->assembly = assembly;
 struct annoFormatVepConfig *config = annoFormatVepConfigNew(variantSource, variantDescription,
 							    gpVarSource, gpVarDescription,
 							    snpSource, snpDescription);
@@ -1231,10 +1322,11 @@ afVepSetConfig(self, config);
 return (struct annoFormatter *)self;
 }
 
-void annoFormatVepAddExtraItem(struct annoFormatter *fSelf, struct annoStreamer *extraSource,
-			       char *tag, char *description, char *column)
+static void afvAddExtraItemMaybeReg(struct annoFormatter *fSelf, struct annoStreamer *extraSource,
+				    char *tag, char *description, char *column, boolean isReg)
 /* Tell annoFormatVep that it should include the given column of extraSource
  * in the EXTRAS column with tag.  The VEP header will include tag's description.
+ * If isReg, overlap implies that the variant has consequence regulatory_region_variant.
  * For some special-cased sources e.g. dbNsfp files, column may be NULL/ignored. */
 {
 struct annoFormatVep *self = (struct annoFormatVep *)fSelf;
@@ -1259,5 +1351,24 @@ item->description = cloneString(description);
 item->rowIx = -1;
 if (isNotEmpty(column))
     item->rowIx = asColumnFindIx(extraSource->asObj->columnList, column);
+item->isRegulatory = isReg;
 slAddTail(&(src->items), item);
+}
+
+void annoFormatVepAddExtraItem(struct annoFormatter *fSelf, struct annoStreamer *extraSource,
+			       char *tag, char *description, char *column)
+/* Tell annoFormatVep that it should include the given column of extraSource
+ * in the EXTRAS column with tag.  The VEP header will include tag's description.
+ * For some special-cased sources e.g. dbNsfp files, column may be NULL/ignored. */
+{
+afvAddExtraItemMaybeReg(fSelf, extraSource, tag, description, column, FALSE);
+}
+
+void annoFormatVepAddRegulatory(struct annoFormatter *fSelf, struct annoStreamer *regSource,
+				char *tag, char *description, char *column)
+/* Tell annoFormatVep to use the regulatory_region_variant consequence if there is overlap
+ * with regSource, and to include the given column of regSource in the EXTRAS column.
+ * The VEP header will include tag's description. */
+{
+afvAddExtraItemMaybeReg(fSelf, regSource, tag, description, column, TRUE);
 }

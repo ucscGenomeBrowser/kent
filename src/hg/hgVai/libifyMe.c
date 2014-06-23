@@ -16,6 +16,7 @@
 #include "annoGratorGpVar.h"
 #include "annoStreamBigBed.h"
 #include "annoStreamDb.h"
+#include "annoStreamDbFactorSource.h"
 #include "annoStreamTab.h"
 #include "annoStreamVcf.h"
 #include "annoStreamWig.h"
@@ -396,6 +397,13 @@ else if (startsWith("bigBed", tdb->type))
     {
     char *fileOrUrl = getBigDataFileName(db, tdb, selTable, chrom);
     streamer = annoStreamBigBedNew(fileOrUrl, assembly, maxOutRows);
+    }
+else if (sameString("factorSource", tdb->type))
+    {
+    char *sourceTable = trackDbSetting(tdb, "sourceTable");
+    char *inputsTable = trackDbSetting(tdb, "inputTrackTable");
+    streamer = annoStreamDbFactorSourceNew(db, tdb->track, sourceTable, inputsTable, assembly,
+					   maxOutRows);
     }
 else
     {
