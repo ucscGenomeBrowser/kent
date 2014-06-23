@@ -879,6 +879,8 @@ else
 *retGenome = cloneString(*retGenome);
 *retClade = hClade(*retGenome);
 
+if ( (*retClade != NULL) && sameString(*retClade, "other"))
+    cartRemove(cart, "position");
 /* Detect change of database and reset db-specific cart variables: */
 if (oldVars)
     {
