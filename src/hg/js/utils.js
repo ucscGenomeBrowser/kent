@@ -160,7 +160,7 @@ function updateOrMakeNamedVariable(theForm,aName,aValue)
 {   // Store a value to a named input.  Will make the input if necessary
     var inp = normed($(theForm).find("input[name='"+aName+"']:last"));
     if (inp) {
-        inp.val(aValue);
+        $(inp).val(aValue);
         inp.disabled = false;
     } else
         makeHiddenInput(theForm,aName,aValue);
@@ -529,12 +529,13 @@ function setTableRowVisibility(button, prefix, hiddenPrefix, titleDesc, doAjax)
             else
                 $(button).text('-');
         }
-        if (newVal === 1) {
+        var contents = $("tr[id^='"+prefix+"-']");
+        if(newVal === 1) {
             $(button).attr('title', 'Expand this '+titleDesc);
-            $("tr[id^='"+prefix+"-']").hide();
+            contents.hide();
         } else {
             $(button).attr('title', 'Collapse this '+titleDesc);
-            $("tr[id^='"+prefix+"-']").show();
+            contents.show().trigger('show');
         }
         $(hidden).val(newVal);
 	if (doAjax) {
