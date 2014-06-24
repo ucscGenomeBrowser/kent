@@ -24,7 +24,8 @@
 # v = verbose
 # z = compress
 # P = permit partial download (for restart)
-RSYNCOPTS="-ltrz"
+# h = human readable
+RSYNCOPTS="-ltrzvh"
 # rsync server for CGIs and html files
 RSYNCSRC="rsync://hgdownload.cse.ucsc.edu"
 RSYNCCGIBIN=cgi-bin
@@ -36,18 +37,27 @@ if [ "$(id -u)" != "0" ] ; then
    exit 1
 fi
 
-# if we didn't get a parameter this is the main update script
-# check flag , update ourself and run with parameter to avoid recursion
+# check flag if run with no parameter (=from cron)
 if [ "$#" -eq 0 ] ; then
    # check a flag file to see if anything on hgdownload actually changed
-   if /root/urlIsNotNewerThanFile http://hgdownload.cse.ucsc.edu/admin/hgcentral.sql /root/lastUpdateTime.flag
+   if /root/urlIsNotNewerThanFile http://hgdownload.cse.ucsc.edu/gbib/lastUpdate /root/lastUpdateTime.flag
    then
        exit 0
    fi
+fi
 
+# use the right update script, depending on version
+if [ "$1" == "alpha" -o "$1" == "beta" -o "$1" == "devbox" ] ; then
+    UPDATEBASE=http://hgwdev.soe.ucsc.edu/gbib
+else
+    UPDATEBASE=http://hgdownload.cse.ucsc.edu/gbib
+fi
+
+# unless already calling self, update self and call self
+if [ "$BASH_ARGV" != "noUpdate" ] ; then
     echo getting new update script
-    wget http://hgwdev.soe.ucsc.edu/browserbox/updateBrowser.sh -O /root/updateBrowser.sh -q
-    sudo /root/updateBrowser.sh noUpdate
+    wget $UPDATEBASE/updateBrowser.sh -O /root/updateBrowser.sh -q
+    sudo /root/updateBrowser.sh $1 noUpdate
     exit 0
 fi
 
@@ -66,37 +76,33 @@ if [ -f /tmp/lastJob.pid ] && [ "$(ps x -o pgid | grep $(cat /tmp/lastJob.pid) |
     exit 1
 fi
 	
-if [ "$1" == "alpha" ] ; then
-    echo updating from alpha server
-    RSYNCSRC="rsync://hgwdev.soe.ucsc.edu"
-    RSYNCOPTS="-ltrv"
-    RSYNCCGIBIN=cgi-bin
-    RSYNCHTDOCS=htdocs
-fi
-
-if [ "$1" == "beta" ] ; then
-    echo updating from beta server
-    RSYNCSRC="rsync://hgwdev.soe.ucsc.edu"
-    RSYNCOPTS="-ltrv"
-    RSYNCCGIBIN=cgi-bin-beta
-    RSYNCHTDOCS=htdocs-beta
-fi
-
 echo
 echo Now updating the genome browser software and data:
 
-# update CGIs
-echo updating CGIs...
-rsync --delete --delete-excluded $RSYNCOPTS $RSYNCSRC/$RSYNCCGIBIN /usr/local/apache/cgi-bin/ --exclude=hg.conf --exclude edw* --exclude *private --exclude hgNearData/**
-chown -R www-data.www-data /usr/local/apache/cgi-bin/*
+# alpha states cannot use rsync on hgwdev, need to use tarball
+if [ "$1" == "alpha" -o "$1" == "beta" -o "$1" == "devbox" ] ; then
+    echo updating from prepared $1-package on genome-test
+    pushd . > /dev/null
+    cd /usr/local/apache
+    wget http://genome-test.soe.ucsc.edu/browserbox/$1.tgz -O - | tar xvz
+    cd /
+    wget http://genome-test.soe.ucsc.edu/browserbox/$1-push.tgz -O - | tar xvz
+    popd
+# normal updates go via rsync
+else
+    # update CGIs
+    echo updating CGIs...
+    rsync --delete $RSYNCOPTS $RSYNCSRC/$RSYNCCGIBIN /usr/local/apache/cgi-bin/ --exclude=hg.conf --exclude edw* --exclude *private --exclude hgNearData/**
 
-echo updating HTML files...
-rsync --delete $RSYNCOPTS $RSYNCSRC/$RSYNCHTDOCS/ /usr/local/apache/htdocs/ --include **/customTracks/*.html --exclude ENCODE/ --exclude *.bw --exclude *.gz --exclude favicon.ico --exclude folders --exclude ancestors/** --exclude admin/** --exclude goldenPath/customTracks/*/* --exclude images/mammalPsg/** --exclude style/gbib.css --exclude images/title.jpg --exclude images/homeIconSprite.png
+    echo updating HTML files...
+    rsync --delete $RSYNCOPTS $RSYNCSRC/$RSYNCHTDOCS/ /usr/local/apache/htdocs/ --include **/customTracks/*.html --exclude ENCODE/ --exclude *.bw --exclude *.gz --exclude favicon.ico --exclude folders --exclude ancestors/** --exclude admin/** --exclude goldenPath/customTracks/*/* --exclude images/mammalPsg/** --exclude style/gbib.css --exclude images/title.jpg --exclude images/homeIconSprite.png
+fi
+
+chown -R www-data.www-data /usr/local/apache/cgi-bin/*
 chown -R www-data.www-data /usr/local/apache/htdocs/
-#wget http://hgwdev.soe.ucsc.edu/favicon.ico -O /usr/local/apache/htdocs/favicon.ico
 
 echo updating GBDB files...
-rsync $RSYNCOPTS --existing rsync://hgdownload.cse.ucsc.edu/gbdb/hg19/ /data/gbdb/hg19/
+rsync $RSYNCOPTS --existing rsync://hgdownload.cse.ucsc.edu/gbdb/ /data/gbdb/
 chown -R www-data.www-data /data/gbdb/
 
 echo updating MYSQL files - browser will not work during the MYSQL update
@@ -104,7 +110,7 @@ echo updating MYSQL files - browser will not work during the MYSQL update
 # it doesn't work if I use two mysql invocations, as 'flush tables with read lock'
 # is only valid as long as the session is open
 # so I use the SYSTEM command
-echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync $RSYNCOPTS --existing rsync://hgdownload.cse.ucsc.edu/mysql/hg19/ /data/mysql/hg19/; SYSTEM chown -R mysql.mysql /data/mysql/; UNLOCK TABLES;" | mysql
+echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync $RSYNCOPTS --existing rsync://hgdownload.cse.ucsc.edu/mysql/ /data/mysql/; SYSTEM chown -R mysql.mysql /data/mysql/; UNLOCK TABLES;" | mysql
 
 echo updating hgcentral database
 echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync $RSYNCOPTS --existing rsync://hgdownload.cse.ucsc.edu/mysql/hgcentral/ /data/mysql/hgcentral/; SYSTEM chown -R mysql.mysql /data/mysql/hgcentral; UNLOCK TABLES;" | mysql
@@ -112,6 +118,9 @@ echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync $RSYNCOPTS --existing rsync://hg
 mysql hgcentral -e 'UPDATE blatServers SET host=CONCAT(host,".cse.ucsc.edu")'
 # the box does not support HAL right now, remove the ecoli hubs
 mysql hgcentral -e 'delete from hubPublic where hubUrl like "%nknguyen%"'
+
+echo pulling other files
+rsync $RSYNCOPTS hgdownload.cse.ucsc.edu::gbib/push/ /
 
 echo patching menu 
 cp /usr/local/apache/htdocs/inc/globalNavBar.inc /tmp/navbar.inc
@@ -123,14 +132,14 @@ rm /tmp/navbar.inc
 
 # patch left side menu:
 # remove encode, neandertal, galaxy, visiGene, Downloads, cancer browser, microbial, mirrors, jobs
-# <A CLASS="leftbar" HREF="cgi-bin/hgGateway">
-#                        #Genome Browser</A><HR>
 for i in hgNear ENCODE Neandertal galaxy VisiGene hgdownload genome-cancer microbes mirror jobs; do
     sed -i '/<A CLASS="leftbar" .*'$i'.*$/,/<HR>$/d' /usr/local/apache/htdocs/index.html
 done
 
-# patch main page
+# patch main pages
 sed -i 's/About the UCSC Genome Bioinformatics Site/About the UCSC Genome Browser in a Box/g' /usr/local/apache/htdocs/indexIntro.html
+perl -0777 -pi -e 's/It also.+ provides.+> projects. //s' /usr/local/apache/htdocs/indexIntro.html
+perl -0777 -pi -e 's/Program-driven.+ per day.//s' /usr/local/apache/htdocs/indexInfo.html
 # patch contacts page
 sed -i 's/......cgi-bin\/hgUserSuggestion/http:\/\/genome.ucsc.edu\/cgi-bin\/hgUserSuggestion/' /usr/local/apache/htdocs/contacts.html
 # remove visigene from top menu
@@ -139,25 +148,24 @@ sed -i '/hgVisiGene/d' /usr/local/apache/htdocs/inc/home.topbar.html
 # not needed, but running anyway
 chown www-data.www-data /usr/local/apache/htdocs/inc/globalNavBar.inc
 
-# make sure we have the current hg.conf
-sudo wget -q http://hgwdev.soe.ucsc.edu/browserbox/hg.conf -O /usr/local/apache/cgi-bin/hg.conf
-
 # make sure we have the right symlink to /media
 sudo ln -sfT /media /usr/local/apache/htdocs/folders
 
 # make sure this tableList is not there, it can break the box
 mysql hgcentral -e 'drop table if exists tableList'
 
-# hide big tracks
+# hide the really big tracks
 mysql hg19 -e 'update trackDb set visibility=0 where tableName like "cons%way"'
 mysql hg19 -e 'update trackDb set visibility=0 where tableName like "ucscRetroAli%"'
+
+# rsync tables on hgdownload are sometimes a in crashed state
+echo checking mysql tables
+sudo myisamchk --force --silent --fast --update-state /data/mysql/hg19/*.MYI /data/mysql/hgcentral/*.MYI /data/mysql/hgFixed/*.MYI 2> /dev/null
 
 #LATENCY=`ping genome.ucsc.edu -n -c1 -q | grep rtt | cut -d' ' -f4 | cut -d/ -f2 | cut -d. -f1`
 #if [ "$LATENCY" -gt "90" ]; then
 #echo making low-latency changes
-# excluding some rarely used tracks from track search
-# potentially add: rgdQtl rgdRatQtl hgIkmc acembly jaxQtlAsIs jaxQtlPadded vegaGene
-/usr/local/apache/cgi-bin/hgMirror hideTracks
+/usr/local/apache/cgi-bin/hgMirror postRsyncUpdates
 
 touch /root/lastUpdateTime.flag
 echo update done.
