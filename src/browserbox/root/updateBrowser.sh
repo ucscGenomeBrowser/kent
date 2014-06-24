@@ -25,7 +25,8 @@
 # z = compress
 # P = permit partial download (for restart)
 # h = human readable
-RSYNCOPTS="-ltrzvh"
+# u = skip if file is newer on receiver
+RSYNCOPTS="-ltrzvhu"
 # rsync server for CGIs and html files
 RSYNCSRC="rsync://hgdownload.cse.ucsc.edu"
 RSYNCCGIBIN=cgi-bin
@@ -48,6 +49,9 @@ fi
 
 # use the right update script, depending on version
 if [ "$1" == "alpha" -o "$1" == "beta" -o "$1" == "devbox" ] ; then
+    # the alpha/beta/devbox states always overwrite even if files are newer
+    # note the missing -u option
+    RSYNCOPTS="-ltrzvh"
     UPDATEBASE=http://hgwdev.soe.ucsc.edu/gbib
 else
     UPDATEBASE=http://hgdownload.cse.ucsc.edu/gbib
