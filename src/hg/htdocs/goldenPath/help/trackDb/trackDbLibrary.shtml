@@ -847,7 +847,7 @@
     based on the name field. </P>
     <P>
     Put the identifiers for these links into extended
-    bigBed fields as explained in example 3 of the <a href="/goldenPath/help/bigBed.html">bigBed documentation</a>.
+    bigBed fields as explained in example 3 of the <a href="/goldenPath/help/bigBed.html#Ex3">bigBed documentation</a>.
     The field names from your .as file are the field names referenced in this statement.
     The urls in this statement support the same wildcards as the <A
     onclick="jumpTo(this)" HREF="#">url</A> statement.  Make sure to enclose
@@ -857,7 +857,7 @@
 
     <P><B>Example:</B></P>
     <pre>
-    urls pmid="http://www.ncbi.nlm.nih.gov/pubmed/$$" hgncId="http://www.genenames.org/data/hgnc_data.php?hgnc_id=$$"
+    urls pmid="http://www.ncbi.nlm.nih.gov/pubmed/$$" spId="http://www.uniprot.org/uniprot/$$"
     </pre>
 </DIV>
 
