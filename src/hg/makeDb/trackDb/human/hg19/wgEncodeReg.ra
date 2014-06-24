@@ -344,6 +344,35 @@ canPack On
     scoreFilterLimits 100:1000
     priority 1.6
 
+    track wgEncodeRegDnaseClusteredV2
+    release alpha
+    shortLabel DNase Clusters V2
+    longLabel Digital DNaseI Hypersensitivity Clusters in 125 cell types from ENCODE (V2)
+    type bed 5 .
+    superTrack wgEncodeReg dense
+    inputTrackTable wgEncodeRegDnaseClusteredInputsV2
+    inputTableFieldDisplay cellType treatment lab
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    visibility dense
+    useScore 1
+    scoreFilter 100
+    scoreFilterLimits 100:1000
+    priority 1.6
+
+    track wgEncodeRegDnaseClusteredV3
+    shortLabel DNase Clusters
+    longLabel Digital DNaseI Hypersensitivity Clusters in 125 cell types from ENCODE
+    type bed 5 .
+    superTrack wgEncodeReg dense
+    inputTrackTable wgEncodeRegDnaseClusteredInputsV2
+    inputTableFieldDisplay cellType treatment lab
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    visibility dense
+    useScore 1
+    scoreFilter 100
+    scoreFilterLimits 100:1000
+    priority 1.6
+
     track wgEncodeRegTfbsClusteredV2
     release beta, public
     shortLabel Txn Fac ChIP V2
