@@ -90,8 +90,8 @@ FORCEFIXED = ['trackVersion', 'tableList']
 
 # big file table base URL
 # points to a http directory with <db>/bigFiles.tab files that tell us which bigfile goes to which track
-BIGFILETABLEURL = "http://hgwdev.soe.ucsc.edu/~max/browserbox/%s/bigFiles.tab.gz" # %s == db
-#BIGFILETABLEURL = "http://hgdownload.cse.ucsc.edu/goldenpath/%s/database/bigFiles.tab.gz"
+#BIGFILETABLEURL = "http://hgwdev.soe.ucsc.edu/~max/browserbox/%s/bigFiles.tab.gz" # %s == db
+BIGFILETABLEURL = "http://hgdownload.cse.ucsc.edu/goldenpath/%s/database/bigFiles.txt.gz"
 
 # cache of hg.conf dict
 hgConf = None
@@ -1383,7 +1383,11 @@ def postRsyncChanges(db, localSizes):
     " remove some tracks from trackDb, others from hgFindSpec and add a few row to tableList"
     if not mysqlDbLoaded:
         return
-    conn = sqlConnect(db, "local")
+    try:
+        conn = sqlConnect(db, "local")
+    except MySQLdb.OperationalError, e:
+        return
+
     hideSomeTracks(conn, localSizes)
     removeSomeTracksFromSearch(conn)
     addTableList(db, conn)
