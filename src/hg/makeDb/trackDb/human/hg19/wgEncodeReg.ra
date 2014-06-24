@@ -331,6 +331,7 @@ canPack On
     priority 1.6
 
     track wgEncodeRegDnaseClusteredV2
+    release beta, public
     shortLabel DNase Clusters
     longLabel Digital DNaseI Hypersensitivity Clusters in 125 cell types from ENCODE
     type bed 5 .
