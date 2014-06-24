@@ -18991,12 +18991,15 @@ if (cgiVarExists("o"))
 	       database, tdb->track);
 	printf("<B>Other Position Relative Orientation:</B>%s<BR>\n",
 	       dup.strand);
-	printf("<B>Filter Verdict:</B> %s<BR>\n", dup.verdict);
-	printf("&nbsp;&nbsp;&nbsp;<B> testResult:</B>%s<BR>\n", dup.testResult);
-	printf("&nbsp;&nbsp;&nbsp;<B> chits:</B>%s<BR>\n", dup.chits);
-	printf("&nbsp;&nbsp;&nbsp;<B> ccov:</B>%s<BR>\n", dup.ccov);
-	printf("&nbsp;&nbsp;&nbsp;<B> posBasesHit:</B>%d<BR>\n",
-	       dup.posBasesHit);
+	if(sameString("canFam1", database))
+	{
+		printf("<B>Filter Verdict:</B> %s<BR>\n", dup.verdict);
+		printf("&nbsp;&nbsp;&nbsp;<B> testResult:</B>%s<BR>\n", dup.testResult);
+		printf("&nbsp;&nbsp;&nbsp;<B> chits:</B>%s<BR>\n", dup.chits);
+		printf("&nbsp;&nbsp;&nbsp;<B> ccov:</B>%s<BR>\n", dup.ccov);
+		printf("&nbsp;&nbsp;&nbsp;<B> posBasesHit:</B>%d<BR>\n",
+		       dup.posBasesHit);
+	} else {};
 	if (alignUrl != NULL)
 	    printf("<A HREF=%s/%s "
 		   "TARGET=\"%s:%d-%d\">Optimal Global Alignment</A><BR>\n",

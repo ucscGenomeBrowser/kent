@@ -1700,18 +1700,6 @@ group x
 visibility hide
 type bed 3 +
 
-searchTable uc16
-searchMethod exact
-searchType bed
-searchPriority 10
-termRegex uc\.[0-9]+
-
-searchTable ux16
-searchMethod exact
-searchType bed
-searchPriority 10
-termRegex ux\.[0-9]+
-
 track exoniphyHMR
 shortLabel Exoniphy HMR
 longLabel Exoniphy Human/Mouse/Rat, Lifted from Hg16

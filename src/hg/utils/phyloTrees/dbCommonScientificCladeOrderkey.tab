@@ -48,7 +48,7 @@ balAcu1	Minke whale	Balaenoptera acutorostrata scammoni	mammal	cetartiodactyla	2
 oviAri3	Sheep	Ovis aries	mammal	cetartiodactyla	2369
 capHir1	Domestic goat	Capra hircus	mammal	cetartiodactyla	2375
 bosTau7	Cow	Bos taurus	mammal	cetartiodactyla	2379
-bosMut1	Wild yak	Bos mutus	mammal	cetartiodactyla	2381
+bosMut1	Wild yak	Bos grunniens mutus	mammal	cetartiodactyla	2381
 bubBub1	Water buffalo	Bubalus bubalis	mammal	cetartiodactyla	2383
 equCab2	Horse	Equus caballus	mammal	perissodactyla	2409
 equPrz1	Przewalski horse	Equus przewalskii	mammal	perissodactyla	 2409
@@ -102,7 +102,7 @@ galGal4	Chicken	Gallus gallus	vertebrate	aves	4349
 cotJap1	Japanese quail	Japanese quail	vertebrate	aves	4353
 chaVoc1	Killdeer	Charadrius vociferus	vertebrate	aves	4354
 cucCan1	Common cuckoo	Cuculus canorus	vertebrate	aves	4355
-apaVit1	Rock pigeon	 Apaloderma vittatum	vertebrate	aves	4355
+apaVit1	Rock pigeon	Apaloderma vittatum	vertebrate	aves	4355
 anaPla1	Mallard duck	Anas platyrhynchos	vertebrate	aves	4357
 pseHum1	Tibetan ground jay	Pseudopodoces humilis	vertebrate	aves	4358
 zonAlb1	White-throated sparrow	Zonotrichia albicollis	vertebrate	aves	4359
