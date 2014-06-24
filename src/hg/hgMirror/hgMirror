@@ -1135,7 +1135,8 @@ def getLocalSizes(db):
     cmd = 'sudo -u mysql /bin/ls -l %s > %s' % (path, sqlFname)
     ret = runCmd(cmd, mustRun=False)
     if ret!=0:
-        print "<small>info: cannot read file sizes from %s, local file sizes unknown</small><br>" % path
+        if runningAtUcsc():
+            print "<small>info: cannot read file sizes from %s, local file sizes unknown</small><br>" % path
         return sizes
 
     for line in open(sqlFname):
