@@ -443,9 +443,9 @@ def humanReadable(totalSize):
     gbyte = mbyte*1024
     tbyte = gbyte*1024
     if totalSize>tbyte:
-        sizeStr = "%d TB" % (totalSize/tbyte)
+        sizeStr = "%.1f TB" % (float(totalSize)/tbyte)
     elif totalSize>gbyte:
-        sizeStr = "%d GB" % (totalSize/gbyte)
+        sizeStr = "%.1f GB" % (float(totalSize)/gbyte)
     elif totalSize>mbyte:
         sizeStr = "%d MB" % (totalSize/mbyte)
     elif totalSize>1024:
@@ -1441,21 +1441,30 @@ def htmlMiddle(args):
 
     # show list of files is told to do so
     elif "showFiles" in args.keys() and "db" in args.keys():
+        addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabels, trackChildren, \
+            tableToGbdbFiles, trackTables, tableSizes)
         trackName = args["showFiles"].value
         tables, gbdbFiles = trackToFiles(trackName, trackTables, trackChildren, \
                 tableSizes, tableToGbdbFiles, noTableTracks)
+
+        totalSize = 0
 
         print "<h4>MySQL tables linked to track %s</h4>" % trackName
         for table in tables:
             size = tableSizes[table]
             sizeStr = humanReadable(size)
+            totalSize += size
             print table+" (%s) <br>" % sizeStr
         
         print "<h4>GBDB files linked to track %s</h4>" % trackName
         for gbdbFname in gbdbFiles:
             size = gbdbSizes[gbdbFname]
+            totalSize += size
             sizeStr = humanReadable(size)
             print gbdbFname+" (%s) <br>" % sizeStr
+
+        totalSizeStr = humanReadable(totalSize)
+        print "<h4>Total size: %s</h4>" % totalSizeStr
         sys.exit(0)
 
     # if we have a jobId in URL, show the rsync log
