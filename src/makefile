@@ -14,7 +14,7 @@ update:
 	${MAKE} clean
 
 topLibs:
-	@./machTest.sh
+	@MACHTYPE=${MACHTYPE} ./machTest.sh
 	cd lib && ${MAKE}
 	cd jkOwnLib && ${MAKE}
 	cd parasol/lib && ${MAKE}

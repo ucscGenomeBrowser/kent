@@ -237,6 +237,7 @@ motifMaxWindow factorSource
 motifDrawDefault factorSource
 msaTable wig wigMafProt wigMaf
 ncbiAccXref bed
+negateValues wigMaf bigWig bedGraph wig
 nextExonText *
 nextItemButton *
 noColorTag bam
@@ -313,7 +314,9 @@ scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR peptideMapping bi
 scoreFilterMax bed bedlogR peptideMapping bigBed
 scoreMax bed bedlogR interaction peptideMapping bigBed narrowPeak
 scoreMin broadPeak narrowPeak bed bedlogR interaction peptideMapping
+searchIndex bigBed
 searchMethod bed
+searchTrix bigBed
 searchType bed
 selectSubject psl
 seqTable bed

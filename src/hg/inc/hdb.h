@@ -658,9 +658,6 @@ boolean hTrackCanPack(char *db, char *trackName);
 bool hTrackIsSubtrack(char *db, char *trackName);
 /* Return TRUE if this track is a subtrack. */
 
-char *hGetParent(char *db, char *subtrackName);
-/* Return parent of subtrack. */
-
 char *hGetTrackForTable(char *db, char *table);
 /* Given a table name, get first track associated with it. */
 

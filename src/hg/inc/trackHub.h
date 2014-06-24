@@ -170,5 +170,12 @@ void trackHubFindPos(char *db, char *term, struct hgPositions *hgp);
 void trackHubAddDescription(char *trackDbFile, struct trackDb *tdb);
 /* Fetch tdb->track's html description (or nearest ancestor's non-empty description)
  * and store in tdb->html. */
+
+struct trackHubGenome *trackHubGetGenome(char *database);
+/* get genome structure for an assembly in a trackHub */
+
+boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost,
+    char **pPort);
+/* get "blat" and "transBlat" entries (if any) for an assembly hub */
 #endif /* TRACKHUB_H */
 

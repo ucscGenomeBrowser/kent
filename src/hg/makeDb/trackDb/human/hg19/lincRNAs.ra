@@ -196,3 +196,10 @@ html lincRNAs
 	subGroups view=lincRNAsRefseqExp tissueType=hlf_r1
 
 
+searchTable lincRNAsTranscripts
+searchMethod exact
+searchType genePred
+semiShortCircuit 1
+termRegex TCONS_.*
+dontCheck H19
+searchPriority 50

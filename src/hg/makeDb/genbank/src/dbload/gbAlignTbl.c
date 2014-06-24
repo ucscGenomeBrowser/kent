@@ -5,7 +5,7 @@
  * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "gbAlignTbl.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "hash.h"
 #include "portable.h"
 #include "linefile.h"

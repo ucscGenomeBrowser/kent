@@ -8,7 +8,7 @@
 #include "chromInfo.h"
 #include "portable.h"
 #include "hgConfig.h"
-#include "errabort.h"
+#include "errAbort.h"
 
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */

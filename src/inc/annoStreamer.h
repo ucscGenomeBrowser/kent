@@ -23,7 +23,7 @@ struct annoStreamer
     // Public methods
     struct asObject *(*getAutoSqlObject)(struct annoStreamer *self);
     void (*setAutoSqlObject)(struct annoStreamer *self, struct asObject *asObj);
-    /* Get and set autoSql representation (do not modify or free!) */
+    /* Get and set autoSql representation (do not modify or free asObj!) */
 
     void (*setRegion)(struct annoStreamer *self, char *chrom, uint rStart, uint rEnd);
     /* Set genomic region for query; if chrom is NULL, region is whole genome.
@@ -32,9 +32,9 @@ struct annoStreamer
     char *(*getHeader)(struct annoStreamer *self);
     /* Get the file header as a string (possibly NULL, possibly multi-line). */
 
-    struct annoFilter *(*getFilters)(struct annoStreamer *self);
     void (*setFilters)(struct annoStreamer *self, struct annoFilter *newFilters);
-    /* Get and set filters */
+    void (*addFilters)(struct annoStreamer *self, struct annoFilter *newFilters);
+    /* Set/add filters. Memory management of filters is up to caller. */
 
     struct annoRow *(*nextRow)(struct annoStreamer *self, char *minChrom, uint minEnd,
 			       struct lm *lm);
@@ -78,11 +78,12 @@ void annoStreamerSetRegion(struct annoStreamer *self, char *chrom, uint rStart, 
  * Many subclasses should make their own setRegion method that calls this and
  * configures their data connection to change to the new position. */
 
-struct annoFilter *annoStreamerGetFilters(struct annoStreamer *self);
-/* Return supported filters with current settings.  Callers can modify and free when done. */
-
 void annoStreamerSetFilters(struct annoStreamer *self, struct annoFilter *newFilters);
-/* Free old filters and use clone of newFilters. */
+/* Replace any existing filters with newFilters.  It is up to calling code to
+ * free old filters and allocate newFilters. */
+
+void annoStreamerAddFilters(struct annoStreamer *self, struct annoFilter *newFilters);
+/* Add newFilter(s).  It is up to calling code to allocate newFilters. */
 
 void annoStreamerInit(struct annoStreamer *self, struct annoAssembly *assembly,
 		      struct asObject *asObj, char *name);

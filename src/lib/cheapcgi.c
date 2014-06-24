@@ -9,7 +9,7 @@
 #include "cheapcgi.h"
 #include "portable.h"
 #include "linefile.h"
-#include "errabort.h"
+#include "errAbort.h"
 #ifndef GBROWSE
 #include "mime.h"
 #endif /* GBROWSE */

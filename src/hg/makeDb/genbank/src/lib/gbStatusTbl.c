@@ -10,7 +10,7 @@
 #include "hash.h"
 #include "dystring.h"
 #include "localmem.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "jksql.h"
 
 

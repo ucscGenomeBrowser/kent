@@ -228,7 +228,7 @@ NCSecwShutdown();
 
 #include <stdarg.h>
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 
 void jp2DecInit(char *jp2Path, int *retWidth, int *retHeight)
 {

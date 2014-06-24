@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "options.h"
 #include "htmshell.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "cheapcgi.h"
 #include "jksql.h"
 #include "encodeDataWarehouse.h"

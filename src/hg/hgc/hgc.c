@@ -14,7 +14,7 @@
 #include "hvGfx.h"
 #include "portable.h"
 #include "regexHelper.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "dystring.h"
 #include "nib.h"
 #include "cheapcgi.h"
@@ -956,7 +956,8 @@ char* replaceInUrl(struct trackDb *tdb, char *url, char *idInUrl, boolean encode
 struct dyString *uUrl = NULL;
 struct dyString *eUrl = NULL;
 char startString[64], endString[64];
-char *ins[9], *outs[9];
+char begItem[64], endItem[64];
+char *ins[11], *outs[11];
 char *eItem = (encode ? cgiEncode(idInUrl) : cloneString(idInUrl));
 
 safef(startString, sizeof startString, "%d", winStart);
@@ -993,6 +994,25 @@ if (stringIn(":", idInUrl)) {
     outs[7] = idInUrl;	/* otherwise, these are not expected */
     outs[8] = idInUrl;	/* to be used */
 }
+
+// URL may now contain item boundaries
+ins[9] = "${";
+ins[10] = "$}";
+if (cartOptionalString(cart, "o") && cartOptionalString(cart, "t"))
+    {
+    int itemBeg = cartIntExp(cart, "o") + 1; // Should strip any unexpected commas
+    int itemEnd = cartIntExp(cart, "t");
+    safef(begItem, sizeof begItem, "%d", itemBeg);
+    safef(endItem, sizeof endItem, "%d", itemEnd);
+    outs[9] = begItem;
+    outs[10] = endItem;
+    }
+else // should never be but I am unwilling to bet the farm
+    {
+    outs[9] = startString;
+    outs[10] = endString;
+    }
+
 uUrl = subMulti(url, ArraySize(ins), ins, outs);
 outs[0] = eItem;
 eUrl = subMulti(url, ArraySize(ins), ins, outs);

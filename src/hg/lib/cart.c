@@ -5,7 +5,7 @@
 #include "hCommon.h"
 #include "obscure.h"
 #include "linefile.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "hash.h"
 #include "cheapcgi.h"
 #include "cartDb.h"

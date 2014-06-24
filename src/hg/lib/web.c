@@ -6,7 +6,7 @@
 #include "hCommon.h"
 #include "obscure.h"
 #include "dnautil.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "htmshell.h"
 #include "web.h"
 #include "hPrint.h"
@@ -879,6 +879,8 @@ else
 *retGenome = cloneString(*retGenome);
 *retClade = hClade(*retGenome);
 
+if ( (*retClade != NULL) && sameString(*retClade, "other"))
+    cartRemove(cart, "position");
 /* Detect change of database and reset db-specific cart variables: */
 if (oldVars)
     {

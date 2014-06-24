@@ -7,7 +7,7 @@
 #include "bed.h"
 #include "obscure.h"
 #include "dystring.h"
-#include "errabort.h"
+#include "errAbort.h"
 
 
 static struct optionSpec optionSpecs[] = 
