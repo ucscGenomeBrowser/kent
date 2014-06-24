@@ -19,7 +19,7 @@
       # Process these into clusters in a bed file and load clusters into
       # table.
       /bin/ls -1 peaks/*.narrowPeak.gz > peak.lst
-      regClusterMakeTableOfTables uw02 peak.lst peak.table
+       uw02 peak.lst peak.table
       regCluster peak.table /dev/null peak.bed
       awk '$4 > 1 && $5 >= 100' peak.bed > wgEncodeRegDnaseClustered.bed
       hgLoadBed hg19 wgEncodeRegDnaseClustered wgEncodeRegDnaseClustered.bed
@@ -265,6 +265,8 @@
     # See doc/encodeAwgHg19.txt
     # There are 125 cell type+treatments  represented -- UW, Duke, and Uw+Duke for 14 cell types
     # Previous track had 74
+
+    # Redoing filtering (2014-06-24) V3 version, to include single-cell clusters
  
     cd /hive/data/genomes/hg19/bed/wgEncodeReg
     mkdir -p dnaseAwg
@@ -290,8 +292,13 @@
     awk '$4 > 1 && $5 >= 100' peak.bed > wgEncodeRegDnaseClusteredV2.bed
     wc -l wgEncodeRegDnaseClusteredV2.bed
     # 1281988 wgEncodeRegDnaseClusteredV2.bed
-
     hgLoadBed hg19 wgEncodeRegDnaseClusteredV2 wgEncodeRegDnaseClusteredV2.bed
+
+    awk '$5 >= 100' peak.bed > wgEncodeRegDnaseClusteredV3.bed
+    wc -l wgEncodeRegDnaseClusteredV3.bed
+    # 1867665 wgEncodeRegDnaseClusteredV3.bed
+    hgLoadBed hg19 wgEncodeRegDnaseClusteredV3 wgEncodeRegDnaseClusteredV3.bed
+
 
     #  NOTE: V1 had ~1M clusters, V2 has 1.2M
     # It would be nice if hgc sorted datasets by signal or cellType
@@ -315,6 +322,8 @@
     mkdir downloads
     gzip -c wgEncodeRegDnaseClusteredV2.bed > downloads/wgEncodeRegDnaseClusteredV2.bed.gz
     gzip -c wgEncodeRegDnaseClusteredInputsV2.tab > downloads/wgEncodeRegDnaseClusteredInputsV2.tab.gz
+
+    gzip -c wgEncodeRegDnaseClusteredV3.bed > downloads/wgEncodeRegDnaseClusteredV3.bed.gz
 
     # use (existing) ENCODE DCC downloads dir
     set dload = /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeRegDnaseClustered
@@ -341,14 +350,38 @@
     # vim README.txt
     cp README.txt md5sum.txt ..
 
+    mkdir release3
+    rm beta releaseLatest
+    ln -s release3 beta
+    ln -s release3 releaseLatest
+    cd $dir/downloads
+    ln wgEncodeRegDnaseClusteredV3.bed.gz $dload
+    cd $dload
+    ln wgEncodeRegDnaseClusteredV3.bed.gz wgEncodeRegDnaseClusteredInputsV3.tab.gz releaseLatest
+    cp README.txt releaseLatest
+    cd releaseLatest
+    md5sum *.gz > md5sum.txt
+    # vim README.txt
+    cp README.txt md5sum.txt ..
+
     # add minimal metaObject to metaDb to associate new table with (pseudo-)composite 
     # wgEncodeRegDnaseClustered -- this allows hgTrackUi to locate downloads
+    cd ~/kent/src/hg/makeDb/trackDb/human/hg19/metaDb/alpha
     cat > wgEncodeRegDnaseClustered.ra << 'EOF'
 metaObject wgEncodeRegDnaseClusteredV2
 objType table
 composite wgEncodeRegDnaseClustered
 fileName wgEncodeRegDnaseClusteredV2.bed.gz
 tableName wgEncodeRegDnaseClusteredV2
+project wgEncode
+'EOF'
+
+    cat > wgEncodeRegDnaseClustered.ra << 'EOF'
+metaObject wgEncodeRegDnaseClusteredV3
+objType table
+composite wgEncodeRegDnaseClustered
+fileName wgEncodeRegDnaseClusteredV3.bed.gz
+tableName wgEncodeRegDnaseClusteredV3
 project wgEncode
 'EOF'
 
