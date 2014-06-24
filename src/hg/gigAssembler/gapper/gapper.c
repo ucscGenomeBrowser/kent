@@ -5,7 +5,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "portable.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "obscure.h"
 #include "localmem.h"
 #include "hCommon.h"

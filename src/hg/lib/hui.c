@@ -4726,7 +4726,7 @@ safef(option, sizeof(option), "%s.%s", name, HORIZGRID );
 wiggleGridDropDown(option, horizontalGrid);
 printf("&nbsp;&nbsp;&nbsp;at y =");
 safef(option, sizeof(option), "%s.%s", name, YLINEMARK );
-cgiMakeDoubleVarWithLimits(option, yLineMark, "Indicator at Y", 0, tDbMinY, tDbMaxY);
+cgiMakeDoubleVarInRange(option, yLineMark, "Indicator at Y", 0, NULL, NULL);
 safef(option, sizeof(option), "%s.%s", name, YLINEONOFF );
 wiggleYLineMarkDropDown(option, yLineMarkOnOff);
 printf("</td>");

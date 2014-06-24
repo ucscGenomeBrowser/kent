@@ -276,6 +276,10 @@ void edwReserveTempFile(char *path);
 void edwBwaIndexPath(struct edwAssembly *assembly, char indexPath[PATH_LEN]);
 /* Fill in path to BWA index. */
 
+void edwAsPath(char *format, char path[PATH_LEN]);
+/* Convert something like "narrowPeak" in format to fill path involving
+ * encValDir/as/narrowPeak.as */
+
 void edwAlignFastqMakeBed(struct edwFile *ef, struct edwAssembly *assembly,
     char *fastqPath, struct edwValidFile *vf, FILE *bedF,
     double *retMapRatio,  double *retDepth,  double *retSampleCoverage,

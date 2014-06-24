@@ -5,6 +5,7 @@
 
 /* version history: 
  *    1 - initial release 
+ *    2 - added sponge option
  */
 
 #include "common.h"
@@ -19,7 +20,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "edwBamFilter v1 - Remove reads from a BAM file based on a number of criteria.\n"
+  "edwBamFilter v2 - Remove reads from a BAM file based on a number of criteria.\n"
   "usage:\n"
   "   edwBamFilter in.bam out.bam\n"
   "options:\n"

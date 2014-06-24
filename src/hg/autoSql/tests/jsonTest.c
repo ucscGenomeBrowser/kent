@@ -5,7 +5,7 @@
 #include "output/doc2.h"
 
 #include "common.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "linefile.h"
 #include "obscure.h"
 #include "dystring.h"

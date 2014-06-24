@@ -6,6 +6,16 @@ endif
 ifeq (${CFLAGS},)
     CFLAGS=
 endif
+ifeq (${MACHTYPE},)
+    MACHTYPE:=$(shell uname -m)
+#    $(info MACHTYPE was empty, set to: ${MACHTYPE})
+endif
+ifneq (,$(findstring -,$(MACHTYPE)))
+#    $(info MACHTYPE has - sign ${MACHTYPE})
+    MACHTYPE:=$(shell uname -m)
+#    $(info MACHTYPE has - sign set to: ${MACHTYPE})
+endif
+
 HG_DEFS=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -DMACHTYPE_${MACHTYPE}
 HG_INC=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../inc
 
@@ -84,11 +94,22 @@ ifeq (${PNGLIB},)
   endif
 endif
 ifeq (${PNGLIB},)
+  ifneq ($(wildcard /usr/local/lib/libpng.a),)
+      PNGLIB=/usr/local/lib/libpng.a
+  endif
+endif
+ifeq (${PNGLIB},)
+      PNGLIB := $(shell libpng-config --ldflags  || true)
+endif
+ifeq (${PNGLIB},)
   PNGLIB=-lpng
 endif
 ifeq (${PNGINCL},)
   ifneq ($(wildcard /opt/local/include/png.h),)
       PNGINCL=-I/opt/local/include
+  else
+      PNGINCL := $(shell libpng-config --I_opts  || true)
+#       $(info using libpng-config to set PNGINCL: ${PNGINCL})
   endif
 endif
 
@@ -102,16 +123,16 @@ ifneq ($(MAKECMDGOALS),clean)
   endif
   # this does *not* work on Mac OSX with the dynamic libraries
   ifneq ($(UNAME_S),Darwin)
-    ifeq (${MYSQLINC},)
-      MYSQLINC := $(shell mysql_config --include | sed -e 's/-I//' || true)
-      #  $(info using mysql_config to set MYSQLINC: ${MYSQLINC})
-    endif
     ifeq (${MYSQLLIBS},)
       MYSQLLIBS := $(shell mysql_config --libs || true)
-      #  $(info using mysql_config to set MYSQLLIBS: ${MYSQLLIBS})
+#        $(info using mysql_config to set MYSQLLIBS: ${MYSQLLIBS})
     endif
   endif
 
+  ifeq (${MYSQLINC},)
+    MYSQLINC := $(shell mysql_config --include | sed -e 's/-I//' || true)
+#        $(info using mysql_config to set MYSQLINC: ${MYSQLINC})
+  endif
   ifeq (${MYSQLINC},)
     ifneq ($(wildcard /usr/local/mysql/include/mysql.h),)
 	  MYSQLINC=/usr/local/mysql/include
@@ -157,9 +178,19 @@ ifneq ($(MAKECMDGOALS),clean)
 	  MYSQLLIBS=/opt/local/lib/mysql55/mysql/libmysqlclient.a
     endif
   endif
+  ifeq (${MYSQLLIBS},)
+    ifneq ($(wildcard /usr/local/Cellar/mysql/5.6.19/lib/libmysqlclient.a),)
+	  MYSQLLIBS=/usr/local/Cellar/mysql/5.6.19/lib/libmysqlclient.a
+    endif
+  endif
+  ifeq (${MYSQLLIBS},)
+    ifneq ($(wildcard /usr/local/Cellar/mysql/5.6.16/lib/libmysqlclient.a),)
+	  MYSQLLIBS=/usr/local/Cellar/mysql/5.6.16/lib/libmysqlclient.a
+    endif
+  endif
   ifeq ($(findstring src/hg/,${CURDIR}),src/hg/)
-      ifeq (${MYSQLINC},)
-	$(error can not find installed mysql development system)
+    ifeq (${MYSQLINC},)
+        $(error can not find installed mysql development system)
     endif
   endif
     # last resort, hoping the compiler can find it in standard locations
@@ -369,3 +400,7 @@ ENCODEDCC_DIR = ${PIPELINE_PATH}/downloads/encodeDCC
 %.o: %.c
 	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${LOWELAB_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
 
+# jshint: off unless JSHINT is already in environment
+ifeq (${JSHINT},)
+    JSHINT=true
+endif

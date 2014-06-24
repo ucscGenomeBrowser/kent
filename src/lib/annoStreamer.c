@@ -4,7 +4,7 @@
  * See README in this or parent directory for licensing information. */
 
 #include "annoStreamer.h"
-#include "errabort.h"
+#include "errAbort.h"
 
 // ----------------------- annoStreamer base methods --------------------------
 
@@ -17,9 +17,7 @@ return self->asObj;
 void annoStreamerSetAutoSqlObject(struct annoStreamer *self, struct asObject *asObj)
 /* Use new asObj and update internal state derived from asObj. */
 {
-annoFilterFreeList(&(self->filters));
 self->asObj = asObj;
-self->filters = annoFiltersFromAsObject(asObj);
 self->numCols = slCount(asObj->columnList);
 }
 
@@ -51,17 +49,17 @@ static char *annoStreamerGetHeader(struct annoStreamer *self)
 return NULL;
 }
 
-struct annoFilter *annoStreamerGetFilters(struct annoStreamer *self)
-/* Return supported filters with current settings.  Callers can modify and free when done. */
+void annoStreamerSetFilters(struct annoStreamer *self, struct annoFilter *newFilters)
+/* Replace any existing filters with newFilters.  It is up to calling code to
+ * free old filters and allocate newFilters. */
 {
-return annoFilterCloneList(self->filters);
+self->filters = newFilters;
 }
 
-void annoStreamerSetFilters(struct annoStreamer *self, struct annoFilter *newFilters)
-/* Free old filters and use clone of newFilters. */
+void annoStreamerAddFilters(struct annoStreamer *self, struct annoFilter *newFilters)
+/* Add newFilter(s).  It is up to calling code to allocate newFilters. */
 {
-annoFilterFreeList(&(self->filters));
-self->filters = annoFilterCloneList(newFilters);
+self->filters = slCat(newFilters, self->filters);
 }
 
 void annoStreamerInit(struct annoStreamer *self, struct annoAssembly *assembly,
@@ -76,8 +74,8 @@ self->getAutoSqlObject = annoStreamerGetAutoSqlObject;
 self->setAutoSqlObject = annoStreamerSetAutoSqlObject;
 self->setRegion = annoStreamerSetRegion;
 self->getHeader = annoStreamerGetHeader;
-self->getFilters = annoStreamerGetFilters;
 self->setFilters = annoStreamerSetFilters;
+self->addFilters = annoStreamerAddFilters;
 self->positionIsGenome = TRUE;
 self->setAutoSqlObject(self, asObj);
 if (name == NULL)
@@ -94,7 +92,6 @@ if (pSelf == NULL)
 struct annoStreamer *self = *pSelf;
 freez(&(self->name));
 freez(&(self->chrom));
-annoFilterFreeList(&(self->filters));
 freez(pSelf);
 }
 

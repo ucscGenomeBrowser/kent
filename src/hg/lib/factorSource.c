@@ -197,3 +197,26 @@ else
 }
 return ret;
 }
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+static char *factorSourceAutoSqlString =
+"table factorSource"
+"\"BED5+ with two fields having variable number of experiment IDs and values (none zero-valued)\""
+"    ("
+"    string chrom;      \"Reference sequence chromosome or scaffold\""
+"    uint   chromStart; \"Start position in chromosome\""
+"    uint   chromEnd;   \"End position in chromosome\""
+"    string name;       \"Name of item\""
+"    uint   score;      \"Score from 0-1000\""
+"    uint expCount;     \"Number of experiment values\""
+"    uint[expCount] expNums; \"Comma separated list of experiment numbers\""
+"    float[expCount] expScores; \"Comma separated list of experiment scores\""
+"    )"
+    ;
+
+struct asObject *factorSourceAsObj()
+/* Return asObject describing fields of factorSource */
+{
+return asParseText(factorSourceAutoSqlString);
+}

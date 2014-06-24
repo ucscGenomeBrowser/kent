@@ -23,15 +23,17 @@ char *analyticsKey = cfgOption("analyticsKey");
 if (isEmpty(analyticsKey))
     return;
 
+/* updated to Universal Analytics code 2014-06-19 */
 
-hPrintf("\n<script type=\"text/javascript\">\n"
-"var gaJsHost = ((\"https:\" == document.location.protocol) ? \"https://ssl.\" : \"http://www.\");\n"
-"document.write(unescape(\"%%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%%3E%%3C/script%%3E\"));\n"
-"</script>\n"
-"<script type=\"text/javascript\">\n"
-"var pageTracker = _gat._getTracker(\"%s\");\n"
-"pageTracker._initData();\n"
-"pageTracker._trackPageview();\n"
-"</script>\n", analyticsKey);
+hPrintf("\n<script>\n"
+"  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\n"
+"  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\n"
+"  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n"
+"  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');\n"
+"  ga('require', 'displayfeatures');\n"
+"  ga('create', '%s', 'ucsc.edu');\n"
+"  ga('send', 'pageview');\n"
+"\n"
+"</script>", analyticsKey);
 
 }

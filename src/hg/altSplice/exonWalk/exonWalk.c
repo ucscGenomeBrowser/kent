@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "heap.h"
 #include "memalloc.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "malloc.h"
 #include "options.h"
 #include "portable.h"

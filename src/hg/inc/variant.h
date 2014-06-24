@@ -6,6 +6,7 @@
 #ifndef VARIANT_H
 #define VARIANT_H
 
+#include "annoRow.h"
 #include "localmem.h"
 #include "pgSnp.h"
 
@@ -33,8 +34,13 @@ struct variant *variantNew(char *chrom, unsigned start, unsigned end, unsigned n
 /* Create a variant from basic information that is easy to extract from most other variant
  * formats: coords, allele count, string of slash-separated alleles and reference allele. */
 
-struct variant *variantFromPgSnp(struct pgSnp *pgSnp, char *refAllele, struct lm *lm);
-/* convert pgSnp record to variant record */
+struct variant *variantFromPgSnpAnnoRow(struct annoRow *row, char *refAllele, struct lm *lm);
+/* Translate pgSnp annoRow into variant (allocated by lm). */
+
+struct variant *variantFromVcfAnnoRow(struct annoRow *row, char *refAllele, struct lm *lm,
+				      struct dyString *dyScratch);
+/* Translate vcf array of words into variant (allocated by lm, overwriting dyScratch
+ * as temporary scratch string). */
 
 struct allele  *alleleClip(struct allele *allele, int sx, int ex, struct lm *lm);
 /* Return new allele pointing to new variant, both clipped to region defined by sx..ex. */

@@ -24,7 +24,7 @@ cd $WEEKLYBLD
 cd ../../../../src/hg/inc/
 
 echo "Current version:"
-cat versionInfo.h
+grep CGI_VERSION versionInfo.h
 
 set currentBranch=`git branch | grep master`
 if ("$currentBranch" != "* master") then
@@ -44,8 +44,10 @@ echo "now committing new version# into source code versionInfo.h [${0}: `date`]"
 
 # -- set the new version # using .cshrc value BRANCHNN --
 set temp = "#define CGI_VERSION "'"'"$BRANCHNN"'"'
-echo $temp > versionInfo.h
-cat versionInfo.h
+echo "/* Copyright (C) 2014 The Regents of the University of California \
+ * See README in this or parent directory for licensing information. */" > versionInfo.h
+echo $temp >> versionInfo.h
+grep CGI_VERSION versionInfo.h
 set temp = "New version number v$BRANCHNN"
 git add versionInfo.h
 git commit -m "$temp" versionInfo.h

@@ -14,7 +14,7 @@ update:
 	${MAKE} clean
 
 topLibs:
-	@./machTest.sh
+	@MACHTYPE=${MACHTYPE} ./machTest.sh
 	cd lib && ${MAKE}
 	cd jkOwnLib && ${MAKE}
 	cd parasol/lib && ${MAKE}
@@ -106,6 +106,8 @@ LIB_TAGS_IN = lib/*.[hc] */lib/*.[hc] */*/lib/*.[hc] */*/*/lib/*.[hc] jkOwnLib/*
 tags:
 	ctags ${LIB_TAGS_IN}
 
+cscope: 
+	cscope -Rb
 # build emacs tags for libraries
 .PHONY: etags
 etags:

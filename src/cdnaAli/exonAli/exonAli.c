@@ -11,7 +11,7 @@
 #include "htmshell.h"
 #include "cheapcgi.h"
 #include "fuzzyFind.h"
-#include "errabort.h"
+#include "errAbort.h"
 
 long clock1000();
 

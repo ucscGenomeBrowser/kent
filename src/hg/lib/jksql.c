@@ -12,7 +12,7 @@
 
 #include "common.h"
 #include "portable.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include <mysql.h>
 #include "dlist.h"
 #include "dystring.h"
@@ -2096,6 +2096,20 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 slReverse(&list);
 return list;
+}
+
+struct slPair *sqlQuickPairList(struct sqlConnection *conn, char *query)
+/* Return a list of slPairs with the results of a two-column query.
+ * Free result with slPairFreeValsAndList. */
+{
+struct slPair *pairList = NULL;
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    slAddHead(&pairList, slPairNew(row[0], cloneString(row[1])));
+sqlFreeResult(&sr);
+slReverse(&pairList);
+return pairList;
 }
 
 

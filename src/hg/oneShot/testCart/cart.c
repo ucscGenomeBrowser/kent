@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "cartDb.h"
 #include "htmshell.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "cart.h"
 
 

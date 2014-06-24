@@ -6,7 +6,7 @@
 #include <utime.h>
 #include "common.h"
 #include "internet.h"
-#include "errabort.h"
+#include "errAbort.h"
 #include "hash.h"
 #include "linefile.h"
 #include "net.h"

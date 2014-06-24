@@ -1834,3 +1834,61 @@ wait
     # verify the track link to INSDC functions
 
 ##############################################################################
+## Lamprey genes from (DONE - 2013-05-11 - Hiram)
+   mkdir /hive/data/genomes/petMar2/bed/lampreyGenes
+   cd /hive/data/genomes/petMar2/bed/lampreyGenes
+   wget --timestamping \
+     http://derringer.genetics.utah.edu/data/Pmarinus_7.0.66_final.tgz
+   tar xvzf Pmarinus_7.0.66_final.tgz
+   gff3ToGenePred Pmarinus_7.0.66_final/Pmarinus_7.0.66.all.protein_coding.gff \
+       proteinCoding.gp
+   hgLoadGenePred petMar2 lampreyGene proteinCoding.gp
+   genePredCheck -db=petMar2 lampreyGene
+   # checked: 23393 failed: 0
+
+   # prepare search rule
+   cat << '_EOF_' > nameScan.sh
+#!/bin/sh
+#hgsql -N -e 'select name from animalQtl;' bosTau7 | sort >
+#/tmp/bosTau7.animalQtl.name.txt
+hgsql -N -e 'select name from lampreyGene;' petMar2 > name.lampreyGene.petMar2
+export maxLen=`awk '{print length($0)}' name.lampreyGene.petMar2 | sort -rn | head -1`
+echo "scan to column: $maxLen"
+
+export C=1
+while [ $C -le $maxLen ];
+do
+echo -n " $C: "
+sort -u name.lampreyGene.petMar2 | awk '{ print substr($0,'$C',1) }' | sort -u | xargs echo | sed -e 's/ //g'
+C=`echo $C | awk '{print $1+1}'`
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x nameScan.sh
+
+    ./nameScan.sh 
+scan to column: 14
+ 1: P
+ 2: M
+ 3: Z
+ 4: _
+ 5: 0
+ 6: 0
+ 7: 012
+ 8: 0123456789
+ 9: 0123456789
+ 10: 0123456789
+ 11: 0123456789
+ 12: -
+ 13: R
+ 14: ABCDEFGHIJ
+
+searchName lampreyGene
+searchTable lampreyGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+termRegex PMZ_00[0-9]+(\-[A-Z]*)?
+searchPriority 50
+
+##############################################################################
