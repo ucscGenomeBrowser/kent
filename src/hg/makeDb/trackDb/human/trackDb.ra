@@ -789,8 +789,6 @@ visibility hide
 exonArrows off
 color 150,0,0
 type bed 4 .
-searchMethod exact
-searchType bed
 
 track ux16
 shortLabel Extended Ultras
@@ -4110,4 +4108,16 @@ searchType bed
 semiShortCircuit on
 searchPriority 50
 termRegex ([en]ss?v|dgv[0-9]+[a-z]+)[0-9]+
+
+searchTable uc16
+searchMethod exact
+searchType bed
+searchPriority 10
+termRegex uc\.[0-9]+
+
+searchTable ux16
+searchMethod exact
+searchType bed
+searchPriority 10
+termRegex ux\.[0-9]+
 

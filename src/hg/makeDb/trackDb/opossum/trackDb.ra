@@ -10,8 +10,6 @@ priority 141
 visibility pack
 color 150,0,0
 type bed 4 .
-searchMethod exact
-searchType bed
   
 track blastHg17KG override
 shortLabel Human Proteins
@@ -146,3 +144,9 @@ type netAlign
     type netAlign canFam2 chainCanFam2
     otherDb canFam2
 
+
+searchTable ultra
+searchMethod exact
+searchType bed
+searchPriority 10
+termRegex uc\.[0-9]+
