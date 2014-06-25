@@ -82,6 +82,12 @@ INLINE void startCollapsibleSection(char *sectionSuffix, char *title, boolean on
 jsBeginCollapsibleSectionFontSize(cart, "hgva", sectionSuffix, title, onByDefault, "1.1em");
 }
 
+INLINE void startSmallCollapsibleSection(char *sectionSuffix, char *title, boolean onByDefault)
+// Wrap shared args to jsBeginCollapsibleSectionFontSize
+{
+jsBeginCollapsibleSectionFontSize(cart, "hgva", sectionSuffix, title, onByDefault, "0.9em");
+}
+
 #define endCollapsibleSection jsEndCollapsibleSection
 
 
@@ -251,6 +257,114 @@ hgGatewayCladeGenomeDb();
 
 //#*** No longer ending form here...
 }
+
+void factorSourceListInputProperties(struct trackDb *tdb, struct slName **retFactorList,
+			     struct slName **retCellTypeList, struct slName **retTreatmentList)
+/* Get a list of factor names used in factorSource track. */
+{
+char *inputsTable = trackDbSetting(tdb, "inputTrackTable");
+if (isEmpty(inputsTable))
+    errAbort("track %s does not have an inputTrackTable setting", tdb->track);
+char query[2048];
+struct sqlConnection *conn = hAllocConn(database);
+if (retFactorList && retCellTypeList && retTreatmentList)
+    {
+    sqlSafef(query, sizeof(query), "select distinct(factor) from %s order by factor", inputsTable);
+    *retFactorList = sqlQuickList(conn, query);
+    sqlSafef(query, sizeof(query), "select distinct(cellType) from %s order by cellType",
+	     inputsTable);
+    *retCellTypeList = sqlQuickList(conn, query);
+    sqlSafef(query, sizeof(query), "select distinct(treatment) from %s order by treatment",
+	     inputsTable);
+    *retTreatmentList = sqlQuickList(conn, query);
+    }
+else
+    errAbort("factorSourceListInputProperties: ret args must be non-NULL.");
+hFreeConn(&conn);
+}
+
+void printMultiselect(char *track, char *label, char *var, struct slName *optionList)
+/* Print a label and multi-select, with hgva_track_var as cart var, with options in optionList,
+ * marking as selected any options stored in cart. */
+{
+printf("%s: ", label);
+char cartVar[1024];
+safef(cartVar, sizeof(cartVar), "hgva_filter_%s_%s", track, var);
+struct hash *selHash = NULL;
+if (cartListVarExists(cart, cartVar))
+    selHash = hashFromSlNameList(cartOptionalSlNameList(cart, cartVar));
+printf("<select id=\"%s\" name=\"%s\" style=\"display: none; font-size:.9em;\" "
+       "class=\"filterBy\" multiple>\n", cartVar, cartVar);
+char *selected = "";
+if (!selHash || hashLookup(selHash, "All"))
+    selected = " selected";
+printf("<option%s>All</option>", selected);
+struct slName *option;
+for (option = optionList;  option != NULL;  option = option->next)
+    {
+    selected = "";
+    if (selHash && hashLookup(selHash, option->name))
+	selected = " selected";
+    printf("<option%s>%s</option>", selected, option->name);
+    }
+printf("</select>\n");
+char shadowVar[1024];
+safef(shadowVar, sizeof(shadowVar), "%s%s", cgiMultListShadowPrefix(), cartVar);
+cgiMakeHiddenVar(shadowVar, "1");
+//printf("<script>$(document).ready(function(){ ddcl.setup($('#%s')[0]); });</script>\n", cartVar);
+}
+
+void printFilterOptions(struct trackDb *tdb)
+/* Print a collapsible filter section for tdb, with controls depending on tdb->type. */
+{
+char sectionName[512], cartVar[512];
+safef(sectionName, sizeof(sectionName), "%s_filter", tdb->track);
+if (sameString(tdb->type, "factorSource"))
+    {
+    puts("<TABLE>");
+    startSmallCollapsibleSection(sectionName, "filter items", FALSE);
+    struct slName *factorOptions = NULL, *cellTypeOptions = NULL, *treatmentOptions = NULL;
+    factorSourceListInputProperties(tdb, &factorOptions, &cellTypeOptions,
+				    &treatmentOptions);
+    printMultiselect(tdb->track, "factor", "name", factorOptions);
+    printMultiselect(tdb->track, "cell type", "cellType", cellTypeOptions);
+    printMultiselect(tdb->track, "treatment", "treatment", treatmentOptions);
+    puts("<BR>");
+    puts("minimum peak score [0-1000]: ");
+    safef(cartVar, sizeof(cartVar), "hgva_filter_%s_score", tdb->track);
+    char *defaultScore = cartUsualString(cart, cartVar, "0");
+    printf("<input type=text name=\"%s\" size=12 value=\"%s\"><BR>",
+	   cartVar, defaultScore);
+    // The dimensions of ui-dropdownchecklist multiselects are not correct when
+    // the item is hidden.  So, when this filter section is made visible, reinit them.
+    printf("<script>\n"
+	   "$(function(){"
+	   "$('tr[id^=\"%s-\"]').bind('show',"
+	   "  function(jqev) { \n"
+	   "    var $multisels = $(jqev.target).find('.filterBy');\n"
+	   "    var multiselElList = $multisels.each(function(ix, el){ return el; });\n"
+	   "    ddcl.reinit(multiselElList);"
+	   "  });\n"
+	   "});"
+	   "</script>\n", sectionName);
+    puts("</TABLE>");
+    endCollapsibleSection();
+    }
+if (startsWith("bed 5", tdb->type)) //#*** TODO: detect bed# properly
+    {
+    puts("<TABLE>");
+    startSmallCollapsibleSection(sectionName, "filter items", FALSE);
+    //#*** Also watch out for noScoreFilter or whatever it's called
+    puts("minimum peak score [0-1000]: ");
+    safef(cartVar, sizeof(cartVar), "hgva_filter_%s_score", tdb->track);
+    char *defaultScore = cartUsualString(cart, cartVar, "0");
+    printf("<input type=text name=\"%s\" size=12 value=\"%s\"><BR>",
+	   cartVar, defaultScore);
+    puts("</TABLE>");
+    endCollapsibleSection();
+    }
+}
+
 
 typedef boolean TdbFilterFunction(struct trackDb *tdb, void *filterData);
 /* Return TRUE if tdb passes filter criteria. */
@@ -614,6 +728,53 @@ puts("<BR>");
 endCollapsibleSection();
 }
 
+boolean isRegulatoryTrack(struct trackDb *tdb, void *filterData)
+/* For now, just look for a couple specific tracks by tableName. */
+{
+//#*** NEED METADATA
+return (sameString("wgEncodeRegDnaseClusteredV2", tdb->table) ||
+	sameString("wgEncodeRegTfbsClusteredV3", tdb->table));
+}
+
+struct slRef *findRegulatoryTracks()
+/* Look for the very limited set of Regulation tracks that hgVai offers. */
+{
+struct slRef *regTrackRefList = NULL;
+tdbFilterGroupTrack(fullTrackList, fullGroupList, isRegulatoryTrack,
+		    NULL, NULL, &regTrackRefList);
+return regTrackRefList;
+}
+
+void selectRegulatory(struct slRef *trackRefList)
+/* If trackRefList is non-NULL, make a collapsible section with a checkbox for each track,
+ * labelled with longLabel, and optionally some filtering options. */
+{
+if (trackRefList != NULL)
+    {
+    startCollapsibleSection("Regulation", "Regulatory regions", FALSE);
+    // Use a table with checkboxes in one column and label/other stuff that depends on
+    // checkbox in other column.
+    puts("<TABLE>");
+    struct slRef *ref;
+    for (ref = trackRefList;  ref != NULL;  ref = ref->next)
+	{
+	struct trackDb *tdb = ref->val;
+	char cartVar[512];
+	safef(cartVar, sizeof(cartVar), "hgva_track_%s_%s", database, tdb->track);
+	puts("<TR><TD valign=top>");
+	cartMakeCheckBox(cart, cartVar, FALSE);
+	puts("</TD><TD>");
+	struct trackDb *topTdb = trackDbTopLevelSelfOrParent(tdb);
+	printf("<A HREF=\"%s?%s&g=%s\">%s</A><BR>\n", hgTrackUiName(), cartSidUrlString(cart),
+	       topTdb->track, tdb->longLabel);
+	printFilterOptions(tdb);
+	puts("</TD></TR>");
+	}
+    puts("</TABLE><BR>");
+    endCollapsibleSection();
+    }
+}
+
 boolean isConsElTrack(struct trackDb *tdb, void *filterData)
 /* This is a TdbFilterFunction to get "phastConsNwayElements" tracks. */
 {
@@ -637,38 +798,25 @@ tdbFilterGroupTrack(fullTrackList, fullGroupList, isConsScoreTrack,
 		    NULL, NULL, retScoreTrackRefList);
 }
 
-void trackRefListToCheckboxes(struct slRef *trackRefList)
+void trackCheckBoxSection(char *sectionSuffix, char *title, struct slRef *trackRefList)
+/* If trackRefList is non-NULL, make a collapsible section with a checkbox for each track,
+ * labelled with longLabel. */
 {
-struct slRef *ref;
-for (ref = trackRefList;  ref != NULL;  ref = ref->next)
+if (trackRefList != NULL)
     {
-    struct trackDb *tdb = ref->val;
-    char cartVar[512];
-    safef(cartVar, sizeof(cartVar), "hgva_track_%s_%s", database, tdb->track);
-    cartMakeCheckBox(cart, cartVar, FALSE);
-    struct trackDb *topTdb = trackDbTopLevelSelfOrParent(tdb);
-    printf("<A HREF=\"%s?%s&g=%s\">%s</A><BR>\n", hgTrackUiName(), cartSidUrlString(cart),
-	   topTdb->track, tdb->longLabel);
-    }
-}
-
-void selectCons(struct slRef *elTrackRefList, struct slRef *scoreTrackRefList)
-/* Offer checkboxes for optional Conservation scores. */
-{
-if (elTrackRefList == NULL && scoreTrackRefList == NULL)
-    return;
-if (elTrackRefList != NULL)
-    {
-    startCollapsibleSection("ConsEl", "Conserved elements", FALSE);
-    trackRefListToCheckboxes(elTrackRefList);
+    startCollapsibleSection(sectionSuffix, title, FALSE);
+    struct slRef *ref;
+    for (ref = trackRefList;  ref != NULL;  ref = ref->next)
+	{
+	struct trackDb *tdb = ref->val;
+	char cartVar[512];
+	safef(cartVar, sizeof(cartVar), "hgva_track_%s_%s", database, tdb->track);
+	cartMakeCheckBox(cart, cartVar, FALSE);
+	struct trackDb *topTdb = trackDbTopLevelSelfOrParent(tdb);
+	printf("<A HREF=\"%s?%s&g=%s\">%s</A><BR>\n", hgTrackUiName(), cartSidUrlString(cart),
+	       topTdb->track, tdb->longLabel);
+	}
     puts("<BR>");
-    endCollapsibleSection();
-    }
-if (scoreTrackRefList != NULL)
-    {
-    startCollapsibleSection("ConsScore", "Conservation scores",
-			    FALSE);
-    trackRefListToCheckboxes(scoreTrackRefList);
     endCollapsibleSection();
     }
 }
@@ -678,9 +826,11 @@ void selectAnnotations()
 {
 struct slName *dbNsfpTables = findDbNsfpTables();
 boolean gotSnp = findSnpBed4("", NULL, NULL);
+struct slRef *regTrackRefList = findRegulatoryTracks();
 struct slRef *elTrackRefList = NULL, *scoreTrackRefList = NULL;
 findCons(&elTrackRefList, &scoreTrackRefList);
-if (dbNsfpTables == NULL && !gotSnp && elTrackRefList == NULL && scoreTrackRefList == NULL)
+if (dbNsfpTables == NULL && !gotSnp && elTrackRefList == NULL && scoreTrackRefList == NULL
+    && regTrackRefList == NULL)
     return;
 puts("<BR>");
 printf("<div class='sectionLiteHeader'>Select More Annotations (optional)</div>\n");
@@ -688,7 +838,9 @@ printf("<div class='sectionLiteHeader'>Select More Annotations (optional)</div>\
 puts("<TABLE border=0 cellspacing=5 cellpadding=0 style='padding-left: 10px;'>");
 selectDbNsfp(dbNsfpTables);
 selectDbSnp(gotSnp);
-selectCons(elTrackRefList, scoreTrackRefList);
+selectRegulatory(regTrackRefList);
+trackCheckBoxSection("ConsEl", "Conserved elements", elTrackRefList);
+trackCheckBoxSection("ConsScore", "Conservation scores", scoreTrackRefList);
 puts("</TABLE>");
 }
 
@@ -861,9 +1013,8 @@ void doMainPage()
 /* Print out initial HTML of control page. */
 {
 jsInit();
-jsIncludeFile("jquery-ui.js", NULL);
 webIncludeResourceFile("jquery-ui.css");
-jsIncludeFile("hgVarAnnogrator.js", NULL);
+webIncludeResourceFile("ui.dropdownchecklist.css");
 boolean alreadyAgreed = cartUsualBoolean(cart, "hgva_agreedToDisclaimer", FALSE);
 printf("<script>\n"
        "$(document).ready(function() { hgva.disclaimer.init(%s, hgva.userClickedAgree); });\n"
@@ -893,6 +1044,10 @@ jsReloadOnBackButton(cart);
 
 webNewSection("Using the Variant Annotation Integrator");
 webIncludeHelpFile("hgVaiHelpText", FALSE);
+jsIncludeFile("jquery-ui.js", NULL);
+jsIncludeFile("hgVarAnnogrator.js", NULL);
+jsIncludeFile("ui.dropdownchecklist.js", NULL);
+jsIncludeFile("ddcl.js", NULL);
 }
 
 void doUi()
@@ -1026,6 +1181,18 @@ char *tag = cloneStringZ(tableName, tagSize);
 if (isNotEmpty(suffix))
     safecat(tag, tagSize, suffix);
 touppers(tag);
+// Some custom shortenings, to avoid very long tag names:
+(void)strSwapStrs(tag, tagSize, "POLYPHEN", "PP");
+(void)strSwapStrs(tag, tagSize, "MUTATION", "MUT");
+(void)strSwapStrs(tag, tagSize, "PHYLOP", "PHP");
+(void)strSwapStrs(tag, tagSize, "PHASTCONS", "PHC");
+(void)strSwapStrs(tag, tagSize, "ELEMENTS", "EL");
+(void)strSwapStrs(tag, tagSize, "PRIMATES", "PRIM");
+(void)strSwapStrs(tag, tagSize, "PLACENTAL", "PLAC");
+if (regexMatch(tag, "^PH.*[0-9]WAY"))
+    (void)strSwapStrs(tag, tagSize, "WAY", "W");
+(void)strSwapStrs(tag, tagSize, "WGENCODEREGDNASECLUSTERED", "DNASE");
+(void)strSwapStrs(tag, tagSize, "WGENCODEREGTFBSCLUSTERED", "TFBS");
 return tag;
 }
 
@@ -1050,7 +1217,7 @@ return subset;
 
 void updateGratorListAndVepExtra(struct annoGrator *grator, struct annoGrator **pGratorList,
 				 struct annoFormatter *vepOut, enum PolyPhen2Subset subset,
-				 char *column, char *description)
+				 char *column, char *description, boolean isReg)
 /* If grator is non-NULL, add it to gratorList and vepOut's list of items for EXTRAs column. */
 {
 if (grator == NULL)
@@ -1067,14 +1234,17 @@ if (vepOut != NULL)
     char *tag = tagFromTableName(tableName, suffix);
     if (isEmpty(description))
 	description = grator->streamer.name;
-    annoFormatVepAddExtraItem(vepOut, (struct annoStreamer *)grator, tag, description, column);
+    if (isReg)
+	annoFormatVepAddRegulatory(vepOut, (struct annoStreamer *)grator, tag, description, column);
+    else
+	annoFormatVepAddExtraItem(vepOut, (struct annoStreamer *)grator, tag, description, column);
     }
 }
 
 INLINE void updateGratorList(struct annoGrator *grator, struct annoGrator **pGratorList)
 /* If grator is non-NULL, add it to gratorList. */
 {
-updateGratorListAndVepExtra(grator, pGratorList, NULL, 0, NULL, NULL);
+updateGratorListAndVepExtra(grator, pGratorList, NULL, 0, NULL, NULL, FALSE);
 }
 
 void addDbNsfpSeqChange(char *trackName, struct annoAssembly *assembly, struct hash *gratorsByName,
@@ -1096,6 +1266,95 @@ if (hashFindVal(gratorsByName, seqChangeTable) == NULL)
     updateGratorList(grator, pGratorList);
     hashAdd(gratorsByName, seqChangeTable, grator);
     }
+}
+
+static struct dyString *dyInfo = NULL;
+
+struct hash *getTrackFilterVars(char *track)
+/* Return a hash of filter variable names (cart variable suffixes) to slName lists of values. */
+{
+char filterPrefix[512];
+safef(filterPrefix, sizeof(filterPrefix), "hgva_filter_%s_", track);
+struct slPair *filterVars = cartVarsWithPrefix(cart, filterPrefix), *var;
+int prefixLen = strlen(filterPrefix);
+struct hash *varHash = hashNew(0);
+for (var = filterVars;  var != NULL;  var = var->next)
+    {
+    char *varName = var->name+prefixLen;
+    char *val = var->val;
+    struct hashEl *hel = hashLookup(varHash, varName);
+    if (hel != NULL)
+	slNameAddHead((struct slName **)(&hel->val), val);
+    else
+	hashAdd(varHash, varName, slNameNew(val));
+    }
+return varHash;
+}
+
+INLINE boolean isNotAll(struct slName *valList)
+/* Return TRUE unless valList has one element with name "All" (for multiselects). */
+{
+if (slCount(valList) == 1 && sameString(valList->name, "All"))
+    return FALSE;
+return TRUE;
+}
+
+void factorSourceGratorAddFilter(struct annoGrator *grator, char *name, struct slName *valList)
+/* Add filter to factorSource grator. */
+//#*** Do these smarts belong here in hgVai?  Probably not -- should be an hg/lib module with
+//#*** UI/metadata smarts.
+{
+struct annoStreamer *gStreamer = (struct annoStreamer *)grator;
+struct annoFilter *filter = NULL;
+if (sameString(name, "name") || sameString(name, "cellType") || sameString(name, "treatment"))
+    {
+    if (valList && isNotAll(valList))
+	filter = annoFilterFromAsColumn(gStreamer->asObj, name, afMatch, valList);
+    }
+else if (sameString(name, "score"))
+    filter = annoFilterFromAsColumn(gStreamer->asObj, name, afGTE, valList);
+else
+    errAbort("Unrecognized filter name '%s' for %s, type=factorSource", name, gStreamer->name);
+if (filter)
+    gStreamer->addFilters(gStreamer, filter);
+}
+
+void bed5AddFilter(struct annoGrator *grator, char *name, struct slName *valList)
+/* Add filter to bed 5 grator. */
+{
+struct annoStreamer *gStreamer = (struct annoStreamer *)grator;
+struct annoFilter *filter = NULL;
+if (sameString(name, "name"))
+    {
+    if (valList && isNotAll(valList))
+	filter = annoFilterFromAsColumn(gStreamer->asObj, name, afMatch, valList);
+    }
+else if (sameString(name, "score"))
+    filter = annoFilterFromAsColumn(gStreamer->asObj, name, afGTE, valList);
+else
+    errAbort("Unrecognized filter name '%s' for %s, type=bed 5", name, gStreamer->name);
+if (filter)
+    gStreamer->addFilters(gStreamer, filter);
+}
+
+void addFiltersToGrator(struct annoGrator *grator, struct trackDb *tdb)
+/* Look for filter variables in the cart and add filters to grator accordingly. */
+{
+struct hash *varHash = getTrackFilterVars(tdb->track);
+struct hashEl *hel, *helList = hashElListHash(varHash);
+for (hel = helList;  hel != NULL;  hel = hel->next)
+    {
+    char *filterName = hel->name;
+    struct slName *valList = hel->val;
+//#*** Need a much better way to dispatch...
+    if (sameString("factorSource", tdb->type))
+	factorSourceGratorAddFilter(grator, filterName, valList);
+    else if (startsWith("bed 5", tdb->type))
+	bed5AddFilter(grator, filterName, valList);
+    else
+	dyStringPrintf(dyInfo, "Ignoring %s filter %s\n", tdb->track, filterName);
+    }
+hashFree(&varHash);
 }
 
 void addOutputTracks(struct annoGrator **pGratorList, struct hash *gratorsByName,
@@ -1123,6 +1382,7 @@ for (trackVar = trackVars;  trackVar != NULL;  trackVar = trackVar->next)
     enum PolyPhen2Subset subset = noSubset;
     char *description = NULL;
     char *column = NULL;
+    boolean isReg = FALSE;
     if (startsWith("dbNsfp", trackName))
 	{
 	// trackName for PolyPhen2 has a suffix for subset -- strip it if we find it:
@@ -1141,14 +1401,18 @@ for (trackVar = trackVars;  trackVar != NULL;  trackVar = trackVar->next)
 	    grator = gratorFromTrackDb(assembly, tdb->table, tdb, chrom, NO_MAXROWS, NULL,
 				       agoNoConstraint);
 	    if (grator != NULL)
+		{
 		//#*** Need something more sophisticated but this works for our
 		//#*** limited selection of extra tracks:
 		if (asColumnFind(grator->streamer.asObj, "name") != NULL)
 		    column = "name";
+		addFiltersToGrator(grator, tdb);
+		}
 	    description = tdb->longLabel;
+	    isReg = isRegulatoryTrack(tdb, NULL);
 	    }
 	}
-    updateGratorListAndVepExtra(grator, pGratorList, vepOut, subset, column, description);
+    updateGratorListAndVepExtra(grator, pGratorList, vepOut, subset, column, description, isReg);
     if (grator != NULL)
 	hashAdd(gratorsByName, trackName, grator);
     }
@@ -1830,6 +2094,7 @@ return varTdb;
 void doQuery()
 /* Translate simple form inputs into anno* components and execute query. */
 {
+dyInfo = dyStringNew(0);
 char *chrom = NULL;
 uint start = 0, end = 0;
 if (sameString(regionType, hgvaRegionTypeRange))
@@ -1909,7 +2174,7 @@ struct annoFormatter *vepOut = annoFormatVepNew("stdout", doHtml,
 						(struct annoStreamer *)gpVarGrator,
 						geneTdb->longLabel,
 						(struct annoStreamer *)snpGrator,
-						snpDesc);
+						snpDesc, assembly);
 addOutputTracks(&gratorList, gratorsByName, vepOut, assembly, chrom, doHtml);
 addFilterTracks(&gratorList, gratorsByName, assembly, chrom);
 
@@ -1927,6 +2192,8 @@ else
     textOpen();
     webStartText();
     }
+if (isNotEmpty(dyInfo->string))
+    puts(dyInfo->string);
 struct annoGratorQuery *query = annoGratorQueryNew(assembly, primary, gratorList, vepOut);
 struct slName *comment;
 for (comment = commentList;  comment != NULL;  comment = comment->next)

@@ -4,6 +4,7 @@
  * See README in this or parent directory for licensing information. */
 
 #include "annoAssembly.h"
+#include "dnaseq.h"
 #include "obscure.h"
 #include "twoBit.h"
 
@@ -15,6 +16,7 @@ AllocVar(aa);
 aa->name = cloneString(name);
 aa->tbf = twoBitOpen(twoBitPath);
 aa->twoBitPath = cloneString(twoBitPath);
+aa->curSeq = NULL;
 return aa;
 }
 
@@ -42,6 +44,22 @@ else
     hashAdd(aa->seqSizes, seqName, pt + seqSize);
     }
 return seqSize;
+}
+
+void annoAssemblyGetSeq(struct annoAssembly *aa, char *seqName, uint start, uint end,
+			char *buf, size_t bufSize)
+/* Copy sequence to buf; bufSize must be at least end-start+1 chars in length. */
+{
+if (aa->curSeq == NULL || differentString(aa->curSeq->name, seqName))
+    {
+    dnaSeqFree(&aa->curSeq);
+    aa->curSeq = twoBitReadSeqFragLower(aa->tbf, seqName, 0, 0);
+    }
+uint chromSize = aa->curSeq->size;
+if (end > chromSize || start > chromSize || start > end)
+    errAbort("annoAssemblyGetSeq: bad coords [%u,%u) (sequence %s size %u)",
+	     start, end, seqName, chromSize);
+safencpy(buf, bufSize, aa->curSeq->dna+start, end-start);
 }
 
 void annoAssemblyClose(struct annoAssembly **pAa)

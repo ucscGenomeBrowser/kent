@@ -2543,6 +2543,12 @@ char *clade;
 if ((clade = trackHubAssemblyClade(genome)) != NULL)
     return clade;
 
+if (isHubTrack(genome))
+    {
+    warn("Current genome '%s' is supported by a hub that is no longer connected. Switching to default database.", trackHubSkipHubName(genome));
+    return cloneString("other");
+    }
+
 struct sqlConnection *conn = hConnectCentral();
 if (hGotCladeConn(conn))
     {
