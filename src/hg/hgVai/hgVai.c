@@ -343,7 +343,7 @@ if (sameString(tdb->type, "factorSource"))
 	   "  function(jqev) { \n"
 	   "    var $multisels = $(jqev.target).find('.filterBy');\n"
 	   "    var multiselElList = $multisels.each(function(ix, el){ return el; });\n"
-	   "    ddcl.reinit(multiselElList, true);"
+	   "    ddcl.reinit(multiselElList);"
 	   "  });\n"
 	   "});"
 	   "</script>\n", sectionName);

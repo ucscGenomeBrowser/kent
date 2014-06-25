@@ -133,6 +133,7 @@ aptFor1 -> Emperor_penguin ;
 carCri1 -> Red_legged_seriema ;
 mesUni1 -> Brown_roatelo ;
 eurHel1 -> Sunbittern ;
+balPav1 -> Crowned_crain ;
 chlUnd1 -> Houbara_bustard ;
 colLiv1 -> Rock_pigeon ;
 apaVit1 -> Rock_pigeon ;

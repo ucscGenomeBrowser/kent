@@ -2190,8 +2190,6 @@ visibility hide
 exonArrows off
 color 150,0,0
 type bed 4 .
-searchMethod exact
-searchType bed
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
@@ -2203,10 +2201,20 @@ visibility hide
 exonArrows off
 color 100,0,100
 type bed 4 .
-searchMethod exact
-searchType bed
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
+
+searchTable ultraConserved
+searchMethod exact
+searchType bed
+searchPriority 10
+termRegex uc\.[0-9]+
+
+searchTable ultraConservedExtended
+searchMethod exact
+searchType bed
+searchPriority 10
+termRegex ux\.[0-9]+
 
 #these 6 overrides go with ucsfBrainMethyl parent track
 track ucsfChipSeqH3K4me3BrainCoverage override

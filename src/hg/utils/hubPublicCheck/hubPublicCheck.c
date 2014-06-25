@@ -143,8 +143,8 @@ while ((hel = hashNext(&cookie)) != NULL)
     dyStringPrintf(dy, "%s,", trackHubSkipHubName(hel->name));
     }
 
-printf("insert into %s (hubUrl,shortLabel,longLabel,registrationTime,dbCount,dbList) values (\"%s\",\"%s\", \"%s\",now(),%d, \"%s\");\n",
-    table, url, tHub->shortLabel, tHub->longLabel, dbCount, dy->string); 
+printf("insert into %s (hubUrl,descriptionUrl,shortLabel,longLabel,registrationTime,dbCount,dbList) values (\"%s\",\"%s\", \"%s\", \"%s\", now(),%d, \"%s\");\n",
+    table, url, tHub->descriptionUrl, tHub->shortLabel, tHub->longLabel, dbCount, dy->string); 
 
 return 0;
 }

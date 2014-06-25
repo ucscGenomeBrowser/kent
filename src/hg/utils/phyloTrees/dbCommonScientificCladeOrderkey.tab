@@ -48,7 +48,7 @@ balAcu1	Minke whale	Balaenoptera acutorostrata scammoni	mammal	cetartiodactyla	2
 oviAri3	Sheep	Ovis aries	mammal	cetartiodactyla	2369
 capHir1	Domestic goat	Capra hircus	mammal	cetartiodactyla	2375
 bosTau7	Cow	Bos taurus	mammal	cetartiodactyla	2379
-bosMut1	Wild yak	Bos mutus	mammal	cetartiodactyla	2381
+bosMut1	Wild yak	Bos grunniens mutus	mammal	cetartiodactyla	2381
 bubBub1	Water buffalo	Bubalus bubalis	mammal	cetartiodactyla	2383
 equCab2	Horse	Equus caballus	mammal	perissodactyla	2409
 equPrz1	Przewalski horse	Equus przewalskii	mammal	perissodactyla	 2409
@@ -100,6 +100,9 @@ amaVit1	Puerto Rican parrot	Amazona vittata	vertebrate	aves	4310
 araMac1	Scarlet macaw	Ara macao	vertebrate	aves	4320
 galGal4	Chicken	Gallus gallus	vertebrate	aves	4349
 cotJap1	Japanese quail	Japanese quail	vertebrate	aves	4353
+chaVoc1	Killdeer	Charadrius vociferus	vertebrate	aves	4354
+cucCan1	Common cuckoo	Cuculus canorus	vertebrate	aves	4355
+apaVit1	Rock pigeon	Apaloderma vittatum	vertebrate	aves	4355
 anaPla1	Mallard duck	Anas platyrhynchos	vertebrate	aves	4357
 pseHum1	Tibetan ground jay	Pseudopodoces humilis	vertebrate	aves	4358
 zonAlb1	White-throated sparrow	Zonotrichia albicollis	vertebrate	aves	4359
@@ -114,8 +117,10 @@ carCri1	Red-legged seriema	Cariama cristata	vertebrate	aves	4363
 chlUnd1	Houbara bustard	Chlamydotis undulata macqueenii	vertebrate	aves	4363
 colStr1	Speckled mousebird	Colius striatus	vertebrate	aves	4363
 corBra1	American crow	Corvus brachyrhynchos	vertebrate	aves	4363
+nipNip1	Crested ibis	Nipponia nippon	vertebrate	aves	4363
 egrGar1	Little egret	Egretta garzetta	vertebrate	aves	4363
 eurHel1	Sunbittern	Eurypyga helias	vertebrate	aves	4363
+balPav1	Crowned crain	Balearica pavonina gibbericeps	vertebrate	aves	4363
 fulGla1	Northern fulmar	Fulmarus glacialis	vertebrate	aves	4363
 gavSte1	Red-throated loon	Gavia stellata	vertebrate	aves	4363
 halAlb1	White-tailed eagle	Haliaeetus albicilla	vertebrate	aves	4363
@@ -125,6 +130,7 @@ merNub1	Northern carmine bee-eater	Merops nubicus	vertebrate	aves	4363
 mesUni1	Brown roatelo	Mesitornis unicolor	vertebrate	aves	4363
 opiHoa1	Hoatzin	Opisthocomus hoazin	vertebrate	aves	4363
 pelCri1	Dalmatian pelican	Pelecanus crispus	vertebrate	aves	4363
+phaCar1	Bar tailed trogon	Phalacrocorax carbo	vertebrate	4363
 phaLep1	White-tailed tropicbird	Phaethon lepturus	vertebrate	aves	4363
 phoRub1	American flamingo	Phoenicopterus ruber ruber	vertebrate	aves	4363
 picPub1	Downy woodpecker	Picoides pubescens	vertebrate	aves	4363
