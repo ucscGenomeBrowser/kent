@@ -11,7 +11,6 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
-#include "bed5Sources.h"
 #include "hgRelate.h"
 #include "verbose.h"
 
@@ -101,7 +100,7 @@ while (lineFileNextReal(lf, &line))
         dyStringPrintf(ds, "%d,", sourceId);
         sourceCount++;
         }
-    fprintf(f, "%s\t%u\t%s", line, sourceCount, dyStringCannibalize(&ds));
+    fprintf(f, "%s\t%u\t%s\n", line, sourceCount, dyStringCannibalize(&ds));
     //freeMem(lastTab);
     }
 lineFileClose(&lf);
