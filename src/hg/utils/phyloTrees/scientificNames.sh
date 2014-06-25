@@ -61,6 +61,7 @@ s/aptFor1/Aptenodytes_forsteri/;
 s/carCri1/Cariama_cristata/;
 s/mesUni1/Mesitornis_unicolor/;
 s/eurHel1/Eurypyga_helias/;
+s/balPav1/Balearica_pavonina_gibbericeps/;
 s/chlUnd1/Chlamydotis_undulata/;
 s/ficAlb1/Ficedula_albicollis/;
 s/ficAlb2/Ficedula_albicollis/;
@@ -139,7 +140,7 @@ do
        echo "$DB -> $sciName from sed statement" 1>&2
     fi
     treeDocString="${treeDocString} $DB -> $sciName ;"
-    echo "$treeDocString" 1>&2
+#    echo "$treeDocString" 1>&2
     echo "$treeDocString"
 done | tail -1 | while read treeDocString
 do

@@ -165,6 +165,7 @@ var ddcl = {
         // This is done when the track search with tabs gets switched to advanced tab
         // because the DDCLs were setup on hidden filterBys and dimensiuons are wrong.
         // if not force, then only reinit when the dimensions are suspect
+// NOTE: If force is true, this doesn't do anything!!
 
         if (filterBys.length < 1)
             return;
