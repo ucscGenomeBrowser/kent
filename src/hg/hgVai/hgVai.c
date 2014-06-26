@@ -869,6 +869,13 @@ cartMakeCheckBox(cart, "hgva_include_splice", TRUE);
 printf("splice site or splice region<BR>\n");
 cartMakeCheckBox(cart, "hgva_include_nonCodingExon", TRUE);
 printf("exon of non-coding gene<BR>\n");
+struct slRef *regTrackRefList = findRegulatoryTracks();
+if (regTrackRefList != NULL)
+    {
+    cartMakeCheckBox(cart, "hgva_include_regulatory", TRUE);
+    printf("regulatory element (note: these are detected only if one or more tracks "
+	   "are selected in Regulatory regions above)<BR>\n");
+    }
 puts("<BR>");
 endCollapsibleSection();
 }
@@ -1359,9 +1366,11 @@ hashFree(&varHash);
 
 void addOutputTracks(struct annoGrator **pGratorList, struct hash *gratorsByName,
 		     struct annoFormatter *vepOut, struct annoAssembly *assembly, char *chrom,
-		     boolean doHtml)
+		     boolean doHtml, boolean *retHasRegulatory)
 // Construct grators for tracks selected to appear in EXTRAS column
 {
+boolean includeReg = cartUsualBoolean(cart, "hgva_include_regulatory", TRUE);
+boolean haveReg = FALSE;
 char trackPrefix[128];
 safef(trackPrefix, sizeof(trackPrefix), "hgva_track_%s_", database);
 int trackPrefixLen = strlen(trackPrefix);
@@ -1409,13 +1418,16 @@ for (trackVar = trackVars;  trackVar != NULL;  trackVar = trackVar->next)
 		addFiltersToGrator(grator, tdb);
 		}
 	    description = tdb->longLabel;
-	    isReg = isRegulatoryTrack(tdb, NULL);
+	    isReg = includeReg && isRegulatoryTrack(tdb, NULL);
 	    }
 	}
+    haveReg |= isReg;
     updateGratorListAndVepExtra(grator, pGratorList, vepOut, subset, column, description, isReg);
     if (grator != NULL)
 	hashAdd(gratorsByName, trackName, grator);
     }
+if (retHasRegulatory)
+    *retHasRegulatory = haveReg;
 }
 
 void addFilterTracks(struct annoGrator **pGratorList, struct hash *gratorsByName,
@@ -2091,6 +2103,14 @@ else
 return varTdb;
 }
 
+static void adjustGpVarOverlapRule(struct annoGrator *gpVarGrator, boolean haveRegulatory)
+/* If we're able to detect regulatory elements, and want to keep those annotations, loosen up
+ * gpVarGrator's overlap rule from the default (must overlap). */
+{
+if (haveRegulatory && cartUsualBoolean(cart, "hgva_include_regulatory", TRUE))
+    gpVarGrator->setOverlapRule(gpVarGrator, agoNoConstraint);
+}
+
 void doQuery()
 /* Translate simple form inputs into anno* components and execute query. */
 {
@@ -2175,7 +2195,10 @@ struct annoFormatter *vepOut = annoFormatVepNew("stdout", doHtml,
 						geneTdb->longLabel,
 						(struct annoStreamer *)snpGrator,
 						snpDesc, assembly);
-addOutputTracks(&gratorList, gratorsByName, vepOut, assembly, chrom, doHtml);
+boolean haveRegulatory = FALSE;
+addOutputTracks(&gratorList, gratorsByName, vepOut, assembly, chrom, doHtml, &haveRegulatory);
+adjustGpVarOverlapRule(gpVarGrator, haveRegulatory);
+
 addFilterTracks(&gratorList, gratorsByName, assembly, chrom);
 
 slReverse(&gratorList);
