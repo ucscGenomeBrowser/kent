@@ -831,9 +831,22 @@ cat  << 'EOF' > link.csh
     # Name field has count of cell types having DHS overlapping the master site
     hgBedSources dhs.sources.bed wgEncodeAwgDnaseMaster
 
+    # 
+cat checklinks.csh  << 'EOF'
+     foreach t (`awk '{print $2}' < wgEncodeAwgDnaseCombinedSources.tab`)
+         echo -n "$t :"
+         curl -s "http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&deprecated=true&term=$t" \
+                 | grep -c 'argument not found'
+     end
+'EOF'
+    # manually map to CV to create maplinks.txt
+    # NOTE: this would be best done before hgBedSources
+
+    csh maplinks.csh wgEncodeAwgDnaseMasterSources.tab > sources.fixed.tab
+
     # Sources table
     autoSql $HOME/kent/src/hg/lib/idName.as idName
-    hgLoadSqlTab hg19 wgEncodeAwgDnaseMasterSources idName.sql wgEncodeAwgDnaseMasterSources.tab
+    hgLoadSqlTab hg19 wgEncodeAwgDnaseMasterSources2 idName.sql sources.fixed.tab
 
     # BED table
     hgLoadBed -noNameIx -type=bed5+3 \
