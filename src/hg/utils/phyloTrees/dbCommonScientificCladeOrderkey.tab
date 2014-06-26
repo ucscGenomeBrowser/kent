@@ -102,12 +102,13 @@ galGal4	Chicken	Gallus gallus	vertebrate	aves	4349
 cotJap1	Japanese quail	Japanese quail	vertebrate	aves	4353
 chaVoc1	Killdeer	Charadrius vociferus	vertebrate	aves	4354
 cucCan1	Common cuckoo	Cuculus canorus	vertebrate	aves	4355
-apaVit1	Rock pigeon	Apaloderma vittatum	vertebrate	aves	4355
+apaVit1	Bar tailed trogon	Apaloderma vittatum	vertebrate	aves	4355
 anaPla1	Mallard duck	Anas platyrhynchos	vertebrate	aves	4357
 pseHum1	Tibetan ground jay	Pseudopodoces humilis	vertebrate	aves	4358
 zonAlb1	White-throated sparrow	Zonotrichia albicollis	vertebrate	aves	4359
 melGal1	Turkey	Meleagris gallopavo	vertebrate	aves	4360
 strCam1	Ostrich	Struthio camelus	vertebrate	aves	4363
+tinGut1	White throated tinamou	Tinamus guttatus	vertebrate	aves	4363
 acaChl1	Rifleman	Acanthisitta chloris	vertebrate	aves	4363
 aptFor1	Emperor penguin	Aptenodytes forsteri	vertebrate	aves	4363
 aquChr1	Golden eagle	Aquila chrysaetos canadensis	vertebrate	aves	4363
@@ -129,6 +130,7 @@ manVit1	Golden-collared manakin	Manacus vitellinus	vertebrate	aves	4363
 merNub1	Northern carmine bee-eater	Merops nubicus	vertebrate	aves	4363
 mesUni1	Brown roatelo	Mesitornis unicolor	vertebrate	aves	4363
 opiHoa1	Hoatzin	Opisthocomus hoazin	vertebrate	aves	4363
+tauEry1	Red crested turaco	Tauraco erythrolophus	vertebrate	aves	4363
 pelCri1	Dalmatian pelican	Pelecanus crispus	vertebrate	aves	4363
 phaCar1	Bar tailed trogon	Phalacrocorax carbo	vertebrate	4363
 phaLep1	White-tailed tropicbird	Phaethon lepturus	vertebrate	aves	4363
