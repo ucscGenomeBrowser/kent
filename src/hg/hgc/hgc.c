@@ -24206,12 +24206,12 @@ int qWidth = atoi(cartOptionalString(cart, "qWidth"));
 safef(otherDb, sizeof otherDb, "%s_%s", hubName, otherSpecies);
 
 
-printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=_BLANK><B>Link to block in other species</A><BR>\n", otherDb, qName, qs, qe,hubName,trackHubSkipHubName(database));
+printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=_BLANK><B>Link to block in other assembly</A><BR>\n", otherDb, qName, qs, qe,hubName,trackHubSkipHubName(database));
 
 int qCenter = (qs + qe) / 2;
 int newQs = qCenter - qWidth/2;
 int newQe = qCenter + qWidth/2;
-printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=\"_blank\"><B>Link to same window size in other species</A><BR>\n", otherDb, qName, newQs, newQe,hubName,trackHubSkipHubName(database));
+printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=\"_blank\"><B>Link to same window size in other assembly</A><BR>\n", otherDb, qName, newQs, newQe,hubName,trackHubSkipHubName(database));
 } 
 
 bool vsameWords(char *a, va_list args)
