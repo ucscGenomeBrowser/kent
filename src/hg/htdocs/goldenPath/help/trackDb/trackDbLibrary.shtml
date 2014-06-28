@@ -847,7 +847,7 @@
     based on the name field. </P>
     <P>
     Put the identifiers for these links into extended
-    bigBed fields as explained in example 3 of the <a href="/goldenPath/help/bigBed.html">bigBed documentation</a>.
+    bigBed fields as explained in example 3 of the <a href="/goldenPath/help/bigBed.html#Ex3">bigBed documentation</a>.
     The field names from your .as file are the field names referenced in this statement.
     The urls in this statement support the same wildcards as the <A
     onclick="jumpTo(this)" HREF="#">url</A> statement.  Make sure to enclose
@@ -857,7 +857,7 @@
 
     <P><B>Example:</B></P>
     <pre>
-    urls pmid="http://www.ncbi.nlm.nih.gov/pubmed/$$" hgncId="http://www.genenames.org/data/hgnc_data.php?hgnc_id=$$"
+    urls pmid="http://www.ncbi.nlm.nih.gov/pubmed/$$" spId="http://www.uniprot.org/uniprot/$$"
     </pre>
 </DIV>
 
@@ -1875,6 +1875,12 @@
     is large.  To avoid overburdening the Browser, the size of the window to
     query should be limited.  The value of this setting is the maximum window size in bases that
     should be queried to give the detailed signal numbers.</P>
+</DIV>
+
+<DIV class="negateValues"><span class="types wig bigWig bedGraph"></span>
+<div class="format"><code>negateValues &lt;on&gt;</code></div>
+    <P>Negate the values in the wiggle, meaning that positive values become negative and vice-versa.
+    This is useful for wiggles representing transcription or other activities on the Crick strand.  Be aware that wiggles with negative values are drawn in <B>altColor</B>  not <B>color</B> as positive values are.
 </DIV>
 
 <DIV class="spanList"><span class="types wig"></span>

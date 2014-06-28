@@ -814,31 +814,46 @@ cat  << 'EOF' > link.csh
 
     # Paste together bed and sources, trim MCV- from item name to leave just the count
     # of cell types (Bob Thurman suggestion), replace semi-colons in source list with commas, 
-    # and add score field
-
-    awk '{sub(/MCV-/,"",$4); printf("%s\t%u\t%u\t%u\t%d\t%.2f\n", $1,$2,$3,$4,0,$5)}' \
+    # and add score field, log transformed and scaled to 100-1000 range:
+    # m = 900/(ln(max)-ln(min))
+    #   -> 125.6
+    # b = ln(max) * m - 1000
+    #   -> 80
+    # score = floatScore * m + b
+    awk '{sub(/MCV-/,"",$4); printf("%s\t%u\t%u\t%u\t%d\t%.2f\n", $1,$2,$3,$4,125.6*log($5)-80,$5)}' \
         ebi/multi-tissue.master.ntypes.simple.hg19.bed > dhs.bed
+
     sed -e 's/;/,/g' multi-tissue.master.ntypes.simple.names.hg19.txt | \
         paste dhs.bed - > dhs.sources.bed
 
 # Create files for loading database tables: track table (bed5Sources) 
     # and sourceTable (idName).  Use new tool to split above format (bed5 + floatScore + sources)
     # Name field has count of cell types having DHS overlapping the master site
+    hgBedSources dhs.sources.bed wgEncodeAwgDnaseMaster
 
-    hgBedSources dhs.sources.bed wgEncodeAwgDnaseCombined
+    # 
+cat checklinks.csh  << 'EOF'
+     foreach t (`awk '{print $2}' < wgEncodeAwgDnaseCombinedSources.tab`)
+         echo -n "$t :"
+         curl -s "http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&deprecated=true&term=$t" \
+                 | grep -c 'argument not found'
+     end
+'EOF'
+    # manually map to CV to create maplinks.txt
+    # NOTE: this would be best done before hgBedSources
+
+    csh maplinks.csh wgEncodeAwgDnaseMasterSources.tab > sources.fixed.tab
 
     # Sources table
     autoSql $HOME/kent/src/hg/lib/idName.as idName
-    hgLoadSqlTab hg19 wgEncodeAwgDnaseCombinedSources idName.sql wgEncodeAwgDnaseCombinedSources.tab
+    hgLoadSqlTab hg19 wgEncodeAwgDnaseMasterSources2 idName.sql sources.fixed.tab
 
     # BED table
-    hgLoadBed -fillInScore=floatScore -noNameIx -type=bed5+3 \
+    hgLoadBed -noNameIx -type=bed5+3 \
         -sqlTable=$HOME/kent/src/hg/lib/bed5Sources.sql \
         -renameSqlTable -as=$HOME/kent/src/hg/lib/bed5Sources.as \
-            hg19 wgEncodeAwgDnaseCombinedSites wgEncodeAwgDnaseCombined.bed
-    # Read 2890742 elements of size 8 from wgEncodeAwgDnaseCombined.bed
-
-    #TODO: better scores (e.g. log transform)
+            hg19 wgEncodeAwgDnaseMasterSites wgEncodeAwgDnaseMaster.bed
+    # Read 2890742 elements of size 8 from wgEncodeAwgDnaseMaster.bed
 
 
 ###############################################

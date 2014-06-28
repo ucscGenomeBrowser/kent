@@ -325,6 +325,10 @@ struct slDouble *sqlQuickDoubleList(struct sqlConnection *conn, char *query);
 /* Return a list of slDoubles for a single column query.
  * Do a slFreeList on result when done. */
 
+struct slPair *sqlQuickPairList(struct sqlConnection *conn, char *query);
+/* Return a list of slPairs with the results of a two-column query.
+ * Free result with slPairFreeValsAndList. */
+
 void sqlRenameTable(struct sqlConnection *sc, char *table1, char *table2);
 /* Rename table */
 

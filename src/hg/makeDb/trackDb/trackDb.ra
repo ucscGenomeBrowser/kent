@@ -1966,8 +1966,6 @@ searchPriority 9
 searchName stsMapAliasMrnaAcc
 searchTable stsMap
 searchType bed
-shortCircuit 1
-semiShortCircuit 1
 xrefTable stsAlias
 xrefQuery select trueName,alias from %s where alias like '%s'
 searchBoth on
@@ -2608,7 +2606,6 @@ visibility hide
 type bigBed 4 +
 url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id=$$
 urlLabel GRC Incident:
-nonBedFieldsLabel Summary information from incident database:
 
 track tRNAs
 shortLabel tRNA Genes

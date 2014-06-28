@@ -42,8 +42,6 @@ visibility hide
 exonArrows off
 color 150,0,0
 type bed 4 .
-searchMethod exact
-searchType bed
 
 track uxf16
 shortLabel Extended Ultras
@@ -54,8 +52,6 @@ visibility hide
 exonArrows off
 color 150,0,0
 type bed 4 .
-searchMethod exact
-searchType bed
 
 searchTable uc16
 searchMethod exact

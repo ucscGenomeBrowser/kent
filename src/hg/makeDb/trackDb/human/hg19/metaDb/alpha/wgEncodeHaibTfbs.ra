@@ -64474,7 +64474,7 @@ objType file
 antibody YY1_(SC-281)
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1613
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
@@ -64527,7 +64527,7 @@ objType table
 antibody YY1_(SC-281)
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1613
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-02-14
@@ -83931,4 +83931,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
 treatment None
 view RawSignal
 
-# MAGIC: -1781073911
+# MAGIC: -1781073801

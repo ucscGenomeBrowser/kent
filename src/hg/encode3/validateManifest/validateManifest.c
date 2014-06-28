@@ -207,6 +207,7 @@ else
     }
 if (
     !sameString(genome, "dm3") &&
+    !sameString(genome, "dm6") &&
     !sameString(genome, "ce10") &&
     !sameString(genome, "hg19") &&
     !sameString(genome, "hg20") &&

@@ -12,9 +12,7 @@ UCSC_JS_FILES=ajax.js alleles.js autocomplete.js edwPersona.js \
 STATIC_FILES=staticDoc.js
 
 # JQUERY files and other third pary files which have NOT BEEN TOUCHED by UCSC
-JQUERY_FILES_UNTOUCHED=jquery.js jquery.tablednd.js \
-    jquery.imgareaselect.js jquery-ui.js jquery.contextmenu.js \
-    ui.dropdownchecklist.js \
+JQUERY_FILES_UNTOUCHED=jquery.js jquery.imgareaselect.js jquery-ui.js jquery.contextmenu.js \
     jquery.cookie.js jquery.watermarkinput.js \
     jquery.floatheader.js jquery.rotateTableCellContent.js jquery.plugins.js \
     jquery.validate.min.js jquery.history.js
@@ -30,7 +28,6 @@ SYMLINKED_FILES=${UCSC_JS_FILES} ${JQUERY_FILES}
 
 ifdef LOWELAB
     # LOWE lab files should be forced through jshint (but currently aren't)
-    #UCSC_JS_FILES += lowetooltip.js loweautocomplete.js
     SYMLINKED_FILES += lowetooltip.js loweautocomplete.js
 endif
 

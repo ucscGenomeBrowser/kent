@@ -25,15 +25,26 @@ export DB=calMil1
 mkdir -p /hive/data/genomes/${DB}/genbank
 cd /hive/data/genomes/${DB}/genbank
 
-time rsync -a -P \
-  rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Callorhinchus_milii/Callorhinchus_milii-6.1.3/ \
-    ./
+# Verify this FTP directory appears to be correct:
+
+grep `echo $DB | sed -e 's/[0-9][0-9]*//'` $HOME/kent/src/hg/utils/phyloTrees/db.ncbiTaxId.tab  | sort | cut -f5 | tail -1 | sed -e 's#/ASSEMB.*##'
+
+# if that looks good, then let it be used:
+
+grep `echo $DB | sed -e 's/[0-9][0-9]*//'` $HOME/kent/src/hg/utils/phyloTrees/db.ncbiTaxId.tab  | sort | cut -f5 | tail -1 | sed -e 's#/ASSEMB.*##' | while read ftpDir
+do
+  time rsync -a -P \
+    rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/${ftpDir}/ ./
+done
 
 #############################################################################
 # establish UCSC naming scheme
-#    When the assembly is composed only of unplaced scaffolds:
 
+# setup the scientific name:
 cd /hive/data/genomes/${DB}
+grep ORGANISM: genbank/ASSEMBLY_INFO  | cut -f2 > species.name.txt
+
+#    When the assembly is composed only of unplaced scaffolds:
 time ~/kent/src/hg/utils/automation/unplacedScaffolds.pl ${DB} > step1.log 2>&1
 # this constructs the files and directory:
 # -rw-rw-r-- 1 244682665 Mar  4 12:30 calMil1.unmasked.2bit
@@ -59,15 +70,19 @@ export mSize=`faCount chrM.fa | grep total | awk '{print $2}'`
 
 # then, combine this chrM.agp and chrM.fa sequence with the unplaced
 # agp and fa files
-# move the existing agp and fa.gz aside, zcat the fa.gz together
-#  with the chrM.fa into a new fa.gz
-# cat the existing agp and chrM.agp together into a new agp
+mv ${DB}.ucsc.fa.gz ${DB}.ucsc.fa.0.gz
+(zcat ${DB}.ucsc.fa.0.gz; cat chrM.fa) | gzip -c > ${DB}.ucsc.fa.gz
+
+mv ${DB}.ucsc.agp ${DB}.ucsc.0.agp
+cat ${DB}.ucsc.0.agp chrM.agp > ${DB}.ucsc.agp
+
 # faToTwoBit on the new sequence, checkAgpAndFa with the new agp
 # replace the ${DB}.unmasked.2bit and ${DB}.agp at the top
-
-# setup the scientific name:
-cd /hive/data/genomes/${DB}
-grep ORGANISM: genbank/ASSEMBLY_INFO  | cut -f2 > species.name.txt
+faToTwoBit ${DB}.ucsc.fa.gz ../${DB}.unmasked.2bit
+twoBitInfo ../${DB}.unmasked.2bit stdout | sort -k2nr > ../chrom.sizes
+checkAgpAndFa ${DB}.ucsc.agp ../${DB}.unmasked.2bit 2>&1 | tail
+# if OK, remove the old ones:
+rm ${DB}.ucsc.fa.0.gz ${DB}.ucsc.0.agp
 
 cp -p ucsc/${DB}.ucsc.agp ./${DB}.agp
 
@@ -115,7 +130,7 @@ cd /hive/data/genomes/${DB}/dbDb
 export asmInfoPath="/hive/data/genomes/${DB}/genbank/ASSEMBLY_INFO"
 export dbDbInfo="${HOME}/kent/src/hg/utils/phyloTrees/dbCommonScientificCladeOrderkey.tab"
 export chromSizes="/hive/data/genomes/${DB}/chrom.sizes"
-export asmDate=`grep "^DATE:" ${asmInfoPath} | cut -f2 | sed -e 's/^[0-9]+-//; s/-/ /;'`
+export asmDate=`grep "^DATE:" ${asmInfoPath} | cut -f2 | sed -e 's/^[0-9]+-//; s/-/ /g;'`
 
 export asmShortLabel=`grep "^ASSEMBLY SHORT NAME:" ${asmInfoPath} | cut -f2`;
 export asmSciName=`grep "^ORGANISM:" ${asmInfoPath} | cut -f2`;
@@ -160,6 +175,9 @@ echo "INSERT INTO genomeClade (genome, clade, priority) VALUES (\"${commonName}\
   "vertebrate")
 echo "INSERT INTO genomeClade (genome, clade, priority) VALUES (\"${commonName}\", \"$clade\", \"70\");"
     ;;
+  "insect")
+echo "INSERT INTO genomeClade (genome, clade, priority) VALUES (\"${commonName}\", \"$clade\", \"70\");"
+    ;;
 esac > ${DB}.genomeClade.sql
 
 # take a look at these to verify they are sane:
@@ -182,44 +200,27 @@ cd /hive/data/genomes/${DB}/bed/repeatMasker
 export sciName=`cat ../../species.name.txt`
 
 $ the useRMBlastn is the faster alignment engine
-time doRepeatMasker.pl -buildDir=`pwd` \
+time (doRepeatMasker.pl -buildDir=`pwd` \
    -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
    -species "$sciName" -useRMBlastn \
-   -smallClusterHub=ku ${DB} > do.log 2>&1 &
+   -smallClusterHub=ku ${DB}) > do.log 2>&1 &
 
 #############################################################################
 # running simple repeats:
 mkdir /hive/data/genomes/${DB}/bed/simpleRepeat
 cd /hive/data/genomes/${DB}/bed/simpleRepeat
-time doSimpleRepeat.pl -buildDir=`pwd` \
-   -smallClusterHub=ku -workhorse=hgwdev ${DB} > do.log 2>&1 &
+time (doSimpleRepeat.pl -buildDir=`pwd` \
+   -smallClusterHub=ku -workhorse=hgwdev ${DB}) > do.log 2>&1 &
 
 #############################################################################
 # running window masker:
 mkdir /hive/data/genomes/${DB}/bed/windowMasker
 cd /hive/data/genomes/${DB}/bed/windowMasker
-time doWindowMasker.pl -buildDir=`pwd` \
-   -workhorse=hgwdev ${DB} > do.log 2>&1 &
-
-   # after gaps are done below, clean this result, do not mark
-   # gaps as masked:
-awk '{print $3-$2,$0}' ../gap/notGap.bed > notGap.sizes.txt
-# biggest contiguous sequence
-max=`sort -rn notGap.sizes.txt | head -1 | awk '{print $1}'`
-minCover=`echo $max | awk '{printf "%15.10f", 1/(2*$1)}' | sed -e 's/ //g'`
-
-bedIntersect -minCoverage=$minCover windowmasker.sdust.bed \
-   ../gap/notGap.bed stdout | sort -k1,1 -k2,2n | gzip -c > cleanWMask.bed.gz
-
-zcat cleanWMask.bed.gz | twoBitMask ../../${DB}.unmasked.2bit \
-   stdin -type=.bed ${DB}.cleanWMSdust.2bit
-twoBitToFa ${DB}.cleanWMSdust.2bit stdout | faSize stdin \
-   > faSize.${DB}.cleanWMSdust.txt 2>&1
-
-cat faSize.${DB}.cleanWMSdust.txt
+time (doWindowMasker.pl -buildDir=`pwd` \
+   -workhorse=hgwdev ${DB}) > do.log 2>&1 &
 
 #############################################################################
-# check gaps - the above windowMasker needs this
+# check gaps
 
 mkdir /hive/data/genomes/${DB}/bed/gap
 cd /hive/data/genomes/${DB}/bed/gap
@@ -261,26 +262,26 @@ twoBitToFa ${DB}.2bit stdout | faSize stdin > faSize.${DB}.2bit.txt
 
 mkdir /hive/data/genomes/${DB}/bed/genscan
 cd /hive/data/genomes/${DB}/bed/genscan
-doGenscan.pl -buildDir=`pwd` -bigClusterHub=ku -workhorse=hgwdev \
-    -dbHost=hgwdev $DB > do.log 2>&1
+time (doGenscan.pl -buildDir=`pwd` -bigClusterHub=ku -workhorse=hgwdev \
+    -dbHost=hgwdev $DB) > do.log 2>&1
 
 #############################################################################
 # CPG Islands track
 
 mkdir /hive/data/genomes/${DB}/bed/cpgIslands
 cd /hive/data/genomes/${DB}/bed/cpgIslands
-time doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
-   -dbHost=hgwdev -smallClusterHub=ku -workhorse=hgwdev $DB > do.log 2>&1
+time (doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
+   -dbHost=hgwdev -smallClusterHub=ku -workhorse=hgwdev $DB) > do.log 2>&1
 
 #############################################################################
 # CPG Islands Unmasked track
 
 mkdir /hive/data/genomes/${DB}/bed/cpgIslandsUnmasked
 cd /hive/data/genomes/${DB}/bed/cpgIslandsUnmasked
-time doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
+time (doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
    -tableName=cpgIslandExtUnmasked -dbHost=hgwdev -smallClusterHub=ku \
     -workhorse=hgwdev \
-    -maskedSeq=/hive/data/genomes/${DB}/${DB}.unmasked.2bit $DB > do.log 2>&1
+    -maskedSeq=/hive/data/genomes/${DB}/${DB}.unmasked.2bit $DB) > do.log 2>&1
 
 #############################################################################
 # GC 5-base track
@@ -296,7 +297,7 @@ mkdir -p /gbdb/${DB}/bbi/gc5BaseBw
 rm -f /gbdb/${DB}/bbi/gc5BaseBw/gc5Base.bw
 ln -s `pwd`/${DB}.gc5Base.bw /gbdb/${DB}/bbi/gc5BaseBw/gc5Base.bw
 hgsql ${DB} -e "DROP TABLE IF EXISTS gc5BaseBw;
-    CREATE TABLE gc5BaseBw (fileName varchar(255) not null);
-       INSERT INTO gc5BaseBw VALUES (\"/gbdb/${DB}/bbi/gc5BaseBw/gc5Base.bw\");"
+   CREATE TABLE gc5BaseBw (fileName varchar(255) not null);
+      INSERT INTO gc5BaseBw VALUES (\"/gbdb/${DB}/bbi/gc5BaseBw/gc5Base.bw\");"
 
 #############################################################################

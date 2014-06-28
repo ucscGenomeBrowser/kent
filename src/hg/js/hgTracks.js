@@ -2903,6 +2903,13 @@ var imageV2 = {
             return true;
         return false;
     },
+    
+    manyTracks: function ()
+    {   // image-reload is slower than whole page reload when there are too many tracks
+        if (!hgTracks || !hgTracks.trackDb || objKeyCount(hgTracks.trackDb) > 50)
+            return true;
+        return false;
+    },
 
     updateTiming: function (response)
     {   // update measureTiming text on current page based on what's in the response
@@ -3128,13 +3135,23 @@ var imageV2 = {
                 });
     },
 
-    fullReload: function()
+    fullReload: function(extraData)
     {
         // force reload of whole page via trackform submit
         // This function does not return
         jQuery('body').css('cursor', 'wait');
+        if (extraData || cart.updatesWaiting()) {
+            var url = cart.addUpdatesToUrl(window.location.href);
+            if (extraData) {
+                if ( url.lastIndexOf("?") === -1)
+                    url += "?" + extraData;
+                else
+                    url += '&' + extraData;
+            }
+            window.location.assign(url);
+            return false;
+        }
         document.TrackHeaderForm.submit();
-
     },
 
     updateImgAndMap: function (response, status)
@@ -3350,6 +3367,12 @@ var imageV2 = {
         // Tim thinks we should consider disabling all UI input while we are doing in-place update.
         // TODO: waitOnFuction?
     
+        // No ajax image update if there are too many tracks!
+        if (imageV2.manyTracks()) {
+            imageV2.fullReload(params);
+            return false;  // Shouldn't return from fullReload but I have seen it in FF
+        }
+    
         // If UCSC Genes (or any suggestion) is supposed to be made visible, then do so
         if ($("#suggestTrack").length && $('#hgFindMatches').length)
             vis.makeTrackVisible($("#suggestTrack").val());
@@ -3477,16 +3500,18 @@ var imageV2 = {
         // This ensures that the 'go' and 'refresh' button will do so unless the chrom changes.
         $("input[value='go'],input[value='refresh']").click(function () {
             var newPos = genomePos.get().replace(/,/g,'');
-            var newChrom = newPos.split(':')[0];
-            var oldChrom  = genomePos.getOriginalPos().split(':')[0];
-            if (newChrom === oldChrom) {
-                imageV2.markAsDirtyPage();
-                imageV2.navigateInPlace("position="+encodeURIComponent(newPos), null, false);
-                window.scrollTo(0,0);
-                return false;
+            if ( ! imageV2.manyTracks() ) {
+                var newChrom = newPos.split(':')[0];
+                var oldChrom  = genomePos.getOriginalPos().split(':')[0];
+                if (newChrom === oldChrom) {
+                    imageV2.markAsDirtyPage();
+                    imageV2.navigateInPlace("position="+encodeURIComponent(newPos), null, false);
+                    window.scrollTo(0,0);
+                    return false;
+                }
             }
             
-            // If chrom changed AND there are vis updates waiting...
+            // If not just image update AND there are vis updates waiting...
             if (cart.updatesWaiting()) {
                 var url = "../cgi-bin/hgTracks?" + cart.varsToUrlData({ 'db': getDb(), 
                                                         'position': newPos, 'hgsid': getHgsid() });

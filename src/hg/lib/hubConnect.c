@@ -520,11 +520,10 @@ hub = getAndSetHubStatus( cart, url, TRUE);
 cartRemove(cart, hgHubDataText);
 
 char *wantFirstDb = cartOptionalString(cart, hgHubDoFirstDb);
-if (wantFirstDb != NULL)
-    {
+if ((wantFirstDb != NULL) && (hub->trackHub != NULL))
     newDatabase = hub->trackHub->defaultDb;
-    fprintf(stderr, "getting defaultDb %s\n", newDatabase);
-    }
+
+cartRemove(cart, hgHubDoFirstDb);
 return newDatabase;
 }
 
@@ -588,7 +587,10 @@ void hubUpdateStatus(char *errorMessage, struct hubConnectStatus *hub)
 {
 struct sqlConnection *conn = hConnectCentral();
 char query[64 * 1024];
-struct trackHub *tHub = hub->trackHub;
+struct trackHub *tHub = NULL;
+
+if (hub != NULL)
+    tHub = hub->trackHub;
 
 if (errorMessage != NULL)
     {

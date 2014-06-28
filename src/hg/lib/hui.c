@@ -4726,7 +4726,7 @@ safef(option, sizeof(option), "%s.%s", name, HORIZGRID );
 wiggleGridDropDown(option, horizontalGrid);
 printf("&nbsp;&nbsp;&nbsp;at y =");
 safef(option, sizeof(option), "%s.%s", name, YLINEMARK );
-cgiMakeDoubleVarWithLimits(option, yLineMark, "Indicator at Y", 0, tDbMinY, tDbMaxY);
+cgiMakeDoubleVarInRange(option, yLineMark, "Indicator at Y", 0, NULL, NULL);
 safef(option, sizeof(option), "%s.%s", name, YLINEONOFF );
 wiggleYLineMarkDropDown(option, yLineMarkOnOff);
 printf("</td>");
@@ -5212,8 +5212,14 @@ if (filterSettings)
                     }
                 }
         #endif///ndef EXTRA_FIELDS_SUPPORT
+            // FIXME: Label munging should be localized to showScoreFilter()
+            //  when that function is simplified
+            char varName[256];
             char label[128];
-            safef(label,sizeof(label),"Minimum %s",field);
+            safef(varName, sizeof(varName), "%s%s", scoreName, _BY_RANGE);
+            boolean filterByRange = trackDbSettingClosestToHomeOn(tdb, varName);
+            safef(label, sizeof(label),"%s%s", filterByRange ? "": "Minimum ", field);
+
             showScoreFilter(cart,tdb,opened,boxed,parentLevel,name,title,label,scoreName,isFloat);
             freeMem(scoreName);
             count++;
