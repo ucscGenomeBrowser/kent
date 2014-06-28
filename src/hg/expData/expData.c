@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "expData.h"
 #include "sqlList.h"
-
+#include "hacTree.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -14,7 +14,7 @@ void usage()
 errAbort(
   "expData -  Takes in a relational database and outputs expression information\n"
   "usage:\n"
-  "   expData inputDataBase output\n"
+  "   expData biosamples matrix output\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -25,18 +25,102 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-typedef struct
-{
-char *name;
-int count;
-} expCell;
 
-typedef struct
-{
-char *name;
-float value;
-}nameValue;
+struct bioExpVector
+/* Contains expression information for a biosample on many genes */
+    {
+    struct bioExpVector *next;
+    char *name;	    // name of biosample
+    int count;	    // Number of genes we have data for
+    double *vector;   //  An array allocated dynamically
+    };
 
+struct bioExpVector *bioExpVectorListFromFile(char *matrixFile)
+// Read a tab-delimited file and return list of bioExpVector.
+
+{
+int vectorSize = 0;
+struct lineFile *lf = lineFileOpen(matrixFile, TRUE);
+char *line, **row = NULL;
+struct bioExpVector *list = NULL, *el;
+while (lineFileNextReal(lf, &line))
+    {
+    if (vectorSize == 0)
+        {
+	// Detect first row
+	vectorSize = chopByWhite(line, NULL, 0);  // counting up
+	AllocArray(row, vectorSize);
+	continue;
+	}
+    AllocVar(el);
+    AllocArray(el->vector, vectorSize);
+    el->count = chopByWhite(line, row, vectorSize);
+    assert(el->count == vectorSize);
+    int i;
+    for (i = 0; i < el->count; ++i)
+	el->vector[i] = sqlDouble(row[i]);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+void fillInNames(struct bioExpVector *list, char *nameFile)
+/* Fill in name field from file */
+{
+struct lineFile *lf = lineFileOpen(nameFile, TRUE);
+char *line;
+struct bioExpVector *el = list;
+while (lineFileNextReal(lf, &line))
+     {
+     if (el == NULL)
+	 {
+         warn("More names than items in list");
+	 break;
+	 }
+     el->name = cloneString(line);
+     el = el->next;
+     }
+lineFileClose(&lf);
+}
+
+
+static void rPrintSlBioExpVectorTree(FILE *f, struct hacTree *tree, int level)
+/* Recursively print out cluster as nested-parens with {}'s around leaf nodes. */
+{
+char *tissue = ((struct bioExpVector *)(tree->itemOrCluster))->name;
+int i;
+for (i = 0;  i < level;  i++)
+    fputc(' ', f);
+if (tree->left == NULL && tree->right == NULL)
+    {
+    fprintf(f, "{%s}", tissue);
+    return;
+    }
+else if (tree->left == NULL || tree->right == NULL)
+    errAbort("\nHow did we get a node with one NULL kid??");
+fprintf(f, "(%s\n", tissue);
+rPrintSlBioExpVectorTree(f, tree->left, level+1);
+fputs(",\n", f);
+rPrintSlBioExpVectorTree(f, tree->right, level+1);
+fputc('\n', f);
+for (i=0;  i < level;  i++)
+    fputc(' ', f);
+fputs(")", f);
+}
+
+void printSlBioExpVectorTree(FILE *f, struct hacTree *tree)
+/* Print out cluster as nested-parens with {}'s around leaf nodes. */
+{
+if (tree == NULL)
+    {
+    fputs("Empty tree.\n", f);
+    return;
+    }
+rPrintSlBioExpVectorTree(f, tree, 0);
+fputc('\n', f);
+}
 
 char* floatToString(float input)
 {
@@ -46,159 +130,62 @@ return result;
 freez(result);
 }
 
-int compareExpCells(expCell exp1, expCell exp2)
-/* a compare function for the HAC tree */
+double slBioExpVectorDistance(const struct slList *item1, const struct slList *item2, void *extraData)
+/* Return the absolute difference between the two kids' values. */
 {
-int result = exp1.count - exp2.count;
-return sqrt(result*result);
+const struct bioExpVector *kid1 = (const struct bioExpVector *)item1;
+const struct bioExpVector *kid2 = (const struct bioExpVector *)item2;
+int j;
+double diff = 0, sum = 0;
+for (j = 0; j < kid1->count; ++j)
+    {
+    diff = kid1->vector[j] - kid2->vector[j];
+    sum += (diff * diff);
+    }
+return sqrt(sum);
 }
 
-expCell mergeExpCells(expCell exp1, expCell exp2)
-/* a merge function for the HAC tree */
-{
-expCell result;
-result.count = (exp1.count + exp2.count)/2;
-result.name = catTwoStrings(exp1.name,exp2.name);
-return result;
-}
 
-int compareTwoRows(char *line1, char* line2)
-/* seems to be working 
- * Takes in two rows from the table, as strings.
- * Parses the rows and finds the summation of distance between
- * the expression values of each row.  */
+struct slList *slBioExpVectorMerge(const struct slList *item1, const struct slList *item2,
+				void *unusedExtraData)
+/* Make a new slPair where the name is the both kids names and the 
+ * value is the average of kids' values.
+ * Designed for HAC tree use*/
 {
-char *output1[10000];
-char *output2[10000];
-char *temp1 = cloneString(line1);
-char *temp2 = cloneString(line2);
-int size1 = 0;
-size1 = chopTabs(temp1,output1);
-int size2 = 0;
-size2 = chopTabs(temp2,output2);
-//double result = 1000000;
-//if (size1 != size2)
-//    {
-//    return result;
-//    }
+const struct bioExpVector *kid1 = (const struct bioExpVector *)item1;
+const struct bioExpVector *kid2 = (const struct bioExpVector *)item2;
+struct bioExpVector *el;
+AllocVar(el);
+AllocArray(el->vector, kid1->count);
+el->count = kid1->count; 
+el->name = catTwoStrings(kid1->name, kid2->name);
 int i;
-double sum = 0;
-for (i = 0; i<size1; ++i)
+for (i = 0; i < el->count; ++i)
     {
-    double diff = atoi(output1[i]) - atoi(output2[i]);
-    sum += sqrt((diff * diff));
+    el->vector[i] = (kid1->vector[i] + kid2->vector[i])/2;
     }
-return sum;
+return (struct slList *)(el);
 }
 
-
-
-void fileIO (char *input, char *output)
+void expData(char *matrixFile, char *nameFile, char *outFile)
+/* Read matrix and names into a list of bioExpVectors, run hacTree to
+ * associate them, and write output. */
 {
-FILE *f = mustOpen(output,"w");
-//struct lm *localMem = lmInit(0);
-struct lineFile *lf = lineFileOpen(input, TRUE);
-char *line;
-long count = 1;
-int i, j;
-struct hash *hashRows = hashNew(0);
-if (!lineFileNext(lf, &line, NULL))
-    {
-    errAbort("%s This should be the column names", lf->fileName);
-    }
-while (lineFileNext(lf,&line,NULL))
-    {
-    char *temp = cloneString(line);
-    hashAdd(hashRows,floatToString(count),temp);
-    ++ count;
-    }
-for (i = 1; i < count; ++i)
-    {
-    for (j = i + 1 ; j < count ; ++j)
-        {
-	expCell exp;
-	exp.name = catTwoStrings(floatToString(i), floatToString(j));
-        char *temp1 = hashFindVal(hashRows, floatToString(i));
-	char *temp2 = hashFindVal(hashRows, floatToString(j));
-	exp.count = compareTwoRows(temp1,temp2);
-	fprintf(f,"%d",compareTwoRows(temp1, temp2));
-	fprintf(f,"%s\n"," ");
-	}
-    }
-//struct hacTree *clusters = hacTreeFromItems((struct slList *)sldList, localMem, compareExpCell, mergeExpCell, NULL, NULL);
+struct bioExpVector *list = bioExpVectorListFromFile(matrixFile);
+FILE *f = mustOpen(outFile,"w");
+struct lm *localMem = lmInit(0);
+fillInNames(list, nameFile);
+struct hacTree *clusters = hacTreeFromItems((struct slList *)list, localMem,
+					    slBioExpVectorDistance, slBioExpVectorMerge, NULL, NULL);
+printSlBioExpVectorTree(f,clusters);
 }
-
-
-void printOutput(FILE *f, struct hash *hash, int count)
-/* Prints the data to the output file.
- * Each row corresponds to a tissue sample; the first element.
- * ALl subsequent elements are in sequence name : expression value pairs. */
-{
-nameValue *output;
-int i;
-for (i = 0 ; i < count; ++i)
-    {
-    output = hashFindVal(hash,floatToString(i)); 
-    struct hashEl *hel;
-    fprintf(f,"%s", floatToString(i)); 
-    fprintf(f,"%s", "    ");
-    for (hel = hashLookup(hash,floatToString(i)); hel != NULL; hel = hashLookupNext(hel))
-        {
-	nameValue *temp = hel->val;
-	char *name = temp->name;
-	long score = temp->value;
-        fprintf(f, "%s", name);
-	fprintf(f, "%s", ":");
-        fprintf(f, "%ld", score);
-	fprintf(f, "%s", " + ");
-	}  
-    fprintf(f, "\n%s", " " );
-    }
-}
-
-
-
-
-void expData(char *output)
-/* Grabs expression data and formats it nicely */
-{
-FILE *f = mustOpen(output, "w");
-struct sqlConnection *conn = sqlConnect("hgFixed");
-char query[512];
-sqlSafef(query, sizeof(query), "select * from gnfHumanAtlas2Median limit 2");
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-char *line = needMem(sizeof(line));
-struct expData *list = NULL;
-struct hash *hash = hashNew(0);
-int count = 0;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct expData *exp = expDataLoad(row);
-    int i;
-    count = exp->expCount;
-    for (i = 0; i<exp->expCount; ++i)
-        {
-	nameValue *pair = needMem(sizeof(pair));
-	pair->name = exp->name;
-	pair->value = exp->expScores[i];
-        hashAdd(hash,floatToString(i),pair);
-        }
-    slAddHead(&list, exp);
-    }
-printOutput(f,hash,count);
-slReverse(&list);
-expDataFreeList(&list);
-carefulClose(&f);
-}
-
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
-fileIO(argv[1],argv[2]);
+expData(argv[1], argv[2], argv[3]);
 return 0;
 }
