@@ -31,7 +31,7 @@ hPrintf("\n<script>\n"
 "  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n"
 "  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');\n"
 "  ga('require', 'displayfeatures');\n"
-"  ga('create', '%s', 'ucsc.edu');\n"
+"  ga('create', '%s', 'auto');\n"
 "  ga('send', 'pageview');\n"
 "\n"
 "</script>", analyticsKey);

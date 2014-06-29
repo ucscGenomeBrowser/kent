@@ -929,7 +929,7 @@ def getRsyncSizes(dataType, db):
         if fields[0][0]=="d":
             continue
         fileName = fields[-1]
-        tableSize = int(fields[1])
+        tableSize = int(fields[1].replace(",",""))
 
         if dataType=="gbdb":
             resName = "%s" % (fileName)
