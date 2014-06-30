@@ -119,7 +119,7 @@ writeGulp(path, result, strlen(result));
 }
 
 
-void autoUpgradeTableAddSesssionKey(struct sqlConnection *conn, char *tableName)
+void autoUpgradeTableAddSessionKey(struct sqlConnection *conn, char *tableName)
 /* Try to upgrade the table by adding sessionKey field
  * in a safe way handling success failures and retries
  * with multiple CGIs running. */
@@ -218,13 +218,13 @@ if (!initialized)
 	    // AUTO-UPGRADE tables to add missing sessionKey field here.
 	    if (!userDbHasSessionKey)
 		{
-		autoUpgradeTableAddSesssionKey(conn, "userDb");
+		autoUpgradeTableAddSessionKey(conn, "userDb");
 		userDbInitialized = FALSE;
 		userDbHasSessionKey = cartDbHasSessionKey(conn, "userDb");
 		}
     	    if (!sessionDbHasSessionKey)
 		{
-		autoUpgradeTableAddSesssionKey(conn, "sessionDb");
+		autoUpgradeTableAddSessionKey(conn, "sessionDb");
 		sessionDbInitialized = FALSE;
 		sessionDbHasSessionKey = cartDbHasSessionKey(conn, "sessionDb");
 		}
@@ -276,6 +276,13 @@ unsigned int cartDbParseId(char *id, char **pSessionKey)
 /* Parse out the numeric id and id_sessionKey string if present. */
 {
 unsigned int result = 0;
+if (sameString(id,"")) // some users reported blank cookie values.
+    {
+    verbose(1, "cartDbParseId: id with empty string found.");
+    if (pSessionKey)
+	*pSessionKey = NULL;
+    return 0;
+    }
 char *e = strchr(id, '_');
 if (e)
     *e = 0;

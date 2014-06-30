@@ -1447,9 +1447,22 @@ if (sameWord("HTTPHOST", domain))
 
 char userIdKey[256];
 cartDbSecureId(userIdKey, sizeof userIdKey, cart->userInfo);
-printf("Set-Cookie: %s=%s; path=/; domain=%s; expires=%s\r\n",
-        cookieName, userIdKey, domain, cookieDate());
-if(geoMirrorEnabled())
+// Some users reported blank cookie values. Do we see that here?
+if (sameString(userIdKey,"")) // make sure we do not write any blank cookies.
+    {
+    // Be sure we do not lose this message.
+    // Because the error happens so early we cannot trust that the warn and error handlers
+    // are setup correctly and working.
+    verbose(1, "unexpected error in cartWriteCookie: userId string is empty.");
+    dumpStack( "unexpected error in cartWriteCookie: userId string is empty.");
+    warn(      "unexpected error in cartWriteCookie: userId string is empty.");
+    }
+else
+    {
+    printf("Set-Cookie: %s=%s; path=/; domain=%s; expires=%s\r\n",
+	    cookieName, userIdKey, domain, cookieDate());
+    }
+if (geoMirrorEnabled())
     {
     // This occurs after the user has manually choosen to go back to the original site; we store redirect value into a cookie so we 
     // can use it in subsequent hgGateway requests before loading the user's cart
