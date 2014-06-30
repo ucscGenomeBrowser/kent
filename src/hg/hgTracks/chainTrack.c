@@ -388,6 +388,7 @@ chainCart->scoreFilter = cartUsualIntClosestToHome(cart, tdb,
 
 linkedFeaturesMethods(tg);
 tg->itemColor = lfChromColor;	/*	default coloring option */
+tg->exonArrowsAlways = TRUE;
 
 /*	if normScore column is available, then allow coloring	*/
 if (normScoreAvailable)
