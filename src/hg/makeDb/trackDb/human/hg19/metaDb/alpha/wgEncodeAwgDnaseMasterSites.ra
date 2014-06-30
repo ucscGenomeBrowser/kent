@@ -1,0 +1,19 @@
+metaObject wgEncodeAwgDnaseMasterSites
+objType table
+composite wgEncodeAwgDnaseMasterSites
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseMasterSites.bed.gz
+project wgEncode
+tableName wgEncodeAwgDnaseMasterSites
+
+metaObject wgEncodeAwgDnaseMasterSources
+objType table
+composite wgEncodeAwgDnaseMasterSites
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+fileName wgEncodeAwgDnaseMasterSources.tab
+project wgEncode
+tableName wgEncodeAwgDnaseMasterSources
+
+# MAGIC: -12029177
