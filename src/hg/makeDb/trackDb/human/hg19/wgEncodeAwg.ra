@@ -10,7 +10,7 @@ type bed 5 +
 bedNameLabel Number of cell types
 visibility dense
 group regulation
-priority 3.6
+priority 2.6
 minGrayLevel 3
 spectrum on
 scoreMax 1000
@@ -30,6 +30,6 @@ shortLabel DnaseI Footprnt
 longLabel DNaseI Hypersensitivity Combined Footprints from ENCODE/Analysis
 type bigBed 3
 color 150,150,50
-priority 3.7
+priority 2.7
 wgEncode 1
 spectrum on
