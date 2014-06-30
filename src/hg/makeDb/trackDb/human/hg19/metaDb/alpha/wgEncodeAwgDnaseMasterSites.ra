@@ -4,6 +4,7 @@ composite wgEncodeAwgDnaseMasterSites
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 fileName wgEncodeAwgDnaseMasterSites.bed.gz
+md5sum db72ff583f952706de1da251551cc24a
 project wgEncode
 tableName wgEncodeAwgDnaseMasterSites
 
@@ -13,7 +14,8 @@ composite wgEncodeAwgDnaseMasterSites
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 fileName wgEncodeAwgDnaseMasterSources.tab
+md5sum d4af561e56ab5c72c83aca64b361e281
 project wgEncode
 tableName wgEncodeAwgDnaseMasterSources
 
-# MAGIC: -12029177
+# MAGIC: 549228870
