@@ -1271,9 +1271,10 @@ chopByChar(altAlCopy, ',', &(alleles[1]), alCount-1);
 int i;
 if (allelesHavePaddingBase(alleles, alCount))
     {
-    // Skip padding base:
+    // Skip padding base (unless we have a symbolic allele):
     for (i = 0;  i < alCount;  i++)
-	alleles[i]++;
+	if (isAllNt(alleles[i], strlen(alleles[i])))
+	    alleles[i]++;
     }
 // Having dealt with left padding base, now look for identical bases on the right:
 int trimmedBases = countIdenticalBasesRight(alleles, alCount);
