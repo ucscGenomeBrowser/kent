@@ -44,6 +44,8 @@ static void factorSourceLoadItems(struct track *track)
 /* Load all items (and motifs if table is present) in window */
 {
 bedLoadItem(track, track->table, (ItemLoader)loadOne);
+if (track->items == NULL)
+    return;
 
 struct factorSourceInfo *fsInfo = NULL;
 AllocVar(fsInfo);
