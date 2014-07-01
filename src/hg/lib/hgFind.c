@@ -2482,15 +2482,15 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 		fprintf(f, "%s=%s&", trackName, vis);
 		// this is magic to tell the browser to make the 
 		// composite and this subTrack visible
-		if (tdb->parentName)
+		if (tdb->parent)
 		    {
 		    if (tdbIsSuperTrackChild(tdb))
-			fprintf(f, "%s=show&", tdb->parentName);
+			fprintf(f, "%s=show&", tdb->parent->track);
 		    else
 			{
 			// tdb is a subtrack of a composite or a view
 			fprintf(f, "%s_sel=1&", trackName);
-			fprintf(f, "%s_sel=1&", tdb->parentName);
+			fprintf(f, "%s_sel=1&", tdb->parent->track);
 			}
 		    }
 		fprintf(f, "hgFind.matches=%s,\">", encMatches);
