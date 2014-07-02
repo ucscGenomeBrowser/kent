@@ -539,9 +539,8 @@ char *newCodingSeq = mergeAllele(oldCodingSeq, startInCds, variantSizeOnCds,
 				 newAlleleSeq, newAlLen, lm);
 // If newCodingSequence has an early stop, truncate there:
 truncateAtStopCodon(newCodingSeq);
-int variantSizeOnRef = allele->variant->chromEnd - allele->variant->chromStart;
 if (retCdsBasesAdded)
-    *retCdsBasesAdded = allele->length - variantSizeOnRef;
+    *retCdsBasesAdded = newAlLen - variantSizeOnCds;
 return newCodingSeq;
 }
 
@@ -583,8 +582,22 @@ else
 	if (newAaSize < oldAaSize)
 	    {
 	    // Not a deletion but protein got smaller; must have been an early stop codon,
-	    // possibly following a frameshift caused by an insertion.
-	    if (cc->aaNew[0] != 'Z')
+	    // possibly inserted or following a frameshift caused by an insertion.
+	    int frame = cc->cdsPosition % 3;
+	    int alleleLength = strlen(effect->allele);
+	    if (! isAllNt(effect->allele, alleleLength))
+		// symbolic -- may be deletion or insertion, but we can't tell. :(
+		alleleLength = 0;
+	    int i, affectedCodons = (frame + alleleLength + 2) / 3;
+	    boolean stopGain = FALSE;
+	    for (i = 0;  i < affectedCodons;  i++)
+		if (cc->aaNew[i] == 'Z')
+		    {
+		    effect->soNumber = stop_gained;
+		    stopGain = TRUE;
+		    break;
+		    }
+	    if (! stopGain)
 		{
 		if (newAa[newAaSize-1] != 'Z')
 		    errAbort("gpFx: new protein is smaller but last base in new sequence "
@@ -593,8 +606,6 @@ else
 			     , newAa[newAaSize-1], oldAaSize, oldAa, newAaSize, newAa);
 		effect->soNumber = frameshift_variant;
 		}
-	    else
-		effect->soNumber = stop_gained;
 	    }
 	else if (newAaSize > oldAaSize)
 	    {
