@@ -110,6 +110,7 @@ if (sqlTable != NULL)
     }
 else if (!oldTable)
     {
+    int minLength = hGetMinIndexLength(database);
     /* Create definition statement. */
     sqlDyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
@@ -123,7 +124,7 @@ else if (!oldTable)
     if (tIndex)
         {
 	if (!noBin)
-	   dyStringAppend(dy, "  INDEX(tName(16),bin),\n");
+           dyStringPrintf(dy, "  INDEX(tName(%d),bin),\n", minLength);
 	}
     else
 	{
@@ -162,6 +163,7 @@ if (sqlTable != NULL)
     }
 else if (!oldTable)
     {
+    int minLength = hGetMinIndexLength(database);
     /* Create definition statement. */
     sqlDyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
@@ -184,11 +186,11 @@ else if (!oldTable)
         {
 	if (noBin)
 	    {
-	    dyStringAppend(dy, "  INDEX(tName(16),tStart),\n");
-	    dyStringAppend(dy, "  INDEX(tName(16),tEnd),\n");
+            dyStringPrintf(dy, "  INDEX(tName(%d),tStart),\n", minLength);
+            dyStringPrintf(dy, "  INDEX(tName(%d),tEnd),\n", minLength);
 	    }
 	else
-	   dyStringAppend(dy, "  INDEX(tName(16),bin),\n");
+           dyStringPrintf(dy, "  INDEX(tName(%d),bin),\n", minLength);
 	}
     else
 	{
