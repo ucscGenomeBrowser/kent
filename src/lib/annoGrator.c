@@ -216,10 +216,22 @@ return FALSE;
 }
 
 static void agSetFilters(struct annoStreamer *vSelf, struct annoFilter *newFilters)
-/* Update filters and re-evaluate self->haveRJIncludeFilter */
+/* Replace filters and re-evaluate self->haveRJIncludeFilter. Apply filters to
+ * own streamer interface and to internal source. */
 {
 annoStreamerSetFilters(vSelf, newFilters);
 struct annoGrator *self = (struct annoGrator *)vSelf;
+self->haveRJIncludeFilter = filtersHaveRJInclude(vSelf->filters);
+self->mySource->setFilters(self->mySource, newFilters);
+}
+
+static void agAddFilters(struct annoStreamer *vSelf, struct annoFilter *newFilters)
+/* Add filters and re-evaluate self->haveRJIncludeFilter. Apply filters to
+ * own streamer interface and to internal source. */
+{
+annoStreamerAddFilters(vSelf, newFilters);
+struct annoGrator *self = (struct annoGrator *)vSelf;
+annoStreamerSetFilters(self->mySource, vSelf->filters);
 self->haveRJIncludeFilter = filtersHaveRJInclude(vSelf->filters);
 }
 
@@ -256,6 +268,7 @@ annoStreamerInit(streamer, mySource->assembly, mySource->getAutoSqlObject(mySour
 streamer->rowType = mySource->rowType;
 streamer->setAutoSqlObject = agSetAutoSqlObject;
 streamer->setFilters = agSetFilters;
+streamer->addFilters = agAddFilters;
 streamer->setRegion = annoGratorSetRegion;
 streamer->nextRow = noNextRow;
 streamer->close = annoGratorClose;

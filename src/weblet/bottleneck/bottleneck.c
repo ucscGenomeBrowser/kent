@@ -47,7 +47,7 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
-   {"post", OPTION_INT},
+   {"port", OPTION_INT},
    {"host", OPTION_STRING},
    {"subnet", OPTION_STRING},
    {"penalty", OPTION_INT},

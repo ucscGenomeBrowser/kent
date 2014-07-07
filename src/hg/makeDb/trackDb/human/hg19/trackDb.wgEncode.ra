@@ -204,5 +204,6 @@ include wgEncodeMapability.ra
 include wgEncodeAwgDnaseUniform.ra
 include wgEncodeAwgTfbsUniform.ra
 include wgEncodeAwgSegmentation.ra
+include wgEncodeAwgDnaseMasterSites.ra
 
 include wgEncodeAwg.ra

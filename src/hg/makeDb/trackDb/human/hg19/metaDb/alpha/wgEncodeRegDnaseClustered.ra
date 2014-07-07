@@ -41,4 +41,11 @@ fileName wgEncodeRegDnaseClusteredV2.bed.gz
 project wgEncode
 tableName wgEncodeRegDnaseClusteredV2
 
-# MAGIC: 1743288666
+metaObject wgEncodeRegDnaseClusteredV3
+objType table
+composite wgEncodeRegDnaseClustered
+fileName wgEncodeRegDnaseClusteredV3.bed.gz
+project wgEncode
+tableName wgEncodeRegDnaseClusteredV3
+
+# MAGIC: 1879694908

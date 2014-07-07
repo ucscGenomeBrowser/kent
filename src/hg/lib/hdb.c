@@ -2543,6 +2543,12 @@ char *clade;
 if ((clade = trackHubAssemblyClade(genome)) != NULL)
     return clade;
 
+if (isHubTrack(genome))
+    {
+    warn("Current genome '%s' is supported by a hub that is no longer connected. Switching to default database.", trackHubSkipHubName(genome));
+    return cloneString("none");
+    }
+
 struct sqlConnection *conn = hConnectCentral();
 if (hGotCladeConn(conn))
     {
@@ -4198,28 +4204,6 @@ char *hTrackOpenVis(char *db, char *trackName)
 /* Return "pack" if track is packable, otherwise "full". */
 {
 return hTrackCanPack(db, trackName) ? "pack" : "full";
-}
-
-char *hGetParent(char *db, char *subtrackName)
-/* Given a subtrack table, find its parent */
-{
-// TODO--- hub tracks can have parents.  This is only called from
-// item search, but it should work there too.   We should be able
-// to grab these out of the settings hash, but then why doesn't
-// this happen for mySQL tracks?  It would be a lot faster methinks
-if (isHubTrack(subtrackName))
-    return NULL;
-
-struct sqlConnection *conn = hAllocConn(db);
-struct trackDb *tdb = hMaybeTrackInfo(conn, subtrackName);
-char *ret = NULL;
-if (tdb != NULL)
-    {
-    ret = firstWordInLine( trackDbLocalSetting(tdb, "parent"));
-    trackDbFree(&tdb);
-    }
-hFreeConn(&conn);
-return ret;
 }
 
 static struct hash *makeTrackSettingsHash(char *db)

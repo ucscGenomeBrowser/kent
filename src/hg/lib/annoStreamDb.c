@@ -17,6 +17,11 @@ struct annoStreamDb
     struct sqlResult *sr;		// SQL query result from which we grab rows
     char *table;			// Table name, must exist in database
 
+    struct dyString *(*makeBaselineQuery)(struct annoStreamDb *self, boolean *retHasWhere);
+    /* Provide baseline query, by default just 'select * from <table>'.
+     * Override this to make a query with specific fields, joins etc.
+     * If the returned query includes a join/where, set *retHasWhere to TRUE. */
+
     // These members enable us to extract coords from the otherwise unknown row:
     char *chromField;			// Name of chrom-ish column in table
     char *startField;			// Name of chromStart-ish column in table
@@ -115,13 +120,24 @@ static char **nextRowFromSqlResult(struct annoStreamDb *self)
 return sqlNextRow(self->sr);
 }
 
+static struct dyString *asdMakeBaselineQuery(struct annoStreamDb *self, boolean *retHasWhere)
+/* Return a baseline query, i.e. "select * from <table>".  This is the default implementation
+ * of annoStreamDb.makeBaselineQuery. */
+{
+if (retHasWhere)
+    *retHasWhere = FALSE;
+return sqlDyStringCreate("select * from %s ", self->table);
+}
+
+
 static void asdDoQuerySimple(struct annoStreamDb *self, char *minChrom, uint minEnd)
 /* Return a sqlResult for a query on table items in position range.
- * If doing a whole genome query. just 'select * from' table. */
+ * If doing a whole genome query. just select all rows from table. */
 // NOTE: it would be possible to implement filters at this level, as in hgTables.
 {
 struct annoStreamer *streamer = &(self->streamer);
-struct dyString *query = sqlDyStringCreate("select * from %s", self->table);
+boolean hasWhere = FALSE;
+struct dyString *query = self->makeBaselineQuery(self, &hasWhere);
 if (!streamer->positionIsGenome)
     {
     if (minChrom && differentString(minChrom, streamer->chrom))
@@ -140,7 +156,8 @@ if (!streamer->positionIsGenome)
 	// Don't let mysql use a (chrom, chromEnd) index because that messes up
 	// sorting by chromStart.
 	sqlDyStringPrintf(query, " IGNORE INDEX (%s)", self->endFieldIndexName);
-    sqlDyStringPrintf(query, " where %s='%s'", self->chromField, streamer->chrom);
+    sqlDyStringAppend(query, hasWhere ? " and " : " where ");
+    sqlDyStringPrintf(query, "%s='%s'", self->chromField, streamer->chrom);
     int chromSize = annoAssemblySeqSize(streamer->assembly, streamer->chrom);
     if (streamer->regionStart != 0 || streamer->regionEnd != chromSize)
 	{
@@ -238,10 +255,11 @@ updateNextChunkState(self, queryMaxItems);
 
 static void asdDoQueryChunking(struct annoStreamDb *self, char *minChrom, uint minEnd)
 /* Return a sqlResult for a query on table items in position range.
- * If doing a whole genome query. just 'select * from' table. */
+ * If doing a whole genome query, just select all rows from table. */
 {
 struct annoStreamer *sSelf = &(self->streamer);
-struct dyString *query = sqlDyStringCreate("select * from %s ", self->table);
+boolean hasWhere = FALSE;
+struct dyString *query = self->makeBaselineQuery(self, &hasWhere);
 if (sSelf->chrom != NULL && self->rowBuf.size > 0 && !self->doNextChunk)
     {
     // We're doing a region query, we already got some rows, and don't need another chunk:
@@ -274,7 +292,7 @@ if (self->hasBin)
 if (self->endFieldIndexName != NULL)
     // Don't let mysql use a (chrom, chromEnd) index because that messes up
     // sorting by chromStart.
-    sqlDyStringPrintf(query, "IGNORE INDEX (%s) ", self->endFieldIndexName);
+    sqlDyStringPrintf(query, " IGNORE INDEX (%s) ", self->endFieldIndexName);
 if (sSelf->chrom != NULL)
     {
     uint start = sSelf->regionStart;
@@ -288,7 +306,8 @@ if (sSelf->chrom != NULL)
 	}
     if (self->doNextChunk && start < self->nextChunkStart)
 	start = self->nextChunkStart;
-    sqlDyStringPrintf(query, "where %s = '%s' and ", self->chromField, sSelf->chrom);
+    sqlDyStringAppend(query, hasWhere ? " and " : " where ");
+    sqlDyStringPrintf(query, "%s = '%s' and ", self->chromField, sSelf->chrom);
     if (self->hasBin)
 	{
 	if (self->doNextChunk && self->gotFinestBin)
@@ -344,7 +363,8 @@ else
 	if (self->doNextChunk && start < self->nextChunkStart)
 	    start = self->nextChunkStart;
 	uint end = annoAssemblySeqSize(self->streamer.assembly, self->queryChrom->name);
-	sqlDyStringPrintf(query, "where %s = '%s' ", self->chromField, chrom);
+	sqlDyStringAppend(query, hasWhere ? " and " : " where ");
+	sqlDyStringPrintf(query, "%s = '%s' ", self->chromField, chrom);
 	if (start > 0 || self->doNextChunk)
 	    {
 	    dyStringAppend(query, "and ");
@@ -657,6 +677,7 @@ if (self->hasBin && !sameString(asFirstColumnName, "bin"))
 if (!asdInitBed3Fields(self))
     errAbort("annoStreamDbNew: can't figure out which fields of %s.%s to use as "
 	     "{chrom, chromStart, chromEnd}.", db, table);
+self->makeBaselineQuery = asdMakeBaselineQuery;
 // When a table has an index on endField, sometimes the query optimizer uses it
 // and that ruins the sorting.  Fortunately most tables don't anymore.
 self->endFieldIndexName = sqlTableIndexOnField(self->conn, self->table, self->endField);

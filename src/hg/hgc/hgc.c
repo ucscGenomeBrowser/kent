@@ -956,6 +956,7 @@ char* replaceInUrl(struct trackDb *tdb, char *url, char *idInUrl, boolean encode
 struct dyString *uUrl = NULL;
 struct dyString *eUrl = NULL;
 char startString[64], endString[64];
+char begItem[64], endItem[64];
 char *ins[11], *outs[11];
 char *eItem = (encode ? cgiEncode(idInUrl) : cloneString(idInUrl));
 
@@ -1001,7 +1002,6 @@ if (cartOptionalString(cart, "o") && cartOptionalString(cart, "t"))
     {
     int itemBeg = cartIntExp(cart, "o") + 1; // Should strip any unexpected commas
     int itemEnd = cartIntExp(cart, "t");
-    char begItem[64], endItem[64];
     safef(begItem, sizeof begItem, "%d", itemBeg);
     safef(endItem, sizeof endItem, "%d", itemEnd);
     outs[9] = begItem;
@@ -18991,12 +18991,15 @@ if (cgiVarExists("o"))
 	       database, tdb->track);
 	printf("<B>Other Position Relative Orientation:</B>%s<BR>\n",
 	       dup.strand);
-	printf("<B>Filter Verdict:</B> %s<BR>\n", dup.verdict);
-	printf("&nbsp;&nbsp;&nbsp;<B> testResult:</B>%s<BR>\n", dup.testResult);
-	printf("&nbsp;&nbsp;&nbsp;<B> chits:</B>%s<BR>\n", dup.chits);
-	printf("&nbsp;&nbsp;&nbsp;<B> ccov:</B>%s<BR>\n", dup.ccov);
-	printf("&nbsp;&nbsp;&nbsp;<B> posBasesHit:</B>%d<BR>\n",
-	       dup.posBasesHit);
+	if(sameString("canFam1", database))
+	{
+		printf("<B>Filter Verdict:</B> %s<BR>\n", dup.verdict);
+		printf("&nbsp;&nbsp;&nbsp;<B> testResult:</B>%s<BR>\n", dup.testResult);
+		printf("&nbsp;&nbsp;&nbsp;<B> chits:</B>%s<BR>\n", dup.chits);
+		printf("&nbsp;&nbsp;&nbsp;<B> ccov:</B>%s<BR>\n", dup.ccov);
+		printf("&nbsp;&nbsp;&nbsp;<B> posBasesHit:</B>%d<BR>\n",
+		       dup.posBasesHit);
+	} else {};
 	if (alignUrl != NULL)
 	    printf("<A HREF=%s/%s "
 		   "TARGET=\"%s:%d-%d\">Optimal Global Alignment</A><BR>\n",
@@ -24203,12 +24206,12 @@ int qWidth = atoi(cartOptionalString(cart, "qWidth"));
 safef(otherDb, sizeof otherDb, "%s_%s", hubName, otherSpecies);
 
 
-printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=_BLANK><B>Link to block in other species</A><BR>\n", otherDb, qName, qs, qe,hubName,trackHubSkipHubName(database));
+printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=_BLANK><B>Link to block in other assembly</A><BR>\n", otherDb, qName, qs, qe,hubName,trackHubSkipHubName(database));
 
 int qCenter = (qs + qe) / 2;
 int newQs = qCenter - qWidth/2;
 int newQe = qCenter + qWidth/2;
-printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=\"_blank\"><B>Link to same window size in other species</A><BR>\n", otherDb, qName, newQs, newQe,hubName,trackHubSkipHubName(database));
+printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=\"_blank\"><B>Link to same window size in other assembly</A><BR>\n", otherDb, qName, newQs, newQe,hubName,trackHubSkipHubName(database));
 } 
 
 bool vsameWords(char *a, va_list args)

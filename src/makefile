@@ -106,6 +106,8 @@ LIB_TAGS_IN = lib/*.[hc] */lib/*.[hc] */*/lib/*.[hc] */*/*/lib/*.[hc] jkOwnLib/*
 tags:
 	ctags ${LIB_TAGS_IN}
 
+cscope: 
+	cscope -Rb
 # build emacs tags for libraries
 .PHONY: etags
 etags:

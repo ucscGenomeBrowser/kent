@@ -37,6 +37,7 @@
 #include "trackHub.h"
 #include "udc.h"
 #include "hubConnect.h"
+#include "bigBedFind.h"
 
 
 // Exhaustive searches can lead to timeouts on CGIs (#11626).
@@ -2430,6 +2431,7 @@ char *ui = getUiUrl(cart);
 char *extraCgi = hgp->extraCgi;
 char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
 boolean containerDivPrinted = FALSE;
+struct trackDb *tdbList = NULL;
 
 if (useWeb)
     {
@@ -2441,14 +2443,17 @@ for (table = hgp->tableList; table != NULL; table = table->next)
     {
     if (table->posList != NULL)
 	{
-	char *parent = hGetParent(db, table->name);
-	char *trackName = table->name;
-	// TODO: should be able to get this from settings hash for
-	// both hub tracks and normal tracks
-	if (!isHubTrack(table->name)) 
-	    trackName = hGetTrackForTable(db, table->name);
-        if (trackName == NULL)
-            errAbort("no track for table \"%s\" found via a findSpec", table->name); // wish we had searchName
+	char *tableName = table->name;
+	if (startsWith("all_", tableName))
+	    tableName += strlen("all_");
+
+	// clear the tdb cache if this track is a hub track
+	if (isHubTrack(tableName))
+	    tdbList = NULL;
+	struct trackDb *tdb = tdbForTrack(db, tableName, &tdbList);
+	if (!tdb)
+            errAbort("no track for table \"%s\" found via a findSpec", tableName);
+	char *trackName = tdb->track;
 	char *vis = hCarefulTrackOpenVis(db, trackName);
 	boolean excludeTable = FALSE;
         if(!containerDivPrinted)
@@ -2477,10 +2482,16 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 		fprintf(f, "%s=%s&", trackName, vis);
 		// this is magic to tell the browser to make the 
 		// composite and this subTrack visible
-		if (parent)
+		if (tdb->parent)
 		    {
-		    fprintf(f, "%s_sel=1&", trackName);
-		    fprintf(f, "%s_sel=1&", parent);
+		    if (tdbIsSuperTrackChild(tdb))
+			fprintf(f, "%s=show&", tdb->parent->track);
+		    else
+			{
+			// tdb is a subtrack of a composite or a view
+			fprintf(f, "%s_sel=1&", trackName);
+			fprintf(f, "%s_sel=1&", tdb->parent->track);
+			}
 		    }
 		fprintf(f, "hgFind.matches=%s,\">", encMatches);
 		htmTextOut(f, pos->name);
@@ -2622,6 +2633,15 @@ if (relativeFlag)
 }
 #endif
 
+static boolean findBigBed(char *db, struct hgFindSpec *hfs, char *spec,
+			    struct hgPositions *hgp)
+/* Look up items in bigBed  */
+{
+struct trackDb *tdb = tdbFindOrCreate(db, NULL, hfs->searchTable);
+
+return findBigBedPosInTdbList(db, tdb, spec, hgp);
+}
+
 static boolean searchSpecial(char *db, struct hgFindSpec *hfs, char *term, int limitResults,
 			     struct hgPositions *hgp, boolean relativeFlag,
 			     int relStart, int relEnd, boolean *retFound)
@@ -2649,6 +2669,10 @@ if (sameString(hfs->searchType, "knownGene"))
 else if (sameString(hfs->searchType, "refGene"))
     {
     found = findRefGenes(db, hfs, term, hgp);
+    }
+else if (sameString(hfs->searchType, "bigBed"))
+    {
+    found = findBigBed(db, hfs, term, hgp);
     }
 else if (sameString(hfs->searchType, "cytoBand"))
     {

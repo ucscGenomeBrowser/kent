@@ -4310,6 +4310,7 @@ tablesIgnored $gbd
     assemblyFrags
     affyDrosDev%
     ancientRepeat
+    animalQtl
     axtInfo
     bam%
     blatFr1
@@ -4323,6 +4324,7 @@ tablesIgnored $gbd
     evofold
     evofoldV2
     exoniphy
+    FaceBase24SampleTypesAvg
     firstEF
     gbLoaded
     gbDelete_tmp

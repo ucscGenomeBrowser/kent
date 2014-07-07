@@ -5212,8 +5212,14 @@ if (filterSettings)
                     }
                 }
         #endif///ndef EXTRA_FIELDS_SUPPORT
+            // FIXME: Label munging should be localized to showScoreFilter()
+            //  when that function is simplified
+            char varName[256];
             char label[128];
-            safef(label,sizeof(label),"Minimum %s",field);
+            safef(varName, sizeof(varName), "%s%s", scoreName, _BY_RANGE);
+            boolean filterByRange = trackDbSettingClosestToHomeOn(tdb, varName);
+            safef(label, sizeof(label),"%s%s", filterByRange ? "": "Minimum ", field);
+
             showScoreFilter(cart,tdb,opened,boxed,parentLevel,name,title,label,scoreName,isFloat);
             freeMem(scoreName);
             count++;

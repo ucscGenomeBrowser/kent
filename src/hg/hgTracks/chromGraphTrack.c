@@ -237,7 +237,9 @@ switch (vis)
 	break;
     case tvDense:
     default:
-        tg->height = tl.fontHeight;
+	// imitate the initialization of simple bed heights
+	tg->lineHeight = tl.fontHeight + 1;
+	tg->height = tg->lineHeight;
 	break;
     }
 return tg->height;

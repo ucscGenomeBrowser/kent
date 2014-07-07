@@ -767,8 +767,8 @@ cat  << 'EOF' > link.csh
 # Filename is in Supplementary data PDF, p. 49, 
 #       Supplementary Methods section 1.2, "DHS Master List and its annotation"
 
-    cd /hive/data/genomes/hg19/bed/wgEncodeAwg/dnase/master
-    set track = wgEncodeAwgDnaseMaster
+    cd /hive/data/genomes/hg19/bed/wgEncodeAwgDnaseMasterSites
+    set track = wgEncodeAwgDnaseMasterSites
 
     mkdir ebi; cd ebi
 
@@ -814,31 +814,78 @@ cat  << 'EOF' > link.csh
 
     # Paste together bed and sources, trim MCV- from item name to leave just the count
     # of cell types (Bob Thurman suggestion), replace semi-colons in source list with commas, 
-    # and add score field
-
-    awk '{sub(/MCV-/,"",$4); printf("%s\t%u\t%u\t%u\t%d\t%.2f\n", $1,$2,$3,$4,0,$5)}' \
+    # and add score field, log transformed and scaled to 100-1000 range:
+    # m = 900/(ln(max)-ln(min))
+    #   -> 125.6
+    # b = ln(max) * m - 1000
+    #   -> 80
+    # score = floatScore * m + b
+    awk '{sub(/MCV-/,"",$4); printf("%s\t%u\t%u\t%u\t%d\t%.2f\n", $1,$2,$3,$4,125.6*log($5)-80,$5)}' \
         ebi/multi-tissue.master.ntypes.simple.hg19.bed > dhs.bed
+
     sed -e 's/;/,/g' multi-tissue.master.ntypes.simple.names.hg19.txt | \
         paste dhs.bed - > dhs.sources.bed
 
 # Create files for loading database tables: track table (bed5Sources) 
     # and sourceTable (idName).  Use new tool to split above format (bed5 + floatScore + sources)
     # Name field has count of cell types having DHS overlapping the master site
+    hgBedSources dhs.sources.bed wgEncodeAwgDnaseMaster
 
-    hgBedSources dhs.sources.bed wgEncodeAwgDnaseCombined
+    # 
+cat checklinks.csh  << 'EOF'
+     foreach t (`awk '{print $2}' < wgEncodeAwgDnaseCombinedSources.tab`)
+         echo -n "$t :"
+         curl -s "http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&deprecated=true&term=$t" \
+                 | grep -c 'argument not found'
+     end
+'EOF'
+    # manually map to CV to create maplinks.txt
+    csh maplinks.csh wgEncodeAwgDnaseMasterSources.tab > sources.fixed.tab
+    mv sources.fixed.tab wgEncodeAwgDnaseMasterSources.unfixed.tab
+    csh maplinks.csh wgEncodeAwgDnaseMasterSources.unfixed.tab > wgEncodeAwgDnaseMasterSources.tab
 
-    # Sources table
+    # Load sources table
     autoSql $HOME/kent/src/hg/lib/idName.as idName
-    hgLoadSqlTab hg19 wgEncodeAwgDnaseCombinedSources idName.sql wgEncodeAwgDnaseCombinedSources.tab
+    hgLoadSqlTab hg19 wgEncodeAwgDnaseMasterSources idName.sql wgEncodeAwgDnaseMasterSources.tab
 
     # BED table
-    hgLoadBed -fillInScore=floatScore -noNameIx -type=bed5+3 \
+    mv wgEncodeAwgDnaseMaster.bed wgEncodeAwgDnaseMasterSites.bed
+    hgLoadBed -noNameIx -type=bed5+3 \
         -sqlTable=$HOME/kent/src/hg/lib/bed5Sources.sql \
         -renameSqlTable -as=$HOME/kent/src/hg/lib/bed5Sources.as \
-            hg19 wgEncodeAwgDnaseCombinedSites wgEncodeAwgDnaseCombined.bed
-    # Read 2890742 elements of size 8 from wgEncodeAwgDnaseCombined.bed
+            hg19 wgEncodeAwgDnaseMasterSites wgEncodeAwgDnaseMasterSites.bed
+    # Read 2890742 elements of size 8 from wgEncodeAwgDnaseMasterSites.bed
 
-    #TODO: better scores (e.g. log transform)
+    # Downloads
+    mkdir downloads
+    cp wgEncodeAwgDnaseMasterSources.tab wgEncodeAwgDnaseMasterSites.bed downloads
+    cd downloads
+    gzip wgEncodeAwgDnaseMasterSites.bed
+    pushd
+
+    set dir = /hive/groups/encode/dcc/pipeline/downloads/hg19
+    mkdir -p $dir/wgEncodeAwgDnaseMasterSites
+    cd $dir/wgEncodeAwgDnaseMasterSites
+    mkdir release1
+    ln -s release1 beta
+    ln -s release1 releaseLatest
+
+    popd
+    ln wgEncodeAwgDnaseMasterSites.bed.gz wgEncodeAwgDnaseMasterSources.tab \
+        $dir/wgEncodeAwgDnaseMasterSites
+    cd $dir/wgEncodeAwgDnaseMasterSites
+
+    # add metadata file trackDb/human/hg19/metaDb/alpha/wgEncodeAwgDnaseMasterSites.ra
+    encodeMkFilesList hg19 -md5 -cv=/cluster/home/kate/kent/src/hg/makeDb/trackDb/cv/alpha
+
+    # Add README.txt
+
+    # Notes file for QA
+    cd ~/kent/src/hg/makeDb/doc/encodeDccHg19
+    /cluster/bin/scripts/encodeMkChangeNotes hg19 wgEncodeAwgDnaseMasterSites 1 > wgEncodeAwgDnaseMasterSites.release1.notes
+
+    # QA preview (vs. redmine issue)
+    encodeQaInit hg19 wgEncodeAwgDnaseMasterSites 1 13230 -t 
 
 
 ###############################################

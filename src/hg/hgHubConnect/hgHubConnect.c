@@ -48,7 +48,7 @@ puts("</TD>");
 static void ourPrintCellLink(char *str, char *url)
 {
 ourCellStart();
-printf("<A HREF=\"%s\" TARGET=_BLANK>\n", url);
+printf("<A class=\"cv\" HREF=\"%s\" TARGET=_BLANK>\n", url);
 if (str != NULL)
     fputs(str, stdout); // do not add a newline -- was causing trailing blanks get copied in cut and paste 
 puts("</A>");

@@ -1525,23 +1525,9 @@ dataVersion March 2007
 track uc16 override
 longLabel Ultraconserved Elements (200 bp 100% ID in Rat/Mouse/Human)
 
-searchTable uc16
-searchMethod exact
-searchType bed
-searchPriority 10
-termRegex uc\.[0-9]+
-
 track ux16 override
 longLabel Extended Ultraconserved Elements (Until 5 Bases Below 85%)
 color 200,0,0
-searchMethod exact
-searchType bed
-
-searchTable ux16
-searchMethod exact
-searchType bed
-searchPriority 10
-termRegex ux\.[0-9]+
 
 track hars
 shortLabel Human Accelerated
