@@ -28695,9 +28695,9 @@ bedToBigBed clinvarCnv.bed /scratch/data/hg19/chrom.sizes clinvarCnv.bb -type=be
 cp clinvarMain.bb /hive/data/genomes/hg19/bed/clinvar/
 cp clinvarCnv.bb /hive/data/genomes/hg19/bed/clinvar/
 
-
+_EOF_
 #########################################################################
-# LOCUS REFERENCE GENOME (LRG) REGIONS AND TRANSCRIPTS (DONE 5/29/14 angie)
+# LOCUS REFERENCE GENOME (LRG) REGIONS AND TRANSCRIPTS (DONE 7/7/14 angie)
     screen -S lrg -t lrg
     set today = `date +%Y_%m_%d`
     mkdir -p /hive/data/genomes/hg19/bed/lrg/$today
@@ -28714,7 +28714,18 @@ cp clinvarCnv.bb /hive/data/genomes/hg19/bed/clinvar/
     # affected transcript's coding_region/coordinates vs. exon/intron info in xml.
     # Contact Variation team leader Fiona Cunningham @EBI to resolve in the background
     # (missing exonFrame info doesn't affect our track representation because we end up using
-    # psl).
+    # psl).  We agreed to disagree about exon 46 of LRG_7t1 because that last coding exon
+    # portion is only the stop codon.
+
+    # Fix some URLs that have moved but have not yet been updated in the LRG xml --
+    # hopefully this will not be needed next time!
+    sed -re 's@http://bioinf.uta.fi/PFCbase/@http://bioinf.uta.fi/CFPbase/@; \
+             s@http://bioinf.uta.fi/@http://structure.bmc.lu.se/idbase/@; \
+             s@http://rapid.rcai.riken.jp/RAPID/diseasePhenotype@http://web16.kazusa.or.jp/rapid/diseasePhenotype@i; \
+             s@http://rapid.rcai.riken.jp/RAPID/mutation@http://web16.kazusa.or.jp/rapid/diseasePhenotype@i; \
+             s@http://ngrl.man.ac.uk/lovd2/home.php\?select_db=UBE3A@https://secure.ngrl.org.uk/LOVDv.2.0/home.php?select_db=UBE3A@;' \
+      lrg.bed > tmp
+    mv tmp lrg.bed
 
     # Load LRG regions:
     bedToBigBed lrg.bed /hive/data/genomes/hg19/chrom.sizes lrg.bb \
@@ -28758,7 +28769,7 @@ cp clinvarCnv.bb /hive/data/genomes/hg19/bed/clinvar/
     # Ignore exonFrames and compare:
     cut -f 1-14 lrgTranscriptsHg19.gp > t1
     cut -f 1-14 lrgTLiftOver.gp > t2
-    diff t1 t2 | less
+    diff t1 t2
     # Hopefully there won't be differences aside from the ones liftOver couldn't map.
     rm t1 t2
 
