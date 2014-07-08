@@ -748,7 +748,7 @@ visibility dense
 
 #facebase microarray track
 track FaceBase24SampleTypesAvg
-shortLabel FaceBase24STypes
+shortLabel FaceBase 24STypes
 longLabel FaceBase 24 Sample Types Averaged
 #priority 79.1
 visibility hide

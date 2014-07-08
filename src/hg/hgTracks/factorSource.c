@@ -44,6 +44,8 @@ static void factorSourceLoadItems(struct track *track)
 /* Load all items (and motifs if table is present) in window */
 {
 bedLoadItem(track, track->table, (ItemLoader)loadOne);
+if (track->items == NULL)
+    return;
 
 struct factorSourceInfo *fsInfo = NULL;
 AllocVar(fsInfo);
@@ -86,11 +88,19 @@ struct sqlConnection *conn = hAllocConn(database);
 if (sqlTableExists(conn, motifTable))
     {
 
-    // Load motifs
+    // Load all motifs for items in window (including motifs outside of window)
     struct slList *items = track->items;
+    int winStartSave = winStart;
+    int winEndSave = winEnd;
+
+    winStart = min(winStart, ((struct factorSource *)items)->chromStart);
+    winEnd = max(winEnd, ((struct factorSource *)items)->chromEnd);
     bedLoadItem(track, motifTable, (ItemLoader)bed6FloatScoreLoad);
     fsInfo->motifs = track->items;
+
     track->items = items;
+    winStart = winStartSave;
+    winEnd = winEndSave;
 
     char *motifMapTable = trackDbSetting(track->tdb, "motifMapTable");
     if (motifMapTable != NULL && sqlTableExists(conn, motifMapTable))
@@ -219,10 +229,16 @@ slReverse(&motifs);
 #define HIGHEST_SCORING
 #ifdef HIGHEST_SCORING
 if ((motif = motifs) != NULL)
+    {
+    if (motif->chromStart > winEnd || motif->chromEnd < winStart)
+        return;
 #else
 for (motif = motifs; motifs != NULL; motif = motif->next)
-#endif
     {
+    // exclude motifs outside of window
+    if (motif->chromStart > winEnd || motif->chromEnd < winStart)
+        continue;
+#endif
     int x1 = round((double)((int)motif->chromStart-winStart)*scale) + xOff;
     int x2 = round((double)((int)motif->chromEnd-winStart)*scale) + xOff;
     int w = x2-x1;

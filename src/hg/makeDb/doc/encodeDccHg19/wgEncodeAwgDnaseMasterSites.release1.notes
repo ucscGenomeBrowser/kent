@@ -1,0 +1,41 @@
+mkChangeNotes v2
+hg19 wgEncodeAwgDnaseMasterSites Release 1
+2014-06-30
+
+QA Count Summaries for Release 1:
+Tables: 2
+Files: 2
+Gbdbs: 0
+Supplemental: 0
+Other: 2
+
+REVOKED:
+Tables: 0
+Files: 0
+Gbdbs: 0
+
+Sizes of New:
+Table: 198 MB
+Files: 53 MB
+Gbdbs: 0 MB
+Supplemental: 0 MB
+Other: 1 MB
+Total: 252 MB
+
+
+New Tables (2):
+wgEncodeAwgDnaseMasterSites
+wgEncodeAwgDnaseMasterSources
+
+
+New Download Files (2):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgDnaseMasterSites/release1/wgEncodeAwgDnaseMasterSites.bed.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgDnaseMasterSites/release1/wgEncodeAwgDnaseMasterSources.tab
+
+
+New Other Files (2):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgDnaseMasterSites/release1/files.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeAwgDnaseMasterSites/release1/md5sum.txt
+
+
+No Errors

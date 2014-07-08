@@ -159,7 +159,7 @@ if ( -e GitReports.ok ) then
     @ LASTNN=$BRANCHNN - 1
     #foreach victim (braney larrym angie hiram tdreszer kate chinhli)
     set victims=( `git log v${LASTNN}_base..v${BRANCHNN}_base --name-status | grep Author | sort | uniq | awk '{ end=index($0,"@"); beg=index($0,"<"); addr=substr( $0,beg+1,end-beg-1); print addr; }'` )
-    echo "Expected victims:\n${victims}" | mail -s "Code summaries for v$BRANCHNN are expected from...." $USER ${BUILDMEISTER}
+    echo "Expected victims:\n${victims}" | mail -s "Code summaries for v$BRANCHNN are expected from...." $USER ${BUILDMEISTER} ann@soe.ucsc.edu
     foreach victim ( $victims )
 		git log --author=${victim} v${LASTNN}_base..v${BRANCHNN}_base --pretty=oneline > /dev/null
 		if ($? == 0) then

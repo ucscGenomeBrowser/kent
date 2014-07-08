@@ -86,12 +86,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 	printf("update %s set longLabel=\"%s\" where hubUrl=\"%s\";\n",table, tHub->longLabel, url);
 	}
 
-    struct hashCookie cookie = hashFirst(tHub->genomeHash);
     struct dyString *dy = newDyString(1024);
-    struct hashEl *hel;
+    struct trackHubGenome *genome = tHub->genomeList;
 
-    while ((hel = hashNext(&cookie)) != NULL)
-	dyStringPrintf(dy, "%s,", trackHubSkipHubName(hel->name));
+    for(; genome; genome = genome->next)
+	dyStringPrintf(dy, "%s,", trackHubSkipHubName(genome->name));
 
     if (!sameString(dy->string, dbList))
 	{

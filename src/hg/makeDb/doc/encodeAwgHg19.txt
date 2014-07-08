@@ -767,8 +767,8 @@ cat  << 'EOF' > link.csh
 # Filename is in Supplementary data PDF, p. 49, 
 #       Supplementary Methods section 1.2, "DHS Master List and its annotation"
 
-    cd /hive/data/genomes/hg19/bed/wgEncodeAwg/dnase/master
-    set track = wgEncodeAwgDnaseMaster
+    cd /hive/data/genomes/hg19/bed/wgEncodeAwgDnaseMasterSites
+    set track = wgEncodeAwgDnaseMasterSites
 
     mkdir ebi; cd ebi
 
@@ -840,20 +840,52 @@ cat checklinks.csh  << 'EOF'
      end
 'EOF'
     # manually map to CV to create maplinks.txt
-    # NOTE: this would be best done before hgBedSources
-
     csh maplinks.csh wgEncodeAwgDnaseMasterSources.tab > sources.fixed.tab
+    mv sources.fixed.tab wgEncodeAwgDnaseMasterSources.unfixed.tab
+    csh maplinks.csh wgEncodeAwgDnaseMasterSources.unfixed.tab > wgEncodeAwgDnaseMasterSources.tab
 
-    # Sources table
+    # Load sources table
     autoSql $HOME/kent/src/hg/lib/idName.as idName
-    hgLoadSqlTab hg19 wgEncodeAwgDnaseMasterSources2 idName.sql sources.fixed.tab
+    hgLoadSqlTab hg19 wgEncodeAwgDnaseMasterSources idName.sql wgEncodeAwgDnaseMasterSources.tab
 
     # BED table
+    mv wgEncodeAwgDnaseMaster.bed wgEncodeAwgDnaseMasterSites.bed
     hgLoadBed -noNameIx -type=bed5+3 \
         -sqlTable=$HOME/kent/src/hg/lib/bed5Sources.sql \
         -renameSqlTable -as=$HOME/kent/src/hg/lib/bed5Sources.as \
-            hg19 wgEncodeAwgDnaseMasterSites wgEncodeAwgDnaseMaster.bed
-    # Read 2890742 elements of size 8 from wgEncodeAwgDnaseMaster.bed
+            hg19 wgEncodeAwgDnaseMasterSites wgEncodeAwgDnaseMasterSites.bed
+    # Read 2890742 elements of size 8 from wgEncodeAwgDnaseMasterSites.bed
+
+    # Downloads
+    mkdir downloads
+    cp wgEncodeAwgDnaseMasterSources.tab wgEncodeAwgDnaseMasterSites.bed downloads
+    cd downloads
+    gzip wgEncodeAwgDnaseMasterSites.bed
+    pushd
+
+    set dir = /hive/groups/encode/dcc/pipeline/downloads/hg19
+    mkdir -p $dir/wgEncodeAwgDnaseMasterSites
+    cd $dir/wgEncodeAwgDnaseMasterSites
+    mkdir release1
+    ln -s release1 beta
+    ln -s release1 releaseLatest
+
+    popd
+    ln wgEncodeAwgDnaseMasterSites.bed.gz wgEncodeAwgDnaseMasterSources.tab \
+        $dir/wgEncodeAwgDnaseMasterSites
+    cd $dir/wgEncodeAwgDnaseMasterSites
+
+    # add metadata file trackDb/human/hg19/metaDb/alpha/wgEncodeAwgDnaseMasterSites.ra
+    encodeMkFilesList hg19 -md5 -cv=/cluster/home/kate/kent/src/hg/makeDb/trackDb/cv/alpha
+
+    # Add README.txt
+
+    # Notes file for QA
+    cd ~/kent/src/hg/makeDb/doc/encodeDccHg19
+    /cluster/bin/scripts/encodeMkChangeNotes hg19 wgEncodeAwgDnaseMasterSites 1 > wgEncodeAwgDnaseMasterSites.release1.notes
+
+    # QA preview (vs. redmine issue)
+    encodeQaInit hg19 wgEncodeAwgDnaseMasterSites 1 13230 -t 
 
 
 ###############################################

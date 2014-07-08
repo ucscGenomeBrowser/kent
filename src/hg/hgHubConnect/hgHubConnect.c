@@ -198,7 +198,7 @@ printf(
     "</thead>\n");
 
 // start first row
-printf("<tbody><tr>");
+printf("<tbody>");
 
 int count = 0;
 for(hub = unlistedHubList; hub; hub = hub->next)
@@ -207,32 +207,19 @@ for(hub = unlistedHubList; hub; hub = hub->next)
 	webPrintLinkTableNewRow();  // ends last row and starts a new one
     count++;
 
-    // if there's an error message, we don't let people select it
-    if (isEmpty(hub->errorMessage))
-	{
-	ourCellStart();
-	char hubName[32];
-	safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, hub->id);
-	if (cartUsualBoolean(cart, hubName, FALSE))
-	    printf("<input name=\"hubDisconnectButton\""
-		"onClick="
-		"\" document.disconnectHubForm.elements['hubId'].value= '%d';"
-		"document.disconnectHubForm.submit();return true;\" "
-		"class=\"hubDisconnectButton\" type=\"button\" value=\"Disconnect\">\n", hub->id);
-	ourCellEnd();
-	}
-    else
-	{
-	// give people a chance to clear the error 
-	ourCellStart();
-	printf(
-	"<input name=\"hubClearButton\""
-	    "onClick=\"document.resetHubForm.elements['hubCheckUrl'].value='%s';"
-		"document.resetHubForm.submit();return true;\" "
-		"class=\"hubButton\" type=\"button\" value=\"Check Hub\">\n"
-		, hub->hubUrl);
-	ourCellEnd();
-	}
+    puts("<tr>");
+
+    ourCellStart();
+    char hubName[32];
+    safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, hub->id);
+    if (cartUsualBoolean(cart, hubName, FALSE))
+	printf("<input name=\"hubDisconnectButton\""
+	    "onClick="
+	    "\" document.disconnectHubForm.elements['hubId'].value= '%d';"
+	    "document.disconnectHubForm.submit();return true;\" "
+	    "class=\"hubDisconnectButton\" type=\"button\" value=\"Disconnect\">\n", hub->id);
+    ourCellEnd();
+
     if (hub->trackHub != NULL)
 	{
 	ourPrintCellLink(hub->trackHub->shortLabel, hub->hubUrl);
@@ -241,9 +228,20 @@ for(hub = unlistedHubList; hub; hub = hub->next)
 	ourPrintCell("");
 
     if (!isEmpty(hub->errorMessage))
-	printf("<TD><span class=\"hubError\">ERROR: %s </span>"
-	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>\n", 
+	{
+	ourCellStart();
+	printf("<span class=\"hubError\">ERROR: %s </span>"
+	    "<a TARGET=_BLANK href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug Help</a>\n", 
 	    hub->errorMessage);
+	
+	// give people a chance to clear the error 
+	printf("<input name=\"hubClearButton\""
+	    "onClick=\"document.resetHubForm.elements['hubCheckUrl'].value='%s';"
+		"document.resetHubForm.submit();return true;\" "
+		"class=\"hubButton\" type=\"button\" value=\"Retry Hub\">"
+		, hub->hubUrl);
+	ourCellEnd();
+	}
     else if (hub->trackHub != NULL)
 	{
 	if (hub->trackHub->descriptionUrl != NULL)
@@ -258,9 +256,11 @@ for(hub = unlistedHubList; hub; hub = hub->next)
 	printGenomes(hub->trackHub, count);
     else
 	ourPrintCell("");
+
+    puts("</tr>");
     }
 
-printf("</TR></tbody></TABLE>\n");
+printf("</tbody></TABLE>\n");
 printf("</div>");
 }
 
@@ -325,7 +325,7 @@ if (haveTrixFile)
 // if we have search terms, put out the line telling the user so
 if (haveTrixFile && !isEmpty(hubSearchTerms))
     {
-    printf("Displayed list restricted by search terms: %s\n", hubSearchTerms);
+    printf("Displayed list <B>restricted by search terms:</B> %s\n", hubSearchTerms);
     puts("<input name=\"hubDeleteSearchButton\""
 	"onClick="
 	"\" document.searchHubForm.elements['hubSearchTerms'].value=\'\';"
@@ -387,7 +387,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	gotAnyRows = TRUE;
 	}
 
-    if ((id != 0) && isEmpty(errorMessage)) 
+    if (id != 0)
 	{
 	ourCellStart();
 	char hubName[32];
@@ -422,18 +422,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 	ourCellEnd();
 	}
-    else if (!isEmpty(errorMessage))
-	{
-	// give user a chance to clear the error
-	ourCellStart();
-	printf(
-	"<input name=\"hubClearButton\""
-	    "onClick=\"document.resetHubForm.elements['hubCheckUrl'].value='%s';"
-		"document.resetHubForm.submit();return true;\" "
-		"class=\"hubButton\" type=\"button\" value=\"Check Hub\">"
-		, url);
-	ourCellEnd();
-	}
     else
 	errAbort("cannot get id for hub with url %s\n", url);
 
@@ -447,9 +435,19 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    ourPrintCell(longLabel);
 	}
     else
-	printf("<TD><span class=\"hubError\">ERROR: %s </span>"
-	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>", 
+	{
+	ourCellStart();
+	printf("<span class=\"hubError\">ERROR: %s </span>"
+	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug Help</a>", 
 	    errorMessage);
+	printf(
+	"<input name=\"hubClearButton\""
+	    "onClick=\"document.resetHubForm.elements['hubCheckUrl'].value='%s';"
+		"document.resetHubForm.submit();return true;\" "
+		"class=\"hubButton\" type=\"button\" value=\"Retry Hub\">"
+		, url);
+	ourCellEnd();
+	}
 
     printGenomeList(dbListNames, count); 
     }
