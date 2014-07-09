@@ -2099,6 +2099,16 @@ else
     return atof(a);
 }
 
+boolean cartOrTdbBoolean(struct cart *cart, struct trackDb *tdb, char *var, boolean defaultVal)
+/* Look first in cart, then in trackDb for var.  Return defaultVal if not found. */
+{
+boolean tdbVal = defaultVal;
+char *tdbSetting = trackDbSetting(tdb, var);
+if (tdbSetting != NULL)
+    tdbVal = trackDbSettingClosestToHomeOn(tdb, var);
+return cartUsualBooleanClosestToHome(cart, tdb, isNameAtParentLevel(tdb, var), var, tdbVal);
+}
+
 // These macros allow toggling warn messages to NOOPS when no longer debugging
 //#define DEBUG_WITH_WARN
 #ifdef DEBUG_WITH_WARN
