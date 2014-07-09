@@ -493,9 +493,6 @@ if ((row = sqlNextRow(sr)) != NULL)
 	/* Overload settings explicitly passed in via CGI (except for the
 	 * command that sent us here): */
 	loadCgiOverHash(cart, oldVars);
-#ifndef GBROWSE
-	cartCopyCustomTracks(cart);
-#endif /* GBROWSE */
 	if (isNotEmpty(actionVar))
 	    cartRemove(cart, actionVar);
 	hDisconnectCentral(&conn2);
@@ -553,9 +550,6 @@ if (oldVars)
 /* Overload settings explicitly passed in via CGI (except for the
  * command that sent us here): */
 loadCgiOverHash(cart, oldVars);
-#ifndef GBROWSE
-cartCopyCustomTracks(cart);
-#endif /* GBROWSE */
 
 if (isNotEmpty(actionVar))
     cartRemove(cart, actionVar);
@@ -671,6 +665,7 @@ cartJustify(cart, oldVars);
 /* If some CGI other than hgSession been passed hgSession loading instructions,
  * apply those to cart before we do anything else.  (If this is hgSession,
  * let it handle the settings so it can display feedback to the user.) */
+boolean didSessionLoad = FALSE;
 if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
     {
     if (cartVarExists(cart, hgsDoOtherUser))
@@ -683,6 +678,7 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 			    oldVars, hgsDoOtherUser);
 	hDisconnectCentral(&conn2);
 	cartTrace(cart, "after cartLUS", conn);
+	didSessionLoad = TRUE;
 	}
     else if (cartVarExists(cart, hgsDoLoadUrl))
 	{
@@ -692,6 +688,7 @@ if (! (cgiScriptName() && endsWith(cgiScriptName(), "hgSession")))
 	cartLoadSettings(lf, cart, oldVars, hgsDoLoadUrl);
 	lineFileClose(&lf);
 	cartTrace(cart, "after cartLS", conn);
+	didSessionLoad = TRUE;
 	}
     }
 #endif /* GBROWSE */
@@ -702,6 +699,11 @@ if (cartVarExists(cart, hgHubDoDisconnect))
     doDisconnectHub(cart);
 
 char *newDatabase = hubConnectLoadHubs(cart);
+
+#ifndef GBROWSE
+if (didSessionLoad)
+    cartCopyCustomTracks(cart);
+#endif /* GBROWSE */
 
 if (newDatabase != NULL)
     {
