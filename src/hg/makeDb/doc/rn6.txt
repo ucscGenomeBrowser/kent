@@ -164,6 +164,11 @@ chrUn_AABR07023006v1" > dup.list
     # verify end of agp.log indictates:
 # All AGP and FASTA entries agree - both files are valid
 
+    # the non-dup sequence is now:
+    twoBitToFa rn6.unmasked.2bit stdout | faSize stdin
+    #   2870182909 bases (140322104 N's 2729860805 real 2729860805 upper
+    #    0 lower) in 953 sequences in 1 files
+
     # continue with the build, don't let this run without a workhorse
     # specified, it can end up on a machine that can't run the wigToBigWig
     # for the gc5Base track:
@@ -173,34 +178,30 @@ chrUn_AABR07023006v1" > dup.list
 
 
 #########################################################################
-# running repeat masker (WORKING - 2014-07-07 - Hiram)
+# running repeat masker (DONE - 2014-07-07,09 - Hiram)
     mkdir /hive/data/genomes/rn6/bed/repeatMasker
     cd /hive/data/genomes/rn6/bed/repeatMasker
     time doRepeatMasker.pl -buildDir=`pwd` \
 	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=ku rn6 > do.log 2>&1 &
-XXX - running - Mon Jul  7 13:59:41 PDT 2014
-    # hgwdev rebooted during kluster run, continuing:
-    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
-	-continue=cat -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
-	-smallClusterHub=encodek rn6 > cat.log 2>&1 &
-    #	real    55m22.186s
+    #  real    1921m43.379s
+
     cat faSize.rmsk.txt
-    #	2909698938 bases (336845215 N's 2572853723 real 1473277432 upper
-    #	1099576291 lower) in 2739 sequences in 1 files
-    #	Total size: mean 1062321.6 sd 13354598.7 min 280 (chrUn_AABR06111537)
-    #	max 290094216 (chr1) median 1018
-    #	%37.79 masked total, %42.74 masked real
+    # 2870182909 bases (140322104 N's 2729860805 real 1551246793 upper
+    #    1178614012 lower) in 953 sequences in 1 files
+    # Total size: mean 3011734.4 sd 21338622.2 min 230 (chrUn_AABR07024268v1)
+    #    max 282763074 (chr1) median 7294
+    # %41.06 masked total, %43.17 masked real
 
     grep -i versi do.log
-# RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
-#    April 26 2011 (open-3-3-0) version of RepeatMasker
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
 
     featureBits -countGaps rn6 rmsk
-    #	1100336249 bases of 2909698938 (37.816%) in intersection
+    #	1178980732 bases of 2870182909 (41.077%) in intersection
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the faSize count above
-    #	separates out the N's from the bases, it doesn't show lower case N's
+    #	separates out the N's from the bases, it doesn't count lower case N's
 
 ##########################################################################
 # running simple repeat (DONE - 2014-07-07 - Hiram)
@@ -213,7 +214,6 @@ XXX - running - Mon Jul  7 13:59:41 PDT 2014
     cat fb.simpleRepeat 
     #	106804757 bases of 2731211732 (3.911%) in intersection
 
-XXX waiting for RM to finish Mon Jul  7 18:39:34 PDT 2014
     # add the TRF mask to the rmsk sequence:
     #	it masks more sequence
     cd /hive/data/genomes/rn6
@@ -223,11 +223,11 @@ XXX waiting for RM to finish Mon Jul  7 18:39:34 PDT 2014
 
     twoBitToFa rn6.2bit stdout | faSize stdin > faSize.rn6.2bit.txt
     cat faSize.rn6.2bit.txt
-    #	2909698938 bases (336845215 N's 2572853723 real 1471484052 upper
-    #	1101369671 lower) in 2739 sequences in 1 files
-    #	Total size: mean 1062321.6 sd 13354598.7 min 280 (chrUn_AABR06111537)
-    #	max 290094216 (chr1) median 1018
-    #	%37.85 masked total, %42.81 masked real
+    #   2870182909 bases (140322104 N's 2729860805 real 1547693783 upper
+    #   1182167022 lower) in 953 sequences in 1 files
+    #   Total size: mean 3011734.4 sd 21338622.2 min 230 (chrUn_AABR07024268v1)
+    #       max 282763074 (chr1) median 7294
+    #   %41.19 masked total, %43.31 masked real
 
     #	replace the previous symLink which goes to the unmasked 2bit
     rm /gbdb/rn6/rn6.2bit
@@ -315,65 +315,18 @@ close (FH);
     #  145292 yes
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2012-03-19 - Hiram)
+## WINDOWMASKER (DONE - 2014-07-09 - Hiram)
     mkdir /hive/data/genomes/rn6/bed/windowMasker
     cd /hive/data/genomes/rn6/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev rn6 > do.log 2>&1 &
-    #	real    231m12.464s
+    #	real    205m59.097s
 
     # Masking statistics
-    twoBitToFa rn6.wmsk.2bit stdout | faSize stdin
-    #	2909698938 bases (336845215 N's 2572853723 real 1725214664 upper
-    #	847639059 lower) in 2739 sequences in 1 files
-    #	Total size: mean 1062321.6 sd 13354598.7 min 280 (chrUn_AABR06111537)
-    #	max 290094216 (chr1) median 1018
-    #	%29.13 masked total, %32.95 masked real
-
-    twoBitToFa rn6.wmsk.sdust.2bit stdout | faSize stdin
-    #	2909698938 bases (336845215 N's 2572853723 real 1710265619 upper
-    #	862588104 lower) in 2739 sequences in 1 files
-    #	Total size: mean 1062321.6 sd 13354598.7 min 280 (chrUn_AABR06111537)
-    #	max 290094216 (chr1) median 1018
-    #	%29.65 masked total, %33.53 masked real
-
-    hgLoadBed rn6 windowmaskerSdust windowmasker.sdust.bed.gz
-    #	Loaded 13855996 elements of size 3
-
-    featureBits -countGaps rn6 windowmaskerSdust
-    #	1199303584 bases of 2909698938 (41.217%) in intersection
-
-    #	eliminate the gaps from the masking
-    featureBits rn6 -not gap -bed=notGap.bed
-    #	2572853723 bases of 2572853723 (100.000%) in intersection
-    time nice -n +19 featureBits rn6 windowmaskerSdust notGap.bed \
-        -bed=stdout | gzip -c > cleanWMask.bed.gz
-    #	862588104 bases of 2572853723 (33.527%) in intersection
-    #	real    3m53.016s
-
-    #	reload track to get it clean
-    hgLoadBed rn6 windowmaskerSdust cleanWMask.bed.gz
-    #	Loaded 13904385 elements of size 4
-    time featureBits -countGaps rn6 windowmaskerSdust
-    #	862588104 bases of 2909698938 (29.645%) in intersection
-    #	real    1m26.398s
-
-    #	mask with this clean result
-    zcat cleanWMask.bed.gz \
-	| twoBitMask ../../rn6.unmasked.2bit stdin \
-	    -type=.bed rn6.cleanWMSdust.2bit
-    twoBitToFa rn6.cleanWMSdust.2bit stdout | faSize stdin \
-        > rn6.cleanWMSdust.faSize.txt
-    cat rn6.cleanWMSdust.faSize.txt
-    #	2909698938 bases (336845215 N's 2572853723 real 1710265619 upper
-    #	862588104 lower) in 2739 sequences in 1 files
-    #	Total size: mean 1062321.6 sd 13354598.7 min 280 (chrUn_AABR06111537)
-    #	max 290094216 (chr1) median 1018
-    #	%29.65 masked total, %33.53 masked real
-
-    # how much does this window masker and repeat masker overlap:
-    featureBits -countGaps rn6 rmsk windowmaskerSdust
-    #	648600018 bases of 2909698938 (22.291%) in intersection
+    cat fb.rn6.windowmaskerSdust.clean.txt
+    #  949668059 bases of 2870182909 (33.087%) in intersection
+    cat fb.rn6.rmsk.windowmaskerSdust.txt
+    #  712388228 bases of 2870182909 (24.820%) in intersection
 
 #########################################################################
 # MASK SEQUENCE WITH WM+TRF
@@ -392,7 +345,7 @@ close (FH);
 
 #########################################################################
 # PREPARE LINEAGE SPECIFIC REPEAT FILES FOR BLASTZ (TBD - 2012-03-23 - Hiram)
-    ssh encodek
+    ssh ku
     mkdir /hive/data/genomes/rn6/bed/linSpecRep
     cd /hive/data/genomes/rn6/bed/linSpecRep
 
@@ -404,12 +357,15 @@ close (FH);
 
     ls -1S rmsk/* > rmOut.list
     wc -l rmOut.list
-    #	2382 rmOut.list
+    #	904 rmOut.list
+    wc -l ../../chrom.sizes
+    # 953 ../../chrom.sizes
+    #evidently there are 49 segments without RM annotations, some are very small
 
     cat << '_EOF_' > mkLSR
 #!/bin/csh -fe
 rm -f dateRepeats/$1_homo-sapiens_mus-musculus
-/scratch/data/RepeatMasker110426/DateRepeats \
+/scratch/data/RepeatMasker140131/DateRepeats \
     $1 -query rat -comp human -comp mouse
 mv $1_homo-sapiens_mus-musculus dateRepeats
 '_EOF_'
@@ -427,12 +383,12 @@ mv $1_homo-sapiens_mus-musculus dateRepeats
     para create jobList
     para try ... check ... push ... etc...
     para time
-# Completed: 2382 of 2382 jobs
-# CPU time in finished jobs:      37294s     621.57m    10.36h    0.43d  0.001 y
-# IO & Wait Time:                  6367s     106.11m     1.77h    0.07d  0.000 y
-# Average job time:                  18s       0.31m     0.01h    0.00d
-# Longest finished job:              78s       1.30m     0.02h    0.00d
-# Submission to last job:          2245s      37.42m     0.62h    0.03d
+# Completed: 904 of 904 jobs
+# CPU time in finished jobs:      21844s     364.06m     6.07h    0.25d  0.001 y
+# IO & Wait Time:                 20183s     336.39m     5.61h    0.23d  0.001 y
+# Average job time:                  46s       0.77m     0.01h    0.00d
+# Longest finished job:              96s       1.60m     0.03h    0.00d
+# Submission to last job:           682s      11.37m     0.19h    0.01d
 
     mkdir notInHuman notInMouse
     for F in dateRepeats/chr*.out_homo-sapiens*
@@ -470,192 +426,95 @@ do
     twoBitToFa -seq=${C} rn6.2bit stdout | faToNib -softMask stdin nib/${C}.nib
     ls -og nib/$C.nib
 done
-    # verify one is properly masked:
-    nibFrag -masked nib/chrM.nib 0 `grep -w chrM chrom.sizes | cut -f2` + \
-	stdout | faSize stdin
-    #	16313 bases (0 N's 16313 real 15922 upper 391 lower)
-    #	in 1 sequences in 1 files
-    #	%2.40 masked total, %2.40 masked real
-    # compare to:
-    twoBitToFa -seq=chrM rn6.2bit stdout | faSize stdin
-    #	16313 bases (0 N's 16313 real 15922 upper 391 lower)
-    #	in 1 sequences in 1 files
-    #	%2.40 masked total, %2.40 masked real
+    # verify sequence remains the same
+    cut -f1 chrom.sizes | while read C
+do
+    nibFrag -masked nib/${C}.nib 0 `grep -w ${C} chrom.sizes | cut -f2` + \
+	stdout
+done | faSize stdin
+    #   2870182909 bases (140322104 N's 2729860805 real 1547693783 upper
+    #      1182167022 lower) in 953 sequences in 1 files
+    #   Total size: mean 3011734.4 sd 21338622.2
+    #      min 230 (nib/chrUn_AABR07024268v1.nib:0-230)
+    #      max 282763074 (nib/chr1.nib:0-282763074) median 7294
+    #   %41.19 masked total, %43.31 masked real
+
+    #   Compare to original:
+    cat faSize.rn6.2bit.txt 
+    #   2870182909 bases (140322104 N's 2729860805 real 1547693783 upper
+    #      1182167022 lower) in 953 sequences in 1 files
+    #   Total size: mean 3011734.4 sd 21338622.2
+    #      min 230 (chrUn_AABR07024268v1) max 282763074 (chr1) median 7294
+    #   %41.19 masked total, %43.31 masked real
 
     #	Copy to data/genomes staging for cluster replication
     rsync -a -P ./nib/ /hive/data/staging/data/rn6/nib/
 
 #########################################################################
-# cpgIslands - (TBD - 2011-04-20 - Hiram)
+# cpgIslands - (DONE - 2014-07-09 - Hiram)
     mkdir /hive/data/genomes/rn6/bed/cpgIslands
     cd /hive/data/genomes/rn6/bed/cpgIslands
-    time doCpgIslands.pl rn6 > do.log 2>&1
-    #   Elapsed time: 11m10s
+    time (doCpgIslands.pl -workhorse=hgwdev -buildDir=`pwd` \
+       -dbHost=hgwdev -smallClusterHub=ku -bigClusterHub=ku rn6) > do.log 2>&1
+    #   real    2m32.227s
 
     cat fb.rn6.cpgIslandExt.txt
-    #   10377460 bases of 2572853723 (0.403%) in intersection
+    #   11404910 bases of 2729860805 (0.418%) in intersection
 
 #############################################################################
 # CPG Islands Unmasked track (DONE - 2014-07-08 - Hiram)
 
-mkdir /hive/data/genomes/rn6/bed/cpgIslandsUnmasked
-cd /hive/data/genomes/rn6/bed/cpgIslandsUnmasked
-time (doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
-   -tableName=cpgIslandExtUnmasked -dbHost=hgwdev -smallClusterHub=ku \
-    -workhorse=hgwdev \
-    -maskedSeq=/hive/data/genomes/rn6/rn6.unmasked.2bit rn6) > do.log 2>&1
+    mkdir /hive/data/genomes/rn6/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/rn6/bed/cpgIslandsUnmasked
+    time (doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
+      -tableName=cpgIslandExtUnmasked -dbHost=hgwdev -smallClusterHub=ku \
+         -workhorse=hgwdev \
+         -maskedSeq=/hive/data/genomes/rn6/rn6.unmasked.2bit rn6) > do.log 2>&1
     # real    14m0.085s
 
     cat fb.rn6.cpgIslandExtUnmasked.txt
     # 13483527 bases of 2731211732 (0.494%) in intersection
 
 #########################################################################
-# genscan - (TBD - 2011-04-25 - Hiram)
+# genscan - (DONE - 2014-07-09 - Hiram)
     mkdir /hive/data/genomes/rn6/bed/genscan
     cd /hive/data/genomes/rn6/bed/genscan
-    time doGenscan.pl rn6 > do.log 2>&1
-    #   real    104m9.716s
-    # a number of jobs did not finish, rerunning with window size 2000000
-    #   only chr7 completed at 15000000
-    # rerunning with window size of 1000000
-    #   real    78m10.904s
-    # rerunning with window size of 500000
-    # rerunning with window size of 250000
-    # rerunning with window size of 100000
-    #   real    85m5.776s
-    # rerunning with window size of 50000
-    #   real    86m57.706s
-    #   This is not working.  Need to run these split
-    mkdir /hive/data/genomes/rn6/bed/genscan/splitRun
-    cd /hive/data/genomes/rn6/bed/genscan/splitRun
-    gapToLift rn6 rn6.nonBridged.lift -bedFile=rn6.nonBridged.bed
-
-    for C in 2 3 4 5 6 7 11 13 15 19
-do
-    echo chr${C}
-    cd /hive/data/genomes/rn6/bed/genscan/splitRun
-    grep -w "chr${C}" rn6.nonBridged.lift | grep -v random \
-        | sed -e "s/chr${C}./chr${C}_/" > chr${C}.nonBridged.lift
-    mkdir chr${C}
-    faToTwoBit ../hardMaskedFa/000/chr${C}.fa chr${C}/chr${C}.2bit
-    ~/kent/src/hg/utils/lft2BitToFa.pl chr${C}/chr${C}.2bit \
-        chr${C}.nonBridged.lift > chr${C}/chr${C}.nonBridged.fa
-    cd /hive/data/genomes/rn6/bed/genscan/splitRun/chr${C}
-    mkdir split${C}
-    faSplit sequence chr${C}.nonBridged.fa 100 split${C}/chr${C}_
-done
-
-    for C in 2 3 4 5 6 7 11 13 15 19
-do
-    grep -w "chr${C}" rn6.nonBridged.lift | grep -v random \
-        | sed -e "s/chr${C}./chr${C}_/" > chr${C}.nonBridged.lift
-done
-
-    for C in 2 3 4 5 6 7 11 13 15 19
-do
-    echo chr${C}
-    cd /hive/data/genomes/rn6/bed/genscan/splitRun/chr${C}
-    echo '#!/bin/sh' > cmdList.sh
-    export NL=-1
-    ls split${C} | while read F
-  do
-  NL=`echo $NL | awk '{print $1+1}'`
-  if [ "${NL}" -gt 7 ]; then
-    NL=0
-    echo "echo waiting before $F" >> cmdList.sh
-    echo wait >> cmdList.sh
-  fi
-  echo "/cluster/bin/x86_64/gsBig split${C}/${F} gtf/${F}.gtf -trans=pep/${F}.pep -subopt=subopt/${F}.bed -exe=/scratch/data/genscan/genscan -par=/scratch/data/genscan/HumanIso.smat -tmp=/dev/shm -window=2400000 &" 
-  done >> cmdList.sh
-    echo "echo waiting at end" >> cmdList.sh
-    echo "wait" >> cmdList.sh
-    chmod +x cmdList.sh
-    rm -fr gtf pep subopt
-    mkdir gtf pep subopt
-done
-
-# running chr15 - real    345m30.138s
-    # running them all:
-    time ./runAll.sh > runAll.log 2>&1
-    #   real    458m23.357s
-
-    # collecting the results:
-for C in chr2 chr3 chr4 chr5 chr6 chr7 chr11 chr13 chr15 chr19
-do
-    cd /hive/data/genomes/rn6/bed/genscan/splitRun/${C}
-    cat gtf/${C}_*.gtf | liftUp -type=.gtf stdout ../${C}.nonBridged.lift error stdin \
-        | sed -e "s/${C}_0\([0-4]\)\./${C}.\1/g" > ${C}.gtf
-cat subopt/${C}_*.bed | liftUp -type=.bed stdout ../${C}.nonBridged.lift error stdin \
-        | sed -e "s/${C}_0\([0-4]\)\./${C}.\1/g" > ${C}.subopt.bed
-cat pep/${C}_*.pep | sed -e "s/${C}_0\([0-4]\)\./${C}.\1/g" > ${C}.pep
-ls -l ../../gtf/00?/${C}.gtf ../../pep/00?/${C}.pep ../../subopt/00?/${C}.bed
-ls -l ${C}.gtf ${C}.pep ${C}.subopt.bed
-done
-
-    # after verifying the sizes of the files seem same compared to what
-    #   happened in the main run:
-for C in chr2 chr3 chr4 chr5 chr6 chr7 chr11 chr13 chr15 chr19
-do
-    cd /hive/data/genomes/rn6/bed/genscan/splitRun/${C}
-   ls -l ../../gtf/00?/${C}.gtf ../../pep/00?/${C}.pep ../../subopt/00?/${C}.bed
-    ls -l ${C}.gtf ${C}.pep ${C}.subopt.bed
-    cd /hive/data/genomes/rn6/bed/genscan/splitRun
-done
-
-    # this is tricky, it is counting on the file existing, empty or otherwise
-for C in chr2 chr3 chr4 chr5 chr6 chr7 chr11 chr13 chr15 chr19
-do
-    cd /hive/data/genomes/rn6/bed/genscan/splitRun/${C}
-    D=`ls ../../gtf/00?/${C}.gtf`
-    rm -f "${D}"
-    cp -p ${C}.gtf "${D}"
-    D=`ls ../../pep/00?/${C}.pep`
-    rm -f "${D}"
-    cp -p ${C}.pep "${D}"
-    D=`ls ../../subopt/00?/${C}.bed`
-    rm -f "${D}"
-    cp -p ${C}.subopt.bed "${D}"
-    cd /hive/data/genomes/rn6/bed/genscan/splitRun
-done
-
-    # Now, we can continue
-    cd /hive/data/genomes/rn6/bed/genscan
-    time doGenscan.pl -continue=makeBed -workhorse=hgwdev -dbHost=hgwdev \
-        rn6 > makeBed.log 2>&1
-    #   real    1m51.711s
+    time (doGenscan.pl -bigClusterHub=ku -workhorse=hgwdev \
+      -dbHost=hgwdev -buildDir=`pwd` rn6) > do.log 2>&1 &
+    # real    137m3.209s
 
     cat fb.rn6.genscan.txt
-    #   56153914 bases of 2572853723 (2.183%) in intersection
+    #   57944086 bases of 2729860805 (2.123%) in intersection
     cat fb.rn6.genscanSubopt.txt
-    #   59799363 bases of 2572853723 (2.324%) in intersection
+    #   62473326 bases of 2729860805 (2.289%) in intersection
 
 #########################################################################
-# MAKE 11.OOC FILE FOR BLAT/GENBANK (TBD - 2012-05-04 - Hiram)
-    # Use -repMatch=900, based on size -- for human we use 1024
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2014-07-09 - Hiram)
+    # Use -repMatch=1000, based on size -- for human we use 1024
     # use the "real" number from the faSize measurement,
     # hg19 is 2897316137, calculate the ratio factor for 1024:
-    calc \( 2572837410 / 2897316137 \) \* 1024
-    #	( 2572837410 / 2897316137 ) * 1024 = 909.319309
+    calc \( 2729860805 / 2897316137 \) \* 1024
+    #	( 2729860805 / 2897316137 ) * 1024 = 964.816172
 
-    # round up to 950  (rn4 was 1024)
+    # round up to 1000  (rn5 was 950)
 
     cd /hive/data/genomes/rn6
     time blat rn6.2bit /dev/null /dev/null -tileSize=11 \
-      -makeOoc=jkStuff/rn6.11.ooc -repMatch=800
-    #   Wrote 34513 overused 11-mers to jkStuff/rn6.11.ooc
-    #   rn4 had: Wrote 25608 overused 11-mers to /cluster/bluearc/rn4/11.ooc
-    #	real     1m13.627s
+      -makeOoc=jkStuff/rn6.11.ooc -repMatch=1000
+    #   Wrote 27021 overused 11-mers to jkStuff/rn6.11.ooc
+    #   rn5 had: Wrote 34513 overused 11-mers to jkStuff/rn6.11.ooc
+    #	real    1m10.077s
 
     # there are non-bridged gaps, create lift file needed for genbank
     hgsql -N -e "select bridge from gap;" rn6 | sort | uniq -c
-    #   8109 no
-    #   250293 yes
+    #       440 no
+    #    145292 yes
 
     cd /hive/data/genomes/rn6/jkStuff
     gapToLift rn6 rn6.nonBridged.lift -bedFile=rn6.nonBridged.bed
     # largest non-bridged contig:
     awk '{print $3-$2,$0}' rn6.nonBridged.bed | sort -nr | head
-    #   13151837 chr10  48884958        62036795        chr10.150
+    #   52752077 chr18  35449852        88201929        chr18.06
 
 #########################################################################
 
