@@ -205,9 +205,7 @@ def runExecute(execOptions, execTable, execField1, execField2, execOrder):
               "the correct clade and priority value for", execOptions.assembly, \
               "and\nmanually add this entry to the proper clade on beta. ***\n\n"
         return
-# Uncomment the following line and delete the line below that once copying from beta -> rr is active
-#    if queryExecuteDest != "":
-    if execOptions.orig == "dev" and queryExecuteDest != "":
+    if queryExecuteDest != "":
         input = ""
         print
         while input not in ["yes", "no"]:
@@ -231,45 +229,18 @@ def runExecute(execOptions, execTable, execField1, execField2, execOrder):
             callHgsql("hgcentralbeta", deleteQuery, "mysqlbeta")
         callHgsql("hgcentralbeta", loadQueryBeta, "mysqlbeta")
         queryExecuteBeta = chopper(callHgsql("hgcentralbeta", execQuery, "mysqlbeta"), "strip", "")
-# Delete the following 3 lines when copying from beta -> rr is active
-        printOutput(execTable, queryExecuteDev, queryExecuteBeta, queryExecuteRr)
-        print "***", execTable, "successfully copied from", execOptions.orig, \
-              "to", execOptions.dest, "***\n"
     else:
-# Delete the following 22 lines and uncomment the rest when copying from beta -> rr is active
-        printHeader(execTable)
-        print "\n *** Automatic copying to hgcentral is currently disabled " \
-              "***\n\n *** If you would like to manually copy", execTable, \
-              "entries from beta to rr," \
-              "\n     run the following command: ***\n\n\n" \
-              "  hgsql -e \"load data local infile '" + fileTestBeta + "' into " \
-              "table", execTable + "\" hgcentral -h genome-centdb\n\n"
-        if queryExecuteRr != "":
-            print " *** WARNING:", execTable, "on hgcentral already " \
-                  "contains data for", execOptions.assembly + ".\n     If you " \
-                  "run the above command without first deleting the existing " \
-                  "\n     data from hgcentral, it will create duplicate " \
-                  "entries. ***\n\n"
+        if eraseFirst == 1:
+            callHgsql("hgcentral", deleteQuery, "genome-centdb")
+        callHgsql("hgcentral", loadQueryRr, "genome-centdb")
         if execTable == "dbDb":
-            print " *** If you manually copy dbDb from beta to rr, be sure to " \
-                  "also set\n     active=0 with the following " \
-                  "command: ***\n\n\n" \
-                  "  hgsql -e \"update dbDb set active=0 where name='" + \
-                  execOptions.assembly + "'\" hgcentral -h " \
-                  "genome-centdb\n\n\n"
-        print " *** If you manually copy", execTable, "from beta to rr, be " \
-              "sure to run test mode\n     again to verify your changes ***\n"
-#        if eraseFirst == 1:
-#            callHgsql("hgcentral", deleteQuery, "genome-centdb")
-#        callHgsql("hgcentral", loadQueryRr, "genome-centdb")
-#        if execTable == "dbDb":
-#            callHgsql("hgcentral", activeZeroQuery, "genome-centdb")
-#        queryExecuteRr = chopper(callHgsql("hgcentral", execQuery, "genome-centdb"), "strip", "")
-#    printOutput(execTable, queryExecuteDev, queryExecuteBeta, queryExecuteRr)
-#    print "***", execTable, "successfully copied from", execOptions.orig, "to", \
-#          execOptions.dest, "***\n"
-#    if execOptions.dest == "rr" and execTable == "dbDb":
-#        print "*** active set to 0 on rr ***\n"
+            callHgsql("hgcentral", activeZeroQuery, "genome-centdb")
+        queryExecuteRr = chopper(callHgsql("hgcentral", execQuery, "genome-centdb"), "strip", "")
+    printOutput(execTable, queryExecuteDev, queryExecuteBeta, queryExecuteRr)
+    print "***", execTable, "successfully copied from", execOptions.orig, "to", \
+          execOptions.dest, "***\n"
+    if execOptions.dest == "rr" and execTable == "dbDb":
+        print "*** active set to 0 on rr ***\n"
     print
 
 
