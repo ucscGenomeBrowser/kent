@@ -135,10 +135,17 @@ sub parseOneLrg {
   my $hgncSymbol = $dom->findvalue('/lrg/updatable_annotation/annotation_set/lrg_locus[@source="HGNC"]');
   # GenBank reference sequence accession
   my $lrgNcbiAcc = $dom->findvalue('/lrg/fixed_annotation/sequence_source');
-  # LRG sequence source
-  my $lrgSource = $dom->findvalue('/lrg/fixed_annotation/source/name');
-  $lrgSource = utf8ToHtml($lrgSource);
-  my $lrgSourceUrl = $dom->findvalue('/lrg/fixed_annotation/source/url');
+  # LRG sequence source(s); for now, keeping only the first listed source because hgc.c
+  # doesn't yet anticipate lists.
+  my @lrgSources = $dom->findnodes('/lrg/fixed_annotation/source');
+  my ($lrgSource, $lrgSourceUrl) = ('', '');
+  while ((defined $lrgSources[0]) && (! $lrgSources[0]->findvalue('name'))) {
+    shift @lrgSources;
+  }
+  if (defined $lrgSources[0]) {
+    $lrgSource = utf8ToHtml($lrgSources[0]->findvalue('name'));
+    $lrgSourceUrl = $lrgSources[0]->findvalue('url');
+  }
   my $creationDate = $dom->findvalue('/lrg/fixed_annotation/creation_date');
 
   # watch out for stray tab chars:
