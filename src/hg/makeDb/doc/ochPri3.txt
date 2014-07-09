@@ -516,3 +516,52 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     # 2229835716 bases of 2229835716 (100.000%) in intersection
 
 ##############################################################################
+# setup search rule for assembly track (DONE - 2014-07-08 - Hiram)
+   export maxLen=`hgsql -N -e 'select frag from gold;' ochPri3 | awk '{print length($0)}' | sort -run | head -1`
+
+   echo $maxLen
+   #  14
+
+export C=1
+while [ $C -le $maxLen ];
+do
+  echo -n " $C: "
+  hgsql -N -e 'select frag from gold;' ochPri3 | sort -u \
+    | awk '{ print substr($0,'$C',1) }' | sort -u | xargs echo | sed -e 's/ //g'
+  C=`echo $C | awk '{print $1+1}'`
+done
+
+#   1: AN
+#   2: CL
+#   3: I_
+#   4: 0T
+#   5: 0
+#   6: 15
+#   7: 013
+#   8: 0123456789
+#   9: 0123456789
+#  10: 0123456789
+#  11: 0123456789
+#  12: 0123456789
+#  13: .
+#  14: 1
+
+searchTable gold
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex [AN][CL][I_][0T]0[15][0-9]+(\.1)*
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+  # test pattern:
+   hgsql -N -e 'select frag from gold;' ochPri3 | wc -l
+   # 132962
+   hgsql -N -e 'select frag from gold;' ochPri3 \
+     | egrep -e '[AN][CL][I_][0T]0[15][0-9]+(\.1)*' | wc -l
+   # 132962
+   hgsql -N -e 'select frag from gold;' ochPri3 \
+     | egrep -v -e '[AN][CL][I_][0T]0[15][0-9]+(\.1)*' | wc -l
+   # 0
+
+##############################################################################
