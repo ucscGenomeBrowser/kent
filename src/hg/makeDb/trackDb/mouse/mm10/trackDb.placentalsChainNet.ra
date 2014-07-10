@@ -130,13 +130,13 @@ html chainNet
         type chain eriEur1
         otherDb eriEur1
 
-        track chainSorAra1
+        track chainSorAra2
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=gShrew clade=dInsect
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain sorAra1
-        otherDb sorAra1
+        type chain sorAra2
+        otherDb sorAra2
 
         track chainChoHof1
         subTrack placentalChainNetViewchain off
@@ -296,13 +296,13 @@ html chainNet
         type netAlign eriEur1 chainEriEur1
         otherDb eriEur1
 
-        track netSorAra1
+        track netSorAra2
         subTrack placentalChainNetViewnet on
         subGroups view=net species=gShrew clade=dInsect
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign sorAra1 chainSorAra1
-        otherDb sorAra1
+        type netAlign sorAra2 chainSorAra2
+        otherDb sorAra2
 
         track netChoHof1
         subTrack placentalChainNetViewnet on
