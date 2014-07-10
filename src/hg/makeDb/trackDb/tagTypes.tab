@@ -18,6 +18,7 @@ aliQualRange bam
 allButtonPair *
 altColor *
 alwaysZero wig bedGraph
+applyMinQual vcf
 autoScale *
 autoTranslate genePred
 bamColorMode bam
@@ -164,6 +165,10 @@ graphTypeDefault wig bigWig
 gridDefault bed bedGraph wig bigWig
 group *
 groupings expRatio
+hapClusterEnabled vcf
+hapClusterColorBy vcf
+hapClusterTreeAngle vcf
+hapClusterHeight vcf
 hapmapPhase bed
 hgGene genePred
 hgsid bed genePred
@@ -226,9 +231,11 @@ metadata *
 mouseOverField bigBed
 mgiUrl bed
 mgiUrlLabel bed
+minFreq vcf
 minGrayLevel bed broadPeak narrowPeak bedLogR
 minLimit *
 minMax chromGraph
+minQual vcf
 minScore bed broadPeak narrowPeak
 motifTable factorSource
 motifPwmTable factorSource bed6FloatScore

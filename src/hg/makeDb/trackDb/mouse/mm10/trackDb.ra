@@ -202,6 +202,9 @@ longLabel Mouse Genome Informatics Quantitative Trait Loci ***Lifted from NCBI 3
 origAssembly mm9 
 pennantIcon 9.jpg ../goldenPath/help/liftOver.html "These data were converted via liftOver from the July 2007 (NCBI37/mm9) version of the track"
 
+track FaceBase24SampleTypesAvg override
+pennantIcon 9.jpg ../goldenPath/help/liftOver.html "These data were converted via liftOver from the July 2007 (NCBI37/mm9) version of the track"
+
 # GENCODE
 track wgEncodeGencodeSuper
 superTrack on
