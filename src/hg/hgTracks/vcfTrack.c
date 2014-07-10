@@ -22,12 +22,10 @@
 static boolean getMinQual(struct trackDb *tdb, double *retMinQual)
 /* Return TRUE and set retMinQual if cart contains minimum QUAL filter */
 {
-if (cartUsualBooleanClosestToHome(cart, tdb, FALSE,
-				  VCF_APPLY_MIN_QUAL_VAR, VCF_DEFAULT_APPLY_MIN_QUAL))
+if (cartOrTdbBoolean(cart, tdb, VCF_APPLY_MIN_QUAL_VAR, VCF_DEFAULT_APPLY_MIN_QUAL))
     {
     if (retMinQual != NULL)
-	*retMinQual = cartUsualDoubleClosestToHome(cart, tdb, FALSE, VCF_MIN_QUAL_VAR,
-						   VCF_DEFAULT_MIN_QUAL);
+	*retMinQual = cartOrTdbDouble(cart, tdb, VCF_MIN_QUAL_VAR, VCF_DEFAULT_MIN_QUAL);
     return TRUE;
     }
 return FALSE;
@@ -70,16 +68,12 @@ return FALSE;
 static boolean getMinFreq(struct trackDb *tdb, double *retMinFreq)
 /* Return TRUE and set retMinFreq if cart contains nonzero minimum minor allele frequency. */
 {
-if (cartVarExistsAnyLevel(cart, tdb, FALSE, VCF_MIN_ALLELE_FREQ_VAR))
+double minFreq = cartOrTdbDouble(cart, tdb, VCF_MIN_ALLELE_FREQ_VAR, VCF_DEFAULT_MIN_ALLELE_FREQ);
+if (minFreq > 0)
     {
-    double minFreq = cartUsualDoubleClosestToHome(cart, tdb, FALSE,
-					    VCF_MIN_ALLELE_FREQ_VAR, VCF_DEFAULT_MIN_ALLELE_FREQ);
-    if (minFreq > 0)
-	{
-	if (retMinFreq != NULL)
-	    *retMinFreq = minFreq;
-	return TRUE;
-	}
+    if (retMinFreq != NULL)
+	*retMinFreq = minFreq;
+    return TRUE;
     }
 return FALSE;
 }
@@ -124,12 +118,12 @@ else
 	anEl->missingData[0] == FALSE)
 	{
 	gotInfo = TRUE;
-	int totalCount = anEl->values[0].datFloat;
+	int totalCount = anEl->values[0].datInt;
 	for (i = 0;  i < acEl->count;  i++)
 	    {
 	    if (acEl->missingData[i])
 		continue;
-	    int altCount = acEl->values[i].datFloat;
+	    int altCount = acEl->values[i].datInt;
 	    double altFreq = (double)altCount / totalCount;
 	    refFreq -= altFreq;
 	    if (altFreq < maxAltFreq)
@@ -1022,8 +1016,7 @@ static enum hapColorMode getColorMode(struct trackDb *tdb)
 /* Get the hap-cluster coloring mode from cart & tdb. */
 {
 enum hapColorMode colorMode = altOnlyMode;
-char *colorBy = cartUsualStringClosestToHome(cart, tdb, FALSE,
-					     VCF_HAP_COLORBY_VAR, VCF_DEFAULT_HAP_COLORBY);
+char *colorBy = cartOrTdbString(cart, tdb, VCF_HAP_COLORBY_VAR, VCF_DEFAULT_HAP_COLORBY);
 if (sameString(colorBy, VCF_HAP_COLORBY_ALTONLY))
     colorMode = altOnlyMode;
 else if (sameString(colorBy, VCF_HAP_COLORBY_REFALT))
@@ -1092,8 +1085,7 @@ initYFromNodeHelper(&yHelper, yOff+extraPixel, hapHeight, gtHapCount, gtHapOrder
 		    vcff->genotypeCount);
 struct titleHelper titleHelper = { NULL, 0, 0, 0, 0, NULL, NULL };
 initTitleHelper(&titleHelper, tg->track, startIx, centerIx, endIx, nRecords, vcff);
-char *treeAngle = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, VCF_HAP_TREEANGLE_VAR,
-					       VCF_DEFAULT_HAP_TREEANGLE);
+char *treeAngle = cartOrTdbString(cart, tg->tdb, VCF_HAP_TREEANGLE_VAR, VCF_DEFAULT_HAP_TREEANGLE);
 boolean drawRectangle = sameString(treeAngle, VCF_HAP_TREEANGLE_RECTANGLE);
 drawTreeInLabelArea(ht, hvg, yOff+extraPixel, hapHeight+CLIP_PAD, &yHelper, &titleHelper,
 		    drawRectangle);
@@ -1112,8 +1104,7 @@ int defaultHeight = min(simpleHeight, VCF_DEFAULT_HAP_HEIGHT);
 char *tdbHeight = trackDbSettingOrDefault(tg->tdb, VCF_HAP_HEIGHT_VAR, NULL);
 if (isNotEmpty(tdbHeight))
     defaultHeight = atoi(tdbHeight);
-int cartHeight = cartUsualIntClosestToHome(cart, tg->tdb, FALSE, VCF_HAP_HEIGHT_VAR,
-					   defaultHeight);
+int cartHeight = cartOrTdbInt(cart, tg->tdb, VCF_HAP_HEIGHT_VAR, defaultHeight);
 if (tg->visibility == tvSquish)
     cartHeight /= 2;
 int extraPixel = (getColorMode(tg->tdb) == altOnlyMode) ? 1 : 0;
@@ -1178,8 +1169,7 @@ if (isEmpty(fileOrUrl))
     return;
 int vcfMaxErr = -1;
 struct vcfFile *vcff = NULL;
-boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE,
-							VCF_HAP_ENABLED_VAR, TRUE);
+boolean hapClustEnabled = cartOrTdbBoolean(cart, tg->tdb, VCF_HAP_ENABLED_VAR, TRUE);
 /* protect against temporary network error */
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
@@ -1258,8 +1248,7 @@ static void vcfLoadItems(struct track *tg)
 {
 int vcfMaxErr = -1;
 struct vcfFile *vcff = NULL;
-boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE,
-							VCF_HAP_ENABLED_VAR, TRUE);
+boolean hapClustEnabled = cartOrTdbBoolean(cart, tg->tdb, VCF_HAP_ENABLED_VAR, TRUE);
 char *table = tg->table;
 struct customTrack *ct = tg->customPt;
 struct sqlConnection *conn;

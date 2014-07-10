@@ -22,6 +22,7 @@
 #include "customFactory.h"
 #include "udc.h"
 #include "hgSession.h"
+#include "hubConnect.h"
 
 
 void usage()
@@ -848,6 +849,8 @@ if (hel != NULL)
 		   getSessionLink(encUserName, encSessionName),
 		   getSessionEmailLink(encUserName, encSessionName));
     cartLoadUserSession(conn, userName, sessionName, cart, NULL, wildStr);
+    hubConnectLoadHubs(cart);
+    cartCopyCustomTracks(cart);
     checkForCustomTracks(dyMessage);
     didSomething = TRUE;
     }
@@ -894,6 +897,8 @@ dyStringPrintf(dyMessage,
 	       getSessionLink(otherUser, encSessionName),
 	       getSessionEmailLink(encOtherUser, encSessionName));
 cartLoadUserSession(conn, otherUser, sessionName, cart, NULL, actionVar);
+hubConnectLoadHubs(cart);
+cartCopyCustomTracks(cart);
 checkForCustomTracks(dyMessage);
 hDisconnectCentral(&conn);
 return dyStringCannibalize(&dyMessage);
@@ -991,6 +996,8 @@ else
 if (lf != NULL)
     {
     cartLoadSettings(lf, cart, NULL, actionVar);
+    hubConnectLoadHubs(cart);
+    cartCopyCustomTracks(cart);
     checkForCustomTracks(dyMessage);
     lineFileClose(&lf);
     }
