@@ -162,13 +162,13 @@ include chainNetFelCat5.ra
         type chain dipOrd1
         otherDb dipOrd1
 
-        track chainOchPri2
+        track chainOchPri3
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=hPika clade=aEuarch
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain ochPri2
-        otherDb ochPri2
+        type chain ochPri3
+        otherDb ochPri3
 
         track chainEriEur2
         subTrack placentalChainNetViewchain off
@@ -191,13 +191,13 @@ include chainNetEchTel2.ra
 include chainNetRn4.ra beta,public
 include chainNetRn5.ra alpha
 
-        track chainSorAra1
+        track chainSorAra2
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=vShrew clade=bLaura
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain sorAra1
-        otherDb sorAra1
+        type chain sorAra2
+        otherDb sorAra2
 
         track chainAilMel1
         subTrack placentalChainNetViewchain off
@@ -349,13 +349,13 @@ include chainNetTurTru2.ra alpha
         type netAlign dipOrd1 chainDipOrd1
         otherDb dipOrd1
 
-        track netOchPri2
+        track netOchPri3
         subTrack placentalChainNetViewnet off
         subGroups view=net species=hPika clade=aEuarch
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign ochPri2 chainOchPri2
-        otherDb ochPri2
+        type netAlign ochPri3 chainOchPri3
+        otherDb ochPri3
 
         track netEriEur2
         subTrack placentalChainNetViewnet off
@@ -373,13 +373,13 @@ include chainNetTurTru2.ra alpha
         type netAlign mm10 chainMm10
         otherDb mm10
 
-        track netSorAra1
+        track netSorAra2
         subTrack placentalChainNetViewnet off
         subGroups view=net species=vShrew clade=bLaura
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign sorAra1 chainSorAra1
-        otherDb sorAra1
+        type netAlign sorAra2 chainSorAra2
+        otherDb sorAra2
 
         track netAilMel1
         subTrack placentalChainNetViewnet off
