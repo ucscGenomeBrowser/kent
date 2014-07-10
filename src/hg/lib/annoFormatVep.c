@@ -1033,7 +1033,7 @@ for (i = 0, row = extraRows;  row != NULL;  i++, row = row->next)
 static void afVepPrintExtrasOther(struct annoFormatVep *self, struct annoRow *varRow,
 				  struct annoRow *gpvRow, struct gpFx *gpFx,
 				  struct annoStreamRows gratorData[], int gratorCount,
-				  boolean *pGotExtra)
+				  boolean includeRegulatory, boolean *pGotExtra)
 /* Print the Extra column's tag=value; components (other than dbNSFP) if we have any. */
 {
 struct annoFormatVepExtraSource *extras = self->config->extraSources, *extraSrc;
@@ -1047,7 +1047,8 @@ for (extraSrc = extras;  extraSrc != NULL;  extraSrc = extraSrc->next)
 	{
 	struct annoFormatVepExtraItem *extraItem;
 	for (extraItem = extraSrc->items;  extraItem != NULL;  extraItem = extraItem->next)
-	    extraSrc->printExtra(self, extraItem, extraRows, pGotExtra);
+	    if (includeRegulatory || ! extraItem->isRegulatory)
+		extraSrc->printExtra(self, extraItem, extraRows, pGotExtra);
 	}
     }
 // VEP automatically adds DISTANCE for upstream/downstream variants
@@ -1122,7 +1123,7 @@ afVepPrintPredictions(self, varRow, gpvRow, gpFx);
 afVepPrintExistingVar(self, varRow, gratorData, gratorCount);
 boolean gotExtra = FALSE;
 afVepPrintExtrasDbNsfp(self, varRow, gpvRow, gpFx, gratorData, gratorCount, &gotExtra);
-afVepPrintExtrasOther(self, varRow, gpvRow, gpFx, gratorData, gratorCount, &gotExtra);
+afVepPrintExtrasOther(self, varRow, gpvRow, gpFx, gratorData, gratorCount, FALSE, &gotExtra);
 afVepEndRow(self->f, self->doHtml);
 }
 
@@ -1193,7 +1194,7 @@ if (afVepIsRegulatory(self, gratorData, gratorCount))
     afVepPrintPredictionsReg(self, varRow);
     afVepPrintExistingVar(self, varRow, gratorData, gratorCount);
     boolean gotExtra = FALSE;
-    afVepPrintExtrasOther(self, varRow, NULL, NULL, gratorData, gratorCount, &gotExtra);
+    afVepPrintExtrasOther(self, varRow, NULL, NULL, gratorData, gratorCount, TRUE, &gotExtra);
     afVepEndRow(self->f, self->doHtml);
     }
 }
