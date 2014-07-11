@@ -25,22 +25,17 @@ errAbort(
 static struct optionSpec options[] = {
    {NULL, 0},
 };
-int gc = 0;
-int gc2 = 0;
-struct link 
-/* Contains the info for a Json link */
-    {
-    struct link *next;
-    int source;		// the source node
-    int target;		// the target node
-    };
+
+int target = 0;  // Used for the target value in rlinkJson.
+float longest = 0;  // Used to normalize link distances in rlinkJson.
+
 struct bioExpVector
-/* Contains expression information for a biosample on many genes */
+/* Contains expression information for a biosample on many genes. */
     {
     struct bioExpVector *next;
-    char *name;	    // name of biosample
-    int count;	    // Number of genes we have data for
-    double *vector;   //  An array allocated dynamically
+    char *name;	    // name of biosample.
+    int count;	    // Number of genes we have data for.
+    double *vector;   //  An array allocated dynamically.
     };
 
 struct bioExpVector *bioExpVectorListFromFile(char *matrixFile)
@@ -55,7 +50,7 @@ while (lineFileNextReal(lf, &line))
     {
     if (vectorSize == 0)
         {
-	// Detect first row
+	// Detect first row.
 	vectorSize = chopByWhite(line, NULL, 0);  // counting up
 	AllocArray(row, vectorSize);
 	continue;
@@ -75,7 +70,7 @@ return list;
 }
 
 void fillInNames(struct bioExpVector *list, char *nameFile)
-/* Fill in name field from file */
+/* Fill in name field from file. */
 {
 struct lineFile *lf = lineFileOpen(nameFile, TRUE);
 char *line;
@@ -97,12 +92,19 @@ void rPrintNodes(FILE *f, struct hacTree *tree)
 {
 // Recursively prints out the nodes in a depth first order starting on the left
 char *tissue = ((struct bioExpVector *)(tree->itemOrCluster))->name;
+struct jsonWrite *jw = jsonWriteNew();
 if (tree->childDistance != 0) 
+    // If the current object is a node then we assign no name.
     {
     fprintf(f,"    %s\"%s\"%s\"%s\"%s", "{","name", ":", " ", ",");
+    jsonWriteString(jw, "name", " ");
+    jsonWriteNumber(jw, "y", tree->childDistance);
     fprintf(f,"\"%s\"%s%0.31f%s\n", "y", ":" , tree->childDistance, "},");
     }
 else {
+    // Otherwise the current object is a leaf, and the tissue name is printed. 
+    jsonWriteString(jw, "name", tissue);
+    jsonWriteNumber(jw, "y", tree->childDistance);
     fprintf(f,"    %s\"%s\"%s\"%s\"%s", "{","name", ":", tissue, ",");
     fprintf(f,"\"%s\"%s%0.31f%s\n", "y", ":" , tree->childDistance, "},");
     }
@@ -117,15 +119,12 @@ rPrintNodes(f, tree->right);
 }
 
 
-int testSource = 0, testTarget = 0;
 void rPrintLinks(FILE *f, struct hacTree *tree, int source)
 {
-// recursively prints the links
-
-if (gc == gc2 - 1)
-    {
-    return;
-    }
+// Recursively prints the links in json format. 
+if (tree->childDistance > longest)
+    // the first distance will be the longest, and is used for normalization
+    longest = tree->childDistance;
 /* if the current location is a leaf */
 if (tree->left == NULL && tree->right == NULL)
     { 
@@ -135,17 +134,19 @@ else if (tree->left == NULL || tree->right == NULL)
     errAbort("\nHow did we get a node with one NULL kid??");
 /* check for the end of the tree */
 
-/* left recursgion, the source and target are always ofset by 1 */
-++testTarget;
-fprintf(f,"    %s\"%s\"%s%d%s", "{","source", ":", testTarget - 1, ",");
-fprintf(f,"\"%s\"%s%d%s\n", "target", ":" , testTarget, "},");  
-/* preps the source for the right links */
-source = testTarget;
+/* Left recursion; the source and target are always ofset by 1. */
+++target;
+fprintf(f,"    %s\"%s\"%s%d%s", "{","source", ":", target - 1, ",");
+fprintf(f,"\"%s\"%s%d%s", "target", ":" , target, ",");  
+fprintf(f,"\"%s\"%s%0.31f%s\n", "distance", ":" , 100*(tree->childDistance/longest) , "},");  
+/* Prepares the source for the right recursion. */
+source = target;
 rPrintLinks(f, tree->left, source);
-/* print the right link */
-++testTarget;
+/* Right recursion. */
+++target;
 fprintf(f,"    %s\"%s\"%s%d%s", "{","source", ":", source - 1 , ",");
-fprintf(f,"\"%s\"%s%d%s\n", "target", ":" , testTarget, "},");  
+fprintf(f,"\"%s\"%s%d%s", "target", ":" , target, ",");  
+fprintf(f,"\"%s\"%s%0.31f%s\n", "distance", ":" , 100*(tree->childDistance/longest) , "},");  
 rPrintLinks(f, tree->right, ++source);
 }
 
@@ -154,7 +155,9 @@ void printJson(FILE *f, struct hacTree *tree)
 {
 int source = 0;
 // Basic json template for d3 visualizations
+//struct jsonWrite *jw = jsonWriteNew();
 fprintf(f,"%s\n", "{");
+//jsonWriteTag(struct jsonWrite *jw, char *var);
 fprintf(f,"  \"%s\"%s\n", "nodes", ":[" );
 rPrintNodes(f, tree);
 fprintf(f,  "%s\n", "],");
@@ -214,7 +217,8 @@ freez(result);
 }
 
 double slBioExpVectorDistance(const struct slList *item1, const struct slList *item2, void *extraData)
-/* Return the absolute difference between the two kids' values. */
+/* Return the absolute difference between the two kids' values. 
+ * Designed for HAC tree use*/
 {
 const struct bioExpVector *kid1 = (const struct bioExpVector *)item1;
 const struct bioExpVector *kid2 = (const struct bioExpVector *)item2;
@@ -231,7 +235,7 @@ return sqrt(sum);
 
 struct slList *slBioExpVectorMerge(const struct slList *item1, const struct slList *item2,
 				void *unusedExtraData)
-/* Make a new slPair where the name is the both kids names and the 
+/* Make a new slPair where the name is the children names concattenated and the 
  * value is the average of kids' values.
  * Designed for HAC tree use*/
 {
