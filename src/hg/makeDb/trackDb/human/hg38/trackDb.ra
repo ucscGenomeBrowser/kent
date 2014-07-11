@@ -231,3 +231,57 @@ group x
     html altSequence
 
 include trackDb.7way.ra
+
+track ucscRetroAli8
+shortLabel Retroposed Genes 8.0
+longLabel Retroposed Genes V8, Including Pseudogenes
+group genes
+type psl
+priority 37.14
+color 20,0,250
+visibility pack
+nextItemButton on
+ucscRetroInfo ucscRetroInfo8
+baseColorDefault diffCodons
+baseColorUseCds table ucscRetroCds8
+baseColorUseSequence extFile ucscRetroSeq8 ucscRetroExtFile8
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
+searchName ucscRetroInfoRefSeq8
+searchTable ucscRetroAli8
+searchDescription Retroposed GenesV8, Including Pseudogenes - 2014-07-08
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+xrefTable refLink, ucscRetroInfo8
+dontCheckXrefQueryFormat 1
+xrefQuery select ucscRetroInfo8.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+searchPriority 3.52
+
+searchName ucscRetroInfoMrna8
+searchTable ucscRetroAli8
+searchDescription Retroposed GenesV8, Including Pseudogenes - 2014-07-08
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+searchPriority 3.55
+
+searchName ucscRetroUniProt8
+searchTable ucscRetroAli8
+searchDescription Retroposed GenesV8, Including Pseudogenes - 2014-07-08
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo8
+xrefQuery select ucscRetroInfo8.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
+searchPriority 3.54
+
+searchName ucscRetroKnownGene8
+searchTable ucscRetroAli8
+searchDescription Retroposed GenesV8, Including Pseudogenes - 2014-07-08
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo8
+xrefQuery select ucscRetroInfo8.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
+searchPriority 3.53
+
