@@ -97,7 +97,7 @@ writeOutput(input, hash, unmapped, dir);
 /* Open the output bam files in a new directory. */
 /* Write each alignment to the correct output file. */
 closeOutput(hash, head);
-/* Close the output files. */
+/* Loops through each output file and closes it */
 samclose(input);
 }
 
