@@ -745,13 +745,25 @@ tdbFilterGroupTrack(fullTrackList, fullGroupList, isRegulatoryTrack,
 return regTrackRefList;
 }
 
-void selectRegulatory(struct slRef *trackRefList)
-/* If trackRefList is non-NULL, make a collapsible section with a checkbox for each track,
+void selectRegulatory()
+/* If trackRefList is non-NULL, make a section with a checkbox for each track,
  * labelled with longLabel, and optionally some filtering options. */
 {
+struct slRef *trackRefList = findRegulatoryTracks();
 if (trackRefList != NULL)
     {
-    startCollapsibleSection("Regulation", "Regulatory regions", FALSE);
+    puts("<BR>");
+    printf("<div class='sectionLiteHeader'>Select Regulatory Annotations</div>\n");
+    printf("The annotations in this section provide predicted regulatory regions "
+	   "based on various experimental data.  "
+	   "When a variant overlaps an annotation selected here, the consequence term "
+	   "<A HREF=\"http://sequenceontology.org/browser/current_release/term/SO:0001566\" "
+	   "TARGET=_BLANK>regulatory_region_variant</A> will be assigned.  "
+	   "Follow the links to description pages that explain how each dataset was "
+	   "constructed.  "
+	   "Some datasets cover a significant portion of the genome and it may be "
+	   "desirable to filter these annotations by cell type and/or score in order "
+	   "to avoid an overabundance of hits.  ");
     // Use a table with checkboxes in one column and label/other stuff that depends on
     // checkbox in other column.
     puts("<TABLE>");
@@ -770,8 +782,7 @@ if (trackRefList != NULL)
 	printFilterOptions(tdb);
 	puts("</TD></TR>");
 	}
-    puts("</TABLE><BR>");
-    endCollapsibleSection();
+    puts("</TABLE>");
     }
 }
 
@@ -796,6 +807,21 @@ tdbFilterGroupTrack(fullTrackList, fullGroupList, isConsElTrack,
 		    NULL, NULL, retElTrackRefList);
 tdbFilterGroupTrack(fullTrackList, fullGroupList, isConsScoreTrack,
 		    NULL, NULL, retScoreTrackRefList);
+}
+
+boolean trackNameMatches(struct trackDb *tdb, void *filterData)
+/* This is a TdbFilterFunction to get track(s) whose tdb->track matches name (filterData). */
+{
+char *name = filterData;
+return sameString(tdb->track, name);
+}
+
+struct slRef *findTrackRefByName(char *name)
+/* Return a reference to the named track, if found. */
+{
+struct slRef *trackRefList = NULL;
+tdbFilterGroupTrack(fullTrackList, fullGroupList, trackNameMatches, name, NULL, &trackRefList);
+return trackRefList;
 }
 
 void trackCheckBoxSection(char *sectionSuffix, char *title, struct slRef *trackRefList)
@@ -826,11 +852,11 @@ void selectAnnotations()
 {
 struct slName *dbNsfpTables = findDbNsfpTables();
 boolean gotSnp = findSnpBed4("", NULL, NULL);
-struct slRef *regTrackRefList = findRegulatoryTracks();
 struct slRef *elTrackRefList = NULL, *scoreTrackRefList = NULL;
 findCons(&elTrackRefList, &scoreTrackRefList);
-if (dbNsfpTables == NULL && !gotSnp && elTrackRefList == NULL && scoreTrackRefList == NULL
-    && regTrackRefList == NULL)
+struct slRef *cosmicTrackRefList = findTrackRefByName("cosmic");
+if (dbNsfpTables == NULL && !gotSnp && elTrackRefList == NULL && scoreTrackRefList == NULL &&
+    cosmicTrackRefList == NULL)
     return;
 puts("<BR>");
 printf("<div class='sectionLiteHeader'>Select More Annotations (optional)</div>\n");
@@ -838,7 +864,7 @@ printf("<div class='sectionLiteHeader'>Select More Annotations (optional)</div>\
 puts("<TABLE border=0 cellspacing=5 cellpadding=0 style='padding-left: 10px;'>");
 selectDbNsfp(dbNsfpTables);
 selectDbSnp(gotSnp);
-selectRegulatory(regTrackRefList);
+trackCheckBoxSection("Cosmic", "COSMIC", cosmicTrackRefList);
 trackCheckBoxSection("ConsEl", "Conserved elements", elTrackRefList);
 trackCheckBoxSection("ConsScore", "Conservation scores", scoreTrackRefList);
 puts("</TABLE>");
@@ -1040,6 +1066,7 @@ selectVariants(varGroupList, varTrackList);
 boolean gotGP = selectGenes();
 if (gotGP)
     {
+    selectRegulatory();
     selectAnnotations();
     selectFilters();
     selectOutput();

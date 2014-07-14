@@ -9,10 +9,10 @@
 
 <ul class="nice-menu nice-menu-down sf-js-enabled" id="nice-menu-1">
 
-<li class="first even" id="home"><a href="/index.html" ><span id="home-link">Home</span></a></li> 
+<li class="first even" id="home"><a href="../index.html" ><span id="home-link">Home</span></a></li> 
 
-<li id="genomes"><a href="/cgi-bin/hgGateway">Genomes</a></li>
-<li id="genomeBrowser"><a href="/cgi-bin/hgTracks">Genome Browser</a></li>
+<li id="genomes"><a href="../cgi-bin/hgGateway">Genomes</a></li>
+<li id="genomeBrowser"><a href="../cgi-bin/hgTracks">Genome Browser</a></li>
 
 <li class="menuparent" id="tools"><span>Tools</span>
 	<ul style="display: none; visibility: hidden;">

@@ -67,14 +67,14 @@ data, they may be slow.
 While the GBiB and the Genome Browser are similar in many ways, there are several key differences.
 One of the key differences is the ability to visualize sensitive or protected data using the GBiB.
 Previously, to view your data using the Genome Browser, you would have to either upload your data
-to the UCSC Genome Browser website, or place your file on an accessible web server and supply the
-URL to UCSC. With the GBiB, however, none of your data is uploaded to UCSC. The GBiB also allows
-you to view your data using the Genome Browser when your data files are too big to be uploaded
-to a public web server.
+to the UCSC Genome Browser website, or place your file on a publicly accessible web server and
+supplythe URL to UCSC. With the GBiB, however, none of your data is uploaded to UCSC. Because the
+GBiB allows you to load local files, you can use it to view your data using the Genome Browser
+when it's infeasible to load your data onto a public web server.
 </P>
 
 <P>
-The GBiB does not include the entire UCSC genome annotation database of several terabytes, and
+The GBiB does not include the entire UCSC genome annotation database of several terabytes, and instead
 depends upon remote connections to various UCSC servers for much of its functionality and data. It
 connects to our <A HREF="http://hgdownload.soe.ucsc.edu/downloads.html" TARGET="_BLANK">download
 server</A> for the genomic sequences, LiftOver files, and many of the other large data files. It
@@ -100,16 +100,16 @@ There are some basic requirements that your PC should meet to provide the best e
 when using the GBiB:
 <ul>
         <li>A computer with support for virtualization, which is the case for most PCs sold after 2010.</li>
-        <li><A HREF="https://www.virtualbox.org/" TARGET="_BLANK">VirtualBox Software</A></li>
+        <li><A HREF="https://www.virtualbox.org/" TARGET="_BLANK">VirtualBox</A> software.</li>
             <ul>
 	    <li>The software is free to use in many situations. See their
 		<A HREF="https://www.virtualbox.org/wiki/Licensing_FAQ"
 		TARGET="_BLANK">licensing terms and conditions</A> for details.</li>
             <li>Install it by following the instructions on the website.</li>
             <li>You must have administrator rights for your computer to install the VirtualBox software.</li>
-            <li>We have tested and confirmed that the GBiB works using versions 4.3.6 through 4.3.8.</li>
+            <li>We have tested and confirmed that the GBiB works using versions 4.3.6 through 4.3.12.</li>
             </ul>
-        <li>At least 15 GB of free space on your hard disk (or more if you plan to mirror many tracks).</li>
+        <li>At least 20 GB of free space on your hard disk (or more if you plan to mirror many tracks).</li>
         <li>Your network firewall must allow connections on the following ports:</li>
 		<ul>
 		<li>Port 3306 is used by MySQL. Without this, only mirrored tracks are shown.</li>
@@ -120,8 +120,12 @@ when using the GBiB:
 <P><B>Installation</B></P>
 <P>
 Once you have confirmed that your PC meets the above requirements, download the
+<!-- Will be GB Store link later
 <a href="http://hgdownload.cse.ucsc.edu/gbib/gbib.zip" TARGET="_BLANK">Genome Browser in a Box ZIP
-file</a> (~5 GB). This download may take anywhere from 30 minutes to a few hours depending on your
+file</a>
+-->
+Genome Browser in a Box ZIP file. Because this file is several gigabytes, it may take anywhere from
+30 minutes to a few hours to download depending on your
 Internet speed and distance from UCSC. Once you have finished downloading the GBiB ZIP file, unzip
 and extract the three files in it. These files can be moved to a different directory, as long as
 all three files are located in the same directory and not renamed.
@@ -220,8 +224,12 @@ include new features and bug fixes for existing features. The track data, on the
 is not updated on a regular basis. New tracks and updates to existing tracks are released as
 they pass UCSC's quality assurance process. The only exceptions to this are GenBank tracks, including
 RefSeq Genes, GenBank mRNAs, and others. These GenBank tracks are updated every night through an
-automatic process. The GBiB is setup to automatically update itself.</P>
-<P>When it updates itself, it will update all of the files in the GBiB, including software and tracks
+automatic process.
+</P>
+
+<P>
+The GBiB is set up to automatically update itself.
+When it updates itself, it will update all of the files in the GBiB, including software and tracks
 that you have mirrored. The updates will not affect your custom tracks, user accounts or sessions.
 This auto-update process ensures that you will always have the newest data and features. If you are
 using a DSL line, we recommend turning off these automatic updates. Over a slow internet connection,
@@ -230,25 +238,24 @@ unusable during that time.
 </P>
 
 <P>
-In addition to the auto-update process, you can manually update the GBiB using the command line.
-To do this, make sure your GBiB has been correctly setup according to the instructions in the
-"<A HREF="#GetStarted">Getting Started</A>" section. Once you have started the GBiB, click on the
-"black" screen with the terminal and type the following command:
-<pre>updateBrowser</pre>
-This will run the script that updates all of the GBiB software and annotation tracks that you have
-mirrored.
-</P>
-
-<P>
 You can turn off this auto-update process using the GBiB command line. Once you have started
 the GBiB, click on the "black" screen with the terminal and type the following command:
 <pre>autoUpdateOff</pre>
-While you can turn this auto-update process off, it is not recommended. Without this update process
+While you can turn this auto-update process off, it is not recommended unless you are using the
+GBiB on a slow internet connection. Without this update process
 turned on, the GBiB software and tracks that you have mirrored will not be updated. This means that
 you will miss out any features and bug fixes, as well as updates to your mirrored tracks. If you
 would like to turn the auto-update process back on, you can type the following command in the
 GBiB terminal:
 <pre>autoUpdateOn</pre>
+</P>
+
+<P>
+In addition to the auto-update process, you can manually update the GBiB using the command line.
+To do so, click on the "black" screen with the terminal and type the following command:
+<pre>updateBrowser</pre>
+This will run the script that updates all of the GBiB software and annotation tracks that you have
+mirrored.
 </P>
 
 <P>
@@ -367,6 +374,10 @@ these extra tools can be used to extract data and other useful information from 
 convert them between various file types. A complete listing and description for all of these tools
 can be found on UCSC's
 <A HREF="http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/FOOTER" TARGET="_BLANK">download server</A>.
+If you would like to use these tools to modify files you've shared with your GBiB, you will have
+to ensure that the "Read-only" access for VirtualBox is turned off. To do so, follow the directions
+in Step 2 of the <a href="#LocalTracks">Loading Local Big Data Tracks</a> section, except deselect
+the checkbox next to "Read-only".
 </P>
 
 <P><B><I>Example 2:</I></B></P>
