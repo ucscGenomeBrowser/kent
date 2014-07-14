@@ -27,13 +27,13 @@ static struct optionSpec options[] = {
 void bamMerge(char *fileNames[], int files)
 /* bamMerge -  Merges multiple bam files into a single bam file. */
 {
-samfile_t *chromHead = bamMustOpenLocal(fileNames[1], "rb", NULL);
+samfile_t *chromHead = bamMustOpenLocal(fileNames[0], "rb", NULL);
 bam_header_t *head = chromHead->header;
 samfile_t *out = bamMustOpenLocal("merged.bam", "wb", head);
 samclose(chromHead);
 /* Opens the output and sets the header to be the same as the first input. */
 int i;
-for (i = 1; i < files; ++i)
+for (i = 0; i < files - 1; ++i)
 /* Loop through all input files */
     {
     samfile_t *in = bamMustOpenLocal(fileNames[i], "rb", NULL);
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc < 2)
     usage();   
-bamMerge(argv,argc);
+bamMerge(argv+1,argc);
 return 0;
 
 }
