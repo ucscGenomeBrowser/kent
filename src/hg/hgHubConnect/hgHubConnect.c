@@ -203,6 +203,11 @@ printf("<tbody>");
 int count = 0;
 for(hub = unlistedHubList; hub; hub = hub->next)
     {
+    char hubName[64];
+    safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, hub->id);
+    if (!cartUsualBoolean(cart, hubName, FALSE))
+	continue;
+
     if (count)
 	webPrintLinkTableNewRow();  // ends last row and starts a new one
     count++;
@@ -210,14 +215,11 @@ for(hub = unlistedHubList; hub; hub = hub->next)
     puts("<tr>");
 
     ourCellStart();
-    char hubName[32];
-    safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, hub->id);
-    if (cartUsualBoolean(cart, hubName, FALSE))
-	printf("<input name=\"hubDisconnectButton\""
-	    "onClick="
-	    "\" document.disconnectHubForm.elements['hubId'].value= '%d';"
-	    "document.disconnectHubForm.submit();return true;\" "
-	    "class=\"hubDisconnectButton\" type=\"button\" value=\"Disconnect\">\n", hub->id);
+    printf("<input name=\"hubDisconnectButton\""
+	"onClick="
+	"\" document.disconnectHubForm.elements['hubId'].value= '%d';"
+	"document.disconnectHubForm.submit();return true;\" "
+	"class=\"hubDisconnectButton\" type=\"button\" value=\"Disconnect\">\n", hub->id);
     ourCellEnd();
 
     if (hub->trackHub != NULL)
