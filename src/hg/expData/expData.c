@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "obscure.h"
 #include "jksql.h"
 #include "expData.h"
 #include "sqlList.h"
@@ -88,11 +89,11 @@ while (lineFileNextReal(lf, &line))
 lineFileClose(&lf);
 }
 
-void rPrintNodes(FILE *f, struct hacTree *tree)
+void rPrintNodes(struct jsonWrite *jw, FILE *f, struct hacTree *tree)
 {
 // Recursively prints out the nodes in a depth first order starting on the left
 char *tissue = ((struct bioExpVector *)(tree->itemOrCluster))->name;
-struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw);
 if (tree->childDistance != 0) 
     // If the current object is a node then we assign no name.
     {
@@ -108,16 +109,18 @@ else {
     fprintf(f,"    %s\"%s\"%s\"%s\"%s", "{","name", ":", tissue, ",");
     fprintf(f,"\"%s\"%s%0.31f%s\n", "y", ":" , tree->childDistance, "},");
     }
+jsonWriteObjectEnd(jw);
 if (tree->left == NULL && tree->right == NULL)
     { 
     return;
     }
 else if (tree->left == NULL || tree->right == NULL)
     errAbort("\nHow did we get a node with one NULL kid??");
-rPrintNodes(f, tree->left);
-rPrintNodes(f, tree->right);
+rPrintNodes(jw, f, tree->left);
+rPrintNodes(jw, f, tree->right);
 }
 
+   
 
 void rPrintLinks(FILE *f, struct hacTree *tree, int source)
 {
@@ -155,11 +158,12 @@ void printJson(FILE *f, struct hacTree *tree)
 {
 int source = 0;
 // Basic json template for d3 visualizations
-//struct jsonWrite *jw = jsonWriteNew();
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw);
 fprintf(f,"%s\n", "{");
-//jsonWriteTag(struct jsonWrite *jw, char *var);
+jsonWriteListStart(jw, "nodes");
 fprintf(f,"  \"%s\"%s\n", "nodes", ":[" );
-rPrintNodes(f, tree);
+rPrintNodes(jw, f, tree);
 fprintf(f,  "%s\n", "],");
 // Basic json template for d3 visualizations
 fprintf(f,  "\"%s\"%s\n", "links", ":[" );
@@ -167,6 +171,8 @@ rPrintLinks(f,tree, source);
 fprintf(f,"  %s\n", "]");
 
 fprintf(f,"%s\n", "}");
+jsonWriteObjectEnd(jw);
+writeGulp("jsonWrite.out", jw->dy->string, jw->dy->stringSize);
 }
 
 
@@ -205,6 +211,54 @@ if (tree == NULL)
     }
 double distance = 0;
 rPrintSlBioExpVectorTree(f, tree, 0, distance);
+fputc('\n', f);
+}
+
+static void rPrintNestedJson(FILE *f, struct hacTree *tree, int level, double distance)
+/* Recursively print out cluster as nested-parens with {}'s around leaf nodes. */
+{
+char *tissue = ((struct bioExpVector *)(tree->itemOrCluster))->name;
+int i;
+if (tree->childDistance > longest)
+    // the first distance will be the longest, and is used for normalization
+    longest = tree->childDistance;
+for (i = 0;  i < level;  i++)
+    fputc(' ', f);
+if (tree->left == NULL && tree->right == NULL)
+    {
+    fprintf(f, "{\"%s\"%s \"%s\"%s\"%s\"%s %f}", "name", ":", tissue, ", ", "size", ":", distance);
+    return;
+    }
+else if (tree->left == NULL || tree->right == NULL)
+    errAbort("\nHow did we get a node with one NULL kid??");
+//fprintf(f, "{\"%s\"%s \"%f\"%s\n", "name", ":", " ", ",");
+fprintf(f, "{\"%s\"%s \"%f\"%s\n", "name", ":", 100*(tree->childDistance/longest), ",");
+for (i = 0;  i < level + 1;  i++)
+    fputc(' ', f);
+fprintf(f, "\"%s\"%s\n", "children", ": [");
+distance += tree->childDistance;
+rPrintNestedJson(f, tree->left, level+1, distance);
+fputs(",\n", f);
+rPrintNestedJson(f, tree->right, level+1, distance);
+fputc('\n', f);
+for (i=0;  i < level + 1;  i++)
+    fputc(' ', f);
+fputs("]\n", f);
+for (i=0;  i < level;  i++)
+    fputc(' ', f);
+fputs("}", f);
+}
+
+void printNestedJson(FILE *f, struct hacTree *tree)
+/* Print out cluster as nested-parens with {}'s around leaf nodes. */
+{
+if (tree == NULL)
+    {
+    fputs("Empty tree.\n", f);
+    return;
+    }
+double distance = 0;
+rPrintNestedJson(f, tree, 0, distance);
 fputc('\n', f);
 }
 
@@ -264,8 +318,9 @@ struct lm *localMem = lmInit(0);
 fillInNames(list, nameFile);
 struct hacTree *clusters = hacTreeFromItems((struct slList *)list, localMem,
 					    slBioExpVectorDistance, slBioExpVectorMerge, NULL, NULL);
-printJson(f,clusters);
+//printJson(f,clusters);
 //printSlBioExpVectorTree(f,clusters);
+printNestedJson(f,clusters);
 }
 
 int main(int argc, char *argv[])
