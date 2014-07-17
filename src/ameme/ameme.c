@@ -196,7 +196,7 @@ double calcApproximateTime(boolean considerRc)
 /* Get an estimated time in minutes. */
 {
 double time, t;
-double convMult = 0.33;	/* Adjust for server speed here. */
+double convMult = 0.15;	/* Adjust for server speed here. */
 time = findSeedsFragTime(considerRc, defaultTileSize);
 t = findSeedsScanTime(considerRc);
 if (t < time)
@@ -2154,7 +2154,7 @@ void pasteToFa(char *varName, char **retFileName, int *retSeqCount, int *retLong
 {
 static struct tempName tn;
 FILE *f;
-char *lines[1024];
+char *lines[1024*4 + 1];
 int lineCount;
 char *rawGood;
 char *cleanSeq;
@@ -2173,6 +2173,8 @@ goodName = cloneString(tn.forCgi);
 lineCount = chopString(rawGood, "\r\n", lines, ArraySize(lines));
 if (lineCount <= 0)
     return;
+if (lineCount == ArraySize(lines))
+    errAbort("Too many sequences for program to handle.  Maximum is %d", (int)ArraySize(lines) - 1);
 f = mustOpen(goodName, "w");
 if (lines[0][0] == '>') /* Looks like an FA file - just copy it to file. */
     {
@@ -2692,7 +2694,7 @@ fprintf(htmlOut, "background model %s; background data %s;</P>",
     backgroundName);
 
 approxTime = calcApproximateTime(considerRc);
-progress("This run would take about %2.2f minutes on a lightly loaded vintage 2003 web server.",
+progress("This run would take about %2.2f minutes on a lightly loaded vintage 2010 web server.",
     approxTime);
 fprintf(htmlOut, "<TT><PRE>\n");
 horizontalLine();
