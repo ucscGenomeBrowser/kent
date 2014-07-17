@@ -132,7 +132,7 @@ edwAddQaContamTarget rn4
 edwAddQaContamTarget sacCer3
 edwAddQaContamTarget escCol1
 edwAddQaContamTarget hg38
-edwAddQaContamTarget dm6
+# edwAddQaContamTarget dm6
 hgsql encodeDataWarehouse -e 'create view enrichedFiles as select f.id,v.format,v.enrichedIn,e.enrichment,left(f.submitFileName,70) submitFileName from edwQaEnrich e,edwValidFile v,edwFile f,edwQaEnrichTarget t where e.fileId=f.id and v.fileId=f.id and t.id=e.qaEnrichTargetId and v.enrichedIn=t.name;'
 hgsql encodeDataWarehouse -e 'create view crossEnrichments as select e.id aId,e.edwFileName aFileName,y.id bId,y.edwFileName bFileName,ev.enrichedIn enrich,sampleSampleEnrichment xEnrichment from edwFile e,edwQaPairSampleOverlap p, edwFile y,edwValidFile ev where e.id=p.elderFileId and y.id=p.youngerFileId and ev.fileId = e.id'
 hgsql encodeDataWarehouse -e 'create view correlations as select e.id aId,e.edwFileName aFileName,y.id bId,y.edwFileName bFileName,pearsonInEnriched from edwFile e,edwQaPairCorrelation p, edwFile y where  e.id=p.elderFileId and y.id=p.youngerFileId'
