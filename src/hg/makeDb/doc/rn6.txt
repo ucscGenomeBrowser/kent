@@ -260,19 +260,17 @@ searchPriority 8
     join name.coordinate.tab ucscToINSDC.tab | tr '[ ]' '[\t]' > ucscToINSDC.bed
 
     cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
-# 20
+# 27
 
-    # use the 20 in this sed:
-    sed -e "s/21/20/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+    # use the 27 in this sed:
+    sed -e "s/21/27/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
         | hgLoadSqlTab rn6 ucscToINSDC stdin ucscToINSDC.bed
     checkTableCoords rn6 ucscToINSDC
     # should cover all bases
     featureBits -countGaps rn6 ucscToINSDC
-    # 2229835716 bases of 2229835716 (100.000%) in intersection
+    # 2870182909 bases of 2870182909 (100.000%) in intersection
 
 ##############################################################################
-
-#########################################################################
 # running repeat masker (DONE - 2014-07-07,09 - Hiram)
     mkdir /hive/data/genomes/rn6/bed/repeatMasker
     cd /hive/data/genomes/rn6/bed/repeatMasker
