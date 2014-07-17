@@ -6,6 +6,7 @@
 #include "common.h"
 #include "options.h"
 #include "dystring.h"
+#include "hui.h"
 #include "trackHub.h"
 #include "udc.h"
 #include "htmlPage.h"
@@ -95,7 +96,10 @@ if (browserMachine != NULL)
 
 boolean checkTracks = !optionExists("noTracks");
 
+// UDC cache dir: first check for hg.conf setting, then override with command line option if given.
+setUdcCacheDir();
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
+
 struct dyString *errors = newDyString(1024);
 
 FILE *searchFp = NULL;
