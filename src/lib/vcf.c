@@ -344,6 +344,9 @@ else if (startsWith("##FILTER=", line) || startsWith("##ALT=", line))
 	// substrs[2] is ID/key, substrs[4] is Description.
 	struct vcfInfoDef *def = vcfFileAlloc(vcff, sizeof(struct vcfInfoDef));
 	def->key = vcfFileCloneSubstr(vcff, line, substrs[2]);
+	// greedy regex pulls in end quote, trim if found:
+	if (line[substrs[4].rm_eo-1] == '"')
+	    line[substrs[4].rm_eo-1] = '\0';
 	def->description = vcfFileCloneSubstr(vcff, line, substrs[4]);
 	slAddHead((isFilter ? &(vcff->filterDefs) : &(vcff->altDefs)), def);
 	}

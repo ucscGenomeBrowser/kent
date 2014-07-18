@@ -657,13 +657,16 @@ freez(&controlName);
 return edwExperimentLoadByQuery(conn, query);
 }
 
-struct edwFile *mustFindChipControlFile(struct sqlConnection *conn, 
+struct edwFile *mayFindChipControlFile(struct sqlConnection *conn, 
     struct edwValidFile *vf, struct edwExperiment *exp)
-/* Find control file for this chip file */
+/* Find control file for this chip file. Return NULL if not found */
 {
 struct edwExperiment *controlExp = findChipControlExp(conn, exp->accession);
 if (controlExp == NULL)
-    errAbort("Can't find control experiment for ChIP experiment %s", exp->accession);
+    {
+    verbose(2, "Can't find control experiment for ChIP experiment %s\n", exp->accession);
+    return NULL;
+    }
 
 // Got control experiment,  now let's go for a matching bam file. 
 char query[PATH_LEN*3];
@@ -699,7 +702,10 @@ for (controlVf = controlVfList; controlVf != NULL; controlVf = controlVf->next)
 	}
     }
 if (bestControl == NULL)
-    errAbort("Can't find control file for ChIP experiment %s", exp->accession);
+    {
+    verbose(2, "Can't find control file for ChIP experiment %s\n", exp->accession);
+    return NULL;
+    }
 
 // Figure out control bam file info
 return edwFileFromId(conn, bestControl->fileId);
@@ -733,7 +739,9 @@ else
 verbose(2, "Looking for control for chip file %s\n", ef->edwFileName);
 
 // Get control bam file info
-struct edwFile *controlEf = mustFindChipControlFile(conn, vf, exp);
+struct edwFile *controlEf = mayFindChipControlFile(conn, vf, exp);
+if (controlEf == NULL)
+    return;
 verbose(2, "schedulingSppChip on %s with control %s,  step %s, script %s\n", ef->edwFileName, 
     controlEf->edwFileName, analysisStep, scriptName);
 
@@ -785,7 +793,9 @@ else
     }
 
 // Get control bam file info
-struct edwFile *controlEf = mustFindChipControlFile(conn, vf, exp);
+struct edwFile *controlEf = mayFindChipControlFile(conn, vf, exp);
+if (controlEf == NULL)
+    return;
 verbose(2, "schedulingMacsChip on %s with control %s,  step %s, script %s\n", ef->edwFileName, 
     controlEf->edwFileName, analysisStep, scriptName);
 
@@ -976,7 +986,7 @@ if (alreadyTakenCareOf(conn, assembly, analysisStep, ef->id))
     sqlSafef(query, sizeof(query), "select count(*) from eapOutput where fileId=%u", ef->id);
     if (sqlQuickNum(conn, query) == 0)
         {
-	uglyf("Skipping fileId %u,  not an EAP output", ef->id);
+	verbose(2, "Skipping fileId %u,  not an EAP output", ef->id);
 	return;
 	}
     }
