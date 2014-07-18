@@ -5872,4 +5872,5 @@ hPrintf("</script>\n");
 
 if (measureTiming)
     measureTime("Time at end of doMiddle, next up cart write");
+cartRemove(cart,"udcTimeout");
 }

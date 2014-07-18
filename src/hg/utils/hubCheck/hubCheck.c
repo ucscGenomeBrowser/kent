@@ -11,6 +11,8 @@
 #include "udc.h"
 #include "htmlPage.h"
 
+int cacheTime = 1;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -24,7 +26,9 @@ errAbort(
   "   -verbose=2            - output verbosely\n"
   "   -clear=browserMachine - clear hub status, no checking\n"
   "   -searchFile=trixInput - output search terms into trixInput file\n"
+  "   -cacheTime=N - set cache refresh time in seconds, default %d\n"
   "   -noTracks             - don't check each track, just trackDb\n"
+  , cacheTime
   );
 }
 
@@ -33,6 +37,7 @@ static struct optionSpec options[] = {
    {"clear", OPTION_STRING},
    {"searchFile", OPTION_STRING},
    {"noTracks", OPTION_BOOLEAN},
+   {"cacheTime", OPTION_INT},
    {NULL, 0},
 };
 
@@ -88,7 +93,8 @@ optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
 
-udcSetCacheTimeout(1);
+cacheTime = optionInt("cacheTime", cacheTime);
+udcSetCacheTimeout(cacheTime);
 char *browserMachine = NULL;
 browserMachine = optionVal("clear", browserMachine) ;
 if (browserMachine != NULL)
