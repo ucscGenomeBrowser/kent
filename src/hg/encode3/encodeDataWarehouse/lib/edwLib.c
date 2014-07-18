@@ -1271,7 +1271,7 @@ safef(indexPath, PATH_LEN, "%s%s/bwaData/%s.fa",
 }
 
 void edwAsPath(char *format, char path[PATH_LEN])
-/* Convert something like "narrowPeak" in format to fill path involving
+/* Convert something like "narrowPeak" in format to full path involving
  * encValDir/as/narrowPeak.as */
 {
 safef(path, PATH_LEN, "%sas/%s.as", edwValDataDir, format);
