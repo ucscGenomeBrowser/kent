@@ -50,7 +50,7 @@ EOF
     makeGenomeDb.pl dp4.config.ra -stop=db \
       >& makeGenomeDb.log & tail -f makeGenomeDb.log
     # Because of the extremely long sequence names for unplaced sequences,
-    # the chromInfo load command failed because the index string length was 
+    # the chromInfo load command failed because the index string length was
     # too short.  So I temporarily modified my ~/kent/src/hg/lib/chromInfo.sql
     # to lengthen the index, dropped the dp4 database and ran -continue db.
 
@@ -198,7 +198,7 @@ BASE=/cluster/data/dp4/bed/blastz.droWil1.2006-10-02
 #########################################################################
 # MAKE 11.OOC FILE FOR BLAT (DONE 9/18/08 angie)
     # Use -repMatch=85 -- increased from dp3's 75 because this assembly
-    # loses 9272 tiles w/75, as opposed to dp3's 6790 -- even if dp4 has 
+    # loses 9272 tiles w/75, as opposed to dp3's 6790 -- even if dp4 has
     # more repetitive reads than dp3, that seems like too big of an increase
     # (would lose sensitivity).
     ssh kolossus
@@ -219,3 +219,144 @@ BASE=/cluster/data/dp4/bed/blastz.droWil1.2006-10-02
 
 
 #########################################################################
+# lastz run to D. pseudoobscura (DONE - 2014-06-26 - Hiram)
+    screen -S dp4DroPer1      # use a screen to manage this longish running job
+    mkdir /hive/data/genomes/dp4/bed/lastzDroPer1.2014-06-26
+    cd /hive/data/genomes/dp4/bed/lastzDroPer1.2014-06-26
+
+    # always set the BLASTZ program so we know what version was used
+    cat << '_EOF_' > DEF
+# D. pseudoobscura vs D. persimilis
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+BLASTZ_M=50
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+#     A    C    G    T
+#    91  -90  -25 -100
+#   -90  100 -100  -25
+#   -25 -100  100  -90
+#  -100  -25  -90  91
+
+# TARGET: D. pseudoobscura Dp4
+SEQ1_DIR=/hive/data/genomes/dp4/dp4.2bit
+SEQ1_LEN=/hive/data/genomes/dp4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: D. persimilis DroPer1
+SEQ2_DIR=/hive/data/genomes/droPer1/droPer1.2bit
+SEQ2_LEN=/hive/data/genomes/droPer1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+
+BASE=/hive/data/genomes/dp4/bed/lastzDroPer1.2014-06-26
+TMPDIR=/dev/shm
+'_EOF_'
+    # << emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > do.log 2>&1
+    # broke down during featureBits on the chainLink table due to
+    # inadequate index, fixed hgLoadChain and reloaded:
+    time /cluster/home/hiram/kent/src/hg/makeDb/hgLoadChain/hgLoadChain \
+       -tIndex dp4 chainDroPer1 dp4.droPer1.all.chain.gz
+    # Loading 92008528 chains into dp4.chainDroPer1
+    # real    76m24.273s
+
+    time featureBits dp4 chainDroPer1Link > fb.dp4.chainDroPer1Link.txt 2>&1
+    # real    34m12.908s
+
+    cat fb.dp4.chainDroPer1Link.txt
+    # 142529024 bases of 146066673 (97.578%) in intersection
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -continue=download -syntenicNet) > download.log 2>&1
+    # real    9m38.094s
+
+    # filter with doRecipBest.pl
+    time (/cluster/bin/scripts/doRecipBest.pl -buildDir=`pwd` \
+        -dbHost=hgwdev -workhorse=hgwdev dp4 droPer1) > rbest.log 2>&1
+    # real    130m22.825s
+    # this was run before the above download was finished, to complete:
+    time (/cluster/bin/scripts/doRecipBest.pl -buildDir=`pwd` \
+        -continue=download -dbHost=hgwdev -workhorse=hgwdev dp4 droPer1) \
+           > rbest.download.log 2>&1
+    # real    0m4.233s
+
+    # running the swap
+    mkdir /hive/data/genomes/droPer1/bed/blastz.dp4.swap
+    cd /hive/data/genomes/droPer1/bed/blastz.dp4.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/dp4/bed/lastzDroPer1.2014-06-26/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+    # real    170m37.103s
+
+    cat fb.droPer1.chainDp4Link.txt
+    # 169459603 bases of 175583556 (96.512%) in intersection
+
+    time (/cluster/bin/scripts/doRecipBest.pl -buildDir=`pwd` \
+        -dbHost=hgwdev -workhorse=hgwdev droPer1 dp4) > rbest.log 2>&1
+    #  real    3m45.728s
+
+#############################################################################
+# self lastz run (DONE - 2014-07-07 - Hiram)
+    screen -S dp4      # use a screen to manage this longish running job
+    mkdir /hive/data/genomes/dp4/bed/lastzSelf.2014-07-07
+    cd /hive/data/genomes/dp4/bed/lastzSelf.2014-07-07
+
+    # always set the BLASTZ program so we know what version was used
+    cat << '_EOF_' > DEF
+# D. pseudoobscura vs D. pseudoobscura
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+BLASTZ_M=50
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+#     A    C    G    T
+#    91  -90  -25 -100
+#   -90  100 -100  -25
+#   -25 -100  100  -90
+#  -100  -25  -90  91
+
+# TARGET: D. pseudoobscura Dp4
+SEQ1_DIR=/hive/data/genomes/dp4/dp4.2bit
+SEQ1_LEN=/hive/data/genomes/dp4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: D. pseudoobscura Dp4
+SEQ2_DIR=/hive/data/genomes/dp4/dp4.2bit
+SEQ2_LEN=/hive/data/genomes/dp4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+
+BASE=/hive/data/genomes/dp4/bed/lastzSelf.2014-07-07
+TMPDIR=/dev/shm
+'_EOF_'
+    # << emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > do.log 2>&1
+    # failed on the syntenicNet which shouldn't be done for selfies
+    # real    1134m13.977s
+
+    time featureBits dp4 chainSelfLink > fb.dp4.chainSelfLink.txt 2>&1
+    # real    54m55.931s
+
+    cat fb.dp4.chainSelfLink.txt
+    # 113982936 bases of 146066673 (78.035%) in intersection
+
+#############################################################################
