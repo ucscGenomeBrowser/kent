@@ -25120,7 +25120,9 @@ else if (sameWord(table, "transRegCodeProbe"))
     }
 else if (sameWord(table, "wgEncodeRegDnaseClustered")
      ||  sameWord(table, "wgEncodeRegDnaseClusteredV2")
+     ||  sameWord(table, "wgEncodeRegDnaseClusteredV3")
      ||  sameWord(table, "wgEncodeRegDnaseClusteredOn7"))
+     // TODO: replace these with - startsWith("wgEncodeRegDnaseClustered", table)
     {
     doPeakClusters(tdb, item);
     }

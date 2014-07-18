@@ -391,10 +391,11 @@ canPack On
     useScore 1
     scoreFilter 100
     scoreFilterLimits 100:1000
+    html wgEncodeRegDnaseClusteredV3
+    priority 1.6
     #nameFilter 1:125
     #nameFilterLimits 1:125
     #nameFilterByRange on
-    priority 1.6
 
     track wgEncodeRegTfbsClusteredV2
     release beta, public
