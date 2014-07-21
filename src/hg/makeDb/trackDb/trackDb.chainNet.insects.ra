@@ -1,0 +1,1605 @@
+################################################################
+# dm6 - D. melanogaster - Drosophila melanogaster - insect drosophila -9060
+################################################################
+track chainNetDm6
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9060
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb dm6
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDm6Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDm6
+    spectrum on
+
+        track chainDm6
+        release alpha
+        parent chainNetDm6Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain dm6
+        html chainNet
+
+    track chainNetDm6Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDm6
+
+        track netDm6
+        release alpha
+        parent chainNetDm6Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign dm6 chainDm6
+        html chainNet
+
+
+################################################################
+# droSim1 - D. simulans - Drosophila simulans - insect drosophila - 9140
+################################################################
+track chainNetDroSim1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9140
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droSim1
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroSim1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroSim1
+    spectrum on
+
+        track chainDroSim1
+        release alpha
+        parent chainNetDroSim1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droSim1
+        html chainNet
+
+    track chainNetDroSim1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroSim1
+
+        track netDroSim1
+        release alpha
+        parent chainNetDroSim1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droSim1 chainDroSim1
+        html chainNet
+
+################################################################
+# droSec1 D. sechellia - Drosophila sechellia - insect drosophila -9190
+################################################################
+track chainNetDroSec1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9190
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droSec1
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroSec1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroSec1
+    spectrum on
+
+        track chainDroSec1
+        release alpha
+        parent chainNetDroSec1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droSec1
+        html chainNet
+
+    track chainNetDroSec1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroSec1
+
+        track netDroSec1
+        release alpha
+        parent chainNetDroSec1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droSec1 chainDroSec1
+        html chainNet
+
+################################################################
+# droYak3 D. yakuba - Drosophila yakuba - insect - drosophila -9230
+################################################################
+track chainNetDroYak3
+release alpha
+compositeTrack on
+shortLabel D. yakuba Chain/Net
+longLabel D. yakuba (Jun. 2006 (FlyBase/dyak_caf1), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9520
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droYak3
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroYak3Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroYak3
+    spectrum on
+
+        track chainDroYak3
+        release alpha
+        parent chainNetDroYak3Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droYak3
+        html chainNet
+
+    track chainNetDroYak3Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroYak3
+
+        track netDroYak3
+        release alpha
+        parent chainNetDroYak3Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droYak3 chainDroYak3
+        html chainNet
+
+################################################################
+# droBia2 D. biarmipes - Drosophila biarmipes - insect drosophila -9260
+################################################################
+track chainNetDroBia2
+release alpha
+compositeTrack on
+shortLabel D. biarmipes Chain/Net
+longLabel D. biarmipes (Mar. 2013 (Baylor/Dbia_2.0), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9260
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droBia2
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroBia2Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroBia2
+    spectrum on
+
+        track chainDroBia2
+        release alpha
+        parent chainNetDroBia2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droBia2
+        html chainNet
+
+    track chainNetDroBia2Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroBia2
+
+        track netDroBia2
+        release alpha
+        parent chainNetDroBia2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droBia2 chainDroBia2
+        html chainNet
+
+################################################################
+# droBip2 - D. bipectinata - Drosophila bipectinata - insect drosophila -9270
+################################################################
+track chainNetDroBip2
+release alpha
+compositeTrack on
+shortLabel D. bipectinata Chain/Net
+longLabel D. bipectinata (Mar. 2013 (Baylor/Dbip_2.0), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9270
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droBip2
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroBip2Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroBip2
+    spectrum on
+
+        track chainDroBip2
+        release alpha
+        parent chainNetDroBip2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droBip2
+        html chainNet
+
+    track chainNetDroBip2Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroBip2
+
+        track netDroBip2
+        release alpha
+        parent chainNetDroBip2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droBip2 chainDroBip2
+        html chainNet
+
+################################################################
+# droSuz1 D. suzukiii - Drosophila suzukii - insect drosophila -9265
+################################################################
+track chainNetDroSuz1
+release alpha
+compositeTrack on
+shortLabel D. suzukiii Chain/Net
+longLabel D. suzukiii (Sep. 2013(BGI/Dsuzukii.v01)), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9265
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droSuz1
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroSuz1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroSuz1
+    spectrum on
+
+        track chainDroSuz1
+        release alpha
+        parent chainNetDroSuz1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droSuz1
+        html chainNet
+
+    track chainNetDroSuz1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroSuz1
+
+        track netDroSuz1
+        release alpha
+        parent chainNetDroSuz1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droSuz1 chainDroSuz1
+        html chainNet
+
+################################################################
+# droEre2 - D. erecta - Drosophila erecta - insect drosophila -9280
+################################################################
+track chainNetDroEre2
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9280
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droEre2
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroEre2Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroEre2
+    spectrum on
+
+        track chainDroEre2
+        release alpha
+        parent chainNetDroEre2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droEre2
+        html chainNet
+
+    track chainNetDroEre2Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroEre2
+
+        track netDroEre2
+        release alpha
+        parent chainNetDroEre2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droEre2 chainDroEre2
+        html chainNet
+
+################################################################
+# droAna3 - D. ananassae - Drosophila ananassae - insect drosophila -9320
+################################################################
+track chainNetDroAna3
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9320
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droAna3
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroAna3Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroAna3
+    spectrum on
+
+        track chainDroAna3
+        release alpha
+        parent chainNetDroAna3Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droAna3
+        html chainNet
+
+    track chainNetDroAna3Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroAna3
+
+        track netDroAna3
+        release alpha
+        parent chainNetDroAna3Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droAna3 chainDroAna3
+        html chainNet
+
+################################################################
+# droEle2 - D. elegans - Drosophila elegans - insect drosophila -9330
+################################################################
+track chainNetDroEle2
+release alpha
+compositeTrack on
+shortLabel D. elegans  Chain/Net
+longLabel D. elegans  (Mar. 2013 (Baylor/Dele_2.0)), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9330
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droEle2
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroEle2Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroEle2
+    spectrum on
+
+        track chainDroEle2
+        release alpha
+        parent chainNetDroEle2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droEle2
+        html chainNet
+
+    track chainNetDroEle2Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroEle2
+
+        track netDroEle2
+        release alpha
+        parent chainNetDroEle2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droEle2 chainDroEle2
+        html chainNet
+
+################################################################
+# droTak2 - D. takahashii - Drosophila takahashii - insect drosophila -9326
+################################################################
+track chainNetDroTak2
+release alpha
+compositeTrack on
+shortLabel D. takahashii Chain/Net
+longLabel D. takahashii (Mar. 2013 (Baylor/Dtak_2.0), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9326
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droTak2
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroTak2Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroTak2
+    spectrum on
+
+        track chainDroTak2
+        release alpha
+        parent chainNetDroTak2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droTak2
+        html chainNet
+
+    track chainNetDroTak2Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroTak2
+
+        track netDroTak2
+        release alpha
+        parent chainNetDroTak2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droTak2 chainDroTak2
+        html chainNet
+
+################################################################
+# droKik2 - D. kikkawai - Drosophila kikkawai - insect drosophila -9334
+################################################################
+track chainNetDroKik2
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9334
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droKik2
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroKik2Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroKik2
+    spectrum on
+
+        track chainDroKik2
+        release alpha
+        parent chainNetDroKik2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droKik2
+        html chainNet
+
+    track chainNetDroKik2Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroKik2
+
+        track netDroKik2
+        release alpha
+        parent chainNetDroKik2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droKik2 chainDroKik2
+        html chainNet
+
+################################################################
+# droFic2 - D. ficusphila - Drosophila ficusphila - insect  drosophila -9338
+################################################################
+track chainNetDroFic2
+release alpha
+compositeTrack on
+shortLabel D. ficusphila Chain/Net
+longLabel D. ficusphila (Mar. 2013 (Baylor/Dfic_2.0)), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9338
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droFic2
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroFic2Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroFic2
+    spectrum on
+
+        track chainDroFic2
+        release alpha
+        parent chainNetDroFic2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droFic2
+        html chainNet
+
+    track chainNetDroFic2Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroFic2
+
+        track netDroFic2
+        release alpha
+        parent chainNetDroFic2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droFic2 chainDroFic2
+        html chainNet
+
+################################################################
+# droEug2 - D. eugracilis - Drosophila eugracilis - insect drosophila -9342
+################################################################
+track chainNetDroEug2
+release alpha
+compositeTrack on
+shortLabel D. eugracilis Chain/Net
+longLabel D. eugracilis (Mar. 2013 (modENCODE/Deug_2.0)), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9342
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droEug2
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroEug2Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroEug2
+    spectrum on
+
+        track chainDroEug2
+        release alpha
+        parent chainNetDroEug2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droEug2
+        html chainNet
+
+    track chainNetDroEug2Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroEug2
+
+        track netDroEug2
+        release alpha
+        parent chainNetDroEug2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droEug2 chainDroEug2
+        html chainNet
+
+################################################################
+# droRho2 - D. rhopaloa - Drosophila rhopaloa - insect drosophila -9346
+################################################################
+track chainNetDroRho2
+release alpha
+compositeTrack on
+shortLabel D. rhopaloa Chain/Net
+longLabel D. rhopaloa (Feb. 2013 (modENCODE/Drho_2.0)), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9346
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droRho2
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroRho2Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroRho2
+    spectrum on
+
+        track chainDroRho2
+        release alpha
+        parent chainNetDroRho2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droRho2
+        html chainNet
+
+    track chainNetDroRho2Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroRho2
+
+        track netDroRho2
+        release alpha
+        parent chainNetDroRho2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droRho2 chainDroRho2
+        html chainNet
+
+################################################################
+# droPse3 - D. pseudoobscura - Drosophila pseudoobscura - insect drosophila -9359
+################################################################
+track chainNetDroPse3
+release alpha
+compositeTrack on
+shortLabel D. pseudoobscura (Dpse_3.0) Chain/Net
+longLabel D. pseudoobscura (Apr. 2013 (Baylor/Dpse_3.0)), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9359
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droPse3
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroPse3Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroPse3
+    spectrum on
+
+        track chainDroPse3
+        release alpha
+        parent chainNetDroPse3Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droPse3
+        html chainNet
+
+    track chainNetDroPse3Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroPse3
+
+        track netDroPse3
+        release alpha
+        parent chainNetDroPse3Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droPse3 chainDroPse3
+        html chainNet
+
+################################################################
+# dp4 - D. pseudoobscura - Drosophila pseudoobscura - insect drosophila -9360
+################################################################
+track chainNetDp4
+release alpha
+compositeTrack on
+shortLabel $o_Organism (dp4) Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9360
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb dp4
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDp4Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDp4
+    spectrum on
+
+        track chainDp4
+        release alpha
+        parent chainNetDp4Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain dp4
+        html chainNet
+
+    track chainNetDp4Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDp4
+
+        track netDp4
+        release alpha
+        parent chainNetDp4Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign dp4 chainDp4
+        html chainNet
+
+################################################################
+# droPer1 - D. persimilis - Drosophila persimilis - insect drosophila -9440
+################################################################
+track chainNetDroPer1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9440
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droPer1
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroPer1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroPer1
+    spectrum on
+
+        track chainDroPer1
+        release alpha
+        parent chainNetDroPer1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droPer1
+        html chainNet
+
+    track chainNetDroPer1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroPer1
+
+        track netDroPer1
+        release alpha
+        parent chainNetDroPer1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droPer1 chainDroPer1
+        html chainNet
+
+################################################################
+# droMir2 - D. miranda - Drosophila miranda -insect drosophila -9450
+################################################################
+track chainNetDroMir2
+release alpha
+compositeTrack on
+shortLabel D. miranda Chain/Net
+longLabel D. miranda (Apr. 2013 (UC Berkeley/DroMir_2.2)), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9450
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droMir2
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroMir2Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroMir2
+    spectrum on
+
+        track chainDroMir2
+        release alpha
+        parent chainNetDroMir2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droMir2
+        html chainNet
+
+    track chainNetDroMir2Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroMir2
+
+        track netDroMir2
+        release alpha
+        parent chainNetDroMir2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droMir2 chainDroMir2
+        html chainNet
+
+################################################################
+# droWil2 - D. willistoni - Drosophila willistoni - insect  drosophila -9489
+################################################################
+track chainNetDroWil2
+release alpha
+compositeTrack on
+shortLabel D. willistoni Chain/Net
+longLabel D. willistoni (Aug. 2006 (J. Craig Venter Institute/dwil_caf1), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9489
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droWil2
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroWil2Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroWil2
+    spectrum on
+
+        track chainDroWil2
+        release alpha
+        parent chainNetDroWil2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droWil2
+        html chainNet
+
+    track chainNetDroWil2Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroWil2
+
+        track netDroWil2
+        release alpha
+        parent chainNetDroWil2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droWil2 chainDroWil2
+        html chainNet
+
+################################################################
+# droAlb1 - D. albomicans - Drosophila albomicans - insect drosophila -9500
+################################################################
+track chainNetDroAlb1
+release alpha
+compositeTrack on
+shortLabel D. albomicans Chain/Net
+longLabel D. albomicans (May. 2012 (KIZ CAS/DroAlb_1.0)), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9500
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droAlb1
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroAlb1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroAlb1
+    spectrum on
+
+        track chainDroAlb1
+        release alpha
+        parent chainNetDroAlb1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droAlb1
+        html chainNet
+
+    track chainNetDroAlb1Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroAlb1
+
+        track netDroAlb1
+        release alpha
+        parent chainNetDroAlb1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droAlb1 chainDroAlb1
+        html chainNet
+
+################################################################
+# droVir3 - D. virilis - Drosophila virilis - insect drosophila -9520
+################################################################
+track chainNetDroVir3
+release alpha
+##release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9520
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droVir3
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroVir3Viewchain
+    release alpha
+    #release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroVir3
+    spectrum on
+
+        track chainDroVir3
+        release alpha
+        #release alpha
+        parent chainNetDroVir3Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droVir3
+        html chainNet
+
+    track chainNetDroVir3Viewnet
+    release alpha
+    #release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroVir3
+
+        track netDroVir3
+        release alpha
+        #release alpha
+        parent chainNetDroVir3Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droVir3 chainDroVir3
+        html chainNet
+
+################################################################
+# droMoj3 - D. mojavensis - Drosophila mojavensis - insect drosophila -9570
+################################################################
+track chainNetDroMoj3
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9570
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droMoj3
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroMoj3Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroMoj3
+    spectrum on
+
+        track chainDroMoj3
+        release alpha
+        parent chainNetDroMoj3Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droMoj3
+        html chainNet
+
+    track chainNetDroMoj3Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroMoj3
+
+        track netDroMoj3
+        release alpha
+        parent chainNetDroMoj3Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droMoj3 chainDroMoj3
+        html chainNet
+
+################################################################
+# droGri2 - D. grimshawi - Drosophila grimshawi - insect drosophila -9595
+################################################################
+track chainNetDroGri2
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 142.9595
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb droGri2
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetDroGri2Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetDroGri2
+    spectrum on
+
+        track chainDroGri2
+        release alpha
+        parent chainNetDroGri2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain droGri2
+        html chainNet
+
+    track chainNetDroGri2Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetDroGri2
+
+        track netDroGri2
+        release alpha
+        parent chainNetDroGri2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign droGri2 chainDroGri2
+        html chainNet
+
+################################################################
+# musDom2 - M. domestica - Musca domestica - insect diptera -9620
+################################################################
+track chainNetMusDom2
+release alpha
+compositeTrack on
+shortLabel M. domestica Chain/Net
+longLabel M. domestica (Apr. 2013 (GGC/Musca_domestica-2.0.2), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 14555550
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb musDom2
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetMusDom2Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetMusDom2
+    spectrum on
+
+        track chainMusDom2
+        release alpha
+        parent chainNetMusDom2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain musDom2
+        html chainNet
+
+    track chainNetMusDom2Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetMusDom2
+
+        track netMusDom2
+        release alpha
+        parent chainNetMusDom2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign musDom2 chainMusDom2
+        html chainNet
+
+################################################################
+# anoGam1 - A. gambiae - Anopheles gambiae - insect -  diptera - 9640 
+################################################################
+track chainNetAnoGam1
+release alpha
+##release alpha
+compositeTrack on
+shortLabel $o_Organism Chain/Net
+longLabel $o_Organism ($o_date), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 146.9520
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb anoGam1
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetAnoGam1Viewchain
+    release alpha
+    #release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetAnoGam1
+    spectrum on
+
+        track chainAnoGam1
+        release alpha
+        #release alpha
+        parent chainNetAnoGam1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain anoGam1
+        html chainNet
+
+    track chainNetAnoGam1Viewnet
+    release alpha
+    #release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetAnoGam1
+
+        track netAnoGam1
+        release alpha
+        #release alpha
+        parent chainNetAnoGam1Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign anoGam1 chainAnoGam1
+        html chainNet
+
+################################################################
+# apiMel4 - A. mellifera - Apis mellifera - insect hymenoptera -9654
+################################################################
+track chainNetApiMel4
+release alpha
+compositeTrack on
+shortLabel A. mellifera Chain/Net
+longLabel A. mellifera (Nov. 2010 (Baylor/Amel_4.5), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 14r9.9654
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb apiMel4
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetApiMel4Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetApiMel4
+    spectrum on
+
+        track chainApiMel4
+        release alpha
+        parent chainNetApiMel4Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain apiMel4
+        html chainNet
+
+    track chainNetApiMel4Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetApiMel4
+
+        track netApiMel4
+        release alpha
+        parent chainNetApiMel4Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign apiMel4 chainApiMel4
+        html chainNet
+
+

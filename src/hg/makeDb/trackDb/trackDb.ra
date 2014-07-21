@@ -10,6 +10,8 @@ include trackDb.chainNet.mammal.ra
 include trackDb.chainNet.birds.ra
 include trackDb.chainNet.sarcopterygii.ra
 include trackDb.chainNet.fish.ra
+#include trackDb.chainNet.insects.ra 
+
 
 include trackDb.nt.ra
 include trackDb.genbank.ra beta,public
