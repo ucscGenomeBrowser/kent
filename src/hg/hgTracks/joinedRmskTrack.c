@@ -240,12 +240,11 @@ if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
 	struct sqlResult *sr = hRangeQuery (conn, tg->table, chromName,
 					    winStart, winEnd, NULL,
 					    &rowOffset);
-
 	struct rmskJoined *detailList = NULL;
 	while ((row = sqlNextRow (sr)) != NULL)
 	    {
 	    rm = rmskJoinedLoad (row + rowOffset);
-	    slAddHead (detailList, rm);
+	    slAddHead (&detailList, rm);
 	    }
 	slSort (&detailList, cmpRepeatVisStart);
 
