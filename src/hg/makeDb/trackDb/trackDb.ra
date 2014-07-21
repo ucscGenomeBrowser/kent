@@ -1463,7 +1463,7 @@ track joinedRmsk
 compositeTrack on
 shortLabel RepeatMasker Visualization
 longLabel Detailed Visualization of RepeatMasker Annotations
-group varRep
+group rep
 allButtonPair on
 visibility dense
 spectrum on
