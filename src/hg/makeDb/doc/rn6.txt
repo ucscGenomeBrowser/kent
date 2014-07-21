@@ -74,7 +74,7 @@ rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Ratt
     # fixed this script to be more generic so it should work on any
     # assembly in the future as long as the fasta headers maintain the
     # observed structre
-    time ./unplaced.pl 
+    time ./unplaced.pl
     # real    0m0.494s
 
     zcat ../genbank/non-nuclear/assembled_chromosomes/FASTA/chrMT.fa.gz \
@@ -176,8 +176,101 @@ chrUn_AABR07023006v1" > dup.list
       -continue=db rn6.config.ra > db.log 2>&1
     #	real    23m10.146s
 
-
 #########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2014-07-09 - Hiram)
+   export maxLen=`hgsql -N -e 'select frag from gold;' rn6 | awk '{print length($0)}' | sort -run | head -1`
+
+   echo $maxLen
+   #  14
+
+export C=1
+while [ $C -le $maxLen ];
+do
+  echo -n " $C: "
+  hgsql -N -e 'select frag from gold;' rn6 | sort -u \
+    | awk '{ print substr($0,'$C',1) }' | sort -u | xargs echo | sed -e 's/ //g'
+  C=`echo $C | awk '{print $1+1}'`
+done
+#   1: A
+#   2: ACY
+#   3: 012B
+#   4: 012345789R
+#   5: 0123456789
+#   6: 0123456789
+#   7: 0123456789
+#   8: 0123456789
+#   9: .0123456789
+#  10: 0123456789
+#  11: 0123456789
+#  12: 0123456789
+#  13: .
+#  14: 1
+
+    # since we have the composite fragment IDs, there are a variety of
+    # dot versions:
+    hgsql -N -e 'select frag from gold;' rn6 | sed -e 's/.*\.//' \
+       | sort | uniq -c  | sort -rn
+#  73744 1
+#    574 5
+#    540 4
+#    390 6
+# ... etc ...
+
+    # hence, add to trackDb/rat/rn6/trackDb.ra
+
+searchTable gold
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A[ACY][B012][R0-9][0-9]+(\.[0-9]+)*
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+  # test pattern:
+   hgsql -N -e 'select frag from gold;' rn6 | wc -l
+   # 76195
+   hgsql -N -e 'select frag from gold;' rn6 \
+     | egrep -e 'A[ACY][B012][R0-9][0-9]+(\.[0-9]+)*' | wc -l
+   # 76195
+   hgsql -N -e 'select frag from gold;' rn6 \
+     | egrep -v -e 'A[ACY][B012][R0-9][0-9]+(\.[0-9]+)*' | wc -l
+   # 0
+
+############################################################################
+# create ucscToINSDC name mapping (DONE - 2014-04-11 - Hiram)
+    mkdir /hive/data/genomes/rn6/bed/ucscToINSDC
+    cd /hive/data/genomes/rn6/bed/ucscToINSDC
+
+    # this script has been maturing over time, it is close to complete.
+    # to find a latest copy of it:
+    # ls -ogrt /hive/data/genomes/*/bed/ucscToINSDC/translateNames.sh
+
+    cp -p /hive/data/genomes/poeRet1/bed/ucscToINSDC/translateNames.sh .
+    # to see chrM accession:
+    hgsql -e 'select * from gold;' rn6 | grep chrM
+    # use that accession here:
+    ./translateNames.sh AY172581.1
+    # eliminate the duplicates, and needs to be sorted to work with join
+    egrep -v "chrUn_AABR07022518v1|chrUn_AABR07023006v1" ucscToINSDC.txt \
+        | sort > ucscToINSDC.tab
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes | sort \
+        > name.coordinate.tab
+
+    join name.coordinate.tab ucscToINSDC.tab | tr '[ ]' '[\t]' > ucscToINSDC.bed
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+# 27
+
+    # use the 27 in this sed:
+    sed -e "s/21/27/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+        | hgLoadSqlTab rn6 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords rn6 ucscToINSDC
+    # should cover all bases
+    featureBits -countGaps rn6 ucscToINSDC
+    # 2870182909 bases of 2870182909 (100.000%) in intersection
+
+##############################################################################
 # running repeat masker (DONE - 2014-07-07,09 - Hiram)
     mkdir /hive/data/genomes/rn6/bed/repeatMasker
     cd /hive/data/genomes/rn6/bed/repeatMasker
@@ -211,7 +304,7 @@ chrUn_AABR07023006v1" > dup.list
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku rn6 > do.log 2>&1 &
     #	real    8m49.125s
 
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
     #	106804757 bases of 2731211732 (3.911%) in intersection
 
     # add the TRF mask to the rmsk sequence:
@@ -314,6 +407,12 @@ close (FH);
     #     440 no
     #  145292 yes
 
+#########################################################################
+# cytoBandIdeo - (DONE - 2014-07-14 - Hiram)
+    mkdir /hive/data/genomes/rn6/bed/cytoBand
+    cd /hive/data/genomes/rn6/bed/cytoBand
+    makeCytoBandIdeo.csh rn6
+
 ##########################################################################
 ## WINDOWMASKER (DONE - 2014-07-09 - Hiram)
     mkdir /hive/data/genomes/rn6/bed/windowMasker
@@ -395,7 +494,7 @@ mv $1_homo-sapiens_mus-musculus dateRepeats
     do
 	B=`basename ${F}`
 	B=${B/.out*/}
-	echo $B 
+	echo $B
         /cluster/bin/scripts/extractRepeats 1 ${F} > \
 		notInHuman/${B}.out.spec
         /cluster/bin/scripts/extractRepeats 2 ${F} > \
@@ -440,7 +539,7 @@ done | faSize stdin
     #   %41.19 masked total, %43.31 masked real
 
     #   Compare to original:
-    cat faSize.rn6.2bit.txt 
+    cat faSize.rn6.2bit.txt
     #   2870182909 bases (140322104 N's 2729860805 real 1547693783 upper
     #      1182167022 lower) in 953 sequences in 1 files
     #   Total size: mean 3011734.4 sd 21338622.2
@@ -517,4 +616,171 @@ done | faSize stdin
     #   52752077 chr18  35449852        88201929        chr18.06
 
 #########################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-04 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Rattus norvegicus       125869  1103595 17503
 
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add:
+
+# rn6 (rat)
+rn6.serverGenome = /hive/data/genomes/rn6/rn6.2bit
+rn6.clusterGenome = /hive/data/genomes/rn6/rn6.2bit
+rn6.ooc = /hive/data/genomes/rn6/jkStuff/rn6.11.ooc
+rn6.lift = /hive/data/genomes/rn6/jkStuff/rn6.nonBridged.lift
+rn6.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+rn6.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+rn6.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+rn6.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+rn6.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+rn6.downloadDir = rn6
+rn6.refseq.mrna.xeno.load  = yes
+rn6.refseq.mrna.xeno.loadDesc = yes
+rn6.genbank.mrna.xeno.load  = yes
+rn6.perChromTables = no
+rn6.mgc = yes
+# rn6.upstreamGeneTbl = ensGene
+# rn6.upstreamMaf = multiz13way
+# /hive/data/genomes/rn6/bed/multiz13way/species.list.txt
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding rn6 rat refs #13578" etc/genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S rn6           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial rn6 &
+    #	var/build/logs/2014.07.09-12:07:40.rn6.initalign.log
+    #   real    902m50.425s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad rn6 &
+    #	logFile: var/dbload/hgwdev/logs/2014.07.10-18:27:18.rn6.dbload.log
+    #   real    68m41.070s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add rn6 to:
+        etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added rn6 refs #13578" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# setup search rule for assembly track (DONE - 2014-07-08 - Hiram)
+   export maxLen=`hgsql -N -e 'select frag from gold;' rn6 | awk '{print length($0)}' | sort -run | head -1`
+
+   echo $maxLen
+   #  14
+
+export C=1
+while [ $C -le $maxLen ];
+do
+  echo -n " $C: "
+  hgsql -N -e 'select frag from gold;' rn6 | sort -u \
+    | awk '{ print substr($0,'$C',1) }' | sort -u | xargs echo | sed -e 's/ //g'
+  C=`echo $C | awk '{print $1+1}'`
+done
+
+#   1: A
+#   2: ACY
+#   3: 012B
+#   4: 012345789R
+#   5: 0123456789
+#   6: 0123456789
+#   7: 0123456789
+#   8: 0123456789
+#   9: .0123456789
+#  10: 0123456789
+#  11: 0123456789
+#  12: 0123456789
+#  13: .
+#  14: 1
+
+searchTable gold
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A[ACY][012B][0-9R][0-9]+(\.1)*
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+  # test pattern:
+   hgsql -N -e 'select frag from gold;' rn6 | wc -l
+   # 76195
+   hgsql -N -e 'select frag from gold;' rn6 \
+     | egrep -e 'A[ACY][B012][R0-9][0-9]+(\.[0-9]+)*' | wc -l
+   # 76195
+   hgsql -N -e 'select frag from gold;' rn6 | sed -e 's/\.[0-9]+$//' \
+	| egrep -e 'A[ACY][B012][R0-9][0-9]+(\.[0-9]+)*' | wc -l
+   # 76195
+   hgsql -N -e 'select frag from gold;' rn6 \
+     | egrep -v -e 'A[ACY][B012][R0-9][0-9]+(\.[0-9]+)*' | wc -l
+   # 0
+
+##############################################################################
+# construct liftOver from rn5 to rn6 (DONE - 2014-07-14 - Hiram)
+    # documentation for this step is in rn5.txt
+
+#########################################################################
+## Default position to same as rn5 found via lift over data n rn5
+##  (DONE - 2014-07-14 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr1:80608553-80639261"
+	where name="rn6";' hgcentraltest
+
+##############################################################################
+# construct downloads files (DONE - 2014-07-14 - Hiram)
+#   before starting downloads, the joinerCheck should be clean
+#   after rn6 is added to all.joiner:
+    joinerCheck -keys -database=rn6 all.joiner
+
+    cd /hive/data/genomes/rn6
+    makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev rn6 \
+	> downloads.log 2>&1
+    # real    28m50.409s
+
+    # examine the goldenPath/*/README.txt files to verify the text
+
+##############################################################################
+# ready for first pushQ entry (DONE - 2014-07-14 - Hiram)
+    mkdir /hive/data/genomes/rn6/pushQ
+    cd /hive/data/genomes/rn6/pushQ
+    makePushQSql.pl rn6 > rn6.sql 2> stderr.out
+    # real    1m52.294s
+    # some errors are legitimate and OK:
+     head stderr.out
+# WARNING: hgwdev does not have /gbdb/rn6/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/rn6/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/rn6/bbi/qualityBw/quality.bw
+# WARNING: rn6 does not have seq
+# WARNING: rn6 does not have extFile
+
+    scp -p rn6.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta './bin/x86_64/hgsql qapushq < /tmp/rn6.sql'
+
+##############################################################################
+## blat server turned on (DONE - 2014-01-13 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("rn6", "blat4b", "17784", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("rn6", "blat4b", "17785", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################

@@ -562,3 +562,55 @@ chainSome $(path1)
     tail -f do.log
     ln -s blastz.dm3.swap /cluster/data/droPer1/bed/blastz.dm3
 
+#############################################################################
+# self lastz run (DONE - 2014-07-07 - Hiram)
+    screen -S droPer1      # use a screen to manage this longish running job
+    mkdir /hive/data/genomes/droPer1/bed/lastzSelf.2014-07-07
+    cd /hive/data/genomes/droPer1/bed/lastzSelf.2014-07-07
+
+    # always set the BLASTZ program so we know what version was used
+    cat << '_EOF_' > DEF
+# D. persimilis vs D. persimilis
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+BLASTZ_M=50
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+#     A    C    G    T
+#    91  -90  -25 -100
+#   -90  100 -100  -25
+#   -25 -100  100  -90
+#  -100  -25  -90  91
+
+# TARGET: D. persimilis Dp4
+SEQ1_DIR=/hive/data/genomes/droPer1/droPer1.2bit
+SEQ1_LEN=/hive/data/genomes/droPer1/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=50
+
+# QUERY: D. persimilis Dp4
+SEQ2_DIR=/hive/data/genomes/droPer1/droPer1.2bit
+SEQ2_LEN=/hive/data/genomes/droPer1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+SEQ2_LIMIT=200
+
+BASE=/hive/data/genomes/droPer1/bed/lastzSelf.2014-07-07
+TMPDIR=/dev/shm
+'_EOF_'
+    # << emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > do.log 2>&1
+    #  real    417m57.427s
+
+    featureBits droPer1 chainSelfLink > fb.droPer1.chainSelfLink.txt 2>&1
+    cat fb.droPer1.chainSelfLink.txt
+
+    #   171616442 bases of 175583556 (97.741%) in intersection
+
+#############################################################################

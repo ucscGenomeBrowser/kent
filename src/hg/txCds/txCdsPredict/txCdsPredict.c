@@ -79,7 +79,7 @@ struct orthoCds
     {
     int start;	        /* CDS end */
     int end;            /* CDS start */
-    char base;		/* Base in other species at this position. */
+    char base;		/* Base in other species at this position. Used for debugging only. */
     };
 
 struct orthoCdsArray
@@ -476,6 +476,7 @@ if (mafFile != NULL)
     for (maf = mf->alignments; maf != NULL; maf = maf->next)
         {
 	struct mafComp *comp;
+	// Skip over first component since it's the reference
 	for (comp = maf->components->next;  comp != NULL; comp = comp->next)
 	    hashStore(uniqSpeciesHash, comp->src);
 	}

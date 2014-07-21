@@ -338,7 +338,8 @@ and the name and position fields should uniquely describe items so that the
 correct ID and description will be displayed on the details pages.
 <P><B><I>Example:</I></B><BR>
 This example uses the first 4 columns of BED format, but up to 12 may be used.
-Click <a class="insideLink" href="../../cgi-bin/hgTracks?db=hg19&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/bedDetailExample.txt" 
+Click <a class="insideLink" 
+href="../cgi-bin/hgTracks?db=hg19&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/bedDetailExample.txt" 
 target="_blank">here</a> to view this track in the Genome Browser.</P>
 <PRE style="width:800px;overflow:auto;background-color:#fffffa;color:#111;padding:5px;">
 track name=HbVar type=bedDetail description="HbVar custom track" db=hg19 visibility=3 url="http://globin.bx.psu.edu/cgi-bin/hbvar/query_vars3?display_format=page&amp;mode=output&amp;id=$$"
@@ -849,8 +850,8 @@ TARGET="_blank">here</a> to display this track in the Genome Browser.
                     </UL>
                     Undefined variables are ignored by the parser.
 		    <P>
-                    The second line is usually a comment line (it begins with a #) 
-                    and may display the parameters that were used to run the alignment program.
+                    The header line is usually followed by a comment line (it begins with a #) 
+                    that describes the parameters that were used to run the alignment program.
 		    <PRE style="color:#0000ff;"> # tba.v8 (((human chimp) baboon) (mouse rat))</PRE>
                     <P>
 		    <B>Alignment Block Lines</B> (lines starting with 'a' -- parameters for a new alignment block)

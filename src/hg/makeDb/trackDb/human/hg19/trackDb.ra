@@ -552,14 +552,15 @@ group map
 visibility hide
 type bed 4 +
 
-track msr1
+track msr2
 shortLabel Gene Interactions
-longLabel Microsoft Research Gene Interactions
+longLabel Gene Interactions in Abstracts
 group pub
-visibility hide
+visibility dense
 type bigBed 4 .
 noScoreFilter on
 release alpha
+directUrl hgcGeneGraph?gene=%s
 
 track pubsDev
 shortLabel Publications Beta

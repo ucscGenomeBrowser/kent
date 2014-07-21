@@ -595,7 +595,7 @@ if (isNew)
     replaceInStr(html, sizeof(html), "<!transferbutton>", "");
 
     safef(tempLink, sizeof(tempLink),
-                "<a href=\"/cgi-bin/qaPushQ?cb=%s\">CANCEL</a>&nbsp;&nbsp;",newRandState);
+                "<a href=\"qaPushQ?cb=%s\">CANCEL</a>&nbsp;&nbsp;",newRandState);
     replaceInStr(html, sizeof(html), "<!cancellink>", tempLink );
 
     showSizesJavascript();
@@ -661,11 +661,11 @@ else
                      "<input TYPE=SUBMIT NAME=\"lockbutton\" VALUE=\"Lock\" >&nbsp;&nbsp;");
 
         safef(tempLink, sizeof(tempLink),
-              "<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a>&nbsp;&nbsp;",newRandState);
+              "<a href=\"qaPushQ?cb=%s\">RETURN</a>&nbsp;&nbsp;",newRandState);
         replaceInStr(html, sizeof(html), "<!cancellink>", tempLink );
 
         safef(tempLink, sizeof(tempLink),
-              "<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">REFRESH</a>&nbsp;&nbsp;",
+              "<a href=\"qaPushQ?action=edit&qid=%s&cb=%s\">REFRESH</a>&nbsp;&nbsp;",
               ki->qid,newRandState);
         replaceInStr(html, sizeof(html), "<!refreshlink>", tempLink );
 
@@ -782,11 +782,11 @@ char *temp = NULL;
 switch(col)
     {
     case e_qid:
-	printf("<td><A href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">%s</A>%s",
+	printf("<td><A href=\"qaPushQ?action=edit&qid=%s&cb=%s\">%s</A>%s",
 	    ki->qid, newRandState, ki->qid, sameString(ki->lockUser,"") ? "":"*" );
 	if (ki->pushState[0]=='Y')
 	    {
-	    printf("<BR><A href=\"/cgi-bin/qaPushQ?action=pushDone&qid=%s&cb=%s\">Done!</A>",
+	    printf("<BR><A href=\"qaPushQ?action=pushDone&qid=%s&cb=%s\">Done!</A>",
 		ki->qid, newRandState );
 	    }
 	printf("</td>\n");
@@ -806,11 +806,11 @@ switch(col)
 	    {
 	    printf(
 		"<td><table><tr><td>%s</td><td>"
-		"<A href=\"/cgi-bin/qaPushQ?action=promote&qid=%s&cb=%s\">^</A>&nbsp;&nbsp;"
-		"<A href=\"/cgi-bin/qaPushQ?action=top&qid=%s&cb=%s\">T</A>&nbsp;&nbsp;"
+		"<A href=\"qaPushQ?action=promote&qid=%s&cb=%s\">^</A>&nbsp;&nbsp;"
+		"<A href=\"qaPushQ?action=top&qid=%s&cb=%s\">T</A>&nbsp;&nbsp;"
 		"</td></tr><tr><td>&nbsp</td><td>"
-		"<A href=\"/cgi-bin/qaPushQ?action=demote&qid=%s&cb=%s\">v</A>&nbsp;&nbsp;"
-		"<A href=\"/cgi-bin/qaPushQ?action=bottom&qid=%s&cb=%s\">B</A>"
+		"<A href=\"qaPushQ?action=demote&qid=%s&cb=%s\">v</A>&nbsp;&nbsp;"
+		"<A href=\"qaPushQ?action=bottom&qid=%s&cb=%s\">B</A>"
 		"</td></tr></table></td>\n",
 		ki->priority,
 		ki->qid, newRandState,
@@ -1022,26 +1022,26 @@ if (!sameString(msg,""))
 
 if (sameString(month,""))
     {
-    printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=add&cb=%s>ADD</A>\n",newRandState);
+    printf("&nbsp;<A href=qaPushQ?action=add&cb=%s>ADD</A>\n",newRandState);
     }
 else
     {
-    printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=display&month=current&cb=%s>Current</A>\n",newRandState);
+    printf("&nbsp;<A href=qaPushQ?action=display&month=current&cb=%s>Current</A>\n",newRandState);
     }
-printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=reset&cb=%s>Logout</A>\n",newRandState);
-printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showAllCol&cb=%s>All Columns</A>\n",newRandState);
-printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showDefaultCol&cb=%s>Default Columns</A>\n",newRandState);
-printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showMonths&cb=%s>Log by Month</A>\n",newRandState);
-printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showGateway&cb=%s>Gateway</A>\n",newRandState);
-printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=showDisplayHelp target=\"_blank\">Help</A>\n");
-printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=releaseLog target=\"_blank\">Release Log</A>\n");
-//printf("&nbsp;<A href=/cgi-bin/qaPushQ?action=releaseLogPush target=\"_blank\">Publish RL</A>\n");
-printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s#priorityA>A</A>\n",newRandState);
-printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s#priorityB>B</A>\n",newRandState);
-printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s#priorityC>C</A>\n",newRandState);
-printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s#priorityD>D</A>\n",newRandState);
-printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s#priorityL>L</A>\n",newRandState);
-printf("&nbsp;<A href=/cgi-bin/qaPushQ?cb=%s>Refresh</A>\n",newRandState);
+printf("&nbsp;<A href=qaPushQ?action=reset&cb=%s>Logout</A>\n",newRandState);
+printf("&nbsp;<A href=qaPushQ?action=showAllCol&cb=%s>All Columns</A>\n",newRandState);
+printf("&nbsp;<A href=qaPushQ?action=showDefaultCol&cb=%s>Default Columns</A>\n",newRandState);
+printf("&nbsp;<A href=qaPushQ?action=showMonths&cb=%s>Log by Month</A>\n",newRandState);
+printf("&nbsp;<A href=qaPushQ?action=showGateway&cb=%s>Gateway</A>\n",newRandState);
+printf("&nbsp;<A href=qaPushQ?action=showDisplayHelp target=\"_blank\">Help</A>\n");
+printf("&nbsp;<A href=qaPushQ?action=releaseLog target=\"_blank\">Release Log</A>\n");
+//printf("&nbsp;<A href=qaPushQ?action=releaseLogPush target=\"_blank\">Publish RL</A>\n");
+printf("&nbsp;<A href=qaPushQ?cb=%s#priorityA>A</A>\n",newRandState);
+printf("&nbsp;<A href=qaPushQ?cb=%s#priorityB>B</A>\n",newRandState);
+printf("&nbsp;<A href=qaPushQ?cb=%s#priorityC>C</A>\n",newRandState);
+printf("&nbsp;<A href=qaPushQ?cb=%s#priorityD>D</A>\n",newRandState);
+printf("&nbsp;<A href=qaPushQ?cb=%s#priorityL>L</A>\n",newRandState);
+printf("&nbsp;<A href=qaPushQ?cb=%s>Refresh</A>\n",newRandState);
 //printf("&nbsp;newRandState=%s\n",newRandState);
 //printf("&nbsp;oldRandState=%s\n",oldRandState);
 
@@ -2244,7 +2244,7 @@ char tempe[64];
 
 printf("<h4>Show Hidden Columns</h4>\n");
 printf("<br>\n");
-printf("<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a><br>", newRandState);
+printf("<a href=\"qaPushQ?cb=%s\">RETURN</a><br>", newRandState);
 printf("<br>\n");
 printf("Click on any column below to un-hide it.<br>\n");
 printf("<br>\n");
@@ -2256,13 +2256,13 @@ for (c=0; c<e_NUMCOLS; c++)
     safef(tempe,sizeof(tempe),",%s,",colName[c]);  /* add sentinel comma values to the ends of the col element */
     if (strstr(templist,tempe)==NULL)
 	{
-	printf("<a href=\"/cgi-bin/qaPushQ?action=showColumn&colName=%s&cb=%s\">%s</a><br><br>",
+	printf("<a href=\"qaPushQ?action=showColumn&colName=%s&cb=%s\">%s</a><br><br>",
 	    colName[c], newRandState, colName[c]);
 	}
     }
 
 printf("<br>\n");
-printf("<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a><br>", newRandState);
+printf("<a href=\"qaPushQ?cb=%s\">RETURN</a><br>", newRandState);
 }
 
 
@@ -2325,7 +2325,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 printf("<br>\n");
-printf("<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a><br>", newRandState);
+printf("<a href=\"qaPushQ?cb=%s\">RETURN</a><br>", newRandState);
 }
 
 
@@ -3001,14 +3001,14 @@ printf("<H2>Transfer Queue Entry %s:%s to Another Queue </H2>\n", pushQtbl, newQ
 
 q=mustLoadPushQ(newQid);
 
-printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">RETURN</a> \n",newQid,newRandState);
+printf("<a href=\"qaPushQ?action=edit&qid=%s&cb=%s\">RETURN</a> \n",newQid,newRandState);
 printf("<br>\n");
 printf("<br>\n");
 
 safef(tempUrl, sizeof(tempUrl), "action=transferTo&qid=%s&toOrg", newQid);
 listQueues(tempUrl, TRUE);
 
-printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">RETURN</a> <br>\n",newQid,newRandState);
+printf("<a href=\"qaPushQ?action=edit&qid=%s&cb=%s\">RETURN</a> <br>\n",newQid,newRandState);
 pushQFree(&q);
 }
 
@@ -3257,7 +3257,7 @@ printf("<br>\n");
 
 listQueues("org", FALSE);
 
-printf("<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a> <br>\n",newRandState);
+printf("<a href=\"qaPushQ?cb=%s\">RETURN</a> <br>\n",newRandState);
 }
 
 void doUnlock()
@@ -3395,10 +3395,10 @@ for (ki = kiList; ki != NULL; ki = ki->next)
 printf("</ul>\n");
 printf("<p>\n");
 printf(" For more information about the tracks and tables listed on this page, refer to the "
-"<a href=/goldenPath/help/hgTracksHelp.html#IndivTracks>User's Guide</a>.<p>\n");
+"<a href=../goldenPath/help/hgTracksHelp.html#IndivTracks>User's Guide</a>.<p>\n");
 
 strftime (now, sizeof(now), "%02d %b %Y", loctime); /* default to today's date */
-printf("<em>Last updated %s. <a HREF=\"/contacts.html\">Inquiries and feedback welcome</a>.</em>\n",now);
+printf("<em>Last updated %s. <a HREF=\"../contacts.html\">Inquiries and feedback welcome</a>.</em>\n",now);
 /* 10 LATEST CHANGES */
 webNewSection("<A NAME=recent></A> 10 Latest Changes (all assemblies)");
 

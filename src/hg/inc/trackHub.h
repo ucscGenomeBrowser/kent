@@ -57,6 +57,7 @@ struct trackHubGenome
     char *organism;          /* organism name, like Human */
     char *description;       /* description, also called freeze name */
     struct trackHub *trackHub; /* associated track hub */
+    unsigned orderKey;   /* the orderKey for changing the order from the order in the file */
     };
 
 void trackHubClose(struct trackHub **pHub);

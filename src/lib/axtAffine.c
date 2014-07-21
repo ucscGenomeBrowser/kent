@@ -13,7 +13,7 @@ boolean axtAffineSmallEnough(double querySize, double targetSize)
 /* Return TRUE if it is reasonable to align sequences of given sizes
  * with axtAffine. */
 {
-return targetSize * querySize <= 1.0E8;
+return targetSize * querySize <= 1.0E9;
 }
 
 static void affineAlign(char *query, int querySize, 

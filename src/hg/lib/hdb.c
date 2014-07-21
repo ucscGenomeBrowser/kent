@@ -4334,6 +4334,7 @@ char **row;
 struct dbDb *dbList = NULL, *db;
 
 dbList = trackHubGetDbDbs(theClade);
+slReverse(&dbList); // since we do a slReverse at the end of this function
 
 /* Scan through dbDb table, loading into list */
 if (theClade != NULL)

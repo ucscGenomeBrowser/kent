@@ -51,17 +51,7 @@ html primateChainNet
         type chain ponAbe2
         otherDb ponAbe2
 
-        track chainNomLeu1
-        release public
-        subTrack primateChainNetViewchain off
-        subGroups view=chain species=dGibbon clade=aHom
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain nomLeu1
-        otherDb nomLeu1
-
         track chainNomLeu3
-        release alpha,beta
         subTrack primateChainNetViewchain off
         subGroups view=chain species=dGibbon clade=aHom
         shortLabel $o_Organism Chain
@@ -145,17 +135,7 @@ include chainNetRBestOtoGar3.ra alpha
         type netAlign ponAbe2 chainPonAbe2
         otherDb ponAbe2
 
-        track netNomLeu1
-        release public
-        subTrack primateChainNetViewnet off
-        subGroups view=net species=dGibbon clade=aHom
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign nomLeu1 chainNomLeu1
-        otherDb nomLeu1
-
         track netNomLeu3
-        release alpha,beta
         subTrack primateChainNetViewnet off
         subGroups view=net species=dGibbon clade=aHom
         shortLabel $o_Organism Net

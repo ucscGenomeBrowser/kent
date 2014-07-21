@@ -1604,7 +1604,7 @@ return defaultDir;
 void udcSetDefaultDir(char *path)
 /* Set default directory for cache */
 {
-defaultDir = path;
+defaultDir = cloneString(path);
 }
 
 

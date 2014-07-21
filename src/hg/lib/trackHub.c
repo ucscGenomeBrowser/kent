@@ -208,8 +208,8 @@ if (globalAssemblyHubList != NULL)
 	}
     }
 
-slSort(&dbList, hDbDbCmpOrderKey);
 slReverse(&dbList);
+slSort(&dbList, hDbDbCmpOrderKey);
 return dbList;
 }
 
@@ -434,6 +434,17 @@ safef(buffer, sizeof(buffer), "%s_%s", hubName, base);
 return cloneString(buffer);
 }
 
+static int genomeOrderKeyCmp(const void *va, const void *vb)
+/* Compare to sort based on order key */
+{
+const struct trackHubGenome *a = *((struct trackHubGenome **)va);
+const struct trackHubGenome *b = *((struct trackHubGenome **)vb);
+
+if (b->orderKey > a->orderKey) return -1;
+else if (b->orderKey < a->orderKey) return 1;
+else return 0;
+}
+
 static struct trackHubGenome *trackHubGenomeReadRa(char *url, struct trackHub *hub)
 /* Read in a genome.ra format url and return it as a list of trackHubGenomes. 
  * Also add it to hash, which is keyed by genome. */
@@ -467,6 +478,10 @@ while ((ra = raNextRecord(lf)) != NULL)
     el->trackHub = hub;
     hashAdd(hash, el->name, el);
     slAddHead(&list, el);
+    char *orderKey = hashFindVal(ra, "orderKey");
+    if (orderKey != NULL)
+	el->orderKey = sqlUnsigned(orderKey);
+
     char *groups = hashFindVal(ra, "groups");
     if (twoBitPath != NULL)
 	{
@@ -498,6 +513,7 @@ while ((ra = raNextRecord(lf)) != NULL)
 /* Clean up and go home. */
 lineFileClose(&lf);
 slReverse(&list);
+slSort(&list, genomeOrderKeyCmp);
 return list;
 }
 

@@ -469,4 +469,7 @@ int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int 
 
 #define NUCCORE_SEARCH "http://www.ncbi.nlm.nih.gov/sites/entrez?db=nuccore&cmd=search&term="
 
+void doJRepeat (struct trackDb *tdb, char *repeat);
+   /* New RepeatMasker Visualization defined in joinedRmskClick.c */
+
 #endif
