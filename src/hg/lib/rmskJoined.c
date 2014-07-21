@@ -40,7 +40,7 @@ sqlSignedDynamicArray(row[11], &ret->blockRelStarts, &sizeOne);
 assert(sizeOne == ret->blockCount);
 }
 ret->id = cloneString(row[12]);
-ret->description = cloneString(row[13]);
+// ret->description = cloneString(row[13]);
 return ret;
 }
 
@@ -218,4 +218,3 @@ fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
-

@@ -241,14 +241,14 @@ if (offset >= 0)
     if (hTableExists (database, table))
 	{
 	hFindSplitTable (database, seqName, table, qTable, &hasBin);
-	safef (query, sizeof (query),
+	sqlSafef (query, sizeof (query),
 	       "select * from %s where chrom = '%s' and alignStart >= %d"
 	       " and id = %s", qTable, seqName, start, repeat);
 
 	sr2 = sqlGetResult (conn2, query);
 	if ((row = sqlNextRow (sr2)) != NULL)
 	    {
-	    struct rmskJoined *rmJoin = rmskJoinedLoad (row);
+	    struct rmskJoined *rmJoin = rmskJoinedLoad (row + hasBin);
 
 	    char class[32];
 	    class[0] = '\0';
@@ -288,7 +288,7 @@ if (offset >= 0)
 	int isFirst = 0;
 	struct rmskOut2 *ro;
 	hFindSplitTable (database, seqName, outTable, qTable, &hasBin);
-	safef (query, sizeof (query),
+	sqlSafef (query, sizeof (query),
 	       "select * from %s where genoName = '%s' and genoStart >= %d"
 	       " and id = %s", qTable, seqName, start, repeat);
 	sr2 = sqlGetResult (conn2, query);
@@ -355,7 +355,7 @@ if (offset >= 0)
 	{
 	struct rmskAlign *ro;
 	hFindSplitTable (database, seqName, alignTable, qTable, &hasBin);
-	safef (query, sizeof (query),
+	sqlSafef (query, sizeof (query),
 	       "select * from %s where genoName = '%s' and genoStart >= %d"
 	       " and id = %s", qTable, seqName, start, repeat);
 	sr2 = sqlGetResult (conn2, query);

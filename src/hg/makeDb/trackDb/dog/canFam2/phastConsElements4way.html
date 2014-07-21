@@ -19,7 +19,7 @@ PhastCons constructs a two-state phylo-HMM with a state for conserved
 regions and a state for non-conserved regions.  The two states share a
 single phylogenetic model, except that the branch lengths of the tree
 associated with the conserved state are multiplied by a constant scaling
-factor <em>rho</em> (0 <= <em>rho</em> <= 1).  The free parameters of the
+factor <em>rho</em> (0 &lt;= <em>rho</em> &lt;= 1).  The free parameters of the
 phylo-HMM, including the scaling factor <em>rho</em>, are estimated from
 the data by maximum likelihood using an EM algorithm.  This procedure is
 subject to certain constraints on the "coverage" of the genome by conserved
@@ -54,43 +54,55 @@ by Jim Kent at UCSC.
 
 <H2>References</H2>
 
-<H3>PhastCons</H3>
-<P>
-Siepel, A., Bejerano, G., Pedersen, J.S., Hinrichs, A., Hou, M., Rosenbloom, 
-K., Clawson, H., Spieth, J., Hillier, L.W., Richards, S., Weinstock, G.M., 
-Wilson, R. K., Gibbs, R.A., Kent, W.J., Miller, W., and Haussler, D. 
-<A HREF="http://www.genome.org/cgi/doi/10.1101/gr.3715005"
-TARGET=_blank>Evolutionarily conserved elements in vertebrate, insect, worm, 
-and yeast genomes</A>.
-<em>Genome Res.</em> <B>15</B>, 1034-1050 (2005).</P>
+<H3>PhastCons:</H3>
+<p>
+Siepel A, Bejerano G, Pedersen JS, Hinrichs AS, Hou M, Rosenbloom K,
+Clawson H, Spieth J, Hillier LW, Richards S, <em>et al.</em>
+<a href="http://genome.cshlp.org/content/15/8/1034"
+target="_blank">Evolutionarily conserved elements in vertebrate, insect, worm,
+and yeast genomes</a>.
+<em>Genome Res</em>. 2005 Aug;15(8):1034-50.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/16024819" target="_blank">16024819</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1182216/" target="_blank">PMC1182216</a>
+</p>
 
-<H3>Chain/Net</H3>
-<P>
-Kent, W.J., Baertsch, R., Hinrichs, A., Miller, W., and Haussler, D.
-<A HREF="http://www.pnas.org/cgi/content/abstract/1932072100v1" 
-TARGET=_blank>Evolution's cauldron: Duplication, deletion, and rearrangement
-in the mouse and human genomes</A>.
-<em>Proc Natl Acad Sci USA</em> <B>100</B>(20), 11484-11489 (2003).</P>
+<H3>Chain/Net:</H3>
+<p>
+Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
+<a href="http://www.pnas.org/content/100/20/11484.abstract"
+target="_blank">Evolution's cauldron:
+duplication, deletion, and rearrangement in the mouse and human genomes</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2003 Sep 30;100(20):11484-9.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/14500911" target="_blank">14500911</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC208784/" target="_blank">PMC208784</a>
+</p>
 
-<H3>Multiz</H3>
-<P>
-Blanchette, M., Kent, W.J., Riemer, C., Elnitski, L., Smit, A.F.A., 
-Roskin, K.M., Baertsch, R., Rosenbloom, K., Clawson, H., Green, E.D., 
-Haussler, D., Miller, W. 
-<A HREF="http://www.genome.org/cgi/content/abstract/14/4/708" 
-TARGET=_blank>Aligning multiple genomic sequences with the threaded blockset
-aligner</A>.
-<em>Genome Res.</em> <B>14</B>(4), 708-15 (2004).</P>
+<H3>Multiz:</H3>
+<p>
+Blanchette M, Kent WJ, Riemer C, Elnitski L, Smit AF, Roskin KM,
+Baertsch R, Rosenbloom K, Clawson H, Green ED, <em>et al.</em>
+<a href="http://genome.cshlp.org/content/14/4/708.abstract"
+target="_blank">Aligning multiple genomic sequences with the threaded blockset aligner</a>.
+<em>Genome Res</em>. 2004 Apr;14(4):708-15.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/15060014" target="_blank">15060014</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC383317/" target="_blank">PMC383317</a>
+</p>
 
-<H3>Blastz</H3>
-<P>
-Chiaromonte, F., Yap, V.B., Miller, W. 
-<A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&list_uids=11928468&dopt=Abstract" 
-TARGET=_blank>Scoring pairwise genomic sequence alignments</A>. 
-<em>Pac Symp Biocomput 2002</em>, 115-26 (2002).</P>
-<P>
-Schwartz, S., Kent, W.J., Smit, A., Zhang, Z., Baertsch, R., Hardison, R., 
-Haussler, D., and Miller, W.
-<A HREF="http://www.genome.org/cgi/content/abstract/13/1/103" 
-TARGET=_blank>Human-Mouse Alignments with BLASTZ</A>. 
-<em>Genome Res.</em> <B>13</B>(1), 103-7 (2003).</P>
+<H3>Blastz:</H3>
+<p>
+Chiaromonte F, Yap VB, Miller W.
+<a href="http://psb.stanford.edu/psb-online/proceedings/psb02/chiaromonte.pdf"
+target="_blank">Scoring pairwise genomic sequence alignments</a>.
+<em>Pac Symp Biocomput</em>. 2002:115-26.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/11928468" target="_blank">11928468</a>
+</p>
+
+<p>
+Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC,
+Haussler D, Miller W.
+<a href="http://genome.cshlp.org/content/13/1/103.abstract"
+target="_blank">Human-mouse alignments with BLASTZ</a>.
+<em>Genome Res</em>. 2003 Jan;13(1):103-7.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/12529312" target="_blank">12529312</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC430961/" target="_blank">PMC430961</a>
+</p>
