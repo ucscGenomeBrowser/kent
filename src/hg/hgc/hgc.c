@@ -24503,6 +24503,10 @@ else if (sameWord(table, "wabaCbr"))
     {
     doHgCbr(tdb, item);
     }
+else if (startsWith("rmskJoined", table))
+    {
+    doJRepeat(tdb, item);
+    }
 else if (startsWith("rmsk", table))
     {
     doHgRepeat(tdb, item);
