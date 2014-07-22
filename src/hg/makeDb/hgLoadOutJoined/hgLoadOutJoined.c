@@ -35,8 +35,6 @@ char *createRmskOut = "CREATE TABLE %s (\n"
 "             #Indices\n";
 
 boolean noBin = FALSE;
-boolean split = FALSE;
-boolean noSplit = FALSE;
 char *tabFileName = NULL;
 char *suffix = NULL;
 int badRepCnt = 0;
@@ -45,9 +43,6 @@ int badRepCnt = 0;
 static struct optionSpec optionSpecs[] = {
     {"tabFile", OPTION_STRING},
     {"tabfile", OPTION_STRING},
-    {"nosplit", OPTION_BOOLEAN},
-    {"noSplit", OPTION_BOOLEAN},
-    {"split",   OPTION_BOOLEAN},
     {"table", OPTION_STRING},
     {NULL, 0}
 };
@@ -59,12 +54,11 @@ errAbort(
   "hgLoadOutJoined - load new style (2014) RepeatMasker .out files into database\n"
   "usage:\n"
   "   hgLoadOutJoined database file(s).out\n"
-  "For multiple files chrN.out this will create the single table 'rmsk'\n"
-  "in the database, use the -split argument to obtain separate chrN_rmsk tables.\n"
+  "For multiple files chrN.out this will create the single table 'rmskOutBaseline'\n"
+  "in the database.\n"
   "options:\n"
   "   -tabFile=text.tab - don't actually load database, just create tab file\n"
-  "   -split - load chrN_rmsk separate tables even if a single file is given\n"
-  "   -table=name - use a different suffix other than the default (rmsk)");
+  "   -table=name - use a different suffix other than the default (rmskOutBaseline)");
 }
 
 void badFormat(struct lineFile *lf, int id)
@@ -117,41 +111,16 @@ return TRUE;
 
 FILE *theFile = NULL;
 struct hash *chromFpHash = NULL;
-char *defaultTempName = "rmsk.tab";
+char *defaultTempName = "rmskOutBaseline.tab";
 
 FILE *getFileForChrom(char *chrom)
-/* Return the appropriate file pointer for the given chrom if -split.
- * If not using -split, then there is only one file pointer in action. */
+/* Return the appropriate file pointer for the given chrom */
 {
-static int chromCount = 0;
 char *tempName = tabFileName ? tabFileName : defaultTempName;
 
-if (split)
-    {
-    if (chromFpHash == NULL)
-	chromFpHash = hashNew(10);
-    theFile = (FILE *)hashFindVal(chromFpHash, chrom);
-    if (theFile == NULL)
-	{
-	char fName[512];
-	if (chromCount > 1000)
-	    {
-	    /* We will probably run into the operating system limit on open
-	     * files well before this point, but just in case... */
-	    errAbort("-split should not be used when there are >1000 sequences"
-		     " -- too many split tables.");
-	    }
-	safef(fName, sizeof(fName), "%s_%s", chrom, tempName);
-	theFile = mustOpen(fName, "w");
-	hashAdd(chromFpHash, chrom, theFile);
-	chromCount++;
-	}
-    }
-else
-    {
-    if (theFile == NULL)
-	theFile = mustOpen(tempName, "w");
-    }
+if (theFile == NULL)
+    theFile = mustOpen(tempName, "w");
+
 return theFile;
 }
 
@@ -163,15 +132,9 @@ carefulClose(&f);
 }
 
 void closeFiles()
-/* If split, close each file pointer in chromFpHash.  Otherwise close the
- * single file pointer that we've been using. */
+/* Close the * single file pointer that we've been using. */
 {
-if (split)
-    {
-    hashTraverseEls(chromFpHash, helCarefulClose);
-    }
-else
-    carefulClose(&theFile);
+carefulClose(&theFile);
 }
 
 void readOneOut(char *rmskFile)
@@ -276,15 +239,8 @@ dyStringClear(query);
 sqlDyStringPrintf(query, createRmskOut, tableName);
 
 /* Create the indexes */
-if (!noSplit)
-    {
-    dyStringAppend(query, "   INDEX(bin))\n");
-    }
-else
-    {
-    int indexLen = hGetMinIndexLength(database);
-    sqlDyStringPrintf(query, "   INDEX(genoName(%d),bin))\n", indexLen);
-    }
+int indexLen = hGetMinIndexLength(database);
+sqlDyStringPrintf(query, "   INDEX(genoName(%d),bin))\n", indexLen);
 
 sqlUpdate(conn, query->string);
 
@@ -300,9 +256,6 @@ void processOneOut(char *database, struct sqlConnection *conn, char *rmskFile, c
 /* Read one RepeatMasker .out file and load it into database. */
 {
 verbose(1, "Processing %s\n", rmskFile);
-
-if (split || noSplit)
-    errAbort("program error: processOneOut doesn't do -split or -nosplit.");
 
 readOneOut(rmskFile);
 
@@ -321,25 +274,6 @@ if (tabFileName == NULL)
 
 struct sqlConnection *theConn = NULL;
 
-void loadOneSplitTable(struct hashEl *hel)
-/* Load the table for the given chrom. */
-{
-char tempName[512];
-char tableName[256];
-char *chrom = hel->name;
-safef(tempName, sizeof(tempName), "%s_%s", chrom, defaultTempName);
-safef(tableName, sizeof(tableName), "%s_%s", chrom, suffix);
-loadOneTable(sqlGetDatabase(theConn), theConn, tempName, tableName);
-}
-
-void loadSplitTables(char *database, struct sqlConnection *conn)
-/* For each chrom in chromHash, load its tempfile into table chrom_suffix. */
-{
-theConn = conn;
-hashTraverseEls(chromFpHash, loadOneSplitTable);
-}
-
-
 void hgLoadOutJoined(char *database, int rmskCount, char *rmskFileNames[], char *suffix)
 /* hgLoadOutJoined - load RepeatMasker .out files into database. */
 {
@@ -353,18 +287,12 @@ if (tabFileName == NULL)
     }
 for (i=0; i<rmskCount; ++i)
     {
-    if (split || noSplit)
-	readOneOut(rmskFileNames[i]);
-    else
-	processOneOut(database, conn, rmskFileNames[i], suffix);
+    readOneOut(rmskFileNames[i]);
     }
 closeFiles();
 if (tabFileName == NULL)
     {
-    if (split)
-	loadSplitTables(database, conn);
-    else if (noSplit)
-	loadOneTable(database, conn, defaultTempName, suffix);
+    loadOneTable(database, conn, defaultTempName, suffix);
     }
 hFreeConn(&conn);
 if (badRepCnt > 0)
@@ -381,15 +309,10 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc < 3)
     usage();
-// default changed to noSplit Jan 2014 , ignore noSplit arguments
-split = optionExists("split");
-noSplit = ! split;
-suffix = optionVal("table", "rmsk");
+suffix = optionVal("table", "rmskOutBaseline");
 tabFileName = optionVal("tabFile", tabFileName);
 if (tabFileName == NULL)
     tabFileName = optionVal("tabfile", tabFileName);
-if (split && noSplit)
-    errAbort("-split and -nosplit cannot be used together.");
 hgLoadOutJoined(argv[1], argc-2, argv+2, suffix) ;
 return 0;
 }
