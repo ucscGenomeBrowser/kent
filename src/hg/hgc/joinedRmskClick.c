@@ -243,7 +243,7 @@ if (offset >= 0)
 	hFindSplitTable (database, seqName, table, qTable, &hasBin);
 	sqlSafef (query, sizeof (query),
 	       "select * from %s where chrom = '%s' and alignStart >= %d"
-	       " and id = %s", qTable, seqName, start, repeat);
+	       " and id = %s", qTable, seqName, start-1, repeat);
 
 	sr2 = sqlGetResult (conn2, query);
 	if ((row = sqlNextRow (sr2)) != NULL)
@@ -290,7 +290,7 @@ if (offset >= 0)
 	hFindSplitTable (database, seqName, outTable, qTable, &hasBin);
 	sqlSafef (query, sizeof (query),
 	       "select * from %s where genoName = '%s' and genoStart >= %d"
-	       " and id = %s", qTable, seqName, start, repeat);
+	       " and id = %s", qTable, seqName, start-1, repeat);
 	sr2 = sqlGetResult (conn2, query);
 	printf ("<h4>RepeatMasker Annotation:</h4>\n");
 	printf
@@ -357,7 +357,7 @@ if (offset >= 0)
 	hFindSplitTable (database, seqName, alignTable, qTable, &hasBin);
 	sqlSafef (query, sizeof (query),
 	       "select * from %s where genoName = '%s' and genoStart >= %d"
-	       " and id = %s", qTable, seqName, start, repeat);
+	       " and id = %s", qTable, seqName, start-1, repeat);
 	sr2 = sqlGetResult (conn2, query);
 	printf ("<h4>RepeatMasker Alignments:</h4>\n");
 	printf
