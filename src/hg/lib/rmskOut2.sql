@@ -5,6 +5,7 @@
 
 #RepeatMasker .out record
 CREATE TABLE rmskOut2 (
+    bin smallint not null,              # bin number for browser speedup
     swScore int unsigned not null,	# Smith Waterman alignment score
     milliDiv int unsigned not null,	# Base mismatches in parts per thousand
     milliDel int unsigned not null,	# Bases deleted in parts per thousand
@@ -22,5 +23,5 @@ CREATE TABLE rmskOut2 (
     repLeft int not null,	# -#bases after match in repeat sequence - regardless of orient
     id int unsigned not null,	# The ID of the hit. Used to link related fragments
               #Indices
-    PRIMARY KEY(swScore)
+    INDEX(genoName,bin)
 );

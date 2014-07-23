@@ -725,7 +725,15 @@ if (isNotEmpty(orthoTable) && hTableExists(database, orthoTable))
     printf("<BR><BR>\n");
     }
 else
-    puts("<BR>");
+    {
+    printf("<BR><B>Include observed alleles in name: </B>&nbsp;");
+    safef(cartVar, sizeof(cartVar), "%s.extendedNames", tdb->track);
+    snp125ExtendedNames = cartUsualBoolean(cart, cartVar,
+			  // Check old cart var name for backwards compatibility w/ old sessions:
+					   cartUsualBoolean(cart, "snp125ExtendedNames", FALSE));
+    cgiMakeCheckBox(cartVar, snp125ExtendedNames);
+    puts("<BR><BR>");
+    }
 
 // Make wrapper table for collapsible sections:
 puts("<TABLE border=0 cellspacing=0 cellpadding=0>");

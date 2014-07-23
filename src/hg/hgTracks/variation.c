@@ -456,6 +456,26 @@ if (dif == 0)
 return dif;
 }
 
+static char *snp125ExtendName(char *rsId, char *chimpAllele, char *observedAlleles)
+/* Allocate and return a string of the format "rsId chimpAllele>observedAlleles" if
+ * chimpAllele is non-empty, otherwise "rsId observedAlleles". */
+{
+struct dyString *dy = dyStringNew(64);
+if (isNotEmpty(chimpAllele))
+    dyStringPrintf(dy, "%s %s>%s", rsId, chimpAllele, observedAlleles);
+else
+    dyStringPrintf(dy, "%s %s", rsId, observedAlleles);
+return dyStringCannibalize(&dy);
+}
+
+static void setSnp125ExtendedNameObserved(struct snp125 *snpList)
+/* Append observed alleles to each snp's name. */
+{
+struct snp125 *snpItem = snpList;
+for (;  snpItem != NULL;  snpItem = snpItem->next)
+    snpItem->name = snp125ExtendName(snpItem->name, NULL, snpItem->observed);
+}
+
 void setSnp125ExtendedNameExtra(struct track *tg)
 /* add extra text to be drawn in snp name field.  This works by
    walking through two sorted lists and updating the name value
@@ -477,11 +497,11 @@ struct orthoBed      *orthoItem     = orthoItemList;
 char                 *orthoTable    = snp125OrthoTable(tg->tdb, NULL);
 struct sqlResult     *sr            = NULL;
 int                   cmp           = 0;
-struct dyString      *extra         = newDyString(256);
 
-/* if orthologous info is not available, don't add it! */
+/* if orthologous info is not available, show only observed alleles */
 if(isEmpty(orthoTable) || !sqlTableExists(conn, orthoTable))
     {
+    setSnp125ExtendedNameObserved((struct snp125 *)tg->items);
     hFreeConn(&conn);
     return;
     }
@@ -507,6 +527,8 @@ while (snpItem!=NULL && orthoItem!=NULL)
     cmp = snpOrthoCmp(&snpItem, &orthoItem);
     if (cmp < 0)
         {
+	// Update snp->name with observed alleles even if we don't have ortho data
+	snpItem->name = snp125ExtendName(snpItem->name, NULL, snpItem->observed);
 	snpItem = snpItem->next;
 	continue;
 	}
@@ -516,14 +538,14 @@ while (snpItem!=NULL && orthoItem!=NULL)
 	continue;
 	}
     /* update the snp->name with the ortho data */
-    dyStringPrintf(extra, "%s %s>%s", snpItem->name, orthoItem->chimp, snpItem->observed);
-    snpItem->name = cloneString(extra->string);
-    dyStringClear(extra);
+    snpItem->name = snp125ExtendName(snpItem->name, orthoItem->chimp, snpItem->observed);
     /* increment the list pointers */
     snpItem = snpItem->next;
     orthoItem = orthoItem->next;
     }
-freeDyString(&extra);
+// If orthoItemList ends before snpItemList, add observed alleles to remaining snps:
+if (snpItem != NULL)
+    setSnp125ExtendedNameObserved(snpItem);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }

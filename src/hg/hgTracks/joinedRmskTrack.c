@@ -1052,18 +1052,18 @@ else
      */
     if (hFindSplitTable (database, chromName, tg->table, table, &hasBin))
 	{
-	dyStringPrintf (query,
+	sqlDyStringPrintf (query,
 			"select chromStart,blockCount,blockSizes,"
 			"blockRelStarts from %s where ", table);
 	if (hasBin)
 	hAddBinToQuery (winStart, winEnd, query);
-	dyStringPrintf (query, "chromStart<%u and chromEnd>%u ",
+	sqlDyStringPrintf (query, "chromStart<%u and chromEnd>%u ",
 			winEnd, winStart);
 	/*
 	 * if we're using a single rmsk table, add chrom to the where clause
 	 */
 	if (startsWith ("rmskJoined", table))
-	dyStringPrintf (query, " and chrom = '%s' ", chromName);
+	sqlDyStringPrintf (query, " and chrom = '%s' ", chromName);
 	sr = sqlGetResult (conn, query->string);
 	while ((row = sqlNextRow (sr)) != NULL)
 	    {
