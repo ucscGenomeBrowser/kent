@@ -274,7 +274,7 @@ if (offset >= 0)
 	    printf ("<b>Family:</b> %s<br>\n", family);
 	    printf ("<b>Orientation:</b> %s<br>\n", rmJoin->strand);
 	    printf ("<b>Joined Element Genomic Range:</b> %s:%d-%d<br>\n",
-		    rmJoin->chrom, rmJoin->alignStart, rmJoin->alignEnd);
+		    rmJoin->chrom, rmJoin->alignStart+1, rmJoin->alignEnd);
 	    printf ("<br><br>\n");
 	    }
 	sqlFreeResult (&sr2);
