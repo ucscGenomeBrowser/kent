@@ -6,7 +6,6 @@
 
 
 var debug = false;
-var browser;              // browser ("msie", "safari" etc.) // move to utils.js?
 
 /* Data passed in from CGI via the hgTracks object:
  *
@@ -36,37 +35,26 @@ function initVars()
         // imageV2.enabled === true unless: advancedJavascript===false, or trackSearch, or config pg
         imageV2.enabled = (imageV2.imgTbl && imageV2.imgTbl.length > 0);
 
-        jQuery.each(jQuery.browser, function(i, val) {
-            if (val) {
-                browser = i;
-            }
-            });
         // jQuery load function with stuff to support drag selection in track img
-        if (browser === "safari") {
-            if (navigator.userAgent.indexOf("Chrome") !== -1) {
-                // Handle the fact that (as of 1.3.1), jQuery.browser reports "safari"
-                // when the browser is in fact Chrome.
-                browser = "chrome";
-            } else {
-                // Safari has the following bug: if we update the hgTracks map dynamically,
-                // the browser ignores the changes (even though if you look in the DOM the changes
-                // are there). So we have to do a full form submission when the user changes
-                // visibility settings or track configuration.
-                // As of 5.0.4 (7533.20.27) this is problem still exists in safari.
-                // As of 5.1 (7534.50) this problem appears to have been fixed - unfortunately,
-                // logs for 7/2011 show vast majority of safari users are pre-5.1 (5.0.5 is by far
-                // the most common).
-                //
-                // Early versions of Chrome had this problem too, but this problem went away
-                // as of Chrome 5.0.335.1 (or possibly earlier).
-                imageV2.mapIsUpdateable = false;
-                var reg = new RegExp("Version\/([0-9]+.[0-9]+) Safari");
-                var a = reg.exec(navigator.userAgent);
-                if (a && a[1]) {
-                    var version = Number(a[1]);
-                    if (version >= 5.1) {
-                        imageV2.mapIsUpdateable = true;
-                    }
+        if (theClient.isSafari()) {
+            // Safari has the following bug: if we update the hgTracks map dynamically,
+            // the browser ignores the changes (even though if you look in the DOM the changes
+            // are there). So we have to do a full form submission when the user changes
+            // visibility settings or track configuration.
+            // As of 5.0.4 (7533.20.27) this is problem still exists in safari.
+            // As of 5.1 (7534.50) this problem appears to have been fixed - unfortunately,
+            // logs for 7/2011 show vast majority of safari users are pre-5.1 (5.0.5 is by far
+            // the most common).
+            //
+            // Early versions of Chrome had this problem too, but this problem went away
+            // as of Chrome 5.0.335.1 (or possibly earlier).
+            imageV2.mapIsUpdateable = false;
+            var reg = new RegExp("Version\/([0-9]+.[0-9]+) Safari");
+            var a = reg.exec(navigator.userAgent);
+            if (a && a[1]) {
+                var version = Number(a[1]);
+                if (version >= 5.1) {
+                    imageV2.mapIsUpdateable = true;
                 }
             }
         }
@@ -1200,7 +1188,7 @@ this.each(function(){
         img.left = Math.round(offs.left);
         img.scrolledTop  = img.top  - $("body").scrollTop();
         img.scrolledLeft = img.left - $("body").scrollLeft();
-        if ($.browser.msie) {
+        if (theClient.isIePre11()) {
             img.height = $(chrImg).outerHeight();
             img.width  = $(chrImg).outerWidth();
         } else {
@@ -1597,7 +1585,7 @@ jQuery.fn.panImages = function(){
         $(pan).parents('td.tdData').mousemove(function(e) {
             if (e.shiftKey)
                 $(this).css('cursor',"crosshair");  // shift-dragZoom
-            else if ( $.browser.msie )     // IE will override map item cursors if this gets set
+            else if ( theClient.isIePre11() )     // IE will override map item cursors if this gets set
                 $(this).css('cursor',"");  // normal pointer when not over clickable item
         });
 

@@ -397,7 +397,7 @@ var alleles = (function()
                 //if (seqCharsPerPos === 3)
                 //    seqLen /= 2;
                 seqPxPerPos = Math.round( $(fullSeqHeader).width() / (seqLen / seqCharsPerPos));
-                if ($.browser.msie) 
+                if (theClient.isIePre11()) 
                     seqPxPerPos = $(fullSeqHeader).width() / (seqLen / seqCharsPerPos);
             }
             

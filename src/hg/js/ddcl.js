@@ -44,7 +44,7 @@ var ddcl = {
     textOfCurrentSelections: function (options) {
         // Generates a multi-line string of currently selected options
         var chosen = $(options).filter(':selected');  // Works with FF and Chrome but not IE!
-        if (chosen.length === 0 && $.browser.msie)
+        if (chosen.length === 0 && theClient.isIe())
             chosen = $(options).find(':selected');  // Works with IE but not FF and Chrome!
         var chosenCount = $(chosen).length;
         var msg = '';
@@ -490,7 +490,7 @@ var filterTable = {
             return false;
 
         // IE takes tooo long, so this should be called only when leaving the filterBy box
-        if ($.browser.msie && $(allTrs).length > 300) 
+        if (theClient.isIePre11() && $(allTrs).length > 300) 
             return false;
 
         // Find the var for this filter
