@@ -10,6 +10,7 @@ UTILS_APPLIST = \
 	hgFindSpec \
 	hgLoadBed \
 	hgLoadOut \
+	hgLoadOutJoined \
 	hgGcPercent \
 	hgLoadWiggle \
 	hgTrackDb \
