@@ -827,6 +827,19 @@ priority 2
 track genomicSuperDups override
 group rep
 
+track snp141Mult override
+snpSeqFile /gbdb/hg19/snp/snp141.fa
+
+track snp141Flagged override
+snpSeqFile /gbdb/hg19/snp/snp141.fa
+
+track snp141Common override
+snpSeqFile /gbdb/hg19/snp/snp141.fa
+priority 1
+
+track snp141 override
+snpSeqFile /gbdb/hg19/snp/snp141.fa
+
 track snp137Common override
 snpSeqFile /gbdb/hg19/snp/snp137.fa
 chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
