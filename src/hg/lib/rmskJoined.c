@@ -40,7 +40,6 @@ sqlSignedDynamicArray(row[11], &ret->blockRelStarts, &sizeOne);
 assert(sizeOne == ret->blockCount);
 }
 ret->id = cloneString(row[12]);
-// ret->description = cloneString(row[13]);
 return ret;
 }
 
@@ -122,7 +121,6 @@ s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
 }
 ret->id = sqlStringComma(&s);
-ret->description = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -139,7 +137,6 @@ freeMem(el->name);
 freeMem(el->blockSizes);
 freeMem(el->blockRelStarts);
 freeMem(el->id);
-freeMem(el->description);
 freez(pEl);
 }
 
@@ -211,8 +208,6 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->id);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->description);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

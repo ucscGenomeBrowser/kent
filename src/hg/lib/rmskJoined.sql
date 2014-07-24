@@ -4,7 +4,7 @@
 # automatic way.
 
 #RepeatMasker joined annotation record
-CREATE TABLE rmskJoined (
+CREATE TABLE rmskJoinedBaseline (
     bin int unsigned not null,          # bin number for browser speedup
     chrom varchar(255) not null,	# Reference sequence chromosome or scaffold
     chromStart int unsigned not null,	# Start position of feature in chromosome
@@ -19,8 +19,6 @@ CREATE TABLE rmskJoined (
     blockSizes longblob not null,	# Comma separated list of block sizes
     blockRelStarts longblob not null,	# Start positions rel. to chromStart or -1 for unaligned blocks
     id varchar(255) not null,	# ID to bed used in URL to link back
-#  missing description at this time ?
-#     description longblob not null,	# Long description of item for the details page
               #Indices
     INDEX(chrom,bin)
 );
