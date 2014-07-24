@@ -312,7 +312,7 @@ if (offset >= 0)
 	    printf ("    <td %s>%3.1f</td>\n", data_style,
 		    (double) ro->milliIns * (double) 0.01);
 	    printf ("    <td %s>%s</td>\n", data_style, ro->genoName);
-	    printf ("    <td %s>%d</td>\n", data_style, ro->genoStart);
+	    printf ("    <td %s>%d</td>\n", data_style, ro->genoStart + 1);
 	    printf ("    <td %s>%d</td>\n", data_style, ro->genoEnd);
 	    printf ("    </A>");
 	    printf ("    <td %s>(%d)</td>\n", data_style, ro->genoLeft);
@@ -378,7 +378,7 @@ if (offset >= 0)
 	    printf ("    <td>%3.2f</td>\n",
 		    (double) ro->milliIns * (double) 0.01);
 	    printf ("    <td>%s</td>\n", ro->genoName);
-	    printf ("    <td>%d</td>\n", ro->genoStart);
+	    printf ("    <td>%d</td>\n", ro->genoStart + 1);
 	    printf ("    <td>%d</td>\n", ro->genoEnd);
 	    printf ("    <td>(%d)</td>\n", ro->genoLeft);
 	    printf ("    <td>%s</td>\n", ro->strand);

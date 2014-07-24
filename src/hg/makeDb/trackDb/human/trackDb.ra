@@ -860,6 +860,80 @@ visibility hide
 type bed 3 +
 otherDb panTro1
 
+track snp141Common
+shortLabel Common SNPs(141)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 141) Found in >= 1% of Samples
+group varRep
+visibility dense
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+snpSeq snp141Seq
+snpExceptionDesc snp141ExceptionDesc
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+chimpOrangMacOrthoTable snp141OrthoPt4Pa2Rm3
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp141CodingDbSnp,
+
+track snp141Flagged
+shortLabel Flagged SNPs(141)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 141) Flagged by dbSNP as Clinically Assoc
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp141Seq
+snpExceptionDesc snp141ExceptionDesc
+defaultGeneTracks knownGene
+type bed 6 +
+chimpOrangMacOrthoTable snp141OrthoPt4Pa2Rm3
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp141CodingDbSnp,
+
+track snp141Mult
+shortLabel Mult. SNPs(141)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 141) That Map to Multiple Genomic Loci
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+snpSeq snp141Seq
+snpExceptionDesc snp141ExceptionDesc
+defaultGeneTracks knownGene
+defaultMaxWeight 3
+maxWindowToDraw 10000000
+type bed 6 +
+chimpOrangMacOrthoTable snp141OrthoPt4Pa2Rm3
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp141CodingDbSnp,
+
+track snp141
+shortLabel All SNPs(141)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 141)
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+chimpOrangMacOrthoTable snp141OrthoPt4Pa2Rm3
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp141CodingDbSnp,
+
 track hgdpGeo
 shortLabel HGDP Allele Freq
 longLabel Human Genome Diversity Project SNP Population Allele Frequencies
@@ -3880,22 +3954,6 @@ xrefTable ensGtp
 xrefQuery select transcript,protein from %s where protein like '%s%%'
 termRegex ENS([A-Z]{3})?P[0-9]+(\.[0-9]+)?
 
-searchTable snp131Clinical
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex rs[0-9]+
-searchPriority 12.990
-padding 250
-
-searchTable snp131NonClinical
-searchMethod exact
-searchType bed
-semiShortCircuit 1
-termRegex rs[0-9]+
-searchPriority 12.991
-padding 250
-
 searchTable iscaRetrospective
 searchMethod exact
 searchType bed
@@ -4121,3 +4179,34 @@ searchType bed
 searchPriority 10
 termRegex ux\.[0-9]+
 
+searchTable snp141Common
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9865
+padding 250
+
+searchTable snp141Flagged
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9866
+padding 250
+
+searchTable snp141Mult
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9867
+padding 250
+
+searchTable snp141
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9868
+padding 250
