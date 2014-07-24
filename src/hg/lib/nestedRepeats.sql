@@ -3,7 +3,7 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#BED12+ describing joined (by ID) fragments of repeats from RepeatMasker.
+#BED12+ describing joined (by ID) fragments of repeats from RepeatMasker
 CREATE TABLE nestedRepeats (
     bin smallint not null,      # Bin number for browser speedup
     chrom varchar(255) not null,	# Chromosome (or contig, scaffold, etc.)
@@ -18,8 +18,8 @@ CREATE TABLE nestedRepeats (
     blockCount int not null,	# Number of blocks
     blockSizes longblob not null,	# Comma separated list of block (fragment) sizes
     chromStarts longblob not null,	# Start positions relative to chromStart
-    blockStrands longblob not null,	# Strand of each fragment.
-    id int unsigned not null,	# RepeatMasker-assigned ID used to join fragments.
+    blockStrands longblob not null,	# Strand of each fragment
+    id int unsigned not null,	# RepeatMasker-assigned ID used to join fragments
     repClass varchar(255) not null,	# Class of repeat
     repFamily varchar(255) not null,	# Family of repeat
               #Indices
