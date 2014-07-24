@@ -511,10 +511,10 @@ if (tg->itemColor != NULL)
     {
     color = tg->itemColor(tg, bed, hvg);
     }
-else if (tg->colorShades)
+else
     {
     adjustBedScoreGrayLevel(tdb, bed, scoreMin, scoreMax);
-    color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
+    color = colorBySpectrumOrDefault(hvg,tg,grayInRange(bed->score, scoreMin, scoreMax),color);
     }
 /*	Keep the item at least 4 pixels wide at all viewpoints */
 if (thickDrawItem && (w < 4))

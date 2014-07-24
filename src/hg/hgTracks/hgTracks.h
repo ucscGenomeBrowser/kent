@@ -1180,8 +1180,7 @@ void complexBedMethods(struct track *track, struct trackDb *tdb, boolean isBigBe
 /* Fill in methods for more complex bed tracks. */
 
 void makeCompositeTrack(struct track *track, struct trackDb *tdb);
-/* Construct track subtrack list from trackDb entry.
- * Sets up color gradient in subtracks if requested */
+// Construct track subtrack list from trackDb entry.
 
 void makeContainerTrack(struct track *track, struct trackDb *tdb);
 /* Construct track subtrack list from trackDb entry for container tracks. */
@@ -1397,6 +1396,10 @@ int tgCmpPriority(const void *va, const void *vb);
 
 void printMenuBar();
 /* Put up the menu bar. */
+
+Color colorBySpectrumOrDefault(struct hvGfx *hvg, struct track *track,int shade,
+                               Color defaultColor);
+// Returns color to use if spectrum exists, else returns default
 
 #define measureTime uglyTime
 

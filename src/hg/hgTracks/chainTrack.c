@@ -349,7 +349,7 @@ static Color chainScoreColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct linkedFeatures *lf = (struct linkedFeatures *)item;
 
-return(tg->colorShades[lf->grayIx]);
+return colorBySpectrumOrDefault(hvg,tg,lf->grayIx,0);
 }
 
 static Color chainNoColor(struct track *tg, void *item, struct hvGfx *hvg)
