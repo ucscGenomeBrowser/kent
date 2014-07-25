@@ -101,8 +101,8 @@ if (r->repEnd < 0 || r->repStart > r->repEnd)
     badRepCnt++;
     if (verboseLevel() > 1)
         {
-        verbose(2, "bad rep range [%d, %d] line %d of %s \n",
-		r->repStart, r->repEnd, lf->lineIx, lf->fileName);
+        verbose(2, "bad rep range [%d, %d] line %d of %s %s:%d-%d\n",
+		r->repStart, r->repEnd, lf->lineIx, lf->fileName, r->genoName, r->genoStart, r->genoEnd);
         }
     return FALSE;
     }
