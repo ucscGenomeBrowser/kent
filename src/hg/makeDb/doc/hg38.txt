@@ -5055,3 +5055,30 @@ done
     # http://genomewiki.ucsc.edu/images/7/7f/Hg38.grcIncidentDb.bb
 
 #############################################################################
+# RepeatMasker Visualization track (DONE - 2014-07-25 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/rmskJoined
+    cd /hive/data/genomes/hg38/bed/rmskJoined
+
+    ln -s ../repeatMasker/hg38.sorted.fa.out .
+    ln -s ../repeatMasker/hg38.fa.align.gz .
+
+    # working on fixing this script for the next release of RM
+    /scratch/data/RepeatMasker140131/util/nextVerRmToUCSCTables.pl \
+            -out hg38.sorted.fa.out -align hg38.fa.align.gz
+
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/rmskJoined.sql \
+        -renameSqlTable -verbose=4 -tab \
+            -type=bed4+9 -as=$HOME/kent/src/hg/lib/rmskJoined.as hg38 \
+                rmskJoinedBaseline hg38.sorted.fa.join.bed \
+                    > loadJoined.log 2>&1
+
+    hgLoadSqlTab hg38 rmskAlignBaseline \
+        /cluster/home/hiram/kent/src/hg/lib/rmskAlign.sql \
+            hg38.fa.align.tsv > loadAlign.log 2>&1
+
+    hgLoadOutJoined -verbose=2 hg38 hg38.sorted.fa.out > loadOut.log 2>&1
+
+    featureBits -countGaps hg38 rmskJoinedBaseline
+    #    2716777279 bases of 3209286105 (84.654%) in intersection
+
+##############################################################################
