@@ -456,24 +456,62 @@ if (dif == 0)
 return dif;
 }
 
-static char *snp125ExtendName(char *rsId, char *chimpAllele, char *observedAlleles)
+static char *snp125ExtendName(char *rsId, char *chimpAllele, char *observedAlleles, boolean doRc)
 /* Allocate and return a string of the format "rsId chimpAllele>observedAlleles" if
- * chimpAllele is non-empty, otherwise "rsId observedAlleles". */
+ * chimpAllele is non-empty, otherwise "rsId observedAlleles".  If doRc, reverse-complement
+ * all alleles. */
 {
 struct dyString *dy = dyStringNew(64);
+
+dyStringPrintf(dy, "%s ", rsId);
 if (isNotEmpty(chimpAllele))
-    dyStringPrintf(dy, "%s %s>%s", rsId, chimpAllele, observedAlleles);
+    {
+    int chimpLen = strlen(chimpAllele);
+    if (doRc && isAllNt(chimpAllele, chimpLen))
+	{
+	char chimpCopy[chimpLen+1];
+	safecpy(chimpCopy, sizeof(chimpCopy), chimpAllele);
+	reverseComplement(chimpCopy, chimpLen);
+	dyStringPrintf(dy, "%s>", chimpCopy);
+	}
+    else
+	dyStringPrintf(dy, "%s>", chimpAllele);
+    }
+if (doRc)
+    {
+    int obsLen = strlen(observedAlleles);
+    char obsCopy[obsLen+1];
+    safecpy(obsCopy, sizeof(obsCopy), observedAlleles);
+    char *obsWords[obsLen];
+    int obsCount = chopByChar(obsCopy, '/', obsWords, obsLen);
+    int i;
+    // dbSNP orders alleles alphabetically so reverse the order too:
+    for (i = obsCount-1;  i >= 0;  i--)
+	{
+	char *al = obsWords[i];
+	int alLen = strlen(al);
+	if (isAllNt(al, alLen))
+	    reverseComplement(al, alLen);
+	if (i < obsCount-1)
+	    dyStringAppendC(dy, '/');
+	dyStringPrintf(dy, "%s", al);
+	}
+    }
 else
-    dyStringPrintf(dy, "%s %s", rsId, observedAlleles);
+    dyStringPrintf(dy, "%s", observedAlleles);
 return dyStringCannibalize(&dy);
 }
 
-static void setSnp125ExtendedNameObserved(struct snp125 *snpList)
-/* Append observed alleles to each snp's name. */
+static void setSnp125ExtendedNameObserved(struct snp125 *snpList, boolean useRefStrand)
+/* Append observed alleles to each snp's name, possibly reverse-complementing alleles
+ * that were reported on the - strand. */
 {
 struct snp125 *snpItem = snpList;
 for (;  snpItem != NULL;  snpItem = snpItem->next)
-    snpItem->name = snp125ExtendName(snpItem->name, NULL, snpItem->observed);
+    {
+    boolean doRc = useRefStrand && snpItem->strand[0] == '-';
+    snpItem->name = snp125ExtendName(snpItem->name, NULL, snpItem->observed, doRc);
+    }
 }
 
 void setSnp125ExtendedNameExtra(struct track *tg)
@@ -483,12 +521,16 @@ void setSnp125ExtendedNameExtra(struct track *tg)
    information */
 {
 char cartVar[512];
-    safef(cartVar, sizeof(cartVar), "%s.extendedNames", tg->tdb->track);
+safef(cartVar, sizeof(cartVar), "%s.extendedNames", tg->tdb->track);
 boolean enabled = cartUsualBoolean(cart, cartVar,
 			  // Check old cart var name for backwards compatibility w/ old sessions:
 				   cartUsualBoolean(cart, "snp125ExtendedNames", FALSE));
 if (!enabled)
     return;
+
+safef(cartVar, sizeof(cartVar), "%s.allelesDbSnpStrand", tg->tdb->track);
+boolean useRefStrand = ! cartUsualBoolean(cart, cartVar, FALSE);
+
 struct sqlConnection *conn          = hAllocConn(database);
 int                   rowOffset     = 0;
 char                **row           = NULL;
@@ -501,7 +543,7 @@ int                   cmp           = 0;
 /* if orthologous info is not available, show only observed alleles */
 if(isEmpty(orthoTable) || !sqlTableExists(conn, orthoTable))
     {
-    setSnp125ExtendedNameObserved((struct snp125 *)tg->items);
+    setSnp125ExtendedNameObserved((struct snp125 *)tg->items, useRefStrand);
     hFreeConn(&conn);
     return;
     }
@@ -525,10 +567,11 @@ while (snpItem!=NULL && orthoItem!=NULL)
     /* check to see that we're not at the end of either list and that
      * the two list elements represent the same human position */
     cmp = snpOrthoCmp(&snpItem, &orthoItem);
+    boolean doRc = useRefStrand && snpItem->strand[0] == '-';
     if (cmp < 0)
         {
 	// Update snp->name with observed alleles even if we don't have ortho data
-	snpItem->name = snp125ExtendName(snpItem->name, NULL, snpItem->observed);
+	snpItem->name = snp125ExtendName(snpItem->name, NULL, snpItem->observed, doRc);
 	snpItem = snpItem->next;
 	continue;
 	}
@@ -538,14 +581,14 @@ while (snpItem!=NULL && orthoItem!=NULL)
 	continue;
 	}
     /* update the snp->name with the ortho data */
-    snpItem->name = snp125ExtendName(snpItem->name, orthoItem->chimp, snpItem->observed);
+    snpItem->name = snp125ExtendName(snpItem->name, orthoItem->chimp, snpItem->observed, doRc);
     /* increment the list pointers */
     snpItem = snpItem->next;
     orthoItem = orthoItem->next;
     }
 // If orthoItemList ends before snpItemList, add observed alleles to remaining snps:
 if (snpItem != NULL)
-    setSnp125ExtendedNameObserved(snpItem);
+    setSnp125ExtendedNameObserved(snpItem, useRefStrand);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
