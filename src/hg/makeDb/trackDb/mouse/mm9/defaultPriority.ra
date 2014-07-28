@@ -7,11 +7,14 @@ track ensGene override
 visibility pack
 priority 2
 
-track xenoRefGene override
+track blastHg18KG override
 priority 3
 
-track refGene override
+track xenoRefGene override
 priority 4
+
+track refGene override
+priority 5
 
 # mRNA and EST
 track mrna override

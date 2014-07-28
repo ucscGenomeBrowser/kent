@@ -3,6 +3,8 @@
 include trackDb.chainNet.ra
 include trackDb.wgEncode.ra
 
+include defaultPriority.ra
+
 track jaxQTLLift
 shortLabel MGI QTL LiftO
 longLabel Mouse Genome Informatics Quantitative Trait Loci ***Lifted from NCBI 36 (mm8)***
