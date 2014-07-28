@@ -120,6 +120,8 @@ struct gff3Ann
 
     struct slName *notes;  /* free text notes. */
 
+    boolean isCircular;  /* is this item circular */
+
     struct slName *dbxrefs; /* database cross references. */
 
     struct slName *ontologyTerms; /* cross reference to ontology terms. */
