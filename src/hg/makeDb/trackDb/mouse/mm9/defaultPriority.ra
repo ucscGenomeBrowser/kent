@@ -1,3 +1,6 @@
+# Mapping and Sequencing
+track stsMapMouseNew override
+priority 1
 
 # Genes and Gene Prediction Tracks
 track knownGene override
@@ -26,3 +29,6 @@ priority 2
 # Variation and Repeats
 track rmsk override
 priority 3
+
+track snp128 override
+priority 4
