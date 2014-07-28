@@ -3148,7 +3148,7 @@ TMPDIR=/scratch/tmp
     time doRecipBest.pl -buildDir=`pwd` hg19 papAnu2 > rbest.log 2>&1 &
     #	real    182m0.276s
 
-    #	running the swap - DONE - 2013-07-01
+    #	running the swap - DONE - 2014-07-25
     mkdir /hive/data/genomes/papAnu2/bed/blastz.hg19.swap
     cd /hive/data/genomes/papAnu2/bed/blastz.hg19.swap
 
