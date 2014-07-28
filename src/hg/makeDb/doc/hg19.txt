@@ -3153,18 +3153,14 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/papAnu2/bed/blastz.hg19.swap
 
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	-swap /hive/data/genomes/hg19/bed/lastzPapAnu2.2013-08-19 \
-	-syntenicNet \
-	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
-	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-	> swap.log 2>&1 &
-    #  real    534m25.137s
+	-swap /hive/data/genomes/hg19/bed/lastzPapAnu2.2013-08-19/DEF \
+	-syntenicNet -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	> swap.log 2>&1
+    #  real    99m36.864s
 
     cat fb.papAnu2.chainHg19Link.txt
-    #  2353204907 bases of 2741849051 (85.825%) in intersection
-
-    cd /hive/data/genomes/papHam1/bed
-    ln -s blastz.hg19.swap lastz.hg19
+    #  2410008689 bases of 2893250291 (83.298%) in intersection
 
 #########################################################################
 # LASTZ Baboon PapHam1 (DONE - 2009-05-20,22 - Hiram)
