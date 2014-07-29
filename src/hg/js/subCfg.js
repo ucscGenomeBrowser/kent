@@ -647,7 +647,11 @@ var subCfg = { // subtrack config module.
         var newObj = $("select[name='"+subtrack+"']");
         if (open) {
             $(newObj).css({'zIndex':'2','vertical-align':'top'});
-            $(newObj).attr('size',visibilities.length);
+            // For some reason IE11 will hang if the sect is opened to start with!
+            // This ungraceful fix avoids the hang, but a nicer solution would be apprciated!
+            if (theClient.isIePost11() === false) { 
+                $(newObj).attr('size',visibilities.length);
+            }
             $(newObj).one('blur',function (e) {
                 $(this).attr('size',1);
                 $(this).unbind('click');

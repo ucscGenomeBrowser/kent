@@ -48,10 +48,10 @@ if (errCatchStart(errCatch))
 #endif
 	{
 	char *relativeUrl = trackDbSetting(tdb, "bigDataUrl");
-	char *type = trackDbRequiredSetting(tdb, "type");
 
 	if (relativeUrl != NULL)
 	    {
+	    char *type = trackDbRequiredSetting(tdb, "type");
 	    char *bigDataUrl = trackHubRelativeUrl(genome->trackDbFile, relativeUrl);
 	    verbose(2, "checking %s.%s type %s at %s\n", genome->name, tdb->track, type, bigDataUrl);
 	    if (startsWithWord("bigWig", type))

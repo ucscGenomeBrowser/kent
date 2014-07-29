@@ -196,7 +196,7 @@ static void ignoreEm(char *format, va_list args)
 {
 }
 
-static void vcfGenotypesDetails(struct vcfRecord *rec, char *track, char **displayAls)
+static void vcfGenotypesDetails(struct vcfRecord *rec, struct trackDb *tdb, char **displayAls)
 /* Print summary of allele and genotype frequency, plus collapsible section
  * with table of genotype details. */
 {
@@ -271,13 +271,19 @@ if (vcff->genotypeCount > 1 && differentString(seqName, "chrY"))
 	printf("; other: %d (%.3f%%)", gtOther, 100*(double)gtOther/vcff->genotypeCount);
     printf("<BR>\n");
     if (rec->alleleCount == 2)
-	printf("<B>Hardy-Weinberg equilibrium:</B> "
-	       "P(%s/%s) = %.3f%%; P(%s/%s) = %.3f%%; P(%s/%s) = %.3f%%<BR>",
-	       displayAls[0], displayAls[0], 100*refAf*refAf,
-	       displayAls[0], displayAls[1], 100*2*refAf*altAf,
-	       displayAls[1], displayAls[1], 100*altAf*altAf);
+	{
+	boolean showHW = cartOrTdbBoolean(cart, tdb, VCF_SHOW_HW_VAR, FALSE);
+	if (showHW)
+	    printf("<B><A HREF=\"http://en.wikipedia.org/wiki/Hardy%%E2%%80%%93Weinberg_principle\" "
+		   "TARGET=_BLANK>Hardy-Weinberg equilibrium</A>:</B> "
+		   "P(%s/%s) = %.3f%%; P(%s/%s) = %.3f%%; P(%s/%s) = %.3f%%<BR>",
+		   displayAls[0], displayAls[0], 100*refAf*refAf,
+		   displayAls[0], displayAls[1], 100*2*refAf*altAf,
+		   displayAls[1], displayAls[1], 100*altAf*altAf);
+	}
     }
-vcfGenotypeTable(rec, track, displayAls);
+puts("<BR>");
+vcfGenotypeTable(rec, tdb->track, displayAls);
 puts("</TABLE>");
 }
 
@@ -357,12 +363,16 @@ else if (regexMatch(rec->name, "^[en]ss?v[0-9]+$"))
 	   "TARGET=_BLANK>%s</A><BR>\n", rec->name, rec->name);
     }
 printCustomUrl(tdb, rec->name, TRUE);
-static char *formName = "vcfCfgHapCenter";
-printf("<FORM NAME=\"%s\" ACTION=\"%s\">\n", formName, hgTracksName());
-cartSaveSession(cart);
-vcfCfgHaplotypeCenter(cart, tdb, tdb->track, FALSE, rec->file, rec->name,
-		      seqName, rec->chromStart, formName);
-printf("</FORM>\n");
+boolean hapClustEnabled = cartOrTdbBoolean(cart, tdb, VCF_HAP_ENABLED_VAR, TRUE);
+if (hapClustEnabled)
+    {
+    static char *formName = "vcfCfgHapCenter";
+    printf("<FORM NAME=\"%s\" ACTION=\"%s\">\n", formName, hgTracksName());
+    cartSaveSession(cart);
+    vcfCfgHaplotypeCenter(cart, tdb, tdb->track, FALSE, rec->file, rec->name,
+			  seqName, rec->chromStart, formName);
+    printf("</FORM>\n");
+    }
 char leftBase = rec->alleles[0][0];
 unsigned int vcfStart = vcfRecordTrimIndelLeftBase(rec);
 boolean showLeftBase = (rec->chromStart == vcfStart+1);
@@ -377,7 +387,7 @@ vcfFilterDetails(rec);
 vcfInfoDetails(rec);
 pgSnpCodingDetail(rec);
 makeDisplayAlleles(rec, showLeftBase, leftBase, 5, FALSE, TRUE, displayAls);
-vcfGenotypesDetails(rec, tdb->track, displayAls);
+vcfGenotypesDetails(rec, tdb, displayAls);
 }
 
 void doVcfDetailsCore(struct trackDb *tdb, char *fileOrUrl, boolean isTabix)

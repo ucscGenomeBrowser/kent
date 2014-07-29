@@ -550,7 +550,7 @@ if (sqlTable != NULL && !oldTable)
             char *tableName = nextWord(&pos);
             sql = replaceChars(oldSql, tableName, track);
             }
-        verbose(1, "Creating table definition for %s\n", track);
+        verbose(1, "Creating table definition for %s from sql: %s\n", track, sqlTable);
 	// add NOSQLINJ tag
 	sqlDyStringPrintf(dy, "%-s", sql);
         sqlRemakeTable(conn, track, dy->string);
@@ -574,7 +574,7 @@ else if (!oldTable)
     verbose(2, "INDEX chrom length: %d\n", minLength);
 
     /* Create definition statement. */
-    verbose(1, "Creating table definition for %s\n", track);
+    verbose(1, "Creating table definition for %s, bedSize: %d\n", track, bedSize);
     sqlDyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
        dyStringAppend(dy, "  bin smallint unsigned not null,\n");

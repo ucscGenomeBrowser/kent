@@ -1,5 +1,8 @@
 
 # Genes and Gene Prediction Tracks
+track knownGene override
+priority 1
+
 track ensGene override
 visibility pack
 priority 2
@@ -9,9 +12,6 @@ priority 3
 
 track refGene override
 priority 4
-
-track knownGene override
-priority 1
 
 # mRNA and EST
 track mrna override

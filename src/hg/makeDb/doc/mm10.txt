@@ -9682,7 +9682,7 @@ echo -e "chrM\tNC_005089.1"
 db mm10
 orgDir mouse_10090
 build 138
-buildAssembly 
+buildAssembly
 EOF
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >& do.log & tail -f do.log
     # Some trial and error was required to get the config.ra just right.
@@ -9955,7 +9955,7 @@ EOF
     # see output in check/joiner.out
 ##############################################################################
 # SEGMENTAL DUPLICATIONS (WORKING 4/14/14 Pauline)
-    # File emailed from John Huddleston (jlhudd@uw.edu) in the Eichler Lab. 
+    # File emailed from John Huddleston (jlhudd@uw.edu) in the Eichler Lab.
     mkdir /hive/data/genomes/mm10/bed/genomicSuperDups
     cd /hive/data/genomes/mm10/bed/genomicSuperDups
 
@@ -10190,5 +10190,36 @@ TMPDIR=/scratch/tmp
 
     #For microarray tracks also need to add a section to
     #/cluster/home/pauline/kent/src/hg/makeDb/hgCgiData/Mouse/microarrayGroups.ra
+
+##############################################################################
+# RepeatMasker Visualization track (DONE - 2014-07-25 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/rmskJoined
+    cd /hive/data/genomes/mm10/bed/rmskJoined
+
+    ln -s ../repeatMasker/mm10.sorted.fa.out .
+    ln -s ../repeatMasker/mm10.fa.align.gz .
+
+    # working on fixing this script for the next release of RM
+    # since mm10 was an older version of RM, this conversion needs the
+    # bedtools, thus the extra PATH business
+
+    export PATH=/cluster/bin/bedtools:$PATH
+        /scratch/data/RepeatMasker140131/util/nextVerRmToUCSCTables.pl \
+            -out mm10.sorted.fa.out -align mm10.fa.align.gz
+
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/rmskJoined.sql \
+        -renameSqlTable -verbose=4 -tab \
+            -type=bed4+9 -as=$HOME/kent/src/hg/lib/rmskJoined.as mm10 \
+                rmskJoinedBaseline mm10.sorted.fa.join.bed \
+                    > loadJoined.log 2>&1
+
+    hgLoadSqlTab mm10 rmskAlignBaseline \
+        /cluster/home/hiram/kent/src/hg/lib/rmskAlign.sql \
+            mm10.fa.align.tsv > loadAlign.log 2>&1
+
+    hgLoadOutJoined -verbose=2 mm10 mm10.sorted.fa.out > loadOut.log 2>&1
+
+    featureBits -countGaps mm10 rmskJoinedBaseline
+    #    2243474717 bases of 2730871774 (82.152%) in intersection
 
 ##############################################################################

@@ -4002,6 +4002,11 @@ identifier txnFactorMotifId
     hg19.factorbookMotifPwm.name minCheck=0.85
     hg19.factorbookMotifCanonical.motif comma minCheck=0.85
 
+identifier rmskJoinedBaseline
+"linking together RepeatMasker repeat fragments rmskJoined"
+    hg38.rmskAlignBaseline.id dupeOk
+    hg38.rmskJoinedBaseline.id
+    hg38.rmskOutBaseline.id
 
 # Dependencies not already captured in identifiers
 

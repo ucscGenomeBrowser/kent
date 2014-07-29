@@ -1,0 +1,34 @@
+# Mapping and Sequencing
+track stsMapMouseNew override
+priority 1
+
+# Genes and Gene Prediction Tracks
+track knownGene override
+priority 1
+
+track ensGene override
+visibility pack
+priority 2
+
+track blastHg18KG override
+priority 3
+
+track xenoRefGene override
+priority 4
+
+track refGene override
+priority 5
+
+# mRNA and EST
+track mrna override
+priority 1
+
+track intronEst override
+priority 2
+
+# Variation and Repeats
+track rmsk override
+priority 3
+
+track snp128 override
+priority 4

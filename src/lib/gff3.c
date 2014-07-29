@@ -41,6 +41,7 @@ char *gff3AttrDerivesFrom = "Derives_from";
 char *gff3AttrNote = "Note";
 char *gff3AttrDbxref = "Dbxref";
 char *gff3AttrOntologyTerm = "Ontology_term";
+char *gff3AttrIsCircular = "Is_circular";
 
 /* commonly used features names */
 char *gff3FeatGene = "gene";
@@ -347,7 +348,7 @@ char *tc = tag;
 boolean isOk = isalpha(*tc);
 for (tc++; isOk && (*tc != '\0'); tc++)
     {
-    if (!((*tc == '_') || isalnum(*tc)))
+    if (!((*tc == '-') || (*tc == '_') || isalnum(*tc)))
         isOk = FALSE;
     }
 if (!isOk)
@@ -492,6 +493,12 @@ checkSingleValAttr(g3a, attr);
 g3a->derivesFromId = attr->vals->name;
 }
 
+static void parseIsCircular(struct gff3Ann *g3a, struct gff3Attr *attr)
+/* parse the Note attribute */
+{
+g3a->isCircular = TRUE;
+}
+
 static void parseNoteAttr(struct gff3Ann *g3a, struct gff3Attr *attr)
 /* parse the Note attribute */
 {
@@ -529,6 +536,8 @@ else if (sameString(attr->tag, gff3AttrGap))
     parseGapAttr(g3a, attr);
 else if (sameString(attr->tag, gff3AttrDerivesFrom))
     parseDerivesFromAttr(g3a, attr);
+else if (sameString(attr->tag, gff3AttrIsCircular))
+    parseIsCircular(g3a, attr);
 else if (sameString(attr->tag, gff3AttrNote))
     parseNoteAttr(g3a, attr);
 else if (sameString(attr->tag, gff3AttrDbxref))

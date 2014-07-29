@@ -1162,6 +1162,16 @@ cd $dir/hgNearBlastp
 cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
 gzip run.*/all.tab
 
+# make knownToMalacards
+mkdir -p $dir/malacards
+cd $dir/malacards
+# grab files that b0b came up with somehow
+cp /hive/users/kuhn/tracks/malacards/malacardsUcscGenesExport.csv .
+awk 'BEGIN {FS=","} {print $1}' malacardsUcscGenesExport.csv | sort -u > malacardExists.txt
+hgsql -e "select geneSymbol,kgId from kgXref" --skip-column-names hg38 | awk '{if (NF == 2) print}' | sort > geneSymbolToKgId.txt
+join malacardExists.txt geneSymbolToKgId.txt | awk 'BEGIN {OFS="\t"} {print $2,$1}' | sort > knownToMalacards.tab
+hgLoadSqlTab -notOnServer $tempDb  knownToMalacards $kent/src/hg/lib/knownTo.sql  knownToMalacards.tab
+
 # make knownToLynx
 mkdir -p $dir/lynx
 cd $dir/lynx

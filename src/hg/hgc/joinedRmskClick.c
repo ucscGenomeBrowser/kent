@@ -42,7 +42,7 @@ int sCnt = 0;
 int qStart = ra->genoStart;
 int sStart = ra->repStart;
 if (ra->strand[0] == '-')
-sStart = ra->repEnd;
+    sStart = ra->repEnd;
 
 int maxNameLen =
     (strlen (ra->genoName) >
@@ -51,11 +51,11 @@ int maxNameLen =
 while (ra->alignment[aIdx] != '\0')
     {
     if (ra->alignment[aIdx] == '/')
-    inSub = 1;
+        inSub = 1;
     else if (ra->alignment[aIdx] == '-')
-    inDel ^= 1;
+        inDel ^= 1;
     else if (ra->alignment[aIdx] == '+')
-    inIns ^= 1;
+        inIns ^= 1;
     else
 	{
 	if (inSub)
@@ -71,9 +71,9 @@ while (ra->alignment[aIdx] != '\0')
 	    diffSeq[sIdx - 1] = 'i';
 	    else if ((index ("BDHVRYKMSWNX", querySeq[sIdx - 1]) != NULL) ||
 		     (index ("BDHVRYKMSWNX", subjSeq[sIdx - 1]) != NULL))
-	    diffSeq[sIdx - 1] = '?';
+	        diffSeq[sIdx - 1] = '?';
 	    else
-	    diffSeq[sIdx - 1] = 'v';
+	        diffSeq[sIdx - 1] = 'v';
 	    inSub = 0;
 	    }
 	else if (inDel)
@@ -110,17 +110,17 @@ while (ra->alignment[aIdx] != '\0')
 		    querySeq, (qStart + qCnt - 1));
 	    printf ("%*s            %s\n", maxNameLen, " ", diffSeq);
 	    if (ra->strand[0] == '+')
-	    printf ("%*s %10d %s %d\n", maxNameLen, ra->repName, sStart,
+	        printf ("%*s %10d %s %d\n", maxNameLen, ra->repName, sStart,
 		    subjSeq, (sStart + sCnt - 1));
 	    else
-	    printf ("%*s %10d %s %d\n", maxNameLen, ra->repName, sStart,
+	        printf ("%*s %10d %s %d\n", maxNameLen, ra->repName, sStart,
 		    subjSeq, (sStart - sCnt + 1));
 	    printf ("\n");
 	    qStart += qCnt;
 	    if (ra->strand[0] == '+')
-	    sStart += sCnt;
+	        sStart += sCnt;
 	    else
-	    sStart -= sCnt;
+	        sStart -= sCnt;
 	    qCnt = 0;
 	    sCnt = 0;
 	    sIdx = 0;
@@ -137,10 +137,10 @@ if (sIdx)
 	    (qStart + qCnt - 1));
     printf ("%*s            %s\n", maxNameLen, " ", diffSeq);
     if (ra->strand[0] == '+')
-    printf ("%*s %10d %s %d\n", maxNameLen, ra->repName, sStart, subjSeq,
+        printf ("%*s %10d %s %d\n", maxNameLen, ra->repName, sStart, subjSeq,
 	    (sStart + sCnt - 1));
     else
-    printf ("%*s %10d %s %d\n", maxNameLen, ra->repName, sStart, subjSeq,
+        printf ("%*s %10d %s %d\n", maxNameLen, ra->repName, sStart, subjSeq,
 	    (sStart - sCnt + 1));
     ;
     }
@@ -241,14 +241,14 @@ if (offset >= 0)
     if (hTableExists (database, table))
 	{
 	hFindSplitTable (database, seqName, table, qTable, &hasBin);
-	safef (query, sizeof (query),
+	sqlSafef (query, sizeof (query),
 	       "select * from %s where chrom = '%s' and alignStart >= %d"
-	       " and id = %s", qTable, seqName, start, repeat);
+	       " and id = %s", qTable, seqName, start-1, repeat);
 
 	sr2 = sqlGetResult (conn2, query);
 	if ((row = sqlNextRow (sr2)) != NULL)
 	    {
-	    struct rmskJoined *rmJoin = rmskJoinedLoad (row);
+	    struct rmskJoined *rmJoin = rmskJoinedLoad (row + hasBin);
 
 	    char class[32];
 	    class[0] = '\0';
@@ -274,7 +274,7 @@ if (offset >= 0)
 	    printf ("<b>Family:</b> %s<br>\n", family);
 	    printf ("<b>Orientation:</b> %s<br>\n", rmJoin->strand);
 	    printf ("<b>Joined Element Genomic Range:</b> %s:%d-%d<br>\n",
-		    rmJoin->chrom, rmJoin->alignStart, rmJoin->alignEnd);
+		    rmJoin->chrom, rmJoin->alignStart+1, rmJoin->alignEnd);
 	    printf ("<br><br>\n");
 	    }
 	sqlFreeResult (&sr2);
@@ -288,9 +288,9 @@ if (offset >= 0)
 	int isFirst = 0;
 	struct rmskOut2 *ro;
 	hFindSplitTable (database, seqName, outTable, qTable, &hasBin);
-	safef (query, sizeof (query),
+	sqlSafef (query, sizeof (query),
 	       "select * from %s where genoName = '%s' and genoStart >= %d"
-	       " and id = %s", qTable, seqName, start, repeat);
+	       " and id = %s", qTable, seqName, start-1, repeat);
 	sr2 = sqlGetResult (conn2, query);
 	printf ("<h4>RepeatMasker Annotation:</h4>\n");
 	printf
@@ -302,7 +302,7 @@ if (offset >= 0)
 	    {
 	    ro = rmskOut2Load (row + hasBin);
 	    if (!isFirst++)
-	    printOutTableHeader (ro->strand[0]);
+	        printOutTableHeader (ro->strand[0]);
 	    printf ("  <tr>\n");
 	    printf ("    <td %s>%d</td>\n", data_style, ro->swScore);
 	    printf ("    <td %s>%3.1f</td>\n", data_style,
@@ -312,7 +312,7 @@ if (offset >= 0)
 	    printf ("    <td %s>%3.1f</td>\n", data_style,
 		    (double) ro->milliIns * (double) 0.01);
 	    printf ("    <td %s>%s</td>\n", data_style, ro->genoName);
-	    printf ("    <td %s>%d</td>\n", data_style, ro->genoStart);
+	    printf ("    <td %s>%d</td>\n", data_style, ro->genoStart + 1);
 	    printf ("    <td %s>%d</td>\n", data_style, ro->genoEnd);
 	    printf ("    </A>");
 	    printf ("    <td %s>(%d)</td>\n", data_style, ro->genoLeft);
@@ -355,9 +355,9 @@ if (offset >= 0)
 	{
 	struct rmskAlign *ro;
 	hFindSplitTable (database, seqName, alignTable, qTable, &hasBin);
-	safef (query, sizeof (query),
+	sqlSafef (query, sizeof (query),
 	       "select * from %s where genoName = '%s' and genoStart >= %d"
-	       " and id = %s", qTable, seqName, start, repeat);
+	       " and id = %s", qTable, seqName, start-1, repeat);
 	sr2 = sqlGetResult (conn2, query);
 	printf ("<h4>RepeatMasker Alignments:</h4>\n");
 	printf
@@ -378,7 +378,7 @@ if (offset >= 0)
 	    printf ("    <td>%3.2f</td>\n",
 		    (double) ro->milliIns * (double) 0.01);
 	    printf ("    <td>%s</td>\n", ro->genoName);
-	    printf ("    <td>%d</td>\n", ro->genoStart);
+	    printf ("    <td>%d</td>\n", ro->genoStart + 1);
 	    printf ("    <td>%d</td>\n", ro->genoEnd);
 	    printf ("    <td>(%d)</td>\n", ro->genoLeft);
 	    printf ("    <td>%s</td>\n", ro->strand);

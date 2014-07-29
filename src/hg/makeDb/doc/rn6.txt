@@ -772,3 +772,29 @@ searchPriority 8
     ssh qateam@hgwbeta './bin/x86_64/hgsql qapushq < /tmp/rn6.sql'
 
 ##############################################################################
+## blat server turned on (DONE - 2014-01-13 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("rn6", "blat4b", "17784", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("rn6", "blat4b", "17785", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+# LIFTOVER TO Rn5 (DONE - 2014-07-14 - Hiram )
+    mkdir /hive/data/genomes/rn6/bed/blat.rn5.2014-07-25
+    cd /hive/data/genomes/rn6/bed/blat.rn5.2014-07-25
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -ooc=/hive/data/genomes/rn6/jkStuff/rn6.11.ooc \
+        -debug rn6 rn5
+    # Real run:
+    time doSameSpeciesLiftOver.pl \
+	-bigClusterHub=ku -workhorse=hgwdev -dbHost=hgwdev -buildDir=`pwd` \
+      -ooc=/hive/data/genomes/rn6/jkStuff/rn6.11.ooc rn6 rn5 > do.log 2>&1
+    # real    73m17.426s
+
+    # test with sequence
+#############################################################################

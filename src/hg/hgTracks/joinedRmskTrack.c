@@ -127,7 +127,7 @@ static struct Extents ex;
 char lenLabel[20];
 
 if (rm == NULL)
-return NULL;
+    return NULL;
 
 ex.start = rm->alignStart
     -
@@ -203,7 +203,7 @@ for (i = 0; i < numClasses; ++i)
     // Hash now prebuilt to hold color attributes
     hashAdd (classHash, ri->class, ri);
     if (sameString (rptClassNames[i], "Other"))
-    otherRepeatItem = ri;
+        otherRepeatItem = ri;
     }
 slReverse (&riList);
 return riList;
@@ -219,7 +219,7 @@ static void jRepeatLoad (struct track *tg)
    * all the repeat data for each displayed subtrack.
    */
 if (!subTracksHash)
-subTracksHash = newHash (20);
+    subTracksHash = newHash (20);
 
 tg->items = makeJRepeatItems ();
 
@@ -240,12 +240,11 @@ if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
 	struct sqlResult *sr = hRangeQuery (conn, tg->table, chromName,
 					    winStart, winEnd, NULL,
 					    &rowOffset);
-
 	struct rmskJoined *detailList = NULL;
 	while ((row = sqlNextRow (sr)) != NULL)
 	    {
 	    rm = rmskJoinedLoad (row + rowOffset);
-	    slAddHead (detailList, rm);
+	    slAddHead (&detailList, rm);
 	    }
 	slSort (&detailList, cmpRepeatVisStart);
 
@@ -282,13 +281,9 @@ if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
 		    crChromStart = rmChromStart;
 		    crChromEnd = rmChromEnd;
 		    if (prev)
-			{
 			prev->next = rm->next;
-			}
 		    else
-			{
 			detailList = rm->next;
-			}
 
 		    rm = rm->next;
 		    cr->next = NULL;
@@ -326,13 +321,9 @@ struct repeatItem *ri = item;
 if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
     {
     if (strcmp (ri->className, "SINE") == 0)
-	{
 	return ("Repeats");
-	}
     else
-	{
 	return &empty;
-	}
     }
 return ri->className;
 }
@@ -346,10 +337,9 @@ if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
     // Lookup the depth of this subTrack and report it
     struct subTrack *st = hashFindVal (subTracksHash, tg->table);
     if (st)
-    return ((st->levelCount + 1) * 24);
+        return ((st->levelCount + 1) * 24);
     else
-    // Just display one line
-    return (24);
+        return (24);	// Just display one line
     }
 else
 return tgFixedTotalHeightNoOverflow (tg, vis);
@@ -360,9 +350,9 @@ int jRepeatItemHeight (struct track *tg, void *item)
   // Are we in full view mode and at the scale needed to display
   // the detail view?
 if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
-return 24;
+    return 24;
 else
-return tgFixedItemHeight (tg, item);
+    return tgFixedItemHeight (tg, item);
 }
 
 static void drawDashedHorizLine (struct hvGfx *hvg, int x1, int x2,
@@ -375,11 +365,11 @@ while (1)
     {
     cx2 = cx1 + dashLen;
     if (cx2 > x2)
-    cx2 = x2;
+        cx2 = x2;
     hvGfxLine (hvg, cx1, y, cx2, y, lineColor);
     cx1 += (dashLen + gapLen);
     if (cx1 > x2)
-    break;
+        break;
     }
 }
 
@@ -400,9 +390,7 @@ int stringWidth = mgFontStringWidth (font, lenLabel) + LABEL_PADDING;
 int glyphWidth = x2 - x1;
 
 if (glyphWidth < stringWidth + 6 + (2 * dashLen))
-stringWidth = 0;
-
-
+    stringWidth = 0;
 
 int midX = ((glyphWidth) / 2) + x1;
 int startHash = midX - (stringWidth * 0.5);
@@ -432,7 +420,7 @@ while (1)
     {
     cx2 = cx1 + dashLen;
     if (cx2 > x2)
-    cx2 = x2;
+        cx2 = x2;
 
     if (!midPointDrawn && cx2 > startHash)
 	{
@@ -475,7 +463,7 @@ while (1)
 	}
 
     if (cx1 > x2)
-    break;
+        break;
     }
 }
 
@@ -596,7 +584,7 @@ if (poundPtr)
     safecpy (class, sizeof (class), poundPtr + 1);
     char *slashPtr = index (class, '/');
     if (slashPtr)
-    *slashPtr = '\0';
+        *slashPtr = '\0';
     }
 else
     {
@@ -604,14 +592,14 @@ else
     }
 char *p = &(class[strlen (class) - 1]);
 if (*p == '?')
-*p = '\0';
+    *p = '\0';
 if (endsWith (class, "RNA"))
-safecpy (class, sizeof (class), "RNA");
+    safecpy (class, sizeof (class), "RNA");
 
   // Lookup the class to get the color scheme
 ri = hashFindVal (classHash, class);
 if (ri == NULL)
-ri = otherRepeatItem;
+    ri = otherRepeatItem;
 
   // Pick the fill color based on the divergence
 int percId = 10000 - rm->score;
@@ -642,7 +630,7 @@ for (idx = 0; idx < rm->blockCount; idx++)
 	lx2 = roundingScale (fragGEnd - winStart, width, baseWidth) + xOff;
 	w = lx2 - lx1;
 	if (w <= 0)
-	w = 1;
+	    w = 1;
 
 	if (idx == 1 && rm->blockCount == 3)
 	    {
@@ -839,7 +827,7 @@ for (idx = 0; idx < rm->blockCount; idx++)
 		    rm->blockSizes[idx - 1] - (alignedOverlapSize / 2);
 
 		if (abs (unaSize) > rm->blockSizes[idx - 1])
-		unaSize = -rm->blockSizes[idx - 1];
+		    unaSize = -rm->blockSizes[idx - 1];
 
 		lx1 = roundingScale (rm->chromStart +
 				     rm->blockRelStarts[idx -
@@ -879,7 +867,7 @@ for (idx = 0; idx < rm->blockCount; idx++)
 		int smallOverlapLen = 0;
 		smallOverlapLen = (0.3 * rm->blockSizes[idx - 1]);
 		if (smallOverlapLen > (0.3 * rm->blockSizes[idx + 1]))
-		smallOverlapLen = (0.3 * rm->blockSizes[idx + 1]);
+		    smallOverlapLen = (0.3 * rm->blockSizes[idx + 1]);
 		unaSize = (smallOverlapLen * 2) + alignedGapSize;
 		relStart =
 		    rm->blockRelStarts[idx - 1] +
@@ -999,7 +987,7 @@ if (isFull)
 	    safecpy (class, sizeof (class), poundPtr + 1);
 	    char *slashPtr = index (class, '/');
 	    if (slashPtr)
-	    *slashPtr = '\0';
+	        *slashPtr = '\0';
 	    }
 	else
 	    {
@@ -1007,12 +995,12 @@ if (isFull)
 	    }
 	char *p = &(class[strlen (class) - 1]);
 	if (*p == '?')
-	*p = '\0';
+	    *p = '\0';
 	if (endsWith (class, "RNA"))
-	safecpy (class, sizeof (class), "RNA");
+	    safecpy (class, sizeof (class), "RNA");
 	ri = hashFindVal (hash, class);
 	if (ri == NULL)
-	ri = otherRepeatItem;
+	    ri = otherRepeatItem;
 	percId = 10000 - ro->score;
 	grayLevel = grayInRange (percId, 6000, 10000);
 	col = shadesOfGray[grayLevel];
@@ -1034,7 +1022,7 @@ if (isFull)
 				    baseWidth) + xOff;
 		w = x2 - x1;
 		if (w <= 0)
-		w = 1;
+		    w = 1;
 		hvGfxBox (hvg, x1, ri->yOffset, w, heightPer, col);
 		}
 	    }
@@ -1053,18 +1041,18 @@ else
      */
     if (hFindSplitTable (database, chromName, tg->table, table, &hasBin))
 	{
-	dyStringPrintf (query,
+	sqlDyStringPrintf (query,
 			"select chromStart,blockCount,blockSizes,"
 			"blockRelStarts from %s where ", table);
 	if (hasBin)
-	hAddBinToQuery (winStart, winEnd, query);
-	dyStringPrintf (query, "chromStart<%u and chromEnd>%u ",
+	    hAddBinToQuery (winStart, winEnd, query);
+	sqlDyStringPrintf (query, "chromStart<%u and chromEnd>%u ",
 			winEnd, winStart);
 	/*
 	 * if we're using a single rmsk table, add chrom to the where clause
 	 */
 	if (startsWith ("rmskJoined", table))
-	dyStringPrintf (query, " and chrom = '%s' ", chromName);
+	    sqlDyStringPrintf (query, " and chrom = '%s' ", chromName);
 	sr = sqlGetResult (conn, query->string);
 	while ((row = sqlNextRow (sr)) != NULL)
 	    {
@@ -1094,7 +1082,7 @@ else
 					baseWidth) + xOff;
 		    w = x2 - x1;
 		    if (w <= 0)
-		    w = 1;
+		        w = 1;
 		    hvGfxBox (hvg, x1, yOff, w, heightPer, MG_BLACK);
 		    }
 		}
@@ -1136,9 +1124,8 @@ if (isFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
 
     struct subTrack *st = hashFindVal (subTracksHash, tg->table);
     if (!st)
-	{
 	return;
-	}
+
     int lidx = st->levelCount;
     int currLevel = 0;
     for (currLevel = 0; currLevel < lidx; currLevel++)
@@ -1161,7 +1148,7 @@ if (isFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
 				    baseWidth) + xOff;
 	    int w = x2 - x1;
 	    if (w <= 0)
-	    w = 1;
+	        w = 1;
 
 	    mapBoxHc (hvg, rm->alignStart, rm->alignEnd, ss1, level,
 		      w, heightPer, tg->track, rm->id, statusLine);

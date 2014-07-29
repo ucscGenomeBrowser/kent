@@ -23,5 +23,5 @@ CREATE TABLE rmskAlign (
     id int unsigned not null,	# The ID of the hit. Used to link related fragments
     alignment longblob not null,	# The alignment data stored as a single string
               #Indices
-    PRIMARY KEY(swScore)
+    INDEX chromId (genoName,id)
 );
