@@ -89,6 +89,9 @@ All options are placed in a single line separated by spaces (lines are broken
 only for readability here):
 <PRE>
   <B>track type=vcfTabix bigDataUrl=</B><EM>http://...</EM>
+     <B>hapClusterEnabled=</B><EM>true|false</EM> <B>hapClusterColorBy=</B><EM>altOnly|refAlt|base</EM>
+     <B>hapClusterTreeAngle=</B><EM>triangle|rectangle</EM> <B>hapClusterHeight=</B><EM>N</EM>
+     <B>applyMinQual=</B><EM>true|false</EM> <B>minQual=</B><EM>Q</EM> <B>minFreq=</B><EM>F</EM>
      <B>name=</B><EM>track_label</EM> <B>description=</B><EM>center_label</EM> 
      <B>visibility=</B><EM>display_mode</EM> <B>priority=</B><EM>priority</EM>
      <B>db=</B><EM>db</EM> <B>maxWindowToDraw=</B><EM>N</EM> 
@@ -102,7 +105,17 @@ without editing.
 The track type and bigDataUrl are REQUIRED:
 <PRE>  <B>type=vcfTabix bigDataUrl=</B><EM>http://myorg.edu/mylab/my.vcf.gz</EM></B></PRE>
 
-The remaining settings are OPTIONAL.
+The remaining settings are OPTIONAL.  Some are specific to VCF:
+<PRE>
+  <B>hapClusterEnabled   </B><EM>true|false             </EM> # if file has phased genotypes, sort by local similarity
+  <B>hapClusterColorBy   </B><EM>altOnly|refAlt|base    </EM> # coloring scheme, default altOnly, conditional on hapClusterEnabled
+  <B>hapClusterTreeAngle </B><EM>triangle|rectangle     </EM> # draw leaves as < or [, default <, conditional on hapClusterEnabled
+  <B>hapClusterHeight    </B><EM>N                      </EM> # height of track in pixels, default 128, conditional on hapClusterEnabled
+  <B>applyMinQual        </B><EM>true|false             </EM> # if true, don't display items with QUAL < minQual; default false
+  <B>minQual             </B><EM>Q                      </EM> # minimum value of Q column to display item, conditional on applyMinQual
+  <B>minFreq             </B><EM>F                      </EM> # minimum minor allele frequency to display item; default 0.0
+</PRE>
+Other optional settings are not specific to VCF, but relevant:
 <PRE>
   <B>name            </B><EM>track label                </EM> # default is "User Track"
   <B>description     </B><EM>center label               </EM> # default is "User Supplied Track"

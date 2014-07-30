@@ -39,114 +39,17 @@ void jsInit()
 {
 if (! jsInited)
     {
-    puts(
-
-"<INPUT TYPE=HIDDEN NAME=\"jsh_pageVertPos\" VALUE=0>\n"
-"<script language=\"javascript\">\n"
-"// f_scrollTop and f_filterResults taken from\n"
-"// http://www.softcomplex.com/docs/get_window_size_and_scrollbar_position.html\n"
-"function f_scrollTop() {\n"
-"	return f_filterResults (\n"
-"		window.pageYOffset ? window.pageYOffset : 0,\n"
-"		document.documentElement ? document.documentElement.scrollTop : 0,\n"
-"		document.body ? document.body.scrollTop : 0\n"
-"	);\n"
-"}\n"
-"function f_filterResults(n_win, n_docel, n_body) {\n"
-"	var n_result = n_win ? n_win : 0;\n"
-"	if (n_docel && (!n_result || (n_result > n_docel)))\n"
-"		n_result = n_docel;\n"
-"	return n_body && (!n_result || (n_result > n_body)) ? n_body : n_result;\n"
-"}\n"
-"</script>\n");
+    // jsh_pageVertPos trick taken from
+    // http://www.softcomplex.com/docs/get_window_size_and_scrollbar_position.html
+    puts("<INPUT TYPE=HIDDEN NAME=\"jsh_pageVertPos\" VALUE=0>");
     int pos = cgiOptionalInt("jsh_pageVertPos", 0);
     if (pos > 0)
-	printf("\n<script language=\"javascript\">"
+	printf("<script language=\"javascript\">"
 	       "window.onload = function () { window.scrollTo(0, %d); }"
 	       "</script>\n", pos);
-    jsWriteFunctions();
     jsInited = TRUE;
+    jsIncludeFile("jsHelper.js", NULL);
     }
-}
-
-void jsWriteFunctions()
-/* Write out Javascript functions. */
-{
-hPrintf("\n<SCRIPT>\n");
-hPrintf("%s\n",
-"function setRadioCheck(varName, value) \n"
-"{\n"
-"var len = document.mainForm.elements.length;\n"
-"var i = 0;\n"
-"for (i = 0; i < len; i++) \n"
-"    {\n"
-"    if (document.mainForm.elements[i].name == varName) \n"
-"	{\n"
-"	if (document.mainForm.elements[i].value == value)\n"
-"	    document.mainForm.elements[i].checked = true;\n"
-"	else\n"
-"	    document.mainForm.elements[i].checked = false;\n"
-"	}\n"
-"    }\n"
-"}\n"
-"\n"
-"function getKeyCode(e)\n"
-"{\n"
-"if (window.event) // IE\n"
-"    {\n"
-"    return e.keyCode;\n"
-"    }\n"
-"else \n"
-"    {\n"
-"    return e.which;\n"
-"    }\n"
-"}\n"
-"\n"
-"function getKey(e)\n"
-"{\n"
-"return String.fromCharCode(getKeyCode(e));\n"
-"}\n"
-"\n"
-"function gotEnterKey(e)\n"
-"{\n"
-"return getKeyCode(e) == 13;\n"
-"}\n"
-"\n"
-"var submitted = false;\n"
-"\n"
-"function submitOnEnter(e,f)\n"
-"{\n"
-"if(gotEnterKey(e))\n"
-"   {\n"
-"   if (!submitted)\n"
-"      {\n"
-"      submitted = true;\n"
-"      f.submit();\n"
-"      }\n"
-"   return false;\n"
-"   }\n"
-"else\n"
-"   return true;\n"
-"}\n"
-"\n"
-"function noSubmitOnEnter(e)\n"
-"{\n"
-"return !gotEnterKey(e);\n"
-"}\n"
-"function pressOnEnter(e, button)\n"
-"{\n"
-"if (gotEnterKey(e))\n"
-"    {\n"
-"    button.click();\n"
-"    return false;\n"
-"    }\n"
-"else\n"
-"    {\n"
-"    return true;\n"
-"    }\n"
-"}\n"
-);
-hPrintf("</SCRIPT>\n");
 }
 
 struct dyString *jsOnChangeStart()
@@ -265,48 +168,6 @@ safef(vertPosSet, sizeof(vertPosSet),
 return vertPosSet;
 }
 
-void jsMakeSetClearButton(struct cart *cart,
-			  char *form, char *buttonVar, char *buttonLabel,
-			  char *cartVarPrefix, struct slName *cartVarSuffixList,
-			  char *anchor, boolean currentPos, boolean isSet)
-/* Make a button for setting or clearing all of a list of boolean
- * cart variables (i.e. checkboxes).  If this button was just pressed,
- * set or clear those cart variables.
- * Optional html anchor is appended to the form's action if given.
- * If currentPos, anchor is ignored and jsSetVerticalPosition is used so
- * that the new page gets the same vertical offset as the current page. */
-{
-struct slName *suffix;
-char javascript[2048];
-char *vertPosJs = "";
-if (currentPos)
-    {
-    anchor = NULL;
-    jsInit();
-    vertPosJs = jsSetVerticalPosition(form);
-    }
-cgiMakeHiddenVar(buttonVar, "");
-safef(javascript, sizeof javascript,
-      "document.%s.action = '%s%s%s'; document.%s.%s.value='%s'; %s"
-      "document.%s.submit();",
-      form, cgiScriptName(),
-      (isNotEmpty(anchor) ? "#" : ""), (isNotEmpty(anchor) ? anchor : ""),
-      form, buttonVar, buttonLabel, vertPosJs, form);
-cgiMakeOnClickButton(javascript, buttonLabel);
-
-if (isNotEmpty(cgiOptionalString(buttonVar)))
-    {
-    char option[1024];
-    if (cartVarPrefix == NULL)
-	cartVarPrefix = "";
-    for (suffix = cartVarSuffixList;  suffix != NULL;  suffix = suffix->next)
-        {
-        safef(option, sizeof(option), "%s%s", cartVarPrefix, suffix->name);
-        cartSetBoolean(cart, option, isSet);
-        }
-    }
-}
-
 void jsMakeCheckboxGroupSetClearButton(char *buttonVar, boolean isSet)
 /* Make a button for setting or clearing a set of checkboxes with the same name.
  * Uses only javascript to change the checkboxes, no resubmit. */
@@ -316,6 +177,23 @@ safef(javascript, sizeof(javascript), "var list = document.getElementsByName('%s
       "for (var ix = 0; ix < list.length; ix++) {list[ix].checked = %s}", buttonVar,
       isSet ? "true" : "false");
 cgiMakeOnClickButton(javascript, isSet ? JS_SET_ALL_BUTTON_LABEL : JS_CLEAR_ALL_BUTTON_LABEL);
+}
+
+void jsMakeSetClearContainer()
+/* Begin a wrapper div with class setClearContainer, plus 'Set all' and 'Clear all' buttons.
+ * This should be followed by a bunch of checkboxes, and then a call to jsEndContainer. */
+{
+puts("<div class=\"setClearContainer\">\n"
+     "<input type=button value=\""JS_SET_ALL_BUTTON_LABEL"\" title=\"Check all checkboxes\">\n"
+     "<input type=button value=\""JS_CLEAR_ALL_BUTTON_LABEL"\" title=\"Uncheck all checkboxes\">\n"
+     "<br>"
+     );
+}
+
+void jsEndContainer()
+/* End a wrapper div. */
+{
+puts("</div>");
 }
 
 char *jsPressOnEnter(char *button)

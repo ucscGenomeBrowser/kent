@@ -14,7 +14,6 @@ shortLabel Known+Pred RNA
 longLabel Known and Predicted RNA Transcription in the ENCODE Regions
 group encodeGenes
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-priority 52
 visibility hide
 type bed 6 +
 origAssembly hg16
@@ -26,7 +25,6 @@ superTrack on
 shortLabel Gencode Genes
 longLabel Gencode Gene Annotation
 group encodeGenes
-priority 10.3
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track encodeGencodeGeneMar07
@@ -285,7 +283,6 @@ superTrack on
 shortLabel EGASP 
 longLabel ENCODE Gene Prediction Workshop (EGASP) 
 group encodeGenes
-priority 12.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track encodeEgaspFull
@@ -615,7 +612,6 @@ compositeTrack on
 shortLabel Pseudogenes 
 longLabel ENCODE Pseudogene Predictions - All ENCODE Regions
 group encodeGenes
-priority 15.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type genePred
@@ -700,7 +696,6 @@ shortLabel BU First Exon
 longLabel Boston University First Exon Activity 
 group encodeTxLevels
 itemRgb on
-priority 22.0
 chromosomes chr11,chr13,chr15,chr16,chr19,chr2,chr5,chr7,chr9,chrX
 visibility hide
 type bed 12 +
@@ -772,7 +767,6 @@ compositeTrack on
 shortLabel Riken CAGE
 longLabel Riken CAGE - Predicted Gene Start Sites
 group encodeTxLevels
-priority 23.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bedGraph 4
@@ -848,7 +842,6 @@ compositeTrack on
 shortLabel Stanf Promoter
 longLabel Stanford Promoter Activity 
 group encodeTxLevels
-priority 26.0
 chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 9 +
@@ -963,7 +956,6 @@ track encodeStanfordRtPcr
 shortLabel Stanf RTPCR
 longLabel Stanford Endogenous Transcript Levels in HCT116 Cells
 group encodeTxLevels
-priority 27.0
 chromosomes chr1,chr11,chr13,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 useScore 1
@@ -977,7 +969,6 @@ dataVersion ENCODE June 2005 Freeze
         shortLabel Yale RNA
         longLabel Yale RNA (Neutrophil, Placenta and NB4 cells)
         group encodeTxLevels
-        priority 28
         chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track encodeYaleMASPlacRNATransMap
@@ -1113,7 +1104,6 @@ dataVersion ENCODE June 2005 Freeze
         shortLabel Affy EC
         longLabel Affymetrix ENCODE Extension Transcription
         group encodeTxLevels
-        priority 34.0
         chromosomes chr21,chr22
 
 track encodeAffyEcSites
@@ -2689,7 +2679,6 @@ dataVersion ENCODE Oct 2005 Freeze
         shortLabel LI/UCSD ChIP
         longLabel Ludwig Institute/UC San Diego ChIP-chip
         group encodeChip
-        priority 48
         chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 
@@ -2916,7 +2905,6 @@ superTrack on
 shortLabel Stanf ChIP
 longLabel Stanford ChIP-chip
 group encodeChip
-priority 55.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track encodeStanfordChip
@@ -3158,7 +3146,6 @@ dataVersion Mar 2007
         group encodeChip
         chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
         visibility hide
-        priority 60
         origAssembly hg17
 
 
@@ -3251,7 +3238,6 @@ compositeTrack on
 shortLabel Stanf Meth
 longLabel Stanford Methylation Digest: Be2C, CRL1690, HCT116, HT1080, HepG2, JEG3, Snu182, U87
 group encodeChrom
-priority 62.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bedGraph 4
@@ -3318,7 +3304,6 @@ compositeTrack on
 shortLabel Stanf Meth Score
 longLabel Stanford Methylation Digest Smoothed Score
 group encodeChrom
-priority 62.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bedGraph 4
@@ -3385,7 +3370,6 @@ compositeTrack on
 shortLabel UNC FAIRE
 longLabel UNC FAIRE (Formaldehyde Assisted Isolation of Regulatory Elements)
 group encodeChrom
-priority 63.0
 chromosomes chr1,chr4,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chr10,chrX
 type bedGraph 4
 spanList 38
@@ -3440,7 +3424,6 @@ superTrack on
 shortLabel UVa DNA Rep
 longLabel University of Virginia DNA Replication Timing and Origins
 group encodeChrom
-priority 64.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track encodeUvaDnaRep
@@ -3659,7 +3642,6 @@ track encodeReseqRegions
 shortLabel Reseq Regions
 longLabel ENCODE Resequencing Regions
 group encodeVariation
-priority 79.9
 color 150,100,30
 chromosomes chr12,chr18,chr2,chr4,chr7,chr8,chr9
 visibility hide
@@ -3669,7 +3651,6 @@ track encodeIndels
 shortLabel NHGRI DIPs 
 longLabel NHGRI Deletion/Insertion Polymorphisms in ENCODE regions
 group encodeVariation
-priority 80
 visibility hide
 itemRgb on
 type bed 9 + 
@@ -3682,7 +3663,6 @@ compositeTrack on
 shortLabel HapMap Coverage
 longLabel ENCODE HapMap (16c.1) Resequencing Coverage
 group encodeVariation
-priority 80.8
 chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
 maxHeightPixels 128:16:16
 visibility hide
@@ -3720,7 +3700,6 @@ track encodeRecombRate
 shortLabel SNP Recomb Rates
 longLabel Oxford Recombination Rates from ENCODE resequencing data
 group encodeVariation
-priority 80.9
 visibility hide
 type bedGraph 4
 chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
@@ -3736,7 +3715,6 @@ track encodeRecombHotspot
 shortLabel SNP Recomb Hots
 longLabel Oxford Recombination Hotspots from ENCODE resequencing data
 group encodeVariation
-priority 80.91
 visibility hide
 type bed 3 .
 chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
@@ -3747,7 +3725,6 @@ track encodeSangerGenoExprAssociation
 shortLabel Sanger Assoc
 longLabel Sanger Genotype-Expression Association
 group encodeVariation
-priority 81
 chromosomes chr2,chr7,chr8,chr9,chr12,chr18
 visibility hide
 type bed5FloatScore
@@ -3760,7 +3737,6 @@ compositeTrack on
 shortLabel HapMap SNPs
 longLabel ENCODE HapMap (16c.1) Allele Frequencies
 group encodeVariation
-priority 82
 chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
 visibility hide
 type bed 6 + 
@@ -3957,7 +3933,6 @@ compositeTrack on
 shortLabel Gencode Unann
 longLabel Gencode Unannotated Region Classification
 group encodeAnalysis
-priority 508
 visibility hide
 type bed 4 .
 dataVersion ENCODE June 2005 Freeze
@@ -4031,7 +4006,6 @@ compositeTrack on
 shortLabel Consens Unann TF
 longLabel ENCODE Consensus Unannotated Transfrags
 group encodeAnalysis
-priority 509
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 4
@@ -4081,7 +4055,6 @@ subGroup1 region Region/Distance intronicProximal=Intronic_Proximal intronicDist
 subGroup2 celltype Cell_Type gm06990=Gm06990 hela=HeLa hl60=HL60 nb4=NB4 neut=Neutrophil plac=Placenta
 subGroup3 source Source yale=Yale affy=Affymetrix
 group encodeAnalysis
-priority 510
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 4 .

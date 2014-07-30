@@ -9,7 +9,6 @@ subGroup1 view Views align=Alignments cons=Conservation
 dragAndDrop subTracks
 type bed 4
 dataVersion ENCODE Nov 2008 Freeze
-priority 1
 
     track encodeMsaTbaDec07Viewalign
     shortLabel Alignments
@@ -74,7 +73,6 @@ track encodeTbaAlignSep07
 shortLabel Sep07 TBA Align
 longLabel TBA Alignments of 36 Vertebrates in the ENCODE Regions (Sep07)
 group encodeCompAndVar
-priority 70.2
 color 0, 10, 100
 altColor 1,128,0
 type wigMaf 0.0 1.0
@@ -94,7 +92,6 @@ track encodeIndels
 shortLabel NHGRI DIPs
 longLabel NHGRI Deletion/Insertion Polymorphisms in ENCODE regions
 group encodeCompAndVar
-priority 80
 itemRgb on
 type bed 9 +
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX

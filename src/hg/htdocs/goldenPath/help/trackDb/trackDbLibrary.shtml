@@ -2412,6 +2412,9 @@
     bamColorTag YC    </pre>
     <P>The bam file includes RGB values in the YC
     field that will be used to color tags.</P>
+    <pre>
+    bamColorMode off  </pre>
+    <P>No special coloring will be applied to items.</P>
 </DIV>
 
 <DIV class="bamSkipPrintQualScore"><span class="types bam"></span>
@@ -3432,12 +3435,77 @@
     <P><em>Example can be found below.</em></P>
 </DIV>
 
+<DIV class="hapClusterEnabled"><span class="types vcf"></span>
+<div class="format"><code>hapClusterEnabled &lt;true|false&gt;</code></div>
+    <P>If the VCF file includes genotype columns for at least two individuals,
+    then a haplotype sorting display is enabled by default.  This option can be
+    used to disable it if desired, for example if the genotypes have not been
+    phased and a significant portion of the genotypes are heterozygous.
+    More information about the haplotype sorting display can be found
+    <A HREF="../hgVcfTrackHelp.html">here</A>.
+    </P>
+</DIV>
+
+<DIV class="hapClusterColorBy"><span class="types vcf"></span>
+<div class="format"><code>hapClusterColorBy &lt;altOnly|refAlt|base&gt;</code></div>
+    <P>Assuming <code>hapClusterEnabled</code> is <code>true</code>,
+    this specifies one of three ways that reference and alternate alleles are colored:
+    <UL>
+      <LI><code>altOnly</code>: reference allele is white (invisible),
+	alternate allele is black.  This emphasizes haplotypes with alternate alleles.  (default)
+      <LI><code>refAlt</code>: reference allele is blue, alternate allele is red.
+      <LI><code>base</code>: A is red, C is blue, G is green and T is magenta.
+    </UL>
+    </P>
+</DIV>
+
+<DIV class="hapClusterTreeAngle"><span class="types vcf"></span>
+<div class="format"><code>hapClusterTreeAngle &lt;triangle|rectangle&gt;</code></div>
+    <P>Assuming <code>hapClusterEnabled</code> is <code>true</code>,
+    this controls the shape of leaf clusters on the right of the tree
+    (i.e. the lines drawn to denote groups of identical local haplotypes):
+    <code>triangle</code> for the <B>&lt;</B> shape (default), <code>rectangle</code>
+    for the <B>[</B> shape.
+    </P>
+</DIV>
+
+<DIV class="hapClusterHeight"><span class="types vcf"></span>
+<div class="format"><code>hapClusterHeight &lt;<EM>N</EM>&gt;</code></div>
+    <P>Assuming <code>hapClusterEnabled</code> is <code>true</code>,
+    this specifies the height in pixels of the haplotype sorting display.
+    </P>
+</DIV>
+
+<DIV class="applyMinQual"><span class="types vcf"></span>
+<div class="format"><code>applyMinQual &lt;true|false&gt;</code></div>
+    <P>If <code>true</code>, then variants whose QUAL column contains a value less
+    than the <code>minQual</code> setting will not be displayed.
+    </P>
+</DIV>
+
+<DIV class="minQual"><span class="types vcf"></span>
+<div class="format"><code>minQual &lt;<EM>Q</EM>&gt;</code></div>
+    <P>
+    <P>Assuming <code>applyMinQual</code> is <code>true</code>,
+    this is the minimum QUAL value required for a variant to be displayed.
+    </P>
+</DIV>
+
+<DIV class="minFreq"><span class="types vcf"></span>
+<div class="format"><code>minFreq &lt;<EM>F</EM>&gt;</code></div>
+    <P>
+    The minimum minor allele frequency required for a variant to be displayed.
+    By default this is 0.0 (i.e. display all variants).
+    </P>
+</DIV>
+
 <DIV class="vcfTabix_example"><span class="types vcfTabix"></span>
 <div class="format"><B>Example of a VCF track</B></div>
     <pre>
     track myVcf
     type vcfTabix
     bigDataUrl http://myorg.edu/mylab/myVcf.gz
+    hapClusterEnabled false
     maxWindowToDraw 3000000
       ...    </pre>
     <P>The data for this VCF track is stored in the remote file,

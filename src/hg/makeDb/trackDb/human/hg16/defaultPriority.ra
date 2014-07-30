@@ -1,0 +1,53 @@
+# Mapping and Sequencing
+
+track gap override
+priority 1
+
+track stsMap override
+priority 2
+
+
+# Genes and Gene Predictions
+
+# track hg17Kg override
+# priority 1
+# This priority is defined in human/hg16/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+# track acembly override
+# priority 2
+# This priority is defined in human/hg16/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+track refGene override
+priority 3
+
+# mRNA and EST
+
+track mrna override
+priority 1
+
+track intronEst override
+priority 2
+
+# Comparative Genomics
+
+# track mzPt1Mm3Rn3Gg2_pHMM override
+# priority 1
+# This priority is defined in human/hg16/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+# track blatFr1 override
+# priority 2
+# This priority is defined in human/hg16/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+# Variation and Repeats
+
+# track rmsk override
+# priority 1
+# This priority is defined in human/hg16/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+track snp override
+priority 2

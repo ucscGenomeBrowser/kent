@@ -694,7 +694,6 @@ track chainPonAbe0
 shortLabel chainPonAbe0
 longLabel chainPonAbe0
 group x
-priority 290
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -716,7 +715,6 @@ track chainHomNea0
 shortLabel Neandertal Chain
 longLabel Neandertal Chain
 group x
-priority 300
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -740,7 +738,6 @@ track chainMapHomIni14
 shortLabel $o_Organism Map
 longLabel $o_Organism ($o_date) Mapping Chain
 group x
-priority 300
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -752,7 +749,6 @@ track chainMapHomIni13
 shortLabel $o_Organism Map
 longLabel $o_Organism ($o_date) Mapping Chain
 group x
-priority 300
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -864,7 +860,6 @@ track chainSelf2K
 shortLabel Self 2K Chain
 longLabel $Organism Chained Self Alignments, chainMinScore=2,000
 group varRep
-priority 401.01
 visibility hide
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrM,chrX,chrY,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22
 color 100,50,0
@@ -1216,7 +1211,6 @@ type bed 3
         shortLabel Affy Txn
         longLabel Affy Transcriptome Phase 3
         group expression
-        priority 300
 
 track affyTxnPhase3FragsL
 superTrack affyTxnPhase3Super dense
@@ -1789,7 +1783,6 @@ track chainMm8WM
 shortLabel Mm8 Chain WM
 longLabel $o_Organism ($o_date) Chained Alignments - Window Masker masked
 group x
-priority 270
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -1803,7 +1796,6 @@ track netMm8WM
 shortLabel Mm8 Net WM
 longLabel $o_Organism ($o_date) Alignment Net - Window Masker masked
 group x
-priority 270.1
 visibility hide
 spectrum on
 type netAlign mm8 chainMm8WM
@@ -3738,7 +3730,6 @@ track testChainHg19Overlap500
 shortLabel hg19 liftOver 500
 longLabel hg19 liftOver Chains 500 base overlap 5,000 base chunk size
 group map
-priority 165
 visibility hide
 color 100,50,0
 altColor 255,240,200

@@ -1,0 +1,35 @@
+# Genes and Gene Predictions
+
+# track knownGene override
+# priority 1
+# This priority is defined in human/hg17/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+track refGene override
+priority 2
+
+# mRNA and EST
+
+track mrna override
+priority 1
+
+track intronEst override
+priority 2
+
+# Comparative Genomics
+
+# track multiz17way override
+# priority 1
+# This priority is defined in human/hg17/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+# Variation and Repeats
+
+track snp125 override
+priority 1
+
+# Repeats
+
+track rmsk override
+group rep
+priority 1
