@@ -265,48 +265,6 @@ safef(vertPosSet, sizeof(vertPosSet),
 return vertPosSet;
 }
 
-void jsMakeSetClearButton(struct cart *cart,
-			  char *form, char *buttonVar, char *buttonLabel,
-			  char *cartVarPrefix, struct slName *cartVarSuffixList,
-			  char *anchor, boolean currentPos, boolean isSet)
-/* Make a button for setting or clearing all of a list of boolean
- * cart variables (i.e. checkboxes).  If this button was just pressed,
- * set or clear those cart variables.
- * Optional html anchor is appended to the form's action if given.
- * If currentPos, anchor is ignored and jsSetVerticalPosition is used so
- * that the new page gets the same vertical offset as the current page. */
-{
-struct slName *suffix;
-char javascript[2048];
-char *vertPosJs = "";
-if (currentPos)
-    {
-    anchor = NULL;
-    jsInit();
-    vertPosJs = jsSetVerticalPosition(form);
-    }
-cgiMakeHiddenVar(buttonVar, "");
-safef(javascript, sizeof javascript,
-      "document.%s.action = '%s%s%s'; document.%s.%s.value='%s'; %s"
-      "document.%s.submit();",
-      form, cgiScriptName(),
-      (isNotEmpty(anchor) ? "#" : ""), (isNotEmpty(anchor) ? anchor : ""),
-      form, buttonVar, buttonLabel, vertPosJs, form);
-cgiMakeOnClickButton(javascript, buttonLabel);
-
-if (isNotEmpty(cgiOptionalString(buttonVar)))
-    {
-    char option[1024];
-    if (cartVarPrefix == NULL)
-	cartVarPrefix = "";
-    for (suffix = cartVarSuffixList;  suffix != NULL;  suffix = suffix->next)
-        {
-        safef(option, sizeof(option), "%s%s", cartVarPrefix, suffix->name);
-        cartSetBoolean(cart, option, isSet);
-        }
-    }
-}
-
 void jsMakeCheckboxGroupSetClearButton(char *buttonVar, boolean isSet)
 /* Make a button for setting or clearing a set of checkboxes with the same name.
  * Uses only javascript to change the checkboxes, no resubmit. */

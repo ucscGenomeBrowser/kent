@@ -74,17 +74,6 @@ char *jsSetVerticalPosition(char *form);
  * jsInit must be called first.
  * Do not free return value!   */
 
-void jsMakeSetClearButton(struct cart *cart,
-			  char *form, char *buttonVar, char *buttonLabel,
-			  char *cartVarPrefix, struct slName *cartVarSuffixList,
-			  char *anchor, boolean currentPos, boolean isSet);
-/* Make a button for setting or clearing all of a list of boolean
- * cart variables (i.e. checkboxes).  If this button was just pressed,
- * set or clear those cart variables.
- * Optional html anchor is appended to the form's action if given.
- * If currentPos, anchor is ignored and jsSetVerticalPosition is used so
- * that the new page gets the same vertical offset as the current page. */
-
 void jsMakeCheckboxGroupSetClearButton(char *buttonVar, boolean isSet);
 /* Make a button for setting or clearing a set of checkboxes with the same name.
  * Uses only javascript to change the checkboxes, no resubmit. */
