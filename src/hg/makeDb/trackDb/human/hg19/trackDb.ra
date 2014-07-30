@@ -835,7 +835,7 @@ snpSeqFile /gbdb/hg19/snp/snp141.fa
 
 track snp141Common override
 snpSeqFile /gbdb/hg19/snp/snp141.fa
-priority 1
+priority 2
 
 track snp141 override
 snpSeqFile /gbdb/hg19/snp/snp141.fa
@@ -2265,10 +2265,6 @@ visibility hide
 type gvf 
 noScoreFilter .
 
-track rmsk override
-group rep
-priority 1
-
 track nestedRepeats override
 group rep
 
@@ -2280,10 +2276,6 @@ group rep
 
 track microsat override
 group rep 
-
-track pubs override
-group phenDis
-priority 1
 
 track pubsBingBlat override
 group phenDis

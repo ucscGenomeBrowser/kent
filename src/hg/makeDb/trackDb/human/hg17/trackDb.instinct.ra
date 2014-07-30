@@ -4,7 +4,6 @@ track cnvLungBroadv2
 shortLabel CNV Lung
 longLabel Lung Adenocarcinoma Copy Number Variation
 group x
-priority 920
 visibility hide
 type expRatio
 expScale 1.5
@@ -16,7 +15,6 @@ track cnvLungBroadv2_ave100K
 shortLabel CNV Lung Moving Ave
 longLabel Lung Adenocarcinoma Copy Number Variation Moving Ave
 group x
-priority 920
 visibility hide
 type expRatio
 expScale 0.7
@@ -28,7 +26,6 @@ track CGHBreastCancerUCSF
 shortLabel BreastCancer CGH
 longLabel Breast Cancer Comparative Genomic Hybridization UCSF
 group x
-priority 920
 visibility hide
 type expRatio
 expScale 1.0
@@ -40,7 +37,6 @@ track expBreastCancerUCSF
 shortLabel BreastCancer Gene Expression
 longLabel Breast Cancer Gene Expression UCSF
 group x
-priority 920
 visibility hide
 type expRatio
 expScale 1.5
@@ -52,7 +48,6 @@ track CGHBreastCancerStanford
 shortLabel Pollack CGH
 longLabel Stanford Brown Lab Breast Cancer CGH
 group x
-priority 920
 visibility hide
 type expRatio
 expScale 1.0

@@ -1,5 +1,7 @@
 #	"$Id: trackDb.ra,v 1.458 2010/05/07 05:35:52 kent Exp $";
 
+include defaultPriority.ra
+
 # chain/net composites
 include trackDb.chainNet.ra
 
@@ -18,12 +20,12 @@ visibility hide
 track knownGene override
 shortLabel Known Genes
 longLabel UCSC Known Genes (June, 05) Based on UniProt, RefSeq, and GenBank mRNA
+priority 1
 
 track kgProtMap
 shortLabel kgProtMap
 longLabel kgProtMap
 group genes
-priority 146
 visibility hide
 spectrum on
 type psl .
@@ -58,7 +60,6 @@ compositeTrack on
 shortLabel N-SCAN
 longLabel N-SCAN Gene Predictions
 group genes
-priority 45.1
 visibility hide
 type genePred
 baseColorUseCds given
@@ -83,7 +84,6 @@ compositeTrack on
 shortLabel Augustus
 longLabel Augustus Gene Predictions
 group genes
-priority 51.7
 visibility hide
 type genePred
 cdsDrawDefault genomic\ codons
@@ -117,7 +117,6 @@ track RfamSeedFolds
 shortLabel Rfam seed folds
 longLabel Secondary Structure Annotation of ncRNAs from Rfam Seed
 group genes
-priority 61	
 visibility hide
 color 60,70,1 
 type bed 6 +
@@ -128,7 +127,6 @@ track rnafold
 shortLabel RNAfold
 longLabel RNAfold predictions of RNA Secondary Structure (id_strand_score)
 group genes
-priority 63.3
 visibility hide
 color 20,70,0
 type bed 6 +
@@ -184,7 +182,6 @@ track regPotential5X
 shortLabel 5x Reg Potential
 longLabel 5-Way Regulatory Potential - Human, Chimp, Dog, Mouse, Rat
 group regulation
-priority 200
 visibility hide
 autoScale Off
 maxHeightPixels 128:36:16
@@ -531,7 +528,7 @@ wiggle phastCons17way
 shortLabel Conservation 
 longLabel Vertebrate Multiz Alignment & Conservation
 group compGeno
-priority 104.1
+priority 1
 visibility pack
 color 0, 10, 100
 altColor 0,90,10
@@ -557,7 +554,7 @@ release alpha
 shortLabel Conservation 
 longLabel Vertebrate Multiz Alignment & Conservation
 group compGeno
-priority 104.1
+priority 1
 visibility pack
 color 0, 10, 100
 altColor 0,90,10
@@ -773,7 +770,6 @@ compositeTrack on
 shortLabel SNP Arrays
 longLabel SNP Genotyping Arrays
 group varRep
-priority 101
 visibility hide
 type bed 4 .
 
@@ -857,7 +853,6 @@ compositeTrack on
 shortLabel Structural Var
 longLabel Structural Variation
 group varRep
-priority 146
 visibility hide
 type bed 4 +
 
@@ -1230,7 +1225,6 @@ compositeTrack on
 shortLabel HapMap LD
 longLabel HapMap Linkage Disequilibrium - Phase II
 group varRep
-priority 144.49
 visibility hide
 canPack off
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX
@@ -1271,7 +1265,6 @@ track rertyHumanDiversityLd
 shortLabel Haploview LD
 longLabel Haploview Linkage Disequilibrium 
 group varRep
-priority 144.499
 visibility hide
 canPack off
 chromosomes chr20
@@ -1349,7 +1342,6 @@ track syntenyNetSelf
 shortLabel Self Syntenic Net
 longLabel $Organism Syntenic Self Alignment Net
 group varRep
-priority 402
 visibility hide
 spectrum on
 type netAlign hg17 chainSelf
@@ -1360,7 +1352,6 @@ compositeTrack on
 shortLabel RIPs
 longLabel Retrotransposon Insertion Polymorphisms in Humans
 group varRep
-priority 320
 visibility hide 
 thickDrawItem on
 type bed 6 .
@@ -1527,7 +1518,6 @@ track scoreMm5
 shortLabel  Mm5 Scored
 longLabel  Mm5 Scored (black=correct,gray=base not mapped,red=base mapped elsewhere)
 group x
-priority 201.95
 visibility hide
 type bed 14 .
 
@@ -1733,7 +1723,6 @@ searchPriority 50
 track luPosi
 shortLabel Potential_code
 longLabel Potential Coding Fragments
-priority 1100
 group x
 visibility hide
 type bed 12
@@ -1741,7 +1730,6 @@ type bed 12
 track luNega override
 shortLabel Potential_pseudo
 longLabel Potential Pseudo Fragments
-priority 1100
 group x
 
 track ancestor4way
@@ -1843,7 +1831,6 @@ track monDom4PileUp
 shortLabel monDom4 Pile Ups
 longLabel Pile Ups of Opossum chains to Hg17
 group x
-priority 31
 visibility hide
 autoScale on
 maxHeightPixels 128:64:16
@@ -1863,7 +1850,6 @@ compositeTrack on
 visibility hide 
 type genePred 
 group genes 
-priority 75
  
     track transmapSeg 
     parent seg 
@@ -1929,7 +1915,6 @@ track rnaLpFold
 shortLabel RNA LP Fold
 longLabel RNA LP Fold
 group map
-priority 12
 visibility hide
 canPack off
 dataVersion development test
