@@ -606,6 +606,7 @@ else if (lf->filterColor != 0)
     // In bamTrack, lf->filterColor is an RGBA value
     color = lf->filterColor;
     }
+else
     color = colorBySpectrumOrDefault(hvg,tg,lf->grayIx,tg->ixColor);
 
 indelEnabled(cart, tg->tdb, basesPerPixel, &indelShowDoubleInsert, &indelShowQueryInsert,

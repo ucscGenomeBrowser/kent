@@ -2421,18 +2421,13 @@ else if (tg->itemColor)
     *retColor = tg->itemColor(tg, lf, hvg);
     *retBarbColor = tg->ixAltColor;
     }
-else if (tg->colorShades)
+else
     {
     boolean isXeno = (tg->subType == lfSubXeno)
                                 || (tg->subType == lfSubChain)
                                 || startsWith("mrnaBla", tg->table);
     *retColor     = colorBySpectrumOrDefault(hvg,tg,lf->grayIx+isXeno,*retColor);
     *retBarbColor = colorBySpectrumOrDefault(hvg,tg,lf->grayIx,       *retBarbColor);
-    }
-else
-    {
-    *retColor = tg->ixColor;
-    *retBarbColor = tg->ixAltColor;
     }
 }
 

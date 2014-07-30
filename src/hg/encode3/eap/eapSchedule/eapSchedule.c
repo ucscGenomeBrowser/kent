@@ -9,6 +9,7 @@
 #include "portable.h"
 #include "bamFile.h"
 #include "obscure.h"
+#include "intValTree.h"
 #include "../../encodeDataWarehouse/inc/encodeDataWarehouse.h"
 #include "../../encodeDataWarehouse/inc/edwLib.h"
 #include "../../../../parasol/inc/paraMessage.h"
@@ -26,6 +27,7 @@ boolean clUpgrade = FALSE;
 char *clStep = "*";
 char *clInFormat = "*";
 char *clTarget = "hg38";
+char *clIdFile = NULL;
 int clMax = 0;
 
 void usage()
@@ -46,6 +48,7 @@ errAbort(
   "   -ignoreQa - if set then ignore QA results when scheduling\n"
   "   -justLink - just symbolically link rather than copy EDW files to cache\n"
   "   -max=count - Maximum number of jobs to schedule\n"
+  "   -idFile=file - Restrict to file id's in file, which is whitespace separated\n"
   "   -dry - just print out the commands that would result\n"
   );
 }
@@ -63,6 +66,7 @@ static struct optionSpec options[] = {
    {"ignoreQa", OPTION_BOOLEAN},
    {"justLink", OPTION_BOOLEAN},
    {"max", OPTION_INT},
+   {"idFile", OPTION_STRING},
    {"dry", OPTION_BOOLEAN},
    {NULL, 0},
 };
@@ -224,6 +228,7 @@ struct edwAssembly *targetAssemblyForDbAndSex(struct sqlConnection *conn, char *
 /* Figure out best target assembly for something that is associated with a given ucscDB.  
  * In general this will be the most recent for the organism. */
 {
+sex = "sponge"; // uglyf
 char sexedName[128];
 safef(sexedName, sizeof(sexedName), "%s.%s", sex, clTarget);
 char query[256];
@@ -1451,6 +1456,25 @@ if (vf->replicateQaStatus > 0)
     }
 }
 
+struct rbTree *intTreeFromFile(char *fileName)
+/* Create intVal tree with empty vals from a space separated file of integer IDs */
+{
+struct rbTree *it = intValTreeNew();
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line;
+while (lineFileNextReal(lf, &line))
+    {
+    char *word;
+    while ((word = nextWord(&line)) != NULL)
+        {
+	int key = sqlUnsigned(word);
+	intValTreeAdd(it, key, NULL);
+	}
+    }
+lineFileClose(&lf);
+return it;
+}
+
 void edwScheduleAnalysis(int startFileId, int endFileId)
 /* edwScheduleAnalysis - Schedule analysis runs.. */
 {
@@ -1463,8 +1487,21 @@ if (clTest)
     return;
     }
 
+struct rbTree *idTree = NULL;
+if (clIdFile != NULL)
+    {
+    idTree = intTreeFromFile(clIdFile);
+    verbose(1, "%d items in %s\n", idTree->n, clIdFile);
+    }
+
 for (ef = efList; ef != NULL; ef = ef->next)
     {
+    if (idTree != NULL)
+        {
+	struct intVal iv = {ef->id, NULL};
+	if (rbTreeFind(idTree, &iv) == NULL)
+	    continue;
+	}
     struct edwValidFile *vf = edwValidFileFromFileId(conn, ef->id);
     if (vf != NULL && wildMatch(clInFormat, vf->format) && targetsCompatible(vf->ucscDb, clTarget))
 	{
@@ -1502,6 +1539,7 @@ clInFormat = optionVal("inFormat", clInFormat);
 clMax = optionInt("max", clMax);
 clUpgrade = optionExists("upgrade");
 clTarget = optionVal("target", clTarget);
+clIdFile = optionVal("idFile", clIdFile);
 if (clUpgrade)
     gRedoPriority = eapUpgrade;
 gRedoThresholdCache = hashNew(8);

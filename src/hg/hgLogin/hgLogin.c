@@ -1361,6 +1361,7 @@ int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
 pushCarefulMemHandler(100000000);
+setUdcCacheDir();
 cgiSpoof(&argc, argv);
 htmlSetStyleSheet("/style/userAccounts.css");
 htmlSetStyle(htmlStyleUndecoratedLink);

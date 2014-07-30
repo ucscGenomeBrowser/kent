@@ -2443,7 +2443,9 @@ hPrintf("<div id='" HAPLO_TABLE "'><!-- " HAPLO_TABLE " begin -->\n");
 // Brief intro
 hPrintf("Generated from <A HREF='http://www.1000genomes.org/' TARGET=_BLANK>1000 Genomes</A> "
         "Phase1 variants (<A HREF='../goldenPath/help/haplotypes.html' "
-        "title='Help on Gene haplotype alleles section' TARGET=_BLANK>help</A>).");
+        "title='Help on Gene haplotype alleles section' TARGET=_BLANK>help</A>). "
+	"Note the association of SNP alleles within a haplotype is statistically imputed rather than directly "
+	"observed in most cases.");
 
 boolean rareVars     =  cartUsualBoolean(cart, HAPLO_RARE_VAR, FALSE);
 boolean dnaView      =  cartUsualBoolean(cart, HAPLO_DNA_VIEW, FALSE);
