@@ -99,13 +99,9 @@ function setClearAllInit($el)
 // defines for JS_{SET,CLEAR}_ALL_BUTTON_LABEL).  Set up event handlers on those to act
 // on all checkboxes in $el.
 {
-console.log($el);
 var $checkboxes = $el.find('input[type="checkbox"]');
-console.log($checkboxes);
 var $setAll = $el.find('input[type="button"][value="Set all"]');
-console.log($setAll);
 var $clearAll = $el.find('input[type="button"][value="Clear all"]');
-console.log($clearAll);
 $setAll.bind('click', function() {
     $checkboxes.each( function(ix, el) { el.checked = true; });
     });
