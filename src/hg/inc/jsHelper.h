@@ -78,6 +78,13 @@ void jsMakeCheckboxGroupSetClearButton(char *buttonVar, boolean isSet);
 /* Make a button for setting or clearing a set of checkboxes with the same name.
  * Uses only javascript to change the checkboxes, no resubmit. */
 
+void jsMakeSetClearContainer();
+/* Begin a wrapper div with class setClearContainer, plus 'Set all' and 'Clear all' buttons.
+ * This should be followed by a bunch of checkboxes, and then a call to jsEndContainer. */
+
+void jsEndContainer();
+/* End a wrapper div. */
+
 char *jsPressOnEnter(char *button);
 /* Returns a javascript statement that clicks button when the Enter key
  * has been pressed; typically this would go in a text input.

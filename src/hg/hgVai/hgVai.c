@@ -631,6 +631,7 @@ printf("<A HREF='https://sites.google.com/site/jpopgen/dbNSFP' TARGET=_BLANK>dbN
 //#*** Another cheap hack: reverse alph order happens to be what we want,
 //#*** but priorities would be cleaner:
 slReverse(&dbNsfpTables);
+jsMakeSetClearContainer();
 struct slName *table;
 for (table = dbNsfpTables;  table != NULL;  table = table->next)
     {
@@ -642,6 +643,7 @@ for (table = dbNsfpTables;  table != NULL;  table = table->next)
     else
 	printDbNsfpSource(table->name, 0);
     }
+jsEndContainer();
 puts("<BR>");
 endCollapsibleSection();
 }
@@ -875,6 +877,7 @@ void selectFiltersFunc()
 {
 startCollapsibleSection("filtersFunc", "Functional role", FALSE);
 printf("Include variants annotated as<BR>\n");
+jsMakeSetClearContainer();
 cartMakeCheckBox(cart, "hgva_include_intergenic", TRUE);
 printf("intergenic<BR>\n");
 cartMakeCheckBox(cart, "hgva_include_upDownstream", TRUE);
@@ -902,6 +905,7 @@ if (regTrackRefList != NULL)
     printf("regulatory element (note: these are detected only if one or more tracks "
 	   "are selected in Regulatory regions above)<BR>\n");
     }
+jsEndContainer();
 puts("<BR>");
 endCollapsibleSection();
 }
