@@ -107,6 +107,7 @@ tags:
 	ctags ${LIB_TAGS_IN}
 
 cscope: 
+	find `pwd` -name '*.c' -o -name '*.h' > cscope.files
 	cscope -Rb
 # build emacs tags for libraries
 .PHONY: etags
