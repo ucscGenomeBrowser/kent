@@ -1,3 +1,4 @@
+include defaultPriority.ra
 
 track ctgPos override
 shortLabel Contigs
@@ -24,7 +25,7 @@ track refGeneBlatz
 shortLabel Human RefSeq Blatz
 longLabel Human mRNAs aligned with Blatz ident > 83% nearBest .5%
 group genes
-priority 35.1
+priority 2
 visibility pack
 color 12,12,120
 type genePred
@@ -44,7 +45,7 @@ track augustusHints
 shortLabel Augustus using Hints
 longLabel Augustus using transMapped RefSeqs
 group genes
-priority 51.7
+priority 1
 visibility dense
 color 186,85,211
 type genePred
@@ -107,9 +108,6 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
-track xenoRefGene override
-visibility pack
-
 track quality override
 type wig 0 60
 
@@ -117,7 +115,6 @@ track chainSelf
 shortLabel Self Chain
 longLabel $Organism Chained Self Alignments
 group varRep
-priority 400
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -130,7 +127,6 @@ track netSelf
 shortLabel Self Net
 longLabel $Organism Chained Self Alignment Net
 group varRep
-priority 401
 visibility hide
 spectrum on
 type netAlign rheMac2 chainSelf
@@ -162,7 +158,6 @@ subGroup2 tissType Tissue_Type Brain=Brain Ileum=Ileum Kidney=Kidney Liver=Liver
 subGroup3 strand Strand fwd=Forward rev=Reverse
 dimensions dimensionY=tissType dimensionX=strand
 sortOrder tissType=+ strand=+ view=+
-priority 79.2
 type bed 
 dragAndDrop subTracks
 visibility hide
@@ -278,10 +273,8 @@ wgEncode 1
 track nscanGene override
 informant Rhesus N-SCAN uses mouse (mm8) as the informant and iterative pseudogene masking.
 visibility dense
+priority 3
 
 track chainNetMonDom5 override
 matrixHeader A, C, G, T
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-
-track refSeqAnno override
-refSeqAnnoVersion 1.2

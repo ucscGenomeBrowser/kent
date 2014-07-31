@@ -1,10 +1,8 @@
+include defaultPriority.ra
+
 # Local declaration so that local gold.html is picked up.
 track gold override
 html gold
-
-# Local declaration so that local gap.html is picked up.
-track gap override
-html gap
 
 # different type of gold search here so the fragments can be found with
 #	or without their trailing .1

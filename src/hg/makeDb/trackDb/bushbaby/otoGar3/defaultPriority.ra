@@ -1,0 +1,20 @@
+# Mapping and Sequencing
+
+track gc5BaseBw override
+visibility full
+priority 1
+
+# Genes and Gene Predictions
+
+track genscan override
+visibility pack
+priority 1
+
+track xenoRefGene override
+visibility dense
+priority 2
+
+# Variation and Repeats
+
+track rmsk override
+priority 1

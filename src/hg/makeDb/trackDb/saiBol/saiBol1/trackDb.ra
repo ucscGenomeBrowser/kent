@@ -1,25 +1,14 @@
+include defaultPriority.ra
+
 # Local declaration so that local gold.html is picked up.
 track gold override
 html gold
 
-# Local declaration so that local gap.html is picked up.
-track gap override
-html gap
-
 track chainNetMm10 override
-visibility pack
-
-track gc5BaseBw override
-visibility full
-
-track genscan override
 visibility pack
 
 track mrna override
 visibility hide
-
-track xenoRefGene override
-visibility dense
 
 searchTable gold
 searchMethod prefix
