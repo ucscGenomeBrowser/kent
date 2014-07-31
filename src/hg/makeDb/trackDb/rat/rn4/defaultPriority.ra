@@ -1,0 +1,59 @@
+# Mapping and Sequencing
+
+track gap override
+html gap
+priority 1
+
+# Genes and Gene Predictions
+
+# track nscanGene override
+# priority 1
+# This priority is defined in rat/rn4/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+track xenoRefGene override
+priority 2
+
+track refGene override
+priority 3
+
+# track rgdGene2 override
+# priority 4
+# This priority is defined in rat/rn4/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+track sgpGene override
+priority 5
+
+# Literature
+
+track pubs override
+priority 1
+
+# mRNA and EST
+
+track mrna override
+priority 1
+
+track intronEst override
+priority 2
+
+# Comparative Genomics
+
+# track multiz9way
+# priority 1
+# This priority is defined in rat/rn4/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+# Variation and Repeats
+
+track rmsk override
+priority 1
+
+# track snp125 override
+# priority 2
+# This priority is defined in rat/rn4/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+track snp130 override
+priority 3
