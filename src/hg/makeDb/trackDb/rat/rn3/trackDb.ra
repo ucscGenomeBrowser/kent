@@ -2,6 +2,8 @@
 
 include trackDb.chainNet.ra
 
+include defaultPriority.ra
+
 track gcPercent override
 shortLabel GC% 20K
 
@@ -10,7 +12,6 @@ track gc5Base
 shortLabel GC Percent
 longLabel Percentage GC in 5-Base windows
 group map
-priority 23.5
 visibility hide
 autoScale Off
 maxHeightPixels 128:36:16
@@ -25,6 +26,7 @@ type wig 0 100
 track knownGene override
 shortLabel Known Genes
 longLabel UCSC Known Genes Based on UniProt, RefSeq, and GenBank mRNA
+priority 1
 
 track ECgene override
 longLabel ECgene v1.2 Gene Predictions with Alt-Splicing 
@@ -33,6 +35,7 @@ color 155, 0, 125
 track nscanGene override
 visibility dense
 informant Rat N-SCAN uses human (hg17) as the informant and iterative pseudogene masking.
+priority 3
 
 track blastzTightHg15
 shortLabel Human Tight Hg15

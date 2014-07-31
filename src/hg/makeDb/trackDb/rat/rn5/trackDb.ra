@@ -1,19 +1,10 @@
 include trackDb.chainNet.ra
 include cons13way.ra
+include defaultPriority.ra
 
 # Local declaration so that local gold.html is picked up.
 track gold override
 html gold
-
-# Local declaration so that local gap.html is picked up.
-track gap override
-html gap
-
-track mgcFullMrna override
-visibility pack
-
-track xenoRefGene override
-visibility pack
 
 searchTable gold
 shortCircuit 1

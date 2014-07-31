@@ -15,7 +15,6 @@ track cytoBand
 shortLabel Chromosome Band
 longLabel Chromosome Bands Based On ISCN Lengths
 group map
-priority 1
 visibility hide
 altColor 150,50,50
 type bed 4 +
@@ -24,7 +23,6 @@ track recombRateRat
 shortLabel Recomb Rate
 longLabel Recombination Rate from SHRSPxBN and FHHxACI genetic maps (SHRSPxBN default)
 group map
-priority 8
 visibility hide
 type bed 4 +
 
@@ -32,7 +30,6 @@ track bactigPos
 shortLabel Bactigs
 longLabel Bactigs
 group map
-priority 14
 visibility hide
 color 150,0,0
 type bed 4 +
@@ -92,7 +89,6 @@ shortLabel Agilent CGH
 longLabel Agilent CGH Microarray probesets
 compositeTrack on
 group varRep
-priority 143.2
 visibility hide
 noInherit on
 type bed 3
@@ -145,7 +141,6 @@ track affyRAE230
 shortLabel Affy RAE230
 longLabel Alignments of Affymetrix Consensus Sequences from RAE230
 group regulation
-priority 82
 visibility hide
 type psl .
 
@@ -153,7 +148,6 @@ track affyU34A
 shortLabel Affy RG-U34A
 longLabel Alignments of Affymetrix Exemplar Sequences from RG-U34A
 group regulation
-priority 80.1
 visibility hide
 type psl .
 
@@ -161,7 +155,6 @@ track gnfAtlas2
 shortLabel GNF Atlas 2
 longLabel GNF Rat U34A Expression Atlas 2
 group regulation
-priority 80
 visibility hide
 type expRatio
 expScale 4.0
