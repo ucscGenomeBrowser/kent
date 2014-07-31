@@ -27,11 +27,8 @@ void jsInit();
 /* If this is the first call, set window.onload to the operations
  * performed upon loading a page and print supporting javascript.
  * Currently this just sets the page vertical position if specified on
- * CGI, and also calls jsWriteFunctions.
+ * CGI, and includes jsHelper.js.
  * Subsequent calls do nothing, so this can be called many times. */
-
-void jsWriteFunctions();
-/* Write out Javascript functions. */
 
 struct dyString *jsOnChangeStart();
 /* Start up an onChange string */
@@ -65,7 +62,7 @@ void jsTrackedVarCarryOver(struct dyString *dy, char *cgiVar, char *jsVar);
 char *jsRadioUpdate(char *cgiVar, char *jsVar, char *val);
 /* Make a little javascript to check and uncheck radio buttons
  * according to new value.  To use this you must have called
- * jsWriteFunctions somewhere, and also must use jsMakeTrackingRadioButton
+ * jsInit somewhere, and also must use jsMakeTrackingRadioButton
  * to make the buttons. */
 
 char *jsSetVerticalPosition(char *form);
