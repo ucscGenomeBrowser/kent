@@ -882,7 +882,7 @@ hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" NAME=\"mainForm\" METHOD=\"%s\">",
 	cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 
-jsWriteFunctions();
+jsInit();
 
 allJoiner = joinerRead("all.joiner");
 initGroupsTracksTables();
