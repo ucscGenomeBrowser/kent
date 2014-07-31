@@ -9,7 +9,6 @@ track jaxQTLLift
 shortLabel MGI QTL LiftO
 longLabel Mouse Genome Informatics Quantitative Trait Loci ***Lifted from NCBI 36 (mm8)***
 group map
-priority 21.11
 visibility hide
 color 200,100,0
 type bed 6 +
@@ -38,7 +37,6 @@ track knownGeneOld4
 shortLabel Old UCSC Genes
 longLabel Previous Version of UCSC Genes
 group genes
-priority 34.1
 visibility hide
 color 82,82,160
 type genePred
@@ -51,7 +49,6 @@ track pseudoYale60
 shortLabel Yale Pseudo60
 longLabel Yale Pseudogenes based on Ensembl Release 60
 group genes
-priority 53
 visibility hide
 spectrum on
 type genePred
@@ -75,7 +72,6 @@ shortLabel Retroposed Genes
 longLabel Retroposed GenesV1, Including Pseudogenes - November 2010 
 group genes
 type psl
-priority 37.5
 color 20,0,250
 visibility hide
 ucscRetroInfo ucscRetroInfo1
@@ -126,7 +122,6 @@ track NIAGene
 shortLabel NIA Gene Index
 longLabel NIA Mouse Gene Index
 group genes
-priority 54
 visibility hide
 color 0,60,120
 altColor 200,220,255
@@ -144,7 +139,6 @@ longLabel Mouse Genome Informatics Representative Transcript ***Lifted from NCBI
 group phenoAllele
 visibility hide
 color 0,0,150
-priority 70.01
 type genePred
 url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=markerDetail&id=$$
 urlLabel MGI Gene Detail:
@@ -157,7 +151,6 @@ longLabel Mouse Genome Informatics Representative Transcript ***Lifted from NCBI
 group phenoAllele
 visibility hide
 color 0,0,150
-priority 70
 type genePred
 url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=markerDetail&id=$$
 urlLabel MGI Gene Detail:
@@ -170,7 +163,6 @@ longLabel Mouse Genome Informatics Phenotype ***Lifted from NCBI 36 (mm8)***
 group phenoAllele
 visibility hide
 color 190,110,0
-priority 71.01
 type bed 12 +
 noScoreFilter .
 url http://www.informatics.jax.org/searches/allele_report.cgi?markerID=$$
@@ -183,7 +175,6 @@ longLabel Mouse Genome Informatics Phenotype ***Lifted from NCBI 36 (mm8)***
 group phenoAllele
 visibility hide
 color 190,110,0
-priority 71
 type bed 12 +
 noScoreFilter .
 url http://www.informatics.jax.org/searches/allele_report.cgi?markerID=$$
@@ -197,7 +188,6 @@ group phenoAllele
 visibility hide
 color 200, 0, 110
 altColor 200, 0, 110
-priority 72.01
 type bed 12 +
 noScoreFilter .
 url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=alleleDetail&id=$$
@@ -211,7 +201,6 @@ group phenoAllele
 visibility hide
 color 200, 0, 110
 altColor 200, 0, 110
-priority 72
 type bed 12 +
 noScoreFilter .
 url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=alleleDetail&id=$$
@@ -222,7 +211,6 @@ track chainSelf
 shortLabel Self Chain
 longLabel $Organism Chained Self Alignments
 group varRep
-priority 400
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -235,7 +223,6 @@ track netSelf
 shortLabel Self Net
 longLabel $Organism Chained Self Alignment Net
 group varRep
-priority 401
 visibility hide
 spectrum on
 type netAlign mm9 chainSelf
@@ -269,7 +256,6 @@ track exoniphy
 shortLabel Exoniphy
 longLabel Exoniphy Mouse/Rat/Human/Dog
 group genes
-priority 50.9
 visibility hide
 color 173,17,162
 type genePred
@@ -289,7 +275,7 @@ dimensions dimensionX=clade
 visibility full
 type bed 4
 group compGeno
-priority 103.2
+priority 1
 
     track cons30wayViewalign
     shortLabel Multiz Alignments
@@ -485,7 +471,6 @@ track transcriptome
 shortLabel Transcriptome
 longLabel TROMER Transcriptome database
 group genes
-priority 66
 color 56,108,56
 type genePred
 url http://ccg.vital-it.ch/cgi-bin/tromer/tromer_quick_search.pl?db=mm9&query_str=$$
@@ -504,7 +489,6 @@ subGroup2 tissType Tissue_Type Brain=Brain Kidney=Kidney Liver=Liver Muscle=Musc
 subGroup3 strand Strand fwd=Forward rev=Reverse
 dimensions dimensionY=tissType dimensionX=strand
 sortOrder tissType=+ strand=+ view=+
-priority 79.2
 type bed 
 dragAndDrop subTracks
 visibility hide
@@ -604,7 +588,6 @@ track rest
 shortLabel REST
 longLabel Repressor Element 1-Silencing Transcription Factor (REST) binding sites
 group regulation
-priority 92
 visibility hide
 color 0,0,200
 altColor 255,0,0
@@ -615,7 +598,6 @@ compositeTrack on
 shortLabel Vega Genes
 longLabel Vega Annotations
 group genes
-priority 37.1
 visibility hide
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chrX,chrY
 type genePred vegaPep
@@ -898,7 +880,6 @@ maxHeightPixels 128:64:20
         shortLabel NKI Nuc Lamina
         longLabel NKI Nuclear Lamina Associated Domains (LaminB1 DamID)
         group regulation
-        priority 300
 	html laminB1Mm9
 
 #ES
@@ -978,7 +959,6 @@ compositeTrack on
 shortLabel NumtS Sequence
 longLabel Mouse NumtS mitochondrial sequence
 group varRep
-priority 500.5
 visibility hide
 noInherit on
 type bed 3 .

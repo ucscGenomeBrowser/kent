@@ -2,9 +2,12 @@
 
 include trackDb.chainNet.ra
 
+include defaultPriority.ra
+
 track knownGene override
 shortLabel Known Genes
 longLabel UCSC Known Genes (November, 05) Based on UniProt, RefSeq, and GenBank mRNA
+priority 1
 
 track chainOryCun1 override
 priority 259.5
@@ -143,7 +146,7 @@ track multiz17way
 shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation 
 group compGeno
-priority 104.2
+priority 1
 visibility pack
 color 0, 10, 100
 altColor 0,90,10
