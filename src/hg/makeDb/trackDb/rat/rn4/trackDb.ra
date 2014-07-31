@@ -1,5 +1,7 @@
 include trackDb.chainNet.ra
 
+include defaultPriority.ra
+
 track quality override
 type wig 0 99
 
@@ -11,7 +13,7 @@ track rgdGene2
 shortLabel RGD Genes
 longLabel RGD Genes
 group genes
-priority 33.1
+priority 4
 hgGene on
 hgsid on
 directUrl ../cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
@@ -24,7 +26,7 @@ track multiz9way
 shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation
 group compGeno
-priority 101.1
+priority 1
 visibility pack
 color 0, 10, 100
 altColor 0,90,10
@@ -59,13 +61,14 @@ type bed 5 .
 track nscanGene override
 visibility pack
 informant Rat N-SCAN uses human (hg18) as the informant and iterative pseudogene masking.
+priority 1
 
 track snp125
 #replaces record snp125 in parent dir missing/extra maxWindowToDraw
 shortLabel SNPs
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 125)
 group varRep
-priority 143.1
+priority 2
 visibility dense
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
@@ -98,7 +101,6 @@ subGroup2 tissType Tissue_Type Brain=Brain Testis=Testis
 subGroup3 strand Strand fwd=Forward rev=Reverse
 dimensions dimensionY=tissType dimensionX=strand
 sortOrder tissType=+ strand=+ view=+
-priority 79.2
 type bed 
 dragAndDrop subTracks
 visibility hide
@@ -238,7 +240,6 @@ track knownGenePrevious
 shortLabel Old Known Genes
 longLabel Previous Version of Known Genes
 group genes
-priority 34.1
 visibility hide
 color 82,82,160
 type genePred
