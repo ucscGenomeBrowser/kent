@@ -17,7 +17,7 @@ aggregate bigWig wig bedGraph
 aliQualRange bam
 allButtonPair *
 altColor *
-alwaysZero wig bedGraph
+alwaysZero wig bedGraph bigWig
 applyMinQual vcf vcfTabix
 autoScale *
 autoTranslate genePred

@@ -183,3 +183,27 @@ urlLabel NCBI CloneDB:
     superTrack cloneEndSuper hide
     shortLabel WI2
     longLabel 587,165 end placements, average size 77,576 bases - WIBR-2 Fosmid library
+
+    track cloneEnd_multipleMaps
+    superTrack cloneEndSuper hide
+    shortLabel Multiple mappings
+    longLabel Clone end placements that map to multiple locations in the genome
+
+    track cloneEnd_coverageForward
+    superTrack cloneEndSuper hide
+    shortLabel Coverage forward strand
+    longLabel Clone end placements overlap coverage on the forward strand
+    type bigWig 0 5428
+    autoScale on
+    alwaysZero on
+    windowingFunction mean
+
+    track cloneEnd_coverageReverse
+    superTrack cloneEndSuper hide
+    shortLabel Coverage reverse strand
+    longLabel Clone end placements overlap coverage on the reverse strand
+    type bigWig 0 4157
+    negateValues 1
+    alwaysZero on
+    windowingFunction mean
+    autoScale on
