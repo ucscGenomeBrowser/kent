@@ -1,13 +1,10 @@
-
 include trackDb.chainNet.ra
+
+include defaultPriority.ra
 
 # Local declaration so that local gold.html is picked up.
 track gold override
 html gold
-
-# Local declaration so that local gap.html is picked up.
-track gap override
-html gap
 
 track ctgPos2
 shortLabel Scaffolds
@@ -33,7 +30,7 @@ dragAndDrop subTracks
 visibility full
 type bed 4
 group compGeno
-priority 103.29
+priority 1
 
     track cons11wayViewalign
     shortLabel Multiz Alignments

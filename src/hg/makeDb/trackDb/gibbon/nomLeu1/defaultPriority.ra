@@ -1,0 +1,21 @@
+# Mapping and Sequencing
+
+track gap override
+html gap
+priority 1
+
+# Genes and Gene Predictions
+
+track xenoRefGene override
+visibility squish
+priority 1
+
+# mRNA and EST
+
+track mrna override
+priority 1
+
+# Variation and Repeats
+
+track rmsk override
+priority 1

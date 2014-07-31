@@ -1,0 +1,17 @@
+# Genes and Gene Predictions
+
+track genscan override
+visibility pack
+priority 1
+
+track xenoRefGene override
+visibility dense
+priority 2
+
+track refGene override
+priority 3
+
+# Variation and Repeats
+
+track rmsk override
+priority 1

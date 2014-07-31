@@ -7931,7 +7931,7 @@ void printUpdateTime(char *database, struct trackDb *tdb,
 if (trackHubDatabase(database))
     return;
 /* have not decided what to do for a composite container */
-if (tdbIsComposite(tdb))
+if (tdbIsComposite(tdb) || tdbIsSuper(tdb))
     return;
 struct sqlConnection *conn = NULL;
 char *tableName = NULL;

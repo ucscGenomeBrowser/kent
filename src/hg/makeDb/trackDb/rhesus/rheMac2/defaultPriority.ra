@@ -1,0 +1,46 @@
+# Mapping and Sequencing
+
+track gap override
+priority 1
+
+# Genes and Gene Predictions
+
+# track augustusHints override
+# priority 1
+# This priority is defined in rhesus/rheMac2/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+# track refGeneBlatz override
+# # priority 2
+# # This priority is defined in rhesus/rheMac2/trackDb.ra
+# # If this priority changes, please change it here and there as well
+
+# track nscanGene override
+# priority 3
+# This priority is defined in rhesus/rheMac2/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+track xenoRefGene override
+visibility pack
+priority 4
+
+track refSeqAnno override
+refSeqAnnoVersion 1.2
+priority 5
+
+track refGene override
+visibility pack
+priority 6
+
+# mRNA and EST
+
+track mrna override
+priority 1
+
+track intronEst override
+priority 2
+
+# Variation and Repeats
+
+track rmsk override
+priority 1

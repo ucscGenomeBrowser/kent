@@ -982,7 +982,7 @@ hPrintf("</script>\n");
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n",
 	getScriptName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
-jsWriteFunctions();
+jsInit();
 showMainControlTable(conn);
 hPrintf("</FORM>\n");
 

@@ -1,5 +1,7 @@
 include trackDb.chainNet.ra
 
+include defaultPriority.ra
+
 # Local declaration so that local gold.html is picked up.
 track gold override
 html gold
@@ -13,7 +15,6 @@ track ctgPos2
 shortLabel Scaffolds
 longLabel Assembly Scaffolds
 group map
-priority 10
 visibility hide
 type ctgPos
 
@@ -27,13 +28,7 @@ searchPriority 5
 track intronEst override
 visibility hide
 
-track refGene override
-visibility pack
-
 track chainNetMm10 override
-visibility dense
-
-track xenoRefGene override
 visibility dense
 
 searchTable gold
