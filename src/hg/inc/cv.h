@@ -69,6 +69,7 @@
 #define CV_TERM_LOCALIZATION    "localization"
 #define CV_TERM_VIEW            "view"
 #define CV_TERM_SEQ_PLATFORM    "seqPlatform"
+#define CV_TERM_TREATMENT       "treatment"
 
 #define CV_LABEL_EMPTY_IS_NONE  "None"
 
