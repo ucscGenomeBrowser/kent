@@ -2288,3 +2288,15 @@ track pubsBingBlat override
 group phenDis
 
 include defaultPriority.ra
+
+# This is an exploratory track on dev for proteomics (might become a public hub)
+track peptideAtlas
+table peptideAtlas2
+shortLabel Peptide Atlas
+longLabel Peptide sequences identified by tandem MS from PeptideAtlas
+type bedDetail 6
+url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=393&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
+urlLabel Link to PeptideAtlas:
+group expression
+color 82, 82. 160
+
