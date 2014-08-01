@@ -7,10 +7,11 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 A = hgc
 
 O = $A.o bamClick.o bigBedClick.o dbRIP.o ccdsClick.o cgapSageClick.o encodeClick.o expClick.o \
-	gencodeClick.o gvfClick.o hgdpClick.o joinedRmskClick.o \
+	gencodeClick.o gvfClick.o hgdpClick.o \
 	lowelab.o lrgClick.o \
 	mafClick.o makeItemsClick.o mgcClick.o \
-	parClick.o peakClusters.o regMotif.o retroClick.o rnaFoldClick.o \
+	parClick.o peakClusters.o regMotif.o retroClick.o rmskJoinedClick.o \
+	rnaFoldClick.o \
 	transMapClick.o txCdsInfo.o pubs.o vcfClick.o virusClick.o wiggleClick.o \
 	wikiTrack.o variomeClick.o numtsClick.o geneReviewsClick.o
 
