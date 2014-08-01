@@ -1,7 +1,4 @@
 /* regClusterMakeTableOfTables - Make up a table of tables for regCluster program. */
-
-/* Copyright (C) 2013 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -9,7 +6,8 @@
 #include "obscure.h"
 #include "sqlNum.h"
 #include "hmmstats.h"
-
+#include "mdb.h"
+#include "jksql.h"
 
 int scoreColIx = 7;
 
@@ -22,12 +20,13 @@ errAbort(
   "   regClusterMakeTableOfTables type fileListFile output\n"
   "Where the fileListFile is a list of narrowPeak format files,\n"
   "and type is one of:\n"
-  "        ans01 - Anshul's uniform peaks from Jan 2011 ENCODE freeze\n"
-  "        ans02 - Anshul's uniform peaks from June 2012 ENCODE freeze\n"
+  "        ans01 - Anshul's uniform ChIp-seq peaks from Jan 2011 ENCODE freeze\n"
+  "        ans02 - Anshul's uniform ChIP-seq peaks from June 2012 ENCODE freeze\n"
   "        uw01 - From UW DNase file names for hg18\n"
   "        uw02 - From UW DNase file names for hg19 as of Jan 2011 freeze\n"
   "        enh01 - From enhancer picks\n"
   "        awgDnase01 - AWG uniform dnase peaks, named wgEncodeAwgDnase<lab><cell>Peak.bigBed from Jan 2011 ENCODE freeze\n"
+  "        awgDnase01Hg19 - AWG uniform dnase peaks, with cell type + treatment metadata from hg19 metaDb\n"
   "options:\n"
   "    scoreColIx=N (default %d) Index (1 based) of score column in files.  Use 5 for bed,\n"
   "               7 for narrowPeak"
@@ -143,9 +142,37 @@ fprintf(f, "\t%s\t%s", cell, rep);
 }
 
 void awgDnase01MetaOut(FILE *f, char *midString)
-/* uw02MetaOut - Version of function used for AWG. Doesn't include metadata */
+/* Version of function used for AWG. Doesn't include metadata */
 {
 fprintf(f, "\t.");
+}
+
+
+/* Version of function used for AWG DNase with metadata */
+static struct sqlConnection *conn = NULL;
+
+void awgDnase01Hg19MetaOut(FILE *f, char *objName)
+/* Version of function used for AWG DNase with metadata */
+{
+if (conn == NULL)
+    conn = sqlConnect("hg19");
+struct mdbObj *obj = NULL;
+AllocVar(obj);
+obj->obj = objName;
+obj = mdbObjQuery(conn, MDB_DEFAULT_NAME, obj);
+char *cell = NULL, *treatment = NULL;
+if (obj && obj->varHash != NULL)
+    {
+    struct mdbVar *var = hashFindVal(obj->varHash, MDB_VAR_CELL);
+    if (var != NULL)
+        cell = var->val;
+    var = hashFindVal(obj->varHash, MDB_VAR_TREATMENT);
+    if (var != NULL)
+        treatment = var->val;
+    }
+fprintf(f, "\t%s", cell);
+if (treatment != NULL && differentString(treatment, "None"))
+    fprintf(f, "+%s", treatment);
 }
 
 char *findKnownPrefix(char *s, char **prefixes)
@@ -230,8 +257,13 @@ if (patPos != NULL)
     // force to Rep1 
     patPos += strlen(pattern);
     *patPos++ = '1';
+    *patPos = 0;
     }
+
 // allow for no replicates (e.g. OpenChrom)
+
+verbose(3, "Endstring=%s\n", endString);
+
 fprintf(f, "\twgEncode%s\twgEncode%s", midString, endString);
 }
 
@@ -320,6 +352,12 @@ for (in = inList; in != NULL; in = in->next)
         enh01MetaOut(f, midString);
     else if (sameString(type, "awgDnase01"))
         awgDnase01MetaOut(f, midString);
+    else if (sameString(type, "awgDnase01Hg19"))
+        {
+        // strip extension to get mdbObject name 
+        chopSuffix(s);
+        awgDnase01Hg19MetaOut(f, s);
+        }
     else
 	errAbort("Unknown type '%s' in first command line parameter.", type);
     freez(&midString);
