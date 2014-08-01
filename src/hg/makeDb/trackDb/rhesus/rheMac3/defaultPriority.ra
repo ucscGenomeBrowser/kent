@@ -1,0 +1,19 @@
+# Genes and Gene Predictions
+
+track xenoRefGene override
+visibility dense
+priority 1
+
+track refGene override
+visibility pack
+priority 2
+
+# mRNA and EST
+
+track mrna override
+priority 1
+
+# Variation and Repeats
+
+track rmsk override
+priority 1

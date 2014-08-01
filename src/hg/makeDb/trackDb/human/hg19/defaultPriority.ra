@@ -1,11 +1,55 @@
-
 # Genes and Gene Predictions
+
+# track knownGene override
+# priority 1
+# This priority is defined in human/hg19/trackDb.ra
+# If this priority changes, please change it here and there as well
+
 track refGene override
 priority 2
 
+# Phenotype and Literature
+
+track pubs override
+group phenDis
+priority 1
+
 # mRNA and EST
+
 track mrna override
 priority 1
 
 track intronEst override
 priority 2
+
+# Regulation
+
+# track wgEncodeReg override
+# priority 1
+# This priority is defined in human/hg19/wgEncodeReg.ra
+# If this priority changes, please change it here and there as well
+
+# Comparative Genomics
+
+# track cons100way override
+# priority 1
+# This priority is defined in human/hg19/trackDb.100way.ra
+# If this priority changes, please change it here and there as well
+
+# Variation
+
+# track snp138Common override
+# priority 1
+# This priority is defined in human/hg19/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+# track snp141Common override
+# priority 2
+# This priority is defined in human/hg19/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+# Repeats
+
+track rmsk override
+group rep
+priority 1

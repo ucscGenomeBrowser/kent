@@ -73,7 +73,8 @@ if (sponge)
     for (i=0; i<head->n_targets; ++i)
 	{
 	char *name = head->target_name[i];
-	if (startsWith("other|", name) || startsWith("mito|", name) || startsWith("ribo|", name))
+	if (startsWith("other|", name) || startsWith("mito|", name) || startsWith("ribo|", name)
+	   || startsWith("cen", name))
 	    {
 	    assert(i < head->n_targets);
 	    skipChrom[i] = TRUE;

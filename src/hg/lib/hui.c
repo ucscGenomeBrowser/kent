@@ -4645,6 +4645,7 @@ boolean doNegative = wigFetchDoNegativeWithCart(cart,tdb,tdb->track, (char **) N
 printf("<TABLE BORDER=0>");
 
 boolean parentLevel = isNameAtParentLevel(tdb, name);
+boolean didAggregate = FALSE;
 if (parentLevel)
     {
     assert(tdb->parent != NULL);
@@ -4662,6 +4663,8 @@ if (parentLevel)
 	    {
 	    windowingFunction = "maximum";
 	    }
+
+	didAggregate = TRUE;
         }
     }
 
@@ -4738,8 +4741,9 @@ else
     printf("<A HREF=\"%s\" TARGET=_blank>Graph configuration help</A>",WIGGLE_HELP_PAGE);
     }
 
-// add a little javascript call to make sure we don't get whiskers with stacks
-printf("<script> $(function () { multiWigSetupOnChange('%s'); }); </script>\n", name);
+// add a little javascript call to make sure we don't get whiskers with stacks in multiwigs
+if (didAggregate)
+    printf("<script> $(function () { multiWigSetupOnChange('%s'); }); </script>\n", name);
 
 cfgEndBox(boxed);
 }
@@ -7927,7 +7931,7 @@ void printUpdateTime(char *database, struct trackDb *tdb,
 if (trackHubDatabase(database))
     return;
 /* have not decided what to do for a composite container */
-if (tdbIsComposite(tdb))
+if (tdbIsComposite(tdb) || tdbIsSuper(tdb))
     return;
 struct sqlConnection *conn = NULL;
 char *tableName = NULL;

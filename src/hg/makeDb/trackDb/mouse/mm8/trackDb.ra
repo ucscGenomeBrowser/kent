@@ -2,23 +2,24 @@
 
 include trackDb.chainNet.ra
 
+include defaultPriority.ra
+
 track wssdCoverage
 shortLabel WSSD Coverage
 longLabel Regions Assayed for SDD
 group map
-priority 29
 visibility hide
 type bed 3 .
 
 track knownGene override
 shortLabel Known Genes
 longLabel UCSC Known Genes Based on UniProt, RefSeq, and GenBank mRNA
+priority 1
 
 track NIAGene
 shortLabel NIA Gene Index
 longLabel NIA Mouse Gene Index
 group genes
-priority 54
 visibility hide
 color 0,60,120
 altColor 200,220,255
@@ -33,7 +34,7 @@ track multiz17way
 shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation 
 group compGeno
-priority 104.2
+priority 1
 visibility pack
 color 0, 10, 100
 altColor 0,90,10
@@ -59,7 +60,6 @@ track chainSelf
 shortLabel Self Chain 
 longLabel $Organism Chained Self Alignments
 group varRep
-priority 400
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -72,7 +72,6 @@ track netSelf
 shortLabel Self Net
 longLabel $Organism Chained Self Alignment Net
 group varRep
-priority 401
 visibility hide
 spectrum on
 type netAlign mm8 chainSelf
@@ -123,7 +122,6 @@ track exoniphy
 shortLabel Exoniphy 
 longLabel Exoniphy Mouse/Rat/Human/Dog 
 group genes 
-priority 50.9 
 visibility hide 
 color 173,17,162 
 type genePred 
@@ -496,7 +494,6 @@ dimensions dimensionX=CEL dimensionY=FAC
 sortOrder CEL=+ FAC=+ view=-
 dragAndDrop subTracks
 visibility hide
-priority 130
 type bed 3
 
     track broadChromatinChIPSeqViewHMM

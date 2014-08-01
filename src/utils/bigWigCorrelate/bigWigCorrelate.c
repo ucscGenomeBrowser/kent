@@ -7,6 +7,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "obscure.h"
 #include "correlate.h"
 #include "bbiFile.h"
 #include "bigBed.h"
@@ -23,6 +24,8 @@ errAbort(
   "bigWigCorrelate - Correlate bigWig files, optionally only on target regions.\n"
   "usage:\n"
   "   bigWigCorrelate a.bigWig b.bigWig\n"
+  "or\n"
+  "   bigWigCorrelate listOfFiles\n"
   "options:\n"
   "   -restrict=restrict.bigBed - restrict correlation to parts covered by this file\n"
   "   -threshold=N.N - clip values to this threshold\n"
@@ -103,7 +106,7 @@ bbiChromInfoFreeList(&chromList);
 return grt;
 }
 
-void bigWigCorrelate(char *aFileName, char *bFileName)
+struct correlate *bigWigCorrelate(char *aFileName, char *bFileName)
 /* bigWigCorrelate - Correlate bigWig files, optionally only on target regions.. */
 {
 struct genomeRangeTree *targetGrt = NULL;
@@ -119,17 +122,58 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     addBwCorrelations(chrom, targetGrt, aVals, bVals, aBbi, bBbi, threshold, threshold, c);
     }
+bigWigValsOnChromFree(&aVals);
+bigWigValsOnChromFree(&bVals);
+bbiFileClose(&aBbi);
+bbiFileClose(&bBbi);
+genomeRangeTreeFree(&targetGrt);
+return c;
+}
+
+void bigWigCorrelatePair(char *aFileName, char *bFileName)
+/* Correlate a pair of bigWigs and print result */
+{
+struct correlate *c = bigWigCorrelate(aFileName, bFileName);
 printf("%g\n", correlateResult(c));
+}
+
+void bigWigCorrelateList(char *listFile)
+/* Correlate all files in list to each other */
+{
+char **fileNames = NULL;
+int fileCount = 0;
+char *buf = NULL;
+readAllWords(listFile, &fileNames, &fileCount, &buf);
+int i;
+for (i=0; i<fileCount; ++i)
+    {
+    char *aPath = fileNames[i];
+    char aName[FILENAME_LEN];
+    splitPath(aPath, NULL, aName, NULL);
+    int j;
+    for (j=i+1; j<fileCount; ++j)
+        {
+	char *bPath = fileNames[j];
+	char bName[FILENAME_LEN];
+	splitPath(bPath, NULL, bName, NULL);
+	struct correlate *c = bigWigCorrelate(aPath, bPath);
+	printf("%s\t%s\t%g\n", aName, bName, correlateResult(c));
+	correlateFree(&c);
+	}
+    }
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 2 && argc != 3)
     usage();
 restrictFile = optionVal("restrict", restrictFile);
 threshold = optionDouble("threshold", threshold);
-bigWigCorrelate(argv[1], argv[2]);
+if (argc == 3)
+    bigWigCorrelatePair(argv[1], argv[2]);
+else
+    bigWigCorrelateList(argv[1]);
 return 0;
 }

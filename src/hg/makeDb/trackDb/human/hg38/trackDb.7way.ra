@@ -5,6 +5,7 @@ longLabel Multiz Alignment & Conservation (7 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility full
+priority 1
 type bed 4
 group compGeno
 
@@ -47,7 +48,7 @@ group compGeno
         track phyloP7way
         subTrack cons7wayViewphyloP off
         subGroups view=phyloP
-        shortLabel 7 vertebrates Cons
+        shortLabel 7 Vert. Cons
         longLabel 7 vertebrates Basewise Conservation by PhyloP
         noInherit on
         configurable on
@@ -71,7 +72,7 @@ group compGeno
         track phastCons7way
         subTrack cons7wayViewphastcons off
         subGroups view=phastcons
-        shortLabel 7 vertebrates Cons
+        shortLabel 7 Vert. Cons
         longLabel 7 vertebrates conservation by PhastCons
         noInherit on
         configurable on
@@ -94,7 +95,7 @@ group compGeno
         track phastConsElements7way
         subTrack cons7wayViewelements on
         subGroups view=elements
-        shortLabel 7 vertebrates El
+        shortLabel 7 Vert. El
         longLabel 7 vertebrates Conserved Elements
         noInherit on
         color 110,10,40

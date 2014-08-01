@@ -1914,6 +1914,53 @@ hvGfxUnclip(hvg);
 return y;
 }
 
+static void logTrackList(struct dyString *dy, struct track *trackList)
+/* add visibile tracks to dyString, recursively called */
+{
+if (trackList == NULL)
+    return;
+
+struct track *track;
+for (track = trackList; track != NULL; track = track->next)
+    {
+    int vis = track->limitedVisSet ? track->limitedVis : track->visibility;
+    if (vis)
+	{
+	logTrackList(dy, track->subtracks);
+	if (dy->stringSize)
+	    dyStringAppendC(dy, ',');
+	dyStringPrintf(dy,"%s:%d", track->track, vis);
+	}
+    }
+}
+
+static void logTrackVisibilities (char *hgsid, struct track *trackList)
+/* log visibile tracks and hgsid */
+{
+struct dyString *dy = newDyString(1024);
+
+// build up dyString
+logTrackList(dy, trackList);
+
+// put out ~1024 bye blocks to error_log because otherwise
+// it'll chop up the lines
+char *begin = dy->string;
+char *ptr = begin;
+int count = 0;
+for(ptr=begin; ((ptr = strchr(ptr, ',')) != NULL); ptr++)
+    {
+    if (ptr - begin > 900)
+	{
+	*ptr = 0;
+	fprintf(stderr, "trackLog %d %s %s\n", count++, hgsid, begin);
+	begin = ptr+1;
+	}
+    }
+fprintf(stderr, "trackLog %d %s %s\n", count++, hgsid, begin);
+
+dyStringFree(&dy);
+}
+
 static void rAddToTrackHash(struct hash *trackHash, struct track *trackList)
 /* Add list and any children of list to hash. */
 {
@@ -4425,6 +4472,9 @@ for (track = trackList; track != NULL; track = track->next)
         track->limitedVisSet = TRUE;
 	}
     }
+
+if (sameString(cfgOptionDefault("trackLog", "off"), "on"))
+    logTrackVisibilities(cartSessionId(cart), trackList);
 
 /* pre-load remote tracks in parallel */
 int ptMax = atoi(cfgOptionDefault("parallelFetch.threads", "20"));  // default number of threads for parallel fetch.

@@ -27,11 +27,8 @@ void jsInit();
 /* If this is the first call, set window.onload to the operations
  * performed upon loading a page and print supporting javascript.
  * Currently this just sets the page vertical position if specified on
- * CGI, and also calls jsWriteFunctions.
+ * CGI, and includes jsHelper.js.
  * Subsequent calls do nothing, so this can be called many times. */
-
-void jsWriteFunctions();
-/* Write out Javascript functions. */
 
 struct dyString *jsOnChangeStart();
 /* Start up an onChange string */
@@ -65,7 +62,7 @@ void jsTrackedVarCarryOver(struct dyString *dy, char *cgiVar, char *jsVar);
 char *jsRadioUpdate(char *cgiVar, char *jsVar, char *val);
 /* Make a little javascript to check and uncheck radio buttons
  * according to new value.  To use this you must have called
- * jsWriteFunctions somewhere, and also must use jsMakeTrackingRadioButton
+ * jsInit somewhere, and also must use jsMakeTrackingRadioButton
  * to make the buttons. */
 
 char *jsSetVerticalPosition(char *form);
@@ -74,20 +71,16 @@ char *jsSetVerticalPosition(char *form);
  * jsInit must be called first.
  * Do not free return value!   */
 
-void jsMakeSetClearButton(struct cart *cart,
-			  char *form, char *buttonVar, char *buttonLabel,
-			  char *cartVarPrefix, struct slName *cartVarSuffixList,
-			  char *anchor, boolean currentPos, boolean isSet);
-/* Make a button for setting or clearing all of a list of boolean
- * cart variables (i.e. checkboxes).  If this button was just pressed,
- * set or clear those cart variables.
- * Optional html anchor is appended to the form's action if given.
- * If currentPos, anchor is ignored and jsSetVerticalPosition is used so
- * that the new page gets the same vertical offset as the current page. */
-
 void jsMakeCheckboxGroupSetClearButton(char *buttonVar, boolean isSet);
 /* Make a button for setting or clearing a set of checkboxes with the same name.
  * Uses only javascript to change the checkboxes, no resubmit. */
+
+void jsMakeSetClearContainer();
+/* Begin a wrapper div with class setClearContainer, plus 'Set all' and 'Clear all' buttons.
+ * This should be followed by a bunch of checkboxes, and then a call to jsEndContainer. */
+
+void jsEndContainer();
+/* End a wrapper div. */
 
 char *jsPressOnEnter(char *button);
 /* Returns a javascript statement that clicks button when the Enter key

@@ -509,7 +509,7 @@ static void setSnp125ExtendedNameObserved(struct snp125 *snpList, boolean useRef
 struct snp125 *snpItem = snpList;
 for (;  snpItem != NULL;  snpItem = snpItem->next)
     {
-    boolean doRc = useRefStrand && snpItem->strand[0] == '-';
+    boolean doRc = useRefStrand && ((snpItem->strand[0] == '-') ^ revCmplDisp);
     snpItem->name = snp125ExtendName(snpItem->name, NULL, snpItem->observed, doRc);
     }
 }
@@ -567,7 +567,7 @@ while (snpItem!=NULL && orthoItem!=NULL)
     /* check to see that we're not at the end of either list and that
      * the two list elements represent the same human position */
     cmp = snpOrthoCmp(&snpItem, &orthoItem);
-    boolean doRc = useRefStrand && snpItem->strand[0] == '-';
+    boolean doRc = useRefStrand && ((snpItem->strand[0] == '-') ^ revCmplDisp) ;
     if (cmp < 0)
         {
 	// Update snp->name with observed alleles even if we don't have ortho data

@@ -562,8 +562,7 @@ if ((count > 500) || (count == 0))
     }
 
 
-/* Write some javascript functions */
-jsWriteFunctions();
+jsInit();
 saveOnChangeOtherFunction(graphRows, graphCols, cgaOnly);
 char *jsOther = onChangeOther();
 

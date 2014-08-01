@@ -1,6 +1,7 @@
 #	"$Id: trackDb.ra,v 1.591 2010/05/07 05:35:52 kent Exp $";
 
 include trackDb.chainNet.ra
+include defaultPriority.ra
 
 # ENCODE tracks
 include trackDb.encode.ra
@@ -36,7 +37,7 @@ track hg17Kg
 shortLabel Known Genes II
 longLabel UCSC Known Genes II (June 05, Based on hg17 UCSC Known Genes)
 group genes
-priority 34.1
+priority 1
 visibility pack
 color 12,12,120
 type genePred
@@ -59,7 +60,7 @@ track acembly
 shortLabel Acembly Genes
 longLabel AceView Gene Models With Alt-Splicing
 group genes
-priority 41
+priority 2
 visibility dense
 color 155,0,125
 type genePred acemblyPep acemblyMrna
@@ -90,7 +91,7 @@ track blatFr1
 shortLabel Fugu Blat
 longLabel Takifugu rubripes (Aug. 2002/fr1) Translated Blat Alignments
 group compGeno
-priority 150
+priority 2
 visibility dense
 color 0,60,120
 altColor 200,220,255
@@ -466,7 +467,6 @@ compositeTrack on
 shortLabel HapMap LD
 longLabel HapMap Linkage Disequilibrium - Phase II
 group varRep
-priority 144.49
 visibility hide
 canPack off
 chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX
@@ -505,7 +505,6 @@ compositeTrack on
 shortLabel Structural Var
 longLabel Structural Variation
 group varRep
-priority 146
 visibility hide
 type bed 4 +
 
@@ -570,7 +569,7 @@ track rmsk
 shortLabel RepeatMasker
 longLabel Repeating Elements by RepeatMasker
 group varRep
-priority 147
+priority 1
 visibility dense
 spectrum on
 type rmsk
@@ -582,16 +581,12 @@ priority 147.5
 track vntr
 shortLabel Microsatellites
 longLabel Perfect Microsatellites - VNTR
-priority 148
 group varRep
 visibility hide
 type bed 4 +
 
 track blastzSelfUnmasked override
 longLabel Blastz Self Join Without Repeats Masked (tandem repeats masked)
-
-track simpleRepeat override
-priority 148
 
 
 track gpcr override
@@ -913,7 +908,7 @@ track mzPt1Mm3Rn3Gg2_pHMM
 shortLabel Conservation
 longLabel Human/Chimp/Mouse/Rat/Chicken Multiz Alignments & PhyloHMM Cons 
 group compGeno
-priority 100
+priority 1
 visibility pack
 #color 0, 10, 100
 type wigMaf 0.0 1.0
@@ -1025,7 +1020,6 @@ track regPotential3X
 shortLabel 3x Reg Potential
 longLabel 3-Way Regulatory Potential - Human, Mouse (Feb. 2003/mm3), Rat (June 2003/rn3)
 group regulation
-priority 200
 visibility hide
 autoScale Off
 maxHeightPixels 128:36:16
@@ -1041,7 +1035,6 @@ track regPotential2X
 shortLabel 2x Reg Potential
 longLabel 2-Way Regulatory Potential - Human (hg16), Mouse (Oct. 2003/mm4)
 group regulation
-priority 200
 visibility hide
 autoScale Off
 maxHeightPixels 128:36:16
