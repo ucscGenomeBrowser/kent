@@ -92,6 +92,20 @@ static char *rptClasses[] = {
  *  NOTE: If these are changed, do not forget to update the
  *        help table in joinedRmskTrack.html
  */
+// trying colors from snakePalette
+static Color rmskJoinedClassColors[] = {
+0xff1f77b4,			// SINE - red
+0xffff7f0e,			// LINE - lime
+0xff2ca02c,			// LTR - maroon
+0xffd62728,			// DNA - fuchsia
+0xff9467bd,			// Simple - yellow
+0xff8c564b,			// LowComplex - olive
+0xffe377c2,			// Satellite - blue
+0xff7f7f7f,			// RNA - green
+0xffbcbd22,			// Other - teal
+0xff17becf,			// Unknown - aqua
+};
+/*
 static Color rmskJoinedClassColors[] = {
 0xff0000ff,			// SINE - red
 0xff00ff00,			// LINE - lime
@@ -104,6 +118,7 @@ static Color rmskJoinedClassColors[] = {
 0xff808000,			// Other - teal
 0xffffff00,			// Unknown - aqua
 };
+*/
 
 // Basic range type
 struct Extents
