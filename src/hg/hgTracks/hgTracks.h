@@ -1357,7 +1357,7 @@ void messageLineMethods(struct track *track);
 /* Methods for drawing a single-height message line instead of track items,
  * e.g. if source was compiled without a necessary library. */
 
-void jRepeatMethods(struct track *track);
+void rmskJoinedMethods(struct track *track);
 /* construct track for detailed repeat visualization */
 
 void lrgMethods(struct track *tg);
