@@ -305,7 +305,11 @@
     #   which will extract, uniquify, and assign ID's to sources
     awk 'BEGIN {OFS="\t"}{if ($5 >= 100) print $1, $2, $3, $4, $5, 0, $7}' peak.meta.bed > peak.meta.bed6
     hgBedSources peak.meta.bed6 regDnase
-    mv regDnaseSources.tab wgEncodeRegDnaseClusteredCells.txt
+    mv regDnaseSources.tab wgEncodeRegDnaseClusteredSources.tab
+
+    # Load sources table
+    autoSql $HOME/kent/src/hg/lib/idName.as idName
+    hgLoadSqlTab hg19 wgEncodeRegDnaseClusteredSources idName.sql wgEncodeRegDnaseClusteredSources.tab
 
     # format to BED5+sourceCount+sourceIds+sourceVals
     awk '{print $8}' peak.meta.bed > peak.vals
@@ -342,7 +346,7 @@
     gzip -c wgEncodeRegDnaseClusteredV2.bed > downloads/wgEncodeRegDnaseClusteredV2.bed.gz
     gzip -c wgEncodeRegDnaseClusteredInputsV2.tab > downloads/wgEncodeRegDnaseClusteredInputsV2.tab.gz
     gzip -c wgEncodeRegDnaseClusteredV3.bed > downloads/wgEncodeRegDnaseClusteredV3.bed.gz
-    cp wgEncodeRegDnaseClusteredCells.txt downloads
+    cp wgEncodeRegDnaseClusteredSources.tab downloads
 
     # use (existing) ENCODE DCC downloads dir
     set dload = /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeRegDnaseClustered
@@ -374,9 +378,9 @@
     ln -s release3 beta
     ln -s release3 releaseLatest
     cd $dir/downloads
-    ln wgEncodeRegDnaseClusteredV3.bed.gz wgEncodeRegDnaseClusteredCells.txt $dload
+    ln wgEncodeRegDnaseClusteredV3.bed.gz wgEncodeRegDnaseClusteredSources.tab $dload
     cd $dload
-    ln wgEncodeRegDnaseClusteredV3.bed.gz wgEncodeRegDnaseClusteredCells.txt releaseLatest
+    ln wgEncodeRegDnaseClusteredV3.bed.gz wgEncodeRegDnaseClusteredSources.tab releaseLatest
     cp README.txt releaseLatest
     cd releaseLatest
     md5sum *.gz > md5sum.txt
