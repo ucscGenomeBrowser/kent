@@ -296,6 +296,7 @@
      1281988 wgEncodeRegDnaseClusteredV2.bed
     hgLoadBed hg19 wgEncodeRegDnaseClusteredV2 wgEncodeRegDnaseClusteredV2.bed
 
+    # filter out low scoring, but retain single cell type clusters and load in database
     awk '$5 >= 100' peak.bed > wgEncodeRegDnaseClusteredV3.bed
     wc -l wgEncodeRegDnaseClusteredV3.bed
     # 1867665 wgEncodeRegDnaseClusteredV3.bed

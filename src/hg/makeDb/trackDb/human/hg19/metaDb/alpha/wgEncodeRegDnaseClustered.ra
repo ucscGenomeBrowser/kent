@@ -44,6 +44,14 @@ lab UCSC
 project wgEncode
 tableName wgEncodeRegDnaseClusteredInputs
 
+metaObject wgEncodeRegDnaseClusteredSources
+objType table
+composite wgEncodeRegDnaseClustered
+dataType Cluster
+fileName wgEncodeRegDnaseClusteredSources.tab
+project wgEncode
+tableName wgEncodeRegDnaseClustered
+
 metaObject wgEncodeRegDnaseClusteredV2
 objType table
 composite wgEncodeRegDnaseClustered
@@ -58,4 +66,4 @@ fileName wgEncodeRegDnaseClusteredV3.bed.gz
 project wgEncode
 tableName wgEncodeRegDnaseClusteredV3
 
-# MAGIC: 1427237776
+# MAGIC: 2141994782
