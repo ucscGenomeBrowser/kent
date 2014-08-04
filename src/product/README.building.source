@@ -281,6 +281,15 @@ make: *** [aliType.o] Error 1
     Or, you can set the MYSQLINC and MYSQLLIBS shell environment variables
     to the static MySQL library as mentioned in Step 3 above.
 
+11. Genome browser issues error:
+
+    "PDF format not available" when trying to export to pdf.
+
+    The browser can't find the command 'ps2pdf' which is usually
+    found in /usr/bin/ps2pdf and is installed with the 'ghostscript'
+    package.  Install the 'ghostscript' package and verify ps2pdf is
+    in: /usr/bin/ps2pdf
+
 ====================================================================
 For more details see:
 http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=history;f=src/product/README.building.source

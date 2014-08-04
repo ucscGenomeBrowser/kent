@@ -386,6 +386,7 @@ canPack On
     superTrack wgEncodeReg dense
     inputTrackTable wgEncodeRegDnaseClusteredInputsV2
     inputTableFieldDisplay cellType treatment lab
+    sourceTable wgEncodeRegDnaseClusteredSources
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
     visibility dense
     useScore 1
