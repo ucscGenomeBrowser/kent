@@ -25,7 +25,7 @@ errAbort(
   "   -utr - Add 5UTR and 3UTR features\n"
   "   -honorCdsStat - use cdsStartStat/cdsEndStat when defining start/end\n"
   "    codon records\n"
-  "   -source=src set source name to uses\n"
+  "   -source=src set source name to use\n"
   "   -addComments - Add comments before each set of transcript records.\n"
   "    allows for easier visual inspection\n"
   "Note: use a refFlat table or extended genePred table or file to include\n"
