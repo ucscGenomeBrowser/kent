@@ -910,12 +910,12 @@ void doSaveLocal()
 {
 char *fileName = trimSpaces(cartString(cart, hgsSaveLocalFileName));
 char *compressType = cartString(cart, hgsSaveLocalFileCompress);
-struct pipeline *compressPipe = textOutInit(fileName, compressType);
+struct pipeline *compressPipe = textOutInit(fileName, compressType, NULL);
 
 cleanHgSessionFromCart(cart);
 cartDump(cart);
 
-textOutClose(&compressPipe);
+textOutClose(&compressPipe, NULL);
 }
 
 char *doLoad(boolean fromUrl, char *actionVar)

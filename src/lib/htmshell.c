@@ -20,6 +20,8 @@
 
 jmp_buf htmlRecover;
 
+boolean htmlWarnBoxSetUpAlready=FALSE;
+
 static bool NoEscape = FALSE;
 
 void htmlNoEscape()

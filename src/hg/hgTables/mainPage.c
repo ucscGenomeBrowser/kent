@@ -471,13 +471,20 @@ if (!cfgOptionBooleanDefault("hgta.disableSendOutput", FALSE))
     hPrintf(" Send output to ");
     cgiMakeCheckBoxIdAndJS("sendToGalaxy", doGalaxy(),
         "checkboxGalaxy",
-        "onclick=\"document.getElementById('checkboxGreat').checked=false; return true;\"");
+	"onclick=\"document.getElementById('checkboxGreat').checked=false;"
+	      	  "document.getElementById('checkboxGenomeSpace').checked=false; return true;\"");
     hPrintf("<A HREF=\""GALAXY_URL_BASE"\" target=_BLANK>Galaxy</A>\n");
     nbSpaces(2);
     cgiMakeCheckBoxIdAndJS("sendToGreat", doGreat(),
         "checkboxGreat",
         "onclick=\"return onSelectGreat();\"");
     hPrintf(" <A HREF=\"http://great.stanford.edu\" target=_BLANK>GREAT</A>");
+    nbSpaces(2);
+    cgiMakeCheckBoxIdAndJS("sendToGenomeSpace", doGenomeSpace(),
+	"checkboxGenomeSpace",
+    	"onclick=\"document.getElementById('checkboxGreat').checked=false;"
+		  "document.getElementById('checkboxGalaxy').checked=false; return true;\"");
+    hPrintf(" <A HREF=\"http://www.genomespace.org\" target=_BLANK>GenomeSpace</A>");
     }
 
 hPrintf("</TD></TR>\n");
@@ -961,7 +968,10 @@ hPrintf("%s",
   "MySQL server</A>. "
   "To examine the biological function of your set through annotation "
   "enrichments, send the data to "
-  "<A HREF=\"http://great.stanford.edu\">GREAT</A>. Refer to the "
+  "<A HREF=\"http://great.stanford.edu\" target=_BLANK>GREAT</A>. "
+  "Send data to "
+  "<A HREF=\"http://www.genomespace.org\" target=_BLANK>GenomeSpace</A> for use with diverse computational tools. "
+  "Refer to the "
   "<A HREF=\"../goldenPath/credits.html\">Credits</A> page for the list of "
   "contributors and usage restrictions associated with these data. "
   "All tables can be downloaded in their entirety from the "
@@ -972,6 +982,7 @@ hPrintf("%s",
 hPrintf("<script type=\"text/javascript\">\n");
 hPrintf("function onSelectGreat() {\n");
 hPrintf("document.getElementById('checkboxGalaxy').checked=false;\n");
+hPrintf("document.getElementById('checkboxGenomeSpace').checked=false;\n");
 hPrintf("document.getElementById('outBed').selected=true;\n");
 hPrintf("return true;\n");
 hPrintf("}\n");

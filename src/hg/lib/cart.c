@@ -1618,6 +1618,7 @@ void cartWebEnd()
 {
 webEnd();
 popWarnHandler();
+inWeb = FALSE;
 }
 
 void cartFooter(void)

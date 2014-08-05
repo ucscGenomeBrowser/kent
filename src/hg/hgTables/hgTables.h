@@ -438,6 +438,9 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaDoGalaxyQuery "hgta_doGalaxyQuery"
 #define hgtaDoGreatOutput "hgta_doGreatOutput"
 #define hgtaDoGreatQuery "hgta_doGreatQuery"
+#define hgtaDoGsLogin "hgta_doGsLogin"
+#define hgtaGsUser "hgta_gsUser"
+#define hgtaGsPassword "hgta_gsPassword"
 #define hgtaDoLookupPosition "hgta_doLookupPosition"
 #define hgtaDoMetaData "hgta_doMetaData"
 #define hgtaDoSetUserRegions "hgta_doSetUserRegions"
@@ -1131,6 +1134,27 @@ void doGetGreatOutput(void (*dispatch)());
 
 void doGreatTopLevel();
 /* intermediate page for sending to GREAT directly from top form */
+
+/* --------------- GenomeSpace functions --------------- */
+boolean doGenomeSpace();
+/* Has the send query results to GenomeSpace checkbox been selected? */
+
+boolean checkGsReady();
+/* check that GS requirements are met */
+
+void doGsLogin(struct sqlConnection *conn);
+/* Process user password post. */
+
+void gsSendToDM();
+/* upload the generated file to DM */
+
+void getBackgroundStatus(char *url);
+/* fetch status as the latest complete html block available */
+
+void startBackgroundWork(char *exec, char **pWorkUrl);
+/* deal with forking off child for background work
+ * and setting up the trash file for communicating
+ * from the child to the browser */
 
 /* --------------- wikiTrack functions --------------- */
 void wikiTrackDb(struct trackDb **list);

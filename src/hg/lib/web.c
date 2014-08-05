@@ -34,6 +34,9 @@
 boolean webHeadAlreadyOutputed = FALSE;
 /* flag that tell if text CGI header hsa been outputed */
 boolean webInTextMode = FALSE;
+
+struct hash *includedResourceFiles = NULL;
+
 static char *dbCgiName = "db";
 static char *orgCgiName = "org";
 static char *cladeCgiName = "clade";
@@ -1189,7 +1192,6 @@ char *webTimeStampedLinkToResourceOnFirstCall(char *fileName, boolean wrapInHtml
 // else returns NULL.  Useful to ensure multiple references to the same resource file are not made
 // NOTE: png, jpg and gif should also be supported but are untested.
 {
-static struct hash *includedResourceFiles = NULL;
 if (!includedResourceFiles)
     includedResourceFiles = newHash(0);
 

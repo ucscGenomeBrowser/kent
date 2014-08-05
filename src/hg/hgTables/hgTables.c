@@ -36,6 +36,7 @@
 #include "udc.h"
 #include "chromInfo.h"
 #include "knetUdc.h"
+#include "trashDir.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -69,6 +70,9 @@ char *curTable;		/* Currently selected table. */
 struct joiner *allJoiner;	/* Info on how to join tables. */
 
 static struct pipeline *compressPipeline = (struct pipeline *)NULL;
+
+char *gsTemp = NULL;
+int saveStdout = -1;
 
 boolean allowAllTables(void)
 /* determine if all tables should is allowed by configuration */
@@ -189,6 +193,7 @@ va_end(args);
 void htmlClose()
 /* Close down html format page. */
 {
+popWarnHandler();
 cartWebEnd();
 }
 
@@ -229,6 +234,7 @@ else
     return hgTablesName();
 }
 
+
 void textOpen()
 /* Start up page in text format. (No need to close this).
  *	In case of pipeline output to a compressor, it is closed
@@ -239,7 +245,17 @@ char *fileName = cartUsualString(cart, hgtaOutFileName, "");
 char *compressType = cartUsualString(cart, hgtaCompressType,
 				     textOutCompressNone);
 
-compressPipeline = textOutInit(fileName, compressType);
+if (doGenomeSpace())
+    {
+    char hgsid[64];
+    struct tempName tn;
+    safef(hgsid, sizeof(hgsid), "%s", cartSessionId(cart));
+    trashDirFile(&tn, "genomeSpace", hgsid, ".tmp");
+    gsTemp = cloneString(tn.forCgi);
+    fileName = gsTemp;
+    }
+
+compressPipeline = textOutInit(fileName, compressType, &saveStdout);
 }
 
 
@@ -1695,6 +1711,11 @@ if (track != NULL)
 	return;
 	}
     }
+if (doGenomeSpace())
+    {
+    if (!checkGsReady())
+	return;
+    }
 if (doGreat())
     verifyGreatFormat(output);
 if (sameString(output, outPrimaryTable))
@@ -1912,6 +1933,11 @@ else if (cartVarExists(cart, hgtaDoClearUserRegions))
     doClearUserRegions(conn);
 else if (cartVarExists(cart, hgtaDoMetaData))
     doMetaData(conn);
+else if (cartVarExists(cart, hgtaDoGsLogin))
+    {
+    doGsLogin(conn);
+    dispatch();
+    }
 else	/* Default - put up initial page. */
     doMainPage(conn, FALSE);
 cartRemovePrefix(cart, hgtaDo);
@@ -1976,14 +2002,17 @@ if (curTrack == NULL)
     }
 }
 
+
 void hgTables()
 /* hgTables - Get table data associated with tracks and intersect tracks.
  * Here we set up cart and some global variables, dispatch the command,
  * and put away the cart when it is done. */
 {
+
 char *clade = NULL;
 
 setUdcCacheDir();
+
 oldVars = hashNew(10);
 
 /* Sometimes we output HTML and sometimes plain text; let each outputter
@@ -2000,14 +2029,28 @@ if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
 knetUdcInstall();
 
+char *backgroundStatus = cartUsualString(cart, "backgroundStatus", NULL);
+if (backgroundStatus)
+    {
+    getBackgroundStatus(backgroundStatus);
+    exit(0);
+    }
+
+char *backgroundExec = cgiUsualString("backgroundExec", NULL);
+if (sameOk(backgroundExec,"gsSendToDM"))
+    {
+    gsSendToDM();
+    exit(0);
+    }
+
 /* Init track and group lists and figure out what page to put up. */
 initGroupsTracksTables();
 if (lookupPosition())
     {
     if (cartUsualBoolean(cart, hgtaDoGreatOutput, FALSE))
-        doGetGreatOutput(dispatch);
+	doGetGreatOutput(dispatch);
     else
-        dispatch();
+	dispatch();
     }
 else
     {
@@ -2017,6 +2060,30 @@ else
     doMainPage(conn, TRUE);
     hFreeConn(&conn);
     }
+
+textOutClose(&compressPipeline, &saveStdout);
+
+if (doGenomeSpace())
+    {
+    if (gsTemp)
+	{
+	cartSetString(cart, "gsTemp", gsTemp);
+	char *workUrl = NULL;
+	startBackgroundWork("./hgTables backgroundExec=gsSendToDM", &workUrl);
+
+	htmlOpen("Uploading Output to GenomeSpace");
+
+	puts("<script type=\"text/JavaScript\">");
+	puts("<!--");
+	printf("setTimeout(\"location = 'hgTables?backgroundStatus=%s';\",2000);\n", cgiEncode(workUrl)); // was 10000?
+	puts("-->");
+	puts("</script>");
+
+	gsTemp = NULL;
+	}	
+    }
+
+
 /* Save variables. */
 cartCheckout(&cart);
 }
@@ -2024,14 +2091,16 @@ cartCheckout(&cart);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+
 long enteredMainTime = clock1000();
+
 pushCarefulMemHandler(LIMIT_2or6GB);
 htmlPushEarlyHandlers(); /* Make errors legible during initialization. */
 cgiSpoof(&argc, argv);
 
 hgTables();
 
-textOutClose(&compressPipeline);
 cgiExitTime("hgTables", enteredMainTime);
+
 return 0;
 }

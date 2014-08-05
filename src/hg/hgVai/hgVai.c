@@ -1127,7 +1127,7 @@ void textOpen()
 {
 char *fileName = cartUsualString(cart, "hgva_outFile", "");
 char *compressType = cartUsualString(cart, "hgva_compressType", textOutCompressGzip);
-compressPipeline = textOutInit(fileName, compressType);
+compressPipeline = textOutInit(fileName, compressType, NULL);
 }
 
 void setGpVarFuncFilter(struct annoGrator *gpVarGrator)
@@ -2260,7 +2260,7 @@ annoGratorQueryFree(&query);
 if (doHtml)
     webEnd();
 else
-    textOutClose(&compressPipeline);
+    textOutClose(&compressPipeline, NULL);
 }
 
 int main(int argc, char *argv[])
