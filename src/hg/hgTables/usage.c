@@ -7,11 +7,26 @@
 #include "jksql.h"
 #include "hgTables.h"
 
+static char *getGenomeSpaceText()
+/* Return GenomeSpace help text if it is enabled */
+{
+if (isGenomeSpaceEnabled())
+    {
+    return 
+"        <LI><B>Send output to GenomeSpace:</B> sends data to \n"
+"        <A HREF=\"http://www.genomespace.org\">GenomeSpace</A> Data Manager for use with\n"
+"        diverse computational tools.\n";
+    }
+else
+    {
+    return "";
+    }
+}
 
 void printMainHelp()
 /* Put up main page help info. */
 {
-hPrintf("%s",
+hPrintf(
 "This section provides brief line-by-line descriptions of the Table \n"
 "Browser controls. For more information on using this program, see the \n"
 "<A HREF=\"../goldenPath/help/hgTablesHelp.html\" TARGET=_blank>Table \n"
@@ -127,9 +142,7 @@ hPrintf("%s",
 "        <LI><B>Send output to GREAT:</B> displays the functional enrichments of the \n"
 "        query results in <A HREF=\"http://great.stanford.edu\">GREAT</A>, a tool for\n"
 "        analysis of the biological function of cis-regulatory regions.\n"
-"        <LI><B>Send output to GenomeSpace:</B> sends data to \n"
-"        <A HREF=\"http://www.genomespace.org\">GenomeSpace</A> Data Manager for use with\n"
-"        diverse computational tools.\n"
+"%s"
 "        <LI><B>file type returned: </B>When a filename is entered in the \n"
 "	 &quot;output file&quot; text box, specifies the format of the output file:\n"
 "        <UL>\n"
@@ -145,5 +158,7 @@ hPrintf("%s",
 "        <LI><B>summary/statistics: </B>Displays statistics about the data \n"
 "        specified by the parameters.</LI>\n"
 "        \n"
-"        </UL>\n");
+"        </UL>\n"
+, getGenomeSpaceText()
+);
 }
