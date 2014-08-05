@@ -474,7 +474,7 @@ if (!cfgOptionBooleanDefault("hgta.disableSendOutput", FALSE))
 	"onclick=\"document.getElementById('checkboxGreat').checked=false;");
     if (isGenomeSpaceEnabled())
 	dyStringAppend(dy, 
-	      	  "document.getElementById('checkboxGenomeSpace').checked=false;\"");
+	      	  "document.getElementById('checkboxGenomeSpace').checked=false;");
     dyStringAppend(dy, 
 	      	  "return true;\"");
     cgiMakeCheckBoxIdAndJS("sendToGalaxy", doGalaxy(),
