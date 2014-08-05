@@ -352,7 +352,7 @@ for (tc++; isOk && (*tc != '\0'); tc++)
         isOk = FALSE;
     }
 if (!isOk)
-    gff3AnnErr(g3a, "invalid attribute tag, must start with an alphabetic character and be composed of alphanumeric or underscore characters: %s", tag);
+    gff3AnnErr(g3a, "invalid attribute tag, must start with an alphabetic character and be composed of alphanumeric, dash, or underscore characters: %s", tag);
 return isOk;
 }
 

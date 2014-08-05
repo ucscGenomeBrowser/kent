@@ -30,7 +30,7 @@ static void textOutAbortHandler()
 exit(-1);
 }
 
-static char *getCompressSuffix(char *compressType)
+char *getCompressSuffix(char *compressType)
 /* Return the file dot-suffix (including the dot) for compressType. */
 {
 static char *gzipSuffix = ".gz";
@@ -103,7 +103,7 @@ else
 }
 
 
-struct pipeline *textOutInit(char *fileName, char *compressType)
+struct pipeline *textOutInit(char *fileName, char *compressType, int *saveStdout)
 /* Set up stdout to be HTTP text, file (if fileName is specified), or 
  * compressed file (if both fileName and compressType are specified -- 
  * see textOut.h for supported compression types).  
@@ -112,6 +112,21 @@ struct pipeline *textOutInit(char *fileName, char *compressType)
 {
 struct pipeline *compressPipeline = NULL;
 
+// if path contains a slash, we are outputting to a local file
+boolean outToFile = (strchr(fileName, '/') != NULL);
+if (outToFile)
+    {
+    FILE *f;
+    f = fopen(fileName, "w");
+    /* We want to capture stdout output to a file */
+    fflush(stdout);
+    int tempOut = dup(STDOUT_FILENO);
+    if (saveStdout)
+	*saveStdout = tempOut;
+    dup2(fileno(f),STDOUT_FILENO);   /* closes STDOUT before setting it again */
+    fclose(f);
+    }
+
 trimSpaces(fileName);
 if (isEmpty(fileName))
     {
@@ -119,22 +134,27 @@ if (isEmpty(fileName))
     }
 else if (isEmpty(compressType) || sameWord(compressType, textOutCompressNone))
     {
-    printf("Content-Type: application/octet-stream\n");
-    printf("Content-Disposition: attachment; filename=%s\n\n", fileName);
+    if (!outToFile)
+	{
+	printf("Content-Type: application/octet-stream\n");
+	printf("Content-Disposition: attachment; filename=%s\n\n", fileName);
+	}
     }
 else
     {
-    char *suffix = getCompressSuffix(compressType);
 
-    printf("Content-Type: application/x-%s\n", compressType);
-    if (endsWith(fileName, suffix))
-	printf("Content-Disposition: attachment; filename=%s\n\n", fileName);
-    else
-	printf("Content-Disposition: attachment; filename=%s%s\n\n",
-	       fileName, suffix);
-
-    /* Send the Content header uncompressed! */
-    fflush(stdout);
+    if (!outToFile)
+	{
+	char *suffix = getCompressSuffix(compressType);
+	printf("Content-Type: application/x-%s\n", compressType);
+	if (endsWith(fileName, suffix))
+	    printf("Content-Disposition: attachment; filename=%s\n\n", fileName);
+	else
+	    printf("Content-Disposition: attachment; filename=%s%s\n\n",
+		   fileName, suffix);
+	/* Send the Content header uncompressed! */
+	fflush(stdout);
+	}
 
     /* Make sure no environment variables interfere with compressor. */
     cleanEnvVars(compressType);
@@ -151,16 +171,27 @@ pushAbortHandler(textOutAbortHandler);
 return(compressPipeline);
 }
 
-void textOutClose(struct pipeline **pCompressPipeline)
+void textOutClose(struct pipeline **pCompressPipeline, int *saveStdout)
 /* Flush and close stdout, wait for the pipeline to finish, and then free 
  * the pipeline object. */
 {
 if (pCompressPipeline && *pCompressPipeline)
     {
     fflush(stdout);
-    fclose(stdout);
+    close(STDOUT_FILENO); // Do not use fclose
     pipelineWait(*pCompressPipeline);
     pipelineFree(pCompressPipeline);
+    }
+if (saveStdout)
+    {
+    if (*saveStdout != -1)
+	{
+	/* restore stdout */
+	fflush(stdout);
+	dup2(*saveStdout,STDOUT_FILENO);  /* closes STDOUT before setting it back to saved descriptor */
+	close(*saveStdout);
+	*saveStdout = -1;
+	}
     }
 }
 

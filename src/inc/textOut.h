@@ -31,15 +31,17 @@
 					 NULL\
 				       }
 
+char *getCompressSuffix(char *compressType);
+/* Return the file dot-suffix (including the dot) for compressType. */
 
-struct pipeline *textOutInit(char *fileName, char *compressType);
+struct pipeline *textOutInit(char *fileName, char *compressType, int *saveStdout);
 /* Set up stdout to be HTTP text, file (if fileName is specified), or 
  * compressed file (if both fileName and a supported compressType are 
  * specified). 
  * Return NULL if no compression, otherwise a pipeline handle on which 
  * textOutClose should be called when we're done writing stdout. */
 
-void textOutClose(struct pipeline **pCompressPipeline);
+void textOutClose(struct pipeline **pCompressPipeline, int *saveStdout);
 /* Flush and close stdout, wait for the pipeline to finish, and then free 
  * the pipeline object. */
 
