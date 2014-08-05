@@ -2421,18 +2421,13 @@ else if (tg->itemColor)
     *retColor = tg->itemColor(tg, lf, hvg);
     *retBarbColor = tg->ixAltColor;
     }
-else if (tg->colorShades)
+else
     {
     boolean isXeno = (tg->subType == lfSubXeno)
                                 || (tg->subType == lfSubChain)
                                 || startsWith("mrnaBla", tg->table);
-    *retColor =  tg->colorShades[lf->grayIx+isXeno];
-    *retBarbColor =  tg->colorShades[lf->grayIx];
-    }
-else
-    {
-    *retColor = tg->ixColor;
-    *retBarbColor = tg->ixAltColor;
+    *retColor     = colorBySpectrumOrDefault(hvg,tg,lf->grayIx+isXeno, tg->ixColor);
+    *retBarbColor = colorBySpectrumOrDefault(hvg,tg,lf->grayIx,        tg->ixAltColor);
     }
 }
 
@@ -5075,11 +5070,11 @@ struct trackDb *tdb = tg->tdb;
 
 if (tg->itemColor != NULL)
     color = tg->itemColor(tg, bed, hvg);
-else if (tg->colorShades)
+else
     {
     int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMin", "0"));
     int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
-    color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
+    color = colorBySpectrumOrDefault(hvg, tg, grayInRange(bed->score, scoreMin, scoreMax),color);
     }
 if (color)
     {
@@ -6191,10 +6186,7 @@ MG_RED} ;
 if (tg->itemColor != NULL)
     color = tg->itemColor(tg, bed, hvg);
 else
-    {
-    if (tg->colorShades)
-	color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
-    }
+    color = colorBySpectrumOrDefault(hvg,tg,grayInRange(bed->score, scoreMin, scoreMax),color);
 
 w = x2-x1;
 if (w < 1)
@@ -7534,7 +7526,7 @@ return getSeqColorDefault(lf->name, hvg, tg->ixColor);
 Color interactionColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct linkedFeatures *lf = item;
-return  tg->colorShades[lf->grayIx];
+return colorBySpectrumOrDefault(hvg,tg,lf->grayIx,hvGfxFindRgb(hvg, &tg->color));
 
 #ifdef NOTNOW  // leaving this in the code in case we want chrom color again
 
@@ -9187,6 +9179,101 @@ boolean colorsSame(struct rgbColor *a, struct rgbColor *b)
 return a->r == b->r && a->g == b->g && a->b == b->b;
 }
 
+//#define SPECTRUM_LIVE
+#ifdef SPECTRUM_LIVE
+// Define SPECTRUM_LIVE to enable live calculation of color rather than using track->colorShades
+// History: trackDb setting 'spectrum' (aka 'useScore') is defined to use an item's score to
+//          determine color on a spectrum.  This was originally limited to gray scale and only
+//          the discrete 10 shades defined in the colorShades array.  Two additional color scales
+//          were added (shadesOfBrown and shadesOfSea, but with no documentation on how a trackDb
+//          user could make use of these.  The array of shades has been widely used on track types
+//          beyond beds.
+// Spectrum support has been added to simply fill in the colorShades array on first use, based
+//          upon color/altColor.  This simple change does not need to touch on ubiquitous code that
+//          relies upon colorShades.  It is a targeted change with limited footprint, but maintains
+//          a hash of spectrums that gets built as needed.
+// Live spectrum, on the other hand would do away with colorShades and calculate the color whenever
+//          needed.  There would no longer be a limit to 10 shades, but would require extensive
+//          code changes to eliminate dependence upon the colorShades array.  There is no
+//          compelling efficiency of one method versus another.  Using live calculation should
+//          ultimately simplify code and structures.  But as I am being laid off, I feel it would
+//          be irresponsible to check in a larger change at this time
+// TODO: move to hvGfx.c
+Color hvGfxColorInSpectrum(struct hvGfx *hvg, struct rgbColor *colorOfZero,
+                           struct rgbColor *colorOfOne, float aboveZero)
+// Returns the color that lies between zero and one in the spectrum.
+{
+assert(aboveZero >= 0 && aboveZero <= 1.0);
+float belowOne = 1.0 - aboveZero;
+int red   = (belowOne * colorOfZero->r) + (aboveZero * colorOfOne->r);
+int green = (belowOne * colorOfZero->g) + (aboveZero * colorOfOne->g);
+int blue  = (belowOne * colorOfZero->b) + (aboveZero * colorOfOne->b);
+return hvGfxFindColorIx(hvg, red, green, blue);
+}
+
+Color colorWithinRange(struct hvGfx *hvg, struct rgbColor *bottomColor, struct rgbColor *topColor,
+                       int value, int rangeBottom, int rangeTop)
+// Returns color within range.  Colors outside of range will top or bottom out.
+// If range not defined, then range defaults to normal score range (0-1000).
+{
+// requested spectrum must have 2 colors
+if (!colorsSame(bottomColor, topColor))
+    {
+    if (rangeBottom >= rangeTop)
+        {
+        rangeBottom = 0;    // default this to normal score range
+        rangeTop    = 1000;
+        }
+    if (value < rangeBottom)
+        value = rangeBottom;
+    if (value > rangeTop)
+        value = rangeTop;
+    float aboveZero = ((float)value - rangeBottom)/(rangeTop - rangeBottom);
+    return hvGfxColorInSpectrum(hvg, bottomColor, topColor,aboveZero);
+    }
+else // no color range so use the only color
+    return hvGfxFindColorIx(hvg, topColor->r, topColor->g, topColor->b);
+}
+#endif//def SPECTRUM_LIVE
+
+Color colorBySpectrumOrDefault(struct hvGfx *hvg, struct track *track,int shade,Color defaultColor)
+// Returns color to use if spectrum exists, else returns default
+{
+if (track->tdb->useScore && track->colorShades == NULL)
+    {
+#ifdef SPECTRUM_LIVE
+    return colorWithinTrackIxRange(hvg,track,shade);
+#else// ifndef SPECTRUM_LIVE
+    struct rgbColor paintItBlack = {0, 0, 0};
+    if (!colorsSame(&paintItBlack, &track->color)
+    ||  !colorsSame(&paintItBlack, &track->altColor))
+        {
+        // Caching of the spectrum may be overkill, but if there are hundreds, this will be helpful
+        // An slPair list would be more space efficient, but with slower lookups
+        static struct hash *spectrumHash = NULL;
+        char spectrumName[32];
+        safef(spectrumName,32,"%02X%02X%02X,%02X%02X%02X",
+                             track->color.r,   track->color.g,   track->color.b,
+                          track->altColor.r,track->altColor.g,track->altColor.b);
+        if (spectrumHash == NULL)
+            spectrumHash = hashNew(4); // small hash
+        else
+            track->colorShades = hashFindVal(spectrumHash,spectrumName);
+        if (track->colorShades == NULL)
+            {
+            track->colorShades = needMem(sizeof(Color *) * maxShade + 2);
+            hvGfxMakeColorGradient(hvg, &track->color, &track->altColor,
+                                   maxShade+1, track->colorShades);
+            hashAddUnique(spectrumHash,spectrumName,track->colorShades);
+            }
+        }
+#endif//ndef SPECTRUM_LIVE
+    }
+if (track->colorShades == NULL || shade > maxShade + 1) // true range is 1 to 10.
+    return defaultColor;
+return track->colorShades[shade];
+}
+
 #ifndef GBROWSE
 void loadValAl(struct track *tg)
 /* Load the items in one custom track - just move beds in
@@ -9619,7 +9706,7 @@ void pgSnpLeftLabels(struct track *tg, int seqStart, int seqEnd,
  * with the item-drawing labels, but we do still need dense mode left labels. */
 {
 if (tg->visibility == tvDense)
-    {
+{
     if (isCenterLabelIncluded(tg))
 	yOff += mgFontLineHeight(font);
     hvGfxTextRight(hvg, leftLabelX, yOff, leftLabelWidth-1, tg->lineHeight,
@@ -9853,10 +9940,7 @@ int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"
 if (tg->itemColor != NULL)
     color = tg->itemColor(tg, bed, hvg);
 else
-    {
-    if (tg->colorShades)
-	color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
-    }
+    color = colorBySpectrumOrDefault(hvg,tg,grayInRange(bed->score, scoreMin, scoreMax),color);
 
 drawTri(hvg, x1, y, y2, color, bed->strand[0]);
 }
@@ -12371,20 +12455,12 @@ return (a->priority - b->priority);
 }
 
 void makeCompositeTrack(struct track *track, struct trackDb *tdb)
-/* Construct track subtrack list from trackDb entry.
- * Sets up color gradient in subtracks if requested */
+// Construct track subtrack list from trackDb entry.
 {
-unsigned char finalR = track->color.r, finalG = track->color.g,
-                            finalB = track->color.b;
-unsigned char altR = track->altColor.r, altG = track->altColor.g,
-                            altB = track->altColor.b;
-unsigned char deltaR = 0, deltaG = 0, deltaB = 0;
-
 struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendantLeaves(tdb->subtracks);
 
 struct trackDb *subTdb;
 int subCount = slCount(tdbRefList);
-int altColors = subCount - 1;
 struct track *subtrack = NULL;
 TrackHandler handler;
 boolean smart = FALSE;
@@ -12410,15 +12486,6 @@ else
     track->totalHeight = compositeTotalHeight;
     }
 
-if (altColors && (finalR || finalG || finalB))
-    {
-    /* not black -- make a color gradient for the subtracks,
-                from black, to the specified color */
-    deltaR = (finalR - altR) / altColors;
-    deltaG = (finalG - altG) / altColors;
-    deltaB = (finalB - altB) / altColors;
-    }
-
 /* fill in subtracks of composite track */
 for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     {
@@ -12438,28 +12505,12 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     subtrack->priority = subTdb->priority;
     subtrack->parent = track;
 
-    /* Add color gradient. */
-    if (finalR || finalG || finalB)
-	{
-	subtrack->color.r = altR;
-	subtrack->altColor.r = (255+altR)/2;
-	altR += deltaR;
-	subtrack->color.g = altG;
-	subtrack->altColor.g = (255+altG)/2;
-	altG += deltaG;
-	subtrack->color.b = altB;
-	subtrack->altColor.b = (255+altB)/2;
-	altB += deltaB;
-	}
-    else
-	{
-	subtrack->color.r = subTdb->colorR;
-	subtrack->color.g = subTdb->colorG;
-	subtrack->color.b = subTdb->colorB;
-	subtrack->altColor.r = subTdb->altColorR;
-	subtrack->altColor.g = subTdb->altColorG;
-	subtrack->altColor.b = subTdb->altColorB;
-	}
+    subtrack->color.r = subTdb->colorR;
+    subtrack->color.g = subTdb->colorG;
+    subtrack->color.b = subTdb->colorB;
+    subtrack->altColor.r = subTdb->altColorR;
+    subtrack->altColor.g = subTdb->altColorG;
+    subtrack->altColor.b = subTdb->altColorB;
     slAddHead(&track->subtracks, subtrack);
     }
 slSort(&track->subtracks, trackPriCmp);
@@ -12520,12 +12571,16 @@ track->canPack = tdb->canPack;
 if (tdb->useScore)
     {
     /* Todo: expand spectrum opportunities. */
+    struct rgbColor paintItBlack = {0, 0, 0};
     if (colorsSame(&brownColor, &track->color))
         track->colorShades = shadesOfBrown;
     else if (colorsSame(&darkSeaColor, &track->color))
         track->colorShades = shadesOfSea;
+    else if (!colorsSame(&paintItBlack, &track->color)
+         ||  !colorsSame(&paintItBlack, &track->altColor))
+        track->colorShades = NULL; // Signal to generate spectrum on first need
     else
-	track->colorShades = shadesOfGray;
+        track->colorShades = shadesOfGray;
     }
 track->tdb = tdb;
 
@@ -12828,9 +12883,9 @@ registerTrackHandler("ncRna", ncRnaMethods);
 registerTrackHandler("rmskLinSpec", repeatMethods);
 registerTrackHandler("rmsk", repeatMethods);
 registerTrackHandler("rmskNew", repeatMethods);
-registerTrackHandler("joinedRmsk", jRepeatMethods);
-registerTrackHandler("rmskJoinedBaseline", jRepeatMethods);
-registerTrackHandler("rmskJoinedCurrent", jRepeatMethods);
+registerTrackHandler("joinedRmsk", rmskJoinedMethods);
+registerTrackHandler("rmskJoinedBaseline", rmskJoinedMethods);
+registerTrackHandler("rmskJoinedCurrent", rmskJoinedMethods);
 registerTrackHandler("rmskCensor", repeatMethods);
 registerTrackHandler("simpleRepeat", simpleRepeatMethods);
 registerTrackHandler("chesSimpleRepeat", simpleRepeatMethods);

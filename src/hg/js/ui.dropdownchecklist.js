@@ -214,7 +214,7 @@
 
 			// Watch for a window resize and adjust the control if open
             ///// UCSC Stop ugly bug in IE where onChange gets called on every selection.
-            if ($.browser.msie !== true) {  ///// UCSC
+            if (theClient.isIe() !== true) {  ///// UCSC
                 $(window).resize(function() {
                     if (!self.disabled && self.dropWrapper.isOpen) {
                             // Reopen yourself to get the position right

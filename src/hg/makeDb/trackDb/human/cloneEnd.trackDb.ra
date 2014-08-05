@@ -1,0 +1,209 @@
+track cloneEndSuper
+superTrack on hide
+shortLabel NCBI Ends
+longLabel NCBI mapping of clone libraries end placements
+group map
+visibility hide
+colorByStrand 0,0,128 0,128,0
+type bigBed 12
+url http://www.ncbi.nlm.nih.gov/clone/?term=$$
+urlLabel NCBI CloneDB:
+
+    track cloneEnd_ABC10
+    superTrack cloneEndSuper hide
+    shortLabel ABC10
+    longLabel 787,969 end placements, average size 73,413 bases - Agencourt fosmid library 10
+
+    track cloneEnd_ABC11
+    superTrack cloneEndSuper hide
+    shortLabel ABC11
+    longLabel 729,962 end placements, average size 65,435 bases - Agencourt fosmid library 11
+
+    track cloneEnd_ABC12
+    superTrack cloneEndSuper hide
+    shortLabel ABC12
+    longLabel 777,816 end placements, average size 79,572 bases - Agencourt fosmid library 12
+
+    track cloneEnd_ABC13
+    superTrack cloneEndSuper hide
+    shortLabel ABC13
+    longLabel 810,822 end placements, average size 87,083 bases - Agencourt fosmid library 13
+
+    track cloneEnd_ABC14
+    superTrack cloneEndSuper hide
+    shortLabel ABC14
+    longLabel 845,573 end placements, average size 72,331 bases - Agencourt fosmid library 14
+
+    track cloneEnd_ABC16
+    superTrack cloneEndSuper hide
+    shortLabel ABC16
+    longLabel 452,220 end placements, average size 80,268 bases - Agencourt fosmid library 16
+
+    track cloneEnd_ABC17
+    superTrack cloneEndSuper hide
+    shortLabel ABC17
+    longLabel 10,305 end placements, average size 69,010 bases - Agencourt fosmid library 17
+
+    track cloneEnd_ABC18
+    superTrack cloneEndSuper hide
+    shortLabel ABC18
+    longLabel 325,080 end placements, average size 71,109 bases - Agencourt fosmid library 18
+
+    track cloneEnd_ABC19
+    superTrack cloneEndSuper hide
+    shortLabel ABC19
+    longLabel 12,269 end placements, average size 64,354 bases - Agencourt fosmid library 19
+
+    track cloneEnd_ABC20
+    superTrack cloneEndSuper hide
+    shortLabel ABC20
+    longLabel 24,692 end placements, average size 89,495 bases - Agencourt fosmid library 20
+
+    track cloneEnd_ABC21
+    superTrack cloneEndSuper hide
+    shortLabel ABC21
+    longLabel 182,154 end placements, average size 72,228 bases - Agencourt fosmid library 21
+
+    track cloneEnd_ABC22
+    superTrack cloneEndSuper hide
+    shortLabel ABC22
+    longLabel 189,939 end placements, average size 68,551 bases - Agencourt fosmid library 22
+
+    track cloneEnd_ABC23
+    superTrack cloneEndSuper hide
+    shortLabel ABC23
+    longLabel 436,965 end placements, average size 73,717 bases - Agencourt fosmid library 23
+
+    track cloneEnd_ABC24
+    superTrack cloneEndSuper hide
+    shortLabel ABC24
+    longLabel 398,944 end placements, average size 101,774 bases - Agencourt fosmid library 24
+
+    track cloneEnd_ABC26
+    superTrack cloneEndSuper hide
+    shortLabel ABC26
+    longLabel 2,454 end placements, average size 76,784 bases - Agencourt fosmid library 26
+
+    track cloneEnd_ABC27
+    superTrack cloneEndSuper hide
+    shortLabel ABC27
+    longLabel 334,178 end placements, average size 73,099 bases - Agencourt fosmid library 27
+
+    track cloneEnd_ABC7
+    superTrack cloneEndSuper hide
+    shortLabel ABC7
+    longLabel 649,297 end placements, average size 90,618 bases - Agencourt fosmid library 7
+
+    track cloneEnd_ABC8
+    superTrack cloneEndSuper hide
+    shortLabel ABC8
+    longLabel 1,204,275 end placements, average size 131,597 bases - Agencourt fosmid library 8
+
+    track cloneEnd_ABC9
+    superTrack cloneEndSuper hide
+    shortLabel ABC9
+    longLabel 755,994 end placements, average size 64,667 bases - Agencourt fosmid library 9
+
+    track cloneEnd_CH17
+    superTrack cloneEndSuper hide
+    shortLabel CH17
+    longLabel 105,618 end placements, average size 240,753 bases - CHORI BAC hydatidiform mole
+
+    track cloneEnd_COR02
+    superTrack cloneEndSuper hide
+    shortLabel COR02
+    longLabel 208,263 end placements, average size 61,793 bases - NHGRI-CORIELLE CORIELL-02-F-39-40KB
+
+    track cloneEnd_COR2A
+    superTrack cloneEndSuper hide
+    shortLabel COR2A
+    longLabel 583,008 end placements, average size 56,432 bases - NHGRI-CORIELLE CORIELL-02A-F-39-40KB
+
+    track cloneEnd_CTA
+    superTrack cloneEndSuper pack
+    shortLabel CTA
+    longLabel 2,202 end placements, average size 257,729 bases - CalTech BAC library A
+
+    track cloneEnd_CTB
+    superTrack cloneEndSuper pack
+    shortLabel CTB
+    longLabel 14 end placements, average size 235,532 bases - CalTech BAC library B
+
+    track cloneEnd_CTC
+    superTrack cloneEndSuper pack
+    shortLabel CTC
+    longLabel 4,951 end placements, average size 290,645 bases - CalTech BAC library C
+
+    track cloneEnd_CTD
+    superTrack cloneEndSuper pack
+    shortLabel CTD
+    longLabel 95,853 end placements, average size 225,520 bases - CalTech BAC library D
+
+    track cloneEnd_GS1
+    superTrack cloneEndSuper pack
+    shortLabel GS1
+    longLabel 42 end placements, average size 121,945 bases - Genome Systems BAC library 1
+
+    track cloneEnd_RP1
+    superTrack cloneEndSuper pack
+    shortLabel RP1
+    longLabel 2,509 end placements, average size 291,470 bases - RPCI PAC library 1
+
+    track cloneEnd_RP11
+    superTrack cloneEndSuper pack
+    shortLabel RP11
+    longLabel 86,660 end placements, average size 276,053 bases - RPCI BAC library 11
+
+    track cloneEnd_RP13
+    superTrack cloneEndSuper pack
+    shortLabel RP13
+    longLabel 58 end placements, average size 442,334 bases - RPCI BAC library 13
+
+    track cloneEnd_RP3
+    superTrack cloneEndSuper pack
+    shortLabel RP3
+    longLabel 44 end placements, average size 119,947 bases - RPCI PAC library 3
+
+    track cloneEnd_RP4
+    superTrack cloneEndSuper pack
+    shortLabel RP4
+    longLabel 99 end placements, average size 111,930 bases - RPCI PAC library 4
+
+    track cloneEnd_RP5
+    superTrack cloneEndSuper pack
+    shortLabel RP5
+    longLabel 145 end placements, average size 142,032 bases - RPCI PAC library 4
+
+    track cloneEnd_RP6
+    superTrack cloneEndSuper pack
+    shortLabel RP6
+    longLabel 81 end placements, average size 146,801 bases - RPCI PAC library 4
+
+    track cloneEnd_WI2
+    superTrack cloneEndSuper hide
+    shortLabel WI2
+    longLabel 587,165 end placements, average size 77,576 bases - WIBR-2 Fosmid library
+
+    track cloneEnd_multipleMaps
+    superTrack cloneEndSuper hide
+    shortLabel Multiple mappings
+    longLabel Clone end placements that map to multiple locations in the genome
+
+    track cloneEnd_coverageForward
+    superTrack cloneEndSuper hide
+    shortLabel Coverage forward strand
+    longLabel Clone end placements overlap coverage on the forward strand
+    type bigWig 0 5428
+    autoScale on
+    alwaysZero on
+    windowingFunction mean
+
+    track cloneEnd_coverageReverse
+    superTrack cloneEndSuper hide
+    shortLabel Coverage reverse strand
+    longLabel Clone end placements overlap coverage on the reverse strand
+    type bigWig 0 4157
+    negateValues 1
+    alwaysZero on
+    windowingFunction mean
+    autoScale on

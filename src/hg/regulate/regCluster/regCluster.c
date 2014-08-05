@@ -16,6 +16,7 @@ double clScoreScale = 1.0;
 double clForceJoinScore = 2;
 double clWeakLevel = 0.1;
 boolean clAveScore = FALSE;
+boolean clBedSources = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -28,7 +29,7 @@ errAbort(
 "   <fileName> <chrom> <start> <end> <score> <normScore> <dim1 label> ... <dimN label>\n"
 "where chrom, start, end, score are the indexes (starting with 0) of the chromosome, start, \n"
 "and end fields in the file, normScore is a factor to multiply score by to get it into the\n"
-"0-1000 range, and the dim# labels are the labels in each dimention.\n"
+"0-1000 range, and the dim# labels are the labels in each dimension.\n"
 "for example\n"
 "   simpleReg.bed 0 1 2 4 aCell aFactor\n"
 "options:\n"
@@ -39,6 +40,7 @@ errAbort(
 "   -forceJoinScore=0.N - if combined score of elements joining 2 clusters above this, the\n"
 "                         clusters will be joined. Default %g\n"
 "   -aveScore - if set cluster score is average of components, not max\n"
+"   -bedSources - output bed8 (source count, comma-sep source id and source score fields)\n"
 , clDims
 , clScoreScale
 , clWeakLevel
@@ -52,6 +54,7 @@ static struct optionSpec options[] = {
    {"forceJoinScore", OPTION_DOUBLE},
    {"weakLevel", OPTION_DOUBLE},
    {"aveScore", OPTION_BOOLEAN},
+   {"bedSources", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -90,8 +93,32 @@ for (range = rangeList; range != NULL; range = range->next)
 	else
 	    score = clScoreScale * cluster->maxSubScore;
 	if (score > 1000) score = 1000;
-	fprintf(fBed, "%s\t%d\t%d\t%d\t%d\n", chrom, 
-		cluster->chromStart, cluster->chromEnd, uniqHash->elCount, round(score));
+	fprintf(fBed, "%s\t%d\t%d\t%d\t%d", chrom, 
+            cluster->chromStart, cluster->chromEnd, uniqHash->elCount, round(score));
+        if (clBedSources)
+            {
+            /* print expCount, expNums, exScores */
+            fprintf(fBed, "\t%d\t", slCount(cluster->itemRefList));
+            for (ref = cluster->itemRefList; ref != NULL; ref = ref->next)
+                {
+	        struct peakItem *item = ref->val;
+                int i;
+                for (i=0; i<clDims; ++i)
+                    {
+                    fprintf(fBed, "%s", item->source->labels[i]);
+                    if (i<clDims-1)
+                        fprintf(fBed, "+");
+                    }
+                fprintf(fBed, ",");
+                }
+            fprintf(fBed, "\t");
+            for (ref = cluster->itemRefList; ref != NULL; ref = ref->next)
+                {
+	        struct peakItem *item = ref->val;
+                fprintf(fBed, "%d,", round(item->score));
+                }
+            }
+        fprintf(fBed, "\n");
 	hashFree(&uniqHash);
 	}
     }
@@ -136,6 +163,7 @@ clDims = optionInt("dims", clDims);
 clScoreScale = optionDouble("scoreScale", clScoreScale);
 clWeakLevel = optionDouble("weakLevel", clWeakLevel);
 clAveScore = optionExists("aveScore");
+clBedSources = optionExists("bedSources");
 regCluster(argv[1], argv[2], argv[3]);
 return 0;
 }

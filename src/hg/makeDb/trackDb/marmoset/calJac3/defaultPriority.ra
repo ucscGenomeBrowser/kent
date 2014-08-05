@@ -1,0 +1,32 @@
+# Mapping and Sequencing
+
+track gap override
+html gap
+priority 1
+
+track gc5BaseBw override
+visibility full
+priority 2
+
+# Genes and Gene Predictions
+
+# track nscanGene override
+# priority 1
+# This priority is defined in marmoset/calJac3/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+track xenoRefGene override
+visibility dense
+priority 2
+
+# Comparative Genomics
+
+# track cons13way override
+# priority 1
+# This priority is defined in marmoset/calJac3/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+# Variation and Repeats
+
+track rmsk override
+priority 1

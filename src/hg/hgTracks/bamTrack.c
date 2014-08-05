@@ -606,10 +606,8 @@ else if (lf->filterColor != 0)
     // In bamTrack, lf->filterColor is an RGBA value
     color = lf->filterColor;
     }
-else if (tg->colorShades)
-    color = tg->colorShades[lf->grayIx];
 else
-    color = tg->ixColor;
+    color = colorBySpectrumOrDefault(hvg,tg,lf->grayIx,tg->ixColor);
 
 indelEnabled(cart, tg->tdb, basesPerPixel, &indelShowDoubleInsert, &indelShowQueryInsert,
 	     &indelShowPolyA);
@@ -621,7 +619,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
     if (e <= s || e < winStart || s > winEnd)
 	continue;
     if (baseQualMode)
-	color = tg->colorShades[sf->grayIx];
+        color = colorBySpectrumOrDefault(hvg,tg,sf->grayIx,color);
     baseColorDrawItem(tg, lf, sf->grayIx, hvg, xOff, y, scale, font, s, e, heightPer,
 		      zoomedToCodonLevel, mrnaSeq, sf, psl, drawOpt, MAXPIXELS, winStart, color);
     if (tg->exonArrowsAlways ||

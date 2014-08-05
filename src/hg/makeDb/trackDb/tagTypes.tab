@@ -17,8 +17,8 @@ aggregate bigWig wig bedGraph
 aliQualRange bam
 allButtonPair *
 altColor *
-alwaysZero wig bedGraph
-applyMinQual vcf
+alwaysZero wig bedGraph bigWig
+applyMinQual vcf vcfTabix
 autoScale *
 autoTranslate genePred
 bamColorMode bam
@@ -165,10 +165,10 @@ graphTypeDefault wig bigWig
 gridDefault bed bedGraph wig bigWig
 group *
 groupings expRatio
-hapClusterEnabled vcf
-hapClusterColorBy vcf
-hapClusterTreeAngle vcf
-hapClusterHeight vcf
+hapClusterEnabled vcf vcfTabix
+hapClusterColorBy vcf vcfTabix
+hapClusterTreeAngle vcf vcfTabix
+hapClusterHeight vcf vcfTabix
 hapmapPhase bed
 hgGene genePred
 hgsid bed genePred
@@ -225,17 +225,17 @@ maxHeightPixels *
 maxItems *
 maxLimit *
 maxScore broadPeak narrowPeak
-maxWindowToDraw bam rmsk joinedRmsk bed narrowPeak broadPeak bigWig bedlogR genepred vcfTabix factorSource
+maxWindowToDraw bam rmsk joinedRmsk bed narrowPeak broadPeak bigWig bedlogR genepred vcf vcfTabix factorSource
 maxWindowToQuery bigWig bed bedlogR
 metadata *
 mouseOverField bigBed
 mgiUrl bed
 mgiUrlLabel bed
-minFreq vcf
+minFreq vcf vcfTabix
 minGrayLevel bed broadPeak narrowPeak bedLogR
 minLimit *
 minMax chromGraph
-minQual vcf
+minQual vcf vcfTabix
 minScore bed broadPeak narrowPeak
 motifTable factorSource
 motifPwmTable factorSource bed6FloatScore
@@ -331,6 +331,7 @@ showCdsAllScales psl
 showCdsMaxZoom psl
 showDiffBasesAllScales *
 showDiffBasesMaxZoom *
+showHardyWeinberg vcf vcfTabix
 showNames bam
 showSubtrackColorOnUi *
 showTopScorers bed5FloatScoreWithFdr bed5FloatScore bed

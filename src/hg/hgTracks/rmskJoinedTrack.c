@@ -54,7 +54,7 @@ static struct repeatItem *otherRepeatItem = NULL;
 
 /* Hash of subtracks
  *   The joinedRmskTrack is designed to be used as a composite track.
- *   When jRepeatLoad is called this hash is populated with the
+ *   When rmskJoinedLoadItems is called this hash is populated with the
  *   results of one or more table queries
  */
 struct hash *subTracksHash = NULL;
@@ -92,7 +92,21 @@ static char *rptClasses[] = {
  *  NOTE: If these are changed, do not forget to update the
  *        help table in joinedRmskTrack.html
  */
-static Color jRepeatClassColors[] = {
+// trying colors from snakePalette
+static Color rmskJoinedClassColors[] = {
+0xff1f77b4,			// SINE - red
+0xffff7f0e,			// LINE - lime
+0xff2ca02c,			// LTR - maroon
+0xffd62728,			// DNA - fuchsia
+0xff9467bd,			// Simple - yellow
+0xff8c564b,			// LowComplex - olive
+0xffe377c2,			// Satellite - blue
+0xff7f7f7f,			// RNA - green
+0xffbcbd22,			// Other - teal
+0xff17becf,			// Unknown - aqua
+};
+/*
+static Color rmskJoinedClassColors[] = {
 0xff0000ff,			// SINE - red
 0xff00ff00,			// LINE - lime
 0xff000080,			// LTR - maroon
@@ -104,6 +118,7 @@ static Color jRepeatClassColors[] = {
 0xff808000,			// Other - teal
 0xffffff00,			// Unknown - aqua
 };
+*/
 
 // Basic range type
 struct Extents
@@ -112,7 +127,7 @@ int start;
 int end;
 };
 
-static struct Extents * getExtents (struct rmskJoined *rm)
+static struct Extents * getExtents(struct rmskJoined *rm)
 /* Calculate the glyph extents in genome coordinate
  * space ( ie. bp )
  *
@@ -127,19 +142,19 @@ static struct Extents ex;
 char lenLabel[20];
 
 if (rm == NULL)
-return NULL;
+    return NULL;
 
 ex.start = rm->alignStart
     -
-    (int) ((mgFontStringWidth (tl.font, rm->name) +
+    (int) ((mgFontStringWidth(tl.font, rm->name) +
 	    LABEL_PADDING) / pixelsPerBase);
 
 
 if ((rm->blockSizes[0] * pixelsPerBase) > MAX_UNALIGNED_PIXEL_LEN)
     {
-    safef (lenLabel, sizeof (lenLabel), "%d", rm->blockSizes[0]);
+    safef(lenLabel, sizeof(lenLabel), "%d", rm->blockSizes[0]);
     ex.start -= (int) (MAX_UNALIGNED_PIXEL_LEN / pixelsPerBase) +
-	(int) ((mgFontStringWidth (tl.font, lenLabel) +
+	(int) ((mgFontStringWidth(tl.font, lenLabel) +
 		LABEL_PADDING) / pixelsPerBase);
     }
 else
@@ -152,11 +167,11 @@ ex.end = rm->alignEnd;
 if ((rm->blockSizes[rm->blockCount - 1] * pixelsPerBase) >
     MAX_UNALIGNED_PIXEL_LEN)
     {
-    safef (lenLabel, sizeof (lenLabel), "%d",
+    safef(lenLabel, sizeof(lenLabel), "%d",
 	   rm->blockSizes[rm->blockCount - 1]);
     ex.end +=
 	(int) (MAX_UNALIGNED_PIXEL_LEN / pixelsPerBase) +
-	(int) ((mgFontStringWidth (tl.font, lenLabel) +
+	(int) ((mgFontStringWidth(tl.font, lenLabel) +
 		LABEL_PADDING) / pixelsPerBase);
     }
 else
@@ -167,7 +182,7 @@ else
 return &ex;
 }
 
-static int cmpRepeatVisStart (const void *va, const void *vb)
+static int cmpRepeatVisStart(const void *va, const void *vb)
 /* Sort repeats by display start position.  Note: We
  * account for the fact we may not start the visual
  * display at chromStart.  See MAX_UNALIGNED_PIXEL_LEN.
@@ -177,41 +192,41 @@ struct rmskJoined *a = *((struct rmskJoined **) va);
 struct rmskJoined *b = *((struct rmskJoined **) vb);
 
 struct Extents *ext = NULL;
-ext = getExtents (a);
+ext = getExtents(a);
 int aStart = ext->start;
-ext = getExtents (b);
+ext = getExtents(b);
 int bStart = ext->start;
 
 return (aStart - bStart);
 }
 
-static struct repeatItem * makeJRepeatItems ()
+static struct repeatItem * makeJRepeatItems()
 /* Initialize the track */
 {
-classHash = newHash (6);
+classHash = newHash(6);
 struct repeatItem *ri, *riList = NULL;
 int i;
-int numClasses = ArraySize (rptClasses);
+int numClasses = ArraySize(rptClasses);
 for (i = 0; i < numClasses; ++i)
     {
-    AllocVar (ri);
+    AllocVar(ri);
     ri->class = rptClasses[i];
     ri->className = rptClassNames[i];
     // New color attribute
-    ri->color = jRepeatClassColors[i];
-    slAddHead (&riList, ri);
+    ri->color = rmskJoinedClassColors[i];
+    slAddHead(&riList, ri);
     // Hash now prebuilt to hold color attributes
-    hashAdd (classHash, ri->class, ri);
-    if (sameString (rptClassNames[i], "Other"))
-    otherRepeatItem = ri;
+    hashAdd(classHash, ri->class, ri);
+    if (sameString(rptClassNames[i], "Other"))
+        otherRepeatItem = ri;
     }
-slReverse (&riList);
+slReverse(&riList);
 return riList;
 }
 
-static void jRepeatLoad (struct track *tg)
+static void rmskJoinedLoadItems(struct track *tg)
 /* We do the query(ies) here so we can report how deep the track(s)
- * will be when jRepeatTotalHeight() is called later on.
+ * will be when rmskJoinedTotalHeight() is called later on.
  */
 {
   /*
@@ -219,101 +234,94 @@ static void jRepeatLoad (struct track *tg)
    * all the repeat data for each displayed subtrack.
    */
 if (!subTracksHash)
-subTracksHash = newHash (20);
+    subTracksHash = newHash(20);
 
-tg->items = makeJRepeatItems ();
+tg->items = makeJRepeatItems();
 
 int baseWidth = winEnd - winStart;
 pixelsPerBase = (float) insideWidth / (float) baseWidth;
 if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
     {
     struct subTrack *st = NULL;
-    AllocVar (st);
-    if (st)
-	{
-	st->levels[0] = NULL;
-	st->levelCount = 0;
-	struct rmskJoined *rm = NULL;
-	char **row;
-	int rowOffset;
-	struct sqlConnection *conn = hAllocConn (database);
-	struct sqlResult *sr = hRangeQuery (conn, tg->table, chromName,
-					    winStart, winEnd, NULL,
-					    &rowOffset);
-	struct rmskJoined *detailList = NULL;
-	while ((row = sqlNextRow (sr)) != NULL)
-	    {
-	    rm = rmskJoinedLoad (row + rowOffset);
-	    slAddHead (&detailList, rm);
-	    }
-	slSort (&detailList, cmpRepeatVisStart);
+    AllocVar(st);
+    st->levels[0] = NULL;
+    st->levelCount = 0;
+    struct rmskJoined *rm = NULL;
+    char **row;
+    int rowOffset;
+    struct sqlConnection *conn = hAllocConn(database);
+    struct sqlResult *sr = hRangeQuery(conn, tg->table, chromName,
+                                        winStart, winEnd, NULL,
+                                        &rowOffset);
+    struct rmskJoined *detailList = NULL;
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        rm = rmskJoinedLoad(row + rowOffset);
+        slAddHead(&detailList, rm);
+        }
+    slSort(&detailList, cmpRepeatVisStart);
 
-	sqlFreeResult (&sr);
-	hFreeConn (&conn);
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
 
-	int crChromStart, crChromEnd;
-	while (detailList)
-	    {
-	    st->levels[st->levelCount++] = detailList;
+    int crChromStart, crChromEnd;
+    while (detailList)
+        {
+        st->levels[st->levelCount++] = detailList;
 
-	    struct rmskJoined *cr = detailList;
-	    detailList = detailList->next;
-	    cr->next = NULL;
-	    int rmChromStart, rmChromEnd;
-	    struct rmskJoined *prev = NULL;
-	    rm = detailList;
+        struct rmskJoined *cr = detailList;
+        detailList = detailList->next;
+        cr->next = NULL;
+        int rmChromStart, rmChromEnd;
+        struct rmskJoined *prev = NULL;
+        rm = detailList;
 
-	    struct Extents *ext = NULL;
-	    ext = getExtents (cr);
-	    crChromStart = ext->start;
-	    crChromEnd = ext->end;
+        struct Extents *ext = NULL;
+        ext = getExtents(cr);
+        crChromStart = ext->start;
+        crChromEnd = ext->end;
 
-	    while (rm)
-		{
-		ext = getExtents (rm);
-		rmChromStart = ext->start;
-		rmChromEnd = ext->end;
+        while (rm)
+            {
+            ext = getExtents(rm);
+            rmChromStart = ext->start;
+            rmChromEnd = ext->end;
 
-		if (rmChromStart > crChromEnd)
-		    {
-		    cr->next = rm;
-		    cr = rm;
-		    crChromStart = rmChromStart;
-		    crChromEnd = rmChromEnd;
-		    if (prev)
-			{
-			prev->next = rm->next;
-			}
-		    else
-			{
-			detailList = rm->next;
-			}
+            if (rmChromStart > crChromEnd)
+                {
+                cr->next = rm;
+                cr = rm;
+                crChromStart = rmChromStart;
+                crChromEnd = rmChromEnd;
+                if (prev)
+                    prev->next = rm->next;
+                else
+                    detailList = rm->next;
 
-		    rm = rm->next;
-		    cr->next = NULL;
-		    }
-		else
-		    {
-		    // Save for a lower level
-		    prev = rm;
-		    rm = rm->next;
-		    }
-		}		// while ( rm )
-	    }			// while ( detailList )
-	// Create Hash Entry
-	hashReplace (subTracksHash, tg->table, st);
-	}			// if ( st )
+                rm = rm->next;
+                cr->next = NULL;
+                }
+            else
+                {
+                // Save for a lower level
+                prev = rm;
+                rm = rm->next;
+                }
+            }		// while ( rm )
+        }			// while ( detailList )
+    // Create Hash Entry
+    hashReplace(subTracksHash, tg->table, st);
     }				// if ( tg->visibility == tvFull
 }
 
-static void jRepeatFree (struct track *tg)
-/* Free up jRepeatMasker items. */
+static void rmskJoinedFreeItems(struct track *tg)
+/* Free up rmskJoinedMasker items. */
 {
-slFreeList (&tg->items);
+slFreeList(&tg->items);
 }
 
-static char * jRepeatName (struct track *tg, void *item)
-/* Return name of jRepeat item track. */
+static char * rmskJoinedName(struct track *tg, void *item)
+/* Return name of rmskJoined item track. */
 {
 static char empty = '\0';
 struct repeatItem *ri = item;
@@ -324,47 +332,44 @@ struct repeatItem *ri = item;
    */
 if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
     {
-    if (strcmp (ri->className, "SINE") == 0)
-	{
-	return ("Repeats");
-	}
+    if (strcmp(ri->className, "SINE") == 0)
+	return("Repeats");
     else
-	{
 	return &empty;
-	}
     }
 return ri->className;
 }
 
-int jRepeatTotalHeight (struct track *tg, enum trackVisibility vis)
+#define HEIGHT24 24
+
+int rmskJoinedTotalHeight(struct track *tg, enum trackVisibility vis)
 {
   // Are we in full view mode and at the scale needed to display
   // the detail view?
 if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
     {
     // Lookup the depth of this subTrack and report it
-    struct subTrack *st = hashFindVal (subTracksHash, tg->table);
+    struct subTrack *st = hashFindVal(subTracksHash, tg->table);
     if (st)
-    return ((st->levelCount + 1) * 24);
+        return ((st->levelCount + 1) * HEIGHT24);
     else
-    // Just display one line
-    return (24);
+        return (HEIGHT24);	// Just display one line
     }
 else
-return tgFixedTotalHeightNoOverflow (tg, vis);
+return tgFixedTotalHeightNoOverflow(tg, vis);
 }
 
-int jRepeatItemHeight (struct track *tg, void *item)
+int rmskJoinedItemHeight(struct track *tg, void *item)
 {
   // Are we in full view mode and at the scale needed to display
   // the detail view?
 if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
-return 24;
+    return HEIGHT24;
 else
-return tgFixedItemHeight (tg, item);
+    return tgFixedItemHeight(tg, item);
 }
 
-static void drawDashedHorizLine (struct hvGfx *hvg, int x1, int x2,
+static void drawDashedHorizLine(struct hvGfx *hvg, int x1, int x2,
 		     int y, int dashLen, int gapLen, Color lineColor)
 // ie.    - - - - - - - - - - - - - - - -
 {
@@ -374,15 +379,15 @@ while (1)
     {
     cx2 = cx1 + dashLen;
     if (cx2 > x2)
-    cx2 = x2;
-    hvGfxLine (hvg, cx1, y, cx2, y, lineColor);
+        cx2 = x2;
+    hvGfxLine(hvg, cx1, y, cx2, y, lineColor);
     cx1 += (dashLen + gapLen);
     if (cx1 > x2)
-    break;
+        break;
     }
 }
 
-static void drawDashedHorizLineWHash (struct hvGfx *hvg, int x1, int x2,
+static void drawDashedHorizLineWHash(struct hvGfx *hvg, int x1, int x2,
 			  int y, int dashLen, int gapLen, Color lineColor,
 			  int unalignedLen)
 // ie.    - - - - - - -\234\- - - - - - - - -
@@ -391,17 +396,15 @@ int cx1 = x1;
 int cx2;
 
 char lenLabel[20];
-safef (lenLabel, sizeof (lenLabel), "%d", unalignedLen);
+safef(lenLabel, sizeof(lenLabel), "%d", unalignedLen);
 MgFont *font = tl.font;
 int fontHeight = tl.fontHeight;
-int stringWidth = mgFontStringWidth (font, lenLabel) + LABEL_PADDING;
+int stringWidth = mgFontStringWidth(font, lenLabel) + LABEL_PADDING;
 
 int glyphWidth = x2 - x1;
 
 if (glyphWidth < stringWidth + 6 + (2 * dashLen))
-stringWidth = 0;
-
-
+    stringWidth = 0;
 
 int midX = ((glyphWidth) / 2) + x1;
 int startHash = midX - (stringWidth * 0.5);
@@ -414,16 +417,16 @@ int midPointDrawn = 0;
    */
 if (glyphWidth < 6 + dashLen)
     {
-    hvGfxLine (hvg, x1, y, x2, y, lineColor);
+    hvGfxLine(hvg, x1, y, x2, y, lineColor);
     return;
     }
 if (glyphWidth < 6 + (2 * dashLen))
     {
     midX -= 3;
-    hvGfxLine (hvg, x1, y, midX, y, lineColor);
-    hvGfxLine (hvg, midX, y - 3, midX + 3, y + 3, lineColor);
-    hvGfxLine (hvg, midX + 3, y - 3, midX + 6, y + 3, lineColor);
-    hvGfxLine (hvg, midX + 6, y, x2, y, lineColor);
+    hvGfxLine(hvg, x1, y, midX, y, lineColor);
+    hvGfxLine(hvg, midX, y - 3, midX + 3, y + 3, lineColor);
+    hvGfxLine(hvg, midX + 3, y - 3, midX + 6, y + 3, lineColor);
+    hvGfxLine(hvg, midX + 6, y, x2, y, lineColor);
     return;
     }
 
@@ -431,40 +434,40 @@ while (1)
     {
     cx2 = cx1 + dashLen;
     if (cx2 > x2)
-    cx2 = x2;
+        cx2 = x2;
 
     if (!midPointDrawn && cx2 > startHash)
 	{
 	// Draw double slashes "\\" instead of dash
-	hvGfxLine (hvg, cx1, y - 3, cx1 + 3, y + 3, lineColor);
+	hvGfxLine(hvg, cx1, y - 3, cx1 + 3, y + 3, lineColor);
 	if (stringWidth)
 	    {
-	    hvGfxTextCentered (hvg, cx1 + 3, y - 3, stringWidth,
+	    hvGfxTextCentered(hvg, cx1 + 3, y - 3, stringWidth,
 			       fontHeight, MG_BLACK, font, lenLabel);
 	    cx1 += stringWidth;
 	    }
-	hvGfxLine (hvg, cx1 + 3, y - 3, cx1 + 6, y + 3, lineColor);
+	hvGfxLine(hvg, cx1 + 3, y - 3, cx1 + 6, y + 3, lineColor);
 	cx1 += 6;
 	midPointDrawn = 1;
 	}
     else
 	{
 	// Draw a dash
-	hvGfxLine (hvg, cx1, y, cx2, y, lineColor);
+	hvGfxLine(hvg, cx1, y, cx2, y, lineColor);
 	cx1 += dashLen;
 	}
 
     if (!midPointDrawn && cx1 + gapLen > midX)
 	{
 	// Draw double slashes "\\" instead of gap
-	hvGfxLine (hvg, cx1, y - 3, cx1 + 3, y + 3, lineColor);
+	hvGfxLine(hvg, cx1, y - 3, cx1 + 3, y + 3, lineColor);
 	if (stringWidth)
 	    {
-	    hvGfxTextCentered (hvg, cx1 + 3, y - 3, stringWidth,
+	    hvGfxTextCentered(hvg, cx1 + 3, y - 3, stringWidth,
 			       fontHeight, MG_BLACK, font, lenLabel);
 	    cx1 += stringWidth;
 	    }
-	hvGfxLine (hvg, cx1 + 3, y - 3, cx1 + 6, y + 3, lineColor);
+	hvGfxLine(hvg, cx1 + 3, y - 3, cx1 + 6, y + 3, lineColor);
 	cx1 += 6;
 	midPointDrawn = 1;
 	}
@@ -474,14 +477,14 @@ while (1)
 	}
 
     if (cx1 > x2)
-    break;
+        break;
     }
 }
 
-static void drawNormalBox (struct hvGfx *hvg, int x1, int y1,
+static void drawNormalBox(struct hvGfx *hvg, int x1, int y1,
 	       int width, int height, Color fillColor, Color outlineColor)
 {
-struct gfxPoly *poly = gfxPolyNew ();
+struct gfxPoly *poly = gfxPolyNew();
 int y2 = y1 + height;
 int x2 = x1 + width;
   /*
@@ -491,29 +494,29 @@ int x2 = x1 + width;
    *       |              |
    *       4--------------3
    */
-gfxPolyAddPoint (poly, x1, y1);
-gfxPolyAddPoint (poly, x2, y1);
-gfxPolyAddPoint (poly, x2, y2);
-gfxPolyAddPoint (poly, x1, y2);
-gfxPolyAddPoint (poly, x1, y1);
-hvGfxDrawPoly (hvg, poly, fillColor, TRUE);
-hvGfxDrawPoly (hvg, poly, outlineColor, FALSE);
-gfxPolyFree (&poly);
+gfxPolyAddPoint(poly, x1, y1);
+gfxPolyAddPoint(poly, x2, y1);
+gfxPolyAddPoint(poly, x2, y2);
+gfxPolyAddPoint(poly, x1, y2);
+gfxPolyAddPoint(poly, x1, y1);
+hvGfxDrawPoly(hvg, poly, fillColor, TRUE);
+hvGfxDrawPoly(hvg, poly, outlineColor, FALSE);
+gfxPolyFree(&poly);
 }
 
-static void drawBoxWChevrons (struct hvGfx *hvg, int x1, int y1,
+static void drawBoxWChevrons(struct hvGfx *hvg, int x1, int y1,
 		  int width, int height, Color fillColor, Color outlineColor,
 		  char strand)
 {
-drawNormalBox (hvg, x1, y1, width, height, fillColor, outlineColor);
+drawNormalBox(hvg, x1, y1, width, height, fillColor, outlineColor);
 static Color white = 0xffffffff;
 int dir = (strand == '+' ? 1 : -1);
 int midY = y1 + ((height) >> 1);
-clippedBarbs (hvg, x1 + 1, midY, width, ((height >> 1) - 2), 5,
+clippedBarbs(hvg, x1 + 1, midY, width, ((height >> 1) - 2), 5,
 	      dir, white, TRUE);
 }
 
-static void drawRMGlyph (struct hvGfx *hvg, int y, int heightPer,
+static void drawRMGlyph(struct hvGfx *hvg, int y, int heightPer,
 	     int width, int baseWidth, int xOff, struct rmskJoined *rm)
 /*
  *  Draw a detailed RepeatMasker annotation glyph given
@@ -580,41 +583,41 @@ int alignedBlockOffset = heightPer - alignedBlockHeight;
 int unalignedBlockHeight = heightPer * 0.75;
 int unalignedBlockOffset = heightPer - unalignedBlockHeight;
 
-Color black = hvGfxFindColorIx (hvg, 0, 0, 0);
+Color black = hvGfxFindColorIx(hvg, 0, 0, 0);
 Color fillColor = shadesOfGray[5];
-Color outlineColor = jRepeatClassColors[0];
+Color outlineColor = rmskJoinedClassColors[0];
 
   // Break apart the name and get the class of the
   // repeat.
 char class[256];
   // Simplify repClass for lookup: strip trailing '?',
   // simplify *RNA to RNA:
-char *poundPtr = index (rm->name, '#');
+char *poundPtr = index(rm->name, '#');
 if (poundPtr)
     {
-    safecpy (class, sizeof (class), poundPtr + 1);
-    char *slashPtr = index (class, '/');
+    safecpy(class, sizeof(class), poundPtr + 1);
+    char *slashPtr = index(class, '/');
     if (slashPtr)
-    *slashPtr = '\0';
+        *slashPtr = '\0';
     }
 else
     {
-    safecpy (class, sizeof (class), "Unknown");
+    safecpy(class, sizeof(class), "Unknown");
     }
-char *p = &(class[strlen (class) - 1]);
+char *p = &(class[strlen(class) - 1]);
 if (*p == '?')
-*p = '\0';
-if (endsWith (class, "RNA"))
-safecpy (class, sizeof (class), "RNA");
+    *p = '\0';
+if (endsWith(class, "RNA"))
+    safecpy(class, sizeof(class), "RNA");
 
   // Lookup the class to get the color scheme
-ri = hashFindVal (classHash, class);
+ri = hashFindVal(classHash, class);
 if (ri == NULL)
-ri = otherRepeatItem;
+    ri = otherRepeatItem;
 
   // Pick the fill color based on the divergence
 int percId = 10000 - rm->score;
-int grayLevel = grayInRange (percId, 6000, 10000);
+int grayLevel = grayInRange(percId, 6000, 10000);
 fillColor = shadesOfGray[grayLevel];
 outlineColor = ri->color;
 
@@ -636,17 +639,17 @@ for (idx = 0; idx < rm->blockCount; idx++)
 	int fragSize = rm->blockSizes[idx];
 	fragGStart += rm->chromStart;
 	int fragGEnd = fragGStart + fragSize;
-	lx1 = roundingScale (fragGStart - winStart, width, baseWidth) + xOff;
-	lx1 = max (lx1, 0);
-	lx2 = roundingScale (fragGEnd - winStart, width, baseWidth) + xOff;
+	lx1 = roundingScale(fragGStart - winStart, width, baseWidth) + xOff;
+	lx1 = max(lx1, 0);
+	lx2 = roundingScale(fragGEnd - winStart, width, baseWidth) + xOff;
 	w = lx2 - lx1;
 	if (w <= 0)
-	w = 1;
+	    w = 1;
 
 	if (idx == 1 && rm->blockCount == 3)
 	    {
 	    // One and only one aligned block
-	    drawBoxWChevrons (hvg, lx1, y + alignedBlockOffset, w,
+	    drawBoxWChevrons(hvg, lx1, y + alignedBlockOffset, w,
 			      alignedBlockHeight, fillColor,
 			      outlineColor, rm->strand[0]);
 	    }
@@ -656,7 +659,7 @@ for (idx = 0; idx < rm->blockCount; idx++)
 	    if (rm->strand[0] == '-')
 		{
 		// First block on negative strand is the point block
-		drawBoxWChevrons (hvg, lx1,
+		drawBoxWChevrons(hvg, lx1,
 				  y + alignedBlockOffset, w,
 				  alignedBlockHeight, fillColor,
 				  outlineColor, rm->strand[0]);
@@ -664,7 +667,7 @@ for (idx = 0; idx < rm->blockCount; idx++)
 	    else
 		{
 		// First block on the positive strand is the tail block
-		drawBoxWChevrons (hvg, lx1,
+		drawBoxWChevrons(hvg, lx1,
 				  y + alignedBlockOffset, w,
 				  alignedBlockHeight, fillColor,
 				  outlineColor, rm->strand[0]);
@@ -677,7 +680,7 @@ for (idx = 0; idx < rm->blockCount; idx++)
 	    if (rm->strand[0] == '-')
 		{
 		// Last block on the negative strand is the tail block
-		drawBoxWChevrons (hvg, lx1,
+		drawBoxWChevrons(hvg, lx1,
 				  y + alignedBlockOffset, w,
 				  alignedBlockHeight, fillColor,
 				  outlineColor, rm->strand[0]);
@@ -686,7 +689,7 @@ for (idx = 0; idx < rm->blockCount; idx++)
 	    else
 		{
 		// Last block on the positive strand is the poitn block
-		drawBoxWChevrons (hvg, lx1,
+		drawBoxWChevrons(hvg, lx1,
 				  y + alignedBlockOffset, w,
 				  alignedBlockHeight, fillColor,
 				  outlineColor, rm->strand[0]);
@@ -696,7 +699,7 @@ for (idx = 0; idx < rm->blockCount; idx++)
 	else
 	    {
 	    // Intermediate aligned blocks are drawn as rectangles
-	    drawBoxWChevrons (hvg, lx1, y + alignedBlockOffset, w,
+	    drawBoxWChevrons(hvg, lx1, y + alignedBlockOffset, w,
 			      alignedBlockHeight, fillColor,
 			      outlineColor, rm->strand[0]);
 	    }
@@ -715,44 +718,44 @@ for (idx = 0; idx < rm->blockCount; idx++)
 	     *                  |                      |
 	     *                  >>>>>>>                >>>>>>>>
 	     */
-	    lx2 = roundingScale (rm->chromStart +
+	    lx2 = roundingScale(rm->chromStart +
 				 rm->blockRelStarts[idx + 1] -
 				 winStart, width, baseWidth) + xOff;
 	    if ((rm->blockSizes[idx] * pixelsPerBase) >
 		MAX_UNALIGNED_PIXEL_LEN)
 		{
-		lx1 = roundingScale (rm->chromStart +
+		lx1 = roundingScale(rm->chromStart +
 				     (rm->blockRelStarts[idx + 1] -
 				      (int)
 				      (MAX_UNALIGNED_PIXEL_LEN /
 				       pixelsPerBase)) -
 				     winStart, width, baseWidth) + xOff;
 		// Line Across
-		drawDashedHorizLineWHash (hvg, lx1, lx2,
+		drawDashedHorizLineWHash(hvg, lx1, lx2,
 					  y +
 					  unalignedBlockOffset,
 					  5, 5, black, rm->blockSizes[idx]);
 		}
 	    else
 		{
-		lx1 = roundingScale (rm->chromStart - winStart,
+		lx1 = roundingScale(rm->chromStart - winStart,
 				     width, baseWidth) + xOff;
 		// Line Across
-		drawDashedHorizLine (hvg, lx1, lx2,
+		drawDashedHorizLine(hvg, lx1, lx2,
 				     y + unalignedBlockOffset, 5, 5, black);
 		}
 	    // Line down
-	    hvGfxLine (hvg, lx2, y + alignedBlockOffset, lx2,
+	    hvGfxLine(hvg, lx2, y + alignedBlockOffset, lx2,
 		       y + unalignedBlockOffset, black);
-	    hvGfxLine (hvg, lx1, y + unalignedBlockOffset - 3, lx1,
+	    hvGfxLine(hvg, lx1, y + unalignedBlockOffset - 3, lx1,
 		       y + unalignedBlockOffset + 3, black);
 
 	    // Draw labels
 	    MgFont *font = tl.font;
 	    int fontHeight = tl.fontHeight;
 	    int stringWidth =
-		mgFontStringWidth (font, rm->name) + LABEL_PADDING;
-	    hvGfxTextCentered (hvg, lx1 - stringWidth,
+		mgFontStringWidth(font, rm->name) + LABEL_PADDING;
+	    hvGfxTextCentered(hvg, lx1 - stringWidth,
 			       y + unalignedBlockOffset + fontHeight,
 			       stringWidth, fontHeight, MG_BLACK, font,
 			       rm->name);
@@ -768,14 +771,14 @@ for (idx = 0; idx < rm->blockCount; idx++)
 	     *       |                          |
 	     *  >>>>>                    >>>>>>>
 	     */
-	    lx1 = roundingScale (rm->chromStart +
+	    lx1 = roundingScale(rm->chromStart +
 				 rm->blockRelStarts[idx - 1] +
 				 rm->blockSizes[idx - 1] - winStart,
 				 width, baseWidth) + xOff;
 	    if ((rm->blockSizes[idx] * pixelsPerBase) >
 		MAX_UNALIGNED_PIXEL_LEN)
 		{
-		lx2 = roundingScale (rm->chromStart +
+		lx2 = roundingScale(rm->chromStart +
 				     rm->blockRelStarts[idx -
 							1] +
 				     rm->blockSizes[idx - 1] +
@@ -784,27 +787,27 @@ for (idx = 0; idx < rm->blockCount; idx++)
 				      pixelsPerBase) - winStart,
 				     width, baseWidth) + xOff;
 		// Line Across
-		drawDashedHorizLineWHash (hvg, lx1, lx2,
+		drawDashedHorizLineWHash(hvg, lx1, lx2,
 					  y +
 					  unalignedBlockOffset,
 					  5, 5, black, rm->blockSizes[idx]);
 		}
 	    else
 		{
-		lx2 = roundingScale (rm->chromStart +
+		lx2 = roundingScale(rm->chromStart +
 				     rm->blockRelStarts[idx -
 							1] +
 				     rm->blockSizes[idx - 1] +
 				     rm->blockSizes[idx] -
 				     winStart, width, baseWidth) + xOff;
 		// Line Across
-		drawDashedHorizLine (hvg, lx1, lx2,
+		drawDashedHorizLine(hvg, lx1, lx2,
 				     y + unalignedBlockOffset, 5, 5, black);
 		}
 	    // Line down
-	    hvGfxLine (hvg, lx1, y + alignedBlockOffset, lx1,
+	    hvGfxLine(hvg, lx1, y + alignedBlockOffset, lx1,
 		       y + unalignedBlockOffset, black);
-	    hvGfxLine (hvg, lx2, y + unalignedBlockOffset - 3, lx2,
+	    hvGfxLine(hvg, lx2, y + unalignedBlockOffset - 3, lx2,
 		       y + unalignedBlockOffset + 3, black);
 	    }
 	else
@@ -837,17 +840,17 @@ for (idx = 0; idx < rm->blockCount; idx++)
 		    rm->blockRelStarts[idx - 1] +
 		    rm->blockSizes[idx - 1] - (alignedOverlapSize / 2);
 
-		if (abs (unaSize) > rm->blockSizes[idx - 1])
-		unaSize = -rm->blockSizes[idx - 1];
+		if (abs(unaSize) > rm->blockSizes[idx - 1])
+		    unaSize = -rm->blockSizes[idx - 1];
 
-		lx1 = roundingScale (rm->chromStart +
+		lx1 = roundingScale(rm->chromStart +
 				     rm->blockRelStarts[idx -
 							1] +
 				     rm->blockSizes[idx - 1] +
 				     unaSize - winStart, width,
 				     baseWidth) + xOff;
-		lx1 = max (lx1, 0);
-		lx2 = roundingScale (rm->chromStart +
+		lx1 = max(lx1, 0);
+		lx2 = roundingScale(rm->chromStart +
 				     rm->blockRelStarts[idx +
 							1] -
 				     winStart, width, baseWidth) + xOff;
@@ -855,16 +858,16 @@ for (idx = 0; idx < rm->blockCount; idx++)
 		int midPoint = ((lx2 - lx1) / 2) + lx1;
 
 		// Block Intersection Line
-		hvGfxLine (hvg, lx1, y + alignedBlockOffset, lx1,
+		hvGfxLine(hvg, lx1, y + alignedBlockOffset, lx1,
 			   y + alignedBlockOffset + alignedBlockHeight,
 			   black);
 
 		// Line Up
-		hvGfxLine (hvg, lx1, y + alignedBlockOffset,
+		hvGfxLine(hvg, lx1, y + alignedBlockOffset,
 			   midPoint, y + unalignedBlockOffset, black);
 
 		// Line Down
-		hvGfxLine (hvg, lx2, y + alignedBlockOffset,
+		hvGfxLine(hvg, lx2, y + alignedBlockOffset,
 			   midPoint, y + unalignedBlockOffset, black);
 
 		}
@@ -878,37 +881,37 @@ for (idx = 0; idx < rm->blockCount; idx++)
 		int smallOverlapLen = 0;
 		smallOverlapLen = (0.3 * rm->blockSizes[idx - 1]);
 		if (smallOverlapLen > (0.3 * rm->blockSizes[idx + 1]))
-		smallOverlapLen = (0.3 * rm->blockSizes[idx + 1]);
+		    smallOverlapLen = (0.3 * rm->blockSizes[idx + 1]);
 		unaSize = (smallOverlapLen * 2) + alignedGapSize;
 		relStart =
 		    rm->blockRelStarts[idx - 1] +
 		    rm->blockSizes[idx - 1] - smallOverlapLen;
-		lx1 = roundingScale (relStart + rm->chromStart -
+		lx1 = roundingScale(relStart + rm->chromStart -
 				     winStart, width, baseWidth) + xOff;
-		lx1 = max (lx1, 0);
-		lx2 = roundingScale (relStart + rm->chromStart +
+		lx1 = max(lx1, 0);
+		lx2 = roundingScale(relStart + rm->chromStart +
 				     unaSize - winStart, width,
 				     baseWidth) + xOff;
 		// Line Up
-		cx1 = roundingScale (rm->chromStart +
+		cx1 = roundingScale(rm->chromStart +
 				     rm->blockRelStarts[idx -
 							1] +
 				     rm->blockSizes[idx - 1] -
 				     winStart, width, baseWidth) + xOff;
-		hvGfxLine (hvg, cx1, y + alignedBlockOffset, lx1,
+		hvGfxLine(hvg, cx1, y + alignedBlockOffset, lx1,
 			   y + unalignedBlockOffset, black);
 
 		// Line Across
-		drawDashedHorizLineWHash (hvg, lx1, lx2,
+		drawDashedHorizLineWHash(hvg, lx1, lx2,
 					  y +
 					  unalignedBlockOffset,
 					  5, 5, black, rm->blockSizes[idx]);
 		// Line Down
-		cx2 = roundingScale (rm->chromStart +
+		cx2 = roundingScale(rm->chromStart +
 				     rm->blockRelStarts[idx +
 							1] -
 				     winStart, width, baseWidth) + xOff;
-		hvGfxLine (hvg, cx2, y + alignedBlockOffset, lx2,
+		hvGfxLine(hvg, cx2, y + alignedBlockOffset, lx2,
 			   y + unalignedBlockOffset, black);
 		}
 	    else
@@ -917,28 +920,28 @@ for (idx = 0; idx < rm->blockCount; idx++)
 		relStart =
 		    rm->blockRelStarts[idx - 1] +
 		    rm->blockSizes[idx - 1] - (alignedOverlapSize / 2);
-		lx1 = roundingScale (relStart + rm->chromStart -
+		lx1 = roundingScale(relStart + rm->chromStart -
 				     winStart, width, baseWidth) + xOff;
-		lx1 = max (lx1, 0);
-		lx2 = roundingScale (relStart + rm->chromStart +
+		lx1 = max(lx1, 0);
+		lx2 = roundingScale(relStart + rm->chromStart +
 				     unaSize - winStart, width,
 				     baseWidth) + xOff;
 		// Line Up
 		int cx1 =
-		    roundingScale (rm->chromStart +
+		    roundingScale(rm->chromStart +
 				   rm->blockRelStarts[idx - 1] +
 				   rm->blockSizes[idx - 1] - winStart,
 				   width, baseWidth) + xOff;
-		hvGfxLine (hvg, cx1, y + alignedBlockOffset, lx1,
+		hvGfxLine(hvg, cx1, y + alignedBlockOffset, lx1,
 			   y + unalignedBlockOffset, black);
-		drawDashedHorizLine (hvg, lx1, lx2,
+		drawDashedHorizLine(hvg, lx1, lx2,
 				     y + unalignedBlockOffset, 5, 5, black);
 		// Line Down
-		cx2 = roundingScale (rm->chromStart +
+		cx2 = roundingScale(rm->chromStart +
 				     rm->blockRelStarts[idx +
 							1] -
 				     winStart, width, baseWidth) + xOff;
-		hvGfxLine (hvg, cx2, y + alignedBlockOffset, lx2,
+		hvGfxLine(hvg, cx2, y + alignedBlockOffset, lx2,
 			   y + unalignedBlockOffset, black);
 		}
 	    }
@@ -947,7 +950,7 @@ for (idx = 0; idx < rm->blockCount; idx++)
 
 }
 
-static void origRepeatDraw (struct track *tg, int seqStart, int seqEnd,
+static void origRepeatDraw(struct track *tg, int seqStart, int seqEnd,
 		struct hvGfx *hvg, int xOff, int yOff, int width,
 		MgFont * font, Color color, enum trackVisibility vis)
 /* This is the original repeat drawing routine, modified
@@ -962,7 +965,7 @@ int lineHeight = tg->lineHeight;
 int x1, x2, w;
 boolean isFull = (vis == tvFull);
 Color col;
-struct sqlConnection *conn = hAllocConn (database);
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
@@ -973,7 +976,7 @@ if (isFull)
     /*
      * Do gray scale representation spread out among tracks.
      */
-    struct hash *hash = newHash (6);
+    struct hash *hash = newHash(6);
     struct rmskJoined *ro;
     int percId;
     int grayLevel;
@@ -982,38 +985,38 @@ if (isFull)
 	{
 	ri->yOffset = y;
 	y += lineHeight;
-	hashAdd (hash, ri->class, ri);
+	hashAdd(hash, ri->class, ri);
 	}
-    sr = hRangeQuery (conn, tg->table, chromName, winStart, winEnd, NULL,
+    sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL,
 		      &rowOffset);
-    while ((row = sqlNextRow (sr)) != NULL)
+    while ((row = sqlNextRow(sr)) != NULL)
 	{
-	ro = rmskJoinedLoad (row + rowOffset);
+	ro = rmskJoinedLoad(row + rowOffset);
 	char class[256];
 	// Simplify repClass for lookup: strip trailing '?',
 	// simplify *RNA to RNA:
-	char *poundPtr = index (ro->name, '#');
+	char *poundPtr = index(ro->name, '#');
 	if (poundPtr)
 	    {
-	    safecpy (class, sizeof (class), poundPtr + 1);
-	    char *slashPtr = index (class, '/');
+	    safecpy(class, sizeof(class), poundPtr + 1);
+	    char *slashPtr = index(class, '/');
 	    if (slashPtr)
-	    *slashPtr = '\0';
+	        *slashPtr = '\0';
 	    }
 	else
 	    {
-	    safecpy (class, sizeof (class), "Unknown");
+	    safecpy(class, sizeof(class), "Unknown");
 	    }
-	char *p = &(class[strlen (class) - 1]);
+	char *p = &(class[strlen(class) - 1]);
 	if (*p == '?')
-	*p = '\0';
-	if (endsWith (class, "RNA"))
-	safecpy (class, sizeof (class), "RNA");
-	ri = hashFindVal (hash, class);
+	    *p = '\0';
+	if (endsWith(class, "RNA"))
+	    safecpy(class, sizeof(class), "RNA");
+	ri = hashFindVal(hash, class);
 	if (ri == NULL)
-	ri = otherRepeatItem;
+	    ri = otherRepeatItem;
 	percId = 10000 - ro->score;
-	grayLevel = grayInRange (percId, 6000, 10000);
+	grayLevel = grayInRange(percId, 6000, 10000);
 	col = shadesOfGray[grayLevel];
 
 	int idx = 0;
@@ -1026,57 +1029,57 @@ if (isFull)
 		    ro->chromStart + ro->blockRelStarts[idx] +
 		    ro->blockSizes[idx];
 
-		x1 = roundingScale (blockStart - winStart, width,
+		x1 = roundingScale(blockStart - winStart, width,
 				    baseWidth) + xOff;
-		x1 = max (x1, 0);
-		x2 = roundingScale (blockEnd - winStart, width,
+		x1 = max(x1, 0);
+		x2 = roundingScale(blockEnd - winStart, width,
 				    baseWidth) + xOff;
 		w = x2 - x1;
 		if (w <= 0)
-		w = 1;
-		hvGfxBox (hvg, x1, ri->yOffset, w, heightPer, col);
+		    w = 1;
+		hvGfxBox(hvg, x1, ri->yOffset, w, heightPer, col);
 		}
 	    }
-	rmskJoinedFree (&ro);
+	rmskJoinedFree(&ro);
 	}
-    freeHash (&hash);
+    freeHash(&hash);
     }
 else
     {
     char table[64];
     boolean hasBin;
-    struct dyString *query = newDyString (1024);
+    struct dyString *query = newDyString(1024);
     /*
      * Do black and white on single track.  Fetch less than
      * we need from database.
      */
-    if (hFindSplitTable (database, chromName, tg->table, table, &hasBin))
+    if (hFindSplitTable(database, chromName, tg->table, table, &hasBin))
 	{
-	sqlDyStringPrintf (query,
+	sqlDyStringPrintf(query,
 			"select chromStart,blockCount,blockSizes,"
 			"blockRelStarts from %s where ", table);
 	if (hasBin)
-	hAddBinToQuery (winStart, winEnd, query);
-	sqlDyStringPrintf (query, "chromStart<%u and chromEnd>%u ",
+	    hAddBinToQuery(winStart, winEnd, query);
+	sqlDyStringPrintf(query, "chromStart<%u and chromEnd>%u ",
 			winEnd, winStart);
 	/*
 	 * if we're using a single rmsk table, add chrom to the where clause
 	 */
-	if (startsWith ("rmskJoined", table))
-	sqlDyStringPrintf (query, " and chrom = '%s' ", chromName);
-	sr = sqlGetResult (conn, query->string);
-	while ((row = sqlNextRow (sr)) != NULL)
+	if (startsWith("rmskJoined", table))
+	    sqlDyStringPrintf(query, " and chrom = '%s' ", chromName);
+	sr = sqlGetResult(conn, query->string);
+	while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    int idx = 0;
-	    int blockCount = sqlSigned (row[1]);
+	    int blockCount = sqlSigned(row[1]);
 	    int sizeOne;
 	    int *blockSizes;
 	    int *blockRelStarts;
-	    int chromStart = sqlUnsigned (row[0]);
-	    sqlSignedDynamicArray (row[2], &blockSizes, &sizeOne);
-	    assert (sizeOne == blockCount);
-	    sqlSignedDynamicArray (row[3], &blockRelStarts, &sizeOne);
-	    assert (sizeOne == blockCount);
+	    int chromStart = sqlUnsigned(row[0]);
+	    sqlSignedDynamicArray(row[2], &blockSizes, &sizeOne);
+	    assert(sizeOne == blockCount);
+	    sqlSignedDynamicArray(row[3], &blockRelStarts, &sizeOne);
+	    assert(sizeOne == blockCount);
 
 	    for (idx = 1; idx < blockCount - 1; idx++)
 		{
@@ -1086,29 +1089,29 @@ else
 		    int blockEnd =
 			chromStart + blockRelStarts[idx] + blockSizes[idx];
 
-		    x1 = roundingScale (blockStart - winStart,
+		    x1 = roundingScale(blockStart - winStart,
 					width, baseWidth) + xOff;
-		    x1 = max (x1, 0);
-		    x2 = roundingScale (blockEnd - winStart, width,
+		    x1 = max(x1, 0);
+		    x2 = roundingScale(blockEnd - winStart, width,
 					baseWidth) + xOff;
 		    w = x2 - x1;
 		    if (w <= 0)
-		    w = 1;
-		    hvGfxBox (hvg, x1, yOff, w, heightPer, MG_BLACK);
+		        w = 1;
+		    hvGfxBox(hvg, x1, yOff, w, heightPer, MG_BLACK);
 		    }
 		}
 	    }
 	}
-    dyStringFree (&query);
+    dyStringFree(&query);
     }
-sqlFreeResult (&sr);
-hFreeConn (&conn);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
 }
 
 /* Main callback for displaying this track in the viewport
  * of the browser.
  */
-static void jRepeatDraw (struct track *tg, int seqStart, int seqEnd,
+static void rmskJoinedDrawItems(struct track *tg, int seqStart, int seqEnd,
 	     struct hvGfx *hvg, int xOff, int yOff, int width,
 	     MgFont * font, Color color, enum trackVisibility vis)
 {
@@ -1118,12 +1121,12 @@ int baseWidth = seqEnd - seqStart;
 pixelsPerBase = (float) width / (float) baseWidth;
   /*
    * Its unclear to me why heightPer is not updated to the
-   * value set in jRepeatItemHeight() at the time this callback
+   * value set in rmskJoinedItemHeight() at the time this callback
    * is invoked.  Getting the correct value myself.
    * was:
    * int heightPer = tg->heightPer;
    */
-int heightPer = jRepeatItemHeight (tg, NULL);
+int heightPer = rmskJoinedItemHeight(tg, NULL);
 boolean isFull = (vis == tvFull);
 struct rmskJoined *rm;
 
@@ -1133,11 +1136,10 @@ if (isFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
     {
     int level = yOff;
 
-    struct subTrack *st = hashFindVal (subTracksHash, tg->table);
+    struct subTrack *st = hashFindVal(subTracksHash, tg->table);
     if (!st)
-	{
 	return;
-	}
+
     int lidx = st->levelCount;
     int currLevel = 0;
     for (currLevel = 0; currLevel < lidx; currLevel++)
@@ -1145,49 +1147,49 @@ if (isFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
 	rm = st->levels[currLevel];
 	while (rm)
 	    {
-	    drawRMGlyph (hvg, level, heightPer, width, baseWidth, xOff, rm);
+	    drawRMGlyph(hvg, level, heightPer, width, baseWidth, xOff, rm);
 
 	    char statusLine[128];
-	    int ss1 = roundingScale (rm->alignStart - winStart,
+	    int ss1 = roundingScale(rm->alignStart - winStart,
 				     width, baseWidth) + xOff;
 
-	    safef (statusLine, sizeof (statusLine), "%s", rm->name);
+	    safef(statusLine, sizeof(statusLine), "%s", rm->name);
 
-	    int x1 = roundingScale (rm->alignStart - winStart, width,
+	    int x1 = roundingScale(rm->alignStart - winStart, width,
 				    baseWidth) + xOff;
-	    x1 = max (x1, 0);
-	    int x2 = roundingScale (rm->alignEnd - winStart, width,
+	    x1 = max(x1, 0);
+	    int x2 = roundingScale(rm->alignEnd - winStart, width,
 				    baseWidth) + xOff;
 	    int w = x2 - x1;
 	    if (w <= 0)
-	    w = 1;
+	        w = 1;
 
-	    mapBoxHc (hvg, rm->alignStart, rm->alignEnd, ss1, level,
+	    mapBoxHc(hvg, rm->alignStart, rm->alignEnd, ss1, level,
 		      w, heightPer, tg->track, rm->id, statusLine);
 	    rm = rm->next;
 	    }
 	level += heightPer;
-	rmskJoinedFreeList (&(st->levels[currLevel]));
+	rmskJoinedFreeList(&(st->levels[currLevel]));
 	}
     }
 else
     {
     // Draw the stereotypical view
-    origRepeatDraw (tg, seqStart, seqEnd,
+    origRepeatDraw(tg, seqStart, seqEnd,
 		    hvg, xOff, yOff, width, font, color, vis);
     }
 }
 
-void jRepeatMethods (struct track *tg)
+void rmskJoinedMethods(struct track *tg)
 {
-tg->loadItems = jRepeatLoad;
-tg->freeItems = jRepeatFree;
-tg->drawItems = jRepeatDraw;
+tg->loadItems = rmskJoinedLoadItems;
+tg->freeItems = rmskJoinedFreeItems;
+tg->drawItems = rmskJoinedDrawItems;
 tg->colorShades = shadesOfGray;
-tg->itemName = jRepeatName;
-tg->mapItemName = jRepeatName;
-tg->totalHeight = jRepeatTotalHeight;
-tg->itemHeight = jRepeatItemHeight;
+tg->itemName = rmskJoinedName;
+tg->mapItemName = rmskJoinedName;
+tg->totalHeight = rmskJoinedTotalHeight;
+tg->itemHeight = rmskJoinedItemHeight;
 tg->itemStart = tgItemNoStart;
 tg->itemEnd = tgItemNoEnd;
 tg->mapsSelf = TRUE;

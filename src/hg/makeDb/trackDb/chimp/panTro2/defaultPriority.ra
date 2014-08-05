@@ -1,0 +1,41 @@
+# Mapping and Sequencing
+
+track gap override
+html gap
+priority 1
+
+# Genes and Gene Predictions
+
+# track nscanGene override
+# priority 1
+# This priority is defined in chimp/panTro2/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+track xenoRefGene override
+priority 2
+
+track refGene override
+priority 3
+
+# mRNA and EST
+
+track mrna override
+priority 1
+
+track intronEst override
+priority 2
+
+# Comparative Genomics
+
+# track multiz8way
+# priority 1
+# This priority is defined in chimp/panTro2/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+# Variation and Repeats
+
+track rmsk override
+priority 1
+
+track snp127 override
+priority 2

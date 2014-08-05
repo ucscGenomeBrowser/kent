@@ -947,7 +947,7 @@ function filterCompositeExcludeOptions(multiSelect)
         return false;
 
     // IE takes tooo long, so this should be called only when leaving the filterBy box
-    if ($.browser.msie && $(allSubCBs).filter(":checked").length > 300) 
+    if (theClient.isIePre11() && $(allSubCBs).filter(":checked").length > 300) 
         return false;
 
     var filterClass = filterCompFilterVar(multiSelect);
@@ -1087,12 +1087,12 @@ function fauxDisable(obj,disable,title)
  //   div.disabled is border-color: gray; color: gray;
     if ($(obj).hasClass('subCB') === false || typeof(subCfg) === "object") { // subCfg.js ?
         if (disable) {
-            if ($.browser.msie)
+            if (theClient.isIePre11())
                 $(obj).css('opacity', '0.5');
             $(obj).addClass('disabled');
         } else {
             // For some reason IE<9 accepts direct change but isn't happy with simply adding class!
-            if ($.browser.msie)
+            if (theClient.isIePre11())
                 $(obj).css('opacity', '1'); 
             $(obj).removeClass('disabled');
         }
@@ -1277,7 +1277,7 @@ var mat = { // Beginings of matrix object
         mat.matrix = $('table.matrix');
         if (mat.matrix && mat.matrix.length === 1) {
             mat.resizeAngleLabels();
-            if (!$.browser.msie) { // IE can't handle the hover!
+            if (theClient.isIePre11() === false) { // IE pre v11 can't handle the hover!
                 var cells = $('td.matCell');
                 if (cells && cells.length > 0) {
                     var classList = $( cells[0] ).attr("class").split(" ");

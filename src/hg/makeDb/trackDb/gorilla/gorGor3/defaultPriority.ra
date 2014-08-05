@@ -1,0 +1,27 @@
+# Mapping and Sequencing
+
+track gap override
+html gap
+priority 1
+
+# Genes and Gene Predictions
+
+track xenoRefGene override
+priority 1
+
+# mRNA and EST
+
+track mrna override
+priority 1
+
+# Comparative Genomics
+
+# track cons11way
+# priority 1
+# This priority is defined in gorilla/gorGor3/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+# Variation and Repeats
+
+track rmsk override
+priority 1

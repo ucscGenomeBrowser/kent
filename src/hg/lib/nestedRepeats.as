@@ -1,11 +1,11 @@
 table nestedRepeats
-"BED12+ describing joined (by ID) fragments of repeats from RepeatMasker."
+"BED12+ describing joined (by ID) fragments of repeats from RepeatMasker"
     (
     string chrom;      "Chromosome (or contig, scaffold, etc.)"
     uint   chromStart; "Start position in chromosome"
     uint   chromEnd;   "End position in chromosome"
     string name;       "Name of item"
-    uint   score;      "Average of fragment identity scores, transformed into 0..1000 range for shading."
+    uint   score;      "Average of fragment identity scores, transformed into 0..1000 range for shading"
     char[1] strand;    "+, -, or . for mixed (some fragments +, some -)"
     uint thickStart;   "for BED compatibility -- same as chromStart"
     uint thickEnd;     "for BED compatibility -- same as chromEnd"
@@ -13,8 +13,8 @@ table nestedRepeats
     int blockCount;    "Number of blocks"
     int[blockCount] blockSizes; "Comma separated list of block (fragment) sizes"
     int[blockCount] chromStarts; "Start positions relative to chromStart"
-    char[blockCount] blockStrands; "Strand of each fragment."
-    uint id;	       "RepeatMasker-assigned ID used to join fragments."
+    char[blockCount] blockStrands; "Strand of each fragment"
+    uint id;	       "RepeatMasker-assigned ID used to join fragments"
     string repClass;   "Class of repeat"
     string repFamily;  "Family of repeat"
     )

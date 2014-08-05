@@ -1,0 +1,41 @@
+# Mapping and Sequencing
+
+track stsMapMouseNew override
+priority 1
+
+# Genes and Gene Prediction Tracks
+
+# track knownGene override
+# priority 1
+# This priority is defined in mouse/mm7/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+track ensGene override
+visibility pack
+priority 2
+
+track xenoRefGene override
+priority 3
+
+track refGene override
+priority 4
+
+# mRNA and EST
+
+track mrna override
+priority 1
+
+track intronEst override
+priority 2
+
+# Comparative Genomics
+
+# track multiz17way override
+# priority 1
+# This priority is defined in mouse/mm7/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+# Variation and Repeats
+
+track rmsk override
+priority 1

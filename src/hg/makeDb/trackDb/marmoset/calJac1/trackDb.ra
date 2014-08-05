@@ -1,3 +1,4 @@
+include defaultPriority.ra
 
 track quality override
 type wig 0 97
@@ -6,7 +7,7 @@ track multiz9way
 shortLabel Conservation
 longLabel 9-Way Multiz Alignment & Conservation 
 group compGeno
-priority 103.4
+priority 1
 visibility pack
 color 0, 10, 100
 altColor 0,90,10
@@ -42,6 +43,7 @@ type bed 5 .
 track nscanGene override
 visibility pack
 informant Marmoset N-SCAN uses mouse (mm9) as the informant.
+priority 1
 
 searchTable nscanGene
 searchType genePred
@@ -50,7 +52,3 @@ searchPriority 50
 
 
 #Overrides from visibility.ra
-
-track xenoRefGene override
-visibility pack
-

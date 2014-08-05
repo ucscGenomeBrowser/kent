@@ -4,7 +4,6 @@ longLabel Gencode Gene Annotations
 dataVersion ENCODE June 2005 Freeze
 group encodeGenes
 color 73,76,73
-priority 10.8
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type genePred
@@ -30,7 +29,6 @@ shortLabel Gencode Introns Jun05
 longLabel Gencode Intron Validation (Jun 2005)
 dataVersion ENCODE June 2005 Freeze
 group encodeGenes
-priority 10.9
 # NOTE: missing regions
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr8,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr9,chrX
 visibility hide
@@ -49,7 +47,6 @@ itemRgb on
 type bed 12
 dataVersion ENCODE Oct 2005 Freeze
 origAssembly hg17
-priority 49.2
 
     track encodeGisRnaPetMCF7
     parent encodeGisRnaPet
@@ -75,7 +72,6 @@ compositeTrack on
 shortLabel Affy RNA Signal
 longLabel Affymetrix PolyA+ RNA Signal
 group encodeTxLevels
-priority 19.02
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig -1168.00 1591.5
@@ -132,7 +128,6 @@ compositeTrack on
 shortLabel Affy Transfrags
 longLabel Affymetrix PolyA+ RNA Transfrags
 group encodeTxLevels
-priority 19.03
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 3 .
@@ -185,7 +180,6 @@ compositeTrack on
 shortLabel Yale RNA
 longLabel Yale RNA Transcript Map (Neutrophil, Placenta and NB4 cells)
 group encodeTxLevels
-priority 30.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig -2658 3275
@@ -258,7 +252,6 @@ compositeTrack on
 shortLabel Yale TAR
 longLabel Yale RNA Transcriptionally Active Regions (TARs)
 group encodeTxLevels
-priority 31.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 4 .
@@ -352,7 +345,6 @@ compositeTrack on
 shortLabel GIS ChIP-PET
 longLabel GIS ChIP-PET
 group encodeChip
-priority 47.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 useScore 1
 type bed 12
@@ -398,7 +390,6 @@ subGroup2 factor Factor h3k4me1=H3K4me1 h3k4me2=H3K4me2 h3k4me3=H3K4me3 h3ac=H3a
 shortLabel Sanger ChIP
 longLabel Sanger ChIP-chip (histones H3,H4 ab in GM06990, K562, HeLa, HFL-1, MOLT4, and PTR8 cells) 
 group encodeChip
-priority 54.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bedGraph 4
@@ -711,7 +702,6 @@ compositeTrack on
 shortLabel Sanger ChIP Hits
 longLabel Sanger ChIP-chip Hits and Peak Centers
 group encodeChip
-priority 54.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bedGraph 4
@@ -982,7 +972,6 @@ compositeTrack on
 shortLabel UCD Ng ChIP
 longLabel UC Davis ChIP-chip NimbleGen (E2F1, c-Myc, TAF, POLII)
 group encodeChip
-priority 56.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 type bedGraph 4
 maxHeightPixels 128:16:16
@@ -1042,7 +1031,6 @@ compositeTrack on
 shortLabel UCD Ng ChIP Hits
 longLabel UC Davis ChIP-chip Hits NimbleGen (E2F1, Myc ab, HeLa Cells)
 group encodeChip
-priority 56.1
 chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
 type bed 5
 dataVersion ENCODE June & Oct 2005 Freezes
@@ -1068,7 +1056,6 @@ compositeTrack on
 shortLabel LI Ng gIF ChIP
 longLabel Ludwig Institute/UCSD ChIP-chip NimbleGen - Gamma Interferon Experiments
 group encodeChip
-priority 50.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 type bedGraph 4
 maxHeightPixels 128:16:16
@@ -1232,7 +1219,6 @@ compositeTrack on
 shortLabel LI PCR ChIP
 longLabel Ludwig Institute/UCSD PCR ChIP-chip 
 group encodeChip
-priority 51.3
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 type bedGraph 4
 maxHeightPixels 128:16:16
@@ -1563,7 +1549,6 @@ compositeTrack on
 shortLabel LI Ng ChIP
 longLabel Ludwig Institute/UCSD NimbleGen ChIP-chip 
 group encodeChip
-priority 51.4
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 type bedGraph 4
 maxHeightPixels 128:16:16
@@ -1838,7 +1823,6 @@ compositeTrack on
 shortLabel LI Ng TAF1 IMR90
 longLabel Ludwig Institute NimbleGen ChIP-chip: TAF1 antibody, IMR90 cells
 group encodeChip
-priority 51.0
 chromosomes chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr1,chr20,chr21,chr22,chr2,chr3,chr4,chr5,chr6,chr6_hla_hap1,chr7,chr8,chr9,chrX,chrY,chr4_random
 visibility hide
 maxHeightPixels 128:16:16
@@ -1881,7 +1865,6 @@ compositeTrack on
 shortLabel LI Ng Validation
 longLabel Ludwig Institute ChIP-chip Validation: IMR90 cells
 group encodeChip
-priority 51.1
 visibility hide
 type bedGraph 4
 maxHeightPixels 128:16:16
@@ -1925,7 +1908,6 @@ compositeTrack on
 shortLabel Uppsala ChIP
 longLabel Uppsala University, Sweden ChIP-chip
 group encodeChip
-priority 61
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bedGraph 4
@@ -1978,7 +1960,6 @@ compositeTrack on
 shortLabel Uppsala ChIP Butyrate
 longLabel Uppsala University, Sweden ChIP-chip Na-butyrate time series
 group encodeChip
-priority 61.5
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig 0.0 15.7
@@ -2038,7 +2019,6 @@ compositeTrack on
 shortLabel Yale STAT1 pVal
 longLabel Yale ChIP-chip (STAT1 ab, HeLa cells) P-Value
 group encodeChip
-priority 65.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bedGraph 4
@@ -2084,7 +2064,6 @@ compositeTrack on
 shortLabel Yale STAT1 Sig
 longLabel Yale ChIP-chip (STAT1 ab, HeLa cells) Signal
 group encodeChip
-priority 65.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bedGraph 4
@@ -2134,7 +2113,6 @@ compositeTrack on
 shortLabel Yale STAT1 Sites
 longLabel Yale ChIP-chip (STAT1 ab, HeLa cells) Binding Sites
 group encodeChip
-priority 65.2
 # NOTE: missing regions
 chromosomes chr1,chr10,chr11,chr13,chr14,chr15,chr16,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
@@ -2179,7 +2157,6 @@ compositeTrack on
 shortLabel Yale ChIP pVal
 longLabel Yale ChIP-chip P-Value
 group encodeChip
-priority 65.21
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 type bedGraph 4
 maxHeightPixels 128:16:16
@@ -2386,7 +2363,6 @@ compositeTrack on
 shortLabel Yale ChIP Signal
 longLabel Yale ChIP-chip Signal
 group encodeChip
-priority 65.22
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 maxHeightPixels 128:16:16
@@ -2594,7 +2570,6 @@ compositeTrack on
 shortLabel Yale ChIP Sites
 longLabel Yale ChIP-chip Sites 
 group encodeChip
-priority 65.23
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion ENCODE Oct 2005 Freeze
 type bed5FloatScore
@@ -2819,7 +2794,6 @@ compositeTrack on
 shortLabel Yale ChIP RFBR
 longLabel Yale ChIP-chip Regulatory Factor Binding Regions Analysis
 group encodeChip
-priority 65.24
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion Dec 2005 Freeze
 type bed 4 .
@@ -2844,7 +2818,6 @@ track encodeBu_ORChID1
 shortLabel BU ORChID
 longLabel Boston University ORChID (OH Radical Cleavage Intensity Database)
 group encodeChrom
-priority 60.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig -0.56 1.58
@@ -2901,7 +2874,6 @@ compositeTrack on
 shortLabel UW QCP DNaseI Sens
 longLabel UW QCP DNaseI Sensitivity
 group encodeChrom
-priority 66.05
 # NOTE: Missing regions
 chromosomes chr1,chr10,chr11,chr12,chr13,chr16,chr18,chr19,chr2,chr21,chr22,chr4,chr5,chr7,chr8,chr9,chrX
 visibility hide
@@ -3171,7 +3143,6 @@ compositeTrack on
 shortLabel UW DNase-array
 longLabel UW DNaseI hypersensitivity by DNase-array
 group encodeChrom
-priority 66.5
 type bedGraph 4
 maxHeightPixels 128:32:16
 minLimit -5
@@ -3208,7 +3179,6 @@ compositeTrack on
 shortLabel Duke/NHGRI DNase
 longLabel Duke/NHGRI DNaseI-Hypersensitivity
 group encodeChrom
-priority 61.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bedGraph 4
@@ -3395,7 +3365,6 @@ track encodeTbaAlign
 shortLabel TBA Alignment
 longLabel TBA Alignments
 group encodeCompGeno
-priority 70.1
 visibility hide
 color 0, 10, 100
 altColor 1,128,0
@@ -3415,7 +3384,6 @@ track encodeTbaAlignAnno
 shortLabel TBA Alignment Anno
 longLabel TBA Alignments Anno
 group x
-priority 70.1
 visibility hide
 color 0, 10, 100
 altColor 1,128,0
@@ -3438,7 +3406,6 @@ compositeTrack on
 shortLabel TBA Cons
 longLabel  TBA Conservation
 group encodeCompGeno
-priority 70.2
 type wig 0.0 1.0
 spanList 1
 maxHeightPixels 100:25:11
@@ -3481,7 +3448,6 @@ compositeTrack on
 shortLabel TBA Elements
 longLabel TBA Conserved Elements
 group encodeCompGeno
-priority 70.3
 visibility hide
 exonArrows off
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -3521,7 +3487,6 @@ track encodeMlaganAlign
 shortLabel MLAGAN Alignment
 longLabel MLAGAN Alignments
 group encodeCompGeno
-priority 72.0
 visibility hide
 color 0, 10, 100
 altColor 1,128,0
@@ -3541,7 +3506,6 @@ track encodeMlaganAlignAnno
 shortLabel MLAGAN Alignment Anno
 longLabel MLAGAN Alignments Anno
 group x
-priority 72.0
 visibility hide
 color 0, 10, 100
 altColor 1,128,0
@@ -3564,7 +3528,6 @@ compositeTrack on
 shortLabel MLAGAN Cons
 longLabel MLAGAN Conservation
 group encodeCompGeno
-priority 72.1
 visibility hide
 type wig 0.0 1.0
 maxHeightPixels 100:25:11
@@ -3604,7 +3567,6 @@ compositeTrack on
 shortLabel MLAGAN Elements
 longLabel MLAGAN Conserved Elements
 group encodeCompGeno
-priority 72.3
 visibility hide
 exonArrows off
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -3636,7 +3598,6 @@ track encodeMavidAlign
 shortLabel MAVID Alignment
 longLabel MAVID Alignments
 group encodeCompGeno
-priority 74.1
 visibility hide
 color 0, 10, 100
 altColor 1,128,0
@@ -3656,7 +3617,6 @@ track encodeMavidAlignAnno
 shortLabel MAVID Alignment Anno
 longLabel MAVID Alignments Anno
 group x
-priority 74.1
 visibility hide
 color 0, 10, 100
 altColor 1,128,0
@@ -3678,7 +3638,6 @@ compositeTrack on
 shortLabel MAVID Cons
 longLabel MAVID Conservation
 group encodeCompGeno
-priority 74.2
 visibility hide
 type wig 0.0 1.0
 maxHeightPixels 100:25:11
@@ -3718,7 +3677,6 @@ compositeTrack on
 shortLabel MAVID Elements
 longLabel MAVID Conserved Elements
 group encodeCompGeno
-priority 74.3
 visibility hide
 exonArrows off
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -3751,7 +3709,6 @@ compositeTrack on
 shortLabel Consens Elements
 longLabel MSA Consensus Constrained Elements
 group encodeCompGeno
-priority 70.0
 visibility hide
 exonArrows off
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -3784,7 +3741,6 @@ compositeTrack on
 shortLabel Align Agree
 longLabel MSA Alignment Agreement
 group encodeCompGeno
-priority 75.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 type wig 0 1.0
 viewLimits .5:1
@@ -3826,7 +3782,6 @@ compositeTrack on
 shortLabel Align Gaps
 longLabel MSA Alignment Gaps (#Ungapped Species)
 group encodeCompGeno
-priority 75.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 type wig 0 27
 spanList 1
@@ -3860,7 +3815,6 @@ track encodeEvoFold
 shortLabel UCSC EvoFold
 longLabel UCSC, RNA secondary structure predicted by EvoFold (id_strand_score)
 group encodeGenes
-priority 63.11
 visibility hide
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 color 30,120,0
@@ -3872,7 +3826,6 @@ track encodeUViennaRnaz
 shortLabel Vienna RNAz
 longLabel University of Vienna, RNA secondary structure predicted by RNAz 
 group encodeGenes
-priority 63.12
 visibility hide
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 color 30,120,0
@@ -3883,7 +3836,6 @@ track encodeDless
 shortLabel DLESS
 longLabel Detection of LinEage Specific Selection (DLESS)
 group encodeCompGeno
-priority 100.191
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 gainColor 0,255,0
 lossColor 255,0,0

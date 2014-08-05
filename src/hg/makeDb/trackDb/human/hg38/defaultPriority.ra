@@ -1,4 +1,17 @@
+# Mapping and Sequencing
+
+track gold override
+html gold
+visibility pack
+priority 1
+
+# track hg38ContigDiff override
+# priority 2
+# This priority is defined in human/hg38/trackDb.ra
+# If this priority changes, please change it here and there as well
+
 # Genes and Gene Predictions
+
 track knownGene override
 priority 1
 
@@ -7,8 +20,33 @@ visibility pack
 priority 2
 
 # mRNA and EST
+
 track mrna override
 priority 1
 
 track intronEst override
+priority 2
+
+# Comparative Genomics
+
+# track cons7way override
+# priority 1
+# This priority is defined in human/hg38/trackDb.7way.ra
+# If this priority changes, please change it here and there as well
+
+# Variation
+
+# track snp141Common
+# priority 1
+# This priority is defined in human/hg38/trackDb.ra
+# If this priority changes, please change it here and there as well
+
+# Repeats
+
+track rmsk override
+group rep
+visibility full
+priority 1
+
+track joinedRmsk override
 priority 2

@@ -82,12 +82,11 @@ if (!isdigit(s[0]))
 return round(10.0*atof(s));
 }
 
-int parenSignInt(char *s, struct lineFile *lf)
-/* Convert from ascii notation where a parenthesized integer is negative
- * to straight int. */
+static int parenInt(char *s, struct lineFile *lf)
+/* Convert from ascii to int where a parenthesized integer is the same */
 {
 if (s[0] == '(')
-    return -atoi(s+1);
+    return atoi(s+1);
 else
     return atoi(s);
 }
@@ -101,8 +100,8 @@ if (r->repEnd < 0 || r->repStart > r->repEnd)
     badRepCnt++;
     if (verboseLevel() > 1)
         {
-        verbose(2, "bad rep range [%d, %d] line %d of %s \n",
-		r->repStart, r->repEnd, lf->lineIx, lf->fileName);
+        verbose(2, "bad rep range [%d, %d] line %d of %s %s:%d-%d\n",
+		r->repStart, r->repEnd, lf->lineIx, lf->fileName, r->genoName, r->genoStart, r->genoEnd);
         }
     return FALSE;
     }
@@ -174,7 +173,7 @@ while (lineFileNext(lf, &line, &lineSize))
     r.genoName = words[4];
     r.genoStart = atoi(words[5])-1;
     r.genoEnd = atoi(words[6]);
-    r.genoLeft = parenSignInt(words[7], lf);
+    r.genoLeft = parenInt(words[7], lf);
     r.strand[0]  = (words[8][0] == '+' ? '+' : '-');
     r.repName = words[9];
     r.repClass = words[10];
@@ -203,14 +202,14 @@ while (lineFileNext(lf, &line, &lineSize))
            r.repFamily = s;
            }
         }
-    r.repStart = parenSignInt(words[11-wordOffset], lf);
+    r.repStart = parenInt(words[11-wordOffset], lf);
     r.repEnd = atoi(words[12-wordOffset]);
-    r.repLeft = parenSignInt(words[13-wordOffset], lf);
+    r.repLeft = parenInt(words[13-wordOffset], lf);
     r.id = atoi(words[14-wordOffset]);
     if (words[8][0] == 'C')
 	{
-	r.repLeft = parenSignInt(words[11-wordOffset], lf);
-	r.repStart = parenSignInt(words[13-wordOffset], lf);
+	r.repLeft = parenInt(words[11-wordOffset], lf);
+	r.repStart = parenInt(words[13-wordOffset], lf);
 	}
     if (checkRepeat(&r, lf))
         {

@@ -105,6 +105,7 @@ void mdbJsonOutput(struct mdb *el, FILE *f);
 #define MDB_VAR_DATATYPE        CV_TERM_DATA_TYPE
 #define MDB_VAR_VIEW            CV_TERM_VIEW
 #define MDB_VAR_CONTROL         CV_TERM_CONTROL
+#define MDB_VAR_TREATMENT       CV_TERM_TREATMENT
 #define MDB_VAR_TABLENAME       "tableName"
 #define MDB_VAR_FILENAME        "fileName"
 #define MDB_VAR_MD5SUM          "md5sum"

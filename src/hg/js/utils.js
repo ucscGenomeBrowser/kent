@@ -109,6 +109,138 @@ function normed(thing)
     return thing;
 }
 
+var theClient = (function() {
+// Object that detects client browser if requested              
+    
+    // - - - - - Private variables and/or methods - - - - - 
+    var ieVersion = null;
+    var browserNamed = null;
+    
+    // - - - - - Public methods - - - - - 
+    return { // returns an object with public methods
+    
+        getIeVersion: function ()
+        { // Adapted from the web: stackOverflow.com answer by Joachim Isaksson
+            if (ieVersion === null) {
+                ieVersion = -1.0;
+                var re = null;
+                if (navigator.appName === 'Microsoft Internet Explorer') {
+                    browserNamed = 'MSIE';
+                    re = new RegExp("MSIE ([0-9]{1,}[.0-9]{0,})");
+                    if (re.exec(navigator.userAgent) !== null)
+                        ieVersion = parseFloat( RegExp.$1 );
+                } else if (navigator.appName === 'Netscape') {
+                    re = new RegExp("Trident/.*rv:([0-9]{1,}[.0-9]{0,})");
+                    if (re.exec(navigator.userAgent) !== null) {
+                        browserNamed = 'MSIE';
+                        ieVersion = parseFloat( RegExp.$1 );
+                    }
+                }
+            }
+            return ieVersion;
+        },
+        
+        isIePre11: function ()
+        {
+            var ieVersion = theClient.getIeVersion();
+            if ( ieVersion !== -1.0 && ieVersion < 11.0 )
+                return true;
+            return false;
+        },
+        
+        isIePost11: function ()
+        {
+            if (theClient.getIeVersion() >= 11.0 )
+                return true;
+            return false;
+        },
+        
+        isIe: function ()
+        {
+            if (theClient.getIeVersion() === -1.0 )
+                return false;
+            return true;
+        },
+        
+        isChrome: function () 
+        {
+            if (browserNamed !== null)
+                return (browserNamed === 'Chrome');
+            
+            if (navigator.userAgent.indexOf("Chrome") !== -1) {
+                browserNamed = 'Chrome';
+                return true;
+            }
+            return false;
+        },
+        
+        isNetscape: function () 
+        {   // IE sometimes mimics netscape
+            if (browserNamed !== null)
+                return (browserNamed === 'Netscape');
+        
+            if (navigator.appName === 'Netscape'
+            &&  navigator.userAgent.indexOf("Trident") === -1) {
+                browserNamed = 'Netscape';
+                return true;
+            }
+            return false;
+        },
+        
+        isFirefox: function () 
+        {
+            if (browserNamed !== null)
+                return (browserNamed === 'FF');
+            
+            if (navigator.userAgent.indexOf("Firefox") !== -1) {
+                browserNamed = 'FF';
+                return true;
+            }
+            return false;
+        },
+        
+        isSafari: function () 
+        {   // Chrome sometimes mimics Safari
+            if (browserNamed !== null)
+                return (browserNamed === 'Safari');
+            
+            if (navigator.userAgent.indexOf("Safari") !== -1 
+            &&  navigator.userAgent.indexOf('Chrome') === -1) {
+                browserNamed = 'Safari';
+                return true;
+            }
+            return false;
+        },
+        
+        isOpera: function () 
+        {
+            if (browserNamed !== null)
+                return (browserNamed === 'Opera');
+            
+            if (navigator.userAgent.indexOf("Presto") !== -1) {
+                browserNamed = 'Opera';
+                return true;
+            }
+            return false;
+        },
+        
+        nameIs: function () 
+        {   // simple enough, this needs no comment!
+            if (browserNamed === null
+            &&  theClient.isChrome() === false   // Looking in the order of popularity
+            &&  theClient.isFirefox() === false
+            &&  theClient.isIe()       === false
+            &&  theClient.isSafari()    === false
+            &&  theClient.isOpera()      === false
+            &&  theClient.isNetscape()    === false)
+                browserNamed = navigator.appName; // Don't know what else to look for.
+            
+            return browserNamed;
+        }
+
+    };
+}());
+
 function waitCursor(obj)  // DEAD CODE?
 {
     //document.body.style.cursor="wait"
@@ -301,7 +433,7 @@ function validateInt(obj,min,max)
     var rangeMax=parseInt(max);
     if (title.length === 0)
         title = "Value";
-    var popup=( $.browser.msie === false );
+    var popup=( theClient.isIePre11() === false );
     for (;;) {
         if ((obj.value === undefined || obj.value === null || obj.value === "") 
         &&  isInteger(obj.defaultValue))
@@ -368,7 +500,7 @@ function validateFloat(obj,min,max)
     var rangeMax=parseFloat(max);
     if (title.length === 0)
         title = "Value";
-    var popup=( $.browser.msie === false );
+    var popup=( theClient.isIePre11() === false );
     for (;;) {
         if ((obj.value === undefined || obj.value === null || obj.value === "") 
         &&  isFloat(obj.defaultValue))
@@ -1038,7 +1170,7 @@ function waitMaskSetup(timeOutInMs)
     $(waitMask).css({opacity:0.0,display:'block',top: '0px', 
                         height: $(document).height().toString() + 'px' });
     // Special for IE, since it takes so long, make mask obvious
-    //if ($.browser.msie)
+    //if (theClient.isIePre11())
     //    $(waitMask).css({opacity:0.4,backgroundColor:'gray'});
 
     // Things could fail, so always have a timeout.
@@ -2064,7 +2196,7 @@ var sortTable = {
             if ( ! $(this).attr('onclick') ) {
                 $(this).click( function () { sortTable.sortOnButtonPress(this);} );
             }
-            if ($.browser.msie) { // Special case for IE since CSS :hover doesn't work
+            if (theClient.isIePre11()) { // Special case for IE since CSS :hover doesn't work
                 $(this).hover(
                     function () { $(this).css( { backgroundColor: '#CCFFCC', cursor: 'hand' } ); },
                     function () { $(this).css( { backgroundColor: '#FCECC0', cursor: '' } ); }

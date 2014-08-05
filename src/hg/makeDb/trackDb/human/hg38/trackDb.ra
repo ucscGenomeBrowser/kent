@@ -1,19 +1,8 @@
 include trackDb.wgEncode.ra
 
-# Local declaration so that local gold.html is picked up.
-track gold override
-html gold
-visibility pack
-priority 1
-
 track par override
 group x
 visibility hide
-
-track rmsk override
-group rep
-visibility full
-priority 1
 
 track windowmaskerSdust override
 group rep
@@ -82,7 +71,7 @@ track hg38ContigDiff
 shortLabel Hg19 Diff
 longLabel Contigs New to GRCh38/(hg38), Not Carried Forward from GRCh37/(hg19)
 visibility pack
-priority 3
+priority 2
 group map
 type bed 9 .
 scoreFilterByRange on
@@ -237,7 +226,6 @@ shortLabel Retroposed Genes 8.0
 longLabel Retroposed Genes V8, Including Pseudogenes
 group genes
 type psl
-priority 37.14
 color 20,0,250
 visibility hide
 ucscRetroInfo ucscRetroInfo8
@@ -284,3 +272,15 @@ xrefTable kgXref, ucscRetroInfo8
 xrefQuery select ucscRetroInfo8.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
 
+track snp141Mult override
+snpSeqFile /gbdb/hg19/snp/snp141.fa
+
+track snp141Flagged override
+snpSeqFile /gbdb/hg19/snp/snp141.fa
+
+track snp141Common override
+snpSeqFile /gbdb/hg19/snp/snp141.fa
+priority 1
+
+track snp141 override
+snpSeqFile /gbdb/hg19/snp/snp141.fa

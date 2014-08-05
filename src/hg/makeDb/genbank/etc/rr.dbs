@@ -7,6 +7,7 @@
 hg38
 hg19
 mm10
+rn6
 # 
 # Most recent assembly for each org
 #
@@ -86,7 +87,6 @@ priPac1
 proCap1
 pteVam1
 rheMac3
-rn5
 sacCer3
 saiBol1
 sarHar1
@@ -157,6 +157,7 @@ panTro2
 panTro1
 petMar1
 rheMac2
+rn5
 rn4
 rn3
 sacCer2

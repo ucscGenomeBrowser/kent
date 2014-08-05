@@ -25109,7 +25109,7 @@ else if (sameWord(table, "esRegGeneToMotif"))
     {
     doTriangle(tdb, item, "esRegMotif");
     }
-else if (sameWord(table, "wgEncodeRegTfbsClusteredMotifs"))
+else if (startsWith("wgEncodeRegTfbsClusteredMotifs", table))
     {
     doTriangle(tdb, item, "transRegCodeMotif");
     }
@@ -25122,11 +25122,7 @@ else if (sameWord(table, "transRegCodeProbe"))
     doTransRegCodeProbe(tdb, item, "transRegCode", "transRegCodeMotif",
                         "transRegCodeCondition", "growthCondition");
     }
-else if (sameWord(table, "wgEncodeRegDnaseClustered")
-     ||  sameWord(table, "wgEncodeRegDnaseClusteredV2")
-     ||  sameWord(table, "wgEncodeRegDnaseClusteredV3")
-     ||  sameWord(table, "wgEncodeRegDnaseClusteredOn7"))
-     // TODO: replace these with - startsWith("wgEncodeRegDnaseClustered", table)
+else if (startsWith("wgEncodeRegDnaseClustered", table))
     {
     doPeakClusters(tdb, item);
     }
