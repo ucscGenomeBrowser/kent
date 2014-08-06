@@ -469,22 +469,31 @@ hPrintf(" ");
 if (!cfgOptionBooleanDefault("hgta.disableSendOutput", FALSE))
     {
     hPrintf(" Send output to ");
+    struct dyString *dy = dyStringNew(256);
+    dyStringAppend(dy, 
+	"onclick=\"document.getElementById('checkboxGreat').checked=false;");
+    if (isGenomeSpaceEnabled())
+	dyStringAppend(dy, 
+	      	  "document.getElementById('checkboxGenomeSpace').checked=false;");
+    dyStringAppend(dy, 
+	      	  "return true;\"");
     cgiMakeCheckBoxIdAndJS("sendToGalaxy", doGalaxy(),
-        "checkboxGalaxy",
-	"onclick=\"document.getElementById('checkboxGreat').checked=false;"
-	      	  "document.getElementById('checkboxGenomeSpace').checked=false; return true;\"");
+        "checkboxGalaxy", dy->string);
     hPrintf("<A HREF=\""GALAXY_URL_BASE"\" target=_BLANK>Galaxy</A>\n");
     nbSpaces(2);
     cgiMakeCheckBoxIdAndJS("sendToGreat", doGreat(),
         "checkboxGreat",
         "onclick=\"return onSelectGreat();\"");
     hPrintf(" <A HREF=\"http://great.stanford.edu\" target=_BLANK>GREAT</A>");
-    nbSpaces(2);
-    cgiMakeCheckBoxIdAndJS("sendToGenomeSpace", doGenomeSpace(),
-	"checkboxGenomeSpace",
-    	"onclick=\"document.getElementById('checkboxGreat').checked=false;"
-		  "document.getElementById('checkboxGalaxy').checked=false; return true;\"");
-    hPrintf(" <A HREF=\"http://www.genomespace.org\" target=_BLANK>GenomeSpace</A>");
+    if (isGenomeSpaceEnabled())
+	{
+	nbSpaces(2);
+	cgiMakeCheckBoxIdAndJS("sendToGenomeSpace", doGenomeSpace(),
+	    "checkboxGenomeSpace",
+	    "onclick=\"document.getElementById('checkboxGreat').checked=false;"
+		      "document.getElementById('checkboxGalaxy').checked=false; return true;\"");
+	hPrintf(" <A HREF=\"http://www.genomespace.org\" target=_BLANK>GenomeSpace</A>");
+	}
     }
 
 hPrintf("</TD></TR>\n");
@@ -947,11 +956,26 @@ hPrintf("<P>"
 
 }
 
+static char *getGenomeSpaceText()
+/* fetch GenomeSpace text if enabled */
+{
+if (isGenomeSpaceEnabled())
+    {
+    return 
+  "Send data to "
+  "<A HREF=\"http://www.genomespace.org\" target=_BLANK>GenomeSpace</A> for use with diverse computational tools. ";
+    }
+else
+    {
+    return "";
+    }
+}
+
 void mainPageAfterOpen(struct sqlConnection *conn)
 /* Put up main page assuming htmlOpen()/htmlClose()
  * will happen in calling routine. */
 {
-hPrintf("%s",
+hPrintf(
   "Use this program to retrieve the data associated with a track in text "
   "format, to calculate intersections between tracks, and to retrieve "
   "DNA sequence covered by a track. For help in using this application "
@@ -969,20 +993,21 @@ hPrintf("%s",
   "To examine the biological function of your set through annotation "
   "enrichments, send the data to "
   "<A HREF=\"http://great.stanford.edu\" target=_BLANK>GREAT</A>. "
-  "Send data to "
-  "<A HREF=\"http://www.genomespace.org\" target=_BLANK>GenomeSpace</A> for use with diverse computational tools. "
+  "%s"
   "Refer to the "
   "<A HREF=\"../goldenPath/credits.html\">Credits</A> page for the list of "
   "contributors and usage restrictions associated with these data. "
   "All tables can be downloaded in their entirety from the "
   "<A HREF=\"http://hgdownload.cse.ucsc.edu/downloads.html\""
   ">Sequence and Annotation Downloads</A> page."
+   , getGenomeSpaceText()
    );
 
 hPrintf("<script type=\"text/javascript\">\n");
 hPrintf("function onSelectGreat() {\n");
 hPrintf("document.getElementById('checkboxGalaxy').checked=false;\n");
-hPrintf("document.getElementById('checkboxGenomeSpace').checked=false;\n");
+if (isGenomeSpaceEnabled())
+    hPrintf("document.getElementById('checkboxGenomeSpace').checked=false;\n");
 hPrintf("document.getElementById('outBed').selected=true;\n");
 hPrintf("return true;\n");
 hPrintf("}\n");

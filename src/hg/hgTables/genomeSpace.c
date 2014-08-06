@@ -128,6 +128,16 @@ if (!value)
 return value;
 }
 
+boolean isGenomeSpaceEnabled()
+/* genomeSpace is enabled by the presence of GS config settings. */
+{
+char *iSU = getGenomeSpaceConfig("identityServerUrl");
+char *dmSvr = getGenomeSpaceConfig("dmServer");
+if (isNotEmpty(iSU) && isNotEmpty(dmSvr))
+    return TRUE;
+return FALSE;
+}
+
 char *insertUserPasswordIntoUrl(char *url, char *user, char *password)
 /* Insert cgi-encoded user and password into url after protocol. Free returned string when done. */
 {

@@ -1136,6 +1136,9 @@ void doGreatTopLevel();
 /* intermediate page for sending to GREAT directly from top form */
 
 /* --------------- GenomeSpace functions --------------- */
+boolean isGenomeSpaceEnabled();
+/* genomeSpace is enabled by the presence of GS config settings. */
+
 boolean doGenomeSpace();
 /* Has the send query results to GenomeSpace checkbox been selected? */
 
