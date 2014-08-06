@@ -14,8 +14,9 @@
 
 char *database = "hgFixed";
 char *tabDir = ".";
-boolean doLoad;
-boolean doRound;
+boolean doLoad = FALSE;
+boolean doRound = FALSE;
+boolean median = FALSE;
 int limit = 0;
 
 #define DATA_FILE_VERSION "#1.2"
@@ -38,6 +39,7 @@ errAbort(
   "    -noLoad  - If true don't load database and don't clean up tab files\n"
   "    -doRound - If true round data values\n"
   "    -limit=N - Only do limit rows of table, for testing\n"
+  "    -median - Create tables grouped by tissue, using median expression value\n"
   , database);
 }
 
@@ -50,7 +52,42 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+struct hash *parseSamples(struct lineFile *lf, int expectedCols, int *sampleCount)
+/* Parse sample descriptions. Return hash keyed on sample name */
+{
+char *line;
+int wordCount;
+char *words[100];
+char *sampleId, *tissue, *donor;
+struct hash *hash = newHash(17);
+int count = 0;
+
+while (lineFileNext(lf, &line, NULL))
+    {
+    /* Convert line to sample record */
+    wordCount = chopTabs(line, words);
+    lineFileExpectWords(lf, expectedCols, wordCount);
+    sampleId = cloneString(words[0]);
+    tissue = cloneString(words[6]);
+
+    /*  Donor is GTEX-XXXX-* */
+    chopByChar(cloneString(sampleId), '-', words, ArraySize(words));
+    donor = cloneString(words[1]);
+
+    AllocVar(sample);
+    sample->tissue = tissue;
+    sample->donor = donor;
+    sample->name = sampleId;
+    hashAdd(hash, sampleId, sample);
+    count++;
+    }
+if (sampleCount)
+    *sampleCount = count;
+return hash;
+}
+
 void sampleRowOut(FILE *f, struct gtexSample *sample, int id)
+/* Output description of one sample */
 {
 fprintf(f, "%d\t", id);
 fprintf(f, "%s\t", sample->tissue);
@@ -59,7 +96,7 @@ fprintf(f, "%s\n", sample->name);
 }
 
 void dataRowOut(FILE *f, int count, char **row)
-/* Output data */
+/* Output expression levels for one gene */
 {
 int i;
 /* Print geneId and sample count */
@@ -85,9 +122,9 @@ char *line;
 int i, wordCount;
 char *words[100];
 FILE *f = NULL;
-struct hash *hash = newHash(17);
 int dataCount = 0;
 int sampleCount = 0;
+struct hash *sampleHash;
 
 /* Parse GTEX sample file */
 lf = lineFileOpen(sampleFile, TRUE);
@@ -98,27 +135,7 @@ if (!startsWith("SAMPID", line))
 int sampleCols = chopTabs(line, words);
 if (sampleCols < 7 || differentString(words[6], "SMTSD"))
     errAbort("unrecognized format - expecting sample file header in %s first line", lf->fileName);
-
-while (lineFileNext(lf, &line, NULL))
-    {
-    /* Convert line to sample record */
-    char *sampleId, *tissue, *donor;
-    wordCount = chopTabs(line, words);
-    lineFileExpectWords(lf, sampleCols, wordCount);
-    sampleId = cloneString(words[0]);
-    tissue = cloneString(words[6]);
-
-    /*  Donor is GTEX-XXXX-* */
-    chopByChar(cloneString(sampleId), '-', words, ArraySize(words));
-    donor = cloneString(words[1]);
-
-    AllocVar(sample);
-    sample->tissue = tissue;
-    sample->donor = donor;
-    sample->name = sampleId;
-    hashAdd(hash, sampleId, sample);
-    sampleCount++;
-    }
+sampleHash = parseSamples(lf, sampleCols, &sampleCount);
 lineFileClose(&lf);
 
 /* Open GTEX expression data file, and read header lines */
@@ -157,7 +174,7 @@ f = hgCreateTabFile(tabDir, sampleTable);
 struct gtexSample *sample;
 for (i=0; i<dataSampleCount; i++)
     {
-    sample = hashMustFindVal(hash, samples[i]);
+    sample = hashMustFindVal(sampleHash, samples[i]);
     sampleRowOut(f, sample, i);
     }
 if (doLoad)
@@ -182,9 +199,6 @@ char **row;
 AllocArray(row, dataSampleCount+2);
 while (lineFileNext(lf, &line, NULL))
     {
-    //geneId = nextWord(&line);
-    //nextWord(&line);
-    //wordCount = chopTabs(line, row);
     wordCount = chopByChar(line, '\t', row, dataSampleCount+2);
     if (wordCount-2 != dataSampleCount)
         errAbort("Expecting %d data points, got %d line %d of %s", 
@@ -218,6 +232,7 @@ optionInit(&argc, argv, options);
 database = optionVal("database", database);
 doLoad = !optionExists("noLoad");
 doRound = optionExists("doRound");
+median = optionExists("median");
 if (optionExists("tab"))
     {
     tabDir = optionVal("tab", tabDir);
