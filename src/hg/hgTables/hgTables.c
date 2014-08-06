@@ -646,13 +646,16 @@ struct hTableInfo *hubTrackTableInfo(struct trackDb *tdb)
 /* Given trackDb entry for a hub track, wrap table info around it. */
 {
 struct hTableInfo *hti;
-if (startsWithWord("bigBed", tdb->type))
-    hti = bigBedToHti(tdb->track, NULL);
-else if (startsWithWord("bam", tdb->type))
-    hti = bamToHti(tdb->table);
-else if (startsWithWord("vcfTabix", tdb->type))
-    hti = vcfToHti(tdb->table, TRUE);
-else
+if (tdb->subtracks == NULL)
+    {
+    if (startsWithWord("bigBed", tdb->type))
+	hti = bigBedToHti(tdb->track, NULL);
+    else if (startsWithWord("bam", tdb->type))
+	hti = bamToHti(tdb->table);
+    else if (startsWithWord("vcfTabix", tdb->type))
+	hti = vcfToHti(tdb->table, TRUE);
+    }
+if (hti == NULL)
     {
     AllocVar(hti);
     hti->rootName = cloneString(tdb->track);
