@@ -48,6 +48,7 @@ static struct optionSpec options[] = {
    {"tab", OPTION_STRING},
    {"noLoad", OPTION_BOOLEAN},
    {"doRound", OPTION_BOOLEAN},
+   {"median", OPTION_BOOLEAN},
    {"limit", OPTION_INT},
    {NULL, 0},
 };
@@ -59,7 +60,7 @@ char *line;
 int wordCount;
 char *words[100];
 char *sampleId, *tissue, *donor;
-struct hash *hash = newHash(17);
+struct hash *hash = hashNew(0);
 int count = 0;
 
 while (lineFileNext(lf, &line, NULL))
@@ -84,6 +85,44 @@ while (lineFileNext(lf, &line, NULL))
 if (sampleCount)
     *sampleCount = count;
 return hash;
+}
+
+struct hashEl *groupSamples(struct hash *sampleHash, char **sampleIds, int sampleCount)
+/* Group samples by tissue for median option */
+{
+struct hash *tissueHash = hashNew(0);
+struct slUnsigned *offset;
+struct hashEl *el;
+struct gtexSample *sample;
+int i;
+
+for (i = 0; i < sampleCount; i++)
+    {
+    sample = hashMustFindVal(sampleHash, sampleIds[i]);
+    offset = slUnsignedNew(i);
+    el = hashLookup(tissueHash, sample->tissue);
+    if (el)
+        slAddHead((struct slUnsigned *)el->val, offset);
+    else
+        hashAdd(tissueHash, sample->tissue, offset);
+    }
+
+struct hashEl *tissueOffsetList = hashElListHash(tissueHash);
+slSort(&tissueOffsetList, hashElCmp);
+
+//#define DEBUG 1
+#ifdef DEBUG
+uglyf("tissue count: %d\n", slCount(tissueOffsetList));
+for (el = tissueOffsetList; el->next; el = el->next)
+    {
+    uglyf("%s\t", el->name);
+    for (offset = (struct slUnsigned *)el->val; offset->next; offset = offset->next)
+        uglyf("%d,", offset->val);
+    uglyf("\n");
+    }
+#endif
+
+return tissueOffsetList;
 }
 
 void sampleRowOut(FILE *f, struct gtexSample *sample, int id)
@@ -113,6 +152,7 @@ for (i=0; i<count; ++i)
     } 
 fprintf(f, "\n");
 }
+
 
 void hgGtex(char *tableRoot, char *dataFile, char *sampleFile)
 /* Main function */
@@ -167,16 +207,42 @@ char *sampleWords[sampleCount+3];
 int dataSampleCount = chopTabs(line, sampleWords) - 2;
 char **samples = &sampleWords[2];
 
-/* Create sample table with samples ordered as in data file */
+/* Create sample table with samples ordered as in data file, 
+        or tissues alpha-sorted (median option) */
 char sampleTable[64];
-safef(sampleTable, sizeof(sampleTable), "%sSamples", tableRoot);
-f = hgCreateTabFile(tabDir, sampleTable);
+struct hashEl *tissueEl, *tissueOffsetList = NULL;
+int tissueCount = 0;
 struct gtexSample *sample;
-for (i=0; i<dataSampleCount; i++)
+char donorCount[10];
+if (median)
     {
-    sample = hashMustFindVal(sampleHash, samples[i]);
-    sampleRowOut(f, sample, i);
+    AllocVar(sample);
+    sample->name = "n/a";
+    tissueOffsetList = groupSamples(sampleHash, samples, sampleCount);
+    safef(sampleTable, sizeof(sampleTable), "%sTissues", tableRoot);
+    f = hgCreateTabFile(tabDir, sampleTable);
+    tissueCount = slCount(tissueOffsetList);
+    //uglyf(2, "tissue count: %d\n", tissueCount);
+    i = 0;
+    for (tissueEl = tissueOffsetList; tissueEl->next;  tissueEl = tissueEl->next)
+        {
+        sample->tissue = tissueEl->name;
+        safef(donorCount, sizeof(donorCount), "%i", slCount(tissueEl->val));
+        sample->donor = donorCount;
+        sampleRowOut(f, sample, i++);
+        }
     }
+else
+    {
+    safef(sampleTable, sizeof(sampleTable), "%sSamples", tableRoot);
+    f = hgCreateTabFile(tabDir, sampleTable);
+    for (i=0; i<dataSampleCount; i++)
+        {
+        sample = hashMustFindVal(sampleHash, samples[i]);
+        sampleRowOut(f, sample, i);
+        }
+    }
+
 if (doLoad)
     {
     struct sqlConnection *conn = sqlConnect(database);
