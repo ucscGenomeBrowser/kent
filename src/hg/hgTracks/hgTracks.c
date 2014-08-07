@@ -5924,8 +5924,9 @@ if (measureTiming)
     measureTime("Time at end of doMiddle, next up cart write");
 if (cartOptionalString(cart, "udcTimeout"))
     {
-    warn("The Genome Brower cart currently includes the \"udcTimeout\" string.  While this is useful for debugging hubs, it may negatively impact performance.   To clear this variable, reset cart.");
-    //warn("Removing udcTimeout from cart.  To set again add \"&udcTimeout=0\" to hgTracks URL");
-  //  cartRemove(cart,"udcTimeout");
+    warn("The Genome Browser cart currently includes the \"udcTimeout\" string. "
+	"While this is useful for debugging hubs, it may negatively impact "
+	"performance.   To clear this variable, click "
+	"<A HREF=hgTracks?hgsid=%s&udcTimeout=[]>here</A>.",cartSessionId(cart));
     }
 }
