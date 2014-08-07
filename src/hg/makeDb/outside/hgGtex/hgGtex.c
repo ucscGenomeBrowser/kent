@@ -264,8 +264,8 @@ if (median)
     AllocVar(sample);
     sample->name = "n/a";
 
-    i = 0;
-    for (tissueEl = tissueOffsets; tissueEl->next;  tissueEl = tissueEl->next)
+    int i;
+    for (i=0, tissueEl = tissueOffsets; i<tissueCount;  tissueEl = tissueEl->next)
         {
         sample->tissue = tissueEl->name;
         safef(donorCount, sizeof(donorCount), "%i", slCount(tissueEl->val));
