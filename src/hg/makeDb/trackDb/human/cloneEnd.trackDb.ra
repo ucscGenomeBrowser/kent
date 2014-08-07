@@ -10,7 +10,7 @@ noInherit on
     track cloneEnd_ABC10
     parent cloneEndSuper hide
     shortLabel ABC10
-    longLabel 781,331 end placements, average size 73,413 bases - Agencourt fosmid library 10
+    longLabel Agencourt fosmid library 10
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -19,7 +19,7 @@ noInherit on
     track cloneEnd_ABC11
     parent cloneEndSuper hide
     shortLabel ABC11
-    longLabel 724,864 end placements, average size 65,435 bases - Agencourt fosmid library 11
+    longLabel Agencourt fosmid library 11
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -28,7 +28,7 @@ noInherit on
     track cloneEnd_ABC12
     parent cloneEndSuper hide
     shortLabel ABC12
-    longLabel 771,827 end placements, average size 79,572 bases - Agencourt fosmid library 12
+    longLabel Agencourt fosmid library 12
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -37,7 +37,7 @@ noInherit on
     track cloneEnd_ABC13
     parent cloneEndSuper hide
     shortLabel ABC13
-    longLabel 803,589 end placements, average size 87,083 bases - Agencourt fosmid library 13
+    longLabel Agencourt fosmid library 13
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -46,7 +46,7 @@ noInherit on
     track cloneEnd_ABC14
     parent cloneEndSuper hide
     shortLabel ABC14
-    longLabel 839,126 end placements, average size 72,331 bases - Agencourt fosmid library 14
+    longLabel Agencourt fosmid library 14
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -55,7 +55,7 @@ noInherit on
     track cloneEnd_ABC16
     parent cloneEndSuper hide
     shortLabel ABC16
-    longLabel 449,101 end placements, average size 80,268 bases - Agencourt fosmid library 16
+    longLabel Agencourt fosmid library 16
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -64,7 +64,7 @@ noInherit on
     track cloneEnd_ABC18
     parent cloneEndSuper hide
     shortLabel ABC18
-    longLabel 322,904 end placements, average size 71,109 bases - Agencourt fosmid library 18
+    longLabel Agencourt fosmid library 18
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -73,7 +73,7 @@ noInherit on
     track cloneEnd_ABC20
     parent cloneEndSuper hide
     shortLabel ABC20
-    longLabel 24,474 end placements, average size 89,495 bases - Agencourt fosmid library 20
+    longLabel Agencourt fosmid library 20
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -82,7 +82,7 @@ noInherit on
     track cloneEnd_ABC21
     parent cloneEndSuper hide
     shortLabel ABC21
-    longLabel 180,973 end placements, average size 72,228 bases - Agencourt fosmid library 21
+    longLabel Agencourt fosmid library 21
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -91,7 +91,7 @@ noInherit on
     track cloneEnd_ABC22
     parent cloneEndSuper hide
     shortLabel ABC22
-    longLabel 188,743 end placements, average size 68,551 bases - Agencourt fosmid library 22
+    longLabel Agencourt fosmid library 22
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -100,7 +100,7 @@ noInherit on
     track cloneEnd_ABC23
     parent cloneEndSuper hide
     shortLabel ABC23
-    longLabel 433,896 end placements, average size 73,717 bases - Agencourt fosmid library 23
+    longLabel Agencourt fosmid library 23
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -109,7 +109,7 @@ noInherit on
     track cloneEnd_ABC24
     parent cloneEndSuper hide
     shortLabel ABC24
-    longLabel 395,776 end placements, average size 101,774 bases - Agencourt fosmid library 24
+    longLabel Agencourt fosmid library 24
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -118,7 +118,7 @@ noInherit on
     track cloneEnd_ABC27
     parent cloneEndSuper hide
     shortLabel ABC27
-    longLabel 331,822 end placements, average size 73,099 bases - Agencourt fosmid library 27
+    longLabel Agencourt fosmid library 27
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -127,7 +127,7 @@ noInherit on
     track cloneEnd_ABC7
     parent cloneEndSuper hide
     shortLabel ABC7
-    longLabel 644,071 end placements, average size 90,618 bases - Agencourt fosmid library 7
+    longLabel Agencourt fosmid library 7
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -136,7 +136,7 @@ noInherit on
     track cloneEnd_ABC8
     parent cloneEndSuper hide
     shortLabel ABC8
-    longLabel 1,192,784 end placements, average size 131,597 bases - Agencourt fosmid library 8
+    longLabel Agencourt fosmid library 8
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -145,7 +145,7 @@ noInherit on
     track cloneEnd_ABC9
     parent cloneEndSuper hide
     shortLabel ABC9
-    longLabel 750,648 end placements, average size 64,667 bases - Agencourt fosmid library 9
+    longLabel Agencourt fosmid library 9
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -154,7 +154,7 @@ noInherit on
     track cloneEnd_CH17
     parent cloneEndSuper hide
     shortLabel CH17
-    longLabel 105,060 end placements, average size 240,753 bases - CHORI BAC hydatidiform mole
+    longLabel CHORI BAC hydatidiform mole
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -163,7 +163,7 @@ noInherit on
     track cloneEnd_COR02
     parent cloneEndSuper hide
     shortLabel COR02
-    longLabel 206,782 end placements, average size 61,793 bases - NHGRI-CORIELLE CORIELL-02-F-39-40KB
+    longLabel NHGRI-CORIELLE CORIELL-02-F-39-40KB
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -172,7 +172,7 @@ noInherit on
     track cloneEnd_COR2A
     parent cloneEndSuper hide
     shortLabel COR2A
-    longLabel 578,578 end placements, average size 56,432 bases - NHGRI-CORIELLE CORIELL-02A-F-39-40KB
+    longLabel NHGRI-CORIELLE CORIELL-02A-F-39-40KB
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -181,7 +181,7 @@ noInherit on
     track cloneEnd_CTD
     parent cloneEndSuper pack
     shortLabel CTD
-    longLabel 94,941 end placements, average size 225,520 bases - CalTech BAC library D
+    longLabel CalTech BAC library D
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -190,7 +190,7 @@ noInherit on
     track cloneEnd_RP11
     parent cloneEndSuper pack
     shortLabel RP11
-    longLabel 85,903 end placements, average size 276,053 bases - RPCI BAC library 11
+    longLabel RPCI BAC library 11
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -199,7 +199,7 @@ noInherit on
     track cloneEnd_WI2
     parent cloneEndSuper hide
     shortLabel WI2
-    longLabel 582,843 end placements, average size 77,576 bases - WIBR-2 Fosmid library
+    longLabel WIBR-2 Fosmid library
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -208,7 +208,7 @@ noInherit on
     track cloneEnd_multipleMaps
     parent cloneEndSuper hide
     shortLabel Multiple mappings
-    longLabel Clone end placements that map to multiple locations in the genome (775,629 items)
+    longLabel Clone end placements that map to multiple locations in the genome
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
@@ -217,7 +217,7 @@ noInherit on
     track cloneEnd_badEnds
     parent cloneEndSuper hide
     shortLabel Bad end mappings
-    longLabel Clone end placements that map too far apart (3X median library size)(152,979 items)
+    longLabel Clone end placements dropped at UCSC, map distance 3X median library size
     colorByStrand 0,0,128 0,128,0
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
