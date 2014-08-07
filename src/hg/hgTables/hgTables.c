@@ -645,7 +645,7 @@ freeMem(splitTable);
 struct hTableInfo *hubTrackTableInfo(struct trackDb *tdb)
 /* Given trackDb entry for a hub track, wrap table info around it. */
 {
-struct hTableInfo *hti;
+struct hTableInfo *hti = NULL;
 if (tdb->subtracks == NULL)
     {
     if (startsWithWord("bigBed", tdb->type))
