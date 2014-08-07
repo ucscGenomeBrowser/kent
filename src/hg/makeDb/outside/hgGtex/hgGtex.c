@@ -165,18 +165,22 @@ float medianVal;
 
 /* Print geneId and tissue count */
 fprintf(f, "%s\t%d\t", row[0], tissueCount);
+verbose(2, "%s\n", row[0]);
 for (el = tissueOffsets; el->next; el = el->next)
     {
     /* Get median value for this tissue */
     offsets = (struct slUnsigned *)el->val;
     sampleCount = slCount(offsets);
+    verbose(2, "%s %d samples\t", el->name, sampleCount);
     AllocArray(sampleVals, sampleCount);
     for (i=0, offset = offsets; offset->next; offset = offset->next)
         {
         sampleVals[i] = sqlDouble(row[(offset->val)+2]);
+        verbose(2, "[%d]%0.3f, ", (offset->val)+2, sampleVals[i]);
         i++;
         }
     medianVal = (float)doubleMedian(sampleCount, sampleVals);
+    verbose(2, "MEDIAN: %0.3f\n", medianVal);
 
     /* If no rounding, then print as float, otherwise round */
     if (doRound)
