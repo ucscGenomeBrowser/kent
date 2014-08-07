@@ -37,6 +37,7 @@ errAbort(
   "   -bedOut=out.bed - Make output bed that is echo of input bed but with mean column appended\n"
   "   -sampleAroundCenter=N - Take sample at region N bases wide centered around bed item, rather\n"
   "                     than the usual sample in the bed item.\n"
+  "   -minMax - include two additional columns containing the min and max observed in the area.\n"
   );
 }
 
@@ -44,6 +45,7 @@ static struct optionSpec options[] = {
    {"bedOut", OPTION_STRING},
    {"stats", OPTION_STRING},
    {"sampleAroundCenter", OPTION_INT},
+   {"minMax", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -64,20 +66,28 @@ hashFree(&hash);
 }
 
 void addBigWigIntervalInfo(struct bbiFile *bbi, struct lm *lm, char *chrom, int start, int end,
-    int *pSumSize, int *pSumCoverage, double *pSumVal)
+    int *pSumSize, int *pSumCoverage, double *pSumVal, double *pMin, double *pMax)
 /* Read in interval from bigBed and add it sums. */
 {
 struct bbiInterval *iv, *ivList = bigWigIntervalQuery(bbi, chrom, start, end, lm);
 *pSumSize += (end - start);
+double maxVal = *pMax, minVal = *pMin;
 for (iv = ivList; iv != NULL; iv = iv->next)
     {
     int cov1 = rangeIntersection(iv->start, iv->end, start, end);
     if (cov1 > 0)
 	{
 	*pSumCoverage += cov1;
-	*pSumVal += cov1 * iv->val;
+	double val = iv->val;
+	if (maxVal < val)
+	    maxVal = val;
+	if (minVal > val)
+	    minVal = val;
+	*pSumVal += cov1 * val;
 	}
     }
+*pMin = minVal;
+*pMax = maxVal;
 }
 	
 int countBlocks(struct bed *bedList, int fieldCount)
@@ -92,13 +102,17 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 return blockCount;
 }
 
-void optionallyPrintBedPlus(FILE *f, struct bed *bed, int fieldCount, double extra)
+void optionallyPrintBedPlus(FILE *f, struct bed *bed, int fieldCount, double extra, 
+    boolean outputMinMax, double minVal, double maxVal)
 /* Print BED to tab separated file plus an extra double-format column. */
 {
 if (f != NULL)
     {
     bedOutputN(bed, fieldCount, f, '\t', '\t');
-    fprintf(f, "%g\n", extra);
+    fprintf(f, "%g", extra);
+    if (outputMinMax)
+       fprintf(f, "\t%g\t%g", minVal, maxVal);
+    fputc('\n', f);
     }
 }
 
@@ -144,9 +158,8 @@ fprintf(f, "spotSumSignal %g\n", sumSum);
 carefulClose(&f);
 }
 
-
 void averageFetchingEachBlock(struct bbiFile *bbi, struct bed *bedList, int fieldCount, 
-	FILE *f, FILE *bedF)
+	int outputMinMax, FILE *f, FILE *bedF)
 /* Do the averaging fetching each block from bedList from bigWig.  Fastest for short bedList. */
 {
 struct lm *lm = lmInit(0);
@@ -156,19 +169,20 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     int coverage = 0;
     double sum = 0.0;
     int size = 0;
+    double minVal = BIGDOUBLE, maxVal = -BIGDOUBLE;
 
     if (sampleAroundCenter > 0)
         {
 	int center = (bed->chromStart + bed->chromEnd)/2;
 	int left = center - (sampleAroundCenter/2);
 	addBigWigIntervalInfo(bbi, lm, bed->chrom, left, left+sampleAroundCenter, 
-		&size, &coverage, &sum);
+		&size, &coverage, &sum, &minVal, &maxVal);
 	}
     else
 	{
 	if (fieldCount < 12)
 	    addBigWigIntervalInfo(bbi, lm, bed->chrom, bed->chromStart, bed->chromEnd, 
-		    &size, &coverage, &sum);
+		    &size, &coverage, &sum, &minVal, &maxVal);
 	else
 	    {
 	    int i;
@@ -176,7 +190,8 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 		{
 		int start = bed->chromStart + bed->chromStarts[i];
 		int end = start + bed->blockSizes[i];
-		addBigWigIntervalInfo(bbi, lm, bed->chrom, start, end, &size, &coverage, &sum);
+		addBigWigIntervalInfo(bbi, lm, bed->chrom, start, end, &size, &coverage, &sum, 
+		    &minVal, &maxVal);
 		}
 	    }
 	}
@@ -185,8 +200,11 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     double mean = 0;
     if (coverage > 0)
 	 mean = sum/coverage;
-    fprintf(f, "%s\t%d\t%d\t%g\t%g\t%g\n", bed->name, size, coverage, sum, sum/size, mean);
-    optionallyPrintBedPlus(bedF, bed, fieldCount, mean);
+    fprintf(f, "%s\t%d\t%d\t%g\t%g\t%g", bed->name, size, coverage, sum, sum/size, mean);
+    if (outputMinMax)
+        fprintf(f, "\t%g\t%g", minVal, maxVal);
+    fputc('\n', f);
+    optionallyPrintBedPlus(bedF, bed, fieldCount, mean, outputMinMax, minVal, maxVal);
     updateSums(sum, coverage, size);
     }
 }
@@ -212,7 +230,7 @@ return bed;
 }
 
 void addBufIntervalInfo(double *valBuf, Bits *covBuf, int start, int end,
-    int *pSumSize, int *pSumCoverage, double *pSumVal)
+    int *pSumSize, int *pSumCoverage, double *pSumVal, double *pMin, double *pMax)
 /* Look at interval in buffers and add result to sums. */
 {
 int size1 = end - start;
@@ -221,13 +239,23 @@ int cov1 = bitCountRange(covBuf, start, size1);
 *pSumCoverage += cov1;
 int i;
 double sum1 = 0;
+double maxVal = *pMax, minVal = *pMin;
 for (i=start; i<end; ++i)
-    sum1 += valBuf[i];
+    {
+    double val = valBuf[i];
+    if (maxVal < val)
+        maxVal = val;
+    if (minVal > val)
+        minVal = val;
+    sum1 += val;
+    }
 *pSumVal += sum1;
+*pMin = minVal;
+*pMax = maxVal;
 }
 
 void averageFetchingEachChrom(struct bbiFile *bbi, struct bed **pBedList, int fieldCount, 
-	FILE *f, FILE *bedF)
+	int outputMinMax, FILE *f, FILE *bedF)
 /* Do the averaging by sorting bedList by chromosome, and then processing each chromosome
  * at once. Faster for long bedLists. */
 {
@@ -255,19 +283,20 @@ for (bedList = *pBedList; bedList != NULL; bedList = nextChrom)
 	    {
 	    int size = 0, coverage = 0;
 	    double sum = 0.0;
+	    double minVal = BIGDOUBLE, maxVal = -BIGDOUBLE;
 	    if (sampleAroundCenter > 0)
 		{
 		int center = (bed->chromStart + bed->chromEnd)/2;
 		int left = center - (sampleAroundCenter/2);
 		addBufIntervalInfo(valBuf, covBuf, left, left+sampleAroundCenter,
-		    &size, &coverage, &sum);
+		    &size, &coverage, &sum, &minVal, &maxVal);
 		}
 	    else
 		{
 		if (fieldCount < 12)
 		    {
 		    addBufIntervalInfo(valBuf, covBuf, bed->chromStart, bed->chromEnd,
-			&size, &coverage, &sum);
+			&size, &coverage, &sum, &minVal, &maxVal);
 		    }
 		else
 		    {
@@ -276,7 +305,8 @@ for (bedList = *pBedList; bedList != NULL; bedList = nextChrom)
 			{
 			int start = bed->chromStart + bed->chromStarts[i];
 			int end = start + bed->blockSizes[i];
-			addBufIntervalInfo(valBuf, covBuf, start, end, &size, &coverage, &sum);
+			addBufIntervalInfo(valBuf, covBuf, start, end, &size, &coverage, &sum, 
+			    &minVal, &maxVal);
 			}
 		    }
 		}
@@ -285,8 +315,11 @@ for (bedList = *pBedList; bedList != NULL; bedList = nextChrom)
 	    double mean = 0;
 	    if (coverage > 0)
 		 mean = sum/coverage;
-	    fprintf(f, "%s\t%d\t%d\t%g\t%g\t%g\n", bed->name, size, coverage, sum, sum/size, mean);
-	    optionallyPrintBedPlus(bedF, bed, fieldCount, mean);
+	    fprintf(f, "%s\t%d\t%d\t%g\t%g\t%g", bed->name, size, coverage, sum, sum/size, mean);
+	    if (outputMinMax)
+		fprintf(f, "\t%g\t%g", minVal, maxVal);
+	    fputc('\n', f);
+	    optionallyPrintBedPlus(bedF, bed, fieldCount, mean, outputMinMax, minVal, maxVal);
 	    updateSums(sum, coverage, size);
 	    }
 	verboseDot();
@@ -296,8 +329,11 @@ for (bedList = *pBedList; bedList != NULL; bedList = nextChrom)
 	/* If no bigWig data on this chromosome, just output as if coverage is 0 */
 	for (bed = bedList; bed != nextChrom; bed = bed->next)
 	    {
-	    fprintf(f, "%s\t%d\t0\t0\t0\t0\n", bed->name, bedTotalBlockSize(bed));
-	    optionallyPrintBedPlus(bedF, bed, fieldCount, 0);
+	    fprintf(f, "%s\t%d\t0\t0\t0\t0", bed->name, bedTotalBlockSize(bed));
+	    if (outputMinMax)
+		fprintf(f, "\t0\t0");
+	    fputc('\n', f);
+	    optionallyPrintBedPlus(bedF, bed, fieldCount, 0, outputMinMax, BIGDOUBLE, -BIGDOUBLE);
 	    }
 	}
     }
@@ -309,6 +345,7 @@ void bigWigAverageOverBed(char *inBw, char *inBed, char *outTab)
 {
 struct bed *bedList;
 int fieldCount;
+boolean minMax = optionExists("minMax");
 bedLoadAllReturnFieldCount(inBed, &bedList, &fieldCount);
 checkUniqueNames(bedList);
 
@@ -332,9 +369,9 @@ int blockCount = countBlocks(bedList, fieldCount);
 verbose(2, "Got %d blocks, if >= 3000 will use chromosome-at-a-time method\n", blockCount);
 
 if (blockCount < 3000)
-    averageFetchingEachBlock(bbi, bedList, fieldCount, f, bedF);
+    averageFetchingEachBlock(bbi, bedList, fieldCount, minMax, f, bedF);
 else
-    averageFetchingEachChrom(bbi, &bedList, fieldCount, f, bedF);
+    averageFetchingEachChrom(bbi, &bedList, fieldCount, minMax, f, bedF);
 if (statsRa != NULL)
     outputSums(statsRa, bbi);
 
