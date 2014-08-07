@@ -107,13 +107,13 @@ for (i = 0; i < sampleCount; i++)
         hashAdd(tissueHash, sample->tissue, offset);
     }
 
-struct hashEl *tissueOffsetList = hashElListHash(tissueHash);
-slSort(&tissueOffsetList, hashElCmp);
+struct hashEl *tissueOffsets = hashElListHash(tissueHash);
+slSort(&tissueOffsets, hashElCmp);
 
 //#define DEBUG 1
 #ifdef DEBUG
-uglyf("tissue count: %d\n", slCount(tissueOffsetList));
-for (el = tissueOffsetList; el->next; el = el->next)
+uglyf("tissue count: %d\n", slCount(tissueOffsets));
+for (el = tissueOffsets; el->next; el = el->next)
     {
     uglyf("%s\t", el->name);
     for (offset = (struct slUnsigned *)el->val; offset->next; offset = offset->next)
@@ -122,7 +122,7 @@ for (el = tissueOffsetList; el->next; el = el->next)
     }
 #endif
 
-return tissueOffsetList;
+return tissueOffsets;
 }
 
 void sampleRowOut(FILE *f, struct gtexSample *sample, int id)
@@ -135,7 +135,7 @@ fprintf(f, "%s\n", sample->name);
 }
 
 void dataRowOut(FILE *f, int count, char **row)
-/* Output expression levels for one gene */
+/* Output expression levels per sample for one gene */
 {
 int i;
 /* Print geneId and sample count */
@@ -150,6 +150,41 @@ for (i=0; i<count; ++i)
     else 
         fprintf(f, "%0.3f,", datum);
     } 
+fprintf(f, "\n");
+}
+
+void dataMedianRowOut(FILE *f, int count, char **row, struct hashEl *tissueOffsets, int tissueCount)
+/* Output expression levels per tissue for one gene */
+{
+int i = 0;
+struct hashEl *el;
+struct slUnsigned *offset, *offsets;
+double *sampleVals;
+int sampleCount = 0;
+float medianVal;
+
+/* Print geneId and tissue count */
+fprintf(f, "%s\t%d\t", row[0], tissueCount);
+for (el = tissueOffsets; el->next; el = el->next)
+    {
+    /* Get median value for this tissue */
+    offsets = (struct slUnsigned *)el->val;
+    sampleCount = slCount(offsets);
+    AllocArray(sampleVals, sampleCount);
+    for (i=0, offset = offsets; offset->next; offset = offset->next)
+        {
+        sampleVals[i] = sqlDouble(row[(offset->val)+2]);
+        i++;
+        }
+    medianVal = (float)doubleMedian(sampleCount, sampleVals);
+
+    /* If no rounding, then print as float, otherwise round */
+    if (doRound)
+        fprintf(f, "%d,", round(medianVal));
+    else 
+        fprintf(f, "%0.3f,", medianVal);
+    freez(&sampleVals);
+    }
 fprintf(f, "\n");
 }
 
@@ -210,21 +245,24 @@ char **samples = &sampleWords[2];
 /* Create sample table with samples ordered as in data file, 
         or tissues alpha-sorted (median option) */
 char sampleTable[64];
-struct hashEl *tissueEl, *tissueOffsetList = NULL;
+struct hashEl *tissueEl, *tissueOffsets = NULL;
 int tissueCount = 0;
 struct gtexSample *sample;
 char donorCount[10];
 if (median)
     {
-    AllocVar(sample);
-    sample->name = "n/a";
-    tissueOffsetList = groupSamples(sampleHash, samples, sampleCount);
+    tissueOffsets = groupSamples(sampleHash, samples, sampleCount);
+    tissueCount = slCount(tissueOffsets);
+    verbose(2, "tissue count: %d\n", tissueCount);
+
     safef(sampleTable, sizeof(sampleTable), "%sTissues", tableRoot);
     f = hgCreateTabFile(tabDir, sampleTable);
-    tissueCount = slCount(tissueOffsetList);
-    //uglyf(2, "tissue count: %d\n", tissueCount);
+
+    AllocVar(sample);
+    sample->name = "n/a";
+
     i = 0;
-    for (tissueEl = tissueOffsetList; tissueEl->next;  tissueEl = tissueEl->next)
+    for (tissueEl = tissueOffsets; tissueEl->next;  tissueEl = tissueEl->next)
         {
         sample->tissue = tissueEl->name;
         safef(donorCount, sizeof(donorCount), "%i", slCount(tissueEl->val));
@@ -260,7 +298,7 @@ else
 char *dataTable = tableRoot;
 f = hgCreateTabFile(tabDir,dataTable);
 
-/* Parse expression values in data file */
+/* Parse expression values in data file. Each row is a gene */
 char **row;
 AllocArray(row, dataSampleCount+2);
 while (lineFileNext(lf, &line, NULL))
@@ -269,7 +307,14 @@ while (lineFileNext(lf, &line, NULL))
     if (wordCount-2 != dataSampleCount)
         errAbort("Expecting %d data points, got %d line %d of %s", 
 		dataSampleCount, wordCount-2, lf->lineIx, lf->fileName);
-    dataRowOut(f, dataSampleCount, row);
+    if (median)
+        {
+        dataMedianRowOut(f, dataSampleCount, row, tissueOffsets, tissueCount);
+        }
+    else
+        {
+        dataRowOut(f, dataSampleCount, row);
+        }
     dataCount++;
     if (limit != 0 && dataCount >= limit)
         break;
