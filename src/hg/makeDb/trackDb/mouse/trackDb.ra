@@ -760,3 +760,5 @@ group regulation
 
 #searchTable FaceBase_24Samp_Types_Averaged
 #searchType bed
+
+include cloneEnd.trackDb.ra
