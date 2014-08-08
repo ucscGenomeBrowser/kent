@@ -15,9 +15,14 @@ void usage()
 errAbort(
   "ga4ghToBed - Use GA4GH API to extract variant data for a genomic region and save it as a BED file.\n"
   "usage:\n"
-  "   ga4ghToBed url chrom start end output.bed\n"
+  "   ga4ghToBed url key chrom start end output.bed\n"
+  "where url is typically something like https://www.googleapis.com/genomics/v1beta/reads/search\n"
+  "and key is something you might get from doll@google.com\n"
+  "and chrom is the chromosome number (no 'chr')\n"
+  "and start/end are zero-based half open coordinates on the chromosome\n"
+  "and output.bed is the simple three column bed output\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -verbose=N set verbose=2 or higher for more debugging output\n"
   );
 }
 
