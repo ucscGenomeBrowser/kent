@@ -1411,7 +1411,7 @@ else if (sameWord(form->method, "POST"))
     cgiVars = htmlFormCgiVars(origPage, form, buttonName, buttonVal, dyHeader);
     contentLength = strlen(cgiVars);
     verbose(3, "POST %s\n", dyUrl->string);
-    dyStringPrintf(dyHeader, "Content-length: %d\r\n", contentLength);
+    dyStringPrintf(dyHeader, "Content-Length: %d\r\n", contentLength);
     sd = netOpenHttpExt(dyUrl->string, form->method, dyHeader->string);
     mustWriteFd(sd, cgiVars, contentLength);
     }
