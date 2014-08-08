@@ -1,4 +1,4 @@
-/* ga4ghToBed - Use GA4GH API to extract variant data for a genomic region and save it as a BED file.. */
+/* ga4ghToBed - Use GA4GH API to extract read data for a genomic region and save it as a BED file */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -13,7 +13,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "ga4ghToBed - Use GA4GH API to extract variant data for a genomic region and save it as a BED file.\n"
+  "ga4ghToBed - Use GA4GH API to extract read data for a genomic region and save it as a BED file\n"
   "usage:\n"
   "   ga4ghToBed url key chrom start end output.bed\n"
   "where url is typically something like https://www.googleapis.com/genomics/v1beta/reads/search\n"
@@ -38,45 +38,34 @@ struct htmlPage *newPage = NULL;
 struct dyString *dyHeader = dyStringNew(0);
 struct dyString *dyText = NULL;
 
+/* Create header */
 int contentLength = jw->dy->stringSize;
 dyStringPrintf(dyHeader, "Content-Length: %d\r\n", contentLength);
 dyStringPrintf(dyHeader, "Content-Type: application/json\r\n");
+
+/* Post header and json and get response */
 verboseTimeInit();
 int sd = netOpenHttpExt(url, "POST", dyHeader->string);
-
 mustWriteFd(sd, jw->dy->string, contentLength);
 dyText = netSlurpFile(sd);
 verboseTime(1, "milleseconds to get response");
 close(sd);
+
+/* Parse lightly response (just into header and rest), clean up and return response */
 newPage = htmlPageParse(url, dyStringCannibalize(&dyText));
 dyStringFree(&dyHeader);
 return newPage;
 }
 
-#ifdef DEBUG
 struct jsonWrite *readSearchJson(char **setIds, int setCount, char *chrom, int start, int end)
-/* Return a jsonWrite object set up to make the given query. */
-{
-struct jsonWrite *js = jsonWriteNew();
-struct dyString *dy = js->dy;
-dyStringPrintf(dy, "{\n");
-dyStringPrintf(dy, "\"rxyz\": \"123\"\n");
-dyStringPrintf(dy, "}\n");
-return js;
-}
-#endif /* DEBUG */
-
-struct jsonWrite *readSearchJson(char **setIds, int setCount, char *chrom, int start, int end)
-/* Return a jsonWrite object set up to make the given query. */
+/* Return a jsonWrite object set up to make the search reads in region query. */
 {
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteObjectStart(jw);
 jsonWriteListStart(jw, "readsetIds");
 int i;
-for  (i=0; i<setCount; ++i)
-    {
+for (i=0; i<setCount; ++i)
     jsonWriteString(jw, NULL, setIds[i]);
-    }
 jsonWriteListEnd(jw);
 jsonWriteString(jw, "sequenceName", chrom);
 jsonWriteNumber(jw, "sequenceStart", start);
@@ -86,7 +75,7 @@ return jw;
 }
 
 int cigarSize(char *cigar)
-/* Return size of area covered by cigar string */
+/* Return number of bases in target genome covered by cigar string */
 {
 int size = 0;
 char c;
@@ -143,6 +132,7 @@ for (el = list; el != NULL; el = el->next)
 carefulClose(&f);
 }
 
+/* NA12787 read set ID */
 char *setIds[] = {"CJDmkYn8ChDPtMO55665i4kB"};
 
 void ga4ghToBed(char *url, char *key, char *chrom, char *startString, char *endString, 
