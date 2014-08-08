@@ -50,29 +50,19 @@ jw->stackIx = stackIx;
 }
 
 void jsonWriteTag(struct jsonWrite *jw, char *var)
-/* Print out quoted tag followed by colon */
+/* Print out quoted tag followed by colon. Print out preceding comma if need be.  */
 {
 struct dyString *dy = jw->dy;
 if (jw->objStack[jw->stackIx] != 0)
     dyStringAppend(dy, ",\n");
 else
     jw->objStack[jw->stackIx] = 1;
-dyStringPrintf(jw->dy, "\"%s\": ", var);
+if (var != NULL)
+    dyStringPrintf(jw->dy, "\"%s\": ", var);
 }
-
-#ifdef OLD
-void jsonWriteEndLine(struct jsonWrite *jw)
-/* Write comma if in middle, and then newline regardless. */
-{
-struct dyString *dy = jw->dy;
-if (isMiddle)
-   dyStringAppendC(dy, ',');
-dyStringAppendC(dy, '\n');
-}
-#endif /* OLD */
 
 void jsonWriteString(struct jsonWrite *jw, char *var, char *string)
-/* Print out "var": "val" */
+/* Print out "var": "val".  If var is NULL then just print out "val" */
 {
 struct dyString *dy = jw->dy;
 jsonWriteTag(jw, var);
@@ -80,7 +70,7 @@ dyStringPrintf(dy, "\"%s\"", string);
 }
 
 void jsonWriteDateFromUnix(struct jsonWrite *jw, char *var, long long unixTimeVal)
-/* Add "var": YYYY-MM-DDT-HH:MM:SSZ given a Unix time stamp */
+/* Add "var": YYYY-MM-DDT-HH:MM:SSZ given a Unix time stamp. Var may be NULL. */
 {
 struct dyString *dy = jw->dy;
 time_t timeStamp = unixTimeVal;
@@ -92,7 +82,7 @@ dyStringPrintf(dy, "\"%d:%02d:%02dT%02d:%02d:%02dZ\"",
 }
 
 void jsonWriteNumber(struct jsonWrite *jw, char *var, long long val)
-/* print out "var": val as number */
+/* print out "var": val as number. Var may be NULL. */
 {
 struct dyString *dy = jw->dy;
 jsonWriteTag(jw, var);
@@ -101,7 +91,7 @@ dyStringPrintf(dy, "%lld", val);
 
 void jsonWriteLink(struct jsonWrite *jw, char *var, char *objRoot, char *name)
 /* Print out the jsony type link to another object.  objRoot will start and end with a '/'
- * and may have additional slashes in this usage. */
+ * and may have additional slashes in this usage. Var may be NULL. */
 {
 struct dyString *dy = jw->dy;
 jsonWriteTag(jw, var);
@@ -110,7 +100,7 @@ dyStringPrintf(dy, "\"%s%s\"", objRoot, name);
 
 void jsonWriteLinkNum(struct jsonWrite *jw, char *var, char *objRoot, long long id)
 /* Print out the jsony type link to another object with a numerical id.  objRoot will start 
- * and end with a '/' and may have additional slashes in this usage. */
+ * and end with a '/' and may have additional slashes in this usage. Var may be NULL */
 {
 struct dyString *dy = jw->dy;
 jsonWriteTag(jw, var);
@@ -118,7 +108,7 @@ dyStringPrintf(dy, "\"%s%lld\"", objRoot, id);
 }
 
 void jsonWriteListStart(struct jsonWrite *jw, char *var)
-/* Start an array in JSON */
+/* Start an array in JSON. Var may be NULL */
 {
 struct dyString *dy = jw->dy;
 jsonWriteTag(jw, var);
