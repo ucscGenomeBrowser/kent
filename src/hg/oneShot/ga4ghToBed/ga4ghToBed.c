@@ -36,10 +36,12 @@ struct dyString *dyText = NULL;
 int contentLength = jw->dy->stringSize;
 dyStringPrintf(dyHeader, "Content-Length: %d\r\n", contentLength);
 dyStringPrintf(dyHeader, "Content-Type: application/json\r\n");
+verboseTimeInit();
 int sd = netOpenHttpExt(url, "POST", dyHeader->string);
 
 mustWriteFd(sd, jw->dy->string, contentLength);
 dyText = netSlurpFile(sd);
+verboseTime(1, "milleseconds to get response");
 close(sd);
 newPage = htmlPageParse(url, dyStringCannibalize(&dyText));
 dyStringFree(&dyHeader);
