@@ -153,7 +153,7 @@ for (i=0; i<count; ++i)
 fprintf(f, "\n");
 }
 
-void dataMedianRowOut(FILE *f, int count, char **row, struct hashEl *tissueOffsets, int tissueCount)
+void dataMedianRowOut(FILE *f, int count, char **row, int tissueCount, struct hashEl *tissueOffsets)
 /* Output expression levels per tissue for one gene */
 {
 int i = 0;
@@ -312,7 +312,7 @@ while (lineFileNext(lf, &line, NULL))
 		dataSampleCount, wordCount-2, lf->lineIx, lf->fileName);
     if (median)
         {
-        dataMedianRowOut(f, dataSampleCount, row, tissueOffsets, tissueCount);
+        dataMedianRowOut(f, dataSampleCount, row, tissueCount, tissueOffsets);
         }
     else
         {
