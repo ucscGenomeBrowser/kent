@@ -367,22 +367,22 @@ searchTable cloneEnd_RP11
 searchType bed
 searchMethod prefix
 searchPriority 50
-termRegex RP11-([0-9A-Z\*])+
+termRegex RP11-([0-9A-Z])+
 
 searchTable cloneEnd_WI2
 searchType bed
 searchMethod prefix
 searchPriority 50
-termRegex [GW][2I][24][-8]([0-9A-Z\*])+
+termRegex [GW][2I][24][-8]([0-9A-Z])+
 
 searchTable cloneEnd_multipleMaps
 searchType bed
 searchMethod prefix
 searchPriority 50
-termRegex [ACGRW][BHIOPT2]([0-9A-Z-])+
+termRegex [ACGRW][BHIOPT2]([0-9A-Z_])+
 
 searchTable cloneEnd_badEnds
 searchType bed
 searchMethod prefix
 searchPriority 50
-termRegex [ACGRW][BHIOPT2]([0-9A-Z-])+
+termRegex [ACGRW][BHIOPT2]([0-9A-Z_])+
