@@ -951,7 +951,7 @@ static void polishOneTrack( struct trackHub *hub, struct trackDb *bt,
  * of the original name for html retrieval, make sure there aren't 
  * two tracks with the same name. */
 {
-char *polished = trackDbSetting(bt, "polished");
+char *polished = trackDbLocalSetting(bt, "polished");
 if (polished != NULL)
     return;
 

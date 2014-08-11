@@ -362,7 +362,7 @@ fileName wgEncodeSydhHistEse14H3k04me1StdRawDataRep1.fastq.tgz
 geoSampleAccession GSM1003750
 grant Snyder
 lab Stanford-m
-md5sum c0b82dd102c3781187b0353995de0d34
+md5sum aa47d3437e859686fecbfd50d4133a37
 project wgEncode
 replicate 1
 setType exp
@@ -390,7 +390,7 @@ fileName wgEncodeSydhHistEse14H3k04me1StdRawDataRep2.fastq.tgz
 geoSampleAccession GSM1003750
 grant Snyder
 lab Stanford-m
-md5sum fd892447c64b57115f13f9613ae0e017
+md5sum e2f9b54e366ce15d3855d0c37fbd4d59
 project wgEncode
 replicate 2
 setType exp
@@ -2130,6 +2130,7 @@ fileName wgEncodeSydhHistMelH3k27acIggrabAlnRep1.bam,wgEncodeSydhHistMelH3k27acI
 grant Snyder
 lab Stanford-m
 md5sum 03c21a99727d1650cdc162b3c8dc4374,24d23915ae014c1decb58ab417272bf7
+objStatus revoked - Incorrect antibody used
 project wgEncode
 replicate 1
 setType exp
@@ -2138,7 +2139,6 @@ strain Unknown
 subId 6571
 treatment None
 view Alignments
-objStatus revoked - Incorrect antibody used
 
 metaObject wgEncodeSydhHistMelH3k27acIggrabAlnRep2
 objType file
@@ -2158,6 +2158,7 @@ fileName wgEncodeSydhHistMelH3k27acIggrabAlnRep2.bam,wgEncodeSydhHistMelH3k27acI
 grant Snyder
 lab Stanford-m
 md5sum 4eb01ebf8b9cfdf9e5413f6e9ea6b002,df0bcdc85130ae21a9206ef9e0e64838
+objStatus revoked - Incorrect antibody used
 project wgEncode
 replicate 2
 setType exp
@@ -2166,7 +2167,6 @@ strain Unknown
 subId 6571
 treatment None
 view Alignments
-objStatus revoked - Incorrect antibody used
 
 metaObject wgEncodeSydhHistMelH3k27acIggrabPk
 objType table
@@ -2188,6 +2188,7 @@ grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
 md5sum 497115e6b24e62034017f05673e88e94
+objStatus revoked - Incorrect antibody used
 project wgEncode
 setType exp
 sex M
@@ -2196,7 +2197,6 @@ subId 6571
 tableName wgEncodeSydhHistMelH3k27acIggrabPk
 treatment None
 view Peaks
-objStatus revoked - Incorrect antibody used
 
 metaObject wgEncodeSydhHistMelH3k27acIggrabRawDataRep1
 objType file
@@ -2217,6 +2217,7 @@ geoSampleAccession GSM1003752
 grant Snyder
 lab Stanford-m
 md5sum 2736d59520741c511c02d2778c5d4c9d
+objStatus revoked - Incorrect antibody used
 project wgEncode
 replicate 1
 setType exp
@@ -2225,7 +2226,6 @@ strain Unknown
 subId 6571
 treatment None
 view RawData
-objStatus revoked - Incorrect antibody used
 
 metaObject wgEncodeSydhHistMelH3k27acIggrabRawDataRep2
 objType file
@@ -2246,6 +2246,7 @@ geoSampleAccession GSM1003752
 grant Snyder
 lab Stanford-m
 md5sum a0f8e02c128b15ab8dd10ba096478f2b
+objStatus revoked - Incorrect antibody used
 project wgEncode
 replicate 2
 setType exp
@@ -2254,7 +2255,6 @@ strain Unknown
 subId 6571
 treatment None
 view RawData
-objStatus revoked - Incorrect antibody used
 
 metaObject wgEncodeSydhHistMelH3k27acIggrabSig
 objType table
@@ -2276,6 +2276,7 @@ grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
 md5sum c3e32f83480c8f9018f81b20469d270e
+objStatus revoked - Incorrect antibody used
 project wgEncode
 setType exp
 sex M
@@ -2284,7 +2285,6 @@ subId 6571
 tableName wgEncodeSydhHistMelH3k27acIggrabSig
 treatment None
 view Signal
-objStatus revoked - Incorrect antibody used
 
 metaObject wgEncodeSydhHistMelH3k27me3bDm2p5dStdAlnRep1
 objType file
@@ -3044,4 +3044,4 @@ tableName wgEncodeSydhHistMelInputIggyaleSig
 treatment None
 view Signal
 
-# MAGIC: -1749736339
+# MAGIC: 368226553

@@ -123,8 +123,6 @@ static char *getGenomeSpaceConfig(char *variable)
 /* Read genomeSpace config setting or abort if not found */
 {
 char *value = cfgOption2("genomeSpace", variable);
-if (!value)
-    errAbort("missing genomeSpace setting genomeSpace.%s in hg.conf", variable);
 return value;
 }
 
