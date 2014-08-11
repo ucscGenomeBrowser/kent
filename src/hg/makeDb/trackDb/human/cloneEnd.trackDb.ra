@@ -349,13 +349,13 @@ searchTable cloneEnd_COR02
 searchType bed
 searchMethod prefix
 searchPriority 50
-termRegex COR02-DD0002([0-9A-Z-])+
+termRegex COR02-DD0002([0-9A-Z_])+
 
 searchTable cloneEnd_COR2A
 searchType bed
 searchMethod prefix
 searchPriority 50
-termRegex COR2A-DD000([0-9A-Z-])+
+termRegex COR2A-DD000([0-9A-Z_])+
 
 searchTable cloneEnd_CTD
 searchType bed
