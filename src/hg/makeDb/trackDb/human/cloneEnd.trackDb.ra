@@ -241,3 +241,148 @@ noInherit on
     alwaysZero on
     windowingFunction mean
     autoScale on
+
+
+searchTable cloneEnd_ABC10
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex ABC10-([0-9A-Z])+
+
+searchTable cloneEnd_ABC11
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex ABC11-([0-9A-Z])+
+
+searchTable cloneEnd_ABC12
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex ABC12-([0-9A-Z])+
+
+searchTable cloneEnd_ABC13
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex ABC13-([0-9A-Z])+
+
+searchTable cloneEnd_ABC14
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex ABC14-([0-9A-Z])+
+
+searchTable cloneEnd_ABC16
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex ABC16-([0-9A-Z])+
+
+searchTable cloneEnd_ABC18
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex ABC18-([0-9A-Z])+
+
+searchTable cloneEnd_ABC20
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex ABC20-([0-9A-Z])+
+
+searchTable cloneEnd_ABC21
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex ABC21-([0-9A-Z])+
+
+searchTable cloneEnd_ABC22
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex ABC22-([0-9A-Z])+
+
+searchTable cloneEnd_ABC23
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex ABC23-([0-9A-Z])+
+
+searchTable cloneEnd_ABC24
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex ABC24-([0-9A-Z])+
+
+searchTable cloneEnd_ABC27
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex ABC27-([0-9A-Z])+
+
+searchTable cloneEnd_ABC7
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex ABC7-([0-9A-Z])+
+
+searchTable cloneEnd_ABC8
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex ABC8-([0-9A-Z])+
+
+searchTable cloneEnd_ABC9
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex ABC9-([0-9A-Z])+
+
+searchTable cloneEnd_CH17
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex CH17-([0-9A-Z])+
+
+searchTable cloneEnd_COR02
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex COR02-DD0002([0-9A-Z-])+
+
+searchTable cloneEnd_COR2A
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex COR2A-DD000([0-9A-Z-])+
+
+searchTable cloneEnd_CTD
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex CTD-([0-9A-Z])+
+
+searchTable cloneEnd_RP11
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex RP11-([0-9A-Z\*])+
+
+searchTable cloneEnd_WI2
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex [GW][2I][24][-8]([0-9A-Z\*])+
+
+searchTable cloneEnd_multipleMaps
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex [ACGRW][BHIOPT2]([0-9A-Z-])+
+
+searchTable cloneEnd_badEnds
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex [ACGRW][BHIOPT2]([0-9A-Z-])+
