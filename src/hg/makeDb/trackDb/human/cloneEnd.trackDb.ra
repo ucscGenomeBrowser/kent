@@ -385,4 +385,4 @@ searchTable cloneEnd_badEnds
 searchType bed
 searchMethod prefix
 searchPriority 50
-termRegex [ACGRW][BHIOPT2]([0-9A-Z_])+
+termRegex [ACGRW][BHIOPT2]([-0-9A-Z_])+
