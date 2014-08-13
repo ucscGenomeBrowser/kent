@@ -10,17 +10,16 @@
 
 
 
-char *gtexSampleCommaSepFieldNames = "id,tissue,donor,name";
+char *gtexSampleCommaSepFieldNames = "name,tissue,donor";
 
 void gtexSampleStaticLoad(char **row, struct gtexSample *ret)
 /* Load a row from gtexSample table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
-ret->id = sqlUnsigned(row[0]);
+ret->name = row[0];
 ret->tissue = row[1];
 ret->donor = row[2];
-ret->name = row[3];
 }
 
 struct gtexSample *gtexSampleLoad(char **row)
@@ -30,10 +29,9 @@ struct gtexSample *gtexSampleLoad(char **row)
 struct gtexSample *ret;
 
 AllocVar(ret);
-ret->id = sqlUnsigned(row[0]);
+ret->name = cloneString(row[0]);
 ret->tissue = cloneString(row[1]);
 ret->donor = cloneString(row[2]);
-ret->name = cloneString(row[3]);
 return ret;
 }
 
@@ -43,7 +41,7 @@ struct gtexSample *gtexSampleLoadAll(char *fileName)
 {
 struct gtexSample *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[3];
 
 while (lineFileRow(lf, row))
     {
@@ -61,7 +59,7 @@ struct gtexSample *gtexSampleLoadAllByChar(char *fileName, char chopper)
 {
 struct gtexSample *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[3];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -82,10 +80,9 @@ char *s = *pS;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->id = sqlUnsignedComma(&s);
+ret->name = sqlStringComma(&s);
 ret->tissue = sqlStringComma(&s);
 ret->donor = sqlStringComma(&s);
-ret->name = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -97,9 +94,9 @@ void gtexSampleFree(struct gtexSample **pEl)
 struct gtexSample *el;
 
 if ((el = *pEl) == NULL) return;
+freeMem(el->name);
 freeMem(el->tissue);
 freeMem(el->donor);
-freeMem(el->name);
 freez(pEl);
 }
 
@@ -119,7 +116,9 @@ for (el = *pList; el != NULL; el = next)
 void gtexSampleOutput(struct gtexSample *el, FILE *f, char sep, char lastSep) 
 /* Print out gtexSample.  Separate fields with sep. Follow last field with lastSep. */
 {
-fprintf(f, "%u", el->id);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->tissue);
@@ -127,10 +126,6 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->donor);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
@@ -144,12 +139,11 @@ char query[1024];
 
 sqlSafef(query, sizeof(query),
 "CREATE TABLE %s (\n"
-"    id int unsigned not null,	# internal id\n"
-"    tissue varchar(255) not null,	# GTEx tissue\n"
-"    donor varchar(255) not null,	# GTEx donor name\n"
-"    name varchar(255) not null,        # GTEx sample name\n"
+"    name varchar(255) not null,       # GTEx sample identifier\n"
+"    tissue varchar(255) not null,     # Tissue name\n"
+"    donor varchar(255) not null,      # GTEx subject identifier\n"
 "              #Indices\n"
-"    PRIMARY KEY(id)\n"
+"    PRIMARY KEY(name)\n"
 ")\n",   table);
 sqlRemakeTable(conn, table, query);
 }

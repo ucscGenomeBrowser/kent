@@ -15,6 +15,7 @@ DIRS = \
 	hgFiberglass \
 	hgFlyBase \
 	hgGnfMicroarray \
+	hgGtex \
 	hgJaxQtl \
 	hgKegg \
 	hgKegg2 \

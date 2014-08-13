@@ -1,0 +1,59 @@
+# Create samples.txt and matrix.txt for expData from GTEx latest release
+# from www.gtexportal.org/home/datasets
+
+# Gene expression levels  in multiple tissues & donors
+
+# Samples
+
+wget -O GTEx_Data_2014-01-17_Annotations_SampleAttributesDS.txt http://www.gtexportal.org/home/rest/file/download\?portalFileId=175707
+wget -O GTEx_Data_2014-01-17_Annotations_SampleAttributesDD.xlsx  http://www.gtexportal.org/home/rest/file/download\?portalFileId=175705
+
+# Subjects
+
+wget -O GTEx_Data_2014-01-17_Annotations_SubjectPhenotypes_DS.txt http://www.gtexportal.org/home/rest/file/download\?portalFileId=175711
+
+# description of fields in Subjects file
+wget -O GTEx_Data_2014-01-17_Annotations_SubjectPhenotypes_DD.xlsx http://www.gtexportal.org/home/rest/file/download\?portalFileId=17570
+
+awk -F"\t" '{print $1, $7}' *Sample*txt > samples.txt
+
+wc -l samples.txt
+#4501 samples.txt
+
+# 55 tissues
+# Need to aggregate (average?) expression levels across samples for same cell type
+# Jim suggests median level
+
+# Expression file (.gct)
+#   Format:  
+#       line 1:  #1.2 (version ?)
+#       <#genes> <#samples> ?
+# Header line:   'Name' 'Description' <sample1> ... <sampleN>
+# <ens geneID> <gene name> <expr for sample1> ... <expr for sampleN>
+
+
+# Load tables (gtexData - median expression level across tissues, gtexTissues):
+hgGtex gtex /hive/data/outside/GTEx/2014-01-17/GTEx_Analysis_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct /hive/data/outside/GTEx/2014-01-17/GTEx_Data_2014-01-17_Annotations_SampleAttributesDS.txt -median
+
+# Output format for Chris Eisenhart tissue clustering (hg/expData): 2 files
+#       1. matrix of exprssion levels: genes (columns) and tissues (rows)
+#               - first line is gene identifiers
+#               - tissue name for each row is in separate file
+#       2. tissue names
+
+cd matrix
+cat > transpose.awk << 'EOF'
+
+BEGIN { FS = "\t" }
+    { for (col=1; col<=NF; col++) if ($col) matrix[NR,col] = $col }
+END { for (col=1; col<=NF; col++)
+        for (row=1; row<=NR; row++)
+          printf("%s%s",
+                 ((row,col) in matrix) ? matrix[row,col] : 0,
+                 (row<NR) ? FS : RS)
+'EOF'
+
+hgsql hgFixed -N -e 'select geneId, sampleLevels from gtexMedian' | sed 's/,/\t/g' | \
+        awk -f transpose.awk > matrix.txt
+hgsql hgFixed -N -e 'select tissue from gtexTissue' > bioSamples.txt
+
