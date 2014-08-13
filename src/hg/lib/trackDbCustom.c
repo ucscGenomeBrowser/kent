@@ -370,7 +370,7 @@ struct trackDb *trackDbFromRa(char *raFile, char *releaseTag)
 /* Load track info from ra file into list.  If releaseTag is non-NULL
  * then only load tracks that mesh with release. */
 {
-struct lineFile *lf = netLineFileOpen(raFile);
+struct lineFile *lf = udcWrapShortLineFile(raFile, NULL, 16*1024*1024);
 struct trackDb *tdbList = trackDbFromOpenRa(lf, releaseTag);
 lineFileClose(&lf);
 return tdbList;

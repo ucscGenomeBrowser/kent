@@ -5142,6 +5142,7 @@ TMPDIR=/dev/shm
     cat fb.rheMac2.chainHg38Link.txt
     # 2313950599 bases of 2646704109 (87.428%) in intersection
 #
+
 #########################################################################
 # LASTZ Chlorocebus sabaeus  (DONE - 2014-07-13 - braney)
     mkdir /hive/data/genomes/hg38/bed/lastzChlSab2.2014-07-11
@@ -5203,3 +5204,45 @@ TMPDIR=/dev/shm
     # 88m48.411s
     cat fb.chlSab2.chainHg38Link.txt
     # 2429053010 bases of 2752019208 (88.264%) in intersection
+
+#########################################################################
+# SEGMENTAL DUPLICATIONS (DONE - 2014-08-13 - Hiram)
+    # redmine issue: refs #13580
+
+    # file received in email from Archana Natarajan Raja (araja at uw.edu)
+    mkdir /hive/data/genomes/hg38/bed/genomicSuperDups
+    cd /hive/data/genomes/hg38/bed/genomicSuperDups
+# -rw-r--r-- 1 16478617 Aug 11 16:18 GenomicSuperDup.tab
+
+    # no longer filtering items smaller than 1,000 bases, see note
+    # in redmine issue refs #13580
+# While the size of the 24 alignments are less than 1000 bases , the size of
+# their pairs to which they align are always >1000, you can confirm this by
+# looking at the value in column 22 in your table (alignB -ucsc format), will
+# always be >1000 bp . We are seeing this only now because there are lots of
+# new and resolved duplications added to hg38. Hence , I would recommend not
+# filtering these items and uploading the current set as is.
+
+    # there is no chrEBV in the browser:
+    grep -v chrEBV GenomicSuperDup.tab \
+      | hgLoadBed hg38 genomicSuperDups stdin \
+	-sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+    #  Read 69894 elements of size 29 from stdin
+
+    checkTableCoords  hg38 genomicSuperDups
+    # <silence>  (the chrEBV was found with this check)
+
+    featureBits -countGaps hg38 genomicSuperDups
+    # 175429664 bases of 3209286105 (5.466%) in intersection
+
+    featureBits -countGaps hg19 genomicSuperDups
+    #  166092393 bases of 3137161264 (5.294%) in intersection
+    featureBits -countGaps hg18 genomicSuperDups
+    #  159204446 bases of 3107677273 (5.123%) in intersection
+
+    featureBits -countGaps mm10 genomicSuperDups
+    # 214917441 bases of 2730871774 (7.870%) in intersection
+    featureBits -countGaps mm9 genomicSuperDups
+    # 208214567 bases of 2725765481 (7.639%) in intersection
+
+#########################################################################

@@ -65,10 +65,12 @@ bosTau	9913	Bos taurus	2012-11-14 10:16:13	vertebrates_mammals/Bos_taurus/Btau_4
 bosTau	9913	Bos taurus	2012-11-14 10:16:13	vertebrates_mammals/Bos_taurus/Btau_ChrY_1.0/ASSEMBLY_INFO
 bosTau	9913	Bos taurus	2012-11-14 10:16:13	vertebrates_mammals/Bos_taurus/UMD_Bos_taurus_2.0/ASSEMBLY_INFO
 bosTau	9913	Bos taurus	2012-11-14 10:16:13	vertebrates_mammals/Bos_taurus/UMD_Bos_taurus_3.0/ASSEMBLY_INFO
+bosTau	9913	Bos taurus	2014-07-02 10:23:29	vertebrates_mammals/Bos_taurus/Bos_taurus_UMD_3.1.1/ASSEMBLY_INFO
 botSch	30301	Botryllus schlosseri	2014-06-16 12:06:09	invertebrates/Botryllus_schlosseri/356a-chromosome-assembly/ASSEMBLY_INFO
 braFlo	7739	Branchiostoma floridae	2014-06-16 12:06:09	invertebrates/Branchiostoma_floridae/Version_2/ASSEMBLY_INFO
 bruMal	6279	Brugia malayi	2014-06-16 12:06:09	invertebrates/Brugia_malayi/ASM299v2/ASSEMBLY_INFO
 bubBub	89462	Bubalus bubalis	2013-10-22 10:23:06	vertebrates_mammals/Bubalus_bubalis/UMD_CASPUR_WB_2.0/ASSEMBLY_INFO
+bucRhi	175836	Buceros rhinoceros silvestris	2014-07-03 10:23:15	vertebrates_other/Buceros_rhinoceros/ASM71030v1/ASSEMBLY_INFO
 caeAng	860376	Caenorhabditis angaria	2014-06-16 12:06:09	invertebrates/Caenorhabditis_angaria/ps1010rel4/ASSEMBLY_INFO
 caeAng	96668	Caenorhabditis sp. PS1010	2014-06-16 12:06:09	invertebrates/Caenorhabditis_angaria/ps1010rel4/ASSEMBLY_INFO.01Nov2010
 caeBre	135651	Caenorhabditis brenneri	2014-06-16 12:06:09	invertebrates/Caenorhabditis_brenneri/C_brenneri-6.0.1/ASSEMBLY_INFO
@@ -96,6 +98,7 @@ cerCap	7213	Ceratitis capitata	2014-06-16 12:06:09	invertebrates/Ceratitis_capit
 cerSim	73337	Ceratotherium simum simum	2012-11-14 10:16:14	vertebrates_mammals/Ceratotherium_simum/CerSimSim1.0/ASSEMBLY_INFO
 cerSol	326594	Ceratosolen solmsi marchali	2014-06-16 12:06:09	invertebrates/Ceratosolen_solmsi/CerSol_1.0/ASSEMBLY_INFO
 chaVoc	50402	Charadrius vociferus	2014-06-17 10:23:06	vertebrates_other/Charadrius_vociferus/ASM70802v1/ASSEMBLY_INFO
+chaVoc	50402	Charadrius vociferus	2014-08-06 10:23:12	vertebrates_other/Charadrius_vociferus/ASM70802v2/ASSEMBLY_INFO
 cheMyd	8469	Chelonia mydas	2013-03-21 11:19:24	vertebrates_other/Chelonia_mydas/CheMyd_1.0/ASSEMBLY_INFO
 chiLan	34839	Chinchilla lanigera	2012-11-14 10:16:14	vertebrates_mammals/Chinchilla_lanigera/ChiLan1.0/ASSEMBLY_INFO
 chlSab	60711	Chlorocebus sabaeus	2013-07-14 16:35:15	vertebrates_mammals/Chlorocebus_sabaeus/Chlorocebus_sabeus_1.0/ASSEMBLY_INFO
@@ -112,6 +115,7 @@ colStr	57412	Colius striatus	2014-06-04 10:23:03	vertebrates_other/Colius_striat
 conCri	143302	Condylura cristata	2012-11-14 10:16:14	vertebrates_mammals/Condylura_cristata/ConCri1.0/ASSEMBLY_INFO
 copFlo	29053	Copidosoma floridanum	2014-06-16 12:06:09	invertebrates/Copidosoma_floridanum/Cflo_1.0/ASSEMBLY_INFO
 corBra	85066	Corvus brachyrhynchos	2014-06-04 10:23:03	vertebrates_other/Corvus_brachyrhynchos/ASM69197v1/ASSEMBLY_INFO
+corCor	932674	Corvus cornix cornix	2014-08-13 10:23:05	vertebrates_other/Corvus_cornix/Hooded_Crow_genome/ASSEMBLY_INFO
 cotJap	93934	Coturnix japonica	2013-12-23 10:23:03	vertebrates_other/Coturnix_japonica/Coja_1.0/ASSEMBLY_INFO
 craGig	29159	Crassostrea gigas	2014-06-16 12:06:09	invertebrates/Crassostrea_gigas/oyster_v9/ASSEMBLY_INFO
 criGri	10029	Cricetulus griseus	2012-11-14 10:16:14	vertebrates_mammals/Cricetulus_griseus/CriGri_1.0/ASSEMBLY_INFO
@@ -119,6 +123,7 @@ criGri	10029	Cricetulus griseus	2013-07-31 16:27:38	vertebrates_mammals/Cricetul
 criGri	10029	Cricetulus griseus	2013-09-03 10:23:25	vertebrates_mammals/Cricetulus_griseus/Cgr1.0/ASSEMBLY_INFO
 cucCan	55661	Cuculus canorus	2014-06-18 10:23:16	vertebrates_other/Cuculus_canorus/ASM70932v1/ASSEMBLY_INFO
 cynSem	244447	Cynoglossus semilaevis	2014-02-03 10:23:03	vertebrates_other/Cynoglossus_semilaevis/Cse_v1.0/ASSEMBLY_INFO
+cypVar	28743	Cyprinodon variegatus	2014-07-24 10:23:12	vertebrates_other/Cyprinodon_variegatus/C_variegatus-1.0/ASSEMBLY_INFO
 danPle	13037	Danaus plexippus	2014-06-16 12:06:09	invertebrates/Danaus_plexippus/DanPle_1.0/ASSEMBLY_INFO
 danRer	7955	Danio rerio	2012-11-14 10:16:19	vertebrates_other/Danio_rerio/Zv9/ASSEMBLY_INFO
 dapPul	6669	Daphnia pulex	2014-06-16 12:06:09	invertebrates/Daphnia_pulex/V1.0/ASSEMBLY_INFO
@@ -164,6 +169,7 @@ eptFus	29078	Eptesicus fuscus	2012-11-14 10:16:14	vertebrates_mammals/Eptesicus_
 equCab	9796	Equus caballus	2014-06-09 10:23:06	vertebrates_mammals/Equus_caballus/Ajinai1.0/ASSEMBLY_INFO
 equPrz	9798	Equus przewalskii	2014-06-09 10:23:06	vertebrates_mammals/Equus_przewalskii/Burgud/ASSEMBLY_INFO
 eriEur	9365	Erinaceus europaeus	2012-11-14 10:16:15	vertebrates_mammals/Erinaceus_europaeus/EriEur2.0/ASSEMBLY_INFO
+esoLuc	8010	Esox lucius	2014-07-10 10:23:09	vertebrates_other/Esox_lucius/EsoLuc1.0/ASSEMBLY_INFO
 eurAff	88015	Eurytemora affinis	2014-06-16 12:06:09	invertebrates/Eurytemora_affinis/Eaff_1.0/ASSEMBLY_INFO
 eurHel	54383	Eurypyga helias	2014-06-04 10:23:03	vertebrates_other/Eurypyga_helias/ASM69077v1/ASSEMBLY_INFO
 falChe	345164	Falco cherrug	2013-02-21 23:30:07	vertebrates_other/Falco_cherrug/F_cherrug_v1.0/ASSEMBLY_INFO
@@ -191,6 +197,7 @@ haeCon	6289	Haemonchus contortus	2014-06-16 12:06:09	invertebrates/Haemonchus_co
 haeCon	6289	Haemonchus contortus	2014-06-16 12:06:09	invertebrates/Haemonchus_contortus/Hco_v4_coding/ASSEMBLY_INFO
 halAlb	8969	Haliaeetus albicilla	2014-06-04 10:23:03	vertebrates_other/Haliaeetus_albicilla/ASM69140v1/ASSEMBLY_INFO
 halHal	286706	Halyomorpha halys	2014-06-16 12:06:09	invertebrates/Halyomorpha_halys/Hhal_1.0/ASSEMBLY_INFO
+halLeu	52644	Haliaeetus leucocephalus	2014-08-05 10:23:05	vertebrates_other/Haliaeetus_leucocephalus/Haliaeetus_leucocephalus-4.0/ASSEMBLY_INFO
 hapBur	8153	Haplochromis burtoni	2012-11-14 10:16:19	vertebrates_other/Haplochromis_burtoni/AstBur1.0/ASSEMBLY_INFO
 harSal	610380	Harpegnathos saltator	2014-06-16 12:06:09	invertebrates/Harpegnathos_saltator/HarSal_1.0/ASSEMBLY_INFO
 helMel	171917	Heliconius melpomene melpomene	2014-06-16 12:06:09	invertebrates/Heliconius_melpomene/ASM31383v2/ASSEMBLY_INFO
@@ -250,8 +257,10 @@ macFas	9541	Macaca fascicularis	2012-11-14 10:16:18	vertebrates_mammals/Macaca_f
 macFas	9541	Macaca fascicularis	2012-11-14 10:16:18	vertebrates_mammals/Macaca_fascicularis/MacFas_Jun2011/ASSEMBLY_INFO
 macFas	9541	Macaca fascicularis	2013-07-14 16:35:21	vertebrates_mammals/Macaca_fascicularis/Macaca_fascicularis_5.0/ASSEMBLY_INFO
 rheMac	9544	Macaca mulatta	2012-11-14 10:16:18	vertebrates_mammals/Macaca_mulatta/CR_1.0/ASSEMBLY_INFO
+manPen	143292	Manis pentadactyla	2014-08-13 10:23:11	vertebrates_mammals/Manis_pentadactyla/M_pentadactyla-1.1.1/ASSEMBLY_INFO
 manSex	7130	Manduca sexta	2014-06-16 12:06:09	invertebrates/Manduca_sexta/Msex_1.0/ASSEMBLY_INFO
 manVit	328815	Manacus vitellinus	2014-06-04 10:23:03	vertebrates_other/Manacus_vitellinus/ASM69201v1/ASSEMBLY_INFO
+manVit	328815	Manacus vitellinus	2014-08-04 10:23:02	vertebrates_other/Manacus_vitellinus/ASM69201v2/ASSEMBLY_INFO
 mayDes	39758	Mayetiola destructor	2014-06-16 12:06:09	invertebrates/Mayetiola_destructor/Mdes_1.0/ASSEMBLY_INFO
 mayZeb	106582	Maylandia zebra	2012-11-14 10:16:19	vertebrates_other/Maylandia_zebra/MetZeb1.0/ASSEMBLY_INFO
 mayZeb	106582	Maylandia zebra	2012-11-14 10:16:19	vertebrates_other/Maylandia_zebra/MetZeb1.1/ASSEMBLY_INFO
@@ -293,6 +302,7 @@ nipNip	128390	Nipponia nippon	2014-06-17 10:23:06	vertebrates_other/Nipponia_nip
 nomLeu	61853	Nomascus leucogenys	2012-11-14 10:16:18	vertebrates_mammals/Nomascus_leucogenys/Nleu1.0/ASSEMBLY_INFO
 nomLeu	61853	Nomascus leucogenys	2012-11-14 10:16:18	vertebrates_mammals/Nomascus_leucogenys/Nleu1.1/ASSEMBLY_INFO
 nomLeu	61853	Nomascus leucogenys	2013-01-03 06:25:12	vertebrates_mammals/Nomascus_leucogenys/Nleu_3.0/ASSEMBLY_INFO
+notCor	8208	Notothenia coriiceps	2014-07-30 10:23:07	vertebrates_other/Notothenia_coriiceps/NC01/ASSEMBLY_INFO
 ochPri	9978	Ochotona princeps	2012-11-14 10:16:18	vertebrates_mammals/Ochotona_princeps/OchPri3.0/ASSEMBLY_INFO
 octDeg	10160	Octodon degus	2012-11-14 10:16:18	vertebrates_mammals/Octodon_degus/OctDeg1.0/ASSEMBLY_INFO
 odoRosDiv	9708	Odobenus rosmarus divergens	2013-02-21 23:30:07	vertebrates_mammals/Odobenus_rosmarus/Oros_1.0/ASSEMBLY_INFO
@@ -382,6 +392,7 @@ tarSyr	9478	Tarsius syrichta	2013-09-19 10:23:10	vertebrates_mammals/Tarsius_syr
 tauEry	121530	Tauraco erythrolophus	2014-06-26 10:23:03	vertebrates_other/Tauraco_erythrolophus/ASM70936v1/ASSEMBLY_INFO
 tetUrt	32264	Tetranychus urticae	2014-06-16 12:06:09	invertebrates/Tetranychus_urticae/ASM23943v1/ASSEMBLY_INFO
 tinGut	94827	Tinamus guttatus	2014-06-26 10:23:03	vertebrates_other/Tinamus_guttatus/ASM70537v1/ASSEMBLY_INFO
+tinGut	94827	Tinamus guttatus	2014-08-06 10:23:13	vertebrates_other/Tinamus_guttatus/ASM70537v2/ASSEMBLY_INFO
 triMan	127582	Trichechus manatus latirostris	2012-11-14 10:16:19	vertebrates_mammals/Trichechus_manatus/TriManLat1.0/ASSEMBLY_INFO
 triMur	70415	Trichuris muris	2014-06-16 12:06:09	invertebrates/Trichuris_muris/TMUE2.2/ASSEMBLY_INFO
 triPre	7493	Trichogramma pretiosum	2014-06-16 12:06:09	invertebrates/Trichogramma_pretiosum/Tpre_1.0/ASSEMBLY_INFO

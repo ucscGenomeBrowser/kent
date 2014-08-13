@@ -4410,6 +4410,7 @@ tablesIgnored $kgDb
 
 tablesIgnored hg38
     altLocations
+    centromeres
 
 tablesIgnored hg19
     affyCytoScan
