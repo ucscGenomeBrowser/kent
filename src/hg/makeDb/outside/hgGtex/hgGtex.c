@@ -63,6 +63,12 @@ static struct optionSpec options[] = {
 /****************************/
 /* Process sample file */
 
+#define SAMPLE_FIRST_FIELD_LABEL "SAMPID"
+#define SAMPLE_ORGAN_FIELD_INDEX 5
+#define SAMPLE_TISSUE_FIELD_LABEL "SMTSD"
+#define SAMPLE_TISSUE_FIELD_INDEX 6
+#define SAMPLE_NAME_FIELD_INDEX 0
+
 int parseSampleFileHeader(struct lineFile *lf)
 /* Parse GTEX sample file header. Return number of columns */
 /* TODO: return column headers in array */
@@ -70,11 +76,12 @@ int parseSampleFileHeader(struct lineFile *lf)
 char *line;
 if (!lineFileNext(lf, &line, NULL))
     errAbort("%s is empty", lf->fileName);
-if (!startsWith("SAMPID", line))
+if (!startsWith(SAMPLE_FIRST_FIELD_LABEL, line))
     errAbort("unrecognized format - expecting sample file header in %s first line", lf->fileName);
 char *words[100];
 int sampleCols = chopTabs(line, words);
-if (sampleCols < 7 || differentString(words[6], "SMTSD"))
+if (sampleCols < SAMPLE_TISSUE_FIELD_INDEX+1 || 
+        differentString(words[SAMPLE_TISSUE_FIELD_INDEX], SAMPLE_TISSUE_FIELD_LABEL))
     errAbort("unrecognized format - expecting sample file header in %s first line", lf->fileName);
 return sampleCols;
 }
@@ -102,12 +109,12 @@ while (lineFileNext(lf, &line, NULL))
     lineFileExpectWords(lf, expectedCols, wordCount);
 
     AllocVar(sample);
-    sample->name = cloneString(words[0]);
-    sample->organ = cloneString(words[5]);
+    sample->name = cloneString(words[SAMPLE_NAME_FIELD_INDEX]);
+    sample->organ = cloneString(words[SAMPLE_ORGAN_FIELD_INDEX]);
     // Handle missing tissue and organ
     if (!*sample->organ)
         sample->organ = "Unannotated";
-    sample->tissue = cloneString(words[6]);
+    sample->tissue = cloneString(words[SAMPLE_TISSUE_FIELD_INDEX]);
     if (!*sample->tissue)
         sample->tissue = "Unannotated";
     hashAdd(sampleHash, sample->name, sample);
@@ -141,7 +148,7 @@ while (lineFileNext(lf, &line, NULL))
     lineFileExpectWords(lf, expectedCols, wordCount);
     i++;
 
-    char *sampleId = cloneString(words[0]);
+    char *sampleId = cloneString(words[SAMPLE_NAME_FIELD_INDEX]);
     if (!hashLookup(sampleNameHash, sampleId))
         continue;
 
@@ -151,8 +158,8 @@ while (lineFileNext(lf, &line, NULL))
     AllocVar(sample);
     sample->name = sampleId;
     sample->donor = cloneString(words[1]);
-    verbose(4, "parseSamples: lookup %s in tissueNameHash\n", words[6]);
-    sample->tissue = hashMustFindVal(tissueNameHash, words[6]);
+    verbose(4, "parseSamples: lookup %s in tissueNameHash\n", words[SAMPLE_TISSUE_FIELD_INDEX]);
+    sample->tissue = hashMustFindVal(tissueNameHash, words[SAMPLE_TISSUE_FIELD_INDEX]);
     verbose(3, "Adding sample: \'%s'\n", sampleId);
     hashAdd(hash, sampleId, sample);
     }
@@ -213,6 +220,9 @@ return tissueOffsets;
 /****************************/
 /* Process data file */
 
+#define DATA_GENE_COUNT_FIELD_INDEX 0
+#define DATA_SAMPLE_COUNT_FIELD_INDEX 1
+
 struct slName *parseDataFileHeader(struct lineFile *lf, int sampleCount, int *dataSampleCountRet)
 /* Parse version, info, and header lines. Return array of sample Ids in order from header */
 {
@@ -231,8 +241,8 @@ int wordCount = chopLine(line, words);
 if (wordCount != 2)
     errAbort("%s is truncated: expecting <#genes> <#samples>", lf->fileName);
 
-int geneCount = sqlUnsigned(words[0]);
-int headerSampleCount = sqlUnsigned(words[1]);
+int geneCount = sqlUnsigned(words[DATA_GENE_COUNT_FIELD_INDEX]);
+int headerSampleCount = sqlUnsigned(words[DATA_SAMPLE_COUNT_FIELD_INDEX]);
 if (headerSampleCount > sampleCount)
     errAbort("data file has more samples than sample file");
 verbose(2, "GTEX data file: %d genes, %d samples\n", geneCount, headerSampleCount);
@@ -283,6 +293,7 @@ for (el = tissueOffsets; el != NULL; el = el->next)
     for (i = 0, sampleOffset = sampleOffsets; i<tissueSampleCount;
                 sampleOffset = sampleOffset->next, i++)
         {
+        // skip over Name and Description fields to find first score for this gene
         double val = sqlDouble(row[(sampleOffset->offset)+2]);
         verbose(3, "    %s\t%s\t%s\t%0.3f\n", gene, tissue, sampleOffset->sample, val);
         fprintf(allFile, "%s\t%s\t%s\t", gene, tissue, sampleOffset->sample);
