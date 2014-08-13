@@ -115,6 +115,7 @@ colStr	57412	Colius striatus	2014-06-04 10:23:03	vertebrates_other/Colius_striat
 conCri	143302	Condylura cristata	2012-11-14 10:16:14	vertebrates_mammals/Condylura_cristata/ConCri1.0/ASSEMBLY_INFO
 copFlo	29053	Copidosoma floridanum	2014-06-16 12:06:09	invertebrates/Copidosoma_floridanum/Cflo_1.0/ASSEMBLY_INFO
 corBra	85066	Corvus brachyrhynchos	2014-06-04 10:23:03	vertebrates_other/Corvus_brachyrhynchos/ASM69197v1/ASSEMBLY_INFO
+corCor	932674	Corvus cornix cornix	2014-08-13 10:23:05	vertebrates_other/Corvus_cornix/Hooded_Crow_genome/ASSEMBLY_INFO
 cotJap	93934	Coturnix japonica	2013-12-23 10:23:03	vertebrates_other/Coturnix_japonica/Coja_1.0/ASSEMBLY_INFO
 craGig	29159	Crassostrea gigas	2014-06-16 12:06:09	invertebrates/Crassostrea_gigas/oyster_v9/ASSEMBLY_INFO
 criGri	10029	Cricetulus griseus	2012-11-14 10:16:14	vertebrates_mammals/Cricetulus_griseus/CriGri_1.0/ASSEMBLY_INFO
@@ -256,6 +257,7 @@ macFas	9541	Macaca fascicularis	2012-11-14 10:16:18	vertebrates_mammals/Macaca_f
 macFas	9541	Macaca fascicularis	2012-11-14 10:16:18	vertebrates_mammals/Macaca_fascicularis/MacFas_Jun2011/ASSEMBLY_INFO
 macFas	9541	Macaca fascicularis	2013-07-14 16:35:21	vertebrates_mammals/Macaca_fascicularis/Macaca_fascicularis_5.0/ASSEMBLY_INFO
 rheMac	9544	Macaca mulatta	2012-11-14 10:16:18	vertebrates_mammals/Macaca_mulatta/CR_1.0/ASSEMBLY_INFO
+manPen	143292	Manis pentadactyla	2014-08-13 10:23:11	vertebrates_mammals/Manis_pentadactyla/M_pentadactyla-1.1.1/ASSEMBLY_INFO
 manSex	7130	Manduca sexta	2014-06-16 12:06:09	invertebrates/Manduca_sexta/Msex_1.0/ASSEMBLY_INFO
 manVit	328815	Manacus vitellinus	2014-06-04 10:23:03	vertebrates_other/Manacus_vitellinus/ASM69201v1/ASSEMBLY_INFO
 manVit	328815	Manacus vitellinus	2014-08-04 10:23:02	vertebrates_other/Manacus_vitellinus/ASM69201v2/ASSEMBLY_INFO
