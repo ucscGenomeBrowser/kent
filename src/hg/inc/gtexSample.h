@@ -5,7 +5,7 @@
 #ifndef GTEXSAMPLE_H
 #define GTEXSAMPLE_H
 
-#define GTEXSAMPLE_NUM_COLS 4
+#define GTEXSAMPLE_NUM_COLS 3
 
 extern char *gtexSampleCommaSepFieldNames;
 
@@ -13,10 +13,9 @@ struct gtexSample
 /* GTEx sample description */
     {
     struct gtexSample *next;  /* Next in singly linked list. */
-    unsigned id;	/* internal id */
-    char *tissue;	/* GTEX tissue description */
-    char *donor;	/* GTEX donor name */
-    char *name;	/* GTEX sample name */
+    char *name;	/* GTEX sample identifier */
+    char *tissue;	/* Tissue name */
+    char *donor;	/* GTEX subject identifier */
     };
 
 void gtexSampleStaticLoad(char **row, struct gtexSample *ret);
