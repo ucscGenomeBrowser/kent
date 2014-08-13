@@ -1,5 +1,6 @@
 # UCSC<tab>common<tab>Scientific<tab>group<tab>clade<tab>orderKey
 # dbase    name       name           menu
+hg38	Human	Homo sapiens	primate	primate	130
 hg19	Human	Homo sapiens	primate	primate	140
 panTro4	Chimp	Pan troglodytes	primate	primate	229
 panPan1	Bonobo	Pan paniscus	primate	primate	245
@@ -47,12 +48,14 @@ phyCat1	Sperm whale	Physeter catodon	mammal	cetartiodactyla	2368
 balAcu1	Minke whale	Balaenoptera acutorostrata scammoni	mammal	cetartiodactyla	2369
 oviAri3	Sheep	Ovis aries	mammal	cetartiodactyla	2369
 capHir1	Domestic goat	Capra hircus	mammal	cetartiodactyla	2375
+bosTau8	Cow	Bos taurus	mammal	cetartiodactyla	2378
 bosTau7	Cow	Bos taurus	mammal	cetartiodactyla	2379
 bosMut1	Wild yak	Bos grunniens mutus	mammal	cetartiodactyla	2381
 bubBub1	Water buffalo	Bubalus bubalis	mammal	cetartiodactyla	2383
 equCab2	Horse	Equus caballus	mammal	perissodactyla	2409
 equPrz1	Przewalski horse	Equus przewalskii	mammal	perissodactyla	 2409
 cerSim1	White rhinoceros	Ceratotherium simum	mammal	perissodactyla	2415
+manPen1	Chinese pangolin	Manis pentadactyla	mammal	pholidota
 felCat5	Cat	Felis catus	mammal	carnivora	2418
 panTig1	Amur tiger	Panthera tigris altaica	mammal	carnivora	2425
 musFur1	Ferret 	Mustela putorius furo	mammal	carnivora	2430
@@ -100,24 +103,29 @@ amaVit1	Puerto Rican parrot	Amazona vittata	vertebrate	aves	4310
 araMac1	Scarlet macaw	Ara macao	vertebrate	aves	4320
 galGal4	Chicken	Gallus gallus	vertebrate	aves	4349
 cotJap1	Japanese quail	Coturnix japonica	vertebrate	aves	4353
+chaVoc2	Killdeer	Charadrius vociferus	vertebrate	aves	4354
 chaVoc1	Killdeer	Charadrius vociferus	vertebrate	aves	4354
 cucCan1	Common cuckoo	Cuculus canorus	vertebrate	aves	4355
 apaVit1	Bar tailed trogon	Apaloderma vittatum	vertebrate	aves	4355
 anaPla1	Mallard duck	Anas platyrhynchos	vertebrate	aves	4357
+bucRhi1	Rhinoceros hornbill	Buceros rhinoceros silvestris	vertebrate	aves	4358
 pseHum1	Tibetan ground jay	Pseudopodoces humilis	vertebrate	aves	4358
 zonAlb1	White-throated sparrow	Zonotrichia albicollis	vertebrate	aves	4359
 melGal1	Turkey	Meleagris gallopavo	vertebrate	aves	4360
 strCam1	Ostrich	Struthio camelus	vertebrate	aves	4363
+tinGut2	White throated tinamou	Tinamus guttatus	vertebrate	aves	4363
 tinGut1	White throated tinamou	Tinamus guttatus	vertebrate	aves	4363
 acaChl1	Rifleman	Acanthisitta chloris	vertebrate	aves	4363
 aptFor1	Emperor penguin	Aptenodytes forsteri	vertebrate	aves	4363
 aquChr1	Golden eagle	Aquila chrysaetos canadensis	vertebrate	aves	4363
+halLeu1	Bald eagle	Haliaeetus leucocephalus	vertebrate	aves	4363
 calAnn1	Anna's hummingbird	Calypte anna	vertebrate	aves	4363
 capCar1	Chuck-will's-widow	Caprimulgus carolinensis	vertebrate	aves	4363
 carCri1	Red-legged seriema	Cariama cristata	vertebrate	aves	4363
 chlUnd1	Houbara bustard	Chlamydotis undulata macqueenii	vertebrate	aves	4363
 colStr1	Speckled mousebird	Colius striatus	vertebrate	aves	4363
 corBra1	American crow	Corvus brachyrhynchos	vertebrate	aves	4363
+corCor1	Hooded crow	Corvus cornix cornix	vertebrate	aves	4363
 nipNip1	Crested ibis	Nipponia nippon	vertebrate	aves	4363
 egrGar1	Little egret	Egretta garzetta	vertebrate	aves	4363
 eurHel1	Sunbittern	Eurypyga helias	vertebrate	aves	4363
@@ -126,13 +134,14 @@ fulGla1	Northern fulmar	Fulmarus glacialis	vertebrate	aves	4363
 gavSte1	Red-throated loon	Gavia stellata	vertebrate	aves	4363
 halAlb1	White-tailed eagle	Haliaeetus albicilla	vertebrate	aves	4363
 lepDis1	Cuckoo roller	Leptosomus discolor	vertebrate	aves	4363
+manVit2	Golden-collared manakin	Manacus vitellinus	vertebrate	aves	4363
 manVit1	Golden-collared manakin	Manacus vitellinus	vertebrate	aves	4363
 merNub1	Northern carmine bee-eater	Merops nubicus	vertebrate	aves	4363
 mesUni1	Brown roatelo	Mesitornis unicolor	vertebrate	aves	4363
 opiHoa1	Hoatzin	Opisthocomus hoazin	vertebrate	aves	4363
 tauEry1	Red crested turaco	Tauraco erythrolophus	vertebrate	aves	4363
 pelCri1	Dalmatian pelican	Pelecanus crispus	vertebrate	aves	4363
-phaCar1	Bar tailed trogon	Phalacrocorax carbo	vertebrate	4363
+phaCar1	Great cormorant	Phalacrocorax carbo	vertebrate	aves	4363
 phaLep1	White-tailed tropicbird	Phaethon lepturus	vertebrate	aves	4363
 phoRub1	American flamingo	Phoenicopterus ruber ruber	vertebrate	aves	4363
 picPub1	Downy woodpecker	Picoides pubescens	vertebrate	aves	4363
@@ -147,7 +156,9 @@ melUnd1	Budgerigar	Melopsittacus undulatus	vertebrate	aves	4375
 pytBiv1	Burmese python	Python bivittatus	vertebrate	sauria	4378
 allMis1	American alligator	Alligator mississippiensis	vertebrate	sauria	4380
 allSin1	Chinese alligator	Alligator sinensis	vertebrate	sauria	4382
+croPor0	Crocodile	Crocodylus porosus	vertebrate	sauria	4385
 croPor1	Crocodile	Crocodylus porosus	vertebrate	sauria	4385
+gavGan0	Gharial	Gavialis gangeticus	vertebrate	sauria	4387
 gavGan1	Gharial	Gavialis gangeticus	vertebrate	sauria	4387
 anoCar2	Lizard	Anolis carolinensis	vertebrate	sauria	4390
 pytMolBiv1	Burmese python	Python molurus bivittatus	vertebrate	sauria	4392
@@ -170,13 +181,16 @@ punNye1	Pundamilia nyererei	Pundamilia nyererei	vertebrate	percomorpha	4665
 oreNil2	Nile tilapia	Oreochromis niloticus	vertebrate	percomorpha	4669
 neoBri1	Princess of Burundi	Neolamprologus brichardi	vertebrate	percomorpha	4680
 cynSem1	Tongue sole	Cynoglossus semilaevis	vertebrate	percomorpha	4690
+notCor	Black rockcod	Notothenia coriiceps	vertebrate	percomorpha	4692
 sebNig1	Tiger rockfish	Sebastes nigrocinctus	vertebrate	percomorpha	4693
 sebRub1	Flag rockfish	Sebastes rubrivinctus	vertebrate	percomorpha	4696
 gasAcu1	Stickleback	Gasterosteus aculeatus	vertebrate	percomorpha	4700
 oryLat2	Medaka	Oryzias latipes	vertebrate	percomorpha	4729
+cypVar1	Sheepshead minnow	Cyprinodon variegatus	vertebrate	percomorpha	4637
 xipMac1	Southern platyfish	Xiphophorus maculatus	vertebrate	percomorpha	4740
 poeRet1	guppy	Poecilia reticulata	vertebrate	percomorpha	4743
 poeFor1	Amazon molly	Poecilia formosa	vertebrate	percomorpha	4745
+esoLuc1	Northern pike	Esox lucius	vertebrate	neopterygii	4748
 gadMor1	Atlantic cod	Gadus morhua	vertebrate	neoteleostei	4750
 angJap1	Japanese eel	Anguilla japonica	vertebrate	teleostei	4770
 danRer7	Zebrafish	Danio rerio	vertebrate	teleostei	4774
