@@ -62,7 +62,8 @@ variation discovery pipeline following the guidelines in the
 <A HREF="http://gatkforums.broadinstitute.org/discussion/1186/best-practice-variant-detection-with-the-gatk-v4-for-release-2-0" target=_blank>GATK best practices v4</A>. 
 More specifically, each BAM was reduced to create a Reduced BAM, and then INDELs were 
 discovered by analyzing all samples simultaneously with the GATK 
-<A HREF="http://www.broadinstitute.org/gatk/gatkdocs/org_broadinstitute_sting_gatk_walkers_genotyper_UnifiedGenotyper.html" target=_blank>UnifiedGenotyper</A>, 
+<A HREF="https://www.broadinstitute.org/gatk/gatkdocs/org_broadinstitute_gatk_tools_walkers_genotyper_UnifiedGenotyper.html"
+target=_blank>UnifiedGenotyper</A>,
 and subsequently filtered by the GATK Variant Quality Score Recalibration (VQSR) filtering 
 model, again following the V4 best practices. The INDEL genotypes for X and Y chromosomes
 were adjusted to be consistent with the samples' genders. Female samples have diploid calls 
