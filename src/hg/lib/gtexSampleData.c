@@ -149,7 +149,8 @@ sqlSafef(query, sizeof(query),
 "    tissue varchar(255) not null,     # Tissue name\n"
 "    score float not null,	# Expression level (RPKM)\n"
 "              #Indices\n"
-"    PRIMARY KEY(geneId)\n"
+"    KEY(geneId),\n"
+"    KEY(tissue)\n"
 ")\n",   table);
 sqlRemakeTable(conn, table, query);
 }
