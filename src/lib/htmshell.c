@@ -240,7 +240,6 @@ void htmlWarnBoxSetup(FILE *f)
  * and then made visible. */
 {
 // Only set this up once per page
-static boolean htmlWarnBoxSetUpAlready=FALSE;
 if (htmlWarnBoxSetUpAlready)
     return;
 htmlWarnBoxSetUpAlready=TRUE;
