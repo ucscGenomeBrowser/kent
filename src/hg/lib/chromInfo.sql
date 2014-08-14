@@ -9,5 +9,5 @@ CREATE TABLE chromInfo (
     size int unsigned not null,	# Chromosome size
     fileName varchar(255) null,	# Chromosome file (raw one byte per base)
               #Indices
-    PRIMARY KEY(chrom(16))
+    PRIMARY KEY(chrom(31))
 );
