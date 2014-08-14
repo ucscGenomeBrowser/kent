@@ -8,8 +8,8 @@ fi
 
 export F=$1
 
-sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' ${F} \
-    | xargs echo | sed 's/ //g; s/,/ /g' | sed 's/[()]//g; s/,/ /g' \
+sed 's/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' ${F} | sed -e "s/'/xXx/g"  \
+    | xargs echo | sed "s/ //g; s/,/ /g; s/xXx/'/g" | sed 's/[()]//g; s/,/ /g' \
     | tr '[ ]' '[\n]'
 
 
