@@ -9,6 +9,7 @@
 #include "options.h"
 #include "portable.h"
 #include "hgRelate.h"
+#include "gtexDonor.h"
 #include "gtexSample.h"
 #include "gtexTissue.h"
 #include "gtexSampleData.h"
@@ -160,7 +161,7 @@ while (lineFileNext(lf, &line, NULL))
     sample->donor = cloneString(words[1]);
     verbose(4, "parseSamples: lookup %s in tissueNameHash\n", words[SAMPLE_TISSUE_FIELD_INDEX]);
     sample->tissue = hashMustFindVal(tissueNameHash, words[SAMPLE_TISSUE_FIELD_INDEX]);
-    verbose(3, "Adding sample: \'%s'\n", sampleId);
+    verbose(4, "Adding sample: \'%s'\n", sampleId);
     hashAdd(hash, sampleId, sample);
     }
 verbose(2, "Found %d data samples out of %d in sample file\n", hashNumEntries(hash), i);
@@ -295,8 +296,9 @@ for (el = tissueOffsets; el != NULL; el = el->next)
         {
         // skip over Name and Description fields to find first score for this gene
         double val = sqlDouble(row[(sampleOffset->offset)+2]);
-        verbose(3, "    %s\t%s\t%s\t%0.3f\n", gene, tissue, sampleOffset->sample, val);
-        fprintf(allFile, "%s\t%s\t%s\t", gene, tissue, sampleOffset->sample);
+        // TODO: use gtexSampleDataOut
+        verbose(3, "    %s\t%s\t%s\t%0.3f\n", gene, sampleOffset->sample, tissue, val);
+        fprintf(allFile, "%s\t%s\t%s\t", gene, sampleOffset->sample, tissue);
         if (doRound)
             fprintf(allFile, "%d", round(val));
         else 
@@ -362,6 +364,73 @@ for (i=0, el = helList; el != NULL; el = el->next, i++)
     }
 carefulClose(&f);
 }
+
+/****************************/
+/* Deal with donors */
+
+#define SUBJECT_FIRST_FIELD_LABEL "SUBJID"
+
+#define SUBJECT_NAME_FIELD 0
+        // GTEX-XXXX
+#define SUBJECT_GENDER_FIELD 1
+        // 1=Male (hmmf), 2=Female
+#define donorGetGender(x) (sqlUnsigned(x) == 1 ? "M" : "F")
+#define SUBJECT_AGE_FIELD 2
+        // e.g. 60-69 years
+#define SUBJECT_DEATH_FIELD 3   
+        // Hardy scale 0-4 or empty (unknown?).  See .as for scale definitions.
+#define donorGetDeathClass(x) (isEmpty(x) ? -1 : sqlUnsigned(x))
+#define SUBJECT_LAST_FIELD SUBJECT_DEATH_FIELD
+
+int donorGetAge(char *age)
+/* Change '60-69 yrs' to numeric 60 */
+{
+char *pos;
+char *ageBuf = cloneString(age);
+pos = stringIn("-", ageBuf);
+if (pos == NULL)
+    return 0;
+*pos = '\0';
+return sqlUnsigned(ageBuf);
+}
+
+struct gtexDonor *parseSubjectFile(struct lineFile *lf)
+{
+char *line;
+if (!lineFileNext(lf, &line, NULL))
+    errAbort("%s is empty", lf->fileName);
+if (!startsWith(SUBJECT_FIRST_FIELD_LABEL, line))
+    errAbort("unrecognized format - expecting subject file header in %s first line", lf->fileName);
+
+char *words[100];
+int wordCount;
+struct gtexDonor *donor=NULL, *donors = NULL;
+
+while (lineFileNext(lf, &line, NULL))
+    {
+    /* Convert line to donor record */
+    wordCount = chopTabs(line, words);
+    lineFileExpectWords(lf, SUBJECT_LAST_FIELD+1, wordCount);
+
+    AllocVar(donor);
+    char *subject = cloneString(words[SUBJECT_NAME_FIELD]);
+    char *gender = cloneString(words[SUBJECT_GENDER_FIELD]);
+    char *age = cloneString(words[SUBJECT_AGE_FIELD]);
+    char *deathClass = cloneString(words[SUBJECT_DEATH_FIELD]);
+
+    verbose(3, "subject: %s %s %s %s\n", subject, gender, age, deathClass);
+    donor->name = subject;
+    donor->gender = donorGetGender(gender);
+    donor->age = donorGetAge(age);
+    donor->deathClass = donorGetDeathClass(deathClass);
+    slAddTail(&donors, donor);
+    //slAddHead(&donors, donor);
+    //slReverse(&donors);
+    }
+verbose(2, "Found %d donors\n", slCount(donors));
+return(donors);
+}
+
 
 /****************************/
 /* Main functions */
@@ -465,26 +534,53 @@ for (sampleId = sampleIds; sampleId != NULL; sampleId = sampleId->next)
     gtexSampleOutput(sample, f, '\t', '\n');
     }
 
+/* Load subjects (donors) file and write to table file */
+struct gtexDonor *donor, *donors;
+lf = lineFileOpen(subjectFile, TRUE);
+donors = parseSubjectFile(lf);
+verbose(2, "%d donors in subjects file\n", slCount(donors));
+lineFileClose(&lf);
+
+char donorTable[64];
+safef(donorTable, sizeof(donorTable), "%sDonor", tableRoot);
+FILE *donorFile = hgCreateTabFile(tabDir, donorTable);
+for (donor = donors; donor != NULL; donor = donor->next)
+    {
+    gtexDonorOutput(donor, donorFile, '\t', '\n');
+    }
+
 if (doLoad)
     {
     struct sqlConnection *conn = sqlConnect(database);
 
     /* Load sample table */
+    verbose(2, "Creating sample table\n");
     gtexSampleCreateTable(conn, sampleTable);
     hgLoadTabFile(conn, tabDir, sampleTable, &f);
     hgRemoveTabFile(tabDir, sampleTable);
 
     /* Load tissue table */
     char tissueTable[64];
+    verbose(2, "Creating tissue table\n");
     safef(tissueTable, sizeof(tissueTable), "%sTissue", tableRoot);
     gtexTissueCreateTable(conn, tissueTable);
-    hgLoadNamedTabFile(conn, NULL, tissueTable, tissuesFile, NULL);
+    char dir[128];
+    char fileName[64];
+    splitPath(tissuesFile, dir, fileName, NULL);
+    hgLoadNamedTabFile(conn, dir, tissueTable, fileName, NULL);
+
+    /* Load donor table */
+    verbose(2, "Creating donor table\n");
+    gtexDonorCreateTable(conn, donorTable);
+    hgLoadTabFile(conn, tabDir, donorTable, &donorFile);
+    hgRemoveTabFile(tabDir, donorTable);
 
     sqlDisconnect(&conn);
     }
 else
     {
     carefulClose(&f);
+    carefulClose(&donorFile);
     }
 
 /* Ready to process data items */
@@ -523,15 +619,17 @@ if (doLoad)
     {
     struct sqlConnection *conn = sqlConnect(database);
 
-    // Load sample data table 
-    gtexSampleDataCreateTable(conn, sampleDataTable);
-    hgLoadTabFile(conn, tabDir, sampleDataTable, &sampleDataFile);
-    hgRemoveTabFile(tabDir, sampleDataTable);
-
     // Load tissue data (medians) table
+    verbose(2, "Creating tissue data table\n");
     gtexTissueDataCreateTable(conn, tissueDataTable);
     hgLoadTabFile(conn, tabDir, tissueDataTable, &tissueDataFile);
     hgRemoveTabFile(tabDir, tissueDataTable);
+
+    // Load sample data table 
+    verbose(2, "Creating sample data table\n");
+    gtexSampleDataCreateTable(conn, sampleDataTable);
+    hgLoadTabFile(conn, tabDir, sampleDataTable, &sampleDataFile);
+    hgRemoveTabFile(tabDir, sampleDataTable);
 
     sqlDisconnect(&conn);
     }
