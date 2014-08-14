@@ -112,7 +112,7 @@
        (Oryzias_latipes:0.28197,
        (Xiphophorus_maculatus:0.2,
        (Poecilia_formosa:0.1,
-       poeRet1:0.1):0.1):0.1):0.2):0.03,
+       Poecilia_reticulata:0.1):0.1):0.1):0.2):0.03,
       Gasterosteus_aculeatus:0.346413):0.01,
      (Sebastes_nigrocinctus:0.2,
      Sebastes_rubrivinctus:0.2):0.2):0.02,

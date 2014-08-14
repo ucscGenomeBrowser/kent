@@ -10,5 +10,6 @@ CREATE TABLE gtexSampleData (
     tissue varchar(255) not null,	# Tissue short name
     score float not null,	# Expression level (RPKM)
               #Indices
-    PRIMARY KEY(geneId)
+    KEY(geneId),
+    KEY(tissue)
 );

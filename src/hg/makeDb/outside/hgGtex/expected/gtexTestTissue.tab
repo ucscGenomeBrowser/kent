@@ -1,0 +1,53 @@
+0	adiposeSubcutaneous	Adipose - Subcutaneous	Adipose Tissue
+1	adiposeVisceral	Adipose - Visceral (Omentum)	Adipose Tissue
+2	adrenalGland	Adrenal Gland	Adrenal Gland
+3	arteryAorta	Artery - Aorta	Blood Vessel
+4	arteryCoronary	Artery - Coronary	Blood Vessel
+5	arteryTibial	Artery - Tibial	Blood Vessel
+6	bladder	Bladder	Bladder
+7	brainAmygdala	Brain - Amygdala	Brain
+8	brainAnteriorcingulatecortex	Brain - Anterior cingulate cortex (BA24)	Brain
+9	brainCaudate	Brain - Caudate (basal ganglia)	Brain
+10	brainCerebellarHemisphere	Brain - Cerebellar Hemisphere	Brain
+11	brainCerebellum	Brain - Cerebellum	Brain
+12	brainCortex	Brain - Cortex	Brain
+13	brainFrontalCortex	Brain - Frontal Cortex (BA9)	Brain
+14	brainHippocampus	Brain - Hippocampus	Brain
+15	brainHypothalamus	Brain - Hypothalamus	Brain
+16	brainNucleusaccumbens	Brain - Nucleus accumbens (basal ganglia)	Brain
+17	brainPutamen	Brain - Putamen (basal ganglia)	Brain
+18	brainSpinalcord	Brain - Spinal cord (cervical c-1)	Brain
+19	brainSubstantianigra	Brain - Substantia nigra	Brain
+20	breastMammaryTissue	Breast - Mammary Tissue	Breast
+21	cellsEBV-transformedlymphocytes	Cells - EBV-transformed lymphocytes	Blood
+22	cellsTransformedfibroblasts	Cells - Transformed fibroblasts	Skin
+23	cervixEctocervix	Cervix - Ectocervix	Cervix Uteri
+24	cervixEndocervix	Cervix - Endocervix	Cervix Uteri
+25	colonSigmoid	Colon - Sigmoid	Colon
+26	colonTransverse	Colon - Transverse	Colon
+27	esophagusGastroesophagealJunction	Esophagus - Gastroesophageal Junction	Esophagus
+28	esophagusMucosa	Esophagus - Mucosa	Esophagus
+29	esophagusMuscularis	Esophagus - Muscularis	Esophagus
+30	fallopianTube	Fallopian Tube	Fallopian Tube
+31	heartAtrialAppendage	Heart - Atrial Appendage	Heart
+32	heartLeftVentricle	Heart - Left Ventricle	Heart
+33	kidneyCortex	Kidney - Cortex	Kidney
+34	liver	Liver	Liver
+35	lung	Lung	Lung
+36	minorSalivaryGland	Minor Salivary Gland	Salivary Gland
+37	muscleSkeletal	Muscle - Skeletal	Muscle
+38	nerveTibial	Nerve - Tibial	Nerve
+39	ovary	Ovary	Ovary
+40	pancreas	Pancreas	Pancreas
+41	pituitary	Pituitary	Pituitary
+42	prostate	Prostate	Prostate
+43	skinNotSunExposed	Skin - Not Sun Exposed (Suprapubic)	Skin
+44	skinSunExposed	Skin - Sun Exposed (Lower leg)	Skin
+45	smallIntestineTerminalIleum	Small Intestine - Terminal Ileum	Small Intestine
+46	spleen	Spleen	Spleen
+47	stomach	Stomach	Stomach
+48	testis	Testis	Testis
+49	thyroid	Thyroid	Thyroid
+50	uterus	Uterus	Uterus
+51	vagina	Vagina	Vagina
+52	wholeBlood	Whole Blood	Blood
