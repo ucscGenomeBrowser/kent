@@ -643,7 +643,7 @@ printf("Name: %s<br>\n", fileName);
 printf("Size: %s<br>\n", nicenumber);
 printf("Progress: 0%%<br>\n");
 printf("You can remain on this page and monitor upload progress.<br>\n");
-printf("Otherwise, feel free to continue working, and your output will appear in GenomeSpace when you are ready.<br>\n");
+printf("Otherwise, feel free to continue working, and your output will appear in GenomeSpace when the upload is complete.<br>\n");
 printf("<br>\n");
 printf("<FORM ACTION=\"/cgi-bin/hgTables\" METHOD=GET>\n"
         "<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"Back\" >\n"
