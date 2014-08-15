@@ -97,7 +97,7 @@ close(sd);
 
 char *protocol = "HTTP/1.1 ";
 if (!startsWith(protocol, dy->string))
-    errAbort("GenomeSpace: Expected HTTP/1.1 response: found %s", dy->string);
+    errAbort("GenomeSpace: Expected response to start with [%s], got [%s]", protocol, dy->string);
 
 if (pResponseCode)
     {
