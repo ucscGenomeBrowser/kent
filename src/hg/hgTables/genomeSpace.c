@@ -415,7 +415,7 @@ while ((bufRead = fread(&buffer, 1, S3UPBUFSIZE, f)) > 0)
 	    "<INPUT TYPE=SUBMIT NAME=\"Refresh\" VALUE=\"Refresh\" onclick='window.location=window.location;return false;' >"
 	    "</FORM>\n"
 	    , hgtaDoMainPage);
-	puts("<script type=\"text/JavaScript\">");
+	puts("<script type=\"text/javascript\">");
 	puts("<!--");
 	puts("setTimeout(\"location = location;\",5000);");
 	puts("-->");
@@ -482,8 +482,23 @@ if (start < 0)
     }
 puts("Content-Type: text/html\n");
 int line;
+boolean autoRefreshFound = FALSE;
 for (line=start; line <= end; line++)
+    {
     puts(lines[line]);
+    if (startsWith("setTimeout(\"location = location;", lines[line]))
+	autoRefreshFound = TRUE;
+    }
+// if it looks like the background is no longer running, 
+// include the .err stdout output for more informative problem message
+char urlErr[512];
+char *textErr = NULL;
+safef(urlErr, sizeof urlErr, "%s.err", url);
+if (!autoRefreshFound && (fileSize(urlErr) > 0))
+    {
+    readInGulp(urlErr, &textErr, NULL);
+    printf("%s", textErr);
+    }
 }
 
 #include "trashDir.h"
