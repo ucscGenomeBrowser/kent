@@ -254,6 +254,7 @@ origAssembly mm9
 pennantIcon 9.jpg ../goldenPath/help/liftOver.html "These data were converted via liftOver from the July 2007 (NCBI37/mm9) version of the track"
 
 track FaceBase24SampleTypesAvg override
+origAssembly mm9
 pennantIcon 9.jpg ../goldenPath/help/liftOver.html "These data were converted via liftOver from the July 2007 (NCBI37/mm9) version of the track"
 
 # GENCODE

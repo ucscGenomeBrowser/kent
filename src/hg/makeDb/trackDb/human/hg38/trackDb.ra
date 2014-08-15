@@ -284,3 +284,6 @@ priority 1
 
 track snp141 override
 snpSeqFile /gbdb/hg19/snp/snp141.fa
+
+track genomicSuperDups override
+group rep

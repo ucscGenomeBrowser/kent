@@ -97,7 +97,7 @@ close(sd);
 
 char *protocol = "HTTP/1.1 ";
 if (!startsWith(protocol, dy->string))
-    errAbort("GenomeSpace: Expected HTTP/1.1 response: found %s", dy->string);
+    errAbort("GenomeSpace: Expected response to start with [%s], got [%s]", protocol, dy->string);
 
 if (pResponseCode)
     {
@@ -415,7 +415,7 @@ while ((bufRead = fread(&buffer, 1, S3UPBUFSIZE, f)) > 0)
 	    "<INPUT TYPE=SUBMIT NAME=\"Refresh\" VALUE=\"Refresh\" onclick='window.location=window.location;return false;' >"
 	    "</FORM>\n"
 	    , hgtaDoMainPage);
-	puts("<script type=\"text/JavaScript\">");
+	puts("<script type=\"text/javascript\">");
 	puts("<!--");
 	puts("setTimeout(\"location = location;\",5000);");
 	puts("-->");
@@ -482,8 +482,23 @@ if (start < 0)
     }
 puts("Content-Type: text/html\n");
 int line;
+boolean autoRefreshFound = FALSE;
 for (line=start; line <= end; line++)
+    {
     puts(lines[line]);
+    if (startsWith("setTimeout(\"location = location;", lines[line]))
+	autoRefreshFound = TRUE;
+    }
+// if it looks like the background is no longer running, 
+// include the .err stdout output for more informative problem message
+char urlErr[512];
+char *textErr = NULL;
+safef(urlErr, sizeof urlErr, "%s.err", url);
+if (!autoRefreshFound && (fileSize(urlErr) > 0))
+    {
+    readInGulp(urlErr, &textErr, NULL);
+    printf("%s", textErr);
+    }
 }
 
 #include "trashDir.h"
@@ -643,7 +658,7 @@ printf("Name: %s<br>\n", fileName);
 printf("Size: %s<br>\n", nicenumber);
 printf("Progress: 0%%<br>\n");
 printf("You can remain on this page and monitor upload progress.<br>\n");
-printf("Otherwise, feel free to continue working, and your output will appear in GenomeSpace when you are ready.<br>\n");
+printf("Otherwise, feel free to continue working, and your output will appear in GenomeSpace when the upload is complete.<br>\n");
 printf("<br>\n");
 printf("<FORM ACTION=\"/cgi-bin/hgTables\" METHOD=GET>\n"
         "<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"Back\" >\n"

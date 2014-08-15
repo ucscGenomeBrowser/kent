@@ -6,242 +6,294 @@ group map
 visibility hide
 type bed 3
 noInherit on
+dragAndDrop on
 
     track cloneEnd_ABC10
-    parent cloneEndSuper hide
+    parent cloneEndSuper on
     shortLabel ABC10
     longLabel Agencourt fosmid library 10
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility pack
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 1
 
     track cloneEnd_ABC11
-    parent cloneEndSuper hide
+    parent cloneEndSuper off
     shortLabel ABC11
     longLabel Agencourt fosmid library 11
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 2
 
     track cloneEnd_ABC12
-    parent cloneEndSuper hide
+    parent cloneEndSuper off
     shortLabel ABC12
     longLabel Agencourt fosmid library 12
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 3
 
     track cloneEnd_ABC13
-    parent cloneEndSuper hide
+    parent cloneEndSuper off
     shortLabel ABC13
     longLabel Agencourt fosmid library 13
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 4
 
     track cloneEnd_ABC14
-    parent cloneEndSuper hide
+    parent cloneEndSuper off
     shortLabel ABC14
     longLabel Agencourt fosmid library 14
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 5
 
     track cloneEnd_ABC16
-    parent cloneEndSuper hide
+    parent cloneEndSuper off
     shortLabel ABC16
     longLabel Agencourt fosmid library 16
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 6
 
     track cloneEnd_ABC18
-    parent cloneEndSuper hide
+    parent cloneEndSuper off
     shortLabel ABC18
     longLabel Agencourt fosmid library 18
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 7
 
     track cloneEnd_ABC20
-    parent cloneEndSuper hide
+    parent cloneEndSuper off
     shortLabel ABC20
     longLabel Agencourt fosmid library 20
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 8
 
     track cloneEnd_ABC21
-    parent cloneEndSuper hide
+    parent cloneEndSuper off
     shortLabel ABC21
     longLabel Agencourt fosmid library 21
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 9
 
     track cloneEnd_ABC22
-    parent cloneEndSuper hide
+    parent cloneEndSuper off
     shortLabel ABC22
     longLabel Agencourt fosmid library 22
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 10
 
     track cloneEnd_ABC23
-    parent cloneEndSuper hide
+    parent cloneEndSuper off
     shortLabel ABC23
     longLabel Agencourt fosmid library 23
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 11
 
     track cloneEnd_ABC24
-    parent cloneEndSuper hide
+    parent cloneEndSuper off
     shortLabel ABC24
     longLabel Agencourt fosmid library 24
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 12
 
     track cloneEnd_ABC27
-    parent cloneEndSuper hide
+    parent cloneEndSuper off
     shortLabel ABC27
     longLabel Agencourt fosmid library 27
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 13
 
     track cloneEnd_ABC7
-    parent cloneEndSuper hide
+    parent cloneEndSuper off
     shortLabel ABC7
     longLabel Agencourt fosmid library 7
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 14
 
     track cloneEnd_ABC8
-    parent cloneEndSuper hide
+    parent cloneEndSuper off
     shortLabel ABC8
     longLabel Agencourt fosmid library 8
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 15
 
     track cloneEnd_ABC9
-    parent cloneEndSuper hide
+    parent cloneEndSuper off
     shortLabel ABC9
     longLabel Agencourt fosmid library 9
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 16
 
     track cloneEnd_CH17
-    parent cloneEndSuper hide
+    parent cloneEndSuper off
     shortLabel CH17
     longLabel CHORI BAC hydatidiform mole
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 17
 
     track cloneEnd_COR02
-    parent cloneEndSuper hide
+    parent cloneEndSuper off
     shortLabel COR02
     longLabel NHGRI-CORIELLE CORIELL-02-F-39-40KB
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 18
 
     track cloneEnd_COR2A
-    parent cloneEndSuper hide
+    parent cloneEndSuper off
     shortLabel COR2A
     longLabel NHGRI-CORIELLE CORIELL-02A-F-39-40KB
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 19
 
     track cloneEnd_CTD
-    parent cloneEndSuper pack
+    parent cloneEndSuper off
     shortLabel CTD
     longLabel CalTech BAC library D
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 20
 
     track cloneEnd_RP11
-    parent cloneEndSuper pack
+    parent cloneEndSuper off
     shortLabel RP11
     longLabel RPCI BAC library 11
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 21
 
     track cloneEnd_WI2
-    parent cloneEndSuper hide
+    parent cloneEndSuper off
     shortLabel WI2
     longLabel WIBR-2 Fosmid library
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 22
 
     track cloneEnd_multipleMaps
-    parent cloneEndSuper hide
+    parent cloneEndSuper off
     shortLabel Multiple mappings
     longLabel Clone end placements that map to multiple locations in the genome
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 23
 
     track cloneEnd_badEnds
-    parent cloneEndSuper hide
+    parent cloneEndSuper off
     shortLabel Bad end mappings
     longLabel Clone end placements dropped at UCSC, map distance 3X median library size
     colorByStrand 0,0,128 0,128,0
     type bed 12
+    visibility hide
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 24
 
     track cloneEnd_coverageForward
-    parent cloneEndSuper hide
+    parent cloneEndSuper on
     shortLabel Coverage forward strand
     longLabel Clone end placements overlap coverage on the forward strand
     type bigWig 0 5377
+    visibility full
     autoScale on
     alwaysZero on
     windowingFunction mean
+    priority 25
 
     track cloneEnd_coverageReverse
-    parent cloneEndSuper hide
+    parent cloneEndSuper on
     shortLabel Coverage reverse strand
     longLabel Clone end placements overlap coverage on the reverse strand
     type bigWig 0 4112
+    visibility full
     negateValues 1
     alwaysZero on
     windowingFunction mean
     autoScale on
-
+    priority 26
 
 searchTable cloneEnd_ABC10
 searchType bed
@@ -379,7 +431,7 @@ searchTable cloneEnd_multipleMaps
 searchType bed
 searchMethod prefix
 searchPriority 50
-termRegex [ACGRW][BHIOPT2]([0-9A-Z_])+
+termRegex [ACGRW][BHIOPT2]([-0-9A-Z_])+
 
 searchTable cloneEnd_badEnds
 searchType bed

@@ -240,7 +240,6 @@ void htmlWarnBoxSetup(FILE *f)
  * and then made visible. */
 {
 // Only set this up once per page
-static boolean htmlWarnBoxSetUpAlready=FALSE;
 if (htmlWarnBoxSetUpAlready)
     return;
 htmlWarnBoxSetUpAlready=TRUE;
@@ -481,7 +480,7 @@ if (printDocType)
         fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">\n", f);
     else
         fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
-              "\"http://www.w3.org/TR/html4/loose.dtd\">",f);
+              "\"http://www.w3.org/TR/html4/loose.dtd\">\n",f);
     // Strict would be nice since it fixes atleast one IE problem (use of :hover CSS pseudoclass)
 #endif///ndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     }

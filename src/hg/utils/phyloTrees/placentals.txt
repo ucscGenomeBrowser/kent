@@ -10,6 +10,8 @@ tupBel	Eutheria; Euarchontoglires; Scandentia; Tupaiidae; Tupaia
 # Chinese tree shrew - Tupaia chinensis
 tupChi	Eutheria; Euarchontoglires; Scandentia; Tupaiidae; Tupaia
 
+# galVar1	Malayan flying lemur	Galeopterus variegatus
+galVar	Eutheria; Euarchontoglires; Dermoptera; Cynocephalidae; Galeopterus
 
 # Rabbit Oryctolagus cuniculus
 oryCun	Eutheria; Euarchontoglires; Glires; Lagomorpha; Leporidae; Oryctolagus
@@ -57,7 +59,6 @@ mm	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea; Muridae
 # Rat Rattus norvegicus
 rn	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea; Muridae; Murinae; Rattus
 
-
 # Horse Equus caballus
 equCab	Eutheria; Laurasiatheria; Perissodactyla; Equidae; Equus
 
@@ -75,6 +76,9 @@ turTru	Eutheria; Laurasiatheria; Cetartiodactyla; Cetacea; Odontoceti; Delphinid
 
 # Killer Whale - Orcinus orca
 orcOrc	Eutheria; Laurasiatheria; Cetartiodactyla; Cetacea; Odontoceti; Delphinidae; Orcinus
+
+# sperm whale - Physeter catodon
+phyCat	Eutheria; Boreoeutheria; Laurasiatheria; Cetartiodactyla; Cetacea; Odontoceti; Physeteridae; Physeter
 
 # Alpaca - Vicugna pacos
 vicPac	Eutheria; Laurasiatheria; Cetartiodactyla; Tylopoda; Camelidae; Vicugna

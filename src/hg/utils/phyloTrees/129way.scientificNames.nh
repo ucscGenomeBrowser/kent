@@ -91,7 +91,7 @@
          ((Gallus_gallus:0.036254,
           Coturnix_japonica:0.04):0.08,
          Meleagris_gallopavo:0.150718):0.036045):0.02):0.05,
-        Struthio_camelus:0.04):0.16,
+        Struthio_camelus_australis:0.04):0.16,
        ((Alligator_mississippiensis:0.1,
         Alligator_sinensis:0.1):0.05,
        (Crocodylus_porosus:0.05,

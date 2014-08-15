@@ -34,6 +34,7 @@ use vars qw/
     $opt_useRMBlastn
     $opt_splitTables
     $opt_noSplit
+    $opt_updateTable
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -75,6 +76,7 @@ options:
     -customLib lib.fa     Use custom repeat library instead of RepeatMaskers\'s.
     -useRMBlastn          Use NCBI rmblastn instead of crossmatch
     -useHMMER             Use hmmer instead of crossmatch ( currently for human only )
+    -updateTable          load into table name rmskUpdate (default: rmsk)
     -splitTables          split the _rmsk tables (default is not split)
     -noSplit              default behavior, this option no longer required.
 _EOF_
@@ -110,7 +112,7 @@ Assumptions:
 # Command line args: db
 my ($db);
 # Other:
-my ($buildDir, $chromBased, $secondsStart, $secondsEnd);
+my ($buildDir, $chromBased, $updateTable, $secondsStart, $secondsEnd);
 
 sub checkOptions {
   # Make sure command line options are valid/supported.
@@ -123,6 +125,7 @@ sub checkOptions {
                       'useHMMER',
 		      'splitTables',
 		      'noSplit',
+		      'updateTable',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -403,8 +406,8 @@ sub doMask {
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-twoBitMask $unmaskedSeq $db.sorted.fa.out $db.rmsk.2bit
-twoBitToFa $db.rmsk.2bit stdout | faSize stdin > faSize.rmsk.txt
+twoBitMask $unmaskedSeq $db.sorted.fa.out $db.rmsk$updateTable.2bit
+twoBitToFa $db.rmsk$updateTable.2bit stdout | faSize stdin > faSize.rmsk$updateTable.txt
 _EOF_
   );
   $bossScript->execute();
@@ -420,7 +423,7 @@ sub doInstall {
   my $split = "";
   $split = " (split)" if ($opt_splitTables);
   my $whatItDoes =
-"It loads $db.sorted.fa.out into the$split rmsk table and $db.nestedRepeats.bed\n" .
+"It loads $db.sorted.fa.out into the$split rmsk$updateTable table and $db.nestedRepeats.bed\n" .
 "into the nestedRepeats table.  It also installs the masked 2bit.";
   my $bossScript = newBash HgRemoteScript("$runDir/doLoad.bash", $dbHost,
 				      $runDir, $whatItDoes);
@@ -431,12 +434,12 @@ sub doInstall {
   $bossScript->add(<<_EOF_
 export db=$db
 
-hgLoadOut -table=rmsk $split \$db \$db.sorted.fa.out
-hgLoadOut -verbose=2 -tabFile=\$db.rmsk.tab -table=rmsk -nosplit \$db \$db.sorted.fa.out 2> \$db.bad.records.txt
+hgLoadOut -table=rmsk$updateTable $split \$db \$db.sorted.fa.out
+hgLoadOut -verbose=2 -tabFile=\$db.rmsk$updateTable.tab -table=rmsk$updateTable -nosplit \$db \$db.sorted.fa.out 2> \$db.bad.records.txt
 # construct bbi files for assembly hub
 rm -fr classBed classBbi rmskClass
 mkdir classBed classBbi rmskClass
-sort -k12,12 \$db.rmsk.tab \\
+sort -k12,12 \$db.rmsk$updateTable.tab \\
   | splitFileByColumn -ending=tab  -col=12 -tab stdin rmskClass
 for T in SINE LINE LTR DNA Simple Low_complexity Satellite
 do
@@ -468,23 +471,38 @@ bedToBigBed -tab -type=bed6+10 -as=\$HOME/kent/src/hg/lib/rmskBed6+10.as \\
 
 export bbiCount=`for F in classBbi/*.bb; do bigBedInfo \$F | grep itemCount; done | awk '{print \$NF}' | sed -e 's/,//g' | ave stdin | grep total | awk '{print \$2}' | sed -e 's/.000000//'`
 
-export firstTabCount=`cat \$db.rmsk.tab | wc -l`
+export firstTabCount=`cat \$db.rmsk$updateTable.tab | wc -l`
 export splitTabCount=`cat rmskClass/*.tab | wc -l`
 
 if [ "\$firstTabCount" -ne \$bbiCount ]; then
-   echo "\$db.rmsk.tab count: \$firstTabCount, split class tab file count: \$splitTabCount, bbi class item count:  \$bbiCount"
+   echo "\$db.rmsk$updateTable.tab count: \$firstTabCount, split class tab file count: \$splitTabCount, bbi class item count:  \$bbiCount"
    echo "ERROR: did not account for all items in rmsk class bbi construction" 1>&2
    exit 255
 fi
 wc -l classBed/*.bed > \$db.class.profile.txt
 wc -l rmskClass/*.tab >> \$db.class.profile.txt
-rm -fr rmskClass classBed \$db.rmsk.tab
+rm -fr rmskClass classBed \$db.rmsk$updateTable.tab
+_EOF_
+  );
 
+  if ($opt_updateTable) {
+  $bossScript->add(<<_EOF_
+sed -e 's/nestedRepeats/nestedRepeatsUpdate/g' \$HOME/kent/src/hg/lib/nestedRepeats.sql > nestedRepeatsUpdate.sql
+hgLoadBed \$db nestedRepeats$updateTable \$db.nestedRepeats.bed \\
+  -sqlTable=nestedRepeatsUpdate.sql
+_EOF_
+  );
+  } else {
+  $bossScript->add(<<_EOF_
 hgLoadBed \$db nestedRepeats \$db.nestedRepeats.bed \\
   -sqlTable=\$HOME/kent/src/hg/lib/nestedRepeats.sql
+_EOF_
+  );
+  }
 
-rm -f $installDir/\$db.rmsk.2bit
-ln -s $buildDir/\$db.rmsk.2bit $installDir/\$db.rmsk.2bit
+  $bossScript->add(<<_EOF_
+rm -f $installDir/\$db.rmsk$updateTable.2bit
+ln -s $buildDir/\$db.rmsk$updateTable.2bit $installDir/\$db.rmsk$updateTable.2bit
 _EOF_
   );
   $bossScript->execute();
@@ -554,6 +572,7 @@ $unmaskedSeq = $opt_unmaskedSeq ? $opt_unmaskedSeq :
   "$HgAutomate::clusterData/$db/$db.unmasked.2bit";
 my $seqCount = `twoBitInfo $unmaskedSeq stdout | wc -l`;
 $chromBased = ($seqCount <= $HgAutomate::splitThreshold) && $opt_splitTables;
+$updateTable = $opt_updateTable ? "Update" : "";
 
 # Do everything.
 $stepper->execute();

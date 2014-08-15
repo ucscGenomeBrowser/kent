@@ -153,3 +153,81 @@ noInherit on
     alwaysZero on
     windowingFunction mean
     autoScale on
+
+searchTable cloneEnd_B6Ng01
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex B6Ng01-([0-9A-Z])+
+
+searchTable cloneEnd_bMQ
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex [Bb]MQ-([0-9A-Z])+
+
+searchTable cloneEnd_C3H
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex C3H-([0-9A-Z])+
+
+searchTable cloneEnd_CH29
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex CH29-([0-9A-Z])+
+
+searchTable cloneEnd_DN
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex DN-([0-9A-Z])+
+
+searchTable cloneEnd_MHPN
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex MHPN-([0-9A-Z])+
+
+searchTable cloneEnd_MHPP
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex MHPP-([0-9A-Z])+
+
+searchTable cloneEnd_MSMg01
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex MSMg01-([0-9A-Z])+
+
+searchTable cloneEnd_RP23
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex RP23-([0-9A-Z])+
+
+searchTable cloneEnd_RP24
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex RP24-([0-9A-Z])+
+
+searchTable cloneEnd_WI1
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex [Ww][Ii]1-([0-9A-Z])+
+
+searchTable cloneEnd_badEnds
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex [BCDMRWb][HIMNPS36]([-0-9A-Zg])+
+
+searchTable cloneEnd_multipleMaps
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex [BCDMRW][HIMNPS36]([-0-9A-Zg])+
