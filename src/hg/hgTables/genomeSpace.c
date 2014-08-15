@@ -483,18 +483,21 @@ if (start < 0)
 puts("Content-Type: text/html\n");
 int line;
 boolean autoRefreshFound = FALSE;
+boolean successfullyUploaded = FALSE;
 for (line=start; line <= end; line++)
     {
     puts(lines[line]);
     if (startsWith("setTimeout(\"location = location;", lines[line]))
 	autoRefreshFound = TRUE;
+    if (startsWith("Output has been successfully uploaded", lines[line]))
+	successfullyUploaded = TRUE;
     }
 // if it looks like the background is no longer running, 
 // include the .err stdout output for more informative problem message
 char urlErr[512];
 char *textErr = NULL;
 safef(urlErr, sizeof urlErr, "%s.err", url);
-if (!autoRefreshFound && (fileSize(urlErr) > 0))
+if (!autoRefreshFound && !successfullyUploaded && (fileSize(urlErr) > 0))
     {
     readInGulp(urlErr, &textErr, NULL);
     printf("%s", textErr);
