@@ -7,6 +7,7 @@
 #include "sqlProg.h"
 #include "hgConfig.h"
 #include "obscure.h"
+#include "portable.h"
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <signal.h>
@@ -174,6 +175,24 @@ void sqlExecProgLocal(char *prog, char **progArgs, int userArgc, char *userArgv[
 sqlExecProgProfile("localDb", prog, progArgs, userArgc, userArgv);
 }
 
+
+void nukeOldCnfs(char *homeDir)
+/* Remove .hgsql.cnf-* files older than a month */
+{
+struct fileInfo *file, *fileList = listDirX(homeDir, ".hgsql.cnf-*", FALSE);
+time_t now = time(0);
+for (file = fileList; file != NULL; file = file->next)
+    {
+    if (difftime(now, file->lastAccess) >  30 * 24 * 60 * 60)  // 30 days in seconds.
+	{
+	char homePath[256];
+	safef(homePath, sizeof homePath, "%s/%s", homeDir, file->name);
+	remove(homePath);
+	}
+    }
+
+}
+
 void sqlExecProgProfile(char *profile, char *prog, char **progArgs, int userArgc, char *userArgv[])
 /* 
  * Exec one of the sql programs using user and password defined in localDb.XXX variables from ~/.hg.conf 
@@ -192,8 +211,14 @@ sqlProgInitSigHandlers();
 /* Assemble defaults file */
 if ((homeDir = getenv("HOME")) == NULL)
     errAbort("sqlExecProgProfile: HOME is not defined in environment; cannot create temporary password file");
+
+nukeOldCnfs(homeDir);
+
 safef(defaultFileName, sizeof(defaultFileName), "%s/.hgsql.cnf-XXXXXX", homeDir);
 defaultFileNo=sqlMakeDefaultsFile(defaultFileName, profile, "client");
+
+swapForOldCnf(homeDir,  );
+
 safef(defaultFileArg, sizeof(defaultFileArg), "--defaults-file=%s", defaultFileName);
 
 AllocArray(nargv, nargc);
