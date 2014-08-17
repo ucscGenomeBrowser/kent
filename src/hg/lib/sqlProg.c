@@ -217,8 +217,6 @@ nukeOldCnfs(homeDir);
 safef(defaultFileName, sizeof(defaultFileName), "%s/.hgsql.cnf-XXXXXX", homeDir);
 defaultFileNo=sqlMakeDefaultsFile(defaultFileName, profile, "client");
 
-swapForOldCnf(homeDir,  );
-
 safef(defaultFileArg, sizeof(defaultFileArg), "--defaults-file=%s", defaultFileName);
 
 AllocArray(nargv, nargc);
