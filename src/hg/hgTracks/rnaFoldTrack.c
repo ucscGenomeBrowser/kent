@@ -176,7 +176,10 @@ int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"
 if (tg->itemColor != NULL)
     color = tg->itemColor(tg, rnaSecStr, hvg);
 else
-    color = colorBySpectrumOrDefault(hvg,tg,grayInRange(rnaSecStr->score,scoreMin,scoreMax),color);
+    {
+    if (tg->colorShades)
+	color = tg->colorShades[grayInRange(rnaSecStr->score, scoreMin, scoreMax)];
+    }
 w = x2-x1;
 if (w < 1)
     w = 1;
