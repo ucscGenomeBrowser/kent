@@ -2426,8 +2426,8 @@ else
     boolean isXeno = (tg->subType == lfSubXeno)
                                 || (tg->subType == lfSubChain)
                                 || startsWith("mrnaBla", tg->table);
-    *retColor     = colorBySpectrumOrDefault(hvg,tg,lf->grayIx+isXeno, tg->ixColor);
-    *retBarbColor = colorBySpectrumOrDefault(hvg,tg,lf->grayIx,        tg->ixAltColor);
+    *retColor     = colorBySpectrumOrDefault(hvg,tg,lf->grayIx+isXeno,*retColor);
+    *retBarbColor = colorBySpectrumOrDefault(hvg,tg,lf->grayIx,       *retBarbColor);
     }
 }
 
