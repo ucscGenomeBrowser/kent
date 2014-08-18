@@ -5246,3 +5246,57 @@ TMPDIR=/dev/shm
     # 208214567 bases of 2725765481 (7.639%) in intersection
 
 #########################################################################
+2014-08-11: import of UCSC GENCODE group processing of GENCODE V20 (markd)
+    # download files
+    mkdir -p /hive/data/genomes/hg38/bed/gencodeV20/data
+    cd /hive/data/genomes/hg38/bed/gencodeV20
+
+    # download gencode release
+    cd data
+    wget -nv -r -np ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_20
+    mv ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_20 .
+    rm -rf ftp.sanger.ac.uk
+
+    cd ..
+    # create Makefile from previous one.
+    cp /hive/data/genomes/hg19/bed/gencodeV19/Makefile .
+
+    # build and load tables
+    (time nice make -j 10) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.
+        make cmpRelease >gencode-cmp.tsv
+
+    ## Copy and update trackDb files from previous release.
+    ## Change version and use lower priority so it sorts to top of
+    ## super track page.
+    ## Important to make sure filter attrs.transcriptType matches current set
+    ## figured out with
+    select distinct transcriptType from wgEncodeGencodeAttrsV20 order by transcriptType;
+    cd kent/src/hg/makeDb/trackDb
+    cp human/hg38/wgEncodeGencodeV18.ra human/hg38/wgEncodeGencodeV20.ra
+    cp human/hg38/wgEncodeGencodeV18.html human/hg38/wgEncodeGencodeV20.html
+
+    # edit these plus human/hg38/trackDb.wgEncode.ra
+    # - set priorities in wgEncodeGencodeV20.ra in reverse order with previous
+    #   tracks so newest shows up first
+    #     priority - set to previous version priority minus 0.001
+    #     searchPriority - set each to previous minus 0.001
+    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
+    #     superTrack wgEncodeGencodeSuper pack
+    # - Update wgEncodeGencodeSuper.html to describe new release and to
+    #   pick up other updates.
+
+    ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
+    ### track handler for this version of gencode:
+    registerTrackHandler("wgEncodeGencodeV20", gencodeGeneMethods);
+
+    # update all.joiner and validate
+    # look for the last section `begin Gencode V??' in all.joiner
+    # and copy and update version
+    # repeat this until happy, editing minCheck as needed
+    cd /hive/data/genomes/hg38/bed/gencodeV20
+    make joinerCheck  # output in check/joiner.out
+
+##############################################################################

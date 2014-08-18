@@ -1,1 +1,2 @@
 include wgEncodeGencodeV19.ra
+include wgEncodeGencodeV20.ra alpha
