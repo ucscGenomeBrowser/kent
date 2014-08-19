@@ -6,10 +6,15 @@
     <link rel="stylesheet" href="/style/HGStyle.css" type="text/css">
     <link rel="stylesheet" href="/style/encodeProject.css" type="text/css">
     <style>
-        table, td {
+        /* using tables for layout, sorry */
+        table {
             border-style: none
             /* DEBUG */
             /* border: 2px solid red;  */
+        }
+        td {
+            border-style: none;
+            vertical-align: top;
         }
 
         /* override visited img links in HGStyle */
@@ -25,6 +30,7 @@
         /* left menu */
         .leftBlueBar {
             background-color: #00457c;
+            padding: 10px;
         }
 
         .leftBarSection {
@@ -49,11 +55,10 @@
     </div>
 
     <div>
-    <!--<table cellpadding="10">-->
     <table>
         <tr>
         <!-- left menu bar -->
-        <td width="12%" class="leftBlueBar" style="vertical-align: top; padding: 10px">
+        <td width="12%" class="leftBlueBar">
             <div class="leftBarSection">Human Data at UCSC</div>
                 <a class="leftbar" href="downloads.html">Downloads</a>
                 <hr><a class="leftbar" href="/ENCODE/dataMatrix/encodeDataMatrixHuman.html">Experiment Matrix</a>
@@ -81,10 +86,10 @@
         </td>
 
         <!-- main content -->
-        <td style="vertical-align: top;">
+        <td>
         <table>
             <tr>
-            <td style="vertical-align: top;" colspan="2">
+            <td colspan="2">
             <div style="margin-top: 0; margin-left: 10px;" class="wrapper">
                 <div class="bar"><h4 class="title">About</h4></div>
                 <div class="content">
@@ -124,32 +129,32 @@ ENCODE project informational pages are available from the ENCODE Project Portal,
 
             <!-- screenshot launchers 2x2 matrix -->
                 <tr>
-                    <td width="20%" height="200" style="vertical-align: top;">
+                    <td width="20%" height="200">
                     <div style="height:100%; margin-top:0; margin-left:10px; margin-right:10px" class="wrapper">
                         <div class="bar"><h4 class="title">Explore ENCODE data at UCSC</h4></div>
                         <div class="content">
-                            <a  href="dataMatrix/encodeDataMatrixHuman.html"><img class="screenshot" style="border: 1px solid gray" src="../images/encode/dataMatrix.png"></a>
+                            <a  href="dataMatrix/encodeDataMatrixHuman.html"><img class="screenshot" src="../images/encode/dataMatrix.png"></a>
                         </div>
                     </div> <!-- end wrapper -->
                     </td>
-                    <td width="20%" height="200" style="vertical-align: top;">
+                    <td width="20%" height="200"> 
                     <div style="height: 100%; margin-top:0;" class="wrapper">
                         <div class="bar"><h4 class="title">View ENCODE data in the UCSC Genome Browser</h4></div>
-                            <a href="http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=kate&hgS_otherUserSessionName=encodeDemo"><img class="screenshot" style="border: 1px solid gray" src="../images/encode/browser.png"></a>
+                            <a href="http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=kate&hgS_otherUserSessionName=encodeDemo"><img class="screenshot"  src="../images/encode/browser.png"></a>
                     </div>
                     </td>
                 </tr>
 
                 <tr>
-                    <td width="20%" height="200" style="vertical-align: top;">
+                    <td width="20%" height="200">
                     <div style="height: 100%; margin-top:10px; margin-left:10px; margin-right:10px" class="wrapper">
                         <div class="bar"><h4 class="title">Search for data at the ENCODE Portal</h4></div>
-                            <a href="https://www.encodedcc.org/search/?type=experiment"><img class="screenshot" style="display: block; margin: auto; border: 1px solid gray" src="../images/encode/stanfordSearch.png"></a>
+                            <a href="https://www.encodedcc.org/search/?type=experiment"><img class="screenshot" style="display: block; margin: auto;" src="../images/encode/stanfordSearch.png"></a>
                     </div>
                     </td>
-                    <td width="20%" height="200" style="vertical-align: top">
+                    <td width="20%" height="200">
                     <div style="height: 100%; margin-top:10px" class="wrapper">
-                        <div class="bar"><h4 class="title">Search for ENCODE tracks in the UCSC Genome Browser</h4></div>
+                        <div class="bar"><h4 class="title">Search for ENCODE tracks in the UCSC Browser</h4></div>
                             <a href="http://genome.ucsc.edu/cgi-bin/hgTracks?hgt_=1408334670&db=hg19&tsCurTab=advancedTab&hgt_tsDelRow=&hgt_tsAddRow=&hgt_tsPage=&tsSimple=&tsName=&tsDescr=&tsGroup=Any&tsType=Any&hgt_mdbVar1=cell&hgt_mdbVal1=HeLa-S3&hgt_mdbVar2=dataType&hgt_mdbVal2=RnaSeq&hgt_tSearch=search"><img class="screenshot" src="../images/encode/search.png"></a>
                     </div>
                     </td>
