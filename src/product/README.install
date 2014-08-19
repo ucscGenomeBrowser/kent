@@ -1,13 +1,12 @@
 
 Installing the UCSC Genome browser
 
-Scripts to perform all of the functions below can be found in
-a directory here: ./scripts/
-Please see that ./scripts/README file for more information.
+This file is from:
+  http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob;f=src/product/README.install
 
-The sequence of instructions here are similar to the Mirror site
-	instructions at:
-	http://genome.ucsc.edu/admin/mirror.html
+Scripts to perform all of the functions below can be found in
+the directory here: ./scripts/
+Please see the ./scripts/README file for more information.
 
 1.  Confirm the following:
 	a. Apache WEB server is installed and working
@@ -91,7 +90,7 @@ XBitHack on
 	that directory.
 
 	A cron job should be set to periodically clean the files in trash.
-	See also, the two scripts here: 
+	See also, the two scripts here:
 		scripts/trashCleanMonitor.csh
 		scripts/trashCleaner.csh
 
@@ -161,16 +160,36 @@ XBitHack on
 		rsync://hgdownload.cse.ucsc.edu/mysql/ce4/ \
 		/var/lib/mysql/ce4/
 
-11.  Copy the gbdb data to /gbdb - See also:
+11.  Download extra databases to work with a full genome assembly
+     such as human/hg38: hgFixed go140213 proteins140122 sp140122
+     Construct symlinks in your MySQL data directory to use database
+     names: go proteome uniProt for these database directories:
+
+$ ls -og proteome go uniProt
+lrwxrwxrwx 1  8 Feb 26 11:39 go -> go140213
+lrwxrwxrwx 1 14 Mar 27 12:01 proteome -> proteins140122
+lrwxrwxrwx 1  8 Mar 27 12:01 uniProt -> sp140122
+
+$ ls -ld go140213 proteins140122 sp140122
+drwx------ 2 mysql mysql 4096 Feb 26 10:57 go140213
+drwx------ 2 mysql mysql 4096 Aug 19 08:08 proteins140122
+drwx------ 2 mysql mysql 4096 Mar 26 13:01 sp140122
+
+     These file names are data stamped YYMMDD to indicate changes
+     over time as they are updated with new builds of the UCSC gene track.
+     When a new UCSC gene track is released, fetch new databases and
+     change the symlink.
+
+12.  Copy the gbdb data to /gbdb - See also:
 		scripts/fetchFullGbdb.sh
 		scripts/fetchMinimalGbdb.sh
 
-12.  The browser should now appear at the URL:
+13.  The browser should now appear at the URL:
 	http://localhost/
 
 	Check your Apache error_log file for hints to solving problems.
 
-13.  blat server setup
+14.  blat server setup
 	The blatServers table in the database hgcentral needs to
 	have a fully qualified host name specified in the 'host' column.
 	Educational and non-profit institutions are allowed to use
@@ -179,7 +198,7 @@ XBitHack on
 	and: http://genome.ucsc.edu/license/
 	In the source tree: src/gfServer/README.blat
 
-14.  Useful links:
+15.  Useful links:
 
 	http://genomewiki.ucsc.edu/index.php/Category:Mirror_Site_FAQ
 
@@ -190,7 +209,7 @@ XBitHack on
 		./src/hg/makeDb/trackDB/README
 		./src/hg/makeDb/doc/make*.txt
 
-15. Apache configuration:
+16. Apache configuration:
 
     To lock down your trash directory from scanning via "indexes"
     enter the following in your httpd.conf:
@@ -205,4 +224,6 @@ XBitHack on
     The specified directory name is your apache: DocumentRoot/trash
     e.g. /usr/local/apache/htdocs/trash
 
+====================================================================
+Information last updated: 19 August 2014
 ====================================================================
