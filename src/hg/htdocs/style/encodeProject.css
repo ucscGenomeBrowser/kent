@@ -3,28 +3,6 @@
 */
 
 /* over-riding alignment so we don't have to nest in a table */
-.topBlueBar {
-    text-align: left;
-    background-color: #00457c;
-    position: relative;
-}
-
-.leftBlueBar {
-    /*float: left; */
-    background-color: #00457c;
-}
-
-.leftBarSection {
-    color: #ffcc00;
-    background-color: #00457c;
-    font-style: italic;
-    font-weight: bold;
-    font-size: smaller;
-}
-
-.leftbar {
-    background-color: #00457c;
-}
 
 body {
     font-family: arial,Geneva,Helvetica,sans-serif;
@@ -107,6 +85,7 @@ h4.title {
     width: 100%;
     margin: 0px;
     padding: 3px 0px 3px 0px;
+    /* padding: 0 */
     height: 27px;
 }
 

@@ -7,10 +7,12 @@
     <link rel="stylesheet" href="/style/encodeProject.css" type="text/css">
     <style>
         table, td {
-            /* border-collapse: separate; */
-            border-style: none;
+            border-style: none
+            /* DEBUG */
+            /* border: 2px solid red;  */
         }
-        /* emphasis to override visited img links in HGStyle */
+
+        /* override visited img links in HGStyle */
         .screenshot {
             display: block;
             margin: auto       !important;
@@ -18,6 +20,24 @@
             margin-bottom: 15px !important;
             border: 1px solid gray !important;
             width: 300px;
+        }
+
+        /* left menu */
+        .leftBlueBar {
+            background-color: #00457c;
+        }
+
+        .leftBarSection {
+            color: #ffcc00;
+            background-color: #00457c;
+            font-style: italic;
+            font-weight: bold;
+            padding-bottom: 6px;
+        }
+
+        /* override from HGStyle */
+        .leftbar {
+            background-color: #00457c;
         }
     </style>
 </head>
@@ -33,8 +53,8 @@
     <table>
         <tr>
         <!-- left menu bar -->
-        <td width="13%" class="leftBlueBar" style="vertical-align: top; padding: 10px">
-            <div class="leftBarSection">Human&nbsp;Data at UCSC</div>
+        <td width="12%" class="leftBlueBar" style="vertical-align: top; padding: 10px">
+            <div class="leftBarSection">Human Data at UCSC</div>
                 <a class="leftbar" href="downloads.html">Downloads</a>
                 <hr><a class="leftbar" href="/ENCODE/dataMatrix/encodeDataMatrixHuman.html">Experiment Matrix</a>
                 <hr><a class="leftbar" href="search.html">Search</a>
@@ -55,14 +75,13 @@
                 <hr><a class="leftbar" href="antibodies.html">Antibodies</a>
                 <hr>
             <div class="leftBarSection">Other Resources</div>
-                <hr><a class="leftbar" href="contributors.html">First Production (2007-2012)</a>
+                <a class="leftbar" href="contributors.html">First Production (2007-2012)</a>
                 <hr><a class="leftbar" href="pilot.html">Pilot (2003-2007)</a>
                 <hr><a class="leftbar" href="contacts.html">Contacts</a>
-                <hr>
         </td>
 
         <!-- main content -->
-        <td>
+        <td style="vertical-align: top;">
         <table>
             <tr>
             <td style="vertical-align: top;" colspan="2">
@@ -70,34 +89,33 @@
                 <div class="bar"><h4 class="title">About</h4></div>
                 <div class="content">
 <p>The <a href="http://www.genome.gov/10005107" target="_blank">Encyclopedia of DNA Elements</a>
-(ENCODE) Consortium is an international collaboration
-of research groups funded by the National Human Genome Research
-Institute (<a href="http://www.genome.gov/" target="_blank">NHGRI</a>).
-The goal of ENCODE is to build a comprehensive parts list of
-functional elements in the human genome, including elements that
-act at the protein and RNA levels,
-and regulatory elements that control cells and
-circumstances in which a gene is active.</p>
+(ENCODE) Consortium is an international collaboration of research groups funded by the 
+National Human Genome Research Institute 
+(<a href="http://www.genome.gov/" target="_blank">NHGRI</a>).
+The goal of ENCODE is to build a comprehensive parts list of functional elements in the 
+human genome, including elements that act at the protein and RNA levels, and regulatory 
+elements that control cells and circumstances in which a gene is active.</p>
+
 <!--#if expr='"$SERVER_NAME" = /hgwdev.*.cse.ucsc.edu/ || "$SERVER_NAME" = "genome-test.cse.ucsc.edu"'-->
 <p>
 <b>WARNING: This is a test site.</b>
-Data and tools here are under
-construction, have not been quality reviewed, and are subject to change
-at any time.
-For
-high-quality reviewed annotations on the UCSC production server, visit
+Data and tools here are under construction, have not been quality reviewed, and are subject 
+to change at any time.
+For high-quality reviewed annotations on the UCSC production server, visit
 <a HREF="http://genome.ucsc.edu/ENCODE">http://genome.ucsc.edu/ENCODE</a>.</p>
 <!--#endif -->
-</p>
+
 <p>
-UCSC coordinated data for the ENCODE Consortium from its inception in 2003 (Pilot phase) to the end of the first
-5 year phase of whole-genome data production in 2012.  All data produced by ENCODE investigators and the
-results of ENCODE analysis projects from this period are hosted in the UCSC Genome browser and database.
+UCSC coordinated data for the ENCODE Consortium from its inception in 2003 (Pilot phase) 
+to the end of the first 5 year phase of whole-genome data production in 2012.  
+All data produced by ENCODE investigators and the results of ENCODE analysis projects 
+from this period are hosted in the UCSC Genome browser and database.
 Explore ENCODE data using the image links below or via the left menu bar.
 <b><em>All ENCODE data at UCSC are freely available for download and analysis</em></b>.</p>
 <p>
 ENCODE results from 2013 and later, along with additional ENCODE access tools and
-ENCODE project informational pages are available from the ENCODE Project Portal, <a href="https://encodeproject.org" target=_blank>encodeproject.org</a>.</p>
+ENCODE project informational pages are available from the ENCODE Project Portal, 
+<a href="https://encodeproject.org" target=_blank>encodeproject.org</a>.</p>
 
                 </div><!--end content-->
             </div><!--end wrapper-->
