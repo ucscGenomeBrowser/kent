@@ -189,7 +189,7 @@ include chainNetEchTel2.ra
         otherDb mm10
 
 include chainNetRn4.ra beta,public
-include chainNetRn5.ra alpha
+include chainNetRn5.ra alpha,beta,public
 
         track chainSorAra2
         subTrack placentalChainNetViewchain off
