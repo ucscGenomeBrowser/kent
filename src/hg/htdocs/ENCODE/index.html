@@ -1,136 +1,74 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-	"http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-  <meta http-equiv="Content-Type"
- content="text/html; charset=ISO-8859-1">
-  <meta name="description" content="encodeproject.org">
-  <meta name="keywords"
- content="ENCODE, project, ENCODE project, genome, genome browser, human genome, Blat, UCSC, bioinformatics, gene prediction, SNP, EST, mRNA, NHGRI, NISC">
-  <title>ENCODE Project at UCSC</title>
-  <link rel="STYLESHEET" href="../style/HGStyle.css">
-  <meta http-equiv="content-type"
- content="text/html; charset=ISO-8859-1">
-  <meta http-equiv="content-type"
- content="text/html; charset=ISO-8859-1">
-  <meta http-equiv="content-type"
- content="text/html; charset=ISO-8859-1">
- <script type="text/javascript" src="../js/jquery.js"></script>
- <script type="text/javascript" src="../js/staticDoc.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <title>ENCODE at UCSC</title>
+    <link rel="stylesheet" href="/style/HGStyle.css" type="text/css">
+    <link rel="stylesheet" href="/style/encodeProject.css" type="text/css">
+    <style>
+        table, td {
+            /* border-collapse: separate; */
+            border-style: none;
+        }
+        /* emphasis to override visited img links in HGStyle */
+        .screenshot {
+            display: block;
+            margin: auto       !important;
+            margin-top: 15px   !important;
+            margin-bottom: 15px !important;
+            border: 1px solid gray !important;
+            width: 300px;
+        }
+    </style>
 </head>
-<body style="font-family: arial, Geneva, Helvetica, sans-serif; background-color: #fff;" alink="#6600ff"
- link="#0000cc" vlink="#330066">
 
-<a name="TOP"></a><!-- Header Images and links -->
-<table border="0" cellpadding="0" cellspacing="0" width="100%">
-  <tbody>
-    <tr>
-      <th colspan="2" align="left">
-<a href="../index.html" target=_blank><img src="../images/gbLogoOnly.png" style="height:90%" alt="ENCODE Data at UCSC" height="75"></a> &nbsp;&nbsp;
- <font size="6" face="arial, Geneva, Helvetica, sans-serif"><font color="00457c">
- Encyclopedia of DNA Elements</font>
-       </th>
-    </tr>
-    <tr height="100%" valign="top">
-      <td rowspan="1" height="100%" valign="top"><!-- outer table is to align leftbar & content boxes at top of page -->
-      <table border="0" cellpadding="0" cellspacing="0" width="100%">
-        <tbody>
-          <tr>
-            <td><img src="../images/DOT.gif" alt="" height="7"></td>
-          </tr>
-          <tr height="100%">
-            <td height="100%"><!--outer table is for black border-->
-            <table bgcolor="#00457c" border="0" cellpadding="1" cellspacing="0" width="100%">
-              <tbody>
-                <tr>
-                  <td>
-                  <table border="0" cellpadding="10" cellspacing="0" width="100%">
-                    <tbody>
-                      <tr height="100%">
-                        <td bgcolor="#00457c" height="100%" valign="top">
+<body>
+    <div class="encodeHeader">
+        <a href="/ENCODE/index.html"><img src="/images/gbLogoOnly.png" style="height:80%" alt="ENCODE Project at UCSC" title="ENCODE Project at UCSC"></a>
+        <span class="txt">Encyclopedia of DNA Elements</span>
+    </div>
 
-                        <font size=-1 color="#FFCC00"><b><em>Human Data at UCSC</em></b></font><br>
-                        <img src="../images/DOT.gif" alt="" height="8" width="0"><br>
+    <div>
+    <!--<table cellpadding="10">-->
+    <table>
+        <tr>
+        <!-- left menu bar -->
+        <td width="13%" class="leftBlueBar" style="vertical-align: top; padding: 10px">
+            <div class="leftBarSection">Human&nbsp;Data at UCSC</div>
+                <a class="leftbar" href="downloads.html">Downloads</a>
+                <hr><a class="leftbar" href="/ENCODE/dataMatrix/encodeDataMatrixHuman.html">Experiment Matrix</a>
+                <hr><a class="leftbar" href="search.html">Search</a>
+                <hr><a class="leftbar" href="/cgi-bin/hgTracks?db=hg19">Genome Browser (hg19)</a>
+                <hr><a class="leftbar" href="/ENCODE/dataSummary.html" title="formerly Data Summary">Experiment List</a>
+                <hr><a class="leftbar" href="cellTypes.html">Cell Types</a>
+                <hr>
+            <div class="leftBarSection">Mouse Data at UCSC</div>
+                <a class="leftbar" href="downloadsMouse.html">Downloads</a>
+                <hr><a class="leftbar" href="/ENCODE/dataMatrix/encodeDataMatrixMouse.html">Experiment Matrix</a>
+                <hr><a class="leftbar" href="search.html">Search</a>
+                <hr><a class="leftbar" href="/cgi-bin/hgTracks?db=mm9">Genome Browser (mm9)</a>
+                <hr><a class="leftbar" href="/ENCODE/dataSummaryMouse.html"title="formerly Data Summary">Experiment List</a>
+                <hr><a class="leftbar" href="cellTypesMouse.html">Cell Types</a>
+                <hr>
+            <div class="leftBarSection">Metadata Terms</div>
+                <a class="leftbar" href="otherTerms.html">Registered Variables</a>
+                <hr><a class="leftbar" href="antibodies.html">Antibodies</a>
+                <hr>
+            <div class="leftBarSection">Other Resources</div>
+                <hr><a class="leftbar" href="contributors.html">First Production (2007-2012)</a>
+                <hr><a class="leftbar" href="pilot.html">Pilot (2003-2007)</a>
+                <hr><a class="leftbar" href="contacts.html">Contacts</a>
+                <hr>
+        </td>
 
-                        <a class="leftbar" href="downloads.html">Downloads</a>
-                        <hr><a class="leftbar" href="/ENCODE/dataMatrix/encodeDataMatrixHuman.html">Experiment Matrix</a>
-                        <hr><a class="leftbar" href="search.html">Search</a>
-                        <hr><a class="leftbar" href="/cgi-bin/hgTracks?db=hg19">Genome Browser (hg19)</a>
-                        <hr><a class="leftbar" href="/ENCODE/dataSummary.html" title="formerly Data Summary">Experiment List</a>
-                        <hr><a class="leftbar" href="cellTypes.html">Cell Types</a>
-                        <hr>
-                        <img src="../images/DOT.gif" alt="" height="5" width="0"><br>
-
-                        <!-- Mouse section -->
-
-                        <font size=-1 color="#FFCC00"><b><em>Mouse Data at UCSC</em></b></font><br>
-                        <img src="../images/DOT.gif" alt="" height="8" width="0"><br>
-<!--uncomment when mouseencode.org no longer needs login                                                                                                                                                 
-                        <a class="leftbar" target="_blank" href="http://mouseencode.org"><em>mouseencode.org</em></a>
-                        <font color="#FF0000"><sup><strong><em>New</strong></em></sup></font>  
-                        <hr><a class="leftbar" href="downloadsMouse.html">Downloads</a>
-and delete the following line-->
-                        <a class="leftbar" href="downloadsMouse.html">Downloads</a>
-                        <hr><a class="leftbar" href="/ENCODE/dataMatrix/encodeDataMatrixMouse.html">Experiment Matrix</a>
-                        <hr><a class="leftbar" href="search.html">Search</a>
-                        <hr><a class="leftbar" href="/cgi-bin/hgTracks?db=mm9">Genome Browser (mm9)</a>
-                        <hr><a class="leftbar" href="/ENCODE/dataSummaryMouse.html"title="formerly Data Summary">Experiment List</a>
-                        <hr><a class="leftbar" href="cellTypesMouse.html">Cell Types</a>
-                        <hr>
-                        <font size=-1 color="FFCC00"><b><em>Metadata Terms</em></b></font><br>
-                        <img src="../images/DOT.gif" alt="" height="8" width="0"><br>
-                        <a class="leftbar" href="otherTerms.html">Registered Variables</a>
-                        <hr><a class="leftbar" href="antibodies.html">Antibodies</a>
-                        <hr>
-                        <font size=-1 color="FFCC00"><b><em>Other Resources</em></b></font><br>
-                        <img src="../images/DOT.gif" alt="" height="8" width="0"><br>
-                        <a class="leftbar" href="terms.html">Citing ENCODE</a>
-                        <hr><a class="leftbar" href="usageResources.html">Education and Outreach</a>
-                        <img src="../images/DOT.gif" alt="" height="8"><br>
-                        <hr><a class="leftbar" href="fileFormats.html">File Formats</a>
-                        <hr><a class="leftbar" href="releaseLog.html">Release Log</a>
-                        <!--<font color="#FF0000"><sup><strong><em>New</strong></em></sup></font>  -->
-                        <!-- <font color="#FF0000"><sup><strong><em>Updated</strong></em></sup></font>-->
-
-                        <hr><a class="leftbar" href="contributors.html">First Production (2007-2012)</a>
-                        <hr><a class="leftbar" href="pilot.html">Pilot (2003-2007)</a>
-                        <hr><a class="leftbar" href="contacts.html">Contacts</a>
-                        <hr><br>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      </td>
-<!-- Content Tables --> <td valign="top">
-      <table border="0" cellpadding="5">
-        <tbody>
-          <tr>
-            <td><!--outer table is for border purposes-->
-            <table bgcolor="#888888" border="0" cellpadding="1"
- cellspacing="0" width="100%">
-              <tbody>
-                <tr>
-                  <td>
-                  <table bgcolor="#FFFFFF" border="0" cellpadding="0"
- cellspacing="0" width="100%">
-                    <tbody>
-                      <tr>
-                        <td>
-
-                        <table bgcolor="#FFFFFF" border="0"
- cellpadding="0" width="100%">
-                          <tbody>
-                            <tr>
-                              </td>
-                              <td>
+        <!-- main content -->
+        <td>
+        <table>
+            <tr>
+            <td style="vertical-align: top;" colspan="2">
+            <div style="margin-top: 0; margin-left: 10px;" class="wrapper">
+                <div class="bar"><h4 class="title">About</h4></div>
+                <div class="content">
 <p>The <a href="http://www.genome.gov/10005107" target="_blank">Encyclopedia of DNA Elements</a>
 (ENCODE) Consortium is an international collaboration
 of research groups funded by the National Human Genome Research
@@ -139,15 +77,14 @@ The goal of ENCODE is to build a comprehensive parts list of
 functional elements in the human genome, including elements that
 act at the protein and RNA levels,
 and regulatory elements that control cells and
-circumstances in which a gene is active.
-</p>
+circumstances in which a gene is active.</p>
 <!--#if expr='"$SERVER_NAME" = /hgwdev.*.cse.ucsc.edu/ || "$SERVER_NAME" = "genome-test.cse.ucsc.edu"'-->
 <p>
 <b>WARNING: This is a test site.</b>
-Data and tools here are under 
-construction, have not been quality reviewed, and are subject to change 
-at any time.  
-For 
+Data and tools here are under
+construction, have not been quality reviewed, and are subject to change
+at any time.
+For
 high-quality reviewed annotations on the UCSC production server, visit
 <a HREF="http://genome.ucsc.edu/ENCODE">http://genome.ucsc.edu/ENCODE</a>.</p>
 <!--#endif -->
@@ -161,97 +98,48 @@ Explore ENCODE data using the image links below or via the left menu bar.
 <p>
 ENCODE results from 2013 and later, along with additional ENCODE access tools and
 ENCODE project informational pages are available from the ENCODE Project Portal, <a href="https://encodeproject.org" target=_blank>encodeproject.org</a>.</p>
-                              </td>
-                            </tr>
 
-                          </tbody>
-                        </table>
-<!-- images with links -->
-<table cellpadding=10 cellspacing=5>
-    <tr>
-        <td colspan="2">
-        <hr>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <em><font color=#00457c size=-1>Explore ENCODE data at UCSC</em></font><br>
-        </td>
-        <td>
-            <em><font color=#00457c size=-1>View ENCODE data in the UCSC Genome Browser</em></font><br>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <a href="dataMatrix/encodeDataMatrixHuman.html"><img width=400px src="../images/encode/dataMatrix.png"></a>
-        </td>
-        <td>
-<a href="http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=kate&hgS_otherUserSessionName=encodeDemo" target="_blank"><img src="../images/encode/browser.png" width=400px alt=""></a>
-        </td>
-    </tr>
-    <tr>
-
-    <td colspan="2">
-        <hr>
-        </td>
-    </tr>
-
-    <tr>
-        <td>
-            <em><font color=#00457c size=-1>Search for data at the ENCODE Portal</em></font><br>
-        </td>
-        <td>
-            <em><font color=#00457c size=-1>Search for ENCODE tracks in the UCSC Genome Browser</em></font><br>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <a href="https://www.encodedcc.org/search/?type=experiment"><img width=400px src="../images/encode/stanfordSearch.png"></a>
-        </td>
-        <td>
-            <a href="http://genome.ucsc.edu/cgi-bin/hgTracks?hgt_=1408334670&db=hg19&tsCurTab=advancedTab&hgt_tsDelRow=&hgt_tsAddRow=&hgt_tsPage=&tsSimple=&tsName=&tsDescr=&tsGroup=Any&tsType=Any&hgt_mdbVar1=cell&hgt_mdbVal1=HeLa-S3&hgt_mdbVar2=dataType&hgt_mdbVal2=RnaSeq&hgt_tSearch=search"
-target="_blank"><img src="../images/encode/search.png" width=400px alt=""></a>
-        </td>
-    </tr>
-</table>
-
-</table>
-                        <br>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-
-                            </tr>
-                          </tbody>
-                        </table>
-
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-
-            <br>
+                </div><!--end content-->
+            </div><!--end wrapper-->
             </td>
-          </tr>
-        </tbody>
-      </table>
+            </tr>
 
-      </td>
+            <!-- screenshot launchers 2x2 matrix -->
+                <tr>
+                    <td width="20%" height="200" style="vertical-align: top;">
+                    <div style="height:100%; margin-top:0; margin-left:10px; margin-right:10px" class="wrapper">
+                        <div class="bar"><h4 class="title">Explore ENCODE data at UCSC</h4></div>
+                        <div class="content">
+                            <a  href="dataMatrix/encodeDataMatrixHuman.html"><img class="screenshot" style="border: 1px solid gray" src="../images/encode/dataMatrix.png"></a>
+                        </div>
+                    </div> <!-- end wrapper -->
+                    </td>
+                    <td width="20%" height="200" style="vertical-align: top;">
+                    <div style="height: 100%; margin-top:0;" class="wrapper">
+                        <div class="bar"><h4 class="title">View ENCODE data in the UCSC Genome Browser</h4></div>
+                            <a href="http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=kate&hgS_otherUserSessionName=encodeDemo"><img class="screenshot" style="border: 1px solid gray" src="../images/encode/browser.png"></a>
+                    </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td width="20%" height="200" style="vertical-align: top;">
+                    <div style="height: 100%; margin-top:10px; margin-left:10px; margin-right:10px" class="wrapper">
+                        <div class="bar"><h4 class="title">Search for data at the ENCODE Portal</h4></div>
+                            <a href="https://www.encodedcc.org/search/?type=experiment"><img class="screenshot" style="display: block; margin: auto; border: 1px solid gray" src="../images/encode/stanfordSearch.png"></a>
+                    </div>
+                    </td>
+                    <td width="20%" height="200" style="vertical-align: top">
+                    <div style="height: 100%; margin-top:10px" class="wrapper">
+                        <div class="bar"><h4 class="title">Search for ENCODE tracks in the UCSC Genome Browser</h4></div>
+                            <a href="http://genome.ucsc.edu/cgi-bin/hgTracks?hgt_=1408334670&db=hg19&tsCurTab=advancedTab&hgt_tsDelRow=&hgt_tsAddRow=&hgt_tsPage=&tsSimple=&tsName=&tsDescr=&tsGroup=Any&tsType=Any&hgt_mdbVar1=cell&hgt_mdbVal1=HeLa-S3&hgt_mdbVar2=dataType&hgt_mdbVal2=RnaSeq&hgt_tSearch=search"><img class="screenshot" src="../images/encode/search.png"></a>
+                    </div>
+                    </td>
+                </tr>
+            <!-- screenshot launchers -->
+            </table>
+        </td>
     </tr>
-  </tbody>
-</table>
+    </table>
 </body>
 </html>
