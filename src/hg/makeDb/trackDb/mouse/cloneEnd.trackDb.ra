@@ -125,6 +125,7 @@ noInherit on
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 12
 
     track cloneEnd_badEnds
     parent cloneEndSuper hide
@@ -134,6 +135,7 @@ noInherit on
     type bed 12
     url http://www.ncbi.nlm.nih.gov/clone/?term=$$
     urlLabel NCBI CloneDB:
+    priority 13
 
     track cloneEnd_coverageForward
     parent cloneEndSuper hide
@@ -143,6 +145,7 @@ noInherit on
     autoScale on
     alwaysZero on
     windowingFunction mean
+    priority 14
 
     track cloneEnd_coverageReverse
     parent cloneEndSuper hide
@@ -153,6 +156,7 @@ noInherit on
     alwaysZero on
     windowingFunction mean
     autoScale on
+    priority 15
 
 searchTable cloneEnd_B6Ng01
 searchType bed
@@ -220,14 +224,14 @@ searchMethod prefix
 searchPriority 50
 termRegex [Ww][Ii]1-([0-9A-Z])+
 
-searchTable cloneEnd_badEnds
-searchType bed
-searchMethod prefix
-searchPriority 50
-termRegex [BCDMRWb][HIMNPS36]([-0-9A-Zg])+
-
 searchTable cloneEnd_multipleMaps
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex [BCDMRW][HIMNPS36]([-0-9A-Zg])+
+
+searchTable cloneEnd_badEnds
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex [BCDMRWb][HIMNPS36]([-0-9A-Zg])+
