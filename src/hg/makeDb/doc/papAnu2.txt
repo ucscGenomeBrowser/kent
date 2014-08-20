@@ -666,4 +666,24 @@ papAnu2.genbank.est.native.load = yes
     cat fb.papAnu2.chainHg19Link.txt
     #  2410008689 bases of 2893250291 (83.298%) in intersection
 
-#########################################################################
+############################################################################
+#  papAnu2 - Baboon - Ensembl Genes version 76  (DONE - 2014-08-08 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/papAnu2
+    cat << '_EOF_' > papAnu2.ensGene.ra
+# required db variable
+db papAnu2
+
+# remove the first .1 from the contig names in the Ensembl GTF file
+# UCSC does not have the chrMt, and add chr to the chrom names
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; /MT/d; s/\.1//"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=76 papAnu2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/papAnu2/bed/ensGene.76
+    featureBits papAnu2 ensGene
+    # 45154927 bases of 2893250291 (1.561%) in intersection
+
+############################################################################
