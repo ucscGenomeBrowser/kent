@@ -1,6 +1,8 @@
 
-MySQL DATABASE SETUP
+This file is from:
+  http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob;f=src/product/README.mysql.setup
 
+MySQL DATABASE SETUP
 
 ENABLE "LOAD DATA LOCAL INFILE"
 
@@ -16,7 +18,8 @@ local-infile=1
 STORAGE ENGINE
 
 MySQL default storage engine.
-In recent versions of MySQL, the default storage engine has changed from myisam to innodb.
+In recent versions of MySQL, the default storage engine has changed from
+myisam to innodb.
 However the myisam engine should be used with the UCSC Genome Browser.
 
 Set it in /etc/my.cnf or /etc/mysql/my.cnf:
@@ -24,7 +27,8 @@ Set it in /etc/my.cnf or /etc/mysql/my.cnf:
 [mysqld]
 default-storage-engine=MYISAM
 
-Always restart your mysql server after making changes to these configuration files.
+Always restart your mysql server after making changes to these
+configuration files.
 
 USERS
 
@@ -71,7 +75,7 @@ the following procedure.
 
 For the following it is assumed that your root account
 has access to the mysql database.  You should be able
-to perform the following at a root login prompt:
+to perform the following:
 
 $ export SQL_PASSWORD=mysql_root_password
 $ mysql -u root -p${SQL_PASSWORD} -e "show tables;" mysql
@@ -80,12 +84,14 @@ Create a MySQL user called "browser" with password
 "genome" and give access to selected MySQL commands
 for the following list of databases.  When you add other
 databases, you will need to add these permissions to your
-databases.
+databases.  This procedure of adding permissions specifically
+for a set list of databases is a more secure method than allowing
+the MySQL "browser" user to have access to any database.
 
 ( MySQL version 5.5 requires the LOCK TABLES permission here )
 ( FILE, CREATE, DROP, ALTER, LOCK TABLES, CREATE TEMPORARY TABLES on ${DB}.* )
 
-for DB in cb1 hgcentral hgFixed hg17 proteins040315
+for DB in cb1 hgcentral hgFixed hg38 proteins140122 sp140122 go140213 uniProt go proteome
 do
     mysql -u root -p${SQL_PASSWORD} -e "GRANT SELECT, INSERT, UPDATE, DELETE, \
 	FILE, CREATE, DROP, ALTER, CREATE TEMPORARY TABLES on ${DB}.* \
@@ -95,18 +101,19 @@ done
 
 The above granted permissions are recommended for browser developers.
 The WEB browser CGI binaries need SELECT, INSERT and CREATE TEMPORARY
-TABLES permissions.  For example, you could create a special user for
+TABLES permissions.  For example, you should create a special user for
 the browser genome databases only.  In this example, user: "readonly"
 with password: "access"
 
-for DB in cb1 hgcentral hgFixed hg17 proteins040315
+for DB in cb1 hgcentral hgFixed hg38 proteins140122 sp140122 go140213 uniProt go
+ proteome
 do
     mysql -u root -p${SQL_PASSWORD} -e "GRANT SELECT \
 	on ${DB}.* TO \
 	readonly@localhost IDENTIFIED BY 'access';" mysql
 done
 
-Now create a database to hold temporary tables.
+Create a database to hold temporary tables:
 
     mysql -u root -p${SQL_PASSWORD} -e "create database hgTemp"
 
@@ -115,7 +122,7 @@ Now create a database to hold temporary tables.
 	on hgTemp.* TO \
 	readonly@localhost IDENTIFIED BY 'access';" mysql
 
-A third MySQL user can be created with read-write access to only
+A third MySQL user should be created with read-write access to only
 the hgcentral database.  For example, a user: "readwrite"
 with password: "update"
 
@@ -163,5 +170,8 @@ central.db=hgcentral
 To test this access with your ~/.hg.conf file in place:
 
 $ hgsql -e "show tables;" hgcentral
+$ hgsql -e "show grants;" hgcentral
 
+====================================================================
+Information last updated: 19 August 2014
 ====================================================================
