@@ -2,11 +2,15 @@
         (Mostly re-using Genome Browser styles)
 */
 
-/* over-riding alignment so we don't have to nest in a table */
-
 body {
     font-family: arial,Geneva,Helvetica,sans-serif;
     background-color: #fff;
+}
+
+.topBlueBar {
+    text-align: left;
+    background-color: #00457c;
+    position: relative;
 }
 
 .encodeHeader {
