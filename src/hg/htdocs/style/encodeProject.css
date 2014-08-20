@@ -3,11 +3,6 @@
 */
 
 /* over-riding alignment so we don't have to nest in a table */
-.topBlueBar {
-    text-align: left;
-    background-color: #004D99;
-    position: relative;
-}
 
 body {
     font-family: arial,Geneva,Helvetica,sans-serif;
@@ -15,7 +10,7 @@ body {
 }
 
 .encodeHeader {
-    color: #004D99;
+    color: #00457c;
     font-size: 30px;
     margin-top: 15px;
     height: 70px;
@@ -85,13 +80,15 @@ h4.title {
 }
 
 .bar {
-    background-color: #dae5f7;
+    background-color: rgb(239,239,239);
+    color: rgb(85,85,85);
     width: 100%;
     margin: 0px;
-    padding: 0px;
+    padding: 3px 0px 3px 0px;
+    /* padding: 0 */
     height: 27px;
 }
-    
+
 dt {
     padding-bottom: 12px;
 }
@@ -134,10 +131,14 @@ dd {
 }
 
 .selectable {
-    color: #004D99;
+    color: #00457c;
 }
 
 .floatHeader {
     opacity: 1;
+}
+
+.ltGray { 
+    background-color: rgb(239,239,239); 
 }
 
