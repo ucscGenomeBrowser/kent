@@ -102,7 +102,7 @@ for (exp = expList; exp != NULL; exp = exp->next)
     sqlSafef(query, sizeof(query),
        "select biosample,sex,taxon  from edwExperiment,edwBiosample "
        "where edwExperiment.biosample = edwBiosample.term "
-       "and edwExperiment.accession = '%s'", exp->name);
+       "and edwExperiment.accession = '%s' and sex != 'B'", exp->name);
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row;
     while ((row = sqlNextRow(sr)) != NULL)
