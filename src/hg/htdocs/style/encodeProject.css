@@ -108,6 +108,11 @@ table, th, td {
     height: 27px;
 }
 
+.topLink {
+    font-size: large;
+    font-weight: bold;
+}
+
 .content {
     margin: 0px;
     padding: 0px 15px;
