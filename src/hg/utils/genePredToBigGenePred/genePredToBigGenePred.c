@@ -25,6 +25,7 @@ static struct optionSpec options[] = {
 
 #define MAX_BLOCKS 10000
 unsigned blockSizes[MAX_BLOCKS];
+unsigned blockStarts[MAX_BLOCKS];
 
 void outBigGenePred(FILE *fp, struct genePred *gp)
 {
@@ -45,11 +46,14 @@ bgp.thickEnd = gp->cdsEnd;
 bgp.itemRgb = 0xffffff;
 bgp.blockCount = gp->exonCount;
 bgp.blockSizes = (unsigned *)blockSizes;
+bgp.chromStarts = (unsigned *)blockStarts;
 int ii;
 for(ii=0; ii < bgp.blockCount; ii++)
+    {
+    blockStarts[ii] = gp->exonStarts[ii] - bgp.chromStart;
     blockSizes[ii] = gp->exonEnds[ii] - gp->exonStarts[ii];
+    }
     
-bgp.chromStarts = gp->exonStarts;
 bgp.name2 = gp->name2;
 bgp.cdsStartStat = gp->cdsStartStat;
 bgp.cdsEndStat = gp->cdsEndStat;

@@ -730,6 +730,7 @@ else
           startsWithWord("halSnake", type) ||
 #endif
           startsWithWord("vcfTabix", type) ||
+          startsWithWord("bigGenePred", type) ||
           startsWithWord("bam", type)))
 	{
 	errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,

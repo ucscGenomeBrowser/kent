@@ -640,6 +640,8 @@ if(startsWith("wigMaf", type))
     cType = cfgWigMaf;
 else if(startsWith("wig", type))
     cType = cfgWig;
+else if(startsWith("bigGenePred", type))
+    cType = cfgGenePred;
 else if(startsWith("bigWig", type))
     cType = cfgWig;
 else if(startsWith("bedGraph", type))
