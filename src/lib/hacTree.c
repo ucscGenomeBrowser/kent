@@ -284,7 +284,10 @@ return root;
  ** function and for that matter the distance function much less than the function
  ** above.  */
 
-static double findClosestPair(struct dlList *list, struct hash *distanceHash, 
+typedef double hacPairingFunction(struct dlList *list, struct hash *distanceHash, 
+    hacDistanceFunction *distF, void *distData, struct dlNode **retNodeA, struct dlNode **retNodeB);
+
+static double pairSerially(struct dlList *list, struct hash *distanceHash, 
     hacDistanceFunction *distF, void *extraData, struct dlNode **retNodeA, struct dlNode **retNodeB)
 /* Loop through list returning closest two nodes */
 {
@@ -322,18 +325,18 @@ for (aNode = list->head; !dlEnd(aNode); aNode = aNode->next)
 return closestDistance;
 }
 
-static void lmDlAddValTail(struct lm *lm, struct dlList *list, void *val)
+static void lmDlAddValHead(struct lm *lm, struct dlList *list, void *val)
 /* Allocate new dlNode out of lm, initialize it with val, and add it to end of list */
 {
 struct dlNode *node;
 lmAllocVar(lm, node);
 node->val = val;
-dlAddTail(list, node);
+dlAddHead(list, node);
 }
 
-struct hacTree *hacTreeForCostlyMerges(struct slList *itemList, struct lm *localMem,
+struct hacTree *hacTreeVirtualPairing(struct slList *itemList, struct lm *localMem,
 				 hacDistanceFunction *distF, hacMergeFunction *mergeF,
-				 void *extraData)
+				 void *extraData, hacPairingFunction *pairingF)
 /* Construct hacTree using a method that will minimize the number of calls to
  * the distance and merge functions, assuming they are expensive.  Do a lmCleanup(localMem)
  * to free the returned tree. */
@@ -349,7 +352,7 @@ for (item = itemList; item != NULL; item = item->next)
     struct hacTree *ht;
     lmAllocVar(localMem, ht);
     ht->itemOrCluster = item;
-    lmDlAddValTail(localMem, &remaining, ht);
+    lmDlAddValHead(localMem, &remaining, ht);
     count += 1;
     }
 
@@ -359,7 +362,7 @@ for (i=1; i<count; ++i)
     {
     /* Find closest pair and take them off of remaining list */
     struct dlNode *aNode, *bNode;
-    double distance = findClosestPair(&remaining, distanceHash, distF, extraData, &aNode, &bNode);
+    double distance = pairingF(&remaining, distanceHash, distF, extraData, &aNode, &bNode);
     dlRemove(aNode);
     dlRemove(bNode);
 
@@ -373,7 +376,7 @@ for (i=1; i<count; ++i)
     ht->childDistance = distance;
 
     /* Put merged item onto remaining list. */
-    lmDlAddValTail(localMem, &remaining, ht);
+    lmDlAddValHead(localMem, &remaining, ht);
     }
 
 /* Clean up and go home. */
@@ -382,3 +385,12 @@ struct dlNode *lastNode = dlPopHead(&remaining);
 return lastNode->val;
 }
 
+struct hacTree *hacTreeForCostlyMerges(struct slList *itemList, struct lm *localMem,
+				 hacDistanceFunction *distF, hacMergeFunction *mergeF,
+				 void *extraData)
+/* Construct hacTree using a method that will minimize the number of calls to
+ * the distance and merge functions, assuming they are expensive.  Do a lmCleanup(localMem)
+ * to free the returned tree. */
+{
+return hacTreeVirtualPairing(itemList, localMem, distF, mergeF, extraData, pairSerially);
+}
