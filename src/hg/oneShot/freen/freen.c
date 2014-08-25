@@ -27,7 +27,7 @@ spaceOut(f, level*2);
 struct slDouble *el = (struct slDouble *)ht->itemOrCluster;
 if (ht->left || ht->right)
     {
-    fprintf(f, "(%g)\n", el->val);
+    fprintf(f, "(%g %g)\n", el->val, ht->childDistance);
     rDump(ht->left, level+1, f);
     rDump(ht->right, level+1, f);
     }
