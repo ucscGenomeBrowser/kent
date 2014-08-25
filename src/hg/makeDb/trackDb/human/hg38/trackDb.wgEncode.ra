@@ -1,2 +1,9 @@
+track wgEncodeGencodeSuper
+superTrack on
+group genes
+shortLabel GENCODE (Ensembl)
+longLabel GENCODE Gene Annotations (Ensembl)
+# doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
+
 include wgEncodeGencodeV19.ra
 include wgEncodeGencodeV20.ra alpha
