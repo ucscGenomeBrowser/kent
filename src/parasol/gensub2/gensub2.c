@@ -38,9 +38,10 @@ errAbort(
   "       $(file2)  - Name without dir of second file.\n"
   "       $(num1)   - Index of first file in list.\n"
   "       $(num2)   - Index of second file in list.\n"
-  "The <file list 2> parameter can be 'single' if there is only \n"
-  "one file list.  By default the order is diagonal, meaning if \n"
-  "the first list is ABC and the secon list is abc the combined \n"
+  "The <file list 2> parameter can be 'single' if there is only one file list and \n"
+  "'selfPair' if there is a single list, but you want all\n" 
+  "pairs of single list with itself.  By default the order is diagonal, meaning if \n"
+  "the first list is ABC and the second list is abc the combined \n"
   "order is Aa Ba Ab Ca Bb Ac  Cb Bc Cc.  This tends to put the \n"
   "largest jobs first if the file lists are both sorted by size. \n"
   "The following options can change this:\n"
@@ -270,7 +271,9 @@ char *lineT;
 int i, j;
 struct slName *loopText = NULL, *loopEl;
 bool gotLoop = FALSE, gotEndLoop = FALSE;
-boolean twoLists = !sameWord(list2Name, "single");
+boolean isSingle = sameWord(list2Name, "single");
+boolean selfPair = sameWord(list2Name, "selfPair");
+boolean twoLists = !isSingle && !selfPair;
 char **lines1 = NULL, **lines2 = NULL;
 int count1, count2;
 
@@ -325,6 +328,14 @@ else if (optionExists("group2"))
     for (j=0; j<count2; ++j)
 	for (i=0; i<count1; ++i)
 	    outputOneSub(lines1[i], lines2[j], i, j, loopText, f);
+    }
+else if (selfPair)
+    {
+    for (i=0; i<count1; ++i)
+       {
+       for (j=i+1; j<count1; ++j)
+            outputOneSub(lines1[i], lines1[j], i, j, loopText, f);
+       }
     }
 else
     {
