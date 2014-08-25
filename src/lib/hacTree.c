@@ -294,7 +294,7 @@ return root;
  ** function and for that matter the distance function much less than the function
  ** above.  */
 
-static void findClosestPair(struct dlList *list, struct hash *distanceHash, 
+static double findClosestPair(struct dlList *list, struct hash *distanceHash, 
     hacDistanceFunction *distF, void *extraData, struct dlNode **retNodeA, struct dlNode **retNodeB)
 /* Loop through list returning closest two nodes */
 {
@@ -329,6 +329,7 @@ for (aNode = list->head; !dlEnd(aNode); aNode = aNode->next)
     }
 *retNodeA = closestA;
 *retNodeB = closestB;
+return closestDistance;
 }
 
 static void lmDlAddValTail(struct lm *lm, struct dlList *list, void *val)
@@ -368,7 +369,7 @@ for (i=1; i<count; ++i)
     {
     /* Find closest pair and take them off of remaining list */
     struct dlNode *aNode, *bNode;
-    findClosestPair(&remaining, distanceHash, distF, extraData, &aNode, &bNode);
+    double distance = findClosestPair(&remaining, distanceHash, distF, extraData, &aNode, &bNode);
     dlRemove(aNode);
     dlRemove(bNode);
 
@@ -379,6 +380,7 @@ for (i=1; i<count; ++i)
     struct hacTree *right = ht->right = bNode->val;
     left->parent = right->parent = ht;
     ht->itemOrCluster = mergeF(left->itemOrCluster, right->itemOrCluster, extraData);
+    ht->childDistance = distance;
 
     /* Put merged item onto remaining list. */
     lmDlAddValTail(localMem, &remaining, ht);
