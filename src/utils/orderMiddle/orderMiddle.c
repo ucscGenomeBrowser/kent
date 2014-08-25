@@ -117,15 +117,13 @@ void orderMiddle(char *inList, char *inPairs, char *outTab)
  * to order in such a way to minimize distance between adjacent items.  */
 {
 struct slName *itemList = readAllLines(inList);
-verbose(1, "%d items in %s\n", slCount(itemList), inList);
+verbose(2, "%d items in %s\n", slCount(itemList), inList);
 struct pairDistance *pairList= pairDistanceReadAll(inPairs);
 if (optionExists("invert"))
     pairDistanceInvert(pairList);
-verbose(1, "%d pairs in %s\n", slCount(pairList), inPairs);
+verbose(2, "%d pairs in %s\n", slCount(pairList), inPairs);
 struct hash *pairHash = pairDistanceHashList(pairList);
-uglyf("%d items in pairHash\n", pairHash->elCount);
 struct dlList *orderedList = greedyOrder(itemList, pairHash);
-uglyf("%d items in orderedList\n", dlCount(orderedList));
 struct dlNode *node;
 FILE *f = mustOpen(outTab, "w");
 for (node = orderedList->head; !dlEnd(node); node = node->next)
