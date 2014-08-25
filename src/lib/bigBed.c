@@ -140,7 +140,7 @@ row[1] = startBuf;
 row[2] = endBuf;
 if (!isEmpty(interval->rest))
     {
-    int wordCount = chopByChar(interval->rest, '\t', row+3, rowSize-3);
+    int wordCount = chopByChar(cloneString(interval->rest), '\t', row+3, rowSize-3);
     fieldCount += wordCount;
     }
 return fieldCount;

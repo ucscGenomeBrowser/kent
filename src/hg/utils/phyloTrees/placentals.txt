@@ -10,7 +10,7 @@ tupBel	Eutheria; Euarchontoglires; Scandentia; Tupaiidae; Tupaia
 # Chinese tree shrew - Tupaia chinensis
 tupChi	Eutheria; Euarchontoglires; Scandentia; Tupaiidae; Tupaia
 
-# galVar1	Malayan flying lemur	Galeopterus variegatus
+# Malayan flying lemur - Galeopterus variegatus
 galVar	Eutheria; Euarchontoglires; Dermoptera; Cynocephalidae; Galeopterus
 
 # Rabbit Oryctolagus cuniculus

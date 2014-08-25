@@ -1598,7 +1598,7 @@ if (as == NULL)
 int start = 0;
 char *type = cloneString(tdb->type);
 char *word = nextWord(&type);
-if (word && (sameWord(word,"bed") || sameWord(word,"bigBed")))
+if (word && (sameWord(word,"bed") || sameWord(word,"bigBed") || sameWord(word,"bigGenePred")))
     {
     if (NULL != (word = nextWord(&type)))
         start = sqlUnsigned(word);
@@ -3968,6 +3968,11 @@ else if (wordCount > 0)
 	    num = atoi(words[1]);
 	if (num < 3) num = 3;
         genericBedClick(conn, tdb, item, start, num);
+	}
+    else if (sameString(type, "bigGenePred"))
+        {
+	int num = 12;
+        genericBigBedClick(conn, tdb, item, start, end, num);
 	}
     else if (sameString(type, "bigBed"))
         {

@@ -144,6 +144,50 @@ freeMem(rest);
 return field;
 }
 
+struct genePred  *genePredFromBigGenePred( char *chrom, struct bigBedInterval *bb)
+/* build a genePred from a bigGenePred */
+{
+char *extra = cloneString(bb->rest);
+int numCols = 12 + 8 - 3;
+char *row[numCols];
+int wordCount = chopByChar(extra, '\t', row, numCols);
+assert(wordCount == numCols);
+
+struct genePred *gp;
+AllocVar(gp);
+
+gp->chrom = chrom;
+gp->txStart = bb->start;
+gp->txEnd = bb->end;
+gp->name =  cloneString(row[ 0]);
+gp->strand[0] =  row[ 2][0];
+gp->strand[1] =  row[ 2][1];
+gp->cdsStart =  atoi(row[ 3]);
+gp->cdsEnd =  atoi(row[ 4]);
+gp->exonCount =  atoi(row[ 6]);
+int numBlocks;
+sqlUnsignedDynamicArray(row[ 8],  &gp->exonStarts, &numBlocks);
+assert (numBlocks == gp->exonCount);
+sqlUnsignedDynamicArray(row[ 7],  &gp->exonEnds, &numBlocks);
+assert (numBlocks == gp->exonCount);
+
+int ii;
+for(ii=0; ii < numBlocks; ii++)
+    {
+    gp->exonStarts[ii] += bb->start;
+    gp->exonEnds[ii] += gp->exonStarts[ii];
+    }
+
+gp->name2 = cloneString(row[ 9]);
+
+gp->cdsStartStat = parseCdsStat(row[ 10]);
+gp->cdsEndStat = parseCdsStat(row[ 11]);
+sqlSignedDynamicArray(row[ 12],  &gp->exonFrames, &numBlocks);
+assert (numBlocks == gp->exonCount);
+
+return gp;
+}
+
 void bigBedAddLinkedFeaturesFrom(struct track *track,
 	char *chrom, int start, int end, int scoreMin, int scoreMax, boolean useItemRgb,
 	int fieldCount, struct linkedFeatures **pLfList)
@@ -173,6 +217,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     if (scoreFilter == NULL || lf->score >= minScore)
 	slAddHead(pLfList, lf);
     lf->mouseOver   = mouseOver; // leaks some memory, cloneString handles NULL ifself 
+    if (sameString(track->tdb->type, "bigGenePred"))
+	lf->original = genePredFromBigGenePred(chromName, bb); 
     }
 lmCleanup(&lm);
 }

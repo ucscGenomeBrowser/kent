@@ -2,20 +2,19 @@
         (Mostly re-using Genome Browser styles)
 */
 
-/* over-riding alignment so we don't have to nest in a table */
-.topBlueBar {
-    text-align: left;
-    background-color: #004D99;
-    position: relative;
-}
-
 body {
     font-family: arial,Geneva,Helvetica,sans-serif;
     background-color: #fff;
 }
 
+.topBlueBar {
+    text-align: left;
+    background-color: #00457c;
+    position: relative;
+}
+
 .encodeHeader {
-    color: #004D99;
+    color: #00457c;
     font-size: 30px;
     margin-top: 15px;
     height: 70px;
@@ -25,6 +24,12 @@ body {
     float: left;
     height: 70px;
     line-height:  70px;
+}
+
+.encodeHeaderDates {
+    font-size: 18px;
+    background-color: #efefef;
+    padding: 4px 5px;
 }
 
 /* image shown when ajax is loading data
@@ -68,9 +73,44 @@ table, th, td {
 }
 
 .wrapper {
-	border: 1px solid gray;
-	padding:0px;
-	margin: 7px 0px 20px 0px;
+    border: 1px solid gray;
+    padding:0px;
+    margin: 7px 0px 20px 0px;
+}
+
+.bar {
+    background-color: rgb(239,239,239);
+    color: rgb(85,85,85);
+    width: 100%;
+    margin: 0px;
+    padding: 3px 0px 3px 0px;
+    /* padding: 0 */
+    height: 27px;
+}
+
+.vocabTable {
+    width: 100%;
+    border: none;
+    margin-top: 10px;
+}
+
+.vocabWrapper {
+    background-color: #fff9d2;
+    border: 2px solid black;
+}
+
+.vocabBar {
+    color: black;
+    background-color: #fff9d2;
+    width: 100%;
+    margin: 0px;
+    padding: 3px 0px 3px 0px;
+    height: 27px;
+}
+
+.topLink {
+    font-size: large;
+    font-weight: bold;
 }
 
 .content {
@@ -84,14 +124,6 @@ h4.title {
     padding: 3px 0px 0px 7px;
 }
 
-.bar {
-    background-color: #dae5f7;
-    width: 100%;
-    margin: 0px;
-    padding: 0px;
-    height: 27px;
-}
-    
 dt {
     padding-bottom: 12px;
 }
@@ -116,7 +148,7 @@ dd {
 }
 
 .gold {
-    background-color: #FFDB70;
+    background-color: #f1b521;
 }
 
 .date {
@@ -134,10 +166,14 @@ dd {
 }
 
 .selectable {
-    color: #004D99;
+    color: #00457c;
 }
 
 .floatHeader {
     opacity: 1;
+}
+
+.ltGray { 
+    background-color: rgb(239,239,239); 
 }
 
