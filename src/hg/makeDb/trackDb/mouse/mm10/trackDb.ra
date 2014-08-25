@@ -261,10 +261,11 @@ pennantIcon 9.jpg ../goldenPath/help/liftOver.html "These data were converted vi
 track wgEncodeGencodeSuper
 superTrack on
 group genes
-shortLabel GENCODE
-longLabel GENCODE Gene Annotation 
+shortLabel GENCODE (Ensembl)
+longLabel GENCODE Gene Annotations (Ensembl)
 # doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
 
 include wgEncodeGencodeVM2.ra
+include wgEncodeGencodeVM3.ra alpha
 
 include defaultPriority.ra
