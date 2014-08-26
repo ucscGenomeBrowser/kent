@@ -101,7 +101,7 @@ unsigned eapGraphOneSingleChild(struct eapGraph *eg, unsigned fileId);
 /* Get file ID of child gauranteeing that it exists and there is just one or aborting. */
 
 struct slRef *eapGraphChildList(struct eapGraph *eg, unsigned fileId);
-/* Return list of all children, possibly NULL.  List is in form of slRefs with eapInput vals. */
+/* Return list of all children, possibly NULL.  List is in form of slRefs with eapOutput vals. */
 
 
 /* Routines to fetch more general descendants */
