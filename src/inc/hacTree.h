@@ -86,4 +86,10 @@ struct hacTree *hacTreeForCostlyMerges(struct slList *itemList, struct lm *local
  * number of calls to the distance and merge functions, assuming they are expensive.  
  * Do a lmCleanup(&localMem) to free the returned tree. */
 
+struct hacTree *hacTreeMultiThread(int threadCount, struct slList *itemList, struct lm *localMem,
+				 hacDistanceFunction *distF, hacMergeFunction *mergeF,
+				 void *extraData);
+/* Construct hacTree minimizing number of merges called, and doing distance calls
+ * in parallel when possible.   Do a lmCleanup(localMem) to free returned tree. */
+
 #endif//def HACTREE_H
