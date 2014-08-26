@@ -88,8 +88,24 @@ struct hacTree *hacTreeForCostlyMerges(struct slList *itemList, struct lm *local
 
 struct hacTree *hacTreeMultiThread(int threadCount, struct slList *itemList, struct lm *localMem,
 				 hacDistanceFunction *distF, hacMergeFunction *mergeF,
-				 void *extraData);
+				 void *extraData, struct hash *precalcDistanceHash);
 /* Construct hacTree minimizing number of merges called, and doing distance calls
- * in parallel when possible.   Do a lmCleanup(localMem) to free returned tree. */
+ * in parallel when possible.   Do a lmCleanup(localMem) to free returned tree. 
+ * The inputs are
+ *	threadCount - number of threads - at least one, recommended no more than 15
+ *	itemList - list of items to tree up.  Format can vary, but must start with a
+ *	           pointer to next item in list.
+ *	localMem - memory pool where hacTree and a few other things are allocated from
+ *	distF - function that calculates distance between two items, passed items and extraData
+ *	mergeF - function that creates a new item in same format as itemList from two passed
+ *	         in items and the extraData.  Typically does average of two input items
+ *	extraData - parameter passed through to distF and mergeF, otherwise unused, may be NULL
+ *	precalcDistanceHash - a hash containing at least some of the pairwise distances
+ *	            between items on itemList, set with hacTreeDistanceHashAdd. 
+ *	            As a side effect this hash will be expanded to include all distances 
+ *	            including those between intermediate nodes. */
+
+void hacTreeDistanceHashAdd(struct hash *hash, void *itemA, void *itemB, double distance);
+/* Add an item to distance hash */
 
 #endif//def HACTREE_H

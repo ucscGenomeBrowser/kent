@@ -338,7 +338,8 @@ dlAddHead(list, node);
 
 struct hacTree *hacTreeVirtualPairing(struct slList *itemList, struct lm *localMem,
 				 hacDistanceFunction *distF, hacMergeFunction *mergeF,
-				 void *extraData, hacPairingFunction *pairingF)
+				 void *extraData, hacPairingFunction *pairingF,
+				 struct hash *precalcDistanceHash)
 /* Construct hacTree using a method that will minimize the number of calls to
  * the distance and merge functions, assuming they are expensive.  Do a lmCleanup(localMem)
  * to free the returned tree. */
@@ -348,7 +349,7 @@ struct dlList remaining;
 dlListInit(&remaining);
 struct slList *item;
 int count = 0;
-struct hash *distanceHash = hashNew(0);
+struct hash *distanceHash = (precalcDistanceHash ? precalcDistanceHash : hashNew(0));
 for (item = itemList; item != NULL; item = item->next)
     {
     struct hacTree *ht;
@@ -382,7 +383,8 @@ for (i=1; i<count; ++i)
     }
 
 /* Clean up and go home. */
-hashFree(&distanceHash);
+if (distanceHash != precalcDistanceHash)
+    hashFree(&distanceHash);
 struct dlNode *lastNode = dlPopHead(&remaining);
 return lastNode->val;
 }
@@ -394,7 +396,7 @@ struct hacTree *hacTreeForCostlyMerges(struct slList *itemList, struct lm *local
  * the distance and merge functions, assuming they are expensive.  Do a lmCleanup(localMem)
  * to free the returned tree. */
 {
-return hacTreeVirtualPairing(itemList, localMem, distF, mergeF, extraData, pairSerially);
+return hacTreeVirtualPairing(itemList, localMem, distF, mergeF, extraData, pairSerially, NULL);
 }
 
 /** The code from here on down is an implementation that uses multiple threads **/
@@ -405,6 +407,14 @@ static void calcDistKey(void *a, void *b, char key[distKeySize])
 /* Put key for distance in key */
 {
 safef(key, distKeySize, "%p %p", a, b);
+}
+
+void hacTreeDistanceHashAdd(struct hash *hash, void *itemA, void *itemB, double distance)
+/* Add an item to distance hash */
+{
+char key[distKeySize];
+calcDistKey(itemA, itemB, key);
+hashAdd(hash, key, CloneVar(&distance));
 }
 
 struct hctPair
@@ -450,7 +460,7 @@ for (aNode = list->head; !dlEnd(aNode); aNode = aNode->next)
         {
 	struct hacTree *bHt = bNode->val;
 	char key[64];
-	calcDistKey(aHt, bHt, key);
+	calcDistKey(aHt->itemOrCluster, bHt->itemOrCluster, key);
 	double *pd = hashFindVal(distanceHash, key);
 	if (pd == NULL)
 	     {
@@ -469,11 +479,8 @@ pthreadDoList(distThreadCount, pairList, distanceWorker, &context);
 
 for (pair = pairList; pair != NULL; pair = pair->next)
     {
-    char key[64];
-    calcDistKey(pair->a, pair->b, key);
-    double *pd = needMem(sizeof(double));
-    *pd = pair->distance;
-    hashAdd(distanceHash, key, pd);
+    hacTreeDistanceHashAdd(distanceHash, 
+	pair->a->itemOrCluster, pair->b->itemOrCluster, pair->distance);
     }
 slFreeList(&pairList);
 }
@@ -494,7 +501,7 @@ for (aNode = list->head; !dlEnd(aNode); aNode = aNode->next)
         {
 	struct hacTree *bHt = bNode->val;
 	char key[64];
-	safef(key, sizeof(key), "%p %p", aHt, bHt);
+	safef(key, sizeof(key), "%p %p", aHt->itemOrCluster, bHt->itemOrCluster);
 	double *pd = hashMustFindVal(distanceHash, key);
 	double d = *pd;
 	if (d < closestDistance)
@@ -512,11 +519,25 @@ return closestDistance;
 
 struct hacTree *hacTreeMultiThread(int threadCount, struct slList *itemList, struct lm *localMem,
 				 hacDistanceFunction *distF, hacMergeFunction *mergeF,
-				 void *extraData)
+				 void *extraData, struct hash *precalcDistanceHash)
 /* Construct hacTree minimizing number of merges called, and doing distance calls
- * in parallel when possible.   Do a lmCleanup(localMem) to free returned tree. */
+ * in parallel when possible.   Do a lmCleanup(localMem) to free returned tree. 
+ * The inputs are
+ *	threadCount - number of threads - at least one, recommended no more than 15
+ *	itemList - list of items to tree up.  Format can vary, but must start with a
+ *	           pointer to next item in list.
+ *	localMem - memory pool where hacTree and a few other things are allocated from
+ *	distF - function that calculates distance between two items, passed items and extraData
+ *	mergeF - function that creates a new item in same format as itemList from two passed
+ *	         in items and the extraData.  Typically does average of two input items
+ *	extraData - parameter passed through to distF and mergeF, otherwise unused, may be NULL
+ *	precalcDistanceHash - a hash containing at least some of the pairwise distances
+ *	            between items on itemList, set with hacTreeDistanceHashAdd. 
+ *	            As a side effect this hash will be expanded to include all distances 
+ *	            including those between intermediate nodes. */
 {
 distThreadCount = threadCount;
-return hacTreeVirtualPairing(itemList, localMem, distF, mergeF, extraData, pairParallel);
+return hacTreeVirtualPairing(itemList, localMem, distF, mergeF, extraData, pairParallel,
+    precalcDistanceHash);
 }
 
