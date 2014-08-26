@@ -2620,7 +2620,7 @@ if (psl && baseColorNeedsCodons)
 else if (drawOpt > baseColorDrawOff)
     {
     struct genePred *gp = NULL;
-    if (startsWith("genePred", tg->tdb->type))
+    if (startsWith("genePred", tg->tdb->type) || startsWith("bigGenePred", tg->tdb->type))
 	gp = (struct genePred *)(lf->original);
     if (gp && gp->cdsStart != gp->cdsEnd)
         lf->codons = baseColorCodonsFromGenePred(lf, gp, (drawOpt != baseColorDrawDiffCodons), cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, CODON_NUMBERING_SUFFIX, FALSE));
@@ -12114,6 +12114,15 @@ else if (sameWord(type, "bedLogR"))
     */
 else if (sameWord(type, "bigBed"))
     {
+    bigBedMethods(track, tdb, wordCount, words);
+    if (trackShouldUseAjaxRetrieval(track))
+        track->loadItems = dontLoadItems;
+    }
+else if (sameWord(type, "bigGenePred"))
+    {
+    tdb->canPack = TRUE;
+    wordCount++;
+    words[1] = "12";
     bigBedMethods(track, tdb, wordCount, words);
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;

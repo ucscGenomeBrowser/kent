@@ -155,6 +155,9 @@ struct genePred *genePredExtLoadAll(char *fileName);
 char *genePredCdsStatStr(enum cdsStatus stat);
 /* get string value of a cdsStatus */
 
+enum cdsStatus parseCdsStat(char *statStr);
+/* parse a cdsStatus string */
+
 void genePredAddGenbankCds(struct psl *psl, struct genbankCds* cds, 
 	struct genePred *gene);
 /* Convert cdsStart/End from mrna to genomic coordinates. 

@@ -139,7 +139,7 @@ var encodeMatrix = (function () {
             assembly = encodeMatrix_assembly;
             $('#assemblyLabel').text(assembly);
             header = encodeMatrix_pageHeader;
-            $('#pageHeader').text(header);
+            $('#pageHeader').html(header);
             document.title = 'ENCODE ' + header;
 
             encodeProject.setup({

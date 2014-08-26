@@ -284,7 +284,7 @@ default:
 }
 }
 
-static enum cdsStatus parseCdsStat(char *statStr)
+enum cdsStatus parseCdsStat(char *statStr)
 /* parse a cdsStatus string */
 {
 if ((statStr == NULL) || sameString(statStr, "none"))
