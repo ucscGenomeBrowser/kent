@@ -18,13 +18,14 @@
 <div class="section">
 <h1>&nbsp;Hubs Quick Start Guide</h1> 
 <div class="sectionContent">
-<ul>
+<p>
 Hubs are a method of displaying remote custom tracks quickly
 (binary indexed bigBed, bigWig, BAM or VCF formats),
 while providing more persistence and flexibility than normal
 custom tracks for any UCSC assembly (or remotely-hosted assembly in twoBit format).
+</p>
 <p>
-<p>
+<ul>
 <b>STEP 1:</b> In a publicly-accessible directory, copy the hub.txt, genomes.txt,
 trackDb.txt files using the following commands:<br>
 <tt>curl -O http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt<br>
@@ -128,7 +129,6 @@ target="_blank">Public Hub Guidelines Wiki</a></b>
 <div class="section">
 <h1>&nbsp;Understanding hub.txt</h1>
 <div class="sectionContent">
-<ul>
 <blockquote><tt>
 <b>hub</b> <em>MyHubsNameWithoutSpaces</em> <br>
 <b>shortLabel</b> <em>My Hub's Name</em><br>
@@ -146,7 +146,6 @@ outlined in the trackDb.txt. The optional <tt><b>descriptionUrl</b></tt> field a
 add a HTML page describing your hub. See a basic <a href="../help/examples/hubDirectory/hub.txt"
 target="_blank">example hub.txt</a>.
 </p>
-</ul>
 </div> <!--- sectionContent -->
 </div> <!--- section-->
 
@@ -156,7 +155,6 @@ target="_blank">example hub.txt</a>.
 <div class="section">
 <h1>&nbsp;Understanding genomes.txt</h1>
 <div class="sectionContent">
-<ul>
 <blockquote><tt>
 <b>genome</b> <em>assembly_database_1</em><br>
 <b>trackDb</b> <em>assembly_1_path/trackDb.txt</em><br>
@@ -174,7 +172,6 @@ which will outline all of the assembly's tracks. See a basic
 <a href="../help/examples/hubDirectory/genomes.txt"
 target="_blank">example genomes.txt</a>.
 </p>
-</ul>
 </div> <!--- sectionContent --->
 </div> <!--- section -->
 
@@ -184,7 +181,6 @@ target="_blank">example genomes.txt</a>.
 <div class="section">
 <h1>&nbsp;Understanding trackDb.txt</h1>
 <div class="sectionContent">
-<ul>
 <p>
 <blockquote><tt>
 <b>track</b> <em>uniqueNameNoSpacesOrDots</em><br>
@@ -219,7 +215,6 @@ superTracks and multiWigs.
 See a basic <a href="../help/examples/hubDirectory/hg19/trackDb.txt"
 target="_blank">example trackDb.txt</a>.
 </p>
-</ul>
 </div> <!--- sectionContent -->
 </div> <!--- section --->
 
