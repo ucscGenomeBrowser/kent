@@ -62,6 +62,11 @@ void pthreadDoList(int threadCount, void *workList,  PthreadListWorker *worker, 
  *       worker(item, context)
  * The context is constant across all threads and items. */
 {
+if (workList == NULL)
+    return;
+if (threadCount < 1 || threadCount > 256)
+    errAbort("pthreadDoList - threadCount %d, but must be between 1 and 256", threadCount);
+
 /* Allocate basic structure */
 struct pthreadWorkList *pwl;
 AllocVar(pwl);
