@@ -7,7 +7,6 @@
 #include "hacTree.h"
 #include "rainbow.h"
 
-
 void usage()
 /* Explain usage and exit. */
 {
@@ -25,7 +24,6 @@ static struct optionSpec options[] = {
 };
 double longest = 0;
 int nameCount = 0;
-
 
 
 struct bigWig
@@ -48,13 +46,36 @@ while(lineFileNext(lf, &line, NULL))
     ++i;
     struct bigWig *bw;
     AllocVar(bw);
-    bw->name = line;
+    bw->name = cloneString(line);
     slAddHead(&list,bw);
     }
 slReverse(&list);
 return *list;
 }
 
+
+
+static void rAddLeaf(struct hacTree *tree, struct slRef **pList)
+/* Recursively add leaf to list */
+{
+if (tree->left == NULL && tree->right == NULL)
+    refAdd(pList, tree->itemOrCluster);
+else
+    {
+    rAddLeaf(tree->left, pList);
+    rAddLeaf(tree->right, pList);
+    }
+}
+
+struct slRef *getOrderedLeafList(struct hacTree *tree)
+/* Return list of references to bioExpVectors from leaf nodes
+ * ordered by position in hacTree */
+{
+struct slRef *leafList = NULL;
+rAddLeaf(tree, &leafList);
+slReverse(&leafList);
+return leafList;
+}
 
 
 static void rPrintHierarchicalJson(FILE *f, struct hacTree *tree, int level, double distance,
@@ -64,16 +85,12 @@ static void rPrintHierarchicalJson(FILE *f, struct hacTree *tree, int level, dou
 struct bigWig *bio = (struct bigWig *)tree->itemOrCluster;
 char *tissue = bio->name;
 struct rgbColor colors = bio->color;
-if (tree->childDistance > longest)
-    // the first distance will be the longest, and is used for normalization
-    longest = tree->childDistance;
 int i;
 for (i = 0;  i < level;  i++)
     fputc(' ', f); // correct spacing for .json format
 if (tree->left == NULL && tree->right == NULL)
     {
     // Prints out the leaf objects
- //   fprintf(f, "{\"name\": \"%s\",\"similarity\": %f,\"linkGroup\": \" \"", tissue, distance);
     fprintf(f, "{\"%s\"%s \"%s\"%s\"%s\"%s %f %s\"%s\"%s \"rgb(%i,%i,%i)\"}", "name", ":", tissue, ", ",
     		"similarity", ":", distance, "," , "colorGroup", ":", colors.r, colors.g, colors.b);
     return;
@@ -84,11 +101,11 @@ else if (tree->left == NULL || tree->right == NULL)
 // Prints out the node object and opens a new children block
 fprintf(f, "{\"%s\"%s \"%s\"%s", "name", ":", " ", ",");
 fprintf(f, "\"colorGroup\": \"rgb(%i,%i,%i)\",", colors.r, colors.g, colors.b );
-fprintf(f, "\"%s\"%s \"%f\"%s\n", "distance", ":", normConstant * (tree->childDistance/longest), ",");
+fprintf(f, "\"%s\"%s \"%f\"%s\n", "distance", ":", 20 *(tree->childDistance/longest), ",");
 for (i = 0;  i < level + 1;  i++)
     fputc(' ', f);
 fprintf(f, "\"%s\"%s\n", "children", ": [");
-distance = tree->childDistance/longest; 
+distance = 20*(tree->childDistance/longest); 
 rPrintHierarchicalJson(f, tree->left, level+1, distance, normConstant, cgConstant);
 fputs(",\n", f);
 rPrintHierarchicalJson(f, tree->right, level+1, distance, normConstant, cgConstant);
@@ -123,22 +140,25 @@ double slBigWigDistance(const struct slList *item1, const struct slList *item2, 
 /* Return the absolute difference between the two kids' values. 
  * Designed for HAC tree use*/
 {
+static int count = 0;
+++count;
 verbose(1,"Calculating Distance...\n");
 const struct bigWig *kid1 = (const struct bigWig *)item1;
 const struct bigWig *kid2 = (const struct bigWig *)item2;
 char cmd[1024];
-safef(cmd, 1024, "bigWigCorrelate %s %s > output", kid1->name, kid2->name);
+char tmpName[PATH_LEN];
+safef(tmpName, sizeof(tmpName), "tmp_%p_%p", kid1, kid2);
+safef(cmd, 1024, "bigWigCorrelate %s %s > %s", kid1->name, kid2->name, tmpName);
 double diff = 0;
 mustSystem(cmd);
-struct lineFile *lf = lineFileOpen("output",TRUE);
+struct lineFile *lf = lineFileOpen(tmpName,TRUE);
 char* line = NULL;
 if (!lineFileNext(lf, &line, NULL))
     errAbort("no difference output, check bigWigCorrelate");
-diff = sqlDouble(line);
-remove("output");
-return diff;
+diff = 100 * sqlDouble(cloneString(line));
+remove(tmpName);
+return  100 - diff;
 }
-
 
 struct slList *slBigWigMerge(const struct slList *item1, const struct slList *item2,
 				void *unusedExtraData)
@@ -147,7 +167,7 @@ struct slList *slBigWigMerge(const struct slList *item1, const struct slList *it
  * Designed for HAC tree use*/
 {
 verbose(1,"Merging...\n");
-++nameCount;
+++ nameCount;
 struct bigWig *result;
 AllocVar(result);
 const struct bigWig *kid1 = (const struct bigWig *)item1;
@@ -160,8 +180,50 @@ safef(name,1024, "%i", nameCount);
 safef(cmd2, 1024, "bedGraphToBigWig output chrom.sizes %s", name);
 mustSystem(cmd1);
 mustSystem(cmd2);
-result->name = name;
+result->name = name; 
 return (struct slList *)result;
+}
+
+
+void colorLeaves(struct slRef *leafList)
+/* Assign colors of rainbow to leaves. */
+{
+/* Loop through list once to figure out total, since we need to
+ * normalize */
+double total = 0;
+double purplePos = 0.80;
+struct slRef *el, *nextEl;
+for (el = leafList; el != NULL; el = nextEl)
+   {
+   nextEl = el->next;
+   if (nextEl == NULL)
+       break;
+   struct bigWig *bio1 = el->val;
+   struct bigWig *bio2 = nextEl->val;
+   double distance = slBigWigDistance((struct slList *)bio1, (struct slList *)bio2, NULL);
+   if (distance > longest)
+       longest = distance;
+   total += distance;
+   }
+
+/* Loop through list a second time to generate actual colors. */
+double soFar = 0;
+for (el = leafList; el != NULL; el = nextEl)
+   {
+   nextEl = el->next;
+   if (nextEl == NULL)
+       break;
+   struct bigWig *bio1 = el->val;
+   struct bigWig *bio2 = nextEl->val;
+   double distance = slBigWigDistance((struct slList *)bio1, (struct slList *)bio2, NULL);
+   soFar += distance;
+   double normalized = soFar/total;
+   bio2->color = saturatedRainbowAtPos(normalized * purplePos);
+   }
+
+/* Set first color to correspond to 0, since not set in above loop */
+struct bigWig *bio = leafList->val;
+bio->color = saturatedRainbowAtPos(0);
 }
 
 void bigWigCluster(char *inputList, char* chromSizes, char* output)
@@ -170,10 +232,15 @@ void bigWigCluster(char *inputList, char* chromSizes, char* output)
 struct bigWig *list = getBigWigs(inputList);
 FILE *f = mustOpen(output,"w");
 struct lm *localMem = lmInit(0);
-struct hacTree *clusters = hacTreeFromItems((struct slList *)list, localMem,
-					    slBigWigDistance, slBigWigMerge, NULL, NULL);
+//struct hacTree *clusters = hacTreeFromItems((struct slList *)list, localMem,
+//					    slBigWigDistance, slBigWigMerge,NULL, NULL);
+//struct hacTree *clusters = hacTreeForCostlyMerges((struct slList *)list, localMem,
+//					    slBigWigDistance, slBigWigMerge, NULL);
+struct hacTree *clusters = hacTreeMultiThread(10 ,(struct slList *)list, localMem,
+					    slBigWigDistance, slBigWigMerge, NULL);
+struct slRef *orderedList = getOrderedLeafList(clusters);
+colorLeaves(orderedList);
 printHierarchicalJson(f, clusters, 20, 20);
-
 // some cleanup
 int i;
 for (i = 0 ; i <= nameCount; ++i)
