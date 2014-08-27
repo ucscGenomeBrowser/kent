@@ -327,13 +327,13 @@ for (aNode = list->head; !dlEnd(aNode); aNode = aNode->next)
 return closestDistance;
 }
 
-static void lmDlAddValHead(struct lm *lm, struct dlList *list, void *val)
+static void lmDlAddValTail(struct lm *lm, struct dlList *list, void *val)
 /* Allocate new dlNode out of lm, initialize it with val, and add it to end of list */
 {
 struct dlNode *node;
 lmAllocVar(lm, node);
 node->val = val;
-dlAddHead(list, node);
+dlAddTail(list, node);
 }
 
 struct hacTree *hacTreeVirtualPairing(struct slList *itemList, struct lm *localMem,
@@ -355,7 +355,7 @@ for (item = itemList; item != NULL; item = item->next)
     struct hacTree *ht;
     lmAllocVar(localMem, ht);
     ht->itemOrCluster = item;
-    lmDlAddValHead(localMem, &remaining, ht);
+    lmDlAddValTail(localMem, &remaining, ht);
     count += 1;
     }
 
@@ -363,11 +363,9 @@ for (item = itemList; item != NULL; item = item->next)
 int i;
 for (i=1; i<count; ++i)
     {
-    /* Find closest pair and take them off of remaining list */
+    /* Find closest pair */
     struct dlNode *aNode, *bNode;
     double distance = pairingF(&remaining, distanceHash, distF, extraData, &aNode, &bNode);
-    dlRemove(aNode);
-    dlRemove(bNode);
 
     /* Allocated new hacTree item for them and fill it in with a merged value. */
     struct hacTree *ht;
@@ -378,8 +376,15 @@ for (i=1; i<count; ++i)
     ht->itemOrCluster = mergeF(left->itemOrCluster, right->itemOrCluster, extraData);
     ht->childDistance = distance;
 
-    /* Put merged item onto remaining list. */
-    lmDlAddValHead(localMem, &remaining, ht);
+    /* Put merged item onto remaining list before first matching node in pair. */
+    struct dlNode *mergedNode;
+    lmAllocVar(localMem, mergedNode);
+    mergedNode->val = ht;
+    dlAddBefore(aNode, mergedNode);
+
+    /* Remove nodes we merged out */
+    dlRemove(aNode);
+    dlRemove(bNode);
     }
 
 /* Clean up and go home. */
