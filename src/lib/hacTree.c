@@ -65,7 +65,7 @@ return leafWraps;
 }
 
 INLINE void initNode(struct hacTree *node, const struct hacTree *left, const struct hacTree *right,
-		     hacDistanceFunction *distF, hacMergeFunction *mergeF, void *extraData)
+		     hacDistanceFunction *distF, hacMergeFunction *mergeF, void *extraData, bool distOnly)
 /* Initialize node to have left and right as its children.  Leave parent pointers
  * alone -- they would be unstable during tree construction. */
 {
@@ -73,8 +73,17 @@ node->left = (struct hacTree *)left;
 node->right = (struct hacTree *)right;
 if (left != NULL && right != NULL)
     {
-    node->childDistance = distF(left->itemOrCluster, right->itemOrCluster, extraData);
-    node->itemOrCluster = mergeF(left->itemOrCluster, right->itemOrCluster, extraData);
+    if (distOnly)
+        {
+	struct slList * el;
+	AllocVar(el);
+        node->childDistance = distF(left->itemOrCluster, right->itemOrCluster, extraData);
+        node->itemOrCluster = el;
+        }
+    else {
+        node->childDistance = distF(left->itemOrCluster, right->itemOrCluster, extraData);
+        node->itemOrCluster = mergeF(left->itemOrCluster, right->itemOrCluster, extraData);
+        }
     }
 }
 
@@ -94,11 +103,11 @@ if (runLength > 2)
 				     distF, mergeF, extraData, localMem);
     newClusters[1] = preClusterNodes(leafWraps, i+halfLength, runLength-halfLength,
 				     distF, mergeF, extraData, localMem);
-    initNode(&ret, &(newClusters[0]), &(newClusters[1]), distF, mergeF, extraData);
+    initNode(&ret, &(newClusters[0]), &(newClusters[1]), distF, mergeF, extraData, FALSE);
     }
 else if (runLength == 2)
     {
-    initNode(&ret, leafWraps[i].node, leafWraps[i+1].node, distF, mergeF, extraData);
+    initNode(&ret, leafWraps[i].node, leafWraps[i+1].node, distF, mergeF, extraData, FALSE);
     }
 else
     ret = *(leafWraps[i].node);
@@ -148,14 +157,14 @@ if (cmpF != NULL)
 int pairCount = (itemCount == 1) ? 1 : (itemCount * (itemCount-1) / 2);
 struct hacTree *pairPool = lmAlloc(localMem, pairCount * sizeof(struct hacTree));
 if (itemCount == 1)
-    initNode(pairPool, leafNodes, NULL, distF, mergeF, extraData);
+    initNode(pairPool, leafNodes, NULL, distF, mergeF, extraData, FALSE);
 else
     {
     int i, j, pairIx;
     for (i=0, pairIx=0;  i < itemCount-1;  i++)
 	for (j=i+1;  j < itemCount;  j++, pairIx++)
 	    initNode(&(pairPool[pairIx]), &(leafNodes[i]), &(leafNodes[j]), distF, mergeF,
-		     extraData);
+		     extraData, TRUE);
     }
 *retPairCount = pairCount;
 return pairPool;
@@ -232,6 +241,7 @@ while (poolLength > 0)
 	swapBytes((char *)&(poolHead[0]), (char *)&(poolHead[bestIx]), sizeof(struct hacTree));
     // Pop the best (lowest-distance) node from poolHead, make it root (for now).
     root = poolHead;
+    root->itemOrCluster = mergeF(root->left->itemOrCluster, root->right->itemOrCluster, extraData);
     poolHead = &(poolHead[1]);
     poolLength--;
     // Where root->left is found in the pool, replace it with root.
@@ -243,10 +253,10 @@ while (poolLength > 0)
 	struct hacTree *node = &(poolHead[i]);
 	if (node->left == root->left)
 	    // found root->left; replace node->left with root (merge root with node->right):
-	    initNode(node, root, node->right, distF, mergeF, extraData);
+	    initNode(node, root, node->right, distF, mergeF, extraData, FALSE);
 	else if (node->right == root->left)
 	    // found root->left; replace node->right with root (merge root with node->left):
-	    initNode(node, node->left, root, distF, mergeF, extraData);
+	    initNode(node, node->left, root, distF, mergeF, extraData, FALSE);
 	else if (node->left == root->right || node->right == root->right)
 	    // found root->right; mark this node for deletion:
 	    nodesToDelete[numNodesToDelete++] = i;

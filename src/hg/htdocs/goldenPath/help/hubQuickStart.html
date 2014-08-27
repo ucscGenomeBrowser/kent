@@ -1,42 +1,31 @@
-<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN" 
-"http://www.w3.org/TR/html4/loose.dtd"><html>
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN"
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html;CHARSET=iso-8859-1">
 <title>Quick Start Guide to Track Hubs</title>
-<link rel="STYLESHEET" href="../../style/HGStyle.css">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="/style/HGStyle.css">
 </head>
+<body class="oldStaticPage">
+<div class="header">
+<img src="../../images/title.jpg" alt="UCSC Genome Bioinformatics">
+</div><!-- .header -->
+<div class="nav">
+<!--#include virtual="../../inc/topbar.html"-->
+</div><!-- .nav -->
 
-<body bgcolor="FFF9D2" link="#0000CC" vlink="#330066" alink="#330066">
-<a name="TOP"></a>
-
-<table border=0 cellpadding=0 cellspacing=0 width="100%">
-<tr><th colspan=2 align="left"><img src="../../images/title.jpg" alt="title"></th></tr>
-
-<TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../../inc/topbar.html"--></TD></TR>
-<!-- ========== content tables ================================ -->  
-<!--
-<td cellpadding=10 rowspan=2 valign="top">
--->
-<tr><td rowspan=2 valign="top">	
-<!--outer table is for border purposes-->
-<table width="100%" bgcolor="#888888" border="0" cellspacing="0" cellpadding="1">
-<tr><td>	
-<table bgcolor="#fffee8" width="100%"  border="0" cellspacing="0" cellpadding="0">
-<tr><td>	
-<table bgcolor="#d9e4f8" width="100%">
-<tr><td>
-<font size="4"><b>&nbsp;Hubs Quick Start Guide</b></font> 
-</td></tr>
-</table>
-<table bgcolor="#fffee8" width="100%" cellpadding=0>
-<tr> <td colspan="3">
-<ul>
+<div class="content"> <!-- start of page content -->
+<div class="section">
+<h1>&nbsp;Hubs Quick Start Guide</h1> 
+<div class="sectionContent">
+<p>
 Hubs are a method of displaying remote custom tracks quickly
 (binary indexed bigBed, bigWig, BAM or VCF formats),
 while providing more persistence and flexibility than normal
 custom tracks for any UCSC assembly (or remotely-hosted assembly in twoBit format).
+</p>
 <p>
-<p>
+<ul>
 <b>STEP 1:</b> In a publicly-accessible directory, copy the hub.txt, genomes.txt,
 trackDb.txt files using the following commands:<br>
 <tt>curl -O http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt<br>
@@ -45,7 +34,6 @@ mkdir hg19<br>
 cd hg19<br>
 curl -O http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hg19/trackDb.txt<br>
 </tt>
-
 <p>
 If you do not have curl, you can alternatively use a text editor and
 directly recreate the above three files.
@@ -72,16 +60,15 @@ displays:<br>
 <tt>curl -I http://yourURL/hub.txt</tt>
 </p>
 </ul>
-</td>
-</tr>
-<tr><th height=10></th></tr>
-<tr><td width=10>&nbsp;</td><td> 
 <b><font color="#006666" size=4>The Three Parts of a Hub</font></b>
 <ul>
 <li><b><a href="#hub.txt">Understanding hub.txt</a></b>
 <li><b><a href="#genomes.txt">Understanding genomes.txt</a></b>
 <li><b><a href="#trackDb.txt">Understanding trackDb.txt</a></b>
 <br>
+<a href="../help/examples/hubDirectory"><img src ="../../images/hubDirectoryImage.jpg"
+alt="Example Hub Directory" height="150"></a><br>
+<a href="../help/examples/hubDirectory"><em><font size=-2>Example Hub Directory</em></font></a>
 <p>
 Now that you have a working hub copied from above, you can edit
 the three main text documents to get an idea of how they work,
@@ -117,10 +104,10 @@ target="_blank">Debugging and Updating Track Hubs</a> section of the
 section of the Track Hub User Guide.</b>
 </ul>
 <!---- ======== going to add this section========----
-<b><font color="#006666" size=4> Advanced Examples: </font></b>
+<b><font color="#006666" size=4> Advanced Quick Start Examples: </font></b>
 <ul>
-<li><b><a href="#multiWig">Create an Overlayed Transparent Track</a></b>
-<li><b><a href="#assembly">Create an Assembly Hub</a></b>
+<li><b><a href="#multiWigPage">Quick Start Overlayed Transparent MultiWig Hub</a></b>
+<li><b><a href="#assemblyPage">Quick Start Assembly Hub</a></b>
 </ul>
 -------->
 <b><font color="#006666" size=4> Resources: </font></b>
@@ -133,38 +120,15 @@ target="_blank">Assembly Hubs Wiki</a></b>
 <li><b><a href="http://genomewiki.ucsc.edu/index.php/Public_Hub_Guidelines"
 target="_blank">Public Hub Guidelines Wiki</a></b>
 </ul>
-<!-- This unusual setup puts the graphic to the right of the discussion text-->
-<td>
-<a href="../help/examples/hubDirectory"><img src ="../../images/hubDirectoryImage.jpg"
-alt="Example Hub Directory" height="150"></a><br>
-<a href="../help/examples/hubDirectory"><em><font size=-2>Example Hub Directory</em></font></a>
-</td>
-</td>
-<td width=15></td>
-</tr>
-</table>
-<br></td></tr>
-</table>
-</td></tr>
-</table>
+</div> <!-- end sectionContent-->
+</div> <!-- end section-->
 
 <!-- ========== hub.txt ============================== -->
+
 <a name="hub.txt"></a><br>
-
-<!--outer table is for border purposes-->
-<table width="100%" bgcolor="#888888" border="0" cellspacing="0" cellpadding="1">
-<tr><td>	
-<table bgcolor="#fffee8" width="100%"  border="0" cellspacing="0" cellpadding="0">
-<tr><td>	
-<table bgcolor="#d9e4f8" background="../../images/hr.gif" width="100%">
-<tr><td><font size="4"><a name="toc"></a><b>&nbsp;Understanding hub.txt</b></font>
-</td></tr>
-</table>
-<table bgcolor="#fffee8" width="100%" cellpadding=0>
-<tr><th height=10></th></tr>
-<tr><td width=10>&nbsp;</td><td>
-<p>
-
+<div class="section">
+<h1>&nbsp;Understanding hub.txt</h1>
+<div class="sectionContent">
 <blockquote><tt>
 <b>hub</b> <em>MyHubsNameWithoutSpaces</em> <br>
 <b>shortLabel</b> <em>My Hub's Name</em><br>
@@ -182,33 +146,15 @@ outlined in the trackDb.txt. The optional <tt><b>descriptionUrl</b></tt> field a
 add a HTML page describing your hub. See a basic <a href="../help/examples/hubDirectory/hub.txt"
 target="_blank">example hub.txt</a>.
 </p>
-</td>
-<td width=15></td>
-</tr>
-</table>
-<br></td></tr>
-</table>
-</td></tr>
-</table>
+</div> <!--- sectionContent -->
+</div> <!--- section-->
 
 <!-- ========== genomes.txt ============================== -->
 
 <a name="genomes.txt"></a><br>
-
-<!--outer table is for border purposes-->
-<table width="100%" bgcolor="#888888" border="0" cellspacing="0" cellpadding="1">
-<tr><td>
-<table bgcolor="#fffee8" width="100%"  border="0" cellspacing="0" cellpadding="0">
-<tr><td>
-<table bgcolor="#d9e4f8" background="../../images/hr.gif" width="100%">
-<tr><td><font size="4"><a name="toc"></a><b>&nbsp;Understanding genomes.txt</b></font>
-</td></tr>
-</table>
-<table bgcolor="#fffee8" width="100%" cellpadding=0>
-<tr><th height=10></th></tr>
-<tr><td width=10>&nbsp;</td><td>
-<p>
-
+<div class="section">
+<h1>&nbsp;Understanding genomes.txt</h1>
+<div class="sectionContent">
 <blockquote><tt>
 <b>genome</b> <em>assembly_database_1</em><br>
 <b>trackDb</b> <em>assembly_1_path/trackDb.txt</em><br>
@@ -216,7 +162,7 @@ target="_blank">example hub.txt</a>.
 <b>genome</b> <em>assembly_database_2</em><br>
 <b>trackDb</b> <em>assembly_2_path/trackDb.txt</em><br>
 </tt></blockquote>
-
+<p>
 The genomes.txt text file can be as short as a two-line stanza when using only
 one UCSC assembly (e.g., <tt><b>genome</b> <em>panTro4</em></tt> and <tt>
 <b>trackDb</b> <em>panTro4/trackDb.txt</em></tt>).  The <tt><b>genome</b></tt>
@@ -226,31 +172,15 @@ which will outline all of the assembly's tracks. See a basic
 <a href="../help/examples/hubDirectory/genomes.txt"
 target="_blank">example genomes.txt</a>.
 </p>
-</td>
-<td width=15></td>
-</tr>
-</table>
-<br></td></tr>
-</table>
-</td></tr>
-</table>
+</div> <!--- sectionContent --->
+</div> <!--- section -->
 
 <!-- ==========trackDb.txt ==================== -->
-<a name="trackDb.txt"></a><br>
 
-<!--outer table is for border purposes-->
-<table width="100%" bgcolor="#888888" border="0" cellspacing="0" cellpadding="1">
-<tr><td>	
-<table bgcolor="#fffee8" width="100%"  border="0" cellspacing="0" cellpadding="0">
-<tr><td>	
-<table bgcolor="#d9e4f8" background="../../images/hr.gif" width="100%">
-<tr><td><font size="4"><a
-name="toc"></a><b>&nbsp;Understanding trackDb.txt</b></font>
-</td></tr>
-</table>
-<table bgcolor="#fffee8" width="100%" cellpadding=0>
-<tr><th height=10></th></tr>
-<tr><td width=10>&nbsp;</td><td>
+<a name="trackDb.txt"></a><br>
+<div class="section">
+<h1>&nbsp;Understanding trackDb.txt</h1>
+<div class="sectionContent">
 <p>
 <blockquote><tt>
 <b>track</b> <em>uniqueNameNoSpacesOrDots</em><br>
@@ -260,6 +190,7 @@ name="toc"></a><b>&nbsp;Understanding trackDb.txt</b></font>
 <b>longLabel</b> <em>long label up to 80 chars</em><br>
 </tt></blockquote>
 </p>
+<p>
 The trackDb.txt file uses stanzas for each track to inform
 the Browser of the name, type, location, and description
 of each binary file to display. The <a href="trackDb/trackDbHub.html"
@@ -284,48 +215,8 @@ superTracks and multiWigs.
 See a basic <a href="../help/examples/hubDirectory/hg19/trackDb.txt"
 target="_blank">example trackDb.txt</a>.
 </p>
+</div> <!--- sectionContent -->
+</div> <!--- section --->
 
-</td>
-<td width=15></td>
-</tr>
-</table>
-<br></td></tr>
-</table>
-</td></tr>
-</table>
-
-
-<!-- ==========Advanced Example ============================== -->
-<a name="multiWig"></a><br>
-<!--outer table is for border purposes-->
-
-<!--removing until ready to add
-<table width="100%" bgcolor="#888888" border="0" cellspacing="0" cellpadding="1">
-<tr><td>	
-<table bgcolor="#fffee8" width="100%"  border="0" cellspacing="0" cellpadding="0">
-<tr><td>	
-<table bgcolor="#d9e4f8" background="../../images/hr.gif" width="100%">
-<tr><td><font size="4"><a
-name="toc"></a><b>&nbsp;Composite, Supertrack, MultiWig Hub Example</b></font>
-</td></tr>
-</table>
-<table bgcolor="#fffee8" width="100%" cellpadding=0>
-<tr><th height=10></th></tr>
-<tr><td width=10>&nbsp;</td><td>
-<p>
-STEPS to come to curl a multiWig example
-</p>
-</td>
-<td width=15></td>
-</tr>
-</table>
-<br></td></tr>
-</table>
-</td></tr>
-</table>
---->
-
-</td></tr>
-</table>
-
+</div> <!--  end content-->
 </body></html>
