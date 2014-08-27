@@ -1,0 +1,263 @@
+##
+# WARNING: 
+#  - Must update hgTracks/gencodeTracks.c to add calls to
+#    registerTrackHandler for new gencode versions.
+#  - Must ensure attrs.transcriptType matches current transcriptTypes.
+##
+track wgEncodeGencodeVM3
+compositeTrack on
+superTrack wgEncodeGencodeSuper pack
+shortLabel GENCODE VM3 (Ensembl 76)
+longLabel Gene Annotations from ENCODE/GENCODE Version M3 (Ensembl 76)
+group genes
+dragAndDrop subTracks
+priority 34.997
+visibility hide
+subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA
+subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA
+allButtonPair on
+sortOrder name=+ view=+
+fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
+type genePred 
+configurable off
+wgEncodeGencodeVersion M3
+wgEncodeGencodeAttrs wgEncodeGencodeAttrsVM3
+wgEncodeGencodeExonSupport wgEncodeGencodeExonSupportVM3
+wgEncodeGencodeGeneSource wgEncodeGencodeGeneSourceVM3
+wgEncodeGencodeTranscriptSource wgEncodeGencodeTranscriptSourceVM3
+wgEncodeGencodePdb wgEncodeGencodePdbVM3
+wgEncodeGencodePubMed wgEncodeGencodePubMedVM3
+wgEncodeGencodeRefSeq wgEncodeGencodeRefSeqVM3
+wgEncodeGencodeTag wgEncodeGencodeTagVM3
+wgEncodeGencodeTranscriptSupport wgEncodeGencodeTranscriptSupportVM3
+wgEncodeGencodeUniProt wgEncodeGencodeUniProtVM3
+wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureVM3
+wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkVM3
+wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelVM3
+
+    track wgEncodeGencodeVM3ViewGenes
+    shortLabel Genes
+    view aGenes
+    configurable on
+    visibility pack
+    subTrack wgEncodeGencodeVM3
+    type genePred
+    itemClassTbl wgEncodeGencodeAttrsVM3
+    itemClassNameColumn transcriptId
+    itemClassClassColumn transcriptClass
+    cdsDrawDefault genomic\ codons
+    baseColorUseCds given
+    baseColorDefault genomicCodons
+    geneClasses coding nonCoding pseudo problem
+    gClass_coding 12,12,120
+    gClass_nonCoding 0,153,0
+    gClass_pseudo 255,51,255
+    gClass_problem 254,0,0
+    highlightColor 255,255,0
+    # filterBy notes:
+    #  - attrs is an alias for the current wgEncodeGencodeAttrs in the sql
+    #  - transcriptMethod is a pseudo-column name, which is handled explictly in the code
+    #  - attrs.transcriptType must be updated as biotypes change.  This will get the current list of values:
+    #    hgsql -Ne 'select distinct(transcriptType) from wgEncodeGencodeAttrsV?? order by transcriptType' mm10 | tr '\n' ','
+    #  - supportLevel is a pseudo-column name handled in the code
+    filterBy attrs.transcriptClass:Transcript_Class=coding,nonCoding,pseudo,problem \
+             transcriptMethod:Transcript_Annotation_Method=manual,automatic,manual_only,automatic_only \
+             attrs.transcriptType:Transcript_Biotype=3prime_overlapping_ncrna,antisense,IG_C_gene,IG_D_gene,IG_J_gene,IG_LV_gene,IG_V_gene,IG_V_pseudogene,lincRNA,miRNA,misc_RNA,Mt_rRNA,Mt_tRNA,nonsense_mediated_decay,non_stop_decay,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,retained_intron,rRNA,sense_intronic,sense_overlapping,snoRNA,snRNA,transcribed_processed_pseudogene,transcribed_unprocessed_pseudogene,translated_processed_pseudogene,translated_unprocessed_pseudogene,TR_V_gene,TR_V_pseudogene,unitary_pseudogene,unprocessed_pseudogene \
+             supportLevel:Support_Level=tsl1,tsl2,tsl3,tsl4,tsl5,tslNA
+    highlightBy supportLevel:Support_Level=tsl1,tsl2,tsl3,tsl4,tsl5,tslNA \
+                attrs.transcriptType:Transcript_Biotype=3prime_overlapping_ncrna,antisense,IG_C_gene,IG_D_gene,IG_J_gene,IG_LV_gene,IG_V_gene,IG_V_pseudogene,lincRNA,miRNA,misc_RNA,Mt_rRNA,Mt_tRNA,nonsense_mediated_decay,non_stop_decay,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,retained_intron,rRNA,sense_intronic,sense_overlapping,snoRNA,snRNA,transcribed_processed_pseudogene,transcribed_unprocessed_pseudogene,translated_processed_pseudogene,translated_unprocessed_pseudogene,TR_V_gene,TR_V_pseudogene,unitary_pseudogene,unprocessed_pseudogene
+    
+        track wgEncodeGencodeBasicVM3
+        subTrack wgEncodeGencodeVM3ViewGenes on
+        shortLabel Basic
+        subGroups view=aGenes name=Basic
+        longLabel Basic Gene Annotation Set from ENCODE/GENCODE Version M3 (Ensembl 76)
+        type genePred
+        priority 1
+    
+        track wgEncodeGencodeCompVM3
+        subTrack wgEncodeGencodeVM3ViewGenes off
+        subGroups view=aGenes name=Comprehensive
+        shortLabel Comprehensive
+        longLabel Comprehensive Gene Annotation Set from ENCODE/GENCODE Version M3 (Ensembl 76)
+        type genePred
+        priority 2
+    
+        track wgEncodeGencodePseudoGeneVM3
+        subTrack wgEncodeGencodeVM3ViewGenes on
+        subGroups view=aGenes name=Pseudogenes 
+        shortLabel Pseudogenes
+        longLabel Pseudogene Annotation Set from ENCODE/GENCODE Version M3 (Ensembl 76)
+        type genePred
+        color 255,51,255
+        priority 3
+    
+    track wgEncodeGencodeVM3View2Way 
+    shortLabel 2-Way
+    view 42-Way 
+    visibility hide
+    subTrack wgEncodeGencodeVM3
+    type genePred
+    configurable off
+
+        track wgEncodeGencode2wayConsPseudoVM3
+        subTrack wgEncodeGencodeVM3View2Way off
+        subGroups view=b2-way name=yTwo-way
+        shortLabel 2-way Pseudogenes
+        longLabel 2-way Pseudogene Annotation Set from ENCODE/GENCODE Version M3 (Ensembl 76)
+        type genePred
+        color 255,51,255
+        priority 4
+    
+    track wgEncodeGencodeVM3ViewPolya
+    shortLabel PolyA
+    view cPolya
+    visibility hide
+    subTrack wgEncodeGencodeVM3
+    type genePred
+    configurable off
+
+        track wgEncodeGencodePolyaVM3
+        subTrack wgEncodeGencodeVM3ViewPolya off
+        subGroups view=cPolya name=zPolyA
+        shortLabel PolyA
+        longLabel PolyA Transcript Annotation Set from ENCODE/GENCODE Version M3 (Ensembl 76)
+        type genePred
+        color 0,0,0
+        priority 5
+    
+# searchs for basic
+searchName wgEncodeGencodeBasicVM3
+searchTable wgEncodeGencodeBasicVM3
+searchMethod prefix
+searchType genePred
+termRegex ENSMUST[0-9.]+
+searchPriority 2.27701
+
+searchName wgEncodeGencodeBasicGeneSymVM3
+searchTable wgEncodeGencodeBasicVM3
+searchMethod exact
+searchType genePred
+searchPriority 2.27702
+query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
+
+searchName wgEncodeGencodeBasicGeneVM3
+searchTable wgEncodeGencodeBasicVM3
+searchMethod prefix
+searchType genePred
+termRegex ENSMUSG[0-9.]+
+searchPriority 2.27703
+xrefTable wgEncodeGencodeAttrsVM3
+xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
+
+searchName wgEncodeGencodeBasicHavanaTranscriptVM3
+searchTable wgEncodeGencodeBasicVM3
+searchMethod prefix
+searchType genePred
+termRegex OTTMUST[0-9.]+
+searchPriority 2.27704
+xrefTable wgEncodeGencodeAttrsVM3
+xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
+
+searchName wgEncodeGencodeBasicHavanaGeneVM3
+searchTable wgEncodeGencodeBasicVM3
+searchMethod prefix
+searchType genePred
+termRegex OTTMUSG[0-9.]+
+searchPriority 2.27705
+xrefTable wgEncodeGencodeAttrsVM3
+xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
+
+# searchs for comp
+searchName wgEncodeGencodeCompVM3
+searchTable wgEncodeGencodeCompVM3
+searchMethod prefix
+searchType genePred
+termRegex ENSMUST[0-9.]+
+searchPriority 2.27706
+
+searchName wgEncodeGencodeCompGeneSymVM3
+searchTable wgEncodeGencodeCompVM3
+searchMethod exact
+searchType genePred
+searchPriority 2.27707
+query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
+
+searchName wgEncodeGencodeCompGeneVM3
+searchTable wgEncodeGencodeCompVM3
+searchMethod prefix
+searchType genePred
+termRegex ENSMUSG[0-9.]+
+searchPriority 2.27708
+xrefTable wgEncodeGencodeAttrsVM3
+xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
+
+searchName wgEncodeGencodeCompHavanaTranscriptVM3
+searchTable wgEncodeGencodeCompVM3
+searchMethod prefix
+searchType genePred
+termRegex OTTMUST[0-9.]+
+searchPriority 2.27709
+xrefTable wgEncodeGencodeAttrsVM3
+xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
+
+searchName wgEncodeGencodeCompHavanaGeneVM3
+searchTable wgEncodeGencodeCompVM3
+searchMethod prefix
+searchType genePred
+termRegex OTTMUSG[0-9.]+
+searchPriority 2.27710
+xrefTable wgEncodeGencodeAttrsVM3
+xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
+
+# searchs for pseudogene
+searchName wgEncodeGencodePseudoGeneVM3
+searchTable wgEncodeGencodePseudoGeneVM3
+searchMethod prefix
+searchType genePred
+termRegex ENSMUST[0-9.]+
+searchPriority 2.27711
+
+searchName wgEncodeGencodePseudoGeneGeneSymVM3
+searchTable wgEncodeGencodePseudoGeneVM3
+searchMethod exact
+searchType genePred
+searchPriority 2.27712
+query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
+
+searchName wgEncodeGencodePseudoGeneGeneVM3
+searchTable wgEncodeGencodePseudoGeneVM3
+searchMethod prefix
+searchType genePred
+termRegex ENSMUSG[0-9.]+
+searchPriority 2.27713
+xrefTable wgEncodeGencodeAttrsVM3
+xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
+
+searchName wgEncodeGencodePseudoGeneHavanaTranscriptVM3
+searchTable wgEncodeGencodePseudoGeneVM3
+searchMethod prefix
+searchType genePred
+termRegex OTTMUST[0-9.]+
+searchPriority 2.27714
+xrefTable wgEncodeGencodeAttrsVM3
+xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
+
+searchName wgEncodeGencodePseudoGeneHavanaGeneVM3
+searchTable wgEncodeGencodePseudoGeneVM3
+searchMethod prefix
+searchType genePred
+termRegex OTTMUSG[0-9.]+
+searchPriority 2.27715
+xrefTable wgEncodeGencodeAttrsVM3
+xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
+
+# searchs for 2-way consensus
+searchName wgEncodeGencode2wayConsPseudoVM3
+searchTable wgEncodeGencode2wayConsPseudoVM3
+searchMethod exact
+searchType genePred
+termRegex PGOMOU[0-9.]+
+searchPriority 2.27716
+
+
