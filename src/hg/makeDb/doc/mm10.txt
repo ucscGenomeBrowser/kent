@@ -10223,7 +10223,346 @@ TMPDIR=/scratch/tmp
     #    2243474717 bases of 2730871774 (82.152%) in intersection
 
 ##############################################################################
-2014-08-17: import of UCSC GENCODE group processing of GENCODE VM3 (markd)
+# cloneEnds (DONE - 2014-08-11 - Steve)
+
+    mkdir /hive/data/genomes/mm10/bed/cloneEnds
+    cd /hive/data/genomes/mm10/bed/cloneEnds
+
+    # fetch the NCBI INSDC name correspondence file:
+    rsync -a -P rsync://ftp.ncbi.nlm.nih.gov/genomes/ASSEMBLY_REPORTS/All/GCF_000001635.23.assembly.txt ./
+
+    # fetch the clone reports
+    mkdir reports
+    rsync -a -P \
+rsync://ftp.ncbi.nih.gov/repository/clone/reports/Mus_musculus/*.GCF_000001635.22.103.*.gff \
+       ./reports/
+
+    # script to establish refSeq to UCSC chrom names:
+
+    cat << '_EOF_' > refSeqNames.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "<GCF_000001635.23.assembly.txt") or die "can not read GCF_000001635.23.assembly.txt";
+while (my $line = <FH>) {
+  chomp $line;
+  next if ($line =~ m/^#/);
+  my @a = split('\t', $line);
+  my $chrN = $a[2];
+  my $refSeq = $a[6];
+  my $contig = $a[4];
+  my $type = $a[1];
+  next if (!defined $type);
+  next if (!defined $refSeq);
+  next if (!defined $contig);
+  my $suffix = "";
+  if ($type eq "alt-scaffold") {
+     $suffix = "_alt";
+  } elsif ($type eq "unlocalized-scaffold") {
+     $suffix = "_random";
+  } elsif ($type eq "unplaced-scaffold") {
+     $chrN = "Un";
+  }
+  $chrN = "M" if ($chrN eq "MT");
+  if ($a[0] =~ m/_/) {
+    $contig =~ s/\.[0-9]//;
+    printf "%s\tchr%s_%s%s\n", $refSeq, $chrN, $contig, $suffix;
+  } else {
+    printf "%s\tchr%s\n", $refSeq, $chrN;
+  }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+
+    chmod +x refSeqNames.pl
+
+    ./refSeqNames.pl > refSeq.ucscName.tab
+
+    # establish full library list:
+    ls reports/*.GCF_000001635.22.103.*.gff | sed -e 's#reports/##' \
+       | cut -d"." -f1 | sort -u > library.list.txt
+
+    # a script to scan the GFF files, with the refSeq.ucscName.tab
+    # name correspondence to construct bed files
+
+    cat << '_EOF_' > mm10.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $argc = scalar(@ARGV);
+
+if ($argc < 1) {
+  printf STDERR "usage: ./mm10.pl <report.gff> [moreReports.gff]\n";
+  exit 255;
+}
+
+my %refSeqToUcsc;   # key is refSeq name, value is UCSC chrom name
+open (FH, "<refSeq.ucscName.tab") or die "can not read refSeq.ucscName.tab";
+while (my $line = <FH>) {
+  chomp $line;
+  my ($refSeq, $ucsc) = split('\t', $line);
+  $refSeqToUcsc{$refSeq} = $ucsc;
+}
+close (FH);
+
+my %chromSizes;    # key is UCSC chrom name, key is chrom size
+open (FH, "</hive/data/genomes/mm10/chrom.sizes") or die "can not read mm10/chrom.sizes";
+while (my $line = <FH>) {
+  chomp $line;
+  my ($chr, $size) = split('\t', $line);
+  $chromSizes{$chr} = $size;
+}
+close (FH);
+
+while (my $file = shift) {
+my %starts;   # key is parent ID, value is start end coordinates start,end
+my %ends;	# key is parent ID, value is end end coordinates start,end
+my %parents;	# key is parent ID, value is 1 to signify exists
+my %endNames;   # key is parent ID, value is the Name of the parent clone_insert
+
+printf STDERR "# processing $file\n";
+
+open (FH, "<$file") or die "can not read $file";
+while (my $line = <FH>) {
+  chomp $line;
+  next if ($line=~ m/^#/);
+  my @a = split('\t', $line);
+  next if (scalar(@a) < 1);
+  my $contig = $a[0];
+  $contig =~ s/ref.//;
+  $contig =~ s/\|//;
+  my $ucscChr = $refSeqToUcsc{$contig};
+  if (!defined($ucscChr)) {
+    printf STDERR "# ERR: contig not in refSeqToUcsc: '$contig'\n";
+    next;
+  }
+  next if (! exists($chromSizes{$ucscChr}));
+  my $chromSize = $chromSizes{$ucscChr};
+  my $chromStart = $a[3] - 1;
+  my $chromEnd = $a[4];
+  if ($chromStart > $chromSize) {
+    printf STDERR "# warning chromStart over size $ucscChr $chromStart $chromEnd\n";
+    $chromStart = $chromSize-1;
+  }
+  if ($chromEnd > $chromSize) {
+    my $overRun = $chromEnd - $chromSize;
+    printf STDERR "# warning chromEnd over size by $overRun -> $ucscChr $chromStart $chromEnd\n";
+    $chromEnd = $chromSize;
+  }
+  my $id="notFound";
+  my $name="notFound";
+  my $parent="notFound";
+  my @b = split(';', $a[8]);
+  for (my $i = 0; $i < scalar(@b); ++$i) {
+     my ($tag, $value) = split('=', $b[$i]);
+     if ($tag eq "ID") {
+        $id = $value;
+        if ($id !~ m/-/) {
+          if (exists($parents{$id})) {
+            printf STDERR "# WARN: duplicate parent: $id";
+          } else {
+            $parents{$id} = $ucscChr;
+          }
+        }
+     } elsif ($tag eq "Parent") {
+        $parent = $value;
+     } elsif ($tag eq "Name") {
+        $name = $value;
+     }
+  }
+  my $type="notFound";
+  my $insertType = $a[2];
+  if ($insertType =~ m/clone_insert_start/) {
+     $type = "start";
+     if ($parent eq "notFound") {
+       printf STDERR "# ERR: can not find parent for start $name Ttype $id\n";
+     } else {
+       if (!exists($parents{$parent})) {
+         printf STDERR "# ERR: start found $name  with no parent $parent declared\n";
+       } elsif (exists($starts{$parent})) {
+         printf STDERR "# ERR: duplicate start for $parent\n";
+       } elsif ($ucscChr eq $parents{$parent}) {
+         $starts{$parent} = sprintf("%s\t%s", $chromStart, $chromEnd);
+       } else {
+         printf STDERR "# ERR: start on different chrom $ucscChr than parent $parent $parents{$parent}\n";
+       }
+     }
+  } elsif ($insertType =~ m/clone_insert_end/) {
+     $type = "end";
+     if ($parent eq "notFound") {
+       printf STDERR "# ERR: can not find parent for end $name Ttype $id\n";
+     } else {
+       if (!exists($parents{$parent})) {
+         printf STDERR "# ERR: end found $name  with no parent $parent declared\n";
+       } elsif (exists($ends{$parent})) {
+         printf STDERR "# ERR: duplicate end for $parent\n";
+       } elsif ($ucscChr eq $parents{$parent}) {
+         $ends{$parent} = sprintf("%s\t%s", $chromStart, $chromEnd);
+       } else {
+         printf STDERR "# ERR: end on different chrom $ucscChr than parent $parent $parents{$parent}\n";
+       }
+     }
+  } elsif ($insertType =~ m/clone_insert/) {
+     $type = "insert";
+     $endNames{$id} = $name;
+  }
+  $name =~ s/gi\|//g;
+  $id =~ s/gi\|//g;
+  printf STDERR "%s\t%d\t%d\t%s_%s_%s\t0\t%s\n", $ucscChr, $chromStart, $chromEnd, $name, $type, $id, $a[6];
+}       # while (my $line = <FH>)
+
+close (FH);
+
+foreach my $parent (keys %parents) {
+  if (! exists($starts{$parent}) ) {
+    printf STDERR "# ERR: no start for $parent\n";
+  } elsif (! exists($ends{$parent}) ) {
+    printf STDERR "# ERR: no end for $parent\n";
+  } else {
+    my $strand = "+";
+    my $chrStart = 0;
+    my $chrEnd = 0;
+    my $blockStart = 0;
+    my ($sStart, $sEnd) = split('\t', $starts{$parent});
+    my ($eStart, $eEnd) = split('\t', $ends{$parent});
+    my $startSize = $sEnd - $sStart;
+    my $endSize = $eEnd - $eStart;
+    if ($eStart < $sStart) {
+      $chrStart = $eStart;
+      $chrEnd = $sEnd;
+      $blockStart = $sStart - $chrStart;
+      $strand = "-";
+      $startSize = $eEnd - $eStart;
+      $endSize = $sEnd - $sStart;
+    } else {
+      $chrStart = $sStart;
+      $chrEnd = $eEnd;
+      $blockStart = $eStart - $chrStart;
+    }
+    if ($startSize > $blockStart) {
+      printf STDERR "# startSize > blockStart $endNames{$parent}\n";
+    } else {
+      printf "%s\t%d\t%d\t%s\t0\t%s\t%d\t%d\t0\t2\t%d,%d\t0,%d\n", $parents{$parent}, $chrStart, $chrEnd, $endNames{$parent}, $strand, $chrStart, $chrEnd, $startSize, $endSize, $blockStart;
+    }
+  }
+}
+
+}
+'_EOF_'
+    # << happy emacs
+
+    chmod +x mm10.pl
+
+    # process GFF files into bed files into separateLibs/ directory
+for L in `cat library.list.txt`
+do
+   export db="`pwd -P | awk -F'/' '{print $5}'`"
+   export destDir="separateLibs/${L}"
+   echo "working: ${L}"
+   mkdir -p "${destDir}"
+   ./${db}.pl reports/${L}.GCF_000001635.22.103.*.gff \
+       2> ${destDir}/tmp.bed6 | sort -k1,1 -k2,2n > ${destDir}/${db}.${L}.bed
+   sort -k1,1 -k2,2n ${destDir}/tmp.bed6 > ${destDir}/${db}.${L}.items.bed6
+done
+
+    # use only those libraries with more than 20,000 clone ends
+    wc -l separateLibs/*/*.bed | sort -n | grep -v total | awk '$1 > 20000' \
+        | sed -e 's#.*separateLibs/##; s#/.*##' > libs.over20K.list
+
+    # note those libraries with less than 20,000 clone ends
+    wc -l separateLibs/*/*.bed | grep -v total | awk '$1 < 20000' | sed -e 's#.*separateLibs/##; s#/.*##' > libs.under20K.list
+
+    # filter out bad ends, length must be <= median size times three
+cat lis.over20K.list | while read L
+do
+   if [ ! -s separateLibs/${L}/lengths.txt ]; then
+      awk '{print $3-$2}' separateLibs/${L}/mm10.${L}.bed > separateLibs/${L}/lengths.txt
+   fi
+   median3X=`ave separateLibs/${L}/lengths.txt | grep median | awk '{printf "%d", $2*3}'`
+   awk '($3-$2) < '$median3X'' separateLibs/${L}/mm10.${L}.bed > separateLibs/${L}/mm10.median3X.bed
+   awk '($3-$2) >= '$median3X'' separateLibs/${L}/mm10.${L}.bed > separateLibs/${L}/mm10.badMap.bed
+   before=`cat separateLibs/${L}/mm10.${L}.bed | wc -l`
+   after=`cat separateLibs/${L}/mm10.median3X.bed | wc -l`
+   dropped=`echo $before $after | awk '{print $1-$2}'`
+   perCent=`echo $dropped $before | awk '{printf "%.2f", 100*'$dropped/$before'}'`
+   echo "$L $before - $after = $dropped -> % $perCent dropped"
+done
+
+# B6Ng01 96548 - 95837 = 711 -> % 0.74 dropped
+# C3H 42705 - 42378 = 327 -> % 0.77 dropped
+# CH29 51200 - 50621 = 579 -> % 1.13 dropped
+# DN 101826 - 100472 = 1354 -> % 1.33 dropped
+# MHPN 59859 - 58582 = 1277 -> % 2.13 dropped
+# MHPP 29074 - 28550 = 524 -> % 1.80 dropped
+# MSMg01 81802 - 78772 = 3030 -> % 3.70 dropped
+# RP23 83424 - 83062 = 362 -> % 0.43 dropped
+# RP24 51112 - 50849 = 263 -> % 0.51 dropped
+# WI1 326662 - 324259 = 2403 -> % 0.74 dropped
+# bMQ 73519 - 72540 = 979 -> % 1.33 dropped
+
+   # loading the median3X files
+mkdir -p filteredEnds
+for L in `cat libs.over20K.list`
+do
+    echo $L 1>&2
+    hgLoadBed -type=bed12 mm10 cloneEnd_${L} \
+       separateLibs/${L}/mm10.median3X.bed \
+        > filteredEnds/loadBed.${L}.log 2>&1
+done
+
+    # construct multiple mapped ends:
+cat separateLibs/*/mm10.median3X.bed | cut -f4 | sort | uniq -c | sort -rn > allEnds.names.count.txt
+
+awk '$1 > 1' allEnds.names.count.txt | awk '{print $2}' | sort > multiples.names.txt
+
+cat separateLibs/*/mm10.median3X.bed | sort -k4 > allEnds.nameSorted.bed
+join -t'        ' -o "2.1,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12" -2 4 multiples.names.txt allEnds.nameSorted.bed | sort -k1,1 -k2,2n > allEnds.multiple.locations.bed
+
+hgLoadBed -type=bed12 mm10 cloneEnd_multipleMaps \
+   allEnds.multiple.locations.bed > load.multipleMaps.log 2>&1
+
+    # construct bad mapped ends:
+mkdir -p filteredDroppedEnds
+
+for L in `cat libs.over20K.list`
+do
+    echo $L 1>&2
+    cat separateLibs/${L}/mm10.badMap.bed
+done | sort -k1,1 -k2,2n > filteredDroppedEnds/badEnds.bed
+
+hgLoadBed -type=bed12 mm10 cloneEnd_badEnds filteredDroppedEnds/badEnds.bed \
+       > filteredDroppedEnds/loadBed.badEnds.log 2>&1
+
+    # construct coverage bigWig files:
+cat separateLibs/*/mm10.median3X.bed | awk '$6 == "+"' | sort -k1,1 -k2,2n \
+    | bedItemOverlapCount mm10 stdin > allEnds.forward.bedGraph
+
+cat separateLibs/*/mm10.median3X.bed | awk '$6 == "-"' | sort -k1,1 -k2,2n \
+    | bedItemOverlapCount mm10 stdin > allEnds.reverse.bedGraph
+
+bedGraphToBigWig allEnds.forward.bedGraph /hive/data/genomes/mm10/chrom.sizes \
+   cloneEnd_coverageForward.bw
+
+bedGraphToBigWig allEnds.reverse.bedGraph /hive/data/genomes/mm10/chrom.sizes \
+   cloneEnd_coverageReverse.bw
+
+    mkdir /gbdb/mm10/bbi/cloneEnd
+    ln -s `pwd`/cloneEnd_coverageForward.bw /gbdb/mm10/bbi/cloneEnd
+    ln -s `pwd`/cloneEnd_coverageReverse.bw /gbdb/mm10/bbi/cloneEnd
+
+    hgBbiDbLink mm10 cloneEnd_coverageForward \
+        /gbdb/mm10/bbi/cloneEnd/cloneEnd_coverageForward.bw
+    hgBbiDbLink mm10 cloneEnd_coverageReverse \
+        /gbdb/mm10/bbi/cloneEnd/cloneEnd_coverageReverse.bw
+
+##############################################################################
+# 2014-08-17: import of UCSC GENCODE group processing of GENCODE VM3 (markd)
+
     # download files
     mkdir -p /hive/data/genomes/mm10/bed/gencodeVM3/data
     cd /hive/data/genomes/mm10/bed/gencodeVM3

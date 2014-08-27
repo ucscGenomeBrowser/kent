@@ -527,6 +527,9 @@ cartSetString(cart, sessionVar, hgsid);
 while (lineFileNext(lf, &line, &size))
     {
     char *var = nextWord(&line);
+    if (isEmpty(var))
+        // blank line
+        continue;
     char *val = line;
 
     if (sameString(var, sessionVar))
