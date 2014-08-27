@@ -439,6 +439,8 @@ struct bioExpVector *list = bioExpVectorListFromFile(matrixFile);
 FILE *f = mustOpen(outFile,"w");
 struct lm *localMem = lmInit(0);
 fillInNames(list, nameFile);
+//struct hacTree *clusters = hacTreeForCostlyMerges((struct slList *)list, localMem,
+//					    slBioExpVectorDistance, slBioExpVectorMerge, NULL);
 struct hacTree *clusters = hacTreeFromItems((struct slList *)list, localMem,
 					    slBioExpVectorDistance, slBioExpVectorMerge, NULL, NULL);
 struct slRef *orderedList = getOrderedLeafList(clusters);
