@@ -9,6 +9,7 @@
 #define GENEPRED_H
 
 #include "dnaseq.h"
+#include "bigBed.h"
 
 struct gff;
 struct gffFile;
@@ -319,5 +320,7 @@ int genePredBaseToCodingPos(struct genePred *gp, int basePos,
 // Returns -1 when outside of coding exons unless OPTIONAL isCoding pointer to boolean is
 // provided. In that case, returns last valid position and sets isCoding to FALSE.
 
+struct genePred  *genePredFromBigGenePred( char *chrom, struct bigBedInterval *bb);
+/* build a genePred from a bigGenePred */
 #endif /* GENEPRED_H */
 
