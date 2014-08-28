@@ -4903,6 +4903,7 @@ tablesIgnored $hg
     delHinds
     delHinds2
     delMccarroll
+    denisovaMethylation
     dgv%
     ecoresTetNig1
     encode%
@@ -4932,6 +4933,7 @@ tablesIgnored $hg
     lovd
     lrg
     mammalPsg
+    neandertalMethylation
     nimhBipolarUs
     nimhBipolarDe
     ntHumChimpCodingDiff
