@@ -294,127 +294,10 @@ return root;
 
 /** The code from here on down is an alternative implementation that calls the merge
  ** function and for that matter the distance function much less than the function
- ** above.  */
+ ** above, and also is multithreaded.  It does seem to produce the same output
+ ** but the algorigthm is sufficiently different, at least for now, I'm keeping
+ ** both. */
 
-typedef double hacPairingFunction(struct dlList *list, struct hash *distanceHash, 
-    hacDistanceFunction *distF, void *distData, struct dlNode **retNodeA, struct dlNode **retNodeB);
-
-static double pairSerially(struct dlList *list, struct hash *distanceHash, 
-    hacDistanceFunction *distF, void *extraData, struct dlNode **retNodeA, struct dlNode **retNodeB)
-/* Loop through list returning closest two nodes */
-{
-struct dlNode *aNode;
-double closestDistance = BIGDOUBLE;
-struct dlNode *closestA = NULL, *closestB = NULL;
-for (aNode = list->head; !dlEnd(aNode); aNode = aNode->next)
-    {
-    struct hacTree *aHt = aNode->val;
-    struct slList *a = aHt->itemOrCluster;
-    struct dlNode *bNode;
-    for (bNode = aNode->next; !dlEnd(bNode); bNode = bNode->next)
-        {
-	struct hacTree *bHt = bNode->val;
-	char key[64];
-	safef(key, sizeof(key), "%p %p", aHt, bHt);
-	double *pd = hashFindVal(distanceHash, key);
-	if (pd == NULL)
-	     {
-	     lmAllocVar(distanceHash->lm, pd);
-	     *pd = distF(a, bHt->itemOrCluster, extraData);
-	     hashAdd(distanceHash, key, pd);
-	     }
-	double d = *pd;
-	if (d < closestDistance)
-	    {
-	    closestDistance = d;
-	    closestA = aNode;
-	    closestB = bNode;
-	    }
-	}
-    }
-*retNodeA = closestA;
-*retNodeB = closestB;
-return closestDistance;
-}
-
-static void lmDlAddValTail(struct lm *lm, struct dlList *list, void *val)
-/* Allocate new dlNode out of lm, initialize it with val, and add it to end of list */
-{
-struct dlNode *node;
-lmAllocVar(lm, node);
-node->val = val;
-dlAddTail(list, node);
-}
-
-struct hacTree *hacTreeVirtualPairing(struct slList *itemList, struct lm *localMem,
-				 hacDistanceFunction *distF, hacMergeFunction *mergeF,
-				 void *extraData, hacPairingFunction *pairingF,
-				 struct hash *precalcDistanceHash)
-/* Construct hacTree using a method that will minimize the number of calls to
- * the distance and merge functions, assuming they are expensive.  Do a lmCleanup(localMem)
- * to free the returned tree. */
-{
-/* Make up a doubly-linked list in 'remaining' with all items in it */
-struct dlList remaining;
-dlListInit(&remaining);
-struct slList *item;
-int count = 0;
-struct hash *distanceHash = (precalcDistanceHash ? precalcDistanceHash : hashNew(0));
-for (item = itemList; item != NULL; item = item->next)
-    {
-    struct hacTree *ht;
-    lmAllocVar(localMem, ht);
-    ht->itemOrCluster = item;
-    lmDlAddValTail(localMem, &remaining, ht);
-    count += 1;
-    }
-
-/* Loop through finding closest and merging until only one node left on remaining. */
-int i;
-for (i=1; i<count; ++i)
-    {
-    /* Find closest pair */
-    struct dlNode *aNode, *bNode;
-    double distance = pairingF(&remaining, distanceHash, distF, extraData, &aNode, &bNode);
-
-    /* Allocated new hacTree item for them and fill it in with a merged value. */
-    struct hacTree *ht;
-    lmAllocVar(localMem, ht);
-    struct hacTree *left = ht->left = aNode->val;
-    struct hacTree *right = ht->right = bNode->val;
-    left->parent = right->parent = ht;
-    ht->itemOrCluster = mergeF(left->itemOrCluster, right->itemOrCluster, extraData);
-    ht->childDistance = distance;
-
-    /* Put merged item onto remaining list before first matching node in pair. */
-    struct dlNode *mergedNode;
-    lmAllocVar(localMem, mergedNode);
-    mergedNode->val = ht;
-    dlAddBefore(aNode, mergedNode);
-
-    /* Remove nodes we merged out */
-    dlRemove(aNode);
-    dlRemove(bNode);
-    }
-
-/* Clean up and go home. */
-if (distanceHash != precalcDistanceHash)
-    hashFree(&distanceHash);
-struct dlNode *lastNode = dlPopHead(&remaining);
-return lastNode->val;
-}
-
-struct hacTree *hacTreeForCostlyMerges(struct slList *itemList, struct lm *localMem,
-				 hacDistanceFunction *distF, hacMergeFunction *mergeF,
-				 void *extraData)
-/* Construct hacTree using a method that will minimize the number of calls to
- * the distance and merge functions, assuming they are expensive.  Do a lmCleanup(localMem)
- * to free the returned tree. */
-{
-return hacTreeVirtualPairing(itemList, localMem, distF, mergeF, extraData, pairSerially, NULL);
-}
-
-/** The code from here on down is an implementation that uses multiple threads **/
 
 #define distKeySize 64  
 
@@ -430,6 +313,15 @@ void hacTreeDistanceHashAdd(struct hash *hash, void *itemA, void *itemB, double 
 char key[distKeySize];
 calcDistKey(itemA, itemB, key);
 hashAdd(hash, key, CloneVar(&distance));
+}
+
+double *hacTreeDistanceHashLookup(struct hash *hash, void *itemA, void *itemB)
+/* Look up pair in distance hash.  Returns NULL if not found, otherwise pointer to
+ * distance */
+{
+char key[distKeySize];
+calcDistKey(itemA, itemB, key);
+return hashFindVal(hash, key);
 }
 
 struct hctPair
@@ -457,10 +349,8 @@ pair->distance = (dc->distF)((struct slList *)(aHt->itemOrCluster),
     (struct slList *)(bHt->itemOrCluster), dc->extraData);
 }
 
-static int distThreadCount = 1;  // Number of threads to use for distance calcs.
-
 static void precacheMissingDistances(struct dlList *list, struct hash *distanceHash,
-    hacDistanceFunction *distF, void *extraData)
+    hacDistanceFunction *distF, void *extraData, int threadCount)
 /* Force computation of all distances not already in hash */
 {
 /* Make up list of all missing distances in pairList */
@@ -490,7 +380,7 @@ for (aNode = list->head; !dlEnd(aNode); aNode = aNode->next)
 
 /* Parallelize distance calculations */
 struct distanceWorkerContext context = {.distF=distF, .extraData=extraData};
-pthreadDoList(distThreadCount, pairList, distanceWorker, &context);
+pthreadDoList(threadCount, pairList, distanceWorker, &context);
 
 for (pair = pairList; pair != NULL; pair = pair->next)
     {
@@ -501,10 +391,11 @@ slFreeList(&pairList);
 }
 
 static double pairParallel(struct dlList *list, struct hash *distanceHash, 
-    hacDistanceFunction *distF, void *extraData, struct dlNode **retNodeA, struct dlNode **retNodeB)
+    hacDistanceFunction *distF, void *extraData, int threadCount,
+    struct dlNode **retNodeA, struct dlNode **retNodeB)
 /* Loop through list returning closest two nodes */
 {
-precacheMissingDistances(list, distanceHash, distF, extraData);
+precacheMissingDistances(list, distanceHash, distF, extraData, threadCount);
 struct dlNode *aNode;
 double closestDistance = BIGDOUBLE;
 struct dlNode *closestA = NULL, *closestB = NULL;
@@ -532,9 +423,18 @@ for (aNode = list->head; !dlEnd(aNode); aNode = aNode->next)
 return closestDistance;
 }
 
-struct hacTree *hacTreeMultiThread(int threadCount, struct slList *itemList, struct lm *localMem,
-				 hacDistanceFunction *distF, hacMergeFunction *mergeF,
-				 void *extraData, struct hash *precalcDistanceHash)
+static void lmDlAddValTail(struct lm *lm, struct dlList *list, void *val)
+/* Allocate new dlNode out of lm, initialize it with val, and add it to end of list */
+{
+struct dlNode *node;
+lmAllocVar(lm, node);
+node->val = val;
+dlAddTail(list, node);
+}
+
+struct hacTree *hacTreeMultiThread(int threadCount, struct slList *itemList, 
+		    struct lm *localMem, hacDistanceFunction *distF, hacMergeFunction *mergeF,
+		    void *extraData, struct hash *precalcDistanceHash)
 /* Construct hacTree minimizing number of merges called, and doing distance calls
  * in parallel when possible.   Do a lmCleanup(localMem) to free returned tree. 
  * The inputs are
@@ -551,8 +451,54 @@ struct hacTree *hacTreeMultiThread(int threadCount, struct slList *itemList, str
  *	            As a side effect this hash will be expanded to include all distances 
  *	            including those between intermediate nodes. */
 {
-distThreadCount = threadCount;
-return hacTreeVirtualPairing(itemList, localMem, distF, mergeF, extraData, pairParallel,
-    precalcDistanceHash);
+/* Make up a doubly-linked list in 'remaining' with all items in it */
+struct dlList remaining;
+dlListInit(&remaining);
+struct slList *item;
+int count = 0;
+struct hash *distanceHash = (precalcDistanceHash ? precalcDistanceHash : hashNew(0));
+for (item = itemList; item != NULL; item = item->next)
+    {
+    struct hacTree *ht;
+    lmAllocVar(localMem, ht);
+    ht->itemOrCluster = item;
+    lmDlAddValTail(localMem, &remaining, ht);
+    count += 1;
+    }
+
+/* Loop through finding closest and merging until only one node left on remaining. */
+int i;
+for (i=1; i<count; ++i)
+    {
+    /* Find closest pair */
+    struct dlNode *aNode, *bNode;
+    double distance = pairParallel(&remaining, distanceHash, distF, extraData, threadCount,
+	&aNode, &bNode);
+
+    /* Allocated new hacTree item for them and fill it in with a merged value. */
+    struct hacTree *ht;
+    lmAllocVar(localMem, ht);
+    struct hacTree *left = ht->left = aNode->val;
+    struct hacTree *right = ht->right = bNode->val;
+    left->parent = right->parent = ht;
+    ht->itemOrCluster = mergeF(left->itemOrCluster, right->itemOrCluster, extraData);
+    ht->childDistance = distance;
+
+    /* Put merged item onto remaining list before first matching node in pair. */
+    struct dlNode *mergedNode;
+    lmAllocVar(localMem, mergedNode);
+    mergedNode->val = ht;
+    dlAddBefore(aNode, mergedNode);
+
+    /* Remove nodes we merged out */
+    dlRemove(aNode);
+    dlRemove(bNode);
+    }
+
+/* Clean up and go home. */
+if (distanceHash != precalcDistanceHash)
+    hashFree(&distanceHash);
+struct dlNode *lastNode = dlPopHead(&remaining);
+return lastNode->val;
 }
 
