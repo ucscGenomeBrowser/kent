@@ -88,6 +88,8 @@ table, th, td {
     height: 27px;
 }
 
+/* styles for controlled vocabulary pages (hgEncodeVocab) */
+
 .vocabTable {
     width: 100%;
     border: none;
@@ -112,6 +114,22 @@ table, th, td {
     font-size: large;
     font-weight: bold;
 }
+
+/* styles used on downloads (human and mouse) pages */
+
+.hd2 { 
+    font-size: 100%; 
+    text-align: left; 
+    font-weight:bold; 
+    text-indent:.1em;
+}
+
+.itemTbl { 
+    border: 1px solid #000088;
+}
+
+
+/**/
 
 .content {
     margin: 0px;
@@ -141,6 +159,10 @@ dd {
 
 .under {
     text-decoration:underline
+}
+
+.undecoratedLink {
+    text-decoration: none;
 }
 
 .big {

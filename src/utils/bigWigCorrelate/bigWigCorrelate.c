@@ -16,6 +16,7 @@
 
 char *restrictFile = NULL;
 double threshold = FLT_MAX;
+boolean rootNames = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -29,6 +30,8 @@ errAbort(
   "options:\n"
   "   -restrict=restrict.bigBed - restrict correlation to parts covered by this file\n"
   "   -threshold=N.N - clip values to this threshold\n"
+  "   -rootNames - if set just report the root (minus directory and suffix) of file\n"
+  "                names when using listOfFiles\n"
   );
 }
 
@@ -36,6 +39,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"restrict", OPTION_STRING},
    {"threshold", OPTION_DOUBLE},
+   {"rootNames", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -149,13 +153,19 @@ for (i=0; i<fileCount; ++i)
     {
     char *aPath = fileNames[i];
     char aName[FILENAME_LEN];
-    splitPath(aPath, NULL, aName, NULL);
+    if (rootNames)
+	splitPath(aPath, NULL, aName, NULL);
+    else
+        safef(aName, sizeof(aName), "%s", aPath);
     int j;
     for (j=i+1; j<fileCount; ++j)
         {
 	char *bPath = fileNames[j];
 	char bName[FILENAME_LEN];
-	splitPath(bPath, NULL, bName, NULL);
+	if (rootNames)
+	    splitPath(bPath, NULL, bName, NULL);
+	else
+	    safef(bName, sizeof(bName), "%s", bPath);
 	struct correlate *c = bigWigCorrelate(aPath, bPath);
 	printf("%s\t%s\t%g\n", aName, bName, correlateResult(c));
 	correlateFree(&c);
@@ -171,6 +181,7 @@ if (argc != 2 && argc != 3)
     usage();
 restrictFile = optionVal("restrict", restrictFile);
 threshold = optionDouble("threshold", threshold);
+rootNames = optionExists("rootNames");
 if (argc == 3)
     bigWigCorrelatePair(argv[1], argv[2]);
 else

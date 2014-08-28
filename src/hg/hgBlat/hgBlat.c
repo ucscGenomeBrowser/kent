@@ -592,13 +592,13 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     if (oneSize > maxSingleSize)
 	{
 	warn("Sequence %s is %d letters long (max is %d), skipping",
-	    seq->name, seq->size, maxSingleSize);
+	    seq->name, oneSize, maxSingleSize);
 	continue;
 	}
     if (oneSize < minSingleSize)
         {
 	warn("Warning: Sequence %s is only %d letters long (%d is the recommended minimum)", 
-		seq->name, seq->size, minSingleSize);
+		seq->name, oneSize, minSingleSize);
 	// we could use "continue;" here to actually enforce skipping, 
 	// but let's give the short sequence a chance, it might work.
 	// minimum possible length = tileSize+stepSize, so mpl=16 for dna stepSize=5, mpl=10 for protein.

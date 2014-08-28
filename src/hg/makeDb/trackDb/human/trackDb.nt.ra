@@ -136,3 +136,11 @@ indelQueryInsert on
 chromosomes chrM
 
 
+track neandertalMethylation
+shortLabel Neandertal Methyl
+longLabel Neandertal Reconstructed DNA Methylation Map
+group neandertal
+visibility hide
+type bed 9
+itemRgb on
+

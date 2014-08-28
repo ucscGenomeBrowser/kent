@@ -228,7 +228,6 @@ struct edwAssembly *targetAssemblyForDbAndSex(struct sqlConnection *conn, char *
 /* Figure out best target assembly for something that is associated with a given ucscDB.  
  * In general this will be the most recent for the organism. */
 {
-sex = "sponge"; // uglyf
 char sexedName[128];
 safef(sexedName, sizeof(sexedName), "%s.%s", sex, clTarget);
 char query[256];
@@ -1059,7 +1058,6 @@ verbose(2, "Scheduling dnaseStats\n");
 /* Make sure that we don't schedule it again and again */
 char *analysisStep = "dnase_stats";
 struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, vf->ucscDb);
-if (!endsWith(vf->ucscDb, "hg19")) return;    // ugly temp
 if (alreadyTakenCareOf(conn, assembly, analysisStep, ef->id))
     return;
 
@@ -1359,12 +1357,6 @@ void scheduleReplicatedHotspot(struct sqlConnection *conn, struct edwExperiment 
 {
 char *analysisStep = "replicated_hotspot";
 verbose(2, "Considering %s on %s\n", analysisStep, youngestVf->licensePlate);
-/* Not ready for hg38 yet */
-if (sameString("hg38", youngestVf->ucscDb) || endsWith(youngestVf->ucscDb, ".hg38"))
-    {
-    verbose(2, "Skipping replicated_hotspot on %s %u\n", youngestVf->ucscDb, youngestVf->fileId);
-    return;
-    }
 
 /* Get assembly and figure out if we are already done */
 struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, youngestVf->ucscDb);

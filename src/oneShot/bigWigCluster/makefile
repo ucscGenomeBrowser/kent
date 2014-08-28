@@ -1,3 +1,3 @@
 kentSrc = ../..
-A = orderMiddle
+A = bigWigCluster
 include $(kentSrc)/inc/userApp.mk
