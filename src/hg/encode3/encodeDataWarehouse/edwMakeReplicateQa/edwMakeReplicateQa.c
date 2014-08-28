@@ -486,7 +486,9 @@ if (!isEmpty(replicate) && !sameString(replicate, "n/a")
 	struct edwAssembly *assembly = edwAssemblyForUcscDb(conn, targetDb);
 	for (elder = elderList; elder != NULL; elder = elder->next)
 	    {
-	    doReplicatePair(conn, assembly, edwFileFromIdOrDie(conn, elder->fileId), elder, ef, vf);
+	    if (sameString(targetDb, edwSimpleAssemblyName(elder->ucscDb)))
+		doReplicatePair(conn, assembly, 
+		    edwFileFromIdOrDie(conn, elder->fileId), elder, ef, vf);
 	    }
 	edwAssemblyFree(&assembly);
 	}

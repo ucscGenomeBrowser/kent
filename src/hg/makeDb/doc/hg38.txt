@@ -5643,3 +5643,47 @@ done | sort -k4 > allEnds.bed
         /gbdb/hg38/bbi/cloneEnd/cloneEnd_coverageReverse.bw
 
 ##############################################################################
+# SIB Transcriptome (DONE 2014-08-27 Steve)
+
+    # Create working directory and download data from where Christian
+    # Iseli (christian.iseli@unil.ch) put it, and unpack.
+    mkdir -p /hive/data/genomes/hg38/bed/sibTranscriptome
+    cd /hive/data/genomes/hg38/bed/sibTranscriptome
+    wget --timestamping http://ludwig-sun1.unil.ch/~chris/HTr.gtf.gz
+    wget --timestamping http://ludwig-sun1.unil.ch/~chris/txg.tar.gz
+
+    tar -zxvf txg.tar.gz
+
+    zcat HTr.gtf.gz | ldHgGene hg38 sibGene stdin
+    # Reading stdin
+    # Read 208508 transcripts in 2824960 lines in 1 files
+    # 208508 groups 25 seqs 1 sources 2 feature types
+    # 208508 gene predictions
+
+    # Do a little data cleanup and transformation and load splice graphs
+    # into database.
+    sed 's/altGraphX/sibTxGraph/' ~/kent/src/hg/lib/altGraphX.sql > sibTxGraph.sql
+    cat txg/*.txg | txgToAgx stdin stdout | hgLoadBed -notItemRgb \
+      -sqlTable=sibTxGraph.sql hg38 sibTxGraph stdin
+    # Reading stdin
+    # Read 47817 elements of size 18 from stdin
+    # Sorted
+    # Creating table definition for sibTxGraph from sql: sibTxGraph.sql
+    # Saving bed.tab
+    # Loading hg38
+
+    # Create sibAltEvents track for analyzed alt-splices.
+    # Not on RR for hg18 and hg19, so do not push it out
+    cat txg/*.txg | txgAnalyze stdin /cluster/data/hg38/hg38.2bit sibAltEvents.bed
+    awk '$2 >= 0' sibAltEvents.bed | sort | uniq > foo.bed
+    hgLoadBed hg38 sibAltEvents foo.bed
+    # Reading foo.bed
+    # Read 452436 elements of size 6 from foo.bed
+    # Sorted
+    # Creating table definition for sibAltEvents, bedSize: 6
+    # Saving bed.tab
+    # Loading hg38
+
+    # push sibGene and sibTxGraph for hg38
+
+############################################################################
