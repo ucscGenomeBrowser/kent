@@ -1584,7 +1584,10 @@ for (region = regionList; region != NULL; region = region->next)
 	hPrintf("&position=%s", posBuf);
 	ensureVisibility(database, table, curTrack);
 	if (table2 != NULL)
-	    ensureVisibility(database, table2, NULL);
+            {
+            struct trackDb *tdb2 = findTrack(table2, fullTrackList);
+            ensureVisibility(database, table2, tdb2);
+            }
 	hPrintf("\" TARGET=_blank>");
 	name = bed->name;
 	if (bed->name == NULL)
