@@ -447,11 +447,10 @@ close (FH);
     cd /hive/data/genomes/dm6/bed/cpgIslands
     time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku dm6 > do.log 2>&1 &
-XXX - running Thu Aug 28 13:58:05 PDT 2014
-    # real    2m22.751s
+    #  real    35m11.446s
 
     cat fb.dm6.cpgIslandExt.txt
-    #   15067148 bases of 142573040 (10.568%) in intersection
+    #   15067148 bases of 142573024 (10.568%) in intersection
 
 ##############################################################################
 # cpgIslands on UNMASKED sequence (DONE - 2014-08-28 - Hiram)
@@ -469,18 +468,18 @@ XXX - running Thu Aug 28 13:58:05 PDT 2014
     # 21347147 bases of 142573024 (14.973%) in intersection
 
 #########################################################################
-# genscan - (DONE 2014-06-05 - Chin)
+# genscan - (DONE 2014-08-28 - Hiram)
     mkdir /hive/data/genomes/dm6/bed/genscan
     cd /hive/data/genomes/dm6/bed/genscan
     time doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku dm6 > do.log 2>&1  &
-XXX - running - Thu Aug 28 14:00:44 PDT 2014
-    # real    21m0.104s
+    # real    35m23.353s
 
     cat fb.dm6.genscan.txt
-    #  24277318 bases of 142573040 (17.028%) in intersection
+    #  24277318 bases of 142573024 (17.028%) in intersection
+
     cat fb.dm6.genscanSubopt.txt
-    #   676185 bases of 142573040 (0.474%) in intersection
+    #  676185 bases of 142573024 (0.474%) in intersection
 
 ########################################################################
 # MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE 2014-08-28 - Hiram)
@@ -530,8 +529,7 @@ XXX - running - Thu Aug 28 14:00:44 PDT 2014
     time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
          dm3 dm6 > do.log 2>&1 &
-XXX - running - Thu Aug 28 14:07:18 PDT 2014
-    # real    19m13.611s
+    # real    22m18.988s
 
 #########################################################################
 # LIFTOVER FLYBASE 5.12 ANNOTATIONS FROM DM3 (working 2014-06-09 - Chin)
@@ -555,17 +553,107 @@ XXX - running - Thu Aug 28 14:07:18 PDT 2014
     ldHgGene -predTab dm6 flyBaseGene flyBaseLiftGene.tab
 
 ############################################################################
-# set same default position asm dm3 (DONE - 2014-06-09 - Chin)
+# set same default position asm dm3 (DONE - 2014-08-28 - Hiram)
     hgsql -e \
 'update dbDb set defaultPos="chr2L:826,001-851,000" where name="dm6";' \
      hgcentraltest
 
+############################################################################
+# create ucscToINSDC name mapping (DONE - 2014-08-29 - Hiram)
+    mkdir /hive/data/genomes/dm6/bed/ucscToINSDC
+    cd /hive/data/genomes/dm6/bed/ucscToINSDC
 
-########################################################################
+    # this script has been maturing over time, it is close to complete.
+    # to find a latest copy of it:
+    # ls -ogrt /hive/data/genomes/*/bed/ucscToINSDC/translateNames.sh
+
+    cp /hive/data/genomes/rn6/bed/ucscToINSDC/translateNames.sh .
+    # needed to be fixed up here for new genbank organization
+
+    # to see chrM accession:
+    hgsql -e 'select * from gold;' dm6 | grep chrM
+    # use that accession here:
+    ./translateNames.sh KJ947872.2
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes | sort \
+        > name.coordinate.tab
+
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' > ucscToINSDC.bed
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+# 22
+
+    # use the 22 in this sed:
+    sed -e "s/21/22/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+        | hgLoadSqlTab dm6 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords dm6 ucscToINSDC
+    # should cover all bases
+    featureBits -countGaps dm6 ucscToINSDC
+    # 143726002 bases of 143726002 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2014-07-09 - Hiram)
+   export maxLen=`hgsql -N -e 'select frag from gold;' dm6 | awk '{print length($0)}' | sort -run | head -1`
+
+   echo $maxLen
+   #  10
+
+export C=1
+while [ $C -le $maxLen ];
+do
+  echo -n " $C: "
+  hgsql -N -e 'select frag from gold;' dm6 | sort -u \
+    | awk '{ print substr($0,'$C',1) }' | sort -u | xargs echo | sed -e 's/ //g'
+  C=`echo $C | awk '{print $1+1}'`
+done
+#  1: ACDK
+#  2: EJPS
+#  3: 049
+#  4: 0148
+#  5: 34567
+#  6: 0123456789
+#  7: 0123456789
+#  8: 0123456789
+#  9: .
+# 10: 123456
+
+    # since we have the composite fragment IDs, there are a variety of
+    # dot versions:
+    hgsql -N -e 'select frag from gold;' dm6 | sed -e 's/.*\.//' \
+       | sort | uniq -c  | sort -rn
+#  1861 1
+#     3 5
+#     3 2
+#     1 6
+#     1 4
+#     1 3
+
+    # hence, add to trackDb/rat/dm6/trackDb.ra
+
+searchTable gold
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex [ACDK][EJPS][0-9]+(\.[0-9]+)*
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+  # test pattern:
+   hgsql -N -e 'select frag from gold;' dm6 | wc -l
+   # 1870
+   hgsql -N -e 'select frag from gold;' dm6 \
+     | egrep -e '[ACDK][EJPS][0-9]+(\.[0-9]+)*' | wc -l
+   # 1870
+   hgsql -N -e 'select frag from gold;' dm6 \
+     | egrep -v -e '[ACDK][EJPS][0-9]+(\.[0-9]+)*' | wc -l
+   # 0
+
+############################################################################
+
+##############################################################################
 # Skip the following tasks, since we are not sure how genbank auto update
 # will work with dm6 which is in the middle of genbank submission.
 # AUTO UPDATE GENBANK
-# create ucscToINSDC name mapping
 # construct download files
 # pushQ entry
 ## blat server
