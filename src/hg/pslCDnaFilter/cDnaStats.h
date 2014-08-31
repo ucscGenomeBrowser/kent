@@ -40,7 +40,7 @@ struct cDnaStats
 void cDnaStatsUpdate(struct cDnaStats *stats);
 /* update counters after processing a one cDNAs worth of alignments */
 
-void cDnaStatsPrint(struct cDnaStats *stats, int level);
-/* print stats if at verbose level or above */
+void cDnaStatsPrint(struct cDnaStats *stats, FILE* fh);
+/* print filter stats to file  */
 
 #endif
