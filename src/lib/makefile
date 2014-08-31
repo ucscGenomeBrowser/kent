@@ -35,7 +35,7 @@ O = aliType.o annoAssembly.o annoFilter.o annoFormatter.o annoFormatTab.o \
     obscure.o oldGff.o oligoTm.o options.o osunix.o pairHmm.o pairDistance.o \
     paraFetch.o peakCluster.o \
     phyloTree.o pipeline.o portimpl.o pngwrite.o psGfx.o psPoly.o pscmGfx.o \
-    psl.o pslGenoShow.o pslShow.o pslTbl.o pslTransMap.o pthreadWrap.o \
+    psl.o pslGenoShow.o pslShow.o pslTbl.o pslTransMap.o pthreadDoList.o pthreadWrap.o \
     qa.o quickHeap.o quotedP.o \
     ra.o rainbow.o raToStruct.o rbTree.o rangeTree.o regexHelper.o repMask.o \
     rle.o rnautil.o rqlEval.o rqlParse.o rudp.o \

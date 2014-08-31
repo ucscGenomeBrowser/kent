@@ -517,6 +517,7 @@ struct trackDb *hTrackDbForTrackAndAncestors(char *db, char *track);
  * This does not load children. hTrackDbForTrack will handle children, and
  * is actually faster if being called on lots of tracks.  This function
  * though is faster on one or two tracks. */
+// WARNING: this works for hub and db tracks but not custom tracks.
 
 struct trackDb *hCompositeTrackDbForSubtrack(char *db, struct trackDb *sTdb);
 /* Given a trackDb that may be for a subtrack of a composite track,

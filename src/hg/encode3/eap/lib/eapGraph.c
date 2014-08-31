@@ -284,7 +284,7 @@ return id;
 }
 
 struct slRef *eapGraphChildList(struct eapGraph *eg, unsigned fileId)
-/* Return list of all children, possibly NULL.  List is in form of slRefs with eapInput vals. 
+/* Return list of all children, possibly NULL.  List is in form of slRefs with eapOutput vals. 
  * You can slFreeList result when done. */
 {
 struct slRef *outList = NULL;

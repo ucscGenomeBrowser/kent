@@ -492,3 +492,10 @@ type bigBed 4 +
         longLabel Modern Human Derived (HighFreq), Denisova Ancestral: High Inf Pos in TFBP
         color 230,60,0
 
+track denisovaMethylation
+shortLabel Denisova Methyl
+longLabel Denisova Reconstructed DNA Methylation Map
+group denisova
+visibility hide
+type bed 9
+itemRgb on

@@ -4228,7 +4228,7 @@ for each cell associated with the particular TF binding location.</P>
 </DIV>
 
 <DIV class="dragAndDrop"><span class="types compositeTrack"></span>
-<div class="format"><code>dragAndDrop on</code></div>
+<div class="format"><code>dragAndDrop subTracks</code></div>
     <!-- <P><I>TODO: Should be made obsolete (and default behavior)</I></P> -->
     <P>The subtrack list in the configuration page can be rearranged by setting
     a <A onclick="return jumpTo(this);" HREF="#">sortOrder</A>, as described below, 
@@ -4251,7 +4251,7 @@ for each cell associated with the particular TF binding location.</P>
     type bigWig 0 1.0
     viewLimits 0.0:0.2
     allButtonPair on
-    dragAndDrop on
+    dragAndDrop subTracks
       ...
 
         track myFirstSubtrack

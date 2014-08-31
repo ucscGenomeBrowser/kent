@@ -9,6 +9,12 @@
 #include "options.h"
 #include "dlist.h"
 #include "hacTree.h"
+#include "synQueue.h"
+#include "pthreadWrap.h"
+#include "pthreadDoList.h"
+
+int gThreadCount = 5; /* NUmber of threads */
+
 
 void usage()
 {
@@ -39,7 +45,7 @@ double dblDistance(const struct slList *item1, const struct slList *item2, void 
 {
 struct slDouble *i1 = (struct slDouble *)item1;
 struct slDouble *i2 = (struct slDouble *)item2;
-double d = abs(i1->val - i2->val);
+double d = fabs(i1->val - i2->val);
 uglyf("dblDistance %g %g = %g\n", i1->val, i2->val, d);
 return d;
 }
@@ -68,11 +74,14 @@ for (i=0; i<10; ++i)
     slAddHead(&list, el);
     }
 struct lm *lm = lmInit(0);
+#ifdef OLD
 struct hacTree *ht = hacTreeForCostlyMerges((struct slList *)list, lm, dblDistance, dblMerge, 
     NULL);
-#ifdef OLD
 struct hacTree *ht = hacTreeFromItems((struct slList *)list, lm, dblDistance, dblMerge, NULL, NULL);
 #endif /* OLD */
+
+struct hacTree *ht = hacTreeMultiThread(10, (struct slList *)list, lm, dblDistance, dblMerge, NULL);
+
 rDump(ht, 0, f);
 carefulClose(&f);
 }

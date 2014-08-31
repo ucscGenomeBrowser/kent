@@ -29215,4 +29215,63 @@ hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
     cd /hive/data/genomes/hg19/bed/liftOverHg38
     hgLoadBed hg19 hg38ContigDiff hg19.itemRgb.bed
 
+
+##########################################################################
+# NEANDERTAL AND DENISOVA METHYLATION (DONE 8/27/14 angie)
+    # RM #13439
+    mkdir /hive/data/genomes/hg19/bed/neandertalMethylation
+    cd /hive/data/genomes/hg19/bed/neandertalMethylation
+    wget http://carmelab.huji.ac.il/data/Reconstructed_Methylation_Neandertal.zip
+    unzip Reconstructed_Methylation_Neandertal.zip
+    # The file has scores in e-notation ("4.108367e+001"); use perl to add "chr"
+    # and convert scores to regular floating point notation.
+    # Also, the submitters requested a green-to-red score display (0 = green, 100 = red)
+    # like the ENCODE HAIB Methyl-RRBS track, so make it a bed 9 with the ENCODE coloring.
+    # For the bed5 score, scale up 0-100 to 0-1000.
+    perl -we '\
+        @colorScale = (0x00FF00, 0x37FF00, 0x69FF00, 0x9BFF00, 0xCDFF00, 0xFFFF00, \
+                       0xFFCD00, 0xFF9B00, 0xFF6900, 0xFF3700, 0xFF0000); \
+        while (<>) { \
+          chomp;  ($c, $s, $e, $score) = split; \
+          $chr = "chr".$c; \
+          $score = $score + 0.0; \
+          $bedScore = int($score * 10); \
+          $colorIdx = int(@colorScale * $score / 100); \
+          $colorIdx-- if ($colorIdx >= @colorScale); \
+          $color = $colorScale[$colorIdx]; \
+          print join("\t", $chr, $s, $e, $score, $bedScore, "+", $s, $e, $color) . "\n"; \
+        }' \
+      Recon_Meth_Altai_Neandertal.txt \
+        > neandertalMethylation.bed
+    hgLoadBed hg19 neandertalMethylation neandertalMethylation.bed
+    # clean up
+    rm Recon_Meth_Altai_Neandertal.txt bed.tab
+    gzip neandertalMethylation.bed &
+
+
+    mkdir /hive/data/genomes/hg19/bed/denisovaMethylation
+    cd /hive/data/genomes/hg19/bed/denisovaMethylation
+    wget http://carmelab.huji.ac.il/data/Reconstructed_Methylation_Denisovan.zip
+    unzip Reconstructed_Methylation_Denisovan.zip
+    # Apply the same transform as above:
+    perl -we '\
+        @colorScale = (0x00FF00, 0x37FF00, 0x69FF00, 0x9BFF00, 0xCDFF00, 0xFFFF00, \
+                       0xFFCD00, 0xFF9B00, 0xFF6900, 0xFF3700, 0xFF0000); \
+        while (<>) { \
+          chomp;  ($c, $s, $e, $score) = split; \
+          $chr = "chr".$c; \
+          $score = $score + 0.0; \
+          $bedScore = int($score * 10); \
+          $colorIdx = int(@colorScale * $score / 100); \
+          $colorIdx-- if ($colorIdx >= @colorScale); \
+          $color = $colorScale[$colorIdx]; \
+          print join("\t", $chr, $s, $e, $score, $bedScore, "+", $s, $e, $color) . "\n"; \
+        }' \
+      Recon_Meth_Denisovan.txt > denisovaMethylation.bed
+    hgLoadBed hg19 denisovaMethylation denisovaMethylation.bed
+    # clean up
+    rm Recon_Meth_Altai_Denisova.txt bed.tab
+    gzip denisovaMethylation.bed &
+
+
 ##########################################################################

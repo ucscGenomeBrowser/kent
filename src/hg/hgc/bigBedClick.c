@@ -12,6 +12,28 @@
 #include "bigBed.h"
 #include "hui.h"
 
+static void bigGenePredLinks(char *track, char *item)
+/* output links to genePred driven sequence dumps */
+{
+printf("<H3>Links to sequence:</H3>\n");
+printf("<UL>\n");
+puts("<LI>\n");
+hgcAnchorSomewhere("htcTranslatedPredMRna", item, "translate", seqName);
+printf("Translated Protein</A> from genomic DNA\n");
+puts("</LI>\n");
+
+puts("<LI>\n");
+hgcAnchorSomewhere("htcGeneMrna", item, track, seqName);
+printf("Predicted mRNA</A> \n");
+puts("</LI>\n");
+
+puts("<LI>\n");
+hgcAnchorSomewhere("htcGeneInGenome", item, track, seqName);
+printf("Genomic Sequence</A> from assembly\n");
+puts("</LI>\n");
+printf("</UL>\n");
+}
+
 static void bigBedClick(char *fileName, struct trackDb *tdb,
                      char *item, int start, int end, int bedSize)
 /* Handle click in generic bigBed track. */
@@ -109,6 +131,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
                 printf("<BR>\n");
                 }
 	    }
+	if (sameString(tdb->type, "bigGenePred"))
+	    bigGenePredLinks(tdb->track, item);
 	}
     if (isCustomTrack(tdb->track))
 	{
