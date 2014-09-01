@@ -145,7 +145,7 @@ ifneq (${inSizes},)
 	sizesOpt=-polyASizes=input/${inSizes}
 endif
 outDir=output/${name}
-sortPsl=sort -k 10,10 -k 12,12n -k 13,13n
+sortPsl=sort -k 10,10 -k 12,12n -k 13,13n -k 14,14 -k 16,16n -k 17,17n
 doFilter:
 	@${MKDIR} ${outDir}
 	${PSLFILT} ${filtArgs} -verbose=1 input/${inPsl} ${outDir}/keep.psl.tmp >${outDir}/filt.out 2>&1
