@@ -40,34 +40,34 @@ updateCounter(&stats->nonUniqueMap);
 updateCounter(&stats->blackListCnts);
 }
 
-static void verbStats(int level, char *label, struct cDnaCnts *cnts, boolean always)
-/* output stats */
+static void verbStats(FILE* fh, char *label, struct cDnaCnts *cnts, boolean always)
+/* output one stats row */
 {
 if ((cnts->aligns > 0) || always)
-    verbose(level, "%18s:\t%d\t%d\n", label, cnts->queries, cnts->aligns);
+    fprintf(fh, "%18s:\t%d\t%d\n", label, cnts->queries, cnts->aligns);
 }
 
-void cDnaStatsPrint(struct cDnaStats *stats, int level)
-/* print stats if at verbose level or above */
+void cDnaStatsPrint(struct cDnaStats *stats, FILE* fh)
+/* print filter stats to file  */
 {
-verbose(level,"%18s \tseqs\taligns\n", "");
-verbStats(level, "total", &stats->totalCnts, TRUE);
-verbStats(level, "weird over", &stats->weirdOverCnts, FALSE);
-verbStats(level, "drop invalid", &stats->badDropCnts, FALSE);
-verbStats(level, "drop minAlnSize", &stats->minAlnSizeDropCnts, FALSE);
-verbStats(level, "drop minNonRepSize", &stats->minNonRepSizeDropCnts, FALSE);
-verbStats(level, "drop maxRepMatch", &stats->maxRepMatchDropCnts, FALSE);
-verbStats(level, "drop min size", &stats->minQSizeDropCnts, FALSE);
-verbStats(level, "drop minIdent", &stats->minIdDropCnts, FALSE);
-verbStats(level, "drop minCover", &stats->minCoverDropCnts, FALSE);
-verbStats(level, "drop overlap", &stats->overlapDropCnts, FALSE);
-verbStats(level, "drop minSpan", &stats->minSpanDropCnts, FALSE);
-verbStats(level, "drop localBest", &stats->localBestDropCnts, FALSE);
-verbStats(level, "drop globalBest", &stats->globalBestDropCnts, FALSE);
-verbStats(level, "drop maxAligns", &stats->maxAlignsDropCnts, FALSE);
-verbStats(level, "drop nonUnique", &stats->nonUniqueMap, FALSE);
-verbStats(level, "drop blackList", &stats->blackListCnts, FALSE);
-verbStats(level, "drop weird", &stats->weirdDropCnts, FALSE);
-verbStats(level, "kept weird", &stats->weirdKeptCnts, FALSE);
-verbStats(level, "kept", &stats->keptCnts, TRUE);
+fprintf(fh, "%18s \tseqs\taligns\n", "");
+verbStats(fh, "total", &stats->totalCnts, TRUE);
+verbStats(fh, "weird over", &stats->weirdOverCnts, FALSE);
+verbStats(fh, "drop invalid", &stats->badDropCnts, FALSE);
+verbStats(fh, "drop minAlnSize", &stats->minAlnSizeDropCnts, FALSE);
+verbStats(fh, "drop minNonRepSize", &stats->minNonRepSizeDropCnts, FALSE);
+verbStats(fh, "drop maxRepMatch", &stats->maxRepMatchDropCnts, FALSE);
+verbStats(fh, "drop min size", &stats->minQSizeDropCnts, FALSE);
+verbStats(fh, "drop minIdent", &stats->minIdDropCnts, FALSE);
+verbStats(fh, "drop minCover", &stats->minCoverDropCnts, FALSE);
+verbStats(fh, "drop overlap", &stats->overlapDropCnts, FALSE);
+verbStats(fh, "drop minSpan", &stats->minSpanDropCnts, FALSE);
+verbStats(fh, "drop localBest", &stats->localBestDropCnts, FALSE);
+verbStats(fh, "drop globalBest", &stats->globalBestDropCnts, FALSE);
+verbStats(fh, "drop maxAligns", &stats->maxAlignsDropCnts, FALSE);
+verbStats(fh, "drop nonUnique", &stats->nonUniqueMap, FALSE);
+verbStats(fh, "drop blackList", &stats->blackListCnts, FALSE);
+verbStats(fh, "drop weird", &stats->weirdDropCnts, FALSE);
+verbStats(fh, "kept weird", &stats->weirdKeptCnts, FALSE);
+verbStats(fh, "kept", &stats->keptCnts, TRUE);
 }

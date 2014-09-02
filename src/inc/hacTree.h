@@ -79,13 +79,6 @@ struct hacTree *hacTreeFromItems(const struct slList *itemList, struct lm *local
  * perform a hierarchical agglomerative (bottom-up) clustering of
  * items.  To free the resulting tree, lmCleanup(&localMem). */
 
-struct hacTree *hacTreeForCostlyMerges(struct slList *itemList, struct lm *localMem,
-				 hacDistanceFunction *distF, hacMergeFunction *mergeF,
-				 void *extraData);
-/* Construct hacTree similar to hacTreeForItems, but using a method that will minimize the 
- * number of calls to the distance and merge functions, assuming they are expensive.  
- * Do a lmCleanup(&localMem) to free the returned tree. */
-
 struct hacTree *hacTreeMultiThread(int threadCount, struct slList *itemList, struct lm *localMem,
 				 hacDistanceFunction *distF, hacMergeFunction *mergeF,
 				 void *extraData, struct hash *precalcDistanceHash);
@@ -103,9 +96,13 @@ struct hacTree *hacTreeMultiThread(int threadCount, struct slList *itemList, str
  *	precalcDistanceHash - a hash containing at least some of the pairwise distances
  *	            between items on itemList, set with hacTreeDistanceHashAdd. 
  *	            As a side effect this hash will be expanded to include all distances 
- *	            including those between intermediate nodes. */
+ *	            including those between intermediate nodes.  May be NULL. */
 
 void hacTreeDistanceHashAdd(struct hash *hash, void *itemA, void *itemB, double distance);
 /* Add an item to distance hash */
+
+double * hacTreeDistanceHashLookup(struct hash *hash, void *itemA, void *itemB);
+/* Look up pair in distance hash.  Returns NULL if not found, otherwise pointer to
+ * distance */
 
 #endif//def HACTREE_H
