@@ -1430,7 +1430,7 @@ hgAddLiftOverChain -minMatch=0.1 -multiple -path=$gbdbLiftOverDir/$over \\
 # Update (or create) liftOver/md5sum.txt with the new .over.chain.gz.
 if (-e $gpLiftOverDir/md5sum.txt) then
   set tmpFile = `mktemp -t tmpMd5.XXXXXX`
-  grep -v $over $gpLiftOverDir/md5sum.txt > \$tmpFile
+  csh -c "grep -v $over $gpLiftOverDir/md5sum.txt || true" > \$tmpFile
   md5sum $gpLiftOverDir/$over \\
   | sed -e 's\@$gpLiftOverDir/\@\@' >> \$tmpFile
   sort \$tmpFile > $gpLiftOverDir/md5sum.txt
