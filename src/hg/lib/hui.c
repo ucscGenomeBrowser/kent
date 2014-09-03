@@ -3846,7 +3846,7 @@ for (;indent>0;indent--)
 boolean tdbAddPrioritiesFromCart(struct cart *cart, struct trackDb *tdbList)
 // Updates the tdb->priority from cart for all tracks in list and their descendents.
 {
-char htmlIdentifier[128];
+char htmlIdentifier[1024];
 struct trackDb *tdb;
 boolean cartPriorities = FALSE;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
