@@ -500,7 +500,7 @@ for (name = extraIndexList; name != NULL; name = name->next)
     struct asColumn *col = asColumnFind(as, name->name);
     if (col == NULL)
         errAbort("extraIndex field %s not a standard bed field or found in 'as' file.",
-	    col->name);
+	    name->name);
     if (!sameString(col->lowType->name, "string"))
         errAbort("Sorry for now can only index string fields.");
     eim->indexFields[indexIx] = slIxFromElement(as->columnList, col);

@@ -14,6 +14,7 @@
 #include "genePred.h"
 #include "bed.h"
 #include "hgSeq.h"
+#include "trackHub.h"
 
 
 int hgSeqChromSize(char *db, char *chromName)
@@ -229,7 +230,14 @@ struct hTableInfo *hti;
 char chrom[32];
 char rootName[256];
 
-if ((table == NULL) || (table[0] == 0))
+if (startsWith("hub_", table))
+    {
+    // we asssume that this is a bigGenePred table if we got here with it
+    hgSeqFeatureRegionOptions(cart, TRUE, TRUE);
+    hgSeqDisplayOptions(cart, TRUE, TRUE, FALSE);
+    return;
+    }
+else if ((table == NULL) || (table[0] == 0))
     {
     hti = NULL;
     }
@@ -784,7 +792,7 @@ int hgSeqItemsInRange(char *db, char *table, char *chrom, int chromStart,
    in the given range in table.  Return number of items. */
 {
 struct hTableInfo *hti;
-struct bed *bedList;
+struct bed *bedList = NULL;
 char rootName[256];
 char parsedChrom[32];
 int itemCount;

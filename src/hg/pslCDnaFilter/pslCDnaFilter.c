@@ -71,6 +71,7 @@ static struct optionSpec optionSpecs[] =
     {"uniqueMapped", OPTION_BOOLEAN},
     {"decayMinCover", OPTION_BOOLEAN},
     {"blackList", OPTION_STRING},
+    {"statsOut", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -103,6 +104,7 @@ static char *gHapLociAlns = NULL;     /* loci id + PSLs indicating haplotype gro
 static boolean gUniqueMapped = FALSE; /* keep only cDNAs that are uniquely
                                        * aligned after filtering */
 static boolean gDecayMinCover = FALSE; /* use decay model for minCoverage */
+static char *gStatsOut = NULL;  /* stats output */
 
 struct outFiles
 /* open output files */
@@ -493,7 +495,14 @@ carefulClose(&outFiles.hapLociAlnsFh);
 carefulClose(&outFiles.dropFh);
 carefulClose(&outFiles.weirdOverFh);
 carefulClose(&outFiles.passFh);
-cDnaStatsPrint(&reader->stats, 1);
+if (gStatsOut != NULL)
+    {
+    FILE *fh = mustOpen(gStatsOut, "w");
+    cDnaStatsPrint(&reader->stats, fh);
+    carefulClose(&fh);
+    }
+else if (verboseLevel() >= 1)
+    cDnaStatsPrint(&reader->stats, stderr);
 hapRegionsFree(&hapRegions);
 cDnaReaderFree(&reader);
 }
@@ -557,6 +566,7 @@ if (optionExists("ignoreNs"))
     gCDnaOpts |= cDnaIgnoreNs;
 gUniqueMapped = optionExists("uniqueMapped");
 gDecayMinCover = optionExists("decayMinCover");
+gStatsOut = optionVal("statsOut", NULL);
 char *blackList = optionVal("blackList", NULL);
 
 if (blackList != NULL)

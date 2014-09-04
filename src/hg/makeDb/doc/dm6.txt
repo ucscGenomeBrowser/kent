@@ -1,94 +1,237 @@
 # for emacs: -*- mode: sh; -*-
 
 # This file describes browser build for the dm6
-# Drosophila melanogaster -- BDGP Release 6.0 (Jan, 2014)
+# Drosophila melanogaster -- BDGP Release 6.0 + ISO1 MT (Aug, 2014)
+#  The FlyBase Consortium/Berkeley Drosophila Genome Project/Celera Genomics
+#  BDGP Release 6 + ISO1 MT
 
-
-# DATE:   
-# ORGANISM:
-# TAXID:  
-# ASSEMBLY LONG NAME: 
-# ASSEMBLY SHORT NAME:
-# ASSEMBLY SUBMITTER:
-# ASSEMBLY TYPE:  
-# NUMBER OF ASSEMBLY-UNITS:
-# ASSEMBLY ACCESSION:     
-
-# FTP-RELEASE DATE: 
-
-
-#       rsync:
-
-#	Mitochondrial sequence: 
 
 #############################################################################
-# fetch sequence from pre-genbank place (DONE - 2014-05-21 - Chin)
-    mkdir -p /hive/data/outside/ncbi/.dmel_RELEASE6
-    cd /hive/data/outside/ncbi/.dmel_RELEASE6
-    wget --timestamping -r --cut-dirs=6 --level=0 -nH -x         --no-remove-listing -np "ftp://ftp.ncbi.nlm.nih.gov/pub/murphyte/.dmel_RELEASE6/RELEASE6_GENBANK.tar.gz"
-
+# fetch sequence from new style download directory (DONE - 2014-08-27 - Hiram)
+    # NCBI has redesigned their FTP download site, new type of address
+    #      and naming scheme
     mkdir -p /hive/data/genomes/dm6/genbank
-    cp -p RELEASE6_GENBANK.tar.gz /hive/data/genomes/dm6/genbank/
     cd /hive/data/genomes/dm6/genbank
-    tar xvfz RELEASE6_GENBANK.tar.gz
 
-    # measure sequence to be used here
-    faSize RELEASE6_GENBANK/na*.fsa
-    # 137547960 bases (490385 N's 137057575 real 137057575 upper 0 lower) 
-    # in 7 sequences in 7 files
-    # Total size: mean 19649708.6 sd 12099037.5 
-    # min 1348131 (gnl|FlyBase|4|gb|AE014135|) 
-    # max 32079331 (gnl|FlyBase|3R|gb|AE014297|) 
-    # median 23542271
-   
-    faSize scaffolds.RELEASE6.fsa
-    # 6158518 bases (662593 N's 5495925 real 5495925 upper 0 lower) 
-    # in 1862 sequences in 1 files
-    # Total size: mean 3307.5 sd 7108.2 
-    # min 544 (gnl|FlyBase|211000022279089|gb|DS485566|) 
-    # max 88768 (gnl|FlyBase|Unmapped_Scaffold_8_D1580_D1567|gb|CP007081|) 
-    # median 1567
- 
-#############################################################################
-# fixup names for UCSC standards (DONE 2014-05-22 - Chin)
+    rsync -L -a -P rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/invertebrate/Drosophila_melanogaster/latest_assembly_versions/GCA_000001215.4_Release_6_plus_ISO1_MT/ ./
 
-    # Follow FlyBase's lead on the chromosome names, but still use our
-    # "chr" prefix:
-    cd /hive/data/genomes/dm6/genbank/RELEASE6_GENBANK
-    mkdir ../ucscChr
-    for f in na_*.dmel.RELEASE6.fsa ;  do
-        chr=`echo $f | sed -r -e 's/^na_(arm)/chr/' -e 's/\.dmel\.RELEASE6\.fsa//'`
-        echo $chr
-	rec=`grep '^>' $f | wc -l`
-	if [ $rec != 1 ] 
-	then
-            echo $f does not have exactly one fasta record\!
-            break
-        fi
-        sed -e 's/^>.*/>'$chr'/' $f > ../ucscChr/$chr.fa
-    done
+    # measure what we have here:
+    faSize GCA_000001215.4_Release_6_plus_ISO1_MT_assembly_structure/Primary_Assembly/assembled_chromosomes/FASTA/*.fna.gz \
+     GCA_000001215.4_Release_6_plus_ISO1_MT_assembly_structure/non-nuclear/assembled_chromosomes/FASTA/chrMT.fna.gz \
+     GCA_000001215.4_Release_6_plus_ISO1_MT_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/*.fna.gz \
+GCA_000001215.4_Release_6_plus_ISO1_MT_assembly_structure/Primary_Assembly/unlocalized_scaffolds/FASTA/*.fna.gz
 
-    faSize ../ucscChr/*.fa
-    # 137547960 bases (490385 N's 137057575 real 137057575 upper 0 lower) 
-    # in 7 sequences in 7 files
-    # Total size: mean 19649708.6 sd 12099037.5 
-    # min 1348131 (chr4) 
-    # max 32079331 (chr3R) median 23542271
-
-    # handle the unplaced scaffolds
-    cat scaffolds.RELEASE6.fsa \
-        | sed -e "s#^>.*|gb|#>chrUn_#; s#|.*##" \
-        | sed -e "s/\.1$//" \
-        > ../ucscChr/chrUn.fa
-    faSize ../ucscChr/chrUn.fa
-    # 6158518 bases (662593 N's 5495925 real 5495925 upper 0 lower) 
-    # in 1862 sequences in 1 files
-    # Total size: mean 3307.5 sd 7108.2 
-    # min 544 (chrUn_DS485566) 
-    # max 88768 (chrUn_CP007081) median 1567
+    # 143726002 bases (1152978 N's 142573024 real 142573024 upper 0 lower)
+    #  in 1870 sequences in 11 files
+    # Total size: mean 76858.8 sd 1382100.2 min 544 (DS485566.2)
+    #   max 32079331 (AE014297.3) median 1577
 
 #############################################################################
-#  Initial database build (working - 2014-06-04 - Chin)
+# fixup to UCSC naming scheme (DONE - 2014-08-27 - Hiram)
+    mkdir /hive/data/genomes/dm6/ucsc
+    cd /hive/data/genomes/dm6/ucsc
+    # evolving these scripts over time, could become source tree scripts
+
+    cat << '_EOF_' > ucscCompositeAgp.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+
+my $primary="../genbank/GCA_000001215.4_Release_6_plus_ISO1_MT_assembly_structure/Primary_Assembly";
+
+open (FH, "<$primary/assembled_chromosomes/chr2acc") or
+        die "can not read Primary_Assembly/assembled_chromosomes/chr2acc";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($chrN, $acc) = split('\s+', $line);
+    $accToChr{$acc} = $chrN;
+}
+close (FH);
+
+foreach my $acc (keys %accToChr) {
+    my $chrN =  $accToChr{$acc};
+    print "$acc $accToChr{$acc}\n";
+    open (FH, "zcat $primary/assembled_chromosomes/AGP/chr${chrN}.comp.agp.gz|") or die "can not read chr${chrN}.comp.agp.gz";
+    open (UC, ">chr${chrN}.agp") or die "can not write to chr${chrN}.agp";
+    while (my $line = <FH>) {
+        if ($line =~ m/^#/) {
+            print UC $line;
+        } else {
+            $line =~ s/^$acc/chr${chrN}/;
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+    open (FH, "zcat $primary/assembled_chromosomes/FASTA/chr${chrN}.fna.gz|") or die "can not read chr${chrN}.fna.gz";
+    open (UC, ">chr${chrN}.fa") or die "can not write to chr${chrN}.fa";
+    while (my $line = <FH>) {
+        if ($line =~ m/^>/) {
+            printf UC ">chr${chrN}\n";
+        } else {
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+}
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > unlocalized.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+my %chrNames;
+
+my $primary="../genbank/GCA_000001215.4_Release_6_plus_ISO1_MT_assembly_structure/Primary_Assembly";
+
+open (FH, "<$primary/unlocalized_scaffolds/unlocalized.chr2scaf") or
+        die "can not read Primary_Assembly/unlocalized_scaffolds/unlocalized.chr2scaf";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($chrN, $acc) = split('\s+', $line);
+    $acc =~ s/\./v/;
+    $accToChr{$acc} = $chrN;
+    $chrNames{$chrN} += 1;
+}
+close (FH);
+
+foreach my $chrN (keys %chrNames) {
+    my $agpFile =  "$primary/unlocalized_scaffolds/AGP/chr$chrN.unlocalized.scaf.agp.gz";
+    my $fastaFile =  "$primary/unlocalized_scaffolds/FASTA/chr$chrN.unlocalized.scaf.fna.gz";
+    open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+    open (UC, ">chr${chrN}_random.agp") or die "can not write to chr${chrN}_random.agp";
+    while (my $line = <FH>) {
+        if ($line =~ m/^#/) {
+            print UC $line;
+        } else {
+            chomp $line;
+            my (@a) = split('\t', $line);
+            my $acc = $a[0];
+            $acc =~ s/\./v/;
+            die "ERROR: chrN $chrN not correct for $acc"
+                if ($accToChr{$acc} ne $chrN);
+            my $ucscName = "chr${chrN}_${acc}_random";
+            printf UC "%s", $ucscName;
+            for (my $i = 1; $i < scalar(@a); ++$i) {
+                printf UC "\t%s", $a[$i];
+            }
+            printf UC "\n";
+        }
+    }
+    close (FH);
+    close (UC);
+    printf "chr%s\n", $chrN;
+    open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+    open (UC, ">chr${chrN}_random.fa") or die "can not write to chr${chrN}_random.fa";
+    while (my $line = <FH>) {
+        if ($line =~ m/^>/) {
+            chomp $line;
+            my $acc = $line;
+            $acc =~ s/ .*//;
+            $acc =~ s/\./v/;
+            $acc =~ s/>//;
+            die "ERROR: chrN $chrN not correct for $acc"
+                if ($accToChr{$acc} ne $chrN);
+            my $ucscName = "chr${chrN}_${acc}_random";
+            printf UC ">$ucscName\n";
+        } else {
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+}
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > unplaced.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $primary="../genbank/GCA_000001215.4_Release_6_plus_ISO1_MT_assembly_structure/Primary_Assembly";
+
+my $agpFile =  "$primary/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
+my $fastaFile =  "$primary/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz";
+open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+open (UC, ">chrUn.agp") or die "can not write to chrUn.agp";
+while (my $line = <FH>) {
+    if ($line =~ m/^#/) {
+        print UC $line;
+    } else {
+        $line =~ s/\./v/;
+        printf UC "chrUn_%s", $line;
+    }
+}
+close (FH);
+close (UC);
+
+open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+open (UC, ">chrUn.fa") or die "can not write to chrUn.fa";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+        chomp $line;
+        $line =~ s/ .*//;
+        $line =~ s/\./v/;
+        $line =~ s/>//;
+        printf UC ">chrUn_$line\n";
+    } else {
+        print UC $line;
+    }
+}
+close (FH);
+close (UC);
+'_EOF_'
+    # << happy emacs
+
+    chmod +x ucscCompositeAgp.pl unlocalized.pl unplaced.pl
+    ./ucscCompositeAgp.pl
+    ./unlocalized.pl
+    ./unplaced.pl
+
+    zcat ../genbank/GCA_000001215.4_Release_6_plus_ISO1_MT_assembly_structure/non-nuclear/assembled_chromosomes/AGP/chrMT.comp.agp.gz \
+        | grep -v "^#" | sed -e 's/^KJ947872.2/chrM/' > chrM.agp
+
+    zcat ../genbank/GCA_000001215.4_Release_6_plus_ISO1_MT_assembly_structure/non-nuclear/assembled_chromosomes/FASTA/chrMT.fna.gz \
+        | sed -e 's/^>.*/>chrM/' > chrM.fa
+
+    # verify this sequence is still the same as it was before
+    #  these translations
+    faSize *.fa
+
+    # 143726002 bases (1152978 N's 142573024 real 142573024 upper 0 lower)
+    #   in 1870 sequences in 11 files
+    # Total size: mean 76858.8 sd 1382100.2 min 544 (chrUn_DS485566v2)
+    #   max 32079331 (chr3R) median 1577
+
+#############################################################################
+# pick up photo (DONE - 2014-06-06 - Chin)
+    mkdir /hive/data/genomes/dm6/photo
+    cd /hive/data/genomes/dm6/photo
+    wget --timestamping \
+http://upload.wikimedia.org/wikipedia/commons/1/1d/Drosophila_melanogaster.jpg
+
+    convert -geometry "190x300" Drosophila_melanogaster.jpg New-Drosophila_melanogaster.jpg
+
+    # check in the New-Drosophila_melanogaster.jpg file into
+    # the source tree:
+# -rw-rw-r-- 1 9842 Jun  6 14:55 Drosophila_melanogaster.jpg
+
+    # and get that installed in /usr/local/apache/htdocs/images/
+
+#############################################################################
+#  Initial database build (DONE - 2014-08-28 - Hiram)
 
     cd /hive/data/genomes/dm6
     cat << '_EOF_' > dm6.config.ra
@@ -98,96 +241,80 @@ clade insect
 genomeCladePriority 10
 scientificName Drosophila melanogaster
 commonName D. melanogaster
-assemblyDate Jan. 2014
-assemblyLabel Berkeley Drosophila Genome Project
-assemblyShortLabel BDGP Release 6
+assemblyDate Aug. 2014
+assemblyLabel The FlyBase Consortium/Berkeley Drosophila Genome Project/Celera Genomics
+assemblyShortLabel BDGP Release 6 + ISO1 MT
 orderKey 9060
-mitoAcc NC_001709.1
-fastaFiles /hive/data/genomes/dm6/genbank/ucscChr/*.fa
-fakeAgpMinContigGap 20
-fakeAgpMinScaffoldGap 50000
-dbDbSpeciesDir dm6
-photoCreditURL http://commons.wikimedia.org/wiki/File:Drosophila_melanogaster.jpg
-photoCreditName Wikimedia Commons
-ncbiGenomeId 246754
-ncbiAssemblyId ????TBD
-ncbiAssemblyName ????TBD
-ncbiBioProject 246754
-genBankAccessionID ????TBD
+# chrM mito sequence KJ947872.2 included
+mitoAcc none
+fastaFiles /hive/data/genomes/dm6/ucsc/chr*.fa
+agpFiles /hive/data/genomes/dm6/ucsc/chr*.agp
+# qualFiles /dev/null
+dbDbSpeciesDir drosophila
+photoCreditURL http://de.wikipedia.org/wiki/Benutzer:Mr.checker
+photoCreditName Wikimedia Commons/Mr.checker
+ncbiGenomeId 47
+ncbiAssemblyId 202931
+ncbiAssemblyName BDGP Release 6 + ISO1 MT
+ncbiBioProject 164
+genBankAccessionID GCA_000001215.4
 taxId 7227
 '_EOF_'
     # << happy emacs
 
     # stepwise to verify sequence and AGP file
-    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+    time makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
 	-stop=seq dm6.config.ra > seq.log 2>&1
+    # real    0m9.989s
 
     # verify sequence and AGP are OK:
-    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+    time makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
 	-continue=agp -stop=agp dm6.config.ra > agp.log 2>&1
+    # real    0m4.901s
 
     # then finish it off:
     time nice -n +19 makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
        -fileServer=hgwdev -continue=db dm6.config.ra > db.log 2>&1
-    # real    1m18.915s
-
-    cp Drosophila_melanogaster.jpg /usr/local/apache/htdocs/image
-    time nice -n +19 makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
-       -fileServer=hgwdev -continue=trackDb dm6.config.ra > trackDb.log 2>&1
-    # real    0m4.552s
-    convert -geometry "190x300" Drosophila_melanogaster.jpg New-Drosophila_melanogaster.jpg
-    cp New-Drosophila_melanogaster.jpg /cluster/home/chinhli/kent/src/hg/htdocs/images/Drosophila_melanogaster
-    mkdir -p /cluster/home/chinhli/kent/src/hg/makeDb/trackDb/drosophila/dm6
-    cp /cluster/data/dm6/TemporaryTrackDbCheckout/kent/src/hg/makeDb/trackDb/dm6/dm6/* /cluster/home/chinhli/kent/src/hg/makeDb/trackDb/drosophila/dm6
-    cd /cluster/home/chinhli/kent/src/hg/makeDb/trackDb
-
-    # - Run make update DBS=dm6 and make alpha when done.
-    # Checkin all dm6 filr to git
-    # - (optional) Clean up /cluster/data/felCat4/TemporaryTrackDbCheckout
-    make update DBS=dm6
-
-   time nice -n +19 makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
-       -fileServer=hgwdev -continue=dbDb dm6.config.ra > dbDb.log 2>&1
-    # real    0m36.707s
+    # real    1m27.449s
 
 ##########################################################################
-# running repeat masker (DONE - 2014-06-04 - Chin)
+# running repeat masker (DONE - 2014-08-28 - Hiram)
     mkdir /hive/data/genomes/dm6/bed/repeatMasker
     cd /hive/data/genomes/dm6/bed/repeatMasker
     time  doRepeatMasker.pl -buildDir=`pwd` \
 	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=ku dm6 > do.log 2>&1 &
-    # Elapsed time: 49m17s
+    # real     44m51.83
 
     cat faSize.rmsk.txt
-    # 143725995 bases (1152978 N's 142573017 real 112610688 
-    # upper 29962329 lower) in 1870 sequences in 1 files
-    # Total size: mean 76858.8 sd 1382100.2 min 544 (chrUn_DS485566) 
-    #    max 32079331 (chr3R) median 1577
+    # 143726002 bases (1152978 N's 142573024 real 112610723 upper
+    #    29962301 lower) in 1870 sequences in 1 files
+    # Total size: mean 76858.8 sd 1382100.2 min 544 (chrUn_DS485566v2)
+    #   max 32079331 (chr3R) median 1577
     # %20.85 masked total, %21.02 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
     #    January 31 2015 (open-4-0-5) version of RepeatMasker
-    # CC   RELEASE 20140131; 
+    # CC   RELEASE 20140131;
 
     featureBits -countGaps dm6 rmsk
-    # 29968041 bases of 143725995 (20.851%) in intersection
+    # 29968013 bases of 143726002 (20.851%) in intersection
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
     #	separates out the N's from the bases, it doesn't show lower case N's
 
 ##########################################################################
-# running simple repeat (DONE 2014-06-05 - Chin)
+# running simple repeat (DONE 2014-08-28 - Hiram)
     mkdir /hive/data/genomes/dm6/bed/simpleRepeat
     cd /hive/data/genomes/dm6/bed/simpleRepeat
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
 	dm6 > do.log 2>&1 &
-    #  real    23m20.727s
+    #  real    23m17.471s
 
-    cat fb.simpleRepeat 
-    #  3925767 bases of 142573040 (2.754%) in intersection
+    cat fb.simpleRepeat
+    #  3925949 bases of 142573024 (2.754%) in intersection
 
     # add to rmsk after it is done:
     cd /hive/data/genomes/dm6
@@ -197,10 +324,10 @@ taxId 7227
 
     twoBitToFa dm6.2bit stdout | faSize stdin > faSize.dm6.2bit.txt
     cat faSize.dm6.2bit.txt
-    # 143725995 bases (1152978 N's 142573017 real 112531010 upper 
-    #    30042007 lower) in 1870 sequences in 1 files
-    # Total size: mean 76858.8 sd 1382100.2 min 544 (chrUn_DS485566) 
-    #    max 32079331 (chr3R) median 1577
+    # 143726002 bases (1152978 N's 142573024 real 112531045 upper
+    #   30041979 # lower) in 1870 sequences in 1 files
+    # Total size: mean 76858.8 sd 1382100.2 min 544 (chrUn_DS485566v2)
+    #   max 32079331 (chr3R) median 1577
     # %20.90 masked total, %21.07 masked real
 
     rm /gbdb/dm6/dm6.2bit
@@ -208,7 +335,7 @@ taxId 7227
 
 #########################################################################
 # Verify all gaps are marked, add any N's not in gap as type 'other'
-#	(DONE 2014-06-05 - Chin)
+#	(DONE 2014-08-28 - Hiram)
     mkdir /hive/data/genomes/dm6/bed/gap
     cd /hive/data/genomes/dm6/bed/gap
     time nice -n +19 findMotif -motif=gattaca -verbose=4 \
@@ -216,116 +343,153 @@ taxId 7227
     #	real    0m1.290s
     grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
     time featureBits -countGaps dm6 -not gap -bed=notGap.bed
-    # 142573040 bases of 143725995 (99.198%) in intersection
+    # 143726002 bases of 143726002 (100.000%) in intersection
+
+
     featureBits dm6 -not gap -bed=notGap.bed allGaps.bed
     time featureBits -countGaps dm6 allGaps.bed notGap.bed -bed=new.gaps.bed
-    # 142573040 bases of 142573040 (100.000%) in intersection
+    # 143726002 bases of 143726002 (100.000%) in intersection
     time featureBits -countGaps dm6 allGaps.bed notGap.bed -bed=new.gaps.bed
-    # 23 bases of 143725995 (0.000%) in intersection
-    # real    0m2.017s
+    # 1152978 bases of 143726002 (0.802%) in intersection
 
-    # nothing to do here, take a look at felCat5.txt for an example
-    # of what to do here with the new gaps
-    # felCat5 has 39382069 bases of 2403678276 (1.638%) in intersection
+    # there are some very large gaps that are unannotated:
+    awk '{print $3-$2,$0}' new.gaps.bed  | sort -rn | head
+    # 53860 chr3L     26952525        27006385        chr3L.7
+    # 53800 chr3L     26882321        26936121        chr3L.6
+    # 32000 chrX      22317804        22349804        chrX.5
+
+    # the original 'component' AGP files have zero annotations in
+    # the chromosomes.  In fact, there are no gaps annotated:
+    hgsql -e 'select count(*) from gap;' dm6
+#   +----------+
+#   | count(*) |
+#   +----------+
+#   |        0 |
+#   +----------+
+
+    #	what is the highest index in the existing gap table:
+    hgsql -N -e "select ix from gap;" dm6 | sort -n | tail -1
+    #	(no output, assume 0)
+    cat << '_EOF_' > mkGap.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $ix=0;
+
+open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
+while (my $line = <FH>) {
+    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
+    ++$ix;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
+        $chromEnd, $ix, $chromEnd-$chromStart;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGap.pl
+    ./mkGap.pl > other.bed
+    featureBits -countGaps dm6 other.bed
+    #  1152978 bases of 143726002 (0.802%) in intersection
+
+    wc -l other.bed
+    #	572
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+	-noLoad dm6 otherGap other.bed
+    #   Read 572 elements of size 8 from other.bed
+    #	starting with this many
+    hgsql -e "select count(*) from gap;" dm6
+    #	 0
+    hgsql dm6 -e 'load data local infile "bed.tab" into table gap;'
+    #	result count:
+    hgsql -e "select count(*) from gap;" dm6
+    #	572
+    # == 0 + 572
+    # verify we aren't adding gaps where gaps already exist
+    # this would output errors if that were true:
+    gapToLift -minGap=1 dm6 nonBridged.lift -bedFile=nonBridged.bed
+    # see example in danRer7.txt
+    # there are no non-bridged gaps here:
+    hgsql -N -e "select bridge from gap;" dm6 | sort | uniq -c
+    #    572 yes
 
 ##########################################################################
-## WINDOWMASKER (DONE - 2014-06-05 - Chin)
+## WINDOWMASKER (DONE - 2014-08-28 - Hiram)
     mkdir /hive/data/genomes/dm6/bed/windowMasker
     cd /hive/data/genomes/dm6/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev dm6 > do.log 2>&1 &
-    #  real    5m34.507s
+    #  real    6m13.489s
 
     # Masking statistics
     cat faSize.dm6.cleanWMSdust.txt
-    # 143725995 bases (1152978 N's 142573017 real 108961420 upper 
-    #    33611597 lower) in 1870 sequences in 1 files
-    # Total size: mean 76858.8 sd 1382100.2 min 544 (chrUn_DS485566) 
-    #    max 32079331 (chr3R) median 1577
-    # %23.39 masked total, %23.58 masked real
+    #  143726002 bases (1152978 N's 142573024 real 108961589 upper
+    #    33611435  lower) in 1870 sequences in 1 files
+    # Total size: mean 76858.8 sd 1382100.2 min 544 (chrUn_DS485566v2)
+    #   max 32079331 (chr3R) median 1577
+    # %23.39 masked total, %23.57 masked real
 
     # how much does this window masker and repeat masker overlap:
     # if RM finished before this got here, the answer is in:
     cat fb.dm6.rmsk.windowmaskerSdust.txt
-    # 16809756 bases of 143725995 (11.696%) in intersection
-
-    # or, if WM finished first, that failed, and this was the last
-    # step of the procedure:
-    featureBits -countGaps dm6 rmsk windowmaskerSdust
-    # 16809756 bases of 143725995 (11.696%) in intersection
-
-    # plus, if it failed, run the clean step to completely finish WM
+    # 16809665 bases of 143726002 (11.696%) in intersection
 
 #############################################################################
-# cytoBandIdeo - (NEED more work 2014-06-05 - Chin)
+# cytoBandIdeo - (NEED more work 2014-08-28 - Hiram)
     mkdir /hive/data/genomes/dm6/bed/cytoBand
     cd /hive/data/genomes/dm6/bed/cytoBand
     makeCytoBandIdeo.csh dm6
 
 ##########################################################################
-# cpgIslands - (DONE - 2014-06-05 - Chin)
+# cpgIslands - (DONE - 2014-08-28 - Hiram)
     mkdir /hive/data/genomes/dm6/bed/cpgIslands
     cd /hive/data/genomes/dm6/bed/cpgIslands
-    time doCpgIslands.pl dm6 > do.log 2>&1 &
-    # real    2m22.751s
+    time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku dm6 > do.log 2>&1 &
+    #  real    35m11.446s
 
     cat fb.dm6.cpgIslandExt.txt
-    #   15067148 bases of 142573040 (10.568%) in intersection
+    #   15067148 bases of 142573024 (10.568%) in intersection
 
 ##############################################################################
-# cpgIslands on UNMASKED sequence (DONE - 2014-06-05 - Chin)
+# cpgIslands on UNMASKED sequence (DONE - 2014-08-28 - Hiram)
     mkdir /hive/data/genomes/dm6/bed/cpgIslandsUnmasked
     cd /hive/data/genomes/dm6/bed/cpgIslandsUnmasked
 
     # run stepwise so the loading can be done in a different table
     time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
-       -stop=makeBed \
+       -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/dm6/dm6.unmasked.2bit \
-             -workhorse=hgwdev -smallClusterHub=ku dm6 > makeBed.log 2>&1
-    #  real    1m31.640s
+             -workhorse=hgwdev -smallClusterHub=ku dm6 > do.log 2>&1 &
+    #  real    40m18.250s
 
-    # debug load step so it can be loaded into a separate table:
-    time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
-       -debug -continue=load \
-          -maskedSeq=/hive/data/genomes/dm6/dm6.unmasked.2bit \
-        -workhorse=hgwdev -smallClusterHub=ku dm6
-    
-    # edit and change the table name cpgIslandExt to cpgIslandExtUnmasked
-    # in doLoadCpg.csh.  also drop the  -noload option
-    chmod +x doLoadCpg.csh
-    time ./doLoadCpg.csh > load.log 2>&1
-    #   Read 27513 elements of size 10 from cpgIsland.bed
-    #   real    0m1.238s
-
-    cat fb.dm6.cpgIslandExtUnmasked.txt 
-    # 21347147 bases of 142573040 (14.973%) in intersection
-
-    time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
-       -continue=cleanup \
-          -maskedSeq=/hive/data/genomes/dm6/dm6.unmasked.2bit \
-        -workhorse=hgwdev -smallClusterHub=ku dm6
-    # real    0m9.842s
+    cat fb.dm6.cpgIslandExtUnmasked.txt
+    # 21347147 bases of 142573024 (14.973%) in intersection
 
 #########################################################################
-# genscan - (DONE 2014-06-05 - Chin)
+# genscan - (DONE 2014-08-28 - Hiram)
     mkdir /hive/data/genomes/dm6/bed/genscan
     cd /hive/data/genomes/dm6/bed/genscan
-    time doGenscan.pl dm6 > do.log 2>&1  &
-    # real    21m0.104s
+    time doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku dm6 > do.log 2>&1  &
+    # real    35m23.353s
 
     cat fb.dm6.genscan.txt
-    #  24277318 bases of 142573040 (17.028%) in intersection 
+    #  24277318 bases of 142573024 (17.028%) in intersection
+
     cat fb.dm6.genscanSubopt.txt
-    #   676185 bases of 142573040 (0.474%) in intersection 
+    #  676185 bases of 142573024 (0.474%) in intersection
 
 ########################################################################
-# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE 2014-06-06 - Chin)
-    # Use -repMatch=100 (based on size -- for human we use 1024, and 
-    # fly size is ~4.96% of human judging by gapless dm1 genome size from 
-    # featureBits -- we would use 50, but bump that up to 100 
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE 2014-08-28 - Hiram)
+    # Use -repMatch=100 (based on size -- for human we use 1024, and
+    # fly size is ~4.96% of human judging by gapless dm1 genome size from
+    # featureBits -- we would use 50, but bump that up to 100
     # a bit to be more  conservative).
-    calc \( 2301325917 / 2897316137 \) \* 1024
-    # ( 143725995 / 2897316137 ) * 1024 = 50.797156
+    #  143726002 bases (1152978 N's 142573024 real 108961589 upper
+    calc \( 142573024 / 2897316137 \) \* 1024
+    # ( 142573024 / 2897316137 ) * 1024 = 50.389661
     # round up to 100
 
     cd /hive/data/genomes/dm6
@@ -333,21 +497,18 @@ taxId 7227
       -makeOoc=jkStuff/dm6.11.ooc -repMatch=100
     #	Wrote 4574 overused 11-mers to jkStuff/dm6.11.ooc
 
-
-
     # there are *only* bridged gaps, no lift file needed for genbank
     # Ignore the 2 yes non-bridged gap
     hgsql -N -e "select bridge from gap;" dm6 | sort | uniq -c
-    #      2 no
-    #    568 yes
+    #    572 yes
 
 #########################################################################
 # MAKE 11.OOC FILE FOR BLAT (DONE 2014-06-07 - Chin)
 # dm3 11.ooc is needed to lift flyBase from dm3 to dm6 for encode3 submission
 
-    # Use -repMatch=100 (based on size -- for human we use 1024, and 
-    # fly size is ~4.4% of human judging by gapless dm1 genome size from 
-    # featureBits -- we would use 45, but bump that up a bit to be more 
+    # Use -repMatch=100 (based on size -- for human we use 1024, and
+    # fly size is ~4.4% of human judging by gapless dm1 genome size from
+    # featureBits -- we would use 45, but bump that up a bit to be more
     # conservative).
     cd /hive/data/genomes/dm3
     blat dm3.2bit /dev/null /dev/null -tileSize=11 \
@@ -355,30 +516,27 @@ taxId 7227
     # Wrote 7657 overused 11-mers to /hive/data/genomes/dm3/11.ooc
 
 #########################################################################
-# dm3 LIFTOVER to dm6 (DONE - 2014-06-07 - Chin)
+# dm3 LIFTOVER to dm6 (DONE - 2014-08-28 - Chin)
 # will move steps to dm3.txt when dm6 is released.
     sh hgwdev
     cd /hive/data/genomes/dm3
     ln -s jkStuff/dm3.11.ooc 11.ooc
-    
+
     # -debug run to create run dir, preview scripts...
     doSameSpeciesLiftOver.pl -debug dm3 dm6
+    cd /hive/data/genomes/dm3/bed/blat.dm6.2014-08-28
 
     time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         dm3 dm6 > doLiftOverToDm6.log 2>&1 &
-    # real    19m13.611s
-    # hold on the following steps until ready to release 
-    # pushd /usr/local/apache/htdocs-hgdownload/goldenPath/dm3/liftOver/
-    # md5sum dm3Todm6.over.chain.gz >> md5sum.txt
-    # popd
+         dm3 dm6 > do.log 2>&1 &
+    # real    22m18.988s
 
 #########################################################################
 # LIFTOVER FLYBASE 5.12 ANNOTATIONS FROM DM3 (working 2014-06-09 - Chin)
 # NOTE:
 # In order to make flyBase gene ui to work, more steps are needed, other wise,
-# hgc will shows errors like "Doh, no go for CG3727-RB from flyBasePep" 
-# all the time. Major objevtive here is to create flyBaseGene tables 
+# hgc will shows errors like "Doh, no go for CG3727-RB from flyBasePep"
+# all the time. Major objevtive here is to create flyBaseGene tables
 # so that we can do featureBits on it for encode3 submission.
     ssh hgwdev
     mkdir /hive/data/genomes/dm6/bed/flybase5.12.liftOver
@@ -395,27 +553,176 @@ taxId 7227
     ldHgGene -predTab dm6 flyBaseGene flyBaseLiftGene.tab
 
 ############################################################################
-# set same default position asm dm3 (DONE - 2014-06-09 - Chin)
+# set same default position asm dm3 (DONE - 2014-08-28 - Hiram)
     hgsql -e \
 'update dbDb set defaultPos="chr2L:826,001-851,000" where name="dm6";' \
      hgcentraltest
 
+############################################################################
+# create ucscToINSDC name mapping (DONE - 2014-08-29 - Hiram)
+    mkdir /hive/data/genomes/dm6/bed/ucscToINSDC
+    cd /hive/data/genomes/dm6/bed/ucscToINSDC
 
-########################################################################
-# Skip the following tasks, since we are not sure how genbank auto update 
-# will work with dm6 which is in the middle of genbank submission.
-# AUTO UPDATE GENBANK 
-# create ucscToINSDC name mapping
-# construct download files 
-# pushQ entry 
-## blat server 
+    # this script has been maturing over time, it is close to complete.
+    # to find a latest copy of it:
+    # ls -ogrt /hive/data/genomes/*/bed/ucscToINSDC/translateNames.sh
 
+    cp /hive/data/genomes/rn6/bed/ucscToINSDC/translateNames.sh .
+    # needed to be fixed up here for new genbank organization
 
-###########################################################################
-# LASTZ D. ananassae DroAna3 (DONE 2014-06-17 - Chin)
+    # to see chrM accession:
+    hgsql -e 'select * from gold;' dm6 | grep chrM
+    # use that accession here:
+    ./translateNames.sh KJ947872.2
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes | sort \
+        > name.coordinate.tab
+
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' > ucscToINSDC.bed
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+# 22
+
+    # use the 22 in this sed:
+    sed -e "s/21/22/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+        | hgLoadSqlTab dm6 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords dm6 ucscToINSDC
+    # should cover all bases
+    featureBits -countGaps dm6 ucscToINSDC
+    # 143726002 bases of 143726002 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2014-07-09 - Hiram)
+   export maxLen=`hgsql -N -e 'select frag from gold;' dm6 | awk '{print length($0)}' | sort -run | head -1`
+
+   echo $maxLen
+   #  10
+
+export C=1
+while [ $C -le $maxLen ];
+do
+  echo -n " $C: "
+  hgsql -N -e 'select frag from gold;' dm6 | sort -u \
+    | awk '{ print substr($0,'$C',1) }' | sort -u | xargs echo | sed -e 's/ //g'
+  C=`echo $C | awk '{print $1+1}'`
+done
+#  1: ACDK
+#  2: EJPS
+#  3: 049
+#  4: 0148
+#  5: 34567
+#  6: 0123456789
+#  7: 0123456789
+#  8: 0123456789
+#  9: .
+# 10: 123456
+
+    # since we have the composite fragment IDs, there are a variety of
+    # dot versions:
+    hgsql -N -e 'select frag from gold;' dm6 | sed -e 's/.*\.//' \
+       | sort | uniq -c  | sort -rn
+#  1861 1
+#     3 5
+#     3 2
+#     1 6
+#     1 4
+#     1 3
+
+    # hence, add to trackDb/drosophila/dm6/trackDb.ra
+
+searchTable gold
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex [ACDK][EJPS][0-9]+(\.[0-9]+)*
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+  # test pattern:
+   hgsql -N -e 'select frag from gold;' dm6 | wc -l
+   # 1870
+   hgsql -N -e 'select frag from gold;' dm6 \
+     | egrep -e '[ACDK][EJPS][0-9]+(\.[0-9]+)*' | wc -l
+   # 1870
+   hgsql -N -e 'select frag from gold;' dm6 \
+     | egrep -v -e '[ACDK][EJPS][0-9]+(\.[0-9]+)*' | wc -l
+   # 0
+
+############################################################################
+# AUTO UPDATE GENBANK (DONE - 2012-05-04 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Drosophila melanogaster	61221	821011	30813
+
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add before dm3 section::
+
+# dm6 (D. melanogaster)
+dm6.serverGenome = /hive/data/genomes/dm6/dm6.2bit
+dm6.clusterGenome = /hive/data/genomes/dm6/dm6.2bit
+dm6.ooc = /hive/data/genomes/dm6/jkStuff/dm6.11.ooc
+dm6.lift = no
+dm6.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+dm6.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+dm6.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+dm6.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+dm6.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+dm6.genbank.mrna.xeno.load = yes
+# dm6.upstreamGeneTbl = refGene
+# dm6.upstreamMaf = multiz15way
+# /hive/data/genomes/dm3/bed/multiz15way/species.lst
+
+    git commit -m "adding dm6 fly refs #4049" etc/genbank.conf
+    git push
+    make etc-update
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen -S dm6           # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial dm6
+    #	logFile: var/build/logs/2014.08.29-10:41:04.dm6.initalign.log
+    #   real    199m22.304s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad dm6 &
+    #	logFile: var/dbload/hgwdev/logs/2014.09.02-11:45:43.dm6.dbload.log
+XXX - running - Tue Sep  2 11:46:03 PDT 2014
+    #   real    19m24.163s
+
+    # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add dm6 to:
+        etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added dm6 refs #13578" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2014-08-29 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("dm6", "blat4c", "17858", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("dm6", "blat4c", "17859", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+##############################################################################
+# LASTZ D. ananassae DroAna3 (DONE 2014-08-29 - Hiram)
     screen -S droAna3-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroAna3.2014-06-17
-    cd /hive/data/genomes/dm6/bed/lastzDroAna3.2014-06-17
+    mkdir /hive/data/genomes/dm6/bed/lastzDroAna3.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroAna3.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. ananassae
@@ -438,41 +745,35 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droAna3/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroAna3.2014-06-17
+BASE=/hive/data/genomes/dm6/bed/lastzDroAna3.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
     # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
-    # real    23m18.083s
-    cat fb.dm6.chainDroAna3Link.txt    
-    # 95924794 bases of 142573040 (67.281%) in intersection
-    cd /hive/data/genomes/dm6/bed
-    ln -s lastzDroAna3.2014-06-17 lastz.droAna3
+    # real    64m19.065s
+
+    cat fb.dm6.chainDroAna3Link.txt
+    # 95925289 bases of 142573024 (67.282%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droAna3/bed/blastz.dm6.swap
     cd /hive/data/genomes/droAna3/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroAna3.2014-06-17/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroAna3.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
-    # real    10m44.250s
+    # real    10m43.121s
     cat fb.droAna3.chainDm6Link.txt
-    # 125691314 bases of 213918817 (58.757%) in intersection
-    cd /hive/data/genomes/droAna3/bed
-    # check is the link has been set up by swap already.
-    ln -s blastz.dm6.swap lastz.dm6
-
+    # 125698535 bases of 213918817 (58.760%) in intersection
 
 ###########################################################################
-# LASTZ D. sechellia DroSec1 (DONE 2014-06-17 - Chin)
+# LASTZ D. sechellia DroSec1 (DONE 2014-08-29 - Hiram)
     screen -S droSec1-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroSec1.2014-06-17
-    cd /hive/data/genomes/dm6/bed/lastzDroSec1.2014-06-17
+    mkdir /hive/data/genomes/dm6/bed/lastzDroSec1.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroSec1.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. sechellia
@@ -495,36 +796,35 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droSec1/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroSec1.2014-06-17
+BASE=/hive/data/genomes/dm6/bed/lastzDroSec1.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
-    # real    20m22.697s
-    cat fb.dm6.chainDroSec1Link.txt    
-    # 117710326 bases of 142573040 (82.561%) in intersection
+    # real    47m43.186s
+    cat fb.dm6.chainDroSec1Link.txt
+    # 117709624 bases of 142573024 (82.561%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droSec1/bed/blastz.dm6.swap
     cd /hive/data/genomes/droSec1/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroSec1.2014-06-17/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroSec1.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
-    # real    10m5.974s
+    # real    9m56.239s
     cat fb.droSec1.chainDm6Link.txt
-    # 128262796 bases of 157238575 (81.572%) in intersection
-
+    # 128262529 bases of 157238575 (81.572%) in intersection
 
 ###########################################################################
-# LASTZ D. simulans DroSim1 (DONE 2014-06-18 - Chin)
+# LASTZ D. simulans DroSim1 (DONE 2014-08-29 - Hiram)
     screen -S droSim1-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroSim1.2014-06-18
-    cd /hive/data/genomes/dm6/bed/lastzDroSim1.2014-06-18
+    mkdir /hive/data/genomes/dm6/bed/lastzDroSim1.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroSim1.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. simulans
@@ -547,36 +847,35 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droSim1/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroSim1.2014-06-18
+BASE=/hive/data/genomes/dm6/bed/lastzDroSim1.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
-    # real    12m54.436s
-    cat fb.dm6.chainDroSim1Link.txt    
-    # 114118424 bases of 142573040 (80.042%) in intersection
+    # real    39m35.348s
+    cat fb.dm6.chainDroSim1Link.txt
+    # 114117667 bases of 142573024 (80.042%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droSim1/bed/blastz.dm6.swap
     cd /hive/data/genomes/droSim1/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroSim1.2014-06-18/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroSim1.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
-    # real    6m58.548s
+    # real    6m50.918s
     cat fb.droSim1.chainDm6Link.txt
-    # 113676371 bases of 127256433 (89.329%) in intersection
-
+    # 113676741 bases of 127256433 (89.329%) in intersection
 
 ###########################################################################
-# LASTZ D. erecta DroEre2 (DONE 2014-06-18 - Chin)
+# LASTZ D. erecta DroEre2 (DONE 2014-08-29 - Hiram)
     screen -S droEre2-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroEre2.2014-06-18
-    cd /hive/data/genomes/dm6/bed/lastzDroEre2.2014-06-18
+    mkdir /hive/data/genomes/dm6/bed/lastzDroEre2.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroEre2.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. erecta
@@ -599,35 +898,35 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droEre2/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroEre2.2014-06-18
+BASE=/hive/data/genomes/dm6/bed/lastzDroEre2.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
-    # real    21m53.918s
-    cat fb.dm6.chainDroEre2Link.txt    
-    # 114091747 bases of 142573040 (80.023%) in intersection
+    # real    19m31.724s
+    cat fb.dm6.chainDroEre2Link.txt
+    # 114091585 bases of 142573024 (80.023%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droEre2/bed/blastz.dm6.swap
     cd /hive/data/genomes/droEre2/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroEre2.2014-06-18/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroEre2.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
-    # real    8m30.557s
+    # real    8m35.520s
     cat fb.droEre2.chainDm6Link.txt
-    # 122431749 bases of 145084019 (84.387%) in intersection
+    # 122430082 bases of 145084019 (84.386%) in intersection
 
 ###########################################################################
-# LASTZ D. grimshawi DroGri2 (DONE 2014-06-18 - Chin)
+# LASTZ D. grimshawi DroGri2 (DONE 2014-08-29 - Hiram)
     screen -S droGri2-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroGri2.2014-06-18
-    cd /hive/data/genomes/dm6/bed/lastzDroGri2.2014-06-18
+    mkdir /hive/data/genomes/dm6/bed/lastzDroGri2.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroGri2.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. grimshawi
@@ -650,35 +949,35 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droGri2/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroGri2.2014-06-18
+BASE=/hive/data/genomes/dm6/bed/lastzDroGri2.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
-    # real    15m56.925s
-    cat fb.dm6.chainDroGri2Link.txt    
-    # 72681040 bases of 142573040 (50.978%) in intersection
+    # real    43m54.742s
+    cat fb.dm6.chainDroGri2Link.txt
+    # 72682996 bases of 142573024 (50.979%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droGri2/bed/blastz.dm6.swap
     cd /hive/data/genomes/droGri2/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroGri2.2014-06-18/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroGri2.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
-    # real    6m19.528s
+    # real    6m15.091s
     cat fb.droGri2.chainDm6Link.txt
-    # 79680544 bases of 186090669 (42.818%) in intersection
+    # 79673484 bases of 186090669 (42.814%) in intersection
 
 ###########################################################################
-# LASTZ D. persimilis DroPer1 (DONE 2014-06-18 - Chin)
+# LASTZ D. persimilis DroPer1 (DONE 2014-08-29 - Hiram)
     screen -S droPer1-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroPer1.2014-06-18
-    cd /hive/data/genomes/dm6/bed/lastzDroPer1.2014-06-18
+    mkdir /hive/data/genomes/dm6/bed/lastzDroPer1.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroPer1.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. persimilis
@@ -701,36 +1000,37 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droPer1/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroPer1.2014-06-18
+BASE=/hive/data/genomes/dm6/bed/lastzDroPer1.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
-    # real    16m36.543s
-    cat fb.dm6.chainDroPer1Link.txt    
-    # 84187678 bases of 142573040 (59.049%) in intersection
+    # real    49m9.697s
+    cat fb.dm6.chainDroPer1Link.txt
+    # 84187839 bases of 142573024 (59.049%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droPer1/bed/blastz.dm6.swap
     cd /hive/data/genomes/droPer1/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroPer1.2014-06-18/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroPer1.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
+XXX - running - Tue Sep  2 10:34:10 PDT 2014
     # real    13m28.190s
     cat fb.droPer1.chainDm6Link.txt
     # 92967575 bases of 175583556 (52.948%) in intersection
 
 
 ###########################################################################
-# LASTZ D. virilis DroVir3 (DONE 2014-06-18 - Chin)
+# LASTZ D. virilis DroVir3 (DONE 2014-08-29 - Hiram)
     screen -S droVir3-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroVir3.2014-06-18
-    cd /hive/data/genomes/dm6/bed/lastzDroVir3.2014-06-18
+    mkdir /hive/data/genomes/dm6/bed/lastzDroVir3.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroVir3.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. virilis
@@ -753,35 +1053,35 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droVir3/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroVir3.2014-06-18
+BASE=/hive/data/genomes/dm6/bed/lastzDroVir3.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
-    # real    13m49.605s
-    cat fb.dm6.chainDroVir3Link.txt    
-    # 74048577 bases of 142573040 (51.937%) in intersection
+    # real    53m38.503s
+    cat fb.dm6.chainDroVir3Link.txt
+    # 74048111 bases of 142573024 (51.937%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droVir3/bed/blastz.dm6.swap
     cd /hive/data/genomes/droVir3/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroVir3.2014-06-18/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroVir3.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
-    # real    6m59.510s
-    -at fb.droVir3.chainDm6Link.txt
-    w 82922297 bases of 189205863 (43.826%) in intersection
+    # real    6m56.701s
+    cat fb.droVir3.chainDm6Link.txt
+    # 82924532 bases of 189205863 (43.828%) in intersection
 
 ###########################################################################
-# LASTZ T. castaneum TriCas2 (DONE 2014-06-18 - Chin)
+# LASTZ T. castaneum TriCas2 (DONE 2014-08-29 - Hiram)
     screen -S triCas2-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzTriCas2.2014-06-18
-    cd /hive/data/genomes/dm6/bed/lastzTriCas2.2014-06-18
+    mkdir /hive/data/genomes/dm6/bed/lastzTriCas2.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzTriCas2.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. T. castaneum
@@ -804,35 +1104,35 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/triCas2/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzTriCas2.2014-06-18
+BASE=/hive/data/genomes/dm6/bed/lastzTriCas2.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
-    # real    8m56.017s
-    cat fb.dm6.chainTriCas2Link.txt    
-    # 20089771 bases of 142573040 (14.091%) in intersection
+    # real    43m49.065s
+    cat fb.dm6.chainTriCas2Link.txt
+    # 20091664 bases of 142573024 (14.092%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/triCas2/bed/blastz.dm6.swap
     cd /hive/data/genomes/triCas2/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzTriCas2.2014-06-18/DEF \
+        /hive/data/genomes/dm6/bed/lastzTriCas2.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
-    # real    1m52.394s
+    # real    1m48.420s
     cat fb.triCas2.chainDm6Link.txt
-    # 22372513 bases of 151549969 (14.762%) in intersection
+    # 22441942 bases of 151549969 (14.808%) in intersection
 
 ###########################################################################
-# LASTZ A. gambiae AnoGam1 (DONE 2014-06-18 - Chin)
+# LASTZ A. gambiae AnoGam1 (DONE 2014-08-29 - Hiram)
     screen -S anoGam1-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzAnoGam1.2014-06-18
-    cd /hive/data/genomes/dm6/bed/lastzAnoGam1.2014-06-18
+    mkdir /hive/data/genomes/dm6/bed/lastzAnoGam1.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzAnoGam1.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. sechellia
@@ -855,35 +1155,35 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/anoGam1/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzAnoGam1.2014-06-18
+BASE=/hive/data/genomes/dm6/bed/lastzAnoGam1.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
-    # real    7m41.832s
-    cat fb.dm6.chainAnoGam1Link.txt    
-    # 20603251 bases of 142573040 (14.451%) in intersection
+    # real    85m43.807s
+    cat fb.dm6.chainAnoGam1Link.txt
+    # 20604473 bases of 142573024 (14.452%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/anoGam1/bed/blastz.dm6.swap
     cd /hive/data/genomes/anoGam1/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzAnoGam1.2014-06-18/DEF \
+        /hive/data/genomes/dm6/bed/lastzAnoGam1.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
-    # real    2m13.713s
+    # real    2m1.764s
     cat fb.anoGam1.chainDm6Link.txt
-    # 22157618 bases of 278268413 (7.963%) in intersection
+    # 22154872 bases of 278268413 (7.962%) in intersection
 
 ###########################################################################
-# LASTZ D. pseudoobscura DroPse3 (DONE 2014-06-19 - Chin)
+# LASTZ D. pseudoobscura DroPse3 (DONE 2014-08-29 - Hiram)
     screen -S droPse3-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroPse3.2014-06-19
-    cd /hive/data/genomes/dm6/bed/lastzDroPse3.2014-06-19
+    mkdir /hive/data/genomes/dm6/bed/lastzDroPse3.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroPse3.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. pseudoobscura
@@ -906,35 +1206,35 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droPse3/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroPse3.2014-06-19
+BASE=/hive/data/genomes/dm6/bed/lastzDroPse3.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
-    # real    10m23.069s
-    cat fb.dm6.chainDroPse3Link.txt    
-    # 85310414 bases of 142573040 (59.836%) in intersection
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
+    # real    54m34.163s
+    cat fb.dm6.chainDroPse3Link.txt
+    # 85310450 bases of 142573024 (59.836%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droPse3/bed/blastz.dm6.swap
     cd /hive/data/genomes/droPse3/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroPse3.2014-06-19/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroPse3.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
-    # real    6m22.337s
+    # real    6m27.317s
     cat fb.droPse3.chainDm6Link.txt
-    # 89188881 bases of 149047912 (59.839%) in intersection
+    # 89188686 bases of 149047912 (59.839%) in intersection
 
 ###########################################################################
-# LASTZ D. willistoni DroWil2 (DONE 2014-06-19 - Chin)
+# LASTZ D. willistoni DroWil2 (DONE 2014-08-29 - Hiram)
     screen -S droWil2-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroWil2.2014-06-19
-    cd /hive/data/genomes/dm6/bed/lastzDroWil2.2014-06-19
+    mkdir /hive/data/genomes/dm6/bed/lastzDroWil2.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroWil2.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. willistoni
@@ -957,35 +1257,35 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droWil2/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroWil2.2014-06-19
+BASE=/hive/data/genomes/dm6/bed/lastzDroWil2.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
     # real    12m46.450s
-    cat fb.dm6.chainDroWil2Link.txt    
-    # 73329892 bases of 142573040 (51.433%) in intersection
+    cat fb.dm6.chainDroWil2Link.txt
+    # 73328691 bases of 142573024 (51.432%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droWil2/bed/blastz.dm6.swap
     cd /hive/data/genomes/droWil2/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroWil2.2014-06-19/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroWil2.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1 & 
-    # real    7m15.452s
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
+    # real    7m21.824s
     cat fb.droWil2.chainDm6Link.txt
-    # 90406265 bases of 223610028 (40.430%) in intersection
+    # 90409687 bases of 223610028 (40.432%) in intersection
 
 ###########################################################################
-# LASTZ D. yakuba DroYak3 (DONE 2014-06-19 - Chin)
+# LASTZ D. yakuba DroYak3 (DONE 2014-08-29 - Hiram)
     screen -S droYak3-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroYak3.2014-06-19
-    cd /hive/data/genomes/dm6/bed/lastzDroYak3.2014-06-19
+    mkdir /hive/data/genomes/dm6/bed/lastzDroYak3.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroYak3.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. yakuba
@@ -1008,35 +1308,35 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droYak3/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroYak3.2014-06-19
+BASE=/hive/data/genomes/dm6/bed/lastzDroYak3.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
-    # real    14m53.775s
-    cat fb.dm6.chainDroYak3Link.txt    
-    # 114859321 bases of 142573040 (80.562%) in intersection
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
+    # real    68m39.923s
+    cat fb.dm6.chainDroYak3Link.txt
+    # 114859096 bases of 142573024 (80.562%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droYak3/bed/blastz.dm6.swap
     cd /hive/data/genomes/droYak3/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroYak3.2014-06-19/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroYak3.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1 & 
-    # real    8m16.261s
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
+    # real    8m13.655s
     cat fb.droYak3.chainDm6Link.txt
-    # 131647876 bases of 162598019 (80.965%) in intersection
+    # 131647225 bases of 162598019 (80.965%) in intersection
 
 ###########################################################################
-# LASTZ A. mellifera ApiMel4 (DONE 2014-06-19 - Chin)
+# LASTZ A. mellifera ApiMel4 (DONE 2014-08-29 - Hiram)
     screen -S apiMel4-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzApiMel4.2014-06-19
-    cd /hive/data/genomes/dm6/bed/lastzApiMel4.2014-06-19
+    mkdir /hive/data/genomes/dm6/bed/lastzApiMel4.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzApiMel4.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. A. mellifera
@@ -1059,35 +1359,35 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/apiMel4/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzApiMel4.2014-06-19
+BASE=/hive/data/genomes/dm6/bed/lastzApiMel4.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
-    # real    7m19.448s
-    cat fb.dm6.chainApiMel4Link.txt    
-    # 11666989 bases of 142573040 (8.183%) in intersection
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
+    # real    42m58.632s
+    cat fb.dm6.chainApiMel4Link.txt
+    # 11667011 bases of 142573024 (8.183%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/apiMel4/bed/blastz.dm6.swap
     cd /hive/data/genomes/apiMel4/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzApiMel4.2014-06-19/DEF \
+        /hive/data/genomes/dm6/bed/lastzApiMel4.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1 & 
-    # real    1m18.504s
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
+    # real    1m19.091s
     cat fb.apiMel4.chainDm6Link.txt
-    # 12244317 bases of 229123650 (5.344%) in intersection
+    # 12280818 bases of 229123650 (5.360%) in intersection
 
 ###########################################################################
-# LASTZ D. mojavensis DroMoj3 (DONE 2014-06-19 - Chin)
+# LASTZ D. mojavensis DroMoj3 (DONE 2014-08-29 - Hiram)
     screen -S droMoj3-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroMoj3.2014-06-19
-    cd /hive/data/genomes/dm6/bed/lastzDroMoj3.2014-06-19
+    mkdir /hive/data/genomes/dm6/bed/lastzDroMoj3.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroMoj3.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. mojavensis
@@ -1110,35 +1410,35 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droMoj3/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroMoj3.2014-06-19
+BASE=/hive/data/genomes/dm6/bed/lastzDroMoj3.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
-    # real    22m53.806s
-    cat fb.dm6.chainDroMoj3Link.txt    
-    # 71473446 bases of 142573040 (50.131%) in intersection
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
+    # real    76m3.636s
+    cat fb.dm6.chainDroMoj3Link.txt
+    # 71474162 bases of 142573024 (50.132%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droMoj3/bed/blastz.dm6.swap
     cd /hive/data/genomes/droMoj3/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroMoj3.2014-06-19/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroMoj3.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1 & 
-    # real    5m50.034s
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
+    # real    5m40.109s
     cat fb.droMoj3.chainDm6Link.txt
-    # 74564476 bases of 180207831 (41.377%) in intersection
+    # 74578701 bases of 180207831 (41.385%) in intersection
 
 ###########################################################################
-# LASTZ D. pseudoobscura DP4 (Done 2014-06-19 - Chin)
+# LASTZ D. pseudoobscura DP4 (Done 2014-08-29 - Hiram)
     screen -S dp4-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDP4.2014-06-19
-    cd /hive/data/genomes/dm6/bed/lastzDP4.2014-06-19
+    mkdir /hive/data/genomes/dm6/bed/lastzDP4.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDP4.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. pseudoobscura
@@ -1161,35 +1461,35 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/dp4/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDP4.2014-06-19
+BASE=/hive/data/genomes/dm6/bed/lastzDP4.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
-    # real    15m4.330s
-    cat fb.dm6.chainDp4Link.txt    
-    # 85548916 bases of 142573040 (60.004%) in intersection
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
+    # real    46m17.831s
+    cat fb.dm6.chainDp4Link.txt
+    # 85549372 bases of 142573024 (60.004%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/dp4/bed/blastz.dm6.swap
     cd /hive/data/genomes/dp4/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDP4.2014-06-19/DEF \
+        /hive/data/genomes/dm6/bed/lastzDP4.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1 & 
-    # real    59m11.720s
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
+    # real    6m45.065s
     cat fb.dp4.chainDm6Link.txt
-    # 88404936 bases of 146066673 (60.524%) in intersection
+    # 88406867 bases of 146066673 (60.525%) in intersection
 
 ###########################################################################
-# LASTZ D. albomicans DroAlb1 (DONE 2014-06-19 - Chin)
+# LASTZ D. albomicans DroAlb1 (DONE 2014-08-29 - Hiram)
     screen -S droAlb1-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroAlb1.2014-06-19
-    cd /hive/data/genomes/dm6/bed/lastzDroAlb1.2014-06-19
+    mkdir /hive/data/genomes/dm6/bed/lastzDroAlb1.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroAlb1.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. albomicans
@@ -1212,35 +1512,34 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droAlb1/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroAlb1.2014-06-19
+BASE=/hive/data/genomes/dm6/bed/lastzDroAlb1.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
     # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
-    # real    13m17.876s
-    cat fb.dm6.chainDroAlb1Link.txt    
-    # 63504597 bases of 142573040 (44.542%) in intersection
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
+    # real    86m58.011s
+    cat fb.dm6.chainDroAlb1Link.txt
+    # 63507363 bases of 142573024 (44.544%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droAlb1/bed/blastz.dm6.swap
     cd /hive/data/genomes/droAlb1/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroAlb1.2014-06-19/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroAlb1.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1 & 
-    # real    7m36.816s
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
+    # real    7m39.524s
     cat fb.droAlb1.chainDm6Link.txt
-    # 82592405 bases of 216120500 (38.216%) in intersection
+    # 82594337 bases of 216120500 (38.217%) in intersection
 
 ###########################################################################
-# LASTZ D. biarmipes DroBia2 (DONE 2014-06-19 - Chin)
+# LASTZ D. biarmipes DroBia2 (DONE 2014-08-29 - Hiram)
     screen -S droBia2-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroBia2.2014-06-19
-    cd /hive/data/genomes/dm6/bed/lastzDroBia2.2014-06-19
+    mkdir /hive/data/genomes/dm6/bed/lastzDroBia2.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroBia2.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. biarmipes
@@ -1263,35 +1562,35 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droBia2/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroBia2.2014-06-19
+BASE=/hive/data/genomes/dm6/bed/lastzDroBia2.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
-    # real    12m57.527s
-    cat fb.dm6.chainDroBia2Link.txt    
-    # 106989220 bases of 142573040 (75.042%) in intersection
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
+    # real    67m19.563s
+    cat fb.dm6.chainDroBia2Link.txt
+    # 106989297 bases of 142573024 (75.042%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droBia2/bed/blastz.dm6.swap
     cd /hive/data/genomes/droBia2/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroBia2.2014-06-19/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroBia2.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1 & 
-    # real    7m30.818s
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
+    # real    7m41.031s
     cat fb.droBia2.chainDm6Link.txt
-    # 113607991 bases of 168601808 (67.382%) in intersection
+    # 113609151 bases of 168601808 (67.383%) in intersection
 
 ###########################################################################
-# LASTZ D. bipectinata DroBip2 (DONE 2014-06-19 - Chin)
+# LASTZ D. bipectinata DroBip2 (DONE 2014-08-29 - Hiram)
     screen -S droBip2-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroBip2.2014-06-19
-    cd /hive/data/genomes/dm6/bed/lastzDroBip2.2014-06-19
+    mkdir /hive/data/genomes/dm6/bed/lastzDroBip2.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroBip2.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. bipectinata
@@ -1314,35 +1613,36 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droBip2/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroBip2.2014-06-19
+BASE=/hive/data/genomes/dm6/bed/lastzDroBip2.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
-    # real    11m48.832s
-    cat fb.dm6.chainDroBip2Link.txt    
-    # 93904078 bases of 142573040 (65.864%) in intersection
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
+    # real    72m58.502s
+
+    cat fb.dm6.chainDroBip2Link.txt
+    # 93905122 bases of 142573024 (65.865%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droBip2/bed/blastz.dm6.swap
     cd /hive/data/genomes/droBip2/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroBip2.2014-06-19/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroBip2.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1 & 
-    # real    7m0.140s
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
+    # real    6m57.737s
     cat fb.droBip2.chainDm6Link.txt
-    # 100264500 bases of 166411051 (60.251%) in intersection
+    # 100268467 bases of 166411051 (60.253%) in intersection
 
 ###########################################################################
-# LASTZ D. elegans DroEle2 (DONE 2014-06-19 - Chin)
+# LASTZ D. elegans DroEle2 (DONE 2014-08-29 - Hiram)
     screen -S droEle2-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroEle2.2014-06-19
-    cd /hive/data/genomes/dm6/bed/lastzDroEle2.2014-06-19
+    mkdir /hive/data/genomes/dm6/bed/lastzDroEle2.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroEle2.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. elegans
@@ -1365,35 +1665,35 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droEle2/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroEle2.2014-06-19
+BASE=/hive/data/genomes/dm6/bed/lastzDroEle2.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
-    # real    11m54.439s
-    cat fb.dm6.chainDroEle2Link.txt    
-    # 107566660 bases of 142573040 (75.447%) in intersection
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
+    # real    52m32.697s
+    cat fb.dm6.chainDroEle2Link.txt
+    # 107563805 bases of 142573024 (75.445%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droEle2/bed/blastz.dm6.swap
     cd /hive/data/genomes/droEle2/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroEle2.2014-06-19/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroEle2.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1 & 
-    # real    7m36.007s
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
+    # real    7m37.855s
     cat fb.droEle2.chainDm6Link.txt
-    # 115221009 bases of 170533638 (67.565%) in intersection
+    # 115222391 bases of 170533638 (67.566%) in intersection
 
 ###########################################################################
-# LASTZ D. eugracilis DroEug2 (DONE  2014-06-20 - Chin)
+# LASTZ D. eugracilis DroEug2 (DONE  2014-08-29 - Hiram)
     screen -S droEug2-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroEug2.2014-06-20
-    cd /hive/data/genomes/dm6/bed/lastzDroEug2.2014-06-20
+    mkdir /hive/data/genomes/dm6/bed/lastzDroEug2.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroEug2.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. eugracilis
@@ -1416,35 +1716,35 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droEug2/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroEug2.2014-06-20
+BASE=/hive/data/genomes/dm6/bed/lastzDroEug2.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
-    # real    11m11.450s
-    cat fb.dm6.chainDroEug2Link.txt    
-    # 107306821 bases of 142573040 (75.264%) in intersection
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
+    # real    81m4.137s
+    cat fb.dm6.chainDroEug2Link.txt
+    # 107307060 bases of 142573024 (75.265%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droEug2/bed/blastz.dm6.swap
     cd /hive/data/genomes/droEug2/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroEug2.2014-06-20/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroEug2.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1 & 
-    # real    7m8.216s
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
+    # real    7m6.555s
     cat fb.droEug2.chainDm6Link.txt
-    # 114575490 bases of 156328338 (73.292%) in intersection
+    # 114576241 bases of 156328338 (73.292%) in intersection
 
 ###########################################################################
-# LASTZ D. ficusphila DroFic2 (DONE 2014-06-20 - Chin)
+# LASTZ D. ficusphila DroFic2 (DONE 2014-08-29 - Hiram)
     screen -S droFic2-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroFic2.2014-06-20
-    cd /hive/data/genomes/dm6/bed/lastzDroFic2.2014-06-20
+    mkdir /hive/data/genomes/dm6/bed/lastzDroFic2.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroFic2.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. ficusphila
@@ -1467,35 +1767,36 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droFic2/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroFic2.2014-06-20
+BASE=/hive/data/genomes/dm6/bed/lastzDroFic2.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
-    # real    11m44.453s
-    cat fb.dm6.chainDroFic2Link.txt    
-    # 106559509 bases of 142573040 (74.740%) in intersection
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
+    # real    62m0.114s
+    cat fb.dm6.chainDroFic2Link.txt
+    # 106559757 bases of 142573024 (74.740%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droFic2/bed/blastz.dm6.swap
     cd /hive/data/genomes/droFic2/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroFic2.2014-06-20/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroFic2.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1 & 
-    # real    6m55.254s
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
+    # real    6m54.593s
+
     cat fb.droFic2.chainDm6Link.txt
-    # 112386374 bases of 151050603 (74.403%) in intersection
+    # 112386864 bases of 151050603 (74.403%) in intersection
 
 ###########################################################################
-# LASTZ D. kikkawai DroKik2 (DONE 2014-06-20 - Chin)
+# LASTZ D. kikkawai DroKik2 (DONE 2014-08-29 - Hiram)
     screen -S droKik2-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroKik2.2014-06-20
-    cd /hive/data/genomes/dm6/bed/lastzDroKik2.2014-06-20
+    mkdir /hive/data/genomes/dm6/bed/lastzDroKik2.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroKik2.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. kikkawai
@@ -1518,35 +1819,35 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droKik2/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroKik2.2014-06-20
+BASE=/hive/data/genomes/dm6/bed/lastzDroKik2.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
-    # real    10m59.711s
-    cat fb.dm6.chainDroKik2Link.txt    
-    # 100641809 bases of 142573040 (70.590%) in intersection
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
+    # real    68m49.238s
+    cat fb.dm6.chainDroKik2Link.txt
+    # 100642052 bases of 142573024 (70.590%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droKik2/bed/blastz.dm6.swap
     cd /hive/data/genomes/droKik2/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroKik2.2014-06-20/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroKik2.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1 & 
-    # real    7m5.616s
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
+    # real    7m5.278s
     cat fb.droKik2.chainDm6Link.txt
-    # 105765174 bases of 163450645 (64.708%) in intersection
+    # 105765944 bases of 163450645 (64.708%) in intersection
 
 ###########################################################################
-# LASTZ D. miranda DroMir2 (DONE 2014-06-20 - Chin)
+# LASTZ D. miranda DroMir2 (DONE 2014-08-29 - Hiram)
     screen -S droMir2-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroMir2.2014-06-20
-    cd /hive/data/genomes/dm6/bed/lastzDroMir2.2014-06-20
+    mkdir /hive/data/genomes/dm6/bed/lastzDroMir2.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroMir2.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. miranda
@@ -1569,35 +1870,37 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droMir2/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroMir2.2014-06-20
+BASE=/hive/data/genomes/dm6/bed/lastzDroMir2.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
-    # real    10m51.515s
-    cat fb.dm6.chainDroMir2Link.txt    
-    # 84557765 bases of 142573040 (59.308%) in intersection
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
+    # real    46m36.289s
+    cat fb.dm6.chainDroMir2Link.txt
+    # 84557634 bases of 142573024 (59.308%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droMir2/bed/blastz.dm6.swap
     cd /hive/data/genomes/droMir2/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroMir2.2014-06-20/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroMir2.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1 & 
-    # real    6m3.673s
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
+XXX - running - Tue Sep  2 10:00:55 PDT 2014
+    # real    real    4m55.434s
+
     cat fb.droMir2.chainDm6Link.txt
-    # 84387260 bases of 132586288 (63.647%) in intersection
+    # 84386358 bases of 132586288 (63.646%) in intersection
 
 ###########################################################################
-# LASTZ D. suzukii DroSuz1 (DONE 2014-06-20 - Chin)
+# LASTZ D. suzukii DroSuz1 (DONE 2014-08-29 - Hiram)
     screen -S droSuz1-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroSuz1.2014-06-20
-    cd /hive/data/genomes/dm6/bed/lastzDroSuz1.2014-06-20
+    mkdir /hive/data/genomes/dm6/bed/lastzDroSuz1.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroSuz1.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. suzukii
@@ -1620,35 +1923,35 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droSuz1/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroSuz1.2014-06-20
+BASE=/hive/data/genomes/dm6/bed/lastzDroSuz1.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
-    # real    14m25.635s
-    cat fb.dm6.chainDroSuz1Link.txt    
-    # 106346317 bases of 142573040 (74.591%) in intersection
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
+    # real    69m12.803s
+    cat fb.dm6.chainDroSuz1Link.txt
+    # 106346119 bases of 142573024 (74.591%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droSuz1/bed/blastz.dm6.swap
     cd /hive/data/genomes/droSuz1/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroSuz1.2014-06-20/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroSuz1.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1 & 
-    # real    9m2.795s
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
+    # real    9m7.373s
     cat fb.droSuz1.chainDm6Link.txt
-    # 129871575 bases of 202303443 (64.196%) in intersection
+    # 129874262 bases of 202303443 (64.198%) in intersection
 
 ###########################################################################
-# LASTZ D. rhopaloa DroRho2 (DONE 2014-06-20 - Chin)
+# LASTZ D. rhopaloa DroRho2 (DONE 2014-08-29 - Hiram)
     screen -S droRho2-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroRho2.2014-06-20
-    cd /hive/data/genomes/dm6/bed/lastzDroRho2.2014-06-20
+    mkdir /hive/data/genomes/dm6/bed/lastzDroRho2.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroRho2.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. rhopaloa
@@ -1671,35 +1974,35 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droRho2/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroRho2.2014-06-20
+BASE=/hive/data/genomes/dm6/bed/lastzDroRho2.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
-    # real    14m20.250s
-    cat fb.dm6.chainDroRho2Link.txt    
-    # 106843926 bases of 142573040 (74.940%) in intersection
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
+    # real    79m31.589s
+    cat fb.dm6.chainDroRho2Link.txt
+    # 106844545 bases of 142573024 (74.940%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droRho2/bed/blastz.dm6.swap
     cd /hive/data/genomes/droRho2/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroRho2.2014-06-20/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroRho2.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1 & 
-    # real    10m22.651s
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
+    # real  10m15.734s
     cat fb.droRho2.chainDm6Link.txt
-    # 126830464 bases of 193889799 (65.414%) in intersection
+    # 126832194 bases of 193889799 (65.415%) in intersection
 
 ###########################################################################
-# LASTZ D. takahashii DroTak2 (DONE 2014-06-20 - Chin)
+# LASTZ D. takahashii DroTak2 (DONE 2014-08-29 - Hiram)
     screen -S droTak2-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzDroTak2.2014-06-20
-    cd /hive/data/genomes/dm6/bed/lastzDroTak2.2014-06-20
+    mkdir /hive/data/genomes/dm6/bed/lastzDroTak2.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzDroTak2.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. D. takahashii
@@ -1722,35 +2025,35 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/droTak2/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzDroTak2.2014-06-20
+BASE=/hive/data/genomes/dm6/bed/lastzDroTak2.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
-    # real    11m15.156s
-    cat fb.dm6.chainDroTak2Link.txt    
-    # 107652911 bases of 142573040 (75.507%) in intersection
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
+    # real     66m20.654s
+    cat fb.dm6.chainDroTak2Link.txt
+    # 107653248 bases of 142573024 (75.507%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/droTak2/bed/blastz.dm6.swap
     cd /hive/data/genomes/droTak2/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzDroTak2.2014-06-20/DEF \
+        /hive/data/genomes/dm6/bed/lastzDroTak2.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1 & 
-    # real    7m12.141s
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
+    # real    7m15.787s
     cat fb.droTak2.chainDm6Link.txt
-    # 114989287 bases of 181031891 (63.519%) in intersection
+    # 114989522 bases of 181031891 (63.519%) in intersection
 
 ###########################################################################
-# LASTZ M. domestica MusDom2 (DONE 2014-06-20 - Chin)
+# LASTZ M. domestica MusDom2 (DONE 2014-08-29 - Hiram)
     screen -S musDom2-dm6
-    mkdir /hive/data/genomes/dm6/bed/lastzMusDom2.2014-06-20
-    cd /hive/data/genomes/dm6/bed/lastzMusDom2.2014-06-20
+    mkdir /hive/data/genomes/dm6/bed/lastzMusDom2.2014-08-29
+    cd /hive/data/genomes/dm6/bed/lastzMusDom2.2014-08-29
 
     cat << '_EOF_' > DEF
 # D. melanogaster vs. M. domestica
@@ -1773,28 +2076,28 @@ SEQ2_CHUNK=5000000
 SEQ2_LAP=10000
 SEQ2_LEN=/hive/data/genomes/musDom2/chrom.sizes
 
-BASE=/hive/data/genomes/dm6/bed/lastzMusDom2.2014-06-20
+BASE=/hive/data/genomes/dm6/bed/lastzMusDom2.2014-08-29
 TMPDIR=/dev/shm
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    time $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
-        `pwd`/DEF \
+    # << happy emacs
+
+    time doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -fileServer=hgwdev \
         -chainMinScore=3000  -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1 &
-    # real    12m50.415s
-    cat fb.dm6.chainMusDom2Link.txt    
-    # 27486108 bases of 142573040 (19.279%) in intersection
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > do.log 2>&1
+    # Elapsed time: 81m30s
+    cat fb.dm6.chainMusDom2Link.txt
+    # 27485718 bases of 142573024 (19.278%) in intersection
 
     #   running the swap
     mkdir /hive/data/genomes/musDom2/bed/blastz.dm6.swap
     cd /hive/data/genomes/musDom2/bed/blastz.dm6.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/dm6/bed/lastzMusDom2.2014-06-20/DEF \
+        /hive/data/genomes/dm6/bed/lastzMusDom2.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1 & 
-    # real    3m32.511s
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
+    # real    3m35.469s
     cat fb.musDom2.chainDm6Link.txt
-    # 33615127 bases of 691751600 (4.859%) in intersection
+    # 33622643 bases of 691751600 (4.861%) in intersection
 
 #########################################################################

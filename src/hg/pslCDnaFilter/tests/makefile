@@ -145,7 +145,7 @@ ifneq (${inSizes},)
 	sizesOpt=-polyASizes=input/${inSizes}
 endif
 outDir=output/${name}
-sortPsl=sort -k 10,10 -k 12,12n -k 13,13n
+sortPsl=sort -k 10,10 -k 12,12n -k 13,13n -k 14,14 -k 16,16n -k 17,17n
 doFilter:
 	@${MKDIR} ${outDir}
 	${PSLFILT} ${filtArgs} -verbose=1 input/${inPsl} ${outDir}/keep.psl.tmp >${outDir}/filt.out 2>&1
@@ -153,10 +153,10 @@ doFilter:
 	@rm -f ${outDir}/keep.psl.tmp
 	${DIFF} expected/${name} output/${name}
 
-# saves dropped and weirdOverlapp
+# saves dropped and weirdOverlapp, also tests -statsOut
 doFilterSave:
 	@${MKDIR} ${outDir}
-	${PSLFILT} ${filtArgs} -verbose=1 -dropped=${outDir}/drop.psl.tmp -weirdOverlapped=${outDir}/weird.psl.tmp input/${inPsl} ${outDir}/keep.psl.tmp >${outDir}/filt.out 2>&1
+	${PSLFILT} ${filtArgs} -verbose=1 -statsOut=${outDir}/filt.out -dropped=${outDir}/drop.psl.tmp -weirdOverlapped=${outDir}/weird.psl.tmp input/${inPsl} ${outDir}/keep.psl.tmp
 	@${sortPsl} ${outDir}/keep.psl.tmp > ${outDir}/keep.psl
 	@${sortPsl} ${outDir}/drop.psl.tmp > ${outDir}/drop.psl 
 	@${sortPsl} ${outDir}/weird.psl.tmp > ${outDir}/weird.psl

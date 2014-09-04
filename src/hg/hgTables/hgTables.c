@@ -648,7 +648,7 @@ struct hTableInfo *hubTrackTableInfo(struct trackDb *tdb)
 struct hTableInfo *hti = NULL;
 if (tdb->subtracks == NULL)
     {
-    if (startsWithWord("bigBed", tdb->type))
+    if (startsWithWord("bigBed", tdb->type) || startsWithWord("bigGenePred", tdb->type))
 	hti = bigBedToHti(tdb->track, NULL);
     else if (startsWithWord("bam", tdb->type))
 	hti = bamToHti(tdb->table);
@@ -1584,7 +1584,10 @@ for (region = regionList; region != NULL; region = region->next)
 	hPrintf("&position=%s", posBuf);
 	ensureVisibility(database, table, curTrack);
 	if (table2 != NULL)
-	    ensureVisibility(database, table2, NULL);
+            {
+            struct trackDb *tdb2 = findTrack(table2, fullTrackList);
+            ensureVisibility(database, table2, tdb2);
+            }
 	hPrintf("\" TARGET=_blank>");
 	name = bed->name;
 	if (bed->name == NULL)
