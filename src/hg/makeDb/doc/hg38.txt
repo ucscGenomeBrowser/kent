@@ -5761,3 +5761,7 @@ TMPDIR=/dev/shm
     # real    78m47.312s
 
 #############################################################################
+# Building WU DNAse I ENCODE2 track (In progress 2014-09-03 Jim Kent)
+See instructions in encode3/hg38_encode2_dnase1.txt
+ 
+#############################################################################
