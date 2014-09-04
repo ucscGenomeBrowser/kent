@@ -9,6 +9,7 @@
 #include "portable.h"
 
 int gThreadCount = 10;
+char *gTmpDir = ".";
 
 void usage()
 /* Explain usage and exit. */
@@ -34,7 +35,7 @@ errAbort(
   "   -precalc=precalc.tab - tab separated file with <file1> <file2> <distance>\n"
   "            columns.\n"
   "   -threads=N - number of threads to use, default %d\n"
-  "Note: creates temp files in current dir but cleans them up on normal program exit\n"
+  "   -tmpDir=/tmp/path - place to put temp files, default current dir\n"
   , gThreadCount
   );
 }
@@ -46,8 +47,11 @@ static struct optionSpec options[] = {
    {"precalc", OPTION_STRING},
    {"threads", OPTION_INT},
    {"labels", OPTION_STRING},
+   {"tmpDir", OPTION_STRING},
    {NULL, 0},
 };
+
+int bigWigNextId;
 
 struct bigWig
 /* Information on a bigWig */
@@ -71,7 +75,7 @@ while(lineFileNextReal(lf, &line))
     /* Allocate new item and initialize id and fileName fields */
     struct bigWig *bw;
     AllocVar(bw);
-    bw->id = lf->lineIx;
+    bw->id = ++bigWigNextId;
     bw->fileName = cloneString(trimSpaces(line));
 
     // Make up default label - same as file name without directory and extension
@@ -229,6 +233,7 @@ safef(cmd2, 1024, "bedGraphToBigWig %s %s %s", tmpName, chromSizesFile, fileName
 mustSystem(cmd1);
 mustSystem(cmd2);
 remove(tmpName);
+result->id = ++bigWigNextId;
 result->fileName = cloneString(fileName);
 result->label = " ";
 return (struct slList *)result;
@@ -394,6 +399,8 @@ optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
 gThreadCount = optionInt("threads", gThreadCount);
+gTmpDir = optionVal("tmpDir", gTmpDir);
+safef(tmpPrefix, sizeof(tmpPrefix), "%s/bwc_tmp_", gTmpDir);
 bigWigCluster(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
