@@ -5742,8 +5742,7 @@ TMPDIR=/dev/shm
     # filter with doRecipBest.pl
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         hg38 ponAbe2) > rbest.log 2>&1
-XXX - running Wed Sep  3 16:04:55 PDT 2014
-    # real    57m55.320s
+    # real    60m1.060s
 
     # running the swap
     mkdir /hive/data/genomes/ponAbe2/bed/blastz.hg38.swap
@@ -5753,13 +5752,12 @@ XXX - running Wed Sep  3 16:04:55 PDT 2014
         -chainMinScore=5000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -syntenicNet) > swap.log 2>&1
-XXX - running Wed Sep  3 16:04:55 PDT 2014
+    # real    102m27.866s
     cat fb.ponAbe2.chainHg38Link.txt
-    # 2776497530 bases of 2902338967 (95.664%) in intersection
-    # real    98m23.729s
+    #  2773568958 bases of 3093572278 (89.656%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         ponAbe2 hg38) > rbest.log 2>&1
-    # real    64m33.812s
+    # real    78m47.312s
 
 #############################################################################
