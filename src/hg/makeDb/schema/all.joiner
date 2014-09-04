@@ -4147,6 +4147,17 @@ identifier lrgTranscriptId
     $hg.lrgPep.name
     $hg.lrgCds.id
 
+identifier rmskJoinedBaseline
+"linking together RepeatMasker repeat fragments rmskJoined"
+    hg38.rmskAlignBaseline.id dupeOk
+    hg38.rmskJoinedBaseline.id
+    hg38.rmskOutBaseline.id
+
+identifier dnaseMasterSourceId
+"Numeric index of cell type contributing to a DNAse master site"
+    hg19.wgEncodeAwgDnaseMasterSources.id
+    hg19.wgEncodeAwgDnaseMasterSites.sourceIds comma full
+
 # Transcription Factor and TF Motif track info
 
 identifier txnFactorGeneId
@@ -4161,12 +4172,6 @@ identifier txnFactorMotifId
     hg19.factorbookMotifPos.name dupeOk
     hg19.factorbookMotifPwm.name minCheck=0.85
     hg19.factorbookMotifCanonical.motif comma minCheck=0.85
-
-identifier rmskJoinedBaseline
-"linking together RepeatMasker repeat fragments rmskJoined"
-    hg38.rmskAlignBaseline.id dupeOk
-    hg38.rmskJoinedBaseline.id
-    hg38.rmskOutBaseline.id
 
 # Dependencies not already captured in identifiers
 
