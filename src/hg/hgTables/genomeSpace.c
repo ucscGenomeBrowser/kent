@@ -23,26 +23,6 @@ extern boolean htmlWarnBoxSetUpAlready;
 //  that would have needed resetting, but I added a line
 //  in webEnd() to reset it.
 
-void md5hash(char * fileName, unsigned char md5[16])
-/* read f in buffer pieces and update md5 hash */
-{
-struct md5_context ctx;
-unsigned char buffer[MD5READBUFSIZE];
-int bufRead = 0;
-FILE *f = mustOpen(fileName,"rb");
-
-md5_starts(&ctx);
-
-while ((bufRead = fread(&buffer, 1, MD5READBUFSIZE, f)) > 0) 
-    {
-    md5_update(&ctx, buffer, bufRead);
-    }
-
-md5_finish(&ctx, md5);
-carefulClose(&f);
-}
-
-
 boolean doGenomeSpace()
 /* has the send to GenomeSpace checkbox been selected? */
 {
@@ -679,7 +659,7 @@ fflush(stdout);
 
 // MD5 COMPUTE
 unsigned char md5[16];       /* Keep the md5 checksum here. */
-md5hash(trashFileName,md5);
+md5ForFile(trashFileName,md5);
 char *hexMd5 = md5ToHex(md5);
 char *base64Md5 = base64Encode((char*)md5, 16);
 
