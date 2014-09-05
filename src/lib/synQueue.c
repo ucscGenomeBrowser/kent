@@ -57,6 +57,13 @@ pthreadMutexDestroy(&sq->mutex);
 freez(pSq);
 }
 
+void synQueuePutUnprotected(struct synQueue *sq, void *message)
+/* Add message to end of queue without protecting against multithreading
+ * contention - used before pthreads are launched perhaps. */
+{
+dlAddValTail(sq->queue, message);
+}
+
 void synQueuePut(struct synQueue *sq, void *message)
 /* Add message to end of queue. */
 {
