@@ -4159,7 +4159,7 @@ identifier dnaseMasterSourceId
     hg19.wgEncodeAwgDnaseMasterSites.sourceIds comma full
 
 identifier dnaseClusterSourceId
-"Numeric index of cell type contributing to a DNAse master site"
+"Numeric index of cell type contributing to a DNAse cluster"
     hg19.wgEncodeRegDnaseClusteredSources.id
     hg19.wgEncodeRegDnaseClusteredV3.sourceIds comma full
 
