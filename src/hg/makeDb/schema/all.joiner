@@ -4158,6 +4158,11 @@ identifier dnaseMasterSourceId
     hg19.wgEncodeAwgDnaseMasterSources.id
     hg19.wgEncodeAwgDnaseMasterSites.sourceIds comma full
 
+identifier dnaseClusterSourceId
+"Numeric index of cell type contributing to a DNAse master site"
+    hg19.wgEncodeRegDnaseClusteredSources.id
+    hg19.wgEncodeRegDnaseClusteredV3.sourceIds comma full
+
 # Transcription Factor and TF Motif track info
 
 identifier txnFactorGeneId
