@@ -8,9 +8,6 @@
 #include "hash.h"
 #include "options.h"
 #include "dlist.h"
-#include "hacTree.h"
-#include "synQueue.h"
-#include "pthreadWrap.h"
 #include "pthreadDoList.h"
 
 int gThreadCount = 5; /* NUmber of threads */
@@ -26,66 +23,42 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void rDump(struct hacTree *ht, int level, FILE *f)
-/* Help dump out results */
-{
-spaceOut(f, level*2);
-struct slDouble *el = (struct slDouble *)ht->itemOrCluster;
-if (ht->left || ht->right)
+struct paraPower
+/* Keep track of a number and it's Nth power in parallel */
     {
-    fprintf(f, "(%g %g)\n", el->val, ht->childDistance);
-    rDump(ht->left, level+1, f);
-    rDump(ht->right, level+1, f);
-    }
-else
-    fprintf(f, "%g\n", el->val);
+    struct paraPower *next;
+    double in;	/* Input number */
+    double out;  /* output number */
+    };
+
+void doPowerCalc(void *item, void *context)
+/* This routine does the actual work. */
+{
+struct paraPower *p = item; // Convert item to known type
+double *y = context;        // Convert context to a known type
+p->out = pow(p->in, *y);    // Calculate and save output back in item.
 }
 
-double dblDistance(const struct slList *item1, const struct slList *item2, void *extraData)
+void freen(char *input)
 {
-struct slDouble *i1 = (struct slDouble *)item1;
-struct slDouble *i2 = (struct slDouble *)item2;
-double d = fabs(i1->val - i2->val);
-uglyf("dblDistance %g %g = %g\n", i1->val, i2->val, d);
-return d;
-}
-
-struct slList *dblMerge(const struct slList *item1, const struct slList *item2, 
-    void *extraData)
-{
-struct slDouble *i1 = (struct slDouble *)item1;
-struct slDouble *i2 = (struct slDouble *)item2;
-double d = 0.5 * (i1->val + i2->val);
-uglyf("dblMerge %g %g = %g\n", i1->val, i2->val, d);
-return (struct slList *)slDoubleNew(d);
-}
-
-void freen(char *output)
-/* Do something, who knows what really */
-{
-FILE *f = mustOpen(output, "w");
+/* Make up list of items */
+struct paraPower *list = NULL, *el;
 int i;
-
-/* Make up list of random numbers */
-struct slDouble *list = NULL;
-for (i=0; i<10; ++i)
+for (i=1; i<=10; ++i)
     {
-    struct slDouble *el = slDoubleNew(rand()%100);
+    AllocVar(el);
+    el->in = i;
     slAddHead(&list, el);
     }
-struct lm *lm = lmInit(0);
-#ifdef OLD
-struct hacTree *ht = hacTreeForCostlyMerges((struct slList *)list, lm, dblDistance, dblMerge, 
-    NULL);
-struct hacTree *ht = hacTreeFromItems((struct slList *)list, lm, dblDistance, dblMerge, NULL, NULL);
-#endif /* OLD */
 
-struct hacTree *ht = hacTreeMultiThread(10, (struct slList *)list, lm, dblDistance, dblMerge, NULL);
+/* Do parallel 4th powering in 3 threads */
+double context = 4;
+pthreadDoList(3, list, doPowerCalc, &context);
 
-rDump(ht, 0, f);
-carefulClose(&f);
+/* Report results */
+for (el = list; el != NULL; el = el->next)
+    printf("%g^%g = %g\n", el->in, context, el->out);
 }
-
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -96,3 +69,4 @@ if (argc != 2)
 freen(argv[1]);
 return 0;
 }
+
