@@ -244,16 +244,6 @@ def runExecute(execOptions, execTable, execField1, execField2, execOrder):
     print
 
 
-def sqlRetrieve(retrieveAssembly, retrieveTable, retrieveField):
-    """Querying defaultDb and genomeClade relies on the genome name rather
-       than the assembly name, so this function is run to obtain the
-       appropriate values to plug into the runQuery function."""
-    assemblyChop = re.sub(r'\d', '', retrieveAssembly)
-    queryRetrieve = callHgsql("hgcentraltest", "select genome from " + retrieveTable + " where " +
-                              retrieveField + " like '" + assemblyChop + "%' limit 1", "hgwdev")
-    return queryRetrieve
-
-
 def main():
     parser = argparse.ArgumentParser(prog='copyHgcentral',
                                      description='Copies items from hgcentraltest -> hgcentralbeta \
@@ -290,10 +280,12 @@ def main():
         if optionList.table in ["dbDb", "all"]:
             runTest(optionList, "dbDb", "name", optionList.assembly, "name")
         if optionList.table in ["defaultDb", "all"]:
-            genome = chopper(sqlRetrieve(optionList.assembly, "defaultDb", "name"), "strip", "")
+            genome = chopper(callHgsql("hgcentraltest", "select organism from dbDb where name='" +
+                              optionList.assembly + "'", "hgwdev"), "strip", "")
             runTest(optionList, "defaultDb", "genome", genome, "genome")
         if optionList.table in ["genomeClade", "all"]:
-            genomeClade = chopper(sqlRetrieve(optionList.assembly, "defaultDb", "name"), "strip", "")
+            genomeClade = chopper(callHgsql("hgcentraltest", "select organism from dbDb where name='" +
+                              optionList.assembly + "'", "hgwdev"), "strip", "")
             runTest(optionList, "genomeClade", "genome", genomeClade, "genome")
     else:
         print
@@ -302,10 +294,12 @@ def main():
         if optionList.table in ["dbDb", "all"]:
             runExecute(optionList, "dbDb", "name", optionList.assembly, "name")
         if optionList.table in ["defaultDb", "all"]:
-            genome = chopper(sqlRetrieve(optionList.assembly, "defaultDb", "name"), "strip", "")
+            genome = chopper(callHgsql("hgcentraltest", "select organism from dbDb where name='" +
+                              optionList.assembly + "'", "hgwdev"), "strip", "")
             runExecute(optionList, "defaultDb", "genome", genome, "genome")
         if optionList.table in ["genomeClade", "all"]:
-            genomeClade = chopper(sqlRetrieve(optionList.assembly, "defaultDb", "name"), "strip", "")
+            genomeClade = chopper(callHgsql("hgcentraltest", "select organism from dbDb where name='" +
+                              optionList.assembly + "'", "hgwdev"), "strip", "")
             runExecute(optionList, "genomeClade", "genome", genomeClade, "genome")
 
 
