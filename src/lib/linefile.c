@@ -685,8 +685,7 @@ if ((lf = *pLf) != NULL)
     struct pipeline *pl = lf->pl;
     if (pl != NULL)
         {
-        pipelineWait(pl);
-        pipelineFree(&lf->pl);
+        pipelineClose(&lf->pl);
         }
     else if (lf->fd > 0 && lf->fd != fileno(stdin))
 	{
