@@ -92,8 +92,7 @@ struct pslInput *pi = *piPtr;
 if (pi != NULL)
     {
     assert(pi->pending == NULL);
-    pipelineWait(pi->pl);
-    pipelineFree(&pi->pl);
+    pipelineClose(&pi->pl);
     freez(piPtr);
     }
 }

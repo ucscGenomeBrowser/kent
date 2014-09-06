@@ -411,7 +411,7 @@ if (keyCount > 0)
 	    slAddHead(&idList, idEl);
 	    }
 	}
-    pipelineFree(&pl);  /* Takes care of lf too. */
+    pipelineClose(&pl);  /* Takes care of lf too. */
     freeCmds(cmds, keyCount);
     if (verboseLevel() >= 3)
 	{
