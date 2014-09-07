@@ -71,8 +71,7 @@ class ChipType(models.Model):
         return self.type
 
 class SampleType(models.Model):
-    """ Broad category of sample, such as cell culture, primary specimen,
-etc.
+    """ Broad category of sample, such as cell culture, primary specimen, etc.
     """
     type = models.CharField('chip protocol', max_length=64, primary_key=True)
 
