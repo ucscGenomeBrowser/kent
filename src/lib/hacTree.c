@@ -295,7 +295,7 @@ return root;
 /** The code from here on down is an alternative implementation that calls the merge
  ** function and for that matter the distance function much less than the function
  ** above, and also is multithreaded.  It does seem to produce the same output
- ** but the algorigthm is sufficiently different, at least for now, I'm keeping
+ ** but the algorithm is sufficiently different, at least for now, I'm keeping
  ** both. */
 
 

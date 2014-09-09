@@ -18,7 +18,7 @@ errAbort(
   "usage:\n"
   "   hacTreeTest XXX\n"
   "options:\n"
-  "   -hacTree = Dictates how the tree is generated;  multiThreads or costlyMerges or fromItems. fromItems is default \n"
+  "   -hacTree = Dictates how the tree is generated;  multiThreads or fromItems. fromItems is default \n"
   "   -threads - number of threads to use for multiThread default %d\n"
   , clThreads
   );
@@ -86,10 +86,6 @@ if (sameString(clHacTree, "multiThreads"))
     {
     ht = hacTreeMultiThread(clThreads, (struct slList *)list, lm, dblDistance, dblMerge, 
 	NULL, NULL);
-    }
-else if (sameString(clHacTree, "costlyMerges"))
-    {
-    ht = hacTreeForCostlyMerges((struct slList *)list, lm, dblDistance, dblMerge, NULL);
     }
 else if (sameString(clHacTree, "fromItems"))
     {
