@@ -13,6 +13,8 @@ errAbort(
   "genePredToBigGenePred - converts genePred or genePredExt to bigGenePred input\n"
   "usage:\n"
   "   genePredToBigGenePred file.gp file.bgpInput\n"
+  "NOTE: to build bigBed:\n"
+  "   bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as file.bgpInput chrom.sizes output.bb\n"
   "options:\n"
   "   -xxx=XXX\n"
   );

@@ -240,7 +240,8 @@ if (sep == ',') fputc('}',f);
 }
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name2);
+if (el->name2 != NULL)
+    fprintf(f, "%s", el->name2);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -256,7 +257,10 @@ int i;
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->blockCount; ++i)
     {
-    fprintf(f, "%d", el->exonFrames[i]);
+    if (el->exonFrames != NULL)
+	fprintf(f, "%d", el->exonFrames[i]);
+    else
+	fputs("-1", f);
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
@@ -271,7 +275,8 @@ fprintf(f, "%s", el->geneName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->geneName2);
+if (el->geneName2 != NULL)
+    fprintf(f, "%s", el->geneName2);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
