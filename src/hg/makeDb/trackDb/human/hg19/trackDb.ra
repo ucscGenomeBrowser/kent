@@ -827,9 +827,6 @@ priority 2
 track genomicSuperDups override
 group rep
 
-track snp141Mult override
-snpSeqFile /gbdb/hg19/snp/snp141.fa
-
 track snp141Flagged override
 snpSeqFile /gbdb/hg19/snp/snp141.fa
 
