@@ -89,6 +89,11 @@ void reverseIntRange(int *pStart, int *pEnd, int size);
  * to opposite strand. */
 void reverseUnsignedRange(unsigned *pStart, unsigned *pEnd, int size); 
 
+char *reverseComplementSlashSeparated(char *alleleStr);
+/* Given a slash-separated series of sequences (a common representation of variant alleles),
+ * returns a slash-sep series with the reverse complement of each sequence (if it is a
+ * nucleotide sequence), also reversing the order of sequences. */
+
 enum dnaCase {dnaUpper,dnaLower,dnaMixed,};
 /* DNA upper, lower, or mixed case? */
 
