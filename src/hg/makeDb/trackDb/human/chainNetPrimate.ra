@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Primate Chain/Net
 longLabel Primate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aaChimp=Chimp abGorilla=Gorilla acOrangutan=Orangutan adGibbon=Gibbon aeRhesus=Rhesus afBaboon=Baboon agMarmoset=Marmoset ahTarsier=Tarsier aiMouse_lemur=Mouse_lemur
+subGroup2 species Species aaChimp=Chimp abGorilla=Gorilla acOrangutan=Orangutan adGibbon=Gibbon aeRhesus=Rhesus afBaboon=Baboon agMarmoset=Marmoset ahTarsier=Tarsier aiMouse_lemur=Mouse_lemur ajBushbaby=Bushbaby
 subGroup3 clade Clade aaHominidae=Hominidae abCercopithecinae=Cercopithecinae acHaplorrhini=Haplorrhini adStrepsirrhini=Strepsirrhini
 dragAndDrop subTracks
 visibility hide
