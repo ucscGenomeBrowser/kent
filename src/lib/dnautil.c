@@ -474,6 +474,41 @@ temp = *pStart;
 *pEnd = size - temp;
 }
 
+char *reverseComplementSlashSeparated(char *alleleStr)
+/* Given a slash-separated series of sequences (a common representation of variant alleles),
+ * returns a slash-sep series with the reverse complement of each sequence (if it is a
+ * nucleotide sequence).
+ * Special behavior to support dbSNP's variant allele conventions:
+ * 1. Reverse the order of sequences (to maintain alphabetical ordering).
+ * 2. If alleleStr begins with "-/", then after reversing, move "-/" back to the beginning. */
+{
+int len = strlen(alleleStr);
+char choppyCopy[len+1];
+safecpy(choppyCopy, sizeof(choppyCopy), alleleStr);
+char *alleles[len];
+int alCount = chopByChar(choppyCopy, '/', alleles, ArraySize(alleles));
+char *outStr = needMem(len+1);
+int i;
+for (i = alCount-1;  i >= 0;  i--)
+    {
+    char *allele = alleles[i];
+    int alLen = strlen(allele);
+    if (isAllNt(allele, alLen))
+        reverseComplement(allele, alLen);
+    if (i != alCount-1)
+        safecat(outStr, len+1, "/");
+    safecat(outStr, len+1, allele);
+    }
+if (startsWith("-/", alleleStr))
+    {
+    // Keep "-/" at the beginning:
+    memmove(outStr+2, outStr, len-2);
+    outStr[0] = '-';
+    outStr[1] = '/';
+    }
+return outStr;
+}
+
 int cmpDnaStrings(DNA *a, DNA *b)
 /* Compare using screwy non-alphabetical DNA order TCGA */
 {

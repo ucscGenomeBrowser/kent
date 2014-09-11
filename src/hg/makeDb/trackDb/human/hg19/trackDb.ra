@@ -545,6 +545,8 @@ include ../chainNetVertebrate.ra
 
 include ../chainNetLegacy.ra alpha
 
+include ../chainNetStray.ra alpha
+
 track hg18cytoBand
 shortLabel hg18 Chromosome Band
 longLabel Chromosome Bands (hg18)
@@ -826,9 +828,6 @@ priority 2
 
 track genomicSuperDups override
 group rep
-
-track snp141Mult override
-snpSeqFile /gbdb/hg19/snp/snp141.fa
 
 track snp141Flagged override
 snpSeqFile /gbdb/hg19/snp/snp141.fa
@@ -2196,6 +2195,7 @@ url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/human/extract_primer_
 urlLabel Click here for primer details:
 
 include trackDb.100way.ra
+include trackDb.cacTest100way.ra
 
 track ultraConserved
 shortLabel Ultra Conserved

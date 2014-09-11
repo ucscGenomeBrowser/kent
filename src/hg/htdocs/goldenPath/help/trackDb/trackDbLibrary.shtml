@@ -1848,7 +1848,7 @@
 <div class="format"><code>graphTypeDefault points</code></div>
     <P>The signal can be
     graphed as either "<code>points</code>" displayed at the signal
-    value, or the default space-filling "<code>bars</code>".</P>
+    value, or the default space-filling "<code>bar</code>".</P>
     <P><B>Example:</B></P>
     <pre>   graphTypeDefault points</pre>
 </DIV>

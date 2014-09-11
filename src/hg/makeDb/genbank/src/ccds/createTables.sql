@@ -30,6 +30,44 @@ CREATE TABLE Accessions_GroupVersions (
 ) 
 ;
 
+DROP TABLE IF EXISTS BuildQualityTests;
+CREATE TABLE BuildQualityTests (
+        build_uid int NOT NULL ,
+        qa_analysis_id int NOT NULL ,
+        is_required tinyint(1) NOT NULL ,
+        acc_rejection_uid int NOT NULL ,
+        val_description varchar (64) NULL
+) 
+;
+
+DROP TABLE IF EXISTS Builds;
+CREATE TABLE Builds (
+        build_uid int PRIMARY KEY NOT NULL ,
+        tax_id int NOT NULL ,
+        ncbi_build_number int NOT NULL ,
+        ncbi_build_version int NOT NULL,
+        ensembl_build_number int NOT NULL ,
+        assembly_acc varchar (16) NOT NULL ,
+        assembly_version int NOT NULL ,
+        assembly_name varchar (16) NOT NULL ,
+        prev_build_uid int NULL ,
+        date_created datetime NOT NULL ,
+        date_made_public datetime NULL ,
+	ncbi_nadb_accession_uid int NULL ,
+	ensembl_nadb_accession_uid int NULL 
+
+) 
+;
+
+DROP TABLE IF EXISTS CcdsStatistics;
+CREATE TABLE CcdsStatistics (
+        statistics_uid int PRIMARY KEY NOT NULL ,
+        statistics_type_uid int NOT NULL ,
+        statistics_html text NULL ,
+        build_uid int NOT NULL 
+) 
+;
+
 DROP TABLE IF EXISTS CcdsStatusVals;
 CREATE TABLE CcdsStatusVals (
 	ccds_status_val_uid int PRIMARY KEY  NOT NULL ,
@@ -130,6 +168,7 @@ CREATE TABLE Interpretations (
 ) 
 ;
 
+
 DROP TABLE IF EXISTS Interpreters;
 CREATE TABLE Interpreters (
 	interpreter_uid int PRIMARY KEY  NOT NULL ,
@@ -155,6 +194,15 @@ CREATE TABLE Locations_GroupVersions (
 ) 
 ;
 
+DROP TABLE IF EXISTS NADB_Accessions;
+CREATE TABLE NADB_Accessions (
+	nadb_accession_uid int PRIMARY KEY  NOT NULL ,
+	organization_uid int NOT NULL ,
+	acc varchar (64) NOT NULL ,
+	version int NOT NULL
+) 
+;
+
 DROP TABLE IF EXISTS NextIds;
 CREATE TABLE NextIds (
 	table_name varchar (128) NOT NULL ,
@@ -167,7 +215,7 @@ CREATE TABLE Organizations (
 	organization_uid int PRIMARY KEY  NOT NULL ,
 	name varchar (128) NOT NULL ,
 	approval_authority tinyint(1) NOT NULL ,
-	tax_id int
+	tax_id int NULL 
 ) 
 ;
 
@@ -180,47 +228,16 @@ CREATE TABLE Programs (
 ) 
 ;
 
-
-DROP TABLE IF EXISTS StatisticsTypes;
-CREATE TABLE StatisticsTypes (
-        statistics_type_uid int PRIMARY KEY  NOT NULL ,
-        statistics_type varchar (20) NOT NULL 
-) 
-;
-
-DROP TABLE IF EXISTS CcdsStatistics;
-CREATE TABLE CcdsStatistics (
-        statistics_uid int PRIMARY KEY NOT NULL ,
-        statistics_type_uid int NOT NULL ,
-        statistics_html text NULL ,
-        build_uid int NOT NULL 
-) 
-;
-
-DROP TABLE IF EXISTS Builds;
-CREATE TABLE Builds (
-        build_uid int PRIMARY KEY NOT NULL ,
-        tax_id int NOT NULL ,
-        ncbi_build_number int NOT NULL ,
-        ncbi_build_version int NOT NULL,
-        ensembl_build_number int NOT NULL ,
-        assembly_acc varchar (16) NOT NULL ,
-        assembly_version int NOT NULL ,
-        assembly_name varchar (16) NOT NULL ,
-        prev_build_uid int NULL ,
-        date_created datetime NOT NULL ,
-        date_made_public datetime NULL
-
-) 
-;
-
-DROP TABLE IF EXISTS BuildQualityTests;
-CREATE TABLE BuildQualityTests (
-        build_uid int NOT NULL ,
-        qa_analysis_id int NOT NULL ,
-        is_required tinyint(1) NOT NULL ,
-        acc_rejection_uid int NOT NULL ,
-        val_description varchar (64) NULL
+DROP TABLE IF EXISTS ProspectiveAnnotCompare;
+CREATE TABLE ProspectiveAnnotCompare (
+        group_version_uid int NOT NULL ,
+        prot_length_diff int NOT NULL ,
+        coverage_pct float NOT NULL ,
+        matched_splice_count int NOT NULL ,
+        unmatched_splice_count int NOT NULL ,
+        total_splice_count int NOT NULL ,
+        matched_splice_pct float NOT NULL ,
+        identity_pct float NULL
 ) 
 ;
 
@@ -246,23 +263,10 @@ CREATE TABLE ProspectiveGroups (
 ) 
 ;
 
-DROP TABLE IF EXISTS ProspectiveAnnotCompare;
-CREATE TABLE ProspectiveAnnotCompare (
-        group_version_uid int NOT NULL ,
-        prot_length_diff int NOT NULL ,
-        coverage_pct float NOT NULL ,
-        matched_splice_count int NOT NULL ,
-        unmatched_splice_count int NOT NULL ,
-        total_splice_count int NOT NULL ,
-        matched_splice_pct float NOT NULL ,
-        identity_pct float NULL
-) 
-;
-
-DROP TABLE IF EXISTS ReportTypes;
-CREATE TABLE ReportTypes (
-        report_type_uid int PRIMARY KEY  NOT NULL ,
-        report_type varchar (128) NOT NULL
+DROP TABLE IF EXISTS ProspectiveStatusVals;
+CREATE TABLE ProspectiveStatusVals (
+	prospective_status_val_uid int PRIMARY KEY  NOT NULL ,
+	prospective_status varchar (50) NOT NULL
 ) 
 ;
 
@@ -278,10 +282,17 @@ CREATE TABLE ReportQueries
 ) 
 ;
 
-DROP TABLE IF EXISTS ProspectiveStatusVals;
-CREATE TABLE ProspectiveStatusVals (
-	prospective_status_val_uid int PRIMARY KEY  NOT NULL ,
-	prospective_status varchar (50) NOT NULL
+DROP TABLE IF EXISTS ReportTypes;
+CREATE TABLE ReportTypes (
+        report_type_uid int PRIMARY KEY  NOT NULL ,
+        report_type varchar (128) NOT NULL
+) 
+;
+
+DROP TABLE IF EXISTS StatisticsTypes;
+CREATE TABLE StatisticsTypes (
+        statistics_type_uid int PRIMARY KEY  NOT NULL ,
+        statistics_type varchar (20) NOT NULL 
 ) 
 ;
 

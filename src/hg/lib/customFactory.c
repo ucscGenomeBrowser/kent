@@ -2695,6 +2695,7 @@ if ((val = hashFindVal(hash, "description")) != NULL)
         tdb->longLabel = cloneString("My Custom Track");
     stripChar(tdb->longLabel,'"');	/*	no quotes please	*/
     stripChar(tdb->longLabel,'\'');	/*	no quotes please	*/
+    subChar(tdb->longLabel,'\t', ' ');	/*	no tabs please	*/
     }
 tdb->type = hashFindVal(hash, "tdbType");
 /* might be an old-style wigType track */

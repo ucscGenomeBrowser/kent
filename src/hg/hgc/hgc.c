@@ -8233,12 +8233,13 @@ void htcGeneMrna(char *geneName)
 {
 char *table = cartString(cart, "o");
 cartHtmlStart("Predicted mRNA from Genome");
-struct genePred *gp, *gpList = getGenePredForPosition(table, geneName);
+struct genePred *gp, *gpList = getGenePredForPosition(table, geneName), *next;
 int cdsStart, cdsEnd;
 struct dnaSeq *seq;
 
-for(gp = gpList; gp; gp = gp->next)
+for(gp = gpList; gp; gp = next)
     {
+    next = gp->next;
     seq = getCdnaSeq(gp);
     getCdsInMrna(gp, &cdsStart, &cdsEnd);
     toUpperN(seq->dna + cdsStart, cdsEnd - cdsStart);

@@ -2101,3 +2101,403 @@ TMPDIR=/dev/shm
     # 33622643 bases of 691751600 (4.861%) in intersection
 
 #########################################################################
+## 7-Way Multiz (DONE - 2014-06-02 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/dm6/bed/multiz27way
+    cd /hive/data/genomes/dm6/bed/multiz27way
+
+    # worked up a phylo tree with the help of
+    # http://phylot.biobyte.de/
+    # http://itol.embl.de/
+    # and editor: http://treegraph.bioinfweb.info/
+
+    cp -p ~/kent/src/hg/utils/phyloTrees/dm6.27way.nh ./
+
+
+    #	what that looks like:
+    ~/kent/src/hg/utils/phyloTrees/asciiTree.pl dm6.27way.nh
+(((((((((((((((((dm6:0.1,
+                (droSim1:0.1,
+                droSec1:0.1):0.1):0.1,
+               (droYak3:0.1,
+               droEre2:0.1):0.1):0.1,
+              (droBia2:0.1,
+              droSuz1:0.1):0.1):0.1,
+             (droAna3:0.1,
+             droBip2:0.1):0.1):0.1,
+            droEug2:0.1):0.1,
+           droEle2:0.1):0.1,
+          droKik2:0.1):0.1,
+         droTak2:0.1):0.1,
+        droRho2:0.1):0.1,
+       droFic2:0.1):0.1,
+      ((droPse3:0.1,
+       droPer1:0.1):0.1,
+      droMir2:0.1):0.1):0.1,
+     droWil2:0.1):0.1,
+    (((droVir3:0.1,
+      droMoj3:0.1):0.1,
+     droAlb1:0.1):0.1,
+    droGri2:0.1):0.1):0.1,
+   musDom2:0.1):0.1,
+  anoGam1:0.1):0.1,
+ apiMel4:0.1):0.1,
+triCas2:0.1);
+
+    # extract species list from that .nh file
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+        dm6.27way.nh | xargs echo | sed 's/ //g; s/,/ /g' \
+        | sed 's/[()]//g; s/,/ /g' | tr '[ ]' '[\n]' > species.list.txt
+
+    # construct db to common name translation list:
+    cat species.list.txt | while read DB
+do
+hgsql -N -e "select name,organism from dbDb where name=\"${DB}\";" hgcentraltest
+done | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
+        > db.to.name.txt
+    # construct db to scientific name translation list:
+    cat species.list.txt | while read DB
+do
+hgsql -N -e "select name,scientificName from dbDb where name=\"${DB}\";" hgcentraltest
+done | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
+     | sed -e 's/pseudoobscura_pseudoobscura/pseudoobscura/;' \
+        > db.to.sciName.txt
+
+    # construct a common name .nh file:
+    /cluster/bin/phast/tree_doctor --rename \
+    "`cat db.to.name.txt`" dm6.27way.nh | sed -e 's/00*)/)/g; s/00*,/,/g' \
+       | $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+         > dm6.27way.commonNames.nh
+
+    # construct a scientific name .nh file:
+    /cluster/bin/phast/tree_doctor --rename \
+    "`cat db.to.sciName.txt`" dm6.27way.nh | sed -e 's/00*)/)/g; s/00*,/,/g' \
+       | $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+         > dm6.27way.scientificNames.nh
+    # construct a scientific name .nh file:
+
+    cat dm6.27way.scientificNames.nh
+(((((((((((((((((Drosophila_melanogaster:0.1,
+                (Drosophila_simulans:0.1,
+                Drosophila_sechellia:0.1):0.1):0.1,
+               (Drosophila_yakuba:0.1,
+               Drosophila_erecta:0.1):0.1):0.1,
+              (Drosophila_biarmipes:0.1,
+              Drosophila_suzukii:0.1):0.1):0.1,
+             (Drosophila_ananassae:0.1,
+             Drosophila_bipectinata:0.1):0.1):0.1,
+            Drosophila_eugracilis:0.1):0.1,
+           Drosophila_elegans:0.1):0.1,
+          Drosophila_kikkawai:0.1):0.1,
+         Drosophila_takahashii:0.1):0.1,
+        Drosophila_rhopaloa:0.1):0.1,
+       Drosophila_ficusphila:0.1):0.1,
+      ((Drosophila_pseudoobscura:0.1,
+       Drosophila_persimilis:0.1):0.1,
+      Drosophila_miranda:0.1):0.1):0.1,
+     Drosophila_willistoni:0.1):0.1,
+    (((Drosophila_virilis:0.1,
+      Drosophila_mojavensis:0.1):0.1,
+     Drosophila_albomicans:0.1):0.1,
+    Drosophila_grimshawi:0.1):0.1):0.1,
+   Musca_domestica:0.1):0.1,
+  Anopheles_gambiae:0.1):0.1,
+ Apis_mellifera:0.1):0.1,
+Tribolium_castaneum:0.1);
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a png image for src/hg/htdocs/images/phylo/dm6_27way.png
+
+    /cluster/bin/phast/all_dists dm6.27way.nh | grep dm6 \
+        | sed -e "s/dm6.//" | sort -k2n > 27way.distances.txt
+    #	Use this output to create the table below
+    head 27way.distances.txt
+droSec1 0.300000
+droSim1 0.300000
+droEre2 0.400000
+droYak3 0.400000
+droBia2 0.500000
+droSuz1 0.500000
+droAna3 0.600000
+droBip2 0.600000
+droEug2 0.600000
+droEle2 0.700000
+
+    cat << '_EOF_' > sizeStats.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "<27way.distances.txt") or
+        die "can not read 27way.distances.txt";
+
+my $count = 0;
+while (my $line = <FH>) {
+    chomp $line;
+    my ($D, $dist) = split('\s+', $line);
+    my $chain = "chain" . ucfirst($D);
+    my $B="/hive/data/genomes/dm6/bed/lastz.$D/fb.dm6." .
+        $chain . "Link.txt";
+    my $chainLinkMeasure =
+        `awk '{print \$5}' ${B} 2> /dev/null | sed -e "s/(//; s/)//"`;
+    chomp $chainLinkMeasure;
+    $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
+    $chainLinkMeasure =~ s/\%//;
+    my $swapFile="/hive/data/genomes/${D}/bed/lastz.dm6/fb.${D}.chainDm6Link.txt";
+    my $swapMeasure = "N/A";
+    if ( -s $swapFile ) {
+	$swapMeasure =
+	    `awk '{print \$5}' ${swapFile} 2> /dev/null | sed -e "s/(//; s/)//"`;
+	chomp $swapMeasure;
+	$swapMeasure = 0.0 if (length($swapMeasure) < 1);
+	$swapMeasure =~ s/\%//;
+    }
+    my $orgName=
+    `hgsql -N -e "select organism from dbDb where name='$D';" hgcentraltest`;
+    chomp $orgName;
+    if (length($orgName) < 1) {
+        $orgName="N/A";
+    }
+    ++$count;
+    printf "# %02d  %.4f (%% %06.3f) (%% %06.3f) - %s %s\n", $count, $dist,
+        $chainLinkMeasure, $swapMeasure, $orgName, $D;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./sizeStats.pl
+    ./sizeStats.pl
+#
+
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+
+#       featureBits chainLink measures
+#               chainLink
+#  N distance  on dm6  on other     other species
+# 01  0.3000 (% 82.561) (% 81.572) - D. sechellia droSec1
+# 02  0.3000 (% 80.042) (% 89.329) - D. simulans droSim1
+# 03  0.4000 (% 80.023) (% 84.386) - D. erecta droEre2
+# 04  0.4000 (% 80.562) (% 80.965) - D. yakuba droYak3
+# 05  0.5000 (% 75.042) (% 67.383) - D. biarmipes droBia2
+# 06  0.5000 (% 74.591) (% 64.198) - D. suzukii droSuz1
+# 07  0.6000 (% 67.282) (% 58.760) - D. ananassae droAna3
+# 08  0.6000 (% 65.865) (% 60.253) - D. bipectinata droBip2
+# 09  0.6000 (% 75.265) (% 73.292) - D. eugracilis droEug2
+# 10  0.7000 (% 75.445) (% 67.566) - D. elegans droEle2
+# 11  0.8000 (% 70.590) (% 64.708) - D. kikkawai droKik2
+# 12  0.9000 (% 75.507) (% 63.519) - D. takahashii droTak2
+# 13  1.0000 (% 74.940) (% 65.415) - D. rhopaloa droRho2
+# 14  1.1000 (% 74.740) (% 74.403) - D. ficusphila droFic2
+# 15  1.3000 (% 59.308) (% 63.646) - D. miranda droMir2
+# 16  1.3000 (% 51.432) (% 40.432) - D. willistoni droWil2
+# 17  1.4000 (% 59.049) (% 52.949) - D. persimilis droPer1
+# 18  1.4000 (% 59.836) (% 59.839) - D. pseudoobscura droPse3
+# 19  1.5000 (% 50.979) (% 42.814) - D. grimshawi droGri2
+# 20  1.5000 (% 19.278) (% 04.861) - M. domestica musDom2
+# 21  1.6000 (% 14.452) (% 07.962) - A. gambiae anoGam1
+# 22  1.6000 (% 44.544) (% 38.217) - D. albomicans droAlb1
+# 23  1.7000 (% 08.183) (% 05.360) - A. mellifera apiMel4
+# 24  1.7000 (% 50.132) (% 41.385) - D. mojavensis droMoj3
+# 25  1.7000 (% 51.937) (% 43.828) - D. virilis droVir3
+# 26  1.8000 (% 14.092) (% 14.808) - T. castaneum triCas2
+
+# None of this concern for distances matters in building the first step, the
+# maf files.
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	dm6.27way.nh | xargs echo | sed 's/ //g; s/,/ /g' > tree.nh
+
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+# dm6 droSim1 droSec1 droYak3 droEre2 droBia2 droSuz1 droAna3 droBip2 droEug2 
+# droEle2 droKik2 droTak2 droRho2 droFic2 droPse3 droPer1 droMir2 droWil2 
+# droVir3 droMoj3 droAlb1 droGri2 musDom2 anoGam1 apiMel4 triCas2
+
+    #	bash shell syntax here ...
+    cd /hive/data/genomes/dm6/bed/multiz27way
+    export H=/hive/data/genomes/dm6/bed
+    mkdir mafLinks
+    # want syntenic net for all the Drosophilas
+    for G in droAlb1 droAna3 droBia2 droBip2 droEle2 droEre2 droEug2 droFic2 droGri2 droKik2 droMir2 droMoj3 droPer1 droPse3 droRho2 droSec1 droSim1 droSuz1 droTak2 droVir3 droWil2 droYak3
+    do
+      mkdir mafLinks/$G
+      echo ln -s ${H}/lastz.$G/axtChain/dm6.${G}.synNet.maf.gz ./mafLinks/$G
+      ln -s ${H}/lastz.$G/axtChain/dm6.${G}.synNet.maf.gz ./mafLinks/$G
+    done
+
+    # and basic maf net for the others:
+    for G in anoGam1 apiMel4 musDom2 triCas2
+do
+      mkdir mafLinks/$G
+      echo ln -s ${H}/lastz.$G/mafNet/dm6.${G}.net.maf.gz ./mafLinks/$G
+      ln -s ${H}/lastz.$G/mafNet/dm6.${G}.net.maf.gz ./mafLinks/$G
+done
+
+    # verify the symLinks are good:
+    ls -ogrtL mafLinks/*/*
+# -rw-rw-r-- 1 57989657 Aug 29 11:52 mafLinks/droAna3/dm6.droAna3.synNet.maf.gz
+# -rw-rw-r-- 1 66653928 Aug 29 13:31 mafLinks/droEre2/dm6.droEre2.synNet.maf.gz
+# -rw-rw-r-- 1 55414479 Aug 29 13:48 mafLinks/droSim1/dm6.droSim1.synNet.maf.gz
+# -rw-rw-r-- 1 64261526 Aug 29 13:55 mafLinks/droSec1/dm6.droSec1.synNet.maf.gz
+# -rw-rw-r-- 1 43326252 Aug 29 13:58 mafLinks/droGri2/dm6.droGri2.synNet.maf.gz
+# -rw-rw-r-- 1 14470342 Aug 29 14:03 mafLinks/triCas2/dm6.triCas2.net.maf.gz
+# -rw-rw-r-- 1 53914019 Aug 29 14:06 mafLinks/droPer1/dm6.droPer1.synNet.maf.gz
+# -rw-rw-r-- 1  8871501 Aug 29 14:09 mafLinks/apiMel4/dm6.apiMel4.net.maf.gz
+# -rw-rw-r-- 1 44299779 Aug 29 14:12 mafLinks/droVir3/dm6.droVir3.synNet.maf.gz
+# -rw-rw-r-- 1 56305568 Aug 29 14:19 mafLinks/droPse3/dm6.droPse3.synNet.maf.gz
+# -rw-rw-r-- 1 58119972 Aug 29 14:31 mafLinks/droMir2/dm6.droMir2.synNet.maf.gz
+# -rw-rw-r-- 1 68523213 Aug 29 14:31 mafLinks/droEle2/dm6.droEle2.synNet.maf.gz
+# -rw-rw-r-- 1 68100446 Aug 29 14:35 mafLinks/droYak3/dm6.droYak3.synNet.maf.gz
+# -rw-rw-r-- 1 64321608 Aug 29 14:43 mafLinks/droBia2/dm6.droBia2.synNet.maf.gz
+# -rw-rw-r-- 1 44761222 Aug 29 14:43 mafLinks/droWil2/dm6.droWil2.synNet.maf.gz
+# -rw-rw-r-- 1 68869400 Aug 29 14:44 mafLinks/droFic2/dm6.droFic2.synNet.maf.gz
+# -rw-rw-r-- 1 42864649 Aug 29 14:45 mafLinks/droMoj3/dm6.droMoj3.synNet.maf.gz
+# -rw-rw-r-- 1 14470901 Aug 29 14:47 mafLinks/anoGam1/dm6.anoGam1.net.maf.gz
+# -rw-rw-r-- 1 61398493 Aug 29 14:51 mafLinks/droBip2/dm6.droBip2.synNet.maf.gz
+# -rw-rw-r-- 1 66734812 Aug 29 14:52 mafLinks/droKik2/dm6.droKik2.synNet.maf.gz
+# -rw-rw-r-- 1 67398540 Aug 29 14:54 mafLinks/droTak2/dm6.droTak2.synNet.maf.gz
+# -rw-rw-r-- 1 60781324 Aug 29 14:54 mafLinks/droSuz1/dm6.droSuz1.synNet.maf.gz
+# -rw-rw-r-- 1 28941891 Aug 29 15:01 mafLinks/droAlb1/dm6.droAlb1.synNet.maf.gz
+# -rw-rw-r-- 1 69660184 Aug 29 15:02 mafLinks/droEug2/dm6.droEug2.synNet.maf.gz
+# -rw-rw-r-- 1 61713626 Aug 29 15:06 mafLinks/droRho2/dm6.droRho2.synNet.maf.gz
+# -rw-rw-r-- 1 19994083 Aug 29 15:08 mafLinks/musDom2/dm6.musDom2.net.maf.gz
+
+#-rw-rw-r-- 1  709500062 Jan 25 12:15 mafLinks/mm10/dm6.mm10.synNet.maf.gz
+#-rw-rw-r-- 1 1089643630 Jan 27 19:15 mafLinks/canFam3/dm6.canFam3.synNet.maf.gz
+#-rw-rw-r-- 1 1277455681 Jan 27 21:52 mafLinks/rheMac3/dm6.rheMac3.synNet.maf.gz
+#-rw-rw-r-- 1  687500679 Mar  1 12:27 mafLinks/rn5/dm6.rn5.synNet.maf.gz
+#-rw-rw-r-- 1 1463969868 May 27 11:41 mafLinks/panTro4/dm6.panTro4.synNet.maf.gz
+#-rw-rw-r-- 1  323347908 May 29 12:38 mafLinks/monDom5/dm6.monDom5.net.maf.gz
+
+    # split the maf files into a set of hashed named files
+    # this hash named split keeps the same chr/contig names in the same
+    # named hash file.
+    mkdir /hive/data/genomes/dm6/bed/multiz27way/mafSplit
+    cd /hive/data/genomes/dm6/bed/multiz27way/mafSplit
+    for D in `sed -e "s/dm6 //" ../species.list`
+do
+    echo "${D}"
+    mkdir $D
+    cd $D
+    echo "mafSplit -byTarget -useHashedName=8 /dev/null . ../../mafLinks/${D}/*.maf.gz"
+    mafSplit -byTarget -useHashedName=8 /dev/null . \
+	../../mafLinks/${D}/*.maf.gz
+    cd ..
+done
+
+    # construct a list of all possible maf file names.
+    # they do not all exist in each of the species directories
+    find . -type f | wc -l
+    # 678
+    find . -type f | grep ".maf$" | xargs -L 1 basename | sort -u > maf.list
+    wc -l maf.list
+    # 161 maf.list
+
+    mkdir /hive/data/genomes/dm6/bed/multiz27way/splitRun
+    cd /hive/data/genomes/dm6/bed/multiz27way/splitRun
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/autoMZ penn
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = dm6
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /dev/shm/$db/multiz.$c
+set pairs = /hive/data/genomes/dm6/bed/multiz27way/mafSplit
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../../tree.nh ../../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //" species.list`)
+    set in = $pairs/$s/$c
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+        if (! -s $out) then
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c \
+        > /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c $result
+/bin/rm -fr $tmp
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(file1) {check out line+ /hive/data/genomes/dm6/bed/multiz27way/splitRun/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    ln -s ../../mafSplit/maf.list maf.list
+    ssh ku
+    cd /hive/data/genomes/dm6/bed/multiz27way/splitRun/run
+    gensub2 maf.list single template stdout > jobList
+    para -ram=8g create jobList
+# Completed: 161 of 161 jobs
+# CPU time in finished jobs:     172027s    2867.12m    47.79h    1.99d  0.005 y
+# IO & Wait Time:                  1065s      17.75m     0.30h    0.01d  0.000 y
+# Average job time:                1075s      17.92m     0.30h    0.01d
+# Longest finished job:           42777s     712.95m    11.88h    0.50d
+# Submission to last job:         42793s     713.22m    11.89h    0.50d
+
+    # combine into one file  (the 1>&2 redirect sends the echo to stderr)
+    cd /hive/data/genomes/dm6/bed/multiz27way
+    head -1 splitRun/maf/053.maf > multiz27way.maf
+    for F in splitRun/maf/*.maf
+do
+    echo "${F}" 1>&2
+    egrep -v "^#" ${F}
+done >> multiz27way.maf
+    tail -1 splitRun/maf/053.maf >> multiz27way.maf
+# -rw-rw-r--  1 5808772759 Sep  5 15:14 multiz27way.maf
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/dm6/bed/multiz27way
+    mkdir /gbdb/dm6/multiz27way
+    ln -s `pwd`/multiz27way.maf /gbdb/dm6/multiz27way
+    cd /dev/shm
+    time hgLoadMaf dm6 multiz27way
+    # Loaded 2110160 mafs in 1 files from /gbdb/dm6/multiz27way
+    # real    5m42.300s
+
+    time hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 dm6 multiz27waySummary \
+	/gbdb/dm6/multiz27way/multiz27way.maf
+    # Created 157893 summary blocks from 34026658 components and 2110160 mafs from /gbdb/dm6/multiz27way/multiz27way.maf
+    # real    2m44.856s
+
+
+    wc -l multiz27way*.tab
+    #  2110160 multiz27way.tab
+    #   157893 multiz27waySummary.tab
+    #  2268053 total
+
+-rw-rw-r-- 1 102915136 Sep  5 15:20 multiz27way.tab
+-rw-rw-r-- 1   7215723 Sep  5 15:35 multiz27waySummary.tab
+
+    rm multiz27way*.tab
+
+##############################################################################
