@@ -200,7 +200,8 @@ fputc(sep,f);
 fprintf(f, "%u", el->chromEnd);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name);
+if (el->name != NULL)
+    fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%u", el->score);
@@ -267,11 +268,13 @@ if (sep == ',') fputc('}',f);
 }
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->type);
+if (el->type != NULL)
+    fprintf(f, "%s", el->type);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->geneName);
+if (el->geneName != NULL)
+    fprintf(f, "%s", el->geneName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -280,7 +283,8 @@ if (el->geneName2 != NULL)
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->geneType);
+if (el->geneType != NULL)
+    fprintf(f, "%s", el->geneType);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
