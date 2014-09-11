@@ -258,6 +258,7 @@ src/hg/makeDb/hgLoadMaf \
 src/hg/makeDb/hgLoadMafFrames \
 src/hg/makeDb/hgLoadNet \
 src/hg/makeDb/hgLoadOut \
+src/hg/makeDb/hgLoadOutJoined \
 src/hg/makeDb/hgLoadPsl \
 src/hg/makeDb/hgLoadSeq \
 src/hg/makeDb/hgLoadSample \
