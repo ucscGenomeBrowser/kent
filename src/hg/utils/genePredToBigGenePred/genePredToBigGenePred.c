@@ -36,6 +36,9 @@ struct bigGenePred bgp;
 if (gp->exonCount > MAX_BLOCKS)
     errAbort("genePred has more than %d exons, make MAX_BLOCKS bigger in source", MAX_BLOCKS);
 
+if (gp->exonFrames == NULL)
+    genePredAddExonFrames(gp);
+
 bgp.chrom = gp->chrom;
 bgp.chromStart = gp->txStart;
 bgp.chromEnd = gp->txEnd;
@@ -60,10 +63,10 @@ bgp.name2 = gp->name2;
 bgp.cdsStartStat = gp->cdsStartStat;
 bgp.cdsEndStat = gp->cdsEndStat;
 bgp.exonFrames = gp->exonFrames;
-bgp.type = "none";
+bgp.type = NULL;
 bgp.geneName = gp->name;
 bgp.geneName2 = gp->name2;
-bgp.geneType = "none";
+bgp.geneType = NULL;
 
 bigGenePredOutput(&bgp, fp, '\t', '\n');
 }
