@@ -545,6 +545,8 @@ include ../chainNetVertebrate.ra
 
 include ../chainNetLegacy.ra alpha
 
+include ../chainNetStray.ra alpha
+
 track hg18cytoBand
 shortLabel hg18 Chromosome Band
 longLabel Chromosome Bands (hg18)
