@@ -499,3 +499,4 @@ group denisova
 visibility hide
 type bed 9
 itemRgb on
+release alpha,beta
