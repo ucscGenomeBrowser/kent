@@ -478,27 +478,9 @@ if (isNotEmpty(chimpAllele))
 	dyStringPrintf(dy, "%s>", chimpAllele);
     }
 if (doRc)
-    {
-    int obsLen = strlen(observedAlleles);
-    char obsCopy[obsLen+1];
-    safecpy(obsCopy, sizeof(obsCopy), observedAlleles);
-    char *obsWords[obsLen];
-    int obsCount = chopByChar(obsCopy, '/', obsWords, obsLen);
-    int i;
-    // dbSNP orders alleles alphabetically so reverse the order too:
-    for (i = obsCount-1;  i >= 0;  i--)
-	{
-	char *al = obsWords[i];
-	int alLen = strlen(al);
-	if (isAllNt(al, alLen))
-	    reverseComplement(al, alLen);
-	if (i < obsCount-1)
-	    dyStringAppendC(dy, '/');
-	dyStringPrintf(dy, "%s", al);
-	}
-    }
+    dyStringAppend(dy, reverseComplementSlashSeparated(observedAlleles));
 else
-    dyStringPrintf(dy, "%s", observedAlleles);
+    dyStringAppend(dy, observedAlleles);
 return dyStringCannibalize(&dy);
 }
 
