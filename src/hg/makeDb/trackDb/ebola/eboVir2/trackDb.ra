@@ -27,7 +27,7 @@ track genePredictions
 shortLabel genePredictions
 longLabel Gene predictions from the five annotated NCBI genomes
 group rna
-visibility hide
+visibility pack
 spectrum on
 color 12,12,120
 type psl protein
