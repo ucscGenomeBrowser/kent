@@ -4,3 +4,5 @@ longLabel gene predictions and annotations from NCBI gff file in release
 group genes
 visibility pack
 type bed 4
+
+include trackDb.chainNet.ra
