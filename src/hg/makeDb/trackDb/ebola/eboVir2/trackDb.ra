@@ -23,14 +23,14 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 
-track genePredictions
-shortLabel genePredictions
-longLabel Gene predictions from the five annotated NCBI genomes
-group rna
-visibility pack
-spectrum on
-color 12,12,120
-type psl protein
+#track genePredictions
+#shortLabel genePredictions
+#longLabel Gene predictions from the five annotated NCBI genomes
+#group rna
+#visibility pack
+#spectrum on
+#color 12,12,120
+#type psl protein
 
 track ncbiGene
 shortLabel NCBI Genes
