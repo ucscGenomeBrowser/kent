@@ -238,7 +238,7 @@ static boolean addCdsFrame(struct genePred *gp, struct gff3AnnRef *cdsBlks)
 struct gff3AnnRef *cds;
 for (cds = cdsBlks; cds != NULL; cds = cds->next)
     {
-    iExon = findCdsExon(gp, cds->ann, -1);
+    int iExon = findCdsExon(gp, cds->ann, -1);
     if (iExon < 0)
         return FALSE; // error
     gp->exonFrames[iExon] = gff3PhaseToFrame(cds->ann->phase);
