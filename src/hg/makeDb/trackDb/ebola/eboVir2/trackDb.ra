@@ -31,3 +31,5 @@ visibility pack
 spectrum on
 color 12,12,120
 type psl protein
+
+include trackDb.49way.ra
