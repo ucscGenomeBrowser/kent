@@ -1,0 +1,45 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+visibility pack
+html gold
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+visibility hide
+html gap
+
+track chainSelf
+shortLabel 47 Strain Chain
+longLabel 47 strains Chained Alignments
+group compGeno
+chainColor Normalized Score
+visibility hide
+matrixHeader A, C, G, T
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+type chain eboVir2
+otherDb eboVir2
+chainNormScoreAvailable yes
+color 100,50,0
+altColor 255,240,200
+spectrum on
+
+track genePredictions
+shortLabel genePredictions
+longLabel Gene predictions from the five annotated NCBI genomes
+group rna
+visibility pack
+spectrum on
+color 12,12,120
+type psl protein
+
+track ncbiGene
+shortLabel NCBI Genes
+longLabel NCBI Genes from http://www.ncbi.nlm.nih.gov/nuccore/674810552
+group genes
+visibility pack
+color 12,12,120
+type genePred 
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+include trackDb.49way.ra
