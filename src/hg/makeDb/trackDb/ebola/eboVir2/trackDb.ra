@@ -13,7 +13,7 @@ shortLabel 47 Strain Chain
 longLabel 47 strains Chained Alignments
 group compGeno
 chainColor Normalized Score
-visibility full
+visibility hide
 matrixHeader A, C, G, T
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 type chain eboVir2
