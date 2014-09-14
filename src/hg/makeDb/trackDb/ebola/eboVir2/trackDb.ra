@@ -34,7 +34,7 @@ type psl protein
 
 track ncbiGene
 shortLabel NCBI Genes
-longLabel NCBI Genes from ftp://ftp.ncbi.nih.gov/genomes/Viruses/Zaire_ebolavirus_uid14703/
+longLabel NCBI Genes from http://www.ncbi.nlm.nih.gov/nuccore/674810552
 group genes
 visibility pack
 color 12,12,120
