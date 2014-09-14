@@ -32,4 +32,14 @@ spectrum on
 color 12,12,120
 type psl protein
 
+track ncbiGene
+shortLabel NCBI Genes
+longLabel NCBI Genes from ftp://ftp.ncbi.nih.gov/genomes/Viruses/Zaire_ebolavirus_uid14703/
+group genes
+visibility pack
+color 12,12,120
+type genePred 
+baseColorUseCds given
+baseColorDefault genomicCodons
+
 include trackDb.49way.ra
