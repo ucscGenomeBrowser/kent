@@ -15,14 +15,22 @@ errAbort(
   "usage:\n"
   "   bigWigCluster input.list chrom.sizes output.json\n"
   "options:\n"
+  "   -threads = int Sets the thread count for the multiThreads option, default is 10 \n"
+  "   -hacTree = Dictates how the tree is generated;  multiThreads or costlyMerges or fromItems. fromItems is default \n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {NULL, 0},
+   {"threads", OPTION_INT},
+   {"hacTree", OPTION_STRING},
 };
+
+
 double longest = 0;
+char* clHacTree = "fromItems";
+int clThreads = 10; // The number of threads to run with the multiThreads option
 int nameCount = 0;
 
 
@@ -180,7 +188,7 @@ safef(name,1024, "%i", nameCount);
 safef(cmd2, 1024, "bedGraphToBigWig output chrom.sizes %s", name);
 mustSystem(cmd1);
 mustSystem(cmd2);
-result->name = name; 
+result->name = cloneString(name); 
 return (struct slList *)result;
 }
 
@@ -232,12 +240,26 @@ void bigWigCluster(char *inputList, char* chromSizes, char* output)
 struct bigWig *list = getBigWigs(inputList);
 FILE *f = mustOpen(output,"w");
 struct lm *localMem = lmInit(0);
-//struct hacTree *clusters = hacTreeFromItems((struct slList *)list, localMem,
-//					    slBigWigDistance, slBigWigMerge,NULL, NULL);
-//struct hacTree *clusters = hacTreeForCostlyMerges((struct slList *)list, localMem,
-//					    slBigWigDistance, slBigWigMerge, NULL);
-struct hacTree *clusters = hacTreeMultiThread(10 ,(struct slList *)list, localMem,
-					    slBigWigDistance, slBigWigMerge, NULL);
+struct hacTree *clusters = NULL;
+if (sameString(clHacTree, "multiThreads"))
+    {
+    clusters = hacTreeMultiThread(clThreads, (struct slList *)list, localMem,
+  					    slBigWigDistance, slBigWigMerge, NULL, NULL);
+    }
+else if (sameString(clHacTree, "costlyMerges"))
+    {
+    clusters = hacTreeForCostlyMerges((struct slList *)list, localMem,
+						slBigWigDistance, slBigWigMerge, NULL);
+    }
+else if (sameString(clHacTree, "fromItems"))
+    {
+    clusters = hacTreeFromItems((struct slList *)list, localMem,
+						slBigWigDistance, slBigWigMerge, NULL, NULL);
+    }
+else 
+    {
+    uglyAbort("Unrecognized input option: %s", clHacTree);
+    }
 struct slRef *orderedList = getOrderedLeafList(clusters);
 colorLeaves(orderedList);
 printHierarchicalJson(f, clusters, 20, 20);
@@ -254,6 +276,8 @@ for (i = 0 ; i <= nameCount; ++i)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+clThreads = optionInt("threads", clThreads);
+clHacTree = optionVal("hacTree", clHacTree);
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
