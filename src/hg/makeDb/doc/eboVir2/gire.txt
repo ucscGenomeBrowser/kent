@@ -60,6 +60,18 @@ KJ660347v2	15659	15660	T/C	2	0,0	0,0
       hgBbiDbLink eboVir2 $vcf:r /gbdb/eboVir2/gire/$vcf.gz
     end
 
+    # Get KM* accessions from project page: http://www.ncbi.nlm.nih.gov/bioproject/PRJNA257197
+    # Download KM* sequences from NCBI... there are 79 not 99, oh well.
+    cd /hive/data/genomes/eboVir2/bed/gire
+    # Save sequences as gire.fasta.
+    # Make files for mapping between GenBank IDs and Gire et al. IDs.
+    grep '^>' gire.fasta \
+    | perl -wpe 's/.*(KM\d+)\.1.*ManoRiver-([A-Z]+\d+(\.\d+)?).*/$1\t$2/' \
+      > gbAccToGireId.txt
+    grep '^>' gire.fasta \
+    | perl -wpe 's/.*(KM\d+)\.1.*ManoRiver-([A-Z]+\d+(\.\d+)?).*/EBOV_2014_$2\t$1/' \
+      > gireIdToGbAcc.txt
+
 #TODO
     # File S2: Phylogenetic trees created using MrBayes and RAxML.
     wget http://www.sciencemag.org/content/suppl/2014/08/27/science.1259657.DC1/1259657_file_s2.zip
@@ -72,5 +84,69 @@ KJ660347v2	15659	15660	T/C	2	0,0	0,0
     # Table S4: SNPs unique to the 2014 outbreak variant.
     wget http://www.sciencemag.org/content/suppl/2014/08/27/science.1259657.DC1/1259657_table_s4.zip
     unzip 1259657_table_s4.zip
-    # Use a spreadsheet tool to convert .xslx to tab-sep text.
+    mkdir /hive/data/genomes/eboVir2/bed/gire/Table_S4
+    cd /hive/data/genomes/eboVir2/bed/gire/Table_S4
+    # Use a spreadsheet tool to convert each sheet of .xslx to tab-sep text.
+    wc -l S4*.txt
+#  395 S4_2014_specific_snps.txt
+#   76 S4_Description.txt
+#   19 S4_GP_Kikwit_aa_diffs.txt
+#   22 S4_GP_Mayinga_aa_diffs.txt
+#   14 S4_filter1.txt
+#   13 S4_filter2.txt
+#   15 S4_ns_changes_polymorphic_in_2014.txt
+#   35 S4_unique_ns_changes_fixed_in_2014.txt
+    # S4_Description.txt describes all of the other files.
+    # Convert S4_2014_specific_snps.txt to bigBed with coloring by coding effect.
+    tail -n +2 S4_2014_specific_snps.txt \
+    | perl -wne ' \
+      chomp; \
+      ($start, $ancNt, $newNt, $gene, $type, $aaPos, $ancAa, $newAa, $blosum62, $countInNew) \
+        = split("\t"); \
+      $chrom = "KJ660347v2"; \
+      $end = $start;  $start--; \
+      $name = "$ancNt/$newNt"; \
+      $color = "0,0,0"; \
+      $hgsv = ""; \
+      if ($type ne "noncoding") { \
+        $hgsv = "$gene:$ancAa$aaPos$newAa"; \
+      } \
+      if ($type eq "nonsynonymous") { \
+        $color = "220,0,0"; \
+        $name .= " $hgsv"; \
+      } elsif ($type eq "synonymous") { \
+        $color = "0,220,0"; \
+      } \
+      $freqInNew = sprintf "%4f", ($countInNew / 81.0); \
+      print join("\t", $chrom, $start, $end, $name, 0, "+", $start, $end, $color, \
+                       $gene, $type, $hgsv, $blosum62, $countInNew, $freqInNew) . "\n"; \
+    ' \
+      > gire2014SpecificSnps.bed
+    cat > gire2014SpecificSnps.as <<EOF
+table gire2014SpecificSnps
+"Sites that carry a unique base in the 2014 outbreak strain, from Gire et al. Table S4"
+    (
+    string chrom;      "Reference sequence"
+    uint   chromStart; "Start position in reference"
+    uint   chromEnd;   "End position in reference"
+    string name;       "Variant: ancestral/2014-derived"
+    uint   score;      "Score from 0-1000 (not used)"
+    char[1] strand;    "+ or - (always + here)"
+    uint thickStart;   "Start of where display should be thick (same as chromStart)"
+    uint thickEnd;     "End of where display should be thick (same as chromEnd)"
+    uint reserved;     "Used as itemRgb"
+    string gene;       "Gene symbol"
+    string type;       "noncoding, synonymous or nonsynonymous"
+    string hgsv;       "HGSV notation for protein coding changes (or lack thereof)"
+    string blosum62;   "BLOSUM62 substitution score for ancestral and 2014 amino acids"
+    int countInNew;    "Number of 2014 samples that contain derived allele (out of 81 total)"
+    float freqInNew;   "Derived allele frequency of 2014 samples"
+    )
+EOF
+    bedToBigBed gire2014SpecificSnps.bed ../../../chrom.sizes \
+      -type=bed9+ -as=gire2014SpecificSnps.as -tab \
+      gire2014SpecificSnps.bb
+    ln -s `pwd`/gire2014SpecificSnps.bb /gbdb/eboVir2/gire/
+    hgBbiDbLink eboVir2 gire2014SpecificSnps /gbdb/eboVir2/gire/gire2014SpecificSnps.bb
+
 
