@@ -54,7 +54,7 @@ shortLabel Zaire Variants
 longLabel Variants from 101 Zaire-clade Ebola virus samples
 group varRep
 type vcfTabix
-visibility hide
+visibility pack
 
 include trackDb.49way.ra
 include trackDb.49wayStrainNames.ra
