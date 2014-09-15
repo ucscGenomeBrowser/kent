@@ -25,6 +25,9 @@ KJ660347v2	15598	15599	A/G	2	0,0	0,0
 KJ660347v2	15659	15660	T/C	2	0,0	0,0
     # Visually checked the custom track against BLAT diffs -- looks good.
 
+    # Oh damn... they used KJ660347.1 but we need .2, likewise for 346 and 348.
+    # I guess the script will have to update those too.  They also have "." for some bases.
+
     # File S1: Alignment and SNP calls used in this study.
     wget http://www.sciencemag.org/content/suppl/2014/08/27/science.1259657.DC1/1259657_file_s1.zip
     unzip 1259657_file_s1.zip
@@ -32,57 +35,8 @@ KJ660347v2	15659	15660	T/C	2	0,0	0,0
     wc -l *.vcf
 #    63 SNP-2014.vcf
 #  1311 SNP-ZEBOV.vcf
-    # All 7 differences are in SNP-2014.vcf so they're probably in both.
-    # Make a script to replace Gire's reference KM034562 with our reference KJ660347v2,
-    # and for those SNVs, swap ref and alt.
-    cat > gireVcfToUcsc.pl <<'_EOF_'
-#!/usr/bin/env perl
-use warnings;
-use strict;
-
-my @diffs = ();
-$diffs[1849] = ['T', 'C'];
-$diffs[6283] = ['C', 'T'];
-$diffs[9923] = ['C', 'T'];
-$diffs[11811] = ['C', 'T'];
-$diffs[13856] = ['A', 'G'];
-$diffs[15599] = ['A', 'G'];
-$diffs[15660] = ['T', 'C'];
-
-while (<>) {
-    if (/^#/) {
-      print;
-      next;
-    }
-    chomp;
-    my @w = split("\t");
-    $w[0] = "KJ660347v2";
-    my $pos = $w[1];
-    if ($diffs[$pos]) {
-      my ($ref, $alt) = @{$diffs[$pos]};
-      my ($gRef, $gAlt) = ($w[3], $w[4]);
-      if ($gRef eq $alt && $gAlt eq $ref) {
-        # Swap REF and ALT, and invert all of the 0/1 genotypes (if any):
-        ($w[3], $w[4]) = ($ref, $alt);
-        for (my $i = 9;  $i <= $#w;   $i++) {
-          $w[$i] =~ /^([01.])(:.*)?/ || die "Can't match $w[$i]";
-          my ($gt, $rest) = ($1, $2);
-          $gt = 1 - $gt if ($gt ne ".");
-          $gt .= $rest if ($rest);
-          $w[$i] = $gt;
-        }
-      } elsif ($gRef ne $ref || $gAlt ne $alt) {
-        # If this ever happens we'll have to get fancier (make a tri-allelic record):
-        die "tri-allelic? KM $gRef/$gAlt vs KJ $ref/$alt\n\t";
-      }
-    }
-    print join("\t", @w) . "\n";
-}
-'_EOF_'
-_EOF_
-    chmod a+x gireVcfToUcsc.pl
-    ./gireVcfToUcsc.pl SNP-2014.vcf > gire2014.vcf
-    ./gireVcfToUcsc.pl SNP-ZEBOV.vcf > gireZebov.vcf
+    ~/kent/src/hg/utils/automation/gireVcfToUcsc.pl SNP-2014.vcf > gire2014.vcf
+    ~/kent/src/hg/utils/automation/gireVcfToUcsc.pl SNP-ZEBOV.vcf > gireZebov.vcf
     # Compress, index, put in /gbdb and load up...
     foreach f (gire*.vcf)
       bgzip $f
@@ -92,6 +46,19 @@ _EOF_
     ln -s `pwd`/gire*.vcf.gz{,.tbi} /gbdb/eboVir2/gire/
     hgBbiDbLink eboVir2 gire2014 /gbdb/eboVir2/gire/gire2014.vcf.gz
     hgBbiDbLink eboVir2 gireZebov /gbdb/eboVir2/gire/gireZebov.vcf.gz
+
+    # Jim's request: make tracks with only missense mutations
+    foreach t (2014 ZEBOV)
+      grep ^# SNP-$t.vcf > SNP-$t-missense.vcf
+      grep MISSENSE SNP-$t.vcf >> SNP-$t-missense.vcf
+      set n = `echo $t | sed -e 's/ZEBOV/Zebov/'`
+      set vcf = gire${n}Missense.vcf
+      ~/kent/src/hg/utils/automation/gireVcfToUcsc.pl SNP-$t-missense.vcf > $vcf
+      bgzip $vcf
+      tabix -p vcf $vcf.gz
+      ln -s `pwd`/$vcf.gz{,.tbi} /gbdb/eboVir2/gire/
+      hgBbiDbLink eboVir2 $vcf:r /gbdb/eboVir2/gire/$vcf.gz
+    end
 
 #TODO
     # File S2: Phylogenetic trees created using MrBayes and RAxML.
