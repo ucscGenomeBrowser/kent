@@ -51,7 +51,7 @@ visibility hide
 
 track gireZebov
 shortLabel Zaire Variants
-longLabel Variants from 101 Zaire-clade Ebola virus samples
+longLabel Variants from 102 ebola sequences from West Africa 2014 outbreak
 group varRep
 type vcfTabix
 visibility pack
