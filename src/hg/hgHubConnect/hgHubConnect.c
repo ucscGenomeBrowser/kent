@@ -155,7 +155,8 @@ printf("<div id=\"unlistedHubs\" class=\"hubList\"> \n"
 	"<input name=\"hubText\" id=\"hubUrl\" class=\"hubField\""
 	    "type=\"text\" size=\"65\"> \n"
 	"<input name=\"hubAddButton\""
-	    "onClick=\"hubText.value=$.trim(hubText.value);if(validateUrl($('#hubUrl').val())) { document.addHubForm.elements['hubUrl'].value=hubText.value;"
+	    "onClick=\"hubText.value=$.trim(hubText.value);if(validateUrl($('#hubUrl').val())) { "
+	    "document.addHubForm.elements['hubUrl'].value=hubText.value;"
 		"document.addHubForm.submit();return true;} else { return false;}\" "
 		"class=\"hubField\" type=\"button\" value=\"Add Hub\">\n"
 	"</th> \n"
@@ -505,6 +506,58 @@ hDisconnectCentral(&conn);
 }
 
 
+static int doRedirect(struct cart *theCart)
+{
+struct hubConnectStatus *hub = hubConnectNewHub();
+if (hub == NULL)
+    return 0;
+
+char headerText[1024];
+
+char *errorMessage;
+hubFindOrAddUrlInStatusTable(database, cart, hub->hubUrl, &errorMessage);
+
+// if there is an error message, we stay in hgHubConnect
+if (errorMessage != NULL)
+    return 0;
+
+getDbAndGenome(cart, &database, &organism, oldVars);
+
+int redirDelay = 3;
+printf( "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d;URL=%s?%s\">",
+	  redirDelay,"../cgi-bin/hgGateway",cartSidUrlString(cart));
+safef(headerText, sizeof(headerText), "Hub Connect Successful");
+cartWebStart(cart, NULL, "%s", headerText);
+
+hPrintf("You will be automatically redirected to the gateway page for this hub's default database "
+    "(<A HREF=\"../cgi-bin/hgGateway?%s\">%s</A>) in %d seconds.<BR><BR>",
+	  cartSidUrlString(cart),trackHubSkipHubName(database),redirDelay);
+hPrintf("<B>This hub is not supported by UCSC. </B>");
+
+struct trackHub *tHub = hub->trackHub;
+if (tHub->email != NULL)
+    {
+    hPrintf("<B>Hub Contact: <A HREF=\"mailto:%s\">%s</A>.</B> ", tHub->email, tHub->email);
+    }
+
+hPrintf("<BR><BR>");
+hPrintf("Hub: %s<BR><BR>", tHub->longLabel);
+hPrintf("Hub Genomes: ");
+struct trackHubGenome *genomeList = tHub->genomeList;
+
+boolean firstTime = TRUE;
+for(; genomeList; genomeList = genomeList->next)
+    {
+    if (!firstTime)
+	hPrintf(",");
+    firstTime = FALSE;
+    hPrintf("<A href=\"../cgi-bin/hgTracks?db=%s&%s\">%s</A>",genomeList->name, 
+	cartSidUrlString(cart),trackHubSkipHubName(genomeList->name));
+    }
+hPrintf("<BR><BR>");
+return 1;
+}
+
 static void doResetHub(struct cart *theCart)
 {
 char *url = cartOptionalString(cart, hgHubCheckUrl);
@@ -571,6 +624,15 @@ if (cartVarExists(cart, hgHubCheckUrl))
     doResetHub(cart);
     }
 
+if (cartVarExists(cart, hgHubDoRedirect))
+    {
+    if (doRedirect(cart))
+	{
+	cartWebEnd();
+	return;
+	}
+    }
+
 cartWebStart(cart, NULL, "%s", pageTitle);
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("utils.js", NULL);
@@ -610,17 +672,21 @@ struct hubConnectStatus *hubList =  hubConnectStatusListFromCartAll(cart);
 checkTrackDbs(hubList);
 
 // here's a little form for the add new hub button
-printf("<FORM ACTION=\"%s\" NAME=\"addHubForm\">\n",  "../cgi-bin/hgGateway");
+printf("<FORM ACTION=\"%s\" NAME=\"addHubForm\">\n",  "../cgi-bin/hgHubConnect");
 cgiMakeHiddenVar("hubUrl", "");
 cgiMakeHiddenVar( hgHubDoFirstDb, "on");
+cgiMakeHiddenVar( hgHubDoRedirect, "on");
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
+cartSaveSession(cart);
 puts("</FORM>");
 
 // this is the form for the connect hub button
-printf("<FORM ACTION=\"%s\" NAME=\"connectHubForm\">\n",  "../cgi-bin/hgGateway");
+printf("<FORM ACTION=\"%s\" NAME=\"connectHubForm\">\n",  "../cgi-bin/hgHubConnect");
 cgiMakeHiddenVar("hubUrl", "");
 cgiMakeHiddenVar("db", "");
+cgiMakeHiddenVar( hgHubDoRedirect, "on");
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
+cartSaveSession(cart);
 puts("</FORM>");
 
 // this is the form for the disconnect hub button
@@ -628,17 +694,20 @@ printf("<FORM ACTION=\"%s\" NAME=\"disconnectHubForm\">\n",  "../cgi-bin/hgHubCo
 cgiMakeHiddenVar("hubId", "");
 cgiMakeHiddenVar(hgHubDoDisconnect, "on");
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
+cartSaveSession(cart);
 puts("</FORM>");
 
 // this is the form for the reset hub button
 printf("<FORM ACTION=\"%s\" NAME=\"resetHubForm\">\n",  "../cgi-bin/hgHubConnect");
 cgiMakeHiddenVar(hgHubCheckUrl, "");
+cartSaveSession(cart);
 puts("</FORM>");
 
 // this is the form for the search hub button
 printf("<FORM ACTION=\"%s\" NAME=\"searchHubForm\">\n",  "../cgi-bin/hgHubConnect");
 cgiMakeHiddenVar(hgHubSearchTerms, "");
 cgiMakeHiddenVar(hgHubDoSearch, "on");
+cartSaveSession(cart);
 puts("</FORM>");
 
 // ... and now the main form
@@ -671,7 +740,7 @@ cartWebEnd();
 }
 
 char *excludeVars[] = {"Submit", "submit", "hc_one_url", 
-    hgHubCheckUrl, hgHubDoClear, hgHubDoDisconnect, hgHubDataText, 
+    hgHubCheckUrl, hgHubDoClear, hgHubDoDisconnect,hgHubDoRedirect, hgHubDataText, 
     hgHubConnectRemakeTrackHub, NULL};
 
 int main(int argc, char *argv[])

@@ -1848,7 +1848,7 @@
 <div class="format"><code>graphTypeDefault points</code></div>
     <P>The signal can be
     graphed as either "<code>points</code>" displayed at the signal
-    value, or the default space-filling "<code>bars</code>".</P>
+    value, or the default space-filling "<code>bar</code>".</P>
     <P><B>Example:</B></P>
     <pre>   graphTypeDefault points</pre>
 </DIV>
@@ -4305,8 +4305,8 @@ for each cell associated with the particular TF binding location.</P>
     <ul>
     <li> <code>tag</code>: Used in the code to select
     and sort subtracks based upon their membership.  Tag names
-    must be alphanumeric, begin with a letter, and be formed such that the
-    desired sort order of the member subtracks will result.</li>
+    must be alphanumeric, begin with a letter, not contain a period, and be formed
+    such that the desired sort order of the member subtracks will result.</li>
     <li> <code>title</code>: Label of the subgroup as it appears on the 
     selection matrix that is displayed to the user, e.g.,"Antibody". Spaces within
     titles must be replaced by '<code>_</code>'.  A limited amount

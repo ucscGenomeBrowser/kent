@@ -308,6 +308,7 @@ sGroup_bird wigMaf
 sGroup_fish wigMaf
 sGroup_Fish wigMaf
 sGroup_hiv wigMafProt wigMaf
+sGroup_Virus wigMaf
 sGroup_mammal wigMaf
 sGroup_placental wigMaf
 sGroup_primate wigMaf
@@ -315,6 +316,8 @@ sGroup_vertebrate wigMaf
 sGroup_worm wigMaf
 sGroup_Caenorhabditis wigMaf
 sGroup_Nematode wigMaf
+sGroup_Drosophila wigMaf
+sGroup_Others wigMaf
 scoreFilter broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed
 scoreFilterByRange bed peptideMapping bigBed
 scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed

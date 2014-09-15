@@ -1,0 +1,318 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the bosTau8
+# Bos taurus -- UMD 3.1.1 (Dec. 2009)
+# Center for Bioinformatics and Computational Biology, University of Maryland
+# UMD 3.1.1 
+
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2014-09-05 - Steve)
+    # NCBI has redesigned their FTP download site, new type of address
+    #      and naming scheme
+    mkdir -p /hive/data/genomes/bosTau8/genbank
+    cd /hive/data/genomes/bosTau8/genbank
+
+    rsync -L -a -P rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Bos_taurus/latest_assembly_versions/GCA_000003055.4_Bos_taurus_UMD_3.1.1 ./
+
+    # measure what we have here:
+    faSize GCA_000003055.4_Bos_taurus_UMD_3.1.1/GCA_000003055.4_Bos_taurus_UMD_3.1.1_assembly_structure/Primary_Assembly/assembled_chromosomes/FASTA/*.fna.gz GCA_000003055.4_Bos_taurus_UMD_3.1.1/GCA_000003055.4_Bos_taurus_UMD_3.1.1_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/*.fna.gz
+    # 2670028162 bases (20740269 N's 2649287893 real 2649287893 upper 0 lower)
+    #  in 3178 sequences in 31 files
+    # Total size: mean 840159.9 sd 9115217.1 min 224 (GJ060330.1)
+    #  max 158337067 (GK000001.2) median 1356
+
+    # note that these totals do not include chrM since the GenBank ftp directory
+    # did not include a non-nuclear directory
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2014-09-05 - Steve)
+    mkdir /hive/data/genomes/bosTau8/ucsc
+    cd /hive/data/genomes/bosTau8/ucsc
+    # evolving these scripts over time, could become source tree scripts
+
+    cat << '_EOF_' > ucscCompositeAgp.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+
+my $primary="../genbank/GCA_000003055.4_Bos_taurus_UMD_3.1.1/GCA_000003055.4_Bos_taurus_UMD_3.1.1_assembly_structure/Primary_Assembly";
+
+open (FH, "<$primary/assembled_chromosomes/chr2acc") or
+        die "can not read Primary_Assembly/assembled_chromosomes/chr2acc";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($chrN, $acc) = split('\s+', $line);
+    $accToChr{$acc} = $chrN;
+}
+close (FH);
+
+foreach my $acc (keys %accToChr) {
+    my $chrN =  $accToChr{$acc};
+    print "$acc $accToChr{$acc}\n";
+    open (FH, "zcat $primary/assembled_chromosomes/AGP/chr${chrN}.comp.agp.gz|") or die "can not read chr${chrN}.comp.agp.gz";
+    open (UC, ">chr${chrN}.agp") or die "can not write to chr${chrN}.agp";
+    while (my $line = <FH>) {
+        if ($line =~ m/^#/) {
+            print UC $line;
+        } else {
+            $line =~ s/^$acc/chr${chrN}/;
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+    open (FH, "zcat $primary/assembled_chromosomes/FASTA/chr${chrN}.fna.gz|") or die "can not read chr${chrN}.fna.gz";
+    open (UC, ">chr${chrN}.fa") or die "can not write to chr${chrN}.fa";
+    while (my $line = <FH>) {
+        if ($line =~ m/^>/) {
+            printf UC ">chr${chrN}\n";
+        } else {
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+}
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > unplaced.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $primary="../genbank/GCA_000003055.4_Bos_taurus_UMD_3.1.1/GCA_000003055.4_Bos_taurus_UMD_3.1.1_assembly_structure/Primary_Assembly";
+
+my $agpFile =  "$primary/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
+my $fastaFile =  "$primary/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz";
+open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+open (UC, ">chrUn.agp") or die "can not write to chrUn.agp";
+while (my $line = <FH>) {
+    if ($line =~ m/^#/) {
+        print UC $line;
+    } else {
+        $line =~ s/\./v/;
+        printf UC "chrUn_%s", $line;
+    }
+}
+close (FH);
+close (UC);
+
+open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+open (UC, ">chrUn.fa") or die "can not write to chrUn.fa";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+        chomp $line;
+        $line =~ s/ .*//;
+        $line =~ s/\./v/;
+        $line =~ s/>//;
+        printf UC ">chrUn_$line\n";
+    } else {
+        print UC $line;
+    }
+}
+close (FH);
+close (UC);
+'_EOF_'
+    # << happy emacs
+
+    chmod +x ucscCompositeAgp.pl unplaced.pl
+    ./ucscCompositeAgp.pl
+    ./unplaced.pl
+
+# download the mitochondrial sequence
+
+export mitoAcc=NC_006853.1
+
+wget -O ${mitoAcc}.fa \
+ "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$mitoAcc"
+
+echo ">chrM" > chrM.fa
+grep -v "^>" ${mitoAcc}.fa >> chrM.fa
+
+export mSize=`faCount chrM.fa | grep total | awk '{print $2}'`
+
+/bin/echo -e "chrM\t1\t$mSize\t1\tF\t$mitoAcc\t1\t$mSize\t+" > chrM.agp
+
+    # verify this sequence is still the same as it was before
+    #  these translations
+    faSize *.fa
+
+    # 2670044500 bases (20740269 N's 2649304231 real 2649304231 upper 0 lower)
+    #  in 3179 sequences in 32 files
+    # Total size: mean 839900.8 sd 9113794.6 min 224 (chrUn_GJ060330v1)
+    #  max 158337067 (chr1) median 1356
+
+    faSize chrM.fa
+    # 16338 bases (0 N's 16338 real 16338 upper 0 lower)
+    #  in 1 sequences in 1 files
+
+#############################################################################
+#  Initial database build (DONE - 2014-09-10 - Steve)
+
+    cd /hive/data/genomes/bosTau8
+    cat << '_EOF_' > bosTau8.config.ra
+# Config parameters for makeGenomeDb.pl:
+db bosTau8
+clade mammal
+genomeCladePriority 31
+scientificName Bos taurus
+commonName Cow
+assemblyDate Dec. 2009
+assemblyLabel University of Maryland Bos_taurus_UMD_3.1.1
+assemblyShortLabel UMD_3.1.1
+orderKey 2378
+mitoAcc none
+# mito included in assembly NC_006853.1
+fastaFiles /hive/data/genomes/bosTau8/ucsc/chr*.fa
+agpFiles /hive/data/genomes/bosTau8/ucsc/chr*.agp
+# qualFiles none
+dbDbSpeciesDir cow
+photoCreditURL http://www.genome.gov/10005141
+photoCreditName NHGRI Press Photos
+ncbiGenomeId 82
+ncbiAssemblyId 189361
+ncbiAssemblyName Bos_taurus_UMD_3.1.1
+ncbiBioProject 33843
+genBankAccessionID GCA_000003055.4
+taxId 9913
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and AGP are OK:
+    time makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp bosTau8.config.ra > agp.log 2>&1
+    # real    2m22.582s
+
+    # then finish it off:
+    time nice -n +19 makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db bosTau8.config.ra > db.log 2>&1
+
+##########################################################################
+# running repeat masker (DONE - 2014-09-10 - Steve)
+    mkdir /hive/data/genomes/bosTau8/bed/repeatMasker
+    cd /hive/data/genomes/bosTau8/bed/repeatMasker
+    time  doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku bosTau8 > do.log 2>&1
+    # real    599m0.131s
+
+    cat faSize.rmsk.txt
+    # 2670044500 bases (20740269 N's 2649304231 real 1360109237 upper
+    #    1289194994 lower) in 3179 sequences in 1 files
+    # Total size: mean 839900.8 sd 9113794.6 min 224 (chrUn_GJ060330v1)
+    #    max 158337067 (chr1) median 1356
+    # %48.28 masked total, %48.66 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    featureBits -countGaps bosTau8 rmsk
+    # 1289639153 bases of 2670044500 (48.300%) in intersection
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE 2014-09-12 - Steve)
+
+    mkdir /hive/data/genomes/bosTau8/bed/simpleRepeat
+    cd /hive/data/genomes/bosTau8/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        bosTau8 > do.log 2>&1
+    # real    5m50.579s
+
+    cat fb.simpleRepeat
+    # 33445177 bases of 2649307237 (1.262%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/bosTau8
+    twoBitMask bosTau8.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed bosTau8.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    twoBitToFa bosTau8.2bit stdout | faSize stdin > faSize.bosTau8.2bit.txt
+    cat faSize.bosTau8.2bit.txt
+    # 2670044500 bases (20740269 N's 2649304231 real 1359475670 upper
+    #    1289828561 lower) in 3179 sequences in 1 files
+    # Total size: mean 839900.8 sd 9113794.6 min 224 (chrUn_GJ060330v1)
+    #    max 158337067 (chr1) median 1356
+    # %48.31 masked total, %48.69 masked real
+
+    rm /gbdb/bosTau8/bosTau8.2bit
+    ln -s `pwd`/bosTau8.2bit /gbdb/bosTau8/bosTau8.2bit
+
+##########################################################################
+## WINDOWMASKER (DONE - 2014-09-12 - Steve)
+
+    mkdir /hive/data/genomes/bosTau8/bed/windowMasker
+    cd /hive/data/genomes/bosTau8/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev bosTau8 > do.log 2>&1
+    # real    165m31.022s
+
+    # Masking statistics
+    cat faSize.bosTau8.cleanWMSdust.txt
+    # 2670044500 bases (20740269 N's 2649304231 real 1560587113 upper
+    #    1088717118 lower) in 3179 sequences in 1 files
+    # Total size: mean 839900.8 sd 9113794.6 min 224 (chrUn_GJ060330v1)
+    #    max 158337067 (chr1) median 1356
+    # %40.78 masked total, %41.09 masked real
+
+    cat fb.bosTau8.rmsk.windowmaskerSdust.txt
+    # 862982888 bases of 2670044500 (32.321%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2014-09-12 - Steve)
+    mkdir /hive/data/genomes/bosTau8/bed/cpgIslands
+    cd /hive/data/genomes/bosTau8/bed/cpgIslands
+    time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku bosTau8 > do.log 2>&1
+    # real    14m36.983s
+
+    cat fb.bosTau8.cpgIslandExt.txt
+    # 24127795 bases of 2649307237 (0.911%) in intersection
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2014-09-12 - Steve)
+    mkdir /hive/data/genomes/bosTau8/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/bosTau8/bed/cpgIslandsUnmasked
+
+    # run stepwise so the loading can be done in a different table
+    time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/bosTau8/bosTau8.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku bosTau8 > do.log 2>&1
+    # real    36m46.811s
+
+    cat fb.bosTau8.cpgIslandExtUnmasked.txt
+    # 32916929 bases of 2649307237 (1.242%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (NEED more work 2014-09-12 - Steve)
+    mkdir /hive/data/genomes/bosTau8/bed/cytoBand
+    cd /hive/data/genomes/bosTau8/bed/cytoBand
+    makeCytoBandIdeo.csh bosTau8
+
+#########################################################################
+# genscan - (DONE 2014-09-12 - Steve)
+    mkdir /hive/data/genomes/bosTau8/bed/genscan
+    cd /hive/data/genomes/bosTau8/bed/genscan
+    time doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku bosTau8 > do.log 2>&1
+    # real    65m53.319s
+
+    cat fb.bosTau8.genscan.txt
+    # 54695662 bases of 2649307237 (2.065%) in intersection
+
+    cat fb.bosTau8.genscanSubopt.txt
+    # 50492196 bases of 2649307237 (1.906%) in intersection

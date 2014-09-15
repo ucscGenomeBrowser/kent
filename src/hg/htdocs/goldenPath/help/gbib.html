@@ -120,16 +120,14 @@ when using the GBiB:
 <P><B>Installation</B></P>
 <P>
 Once you have confirmed that your PC meets the above requirements, download the
-<!-- Will be GB Store link later
-<a href="http://hgdownload.cse.ucsc.edu/gbib/gbib.zip" TARGET="_BLANK">Genome Browser in a Box ZIP
-file</a>
--->
-Genome Browser in a Box ZIP file. Because this file is several gigabytes, it may take anywhere from
+Genome Browser in a Box ZIP file from the
+<a href="//genome-store.ucsc.edu/" target="_blank">Genome Browser store</a>.
+Because this file is several gigabytes, it may take anywhere from
 30 minutes to a few hours to download depending on your
 Internet speed and distance from UCSC. Once you have finished downloading the GBiB ZIP file, unzip
-and extract the three files in it. On OSX, do not use the command line tool "unzip", but double-click
-double click the ZIP file in the Finder. The extracted files can be moved to a different directory, as long as
-all three files are located in the same directory and not renamed.
+and extract the three files in it. On OSX, do not use the command line tool "unzip", instead
+double-click the ZIP file in the Finder. The extracted files can be moved to a different directory,
+as long as all three files are located in the same directory and not renamed.
 </P>
 
 <P>
@@ -213,14 +211,15 @@ You cannot use the GBiB during this time. Once the download is complete, the
 default tracks should load in less than three seconds for a typical genomic position.
 </P>
 
-<P>If you have mirrored all tracks that you might ever need and you want to make sure that GBiB 
-does not connect to the internet anymore (e.g. if this is a corporate IT policy), you can type
-the command
+<P>The GBiB also has an offline mode. This mode is particullary useful when you want to
+ensure that the GBiB does not connect to the internet anymore (i.e. due to a corporate IT
+policy). Once you have mirrored all tracks that you might ever need, click on the "black"
+screen with the terminal and type the following command:
 <pre>boxOffline</pre>
-in the VirtualBox terminal window. It will remove the network access to the UCSC download servers. If any
-datafile is not located on your local disk, the Genome Browser will then show an error message, so we 
-do not recommend it for general use.
-You can always reactivate internet access with 
+This command will remove the network access to the UCSC MySQL server and download servers. If
+any datafile is not located on your local disk, the Genome Browser will then show an error
+message, so we do not recommend it for general use. To reactivate internet access, click on
+the "black" screen with the terminal and typing the following command:
 <pre>boxOnline</pre>
 </P>
 
@@ -543,9 +542,13 @@ disk ... because a hard disk ... already exists."</i></li>
 <h1>Licensing Information</h1>
 <div class="sectionContent">
 <P>
-To use the Genome Browser in a Box (GBiB), you must agree to the license. The GBiB is free for
-non-commercial use by non-profit organizations, academic institutions, and individuals. Corporate
-use requires a license, setup fee and annual payment.
+To use the Genome Browser in a Box (GBiB), you must agree to the
+<a href="//genome-store.ucsc.edu/media/eula/2014/08/13/GBiB-EULA.pdf"
+target="_blank">license</a>. The GBiB is free for
+non-commercial use by non-profit organizations, academic institutions, and individuals.
+Corporate use requires a license, setup fee and annual payment. To purchase a license
+and download the GBiB, see the
+<a href="//genome-store.ucsc.edu/" target="_blank">Genome Browser store</a>.
 </P>
 </div><!-- .sectionContent -->
 </div><!-- .section -->

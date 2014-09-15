@@ -244,6 +244,7 @@
 #include "trackVersion.h"
 #include "numtsClick.h"
 #include "geneReviewsClick.h"
+#include "bigBed.h"
 
 static char *rootDir = "hgcData";
 
@@ -8010,22 +8011,77 @@ else
     }
 }
 
-void htcTranslatedPredMRna(struct trackDb *tdb, char *geneName)
+static struct genePred *getGenePredForPositionSql(char *table, char *geneName)
+/* find the genePred for the current gene using an SQL table*/
+{
+struct genePred *gpList = NULL;
+char query[512];
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+struct genePred *gp;
+int rowOffset = hOffsetPastBin(database, seqName, table);
+
+sqlSafef(query, sizeof(query), "select * from %s where name = \"%s\"", table, geneName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    gp = genePredLoad(row+rowOffset);
+    slAddHead(&gpList, gp);
+    }
+
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return gpList;
+}
+
+struct genePred *getGenePredForPositionBigBed(char *table, char *geneName)
+/* find the genePred to the current gene using a bigGenePred */
+{
+struct trackDb *tdb = hubConnectAddHubForTrackAndFindTdb( database, table, NULL, trackHash);
+struct bbiFile *bbi;
+char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
+bbi = bigBedFileOpen(fileName);
+struct lm *lm = lmInit(0);
+struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, seqName, winStart, winEnd, 0, lm);
+struct genePred *gpList = NULL;
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    struct genePred *gp = genePredFromBigGenePred(seqName, bb); 
+    if (sameString(gp->name, geneName))
+	slAddHead(&gpList, gp);
+    }
+lmCleanup(&lm);
+
+return gpList;
+}
+
+static struct genePred *getGenePredForPosition(char *table, char *geneName)
+{
+struct genePred *gpList = NULL;
+
+if (isHubTrack(table))
+    gpList =  getGenePredForPositionBigBed(table, geneName);
+else
+    gpList =  getGenePredForPositionSql(table, geneName);
+
+return gpList;
+}
+
+void htcTranslatedPredMRna(char *geneName)
 /* Translate virtual mRNA defined by genePred to protein and display it. */
 {
-struct sqlConnection *conn = hAllocConn(database);
+char *table = cartString(cart, "table");
 struct genePred *gp = NULL;
-char where[256];
 char protName[256];
 char *prot = NULL;
 
 cartHtmlStart("Protein Translation from Genome");
-sqlSafefFrag(where, sizeof(where), "name = \"%s\"", geneName);
-gp = genePredReaderLoadQuery(conn, tdb->table, where);
-hFreeConn(&conn);
+gp = getGenePredForPosition(table, geneName);
+
 if (gp == NULL)
     errAbort("%s not found in %s when translating to protein",
-             geneName, tdb->table);
+             geneName, table);
 else if (gp->cdsStart == gp->cdsEnd)
     errAbort("No CDS defined: no protein translation for %s", geneName);
 prot = getPredMRnaProtSeq(gp);
@@ -8170,25 +8226,20 @@ dnaSeqFree(&cdsDna);
 return prot;
 }
 
+
+
 void htcGeneMrna(char *geneName)
 /* Display cDNA predicted from genome */
 {
 char *table = cartString(cart, "o");
-char query[512];
-struct sqlConnection *conn = hAllocConn(database);
-struct sqlResult *sr;
-char **row;
-struct genePred *gp;
-struct dnaSeq *seq;
-int cdsStart, cdsEnd;
-int rowOffset = hOffsetPastBin(database, seqName, table);
-
 cartHtmlStart("Predicted mRNA from Genome");
-sqlSafef(query, sizeof(query), "select * from %s where name = \"%s\"", table, geneName);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+struct genePred *gp, *gpList = getGenePredForPosition(table, geneName), *next;
+int cdsStart, cdsEnd;
+struct dnaSeq *seq;
+
+for(gp = gpList; gp; gp = next)
     {
-    gp = genePredLoad(row+rowOffset);
+    next = gp->next;
     seq = getCdnaSeq(gp);
     getCdsInMrna(gp, &cdsStart, &cdsEnd);
     toUpperN(seq->dna + cdsStart, cdsEnd - cdsStart);
@@ -8203,8 +8254,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     genePredFree(&gp);
     freeDnaSeq(&seq);
     }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
 }
 
 void htcRefMrna(char *geneName)
@@ -8320,16 +8369,57 @@ for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
     }
 }
 
-void htcDnaNearGene(char *geneName)
+
+static struct bed *getBedsFromBigBedRange(char *table, char *geneName)
+/* get a list of beds from a bigBed in the current range */
+{
+struct trackDb *tdb = hubConnectAddHubForTrackAndFindTdb( database, table, NULL, trackHash);
+struct bbiFile *bbi;
+char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
+bbi = bigBedFileOpen(fileName);
+struct lm *lm = lmInit(0);
+struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, seqName, winStart, winEnd, 0, lm);
+struct bed *bedList = NULL;
+char *bedRow[32];
+char startBuf[16], endBuf[16];
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    struct bed *bed = bedLoadN(bedRow, 12);
+    if (sameString(bed->name, geneName))
+	slAddHead(&bedList, bed);
+    }
+lmCleanup(&lm);
+
+return bedList;
+}
+
+void htcDnaNearGene( char *geneName)
 /* Fetch DNA near a gene. */
 {
 char *table    = cartString(cart, "o");
-char constraints[256];
 int itemCount;
 char *quotedItem = makeQuotedString(geneName, '\'');
-safef(constraints, sizeof(constraints), "name = %s", quotedItem);
 puts("<PRE>");
-itemCount = hgSeqItemsInRange(database, table, seqName, winStart, winEnd, constraints);
+if (isHubTrack( table))
+    {
+    struct hTableInfo *hti;
+    AllocVar(hti);
+    hti->hasCDS = TRUE;
+    hti->hasBlocks = TRUE;
+    hti->rootName = table;
+
+    struct bed *bedList = getBedsFromBigBedRange(table, geneName);
+    itemCount = hgSeqBed(database, hti, bedList);
+    freez(&hti);
+    bedFreeList(&bedList);
+    }
+else
+    {
+    char constraints[256];
+    safef(constraints, sizeof(constraints), "name = %s", quotedItem);
+    itemCount = hgSeqItemsInRange(database, table, seqName, winStart, winEnd, constraints);
+    }
 if (itemCount == 0)
     printf("\n# No results returned from query.\n\n");
 puts("</PRE>");
@@ -24319,7 +24409,7 @@ if ((!isCustomTrack(track) && dbIsFound)
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
     if (isHubTrack(track))
 	{
-	hubConnectAddHubForTrackAndFindTdb(database, track, NULL, trackHash);
+	hubConnectAddHubForTrackAndFindTdb( database, track, NULL, trackHash);
 	}
     if (parentWigMaf)
         {
@@ -25029,7 +25119,7 @@ else if (sameWord(table, "htcTranslatedProtein"))
     }
 else if (sameWord(table, "htcTranslatedPredMRna"))
     {
-    htcTranslatedPredMRna(tdbForTableArg(), item);
+    htcTranslatedPredMRna(item);
     }
 else if (sameWord(table, "htcTranslatedMRna"))
     {
@@ -25053,7 +25143,7 @@ else if (sameWord(table, "htcGeneInGenome"))
     }
 else if (sameWord(table, "htcDnaNearGene"))
     {
-    htcDnaNearGene(item);
+    htcDnaNearGene( item);
     }
 else if (sameWord(table, "getMsBedAll"))
     {

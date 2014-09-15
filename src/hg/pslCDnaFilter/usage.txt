@@ -114,8 +114,10 @@ Options:
 
    -noValidate - don't run pslCheck validation.
 
+   -statsOut=file - write filtering stats to this file, overrides -verbose=1
+
    -verbose=1 - 0: quite
-                1: output stats
+                1: output stats, unless -statsOut is specified
                 2: list problem alignment (weird or invalid)
                 3: list dropped alignments and reason for dropping
                 4: list kept psl and info

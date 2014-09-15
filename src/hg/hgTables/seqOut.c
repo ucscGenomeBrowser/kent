@@ -302,7 +302,7 @@ void doOutSequence(struct sqlConnection *conn)
 /* Output sequence page. */
 {
 struct trackDb *tdb = findTdbForTable(database, curTrack, curTable, ctLookupName);
-if (tdb != NULL && startsWith("genePred", tdb->type))
+if (tdb != NULL && (startsWith("genePred", tdb->type) || startsWith("bigGenePred", tdb->type)))
     genePredOptions(tdb, curTrack->type, conn);
 else
     genomicFormatPage(conn);
