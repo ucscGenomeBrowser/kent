@@ -7,31 +7,6 @@ visibility pack
 track gap override
 html gap
 
-track cpgIslandSuper
-superTrack on
-shortLabel CpG Islands
-longLabel CpG Islands (Islands < 300 Bases are Light Green)
-group regulation
-visibility show
-color 0,100,0
-altColor 128,228,128
-type bed 4 +
-html cpgIslandSuper
-
-    track cpgIslandExt
-    superTrack cpgIslandSuper pack
-    shortLabel CpG Islands
-    longLabel CpG Islands (Islands < 300 Bases are Light Green)
-    priority 1
-    html cpgIslandSuper
-
-    track cpgIslandExtUnmasked
-    superTrack cpgIslandSuper hide
-    shortLabel Unmasked CpG
-    longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
-    priority 2
-    html cpgIslandSuper
-
 track xenoRefGene override
 visibility pack
 

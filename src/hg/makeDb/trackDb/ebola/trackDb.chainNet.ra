@@ -1,0 +1,294 @@
+################################################################
+# sudEbo1 - Sudan ebolavirus
+################################################################
+track chainNetSudEbo1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date), Chain Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 100
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb sudEbo1
+chainMinScore 100
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetSudEbo1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetSudEbo1
+    spectrum on
+
+        track chainSudEbo1
+        release alpha
+        parent chainNetSudEbo1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain sudEbo1
+        html chainNet
+
+#    track chainNetSudEbo1Viewnet
+#    release alpha
+#    shortLabel Net
+#    view net
+#    visibility dense
+#    parent chainNetSudEbo1
+#
+#        track netSudEbo1
+#        release alpha
+#        parent chainNetSudEbo1Viewnet
+#        subGroups view=net
+#        shortLabel $o_Organism Net
+#        longLabel $o_Organism ($o_date) Alignment Net
+#        type netAlign sudEbo1 chainSudEbo1
+#        html chainNet
+
+################################################################
+# resEbo1 - Reston ebolavirus
+################################################################
+track chainNetResEbo1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date), Chain Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 200
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb resEbo1
+chainMinScore 100
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetResEbo1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetResEbo1
+    spectrum on
+
+        track chainResEbo1
+        release alpha
+        parent chainNetResEbo1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain resEbo1
+        html chainNet
+
+#    track chainNetResEbo1Viewnet
+#    release alpha
+#    shortLabel Net
+#    view net
+#    visibility dense
+#    parent chainNetResEbo1
+#
+#        track netResEbo1
+#        release alpha
+#        parent chainNetResEbo1Viewnet
+#        subGroups view=net
+#        shortLabel $o_Organism Net
+#        longLabel $o_Organism ($o_date) Alignment Net
+#        type netAlign resEbo1 chainResEbo1
+#        html chainNet
+
+################################################################
+# taiEbo1 - Tai Forest ebolavirus
+################################################################
+track chainNetTaiEbo1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date), Chain Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 300
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb taiEbo1
+chainMinScore 100
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetTaiEbo1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetTaiEbo1
+    spectrum on
+
+        track chainTaiEbo1
+        release alpha
+        parent chainNetTaiEbo1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain taiEbo1
+        html chainNet
+
+#    track chainNetTaiEbo1Viewnet
+#    release alpha
+#    shortLabel Net
+#    view net
+#    visibility dense
+#    parent chainNetTaiEbo1
+#
+#        track netTaiEbo1
+#        release alpha
+#        parent chainNetTaiEbo1Viewnet
+#        subGroups view=net
+#        shortLabel $o_Organism Net
+#        longLabel $o_Organism ($o_date) Alignment Net
+#        type netAlign taiEbo1 chainTaiEbo1
+#        html chainNet
+
+################################################################
+# bunEbo1 - Bundibugyo ebolavirus
+################################################################
+track chainNetBunEbo1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date), Chain Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 400
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb bunEbo1
+chainMinScore 100
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetBunEbo1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetBunEbo1
+    spectrum on
+
+        track chainBunEbo1
+        release alpha
+        parent chainNetBunEbo1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain bunEbo1
+        html chainNet
+
+#    track chainNetBunEbo1Viewnet
+#    release alpha
+#    shortLabel Net
+#    view net
+#    visibility dense
+#    parent chainNetBunEbo1
+#
+#        track netBunEbo1
+#        release alpha
+#        parent chainNetBunEbo1Viewnet
+#        subGroups view=net
+#        shortLabel $o_Organism Net
+#        longLabel $o_Organism ($o_date) Alignment Net
+#        type netAlign bunEbo1 chainBunEbo1
+#        html chainNet
+
+################################################################
+# marVir1 - Marburg virus
+################################################################
+track chainNetMarVir1
+release alpha
+compositeTrack on
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date), Chain Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 400
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb marVir1
+chainMinScore 100
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetMarVir1Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetMarVir1
+    spectrum on
+
+        track chainMarVir1
+        release alpha
+        parent chainNetMarVir1Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain marVir1
+        html chainNet
+
+#    track chainNetMarVir1Viewnet
+#    release alpha
+#    shortLabel Net
+#    view net
+#    visibility dense
+#    parent chainNetMarVir1
+#
+#        track netMarVir1
+#        release alpha
+#        parent chainNetMarVir1Viewnet
+#        subGroups view=net
+#        shortLabel $o_Organism Net
+#        longLabel $o_Organism ($o_date) Alignment Net
+#        type netAlign marVir1 chainMarVir1
+#        html chainNet

@@ -45,6 +45,7 @@
 #define hgHubDoDisconnect  hgHubDo "disconnect"
 #define hgHubDoFirstDb     hgHubDo "firstDb"
 #define hgHubDoDecorateDb  hgHubDo "decorateDb"
+#define hgHubDoRedirect    hgHubDo "redirect"
 
 boolean isHubTrack(char *trackName);
 /* Return TRUE if it's a hub track. */
@@ -152,4 +153,7 @@ struct trackDb *hubCollectTracks( char *database, struct grp **pGroupList);
 
 char *hubConnectSkipHubPrefix(char *trackName);
 /* Given something like "hub_123_myWig" return myWig.  Don't free this, it's not allocated */
+
+struct hubConnectStatus *hubConnectNewHub();
+/* return the hub of the hubUrl we added (if any) */
 #endif /* HUBCONNECT_H */

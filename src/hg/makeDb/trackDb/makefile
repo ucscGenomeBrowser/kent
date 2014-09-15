@@ -53,7 +53,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
 	hetGla1 hetGla2 \
 	sarHar1 \
 	oryCun1 oryCun2 \
-	bosTau2 bosTau3 bosTau4 bosTau5 bosTau6 bosTau7 \
+	bosTau2 bosTau3 bosTau4 bosTau5 bosTau6 bosTau7 bosTau8 \
 	equCab1 \
 	equCab2 \
 	cerSim1 \
@@ -134,6 +134,8 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
 	sacCer1 sacCer2 sacCer3 \
 	sc1 \
 	h1n1 \
+        marVir1 \
+        eboVir2 eboVir1 bunEbo1 sudEbo1 resEbo1 taiEbo1 zaiEbo1 \
 	centromeres1 \
 	repeats2
 

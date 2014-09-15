@@ -1,0 +1,109 @@
+# for emacs: -*- mode: sh; -*-
+
+    # Trackify supplemental info from http://www.sciencemag.org/content/345/6202/1369/suppl/DC1
+    # "Genomic surveillance elucidates Ebola virus origin and transmission during the 2014 outbreak"
+    # Gire et al, Science 12 September 2014: vol. 345 no. 6202 pp. 1369-1372
+
+    mkdir /hive/data/genomes/eboVir2/bed/gire
+    cd /hive/data/genomes/eboVir2/bed/gire
+
+    # They used KM034562.1 as the reference sequence.  Fortunately this has only 7 SNVs
+    # and 2 bases missing at the end relative to our eboVir2 reference sequence (KJ660347.2).
+    # BLAT them... (http://www.ncbi.nlm.nih.gov/nuccore/661348725?report=fasta)
+    twoBitToFa ../../eboVir2.2bit -seq=KJ660347v2 KJ660347v2.fa
+    blat KJ660347v2.fa KM034562.fa kjToKm.psl
+    # OK, that just confirms that we don't need to do a liftOver; dig up locations of
+    # differences from the browser, because for VCF we need the correct REF and ALT alleles
+    # (and corresponding 0 and 1 genotypes).  In pgSNP format for custom track:
+track name=KMDiffs type=pgSnp visibility=pack
+KJ660347v2	1848	1849	T/C	2	0,0	0,0
+KJ660347v2	6282	6283	C/T	2	0,0	0,0
+KJ660347v2	9922	9923	C/T	2	0,0	0,0
+KJ660347v2	11810	11811	C/T	2	0,0	0,0
+KJ660347v2	13855	13856	A/G	2	0,0	0,0
+KJ660347v2	15598	15599	A/G	2	0,0	0,0
+KJ660347v2	15659	15660	T/C	2	0,0	0,0
+    # Visually checked the custom track against BLAT diffs -- looks good.
+
+    # File S1: Alignment and SNP calls used in this study.
+    wget http://www.sciencemag.org/content/suppl/2014/08/27/science.1259657.DC1/1259657_file_s1.zip
+    unzip 1259657_file_s1.zip
+    cd snp
+    wc -l *.vcf
+#    63 SNP-2014.vcf
+#  1311 SNP-ZEBOV.vcf
+    # All 7 differences are in SNP-2014.vcf so they're probably in both.
+    # Make a script to replace Gire's reference KM034562 with our reference KJ660347v2,
+    # and for those SNVs, swap ref and alt.
+    cat > gireVcfToUcsc.pl <<'_EOF_'
+#!/usr/bin/env perl
+use warnings;
+use strict;
+
+my @diffs = ();
+$diffs[1849] = ['T', 'C'];
+$diffs[6283] = ['C', 'T'];
+$diffs[9923] = ['C', 'T'];
+$diffs[11811] = ['C', 'T'];
+$diffs[13856] = ['A', 'G'];
+$diffs[15599] = ['A', 'G'];
+$diffs[15660] = ['T', 'C'];
+
+while (<>) {
+    if (/^#/) {
+      print;
+      next;
+    }
+    chomp;
+    my @w = split("\t");
+    $w[0] = "KJ660347v2";
+    my $pos = $w[1];
+    if ($diffs[$pos]) {
+      my ($ref, $alt) = @{$diffs[$pos]};
+      my ($gRef, $gAlt) = ($w[3], $w[4]);
+      if ($gRef eq $alt && $gAlt eq $ref) {
+        # Swap REF and ALT, and invert all of the 0/1 genotypes (if any):
+        ($w[3], $w[4]) = ($ref, $alt);
+        for (my $i = 9;  $i <= $#w;   $i++) {
+          $w[$i] =~ /^([01.])(:.*)?/ || die "Can't match $w[$i]";
+          my ($gt, $rest) = ($1, $2);
+          $gt = 1 - $gt if ($gt ne ".");
+          $gt .= $rest if ($rest);
+          $w[$i] = $gt;
+        }
+      } elsif ($gRef ne $ref || $gAlt ne $alt) {
+        # If this ever happens we'll have to get fancier (make a tri-allelic record):
+        die "tri-allelic? KM $gRef/$gAlt vs KJ $ref/$alt\n\t";
+      }
+    }
+    print join("\t", @w) . "\n";
+}
+'_EOF_'
+_EOF_
+    chmod a+x gireVcfToUcsc.pl
+    ./gireVcfToUcsc.pl SNP-2014.vcf > gire2014.vcf
+    ./gireVcfToUcsc.pl SNP-ZEBOV.vcf > gireZebov.vcf
+    # Compress, index, put in /gbdb and load up...
+    foreach f (gire*.vcf)
+      bgzip $f
+      tabix -p vcf $f.gz
+    end
+    mkdir /gbdb/eboVir2/gire
+    ln -s `pwd`/gire*.vcf.gz{,.tbi} /gbdb/eboVir2/gire/
+    hgBbiDbLink eboVir2 gire2014 /gbdb/eboVir2/gire/gire2014.vcf.gz
+    hgBbiDbLink eboVir2 gireZebov /gbdb/eboVir2/gire/gireZebov.vcf.gz
+
+#TODO
+    # File S2: Phylogenetic trees created using MrBayes and RAxML.
+    wget http://www.sciencemag.org/content/suppl/2014/08/27/science.1259657.DC1/1259657_file_s2.zip
+    unzip 1259657_file_s2.zip
+
+    # File S4: Intrahost variants for 78 Sierra Leone EVD patients. 
+    wget http://www.sciencemag.org/content/suppl/2014/08/27/science.1259657.DC1/1259657_file_s4.zip
+    unzip 1259657_file_s4.zip
+
+    # Table S4: SNPs unique to the 2014 outbreak variant.
+    wget http://www.sciencemag.org/content/suppl/2014/08/27/science.1259657.DC1/1259657_table_s4.zip
+    unzip 1259657_table_s4.zip
+    # Use a spreadsheet tool to convert .xslx to tab-sep text.
+

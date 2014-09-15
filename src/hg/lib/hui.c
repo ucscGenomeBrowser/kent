@@ -6004,42 +6004,6 @@ if (defaultOffSpecies)
         hashAdd(offHash, words[ii], NULL);
     }
 
-#define BRANEY_SAYS_USETARG_IS_OBSOLETE
-#ifndef BRANEY_SAYS_USETARG_IS_OBSOLETE
-char *speciesTarget = trackDbSetting(tdb, SPECIES_TARGET_VAR);
-char *speciesTree = trackDbSetting(tdb, SPECIES_TREE_VAR);
-struct phyloTree *tree;
-if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
-    {
-    char buffer[128];
-    char *nodeNames[512];
-    int numNodes = 0;
-    char *path, *orgName;
-    int ii;
-
-    safef(buffer, sizeof(buffer), "%s.vis",name);
-    // not closestToHome because BRANEY_SAYS_USETARG_IS_OBSOLETE
-    cartMakeRadioButton(cart, buffer,"useTarg", "useTarg");
-    printf("Show shortest path to target species:  ");
-    path = phyloNodeNames(tree);
-    numNodes = chopLine(path, nodeNames);
-    for(ii=0; ii < numNodes; ii++)
-        {
-        if ((orgName = hOrganism(nodeNames[ii])) != NULL)
-            nodeNames[ii] = orgName;
-        nodeNames[ii][0] = toupper(nodeNames[ii][0]);
-        }
-
-    // not closestToHome because BRANEY_SAYS_USETARG_IS_OBSOLETE
-    cgiMakeDropList(SPECIES_HTML_TARGET, nodeNames, numNodes,
-                    cartUsualString(cart, SPECIES_HTML_TARGET, speciesTarget));
-    puts("<br>");
-    // not closestToHome because BRANEY_SAYS_USETARG_IS_OBSOLETE
-    cartMakeRadioButton(cart,buffer,"useCheck", "useTarg");
-    printf("Show all species checked : ");
-    }
-#endif///ndef BRANEY_SAYS_USETARG_IS_OBSOLETE
-
 if (groupCt == 1)
     puts("\n<TABLE><TR>");
 group = -1;

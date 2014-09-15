@@ -167,13 +167,6 @@ int i;
 int speciesCt = 0, groupCt = 1;
 int speciesOffCt = 0;
 struct hash *speciesOffHash = newHash(0);
-#define BRANEY_SAYS_USETARG_IS_OBSOLETE
-#ifndef BRANEY_SAYS_USETARG_IS_OBSOLETE
-char *speciesTarget = trackDbSetting(track->tdb, SPECIES_TARGET_VAR);
-char *speciesTree = trackDbSetting(track->tdb, SPECIES_TREE_VAR);
-bool useTarg;	/* use phyloTree to find shortest path */
-struct phyloTree *tree = NULL;
-#endif///ndef BRANEY_SAYS_USETARG_IS_OBSOLETE
 char *speciesUseFile = trackDbSetting(track->tdb, SPECIES_USE_FILE);
 char *msaTable = NULL;
 
@@ -190,24 +183,6 @@ if (firstCase != NULL)
     {
     if (sameWord(firstCase, "noChange")) lowerFirstChar = FALSE;
     }
-
-#ifndef BRANEY_SAYS_USETARG_IS_OBSOLETE
-char buffer[128];
-// According to Tim, this makes no sense as ".vis"
-safef(buffer, sizeof(buffer), "%s.vis",track->track);
-if (!cartVarExists(cart, buffer) && (speciesTarget != NULL))
-    useTarg = TRUE;
-else
-    {
-    char *val;
-
-    val = cartUsualString(cart, buffer, "useCheck");
-    useTarg = sameString("useTarg",val);
-    }
-
-if (useTarg && (tree = phyloParseString(speciesTree)) == NULL)
-    useTarg = FALSE;
-#endif///ndef BRANEY_SAYS_USETARG_IS_OBSOLETE
 
 if (speciesOrder == NULL && speciesGroup == NULL && speciesUseFile == NULL)
     return getSpeciesFromMaf(track, height);
@@ -260,59 +235,20 @@ for (group = 0; group < groupCt; group++)
                                 SPECIES_GROUP_PREFIX, groups[group]);
         speciesOrder = trackDbRequiredSetting(track->tdb, sGroup);
         }
-#ifndef BRANEY_SAYS_USETARG_IS_OBSOLETE
-    if (useTarg)
-	{
-        warn("BRANEY_SAYS useTarg should never be TRUE!");
-	char *ptr, *path;
-	struct hash *orgHash = newHash(0);
-	int numNodes, ii;
-	char *nodeNames[512];
-	char *species = NULL;
-	char *lowerString;
-
-	path = phyloNodeNames(tree);
-	numNodes = chopLine(path, nodeNames);
-	for(ii=0; ii < numNodes; ii++)
-	    {
-	    if ((ptr = hOrganism(nodeNames[ii])) != NULL)
-		{
-		ptr[0] = tolower(ptr[0]);
-		hashAdd(orgHash, ptr, nodeNames[ii]);
-		}
-	    else
-		{
-		hashAdd(orgHash, nodeNames[ii], nodeNames[ii]);
-		}
-	    }
-
-	lowerString = cartUsualString(cart, SPECIES_HTML_TARGET,speciesTarget);
-	lowerString[0] = tolower(lowerString[0]);
-	species = hashFindVal(orgHash, lowerString);
-	if ((ptr = phyloFindPath(tree, database, species)) != NULL)
-	    speciesOrder = ptr;
-	}
-#endif///ndef BRANEY_SAYS_USETARG_IS_OBSOLETE
-
     speciesCt = chopLine(cloneString(speciesOrder), species);
     for (i = 0; i < speciesCt; i++)
         {
-#ifndef BRANEY_SAYS_USETARG_IS_OBSOLETE
-	if (!useTarg)
-#endif///ndef BRANEY_SAYS_USETARG_IS_OBSOLETE
-	    {
-	    /* skip this species if UI checkbox was unchecked */
-            if (!cartVarExistsAnyLevel(cart, track->tdb,FALSE,species[i]))
+        /* skip this species if UI checkbox was unchecked */
+        if (!cartVarExistsAnyLevel(cart, track->tdb,FALSE,species[i]))
+            {
+            if (hashLookup(speciesOffHash, species[i]))
                 {
-		if (hashLookup(speciesOffHash, species[i]))
-                    {
-                    safef(option, sizeof(option), "%s.%s", prefix, species[i]);
-		    cartSetBoolean(cart, option, FALSE);
-                    }
+                safef(option, sizeof(option), "%s.%s", prefix, species[i]);
+                cartSetBoolean(cart, option, FALSE);
                 }
-            if (!cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, species[i],TRUE))
-		continue;
-	    }
+            }
+        if (!cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, species[i],TRUE))
+            continue;
         mi = newMafItem(species[i], group, lowerFirstChar);
         slAddHead(&miList, mi);
         }
