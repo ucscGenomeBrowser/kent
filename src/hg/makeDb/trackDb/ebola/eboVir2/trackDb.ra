@@ -57,11 +57,20 @@ type vcfTabix
 visibility pack
 
 track iedb
-shortLabel IEDB Epitopes
-longLabel IEDB Epitopes
+shortLabel IEDB T-Cell Epitopes
+longLabel IEDB T-Cell Epitopes
 group regulation
 type bigBed 12 .
 visibility hide
+urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$
+
+track iedbBcell
+shortLabel IEDB B-Cell Epitopes
+longLabel IEDB B-Cell Epitopes
+group regulation
+type bigBed 12 .
+visibility dense
+urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$
 
 include trackDb.49way.ra
 include trackDb.49wayStrainNames.ra
