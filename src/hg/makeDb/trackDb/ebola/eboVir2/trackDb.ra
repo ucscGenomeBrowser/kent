@@ -43,3 +43,4 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 
 include trackDb.49way.ra
+include trackDb.49wayStrainNames.ra

@@ -4,7 +4,7 @@ shortLabel Conservation
 longLabel Multiz Alignment & Conservation (49 virus strains)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
-visibility full
+visibility hide
 priority 1
 type bed 4
 group compGeno
