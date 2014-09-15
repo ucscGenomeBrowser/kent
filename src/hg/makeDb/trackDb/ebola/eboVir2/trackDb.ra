@@ -56,5 +56,12 @@ group varRep
 type vcfTabix
 visibility pack
 
+track iedb
+shortLabel IEDB Epitopes
+longLabel IEDB Epitopes
+group regulation
+type bigBed 12 .
+visibility hide
+
 include trackDb.49way.ra
 include trackDb.49wayStrainNames.ra
