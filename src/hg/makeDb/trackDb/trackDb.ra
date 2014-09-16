@@ -2734,6 +2734,17 @@ url http://www.ncbi.nlm.nih.gov/nuccore/$$
 urlLabel INSDC link:
 type bed 4
 
+track spMut
+shortLabel UniProt Variants
+longLabel UniProt/SwissProt Amino Acid Substitutions
+group phenDis
+visibility hide
+type bigBed 12 +
+itemRgb on
+urls variationId="http://web.expasy.org/variant_pages/$$.html" uniProtId="http://www.uniprot.org/uniprot/$$" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+mouseOverField comments
+noScoreFilter on
+
 searchTable ucscToINSDC
 shortCircuit 1
 termRegex ^[A-Za-z0-9_]+(\.[0-9]+)?
