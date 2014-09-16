@@ -1,4 +1,4 @@
-AB050936v1	AB050936.1	Reston - Reston genomic RNA	Philippines	1966
+AB050936v1	AB050936.1	Reston - Reston genomic RNA	Philippines	1996
 AF086833v2	AF086833.2	NC_002549.1 Mayinga, Zaire, 1976	Zaire	1976
 AF272001v1	AF272001.1	Zaire strain Mayinga	DRC	1976
 AF499101v1	AF499101.1	Mouse variant Zaire strain Mayinga	USA	?2002?
