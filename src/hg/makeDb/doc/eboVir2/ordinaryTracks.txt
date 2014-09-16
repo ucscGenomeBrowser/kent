@@ -79,4 +79,19 @@ time (doBlastzChainNet.pl `pwd`/DEF \
 
    # failed on NET creation due to no simpleRepeats table in either browser
 
+featureBits -countGaps eboVir2 chainMarVir1Link
+# 640008 bases of 889112 (71.983%) in intersection
+
 ############################################################################
+# on advice from Brian Raney Ph.D (DONE - 2014-09-15 - Hiram)
+
+mkdir /hive/data/genomes/eboVir2/bed/genscan
+cd /hive/data/genomes/eboVir2/bed/genscan
+time (doGenscan.pl -buildDir=`pwd` -bigClusterHub=ku -workhorse=hgwdev \
+    -dbHost=hgwdev eboVir2) > do.log 2>&1
+
+cat fb.eboVir2.genscan.txt
+#  673614 bases of 889109 (75.763%) in intersection
+
+############################################################################
+
