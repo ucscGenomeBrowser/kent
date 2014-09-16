@@ -41,6 +41,7 @@ color 12,12,120
 type genePred 
 baseColorUseCds given
 baseColorDefault genomicCodons
+itemDetailsHtmlTable geneDesc
 
 track iedb
 shortLabel IEDB T-Cell Epitopes
