@@ -41,6 +41,7 @@ struct trackHub
     char *name;	/* Symbolic name of hub in cart, etc.  From trackHubOpen hubName parameter. */
 
     char *descriptionUrl;  /* URL to description file */
+    char *email;           /* email address of contact person */
     };
 
 struct trackHubGenome

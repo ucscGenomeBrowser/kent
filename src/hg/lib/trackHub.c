@@ -587,6 +587,7 @@ trackHubRequiredSetting(hub, "email");
 hub->shortLabel = trackHubRequiredSetting(hub, "shortLabel");
 hub->longLabel = trackHubRequiredSetting(hub, "longLabel");
 hub->genomesFile = trackHubRequiredSetting(hub, "genomesFile");
+hub->email =  trackHubSetting(hub, "email");
 char *descriptionUrl = trackHubSetting(hub, "descriptionUrl");
 if (descriptionUrl != NULL)
     hub->descriptionUrl = trackHubRelativeUrl(hub->url, descriptionUrl);
