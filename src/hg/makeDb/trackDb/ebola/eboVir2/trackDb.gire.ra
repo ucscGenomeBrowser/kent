@@ -7,7 +7,7 @@ visibility hide
 
 track gireZebov
 shortLabel Zaire Variants
-longLabel Protein Changing Variants from 101 Ebola Sequences from Gire et al. (Science 2014)
+longLabel Variants from 101 Ebola Sequences from Gire et al. (Science 2014)
 group varRep
 type vcfTabix
 visibility hide
@@ -21,7 +21,7 @@ visibility hide
 
 track gireZebovMissense
 shortLabel Zaire Missense
-longLabel Missense Variants from 101 Ebola Sequences from West Africa 2014 Outbreak
+longLabel Protein Changing Variants from 101 Ebola Sequences from Gire et al. (Science 2014)
 group varRep
 type vcfTabix
 visibility pack
