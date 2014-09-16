@@ -7,7 +7,7 @@ visibility hide
 
 track gireZebov
 shortLabel Zaire Variants
-longLabel Variants from 101 ebola sequences from West Africa 2014 outbreak
+longLabel Protein changing variants from 101 Ebola sequences from Gire et al (Science 2014)
 group varRep
 type vcfTabix
 visibility hide

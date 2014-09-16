@@ -19,7 +19,7 @@ group compGeno
         track multiz49way
         subTrack cons49wayViewalign on
         shortLabel Multiz Align
-        longLabel Multiz Alignments of 49 virus strains
+        longLabel Multiz genome and protein alignments of 47 Ebola strains and 2 Marburg strains
         subGroups view=align
         noInherit on
         irows on
