@@ -1,6 +1,6 @@
 track cons49wayStrainNames
 compositeTrack on
-shortLabel Conservation
+shortLabel 49 strain
 longLabel Multiz Alignment & Conservation (49 virus strains)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
@@ -10,7 +10,7 @@ type bed 4
 group compGeno
 
     track cons49wayViewalignStrainNames
-    shortLabel Multiz Alignments
+    shortLabel 49 strains
     view align
     visibility pack
     viewUi on
@@ -18,7 +18,7 @@ group compGeno
 
         track multiz49wayStrainNames
         subTrack cons49wayViewalignStrainNames on
-        shortLabel Multiz Align
+        shortLabel 49 strains
         longLabel Multiz Alignments of 49 virus strains
         subGroups view=align
         noInherit on
