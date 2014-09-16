@@ -1,0 +1,97 @@
+#########################################################################
+# repeat masking (DONE - 2015-04-13 - Hiram)
+#
+# RepeatMasker doesn't do virus
+# trf/simpleRepeats finds nothing
+# windowMasker finds a couple of bits
+
+mkdir /hive/data/genomes/eboVir2/bed/windowMasker
+cd /hive/data/genomes/eboVir2/bed/windowMasker
+time (doWindowMasker.pl -buildDir=`pwd` \
+   -workhorse=hgwdev eboVir2> > do.log 2>&1 &
+# real    0m24.311s
+# fails on final measurement with rmsk which does not exist
+time (doWindowMasker.pl -continue=cleanup -buildDir=`pwd` \
+   -workhorse=hgwdev eboVir2) > cleanup.log 2>&1
+#   real    0m4.435s
+
+#########################################################################
+# cpgIslandsUnmasked (DONE - 2014-09-13 - Hiram)
+
+mkdir /hive/data/genomes/eboVir2/bed/cpgIslandsUnmasked
+cd /hive/data/genomes/eboVir2/bed/cpgIslandsUnmasked
+time (doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
+   -tableName=cpgIslandExtUnmasked -dbHost=hgwdev -smallClusterHub=ku \
+    -workhorse=hgwdev \
+    -maskedSeq=/hive/data/genomes/eboVir2/eboVir2.unmasked.2bit eboVir2) > do.log 2>&1
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2014-09-16 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+
+# delete previous temporary
+hgsql -e 'DELETE FROM blatServers where db="eboVir2";' hgcentraltest
+
+hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("eboVir2", "blat4d", "17850", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("eboVir2", "blat4d", "17851", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+# lastz Marburg sequences (DONE - 2014-09-13 - Hiram)
+mkdir /hive/data/genomes/eboVir2/bed/lastzMarVir1.2014-09-13
+cd /hive/data/genomes/eboVir2/bed/lastzMarVir1.2014-09-13
+
+cat << '_EOF_' > DEF
+# Ebola virus 47 strains vs. 2 strains Marburg virus marVir1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET - eboVir2 47 strains
+SEQ1_DIR=/hive/data/genomes/eboVir2/eboVir2.2bit
+SEQ1_CHUNK=200000
+SEQ1_LAP=0
+SEQ1_LEN=/hive/data/genomes/eboVir2/chrom.sizes
+
+# QUERY - marVir1 2 strains
+SEQ2_DIR=/hive/data/genomes/marVir1/marVir1.2bit
+SEQ2_CHUNK=200000
+SEQ2_LAP=0
+SEQ2_LEN=/hive/data/genomes/marVir1/chrom.sizes
+
+BASE=/hive/data/genomes/eboVir2/bed/lastzMarVir1.2014-09-13
+TMPDIR=/dev/shm
+'_EOF_'
+  # << happy emacs
+
+time (doBlastzChainNet.pl `pwd`/DEF \
+        -syntenicNet -fileServer=hgwdev \
+        -tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+        -chainMinScore=100  -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > do.log 2>&1
+# real    1m50.424s
+
+   # failed on NET creation due to no simpleRepeats table in either browser
+
+featureBits -countGaps eboVir2 chainMarVir1Link
+# 640008 bases of 889112 (71.983%) in intersection
+
+############################################################################
+# on advice from Brian Raney Ph.D (DONE - 2014-09-15 - Hiram)
+
+mkdir /hive/data/genomes/eboVir2/bed/genscan
+cd /hive/data/genomes/eboVir2/bed/genscan
+time (doGenscan.pl -buildDir=`pwd` -bigClusterHub=ku -workhorse=hgwdev \
+    -dbHost=hgwdev eboVir2) > do.log 2>&1
+
+cat fb.eboVir2.genscan.txt
+#  673614 bases of 889109 (75.763%) in intersection
+
+############################################################################
+
