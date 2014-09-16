@@ -1,7 +1,7 @@
 track cons102way
 compositeTrack on
 shortLabel Sierra Leone
-longLabel Sierra Leone 2014, 102 virus strains
+longLabel Sierra Leone 2014, 102 Virus Strains
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility hide
@@ -19,7 +19,7 @@ group compGeno
         track multiz102way
         subTrack cons102wayViewalign on
         shortLabel Sierra Leone 2014
-        longLabel Sierra Leone 2014, 102 virus strains multiz alignment
+        longLabel Sierra Leone 2014, 102 Virus Strains Multiz Alignment
         subGroups view=align
         noInherit on
         irows on

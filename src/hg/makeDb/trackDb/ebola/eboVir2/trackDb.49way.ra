@@ -1,7 +1,7 @@
 track cons49way
 compositeTrack on
-shortLabel 49 accessions
-longLabel Multiz Alignment & Conservation (49 virus strains, accession names)
+shortLabel 49 Accessions
+longLabel Multiz Alignment & Conservation (49 Virus Strains, Accession Names)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility hide
@@ -19,7 +19,7 @@ group compGeno
         track multiz49way
         subTrack cons49wayViewalign on
         shortLabel Multiz Align
-        longLabel Multiz genome and protein alignments of 47 Ebola strains and 2 Marburg strains
+        longLabel Multiz Genome and Protein Alignments of 47 Ebola Strains and 2 Marburg Strains
         subGroups view=align
         noInherit on
         irows on
