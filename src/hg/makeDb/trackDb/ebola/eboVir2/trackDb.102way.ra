@@ -4,7 +4,7 @@ shortLabel West Africa
 longLabel West Africa 2014, 102 Virus Strains
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
-visibility hide
+visibility full
 priority 1
 type bed 4
 group compGeno

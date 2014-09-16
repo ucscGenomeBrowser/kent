@@ -4,7 +4,7 @@ visibility pack
 html gold
 
 track spMut override
-visibility dense
+visibility hide
 group regulation
 html spMut
 
