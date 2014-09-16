@@ -45,10 +45,13 @@
 </head>
 
 <body>
-    <!--#include virtual="/inc/ebola.topbar.html"-->
+    <!--#include virtual="../inc/ebola.topbar.html"-->
     <div class="header">
         <span class="txt">&nbsp; UCSC Ebola Portal</span>
         <span class="subHeader">Genomic resources related to the 2014 West Africa outbreak</span> 
+        <!-- TODO
+                <img style="height: 100px; width: 100px;" src="/images/Zaire_ebolavirus.jpg">
+        -->
     </div>
     <div>
     <table>
@@ -63,50 +66,74 @@
                 The 2014 Ebola epidemic in West Africa has stirred international response and
                 renewed efforts to develop effective preventative and treatment options.
                 In response to a request for help from vaccine researchers, we have fast-tracked
-                an Ebola Genome Browser with viral sequences from previous outbreaks as
+                the
+                <a target=_blank href="../cgi-bin/hgTracks?db=eboVir2">UCSC Ebola Genome Browser</a>
+                built with viral sequences from previous outbreaks as
                 well as the 2014 outbreak.  
-		This site provides access to this browser, as well as related tools and 
+		This site also provides related tools and 
                 information that can be used to further the understanding of Ebola.</p>
-		</p>
-
-
-
-
                 </div><!--end content-->
             </div><!--end wrapper-->
             </td>
             </tr>
+            <!-- screenshot launchers 2x2 matrix -->
+                <tr>
+                    <td width="20%" height="150">
+                    <div style="height:100%; margin-top:0; margin-left:10px; margin-right:10px" class="wrapper">
+                        <div class="bar"><h4 class="title">Read about Ebolavirus</h4></div>
+                            <a href="http://en.wikipedia.org/wiki/Ebola_virus_epidemic_in_West_Africa"><img style="height: 33%; width: 33%;" class="screenshot"  src="../images/Zaire_ebolavirus.jpg"></a>
+                    </div>
+                    </td>
+                    <td width="20%" height="150">
+                    <div style="height: 100%; margin-top:0;" class="wrapper">
+                    <div class="bar"><h4 class="title">Explore the Ebola genome with the UCSC Ebola Browser</h4></div>
+                        <div class="content">
+                            <a  href="../cgi-bin/hgTracks?db=eboVir2"><img class="screenshot" src="ebolaBrowserSS.png"></a>
+                        </div>
+                    </div>
+                    </td>
+
+
+                </tr>
+<!--
+
+                <tr>
+                    <td width="20%" height="200">
+                    <div style="height: 100%; margin-top:10px; margin-left:10px; margin-right:10px" class="wrapper">
+                        <div class="bar"><h4 class="title">Search for data at the ENCODE Portal</h4></div>
+                            <a href="https://www.encodedcc.org/search/?type=experiment"><img class="screenshot" style="display: block; margin: auto;" src="../images/encode/stanfordSearch.png"></a>
+                    </div>
+                    </td>
+                    <td width="20%" height="200">
+                    <div style="height: 100%; margin-top:10px" class="wrapper">
+                        <div class="bar"><h4 class="title">Search for ENCODE tracks in the UCSC Browser</h4></div>
+                            <a href="../cgi-bin/hgTracks?hgt_=1408334670&db=hg19&tsCurTab=advancedTab&hgt_tsDelRow=&hgt_tsAddRow=&hgt_tsPage=&tsSimple=&tsName=&tsDescr=&tsGroup=Any&tsType=Any&hgt_mdbVar1=cell&hgt_mdbVal1=HeLa-S3&hgt_mdbVar2=dataType&hgt_mdbVal2=RnaSeq&hgt_tSearch=search"><img class="screenshot" src="../images/encode/search.png"></a>
+                    </div>
+                    </td>
+                </tr>
+-->
+
 
 <! Scientific Links block
             <tr>
             <td colspan="2">
             <div style="margin-top: 0; margin-left: 10px;" class="wrapper">
-
-            <div class="bar"><h4 class="title">Scientific Links</h4></div>
+            <div class="bar"><h4 class="title">Related Publications</h4></div>
             <div class="content">
-
 		<p>
-		    <a href="../cgi-bin/hgTracks?db=eboVir2">UCSC Ebola Genome Browser</a>
+  PLOS Ebola Flipboard:  
+        <a href="https://flipboard.com/section/plos-ebola-collection-bRVgYj" target=_blank>
+PLOS Ebola Collection (all currently published articles, freely available)</a>
+		<p>
+		<p>
+    Science magazine collection: 
+        <a href="http://www.sciencemag.org/site/extra/ebola/" target=_blank>
+Science Magazine Special Collection: Ebola Virus (freely available research and news articles)</a>
 		</p>
-		<p>
-                    Neutralizing antibodies for Kikwit strain:
-		    <a href="http://www.ncbi.nlm.nih.gov/pubmed/10364354"
-                       TARGET=_BLANK> Ebola Virus Can Be Effectively Neutralized by Antibody Produced in Natural Human Infection. </a>
-                    <a href="http://jvi.asm.org/content/73/7/6024.full.pdf"
-                       TARGET=_BLANK> [PDF] </a>
-		</p>
-		<p>
                     99 viral genome sequences from Sierra Leone:
 		    <a href="http://www.ncbi.nlm.nih.gov/pubmed/25214632"
                        TARGET=_BLANK> Genomic surveillance elucidates Ebola virus origin and transmission during the 2014 outbreak.</a>
 		    <a href="http://www.sciencemag.org/content/345/6202/1369.full.pdf"
-                       TARGET=_BLANK> [PDF] </a>
-		</p>
-		<p>
-                    Humanized mAbs (ZMapp) expressed in tobacconists:
-		    <a href="http://www.ncbi.nlm.nih.gov/pubmed/25171469"
-                       TARGET=_BLANK> Reversion of advanced Ebola virus disease in nonhuman primates with ZMapp.</a>
-                    <a href="http://www.nature.com/nature/journal/vnfv/ncurrent/pdf/nature13777.pdf"
                        TARGET=_BLANK> [PDF] </a>
 		</p>
             </div>
@@ -114,6 +141,7 @@
             </div><!--end wrapper-->
             </td>
             </tr>
+
 
 <! Basic Viral Life Cycle block
             <tr>
@@ -149,25 +177,39 @@ cycle takes two to four weeks.
             </td>
             </tr>
 
+<!--Antibodies panel -->
+            <tr>
+            <td colspan="2">
+            <div style="margin-top: 0; margin-left: 10px;" class="wrapper">
+            <div class="bar"><h4 class="title">Antibody Resources</h4></div>
+            <div class="content">
+<p>
+This section contains links to papers and other resources related to antibody use in the
+treatment and vaccine development for Ebola Virus Disease.
+</p>
+		<p>
+                    Neutralizing antibodies for Kikwit strain:
+		    <a href="http://www.ncbi.nlm.nih.gov/pubmed/10364354"
+                       TARGET=_BLANK> Ebola Virus Can Be Effectively Neutralized by Antibody Produced in Natural Human Infection. </a>
+                    <a href="http://jvi.asm.org/content/73/7/6024.full.pdf"
+                       TARGET=_BLANK> [PDF] </a>
+		</p>
 
+		</p>
 
+		<p>
+                    Humanized mAbs (ZMapp) expressed in tobacconists:
+		    <a href="http://www.ncbi.nlm.nih.gov/pubmed/25171469"
+                       TARGET=_BLANK> Reversion of advanced Ebola virus disease in nonhuman primates with ZMapp.</a>
+                    <a href="http://www.nature.com/nature/journal/vnfv/ncurrent/pdf/nature13777.pdf"
+                       TARGET=_BLANK> [PDF] </a>
+		</p>
 
-
-
-
-            <!-- screenshot launchers 2x2 matrix -->
-                <tr>
-                    <td width="20%" height="200">
-                    <div style="height:100%; margin-top:0; margin-left:10px; margin-right:10px" class="wrapper">
-                        <div class="bar"><h4 class="title">Explore the Ebola genome with the UCSC Ebola Browser</h4></div>
-                        <div class="content">
-                            <a  href="../cgi-bin/hgTracks?db=eboVir2"><img class="screenshot" src="ebolaBrowserSS.png"></a>
-                        </div>
-                    </div> <!-- end wrapper -->
-                    </td>
-                </tr>
-            <!-- screenshot launchers -->
-
+            </div>
+            </div><!--end content-->
+            </div><!--end wrapper-->
+            </td>
+            </tr>
 
 
 <! PR Links block
@@ -175,8 +217,11 @@ cycle takes two to four weeks.
             <td colspan="2">
             <div style="margin-top: 0; margin-left: 10px;" class="wrapper">
 
-            <div class="bar"><h4 class="title">Related Links</h4></div>
+            <div class="bar"><h4 class="title">General Interest Links</h4></div>
             <div class="content">
+                <p>
+		    <a href= "https://www.youtube.com/watch?v=1_WOR22-SnY"> A popular song in Africa about Ebola </a>
+                </p>
 
 		<p>
 		    <a href= "https://www.youtube.com/watch?v=ZLKgFkBc11w"> NOVA: Ebola, The Plague Fighters (1995)</a>
@@ -184,9 +229,6 @@ cycle takes two to four weeks.
 		<p>
 		    <a href= "https://www.youtube.com/watch?v=jTF7i6OBGQk"> Fighting to Contain Sierra Leone's Ebola Epidemic (2014) </a>
 		</p>
-                <p>
-		    <a href= "https://www.youtube.com/watch?v=1_WOR22-SnY"> A popular song in Africa about Ebola </a>
-                </p>
             </div>
             </div><!--end content-->
             </div><!--end wrapper-->
