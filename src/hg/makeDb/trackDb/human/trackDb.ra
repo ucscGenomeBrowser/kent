@@ -2900,17 +2900,6 @@ mouseOverField variantType
 tableBrowser off hgmd
 noScoreFilter on
 
-track spMut
-shortLabel UniProt Variants
-longLabel UniProt/SwissProt Amino Acid Substitutions
-group phenDis
-visibility hide
-type bigBed 12 +
-itemRgb on
-urls variationId="http://web.expasy.org/variant_pages/$$.html" uniProtId="http://www.uniprot.org/uniprot/$$" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
-mouseOverField comments
-noScoreFilter on
-
 track clinvar
 compositeTrack on
 shortLabel ClinVar Variants
