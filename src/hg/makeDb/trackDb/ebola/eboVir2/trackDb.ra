@@ -42,20 +42,6 @@ type genePred
 baseColorUseCds given
 baseColorDefault genomicCodons
 
-track gire2014
-shortLabel 2014 Variants
-longLabel Variants from 81 samples from 2014 outbreak
-group varRep
-type vcfTabix
-visibility hide
-
-track gireZebov
-shortLabel Zaire Variants
-longLabel Variants from 102 ebola sequences from West Africa 2014 outbreak
-group varRep
-type vcfTabix
-visibility pack
-
 track iedb
 shortLabel IEDB T-Cell Epitopes
 longLabel IEDB T-Cell Epitopes
@@ -72,5 +58,6 @@ type bigBed 12 .
 visibility dense
 urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
 
+include trackDb.gire.ra
 include trackDb.49way.ra
 include trackDb.49wayStrainNames.ra

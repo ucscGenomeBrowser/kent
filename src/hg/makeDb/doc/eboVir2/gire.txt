@@ -25,6 +25,9 @@ KJ660347v2	15598	15599	A/G	2	0,0	0,0
 KJ660347v2	15659	15660	T/C	2	0,0	0,0
     # Visually checked the custom track against BLAT diffs -- looks good.
 
+    # Oh damn... they used KJ660347.1 but we need .2, likewise for 346 and 348.
+    # I guess the script will have to update those too.  They also have "." for some bases.
+
     # File S1: Alignment and SNP calls used in this study.
     wget http://www.sciencemag.org/content/suppl/2014/08/27/science.1259657.DC1/1259657_file_s1.zip
     unzip 1259657_file_s1.zip
@@ -32,57 +35,8 @@ KJ660347v2	15659	15660	T/C	2	0,0	0,0
     wc -l *.vcf
 #    63 SNP-2014.vcf
 #  1311 SNP-ZEBOV.vcf
-    # All 7 differences are in SNP-2014.vcf so they're probably in both.
-    # Make a script to replace Gire's reference KM034562 with our reference KJ660347v2,
-    # and for those SNVs, swap ref and alt.
-    cat > gireVcfToUcsc.pl <<'_EOF_'
-#!/usr/bin/env perl
-use warnings;
-use strict;
-
-my @diffs = ();
-$diffs[1849] = ['T', 'C'];
-$diffs[6283] = ['C', 'T'];
-$diffs[9923] = ['C', 'T'];
-$diffs[11811] = ['C', 'T'];
-$diffs[13856] = ['A', 'G'];
-$diffs[15599] = ['A', 'G'];
-$diffs[15660] = ['T', 'C'];
-
-while (<>) {
-    if (/^#/) {
-      print;
-      next;
-    }
-    chomp;
-    my @w = split("\t");
-    $w[0] = "KJ660347v2";
-    my $pos = $w[1];
-    if ($diffs[$pos]) {
-      my ($ref, $alt) = @{$diffs[$pos]};
-      my ($gRef, $gAlt) = ($w[3], $w[4]);
-      if ($gRef eq $alt && $gAlt eq $ref) {
-        # Swap REF and ALT, and invert all of the 0/1 genotypes (if any):
-        ($w[3], $w[4]) = ($ref, $alt);
-        for (my $i = 9;  $i <= $#w;   $i++) {
-          $w[$i] =~ /^([01.])(:.*)?/ || die "Can't match $w[$i]";
-          my ($gt, $rest) = ($1, $2);
-          $gt = 1 - $gt if ($gt ne ".");
-          $gt .= $rest if ($rest);
-          $w[$i] = $gt;
-        }
-      } elsif ($gRef ne $ref || $gAlt ne $alt) {
-        # If this ever happens we'll have to get fancier (make a tri-allelic record):
-        die "tri-allelic? KM $gRef/$gAlt vs KJ $ref/$alt\n\t";
-      }
-    }
-    print join("\t", @w) . "\n";
-}
-'_EOF_'
-_EOF_
-    chmod a+x gireVcfToUcsc.pl
-    ./gireVcfToUcsc.pl SNP-2014.vcf > gire2014.vcf
-    ./gireVcfToUcsc.pl SNP-ZEBOV.vcf > gireZebov.vcf
+    ~/kent/src/hg/utils/automation/gireVcfToUcsc.pl SNP-2014.vcf > gire2014.vcf
+    ~/kent/src/hg/utils/automation/gireVcfToUcsc.pl SNP-ZEBOV.vcf > gireZebov.vcf
     # Compress, index, put in /gbdb and load up...
     foreach f (gire*.vcf)
       bgzip $f
@@ -92,6 +46,31 @@ _EOF_
     ln -s `pwd`/gire*.vcf.gz{,.tbi} /gbdb/eboVir2/gire/
     hgBbiDbLink eboVir2 gire2014 /gbdb/eboVir2/gire/gire2014.vcf.gz
     hgBbiDbLink eboVir2 gireZebov /gbdb/eboVir2/gire/gireZebov.vcf.gz
+
+    # Jim's request: make tracks with only missense mutations
+    foreach t (2014 ZEBOV)
+      grep ^# SNP-$t.vcf > SNP-$t-missense.vcf
+      grep MISSENSE SNP-$t.vcf >> SNP-$t-missense.vcf
+      set n = `echo $t | sed -e 's/ZEBOV/Zebov/'`
+      set vcf = gire${n}Missense.vcf
+      ~/kent/src/hg/utils/automation/gireVcfToUcsc.pl SNP-$t-missense.vcf > $vcf
+      bgzip $vcf
+      tabix -p vcf $vcf.gz
+      ln -s `pwd`/$vcf.gz{,.tbi} /gbdb/eboVir2/gire/
+      hgBbiDbLink eboVir2 $vcf:r /gbdb/eboVir2/gire/$vcf.gz
+    end
+
+    # Get KM* accessions from project page: http://www.ncbi.nlm.nih.gov/bioproject/PRJNA257197
+    # Download KM* sequences from NCBI... there are 79 not 99, oh well.
+    cd /hive/data/genomes/eboVir2/bed/gire
+    # Save sequences as gire.fasta.
+    # Make files for mapping between GenBank IDs and Gire et al. IDs.
+    grep '^>' gire.fasta \
+    | perl -wpe 's/.*(KM\d+)\.1.*ManoRiver-([A-Z]+\d+(\.\d+)?).*/$1\t$2/' \
+      > gbAccToGireId.txt
+    grep '^>' gire.fasta \
+    | perl -wpe 's/.*(KM\d+)\.1.*ManoRiver-([A-Z]+\d+(\.\d+)?).*/EBOV_2014_$2\t$1/' \
+      > gireIdToGbAcc.txt
 
 #TODO
     # File S2: Phylogenetic trees created using MrBayes and RAxML.
@@ -105,5 +84,69 @@ _EOF_
     # Table S4: SNPs unique to the 2014 outbreak variant.
     wget http://www.sciencemag.org/content/suppl/2014/08/27/science.1259657.DC1/1259657_table_s4.zip
     unzip 1259657_table_s4.zip
-    # Use a spreadsheet tool to convert .xslx to tab-sep text.
+    mkdir /hive/data/genomes/eboVir2/bed/gire/Table_S4
+    cd /hive/data/genomes/eboVir2/bed/gire/Table_S4
+    # Use a spreadsheet tool to convert each sheet of .xslx to tab-sep text.
+    wc -l S4*.txt
+#  395 S4_2014_specific_snps.txt
+#   76 S4_Description.txt
+#   19 S4_GP_Kikwit_aa_diffs.txt
+#   22 S4_GP_Mayinga_aa_diffs.txt
+#   14 S4_filter1.txt
+#   13 S4_filter2.txt
+#   15 S4_ns_changes_polymorphic_in_2014.txt
+#   35 S4_unique_ns_changes_fixed_in_2014.txt
+    # S4_Description.txt describes all of the other files.
+    # Convert S4_2014_specific_snps.txt to bigBed with coloring by coding effect.
+    tail -n +2 S4_2014_specific_snps.txt \
+    | perl -wne ' \
+      chomp; \
+      ($start, $ancNt, $newNt, $gene, $type, $aaPos, $ancAa, $newAa, $blosum62, $countInNew) \
+        = split("\t"); \
+      $chrom = "KJ660347v2"; \
+      $end = $start;  $start--; \
+      $name = "$ancNt/$newNt"; \
+      $color = "0,0,0"; \
+      $hgsv = ""; \
+      if ($type ne "noncoding") { \
+        $hgsv = "$gene:$ancAa$aaPos$newAa"; \
+      } \
+      if ($type eq "nonsynonymous") { \
+        $color = "220,0,0"; \
+        $name .= " $hgsv"; \
+      } elsif ($type eq "synonymous") { \
+        $color = "0,220,0"; \
+      } \
+      $freqInNew = sprintf "%4f", ($countInNew / 81.0); \
+      print join("\t", $chrom, $start, $end, $name, 0, "+", $start, $end, $color, \
+                       $gene, $type, $hgsv, $blosum62, $countInNew, $freqInNew) . "\n"; \
+    ' \
+      > gire2014SpecificSnps.bed
+    cat > gire2014SpecificSnps.as <<EOF
+table gire2014SpecificSnps
+"Sites that carry a unique base in the 2014 outbreak strain, from Gire et al. Table S4"
+    (
+    string chrom;      "Reference sequence"
+    uint   chromStart; "Start position in reference"
+    uint   chromEnd;   "End position in reference"
+    string name;       "Variant: ancestral/2014-derived"
+    uint   score;      "Score from 0-1000 (not used)"
+    char[1] strand;    "+ or - (always + here)"
+    uint thickStart;   "Start of where display should be thick (same as chromStart)"
+    uint thickEnd;     "End of where display should be thick (same as chromEnd)"
+    uint reserved;     "Used as itemRgb"
+    string gene;       "Gene symbol"
+    string type;       "noncoding, synonymous or nonsynonymous"
+    string hgsv;       "HGSV notation for protein coding changes (or lack thereof)"
+    string blosum62;   "BLOSUM62 substitution score for ancestral and 2014 amino acids"
+    int countInNew;    "Number of 2014 samples that contain derived allele (out of 81 total)"
+    float freqInNew;   "Derived allele frequency of 2014 samples"
+    )
+EOF
+    bedToBigBed gire2014SpecificSnps.bed ../../../chrom.sizes \
+      -type=bed9+ -as=gire2014SpecificSnps.as -tab \
+      gire2014SpecificSnps.bb
+    ln -s `pwd`/gire2014SpecificSnps.bb /gbdb/eboVir2/gire/
+    hgBbiDbLink eboVir2 gire2014SpecificSnps /gbdb/eboVir2/gire/gire2014SpecificSnps.bb
+
 
