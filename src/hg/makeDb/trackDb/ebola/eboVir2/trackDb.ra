@@ -15,7 +15,7 @@ html gap
 
 track chainSelf
 shortLabel 47 Strain Chain
-longLabel 47 strains Chained Alignments
+longLabel 47 Strains Chained Alignments
 group compGeno
 chainColor Normalized Score
 visibility hide
