@@ -49,7 +49,15 @@ static struct optionSpec options[] = {
    {"labels", OPTION_STRING},
    {"tmpDir", OPTION_STRING},
    {NULL, 0},
+   {"threads", OPTION_INT},
+   {"hacTree", OPTION_STRING},
 };
+
+
+double longest = 0;
+char* clHacTree = "fromItems";
+int clThreads = 10; // The number of threads to run with the multiThreads option
+int nameCount = 0;
 
 int bigWigNextId;
 
@@ -395,6 +403,8 @@ mustSystem(cmd);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+clThreads = optionInt("threads", clThreads);
+clHacTree = optionVal("hacTree", clHacTree);
 optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
