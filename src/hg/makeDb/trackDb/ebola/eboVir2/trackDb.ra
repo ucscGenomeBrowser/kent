@@ -61,3 +61,4 @@ urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/
 include trackDb.gire.ra
 include trackDb.49way.ra
 include trackDb.49wayStrainNames.ra
+include trackDb.102way.ra
