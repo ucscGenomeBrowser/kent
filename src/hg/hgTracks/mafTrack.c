@@ -666,7 +666,9 @@ for (full = mafList; full != NULL; full = full->next)
                     if (shade > maxShade)
                         shade = maxShade;
                     c = shadesOfGray[shade];
-                    //hvGfxBox(hvg, i+x1, yOff+2, 1, height - 5, c);
+		    // draw mismatched bases as RED
+		    if (pixelScores[i] < 1.0)
+			c = MG_RED;
                     hvGfxBox(hvg, i+x1, yOff, 1, height - 1, c);
                     }
                 }
