@@ -1,4 +1,3 @@
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
@@ -28,50 +27,32 @@
             width: 300px;
         }
 
-        /* left menu */
-        .leftBlueBar {
-            background-color: #00457c;
-            padding: 10px;
+        .header {
+            color: #00457c;
+            font-size: 25px;
+            margin-top: 15px;
+            height: 70px;
         }
-
-        .leftBarSection {
-            color: #f1b521;
-            background-color: #00457c;
-            font-style: italic;
-            font-weight: bold;
-            font-size: 75%;
-            padding-bottom: 6px;
+        .header span {
+            vertical-align: middle;
+            width: 30%;
         }
-
-        /* override from HGStyle */
-        .leftbar {
-            background-color: #00457c;
+        .subHeader {
+            font-size: 15px;
+            background-color: #efefef;
         }
-
     </style>
 </head>
 
 <body>
-    <div class="encodeHeader">
-        <span class="txt">UCSC Ebola Portal</span> 
+    <!--#include virtual="/inc/ebola.topbar.html"-->
+    <div class="header">
+        <span class="txt">&nbsp; UCSC Ebola Portal</span>
+        <span class="subHeader">Genomic resources related to the 2014 West Africa outbreak</span> 
     </div>
-
     <div>
     <table>
         <tr>
-        <!-- left menu bar -->
-        <td width="12%" class="leftBlueBar">
-            <div class="leftBarSection">Human Data at UCSC</div>
-                <hr><a class="leftbar" href="https://genome.ucsc.edu/">UCSC Genome Browser</a>
-                
-        </td>
-
-        <!-- main content -->
-
-
-
-
-        <td>
         <table>
             <tr>
             <td colspan="2">
@@ -207,7 +188,6 @@ cycle takes two to four weeks.
             </td>
             </tr>
             </table>
-        </td>
     </tr>
     </table>
 </body>
