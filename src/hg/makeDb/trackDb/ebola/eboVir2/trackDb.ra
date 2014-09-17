@@ -82,7 +82,7 @@ urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/
 
 track iedbPred
 shortLabel IEDB Predictions
-longLabel Immune Epitope Database and Analysis Resource (IEDB) MHCII-displayed predicted peptides
+longLabel Immune Epitope Database and Analysis Resource (IEDB) peptides predicted to be displayed to T-Cells
 group regulation
 type bigBed 12 .
 visibility hide
