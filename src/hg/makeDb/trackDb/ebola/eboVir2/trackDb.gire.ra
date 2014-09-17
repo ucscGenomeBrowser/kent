@@ -1,35 +1,35 @@
 track gire2014
 shortLabel 2014 Variants
-longLabel Variants from 81 samples from 2014 outbreak
+longLabel Variants from 81 Samples from 2014 Outbreak
 group varRep
 type vcfTabix
 visibility hide
 
 track gireZebov
 shortLabel Zaire Variants
-longLabel Protein changing variants from 101 Ebola sequences from Gire et al (Science 2014)
+longLabel Variants from 101 Ebola Sequences from Gire et al. (Science 2014)
 group varRep
 type vcfTabix
 visibility hide
 
 track gire2014Missense
 shortLabel 2014 Missense
-longLabel Missense variants from 81 samples from 2014 outbreak
+longLabel Missense Variants from 81 Samples from 2014 Outbreak
 group varRep
 type vcfTabix
 visibility hide
 
 track gireZebovMissense
 shortLabel Zaire Missense
-longLabel Missense variants from 101 ebola sequences from West Africa 2014 outbreak
+longLabel Protein Changing Variants from 101 Ebola Sequences from Gire et al. (Science 2014)
 group varRep
 type vcfTabix
-visibility pack
+visibility hide
 
 track gire2014SpecificSnps
 shortLabel 2014 Specific
-longLabel Sites that carry a unique base in the 2014 outbreak strain
+longLabel Sites that Carry a Unique Base in the 2014 Outbreak Strain
 group varRep
 type bigBed 9 +
-visibility dense
+visibility hide
 itemRgb on

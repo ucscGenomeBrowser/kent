@@ -21,9 +21,8 @@
         .screenshot {
             display: block;
             margin: auto       !important;
-            margin-top: 15px   !important;
             margin-bottom: 15px !important;
-            border: 1px solid gray !important;
+            border: 1px solid gray;
             width: 300px;
         }
 
@@ -45,7 +44,7 @@
 </head>
 
 <body>
-    <!--#include virtual="/inc/ebola.topbar.html"-->
+    <!--#include virtual="../inc/ebola.topbar.html"-->
     <div class="header">
         <span class="txt">&nbsp; UCSC Ebola Portal</span>
         <span class="subHeader">Genomic resources related to the 2014 West Africa outbreak</span> 
@@ -55,7 +54,7 @@
         <tr>
         <table>
             <tr>
-            <td colspan="2">
+            <td colspan="3">
             <div style="margin-top: 0; margin-left: 10px;" class="wrapper">
                 <div class="bar"><h4 class="title">About</h4></div>
                 <div class="content">
@@ -63,50 +62,83 @@
                 The 2014 Ebola epidemic in West Africa has stirred international response and
                 renewed efforts to develop effective preventative and treatment options.
                 In response to a request for help from vaccine researchers, we have fast-tracked
-                an Ebola Genome Browser with viral sequences from previous outbreaks as
+                the
+                <a target=_blank href="../cgi-bin/hgTracks?db=eboVir2">UCSC Ebola Genome Browser</a>
+                built with viral sequences from previous outbreaks as
                 well as the 2014 outbreak.  
-		This site provides access to this browser, as well as related tools and 
+		This site also provides related tools and 
                 information that can be used to further the understanding of Ebola.</p>
-		</p>
-
-
-
-
                 </div><!--end content-->
             </div><!--end wrapper-->
             </td>
             </tr>
+            <!-- screenshot launchers 2x2 matrix -->
+                <tr>
+                    <td width="44%" height="200px">
+                    <div style="height:100%; margin-top:0; margin-left:10px; margin-right:10px" class="wrapper">
+                    <div class="bar"><h4 class="title">Explore the Ebola genome with the UCSC Browser</h4></div>
+                        <div class="content">
+                            <a  href="../cgi-bin/hgTracks?db=eboVir2"><img style="margin: 15px auto !important;height: 120px; width: 209px;" class="screenshot" src="ebolaBrowserSS.png"></a>
+                        </div>
+                    </div>
+                    </td>
+
+                    <td width="15" height="200px">
+                    <div style="height: 100%; margin-top:0; margin-right: 10px;" class="wrapper">
+                        <div class="bar"><h4 class="title">Read about Ebola</h4></div>
+                            <a href="http://en.wikipedia.org/wiki/Ebola_virus"><img class="screenshot" style="margin: 15px auto !important; height: 84; width: 60px;" src="../images/Zaire_ebolavirus.jpg"></a>
+                    </div>
+                    </td>
+
+                    <td width="41%" height="200px">
+                    <div style="height: 100%; margin-top:0;" class="wrapper">
+                        <div class="bar"><h4 class="title">Learn about the 2014 outbreak</h4></div>
+                            <a href="http://www.cdc.gov/vhf/ebola/"><img style="border:0px solid; height: 154px; width: 219px;" class="screenshot"  src="../images/Graph_Diseased_Ebola_2014.png"></a>
+                    </div>
+                    </td>
+
+
+
+                </tr>
+<!--
+
+                <tr>
+                    <td width="20%" height="200">
+                    <div style="height: 100%; margin-top:10px; margin-left:10px; margin-right:10px" class="wrapper">
+                        <div class="bar"><h4 class="title">Search for data at the ENCODE Portal</h4></div>
+                            <a href="https://www.encodedcc.org/search/?type=experiment"><img class="screenshot" style="display: block; margin: auto;" src="../images/encode/stanfordSearch.png"></a>
+                    </div>
+                    </td>
+                    <td width="20%" height="200">
+                    <div style="height: 100%; margin-top:10px" class="wrapper">
+                        <div class="bar"><h4 class="title">Search for ENCODE tracks in the UCSC Browser</h4></div>
+                            <a href="../cgi-bin/hgTracks?hgt_=1408334670&db=hg19&tsCurTab=advancedTab&hgt_tsDelRow=&hgt_tsAddRow=&hgt_tsPage=&tsSimple=&tsName=&tsDescr=&tsGroup=Any&tsType=Any&hgt_mdbVar1=cell&hgt_mdbVal1=HeLa-S3&hgt_mdbVar2=dataType&hgt_mdbVal2=RnaSeq&hgt_tSearch=search"><img class="screenshot" src="../images/encode/search.png"></a>
+                    </div>
+                    </td>
+                </tr>
+-->
+
 
 <! Scientific Links block
             <tr>
-            <td colspan="2">
-            <div style="margin-top: 0; margin-left: 10px;" class="wrapper">
-
-            <div class="bar"><h4 class="title">Scientific Links</h4></div>
+            <td colspan="3">
+            <div style="margin-top: 15px; margin-left: 10px;" class="wrapper">
+            <div class="bar"><h4 class="title">Related Publications</h4></div>
             <div class="content">
-
 		<p>
-		    <a href="../cgi-bin/hgTracks?db=eboVir2">UCSC Ebola Genome Browser</a>
+  PLOS Ebola Flipboard:  
+        <a href="https://flipboard.com/section/plos-ebola-collection-bRVgYj" target=_blank>
+PLOS Ebola Collection</a> (all currently published articles, freely available)
+		<p>
+		<p>
+    Science magazine collection: 
+        <a href="http://www.sciencemag.org/site/extra/ebola/" target=_blank>
+Science Magazine Special Collection: Ebola Virus</a> (freely available research and news articles)
 		</p>
-		<p>
-                    Neutralizing antibodies for Kikwit strain:
-		    <a href="http://www.ncbi.nlm.nih.gov/pubmed/10364354"
-                       TARGET=_BLANK> Ebola Virus Can Be Effectively Neutralized by Antibody Produced in Natural Human Infection. </a>
-                    <a href="http://jvi.asm.org/content/73/7/6024.full.pdf"
-                       TARGET=_BLANK> [PDF] </a>
-		</p>
-		<p>
                     99 viral genome sequences from Sierra Leone:
 		    <a href="http://www.ncbi.nlm.nih.gov/pubmed/25214632"
                        TARGET=_BLANK> Genomic surveillance elucidates Ebola virus origin and transmission during the 2014 outbreak.</a>
 		    <a href="http://www.sciencemag.org/content/345/6202/1369.full.pdf"
-                       TARGET=_BLANK> [PDF] </a>
-		</p>
-		<p>
-                    Humanized mAbs (ZMapp) expressed in tobacconists:
-		    <a href="http://www.ncbi.nlm.nih.gov/pubmed/25171469"
-                       TARGET=_BLANK> Reversion of advanced Ebola virus disease in nonhuman primates with ZMapp.</a>
-                    <a href="http://www.nature.com/nature/journal/vnfv/ncurrent/pdf/nature13777.pdf"
                        TARGET=_BLANK> [PDF] </a>
 		</p>
             </div>
@@ -115,78 +147,103 @@
             </td>
             </tr>
 
+
 <! Basic Viral Life Cycle block
             <tr>
-            <td colspan="2">
+            <td colspan="3">
             <div style="margin-top: 0; margin-left: 10px;" class="wrapper">
 
             <div class="bar"><h4 class="title">Ebola Biology</h4></div>
             <div class="content">
 		<p>
-		Ebola is a viral disease that effects humans and other primates.  The symptoms
-		start within three weeks and include fever, sore throat, muscle pain and
-                headaches.  
-		Vomiting, diarrhea, as well as decreased function of the liver and kidneys follow.  
-		At this point the virus causes both internal and external bleeding.  The entire 
-cycle takes two to four weeks. 
-		The virus is highly virulent, with survival rates as low as ten percent.
-		Additionally it is highly contagious, spreading through bodily fluids and from corpses of the victims.</p>
-		<!-- TODO: reword
-                Due to these issues a large scale epidemic is possible.
-                -->
+                Ebola virus is the causative agent of Ebola hemorrhagic fever (EHF), 
+                a disease affecting humans and other primates. The incubation period 
+                for EHF is 2-21 days and typical early symptoms include fever, chills, 
+                malaise, and myalgia, followed by the onset of symptoms indicative of 
+                multi organ stress and subsequent failure. The disease is also characterized 
+                by high death rates (as high as 90%) and worse yet, is highly contagious, 
+                spreading through direct contact with infected body fluids, or skin/mucus membrane contact.
+                This perfect storm of conditions make the possibility of a large scale epidemic
+                a very real concern.
 		</p>
-                <p>
-                The life cycle starts with a copy of the negative strand of RNA packaged into a viral capsule. 
-                This capsule crashes into a cell and gains entry.   Immediately it activates the 
-                viral polymerase to copy the negative strand into positive strands.  Then the cell's machinery
-                is used to read the positive strand into five proteins. Two of these proteins are cut to create a
-                total of seven proteins.   After a required level of proteins is achieved the virus switches 
-                to a replication mode.  Here it transcribes the positive strand back into negative copies and 
-                packages them into capsule which are released to start the cycle again. 
-                </p>
+		<p>
+                Ebola virus and the related Marburg virus are members of the family 
+                Filoviridae, so named for their filamentous shape.  Like other Filoviruses, 
+                Ebola is an enveloped, non-segmented, negative-stranded RNA virus. Ebola virus 
+                particles have at their core, a viral nucleocapsid composed of a helical single 
+                stranded RNA genome wrapped around viral proteins NP, VP35, VP30, and L. The 
+                nucleocapsid is surrounded by an outer viral envelope studded with viral 
+                glycoprotein (GP) spikes, and viral proteins VP40 and VP24 sit between the 
+                nucleocapsid and the envelope.
+		</p>
+		<p>
+                The viral life cycle begins with host cell entry through a poorly understood mechanism. Once inside 
+                the viral RNA-dependent RNA polymerase (L) binds the 19 kb genome as a complex with 
+                other factors and transcribes the negative strand genome into a positive strand 
+                mRNA to be translated by the host cell's machinery. The seven genes are ordered in the genome as 
+                follows: 3-leader-NP-VP35-VP40-GP/sGP-VP30-VP24-L-trailer-5'. Once the concentration 
+                of nucleocapsid protein (NP) reaches a sufficient level, the RNA polymerase switches 
+                modes to genome replication, producing full length positive strand genomes to be 
+                transcribed into negative orientation. These genomes self assemble with 
+                other virus proteins and bud from the host cell, sheathed in host 
+                cell membrane, thus completing the cycle.
+		</p>
+            </div><!--end content-->
+            </div><!--end wrapper-->
+            </td>
+            </tr>
+
+<!--Antibodies panel -->
+            <tr>
+            <td colspan="3">
+            <div style="margin-top: 0; margin-left: 10px;" class="wrapper">
+            <div class="bar"><h4 class="title">Antibody Resources</h4></div>
+            <div class="content">
+<p>
+This section contains links to papers and other resources related to antibody use in the
+treatment and vaccine development for Ebola Virus Disease.
+</p>
+		<p>
+                    Neutralizing antibodies for Kikwit strain:
+		    <a href="http://www.ncbi.nlm.nih.gov/pubmed/10364354"
+                       TARGET=_BLANK> Ebola Virus Can Be Effectively Neutralized by Antibody Produced in Natural Human Infection. </a>
+                    <a href="http://jvi.asm.org/content/73/7/6024.full.pdf"
+                       TARGET=_BLANK> [PDF] </a>
+		</p>
+
+		</p>
+
+		<p>
+                    Humanized mAbs (ZMapp) expressed in tobacconists:
+		    <a href="http://www.ncbi.nlm.nih.gov/pubmed/25171469"
+                       TARGET=_BLANK> Reversion of advanced Ebola virus disease in nonhuman primates with ZMapp.</a>
+                    <a href="http://www.nature.com/nature/journal/vnfv/ncurrent/pdf/nature13777.pdf"
+                       TARGET=_BLANK> [PDF] </a>
+		</p>
+
+            </div>
             </div><!--end content-->
             </div><!--end wrapper-->
             </td>
             </tr>
 
 
-
-
-
-
-
-            <!-- screenshot launchers 2x2 matrix -->
-                <tr>
-                    <td width="20%" height="200">
-                    <div style="height:100%; margin-top:0; margin-left:10px; margin-right:10px" class="wrapper">
-                        <div class="bar"><h4 class="title">Explore the Ebola genome with the UCSC Ebola Browser</h4></div>
-                        <div class="content">
-                            <a  href="../cgi-bin/hgTracks?db=eboVir2"><img class="screenshot" src="ebolaBrowserSS.png"></a>
-                        </div>
-                    </div> <!-- end wrapper -->
-                    </td>
-                </tr>
-            <!-- screenshot launchers -->
-
-
-
 <! PR Links block
             <tr>
-            <td colspan="2">
+            <td colspan="3">
             <div style="margin-top: 0; margin-left: 10px;" class="wrapper">
 
-            <div class="bar"><h4 class="title">Related Links</h4></div>
+            <div class="bar"><h4 class="title">General Interest Links</h4></div>
             <div class="content">
-
+                <p>
+		    <a href= "https://www.youtube.com/watch?v=1_WOR22-SnY"> A popular song in Africa about Ebola </a>
+                </p>
 		<p>
-		    <a href= "https://www.youtube.com/watch?v=ZLKgFkBc11w"> NOVA: Ebola, The Plague Fighters (1995)</a>
+                    <a href="http://www.youtube.com/watch?v=qTcfnTISMDk">NOVA: Ebola, The Plague Fighters (1995)</a>
 		</p>
 		<p>
 		    <a href= "https://www.youtube.com/watch?v=jTF7i6OBGQk"> Fighting to Contain Sierra Leone's Ebola Epidemic (2014) </a>
 		</p>
-                <p>
-		    <a href= "https://www.youtube.com/watch?v=1_WOR22-SnY"> A popular song in Africa about Ebola </a>
-                </p>
             </div>
             </div><!--end content-->
             </div><!--end wrapper-->

@@ -4,7 +4,7 @@ visibility pack
 html gold
 
 track spMut override
-visibility dense
+visibility hide
 group regulation
 html spMut
 
@@ -15,7 +15,7 @@ html gap
 
 track chainSelf
 shortLabel 47 Strain Chain
-longLabel 47 strains Chained Alignments
+longLabel 47 Strains Chained Alignments
 group compGeno
 chainColor Normalized Score
 visibility hide
