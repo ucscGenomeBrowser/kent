@@ -69,6 +69,13 @@ type bigBed 12 .
 visibility dense
 urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
 
+track iedbPred
+shortLabel IEDB Predictions
+longLabel Immune Epitope Database and Analysis Resource (IEDB) MHCII-displayed predicted peptides
+group regulation
+type bigBed 12 .
+visibility hide
+
 include trackDb.gire.ra
 include trackDb.49way.ra
 include trackDb.49wayStrainNames.ra
