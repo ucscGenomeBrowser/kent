@@ -8,6 +8,11 @@ visibility hide
 group regulation
 html spMut
 
+track spAnnot override
+visibility hide
+group regulation
+html spAnnot
+
 # Local declaration so that local gap.html is picked up.
 track gap override
 visibility hide
