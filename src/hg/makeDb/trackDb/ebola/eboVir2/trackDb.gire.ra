@@ -33,3 +33,10 @@ group varRep
 type bigBed 9 +
 visibility hide
 itemRgb on
+
+track gireIntraHost
+shortLabel 2014 Intra-host
+longLabel Intra-host variants for 78 Sierra Leone EVD patients
+group varRep
+type vcfTabix
+visibility hide
