@@ -21,9 +21,8 @@
         .screenshot {
             display: block;
             margin: auto       !important;
-            margin-top: 15px   !important;
             margin-bottom: 15px !important;
-            border: 1px solid gray !important;
+            border: 1px solid gray;
             width: 300px;
         }
 
@@ -55,7 +54,7 @@
         <tr>
         <table>
             <tr>
-            <td colspan="2">
+            <td colspan="3">
             <div style="margin-top: 0; margin-left: 10px;" class="wrapper">
                 <div class="bar"><h4 class="title">About</h4></div>
                 <div class="content">
@@ -75,20 +74,29 @@
             </tr>
             <!-- screenshot launchers 2x2 matrix -->
                 <tr>
-                    <td width="20%" height="200px">
+                    <td width="44%" height="200px">
                     <div style="height:100%; margin-top:0; margin-left:10px; margin-right:10px" class="wrapper">
-                        <div class="bar"><h4 class="title">Read about Ebola virus</h4></div>
-                            <a href="http://en.wikipedia.org/wiki/Ebola_virus"><img style="height: 107; width: 84px;" class="screenshot"  src="../images/Zaire_ebolavirus.jpg"></a>
-                    </div>
-                    </td>
-                    <td width="20%" height="200px">
-                    <div style="height: 100%; margin-top:0;" class="wrapper">
-                    <div class="bar"><h4 class="title">Explore the Ebola genome with the UCSC Ebola Browser</h4></div>
+                    <div class="bar"><h4 class="title">Explore the Ebola genome with the UCSC Browser</h4></div>
                         <div class="content">
-                            <a  href="../cgi-bin/hgTracks?db=eboVir2"><img style="height: 40%; width: 40%;" class="screenshot" src="ebolaBrowserSS.png"></a>
+                            <a  href="../cgi-bin/hgTracks?db=eboVir2"><img style="margin: 15px auto !important;height: 120px; width: 209px;" class="screenshot" src="ebolaBrowserSS.png"></a>
                         </div>
                     </div>
                     </td>
+
+                    <td width="15" height="200px">
+                    <div style="height: 100%; margin-top:0; margin-right: 10px;" class="wrapper">
+                        <div class="bar"><h4 class="title">Read about Ebola</h4></div>
+                            <a href="http://en.wikipedia.org/wiki/Ebola_virus"><img class="screenshot" style="margin: 15px auto !important; height: 84; width: 60px;" src="../images/Zaire_ebolavirus.jpg"></a>
+                    </div>
+                    </td>
+
+                    <td width="41%" height="200px">
+                    <div style="height: 100%; margin-top:0;" class="wrapper">
+                        <div class="bar"><h4 class="title">Learn about the 2014 outbreak</h4></div>
+                            <a href="http://www.cdc.gov/vhf/ebola/"><img style="border:0px solid; height: 154px; width: 219px;" class="screenshot"  src="../images/Graph_Diseased_Ebola_2014.png"></a>
+                    </div>
+                    </td>
+
 
 
                 </tr>
@@ -113,8 +121,8 @@
 
 <! Scientific Links block
             <tr>
-            <td colspan="2">
-            <div style="margin-top: 5px; margin-left: 10px;" class="wrapper">
+            <td colspan="3">
+            <div style="margin-top: 15px; margin-left: 10px;" class="wrapper">
             <div class="bar"><h4 class="title">Related Publications</h4></div>
             <div class="content">
 		<p>
@@ -142,7 +150,7 @@ Science Magazine Special Collection: Ebola Virus</a> (freely available research 
 
 <! Basic Viral Life Cycle block
             <tr>
-            <td colspan="2">
+            <td colspan="3">
             <div style="margin-top: 0; margin-left: 10px;" class="wrapper">
 
             <div class="bar"><h4 class="title">Ebola Biology</h4></div>
@@ -180,29 +188,6 @@ Science Magazine Special Collection: Ebola Virus</a> (freely available research 
                 other virus proteins and bud from the host cell, sheathed in host 
                 cell membrane, thus completing the cycle.
 		</p>
-
-<!--old section
-		Ebola is a viral disease that effects humans and other primates.  The symptoms
-		start within three weeks and include fever, sore throat, muscle pain and
-                headaches.  
-		Vomiting, diarrhea, as well as decreased function of the liver and kidneys follow.  
-		At this point the virus causes both internal and external bleeding.  The entire 
-cycle takes two to four weeks. 
-		The virus is highly virulent, with survival rates as low as ten percent.
-		Additionally it is highly contagious, spreading through bodily fluids and from corpses of the victims.</p>
-	TODO: reword
-                Due to these issues a large scale epidemic is possible.
-		</p>
-                <p>
-                The life cycle starts with a copy of the negative strand of RNA packaged into a viral capsule. 
-                This capsule crashes into a cell and gains entry.   Immediately it activates the 
-                viral polymerase to copy the negative strand into positive strands.  Then the cell's machinery
-                is used to read the positive strand into five proteins. Two of these proteins are cut to create a
-                total of seven proteins.   After a required level of proteins is achieved the virus switches 
-                to a replication mode.  Here it transcribes the positive strand back into negative copies and 
-                packages them into capsule which are released to start the cycle again. 
-                </p>
--->
             </div><!--end content-->
             </div><!--end wrapper-->
             </td>
@@ -210,7 +195,7 @@ cycle takes two to four weeks.
 
 <!--Antibodies panel -->
             <tr>
-            <td colspan="2">
+            <td colspan="3">
             <div style="margin-top: 0; margin-left: 10px;" class="wrapper">
             <div class="bar"><h4 class="title">Antibody Resources</h4></div>
             <div class="content">
@@ -245,7 +230,7 @@ treatment and vaccine development for Ebola Virus Disease.
 
 <! PR Links block
             <tr>
-            <td colspan="2">
+            <td colspan="3">
             <div style="margin-top: 0; margin-left: 10px;" class="wrapper">
 
             <div class="bar"><h4 class="title">General Interest Links</h4></div>
@@ -253,12 +238,9 @@ treatment and vaccine development for Ebola Virus Disease.
                 <p>
 		    <a href= "https://www.youtube.com/watch?v=1_WOR22-SnY"> A popular song in Africa about Ebola </a>
                 </p>
-
-<!-- removed from YouTube.  I believe it's PBS property, not freely avaiable
 		<p>
-		    <a href= "https://www.youtube.com/watch?v=ZLKgFkBc11w"> NOVA: Ebola, The Plague Fighters (1995)</a>
+                    <a href="http://www.youtube.com/watch?v=qTcfnTISMDk">NOVA: Ebola, The Plague Fighters (1995)</a>
 		</p>
-                -->
 		<p>
 		    <a href= "https://www.youtube.com/watch?v=jTF7i6OBGQk"> Fighting to Contain Sierra Leone's Ebola Epidemic (2014) </a>
 		</p>
