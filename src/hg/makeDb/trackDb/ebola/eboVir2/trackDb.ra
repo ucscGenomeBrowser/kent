@@ -53,6 +53,17 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 itemDetailsHtmlTable geneDesc
 
+track spAnnotSecond
+shortLabel UniProt Structure
+longLabel UniProt/SwissProt Protein Primary/Secondary Structure Annotations
+group regulation
+visibility hide
+type bigBed 12 +
+itemRgb on
+urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+mouseOverField comments
+release alpha
+
 track iedb
 shortLabel IEDB T-Cell Epitopes
 longLabel Immune Epitope Database and Analysis Resource (IEDB) T-Cell Epitopes
