@@ -2747,8 +2747,8 @@ noScoreFilter on
 
 track spAnnot
 shortLabel UniProt Annotations
-longLabel UniProt/SwissProt Annotations
-group x
+longLabel UniProt/SwissProt Protein Annotations
+group genes
 visibility hide
 type bigBed 12 +
 itemRgb on

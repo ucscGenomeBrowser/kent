@@ -5,12 +5,13 @@ html gold
 
 track spMut override
 visibility hide
-group regulation
+group varRep
+shortLabel UniProt Mutation Annotations
 html spMut
 
 track spAnnot override
 visibility hide
-group regulation
+group genes
 html spAnnot
 
 # Local declaration so that local gap.html is picked up.
@@ -65,6 +66,7 @@ shortLabel NCBI Genes
 longLabel NCBI Genes from http://www.ncbi.nlm.nih.gov/nuccore/674810552
 group genes
 visibility pack
+priority 1
 color 12,12,120
 type genePred 
 baseColorUseCds given
@@ -74,7 +76,7 @@ itemDetailsHtmlTable geneDesc
 track spAnnotSecond
 shortLabel UniProt Structure
 longLabel UniProt/SwissProt Protein Primary/Secondary Structure Annotations
-group regulation
+group genes
 visibility hide
 type bigBed 12 +
 itemRgb on
@@ -105,14 +107,6 @@ group immu
 type bigBed 12 .
 visibility hide
 
-track genbank
-shortLabel Genbank Sequences
-longLabel Sequence matches in Genbank with length < 10kbp
-group genes
-type psl
-visibility hide
-url http://www.ncbi.nlm.nih.gov/nuccore/$$
-
 track ncbiGenePfam
 shortLabel Pfam in NCBI Gene
 longLabel Pfam Domains in NCBI Genes
@@ -120,6 +114,26 @@ group genes
 type bed 12
 color 20,0,250
 url http://pfam.sanger.ac.uk/family/$$
+
+track genbank
+shortLabel Genbank ZEBOV
+longLabel Sequence matches in Genbank for Ebola Zaire with length < 10kbp
+group genes
+type psl
+visibility hide
+iframeUrl http://www.ncbi.nlm.nih.gov/nuccore/$$
+iframeOptions width='800' height='800' scrolling='yes'
+priority 10
+
+track genbankNotZaire
+shortLabel Genbank Virus
+longLabel Sequence matches in Genbank for non-Ebola/Zaire Viruses with length < 10kbp
+group genes
+type psl
+visibility hide
+iframeUrl http://www.ncbi.nlm.nih.gov/nuccore/$$
+iframeOptions width='800' height='800' scrolling='yes'
+priority 20
 
 include trackDb.gire.ra
 include trackDb.49way.ra
