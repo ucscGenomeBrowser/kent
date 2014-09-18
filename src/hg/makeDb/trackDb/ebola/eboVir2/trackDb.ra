@@ -2,6 +2,7 @@
 track gold override
 visibility pack
 html gold
+visibility hide
 
 track spMut override
 visibility hide
