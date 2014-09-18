@@ -105,6 +105,7 @@ longLabel Immune Epitope Database and Analysis Resource (IEDB) B-Cell Epitopes
 group immu
 type bigBed 12 .
 visibility dense
+color 0,90,100
 urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
 
 track ncbiGenePfam
