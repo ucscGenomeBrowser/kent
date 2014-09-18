@@ -11,4 +11,16 @@ html gap
 track gc5BaseBw override
 visibility full
 
+track ncbiGene
+shortLabel NCBI Genes
+longLabel NCBI Genes from KM034562 Genbank Record
+group genes
+visibility pack
+priority 1
+color 12,12,120
+type genePred 
+baseColorUseCds given
+baseColorDefault genomicCodons
+itemDetailsHtmlTable geneDesc
+
 include trackDb.160way.ra
