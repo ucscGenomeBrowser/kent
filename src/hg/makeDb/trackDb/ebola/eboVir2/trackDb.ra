@@ -18,20 +18,20 @@ track gap override
 visibility hide
 html gap
 
-track chainSelf
-shortLabel 47 Strain Chain
-longLabel 47 Strains Chained Alignments
-group compGeno
-chainColor Normalized Score
-visibility hide
-matrixHeader A, C, G, T
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-type chain eboVir2
-otherDb eboVir2
-chainNormScoreAvailable yes
-color 100,50,0
-altColor 255,240,200
-spectrum on
+# track eboVir2Self
+# shortLabel 47 Strain Chain
+# longLabel 47 Strains Chained Alignments
+# group compGeno
+# chainColor Normalized Score
+# visibility hide
+# matrixHeader A, C, G, T
+# matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+# type chain eboVir2
+# otherDb eboVir2
+# chainNormScoreAvailable yes
+# color 100,50,0
+# altColor 255,240,200
+# spectrum on
 
 #track genePredictions
 #shortLabel genePredictions
@@ -41,6 +41,24 @@ spectrum on
 #spectrum on
 #color 12,12,120
 #type psl protein
+
+track cpgIslandSuper
+superTrack on
+shortLabel CpG Islands
+longLabel CpG Islands (Islands < 300 Bases are Light Green)
+group regulation
+visibility hide
+color 0,100,0
+altColor 128,228,128
+type bed 4 +
+html cpgIslandSuper
+
+    track cpgIslandExtUnmasked
+    superTrack cpgIslandSuper pack
+    shortLabel Unmasked CpG
+    longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
+    priority 2
+    html cpgIslandSuper
 
 track ncbiGene
 shortLabel NCBI Genes
@@ -67,7 +85,7 @@ release alpha
 track iedb
 shortLabel IEDB T-Cell Epitopes
 longLabel Immune Epitope Database and Analysis Resource (IEDB) T-Cell Epitopes
-group regulation
+group immu
 type bigBed 12 .
 visibility hide
 urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
@@ -75,7 +93,7 @@ urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/
 track iedbBcell
 shortLabel IEDB B-Cell Epitopes
 longLabel Immune Epitope Database and Analysis Resource (IEDB) B-Cell Epitopes
-group regulation
+group immu
 type bigBed 12 .
 visibility dense
 urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
@@ -83,9 +101,17 @@ urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/
 track iedbPred
 shortLabel IEDB Predictions
 longLabel Immune Epitope Database and Analysis Resource (IEDB) peptides predicted to be displayed to T-Cells
-group regulation
+group immu
 type bigBed 12 .
 visibility hide
+
+track genbank
+shortLabel Genbank Sequences
+longLabel Sequence matches in Genbank with length < 10kbp
+group genes
+type psl
+visibility hide
+url http://www.ncbi.nlm.nih.gov/nuccore/$$
 
 track ncbiGenePfam
 shortLabel Pfam in NCBI Gene
