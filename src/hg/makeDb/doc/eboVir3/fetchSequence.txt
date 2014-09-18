@@ -1,3 +1,6 @@
+# for emacs: -*- mode: sh; -*-
+
+###########################################################################
 # accession names obtained from Entrez with the query:
 #
 #    (ebola[title] OR ebolavirus[title]) AND genome[title]

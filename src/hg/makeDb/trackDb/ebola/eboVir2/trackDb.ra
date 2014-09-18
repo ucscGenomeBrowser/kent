@@ -116,7 +116,7 @@ color 20,0,250
 url http://pfam.sanger.ac.uk/family/$$
 
 track genbank
-shortLabel Genbank ZEBOV
+shortLabel GenBank ZEBOV
 longLabel Sequence matches in Genbank for Ebola Zaire with length < 10kbp
 group genes
 type psl
@@ -126,7 +126,7 @@ iframeOptions width='800' height='800' scrolling='yes'
 priority 10
 
 track genbankNotZaire
-shortLabel Genbank Virus
+shortLabel GenBank Virus
 longLabel Sequence matches in Genbank for non-Ebola/Zaire Viruses with length < 10kbp
 group genes
 type psl
@@ -135,7 +135,6 @@ iframeUrl http://www.ncbi.nlm.nih.gov/nuccore/$$
 iframeOptions width='800' height='800' scrolling='yes'
 priority 20
 
-include trackDb.gire.ra
 include trackDb.49way.ra
 include trackDb.49wayStrainNames.ra
 include trackDb.102way.ra

@@ -1,3 +1,5 @@
+# for emacs: -*- mode: sh; -*-
+
 # running up the 160-way on the this reference: KM034562.1
 # DONE - 2014-09-18 - Hiram
 
@@ -72,7 +74,7 @@ ln -s ../query2Bits/${referenceSP}.2bit ${referenceSP}.2bit
 
 twoBitInfo ../query2Bits/${referenceSP}.2bit ${referenceSP}.chrom.sizes
 
-ls ../query2Bits/*.2bit | grep -v KJ660347v2 | while read F
+ls ../query2Bits/*.2bit | while read F
 do
   B=`basename $F | sed -e 's/.2bit//'`
   mkdir -p pairs/${B}
