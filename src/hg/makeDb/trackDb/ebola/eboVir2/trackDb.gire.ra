@@ -66,7 +66,7 @@ visibility hide
 color 220,0,0
 
 track gire2014MayingaMissense
-shortLabel 2014 vs Maynga GP
+shortLabel 2014 vs Mayinga GP
 longLabel Protein changes in GP Between 2014 Outbreak Isolates and a Mayinga Isolate (NC002549)
 group varRep
 type bigBed 4 +
