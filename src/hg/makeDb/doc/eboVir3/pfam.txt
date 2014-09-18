@@ -1,0 +1,20 @@
+mkdir -p /cluster/data/eboVir3/bed/pfam
+cd  /cluster/data/eboVir3/bed/pfam
+
+# grab mRNA CDS from eboVir2 ncbiGene using table  browser into input.fa
+faTrans eboVir3.cds.fa.gz input.faa
+
+/hive/data/outside/pfam/Pfam27.0/PfamScan/hmmer-3.1b1/src/hmmsearch   --domtblout pfamTbl.out --noali -o /dev/null -E 0.1 /hive/data/outside/pfam/Pfam27.0/Pfam-A.hmm     input.faa
+
+cat pfamTbl.out |  sed '/^#/d' | awk 'BEGIN {OFS="\t"} {if ($7 < 0.0001) print $1,$18-1,$19,$4,$7}' | sort > ucscPfam.tab
+
+genePredToFakePsl eboVir3 ncbiGene ncbiGene.psl cdsOut.tab
+sort cdsOut.tab | sed 's/\.\./   /' > sortCdsOut.tab
+sort ucscPfam.tab | sed 's/eboVir3_ncbiGene_//' > sortPfam.tab
+ 
+ awk '{print $10, $11}'  ncbiGene.psl > gene.sizes
+ join sortCdsOut.tab sortPfam.tab |  awk '{print $1, $2 + 3 * $4, $2 + 3 * $5, $6}' | bedToPsl gene.sizes stdin domainToGene.psl
+ pslMap domainToGene.psl ncbiGene.psl stdout | sort | uniq | pslToBed stdin domainToGenome.bed
+
+
+hgLoadBed eboVir3 ncbiGenePfam  domainToGenome.bed
