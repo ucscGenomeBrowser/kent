@@ -9,8 +9,6 @@
         /* using tables for layout */
         table {
             border-style: none
-            /* DEBUG */
-            /* border: 2px solid red;  */
         }
         td {
             border-style: none;
@@ -20,17 +18,18 @@
         /* override visited img links in HGStyle */
         .screenshot {
             display: block;
-            margin: auto       !important;
-            margin-bottom: 15px !important;
-            border: 1px solid gray;
-            width: 300px;
+            width: 100%;
+            margin: 15px 0 !important;
+        }
+        .screenshot:hover {
+            outline: 1px solid ActiveBorder;
         }
 
         .header {
             color: #00457c;
             font-size: 25px;
-            margin-top: 15px;
-            height: 70px;
+            margin-top: 25px;
+            margin-bottom: 15px;
         }
         .header span {
             vertical-align: middle;
@@ -40,18 +39,24 @@
             font-size: 15px;
             background-color: #efefef;
         }
+
+        .bar {
+            height: auto;
+            padding-bottom: 4px;
+        }
+        .wrapper {
+            border: none;
+        }
     </style>
 </head>
 
-<body>
+<body style="margin:0;">
     <!--#include virtual="../inc/ebola.topbar.html"-->
     <div class="header">
-        <span class="txt">&nbsp; UCSC Ebola Portal</span>
-        <span class="subHeader">Genomic resources related to the 2014 West Africa outbreak</span> 
+        <span class="txt">&nbsp; UCSC Ebola Genome Portal</span>
+        <span class="subHeader">Resources for the 2014 West Africa outbreak</span> 
     </div>
-    <div>
-    <table>
-        <tr>
+    <div style="margin:8px; margin-right:16px;">
         <table>
             <tr>
             <td colspan="3">
@@ -74,55 +79,35 @@
             </tr>
             <!-- screenshot launchers 2x2 matrix -->
                 <tr>
-                    <td width="44%" height="200px">
-                    <div style="height:100%; margin-top:0; margin-left:10px; margin-right:10px" class="wrapper">
+                    <!-- Browser image linking to browser CGI -->
+                    <td width="44%">
+                    <div style="margin-top:0; margin-left:10px; margin-right:10px" class="wrapper">
                     <div class="bar"><h4 class="title">Explore the Ebola genome with the UCSC 
 			Genome Browser</h4></div>
                         <div class="content">
-                            <a  href="../cgi-bin/hgTracks?db=eboVir2"><img style="margin: 15px auto !important;height: 120px; width: 209px;" class="screenshot" src="ebolaBrowserSS.png"></a>
+                            <a href="../cgi-bin/hgTracks?db=eboVir2"><img class="screenshot" src="../images/ebolaBrowser.png"></a>
                         </div>
                     </div>
                     </td>
 
-<!--[if !IE]>-->
-                    <td width="15" height="200px">
-                    <div style="height: 100%; margin-top:0; margin-right: 10px;" class="wrapper">
-                        <div class="bar"><h4 class="title">Read about Ebola</h4></div>
-                            <a href="http://en.wikipedia.org/wiki/Ebola_virus" target="_blank"><img class="screenshot" style="margin: 15px auto !important; height: 84; width: 60px;" src="../images/Zaire_ebolavirus.jpg"></a>
-                    </div>
-                    </td>
-<!--<![endif]-->
-
-                    <td width="41%" height="200px">
-                    <div style="height: 100%; margin-top:0;" class="wrapper">
+                    <!-- Incidence graph linked to CDC site -->
+                    <td width="41%" >
+                    <div style="margin-top:0; margin-right: 10px;" class="wrapper">
                         <div class="bar"><h4 class="title">Learn about the 2014 outbreak</h4></div>
-                            <a href="http://www.cdc.gov/vhf/ebola/"><img style="border:0px solid; height: 154px; width: 219px;" class="screenshot"  src="../images/Graph_Diseased_Ebola_2014.png"></a>
+                            <a href="http://www.cdc.gov/vhf/ebola/"><img class="screenshot"  src="../images/Graph_Diseased_Ebola_2014.png"></a>
                     </div>
                     </td>
 
-
-
-                </tr>
-<!--
-
-                <tr>
-                    <td width="20%" height="200">
-                    <div style="height: 100%; margin-top:10px; margin-left:10px; margin-right:10px" class="wrapper">
-                        <div class="bar"><h4 class="title">Search for data at the ENCODE Portal</h4></div>
-                            <a href="https://www.encodedcc.org/search/?type=experiment"><img class="screenshot" style="display: block; margin: auto;" src="../images/encode/stanfordSearch.png"></a>
-                    </div>
-                    </td>
-                    <td width="20%" height="200">
-                    <div style="height: 100%; margin-top:10px" class="wrapper">
-                        <div class="bar"><h4 class="title">Search for ENCODE tracks in the UCSC Browser</h4></div>
-                            <a href="../cgi-bin/hgTracks?hgt_=1408334670&db=hg19&tsCurTab=advancedTab&hgt_tsDelRow=&hgt_tsAddRow=&hgt_tsPage=&tsSimple=&tsName=&tsDescr=&tsGroup=Any&tsType=Any&hgt_mdbVar1=cell&hgt_mdbVal1=HeLa-S3&hgt_mdbVar2=dataType&hgt_mdbVal2=RnaSeq&hgt_tSearch=search"><img class="screenshot" src="../images/encode/search.png"></a>
+                    <!-- Electron micrograph of virus linked to Wikipeda page -->
+                    <td width="15%" >
+                    <div style="margin-top:0;" class="wrapper">
+                        <div class="bar"><h4 class="title">Read about Ebola</h4></div>
+                            <a href="http://en.wikipedia.org/wiki/Ebola_virus" target="_blank"><img class="screenshot" src="../images/Zaire_ebolavirus_vertical.jpg"></a>
                     </div>
                     </td>
                 </tr>
--->
 
-
-<!-- Scientific Links block -->
+<!-- Publications block -->
             <tr>
             <td colspan="3">
             <div style="margin-top: 15px; margin-left: 10px;" class="wrapper">
@@ -155,7 +140,7 @@
             </tr>
 
 
-<!-- Basic Viral Life Cycle block -->
+<!-- Ebola Biology block -->
             <tr>
             <td colspan="3">
             <div style="margin-top: 0; margin-left: 10px;" class="wrapper">
@@ -228,6 +213,9 @@
                 [<a href="http://www.nature.com/nature/journal/vnfv/ncurrent/pdf/nature13777.pdf"
                 target="_blank">PDF</a>]
 		</p>
+                mAbs (MB-003) cocktail (2012): 
+                <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3497800" target="_blank">Delayed treatment of Ebola virus infection with plant-derived monoclonal antibodies provides protection in rhesus macaques</a>
+                <p>
                 <p>
                 EBOV IgG+ sera from asymptomatic individuals and symptomatic Gabonese survivors 
 		(2014):
@@ -324,7 +312,5 @@
             </td>
             </tr>
             </table>
-    </tr>
-    </table>
 </body>
 </html>
