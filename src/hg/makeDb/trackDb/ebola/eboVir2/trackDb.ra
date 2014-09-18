@@ -135,7 +135,6 @@ iframeUrl http://www.ncbi.nlm.nih.gov/nuccore/$$
 iframeOptions width='800' height='800' scrolling='yes'
 priority 20
 
-include trackDb.gire.ra
 include trackDb.49way.ra
 include trackDb.49wayStrainNames.ra
 include trackDb.102way.ra
