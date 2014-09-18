@@ -152,3 +152,10 @@ cat fb.eboVir3.genscan.txt
 #  14316 bases of 18957 (75.518%) in intersection
 
 ############################################################################
+#  set default position on the GP gene area:
+
+hgsql -e \
+'update dbDb set defaultPos="KM034562v1:3545-9003" where name="eboVir3";' \
+     hgcentraltest
+
+############################################################################

@@ -11,7 +11,7 @@ do
   echo -n "${D}: "; zcat ${D}/pslParts/part000.lst.psl.gz \
    | grep -v "^#" | wc 
 done | sort -k4n | sed -e 's#../../lastz160way/KM034562v1/pairs/##;' \
-   | sed -e 's/:.*//' | grep -v KM034562v1 >> species.list
+   | sed -e 's/:.*//; s/marVir1.//;' | grep -v KM034562v1 >> species.list
 
 # verify 160 count
 sort -u species.list | wc -l
@@ -28,8 +28,8 @@ KM034554v1:0.1):0.1,
 KC545391v1:0.1):0.1,
 KC545392v1:0.1):0.1,
 JN638998v1:0.1):0.1,
-marVir1.NC_024781v1:0.1):0.1,
-marVir1.NC_001608v3:0.1);
+NC_024781v1:0.1):0.1,
+NC_001608v3:0.1);
 
 # construct tree with just the names for multiz:
 sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
@@ -50,7 +50,7 @@ do
     fi
     D=`echo $D | sed -e 's/marVir1.//'`
     echo ${D} ${mafNet} 1>&2
-    zcat ${mafNet} | sed -e "s#^s eboVir2.${D}#s ${D}.${D}#;" \
+    zcat ${mafNet} | sed -e "s#^s eboVir2.${D}#s ${D}.${D}#; s#s eboVir2.KM034562v1#s KM034562v1.KM034562v1#;" \
        | gzip -c > KM034562v1.${D}.maf.gz
   fi
 done
@@ -98,7 +98,6 @@ set pairs = /hive/data/genomes/eboVir3/bed/multiz160way/mafLinks
 pushd $tmp > /dev/null
 foreach s (`/bin/grep -v "$db" species.list`)
     set in = $pairs/$db.$s.maf
-echo "looking for: $in"
     set out = $db.$s.sing.maf
     if (-e $in.gz) then
         /bin/zcat $in.gz > $out
@@ -122,3 +121,99 @@ popd > /dev/null
   # << happy emacs
 
 gensub2 maf.list single template jobList
+para create jobList
+para try ... check ... push
+para time
+# Completed: 159 of 159 jobs
+# CPU time in finished jobs:     217592s    3626.54m    60.44h    2.52d  0.007 y
+# IO & Wait Time:                   961s      16.01m     0.27h    0.01d  0.000 y
+# Average job time:                1375s      22.91m     0.38h    0.02d
+# Longest finished job:            1502s      25.03m     0.42h    0.02d
+# Submission to last job:          1514s      25.23m     0.42h    0.02d
+
+# put the results back together into a single file:
+
+head -1 maf/AB050936v1.maf > multiz160way.maf
+for F in maf/*.maf
+do
+    echo "${F}" 1>&2
+    egrep -v "^#" ${F} | sed -e 's#^s \([A-Z0-9a-z_]*\)#s \1.\1#;'
+done | sed -e 's#^s KM034562v1.KM034562v1#s eboVir3.KM034562v1#;' \
+>> multiz160way.maf
+tail -1 maf/AB050936v1.maf >> multiz160way.maf
+
+# scan names to verify sanity:
+grep "^s " multiz160way.maf | awk '{print $2}' | sort | uniq -c \
+  | sort -rn | less
+
+# 27030 eboVir3.KM034562v1
+# 27030 NC_002549v1.NC_002549v1
+# 27030 KM233113v1.KM233113v1
+# 27030 KM233109v1.KM233109v1
+# 27030 KM233070v1.KM233070v1
+# ...
+# 18126 KM233060v1.KM233060v1
+# 17490 KM034563v1.KM034563v1
+# 17172 KM233117v1.KM233117v1
+# 16854 KM233118v1.KM233118v1
+# 15105 FJ621585v1.FJ621585v1
+#  6201 NC_024781v1.NC_024781v1
+#  6201 NC_001608v3.NC_001608v3
+
+mkdir /gbdb/eboVir3/multiz160way
+rm -f /gbdb/eboVir3/multiz160way/multiz160way.maf
+ln -s `pwd`/multiz160way.maf \
+   /gbdb/eboVir3/multiz160way/multiz160way.maf
+
+cd /dev/shm
+time hgLoadMaf eboVir3 multiz160way
+# Loaded 27030 mafs in 1 files from /gbdb/eboVir3/multiz160way
+# real    0m8.057s
+
+# merge that into a single block:
+cd /hive/data/genomes/eboVir3/bed/multiz160way
+
+mafFrag eboVir3 multiz160way KM034562v1 0 18957 + mafFrag.multiz160way.maf
+
+# change dots to dash
+cat << '_EOF_' > dotToDash.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $file = shift;
+
+open (FH, "<$file") or die "can not read $file";
+while (my $line = <FH>) {
+  if ($line =~ m/^s /) {
+    chomp $line;
+    my @a = split('\s+', $line);
+    if (scalar(@a) == 7) {
+      if ($a[1] !~ m/eboVir3/) {
+        $a[1] = "$a[1].$a[1]";
+      }
+      $a[6] =~ s/\./-/g;
+      print join(' ', @a), "\n";
+    } else {
+      die "ERROR: s line found not 7 fields ?";
+    } 
+  } else {
+    printf "%s", $line;
+  }
+}
+close (FH);
+'_EOF_'
+  # << happy emacs
+
+./dotToDash.pl mafFrag.multiz160way.maf > defraged.multiz160way.maf
+
+# and reload:
+rm /gbdb/eboVir3/multiz160way/multiz160way.maf
+ln -s `pwd`/defraged.multiz160way.maf \
+   /gbdb/eboVir3/multiz160way/multiz160way.maf
+
+cd /dev/shm
+time hgLoadMaf eboVir3 multiz160way
+# Loaded 1 mafs in 1 files from /gbdb/eboVir3/multiz160way
+# real    0m0.054s
