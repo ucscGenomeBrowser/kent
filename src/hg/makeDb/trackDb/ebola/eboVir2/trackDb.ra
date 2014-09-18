@@ -86,7 +86,7 @@ mouseOverField comments
 release alpha
 
 track iedb
-shortLabel T-Cell Epitopes
+shortLabel IEDB T-Cell
 longLabel Immune Epitope Database and Analysis Resource (IEDB) T-Cell Epitopes
 group immu
 type bigBed 12 .
@@ -101,7 +101,7 @@ urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/
 #visibility hide
 
 track iedbBcell
-shortLabel B-Cell Epitopes
+shortLabel IEDB B-Cell
 longLabel Immune Epitope Database and Analysis Resource (IEDB) B-Cell Epitopes
 group immu
 type bigBed 12 .
