@@ -92,6 +92,13 @@ type bigBed 12 .
 visibility hide
 urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
 
+track iedbPred
+shortLabel IEDB T-Cell Pred.
+longLabel Immune Epitope Database and Analysis Resource (IEDB) peptides predicted to be displayed by MHCII to T-Cells
+group immu
+type bigBed 12 .
+visibility hide
+
 track iedbBcell
 shortLabel IEDB B-Cell Epitopes
 longLabel Immune Epitope Database and Analysis Resource (IEDB) B-Cell Epitopes
@@ -99,13 +106,6 @@ group immu
 type bigBed 12 .
 visibility dense
 urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
-
-track iedbPred
-shortLabel IEDB Predictions
-longLabel Immune Epitope Database and Analysis Resource (IEDB) peptides predicted to be displayed to T-Cells
-group immu
-type bigBed 12 .
-visibility hide
 
 track ncbiGenePfam
 shortLabel Pfam in NCBI Gene
