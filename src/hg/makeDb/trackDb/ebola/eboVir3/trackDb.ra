@@ -33,3 +33,4 @@ url http://pfam.sanger.ac.uk/family/$$
 
 include trackDb.160way.ra
 include trackDb.gire.ra
+include trackDb.strainName160way.ra

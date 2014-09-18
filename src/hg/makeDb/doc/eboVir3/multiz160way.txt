@@ -217,3 +217,19 @@ cd /dev/shm
 time hgLoadMaf eboVir3 multiz160way
 # Loaded 1 mafs in 1 files from /gbdb/eboVir3/multiz160way
 # real    0m0.054s
+
+# construct strain-name track
+
+cat defraged.multiz160way.maf \
+ | sed -f ~/kent/src/hg/makeDb/doc/eboVir3/ucscName.strainName.sed \
+  | sed -e 's/eboVir3.G3686v1_2014/eboVir3.KM034562v1/' \
+    > strainName.multiz160way.maf
+
+mkdir /gbdb/eboVir3/strainName160way
+rm /gbdb/eboVir3/strainName160way/strainName160way.maf
+ln -s `pwd`/strainName.multiz160way.maf \
+   /gbdb/eboVir3/strainName160way/strainName160way.maf
+
+cd /dev/shm
+time hgLoadMaf eboVir3 strainName160way
+
