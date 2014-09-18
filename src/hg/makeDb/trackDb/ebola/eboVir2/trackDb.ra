@@ -111,6 +111,7 @@ longLabel Sequence matches in Genbank with length < 10kbp
 group genes
 type psl
 visibility hide
+url http://www.ncbi.nlm.nih.gov/nuccore/$$
 
 track ncbiGenePfam
 shortLabel Pfam in NCBI Gene
