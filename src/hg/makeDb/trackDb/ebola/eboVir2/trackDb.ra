@@ -105,6 +105,13 @@ group immu
 type bigBed 12 .
 visibility hide
 
+track genbank
+shortLabel Genbank Sequences
+longLabel Sequence matches in Genbank with length < 10kbp
+group genes
+type psl
+visibility hide
+
 track ncbiGenePfam
 shortLabel Pfam in NCBI Gene
 longLabel Pfam Domains in NCBI Genes
