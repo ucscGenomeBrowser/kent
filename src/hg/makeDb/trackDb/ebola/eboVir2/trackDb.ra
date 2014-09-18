@@ -1,6 +1,5 @@
 # Local declaration so that local gold.html is picked up.
 track gold override
-visibility pack
 html gold
 visibility hide
 
