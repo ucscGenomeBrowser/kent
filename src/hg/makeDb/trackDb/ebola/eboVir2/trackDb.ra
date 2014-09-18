@@ -10,7 +10,8 @@ shortLabel UniProt Mutation Annotations
 html spMut
 
 track spAnnot override
-visibility hide
+shortLabel UniProt Annot.
+visibility dense
 group genes
 html spAnnot
 
@@ -85,7 +86,7 @@ mouseOverField comments
 release alpha
 
 track iedb
-shortLabel IEDB T-Cell Epitopes
+shortLabel T-Cell Epitopes
 longLabel Immune Epitope Database and Analysis Resource (IEDB) T-Cell Epitopes
 group immu
 type bigBed 12 .
@@ -100,7 +101,7 @@ urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/
 #visibility hide
 
 track iedbBcell
-shortLabel IEDB B-Cell Epitopes
+shortLabel B-Cell Epitopes
 longLabel Immune Epitope Database and Analysis Resource (IEDB) B-Cell Epitopes
 group immu
 type bigBed 12 .
