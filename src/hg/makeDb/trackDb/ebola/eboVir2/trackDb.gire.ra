@@ -28,7 +28,7 @@ visibility hide
 
 track gire2014SpecificSnps
 shortLabel 2014 Specific
-longLabel Sites that Carry a Unique Base in the 2014 Outbreak Strain
+longLabel Sites that Carry a Unique Base in 2014 Outbreak Isolates
 group varRep
 type bigBed 9 +
 visibility hide
@@ -40,3 +40,39 @@ longLabel Intra-host variants for 78 Sierra Leone EVD patients
 group varRep
 type vcfTabix
 visibility hide
+
+track gire2014FixedMissense
+shortLabel 2014 Fixed Aa Chg
+longLabel Protein Changes That Are Fixed in 2014 Outbreak Isolates
+group varRep
+type bigBed 4 +
+visibility hide
+color 220,0,0
+
+track gire2014PolymorphicMissense
+shortLabel 2014 Polym Aa Chg
+longLabel Protein Changes That Are Polymorphic in 2014 Outbreak Isolates
+group varRep
+type bigBed 4 +
+visibility hide
+color 220,0,0
+
+track gire2014KikwitMissense
+shortLabel 2014 vs Kikwit GP
+longLabel Protein changes in GP Between 2014 Outbreak Isolates and a Kikwit Isolate (JQ352763)
+group varRep
+type bigBed 4 +
+visibility hide
+color 220,0,0
+
+track gire2014MayingaMissense
+shortLabel 2014 vs Maynga GP
+longLabel Protein changes in GP Between 2014 Outbreak Isolates and a Mayinga Isolate (NC002549)
+group varRep
+type bigBed 4 +
+visibility hide
+color 220,0,0
+
+
+
+

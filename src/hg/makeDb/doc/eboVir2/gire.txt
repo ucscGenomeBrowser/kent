@@ -171,6 +171,18 @@ EOF
     ln -s `pwd`/gire2014SpecificSnps.bb /gbdb/eboVir2/gire/
     hgBbiDbLink eboVir2 gire2014SpecificSnps /gbdb/eboVir2/gire/gire2014SpecificSnps.bb
 
+    # For converting gene aa positions to UCSC start coords: results of TB query:
+#name	cdsStart
+#NP	469
+#VP35	3128
+#VP40	4478
+#ssGP	6038
+#sGP	6038
+#GP	6038
+#VP30	8508
+#VP24	10344
+#L	11580
+
     # Convert S4_unique_ns_changes_fixed_in_2014.txt to bigBed+.
     cd /hive/data/genomes/eboVir2/bed/gire/Table_S4
     head -3 S4_unique_ns_changes_fixed_in_2014.txt
@@ -178,9 +190,164 @@ EOF
 #GP      315     Ala     Pro     -1      yes     81      no    no
 #GP      336     Thr     Asn     0       yes     81      no    no
     # We need to convert from amino acid coords to genomic.
-#TODO
+    perl -wne ' \
+      next if (/^gene/); chomp; \
+      ($gene, $aaPos, $refAa, $altAa, $blosum62, undef, undef, $consAcrossEbola) \
+        = split("\t"); \
+      %geneToCdsStart = ("NP" => 469, "VP35" => 3128, "VP40" => 4478, "GP" => 6038, \
+                         "VP30" => 8508, "VP24" => 10344, "L" => 11580); \
+      $offset = $geneToCdsStart{$gene} || die "nothing for $gene"; \
+      $start = $offset + (($aaPos - 1) * 3); \
+      # Handle GP weird frameshift: \
+      $start-- if ($gene eq "GP" && $start > 6922); \
+      $end = $start + 3; \
+      $hgsv = "$gene:$refAa$aaPos$altAa"; \
+      $name = $hgsv;  $name .= " *CONS*" if ($consAcrossEbola eq "yes"); \
+      print join("\t", "KJ660347v2", $start, $end, $name, \
+                       $gene, $hgsv, $blosum62, $consAcrossEbola) \
+            . "\n"; \
+      ' S4_unique_ns_changes_fixed_in_2014.txt \
+      | sort -k2n,2n \
+      > gire2014FixedMissense.bed
+    cat > gire2014FixedMissense.as <<EOF
+table gire2014FixedMissense
+"Amino acid changes that are unique to and fixed within the 2014 outbreak isolates, from Gire et al. Table S4"
+    (
+    string chrom;      "Reference sequence"
+    uint   chromStart; "Start position in reference"
+    uint   chromEnd;   "End position in reference"
+    string name;       "Amino acid change (with *CONS* if fully conserved across ebola genus)"
+    string gene;       "Gene symbol"
+    string hgsv;       "HGSV notation for amino acid change"
+    string blosum62;   "BLOSUM62 substitution score for ancestral and 2014 amino acids"
+    string consAcrossEbola;  "Fully conserved across ebola genus"
+    )
+EOF
+    bedToBigBed gire2014FixedMissense.bed ../../../chrom.sizes \
+      -type=bed4+ -as=gire2014FixedMissense.as -tab \
+      gire2014FixedMissense.bb
+    ln -s `pwd`/gire2014FixedMissense.bb /gbdb/eboVir2/gire/
+    hgBbiDbLink eboVir2 gire2014FixedMissense /gbdb/eboVir2/gire/gire2014FixedMissense.bb
 
+    # Convert S4_ns_changes_polymorphic_in_2014.txt to bigBed+
     head -3 S4_ns_changes_polymorphic_in_2014.txt 
 #gene    aa_pos  ref     alt     blosum_62_score fixed_in_outbreak_strain        frequency in outbreak strain (number of samples)        fully conserved across ebola genus?     conservative substitution across ebola genus and non-conservative in 2014
 #GP      46      Ser     Asn     1       no      1       no    no
 #GP      82      Ala     Val     0       no      78      yes   no
+    perl -wne ' \
+      next if (/^gene/); chomp; \
+      ($gene, $aaPos, $refAa, $altAa, $blosum62, undef, $countIn2014, $consAcrossEbola) \
+        = split("\t"); \
+      %geneToCdsStart = ("NP" => 469, "VP35" => 3128, "VP40" => 4478, "GP" => 6038, \
+                         "VP30" => 8508, "VP24" => 10344, "L" => 11580); \
+      $offset = $geneToCdsStart{$gene} || die "nothing for $gene"; \
+      $start = $offset + (($aaPos - 1) * 3); \
+      # Handle GP weird frameshift: \
+      $start-- if ($gene eq "GP" && $start > 6922); \
+      $end = $start + 3; \
+      $hgsv = "$gene:$refAa$aaPos$altAa"; \
+      $name = "$hgsv ($countIn2014/81)"; \
+      $name .= " *CONS*" if ($consAcrossEbola eq "yes"); \
+      $freqIn2014 = sprintf "%.4f", ($countIn2014 / 81.0); \
+      print join("\t", "KJ660347v2", $start, $end, $name, \
+                       $gene, $hgsv, $blosum62, $countIn2014, $freqIn2014, $consAcrossEbola) \
+            . "\n"; \
+      ' S4_ns_changes_polymorphic_in_2014.txt \
+      | sort -k2n,2n \
+      > gire2014PolymorphicMissense.bed
+    cat > gire2014PolymorphicMissense.as <<EOF
+table gire2014PolymorphicMissense
+"Amino acid changes that are unique to and fixed within the 2014 outbreak isolates, from Gire et al. Table S4"
+    (
+    string chrom;      "Reference sequence"
+    uint   chromStart; "Start position in reference"
+    uint   chromEnd;   "End position in reference"
+    string name;       "Amino acid change + frequency in 2014 (with *CONS* if fully conserved across ebola genus)"
+    string gene;       "Gene symbol"
+    string hgsv;       "HGSV notation for amino acid change"
+    string blosum62;   "BLOSUM62 substitution score for ancestral and 2014 amino acids"
+    int countIn2014;   "Number of 2014 samples with change (out of 81)"
+    float freqIn2014;   "Frequency of 2014 samples with change"
+    string consAcrossEbola;  "Fully conserved across ebola genus"
+    )
+EOF
+    bedToBigBed gire2014PolymorphicMissense.bed ../../../chrom.sizes \
+      -type=bed4+ -as=gire2014PolymorphicMissense.as -tab \
+      gire2014PolymorphicMissense.bb
+    ln -s `pwd`/gire2014PolymorphicMissense.bb /gbdb/eboVir2/gire/
+    hgBbiDbLink eboVir2 gire2014PolymorphicMissense /gbdb/eboVir2/gire/gire2014PolymorphicMissense.bb
+
+    # Convert S4_GP_Kikwit_aa_diffs.txt to bigBed+
+    head -3 S4_GP_Kikwit_aa_diffs.txt
+#aa_pos  Kikwit_aa       variant_aa      number_2014_seqs_with_variant_aa
+#46      S       N       1
+#82      A       V       78
+    perl -wne ' \
+      next unless (/^\d/); chomp; \
+      ($aaPos, $kikAa, $altAa, $countIn2014) = split("\t"); \
+      $offset = 6038; \
+      $start = $offset + (($aaPos - 1) * 3); \
+      # Handle GP weird frameshift: \
+      $start-- if ($start > 6922); \
+      $end = $start + 3; \
+      $hgsv = "GP:$kikAa$aaPos$altAa"; \
+      $name = "$hgsv ($countIn2014/81)"; \
+      print join("\t", "KJ660347v2", $start, $end, $name, $hgsv, $countIn2014) . "\n"; \
+      ' S4_GP_Kikwit_aa_diffs.txt \
+      | sort -k2n,2n \
+      > gire2014KikwitMissense.bed
+    cat > gire2014KikwitMissense.as <<EOF
+table gire2014KikwitMissense
+"GP gene amino acid changes in 2014 outbreak isolates compared to a Kikwit isolate, from Gire et al. Table S4"
+    (
+    string chrom;      "Reference sequence"
+    uint   chromStart; "Start position in reference"
+    uint   chromEnd;   "End position in reference"
+    string name;       "Amino acid change"
+    string hgsv;       "HGSV notation for amino acid change"
+    int countIn2014;   "Number of 2014 samples with change (out of 81)"
+    )
+EOF
+    bedToBigBed gire2014KikwitMissense.bed ../../../chrom.sizes \
+      -type=bed4+ -as=gire2014KikwitMissense.as -tab \
+      gire2014KikwitMissense.bb
+    ln -s `pwd`/gire2014KikwitMissense.bb /gbdb/eboVir2/gire/
+    hgBbiDbLink eboVir2 gire2014KikwitMissense /gbdb/eboVir2/gire/gire2014KikwitMissense.bb
+
+    # Convert S4_GP_Mayinga_aa_diffs.txt to bigBed+
+    head -3 S4_GP_Mayinga_aa_diffs.txt
+#aa_pos  Mayinga_aa      variant_aa      number_2014_seqs_with_variant_aa
+#46      S       N       1
+#82      A       V       78
+    perl -wne ' \
+      next unless (/^\d/); chomp; \
+      ($aaPos, $mayAa, $altAa, $countIn2014) = split("\t"); \
+      $offset = 6038; \
+      $start = $offset + (($aaPos - 1) * 3); \
+      # Handle GP weird frameshift: \
+      $start-- if ($start > 6922); \
+      $end = $start + 3; \
+      $hgsv = "GP:$mayAa$aaPos$altAa"; \
+      $name = "$hgsv ($countIn2014/81)"; \
+      print join("\t", "KJ660347v2", $start, $end, $name, $hgsv, $countIn2014) . "\n"; \
+      ' S4_GP_Mayinga_aa_diffs.txt \
+      | sort -k2n,2n \
+      > gire2014MayingaMissense.bed
+    cat > gire2014MayingaMissense.as <<EOF
+table gire2014MayingaMissense
+"GP gene amino acid changes in 2014 outbreak isolates compared to a Mayinga isolate, from Gire et al. Table S4"
+    (
+    string chrom;      "Reference sequence"
+    uint   chromStart; "Start position in reference"
+    uint   chromEnd;   "End position in reference"
+    string name;       "Amino acid change"
+    string hgsv;       "HGSV notation for amino acid change"
+    int countIn2014;   "Number of 2014 samples with change (out of 81)"
+    )
+EOF
+    bedToBigBed gire2014MayingaMissense.bed ../../../chrom.sizes \
+      -type=bed4+ -as=gire2014MayingaMissense.as -tab \
+      gire2014MayingaMissense.bb
+    ln -s `pwd`/gire2014MayingaMissense.bb /gbdb/eboVir2/gire/
+    hgBbiDbLink eboVir2 gire2014MayingaMissense /gbdb/eboVir2/gire/gire2014MayingaMissense.bb
+
