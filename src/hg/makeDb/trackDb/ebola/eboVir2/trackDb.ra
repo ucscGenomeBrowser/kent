@@ -107,6 +107,13 @@ type bigBed 12 .
 visibility dense
 urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
 
+track arjun
+shortLabel Predicted MHCI-binding
+longLabel Predicted by netMHC to be bound by MHC Class I for display to T-Killer Cells
+group immu
+type bigBed 12 .
+visibility hide
+
 track ncbiGenePfam
 shortLabel Pfam in NCBI Gene
 longLabel Pfam Domains in NCBI Genes
