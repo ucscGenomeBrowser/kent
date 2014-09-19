@@ -528,10 +528,13 @@ if (rec->alleleCount < 2)
     }
 const struct vcfFile *vcff = rec->file;
 int gtRefRefCount = 0, gtRefAltCount = 0, gtAltAltCount = 0, gtUnkCount = 0, gtOtherCount = 0;
+boolean allHaploid = TRUE;
 int i;
 for (i=0;  i < vcff->genotypeCount;  i++)
     {
     struct vcfGenotype *gt = &(rec->genotypes[i]);
+    if (! gt->isHaploid)
+        allHaploid = FALSE;
     if (gt->hapIxA == 0 && gt->hapIxB == 0)
 	gtRefRefCount++;
     else if (gt->hapIxA == 1 && gt->hapIxB == 1)
@@ -547,7 +550,7 @@ char refAl[16];
 abbrevAndHandleRC(refAl, sizeof(refAl), rec->alleles[0]);
 char altAl1[16];
 abbrevAndHandleRC(altAl1, sizeof(altAl1), rec->alleles[1]);
-if (sameString(chromName, "chrY"))
+if (allHaploid)
     dyStringPrintf(dy, "%s:%d %s:%d",
 		   refAl, gtRefRefCount, altAl1, gtRefAltCount);
 else
