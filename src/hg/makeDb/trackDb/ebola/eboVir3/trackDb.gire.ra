@@ -53,7 +53,7 @@ color 220,0,0
 priority 18
 
 track gire2014MayingaMissense
-shortLabel 2014 vs Mayinga GP
+shortLabel 2014 vs Maynga GP
 longLabel Protein Changes in GP Between 81 Sequences from 2014 Outbreak and Mayinga 1976 (NC002549)
 group varRep
 type bigBed 4 +
