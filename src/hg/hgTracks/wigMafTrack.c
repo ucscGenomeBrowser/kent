@@ -1251,6 +1251,7 @@ int graphHeight = 0;
 Color pairColor = (vis == tvFull ? track->ixAltColor : color);
 boolean useIrowChains = TRUE;
 char option[64];
+boolean doSnpMode = (vis == tvPack) &&(trackDbSetting(track->tdb, "snpMode") != NULL);
 
 char *prefix = track->track; // use when setting things to the cart
 if (tdbIsContainerChild(track->tdb))
@@ -1326,7 +1327,7 @@ for (mi = miList; mi != NULL; mi = mi->next)
     hvGfxSetClip(hvg, xOff, yOff, width, mi->height);
     drawMafRegionDetails(mafList, mi->height, seqStart, seqEnd, hvg, xOff, yOff,
                          width, font, pairColor, pairColor, vis, FALSE,
-                         useIrowChains);
+                         useIrowChains, doSnpMode);
     hvGfxUnclip(hvg);
 
     /* need to add extra space between graphs ?? (for now) */
@@ -2315,6 +2316,7 @@ scoreVis = (vis == tvDense ? tvDense : tvFull);
 
 if (wigTrack == NULL)
     {
+    boolean doSnpMode = (vis == tvPack) &&(trackDbSetting(track->tdb, "snpMode") != NULL);
     /* no wiggle */
     int height = tl.fontHeight * 4;
     if (vis == tvFull || vis == tvPack)
@@ -2329,7 +2331,8 @@ if (wigTrack == NULL)
         /* use mafs */
         drawMafRegionDetails(mp->list, height, seqStart, seqEnd,
                                 hvg, xOff, yOff, width, font,
-                                color, color, scoreVis, FALSE, FALSE);
+                                color, color, scoreVis, FALSE, FALSE,
+				doSnpMode);
         }
     else if (mp->ct != NULL)
         {
