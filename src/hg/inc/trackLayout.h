@@ -34,6 +34,7 @@ boolean trackLayoutInclFontExtras();
  * extra fonts and related options that are not part of the public browser */
 
 #define textSizeVar "textSize"	/* Variable name used for text size. */
+#define MAX_DISPLAY_PIXEL_WIDTH 5000
 
 #endif /* TRACKLAYOUT_H */
 
