@@ -29,6 +29,7 @@ group compGeno
         color 0, 10, 100
         altColor 0,90,10
         mafDot on
+	snpMode on
         type wigMaf 0.0 1.0
         speciesCodonDefault eboVir3
         speciesGroups Ebola_2014 DRC_2007 Zaire(DRC)_1976-7 Bundibugyo_2007 Reston_1989-90 Sudan_1976-9 Marburg_1987

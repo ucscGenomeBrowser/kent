@@ -358,6 +358,7 @@ snpSeq bed
 snpSeqFile bed
 snpTable bed
 snpVersion bed
+snpMode wigMaf maf
 sortOrder *
 sourceTable factorSource bed
 spanList *
