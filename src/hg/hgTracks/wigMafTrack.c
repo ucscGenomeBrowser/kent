@@ -160,7 +160,7 @@ char option[MAX_SP_SIZE];
 char *species[MAX_SP_SIZE];
 char *groups[20];
 char *defaultOff[MAX_SP_SIZE];
-char sGroup[24];
+char sGroup[MAX_SP_SIZE];
 struct wigMafItem *mi = NULL, *miList = NULL;
 int group;
 int i;

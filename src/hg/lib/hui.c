@@ -5887,13 +5887,13 @@ int speciesCt = 0;
 char *speciesGroup   = trackDbSetting(tdb, SPECIES_GROUP_VAR);
 char *speciesUseFile = trackDbSetting(tdb, SPECIES_USE_FILE);
 char *speciesOrder   = trackDbSetting(tdb, SPECIES_ORDER_VAR);
-char sGroup[24];
+#define MAX_SP_SIZE 2000
+#define MAX_GROUPS 20
+char sGroup[MAX_SP_SIZE];
 //Ochar *groups[20];
 struct wigMafSpecies *wmSpecies, *wmSpeciesList = NULL;
 int group;
 int i;
-#define MAX_SP_SIZE 2000
-#define MAX_GROUPS 20
 char *species[MAX_SP_SIZE];
 char option[MAX_SP_SIZE];
 
