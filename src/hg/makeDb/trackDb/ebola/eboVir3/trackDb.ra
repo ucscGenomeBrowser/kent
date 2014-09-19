@@ -1,0 +1,36 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+visibility hide
+html gold
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+visibility hide
+html gap
+
+track gc5BaseBw override
+visibility full
+
+track ncbiGene
+shortLabel NCBI Genes
+longLabel NCBI Genes from KM034562 Genbank Record
+group genes
+visibility pack
+priority 1
+color 12,12,120
+type genePred 
+baseColorUseCds given
+baseColorDefault genomicCodons
+itemDetailsHtmlTable geneDesc
+
+track ncbiGenePfam
+shortLabel Pfam in NCBI Gene
+longLabel Pfam Domains in NCBI Genes
+group genes
+type bed 12
+color 20,0,250
+url http://pfam.sanger.ac.uk/family/$$
+
+include trackDb.160way.ra
+include trackDb.gire.ra
+include trackDb.strainName160way.ra

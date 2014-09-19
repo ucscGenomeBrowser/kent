@@ -10,7 +10,8 @@ shortLabel UniProt Mutation Annotations
 html spMut
 
 track spAnnot override
-visibility hide
+shortLabel UniProt Annot.
+visibility dense
 group genes
 html spAnnot
 
@@ -43,23 +44,23 @@ html gap
 #color 12,12,120
 #type psl protein
 
-track cpgIslandSuper
-superTrack on
-shortLabel CpG Islands
-longLabel CpG Islands (Islands < 300 Bases are Light Green)
-group regulation
-visibility hide
-color 0,100,0
-altColor 128,228,128
-type bed 4 +
-html cpgIslandSuper
+#track cpgIslandSuper
+#superTrack on
+#shortLabel CpG Islands
+#longLabel CpG Islands (Islands < 300 Bases are Light Green)
+#group regulation
+#visibility hide
+#color 0,100,0
+#altColor 128,228,128
+#type bed 4 +
+#html cpgIslandSuper
 
-    track cpgIslandExtUnmasked
-    superTrack cpgIslandSuper pack
-    shortLabel Unmasked CpG
-    longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
-    priority 2
-    html cpgIslandSuper
+#    track cpgIslandExtUnmasked
+#    superTrack cpgIslandSuper pack
+#    shortLabel Unmasked CpG
+#    longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
+#    priority 2
+#    html cpgIslandSuper
 
 track ncbiGene
 shortLabel NCBI Genes
@@ -85,26 +86,27 @@ mouseOverField comments
 release alpha
 
 track iedb
-shortLabel IEDB T-Cell Epitopes
+shortLabel IEDB T-Cell
 longLabel Immune Epitope Database and Analysis Resource (IEDB) T-Cell Epitopes
 group immu
 type bigBed 12 .
 visibility hide
 urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
 
-track iedbPred
-shortLabel IEDB T-Cell Pred.
-longLabel Immune Epitope Database and Analysis Resource (IEDB) peptides predicted to be displayed by MHCII to T-Cells
-group immu
-type bigBed 12 .
-visibility hide
+#track iedbPred
+#shortLabel IEDB T-Cell Pred.
+#longLabel Immune Epitope Database and Analysis Resource (IEDB) peptides predicted to be displayed by MHCII to T-Cells
+#group immu
+#type bigBed 12 .
+#visibility hide
 
 track iedbBcell
-shortLabel IEDB B-Cell Epitopes
+shortLabel IEDB B-Cell
 longLabel Immune Epitope Database and Analysis Resource (IEDB) B-Cell Epitopes
 group immu
 type bigBed 12 .
 visibility dense
+color 0,90,100
 urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
 
 track arjun
@@ -123,7 +125,7 @@ color 20,0,250
 url http://pfam.sanger.ac.uk/family/$$
 
 track genbank
-shortLabel Genbank ZEBOV
+shortLabel ZEBOV RNA BLAT
 longLabel Sequence matches in Genbank for Ebola Zaire with length < 10kbp
 group genes
 type psl
@@ -133,7 +135,7 @@ iframeOptions width='800' height='800' scrolling='yes'
 priority 10
 
 track genbankNotZaire
-shortLabel Genbank Virus
+shortLabel Virus RNA BLAT
 longLabel Sequence matches in Genbank for non-Ebola/Zaire Viruses with length < 10kbp
 group genes
 type psl
@@ -142,7 +144,6 @@ iframeUrl http://www.ncbi.nlm.nih.gov/nuccore/$$
 iframeOptions width='800' height='800' scrolling='yes'
 priority 20
 
-include trackDb.gire.ra
 include trackDb.49way.ra
 include trackDb.49wayStrainNames.ra
 include trackDb.102way.ra
