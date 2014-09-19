@@ -151,7 +151,7 @@ group genes
 type psl
 visibility hide
 iframeUrl http://www.ncbi.nlm.nih.gov/nuccore/$$
-iframeOptions width='800' height='800' scrolling='yes'
+iframeOptions width='1000' height='800' scrolling='yes'
 priority 20
 
 track pdb
@@ -161,7 +161,7 @@ group genes
 type bed 12
 visibility hide
 iframeUrl http://www.pdb.org/pdb/explore/explore.do?structureId=$$
-iframeOptions width='800' height='800' scrolling='yes'
+iframeOptions width='1000' height='800' scrolling='yes'
 priority 30
 
 include trackDb.49way.ra
