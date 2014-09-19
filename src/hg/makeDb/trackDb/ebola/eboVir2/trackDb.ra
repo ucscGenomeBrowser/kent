@@ -85,9 +85,17 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http:
 mouseOverField comments
 release alpha
 
-track iedb
-shortLabel IEDB T-Cell
-longLabel Immune Epitope Database and Analysis Resource (IEDB) T-Cell Epitopes
+track iedbTcellShort
+shortLabel IEDB T-Cell I
+longLabel Immune Epitope Database and Analysis Resource (IEDB) curated T-Cell Epitopes, Class I
+group immu
+type bigBed 12 .
+visibility hide
+urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
+
+track iedbTcellLong
+shortLabel IEDB T-Cell II
+longLabel Immune Epitope Database and Analysis Resource (IEDB) curated T-Cell Epitopes, Class II
 group immu
 type bigBed 12 .
 visibility hide
