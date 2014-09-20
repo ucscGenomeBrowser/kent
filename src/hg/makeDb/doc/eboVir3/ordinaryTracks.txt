@@ -84,9 +84,9 @@ time (doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
 hgsql -e 'DELETE FROM blatServers where db="eboVir3";' hgcentraltest
 
 hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("eboVir3", "blat4d", "17850", "1", "0"); \
+	VALUES ("eboVir3", "blat4d", "17852", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("eboVir3", "blat4d", "17851", "0", "1");' \
+	VALUES ("eboVir3", "blat4d", "17853", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
