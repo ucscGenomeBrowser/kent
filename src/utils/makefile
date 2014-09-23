@@ -69,6 +69,7 @@ UTILS_APPLIST = \
 	paraFetch \
 	paraSync \
 	pslLiftSubrangeBlat \
+	pslScore \
 	pslToPslx \
 	randomLines \
 	raSqlQuery \
