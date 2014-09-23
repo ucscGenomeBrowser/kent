@@ -111,8 +111,8 @@ mouseOverField mHC_Allele_Name
 #visibility hide
 
 track iedbBcell
-shortLabel IEDB B-Cell
-longLabel Immune Epitope Database and Analysis Resource (IEDB) B-Cell Epitopes
+shortLabel IEDB B Cell
+longLabel Immune Epitope Database and Analysis Resource (IEDB) B Cell Epitopes
 group immu
 type bigBed 12 .
 visibility dense
@@ -121,7 +121,7 @@ urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/
 
 track arjun
 shortLabel Predicted MHCI-binding
-longLabel Predicted by netMHC to be bound by MHC Class I for display to T-Killer Cells
+longLabel Predicted by netMHC to be bound by MHC Class I for display to Killer T Cells
 group immu
 type bigBed 12 .
 visibility hide
