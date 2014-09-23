@@ -39,6 +39,8 @@ sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
 mkdir -p /hive/data/genomes/eboVir3/bed/multiz160way/mafLinks
 cd /hive/data/genomes/eboVir3/bed/multiz160way/mafLinks
 
+# one with eboVir3 db sneaked in after this was all moved over from
+# eboVir2, the sed catches both
 ls ../../lastz160way/KM034562v1/pairs | while read D
 do
   onePair="../../lastz160way/KM034562v1/pairs/${D}"
@@ -50,7 +52,8 @@ do
     fi
     D=`echo $D | sed -e 's/marVir1.//'`
     echo ${D} ${mafNet} 1>&2
-    zcat ${mafNet} | sed -e "s#^s eboVir2.${D}#s ${D}.${D}#; s#s eboVir2.KM034562v1#s KM034562v1.KM034562v1#;" \
+    zcat ${mafNet} \
+       | sed -e "s#^s eboVir2.${D}#s ${D}.${D}#; s#s eboVir2.KM034562v1#s KM034562v1.KM034562v1#; s#^s eboVir3.${D}#s ${D}.${D}#; s#s eboVir3.KM034562v1#s KM034562v1.KM034562v1#;" \
        | gzip -c > KM034562v1.${D}.maf.gz
   fi
 done
@@ -65,6 +68,23 @@ ls *.maf.gz | wc -l
 # scan the names to verify sanity:
 zcat *.maf.gz | grep "^s " | awk '{print $2}' | sort \
    | uniq -c | sort -rn | less
+# should look like:
+#   262 KM034562v1.KM034562v1
+#    11 NC_024781v1.NC_024781v1
+#    11 NC_001608v3.NC_001608v3
+#     5 NC_014372v1.NC_014372v1
+#     5 NC_004161v1.NC_004161v1
+#     5 KC589025v1.KC589025v1
+#     5 JN638998v1.JN638998v1
+#     ...
+#     1 HQ613402v1.HQ613402v1
+#     1 EU224440v2.EU224440v2
+#     1 AY354458v1.AY354458v1
+#     1 AY142960v1.AY142960v1
+#     1 AF499101v1.AF499101v1
+#     1 AF272001v1.AF272001v1
+#     1 AF086833v2.AF086833v2
+
 
 cd /hive/data/genomes/eboVir3/bed/multiz160way
 mkdir run maf
