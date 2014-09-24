@@ -1,3 +1,75 @@
-<H1>Methods</H1>
-<a target=_blank href="http://www.peptideatlas.org/">PeptideAtlas</a> collects raw mass spectrometry proteomics datasets from laboratories around the world and reprocesses them in a uniform bioinformatics workflow using the Trans-Proteomic Pipeline. Each PeptideAtlas build comprises a set of reprocessed experiments from a single species or subset of samples (such has human plasma) from a species. Processed results are filtered to a quality level such that there is a 1% false discovery rate at the protein level. All peptide identifications of sufficient quality to enter a build are mapped to the Ensembl genome (v67.37) using the Ensembl toolkit. Genomic coordinates for all identified peptides to all their Ensembl protein, transcript, and gene mappings, including intron spans, as calculated by the Ensembl toolkit are stored in the PeptideAtlas database.
+<h1>Description</h1>
+<p>
+<a target=_blank href="http://www.peptideatlas.org/">PeptideAtlas</a> collects raw mass 
+spectrometry proteomics datasets from laboratories around the world and reprocesses them in a 
+uniform bioinformatics workflow using the 
+<a href="http://http://tools.proteomecenter.org/wiki/index.php?title=Software:TPP" target=_blank>
+Trans-Proteomic Pipeline </a>. 
+This track displays peptide identifications from the PeptideAtlas
+<a target=_blank href="https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/buildDetails?atlas_build_id=433">August 2014 (Build 433) Human build</a>.
+This build, based on 971 samples containing 420,607,360 spectra, identified 1,021,823 distinct
+peptides, covering 15,136 canonical proteins.</p>
+
+<p>
+Each PeptideAtlas build comprises a set of reprocessed experiments from a single species or subset of samples (such has human plasma) from a species. Processed results are filtered to a quality level such that there is a 1% false discovery rate at the protein level. All peptide identifications of sufficient quality to enter a build are mapped to the Ensembl genome (v75) using the Ensembl toolkit. Genomic coordinates for all identified peptides to all their Ensembl protein, transcript, and gene mappings, including intron spans, as calculated by the Ensembl toolkit are stored in the PeptideAtlas database.</p>
+<h1>Methods</h1>
+
+<p>
+Mass spectrometer spectra are compared to theoretical spectra (SEQUEST, X!Tandem) or actual 
+spectra (SpectraST) to identify possible peptides.
+These peptide identifications are scored and filtered (using PeptideProphet) to retain 
+only the highest scoring identifications.
+The filtered sequences are compared to protein sequence 
+databases (for human, Ensembl, IPI, and Swiss-Prot).
+The CDS coordinates relative to protein start of matched sequences are used to
+then calculate genomic coordinates.
+The protein identifications are then clustered and annotated using ProteinProphet,
+and stored in the SBEAMS database, where they 
+assigned a unique identifer of the form PAp[8 digit number], e.g. PAp00000001.
+The processing pipeline is summarized in the graphic below.
+<div align="center">
+<!--<img style="margin:8px; border:1px solid; height:288px; width;644px;" src="../images/peptideAtlasMethods.png" alt="PeptideAtlas Methods">
+-->
+<img style="margin:8px; border:1px solid; height:216; width;483;" src="../images/peptideAtlasMethods.png" alt="PeptideAtlas Methods">
+</div>
+
+
+<h1>Credits</h1>
+Eric Deutsch, Zhi Sun, and the PeptideAtlas team at the Institute for Systems Biology, Seattle.
+
+<h1>References</h1>
+<p>
+Desiere F, Deutsch EW, King NL, Nesvizhskii AI, Mallick P, Eng J, Chen S, Eddes J, Loevenich SN,
+Aebersold R.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/16381952" target="_blank">
+The PeptideAtlas project</a>.
+<em>Nucleic Acids Res</em>. 2006 Jan 1;34(Database issue):D655-8.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/16381952" target="_blank">16381952</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1347403" target="_blank">PMC1347403</a>
+</p>
+<p>
+Farrah T, Deutsch EW, Omenn GS, Sun Z, Watts JD, Yamamoto T, Shteynberg D, Harris MM, Moritz RL.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/24261998" target="_blank">
+State of the human proteome in 2013 as viewed through PeptideAtlas: comparing the kidney, urine, and
+plasma proteomes for the biology- and disease-driven Human Proteome Project</a>.
+<em>J Proteome Res</em>. 2014 Jan 3;13(1):60-75.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/24261998" target="_blank">24261998</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3951210" target="_blank">PMC3951210</a>
+</p>
+<p>
+Keller A, Nesvizhskii AI, Kolker E, Aebersold R.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/12403597" target="_blank">
+Empirical statistical model to estimate the accuracy of peptide identifications made by MS/MS and
+database search</a>.
+<em>Anal Chem</em>. 2002 Oct 15;74(20):5383-92.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/12403597" target="_blank">12403597</a>
+</p>
+
+Nesvizhskii AI, Keller A, Kolker E, Aebersold R.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/14632076" target="_blank">
+A statistical model for identifying proteins by tandem mass spectrometry</a>.
+<em>Anal Chem</em>. 2003 Sep 1;75(17):4646-58.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/14632076" target="_blank">14632076</a>
+</p>
+
 
