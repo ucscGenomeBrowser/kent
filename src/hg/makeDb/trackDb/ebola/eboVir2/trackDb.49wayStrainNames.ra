@@ -8,6 +8,7 @@ visibility full
 priority 1
 type bed 4
 group compGeno
+html cons49way
 
     track cons49wayViewalignStrainNames
     shortLabel 49 Strains
