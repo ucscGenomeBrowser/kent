@@ -21,6 +21,7 @@
 #include "mafSummary.h"
 #include "mafFrames.h"
 #include "phyloTree.h"
+#include "soTerm.h"
 
 
 #define GAP_ITEM_LABEL  "Gaps"
@@ -160,7 +161,7 @@ char option[MAX_SP_SIZE];
 char *species[MAX_SP_SIZE];
 char *groups[20];
 char *defaultOff[MAX_SP_SIZE];
-char sGroup[24];
+char sGroup[MAX_SP_SIZE];
 struct wigMafItem *mi = NULL, *miList = NULL;
 int group;
 int i;
@@ -510,8 +511,13 @@ static struct wigMafItem *loadPairwiseItems(struct track *track)
 struct wigMafItem *miList = NULL, *speciesItems = NULL, *mi;
 struct track *wigTrack = track->subtracks;
 int scoreHeight = tl.fontHeight * 4;
+char *snpTable = trackDbSetting(track->tdb, "snpTable");
+boolean doSnpTable = FALSE;
+if ( (track->limitedVis == tvPack) && (snpTable != NULL))
+    doSnpTable = TRUE;
 
-if (winBaseCount < MAF_SUMMARY_VIEW)
+// the maf's only get loaded if we're not in summary or snpTable views
+if (!doSnpTable && (winBaseCount < MAF_SUMMARY_VIEW))
     {
     /* "close in" display uses actual alignments from file */
     struct mafPriv *mp = getMafPriv(track);
@@ -1003,6 +1009,121 @@ hFreeConn(&conn);
 }
 
 
+static boolean drawPairsFromSnpTable(struct track *track,
+	char *snpTable,
+        int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width, MgFont *font,
+        Color color, enum trackVisibility vis)
+/* use trackDb variable "snpTable" bed to draw this mode */
+{
+struct wigMafItem *miList = track->items, *mi = miList;
+struct sqlConnection *conn;
+struct sqlResult *sr = NULL;
+char **row = NULL;
+int rowOffset = 0;
+struct hash *componentHash = newHash(6);
+struct hashEl *hel;
+struct dyString *where = dyStringNew(256);
+char *whereClause = NULL;
+
+if (miList == NULL)
+    return FALSE;
+
+if (snpTable == NULL)
+    return FALSE;
+
+/* Create SQL where clause that will load up just the
+ * beds for the species that we are including. */
+conn = hAllocConn(database);
+dyStringAppend(where, "name in (");
+for (mi = miList; mi != NULL; mi = mi->next)
+    {
+    if (!isPairwiseItem(mi))
+	/* exclude non-species items (e.g. conservation wiggle */
+	continue;
+    dyStringPrintf(where, "'%s'", mi->db);
+    if (mi->next != NULL)
+	dyStringAppend(where, ",");
+    }
+dyStringAppend(where, ")");
+/* check for empty where clause */
+if (!sameString(where->string,"name in ()"))
+    whereClause = where->string;
+sr = hOrderedRangeQuery(conn, snpTable, chromName, seqStart, seqEnd,
+                        whereClause, &rowOffset);
+
+/* Loop through result creating a hash of lists of beds .
+ * The hash is keyed by species. */
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct bed *bed = bedLoadN(&row[1], 5);
+    /* prune to fit in window bounds */
+    if (bed->chromStart < seqStart)
+        bed->chromStart = seqStart;
+    if (bed->chromEnd > seqEnd)
+        bed->chromEnd = seqEnd;
+    if ((hel = hashLookup(componentHash, bed->name)) == NULL)
+        hashAdd(componentHash, bed->name, bed);
+    else
+        slAddHead(&(hel->val), bed);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+
+/* display pairwise items */
+Color yellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
+for (mi = miList; mi != NULL; mi = mi->next)
+    {
+    if (mi->ix < 0)
+	/* ignore item for the score */
+	continue;
+    struct bed *bedList = (struct bed *)hashFindVal(componentHash, mi->db);
+    if (bedList == NULL)
+	bedList = (struct bed *)hashFindVal(componentHash, mi->name);
+
+    if (bedList != NULL)
+	{
+	hvGfxSetClip(hvg, xOff, yOff, width, mi->height);
+
+	struct bed *bed = bedList;
+
+	double scale = scaleForPixels(width);
+	for(; bed; bed = bed->next)
+	    {
+	    int x1 = round((bed->chromStart - seqStart)*scale);
+	    int x2 = round((bed->chromEnd - seqStart)*scale);
+	    int w = x2-x1+1;
+	    int height1 = mi->height-1;
+	    int color = MG_BLACK;
+	    switch(bed->score)
+		{
+		case 0:
+		    color = yellow;
+		    break;
+		case _5_prime_UTR_variant:
+		case _3_prime_UTR_variant:
+		case coding_sequence_variant:
+		case intron_variant:
+		case intergenic_variant:
+		    color = MG_BLUE;
+		    break;
+		case synonymous_variant:
+		    color = MG_GREEN;
+		    break;
+		case missense_variant:
+		    color = MG_RED;
+		    break;
+		}
+	    hvGfxBox(hvg, x1 + xOff, yOff, w, height1, color);
+
+	    }
+	hvGfxUnclip(hvg);
+	}
+    yOff += mi->height;
+    }
+return TRUE;
+}
+
 static boolean drawPairsFromSummary(struct track *track,
         int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, MgFont *font,
@@ -1251,6 +1372,7 @@ int graphHeight = 0;
 Color pairColor = (vis == tvFull ? track->ixAltColor : color);
 boolean useIrowChains = TRUE;
 char option[64];
+boolean doSnpMode = (vis == tvPack) &&(trackDbSetting(track->tdb, "snpMode") != NULL);
 
 char *prefix = track->track; // use when setting things to the cart
 if (tdbIsContainerChild(track->tdb))
@@ -1326,7 +1448,7 @@ for (mi = miList; mi != NULL; mi = mi->next)
     hvGfxSetClip(hvg, xOff, yOff, width, mi->height);
     drawMafRegionDetails(mafList, mi->height, seqStart, seqEnd, hvg, xOff, yOff,
                          width, font, pairColor, pairColor, vis, FALSE,
-                         useIrowChains);
+                         useIrowChains, doSnpMode);
     hvGfxUnclip(hvg);
 
     /* need to add extra space between graphs ?? (for now) */
@@ -1358,9 +1480,14 @@ static boolean wigMafDrawPairwise(struct track *track, int seqStart, int seqEnd,
     if (isCustomTrack(track->table) || pairwiseSuffix(track))
         return drawPairsFromPairwiseMafScores(track, seqStart, seqEnd, hvg,
                                         xOff, yOff, width, font, color, vis);
-    if (summarySetting(track))
+    if ((winBaseCount >= MAF_SUMMARY_VIEW) && summarySetting(track))
         return drawPairsFromSummary(track, seqStart, seqEnd, hvg,
                                         xOff, yOff, width, font, color, vis);
+    char *snpTable = trackDbSetting(track->tdb, "snpTable");
+    if ( (track->limitedVis == tvPack) && (snpTable != NULL))
+        return drawPairsFromSnpTable(track, snpTable, seqStart, seqEnd, hvg,
+                                        xOff, yOff, width, font, color, vis);
+
     return FALSE;
 }
 
@@ -2315,6 +2442,7 @@ scoreVis = (vis == tvDense ? tvDense : tvFull);
 
 if (wigTrack == NULL)
     {
+    boolean doSnpMode = (vis == tvPack) &&(trackDbSetting(track->tdb, "snpMode") != NULL);
     /* no wiggle */
     int height = tl.fontHeight * 4;
     if (vis == tvFull || vis == tvPack)
@@ -2329,7 +2457,8 @@ if (wigTrack == NULL)
         /* use mafs */
         drawMafRegionDetails(mp->list, height, seqStart, seqEnd,
                                 hvg, xOff, yOff, width, font,
-                                color, color, scoreVis, FALSE, FALSE);
+                                color, color, scoreVis, FALSE, FALSE,
+				doSnpMode);
         }
     else if (mp->ct != NULL)
         {

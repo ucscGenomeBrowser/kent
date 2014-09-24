@@ -24,11 +24,12 @@ group compGeno
         noInherit on
         irows on
         summary multiz102waySummary
-#        frames multiz102wayFrames
+        frames multiz102wayFrames
         group compGeno
         color 0, 10, 100
         altColor 0,90,10
         mafDot on
+	snpMode on
         type wigMaf 0.0 1.0
         speciesCodonDefault eboVir2
         speciesGroups Virus

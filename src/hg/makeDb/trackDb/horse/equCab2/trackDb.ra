@@ -89,3 +89,6 @@ searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
 termRegex ECA_NumtS_.*
 
+track animalQtl override
+url http://www.animalgenome.org/cgi-bin/QTLdb/EC/qdetails?QTL_ID=$p
+urlLabel Animal Genome QTL db:

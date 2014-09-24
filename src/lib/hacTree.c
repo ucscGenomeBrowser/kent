@@ -241,7 +241,13 @@ while (poolLength > 0)
 	swapBytes((char *)&(poolHead[0]), (char *)&(poolHead[bestIx]), sizeof(struct hacTree));
     // Pop the best (lowest-distance) node from poolHead, make it root (for now).
     root = poolHead;
-    root->itemOrCluster = mergeF(root->left->itemOrCluster, root->right->itemOrCluster, extraData);
+    if (root->left && root->right)
+        root->itemOrCluster = mergeF(root->left->itemOrCluster, root->right->itemOrCluster,
+                                     extraData);
+    else if (root->left)
+        root->itemOrCluster = root->left->itemOrCluster;
+    else if (root->right)
+        root->itemOrCluster = root->right->itemOrCluster;
     poolHead = &(poolHead[1]);
     poolLength--;
     // Where root->left is found in the pool, replace it with root.

@@ -1,0 +1,122 @@
+# for emacs: -*- mode: sh; -*-
+
+# running up the 160-way on the this reference: KM034562.1
+# DONE - 2014-09-18 - Hiram
+
+mkdir /hive/data/genomes/eboVir3/bed/lastz160way
+cd /hive/data/genomes/eboVir3/bed/lastz160way
+
+rm -fr query2Bits
+mkdir query2Bits
+
+for F in /hive/data/genomes/eboVir3/ucsc/*.fa.gz
+do
+  C=`basename $F | sed -e 's/.fa.gz//'`
+  echo $C
+  faToTwoBit ${F} query2Bits/${C}.2bit
+done
+
+# and including the Marburg sequences:
+cut -f1 ../../../marVir1/chrom.sizes | while read C
+do
+  echo "marVir1.${C}"
+  faToTwoBit ../../../marVir1/ucsc/${C}.fa query2Bits/marVir1.${C}.2bit
+done
+
+mkdir KM034562v1
+cd KM034562v1
+
+cat << '_EOF_' > mkRunDirs.sh
+#!/bin/sh
+
+export referenceSP="KM034562v1"
+
+mkDef() {
+  query=$1
+echo "# Ebola virus ${referenceSP} vs $query"
+echo "BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET - eboVir3 ${referenceSP}
+SEQ1_DIR=/hive/data/genomes/eboVir3/bed/lastz160way/${referenceSP}/${referenceSP}.2bit
+SEQ1_LEN=/hive/data/genomes/eboVir3/bed/lastz160way/${referenceSP}/${referenceSP}.chrom.sizes
+SEQ1_CHUNK=200000
+SEQ1_LAP=0
+
+# QUERY - $query
+SEQ2_DIR=/hive/data/genomes/eboVir3/bed/lastz160way/query2Bits/${query}.2bit
+SEQ2_LEN=/hive/data/genomes/eboVir3/bed/lastz160way/${referenceSP}/pairs/${query}/${query}.chrom.sizes
+SEQ2_CHUNK=200000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/eboVir3/bed/lastz160way/${referenceSP}/pairs/${query}
+TMPDIR=/dev/shm"
+}
+
+mkRunSh() {
+  query=$1
+  echo "#!/bin/sh"
+  echo
+  echo "cd /hive/data/genomes/eboVir3/bed/lastz160way/${referenceSP}/pairs/${query}"
+  echo
+  echo "time (doBlastzChainNet.pl \`pwd\`/DEF \\
+    -ignoreSelf -stop=net -noDbNameCheck -fileServer=hgwdev \\
+    -tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \\
+    -chainMinScore=10 -chainLinearGap=loose \\
+    -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > do.log 2>&1"
+}
+
+ln -s ../query2Bits/${referenceSP}.2bit ${referenceSP}.2bit
+
+twoBitInfo ../query2Bits/${referenceSP}.2bit ${referenceSP}.chrom.sizes
+
+ls ../query2Bits/*.2bit | while read F
+do
+  B=`basename $F | sed -e 's/.2bit//'`
+  mkdir -p pairs/${B}
+  mkDef ${B} > pairs/${B}/DEF
+  twoBitInfo ../query2Bits/${B}.2bit pairs/${B}/${query}.chrom.sizes
+  mkRunSh ${B} > pairs/${B}/runLz.sh
+  chmod +x pairs/${B}/runLz.sh
+done
+'_EOF_'
+
+chmod +x mkRunDirs.sh
+./mkRunDirs.sh
+
+# verify correct files are in some of the pairs/*/ directories
+ls -ogrt pairs/NC_002549v1
+# total 16
+# -rw-rw-r-- 1 748 Sep 18 09:12 DEF
+# -rw-rw-r-- 1  18 Sep 18 09:12 NC_002549v1.chrom.sizes
+# -rwxrwxr-x 1 370 Sep 18 09:12 runLz.sh
+
+# running 6 at a time
+#   (got into some kind of ssh limit trouble running more than that)
+
+export N=0
+ls pairs/*/runLz.sh | while read P
+do
+  N=`echo $N | awk '{print $1+1}'`
+  echo "running $P"
+  ${P} &
+  if [ ${N} -eq 6 ]; then
+   echo "waiting"
+   wait
+   N=0
+  fi
+done > do.log 2>&1
+echo "final wait"
+wait
+
+
+# verify all results are present, note sizes of results:
+
+ls -ogrt pairs/*/mafNet/*.maf.gz | sort -k3nr | less
+# and count should be 159
+ls -ogrt pairs/*/mafNet/*.maf.gz | wc -l
+# 159

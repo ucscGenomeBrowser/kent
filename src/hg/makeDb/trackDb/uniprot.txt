@@ -1,0 +1,15 @@
+# Uniprot mutations and annotations (Max Wed Sep 17 02:53:48 PDT 2014)
+# parse uniprot
+pubParseDb uniprot  --taxon 128952 
+# create a mapping from uniprot prot seq to DNA. The mapping has to be in nucl
+# space, so use pslProtCnv
+blat -t=dnax -q=prot /hive/data/genomes/eboVir2/eboVir2.2bit uniprot.128952.fa.gz stdout -noHead | pslCDnaFilter stdin stdout -minId=0.95 -minCover=0.95 | pslProtCnv > spToEboVir2.psl
+# lift the uniprot annotations
+uniprotLift 128952 eboVir2 spToEboVir2.psl 
+# copy over output files
+cp spAnnot.bb /cluster/data/eboVir2/bed/uniprot/
+cp spMut.bb /cluster/data/eboVir2/bed/uniprot/
+ln -s /cluster/data/eboVir2/bed/uniprot/spAnnot.bb /gbdb/eboVir2/bbi/spAnnot.bb
+ln -s /cluster/data/eboVir2/bed/uniprot/spMut.bb /gbdb/eboVir2/bbi/spMut.bb
+hgBbiDbLink eboVir2 spMut /gbdb/eboVir2/bbi/spMut.bb 
+hgBbiDbLink eboVir2 spAnnot /gbdb/eboVir2/bbi/spAnnot.bb 

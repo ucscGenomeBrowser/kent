@@ -1,0 +1,54 @@
+#!/usr/bin/env python
+
+import logging, sys, optparse
+from collections import defaultdict
+from os.path import join, basename, dirname, isfile
+
+# === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
+parser = optparse.OptionParser("usage: %prog [options] filename - fix overlapping blocks in a bed file, produced e.g. by pslMap") 
+
+parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages") 
+#parser.add_option("-f", "--file", dest="file", action="store", help="run on file") 
+#parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
+(options, args) = parser.parse_args()
+
+if options.debug:
+    logging.basicConfig(level=logging.DEBUG)
+else:
+    logging.basicConfig(level=logging.INFO)
+# ==== FUNCTIONs =====
+    
+# ----------- MAIN --------------
+if args==[]:
+    parser.print_help()
+    exit(1)
+
+filename = args[0]
+if filename=="stdin":
+    ifh = sys.stdin
+else:
+    ifh = open(filename)
+
+for line in ifh:
+    row = line.rstrip("\n").split("\t")
+    bSizes = [int(x) for x in row[10].strip(",").split(",")]
+    bStarts = [int(x) for x in row[11].strip(",").split(",")]
+    newLens = []
+    newStarts = []
+
+    # go over blockLens/blockStarts and fix overlaps
+    pos = 0
+    for bs, bl in zip(bStarts, bSizes):
+        if pos>bs:
+            diff = pos-bs
+            bs = pos
+            bl = bl-diff
+        pos += bl
+        newLens.append(str(bl))
+        newStarts.append(str(bs))
+    row[10] = ",".join(newLens)
+    row[11] = ",".join(newStarts)
+    print "\t".join(row)
+
+
+

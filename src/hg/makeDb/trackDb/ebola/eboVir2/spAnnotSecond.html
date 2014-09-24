@@ -1,0 +1,57 @@
+<h2>Description</h2>
+
+<p>
+This track shows the genomic positions of protein secondary structures and amino acid modifications
+in the <a href="http://www.uniprot.org/" target="_blank">UniProt/SwissProt</A> database.
+These data have been curated from scientific publications by the UniProt staff.
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+
+<p>
+Genomic locations of UniProt/SwissProt protein secondary structures and amino acid modifications
+are labeled with the feature name (e.g. helix, beta, coiled-coil, disulf bond, glyco) at a given
+position. 
+</p>
+
+<p>
+Mouse over a feature to see the UniProt comments.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+UniProt sequences were aligned to RefSeq sequences first with BLAT, then lifted
+to genome positions with pslMap. UniProt protein secondary structures and amino acid modifications
+were parsed from the UniProt XML file. The features were then mapped to the genome through the
+alignment using the pslMap program. This mapping approach
+draws heavily on the <A HREF="http://modbase.compbio.ucsf.edu/LS-SNP/"
+TARGET="_BLANK">LS-SNP</A> pipeline by Mark Diekhans. The complete script is
+part of the kent source tree and is located in src/hg/utils/uniprotMutations.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+This track was created by Maximilian Haeussler, with advice from Mark Diekhans and Brian Raney.
+</p>
+
+<h2>References</h2>
+
+<p>
+UniProt Consortium.
+<a href="http://nar.oxfordjournals.org/content/40/D1/D71.long" 
+target="_blank">Reorganizing the protein space at the Universal Protein Resource (UniProt)</a>.
+<em>Nucleic Acids Res</em>. 2012 Jan;40(Database issue):D71-5.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/22102590" target="_blank">22102590</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3245120" target="_blank">PMC3245120</a>
+</p>
+
+<p>
+Yip YL, Scheib H, Diemand AV, Gattiker A, Famiglietti LM, Gasteiger E, Bairoch A.
+<a href="http://onlinelibrary.wiley.com/doi/10.1002/humu.20021/abstract" target="_blank">
+The Swiss-Prot variant page and the ModSNP database: a resource for sequence and structure
+information on human protein variants</a>.
+<em>Hum Mutat</em>. 2004 May;23(5):464-70.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/15108278" target="_blank">15108278</a>
+</p>

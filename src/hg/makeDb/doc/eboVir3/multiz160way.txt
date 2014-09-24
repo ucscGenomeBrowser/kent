@@ -1,0 +1,255 @@
+# for emacs: -*- mode: sh; -*-
+
+mkdir -p /hive/data/genomes/eboVir3/bed/multiz160way
+cd /hive/data/genomes/eboVir3/bed/multiz160way
+
+# construct a species list ordered by number of words in the psl pair
+# alignment results:
+echo KM034562v1 > species.list
+for D in ../../lastz160way/KM034562v1/pairs/*
+do
+  echo -n "${D}: "; zcat ${D}/pslParts/part000.lst.psl.gz \
+   | grep -v "^#" | wc 
+done | sort -k4n | sed -e 's#../../lastz160way/KM034562v1/pairs/##;' \
+   | sed -e 's/:.*//; s/marVir1.//;' | grep -v KM034562v1 >> species.list
+
+# verify 160 count
+sort -u species.list | wc -l
+# 160
+
+# construct 160way.nh tree from that species.list, beginning as so,
+with the first two as the first pair:
+
+(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((KM034562v1:0.1,KJ660346v2:0.1):0.1,
+KJ660347v2:0.1):0.1,
+KJ660348v2:0.1):0.1,
+KM034554v1:0.1):0.1,
+...
+KC545391v1:0.1):0.1,
+KC545392v1:0.1):0.1,
+JN638998v1:0.1):0.1,
+NC_024781v1:0.1):0.1,
+NC_001608v3:0.1);
+
+# construct tree with just the names for multiz:
+sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+        160way.nh | xargs echo | sed 's/ //g; s/,/ /g' > tree.nh
+
+# create mafLinks:
+mkdir -p /hive/data/genomes/eboVir3/bed/multiz160way/mafLinks
+cd /hive/data/genomes/eboVir3/bed/multiz160way/mafLinks
+
+# one with eboVir3 db sneaked in after this was all moved over from
+# eboVir2, the sed catches both
+ls ../../lastz160way/KM034562v1/pairs | while read D
+do
+  onePair="../../lastz160way/KM034562v1/pairs/${D}"
+  if [ -d "${onePair}" ]; then
+    mafNet=`ls ${onePair}/mafNet/*.maf.gz 2> /dev/null`
+    if [ ! -f "${mafNet}" ]; then
+      echo "ERROR: can not find mafNet file ${mafNet}" 1>&2
+      exit 255
+    fi
+    D=`echo $D | sed -e 's/marVir1.//'`
+    echo ${D} ${mafNet} 1>&2
+    zcat ${mafNet} \
+       | sed -e "s#^s eboVir2.${D}#s ${D}.${D}#; s#s eboVir2.KM034562v1#s KM034562v1.KM034562v1#; s#^s eboVir3.${D}#s ${D}.${D}#; s#s eboVir3.KM034562v1#s KM034562v1.KM034562v1#;" \
+       | gzip -c > KM034562v1.${D}.maf.gz
+  fi
+done
+
+# remove the self alignment:
+rm KM034562v1.KM034562v1.maf.gz
+
+# leaves 159 files:
+ls *.maf.gz | wc -l
+# 159
+
+# scan the names to verify sanity:
+zcat *.maf.gz | grep "^s " | awk '{print $2}' | sort \
+   | uniq -c | sort -rn | less
+# should look like:
+#   262 KM034562v1.KM034562v1
+#    11 NC_024781v1.NC_024781v1
+#    11 NC_001608v3.NC_001608v3
+#     5 NC_014372v1.NC_014372v1
+#     5 NC_004161v1.NC_004161v1
+#     5 KC589025v1.KC589025v1
+#     5 JN638998v1.JN638998v1
+#     ...
+#     1 HQ613402v1.HQ613402v1
+#     1 EU224440v2.EU224440v2
+#     1 AY354458v1.AY354458v1
+#     1 AY142960v1.AY142960v1
+#     1 AF499101v1.AF499101v1
+#     1 AF272001v1.AF272001v1
+#     1 AF086833v2.AF086833v2
+
+
+cd /hive/data/genomes/eboVir3/bed/multiz160way
+mkdir run maf
+cd run
+mkdir penn
+cp -p /cluster/bin/penn/multiz.2009-01-21_patched/multiz penn
+cp -p /cluster/bin/penn/multiz.2009-01-21_patched/maf_project penn
+cp -p /cluster/bin/penn/multiz.2009-01-21_patched/autoMZ penn
+
+ls ../mafLinks | sed -e 's/.maf.gz//; s/KM034562v1.//' > maf.list
+
+cat << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(file1) {check out line+ /hive/data/genomes/eboVir3/bed/multiz160way/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+  # << happy emacs
+
+
+cat << '_EOF_' > autoMultiz.csh
+#!/bin/csh -ef
+set db = KM034562v1
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /dev/shm/$db/multiz.$c
+set pairs = /hive/data/genomes/eboVir3/bed/multiz160way/mafLinks
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../tree.nh ../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/grep -v "$db" species.list`)
+    set in = $pairs/$db.$s.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+        if (! -s $out) then
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c \
+        > /dev/null
+popd > /dev/null
+/bin/rm -f $result.maf
+/bin/cp -p $tmp/$c $result.maf
+/bin/rm -fr $tmp
+'_EOF_'
+  # << happy emacs
+
+gensub2 maf.list single template jobList
+para create jobList
+para try ... check ... push
+para time
+# Completed: 159 of 159 jobs
+# CPU time in finished jobs:     217592s    3626.54m    60.44h    2.52d  0.007 y
+# IO & Wait Time:                   961s      16.01m     0.27h    0.01d  0.000 y
+# Average job time:                1375s      22.91m     0.38h    0.02d
+# Longest finished job:            1502s      25.03m     0.42h    0.02d
+# Submission to last job:          1514s      25.23m     0.42h    0.02d
+
+# put the results back together into a single file:
+
+head -1 maf/AB050936v1.maf > multiz160way.maf
+for F in maf/*.maf
+do
+    echo "${F}" 1>&2
+    egrep -v "^#" ${F} | sed -e 's#^s \([A-Z0-9a-z_]*\)#s \1.\1#;'
+done | sed -e 's#^s KM034562v1.KM034562v1#s eboVir3.KM034562v1#;' \
+>> multiz160way.maf
+tail -1 maf/AB050936v1.maf >> multiz160way.maf
+
+# scan names to verify sanity:
+grep "^s " multiz160way.maf | awk '{print $2}' | sort | uniq -c \
+  | sort -rn | less
+
+# 27030 eboVir3.KM034562v1
+# 27030 NC_002549v1.NC_002549v1
+# 27030 KM233113v1.KM233113v1
+# 27030 KM233109v1.KM233109v1
+# 27030 KM233070v1.KM233070v1
+# ...
+# 18126 KM233060v1.KM233060v1
+# 17490 KM034563v1.KM034563v1
+# 17172 KM233117v1.KM233117v1
+# 16854 KM233118v1.KM233118v1
+# 15105 FJ621585v1.FJ621585v1
+#  6201 NC_024781v1.NC_024781v1
+#  6201 NC_001608v3.NC_001608v3
+
+mkdir /gbdb/eboVir3/multiz160way
+rm -f /gbdb/eboVir3/multiz160way/multiz160way.maf
+ln -s `pwd`/multiz160way.maf \
+   /gbdb/eboVir3/multiz160way/multiz160way.maf
+
+cd /dev/shm
+time hgLoadMaf eboVir3 multiz160way
+# Loaded 27030 mafs in 1 files from /gbdb/eboVir3/multiz160way
+# real    0m8.057s
+
+# merge that into a single block:
+cd /hive/data/genomes/eboVir3/bed/multiz160way
+
+mafFrag eboVir3 multiz160way KM034562v1 0 18957 + mafFrag.multiz160way.maf
+
+# change dots to dash
+cat << '_EOF_' > dotToDash.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $file = shift;
+
+open (FH, "<$file") or die "can not read $file";
+while (my $line = <FH>) {
+  if ($line =~ m/^s /) {
+    chomp $line;
+    my @a = split('\s+', $line);
+    if (scalar(@a) == 7) {
+      if ($a[1] !~ m/eboVir3/) {
+        $a[1] = "$a[1].$a[1]";
+      }
+      $a[6] =~ s/\./-/g;
+      print join(' ', @a), "\n";
+    } else {
+      die "ERROR: s line found not 7 fields ?";
+    } 
+  } else {
+    printf "%s", $line;
+  }
+}
+close (FH);
+'_EOF_'
+  # << happy emacs
+
+./dotToDash.pl mafFrag.multiz160way.maf > defraged.multiz160way.maf
+
+# and reload:
+rm /gbdb/eboVir3/multiz160way/multiz160way.maf
+ln -s `pwd`/defraged.multiz160way.maf \
+   /gbdb/eboVir3/multiz160way/multiz160way.maf
+
+cd /dev/shm
+time hgLoadMaf eboVir3 multiz160way
+# Loaded 1 mafs in 1 files from /gbdb/eboVir3/multiz160way
+# real    0m0.054s
+
+# construct strain-name track
+
+cat defraged.multiz160way.maf \
+ | sed -f ~/kent/src/hg/makeDb/doc/eboVir3/ucscName.strainName.sed \
+  | sed -e 's/eboVir3.G3686v1_2014/eboVir3.KM034562v1/' \
+    > strainName.multiz160way.maf
+
+mkdir /gbdb/eboVir3/strainName160way
+rm /gbdb/eboVir3/strainName160way/strainName160way.maf
+ln -s `pwd`/strainName.multiz160way.maf \
+   /gbdb/eboVir3/strainName160way/strainName160way.maf
+
+cd /dev/shm
+time hgLoadMaf eboVir3 strainName160way
+
