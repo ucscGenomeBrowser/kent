@@ -24,6 +24,7 @@ group compGeno
         noInherit on
 #        irows on
 #        summary strainName160waySummary
+	snpTable mafSnp160way
         frames strainName160wayFrames
         group compGeno
         color 0, 10, 100
