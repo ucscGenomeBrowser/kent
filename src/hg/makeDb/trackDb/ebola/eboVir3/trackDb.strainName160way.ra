@@ -8,6 +8,7 @@ visibility hide
 priority 1
 type bed 4
 group compGeno
+html cons160way
 
     track strainCons160wayViewalign
     shortLabel Multiz Alignments
