@@ -354,12 +354,11 @@ signalFilterLimits bed narrowPeak broadPeak
 smoothingWindow wig bed5FloatScore bedGraph bigWig
 snpExceptions bed
 snpExceptionDesc bed
+snpMode wigMaf maf
 snpSeq bed
 snpSeqFile bed
-snpTable bed
+snpTable bed wigMaf
 snpVersion bed
-snpMode wigMaf maf
-snpTable wigMaf
 sortOrder *
 sourceTable factorSource bed
 spanList *

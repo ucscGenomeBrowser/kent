@@ -8,6 +8,7 @@ visibility hide
 priority 1
 type bed 4
 group compGeno
+html cons160way
 
     track strainCons160wayViewalign
     shortLabel Multiz Alignments
@@ -42,5 +43,6 @@ group compGeno
         sGroup_Sudan_1976-9 EboSud-602_2012 EboSud-603_2012 EboSud-609_2012 EboSud-682_2012 EboSud-639_2012 Nakisamata_2011 Boniface_1976 Maleo_1979 Yambio_2004 Gulu_Uganda_2000 Gulu_2000 
         sGroup_Marburg_1987 Marburg_KitumCave_Kenya_1987 Marburg_MtElgon_Musoke_Kenya_1980
         itemFirstCharCase noChange
-        treeImage phylo/eboVir3_160way.png
         priority 100
+
+#        treeImage phylo/eboVir3_160way.png

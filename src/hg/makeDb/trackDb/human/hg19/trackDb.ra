@@ -2305,11 +2305,9 @@ html peptideAtlas
 longLabel Density of peptide sequences identified by tandem MS from PeptideAtlas (2014)
 type bigWig 1 1359
 visibility full
-windowingFunction mean
 autoScale on
-maxHeightPixels:100:64:8
-viewLimits 0:100
-viewLimitsMax 0:1359
+maxHeightPixels 100:64:8
+viewLimits 0:100:1359
 windowingFunction mean+whiskers
 group expression
 color 225, 82, 160
