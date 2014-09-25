@@ -100,6 +100,11 @@ type bigBed 12 +
 itemRgb on
 urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
 mouseOverField comments
+
+track genscan override
+release alpha
+
+track windowmaskerSdust override
 release alpha
 
 include trackDb.160way.ra

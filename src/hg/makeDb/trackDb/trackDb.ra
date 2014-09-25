@@ -2754,7 +2754,6 @@ type bigBed 12 +
 itemRgb on
 urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
 mouseOverField comments
-release alpha
 
 searchTable ucscToINSDC
 shortCircuit 1
