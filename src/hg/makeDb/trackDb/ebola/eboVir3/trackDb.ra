@@ -8,8 +8,8 @@ track gap override
 visibility hide
 html gap
 
-track gc5BaseBw override
-visibility full
+#track gc5BaseBw override
+#visibility full
 
 track ncbiGene
 shortLabel NCBI Genes
