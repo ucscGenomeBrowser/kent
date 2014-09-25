@@ -24,14 +24,14 @@ group compGeno
         noInherit on
 #        irows on
 #        summary multiz160waySummary
-#        frames multiz160wayFrames
+        frames multiz160wayFrames
         group compGeno
         color 0, 10, 100
         altColor 0,90,10
         mafDot on
 	snpMode on
         type wigMaf 0.0 1.0
-        speciesCodonDefault zaiEbo1
+        speciesCodonDefault resEbo1
         speciesGroups Reston_1989-90 Zaire(DRC)_1976-7 DRC_2007 Ebola_2014 Bundibugyo_2007 Sudan_1976-9 Marburg_1987
         sGroup_Reston_1989-90 AF522874v1 AY769362v1 JX477166v1 AB050936v1 FJ621585v1 FJ621583v1 JX477165v1 FJ621584v1
         sGroup_Zaire(DRC)_1976-7 NC_002549v1 EU224440v2 AF272001v1 AF086833v2 KC242791v1 AF499101v1 AY142960v1 KC242801v1

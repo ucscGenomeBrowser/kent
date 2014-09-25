@@ -31,7 +31,7 @@ group compGeno
         mafDot on
 	snpMode on
         type wigMaf 0.0 1.0
-        speciesCodonDefault zaiEbo1
+        speciesCodonDefault taiEbo1
         speciesGroups Bundibugyo_2007 Sudan_1976-9 DRC_2007 Ebola_2014 Zaire(DRC)_1976-7 Reston_1989-90 Marburg_1987
         sGroup_Bundibugyo_2007 FJ217162v1 KC545393v1 KC545395v1 KC545394v1 KC545396v1 FJ217161v1 EU338380v1
         sGroup_Sudan_1976-9 NC_014373v1 AY729654v1 NC_006432v1 KC545390v1 KC545389v1 KC545391v1 JN638998v1 KC589025v1 KC545392v1 FJ968794v1 KC242783v2
