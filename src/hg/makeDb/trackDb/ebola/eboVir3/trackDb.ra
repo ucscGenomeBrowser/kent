@@ -82,7 +82,7 @@ mouseOverField mHCAlleleName
 track spMut override
 visibility hide
 group varRep
-shortLabel UniProt Mutation Annotations
+shortLabel UniProt Mutations
 html spMut
 
 track spAnnot override
