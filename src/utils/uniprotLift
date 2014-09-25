@@ -1,6 +1,7 @@
 #!/usr/bin/env python2.7
 # a script to lift uniprot mutations/annotations created by the publications uniprot parser
-# to a DB and create two bigbed files for them
+# to a DB and create three bigbed files for them:
+# one for structures, one for mutations, one for other annotations
 
 from os.path import join, isfile
 from os import system
@@ -16,6 +17,7 @@ DEBUG = False
 
 pmidBlackList = set(["17344846", "15489334", "16959974", "14702039", "17974005"])
 
+# if --filter option provided, remove these altogether
 removeTypes = set(["helix", "strand", "beta", "turn", "signal"])
 
 # by default, only output identifiers, not html links to them
@@ -27,6 +29,10 @@ urls = {"var": "http://web.expasy.org/cgi-bin/variant_pages/get-sprot-variant.pl
         "uniProt" : "http://www.uniprot.org/uniprot/",
         "pubmed" : "http://www.ncbi.nlm.nih.gov/pubmed/"
         }
+
+# some feature types should not go into the bed file name field, but rather be replaced 
+# with the curator's comments
+useComment = set(["domain", "chain","region of interest","topological domain","short sequence motif"])
 
 # -------------
 
@@ -139,6 +145,25 @@ def makeBedLine(mut, bed, isMut):
         bed[8] = "0,0,100"
     else:
         bed[3] = mut.shortFeatType
+        if mut.featType=="signal peptide":
+            bed[3] = "Signal peptide"
+        if mut.featType=="lipid moiety-binding region":
+            bed[3] = "Lipidation"
+        if mut.featType=="transmembrane region":
+            bed[3] = "Transmembrane"
+        if mut.featType in useComment:
+            bed[3] = mut.comment
+        if mut.comment=="Involved in receptor recognition and/or post-binding events":
+            bed[3] = "Recept recog"
+        if mut.comment.startswith("Cleavage; by host "):
+            bed[3] = "Cleave:"+mut.comment.split()[-1]
+
+        if bed[3] == "Intrinsically disordered":
+            bed[3] = "Disordered"
+        
+        if len(bed[3])>17:
+            bed[3] = bed[3][:14]+"..."
+
         varType = mut.featType
         bed[8] = featTypeColors.get(mut.featType, "0,0,0")
 
@@ -256,6 +281,7 @@ if __name__ == '__main__':
     # read lifted bed and add uniprot annotations to it as additional fields
     mutBed = open("spMut.bed", "w")
     annotBed = open("spAnnot.bed" , "w")
+    structBed = open("spStruct.bed" , "w")
 
     count = 0
     blackCount = 0
@@ -277,6 +303,9 @@ if __name__ == '__main__':
         if mut.featType in ["mutagenesis site", "sequence variant"]:
             isMut = True
             ofh = mutBed
+        elif mut.featType in ["strand","helix", "coiled-coil region", "turn", "disulfide bond", "glycosylation site"]:
+            isMut = False
+            ofh = structBed
         else:
             isMut = False
             ofh = annotBed
@@ -294,6 +323,7 @@ if __name__ == '__main__':
     print "%d features written to %s" % (count, ofh.name)
     mutBed.close()
     annotBed.close()
+    structBed.close()
 
     #print "%d variants not mapped to genome" % len(notMapped)
 
@@ -306,10 +336,13 @@ if __name__ == '__main__':
     cmd = "bedToBigBed -as=%s spAnnot.bed /hive/data/genomes/%s/chrom.sizes spAnnot.bb -type=bed12+ -tab" % \
         (asFname, db)
     run(cmd)
+    cmd = "bedToBigBed -as=%s spStruct.bed /hive/data/genomes/%s/chrom.sizes spStruct.bb -type=bed12+ -tab" % \
+        (asFname, db)
+    run(cmd)
 
     cmd = "rm -rf work"
     run(cmd)
-    cmd = "wc -l spMut.bed spAnnot.bed"
+    cmd = "wc -l spMut.bed spAnnot.bed spStruct.bed"
     run(cmd)
     #print "%d features written to spMut.bed and %s.bed" % (count, outFname, outFname)
     print "%d features skipped because of blacklisted PMIDS" % (blackCount)
