@@ -7,6 +7,7 @@
 #include "dnaseq.h"
 #include "obscure.h"
 #include "twoBit.h"
+#include "../hg/inc/hdb.h"
 
 struct annoAssembly *annoAssemblyNew(char *name, char *twoBitPath)
 /* Return an annoAssembly with open twoBitFile. */
@@ -14,8 +15,8 @@ struct annoAssembly *annoAssemblyNew(char *name, char *twoBitPath)
 struct annoAssembly *aa;
 AllocVar(aa);
 aa->name = cloneString(name);
-aa->tbf = twoBitOpen(twoBitPath);
-aa->twoBitPath = cloneString(twoBitPath);
+aa->twoBitPath = hReplaceGbdb(twoBitPath);
+aa->tbf = twoBitOpen(aa->twoBitPath);
 aa->curSeq = NULL;
 return aa;
 }
