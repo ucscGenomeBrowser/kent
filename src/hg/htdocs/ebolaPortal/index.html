@@ -5,49 +5,7 @@
     <title>UCSC Ebola Portal</title>
     <link rel="stylesheet" href="../style/HGStyle.css" type="text/css">
     <link rel="stylesheet" href="../style/encodeProject.css" type="text/css">
-    <style>
-        /* using tables for layout */
-        table {
-            border-style: none
-        }
-        td {
-            border-style: none;
-            vertical-align: top;
-        }
-
-        /* override visited img links in HGStyle */
-        .screenshot {
-            display: block;
-            width: 100%;
-            margin: 15px 0 !important;
-        }
-        .screenshot:hover {
-            outline: 1px solid ActiveBorder;
-        }
-
-        .header {
-            color: #00457c;
-            font-size: 25px;
-            margin-top: 25px;
-            margin-bottom: 15px;
-        }
-        .header span {
-            vertical-align: middle;
-            width: 30%;
-        }
-        .subHeader {
-            font-size: 15px;
-            background-color: #efefef;
-        }
-
-        .bar {
-            height: auto;
-            padding-bottom: 4px;
-        }
-        .wrapper {
-            border: none;
-        }
-    </style>
+    <link rel="stylesheet" href="ebolaPortal.css" type="text/css">
 </head>
 
 <body style="margin:0;">
@@ -68,7 +26,7 @@
                 renewed efforts to develop effective preventative and treatment options.
                 In response to a request for help from vaccine researchers, we have fast-tracked
                 the
-                <a target="_blank" href="../cgi-bin/hgTracks?db=eboVir2">UCSC Ebola Genome Browser</a>
+                <a target="_blank" href="../cgi-bin/hgTracks?db=eboVir3">UCSC Ebola Genome Browser</a>
                 built with viral sequences from previous outbreaks as
                 well as the 2014 outbreak.  
 		This site also provides related tools and 
@@ -84,7 +42,7 @@
                     <div style="margin-top:0; margin-left:10px; margin-right:10px" class="wrapper">
                     <div class="bar"><h4 class="title">Explore the Ebola genome with the UCSC Browser</h4></div>
                         <div class="content">
-                            <a href="../cgi-bin/hgTracks?db=eboVir2" target="_blank"><img class="screenshot" src="../images/ebolaBrowser.png"></a>
+                            <a href="../cgi-bin/hgTracks?db=eboVir3" target="_blank"><img class="screenshot" src="../images/ebolaBrowser.png"></a>
                         </div>
                     </div>
                     </td>
@@ -110,7 +68,7 @@
             <tr>
             <td colspan="3">
             <div style="margin-top: 15px; margin-left: 10px;" class="wrapper">
-            <div class="bar"><h4 class="title">Related Publications</h4></div>
+            <div class="bar"><h4 class="title">Related Publications and Data Resources</h4></div>
             <div class="content">
 		<p>
   		PLOS Ebola Flipboard:  
@@ -124,13 +82,9 @@
 		Magazine Special Collection: Ebola Virus</a> (freely available research and news 
 		articles)
 		</p>
-		<p>
-                99 viral genome sequences from Sierra Leone:
-		<a href="http://www.ncbi.nlm.nih.gov/pubmed/25214632"
-                target="_blank">Genomic surveillance elucidates Ebola virus origin and transmission 
-		during the 2014 outbreak</a>
-		[<a href="http://www.sciencemag.org/content/345/6202/1369.full.pdf"
-                target="_blank">PDF</a>]
+                <p>
+                NCBI sequence database search, publication list, and genome display:
+                <a href="http://www.ncbi.nlm.nih.gov/genome/viruses/variation/ebola/" target="_blank"</a>NCBI Virus Variation Ebolavirus Resource</a>
 		</p>
             </div>
             </div><!--end content-->
@@ -238,91 +192,63 @@
 
 <a name="antibodies">
 
-<!--Antibodies panel -->
+<!--Treatment research panel -->
             <tr>
             <td colspan="3">
             <div style="margin-top: 0; margin-left: 10px;" class="wrapper">
-            <div class="bar"><h4 class="title">Antibody Resources</h4></div>
+            <div class="bar"><h4 class="title">Treatment Research</h4></div>
             <div class="content">
 		<p>
+                Multiple therapeutic approaches for Ebola treatment are under active development.
+                References for three close to field use as of September 2014 are listed below.
+                See also the <a href="http://www.cdc.gov/vhf/ebola/outbreaks/guinea/qa-experimental-treatments.html" target="_blank">CDC Questions and Answers on Experimental Treatments and Vaccines for Ebola</a>.
 
-		This section contains links to papers and other resources related to antibody use 
-		in the treatment and vaccine development for Ebola Virus Disease.
-		</p>
-		<p>
-                Neutralizing antibodies for Kikwit strain (1999):
-	   	<a href="http://www.ncbi.nlm.nih.gov/pubmed/10364354"
-                target="_blank"> Ebola virus can be effectively neutralized by antibody produced in 
-		natural human infection</a>
-                [<a href="http://jvi.asm.org/content/73/7/6024.full.pdf" target="_blank">PDF</a>]
-		</p>
-		<p>
-                Humanized mAbs (ZMapp) expressed in tobacconists (2014):
-		<a href="http://www.ncbi.nlm.nih.gov/pubmed/25171469"
-                target="_blank">Reversion of advanced Ebola virus disease in nonhuman primates with 
-		ZMapp</a>
-                [<a href="http://www.nature.com/nature/journal/vnfv/ncurrent/pdf/nature13777.pdf"
-                target="_blank">PDF</a>]
-		</p>
-                mAbs (MB-003) cocktail (2012): 
-                <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3497800" target="_blank">Delayed treatment of Ebola virus infection with plant-derived monoclonal antibodies provides protection in rhesus macaques</a>
                 <p>
-                <p>
-                EBOV IgG+ sera from asymptomatic individuals and symptomatic Gabonese survivors 
-		(2014):
-		<a href="http://www.ncbi.nlm.nih.gov/pubmed/24914933" 
-		target="_blank">Identification of continuous human B-cell epitopes in the VP35, 
-		VP40, nucleoprotein and glycoprotein of Ebola virus</a>
-                [<a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4051576/pdf/pone.0096360.pdf" 
-                target="_blank">PDF</a>]
+                <em>Broad-spectrum small molecule anti-viral</em>: Inhibition of viral RNA polymerase by nucleoside analogues
+                <ul>
+                <li>
+                Warren et al., Nature (2014): <a href="http://www.nature.com/nature/journal/v508/n7496/full/nature13027.html" target="_blank">Protection against filovirus diseases by a novel broad-spectrum nucleoside analogue BCX4430</a> PMID:24590073.
+                </li>
+                <li>
+                Biocryst Pharmaceuticals: <a href="http://www.biocryst.com/bcx_4430" target="_blank">BCX4430 information page</a>
+                </li>
+                <li>
+                Julander et al., 2nd Antivirals Congress (2012): <a href="http://www.biocryst.com/PDFs/BCX4430_2ndAntiviralsCongressPresentation11Nov12FINAL.pdf" target="_blank">BCX4430, an Adenosine Analog, with Potent Activity Against Yellow Fever  Virus in a Hamster Model</a>
+                </li>
+                </ul>
                 </p>
                 <p>
-                Mouse mAb binding sites mapped to seven antigenic regions, two highly conserved,
-		across all known Ebolavirus species (2013):
-                <a href="http://www.ncbi.nlm.nih.gov/pubmed/23702199" 
-		target="_blank">Mapping of conserved and species-specific antibody epitopes on the 
-		Ebola virus nucleoprotein</a>
-                [<a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3787873/pdf/nihms516287.pdf"
-                target="_blank">PDF</a>]
-                </p> 
-                <p>
-                Literature links from 
-                <a href="http://help.iedb.org/entries/51011785-Ebola-virus-related-immune-epitope-data-curated-in-the-IEDB"
-		target="_blank">Reported functional EBOV-related B cell epitopes</a> (Table 2) on
-		the <a href="http://www.iedb.org/" 
-		target="_blank">Immune Epitope Database and Analysis Resource</a> (IEDB) website: 
+                <em>RNA interference</em>: Combination of siRNAs targeting Ebolavirus RNA polymerase and other proteins (e.g. VP24 and VP35)
                 </p>
                 <ul>
                 <li>
-                (2012) <a href="http://www.mdpi.com/1999-4915/4/4/447" 
-		target="_blank">Structural basis for differential neutralization of ebolaviruses</a>
+                Geisbert et al., Lancet (2010): <a href="http://www.ncbi.nlm.nih.gov/pubmed/20511019" target="_blank">Postexposure protection of non-human primates against a lethal Ebola virus challenge with RNA interference: a proof-of-concept study</a>. PMID:20511019.
                 </li>
                 <li>
-                (2011) <a href="http://linkinghub.elsevier.com/retrieve/pii/S1521-6616(11)00242-7"
-		target="_blank">Characterization of Zaire ebolavirus glycoprotein-specific 
-		monoclonal antibodies</a>
-                </li>
-                <li>
-                (2008) <a href="http://www.ncbi.nlm.nih.gov/pubmed/18005986" 
-		target="_blank">Complex of a protective antibody with its Ebola virus GP peptide 
-		epitope: unusual features of a V lambda x light chain</a>
-                </li>
-                <li>
-                (2008) <a href="http://dx.doi.org/10.1038/nature07082" 
-		target="_blank">Structure of the Ebola virus glycoprotein bound to an antibody from 
-		a human survivor</a>
-                </li>
-                <li>
-                (2003) <a href="http://jvi.asm.org/cgi/pmidlookup?view=long&amp;pmid=12502822" 
-		target="_blank">Identification of protective epitopes on ebola virus glycoprotein 
-		at the single amino acid level by using recombinant vesicular stomatitis viruses</a>
-                </li>
-                <li>
-                (2000) <a href="http://www.sciencemag.org/cgi/pmidlookup?view=long&amp;pmid=10698744" 
-		target="_blank">Epitopes involved in antibody-mediated protection from Ebola 
-		virus</a>
+                Tekmira Pharmaceuticals, Press Release (Sept. 22, 2014): <a href="http://investor.tekmirapharm.com/releasedetail.cfm?ReleaseID=871918" target="_blank">Tekmira Establishes Regulatory Framework for Emergency Use of TKM-Ebola</a>.
                 </li>
                 </ul>
+
+                <p>
+                <em>Immunologic</em>: Cocktail of neutralizing antibodies specific for Ebolavirus surface glycoprotein
+                <ul>
+		<li>
+		Qiu et al., Nature (2014): <a href="http://www.ncbi.nlm.nih.gov/pubmed/25171469"
+                target="_blank">Reversion of advanced Ebola virus disease in nonhuman primates with 
+		ZMapp</a> 
+                [<a href="http://www.nature.com/nature/journal/vnfv/ncurrent/pdf/nature13777.pdf"
+                target="_blank">PDF</a>] PMID:25171469.
+		</li>
+                <li>
+                Mapp Pharmaceutical: <a href="http://www.mappbio.com/" target="_blank">ZMapp information pages</a>
+		</li>
+                <li>
+                <a href="http://en.wikipedia.org/wiki/ZMapp" target="_blank">Wikipedia ZMapp page</a>
+                </li>
+                </ul>
+                Additional references related to Ebola antibody-based therapeutics are listed on the 
+                <a href="antibodyResources.html" target="_blank">UCSC Ebola Genome Portal: Antibody Resources</a> page.
+                </p>
             </div>
             </div><!--end content-->
             </div><!--end wrapper-->

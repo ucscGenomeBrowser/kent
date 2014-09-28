@@ -1,0 +1,42 @@
+mkdir -p  /hive/data/genomes/eboVir3/bed/snpView	
+cd /hive/data/genomes/eboVir3/bed/snpView	
+awk '/^s/ {print $2}' ../multiz160way/defraged.multiz160way.maf | sed 's/\..*//' > species.lst  
+mafGene -exons eboVir3 multiz160way ncbiGene species.lst nonsyn.faa
+
+paSNP species.lst nonsyn.faa stdout | sed 's/:/ /' | sed 's/-/ /' | awk '{print $1, $2-1, $3, $4, 1583, "+", $2-1, $3, "255,0,0", 1, $3-($2 - 1), 0}' > nonsyn.bed
+
+mafGene -uniqAA -exons eboVir3 multiz160way ncbiGene species.lst syn.faa
+
+paSNP species.lst syn.faa stdout | sed 's/:/ /' | sed 's/-/ /' | awk '{print $1, $2-1, $3, $4, 1819, "+", $2-1, $3, "0,255,0", 1, $3 - ($2 - 1), 0}' > syn.bed
+
+mafToSnpBed eboVir3 ../multiz160way/defraged.multiz160way.maf ../ncbiGene/ncbiGene.gp stdout |  sed 's/eboVir3.//' > single.bed
+
+#these should all disappear on the merge
+grep "1580$" single.bed | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "255,255,0", 1, $3 -$2, 0}' > codingVariant.bed
+
+grep "1623$" single.bed | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "255,255,0", 1, $3 -$2, 0}' > utrVariant.bed
+grep "1624$" single.bed | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "255,255,0", 1, $3 -$2, 0}' >> utrVariant.bed
+
+grep " 0$" single.bed | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "240,240,180", 1, $3 -$2, 0}' > missing.bed
+
+grep "1628$" single.bed | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "0,0,0", 1, $3 -$2, 0}' > intergenic.bed
+
+grep "1627$" single.bed | awk '{print $1, $2, $3, $4, $5, "+", $2, $3, "0,0,0", 1, $3 -$2, 0}' > intron.bed
+
+echo "select * from chromInfo" | hgsql eboVir3 | tail -n +2 > chrom.sizes
+rm output.bed
+for i in `cat species.lst`
+do
+echo $i
+grep -wh "$i" nonsyn.bed syn.bed codingVariant.bed utrVariant.bed intron.bed intergenic.bed missing.bed | bedSmash stdin chrom.sizes stdout >>  output.bed
+done
+
+awk '{print $1,$2,$3,$4,$5}' output.bed > load.bed
+
+cat load.bed | sed -f ~/kent/src/hg/makeDb/doc/eboVir3/ucscName.strainName.sed \
+  | sed -e 's/G3686v1_2014/KM034562v1/' \
+  > strainLoad.bed
+
+hgLoadBed eboVir3 mafSnp160way load.bed
+hgLoadBed eboVir3 mafSnpStrainName160way strainLoad.bed
+

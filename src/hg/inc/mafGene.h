@@ -8,6 +8,7 @@
 #define MAFGENE_OUTBLANK	(1 << 2)
 #define MAFGENE_OUTTABLE	(1 << 3)
 #define MAFGENE_INCLUDEUTR	(1 << 4)
+#define MAFGENE_UNIQUEAA	(1 << 5)
 
 /* output a FASTA alignment from the given mafTable
  * for a given genePred
