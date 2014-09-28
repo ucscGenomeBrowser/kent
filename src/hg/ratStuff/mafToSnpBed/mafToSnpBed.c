@@ -34,8 +34,7 @@ for (ii = 0;  ii < gp->exonCount;  ii++)
 return FALSE;
 }
 
-static void parseOnePair(struct mafComp *mcMaster, struct mafComp *mcOther,
-  struct genePred *gp, struct dnaSeq *transcriptSequence, struct bed **bedList, struct lm *lm)
+static void parseOnePair(struct mafComp *mcMaster, struct mafComp *mcOther, struct genePred *gp,  FILE *f)
 {
 char *mptr = mcMaster->text;
 char *optr = mcOther->text;
@@ -73,7 +72,7 @@ for(; *mptr; )
 
     if (inUnaligned)
 	{
-	printf("%s %d %d %s %d\n", mcMaster->src, unAlignedStart, unAlignedEnd+1, species, 0);
+	fprintf(f,"%s %d %d %s %d\n", mcMaster->src, unAlignedStart, unAlignedEnd+1, species, 0);
 	inUnaligned = FALSE;
 	}
 
@@ -100,36 +99,33 @@ for(; *mptr; )
 	else
 	    so = intergenic_variant;
 
-	//printf("%s %d %d %s %d %c/%c\n", mcMaster->src, start, start+1, species, so, masterCh, otherCh);   
-	printf("%s %d %d %s %d\n", mcMaster->src, start, start+1, species, so);   
+	fprintf(f,"%s %d %d %s %d\n", mcMaster->src, start, start+1, species, so);   
 	}
 
     start++;
     }
 
 if (inUnaligned)
-    printf("%s %d %d %s %d\n", mcMaster->src, unAlignedStart, unAlignedEnd+1, species, 0);
+    fprintf(f,"%s %d %d %s %d\n", mcMaster->src, unAlignedStart, unAlignedEnd+1, species, 0);
 }
 
-static void parseOneAli(struct mafAli *aliList, struct genePred *gp, struct dnaSeq *transcriptSequence, struct bed **bedList, struct lm *lm)
+static void parseOneAli(struct mafAli *aliList, struct genePred *gp,  FILE *f)
 {
 struct mafComp *mcMaster = aliList->components;
 struct mafComp *mcOther = mcMaster->next;
 
 for(; mcOther; mcOther = mcOther->next)
     {
-    parseOnePair(mcMaster, mcOther, gp, transcriptSequence, bedList, lm);
+    parseOnePair(mcMaster, mcOther, gp, f);
     }
 }
 
-static void parseOneGp(char *database, struct mafAli *aliList, struct genePred *gp, struct bed **bedList, struct lm *lm)
+static void parseOneGp(char *database, struct mafAli *aliList, struct genePred *gp, FILE *f)
 {
 struct mafAli *ali = aliList;
 
-struct dnaSeq *transcriptSequence = genePredGetDna(database, gp,
-                              FALSE,  dnaLower);
 for(; ali; ali = ali->next)
-    parseOneAli(ali, gp, transcriptSequence, bedList, lm);
+    parseOneAli(ali, gp, f);
 }
 
 void mafToSnpBed(char *database, char *mafIn, char *gpIn, char *bedOut)
@@ -137,21 +133,15 @@ void mafToSnpBed(char *database, char *mafIn, char *gpIn, char *bedOut)
 {
 struct mafFile *mafFile = mafReadAll(mafIn);
 struct genePred *genePred = genePredLoadAll(gpIn);
-struct bed *bedList = NULL;
-struct lm *lm = lmInit(0);
+FILE *f = mustOpen(bedOut, "w");
 
 struct genePred *gp, *next;
 for(gp = genePred; gp; gp = next)
     {
     next = gp->next;
     gp->next = NULL;
-    parseOneGp(database, mafFile->alignments, gp, &bedList, lm);
+    parseOneGp(database, mafFile->alignments, gp, f);
     }
-
-FILE *f = mustOpen(bedOut, "w");
-struct bed *bed;
-for(bed=bedList; bed; bed = bed->next)
-    bedTabOutNitemRgb(bed, 4, f);
 }
 
 int main(int argc, char *argv[])
