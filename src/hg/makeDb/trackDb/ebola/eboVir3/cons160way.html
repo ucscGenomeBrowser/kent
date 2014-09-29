@@ -9,6 +9,64 @@ TARGET=_blank>Penn State Bioinformatics</A>
 comparative genomics alignment pipeline.
 </P>
 
+<H2>Display Conventions and Configuration</H2>
+<P>
+Pairwise alignments of each species to the $organism genome are
+displayed as a series of colored blocks indicating the functional effect of polymorphisms (in pack mode) ,or as a wiggle (in full mode) that indicates alignment quality.
+In dense display mode, percent identity of the whole alignments is shown in grayscale using
+darker values to indicate higher levels of identity.
+<P>
+In pack mode, regions that align with 100% identity are not shown.   When there is not 100% percent identity, blocks of four colors are drawn.
+<LI>Red blocks are drawn when a polymorphism in a coding region results in a change in the amino acid that is generated.
+<LI>Green blocks are drawn when a polymorphism in a coding region results in no change to the amino acid that is generated.
+<LI>Blue blocks are drawn when a polymorphism is outside a coding region.
+<LI>Pale yellow blocks are drawn when there is no aligning bases to that region in the reference genome.
+<P>
+Checkboxes on the track configuration page allow selection of the
+species to include in the pairwise display.
+Configuration buttons are available to select all of the species
+(<EM>Set all</EM>), deselect all of the species (<EM>Clear all</EM>), or
+use the default settings (<EM>Set defaults</EM>).
+<P>
+To view detailed information about the alignments at a specific
+position, zoom the display in to 30,000 or fewer bases, then click on
+the alignment.</P>
+
+<H3>Base Level</H3>
+<P>
+When zoomed-in to the base-level display, the track shows the base
+composition of each alignment.
+The numbers and symbols on the Gaps
+line indicate the lengths of gaps in the $organism sequence at those
+alignment positions relative to the longest non-$organism sequence.
+If there is sufficient space in the display, the size of the gap is shown.
+If the space is insufficient and the gap size is a multiple of 3, a
+&quot;*&quot; is displayed; other gap sizes are indicated by &quot;+&quot;.</P>
+<P>
+Codon translation is available in base-level display mode if the
+displayed region is identified as a coding segment. To display this annotation, select the species for translation from the pull-down menu in the Codon
+Translation configuration section at the top of the page. Then, select one of
+the following modes:
+<UL>
+<LI>
+<B>No codon translation:</B> The gene annotation is not used; the bases are
+displayed without translation.
+<LI>
+<B>Use default species reading frames for translation:</B> The annotations from
+the genome displayed in the <EM>Default species to establish reading frame</EM>
+pull-down menu are used to translate all the aligned species present in the
+alignment.
+<LI>
+<B>Use reading frames for species if available, otherwise no translation:</B>
+Codon translation is performed only for those species where the region is
+annotated as protein coding.
+<LI><B>Use reading frames for species if available, otherwise use default species:</B>
+Codon translation is done on those species that are annotated as being protein
+coding over the aligned region using species-specific annotation; the remaining
+species are translated using the default species annotation.
+</UL></P>
+<P>
+</BLOCKQUOTE></P>
 <H2>Methods</H2>
 <P>
 Pairwise alignments with the reference sequence were generated for
