@@ -1806,10 +1806,17 @@ else
 struct annoAssembly *getAnnoAssembly(char *db)
 /* Make annoAssembly for db. */
 {
-char *nibOrTwoBitDir = hDbDbNibPath(db);
-char twoBitPath[HDB_MAX_PATH_STRING];
-safef(twoBitPath, sizeof(twoBitPath), "%s/%s.2bit", nibOrTwoBitDir, db);
-return annoAssemblyNew(db, twoBitPath);
+static struct annoAssembly *aa = NULL;
+if (aa == NULL)
+    {
+    char *nibOrTwoBitDir = hDbDbNibPath(db);
+    char twoBitPath[HDB_MAX_PATH_STRING];
+    safef(twoBitPath, sizeof(twoBitPath), "%s/%s.2bit", nibOrTwoBitDir, db);
+    char *path = hReplaceGbdb(twoBitPath);
+    aa = annoAssemblyNew(db, path);
+    freeMem(path);
+    }
+return aa;
 }
 
 struct annoStreamer *streamerFromSource(char *db, char *table, struct trackDb *tdb, char *chrom)
