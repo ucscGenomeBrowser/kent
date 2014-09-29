@@ -49,7 +49,6 @@ char *genome;		/* Name of genome - mouse, human, etc. */
 char *database;		/* Current genome database - hg17, mm5, etc. */
 char *regionType;	/* genome, ENCODE pilot regions, or specific position range. */
 char *position;		/* position range (if applicable) */
-static struct pipeline *compressPipeline = (struct pipeline *)NULL;
 struct grp *fullGroupList;	/* List of all groups. */
 struct trackDb *fullTrackList;	/* List of all tracks in database. */
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
@@ -1592,7 +1591,6 @@ else if (webGotWarnings())
 cartWebEnd();
 /* Save variables. */
 cartCheckout(&cart);
-textOutClose(&compressPipeline);
 }
 
 char *escapeStringForJson(char *input)
