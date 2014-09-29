@@ -13,7 +13,7 @@ html gap
 
 track ncbiGene
 shortLabel NCBI Genes
-longLabel NCBI Genes from KM034562 Genbank Record
+longLabel NCBI Genes from KM034562 GenBank Record
 group genes
 visibility pack
 priority 1
@@ -33,7 +33,7 @@ url http://pfam.sanger.ac.uk/family/$$
 
 track pdb
 shortLabel PDB 
-longLabel Protein Data Bank (PDB) sequence matches
+longLabel Protein Data Bank (PDB) Sequence Matches
 group genes
 type bed 12
 visibility hide
@@ -53,7 +53,7 @@ mouseOverField author
 
 track iedbBcellNeg
 shortLabel IEDB B Cell Neg
-longLabel Immune Epitope Database and Analysis Resource (IEDB) B Cell Epitopes with negative assay result
+longLabel Immune Epitope Database and Analysis Resource (IEDB) B Cell Epitopes with Negative Assay Result
 group immu
 type bigBed 12 .
 visibility hide
@@ -62,8 +62,8 @@ urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/
 mouseOverField author
 
 track iedbTcellI
-shortLabel IEDB T-Cell I
-longLabel Immune Epitope Database and Analysis Resource (IEDB) curated T-Cell Epitopes, MHC Class I
+shortLabel IEDB T Cell I
+longLabel Immune Epitope Database and Analysis Resource (IEDB) Curated T Cell Epitopes, MHC Class I
 group immu
 type bigBed 12 .
 visibility hide
@@ -71,8 +71,8 @@ urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/
 mouseOverField mHCAlleleName
 
 track iedbTcellII
-shortLabel IEDB T-Cell II
-longLabel Immune Epitope Database and Analysis Resource (IEDB) curated T-Cell Epitopes, MHC Class II
+shortLabel IEDB T Cell II
+longLabel Immune Epitope Database and Analysis Resource (IEDB) Curated T Cell Epitopes, MHC Class II
 group immu
 type bigBed 12 .
 visibility hide
