@@ -73,12 +73,19 @@ static struct optionSpec optionSpecs[] = {
 struct annoAssembly *getAnnoAssembly(char *db)
 /* Make annoAssembly for db. */
 {
-char *nibOrTwoBitDir = hDbDbNibPath(db);
-if (nibOrTwoBitDir == NULL)
-    errAbort("Can't find .2bit for db '%s'", db);
-char twoBitPath[HDB_MAX_PATH_STRING];
-safef(twoBitPath, sizeof(twoBitPath), "%s/%s.2bit", nibOrTwoBitDir, db);
-return annoAssemblyNew(db, twoBitPath);
+static struct annoAssembly *aa = NULL;
+if (aa == NULL)
+    {
+    char *nibOrTwoBitDir = hDbDbNibPath(db);
+    if (nibOrTwoBitDir == NULL)
+        errAbort("Can't find .2bit for db '%s'", db);
+    char twoBitPath[HDB_MAX_PATH_STRING];
+    safef(twoBitPath, sizeof(twoBitPath), "%s/%s.2bit", nibOrTwoBitDir, db);
+    char *path = hReplaceGbdb(twoBitPath);
+    aa = annoAssemblyNew(db, path);
+    freeMem(path);
+    }
+return aa;
 }
 
 struct streamerInfo

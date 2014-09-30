@@ -159,3 +159,24 @@ hgsql -e \
      hgcentraltest
 
 ############################################################################
+# joinerCheck and download files (DONE - 2014-09-30 - Hiram)
+#  add entries to all.joiner to get this clean:
+   joinerCheck -database=eboVir3 -tableCoverage  ./all.joiner
+# should be no output for tableCoverage
+   joinerCheck -database=eboVir3 -keys ./all.joiner
+Checking keys on database eboVir3
+ eboVir3.chainMarVir1.id - hits 2 of 2 (100.000%) ok
+ eboVir3.chainMarVir1Link.chainId - hits 541 of 541 (100.000%) ok
+ eboVir3.chainMarVir1Link.chainId - hits 541 of 541 (100.000%) ok
+ eboVir3.chromInfo.chrom - hits 1 of 1 (100.000%) ok
+
+    cd /hive/data/genomes/eboVir3
+    makeDownloads.pl -allowMissedTrfs -ignoreRepeatMasker \
+        -dbHost=hgwdev -workhorse=hgwdev eboVir3 > downloads.log 2>&1
+
+    # the jkStuff/doCompress.csh needed to have some business
+    # commented out to make it complete.  It was run manually, and
+    # the resulting README files were edited.
+
+##############################################################################
+
