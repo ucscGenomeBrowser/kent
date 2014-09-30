@@ -8,6 +8,7 @@ visibility hide
 priority 1
 type bed 4
 group compGeno
+chromosomes KJ660347v2
 
     track cons49wayViewalign
     shortLabel Multiz Alignments

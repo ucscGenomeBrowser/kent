@@ -6,3 +6,8 @@ html gold
 track gap override
 html gap
 
+track ncbiAnnotations override
+visibility hide
+
+include trackDb.160way.ra
+include ../trackDb.ncbiGene.ra

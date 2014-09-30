@@ -71,7 +71,7 @@ return TRUE;
  * make the AA a dash.
  */
 static aaSeq *doTranslate(struct dnaSeq *inSeq, unsigned offset, 
-    unsigned inSize, boolean stop)
+    unsigned inSize, boolean stop, boolean doUniq)
 {
 aaSeq *seq;
 DNA *dna = inSeq->dna;
@@ -88,7 +88,10 @@ AllocVar(seq);
 seq->dna = pep = needLargeMem(inSize/3+1);
 for (i=offset; i <= lastCodon; i += 3)
     {
-    aa = lookupCodon(dna+i);
+    if (doUniq)
+	aa = lookupUniqCodon(dna+i);
+    else
+	aa = lookupCodon(dna+i);
     if (aa == 'X')
 	{
 	if ((dna[i] == '-') ||
@@ -246,7 +249,7 @@ return siList;
 
 
 static void outSpeciesExons(FILE *f, char *dbName, struct speciesInfo *si, 
-    struct exonInfo *giList, boolean doBlank, boolean doTable, int numCols)
+    struct exonInfo *giList, boolean doBlank, boolean doTable, boolean doUniq, int numCols)
 {
 int exonNum = 1;
 struct dnaSeq thisSeq;
@@ -304,7 +307,7 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 
 	thisSeq.dna = exonBuffer;
 	thisSeq.size = ptr - exonBuffer;
-	outSeq =  doTranslate(&thisSeq, 0,  0, FALSE);
+	outSeq =  doTranslate(&thisSeq, 0,  0, FALSE, doUniq);
 	char buffer[10 * 1024];
 
 	safef(buffer, sizeof buffer,  "%s_%s_%d_%d %d %d %d %s",
@@ -416,7 +419,7 @@ aaSeq *outSeq;
 
 thisSeq.dna = si->nucSequence;
 thisSeq.size = si->size;
-outSeq =  doTranslate(&thisSeq, 0,  0, FALSE);
+outSeq =  doTranslate(&thisSeq, 0,  0, FALSE, FALSE);
 si->aaSequence  = outSeq->dna;
 si->aaSize = outSeq->size;
 }
@@ -451,6 +454,7 @@ boolean inExons = options & MAFGENE_EXONS;
 boolean noTrans = options & MAFGENE_NOTRANS;
 boolean doBlank = options & MAFGENE_OUTBLANK;
 boolean doTable = options & MAFGENE_OUTTABLE;
+boolean doUniq = options & MAFGENE_UNIQUEAA;
 
 if (inExons)
     {
@@ -458,7 +462,7 @@ if (inExons)
 	outSpeciesExonsNoTrans(f, dbName, si, giList, doBlank, 
 	    doTable, numCols);
     else
-	outSpeciesExons(f, dbName, si, giList, doBlank, doTable, numCols);
+	outSpeciesExons(f, dbName, si, giList, doBlank, doTable, doUniq, numCols);
     return;
     }
 

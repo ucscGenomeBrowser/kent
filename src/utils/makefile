@@ -69,6 +69,7 @@ UTILS_APPLIST = \
 	paraFetch \
 	paraSync \
 	pslLiftSubrangeBlat \
+	pslScore \
 	pslToPslx \
 	randomLines \
 	raSqlQuery \
@@ -144,7 +145,9 @@ SCRIPT_FILES = \
         bedCollapse.pl \
         iSync \
         lodToBedScore \
-	mkMafFrames.pl
+	mkMafFrames.pl \
+	uniprotLift \
+	bedFixBlockOverlaps
 
 # List of all directories to build
 

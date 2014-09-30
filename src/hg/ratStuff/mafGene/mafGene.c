@@ -34,6 +34,7 @@ errAbort(
   "   -chrom=chr1        name of chromosome from which to grab genes\n"
   "   -exons             output exons\n"
   "   -noTrans           don't translate output into amino acids\n"
+  "   -uniqAA            put out unique pseudo-AA for every different codon\n"
   "   -includeUtr        include the UTRs, use only with -noTrans\n"
   "   -delay=N           delay N seconds between genes (default 0)\n" 
   "   -noDash            don't output lines with all dashes\n"
@@ -48,6 +49,7 @@ static struct optionSpec options[] = {
    {"exons", OPTION_BOOLEAN},
    {"noTrans", OPTION_BOOLEAN},
    {"noDash", OPTION_BOOLEAN},
+   {"uniqAA", OPTION_BOOLEAN},
    {"useFile", OPTION_BOOLEAN},
    {"includeUtr", OPTION_BOOLEAN},
    {"delay", OPTION_INT},
@@ -62,6 +64,7 @@ boolean inExons = FALSE;
 boolean noTrans = TRUE;
 int delay = 0;
 boolean newTableType;
+boolean uniqAA = FALSE;
 boolean noDash = FALSE;
 boolean useFile = FALSE;
 boolean includeUtr = FALSE;
@@ -115,6 +118,8 @@ void outGenePred(FILE *f, struct genePred *pred, char *dbName,
 {
 unsigned options = 0;
 
+if (uniqAA)
+    options |= MAFGENE_UNIQUEAA;
 if (inExons)
     options |= MAFGENE_EXONS;
 if (noTrans)
@@ -262,6 +267,7 @@ geneList = optionVal("geneList", geneList);
 geneBeds = optionVal("geneBeds", geneBeds);
 onlyChrom = optionVal("chrom", onlyChrom);
 inExons = optionExists("exons");
+uniqAA = optionExists("uniqAA");
 noDash = optionExists("noDash");
 noTrans = optionExists("noTrans");
 includeUtr = optionExists("includeUtr");

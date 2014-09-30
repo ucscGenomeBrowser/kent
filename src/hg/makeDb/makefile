@@ -65,6 +65,7 @@ DIRS = \
 	hgTraceInfo \
 	hgWaba \
 	hgMrnaRefseq \
+	mdbUpdate \
 	schema \
 	tfbsConsLoc \
 	tfbsConsSort \

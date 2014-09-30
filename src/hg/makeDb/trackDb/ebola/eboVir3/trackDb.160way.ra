@@ -29,7 +29,8 @@ group compGeno
         color 0, 10, 100
         altColor 0,90,10
         mafDot on
-	snpMode on
+	snpTable mafSnp160way
+#	snpMode on
         type wigMaf 0.0 1.0
         speciesCodonDefault eboVir3
         speciesGroups Ebola_2014 DRC_2007 Zaire(DRC)_1976-7 Bundibugyo_2007 Reston_1989-90 Sudan_1976-9 Marburg_1987
@@ -41,5 +42,6 @@ group compGeno
         sGroup_Sudan_1976-9 KC545389v1 KC545390v1 KC545391v1 KC545392v1 KC589025v1 JN638998v1 FJ968794v1 KC242783v2 EU338380v1 AY729654v1 NC_006432v1 
         sGroup_Marburg_1987 NC_024781v1 NC_001608v3
         itemFirstCharCase noChange
-        treeImage phylo/eboVir3_160way.png
         priority 100
+
+#        treeImage phylo/eboVir3_160way.png

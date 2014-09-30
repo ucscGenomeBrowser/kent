@@ -4,10 +4,11 @@ shortLabel 160 Strains
 longLabel Multiz Alignment & Conservation (160 Virus Strains, Accession Names)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
-visibility hide
+visibility pack
 priority 1
 type bed 4
 group compGeno
+html cons160way
 
     track strainCons160wayViewalign
     shortLabel Multiz Alignments
@@ -24,12 +25,13 @@ group compGeno
         noInherit on
 #        irows on
 #        summary strainName160waySummary
+	snpTable mafSnpStrainName160way
         frames strainName160wayFrames
         group compGeno
         color 0, 10, 100
         altColor 0,90,10
         mafDot on
-	snpMode on
+#	snpMode on
         type wigMaf 0.0 1.0
         speciesCodonDefault eboVir3
         speciesGroups Ebola_2014 DRC_2007 Zaire(DRC)_1976-7 Bundibugyo_2007 Reston_1989-90 Sudan_1976-9 Marburg_1987
@@ -41,5 +43,6 @@ group compGeno
         sGroup_Sudan_1976-9 EboSud-602_2012 EboSud-603_2012 EboSud-609_2012 EboSud-682_2012 EboSud-639_2012 Nakisamata_2011 Boniface_1976 Maleo_1979 Yambio_2004 Gulu_Uganda_2000 Gulu_2000 
         sGroup_Marburg_1987 Marburg_KitumCave_Kenya_1987 Marburg_MtElgon_Musoke_Kenya_1980
         itemFirstCharCase noChange
-        treeImage phylo/eboVir3_160way.png
         priority 100
+
+#        treeImage phylo/eboVir3_160way.png

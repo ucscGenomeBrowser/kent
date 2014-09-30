@@ -110,6 +110,8 @@ typedef char Codon; /* Our codon type. */
  * The "Standard" Code */
 AA lookupCodon(DNA *dna); 
 
+AA lookupUniqCodon(DNA *dna);
+
 boolean isStopCodon(DNA *dna);
 /* Return TRUE if it's a stop codon. */
 
