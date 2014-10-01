@@ -84,6 +84,8 @@ visibility hide
 group varRep
 shortLabel UniProt Mutations
 html spMut
+url http://mupit-ebola.icm.jhu.edu/ResidueFileUpload?residues=chr1%20${
+urlLabel MuPIT protein structures
 
 track spAnnot override
 shortLabel UniProt Annot.
