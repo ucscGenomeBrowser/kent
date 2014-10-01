@@ -12,7 +12,7 @@
     <!--#include virtual="../inc/ebola.topbar.html"-->
     <div class="header">
         <span class="txt">&nbsp; UCSC Ebola Genome Portal</span>
-        <span class="subHeader">Resources for the 2014 West Africa outbreak</span> 
+        <span class="subHeader">Resources for the 2014 West Africa Outbreak</span> 
     </div>
     <div style="margin:8px; margin-right:16px;">
         <table>
@@ -37,31 +37,33 @@
             </tr>
             <!-- screenshot launchers 2x2 matrix -->
                 <tr>
+
                     <!-- Browser image linking to browser CGI -->
-                    <td width="44%">
+                    <td width="40%">
                     <div style="margin-top:0; margin-left:10px; margin-right:10px" class="wrapper">
-                    <div class="bar"><h4 class="title">Explore the Ebola genome with the UCSC Browser</h4></div>
+                    <div class="bar"><h4 class="title">Explore the Ebola Genome with the UCSC Browser</h4></div>
                         <div class="content">
                             <a href="../cgi-bin/hgTracks?db=eboVir3" target="_blank"><img class="screenshot" src="../images/ebolaBrowser.png"></a>
                         </div>
                     </div>
                     </td>
 
+                    <!-- Electron micrograph of virus linked to Wikipeda page -->
+                    <td width="30%" >
+                    <div style="margin-top:0; margin-right: 10px;" class="wrapper">
+                        <div class="bar"><h4 class="title">Read about Ebola</h4></div>
+                            <a href="http://viralzone.expasy.org/all_by_species/207.html" target="_blank"><img class="screenshot" src="../images/Filovirus_virion.jpg"></a>
+                    </div>
+                    </td>
+
                     <!-- Incidence graph linked to CDC site -->
-                    <td width="41%" >
+                    <td width="30%" >
                     <div style="margin-top:0; margin-right: 10px;" class="wrapper">
                         <div class="bar"><h4 class="title">Learn about the 2014 outbreak</h4></div>
                             <a href="http://www.cdc.gov/vhf/ebola/" target="_blank"><img class="screenshot"  src="../images/Graph_Diseased_Ebola_2014.png"></a>
                     </div>
                     </td>
 
-                    <!-- Electron micrograph of virus linked to Wikipeda page -->
-                    <td width="15%" >
-                    <div style="margin-top:0;" class="wrapper">
-                        <div class="bar"><h4 class="title">Read about Ebola</h4></div>
-                            <a href="http://en.wikipedia.org/wiki/Ebola_virus" target="_blank"><img class="screenshot" src="../images/Zaire_ebolavirus_vertical.jpg"></a>
-                    </div>
-                    </td>
                 </tr>
 
 <!-- Publications block -->
@@ -198,18 +200,42 @@
             <div style="margin-top: 0; margin-left: 10px;" class="wrapper">
             <div class="bar"><h4 class="title">Treatment Research</h4></div>
             <div class="content">
+
+
+
 		<p>
                 Multiple therapeutic approaches for Ebola treatment are under active development.
                 References for three close to field use as of September 2014 are listed below.
                 See also the <a href="http://www.cdc.gov/vhf/ebola/outbreaks/guinea/qa-experimental-treatments.html" target="_blank">CDC Questions and Answers on Experimental Treatments and Vaccines for Ebola</a>.
+		
 
+ 		<p>
+		<em> Lamivudine </em>: A nucleoside analog reverse transcriptase inhibitor being sold across Africa as an HIV drug.  It has shown remarkable efficacy against the Ebola virus.   
+		<ul>
+		<li> A CNN release covering the issue : <a href="http://www.cnn.com/2014/09/27/health/ebola-hiv-drug/" target = "_blank" > Lamivudine usage with Ebola patients </a>
+		</li>
+		<li> An online article discussing the issue : <a href="http://allafrica.com/stories/201409292050.html" target = "_blank" > Lamivudine usage decreases Ebola's virulence </a>
+		</li>
+		<li> General Information : <a href="http:en.wikipedia.org/wiki/Lamivudine" target = "_blank" > Lamivudine </a>
+		</li>
+                </ul>
+		</p>
+
+
+		<! -- first classification of treatments, broad-spectrum small molecule anti -viral> 
                 <p>
-                <em>Broad-spectrum small molecule anti-viral</em>: Inhibition of viral RNA polymerase by nucleoside analogues
+                <em>Broad-spectrum small molecule anti-viral</em>: Inhibition of viral RNA polymerase by other nucleoside analogues
                 <ul>
+		<! -- A single reference in this classification of treatments>
                 <li>
                 Warren et al., Nature (2014): <a href="http://www.nature.com/nature/journal/v508/n7496/full/nature13027.html" target="_blank">Protection against filovirus diseases by a novel broad-spectrum nucleoside analogue BCX4430</a> PMID:24590073.
                 </li>
                 <li>
+                Andreas et al., Antiviral Chemistry (2013): <a href="http://www.researchgate.net/publication/236603294_Retinazone_inhibits_certain_blood-borne_human_viruses_including_Ebola_virus_Zaire" 
+		target="_blank">Retinazone inhibits certain blood-borne human viruses inclding Ebola virus Zaire</a> .
+                </li>
+                
+		<li>
                 Biocryst Pharmaceuticals: <a href="http://www.biocryst.com/bcx_4430" target="_blank">BCX4430 information page</a>
                 </li>
                 <li>
@@ -217,7 +243,10 @@
                 </li>
                 </ul>
                 </p>
-                <p>
+                <! ending of treatment sub section> 
+
+
+		<p>
                 <em>RNA interference</em>: Combination of siRNAs targeting Ebolavirus RNA polymerase and other proteins (e.g. VP24 and VP35)
                 </p>
                 <ul>
@@ -246,15 +275,28 @@
                 <a href="http://en.wikipedia.org/wiki/ZMapp" target="_blank">Wikipedia ZMapp page</a>
                 </li>
                 </ul>
-                Additional references related to Ebola antibody-based therapeutics are listed on the 
-                <a href="antibodyResources.html" target="_blank">UCSC Ebola Genome Portal: Antibody Resources</a> page.
-                </p>
+		<b>
+                Additional references related to Ebola antibody-based therapeutics are listed at: </b> 
+                <a href="antibodyResources.html" target="_blank">UCSC Ebola Genome Portal: Antibody Resources</a>.
+		</p>
             </div>
             </div><!--end content-->
             </div><!--end wrapper-->
             </td>
             </tr>
 
+
+<!-- Zoonotic Infections block -->
+
+                    <!-- Browser image linking to browser CGI -->
+                    <td width="40%">
+                    <div class="bar"><h4 class="title">UCSC Ebola Genome Portal: Zoonotic Infections</h4></div>
+                    <div style="margin-top:0; margin-left:10px; margin-right:10px" class="wrapper">
+                        <div class="content">
+                            <a href="zoonoticInfections.html" target="_blank"><img class="screenshot" src="../images/fruitBat.jpg"></a>
+                        </div>
+                    </div>
+                    </td>
 
 <!-- PR Links block -->
             <tr>
@@ -272,9 +314,8 @@
 		target="_blank">Fighting to Contain Sierra Leone's Ebola Epidemic</a> (2014)
 		</p>
                 <p>
-		<a href= "https://www.youtube.com/watch?v=1_WOR22-SnY" 
-		target="_blank">A popular song in Africa about Ebola</a> (graphic
-		visual content)
+		<a href= "https://www.youtube.com/watch?v=l0EBQKdQyyM" 
+		target="_blank">A Popular Song in Africa about Ebola (2014)</a> 
                 </p>
             </div>
             </div><!--end content-->
