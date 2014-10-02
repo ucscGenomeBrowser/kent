@@ -79,6 +79,15 @@ visibility hide
 urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
 mouseOverField mHCAlleleName
 
+track muPIT
+shortLabel muPIT protein map
+longLabel muPIT - Mapping Genomic Positions on Protein Structures
+group varRep
+visibility hide
+type bed 4
+url http://mupit-ebola.icm.jhu.edu/ResidueFileUpload?residues=chr1%20${
+urlLabel MuPIT protein structures
+
 track spMut override
 visibility hide
 group varRep
