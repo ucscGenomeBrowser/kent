@@ -377,7 +377,7 @@ void slSortMergeUniq(void *pA, void *b, CmpFunction *compare, void (*free)())
 // returning 0. If free is provided, items dropped from list can disposed of.
 {
 struct slList **pList = (struct slList **)pA;
-slCat(*pList, b);
+*pList = slCat(*pList, b);
 slUniqify(pList,compare,free);
 }
 
