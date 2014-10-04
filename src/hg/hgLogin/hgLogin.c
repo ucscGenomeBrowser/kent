@@ -617,7 +617,6 @@ cartSaveSession(cart);
 void sendNewPassword(struct sqlConnection *conn, char *username, char *password)
 /* email user new password  */
 {
-struct sqlResult *sr;
 char query[256];
 /* find email address associated with this username */
 sqlSafef(query,sizeof(query),"SELECT email FROM gbMembers WHERE userName='%s'", username);
@@ -630,7 +629,6 @@ if (!email || sameString(email,""))
     return;
     }
 sendNewPwdMail(username, email, password);
-sqlFreeResult(&sr);
 }
 
 void lostPassword(struct sqlConnection *conn, char *username)
