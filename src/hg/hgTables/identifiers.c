@@ -119,7 +119,9 @@ else
     hPrintf(".\n");
 hPrintf("(The \"describe table schema\" button shows more information about "
 	"the table fields.)\n");
-if (!isCustomTrack(curTable))
+
+// on a browserbox, db is on the UCSC server, so cannot select into db, even if temporary
+if (!isCustomTrack(curTable) && !hIsBrowserbox())
     {
     struct slName *exampleList = NULL, *ex;
     hPrintf("Some example values:<BR>\n");
@@ -131,6 +133,7 @@ if (!isCustomTrack(curTable))
 	hPrintf("<TT>%s</TT><BR>\n", tmp);
 	freeMem(tmp);
 	}
+
     if (aliasField != NULL)
 	{
 	char tmpTable[512];
@@ -155,6 +158,7 @@ if (!isCustomTrack(curTable))
 		  "where %s != %s limit 100000",
 		  tmpTable, aliasField, xrefTable, aliasField, xrefIdField);
 	sqlUpdate(conn, query);
+
 	exampleList = getExamples(db, conn, tmpTable, aliasField, 3);
 	for (ex = exampleList;  ex != NULL;  ex = ex->next)
 	    hPrintf("<TT>%s</TT><BR>\n", ex->name);
