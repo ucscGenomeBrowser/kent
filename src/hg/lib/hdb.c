@@ -962,7 +962,7 @@ return ci->size;
 void hNibForChrom(char *db, char *chromName, char retNibName[HDB_MAX_PATH_STRING])
 /* Get .nib file associated with chromosome. */
 {
-if (cfgOptionBooleanDefault("forceTwoBit", FALSE) == TRUE)
+if (cfgOptionBooleanDefault("forceTwoBit", FALSE) == TRUE && !trackHubDatabase(db))
     {
     char buf[HDB_MAX_PATH_STRING];
     safef(buf, HDB_MAX_PATH_STRING, "/gbdb/%s/%s.2bit", db, db);
