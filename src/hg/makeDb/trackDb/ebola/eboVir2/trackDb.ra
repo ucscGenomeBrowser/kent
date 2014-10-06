@@ -168,3 +168,4 @@ include trackDb.49way.ra
 include trackDb.49wayStrainNames.ra
 include trackDb.102way.ra
 include trackDb.netMhcPan.ra
+include trackDb.netMhcPanII.ra
