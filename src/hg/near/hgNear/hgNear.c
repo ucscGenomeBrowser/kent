@@ -1888,6 +1888,13 @@ void doMiddle(struct cart *theCart)
  * This routine sets up some globals and then
  * dispatches to the appropriate page-maker. */
 {
+if (hIsBrowserbox())
+    {
+    printf("The Gene Sorter is not supported on the Genome Browser in a Box Virtual Machine.<p>");
+    printf("To use this tool, please go to the <a href=\"http://127.0.0.1:1236/cgi-bin/hgNear\">UCSC website</a><p>");
+    return;
+    }
+
 char *var = NULL;
 struct sqlConnection *conn;
 struct column *colList, *col;
