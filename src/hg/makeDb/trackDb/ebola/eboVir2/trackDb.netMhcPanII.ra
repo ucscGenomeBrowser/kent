@@ -9,6 +9,13 @@ spectrum on
 scoreMax 500
 scoreMin 0
 
+track HLADRB30101
+shortLabel HLA-DRB3*01*01
+longLabel HLA-DRB3*01*01
+type bigBed 12
+parent netMhcPanII on
+visibility hide
+
 track HLADRB30202
 shortLabel HLA-DRB3*02:02
 longLabel HLA-DRB3*02:02
@@ -17,18 +24,25 @@ parent netMhcPanII on
 visibility dense
 
 track HLADRB30301
-shortLabel HLA-DRB3*03:01
-longLabel HLA-DRB3*03:01
+shortLabel HLA-DRB3*03*01
+longLabel HLA-DRB3*03*01
 type bigBed 12
 parent netMhcPanII on
 visibility dense
 
-track HLADRB50101
-shortLabel HLA-DRB5*01:01
-longLabel HLA-DRB5*01:01
+track HLADRB40101
+shortLabel HLA-DRB4*01*01
+longLabel HLA-DRB4*01*01
 type bigBed 12
 parent netMhcPanII on
-visibility dense
+visibility hide
+
+track HLADRB50101
+shortLabel HLA-DRB5*01*01
+longLabel HLA-DRB5*01*01
+type bigBed 12
+parent netMhcPanII on
+visibility hide
 
 track HLADPA10101
 shortLabel HLA-DPA1*01:01
