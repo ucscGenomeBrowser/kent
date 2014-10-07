@@ -32,6 +32,10 @@ rm -f part1Src.zip part2Src.zip part3Src.zip part4Src.zip part5Src.zip
 export partNumber=1
 export ofN="of 5"
 
+# this util changed from being in a directory to being a script
+# the extract can't overwrite the directory with a file
+rm -fr kent/src/utils/uniprotLift
+
 echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 git archive --format=zip -9 --remote=git://genome-source.cse.ucsc.edu/kent.git \
 --prefix=kent/ ${branch} \
@@ -188,8 +192,6 @@ src/hg/qaToQac \
 src/hg/qacAgpLift \
 src/hg/qacToQa \
 src/hg/qacToWig \
-src/hg/ratStuff/mafsInRegion \
-src/hg/ratStuff/mafSpeciesSubset \
 src/hg/recycleDb \
 src/hg/relPairs \
 src/hg/reviewSanity \

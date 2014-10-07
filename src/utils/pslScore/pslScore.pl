@@ -121,7 +121,6 @@ while (my $file = shift) {
         $sizeMul * $misMatches - $qNumInsert - $tNumInsert;
     my $milliBad = int(pslCalcMilliBad($sizeMul, $qEnd, $qStart, $tEnd, $tStart, $qNumInsert, $tNumInsert, $matches, $repMatches, $misMatches, 1));
     my $percentIdentity = 100.0 - $milliBad * 0.1;
-    printf STDERR "# %s\t%s\t%d\t%.2f\t%d\n", $tName, $qName, $pslScore, $percentIdentity, $milliBad;
     printf "%s\t%d\t%d\t%s:%d-%d\t%d\t%.2f\n", $tName, $tStart, $tEnd, $qName, $qStart, $qEnd, $pslScore, $percentIdentity;
 
   }

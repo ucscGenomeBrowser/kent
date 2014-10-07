@@ -203,6 +203,9 @@ noWarnAbort();
 void errAbort(char *format, ...)
 /* Abort function, with optional (printf formatted) error message. */
 {
+#ifdef COREDUMP
+    abort();
+#endif
 va_list args;
 va_start(args, format);
 vaErrAbort(format, args);

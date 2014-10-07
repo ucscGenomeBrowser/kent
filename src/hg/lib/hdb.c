@@ -962,7 +962,7 @@ return ci->size;
 void hNibForChrom(char *db, char *chromName, char retNibName[HDB_MAX_PATH_STRING])
 /* Get .nib file associated with chromosome. */
 {
-if (cfgOptionBooleanDefault("forceTwoBit", FALSE) == TRUE)
+if (cfgOptionBooleanDefault("forceTwoBit", FALSE) == TRUE && !trackHubDatabase(db))
     {
     char buf[HDB_MAX_PATH_STRING];
     safef(buf, HDB_MAX_PATH_STRING, "/gbdb/%s/%s.2bit", db, db);
@@ -3343,9 +3343,7 @@ return hHostHasPrefix("hgwbeta");
 boolean hIsBrowserbox()
 /* Return TRUE if this is the browserbox virtual machine */
 {
-char name[256];
-gethostname(name, sizeof(name));
-return (startsWith("browserbox", name));
+return (cfgOptionBooleanDefault("isGbib", FALSE));
 }
 
 boolean hIsPreviewHost()

@@ -782,7 +782,7 @@ else
 if (conn->failoverConn != NULL)
     {
     struct slName *failoverList = sqlListTablesForConn(conn->failoverConn, likeExpr);
-    slSortMergeUniq(list, failoverList, slNameCmp, slNameFree);
+    slSortMergeUniq(&list, failoverList, slNameCmp, slNameFree);
     }
 
 return list;

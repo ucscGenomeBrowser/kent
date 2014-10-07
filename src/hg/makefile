@@ -85,6 +85,7 @@ UTILS_APPLIST = \
 	mrnaToGene \
 	ratStuff/mafsInRegion \
 	ratStuff/mafSpeciesSubset \
+	ratStuff/mafToSnpBed \
 	pslCDnaFilter \
 	genePredCheck \
 	genePredToGtf \
