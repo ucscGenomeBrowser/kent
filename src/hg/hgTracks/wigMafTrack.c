@@ -316,6 +316,10 @@ struct mafPriv *mp = getMafPriv(track);
 if (winBaseCount > MAF_SUMMARY_VIEW)
     return;
 
+int begin = winStart - 2;
+if (begin < 0)
+    begin = 0;
+
 /* we open two connections to the database
  * that has the maf track in it.  One is
  * for the scoredRefs, the other to access
@@ -332,7 +336,7 @@ if (mp->ct)
     conn = hAllocConn(CUSTOM_TRASH);
     conn2 = hAllocConn(CUSTOM_TRASH);
     mp->list = wigMafLoadInRegion(conn, conn2, mp->ct->dbTableName,
-				chromName, winStart - 2 , winEnd + 2, fileName);
+				chromName, begin, winEnd + 2, fileName);
     hFreeConn(&conn);
     hFreeConn(&conn2);
     }
@@ -342,7 +346,7 @@ else
     conn = hAllocConn(database);
     conn2 = hAllocConn(database);
     mp->list = wigMafLoadInRegion(conn, conn2, track->table,
-				chromName, winStart - 2 , winEnd + 2, fileName);
+				chromName, begin, winEnd + 2, fileName);
     hFreeConn(&conn);
     hFreeConn(&conn2);
     }
