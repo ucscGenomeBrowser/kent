@@ -109,18 +109,6 @@ if ((fd = fopen(buFile.forCgi, "w")) != NULL)
     }
 }
 
-void removeChar(char* str, char c) {
-    /* removes all occurences of a character in a string, in place (libify?) */
-    char *pFrom = str;
-    char *pTo = str;
-    while (*pFrom!='\0') {
-        *pTo = *pFrom;
-        pFrom++;
-        if (*pTo != c)
-            pTo++;
-    }
-    *pTo = '\0';
-}
 struct fileDb *fileDbGet(char *db, char *dir, char *subDir, char *fileName)
 // Returns NULL or if found a fileDb struct with name, size and date filled in.
 {
@@ -177,7 +165,7 @@ if (foundFiles == NULL
                     // rsync 3.1 adds commas:
                     //-rw-rw-r-- 26,420,982 2009/09/29 14:53:30 wgEncodeBroadChipSeq/wgEncode...
                     AllocVar(oneFile);
-                    removeChar(words[1], ',');
+                    stripChar(words[1], ',');
                     oneFile->fileSize = sqlUnsignedLong(words[1]);
                     oneFile->fileDate = cloneString(words[2]);
                     strSwapChar(oneFile->fileDate,'/','-');// Standardize YYYY-MM-DD, no time

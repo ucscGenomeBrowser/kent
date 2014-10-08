@@ -1391,7 +1391,7 @@ identifier wgEncodeGencodePseudoGeneAttrsV20
 identifier wgEncodeGencodeExonSupportV20
 "Link together Gencode Exon Support table with Attributes table"
     hg38.wgEncodeGencodeExonSupportV20.transcriptId dupeOk
-    hg38.wgEncodeGencodeAttrsV20.transcriptId minCheck=0.018
+    hg38.wgEncodeGencodeAttrsV20.transcriptId minCheck=0.98
 
 identifier wgEncodeGencodeGeneSourceV20
 "Link together Gencode Gene Source table with Attributes table"
