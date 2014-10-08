@@ -3343,9 +3343,7 @@ return hHostHasPrefix("hgwbeta");
 boolean hIsBrowserbox()
 /* Return TRUE if this is the browserbox virtual machine */
 {
-char name[256];
-gethostname(name, sizeof(name));
-return (startsWith("browserbox", name));
+return (cfgOptionBooleanDefault("isGbib", FALSE));
 }
 
 boolean hIsPreviewHost()

@@ -86,7 +86,8 @@ FORCETABLES = ['cytoBand', 'chromInfo', 'cytoBandIdeo', 'kgColor', \
     ]
 
 # always copy these hgFixed tables
-FORCEFIXED = ['trackVersion', 'tableList']
+FORCEFIXED = ['trackVersion']
+#FORCEFIXED = ['trackVersion', 'tableList']
 
 # big file table base URL
 # points to a http directory with <db>/bigFiles.tab files that tell us which bigfile goes to which track
