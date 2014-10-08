@@ -105,7 +105,7 @@ mouseOverField mHC_Allele_Name
 
 track iedbPred
 shortLabel IEDB T-Cell Pred.
-longLabel Immune Epitope Database and Analysis Resource (IEDB) peptides predicted to be displayed by MHCII to T-Cells
+longLabel Immune Epitope Database and Analysis Resource (IEDB) GP peptides predicted to be displayed by MHCII to T-Cells
 group immu
 type bigBed 12 .
 visibility hide
