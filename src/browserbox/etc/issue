@@ -4,13 +4,15 @@
 
 
 
-+------------------------------------------------+
-|                                                |
-| Browse the genome by entering this address     |
-| in your Firefox/Safari/Chrome/IE               |
-|   ==>   http://127.0.0.1:1234   <==            |
-|                                                |
-+------------------------------------------------+
++----------------------------------------------------+
+|                                                    |
+| Browse the genome by entering this address         |
+| in your Firefox/Safari/Chrome/IE                   |
+|   ==>   http://127.0.0.1:1234   <==                |
+|                                                    |
+| Find the Genome Browser in a Box User Guide here   |
+| http://genome.ucsc.edu/goldenPath/help/gbib        |
++----------------------------------------------------+
 
 
 This is a Linux command line, the sudo password is "browser"
