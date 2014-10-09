@@ -84,6 +84,14 @@ CREATE TABLE [dbo].[ChromosomeAccessions] (
 ) ON [PRIMARY]
 go
 
+CREATE TABLE [dbo].[GeneLocations] (
+	[gene_id] [int] NOT NULL ,
+	[build_uid] [int] NOT NULL ,
+	[chromosome_accession_uid] [int] NOT NULL ,
+	[location_uid] [int] NOT NULL
+) ON [PRIMARY]
+go
+
 CREATE TABLE [dbo].[GroupVersions] (
 	[group_version_uid] [int] IDENTITY (1, 1) NOT FOR REPLICATION  NOT NULL ,
 	[group_uid] [int] NOT NULL ,

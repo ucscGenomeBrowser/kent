@@ -65,6 +65,15 @@ ALTER TABLE [dbo].[ChromosomeAccessions] ADD
 	) WITH  FILLFACTOR = 90  ON [PRIMARY] 
 go
 
+ALTER TABLE [dbo].[GeneLocations] ADD
+	CONSTRAINT [PK_GeneLocations] PRIMARY KEY  CLUSTERED
+	(
+		[gene_id],
+		[build_uid],
+		[chromosome_accession_uid]
+	) WITH  FILLFACTOR = 90  ON [PRIMARY]
+go
+
 ALTER TABLE [dbo].[GroupVersions] ADD 
 	CONSTRAINT [PK_GroupVersions] PRIMARY KEY  CLUSTERED 
 	(
@@ -320,6 +329,27 @@ ALTER TABLE [dbo].[ChromosomeAccessions] ADD
 	) REFERENCES [dbo].[Organizations] (
 		[organization_uid]
 	)
+go
+
+ALTER TABLE [dbo].[GeneLocations] ADD
+	CONSTRAINT [FK_GeneLocations_Builds] FOREIGN KEY
+	(
+		[build_uid]
+	) REFERENCES [dbo].[Builds] (
+		[build_uid]
+	),
+	CONSTRAINT [FK_GeneLocations_ChromosomeAccessions] FOREIGN KEY
+	(
+		[chromosome_accession_uid]
+	) REFERENCES [dbo].[ChromosomeAccessions] (
+		[chromosome_accession_uid]
+	),
+	CONSTRAINT [FK_GeneLocations_Locations] FOREIGN KEY
+	(
+		[location_uid]
+	) REFERENCES [dbo].[Locations] (
+		[location_uid]
+	)        
 go
 
 ALTER TABLE [dbo].[GroupVersions] ADD 

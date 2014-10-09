@@ -93,6 +93,15 @@ CREATE TABLE ChromosomeAccessions (
 ) 
 ;
 
+DROP TABLE IF EXISTS GeneLocations;
+CREATE TABLE GeneLocations (
+	gene_id int NOT NULL ,
+	build_uid int NOT NULL ,
+	chromosome_accession_uid int NOT NULL ,
+	location_uid int NOT NULL
+) 
+;
+
 DROP TABLE IF EXISTS GroupVersions;
 CREATE TABLE GroupVersions (
 	group_version_uid int PRIMARY KEY  NOT NULL ,
