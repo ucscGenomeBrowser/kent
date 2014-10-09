@@ -219,12 +219,12 @@ default tracks should load in less than three seconds for a typical genomic posi
 ensure that the GBiB does not connect to the internet anymore (i.e. due to a corporate IT
 policy). Once you have mirrored all tracks that you might ever need, click on the "black"
 screen with the terminal and type the following command:
-<pre>boxOffline</pre>
+<pre>gbibOffline</pre>
 This command will remove the network access to the UCSC MySQL server and download servers. If
 any datafile is not located on your local disk, the Genome Browser will then show an error
 message, so we do not recommend it for general use. To reactivate internet access, click on
 the "black" screen with the terminal and typing the following command:
-<pre>boxOnline</pre>
+<pre>gbibOnline</pre>
 </P>
 
 </div><!-- .sectionContent -->
@@ -256,14 +256,14 @@ unusable during that time.
 <P>
 You can turn off this auto-update process using the GBiB command line. Once you have started
 the GBiB, click on the "black" screen with the terminal and type the following command:
-<pre>autoUpdateOff</pre>
+<pre>gbibAutoUpdateOff</pre>
 While you can turn this auto-update process off, it is not recommended unless you are using the
 GBiB on a slow internet connection. Without this update process
 turned on, the GBiB software and tracks that you have mirrored will not be updated. This means that
 you will miss out any features and bug fixes, as well as updates to your mirrored tracks. If you
 would like to turn the auto-update process back on, you can type the following command in the
 GBiB terminal:
-<pre>autoUpdateOn</pre>
+<pre>gbibAutoUpdateOn</pre>
 </P>
 
 <P>
@@ -384,7 +384,7 @@ By default, the GBiB includes a few of the basic UCSC tools, such as bedToBigBed
 samtools and tabix. These tools can be used to convert and manipulate your basic files into ones
 that can be uploaded to GBiB as custom tracks. If you need other Genome Browser tools, type the
 following command into the GBiB terminal window:
-<pre>downloadTools</pre>
+<pre>gbibAddTools</pre>
 This command downloads and installs the full suite of command line tools provided by UCSC. Many of
 these extra tools can be used to extract data and other useful information from your files, or to
 convert them between various file types. A complete listing and description for all of these tools
@@ -399,7 +399,7 @@ Local Big Data Tracks</a> section, except deselect the checkbox next to "Read-on
 
 <P><B><I>Example 2:</I></B></P>
 <P>
-To index a BAM file in a shared folder "Documents" on your hard disk, type:
+To load a BAM file in the browser, it needs to be indexed. To index a BAM file in a shared folder "Documents" on your hard disk, type:
 <pre>
 cd /folders/Documents
 samtools index my.sorted.bam
@@ -408,7 +408,7 @@ samtools index my.sorted.bam
 
 <P><B><I>Example 3:</I></B></P>
 <P>
-To convert a .bed file in a shared folder "Documents" on your hard disk to a .bigBed format file, type:
+BED files need to be converted to bigBed to be loaded in the browser. To convert a .bed file in a shared folder "Documents" on your hard disk to a .bigBed format file, type:
 <pre>
 cd /folders/Documents
 fetchChromSizes hg19 &gt; hg19.sizes
@@ -437,6 +437,9 @@ Your colleagues can then access and use your GBiB instance by typing your IP add
 internet browser, followed by the :1234 port. Please keep in mind that once you have opened up your
 GBiB for remote access, anyone who knows your IP address will be able to access your GBiB and
 files that you have shared with it.
+</P>
+<P>
+If you do not want your colleagues to configure track mirroring in your shared GBiB, you can use the commands "gbibMirroOff" and "gbibMirroOn" to disable or enable the "Mirror Tracks" function in the menu.
 </P>
 </div><!-- .sectionContent -->
 </div><!-- .section -->
