@@ -6271,7 +6271,6 @@ SEQ2_IN_CONTIGS=0
 BASE=/hive/data/genomes/hg38/bed/lastzPonAbe2.2014-09-02
 TMPDIR=/dev/shm
 '_EOF_'
-    # << emacs
 
     time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
         -chainMinScore=5000 -chainLinearGap=medium \
@@ -6305,5 +6304,43 @@ TMPDIR=/dev/shm
 #############################################################################
 # Building WU DNAse I ENCODE2 track (In progress 2014-09-03 Jim Kent)
 See instructions in encode3/hg38_encode2_dnase1.txt
- 
+
+
+#############################################################################
+# Add chrX alts to par (DONE 2014-10-09 angie)
+# Thanks to Hiram for pointing out that intersecting chrX positions in
+# altLocations and par shows whether a chrX alt overlaps a PAR.
+    cd /hive/data/genomes/hg38/bed/par
+    hgsql hg38 -e 'select * from altLocations where chrom = "chrX"'
+#+-----+-------+------------+----------+---------------------+
+#| bin | chrom | chromStart | chromEnd | name                |
+#+-----+-------+------------+----------+---------------------+
+#|  73 | chrX  |     319337 |   601516 | chrX_KI270880v1_alt |
+#|  73 | chrX  |     326487 |   601516 | chrX_KI270913v1_alt |
+#| 149 | chrX  |   79965153 | 80097082 | chrX_KI270881v1_alt |
+#+-----+-------+------------+----------+---------------------+
+    hgsql hg38 -e 'select * from par where chrom = "chrX"'
+#+-----+-------+------------+-----------+------+
+#| bin | chrom | chromStart | chromEnd  | name |
+#+-----+-------+------------+-----------+------+
+#|   9 | chrX  |      10000 |   2781479 | PAR1 |
+#| 221 | chrX  |  155701382 | 156030895 | PAR2 |
+#+-----+-------+------------+-----------+------+
+    # chrX_KI270880v1_alt and chrX_KI270881v1_alt are entirely contained in PAR1;
+    # chrX_KI270913v1_alt is not in either PAR.
+    hgsql hg38 -e 'select chrom,size from chromInfo where chrom like "chrX\_KI27088%";'
+#+---------------------+--------+
+#| chrom               | size   |
+#+---------------------+--------+
+#| chrX_KI270880v1_alt | 284869 |
+#| chrX_KI270881v1_alt | 144206 |
+#+---------------------+--------+
+    cat >> hg38Par.bed4 <<EOF
+chrX_KI270880v1_alt 0 284869 PAR1
+chrX_KI270881v1_alt 0 144206 PAR1
+EOF
+    hgLoadBed hg38 par hg38Par.bed4
+    checkTableCoords hg38 par
+
+
 #############################################################################
