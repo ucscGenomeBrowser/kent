@@ -1,7 +1,7 @@
 track strainCons160way
 compositeTrack on
 shortLabel 160 Strains
-longLabel Multiz Alignment & Conservation (160 Virus Strains, Accession Names)
+longLabel Multiz Alignment & Conservation (160 Virus Strains, Strain Names)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility pack

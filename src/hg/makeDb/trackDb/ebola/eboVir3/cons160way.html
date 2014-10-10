@@ -1,7 +1,7 @@
 <H2>Description</H2>
 <P>
 This track shows multiple alignments of 160 virus sequences,
-composed of 158 sequences to the $organism reference strain
+composed of 158 sequences to the $Organism reference sequence
 G3683/KM034562.1 and two Marburg virus sequences.
 The multiple alignments were generated using multiz and
 other tools in the UCSC/<A HREF="http://www.bx.psu.edu/miller_lab/"
@@ -9,20 +9,37 @@ TARGET=_blank>Penn State Bioinformatics</A>
 comparative genomics alignment pipeline.
 </P>
 
+<p>
+The data contained in the <a href="../cgi-bin/hgTrackUi?g=cons160way">160 Accessions</a> and the
+<a href="../cgi-bin/hgTrackUi?g=strainCons160way">160 Strains</a> tracks are the same. The only
+difference between these two tracks are the identifiers used to label the sequences. In the 160
+Accessions track, the sequence is labeled using its NCBI <a href="http://www.ncbi.nlm.nih.gov/nuccore"
+target="_blank">Nucleotide</a> accession number. In the 160 Strains track, we used a shortened
+version of the strain name from the NCBI Nucleotide entry to label each sequence, and when this
+was unavailable, we constructed our own using the <tt>DEFINITION</tt>, <tt>/country</tt>, and
+<tt>/collection_date</tt> lines from the NCBI record.
+</p>
+
+
 <H2>Display Conventions and Configuration</H2>
 <P>
-Pairwise alignments of each species to the $organism genome are
-displayed as a series of colored blocks indicating the functional effect of polymorphisms (in pack mode) ,or as a wiggle (in full mode) that indicates alignment quality.
+Pairwise alignments of each species to the $Organism genome are
+displayed as a series of colored blocks indicating the functional effect of polymorphisms (in pack
+mode) ,or as a wiggle (in full mode) that indicates alignment quality.
 In dense display mode, percent identity of the whole alignments is shown in grayscale using
 darker values to indicate higher levels of identity.
 <P>
-In pack mode, regions that align with 100% identity are not shown.   When there is not 100% percent identity, blocks of four colors are drawn.
-<UL>
-<LI>Red blocks are drawn when a polymorphism in a coding region results in a change in the amino acid that is generated.
-<LI>Green blocks are drawn when a polymorphism in a coding region results in no change to the amino acid that is generated.
-<LI>Blue blocks are drawn when a polymorphism is outside a coding region.
-<LI>Pale yellow blocks are drawn when there is no aligning bases to that region in the reference genome.
-</UL>
+In pack mode, regions that align with 100% identity are not shown.   When there is not 100% percent
+identity, blocks of four colors are drawn.
+<ul>
+<li>Red blocks are drawn when a polymorphism in a coding region results in a change in the amino
+acid that is generated.</li>
+<li>Green blocks are drawn when a polymorphism in a coding region results in no change to the amino
+acid that is generated.</li>
+<li>Blue blocks are drawn when a polymorphism is outside a coding region.</li>
+<li>Pale yellow blocks are drawn when there is no aligning bases to that region in the reference
+genome.</li>
+</ul>
 <P>
 Checkboxes on the track configuration page allow selection of the
 species to include in the pairwise display.
@@ -39,14 +56,15 @@ the alignment.</P>
 When zoomed-in to the base-level display, the track shows the base
 composition of each alignment.
 The numbers and symbols on the Gaps
-line indicate the lengths of gaps in the $organism sequence at those
-alignment positions relative to the longest non-$organism sequence.
+line indicate the lengths of gaps in the $Organism sequence at those
+alignment positions relative to the longest non-$Organism sequence.
 If there is sufficient space in the display, the size of the gap is shown.
 If the space is insufficient and the gap size is a multiple of 3, a
 &quot;*&quot; is displayed; other gap sizes are indicated by &quot;+&quot;.</P>
 <P>
 Codon translation is available in base-level display mode if the
-displayed region is identified as a coding segment. To display this annotation, select the species for translation from the pull-down menu in the Codon
+displayed region is identified as a coding segment. To display this annotation, select the species
+for translation from the pull-down menu in the Codon
 Translation configuration section at the top of the page. Then, select one of
 the following modes:
 <UL>
@@ -67,8 +85,7 @@ Codon translation is done on those species that are annotated as being protein
 coding over the aligned region using species-specific annotation; the remaining
 species are translated using the default species annotation.
 </UL></P>
-<P>
-</BLOCKQUOTE></P>
+
 <H2>Methods</H2>
 <P>
 Pairwise alignments with the reference sequence were generated for
@@ -179,11 +196,6 @@ visualization of codons in the multiple alignment display.</P>
 Webb Miller of the <A HREF="http://www.bx.psu.edu/miller_lab/"
 TARGET=_blank>Penn State Bioinformatics Group</A>
 <LI> Chaining and Netting:  axtChain, chainNet by Jim Kent at UCSC
-<LI> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view and
-other programs in PHAST by
-<A HREF="http://compgen.bscb.cornell.edu/~acs/software.html"
-TARGET=_blank>Adam Siepel</A> at Cornell University (original development
-done at the Haussler lab at UCSC).
 <LI> MAF Annotation tools: mafAddIRows by Brian Raney, UCSC; mafAddQRows
 by Richard Burhans, Penn State; genePredToMafFrames by Mark Diekhans, UCSC
 <LI> Tree image generator: phyloGif by Galt Barber, UCSC
@@ -201,68 +213,48 @@ Fullah M, Dudas G <em>et al.</em>
 target="_blank">Genomic surveillance elucidates Ebola virus origin and transmission 
 during the 2014 outbreak</a>.
 <em>Science</em> 2014 Sep 12;345(6202):1369-72.
-PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/25214632" target="_blank">25214632</a>
-<br>
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/25214632" target="_blank">25214632</a>;
 <a href="http://www.sciencemag.org/content/345/6202/1369/suppl/DC1"
 target="_blank">Supplemental Materials and Methods</a>
 </p>
 
-<h3>Phylo-HMMs, phastCons, and phyloP:</h3>
-
-<p>
-Pollard KS, Hubisz MJ, Rosenbloom KR, Siepel A.
-<a href="http://genome.cshlp.org/content/20/1/110.long" target="_blank">
-Detection of nonneutral substitution rates on mammalian phylogenies</a>.
-<em>Genome Res</em>. 2010 Jan;20(1):110-21.
-</p>
-
-<p>
-Siepel A, Bejerano G, Pedersen JS, Hinrichs AS, Hou M, Rosenbloom K,
-Clawson H, Spieth J, Hillier LW, Richards S, <em>et al</em>.
-<a href="http://genome.cshlp.org/content/15/8/1034" target="_blank">
-Evolutionarily conserved elements in vertebrate, insect, worm, and yeast genomes</a>.
-<em>Genome Res</em>. 2005 Aug;15(8):1034-50.
-</p>
-
 <h3>Chain/Net:</h3>
-
 <p>
 Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
-<a href="http://www.pnas.org/content/100/20/11484.abstract" target="_blank">
-Evolution's cauldron: duplication, deletion, and rearrangement in the mouse and human genomes</a>.
+<a href="http://www.pnas.org/content/100/20/11484.abstract"
+target="_blank">Evolution's cauldron:
+duplication, deletion, and rearrangement in the mouse and human genomes</a>.
 <em>Proc Natl Acad Sci U S A</em>. 2003 Sep 30;100(20):11484-9.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/14500911" target="_blank">14500911</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC208784/" target="_blank">PMC208784</a>
 </p>
 
-<h3>Lastz:</h3>
-
-<p>
-Harris RS. <a href="http://www.bx.psu.edu/~rsharris/rsharris_phd_thesis_2007.pdf" 
-target="_blank">Improved pairwise alignment of genomic DNA</a>. Ph.D. Thesis, The
-Pennsylvania State University. 2007.
-
 <h3>Multiz:</h3>
-
 <p>
 Blanchette M, Kent WJ, Riemer C, Elnitski L, Smit AF, Roskin KM,
-Baertsch R, Rosenbloom K, Clawson H, Green ED, <em>et al</em>.
-<a href="http://genome.cshlp.org/content/14/4/708.abstract" target="_blank">
-Aligning multiple genomic sequences with the threaded blockset aligner</a>.
+Baertsch R, Rosenbloom K, Clawson H, Green ED, <em>et al.</em>
+<a href="http://genome.cshlp.org/content/14/4/708.abstract"
+target="_blank">Aligning multiple genomic sequences with the threaded blockset aligner</a>.
 <em>Genome Res</em>. 2004 Apr;14(4):708-15.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/15060014" target="_blank">15060014</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC383317/" target="_blank">PMC383317</a>
 </p>
 
 <h3>Blastz:</h3>
-
 <p>
 Chiaromonte F, Yap VB, Miller W.
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/11928468" target="_blank">
-Scoring pairwise genomic sequence alignments</a>.
+<a href="http://psb.stanford.edu/psb-online/proceedings/psb02/chiaromonte.pdf"
+target="_blank">Scoring pairwise genomic sequence alignments</a>.
 <em>Pac Symp Biocomput</em>. 2002:115-26.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/11928468" target="_blank">11928468</a>
 </p>
 
 <p>
 Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC,
 Haussler D, Miller W.
-<a href="http://genome.cshlp.org/content/13/1/103.abstract" target="_blank">
-Human-mouse alignments with BLASTZ</a>.
+<a href="http://genome.cshlp.org/content/13/1/103.abstract"
+target="_blank">Human-mouse alignments with BLASTZ</a>.
 <em>Genome Res</em>. 2003 Jan;13(1):103-7.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/12529312" target="_blank">12529312</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC430961/" target="_blank">PMC430961</a>
 </p>
