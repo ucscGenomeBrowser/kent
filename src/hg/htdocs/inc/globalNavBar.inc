@@ -68,6 +68,7 @@
 	<ul style="display: none; visibility: hidden;">
 	<li class="first odd"><a href="../goldenPath/newsarch.html">News</a></li>
 	<li class="even"><a href="../goldenPath/pubs.html">Publications</a></li>
+	<li class="even"><a href="http://genome.ucsc.edu/blog/">Blog</a></li>
 	<li class="odd"><a href="../cite.html">Cite Us</a></li>
 	<li class="even"><a href="../goldenPath/credits.html">Credits</a></li>
 	<li class="odd"><a href="../goldenPath/releaseLog.html">Release Log</a></li>
