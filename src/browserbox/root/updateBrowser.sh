@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # update script on the box
-# - updates itself from hgwdev and then run itself
+# - updates itself and then run itself
 # - updates cgis, html and gbdb via rsync 
 # - updates hg.conf via wget
 # - patches the menu
@@ -12,17 +12,19 @@
 # - not run as root
 # - if a script named updateBrowser.sh already is running
 # - any hgMirror jobs are running
+# - hgdownload is offline
 # - if a flagFile on hgDownload is not more recent than a local flag file
 
+# parameters:
+# - parameter "hgwdev": does not update itself, copies only the beta/alpha CGIs/htdocs from hgwdev
+# - parameter "noUpdate": does not update itself and does not check flagfile
 
 # rsync options:
-# t = preserve time
 # l = preserve symlinks
-# p = preserve permissions
+# t = preserve time
 # r = recurse
-# v = verbose
 # z = compress
-# P = permit partial download (for restart)
+# v = verbose
 # h = human readable
 # u = skip if file is newer on receiver
 RSYNCOPTS="-ltrzvhu"
@@ -30,6 +32,7 @@ RSYNCOPTS="-ltrzvhu"
 RSYNCSRC="rsync://hgdownload.cse.ucsc.edu"
 RSYNCCGIBIN=cgi-bin
 RSYNCHTDOCS=htdocs
+UPDATEFLAG=http://hgdownload.cse.ucsc.edu/gbib/lastUpdate
 
 # check if running as root
 if [ "$(id -u)" != "0" ] ; then
@@ -41,19 +44,13 @@ fi
 RUNNING=`ps --no-headers -CupdateBrowser.sh | wc -l`
 if [ ${RUNNING} -gt 3 ] ; then
     #echo update already running
-    exit 1
+    exit 2
 fi
 	
-# use the right update script, depending on version
-if [ "$1" == "alpha" -o "$1" == "beta" -o "$1" == "devbox" ] ; then
-    # the alpha/beta/devbox states always overwrite even if files are newer
-    # note the missing -u option
-    RSYNCOPTS="-ltrzvh"
-    UPDATEBASE=http://hgwdev.soe.ucsc.edu/gbib
-    UPDATEFLAG=http://hgwdev.soe.ucsc.edu/gbib/lastUpdate
-else
-    UPDATEBASE=http://hgdownload.cse.ucsc.edu/gbib
-    UPDATEFLAG=http://hgdownload.cse.ucsc.edu/gbib/lastUpdate
+# check if we have internet
+wget -q --tries=1 --timeout=10 --spider http://hgdownload.soe.ucsc.edu -O /dev/null
+if [ $? -ne 0 ] ; then
+    exit 3
 fi
 
 # check flag if run with no parameter (=from cron)
@@ -65,12 +62,11 @@ if [ "$#" -eq 0 ] ; then
    fi
 fi
 
-# unless already calling self, update self and call self
-if [ "$BASH_ARGV" != "noUpdate" ] ; then
+# unless already calling self, update self and call self unless doing only cgis
+if [ "$BASH_ARGV" != "noUpdate" -a "$1" != "hgwdev" ] ; then
     echo getting new update script
     # we got three VMs where updateBrowser.sh was 0 bytes, so doing download/move now
-    wget $UPDATEBASE/updateBrowser.sh -O /root/updateBrowser.sh.new -q
-    mv /root/updateBrowser.sh.new /root/updateBrowser.sh
+    wget http://hgdownload.soe.ucsc.edu/gbib/updateBrowser.sh -O /root/updateBrowser.sh.new -q && mv /root/updateBrowser.sh.new /root/updateBrowser.sh
     chmod a+x /root/updateBrowser.sh
     /root/updateBrowser.sh $1 noUpdate
     exit 0
@@ -81,54 +77,97 @@ fi
 # note that the .pid actually contains a group id, not a process id
 if [ -f /tmp/lastJob.pid ] && [ "$(ps x -o pgid | grep $(cat /tmp/lastJob.pid) | wc -l)" != "0" ] ; then
     echo a hgMirror job is running right now, not updating
-    exit 1
+    exit 4
 fi
 	
 echo
-echo Now updating the genome browser software and data:
+echo Updating the genome browser software via rsync:
 
-# alpha states cannot use rsync on hgwdev, need to use tarball
-if [ "$1" == "alpha" -o "$1" == "beta" -o "$1" == "devbox" ] ; then
-    echo updating from prepared $1-package on genome-test
-    pushd . > /dev/null
-    cd /usr/local/apache
-    wget http://genome-test.soe.ucsc.edu/browserbox/$1.tgz -O - | tar xvz
-    cd /
-    wget http://genome-test.soe.ucsc.edu/browserbox/$1-push.tgz -O - | tar xvz
-    popd
-# normal updates go via rsync
+# CGI-BIN and HTDOCS:
+# the parameter "hgwdev" copies over only the beta/alpha CGIs from hgwdev
+if [ "$1" == "hgwdev" ] ; then
+    # note the missing -u option to RSYNC: in hgwdev mode, we want to overwrite everything.
+    # On a development machine, the developer might have touched a file
+    # for testing. We want to make sure that all local files are overwritten by the 
+    # files on hgwdev
+    RSYNCOPTS="-ltrzvh"
+    user=$2
+    dirExt=$3
+
+    if [ "$user" == "" ]; then
+        echo arguments: updateBrowser hgwdev hgwdevUsername cgiDirectoryExtension 
+        echo in alpha/beta mode you need to provide a username for the hgwdev login
+        echo and a directory extension, the part after /usr/local/apache/cgi-bin-XXX
+        echo The extension '"alpha"' is translated to '"no extension"'
+        echo example '"updateBrowser hgwdev kent alpha"'
+        echo example '"updateBrowser hgwdev hiram beta"'
+        exit 5
+    fi
+
+    if [ "$dirExt" == "alpha" ] ; then
+    	cgiExt=""
+    	htmlExt="-beta" # we need the -vXXX.css files, not the -vRANDOMNUMBER.css files
+    else
+    	cgiExt="-"$dirExt
+    	htmlExt="-"$dirExt
+    fi
+
+    RSYNCAPACHE="$RSYNCOPTS --delete"
+
+     # remove a lot of clutter that accumulated in hgwdev's alpha cgi-bin dir
+    if [ "$dirExt" == "alpha" ] ; then
+      RSYNCAPACHE="$RSYNCAPACHE --exclude ENCODE/**.pdf --exclude *.gz --exclude *.bw --exclude *.bb --exclude *.bam --exclude goldenPath/**.pdf --exclude admin/** --exclude goldenPath/customTracks/** --exclude pubs/** --exclude ancestors/** --exclude training/** --exclude trash --exclude style-public/** --exclude js-public/** --exclude **/edw* --exclude images/mammalPsg/** --exclude **/encodeTestHub* --exclude favicon.ico --exclude folders --exclude ENCODE/** --exclude ENCODE/** --exclude Neandertal/** --exclude gbib/** --exclude generator/** --exclude js-*/** --exclude js/*/* --exclude .\* --exclude x86_64/* --exclude .xauth --exclude .hg.conf --exclude hgHeatmap* --exclude hg.conf --exclude 'hgt/**' --exclude admin/** --exclude images --exclude trash --exclude edw* --exclude visiGeneData/** --exclude crom_dir/ --exclude testp/ --exclude *.exe --exclude *.old --exclude *.tmp --exclude *.bak --exclude test* --exclude hg.conf* --exclude **/hgHeatmap* --exclude ~* --exclude Intronerator** --exclude hgText --exclude hgSubj --exclude gisaid* --exclude nt4.dir --exclude qaPush* --exclude docIdView --exclude ct/ --exclude *.bak --exclude hg.conf* --exclude gsid*/ --exclude *.private --exclude useCount --exclude ~* --exclude lssnp/"
+    fi
+  
+    # remove things that are on hgwdev beta directories but not necessary on the gbib
+    if [ "$dirExt" == "beta" ] ; then
+      RSYNCAPACHE="$RSYNCAPACHE --exclude favicon*.ico --exclude hg.conf* --exclude ENCODE --exclude *.gz --exclude *.bw --exclude *.bb --exclude *.bam --exclude goldenPath/**.pdf --exclude admin --exclude goldenPath/customTracks --exclude pubs --exclude ancestors --exclude training --exclude trash --exclude .htaccess --exclude htdocs --exclude Neandertal --exclude RNA-img --exclude ebola --exclude encodeDCC --exclude evoFold --exclude geneExtra --exclude js-public --exclude style-public --exclude hgNearData --exclude visiGeneData --exclude visiGene"
+    fi
+
+    rsync $RSYNCAPACHE $user@hgwdev.soe.ucsc.edu:/usr/local/apache/htdocs${htmlExt}/ /usr/local/apache/htdocs/
+    rsync $RSYNCAPACHE $user@hgwdev.soe.ucsc.edu:/usr/local/apache/cgi-bin${cgiExt}/ /usr/local/apache/cgi-bin/
+
+    PUSHLOC=$user@hgwdev.soe.ucsc.edu:/usr/local/apache/htdocs/gbib/push/
+
+# normal public updates from hgdownload are easier, not many excludes necessary
 else
     # update CGIs
     echo updating CGIs...
-    rsync --delete $RSYNCOPTS $RSYNCSRC/$RSYNCCGIBIN /usr/local/apache/cgi-bin/ --exclude=hg.conf --exclude edw* --exclude *private --exclude hgNearData/**
+    rsync --delete $RSYNCOPTS $RSYNCSRC/$RSYNCCGIBIN /usr/local/apache/cgi-bin/ --exclude=hg.conf --exclude edw* --exclude *private --exclude hgNearData --exclude visiGeneData --exclude Neandertal 
 
     echo updating HTML files...
-    rsync --delete $RSYNCOPTS $RSYNCSRC/$RSYNCHTDOCS/ /usr/local/apache/htdocs/ --include **/customTracks/*.html --exclude ENCODE/ --exclude *.bw --exclude *.gz --exclude favicon.ico --exclude folders --exclude ancestors/** --exclude admin/** --exclude goldenPath/customTracks/*/* --exclude images/mammalPsg/** --exclude style/gbib.css --exclude images/title.jpg --exclude images/homeIconSprite.png
+    rsync --delete $RSYNCOPTS $RSYNCSRC/$RSYNCHTDOCS/ /usr/local/apache/htdocs/ --include **/customTracks/*.html --exclude ENCODE/ --exclude *.bam --exclude *.bb --exclude */*.bw --exclude */*.gz --exclude favicon.ico --exclude folders --exclude ancestors --exclude admin --exclude goldenPath/customTracks --exclude images/mammalPsg --exclude style/gbib.css --exclude images/title.jpg --exclude images/homeIconSprite.png --exclude goldenPath/**.pdf --exclude training
+
+    PUSHLOC=hgdownload.cse.ucsc.edu::gbib/push/
 fi
 
 chown -R www-data.www-data /usr/local/apache/cgi-bin/*
 chown -R www-data.www-data /usr/local/apache/htdocs/
 
-echo updating GBDB files...
-rsync $RSYNCOPTS --existing rsync://hgdownload.cse.ucsc.edu/gbdb/ /data/gbdb/
-chown -R www-data.www-data /data/gbdb/
-
-echo updating MYSQL files - browser will not work during the MYSQL update
-# inspired by http://forums.mysql.com/read.php?35,45577,47063#msg-47063
-# it doesn't work if I use two mysql invocations, as 'flush tables with read lock'
-# is only valid as long as the session is open
-# so I use the SYSTEM command
-echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync $RSYNCOPTS --existing rsync://hgdownload.cse.ucsc.edu/mysql/ /data/mysql/; SYSTEM chown -R mysql.mysql /data/mysql/; UNLOCK TABLES;" | mysql
-
-echo updating hgcentral database
-echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync $RSYNCOPTS --existing rsync://hgdownload.cse.ucsc.edu/mysql/hgcentral/ /data/mysql/hgcentral/; SYSTEM chown -R mysql.mysql /data/mysql/hgcentral; UNLOCK TABLES;" | mysql
-# update blat servers
-mysql hgcentral -e 'UPDATE blatServers SET host=CONCAT(host,".cse.ucsc.edu")'
-# the box does not support HAL right now, remove the ecoli hubs
-mysql hgcentral -e 'delete from hubPublic where hubUrl like "%nknguyen%"'
+if [ "$1" != "hgwdev" ] ; then
+  echo updating GBDB files...
+  rsync $RSYNCOPTS --existing rsync://hgdownload.cse.ucsc.edu/gbdb/ /data/gbdb/
+  chown -R www-data.www-data /data/gbdb/
+fi
 
 echo pulling other files
-rsync $RSYNCOPTS hgdownload.cse.ucsc.edu::gbib/push/ /
+rsync $RSYNCOPTS $PUSHLOC /
+
+if [ "$1" != "hgwdev" ] ; then
+  echo updating MYSQL files - browser will not work during the MYSQL update
+  # inspired by http://forums.mysql.com/read.php?35,45577,47063#msg-47063
+  # it doesn't work if I use two mysql invocations, as 'flush tables with read lock'
+  # is only valid as long as the session is open
+  # so I use the SYSTEM command
+  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync $RSYNCOPTS --existing rsync://hgdownload.cse.ucsc.edu/mysql/ /data/mysql/; SYSTEM chown -R mysql.mysql /data/mysql/; UNLOCK TABLES;" | mysql
+  
+  echo updating hgcentral database, make sure to always overwrite
+  echo "FLUSH TABLES WITH READ LOCK; SYSTEM rsync -vrz --existing rsync://hgdownload.cse.ucsc.edu/mysql/hgcentral/ /data/mysql/hgcentral/; SYSTEM chown -R mysql.mysql /data/mysql/hgcentral; UNLOCK TABLES;" | mysql
+  # update blat servers
+  mysql hgcentral -e 'UPDATE blatServers SET host=CONCAT(host,".cse.ucsc.edu") WHERE host not like "%ucsc.edu"'
+  # the box does not officially support the HAL right now, remove the ecoli hubs
+  mysql hgcentral -e 'delete from hubPublic where hubUrl like "%nknguyen%"'
+fi
 
 echo patching menu 
 cp /usr/local/apache/htdocs/inc/globalNavBar.inc /tmp/navbar.inc
@@ -153,22 +192,28 @@ sed -i 's/......cgi-bin\/hgUserSuggestion/http:\/\/genome.ucsc.edu\/cgi-bin\/hgU
 # remove visigene from top menu
 sed -i '/hgVisiGene/d' /usr/local/apache/htdocs/inc/home.topbar.html
 
-# not needed, but running anyway
+# maybe not needed, but running anyway
 chown www-data.www-data /usr/local/apache/htdocs/inc/globalNavBar.inc
 
 # make sure we have the right symlink to /media
 sudo ln -sfT /media /usr/local/apache/htdocs/folders
+sudo ln -sfT /data/trash /usr/local/apache/htdocs/trash
 
 # make sure this tableList is not there, it can break the box
+# hgcentral on hgdownload has tables missing: those with users and passwords
 mysql hgcentral -e 'drop table if exists tableList'
 
 # hide the really big tracks
 mysql hg19 -e 'update trackDb set visibility=0 where tableName like "cons%way"'
 mysql hg19 -e 'update trackDb set visibility=0 where tableName like "ucscRetroAli%"'
 
-# rsync tables on hgdownload are sometimes a in crashed state
+# temporary fix for hgdownload problem, Oct 2014
+ls /data/mysql/eboVir3 > /dev/null 2> /dev/null && mysql eboVir3 -e 'drop table if exists history'
+
+# rsync tables on hgdownload are sometimes in a crashed state
 echo checking mysql tables
-sudo myisamchk --force --silent --fast --update-state /data/mysql/hg19/*.MYI /data/mysql/hgcentral/*.MYI /data/mysql/hgFixed/*.MYI 2> /dev/null
+#sudo myisamchk --force --silent --fast /data/mysql/hg19/*.MYI /data/mysql/hgcentral/*.MYI /data/mysql/hgFixed/*.MYI 2> /dev/null
+mysqlcheck --all-databases --auto-repair --quick --fast --silent
 
 #LATENCY=`ping genome.ucsc.edu -n -c1 -q | grep rtt | cut -d' ' -f4 | cut -d/ -f2 | cut -d. -f1`
 #if [ "$LATENCY" -gt "90" ]; then

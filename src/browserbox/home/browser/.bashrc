@@ -115,7 +115,6 @@ fi
 
 # CHANGES IN BROWSERBOX
 
-alias vim=vim.tiny
 export PATH=~/bin:$PATH:.
 
 # for a VM this is very useful
@@ -137,7 +136,8 @@ alias autoUpdateOn=gbibAutoUpdateOn
 # rm and zero the disk
 alias rmIt='sudo shred -n 1 -zu'
 # update the update script
-alias gbibUpdateUpdate='sudo wget http://genome-test.cse.ucsc.edu:/browserbox/updateBrowser.sh -O /root/updateBrowser.sh; chmod a+x /root/updateBrowser.sh'
+alias gbibUpdateUpdate='sudo wget http://genome-test.cse.ucsc.edu:/browserbox/updateBrowser.sh -O /root/updateBrowser.sh; sudo chmod a+x /root/updateBrowser.sh'
+alias gbibUpdateUpdateBeta='sudo wget http://hgwdev.cse.ucsc.edu:/gbib/updateBrowser.sh -O /root/updateBrowser.sh; sudo chmod a+x /root/updateBrowser.sh'
 
 # repair all tables, first while mysql is running, then with a full server stop
 alias gbibFixMysql1='sudo mysqlcheck --all-databases --auto-repair --fast'
@@ -153,8 +153,8 @@ alias gbibUcscGbdbLog='sudo find /data/trash/udcCache/http/hgdownload.cse.ucsc.e
 alias gbibUcscGbdbReset='rm -rf /data/trash/udcCache/http/hgdownload.cse.ucsc.edu/*'
 
 # remove or add the ucsc mysql server for testing
-alias gbibOffline='sudo cp /usr/local/apache/cgi-bin/hg.conf /root/hg.conf.online; sudo cp /root/hg.conf.offline /usr/local/apache/cgi-bin/hg.conf'
-alias gbibOnline='sudo cp /root/hg.conf.online /usr/local/apache/cgi-bin/hg.conf'
+alias gbibOffline='sudo cp /usr/local/apache/cgi-bin/hg.conf /root/hg.conf.online; sudo cp /root/hg.conf.offline /usr/local/apache/cgi-bin/hg.conf; gbibAutoUpdateOff; echo remote access to UCSC and auto updates switched off.'
+alias gbibOnline='sudo cp /root/hg.conf.online /usr/local/apache/cgi-bin/hg.conf; gbibAutoUpdateOn; remote access to UCSC and auto updates switched on'
 alias boxOffline=gbibOffline
 alias boxOnline=gbibOnline
 
