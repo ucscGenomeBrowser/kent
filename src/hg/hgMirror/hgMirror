@@ -39,7 +39,7 @@ import cgitb; cgitb.enable()
 
 # these are default python modules on python 2.7, no errors expected here
 import urllib, urllib2, zlib, collections, StringIO, gzip, string, sys, os, random, \
-    subprocess, re, types, socket, cPickle
+    subprocess, re, types, socket, cPickle, copy
 
 from collections import defaultdict, namedtuple
 from os.path import *
@@ -556,19 +556,11 @@ def makeTableFileList(jobId, db, trackNames, trackTables, trackChildren, tableTo
 def printTrackInfo(db, trackName, trackTables, trackLabels, localSizes, trackChildren, tableSizes, \
             trackToGbdbFiles, gbdbSizes, showSubtracks, indent, noTableTracks):
     " print info about one track as html "
-    #trackTableNames, remoteTableSize = getTableInfo(trackName, trackTables, trackChildren, tableSizes)
     trackTableNames, gbdbFnames = trackToFiles(trackName, trackTables, trackChildren, tableSizes, \
         trackToGbdbFiles, noTableTracks, gbdbSizes)
 
-    tableSizes = [tableSizes[n] for n in trackTableNames]
-    tableSize = sum(tableSizes)
-
-    gbdbSizes = [gbdbSizes[n] for n in gbdbFnames]
-    gbdbSize = sum(gbdbSizes)
-    #if trackName=="allTables":
-        #gbdbSize, gbdbFnames = 0, []
-    #else:
-        #gbdbSize, gbdbFnames = getGbdbSize(trackName, trackTableNames, trackToGbdbFiles, gbdbSizes)
+    tableSize = sum([tableSizes[n] for n in trackTableNames])
+    gbdbSize = sum([gbdbSizes[n] for n in gbdbFnames])
 
     # add note for omim/decipher/etc
     label = trackLabels[trackName]
@@ -585,18 +577,13 @@ def printTrackInfo(db, trackName, trackTables, trackLabels, localSizes, trackChi
     else:
         tableStr = "%d tables" % len(trackTableNames)
 
-    #print trackTableNames, gbdbFnames
-    # sum up size of all child tracks and gbdb filenames on local disk
-    #for t in trackTableNames:
-        #print t, localSizes.get(t, 0), tableSizes.get(t, 0), "<br>"
     localTableSize = sum([localSizes.get(track, 0) for track in trackTableNames])
     localGbdbSize = sum([localSizes.get(fname, 0) for fname in gbdbFnames])
-    #print localTableSize, localGbdbSize, "<br>"
+
     localSize = localTableSize + localGbdbSize
     debug("remoteTableSize %d, remote gbdb size %d, local table size %d, localGbdbSize %d" % \
         (tableSize, gbdbSize, localTableSize, localGbdbSize))
 
-    #print "remote, local", remoteSize, localSize, "<br>"
     status = ""
     isGrey = False
     if remoteSize!=0 and remoteSize<=localSize:
@@ -659,31 +646,6 @@ def getRevokedTracks(db):
         ofh.close()
     
     return tables
-
-def getGbdbSize(trackName, trackTableNames, trackToGbdbFiles, gbdbSizes):
-    " sum up sizes of all files for all tables "
-    # first get the list of fnames
-    gbdbFnames = set()
-    # some entries like "liftOver" have no mysql table
-    if len(trackTableNames)==0:
-        trackTableNames = [trackName]
-
-    for table in trackTableNames:
-        for gbdbFname in trackToGbdbFiles[table]:
-            if trackName=="defaultConsTables":
-                if gbdbFname.endswith(".maf") or gbdbFname.endswith(".wib"):
-                    continue
-            gbdbFnames.add(gbdbFname)
-
-    if trackName=="allGbdb":
-        gbdbFnames = gbdbSizes.keys()
-
-    # then their size
-    total = 0
-    for gbdbFname in gbdbFnames:
-            size = gbdbSizes[gbdbFname]
-            total += size
-    return total, gbdbFnames
 
 def htmlDropBox(selName, elList, selKey):
     """ 
@@ -1224,15 +1186,18 @@ def hideSomeTracks(db, conn, trackNames):
         #return
 
     # find all conservation tracks     
+    hideTracks = []
     for t in trackNames:
         if (t.startswith("multiz") or t.startswith("cons")) and t.endswith("way"):
-            FORCEHIDE.append(t)
-    hideList = ["'"+s+"'" for s in FORCEHIDE]
+            hideTracks.append(t)
+        elif t in FORCEHIDE:
+            hideTracks.append(t)
 
-    cur = conn.cursor()
+    hideList = ["'"+s+"'" for s in hideTracks]
     hideStr = ", ".join(hideList)
     hideStr = "(%s)" % hideStr
 
+    cur = conn.cursor()
     try:
         cur.execute("SELECT 1 FROM trackDb LIMIT 1;")
     except:
