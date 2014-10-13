@@ -821,11 +821,19 @@ def htmlTrackTable(db, trackLabels, trackTables, \
     else:
         print '<a href="%s?showSubtracks=1">show subtracks</a><br>' % myUrl
 
+    print "<h4>Track groups</h4>"
+    print "<ul>"
+    for groupName, groupLabel in groupList:
+        if len(groupToTopTracks[groupName])==0:
+            continue
+        print '<li><a href="#{}">{}</a></li>'.format(groupName, groupLabel)
+    print "</ul>"
+
     for groupName, groupLabel in groupList:
         # skip empty groups like custom
         if len(groupToTopTracks[groupName])==0:
             continue
-        print "<h4>%s</h4>" % groupLabel
+        print '<a name="%s"><h4>Group: %s</h4>' % ( groupName, groupLabel)
 
         for trackName in groupToTopTracks[groupName]:
             printTrackInfo(db, trackName, trackTables, trackLabels, localSizes, \
