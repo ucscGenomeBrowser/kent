@@ -24,15 +24,15 @@
 <P><B>Table of Contents:</B>
 <TD><UL><B>
                 <LI><A CLASS="toc" HREF="#What">
-                        What is the Genome Browser in a Box?</A>
+                        What is Genome Browser in a Box?</A>
                 <LI><A CLASS="toc" HREF="#GetStarted">
-                        Getting Started: Setting up the Genome Browser in a Box</A>
+                        Getting Started: Setting up Genome Browser in a Box</A>
                 <LI><A CLASS="toc" HREF="#UsingGbib">
-                        Using the Genome Browser in a Box</A>
+                        Using Genome Browser in a Box</A>
                 <LI><A CLASS="toc" HREF="#GbibMirroring">
                         Improving the Speed By Mirroring Tracks</A>
                 <LI><A CLASS="toc" HREF="#UpdatingGbib">
-                        Updating the Genome Browser in a Box</A>
+                        Updating Genome Browser in a Box</A>
                 <LI><A CLASS="toc" HREF="#YourTracks">
                         Viewing Your Data</A>
                  <LI><A CLASS="toc" HREF="#SharingGBIB">
@@ -49,102 +49,113 @@
 
 <A NAME="What"></A>
 <div class="section">
-<h1>What is the Genome Browser in a Box?</h1>
+<h1>What is Genome Browser in a Box?</h1>
 <div class="sectionContent">
 <P>
-The Genome Browser in a Box (GBiB) is a "virtual machine" of the entire UCSC Genome Browser website
-that is designed to run on most PCs (Windows, Mac OSX or Linux). The GBiB allows you to access much
-of the UCSC Genome Browser's functionality from the comfort of your own computer. The GBiB is primarily
-focused towards allowing users with protected data to use the Genome Browser's functionality. We
-expect that many of these users with protected data will be using the human genomes (hg19, and
-soon hg38). Because of this, the GBiB has been optimized for use with the hg19 assembly. Many of the
-more recent assemblies will work, but without <A HREF="#GbibMirroring">mirroring</A> additional
-data, they may be slow.
+Genome Browser in a Box (GBiB) is a &quot;virtual machine&quot; of the entire UCSC Genome Browser 
+website
+that is designed to run on most PCs (Windows, Mac OSX or Linux). GBiB allows you to access much
+of the UCSC Genome Browser's functionality from the comfort of your own computer. It is particularly
+directed at individuals who want to use the Genome Browser's functionality to view protected data. 
+With the anticipation that the majority of protected data use will focus on the human genomes 
+(primarily GRCh37/hg19, and eventually GRCh38/hg38), the current version of GBiB 
+has been optimized for use with the hg19 assembly. Many of the other recent genome assemblies will 
+work, but without <A HREF="#GbibMirroring">mirroring</A> of additional data, they may be slow.
 </P>
 
-<P><B>Differences between the GBiB and the Genome Browser?</B></P>
+<P><B>Differences between GBiB and the Genome Browser</B></P>
 <P>
-While the GBiB and the Genome Browser are similar in many ways, there are several key differences.
-One of the key differences is the ability to visualize sensitive or protected data using the GBiB.
-Previously, to view your data using the Genome Browser, you would have to either upload your data
-to the UCSC Genome Browser website, or place your file on a publicly accessible web server and
-supply the URL to UCSC. With the GBiB, however, none of your data is uploaded to UCSC. This means
+While GBiB and the Genome Browser are similar in many ways, there are several key differences.
+In particular, GBiB makes it much easier to visualize sensitive or protected data. 
+Prior to GBiB, viewing your own data using the Genome Browser required either uploading your data
+to the UCSC Genome Browser website or placing your file on a publicly accessible web server and
+supplying the URL to UCSC. With GBiB, however, none of your data is uploaded to UCSC, which means
 that you can use GBiB to view your data even in situations where it's infeasible to load your data
 onto a public web server.
 </P>
 
 <P>
-The GBiB does not include the entire UCSC genome annotation database of several terabytes, and instead
-depends upon remote connections to various UCSC servers for much of its functionality and data. It
-connects to our <A HREF="http://hgdownload.soe.ucsc.edu/downloads.html" TARGET="_BLANK">download
-server</A> for the genomic sequences, LiftOver files, and many of the other large data files. It
+The GBiB installation does not include the entire UCSC genome annotation database (several terabytes
+of data). Instead, GBiB depends upon remote connections to various UCSC servers for much of its 
+functionality and data. It connects to the UCSC 
+<A HREF="http://hgdownload.soe.ucsc.edu/downloads.html" TARGET="_BLANK">download server</A>
+to obtain genomic sequences, liftOver files, and many of the other large data files, and
 connects to UCSC's <A HREF="mysql.html">public MySQL server</A> to download data displayed by the
-various tracks. Unfortunately, there are several tracks that are unavailable on our public MySQL
-server due to agreements with the data distributors, and thus unavailable in the GBiB. The tracks
-that are not available on our public MySQL server include the DECIPHER and LOVD Variant tracks.
-Depending on your distance to UCSC, remote access to these
-UCSC databases can be slow. Therefore, the GBiB includes a simple tool that allows downloading
-("mirroring") of selected genome annotation tracks to your machine. You can find more information on
-this new tool in the <A HREF="#GbibMirroring">Improving the Speed By Mirroring Tracks</A> section.
+various tracks. Unfortunately, a few tracks are unavailable on our public MySQL
+server due to agreements with the data distributors (DECIPHER and LOVD Variants), and thus are 
+unavailable in GBiB.
+</P>
+
+<P>
+Depending on your connection distance from UCSC, remote access to the
+UCSC databases may be slow. For this situation, the GBiB includes a simple tool that allows 
+downloading (&quot;mirroring&quot;) of selected genome annotation tracks to your machine. You can 
+find more information on this tool in the 
+<A HREF="#GbibMirroring">Improving the Speed By Mirroring Tracks</A> section.
 </P>
 </div><!-- .sectionContent -->
 </div><!-- .section -->
 
 <A NAME="GetStarted"></A>
 <div class="section">
-<h1>Getting Started: Setting up the Genome Browser in a Box</h1>
+<h1>Getting Started: Setting up Genome Browser in a Box</h1>
 <div class="sectionContent">
 <P>
-The Genome Browser in a Box (GBiB) will run on most modern PCs and major operating systems.
+GBiB will run on most modern PCs and major operating systems.
 There are some basic requirements that your PC should meet to provide the best experience
-when using the GBiB:
+when using GBiB:
 <ul>
-        <li>A computer with support for virtualization, which is the case for most PCs sold after 2010.</li>
-        <li><A HREF="https://www.virtualbox.org/" TARGET="_BLANK">VirtualBox</A> software.</li>
-            <ul>
-	    <li>The software is free to use in many situations. See their
-		<A HREF="https://www.virtualbox.org/wiki/Licensing_FAQ"
-		TARGET="_BLANK">licensing terms and conditions</A> for details.</li>
-            <li>Install it by following the instructions on the website.</li>
-            <li>You must have administrator rights for your computer to install the VirtualBox software.</li>
-            <li>We have tested and confirmed that the GBiB works using versions 4.3.6 through 4.3.12.</li>
-            </ul>
-        <li>At least 20 GB of free space on your hard disk (or more if you plan to mirror many tracks).</li>
-        <li>Your network firewall must allow connections on the following ports:</li>
-		<ul>
-		<li>Port 3306 is used by MySQL. Without this, only mirrored tracks are shown.</li>
-		<li>TCP port 873 is used by rsync. Without this, you cannot download track data.</li>
-		</ul>
+    <li>The computer must support virtualization (common for most PCs sold after 2010).</li>
+
+    <li>A compatible verion of the <A HREF="https://www.virtualbox.org/" 
+    TARGET="_BLANK">VirtualBox</A> software (versions 4.3.6 through 4.3.12)
+    must be installed. This software is free to use in many situations. See the VirtualBox wiki
+    for <A HREF="https://www.virtualbox.org/wiki/Licensing_FAQ" 
+    TARGET="_BLANK">licensing terms and conditions</A> and 
+    <A HREF="https://www.virtualbox.org/wiki/Downloads" TARGET="_blank">installation</A> 
+    instructions. Note that you must have administrator rights for your computer to install 
+    the VirtualBox software.</li>
+
+    <li>The computer hard disk must have at least 20 GB of free space (more if you plan to mirror 
+    many tracks).</li>
+
+    <li>Your network firewall must allow connections on the following ports:
+	<ul>
+	    <li>port 3306, used by MySQL. Without this, only mirrored tracks are shown.</li>
+	    <li>TCP port 873, used by rsync. Without this, you cannot download track data.</li>
+	</ul>
+    </li>
 </ul></P>
 
 <P><B>Installation</B></P>
 <P>
 Once you have confirmed that your PC meets the above requirements, download the
-Genome Browser in a Box ZIP file from the
+Genome Browser in a Box .zip file from the
 <a href="//genome-store.ucsc.edu/" target="_blank">Genome Browser store</a>.
-Because this file is several gigabytes, it may take anywhere from
-30 minutes to a few hours to download depending on your
-Internet speed and distance from UCSC. Once you have finished downloading the GBiB ZIP file, unzip
-and extract the three files in it. On OSX, do not use the command line tool "unzip", instead
-double-click the ZIP file in the Finder. On Windows, you will need to use a third-party tool, such
+Because this file is several gigabytes in size, it may take anywhere from
+30 minutes to a few hours to download depending on your Internet speed and connection distance 
+from UCSC. Once you have finished downloading the GBiB .zip file, unzip
+and extract the contents (three files). On OSX, do not use the command line tool &quot;unzip&quot; 
+instead
+double-click the .zip file in the Finder. On Windows, you will need to use a third-party tool, such
 as <a href="http://www.7-zip.org/" target="_blank">7zip</a> or
 <a href="http://www.rarlab.com/" target="_blank">WinRAR</a>, to
-extract the GBiB, as it is too large of a file for the Windows extraction tool.
+extract GBiB, as it is too large of a file for the Windows extraction tool.
 The extracted files can be moved to a different directory,
 as long as all three files are located in the same directory and not renamed.
 </P>
 
 <P>
-You can add the GBiB to VirtualBox by either double-clicking the file browserbox.vbox or by
-starting VirtualBox and selecting <i>Machine &gt;&gt; Add</i> (&#8984;+A on Macs or Ctrl-A on Linux/Windows)
-and opening the file browserbox.vbox.
+Add GBiB to VirtualBox in one of two ways: double-click the file <em>browserbox.vbox</em> or 
+start VirtualBox and select <em>Machine &gt;&gt; Add</em> (&#8984;+A on Mac or Ctrl-A on 
+Linux/Windows) and open the file <em>browserbox.vbox</em>.
 </P>
 
 <P><img src="../../images/gbib-add.png"></P>
 
 <P>
-Finally, if needed, select "browserbox" on the left side menu of VirtualBox and click the
-big "Start" button in the symbol bar.
+Finally, if needed, select &quot;browserbox&quot; on the left side menu of VirtualBox and click the
+big &quot;Start&quot; button in the symbol bar.
 </P>
 
 <P><img src="../../images/gbib-start.png"></P>
@@ -158,16 +169,16 @@ If there are error messages displayed by VirtualBox or the Genome Browser, pleas
 
 <A NAME="UsingGbib"></A>
 <div class="section">
-<h1>Using the Genome Browser in a Box</h1>
+<h1>Using Genome Browser in a Box</h1>
 <div class="sectionContent">
 <P>
-Make sure that you have set up your Genome Browser in a Box (GBiB) according to the instructions
-in the "<A HREF="#GetStarted">Getting Started</A>" section. Once you have your GBiB set up and powered
-on, point your Internet browser to <a href="http://127.0.0.1:1234" TARGET="_BLANK">127.0.0.1:1234</a> (we suggest
-bookmarking this address). If you have correctly set up your GBiB, you should see the normal UCSC
-homepage. Once on the UCSC homepage, you can start using the GBiB as you would the main Genome Browser
-website. You can find an introduction to using the UCSC Genome Browser on our
-<A HREF="hgTracksHelp.html">main help page</A>.
+Make sure that you have set up GBiB according to the instructions
+in the "<A HREF="#GetStarted">Getting Started</A>" section. Once GBiB is set up and powered
+on, point your Internet browser to <a href="http://127.0.0.1:1234" 
+TARGET="_BLANK">127.0.0.1:1234</a> (we suggest you bookmark this address). If you have correctly 
+set up your GBiB, you should see the UCSC home page. Once on the UCSC home page, you can start 
+using GBiB as you would the main Genome Browser website. You can find an introduction to using the 
+UCSC Genome Browser on our <A HREF="hgTracksHelp.html">main help page</A>.
 </P>
 
 <P>
@@ -183,47 +194,51 @@ browser configuration may not be saved between sessions.
 <h1>Improving Speed by Mirroring Tracks</h1>
 <div class="sectionContent">
 <P>
-As a first measure, you can try to increase the amount of RAM that Genome
-Browser in a Box is allowed to use. By default it is limited to 1GB but if your machine
-has enough RAM installed, you might want to increase it to 2GB, 4GB or even 8GB. Stop the box,
-click <i>Settings &gt;&gt; System</i> and increase the memory slider to a value of your choice. This will
-usually make the system more responsive.
+Under certain circumstances the speed and response time of GBiB may be less than optimal.  
+As a first measure for performance improvment, you can try to increase the amount of RAM that GBiB 
+is allowed to use. By default this is limited to 1 GB. If your machine
+has enough RAM installed, you might want to increase it to 2 GB, 4 GB or even 8 GB. To
+increase the RAM, stop the box, click <em>Settings &gt;&gt; System</em> and move the memory slider 
+to the value of your choice. This will usually improve the system responsiveness.
 </P>
 
 <P>
-If your Genome Browser in a Box (GBiB) is still slow, then you are probably located too far away
-from UCSC.
-The load time of the default tracks ranges from a few seconds on the West coast of the United States
-to up to 7 seconds from Europe. The GBiB includes the new
-mirror tool that allows you to download tracks to your machine, which will greatly
-increase the speed of the GBiB when accessing those tracks. To download annotation tracks to your
-own machine ("mirror"), click <i>Tools &gt;&gt; Mirror Tracks</i> in the Genome Browser menu.
-The first time you navigate to this mirror tool, the page may take a while to load. Select the tracks
-that you typically use by checking the boxes next to the track names, and clicking "Download". In
-addition to downloading entire track sets, you can also download individual subtracks. The size of
-the download for each track is listed next to the track name. When downloading large tracks, please
-keep in mind that you cannot delete these tracks and the related data from your GBiB once you have
-downloaded them. If you find that you've started downloading the wrong track, or a track that is too
-large for your machine, you can cancel the download at any point by clicking '<i>Cancel Download Now</i>'.
+If your GBiB performance is still slow, you may be located too far from UCSC.
+The load time of default tracks ranges from a few seconds on the West coast of the United States
+to as much as 7 seconds from Europe. In this situation, you may want to use the GBiB mirror tool 
+to download tracks to your machine (&quot;mirror&quot;), which will greatly increase the access 
+speed for those tracks. To use the mirror tool, click <em>Tools &gt;&gt; Mirror Tracks</em> in the 
+Genome Browser menu. The first time you open the mirror tool, the page may take a while to load. 
+Select the tracks
+that you typically use by checking the boxes next to the track names, and then click
+<em>Download</em>. In addition to downloading entire track sets, you can also download individual
+subtracks. The file size of each track is listed next to the track name. When downloading large 
+tracks, please keep in mind that you cannot delete these tracks and the related data from GBiB once 
+you have
+downloaded them. If you find that you've started downloading the wrong track or a track that is too
+large for your machine, you can cancel the download at any point by clicking <em>Cancel Download 
+Now</em>.
 </P>
 
 <P>
-If you are unsure what to select, our recommendation is "Default tracks with conservation tables,
-but no alignments". Depending on your network bandwidth, the download can take several minutes or up
-to a few hours over an ADSL line. During the download, the file gbib-data.vdi will grow.
+If you are unsure of which tracks to select, our recommendation is <em>Default tracks with 
+conservation tables, but no alignments</em>. Depending on your network bandwidth, the download can 
+take several minutes or up to a few hours over an ADSL line. During the download, the file 
+<em>gbib-data.vdi</em> will grow in size.
 You cannot use the GBiB during this time. Once the download is complete, the
 default tracks should load in less than three seconds for a typical genomic position.
 </P>
 
-<P>The GBiB also has an offline mode. This mode is particullary useful when you want to
-ensure that the GBiB does not connect to the internet anymore (i.e. due to a corporate IT
-policy). Once you have mirrored all tracks that you might ever need, click on the "black"
-screen with the terminal and type the following command:
+<P>GBiB also has an offline mode that is particularly useful when you want to
+ensure that GBiB does not connect to the internet anymore (for instance, to comply with corporate IT
+policy). Before going offline, first mirror all the tracks that you need, then click on 
+the &quot;black&quot; screen with the terminal and type the following command:
 <pre>gbibOffline</pre>
-This command will remove the network access to the UCSC MySQL server and download servers. If
-any datafile is not located on your local disk, the Genome Browser will then show an error
-message, so we do not recommend it for general use. To reactivate internet access, click on
-the "black" screen with the terminal and typing the following command:
+This command will remove the network access to the UCSC MySQL server and download servers.
+Once GBiB is in offline mode, the Genome Browser will display an error message if you attempt to
+access a data file not located on your local disk; therefore, we do not recommend this option for 
+general use. To reactivate Internet access, click on the &quot;black&quot; screen with the terminal 
+and type the following command: 
 <pre>gbibOnline</pre>
 </P>
 
@@ -232,37 +247,34 @@ the "black" screen with the terminal and typing the following command:
 
 <A NAME="UpdatingGbib"></A>
 <div class="section">
-<h1>Updating the Genome Browser in a Box</h1>
+<h1>Updating Genome Browser in a Box</h1>
 <div class="sectionContent">
 <P>
 The software that supports the UCSC Genome Browser is updated every three weeks. These updates
 include new features and bug fixes for existing features. The track data, on the other hand,
 is not updated on a regular basis. New tracks and updates to existing tracks are released as
-they pass UCSC's quality assurance process. The only exceptions to this are GenBank tracks, including
-RefSeq Genes, GenBank mRNAs, and others. These GenBank tracks are updated every night through an
+they pass UCSC's quality assurance process. The only exceptions to this are GenBank tracks, 
+including RefSeq Genes, GenBank mRNAs, and others, which are updated every night through an
 automatic process.
 </P>
 
 <P>
-The GBiB is set up to automatically update itself.
-When it updates itself, it will update all of the files in the GBiB, including software and tracks
+GBiB is set up to automatically update itself.
+During this process, it will update all of the files in GBiB, including software and tracks
 that you have mirrored. The updates will not affect your custom tracks, user accounts or sessions.
-This auto-update process ensures that you will always have the newest data and features. If you are
-using a DSL line, we recommend turning off these automatic updates. Over a slow internet connection,
-it could take hours for your GBiB to complete the update process, meaning that the GBiB would be
-unusable during that time.
+This auto-update process ensures that you always have the newest data and features. If you are
+using a DSL line, we recommend turning off automatic updates. Over a slow internet connection,
+the GBiB update may take several hours to complete, during which time the software is unusable.
+We recommend that you leave the auto-update process turned on if Internet connection speed is not 
+an issue, to ensure that you receive all the latest software features and bug fixes, as well as 
+updates to your mirrored tracks. 
 </P>
 
 <P>
-You can turn off this auto-update process using the GBiB command line. Once you have started
-the GBiB, click on the "black" screen with the terminal and type the following command:
+To turn off the auto-update process, start GBiB and then click on the &quot;black&quot; screen with 
+the terminal and type the following command:
 <pre>gbibAutoUpdateOff</pre>
-While you can turn this auto-update process off, it is not recommended unless you are using the
-GBiB on a slow internet connection. Without this update process
-turned on, the GBiB software and tracks that you have mirrored will not be updated. This means that
-you will miss out any features and bug fixes, as well as updates to your mirrored tracks. If you
-would like to turn the auto-update process back on, you can type the following command in the
-GBiB terminal:
+To reactivate the auto-update process, type the following command in the GBiB terminal:
 <pre>gbibAutoUpdateOn</pre>
 </P>
 
