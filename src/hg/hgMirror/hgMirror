@@ -1516,23 +1516,33 @@ def addTableList(db, conn):
         cur.execute(query)
         cur.close()
 
+def getAllTrackNames(conn):
+    " return list of all tracks in trackDb "
+    cur = conn.cursor()
+    names = []
+    query = "SELECT tableName from trackDb";
+    cur.execute(query)
+    for row in cur.fetchall():
+        names.append(row[0])
+    return names
+
 def postRsyncChanges(db, localSizes):
     " remove some tracks from trackDb, others from hgFindSpec and add a few row to tableList"
     if not mysqlDbLoaded:
         return
     try:
         conn = sqlConnect(db, "local")
+        tracks = getAllTrackNames(conn)
+        hideSomeTracks(db, conn, tracks)
+        removeSomeTracksFromSearch(conn)
+        addTableList(db, conn)
+        conn.close()
     except MySQLdb.OperationalError, e:
+        print "Could not run postRsyncChanges on db %s" % db
         return
-
-    hideSomeTracks(db, conn, localSizes)
-    removeSomeTracksFromSearch(conn)
-    addTableList(db, conn)
-    conn.close()
 
 def reloadPage():
     " trigger page reload with javascript "
-    #return # XX
     print ("""
     <script type="text/javascript">
     location.reload()
