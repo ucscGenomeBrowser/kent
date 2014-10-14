@@ -517,12 +517,14 @@ Your 64-bit guest will fail to detect a 64-bit CPU and will not be able to boot.
 	    sold with CPUs that do not support virtualization.  These laptops cannot run the Genome
 	    Browser in a Box. The same applies to low-cost laptops called "netbooks" with Intel Atom
 	    processors.</li>
-        <li>On some DELL OptiPlex (e.g. OptiPlex 960) laptops, virtualization is supported, but
+        <li>For some hardware, virtualization is supported, but
             deactivated in the BIOS. Reboot the computer, press F12 during boot to show the BIOS
             menu. Go to <i>BIOS Setup &gt;&gt; Virtualization Support &gt;&gt; Virtualization</i>, and check "Enable
-            Intel Virtualization Technology". (On some DELL laptops, you may need to enable additional
+            Intel Virtualization Technology". (On some DELL systems, you may need to enable additional
 	    virtualization options under the BIOS Setup. Go to <i>Virtualization Support &gt;&gt; Virtualization
-	    for Direct I/O</i>, and check "Enable Virtualization for Direct I/O".) Exit and save. Restart the computer.</li>
+	    for Direct I/O</i>, and check "Enable Virtualization for Direct I/O".) Exit and save. Restart the computer.
+	    Please note that your BIOS virtualization options may be different than those described
+	    here.</li>
         </ul>
 <li>VirtualBox Error: <i>"Failed to open virtual machine located in... Trying to open a VM config ...
 which has the same UUID as an existing virtual machine."</i></li>
