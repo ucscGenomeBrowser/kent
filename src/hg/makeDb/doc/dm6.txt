@@ -2101,7 +2101,7 @@ TMPDIR=/dev/shm
     # 33622643 bases of 691751600 (4.861%) in intersection
 
 #########################################################################
-## 7-Way Multiz (DONE - 2014-06-02 - Hiram)
+## 27-Way Multiz (DONE - 2014-09-05 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/dm6/bed/multiz27way
     cd /hive/data/genomes/dm6/bed/multiz27way
@@ -2501,3 +2501,66 @@ done >> multiz27way.maf
     rm multiz27way*.tab
 
 ##############################################################################
+# multiz27way MAF FRAMES (DONE - 2014-09-11 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/dm6/bed/multiz27way/frames
+    cd /hive/data/genomes/dm6/bed/multiz27way/frames
+#   survey all the genomes to find out what kinds of gene tracks they have
+    cat << '_EOF_' > showGenes.csh
+#!/bin/csh -fe
+foreach db (`cat ../species.list`)
+    echo -n "${db}: "
+    set tables = `hgsql $db -N -e "show tables like '%Gene%'"`
+    foreach table ($tables)
+        if ($table == "ensGene" || $table == "refGene" || \
+           $table == "mgcGenes" || $table == "knownGene" || \
+           $table == "xenoRefGene" ) then
+           set count = `hgsql $db -N -e "select count(*) from $table"`
+            echo -n "${table}: ${count}, "
+        endif
+    end
+    set orgName = `hgsql hgcentraltest -N -e \
+            "select scientificName from dbDb where name='$db'"`
+    set orgId = `hgsql hg19 -N -e \
+            "select id from organism where name='$orgName'"`
+    if ($orgId == "") then
+        echo "Mrnas: 0"
+    else
+        set count = `hgsql hg19 -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
+        echo "Mrnas: ${count}"
+    endif
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./showGenes.csh
+    time ./showGenes.csh
+
+# dm6: refGene: 36039, xenoRefGene: 49470, Mrnas: 907097
+# droSim1: xenoRefGene: 256763, Mrnas: 119083
+# droSec1: xenoRefGene: 223223, Mrnas: 38274
+# droYak3: Mrnas: 11950
+# droEre2: Mrnas: 22704
+# droBia2: Mrnas: 0
+# droSuz1: Mrnas: 1
+# droAna3: Mrnas: 23405
+# droBip2: Mrnas: 3
+# droEug2: Mrnas: 5
+# droEle2: Mrnas: 1
+# droKik2: Mrnas: 2
+# droTak2: Mrnas: 1
+# droRho2: Mrnas: 4
+# droFic2: Mrnas: 1
+# droPse3: Mrnas: 18
+# droPer1: xenoRefGene: 221008, Mrnas: 34
+# droMir2: Mrnas: 2
+# droWil2: Mrnas: 26771
+# droVir3: Mrnas: 22882
+# droMoj3: Mrnas: 19869
+# droAlb1: Mrnas: 1
+# droGri2: Mrnas: 21278
+# musDom2: Mrnas: 9396
+# anoGam1: ensGene: 15802, xenoRefGene: 107609, Mrnas: 217467
+# apiMel4: Mrnas: 199705
+# triCas2: Mrnas: 65947
+
+######################################################################
