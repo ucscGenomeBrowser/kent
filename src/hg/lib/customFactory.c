@@ -43,6 +43,7 @@
 #include "pgSnp.h"
 #include "regexHelper.h"
 #include "chromInfo.h"
+#include "trackHub.h"
 
 // placeholder when custom track uploaded file name is not known
 #define CT_NO_FILE_NAME         "custom track"
@@ -1687,8 +1688,16 @@ dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
 cmd2[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
 cmd2[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-dyStringPrintf(tmpDy, "-chromInfoDb=%s", track->genomeDb);
-cmd2[5] = dyStringCannibalize(&tmpDy);
+// hgLoadWiggle doesn't know about assembly hubs so disable size check
+if (trackHubDatabase(track->genomeDb))
+    {
+    cmd2[5] = "-noChromInfo";
+    }
+else
+    {
+    dyStringPrintf(tmpDy, "-chromInfoDb=%s", track->genomeDb);
+    cmd2[5] = dyStringCannibalize(&tmpDy);
+    }
 /* a system could be using /trash/ absolute reference, and nothing to do with
  *	local references, so don't confuse it with ./ a double // will work
  */

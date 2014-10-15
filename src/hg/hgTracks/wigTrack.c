@@ -399,7 +399,11 @@ void wigLoadItems(struct track *tg)
  *	rows will need to be loaded at any one time.
  */
 {
-struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn = NULL ;
+
+// if this is a custom track we don't need an SQL connection to the database
+if (!(isCustomTrack(tg->table) && tg->customPt))
+    conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
