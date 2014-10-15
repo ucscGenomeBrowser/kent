@@ -198,7 +198,7 @@ if (!startsWith("retroAugust",mi->geneSet))
 /* construct URL to browser */
 safef(srcGeneUrl, sizeof(srcGeneUrl),
       "../cgi-bin/hgTracks?db=%s&position=%s:%d-%d",
-       database, mi->pg->gChrom, mi->pg->gStart, mi->pg->gEnd);
+       database, mi->pg->gChrom, mi->pg->gStart + 1, mi->pg->gEnd);
 
 printf("<TABLE class=\"transMap\">\n");
 printf("<H3>Source Gene:</H3>\n");
@@ -230,7 +230,7 @@ else
             mi->tblPre, mi->geneSet);
 
 printf("<TABLE class=\"transMap\">\n");
-printf("<H3>Breaks in Orthology:</H3>\n");
+printf("<H3><A HREF=\"#orthology\">Breaks in Orthology:</A></H3>\n");
 printf("<THEAD>\n");
 printf("<TR><TH>Organism<TH>%% Coverage</TR>\n");
 printf("</THEAD><TBODY>\n");
@@ -491,8 +491,8 @@ if (pslList != NULL && *table )
             mi->gbAcc);
     }
 else
-    printf("missing alignment %s %s:%d-%d from table %s<br>\n",
-             mi->gbAcc, pg->gChrom, pg->gStart, pg->gEnd, table);
+    printf("missing alignment %s chr %s:%d-%d from table %s<br>\n",
+             mi->gbAcc, pg->gChrom, pg->gStart + 1, pg->gEnd, table);
 }
 
 /* return count of coding exons */
