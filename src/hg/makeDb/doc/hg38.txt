@@ -5224,7 +5224,7 @@ TMPDIR=/dev/shm
 # filtering these items and uploading the current set as is.
 
     # there is no chrEBV in the browser:
-    grep -v chrEBV GenomicSuperDup.tab \
+    grep -v chrEBV GenomicSuperDup.tab | sed -e 's/\t_\t/\t-\t/;' \
       | hgLoadBed hg38 genomicSuperDups stdin \
 	-sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
     #  Read 69894 elements of size 29 from stdin
