@@ -26,8 +26,8 @@ html cons160way
 #        irows on
 #        summary strainName160waySummary
 	snpTable mafSnpStrainName160way
-#        frames strainName160wayFrames
-        frames testAllStrainFrames
+        frames strainName160wayFrames
+#        frames testAllStrainFrames
         group compGeno
         color 0, 10, 100
         altColor 0,90,10
