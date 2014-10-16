@@ -9,7 +9,7 @@ set anoGam anoGam1
 set apiMel apiMel1,apiMel2
 set aplCal aplCal1
 set balAcu balAcu1
-set bosTau bosTau2,bosTau3,bosTau4,bosTau5,bosTau6,bosTau7
+set bosTau bosTau2,bosTau3,bosTau4,bosTau5,bosTau6,bosTau7,bosTau8
 set braFlo braFlo1,braFlo2
 set bruMal bruMal1
 set caeAng caeAng1
@@ -178,7 +178,7 @@ set ccdsDb hg38,hg19,hg18,hg17,mm8,mm9,mm10
 set split splitPrefix=chr%\_
 
 # Databases with the tRNAs track
-set tRNAsDbs hg18,hg19,hg38,mm9,mm10,rn4,ailMel1,caePb1,canFam2,danRer5,felCat3,gorGor3,ornAna1,panTro3,susScr2,anoCar2,caePb2,cavPor3,danRer6,felCat4,loxAfr3,oryCun2,petMar1,taeGut1,taeGut2,bosTau4,caeRem2,cb3,danRer7,fr2,fr3,melGal1,oryLat2,ponAbe2,tetNig2,bosTau6,caeRem3,ce4,equCab1,galGal3,monDom5,oviAri1,oviAri3,priPac1,xenTro3,caeJap1,calJac3,ce6,equCab2,gasAcu1,nomLeu1,panTro2,rheMac2,sarHar1
+set tRNAsDbs ailMel1,anoCar2,bosTau4,bosTau6,caeJap1,caePb1,caePb2,caeRem2,caeRem3,calJac3,canFam2,cavPor3,cb3,ce4,ce6,danRer5,danRer6,danRer7,equCab1,equCab2,felCat3,felCat4,fr2,fr3,galGal3,gasAcu1,gorGor3,hg18,hg19,hg38,loxAfr3,melGal1,mm9,mm10,monDom5,nomLeu1,ornAna1,oryCun2,oryLat2,oviAri1,oviAri3,panTro2,panTro3,petMar1,ponAbe2,priPac1,rheMac2,rn4,sarHar1,susScr2,taeGut1,taeGut2,tetNig2,xenTro3
 
 # Databases with the CGAP SAGE track
 set cgapSageDbs hg18,hg19,hg38,mm8

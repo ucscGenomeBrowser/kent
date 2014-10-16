@@ -5301,9 +5301,9 @@ TMPDIR=/dev/shm
 
 
 ##############################################################################
-# DBSNP B141 / SNP141 (DONE 10/10/14)
+# DBSNP B141 / SNP141 (DONE 10/14/14)
 # originally done 9/10/14.
-# updated 10/9/14 after Matt found that MultipleAlignments was erroneously triggered
+# updated 10/9/14 - 10/14/14 after Matt found that MultipleAlignments was erroneously triggered
 # by PAR1 X alt mappings.
 # Redmine #13309
     mkdir -p /hive/data/outside/dbSNP/141/human_hg38
@@ -5625,13 +5625,14 @@ EOF
     # 10/9/14: Matt found that MultipleAlignments was erroneously triggered
     # by PAR1 X alt mappings.  I added chrX_*_alt entries to PAR table
     # (see "Add chrX alts to par" section below); now re-run from snpNcbiToUcsc.
+    # 10/14/14: turned out I messed up the X_*_alt par entries, doh! Fixed par; run again.
     cd /hive/data/outside/dbSNP/141/human_hg38
     set tmpDir = `cat workingDir`
     mkdir $tmpDir
     pushd $tmpDir
     hgsql hg38 -NBe 'select chrom,chromStart,chromEnd,name from par' > par.bed
     ln -s /hive/data/outside/dbSNP/141/human_hg38/ucscNcbiSnp.bed.gz .
-    echo "\n10/9/14: Redo from snpNcbiToUcsc\n" >> /hive/data/outside/dbSNP/141/human_hg38/do.log
+    echo "\n10/14/14: Redo from snpNcbiToUcsc\n" >> /hive/data/outside/dbSNP/141/human_hg38/do.log
     echo "snpNcbiToUcsc -snp132Ext -par=par.bed ucscNcbiSnp.bed.gz /hive/data/genomes/hg38/hg38.2bit snp141" >> /hive/data/outside/dbSNP/141/human_hg38/do.log
     snpNcbiToUcsc -snp132Ext -par=par.bed ucscNcbiSnp.bed.gz /hive/data/genomes/hg38/hg38.2bit \
       snp141 \
@@ -5644,7 +5645,7 @@ EOF
       > snp141.bed
     # Compare results -- the only changes should be the disappearance of MultipleAlignments
     # from the part of PAR1 that the alts overlap: chrX:319338-601516, chrY:319338-601516,
-    # chrX_KI270880v1_alt and chrX_KI270881v1_alt).
+    # chrX_KI270880v1_alt and chrX_KI270913v1_alt).
     zcat /hive/data/outside/dbSNP/141/human_hg38/snp141.bed.gz > snp141.prev.bed
     diff snp141.prev.bed snp141.bed | less
     # Yep, differences are limited to those ranges and are disappearance of MultipleAlignments.
@@ -5652,6 +5653,7 @@ EOF
     gzip *.txt *.bed *.tab
     cp -p * /hive/data/outside/dbSNP/141/human_hg38/
     popd
+
     # Reload snp141 and snp141ExceptionDesc
     hgLoadBed -tab -onServer -tmpDir=$TMPDIR -allowStartEqualEnd -type=bed6+ \
       hg38 snp141 -sqlTable=snp141.sql snp141.bed.gz
@@ -5661,14 +5663,17 @@ EOF
     # Regenerate snp141{Mult,Common,Flagged}:
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=filter -stop=filter \
       >>& do.log & tail -f do.log
+
+    # Clean up by pasting the output of this if it looks right:
+    echo rm `cat workingDir`/snp*
+
     # Now unfortunately I do need to redo pretty much everything from this point on
     # because everything uses MultipleAlignments.
 
-
 ##############################################################################
-# SNP141 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 10/10/14 angie)
+# SNP141 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 10/15/14 angie)
 # originally done 9/10/14.
-# updated 10/10/14 after Matt found that MultipleAlignments was erroneously triggered
+# updated 10/15/14 after Matt found that MultipleAlignments was erroneously triggered
     # Redmine #13309
     mkdir /hive/data/genomes/hg38/bed/snp141Ortho
     cd /hive/data/genomes/hg38/bed/snp141Ortho
@@ -5678,7 +5683,7 @@ EOF
     | sort -u \
       > snp141ExcludeIds.txt
     wc -l snp141ExcludeIds.txt
-#314276 snp141ExcludeIds.txt
+#304622 snp141ExcludeIds.txt
     # Glom all human info that we need for the final table onto the
     # name, to sneak it through liftOver: rsId|chr|start|end|obs|ref|strand
     zcat /hive/data/outside/dbSNP/141/human_hg38/snp141.bed.gz \
@@ -5690,7 +5695,7 @@ EOF
                0, $6;}' \
       > snp141ForLiftOver.bed
       wc -l snp141ForLiftOver.bed
-#56433133 snp141ForLiftOver.bed
+#56466708 snp141ForLiftOver.bed
 
     # For each other species, do a cluster run to liftOver to that species' coords
     # and get the species' "allele" (reference assembly base) at that location.
@@ -5698,9 +5703,11 @@ EOF
     cat > liftOne.csh<<'EOF'
 #!/bin/csh -ef
 set chunkFile = $1
-set liftOverFile = $2
-set other2bit = $3
-set outFile = $4
+set db = $2
+set outFile = $3
+set Db = `echo $db | perl -wpe 's/(\S+)/\u$1/'`
+set liftOverFile = /hive/data/genomes/hg38/bed/liftOver/hg38To$Db.over.chain.gz
+set other2bit = /hive/data/genomes/$db/$db.2bit
 liftOver $chunkFile $liftOverFile stdout /dev/null \
 | $HOME/kent/src/hg/snp/snpLoad/getOrthoSeq.pl $other2bit \
 | sort > $outFile
@@ -5709,69 +5716,28 @@ EOF
     chmod a+x liftOne.csh
 
     # Map coords to chimp using liftOver.
-    mkdir run.liftOChimp
-    cd run.liftOChimp
+    mkdir run.liftOver
+    cd run.liftOver
     mkdir split out
     splitFile ../snp141ForLiftOver.bed 10000 split/chunk
     cp /dev/null jobList
-    foreach f (split/chunk*)
-      echo ../liftOne.csh $f /hive/data/genomes/hg38/bed/liftOver/hg38ToPanTro4.over.chain.gz \
-        /hive/data/genomes/panTro4/panTro4.2bit \
-        \{check out exists out/$f:t.bed\} \
-        >> jobList
+    foreach chunkFile (split/chunk*)
+      set chunk = $chunkFile:t:r
+      foreach db (panTro4 ponAbe2 rheMac3)
+        echo ../liftOne.csh $chunkFile $db \{check out exists out/$db.$chunk.bed\} \
+          >> jobList
+      end
     end
     ssh ku
-    screen -S chimp -t chimp
-    cd /hive/data/genomes/hg38/bed/snp141Ortho/run.liftOChimp
+    screen -S ortho -t ortho
+    cd /hive/data/genomes/hg38/bed/snp141Ortho/run.liftOver
     para make jobList
-#Completed: 5644 of 5644 jobs
-#CPU time in finished jobs:     392833s    6547.22m   109.12h    4.55d  0.012 y
+#Completed: 16941 of 16941 jobs
+#CPU time in finished jobs:    1562387s   26039.78m   434.00h   18.08d  0.050 y
 #IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
-#Average job time:                  64s       1.07m     0.02h    0.00d
-#Longest finished job:             532s       8.87m     0.15h    0.01d
-#Submission to last job:           795s      13.25m     0.22h    0.01d
-
-    # Map coords to orangutan using liftOver.
-    screen -S pon -t pon
-    mkdir /hive/data/genomes/hg38/bed/snp141Ortho/run.liftOPon
-    cd /hive/data/genomes/hg38/bed/snp141Ortho/run.liftOPon
-    mkdir out
-    ln -s ../run.liftOChimp/split .
-    cp /dev/null jobList
-    foreach f (split/chunk*)
-      echo ../liftOne.csh $f /hive/data/genomes/hg38/bed/liftOver/hg38ToPonAbe2.over.chain.gz \
-        /hive/data/genomes/ponAbe2/ponAbe2.2bit \
-        \{check out exists out/$f:t.bed\} \
-        >> jobList
-    end
-    para make jobList
-#Completed: 5644 of 5644 jobs
-#CPU time in finished jobs:    1112238s   18537.29m   308.95h   12.87d  0.035 y
-#IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
-#Average job time:                 196s       3.27m     0.05h    0.00d
-#Longest finished job:             847s      14.12m     0.24h    0.01d
-#Submission to last job:          1331s      22.18m     0.37h    0.02d
-
-    # Map coords to macaque using liftOver.
-    screen -S mac -t mac
-    mkdir /hive/data/genomes/hg38/bed/snp141Ortho/run.liftOMac
-    cd /hive/data/genomes/hg38/bed/snp141Ortho/run.liftOMac
-    mkdir out
-    ln -s ../run.liftOChimp/split .
-    cp /dev/null jobList
-    foreach f (split/chunk*)
-      echo ../liftOne.csh $f /hive/data/genomes/hg38/bed/liftOver/hg38ToRheMac3.over.chain.gz \
-        /hive/data/genomes/rheMac3/rheMac3.2bit \
-        \{check out exists out/$f:t.bed\} \
-        >> jobList
-    end
-    para make jobList
-#Completed: 5644 of 5644 jobs
-#CPU time in finished jobs:     717439s   11957.31m   199.29h    8.30d  0.023 y
-#IO & Wait Time:                 16289s     271.49m     4.52h    0.19d  0.001 y
-#Average job time:                 130s       2.17m     0.04h    0.00d
-#Longest finished job:             603s      10.05m     0.17h    0.01d
-#Submission to last job:           887s      14.78m     0.25h    0.01d
+#Average job time:                  82s       1.37m     0.02h    0.00d
+#Longest finished job:             588s       9.80m     0.16h    0.01d
+#Submission to last job:          2881s      48.02m     0.80h    0.03d
 
     cd /hive/data/genomes/hg38/bed/snp141Ortho
     # Join the results for each chunk:
@@ -5782,7 +5748,7 @@ set orangFile = $2
 set macFile = $3
 set outFile = $4
 set tmpFile = `mktemp`
-    # Use the glommed name field as a key to join up chimp, macaque and orang
+    # Use the glommed name field as a key to join up chimp, orang and macaque
     # allele data.  Include glommed name from both files because if only
     # file 2 has a line for the key in 2.1, then 1.1 is empty.  Then plop
     # in the orthoGlom fields from each file, which are in the same order
@@ -5818,22 +5784,21 @@ EOF
     mkdir /hive/data/genomes/hg38/bed/snp141Ortho/run.join
     cd /hive/data/genomes/hg38/bed/snp141Ortho/run.join
     mkdir out
-    ln -s ../run.liftOChimp/split .
+    ln -s ../run.liftOver/split .
     cp /dev/null jobList
     foreach f (split/chunk*)
       set chunk = $f:t
-      echo ../joinOne.csh ../run.liftOChimp/out/$chunk.bed ../run.liftOPon/out/$chunk.bed \
-        ../run.liftOMac/out/$chunk.bed \
+      echo ../joinOne.csh ../run.liftOver/out/{panTro4,ponAbe2,rheMac3}.$chunk.bed \
         \{check out exists out/$chunk.bed\} \
         >> jobList
     end
     para make jobList
-#Completed: 5644 of 5644 jobs
-#CPU time in finished jobs:       1582s      26.37m     0.44h    0.02d  0.000 y
-#IO & Wait Time:                 30689s     511.48m     8.52h    0.36d  0.001 y
-#Average job time:                   6s       0.10m     0.00h    0.00d
-#Longest finished job:              20s       0.33m     0.01h    0.00d
-#Submission to last job:           633s      10.55m     0.18h    0.01d
+#Completed: 5647 of 5647 jobs
+#CPU time in finished jobs:       1626s      27.10m     0.45h    0.02d  0.000 y
+#IO & Wait Time:                 44978s     749.63m    12.49h    0.52d  0.001 y
+#Average job time:                   8s       0.14m     0.00h    0.00d
+#Longest finished job:              35s       0.58m     0.01h    0.00d
+#Submission to last job:           642s      10.70m     0.18h    0.01d
 
     # Back on hgwdev, cat all of the joined results together (~45mins) & load table.
     cd /hive/data/genomes/hg38/bed/snp141Ortho
@@ -5841,17 +5806,17 @@ EOF
     hgLoadBed -tab -onServer -tmpDir=/data/tmp -renameSqlTable \
       -sqlTable=$HOME/kent/src/hg/lib/snpOrthoPanPonRhe.sql \
       hg38 snp141OrthoPt4Pa2Rm3 snp141OrthoPt4Pa2Rm3.bed
-#Read 54850314 elements of size 22 from snp141OrthoPt4Pa2Rm3.bed
+#Read 54877953 elements of size 22 from snp141OrthoPt4Pa2Rm3.bed
 
     # Cleanup:
-    rm -r run*/out
+    rm -r run*/out run*/split
     gzip snp141ExcludeIds.txt snp141ForLiftOver.bed snp141OrthoPt4Pa2Rm3.bed &
 
 
 ############################################################################
-# SNPMASKED SEQUENCE FOR SNP141 (DONE 10/10/14 angie)
+# SNPMASKED SEQUENCE FOR SNP141 (DONE 10/14/14 angie)
 # originally done 9/3/14.
-# updated 10/10/14 after Matt found that MultipleAlignments was erroneously triggered
+# updated 10/14/14 after Matt found that MultipleAlignments was erroneously triggered
     # Redmine #13309
     mkdir /hive/data/genomes/hg38/snp141Mask
     cd /hive/data/genomes/hg38/snp141Mask
@@ -5864,19 +5829,19 @@ EOF
     | grep -vFwf snp141ExcludeRsIds.txt \
       > snp141Cleaned.bed
     wc -l snp141Cleaned.bed
-#61817196 snp141Cleaned.bed
+#61856902 snp141Cleaned.bed
 
     # Substitutions:
     mkdir substitutions
     snpMaskSingle snp141Cleaned.bed /hive/data/genomes/hg38/hg38.2bit stdout diffObserved.txt \
     | faSplit byname stdin substitutions/
-#Masked 55212773 snps in 55212764 out of 3204385583 genomic bases
-#/hive/data/genomes/hg38/hg38.2bit has 3209286105 total bases, but the total number of bases in sequences for which we masked snps is 3204385583 (difference is 4900522)
-    # Check that 4900522 is the total #bases in sequences with nothing in snp141Cleaned:
+#Masked 55246923 snps in 55246914 out of 3204659592 genomic bases
+#/hive/data/genomes/hg38/hg38.2bit has 3209286105 total bases, but the total number of bases in sequences for which we masked snps is 3204659592 (difference is 4626513)
+    # Check that 4626513 is the total #bases in sequences with nothing in snp141Cleaned:
     grep -Fw single snp141Cleaned.bed | cut -f 1 | uniq > /data/tmp/1
     grep -vwf /data/tmp/1 ../chrom.sizes \
     | awk 'BEGIN {TOTAL = 0;}  {TOTAL += $2;}  END {printf "%d\n", TOTAL;}'
-#4900522
+#4626513
     # warnings about differing observed strings at same base position:
     wc -l diffObserved.txt
 #20 diffObserved.txt
@@ -5897,7 +5862,7 @@ EOF
       mv $f $f:r.subst.fa
     end
     # Fire off a bunch of gzip jobs in parallel:
-    ls -1 substitutions/*.fa | split -l 5
+    ls -1 substitutions/*.fa | split -l 10
     foreach f (x??)
       gzip `cat $f` &
     end
@@ -6390,7 +6355,7 @@ See instructions in encode3/hg38_encode2_dnase1.txt
 
 
 #############################################################################
-# Add chrX alts to par (DONE 2014-10-09 angie)
+# Add chrX alts to par (DONE 2014-10-14 angie)
 # Thanks to Hiram for pointing out that intersecting chrX positions in
 # altLocations and par shows whether a chrX alt overlaps a PAR.
     cd /hive/data/genomes/hg38/bed/par
@@ -6409,19 +6374,20 @@ See instructions in encode3/hg38_encode2_dnase1.txt
 #|   9 | chrX  |      10000 |   2781479 | PAR1 |
 #| 221 | chrX  |  155701382 | 156030895 | PAR2 |
 #+-----+-------+------------+-----------+------+
-    # chrX_KI270880v1_alt and chrX_KI270881v1_alt are entirely contained in PAR1;
-    # chrX_KI270913v1_alt is not in either PAR.
-    hgsql hg38 -e 'select chrom,size from chromInfo where chrom like "chrX\_KI27088%";'
+    # chrX_KI270880v1_alt and chrX_KI270913v1_alt are entirely contained in PAR1;
+    # chrX_KI270881v1_alt is not in either PAR.
+    hgsql hg38 -e 'select chrom,size from chromInfo \
+                     where chrom in ("chrX_KI270880v1_alt", "chrX_KI270913v1_alt");'
 #+---------------------+--------+
 #| chrom               | size   |
 #+---------------------+--------+
 #| chrX_KI270880v1_alt | 284869 |
-#| chrX_KI270881v1_alt | 144206 |
+#| chrX_KI270913v1_alt | 274009 |
 #+---------------------+--------+
-    cat >> hg38Par.bed4 <<EOF
-chrX_KI270880v1_alt 0 284869 PAR1
-chrX_KI270881v1_alt 0 144206 PAR1
-EOF
+    # Process that into bed4 with name=PAR1:
+    hgsql hg38 -NBe 'select chrom, 0, size, "PAR1" from chromInfo \
+                       where chrom in ("chrX_KI270880v1_alt", "chrX_KI270913v1_alt");' \
+      >> hg38Par.bed4
     hgLoadBed hg38 par hg38Par.bed4
     checkTableCoords hg38 par
 
