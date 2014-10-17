@@ -6393,3 +6393,59 @@ See instructions in encode3/hg38_encode2_dnase1.txt
 
 
 #############################################################################
+# LASTZ Cow bosTau8 (DONE - 2014-10-15 - Steve)
+    mkdir /hive/data/genomes/hg38/bed/lastzBosTau8.2014-10-215
+    cd /hive/data/genomes/hg38/bed/lastzBosTau8.2014-10-15
+
+    cat << '_EOF_' > DEF
+# human vs cow
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+
+# TARGET: Human hg38
+SEQ1_DIR=/scratch/data/hg38/hg38.2bit
+SEQ1_LEN=/scratch/data/hg38/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow bosTau8
+SEQ2_DIR=/hive/data/genomes/bosTau8/bosTau8.2bit
+SEQ2_LEN=/hive/data/genomes/bosTau8/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+
+BASE=/hive/data/genomes/hg38/bed/lastzBosTau8.2014-10-15
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1
+    # real    602m37.523s
+    cat fb.hg38.chainBosTau8Link.txt
+    # 1401921010 bases of 3049335806 (45.975%) in intersection
+    # Create link
+    cd /hive/data/genomes/hg38/bed
+    ln -s  lastzBosTau8.2014-10-15 lastz.bosTau8
+
+    #   running the swap
+    mkdir /hive/data/genomes/bosTau8/bed/blastz.hg38.swap
+    cd /hive/data/genomes/bosTau8/bed/blastz.hg38.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg38/bed/lastzBosTau8.2014-10-15/DEF \
+        -swap  -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
+    #   real     116m32.121s
+    cat fb.bosTau8.chainHg38Link.txt
+    #   1336307377 bases of 2649307237 (50.440%) in intersection
+    cd /hive/data/genomes/bosTau8/bed
+    ln -s blastz.hg38.swap lastz.hg38
+
+############################################################################
+
