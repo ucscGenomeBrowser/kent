@@ -75,23 +75,6 @@ sed -e 's/KM034562v1/eboVir3/g' ../4d/all.mod > all.mod
 
     /cluster/bin/scripts/lodToBedScore eboVir3.bed > mostConserved.bed
 
-
-    # create Most Conserved track
-    cd /hive/data/genomes/eboVir3/bed/multiz160way/cons/all
-    cut -f1 ../../../../chrom.sizes | while read C
-do
-    ls -d bed/?/${C} 2> /dev/null | while read D
-    do
-        echo ${D}/${C}*.bed 1>&2
-        cat ${D}/${C}*.bed
-    done | sort -k1,1 -k2,2n \
-    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "'${C}'", $2, $3, $5, $5;}'
-done > tmpMostConserved.bed
-
-    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
-    #    -rw-rw-r--  1 42636652 Jun  4 10:45 tmpMostConserved.bed
-    #    -rw-rw-r--  1 43721828 Jun  4 10:45 mostConserved.bed
-
     # fixup up chrom name in the .pp file:
     sed -e 's/chrom=eboVir3/chrom=KM034562v1/' eboVir3.pp > KM034562v1.pp
     sed -e 's/^eboVir3/KM034562v1/' mostConserved.bed > KM034562v1.bed
@@ -116,8 +99,9 @@ std: 0.397315
 
     # load into database
     ssh hgwdev
-    cd /hive/data/genomes/eboVir3/bed/multiz160way/cons/all
+    cd /hive/data/genomes/eboVir3/bed/multiz160way/cons
     hgLoadBed eboVir3 phastConsElements160way KM034562v1.bed
+    hgLoadBed eboVir3 strainPhastConsElements160way KM034562v1.bed
     # Read 129 elements of size 6 from mostConserved.bed
     featureBits eboVir3 phastConsElements160way
     #  14451 bases of 18957 (76.230%) in intersection
@@ -126,6 +110,8 @@ std: 0.397315
           /gbdb/eboVir3/multiz160way/phastCons160way.wib
     hgLoadWiggle -pathPrefix=/gbdb/eboVir3/multiz160way \
 	eboVir3 phastCons160way phastCons160way.wig
+    hgLoadWiggle -pathPrefix=/gbdb/eboVir3/multiz160way \
+	eboVir3 strainPhastCons160way phastCons160way.wig
 
     # on human we often try for 5% overall cov, and 70% CDS cov
     # most bets are off here for that goal, these alignments are too few
@@ -221,6 +207,8 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     ln -s `pwd`/phyloP160way.wib /gbdb/eboVir3/multiz160way/phyloP160way.wib
     hgLoadWiggle -pathPrefix=/gbdb/eboVir3/multiz160way eboVir3 \
 	phyloP160way phyloP160way.wig
+    hgLoadWiggle -pathPrefix=/gbdb/eboVir3/multiz160way eboVir3 \
+	strainPhyloP160way phyloP160way.wig
 
     # use to set trackDb.ra entries for wiggle min and max
     # and verify table is loaded correctly
