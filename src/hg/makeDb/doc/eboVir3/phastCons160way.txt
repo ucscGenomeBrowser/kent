@@ -170,4 +170,106 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #########################################################################
+# phyloP for 7-way (DONE - 2014-10-17 - Hiram)
+    # run phyloP with score=LRT
+    mkdir /cluster/data/eboVir3/bed/multiz160way/consPhyloP
+    cd /cluster/data/eboVir3/bed/multiz160way/consPhyloP
 
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../4d/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.320
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../4d/all.mod 0.320 > all.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK all.mod
+    #   BACKGROUND: 0.340000 0.160000 0.160000 0.340000 
+
+    sed -e 's/eboVir3/KM034562v1/' ../cons/SS/multiz160way.1-18957.ss \
+      > KM034562v1.ss
+
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloP \
+      --method LRT --mode CONACC --wig-scores --chrom KM034562v1 \
+        -i SS all.mod KM034562v1.ss > KM034562v1.wigFix
+
+    # check integrity of data with wigToBigWig
+    wigToBigWig -verbose=2 KM034562v1.wigFix \
+      /hive/data/genomes/eboVir3/chrom.sizes phyloP160way.bw
+
+    # pid=63708: VmPeak:       33732 kB
+
+    bigWigInfo phyloP160way.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 52,079
+# primaryIndexSize: 6,348
+# zoomLevels: 6
+# chromCount: 1
+# basesCovered: 18,957
+# mean: 2.048103
+# min: -20.000000
+# max: 7.305000
+# std: 2.709788
+
+    #	encode those files into wiggle data
+    wigEncode KM034562v1.wigFix phyloP160way.wig phyloP160way.wib
+
+    #   Converted KM034562v1.wigFix, upper limit 7.30, lower limit -20.00
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phyloP160way.wib /gbdb/eboVir3/multiz160way/phyloP160way.wib
+    hgLoadWiggle -pathPrefix=/gbdb/eboVir3/multiz160way eboVir3 \
+	phyloP160way phyloP160way.wig
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh eboVir3 phyloP160way
+# db.table      min max mean count sumData
+# eboVir3.phyloP160way    -20 7.305 2.0481 18957 38825.9
+#       stdDev viewLimits
+#  2.70979 viewLimits=-11.5008:7.305
+
+    #	that range is: 20 + 7.405 = 27.305 for hBinSize=0.027305
+
+    #  Create histogram to get an overview of all the data
+    hgWiggle -doHistogram -hBinSize=0.027305 -hBinCount=1000 \
+       -hMinVal=-20 -verbose=2 \
+	    -db=eboVir3 phyloP160way > histogram.data 2>&1
+
+    # find out the range for the 2:5 graph
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin
+# Q1 0.000158
+# median 0.000791
+# Q3 0.002532
+# average 0.002123
+# min 0.000053
+# max 0.045049
+# count 471
+# total 1.000058
+# standard deviation 0.004132
+
+    #	create plot of histogram:
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Ebola eboVir3 Histogram phyloP160way track"
+set xlabel " phyloP160way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#############################################################################
