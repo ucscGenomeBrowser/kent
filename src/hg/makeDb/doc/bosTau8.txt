@@ -318,7 +318,7 @@ taxId 9913
     # 50492196 bases of 2649307237 (1.906%) in intersection
 
 ########################################################################
-# Create kluster run files (DONE - 2012-01-05 - Chin)
+# Create kluster run files (DONE - 2014-10-10 - Steve)
 
     # numerator is bosTau8 gapless bases "real" as reported by:
     featureBits -noRandom -noHap bosTau8 gap
