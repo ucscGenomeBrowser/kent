@@ -2284,7 +2284,7 @@ identifier wgsContigName
     $wgs.contigAcc.contig
     $wgs,!panTro1.gold.frag $split full
 
-set notProteinAccession !ailMel1,!allMis1,!balAcu1,!braFlo2,!calJac3,!calMil1,!cerSim1,!criGri1,!eboVir3,!danRer7,!dasNov3,!dm3,!dm6,!echTel2,!eriEur2,!fr2,!galGal4,!gasAcu1,!loxAfr3,!myoLuc2,!nomLeu1,!ochPri3,!otoGar3,!oviAri3,!petMar2,!rn5,!rn6,!sorAra2,!speTri2,!susScr3,!taeGut2,!vicPac2
+set notProteinAccession !ailMel1,!allMis1,!balAcu1,!bosTau8,!braFlo2,!calJac3,!calMil1,!cerSim1,!criGri1,!eboVir3,!danRer7,!dasNov3,!dm3,!dm6,!echTel2,!eriEur2,!fr2,!galGal4,!gasAcu1,!loxAfr3,!myoLuc2,!nomLeu1,!ochPri3,!otoGar3,!oviAri3,!petMar2,!rn5,!rn6,!sorAra2,!speTri2,!susScr3,!taeGut2,!vicPac2
 
 identifier proteinAccession typeOf=genbankAccession fuzzy
 "Genbank protein accession."
