@@ -471,3 +471,22 @@ bosTau8.upstreamGeneTbl = refGene
     ln -s blastz.mm10.swap lastz.mm10
 
 #########################################################################
+# uscsToINSDC table/track (DONE - 2014-10-21 - Hiram)
+    # fixup the translateNames.sh file from rn6 work to use the new
+    # genbank structure  (copied over from rn6/bed/ucscToINSDC)
+    ./translateNames.sh  NC_006853.1
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 16
+    # use the 16 in this sed
+    sed -e "s/21/16/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab bosTau8 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords bosTau8
+    # should cover %100 entirely:
+    featureBits -countGaps bosTau8 ucscToINSDC
+    # 2670044500 bases of 2670044500 (100.000%) in intersection
+
+#########################################################################
