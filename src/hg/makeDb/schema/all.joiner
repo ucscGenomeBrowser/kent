@@ -2749,7 +2749,7 @@ identifier humanFosmidEndId
 ## TYPED TO HERE %%%
 # Mapping Stuff, STS, etc.
 
-set notDbStsId !ailMel1,!allMis1,!balAcu1,!braFlo2,!calJac3,!calMil1,!cerSim1,!criGri1,!dm6,!eboVir3,!danRer7,!dasNov3,!echTel2,!eriEur2,!fr2,!galGal4,!gasAcu1,!loxAfr3,!mm10,!myoLuc2,!nomLeu1,!ochPri3,!otoGar3,!oviAri3,!petMar2,!rn5,!rn6,!sacCer3,!sorAra2,!speTri2,!susScr3,!taeGut2,!vicPac2
+set notDbStsId !ailMel1,!allMis1,!balAcu1,!braFlo2,!bosTau8,!calJac3,!calMil1,!cerSim1,!criGri1,!dm6,!eboVir3,!danRer7,!dasNov3,!echTel2,!eriEur2,!fr2,!galGal4,!gasAcu1,!loxAfr3,!mm10,!myoLuc2,!nomLeu1,!ochPri3,!otoGar3,!oviAri3,!petMar2,!rn5,!rn6,!sacCer3,!sorAra2,!speTri2,!susScr3,!taeGut2,!vicPac2
 
 identifier dbStsId external=dbSts fuzzy
 "NCBI dbSTS (Sequenced Tagged Site, aka mapping sequence) ID"
@@ -2770,7 +2770,7 @@ identifier ucscMouseStsId
     $mm.all_sts_primer.qName chopAfter=_ minCheck=0.99
     $mm.stsMapMouseNew.identNo
 
-set notStsName !ailMel1,!allMis1,!balAcu1,!braFlo2,!calJac3,!calMil1,!cerSim1,!criGri1,!dm6,!eboVir3,!danRer7,!dasNov3,!echTel2,!eriEur2,!fr2,!galGal4,!gasAcu1,!loxAfr3,!mm10,!myoLuc2,!nomLeu1,!ochPri3,!otoGar3,!oviAri3,!petMar2,!rn5,!rn6,!sacCer3,!sorAra2,!speTri2,!susScr3,!taeGut2,!vicPac2
+set notStsName !ailMel1,!allMis1,!balAcu1,!bosTau8,!braFlo2,!calJac3,!calMil1,!cerSim1,!criGri1,!dm6,!eboVir3,!danRer7,!dasNov3,!echTel2,!eriEur2,!fr2,!galGal4,!gasAcu1,!loxAfr3,!mm10,!myoLuc2,!nomLeu1,!ochPri3,!otoGar3,!oviAri3,!petMar2,!rn5,!rn6,!sacCer3,!sorAra2,!speTri2,!susScr3,!taeGut2,!vicPac2
 
 identifier stsName fuzzy
 "STS (Sequenced Tagged Site, aka mapping sequence) Name"
@@ -2870,7 +2870,7 @@ identifier wormBaseIsoformCluster
     $ce.sangerCanonical.clusterId
     $ce.sangerIsoforms.clusterId full
 
-set notWormBaseId !ailMel1,!allMis1,!balAcu1,!braFlo2,!calJac3,!calMil1,!cerSim1,!criGri1,!dm6,!eboVir3,!danRer7,!dasNov3,!echTel2,!eriEur2,!fr2,!galGal4,!gasAcu1,!hg38,!hg19,!loxAfr3,!mm10,!myoLuc2,!nomLeu1,!ochPri3,!otoGar3,!oviAri3,!petMar2,!rn3,!rn5,!rn6,!sorAra2,!speTri2,!susScr3,!taeGut2,!vicPac2
+set notWormBaseId !ailMel1,!allMis1,!balAcu1,!bosTau8,!braFlo2,!calJac3,!calMil1,!cerSim1,!criGri1,!dm6,!eboVir3,!danRer7,!dasNov3,!echTel2,!eriEur2,!fr2,!galGal4,!gasAcu1,!hg38,!hg19,!loxAfr3,!mm10,!myoLuc2,!nomLeu1,!ochPri3,!otoGar3,!oviAri3,!petMar2,!rn3,!rn5,!rn6,!sorAra2,!speTri2,!susScr3,!taeGut2,!vicPac2
 
 identifier wormBaseId external=WormBase dependency
 "WormBase (C. elegans) ORF ID"
@@ -2914,7 +2914,7 @@ identifier flyBaseAlleleId
     $dm.fbAllele.id
     $dm.fbPhenotype.fbAllele exclude=0
 
-set notFlyBaseGeneId !ailMel1,!allMis1,!balAcu1,!braFlo2,!calJac3,!calMil1,!ce2,!ce4,!ce6,!ce9,!ce10,!cerSim1,!criGri1,!eboVir3,!danRer3,!danRer7,!dasNov3,!echTel2,!eriEur2,!fr2,!galGal4,!gasAcu1,!hg17,!hg18,!hg38,!hg19,!loxAfr3,!mm7,!mm8,!mm9,!mm10,!myoLuc2,!nomLeu1,!ochPri3,!otoGar3,!oviAri3,!petMar2,!rn3,!rn4,!rn5,!rn6,!sacCer1,!sacCer2,!sacCer3,!sorAra2,!speTri2,!susScr3,!taeGut2,!vicPac2
+set notFlyBaseGeneId !ailMel1,!allMis1,!balAcu1,!bosTau8,!braFlo2,!calJac3,!calMil1,!ce2,!ce4,!ce6,!ce9,!ce10,!cerSim1,!criGri1,!eboVir3,!danRer3,!danRer7,!dasNov3,!echTel2,!eriEur2,!fr2,!galGal4,!gasAcu1,!hg17,!hg18,!hg38,!hg19,!loxAfr3,!mm7,!mm8,!mm9,!mm10,!myoLuc2,!nomLeu1,!ochPri3,!otoGar3,!oviAri3,!petMar2,!rn3,!rn4,!rn5,!rn6,!sacCer1,!sacCer2,!sacCer3,!sorAra2,!speTri2,!susScr3,!taeGut2,!vicPac2
 
 identifier flyBaseGeneId external=FlyBase
 "FlyBase (Drosophila) Gene ID"
@@ -3032,7 +3032,7 @@ identifier sgdProtHomologId
 identifier sgdId external=SGD
 "Sacchromyces Genome Database ID - Coding or other"
 
-set notSgdCodingId !ailMel1,!allMis1,!balAcu1,!braFlo2,!calJac3,!calMil1,!cerSim1,!criGri1,!dm6,!eboVir3,!danRer7,!dasNov3,!echTel2,!eriEur2,!fr2,!galGal4,!gasAcu1,!hg38,!hg19,!loxAfr3,!mm10,!myoLuc2,!nomLeu1,!ochPri3,!otoGar3,!oviAri3,!petMar2,!rn5,!rn6,!sorAra2,!speTri2,!susScr3,!taeGut2,!vicPac2
+set notSgdCodingId !ailMel1,!allMis1,!balAcu1,!bosTau8,!braFlo2,!calJac3,!calMil1,!cerSim1,!criGri1,!dm6,!eboVir3,!danRer7,!dasNov3,!echTel2,!eriEur2,!fr2,!galGal4,!gasAcu1,!hg38,!hg19,!loxAfr3,!mm10,!myoLuc2,!nomLeu1,!ochPri3,!otoGar3,!oviAri3,!petMar2,!rn5,!rn6,!sorAra2,!speTri2,!susScr3,!taeGut2,!vicPac2
 
 identifier sgdCodingId typeOf=sgdId dependency
 "Sacchromyces Genome Database ID"
@@ -3173,7 +3173,7 @@ identifier ensemblProteinId3 external=Ensembl
     $gbd.ensemblXref3.protein dupeOk
     $gbd.sfAssign.seqID minCheck=0.01
 
-set notEnsemblTranscriptId !allMis1,!balAcu1,!braFlo2,!ce10,!calMil1,!cerSim1,!eboVir3,!felCat3,!taeGut2,!vicPac2
+set notEnsemblTranscriptId !allMis1,!balAcu1,!bosTau8,!braFlo2,!ce10,!calMil1,!cerSim1,!eboVir3,!felCat3,!taeGut2,!vicPac2
 
 identifier ensemblTranscriptId external=Ensembl dependency
 "Ensembl Transcript ID"
