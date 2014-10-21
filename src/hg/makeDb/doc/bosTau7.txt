@@ -991,7 +991,7 @@ done
 
 #############################################################################
 # LIFTOVER TO bosTau4 (DONE - 2012-05-11 - Chin)
-    sh hgwdev
+    ssh hgwdev
     cd /hive/data/genomes/bosTau7
     ln -s jkStuff/bosTau7.11.ooc 11.ooc
     time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
@@ -1005,7 +1005,7 @@ done
 
 #############################################################################
 # LIFTOVER TO bosTau5 (DONE - 2012-05-11 - Chin)
-    sh hgwdev
+    ssh hgwdev
     cd /hive/data/genomes/bosTau7
     ln -s jkStuff/bosTau7.11.ooc 11.ooc
     time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
@@ -1019,7 +1019,7 @@ done
 
 #############################################################################
 # LIFTOVER TO bosTau6 (DONE - 2012-05-11 - Chin)
-    sh hgwdev
+    ssh hgwdev
     cd /hive/data/genomes/bosTau7
     ln -s jkStuff/bosTau7.11.ooc 11.ooc
     time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
@@ -1033,7 +1033,7 @@ done
 
 #############################################################################
 # LIFTOVER TO bosTau8 (DONE - 2014-10-17 - Steve)
-    sh hgwdev
+    ssh hgwdev
     cd /hive/data/genomes/bosTau7
     ln -s jkStuff/bosTau7.11.ooc 11.ooc
     time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
