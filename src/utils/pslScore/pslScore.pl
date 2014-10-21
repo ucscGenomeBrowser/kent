@@ -1,4 +1,8 @@
 #!/usr/bin/env perl
+#
+#  pslScore.pl - a reproduction of the C library calculations from
+#                src/lib/psl.c
+#
 
 use strict;
 use warnings;
@@ -13,12 +17,6 @@ if ($argc < 1) {
   printf STDERR "   none at this time\n";
   exit 255;
 }
-
-# pslIsProtein() C code:
-# return  (((psl->strand[1] == '+' ) &&
-#    (psl->tEnd == psl->tStarts[lastBlock] + 3*psl->blockSizes[lastBlock])) ||
-#   ((psl->strand[1] == '-') &&
-#    (psl->tStart == (psl->tSize-(psl->tStarts[lastBlock] + 3*psl->blockSizes[lastBlock])))));
 
 # is psl a protein psl (are it's blockSizes and scores in protein space)
 # 1 == not protein, return 3 == protein
@@ -37,39 +35,6 @@ sub pslIsProtein($$$$$$$) {
   }
   return $answer;
 } # pslIsProtein()
-
-# int pslCalcMilliBad(struct psl *psl, boolean isMrna)
-# /* Calculate badness in parts per thousand. */
-# {
-# int sizeMul = pslIsProtein(psl) ? 3 : 1;
-# int qAliSize, tAliSize, aliSize;
-# int milliBad = 0;
-# int sizeDif;
-# int insertFactor;
-# int total;
-# 
-# qAliSize = sizeMul * (psl->qEnd - psl->qStart);
-# tAliSize = psl->tEnd - psl->tStart;
-# aliSize = min(qAliSize, tAliSize);
-# if (aliSize <= 0)
-#     return 0;
-# sizeDif = qAliSize - tAliSize;
-# if (sizeDif < 0)
-#     {
-#     if (isMrna)
-#         sizeDif = 0;
-#     else
-#         sizeDif = -sizeDif;
-#     }
-# insertFactor = psl->qNumInsert;
-# if (!isMrna)
-#     insertFactor += psl->tNumInsert;
-# 
-# total = (sizeMul * (psl->match + psl->repMatch + psl->misMatch));
-# if (total != 0)
-#     milliBad = (1000 * (psl->misMatch*sizeMul + insertFactor + round(3*log(1+sizeDif)))) / total;
-# return milliBad;
-# }
 
 sub pslCalcMilliBad($$$$$$$$$$$) {
 my ($sizeMul, $qEnd, $qStart, $tEnd, $tStart, $qNumInsert, $tNumInsert, $matches, $repMatches, $misMatches, $isMrna) = @_;
