@@ -436,10 +436,67 @@ close (FH);
     # 16809665 bases of 143726002 (11.696%) in intersection
 
 #############################################################################
-# cytoBandIdeo - (NEED more work 2014-08-28 - Hiram)
+# cytoBandIdeo - (OBSOLETE, redone below 2014-08-28 - Hiram)
     mkdir /hive/data/genomes/dm6/bed/cytoBand
     cd /hive/data/genomes/dm6/bed/cytoBand
     makeCytoBandIdeo.csh dm6
+
+#########################################################################
+# CHROMOSOME BANDS (DONE - 2014-10-09 - Hiram)
+    ssh hgwdev
+    cd /cluster/data/dm6/bed/cytoBand
+    # As of 5.3, the GFF now includes what we need to make cytoBandIdeo
+    # directly:
+
+    zgrep chromosome_band ../../flyBase/dmel-all-r6.02.gff.gz > chromBand.gff
+
+    cat << '_EOF_' > gffToBand.pl
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+open (FH, "<chromBand.gff") or die "can not read chromBand.gff";
+while (my $line = <FH>) {
+  chomp $line;
+  my @w = split('\t', $line);
+  $w[3]--;
+  $w[3] = 0 if ($w[3] < 0);
+  $w[8] =~ s/^.*Name=band-//;
+  $w[8] =~ s/[;].*$//;
+  if ($w[8] !~ /^\d+[A-Z]\d+$/) { next; }
+  if ($w[4] <= 0) { next; }
+  printf "chr%s\t%d\t%d\t%s\tn/a\n", $w[0], $w[3], $w[4], $w[8];
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x gffToBand.pl
+    ./gffToBand.pl > dm6.cytoBand.tab
+
+    # re-use items from the previously loaded cytoBand data to add
+    # to the ones defined for the 'real' cytoBand data:
+    egrep -v -w "chr2L|chr2R|chr3L|chr3R|chr4|chrX" dm6.cytoBand \
+       > dm6.combined.bed
+    cat dm6.cytoBand.tab >> dm6.combined.bed
+
+    featureBits -bed=notCovered.bed -not -countGaps dm6 dm6.combined.bed
+    awk '{printf "%s\t%d\t%d\tn/a\tgneg\n", $1, $2, $3}' notCovered.bed \
+       >> dm6.combined.bed
+
+    featureBits -countGaps dm6 dm6.combined.bed
+
+    maxLen=`awk '{print length($1)}' dm6.combined.bed | sort -rn | head -1`
+
+    sed -e "s/12/${maxLen}/;" ~/kent/src/hg/lib/cytoBand.sql > dm6.cytoBand.sql
+
+    hgLoadSqlTab dm6 cytoBand dm6.cytoBand.sql dm6.combined.bed
+
+    checkTableCoords -verbose=2  dm6 cytoBand
+
+    hgLoadSqlTab dm6 cytoBandIdeo dm6.cytoBand.sql dm6.combined.bed
+
+    checkTableCoords -verbose=2  dm6 cytoBandIdeo
 
 ##########################################################################
 # cpgIslands - (DONE - 2014-08-28 - Hiram)
@@ -2564,3 +2621,32 @@ end
 # triCas2: Mrnas: 65947
 
 ######################################################################
+# construct downloads files and pushQ entry (DONE - 2014-10-14 - Hiram)
+#   before starting downloads, the joinerCheck should be clean
+#   after dm6 is added to all.joiner:
+    joinerCheck -tableCoverage -database=dm6 all.joiner
+    joinerCheck -keys -database=dm6 all.joiner
+
+    cd /hive/data/genomes/dm6
+    makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev dm6 \
+	> downloads.log 2>&1
+    # real    28m50.409s
+
+    # examine the goldenPath/*/README.txt files to verify the text
+
+    # ready for pushQ entry (DONE - 2014-10-14 - Hiram)
+    mkdir /hive/data/genomes/dm6/pushQ
+    cd /hive/data/genomes/dm6/pushQ
+    makePushQSql.pl dm6 > dm6.sql 2> stderr.out
+    # real    1m52.294s
+    # some errors are legitimate and OK:
+     head stderr.out
+# WARNING: hgwdev does not have /gbdb/dm6/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/dm6/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/dm6/bbi/qualityBw/quality.bw
+# WARNING: dm6 does not have seq
+
+    scp -p dm6.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta './bin/x86_64/hgsql qapushq < /tmp/dm6.sql'
+
+##############################################################################

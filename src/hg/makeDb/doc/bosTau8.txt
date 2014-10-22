@@ -471,6 +471,64 @@ bosTau8.upstreamGeneTbl = refGene
     ln -s blastz.mm10.swap lastz.mm10
 
 #########################################################################
+# LIFTOVER TO bosTau6 (DONE - 2014-10-21 - Steve)
+    ssh hgwdev
+    cd /hive/data/genomes/bosTau8
+    ln -s jkStuff/bosTau8.11.ooc 11.ooc
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         bosTau8 bosTau6 > doLiftOverToBosTau6.log 2>&1
+    # real    82m56.388s
+
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/bosTau8/liftOver/
+    md5sum bosTau8ToBosTau6.over.chain.gz >> md5sum.txt
+    popd
+
+#########################################################################
+# LIFTOVER TO bosTau7 (DONE - 2014-10-21 - Steve)
+    ssh hgwdev
+    cd /hive/data/genomes/bosTau8
+    ln -s jkStuff/bosTau8.11.ooc 11.ooc
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         bosTau8 bosTau7 > doLiftOverToBosTau7.log 2>&1
+    # real    105m34.448s
+
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/bosTau8/liftOver/
+    md5sum bosTau8ToBosTau7.over.chain.gz >> md5sum.txt
+    popd
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE 2014-10-21 - Steve)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=bosTau8 -keys all.joiner
+    joinerCheck -database=bosTau8 -tableCoverage all.joiner
+    joinerCheck -database=bosTau8 -times all.joiner
+
+    cd /hive/data/genomes/bosTau8
+    makeDownloads.pl bosTau8 > do.log 2>&1
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/bosTau8/pushQ
+    cd /hive/data/genomes/bosTau8/pushQ
+    makePushQSql.pl bosTau8 > bosTau8.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/bosTau8/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/bosTau8/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/bosTau8/bbi/quality.bw
+    # WARNING: bosTau8 does not have seq
+    # WARNING: bosTau8 does not have extFile
+
+    #   copy it to hgwbeta
+    scp -p bosTau8.pushQ.sql qateam@hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < bosTau8.pushQ.sql
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################
 # uscsToINSDC table/track (DONE - 2014-10-21 - Hiram)
     # fixup the translateNames.sh file from rn6 work to use the new
     # genbank structure  (copied over from rn6/bed/ucscToINSDC)
