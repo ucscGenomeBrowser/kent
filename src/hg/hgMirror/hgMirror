@@ -976,8 +976,15 @@ def getRsyncSizes(dataType, db):
     # run rsync command
     tmpFname = "/tmp/%s_%s.rsync.txt" % (dataType, db)
     if not isfile(tmpFname):
-        cmd = "rsync -nav rsync://hgdownload.cse.ucsc.edu/%s/%s/ > %s" % (dataType, db, tmpFname)
-        runCmd(cmd)
+        cmd = "rsync -nav rsync://hgdownload.cse.ucsc.edu/%s/%s/ > %s.new && mv %s.new %s" % (dataType, db, tmpFname, tmpFname, tmpFname)
+        ret = runCmd(cmd, mustRun=False)
+        if ret!=0:
+            print "<p>"
+            print "Cannot run %s<br>" % cmd
+            print "<hr>"
+            print "It seems that the rsync server hgdownload.cse.ucsc.edu is not available<br>"
+            print "Please check your network connection. If this problem persists send email to genome@soe.ucsc.edu<br>"
+            sys.exit(0)
 
     # parse rsync output file
     tableSizes = collections.defaultdict(int)

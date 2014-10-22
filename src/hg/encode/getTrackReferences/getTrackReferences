@@ -108,7 +108,7 @@ def makeHtml(infoDict, plain, verbose):
     # construct hyperlinks for PMID and PMCID (if it exists)
     idStr = "PMID: <a href=\"%s\" target=\"_blank\">%s</a>" % (htmlEscape(infoDict['url']), infoDict['pubmed'])
     if 'pmc' in infoDict:
-        idStr = idStr + "; PMC: <a href=\"http://www.ncbi.nlm.nih.gov/pmc/articles/%s\" target=\"_blank\">%s</a>" % (infoDict['pmc'], infoDict['pmc'])
+        idStr = idStr + "; PMC: <a href=\"http://www.ncbi.nlm.nih.gov/pmc/articles/%s/\" target=\"_blank\">%s</a>" % (infoDict['pmc'], infoDict['pmc'])
 
     # now that the pubmed link has been constructed, we can overwrite the url in infoDict with the original article URL
 

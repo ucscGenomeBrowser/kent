@@ -40,7 +40,7 @@
 
 // TODO: Document
 #define LABEL_PADDING 5
-
+#define MINHEIGHT 24
 
 // TODO: Document
 static float pixelsPerBase = 1.0;
@@ -182,11 +182,23 @@ else
 return &ex;
 }
 
-static int cmpRepeatVisStart(const void *va, const void *vb)
+// A better way to organize the display
+static int cmpRepeatDiv(const void *va, const void *vb)
+/* Sort repeats by divergence.
+ */
+{
+struct rmskJoined *a = *((struct rmskJoined **) va);
+struct rmskJoined *b = *((struct rmskJoined **) vb);
+
+return (b->score - a->score);
+}
+
+//static int cmpRepeatVisStart(const void *va, const void *vb)
 /* Sort repeats by display start position.  Note: We
  * account for the fact we may not start the visual
  * display at chromStart.  See MAX_UNALIGNED_PIXEL_LEN.
  */
+/*
 {
 struct rmskJoined *a = *((struct rmskJoined **) va);
 struct rmskJoined *b = *((struct rmskJoined **) vb);
@@ -199,6 +211,7 @@ int bStart = ext->start;
 
 return (aStart - bStart);
 }
+*/
 
 static struct repeatItem * makeJRepeatItems()
 /* Initialize the track */
@@ -259,7 +272,8 @@ if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
         rm = rmskJoinedLoad(row + rowOffset);
         slAddHead(&detailList, rm);
         }
-    slSort(&detailList, cmpRepeatVisStart);
+    //slSort(&detailList, cmpRepeatVisStart);
+    slSort(&detailList, cmpRepeatDiv);
 
     sqlFreeResult(&sr);
     hFreeConn(&conn);
@@ -340,7 +354,23 @@ if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
 return ri->className;
 }
 
-#define HEIGHT24 24
+
+int rmskJoinedItemHeight(struct track *tg, void *item)
+{
+  // Are we in full view mode and at the scale needed to display
+  // the detail view?
+if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
+    {
+    if ( tg->heightPer < MINHEIGHT )
+      return MINHEIGHT;
+    else
+      return tg->heightPer;
+    }
+else
+    {
+    return tgFixedItemHeight(tg, item);
+    }
+}
 
 int rmskJoinedTotalHeight(struct track *tg, enum trackVisibility vis)
 {
@@ -351,22 +381,12 @@ if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
     // Lookup the depth of this subTrack and report it
     struct subTrack *st = hashFindVal(subTracksHash, tg->table);
     if (st)
-        return ((st->levelCount + 1) * HEIGHT24);
+        return ((st->levelCount + 1) * rmskJoinedItemHeight(tg, NULL) );
     else
-        return (HEIGHT24);	// Just display one line
+        return (rmskJoinedItemHeight(tg, NULL));	// Just display one line
     }
 else
 return tgFixedTotalHeightNoOverflow(tg, vis);
-}
-
-int rmskJoinedItemHeight(struct track *tg, void *item)
-{
-  // Are we in full view mode and at the scale needed to display
-  // the detail view?
-if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
-    return HEIGHT24;
-else
-    return tgFixedItemHeight(tg, item);
 }
 
 static void drawDashedHorizLine(struct hvGfx *hvg, int x1, int x2,
@@ -411,9 +431,9 @@ int startHash = midX - (stringWidth * 0.5);
 int midPointDrawn = 0;
 
   /*
-     Degrade Gracefully:
-     * Too little space to draw dashes or even
-     * hash marks, give up.
+   * Degrade Gracefully:
+   *   Too little space to draw dashes or even
+   *   hash marks, give up.
    */
 if (glyphWidth < 6 + dashLen)
     {
@@ -442,7 +462,7 @@ while (1)
 	hvGfxLine(hvg, cx1, y - 3, cx1 + 3, y + 3, lineColor);
 	if (stringWidth)
 	    {
-	    hvGfxTextCentered(hvg, cx1 + 3, y - 3, stringWidth,
+	    hvGfxTextCentered(hvg, cx1 + 3, y - (fontHeight/2), stringWidth,
 			       fontHeight, MG_BLACK, font, lenLabel);
 	    cx1 += stringWidth;
 	    }
@@ -756,7 +776,7 @@ for (idx = 0; idx < rm->blockCount; idx++)
 	    int stringWidth =
 		mgFontStringWidth(font, rm->name) + LABEL_PADDING;
 	    hvGfxTextCentered(hvg, lx1 - stringWidth,
-			       y + unalignedBlockOffset + fontHeight,
+			       heightPer - fontHeight + y,
 			       stringWidth, fontHeight, MG_BLACK, font,
 			       rm->name);
 
@@ -974,7 +994,7 @@ int rowOffset;
 if (isFull)
     {
     /*
-     * Do gray scale representation spread out among tracks.
+     * Do grayscale representation spread out among tracks.
      */
     struct hash *hash = newHash(6);
     struct rmskJoined *ro;

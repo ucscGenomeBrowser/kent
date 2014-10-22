@@ -837,7 +837,7 @@ CREATE TABLE ucscToEnsembl (
 #############################################################################
 # LIFTOVER TO bosTau4 (DONE - 2011-10-20 - Chin)
 
-    sh hgwdev
+    ssh hgwdev
     cd /hive/data/genomes/bosTau6
     ln -s jkStuff/bosTau6.11.ooc 11.ooc
     time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
@@ -850,7 +850,7 @@ CREATE TABLE ucscToEnsembl (
 
 #############################################################################
 # LIFTOVER TO bosTau4 ( redo DONE - 2012-05-11 - Chin)
-    sh hgwdev
+    ssh hgwdev
     cd /hive/data/genomes/bosTau6
     ln -s jkStuff/bosTau6.11.ooc 11.ooc
     time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
@@ -864,7 +864,7 @@ CREATE TABLE ucscToEnsembl (
 
 #############################################################################
 # LIFTOVER TO bosTau5 (DONE - 2012-05-11 - Chin)
-    sh hgwdev
+    ssh hgwdev
     cd /hive/data/genomes/bosTau6
     ln -s jkStuff/bosTau6.11.ooc 11.ooc
     time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
@@ -878,7 +878,7 @@ CREATE TABLE ucscToEnsembl (
 
 #############################################################################
 # LIFTOVER TO bosTau7 (DONE - 2012-05-11 - Chin)
-    sh hgwdev
+    ssh hgwdev
     cd /hive/data/genomes/bosTau6
     ln -s jkStuff/bosTau6.11.ooc 11.ooc
     time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
@@ -890,6 +890,19 @@ CREATE TABLE ucscToEnsembl (
     md5sum bosTau6ToBosTau7.over.chain.gz >> md5sum.txt
     popd
 
+#############################################################################
+# LIFTOVER TO bosTau8 (DONE - 2014-10-17 - Steve)
+    ssh hgwdev
+    cd /hive/data/genomes/bosTau6
+    ln -s jkStuff/bosTau6.11.ooc 11.ooc
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         bosTau6 bosTau8 > doLiftOverToBosTau8.log 2>&1
+    # real    81m5.737s
+
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/bosTau6/liftOver/
+    md5sum bosTau6ToBosTau8.over.chain.gz >> md5sum.txt
+    popd
 
 ##############################################################################
 # SWAP mm10 LASTZ (DONE - 2012-06-19 - Chin)
