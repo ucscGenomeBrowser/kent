@@ -1551,7 +1551,7 @@ identifier wgEncodeGencodePseudoGeneAttrsVM3
 identifier wgEncodeGencodeExonSupportVM3
 "Link together Gencode Exon Support table with Attributes table"
     mm10.wgEncodeGencodeExonSupportVM3.transcriptId dupeOk
-    mm10.wgEncodeGencodeAttrsVM3.transcriptId minCheck=0.98202
+    mm10.wgEncodeGencodeAttrsVM3.transcriptId minCheck=0.97
 
 identifier wgEncodeGencodeGeneSourceVM3
 "Link together Gencode Gene Source table with Attributes table"
