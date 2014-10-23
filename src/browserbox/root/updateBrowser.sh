@@ -238,3 +238,4 @@ mysqlcheck --all-databases --auto-repair --quick --fast --silent
 
 touch /root/lastUpdateTime.flag
 echo update done.
+cat /etc/issue | tr -s '\n'
