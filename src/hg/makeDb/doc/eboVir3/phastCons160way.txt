@@ -261,3 +261,55 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #############################################################################
+# 160-way downloads (DONE - 2014-10-22 - Hiram)
+    mkdir -p \
+       /hive/data/genomes/eboVir3/bed/multiz160way/downloads/phastCons160way
+    cd /hive/data/genomes/eboVir3/bed/multiz160way/downloads/phastCons160way
+
+    cp -p ../../cons/KM034562v1.pp ./eboVir3.phastCons160way.wigFix
+    gzip eboVir3.phastCons160way.wigFix
+    ln -s ../../cons/all.mod ./eboVir3.phastCons160way.mod
+    ln -s ../../cons/KM034562v1.bw ./eboVir3.phastCons160way.bw
+
+    sed -e 's/^s#//; s/#/\t/; s/#g;//' \
+       ~/kent/src/hg/makeDb/doc/eboVir3/ucscName.strainName.sed \
+          > accession.to.sequenceIdentifier.txt
+ 
+
+    # reusing the README.txt file from:
+# /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/phastCons7way/README.txt
+    # edited here to reflect this construction
+
+    md5sum *.txt *.gz *.mod *.bw > md5sum.txt
+
+    mkdir -p \
+       /hive/data/genomes/eboVir3/bed/multiz160way/downloads/phyloP160way
+    cd /hive/data/genomes/eboVir3/bed/multiz160way/downloads/phyloP160way
+
+    ln -s ../../consPhyloP/all.mod ./eboVir3.phyloP160way.mod
+    cp -p ../../consPhyloP/KM034562v1.wigFix ./eboVir3.phyloP160way.wigFix
+    ln -s ../../consPhyloP/phyloP160way.bw ./eboVir3.phyloP160way.bw
+    gzip *.wigFix
+
+    sed -e 's/^s#//; s/#/\t/; s/#g;//' \
+       ~/kent/src/hg/makeDb/doc/eboVir3/ucscName.strainName.sed \
+          > accession.to.sequenceIdentifier.txt
+
+    # reusing the README.txt file from:
+# /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/phyloP7way/README.txt
+    # edited here to reflect this construction
+
+    md5sum *.txt *.gz *.mod *.bw > md5sum.txt
+
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/eboVir3/phastCons160way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/eboVir3/phastCons160way
+    ln -s \
+     /hive/data/genomes/eboVir3/bed/multiz160way/downloads/phastCons160way/* ./
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/eboVir3/phyloP160way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/eboVir3/phyloP160way
+    ln -s \
+     /hive/data/genomes/eboVir3/bed/multiz160way/downloads/phyloP160way/* ./
+    
+##############################################################################
