@@ -834,7 +834,6 @@ snpSeqFile /gbdb/hg19/snp/snp141.fa
 
 track snp141Common override
 snpSeqFile /gbdb/hg19/snp/snp141.fa
-priority 2
 
 track snp141 override
 snpSeqFile /gbdb/hg19/snp/snp141.fa
@@ -891,7 +890,7 @@ chimpDb panTro3
 orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
-priority 1
+visibility hide
 
 track snp137Flagged
 shortLabel Flagged SNPs(137)

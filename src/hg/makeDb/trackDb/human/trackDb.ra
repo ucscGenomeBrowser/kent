@@ -878,6 +878,7 @@ orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
+priority 1
 
 track snp141Flagged
 shortLabel Flagged SNPs(141)

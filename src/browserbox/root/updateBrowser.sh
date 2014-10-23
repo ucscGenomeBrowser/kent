@@ -17,7 +17,7 @@
 
 # parameters:
 # - parameter "hgwdev": does not update itself, copies only the beta/alpha CGIs/htdocs from hgwdev
-# - parameter "noUpdate": does not update itself and does not check flagfile
+# - parameter "notSelf": does not update itself and does not check flagfile
 
 # rsync options:
 # l = preserve symlinks
@@ -27,12 +27,27 @@
 # v = verbose
 # h = human readable
 # u = skip if file is newer on receiver
-RSYNCOPTS="-ltrzvhu"
+RSYNCOPTS="-ltrzvh"
 # rsync server for CGIs and html files
 RSYNCSRC="rsync://hgdownload.cse.ucsc.edu"
 RSYNCCGIBIN=cgi-bin
 RSYNCHTDOCS=htdocs
 UPDATEFLAG=http://hgdownload.cse.ucsc.edu/gbib/lastUpdate
+
+# help
+if [ "$1" == "-h" ] ; then
+   echo "Without any options, this script checks if it can reach hgdownload and if "
+   echo "new data has been added since the last run. It updates itself and runs the new copy."
+   echo "The new copy rsyncs the CGIs/MysqlDbs/htdocs from hgdownload."
+   echo "It rsyncs the gbib/push directory into / to update other files."
+   echo "It finally repairs mysql tables, makes some trackDb changes, adds symlinks,"
+   echo "and chmods the directories."
+   echo "Parameters:"
+   echo "updateBrowser.sh notSelf - do not update the script itself. Do not check if data has been "
+   echo "                           added to hgdownload since the last run"
+   echo "updateBrowser.sh hgwdev - more info on how to update to alpha versions (used only by UCSC)"
+   exit 0
+fi
 
 # check if running as root
 if [ "$(id -u)" != "0" ] ; then
@@ -63,12 +78,12 @@ if [ "$#" -eq 0 ] ; then
 fi
 
 # unless already calling self, update self and call self unless doing only cgis
-if [ "$BASH_ARGV" != "noUpdate" -a "$1" != "hgwdev" ] ; then
+if [ "$BASH_ARGV" != "notSelf" -a "$1" != "hgwdev" ] ; then
     echo getting new update script
     # we got three VMs where updateBrowser.sh was 0 bytes, so doing download/move now
     wget http://hgdownload.soe.ucsc.edu/gbib/updateBrowser.sh -O /root/updateBrowser.sh.new -q && mv /root/updateBrowser.sh.new /root/updateBrowser.sh
     chmod a+x /root/updateBrowser.sh
-    /root/updateBrowser.sh $1 noUpdate
+    /root/updateBrowser.sh $1 notSelf
     exit 0
 fi
 
@@ -106,7 +121,7 @@ if [ "$1" == "hgwdev" ] ; then
 
     if [ "$dirExt" == "alpha" ] ; then
     	cgiExt=""
-    	htmlExt="-beta" # we need the -vXXX.css files, not the -vRANDOMNUMBER.css files
+    	htmlExt="" 
     else
     	cgiExt="-"$dirExt
     	htmlExt="-"$dirExt
@@ -143,6 +158,7 @@ fi
 
 chown -R www-data.www-data /usr/local/apache/cgi-bin/*
 chown -R www-data.www-data /usr/local/apache/htdocs/
+chmod -R a+r /usr/local/apache/htdocs
 
 if [ "$1" != "hgwdev" ] ; then
   echo updating GBDB files...
@@ -185,7 +201,7 @@ done
 
 # patch main pages
 sed -i 's/About the UCSC Genome Bioinformatics Site/About the UCSC Genome Browser in a Box/g' /usr/local/apache/htdocs/indexIntro.html
-perl -0777 -pi -e 's/It also.+ provides.+> projects. //s' /usr/local/apache/htdocs/indexIntro.html
+perl -0777 -pi -e 's/It also.+ provides.+> project. //s' /usr/local/apache/htdocs/indexIntro.html
 perl -0777 -pi -e 's/Program-driven.+ per day.//s' /usr/local/apache/htdocs/indexInfo.html
 # patch contacts page
 sed -i 's/......cgi-bin\/hgUserSuggestion/http:\/\/genome.ucsc.edu\/cgi-bin\/hgUserSuggestion/' /usr/local/apache/htdocs/contacts.html
@@ -222,3 +238,4 @@ mysqlcheck --all-databases --auto-repair --quick --fast --silent
 
 touch /root/lastUpdateTime.flag
 echo update done.
+cat /etc/issue | tr -s '\n'
