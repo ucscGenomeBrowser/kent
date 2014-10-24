@@ -82,7 +82,7 @@ mouseOverField mHCAlleleName
 track muPIT
 shortLabel muPIT protein map
 longLabel muPIT - Mapping Genomic Positions on Protein Structures
-group varRep
+group genes
 visibility hide
 type bed 4
 url http://mupit-ebola.icm.jhu.edu/ResidueFileUpload?residues=chr1%20${
