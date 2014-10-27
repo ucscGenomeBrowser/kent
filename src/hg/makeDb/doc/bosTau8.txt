@@ -3,7 +3,7 @@
 # This file describes browser build for the bosTau8
 # Bos taurus -- UMD 3.1.1 (Dec. 2009)
 # Center for Bioinformatics and Computational Biology, University of Maryland
-# UMD 3.1.1 
+# UMD 3.1.1
 
 
 #############################################################################
@@ -546,5 +546,123 @@ bosTau8.upstreamGeneTbl = refGene
     # should cover %100 entirely:
     featureBits -countGaps bosTau8 ucscToINSDC
     # 2670044500 bases of 2670044500 (100.000%) in intersection
+
+#########################################################################
+# lastz Horse (WORKING - 2014-10-27 - Hiram)
+    # a tuning run to determine lastz parameters, this process should move
+    # out of this directory to a bosTau8/bed/lastz... directory:
+
+    mkdir /hive/users/hiram/multiz/100way/bosTau8.equCab2
+    cd /hive/users/hiram/multiz/100way/bosTau8.equCab2
+    zcat /hive/data/genomes/equCab2/bed/genscan/genscan.pep.gz \
+       > equCab2.genscan.pep
+    zcat /hive/data/genomes/equCab2/bed/genscan/genscan.gp.gz \
+       > equCab2.genscan.gp
+    zcat /hive/data/genomes/bosTau8/bed/genscan/genscan.pep.gz \
+       > bosTau8.genscan.pep
+    zcat /hive/data/genomes/bosTau8/bed/genscan/genscan.gp.gz \
+       > bosTau8.genscan.gp
+
+    # determine a correspondence between genes in the two sequences:
+    time (blat -prot -oneOff=1 bosTau8.genscan.pep equCab2.genscan.pep \
+       -out=maf bosTau8.equCab2.oneOff.maf) > blat.log 2>&1
+    #  real    282m40.628s
+    ../mafScoreSizeScan.pl bosTau8.equCab2.oneOff.maf  > mafScoreSizeScan.list
+    ave mafScoreSizeScan.list | grep "^Q3" | awk '{print $2}' \
+       | sed -e 's/.000000//' > mafScoreSizeScan.Q3
+
+    # with those regions identified, extract corresponding sequence to
+    # use in the lastz tuning operation.  Filter all the scores for the
+    # top quartile:
+    Q3=`cat mafScoreSizeScan.Q3`
+    awk '$1 > '$Q3' && $2 > 100 && $7 > 80 && $8 > 80' mafScoreSizeScan.list \
+            > top.all.list
+    cut -f3,4 top.all.list | sort > selected.topAll.list
+    topCount=`cat selected.topAll.list | wc -l`
+    echo "number of top scorers: $topCount"
+    #  number of top scorers: 3240
+    for N in 100 200 300 400
+do
+  cat top.all.list | randomLines -decomment stdin $N top.$N.list
+  cut -f3,4 top.$N.list | sort > selected.top$N.list
+  $TOP/selectedFasta.sh $target $query top$N
+            ./tune.top$N.sh &
+  /cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz_D \
+     --inferonly=/hive/users/hiram/multiz/100way/create_scores_file.control \
+        bosTau8.top${N}.fa equCab2.top${N}.fa \
+          | /hive/users/hiram/multiz/100way/expand_scores_file.py \
+             > bosTau8.equCab2.tuning.top${N}.txt 2>&1
+done
+
+    # scan the four result files to see the range in the matrix scores
+    # hopefully not too wildly different:
+    ../matrixSummary.pl
+#  read 4 .txt files    bosTau8.equCab2
+      A     C     G     T       averages        4 files bosTau8.equCab2
+A    81  -119   -30  -133
+C  -119   100   -95   -30
+G   -30   -95   100  -119
+T  -133   -30  -119    81
+      A     C     G     T       ranges  4 files bosTau8.equCab2
+A    12    13     4    11
+C    13     0    31     4
+G     4    31     0    13
+T    11     4    13    12
+      A     C     G     T       ranges percent  4 files bosTau8.equCab2
+A  14.7  10.9  13.0   8.2
+C  10.9   0.0  32.6  13.0
+G  13.0  32.6  -0.0  10.9
+T   8.2  13.0  10.9  14.7
+
+     # looks good, using the results from the top400:
+
+     mkdir /hive/data/genomes/bosTau8/bed/lastzEquCab2.2014-10-27
+     cd /hive/data/genomes/bosTau8/bed/lastzEquCab2.2014-10-27
+
+     cp -p /hive/users/hiram/multiz/100way/bosTau8.equCab2/bosTau8.equCab2.tuning.top400.txt \
+        ./bosTau8.equCab2.tuning.Q.txt
+
+     cat << '_EOF_' > DEF
+# Horse pig vs Horse
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/bosTau8.equCab2/bosTau8.equCab2.tuning.top400.txt
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+
+BLASTZ_T=2
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=50
+BLASTZ_X=880
+BLASTZ_Y=3400
+BLASTZ_Q=/hive/data/genomes/bosTau8/bed/lastzEquCab2.2014-10-27/bosTau8.equCab2.tuning.Q.txt
+#       A     C     G     T
+# A    88  -111   -31  -128
+# C  -111   100   -75   -31
+# G   -31   -75   100  -111
+# T  -128   -31  -111    88
+
+# TARGET: Horse bosTau8
+SEQ1_DIR=/hive/data/genomes/bosTau8/bosTau8.2bit
+SEQ1_LEN=/hive/data/genomes/bosTau8/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=40
+SEQ1_LAP=0
+
+# QUERY: Horse equCab2
+SEQ2_DIR=/hive/data/genomes/equCab2/equCab2.2bit
+SEQ2_LEN=/hive/data/genomes/equCab2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=500
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/bosTau8/bed/lastzEquCab2.2014-10-27
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+        time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
 
 #########################################################################
