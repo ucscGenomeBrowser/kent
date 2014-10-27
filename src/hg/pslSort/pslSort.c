@@ -16,9 +16,9 @@ void usage()
 errAbort(
    "pslSort - Merge and sort psCluster .psl output files\n"
    "usage:\n"
-   "      pslSort dirs[1|2] outFile tempDir inDir(s)\n"
+   "      pslSort dirs[1|2] outFile tempDir inDir(s)OrFile(s)\n"
    "\n"
-   "   This will sort all of the .psl files in the directories\n"
+   "   This will sort all of the .psl input files or those in the directories\n"
    "   inDirs in two stages - first into temporary files in tempDir\n"
    "   and second into outFile.  The device on tempDir must have\n"
    "   enough space (typically 15-20 gigabytes if processing whole genome).\n"
@@ -306,6 +306,13 @@ if (!secondOnly)
     for (i=0; i<inDirCount; ++i)
 	{
 	inDir = inDirs[i];
+        /* if not a dir but actually a file, just add it */
+        if (isRegularFile(inDir))
+            {
+	    name = newSlName(cloneString(inDir));
+            slAddHead(&fileList, name);
+            continue;
+            }
 	dirDir = listDir(inDir, "*.psl");
 	if (slCount(dirDir) == 0)
 	    dirDir = listDir(inDir, "*.psl.gz");
