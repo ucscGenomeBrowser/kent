@@ -155,7 +155,7 @@ cat fb.eboVir3.genscan.txt
 #  set default position on the GP gene area:
 
 hgsql -e \
-'update dbDb set defaultPos="KM034562v1:3545-9003" where name="eboVir3";' \
+'update dbDb set defaultPos="KM034562v1:1-18957" where name="eboVir3";' \
      hgcentraltest
 
 ############################################################################
