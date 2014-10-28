@@ -59,7 +59,7 @@ group compGeno
         track phyloP160way
         subTrack cons160wayViewphyloP on
         subGroups view=phyloP
-        shortLabel 7 Vert. Cons
+        shortLabel PhyloP
         longLabel 158 Ebola strains and 2 Marburg strains Basewise Conservation by PhyloP
         noInherit on
         configurable on
