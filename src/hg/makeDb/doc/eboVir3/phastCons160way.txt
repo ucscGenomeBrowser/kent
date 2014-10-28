@@ -73,11 +73,10 @@ sed -e 's/KM034562v1/eboVir3/g' ../4d/all.mod > all.mod
     --rho $rho --expected-length $len --target-coverage $cov --quiet \
     --seqname $c --idpref $c --most-conserved $c.bed --score > $c.pp
 
-    /cluster/bin/scripts/lodToBedScore eboVir3.bed > mostConserved.bed
+awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "KM034562v1", $2, $3, $5, $5}' \
+   eboVir3.bed > tmpMostConserved.bed
+/cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
 
-    # fixup up chrom name in the .pp file:
-    sed -e 's/chrom=eboVir3/chrom=KM034562v1/' eboVir3.pp > KM034562v1.pp
-    sed -e 's/^eboVir3/KM034562v1/' mostConserved.bed > KM034562v1.bed
     wigToBigWig -verbose=2 KM034562v1.pp \
       /hive/data/genomes/eboVir3/chrom.sizes KM034562v1.bw
     bigWigInfo KM034562v1.bw
@@ -100,9 +99,9 @@ std: 0.397315
     # load into database
     ssh hgwdev
     cd /hive/data/genomes/eboVir3/bed/multiz160way/cons
-    hgLoadBed eboVir3 phastConsElements160way KM034562v1.bed
-    hgLoadBed eboVir3 strainPhastConsElements160way KM034562v1.bed
-    # Read 129 elements of size 6 from mostConserved.bed
+    hgLoadBed eboVir3 phastConsElements160way mostConserved.bed
+    hgLoadBed eboVir3 strainPhastConsElements160way mostConserved.bed
+    # Read 129 elements of size 5 from mostConserved.bed
     featureBits eboVir3 phastConsElements160way
     #  14451 bases of 18957 (76.230%) in intersection
 
