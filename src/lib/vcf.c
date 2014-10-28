@@ -227,7 +227,7 @@ int substrLen = substr.rm_eo - substr.rm_so;
 if (substrLen > sizeof(typeWord) - 1)
     {
     vcfFileErr(vcff, "substring passed to vcfInfoTypeFromSubstr is too long.");
-    return vcfInfoNoType;
+    return vcfInfoString;
     }
 safencpy(typeWord, sizeof(typeWord), line + substr.rm_so, substrLen);
 if (sameString("Integer", typeWord))
@@ -241,7 +241,7 @@ if (sameString("Character", typeWord))
 if (sameString("String", typeWord))
     return vcfInfoString;
 vcfFileErr(vcff, "Unrecognized type word \"%s\" in metadata line \"%s\"", typeWord, line);
-return vcfInfoNoType;
+return vcfInfoString;
 }
 
 // Regular expressions to check format and extract information from header lines:
@@ -561,13 +561,7 @@ static enum vcfInfoType typeForInfoKey(struct vcfFile *vcff, const char *key)
  * and failing that, from the keys reserved in the spec. */
 {
 struct vcfInfoDef *def = vcfInfoDefForKey(vcff, key);
-if (def == NULL)
-    {
-    vcfFileErr(vcff, "There is no INFO header defining \"%s\"", key);
-    // default to string so we can display value as-is:
-    return vcfInfoString;
-    }
-return def->type;
+return def ? def->type : vcfInfoString;
 }
 
 static int parseInfoValue(struct vcfRecord *record, char *infoKey, enum vcfInfoType type,
@@ -1119,13 +1113,7 @@ static enum vcfInfoType typeForGtFormat(struct vcfFile *vcff, const char *key)
  * and failing that, from the keys reserved in the spec. */
 {
 struct vcfInfoDef *def = vcfInfoDefForGtKey(vcff, key);
-if (def == NULL)
-    {
-    vcfFileErr(vcff, "There is no FORMAT header defining \"%s\"", key);
-    // default to string so we can display value as-is:
-    return vcfInfoString;
-    }
-return def->type;
+return def ? def->type : vcfInfoString;
 }
 
 #define VCF_MAX_FORMAT VCF_MAX_INFO
