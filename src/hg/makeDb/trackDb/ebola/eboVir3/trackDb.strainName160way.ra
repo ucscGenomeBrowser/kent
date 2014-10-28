@@ -58,7 +58,7 @@ html cons160way
     viewLimitsMax -4.611:0.934
 
         track strainPhyloP160way
-        subTrack strainCons160wayViewphyloP off
+        subTrack strainCons160wayViewphyloP on
         subGroups view=phyloP
         shortLabel PhyloP
         longLabel 158 Ebola strains and 2 Marburg strains Basewise Conservation by PhyloP
@@ -82,7 +82,7 @@ html cons160way
     subTrack strainCons160way
 
         track strainPhastCons160way
-        subTrack strainCons160wayViewphastcons off
+        subTrack strainCons160wayViewphastcons on
         subGroups view=phastcons
         shortLabel PhastCons
         longLabel 158 Ebola strains and 2 Marburg strains Basewise Conservation by PhastCons

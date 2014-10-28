@@ -57,7 +57,7 @@ group compGeno
     viewLimitsMax -4.611:0.934
 
         track phyloP160way
-        subTrack cons160wayViewphyloP off
+        subTrack cons160wayViewphyloP on
         subGroups view=phyloP
         shortLabel 7 Vert. Cons
         longLabel 158 Ebola strains and 2 Marburg strains Basewise Conservation by PhyloP
@@ -81,7 +81,7 @@ group compGeno
     subTrack cons160way
 
         track phastCons160way
-        subTrack cons160wayViewphastcons off
+        subTrack cons160wayViewphastcons on
         subGroups view=phastcons
         shortLabel PhastCons
         longLabel 158 Ebola strains and 2 Marburg strains Basewise Conservation by PhastCons
