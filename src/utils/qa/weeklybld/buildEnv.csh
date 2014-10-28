@@ -2,8 +2,8 @@
 setenv REVIEWDAY 2014-10-20             # v308 preview
 setenv LASTREVIEWDAY 2014-09-29         # v307 preview
 # set for preview 2:
-setenv REVIEW2DAY 2014-10-06        # v307 preview2
-setenv LASTREVIEW2DAY 2014-09-15    # v306 preview2
+setenv REVIEW2DAY 2014-10-27        # v308 preview2
+setenv LASTREVIEW2DAY 2014-10-06    # v307 preview2
 # set these three for final build:
 setenv BRANCHNN 307
 setenv TODAY 2014-10-13                # v307 final

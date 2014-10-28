@@ -95,7 +95,7 @@ for (i = 0;  i < rec->infoCount;  i++)
 	dyStringAppendC(dy, ';');
     const struct vcfInfoElement *el = &(rec->infoElements[i]);
     const struct vcfInfoDef *def = vcfInfoDefForKey(vcff, el->key);
-    enum vcfInfoType type = def? def->type : vcfInfoNoType;
+    enum vcfInfoType type = def ? def->type : vcfInfoString;
     dyStringAppend(dy, el->key);
     if (el->count > 0)
 	dyStringAppendC(dy, '=');
@@ -133,7 +133,6 @@ for (i = 0;  i < rec->infoCount;  i++)
 		dyStringAppendC(dy, dat.datChar);
 		break;
 	    case vcfInfoFlag: // Flags could have values in older VCF
-	    case vcfInfoNoType:
 	    case vcfInfoString:
 		dyStringAppend(dy, dat.datString);
 		break;
