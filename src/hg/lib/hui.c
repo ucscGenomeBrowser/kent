@@ -6311,6 +6311,14 @@ boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 char cartVarName[1024];
 
 printf("<TABLE%s><TR><TD>",boxed?" width='100%'":"");
+
+char *showWig = cartOrTdbString(cart, tdb, BAMWIG_MODE, "0");
+safef(cartVarName, sizeof(cartVarName), "%s.%s", name, BAMWIG_MODE);
+cgiMakeCheckBox(cartVarName, SETTING_IS_ON(showWig));
+printf("</TD><TD>Only show coverage of reads</TD>");
+printf("</TR>\n");
+
+printf("<TR><TD>\n");
 char *showNames = cartOrTdbString(cart, tdb, BAM_SHOW_NAMES, "0");
 safef(cartVarName, sizeof(cartVarName), "%s.%s", name, BAM_SHOW_NAMES);
 cgiMakeCheckBox(cartVarName, SETTING_IS_ON(showNames));
