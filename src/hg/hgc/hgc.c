@@ -18823,6 +18823,10 @@ if (row != NULL)
         {
         sqlFreeResult(&sr);
         hFindSplitTable(database, seqName, lfs->pslTable, pslTable, &hasBin);
+
+        if (isEmpty(pslTable) && trackDbSetting(tdb, "lfPslTable"))
+            safecpy(pslTable, sizeof(pslTable), trackDbSetting(tdb, "lfPslTable"));
+            
         sqlSafef(query, sizeof query, "SELECT * FROM %s WHERE qName = '%s'",
                        pslTable, lfs->lfNames[i]);
         sr = sqlMustGetResult(conn, query);
