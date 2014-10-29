@@ -59,8 +59,7 @@ introduction of GBiB, it was necessary to upload your data to the UCSC Genome Br
 place the data files on a publicly accessible web server and supply the URL to UCSC in order
 to view your own data with the Genome Browser. GBiB removes these requirements: none of your data 
 must be uploaded to the UCSC servers, allowing you to use the Genome Browser on personal
-datasets in situations where it's infeasible to load the data onto a public web server. 
-</p>
+datasets in situations where it's infeasible to load the data onto a public web server. </p>
 <p>
 Rather than installing the entire UCSC genome annotation database (several terabytes
 of data), GBiB instead depends upon remote connections to various UCSC servers for much of its 
@@ -70,8 +69,7 @@ to obtain genomic sequences, liftOver files, and many of the other large data fi
 connects to UCSC's <a href="mysql.html">public MySQL server</a> to download data displayed by the
 various annotation tracks. A few Genome Browser tracks are unavailable on the UCSC public MySQL
 server due to agreements with the data distributors (DECIPHER and LOVD Variants), and thus are 
-unavailable for use with GBiB. 
-</p>
+unavailable for use with GBiB. </p>
 <p>
 The majority of protected data use in the research community currently focuses on the human genomes,
 primarily the hg19 (GRCh37) assembly and with a growing body of annotation on the newer hg38 
@@ -82,8 +80,12 @@ may also be impacted by your connection distance from the UCSC server.
 To improve performance in these situations, GBiB includes a simple tool that allows you to
 download (&quot;mirror&quot;) selected genome annotation tracks to your machine. You can 
 find more information about this tool in the 
-<a href="#GbibMirroring">Improving Speed and Performance</a> section.
-</p>
+<a href="#GbibMirroring">Improving Speed and Performance</a> section.</p>
+<p>
+For more background on GBiB see: Haeussler M et al.
+<a href="http://bioinformatics.oxfordjournals.org/cgi/content/abstract/btu712?ijkey=oQ6TgaxqQRIaHXY&keytype=ref"
+target="_blank">Navigating protected genomics data with UCSC Genome Browser in a Box</a>. 
+<em>Bioinformatics</em> 2014; doi: 10.1093/bioinformatics/btu712. </p>
 </div><!-- .sectionContent -->
 </div><!-- .section -->
 
