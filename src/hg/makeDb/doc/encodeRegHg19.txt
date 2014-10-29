@@ -296,15 +296,22 @@
      1281988 wgEncodeRegDnaseClusteredV2.bed
     hgLoadBed hg19 wgEncodeRegDnaseClusteredV2 wgEncodeRegDnaseClusteredV2.bed
 
-    # filter out low scoring, but retain single cell type clusters and load in database
-    awk '$5 >= 100' peak.bed > wgEncodeRegDnaseClusteredV3.bed
-    wc -l wgEncodeRegDnaseClusteredV3.bed
-    # 1867665 wgEncodeRegDnaseClusteredV3.bed
-    hgLoadBed hg19 wgEncodeRegDnaseClusteredV3 wgEncodeRegDnaseClusteredV3.bed
+    # V3 of track -- don't filter out single celltype peaks!
+    # August 2014, KRR
+    # filter out low scoring, but retain single cell type clusters
+    awk '$5 >= 100' peak.bed > wgEncodeRegDnaseClusteredV3a.bed
+    # 1867665 wgEncodeRegDnaseClusteredV3a.bed
+    hgLoadBed hg19 wgEncodeRegDnaseClusteredV3a wgEncodeRegDnaseClusteredV3a.bed
 
-    # filter out low scoring, then format to BED5+floatscore+sources for hgBedSources 
+    # do same with metadata version, as we will actually load track with
+    # this additional info, for VAI integration
+    awk '$5 >= 100' peak.meta.bed > peak.meta.filtered.bed
+    wc -l peak.meta.filtered.bed
+    1867665 peak.meta.filtered.bed
+
+    # format to BED5+floatscore+sources for hgBedSources 
     #   which will extract, uniquify, and assign ID's to sources
-    awk 'BEGIN {OFS="\t"}{if ($5 >= 100) print $1, $2, $3, $4, $5, 0, $7}' peak.meta.bed > peak.meta.bed6
+    awk 'BEGIN {OFS="\t"}{print $1, $2, $3, $4, $5, 0, $7;}' peak.meta.filtered.bed > peak.meta.bed6
     hgBedSources peak.meta.bed6 regDnase
     mv regDnaseSources.tab wgEncodeRegDnaseClusteredSources.tab
 
@@ -313,18 +320,13 @@
     hgLoadSqlTab hg19 wgEncodeRegDnaseClusteredSources idName.sql wgEncodeRegDnaseClusteredSources.tab
 
     # format to BED5+sourceCount+sourceIds+sourceVals
-    awk '{print $8}' peak.meta.bed > peak.vals
-    awk 'BEGIN {OFS="\t"}{print $1, $2, $3, $4, $5, $7, $8}' regDnase.bed | paste - peak.vals > wgEncodeRegDnaseClusteredV4.bed
-    hgLoadBed hg19 wgEncodeRegDnaseClusteredV4 -sqlTable=$HOME/kent/src/hg/lib/bed5SourceVals.sql -renameSqlTable \
-        -as=$HOME/kent/src/hg/lib/bed5SourceVals.as wgEncodeRegDnaseClusteredV4.bed
+    awk '{print $8}' peak.meta.filtered.bed > peak.vals
+    awk 'BEGIN {OFS="\t"}{print $1, $2, $3, $4, $5, $7, $8;}' regDnase.bed | paste - peak.vals > wgEncodeRegDnaseClusteredV3.bed
+    hgLoadBed hg19 wgEncodeRegDnaseClusteredV3 -sqlTable=$HOME/kent/src/hg/lib/bed5SourceVals.sql -renameSqlTable \
+        -as=$HOME/kent/src/hg/lib/bed5SourceVals.as wgEncodeRegDnaseClusteredV3.bed
 
-    # swap in newer schema table for V3
-    hgsql hg19 -e "alter table wgEncodeRegDnaseClusteredV3 rename to wgEncodeRegDnaseClusteredV3a"
-    hgsql hg19 -e "alter table wgEncodeRegDnaseClusteredV4 rename to wgEncodeRegDnaseClusteredV3"
-    mv wgEncodeRegDnaseClusteredV3.bed wgEncodeRegDnaseClusteredV3a.bed
-    mv wgEncodeRegDnaseClusteredV4.bed wgEncodeRegDnaseClusteredV3.bed
 
-    #  NOTE: V1 had ~1M clusters, V2 has 1.2M
+    #  NOTE: V1 had ~1M clusters, V2 has 1.2M, V3 has 1.9M
     # It would be nice if hgc sorted datasets by signal or cellType
     # Create metadata table:  wgEncodeRegV2DnaseClusteredInputs (inputTrackTable setting)
     #  was: objName, cellType, treatment, replicate, lab, dateUnrestricted

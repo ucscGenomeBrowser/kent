@@ -742,6 +742,31 @@ unsigned int colorInt = snakePalette2[hashVal % (sizeof(snakePalette2)/sizeof(Co
 return MAKECOLOR_32(((colorInt >> 16) & 0xff),((colorInt >> 8) & 0xff),((colorInt >> 0) & 0xff));
 }
 
+static void boundMapBox(struct hvGfx *hvg, int start, int end, int x, int y, int width, int height,
+                       char *track, char *item, char *statusLine, char *directUrl, boolean withHgsid,
+                       char *extra)
+// make sure start x and end x position are on the screen
+// otherwise the tracking box code gets confused
+{
+if (x > insideWidth)
+    return;
+
+if (x < 0)
+    {
+    width -= -x;
+    x = 0;
+    }
+
+if (x + width > insideWidth)
+    {
+    width -= x + width - insideWidth;
+    }
+
+mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height,
+                       track, item, statusLine, directUrl, withHgsid,
+                       extra);
+}
+
 static void snakeDrawAt(struct track *tg, void *item,
 	struct hvGfx *hvg, int xOff, int y, double scale, 
 	MgFont *font, Color color, enum trackVisibility vis)
@@ -923,7 +948,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
     if ((vis == tvFull) || (vis == tvPack) )
 	{
 	safef(qAddress, sizeof qAddress, "qName=%s&qs=%d&qe=%d&qWidth=%d",sf->qName,  qs, qe,  winEnd - winStart);
-	mapBoxHgcOrHgGene(hvg, s, e, sx+1, y, w-2, heightPer, tg->track,
+	boundMapBox(hvg, s, e, sx+1, y, w-2, heightPer, tg->track,
 		    buffer, buffer, NULL, TRUE, qAddress);
 	}
     hvGfxBox(hvg, sx, y, w, heightPer, color);
@@ -1077,14 +1102,14 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 		{
 		hvGfxLine(hvg, sx, y2 - lineHeight/2 , sx, y2 + lineHeight/2, MG_ORANGE);
 		safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
-		mapBoxHgcOrHgGene(hvg, s, e, sx, y2 - lineHeight/2, 1, lineHeight, tg->track,
+		boundMapBox(hvg, s, e, sx, y2 - lineHeight/2, 1, lineHeight, tg->track,
 				    "foo", buffer, NULL, TRUE, NULL);
 		}
 	    else if ((sf->orientation == -1) && (qs != lastQEnd) && (lastS == e))
 		{
 		hvGfxLine(hvg, ex, y2 - lineHeight/2 , ex, y2 + lineHeight/2, MG_ORANGE);
 		safef(buffer, sizeof buffer, "%dbp", qs - lastQEnd);
-		mapBoxHgcOrHgGene(hvg, s, e, ex, y2 - lineHeight/2, 1, lineHeight, tg->track,
+		boundMapBox(hvg, s, e, ex, y2 - lineHeight/2, 1, lineHeight, tg->track,
 				    "foo", buffer, NULL, TRUE, NULL);
 		}
 	    }
@@ -1103,7 +1128,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 		    if (lastX != ex)
 			{
 			hvGfxLine(hvg, ex, y1, lastX, y2, color);
-			mapBoxHgcOrHgGene(hvg, s, e, ex, y1, lastX-ex, 1, tg->track,
+			boundMapBox(hvg, s, e, ex, y1, lastX-ex, 1, tg->track,
 				"", buffer, NULL, TRUE, NULL);
 			}
 		    }
@@ -1112,7 +1137,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 		    if (lastX != sx)
 			{
 			hvGfxLine(hvg, lastX, y1, sx, y2, color);
-			mapBoxHgcOrHgGene(hvg, s, e, lastX, y1, sx-lastX, 1, tg->track,
+			boundMapBox(hvg, s, e, lastX, y1, sx-lastX, 1, tg->track,
 				"", buffer, NULL, TRUE, NULL);
 			}
 		    }
@@ -1123,7 +1148,7 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 		hvGfxLine(hvg, sx, y2, sx, y2 - lineHeight - lineHeight/3, color);
 		char buffer[1024];
 		safef(buffer, sizeof buffer, "%d-%d %dbp gap",prevSf->qStart,prevSf->qEnd, qs - lastQEnd);
-		mapBoxHgcOrHgGene(hvg, s, e, sx, y2 - lineHeight - lineHeight/3, 2, lineHeight + lineHeight/3, tg->track,
+		boundMapBox(hvg, s, e, sx, y2 - lineHeight - lineHeight/3, 2, lineHeight + lineHeight/3, tg->track,
 	                    "", buffer, NULL, TRUE, NULL);
 
 		}
@@ -1135,14 +1160,14 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 		    {
 		    hvGfxLine(hvg, lastX-1, y1, ex, y2, color);
 		    hvGfxLine(hvg, ex, y2, ex, y2 + lineHeight , color);
-		    mapBoxHgcOrHgGene(hvg, s, e, ex-1, y2, 2, lineHeight , tg->track,
+		    boundMapBox(hvg, s, e, ex-1, y2, 2, lineHeight , tg->track,
 				"", buffer, NULL, TRUE, NULL);
 		    }
 		else
 		    {
 		    hvGfxLine(hvg, lastX-1, y1, sx, y2, color);
 		    hvGfxLine(hvg, sx, y2, sx, y2 + lineHeight , color);
-		    mapBoxHgcOrHgGene(hvg, s, e, sx-1, y2, 2, lineHeight , tg->track,
+		    boundMapBox(hvg, s, e, sx-1, y2, 2, lineHeight , tg->track,
 				"", buffer, NULL, TRUE, NULL);
 
 		    }

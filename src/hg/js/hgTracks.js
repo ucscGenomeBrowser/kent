@@ -3082,10 +3082,15 @@ var imageV2 = {
             var b = /SRC\s*=\s*"([^")]+)"/.exec(a[1]);
             if (b && b[1]) {
                 $('#chrom').attr('src', b[1]);
-                // ideoMap?  Not needed if the chrom has not changed.
-                //a = /<MAP Name=ideoMap>([\s\S]+)<\/MAP>/.exec(response);
-                //if (a && a[1])
-                //    $("map[name='idelMap']").html('src', a[1]);
+                // Even if we're on the same chrom, ideoMap may change because the label
+                // on the left changes width depending on band name, and that changes px scaling.
+                var ideoMapMatch = /<MAP Name=ideoMap>[\s\S]+?<\/MAP>/.exec(response);
+                if (ideoMapMatch) {
+                    var $oldMap = $("map[name='ideoMap']");
+                    var $container = $oldMap.parent();
+                    $oldMap.remove();
+                    $container.append(ideoMapMatch[0]);
+                }
                 if (imageV2.backSupport) {
                     // Reinit chrom dragging.
                     if ($('area.cytoBand').length >= 1) {

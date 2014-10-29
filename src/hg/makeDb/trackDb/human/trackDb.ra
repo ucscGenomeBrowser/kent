@@ -878,6 +878,7 @@ orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
+priority 1
 
 track snp141Flagged
 shortLabel Flagged SNPs(141)
@@ -2900,17 +2901,6 @@ mouseOverField variantType
 tableBrowser off hgmd
 noScoreFilter on
 
-track spMut
-shortLabel UniProt Variants
-longLabel UniProt/SwissProt Amino Acid Substitutions
-group phenDis
-visibility hide
-type bigBed 12 +
-itemRgb on
-urls variationId="http://web.expasy.org/variant_pages/$$.html" uniProtId="http://www.uniprot.org/uniprot/$$" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
-mouseOverField comments
-noScoreFilter on
-
 track clinvar
 compositeTrack on
 shortLabel ClinVar Variants
@@ -2935,17 +2925,6 @@ noScoreFilter on
     visibility pack
     parent clinvar
     priority 2
-
-track spAnnot
-shortLabel UniProt Annotations
-longLabel UniProt/SwissProt Annotations
-group x
-visibility hide
-type bigBed 12 +
-itemRgb on
-urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
-mouseOverField comments
-release alpha
 
 searchName cosmicId
 searchTable cosmic

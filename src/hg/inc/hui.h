@@ -623,6 +623,7 @@ enum wiggleAggregateFunctionEnum wiggleAggregateFunctionStringToEnum(char *strin
 #define BAM_COLOR_TAG "bamColorTag"
 #define BAM_COLOR_TAG_DEFAULT "YC"
 
+#define BAMWIG_MODE "bamWigMode"
 
 /*** Control of base/codon coloring code: ***/
 

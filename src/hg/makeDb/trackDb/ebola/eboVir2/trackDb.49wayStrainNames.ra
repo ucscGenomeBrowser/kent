@@ -1,0 +1,40 @@
+track cons49wayStrainNames
+compositeTrack on
+shortLabel 49 Strains
+longLabel Multiz Alignment & Conservation (49 Virus Strains)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility full
+priority 1
+type bed 4
+group compGeno
+html cons49way
+
+    track cons49wayViewalignStrainNames
+    shortLabel 49 Strains
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons49wayStrainNames
+
+        track multiz49wayStrainNames
+        subTrack cons49wayViewalignStrainNames on
+        shortLabel 49 Strains
+        longLabel Multiz Genome and Protein Alignments of 47 Ebola Strains and 2 Marburg Strains
+        subGroups view=align
+        noInherit on
+        irows on
+#        summary multiz49waySummary
+        frames multiz49wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        mafDot on
+	snpMode on
+        type wigMaf 0.0 1.0
+        speciesCodonDefault eboVir2
+        speciesGroups Virus
+        sGroup_Virus Guinea_Gueckedou-C05_2014 Guinea_Kissidougou-C15_2014 zaire_AF086833v2_1976 deRoover_1976 Bonduni_1977 Mayinga_1976 13709Kikwit_1995 13625Kikwit_1995 Zaire_1995 Kikwit_1995 2Nza_1996 1Eko_1996 Gabon_1994 Luebo5_2007 Luebo4_2007 Luebo43_2007 Luebo23_2007 Luebo1_2007 Luebo0_2007 Luebo9_2007 M-M_2007 034-KS_2008 Ilembe_2002 Maleo_1979 Boniface_1976 Yambio_2004 EboSud-682_2012 EboSud-609_2012 EboSud-603_2012 EboSud-602_2012 Gulu_2000 Nakisamata_2011 EboSud-639_2012 Reston09-A_2009 Reston08-A_2008 Reston08-C_2008 Alice,_TX_USA_MkCQ8167_1996 Reston_1996 Pennsylvania_1990 Reston08-E_2008 Bundibugyo_2007 EboBund-14_2012 EboBund-122_2012 EboBund-120_2012 EboBund-112_2012 Cote_dIvoire_1994 Marburg_MtElgon_Musoke_Kenya_1980 Marburg_MtElgon_Musoke_Kenya_1980
+        itemFirstCharCase noChange
+        treeImage phylo/eboVir2_49way.png
+        priority 100

@@ -1,0 +1,115 @@
+track strainCons160way
+compositeTrack on
+shortLabel 160 Strains
+longLabel Multiz Alignment & Conservation (160 Virus Strains, Strain Names)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility pack
+priority 1
+type bed 4
+group compGeno
+html cons160way
+
+    track strainCons160wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack strainCons160way
+
+        track strainName160way
+        subTrack strainCons160wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Genome Alignments of 158 Ebola strains and 2 Marburg strains
+        subGroups view=align
+        noInherit on
+#        irows on
+#        summary strainName160waySummary
+	snpTable mafSnpStrainName160way
+        frames strainName160wayFrames
+#        frames testAllStrainFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        mafDot on
+#	snpMode on
+        type wigMaf 0.0 1.0
+        speciesCodonDefault eboVir3
+        speciesGroups Ebola_2014 DRC_2007 Zaire(DRC)_1976-7 Bundibugyo_2007 Reston_1989-90 Sudan_1976-9 Marburg_1987
+        sGroup_Ebola_2014 Guinea_Kissidougou-C15_2014 Guinea_Gueckedou-C07_2014 Guinea_Gueckedou-C05_2014 EM095B_2014 EM095_2014 EM096_2014 EM098_2014 G3670v1_2014 G3676v1_2014 G3676v2_2014 G3677v1_2014 G3677v2_2014 G3679v1_2014 G3680v1_2014 G3682v1_2014 G3683v1_2014 G3687v1_2014 EM104_2014 EM106_2014 EM110_2014 EM111_2014 EM112_2014 EM113_2014 EM115_2014 EM119_2014 EM120_2014 EM121_2014 EM124v1_2014 EM124v2_2014 EM124v3_2014 EM124v4_2014 G3707_2014 G3713v2_2014 G3713v3_2014 G3713v4_2014 G3724_2014 G3729_2014 G3734v1_2014 G3735v1_2014 G3735v2_2014 G3750v1_2014 G3750v2_2014 G3750v3_2014 G3752_2014 G3758_2014 G3764_2014 G3765v2_2014 G3769v1_2014 G3769v2_2014 G3769v3_2014 G3769v4_2014 G3770v1_2014 G3770v2_2014 G3771_2014 G3782_2014 G3786_2014 G3787_2014 G3788_2014 G3789v1_2014 G3795_2014 G3796_2014 G3798_2014 G3799_2014 G3800_2014 G3805v1_2014 G3805v2_2014 G3807_2014 G3808_2014 G3809_2014 G3810v1_2014 G3810v2_2014 G3814_2014 G3816_2014 G3817_2014 G3818_2014 G3819_2014 G3820_2014 G3821_2014 G3822_2014 G3823_2014 G3825v1_2014 G3825v2_2014 G3826_2014 G3827_2014 G3829_2014 G3831_2014 G3834_2014 G3838_2014 G3840_2014 G3841_2014 G3845_2014 G3846_2014 G3848_2014 G3850_2014 G3851_2014 G3856v1_2014 G3856v3_2014 G3857_2014 NM042v1_2014 NM042v2_2014 NM042v3_2014
+        sGroup_DRC_2007 Ilembe_2002 034-KS_2008 M-M_2007 Luebo9_2007 Luebo0_2007 Luebo1_2007 Luebo23_2007 Luebo43_2007 Luebo4_2007 Luebo5_2007 Zaire_1995 Kikwit_1995 13625Kikwit_1995 13709Kikwit_1995 Gabon_1994 1Eko_1996 2Nza_1996 1Mbie_Gabon_1996 1Oba_Gabon_1996 1Ikot_Gabon_1996 
+        sGroup_Zaire(DRC)_1976-7 GuineaPig_Mayinga_2007 Mouse_Mayinga_2002 Mayinga_2002 AF086833v2_1976 Mayinga_1976 Bonduni_1977 deRoover_1976 NC_002549v1_1976
+        sGroup_Bundibugyo_2007 EboBund-112_2012 EboBund-120_2012 EboBund-122_2012 EboBund-14_2012 Bundibugyo_Uganda_2007 Bundibugyo_2007 Cote_dIvoire_CIEBOV_1994 Cote_dIvoire_1994
+        sGroup_Reston_1989-90 Reston_PA_1990 Reston09-A_2009 Pennsylvania_1990 reconstructReston_2008 Reston08-A_2008 Reston08-C_2008 Reston_1996 Alice_TX_USA_MkCQ8167_1996 Reston08-E_2008 
+        sGroup_Sudan_1976-9 EboSud-602_2012 EboSud-603_2012 EboSud-609_2012 EboSud-682_2012 EboSud-639_2012 Nakisamata_2011 Boniface_1976 Maleo_1979 Yambio_2004 Gulu_Uganda_2000 Gulu_2000 
+        sGroup_Marburg_1987 Marburg_KitumCave_Kenya_1987 Marburg_MtElgon_Musoke_Kenya_1980
+        itemFirstCharCase noChange
+        priority 100
+
+#        treeImage phylo/eboVir3_160way.png
+
+    # PhyloP conservation
+    track strainCons160wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack strainCons160way
+    viewLimits -3:0.5
+    viewLimitsMax -4.611:0.934
+
+        track strainPhyloP160way
+        subTrack strainCons160wayViewphyloP on
+        subGroups view=phyloP
+        shortLabel PhyloP
+        longLabel 158 Ebola strains and 2 Marburg strains Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -4.711 0.934
+        maxHeightPixels 100:50:11
+        viewLimits -3.107:0.934
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track strainCons160wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack strainCons160way
+
+        track strainPhastCons160way
+        subTrack strainCons160wayViewphastcons on
+        subGroups view=phastcons
+        shortLabel PhastCons
+        longLabel 158 Ebola strains and 2 Marburg strains Basewise Conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track strainCons160wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack strainCons160way
+
+        track strainPhastConsElements160way
+        subTrack strainCons160wayViewelements on
+        subGroups view=elements
+        shortLabel Cons. Elements
+        longLabel 158 Ebola strains and 2 Marburg strains Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23

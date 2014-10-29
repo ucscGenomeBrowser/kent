@@ -108,6 +108,7 @@ filterComposite *
 filterTopScorers bed5FloatScoreWithFdr bed5FloatScore
 firstItemPos customTracks
 frames wigMaf
+forceFirstCharLowerCase wigMaf
 ensemblTranscriptIdUrl genePred
 ensemblGeneIdUrl genePred
 vegaTranscriptIdUrl genePred
@@ -289,6 +290,7 @@ qValueFilterLimits bed narrowPeak broadPeak
 refSeqAnnoVersion genePred
 release *
 ucscRetroInfo psl
+ucscRetroParentTables *
 sGroup_Birds wigMaf
 sGroup_Chimp wigMaf
 sGroup_Glires wigMaf
@@ -308,6 +310,16 @@ sGroup_bird wigMaf
 sGroup_fish wigMaf
 sGroup_Fish wigMaf
 sGroup_hiv wigMafProt wigMaf
+sGroup_Virus wigMaf
+sGroup_Ebola_2014 wigMaf
+sGroup_Bundibugyo_2007 wigMaf
+sGroup_Sudan_1976-9 wigMaf
+sGroup_Reston_1989-90 wigMaf
+sGroup_DRC_2007 wigMaf
+sGroup_Zaire(DRC)_1976-7 wigMaf
+sGroup_Marburg_1987 wigMaf
+sGroup_Zaire wigMaf
+sGroup_Gabon wigMaf
 sGroup_mammal wigMaf
 sGroup_placental wigMaf
 sGroup_primate wigMaf
@@ -315,12 +327,14 @@ sGroup_vertebrate wigMaf
 sGroup_worm wigMaf
 sGroup_Caenorhabditis wigMaf
 sGroup_Nematode wigMaf
+sGroup_Drosophila wigMaf
+sGroup_Others wigMaf
 scoreFilter broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed
 scoreFilterByRange bed peptideMapping bigBed
 scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed
 scoreFilterMax bed bedlogR peptideMapping bigBed
-scoreMax bed bedlogR interaction peptideMapping bigBed narrowPeak
-scoreMin broadPeak narrowPeak bed bedlogR interaction peptideMapping
+scoreMax bed bedlogR interaction peptideMapping narrowPeak bigBed
+scoreMin broadPeak narrowPeak bed bedlogR interaction peptideMapping bigBed
 searchIndex bigBed
 searchTrix bigBed
 selectSubject psl
@@ -340,9 +354,10 @@ signalFilterLimits bed narrowPeak broadPeak
 smoothingWindow wig bed5FloatScore bedGraph bigWig
 snpExceptions bed
 snpExceptionDesc bed
+snpMode wigMaf maf
 snpSeq bed
 snpSeqFile bed
-snpTable bed
+snpTable bed wigMaf
 snpVersion bed
 sortOrder *
 sourceTable factorSource bed

@@ -1,0 +1,353 @@
+# for emacs: -*- mode: sh; -*-
+
+    # Trackify supplemental info from http://www.sciencemag.org/content/345/6202/1369/suppl/DC1
+    # "Genomic surveillance elucidates Ebola virus origin and transmission during the 2014 outbreak"
+    # Gire et al, Science 12 September 2014: vol. 345 no. 6202 pp. 1369-1372
+
+    mkdir /hive/data/genomes/eboVir2/bed/gire
+    cd /hive/data/genomes/eboVir2/bed/gire
+
+    # They used KM034562.1 as the reference sequence.  Fortunately this has only 7 SNVs
+    # and 2 bases missing at the end relative to our eboVir2 reference sequence (KJ660347.2).
+    # BLAT them... (http://www.ncbi.nlm.nih.gov/nuccore/661348725?report=fasta)
+    twoBitToFa ../../eboVir2.2bit -seq=KJ660347v2 KJ660347v2.fa
+    blat KJ660347v2.fa KM034562.fa kjToKm.psl
+    # OK, that just confirms that we don't need to do a liftOver; dig up locations of
+    # differences from the browser, because for VCF we need the correct REF and ALT alleles
+    # (and corresponding 0 and 1 genotypes).  In pgSNP format for custom track:
+track name=KMDiffs type=pgSnp visibility=pack
+KJ660347v2	1848	1849	T/C	2	0,0	0,0
+KJ660347v2	6282	6283	C/T	2	0,0	0,0
+KJ660347v2	9922	9923	C/T	2	0,0	0,0
+KJ660347v2	11810	11811	C/T	2	0,0	0,0
+KJ660347v2	13855	13856	A/G	2	0,0	0,0
+KJ660347v2	15598	15599	A/G	2	0,0	0,0
+KJ660347v2	15659	15660	T/C	2	0,0	0,0
+    # Visually checked the custom track against BLAT diffs -- looks good.
+
+    # Oh damn... they used KJ660347.1 but we need .2, likewise for 346 and 348.
+    # I guess the script will have to update those too.  They also have "." for some bases.
+
+
+    # File S1: Alignment and SNP calls used in this study.
+    wget http://www.sciencemag.org/content/suppl/2014/08/27/science.1259657.DC1/1259657_file_s1.zip
+    unzip 1259657_file_s1.zip
+    cd snp
+    wc -l *.vcf
+#    63 SNP-2014.vcf
+#  1311 SNP-ZEBOV.vcf
+    ~/kent/src/hg/utils/automation/gireVcfToUcsc.pl SNP-2014.vcf > gire2014.vcf
+    ~/kent/src/hg/utils/automation/gireVcfToUcsc.pl SNP-ZEBOV.vcf > gireZebov.vcf
+    # Compress, index, put in /gbdb and load up...
+    foreach f (gire*.vcf)
+      bgzip $f
+      tabix -p vcf $f.gz
+    end
+    mkdir /gbdb/eboVir2/gire
+    ln -s `pwd`/gire*.vcf.gz{,.tbi} /gbdb/eboVir2/gire/
+    hgBbiDbLink eboVir2 gire2014 /gbdb/eboVir2/gire/gire2014.vcf.gz
+    hgBbiDbLink eboVir2 gireZebov /gbdb/eboVir2/gire/gireZebov.vcf.gz
+
+    # Jim's request: make tracks with only missense mutations
+    foreach t (2014 ZEBOV)
+      grep ^# SNP-$t.vcf > SNP-$t-missense.vcf
+      grep MISSENSE SNP-$t.vcf >> SNP-$t-missense.vcf
+      set n = `echo $t | sed -e 's/ZEBOV/Zebov/'`
+      set vcf = gire${n}Missense.vcf
+      ~/kent/src/hg/utils/automation/gireVcfToUcsc.pl SNP-$t-missense.vcf > $vcf
+      bgzip $vcf
+      tabix -p vcf $vcf.gz
+      ln -s `pwd`/$vcf.gz{,.tbi} /gbdb/eboVir2/gire/
+      hgBbiDbLink eboVir2 $vcf:r /gbdb/eboVir2/gire/$vcf.gz
+    end
+
+    # Get KM* accessions from project page: http://www.ncbi.nlm.nih.gov/bioproject/PRJNA257197
+    # Download KM* sequences from NCBI... there are 79 not 99, oh well.
+    cd /hive/data/genomes/eboVir2/bed/gire
+    # Save sequences as gire.fasta.
+    # Make files for mapping between GenBank IDs and Gire et al. IDs.
+    grep '^>' gire.fasta \
+    | perl -wpe 's/.*(KM\d+)\.1.*ManoRiver-([A-Z]+\d+(\.\d+)?).*/$1\t$2/' \
+      > gbAccToGireId.txt
+    grep '^>' gire.fasta \
+    | perl -wpe 's/.*(KM\d+)\.1.*ManoRiver-([A-Z]+\d+(\.\d+)?).*/EBOV_2014_$2\t$1/' \
+      > gireIdToGbAcc.txt
+
+
+    # File S2: Phylogenetic trees created using MrBayes and RAxML.
+    wget http://www.sciencemag.org/content/suppl/2014/08/27/science.1259657.DC1/1259657_file_s2.zip
+    unzip 1259657_file_s2.zip
+    cd /hive/data/genomes/eboVir2/bed/gire
+    grep tree_1 trees/ebola.raxml.tree \
+    | perl -wpe ' \
+        s/\[&[^]]+\]//g; \
+        while (/:([\d.]+E[+-]\d+)/) { \
+          $num = sprintf "%f", $1; \
+          s/:([\d.]+E[+-]\d+)/:$num/; \
+      }' \
+      > gire.tree
+#        tree tree_1 =  ((BDBV_2012_KC545395:0.000103,(BDBV_2012_KC545394:0.000155,BDBV_2012_KC545393:0.000103):0.000002):0.000155,(BDBV_2007_FJ217161:0.007415,(TAFV_1994_FJ217162:0.401808,((((RESTV_1990_AF522874:0.003738,((RESTV_2008_FJ621583:0.000094,RESTV_2009_JX477165:0.000591):0.016864,(RESTV_2008_FJ621585:0.010912,(RESTV_1996_AB050936:0.000581,RESTV_1996_JX477166:0.000316):0.00174):0.003797):0.00233):0.008434,RESTV_2008_FJ621584:0.018705):0.822312,((SUDV_2004_EU338380:0.002392,(SUDV_1976_FJ968794:0.000844,SUDV_1979_KC242783:0.001256):0.000082):0.025302,((SUDV_2000_AY729654:0.002432,(SUDV_2011_JN638998:0.003144,((SUDV_2012_KC545392:0.000105,(SUDV_2012_KC545390:0.000052,SUDV_2012_KC545389:0.000002):0.000002):0.000002,SUDV_2012_KC545391:0.000105):0.004058):0.000268):0.001395,SUDV_2012_KC589025:0.004102):0.02302):0.902615):0.388781,(((EBOV_1995_AY354458:0.000061,EBOV_1995_JQ352763:0.000002):0.000246,(EBOV_1995_KC242799:0.000002,EBOV_1995_KC242796:0.000051):0.000153):0.001611,(((((EBOV_2014_KJ660347:0.000052,((((((((((EBOV_2014_EM121:0.000051,(((((EBOV_2014_EM113:0.000002,EBOV_2014_EM111:0.000002):0.000002,(((EBOV_2014_G3764:0.000002,((EBOV_2014_G3856:0.000051,(EBOV_2014_G3822:0.000002,(EBOV_2014_G3821:0.000002,(EBOV_2014_G3809:0.000002,EBOV_2014_G3816:0.000002):0.000002):0.000002):0.000051):0.000002,((EBOV_2014_G3798:0.000002,EBOV_2014_G3771:0.000002):0.000002,EBOV_2014_EM106:0.000002):0.000002):0.000002):0.000002,(EBOV_2014_G3814:0.000002,(EBOV_2014_G3819:0.000051,(EBOV_2014_G3750:0.000051,(EBOV_2014_G3805:0.000002,(EBOV_2014_G3789:0.000002,(EBOV_2014_G3850:0.000002,EBOV_2014_G3765:0.000002):0.000002):0.000002):0.000002):0.000002):0.000002):0.000002):0.000002,(((EBOV_2014_NM042:0.000002,(EBOV_2014_G3735:0.000002,((((EBOV_2014_G3707:0.000002,EBOV_2014_EM124:0.000002):0.000002,(EBOV_2014_G3845:0.000002,(EBOV_2014_EM104:0.000051,EBOV_2014_G3846:0.000102):0.000002):0.000002):0.000002,EBOV_2014_EM110:0.000002):0.000002,(EBOV_2014_G3840:0.000002,(EBOV_2014_G3713:0.000051,EBOV_2014_G3818:0.000102):0.000002):0.000002):0.000002):0.000002):0.000002,(((EBOV_2014_G3752:0.000002,(EBOV_2014_G3834:0.000002,(EBOV_2014_G3825:0.000002,((EBOV_2014_G3857:0.000002,EBOV_2014_G3851:0.000002):0.000002,EBOV_2014_G3848:0.000002):0.000002):0.000002):0.000002):0.000002,EBOV_2014_G3829:0.000051):0.000051,(EBOV_2014_G3827:0.000002,EBOV_2014_G3826:0.000002):0.000051):0.000002):0.000002,EBOV_2014_EM115:0.000002):0.000002):0.000002):0.000002,EBOV_2014_EM112:0.000002):0.000002,(EBOV_2014_G3724:0.000051,(EBOV_2014_G3770:0.000002,EBOV_2014_EM119:0.000002):0.000102):0.000002):0.000002,EBOV_2014_G3817:0.000153):0.000051):0.000002,((((EBOV_2014_G3682:0.000002,EBOV_2014_G3758:0.000002):0.000002,((((EBOV_2014_EM096:0.000002,EBOV_2014_G3679:0.000002):0.000102,(EBOV_2014_G3787:0.000002,EBOV_2014_G3831:0.000002):0.000102):0.000002,EBOV_2014_G3788:0.000051):0.000002,EBOV_2014_G3734:0.000002):0.000002):0.000002,EBOV_2014_G3782:0.000002):0.000002,((((((((((EBOV_2014_G3838:0.000002,EBOV_2014_G3841:0.000002):0.000002,EBOV_2014_G3796:0.000002):0.000002,EBOV_2014_G3807:0.000002):0.000002,(EBOV_2014_G3808:0.000002,EBOV_2014_G3786:0.000002):0.000002):0.000002,(EBOV_2014_G3820:0.000002,EBOV_2014_G3800:0.000002):0.000002):0.000002,EBOV_2014_G3795:0.000002):0.000002,EBOV_2014_G3729:0.000002):0.000002,EBOV_2014_G3677:0.000002):0.000002,((EBOV_2014_G3799:0.000051,EBOV_2014_G3670:0.000102):0.000002,((EBOV_2014_G3810:0.000102,EBOV_2014_G3769:0.000102):0.000002,EBOV_2014_EM120:0.000051):0.000002):0.000002):0.000002,EBOV_2014_EM098:0.000002):0.000002):0.000002):0.000002,EBOV_2014_G3823:0.000051):0.000204,EBOV_2014_G3680:0.000051):0.000002,EBOV_2014_G3676:0.000002):0.000002,EBOV_2014_G3683:0.000051):0.000002,EBOV_2014_G3686:0.000102):0.000002,EBOV_2014_EM095:0.000002):0.000002,EBOV_2014_G3687:0.000053):0.000265,(EBOV_2014_KJ660348:0.000156,EBOV_2014_KJ660346:0.000002):0.000052):0.000053):0.019385,((EBOV_2007_KC242787:0.000002,EBOV_2007_KC242788:0.000409):0.000051,((((EBOV_2007_HQ613403:0.000002,EBOV_2007_KC242784:0.000153):0.000051,EBOV_2008_HQ613402:0.000514):0.000002,(EBOV_2007_KC242786:0.000051,EBOV_2007_KC242789:0.000102):0.000051):0.000002,(EBOV_2007_KC242785:0.000153,EBOV_2007_KC242790:0.000205):0.000051):0.000002):0.008873):0.000238,EBOV_2002_KC242800:0.012358):0.005212,(EBOV_1977_KC242791:0.000051,(EBOV_1976_NC002549:0.000051,EBOV_1976_KC242801:0.000051):0.000002):0.004352):0.003541,((EBOV_1994_KC242792:0.000768,EBOV_1996_KC242793:0.001025):0.000624,EBOV_1996_KC242794:0.002145):0.004322):0.001723):0.46361):0.371814):0.419411):0.00539,BDBV_2012_KC545396:0.000104);
+    # Sent to Hiram
+
+
+    # File S4: Intrahost variants for 78 Sierra Leone EVD patients. 
+    wget http://www.sciencemag.org/content/suppl/2014/08/27/science.1259657.DC1/1259657_file_s4.zip
+    unzip 1259657_file_s4.zip
+    cd /hive/data/genomes/eboVir2/bed/gire/iSNV
+    set vcf = gireIntraHost.vcf
+    ~/kent/src/hg/utils/automation/gireVcfToUcsc.pl iSNV-all.vcf > $vcf
+    bgzip $vcf
+    tabix -p vcf $vcf.gz
+    ln -s `pwd`/$vcf.gz{,.tbi} /gbdb/eboVir2/gire/
+    hgBbiDbLink eboVir2 $vcf:r /gbdb/eboVir2/gire/$vcf.gz
+
+
+    # Table S4: SNPs unique to the 2014 outbreak variant.
+    wget http://www.sciencemag.org/content/suppl/2014/08/27/science.1259657.DC1/1259657_table_s4.zip
+    unzip 1259657_table_s4.zip
+    mkdir /hive/data/genomes/eboVir2/bed/gire/Table_S4
+    cd /hive/data/genomes/eboVir2/bed/gire/Table_S4
+    # Use a spreadsheet tool to convert each sheet of .xslx to tab-sep text.
+    wc -l S4*.txt
+#  395 S4_2014_specific_snps.txt
+#   76 S4_Description.txt
+#   19 S4_GP_Kikwit_aa_diffs.txt
+#   22 S4_GP_Mayinga_aa_diffs.txt
+#   14 S4_filter1.txt
+#   13 S4_filter2.txt
+#   15 S4_ns_changes_polymorphic_in_2014.txt
+#   35 S4_unique_ns_changes_fixed_in_2014.txt
+    # S4_Description.txt describes all of the other files.
+
+    # Convert S4_2014_specific_snps.txt to bigBed with coloring by coding effect.
+    tail -n +2 S4_2014_specific_snps.txt \
+    | perl -wne ' \
+      chomp; \
+      ($start, $ancNt, $newNt, $gene, $type, $aaPos, $ancAa, $newAa, $blosum62, $countInNew) \
+        = split("\t"); \
+      $chrom = "KJ660347v2"; \
+      $end = $start;  $start--; \
+      $name = "$ancNt/$newNt"; \
+      $color = "0,0,0"; \
+      $hgsv = ""; \
+      if ($type ne "noncoding") { \
+        $hgsv = "$gene:$ancAa$aaPos$newAa"; \
+      } \
+      if ($type eq "nonsynonymous") { \
+        $color = "220,0,0"; \
+        $name .= " $hgsv"; \
+      } elsif ($type eq "synonymous") { \
+        $color = "0,220,0"; \
+      } \
+      $freqInNew = sprintf "%4f", ($countInNew / 81.0); \
+      print join("\t", $chrom, $start, $end, $name, 0, "+", $start, $end, $color, \
+                       $gene, $type, $hgsv, $blosum62, $countInNew, $freqInNew) . "\n"; \
+    ' \
+      > gire2014SpecificSnps.bed
+    cat > gire2014SpecificSnps.as <<EOF
+table gire2014SpecificSnps
+"Sites that carry a unique base in the 2014 outbreak strain, from Gire et al. Table S4"
+    (
+    string chrom;      "Reference sequence"
+    uint   chromStart; "Start position in reference"
+    uint   chromEnd;   "End position in reference"
+    string name;       "Variant: ancestral/2014-derived"
+    uint   score;      "Score from 0-1000 (not used)"
+    char[1] strand;    "+ or - (always + here)"
+    uint thickStart;   "Start of where display should be thick (same as chromStart)"
+    uint thickEnd;     "End of where display should be thick (same as chromEnd)"
+    uint reserved;     "Used as itemRgb"
+    string gene;       "Gene symbol"
+    string type;       "noncoding, synonymous or nonsynonymous"
+    string hgsv;       "HGSV notation for protein coding changes (or lack thereof)"
+    string blosum62;   "BLOSUM62 substitution score for ancestral and 2014 amino acids"
+    int countInNew;    "Number of 2014 samples that contain derived allele (out of 81 total)"
+    float freqInNew;   "Derived allele frequency of 2014 samples"
+    )
+EOF
+    bedToBigBed gire2014SpecificSnps.bed ../../../chrom.sizes \
+      -type=bed9+ -as=gire2014SpecificSnps.as -tab \
+      gire2014SpecificSnps.bb
+    ln -s `pwd`/gire2014SpecificSnps.bb /gbdb/eboVir2/gire/
+    hgBbiDbLink eboVir2 gire2014SpecificSnps /gbdb/eboVir2/gire/gire2014SpecificSnps.bb
+
+    # For converting gene aa positions to UCSC start coords: results of TB query:
+#name	cdsStart
+#NP	469
+#VP35	3128
+#VP40	4478
+#ssGP	6038
+#sGP	6038
+#GP	6038
+#VP30	8508
+#VP24	10344
+#L	11580
+
+    # Convert S4_unique_ns_changes_fixed_in_2014.txt to bigBed+.
+    cd /hive/data/genomes/eboVir2/bed/gire/Table_S4
+    head -3 S4_unique_ns_changes_fixed_in_2014.txt
+#gene    aa_pos  ref     alt     blosum_62_score fixed_in_outbreak_strain        frequency in outbreak strain (number of samples)        fully conserved across ebola genus?     conservative substitution across ebola genus and non-conservative in 2014
+#GP      315     Ala     Pro     -1      yes     81      no    no
+#GP      336     Thr     Asn     0       yes     81      no    no
+    # We need to convert from amino acid coords to genomic.
+    perl -wne ' \
+      next if (/^gene/); chomp; \
+      ($gene, $aaPos, $refAa, $altAa, $blosum62, undef, undef, $consAcrossEbola) \
+        = split("\t"); \
+      %geneToCdsStart = ("NP" => 469, "VP35" => 3128, "VP40" => 4478, "GP" => 6038, \
+                         "VP30" => 8508, "VP24" => 10344, "L" => 11580); \
+      $offset = $geneToCdsStart{$gene} || die "nothing for $gene"; \
+      $start = $offset + (($aaPos - 1) * 3); \
+      # Handle GP weird frameshift: \
+      $start-- if ($gene eq "GP" && $start > 6922); \
+      $end = $start + 3; \
+      $hgsv = "$gene:$refAa$aaPos$altAa"; \
+      $name = $hgsv;  $name .= " *CONS*" if ($consAcrossEbola eq "yes"); \
+      print join("\t", "KJ660347v2", $start, $end, $name, \
+                       $gene, $hgsv, $blosum62, $consAcrossEbola) \
+            . "\n"; \
+      ' S4_unique_ns_changes_fixed_in_2014.txt \
+      | sort -k2n,2n \
+      > gire2014FixedMissense.bed
+    cat > gire2014FixedMissense.as <<EOF
+table gire2014FixedMissense
+"Amino acid changes that are unique to and fixed within the 2014 outbreak isolates, from Gire et al. Table S4"
+    (
+    string chrom;      "Reference sequence"
+    uint   chromStart; "Start position in reference"
+    uint   chromEnd;   "End position in reference"
+    string name;       "Amino acid change (with *CONS* if fully conserved across ebola genus)"
+    string gene;       "Gene symbol"
+    string hgsv;       "HGSV notation for amino acid change"
+    string blosum62;   "BLOSUM62 substitution score for ancestral and 2014 amino acids"
+    string consAcrossEbola;  "Fully conserved across ebola genus"
+    )
+EOF
+    bedToBigBed gire2014FixedMissense.bed ../../../chrom.sizes \
+      -type=bed4+ -as=gire2014FixedMissense.as -tab \
+      gire2014FixedMissense.bb
+    ln -s `pwd`/gire2014FixedMissense.bb /gbdb/eboVir2/gire/
+    hgBbiDbLink eboVir2 gire2014FixedMissense /gbdb/eboVir2/gire/gire2014FixedMissense.bb
+
+    # Convert S4_ns_changes_polymorphic_in_2014.txt to bigBed+
+    head -3 S4_ns_changes_polymorphic_in_2014.txt 
+#gene    aa_pos  ref     alt     blosum_62_score fixed_in_outbreak_strain        frequency in outbreak strain (number of samples)        fully conserved across ebola genus?     conservative substitution across ebola genus and non-conservative in 2014
+#GP      46      Ser     Asn     1       no      1       no    no
+#GP      82      Ala     Val     0       no      78      yes   no
+    perl -wne ' \
+      next if (/^gene/); chomp; \
+      ($gene, $aaPos, $refAa, $altAa, $blosum62, undef, $countIn2014, $consAcrossEbola) \
+        = split("\t"); \
+      %geneToCdsStart = ("NP" => 469, "VP35" => 3128, "VP40" => 4478, "GP" => 6038, \
+                         "VP30" => 8508, "VP24" => 10344, "L" => 11580); \
+      $offset = $geneToCdsStart{$gene} || die "nothing for $gene"; \
+      $start = $offset + (($aaPos - 1) * 3); \
+      # Handle GP weird frameshift: \
+      $start-- if ($gene eq "GP" && $start > 6922); \
+      $end = $start + 3; \
+      $hgsv = "$gene:$refAa$aaPos$altAa"; \
+      $name = "$hgsv ($countIn2014/81)"; \
+      $name .= " *CONS*" if ($consAcrossEbola eq "yes"); \
+      $freqIn2014 = sprintf "%.4f", ($countIn2014 / 81.0); \
+      print join("\t", "KJ660347v2", $start, $end, $name, \
+                       $gene, $hgsv, $blosum62, $countIn2014, $freqIn2014, $consAcrossEbola) \
+            . "\n"; \
+      ' S4_ns_changes_polymorphic_in_2014.txt \
+      | sort -k2n,2n \
+      > gire2014PolymorphicMissense.bed
+    cat > gire2014PolymorphicMissense.as <<EOF
+table gire2014PolymorphicMissense
+"Amino acid changes that are unique to and fixed within the 2014 outbreak isolates, from Gire et al. Table S4"
+    (
+    string chrom;      "Reference sequence"
+    uint   chromStart; "Start position in reference"
+    uint   chromEnd;   "End position in reference"
+    string name;       "Amino acid change + frequency in 2014 (with *CONS* if fully conserved across ebola genus)"
+    string gene;       "Gene symbol"
+    string hgsv;       "HGSV notation for amino acid change"
+    string blosum62;   "BLOSUM62 substitution score for ancestral and 2014 amino acids"
+    int countIn2014;   "Number of 2014 samples with change (out of 81)"
+    float freqIn2014;   "Frequency of 2014 samples with change"
+    string consAcrossEbola;  "Fully conserved across ebola genus"
+    )
+EOF
+    bedToBigBed gire2014PolymorphicMissense.bed ../../../chrom.sizes \
+      -type=bed4+ -as=gire2014PolymorphicMissense.as -tab \
+      gire2014PolymorphicMissense.bb
+    ln -s `pwd`/gire2014PolymorphicMissense.bb /gbdb/eboVir2/gire/
+    hgBbiDbLink eboVir2 gire2014PolymorphicMissense /gbdb/eboVir2/gire/gire2014PolymorphicMissense.bb
+
+    # Convert S4_GP_Kikwit_aa_diffs.txt to bigBed+
+    head -3 S4_GP_Kikwit_aa_diffs.txt
+#aa_pos  Kikwit_aa       variant_aa      number_2014_seqs_with_variant_aa
+#46      S       N       1
+#82      A       V       78
+    perl -wne ' \
+      next unless (/^\d/); chomp; \
+      ($aaPos, $kikAa, $altAa, $countIn2014) = split("\t"); \
+      $offset = 6038; \
+      $start = $offset + (($aaPos - 1) * 3); \
+      # Handle GP weird frameshift: \
+      $start-- if ($start > 6922); \
+      $end = $start + 3; \
+      $hgsv = "GP:$kikAa$aaPos$altAa"; \
+      $name = "$hgsv ($countIn2014/81)"; \
+      print join("\t", "KJ660347v2", $start, $end, $name, $hgsv, $countIn2014) . "\n"; \
+      ' S4_GP_Kikwit_aa_diffs.txt \
+      | sort -k2n,2n \
+      > gire2014KikwitMissense.bed
+    cat > gire2014KikwitMissense.as <<EOF
+table gire2014KikwitMissense
+"GP gene amino acid changes in 2014 outbreak isolates compared to a Kikwit isolate, from Gire et al. Table S4"
+    (
+    string chrom;      "Reference sequence"
+    uint   chromStart; "Start position in reference"
+    uint   chromEnd;   "End position in reference"
+    string name;       "Amino acid change"
+    string hgsv;       "HGSV notation for amino acid change"
+    int countIn2014;   "Number of 2014 samples with change (out of 81)"
+    )
+EOF
+    bedToBigBed gire2014KikwitMissense.bed ../../../chrom.sizes \
+      -type=bed4+ -as=gire2014KikwitMissense.as -tab \
+      gire2014KikwitMissense.bb
+    ln -s `pwd`/gire2014KikwitMissense.bb /gbdb/eboVir2/gire/
+    hgBbiDbLink eboVir2 gire2014KikwitMissense /gbdb/eboVir2/gire/gire2014KikwitMissense.bb
+
+    # Convert S4_GP_Mayinga_aa_diffs.txt to bigBed+
+    head -3 S4_GP_Mayinga_aa_diffs.txt
+#aa_pos  Mayinga_aa      variant_aa      number_2014_seqs_with_variant_aa
+#46      S       N       1
+#82      A       V       78
+    perl -wne ' \
+      next unless (/^\d/); chomp; \
+      ($aaPos, $mayAa, $altAa, $countIn2014) = split("\t"); \
+      $offset = 6038; \
+      $start = $offset + (($aaPos - 1) * 3); \
+      # Handle GP weird frameshift: \
+      $start-- if ($start > 6922); \
+      $end = $start + 3; \
+      $hgsv = "GP:$mayAa$aaPos$altAa"; \
+      $name = "$hgsv ($countIn2014/81)"; \
+      print join("\t", "KJ660347v2", $start, $end, $name, $hgsv, $countIn2014) . "\n"; \
+      ' S4_GP_Mayinga_aa_diffs.txt \
+      | sort -k2n,2n \
+      > gire2014MayingaMissense.bed
+    cat > gire2014MayingaMissense.as <<EOF
+table gire2014MayingaMissense
+"GP gene amino acid changes in 2014 outbreak isolates compared to a Mayinga isolate, from Gire et al. Table S4"
+    (
+    string chrom;      "Reference sequence"
+    uint   chromStart; "Start position in reference"
+    uint   chromEnd;   "End position in reference"
+    string name;       "Amino acid change"
+    string hgsv;       "HGSV notation for amino acid change"
+    int countIn2014;   "Number of 2014 samples with change (out of 81)"
+    )
+EOF
+    bedToBigBed gire2014MayingaMissense.bed ../../../chrom.sizes \
+      -type=bed4+ -as=gire2014MayingaMissense.as -tab \
+      gire2014MayingaMissense.bb
+    ln -s `pwd`/gire2014MayingaMissense.bb /gbdb/eboVir2/gire/
+    hgBbiDbLink eboVir2 gire2014MayingaMissense /gbdb/eboVir2/gire/gire2014MayingaMissense.bb
+

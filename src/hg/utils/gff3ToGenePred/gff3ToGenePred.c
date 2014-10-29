@@ -236,10 +236,9 @@ static boolean addCdsFrame(struct genePred *gp, struct gff3AnnRef *cdsBlks)
 /* assign frame based on CDS regions.  Return FALSE error */
 {
 struct gff3AnnRef *cds;
-int iExon = -1; // caches current position
 for (cds = cdsBlks; cds != NULL; cds = cds->next)
     {
-    iExon = findCdsExon(gp, cds->ann, iExon);
+    int iExon = findCdsExon(gp, cds->ann, -1);
     if (iExon < 0)
         return FALSE; // error
     gp->exonFrames[iExon] = gff3PhaseToFrame(cds->ann->phase);

@@ -1,0 +1,13 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+html gold
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+html gap
+
+track ncbiAnnotations override
+visibility hide
+
+include trackDb.160way.ra
+include ../trackDb.ncbiGene.ra

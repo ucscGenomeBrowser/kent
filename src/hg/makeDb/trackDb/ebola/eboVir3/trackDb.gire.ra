@@ -1,0 +1,62 @@
+track gire2014
+shortLabel 2014 Variants
+longLabel Variants from 81 Sequences from 2014 Outbreak
+group varRep
+type vcfTabix
+visibility hide
+hapClusterHeight 81
+priority 11
+
+track gireZebov
+shortLabel Zaire Variants
+longLabel Variants from 81 Sequences from 2014 Outbreak and 20 Zaire-clade Sequences 1976-2008
+group varRep
+type vcfTabix
+visibility hide
+hapClusterHeight 101
+priority 13
+
+track gireIntraHost
+shortLabel 2014 Intra-host
+longLabel Intra-host variants for 78 sequences from Sierra Leone 2014 Outbreak
+group varRep
+type vcfTabix
+visibility hide
+hapClusterHeight 78
+priority 15
+
+track gire2014FixedMissense
+shortLabel 2014 Fixed Aa Chg
+longLabel Protein Changes That Are Fixed in 81 Sequences from 2014 Outbreak
+group varRep
+type bigBed 4 +
+visibility hide
+color 220,0,0
+priority 16
+
+track gire2014PolymorphicMissense
+shortLabel 2014 Polym Aa Chg
+longLabel Protein Changes That Are Polymorphic in 81 Sequences from 2014 Outbreak
+group varRep
+type bigBed 4 +
+visibility hide
+color 220,0,0
+priority 17
+
+track gire2014KikwitMissense
+shortLabel 2014 vs Kikwit GP
+longLabel Protein Changes in GP Between 81 Sequences from 2014 Outbreak and Kikwit 1995 (JQ352763)
+group varRep
+type bigBed 4 +
+visibility hide
+color 220,0,0
+priority 18
+
+track gire2014MayingaMissense
+shortLabel 2014 vs Maynga GP
+longLabel Protein Changes in GP Between 81 Sequences from 2014 Outbreak and Mayinga 1976 (NC002549)
+group varRep
+type bigBed 4 +
+visibility hide
+color 220,0,0
+priority 19

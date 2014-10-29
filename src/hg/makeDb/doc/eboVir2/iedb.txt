@@ -1,0 +1,38 @@
+# tracks iedb and iedbBcell - epitopes displayed by the cell and recognized by
+# the immune system, curated by IEDB staff (Max, Tue Sep 16 03:29:08 PDT 2014)
+
+# scripts bedAppend and tabCollapse in /cluster/bin/scripts and on
+# https://github.com/maximilianh/maxtools
+
+# map B cell data
+wget 'http://www.iedb.org/doc/bcell_compact.zip'
+unzip bcell_compact.zip
+cat bcell_compact.csv | csvToTab > bcell_compact.tab
+# manually removed a trailing space at the end of the header line
+
+# append all fields of lines with same sequence with ","
+tabCollapse bcell_ebola.tab Epitope_Linear_Sequence > bcell_ebola_coll.tab
+cat bcell_ebola_coll.tab | cut -f10 | tawk '{print ">"$1"\n"$1""}' > bcell.fa
+blat -minScore=8 -repMatch=1000000 -tileSize=8 -t=dnax -q=prot /hive/data/genomes/eboVir2/eboVir2.2bit bcell.fa stdout -noHead | sort -k1,1n -r | pslCDnaFilter stdin stdout -minId=0.90 -minCover=0.90 | pslToBed stdin bcell.bed
+# append the extra fields
+bedAppend bcell.bed bcell_ebola_coll.tab 9 bcellPlus.bed bcell.as 
+# keep only epitopes with positive assay result
+grep Positive bcellPlus.bed > bcellPlusPos.bed
+bedToBigBed bcellPlusPos.bed /hive/data/genomes/eboVir2/chrom.sizes bcellPlus.bb -type=bed12+ -as=bcell.as -tab
+cp bcellPlus.bb /cluster/data/eboVir2/bed/iedb/
+hgBbiDbLink eboVir2 iedbBcell /gbdb/eboVir2/bbi/iedb/tcellPlus.bb 
+
+# same for T-cells
+wget 'http://www.iedb.org/doc/tcell_compact.zip'
+unzip tcell_compact.zip
+cat tcell_compact.csv | csvToTab > tcell_compact.tsv
+egrep "PubMed ID|ebola" -i tcell_compact.tsv > tcell_ebola.tsv
+tabCollapse tcell_ebola.tsv Epitope_Linear_Sequence > tcell_ebola_coll.tsv
+less tcell_ebola_coll.tsv | cut -f10 | tawk '{print ">"$1"\n"$1""}' > tcell.fa
+blat -minScore=7 -t=dnax -q=prot /hive/data/genomes/eboVir2/eboVir2.2bit tcell.fa stdout -noHead | sort -k1,1n -r | pslCDnaFilter stdin stdout -minId=0.95 -minCover=0.95 | pslToBed stdin tcell.bed
+bedAppend tcell.bed tcell_ebola_coll.tsv 9 tcellPlus.bed tcell.as 
+grep Positive tcellPlus.bed | bedSort stdin stdout | bedFixBlockOverlaps stdin > tcellPlusPos.bed
+
+bedToBigBed tcellPlus.bed /hive/data/genomes/eboVir2/chrom.sizes tcellPlus.bb -type=bed12+ -as=tcell.as -tab
+
+hgBbiDbLink eboVir2 iedb /gbdb/eboVir2/bbi/iedb/tcellPlus.bb 

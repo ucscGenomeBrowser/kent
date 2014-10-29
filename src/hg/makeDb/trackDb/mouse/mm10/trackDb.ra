@@ -266,6 +266,6 @@ longLabel GENCODE Gene Annotations (Ensembl)
 # doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
 
 include wgEncodeGencodeVM2.ra
-include wgEncodeGencodeVM3.ra alpha
+include wgEncodeGencodeVM3.ra
 
 include defaultPriority.ra

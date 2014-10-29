@@ -1,0 +1,10 @@
+
+mkdir -p /hive/data/genomes/eboVir3/bed/ncbiGene
+/usr/local/bin/bp_genbank2gff3.pl --split ../../genbank/gbk/KM034562.gbk
+sed 's/iD=/ID=/' KM034562.gff | /cluster/home/braney/bin/x86_64/gff3ToGenePred stdin  stdout | sed 's/.t01//' |  sort -nk 4 > ncbiGene.gp
+# edit in GP names in and add in UTR from gene record and change sequence name
+/cluster/home/braney/bin/x86_64/hgLoadGenePred eboVir3 ncbiGene ncbiGene.gp
+
+# build maf frames with long form of GP.
+grep -v sGP ncbiGene.gp | /cluster/home/braney/bin/x86_64/genePredToMafFrames eboVir3 /hive/data/genomes/eboVir3/bed/multiz160way/mafFrag.multiz160way.maf frames.tab eboVir3 /dev/stdin
+hgLoadMafFrames eboVir3 multiz160wayFrames frames.tab  

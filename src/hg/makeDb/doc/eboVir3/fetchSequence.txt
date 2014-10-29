@@ -1,0 +1,104 @@
+# for emacs: -*- mode: sh; -*-
+
+###########################################################################
+# accession names obtained from Entrez with the query:
+#
+#    (ebola[title] OR ebolavirus[title]) AND genome[title]
+#
+#  as of 2014-09-16 shows 158 sequences
+#
+###########################################################################
+# fetch both fasta and gbk records: (DONE - 2014-09-16 - Hiram)
+
+mkdir -p /hive/data/genomes/eboVir3/genbank
+cd /hive/data/genomes/eboVir3/genbank
+# save the 158 accession list from the Entrez query into the file:
+#    158.strain.list
+
+mkdir fasta gbk
+cat 158.strain.list | while read acc
+do
+wget -O fasta/${acc}.fa \
+   "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$acc"
+wget -O gbk/${acc}.gbk \
+  "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=gb&sendto=on&id=$acc"
+done
+
+###########################################################################
+#  scan descriptions to make a list (DONE - 2014-09-16 - Hiram)
+#
+
+cd /hive/data/genomes/eboVir3/genbank
+
+# using the perl script from the source tree, and removing
+# some of the extra verbage:
+
+~/kent/src/hg/makeDb/doc/eboVir3/gbkDefinition.pl gbk/*.gbk \
+   | sed -e 's# Zaire ebolavirus isolate Ebola virus H.sapiens-wt##; s#/SLE/2014/##; s#Zaire ebolavirus isolate Ebola virus H.sapiens-wt##; s#, partial genome.##; s#, complete genome.##; s#ebolavirus##; s#Ebola virus##' 
+
+#  the output of that was used to construct:
+#   src/hg/makeDb/doc/eboVir2/158.strain.descriptions.txt
+#
+# with a bit of editing to fill in some missing bits
+#   src/hg/makeDb/doc/eboVir2/158.strain.descriptions.txt
+#
+###########################################################################
+# construct UCSC names (DONE - 2014-09-16 - Hiram)
+mkdir /hive/data/genomes/eboVir3/ucsc
+cd /hive/data/genomes/eboVir3/ucsc
+
+for F in ../genbank/fasta/*.fa
+do
+ gbName=`grep -h "^>" ${F} | awk -F'|' '{print $4}'`
+ ucscName=`echo $gbName | sed -e 's/\./v/'`
+ echo $gbName $ucscName
+ echo ">$ucscName" > $ucscName.fa
+ grep -v "^>" ${F} >> $ucscName.fa
+ gzip -f $ucscName.fa
+done
+
+# check for duplicates:
+
+faToTwoBit *.fa.gz t.2bit
+twoBitDup t.2bit
+# KC242795v1 and KC242793v1 are identical
+# KC242797v1 and KC242793v1 are identical
+# KC242798v1 and KC242794v1 are identical
+# KM233068v1 and KM233065v1 are identical
+# KM233078v1 and KM233073v1 are identical
+# KM233094v1 and KM233081v1 are identical
+# KM233108v1 and KM233037v1 are identical
+# NC_002549v1 and AF086833v2 are identical
+# NC_004161v1 and AF522874v1 are identical
+# NC_006432v1 and AY729654v1 are identical
+# NC_014372v1 and FJ217162v1 are identical
+# NC_014373v1 and FJ217161v1 are identical
+
+# convert that to strain names:
+twoBitDup t.2bit \
+  | sed -f ~/kent/src/hg/makeDb/doc/eboVir2/ucscName.strainName.sed
+
+# 1Mbie_Gabon_1996 and 1Eko_1996 are identical
+# 1Oba_Gabon_1996 and 1Eko_1996 are identical
+# 1Ikot_Gabon_1996 and 2Nza_1996 are identical
+# ManoR_G3769v4_2014 and ManoR_G3769v1_2014 are identical
+# ManoR_G3796_2014 and ManoR_G3786_2014 are identical
+# ManoR_G3820_2014 and ManoR_G3800_2014 are identical
+# ManoR_G3845_2014 and ManoR_EM110_2014 are identical
+# zaire_AF086833v2_1976 and zaire_AF086833v2_1976 are identical
+# Pennsylvania_1990 and Reston_PA_1990 are identical
+# Gulu_2000 and Gulu_Uganda_2000 are identical
+# Cote_dIvoire_1994 and Cote_dIvoire_CIEBOV_1994 are identical
+# Bundibugyo_2007 and Bundibugyo_Uganda_2007 are identical
+
+# some of the sequences really are duplicates, just different
+# names for the same thing, e.g.:
+# NC_002549v1 and AF086833v2 are identical
+# NC_004161v1 and AF522874v1 are identical
+# NC_006432v1 and AY729654v1 are identical
+# NC_014372v1 and FJ217162v1 are identical
+# NC_014373v1 and FJ217161v1 are identical
+
+# I'm not sure what's up with the other things
+
+###########################################################################

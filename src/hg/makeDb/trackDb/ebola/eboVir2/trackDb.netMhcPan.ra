@@ -1,0 +1,543 @@
+track netMhcPan
+shortLabel netMHC I
+longLabel MHC Class I Binding Predictions by NetMhcPan
+type bed 12
+compositeTrack on
+visibility hide
+group immu
+spectrum on
+scoreMax 500
+scoreMin 0
+
+track HLAA0101
+shortLabel HLA-A01*01
+longLabel HLA-A01*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA0201
+shortLabel HLA-A02*01
+longLabel HLA-A02*01
+type bigBed 12
+parent netMhcPan on
+visibility dense
+
+track HLAA0202
+shortLabel HLA-A02*02
+longLabel HLA-A02*02
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA0203
+shortLabel HLA-A02*03
+longLabel HLA-A02*03
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA0206
+shortLabel HLA-A02*06
+longLabel HLA-A02*06
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA0211
+shortLabel HLA-A02*11
+longLabel HLA-A02*11
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA0212
+shortLabel HLA-A02*12
+longLabel HLA-A02*12
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA0216
+shortLabel HLA-A02*16
+longLabel HLA-A02*16
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA0217
+shortLabel HLA-A02*17
+longLabel HLA-A02*17
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA0219
+shortLabel HLA-A02*19
+longLabel HLA-A02*19
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA0250
+shortLabel HLA-A02*50
+longLabel HLA-A02*50
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA0301
+shortLabel HLA-A03*01
+longLabel HLA-A03*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA1101
+shortLabel HLA-A11*01
+longLabel HLA-A11*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA2301
+shortLabel HLA-A23*01
+longLabel HLA-A23*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA2402
+shortLabel HLA-A24*02
+longLabel HLA-A24*02
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA2403
+shortLabel HLA-A24*03
+longLabel HLA-A24*03
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA2501
+shortLabel HLA-A25*01
+longLabel HLA-A25*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA2601
+shortLabel HLA-A26*01
+longLabel HLA-A26*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA2602
+shortLabel HLA-A26*02
+longLabel HLA-A26*02
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA2603
+shortLabel HLA-A26*03
+longLabel HLA-A26*03
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA2902
+shortLabel HLA-A29*02
+longLabel HLA-A29*02
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA3001
+shortLabel HLA-A30*01
+longLabel HLA-A30*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA3002
+shortLabel HLA-A30*02
+longLabel HLA-A30*02
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA3101
+shortLabel HLA-A31*01
+longLabel HLA-A31*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA3201
+shortLabel HLA-A32*01
+longLabel HLA-A32*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA3207
+shortLabel HLA-A32*07
+longLabel HLA-A32*07
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA3215
+shortLabel HLA-A32*15
+longLabel HLA-A32*15
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA3301
+shortLabel HLA-A33*01
+longLabel HLA-A33*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA6601
+shortLabel HLA-A66*01
+longLabel HLA-A66*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA6801
+shortLabel HLA-A68*01
+longLabel HLA-A68*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA6802
+shortLabel HLA-A68*02
+longLabel HLA-A68*02
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA6823
+shortLabel HLA-A68*23
+longLabel HLA-A68*23
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA6901
+shortLabel HLA-A69*01
+longLabel HLA-A69*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAA8001
+shortLabel HLA-A80*01
+longLabel HLA-A80*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB0702
+shortLabel HLA-B07*02
+longLabel HLA-B07*02
+type bigBed 12
+parent netMhcPan on
+visibility dense
+
+track HLAB0801
+shortLabel HLA-B08*01
+longLabel HLA-B08*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB1402
+shortLabel HLA-B14*02
+longLabel HLA-B14*02
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB1501
+shortLabel HLA-B15*01
+longLabel HLA-B15*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB1502
+shortLabel HLA-B15*02
+longLabel HLA-B15*02
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB1503
+shortLabel HLA-B15*03
+longLabel HLA-B15*03
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB1509
+shortLabel HLA-B15*09
+longLabel HLA-B15*09
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB1517
+shortLabel HLA-B15*17
+longLabel HLA-B15*17
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB1801
+shortLabel HLA-B18*01
+longLabel HLA-B18*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB2705
+shortLabel HLA-B27*05
+longLabel HLA-B27*05
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB2720
+shortLabel HLA-B27*20
+longLabel HLA-B27*20
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB3501
+shortLabel HLA-B35*01
+longLabel HLA-B35*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB3503
+shortLabel HLA-B35*03
+longLabel HLA-B35*03
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB3801
+shortLabel HLA-B38*01
+longLabel HLA-B38*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB3901
+shortLabel HLA-B39*01
+longLabel HLA-B39*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB4001
+shortLabel HLA-B40*01
+longLabel HLA-B40*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB4002
+shortLabel HLA-B40*02
+longLabel HLA-B40*02
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB4013
+shortLabel HLA-B40*13
+longLabel HLA-B40*13
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB4201
+shortLabel HLA-B42*01
+longLabel HLA-B42*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB4402
+shortLabel HLA-B44*02
+longLabel HLA-B44*02
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB4403
+shortLabel HLA-B44*03
+longLabel HLA-B44*03
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB4501
+shortLabel HLA-B45*01
+longLabel HLA-B45*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB4601
+shortLabel HLA-B46*01
+longLabel HLA-B46*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB4801
+shortLabel HLA-B48*01
+longLabel HLA-B48*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB5101
+shortLabel HLA-B51*01
+longLabel HLA-B51*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB5301
+shortLabel HLA-B53*01
+longLabel HLA-B53*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB5401
+shortLabel HLA-B54*01
+longLabel HLA-B54*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB5701
+shortLabel HLA-B57*01
+longLabel HLA-B57*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB5801
+shortLabel HLA-B58*01
+longLabel HLA-B58*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB7301
+shortLabel HLA-B73*01
+longLabel HLA-B73*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAB8301
+shortLabel HLA-B83*01
+longLabel HLA-B83*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAC0303
+shortLabel HLA-C03*03
+longLabel HLA-C03*03
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAC0401
+shortLabel HLA-C04*01
+longLabel HLA-C04*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAC0501
+shortLabel HLA-C05*01
+longLabel HLA-C05*01
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAC0602
+shortLabel HLA-C06*02
+longLabel HLA-C06*02
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAC0701
+shortLabel HLA-C07*01
+longLabel HLA-C07*01
+type bigBed 12
+parent netMhcPan on
+visibility dense
+
+track HLAC0702
+shortLabel HLA-C07*02
+longLabel HLA-C07*02
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAC0802
+shortLabel HLA-C08*02
+longLabel HLA-C08*02
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAC1203
+shortLabel HLA-C12*03
+longLabel HLA-C12*03
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAC1402
+shortLabel HLA-C14*02
+longLabel HLA-C14*02
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAC1502
+shortLabel HLA-C15*02
+longLabel HLA-C15*02
+type bigBed 12
+parent netMhcPan off
+visibility hide
+
+track HLAE0101
+shortLabel HLA-E01*01
+longLabel HLA-E01*01
+type bigBed 12
+parent netMhcPan on
+visibility dense
+

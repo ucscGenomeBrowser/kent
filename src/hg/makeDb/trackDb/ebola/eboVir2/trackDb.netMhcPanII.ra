@@ -1,0 +1,417 @@
+track netMhcPanII
+shortLabel netMHC II
+longLabel MHC Class II Binding Predictions by NetMhcPan
+type bed 12
+compositeTrack on
+visibility dense
+group immu
+spectrum on
+scoreMax 500
+scoreMin 0
+
+track HLADPA10103DPB10101
+shortLabel HLA-DPA1*01:03-DPB1*01:01
+longLabel HLA-DPA1*01:03-DPB1*01:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADPA10103DPB10201
+shortLabel HLA-DPA1*01:03-DPB1*02:01
+longLabel HLA-DPA1*01:03-DPB1*02:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADPA10103DPB10301
+shortLabel HLA-DPA1*01:03-DPB1*03:01
+longLabel HLA-DPA1*01:03-DPB1*03:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADPA10103DPB10401
+shortLabel HLA-DPA1*01:03-DPB1*04:01
+longLabel HLA-DPA1*01:03-DPB1*04:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADPA10103DPB10402
+shortLabel HLA-DPA1*01:03-DPB1*04:02
+longLabel HLA-DPA1*01:03-DPB1*04:02
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADPA10103DPB10501
+shortLabel HLA-DPA1*01:03-DPB1*05:01
+longLabel HLA-DPA1*01:03-DPB1*05:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADPA10201DPB10101
+shortLabel HLA-DPA1*02:01-DPB1*01:01
+longLabel HLA-DPA1*02:01-DPB1*01:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADPA10201DPB10201
+shortLabel HLA-DPA1*02:01-DPB1*02:01
+longLabel HLA-DPA1*02:01-DPB1*02:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADPA10201DPB10301
+shortLabel HLA-DPA1*02:01-DPB1*03:01
+longLabel HLA-DPA1*02:01-DPB1*03:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADPA10201DPB10401
+shortLabel HLA-DPA1*02:01-DPB1*04:01
+longLabel HLA-DPA1*02:01-DPB1*04:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADPA10201DPB10402
+shortLabel HLA-DPA1*02:01-DPB1*04:02
+longLabel HLA-DPA1*02:01-DPB1*04:02
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADPA10201DPB10501
+shortLabel HLA-DPA1*02:01-DPB1*05:01
+longLabel HLA-DPA1*02:01-DPB1*05:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADPA10201DPB10601
+shortLabel HLA-DPA1*02:01-DPB1*06:01
+longLabel HLA-DPA1*02:01-DPB1*06:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADPA10201DPB10901
+shortLabel HLA-DPA1*02:01-DPB1*09:01
+longLabel HLA-DPA1*02:01-DPB1*09:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADPA10201DPB11101
+shortLabel HLA-DPA1*02:01-DPB1*11:01
+longLabel HLA-DPA1*02:01-DPB1*11:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADPA10201DPB11301
+shortLabel HLA-DPA1*02:01-DPB1*13:01
+longLabel HLA-DPA1*02:01-DPB1*13:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADPA10201DPB11401
+shortLabel HLA-DPA1*02:01-DPB1*14:01
+longLabel HLA-DPA1*02:01-DPB1*14:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADPA10201DPB11501
+shortLabel HLA-DPA1*02:01-DPB1*15:01
+longLabel HLA-DPA1*02:01-DPB1*15:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADPA10201DPB11701
+shortLabel HLA-DPA1*02:01-DPB1*17:01
+longLabel HLA-DPA1*02:01-DPB1*17:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADQA10101DQB10501
+shortLabel HLA-DQA1*01:01-DQB1*05:01
+longLabel HLA-DQA1*01:01-DQB1*05:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADQA10102DQB10502
+shortLabel HLA-DQA1*01:02-DQB1*05:02
+longLabel HLA-DQA1*01:02-DQB1*05:02
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADQA10102DQB10602
+shortLabel HLA-DQA1*01:02-DQB1*06:02
+longLabel HLA-DQA1*01:02-DQB1*06:02
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADQA10102DQB10604
+shortLabel HLA-DQA1*01:02-DQB1*06:04
+longLabel HLA-DQA1*01:02-DQB1*06:04
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADQA10201DQB10202
+shortLabel HLA-DQA1*02:01-DQB1*02:02
+longLabel HLA-DQA1*02:01-DQB1*02:02
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADQA10201DQB10303
+shortLabel HLA-DQA1*02:01-DQB1*03:03
+longLabel HLA-DQA1*02:01-DQB1*03:03
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADQA10301DQB10301
+shortLabel HLA-DQA1*03:01-DQB1*03:01
+longLabel HLA-DQA1*03:01-DQB1*03:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADQA10301DQB10302
+shortLabel HLA-DQA1*03:01-DQB1*03:02
+longLabel HLA-DQA1*03:01-DQB1*03:02
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADQA10303DQB10303
+shortLabel HLA-DQA1*03:03-DQB1*03:03
+longLabel HLA-DQA1*03:03-DQB1*03:03
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADQA10501DQB10201
+shortLabel HLA-DQA1*05:01-DQB1*02:01
+longLabel HLA-DQA1*05:01-DQB1*02:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADQA10501DQB10301
+shortLabel HLA-DQA1*05:01-DQB1*03:01
+longLabel HLA-DQA1*05:01-DQB1*03:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB10101
+shortLabel HLA-DRB1*01:01
+longLabel HLA-DRB1*01:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB10102
+shortLabel HLA-DRB1*01:02
+longLabel HLA-DRB1*01:02
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB10301
+shortLabel HLA-DRB1*03:01
+longLabel HLA-DRB1*03:01
+type bigBed 12
+parent netMhcPanII on
+visibility dense
+
+track HLADRB10401
+shortLabel HLA-DRB1*04:01
+longLabel HLA-DRB1*04:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB10402
+shortLabel HLA-DRB1*04:02
+longLabel HLA-DRB1*04:02
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB10404
+shortLabel HLA-DRB1*04:04
+longLabel HLA-DRB1*04:04
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB10405
+shortLabel HLA-DRB1*04:05
+longLabel HLA-DRB1*04:05
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB10407
+shortLabel HLA-DRB1*04:07
+longLabel HLA-DRB1*04:07
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB10408
+shortLabel HLA-DRB1*04:08
+longLabel HLA-DRB1*04:08
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB10701
+shortLabel HLA-DRB1*07:01
+longLabel HLA-DRB1*07:01
+type bigBed 12
+parent netMhcPanII on
+visibility dense
+
+track HLADRB10804
+shortLabel HLA-DRB1*08:04
+longLabel HLA-DRB1*08:04
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB10901
+shortLabel HLA-DRB1*09:01
+longLabel HLA-DRB1*09:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB11001
+shortLabel HLA-DRB1*10:01
+longLabel HLA-DRB1*10:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB11101
+shortLabel HLA-DRB1*11:01
+longLabel HLA-DRB1*11:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB11102
+shortLabel HLA-DRB1*11:02
+longLabel HLA-DRB1*11:02
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB11103
+shortLabel HLA-DRB1*11:03
+longLabel HLA-DRB1*11:03
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB11104
+shortLabel HLA-DRB1*11:04
+longLabel HLA-DRB1*11:04
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB11301
+shortLabel HLA-DRB1*13:01
+longLabel HLA-DRB1*13:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB11501
+shortLabel HLA-DRB1*15:01
+longLabel HLA-DRB1*15:01
+type bigBed 12
+parent netMhcPanII on
+visibility dense
+
+track HLADRB11502
+shortLabel HLA-DRB1*15:02
+longLabel HLA-DRB1*15:02
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB11503
+shortLabel HLA-DRB1*15:03
+longLabel HLA-DRB1*15:03
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB11601
+shortLabel HLA-DRB1*16:01
+longLabel HLA-DRB1*16:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB11602
+shortLabel HLA-DRB1*16:02
+longLabel HLA-DRB1*16:02
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB30101
+shortLabel HLA-DRB3*01:01
+longLabel HLA-DRB3*01:01
+type bigBed 12
+parent netMhcPanII on
+visibility dense
+
+track HLADRB30202
+shortLabel HLA-DRB3*02:02
+longLabel HLA-DRB3*02:02
+type bigBed 12
+parent netMhcPanII on
+visibility dense
+
+track HLADRB30301
+shortLabel HLA-DRB3*03:01
+longLabel HLA-DRB3*03:01
+type bigBed 12
+parent netMhcPanII off
+visibility dense
+
+track HLADRB40101
+shortLabel HLA-DRB4*01:01
+longLabel HLA-DRB4*01:01
+type bigBed 12
+parent netMhcPanII on
+visibility dense
+
+track HLADRB50101
+shortLabel HLA-DRB5*01:01
+longLabel HLA-DRB5*01:01
+type bigBed 12
+parent netMhcPanII on
+visibility dense
+

@@ -1,0 +1,314 @@
+#########################################################################
+# Phylogenetic tree from 160-way (DONE - 2014-10-17 - Hiram)
+    mkdir /hive/data/genomes/eboVir3/bed/multiz160way/4d
+    cd /hive/data/genomes/eboVir3/bed/multiz160way/4d
+
+    # the annotated maf is:
+    ../noDups/multiz160way.maf
+
+    # using ncbiGene for eboVir3
+    hgsql -N -e 'select * from ncbiGene;' eboVir3 \
+       | cut -f2- > eboVir3.ncbiGene.gp
+
+    genePredSingleCover eboVir3.ncbiGene.gp stdout \
+       | sort > eboVir3.ncbiGeneNR.gp
+    wc -l *.gp
+    #  9 eboVir3.ncbiGene.gp
+    #  7 eboVir3.ncbiGeneNR.gp
+
+    sed -e 's/eboVir3.KM034562v1/KM034562v1.KM034562v1/' \
+       ../noDups/multiz160way.maf > multiz160way.KM034562v1.maf
+
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+       --4d --features eboVir3.ncbiGeneNR.gp \
+         -i MAF multiz160way.KM034562v1.maf -o SS > multiz160way.ss
+
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+        -i SS --tuple-size 1 multiz160way.ss > multiz160way.mfa
+
+    #want comma-less species.list
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ../species.list`" multiz160way.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # check they are all in there:
+    grep "^>" 4d.all.mfa | sort -u | wc -l
+    #  160
+
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	../160way.nh | xargs echo | sed -e 's/ //g' > tree_commas.nh
+    # tree_commas.nh looks like:
+    #   (((((eboVir3,panTro4),rheMac3),(mm10,rn5)),canFam3),monDom5)
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time nice -n +19 \
+	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree tree_commas.nh 4d.all.mfa
+    #   real    0m6.583s
+
+
+    mv phyloFit.mod all.mod
+
+#########################################################################
+# phastCons 160-way (DONE - 2014-06-04 - Hiram)
+    # split 160way mafs into 10M chunks and generate sufficient statistics
+    # files for # phastCons
+    ssh ku
+    mkdir -p /hive/data/genomes/eboVir3/bed/multiz160way/cons/SS
+    cd /hive/data/genomes/eboVir3/bed/multiz160way/cons/SS
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
+  /hive/data/genomes/eboVir3/bed/multiz160way/noDups/multiz160way.maf -i MAF \
+    -o SS -r multiz160way -w 10000000,0 -I 1000 -B 5000
+
+    # Run phastCons
+
+export len=45
+export cov=0.3
+export rho=0.3
+export c=eboVir3
+
+sed -e 's/KM034562v1/eboVir3/g' ../4d/all.mod > all.mod
+
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phastCons \
+  SS/multiz160way.1-18957.ss all.mod \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $c.bed --score > $c.pp
+
+awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "KM034562v1", $2, $3, $5, $5}' \
+   eboVir3.bed > tmpMostConserved.bed
+/cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+
+    wigToBigWig -verbose=2 KM034562v1.pp \
+      /hive/data/genomes/eboVir3/chrom.sizes KM034562v1.bw
+    bigWigInfo KM034562v1.bw
+version: 4
+isCompressed: yes
+isSwapped: 0
+primaryDataSize: 21,741
+primaryIndexSize: 6,348
+zoomLevels: 6
+chromCount: 1
+basesCovered: 18,957
+mean: 0.764529
+min: 0.000000
+max: 1.000000
+std: 0.397315
+
+    wigEncode KM034562v1.pp phastCons160way.wig phastCons160way.wib
+    #  Converted KM034562v1.pp, upper limit 1.00, lower limit 0.00
+
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/eboVir3/bed/multiz160way/cons
+    hgLoadBed eboVir3 phastConsElements160way mostConserved.bed
+    hgLoadBed eboVir3 strainPhastConsElements160way mostConserved.bed
+    # Read 129 elements of size 5 from mostConserved.bed
+    featureBits eboVir3 phastConsElements160way
+    #  14451 bases of 18957 (76.230%) in intersection
+
+    ln -s `pwd`/phastCons160way.wib \
+          /gbdb/eboVir3/multiz160way/phastCons160way.wib
+    hgLoadWiggle -pathPrefix=/gbdb/eboVir3/multiz160way \
+	eboVir3 phastCons160way phastCons160way.wig
+    hgLoadWiggle -pathPrefix=/gbdb/eboVir3/multiz160way \
+	eboVir3 strainPhastCons160way phastCons160way.wig
+
+    # on human we often try for 5% overall cov, and 70% CDS cov
+    # most bets are off here for that goal, these alignments are too few
+    #	and too far between
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+    featureBits eboVir3 -enrichment ncbiGene:cds phastConsElements160way
+    # ncbiGene:cds 76.573%, phastConsElements160way 76.230%, both 70.127%,
+    #  cover 91.58%, enrich 1.20x
+
+
+    wigTableStats.sh eboVir3 phastCons160way
+# db.table          min max mean       count sumData      stdDev  viewLimits
+eboVir3.phastCons160way 0 1 0.764529 18957 14493.2 0.397315 viewLimits=0:1
+
+    #  Create histogram to get an overview of all the data
+    hgWiggle -doHistogram -db=eboVir3 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phastCons160way > histogram.data 2>&1
+    #	real    2m40.179s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Ebola eboVir3 Histogram phastCons160way track"
+set xlabel " phastCons160way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#########################################################################
+# phyloP for 7-way (DONE - 2014-10-17 - Hiram)
+    # run phyloP with score=LRT
+    mkdir /cluster/data/eboVir3/bed/multiz160way/consPhyloP
+    cd /cluster/data/eboVir3/bed/multiz160way/consPhyloP
+
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../4d/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.320
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../4d/all.mod 0.320 > all.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK all.mod
+    #   BACKGROUND: 0.340000 0.160000 0.160000 0.340000 
+
+    sed -e 's/eboVir3/KM034562v1/' ../cons/SS/multiz160way.1-18957.ss \
+      > KM034562v1.ss
+
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloP \
+      --method LRT --mode CONACC --wig-scores --chrom KM034562v1 \
+        -i SS all.mod KM034562v1.ss > KM034562v1.wigFix
+
+    # check integrity of data with wigToBigWig
+    wigToBigWig -verbose=2 KM034562v1.wigFix \
+      /hive/data/genomes/eboVir3/chrom.sizes phyloP160way.bw
+
+    # pid=63708: VmPeak:       33732 kB
+
+    bigWigInfo phyloP160way.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 52,079
+# primaryIndexSize: 6,348
+# zoomLevels: 6
+# chromCount: 1
+# basesCovered: 18,957
+# mean: 2.048103
+# min: -20.000000
+# max: 7.305000
+# std: 2.709788
+
+    #	encode those files into wiggle data
+    wigEncode KM034562v1.wigFix phyloP160way.wig phyloP160way.wib
+
+    #   Converted KM034562v1.wigFix, upper limit 7.30, lower limit -20.00
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phyloP160way.wib /gbdb/eboVir3/multiz160way/phyloP160way.wib
+    hgLoadWiggle -pathPrefix=/gbdb/eboVir3/multiz160way eboVir3 \
+	phyloP160way phyloP160way.wig
+    hgLoadWiggle -pathPrefix=/gbdb/eboVir3/multiz160way eboVir3 \
+	strainPhyloP160way phyloP160way.wig
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh eboVir3 phyloP160way
+# db.table      min max mean count sumData
+# eboVir3.phyloP160way    -20 7.305 2.0481 18957 38825.9
+#       stdDev viewLimits
+#  2.70979 viewLimits=-11.5008:7.305
+
+    #	that range is: 20 + 7.405 = 27.305 for hBinSize=0.027305
+
+    #  Create histogram to get an overview of all the data
+    hgWiggle -doHistogram -hBinSize=0.027305 -hBinCount=1000 \
+       -hMinVal=-20 -verbose=2 \
+	    -db=eboVir3 phyloP160way > histogram.data 2>&1
+
+    # find out the range for the 2:5 graph
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin
+# Q1 0.000158
+# median 0.000791
+# Q3 0.002532
+# average 0.002123
+# min 0.000053
+# max 0.045049
+# count 471
+# total 1.000058
+# standard deviation 0.004132
+
+    #	create plot of histogram:
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Ebola eboVir3 Histogram phyloP160way track"
+set xlabel " phyloP160way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#############################################################################
+# 160-way downloads (DONE - 2014-10-22 - Hiram)
+    mkdir -p \
+       /hive/data/genomes/eboVir3/bed/multiz160way/downloads/phastCons160way
+    cd /hive/data/genomes/eboVir3/bed/multiz160way/downloads/phastCons160way
+
+    cp -p ../../cons/KM034562v1.pp ./eboVir3.phastCons160way.wigFix
+    gzip eboVir3.phastCons160way.wigFix
+    ln -s ../../cons/all.mod ./eboVir3.phastCons160way.mod
+    ln -s ../../cons/KM034562v1.bw ./eboVir3.phastCons160way.bw
+
+    sed -e 's/^s#//; s/#/\t/; s/#g;//' \
+       ~/kent/src/hg/makeDb/doc/eboVir3/ucscName.strainName.sed \
+          > accession.to.sequenceIdentifier.txt
+ 
+
+    # reusing the README.txt file from:
+# /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/phastCons7way/README.txt
+    # edited here to reflect this construction
+
+    md5sum *.txt *.gz *.mod *.bw > md5sum.txt
+
+    mkdir -p \
+       /hive/data/genomes/eboVir3/bed/multiz160way/downloads/phyloP160way
+    cd /hive/data/genomes/eboVir3/bed/multiz160way/downloads/phyloP160way
+
+    ln -s ../../consPhyloP/all.mod ./eboVir3.phyloP160way.mod
+    cp -p ../../consPhyloP/KM034562v1.wigFix ./eboVir3.phyloP160way.wigFix
+    ln -s ../../consPhyloP/phyloP160way.bw ./eboVir3.phyloP160way.bw
+    gzip *.wigFix
+
+    sed -e 's/^s#//; s/#/\t/; s/#g;//' \
+       ~/kent/src/hg/makeDb/doc/eboVir3/ucscName.strainName.sed \
+          > accession.to.sequenceIdentifier.txt
+
+    # reusing the README.txt file from:
+# /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/phyloP7way/README.txt
+    # edited here to reflect this construction
+
+    md5sum *.txt *.gz *.mod *.bw > md5sum.txt
+
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/eboVir3/phastCons160way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/eboVir3/phastCons160way
+    ln -s \
+     /hive/data/genomes/eboVir3/bed/multiz160way/downloads/phastCons160way/* ./
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/eboVir3/phyloP160way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/eboVir3/phyloP160way
+    ln -s \
+     /hive/data/genomes/eboVir3/bed/multiz160way/downloads/phyloP160way/* ./
+    
+##############################################################################

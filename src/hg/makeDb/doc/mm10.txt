@@ -10616,3 +10616,58 @@ bedGraphToBigWig allEnds.reverse.bedGraph /hive/data/genomes/mm10/chrom.sizes \
     make joinerCheck  # output in check/joiner.out
 
 ##############################################################################
+# LASTZ Cow bosTau8 (DONE - 2014-10-15 - Steve)
+    mkdir /hive/data/genomes/mm10/bed/lastzBosTau8.2014-10-15
+    cd /hive/data/genomes/mm10/bed/lastzBosTau8.2014-10-15
+
+    cat << '_EOF_' > DEF
+# mouse vs cow
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+
+# TARGET: Mouse mm10
+SEQ1_DIR=/hive/data/genomes/mm10/nib
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow bosTau8
+SEQ2_DIR=/hive/data/genomes/bosTau8/bosTau8.2bit
+SEQ2_LEN=/hive/data/genomes/bosTau8/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzBosTau8.2014-10-15
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1
+    # real    181m30.700s
+    cat fb.mm10.chainBosTau8Link.txt
+    # 698722925 bases of 2652783500 (26.339%) in intersection
+    # Create link
+    cd /hive/data/genomes/mm10/bed
+    ln -s  lastzBosTau8.2014-10-15 lastz.bosTau8
+
+    #   and the swap
+    mkdir /hive/data/genomes/bosTau8/bed/blastz.mm10.swap
+    cd /hive/data/genomes/bosTau8/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/mm10/bed/lastzBosTau8.2014-10-15/DEF \
+        -swap -syntenicNet  \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
+    #   real    58m4.272s
+    cat fb.bosTau8.chainMm10Link.txt
+    # 687270584 bases of 2649307237 (25.942%) in intersection
+    # Create link
+    cd /hive/data/genomes/bosTau8/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+############################################################################

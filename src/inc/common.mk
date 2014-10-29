@@ -232,6 +232,11 @@ ifeq (${SAMTABIXDIR},)
     endif
 endif
 
+# pass through COREDUMP
+ifneq (${COREDUMP},)
+    HG_DEFS+=-DCOREDUMP
+endif
+
 # autodetect UCSC additional source code with password for some external tracks on gbib
 GBIBDIR = /hive/groups/browser/gbib/
 ifneq ($(wildcard ${GBIBDIR}/*.c),)

@@ -1,0 +1,11 @@
+wget ftp://ftp.rcsb.org/pub/pdb/derived_data/pdb_seqres.txt.gz
+gunzip pdb_seqres.txt.gz 
+cat pdb_seqres.txt | sed -re 's/>([^ ]* ).*/>\1/' > pdb.fa
+faFilter pdb_seqres.txt -name=2qhr_P stdout  > test.fa
+twoBitToFa /hive/data/genomes/eboVir3/eboVir3.2bit db.fa
+/cluster/bin/blast/x86_64/blast-2.2.20/bin/formatdb -i db.fa -p F
+/cluster/bin/blast/x86_64/blast-2.2.20/bin/blastall -p tblastn -d db.fa -i pdb.fa -e 10 | blastToPsl stdin stdout > blastn.psl
+pslCDnaFilter -minId=0.8 -minCover=0.8 blastn.psl stdout | sed -e 's/_[A-Z]//g'  | sort -u > blastnBest.psl
+grep 2qhr blastnBest.psl  # a test, found by Pauline, is at 81% id but should be there
+pslToBed blastnBest.psl pdb.bed
+hgLoadBed eboVir3 pdb pdb.bed

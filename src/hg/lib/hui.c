@@ -5887,13 +5887,13 @@ int speciesCt = 0;
 char *speciesGroup   = trackDbSetting(tdb, SPECIES_GROUP_VAR);
 char *speciesUseFile = trackDbSetting(tdb, SPECIES_USE_FILE);
 char *speciesOrder   = trackDbSetting(tdb, SPECIES_ORDER_VAR);
-char sGroup[24];
+#define MAX_SP_SIZE 2000
+#define MAX_GROUPS 20
+char sGroup[MAX_SP_SIZE];
 //Ochar *groups[20];
 struct wigMafSpecies *wmSpecies, *wmSpeciesList = NULL;
 int group;
 int i;
-#define MAX_SP_SIZE 2000
-#define MAX_GROUPS 20
 char *species[MAX_SP_SIZE];
 char option[MAX_SP_SIZE];
 
@@ -6003,42 +6003,6 @@ if (defaultOffSpecies)
     for(ii=0; ii < wordCt; ii++)
         hashAdd(offHash, words[ii], NULL);
     }
-
-#define BRANEY_SAYS_USETARG_IS_OBSOLETE
-#ifndef BRANEY_SAYS_USETARG_IS_OBSOLETE
-char *speciesTarget = trackDbSetting(tdb, SPECIES_TARGET_VAR);
-char *speciesTree = trackDbSetting(tdb, SPECIES_TREE_VAR);
-struct phyloTree *tree;
-if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
-    {
-    char buffer[128];
-    char *nodeNames[512];
-    int numNodes = 0;
-    char *path, *orgName;
-    int ii;
-
-    safef(buffer, sizeof(buffer), "%s.vis",name);
-    // not closestToHome because BRANEY_SAYS_USETARG_IS_OBSOLETE
-    cartMakeRadioButton(cart, buffer,"useTarg", "useTarg");
-    printf("Show shortest path to target species:  ");
-    path = phyloNodeNames(tree);
-    numNodes = chopLine(path, nodeNames);
-    for(ii=0; ii < numNodes; ii++)
-        {
-        if ((orgName = hOrganism(nodeNames[ii])) != NULL)
-            nodeNames[ii] = orgName;
-        nodeNames[ii][0] = toupper(nodeNames[ii][0]);
-        }
-
-    // not closestToHome because BRANEY_SAYS_USETARG_IS_OBSOLETE
-    cgiMakeDropList(SPECIES_HTML_TARGET, nodeNames, numNodes,
-                    cartUsualString(cart, SPECIES_HTML_TARGET, speciesTarget));
-    puts("<br>");
-    // not closestToHome because BRANEY_SAYS_USETARG_IS_OBSOLETE
-    cartMakeRadioButton(cart,buffer,"useCheck", "useTarg");
-    printf("Show all species checked : ");
-    }
-#endif///ndef BRANEY_SAYS_USETARG_IS_OBSOLETE
 
 if (groupCt == 1)
     puts("\n<TABLE><TR>");
@@ -6347,6 +6311,14 @@ boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 char cartVarName[1024];
 
 printf("<TABLE%s><TR><TD>",boxed?" width='100%'":"");
+
+char *showWig = cartOrTdbString(cart, tdb, BAMWIG_MODE, "0");
+safef(cartVarName, sizeof(cartVarName), "%s.%s", name, BAMWIG_MODE);
+cgiMakeCheckBox(cartVarName, SETTING_IS_ON(showWig));
+printf("</TD><TD>Only show coverage of reads</TD>");
+printf("</TR>\n");
+
+printf("<TR><TD>\n");
 char *showNames = cartOrTdbString(cart, tdb, BAM_SHOW_NAMES, "0");
 safef(cartVarName, sizeof(cartVarName), "%s.%s", name, BAM_SHOW_NAMES);
 cgiMakeCheckBox(cartVarName, SETTING_IS_ON(showNames));

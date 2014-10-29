@@ -1,0 +1,105 @@
+track cons102way
+compositeTrack on
+shortLabel West Africa
+longLabel West Africa 2014, 102 Virus Strains
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility full
+priority 1
+type bed 4
+group compGeno
+
+    track cons102wayViewalign
+    shortLabel West Africa 2014
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons102way
+
+        track multiz102way
+        subTrack cons102wayViewalign on
+        shortLabel West Africa 2014
+        longLabel West Africa 2014, 102 Virus Strains Multiz Alignment
+        subGroups view=align
+        noInherit on
+        irows on
+        summary multiz102waySummary
+        frames multiz102wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        mafDot on
+	snpMode on
+        type wigMaf 0.0 1.0
+        speciesCodonDefault eboVir2
+        speciesGroups Virus
+        sGroup_Virus ManoR_G3770v2_2014 Guinea_Kissidougou-C15_2014 Guinea_Gueckedou-C05_2014 ManoR_G3856v1_2014 ManoR_G3846_2014 ManoR_G3770v1_2014 ManoR_G3735v1_2014 ManoR_G3724_2014 ManoR_G3686v1_2014 ManoR_G3848_2014 ManoR_G3713v2_2014 ManoR_G3677v2_2014 ManoR_G3764_2014 ManoR_G3735v2_2014 ManoR_G3834_2014 ManoR_G3825v2_2014 ManoR_G3823_2014 ManoR_G3822_2014 ManoR_EM112_2014 ManoR_G3682v1_2014 ManoR_G3831_2014 ManoR_G3825v1_2014 ManoR_G3713v3_2014 ManoR_G3676v2_2014 ManoR_EM124v1_2014 ManoR_G3782_2014 ManoR_G3729_2014 ManoR_G3818_2014 ManoR_G3676v1_2014 ManoR_G3840_2014 ManoR_G3829_2014 ManoR_G3814_2014 ManoR_G3707_2014 ManoR_G3799_2014 ManoR_EM120_2014 ManoR_G3713v4_2014 ManoR_G3856v3_2014 ManoR_G3758_2014 ManoR_G3826_2014 ManoR_G3677v1_2014 ManoR_G3788_2014 ManoR_G3670v1_2014 ManoR_NM042v1_2014 ManoR_G3795_2014 ManoR_G3680v1_2014 ManoR_G3679v1_2014 ManoR_EM096_2014 ManoR_G3820_2014 ManoR_G3800_2014 ManoR_G3769v4_2014 ManoR_G3769v1_2014 ManoR_G3851_2014 ManoR_EM113_2014 ManoR_G3845_2014 ManoR_G3810v2_2014 ManoR_G3807_2014 ManoR_G3787_2014 ManoR_G3752_2014 ManoR_G3683v1_2014 ManoR_EM124v3_2014 ManoR_EM110_2014 ManoR_G3838_2014 ManoR_G3819_2014 ManoR_EM121_2014 ManoR_EM111_2014 ManoR_G3817_2014 ManoR_G3796_2014 ManoR_G3786_2014 ManoR_EM119_2014 ManoR_EM115_2014 ManoR_EM104_2014 ManoR_G3808_2014 ManoR_G3769v3_2014 ManoR_G3734v1_2014 ManoR_EM095_2014 ManoR_G3841_2014 ManoR_G3827_2014 ManoR_G3769v2_2014 ManoR_EM124v2_2014 ManoR_G3771_2014 ManoR_EM106_2014 ManoR_G3798_2014 ManoR_G3821_2014 ManoR_G3810v1_2014 ManoR_G3750v1_2014 ManoR_G3857_2014 ManoR_G3816_2014 ManoR_G3809_2014 ManoR_EM124v4_2014 ManoR_EM095B_2014 ManoR_G3805v1_2014 ManoR_G3789v1_2014 ManoR_G3765v2_2014 ManoR_G3750v2_2014 ManoR_G3805v2_2014 ManoR_EM098_2014 ManoR_G3850_2014 ManoR_G3750v3_2014 ManoR_G3687v1_2014 ManoR_NM042v2_2014 ManoR_NM042v3_2014
+        itemFirstCharCase noChange
+        treeImage phylo/eboVir2_102way.png
+        priority 100
+
+##    # PhyloP conservation
+##    track cons7wayViewphyloP
+##    shortLabel Basewise Conservation (phyloP)
+##    view phyloP
+##    visibility full
+##    subTrack cons7way
+##    viewLimits -3:0.5
+##    viewLimitsMax -4.611:0.934
+##
+##        track phyloP7way
+##        subTrack cons7wayViewphyloP off
+##        subGroups view=phyloP
+##        shortLabel 7 Vert. Cons
+##        longLabel 7 vertebrates Basewise Conservation by PhyloP
+##        noInherit on
+##        configurable on
+##        type wig -4.711 0.934
+##        maxHeightPixels 100:50:11
+##        viewLimits -3.107:0.934
+##        autoScale off
+##        spanList 1
+##        windowingFunction mean
+##        color 60,60,140
+##        altColor 140,60,60
+##        priority 4
+##
+##    # phastCons conservation
+##    track cons7wayViewphastcons
+##    shortLabel Element Conservation (phastCons)
+##    view phastcons
+##    visibility full
+##    subTrack cons7way
+##
+##        track phastCons7way
+##        subTrack cons7wayViewphastcons off
+##        subGroups view=phastcons
+##        shortLabel 7 Vert. Cons
+##        longLabel 7 vertebrates conservation by PhastCons
+##        noInherit on
+##        configurable on
+##        type wig 0 1
+##        maxHeightPixels 100:40:11
+##        autoScale off
+##        spanList 1
+##        windowingFunction mean
+##        color 70,130,70
+##        altColor 130,70,70
+##        priority 13
+##
+##    # Conserved Elements (Most Conserved)
+##    track cons7wayViewelements
+##    shortLabel Conserved Elements
+##    view elements
+##    visibility dense
+##    subTrack cons7way
+##
+##        track phastConsElements7way
+##        subTrack cons7wayViewelements on
+##        subGroups view=elements
+##        shortLabel 7 Vert. El
+##        longLabel 7 vertebrates Conserved Elements
+##        noInherit on
+##        color 110,10,40
+##        type bed 5 .
+##        priority 23

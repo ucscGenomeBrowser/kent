@@ -1,0 +1,171 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+html gold
+visibility hide
+
+track spMut override
+visibility hide
+group varRep
+shortLabel UniProt Mutations
+html spMut
+
+track spAnnot override
+shortLabel UniProt Annot.
+visibility dense
+group genes
+html spAnnot
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+visibility hide
+html gap
+
+# track eboVir2Self
+# shortLabel 47 Strain Chain
+# longLabel 47 Strains Chained Alignments
+# group compGeno
+# chainColor Normalized Score
+# visibility hide
+# matrixHeader A, C, G, T
+# matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+# type chain eboVir2
+# otherDb eboVir2
+# chainNormScoreAvailable yes
+# color 100,50,0
+# altColor 255,240,200
+# spectrum on
+
+#track genePredictions
+#shortLabel genePredictions
+#longLabel Gene predictions from the five annotated NCBI genomes
+#group rna
+#visibility pack
+#spectrum on
+#color 12,12,120
+#type psl protein
+
+#track cpgIslandSuper
+#superTrack on
+#shortLabel CpG Islands
+#longLabel CpG Islands (Islands < 300 Bases are Light Green)
+#group regulation
+#visibility hide
+#color 0,100,0
+#altColor 128,228,128
+#type bed 4 +
+#html cpgIslandSuper
+
+#    track cpgIslandExtUnmasked
+#    superTrack cpgIslandSuper pack
+#    shortLabel Unmasked CpG
+#    longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
+#    priority 2
+#    html cpgIslandSuper
+
+track ncbiGene
+shortLabel NCBI Genes
+longLabel NCBI Genes from http://www.ncbi.nlm.nih.gov/nuccore/674810552
+group genes
+visibility pack
+priority 1
+color 12,12,120
+type genePred 
+baseColorUseCds given
+baseColorDefault genomicCodons
+itemDetailsHtmlTable geneDesc
+
+track spAnnotSecond
+shortLabel UniProt Structure
+longLabel UniProt/SwissProt Protein Primary/Secondary Structure Annotations
+group genes
+visibility hide
+type bigBed 12 +
+itemRgb on
+urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+mouseOverField comments
+release alpha
+
+track iedbTcellShort
+shortLabel IEDB T-Cell I
+longLabel Immune Epitope Database and Analysis Resource (IEDB) curated T-Cell Epitopes, Class I
+group immu
+type bigBed 12 .
+visibility hide
+urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
+mouseOverField mHC_Allele_Name
+
+track iedbTcellLong
+shortLabel IEDB T-Cell II
+longLabel Immune Epitope Database and Analysis Resource (IEDB) curated T-Cell Epitopes, Class II
+group immu
+type bigBed 12 .
+visibility hide
+urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
+mouseOverField mHC_Allele_Name
+
+track iedbPred
+shortLabel IEDB T-Cell Pred.
+longLabel Immune Epitope Database and Analysis Resource (IEDB) GP peptides predicted to be displayed by MHCII to T-Cells
+group immu
+type bigBed 12 .
+visibility hide
+
+track iedbBcell
+shortLabel IEDB B Cell
+longLabel Immune Epitope Database and Analysis Resource (IEDB) B Cell Epitopes
+group immu
+type bigBed 12 .
+visibility dense
+color 0,90,100
+urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
+
+track arjun
+shortLabel Pred MHCI-binding
+longLabel Predicted by netMHC to be bound by MHC Class I for display to Killer T Cells
+group immu
+type bigBed 12 .
+visibility hide
+
+track ncbiGenePfam
+shortLabel Pfam in NCBI Gene
+longLabel Pfam Domains in NCBI Genes
+group genes
+type bed 12
+color 20,0,250
+url http://pfam.sanger.ac.uk/family/$$
+
+track genbank
+shortLabel ZEBOV RNA BLAT
+longLabel Sequence matches in Genbank for Ebola Zaire with length < 10kbp
+group genes
+type psl
+visibility hide
+iframeUrl http://www.ncbi.nlm.nih.gov/nuccore/$$
+iframeOptions width='800' height='800' scrolling='yes'
+priority 10
+
+track genbankNotZaire
+shortLabel Virus RNA BLAT
+longLabel Sequence matches in Genbank for non-Ebola/Zaire Viruses with length < 10kbp
+group genes
+type psl
+visibility hide
+iframeUrl http://www.ncbi.nlm.nih.gov/nuccore/$$
+iframeOptions width='1000' height='800' scrolling='yes'
+priority 20
+
+track pdb
+shortLabel PDB 
+longLabel Protein Data Bank (PDB) sequence matches
+group genes
+type bed 12
+visibility hide
+iframeUrl http://www.pdb.org/pdb/explore/explore.do?structureId=$$
+iframeOptions width='1000' height='800' scrolling='yes'
+priority 30
+
+include trackDb.49way.ra
+include trackDb.49wayStrainNames.ra
+include trackDb.102way.ra
+include trackDb.netMhcPan.ra
+include trackDb.netMhcPanII.ra

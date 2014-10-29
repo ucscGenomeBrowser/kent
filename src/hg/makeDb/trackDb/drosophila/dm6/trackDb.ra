@@ -4,23 +4,17 @@ include ../../trackDb.chainNet.insects.ra
 track gold override
 html gold
 
+searchTable gold
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex [ACDK][EJPS][0-9]+(\.[0-9]+)*
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
 # Local declaration so that local gap.html is picked up.
 track gap override
 html gap
-
-track flyBaseGene
-shortLabel FlyBase Genes
-longLabel FlyBase Protein-Coding Genes
-group genes
-priority 34
-hgGene on
-hgsid on
-#directUrl ../cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
-visibility pack
-color 0,100,180
-type genePred flyBasePep
-#symbolTable flyBase2004Xref
-
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Low-res)
@@ -41,4 +35,30 @@ altColor 200,150,150
 type bed 4 +
 
 
+include trackDb.27way.ra
 
+track flyBaseGene
+shortLabel FlyBase Genes
+longLabel FlyBase Protein-Coding Genes
+group genes
+priority 34
+visibility pack
+color 0,100,180
+type genePred flyBaseGenePep
+
+track flyBaseNoncoding
+shortLabel FB Noncoding
+longLabel FlyBase Noncoding Genes
+group genes
+priority 34.1
+visibility pack
+color 30,130,210
+type bed 12
+
+searchTable flyBaseGene
+searchType genePred
+searchPriority 100
+
+searchTable flyBaseNoncoding
+searchType bed
+searchPriority 100

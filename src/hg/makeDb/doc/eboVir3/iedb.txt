@@ -1,0 +1,66 @@
+# T CELLS
+# massage the input tables 
+cat tcell_compact.csv | csvToTab > tcell_compact.tab
+cat tcell_full.csv | csvToTab > tcell_full.tab
+egrep "PubMed ID|ebola|filovirus" -i tcell_compact.tab > tcell_ebola.tab
+egrep "PubMed ID|ebola|filovirus" -i tcell_full.tab  > tcell_ebola_full.tab
+tabCollapse tcell_ebola.tab Epitope_Linear_Sequence > tcell_ebola_coll.tab
+tabCut -n "Antigen Object Primary Molecule Sequence,MHC Allele Name"  tcell_ebola_full.tab | tawk '($1!="" && $2!="")' | tabCollapse /dev/stdin "Antigen_Object_Primary_Molecule_Sequence" > tcellAlleles_coll.tab
+
+# map sequences
+less tcell_ebola_coll.tab | cut -f10 | tawk '{print ">"$1"\n"$1""}' > tcell.fa
+blat -maxIntron=6 -t=dnax -q=prot /hive/data/genomes/eboVir3/eboVir3.2bit tcell.fa stdout -noHead -minScore=7 -tileSize=4 -stepSize=1| pslCDnaFilter stdin stdout -minId=0.85 -minCover=0.85 | pslToBed stdin tcell.bed
+
+# pull the alleles out of the big file, add everything to the bed file and
+# convert
+bedAppend tcell.bed tcell_ebola.tab 9 tcellPlus.bed tcell.as -t tcellAlleles_coll.tab 
+cat tcellPlus.bed | bedFixBlockOverlaps stdin | grep Positive > tcellPlusFix.bed
+
+# sort into MHCI and MHCII based on two rules
+# if the allele was annotated, use the allele to derive the MHC class
+# if the allele wasn't annotated use the length: <=12 is ClassI, >12 is classII
+cat tcellPlusFix.bed | tawk '$92 ~ /[Cc]lass I,|HLA-[ABCEFG]|H-2-[bdKDL]/ || ($92=="" && length($4)<=12)' > tcellPlusI.bed
+cat tcellPlusFix.bed | tawk '$92 ~ /[Cc]lass II,|HLA-D|-IA|-IE/ || ($92=="" && length($4)>12)' > tcellPlusII.bed
+bedToBigBed tcellPlusI.bed /hive/data/genomes/eboVir3/chrom.sizes tcellPlusI.bb -tab -type=bed12+ -as=tcell.as
+bedToBigBed tcellPlusII.bed /hive/data/genomes/eboVir3/chrom.sizes tcellPlusII.bb -tab -type=bed12+ -as=tcell.as
+ln -s `pwd`/tcellPlusI.bb /gbdb/eboVir3/bbi/iedb/tcellPlusI.bb
+ln -s `pwd`/tcellPlusII.bb /gbdb/eboVir3/bbi/iedb/tcellPlusII.bb
+hgBbiDbLink eboVir3 iedbTcellII /gbdb/eboVir3/bbi/iedb/tcellPlusII.bb
+hgBbiDbLink eboVir3 iedbTcellI /gbdb/eboVir3/bbi/iedb/tcellPlusI.bb
+
+# B CELLS
+cat bcell_compact.csv | csvToTab > bcell_compact.tab
+cat bcell_full.csv | csvToTab > bcell_full.tab
+egrep "PubMed ID|ebola" -i bcell_compact.tab > bcell_ebola.tab
+egrep -i "PubMed|ebola" bcell_full.tab > bcell_full_ebola.tab
+tabCollapse bcell_ebola.tab Epitope_Linear_Sequence > bcell_ebola_coll.tab 
+less bcell_ebola_coll.tab | cut -f10 | tawk '{print ">"$1"\n"$1""}' > bcell.fa
+# BLAST finds 7% more matches, than BLAT
+#blat -t=dnax -q=prot /hive/data/genomes/eboVir3/eboVir3.2bit bcell.fa stdout -noHead -minScore=8 -tileSize=6 -stepSize=1 -repMatch=1000000000 | sort -k1,1n -r | pslCDnaFilter stdin stdout -minId=0.85 -minCover=0.85 | pslToBed stdin stdout | bedSort stdin bcell.bed
+#bedAppend bcell.bed bcell_ebola_coll.tab 9 bcellPlus.bed bcell.as
+twoBitToFa ../../eboVir3.2bit db.fa
+formatdb -i db.fa -p F
+blastall -e 10000 -p tblastn -i bcell.fa -d db.fa -W 2 2> err.log | blastToPsl stdin stdout | pslCDnaFilter -minId=0.85 stdin stdout -minCover=0.85| pslToBed stdin stdout | bedSort stdin tblastn.bed &
+
+# join in additional fields and create .as file
+bedAppend tblastn.bed bcell_ebola_coll.tab 9 bcellPlus.bed bcell.as
+# keep only positive sequences
+# here we remove the majority of the data! keep it in a different track?
+grep Positive bcellPlus.bed | bedFixBlockOverlaps stdin > bcellPlusPos.bed
+
+# replace names with ab-Name/species
+cp ../../eboVir2/bed/iedb/specTrans.tab ./
+cut -f26,75,290,291 bcell_full_ebola.tab | tabReplace specTrans.tab 1 stdin |  tawk '{if ($3!="") {print $1, $3"/"$2} else {print $1, substr($1,1,6)"/"$2;}}' | sed -e 's/<.*sub>//g' | tawk '($2!="")' | tawk '($1!="")' | sed -e 's/, /,/g' > pepNames.tab
+tabReplace pepNames.tab 3 bcellPlusPos.bed > bcellPlusPosName.bed
+
+bedToBigBed bcellPlusPosName.bed /hive/data/genomes/eboVir3/chrom.sizes bcellPlus.bb -type=bed12+ -as=bcell.as -tab
+ln -s `pwd`/bcellPlus.bb /gbdb/eboVir3/bbi/iedb/bcellPlus.bb
+hgBbiDbLink eboVir3 iedbBcell /gbdb/eboVir2/bbi/iedb/bcellPlus.bb 
+
+#  same for negative results - probably not worth it, all from a single screen
+#  in Plos ONe
+grep Negative bcellPlus.bed | bedFixBlockOverlaps stdin > bcellPlusNeg.bed
+tabReplace pepNames.tab 3 bcellPlusNeg.bed > bcellPlusNegName.bed
+bedToBigBed bcellPlusNegName.bed /hive/data/genomes/eboVir3/chrom.sizes bcellPlusNeg.bb -type=bed12+ -as=bcell.as -tab
+ln -s `pwd`/bcellPlusNeg.bb /gbdb/eboVir3/bbi/iedb/bcellPlusNeg.bb
+hgBbiDbLink eboVir3 iedbBcellNeg /gbdb/eboVir3/bbi/iedb/bcellPlusNeg.bb

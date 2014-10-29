@@ -571,7 +571,8 @@ else
 void drawMafRegionDetails(struct mafAli *mafList, int height,
         int seqStart, int seqEnd, struct hvGfx *hvg, int xOff, int yOff,
         int width, MgFont *font, Color color, Color altColor,
-        enum trackVisibility vis, boolean isAxt, boolean chainBreaks)
+        enum trackVisibility vis, boolean isAxt, boolean chainBreaks,
+        boolean doSnpMode)
 /* Draw wiggle/density plot based on scoring things on the fly
  * from list of MAF */
 {
@@ -584,6 +585,10 @@ int x1, x2;
 int lastAlignX2 = -1;
 int lastChainX2 = -1;
 double scale = scaleForPixels(width);
+if (doSnpMode)
+    mafScoreUseSimple();
+else
+    mafScoreUseTraditional();
 
 safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
 for (full = mafList; full != NULL; full = full->next)
@@ -666,8 +671,21 @@ for (full = mafList; full != NULL; full = full->next)
                     if (shade > maxShade)
                         shade = maxShade;
                     c = shadesOfGray[shade];
-                    //hvGfxBox(hvg, i+x1, yOff+2, 1, height - 5, c);
-                    hvGfxBox(hvg, i+x1, yOff, 1, height - 1, c);
+		    if (doSnpMode)
+			{
+			// draw mismatched bases as RED
+			if (pixelScores[i] == 0.0)
+			    {
+			    c = MG_RED;
+			    hvGfxBox(hvg, i+x1, yOff, 1, height - 1, c);
+			    }
+			else if (pixelScores[i] == 1.0)
+			    hvGfxBox(hvg, i+x1, yOff, 1, height - 1, c);
+			}
+		    else
+			{
+			hvGfxBox(hvg, i+x1, yOff, 1, height - 1, c);
+			}
                     }
                 }
             if (vis != tvFull && mc->leftStatus == MAF_NEW_NESTED_STATUS)
@@ -704,6 +722,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct mafItem *miList = tg->items, *mi = miList;
 char *suffix;
 struct mafPriv *mp = getMafPriv(tg);
+boolean doSnpMode = (vis == tvPack) &&(trackDbSetting(tg->tdb, "snpMode") != NULL);
 
 mafList = mp->list;
 if (mafList == NULL)
@@ -712,7 +731,8 @@ if (mafList == NULL)
 
 /* display the multiple alignment in this region */
 drawMafRegionDetails(mafList, mi->height, seqStart, seqEnd, hvg, xOff, yOff,
-                         width, font, color, tg->ixAltColor,  vis, isAxt, FALSE);
+                         width, font, color, tg->ixAltColor,  vis, isAxt, FALSE,
+			 doSnpMode);
 mafAliFreeList(&mafList);
 
 yOff += mi->height + 1;
@@ -734,7 +754,8 @@ if (vis == tvFull)
         /* display pairwise alignments in this region in dense format */
         drawMafRegionDetails(mafList, mi->height, seqStart, seqEnd, 
                                  hvg, xOff, yOff, width, font,
-                                 color, tg->ixAltColor, tvDense, isAxt, FALSE);
+                                 color, tg->ixAltColor, tvDense, isAxt, FALSE,
+				 doSnpMode);
         yOff += mi->height + 1;
         mafAliFreeList(&mafList);
         }

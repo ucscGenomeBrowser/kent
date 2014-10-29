@@ -23,13 +23,15 @@ struct gencodeQuery
     int supportLevelCol;                    // support level column if joined for highlighting, or -1 
     int transcriptTypeCol;                  // transcript type column if joined for highlighting, or -1 
     int transcriptSourceCol;                // transcript source column if joined for method highlighting, or -1 
+    int tagCol;                             // tag column if joined for method highlighting, or -1 
     filterBy_t *supportLevelHighlight;      // choices for support level highlighting if not NULL
     filterBy_t *transcriptTypeHighlight;    // choices for transcript type highlighting if not NULL
     filterBy_t *transcriptMethodHighlight;  // choices for transcript method highlighting if not NULL
+    filterBy_t *tagHighlight;               // choices for tag highlighting if not NULL
     boolean joinAttrs;                      // join the wgEncodeGencodeAttrs table
-    boolean joinTransSrc;                   // join the wgEncodeGencodeTranscriptSource table
     boolean joinSupportLevel;               // join the wgEncodeGencodeTranscriptionSupportLevel table
     boolean joinTranscriptSource;           // join the wgEncodeGencodeTranscriptSource table
+    boolean joinTag;                        // join the wgEncodeGencodeTag table
 };
 
 static struct gencodeQuery *gencodeQueryNew(void)
@@ -42,6 +44,8 @@ gencodeQuery->from = dyStringNew(0);
 gencodeQuery->where = dyStringNew(0);
 gencodeQuery->supportLevelCol = -1;
 gencodeQuery->transcriptTypeCol = -1;
+gencodeQuery->transcriptSourceCol = -1;
+gencodeQuery->tagCol = -1;
 return gencodeQuery;
 }
 
@@ -56,6 +60,8 @@ if (gencodeQuery != NULL)
     dyStringFree(&gencodeQuery->where);
     filterBySetFree(&gencodeQuery->supportLevelHighlight);
     filterBySetFree(&gencodeQuery->transcriptTypeHighlight);
+    filterBySetFree(&gencodeQuery->transcriptMethodHighlight);
+    filterBySetFree(&gencodeQuery->tagHighlight);
     freeMem(gencodeQuery);
     *gencodeQueryPtr = NULL;
     }
@@ -141,7 +147,7 @@ static void filterByMethodQuery(struct track *tg, filterBy_t *filterBy, struct g
 {
 gencodeQueryBeginSubWhere(gencodeQuery);
 filterByMethodChoicesQuery(filterBy, gencodeQuery);
-gencodeQuery->joinTransSrc = TRUE;
+gencodeQuery->joinTranscriptSource = TRUE;
 gencodeQueryEndSubWhere(gencodeQuery);
 }
 
@@ -173,6 +179,33 @@ gencodeQuery->joinSupportLevel = TRUE;
 gencodeQueryEndSubWhere(gencodeQuery);
 }
 
+static void filterByTagChoiceQuery(char *choice, struct gencodeQuery *gencodeQuery)
+/* add SQL expression GENCODE tag choice. */
+{
+dyStringPrintf(gencodeQuery->where, "(tag.tag = \"%s\")", choice);
+}
+
+static void filterByTagChoicesQuery(filterBy_t *filterBy, struct gencodeQuery *gencodeQuery)
+/* add tag compare clauses */
+{
+struct slName *choice = NULL;
+for (choice = filterBy->slChoices; choice != NULL; choice = choice->next)
+    {
+    if (choice != filterBy->slChoices)
+        dyStringAppend(gencodeQuery->where, " or ");
+    filterByTagChoiceQuery(choice->name, gencodeQuery);
+    }
+}
+
+static void filterByTagQuery(struct track *tg, filterBy_t *filterBy, struct gencodeQuery *gencodeQuery)
+/* generate SQL where clause for annotation tag filtering */
+{
+gencodeQueryBeginSubWhere(gencodeQuery);
+filterByTagChoicesQuery(filterBy, gencodeQuery);
+gencodeQuery->joinTag = TRUE;
+gencodeQueryEndSubWhere(gencodeQuery);
+}
+
 static void filterByAttrsQuery(struct track *tg, filterBy_t *filterBy, struct gencodeQuery *gencodeQuery)
 /* handle adding on filterBy clause for attributes table */
 {
@@ -194,8 +227,12 @@ if (sameString(filterBy->column, "transcriptMethod"))
     filterByMethodQuery(tg, filterBy, gencodeQuery);
 else if (sameString(filterBy->column, "supportLevel"))
     filterBySupportLevelQuery(tg, filterBy, gencodeQuery);
-else
+else if (sameString(filterBy->column, "tag"))
+    filterByTagQuery(tg, filterBy, gencodeQuery);
+else if (startsWith("attrs.", filterBy->column))
     filterByAttrsQuery(tg, filterBy, gencodeQuery);
+else
+    errAbort("gencodeFilterByQuery: don't know how to filter on column \"%s\"", filterBy->column);
 }
 
 static void gencodeFilterBySetQuery(struct track *tg, struct gencodeQuery *gencodeQuery)
@@ -233,11 +270,21 @@ gencodeQuery->joinAttrs = TRUE;
 static void highlightByTranscriptMethodQuery(struct track *tg, filterBy_t *highlightBy, struct gencodeQuery *gencodeQuery)
 /* generate SQL where clause for obtaining transcript type for highlighting */
 {
-gencodeQuery->joinTransSrc = TRUE;
+gencodeQuery->joinTranscriptSource = TRUE;
 dyStringAppend(gencodeQuery->fields, ", transSrc.source");
 gencodeQuery->transcriptSourceCol = gencodeQuery->nextFieldCol++;
 gencodeQuery->transcriptMethodHighlight = highlightBy;
 gencodeQuery->joinAttrs = TRUE;
+}
+
+static void highlightByTagQuery(struct track *tg, filterBy_t *highlightBy, struct gencodeQuery *gencodeQuery)
+/* generate SQL where clause for obtaining tag for highlighting */
+{
+gencodeQuery->joinTag = TRUE;
+dyStringAppend(gencodeQuery->fields, ", tag.tag");
+gencodeQuery->tagCol = gencodeQuery->nextFieldCol++;
+gencodeQuery->tagHighlight = highlightBy;
+gencodeQuery->joinTag = TRUE;
 }
 
 static void gencodeHighlightByQuery(struct track *tg, filterBy_t *highlightBy, struct gencodeQuery *gencodeQuery)
@@ -249,6 +296,8 @@ else if (sameString(highlightBy->column, "attrs.transcriptType"))
     highlightByTranscriptTypeQuery(tg, highlightBy, gencodeQuery);
 else if (sameString(highlightBy->column, "transcriptMethod"))
     highlightByTranscriptMethodQuery(tg, highlightBy, gencodeQuery);
+else if (sameString(highlightBy->column, "tag"))
+    highlightByTagQuery(tg, highlightBy, gencodeQuery);
 else
     errAbort("BUG: gencodeHighlightByQuery unknown highlight column: \"%s\"", highlightBy->column);
 }
@@ -334,6 +383,15 @@ if (gencodeQuery->transcriptMethodHighlight != NULL)
 return FALSE;
 }
 
+static bool highlightByTagSelected(char **row, struct gencodeQuery *gencodeQuery)
+/* is the tag associated with this transcript selected? */
+{
+if (gencodeQuery->tagHighlight == NULL)
+    return FALSE;  // no highlighting by tag
+else
+    return slNameInList(gencodeQuery->tagHighlight->slChoices, row[gencodeQuery->tagCol]);
+}
+
 static unsigned getHighlightColor(struct track *tg)
 /* get the highlightColor from trackDb, or a default if not found */
 {
@@ -349,8 +407,10 @@ static void highlightByGetColor(char **row, struct gencodeQuery *gencodeQuery, u
 /* compute the highlight color based on a extra fields returned in a row, setting
  * the linkedFeatures field */
 {
-if (highlightBySupportLevelSelected(row, gencodeQuery) || highlightByTranscriptTypeSelected(row, gencodeQuery)
-    || highlightByTranscriptMethodSelected(row, gencodeQuery))
+if (highlightBySupportLevelSelected(row, gencodeQuery)
+    || highlightByTranscriptTypeSelected(row, gencodeQuery)
+    || highlightByTranscriptMethodSelected(row, gencodeQuery)
+    || highlightByTagSelected(row, gencodeQuery))
     {
     lf->highlightColor = highlightColor;
     lf->highlightMode = highlightBackground;
@@ -366,7 +426,7 @@ if (gencodeQuery->joinAttrs)
     sqlDyStringPrintf(gencodeQuery->from, ", %s attrs", trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeAttrs"));
     dyStringAppend(gencodeQuery->where, " and (attrs.transcriptId = g.name)");
     }
-if (gencodeQuery->joinTransSrc)
+if (gencodeQuery->joinTranscriptSource)
     {
     sqlDyStringPrintf(gencodeQuery->from, ", %s transSrc", trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeTranscriptSource"));
     dyStringAppend(gencodeQuery->where, " and (transSrc.transcriptId = g.name)");
@@ -375,6 +435,11 @@ if (gencodeQuery->joinSupportLevel)
     {
     sqlDyStringPrintf(gencodeQuery->from, ", %s supLevel", trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeTranscriptionSupportLevel"));
     dyStringAppend(gencodeQuery->where, " and (supLevel.transcriptId = g.name)");
+    }
+if (gencodeQuery->joinTag)
+    {
+    sqlDyStringPrintf(gencodeQuery->from, ", %s tag", trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeTag"));
+    dyStringAppend(gencodeQuery->where, " and (tag.transcriptId = g.name)");
     }
 }
 

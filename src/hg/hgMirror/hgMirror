@@ -39,7 +39,7 @@ import cgitb; cgitb.enable()
 
 # these are default python modules on python 2.7, no errors expected here
 import urllib, urllib2, zlib, collections, StringIO, gzip, string, sys, os, random, \
-    subprocess, re, types, socket
+    subprocess, re, types, socket, cPickle, copy
 
 from collections import defaultdict, namedtuple
 from os.path import *
@@ -72,13 +72,14 @@ DEBUG=False
 REMOVESEARCH = ["wgEncodeGencodeBasicV19", "wgEncodeGencodeCompV17", "wgEncodeGencodeBasicV14", "wgEncodeGencodeBasicV17", "wgEncodeGencodeCompV14", "mgcFullMrna", "wgEncodeGencodeBasicV7", "orfeomeMrna", "wgEncodeGencodePseudoGeneV14", "wgEncodeGencodePseudoGeneV17", "wgEncodeGencodePseudoGeneV19", "wgEncodeGencodeCompV7", "knownGeneOld6", "geneReviews", "transMapAlnSplicedEst", "gbCdnaInfo", "oreganno", "vegaPseudoGene", "transMapAlnMRna", "ucscGenePfam", "qPcrPrimers", "transMapAlnUcscGenes", "transMapAlnRefSeq", "genscan", "bacEndPairs", "fosEndPairs"]
 
 # list of tracks to hide by default
-FORCEHIDE = ["intronEst", "cons100way", "cons46way", "ucscRetroAli5"]
+FORCEHIDE = ["intronEst", "cons100way", "cons46way", "ucscRetroAli5", "mrna"]
 
 # always copy these (small) tables for the current db, if they exist
 FORCETABLES = ['cytoBand', 'chromInfo', 'cytoBandIdeo', 'kgColor', \
     'knownGene', 'kgXref', 'ensemblLift', 'ucscToEnsembl','wgEncodeRegTfbsCells', \
     'tableList', 'refSeqStatus', 'wgEncodeRegTfbsCellsV3', 'extFile', 'trackDb', 'grp',
     'ucscRetroInfo5', "refLink", "ucscRetroSeq5", "ensemblLift", "knownCanonical",
+    'gbExtFile', 'flyBase2004Xref',
     # for faster searches
     'hgFindSpec', 'ensemblToGeneName', "ucscToINSDC",
     # these are almost required for searches, common tracks and not too big
@@ -86,7 +87,8 @@ FORCETABLES = ['cytoBand', 'chromInfo', 'cytoBandIdeo', 'kgColor', \
     ]
 
 # always copy these hgFixed tables
-FORCEFIXED = ['trackVersion', 'tableList']
+FORCEFIXED = ['trackVersion']
+#FORCEFIXED = ['trackVersion', 'tableList']
 
 # big file table base URL
 # points to a http directory with <db>/bigFiles.tab files that tell us which bigfile goes to which track
@@ -311,16 +313,17 @@ def getTrackVis(settings):
             assert(False)
     return trackVis, isSuperTrack
 
-def parseTrackDb(db):
+def parseTrackDb(db, tableSizes):
     """ download and parse trackDb, returns 7 values
-    1) dict trackName -> shortLabel
-    2) dict trackName -> tableName (usually the same as trackName, but not for encode and genbank)
-    3) dict trackName -> trackName of parent track
-    4) dict group -> list of top-level trackNames (not table names)
-    5) pseudoTracks: set of names of tracks that have no tables ("views", "composites", "superTracks", "container multiWig")
-    6) trackVis: dict trackName -> visibility
-    7) set of all superTrack names
+    1) trackLabels = dict trackName -> shortLabel
+    2) trackTables = dict trackName -> tableName (usually the same as trackName, but not for encode and genbank)
+    3) trackParents = dict trackName -> trackName of parent track
+    4) topLevelTracks = dict group -> list of top-level trackNames (not table names)
+    5) pseudoTracks = set of names of tracks that have no tables ("views", "composites", "superTracks", "container multiWig")
+    6) trackVis = dict trackName -> visibility
+    7) superTracks = set of all superTrack names
     """
+    sqlTrackTables = trackToTableNames(tableSizes)
     rows = downloadTable(db, "trackDb")
     trackLabels = dict()
     trackParents = dict()
@@ -361,13 +364,14 @@ def parseTrackDb(db):
 
         trackLabels[track] = shortLabel
 
-        if "table" not in settings:
-            tableName = track
-        else:
+        if "table" in settings:
             tableName = settings["table"]
+        else:
+            tableName = track
 
         if not isPseudo:
-            trackTables[track] = tableName
+            trackTables[track] = sqlTrackTables[track]
+
     return trackLabels, trackTables, trackParents, groups, pseudos, trackVis, superTracks
 
 def htmlHeader():
@@ -428,14 +432,24 @@ def getAllChildren(trackName, trackChildren):
         tracks.extend(grandkids)
     return tracks
 
-def getTableInfo(trackName, trackTables, trackChildren, tableSizes):
-    " return list of table names (including children) for a track and the total remote size "
+def getTableInfo(trackName, trackTables, trackChildren):
+    " return list of table names (including children) for a track "
     subTracks = getAllChildren(trackName, trackChildren)
     subTracks.append(trackName)
-    trackTableNames = set([trackTables[t] for t in subTracks if t in trackTables])
-    tableSizes = [tableSizes[n] for n in trackTableNames]
-    totalSize = sum(tableSizes)
-    return list(trackTableNames), totalSize
+
+    trackTableNames = set()
+    if trackName in ["nonTrackTables", "allTables"]:
+        # just use the table names as they are, they might not be tracks for them
+        trackTableNames = set(trackChildren[trackName])
+        if "history" in trackTableNames:
+            trackTableNames.remove("history")
+    else:
+        # resolve track name -> table for track (e.g. for split tables or encode)
+        for t in subTracks:
+            if t in trackTables:
+                trackTableNames.update(trackTables[t])
+
+    return list(trackTableNames)
 
 def humanReadable(totalSize):
     " convert number to human readable string, adding MB/kb etc "
@@ -460,25 +474,39 @@ def humanReadable(totalSize):
     #s = os.statvfs(p)
     #return s.f_bsize * s.f_bavail
 
-def trackToFiles(trackName, trackTables, trackChildren, tableSizes, tableToGbdbFiles, noTableTracks):
+def trackToFiles(trackName, trackTables, trackChildren, tableSizes, tableToGbdbFiles, noTableTracks, gbdbSizes):
     " return list of mysql tables and gbdb files for a given trackName "
     tableNames = []
     gbdbFiles = []
 
-    trackTableNames, totalSize = getTableInfo(trackName, trackTables, trackChildren, tableSizes)
+    # these tracks don't have any tables, but all gbdb files
+    if trackName=="allGbdb":
+        return [], gbdbSizes.keys()
+    elif trackName=="liftOver":
+        return [], tableToGbdbFiles.get("liftOver", [])
+    elif trackName=="nonTrackTables":
+        return trackChildren.get("nonTrackTables", []), []
+
+    trackTableNames = getTableInfo(trackName, trackTables, trackChildren)
+
+    # this predef track doesn't have any gbdb files
+    if trackName=="allTables":
+        return trackTableNames, []
+
     for table in trackTableNames:
         if table in noTableTracks:
             continue
         tableNames.append(table)
 
         for gbdbFname in tableToGbdbFiles[table]:
+            # this special case on purpose does not include alignments to save space
             if trackName=="defaultConsTables" and (gbdbFname.endswith(".maf") or gbdbFname.endswith(".wib")):
                 continue
             gbdbFiles.append(gbdbFname)
 
     return tableNames, gbdbFiles
 
-def makeTableFileList(jobId, db, trackNames, trackTables, trackChildren, tableToGbdbFiles, tableSizes, forceTables, noTableTracks):
+def makeTableFileList(jobId, db, trackNames, trackTables, trackChildren, tableToGbdbFiles, tableSizes, forceTables, noTableTracks, gbdbSizes):
     """
     create an rsync include file in /tmp for a list of tracks and return file name
 
@@ -492,7 +520,7 @@ def makeTableFileList(jobId, db, trackNames, trackTables, trackChildren, tableTo
     # write table and gbdb files names to two different files, one for mysql rsync, one for gbdb rsync
     for trackName in trackNames:
         tableNames, gbdbFiles = trackToFiles(trackName, trackTables, trackChildren, tableSizes, \
-                tableToGbdbFiles, noTableTracks)
+                tableToGbdbFiles, noTableTracks, gbdbSizes)
 
         for table in tableNames:
             for ext in [".MYD", ".MYI", ".frm"]:
@@ -526,40 +554,36 @@ def makeTableFileList(jobId, db, trackNames, trackTables, trackChildren, tableTo
     return outFname, gbdbListFname, fixListFname
 
 def printTrackInfo(db, trackName, trackTables, trackLabels, localSizes, trackChildren, tableSizes, \
-            trackToGbdbFiles, gbdbSizes, showSubtracks, indent):
+            trackToGbdbFiles, gbdbSizes, showSubtracks, indent, noTableTracks):
     " print info about one track as html "
-    trackTableNames, remoteTableSize = getTableInfo(trackName, trackTables, trackChildren, tableSizes)
+    trackTableNames, gbdbFnames = trackToFiles(trackName, trackTables, trackChildren, tableSizes, \
+        trackToGbdbFiles, noTableTracks, gbdbSizes)
 
-    gbdbSize, gbdbFnames = getGbdbSize(trackName, trackTableNames, trackToGbdbFiles, gbdbSizes)
-    #print gbdbFnames,"<br>"
+    tableSize = sum([tableSizes[n] for n in trackTableNames])
+    gbdbSize = sum([gbdbSizes[n] for n in gbdbFnames])
 
     # add note for omim/decipher/etc
     label = trackLabels[trackName]
     addHtml, addNote = "", ""
-    remoteSize = remoteTableSize + gbdbSize
+    remoteSize = tableSize + gbdbSize
 
     if remoteSize==0:
         addHtml = 'disabled="disabled"'
-        addNote = "<small>this track cannot be mirrored (restricted data)</small>"
+        addNote = "<small>no mirroring, not present or source database restricts data distribution</small>"
 
-    sizeStr = humanReadable(remoteTableSize)
+    sizeStr = humanReadable(tableSize)
     if len(trackTableNames)==1:
         tableStr = "%d table" % len(trackTableNames)
     else:
         tableStr = "%d tables" % len(trackTableNames)
 
-    #print trackTableNames, gbdbFnames
-    # sum up size of all child tracks and gbdb filenames on local disk
-    #for t in trackTableNames:
-        #print t, localSizes.get(t, 0), tableSizes.get(t, 0), "<br>"
     localTableSize = sum([localSizes.get(track, 0) for track in trackTableNames])
     localGbdbSize = sum([localSizes.get(fname, 0) for fname in gbdbFnames])
-    #print localTableSize, localGbdbSize, "<br>"
+
     localSize = localTableSize + localGbdbSize
     debug("remoteTableSize %d, remote gbdb size %d, local table size %d, localGbdbSize %d" % \
-        (remoteTableSize, gbdbSize, localTableSize, localGbdbSize))
+        (tableSize, gbdbSize, localTableSize, localGbdbSize))
 
-    #print "remote, local", remoteSize, localSize, "<br>"
     status = ""
     isGrey = False
     if remoteSize!=0 and remoteSize<=localSize:
@@ -594,29 +618,34 @@ def printTrackInfo(db, trackName, trackTables, trackLabels, localSizes, trackChi
         for subTrack in trackChildren.get(trackName, []):
             printTrackInfo(db, subTrack, trackTables, trackLabels, localSizes, trackChildren, \
                 tableSizes, trackToGbdbFiles, gbdbSizes, \
-                showSubtracks=showSubtracks, indent=indent)
+                showSubtracks, indent, noTableTracks)
 
-def getGbdbSize(trackName, trackTableNames, trackToGbdbFiles, gbdbSizes):
-    " sum up sizes of all files for all tables "
-    # first get the list of fnames
-    gbdbFnames = set()
-    # some entries like "liftOver" have no mysql table
-    if len(trackTableNames)==0:
-        trackTableNames = [trackName]
+def getRevokedTracks(db):
+    " many encode tracks have been revoked or renamed. We ignore them. "
+    
+    outFname = join("/tmp/%s.revokedTrackes" % db)
+    if isfile(outFname):
+        tables = set(open(outFname).read().splitlines())
+    else:
+        query = 'select distinct obj from metaDb where val like "renamed%" or val like "revoked%" or val like "replaced%";'
+        conn = sqlConnect(db, "public")
+        cur = conn.cursor()
+        # make sure that table exists
+        try:
+            cur.execute("SELECT 1 FROM metaDb LIMIT 1;")
+        except:
+            return set()
 
-    for table in trackTableNames:
-        for gbdbFname in trackToGbdbFiles[table]:
-            if trackName=="defaultConsTables":
-                if gbdbFname.endswith(".maf") or gbdbFname.endswith(".wib"):
-                    continue
-            gbdbFnames.add(gbdbFname)
+        cur.execute(query)
+        tables = set()
+        for row in cur.fetchall():
+            tables.add(row[0])
 
-    # then their size
-    total = 0
-    for gbdbFname in gbdbFnames:
-            size = gbdbSizes[gbdbFname]
-            total += size
-    return total, gbdbFnames
+        ofh = open(outFname, "w")
+        ofh.write("\n".join(tables))
+        ofh.close()
+    
+    return tables
 
 def htmlDropBox(selName, elList, selKey):
     """ 
@@ -651,6 +680,71 @@ def printHiddenForm(clade, org, db):
     </FORM>
     """ % (clade, org, db)
 
+def getHgDownloadDbs():
+   " get all dbs available from hgdownload "
+   fname = "/tmp/hgdownload.dbs.txt"
+   if not isfile(fname):
+       proc = subprocess.Popen(['rsync','hgdownload.soe.ucsc.edu::mysql'],stdout=subprocess.PIPE)
+       dbs = set()
+       for line in proc.stdout:
+           db = line.rstrip("\n").split()[-1]
+           dbs.add(db)
+       open(fname, "w").write("\n".join(dbs))
+   else:
+       dbs = set(open(fname).read().splitlines())
+   return dbs
+
+def getOrgInfo(validDbs):
+    " get db info, either from local db or cached version "
+    fname = "/tmp/orgInfo.cache"
+    if isfile(fname):
+         return cPickle.load(open(fname))
+
+    conn = sqlConnect("hgcentral", "local")
+    cur = conn.cursor()
+    # list of all clade descriptions ("mammal", "Mammal"), ...
+    cladeList = []
+    cur.execute("SELECT name, label FROM clade ORDER BY priority")
+    for row in cur.fetchall():
+        cladeList.append((row[0], row[1]))
+
+    # dict of clade -> list (orgName, orgName)
+    cladeToOrgs = defaultdict(list)
+    cur.execute('SELECT clade, genome FROM genomeClade ORDER BY priority')
+    for row in cur.fetchall():
+            cladeToOrgs[row[0]].append((row[1], row[1]))
+            #orgList.append((row[0], row[0]))
+
+    # dict of orgName -> list of (db, description)
+    # SELECT genome, name FROM dbDb order by orderKey;
+    # dict of db -> description
+    orgToDbs = defaultdict(list)
+    cur.execute('SELECT genome, name, description FROM dbDb order by orderKey;')
+    for row in cur.fetchall():
+        rowDb = row[1]
+        if rowDb not in validDbs:
+            continue
+        orgToDbs[row[0]].append((row[1], row[2]))
+
+    # default db per orgName, {"Human":"hg19"}
+    orgToBestDb = {}
+    cur.execute('SELECT genome, name FROM defaultDb')
+    for row in cur.fetchall():
+        orgToBestDb[row[0]] = row[1]
+
+    cur.close()
+    conn.close()
+
+    orgInfo = {}
+    orgInfo["clades"] = cladeList
+    #orgInfo["orgs"] = orgList
+    orgInfo["cladeToOrgs"] = cladeToOrgs
+    orgInfo["orgToDbs"] = orgToDbs
+    orgInfo["orgToBestDb"] = orgToBestDb
+    
+    cPickle.dump(orgInfo, open(fname, "w"))
+    return orgInfo
+
 def getCladeAssemblyDb(clade, org, db):
     """ return the list of clades, organisms and assemblies and default DBs.
     any of clade, org or db can be None.
@@ -658,72 +752,33 @@ def getCladeAssemblyDb(clade, org, db):
     """
     if not mysqlDbLoaded:
         print("<small>info: MySQLDb not installed, cannot retrieve hgcentral.dbDb, using internal defaults</small>")
-        cladeList = [("mammal", "Mammal")]
-        orgList = [("Human", "Human")]
-        dbList = [("hg19", "Human (GrCh37)"), ("mm9", "Mouse (NCBI37)")]
-        defaultDb = {"Human":"hg19"}
         orgInfo = {}
-        orgInfo["clades"] = cladeList
-        orgInfo["orgs"] = orgList
-        orgInfo["dbs"] = dbList
-        orgInfo["defaultDbs"] = {"Human":"hg19"}
+        orgInfo["clades"] = [("mammal", "Mammal")]
+        orgInfo["cladeToOrg"] = {"mammal":"Human"}
+        orgInfo["orgToDbs"] = {"Human":["hg19"]}
+        orgInfo["dbs"] = [("hg19", "Human (GrCh37)"), ("mm9", "Mouse (NCBI37)")]
 
         return orgInfo, "mammal", "Human", "hg19"
 
-    conn = sqlConnect("hgcentral", "public")
-    cur = conn.cursor()
+    validDbs = getHgDownloadDbs()
+    orgInfo = getOrgInfo(validDbs)
 
-    # list of all clades ("mammal", "Mammal"), ...
-    cladeList = []
-    cur.execute("SELECT name, label FROM clade ORDER BY priority")
-    for row in cur.fetchall():
-        cladeList.append((row[0], row[1]))
-
-    # list of organisms for current clade, ("Human", "Human"), ("Chimp", "Chimp"), ...
     if clade is None or clade=="0":
         clade = "mammal"
-    orgList = []
-    cur.execute('SELECT genome FROM genomeClade WHERE clade=%s ORDER BY priority', (clade,))
-    for row in cur.fetchall():
-        orgList.append((row[0], row[0]))
-
-    # list of assemblies of current organism, like ("hg19", "NCBI37"), ("hg18", NCBI36"), etc...
-    if org is None or org=="0":
-        org = orgList[0][0]
-    dbList = []
-    cur.execute('SELECT name, description FROM dbDb WHERE organism = %s order by orderKey;', (org, ))
-    for row in cur.fetchall():
-        dbList.append((row[0], row[1]))
-
-    # default db per organism, {"Human":"hg19"}
-    defaultDbs = {}
-    cur.execute('SELECT genome, name FROM defaultDb')
-    for row in cur.fetchall():
-        defaultDbs[row[0]] = row[1]
-
-    cur.close()
-    conn.close()
+    if org is None or org=="0" and clade not in [None, "0"]:
+        org = orgInfo["cladeToOrgs"][clade][0][0]
 
     if (db==None or db=="0"):
-        if org not in defaultDbs:
-            print "organism %s is not valid" % org
+        if org not in orgInfo["orgToBestDb"]:
+            print "organism is not valid:", org
             sys.exit(0)
-        db = defaultDbs[org]
+        db = orgInfo["orgToBestDb"][org]
 
-    # make sure that the db we return exists on public mysql
-    if mysqlDbLoaded:
-        import _mysql_exceptions
-        try:
-            conn  = sqlConnect(db, "public")
-        except _mysql_exceptions.OperationalError:
-            print("<small>error: DB %s does not exist on public sql server</small>" % db)
-            db = "hg19"
-
-    orgInfo = {}
-    orgInfo["clades"] = cladeList
-    orgInfo["orgs"] = orgList
-    orgInfo["dbs"] = dbList
-    orgInfo["defaultDbs"] = defaultDbs
+    if not db in validDbs:
+        print "error: db %s does not exist on hgdownload" % db
+        org = "Human"
+        clade = "mammal"
+        db = "hg19"
 
     return orgInfo, clade, org, db
 
@@ -734,9 +789,9 @@ def htmlDbSelector(orgInfo, clade, org, db):
     print("Group: ")
     htmlDropBox("clade", orgInfo["clades"], clade)
     print("Genome: ")
-    htmlDropBox("org", orgInfo["orgs"], org)
+    htmlDropBox("org", orgInfo["cladeToOrgs"][clade], org)
     print("Assembly: ")
-    htmlDropBox("db", orgInfo["dbs"], db)
+    htmlDropBox("db", orgInfo["orgToDbs"][org], db)
 
     print '<INPUT type="submit" name="submit" value="Select"></input>'
     print '</FORM>'
@@ -745,14 +800,14 @@ def htmlDbSelector(orgInfo, clade, org, db):
 
 def htmlTrackTable(db, trackLabels, trackTables, \
         trackParents, trackChildren, groupList, groupToTopTracks, \
-        tableSizes, localSizes, gbdbSizes, trackToGbdbFiles, showSubtracks):
+        tableSizes, localSizes, gbdbSizes, trackToGbdbFiles, showSubtracks, noTableTracks):
     " print list of track sizes/tablecount as a html form, sorted by group "
 
     myUrl = basename(__file__)
 
     print 'Locally mirrored tracks are faster to browse than tracks that are accessed through the internet.<br>'
     print 'Select any number of tracks from the list below and click "Download" when finished.<br>'
-    print 'The data will be downloaded from the UCSC servers with udr/rsync and copied to the local mysql database and %s.<p>' % getGbdbDir()
+    print 'The data will be downloaded from the UCSC servers with rsync and copied to the local mysql database and %s.<p>' % getGbdbDir()
 
     htmlStats(localSizes, gbdbSizes, tableSizes)
 
@@ -765,15 +820,23 @@ def htmlTrackTable(db, trackLabels, trackTables, \
     else:
         print '<a href="%s?showSubtracks=1">show subtracks</a><br>' % myUrl
 
+    print "<h4>Track groups</h4>"
+    print "<ul>"
+    for groupName, groupLabel in groupList:
+        if len(groupToTopTracks[groupName])==0:
+            continue
+        print '<li><a href="#{}">{}</a></li>'.format(groupName, groupLabel)
+    print "</ul>"
+
     for groupName, groupLabel in groupList:
         # skip empty groups like custom
         if len(groupToTopTracks[groupName])==0:
             continue
-        print "<h4>%s</h4>" % groupLabel
+        print '<a name="%s"><h4>Group: %s</h4>' % ( groupName, groupLabel)
 
         for trackName in groupToTopTracks[groupName]:
             printTrackInfo(db, trackName, trackTables, trackLabels, localSizes, \
-                trackChildren, tableSizes, trackToGbdbFiles, gbdbSizes, showSubtracks, 0)
+                trackChildren, tableSizes, trackToGbdbFiles, gbdbSizes, showSubtracks, 0, noTableTracks)
 
     print '<p>'
     print '<input type="hidden" name="db" value="%s"></input>' % db
@@ -808,7 +871,7 @@ def downloadCache(url, cacheFname):
 
 def linkTrackToGbdb(fnames, db, tableNames):
     """
-    do some educated guessing on the gbdb files<->track links. returns a dict table -> file
+    do some educated guessing on the gbdb files<->track links. returns a dict track -> list of files
     Needs a file bigFiles.tab.gz that assigns the bbi link table names to big files in them.
 
     fnames is a list of gbdb filenames that we try to assign somehow.
@@ -888,7 +951,7 @@ def linkTrackToGbdb(fnames, db, tableNames):
                table = regex.sub(repl, matchStr)
                tableFiles[table].append(fname)
                assignedFnames.append(fname)
-               #if "multiz100way" in fname:
+               #if "liftOver" in fname:
                    #print fname, "<br>"
                    #print "table", table, "<br>"
 
@@ -912,8 +975,15 @@ def getRsyncSizes(dataType, db):
     # run rsync command
     tmpFname = "/tmp/%s_%s.rsync.txt" % (dataType, db)
     if not isfile(tmpFname):
-        cmd = "rsync -nav rsync://hgdownload.cse.ucsc.edu/%s/%s/ > %s" % (dataType, db, tmpFname)
-        runCmd(cmd)
+        cmd = "rsync -nav rsync://hgdownload.cse.ucsc.edu/%s/%s/ > %s.new && mv %s.new %s" % (dataType, db, tmpFname, tmpFname, tmpFname)
+        ret = runCmd(cmd, mustRun=False)
+        if ret!=0:
+            print "<p>"
+            print "Cannot run %s<br>" % cmd
+            print "<hr>"
+            print "It seems that the rsync server hgdownload.cse.ucsc.edu is not available<br>"
+            print "Please check your network connection. If this problem persists send email to genome@soe.ucsc.edu<br>"
+            sys.exit(0)
 
     # parse rsync output file
     tableSizes = collections.defaultdict(int)
@@ -972,24 +1042,20 @@ def udrIsUsable():
         print "ERROR: could not find the rsync executable in the PATH"
         sys.exit(0)
 
-    # we temporarily don't use udr 
-    return False
+    # we currently don't use udr: it often fails as the port is not open
+    # it's very hard to detect if it fails or not
+    # return False
 
     # check if we can find udr binary
     udrPath = spawn.find_executable("udr")
     if udrPath is None:
         return False
 
-    if not isfile("/tmp/useUdr"):
-        # try to transfer a file
-        cmd = "udr rsync -av hgdownload.soe.ucsc.edu::goldenPath/hg19/bigZips/README.txt /tmp/"
-        ret = runCmd(cmd, mustRun=False)
-        useUdr = (ret==0)
-        open("/tmp/useUdr", "w").write(str(int(useUdr)))
-        return useUdr
+    # created by /etc/rc.local
+    if isfile("/tmp/useUdr"):
+        return True
 
-    useUdr = bool(int(open("/tmp/useUdr").read()))
-    return useUdr
+    return False
 
 def buildRsyncCmd(remotePath, localPath, listFname, logFname):
     """ returns an rsync or udr command  to get files from remotePath to localPath"""
@@ -1016,13 +1082,30 @@ def runRsyncJobs(jobId, db, listFname, gbdbListFname, fixedFname):
 
     cmdFh.write("ps -o pgid= -p $$ > /tmp/lastJob.pid\n")
 
+    cmd = "sudo service mysql stop\n"
+    cmdFh.write(cmd)
+
     cmd = "sudo -u mysql " + buildRsyncCmd("mysql/"+db, localDbDir, listFname, logFname)
     cmdFh.write(cmd)
 
     cmd = "sudo -u mysql " + buildRsyncCmd("mysql/hgFixed", localFixedDir, fixedFname, logFname)
     cmdFh.write(cmd)
 
+    # for some reason this table was often in a crashed state.
+    cmd = "sudo myisamchk /data/mysql/%s/hgFindSpec.MYI --fast  --recover\n" % db
+    cmdFh.write(cmd)
+
+    cmd = "sudo service mysql start\n"
+    cmdFh.write(cmd)
+
+    # the tables on hgdownload are sometimes not in a closed state. Fix them after the download.
+    cmd = "sudo mysqlcheck --all-databases --auto-repair --quick --fast --silent\n"
+    cmdFh.write(cmd)
+
     cmd = buildRsyncCmd("gbdb/"+db, getGbdbDir()+"/"+db, gbdbListFname, logFname)
+    cmdFh.write(cmd)
+
+    cmd = "/usr/local/apache/cgi-bin/hgMirror postRsyncChanges\n"
     cmdFh.write(cmd)
 
     cmdFh.close()
@@ -1069,6 +1152,9 @@ def jobsAreDone():
 def printLog(jobId):
     " print rsync log for given jobId to stdout "
     jobFname = "/tmp/%d.log" % int(jobId)
+    #dbRe = re.compile("/data/gbdb/([a-zA-Z0-9]+)")
+    #db = None
+
     print "rsync download commands:<p>"
     print "<pre>"
     if not isfile(jobFname):
@@ -1078,11 +1164,17 @@ def printLog(jobId):
 
     for line in open(jobFname):
         print line,
+        #mo = dbRe.search(line)
+        #if mo!=None:
+            #db = mo.groups(0)[0]
 
     print "</pre>"
     if jobsAreDone():
-        print '<a href="hgTracks">Back to genome browser</a><p>'
+        print '<a href="hgTracks?hgt.reset=on">Back to Genome Browser</a><p>'
         print '<a href="hgMirror">Download more tracks</a>'
+        #assert(db!=None)
+        #localSizes = getLocalSizes(db)
+        #postRsyncChanges(db, localSizes)
     else:
         print '<i>Downloading files... Page will reload every 4 seconds until download is complete.</i>'
         print '<i><a href="hgMirror?stopAllJobs=1">Cancel download now</a></i>'
@@ -1095,7 +1187,7 @@ def removeSomeTracksFromSearch(conn):
         cur.execute(query)
     cur.close()
 
-def hideSomeTracks(conn, localTables):
+def hideSomeTracks(db, conn, trackNames):
     """
     hide some notoriously slow tracks by default
     """
@@ -1103,15 +1195,33 @@ def hideSomeTracks(conn, localTables):
         print "warning: cannot hide some tracks, module mysqldb not installed"
         return
 
-    if "trackDb" not in localTables:
-        return
+    # do we need this?
+    # if "trackDb" not in localTables:
+        #return
 
-    cur = conn.cursor()
-    hideList = ["'"+s+"'" for s in FORCEHIDE]
+    # find all conservation tracks     
+    hideTracks = []
+    for t in trackNames:
+        if (t.startswith("multiz") or t.startswith("cons")) and t.endswith("way"):
+            hideTracks.append(t)
+        elif t in FORCEHIDE:
+            hideTracks.append(t)
+
+    hideList = ["'"+s+"'" for s in hideTracks]
     hideStr = ", ".join(hideList)
     hideStr = "(%s)" % hideStr
+
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT 1 FROM trackDb LIMIT 1;")
+    except:
+        return 
+
     query = "UPDATE trackDb SET visibility=0 WHERE tableName in %s" % hideStr
-    cur.execute(query)
+    try:
+        cur.execute(query)
+    except:
+        print "could not execute query %s in database %s" % (query, db) 
     cur.close()
 
 def getGbdbDir():
@@ -1217,14 +1327,36 @@ def checkGbdbMysqlAccess():
         print "You might have to remove %s from /etc/at.deny" % APACHEUSER
         sys.exit(0)
 
-def findImportantTables(tableSet):
+def trackToTableNames(tableNames):
+    " handle split tables and some spec cases by creating a dictionary trackName -> tableNames "
+    suffixDict = defaultdict(set)
+    for t in tableNames:
+        if "_" in t and not t.startswith("uniGene"):
+            dummy, track = string.split(t, "_", maxsplit=1)
+        else:
+            track = t
+
+        # assign chain..Link tables to chain table
+        if track.startswith("chain") and track.endswith("Link"):
+            track = track.replace("Link", "")
+        if track.startswith("multiz") and track.endswith("Summary"):
+            track = track.replace("Summary", "")
+        if track.startswith("multiz") and track.endswith("Frames"):
+            track = track.replace("Frames", "")
+
+        suffixDict[track].add(t)
+
+    
+    return suffixDict
+
+def findImportantTables(trackSizes):
     """
     some tables are important for some assemblies, we always add them
     """
-    tables = []
+    tables = set()
     for t in FORCETABLES:
-        if t in tableSet:
-            tables.append(t)
+        if t in trackSizes:
+            tables.add(t)
     return tables
 
 def htmlStats(localSizes, gbdbSizes, tableSizes):
@@ -1235,7 +1367,7 @@ def htmlStats(localSizes, gbdbSizes, tableSizes):
     print("Total size of tables and gbdb on local disk: %(locTotal)s<p>" % locals())
 
 def addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabels, \
-        trackChildren, tableToGbdbFiles, trackTables, tableSizes):
+        trackChildren, tableToGbdbFiles, trackTables, tableSizes, revokedTracks):
     """ add special predefined track groups in place, modifies the last five parameters 
         These groups are special "tracks" that don't exist, their children are the real tracks
     """
@@ -1258,7 +1390,8 @@ def addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabel
     # also remove all superTracks from this list, otherwise will pull in all of encode again
     # somehow visibility/inheritance works this way
     defaultTracks = defaultTracks-set(superTracks)
-    #print defaultTracks,"<br>"
+    # need lists, not sets
+    defaultTracks = list(defaultTracks)
 
     debug(",".join(defaultTracks))
 
@@ -1273,32 +1406,41 @@ def addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabel
         if track in defaultTracks or not track.startswith("wgEncode"):
             nonEncode.append(track)
 
-    nonEncAllTables = [t for t in tableSizes.keys() if not t.startswith("wgEncode")]
+    #nonEncAllTables = [t for t in tableSizes.keys() if not t.startswith("wgEncode")]
 
-    # we need lists, not sets
-    defaultTracks = list(defaultTracks)
+    # create a set of table names that are not linked to any trackDb entry
+    # e.g. gbExtFile or extFile tables
+    allTrackTables = set()
+    for tableList in trackTables.values(): # flatten list
+        allTrackTables.update(tableList)
+    #print "<hr>", revokedTracks
+    nonTrackTables = list(set(tableSizes) - set(allTrackTables) - revokedTracks)
+    # hack to remove the ATTIC removed encode files, they're not in metaDb
+    nonTrackTables = [t for t in nonTrackTables if not t.startswith("wgEncode") and not "Gencode" in t]
+    #print "<hr>", nonTrackTables # XX
 
     groupList.insert(0, ("special", "Predefined tracks sets"))
     groupToTopTracks["special"] = ["defaultNoCons", "defaultConsTables", \
-        "default", "nonEncode", "liftOver", "nonEncAllTables"]
+        "default", "nonEncode", "liftOver", "nonTrackTables", "allTables", "allGbdb"]
 
     trackLabels["defaultNoCons"] = "Default tracks without conservation"
     trackLabels["defaultConsTables"] = "Default tracks with conservation tables, but no alignments"
     trackLabels["default"] = "Default tracks"
     trackLabels["nonEncode"] = "Default tracks plus all non-Encode tracks"
     trackLabels["liftOver"] = "Liftover files"
-    trackLabels["nonEncAllTables"] = "All non-Encode database tables and tracks"
+    #trackLabels["nonEncAllTables"] = "Non-Encode tracks"
+    trackLabels["nonTrackTables"] = "Secondary database tables not assigned to any track"
+    trackLabels["allTables"] = "All database tables"
+    trackLabels["allGbdb"] = "All non-database binary/text files"
 
     trackChildren["defaultNoCons"] = defaultNoCons
     trackChildren["defaultConsTables"] = defaultTracks
     trackChildren["default"] = defaultTracks
     trackChildren["nonEncode"] = nonEncode
-
-    trackChildren["nonEncAllTables"] = nonEncAllTables
-
-    # hack: add the table names for non-track tables 
-    for tn in nonEncAllTables:
-        trackTables[tn] = tn
+    #trackChildren["liftOver"] = trackToGbdbFiles["liftOver"]
+    #trackChildren["nonEncAllTables"] = nonEncAllTables
+    trackChildren["nonTrackTables"] = nonTrackTables
+    trackChildren["allTables"] = tableSizes.keys()
 
 def stopAllJobs():
     """ stop all waiting at jobs and the currently running download job """
@@ -1380,19 +1522,40 @@ def addTableList(db, conn):
         cur.execute(query)
         cur.close()
 
+def getAllTrackNames(conn):
+    " return list of all tracks in trackDb "
+    cur = conn.cursor()
+    names = []
+    query = "SELECT tableName from trackDb";
+    cur.execute(query)
+    for row in cur.fetchall():
+        names.append(row[0])
+    return names
+
 def postRsyncChanges(db, localSizes):
     " remove some tracks from trackDb, others from hgFindSpec and add a few row to tableList"
     if not mysqlDbLoaded:
         return
     try:
         conn = sqlConnect(db, "local")
+        tracks = getAllTrackNames(conn)
+        hideSomeTracks(db, conn, tracks)
+        removeSomeTracksFromSearch(conn)
+        addTableList(db, conn)
+        conn.close()
     except MySQLdb.OperationalError, e:
+        print "Could not run postRsyncChanges on db %s" % db
         return
 
-    hideSomeTracks(conn, localSizes)
-    removeSomeTracksFromSearch(conn)
-    addTableList(db, conn)
-    conn.close()
+def reloadPage():
+    " trigger page reload with javascript "
+    print ("""
+    <script type="text/javascript">
+    location.reload()
+    </script>
+    </html>""")
+    sys.stdout.flush()
+    sys.exit(0)
 
 def htmlMiddle(args):
     " print html middle part "
@@ -1403,14 +1566,32 @@ def htmlMiddle(args):
     orgInfo, clade, org, db = getCladeAssemblyDb(clade, org, db)
 
     if not "jobId" in args.keys():
-        # parse trackDb
-        debug("parsing")
-        groupList = loadGroups(db)
-        trackLabels, trackTables, trackParents, groupToTopTracks, noTableTracks, trackVis, superTracks = parseTrackDb(db)
-        tableSizes = getRsyncSizes("mysql", db)
-        trackChildren = makeTrackHierarchy(trackParents)
-        gbdbSizes = getRsyncSizes("gbdb", db)
-        tableToGbdbFiles = linkTrackToGbdb(gbdbSizes, db, tableSizes)
+        cacheFname = "/tmp/%s.trackDataCache" % db
+        marshalError = False
+        if isfile(cacheFname):
+            try:
+                groupList, trackLabels, trackTables, trackParents, groupToTopTracks, noTableTracks,\
+                    trackVis, superTracks, tableSizes, trackChildren, gbdbSizes, \
+                    tableToGbdbFiles = cPickle.load(open(cacheFname))
+            except ValueError:
+                os.remove(cacheFname)
+                reloadPage()
+
+        else:
+            # parse trackDb: takes up to 10 seconds via transatlantic link so save the result
+            debug("parsing")
+            print("Creating list of downloadable tracks for database %s ... please wait ..." % db)
+            sys.stdout.flush()
+            groupList = loadGroups(db)
+            tableSizes = getRsyncSizes("mysql", db)
+            trackLabels, trackTables, trackParents, groupToTopTracks, noTableTracks, trackVis, superTracks = parseTrackDb(db, tableSizes)
+            trackChildren = makeTrackHierarchy(trackParents)
+            gbdbSizes = getRsyncSizes("gbdb", db)
+            tableToGbdbFiles = linkTrackToGbdb(gbdbSizes, db, tableSizes)
+            allData = groupList, trackLabels, trackTables, trackParents, groupToTopTracks, noTableTracks, trackVis, superTracks, tableSizes, trackChildren, gbdbSizes, tableToGbdbFiles
+            cPickle.dump(allData, open(cacheFname, "w"))
+            reloadPage()
+            sys.exit(0)
 
     # when user has clicked OK, run rsync and refresh with jobId
     if "submit" in args.keys() and args["submit"].value=="Download":
@@ -1431,32 +1612,34 @@ def htmlMiddle(args):
 
         jobId = int(random.random()*1000000)
 
+        revokedTracks = getRevokedTracks(db)
         addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabels, trackChildren, \
-            tableToGbdbFiles, trackTables, tableSizes)
+            tableToGbdbFiles, trackTables, tableSizes, revokedTracks)
 
         listFname, gbdbFname, fixedFname = makeTableFileList(jobId, db, trackList, trackTables, trackChildren, \
-                                        tableToGbdbFiles, tableSizes, forceTables, noTableTracks)
+                                        tableToGbdbFiles, tableSizes, forceTables, noTableTracks, gbdbSizes)
         runRsyncJobs(jobId, db, listFname, gbdbFname, fixedFname)
         refreshPage("jobId=%d" % jobId, addNote=True)
 
-    # show list of files is told to do so
+    # show list of files if told to do so
     elif "showFiles" in args.keys() and "db" in args.keys():
+        revokedTracks = getRevokedTracks(db)
         addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabels, trackChildren, \
-            tableToGbdbFiles, trackTables, tableSizes)
+            tableToGbdbFiles, trackTables, tableSizes, revokedTracks)
         trackName = args["showFiles"].value
         tables, gbdbFiles = trackToFiles(trackName, trackTables, trackChildren, \
-                tableSizes, tableToGbdbFiles, noTableTracks)
+                tableSizes, tableToGbdbFiles, noTableTracks, gbdbSizes)
 
         totalSize = 0
 
-        print "<h4>MySQL tables linked to track %s</h4>" % trackName
+        print "<h4>MySQL tables linked to %s</h4>" % trackName
         for table in tables:
             size = tableSizes[table]
             sizeStr = humanReadable(size)
             totalSize += size
             print table+" (%s) <br>" % sizeStr
         
-        print "<h4>GBDB files linked to track %s</h4>" % trackName
+        print "<h4>GBDB files linked to %s</h4>" % trackName
         for gbdbFname in gbdbFiles:
             size = gbdbSizes[gbdbFname]
             totalSize += size
@@ -1493,21 +1676,40 @@ def htmlMiddle(args):
         showSubtracks = bool(int(args.getfirst("showSubtracks", "0")))
 
         localSizes = getLocalSizes(db)
+        revokedTracks = getRevokedTracks(db)
 
         addPredefined(trackVis, superTracks, groupList, groupToTopTracks, trackLabels, trackChildren, \
-            tableToGbdbFiles, trackTables, tableSizes)
+            tableToGbdbFiles, trackTables, tableSizes, revokedTracks)
 
         htmlTrackTable(db, trackLabels, trackTables, trackParents, trackChildren, \
             groupList, groupToTopTracks, \
-            tableSizes, localSizes, gbdbSizes, tableToGbdbFiles, showSubtracks)
+            tableSizes, localSizes, gbdbSizes, tableToGbdbFiles, showSubtracks, noTableTracks)
 
-        postRsyncChanges(db, localSizes)
+        #postRsyncChanges(db, trackTables)
+
+def getAllLocalDbs():
+    " return list of locally present DBs "
+    conn = sqlConnect("hgcentral", "local")
+    cur = conn.cursor()
+    cur.execute("SHOW DATABASES")
+    rows =  cur.fetchall()
+
+    dbSet = set()
+    for row in rows:
+        dbSet.add(row[0]) # rows are always a list, even if just one value
+    
+    conn.close()
+    dbSet = dbSet - set(['information_schema', 'customTrash', 'hgFixed', 'hgTemp', 'hgcentral', 'mysql','performance_schema'])
+    return dbSet
 
 def main():
     # hide some tracks if any argument specified. makes this tool usable from command line, 
     # from cronjobs that only need to run this function
     if len(sys.argv)>1:
-        postRsyncChanges("hg19", {"trackDb":1})
+        dbSet = getAllLocalDbs()
+        for db in dbSet:
+            localSizes = getLocalSizes(db)
+            postRsyncChanges(db, localSizes)
         sys.exit(0)
 
     print "Content-type: text/html"

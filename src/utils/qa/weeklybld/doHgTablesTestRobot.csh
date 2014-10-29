@@ -7,8 +7,8 @@ cd $WEEKLYBLD
 
 setenv HGDB_CONF /cluster/home/build/.hg.conf.beta
 
-echo "$HOME/bin/$MACHTYPE/hgTablesTest -org=Human -orgs=1  hgwbeta.cse.ucsc.edu/cgi-bin/hgTables ./logs/hgTables-v${BRANCHNN}.log" > ./logs/hgTables-v${BRANCHNN}.log
-$HOME/bin/$MACHTYPE/hgTablesTest -appendLog -org=Human -orgs=1  hgwbeta.cse.ucsc.edu/cgi-bin/hgTables ./logs/hgTables-v${BRANCHNN}.log
+echo "$HOME/bin/$MACHTYPE/hgTablesTest -db=hg19 hgwbeta.cse.ucsc.edu/cgi-bin/hgTables ./logs/hgTables-v${BRANCHNN}.log" > ./logs/hgTables-v${BRANCHNN}.log
+$HOME/bin/$MACHTYPE/hgTablesTest -appendLog -db=hg19 hgwbeta.cse.ucsc.edu/cgi-bin/hgTables ./logs/hgTables-v${BRANCHNN}.log
 echo "" >> ./logs/hgTables-v${BRANCHNN}.log
 echo "$HOME/bin/$MACHTYPE/hgTablesTest -appendLog -org=Mouse -orgs=1  hgwbeta.cse.ucsc.edu/cgi-bin/hgTables ./logs/hgTables-v${BRANCHNN}.log" >> ./logs/hgTables-v${BRANCHNN}.log
 $HOME/bin/$MACHTYPE/hgTablesTest -appendLog -org=Mouse -orgs=1  hgwbeta.cse.ucsc.edu/cgi-bin/hgTables ./logs/hgTables-v${BRANCHNN}.log
@@ -24,11 +24,11 @@ set wc = `echo "$res" | wc -w`
 if ( "$wc" != "0" ) then
  echo "errs found:"
  echo "$res2"
- echo "$res2" | mail -s "Errors in hgTablesTestRobot on $HOST" $USER ${BUILDMEISTER} luvina steve
+ echo "$res2" | mail -s "Errors in hgTablesTestRobot on $HOST" $USER ${BUILDMEISTER} luvina steve mspeir
  exit 1
 endif
 #
 echo Done.
-echo "$res2" | mail -s "v${BRANCHNN} hgTablesTest robot done successfully on $HOST." $USER ${BUILDMEISTER} luvina steve
+echo "$res2" | mail -s "v${BRANCHNN} hgTablesTest robot done successfully on $HOST." $USER ${BUILDMEISTER} luvina steve mspeir
 exit 0
 

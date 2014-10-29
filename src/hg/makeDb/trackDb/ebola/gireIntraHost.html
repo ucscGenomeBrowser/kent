@@ -1,0 +1,45 @@
+<H2>Description</H2>
+<p>
+This track represents intrahost variants for a subset of the 78 Sierra Leone EVD patients described
+in Gire <em>et al</em>., 2014. For a subset of these 78 patients, researchers took multiple blood
+samples from each patient at various time points, then isolated and sequenced the Ebola virus from
+each sample. This allowed them to to track the mutation and evolution of the virus within a single
+patient or host.
+</p>
+
+<H2>Display Conventions</H2>
+<p>
+In &quot;dense&quot; mode, a vertical line is drawn at the position of each variant.
+In &quot;full&quot; mode, in addition to the vertical line, a label to
+the left shows the reference allele first and variant alleles below
+(<span style='color:red;'>A = red</span>, <span style='color:blue;'>C = blue</span>,
+<span style='color:green;'>G = green</span>, <span style='color:magenta;'>T = magenta</span>,
+Indels = black).
+Hovering the pointer over any variant will prompt the display of the occurrences numbers for each
+allele in Gire <em>et al</em>., 2014.  Clicking on any variant will result in
+full details of that variant being displayed.</p>
+<p>
+By default, in &quot;pack&quot; mode, the
+display shows a clustering of haplotypes in the viewed range, sorted
+by similarity of alleles weighted by proximity to a central variant.
+The clustering view can highlight local patterns of linkage.</p>
+<p>
+Each variant is a vertical bar with black representing the reference allele
+and white (invisible) representing the non-reference allele(s).
+Tick marks are drawn at the top and bottom of each variant's vertical bar
+to make the bar more visible when most alleles are reference alleles.
+The vertical bar for the central variant used in clustering is outlined in purple.
+In order to avoid long compute times, the range of alleles used in clustering
+may be limited; alleles used in clustering have purple tick marks at the
+top and bottom.</p>
+<p>
+The clustering tree is displayed to the left of the main image.
+It does not represent relatedness of individuals; it simply shows the arrangement
+of local haplotypes by similarity.  When a rightmost branch is purple, it means
+that all haplotypes in that branch are identical, at least within the range of
+variants used in clustering.
+</p>
+
+<!--#insert file="gireMethods.html"-->
+
+<!--#insert file="gireReferences.html"-->

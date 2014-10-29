@@ -1,0 +1,26 @@
+track gire2014SpecificSnps
+shortLabel 2014 Specific
+longLabel Sites that Carry a Unique Base in 81 Sequences from 2014 Outbreak
+group varRep
+type bigBed 9 +
+visibility hide
+itemRgb on
+priority 10
+
+track gire2014Missense
+shortLabel 2014 Missense
+longLabel Protein Changing Variants from 81 Sequences from 2014 Outbreak
+group varRep
+type vcfTabix
+visibility hide
+hapClusterHeight 81
+priority 12
+
+track gireZebovMissense
+shortLabel Zaire Missense
+longLabel Protein Changing Variants from 81 Sequences from 2014 Outbreak and 20 Zaire-clade Sequences 1976-2008
+group varRep
+type vcfTabix
+visibility hide
+hapClusterHeight 101
+priority 14

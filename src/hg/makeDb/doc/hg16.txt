@@ -11973,3 +11973,18 @@ hg16.upstreamMaf = mzPt1Mm3Rn3Gg2_pHMM /hive/data/genomes/hg16/bed/multiz.hg16mm
     # 21191456 bases of 2865248791 (0.740%) in intersection
 
 ##############################################################################
+# LIFTOVER TO HG38 (DONE 10/10/14 angie)
+    mkdir /hive/data/genomes/hg16/bed/blat.hg38.2014-10-08
+    cd /hive/data/genomes/hg16/bed/blat.hg38.2014-10-08
+    # -debug run to create run dir and scripts to verify this command
+    # is OK
+    doSameSpeciesLiftOver.pl -debug -buildDir=`pwd` \
+          -ooc=/hive/data/genomes/hg16/11.ooc hg16 hg38
+    # then running for real
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` \
+            -ooc=/hive/data/genomes/hg16/11.ooc hg16 hg38 >&! do.log & tail -f do.log
+#0.240u 0.230s 37:09.66 0.0%     0+0k 0+0io 0pf+0w
+
+    # verify the convert link on the browser is now active from hg16 to hg38
+
+##############################################################################

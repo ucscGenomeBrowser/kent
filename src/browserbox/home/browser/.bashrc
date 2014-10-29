@@ -113,18 +113,59 @@ if ! shopt -oq posix; then
   fi
 fi
 
-alias vim=vim.tiny
+# CHANGES IN BROWSERBOX
+
 export PATH=~/bin:$PATH:.
+
+# for a VM this is very useful
 if [ `tty` = '/dev/tty1' ]; then
 	setterm -powersave off -blank 0;
 fi
+
+# useful aliases when working with the gbib
 alias sqlUcsc='mysql -h genome-mysql.cse.ucsc.edu -u genomep --password=password -A hg19'
-alias slowNet='sudo tc qdisc add dev eth0 root netem delay 100ms'
-alias fastNet='sudo tc qdisc del dev eth0 root netem delay 100ms'
+alias gbibSlowNet='sudo tc qdisc add dev eth0 root netem delay 100ms'
+alias gbibFastNet='sudo tc qdisc del dev eth0 root netem delay 100ms'
 alias mail='alpine'
 alias pine='alpine'
-alias autoUpdateOff='sudo touch /root/noAutoUpdate; echo auto updates are off'
-alias autoUpdateOn='sudo rm /root/noAutoUpdate; echo auto updates are on'
+# switch auto updates on/off
+alias gbibAutoUpdateOff='sudo touch /root/noAutoUpdate; echo auto updates are off'
+alias autoUpdateOff=gbibAutoUpdateOff
+alias gbibAutoUpdateOn='sudo rm -f /root/noAutoUpdate; echo auto updates are on'
+alias autoUpdateOn=gbibAutoUpdateOn
+# rm and zero the disk
+alias rmIt='sudo shred -n 1 -zu'
+# update the update script
+alias gbibUpdateUpdate='sudo wget http://genome-test.cse.ucsc.edu:/browserbox/updateBrowser.sh -O /root/updateBrowser.sh; sudo chmod a+x /root/updateBrowser.sh'
+alias gbibUpdateUpdateBeta='sudo wget http://hgwdev.cse.ucsc.edu:/gbib/updateBrowser.sh -O /root/updateBrowser.sh; sudo chmod a+x /root/updateBrowser.sh'
+
+# repair all tables, first while mysql is running, then with a full server stop
+alias gbibFixMysql1='sudo mysqlcheck --all-databases --auto-repair --fast'
+alias gbibFixMysql2='sudo service mysql stop; sudo myisamchk --force --silent --update-state /data/mysql/*/*.MYI; sudo service mysql start'
+
+alias gbibResetNetwork='sudo ifup --force eth0'
+
+# show tables that had to be loaded from UCSC since last reboot
+alias gbibUcscTablesLog='sudo cat /var/log/apache2/error.log | grep -- "->" | grep -o "from [^ ]*" | cut -d" " -f2 | sort | uniq -c | sort -nr | less'
+alias gbibUcscTablesReset='sudo echo | sudo dd of=/var/log/apache2/error.log; sudo service apache2 reload'
+# show gbdb files that had to be loaded from UCSC since last reboot
+alias gbibUcscGbdbLog='sudo find /data/trash/udcCache/http/hgdownload.cse.ucsc.edu/gbdb/ -type f | egrep -v "bitmap"  | sed -e "s/\/sparseData//" | sed -e "s#/data/trash/udcCache/http/hgdownload.cse.ucsc.edu/##"'
+alias gbibUcscGbdbReset='rm -rf /data/trash/udcCache/http/hgdownload.cse.ucsc.edu/*'
+
+# remove or add the ucsc mysql server for testing
+alias gbibOffline='sudo cp /usr/local/apache/cgi-bin/hg.conf /root/hg.conf.online; sudo cp /root/hg.conf.offline /usr/local/apache/cgi-bin/hg.conf; gbibAutoUpdateOff; echo remote access to UCSC and auto updates switched off.'
+alias gbibOnline='sudo cp /root/hg.conf.online /usr/local/apache/cgi-bin/hg.conf; gbibAutoUpdateOn; remote access to UCSC and auto updates switched on'
+alias boxOffline=gbibOffline
+alias boxOnline=gbibOnline
+
+# enable or disable hgMirror support on this VM
+alias gbibMirrorOff='sudo sed -i /allowHgMirror/d /usr/local/apache/cgi-bin/hg.conf.local; sudo bash -c "echo allowHgMirror=false >> /usr/local/apache/cgi-bin/hg.conf.local"'
+alias gbibMirrorOn='sudo sed -i /allowHgMirror/d /usr/local/apache/cgi-bin/hg.conf.local; sudo bash -c "echo allowHgMirror=true >> /usr/local/apache/cgi-bin/hg.conf.local"'
+
+# for consistency
+alias gbibUpdate='/home/browser/updateBrowser'
+
+function trackSize() { rsync -hvn  hgdownload.cse.ucsc.edu::mysql/hg19/$1.* ./ ; }
 
 if [ `tty` == "/dev/tty1" -a ! -e /root/noAutoUpdate ]; then
     sudo /root/updateBrowser.sh

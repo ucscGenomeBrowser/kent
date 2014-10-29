@@ -1,0 +1,159 @@
+<H2>Description</H2>
+<P>
+This track shows multiple alignments of 48 sequences
+to the Ebola virus reference strain KJ660347v2/Guinea_Gueckedou-C07_2014.
+The 48 sequences are composed of 46 Ebola virus sequences from
+five strains, and 2 Marburg sequences.
+The multiple alignments were generated using multiz and
+other tools in the UCSC/<A HREF="http://www.bx.psu.edu/miller_lab/"
+TARGET=_blank>Penn State Bioinformatics</A>
+comparative genomics alignment pipeline.
+</P>
+
+<H2>Methods</H2>
+<P>
+Pairwise alignments with the reference sequence were generated for
+each sequence using lastz version 1.03.52.
+Parameters used for each lastz alignment:
+<pre>
+# hsp_threshold      = 2200
+# gapped_threshold   = 4000 = L
+# x_drop             = 910
+# y_drop             = 3400 = Y
+# gap_open_penalty   = 400
+# gap_extend_penalty = 30
+#        A    C    G    T
+#   A   91  -90  -25 -100
+#   C  -90  100 -100  -25
+#   G  -25 -100  100  -90
+#   T -100  -25  -90   91
+# seed=1110100110010101111 w/transition
+# step=1
+</pre>
+Pairwise alignments were then linked into chains using a dynamic programming
+algorithm that finds maximally scoring chains of gapless subsections
+of the alignments organized in a kd-tree.  Parameters used in
+the chaining (axtChain) step: -minScore=10 -linearGap=loose
+</P>
+<P>
+High-scoring chains were then placed along the genome, with
+gaps filled by lower-scoring chains, to produce an alignment net.
+</P>
+<P>
+The multiple alignment was constructed from the resulting best-in-genome
+pairwise alignments progressively aligned using multiz/autoMZ,
+following the tree topology from Gire et.al (2014):
+<pre>
+(((((((((((((KJ660347v2 KJ660346v2) KJ660348v2) NC_002549v1) KC242793v1) 
+KC242792v1) KC242794v1) ((KC242799v1 KC242796v1) (JQ352763v1 AY354458v1))) 
+((KC242791v1 AF272001v1) KC242801v1)) 
+((((((((KC242788v1 KC242787v1) KC242789v1) KC242786v1) KC242790v1) 
+KC242785v1) KC242784v1) HQ613403v1) HQ613402v1)) (KC242800v1 (KC242783v2 
+(FJ968794v1 (EU338380v1 (JX477165v1 (FJ621583v1 FJ621584v1))))))) 
+((NC_014373v1 (KC545396v1 (KC545395v1 (KC545394v1 KC545393v1)))) 
+NC_014372v1)) (((NC_004161v1 FJ621585v1) (AB050936v1 JX477166v1)) 
+((((KC545392v1 KC545391v1) KC545390v1) KC545389v1) (NC_006432v1 
+(JN638998v1 KC589025v1))))) (NC_024781v1 NC_001608v3))
+</pre>
+<pre>
+(((((((((((((Guinea_Gueckedou-C07_2014 Guinea_Kissidougou-C15_2014)
+Guinea_Gueckedou-C05_2014) NC_002549v1_1976) 1Eko_1996) Gabon_1994) 2Nza_1996)
+((13709Kikwit_1995 13625Kikwit_1995) (Kikwit_1995 Zaire_1995)))
+((Bonduni_1977 Mayinga_1976) deRoover_1976))
+((((((((Luebo43_2007 Luebo23_2007) Luebo4_2007) Luebo1_2007) Luebo5_2007)
+Luebo0_2007) Luebo9_2007) M-M_2007) 034-KS_2008)) (Ilembe_2002 (Maleo_1979
+(Boniface_1976 (Yambio_2004 (Reston09-A_2009
+(Reston08-A_2008 Reston08-C_2008)))))))
+((Bundibugyo_2007 (EboBund-14_2012 (EboBund-122_2012
+(EboBund-120_2012 EboBund-112_2012)))) Cote_dIvoire_1994))
+(((Pennsylvania_1990 Reston08-E_2008) (Reston_1996 Alice_TX_USA_MkCQ8167_1996))
+(((EboSud-682_2012 EboSud-609_2012) EboSud-603_2012) EboSud-602_2012)
+(Gulu_2000 (Nakisamata_2011 EboSud-639_2012)))))
+(Marburg_KitumCave_Kenya_1987 Marburg_MtElgon_Musoke_Kenya_1980))
+</pre>
+Framing tables were constructed to enable
+visualization of codons in the multiple alignment display.</P>
+
+<H2>Credits</H2>
+<P> This track was created using the following programs:
+<UL>
+<LI> Alignment tools: blastz and multiz by Minmei Hou, Scott Schwartz and Webb
+Miller of the <A HREF="http://www.bx.psu.edu/miller_lab/"
+TARGET=_blank>Penn State Bioinformatics Group</A>
+<LI> Chaining and Netting:  axtChain, chainNet by Jim Kent at UCSC
+<LI> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view and
+other programs in PHAST by
+<A HREF="http://compgen.bscb.cornell.edu/~acs/software.html"
+TARGET=_blank>Adam Siepel</A> at Cornell University (original development
+done at the Haussler lab at UCSC).
+<LI> MAF Annotation tools: mafAddIRows by Brian Raney, UCSC; mafAddQRows
+by Richard Burhans, Penn State; genePredToMafFrames by Mark Diekhans, UCSC
+<LI> Tree image generator: phyloGif by Galt Barber, UCSC
+<LI> Conservation track display: Kate Rosenbloom, Hiram Clawson (wiggle
+display), and Brian Raney (gap annotation and codon framing) at UCSC
+</UL>
+</P>
+
+<h2>References</h2>
+
+<h3>Phylo-HMMs, phastCons, and phyloP:</h3>
+
+<p>
+Stephen K. Gire, Augustine Goba, Kristian G. Andersen, ...  Robert F. Garry, S. Humarr Khan, and Pardis C. Sabeti
+<a href="http://www.sciencemag.org/content/345/6202/1369.abstract"
+target="blank">Genomic surveillance elucidates Ebola virus origin
+and transmission during the 2014 outbreak</a>
+<em>Science</em> 12 September 2014: 345 (6202), 1369-1372.<br>
+Published online 28 August 2014 [DOI:10.1126/science.1259657] 
+</p>
+
+<p>
+Pollard KS, Hubisz MJ, Rosenbloom KR, Siepel A.
+<a href="http://genome.cshlp.org/content/20/1/110.long" target="_blank">
+Detection of nonneutral substitution rates on mammalian phylogenies</a>.
+<em>Genome Res</em>. 2010 Jan;20(1):110-21.
+</p>
+
+<p>
+Siepel A, Bejerano G, Pedersen JS, Hinrichs AS, Hou M, Rosenbloom K,
+Clawson H, Spieth J, Hillier LW, Richards S, <em>et al</em>.
+<a href="http://genome.cshlp.org/content/15/8/1034" target="_blank">
+Evolutionarily conserved elements in vertebrate, insect, worm, and yeast genomes</a>.
+<em>Genome Res</em>. 2005 Aug;15(8):1034-50.
+</p>
+
+<h3>Chain/Net:</h3>
+
+<p>
+Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
+<a href="http://www.pnas.org/content/100/20/11484.abstract" target="_blank">
+Evolution's cauldron: duplication, deletion, and rearrangement in the mouse and human genomes</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2003 Sep 30;100(20):11484-9.
+</p>
+
+<h3>Multiz:</h3>
+
+<p>
+Blanchette M, Kent WJ, Riemer C, Elnitski L, Smit AF, Roskin KM,
+Baertsch R, Rosenbloom K, Clawson H, Green ED, <em>et al</em>.
+<a href="http://genome.cshlp.org/content/14/4/708.abstract" target="_blank">
+Aligning multiple genomic sequences with the threaded blockset aligner</a>.
+<em>Genome Res</em>. 2004 Apr;14(4):708-15.
+</p>
+
+<h3>Blastz:</h3>
+
+<p>
+Chiaromonte F, Yap VB, Miller W.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/11928468" target="_blank">
+Scoring pairwise genomic sequence alignments</a>.
+<em>Pac Symp Biocomput</em>. 2002;:115-26.
+</p>
+
+<p>
+Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC,
+Haussler D, Miller W.
+<a href="http://genome.cshlp.org/content/13/1/103.abstract" target="_blank">
+Human-mouse alignments with BLASTZ</a>.
+<em>Genome Res</em>. 2003 Jan;13(1):103-7.
+</p>

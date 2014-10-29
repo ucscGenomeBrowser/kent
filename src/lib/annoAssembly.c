@@ -14,8 +14,8 @@ struct annoAssembly *annoAssemblyNew(char *name, char *twoBitPath)
 struct annoAssembly *aa;
 AllocVar(aa);
 aa->name = cloneString(name);
-aa->tbf = twoBitOpen(twoBitPath);
 aa->twoBitPath = cloneString(twoBitPath);
+aa->tbf = twoBitOpen(aa->twoBitPath);
 aa->curSeq = NULL;
 return aa;
 }

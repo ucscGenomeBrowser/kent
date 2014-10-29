@@ -1480,7 +1480,66 @@ html chainNet
         html chainNet
 
 ################################################################
-# anoGam1 - A. gambiae - Anopheles gambiae - insect -  diptera - 9640 
+# triCas2 - T. castaneum - Tribolium castaneum - insect diptera -9620
+################################################################
+track chainNetTriCas2
+release alpha
+compositeTrack on
+shortLabel T. castaneum Chain/Net
+longLabel T. castaneum (Sep. 2005 (Baylor 2.0/triCas2), Chain and Net Alignments
+subGroup1 view Views chain=Chain net=Net
+dragAndDrop subTracks
+visibility hide
+group compGeno
+noInherit on
+priority 14555550
+color 0,0,0
+altColor 255,255,0
+type bed 3
+sortOrder view=+
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+otherDb triCas2
+chainMinScore 3000
+chainLinearGap loose
+spectrum on
+html chainNet
+
+    track chainNetTriCas2Viewchain
+    release alpha
+    shortLabel Chain
+    view chain
+    visibility pack
+    parent chainNetTriCas2
+    spectrum on
+
+        track chainTriCas2
+        release alpha
+        parent chainNetTriCas2Viewchain
+        subGroups view=chain
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain triCas2
+        html chainNet
+
+    track chainNetTriCas2Viewnet
+    release alpha
+    shortLabel Net
+    view net
+    visibility dense
+    parent chainNetTriCas2
+
+        track netTriCas2
+        release alpha
+        parent chainNetTriCas2Viewnet
+        subGroups view=net
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign triCas2 chainTriCas2
+        html chainNet
+
+################################################################
+# anoGam1 - A. gambiae - Anopheles gambiae - insect -  diptera - 9630
 ################################################################
 track chainNetAnoGam1
 release alpha

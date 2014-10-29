@@ -8,7 +8,7 @@ Fri Oct 25 11:10:34 PDT 2013
   errors during boot time)
 
 Mon Oct 28 13:57:33 PDT 2013
-- Hiram started trashcleaner 
+- Hiram started trashcleaner, Hiram knows how to do it
 
 Wed Jan 15 02:13:25 PST 2014
 - /etc/pam.d/sshd : activate access.conf
@@ -25,14 +25,11 @@ Fri Jan 17 06:26:35 PST 2014
   GRUB_RECORDFAIL_TIMEOUT=0 to /etc/default/grub and did update-grub
 
 Mon Jan 20 13:17:47 PST 2014
-- added gpm to get rid of this annoying mouse capture
-- added acpi-tools to be able to shutdown from the host
+- installed gpm package to get rid of this annoying mouse capture
+- added acpi-tools to be able to shutdown from the host with the powerbutton command
 
 Wed Jan 22 02:00:14 PST 2014
 - changed apache ports.conf and 000default.conf to listen to port 1234, makes bigDataUrl pasting possible
-
-Thu Jan 30 08:55:34 PST 2014
-- moved to rsync for cgi updates and added cronjob to update everything every hour
 
 Sun Feb  2 12:10:19 PST 2014
 - added symlink from htdocs/folders to /media, so auto mounted folders are seen (ht to Jonathan!)
@@ -58,4 +55,15 @@ Fri Apr  4 09:01:41 PDT 2014
 - added urlIsNotNewerThanFile
 
 Fri Apr 11 09:22:50 PDT 2014
-- update timing changed to 1 minute, using hgMirror now to hide tracks
+- update timing changed to 1 minute, using hgMirror now to hide tracks, in root's crontab
+
+Wed Apr 23 20:19:29 GMT 2014
+- timezone is now set to GMT as time by the hgdownload webserver is reported in GMT
+
+Mon Apr 28 09:30:04 GMT 2014
+- increasing SATA timeout http://kb.vmware.com/selfservice/microsites/search.do?language=en_US&cmd=displayKC&externalId=1009465 in /etc/rc.local
+
+Thu Oct  9 10:50:55 GMT 2014
+- https://www.virtualbox.org/ticket/12441, set natdnshostresolver1 to on
+- allowing browser to do more sudo work, in /etc/sudoers.d/browserbox
+- adding more convenience aliases to /home/browser/.bashrc

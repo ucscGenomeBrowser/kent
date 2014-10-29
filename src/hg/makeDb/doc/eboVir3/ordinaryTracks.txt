@@ -1,0 +1,182 @@
+# for emacs: -*- mode: sh; -*-
+
+# starting the database
+
+cd /hive/data/genomes/eboVir3
+
+cat << '_EOF_' > eboVir3.config.ra
+# Config parameters for makeGenomeDb.pl:
+db eboVir3
+clade virus
+genomeCladePriority 1998
+scientificName Filoviridae ebolavirus
+commonName Ebola virus 2014
+assemblyDate Jun. 2014
+assemblyLabel West Africa 01 June 2014 EBOV/G3683/KM034562.1
+assemblyShortLabel G3683/KM034562.1
+orderKey 10798
+mitoAcc none
+fastaFiles /hive/data/genomes/eboVir3/ucsc/KM034562v1.fa.gz
+agpFiles /hive/data/genomes/eboVir3/ucsc/KM034562v1.agp
+# qualFiles none
+dbDbSpeciesDir ebola
+photoCreditURL http://phil.cdc.gov/phil/details.asp?pid=1836
+photoCreditName CDC/Cynthia Goldsmith Public Health Image Library (PHIL)
+ncbiGenomeId 4887
+ncbiAssemblyId KM034561
+ncbiAssemblyName KM034561
+ncbiBioProject 257197
+genBankAccessionID KM034561
+# http://www.ncbi.nlm.nih.gov/biosample/SAMN02951977
+taxId 186538
+'_EOF_'
+  # << happy emacs
+
+# test sequence and AGP
+makeGenomeDb.pl -stop=agp eboVir3.config.ra \
+   -dbHost=hgwdev -fileServer=hgwdev -workhorse=hgwdev > agp.log 2>&1
+
+# verify that looks good, check the agp.log and the resulting *.agp file
+# continuing:
+makeGenomeDb.pl -continue=db eboVir3.config.ra \
+   -dbHost=hgwdev -fileServer=hgwdev -workhorse=hgwdev > db.log 2>&1
+
+# add 2bit file to gbdb
+ln -s eboVir3.unmasked.2bit eboVir3.2bit
+ln -s `pwd`/eboVir3.unmasked.2bit /gbdb/eboVir3/eboVir3.2bit
+
+#########################################################################
+# repeat masking (DONE - 2015-04-18 - Hiram)
+#
+# RepeatMasker doesn't do virus
+# trf/simpleRepeats finds nothing
+# windowMasker finds a couple of bits
+
+mkdir /hive/data/genomes/eboVir3/bed/windowMasker
+cd /hive/data/genomes/eboVir3/bed/windowMasker
+time (doWindowMasker.pl -buildDir=`pwd` \
+   -workhorse=hgwdev eboVir3) > do.log 2>&1
+# real    0m24.311s
+
+# fails on final measurement with rmsk which does not exist
+time (doWindowMasker.pl -continue=cleanup -buildDir=`pwd` \
+   -workhorse=hgwdev eboVir3) > cleanup.log 2>&1
+#   real    0m4.435s
+
+#########################################################################
+# cpgIslandsUnmasked (NOT DONE)
+
+# only finds one bit which isn't relevant to anything
+
+mkdir /hive/data/genomes/eboVir3/bed/cpgIslandsUnmasked
+cd /hive/data/genomes/eboVir3/bed/cpgIslandsUnmasked
+time (doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
+   -tableName=cpgIslandExtUnmasked -dbHost=hgwdev -smallClusterHub=ku \
+    -workhorse=hgwdev \
+    -maskedSeq=/hive/data/genomes/eboVir3/eboVir3.unmasked.2bit eboVir3) \
+      > do.log 2>&1
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2014-09-16 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+
+# delete previous temporary
+hgsql -e 'DELETE FROM blatServers where db="eboVir3";' hgcentraltest
+
+hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("eboVir3", "blat4d", "17852", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("eboVir3", "blat4d", "17853", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+# lastz Marburg sequences (DONE - 2014-09-18 - Hiram)
+mkdir /hive/data/genomes/eboVir3/bed/lastzMarVir1.2014-09-18
+cd /hive/data/genomes/eboVir3/bed/lastzMarVir1.2014-09-18
+
+cat << '_EOF_' > DEF
+# Ebola virus single sample: KM034562.1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET - eboVir3 KM034562.1
+SEQ1_DIR=/hive/data/genomes/eboVir3/eboVir3.2bit
+SEQ1_CHUNK=200000
+SEQ1_LAP=0
+SEQ1_LEN=/hive/data/genomes/eboVir3/chrom.sizes
+
+# QUERY - marVir1 2 strains
+SEQ2_DIR=/hive/data/genomes/marVir1/marVir1.2bit
+SEQ2_CHUNK=200000
+SEQ2_LAP=0
+SEQ2_LEN=/hive/data/genomes/marVir1/chrom.sizes
+
+BASE=/hive/data/genomes/eboVir3/bed/lastzMarVir1.2014-09-18
+TMPDIR=/dev/shm
+'_EOF_'
+  # << happy emacs
+
+time (doBlastzChainNet.pl `pwd`/DEF \
+        -syntenicNet -stop=net -fileServer=hgwdev \
+        -tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+        -chainMinScore=100  -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > do.log 2>&1
+# real    1m50.424s
+
+# need to fixup the load step
+time (doBlastzChainNet.pl `pwd`/DEF \
+        -debug -syntenicNet -continue=load -stop=load -fileServer=hgwdev \
+        -tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+        -chainMinScore=100  -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > load.log 2>&1
+# real    1m50.424s
+
+
+featureBits -countGaps eboVir3 chainMarVir1Link
+# 640008 bases of 889112 (71.983%) in intersection
+
+############################################################################
+# Genscan (DONE - 2014-09-18 - Hiram)
+
+mkdir /hive/data/genomes/eboVir3/bed/genscan
+cd /hive/data/genomes/eboVir3/bed/genscan
+time (doGenscan.pl -buildDir=`pwd` -bigClusterHub=ku -workhorse=hgwdev \
+    -dbHost=hgwdev eboVir3) > do.log 2>&1
+
+cat fb.eboVir3.genscan.txt
+#  14316 bases of 18957 (75.518%) in intersection
+
+############################################################################
+#  set default position on the GP gene area:
+
+hgsql -e \
+'update dbDb set defaultPos="KM034562v1:1-18957" where name="eboVir3";' \
+     hgcentraltest
+
+############################################################################
+# joinerCheck and download files (DONE - 2014-09-30 - Hiram)
+#  add entries to all.joiner to get this clean:
+   joinerCheck -database=eboVir3 -tableCoverage  ./all.joiner
+# should be no output for tableCoverage
+   joinerCheck -database=eboVir3 -keys ./all.joiner
+Checking keys on database eboVir3
+ eboVir3.chainMarVir1.id - hits 2 of 2 (100.000%) ok
+ eboVir3.chainMarVir1Link.chainId - hits 541 of 541 (100.000%) ok
+ eboVir3.chainMarVir1Link.chainId - hits 541 of 541 (100.000%) ok
+ eboVir3.chromInfo.chrom - hits 1 of 1 (100.000%) ok
+
+    cd /hive/data/genomes/eboVir3
+    makeDownloads.pl -allowMissedTrfs -ignoreRepeatMasker \
+        -dbHost=hgwdev -workhorse=hgwdev eboVir3 > downloads.log 2>&1
+
+    # the jkStuff/doCompress.csh needed to have some business
+    # commented out to make it complete.  It was run manually, and
+    # the resulting README files were edited.
+
+##############################################################################
+

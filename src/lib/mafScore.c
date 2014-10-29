@@ -29,6 +29,13 @@ static gap_scores_t ds;
 static int gop[256], gtype[128];
 
 static const uchar nchars[] = "ACGT";
+static const int simpleScoringMatrix[4][4] = {
+  { 100, -10000, -10000, -10000},
+  { -10000, 100, -10000, -10000},
+  { -10000, -10000, 100, -10000},
+  { -10000, -10000, -10000, 100},
+};
+
 static const int HOXD70_sym[4][4] = {
   {  91, -114,  -31, -123 },
   {-114,  100, -125,  -31 },
@@ -37,26 +44,26 @@ static const int HOXD70_sym[4][4] = {
 };
 
 /* DNA_scores --------------------------  substitution scoring matrix for DNA */
-static void DNA_scores(ss_t ss)
+static void DNA_scores(ss_t ss, const int matrix[4][4])
 {
-	int i, j, bad, a, b, A, B;
+    int i, j, bad, a, b, A, B;
 
-	for (i = 0; i < NACHARS; ++i)
-		for (j = 0; j < NACHARS; ++j)
-			ss[i][j] = -100;
-	for (i = 0; i < (signed)CLEN(nchars); ++i) {
-		A = nchars[i];
-		a = tolower(A);
-		for (j = 0; j < (signed)CLEN(nchars); ++j) {
-			B = nchars[j];
-			b = tolower(B);
-			ss[A][B] = ss[a][B] = ss[A][b] = ss[a][b] =
-				HOXD70_sym[i][j];
-		}
-	}
-	bad = -1000;
-	for (i = 0; i < NACHARS; ++i)
-		ss['X'][i] = ss[i]['X'] = ss['x'][i] = ss[i]['x'] = bad;
+    for (i = 0; i < NACHARS; ++i)
+	    for (j = 0; j < NACHARS; ++j)
+		    ss[i][j] = -100;
+    for (i = 0; i < (signed)CLEN(nchars); ++i) {
+	    A = nchars[i];
+	    a = tolower(A);
+	    for (j = 0; j < (signed)CLEN(nchars); ++j) {
+		    B = nchars[j];
+		    b = tolower(B);
+		    ss[A][B] = ss[a][B] = ss[A][b] = ss[a][b] =
+			    matrix[i][j];
+	    }
+    }
+    bad = -1000;
+    for (i = 0; i < NACHARS; ++i)
+	    ss['X'][i] = ss[i]['X'] = ss['x'][i] = ss[i]['x'] = bad;
 }
 
 
@@ -80,6 +87,36 @@ static void gap_costs(int *gop, int *gtype, int gap_open)
 	GAP(D,D,D,X) = gap_open;
 }
 
+static boolean ssInitialized = FALSE;
+
+void mafScoreUseSimple()
+/* use a simple scoring system useful for finding mismatches */
+{
+    int i; 
+    DNA_scores(ss, simpleScoringMatrix);
+    ds.E = 30;
+    ds.O = 400;
+    for (i = 0; i < 128; ++i)
+	    ss[i][DASH] = ss[DASH][i] = 0;
+    ss[DASH][DASH] = 0;
+    gap_costs(gop, gtype, ds.O);   /* quasi-natural gap costs */
+    ssInitialized = TRUE;
+}
+
+void mafScoreUseTraditional()
+/* use the tradition HOX scoring system */
+{
+    int i; 
+    DNA_scores(ss, HOXD70_sym);
+    ds.E = 30;
+    ds.O = 400;
+    for (i = 0; i < 128; ++i)
+	ss[i][DASH] = ss[DASH][i] = -ds.E;
+    ss[DASH][DASH] = 0;
+    gap_costs(gop, gtype, ds.O);   /* quasi-natural gap costs */
+    ssInitialized = TRUE;
+}
+
 double mafScoreRangeMultiz(struct mafAli *maf, int start, int size)
 /* Return score of a subset of an alignment.  Parameters are:
  *    maf - the alignment
@@ -100,15 +137,9 @@ if (start < 0 || size <= 0 ||
 	errAbort( "mafScoreRange: start = %d, size = %d, textSize = %d\n",
 		start, size, maf->textSize);
 }
-if (ss['A']['A'] != HOXD70_sym[0][0]) {
-	DNA_scores(ss);
-	ds.E = 30;
-	ds.O = 400;
-	for (i = 0; i < 128; ++i)
-		ss[i][DASH] = ss[DASH][i] = -ds.E;
-	ss[DASH][DASH] = 0;
-	gap_costs(gop, gtype, ds.O);   /* quasi-natural gap costs */
-}
+if (!ssInitialized)
+    mafScoreUseTraditional();
+
 score = 0.0;
 for (i = start; i < start+size; ++i) {
 	for (c1 = maf->components; c1 != NULL; c1 = c1->next) {

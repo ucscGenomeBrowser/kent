@@ -39,6 +39,7 @@
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a href="http://hgdownload.soe.ucsc.edu/downloads.html">Genome Data</a></li>
 	<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads">Source Code</a></li>
+  <li><a href="https://genome-store.ucsc.edu">Genome Browser Store</a></li>
 	<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">Utilities</a></li>
 	<li class="last"><a href="../goldenPath/help/ftp.html">FTP</a></li>
 	<li class="last"><a href="../goldenPath/help/mysql.html">MySQL Access</a></li>
@@ -68,6 +69,7 @@
 	<ul style="display: none; visibility: hidden;">
 	<li class="first odd"><a href="../goldenPath/newsarch.html">News</a></li>
 	<li class="even"><a href="../goldenPath/pubs.html">Publications</a></li>
+	<li class="even"><a href="http://genome.ucsc.edu/blog/">Blog</a></li>
 	<li class="odd"><a href="../cite.html">Cite Us</a></li>
 	<li class="even"><a href="../goldenPath/credits.html">Credits</a></li>
 	<li class="odd"><a href="../goldenPath/releaseLog.html">Release Log</a></li>

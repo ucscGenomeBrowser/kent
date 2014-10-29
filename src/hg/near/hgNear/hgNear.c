@@ -1888,6 +1888,13 @@ void doMiddle(struct cart *theCart)
  * This routine sets up some globals and then
  * dispatches to the appropriate page-maker. */
 {
+if (hIsBrowserbox())
+    {
+    printf("The Gene Sorter is not supported on the Genome Browser in a Box Virtual Machine.<p>");
+    printf("Please use this tool on the <a href=\"http://genome.ucsc.edu/cgi-bin/hgNear\">UCSC website</a><p>");
+    return;
+    }
+
 char *var = NULL;
 struct sqlConnection *conn;
 struct column *colList, *col;
@@ -2006,6 +2013,7 @@ int main(int argc, char *argv[])
 long enteredMainTime = clock1000();
 // pushCarefulMemHandler(100000000);
 cgiSpoof(&argc, argv);
+setUdcCacheDir();
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 oldVars = hashNew(10);

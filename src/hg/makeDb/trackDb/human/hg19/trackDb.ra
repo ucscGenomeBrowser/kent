@@ -545,6 +545,8 @@ include ../chainNetVertebrate.ra
 
 include ../chainNetLegacy.ra alpha
 
+include ../chainNetStray.ra alpha
+
 track hg18cytoBand
 shortLabel hg18 Chromosome Band
 longLabel Chromosome Bands (hg18)
@@ -827,15 +829,11 @@ priority 2
 track genomicSuperDups override
 group rep
 
-track snp141Mult override
-snpSeqFile /gbdb/hg19/snp/snp141.fa
-
 track snp141Flagged override
 snpSeqFile /gbdb/hg19/snp/snp141.fa
 
 track snp141Common override
 snpSeqFile /gbdb/hg19/snp/snp141.fa
-priority 2
 
 track snp141 override
 snpSeqFile /gbdb/hg19/snp/snp141.fa
@@ -892,7 +890,7 @@ chimpDb panTro3
 orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
-priority 1
+visibility hide
 
 track snp137Flagged
 shortLabel Flagged SNPs(137)
@@ -2196,6 +2194,7 @@ url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/human/extract_primer_
 urlLabel Click here for primer details:
 
 include trackDb.100way.ra
+include trackDb.cacTest100way.ra
 
 track ultraConserved
 shortLabel Ultra Conserved
@@ -2265,6 +2264,53 @@ visibility hide
 type gvf 
 noScoreFilter .
 
+
+track peptideAtlas
+html peptideAtlas.html
+superTrack on
+group expression
+shortLabel PeptideAtlas
+longLabel Peptide sequences identified by tandem MS from PeptideAtlas
+
+track peptideAtlas2013
+table peptideAtlas
+superTrack peptideAtlas
+html peptideAtlas
+shortLabel Peptide Atlas 2013
+longLabel Peptide sequences identified by tandem MS from PeptideAtlas (2013)
+type bedDetail 6
+url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=393&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
+urlLabel Link to PeptideAtlas:
+group expression
+color 82, 82. 160
+
+track peptideAtlas2014
+table peptideAtlas2
+superTrack peptideAtlas
+shortLabel Peptide Atlas 2014
+html peptideAtlas
+longLabel Peptide sequences identified by tandem MS from PeptideAtlas (2014)
+type bedDetail 6
+url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=433&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
+urlLabel Link to PeptideAtlas:
+group expression
+color 82, 82. 160
+
+#track peptideAtlasDensity2014
+#table peptideAtlasDensity2
+#superTrack peptideAtlas
+#shortLabel Peptide Atlas 2014
+#html peptideAtlas
+#longLabel Density of peptide sequences identified by tandem MS from PeptideAtlas (2014)
+#type bigWig 1 1359
+#visibility full
+#autoScale on
+#maxHeightPixels 100:64:8
+#viewLimits 0:100:1359
+#windowingFunction mean+whiskers
+#group expression
+#color 225, 82, 160
+
 track nestedRepeats override
 group rep
 
@@ -2281,15 +2327,4 @@ track pubsBingBlat override
 group phenDis
 
 include defaultPriority.ra
-
-# This is an exploratory track on dev for proteomics (might become a public hub)
-track peptideAtlas
-table peptideAtlas2
-shortLabel Peptide Atlas
-longLabel Peptide sequences identified by tandem MS from PeptideAtlas
-type bedDetail 6
-url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=393&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
-urlLabel Link to PeptideAtlas:
-group expression
-color 82, 82. 160
 

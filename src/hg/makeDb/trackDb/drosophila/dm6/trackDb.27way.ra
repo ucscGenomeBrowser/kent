@@ -1,0 +1,106 @@
+track cons27way
+compositeTrack on
+shortLabel Conservation
+longLabel Multiz Alignment & Conservation (27 Species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+subGroup2 clade drosophila=Drosophila others=Others all=All_species
+dragAndDrop subTracks
+dimensions dimensionX=clade
+visibility full
+priority 1
+type bed 4
+group compGeno
+
+    track cons27wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons27way
+
+        track multiz27way
+        subTrack cons27wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 27 insects
+        subGroups view=align clade=all
+        noInherit on
+        summary multiz27waySummary
+#        irows on
+#        frames multiz27wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault dm6
+        speciesGroups Drosophila Others
+        sGroup_Drosophila dm6 droSim1 droSec1 droYak3 droEre2 droBia2 droSuz1 droAna3 droBip2 droEug2 droEle2 droKik2 droTak2 droRho2 droFic2 droPse3 droPer1 droMir2 droWil2 droVir3 droMoj3 droAlb1 droGri2
+        sGroup_Others musDom2 anoGam1 apiMel4 triCas2
+        itemFirstCharCase noChange
+        treeImage phylo/dm6_27way.png
+        priority 100
+#
+#    # PhyloP conservation
+#    track cons27wayViewphyloP
+#    shortLabel Basewise Conservation (phyloP)
+#    view phyloP
+#    visibility full
+#    subTrack cons27way
+#    viewLimits -3:0.5
+#    viewLimitsMax -4.611:0.934
+#
+#        track phyloP27way
+#        subTrack cons27wayViewphyloP off
+#        subGroups view=phyloP
+#        shortLabel 7 Vert. Cons
+#        longLabel 7 vertebrates Basewise Conservation by PhyloP
+#        noInherit on
+#        configurable on
+#        type wig -4.711 0.934
+#        maxHeightPixels 100:50:11
+#        viewLimits -3.107:0.934
+#        autoScale off
+#        spanList 1
+#        windowingFunction mean
+#        color 60,60,140
+#        altColor 140,60,60
+#        priority 4
+#
+#    # phastCons conservation
+#    track cons27wayViewphastcons
+#    shortLabel Element Conservation (phastCons)
+#    view phastcons
+#    visibility full
+#    subTrack cons27way
+#
+#        track phastCons27way
+#        subTrack cons27wayViewphastcons off
+#        subGroups view=phastcons
+#        shortLabel 7 Vert. Cons
+#        longLabel 7 vertebrates conservation by PhastCons
+#        noInherit on
+#        configurable on
+#        type wig 0 1
+#        maxHeightPixels 100:40:11
+#        autoScale off
+#        spanList 1
+#        windowingFunction mean
+#        color 70,130,70
+#        altColor 130,70,70
+#        priority 13
+#
+#    # Conserved Elements (Most Conserved)
+#    track cons27wayViewelements
+#    shortLabel Conserved Elements
+#    view elements
+#    visibility dense
+#    subTrack cons27way
+#
+#        track phastConsElements27way
+#        subTrack cons27wayViewelements on
+#        subGroups view=elements
+#        shortLabel 7 Vert. El
+#        longLabel 7 vertebrates Conserved Elements
+#        noInherit on
+#        color 110,10,40
+#        type bed 5 .
+#        priority 23

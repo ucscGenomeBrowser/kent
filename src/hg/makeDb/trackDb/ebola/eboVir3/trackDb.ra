@@ -1,0 +1,123 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+visibility hide
+html gold
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+visibility hide
+html gap
+
+#track gc5BaseBw override
+#visibility full
+
+track ncbiGene
+shortLabel NCBI Genes
+longLabel NCBI Genes from KM034562 GenBank Record
+group genes
+visibility pack
+priority 1
+color 12,12,120
+type genePred 
+baseColorUseCds given
+baseColorDefault genomicCodons
+itemDetailsHtmlTable geneDesc
+
+track ncbiGenePfam
+shortLabel Pfam in NCBI Gene
+longLabel Pfam Domains in NCBI Genes
+group genes
+type bed 12
+color 20,0,250
+url http://pfam.sanger.ac.uk/family/$$
+
+track pdb
+shortLabel PDB 
+longLabel Protein Data Bank (PDB) Sequence Matches
+group genes
+type bed 12
+visibility hide
+iframeUrl http://www.pdb.org/pdb/explore/explore.do?structureId=$$
+iframeOptions width='1000' height='800' scrolling='yes'
+priority 30
+
+track iedbBcell
+shortLabel IEDB B Cell
+longLabel Immune Epitope Database and Analysis Resource (IEDB) B-Cell Epitopes
+group immu
+type bigBed 12 .
+visibility dense
+color 0,90,100
+urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
+mouseOverField author
+
+track iedbBcellNeg
+shortLabel IEDB B Cell Neg
+longLabel Immune Epitope Database and Analysis Resource (IEDB) B-Cell Epitopes with Negative Assay Result
+group immu
+type bigBed 12 .
+visibility hide
+color 0,90,100
+urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
+mouseOverField author
+
+track iedbTcellI
+shortLabel IEDB T Cell I
+longLabel Immune Epitope Database and Analysis Resource (IEDB) Curated T-Cell Epitopes, MHC Class I
+group immu
+type bigBed 12 .
+visibility hide
+urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
+mouseOverField mHCAlleleName
+
+track iedbTcellII
+shortLabel IEDB T Cell II
+longLabel Immune Epitope Database and Analysis Resource (IEDB) Curated T-Cell Epitopes, MHC Class II
+group immu
+type bigBed 12 .
+visibility hide
+urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
+mouseOverField mHCAlleleName
+
+track muPIT
+shortLabel muPIT protein map
+longLabel muPIT - Mapping Genomic Positions on Protein Structures
+group genes
+visibility hide
+type bed 4
+url http://mupit-ebola.icm.jhu.edu/ResidueFileUpload?residues=chr1%20${
+urlLabel MuPIT protein structures
+
+track spMut override
+visibility hide
+group varRep
+shortLabel UniProt Mutations
+html spMut
+url http://mupit-ebola.icm.jhu.edu/ResidueFileUpload?residues=chr1%20${
+urlLabel MuPIT protein structures
+
+track spAnnot override
+shortLabel UniProt Annot.
+visibility dense
+group genes
+html spAnnot
+
+track spStruct
+shortLabel UniProt Structure
+longLabel UniProt/SwissProt Protein Primary/Secondary Structure Annotations
+group genes
+visibility hide
+type bigBed 12 +
+itemRgb on
+urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+mouseOverField comments
+
+track genscan override
+release alpha
+
+track windowmaskerSdust override
+release alpha
+
+include trackDb.160way.ra
+include trackDb.gire.ra
+include trackDb.strainName160way.ra

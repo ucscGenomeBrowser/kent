@@ -13,6 +13,8 @@ errAbort(
   "genePredToBigGenePred - converts genePred or genePredExt to bigGenePred input\n"
   "usage:\n"
   "   genePredToBigGenePred file.gp file.bgpInput\n"
+  "NOTE: to build bigBed:\n"
+  "   bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as file.bgpInput chrom.sizes output.bb\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -33,6 +35,9 @@ struct bigGenePred bgp;
 
 if (gp->exonCount > MAX_BLOCKS)
     errAbort("genePred has more than %d exons, make MAX_BLOCKS bigger in source", MAX_BLOCKS);
+
+if (gp->exonFrames == NULL)
+    genePredAddExonFrames(gp);
 
 bgp.chrom = gp->chrom;
 bgp.chromStart = gp->txStart;
@@ -58,10 +63,10 @@ bgp.name2 = gp->name2;
 bgp.cdsStartStat = gp->cdsStartStat;
 bgp.cdsEndStat = gp->cdsEndStat;
 bgp.exonFrames = gp->exonFrames;
-bgp.type = "none";
+bgp.type = NULL;
 bgp.geneName = gp->name;
 bgp.geneName2 = gp->name2;
-bgp.geneType = "none";
+bgp.geneType = NULL;
 
 bigGenePredOutput(&bgp, fp, '\t', '\n');
 }

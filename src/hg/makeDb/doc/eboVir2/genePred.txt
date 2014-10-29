@@ -1,0 +1,9 @@
+
+# manually downloaded Genbank record for KJ660347.2
+/usr/local/bin/bp_genbank2gff3.pl --split KJ660347.gb
+/cluster/home/braney/bin/x86_64/gff3ToGenePred KJ660347.gff  stdout | sed 's/.t01//' | sed 's/KJ660347/KJ660347v2/' | sort -nk 4 > KJ660347.gp
+hgLoadGenePred eboVir2 ncbiGene KJ660347.gp
+
+# build mafFrames
+genePredToMafFrames eboVir2 /hive/data/genomes/eboVir2/bed/multiz49way/multiz49way.maf frames.tab eboVir2 KJ660347.gp
+hgLoadMafFrames eboVir2 multiz49wayFrames frames.tab  

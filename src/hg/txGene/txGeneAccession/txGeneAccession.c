@@ -265,7 +265,7 @@ for (newBed = newList; newBed != NULL; newBed = newBed->next)
 	        errAbort("No version found in %s", oldBed->name);
 	    *ver++ = 0;
 	    int version = sqlUnsigned(ver);
-	    char newAcc[16];
+	    char newAcc[64];
 	    safef(newAcc, sizeof(newAcc), "%s.%d", acc, version+1);
 	    hashAdd(usedHash, oldBed->name, NULL);
 	    fprintf(f, "%s\t%s\n", newBed->name, newAcc);

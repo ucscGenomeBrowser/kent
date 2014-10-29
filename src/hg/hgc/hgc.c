@@ -5745,7 +5745,12 @@ char splitTable[64];
 char query[256];
 if (!hFindSplitTable(database, seqName, table, splitTable, &hasBin))
     errAbort("can't find table %s or %s_%s", table, seqName, table);
-sqlSafef(query, sizeof(query), "select * from %s where qName like '%s%%'", splitTable, acc);
+if (startsWith("ucscRetro", table))
+    {
+    sqlSafef(query, sizeof(query), "select * from %s where qName = '%s'", splitTable, acc);
+    }
+else
+    sqlSafef(query, sizeof(query), "select * from %s where qName like '%s%%'", splitTable, acc);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -8233,12 +8238,13 @@ void htcGeneMrna(char *geneName)
 {
 char *table = cartString(cart, "o");
 cartHtmlStart("Predicted mRNA from Genome");
-struct genePred *gp, *gpList = getGenePredForPosition(table, geneName);
+struct genePred *gp, *gpList = getGenePredForPosition(table, geneName), *next;
 int cdsStart, cdsEnd;
 struct dnaSeq *seq;
 
-for(gp = gpList; gp; gp = gp->next)
+for(gp = gpList; gp; gp = next)
     {
+    next = gp->next;
     seq = getCdnaSeq(gp);
     getCdsInMrna(gp, &cdsStart, &cdsEnd);
     toUpperN(seq->dna + cdsStart, cdsEnd - cdsStart);

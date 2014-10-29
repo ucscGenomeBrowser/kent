@@ -162,7 +162,10 @@ if (foundFiles == NULL
                 if (count == 5)
                     {
                     //-rw-rw-r-- 26420982 2009/09/29 14:53:30 wgEncodeBroadChipSeq/wgEncode...
+                    // rsync 3.1 adds commas:
+                    //-rw-rw-r-- 26,420,982 2009/09/29 14:53:30 wgEncodeBroadChipSeq/wgEncode...
                     AllocVar(oneFile);
+                    stripChar(words[1], ',');
                     oneFile->fileSize = sqlUnsignedLong(words[1]);
                     oneFile->fileDate = cloneString(words[2]);
                     strSwapChar(oneFile->fileDate,'/','-');// Standardize YYYY-MM-DD, no time

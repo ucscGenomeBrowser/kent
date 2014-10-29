@@ -505,6 +505,15 @@ if ((id = getHubId(url, errorMessage)) == 0)
 return id;
 }
 
+// global to hold hubUrl we added if any
+struct hubConnectStatus  *gNewHub;
+
+struct hubConnectStatus  *hubConnectNewHub()
+/* return the hub for the hubUrl we added (if any) */
+{
+return gNewHub;
+}
+
 static char  *checkForNew( struct cart *cart)
 /* see if the user just typed in a new hub url, return id if so */
 {
@@ -516,7 +525,8 @@ if (url == NULL)
     return NULL;
 
 trimSpaces(url);
-hub = getAndSetHubStatus( cart, url, TRUE);
+
+gNewHub = hub = getAndSetHubStatus( cart, url, TRUE);
 cartRemove(cart, hgHubDataText);
 
 char *wantFirstDb = cartOptionalString(cart, hgHubDoFirstDb);

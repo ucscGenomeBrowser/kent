@@ -328,7 +328,7 @@ g3a->phase = parsePhase(g3a, words[7]);
 if (sameString(g3a->type, "CDS"))
     {
     if (g3a->phase < 0)
-        gff3AnnErr(g3a, "CDS feature must have phase");
+	g3a->phase = 0;  // assume the phase is 0
     }
 else
     {
@@ -820,6 +820,7 @@ else if (startsWithWord("##genome-build", line))
     parseGenomeBuild(g3f, line);
 else if (startsWithWord("##gff-spec-version", line) ||
          startsWithWord("##source-version", line) ||
+         startsWithWord("##source", line) ||
          startsWithWord("##date", line) ||
          startsWithWord("##Type", line))
     ;  /* FIXME: silently ignore these.  Mark says. */

@@ -315,7 +315,11 @@ for (i = 0;  i < MAX_FUNC+1;  i++)
     functionStringsUsed[i] = FALSE;
 }
 
-#define isMissing(val) (sameString("MISSING", val) || sameString("NULL", val))
+INLINE boolean isMissing(char *val)
+/* return TRUE if val is "MISSING" (from join) or "NULL" (no value in SQL table) */
+{
+return (sameString("MISSING", val) || sameString("NULL", val));
+}
 
 void tallyMoltype(struct lineFile *lf, char *molType)
 /* Keep track of what molTypes are actually used. */
@@ -1145,6 +1149,7 @@ void adjustCoords(struct lineFile *lf, int locTypeNum, char *locType,
  * and modify chrStart/chrEnd to match our 0-based, half-open coords and
  * conventions. */
 {
+int refNcbiLen = strlen(refNCBI);
 if (chrEnd < chrStart)
     {
     writeError("Unexpected coords for locType \"%s\" (%d) -- "
@@ -1167,7 +1172,7 @@ else if (sameString(locType, "between"))
 	// later error that is just a side-effect of this one.
 	chrEnd++;
 	}
-    else if (! sameString(refNCBI, "-") && strlen(refNCBI) != 2)
+    else if (! sameString(refNCBI, "-") && refNcbiLen != 2)
 	writeError("Unexpected refNCBI \"%s\" for locType \"%s\" (%d) -- "
 		   "expected \"-\" or 2 bases", refNCBI, locType, locTypeNum);
     }
@@ -1178,7 +1183,7 @@ else if (sameString(locType, "exact"))
     if (chrEnd != chrStart)
 	writeError("Unexpected coords for locType \"%s\" (%d) -- "
 		   "expected NCBI's chrEnd = chrStart.", locType, locTypeNum);
-    else if (strlen(refNCBI) != 1)
+    else if (refNcbiLen != 1)
 	writeError("Expected refNCBI to be single-base for locType \"%s\" "
 		   "(%d) but got \"%s\"", locType, locTypeNum, refNCBI);
     else
@@ -1191,8 +1196,8 @@ else if (sameString(locType, "range"))
     if (chrEnd <= chrStart)
 	writeError("Unexpected coords for locType \"%s\" (%d) -- "
 		   "expected NCBI's chrEnd > chrStart.", locType, locTypeNum);
-    else if (strlen(refNCBI) <= 1)
-	writeError("Expected refNCBI to more than one base for locType \"%s\" "
+    else if (refNcbiLen <= 1)
+	writeError("Expected refNCBI to be more than one base for locType \"%s\" "
 		   "(%d) but got \"%s\"", locType, locTypeNum, refNCBI);
     else
 	chrEnd++;
@@ -1201,8 +1206,7 @@ else
     {
     /* The range{Insertion,Substitution,Deletion} locTypes don't have a
      * constraint on size, but do need to be converted. */
-    if (!stringIn("bp insertion", refNCBI) &&
-	strlen(refNCBI) != chrEnd - chrStart + 1)
+    if (isAllNt(refNCBI, refNcbiLen) && refNcbiLen != chrEnd - chrStart + 1)
 	writeError("Unexpected coords for locType \"%s\" (%d) -- "
 		   "expected NCBI's chrEnd == chrStart + strlen(refNCBI) - 1.",
 		   locType, locTypeNum);
@@ -1260,26 +1264,6 @@ else
 	writeException(RefAlleleRevComp);
     }
 return refUCSC;
-}
-
-char *reverseComplementObserved(char *observed)
-/* Rev-comp the sequence portion of an observed string. *
- * Do not free the return value! */
-{
-static struct dyString *myDy = NULL;
-
-if (! startsWith("-/", observed))
-    errAbort("This shouldn't be called on an observed that doesn't start "
-	     "with -/ .");
-
-if (myDy == NULL)
-    myDy = dyStringNew(512);
-dyStringClear(myDy);
-dyStringAppend(myDy, observed);
-
-reverseComplement(myDy->string + 2, strlen(myDy->string + 2));
-
-return myDy->string;
 }
 
 boolean listAllEqual(struct slName *list)
@@ -1676,19 +1660,16 @@ if (prevChr == NULL)
 
 if (observed != NULL)
     {
-    /* Following snpCheckCluster.c's lead, ignore if observed != -/[AGCT]+: */
-    if ((!startsWith("-/", observed) ||
-	 chopString(observed, "/", NULL, 0) > 2))
-	return;
     if (strand == '-')
-	observed = reverseComplementObserved(observed);
-    if (chrStart != chrEnd)
-	lineFileAbort(lf, "Expected 0-length position for insertion");
+	observed = reverseComplementSlashSeparated(observed);
     sameChr = isNotEmpty(prevChr) && sameString(prevChr, chr);
-    if (sameChr && chrStart < prevPos && observed != NULL)
+    // The -1 here is because we have to tweak dbSNP's insertion coords, so tolerate that
+    // although it might make us miss some clusters(?).  Maybe that's why this check
+    // used to be performed only on insertions.
+    if (sameChr && chrStart < prevPos-1 && observed != NULL)
 	lineFileAbort(lf, "Input must be sorted by position.");
     }
-if (!sameChr || chrStart > prevPos || observed == NULL)
+if (!sameChr || chrStart != prevPos || observed == NULL)
     {
     /* New position or end of file: report previous cluster (if it was
      * really a cluster) and reset cluster state. */
@@ -1762,7 +1743,8 @@ for (i=0;  i < *pAlleleFreqCount;  i++)
     double leftover = alleleNs[i] - trunc(alleleNs[i]);
     if (leftover > ALLELE_N_ROUNDING_ERROR && leftover < 1.0-ALLELE_N_ROUNDING_ERROR)
 	writeException(NonIntegerChromCount);
-    total += alleleFreqs[i];
+    if (alleleFreqs != NULL)
+	total += alleleFreqs[i];
     }
 if (total < 1.0-ALLELE_FREQ_ROUNDING_ERROR || total > 1.0+ALLELE_FREQ_ROUNDING_ERROR)
     writeException(AlleleFreqSumNot1);
@@ -1877,26 +1859,18 @@ while ((wordCount = lineFileChop(lf, words)) > 0)
 lineFileClose(&lf);
 }
 
-/* Use an array[MAX_SNPID] of coord lists to detect multiply-mapped SNPs and to store 
- * exceptions. */
-/* Hashing might be slightly more memory efficient, but this is easier and it still works. */
-/* SNP130: now 18M items, max ID 74315166. */
-/* SNP132: 30M items, max ID 121909398 */
-/* SNP134: 62M items, max ID 179363897 */
-/* SNP135: 55M items, max ID 193919341 (wastefulness factor: 193919341 / 55449139 = 3.497247) */
-/* mouse 137: 74M items, max ID 266257353 (266257353 / 74781097 = 3.5605 */
-#define MAX_SNPID 400 * 1024 * 1024
+/* Use a hash of coord lists to detect multiply-mapped SNPs and to store exceptions. */
+struct hash *mappings = NULL;
+
 struct coords
     {
     struct coords *next;
     int chrId;
     int start;
     int end;
+    int rsId;
     unsigned int exceptions;
     };
-
-int lastRsId = 0;
-struct coords **mappings = NULL;
 
 struct hash *chrIds = NULL;
 char **idChrs = NULL;
@@ -1938,24 +1912,28 @@ if (chrIds == NULL)
     {
     chrIds = hashNew(19);
     AllocArray(idChrs, maxChrId);
-    AllocArray(mappings, MAX_SNPID);
+    mappings = hashNew(26); // Yep, 64M is the new normal.
     }
-if (rsId >= MAX_SNPID)
-    errAbort("Need to increase MAX_SNPID. (%d)", rsId);
-if (rsId > lastRsId)
-    lastRsId = rsId;
 mapping->chrId = idForChr(chr);
 mapping->start = chrStart;
 mapping->end   = chrEnd;
+mapping->rsId = rsId;
 mapping->exceptions = exceptionBits;
-slAddHead(&mappings[rsId], mapping);
+char rsName[256];
+safef(rsName, sizeof(rsName), "rs%d", rsId);
+struct hashEl *hel = hashLookup(mappings, rsName);
+if (hel == NULL)
+    hashAdd(mappings, rsName, mapping);
+else
+    slAddHead(&hel->val, mapping);
 }
 
 void stripHapSuffix(struct coords *map, char chromBase[], size_t size)
-/* Translate map->chrId into a string, store in pre-allocated chromBase, strip any _hap suffix. */
+/* Translate map->chrId into a string, store in pre-allocated chromBase,
+ * strip any _hap or _alt suffix. */
 {
 safecpy(chromBase, size, idChrs[map->chrId]);
-if (strstr(chromBase, "_hap"))
+if (strstr(chromBase, "_hap") || endsWith(chromBase, "_alt"))
     {
     char *p = strchr(chromBase, '_');
     *p = '\0';
@@ -2012,14 +1990,18 @@ if (mappings == NULL)
     // don't SEGV on empty input
     return;
 int chromCounts[nextChrId];
-int id, i;
-for (id = 0;  id <= lastRsId;  id++)
-    if (mappings[id] && mappings[id]->next)
+struct hashEl *hel;
+struct hashCookie cookie = hashFirst(mappings);
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    struct coords *coordList = hel->val;
+    int i;
+    if (coordList && coordList->next)
 	{
 	boolean gotMult = FALSE;
 	for (i = 0;  i < nextChrId;  i++)
 	    chromCounts[i] = 0;
-	struct coords *firstMap = mappings[id], *map;
+	struct coords *firstMap = coordList, *map;
 	chromCounts[firstMap->chrId]++;
 	for (map = firstMap->next;  map != NULL;  map = map->next)
 	    {
@@ -2035,9 +2017,10 @@ for (id = 0;  id <= lastRsId;  id++)
 	    {
 	    for (map = firstMap;  map != NULL;  map = map->next)
 		writeExceptionRetro(idChrs[map->chrId], map->start, map->end,
-				    id, MultipleAlignments);
+				    coordList->rsId, MultipleAlignments);
 	    }
 	}
+    }
 }
 
 
@@ -2045,9 +2028,14 @@ struct coords *mustGetMapping(char *mChr, int mStart, int mEnd, int mRsId)
 /* Look up mapping record by id and position or error out. */
 {
 int chromId = idForChr(mChr);
-struct coords *map = mappings[mRsId];
+char rsName[256];
+safef(rsName, sizeof(rsName), "rs%d", mRsId);
+struct hashEl *hel = hashLookup(mappings, rsName);
+if (hel == NULL)
+    errAbort("Can't find mapping for %s", rsName);
+struct coords *map = hel->val;
 while (map != NULL &&
-       (chromId != map->chrId || mStart != map->start || mEnd != map->end))
+       (chromId != map->chrId || mStart != map->start))
     map = map->next;
 if (map == NULL)
     errAbort("Can't find mapping for rs=%d at %s\t%d\t%d", mRsId, mChr, mStart, mEnd);
@@ -2101,8 +2089,28 @@ return retArray;
 
 #define missingOrDouble(lf, row, i) (isMissing(row[i]) ? 0.0 : lineFileNeedDouble(lf, row, i))
 
-#define missingOrFloatArray(lf, row, i, count) (isMissing(row[i]) ? NULL : \
-						parseFloatArray(lf, row, i, count))
+INLINE boolean nullInCommaSep(char *s)
+/* Return TRUE if comma-separated string s has the word 'NULL'. */
+{
+char *n = strstr(s, "NULL");
+if (n != NULL)
+    {
+    char toLeft = (n == s) ? '\0' : *(n - 1);
+    char toRight = *(n + strlen("NULL"));
+    if ((toLeft == '\0' || toLeft == ',') && (toRight == '\0' || toRight == ','))
+	return TRUE;
+    }
+return FALSE;
+}
+
+INLINE float *missingOrFloatArray(struct lineFile *lf, char **row, int i, int count)
+/* If row[i] isMissing, return NULL, otherwise parse out an array of floats from row[i]. */
+{
+float *array = NULL;
+if (! (isMissing(row[i]) || nullInCommaSep(row[i])))
+    array = parseFloatArray(lf, row, i, count);
+return array;
+}
 
 void snpNcbiToUcsc(char *rawFileName, char *twoBitFileName, char *outRoot)
 /* snpNcbiToUcsc - Reformat NCBI SNP field values into UCSC, and flag exceptions.. */
@@ -2215,10 +2223,6 @@ while ((wordCount = lineFileChopTab(lf, row)) > 0)
     boolean obsOk = checkObserved(lf, class, observed, refAllele);
     if (obsOk && sameString(class, "in-del"))
 	adjustClass(lf, class, sizeof(class), observed, locType, refAllele);
-
-    if (sameString("between", locType) && sameString("insertion", class) &&
-	!skipIt)
-	checkCluster(lf, strand, observed);
     char bitfieldsStr[256];
     if (snp132Ext)
 	{
@@ -2232,6 +2236,7 @@ while ((wordCount = lineFileChopTab(lf, row)) > 0)
     if (! skipIt)
 	{
 	storeMapping();
+	checkCluster(lf, strand, observed);
 	tallyMoltype(lf, molType);
 	}
 
@@ -2262,7 +2267,12 @@ while ((wordCount = lineFileChopTab(lf, row)) > 0)
 		fprintf(f, "%f,", alleleNs[i]);
 	    fputc('\t', f);
 	    for (i=0;  i < alleleFreqCount;  i++)
-		fprintf(f, "%f,", alleleFreqs[i]);
+		{
+		if (alleleFreqs != NULL)
+		    fprintf(f, "%f,", alleleFreqs[i]);
+		else
+		    fprintf(f, "NULL,");
+		}
 	    fprintf(f, "\t%s", bitfieldsStr);
 	    }
 	fputc('\n', f);

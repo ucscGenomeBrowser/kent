@@ -6,8 +6,8 @@ Journal
 Link
 Study
 Disease/Trait
-Initial Sample Size
-Replication Sample Size
+Initial Sample Description
+Replication Sample Description
 Region
 Chr_id
 Chr_pos

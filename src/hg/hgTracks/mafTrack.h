@@ -27,7 +27,8 @@ struct mafPriv *getMafPriv(struct track *track);
 void drawMafRegionDetails(struct mafAli *mafList, int height,
         int seqStart, int seqEnd, struct hvGfx *hvg, int xOff, int yOff,
         int width, MgFont *font, Color color, Color altColor,
-        enum trackVisibility vis, boolean isAxt, boolean chainBreaks);
+        enum trackVisibility vis, boolean isAxt, boolean chainBreaks,
+	boolean doSnpMode);
 /* Draw wiggle/density plot based on scoring things on the fly. */
 
 void drawMafChain(struct hvGfx *hvg, int xOff, int yOff, int width, int height,

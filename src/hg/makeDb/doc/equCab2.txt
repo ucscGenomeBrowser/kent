@@ -2621,3 +2621,61 @@ XXX - running - Mon Nov  5 10:39:45 PST 2012
     #   57367480 bases of 2428790173 (2.362%) in intersection
 
 #########################################################################
+
+##############################################################################
+# Farm Animal QTL track (DONE - 2014-09-17 - Steve)
+    mkdir /hive/data/genomes/equCab2/bed/animalQtl
+    cd /hive/data/genomes/equCab2/bed/animalQtl
+
+    wget http://www.animalgenome.org/QTLdb/tmp/QTL_EquCab2.0.ubed.txt.gz
+
+    zcat QTL_EquCab2.0.ubed.txt.gz >> equCab2.animalQtl.bed
+    cut -f1-4 equCab2.animalQtl.bed > equCab2.animalQtl.bed4
+    # Deleted first line from equCab2.animalQtl.bed4 which contained
+    #    non-coordinate info; otherwise, hgLoadBed will fail
+    hgLoadBed equCab2 animalQtl equCab2.animalQtl.bed4
+
+# add following stanza to trackDb/horse/equCab2/trackDb.ra
+track animalQtl override
+url http://www.animalgenome.org/cgi-bin/QTLdb/EC/qdetails?QTL_ID=$p
+urlLabel Animal Genome QTL db:
+
+# script for helping to determine regular expression for searching
+
+#!/bin/sh
+
+export maxLen=`hgsql -N -e "select name from animalQtl" equCab2 | awk '{print length($0)}' | sort -run | head -1`
+
+echo "==== table: animalQtl maxLen: $maxLen ====" 1>&2
+
+hgsql -N -e "select name from animalQtl" equCab2 | sort -u > tbl.$$
+
+export C=1
+while [ $C -le $maxLen ];
+do
+   echo -n " $C: "
+   awk '{ print substr($0,'$C',1) }' tbl.$$ | sort -u | xargs echo | sed -e 's/ //g'
+   C=`echo $C | awk '{print $1+1}'`
+done
+
+rm -f tbl.$$
+
+echo
+
+# ==== table: animalQtl maxLen: 13 ====
+# 1: CDEGINOSh
+# 2: 1AGHPRSTUe
+# 3: 1EGPRSTUVa
+# 4: 3:BDELOv
+# 5: 2:MOSYe
+# 6: 28:MTs
+# 7: 2478:P
+# 8: 23456789:
+# 9: 0123456789
+# 10: 0123456789
+# 11: 0123456789
+# 12: 0123456789
+# 13: 0123456789
+
+# compare output with searchTable animalQtl stanza in trackDb/trackDb.ra
+#    to see if termRegex already applies

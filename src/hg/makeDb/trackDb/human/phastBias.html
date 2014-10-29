@@ -1,31 +1,78 @@
 <H2>Description</H2>
-The phastBias gBGC tracks show regions predicted to be influenced by GC-biased gene conversion (gBGC).  gBGC is a process in which GC/AT (strong/weak) heterozygotes are preferentially resolved to the strong allele during gene conversion.  This confers an advantage to G and C alleles that mimics positive selection, without conferring any known functional advantage.  Therefore, some regions of the genome identified to be under positive selection may be better explained by gBGC.  gBGC has also been hypothesized to be an important contributor to variation in GC content and the fixation of deleterious mutations.
-
-
 <p>
-PhastBias is a prediction method that captures gBGC's signature in multiple-genome alignments: clusters of weak-to-strong substitutions amidst a deficit of strong-to-weak substitutions.  Due to the short life of recombination hotspots, phastBias searches for gBGC tracts on a single foreground branch.  PhastBias is designed to pick up gBGC tracts of arbitrary length and to be robust to variations in local mutation rate and GC content.  It uses a hidden Markov model (HMM) that can be thought of as an extension to the phastCons model.  Whereas phastCons predicts conserved elements using an HMM with two states (conserved and neutral), phastBias predicts gBGC tracts using a four-state HMM (conserved, neutral, conserved with gBGC, neutral with gBGC).
+The phastBias gBGC tracks show regions predicted to be influenced by GC-biased gene conversion
+(gBGC). gBGC is a process in which GC/AT (strong/weak) heterozygotes are preferentially resolved
+to the strong allele during gene conversion. This confers an advantage to G and C alleles that
+mimics positive selection, without conferring any known functional advantage. Therefore, some
+regions of the genome identified to be under positive selection may be better explained by gBGC.
+gBGC has also been hypothesized to be an important contributor to variation in GC content and the
+fixation of deleterious mutations.
 </p>
 
-<p>One of the main parameters of the phastBias model is <i>B</i>, which represents the strength of gBGC and the degree to which weak-to-strong and strong-to-weak substitution rates are skewed on the foreground branch.  The tracks presented here were created with <i>B</i>=3, which was chosen for being sensitive while still having a low false positive rate.  Simulation experiments suggest that phastBias has reasonable power to pick up tracts with length > 1000 bp, and very good power for tracts > 2000 bp.  Nonetheless, other lines of evidence suggest that phastBias only identifies approximately 25-50% of bases influenced by gBGC, so the tract predictions should not be considered exhaustive.</p>
+<p>
+PhastBias is a prediction method that captures gBGC's signature in multiple-genome alignments:
+clusters of weak-to-strong substitutions amidst a deficit of strong-to-weak substitutions. Due
+to the short life of recombination hotspots, phastBias searches for gBGC tracts on a single
+foreground branch. PhastBias is designed to pick up gBGC tracts of arbitrary length and to be
+robust to variations in local mutation rate and GC content. It uses a hidden Markov model (HMM)
+that can be thought of as an extension to the phastCons model. Whereas phastCons predicts
+conserved elements using an HMM with two states (conserved and neutral), phastBias predicts gBGC
+tracts using a four-state HMM (conserved, neutral, conserved with gBGC, neutral with gBGC).
+</p>
+
+<p>
+One of the main parameters of the phastBias model is <i>B</i>, which represents the strength of
+gBGC and the degree to which weak-to-strong and strong-to-weak substitution rates are skewed on
+the foreground branch. The tracks presented here were created with <i>B</i>=3, which was chosen
+for being sensitive while still having a low false positive rate. Simulation experiments suggest
+that phastBias has reasonable power to pick up tracts with length &gt; 1000 bp, and very good
+power for tracts &gt; 2000 bp. Nonetheless, other lines of evidence suggest that phastBias only
+identifies approximately 25-50% of bases influenced by gBGC, so the tract predictions should not
+be considered exhaustive.
+</p>
 
 <H2>Display Conventions</H2>
-<p>The phastBias tracks display separate predictions for both human and chimp lineages of the phylogenetic tree (from the human-chimp ancestor).  For each lineage, two tracks are available: a wiggle showing raw posterior probabilities, and a BED track showing regions predicted to be affected by gBGC. </p>
-
 <p>
-The posterior probability track shows the probability that each base is assigned to either of the gBGC states under the phastBias HMM.  
+The phastBias tracks display separate predictions for both human and chimp lineages of the
+phylogenetic tree (from the human-chimp ancestor).  For each lineage, two tracks are available: a
+wiggle showing raw posterior probabilities, and a BED track showing regions predicted to be
+affected by gBGC.
 </p>
 
 <p>
-The phastBias tracts show regions predicted to be affected by gBGC on a particular lineage.  These are simply defined as all regions with posterior probability > 0.5.
+The posterior probability track shows the probability that each base is assigned to either of the
+gBGC states under the phastBias HMM.  
+</p>
+
+<p>
+The phastBias tracts show regions predicted to be affected by gBGC on a particular lineage. These
+are simply defined as all regions with posterior probability &gt; 0.5.
 </p>
 
 <H2>Methods</H2>
 <p>
-The phastBias tracks were predicted using the phastBias program, available as part of the <a href=http://compgen.bscb.cornell.edu/phast>PHAST</a> software package.  The phastBias tracks represent two separate result sets; one predicting gBGC on the branch leading from the human-chimp ancestor to human, and the other on the opposite branch leading to chimp.  The software was run on human-referenced alignments of hg18, panTro2, ponAbe2, and rheMac2, which were extracted from the hg18 44-way multiple alignment.  Details are available in the Capra <i>et al.</i> manuscript (cited below).  Briefly, the gBGC bias parameter <i>B</i> was set to 3, the mean expected tract length was set to 1/1000, and the transition rate into gBGC states was estimated by expectation-maximization.  Most other parameter settings were set to the same values used for UCSC's mammalian conservation tracts.  Relative branch lengths came from this <a href=http://hgdownload.cse.ucsc.edu/goldenPath/hg19/phastCons46way/placentalMammals.mod>placental mammal tree model</a>, the conservation scale factor was set to 0.31, expected length of conserved elements to 45, and expected coverage of conserved elements to 0.3.  The alignment was split into 10 Mb chunks; for each chunk, a scaling factor for the neutral tree, the transition/transversion rate ratio, and the background base frequencies were re-estimated using the PHAST program phyloFit. The final tracts were filtered to remove elements with length &ge; 5000bp, as these are likely due to artifacts unrelated to gBGC (repeats, alignment error).
+The phastBias tracks were predicted using the phastBias program, available as part of the
+<a href=http://compgen.bscb.cornell.edu/phast/ target="_blank">PHAST</a> software package. 
+The phastBias tracks represent two separate result sets; one predicting gBGC on the branch
+leading from the human-chimp ancestor to human, and the other on the opposite branch leading
+to chimp. The software was run on human-referenced alignments of hg18, panTro2, ponAbe2, and
+rheMac2, which were extracted from the hg18 44-way multiple alignment. Details are available in
+Capra <i>et al.</i>, 2013 (cited below). Briefly, the gBGC bias parameter <i>B</i> was
+set to 3, the mean expected tract length was set to 1/1000, and the transition rate into gBGC
+states was estimated by expectation-maximization. Most other parameter settings were set to the
+same values used for UCSC's mammalian conservation tracts. Relative branch lengths came from this
+<a href=http://hgdownload.cse.ucsc.edu/goldenPath/hg19/phastCons46way/placentalMammals.mod>placental mammal tree model</a>,
+the conservation scale factor was set to 0.31, expected length of conserved elements to 45, and
+expected coverage of conserved elements to 0.3. The alignment was split into 10 Mb chunks; for
+each chunk, a scaling factor for the neutral tree, the transition/transversion rate ratio, and
+the background base frequencies were re-estimated using the PHAST program phyloFit. The final
+tracts were filtered to remove elements with length &ge; 5000bp, as these are likely due to
+artifacts unrelated to gBGC (repeats, alignment error).
+</p>
 
-The method was re-run on hg19 data, extracting hg19, panTro2, rheMac2, and ponAbe2 from the 46-way alignments.
-The chimp tracks were not re-created for hg19, since interest in them is lower.
-
+<p>
+The method was re-run on hg19 data, extracting hg19, panTro2, rheMac2, and ponAbe2 from the
+46-way alignments. The chimp tracks were not re-created for hg19, since interest in them is lower.
 </p>
 
 <H2>References</H2>
@@ -35,14 +82,18 @@ Capra JA, Hubisz MJ, Kostka D, Pollard KS, Siepel A.
 A model-based analysis of GC-biased gene conversion in the human and chimpanzee genomes</a>.
 <em>PLoS Genet</em>. 2013 Aug;9(8):e1003684.
 PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/23966869" target="_blank">23966869</a>; PMC: <a
-href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3744432" target="_blank">PMC3744432</a>
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3744432/" target="_blank">PMC3744432</a>
 </p>
+
+<p>
 Hubisz MJ, Pollard KS, Siepel A.
 <a href="http://bib.oxfordjournals.org/content/12/1/41.full"  target="_blank">
 PHAST and RPHAST: phylogenetic analysis with space/time models</a>.
 <em>Brief Bioinform</em>. 2011 Jan;12(1):41-51.
 PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/21278375" target="_blank">21278375</a>; PMC: <a
-href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3030812" target="_blank">PMC3030812</a>
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3030812/" target="_blank">PMC3030812</a>
+</p>
+
 <p>
 Duret L, Galtier N.
 <a href="http://www.annualreviews.org/doi/abs/10.1146/annurev-genom-082908-150001" target="_blank">

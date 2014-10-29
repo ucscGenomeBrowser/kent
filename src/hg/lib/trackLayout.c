@@ -16,15 +16,21 @@
 void trackLayoutSetPicWidth(struct trackLayout *tl, char *s)
 /* Set pixel width from ascii string. */
 {
+int maxWidth = MAX_DISPLAY_PIXEL_WIDTH;
+char *maxDisplayPixelWidth = cfgOptionDefault("maxDisplayPixelWidth", NULL);
+
+if (isNotEmpty(maxDisplayPixelWidth))
+   maxWidth = sqlUnsigned(maxDisplayPixelWidth);
+
 if (s != NULL && isdigit(s[0]))
     {
     tl->picWidth = atoi(s);
-#ifdef LOWELAB    
+#ifdef LOWELAB
     if (tl->picWidth > 60000)
-      tl->picWidth = 60000;   
+      tl->picWidth = 60000;
 #else
-    if (tl->picWidth > 5000)
-      tl->picWidth = 5000;   
+    if (tl->picWidth > maxWidth)
+      tl->picWidth = maxWidth;
 #endif
     if (tl->picWidth < 320)
         tl->picWidth = 320;

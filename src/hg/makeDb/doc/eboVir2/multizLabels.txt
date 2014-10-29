@@ -1,0 +1,84 @@
+# for emacs: -*- mode: sh; -*-
+
+    # Label multiz results by strain instead of accession.
+    cd /hive/data/genomes/eboVir2/bed/multiz49way
+    # Use strain names from http://epidemic.bio.ed.ac.uk/ebolavirus_sequences
+    # (table from that page copied to text file strainInfo.txt)
+    perl -we ' \
+      open($STR, "strainInfo.txt") || die; \
+      while (<$STR>) { \
+        next if (/^accession/); \
+        ($acc, undef, $strain, undef, $date) = split("\t"); \
+        $date =~ s/-.*//; \
+        if ($acc eq "KJ660346" || $acc eq "KJ660347" || $acc eq "KJ660348") { \
+          $strain = "Guinea_$strain"; \
+        } \
+        $strain =~ s/ /_/g; \
+        $accToStrain{$acc} = "$strain" . "_$date"; \
+        print STDERR "$acc --> $strain" . "_$date\n"; \
+      } \
+      close ($STR); \
+      while (<>) { \
+        if (/^s ([\w.]+)(\s+.*)/) { \
+          ($acc, $rest) = ($1, $2); \
+          $acc =~ s/bundibugyo_NC_014373v1/FJ217161/; \
+          $acc =~ s/reston_NC_004161v1/AF522874/; \
+          $acc =~ s/sudan_NC_006432v1/AY729654/; \
+          $acc =~ s/taiForest_NC_014372v1/FJ217162/; \
+          $acc =~ s/zaire_NC_002549v1/AF086833/; \
+          $acc =~ s/v\d$//; \
+          $strain = $accToStrain{$acc}; \
+          if ($strain) { \
+            $_ = "s $strain$rest\n"; \
+          } \
+        } \
+        print; \
+      }' multiz49way.maf \
+      > multiz49wayStrainNames.maf
+
+    mkdir /gbdb/eboVir2/multiz49wayStrainNames
+    ln -s `pwd`/multiz49wayStrainNames.maf /gbdb/eboVir2/multiz49wayStrainNames/
+    pushd /data/tmp
+    hgLoadMaf -pathPrefix=/gbdb/eboVir2/multiz49wayStrainNames eboVir2 multiz49wayStrainNames
+    popd
+
+    # Now translate the trackDb order from accessions into strain names.
+    # I saved the accessions, 1 per line in order, in order.txt.
+    perl -we ' \
+      open($STR, "strainInfo.txt") || die; \
+      while (<$STR>) { \
+        next if (/^accession/); \
+        ($acc, undef, $strain, undef, $date) = split("\t"); \
+        $date =~ s/-.*//; \
+        if ($acc eq "KJ660346" || $acc eq "KJ660347" || $acc eq "KJ660348") { \
+          $strain = "Guinea_$strain"; \
+        } \
+        $strain =~ s/ /_/g; \
+        $accToStrain{$acc} = "$strain" . "_$date"; \
+        # print STDERR "$acc --> $strain" . "_$date\n"; \
+      } \
+      close ($STR); \
+      while (<>) { \
+        chomp;  $acc = $_; $origAcc = $acc; \
+        $acc =~ s/bundibugyo_NC_014373v1/FJ217161/; \
+        $acc =~ s/reston_NC_004161v1/AF522874/; \
+        $acc =~ s/sudan_NC_006432v1/AY729654/; \
+        $acc =~ s/taiForest_NC_014372v1/FJ217162/; \
+        $acc =~ s/zaire_NC_002549v1/AF086833/; \
+        $acc =~ s/v\d$//; \
+        $strain = $accToStrain{$acc}; \
+        if ($strain) { \
+          print "$strain\n"; \
+        } else { \
+          print "$origAcc\n"; \
+        } \
+      }' order.txt \
+      > strainOrder.txt
+    # Now plop those into trackDb.multiz49wayStrainNames.ra after "sGroup Virus"
+
+http://epidemic.bio.ed.ac.uk/ebolavirus_sequences has the location of AY729654 as Gulu, Uganda, but I believe that should be Gulu, Sudan per http://www.ncbi.nlm.nih.gov/nuccore/AY729654
+
+Also, it has loc of AF272001 (mayinga) as Yambuku, DRC but per http://www.ncbi.nlm.nih.gov/nuccore/AF272001 the strain is from Zaire
+
+Meanwhile our zaire_NC_002549v1 --> AF086833 which is not on that page.
+

@@ -225,6 +225,12 @@ double mafScoreRangeMultiz(struct mafAli *maf, int start, int size);
  *	scoreRange(maf,0,start+size) - scoreRange(maf,0,start)
  */
 
+void mafScoreUseSimple();
+/* use a simple scoring system useful for finding mismatches */
+
+void mafScoreUseTraditional();
+/* use the tradition HOX scoring system */
+
 double mafScoreMultizMaxCol(int species);
 /* Return maximum possible score for a column. */
 

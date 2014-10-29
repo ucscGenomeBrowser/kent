@@ -24817,3 +24817,18 @@ hgsql hg17 < ~/kent/src/hg/lib/knownToKeggEntrez.sql
 hgsql hg17 -e 'load data local infile "knownToKeggEntrez.tab" into table knownToKeggEntrez'
 
 #############################################################################
+# LIFTOVER TO HG38 (DONE 10/8/14 angie)
+    mkdir /hive/data/genomes/hg17/bed/blat.hg38.2014-10-08
+    cd /hive/data/genomes/hg17/bed/blat.hg38.2014-10-08
+    # -debug run to create run dir and scripts to verify this command
+    # is OK
+    doSameSpeciesLiftOver.pl -debug -buildDir=`pwd` \
+          -ooc=/hive/data/genomes/hg17/11.ooc hg17 hg38
+    # then running for real
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` \
+            -ooc=/hive/data/genomes/hg17/11.ooc hg17 hg38 >&! do.log & tail -f do.log
+#0.238u 0.246s 31:25.58 0.0%     0+0k 0+0io 0pf+0w
+
+    # verify the convert link on the browser is now active from hg17 to hg38
+
+#############################################################################

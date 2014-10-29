@@ -21,6 +21,8 @@ my $stepper = new HgStepManager(
       { name => 'bigJoin',    func => \&bigJoin },
       { name => 'translate',  func => \&translate },
       { name => 'load',       func => \&loadTables },
+      { name => 'filter',     func => \&filterTables },
+      { name => 'coding',     func => \&codingDbSnp },
     ]
 			       );
 
@@ -79,6 +81,8 @@ Automates our processing of dbSNP files into our snpNNN track:
     translate:  Run snpNcbiToUcsc on the join output to perform final checks
                 and conversion of numeric codes into strings.
     load:       Load snpNNN* tables into our database.
+    filter:     Extract Common, Mult and Flagged sets (may be empty).
+    coding:     Process dbSNP's functional annotations into snpNNNCodingDbSnp.
 To see detailed information about what should appear in config.ra,
 run \"$base -help\".
 ";
@@ -208,7 +212,7 @@ my ($refAssemblyLabel, $liftUp, $ignoreDbSnpContigsFile, $ignoreDbSnpContigs,
 # Optional config param:
 my ($snpBase);
 # Other globals:
-my ($buildDir, $commonName, $assemblyLabelFile, $endNotes, $needSNPAlleleFreq_TGP);
+my ($buildDir, $commonName, $assemblyDir, $assemblyLabelFile, $endNotes, $needSNPAlleleFreq_TGP);
 # These dbSNP table/file names vary by build and assembly but
 # table desc is stable:
 my ($ContigInfo, $ContigLoc, $ContigLocusId, $MapInfo);
@@ -326,15 +330,15 @@ sub download {
 #*** I don't want to parallelize too much & hog NCBI FTP.
   my $runDir = $buildDir;
   &HgAutomate::mustMkdir("$buildDir/shared");
-  &HgAutomate::mustMkdir("$buildDir/$commonName");
-  &HgAutomate::mustMkdir("$buildDir/$commonName/data");
-  &HgAutomate::mustMkdir("$buildDir/$commonName/schema");
-  &HgAutomate::mustMkdir("$buildDir/$commonName/rs_fasta");
+  &HgAutomate::mustMkdir("$assemblyDir");
+  &HgAutomate::mustMkdir("$assemblyDir/data");
+  &HgAutomate::mustMkdir("$assemblyDir/schema");
+  &HgAutomate::mustMkdir("$assemblyDir/rs_fasta");
   my $getSNPAlleleFreqTGPToo =
     $needSNPAlleleFreq_TGP ? "$wget $ftpSnpDb/SNPAlleleFreq_TGP.bcp.gz" : "";
   my $whatItDoes =
     "It downloads a bunch of dbSNP database table dump files.";
-  my $bossScript = new HgRemoteScript("$runDir/download_${commonName}_${build}.csh",
+  my $bossScript = new HgRemoteScript("$runDir/download_${commonName}_${db}_${build}.csh",
 				      $fileServer, $runDir, $whatItDoes, $CONFIG);
   $bossScript->add(<<_EOF_
 # Get field encodings -- if there are changes or additions to the
@@ -351,9 +355,9 @@ $wget $ftpShared/SnpValidationCode.bcp.gz
 $wget $ftpShared/Allele.bcp.gz
 
 # Get $commonName-specific data:
-cd $buildDir/$commonName
+cd $assemblyDir
 $wget ftp://ftp.ncbi.nih.gov/snp/00readme.txt
-cd $buildDir/$commonName/data
+cd $assemblyDir/data
 set orgDir = $orgDir
 # $ContigLoc table has coords, orientation, loc_type, and refNCBI allele
 $wget $ftpSnpDb/$ContigLoc.bcp.gz
@@ -373,17 +377,17 @@ $wget $ftpSnpDb/SubSNP.bcp.gz
 $wget $ftpSnpDb/SNPSubSNPLink.bcp.gz
 
 # Get schema
-cd $buildDir/$commonName/schema
+cd $assemblyDir/schema
 $wget $ftpOrgSchema/${orgDir}_table.sql.gz
 $wget $ftpSharedSchema/dbSNP_main_table.sql.gz
 
 # Get fasta files
 # using headers of fasta files for molType, class, observed
-cd $buildDir/$commonName/rs_fasta
+cd $assemblyDir/rs_fasta
 $wget ftp://ftp.ncbi.nih.gov/snp/organisms/$orgDir/rs_fasta/\\*.gz
 
 # Extract the set of assembly labels in case we need to exclude any.
-zcat $buildDir/$commonName/data/$ContigInfo.bcp.gz | cut -f $groupLabelCol | uniq | sort -u \\
+zcat $assemblyDir/data/$ContigInfo.bcp.gz | cut -f $groupLabelCol | uniq | sort -u \\
   > $assemblyLabelFile
 _EOF_
     );
@@ -404,7 +408,7 @@ sub translateSql {
 
   # Translate dbSNP's flavor of SQL create statements into mySQL.
   # This is computationally trivial so it doesn't matter where it runs.
-  my $schemaDir = "$buildDir/$commonName/schema";
+  my $schemaDir = "$assemblyDir/schema";
   # First the organism-specific tables from $ftpSnpDb:
   my @orgTables = ($ContigInfo, $ContigLoc, $ContigLocusId, $MapInfo);
   push @orgTables, qw( SNP SNPAlleleFreq SNP_bitfield Batch SubSNP SNPSubSNPLink );
@@ -638,6 +642,10 @@ sub tryToMakeLiftUpFromNcbiAssemblyReportFile {
     my (undef, $seqRole, $chr, undef, $gbAcc, $hopefullyEqual, $refSeqAcc) = split("\t");
     (my $rsaTrimmed = $refSeqAcc) =~ s/\.\d+$//;
     (my $gbaTrimmed = $gbAcc) =~ s/\.\d+$//;
+    # hg38 contig names keep the version number, replacing the '.' with 'v':
+    if ($db eq 'hg38') {
+      ($gbaTrimmed = $gbAcc) =~ s/\./v/;
+    }
     if (exists $missingContigs{$rsaTrimmed}) {
       my $ucscName;
       if ($chr eq "na") {
@@ -650,7 +658,11 @@ sub tryToMakeLiftUpFromNcbiAssemblyReportFile {
       } else {
 	$chr = "M" if ($chr eq "MT");
 	$chr = "chr$chr" unless ($chr =~ /^chr/);
-	$ucscName = join('_', $chr, $gbaTrimmed, 'random');
+	my $suffix = 'random';
+	if ($db eq 'hg38' && $seqRole eq 'alt-scaffold') {
+	  $suffix = 'alt';
+	}
+	$ucscName = join('_', $chr, $gbaTrimmed, $suffix);
       }
       if (exists $chromSizes->{$ucscName}) {
 	if ($hopefullyEqual ne '=') {
@@ -690,7 +702,7 @@ sub tryToMakeLiftUp {
     $chromSizes{$chr} = $size;
   }
   close($CS);
-  my $liftUpFile = "$buildDir/$commonName/suggested.lft";
+  my $liftUpFile = "$assemblyDir/suggested.lft";
   # First see what we have in ContigInfo:
   my ($liftUpCount, $missingInfo) =
     &tryToMakeLiftUpFromContigInfo($liftUpFile, $runDir, \%chromSizes,
@@ -720,7 +732,7 @@ sub tryToMakeLiftUp {
     $missingCount = scalar(@{$missingInfo});
     if ($missingCount > 0) {
       # Write missing info to file.
-      my $noInfoSeqFile = "$buildDir/$commonName/cantLiftUpSeqNames.txt";
+      my $noInfoSeqFile = "$assemblyDir/cantLiftUpSeqNames.txt";
       my $NI = &HgAutomate::mustOpen(">$noInfoSeqFile");
       foreach my $i (@{$missingInfo}) {
 	print $NI join("\t", @{$i}) . "\n";
@@ -805,7 +817,7 @@ sub loadDbSnp {
   &translateSql();
   # Check for multiple reference assembly labels -- developer may need to exclude some.
   my @rejectLabels = &checkAssemblySpec();
-  my $runDir = "$buildDir/$commonName";
+  my $runDir = "$assemblyDir";
   # If liftUp is a relative path, prepend $runDir/
   if ($liftUp && $liftUp !~ /^\//) {
     $liftUp = "$runDir/$liftUp";
@@ -917,6 +929,8 @@ sub loadDbSnp {
       | perl -wpe '$cleanDbSnpSql' \\
       | hgLoadSqlTab -oldTable $tmpDb \$t placeholder stdin
     end
+    # Watch out for NULL freq (sum of counts == 0) seen in b141:
+    hgsql $tmpDb -e 'delete from SNPAlleleFreq where freq IS NULL'
 
     hgsql $tmpDb -e 'alter table Batch add index (batch_id); \\
                      alter table SNPAlleleFreq add index (snp_id); \\
@@ -950,7 +964,7 @@ _EOF_
 # * step: addToDbSnp [workhorse]
 
 sub addToDbSnp {
-  my $runDir = "$buildDir/$commonName";
+  my $runDir = "$assemblyDir";
   my $tmpDb = $db . $snpBase;
   my $whatItDoes =
 "It pre-processes functional annotations into a new table $tmpDb.ucscFunc,
@@ -1120,10 +1134,7 @@ EOF
       > ucscGnl.txt
 #*** compare output of following 2 commands:
     wc -l ucscGnl.txt
-#30144822 ucscGnl.txt
-# weird -- it shrunk from the original 30152349
     cut -f 1 ucscGnl.txt | uniq | wc -l
-#30144822
     cat > ucscGnl.sql <<EOF
 CREATE TABLE ucscGnl (
         snp_id int NOT NULL ,
@@ -1145,7 +1156,7 @@ _EOF_
 # * step: bigJoin [workhorse]
 
 sub bigJoin {
-  my $runDir = "$buildDir/$commonName";
+  my $runDir = "$assemblyDir";
   my $tmpDb = $db . $snpBase;
   my $catOrGrepOutMito = ($db eq 'hg19') ? "grep -vw ^NC_012920" : "cat";
   my $whatItDoes =
@@ -1178,6 +1189,7 @@ in $snpBase.";
          LEFT JOIN ucscHandles as uh ON uh.snp_id = cl.snp_id) \\
         LEFT JOIN ucscAlleleFreq as ua ON ua.snp_id = cl.snp_id) \\
        LEFT JOIN SNP_bitfield as sb ON sb.snp_id = cl.snp_id;' \\
+    | uniq \\
       > ucscNcbiSnp.ctg.bed
     wc -l ucscNcbiSnp.ctg.bed
 
@@ -1252,7 +1264,7 @@ _EOF_
 # * step: translate [workhorse]
 
 sub translate {
-  my $runDir = "$buildDir/$commonName";
+  my $runDir = "$assemblyDir";
   my $tmpDb = $db . $snpBase;
   my $whatItDoes =
 "It runs snpNcbiToUcsc to make final $snpBase.* files for loading,
@@ -1264,7 +1276,8 @@ working directory to $runDir.";
   my $parTable = `echo 'show tables like "par";' | $HgAutomate::runSSH $dbHost hgsql -N $db`;
   chomp $parTable;
   if ($parTable eq "par") {
-    &HgAutomate::run("echo 'select * from $parTable' | hgsql $db -NB > `cat workingDir`/par.bed");
+    &HgAutomate::run("echo 'select chrom,chromStart,chromEnd,name from $parTable' " .
+		     "| hgsql $db -NB > `cat workingDir`/par.bed");
     $parArg = "-par=par.bed";
   }
   my $bossScript = new HgRemoteScript("$runDir/translate.csh",
@@ -1315,7 +1328,7 @@ _EOF_
 # * step: load [dbHost]
 
 sub loadTables {
-  my $runDir = "$buildDir/$commonName";
+  my $runDir = "$assemblyDir";
   my $whatItDoes = "It loads the $snpBase* tables into $db.";
   my $bossScript = new HgRemoteScript("$runDir/load.csh",
 				      $dbHost, $runDir, $whatItDoes, $CONFIG);
@@ -1368,6 +1381,63 @@ _EOF_
 
 
 #########################################################################
+# * step: filter [dbHost]
+
+sub filterTables {
+  my $runDir = "$assemblyDir";
+  my $whatItDoes = "It extracts subsets of All SNPs: ${snpBase}Common, ${snpBase}Mult etc.";
+  my $bossScript = new HgRemoteScript("$runDir/filter.csh",
+				      $dbHost, $runDir, $whatItDoes, $CONFIG);
+  $bossScript->add(<<_EOF_
+    zcat $snpBase.bed.gz \\
+    | ~/kent/src/hg/utils/automation/categorizeSnps.pl
+    foreach f ({Mult,Common,Flagged}.bed.gz)
+      mv \$f $snpBase\$f
+    end
+
+    # Load each table (unless its file is empty)
+    foreach subset (Mult Common Flagged)
+      set table = $snpBase\$subset
+      if (`zcat \$table.bed.gz | head | wc -l`) then
+        hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd -renameSqlTable \\
+          $db \$table -sqlTable=$snpBase.sql \$table.bed.gz
+      endif
+    end
+_EOF_
+    );
+  $bossScript->execute();
+} # filterTables
+
+
+#########################################################################
+# * step: coding [dbHost]
+
+sub codingDbSnp {
+  my $runDir = "$assemblyDir";
+  my $whatItDoes = "It processes dbSNP's functional annotations into ${snpBase}CodingDbSnp.";
+  my $bossScript = new HgRemoteScript("$runDir/coding.csh",
+				      $dbHost, $runDir, $whatItDoes, $CONFIG);
+  $bossScript->add(<<_EOF_
+    zcat ncbiFuncAnnotations.txt.gz \\
+    | $Bin/fixNcbiFuncCoords.pl ncbiFuncInsertions.ctg.bed.gz \\
+    | sort -k1n,1n -k2,2 -k3n,3n -k5,5 -k6n,6n \\
+    | uniq \\
+      > ncbiFuncAnnotationsFixed.txt
+    wc -l ncbiFuncAnnotationsFixed.txt
+    cut -f 6 ncbiFuncAnnotationsFixed.txt \\
+    | sort -n | uniq -c
+    $Bin/collectNcbiFuncAnnotations.pl ncbiFuncAnnotationsFixed.txt \\
+    | liftUp ${snpBase}CodingDbSnp.bed suggested.lft warn stdin
+    hgLoadBed $db ${snpBase}CodingDbSnp -sqlTable=\$HOME/kent/src/hg/lib/snp125Coding.sql \\
+      -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \\
+      ${snpBase}CodingDbSnp.bed
+_EOF_
+    );
+  $bossScript->execute();
+} # codingDbSnp
+
+
+#########################################################################
 # main
 
 # Prevent "Suspended (tty input)" hanging:
@@ -1381,8 +1451,9 @@ my $config = &parseConfig($CONFIG);
 &checkConfig($config);
 
 $buildDir = $opt_buildDir ? $opt_buildDir : "$dbSnpRoot/$build";
-($commonName = $orgDir) =~ s/_\d+$//;
-$assemblyLabelFile = "$buildDir/$commonName/assemblyLabels.txt";
+($commonName = $orgDir) =~ s/_\d+.*$//;
+$assemblyDir = "$buildDir/${commonName}_$db";
+$assemblyLabelFile = "$assemblyDir/assemblyLabels.txt";
 if ($buildAssembly ne "") {
   $ContigInfo = "b${build}_ContigInfo_$buildAssembly";
   $ContigLoc = "b${build}_SNPContigLoc_$buildAssembly";
@@ -1401,7 +1472,7 @@ $snpBase = "snp$build" if (! $snpBase);
 $stepper->execute();
 
 my $stopStep = $stepper->getStopStep();
-my $upThrough = ($stopStep eq 'load') ? "" :
+my $upThrough = ($stopStep eq 'coding') ? "" :
   "  (through the '$stopStep' step)";
 
 HgAutomate::verbose(1,

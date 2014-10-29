@@ -1155,9 +1155,16 @@ else if ((cfgOption("versionStamped") == NULL) &&  (hIsPreviewHost() || hIsPriva
 else
     linkWithTimestamp = dyStringCreate("%s/%s-v%s%s", dyStringContents(fullDirName), baseName, CGI_VERSION, extension);
 
+if (hIsBrowserbox() && !fileExists(dyStringContents(linkWithTimestamp)))
+    // on the browserbox, both alpha and beta binaries can run 
+    {
+    linkWithTimestamp = dyStringCreate("%s/%s-%ld%s", dyStringContents(fullDirName), 
+        baseName, mtime, extension);
+    }
+
 if (!fileExists(dyStringContents(linkWithTimestamp)))
-    errAbort("Cannot find correct version of file '%s'; this is due to an installation error\n\nError details: %s does not exist",
-             fileName, dyStringContents(linkWithTimestamp));
+        errAbort("Cannot find correct version of file '%s'; this is due to an installation "
+        "error\n\nError details: %s does not exist", fileName, dyStringContents(linkWithTimestamp));
 
 // Free up all that extra memory
 dyStringFree(&realFileName);

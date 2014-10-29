@@ -1,0 +1,158 @@
+AB050936v1	AB050936.1	Reston - Reston genomic RNA	Philippines	1996
+AF086833v2	AF086833.2	NC_002549.1 Mayinga, Zaire, 1976	Zaire	1976
+AF272001v1	AF272001.1	Zaire strain Mayinga	DRC	1976
+AF499101v1	AF499101.1	Mouse variant Zaire strain Mayinga	USA	?2002?
+AF522874v1	AF522874.1	Reston strain Pennsylvania	Philippines	1990
+AY142960v1	AY142960.1	Zaire strain Mayinga subtype Zaire	Zaire	?2002?
+AY354458v1	AY354458.1	Zaire strain Zaire Kikwit 1995	DRC	1995
+AY729654v1	AY729654.1	Sudan strain Gulu	Uganda	2000
+AY769362v1	AY769362.1	reconstruction Reston strain Pennsylvania	Germany	?2008?
+EU224440v2	EU224440.2	Guinea Pig Zaire strain Mayinga	Russia	?2007?
+EU338380v1	EU338380.1	Sudan isolate EBOV-S-2004 from Sudan	Sudan: southern Sudan	2004
+FJ217161v1	FJ217161.1	Bundibugyo 	Uganda	Nov-2007
+FJ217162v1	FJ217162.1	Cote d'Ivoire 	Cote d'Ivoire	Nov-1994
+FJ621583v1	FJ621583.1	Reston - Reston strain Reston08-A	Philippines	2008
+FJ621584v1	FJ621584.1	Reston - Reston strain Reston08-C	Philippines	2008
+FJ621585v1	FJ621585.1	Reston - Reston strain Reston08-E	Philippines	2008
+FJ968794v1	FJ968794.1	Sudan strain Boniface	Sudan	?2008?
+HQ613402v1	HQ613402.1	Zaire isolate 034-KS	DRC	31-Dec-2008
+HQ613403v1	HQ613403.1	Zaire isolate M-M	DRC	31-Aug-2007
+JN638998v1	JN638998.1	Sudan - Nakisamata	Uganda	May-2011
+JQ352763v1	JQ352763.1	Zaire strain Kikwit	Zaire	04-May-1995
+JX477165v1	JX477165.1	Reston isolate RESTV/Sus-wt/PHL/2009/09A Farm A	Philippines	2009
+JX477166v1	JX477166.1	Reston isolate RESTV/M.fascicularis-tc/PHL-USA/1996/Ferlite, Philippines/Alice, TX	USA: Texas	1996
+KC242783v2	KC242783.2	Sudan isolate SUDV/H.sapiens-tc/SSD/1979/Maleo	Sudan	1979
+KC242784v1	KC242784.1	Zaire isolate EBOV/H.sapiens-tc/COD/2007/9 Luebo	DRC	2007
+KC242785v1	KC242785.1	Zaire isolate EBOV/H.sapiens-tc/COD/2007/0 Luebo	DRC	2007
+KC242786v1	KC242786.1	Zaire isolate EBOV/H.sapiens-tc/COD/2007/1 Luebo	DRC	2007
+KC242787v1	KC242787.1	Zaire isolate EBOV/H.sapiens-tc/COD/2007/23 Luebo	DRC	2007
+KC242788v1	KC242788.1	Zaire isolate EBOV/H.sapiens-tc/COD/2007/43 Luebo	DRC	2007
+KC242789v1	KC242789.1	Zaire isolate EBOV/H.sapiens-tc/COD/2007/4 Luebo	DRC	2007
+KC242790v1	KC242790.1	Zaire isolate EBOV/H.sapiens-tc/COD/2007/5 Luebo	DRC	2007
+KC242791v1	KC242791.1	Zaire isolate EBOV/H.sapiens-tc/COD/1977/Bonduni	DRC	1977
+KC242792v1	KC242792.1	Zaire isolate EBOV/H.sapiens-tc/GAB/1994/Gabon	Gabon	1994
+KC242793v1	KC242793.1	Zaire isolate EBOV/H.sapiens-tc/GAB/1996/1Eko	Gabon	1996
+KC242794v1	KC242794.1	Zaire isolate EBOV/H.sapiens-tc/GAB/1996/2Nza	Gabon	1996
+KC242795v1	KC242795.1	Zaire isolate EBOV/H.sapiens-tc/GAB/1996/1Mbie	Gabon	1996
+KC242796v1	KC242796.1	Zaire isolate EBOV/H.sapiens-tc/COD/1995/13625 Kikwit	DRC	1995
+KC242797v1	KC242797.1	Zaire isolate EBOV/H.sapiens-tc/GAB/1996/1Oba	Gabon	1996
+KC242798v1	KC242798.1	Zaire isolate EBOV/H.sapiens-tc/GAB/1996/1Ikot	Gabon	1996
+KC242799v1	KC242799.1	Zaire isolate EBOV/H.sapiens-tc/COD/1995/13709 Kikwit	DRC	1995
+KC242800v1	KC242800.1	Zaire isolate EBOV/H.sapiens-tc/GAB/2002/Ilembe	Gabon	2002
+KC242801v1	KC242801.1	Zaire isolate EBOV/H.sapiens-tc/COD/1976/deRoover	DRC	1976
+KC545389v1	KC545389.1	Sudan isolate EboSud-602 2012	Uganda	2012
+KC545390v1	KC545390.1	Sudan isolate EboSud-603 2012	Uganda	2012
+KC545391v1	KC545391.1	Sudan isolate EboSud-609 2012	Uganda	2012
+KC545392v1	KC545392.1	Sudan isolate EboSud-682 2012	Uganda	2012
+KC545393v1	KC545393.1	Bundibugyo isolate EboBund-112 2012	DRC	2012
+KC545394v1	KC545394.1	Bundibugyo isolate EboBund-120 2012	DRC	2012
+KC545395v1	KC545395.1	Bundibugyo isolate EboBund-122 2012	DRC	2012
+KC545396v1	KC545396.1	Bundibugyo isolate EboBund-14 2012	DRC	2012
+KC589025v1	KC589025.1	Sudan isolate EboSud-639	Uganda	2012
+KJ660346v2	KJ660346.2	Zaire isolate H.sapiens-wt/GIN/2014/Kissidougou-C15	Guinea	2014
+KJ660347v2	KJ660347.2	Zaire isolate H.sapiens-wt/GIN/2014/Gueckedou-C07	Guinea	2014
+KJ660348v2	KJ660348.2	Zaire isolate H.sapiens-wt/GIN/2014/Gueckedou-C05	Guinea	2014
+KM034549v1	KM034549.1	Zaire isolate H.sapiens-wtManoRiver-EM095B	Sierra Leone	01-Jun-2014
+KM034550v1	KM034550.1	ManoRiver-EM095	Sierra Leone	01-Jun-2014
+KM034551v1	KM034551.1	ManoRiver-EM096	Sierra Leone	01-Jun-2014
+KM034552v1	KM034552.1	ManoRiver-EM098	Sierra Leone	01-Jun-2014
+KM034553v1	KM034553.1	ManoRiver-G3670.1	Sierra Leone	01-Jun-2014
+KM034554v1	KM034554.1	ManoRiver-G3676.1	Sierra Leone	01-Jun-2014
+KM034555v1	KM034555.1	ManoRiver-G3676.2	Sierra Leone	01-Jun-2014
+KM034556v1	KM034556.1	ManoRiver-G3677.1	Sierra Leone	01-Jun-2014
+KM034557v1	KM034557.1	ManoRiver-G3677.2	Sierra Leone	01-Jun-2014
+KM034558v1	KM034558.1	ManoRiver-G3679.1	Sierra Leone	01-Jun-2014
+KM034559v1	KM034559.1	ManoRiver-G3680.1	Sierra Leone	01-Jun-2014
+KM034560v1	KM034560.1	ManoRiver-G3682.1	Sierra Leone	01-Jun-2014
+KM034561v1	KM034561.1	ManoRiver-G3683.1	Sierra Leone	01-Jun-2014
+KM034562v1	KM034562.1	ManoRiver-G3686.1	Sierra Leone	01-Jun-2014
+KM034563v1	KM034563.1	ManoRiver-G3687.1	Sierra Leone	01-Jun-2014
+KM233035v1	KM233035.1	ManoRiver-EM104	Sierra Leone	02-Jun-2014
+KM233036v1	KM233036.1	ManoRiver-EM106	Sierra Leone	02-Jun-2014
+KM233037v1	KM233037.1	ManoRiver-EM110	Sierra Leone	03-Jun-2014
+KM233038v1	KM233038.1	ManoRiver-EM111	Sierra Leone	03-Jun-2014
+KM233039v1	KM233039.1	ManoRiver-EM112	Sierra Leone	03-Jun-2014
+KM233040v1	KM233040.1	ManoRiver-EM113	Sierra Leone	03-Jun-2014
+KM233041v1	KM233041.1	ManoRiver-EM115	Sierra Leone	03-Jun-2014
+KM233042v1	KM233042.1	ManoRiver-EM119	Sierra Leone	03-Jun-2014
+KM233043v1	KM233043.1	ManoRiver-EM120	Sierra Leone	03-Jun-2014
+KM233044v1	KM233044.1	ManoRiver-EM121	Sierra Leone	04-Jun-2014
+KM233045v1	KM233045.1	ManoRiver-EM124.1	Sierra Leone	04-Jun-2014
+KM233046v1	KM233046.1	ManoRiver-EM124.2	Sierra Leone	06-Jun-2014
+KM233047v1	KM233047.1	ManoRiver-EM124.3	Sierra Leone	08-Jun-2014
+KM233048v1	KM233048.1	ManoRiver-EM124.4	Sierra Leone	09-Jun-2014
+KM233049v1	KM233049.1	ManoRiver-G3707	Sierra Leone	06-Jun-2014
+KM233050v1	KM233050.1	ManoRiver-G3713.2	Sierra Leone	09-Jun-2014
+KM233051v1	KM233051.1	ManoRiver-G3713.3	Sierra Leone	11-Jun-2014
+KM233052v1	KM233052.1	ManoRiver-G3713.4	Sierra Leone	13-Jun-2014
+KM233053v1	KM233053.1	ManoRiver-G3724	Sierra Leone	05-Jun-2014
+KM233054v1	KM233054.1	ManoRiver-G3729	Sierra Leone	07-Jun-2014
+KM233055v1	KM233055.1	ManoRiver-G3734.1	Sierra Leone	07-Jun-2014
+KM233056v1	KM233056.1	ManoRiver-G3735.1	Sierra Leone	07-Jun-2014
+KM233057v1	KM233057.1	ManoRiver-G3735.2	Sierra Leone	09-Jun-2014
+KM233058v1	KM233058.1	ManoRiver-G3750.1	Sierra Leone	10-Jun-2014
+KM233059v1	KM233059.1	ManoRiver-G3750.2	Sierra Leone	12-Jun-2014
+KM233060v1	KM233060.1	ManoRiver-G3750.3	Sierra Leone	14-Jun-2014
+KM233061v1	KM233061.1	ManoRiver-G3752	Sierra Leone	10-Jun-2014
+KM233062v1	KM233062.1	ManoRiver-G3758	Sierra Leone	11-Jun-2014
+KM233063v1	KM233063.1	ManoRiver-G3764	Sierra Leone	12-Jun-2014
+KM233064v1	KM233064.1	ManoRiver-G3765.2	Sierra Leone	14-Jun-2014
+KM233065v1	KM233065.1	ManoRiver-G3769.1	Sierra Leone	12-Jun-2014
+KM233066v1	KM233066.1	ManoRiver-G3769.2	Sierra Leone	13-Jun-2014
+KM233067v1	KM233067.1	ManoRiver-G3769.3	Sierra Leone	15-Jun-2014
+KM233068v1	KM233068.1	ManoRiver-G3769.4	Sierra Leone	16-Jun-2014
+KM233069v1	KM233069.1	ManoRiver-G3770.1	Sierra Leone	12-Jun-2014
+KM233070v1	KM233070.1	ManoRiver-G3770.2	Sierra Leone	14-Jun-2014
+KM233071v1	KM233071.1	ManoRiver-G3771	Sierra Leone	12-Jun-2014
+KM233072v1	KM233072.1	ManoRiver-G3782	Sierra Leone	14-Jun-2014
+KM233073v1	KM233073.1	ManoRiver-G3786	Sierra Leone	14-Jun-2014
+KM233074v1	KM233074.1	ManoRiver-G3787	Sierra Leone	14-Jun-2014
+KM233075v1	KM233075.1	ManoRiver-G3788	Sierra Leone	14-Jun-2014
+KM233076v1	KM233076.1	ManoRiver-G3789.1	Sierra Leone	14-Jun-2014
+KM233077v1	KM233077.1	ManoRiver-G3795	Sierra Leone	15-Jun-2014
+KM233078v1	KM233078.1	ManoRiver-G3796	Sierra Leone	15-Jun-2014
+KM233079v1	KM233079.1	ManoRiver-G3798	Sierra Leone	15-Jun-2014
+KM233080v1	KM233080.1	ManoRiver-G3799	Sierra Leone	15-Jun-2014
+KM233081v1	KM233081.1	ManoRiver-G3800	Sierra Leone	15-Jun-2014
+KM233082v1	KM233082.1	ManoRiver-G3805.1	Sierra Leone	15-Jun-2014
+KM233083v1	KM233083.1	ManoRiver-G3805.2	Sierra Leone	20-Jun-2014
+KM233084v1	KM233084.1	ManoRiver-G3807	Sierra Leone	15-Jun-2014
+KM233085v1	KM233085.1	ManoRiver-G3808	Sierra Leone	15-Jun-2014
+KM233086v1	KM233086.1	ManoRiver-G3809	Sierra Leone	15-Jun-2014
+KM233087v1	KM233087.1	ManoRiver-G3810.1	Sierra Leone	15-Jun-2014
+KM233088v1	KM233088.1	ManoRiver-G3810.2	Sierra Leone	17-Jun-2014
+KM233089v1	KM233089.1	ManoRiver-G3814	Sierra Leone	15-Jun-2014
+KM233090v1	KM233090.1	ManoRiver-G3816	Sierra Leone	15-Jun-2014
+KM233091v1	KM233091.1	ManoRiver-G3817	Sierra Leone	15-Jun-2014
+KM233092v1	KM233092.1	ManoRiver-G3818	Sierra Leone	15-Jun-2014
+KM233093v1	KM233093.1	ManoRiver-G3819	Sierra Leone	15-Jun-2014
+KM233094v1	KM233094.1	ManoRiver-G3820	Sierra Leone	15-Jun-2014
+KM233095v1	KM233095.1	ManoRiver-G3821	Sierra Leone	15-Jun-2014
+KM233096v1	KM233096.1	ManoRiver-G3822	Sierra Leone	15-Jun-2014
+KM233097v1	KM233097.1	ManoRiver-G3823	Sierra Leone	15-Jun-2014
+KM233098v1	KM233098.1	ManoRiver-G3825.1	Sierra Leone	16-Jun-2014
+KM233099v1	KM233099.1	ManoRiver-G3825.2	Sierra Leone	17-Jun-2014
+KM233100v1	KM233100.1	ManoRiver-G3826	Sierra Leone	16-Jun-2014
+KM233101v1	KM233101.1	ManoRiver-G3827	Sierra Leone	16-Jun-2014
+KM233102v1	KM233102.1	ManoRiver-G3829	Sierra Leone	16-Jun-2014
+KM233103v1	KM233103.1	ManoRiver-G3831	Sierra Leone	16-Jun-2014
+KM233104v1	KM233104.1	ManoRiver-G3834	Sierra Leone	17-Jun-2014
+KM233105v1	KM233105.1	ManoRiver-G3838	Sierra Leone	17-Jun-2014
+KM233106v1	KM233106.1	ManoRiver-G3840	Sierra Leone	17-Jun-2014
+KM233107v1	KM233107.1	ManoRiver-G3841	Sierra Leone	17-Jun-2014
+KM233108v1	KM233108.1	ManoRiver-G3845	Sierra Leone	18-Jun-2014
+KM233109v1	KM233109.1	ManoRiver-G3846	Sierra Leone	18-Jun-2014
+KM233110v1	KM233110.1	ManoRiver-G3848	Sierra Leone	18-Jun-2014
+KM233111v1	KM233111.1	ManoRiver-G3850	Sierra Leone	18-Jun-2014
+KM233112v1	KM233112.1	ManoRiver-G3851	Sierra Leone	18-Jun-2014
+KM233113v1	KM233113.1	ManoRiver-G3856.1	Sierra Leone	18-Jun-2014
+KM233114v1	KM233114.1	ManoRiver-G3856.3	Sierra Leone	20-Jun-2014
+KM233115v1	KM233115.1	ManoRiver-G3857	Sierra Leone	18-Jun-2014
+KM233116v1	KM233116.1	ManoRiver-NM042.1	Sierra Leone	04-Jun-2014
+KM233117v1	KM233117.1	ManoRiver-NM042.2	Sierra Leone	09-Jun-2014
+KM233118v1	KM233118.1	ManoRiver-NM042.3	Sierra Leone	12-Jun-2014
+NC_002549v1	NC_002549.1	AF086833 Yambuku-Mayinga Zaire isolate H.sapiens-tc/COD/1976/Yambuku-Mayinga	Zaire	1976
+NC_004161v1	NC_004161.1	AF522874 Reston isolate Reston virus M.fascicularis-tc/USA/1989/Philippines89-Pennsylvania	Philippines	1989
+NC_006432v1	NC_006432.1	derived from AY729654 Gulu Sudan isolate Sudan virus H.sapiens-tc/UGA/2000/Gulu-808892	Uganda	2000
+NC_014372v1	NC_014372.1	FJ217162 Tai Forest isolate Tai Forest virus H.sapiens-tc/CIV/1994/Pauleoula-CI	Cote d'Ivoire	Nov-1994
+NC_014373v1	NC_014373.1	FJ217161 Bundibugyo isolate Bundibugyo virus H.sapiens-tc/UGA/2007/Butalya-811250	Uganda	Nov-2007

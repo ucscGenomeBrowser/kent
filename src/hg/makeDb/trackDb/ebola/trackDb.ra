@@ -1,0 +1,9 @@
+track ncbiAnnotations
+shortLabel annotations
+longLabel gene predictions and annotations from NCBI gff file in release
+group genes
+visibility pack
+type bed 4
+
+include trackDb.gire.ra
+include trackDb.chainNet.ra

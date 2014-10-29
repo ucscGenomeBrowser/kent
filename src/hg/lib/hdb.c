@@ -962,7 +962,7 @@ return ci->size;
 void hNibForChrom(char *db, char *chromName, char retNibName[HDB_MAX_PATH_STRING])
 /* Get .nib file associated with chromosome. */
 {
-if (cfgOptionBooleanDefault("forceTwoBit", FALSE) == TRUE)
+if (cfgOptionBooleanDefault("forceTwoBit", FALSE) == TRUE && !trackHubDatabase(db))
     {
     char buf[HDB_MAX_PATH_STRING];
     safef(buf, HDB_MAX_PATH_STRING, "/gbdb/%s/%s.2bit", db, db);
@@ -1303,6 +1303,7 @@ char *hReplaceGbdb(char* fileName)
  /* Returns a gbdb filename, potentially rewriting it according to hg.conf
   * If the settings gbdbLoc1 and gbdbLoc2 are found, try them in order, by 
   * replacing /gbdb/ with the new locations.
+  * Typically, gbdbLoc1 is /gbdb/ and gbdbLoc2 is http://hgdownload.soe.ucsc.edu/gbdb/
   * If after the replacement of gbdbLoc1 the resulting fileName does not exist,
   * gbdbLoc2 is used.
   * This function does not guarantee that the returned filename exists.
@@ -3343,9 +3344,7 @@ return hHostHasPrefix("hgwbeta");
 boolean hIsBrowserbox()
 /* Return TRUE if this is the browserbox virtual machine */
 {
-char name[256];
-gethostname(name, sizeof(name));
-return (startsWith("browserbox", name));
+return (cfgOptionBooleanDefault("isGbib", FALSE));
 }
 
 boolean hIsPreviewHost()
