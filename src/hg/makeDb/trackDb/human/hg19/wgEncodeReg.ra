@@ -345,6 +345,7 @@ canPack On
     useScore 1
     scoreFilter 100
     scoreFilterLimits 100:1000
+    html wgEncodeRegDnaseClustered
     priority 1.6
 
     track wgEncodeRegDnaseClusteredV2
