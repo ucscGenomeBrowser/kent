@@ -407,8 +407,13 @@ gotError |= reportErrors(BLOCKSTART_NOT_START, table, bSNotStart);
 gotError |= reportErrors(BLOCKSTART_LT_START, table, bSLTStart);
 gotError |= reportErrors(BLOCKEND_LT_BLOCKSTART, table, bELTBS);
 gotError |= reportErrors(BLOCKS_NOT_ASCEND, table, bNotAscend);
-gotError |= reportErrors(BLOCKS_OVERLAP, table, bOverlap);
-gotError |= reportErrors(BLOCKEND_GT_END, table, bEGTEnd);
+// It's OK for bacEnd and cloneEnd tables to have weird blocks -- those are what tip us
+// off to rearrangements between those sequences and the reference assembly
+if (! (startsWith("bacEnd", table) || startsWith("cloneEnd", table)))
+    {
+    gotError |= reportErrors(BLOCKS_OVERLAP, table, bOverlap);
+    gotError |= reportErrors(BLOCKEND_GT_END, table, bEGTEnd);
+    }
 gotError |= reportErrors(BLOCKEND_NOT_END, table, bENotEnd);
 return gotError;
 }
