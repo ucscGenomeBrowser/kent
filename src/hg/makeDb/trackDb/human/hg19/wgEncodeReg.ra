@@ -317,7 +317,7 @@ canPack On
 
 
     track wgEncodeRegDnaseClustered
-    release beta,public
+    release public
     shortLabel DNase Clusters V1
     longLabel Digital DNaseI Hypersensitivity Clusters in 74 cell types (2 reps) from ENCODE
     type bed 5 .
@@ -333,7 +333,7 @@ canPack On
 
     track wgEncodeRegDnaseClusteredV1
     table wgEncodeRegDnaseClustered
-    release alpha
+    release alpha, beta
     shortLabel DNase Clusters V1
     longLabel Digital DNaseI Hypersensitivity Clusters in 74 cell types (2 reps) from ENCODE
     type bed 5 .
@@ -349,7 +349,7 @@ canPack On
     priority 1.6
 
     track wgEncodeRegDnaseClusteredV2
-    release beta, public
+    release public
     shortLabel DNase Clusters
     longLabel Digital DNaseI Hypersensitivity Clusters in 125 cell types from ENCODE
     type bed 5 .
@@ -364,7 +364,7 @@ canPack On
     priority 1.6
 
     track wgEncodeRegDnaseClusteredV2
-    release alpha
+    release alpha, beta
     shortLabel DNase Clusters V2
     longLabel Digital DNaseI Hypersensitivity Clusters in 125 cell types from ENCODE (V2)
     type bed 5 .
@@ -379,7 +379,7 @@ canPack On
     priority 1.6
 
     track wgEncodeRegDnaseClustered
-    release alpha
+    release alpha, beta
     table wgEncodeRegDnaseClusteredV3
     shortLabel DNase Clusters
     longLabel DNaseI Hypersensitivity Clusters in 125 cell types from ENCODE
