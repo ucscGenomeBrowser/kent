@@ -315,22 +315,6 @@ canPack On
 	color 255,128,212
 	type bigWig 0 3851
 
-
-    track wgEncodeRegDnaseClustered
-    release public
-    shortLabel DNase Clusters V1
-    longLabel Digital DNaseI Hypersensitivity Clusters in 74 cell types (2 reps) from ENCODE
-    type bed 5 .
-    superTrack wgEncodeReg hide
-    inputTrackTable wgEncodeRegDnaseClusteredInputs
-    inputTableFieldDisplay cellType treatment replicate lab dateUnrestricted
-    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
-    visibility dense
-    useScore 1
-    scoreFilter 100
-    scoreFilterLimits 100:1000
-    priority 1.6
-
     track wgEncodeRegDnaseClusteredV1
     table wgEncodeRegDnaseClustered
     release alpha, beta
@@ -349,21 +333,6 @@ canPack On
     priority 1.6
 
     track wgEncodeRegDnaseClusteredV2
-    release public
-    shortLabel DNase Clusters
-    longLabel Digital DNaseI Hypersensitivity Clusters in 125 cell types from ENCODE
-    type bed 5 .
-    superTrack wgEncodeReg dense
-    inputTrackTable wgEncodeRegDnaseClusteredInputsV2
-    inputTableFieldDisplay cellType treatment lab
-    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
-    visibility dense
-    useScore 1
-    scoreFilter 100
-    scoreFilterLimits 100:1000
-    priority 1.6
-
-    track wgEncodeRegDnaseClusteredV2
     release alpha, beta
     shortLabel DNase Clusters V2
     longLabel Digital DNaseI Hypersensitivity Clusters in 125 cell types from ENCODE (V2)
@@ -379,7 +348,6 @@ canPack On
     priority 1.6
 
     track wgEncodeRegDnaseClustered
-    release alpha, beta
     table wgEncodeRegDnaseClusteredV3
     shortLabel DNase Clusters
     longLabel DNaseI Hypersensitivity Clusters in 125 cell types from ENCODE
