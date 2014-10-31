@@ -319,6 +319,13 @@ boolean checkBlocks(struct bed *bedList, char *table, struct hTableInfo *hti)
 {
 boolean gotError = FALSE;
 struct bed *bed = NULL;
+// It's OK for bacEnd and cloneEnd tables to have weird blocks -- those are what tip us
+// off to rearrangements between those sequences and the reference assembly.
+// Moreover, the "Orphan" versions of those tracks show a gap line extending in the
+// direction that we'd expect to find the other end by extending chromStart or chromEnd
+// past the block boundaries.
+boolean isEndPairs = (startsWith("bacEnd", table) || startsWith("cloneEnd", table));
+boolean isEndPairsOrphan = isEndPairs && stringIn("Orphan", table);
 int bMissing = 0, bSNotStart=0, bSLTStart=0, bELTBS=0, bENotEnd=0, bEGTEnd=0;
 int bNotAscend=0, bOverlap=0;
 for (bed = bedList;  bed != NULL;  bed = bed->next)
@@ -329,15 +336,27 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	continue;
 	}
     int i=0, lastStart=0, lastEnd=0;
-    if (bed->chromStarts[0] != 0)
-	{
-	if (verboseBlocks || verboseLevel() >= 2)
-	    verbose(0, "%s.%s item %s %s:%d-%d: blockStarts[0] (relative) should be 0, but is %d\n",
-		   db, table, bed->name, bed->chrom,
-		   bed->chromStart, bed->chromEnd,
-		   bed->chromStarts[0]);
-	bSNotStart++;
-	}
+    if (! isEndPairsOrphan)
+        {
+        if (bed->chromStarts[0] != 0)
+            {
+            if (verboseBlocks || verboseLevel() >= 2)
+                verbose(0, "%s.%s item %s %s:%d-%d: blockStarts[0] (relative) should be 0, but is %d\n",
+                        db, table, bed->name, bed->chrom,
+                        bed->chromStart, bed->chromEnd,
+                        bed->chromStarts[0]);
+            bSNotStart++;
+            }
+        if ((bed->chromStart + lastEnd) != bed->chromEnd)
+            {
+            if (verboseBlocks || verboseLevel() >= 2)
+                verbose(0, "%s.%s item %s %s:%d-%d: end of last block (%d) is not the same as chromEnd (%d).\n",
+                        db, table, bed->name, bed->chrom,
+                        bed->chromStart, bed->chromEnd,
+                        (bed->chromStart + lastEnd), bed->chromEnd);
+            bENotEnd++;
+            }
+        }
     lastStart = lastEnd = 0;
     for (i=0;  i < bed->blockCount;  i++)
 	{
@@ -359,16 +378,29 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 		       i-1, i);
 	    bNotAscend++;
 	    }
-	if (bed->chromStarts[i] < lastEnd &&
-	    i > 0 && bed->chromStarts[i] > bed->chromStarts[i-1])
-	    {
-	    if (verboseBlocks || verboseLevel() >= 2)
-		verbose(0, "%s.%s item %s %s:%d-%d: blocks %d and %d overlap.\n",
-		       db, table, bed->name, bed->chrom,
-		       bed->chromStart, bed->chromEnd,
-		       i-1, i);
-	    bOverlap++;
-	    }
+        if (! isEndPairs)
+            {
+            if (bed->chromStarts[i] < lastEnd &&
+                i > 0 && bed->chromStarts[i] > bed->chromStarts[i-1])
+                {
+                if (verboseBlocks || verboseLevel() >= 2)
+                    verbose(0, "%s.%s item %s %s:%d-%d: blocks %d and %d overlap.\n",
+                            db, table, bed->name, bed->chrom,
+                            bed->chromStart, bed->chromEnd,
+                            i-1, i);
+                bOverlap++;
+                }
+            if (bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i]
+                > bed->chromEnd)
+                {
+                if (verboseBlocks || verboseLevel() >= 2)
+                    verbose(0, "%s.%s item %s %s:%d-%d: blockEnd[%d] (%d) > chromEnd.\n",
+                            db, table, bed->name, bed->chrom,
+                            bed->chromStart, bed->chromEnd,
+                            i, (bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i]));
+                bEGTEnd++;
+                }
+            }
 	if (bed->blockSizes[i] < 0)
 	    {
 	    if (verboseBlocks || verboseLevel() >= 2)
@@ -378,28 +410,8 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 		       i, bed->blockSizes[i]);
 	    bELTBS++;
 	    }
-	if (bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i]
-	    > bed->chromEnd)
-	    {
-	    if (verboseBlocks || verboseLevel() >= 2)
-		verbose(0, "%s.%s item %s %s:%d-%d: blockEnd[%d] (%d) > chromEnd.\n",
-		       db, table, bed->name, bed->chrom,
-		       bed->chromStart, bed->chromEnd,
-		       i, (bed->chromStart + bed->chromStarts[i] +
-			   bed->blockSizes[i]));
-	    bEGTEnd++;
-	    }
 	lastStart = bed->chromStarts[i];
 	lastEnd = bed->chromStarts[i] + bed->blockSizes[i];
-	}
-    if ((bed->chromStart + lastEnd) != bed->chromEnd)
-	{
-	if (verboseBlocks || verboseLevel() >= 2)
-	    verbose(0, "%s.%s item %s %s:%d-%d: end of last block (%d) is not the same as chromEnd (%d).\n",
-		   db, table, bed->name, bed->chrom,
-		   bed->chromStart, bed->chromEnd,
-		   (bed->chromStart + lastEnd), bed->chromEnd);
-	bENotEnd++;
 	}
     }
 gotError |= reportErrors(BLOCKS_MISSING, table, bMissing);
@@ -407,13 +419,8 @@ gotError |= reportErrors(BLOCKSTART_NOT_START, table, bSNotStart);
 gotError |= reportErrors(BLOCKSTART_LT_START, table, bSLTStart);
 gotError |= reportErrors(BLOCKEND_LT_BLOCKSTART, table, bELTBS);
 gotError |= reportErrors(BLOCKS_NOT_ASCEND, table, bNotAscend);
-// It's OK for bacEnd and cloneEnd tables to have weird blocks -- those are what tip us
-// off to rearrangements between those sequences and the reference assembly
-if (! (startsWith("bacEnd", table) || startsWith("cloneEnd", table)))
-    {
-    gotError |= reportErrors(BLOCKS_OVERLAP, table, bOverlap);
-    gotError |= reportErrors(BLOCKEND_GT_END, table, bEGTEnd);
-    }
+gotError |= reportErrors(BLOCKS_OVERLAP, table, bOverlap);
+gotError |= reportErrors(BLOCKEND_GT_END, table, bEGTEnd);
 gotError |= reportErrors(BLOCKEND_NOT_END, table, bENotEnd);
 return gotError;
 }
