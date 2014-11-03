@@ -15,7 +15,7 @@ objType table
 composite wgEncodeRegDnaseClustered
 dataType Cluster
 dateUnrestricted 2011-10-21
-fileName wgEncodeRegDnaseClusteredCells.tab.gz
+fileName wgEncodeRegDnaseClusteredCells.txt
 grant Kent
 lab UCSC
 project wgEncode
@@ -34,6 +34,24 @@ project wgEncode
 subId 2095
 tableName wgEncodeRegDnaseClusteredInputs
 
+metaObject wgEncodeRegDnaseClusteredInputsV2
+objType table
+composite wgEncodeRegDnaseClustered
+dataType Cluster
+fileName wgEncodeRegDnaseClusteredInputs.tab.gz
+grant Kent
+lab UCSC
+project wgEncode
+tableName wgEncodeRegDnaseClusteredInputs
+
+metaObject wgEncodeRegDnaseClusteredSources
+objType table
+composite wgEncodeRegDnaseClustered
+dataType Cluster
+fileName wgEncodeRegDnaseClusteredSources.tab
+project wgEncode
+tableName wgEncodeRegDnaseClustered
+
 metaObject wgEncodeRegDnaseClusteredV2
 objType table
 composite wgEncodeRegDnaseClustered
@@ -41,4 +59,11 @@ fileName wgEncodeRegDnaseClusteredV2.bed.gz
 project wgEncode
 tableName wgEncodeRegDnaseClusteredV2
 
-# MAGIC: 1743288666
+metaObject wgEncodeRegDnaseClusteredV3
+objType table
+composite wgEncodeRegDnaseClustered
+fileName wgEncodeRegDnaseClusteredV3.bed.gz
+project wgEncode
+tableName wgEncodeRegDnaseClusteredV3
+
+# MAGIC: 2141994782
