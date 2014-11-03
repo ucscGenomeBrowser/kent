@@ -145,6 +145,12 @@ for line in ifh:
     blockCount = "1"
     blockSizes = str(int(end)-int(start))
     blockStarts = "0"
+
+    if "gain" in allType or "duplication" in allType:
+        itemRgb = "0,0,255"
+    if "deletion" in allType or "loss" in allType:
+        itemRgb = "255,0,0"
+
     row = [chrom, start, end, shortName, score, strand, thickStart, thickEnd, itemRgb, \
         blockCount, blockSizes, blockStarts,
         name, allType, geneId, geneSymbol, clinSign,

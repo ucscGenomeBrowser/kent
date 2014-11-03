@@ -2908,7 +2908,7 @@ longLabel ClinVar Variants
 group phenDis
 visibility hide
 type bigBed 12 .
-itemRgb off
+itemRgb on
 urls rcvAcc="http://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="http://www.ncbi.nlm.nih.gov/gene/$$" snpId="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="http://www.ncbi.nlm.nih.gov/dbvar/variants/$$/"
 mouseOverField clinSign
 noScoreFilter on
