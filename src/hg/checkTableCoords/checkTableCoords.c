@@ -347,15 +347,6 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
                         bed->chromStarts[0]);
             bSNotStart++;
             }
-        if ((bed->chromStart + lastEnd) != bed->chromEnd)
-            {
-            if (verboseBlocks || verboseLevel() >= 2)
-                verbose(0, "%s.%s item %s %s:%d-%d: end of last block (%d) is not the same as chromEnd (%d).\n",
-                        db, table, bed->name, bed->chrom,
-                        bed->chromStart, bed->chromEnd,
-                        (bed->chromStart + lastEnd), bed->chromEnd);
-            bENotEnd++;
-            }
         }
     lastStart = lastEnd = 0;
     for (i=0;  i < bed->blockCount;  i++)
@@ -413,6 +404,18 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	lastStart = bed->chromStarts[i];
 	lastEnd = bed->chromStarts[i] + bed->blockSizes[i];
 	}
+    if (! isEndPairsOrphan)
+        {
+        if ((bed->chromStart + lastEnd) != bed->chromEnd)
+            {
+            if (verboseBlocks || verboseLevel() >= 2)
+                verbose(0, "%s.%s item %s %s:%d-%d: end of last block (%d) is not the same as chromEnd (%d).\n",
+                        db, table, bed->name, bed->chrom,
+                        bed->chromStart, bed->chromEnd,
+                        (bed->chromStart + lastEnd), bed->chromEnd);
+            bENotEnd++;
+            }
+        }
     }
 gotError |= reportErrors(BLOCKS_MISSING, table, bMissing);
 gotError |= reportErrors(BLOCKSTART_NOT_START, table, bSNotStart);
