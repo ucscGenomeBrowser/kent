@@ -452,10 +452,6 @@ if (range[0] != 0)
     isSingle = searchPosition(range, &r);
     if (!isSingle)
 	{
-	// We will call doMainPage after this, so push web start handlers;
-	// hgFind code pops the handlers that it pushes, but after doMainPage
-	// we'll close the page and pop again, so we need to push here.
-	webPushErrHandlersCartDb(cart, database);
 	// In case user manually edits the browser location as described in #13009,
 	// revert the position.  If they instead choose from the list as we expect,
 	// that will set the position to their choice.
@@ -1610,13 +1606,6 @@ if (count == 0)
 htmlClose();
 }
 
-void doLookupPosition(struct sqlConnection *conn)
-/* Handle lookup button press.   The work has actually
- * already been done, so just call main page. */
-{
-doMainPage(conn, FALSE);
-}
-
 /* Remove any meta data variables from the cart. (Copied from above!) */
 void removeMetaData()
 {
@@ -1832,7 +1821,7 @@ if (hIsCgbServer() || hIsGsidServer())
 else if (cartVarExists(cart, hgtaDoTest))
     doTest();
 else if (cartVarExists(cart, hgtaDoMainPage))
-    doMainPage(conn, FALSE);
+    doMainPage(conn);
 else if (cartVarExists(cart, hgtaDoSchema))
     doSchema(conn);
 else if (cartVarExists(cart, hgtaDoTopSubmit))
@@ -1927,8 +1916,6 @@ else if (cartVarExists(cart, hgtaDoSubtrackMergeSubmit))
     doSubtrackMergeSubmit(conn);
 else if (cartVarExists(cart, hgtaDoSubtrackMergePage))
     doSubtrackMergePage(conn);
-else if (cartVarExists(cart, hgtaDoLookupPosition))
-    doLookupPosition(conn);
 else if (cartVarExists(cart, hgtaDoSetUserRegions))
     doSetUserRegions(conn);
 else if (cartVarExists(cart, hgtaDoSubmitUserRegions))
@@ -1945,7 +1932,7 @@ else if (cartVarExists(cart, hgtaDoGsLogin))
     dispatch();
     }
 else	/* Default - put up initial page. */
-    doMainPage(conn, FALSE);
+    doMainPage(conn);
 cartRemovePrefix(cart, hgtaDo);
 hFreeConn(&conn);
 }
@@ -2063,8 +2050,10 @@ else
     struct sqlConnection *conn = NULL;
     if (!trackHubDatabase(database))
 	conn = curTrack ? hAllocConnTrack(database, curTrack) : hAllocConn(database);
-    doMainPage(conn, TRUE);
+    webPushErrHandlersCartDb(cart, database);
+    mainPageAfterOpen(conn);
     hFreeConn(&conn);
+    webPopErrHandlers();
     }
 
 textOutClose(&compressPipeline, &saveStdout);

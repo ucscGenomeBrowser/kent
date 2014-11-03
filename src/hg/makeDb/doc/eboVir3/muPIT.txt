@@ -1,0 +1,27 @@
+#############################################################################
+# muPIT protein map track (DONE - 2014-10-30 - Hiram)
+
+specific locations received in email:
+-rw-r--r-- 1 19041 Oct  2 12:21 mupit_ebola_pos.txt
+
+mkdir /hive/data/genomes/eboVir3/bed/muPIT
+cd /hive/data/genomes/eboVir3/bed/muPIT
+
+# turn those positions into a bed file:
+
+awk '{printf "KM034562v1\t%d\t%d\t%d\n", $1-1,$1,$1}' mupit_ebola_pos.txt \
+  > muPIT.bed
+
+# process this bed file into three bases per item, and add
+# sequence/AA names to items:
+
+~/kent/src/hg/makeDb/doc/eboVir3/threeBaseAATrack.pl > nameVersion.bed
+
+# load table
+hgLoadBed eboVir3 muPIT nameVersion.bed
+
+featureBits -countGaps eboVir3 muPIT
+# 3666 bases of 18957 (19.339%) in intersection
+
+
+#############################################################################

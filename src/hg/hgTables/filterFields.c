@@ -1210,14 +1210,14 @@ void doFilterSubmit(struct sqlConnection *conn)
 /* Respond to submit on filters page. */
 {
 cartSetString(cart, hgtaFilterTable, getDbTable(database, curTable));
-doMainPage(conn, FALSE);
+doMainPage(conn);
 }
 
 void doClearFilter(struct sqlConnection *conn)
 /* Respond to click on clear filter. */
 {
 removeFilterVars();
-doMainPage(conn, FALSE);
+doMainPage(conn);
 }
 
 void constrainFreeForm(char *rawQuery, struct dyString *clause)

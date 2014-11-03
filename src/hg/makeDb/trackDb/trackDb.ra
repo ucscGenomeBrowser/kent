@@ -1461,27 +1461,8 @@ visibility hide
 useScore 1
 type bed 12 +
 
-track joinedRmsk
-compositeTrack on
-shortLabel RepeatMasker Visualization
-longLabel Detailed Visualization of RepeatMasker Annotations
-group rep
-allButtonPair on
-visibility dense
-spectrum on
-type bed 3 +
-maxWindowToDraw 10000000
-canPack off
-
-	track rmskJoinedBaseline
-	parent joinedRmsk off
-	longLabel RepeatMasker v3.0.1 db20100302 : Browser Baseline Dataset
-	priority 1
-
-	track  rmskJoinedCurrent
-	parent joinedRmsk on
-	longLabel RepeatMasker v3.3.0 db20120124 : Current Dataset
-	priority 2
+include joinedRmskComposite.ra alpha
+include joinedRmsk.ra beta,public
 
 track windowmasker
 shortLabel WindowMasker

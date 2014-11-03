@@ -824,7 +824,7 @@ if (gotResults)
     {
     flushCustomTracks();
     initGroupsTracksTables();
-    doMainPage(conn, FALSE);
+    doMainPage(conn);
     }
 }
 

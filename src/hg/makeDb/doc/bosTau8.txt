@@ -548,7 +548,7 @@ bosTau8.upstreamGeneTbl = refGene
     # 2670044500 bases of 2670044500 (100.000%) in intersection
 
 #########################################################################
-# lastz Horse (WORKING - 2014-10-27 - Hiram)
+# lastz Horse equCab2 (DONE - 2014-10-27 - Hiram)
     # a tuning run to determine lastz parameters, this process should move
     # out of this directory to a bosTau8/bed/lastz... directory:
 
@@ -641,7 +641,7 @@ BLASTZ_Q=/hive/data/genomes/bosTau8/bed/lastzEquCab2.2014-10-27/bosTau8.equCab2.
 # G   -31   -75   100  -111
 # T  -128   -31  -111    88
 
-# TARGET: Horse bosTau8
+# TARGET: Cow bosTau8
 SEQ1_DIR=/hive/data/genomes/bosTau8/bosTau8.2bit
 SEQ1_LEN=/hive/data/genomes/bosTau8/chrom.sizes
 SEQ1_CHUNK=20000000
@@ -664,5 +664,29 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
+    # real    292m42.862s
+    cat fb.bosTau8.chainEquCab2Link.txt
+    #  1463490656 bases of 2649307237 (55.241%) in intersection
+
+    time (doRecipBest.pl bosTau8 equCab2 -buildDir=`pwd` -workhorse=hgwdev) \
+	> best.log 2>&1
+    # real    60m9.228s
+
+    #	and the swap
+    mkdir /hive/data/genomes/equCab2/bed/blastz.bosTau8.swap
+    cd /hive/data/genomes/equCab2/bed/blastz.bosTau8.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/bosTau8/bed/lastzEquCab2.2014-10-27/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #   real    139m36.654s
+
+    cat fb.equCab2.chainBosTau8Link.txt
+    #	1497036779 bases of 2428790173 (61.637%) in intersection
+
+    time (doRecipBest.pl equCab2 bosTau8 -buildDir=`pwd` -workhorse=hgwdev) \
+	> best.log 2>&1
+    #   real    75m31.777s
 
 #########################################################################
