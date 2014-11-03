@@ -350,7 +350,7 @@ canPack On
     track wgEncodeRegDnaseClustered
     table wgEncodeRegDnaseClusteredV3
     shortLabel DNase Clusters
-    longLabel DNaseI Hypersensitivity Clusters in 125 cell types from ENCODE
+    longLabel DNaseI Hypersensitivity Clusters in 125 cell types from ENCODE (V3)
     type bed 5 .
     superTrack wgEncodeReg dense
     inputTrackTable wgEncodeRegDnaseClusteredInputsV2
