@@ -3,3 +3,4 @@ dbLinkTest
 testHarness
 mainTest.*
 newTest.*
+jsonTest
