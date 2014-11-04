@@ -2273,31 +2273,6 @@ group expression
 shortLabel PeptideAtlas
 longLabel Peptide sequences identified by tandem MS from PeptideAtlas
 
-    track peptideAtlasRegions2013
-    table peptideAtlas
-    release alpha
-    superTrack peptideAtlas
-    html peptideAtlas
-    shortLabel PeptideAtlas Mappings 2013
-    longLabel Peptide sequence mappings identified by tandem MS from PeptideAtlas (2013)
-    type bedDetail 6
-    url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=393&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
-    urlLabel Link to PeptideAtlas:
-    group expression
-    color 82, 82, 160
-
-    track peptideAtlasRegions2014
-    release alpha
-    superTrack peptideAtlas
-    shortLabel PeptideAtlas Mappings 2014
-    html peptideAtlas
-    longLabel Peptide sequence mappings identified by tandem MS from PeptideAtlas (2014)
-    type bedDetail 6
-    url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=433&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
-    urlLabel Link to PeptideAtlas:
-    group expression
-    color 82, 82, 160
-
     track peptideAtlas2014
     superTrack peptideAtlas
     release alpha
@@ -2313,8 +2288,32 @@ longLabel Peptide sequences identified by tandem MS from PeptideAtlas
     color 82, 82, 160
     spectrum on
     scoreMax 51
-    priority 1
     scoreMin 1
+
+    track peptideAtlasRegions2014
+    release alpha
+    superTrack peptideAtlas
+    shortLabel PeptideAtlas Mappings 2014
+    html peptideAtlas
+    longLabel Peptide sequence mappings identified by tandem MS from PeptideAtlas (2014)
+    type bedDetail 6
+    url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=433&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
+    urlLabel Link to PeptideAtlas:
+    group expression
+    color 82, 82, 160
+
+    track peptideAtlasRegions2013
+    table peptideAtlas
+    release alpha
+    superTrack peptideAtlas
+    html peptideAtlas
+    shortLabel PeptideAtlas Mappings 2013
+    longLabel Peptide sequence mappings identified by tandem MS from PeptideAtlas (2013)
+    type bedDetail 6
+    url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=393&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
+    urlLabel Link to PeptideAtlas:
+    group expression
+    color 82, 82, 160
 
 searchTable peptideAtlas2014
 searchType bed
