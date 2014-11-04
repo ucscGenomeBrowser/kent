@@ -3,6 +3,7 @@
 import logging, sys, optparse, re, os, datetime, gzip, urllib2
 from collections import defaultdict
 from os.path import join, basename, dirname, isfile
+from datetime import date, datetime, timedelta
 
 # === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
 parser = optparse.OptionParser("""usage: %prog [options] filename - check and convert clinVar table to four bed files, split into CNV and shorter mutations, for both hg19 and hg38 and convert all to bigBed
@@ -14,6 +15,7 @@ input file is ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summa
 
 parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages") 
 parser.add_option("-a", "--auto", dest="auto", action="store_true", help="download the file from NCBIi into the current dir and it bigBeds") 
+parser.add_option("", "--maxDiff", dest="maxDiff", action="store", type="float", help="look for yesterday's download file in current dir and accept this much, expressed as a ratio. Can only be used with --auto.")
 (options, args) = parser.parse_args()
 
 if options.debug:
@@ -68,12 +70,22 @@ if args==[] and not options.auto:
     exit(1)
 
 if options.auto:
-    date = datetime.date.today().isoformat() 
+    date = date.today().isoformat() 
     url = "http://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz"
     outFname = "variant_summary.%s.txt.gz" % date
     logging.info("Downlading %s to %s" % (url, outFname))
     open(outFname, "w").write(urllib2.urlopen(url).read())
     filename = outFname
+
+    if options.maxDiff:
+        yesterday = datetime.now() - timedelta(days=1)
+        yesterdayFname = "variant_summary.%s.txt.gz" % yesterday.date().isoformat()
+        todayLines = sum(1 for line in gzip.open(outFname))
+        yesterdayLines = sum(1 for line in gzip.open(yesterdayFname))
+        percDiff = abs(todayLines-yesterdayLines)/float(todayLines) 
+        if percDiff > options.maxDiff:
+            raise Exception("line count changed too much: yesterday %d lines, today %d lines" % (yesterdayLines, todayLines))
+
 else:
     filename = args[0]
 
@@ -145,6 +157,13 @@ for line in ifh:
     blockCount = "1"
     blockSizes = str(int(end)-int(start))
     blockStarts = "0"
+
+    if dbVarAcc.startswith("nsv"):
+        if "gain" in allType or "duplication" in allType:
+            itemRgb = "0,0,255"
+        if "deletion" in allType or "loss" in allType:
+            itemRgb = "255,0,0"
+
     row = [chrom, start, end, shortName, score, strand, thickStart, thickEnd, itemRgb, \
         blockCount, blockSizes, blockStarts,
         name, allType, geneId, geneSymbol, clinSign,
