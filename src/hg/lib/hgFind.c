@@ -588,8 +588,28 @@ struct tsrPos
     struct hgPos *posList;		/* Associated list of positions. */
     };
 
+static boolean isCanonical(struct sqlConnection *conn, char *geneName)
+/* Look for the name in knownCannonical, return true if found */
+{
+boolean foundIt = FALSE;
+if (sqlTableExists(conn, "knownCanonical"))
+    {
+    char query[512];
+    sqlSafef(query, sizeof(query), "select transcript from knownCanonical"
+	  " where '%s' = transcript;", geneName);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row;
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	foundIt = TRUE;
+	}
+    sqlFreeResult(&sr);
+    }
+return foundIt;
+}
+
 static void addKnownGeneItems(struct hgPosTable *table,
-	struct trixSearchResult *tsrList, struct sqlConnection *conn)
+	struct trixSearchResult *tsrList, struct sqlConnection *conn, struct sqlConnection *conn2)
 /* Convert tsrList to posList, and hang posList off of table. */
 {
 /* This code works with just two SQL queries no matter how
@@ -603,7 +623,7 @@ static void addKnownGeneItems(struct hgPosTable *table,
 struct dyString *dy = dyStringNew(0);
 struct trixSearchResult *tsr;
 struct hash *hash = hashNew(16);
-struct hgPos *posList = NULL, *pos;
+struct hgPos *posList = NULL, *pos; // *canonicalPos = NULL;
 struct tsrPos *tpList = NULL, *tp;
 struct sqlResult *sr;
 char **row;
@@ -663,6 +683,8 @@ for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
     }
 dyStringAppend(dy, ")");
 sr = sqlGetResult(conn, dy->string);
+
+// Store all canonical hgPos in a linked list
 while ((row = sqlNextRow(sr)) != NULL)
     {
     tp = hashFindVal(hash, row[0]);
@@ -671,8 +693,18 @@ while ((row = sqlNextRow(sr)) != NULL)
     for (pos = tp->posList; pos != NULL; pos = pos->next)
         {
 	char nameBuf[256];
+	//char nameBuf2[256];
 	safef(nameBuf, sizeof(nameBuf), "%s (%s)", row[1], row[0]);
 	pos->name = cloneString(nameBuf);
+	if (isCanonical(conn2,row[0]))
+	    {
+	    //safef(nameBuf2, sizeof(nameBuf2), "Canonical: %s", nameBuf);
+            //pos->name = cloneString(nameBuf2);
+	    pos->canonical = TRUE;
+	    }
+	else{
+	    pos->canonical = FALSE;
+	    }
 	pos->description = cloneString(row[2]);
 	pos->browserName = cloneString(row[0]);
 	}
@@ -682,14 +714,50 @@ sqlFreeResult(&sr);
 /* Hang all pos onto table. */
 for (tp = tpList; tp != NULL; tp = tp->next)
     {
-    struct hgPos *next;
+    struct hgPos *next, *canonicalList = NULL;
     for (pos = tp->posList; pos != NULL; pos = next)
         {
 	next = pos->next;
 	slAddHead(&posList, pos);
+	//uglyAbort("%d", pos->canonical);
+        if (pos->canonical)
+	    {
+	    //uglyAbort("inside the if statement");
+	    //slAddHead(&canonicalList, pos);
+	    }
 	}
+    //uglyAbort("%i",slCount(tp->posList));
+    /* Pull all canonical genes to the top of the list */	
+    for (pos = canonicalList ; pos != NULL; pos = next)
+        {
+	next = pos->next;
+	slRemoveEl(&posList, pos);
+	slAddHead(&posList, pos);
+	}
+    	
     }
+
+#ifdef OLD
+/* Go through list of canoncial genes
+ * Put them at the top of posList. */
+struct hgPos *next, *canonicalPos = NULL;
+for (canonicalPos = canonicalList; canonicalPos!= NULL; canonicalPos = next)
+    { 
+    uglyAbort("Starting the loop to move canonicals up");
+    next = canonicalPos->next;
+    slRemoveEl(&posList, canonicalPos);
+    slAddHead(&posList, canonicalPos);
+    }
+/* Move canonical to top of list */
+if (canonicalPos != NULL)
+    {
+    slRemoveEl(&posList, canonicalPos);
+    slAddHead(&posList, canonicalPos);
+    }
+#endif /* OLD */
+
 table->posList = posList;
+
 hashFree(&hash);
 dyStringFree(&dy);
 }
@@ -713,8 +781,10 @@ if (tsrList != NULL)
     {
     struct hgPosTable *table = addKnownGeneTable(db, hgp);
     struct sqlConnection *conn = hAllocConn(db);
-    addKnownGeneItems(table, tsrList, conn);
+    struct sqlConnection *conn2 = hAllocConn(db);
+    addKnownGeneItems(table, tsrList, conn, conn2);
     hFreeConn(&conn);
+    hFreeConn(&conn2);
     gotIt = TRUE;
     }
 freez(&lowered);
@@ -2494,12 +2564,18 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 			}
 		    }
 		fprintf(f, "hgFind.matches=%s,\">", encMatches);
+		if(pos->canonical) {
+		    fprintf(f, "<B>");
+		    }
 		htmTextOut(f, pos->name);
+		if(pos->canonical) {
+		    fprintf(f, "</B>");
+		    }
 		fprintf(f, " at %s</A>", range);
 		desc = pos->description;
 		if (desc)
 		    {
-		    fprintf(f, " - ");
+		    fprintf(f, " -+ ");
 		    htmTextOut(f, desc);
 		    }
 		fprintf(f, "\n");
