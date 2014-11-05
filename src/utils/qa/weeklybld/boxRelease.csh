@@ -32,7 +32,7 @@ while (1)
     endif
 end
 
-cd /cluster/home/qateam/VirtualBox\ VMs/browserbox
+cd ~/VirtualBox\ VMs/browserbox
 echo removing shared folders
 sed -i '/<SharedFolder name="/d' browserbox.vbox
 
