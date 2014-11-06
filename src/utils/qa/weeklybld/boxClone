@@ -30,22 +30,6 @@ if ("$runCount" != "0") then
     end
 endif
 
-set runCount=`ps aux | grep VBoxHeadless | grep 'browserbox'$boxVer'$' | wc -l`
-if ("$runCount" != "0") then
-    echo shutting down the $boxVer VM
-    VBoxManage  controlvm  browserbox$boxVer acpipowerbutton
-    while (1) 
-	set runCount=`ps aux | grep VBoxHeadless | grep 'browserbox'$boxVer'$' | wc -l`
-	if ("$runCount" == "0") then
-	     echo VM has stopped
-	     break
-	else
-	     echo VM has not stopped yet, waiting...
-	     sleep 3
-	endif
-    end
-endif
-
 echo unregistering the old $boxVer gbib
 vboxmanage unregistervm browserbox$boxVer || echo not registered
 sleep 3 # not sure if needed - unregistervm is an RPC call that might take a while
@@ -76,5 +60,29 @@ vboxmanage modifyvm browserbox$boxVer --natpf1 "Rule 2",tcp,127.0.0.1,$SSHPORT,,
 echo switching off VRDE
 VBoxManage modifyvm browserbox$boxVer --vrde off
 
-echo booting new VM browserbox$boxVer
-VBoxHeadless -s browserbox$boxVer &
+set runCount=`ps aux | grep VBoxHeadless | grep 'browserbox'$boxVer'$' | wc -l`
+if ("$runCount" != "0") then
+    echo shutting down the $boxVer VM that is running under the qateam account
+    ssh qateam@hgwdev.soe.ucsc.edu VBoxManage  controlvm  browserbox$boxVer acpipowerbutton
+    while (1) 
+	set runCount=`ps aux | grep VBoxHeadless | grep 'browserbox'$boxVer'$' | wc -l`
+	if ("$runCount" == "0") then
+	     echo VM has stopped
+	     break
+	else
+	     echo VM has not stopped yet, waiting...
+	     sleep 2
+	endif
+    end
+endif
+
+echo moving VM files to /cluster/home/qateam/VirtualBox VMs/browserbox$boxVer
+rm -rf "/cluster/home/qateam/VirtualBox VMs/browserbox$boxVer.old"
+# keeping a backup, just in case
+mv "/cluster/home/qateam/VirtualBox VMs/browserbox$boxVer" "/cluster/home/qateam/VirtualBox VMs/browserbox$boxVer.old"
+# moving the new clone from build to qateam
+mv "/cluster/home/build/VirtualBox VMs/browserbox$boxVer" "/cluster/home/qateam/VirtualBox VMs/"
+chmod -R a+rw "/cluster/home/qateam/VirtualBox VMs/" 
+
+#echo booting new VM browserbox$boxVer
+#ssh qateam@hgwdev.soe.ucsc.edu VBoxHeadless -s browserbox$boxVer &
