@@ -1,0 +1,80 @@
+#!/bin/tcsh 
+source `which qaConfig.csh`
+
+####################
+#
+#  Script to clone the buildmeister's gbib into alpha or beta gbib
+#  Max Haeussler
+####################
+
+if ( "$1" == "" ) then
+    echo Please provide either alpha or beta as a parameter
+    exit 0
+endif
+
+set boxVer=$1
+
+set runCount=`ps aux | grep VBoxHeadless | grep 'browserbox$' | wc -l`
+if ("$runCount" != "0") then
+    echo shutting down the buildmeister\'s VM
+    VBoxManage  controlvm  browserbox acpipowerbutton
+    while (1) 
+	set runCount=`ps aux | grep VBoxHeadless | grep 'browserbox$' | wc -l`
+	if ("$runCount" == "0") then
+	     echo VM has stopped
+	     break
+	else
+	     echo VM has not stopped yet, waiting...
+	     sleep 3
+	endif
+    end
+endif
+
+set runCount=`ps aux | grep VBoxHeadless | grep 'browserbox'$boxVer'$' | wc -l`
+if ("$runCount" != "0") then
+    echo shutting down the $boxVer VM
+    VBoxManage  controlvm  browserbox$boxVer acpipowerbutton
+    while (1) 
+	set runCount=`ps aux | grep VBoxHeadless | grep 'browserbox'$boxVer'$' | wc -l`
+	if ("$runCount" == "0") then
+	     echo VM has stopped
+	     break
+	else
+	     echo VM has not stopped yet, waiting...
+	     sleep 3
+	endif
+    end
+endif
+
+echo unregistering the old $boxVer gbib
+vboxmanage unregistervm browserbox$boxVer || echo not registered
+sleep 3 # not sure if needed - unregistervm is an RPC call that might take a while
+
+echo moving the old $boxVer gbib out of the way
+rm -rf "$HOME/VirtualBox VMs/browserbox$boxVer.old"
+mv "$HOME/VirtualBox VMs/browserbox$boxVer" "$HOME/VirtualBox VMs/browserbox$boxVer.old"
+
+echo cloning the buildmeister VM into browserbox$boxVer
+vboxmanage clonevm browserbox --options keepdisknames --register --name browserbox$boxVer
+
+if ( "$1" == "beta" ) then
+    set WEBPORT=1236
+    set SSHPORT=1237
+endif
+
+if ( "$1" == "alpha" ) then
+    set WEBPORT=1238
+    set SSHPORT=1239
+endif
+
+echo changing port forwarding to $WEBPORT for port 80 and $SSHPORT in browserbox$boxVer for port 22
+vboxmanage modifyvm browserbox$boxVer --natpf1 delete "Rule 1"
+vboxmanage modifyvm browserbox$boxVer --natpf1 delete "Rule 2"
+vboxmanage modifyvm browserbox$boxVer --natpf1 "Rule 1",tcp,127.0.0.1,$WEBPORT,,80
+vboxmanage modifyvm browserbox$boxVer --natpf1 "Rule 2",tcp,127.0.0.1,$SSHPORT,,22
+
+echo switching off VRDE
+VBoxManage modifyvm browserbox$boxVer --vrde off
+
+echo booting new VM browserbox$boxVer
+VBoxHeadless -s browserbox$boxVer &

@@ -1303,6 +1303,7 @@ char *hReplaceGbdb(char* fileName)
  /* Returns a gbdb filename, potentially rewriting it according to hg.conf
   * If the settings gbdbLoc1 and gbdbLoc2 are found, try them in order, by 
   * replacing /gbdb/ with the new locations.
+  * Typically, gbdbLoc1 is /gbdb/ and gbdbLoc2 is http://hgdownload.soe.ucsc.edu/gbdb/
   * If after the replacement of gbdbLoc1 the resulting fileName does not exist,
   * gbdbLoc2 is used.
   * This function does not guarantee that the returned filename exists.

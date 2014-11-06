@@ -1,0 +1,11 @@
+track rmskJoinedBaseline
+shortLabel RepeatMasker Viz.
+longLabel Detailed Visualization of RepeatMasker Annotations
+group rep
+visibility dense
+priority 1
+spectrum on
+type bed 3 +
+maxWindowToDraw 10000000
+canPack off
+html joinedRmsk

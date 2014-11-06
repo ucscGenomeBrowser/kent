@@ -63,9 +63,9 @@ if (end > maxEnd)
     warn("chromEnd (%d) greater than chrom length (%s:%d)", end, chrom, maxEnd);
     return TRUE;
     }
-if (start >= end)
+if (start > end)
     {
-    warn("chromStart (%d) must be less than chromEnd (%s:%d)", start, chrom, end);
+    warn("chromStart (%d) greater than chromEnd (%s:%d)", start, chrom, end);
     return TRUE;
     }
 return FALSE;

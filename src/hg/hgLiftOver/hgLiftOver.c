@@ -311,7 +311,7 @@ void webDownloads()
 webNewSection("Command Line Tool");
 cgiParagraph(
 "To lift genome annotations locally on Linux systems, download the "
-"<A HREF=\"http://hgdownload.cse.ucsc.edu/admin/exe/\">" 
+"<A HREF=\"https://genome-store.ucsc.edu\">" 
 "<I>liftOver</I></A> executable and the appropriate "
 "<A HREF=\"http://hgdownload.cse.ucsc.edu/downloads.html#liftover\">"
 "chain file</A>."
@@ -578,6 +578,7 @@ int main(int argc, char *argv[])
 long enteredMainTime = clock1000();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
+setUdcCacheDir();
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 cgiExitTime("hgLiftOver", enteredMainTime);
 return 0;

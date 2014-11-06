@@ -26,8 +26,8 @@ html cons160way
 #        irows on
 #        summary strainName160waySummary
 	snpTable mafSnpStrainName160way
-#        frames strainName160wayFrames
-        frames testAllStrainFrames
+        frames strainName160wayFrames
+#        frames testAllStrainFrames
         group compGeno
         color 0, 10, 100
         altColor 0,90,10
@@ -47,3 +47,69 @@ html cons160way
         priority 100
 
 #        treeImage phylo/eboVir3_160way.png
+
+    # PhyloP conservation
+    track strainCons160wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack strainCons160way
+    viewLimits -3:0.5
+    viewLimitsMax -4.611:0.934
+
+        track strainPhyloP160way
+        subTrack strainCons160wayViewphyloP on
+        subGroups view=phyloP
+        shortLabel PhyloP
+        longLabel 158 Ebola strains and 2 Marburg strains Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -4.711 0.934
+        maxHeightPixels 100:50:11
+        viewLimits -3.107:0.934
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track strainCons160wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack strainCons160way
+
+        track strainPhastCons160way
+        subTrack strainCons160wayViewphastcons on
+        subGroups view=phastcons
+        shortLabel PhastCons
+        longLabel 158 Ebola strains and 2 Marburg strains Basewise Conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track strainCons160wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack strainCons160way
+
+        track strainPhastConsElements160way
+        subTrack strainCons160wayViewelements on
+        subGroups view=elements
+        shortLabel Cons. Elements
+        longLabel 158 Ebola strains and 2 Marburg strains Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23

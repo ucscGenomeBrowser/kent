@@ -9,9 +9,9 @@
 # file template copied from oviAri1.txt
 
 
-# Bos taurus (NCBI Project ID: 10709, Accession: GCA_000003055.3) 
+# Bos taurus (NCBI Project ID: 10709, Accession: GCA_000003055.3)
 #   by International Cow Genomics Consortium (ISGC)
-#    assembly] sequence: 
+#    assembly] sequence:
 # ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Bos_taurus/Bos_taurus_UMD_3.1/
 
 ##########################################################################
@@ -25,7 +25,7 @@
 "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Bos_taurus/Bos_taurus_UMD_3.1/*"
     # FINISHED --2011-05-02 15:20:18--
     # Downloaded: 229 files, 1.9G in 11m 53s (2.73 MB/s)
-    # Read ASSEMBLY_INFO 
+    # Read ASSEMBLY_INFO
 
     mkdir ucscChr
     # stay at genbank directory
@@ -50,19 +50,19 @@ do
     zcat ${S}/FASTA/chr${C}.fa.gz | grep -v "^>" >> ucscChr/chr${C}.fa
     gzip ucscChr/chr${C}.fa &
 done
-   # Check them with faSize 
+   # Check them with faSize
     faSize Primary_Assembly/assembled_chromosomes/FASTA/chr*.fa.gz
-    #  2660906405 bases (20740230 N's 2640166175 real 2640166175 upper 
+    #  2660906405 bases (20740230 N's 2640166175 real 2640166175 upper
     #  0 lower) in 30 sequences in 30 files
 
     faSize ucscChr/chr*.fa.gz
-    #  2660906405 bases (20740230 N's 2640166175 real 2640166175 upper 
+    #  2660906405 bases (20740230 N's 2640166175 real 2640166175 upper
     #  0 lower) in 30 sequences in 30 files
 
     # For unplaced scalfolds, named them as chrUn_xxxxxxxx
-    #   where xxxxxx is the original access id as: chrUn_GL340781.1  
+    #   where xxxxxx is the original access id as: chrUn_GL340781.1
     #   The ".1" at the end need to be filter out since
-    #   MySQL does not allow "." as part of the table name and 
+    #   MySQL does not allow "." as part of the table name and
     #   will casue problems in genbank task step later
 
 export S=Primary_Assembly/unplaced_scaffolds
@@ -79,13 +79,13 @@ zcat ${S}/FASTA/unplaced.scaf.fa.gz \
 zcat ucscChr/chrUn.fa.gz | grep "^>" | wc
    #     3286    3286   13144
 
-   # Check them with faSize 
+   # Check them with faSize
    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
-   #   9499556 bases (40 N's 9499516 real 9499516 upper 0 
+   #   9499556 bases (40 N's 9499516 real 9499516 upper 0
    #   lower) in 3286 sequences in 1 files
 
    faSize ucscChr/chrUn.fa.gz
-   #   9499556 bases (40 N's 9499516 real 9499516 upper 0 
+   #   9499556 bases (40 N's 9499516 real 9499516 upper 0
    #   lower) in 3286 sequences in 1 files
 
 #########################################################################
@@ -143,7 +143,7 @@ taxId 9913
 	-workhorse=hgwdev -bigClusterHub=swarm -noSplit bosTau6 > do.log 2>&1 &
     #   real    355m43.294s
     cat faSize.rmsk.txt
-    # 2670422299 bases (20740270 N's 2649682029 real 1370807360 upper 
+    # 2670422299 bases (20740270 N's 2649682029 real 1370807360 upper
     # 1278874669 lower) in 3317 sequences in 1 files
     # %47.89 masked total, %48.27 masked real
 
@@ -157,15 +157,15 @@ taxId 9913
         bosTau6 > do.log 2>&1 &
     #   real    13m47.346s
 
-    # Batch failed after 4 tries on 
+    # Batch failed after 4 tries on
     #   ./TrfRun.csh /hive/data/genomes/bosTau6/TrfPart/071/071.lst.bed
     # Command failed:
-    # ssh -x -o 'StrictHostKeyChecking = no' -o 'BatchMode = yes' memk 
+    # ssh -x -o 'StrictHostKeyChecking = no' -o 'BatchMode = yes' memk
     #  nice /hive/data/genomes/bosTau6/bed/simpleRepeat/run.cluster/doTrf.csh
     # 071 failed due to no input TrfPart/071/071.lst.bed
     #  which is chrM and can be ignored.
     # to continue, create an empty TrfPart/071/071.lst.bed by:
-    touch /hive/data/genomes/bosTau6/TrfPart/071/071.lst.bed 
+    touch /hive/data/genomes/bosTau6/TrfPart/071/071.lst.bed
     # run a para time > run.time on memk to get that file to exist:
     # Checking finished jobs
     # Completed: 71 of 72 jobs
@@ -183,7 +183,7 @@ taxId 9913
         -continue=filter bosTau6 > filter.log 2>&1 &
     # real	0m20.430s
 
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
     # 32390355 bases of 2649685036 (1.222%) in intersection
 
     #	add to the repeatMasker
@@ -192,7 +192,7 @@ taxId 9913
     #	safe to ignore warnings about >=13 fields
     twoBitToFa bosTau6.2bit stdout | faSize stdin > bosTau6.2bit.faSize.txt
     cat bosTau6.2bit.faSize.txt
-    # 2670422299 bases (20740270 N's 2649682029 real 1370313596 upper 
+    # 2670422299 bases (20740270 N's 2649682029 real 1370313596 upper
     #    1279368433 lower) in 3317 sequences in 1 files
     # %47.91 masked total, %48.28 masked real
 
@@ -250,7 +250,7 @@ close (FH);
     #  Loaded 2011 elements of size 8
     #	adding this many:
     wc -l bed.tab
-    #   2011 bed.tab 
+    #   2011 bed.tab
     #	starting with this many
     hgsql -e "select count(*) from gap;" bosTau6
     #	72454
@@ -263,7 +263,7 @@ close (FH);
 
 ########################################################################
 # Create kluster run files (DONE - 2011-05-10 - Chin)
-    # numerator is bosTau6 gapless bases "real" as reported by: 
+    # numerator is bosTau6 gapless bases "real" as reported by:
     featureBits -noRandom -noHap bosTau6 gap
     # 20740230 bases of 2640182513 (0.786%) in intersection
 
@@ -287,7 +287,7 @@ close (FH);
     hgsql -N \
 	-e 'select * from gap where bridge="no" order by size;' bosTau6 \
 	| sort -k7,7nr
-    #   most non-bridges gaps have size = 100, follow pig's example (5000) 
+    #   most non-bridges gaps have size = 100, follow pig's example (5000)
     #	decide on a minimum gap for this break
     gapToLift -verbose=2 -minGap=100 bosTau6 jkStuff/nonBridged.lft \
 	-bedFile=jkStuff/nonBridged.bed
@@ -331,7 +331,7 @@ bosTau6.refseq.mrna.xeno.loadDesc  = yes
     make etc-update
 
 
-# Edit src/lib/gbGenome.c to add new species.  Skipped 
+# Edit src/lib/gbGenome.c to add new species.  Skipped
 
     screen	#  control this business with a screen since it takes a while
     cd /cluster/data/genbank
@@ -423,7 +423,7 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
     # based on result of
     # hgsql -N -e "select type from ctgPos2;" bosTau6 | sort | uniq
     # W
-    # prepare the src/hg/makeDb/trackDb/cow/bosTau6/ctgPos2.html 
+    # prepare the src/hg/makeDb/trackDb/cow/bosTau6/ctgPos2.html
 
 
 ############################################################################
@@ -441,7 +441,7 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
     sed -e "s#\(extern char\* malloc\)#// \1#" cpg_lh.c > tmp.c
     mv tmp.c cpg_lh.c
     make
-    cd ../../ 
+    cd ../../
     ln -s hg3rdParty/cpgIslands/cpglh.exe
     mkdir -p hardMaskedFa
     cut -f1 ../../chrom.sizes | while read C
@@ -451,8 +451,8 @@ do
         | maskOutFa stdin hard hardMaskedFa/${C}.fa
 done
 
-    ssh swarm 
-    cd /hive/data/genomes/bosTau6/bed/cpgIsland 
+    ssh swarm
+    cd /hive/data/genomes/bosTau6/bed/cpgIsland
     mkdir results
     cut -f1 ../../chrom.sizes > chr.list
     cat << '_EOF_' > template
@@ -553,14 +553,14 @@ BASE=/cluster/data/bosTau6/bed/blastzOrnAna1.2011-05-20
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << happy emacs
-    
+
     time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
         -syntenicNet -noDbNameCheck \
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
         -chainMinScore=5000 -verbose=2 -chainLinearGap=loose > do.log 2>&1 &
     #   real     329m59.325s
 
-    # filter with doRecipBest.pl 
+    # filter with doRecipBest.pl
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         bosTau6 ornAna1 > rbest.log 2>&1
     # real    15m15.120s
@@ -593,7 +593,7 @@ TMPDIR=/scratch/tmp
     screen # use a screen to manage this multi-day job
     mkdir /hive/data/genomes/bosTau6/bed/lastzSusScr2.2011-05-24
     cd /hive/data/genomes/bosTau6/bed/lastzSusScr2.2011-05-24
-    
+
     cat << '_EOF_' > DEF
 # Pig vs. Cow
 BLASTZ_M=50
@@ -651,7 +651,7 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/mm9/bed
     ln -s  lastzBosTau6.2011-05-17 lastz.bosTau6
 
-    #   and the swap 
+    #   and the swap
     mkdir /hive/data/genomes/bosTau6/bed/blastz.mm9.swap
     cd /hive/data/genomes/bosTau6/bed/blastz.mm9.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -696,7 +696,7 @@ TMPDIR=/scratch/tmp
     cat fb.canFam2.chainBosTau6Link.txt
     # 1389712912 bases of 2384996543 (58.269%) in intersection
 
-    #   and the swap 
+    #   and the swap
     mkdir /hive/data/genomes/bosTau6/bed/blastz.canFam2.swap
     cd /hive/data/genomes/bosTau6/bed/blastz.canFam2.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -774,7 +774,7 @@ TMPDIR=/scratch/tmp
     # WARNING: hgwdev does not have /gbdb/bosTau6/bbi/quality.bw
     # WARNING: bosTau6 does not have seq
     # WARNING: bosTau6 does not have extFile
-    # 
+    #
     # WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
     # supporting and genbank tables) which tracks to assign these tables to:
     #   tableList
@@ -837,7 +837,7 @@ CREATE TABLE ucscToEnsembl (
 #############################################################################
 # LIFTOVER TO bosTau4 (DONE - 2011-10-20 - Chin)
 
-    sh hgwdev
+    ssh hgwdev
     cd /hive/data/genomes/bosTau6
     ln -s jkStuff/bosTau6.11.ooc 11.ooc
     time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
@@ -850,7 +850,7 @@ CREATE TABLE ucscToEnsembl (
 
 #############################################################################
 # LIFTOVER TO bosTau4 ( redo DONE - 2012-05-11 - Chin)
-    sh hgwdev
+    ssh hgwdev
     cd /hive/data/genomes/bosTau6
     ln -s jkStuff/bosTau6.11.ooc 11.ooc
     time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
@@ -864,7 +864,7 @@ CREATE TABLE ucscToEnsembl (
 
 #############################################################################
 # LIFTOVER TO bosTau5 (DONE - 2012-05-11 - Chin)
-    sh hgwdev
+    ssh hgwdev
     cd /hive/data/genomes/bosTau6
     ln -s jkStuff/bosTau6.11.ooc 11.ooc
     time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
@@ -878,7 +878,7 @@ CREATE TABLE ucscToEnsembl (
 
 #############################################################################
 # LIFTOVER TO bosTau7 (DONE - 2012-05-11 - Chin)
-    sh hgwdev
+    ssh hgwdev
     cd /hive/data/genomes/bosTau6
     ln -s jkStuff/bosTau6.11.ooc 11.ooc
     time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
@@ -890,6 +890,19 @@ CREATE TABLE ucscToEnsembl (
     md5sum bosTau6ToBosTau7.over.chain.gz >> md5sum.txt
     popd
 
+#############################################################################
+# LIFTOVER TO bosTau8 (DONE - 2014-10-17 - Steve)
+    ssh hgwdev
+    cd /hive/data/genomes/bosTau6
+    ln -s jkStuff/bosTau6.11.ooc 11.ooc
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         bosTau6 bosTau8 > doLiftOverToBosTau8.log 2>&1
+    # real    81m5.737s
+
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/bosTau6/liftOver/
+    md5sum bosTau6ToBosTau8.over.chain.gz >> md5sum.txt
+    popd
 
 ##############################################################################
 # SWAP mm10 LASTZ (DONE - 2012-06-19 - Chin)
@@ -948,7 +961,7 @@ CREATE TABLE ucscToEnsembl (
 # NUMTS TRACK (working 2013-02-05 - Chin)
 
 # copy and unzip
-# http://193.204.182.50/files/tracks.zip and 
+# http://193.204.182.50/files/tracks.zip and
 # http://193.204.182.50/files/other%20NumtS%20tracks.zip
 # to /hive/data/outside/NumtS/2012/tracks
 
@@ -971,4 +984,76 @@ CREATE TABLE ucscToEnsembl (
 
 
 ############################################################################
+# lastz Horse equCab2 (DONE - 2014-10-28 - Hiram)
+    mkdir /hive/data/genomes/bosTau6/bed/lastzEquCab2.2014-10-28
+    cd /hive/data/genomes/bosTau6/bed/lastzEquCab2.2014-10-28
 
+    # reusing parameters from bosTau8 vs equCab2
+     cat << '_EOF_' > DEF
+# Horse pig vs Horse
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/bosTau8.equCab2/bosTau8.equCab2.tuning.top400.txt
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+
+BLASTZ_T=2
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=50
+BLASTZ_X=880
+BLASTZ_Y=3400
+BLASTZ_Q=/hive/data/genomes/bosTau8/bed/lastzEquCab2.2014-10-27/bosTau8.equCab2.tuning.Q.txt
+#       A     C     G     T
+# A    88  -111   -31  -128
+# C  -111   100   -75   -31
+# G   -31   -75   100  -111
+# T  -128   -31  -111    88
+
+# TARGET: Cow bosTau6
+SEQ1_DIR=/hive/data/genomes/bosTau6/bosTau6.2bit
+SEQ1_LEN=/hive/data/genomes/bosTau6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=40
+SEQ1_LAP=0
+
+# QUERY: Horse equCab2
+SEQ2_DIR=/hive/data/genomes/equCab2/equCab2.2bit
+SEQ2_LEN=/hive/data/genomes/equCab2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=500
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/bosTau6/bed/lastzEquCab2.2014-10-28
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+        time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    289m0.446s
+    cat fb.bosTau6chainEquCab2Link.txt
+    #  1467364637 bases of 2649682029 (55.379%) in intersection
+
+    time (doRecipBest.pl bosTau6 equCab2 -buildDir=`pwd` -workhorse=hgwdev) \
+	> best.log 2>&1
+    # real    64m26.957s
+
+    #	and the swap
+    mkdir /hive/data/genomes/equCab2/bed/blastz.bosTau6.swap
+    cd /hive/data/genomes/equCab2/bed/blastz.bosTau6.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/bosTau6/bed/lastzEquCab2.2014-10-28/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #   real    152m48.188s
+
+    cat fb.equCab2.chainBosTau6Link.txt
+    #	1502416509 bases of 2428790173 (61.859%) in intersection
+
+    time (doRecipBest.pl equCab2 bosTau6 -buildDir=`pwd` -workhorse=hgwdev) \
+	> best.log 2>&1
+    # real    57m47.275s
+
+#########################################################################

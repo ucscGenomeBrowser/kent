@@ -318,14 +318,14 @@ void doClearIntersect(struct sqlConnection *conn)
 /* Respond to click on clear intersection. */
 {
 removeCartVars(cart, curVars, ArraySize(curVars));
-doMainPage(conn, FALSE);
+doMainPage(conn);
 }
 
 void doIntersectSubmit(struct sqlConnection *conn)
 /* Respond to submit on intersect page. */
 {
 copyCartVars(cart, nextVars, curVars, ArraySize(curVars));
-doMainPage(conn, FALSE);
+doMainPage(conn);
 }
 
 

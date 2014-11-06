@@ -23,6 +23,7 @@ static boolean noLoad = FALSE;		/* Do not load table, create tab file */
 static boolean noHistory = FALSE;	/* Do not add history table comments */
 static boolean strictTab = FALSE;	/* Separate on tabs. */
 static boolean oldTable = FALSE;	/* Don't redo table. */
+static boolean noChromInfo = FALSE;	/* don't do size checks */
 static char *pathPrefix = NULL;	/* path prefix instead of /gbdb/hg16/wib */
 static char *chromInfoDb = NULL;	/* DB for chromInfo information */
 static int maxChromNameLength = 0;	/* specify to avoid chromInfo */
@@ -42,6 +43,7 @@ static struct optionSpec optionSpecs[] = {
     {"chromInfoDb", OPTION_STRING},
     {"maxChromNameLength", OPTION_INT},
     {"tmpDir", OPTION_STRING},
+    {"noChromInfo", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -100,6 +102,8 @@ return ret;
 static unsigned chromosomeSize(char *chromosome)
 /* Return full extents of chromosome.  Warn and fill in if none. */
 {
+if (noChromInfo)
+    return 0;
 struct hashEl *el = hashLookup(chromHash,chromosome);
 
 if (el == NULL)
@@ -217,7 +221,7 @@ for (wiggle = wiggleList; wiggle != NULL; wiggle = wiggle->next)
 	verbose(3, "chrom: %s size: %u\n", chrom, size);
 	}
     valid = TRUE;
-    if (end > size)
+    if (!noChromInfo && (end > size))
 	{
 	unsigned overrun = 0;
 	unsigned dropCount = 0;
@@ -382,24 +386,27 @@ static void hgLoadWiggle(char *database, char *track,
 struct wiggleStub *wiggleList = NULL;
 int i;
 
-if (chromInfoDb)
-    chromHash = loadAllChromInfo(chromInfoDb);
-else
-    chromHash = loadAllChromInfo(database);
-
-if (verboseLevel() > 2)
+if (!noChromInfo)
     {
-    struct hashCookie cookie;
-    struct hashEl *el;
+    if (chromInfoDb)
+	chromHash = loadAllChromInfo(chromInfoDb);
+    else
+	chromHash = loadAllChromInfo(database);
 
-    cookie = hashFirst(chromHash);
-
-    verbose(3,"chrom\tsize\n");
-    while ((el = hashNext(&cookie)) != NULL)
+    if (verboseLevel() > 2)
 	{
-	unsigned size;
-	size = chromosomeSize(el->name);
-	verbose(3,"%s\t%u\n", el->name, size);
+	struct hashCookie cookie;
+	struct hashEl *el;
+
+	cookie = hashFirst(chromHash);
+
+	verbose(3,"chrom\tsize\n");
+	while ((el = hashNext(&cookie)) != NULL)
+	    {
+	    unsigned size;
+	    size = chromosomeSize(el->name);
+	    verbose(3,"%s\t%u\n", el->name, size);
+	    }
 	}
     }
 
@@ -420,6 +427,7 @@ noBin = optionExists("noBin");
 noLoad = optionExists("noLoad");
 noHistory = optionExists("noHistory");
 strictTab = optionExists("tab");
+noChromInfo = optionExists("noChromInfo");
 oldTable = optionExists("oldTable");
 pathPrefix = optionVal("pathPrefix",NULL);
 chromInfoDb = optionVal("chromInfoDb",NULL);

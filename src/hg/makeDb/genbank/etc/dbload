@@ -20,6 +20,7 @@
 #    than last load time.
 #   -grepIndexRootDir=dir - Location to build grepIndex files. overrides genbank.conf
 #    grepIndex.rootDir variable.
+#   -maxHours=n  -  only run load for n hours
 
 # errors terminate with message
 set -e
@@ -51,6 +52,8 @@ while [[ $1 == -* ]] ; do
             opts="$opts $opt" ;;
         -delayDays=*)
             delayDays=$(echo "$opt" | sed -e 's/-delayDays=//') ;;
+        -maxHours=*)
+            opts="$opts $opt" ;;
         -grepIndexRootDir=*)
             opts="$opts $opt" ;;
         -*) echo "Error: invalid option $opt" >&2
@@ -114,7 +117,7 @@ else
 fi
 
 # update databases
-nice gbDbLoadStep -maxHours=14 -verbose=${verb} $typeArg $opts -workdir=$workdir $databases
+nice gbDbLoadStep -verbose=${verb} $typeArg $opts -workdir=$workdir $databases
 
 # on success, save time load completely and build time we started with
 mv -f $lastTimeTmp $lastTime

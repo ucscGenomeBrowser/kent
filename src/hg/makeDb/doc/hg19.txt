@@ -29805,3 +29805,187 @@ EOF
 
 
 ############################################################################
+# peptideAtlas peptides mapped to the genome
+
+# Aug 2014 build
+# Build #433, based on Ensemblv75
+
+mkdir -p /hive/data/genomes/hg19/bed/peptideAtlas/2014-Aug
+cd /hive/data/genomes/hg19/bed/peptideAtlas/2014-Aug
+
+wget --no-check-certificate -c "https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptides?organism_name=homo%20sapiens&apply_action=QUERY&output_mode=tsv" -O peptideatlas_9606.tsv
+
+wget http://www.peptideatlas.org/builds/human/201408/coordinate_mapping.txt -O peptideAtlas.201408.tsv
+wc -l peptideAtlas.201408.tsv
+# 12858738 
+
+grep -v UNKNOWN peptideAtlas.201408.tsv > known.txt
+ wc -l known.txt
+# 5449240 known.txt
+
+# tripled from 2013!
+# 1396070 known.txt
+
+# 42% mapped (compared to 30% prev) -- 5.4M total mapped
+
+perl toBed.pl < known.txt > known.bed
+grep -v chrH known.bed | grep -v chrG | sed 's/chrMT/chrM/'| sort | uniq > known.clean.bed
+wc -l known.clean.bed
+# 4868641 known.clean.bed
+
+# To preview, load just the regions
+
+# bedDetail 6
+cat << 'EOF' > peptideAtlas.sql
+CREATE TABLE peptideAtlas2014 (
+    chrom varchar(255) not null,   # Reference sequence chromosome or scaffold
+    chromStart int unsigned not null,   # Start position in chromosome
+    chromEnd int unsigned not null,     # End position in chromosome
+    name varchar(255) not null, # Short Name of item
+    id varchar(255) not null,   # ID to be used in URL to link back
+    description longblob not null, # Long description of item for the details page
+    #Indices
+    INDEX(chrom, chromStart)
+);
+'EOF'
+sort -k1,1 -k2,2n known.clean.bed > known.sorted.bed
+hgLoadSqlTab hg19 peptideAtlasRegions2014 peptideAtlas.sql known.sorted.bed
+
+
+# To link up exons, we need the full database
+
+wget http://www.peptideatlas.org/builds/human/201408/atlas_build_433.mysql.gz
+hgsql '' -e 'create database peptideAtlas2014'
+zcat atlas_build_433.mysql.gz | hgsql peptideAtlas2014
+
+csh scanFull.csh | grep TABLE
+#TABLE:    peptide : 1021823
+#TABLE:    peptide_instance : 1021823
+#TABLE:    peptide_instance_search_batch : 18156629
+#TABLE:    peptide_mapping : 12821066
+
+csh getSamples.csh > samples.tab
+
+tail -n +2 hgLoadSqlTab hgFixed peptideAtlasSample433 ~/kent/src/hg/lib/peptideAtlasSample.sql stdin
+
+# sample Ids aren't correct when reloaded into the DB -- they sent me this to use instead:
+wget http://www.peptideatlas.org/builds/human/201408/peptide_instance_sample.tar.gz
+tar xvfz /peptide_instance_sample.tar.gz
+
+# exploratory
+
+hgsql -N peptideAtlas2014 -e 'select min(peptide_length), max(peptide_length) from peptide'
++------+------+
+|    7 |   83 |
++------+------+
+
+hgsql -N peptideAtlas2014 -e 'select peptide_length from peptide order by peptide_length' | textHistogram stdin -binSize=3 -minVal=7 -maxBinCount=30 -log
+  7 *********************************************************** 187407
+ 10 ************************************************************ 237387
+ 13 *********************************************************** 198221
+ 16 ********************************************************** 141932
+ 19 ******************************************************** 94676
+ 22 ***************************************************** 61945
+ 25 *************************************************** 39636
+ 28 ************************************************* 25360
+ 31 ********************************************** 14571
+ 34 ******************************************** 8632
+ 37 ***************************************** 5069
+ 40 *************************************** 2992
+ 43 ************************************ 1677
+ 46 ********************************* 1000
+ 49 ******************************* 568
+ 52 **************************** 330
+ 55 ************************* 174
+ 58 *********************** 126
+ 61 ******************* 51
+ 64 **************** 30
+ 67 *************** 20
+ 70 ********** 8
+ 73 ********* 7
+ 76  1
+ 79 *** 2
+ 82  1
+
+
+hgsql peptideAtlas2014 -e "select peptide_instance_id as peptide, matched_biosequence_id as bioseq, chromosome as chrom, start_in_chromosome as chromStart, end_in_chromosome as chromEnd, strand from peptide_mapping where chromosome='X' group by peptide, chromStart, chromEnd, strand order by peptide, chromStart, bioseq" > chrX_mappings.tab
+
+# max #mappings = 203
+
+hgsql peptideAtlas2014 -e "select peptide.peptide_accession as accession, peptide.peptide_sequence as sequence, peptide.SSRCalc_relative_hydrophobicity as hydrophobicity, peptide_instance.empirical_proteotypic_score as proteotypicScore, peptide_instance.n_samples as sampleCount from peptide, peptide_instance where peptide_instance.peptide_id=peptide.peptide_id order by peptide.peptide_accession" > peptides.tab
+
+hgsql peptideAtlas2014 -e "select peptide.peptide_accession as accession, peptide.peptide_length as length, peptide.peptide_sequence as sequence, peptide.SSRCalc_relative_hydrophobicity as hydrophobicity, peptide_instance.empirical_proteotypic_score as proteotypicScore, peptide_instance.n_samples as sampleCount from peptide, peptide_instance where peptide_instance.peptide_id=peptide.peptide_id order by peptide.peptide_accession" > peptides.len.tab
+
+wc -l peptides.tab
+#1021823 peptides.tab
+
+# create protein fasta file of sequences
+awk 'NR != 1 {printf(">%s\n%s\n", $1, $2)}' peptides.tab > peptides.fa
+
+# extract mappings with some metadata (biosequence matched (protein and gene)))
+# use number of samples where the peptide was observed as the score (to be scaled)
+# filter out patches (which we do not annotate), and contig-based mappings
+
+hgsql peptideAtlas2014 -e "select concat('chr', peptide_mapping.chromosome) as chr, peptide_mapping.start_in_chromosome-1 as chromStart, peptide_mapping.end_in_chromosome as chromEnd, peptide.peptide_accession as name, peptide_instance.n_samples as score, peptide_mapping.strand as strand, biosequence.biosequence_name as biosequence, biosequence.biosequence_gene_name as gene from peptide_mapping, peptide, peptide_instance, biosequence where peptide_mapping.chromosome not like '%PATCH' and peptide_mapping.chromosome not like '%CTG%' and peptide_mapping.chromosome not like '%TEST' and peptide_mapping.chromosome <> '0' and peptide.peptide_id=peptide_instance.peptide_id and peptide_mapping.peptide_instance_id=peptide_instance.peptide_instance_id and peptide_mapping.matched_biosequence_id=biosequence.biosequence_id order by chr, biosequence, chromStart" > mappings.atlas.bed
+
+# fix up chromsome names
+
+sed \
+    -e 's/HSCHR4_1/4_ctg9_hap1/' \
+    -e 's/HSCHR17_1/17_ctg5_hap1/' \
+    -e 's/HSCHR6_MHC_APD/6_apd_hap1/' \
+    -e 's/HSCHR6_MHC_COX/6_cox_hap2/' \
+    -e 's/HSCHR6_MHC_DBB/6_dbb_hap3/' \
+    -e 's/HSCHR6_MHC_MANN/6_mann_hap4/' \
+    -e 's/HSCHR6_MHC_MCF/6_mcf_hap5/' \
+    -e 's/HSCHR6_MHC_QBL/6_qbl_hap6/' \
+    -e 's/HSCHR6_MHC_SSTO/6_ssto_hap7/' \
+    -e 's/GL000191.1/1_gl000191_random/' \
+    -e 's/GL000194.1/4_gl000194_random/' \
+    -e 's/GL000195.1/7_gl000195_random/' \
+    -e 's/GL000201.1/9_gl000201_random/' \
+    -e 's/GL000205.1/17_gl000205_random/' \
+    -e 's/GL000209.1/19_gl000209_random/' \
+    -e 's/GL000213.1/Un_gl000213_random/' \
+    -e 's/GL000218.1/Un_gl000218_random/' \
+    -e 's/GL000219.1/Un_gl000219_random/' \
+    -e 's/GL000222.1/Un_gl000222_random/' \
+    -e 's/GL000223.1/Un_gl000223_random/' \
+    -e 's/GL000242.1/Un_gl000242_random/' \
+        mappings.atlas.bed > mappings.bed
+
+# link up exons and remove dups (peptides mapped to multiple targets at the same genomic location)
+
+splitFileByColumn mappings.bed mappings
+
+# creates mappings/chr*.bed
+
+
+# ?? blat -t=dnax -q=prot -out=pslx /hive/data/genomes/hg19/hg19.2bit/ peptides.fa peptides.psl
+# fed some sequences (test.fa) to webBlat... it finds more matches, but doesn't extend across
+# exon boundaries as well (w/ default config).  In my sample, the positions corresponding
+# to peptideAtlas positions were 100% matches.
+# NOTE: many sequences are shorter than blat's requireed 14
+
+# link exons and de-dup
+
+linkPeptideMappings.pl mappings.bed > mappings.bed12
+
+wc -l mappings.bed mappings.bed12
+#  5145435 mappings.bed
+#  1189307 mappings.bed12
+
+bedSort mappings.bed12 mappings.sorted.bed12
+hgLoadBed hg19 peptideAtlas2014 mappings.bed12
+# Read 1189306 elements of size 12 from mappings.bed12
+
+# NOTE: consider using pslMap to lift these to hg38
+
+
+# count number of peptide sequences in sample dump
+awk -F',' '{print $2}' peptide_inst*tsv | sort | uniq | wc -l
+# 1021824
+
+# count number of samples in sample dump
+awk -F',' '{print $3}' peptide_inst*tsv | sort | uniq | wc -l
+

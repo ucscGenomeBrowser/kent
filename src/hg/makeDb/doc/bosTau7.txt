@@ -991,7 +991,7 @@ done
 
 #############################################################################
 # LIFTOVER TO bosTau4 (DONE - 2012-05-11 - Chin)
-    sh hgwdev
+    ssh hgwdev
     cd /hive/data/genomes/bosTau7
     ln -s jkStuff/bosTau7.11.ooc 11.ooc
     time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
@@ -1005,7 +1005,7 @@ done
 
 #############################################################################
 # LIFTOVER TO bosTau5 (DONE - 2012-05-11 - Chin)
-    sh hgwdev
+    ssh hgwdev
     cd /hive/data/genomes/bosTau7
     ln -s jkStuff/bosTau7.11.ooc 11.ooc
     time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
@@ -1019,7 +1019,7 @@ done
 
 #############################################################################
 # LIFTOVER TO bosTau6 (DONE - 2012-05-11 - Chin)
-    sh hgwdev
+    ssh hgwdev
     cd /hive/data/genomes/bosTau7
     ln -s jkStuff/bosTau7.11.ooc 11.ooc
     time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
@@ -1029,6 +1029,20 @@ done
 
     pushd /usr/local/apache/htdocs-hgdownload/goldenPath/bosTau7/liftOver/
     md5sum bosTau7ToBosTau6.over.chain.gz >> md5sum.txt
+    popd
+
+#############################################################################
+# LIFTOVER TO bosTau8 (DONE - 2014-10-17 - Steve)
+    ssh hgwdev
+    cd /hive/data/genomes/bosTau7
+    ln -s jkStuff/bosTau7.11.ooc 11.ooc
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         bosTau7 bosTau8 > doLiftOverToBosTau8.log 2>&1
+    # real    85m39.000s
+
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/bosTau7/liftOver/
+    md5sum bosTau7ToBosTau8.over.chain.gz >> md5sum.txt
     popd
 
 #########################################################################
