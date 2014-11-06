@@ -506,7 +506,6 @@ if (!refreshOnly && userData != NULL && userData[0] != '\0')
     if (chainFile == NULL)
         errAbort("ERROR: Can't convert from %s to %s: no chain file loaded",
                                 fromDb, toDb);
-    chainFile = hReplaceGbdbMustDownload(chainFile);
 
     readLiftOverMap(chainFile, chainHash);
     lft = liftOverSniff(oldTn.forCgi);
