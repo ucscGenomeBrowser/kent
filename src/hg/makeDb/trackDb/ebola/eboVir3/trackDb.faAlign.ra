@@ -1,7 +1,7 @@
-track newSeqs
+track faAlignComp
 compositeTrack on
-shortLabel New sequences
-longLabel Pairwise alignments with default lastz parameters, newer sequences (top two alignments) from genbank
+shortLabel faAlign
+longLabel Pairwise alignments with faAlign, newer sequences (top two alignments) from genbank
 # subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 subGroup1 view Views align=Multiz_Alignments
 # dragAndDrop subTracks
@@ -10,26 +10,26 @@ priority 1
 type bed 4
 group x
 
-    track newSeqsViewalign
+    track faAlignViewalign
     shortLabel New sequences
     view align
     visibility pack
     viewUi on
-    subTrack newSeqs
+    subTrack faAlignComp
 
-        track newSequences
-        subTrack newSeqsViewalign on
-        shortLabel New sequences
-        longLabel Pairwise alignments with default lastz parameters, newer sequences (top two alignments) from genbank
+        track faAlign
+        subTrack faAlignViewalign on
+        shortLabel faAlign
+        longLabel Pairwise alignments with faAlign, newer sequences (top two alignments) from genbank
         subGroups view=align
         noInherit on
         irows on
 #        summary multiz160waySummary
-        frames newSequencesFrames
+        frames faAlignFrames
         color 0, 10, 100
         altColor 0,90,10
         mafDot on
-	snpTable newSeqSnpView
+	snpTable faAlignSnpView
 	snpMode on
         type wigMaf 0.0 1.0
         speciesCodonDefault eboVir3
