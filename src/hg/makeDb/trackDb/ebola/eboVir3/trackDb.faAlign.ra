@@ -33,8 +33,8 @@ group x
 	snpMode on
         type wigMaf 0.0 1.0
         speciesCodonDefault eboVir3
-        speciesGroups New_sequences
-        sGroup_New_sequences KM519951v1 KM655246v1 KJ660346v2 KM233118v1 KC242800v1 KC242798v1 EU224440v2 NC_002549v1 KC545393v1 NC_014372v1 AF522874v1 FJ621585v1 KC545389v1 NC_006432v1 NC_024781v1
+        speciesGroups Virus
+        sGroup_Virus KM519951v1 KM655246v1 KJ660346v2 KM233118v1 KC242800v1 KC242798v1 EU224440v2 NC_002549v1 KC545393v1 NC_014372v1 AF522874v1 FJ621585v1 KC545389v1 NC_006432v1 NC_024781v1
         itemFirstCharCase noChange
         priority 100
 
