@@ -22,6 +22,18 @@ my %varColors = ( 'CNV' => $brown,
 		  'Inversion' => $purple,
 		  'Loss' => $red,
 		  'Tandem duplication' => $blue,
+                  'complex' => $brown,
+                  'deletion' => $red,
+                  'duplication' => $blue,
+                  'gain' => $blue,
+                  'gain+loss' => $brown,
+                  'insertion' => $blue,
+                  'inversion' => $purple,
+                  'loss' => $red,
+                  'mobile element insertion' => $blue,
+                  'novel sequence insertion' => $blue,
+                  'sequence alteration' => $brown,
+                  'tandem duplication' => $blue,
 		);
 
 while (<>) {
