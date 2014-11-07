@@ -268,3 +268,5 @@ urlLabel SIB link:
 
 track sibTxGraph override
 url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=hg38&species=H.+sapiens&tromer=$$
+
+include trackDb.cloneEnd.ra
