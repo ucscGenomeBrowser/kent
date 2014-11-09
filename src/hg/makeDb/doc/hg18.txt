@@ -21407,58 +21407,63 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
 # 13107400	Inversion  (200,0,200)
 # 2/22/11 color change (Bug #2917): swap blue and red; green -> brown
 # Old DGV format is obsolete; see the following section.
-
+_EOF_
 #######################################################################
-# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 09/13/13 angie)
-    # Beta last updated 2/11/13
-    # DGV is back out of beta, and has added some columns again for the 7/2013
+# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 11/07/14 angie)
+# previously done 9/13/13 #11200
+    # Beta last updated 2/11/13 #9401
+    # 9/13/13: DGV is back out of beta, and has added some columns again for the 7/2013
     # public release.  They have also requested that we make a composite track
     # with subtracks for supporting variants and merged variants.
     set today = `date +%y%m%d`
     mkdir -p /hive/data/genomes/hg18/bed/dgv/$today
     cd /hive/data/genomes/hg18/bed/dgv/$today
-    wget http://dgv.tcag.ca/dgv/docs/NCBI36_hg18_variants_2013-07-23.txt
-    wget http://dgv.tcag.ca/dgv/docs/NCBI36_hg18_supportingvariants_2013-07-23.txt
+    set release = 2014-10-16
+    wget http://dgv.tcag.ca/dgv/docs/NCBI36_hg18_variants_$release.txt
+    wget http://dgv.tcag.ca/dgv/docs/NCBI36_hg18_supportingvariants_$release.txt
     # These are the latest columns; if any changes, update translateDgvPlus.pl:
     head -1 NCBI36_hg18*.txt
-#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription       genes   samples
+#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription  genes   samples
     # Eyeball the categories of variants:
-    cut -f 5,6 NCBI36_hg18_supportingvariants_2013-07-23.txt  | sort | uniq -c | head -100
-#  24907 CNV     CNV
-#   1054 CNV     Complex
-# 166860 CNV     Deletion
-#  17052 CNV     Duplication
-# 125679 CNV     Gain
-#   2431 CNV     Gain+Loss
-# 111866 CNV     Insertion
-# 254257 CNV     Loss
-#      2 OTHER   Complex
-#   2351 OTHER   Inversion
-#   7531 OTHER   Tandem duplication
+    cut -f 5,6 NCBI36_hg18_supportingvariants_$release.txt  | sort | uniq -c | head -100
+# 175225 CNV     deletion
+# 153007 CNV     duplication
+# 298939 CNV     gain
+#   4222 CNV     gain+loss
+#  73225 CNV     insertion
+# 786043 CNV     loss
+#  48428 CNV     mobile element insertion
+#   9066 CNV     novel sequence insertion
+#   7825 CNV     tandem duplication
+#    512 OTHER   complex
+#   2504 OTHER   inversion
+#   3709 OTHER   sequence alteration
 #      1 varianttype     variantsubtype
-    cut -f 5,6 NCBI36_hg18_variants_2013-07-23.txt | sort | uniq -c | head -100
-#   2195 CNV     CNV
-#   3363 CNV     Complex
-#  23704 CNV     Deletion
-#    672 CNV     Duplication
-#  24904 CNV     Gain
-#   3890 CNV     Gain+Loss
-#  24164 CNV     Insertion
-#  64245 CNV     Loss
-#    710 OTHER   Complex
-#   1159 OTHER   Inversion
+    cut -f 5,6 NCBI36_hg18_variants_$release.txt | sort | uniq -c | head -100
+#  29453 CNV     deletion
+#  19549 CNV     duplication
+#  26384 CNV     gain
+#   5779 CNV     gain+loss
+#  25399 CNV     insertion
+#  69600 CNV     loss
+#   4156 CNV     mobile element insertion
+#   8976 CNV     novel sequence insertion
+#    516 CNV     tandem duplication
+#    469 OTHER   complex
+#   1341 OTHER   inversion
+#   2001 OTHER   sequence alteration
 #      1 varianttype     variantsubtype
 
     ~/kent/src/hg/utils/automation/translateDgvPlus.pl \
-      NCBI36_hg18_supportingvariants_2013-07-23.txt > dgvSupporting.bed
+      NCBI36_hg18_supportingvariants_$release.txt > dgvSupporting.bed
     ~/kent/src/hg/utils/automation/translateDgvPlus.pl \
-      NCBI36_hg18_variants_2013-07-23.txt > dgvMerged.bed
+      NCBI36_hg18_variants_$release.txt > dgvMerged.bed
     hgLoadBed hg18 dgvSupporting dgvSupporting.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 713990 elements of size 22 from dgvSupporting.bed
+#Read 1562705 elements of size 22 from dgvSupporting.bed
     hgLoadBed hg18 dgvMerged dgvMerged.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 149006 elements of size 22 from dgvMerged.bed
+#Read 193623 elements of size 22 from dgvMerged.bed
 
 
 ############################################################################

@@ -891,3 +891,57 @@ EOF
 
 
 ##############################################################################
+# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 11/7/14 angie)
+# Redmine #14188
+    set today = `date +%y%m%d`
+    mkdir -p /hive/data/genomes/hg38/bed/dgv/$today
+    cd /hive/data/genomes/hg38/bed/dgv/$today
+    set release = 2014-10-16
+    wget http://dgv.tcag.ca/dgv/docs/GRCh38_hg38_variants_$release.txt
+    wget http://dgv.tcag.ca/dgv/docs/GRCh38_hg38_supportingvariants_$release.txt
+    # These are the latest columns; if any changes, update translateDgvPlus.pl:
+    head -1 GRCh38_hg38*.txt
+#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription  genes   samples
+    # Eyeball the categories of variants:
+    cut -f 5,6 GRCh38_hg38_supportingvariants_$release.txt  | sort | uniq -c | head -100
+#1849011 CNV     deletion
+# 151324 CNV     duplication
+# 291997 CNV     gain
+#   4119 CNV     gain+loss
+#  73327 CNV     insertion
+# 774842 CNV     loss
+#  48428 CNV     mobile element insertion
+#   9063 CNV     novel sequence insertion
+#   7827 CNV     tandem duplication
+#    487 OTHER   complex
+#   2262 OTHER   inversion
+#   3696 OTHER   sequence alteration
+#      1 varianttype     variantsubtype
+
+    cut -f 5,6 GRCh38_hg38_variants_$release.txt | sort | uniq -c | head -100
+#  89091 CNV     deletion
+#  21081 CNV     duplication
+#  26220 CNV     gain
+#   5644 CNV     gain+loss
+#  25552 CNV     insertion
+#  69253 CNV     loss
+#   4156 CNV     mobile element insertion
+#   8973 CNV     novel sequence insertion
+#    517 CNV     tandem duplication
+#    456 OTHER   complex
+#   1275 OTHER   inversion
+#   1992 OTHER   sequence alteration
+#      1 varianttype     variantsubtype
+    ~/kent/src/hg/utils/automation/translateDgvPlus.pl \
+      GRCh38_hg38_supportingvariants_$release.txt > dgvSupporting.bed
+    ~/kent/src/hg/utils/automation/translateDgvPlus.pl \
+      GRCh38_hg38_variants_$release.txt > dgvMerged.bed
+    hgLoadBed hg38 dgvSupporting dgvSupporting.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
+#Read 3216383 elements of size 22 from dgvSupporting.bed
+    hgLoadBed hg38 dgvMerged dgvMerged.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
+#Read 254210 elements of size 22 from dgvMerged.bed
+
+
+##############################################################################
