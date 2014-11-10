@@ -30345,3 +30345,13 @@ EOF
 
 
 ##############################################################################
+# UniProt annotations (DONE 11/10/14 max) RM 13686
+# 
+# the uniprot parser is part of the publications pipeline, see github.com/maximilianh/pubMunch
+~max/projects/pubs/tools/pubParseDb uniprot 9606
+~/kent/src/hg/utils/uniprotMutations/makeUniProtToHg.sh hg19
+uniprotLift 9606 hg19 uniProtTohg19.psl 
+hgBbiDbLink hg19 spStruct /gbdb/hg19/bbi/spMut.bb 
+hgBbiDbLink hg19 spStruct /gbdb/hg19/bbi/spStruct.bb
+hgBbiDbLink hg19 spAnnot /gbdb/hg19/bbi/spAnnot.bb
+##############################################################################
