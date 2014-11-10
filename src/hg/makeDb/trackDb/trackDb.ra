@@ -2615,7 +2615,7 @@ group genes
 type bed 12
 color 20,0,250
 url http://pfam.sanger.ac.uk/family/$$
-
+release beta,public
 
 track numtSeq2012
 compositeTrack on
@@ -2757,6 +2757,14 @@ compositeTrack on
         itemRgb on
         urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
         mouseOverField comments
+
+        track ucscGenePfam
+        shortLabel Pfam in UCSC Gene
+        longLabel Pfam Domains in UCSC Genes
+        group genes
+        type bed 12
+        color 20,0,250
+        url http://pfam.sanger.ac.uk/family/$$
 
 searchTable ucscToINSDC
 shortCircuit 1
