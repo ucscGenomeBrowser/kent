@@ -2761,6 +2761,7 @@ compositeTrack on
         track ucscGenePfam
         shortLabel Pfam in UCSC Gene
         longLabel Pfam Domains in UCSC Genes
+        parent spUniprot
         group genes
         type bed 12
         color 20,0,250
