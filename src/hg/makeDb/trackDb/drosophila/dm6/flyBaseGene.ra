@@ -1,0 +1,25 @@
+track flyBaseGene
+shortLabel FlyBase Genes
+longLabel FlyBase Protein-Coding Genes
+group genes
+priority 34
+visibility pack
+color 0,100,180
+type genePred flyBaseGenePep
+
+track flyBaseNoncoding
+shortLabel FB Noncoding
+longLabel FlyBase Noncoding Genes
+group genes
+priority 34.1
+visibility pack
+color 30,130,210
+type bed 12
+
+searchTable flyBaseGene
+searchType genePred
+searchPriority 100
+
+searchTable flyBaseNoncoding
+searchType bed
+searchPriority 100
