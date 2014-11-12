@@ -2615,7 +2615,7 @@ group genes
 type bed 12
 color 20,0,250
 url http://pfam.sanger.ac.uk/family/$$
-
+release beta,public
 
 track numtSeq2012
 compositeTrack on
@@ -2726,15 +2726,49 @@ urls variationId="http://web.expasy.org/variant_pages/$$.html" uniProtId="http:/
 mouseOverField comments
 noScoreFilter on
 
-track spAnnot
-shortLabel UniProt Annotations
-longLabel UniProt/SwissProt Protein Annotations
+track spUniprot
+shortLabel UniProt
+longLabel UniProt/SwissProt Annotations
 group genes
 visibility hide
 type bigBed 12 +
 itemRgb on
-urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
-mouseOverField comments
+release alpha
+compositeTrack on
+
+        track spAnnot
+        shortLabel UniProt Annotations
+        longLabel UniProt/SwissProt Protein Annotations
+        parent spUniprot
+        group genes
+        visibility hide
+        type bigBed 12 +
+        itemRgb on
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+        mouseOverField comments
+        release alpha
+
+        track spStruct
+        shortLabel UniProt Structure
+        longLabel UniProt/SwissProt Protein Primary/Secondary Structure Annotations
+        parent spUniprot
+        group genes
+        visibility hide
+        type bigBed 12 +
+        itemRgb on
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+        mouseOverField comments
+        release alpha
+
+        track ucscGenePfam
+        shortLabel Pfam in UCSC Gene
+        longLabel Pfam Domains in UCSC Genes
+        parent spUniprot
+        group genes
+        type bed 12
+        color 20,0,250
+        url http://pfam.sanger.ac.uk/family/$$
+        release alpha
 
 searchTable ucscToINSDC
 shortCircuit 1

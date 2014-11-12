@@ -31,6 +31,9 @@
 #define hgHubDataText      "hubUrl"
 /* name of cgi variable containing new hub name */
 
+#define hgHubDataClearText      "hubClear"
+/* name of cgi variable containing new hub name */
+
 #define hubTrackPrefix "hub_"
 /* The names of all hub tracks begin with this.  Use in cart. */
 

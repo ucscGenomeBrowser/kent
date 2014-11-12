@@ -190,7 +190,7 @@ dragAndDrop on
 
     track cloneEndsJCVICorielleCOR2A34000CLONEEND
     shortLabel JCVI / Corielle / COR2A / 34000 / CLONEEND
-    longLabel Center: JCVI, Project: Corielle, Library: COR2A, Avg. Size: 33 kbp, 571295 Clones
+    longLabel NHGRI-HUMAN-CORIELLE-DNA_CORIELL-02A-F-39-40KB, Center: JCVI, Project: Corielle, Library: COR2A, Avg. Size: 33 kbp, 571295 Clones
     visibility dense
     type bed 6 +
     color 0,0,0
@@ -214,7 +214,7 @@ dragAndDrop on
 
     track cloneEndsABCNA18956ABC940000CLONEEND
     shortLabel ABC / NA18956 / ABC9 / 40000 / CLONEEND
-    longLabel Center: ABC, Project: NA18956, Library: ABC9, Avg. Size: 38 kbp, 847598 Clones
+    longLabel Agencourt human fosmid library 9, Center: ABC, Project: NA18956, Library: ABC9, Avg. Size: 38 kbp, 847598 Clones
     visibility dense
     type bed 6 +
     color 0,0,0
@@ -226,7 +226,7 @@ dragAndDrop on
 
     track cloneEndsJCVICorielleCOR0234000CLONEEND
     shortLabel JCVI / Corielle / COR02 / 34000 / CLONEEND
-    longLabel Center: JCVI, Project: Corielle, Library: COR02, Avg. Size: 33 kbp, 158905 Clones
+    longLabel NHGRI-HUMAN-CORIELLE-DNA_CORIELL-02-F-39-40KB, Center: JCVI, Project: Corielle, Library: COR02, Avg. Size: 33 kbp, 158905 Clones
     visibility dense
     type bed 6 +
     color 0,0,0
@@ -250,7 +250,7 @@ dragAndDrop on
 
     track cloneEndsWUGSCHHS080420ABC1640000CLONEEND
     shortLabel WUGSC / H_HS-08-04-20 / ABC16 / 40000 / CLONEEND
-    longLabel Center: WUGSC, Project: H_HS-08-04-20, Library: ABC16, Avg. Size: 36 kbp, 35420 Clones
+    longLabel Agencourt human fosmid library 16, Center: WUGSC, Project: H_HS-08-04-20, Library: ABC16, Avg. Size: 36 kbp, 35420 Clones
     visibility dense
     type bed 6 +
     color 0,0,0
@@ -262,7 +262,7 @@ dragAndDrop on
 
     track cloneEndsWUGSCHHS080427ABC1640000CLONEEND
     shortLabel WUGSC / H_HS-08-04-27 / ABC16 / 40000 / CLONEEND
-    longLabel Center: WUGSC, Project: H_HS-08-04-27, Library: ABC16, Avg. Size: 36 kbp, 24007 Clones
+    longLabel Agencourt human fosmid library 16, Center: WUGSC, Project: H_HS-08-04-27, Library: ABC16, Avg. Size: 36 kbp, 24007 Clones
     visibility dense
     type bed 6 +
     color 0,0,0
@@ -274,7 +274,7 @@ dragAndDrop on
 
     track cloneEndsABCNA18517ABC740000CLONEEND
     shortLabel ABC / NA18517 / ABC7 / 40000 / CLONEEND
-    longLabel Center: ABC, Project: NA18517, Library: ABC7, Avg. Size: 36 kbp, 751574 Clones
+    longLabel Agencourt human fosmid library 7, Center: ABC, Project: NA18517, Library: ABC7, Avg. Size: 36 kbp, 751574 Clones
     visibility dense
     type bed 6 +
     color 0,0,0
@@ -286,7 +286,7 @@ dragAndDrop on
 
     track cloneEndsABCNA18507ABC840000CLONEEND
     shortLabel ABC / NA18507 / ABC8 / 40000 / CLONEEND
-    longLabel Center: ABC, Project: NA18507, Library: ABC8, Avg. Size: 35 kbp, 1332740 Clones
+    longLabel Agencourt human fosmid library 8, Center: ABC, Project: NA18507, Library: ABC8, Avg. Size: 35 kbp, 1332740 Clones
     visibility dense
     type bed 6 +
     color 0,0,0
@@ -322,7 +322,7 @@ dragAndDrop on
 
     track cloneEndsABCNA19240ABC1040000CLONEEND
     shortLabel ABC / NA19240 / ABC10 / 40000 / CLONEEND
-    longLabel Center: ABC, Project: NA19240, Library: ABC10, Avg. Size: 40 kbp, 79769 Clones
+    longLabel Agencourt human fosmid library 10, Center: ABC, Project: NA19240, Library: ABC10, Avg. Size: 40 kbp, 79769 Clones
     visibility dense
     type bed 6 +
     color 0,0,0
@@ -334,7 +334,7 @@ dragAndDrop on
 
     track cloneEndsABCNA12156ABC1440000WGS
     shortLabel ABC / NA12156 / ABC14 / 40000 / WGS
-    longLabel Center: ABC, Project: NA12156, Library: ABC14, Avg. Size: 39 kbp, 855136 Clones
+    longLabel Agencourt human fosmid library 14, Center: ABC, Project: NA12156, Library: ABC14, Avg. Size: 39 kbp, 855136 Clones
     visibility dense
     type bed 6 +
     color 0,0,0
@@ -346,7 +346,7 @@ dragAndDrop on
 
     track cloneEndsABCNA19129ABC1340000WGS
     shortLabel ABC / NA19129 / ABC13 / 40000 / WGS
-    longLabel Center: ABC, Project: NA19129, Library: ABC13, Avg. Size: 38 kbp, 852743 Clones
+    longLabel Agencourt human fosmid library 13, Center: ABC, Project: NA19129, Library: ABC13, Avg. Size: 38 kbp, 852743 Clones
     visibility dense
     type bed 6 +
     color 0,0,0
@@ -370,7 +370,7 @@ dragAndDrop on
 
     track cloneEndsABCNA12878ABC1240000WGS
     shortLabel ABC / NA12878 / ABC12 / 40000 / WGS
-    longLabel Center: ABC, Project: NA12878, Library: ABC12, Avg. Size: 38 kbp, 842078 Clones
+    longLabel Agencourt human fosmid library 12, Center: ABC, Project: NA12878, Library: ABC12, Avg. Size: 38 kbp, 842078 Clones
     visibility dense
     type bed 6 +
     color 0,0,0
@@ -382,7 +382,7 @@ dragAndDrop on
 
     track cloneEndsABCNA18555ABC1140000WGS
     shortLabel ABC / NA18555 / ABC11 / 40000 / WGS
-    longLabel Center: ABC, Project: NA18555, Library: ABC11, Avg. Size: 39 kbp, 775450 Clones
+    longLabel Agencourt human fosmid library 11, Center: ABC, Project: NA18555, Library: ABC11, Avg. Size: 39 kbp, 775450 Clones
     visibility dense
     type bed 6 +
     color 0,0,0
@@ -394,7 +394,7 @@ dragAndDrop on
 
     track cloneEndsABCNA19240ABC1040000WGS
     shortLabel ABC / NA19240 / ABC10 / 40000 / WGS
-    longLabel Center: ABC, Project: NA19240, Library: ABC10, Avg. Size: 40 kbp, 765366 Clones
+    longLabel Agencourt human fosmid library 10, Center: ABC, Project: NA19240, Library: ABC10, Avg. Size: 40 kbp, 765366 Clones
     visibility dense
     type bed 6 +
     color 0,0,0
@@ -418,7 +418,7 @@ dragAndDrop on
 
     track cloneEndsWUGSC197000CLONEEND
     shortLabel WUGSC / 197000 / CLONEEND
-    longLabel Center: WUGSC, Various libraries, Avg. Size: 204 kbp, 90537 Clones
+    longLabel The CHORI-17 BAC Library from a hydatidiform (haploid) mole, Center: WUGSC, Avg. Size: 204 kbp, 90537 Clones
     visibility dense
     type bed 6 +
     color 0,0,0
@@ -466,7 +466,7 @@ dragAndDrop on
 
     track cloneEndsGENBANKCTD
     shortLabel GENBANK / CTD
-    longLabel Center: GENBANK, Library: CTD, Avg. Size: 143 kbp, 116616 Clones
+    longLabel CalTech human BAC library D, Center: GENBANK, Library: CTD, Avg. Size: 143 kbp, 116616 Clones
     visibility dense
     type bed 6 +
     color 0,0,0
@@ -490,7 +490,7 @@ dragAndDrop on
 
     track cloneEndsGENBANKRP11
     shortLabel GENBANK / RP11
-    longLabel Center: GENBANK, Library: RP11, Avg. Size: 187 kbp, 99307 Clones
+    longLabel RPCI human BAC library 11, Center: GENBANK, Library: RP11, Avg. Size: 187 kbp, 99307 Clones
     visibility dense
     type bed 6 +
     color 0,0,0

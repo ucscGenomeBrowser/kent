@@ -1,7 +1,6 @@
 #!/usr/bin/env python2.7
 # a script to lift uniprot mutations/annotations created by the publications uniprot parser
-# to a DB and create three bigbed files for them:
-# one for structures, one for mutations, one for other annotations
+# to a DB and create two bigbed files for them
 
 from os.path import join, isfile
 from os import system
@@ -145,18 +144,37 @@ def makeBedLine(mut, bed, isMut):
         bed[8] = "0,0,100"
     else:
         bed[3] = mut.shortFeatType
+        if mut.featType in useComment:
+            bed[3] = mut.comment
+
         if mut.featType=="signal peptide":
             bed[3] = "Signal peptide"
         if mut.featType=="lipid moiety-binding region":
             bed[3] = "Lipidation"
         if mut.featType=="transmembrane region":
             bed[3] = "Transmembrane"
-        if mut.featType in useComment:
-            bed[3] = mut.comment
+            
+        if mut.comment=="Nuclear localization signal":
+            bed[3] = "Nuclear loc"
         if mut.comment=="Involved in receptor recognition and/or post-binding events":
             bed[3] = "Recept recog"
+        if mut.comment=="Fibronectin type-III":
+            bed[3] = "FibronectIII"
+
+        # more general rules
+        if mut.comment.startswith("Zinc finger protein "):
+            bed[3] = mut.comment.replace("Zinc finger protein ", "ZF-")
+        if mut.comment.startswith("Necessary for the"):
+            bed[3] = mut.comment.replace("Necessary for the ", "")
+        if mut.comment.startswith("Interaction with "):
+            bed[3] = mut.comment.replace("Interaction with ", "Int:")
+        if mut.comment.startswith("Involved in the"):
+            bed[3] = mut.comment.replace("Involved in the ", "")
+        if mut.comment.startswith("Required for "):
+            bed[3] = mut.comment.replace("Required for ", "")
         if mut.comment.startswith("Cleavage; by host "):
             bed[3] = "Cleave:"+mut.comment.split()[-1]
+
 
         if bed[3] == "Intrinsically disordered":
             bed[3] = "Disordered"
@@ -249,12 +267,20 @@ if __name__ == '__main__':
     print "writing nucleotide lengths of %s to %s" % (uniprotFa, "work/chromSizes")
     cmd = "faSize %s -detailed | gawk '{$2=$2*3; print}'> work/chromSizes" % uniprotFa
     run(cmd)
+
+    # keep protein lengths for filtering later, we'll remove everything that 
+    # covers the whole protein
+    seqSizes = {}
+    for line in open("work/chromSizes"):
+        seq, size = line.rstrip("\n").split()
+        seqSizes[seq] = int(size)/3
+        
     # get uniprot IDs 
     speciesAccs = set([line.split()[0] for line in open("work/chromSizes")])
     print "got %d accessions" % len(speciesAccs)
 
     # read data, write bed to file
-    # this annotates mutations on the protein sequence
+    # this annotates in protein coordinates
     print "converting tab to bed"
     ofh = open("work/temp.bed", "w")
     uniProtMutFname = join(options.uniprotDir, "uniprot.%s.mut.tab" % taxonId)
@@ -265,6 +291,12 @@ if __name__ == '__main__':
         if options.filterAnnots and mut.featType in removeTypes:
             continue
         mutName = mut.featType.replace(" ", "_")+":"+mut.acc+":"+mut.origAa+mut.begin+mut.mutAa
+
+        # remove annotations that cover the whole protein, probably not very useful
+        #print mut.begin, mut.end, mut.acc, seqSizes[mut.acc]
+        if int(mut.begin)==1 and int(mut.end)==int(seqSizes[mut.acc])+1:
+            continue
+
         mutPos = 3*(int(mut.begin)-1)
         mutPosEnd = 3*(int(mut.end)-1)
         if mutName not in mutData:

@@ -935,6 +935,81 @@ macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
 
+track snp142Common
+shortLabel Common SNPs(142)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 142) Found in >= 1% of Samples
+group varRep
+visibility dense
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+snpSeq snp142Seq
+snpExceptionDesc snp142ExceptionDesc
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+chimpOrangMacOrthoTable snp142OrthoPt4Pa2Rm3
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp142CodingDbSnp,
+priority 1
+
+track snp142Flagged
+shortLabel Flagged SNPs(142)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 142) Flagged by dbSNP as Clinically Assoc
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp142Seq
+snpExceptionDesc snp142ExceptionDesc
+defaultGeneTracks knownGene
+type bed 6 +
+chimpOrangMacOrthoTable snp142OrthoPt4Pa2Rm3
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp142CodingDbSnp,
+
+track snp142Mult
+shortLabel Mult. SNPs(142)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 142) That Map to Multiple Genomic Loci
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+snpSeq snp142Seq
+snpExceptionDesc snp142ExceptionDesc
+defaultGeneTracks knownGene
+defaultMaxWeight 3
+maxWindowToDraw 10000000
+type bed 6 +
+chimpOrangMacOrthoTable snp142OrthoPt4Pa2Rm3
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp142CodingDbSnp,
+
+track snp142
+shortLabel All SNPs(142)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 142)
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+chimpOrangMacOrthoTable snp142OrthoPt4Pa2Rm3
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp142CodingDbSnp,
+
 track hgdpGeo
 shortLabel HGDP Allele Freq
 longLabel Human Genome Diversity Project SNP Population Allele Frequencies
@@ -1207,7 +1282,24 @@ exonArrows off
 urlLabel DGV Browser and Report:
 url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
 coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
+dataVersion October 16, 2014
+release alpha
+
+track dgvPlus
+compositeTrack on
+shortLabel DGV Struct Var
+longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
+group varRep
+visibility hide
+itemRgb on
+type bed 9 +
+noScoreFilter .
+exonArrows off
+urlLabel DGV Browser and Report:
+url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
+coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
 dataVersion July 23, 2013
+release beta,public
 
     track dgvMerged
     parent dgvPlus
@@ -4221,6 +4313,38 @@ searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9868
+padding 250
+
+searchTable snp142Common
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9861
+padding 250
+
+searchTable snp142Flagged
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9862
+padding 250
+
+searchTable snp142Mult
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9863
+padding 250
+
+searchTable snp142
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9864
 padding 250
 
 include cloneEnd.trackDb.ra

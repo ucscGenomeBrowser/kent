@@ -1,37 +1,30 @@
 <H2>Description</H2>
-This track depicts gaps in the draft assembly (Jan. 2014, Berkeley Drosophila Genome Project)
-of the $organism genome.
-
-  *** Developer: remove this statement if no future assemblies are expected:
-
-Many of these gaps &mdash; with the
-exception of intractable heterochromatic gaps &mdash; may be closed during the
-finishing process.
+<P>
+This track shows the gaps in the Aug. 2014 $organism genome assembly.
+</P>
+<P>
+Genome assembly procedures are covered in the NCBI
+<A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
+TARGET=_blank>assembly documentation</A>.<BR>
+NCBI also provides
+<A HREF="http://www.ncbi.nlm.nih.gov/assembly/202931"
+TARGET="_blank">specific information about this assembly</A>.
+</P>
+<P>
+The definition of the gaps in this assembly is from the
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/dm6/bigZips/dm6.agp.gz"
+TARGET=_blank>AGP file</A> delivered with the sequence.  The NCBI document
+<A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/agp/AGP_Specification.shtml"
+TARGET=_blank>AGP Specification</A> describes the format of the AGP file.
+</P>
 <P>
 Gaps are represented as black boxes in this track.
 If the relative order and orientation of the contigs on either side
-of the gap is known, it is a <em>bridged</em> gap and a white line is drawn 
-through the black box representing the gap.
+of the gap is supported by read pair data, 
+it is a <em>bridged</em> gap and a white line is drawn 
+through the black box representing the gap. 
 </P>
-<P>
-This assembly was sequenced with paired reads taken from
-
-  *** Developer: check if this is accurate:
-
-plasmids and fosmids of various sizes.
-
-Overlapping reads were merged into contigs,
-and pairing information was then used to join the contigs into scaffolds.
-The gap sizes are estimated from the size of the 
-
-plasmids and fosmids,
-
-with a minimum gap size of 20.
-</P>
-<P></P>
-<P>This assembly contains the following types of gaps:
+<P>This assembly contains the following principal types of gaps:
 <UL>
-<LI><B>Contig</B> - gaps of size 20 to 50000.
-<LI><B>Scaffold</B> - gaps greater than 50000 in size.
-</UL>
-</P>
+<LI><B>other</B> - gaps added at UCSC to annotate strings of <em>N</em>s that were not marked in the AGP file (count: 572; size range: 10 - 53,860 bases)</LI>
+</UL></P>
