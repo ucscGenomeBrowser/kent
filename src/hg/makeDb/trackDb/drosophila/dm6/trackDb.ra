@@ -34,6 +34,8 @@ visibility hide
 altColor 200,150,150
 type bed 4 +
 
+track refGene override
+visibility pack
 
 include trackDb.27way.ra
 include flyBaseGene.ra alpha
