@@ -608,6 +608,21 @@ if (sqlTableExists(conn, "knownCanonical"))
 return foundIt;
 }
 
+
+static int hgPosCmpCanonical(const void *vhg1, const void *vhg2)
+// Compares two hgPos structs and returns an integer
+{
+const struct hgPos *hg1 = *((struct hgPos**)vhg1);
+const struct hgPos *hg2 = *((struct hgPos**)vhg2);
+int diff = trixSearchResultCmp(&hg1->tp->tsr, &hg2->tp->tsr);
+if (diff == 0)
+    {
+    diff = (hg2->canonical - hg1->canonical);
+    }
+return diff;
+}
+
+
 static void addKnownGeneItems(struct hgPosTable *table,
 	struct trixSearchResult *tsrList, struct sqlConnection *conn, struct sqlConnection *conn2)
 /* Convert tsrList to posList, and hang posList off of table. */
@@ -623,7 +638,7 @@ static void addKnownGeneItems(struct hgPosTable *table,
 struct dyString *dy = dyStringNew(0);
 struct trixSearchResult *tsr;
 struct hash *hash = hashNew(16);
-struct hgPos *posList = NULL, *pos; // *canonicalPos = NULL;
+struct hgPos *pos, *posList = NULL;
 struct tsrPos *tpList = NULL, *tp;
 struct sqlResult *sr;
 char **row;
@@ -657,7 +672,9 @@ for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
         dyStringAppendC(dy, ',');
     }
 dyStringAppend(dy, ")");
+
 sr = sqlGetResult(conn, dy->string);
+
 while ((row = sqlNextRow(sr)) != NULL)
     {
     tp = hashFindVal(hash, row[0]);
@@ -667,6 +684,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     pos->chrom = cloneString(row[1]);
     pos->chromStart = sqlUnsigned(row[2]);
     pos->chromEnd = sqlUnsigned(row[3]);
+    pos->tp = tp;
     slAddHead(&tp->posList, pos);
     }
 sqlFreeResult(&sr);
@@ -682,9 +700,9 @@ for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
         dyStringAppendC(dy, ',');
     }
 dyStringAppend(dy, ")");
+
 sr = sqlGetResult(conn, dy->string);
 
-// Store all canonical hgPos in a linked list
 while ((row = sqlNextRow(sr)) != NULL)
     {
     tp = hashFindVal(hash, row[0]);
@@ -693,13 +711,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     for (pos = tp->posList; pos != NULL; pos = pos->next)
         {
 	char nameBuf[256];
-	//char nameBuf2[256];
 	safef(nameBuf, sizeof(nameBuf), "%s (%s)", row[1], row[0]);
 	pos->name = cloneString(nameBuf);
 	if (isCanonical(conn2,row[0]))
 	    {
-	    //safef(nameBuf2, sizeof(nameBuf2), "Canonical: %s", nameBuf);
-            //pos->name = cloneString(nameBuf2);
 	    pos->canonical = TRUE;
 	    }
 	else{
@@ -714,48 +729,15 @@ sqlFreeResult(&sr);
 /* Hang all pos onto table. */
 for (tp = tpList; tp != NULL; tp = tp->next)
     {
-    struct hgPos *next, *canonicalList = NULL;
+    struct hgPos *next;
     for (pos = tp->posList; pos != NULL; pos = next)
         {
 	next = pos->next;
 	slAddHead(&posList, pos);
-	//uglyAbort("%d", pos->canonical);
-        if (pos->canonical)
-	    {
-	    //uglyAbort("inside the if statement");
-	    //slAddHead(&canonicalList, pos);
-	    }
 	}
-    //uglyAbort("%i",slCount(tp->posList));
-    /* Pull all canonical genes to the top of the list */	
-    for (pos = canonicalList ; pos != NULL; pos = next)
-        {
-	next = pos->next;
-	slRemoveEl(&posList, pos);
-	slAddHead(&posList, pos);
-	}
-    	
     }
 
-#ifdef OLD
-/* Go through list of canoncial genes
- * Put them at the top of posList. */
-struct hgPos *next, *canonicalPos = NULL;
-for (canonicalPos = canonicalList; canonicalPos!= NULL; canonicalPos = next)
-    { 
-    uglyAbort("Starting the loop to move canonicals up");
-    next = canonicalPos->next;
-    slRemoveEl(&posList, canonicalPos);
-    slAddHead(&posList, canonicalPos);
-    }
-/* Move canonical to top of list */
-if (canonicalPos != NULL)
-    {
-    slRemoveEl(&posList, canonicalPos);
-    slAddHead(&posList, canonicalPos);
-    }
-#endif /* OLD */
-
+slSort(&posList, hgPosCmpCanonical);
 table->posList = posList;
 
 hashFree(&hash);
@@ -1328,21 +1310,6 @@ static void mrnaHtmlOnePos(struct hgPosTable *table, struct hgPos *pos, FILE *f)
 {
 fprintf(f, "%s", pos->description);
 }
-
-#ifdef OLD
-static void makeGbTrackTableName(char *db, char *tableName, size_t tnSize, char *base)
-/* Now we have to watch out for scaffold-based browsers where 
- * the track is all_{mrna,est} not {mrna,est}. */
-{
-char splitTable[256];
-safef(splitTable, sizeof(splitTable), "%s_%s",
-      hDefaultChrom(db), base);
-if (hTableExists(db, splitTable))
-    safef(tableName, tnSize, "%s", base);
-else
-    safef(tableName, tnSize, "all_%s", base);
-}
-#endif /* OLD */
 
 char *hCarefulTrackOpenVis(char *db, char *trackName)
 /* If track is already in full mode, return full; otherwise, return
