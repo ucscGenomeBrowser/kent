@@ -2531,6 +2531,7 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 			}
 		    }
 		fprintf(f, "hgFind.matches=%s,\">", encMatches);
+		// Bold canonical genes. 
 		if(pos->canonical) {
 		    fprintf(f, "<B>");
 		    }
@@ -2542,7 +2543,7 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 		desc = pos->description;
 		if (desc)
 		    {
-		    fprintf(f, " -+ ");
+		    fprintf(f, " - ");
 		    htmTextOut(f, desc);
 		    }
 		fprintf(f, "\n");
