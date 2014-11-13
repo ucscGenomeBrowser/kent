@@ -30345,7 +30345,7 @@ EOF
 
 
 ##############################################################################
-# UniProt annotations (DONE 11/10/14 max) RM 13686
+# UniProt annotations (DONE 11/10/14 max) RM 13688
 # 
 # the uniprot parser is part of the publications pipeline, see github.com/maximilianh/pubMunch
 ~max/projects/pubs/tools/pubParseDb uniprot 9606
