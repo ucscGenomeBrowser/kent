@@ -2815,4 +2815,408 @@ done
     scp -p dm6.sql qateam@hgwbeta:/tmp
     ssh qateam@hgwbeta './bin/x86_64/hgsql qapushq < /tmp/dm6.sql'
 
+#########################################################################
+# Phylogenetic tree from 27-way (DONE - 2014-11-13 - Hiram)
+
+    mkdir /hive/data/genomes/dm6/bed/multiz27way/4d
+    cd /hive/data/genomes/dm6/bed/multiz27way/4d
+
+    # the split annotated maf's are in:
+    ../anno/result/*.maf
+
+    # using refGene for dm6, only transcribed genes and nothing
+    #	from the randoms and other misc.
+    hgsql dm6 -Ne \
+    "select * from refGene WHERE cdsEnd > cdsStart;" | cut -f 2- \
+	| egrep -v "_random|chrUn" > refGene.gp
+    # verify primary chroms only:
+    cut -f2 refGene.gp | sort | uniq -c | sort -rn | less
+    #  7213 chr3R
+    #  6581 chr2L
+    #  6167 chr2R
+    #  5914 chr3L
+    #  5577 chrX
+    #   300 chr4
+    #    31 chrY
+
+    genePredSingleCover refGene.gp stdout | sort > refGeneNP.gp
+    wc -l *.gp
+    #  31783 refGene.gp
+    #  13955 refGeneNP.gp
+
+    ssh ku
+    mkdir /hive/data/genomes/dm6/bed/multiz27way/4d/run
+    cd /hive/data/genomes/dm6/bed/multiz27way/4d/run
+    mkdir ../mfa
+
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+
+    cat << '_EOF_' > 4d.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set r = "/hive/data/genomes/dm6/bed/multiz27way"
+set c = $1
+set infile = $r/anno/result/$2
+set outfile = $3
+cd /scratch/tmp
+# 'clean' maf
+perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf
+awk -v C=$c '$2 == C {print}' $r/4d/refGeneNR.gp | sed -e "s/\t$c\t/\tdm6.$c\t/" > $c.gp
+set NL=`wc -l $c.gp| gawk '{print $1}'`
+if ("$NL" != "0") then
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $c.maf -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $r/4d/run/$outfile
+else
+    echo "" > $r/4d/run/$outfile
+endif
+rm -f $c.gp $c.maf $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4d.csh
+
+    ls -1S /hive/data/genomes/dm6/bed/multiz27way/anno/result/*.maf \
+	| egrep -v "_random|chrUn" | sed -e "s#.*multiz27way/anno/result/##" \
+	> maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+4d.csh $(root1) $(path1) {check out line+ ../mfa/$(root1).mfa}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    # the tac puts the quick jobs at the front
+    gensub2 maf.list single template stdout | tac > jobList
+    para create jobList
+    para try ... check
+    para -maxJob=5 push
+    para time
+# Completed: 8 of 8 jobs
+# CPU time in finished jobs:        502s       8.37m     0.14h    0.01d  0.000 y
+# IO & Wait Time:                    39s       0.64m     0.01h    0.00d  0.000 y
+# Average job time:                  68s       1.13m     0.02h    0.00d
+# Longest finished job:             118s       1.97m     0.03h    0.00d
+# Submission to last job:           125s       2.08m     0.03h    0.00d
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/dm6/bed/multiz27way/4d
+    # one file result is useless:
+# -rw-rw-r-- 1       1 Nov 13 14:13 chrM.mfa
+# -rw-rw-r-- 1   48002 Nov 13 14:13 chrY.mfa
+# -rw-rw-r-- 1  207788 Nov 13 14:13 chr4.mfa
+# -rw-rw-r-- 1 3658928 Nov 13 14:14 chr2R.mfa
+# -rw-rw-r-- 1 3532514 Nov 13 14:14 chr2L.mfa
+# -rw-rw-r-- 1 3198092 Nov 13 14:14 chrX.mfa
+# -rw-rw-r-- 1 3670700 Nov 13 14:14 chr3L.mfa
+# -rw-rw-r-- 1 4577630 Nov 13 14:14 chr3R.mfa
+
+    rm -f mfa/chrM.mfa
+
+    #want comma-less species.list.txt
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ../species.list.txt`" mfa/*.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # check they are all in there:
+    grep "^>" 4d.all.mfa
+# >dm6
+# >droSim1
+# >droSec1
+# >droYak3
+# >droEre2
+....
+# >droAlb1
+# >droGri2
+# >musDom2
+# >anoGam1
+# >apiMel4
+# >triCas2
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+        ../dm6.27way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    # tree-commas.nh:
+# (((((((((((((((((dm6, (droSim1, droSec1)), (droYak3, droEre2)),
+# (droBia2, droSuz1)), (droAna3, droBip2)), droEug2), droEle2), droKik2),
+# droTak2), droRho2), droFic2), ((droPse3, droPer1), droMir2)), droWil2),
+# (((droVir3, droMoj3), droAlb1), droGri2)), musDom2), anoGam1), apiMel4),
+# triCas2)
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree tree-commas.nh 4d.all.mfa
+XXX
+    #	real    22m8.563s
+
+    mv phyloFit.mod all.mod
+
+    grep TREE all.mod
+# TREE: (((((((((((((((((dm6:0.0542029,(droSim1:0.0213103,
+# droSec1:0.0227973):0.0242621):0.0585014,(droYak3:0.0889658,
+# droEre2:0.0771526):0.0254381):0.181996,(droBia2:0.126739,
+# droSuz1:0.0934222):0.0964756):0.0125386,(droAna3:0.132676,
+# droBip2:0.134892):0.531515):0.00264138,droEug2:0.318569):0.0369765,
+# droEle2:0.207426):0.0025605,droKik2:0.485329):0.00243957,
+# droTak2:0.226746):0.0143511,droRho2:0.195624):0.0495906,
+# droFic2:0.257704):0.290027,((droPse3:0.0138526,droPer1:0.014979):0.00969914,
+# droMir2:0.0172853):0.398344):0.150107,droWil2:0.550935):0.0418275,
+# (((droVir3:0.242786,droMoj3:0.321598):0.090819,droAlb1:0.436249):0.0143777,
+# droGri2:0.318782):0.162991):0.222902,musDom2:0.772795):0.268197,
+# anoGam1:1.14709):0.387299,apiMel4:0.865834):0.588712,triCas2:0.588712);
+
 ##############################################################################
+# phastCons 27-way (DONE - 2014-11-27 - Hiram)
+
+    # split 27way mafs into 10M chunks and generate sufficient statistics
+    # files for # phastCons
+    ssh ku
+    mkdir -p /hive/data/genomes/dm6/bed/multiz27way/cons/SS
+    cd /hive/data/genomes/dm6/bed/multiz27way/cons/SS
+    mkdir result done
+
+    cat << '_EOF_' > mkSS.csh
+#!/bin/csh -ef
+set c = $1
+set MAF = /hive/data/genomes/dm6/bed/multiz27way/anno/result/$c.maf
+set WINDOWS = /hive/data/genomes/dm6/bed/multiz27way/cons/SS/result/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $2 ) then
+    exit 0
+endif
+if ( -s $2.running ) then
+    exit 0
+endif
+
+date >> $2.running
+
+rm -fr $WINDOWS
+mkdir $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+date >> $2
+rm -f $2.running
+'_EOF_'
+    # << happy emacs
+
+    chmod +x mkSS.csh
+
+    cat << '_EOF_' > template
+#LOOP
+mkSS.csh $(root1) {check out line+ done/$(root1)}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	do the easy ones first to see some immediate results
+    ls -1S -r ../../anno/result | sed -e "s/.maf//" > maf.list
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... etc
+
+# Completed: 276 of 277 jobs
+# CPU time in finished jobs:        896s      14.93m     0.25h    0.01d  0.000 y
+# IO & Wait Time:                 16749s     279.16m     4.65h    0.19d  0.001 y
+# Average job time:                  64s       1.07m     0.02h    0.00d
+# Longest finished job:             283s       4.72m     0.08h    0.00d
+# Submission to last job:          1017s      16.95m     0.28h    0.01d
+    # one job was finished manually due to ku problems
+
+    #	 Not all files have a result due to low alignment
+    wc -l jobList
+    #  277 jobList
+    find ./result -type f | wc
+    #  158     158    8397
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, beware where this
+    #	takes place or do not run too many at once.
+    ssh ku
+    mkdir -p /hive/data/genomes/dm6/bed/multiz27way/cons/run.cons
+    cd /hive/data/genomes/dm6/bed/multiz27way/cons/run.cons
+
+    #	there are going to be only one phastCons run using
+    #	this same script.  It triggers off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  It is:
+    #	all
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set c = $1
+set cX = $1:r
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
+set grp = $cwd:t
+set cons = /hive/data/genomes/dm6/bed/multiz27way/cons
+set tmp = $cons/tmp/$f
+mkdir -p $tmp
+set ssSrc = $cons
+set useGrp = "$grp.mod"
+ln -s $ssSrc/SS/result/$c/$f.ss $tmp
+ln -s $cons/$grp/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phastCons $f.ss $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+popd > /dev/null
+mkdir -p pp/$c bed/$c
+sleep 4
+touch pp/$c bed/$c
+rm -f pp/$c/$f.pp
+rm -f bed/$c/$f.bed
+mv $tmp/$f.pp pp/$c
+mv $tmp/$f.bed bed/$c
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x doPhast.csh
+
+    #	this template will serve for all runs
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+
+    cat << '_EOF_' > template
+#LOOP
+../run.cons/doPhast.csh $(root1) $(file1) 45 0.3 0.3 {check out line+ pp/$(root1)/$(file1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    find ../SS -type f | grep ".ss$" | sed -e 's/.ss$//' > ss.list
+    wc -l ss.list
+    # 158 ss.list
+
+    # Create parasol batch and run it
+    # run for all species
+    mkdir /hive/data/genomes/dm6/bed/multiz27way/cons/all
+    cd /hive/data/genomes/dm6/bed/multiz27way/cons/all
+    #	Using the .mod tree
+    cp -p ../../4d/all.mod ./all.mod
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para create jobList
+    para try ... check ...
+    para push
+# Completed: 158 of 158 jobs
+# CPU time in finished jobs:       1356s      22.59m     0.38h    0.02d  0.000 y
+# IO & Wait Time:                  1391s      23.19m     0.39h    0.02d  0.000 y
+# Average job time:                  17s       0.29m     0.00h    0.00d
+# Longest finished job:             228s       3.80m     0.06h    0.00d
+# Submission to last job:           900s      15.00m     0.25h    0.01d
+
+    cd /hive/data/genomes/dm6/bed/multiz27way/cons/all
+
+    find ./bed -type f | grep ".bed$" | xargs cat | sort -k1,1 -k2,2n \
+	| awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+	    > tmpMostConserved.bed
+
+    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+
+    # load into database
+    time hgLoadBed dm6 phastConsElements27way mostConserved.bed
+    # Read 1078721 elements of size 5 from mostConserved.bed
+    # real    0m9.166s
+
+    # on human we often try for 5% overall cov, and 70% CDS cov
+    # most bets are off here for that goal, these alignments are too few
+    #	and too far between
+    featureBits dm6 -enrichment refGene:cds phastConsElements27way
+    # refGene:cds 16.071%, phastConsElements27way 38.789%, both 9.915%,
+    #   cover 61.70%, enrich 1.59x
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /hive/data/genomes/dm6/bed/multiz27way/cons/all
+    mkdir downloads
+
+    find ./pp -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| gzip -c > downloads/phastCons27way.wigFix.gz
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phastCons27way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/dm6/chrom.sizes \
+	    phastCons27way.bw) > bigWig.log 2>&1 &
+    tail bigWig.log
+
+    # pid=34798: VmPeak:     1054096 kB
+    # real    1m8.421s
+
+    bigWigInfo phastCons27way.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 132,465,967
+# primaryIndexSize: 2,918,428
+# zoomLevels: 10
+# chromCount: 150
+# basesCovered: 89,437,277
+# mean: 0.618592
+# min: 0.000000
+# max: 1.000000
+# std: 0.448759
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phastCons27way.wigFix.gz \
+	| wigEncode stdin phastCons27way.wig phastCons27way.wib)
+    # Converted stdin, upper limit 1.00, lower limit 0.00
+    # real    0m25.328s
+
+    du -hsc *.wi?
+    # 86M     phastCons27way.wib
+    # 8.2M    phastCons27way.wig
+    # 94M     total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phastCons27way.wib /gbdb/dm6/multiz27way/phastCons27way.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/dm6/multiz27way \
+	dm6 phastCons27way phastCons27way.wig
+    #   real    0m0.854s
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh dm6 phastCons27way
+    # db.table      min max mean count sumData stdDev viewLimits
+    # dm6.phastCons27way 0 1 0.618592 89437277 5.53252e+07 0.448759
+    #  viewLimits=0:1
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram -db=dm6 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phastCons27way > histogram.data 2>&1
+    #   real    0m5.630s
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " D. melanogaster dm6 Histogram phastCons27way track"
+set xlabel " phastCons27way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#############################################################################
