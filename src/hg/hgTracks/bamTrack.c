@@ -786,6 +786,14 @@ void bamMethods(struct track *track)
 {
 knetUdcInstall();
 
+boolean isBamWig = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE,
+			 BAMWIG_MODE, (trackDbSettingClosestToHome(track->tdb, BAMWIG_MODE) != NULL)); 
+if (isBamWig)
+    {
+    bamWigMethods(track, track->tdb, 0, NULL);
+    return;
+    }
+
 track->canPack = TRUE;
 boolean isPaired = cartUsualBooleanClosestToHome(cart, track->tdb, FALSE,
 			 BAM_PAIR_ENDS_BY_NAME,

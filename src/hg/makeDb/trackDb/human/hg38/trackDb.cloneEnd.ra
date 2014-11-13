@@ -1,0 +1,658 @@
+track cloneEndUcsc
+compositeTrack on
+shortLabel UCSC Clone Ends
+longLabel UCSC mapping of clone libraries end placements
+group map
+visibility hide
+type bed 3
+noInherit on
+dragAndDrop on
+
+    track cloneEndsCRAHUMAN53782WGS
+    shortLabel CRA / HUMAN / 53782 / WGS
+    longLabel Center: CRA, Project: HUMAN, Avg. Size: 53 kbp, 34570 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 0
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsCRAHUMAN53782WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsCRAHUMAN9610WGS
+    shortLabel CRA / HUMAN / 9610 / WGS
+    longLabel Center: CRA, Project: HUMAN, Avg. Size: 9 kbp, 447808 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 1
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsCRAHUMAN9610WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsCRAHUMAN11388WGS
+    shortLabel CRA / HUMAN / 11388 / WGS
+    longLabel Center: CRA, Project: HUMAN, Avg. Size: 11 kbp, 362109 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 2
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsCRAHUMAN11388WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsCRAHUMAN14495WGS
+    shortLabel CRA / HUMAN / 14495 / WGS
+    longLabel Center: CRA, Project: HUMAN, Avg. Size: 14 kbp, 640725 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 3
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsCRAHUMAN14495WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsCRAHUMAN52072WGS
+    shortLabel CRA / HUMAN / 52072 / WGS
+    longLabel Center: CRA, Project: HUMAN, Avg. Size: 52 kbp, 165030 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 4
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsCRAHUMAN52072WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsCRAHUMAN48053WGS
+    shortLabel CRA / HUMAN / 48053 / WGS
+    longLabel Center: CRA, Project: HUMAN, Avg. Size: 47 kbp, 4744 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 5
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsCRAHUMAN48053WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsCRAHUMAN52047WGS
+    shortLabel CRA / HUMAN / 52047 / WGS
+    longLabel Center: CRA, Project: HUMAN, Avg. Size: 52 kbp, 343387 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 6
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsCRAHUMAN52047WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsCRAHUMAN56083WGS
+    shortLabel CRA / HUMAN / 56083 / WGS
+    longLabel Center: CRA, Project: HUMAN, Avg. Size: 55 kbp, 141426 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 7
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsCRAHUMAN56083WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsCRAHUMAN10201WGS
+    shortLabel CRA / HUMAN / 10201 / WGS
+    longLabel Center: CRA, Project: HUMAN, Avg. Size: 10 kbp, 1876068 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 8
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsCRAHUMAN10201WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsCRAHUMAN46971WGS
+    shortLabel CRA / HUMAN / 46971 / WGS
+    longLabel Center: CRA, Project: HUMAN, Avg. Size: 46 kbp, 120853 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 9
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsCRAHUMAN46971WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsJCVIhuRef9500WGS
+    shortLabel JCVI / huRef / 9500 / WGS
+    longLabel Center: JCVI, Project: huRef, Avg. Size: 12 kbp, 638316 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 10
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsJCVIhuRef9500WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsJCVIhuRef10000WGS
+    shortLabel JCVI / huRef / 10000 / WGS
+    longLabel Center: JCVI, Project: huRef, Avg. Size: 11 kbp, 1130245 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 11
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsJCVIhuRef10000WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsJCVIhuRef11000WGS
+    shortLabel JCVI / huRef / 11000 / WGS
+    longLabel Center: JCVI, Project: huRef, Avg. Size: 9 kbp, 579655 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 12
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsJCVIhuRef11000WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsJCVIhuRef12500WGS
+    shortLabel JCVI / huRef / 12500 / WGS
+    longLabel Center: JCVI, Project: huRef, Avg. Size: 9 kbp, 1483219 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 13
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsJCVIhuRef12500WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsWUGSCABC1740000CLONEEND
+    shortLabel WUGSC / ABC17 / 40000 / CLONEEND
+    longLabel Agencourt human fosmid library 17, Center: WUGSC, Library: ABC17, Avg. Size: 41 kbp, 12753 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 14
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsWUGSCABC1740000CLONEENDPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsCRAHUMAN40138WGS
+    shortLabel CRA / HUMAN / 40138 / WGS
+    longLabel Center: CRA, Project: HUMAN, Avg. Size: 38 kbp, 3288 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 15
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsCRAHUMAN40138WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsJCVIhuRef12000WGS
+    shortLabel JCVI / huRef / 12000 / WGS
+    longLabel Center: JCVI, Project: huRef, Avg. Size: 16 kbp, 283868 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 16
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsJCVIhuRef12000WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsCRAHUMAN48173WGS
+    shortLabel CRA / HUMAN / 48173 / WGS
+    longLabel Center: CRA, Project: HUMAN, Avg. Size: 48 kbp, 1967 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 17
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsCRAHUMAN48173WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsJCVICorielleCOR2A34000CLONEEND
+    shortLabel JCVI / Corielle / COR2A / 34000 / CLONEEND
+    longLabel NHGRI-HUMAN-CORIELLE-DNA_CORIELL-02A-F-39-40KB, Center: JCVI, Project: Corielle, Library: COR2A, Avg. Size: 34 kbp, 668231 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 18
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsJCVICorielleCOR2A34000CLONEENDPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsWIBRG24840000WGS
+    shortLabel WIBR / G248 / 40000 / WGS
+    longLabel Center: WIBR, Project: G248, Avg. Size: 41 kbp, 839903 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 19
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsWIBRG24840000WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsABCNA19129ABC1340000WGS
+    shortLabel ABC / NA19129 / ABC13 / 40000 / WGS
+    longLabel Agencourt human fosmid library 13, Center: ABC, Project: NA19129, Library: ABC13, Avg. Size: 39 kbp, 887339 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 20
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsABCNA19129ABC1340000WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsABCNA19240ABC1040000CLONEEND
+    shortLabel ABC / NA19240 / ABC10 / 40000 / CLONEEND
+    longLabel Agencourt human fosmid library 10, Center: ABC, Project: NA19240, Library: ABC10, Avg. Size: 41 kbp, 85612 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 21
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsABCNA19240ABC1040000CLONEENDPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsABCNA18507ABC840000CLONEEND
+    shortLabel ABC / NA18507 / ABC8 / 40000 / CLONEEND
+    longLabel Agencourt human fosmid library 8, Center: ABC, Project: NA18507, Library: ABC8, Avg. Size: 37 kbp, 1462831 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 22
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsABCNA18507ABC840000CLONEENDPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsJCVIhuRef44000WGS
+    shortLabel JCVI / huRef / 44000 / WGS
+    longLabel Center: JCVI, Project: huRef, Avg. Size: 37 kbp, 240102 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 23
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsJCVIhuRef44000WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsJCVIhuRef40000WGS
+    shortLabel JCVI / huRef / 40000 / WGS
+    longLabel Center: JCVI, Project: huRef, Avg. Size: 36 kbp, 294859 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 24
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsJCVIhuRef40000WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsJCVICorielleCOR0234000CLONEEND
+    shortLabel JCVI / Corielle / COR02 / 34000 / CLONEEND
+    longLabel NHGRI-HUMAN-CORIELLE-DNA_CORIELL-02-F-39-40KB, Center: JCVI, Project: Corielle, Library: COR02, Avg. Size: 34 kbp, 254069 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 25
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsJCVICorielleCOR0234000CLONEENDPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsABCNA12156ABC1440000WGS
+    shortLabel ABC / NA12156 / ABC14 / 40000 / WGS
+    longLabel Agencourt human fosmid library 14, Center: ABC, Project: NA12156, Library: ABC14, Avg. Size: 40 kbp, 952459 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 26
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsABCNA12156ABC1440000WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsABCNA18517ABC740000CLONEEND
+    shortLabel ABC / NA18517 / ABC7 / 40000 / CLONEEND
+    longLabel Agencourt human fosmid library 7, Center: ABC, Project: NA18517, Library: ABC7, Avg. Size: 38 kbp, 838269 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 27
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsABCNA18517ABC740000CLONEENDPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsABCNA18956ABC940000CLONEEND
+    shortLabel ABC / NA18956 / ABC9 / 40000 / CLONEEND
+    longLabel Agencourt human fosmid library 9, Center: ABC, Project: NA18956, Library: ABC9, Avg. Size: 40 kbp, 908622 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 28
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsABCNA18956ABC940000CLONEENDPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsABCNA18555ABC1140000WGS
+    shortLabel ABC / NA18555 / ABC11 / 40000 / WGS
+    longLabel Agencourt human fosmid library 11, Center: ABC, Project: NA18555, Library: ABC11, Avg. Size: 40 kbp, 823005 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 29
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsABCNA18555ABC1140000WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsJCVIhuRef45000WGS
+    shortLabel JCVI / huRef / 45000 / WGS
+    longLabel Center: JCVI, Project: huRef, Avg. Size: 40 kbp, 330150 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 30
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsJCVIhuRef45000WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsJCVIhuRef42000WGS
+    shortLabel JCVI / huRef / 42000 / WGS
+    longLabel Center: JCVI, Project: huRef, Avg. Size: 37 kbp, 201503 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 31
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsJCVIhuRef42000WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsABCNA19240ABC1040000WGS
+    shortLabel ABC / NA19240 / ABC10 / 40000 / WGS
+    longLabel Agencourt human fosmid library 10, Center: ABC, Project: NA19240, Library: ABC10, Avg. Size: 41 kbp, 799817 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 32
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsABCNA19240ABC1040000WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsABCNA12878ABC1240000WGS
+    shortLabel ABC / NA12878 / ABC12 / 40000 / WGS
+    longLabel Agencourt human fosmid library 12, Center: ABC, Project: NA12878, Library: ABC12, Avg. Size: 40 kbp, 918478 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 33
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsABCNA12878ABC1240000WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsJCVIhuRef43000WGS
+    shortLabel JCVI / huRef / 43000 / WGS
+    longLabel Center: JCVI, Project: huRef, Avg. Size: 37 kbp, 267603 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 34
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsJCVIhuRef43000WGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsWUGSCABC1940000CLONEEND
+    shortLabel WUGSC / ABC19 / 40000 / CLONEEND
+    longLabel Agencourt human fosmid library 19, Center: WUGSC, Library: ABC19, Avg. Size: 41 kbp, 18460 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 35
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsWUGSCABC1940000CLONEENDPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsWUGSCABC2040000CLONEEND
+    shortLabel WUGSC / ABC20 / 40000 / CLONEEND
+    longLabel Agencourt human fosmid library 20, Center: WUGSC, Library: ABC20, Avg. Size: 38 kbp, 30731 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 36
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsWUGSCABC2040000CLONEENDPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsWUGSCABC2440000CLONEEND
+    shortLabel WUGSC / ABC24 / 40000 / CLONEEND
+    longLabel Agencourt human fosmid library 24, Center: WUGSC, Library: ABC24, Avg. Size: 40 kbp, 574219 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 37
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsWUGSCABC2440000CLONEENDPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsWUGSCABC2240000CLONEEND
+    shortLabel WUGSC / ABC22 / 40000 / CLONEEND
+    longLabel Agencourt human fosmid library 22, Center: WUGSC, Library: ABC22, Avg. Size: 40 kbp, 280896 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 38
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsWUGSCABC2240000CLONEENDPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsWUGSCABC2140000CLONEEND
+    shortLabel WUGSC / ABC21 / 40000 / CLONEEND
+    longLabel Agencourt human fosmid library 21, Center: WUGSC, Library: ABC21, Avg. Size: 40 kbp, 248150 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 39
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsWUGSCABC2140000CLONEENDPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsWUGSCABC1640000CLONEEND
+    shortLabel WUGSC / ABC16 / 40000 / CLONEEND
+    longLabel Agencourt human fosmid library 16, Center: WUGSC, Library: ABC16, Avg. Size: 40 kbp, 696303 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 40
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsWUGSCABC1640000CLONEENDPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsWUGSCABC1840000CLONEEND
+    shortLabel WUGSC / ABC18 / 40000 / CLONEEND
+    longLabel Agencourt human fosmid library 18, Center: WUGSC, Library: ABC18, Avg. Size: 41 kbp, 502009 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 41
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsWUGSCABC1840000CLONEENDPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsWUGSCABC2340000CLONEEND
+    shortLabel WUGSC / ABC23 / 40000 / CLONEEND
+    longLabel Agencourt human fosmid library 23, Center: WUGSC, Library: ABC23, Avg. Size: 40 kbp, 634441 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 42
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsWUGSCABC2340000CLONEENDPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsWUGSCABC2740000CLONEEND
+    shortLabel WUGSC / ABC27 / 40000 / CLONEEND
+    longLabel Agencourt human fosmid library 27, Center: WUGSC, Library: ABC27, Avg. Size: 40 kbp, 515268 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 43
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsWUGSCABC2740000CLONEENDPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsJCVIhuRefhuRefB03120KB120000CLONEEND
+    shortLabel JCVI / huRef / huRef-B-03-120KB / 120000 / CLONEEND
+    longLabel Center: JCVI, Project: huRef, Library: huRef-B-03-120KB, Avg. Size: 93 kbp, 165600 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 44
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsJCVIhuRefhuRefB03120KB120000CLONEENDPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsMISC
+    shortLabel MISC(others)
+    longLabel Center: MISC, Various libraries, Avg. Size: 109 kbp, 14681 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 45
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsMISCPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsWUGSCCH17197000CLONEEND
+    shortLabel WUGSC / CH17 / 197000 / CLONEEND
+    longLabel The CHORI-17 BAC Library from a hydatidiform (haploid) mole, Center: WUGSC, Library: CH17, Avg. Size: 207 kbp, 130160 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 46
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsWUGSCCH17197000CLONEENDPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsABC
+    shortLabel ABC(others)
+    longLabel Center: ABC, Various libraries, Avg. Size: 134 kbp, 49760 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 47
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsABCPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsWUGSC
+    shortLabel WUGSC(others)
+    longLabel Center: WUGSC, Various libraries, Avg. Size: 124 kbp, 11919 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 48
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsWUGSCPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsCSHLTSCWGS
+    shortLabel CSHL / TSC / WGS
+    longLabel Center: CSHL, Project: TSC, Avg. Size: 132 kbp, 904644 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 49
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsCSHLTSCWGSPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsSC
+    shortLabel SC(others)
+    longLabel Center: SC, Various libraries, Avg. Size: 148 kbp, 13077 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 50
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsSCPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsCSHL
+    shortLabel CSHL(others)
+    longLabel Center: CSHL, Various libraries, Avg. Size: 506 kbp, 9984 Clones
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 51
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsCSHLPsl
+    parent cloneEndUcsc on
+
+    track cloneEndsOrphan
+    shortLabel Orphan Ends
+    longLabel Single Ends without the other end within 10Mbp in assembly
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 52
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsBadPsl
+    parent cloneEndUcsc off
+
+    track cloneEndsMismatch
+    shortLabel Wrong Orientation
+    longLabel Ends in the wrong orientation compared to assembly
+    visibility dense
+    type bed 6 +
+    color 0,0,0
+    priority 53
+    trackHandler bacEndPairs
+    exonArrows off
+    lfPslTable cloneEndsBadPsl
+    parent cloneEndUcsc off
+

@@ -506,7 +506,6 @@ if (!refreshOnly && userData != NULL && userData[0] != '\0')
     if (chainFile == NULL)
         errAbort("ERROR: Can't convert from %s to %s: no chain file loaded",
                                 fromDb, toDb);
-    chainFile = hReplaceGbdbMustDownload(chainFile);
 
     readLiftOverMap(chainFile, chainHash);
     lft = liftOverSniff(oldTn.forCgi);
@@ -578,6 +577,7 @@ int main(int argc, char *argv[])
 long enteredMainTime = clock1000();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
+setUdcCacheDir();
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 cgiExitTime("hgLiftOver", enteredMainTime);
 return 0;

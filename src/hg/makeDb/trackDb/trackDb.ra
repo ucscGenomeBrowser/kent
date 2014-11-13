@@ -1461,27 +1461,8 @@ visibility hide
 useScore 1
 type bed 12 +
 
-track joinedRmsk
-compositeTrack on
-shortLabel RepeatMasker Visualization
-longLabel Detailed Visualization of RepeatMasker Annotations
-group rep
-allButtonPair on
-visibility dense
-spectrum on
-type bed 3 +
-maxWindowToDraw 10000000
-canPack off
-
-	track rmskJoinedBaseline
-	parent joinedRmsk off
-	longLabel RepeatMasker v3.0.1 db20100302 : Browser Baseline Dataset
-	priority 1
-
-	track  rmskJoinedCurrent
-	parent joinedRmsk on
-	longLabel RepeatMasker v3.3.0 db20120124 : Current Dataset
-	priority 2
+include joinedRmskComposite.ra alpha
+include joinedRmsk.ra beta,public
 
 track windowmasker
 shortLabel WindowMasker
@@ -2634,7 +2615,7 @@ group genes
 type bed 12
 color 20,0,250
 url http://pfam.sanger.ac.uk/family/$$
-
+release beta,public
 
 track numtSeq2012
 compositeTrack on
@@ -2745,15 +2726,49 @@ urls variationId="http://web.expasy.org/variant_pages/$$.html" uniProtId="http:/
 mouseOverField comments
 noScoreFilter on
 
-track spAnnot
-shortLabel UniProt Annotations
-longLabel UniProt/SwissProt Protein Annotations
+track spUniprot
+shortLabel UniProt
+longLabel UniProt/SwissProt Annotations
 group genes
 visibility hide
 type bigBed 12 +
 itemRgb on
-urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
-mouseOverField comments
+release alpha
+compositeTrack on
+
+        track spAnnot
+        shortLabel UniProt Annotations
+        longLabel UniProt/SwissProt Protein Annotations
+        parent spUniprot
+        group genes
+        visibility hide
+        type bigBed 12 +
+        itemRgb on
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+        mouseOverField comments
+        release alpha
+
+        track spStruct
+        shortLabel UniProt Structure
+        longLabel UniProt/SwissProt Protein Primary/Secondary Structure Annotations
+        parent spUniprot
+        group genes
+        visibility hide
+        type bigBed 12 +
+        itemRgb on
+        urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+        mouseOverField comments
+        release alpha
+
+        track ucscGenePfam
+        shortLabel Pfam in UCSC Gene
+        longLabel Pfam Domains in UCSC Genes
+        parent spUniprot
+        group genes
+        type bed 12
+        color 20,0,250
+        url http://pfam.sanger.ac.uk/family/$$
+        release alpha
 
 searchTable ucscToINSDC
 shortCircuit 1

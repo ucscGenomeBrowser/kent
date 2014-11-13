@@ -3,7 +3,7 @@
 
 track wgEncodeAwgDnaseMasterSites
 superTrack wgEncodeDNAseSuper dense
-release alpha
+release alpha,beta
 shortLabel Master DNaseI HS
 longLabel DNaseI Hypersensitive Site Master List (125 cell types) from ENCODE/Analysis
 type bed 5 +

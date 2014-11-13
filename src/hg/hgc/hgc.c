@@ -17272,7 +17272,10 @@ printf("</TD></TR>\n");
 if (snp->alleleFreqCount > 0)
     {
     boolean gotNonIntN = FALSE;
-    int total2N = 0;
+    double total2NDbl = 0.0;
+    for (i = 0;  i < snp->alleleFreqCount;  i++)
+        total2NDbl += snp->alleleNs[i];
+    int total2N = round(total2NDbl);
     printf("<TR><TD><B><A HREF=\"#AlleleFreq\">Allele Frequencies</A>&nbsp;&nbsp;</B></TD><TD>");
     for (i = 0;  i < snp->alleleFreqCount;  i++)
 	{
@@ -17284,14 +17287,13 @@ if (snp->alleleFreqCount > 0)
 	double f = snp->alleleFreqs[i], n = snp->alleleNs[i];
 	if (f > 0)
 	    {
-	    total2N = round(n / f);
 	    int roundedN = round(n);
 	    if (fabs(n - roundedN) < 0.01)
 		printf("(%d / %d)", roundedN, total2N);
 	    else
 		{
 		gotNonIntN = TRUE;
-		printf("(%.3f / %d)", n, total2N);
+		printf("(%.3f / %.3f)", n, total2NDbl);
 		}
 	    }
 	}
@@ -18823,6 +18825,10 @@ if (row != NULL)
         {
         sqlFreeResult(&sr);
         hFindSplitTable(database, seqName, lfs->pslTable, pslTable, &hasBin);
+
+        if (isEmpty(pslTable) && trackDbSetting(tdb, "lfPslTable"))
+            safecpy(pslTable, sizeof(pslTable), trackDbSetting(tdb, "lfPslTable"));
+            
         sqlSafef(query, sizeof query, "SELECT * FROM %s WHERE qName = '%s'",
                        pslTable, lfs->lfNames[i]);
         sr = sqlMustGetResult(conn, query);

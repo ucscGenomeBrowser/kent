@@ -532,12 +532,11 @@ cartWebStart(cart, NULL, "%s", headerText);
 hPrintf("You will be automatically redirected to the gateway page for this hub's default database "
     "(<A HREF=\"../cgi-bin/hgGateway?%s\">%s</A>) in %d seconds.<BR><BR>",
 	  cartSidUrlString(cart),trackHubSkipHubName(database),redirDelay);
-hPrintf("<B>This hub is not supported by UCSC. </B>");
 
 struct trackHub *tHub = hub->trackHub;
 if (tHub->email != NULL)
     {
-    hPrintf("<B>Hub Contact: <A HREF=\"mailto:%s\">%s</A>.</B> ", tHub->email, tHub->email);
+    hPrintf("<B>This hub is provided courtesy of <A HREF=\"mailto:%s\">%s</A>.</B>. Please contact them with any questions.", tHub->email, tHub->email);
     }
 
 hPrintf("<BR><BR>");

@@ -943,7 +943,7 @@ struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn,
 
 /* ----------- Page displayers -------------- */
 
-void doMainPage(struct sqlConnection *conn, boolean webStarted);
+void doMainPage(struct sqlConnection *conn);
 /* Put up the first page user sees. */
 
 void mainPageAfterOpen(struct sqlConnection *conn);

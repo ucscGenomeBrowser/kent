@@ -712,7 +712,6 @@ def getOrgInfo(validDbs):
     cladeToOrgs = defaultdict(list)
     cur.execute('SELECT clade, genome FROM genomeClade ORDER BY priority')
     for row in cur.fetchall():
-        if row[0] not in cladeToOrgs:
             cladeToOrgs[row[0]].append((row[1], row[1]))
             #orgList.append((row[0], row[0]))
 

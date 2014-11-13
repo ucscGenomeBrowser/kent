@@ -1,0 +1,947 @@
+# for emacs: -*- mode: sh; -*-
+
+# Variation tracks for hg38 / GRCh38
+
+##############################################################################
+# DBSNP B141 / SNP141 (DONE 10/14/14)
+# originally done 9/10/14.
+# updated 10/9/14 - 10/14/14 after Matt found that MultipleAlignments was erroneously triggered
+# by PAR1 X alt mappings.
+# Redmine #13309
+    mkdir -p /hive/data/outside/dbSNP/141/human_hg38
+    cd /hive/data/outside/dbSNP/141/human_hg38
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/database/organism_data/
+    # to find the subdir name to use as orgDir below (human_9606 in this case).
+    # Then click into that directory and look for file names like
+    #    b(1[0-9][0-9])_*_([0-9]+_[0-9])
+    # -- use the first num for build and the second num_num for buildAssembly.
+    # jkStuff/liftContigs.lft maps NCBI contig names to chroms; use that for liftUp.
+    #
+    # Some trial and error was required to get the config.ra just right
+    cat > config.ra <<EOF
+db hg38
+orgDir human_9606
+build 141
+buildAssembly 
+refAssemblyLabel GRCh38
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >& do.log & tail -f do.log
+    # hg38 doesn't have a jkStuff/ liftUp file like hg19 & earlier; use the file
+    # created by the script from the ContigInfo table dump:
+    cp suggested.lft usingSuggested.lft
+cat >> config.ra <<EOF
+liftUp usingSuggested.lft
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=loadDbSnp \
+      >>& do.log & tail -f do.log
+
+    # After first run, find SNPs that were dropped due to not having rs_fasta records:
+    zcat snp141Errors.bed.gz \
+    | grep 'Missing observed' \
+    | cut -f 4 \
+    | sort -u \
+      > idsNoFasta.txt
+    # Upload that file here and select FASTA as output format:
+    #   http://www.ncbi.nlm.nih.gov/projects/SNP/dbSNP.cgi?list=rsfile
+    # Wait for email with link to results.
+    # 41 IDs are rejected as not in dbSNP, OK.
+    # Download the batch query results:
+    wget ftp://ftp.ncbi.nlm.nih.gov/snp/batch/140822173438.gz
+    # Move that file into the rs_fasta directory with a name that will be picked up
+    # by "zcat rs_fasta/rs_ch*.fas.gz":
+    mv 140822173438.gz rs_fasta/rs_chBatchQuery.fas.gz
+    # Now continue from the addToDbSnp step.
+    # NOTE: I actually combined this addToDbSnp run with the dbSNP data update run below.
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue addToDbSnp \
+      >>& do.log & tail -f do.log
+
+    # dbSNP re-released a subset of the FTP files... patch those in and rebuild.
+    # I made a new subdir firstBuild and moved a bunch of files there so I can compare.
+    cd /hive/data/outside/dbSNP/141/human_hg38
+    mv data data.orig
+    mkdir data
+    cd data
+    ln -s ../data.orig/* .
+    rm b141_SNPContigLoc.bcp.gz b141_SNPContigLocusId.bcp.gz b141_SNPMapInfo.bcp.gz
+    foreach f (b141_SNPContigLoc.bcp.gz b141_SNPContigLocusId.bcp.gz b141_SNPMapInfo.bcp.gz)
+      wget ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b141_GRCh38/database/organism_data/update_2014_Jul25/$f
+    end
+    hgsql hg38snp141 -e 'drop table b141_SNPContigLoc; \
+                         drop table b141_SNPContigLocusId; \
+                         drop table b141_SNPMapInfo;'
+    # Recreate those tables using schema/table.sql.
+    # Run the parts of loadDbSnp.csh for those specific tables:
+    # ---------- begin loadDbSnp.csh excerpt ----------
+    foreach t (b141_SNPContigLocusId b141_SNPMapInfo)
+      zcat /hive/data/outside/dbSNP/141/human_hg38/data/$t.bcp.gz  \
+      | perl -wpe 's/(\d\d:\d\d:\d\d)\.\d+/$1/g; s/\t(\t|\n)/\t\\N$1/g; s/\t(\t|\n)/\t\\N$1/g;' \
+        > tmp.tab
+      hgLoadSqlTab -oldTable hg38snp141 $t placeholder tmp.tab
+      rm tmp.tab
+    end
+    hgsql hg38snp141 -e \
+      'alter table b141_SNPContigLocusId add index (ctg_id); \
+       alter table b141_SNPMapInfo add index (snp_id);'
+
+    # b141_SNPContigLoc is huge, and we want only the reference contig mappings.
+    # Keep lines only if they have a word match to some reference contig ID.
+    # That allows some false positives from coord matches; clean those up afterward.
+    zcat /hive/data/outside/dbSNP/141/human_hg38/data/b141_ContigInfo.bcp.gz \
+    | cut -f 1 | sort -n > b141_ContigInfo.ctg_id.txt
+    zcat /hive/data/outside/dbSNP/141/human_hg38/data/b141_SNPContigLoc.bcp.gz \
+    | grep -Fwf b141_ContigInfo.ctg_id.txt \
+    | perl -wpe 's/(\d\d:\d\d:\d\d)\.\d+/$1/g; s/\t(\t|\n)/\t\\N$1/g; s/\t(\t|\n)/\t\\N$1/g;' \
+    | hgLoadSqlTab -oldTable hg38snp141 b141_SNPContigLoc placeholder stdin
+    # Get rid of those false positives:
+    hgsql hg38snp141 -e 'alter table b141_SNPContigLoc add index (ctg_id);'
+    hgsql hg38snp141 -e 'create table ContigLocFix select cl.* from b141_SNPContigLoc as cl, b141_ContigInfo as ci where cl.ctg_id = ci.ctg_id;'
+    hgsql hg38snp141 -e 'alter table ContigLocFix add index (ctg_id);'
+    hgsql hg38snp141 -e 'drop table b141_SNPContigLoc; \
+                         rename table ContigLocFix to b141_SNPContigLoc;'
+    hgsql hg38snp141 -e 'alter table b141_SNPContigLoc add index (snp_id);'
+    # ---------- end loadDbSnp.csh excerpt ----------
+    # Now continue from addToDbSnp to pick up the changes -- but stop after translate
+    # so we can look for strand bugs using hg19 b138 vs. b141 info.
+    cd /hive/data/outside/dbSNP/141/human_hg38
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue addToDbSnp -stop translate \
+      >>& do.log & tail -f do.log
+
+    # Try to identify wrongful strand-flips from b138 (see hg19.txt SNP141):
+    # Map rsIDs (uniquely mapped this time around) to strand, ref allele,
+    # observed alleles, and ObservedMismatch status:
+    zcat snp141.bed.gz \
+    | awk -F"\t" '{if ($18 ~ /ObservedMismatch/) { gotObs = "y"; } else { gotObs = "n"; } \
+                   print $4 "\t" $6 "\t" $7 "\t" $9 "\t" gotObs;}' \
+    | sort -u \
+      > hg38_snp141_oriEtc.txt
+    # Get the same rsID-only format from the hg19 snp141 directory:
+    sed -e 's/^.*\.rs/rs/' ../human_hg19/hg19_snp138_snp141_oriEtc.txt \
+    | sort -u \
+      > hg19_snp138_snp141_oriEtc.txt
+    join hg19_snp138_snp141_oriEtc.txt hg38_snp141_oriEtc.txt \
+      > hg19_snp138_snp141_hg38_snp141_oriEtc.txt
+    # Now look for cases where there's no ObservedMismatch in b138 but strand changed
+    # from hg19/b139 to hg19/b141:
+    awk '$5 == "n" && $2 != $6 {print;}' hg19_snp138_snp141_hg38_snp141_oriEtc.txt \
+    | uniq \
+      > hg19_snp138_snp141_hg38_snp141_oriEtc_strandChange.txt
+    wc -l hg19_snp138_snp141_hg38_snp141_oriEtc_strandChange.txt
+#335406 hg19_snp138_snp141_hg38_snp141_oriEtc_strandChange.txt
+    # What are the combinations of ObservedMismatch status in hg19/b141 and hg38/b141?
+    awk '{print $5, $9, $13;}' hg19_snp138_snp141_hg38_snp141_oriEtc_strandChange.txt \
+    | sort \
+    | uniq -c
+#  65455 n n n
+#     17 n n y
+#    148 n y n
+# 269786 n y y
+    # Take a look at some of each
+    # No ObservedMismatch:
+    awk '$9 == "n" && $13 == "n"' hg19_snp138_snp141_hg38_snp141_oriEtc_strandChange.txt \
+    | head
+#rs1000005 - G C/G n + G C/G n + G C/G n  # b141 bad alignment
+#rs1000021 - G C/G n + G C/G n + G C/G n  # b141 bad alignment
+#rs1000023 - G C/G n + G C/G n + G C/G n  # b141 bad alignment
+#rs1000024 - C C/G n + C C/G n + C C/G n
+#rs1000190 - G C/G n + G C/G n + G C/G n
+#rs1000195 - A A/T n + A A/T n + A A/T n
+#rs1000205 - A A/T n + A A/T n + A A/T n  # b141 bad alignment
+    # -- as in hg19, complementary alleles or insertions can't trigger ObsMismatch anyway.
+    # Any allele changes in there?
+    awk '$9 == "n" && $13 == "n" && $3 != $11' \
+      hg19_snp138_snp141_hg38_snp141_oriEtc_strandChange.txt \
+    | head
+#rs1005350 - G C/G n + G C/G n + C C/G n  # flank matches - strand (b138 correct), new contig
+#rs1008420 - A A/T n + A A/T n + T A/T n  # flank matches - strand (b138 correct) on every alt
+                                          # (19, 19_GL*, 19_KI*), some new contigs, some not
+#rs1008475 - G C/G n + G C/G n + C C/G n  # flank matches - strand (b138 correct), new contig
+#rs1008525 - G C/G n + G C/G n + C C/G n  # flank matches - strand (b138 correct) on every alt
+#rs1008598 - C C/G n + C C/G n + G C/G n  # flank matches - strand (b138 correct) on every alt
+#rs1012024 - A A/T n + A A/T n + T A/T n  # flank matches - strand (b138 correct), new contig
+#rs1016720 - T A/T n + T A/T n + A A/T n  # flank matches - strand (b138 correct), new contig
+#rs1018837 - A A/T n + A A/T n + T A/T n  # flank matches - strand (b138 correct), new contig
+#rs1018839 - A A/T n + A A/T n + T A/T n  # flank matches - strand (b138 correct) on every alt
+#rs1024351 - C C/G n + C C/G n + G C/G n  # flank matches - strand (b138 correct) on every alt
+    # -- in all of those cases, both strand and allele changed... any exceptions?
+    awk '$9 == "n" && $13 == "n" && $3 != $11 && $2 == 10' \
+      hg19_snp138_snp141_hg38_snp141_oriEtc_strandChange.txt \
+    | head
+    # -- no output.
+    # Any non-C/G|A/T obs?  yep, tri- and quad-allelics:
+    awk '$9 == "n" && $13 == "n" && $12 != "C/G" && $12 != "A/G"' \
+      hg19_snp138_snp141_hg38_snp141_oriEtc_strandChange.txt \
+    | head
+#rs1001331 - G C/G/T n + G C/G/T n + G C/G/T n        # b141 bad alignment
+#rs1001741 - G A/C/G n + G A/C/G n + G A/C/G n        # b141 bad alignment
+#rs10017873 + G A/C/G/T n - G A/C/G/T n - G A/C/G/T n # !! b141 correct !!  uh-oh.
+#rs1002888 - G A/C/G n + G A/C/G n + G A/C/G n        # b141 bad alignment
+#rs1003420 - C C/G/T n + C C/G/T n + C C/G/T n        # b141 bad alignment
+#rs1003510 - A A/C/T n + A A/C/T n + A A/C/T n        # b141 bad alignment
+#rs1003524 - C C/G/T n + C C/G/T n + C C/G/T n        # b141 bad alignment
+#rs1003689 - C A/C/G n + C A/C/G n + C A/C/G n        # b141 bad alignment
+#rs1004401 - G C/G/T n + G C/G/T n + G C/G/T n        # b141 bad alignment
+#rs10059147 + T A/C/G/T n - T A/C/G/T n - T A/C/G/T n # !! b141 correct !!  uh-oh.
+    # -- I think we should swap the (n n n)'s strands except for quad-allelics.
+    # ObservedMismatch new in hg38/b141 (only 17 of these):
+    awk '$9 == "n" && $13 == "y"' hg19_snp138_snp141_hg38_snp141_oriEtc_strandChange.txt
+#rs238806 - G C/G/T n + G C/G/T n - T C/G/T y    # flank matches - strand on 17, + on alt,
+                                                 # b141 has it backwards
+#rs2520920 - A A/C/T n + A A/C/T n - C A/C/T y   # flank matches - strand on16, + on alt,
+                                                 # b141 has it backwards
+#rs290792 - T A/G/T n + T A/G/T n + C A/G/T y    # flank matches -, 141 has +, new contig
+#rs4114722 - C C/G/T n + C C/G/T n + A C/G/T y   # b141 bad alignment
+#rs41544215 - C A/C/G n + C A/C/G n + T A/C/G y  # b141 bad aligment on all regardless of ObsMis
+#rs41562819 - A A/C/T n + A A/C/T n + G A/C/T y  # b141 bad alignment
+#rs499521 - C A/C/G n + C A/C/G n + T A/C/G y    # b141 bad alignment on all regardless of ObsMis
+#rs550657 - G C/G/T n + G C/G/T n - T C/G/T y    # b141 bad alignment on all regardless of ObsMis
+#rs9629160 - T A/C/T n + T A/C/T n + G A/C/T y   # b141 bad alignment
+    # -- yep, looks like this category (n n y) should be strand-swapped.
+    # ObservedMismatch in hg19/b141 but not hg38/b141:
+    awk '$9 == "y" && $13 == "n"' hg19_snp138_snp141_hg38_snp141_oriEtc_strandChange.txt \
+    | head
+#rs1038172 - G A/C/T n + G A/C/T y - T A/C/T n   # b141 bad alignment, lucky w/ObsMis
+#rs1052993 - A C/T n + A C/T y - A C/T n         # !! b141 correct on all incl 9 alts !!
+#rs1052993 - A C/T n + A C/T y - G C/T n         # -- same variant, different allele
+#rs1052995 - T A/G n + T A/G y - C A/G n         # !! b141 correct on all incl 9 alts !!
+#rs1052995 - T A/G n + T A/G y - T A/G n         # -- same variant, different allele
+#rs1070637 - G A/C/T n + G A/C/T y - A A/C/T n   # b141 bad alignment, lucky w/ObsMis
+#rs1081481 - C A/G n + C A/G y + G A/G n         # !! b141 correct !!
+#rs1096815 - C G/T n + C G/T y + T G/T n         # !! b141 correct !!
+#rs11266881 - A C/G/T n + A C/G/T y - C C/G/T n  # b141 bad alignment, lucky w/ObsMis
+#rs1132605 - G C/T n + G C/T y - A C/T n         # !! b141 correct !!
+    # -- in those cases strand in hg38/b141 matches strand in b138.  Exceptions?
+    awk '$9 == "y" && $13 == "n" && $2 != $10' \
+      hg19_snp138_snp141_hg38_snp141_oriEtc_strandChange.txt \
+    | head
+#rs1081481 - C A/G n + C A/G y + G A/G n         # !! b141 correct !!
+#rs1096815 - C G/T n + C G/T y + T G/T n         # !! b141 correct !!
+#rs1539656 - C A/G n + C A/G y + G A/G n
+#rs1663847 - C A/G n + C A/G y + G A/G n
+#rs1663850 - C A/G n + C A/G y + G A/G n
+#rs1663851 - C A/G n + C A/G y + G A/G n
+#rs1663852 - C G/T n + C G/T y + G G/T n
+#rs1663901 - T A/G n + T A/G y + A A/G n
+#rs1663903 - C A/G n + C A/G y + G A/G n
+#rs1778671 - G C/T n + G C/T y + C C/T n
+    # -- allele changes accompany strand change in hg38.  Leave this category (n y n) alone.
+    # ObservedMismatch in both hg19/b141 and hg38/b141
+    awk '$9 == "y" && $13 == "y"' hg19_snp138_snp141_hg38_snp141_oriEtc_strandChange.txt \
+    | head
+#rs1000002 - C A/G n + C A/G y + C A/G y         # b141 bad alignment
+#rs1000008 - G C/T n + G C/T y + G C/T y         # b141 bad alignment
+#rs1000015 - T A/G n + T A/G y + T A/G y         # b141 bad alignment
+#rs1000020 - C A/G n + C A/G y + C A/G y
+#rs1000027 - G A/C n + G A/C y + G A/C y
+#rs1000032 - G A/C n + G A/C y + G A/C y
+#rs1000041 - C A/G n + C A/G y + C A/G y
+#rs1000042 - C A/G n + C A/G y + C A/G y
+#rs1000043 - C A/G n + C A/G y + C A/G y
+#rs1000044 - C A/G n + C A/G y + C A/G y
+    # -- in those, hg38/snp141 exactly matches hg19/snp141... any allele changes?
+    awk '$9 == "y" && $13 == "y" && $7 != $11' \
+      hg19_snp138_snp141_hg38_snp141_oriEtc_strandChange.txt \
+    | head
+#rs1001572 - A C/T n + A C/T y + G C/T y         # b141 bad alignment
+#rs1001686 - G C/T n + G C/T y - C C/T y         # b141 bad alignment
+#rs1001814 - G C/T n + G C/T y + A C/T y         # b141 bad alignment, both mappings
+#rs1003590 - T A/G n + T A/G y + C A/G y
+#rs1003645 - C A/G n + C A/G y + T A/G y
+#rs1003847 - A C/T n + A C/T y + G C/T y
+#rs1005196 - G C/T n + G C/T y - C C/T y         # b141 bad alignment, all 3 mappings
+#rs1005197 - A C/T n + A C/T y - T C/T y
+#rs1005295 - T A/G n + T A/G y - A A/G y
+#rs1005581 - A C/T n + A C/T y + G C/T y
+    # Yep, looking consistently bad.  Swap the (n y y)'s.
+    # Are there any IDs that appear more than once? (i.e. in multiple categories or allele change?)
+    # Yep, quite a few:
+    awk '{print $1;}' hg19_snp138_snp141_hg38_snp141_oriEtc_strandChange.txt \
+      > ids_strandChange_all.txt
+    uniq ids_strandChange_all.txt \
+      > ids_strandChange_uniq.txt
+    comm -3 ids_strandChange_all.txt ids_strandChange_uniq.txt | uniq | wc -l
+#2379
+    # Some examples:
+    grep rs1008310 hg19_snp138_snp141_hg38_snp141_oriEtc_strandChange.txt
+#rs1008310 - C A/G n + C A/G y + C A/G y
+#rs1008310 - C A/G n + C A/G y - A A/G y
+#rs1008310 - C A/G n + C A/G y - G A/G y
+    # Let's look specifically for multiple ObsMis categories:
+    awk '{print $1, $5, $9, $13;}' hg19_snp138_snp141_hg38_snp141_oriEtc_strandChange.txt \
+    | uniq \
+      > rsObsMis.txt
+    wc -l rsObsMis.txt
+#332961 rsObsMis.txt
+    awk '{print $1;}' rsObsMis.txt | uniq | wc -l
+#332942
+    # Yep.  OK, get a list:
+    awk '{print $1;}' rsObsMis.txt > ids_rsObsMis_all.txt
+    uniq ids_rsObsMis_all.txt > ids_rsObsMis_uniq.txt
+    comm -3 ids_rsObsMis_all.txt ids_rsObsMis_uniq.txt > ids_rsObsMis_mult.txt
+    wc -l ids_rsObsMis_mult.txt
+#19 ids_rsObsMis_mult.txt
+    # Example:
+    grep rs11266881 hg19_snp138_snp141_hg38_snp141_oriEtc_strandChange.txt
+#rs11266881 - A C/G/T n + A C/G/T y + A C/G/T y  # b141 bad ali to chr17
+#rs11266881 - A C/G/T n + A C/G/T y - C C/G/T n  # b141 bad ali to alt but lucky w/ObsMis
+    grep rs238806 hg19_snp138_snp141_hg38_snp141_oriEtc_strandChange.txt
+#rs238806 - G C/G/T n + G C/G/T n + G C/G/T n    # b141 bad ali to chr17 but lucky w/ObsMis
+#rs238806 - G C/G/T n + G C/G/T n - T C/G/T y    # b141 bad ali to alt
+    grep rs2432527 hg19_snp138_snp141_hg38_snp141_oriEtc_strandChange.txt
+#rs2432527 - G A/C n + G A/C y + A A/C n         # b141 bad ali to alt 935 but lucky w/ObsMis
+#rs2432527 - G A/C n + G A/C y + G A/C y         # b141 bad ali to chr3, alts 779
+#rs2432527 - G A/C n + G A/C y - C A/C y         # b141 bad ali to alts 895, 924, 934, 936, 937
+    grep rs2520920 hg19_snp138_snp141_hg38_snp141_oriEtc_strandChange.txt
+#rs2520920 - A A/C/T n + A A/C/T n + A A/C/T n   # b141 bad ali but lucky w/ObsMis
+#rs2520920 - A A/C/T n + A A/C/T n - C A/C/T y
+    # -- spot-checked a few more and they're all bad but have at least one lucky w/ObsMis.
+    # Therefore I think it is safe to swap strand by rsID -- I haven't seen any cases where
+    # some mappings are correct but not other mappings for the same rsID.
+    # Make a list of rsID's that need strand-swapping, i.e. anything with ObsMis in hg38 b141
+    # and the (n n n)'s except quad-allelic.
+    awk '$13 == "y" || ($9 == "n" && $4 != "A/C/G/T" && $12 != "A/C/G/T") {print $1;}' \
+      hg19_snp138_snp141_hg38_snp141_oriEtc_strandChange.txt \
+    | uniq \
+      > idsToSwapStrand.txt
+    wc -l idsToSwapStrand.txt 
+#331493 idsToSwapStrand.txt
+    sed -e 's/^rs//;' idsToSwapStrand.txt \
+    | awk \
+    '{print "update b141_SNPContigLoc set orientation = 1 - orientation where snp_id = "$1";";}' \
+      > fixOrientation.sql
+    hgsql hg38snp141 < fixOrientation.sql
+    # Now continue from addToDbSnp to pick up the changes
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue addToDbSnp \
+      >>& do.log & tail -f do.log
+# *** All done!
+
+    # As in hg19.snp141, there were SNPs with weight > 1 but not MultipleAlignments,
+    # and after realigning some flanking sequences, I believe the weights are erroneous.
+    # Unfortunately hg38 also has some true cases of MultipleAlignments caused by
+    # weird almost-duplicate mappings... so pay attention to MultipleAlignments, but if
+    # we didn't find MultipleAlignments, then tweak the weight to 1 as we did for hg19:
+    mv snp141.bed.gz snp141BadWeights.bed.gz
+    zcat snp141BadWeights.bed.gz \
+    | awk -F"\t" 'BEGIN{OFS="\t";} {if ($18 !~ /MultipleAlignments/) { $17 = 1; }  print;}' \
+    | gzip -c \
+      > snp141.bed.gz
+    hgLoadBed -tab -onServer -tmpDir=$TMPDIR -allowStartEqualEnd -type=bed6+ \
+      hg38 snp141 -sqlTable=snp141.sql snp141.bed.gz
+    # Now rebuild snp141{Common,Flagged} which were missing some SNPs due to incorrect
+    # weights.  Fortunately, I don't need to redo ortho alleles or masked sequences
+    # because they filter out MultipleAlignments ignoring weight.
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=filter -stop=filter \
+      >>& do.log & tail -f do.log
+# (before: snp141Common had 14546553 rows, snp141Flagged had 124075)
+# (after:  snp141Common has 14547298 rows, snp141Flagged has 124776)
+
+    # 10/9/14: Matt found that MultipleAlignments was erroneously triggered
+    # by PAR1 X alt mappings.  I added chrX_*_alt entries to PAR table
+    # (see "Add chrX alts to par" section below); now re-run from snpNcbiToUcsc.
+    # 10/14/14: turned out I messed up the X_*_alt par entries, doh! Fixed par; run again.
+    cd /hive/data/outside/dbSNP/141/human_hg38
+    set tmpDir = `cat workingDir`
+    mkdir $tmpDir
+    pushd $tmpDir
+    hgsql hg38 -NBe 'select chrom,chromStart,chromEnd,name from par' > par.bed
+    ln -s /hive/data/outside/dbSNP/141/human_hg38/ucscNcbiSnp.bed.gz .
+    echo "\n10/14/14: Redo from snpNcbiToUcsc\n" >> /hive/data/outside/dbSNP/141/human_hg38/do.log
+    echo "snpNcbiToUcsc -snp132Ext -par=par.bed ucscNcbiSnp.bed.gz /hive/data/genomes/hg38/hg38.2bit snp141" >> /hive/data/outside/dbSNP/141/human_hg38/do.log
+    snpNcbiToUcsc -snp132Ext -par=par.bed ucscNcbiSnp.bed.gz /hive/data/genomes/hg38/hg38.2bit \
+      snp141 \
+      >>& /hive/data/outside/dbSNP/141/human_hg38/do.log &
+    tail -f /hive/data/outside/dbSNP/141/human_hg38/do.log
+    # Now repeat the fix from above for incorrect weights:
+    mv snp141.bed snp141BadWeights.bed
+    awk -F"\t" 'BEGIN{OFS="\t";} {if ($18 !~ /MultipleAlignments/) { $17 = 1; }  print;}' \
+      snp141BadWeights.bed \
+      > snp141.bed
+    # Compare results -- the only changes should be the disappearance of MultipleAlignments
+    # from the part of PAR1 that the alts overlap: chrX:319338-601516, chrY:319338-601516,
+    # chrX_KI270880v1_alt and chrX_KI270913v1_alt).
+    zcat /hive/data/outside/dbSNP/141/human_hg38/snp141.bed.gz > snp141.prev.bed
+    diff snp141.prev.bed snp141.bed | less
+    # Yep, differences are limited to those ranges and are disappearance of MultipleAlignments.
+    rm snp141.prev.bed
+    gzip *.txt *.bed *.tab
+    cp -p * /hive/data/outside/dbSNP/141/human_hg38/
+    popd
+
+    # Reload snp141 and snp141ExceptionDesc
+    hgLoadBed -tab -onServer -tmpDir=$TMPDIR -allowStartEqualEnd -type=bed6+ \
+      hg38 snp141 -sqlTable=snp141.sql snp141.bed.gz
+    zcat snp141ExceptionDesc.tab.gz \
+    | hgLoadSqlTab hg38 snp141ExceptionDesc $HOME/kent/src/hg/lib/snp125ExceptionDesc.sql stdin
+
+    # Regenerate snp141{Mult,Common,Flagged}:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=filter -stop=filter \
+      >>& do.log & tail -f do.log
+
+    # Clean up by pasting the output of this if it looks right:
+    echo rm `cat workingDir`/snp*
+
+    # Now unfortunately I do need to redo pretty much everything from this point on
+    # because everything uses MultipleAlignments.
+
+##############################################################################
+# SNP141 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 10/15/14 angie)
+# originally done 9/10/14.
+# updated 10/15/14 after Matt found that MultipleAlignments was erroneously triggered
+    # Redmine #13309
+    mkdir /hive/data/genomes/hg38/bed/snp141Ortho
+    cd /hive/data/genomes/hg38/bed/snp141Ortho
+    # Filter snp141 to to keep only uniquely mapped biallelic SNVs (class=single, length=1);
+    zcat /hive/data/outside/dbSNP/141/human_hg38/snp141.bed.gz \
+    | awk '$18 ~ /^MultipleAlignments|SingleClassTriAllelic|SingleClassQuadAllelic/ {print $4;}' \
+    | sort -u \
+      > snp141ExcludeIds.txt
+    wc -l snp141ExcludeIds.txt
+#304622 snp141ExcludeIds.txt
+    # Glom all human info that we need for the final table onto the
+    # name, to sneak it through liftOver: rsId|chr|start|end|obs|ref|strand
+    zcat /hive/data/outside/dbSNP/141/human_hg38/snp141.bed.gz \
+    | awk '$3-$2 == 1 && $11 == "single" {print;}' \
+    | grep -vFwf snp141ExcludeIds.txt \
+    | awk 'BEGIN{OFS="\t";} \
+        {print $1, $2, $3, \
+               $4 "|" $1 "|" $2 "|" $3 "|" $9 "|" $8 "|" $6, \
+               0, $6;}' \
+      > snp141ForLiftOver.bed
+      wc -l snp141ForLiftOver.bed
+#56466708 snp141ForLiftOver.bed
+
+    # For each other species, do a cluster run to liftOver to that species' coords
+    # and get the species' "allele" (reference assembly base) at that location.
+    # End with a lexical sort because we're going to join these files later.
+    cat > liftOne.csh<<'EOF'
+#!/bin/csh -ef
+set chunkFile = $1
+set db = $2
+set outFile = $3
+set Db = `echo $db | perl -wpe 's/(\S+)/\u$1/'`
+set liftOverFile = /hive/data/genomes/hg38/bed/liftOver/hg38To$Db.over.chain.gz
+set other2bit = /hive/data/genomes/$db/$db.2bit
+liftOver $chunkFile $liftOverFile stdout /dev/null \
+| $HOME/kent/src/hg/snp/snpLoad/getOrthoSeq.pl $other2bit \
+| sort > $outFile
+'EOF'
+EOF
+    chmod a+x liftOne.csh
+
+    # Map coords to chimp using liftOver.
+    mkdir run.liftOver
+    cd run.liftOver
+    mkdir split out
+    splitFile ../snp141ForLiftOver.bed 10000 split/chunk
+    cp /dev/null jobList
+    foreach chunkFile (split/chunk*)
+      set chunk = $chunkFile:t:r
+      foreach db (panTro4 ponAbe2 rheMac3)
+        echo ../liftOne.csh $chunkFile $db \{check out exists out/$db.$chunk.bed\} \
+          >> jobList
+      end
+    end
+    ssh ku
+    screen -S ortho -t ortho
+    cd /hive/data/genomes/hg38/bed/snp141Ortho/run.liftOver
+    para make jobList
+#Completed: 16941 of 16941 jobs
+#CPU time in finished jobs:    1562387s   26039.78m   434.00h   18.08d  0.050 y
+#IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+#Average job time:                  82s       1.37m     0.02h    0.00d
+#Longest finished job:             588s       9.80m     0.16h    0.01d
+#Submission to last job:          2881s      48.02m     0.80h    0.03d
+
+    cd /hive/data/genomes/hg38/bed/snp141Ortho
+    # Join the results for each chunk:
+    cat > joinOne.csh <<'EOF'
+#!/bin/csh -ef
+set chimpFile = $1
+set orangFile = $2
+set macFile = $3
+set outFile = $4
+set tmpFile = `mktemp`
+    # Use the glommed name field as a key to join up chimp, orang and macaque
+    # allele data.  Include glommed name from both files because if only
+    # file 2 has a line for the key in 2.1, then 1.1 is empty.  Then plop
+    # in the orthoGlom fields from each file, which are in the same order
+    # as the chimp and macaque columns of hg18.snp128OrthoPanTro2RheMac2.
+    join -o '1.1 2.1 1.2 1.3 1.4 1.5 1.6 2.2 2.3 2.4 2.5 2.6' \
+      -a 1 -a 2 -e '?' \
+      $chimpFile $orangFile \
+    | awk '{if ($1 != "?") { print $1, $3,$4,$5,$6,$7,$8,$9,$10,$11,$12; } \
+            else           { print $2, $3,$4,$5,$6,$7,$8,$9,$10,$11,$12; }}' \
+      > $tmpFile
+    join -o '1.1 2.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 1.10 1.11 2.2 2.3 2.4 2.5 2.6' \
+      -a 1 -a 2 -e '?' \
+      $tmpFile $macFile \
+    | perl -wpe 'chomp; \
+        ($glom12, $glom3, $o1Chr, $o1Start, $o1End, $o1Al, $o1Strand, \
+         $o2Chr, $o2Start, $o2End, $o2Al, $o2Strand, \
+         $o3Chr, $o3Start, $o3End, $o3Al, $o3Strand) = split; \
+        $glomKey = ($glom12 ne "?") ? $glom12 : $glom3; \
+        ($rsId, $hChr, $hStart, $hEnd, $hObs, $hAl, $hStrand) = \
+          split(/\|/, $glomKey); \
+        $o1Start =~ s/^\?$/0/;  $o2Start =~ s/^\?$/0/;  $o3Start =~ s/^\?$/0/; \
+        $o1End   =~ s/^\?$/0/;  $o2End   =~ s/^\?$/0/;  $o3End   =~ s/^\?$/0/; \
+        print join("\t", $hChr, $hStart, $hEnd, $rsId, $hObs, $hAl, $hStrand, \
+                         $o1Chr, $o1Start, $o1End, $o1Al, $o1Strand, \
+                         $o2Chr, $o2Start, $o2End, $o2Al, $o2Strand, \
+                         $o3Chr, $o3Start, $o3End, $o3Al, $o3Strand) . "\n"; \
+        s/^.*$//;' \
+        > $outFile
+     rm $tmpFile
+'EOF'
+EOF
+    chmod a+x joinOne.csh
+    mkdir /hive/data/genomes/hg38/bed/snp141Ortho/run.join
+    cd /hive/data/genomes/hg38/bed/snp141Ortho/run.join
+    mkdir out
+    ln -s ../run.liftOver/split .
+    cp /dev/null jobList
+    foreach f (split/chunk*)
+      set chunk = $f:t
+      echo ../joinOne.csh ../run.liftOver/out/{panTro4,ponAbe2,rheMac3}.$chunk.bed \
+        \{check out exists out/$chunk.bed\} \
+        >> jobList
+    end
+    para make jobList
+#Completed: 5647 of 5647 jobs
+#CPU time in finished jobs:       1626s      27.10m     0.45h    0.02d  0.000 y
+#IO & Wait Time:                 44978s     749.63m    12.49h    0.52d  0.001 y
+#Average job time:                   8s       0.14m     0.00h    0.00d
+#Longest finished job:              35s       0.58m     0.01h    0.00d
+#Submission to last job:           642s      10.70m     0.18h    0.01d
+
+    # Back on hgwdev, cat all of the joined results together (~45mins) & load table.
+    cd /hive/data/genomes/hg38/bed/snp141Ortho
+    sort -k1,1 -k2n,2n run.join/out/chunk*.bed > snp141OrthoPt4Pa2Rm3.bed
+    hgLoadBed -tab -onServer -tmpDir=/data/tmp -renameSqlTable \
+      -sqlTable=$HOME/kent/src/hg/lib/snpOrthoPanPonRhe.sql \
+      hg38 snp141OrthoPt4Pa2Rm3 snp141OrthoPt4Pa2Rm3.bed
+#Read 54877953 elements of size 22 from snp141OrthoPt4Pa2Rm3.bed
+
+    # Cleanup:
+    rm -r run*/out run*/split
+    gzip snp141ExcludeIds.txt snp141ForLiftOver.bed snp141OrthoPt4Pa2Rm3.bed &
+
+
+############################################################################
+# SNPMASKED SEQUENCE FOR SNP141 (DONE 10/14/14 angie)
+# originally done 9/3/14.
+# updated 10/14/14 after Matt found that MultipleAlignments was erroneously triggered
+    # Redmine #13309
+    mkdir /hive/data/genomes/hg38/snp141Mask
+    cd /hive/data/genomes/hg38/snp141Mask
+    # Identify rsIds with various problems -- we will exclude those.
+    zcat /hive/data/outside/dbSNP/141/human_hg38/snp141.bed.gz \
+    | awk '$18 ~ /MultipleAlignments|ObservedTooLong|ObservedWrongFormat|ObservedMismatch|MixedObserved/ {print $4;}' \
+      | sort -u \
+      > snp141ExcludeRsIds.txt
+    zcat /hive/data/outside/dbSNP/141/human_hg38/snp141.bed.gz \
+    | grep -vFwf snp141ExcludeRsIds.txt \
+      > snp141Cleaned.bed
+    wc -l snp141Cleaned.bed
+#61856902 snp141Cleaned.bed
+
+    # Substitutions:
+    mkdir substitutions
+    snpMaskSingle snp141Cleaned.bed /hive/data/genomes/hg38/hg38.2bit stdout diffObserved.txt \
+    | faSplit byname stdin substitutions/
+#Masked 55246923 snps in 55246914 out of 3204659592 genomic bases
+#/hive/data/genomes/hg38/hg38.2bit has 3209286105 total bases, but the total number of bases in sequences for which we masked snps is 3204659592 (difference is 4626513)
+    # Check that 4626513 is the total #bases in sequences with nothing in snp141Cleaned:
+    grep -Fw single snp141Cleaned.bed | cut -f 1 | uniq > /data/tmp/1
+    grep -vwf /data/tmp/1 ../chrom.sizes \
+    | awk 'BEGIN {TOTAL = 0;}  {TOTAL += $2;}  END {printf "%d\n", TOTAL;}'
+#4626513
+    # warnings about differing observed strings at same base position:
+    wc -l diffObserved.txt
+#20 diffObserved.txt
+    # -- small beans, and dbSNP is aware of thousands of SNPs that have clustering issues.
+    # Make sure that sizes are identical, first diffs are normal -> IUPAC,
+    # and first diffs' case is preserved:
+    foreach f (substitutions/chr*.fa)
+      twoBitToFa -seq=$f:t:r /hive/data/genomes/hg38/hg38.2bit stdout \
+      | faCmp -softMask $f stdin |& grep -v "that differ"
+    end
+#chr1 in substitutions/chr1.fa differs from chr1 at stdin at base 10107 (y != c)
+#chr10 in substitutions/chr10.fa differs from chr10 at stdin at base 14582 (K != T)
+#chr10_GL383545v1_alt in substitutions/chr10_GL383545v1_alt.fa differs from chr10_GL383545v1_alt at stdin at base 58 (R != G)
+#chr10_GL383546v1_alt in substitutions/chr10_GL383546v1_alt.fa differs from chr10_GL383546v1_alt at stdin at base 35 (R != A)
+#...
+#(output OK -- ambiguous bases replacing [agct] at SNP positions)
+    foreach f (substitutions/chr*.fa)
+      mv $f $f:r.subst.fa
+    end
+    # Fire off a bunch of gzip jobs in parallel:
+    ls -1 substitutions/*.fa | split -l 10
+    foreach f (x??)
+      gzip `cat $f` &
+    end
+    # Wait for backgrounded gzip jobs to complete
+    rm x??
+
+    # Insertions & deletions not done.  To date we have only offered substs for download.
+    # If there is user demand, use template from snp131 above.
+
+    # Clean up and prepare for download:
+    gzip snp141Cleaned.bed &
+    foreach d (substitutions)
+      pushd $d
+        md5sum *.gz > md5sum.txt
+        # NOTE FOR NEXT TIME: copy from previous hg38 version.
+        cp /hive/data/genomes/hg19/snp141Mask/$d/README.txt .
+      popd
+    end
+    # Edit the README.txt.
+
+    # Create download links on hgwdev.
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/snp141Mask
+    ln -s /hive/data/genomes/hg38/snp141Mask/substitutions/* \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/snp141Mask/
+
+
+##############################################################################
+# DBSNP B142 / SNP142 (DONE 10/24/14)
+    # Redmine #14189
+    mkdir -p /hive/data/outside/dbSNP/142/human_hg38
+    cd /hive/data/outside/dbSNP/142/human_hg38
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/organisms/
+    # to find the subdir name to use as orgDir below (human_9606_b142_GRCh38 in this case).
+    # Go to that subdirectory, then to database/organism_data/ and look for files
+    # whose names start with b142_* and may or may not end with a suffix that identifies
+    # the build assembly version or some annotation version.  If there is a suffix shared
+    # by all b142_* files, add that to config.ra as the "buildAssembly".
+    cat > config.ra <<EOF
+db hg38
+orgDir human_9606_b142_GRCh38
+build 142
+buildAssembly 106
+refAssemblyLabel GRCh38
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >& do.log & tail -f do.log
+
+    # It fails saying there are sequences it won't be able to lift (because we haven't
+    # specified a liftUp file in config.ra).  Use the auto-generated suggested.lft file:
+    cp suggested.lft usingSuggested.lft
+    cat >> config.ra <<EOF
+liftUp usingSuggested.lft
+EOF
+    # Continue at loadDbSnp.  Stop after loadDbSnp to identify SNPs whose sequences didn't
+    # make it into the rs_fasta dump files; we can fetch those separately from dbSNP's
+    # batch query.
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=loadDbSnp -stop=loadDbSnp \
+      >>& do.log & tail -f do.log
+
+    # While that's running, compare rs IDs in rs_fasta with b142_SNPContigLoc_106 to see
+    # which IDs (if any) were omitted from the rs_fasta dump.
+    zcat rs_fasta/rs*.fas.gz \
+    | perl -wne 'if (/^>/) { s/^>gnl\|dbSNP\|(rs\d+) .*/$1/ || die; print; }' \
+    | sort -u > rsFastaIds.txt
+    zcat data/b142_SNPContigLoc_106.bcp.gz \
+    | awk '{print "rs" $2;}' \
+    | sort -u > contigLocIds.txt
+    comm -13 rsFastaIds.txt contigLocIds.txt > missingFromRsFasta.txt
+    wc -l missingFromRsFasta.txt
+#113 missingFromRsFasta.txt
+    # Fewer than in snp141 but more than hg19.snp142.
+    # Fetch fasta for those ids from dbSNP's batch_query.
+    # Go to this URL:
+    #   http://www.ncbi.nlm.nih.gov/projects/SNP/dbSNP.cgi?list=rsfile
+    # Enter your email address, select FASTA as output format, and upload missingFromRsFasta.txt
+    # Wait for email with link to results -- don't close that tab! -- then download the results:
+    # NOTE: after 1 day no email has arrived from dbSNP, so I suspect that as in hg19 snp142,
+    # all of those rs's have been deleted.  I hand-checked a half dozen from different parts
+    # of the file and all were deleted -- looks like a big range of rs's were deleted due to
+    # retracted single submissions.
+    # So rs_fasta is actually complete this time and those extras in SNPContigLoc can be dropped!
+    # Here's what I would have done if actual fasta sequences were returned:
+    wget -O rs_fasta/rs_chBatchQuery.fas.gz $fileFromDbSnpEmail
+    # Now continue from the addToDbSnp step.
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue addToDbSnp \
+      >>& do.log & tail -f do.log
+# *** All done!
+    # Wow, it almost never runs so smoothly; there are usually some formatting weirdnesses
+    # that gum up snpNcbiToUcsc in the translate step.
+
+    # Ah, they have made lists of strand flippers again... should reality-check them:
+    wget ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606/misc/known_issues/b142/rs_with_changed_orientation.bcp
+    # First two lines:
+#GRCh38_chr|GRCh38_chr_pos_start_0based|GRCh38_chr_reference_allele|snp_id|b142_GRCh38_rs2chr_orien|b141_GRCh38_rs2chr_orien|orienChange_reason|
+#1|119072199|G|138203431|0|1|dataflow_issue|
+    # Blatting rs138203431's flanking seqs to hg19, looks like + (0) is the correct orientation
+    # so does this mean they goofed the strand in 142?
+    # Nope, looks like they goofed it in 141 and 142 is OK, good.
+    # Checked more examples, all look like improvements.  Yay!
+
+
+##############################################################################
+# SNP142 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 11/05/14 angie)
+    # Redmine #13309
+    mkdir /hive/data/genomes/hg38/bed/snp142Ortho
+    cd /hive/data/genomes/hg38/bed/snp142Ortho
+    # Filter snp142 to to keep only uniquely mapped biallelic SNVs (class=single, length=1);
+    zcat /hive/data/outside/dbSNP/142/human_hg38/snp142.bed.gz \
+    | awk '$18 ~ /^MultipleAlignments|SingleClassTriAllelic|SingleClassQuadAllelic/ {print $4;}' \
+    | sort -u \
+      > snp142ExcludeIds.txt
+    wc -l snp142ExcludeIds.txt
+#901804 snp142ExcludeIds.txt
+    # Glom all human info that we need for the final table onto the
+    # name, to sneak it through liftOver: rsId|chr|start|end|obs|ref|strand
+    zcat /hive/data/outside/dbSNP/142/human_hg38/snp142.bed.gz \
+    | awk '$3-$2 == 1 && $11 == "single" {print;}' \
+    | grep -vFwf snp142ExcludeIds.txt \
+    | awk 'BEGIN{OFS="\t";} \
+        {print $1, $2, $3, \
+               $4 "|" $1 "|" $2 "|" $3 "|" $9 "|" $8 "|" $6, \
+               0, $6;}' \
+      > snp142ForLiftOver.bed
+      wc -l snp142ForLiftOver.bed
+#105591074 snp142ForLiftOver.bed
+
+    # Do a cluster run to use liftOver to get the other species' coords
+    # and get the species' "allele" (reference assembly base) at that location.
+    # End with a lexical sort because we're going to join these files later.
+    cat > liftOne.csh<<'EOF'
+#!/bin/csh -ef
+set chunkFile = $1
+set db = $2
+set outFile = $3
+set Db = `echo $db | perl -wpe 's/(\S+)/\u$1/'`
+set liftOverFile = /hive/data/genomes/hg38/bed/liftOver/hg38To$Db.over.chain.gz
+set other2bit = /hive/data/genomes/$db/$db.2bit
+liftOver $chunkFile $liftOverFile stdout /dev/null \
+| $HOME/kent/src/hg/snp/snpLoad/getOrthoSeq.pl $other2bit \
+| sort > $outFile
+'EOF'
+EOF
+    chmod a+x liftOne.csh
+
+    # Map coords to chimp using liftOver.
+    mkdir run.liftOver
+    cd run.liftOver
+    mkdir split out
+    splitFile ../snp142ForLiftOver.bed 10000 split/chunk
+    cp /dev/null jobList
+    foreach chunkFile (split/chunk*)
+      set chunk = $chunkFile:t:r
+      foreach db (panTro4 ponAbe2 rheMac3)
+        echo ../liftOne.csh $chunkFile $db \{check out exists out/$db.$chunk.bed\} \
+          >> jobList
+      end
+    end
+    ssh ku
+    screen -S ortho -t ortho
+    cd /hive/data/genomes/hg38/bed/snp142Ortho/run.liftOver
+    para make jobList
+    # busy day on the cluster -- 4.4 hours instead of <1 hr
+#Completed: 31680 of 31680 jobs
+#CPU time in finished jobs:    2877974s   47966.23m   799.44h   33.31d  0.091 y
+#IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+#Average job time:                  89s       1.48m     0.02h    0.00d
+#Longest finished job:             532s       8.87m     0.15h    0.01d
+#Submission to last job:         15927s     265.45m     4.42h    0.18d
+
+    cd /hive/data/genomes/hg38/bed/snp142Ortho
+    # Join the results for each chunk:
+    cat > joinOne.csh <<'EOF'
+#!/bin/csh -ef
+set chimpFile = $1
+set orangFile = $2
+set macFile = $3
+set outFile = $4
+set tmpFile = `mktemp`
+    # Use the glommed name field as a key to join up chimp, orang and macaque
+    # allele data.  Include glommed name from both files because if only
+    # file 2 has a line for the key in 2.1, then 1.1 is empty.  Then plop
+    # in the orthoGlom fields from each file, which are in the same order
+    # as the chimp and macaque columns of hg18.snp128OrthoPanTro2RheMac2.
+    join -o '1.1 2.1 1.2 1.3 1.4 1.5 1.6 2.2 2.3 2.4 2.5 2.6' \
+      -a 1 -a 2 -e '?' \
+      $chimpFile $orangFile \
+    | awk '{if ($1 != "?") { print $1, $3,$4,$5,$6,$7,$8,$9,$10,$11,$12; } \
+            else           { print $2, $3,$4,$5,$6,$7,$8,$9,$10,$11,$12; }}' \
+      > $tmpFile
+    join -o '1.1 2.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 1.10 1.11 2.2 2.3 2.4 2.5 2.6' \
+      -a 1 -a 2 -e '?' \
+      $tmpFile $macFile \
+    | perl -wpe 'chomp; \
+        ($glom12, $glom3, $o1Chr, $o1Start, $o1End, $o1Al, $o1Strand, \
+         $o2Chr, $o2Start, $o2End, $o2Al, $o2Strand, \
+         $o3Chr, $o3Start, $o3End, $o3Al, $o3Strand) = split; \
+        $glomKey = ($glom12 ne "?") ? $glom12 : $glom3; \
+        ($rsId, $hChr, $hStart, $hEnd, $hObs, $hAl, $hStrand) = \
+          split(/\|/, $glomKey); \
+        $o1Start =~ s/^\?$/0/;  $o2Start =~ s/^\?$/0/;  $o3Start =~ s/^\?$/0/; \
+        $o1End   =~ s/^\?$/0/;  $o2End   =~ s/^\?$/0/;  $o3End   =~ s/^\?$/0/; \
+        print join("\t", $hChr, $hStart, $hEnd, $rsId, $hObs, $hAl, $hStrand, \
+                         $o1Chr, $o1Start, $o1End, $o1Al, $o1Strand, \
+                         $o2Chr, $o2Start, $o2End, $o2Al, $o2Strand, \
+                         $o3Chr, $o3Start, $o3End, $o3Al, $o3Strand) . "\n"; \
+        s/^.*$//;' \
+        > $outFile
+     rm $tmpFile
+'EOF'
+EOF
+    chmod a+x joinOne.csh
+    mkdir /hive/data/genomes/hg38/bed/snp142Ortho/run.join
+    cd /hive/data/genomes/hg38/bed/snp142Ortho/run.join
+    mkdir out
+    ln -s ../run.liftOver/split .
+    cp /dev/null jobList
+    foreach f (split/chunk*)
+      set chunk = $f:t
+      echo ../joinOne.csh ../run.liftOver/out/{panTro4,ponAbe2,rheMac3}.$chunk.bed \
+        \{check out exists out/$chunk.bed\} \
+        >> jobList
+    end
+    para make jobList
+#Completed: 10560 of 10560 jobs
+#CPU time in finished jobs:       2815s      46.92m     0.78h    0.03d  0.000 y
+#IO & Wait Time:                 35161s     586.02m     9.77h    0.41d  0.001 y
+#Average job time:                   4s       0.06m     0.00h    0.00d
+#Longest finished job:              21s       0.35m     0.01h    0.00d
+#Submission to last job:          2149s      35.82m     0.60h    0.02d
+
+    # Back on hgwdev, cat all of the joined results together (~45mins) & load table.
+    cd /hive/data/genomes/hg38/bed/snp142Ortho
+    sort -k1,1 -k2n,2n run.join/out/chunk*.bed > snp142OrthoPt4Pa2Rm3.bed
+    hgLoadBed -tab -onServer -tmpDir=/data/tmp -renameSqlTable \
+      -sqlTable=$HOME/kent/src/hg/lib/snpOrthoPanPonRhe.sql \
+      hg38 snp142OrthoPt4Pa2Rm3 snp142OrthoPt4Pa2Rm3.bed
+#Read 103101754 elements of size 22 from snp142OrthoPt4Pa2Rm3.bed
+
+    # Cleanup:
+    rm -r run*/out run*/split
+    gzip snp142ExcludeIds.txt snp142ForLiftOver.bed snp142OrthoPt4Pa2Rm3.bed &
+
+
+##############################################################################
+# SNPMASKED SEQUENCE FOR SNP142 (DONE 11/06/14 angie)
+    # Redmine #13309
+    mkdir /hive/data/genomes/hg38/snp142Mask
+    cd /hive/data/genomes/hg38/snp142Mask
+    # Identify rsIds with various problems -- we will exclude those.
+    zcat /hive/data/outside/dbSNP/142/human_hg38/snp142.bed.gz \
+    | awk '$18 ~ /MultipleAlignments|ObservedTooLong|ObservedWrongFormat|ObservedMismatch|MixedObserved/ {print $4;}' \
+      | sort -u \
+      > snp142ExcludeRsIds.txt
+    zcat /hive/data/outside/dbSNP/142/human_hg38/snp142.bed.gz \
+    | grep -vFwf snp142ExcludeRsIds.txt \
+      > snp142Cleaned.bed
+    wc -l snp142Cleaned.bed
+#113091839 snp142Cleaned.bed
+
+    # Substitutions:
+    mkdir substitutions
+    snpMaskSingle snp142Cleaned.bed /hive/data/genomes/hg38/hg38.2bit stdout diffObserved.txt \
+    | faSplit byname stdin substitutions/
+#Masked 105456777 snps in 105456777 out of 3204743519 genomic bases
+#/hive/data/genomes/hg38/hg38.2bit has 3209286105 total bases, but the total number of bases in sequences for which we masked snps is 3204743519 (difference is 4542586)
+    # Check that 4542586 is the total #bases in sequences with nothing in snp142Cleaned:
+    grep -Fw single snp142Cleaned.bed | cut -f 1 | uniq > /data/tmp/1
+    grep -vwf /data/tmp/1 ../chrom.sizes \
+    | awk 'BEGIN {TOTAL = 0;}  {TOTAL += $2;}  END {printf "%d\n", TOTAL;}'
+#4542586
+    # warnings about differing observed strings at same base position:
+    wc -l diffObserved.txt
+#0 diffObserved.txt
+    # yay!
+    # Make sure that sizes are identical, first diffs are normal -> IUPAC,
+    # and first diffs' case is preserved:
+    foreach f (substitutions/chr*.fa)
+      twoBitToFa -seq=$f:t:r /hive/data/genomes/hg38/hg38.2bit stdout \
+      | faCmp -softMask $f stdin |& grep -v "that differ"
+    end
+#chr1 in substitutions/chr1.fa differs from chr1 at stdin at base 10107 (y != c)
+#chr10 in substitutions/chr10.fa differs from chr10 at stdin at base 14553 (R != A)
+#chr10_GL383545v1_alt in substitutions/chr10_GL383545v1_alt.fa differs from chr10_GL383545v1_alt at stdin at base 5 (M != C)
+#chr10_GL383546v1_alt in substitutions/chr10_GL383546v1_alt.fa differs from chr10_GL383546v1_alt at stdin at base 13 (K != G)
+#...
+#(output OK -- ambiguous bases replacing [agct] at SNP positions)
+    foreach f (substitutions/chr*.fa)
+      mv $f $f:r.subst.fa
+    end
+    # Fire off a bunch of gzip jobs in parallel:
+    ls -1 substitutions/*.fa | split -l 10
+    foreach f (x??)
+      gzip `cat $f` &
+    end
+    # Wait for backgrounded gzip jobs to complete
+    rm x??
+
+    # Insertions & deletions not done.  To date we have only offered substs for download.
+    # If there is user demand, use template from snp131 in hg19.txt.
+
+    # Clean up and prepare for download:
+    gzip snp142Cleaned.bed &
+    foreach d (substitutions)
+      pushd $d
+        md5sum *.gz > md5sum.txt
+        cp /hive/data/genomes/hg38/snp141Mask/$d/README.txt .
+      popd
+    end
+    # Edit the README.txt.
+
+    # Create download links on hgwdev.
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/snp142Mask
+    ln -s /hive/data/genomes/hg38/snp142Mask/substitutions/* \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/snp142Mask/
+
+
+##############################################################################
+# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 11/7/14 angie)
+# Redmine #14188
+    set today = `date +%y%m%d`
+    mkdir -p /hive/data/genomes/hg38/bed/dgv/$today
+    cd /hive/data/genomes/hg38/bed/dgv/$today
+    set release = 2014-10-16
+    wget http://dgv.tcag.ca/dgv/docs/GRCh38_hg38_variants_$release.txt
+    wget http://dgv.tcag.ca/dgv/docs/GRCh38_hg38_supportingvariants_$release.txt
+    # These are the latest columns; if any changes, update translateDgvPlus.pl:
+    head -1 GRCh38_hg38*.txt
+#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription  genes   samples
+    # Eyeball the categories of variants:
+    cut -f 5,6 GRCh38_hg38_supportingvariants_$release.txt  | sort | uniq -c | head -100
+#1849011 CNV     deletion
+# 151324 CNV     duplication
+# 291997 CNV     gain
+#   4119 CNV     gain+loss
+#  73327 CNV     insertion
+# 774842 CNV     loss
+#  48428 CNV     mobile element insertion
+#   9063 CNV     novel sequence insertion
+#   7827 CNV     tandem duplication
+#    487 OTHER   complex
+#   2262 OTHER   inversion
+#   3696 OTHER   sequence alteration
+#      1 varianttype     variantsubtype
+
+    cut -f 5,6 GRCh38_hg38_variants_$release.txt | sort | uniq -c | head -100
+#  89091 CNV     deletion
+#  21081 CNV     duplication
+#  26220 CNV     gain
+#   5644 CNV     gain+loss
+#  25552 CNV     insertion
+#  69253 CNV     loss
+#   4156 CNV     mobile element insertion
+#   8973 CNV     novel sequence insertion
+#    517 CNV     tandem duplication
+#    456 OTHER   complex
+#   1275 OTHER   inversion
+#   1992 OTHER   sequence alteration
+#      1 varianttype     variantsubtype
+    ~/kent/src/hg/utils/automation/translateDgvPlus.pl \
+      GRCh38_hg38_supportingvariants_$release.txt > dgvSupporting.bed
+    ~/kent/src/hg/utils/automation/translateDgvPlus.pl \
+      GRCh38_hg38_variants_$release.txt > dgvMerged.bed
+    hgLoadBed hg38 dgvSupporting dgvSupporting.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
+#Read 3216383 elements of size 22 from dgvSupporting.bed
+    hgLoadBed hg38 dgvMerged dgvMerged.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
+#Read 254210 elements of size 22 from dgvMerged.bed
+
+
+##############################################################################
