@@ -40,19 +40,21 @@ The <a href='bedgraph.html'>bedGraph</a> format should be used if it
 is important to retain exact data when exporting.
 
 <P><B>General Structure</B></P> Wiggle format is line-oriented. For wiggle custom
-tracks, the first line must be a <A HREF="customTrack.html#TRACK"
-TARGET=_BLANK>track definition line</A>, which
+tracks, <b>the first line must be a <A HREF="customTrack.html#TRACK"
+TARGET=_BLANK>track definition line</A>  (<em>i.e.</em>, track type=wiggle_0)</b>, which
 designates the track as a wiggle track and adds a number of options for
 controlling the default display.
 <P>
-Wiggle format is composed of declaration lines and data lines. There are
+Wiggle format is composed of declaration lines and data lines, and require a
+separate wiggle track definition line. There are
 two options for formatting wiggle data: <B>variableStep</B> and <B>fixedStep</B>.
 These formats were developed to allow the file to be written as compactly as
 possible.
 <UL>
 
 <LI> <B>variableStep</B> is for data with irregular intervals between new
-data points and is the more commonly used wiggle format. It begins with a
+data points and is the more commonly used wiggle format. After the wiggle 
+track definition line, variableStep begins with a
 declaration line and is followed by two columns containing chromosome positions
 and data values:
 <FONT color="#0000FF"><PRE>
@@ -94,7 +96,8 @@ advisable to use <A HREF="bedgraph.html" TARGET=_blank>BedGraph</A> format.
 </P>
 
 <LI> <B>fixedStep</B> is for data with regular intervals between new data
-values and is the more compact wiggle format. It begins with a declaration
+values and is the more compact wiggle format. After the wiggle track
+definition line, fixedStep begins with a declaration
 line and is followed by a single column of data values:
 <FONT color="#0000FF"><PRE>
   <B>fixedStep</B>  <B>chrom=</B><I>chrN</I>  <B>start=</B><I>position</I>  <B>step=</B><I>stepInterval</I>  <B>[span=</B><I>windowSize</I><B>]</B>
