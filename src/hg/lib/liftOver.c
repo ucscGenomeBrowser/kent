@@ -906,7 +906,7 @@ for (;;)
 	}
     if (done) 
 	break;
-    if (b->tEnd <= r->end)
+    if (b->tEnd < r->end)
 	{
 	b = b->next;
 	if (b == NULL)
