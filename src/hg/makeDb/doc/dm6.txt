@@ -2369,8 +2369,8 @@ close (FH);
 	dm6.27way.nh | xargs echo | sed 's/ //g; s/,/ /g' > tree.nh
 
     sed 's/[()]//g; s/,/ /g' tree.nh > species.list
-# dm6 droSim1 droSec1 droYak3 droEre2 droBia2 droSuz1 droAna3 droBip2 droEug2 
-# droEle2 droKik2 droTak2 droRho2 droFic2 droPse3 droPer1 droMir2 droWil2 
+# dm6 droSim1 droSec1 droYak3 droEre2 droBia2 droSuz1 droAna3 droBip2 droEug2
+# droEle2 droKik2 droTak2 droRho2 droFic2 droPse3 droPer1 droMir2 droWil2
 # droVir3 droMoj3 droAlb1 droGri2 musDom2 anoGam1 apiMel4 triCas2
 
     #	bash shell syntax here ...
@@ -2421,13 +2421,6 @@ done
 # -rw-rw-r-- 1 69660184 Aug 29 15:02 mafLinks/droEug2/dm6.droEug2.synNet.maf.gz
 # -rw-rw-r-- 1 61713626 Aug 29 15:06 mafLinks/droRho2/dm6.droRho2.synNet.maf.gz
 # -rw-rw-r-- 1 19994083 Aug 29 15:08 mafLinks/musDom2/dm6.musDom2.net.maf.gz
-
-#-rw-rw-r-- 1  709500062 Jan 25 12:15 mafLinks/mm10/dm6.mm10.synNet.maf.gz
-#-rw-rw-r-- 1 1089643630 Jan 27 19:15 mafLinks/canFam3/dm6.canFam3.synNet.maf.gz
-#-rw-rw-r-- 1 1277455681 Jan 27 21:52 mafLinks/rheMac3/dm6.rheMac3.synNet.maf.gz
-#-rw-rw-r-- 1  687500679 Mar  1 12:27 mafLinks/rn5/dm6.rn5.synNet.maf.gz
-#-rw-rw-r-- 1 1463969868 May 27 11:41 mafLinks/panTro4/dm6.panTro4.synNet.maf.gz
-#-rw-rw-r-- 1  323347908 May 29 12:38 mafLinks/monDom5/dm6.monDom5.net.maf.gz
 
     # split the maf files into a set of hashed named files
     # this hash named split keeps the same chr/contig names in the same
@@ -2557,70 +2550,243 @@ done >> multiz27way.maf
 
     rm multiz27way*.tab
 
-##############################################################################
-# multiz27way MAF FRAMES (DONE - 2014-09-11 - Hiram)
+#######################################################################
+# GAP ANNOTATE MULTIZ27WAY MAF AND LOAD TABLES (DONE - 2014-11-13 - Hiram)
+    # mafAddIRows has to be run on single chromosome maf files, it does not
+    #   function correctly when more than one reference sequence
+    #   are in a single file.
+    mkdir -p /hive/data/genomes/dm6/bed/multiz27way/anno/mafSplit
+    cd /hive/data/genomes/dm6/bed/multiz27way/anno/mafSplit
+    time mafSplit -byTarget -useFullSequenceName \
+        /dev/null . ../../multiz27way.maf
+
+    ls | wc
+    # 277     277    6007
+
+    cd /hive/data/genomes/dm6/bed/multiz27way/anno
+    # skipped making the N.bed files - all dbs should have one already
+    # check for N.bed files everywhere:
+    for DB in `cat ../species.list.txt`
+do
+    if [ ! -s /hive/data/genomes/${DB}/${DB}.N.bed ]; then
+        echo "MISS: ${DB}"
+        cd /hive/data/genomes/${DB}
+        twoBitInfo -nBed ${DB}.2bit ${DB}.N.bed
+    else
+        echo "  OK: ${DB}"
+    fi
+    cd /hive/data/genomes/dm6/bed/multiz27way/anno
+done
+
+    for DB in `cat ../species.list.txt`
+    do
+      echo "${DB} "
+      ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+      echo ${DB}.bed  >> nBeds
+      ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+      echo ${DB}.len  >> sizes
+    done
+
+    # make sure they all are successful symLinks:
+    ls -ogrtL
+
+    cd /hive/data/genomes/dm6/bed/multiz27way/anno
+    mkdir result
+    cat << '_EOF_' > template
+#LOOP
+mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/dm6/dm6.2bit {check out exists+ result/$(file1)}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ls mafSplit/*.maf > maf.list
+    ssh ku
+    cd /hive/data/genomes/dm6/bed/multiz27way/anno
+    gensub2 maf.list single template jobList
+
+    para create jobList
+    para try ... check ... etc
+    para push
+# Completed: 276 of 277 jobs
+# Other count: 1 jobs
+# CPU time in finished jobs:        285s       4.75m     0.08h    0.00d  0.000 y
+# IO & Wait Time:                  4730s      78.84m     1.31h    0.05d  0.000 y
+# Average job time:                  18s       0.30m     0.01h    0.00d
+# Longest finished job:             103s       1.72m     0.03h    0.00d
+# Submission to last job:           195s       3.25m     0.05h    0.00d
+    # one job was completed manually due to ku problems
+
+    # combine into one file
+    head -q -n 1 result/chr2L.maf > dm6.27way.maf
+    for F in result/*.maf
+    do
+	grep -h -v "^#" ${F}
+    done >> dm6.27way.maf
+    #   these maf files do not have the end marker, this does nothing:
+    #   tail -q -n 1 result/chr2L.maf > dm6.27way.maf
+    #   tail -q -n 1 result/GL172637.maf >> dm6.27way.maf
+    # How about an official end marker:
+    echo "##eof maf" >> dm6.27way.maf
+
+    # Load into database
+    rm /gbdb/dm6/multiz27way/multiz27way.maf   # remove old symlink
+    ln -s `pwd`/dm6.27way.maf /gbdb/dm6/multiz27way/multiz27way.maf
+    cd /dev/shm
+    time nice -n +19 hgLoadMaf dm6 multiz27way
+
+    #  real    1m43.417s
+
+    time hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 dm6 multiz27waySummary \
+	/gbdb/dm6/multiz27way/multiz27way.maf
+    # Created 157893 summary blocks from 34026658 components and 2115903 mafs
+    #  from /gbdb/dm6/multiz27way/multiz27way.maf
+    # real    2m41.434s
+
+    wc -l multiz27way*.tab
+    # 2115903 multiz27way.tab
+    #  157893 multiz27waySummary.tab
+    # 2273796 total
+
+    rm multiz27way*.tab
+
+#########################################################################
+# multiz27way MAF FRAMES (DONE - 2014-11-13 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/dm6/bed/multiz27way/frames
     cd /hive/data/genomes/dm6/bed/multiz27way/frames
-#   survey all the genomes to find out what kinds of gene tracks they have
-    cat << '_EOF_' > showGenes.csh
-#!/bin/csh -fe
-foreach db (`cat ../species.list`)
+    mkdir genes
+
+    cat << '_EOF_' > showGenes.sh
+#!/bin/sh
+cat ../species.list.txt | while read db
+do
     echo -n "${db}: "
-    set tables = `hgsql $db -N -e "show tables like '%Gene%'"`
-    foreach table ($tables)
-        if ($table == "ensGene" || $table == "refGene" || \
-           $table == "mgcGenes" || $table == "knownGene" || \
-           $table == "xenoRefGene" ) then
-           set count = `hgsql $db -N -e "select count(*) from $table"`
-            echo -n "${table}: ${count}, "
-        endif
-    end
-    set orgName = `hgsql hgcentraltest -N -e \
-            "select scientificName from dbDb where name='$db'"`
-    set orgId = `hgsql hg19 -N -e \
-            "select id from organism where name='$orgName'"`
-    if ($orgId == "") then
+    hgsql $db -N -e "show tables like '%Gene%'" | while read table
+    do
+        if [ $table = "ensGene" -o $table = "refGene" -o \
+           $table = "mgcGenes" -o $table = "knownGene" -o \
+           $table = "xenoRefGene" -o $table = "flyBaseGene" ]; then
+           count=`hgsql $db -N -e "select count(*) from $table"`
+           echo -n "${table}: ${count}, "
+        else
+           echo -n "${table}: n/a, "
+        fi
+    done
+    orgName=`hgsql hgcentraltest -N -e "select scientificName from dbDb where name='$db'"`
+    orgId=`hgsql dm6 -N -e "select id from organism where name='$orgName'"`
+    if [ "x${orgId}y" = "xy" ]; then
         echo "Mrnas: 0"
     else
-        set count = `hgsql hg19 -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
+        count=`hgsql dm6 -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
         echo "Mrnas: ${count}"
-    endif
-end
+    fi
+done
 '_EOF_'
     # << happy emacs
-    chmod +x ./showGenes.csh
-    time ./showGenes.csh
+    chmod +x showGenes.sh
+    ./showGenes.sh > survey.txt
 
-# dm6: refGene: 36039, xenoRefGene: 49470, Mrnas: 907097
-# droSim1: xenoRefGene: 256763, Mrnas: 119083
-# droSec1: xenoRefGene: 223223, Mrnas: 38274
-# droYak3: Mrnas: 11950
-# droEre2: Mrnas: 22704
-# droBia2: Mrnas: 0
-# droSuz1: Mrnas: 1
-# droAna3: Mrnas: 23405
-# droBip2: Mrnas: 3
-# droEug2: Mrnas: 5
-# droEle2: Mrnas: 1
-# droKik2: Mrnas: 2
-# droTak2: Mrnas: 1
-# droRho2: Mrnas: 4
-# droFic2: Mrnas: 1
-# droPse3: Mrnas: 18
-# droPer1: xenoRefGene: 221008, Mrnas: 34
-# droMir2: Mrnas: 2
-# droWil2: Mrnas: 26771
-# droVir3: Mrnas: 22882
-# droMoj3: Mrnas: 19869
-# droAlb1: Mrnas: 1
-# droGri2: Mrnas: 21278
-# musDom2: Mrnas: 9396
-# anoGam1: ensGene: 15802, xenoRefGene: 107609, Mrnas: 217467
-# apiMel4: Mrnas: 199705
-# triCas2: Mrnas: 65947
+    # Getting numbers of items in gene tracks for each of the assemblies
+    #   to pick which is best gene set to use:
+    cat survey.txt
+dm6: flyBaseGene: 30264, flyBaseGenePep: n/a, refGene: 36039, xenoRefGene: 49470, Mrnas: 907097
+droSim1: dmRefGene: n/a, xenoRefGene: 251522, Mrnas: 341
+droSec1: xenoRefGene: 222725, Mrnas: 17
+droYak3: Mrnas: 815
+droEre2: ensGene: 15902, ensemblToGeneName: n/a, Mrnas: 42
+droBia2: Mrnas: 0
+droSuz1: Mrnas: 1
+droAna3: ensGene: 16061, ensemblToGeneName: n/a, Mrnas: 30
+droBip2: Mrnas: 3
+droEug2: Mrnas: 5
+droEle2: Mrnas: 1
+droKik2: Mrnas: 2
+droTak2: Mrnas: 1
+droRho2: Mrnas: 4
+droFic2: Mrnas: 1
+droPse3: Mrnas: 18
+droPer1: xenoRefGene: 220792, Mrnas: 34
+droMir2: Mrnas: 2
+droWil2: Mrnas: 20
+droVir3: Mrnas: 84
+droMoj3: Mrnas: 25
+droAlb1: Mrnas: 1
+droGri2: Mrnas: 10
+musDom2: Mrnas: 6447
+anoGam1: ensGene: 15802, xenoRefGene: 106775, Mrnas: 64135
+apiMel4: Mrnas: 121235
+triCas2: Mrnas: 1376
 
-######################################################################
+    # therefore:
+    # refGene - dm6
+    # ensGene - droEre2 droAna3 anoGam1
+
+    #------------------------------------------------------------------------
+    # get the genes for all genomes
+    # mRNAs with CDS.  single select to get cds+psl, then split that up and
+    # create genePred
+
+    # using ensGene for: cavPor3 panTro4 canFam3 ailMel1 monDom5 galGal4 melGal1
+    for qDB in droEre2 droAna3
+    do
+      echo hgsql -N -e \"'select * from 'ensGene\;\" ${qDB}
+	  hgsql -N -e "select * from ensGene" ${qDB} | cut -f 2-11 \
+	  | genePredSingleCover stdin stdout | gzip -2c > genes/$qDB.gp.gz
+    done
+
+    # seems to be an older ensGene here, no 'bin' column:
+    for qDB in anoGam1
+    do
+      echo hgsql -N -e \"'select * from 'ensGene\;\" ${qDB}
+	  hgsql -N -e "select * from ensGene" ${qDB} \
+	  | genePredSingleCover stdin stdout | gzip -2c > genes/$qDB.gp.gz
+    done
+
+    # Using refGene for: dm6 - want the full extended genePred:
+    for qDB in dm6
+do
+  hgsql -N -e "select * from refGene" ${qDB} | cut -f2- \
+     | genePredSingleCover stdin stdout | gzip -2c \
+        > genes/$qDB.gp.gz
+  echo "${qDB} done"
+done
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+  echo -n "# $T: "
+  zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+
+# genes/anoGam1.gp.gz: 14267
+# genes/dm6.gp.gz: 13823
+# genes/droAna3.gp.gz: 15022
+# genes/droEre2.gp.gz: 14992
+
+    ssh hgwdev
+    cd /hive/data/genomes/dm6/bed/multiz27way/frames
+    time (cat ../multiz27way.maf \
+	| genePredToMafFrames dm6 stdin stdout \
+          dm6 genes/dm6.gp.gz droAna3 genes/droAna3.gp.gz \
+          droEre2 genes/droEre2.gp.gz anoGam1 genes/anoGam1.gp.gz \
+		| gzip > multiz27way.mafFrames.gz)
+    #	real    2m22.546s
+
+    # verify there are frames on everything:
+    zcat multiz27way.mafFrames.gz | awk '{print $4}' | sort | uniq -c
+
+    # 164994 anoGam1
+    #  55050 dm6
+    # 118998 droAna3
+    #  77171 droEre2
+
+    ssh hgwdev
+    cd /hive/data/genomes/dm6/bed/multiz27way/frames
+    time hgLoadMafFrames dm6 multiz27wayFrames multiz27way.mafFrames.gz
+    # real    0m4.457s
+
+##############################################################################
 # construct downloads files and pushQ entry (DONE - 2014-10-14 - Hiram)
 #   before starting downloads, the joinerCheck should be clean
 #   after dm6 is added to all.joiner:

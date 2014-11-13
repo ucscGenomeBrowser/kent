@@ -499,18 +499,18 @@ for (i=0; i<itemCount; i += nodeSizePer)
 return endLevel;
 }
 
-static void writeLeafLevel(bits16 blockSize, void *itemArray, int itemSize, int itemCount, 
+static void writeLeafLevel(bits16 blockSize, void *itemArray, int itemSize, bits64 itemCount, 
 	void (*fetchKey)(const void *va, char *keyBuf), bits32 keySize,
 	void* (*fetchVal)(const void *va), bits32 valSize,
 	FILE *f)
 /* Write out leaf level blocks. */
 {
 char *items = itemArray;
-int i,j;
+bits64 i,j;
 UBYTE isLeaf = TRUE;
 UBYTE reserved = 0;
 bits16 countOne;
-int countLeft = itemCount;
+bits64 countLeft = itemCount;
 char keyBuf[keySize+1];
 keyBuf[keySize] = 0;
 for (i=0; i<itemCount; i += countOne)
