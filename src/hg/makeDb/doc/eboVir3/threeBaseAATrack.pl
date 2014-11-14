@@ -1,4 +1,8 @@
 #!/usr/bin/env perl
+#
+#  scan muPIT.bed single base locations and turn into three base codon
+#                 encoded AAs for more useful track clicks on codons
+#
 
 use strict;
 use warnings;
