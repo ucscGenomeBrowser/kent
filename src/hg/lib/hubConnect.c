@@ -514,12 +514,44 @@ struct hubConnectStatus  *hubConnectNewHub()
 return gNewHub;
 }
 
+static void disconnectHubsSamePrefix(struct cart *cart, char *url)
+/* disconnect all the hubs with the same prefix */
+{
+char *prefix = cloneString(url);
+char *ptr = strrchr(prefix, '/');
+if (ptr == NULL)
+    return;
+*ptr = 0;
+
+char query[2048];
+sqlSafef(query, sizeof(query), "select id from %s where hubUrl like  \"%s%%\"", getHubStatusTableName(), prefix);
+
+struct sqlConnection *conn = hConnectCentral();
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    int id = sqlUnsigned(row[0]);
+    char buffer[512];
+
+    safef(buffer, sizeof(buffer), "hgHubConnect.hub.%d", id);
+    cartRemove(cart, buffer);
+    }
+sqlFreeResult(&sr);
+
+hDisconnectCentral(&conn);
+}
+
 static char  *checkForNew( struct cart *cart)
 /* see if the user just typed in a new hub url, return id if so */
 {
 struct hubConnectStatus *hub;
-char *url = cartOptionalString(cart, hgHubDataText);
-char *newDatabase = NULL;
+char *url = cartOptionalString(cart, hgHubDataClearText);
+
+if (url != NULL)
+    disconnectHubsSamePrefix(cart, url);
+else
+    url = cartOptionalString(cart, hgHubDataText);
 
 if (url == NULL)
     return NULL;
@@ -527,9 +559,12 @@ if (url == NULL)
 trimSpaces(url);
 
 gNewHub = hub = getAndSetHubStatus( cart, url, TRUE);
+    
+cartRemove(cart, hgHubDataClearText);
 cartRemove(cart, hgHubDataText);
 
 char *wantFirstDb = cartOptionalString(cart, hgHubDoFirstDb);
+char *newDatabase = NULL;
 if ((wantFirstDb != NULL) && (hub->trackHub != NULL))
     newDatabase = hub->trackHub->defaultDb;
 

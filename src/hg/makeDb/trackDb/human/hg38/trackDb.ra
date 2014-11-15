@@ -259,6 +259,19 @@ priority 1
 track snp141 override
 snpSeqFile /gbdb/hg38/snp/snp141.fa
 
+track snp142Mult override
+snpSeqFile /gbdb/hg38/snp/snp142.fa
+
+track snp142Flagged override
+snpSeqFile /gbdb/hg38/snp/snp142.fa
+
+track snp142Common override
+snpSeqFile /gbdb/hg38/snp/snp142.fa
+priority 1
+
+track snp142 override
+snpSeqFile /gbdb/hg38/snp/snp142.fa
+
 track genomicSuperDups override
 group rep
 
@@ -268,3 +281,5 @@ urlLabel SIB link:
 
 track sibTxGraph override
 url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=hg38&species=H.+sapiens&tromer=$$
+
+include trackDb.cloneEnd.ra

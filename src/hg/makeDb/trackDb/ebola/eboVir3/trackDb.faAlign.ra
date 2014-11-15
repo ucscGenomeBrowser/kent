@@ -1,0 +1,107 @@
+track faAlignComp
+compositeTrack on
+shortLabel faAlign
+longLabel Pairwise alignments with faAlign, newer sequences (top two alignments) from genbank
+# subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+subGroup1 view Views align=Multiz_Alignments
+# dragAndDrop subTracks
+visibility hide
+priority 1
+type bed 4
+group x
+
+    track faAlignViewalign
+    shortLabel New sequences
+    view align
+    visibility pack
+    viewUi on
+    subTrack faAlignComp
+
+        track faAlign
+        subTrack faAlignViewalign on
+        shortLabel faAlign
+        longLabel Pairwise alignments with faAlign, newer sequences (top two alignments) from genbank
+        subGroups view=align
+        noInherit on
+        irows on
+#        summary multiz160waySummary
+        frames faAlignFrames
+        color 0, 10, 100
+        altColor 0,90,10
+        mafDot on
+	snpTable faAlignSnpView
+	snpMode on
+        type wigMaf 0.0 1.0
+        speciesCodonDefault eboVir3
+        speciesGroups Virus
+        sGroup_Virus KM519951v1 KM655246v1 KJ660346v2 KM233118v1 KC242800v1 KC242798v1 EU224440v2 NC_002549v1 KC545393v1 NC_014372v1 AF522874v1 FJ621585v1 KC545389v1 NC_006432v1 NC_024781v1
+        itemFirstCharCase noChange
+        priority 100
+
+# #        treeImage phylo/eboVir3_160way.png
+# 
+#     # PhyloP conservation
+#     track newSeqsViewphyloP
+#     shortLabel Basewise Conservation (phyloP)
+#     view phyloP
+#     visibility full
+#     subTrack newSeqs
+#     viewLimits -3:0.5
+#     viewLimitsMax -4.611:0.934
+# 
+#         track phyloP160way
+#         subTrack newSeqsViewphyloP on
+#         subGroups view=phyloP
+#         shortLabel 7 Vert. Cons
+#         longLabel 158 Ebola strains and 2 Marburg strains Basewise Conservation by PhyloP
+#         noInherit on
+#         configurable on
+#         type wig -4.711 0.934
+#         maxHeightPixels 100:50:11
+#         viewLimits -3.107:0.934
+#         autoScale off
+#         spanList 1
+#         windowingFunction mean
+#         color 60,60,140
+#         altColor 140,60,60
+#         priority 4
+# 
+#     # phastCons conservation
+#     track newSeqsViewphastcons
+#     shortLabel Element Conservation (phastCons)
+#     view phastcons
+#     visibility full
+#     subTrack newSeqs
+# 
+#         track phastCons160way
+#         subTrack newSeqsViewphastcons on
+#         subGroups view=phastcons
+#         shortLabel PhastCons
+#         longLabel 158 Ebola strains and 2 Marburg strains Basewise Conservation by PhastCons
+#         noInherit on
+#         configurable on
+#         type wig 0 1
+#         maxHeightPixels 100:40:11
+#         autoScale off
+#         spanList 1
+#         windowingFunction mean
+#         color 70,130,70
+#         altColor 130,70,70
+#         priority 13
+# 
+#     # Conserved Elements (Most Conserved)
+#     track newSeqsViewelements
+#     shortLabel Conserved Elements
+#     view elements
+#     visibility dense
+#     subTrack newSeqs
+# 
+#         track phastConsElements160way
+#         subTrack newSeqsViewelements on
+#         subGroups view=elements
+#         shortLabel Cons. Elements
+#         longLabel 158 Ebola strains and 2 Marburg strains Conserved Elements
+#         noInherit on
+#         color 110,10,40
+#         type bed 5 .
+#         priority 23

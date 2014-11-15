@@ -1042,7 +1042,7 @@ if (isNotEmpty(setting))
 		 "must be one of {none, all, given, genbank, table}.",
 		 tdb->track, BASE_COLOR_USE_CDS, setting);
     }
-else if (startsWith("genePred", tdb->type))
+else if (startsWith("genePred", tdb->type)  || startsWith("bigGenePred", tdb->type))
     gotIt = TRUE;
 return gotIt;
 }
@@ -6312,11 +6312,13 @@ char cartVarName[1024];
 
 printf("<TABLE%s><TR><TD>",boxed?" width='100%'":"");
 
+#ifdef NOTNOW  // temporarily (?) remove this check box because code doesn't allow for setting wiggle options
 char *showWig = cartOrTdbString(cart, tdb, BAMWIG_MODE, "0");
 safef(cartVarName, sizeof(cartVarName), "%s.%s", name, BAMWIG_MODE);
 cgiMakeCheckBox(cartVarName, SETTING_IS_ON(showWig));
 printf("</TD><TD>Only show coverage of reads</TD>");
 printf("</TR>\n");
+#endif
 
 printf("<TR><TD>\n");
 char *showNames = cartOrTdbString(cart, tdb, BAM_SHOW_NAMES, "0");

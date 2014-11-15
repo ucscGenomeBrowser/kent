@@ -1,0 +1,88 @@
+#!/bin/tcsh 
+source `which qaConfig.csh`
+
+####################
+#
+#  Script to clone the buildmeister's gbib into alpha or beta gbib
+#  Max Haeussler
+####################
+
+if ( "$1" == "" ) then
+    echo Please provide either alpha or beta as a parameter
+    exit 0
+endif
+
+set boxVer=$1
+
+set runCount=`ps aux | grep VBoxHeadless | grep 'browserbox$' | wc -l`
+if ("$runCount" != "0") then
+    echo shutting down the buildmeister\'s VM
+    VBoxManage  controlvm  browserbox acpipowerbutton
+    while (1) 
+	set runCount=`ps aux | grep VBoxHeadless | grep 'browserbox$' | wc -l`
+	if ("$runCount" == "0") then
+	     echo VM has stopped
+	     break
+	else
+	     echo VM has not stopped yet, waiting...
+	     sleep 3
+	endif
+    end
+endif
+
+echo unregistering the old $boxVer gbib
+vboxmanage unregistervm browserbox$boxVer || echo not registered
+sleep 3 # not sure if needed - unregistervm is an RPC call that might take a while
+
+echo moving the old $boxVer gbib out of the way
+rm -rf "$HOME/VirtualBox VMs/browserbox$boxVer.old"
+mv "$HOME/VirtualBox VMs/browserbox$boxVer" "$HOME/VirtualBox VMs/browserbox$boxVer.old"
+
+echo cloning the buildmeister VM into browserbox$boxVer
+vboxmanage clonevm browserbox --options keepdisknames --register --name browserbox$boxVer
+
+if ( "$1" == "beta" ) then
+    set WEBPORT=1236
+    set SSHPORT=1237
+endif
+
+if ( "$1" == "alpha" ) then
+    set WEBPORT=1238
+    set SSHPORT=1239
+endif
+
+echo changing port forwarding to $WEBPORT for port 80 and $SSHPORT in browserbox$boxVer for port 22
+vboxmanage modifyvm browserbox$boxVer --natpf1 delete "Rule 1"
+vboxmanage modifyvm browserbox$boxVer --natpf1 delete "Rule 2"
+vboxmanage modifyvm browserbox$boxVer --natpf1 "Rule 1",tcp,127.0.0.1,$WEBPORT,,80
+vboxmanage modifyvm browserbox$boxVer --natpf1 "Rule 2",tcp,127.0.0.1,$SSHPORT,,22
+
+echo switching off VRDE
+VBoxManage modifyvm browserbox$boxVer --vrde off
+
+set runCount=`ps aux | grep VBoxHeadless | grep 'browserbox'$boxVer'$' | wc -l`
+if ("$runCount" != "0") then
+    echo shutting down the $boxVer VM that is running under the qateam account
+    ssh qateam@hgwdev.soe.ucsc.edu VBoxManage  controlvm  browserbox$boxVer acpipowerbutton
+    while (1) 
+	set runCount=`ps aux | grep VBoxHeadless | grep 'browserbox'$boxVer'$' | wc -l`
+	if ("$runCount" == "0") then
+	     echo VM has stopped
+	     break
+	else
+	     echo VM has not stopped yet, waiting...
+	     sleep 2
+	endif
+    end
+endif
+
+echo moving VM files to /cluster/home/qateam/VirtualBox VMs/browserbox$boxVer
+rm -rf "/cluster/home/qateam/VirtualBox VMs/browserbox$boxVer.old"
+# keeping a backup, just in case
+mv "/cluster/home/qateam/VirtualBox VMs/browserbox$boxVer" "/cluster/home/qateam/VirtualBox VMs/browserbox$boxVer.old"
+# moving the new clone from build to qateam
+mv "/cluster/home/build/VirtualBox VMs/browserbox$boxVer" "/cluster/home/qateam/VirtualBox VMs/"
+chmod -R a+rw "/cluster/home/qateam/VirtualBox VMs/" 
+
+#echo booting new VM browserbox$boxVer
+#ssh qateam@hgwdev.soe.ucsc.edu VBoxHeadless -s browserbox$boxVer &

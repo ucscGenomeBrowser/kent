@@ -74,10 +74,10 @@ customTracks.useAll=yes
 Establish this user account and password in MySQL with db and user
 privileges:
 
-Select, Insert, Update, Delete, Create, Drop, Alter
+Select, Insert, Update, Delete, Create, Drop, Alter, Index
 for example with your MySQL root user account:
 hgsql -hctdbhost -uroot -p -e \
-    "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER" \
+    "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX" \
     on customTrash.* TO ctdbuser@yourWebHost IDENTIFIED by 'ctdbpasswd';" mysql
 
 Optionally, a temporary read-write directory used during database

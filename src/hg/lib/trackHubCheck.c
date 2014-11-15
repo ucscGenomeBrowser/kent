@@ -60,7 +60,7 @@ if (errCatchStart(errCatch))
 		struct bbiFile *bbi = bigWigFileOpen(bigDataUrl);
 		bbiFileClose(&bbi);
 		}
-	    else if (startsWithWord("bigBed", type))
+	    else if (startsWithWord("bigBed", type) || startsWithWord("bigGenePred", type))
 		{
 		/* Just open and close to verify file exists and is correct type. */
 		struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);

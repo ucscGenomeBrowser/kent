@@ -23,3 +23,10 @@ idSql select value from knownToWikipedia where name = '%s';
 url http://api.genewikiplus.org/biogps-plugins/wp/%s
 priority 11
 
+name gencode
+shortLabel Gencode
+tables knownToGencodeV20
+idSql select value from knownToGencodeV20 where name = '%s';
+url http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s
+priority 10
+

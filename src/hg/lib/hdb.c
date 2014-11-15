@@ -1355,6 +1355,7 @@ char* hReplaceGbdbMustDownload(char* path)
  * if needed from gbdbLoc2.
  * Used for adding files on the fly on mirrors or the box.
  * Returns local path, needs to be freed. Aborts if download failed.
+ * Prints a "please wait..." message to stdout if file has to be downloaded.
  * */
 {
 char* locPath = hReplaceGbdbLocal(path);
@@ -1373,6 +1374,9 @@ if ((access(locPath, W_OK))==0)
 char locDir[1024];
 splitPath(locPath, locDir, NULL, NULL);
 makeDirsOnPath(locDir);
+
+printf("<p>please wait... downloading %s...</p>\n\n", url);
+fflush(stdout);
 
 bool success = parallelFetch(url, locPath, 1, 1, TRUE, FALSE);
 if (! success)

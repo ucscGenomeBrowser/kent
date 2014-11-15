@@ -32,8 +32,8 @@ $base =~ s/^(.*\/)?//;
 # Hardcoded commands / paths:
 my $wget = 'wget --timestamping --no-verbose';
 my $ftpShared = 'ftp://ftp.ncbi.nih.gov/snp/database/shared_data';
-my $ftpSnpDb = 'ftp://ftp.ncbi.nih.gov/snp/database/organism_data/$orgDir';
-my $ftpOrgSchema = 'ftp://ftp.ncbi.nlm.nih.gov/snp/database/organism_schema/$orgDir';
+my $ftpSnpDb = 'ftp://ftp.ncbi.nih.gov/snp/organisms/$orgDir/database/organism_data';
+my $ftpOrgSchema = 'ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/$orgDir/database/organism_schema';
 my $ftpSharedSchema = 'ftp://ftp.ncbi.nlm.nih.gov/snp/database/shared_schema';
 my $dbSnpRoot = '/hive/data/outside/dbSNP';
 # Some ContigInfo columns (1-based) -- if there are any changes, garbage results
@@ -205,7 +205,7 @@ use vars qw/
     $opt_buildDir
     /;
 # Required config parameters:
-my ($db, $build, $buildAssembly, $orgDir);
+my ($db, $build, $buildAssembly, $orgDir, $orgDirTrimmed);
 # Conditionally required config parameters:
 my ($refAssemblyLabel, $liftUp, $ignoreDbSnpContigsFile, $ignoreDbSnpContigs,
     $ncbiAssemblyReportFile);
@@ -359,6 +359,7 @@ cd $assemblyDir
 $wget ftp://ftp.ncbi.nih.gov/snp/00readme.txt
 cd $assemblyDir/data
 set orgDir = $orgDir
+set orgDirTrimmed = $orgDirTrimmed
 # $ContigLoc table has coords, orientation, loc_type, and refNCBI allele
 $wget $ftpSnpDb/$ContigLoc.bcp.gz
 # $ContigLocusId table has functional annotations
@@ -378,7 +379,7 @@ $wget $ftpSnpDb/SNPSubSNPLink.bcp.gz
 
 # Get schema
 cd $assemblyDir/schema
-$wget $ftpOrgSchema/${orgDir}_table.sql.gz
+$wget $ftpOrgSchema/${orgDirTrimmed}_table.sql.gz
 $wget $ftpSharedSchema/dbSNP_main_table.sql.gz
 
 # Get fasta files
@@ -414,7 +415,7 @@ sub translateSql {
   push @orgTables, qw( SNP SNPAlleleFreq SNP_bitfield Batch SubSNP SNPSubSNPLink );
   push @orgTables, 'SNPAlleleFreq_TGP' if ($needSNPAlleleFreq_TGP);
   my $tables = join('|', @orgTables);
-  my $SQLIN = HgAutomate::mustOpen("zcat $schemaDir/${orgDir}_table.sql.gz |" .
+  my $SQLIN = HgAutomate::mustOpen("zcat $schemaDir/${orgDirTrimmed}_table.sql.gz |" .
 				   "sed -re 's/\r//g;' |");
   my $SQLOUT = HgAutomate::mustOpen("> $schemaDir/table.sql");
   my $sepBak = $/;
@@ -422,7 +423,7 @@ sub translateSql {
   my $tableCount = 0;
   while (<$SQLIN>) {
     next unless /^\n*CREATE TABLE \[($tables)\]/;
-    s/[\[\]]//g;  s/\nGO\n/;/;  s/smalldatetime/datetime/g;
+    s/[\[\]]//g;  s/\ngo\n/;/i;  s/smalldatetime/datetime/g;
     s/ON PRIMARY//g;  s/COLLATE//g;  s/Latin1_General_BIN//g;
     s/nvarchar/varchar/g;  s/set quoted/--set quoted/g;
     s/(image|varchar\s+\(\d+\))/BLOB/g;  s/tinyint/tinyint unsigned/g;
@@ -436,9 +437,10 @@ sub translateSql {
   $tables = join('|', @sharedTables);
   $SQLIN = HgAutomate::mustOpen("zcat $schemaDir/dbSNP_main_table.sql.gz |" .
 				   "sed -re 's/\r//g;' |");
+  $/ = "\nGO\n\n";
   while (<$SQLIN>) {
     next unless /^CREATE TABLE \[$tables\]/;
-    s/[\[\]]//g;  s/\nGO\n/;\n/;  s/smalldatetime/datetime/g; s/IDENTITY\(1,1\) //g;
+    s/[\[\]]//g;  s/\nGO\n/;\n/i;  s/smalldatetime/datetime/g; s/IDENTITY\(1,1\) //g;
     print $SQLOUT $_;
     $tableCount++;
   }
@@ -537,7 +539,8 @@ sub tryToMakeLiftUpFromContigInfo {
   my @missingInfo = ();
   my ($missingCount, $liftUpCount) = (0, 0);
   while (<$CI>) {
-    my (undef, undef, $contig, undef, undef, $chr, $chromStart, $chromEnd) = split("\t");
+    chomp;  my @w = split("\t");
+    my ($contig, $chr, $chromStart, $chromEnd) = ($w[2], $w[5], $w[6], $w[7]);
     if ($chromStart ne "") {
       $chr = "chrM" if ($chr eq "MT");
       if (! exists $chromSizes->{$chr}) {
@@ -553,6 +556,18 @@ sub tryToMakeLiftUpFromContigInfo {
       my $oldSize = $chromEnd+1 - $chromStart;
       my $newSize = $chromSizes->{$chr};
       print $LU join("\t", $chromStart, $contig, $oldSize, $chr, $newSize) . "\n";
+      $liftUpCount++;
+    } elsif ($db eq 'hg38') {
+      # If no chromStart given, transform chr and GB acc info into our local sequence names
+      my ($acc, $accVersion, $size) = ($w[15], $w[16], $w[27]);
+      my $ucscSeqName;
+      if ($chr ne "") {
+        my $suffix = ($w[10] =~ /^ALT_REF/) ? '_alt' : '_random';
+        $ucscSeqName = "chr$chr" . "_" . $acc . "v" . $accVersion . $suffix;
+      } else {
+        $ucscSeqName = "chrUn_" . $acc . "v" . $accVersion;
+      }
+      print $LU join("\t", 0, $contig, $size, $ucscSeqName, $size) . "\n";
       $liftUpCount++;
     } else {
       $chr = "no chr" if (! $chr);
@@ -1452,6 +1467,11 @@ my $config = &parseConfig($CONFIG);
 
 $buildDir = $opt_buildDir ? $opt_buildDir : "$dbSnpRoot/$build";
 ($commonName = $orgDir) =~ s/_\d+.*$//;
+# orgDir used to be only human_9606 and the like, but not sometimes they append
+# build ID and/or assembly ID to the end, so for example they can have separate
+# directories for GRCh37 and GRCh38.  The file names don't have the new suffixes,
+# so make a trimmed version
+($orgDirTrimmed = $orgDir) =~ s/(_\d+)_.*/$1/;
 $assemblyDir = "$buildDir/${commonName}_$db";
 $assemblyLabelFile = "$assemblyDir/assemblyLabels.txt";
 if ($buildAssembly ne "") {

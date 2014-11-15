@@ -256,6 +256,7 @@ static void doConvert(char *fromPos)
 {
 struct dbDb *fromDb = hDbDb(database), *toDb = hDbDb(cartString(cart, HGLFT_TODB_VAR));
 char *fileName = liftOverChainFile(fromDb->name, toDb->name);
+fileName = hReplaceGbdbMustDownload(fileName);
 char *chrom;
 int start, end;
 int origSize;

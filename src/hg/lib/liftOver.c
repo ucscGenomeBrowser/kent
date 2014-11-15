@@ -906,7 +906,7 @@ for (;;)
 	}
     if (done) 
 	break;
-    if (b->tEnd <= r->end)
+    if (b->tEnd < r->end)
 	{
 	b = b->next;
 	if (b == NULL)
@@ -1847,7 +1847,7 @@ if (conn)
     chain = liftOverChainLoadByQuery(conn, query);
     if (chain != NULL)
         {
-        path = hReplaceGbdb(chain->path);
+        path = hReplaceGbdbMustDownload(chain->path);
         liftOverChainFree(&chain);
         }
     hDisconnectCentral(&conn);
