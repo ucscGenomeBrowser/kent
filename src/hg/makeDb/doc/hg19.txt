@@ -29961,12 +29961,13 @@ sed \
     -e 's/GL000201.1/9_gl000201_random/' \
     -e 's/GL000205.1/17_gl000205_random/' \
     -e 's/GL000209.1/19_gl000209_random/' \
-    -e 's/GL000213.1/Un_gl000213_random/' \
-    -e 's/GL000218.1/Un_gl000218_random/' \
-    -e 's/GL000219.1/Un_gl000219_random/' \
-    -e 's/GL000222.1/Un_gl000222_random/' \
-    -e 's/GL000223.1/Un_gl000223_random/' \
-    -e 's/GL000242.1/Un_gl000242_random/' \
+    -e 's/GL000213.1/Un_gl000213/' \
+    -e 's/GL000218.1/Un_gl000218/' \
+    -e 's/GL000219.1/Un_gl000219/' \
+    -e 's/GL000222.1/Un_gl000222/' \
+    -e 's/GL000223.1/Un_gl000223/' \
+    -e 's/GL000242.1/Un_gl000242/' \
+    -e 's/MT/M/' \
         mappings.atlas.bed > mappings.bed
 
 # link up exons and remove dups (peptides mapped to multiple targets at the same genomic location)
@@ -30003,6 +30004,12 @@ awk -F',' '{print $2}' peptide_inst*tsv | sort | uniq | wc -l
 
 # count number of samples in sample dump
 awk -F',' '{print $3}' peptide_inst*tsv | sort | uniq | wc -l
+
+# check if peptides match translated genome (if so we can display w/o loading in main table)
+sequenceForBed -db=hg19 -keepName -bedIn=mappings.bed12 -fastaOut=mappings.fa
+faTrans mappings.fa peptides.fa
+faToTab -type=protein peptides.fa stdout | sort | uniq > peptides.fromMappings.tab
+tail -n +2 peptides.tab | awk '{print $1,"\t", $2}' | diff - peptides.fromMappings.tab
 
 
 ##############################################################################
