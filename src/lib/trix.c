@@ -674,7 +674,7 @@ return tsList;
 }
 
 int trixSearchResultCmp(const void *va, const void *vb)
-/* Compare two trixSearchResult by itemId. */
+/* Compare two trixSearchResult in such a way that most relevant searches tend to be first. */
 {
 const struct trixSearchResult *a = *((struct trixSearchResult **)va);
 const struct trixSearchResult *b = *((struct trixSearchResult **)vb);
