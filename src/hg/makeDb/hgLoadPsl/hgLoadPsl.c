@@ -152,10 +152,7 @@ lineFileClose(&lf);
 if (noSort)
     carefulClose(&tabFh);
 else
-    {
-    pipelineWait(pl);
-    pipelineFree(&pl);
-    }
+    pipelineClose(&pl);
 }
 
 void copyPslXaToTab(char *pslFile, char *tabFile)
@@ -188,10 +185,7 @@ lineFileClose(&lf);
 if (noSort)
     carefulClose(&tabFh);
 else
-    {
-    pipelineWait(pl);
-    pipelineFree(&pl);
-    }
+    pipelineClose(&pl);
 }
 
 void loadPslTable(char *database, struct sqlConnection *conn, char *pslFile)

@@ -689,6 +689,20 @@ closePipeline(pl);
 return groupLeaderWait(pl);
 }
 
+int pipelineClose(struct pipeline **pPl)
+/* Wait for pipeline to finish and free it. Same as pipelineWait then pipelineClose.
+ * Returns pipelineWait result (normally 0). */
+{
+struct pipeline *pl = *pPl;
+int ret = 0;
+if (pl != NULL)
+    {
+    ret = pipelineWait(pl);
+    pipelineFree(pPl);
+    }
+return ret;
+}
+
 void pipelineSetNoAbort(struct pipeline *pl)
 /* Make it so pipeline won't abort on error - can be done after the fact.
  * (This is needed to close a pipelined lineFile early.) */

@@ -1,4 +1,10 @@
 #!/usr/bin/env perl
+#
+# Quick and dirty translate a genbank record into genePred records.
+# Works only on a set of known and tested genbank records for
+# Ebola sequences.  This is definitely not a generic translator,
+# It will no doubt fail on new genbank records that it hasn't been tuned for.
+#
 
 use strict;
 use warnings;
@@ -6,11 +12,12 @@ use warnings;
 my $argc = scalar(@ARGV);
 if ($argc < 1) {
   printf STDERR "usage: gbkToGp.pl <file.gbk> [moreFiles.gbk]\n";
+  printf STDERR "translate genbank record to genePred records\n";
   exit 255;
 }
 
-sub recordOut($$$$$$$$$) {
-  my ($accId, $name, $txS, $txE, $cdsS, $cdsE, $exonsS, $exonsE, $eCount) = @_;
+sub recordOut($$$$$$$$$$) {
+  my ($accId, $name, $strand, $txS, $txE, $cdsS, $cdsE, $exonsS, $exonsE, $eCount) = @_;
   # adjust GP name based on total length
   if ($name eq "GP") {
     my $size = int(($cdsE - $cdsS)/3);
@@ -32,7 +39,7 @@ sub recordOut($$$$$$$$$) {
   }
   $exonsS = join(',', @starts) . ",";
   $exonsE = join(',', @ends) . ",";
-  printf "%s\t%s\t+\t%d\t%d\t%d\t%d\t%d\t%s\t%s\n", $name, $accId, $txS, $txE, $cdsS, $cdsE, $eCount, $exonsS, $exonsE;
+  printf "%s\t%s\t%s\t%d\t%d\t%d\t%d\t%d\t%s\t%s\n", $name, $accId, $strand, $txS, $txE, $cdsS, $cdsE, $eCount, $exonsS, $exonsE;
 }
 
 # given nnnn..mmmm return nnnn mmmm
@@ -57,19 +64,29 @@ sub coordRange($) {
 }
 
 # CDS lines can be simple nnnn..mmmm or join(nnnn.mmmm,jjjj.kkkk,etc...)
+#  or complement(nnnn..mmmm)
 sub cdsRanges($) {
   my $start = -1;
   my $end = -1;
   my $exonCount = 0;
   my $starts = "";
   my $ends = "";
+  my $strand = "+";
   my ($line) = @_;
   $line =~ s/^\s+//;
   my @a = split('\s+', $line);
   if (scalar(@a) != 2) {
     printf STDERR "ERROR: do not recognize range line: '%s'\n", $line;
   } else {
-    if ($a[1] =~ m/^join/) {
+    if ($a[1] =~ m/^complement/) {
+      $strand = "-";
+      $a[1] =~ s/complement\(//;
+      $a[1] =~ s/\)//;
+      ($start, $end) = coordRange("CDS $a[1]");
+      $starts = "${start},";
+      $ends = "${end},";
+      $exonCount = 1;
+    } elsif ($a[1] =~ m/^join/) {
       my $joinCoords = $a[1];
       $joinCoords =~ s/join\(//;
       $joinCoords =~ s/\)//;
@@ -93,7 +110,7 @@ sub cdsRanges($) {
       $exonCount = 1;
     }
   }
-  return($start, $end, $exonCount, $starts, $ends);
+  return($start, $end, $exonCount, $starts, $ends, $strand);
 }
 
 while (my $file = shift) {
@@ -103,8 +120,10 @@ while (my $file = shift) {
   my $txEnd = -1;
   my $cdsStart = -1;
   my $cdsEnd = -1;
+  my $strand = "+";
   my $geneName = "";
   my $productName = "";
+  my $locusTag = "";
   my $exonStarts = "";
   my $exonEnds = "";
   my $exonCount = 0;
@@ -119,23 +138,31 @@ while (my $file = shift) {
            $productName =~ s#nucleoprotein#NP#;
            $productName =~ s#glycoprotein#GP#;
            $productName =~ s#viral protein #VP#;
-        }
-        if ($line =~ m#^\s+/gene=#) {
+           $productName =~ s#polymerase#L#;
+        } elsif ($line =~ m#^\s+/locus_tag=#) {
+           $locusTag = $line;
+           $locusTag =~ s#^\s+/locus_tag=##;
+           $locusTag =~ s#"##g;
+        } elsif ($line =~ m#^\s+/gene=#) {
            $geneName = $line;
            $geneName =~ s#^\s+/gene=##;
            $geneName =~ s#"##g;
         }
       } elsif ($line =~ m/^\s+gene\s+/) {
         if ($txStart != -1 && $txEnd != 1 ) {
+          $productName = $locusTag if (length($locusTag) > 1);
           $geneName = $productName if (1 > length($geneName));
-          recordOut($accessionId, $geneName, $txStart, $txEnd, $cdsStart, $cdsEnd, $exonStarts, $exonEnds, $exonCount);
+          recordOut($accessionId, $geneName, $strand, $txStart, $txEnd, $cdsStart, $cdsEnd, $exonStarts, $exonEnds, $exonCount);
         }
         $cdsStart = -1;
         $cdsEnd = -1;
+        $strand = "+";
         $geneName = "";
         $exonStarts = "";
         $exonEnds = "";
-        ($txStart, $txEnd) = coordRange("$line");
+#        ($txStart, $txEnd) = coordRange("$line");
+        my $strandTest = "";
+        ($txStart, $txEnd, undef, undef, undef, $strandTest) = cdsRanges("$line");
       } elsif ($line =~ m/^\s+CDS\s+/) {
         if ($cdsStart != -1 && $cdsEnd != -1) {
           my $noTxEnds = 0;
@@ -144,8 +171,9 @@ while (my $file = shift) {
           }
           $txStart = $cdsStart if ($txStart == -1);
           $txEnd = $cdsEnd if ($txEnd == -1);
+          $productName = $locusTag if (length($locusTag) > 1);
           $geneName = $productName if (1 > length($geneName));
-          recordOut($accessionId, $geneName, $txStart, $txEnd, $cdsStart, $cdsEnd, $exonStarts, $exonEnds, $exonCount);
+          recordOut($accessionId, $geneName, $strand, $txStart, $txEnd, $cdsStart, $cdsEnd, $exonStarts, $exonEnds, $exonCount);
           if ($noTxEnds) {
              $txStart = -1;
              $txEnd = -1;
@@ -153,10 +181,13 @@ while (my $file = shift) {
         }
         $cdsStart = -1;
         $cdsEnd = -1;
+        $strand = "+";
         $geneName = "";
         $exonStarts = "";
         $exonEnds = "";
-        ($cdsStart, $cdsEnd, $exonCount, $exonStarts, $exonEnds) = cdsRanges("$line");
+        my $strandTest = "";
+        ($cdsStart, $cdsEnd, $exonCount, $exonStarts, $exonEnds, $strandTest) = cdsRanges("$line");
+        $strand = $strandTest;
       }
     } else {
       if ($line =~ m/^VERSION/) {
@@ -166,6 +197,22 @@ while (my $file = shift) {
     }
   }
   close (FH);
+  # last one
+  if ($cdsStart != -1 && $cdsEnd != -1) {
+    my $noTxEnds = 0;
+    if ($txStart == -1 || $txEnd == -1) {
+      $noTxEnds = 1;
+    }
+    $txStart = $cdsStart if ($txStart == -1);
+    $txEnd = $cdsEnd if ($txEnd == -1);
+    $productName = $locusTag if (length($locusTag) > 1);
+    $geneName = $productName if (1 > length($geneName));
+    recordOut($accessionId, $geneName, $strand, $txStart, $txEnd, $cdsStart, $cdsEnd, $exonStarts, $exonEnds, $exonCount);
+  } elsif ($txStart != -1 && $txEnd != 1 ) {
+    $productName = $locusTag if (length($locusTag) > 1);
+    $geneName = $productName if (1 > length($geneName));
+    recordOut($accessionId, $geneName, $strand, $txStart, $txEnd, $cdsStart, $cdsEnd, $exonStarts, $exonEnds, $exonCount);
+  }
 }
 
 

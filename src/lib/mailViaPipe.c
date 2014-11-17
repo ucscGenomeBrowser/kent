@@ -13,6 +13,7 @@
 #include "mailViaPipe.h"
 
 int mailViaPipe(char *toAddress, char *theSubject, char *theBody, char *fromAddress)
+/* Send mail via pipeline to sendmail.  Abort if a problem. */
 {
 char *cmd1[] = {"/usr/sbin/sendmail", "-t", "-oi", NULL};
 struct pipeline *dataPipe = pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
@@ -24,8 +25,6 @@ fprintf(out, "Subject: %s\n", theSubject);
 fprintf(out, "\n");
 fprintf(out, "%s\n", theBody);
 fflush(out);
-if(ferror(out) || pipelineWait(dataPipe))
-    pipelineFree(&dataPipe);
-return 0;
+return pipelineClose(&dataPipe);
 }
 
