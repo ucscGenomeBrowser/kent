@@ -164,7 +164,9 @@ static void parseConfigFile(char *filename, int depth)
 /* open and parse a config file */
 {
 checkConfigPerms(filename);
-struct lineFile *lf = lineFileOpen(filename, TRUE);
+struct lineFile *lf = lineFileMayOpen(filename, TRUE);
+if (lf == NULL)
+    return;
 char *line;
 while(lineFileNext(lf, &line, NULL))
     {

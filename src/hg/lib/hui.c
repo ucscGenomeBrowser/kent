@@ -1042,7 +1042,7 @@ if (isNotEmpty(setting))
 		 "must be one of {none, all, given, genbank, table}.",
 		 tdb->track, BASE_COLOR_USE_CDS, setting);
     }
-else if (startsWith("genePred", tdb->type))
+else if (startsWith("genePred", tdb->type)  || startsWith("bigGenePred", tdb->type))
     gotIt = TRUE;
 return gotIt;
 }

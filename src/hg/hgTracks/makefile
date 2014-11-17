@@ -13,7 +13,7 @@ COMMONO = pubsTracks.o altGraphXTrack.o bamTrack.o bedGraph.o bedTrack.o \
 	coverageTrack.o cytoBandTrack.o cutterTrack.o \
         expRatioTracks.o factorSource.o hgTracks.o gencodeTracks.o goldTrack.o gvfTrack.o \
 	loweLabTracks.o lrgTrack.o \
-	mafTrack.o makeItemsTrack.o menu.o multiWig.o netTrack.o pslTrack.o \
+	mafTrack.o makeItemsTrack.o menu.o multiWig.o netTrack.o peptideAtlasTrack.o pslTrack.o \
 	rmskJoinedTrack.o rmskTrack.o \
 	sampleTracks.o searchTracks.o simpleTracks.o snakeTrack.o switchGear.o transMapTracks.o \
 	wabaTrack.o wigTrack.o cds.o \

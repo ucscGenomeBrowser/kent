@@ -411,7 +411,7 @@ if (keyCount > 0)
 	    slAddHead(&idList, idEl);
 	    }
 	}
-    pipelineFree(&pl);  /* Takes care of lf too. */
+    pipelineClose(&pl);  /* Takes care of lf too. */
     freeCmds(cmds, keyCount);
     if (verboseLevel() >= 3)
 	{
@@ -588,8 +588,43 @@ struct tsrPos
     struct hgPos *posList;		/* Associated list of positions. */
     };
 
+static boolean isCanonical(struct sqlConnection *conn, char *geneName)
+/* Look for the name in knownCannonical, return true if found */
+{
+boolean foundIt = FALSE;
+if (sqlTableExists(conn, "knownCanonical"))
+    {
+    char query[512];
+    sqlSafef(query, sizeof(query), "select transcript from knownCanonical"
+	  " where '%s' = transcript;", geneName);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row;
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	foundIt = TRUE;
+	}
+    sqlFreeResult(&sr);
+    }
+return foundIt;
+}
+
+
+static int hgPosCmpCanonical(const void *vhg1, const void *vhg2)
+// Compares two hgPos structs and returns an integer
+{
+const struct hgPos *hg1 = *((struct hgPos**)vhg1);
+const struct hgPos *hg2 = *((struct hgPos**)vhg2);
+int diff = trixSearchResultCmp(&hg1->tp->tsr, &hg2->tp->tsr);
+if (diff == 0)
+    {
+    diff = (hg2->canonical - hg1->canonical);
+    }
+return diff;
+}
+
+
 static void addKnownGeneItems(struct hgPosTable *table,
-	struct trixSearchResult *tsrList, struct sqlConnection *conn)
+	struct trixSearchResult *tsrList, struct sqlConnection *conn, struct sqlConnection *conn2)
 /* Convert tsrList to posList, and hang posList off of table. */
 {
 /* This code works with just two SQL queries no matter how
@@ -603,7 +638,7 @@ static void addKnownGeneItems(struct hgPosTable *table,
 struct dyString *dy = dyStringNew(0);
 struct trixSearchResult *tsr;
 struct hash *hash = hashNew(16);
-struct hgPos *posList = NULL, *pos;
+struct hgPos *pos, *posList = NULL;
 struct tsrPos *tpList = NULL, *tp;
 struct sqlResult *sr;
 char **row;
@@ -637,7 +672,9 @@ for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
         dyStringAppendC(dy, ',');
     }
 dyStringAppend(dy, ")");
+
 sr = sqlGetResult(conn, dy->string);
+
 while ((row = sqlNextRow(sr)) != NULL)
     {
     tp = hashFindVal(hash, row[0]);
@@ -647,6 +684,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     pos->chrom = cloneString(row[1]);
     pos->chromStart = sqlUnsigned(row[2]);
     pos->chromEnd = sqlUnsigned(row[3]);
+    pos->tp = tp;
     slAddHead(&tp->posList, pos);
     }
 sqlFreeResult(&sr);
@@ -662,7 +700,9 @@ for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
         dyStringAppendC(dy, ',');
     }
 dyStringAppend(dy, ")");
+
 sr = sqlGetResult(conn, dy->string);
+
 while ((row = sqlNextRow(sr)) != NULL)
     {
     tp = hashFindVal(hash, row[0]);
@@ -673,6 +713,13 @@ while ((row = sqlNextRow(sr)) != NULL)
 	char nameBuf[256];
 	safef(nameBuf, sizeof(nameBuf), "%s (%s)", row[1], row[0]);
 	pos->name = cloneString(nameBuf);
+	if (isCanonical(conn2,row[0]))
+	    {
+	    pos->canonical = TRUE;
+	    }
+	else{
+	    pos->canonical = FALSE;
+	    }
 	pos->description = cloneString(row[2]);
 	pos->browserName = cloneString(row[0]);
 	}
@@ -689,7 +736,10 @@ for (tp = tpList; tp != NULL; tp = tp->next)
 	slAddHead(&posList, pos);
 	}
     }
+
+slSort(&posList, hgPosCmpCanonical);
 table->posList = posList;
+
 hashFree(&hash);
 dyStringFree(&dy);
 }
@@ -713,8 +763,10 @@ if (tsrList != NULL)
     {
     struct hgPosTable *table = addKnownGeneTable(db, hgp);
     struct sqlConnection *conn = hAllocConn(db);
-    addKnownGeneItems(table, tsrList, conn);
+    struct sqlConnection *conn2 = hAllocConn(db);
+    addKnownGeneItems(table, tsrList, conn, conn2);
     hFreeConn(&conn);
+    hFreeConn(&conn2);
     gotIt = TRUE;
     }
 freez(&lowered);
@@ -1258,21 +1310,6 @@ static void mrnaHtmlOnePos(struct hgPosTable *table, struct hgPos *pos, FILE *f)
 {
 fprintf(f, "%s", pos->description);
 }
-
-#ifdef OLD
-static void makeGbTrackTableName(char *db, char *tableName, size_t tnSize, char *base)
-/* Now we have to watch out for scaffold-based browsers where 
- * the track is all_{mrna,est} not {mrna,est}. */
-{
-char splitTable[256];
-safef(splitTable, sizeof(splitTable), "%s_%s",
-      hDefaultChrom(db), base);
-if (hTableExists(db, splitTable))
-    safef(tableName, tnSize, "%s", base);
-else
-    safef(tableName, tnSize, "all_%s", base);
-}
-#endif /* OLD */
 
 char *hCarefulTrackOpenVis(char *db, char *trackName)
 /* If track is already in full mode, return full; otherwise, return
@@ -2494,7 +2531,14 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 			}
 		    }
 		fprintf(f, "hgFind.matches=%s,\">", encMatches);
+		// Bold canonical genes. 
+		if(pos->canonical) {
+		    fprintf(f, "<B>");
+		    }
 		htmTextOut(f, pos->name);
+		if(pos->canonical) {
+		    fprintf(f, "</B>");
+		    }
 		fprintf(f, " at %s</A>", range);
 		desc = pos->description;
 		if (desc)

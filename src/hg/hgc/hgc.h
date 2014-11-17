@@ -462,6 +462,9 @@ void doLrgTranscriptPsl(struct trackDb *tdb, char *item);
 void htcLrgCdna(char *item);
 /* Serve up LRG transcript cdna seq */
 
+void doPeptideAtlas(struct trackDb *tdb, char *item);
+/* Details for PeptideAtlas peptide mapping */
+
 int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount);
 // Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
 // sr may be null for bigBeds.
