@@ -55,13 +55,14 @@ static char *peptideAtlasItemName(struct track *tg, void *item)
  * This suffices since all PeptideAtlas peptide mappings (in Aug 2014 human build) 
  * are perfect matches to genome */
 {
+struct dnaSeq *dnaSeq;
 if (tg->customPt == NULL)
     {
     int minStart, maxEnd;
     linkedFeaturesRange(tg, &minStart, &maxEnd);
     struct dnaBuf *dnaBuf;
     AllocVar(dnaBuf);
-    struct dnaSeq *dnaSeq = hDnaFromSeq(database, chromName, minStart, maxEnd, dnaLower);
+    dnaSeq = hDnaFromSeq(database, chromName, minStart, maxEnd, dnaLower);
     dnaBuf->dna = dnaSeq->dna;
     dnaBuf->chromStart = minStart;
     dnaBuf->chromEnd = maxEnd;
@@ -69,10 +70,17 @@ if (tg->customPt == NULL)
     }
 struct linkedFeatures *lf = (struct linkedFeatures *)item;
 DNA *dna = dnaForLinkedFeature(lf, (struct dnaBuf *)tg->customPt);
-int size = strlen(dna)/3 + 1;
-AA *peptide = needMem(size);
-dnaTranslateSome(dna, peptide, size);
-return peptide;
+
+/* Too bad this lib function fails here, so a bit more code needed */
+//AA *peptide = needMem(size);
+//dnaTranslateSome(dna, peptide, size);
+
+AllocVar(dnaSeq);
+dnaSeq->dna = dna;
+dnaSeq->size = (int)strlen(dna);
+dnaSeq->name = "";
+aaSeq *peptide = translateSeqN(dnaSeq, 0, 0, FALSE);
+return peptide->dna;
 }
 
 void peptideAtlasMethods(struct track *tg)
