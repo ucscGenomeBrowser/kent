@@ -12313,6 +12313,9 @@ else if (sameWord(type, "gvf"))
     {
     gvfMethods(track);
     }
+/* add handlers for wildcard */
+if (startsWith("peptideAtlas", track->track))
+    peptideAtlasMethods(track);
 #endif /* GBROWSE */
 }
 

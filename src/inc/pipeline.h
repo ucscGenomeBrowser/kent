@@ -38,8 +38,7 @@
  *        {
  *        ...
  *        }
- *    pipelineWait(pl);
- *    pipelineFree(&pl);
+ *    pipelineClose(&pl);
  *
  * A similar example that generates data and writes a compressed file, sorting
  * it numerically by the first column:
@@ -55,8 +54,7 @@
  *    while ((line = makeNextRow()) != NULL)
  *        fprintf(fh, "%s\n", line);
  *    
- *    pipelineWait(pl);
- *    pipelineFree(&pl);
+ *    pipelineClose(&pl);
  *
  * To append to an output file, use pipelineWrite|pipelineAppend:
  *    
@@ -146,6 +144,10 @@ int pipelineWait(struct pipeline *pl);
 
 void pipelineFree(struct pipeline **plPtr);
 /* free a pipeline object */
+
+int pipelineClose(struct pipeline **pPl);
+/* Wait for pipeline to finish and free it. Same as pipelineWait then pipelineClose.
+ * Returns pipelineWait result (normally 0). */
 
 #endif
 /*

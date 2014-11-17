@@ -3246,7 +3246,10 @@ else if (sameString(type, "bigBed") || sameString(type, "bigGenePred"))
     /* Find field counts, and from that revise the tdb->type to be more complete. */
     char extra = (bbi->fieldCount > bbi->definedFieldCount ? '+' : '.');
     char typeBuf[64];
-    safef(typeBuf, sizeof(typeBuf), "bigBed %d %c", bbi->definedFieldCount, extra);
+    if (sameString(type, "bigGenePred"))
+	safef(typeBuf, sizeof(typeBuf), "bigGenePred");
+    else
+	safef(typeBuf, sizeof(typeBuf), "bigBed %d %c", bbi->definedFieldCount, extra);
     tdb->type = cloneString(typeBuf);
 
     /* Finish wrapping track around tdb. */

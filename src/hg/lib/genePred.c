@@ -2082,6 +2082,7 @@ gp->name2 = cloneString(row[ 9]);
 gp->cdsStartStat = parseCdsStat(row[ 10]);
 gp->cdsEndStat = parseCdsStat(row[ 11]);
 sqlSignedDynamicArray(row[ 12],  &gp->exonFrames, &numBlocks);
+gp->optFields |= genePredExonFramesFld;
 assert (numBlocks == gp->exonCount);
 
 return gp;

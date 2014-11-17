@@ -46,3 +46,6 @@ void trixSearchResultFree(struct trixSearchResult **pTsr);
 
 void trixSearchResultFreeList(struct trixSearchResult **pList);
 /* Free up a list of trixSearchResults. */
+
+int trixSearchResultCmp(const void *va, const void *vb);
+/* Compare two trixSearchResult in such a way that most relevant searches tend to be first. */

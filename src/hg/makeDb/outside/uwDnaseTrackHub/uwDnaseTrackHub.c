@@ -157,6 +157,12 @@ int lighten(double col)
 return    round(255.0/3 + 0.666667*col);
 }
 
+void writeSubgroups(FILE *f, char *view, char *acc, char *treatment)
+/* Write out a subgroups line */
+{
+fprintf(f, "\tsubGroups view=%s cellType=%s treatment=%s\n", view, acc, treatment);
+}
+
 void writeTrackDbTxt(char *fileName, struct expMeta *metaList, struct colorTab *colorList)
 /* Write out trackDb file */
 {
@@ -202,9 +208,34 @@ for (col = colorList; col != NULL; col = col->next)
     }
 fprintf(f, "\n");
 
+/* Write out treatment as subGroup3. Also create hash with underbarred values for treatments. */
+fprintf(f, "subGroup3 treatment Treatment");
+struct hash *treatmentHash = hashNew(0);
+for (meta = metaList; meta != NULL; meta = meta->next)
+    {
+    char *treatment = meta->treatment;
+    if (hashLookup(treatmentHash, treatment) == NULL)
+	{
+	char underbarred[64];
+	if (sameString("n/a", treatment))
+	    {
+	    hashAdd(treatmentHash, treatment, "n_a");
+	    fprintf(f, " n_a=n/a");
+	    }
+	else
+	    {
+	    safef(underbarred, sizeof(underbarred), "%s", treatment);
+	    subChar(underbarred, ' ', '_');
+	    hashAdd(treatmentHash, treatment, cloneString(underbarred));
+	    fprintf(f, " %s=%s", underbarred, underbarred);
+	    }
+	}
+    }
+fprintf(f, "\n");
+
 /* Write out some more relatively constant parts to finish up root. */
 fprintf(f, "dimensions dimensionY=cellType\n");
-fprintf(f, "sortOrder cellType+\n");
+fprintf(f, "sortOrder view=+ cellType=+ treatment=+\n");
 fprintf(f, "noInherit on\n");
 fprintf(f, "type bed 3 +\n");
 fprintf(f, "\n");
@@ -227,11 +258,12 @@ fprintf(f, "\n");
 for (col = colorList; col != NULL; col = col->next)
     {
     char *acc = fileToAcc(col->wigFile);
+    meta = hashMustFindVal(metaHash, acc);
     fprintf(f, "\ttrack %sHotW%s\n", rootName, acc+1);
     fprintf(f, "\tparent %sHot off\n", rootName);
     fprintf(f, "\tshortLabel %s Ht\n", col->label);
     fprintf(f, "\tlongLabel %s DNAseI HS HotSpots from ENCODE2/UW %s\n", col->label, acc);
-    fprintf(f, "\tsubGroups view=Hot cellType=%s\n", acc);
+    writeSubgroups(f, "Hot", acc, hashFindVal(treatmentHash, meta->treatment));
     fprintf(f, "\ttype bigBed\n");
     fprintf(f, "\tbigDataUrl data/%s.pooled.broadPeak\n", acc);
     fprintf(f, "\n");
@@ -259,7 +291,7 @@ for (col = colorList; col != NULL; col = col->next)
     fprintf(f, "\tparent %sPeaks off\n", rootName);
     fprintf(f, "\tshortLabel %s Pk\n", col->label);
     fprintf(f, "\tlongLabel %s DNAseI HS Peaks from ENCODE2/UW %s\n", col->label, acc);
-    fprintf(f, "\tsubGroups view=Peaks cellType=%s\n", acc);
+    writeSubgroups(f, "Peaks", acc, hashFindVal(treatmentHash, meta->treatment));
     fprintf(f, "\ttype bigBed\n");
     fprintf(f, "\tbigDataUrl data/%s.pooled.narrowPeak\n", acc);
     fprintf(f, "\n");
@@ -294,7 +326,7 @@ for (col = colorList; col != NULL; col = col->next)
     else
         fprintf(f, "\tlongLabel %s %s DNAseI HS Signals from ENCODE2/UW %s\n", 
 	    meta->cell, meta->treatment, acc);
-    fprintf(f, "\tsubGroups view=Signal cellType=%s\n", acc);
+    writeSubgroups(f, "Signal", acc, hashFindVal(treatmentHash, meta->treatment));
 
     /* Figure out bounds of bigWig */
     struct bbiSummaryElement *sum = hashMustFindVal(wigSumHash, acc);

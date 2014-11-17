@@ -179,8 +179,7 @@ if (pCompressPipeline && *pCompressPipeline)
     {
     fflush(stdout);
     close(STDOUT_FILENO); // Do not use fclose
-    pipelineWait(*pCompressPipeline);
-    pipelineFree(pCompressPipeline);
+    pipelineClose(pCompressPipeline);
     }
 if (saveStdout)
     {

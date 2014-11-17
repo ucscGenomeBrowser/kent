@@ -2091,6 +2091,14 @@ static struct customFactory bigWigFactory =
 
 /*** Big Bed Factory - for big client-side BED tracks ***/
 
+static boolean bigGenePredRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type,
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a wig track */
+{
+return (sameType(type, "bigGenePred"));
+}
+
 static boolean bigBedRecognizer(struct customFactory *fac,
 	struct customPp *cpp, char *type,
     	struct customTrack *track)
@@ -2127,6 +2135,16 @@ errCatchFree(&errCatch);
 setBbiViewLimits(track);
 return track;
 }
+
+static struct customFactory bigGenePredFactory =
+/* Factory for bigBed tracks */
+    {
+    NULL,
+    "bigGenePred",
+    bigGenePredRecognizer,
+    bigBedLoader,
+    };
+
 
 static struct customFactory bigBedFactory =
 /* Factory for bigBed tracks */
@@ -2592,6 +2610,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &gffFactory);
     slAddTail(&factoryList, &pgSnpFactory);
     slAddTail(&factoryList, &bedFactory);
+    slAddTail(&factoryList, &bigGenePredFactory);
     slAddTail(&factoryList, &bigBedFactory);
     slAddTail(&factoryList, &bedGraphFactory);
     slAddTail(&factoryList, &microarrayFactory);
