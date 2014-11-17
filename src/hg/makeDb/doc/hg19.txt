@@ -29937,6 +29937,9 @@ wc -l peptides.tab
 # create protein fasta file of sequences
 awk 'NR != 1 {printf(">%s\n%s\n", $1, $2)}' peptides.tab > peptides.fa
 
+tail -n +2 peptides.tab | \
+    hgLoadSqlTab hgFixed peptideAtlas2014Peptides ~/kent/src/hg/lib/peptideAtlasPeptide.sql stdin
+
 # extract mappings with some metadata (biosequence matched (protein and gene)))
 # use number of samples where the peptide was observed as the score (to be scaled)
 # filter out patches (which we do not annotate), and contig-based mappings
