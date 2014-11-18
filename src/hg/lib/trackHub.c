@@ -908,8 +908,13 @@ if (htmlName == NULL)
 char *simpleName = hubConnectSkipHubPrefix(htmlName);
 char *url = trackHubRelativeUrl(trackDbFile, simpleName);
 char buffer[10*1024];
-safef(buffer, sizeof buffer, "%s.html", url);
-tdb->html = netReadTextFileIfExists(buffer);
+char *fixedUrl = url;
+if (!endsWith(url, ".html"))
+    {
+    safef(buffer, sizeof buffer, "%s.html", url);
+    fixedUrl = buffer;
+    }
+tdb->html = netReadTextFileIfExists(fixedUrl);
 freez(&url);
 }
 
