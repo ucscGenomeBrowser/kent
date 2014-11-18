@@ -1,0 +1,7 @@
+This directory contains files with instructions for building the hg38 human genome browser
+and annotation tracks.
+
+The assembly build and basic tracks are described in hg38.txt.  If you are creating a set of
+related tracks or working on a project that will expand to include multiple tracks, consider
+creating a <project>.txt file instead of adding your notes to hg38.txt.
+

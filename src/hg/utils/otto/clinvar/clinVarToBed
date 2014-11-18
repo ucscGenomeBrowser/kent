@@ -1,0 +1,233 @@
+#!/usr/bin/env python
+
+import logging, sys, optparse, re, os, datetime, gzip, urllib2, subprocess
+from collections import defaultdict
+from os.path import join, basename, dirname, isfile
+from datetime import date, datetime, timedelta
+
+# === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
+parser = optparse.OptionParser("""usage: %prog [options] filename - check and convert clinVar table to four bed files, split into CNV and shorter mutations, for both hg19 and hg38 and convert all to bigBed
+
+Output goes into the current dir
+
+input file is ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz
+""") 
+
+parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages") 
+parser.add_option("-a", "--auto", dest="auto", action="store_true", help="download the file from NCBIi into the current dir and it bigBeds") 
+parser.add_option("", "--maxDiff", dest="maxDiff", action="store", type="float", help="look for yesterday's download file in current dir and accept this much, expressed as a ratio. Can only be used with --auto.")
+(options, args) = parser.parse_args()
+
+if options.debug:
+    logging.basicConfig(level=logging.DEBUG)
+else:
+    logging.basicConfig(level=logging.INFO)
+
+clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	ClinicalSignificance	RS# (dbSNP)	nsv (dbVar)	RCVaccession	TestedInGTR	PhenotypeIDs	Origin	Assembly	Chromosome	Start	Stop	Cytogenetic	ReviewStatus	HGVS(c.)	HGVS(p.)	NumberSubmitters	LastEvaluated	Guidelines	OtherIDs	VariantID\n"
+# ==== FUNCTIONs =====
+
+def shortenName(name):
+    "make the clinvar name shorter "
+    cnvMatch = cnvRe.match(name)
+    hgvsMatch = hgvsRe.match(name)
+    if cnvMatch != None:
+        # some names include the original assembly as a prefix
+        band, copy = cnvMatch.groups()
+        if copy == None:
+            copy = ""
+        name = band+copy
+    #elif hgvsMatch != None:
+        # some names include the whole hgvs desc, we strip the gene name + acc
+        #name = hgvsMatch.groups()[2]
+    elif name.startswith("GRCh"):
+        assert False # name that starts with GRCh but does not match our regex should not happen
+    elif "." in name:
+        # many names look like NM_000274.3(OAT):c.550_552delGCT (p.Ala184del)
+        # so we remove the gene and the protein description
+        if ":" in name:
+            name = name.split(":")[1]
+        name = name.split(" ")[0]
+
+        delMatch = delRe.match(name)
+        if delMatch!=None:
+            return name[-3:]
+
+        posMatch = posRe.match(name)
+        if posMatch!=None:
+            dup, dele, ins, pos = posMatch.groups()[-4:]
+            if dup==None:
+                dup= ""
+            if dele==None:
+                dele = ""
+            if ins==None:
+                ins = ""
+            name = dup+dele+ins+pos
+    return name
+
+# ----------- MAIN --------------
+if args==[] and not options.auto:
+    parser.print_help()
+    exit(1)
+
+outSuffix = ""
+# download from NCBI
+if options.auto:
+    today = date.today().isoformat()
+    outSuffix = "%s." % today
+    url = "http://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz"
+    outFname = "variant_summary.%s.txt.gz" % today
+    logging.info("Downlading %s to %s" % (url, outFname))
+    open(outFname, "w").write(urllib2.urlopen(url).read())
+    filename = outFname
+else:
+    filename = args[0]
+
+# e.g. GRCh38/hg38 1p36.33-36.31(chr1:1181847-5507243)x1
+# GRCh38/hg38 9p24.3-q34.3(chr9:204193-138179445)
+cnvRe = re.compile(r'GRCh[0-9]*/hg[0-9]* ([XY0-9pq.-]+)\([XYa-z_:0-9-]+\)(x[0-9]+)?')
+
+hgvsRe = re.compile(r'(N[RPCGM]_[0-9.]+)(\([a-zA-Z0-9_-]+\))?:([+0-9c.ACTG>a-z_()-]+)')
+
+# e.g.(13359800_13371688)_(13371779_13505931)del
+delRe = re.compile(r'g.\([?0-9()_-]+(del|dup|ins)')
+
+# e.g.
+# c.80_83delGGATinsTGCTGTAAACTGTAACTGTAAA
+# c.80A>T
+# c.740+356C>T
+# c.3839_3855del17
+posRe = re.compile(r'[mgcpdrn]\.[*0-9_+-]+(dup)?(del)?(ins)?([>ACTG0-9]+)')
+
+ifh = gzip.open(filename)
+
+# check the header
+line1 = ifh.readline()
+assert(line1 == clinvarExpectHeaders) # test if clinvar has changed their header line again
+
+# open out files
+hg19Bed = open("clinvarMain.hg19.%sbed" % outSuffix, "w")
+hg38Bed = open("clinvarMain.hg38.%sbed" % outSuffix, "w")
+hg19BedCnv = open("clinvarCnv.hg19.%sbed" % outSuffix, "w")
+hg38BedCnv = open("clinvarCnv.hg38.%sbed" % outSuffix, "w")
+
+longCount = 0
+noAssCount = 0
+
+# convert lines
+for line in ifh:
+    line = line.replace(", ", ",").replace(";", ",") # replace, bigBed conventions
+    line = line.rstrip("\n")
+
+    alleleId, allType, name, geneId, geneSymbol, clinSign, snpAcc, dbVarAcc, \
+      irvcAcc, inGtr, phenotypeIds, origin, assembly, chrom, start, end, cytogenetic, \
+      reviewStatus, hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds, varId \
+           = line.split("\t")
+
+    if chrom=="" or assembly=="" or assembly=="NCBI36":
+        noAssCount += 1
+        continue
+
+    chrom = "chr"+chrom
+    if chrom=="chrMT": # why does NCBI use chrMT but we use chrM ?
+        chrom = "chrM"
+
+    shortName = shortenName(name)
+    if len(shortName)>17:
+        shortName = shortName[:15]+"..."
+        longCount+=1
+
+    # sometimes they seem to inverse their coordinates
+    if int(start)>int(end):
+        start, end = end, start
+
+    # reorder columns for bigBed
+    start = str(int(start)-1) # convert to zero-based, half-open
+    score = "0"
+    strand = "+"
+    thickStart = start
+    thickEnd = end
+    itemRgb = "0"
+    blockCount = "1"
+    blockSizes = str(int(end)-int(start))
+    blockStarts = "0"
+
+    if dbVarAcc.startswith("nsv"):
+        if "gain" in allType or "duplication" in allType:
+            itemRgb = "0,0,255"
+        if "deletion" in allType or "loss" in allType:
+            itemRgb = "255,0,0"
+
+    row = [chrom, start, end, shortName, score, strand, thickStart, thickEnd, itemRgb, \
+        blockCount, blockSizes, blockStarts,
+        name, allType, geneId, geneSymbol, clinSign,
+        snpAcc, dbVarAcc, irvcAcc, inGtr, phenotypeIds, origin, assembly, cytogenetic,
+        reviewStatus, hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds]
+
+    if assembly=="GRCh37":
+        if chrom=="chrM":
+            continue # we don't have the same MT chrom as NCBI, skip these
+        ofh = hg19Bed
+        if dbVarAcc.startswith("nsv"):
+            ofh = hg19BedCnv
+
+    elif assembly=="GRCh38":
+        ofh = hg38Bed
+        if dbVarAcc.startswith("nsv"):
+            ofh = hg38BedCnv
+    else:
+        noAssCount +=1
+        
+    ofh.write("\t".join(row))
+    ofh.write("\n")
+
+hg19Bed.close()
+hg38Bed.close()
+hg19BedCnv.close()
+hg38BedCnv.close()
+
+logging.info("%d lines with feature name that was too long, shortened them" % longCount)
+logging.info("%d lines without, with old assembly or no chrom, skipped" % noAssCount)
+
+fnames = [hg19Bed.name, hg38Bed.name, hg19BedCnv.name, hg38BedCnv.name]
+
+# sort the files
+for fname in fnames:
+    cmd = "bedSort %s %s" % (fname, fname) 
+    logging.debug(cmd)
+    assert(os.system(cmd)==0)
+
+# check new bed files against yesterday's bed files
+if options.maxDiff:
+    for fname in fnames:
+        yesterday = datetime.now() - timedelta(days=1)
+        yesterday = yesterday.date().isoformat()
+        yesterdayFname = fname.replace(today, yesterday)
+        todayLines = sum(1 for line in open(fname))
+        yesterdayLines = sum(1 for line in open(yesterdayFname))
+        percDiff = (todayLines-yesterdayLines)/float(todayLines)
+        if percDiff < 0:
+            raise Exception("line count change negative: %s %d, %s %d" % \
+                (yesterdayFname, yesterdayLines, fname, todayLines))
+        if percDiff > options.maxDiff:
+            raise Exception("line count increased too much: yesterday %d , today %d " % (yesterdayLines, todayLines))
+        # see RM 14350 do more than just linecount
+        # see http://stackoverflow.com/questions/1566461/how-to-count-differences-between-two-files-on-linux
+        cmd = "diff %s %s --speed-large-files | grep '^[\>\<]'  | wc -l" % (fname, yesterdayFname)
+        diffCount = int(subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT))
+        logging.info("%s: %d lines changed" % (fname, diffCount))
+        percDiff = float(diffCount)/todayLines
+        if percDiff > options.maxDiff:
+            raise Exception("too much diff: %d out of %d lines" % (diffCount, todayLines))
+
+# convert to bigBed without the date in the fname, like clinvarMain.hg19.bb
+for fname in fnames:
+    parts = fname.split(".")
+    if len(parts) == 4: # clinvarMain.hg19.2011-11-11.bed
+        base, db, date, ext = parts
+    else:
+        base, db, ext = parts
+        
+    outFname = "%s.%s.bb" % (base, db)
+    cmd = "bedToBigBed -tab -type=bed9+ -as=clinvar.as %s /hive/data/genomes/%s/chrom.sizes %s" % (fname, db, outFname)
+    logging.debug(cmd)
+    assert(os.system(cmd)==0)

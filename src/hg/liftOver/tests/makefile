@@ -2,7 +2,10 @@ include ../../../inc/common.mk
 
 # make VERBOSE=-verbose=2 will echo out positions as they convert
 
-test:   bin bedPlus3 bed8 simpleTest minus enm001 chuckTest chuckBigTest enr223
+test:   bin bedPlus3 bed8 simpleTest minus enm001 chuckTest chuckBigTest enr223 scaffoldEndBug
+
+# tests too slow to use in default test suite
+testSlow: mm3 multiple
 
 liftOver=${DESTBINDIR}/liftOver
 liftOverMerge=${DESTBINDIR}/liftOverMerge
@@ -122,6 +125,13 @@ enr112:	mkdirs
                     output/enr112.bad.bed 2> /dev/null
 	cat output/enr112.{good,bad}.bed | \
                 diff - expected/enr112.bed 1>&2
+
+# bug where genePred going at the exact end of a scaffold was not mapped
+scaffoldEndBug:
+	${liftOver} -genePred ${VERBOSE} input/scaffoldEndBug.gp input/scaffoldEndBug.chain \
+		output/$@.good.gp output/$@.bad.gp 2> /dev/null
+	cat output/$@.{good,bad}.gp | diff - expected/$@.gp 1>&2
+
 
 orderTest: enr223
 enr223:	mkdirs

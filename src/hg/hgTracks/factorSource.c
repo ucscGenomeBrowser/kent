@@ -85,7 +85,7 @@ if (motifTable == NULL)
     return;
 
 struct sqlConnection *conn = hAllocConn(database);
-if (sqlTableExists(conn, motifTable))
+if ((track->items != NULL) & sqlTableExists(conn, motifTable))
     {
 
     // Load all motifs for items in window (including motifs outside of window)

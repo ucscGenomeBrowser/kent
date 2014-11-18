@@ -890,6 +890,7 @@ int main(int argc, char *argv[])
 long enteredMainTime = clock1000();
 uglyTime(NULL);
 cgiSpoof(&argc, argv);
+setUdcCacheDir();
 oldCart = hashNew(0);
 if (cgiVarExists(hgpDoDownload))  /* use cgiVars -- do not commit to any cart method yet */
     {

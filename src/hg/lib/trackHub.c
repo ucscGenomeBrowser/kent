@@ -700,7 +700,11 @@ static void validateOneTrack( struct trackHub *hub,
 {
 /* Check for existence of fields required in all tracks */
 requiredSetting(hub, genome, tdb, "shortLabel");
+char *shortLabel  = trackDbSetting(tdb, "shortLabel");
+memSwapChar(shortLabel, strlen(shortLabel), '\t', ' ');
 requiredSetting(hub, genome, tdb, "longLabel");
+char *longLabel  = trackDbSetting(tdb, "longLabel");
+memSwapChar(longLabel, strlen(longLabel), '\t', ' ');
 
 /* Forbid any dangerous settings that should not be allowed */
 forbidSetting(hub, genome, tdb, "idInUrlSql");

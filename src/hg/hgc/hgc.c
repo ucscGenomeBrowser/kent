@@ -52,6 +52,7 @@
 #include "genePred.h"
 #include "genePredReader.h"
 #include "pepPred.h"
+#include "peptideAtlasPeptide.h"
 #include "wabAli.h"
 #include "genomicDups.h"
 #include "est3.h"
@@ -17272,7 +17273,10 @@ printf("</TD></TR>\n");
 if (snp->alleleFreqCount > 0)
     {
     boolean gotNonIntN = FALSE;
-    int total2N = 0;
+    double total2NDbl = 0.0;
+    for (i = 0;  i < snp->alleleFreqCount;  i++)
+        total2NDbl += snp->alleleNs[i];
+    int total2N = round(total2NDbl);
     printf("<TR><TD><B><A HREF=\"#AlleleFreq\">Allele Frequencies</A>&nbsp;&nbsp;</B></TD><TD>");
     for (i = 0;  i < snp->alleleFreqCount;  i++)
 	{
@@ -17284,14 +17288,13 @@ if (snp->alleleFreqCount > 0)
 	double f = snp->alleleFreqs[i], n = snp->alleleNs[i];
 	if (f > 0)
 	    {
-	    total2N = round(n / f);
 	    int roundedN = round(n);
 	    if (fabs(n - roundedN) < 0.01)
 		printf("(%d / %d)", roundedN, total2N);
 	    else
 		{
 		gotNonIntN = TRUE;
-		printf("(%.3f / %d)", n, total2N);
+		printf("(%.3f / %.3f)", n, total2NDbl);
 		}
 	    }
 	}
@@ -18823,6 +18826,10 @@ if (row != NULL)
         {
         sqlFreeResult(&sr);
         hFindSplitTable(database, seqName, lfs->pslTable, pslTable, &hasBin);
+
+        if (isEmpty(pslTable) && trackDbSetting(tdb, "lfPslTable"))
+            safecpy(pslTable, sizeof(pslTable), trackDbSetting(tdb, "lfPslTable"));
+            
         sqlSafef(query, sizeof query, "SELECT * FROM %s WHERE qName = '%s'",
                        pslTable, lfs->lfNames[i]);
         sr = sqlMustGetResult(conn, query);
@@ -20822,6 +20829,77 @@ genericClickHandlerPlus(tdb, item, NULL, dy->string);
 dyStringFree(&dy);
 }
 
+
+void doPeptideAtlas(struct trackDb *tdb, char *item)
+/* PeptideAtlas item details display. Peptide details are in hgFixed.<table>Peptides */
+{
+char query[512];
+struct sqlResult *sr;
+char **row;
+
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+
+genericHeader(tdb, item);
+printCustomUrl(tdb, item, FALSE);
+struct sqlConnection *conn = hAllocConn(database);
+char peptideTable[128];
+safef(peptideTable, sizeof(peptideTable), "%sPeptides", tdb->table);
+
+// peptide info
+struct sqlConnection *connFixed= hAllocConn("hgFixed");
+if (sqlTableExists(connFixed, peptideTable))
+    {
+    sqlSafef(query, sizeof(query), "select * from %s where accession = '%s'", peptideTable, item);
+    sr = sqlGetResult(connFixed, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+        {
+        struct peptideAtlasPeptide *peptideInfo;
+        AllocVar(peptideInfo);
+        peptideAtlasPeptideStaticLoad(row, peptideInfo);
+        printf("<b>Peptide sequence:</b> %s<br>\n", peptideInfo->sequence);
+        printf("<b>Peptide size:</b> %d<br>\n", (int)strlen(peptideInfo->sequence));
+        printf("<b>Samples where observed:</b> %d<br>\n", peptideInfo->sampleCount);
+        printf("<b>Proteotypic score:</b> %.3f<br>\n", peptideInfo->proteotypicScore);
+        printf("<b>Hydrophobicity:</b> %.3f<br><br>\n", peptideInfo->hydrophobicity);
+        }
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&connFixed);
+
+// peptide mappings
+sqlSafef(query, sizeof(query), "select * from %s where name = '%s' order by chrom, chromStart, chromEnd", 
+        tdb->table, item);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+struct bed *bed = NULL, *beds = NULL;
+int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
+while (row != NULL)
+    {
+    bed = bedLoadN(row + rowOffset, 12);
+    if (sameString(bed->chrom, seqName) && bed->chromStart == start && bed->chromEnd == end)
+        bedPrintPos(bed, 12, tdb);
+    else
+        slAddHead(&beds, bed);
+    row = sqlNextRow(sr);
+    }
+if (beds != NULL)
+    {
+    slSort(&beds, bedCmp);
+    printf("<br><b>Other mappings of this peptide:</b> %d<br>\n", slCount(beds));
+    for (bed = beds; bed != NULL; bed = bed->next)
+        {
+        printf("&nbsp;&nbsp;&nbsp;&nbsp;"
+               "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+               hgTracksPathAndSettings(), database, bed->chrom, bed->chromStart+1, bed->chromEnd);
+        printf("%s:%d-%d</A><BR>\n", bed->chrom, bed->chromStart+1, bed->chromEnd);
+        }
+    }
+hFreeConn(&conn);
+printTrackHtml(tdb);
+}
+
 static void doSgdClone(struct trackDb *tdb, char *item)
 /* Display information about other Sacchromyces Genome Database
  * other (not-coding gene) info. */
@@ -21989,6 +22067,7 @@ if (hTableExists(database, "anoEstExpressed"))
 hFreeConn(&conn);
 printTrackHtml(tdb);
 }
+
 
 void mammalPsgTableRow(char *test, char *description, float pVal, unsigned isFdrSignificant)
 /* print single row of the overview table for mammal PSG track */
@@ -25605,6 +25684,10 @@ else if (sameWord(table, "htcLrgCdna"))
     {
     htcLrgCdna(item);
     }
+else if (startsWith("peptideAtlas", table))
+    {
+    doPeptideAtlas(tdb, item);
+    }
 else if (isHubTrack(table) && startsWith("snake", trackHubSkipHubName(table)))
     {
     doSnakeClick(tdb, item);
@@ -25619,7 +25702,6 @@ else if (tdb != NULL && startsWithWord("vcf", tdb->type))
     {
     doVcfDetails(tdb, item);
     }
-
 else if (tdb != NULL)
     {
     genericClickHandler(tdb, item, NULL);

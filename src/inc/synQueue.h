@@ -19,6 +19,10 @@ void synQueueFreeAndVals(struct synQueue **pSq);
 void synQueuePut(struct synQueue *sq, void *message);
 /* Add message to end of queue. */
 
+void synQueuePutUnprotected(struct synQueue *sq, void *message);
+/* Add message to end of queue without protecting against multithreading
+ * contention - used before pthreads are launched perhaps. */
+
 void *synQueueGet(struct synQueue *sq);
 /* Get message off start of queue.  Wait until there is
  * a message if queue is empty. */

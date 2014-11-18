@@ -12313,6 +12313,9 @@ else if (sameWord(type, "gvf"))
     {
     gvfMethods(track);
     }
+/* add handlers for wildcard */
+if (startsWith("peptideAtlas", track->track))
+    peptideAtlasMethods(track);
 #endif /* GBROWSE */
 }
 
@@ -12693,6 +12696,10 @@ registerTrackHandler("snp141", snp125Methods);
 registerTrackHandler("snp141Common", snp125Methods);
 registerTrackHandler("snp141Flagged", snp125Methods);
 registerTrackHandler("snp141Mult", snp125Methods);
+registerTrackHandler("snp142", snp125Methods);
+registerTrackHandler("snp142Common", snp125Methods);
+registerTrackHandler("snp142Flagged", snp125Methods);
+registerTrackHandler("snp142Mult", snp125Methods);
 registerTrackHandler("ld", ldMethods);
 registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("cnpSharp2", cnpSharp2Methods);

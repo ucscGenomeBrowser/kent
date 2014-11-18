@@ -1631,7 +1631,7 @@ identifier wgEncodeGencodePseudoGeneAttrsVM3
 identifier wgEncodeGencodeExonSupportVM3
 "Link together Gencode Exon Support table with Attributes table"
     mm10.wgEncodeGencodeExonSupportVM3.transcriptId dupeOk
-    mm10.wgEncodeGencodeAttrsVM3.transcriptId minCheck=0.98202
+    mm10.wgEncodeGencodeAttrsVM3.transcriptId minCheck=0.97
 
 identifier wgEncodeGencodeGeneSourceVM3
 "Link together Gencode Gene Source table with Attributes table"
@@ -4245,9 +4245,9 @@ identifier lrgTranscriptId
 
 identifier rmskJoinedBaseline
 "linking together RepeatMasker repeat fragments rmskJoined"
-    hg38.rmskAlignBaseline.id dupeOk
-    hg38.rmskJoinedBaseline.id
-    hg38.rmskOutBaseline.id
+    $gbd.rmskAlignBaseline.id dupeOk
+    $gbd.rmskJoinedBaseline.id
+    $gbd.rmskOutBaseline.id
 
 identifier dnaseMasterSourceId
 "Numeric index of cell type contributing to a DNAse master site"
@@ -4660,6 +4660,9 @@ tablesIgnored $gbd
     phyloP%way%
     phastCons%way%
     phastConsElements%way%
+    strainPhastCons%way%
+    strainPhastConsElements%way%
+    strainPhyloP%way%
     jaxQTL
     jaxQtl
     jaxQtlAsIs
@@ -4945,11 +4948,14 @@ tablesIgnored $eboVir
     iedbTcellII
     mafSnp160way
     mafSnpStrainName160way
+    muPIT
     ncbiGenePfam
     pdb
     spAnnot
     spMut
     spStruct
+    testAllFrames
+    testAllStrainFrames
 
 tablesIgnored $snpDb125
     snp125ExceptionDesc

@@ -1,0 +1,467 @@
+The remainder of this page is identical on the following tracks:
+<UL>
+  <LI>Common SNPs(142) - SNPs with &gt;= 1% minor allele frequency (MAF), mapping
+     only once to reference assembly.</LI>
+  <LI>Flagged SNPs(142) - SNPs &lt; 1% minor allele frequency (MAF) (or unknown),
+     mapping only once to reference assembly, 
+     flagged in dbSnp as "clinically associated" 
+     -- <em><B>not necessarily a risk allele!</B></em></LI>
+  <LI>Mult. SNPs(142) - SNPs mapping in more than one place on reference assembly.</LI>
+  <LI>All SNPs(142) - all SNPs from dbSNP mapping to reference assembly.</LI>
+
+</UL>
+
+<H2>Interpreting and Configuring the Graphical Display</H2>
+<P>
+  Variants are shown as single tick marks at most zoom levels.
+  When viewing the track at or near base-level resolution, the displayed
+  width of the SNP corresponds to the width of the variant in the reference
+  sequence. Insertions are indicated by a single tick mark displayed between
+  two nucleotides, single nucleotide polymorphisms are displayed as the width 
+  of a single base, and multiple nucleotide variants are represented by a 
+  block that spans two or more bases.
+</P>
+
+<P>
+On the track controls page, SNPs can be colored and/or filtered from the 
+display according to several attributes:
+</P>
+  <UL>
+
+    <LI>
+      <A name="Class"></A>
+      <B>Class</B>: Describes the observed alleles<BR>
+      <UL>
+        <LI><B>Single</B> - single nucleotide variation: all observed alleles are single nucleotides
+	    (can have 2, 3 or 4 alleles)</LI>
+        <LI><B>In-del</B> - insertion/deletion</LI>
+        <LI><B>Heterozygous</B> - heterozygous (undetermined) variation: allele contains string '(heterozygous)'</LI>
+        <LI><B>Microsatellite</B> - the observed allele from dbSNP is a variation in counts of short tandem repeats</LI>
+        <LI><B>Named</B> - the observed allele from dbSNP is given as a text name instead of raw sequence, e.g., (Alu)/-</LI>
+        <LI><B>No Variation</B> - the submission reports an invariant region in the surveyed sequence</LI>
+        <LI><B>Mixed</B> - the cluster contains submissions from multiple classes</LI>
+        <LI><B>Multiple Nucleotide Polymorphism (MNP)</B> - the alleles are all of the same length, and length &gt; 1</LI>
+        <LI><B>Insertion</B> - the polymorphism is an insertion relative to the reference assembly</LI>
+        <LI><B>Deletion</B> - the polymorphism is a deletion relative to the reference assembly</LI>
+        <LI><B>Unknown</B> - no classification provided by data contributor</LI>
+      </UL>
+    </LI>
+
+
+    <LI>
+      <A name="Valid"></A>
+      <B><A HREF="http://www.ncbi.nlm.nih.gov/SNP/snp_legend.cgi?legend=validation" 
+	target="_blank">Validation</A></B>: Method used to validate
+	the variant (<I>each variant may be validated by more than one method</I>)<BR>
+        <UL>
+        <LI><B>By Frequency</B> - at least one submitted SNP in cluster has frequency data submitted</LI>
+        <LI><B>By Cluster</B> - cluster has at least 2 submissions, with at least one submission assayed with a non-computational method</LI>
+        <LI><B>By Submitter</B> - at least one submitter SNP in cluster was validated by independent assay</LI>
+        <LI><B>By 2 Hit/2 Allele</B> - all alleles have been observed in at least 2 chromosomes</LI>
+        <LI><B>By HapMap</B> (human only) - submitted by <A HREF="http://hapmap.ncbi.nlm.nih.gov/" 
+	    target="_blank">HapMap</A> project</LI>
+        <LI><B>By 1000Genomes</B> (human only) - submitted by <A HREF="http://www.1000genomes.org/"
+	    target="_blank">1000Genomes</A> project</LI>
+        <LI><B>Unknown</B> - no validation has been reported for this variant</LI>
+      </UL>
+    </LI>
+    <LI>
+      <A name="Func"></A>
+      <B>Function</B>: dbSNP's predicted functional effect of variant on RefSeq transcripts,
+      both curated (NM_* and NR_*) as in the RefSeq Genes track and predicted (XM_* and XR_*),
+      not shown in UCSC Genome Browser.
+      A variant may have more than one functional role if it overlaps
+      multiple transcripts.
+      These terms and definitions are from the <A HREF="http://sequenceontology.org/"
+      TARGET=_BLANK>Sequence Ontology (SO)</A>; click on a term to view it in the
+      <A HREF="http://sequenceontology.org/browser/browser/obob.cgi?release=current_release"
+      TARGET=_BLANK>MISO Sequence Ontology Browser</A>.<BR>
+      <UL>
+        <LI><B>Unknown</B> - no functional classification provided (possibly intergenic)</LI>
+        <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001819"
+	    TARGET=_BLANK>synonymous_variant</A></B> -
+	    A sequence variant where there is no resulting change to the encoded amino acid
+	    (dbSNP term: <TT>coding-synon</TT>)</LI>
+        <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001627"
+	    TARGET=_BLANK>intron_variant</A></B> -
+	    A transcript variant occurring within an intron
+	    (dbSNP term: <TT>intron</TT>)</LI>
+        <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001632"
+	    TARGET=_BLANK>downstream_gene_variant</A></B> -
+	    A sequence variant located 3' of a gene
+	    (dbSNP term: <TT>near-gene-3</TT>)</LI>
+        <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001631"
+	    TARGET=_BLANK>upstream_gene_variant</A></B> -
+	    A sequence variant located 5' of a gene
+	    (dbSNP term: <TT>near-gene-5</TT>)</LI>
+        <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001619"
+	    TARGET=_BLANK>nc_transcript_variant</A></B> -
+	    A transcript variant of a non coding RNA gene
+	    (dbSNP term: <TT>ncRNA</TT>)</LI>
+	 <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001587"
+	    TARGET=_BLANK>stop_gained</A></B> -
+	    A sequence variant whereby at least one base of a codon is changed, resulting in
+	    a premature stop codon, leading to a shortened transcript
+	    (dbSNP term: <TT>nonsense</TT>)</LI>
+        <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001583"
+	    TARGET=_BLANK>missense_variant</A></B> -
+	    A sequence variant, where the change may be longer than 3 bases, and at least
+	    one base of a codon is changed resulting in a codon that encodes for a
+	    different amino acid
+	    (dbSNP term: <TT>missense</TT>)</LI>
+        <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001578"
+	    TARGET=_BLANK>stop_lost</A></B> -
+	    A sequence variant where at least one base of the terminator codon (stop)
+	    is changed, resulting in an elongated transcript
+	    (dbSNP term: <TT>stop-loss</TT>)</LI>
+        <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001589"
+	    TARGET=_BLANK>frameshift_variant</A></B> -
+	    A sequence variant which causes a disruption of the translational reading frame,
+	    because the number of nucleotides inserted or deleted is not a multiple of three
+	    (dbSNP term: <TT>frameshift</TT>)</LI>
+        <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001820"
+	    TARGET=_BLANK>inframe_indel</A></B> -
+	    A coding sequence variant where the change does not alter the frame
+	    of the transcript
+	    (dbSNP term: <TT>cds-indel</TT>)</LI>
+        <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001624"
+	    TARGET=_BLANK>3_prime_UTR_variant</A></B> -
+	    A UTR variant of the 3' UTR
+	    (dbSNP term: <TT>untranslated-3</TT>)</LI>
+        <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001623"
+	    TARGET=_BLANK>5_prime_UTR_variant</A></B> -
+	    A UTR variant of the 5' UTR
+	    (dbSNP term: <TT>untranslated-5</TT>)</LI>
+        <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001574"
+	    TARGET=_BLANK>splice_acceptor_variant</A></B> -
+	    A splice variant that changes the 2 base region at the 3' end of an intron
+	    (dbSNP term: <TT>splice-3</TT>)</LI>
+        <LI><B><A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001575"
+	    TARGET=_BLANK>splice_donor_variant</A></B> -
+	    A splice variant that changes the 2 base region at the 5' end of an intron
+	    (dbSNP term: <TT>splice-5</TT>)</LI>
+      </UL>
+      In the Coloring Options section of the track controls page,
+      function terms are grouped into several categories, shown here with default colors:
+      <UL>
+	<LI><span style="color: #000000; font-weight: bold;">Locus:</span>
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001632"
+	    TARGET=_BLANK>downstream_gene_variant</A>,
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001631"
+	    TARGET=_BLANK>upstream_gene_variant</A></LI>
+	<LI><span style="color: #00ff00; font-weight: bold;">Coding - Synonymous:</span>
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001819"
+	    TARGET=_BLANK>synonymous_variant</A>
+	<LI><span style="color: #ff0000; font-weight: bold;">Coding - Non-Synonymous:</span>
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001587"
+	    TARGET=_BLANK>stop_gained</A>,
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001583"
+	    TARGET=_BLANK>missense_variant</A>,
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001578"
+	    TARGET=_BLANK>stop_lost</A>,
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001589"
+	    TARGET=_BLANK>frameshift_variant</A>,
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001820"
+	    TARGET=_BLANK>inframe_indel</A></LI>
+        <LI><span style="color: #0000ff; font-weight: bold;">Untranslated:</span>
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001623"
+	    TARGET=_BLANK>5_prime_UTR_variant</A>,
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001624"
+	    TARGET=_BLANK>3_prime_UTR_variant</A></LI>
+	<LI><span style="color: #000000; font-weight: bold;">Intron:</span>
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001627"
+	    TARGET=_BLANK>intron_variant</A></LI>
+	<LI><span style="color: #ff0000; font-weight: bold;">Splice Site:</span>
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001574"
+	    TARGET=_BLANK>splice_acceptor_variant</A>,
+	    <A HREF="http://sequenceontology.org/browser/current_release/term/SO:0001575"
+	    TARGET=_BLANK>splice_donor_variant</A>
+      </UL>
+    </LI>
+    <LI>
+      <A name="MolType"></A>
+      <B>Molecule Type</B>: Sample used to find this variant<BR>
+      <UL>
+        <LI><B>Genomic</B> - variant discovered using a genomic template</LI>
+        <LI><B>cDNA</B> - variant discovered using a cDNA template</LI>
+        <LI><B>Unknown</B> - sample type not known</LI>
+      </UL>
+    </LI>
+    <LI>
+      <A name="Exceptions"></A>
+      <B>Unusual Conditions (UCSC)</B>: UCSC checks for several anomalies 
+      that may indicate a problem with the mapping, and reports them in the 
+      Annotations section of the SNP details page if found:
+      <UL>
+        <LI><B>AlleleFreqSumNot1</B> - Allele frequencies do not sum
+            to 1.0 (+-0.01).  This SNP's allele frequency data are
+	    probably incomplete.</LI>
+        <LI><B>DuplicateObserved</B>,
+            <B>MixedObserved</B> - Multiple distinct insertion SNPs have 
+	    been mapped to this location, with either the same inserted 
+	    sequence (Duplicate) or different inserted sequence (Mixed).</LI>
+        <LI><B>FlankMismatchGenomeEqual</B>,
+	    <B>FlankMismatchGenomeLonger</B>,
+	    <B>FlankMismatchGenomeShorter</B> - NCBI's alignment of
+            the flanking sequences had at least one mismatch or gap
+	    near the mapped SNP position.
+            (UCSC's re-alignment of flanking sequences to the genome may
+            be informative.)</LI>
+        <LI><B>MultipleAlignments</B> - This SNP's flanking sequences 
+            align to more than one location in the reference assembly.</LI>
+        <LI><B>NamedDeletionZeroSpan</B> - A deletion (from the
+            genome) was observed but the annotation spans 0 bases.
+            (UCSC's re-alignment of flanking sequences to the genome may
+            be informative.)</LI>
+        <LI><B>NamedInsertionNonzeroSpan</B> - An insertion (into the
+            genome) was observed but the annotation spans more than 0
+            bases.  (UCSC's re-alignment of flanking sequences to the
+            genome may be informative.)</LI>
+        <LI><B>NonIntegerChromCount</B> - At least one allele
+            frequency corresponds to a non-integer (+-0.010000) count of
+            chromosomes on which the allele was observed.  The reported
+            total sample count for this SNP is probably incorrect.</LI>
+        <LI><B>ObservedContainsIupac</B> - At least one observed allele 
+            from dbSNP contains an <A HREF="../goldenPath/help/iupac.html"
+	    target="_blank">IUPAC</A> ambiguous base (e.g., R, Y, N).</LI>
+        <LI><B>ObservedMismatch</B> - UCSC reference allele does not
+            match any observed allele from dbSNP.  This is tested only
+	    for SNPs whose class is single, in-del, insertion, deletion,
+	    mnp or mixed.</LI>
+        <LI><B>ObservedTooLong</B> - Observed allele not given (length
+            too long).</LI>
+        <LI><B>ObservedWrongFormat</B> - Observed allele(s) from dbSNP
+            have unexpected format for the given class.</LI>
+        <LI><B>RefAlleleMismatch</B> - The reference allele from dbSNP
+            does not match the UCSC reference allele, i.e., the bases in
+	    the mapped position range.</LI>
+        <LI><B>RefAlleleRevComp</B> - The reference allele from dbSNP
+            matches the reverse complement of the UCSC reference
+            allele.</LI>
+        <LI><B>SingleClassLongerSpan</B> - All observed alleles are
+            single-base, but the annotation spans more than 1 base.
+            (UCSC's re-alignment of flanking sequences to the genome may
+            be informative.)</LI>
+        <LI><B>SingleClassZeroSpan</B> - All observed alleles are
+            single-base, but the annotation spans 0 bases.  (UCSC's
+            re-alignment of flanking sequences to the genome may be
+            informative.)</LI>
+      </UL>
+      Another condition, which does not necessarily imply any problem,
+      is noted:
+      <UL>
+        <LI><B>SingleClassTriAllelic</B>, <B>SingleClassQuadAllelic</B> - 
+            Class is single and three or four different bases have been
+	    observed (usually there are only two).</LI>
+      </UL>
+    </LI>
+    <LI>
+      <A name="Bitfields"></A>
+      <B>Miscellaneous Attributes (dbSNP)</B>: several properties extracted
+         from dbSNP's SNP_bitfield table
+         (see <A HREF="ftp://ftp.ncbi.nlm.nih.gov/snp/specs/dbSNP_BitField_v5.pdf"
+               target="_blank">dbSNP_BitField_v5.pdf</A> for details)
+      <UL>
+        <LI><B>Clinically Associated</B> (human only) - SNP is in OMIM and/or at 
+	    least one submitter is a Locus-Specific Database.  This does
+	    not necessarily imply that the variant causes any disease,
+	    only that it has been observed in clinical studies.</LI>
+        <LI><B>Appears in OMIM/OMIA</B> - SNP is mentioned in 
+	    <A HREF="http://www.ncbi.nlm.nih.gov/omim" 
+	    target="_blank">Online Mendelian Inheritance in Man</A> for 
+	    human SNPs, or <A HREF="http://omia.angis.org.au/home/"
+	    target="_blank">Online Mendelian Inheritance in Animals</A> for 
+	    non-human animal SNPs.  Some of these SNPs are quite common,
+	    others are known to cause disease; see OMIM/OMIA for more
+	    information.</LI>
+        <LI><B>Has Microattribution/Third-Party Annotation</B> - At least
+	    one of the SNP's submitters studied this SNP in a biomedical
+	    setting, but is not a Locus-Specific Database or OMIM/OMIA.</LI>
+        <LI><B>Submitted by Locus-Specific Database</B> - At least one of
+	    the SNP's submitters is associated with a database of variants
+	    associated with a particular gene.  These variants may or may
+	    not be known to be causative.</LI>
+        <LI><B>MAF &gt;= 5% in Some Population</B> - Minor Allele Frequency is
+	    at least 5% in at least one population assayed.</LI>
+        <LI><B>MAF &gt;= 5% in All Populations</B> - Minor Allele Frequency is
+	    at least 5% in all populations assayed.</LI>
+        <LI><B>Genotype Conflict</B> - Quality check: different genotypes 
+	    have been submitted for the same individual.</LI>
+        <LI><B>Ref SNP Cluster has Non-overlapping Alleles</B> - Quality
+	    check: this reference SNP was clustered from submitted SNPs
+	    with non-overlapping sets of observed alleles.</LI>
+        <LI><B>Some Assembly's Allele Does Not Match Observed</B> - 
+	    Quality check: at least one assembly mapped by dbSNP has an allele
+            at the mapped position that is not present in this SNP's observed
+            alleles.</LI>
+      </UL>
+    </LI>
+  </UL>
+  Several other properties do not have coloring options, but do have 
+  some filtering options:
+  <UL>
+    <LI>
+      <A name="AvHet"></A>
+      <B>Average heterozygosity</B>: Calculated by dbSNP as described in 
+      <A HREF="http://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html" target="_blank">Computation of Average 
+      Heterozygosity and Standard Error for dbSNP RefSNP Clusters</A>.
+      <UL>
+      <LI> Average heterozygosity should not exceed 0.5 for bi-allelic 
+           single-base substitutions.</LI>
+      </UL>
+    </LI>
+    <LI>
+      <A name="Weight"></A>
+      <B>Weight</B>: Alignment quality assigned by dbSNP<BR>
+      <UL>
+      <LI>Weight can be 0, 1, 2, 3 or 10.</LI>
+      <LI>Weight = 1 are the highest quality alignments.</LI>
+      <LI>Weight = 0 and weight = 10 are excluded from the data set.</LI>
+      <LI>A filter on maximum weight value is supported, which defaults to 1
+        on all tracks except the Mult. SNPs track, which defaults to 3.</LI>
+      </UL>
+    </LI>
+    <LI>
+      <A name="Submitters"></A>
+      <B>Submitter handles</B>: These are short, single-word identifiers of
+      labs or consortia that submitted SNPs that were clustered into this
+      reference SNP by dbSNP (e.g., 1000GENOMES, ENSEMBL, KWOK).  Some SNPs
+      have been observed by many different submitters, and some by only a
+      single submitter (although that single submitter may have tested a
+      large number of samples).
+    </LI>
+    <LI>
+      <A name="AlleleFreq"></A>
+      <B>AlleleFrequencies</B>: Some submissions to dbSNP include 
+      allele frequencies and the study's sample size 
+      (i.e., the number of distinct chromosomes, which is two times the
+      number of individuals assayed, a.k.a. 2N).  dbSNP combines all
+      available frequencies and counts from submitted SNPs that are 
+      clustered together into a reference SNP.
+    </LI>
+  </UL>
+
+ <P>
+ You can configure this track such that the details page displays
+ the function and coding differences relative to 
+ particular gene sets.  Choose the gene sets from the list on the SNP 
+ configuration page displayed beneath this heading: <EM>On details page,
+ show function and coding differences relative to</EM>.  
+ When one or more gene tracks are selected, the SNP details page 
+ lists all genes that the SNP hits (or is close to), with the same keywords 
+ used in the <A HREF="#Func">function</A> category.  The function usually 
+ agrees with NCBI's function, except when NCBI's functional annotation is 
+ relative to an XM_* predicted RefSeq (not included in the UCSC Genome 
+ Browser's RefSeq Genes track) and/or UCSC's functional annotation is 
+ relative to a transcript that is not in RefSeq.
+ </P>
+
+<H2>Insertions/Deletions</H2>
+<P>
+dbSNP uses a class called 'in-del'.  We compare the length of the
+reference allele to the length(s) of observed alleles; if the
+reference allele is shorter than all other observed alleles, we change
+'in-del' to 'insertion'.  Likewise, if the reference allele is longer
+than all other observed alleles, we change 'in-del' to 'deletion'.
+</P>
+
+<H2>UCSC Re-alignment of flanking sequences</H2>
+<P>
+dbSNP determines the genomic locations of SNPs by aligning their flanking 
+sequences to the genome.
+UCSC displays SNPs in the locations determined by dbSNP, but does not
+have access to the alignments on which dbSNP based its mappings.
+Instead, UCSC re-aligns the flanking sequences 
+to the neighboring genomic sequence for display on SNP details pages.  
+While the recomputed alignments may differ from dbSNP's alignments,
+they often are informative when UCSC has annotated an unusual condition.
+</P>
+<P>
+Non-repetitive genomic sequence is shown in upper case like the flanking 
+sequence, and a "|" indicates each match between genomic and flanking bases.
+Repetitive genomic sequence (annotated by RepeatMasker and/or the
+Tandem Repeats Finder with period <= 12) is shown in lower case, and matching
+bases are indicated by a "+".
+</P>
+
+<H2>Data Sources and Methods</H2>
+
+<P>
+The data that comprise this track were extracted from database dump files 
+and headers of fasta files downloaded from NCBI.  
+The database dump files were downloaded from 
+<A HREF="ftp://ftp.ncbi.nih.gov/snp/organisms/"
+TARGET="_BLANK">ftp://ftp.ncbi.nih.gov/snp/organisms/</A>
+<EM>organism</EM>_<EM>tax_id</EM>/database/
+(for human, <EM>organism</EM>_<EM>tax_id</EM> = human_9606;
+for mouse, <EM>organism</EM>_<EM>tax_id</EM> = mouse_10090).
+The fasta files were downloaded from 
+<A HREF="ftp://ftp.ncbi.nih.gov/snp/organisms/"
+TARGET="_BLANK">ftp://ftp.ncbi.nih.gov/snp/organisms/</A>
+<EM>organism</EM>_<EM>tax_id</EM>/rs_fasta/
+</P>
+  <UL>
+  <LI>Coordinates, orientation, location type and dbSNP reference allele data
+      were obtained from b142_SNPContigLoc.bcp.gz and 
+      b142_ContigInfo.bcp.gz.</LI>
+  <LI>b142_SNPMapInfo.bcp.gz provided the alignment weights.
+  <LI>Functional classification was obtained from 
+      b142_SNPContigLocusId.bcp.gz. The internal database representation
+      uses dbSNP's function terms, but for display in SNP details pages,
+      these are translated into
+      <A HREF="http://sequenceontology.org/"
+      TARGET=_BLANK>Sequence Ontology</A> terms.</LI>
+  <LI>Validation status and heterozygosity were obtained from SNP.bcp.gz.</LI>
+  <LI>SNPAlleleFreq.bcp.gz and ../shared/Allele.bcp.gz provided allele frequencies.
+      For the human assembly, allele frequencies were also taken from
+      SNPAlleleFreq_TGP.bcp.gz .</LI>
+  <LI>Submitter handles were extracted from Batch.bcp.gz, SubSNP.bcp.gz and 
+      SNPSubSNPLink.bcp.gz.</LI>
+  <LI>SNP_bitfield.bcp.gz provided miscellaneous properties annotated by dbSNP,
+       such as clinically-associated.  See the document 
+       <A HREF="ftp://ftp.ncbi.nlm.nih.gov/snp/specs/dbSNP_BitField_v5.pdf"
+        target="_blank">dbSNP_BitField_v5.pdf</A> for details.</LI>
+  <LI>The header lines in the rs_fasta files were used for molecule type,
+      class and observed polymorphism.</LI>
+  </UL>
+
+<H2>Orthologous Alleles (human assemblies only)</H2>
+<P>
+For the human assembly, we provide a related table that contains
+orthologous alleles in the chimpanzee, orangutan and rhesus macaque
+reference genome assemblies.  
+We use our liftOver utility to identify the orthologous alleles.  
+The candidate human SNPs are a filtered list that meet the criteria:
+<UL>
+<LI>class = 'single'</LI>
+<LI>mapped position in the human reference genome is one base long</LI>
+<LI>aligned to only one location in the human reference genome</LI>
+<LI>not aligned to a chrN_random chrom</LI>
+<LI>biallelic (not tri- or quad-allelic)</LI>
+</UL>
+
+In some cases the orthologous allele is unknown; these are set to 'N'.
+If a lift was not possible, we set the orthologous allele to '?' and the 
+orthologous start and end position to 0 (zero).
+
+<H2>Masked FASTA Files (human assemblies only)</H2>
+
+FASTA files that have been modified to use 
+<A HREF="../goldenPath/help/iupac.html">IUPAC</A>
+ambiguous nucleotide characters at
+each base covered by a single-base substitution are available for download:
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/snp142Mask/">GRCh37/hg19</A>, 
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg38/snp142Mask/">GRCh38/hg38</A>.
+Note that only single-base substitutions (no insertions or deletions) were used
+to mask the sequence, and these were filtered to exclude problematic SNPs.
+
+<H2>References</H2>
+<P>
+Sherry ST, Ward MH, Kholodov M, Baker J, Phan L, Smigielski EM, Sirotkin K. 
+<A HREF="http://nar.oxfordjournals.org/content/29/1/308.abstract" target="_blank">
+dbSNP: the NCBI database of genetic variation</A>.
+<em>Nucleic Acids Res</em>. 2001 Jan 1;29(1):308-11.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/11125122" target="_blank">11125122</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC29783/" target="_blank">PMC29783</a>
+</P>
+

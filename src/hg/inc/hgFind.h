@@ -70,6 +70,8 @@ struct hgPos
      char *name;		/* Name of position - one word. */
      char *description;		/* Position description - a sentence or so. */
      char *browserName;		/* name as in hgTracks tg->itemName(). */
+     bool canonical;		/* The gene is the canonical version. */ 
+     struct tsrPos *tp;		/* The trix search associated with the gene. */      
      };
 
 

@@ -22,20 +22,40 @@
 #define NA "<em>n/a</em>"
 
 static void printKeysWithDescriptions(struct vcfFile *vcff, int wordCount, char **words,
-				      struct vcfInfoDef *infoDefs)
-/* Given an array of keys, print out a list of values with
- * descriptions if descriptions are available. */
+				      struct vcfInfoDef *infoDefs, boolean stripToSymbol)
+/* Given an array of keys, print out a list of values with descriptions if descriptions are
+ * available.  If stripToSymbol, when searching infoDefs, pick the actual key out of
+ * <>'s and other extraneous stuff (e.g. "(C)<DEL>" --> "DEL"). */
 {
 int i;
 for (i = 0;  i < wordCount; i++)
     {
     if (i > 0)
 	printf(", ");
-    char *key = words[i];
-    const struct vcfInfoDef *def = vcfInfoDefForKey(vcff, key);
-    char *htmlKey = htmlEncode(key);
-    if (def != NULL)
-	printf("%s (%s)", htmlKey, def->description);
+    char *displayKey = words[i];
+    char *descKey = displayKey;
+    if (stripToSymbol)
+        {
+        char *p = strchr(displayKey, '<');
+        if (p)
+            {
+            descKey = cloneString(p+1);
+            p = strchr(descKey, '>');
+            if (p)
+                *p = '\0';
+            }
+        }
+    char *description = NULL;
+    struct vcfInfoDef *def;
+    for (def = infoDefs;  def != NULL;  def = def->next)
+        if (sameString(descKey, def->key))
+            {
+            description = def->description;
+            break;
+            }
+    char *htmlKey = htmlEncode(displayKey);
+    if (description)
+	printf("%s (%s)", htmlKey, description);
     else
 	printf("%s", htmlKey);
     }
@@ -52,7 +72,7 @@ if (rec->alleleCount < 2 || sameString(rec->alleles[1], "."))
     return;
     }
 struct vcfFile *vcff = rec->file;
-printKeysWithDescriptions(vcff, rec->alleleCount-1, &(displayAls[1]), vcff->altDefs);
+printKeysWithDescriptions(vcff, rec->alleleCount-1, &(displayAls[1]), vcff->altDefs, TRUE);
 }
 
 static void vcfQualDetails(struct vcfRecord *rec)
@@ -73,7 +93,7 @@ else
     printf("<B>Filter failures:</B> ");
     printf("<font style='font-weight: bold; color: #FF0000;'>\n");
     struct vcfFile *vcff = rec->file;
-    printKeysWithDescriptions(vcff, rec->filterCount, rec->filters, vcff->filterDefs);
+    printKeysWithDescriptions(vcff, rec->filterCount, rec->filters, vcff->filterDefs, FALSE);
     printf("</font>\n");
     }
 }
@@ -91,12 +111,10 @@ for (i = 0;  i < rec->infoCount;  i++)
     {
     struct vcfInfoElement *el = &(rec->infoElements[i]);
     const struct vcfInfoDef *def = vcfInfoDefForKey(vcff, el->key);
-    if (def == NULL)
-	continue;
     printf("<TR valign='top'><TD align=\"right\"><B>%s:</B></TD><TD style=width:15%%;'>",
            el->key);
     int j;
-    enum vcfInfoType type = def->type;
+    enum vcfInfoType type = def ? def->type : vcfInfoString;
     if (type == vcfInfoFlag && el->count == 0)
 	printf("Yes"); // no values, so we can't call vcfPrintDatum...
     // However, if this is older VCF, type vcfInfoFlag might have a value.

@@ -2013,6 +2013,7 @@ int main(int argc, char *argv[])
 long enteredMainTime = clock1000();
 // pushCarefulMemHandler(100000000);
 cgiSpoof(&argc, argv);
+setUdcCacheDir();
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 oldVars = hashNew(10);

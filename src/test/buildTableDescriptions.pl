@@ -445,6 +445,9 @@ foreach my $db (@dbs) {
     print SQL "INSERT INTO tableDescriptions (tableName, autoSqlDef, gbdAnchor)"
       . " values ('$table', '$asd', '$anchor');\n";
   }
+  # Thanks Jorge for finding that this fixes a problem with myisamchk complaining
+  # that the file was not closed properly:
+  print SQL "FLUSH TABLES tableDescriptions;\n";
   close(SQL);
   if (! $noLoad) {
     (! system("/cluster/bin/x86_64/hgsql $db < $sqlFile")) || die "hgsql error for $sqlFile";

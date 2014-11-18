@@ -1717,3 +1717,10 @@ searchType genePred
 termRegex NM_[0-9]+
 searchPriority 50
 
+searchTable cytoBand
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex [0-9]+[A-Z][0-9]+
+searchPriority 6
+padding 5000
