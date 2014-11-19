@@ -833,16 +833,38 @@ cat  << 'EOF' > link.csh
 
     # 
 cat checklinks.csh  << 'EOF'
-     foreach t (`awk '{print $2}' < wgEncodeAwgDnaseCombinedSources.tab`)
+     foreach t (`awk '{print $2}' < wgEncodeAwgDnaseMasterSources.tab`)
          echo -n "$t :"
          curl -s "http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&deprecated=true&term=$t" \
                  | grep -c 'argument not found'
      end
 'EOF'
+
     # manually map to CV to create maplinks.txt
     csh maplinks.csh wgEncodeAwgDnaseMasterSources.tab > sources.fixed.tab
     mv sources.fixed.tab wgEncodeAwgDnaseMasterSources.unfixed.tab
     csh maplinks.csh wgEncodeAwgDnaseMasterSources.unfixed.tab > wgEncodeAwgDnaseMasterSources.tab
+
+$ csh checklinks.csh wgEncodeDnaseMasterSources.tab| grep -v ':0'
+# ignore those with +
+CD14+ :1
+CD20+ :1
+CD34+_Mobilized :1
+# fix these (add hyphen)
+HMVEC-dBlAd :1
+HMVEC-dBlNeo :1
+HMVEC-dLyAd :1
+HMVEC-dLyNeo :1
+# needs 7.5
+Huh-75 :1
+# live with these (treated)
+UrotheliaUt189 :1
+WI-38_TAM :1
+HeLa-S3s3Ifna4h :1
+
+    # edit maplinks2.csh
+    mv wgEncodeAwgDnaseMasterSources.tab wgEncodeAwgDnaseMasterSources.unfixed2.tab
+    csh maplinks2.csh wgEncodeAwgDnaseMasterSources.unfixed2.tab > wgEncodeAwgDnaseMasterSources.tab
 
     # Load sources table
     autoSql $HOME/kent/src/hg/lib/idName.as idName
