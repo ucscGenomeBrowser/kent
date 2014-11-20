@@ -137,7 +137,8 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
         marVir1 \
         eboVir3 eboVir2 eboVir1 bunEbo1 sudEbo1 resEbo1 taiEbo1 zaiEbo1 \
 	centromeres1 \
-	repeats2
+	repeats2 \
+	plasFalc3D7V12
 
 
 GSID_DBS = \
