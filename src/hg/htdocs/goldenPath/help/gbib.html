@@ -119,10 +119,10 @@ GBiB will run on most modern PCs and major operating systems that meet these bas
         VirtualBox.</li>
     <li>The computer hard disk must have at least 20 GB of free space (more if you plan to mirror 
         many tracks).</li>
-    <li>Your network firewall must allow connections on the following ports:
+    <li>Your network firewall must allow outgoing connections to the following servers and ports:
       <ul>
-        <li>Port 3306, used by MySQL (to include tracks not local to your computer)</li>
-	<li>TCP port 873, used by rsync (to download track data)</li>
+        <li>To port 3306 on genome-mysql.cse.ucsc.edu (128.114.119.174), used by MySQL (to include tracks not local to your computer)</li>
+	<li>To TCP port 873 on hgdownload.cse.ucsc.edu (128.114.119.163), used by rsync (to download track data)</li>
       </ul>
     </li>
 </ul></p>

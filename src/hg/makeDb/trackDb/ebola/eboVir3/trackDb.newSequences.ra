@@ -26,11 +26,11 @@ group x
         color 0, 10, 100
         altColor 0,90,10
         mafDot on
-	snpTable newSeqSnpView
+	snpTable newSequencesSnpView
 	snpMode on
         type wigMaf 0.0 1.0
         speciesCodonDefault eboVir3
         speciesGroups Virus
-        sGroup_Virus  KP096420v1 KP096421v1 KP096422v1 KP120616v1 KM519951v1 KM655246v1 NC_016144v1
+        sGroup_Virus  KP096422v1 KP096421v1 KP096420v1 KP120616v1 KM655246v1 KM519951v1 NC_016144v1
         itemFirstCharCase noChange
         priority 100

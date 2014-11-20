@@ -1,0 +1,35 @@
+###
+# Plasmodium falciparum 3D7 Version 12 from PlasmoDb  
+# 2014-11-19:  markd
+# This is a temporary genome build for a research project, it may eventually
+# go to Todd's browser when he has the resources.  This will not be pushed
+# public to the RR.
+###
+     cd /hive/data/genomes/plasFalc3D7V12
+
+     # download fastas
+     cd data/
+     wget -nv     http://plasmodb.org/common/downloads/release-12.0/Pfalciparum3D7/fasta/data/PlasmoDB-12.0_Pfalciparum3D7_Genome.fasta
+
+     # create plasFalc3D7V12.config.ra from one of the templates
+
+     # download http://upload.wikimedia.org/wikipedia/commons/f/f1/Malaria.jpg and 
+     # add to tree as htdocs/images/Plasmodium_falciparum_3D7.jpg
+
+     makeGenomeDb.pl plasFalc3D7V12.config.ra >&make1.log
+
+     # failed with: mustOpenFd: Can't open ./joinedRmskComposite.ra to read
+     cp -r ~/compbio/browser/dev/kent/src/hg/makeDb/trackDb/joinedRmsk* TemporaryTrackDbCheckout/kent/src/hg/makeDb/trackDb/
+
+     makeGenomeDb.pl -continue=trackDb plasFalc3D7V12.config.ra >&make2.log
+
+     # update defaultDb
+     update defaultDb set name="plasFalc3D7V12"  where genome ="Plasmodium falciparum 3D7";
+
+     mkdir bed/genes
+     (cd bed/genes && wget -nv    http://plasmodb.org/common/downloads/release-12.0/Pfalciparum3D7/gff/data/PlasmoDB-12.0_Pfalciparum3D7.gff)
+     gff3ToGenePred bed/genes/PlasmoDB-12.0_Pfalciparum3D7.gff bed/genes/genes.gp
+     hgLoadGenePred -genePredExt plasFalc3D7V12 genes bed/genes/genes.gp
+
+     # link in 2bit.  We don't have a masked on currently
+     ln -s /hive/data/genomes/plasFalc3D7V12/plasFalc3D7V12.unmasked.2bit /gbdb/plasFalc3D7V12/plasFalc3D7V12.2bit 
