@@ -30016,7 +30016,11 @@ tail -n +2 peptides.tab | awk '{print $1,"\t", $2}' | diff - peptides.fromMappin
 
 
 ##############################################################################
-# DBSNP B142 / SNP142 (DONE 11/03/14)
+# DBSNP B142 / SNP142 (DONE 11/18/14)
+# originally done 11/03/14
+# 11/17/14: Allele dump file was outdated at time of download -- it was re-dumped a couple weeks
+#           after release.  snp142 was missing some frequencies due to incomplete join with Allele.
+#           Rebuilding all tables that have allele frequencies (just the track tables & exceptions).
     # Redmine #14189
     mkdir -p /hive/data/outside/dbSNP/142/human_hg19
     cd /hive/data/outside/dbSNP/142/human_hg19
@@ -30141,6 +30145,30 @@ EOF
     # Blatting reminds me that changing the position should also mean changing the flanking
     # sequences, and there's not enough info to do that reliably.  So I think I won't apply
     # the changes after all.
+
+    # 11/17/14: Allele dump file was outdated at time of download -- it was re-dumped a couple weeks
+    # after release.  snp142 was missing some frequencies due to incomplete join with Allele.
+    # Rebuilding all tables that have allele frequencies (just the track tables & exceptions).
+    # First download the updated Allele dump file:
+    cd /hive/data/outside/dbSNP/142/shared
+    rm Allele.bcp.gz
+    wget --timestamping --no-verbose ftp://ftp.ncbi.nih.gov/snp/database/shared_data/Allele.bcp.gz
+    cd /hive/data/outside/dbSNP/142/human_hg19
+    # Clear out old data from Allele table, then reload with new dump file as in loadDbSnp.csh:
+    hgsql hg19snp142 -e 'delete from Allele'
+    zcat /hive/data/outside/dbSNP/142/shared/Allele.bcp.gz \
+    | perl -wpe 's/(\d\d:\d\d:\d\d)\.\d+/$1/g; s/\t(\t|\n)/\t\\N$1/g; s/\t(\t|\n)/\t\\N$1/g;' \
+    | hgLoadSqlTab -oldTable hg19snp142 Allele placeholder stdin
+    hgsql hg19snp142 -e 'alter table Allele add index (allele_id);'
+    # Now update ucscAlleleFreq as in addToDbSnp.csh:
+    /cluster/home/angie/kent/src/hg/utils/automation/snpAddTGPAlleleFreq.pl hg19snp142 \
+      -contigLoc=b142_SNPContigLoc_105 -deDupTGP \
+      > ucscAlleleFreq.txt
+    hgLoadSqlTab hg19snp142 ucscAlleleFreq{,.sql,.txt}
+    # Now re-run from bigJoin onward.
+    mkdir `cat workingDir`
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=bigJoin \
+      >>& do.log & tail -f do.log
 
 
 ##############################################################################

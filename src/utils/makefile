@@ -147,7 +147,8 @@ SCRIPT_FILES = \
         lodToBedScore \
 	mkMafFrames.pl \
 	uniprotLift \
-	bedFixBlockOverlaps
+	bedFixBlockOverlaps \
+	apacheLogParse
 
 # List of all directories to build
 

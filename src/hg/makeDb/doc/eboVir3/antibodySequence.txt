@@ -1,0 +1,10 @@
+# Antibody sequences from literature, courtesy of Pauline Fujita (2014-11-19 kate)
+
+cd /hive/data/genomes/eboVir3/goldenPath
+cp /cluster/home/pauline/ebola/AbSequences/AbSequences.fasta ebolaAbSequences.fasta
+
+# edit header comment
+
+# symlink to downloads area
+cd /data/apache/htdocs-hgdownload/goldenPath/eboVir3
+ln -s  /hive/data/genomes/eboVir3/goldenPath/ebolaAbSequences.fasta .

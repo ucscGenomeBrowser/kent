@@ -1,0 +1,147 @@
+# WORKING - 2014-11-10 - Hiram
+
+# adding new sequences to the eboVir3 browser in a format similar
+# to the multiple alignment
+
+# this procedure can be repeated to add new sequences
+
+mkdir /hive/data/genomes/eboVir3/bed/newSequences
+cd /hive/data/genomes/eboVir3/bed/newSequences
+
+# added 2014-11-18:
+# KP096420.1
+# KP096421.1
+# KP096422.1
+# KP120616.1
+
+# add new sequence genbank accession identifiers to new.acc.list
+# as of 2014-11-10:
+# KM519951.1
+# KM655246.1
+# NC_016144.1
+
+    #######################################################################
+    # obtain sequences and genbank records from NCBI:
+
+mkdir -p fasta gbk ucsc 2bit
+
+cat new.acc.list | while read acc
+do
+  export accV=`echo $acc | sed -e 's/\./v/;'`
+    if [ ! -s fasta/${acc}.fa ]; then
+      echo "# fetch: ${acc} -> ${accV}"
+      wget -O fasta/${acc}.fa \
+    "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$acc"
+      echo ">${accV}" > ucsc/${accV}.fa
+      grep -v '^>' fasta/${acc}.fa >> ucsc/${accV}.fa
+      faToTwoBit ucsc/${accV}.fa 2bit/${accV}.2bit
+    fi
+    if [ ! -s gbk/${accV}.gbk ]; then
+      wget -O gbk/${accV}.gbk \
+         "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=gb&sendto=on&id=$acc"
+    fi
+done  
+
+# verify UCSC names are reasonable:
+    faCount ucsc/*.fa
+# #seq    len     A       C       G       T       N       cpg
+# KM519951v1      18953   6051    4063    3743    5096    0       490
+# KM655246v1      18797   6003    4006    3723    5065    0       477
+# KP096420v1      18958   6055    4050    3753    5100    0       477
+# KP096421v1      18958   6054    4053    3753    5097    1       477
+# KP096422v1      18958   6050    4050    3758    5100    0       477
+# KP120616v1      18920   6034    4047    3748    5091    0       474
+# NC_016144v1     18927   5842    4831    3874    4380    0       514
+
+    #######################################################################
+# construct the genePred records:
+    mkdir -p gp
+    for F in gbk/*.gbk
+do
+ B=`basename $F | sed -e 's/.gbk//;'`
+ if [ ${F} -nt gp/${B}.gp ]; then
+   echo "gbkToGp.pl ${F} > gp/${B}.gp"
+   ~/kent/src/hg/makeDb/doc/eboVir3/gbkToGp.pl ${F} > gp/${B}.gp
+ fi
+done
+
+    #######################################################################
+    # running faAlign on all the sequences
+
+    mkdir -p /hive/data/genomes/eboVir3/bed/newSequences/faAlign
+    cd /hive/data/genomes/eboVir3/bed/newSequences/faAlign
+    mkdir -p sizes axt psl maf
+    twoBitToFa ../../../eboVir3.2bit stdout > KM034562v1.target.fa
+    ln -s ../../../chrom.sizes ./KM034562v1.sizes
+
+    ls ../ucsc/*.fa | sed -e 's/.fa//; s#../ucsc/##;' | while read A
+do
+  faToTwoBit ../ucsc/${A}.fa stdout | twoBitInfo stdin sizes/${A}.sizes
+  echo "faAlign KM034562v1 ${A}.fa axt/${A}.axt"
+  if [ ! -s axt/${A}.axt ]; then
+      faAlign KM034562v1.target.fa ../ucsc/${A}.fa axt/${A}.axt
+  fi
+  axtToPsl axt/${A}.axt KM034562v1.sizes sizes/${A}.sizes psl/${A}.psl
+  axtToMaf axt/${A}.axt KM034562v1.sizes sizes/${A}.sizes stdout \
+   | sed -e 's/^s \([A-Za-z0-9_]*\)/s \1.\1/;' \
+    | sed -e 's/^s KM034562v1.KM034562v1/s eboVir3.KM034562v1/;' > maf/${A}.maf
+done
+
+    # examine pslScore ranges:
+    pslScore psl/*
+# KM034562v1      3       18956   KM519951v1:0-18953      17741   96.90
+# KM034562v1      45      18841   KM655246v1:0-18796      17682   97.10
+# KM034562v1      4       18336   NC_016144v1:0-18925     3194    58.90
+
+    #######################################################################
+    # construct gene frames
+    cd /hive/data/genomes/eboVir3/bed/newSequences
+    mkdir frames singleCover
+    genePredSingleCover ../ncbiGene/correct.txStart.ncbiGene.gp \
+         singleCover/KM034562v1.gp
+    ls faAlign/maf/*.maf | sed -e 's/.maf//g; s#faAlign/##g;' | while read M
+do
+  genePredSingleCover gp/${M}.gp singleCover/${M}.gp
+  genePredToMafFrames eboVir3 faAlign/maf/${M}.maf frames/${M}.bed \
+      eboVir3 singleCover/KM034562v1.gp ${M} singleCover/${M}.gp
+  echo "singleCover/${M}.gp" 1>&2
+done
+
+sort -u frames/*.bed | sort -k1,1 -k2,2n > newSequencesFrames.bed
+hgLoadMafFrames eboVir3 newSequencesFrames newSequencesFrames.bed
+
+    #######################################################################
+    # add iRows
+    cd /hive/data/genomes/eboVir3/bed/newSequences
+    mkdir iRows
+    ls faAlign/maf/*.maf | sed -e 's/.maf//g; s#faAlign/##g;' | while read M
+do
+  echo "${M}.bed" > iRows/${M}.nBeds
+  if [ ! -s 2bit/${M}.2bit ]; then
+    echo "ERROR: missing 2bit/${M}.2bit"
+  else
+    twoBitInfo -nBed "2bit/${M}.2bit" iRows/${M}.bed
+    twoBitInfo "2bit/${M}.2bit" iRows/${M}.len
+    echo "${M}.len" > iRows/${M}.sizes
+    echo "mafAddIRows -nBeds=${M}.bed faAlign/maf/${M}.maf /gbdb/eboVir3/eboVir3.2bit"
+    mafAddIRows -nBeds=iRows/${M}.bed faAlign/maf/${M}.maf /gbdb/eboVir3/eboVir3.2bit \
+      iRows/${M}.maf
+    rm -f /gbdb/eboVir3/newSequences/${M}.maf
+    ln -s `pwd`/iRows/${M}.maf /gbdb/eboVir3/newSequences/${M}.maf
+  fi
+done
+
+    # load all files in /gbdb/eboVir3/newSequences
+    hgLoadMaf eboVir3 newSequences
+
+    #######################################################################
+    # construct SNP display bed files
+rm -fr /hive/data/genomes/eboVir3/bed/newSequences/snpView
+mkdir -p  /hive/data/genomes/eboVir3/bed/newSequences/snpView
+cd /hive/data/genomes/eboVir3/bed/newSequences/snpView
+
+for M in ../faAlign/maf/*.maf
+do
+  awk '/^s/ {print $2}' ${M} | sed 's/\..*//'
+done | sort -u > species.list
+

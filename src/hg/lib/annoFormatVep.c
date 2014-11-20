@@ -910,7 +910,7 @@ for (i = 0;  i < gratorCount;  i++)
     for (row = extraRows;  row != NULL;  row = row->next)
 	{
 	char **words = row->data;
-	if (!sameString(cc->codonOld, words[7]))
+	if (strcasecmp(cc->codonOld, words[7]) != 0)
 	    continue;
 	if (!allelesAgree(gpFx->allele[0], cc->aaNew[0], words))
 	    continue;

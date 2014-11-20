@@ -669,3 +669,19 @@ EOF
 #search stanza
 ^[a-zA-Z0-9]+[a-zA-Z0-9:/-]+[a-zA-Z0-9:/-_%]+
 
+##############################################################################
+# cytoBandIdeo (DONE - 2014-11-19 - Kuhn)
+#
+
+makeCytoBandIdeo.csh oviAri.csh
+# load failed on hgLoadBed, but table and index made properly
+#
+# Can't start query:
+# LOAD DATA   INFILE '/hive/users/kuhn/tracks/sheep/oviAri3.cytoBand'  INTO TABLE cytoBandIdeo
+
+# loaded manually:
+mysql>  LOAD DATA LOCAL INFILE "oviAri3.cytoBand" INTO TABLE cytoBandIdeo;
+
+
+
+
