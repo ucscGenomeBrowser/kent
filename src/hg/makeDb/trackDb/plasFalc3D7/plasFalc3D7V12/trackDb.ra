@@ -6,6 +6,10 @@ html gold
 track gap override
 html gap
 
+# genome is AT rich
+track gc5BaseBw override
+viewLimits 0:40
+
 track genes
 shortLabel Genes
 longLabel PlamosDb Genes
