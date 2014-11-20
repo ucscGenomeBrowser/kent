@@ -750,8 +750,7 @@ dm6.genbank.mrna.xeno.load = yes
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad dm6 &
-    #	logFile: var/dbload/hgwdev/logs/2014.09.02-11:45:43.dm6.dbload.log
-XXX - running - Tue Sep  2 11:46:03 PDT 2014
+    #	logFile: var/dbload/hgwdev/logs/2014.09.03-15:51:49.dm6.dbload.log
     #   real    19m24.163s
 
     # enable daily alignment and update of hgwdev (DONE - 2012-02-09 - Hiram)
@@ -759,7 +758,7 @@ XXX - running - Tue Sep  2 11:46:03 PDT 2014
     git pull
     # add dm6 to:
         etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added dm6 refs #13578" etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added dm6 refs #4049" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
@@ -1077,11 +1076,9 @@ TMPDIR=/dev/shm
         /hive/data/genomes/dm6/bed/lastzDroPer1.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
-XXX - running - Tue Sep  2 10:34:10 PDT 2014
     # real    13m28.190s
     cat fb.droPer1.chainDm6Link.txt
     # 92967575 bases of 175583556 (52.948%) in intersection
-
 
 ###########################################################################
 # LASTZ D. virilis DroVir3 (DONE 2014-08-29 - Hiram)
@@ -1947,7 +1944,6 @@ TMPDIR=/dev/shm
         /hive/data/genomes/dm6/bed/lastzDroMir2.2014-08-29/DEF \
         -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
-XXX - running - Tue Sep  2 10:00:55 PDT 2014
     # real    real    4m55.434s
 
     cat fb.droMir2.chainDm6Link.txt
@@ -2949,7 +2945,6 @@ rm -f $c.gp $c.maf $c.ss
     time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
 	    --EM --precision MED --msa-format FASTA --subst-mod REV \
 		--tree tree-commas.nh 4d.all.mfa
-XXX
     #	real    22m8.563s
 
     mv phyloFit.mod all.mod
@@ -3142,6 +3137,7 @@ rm -fr $tmp
     time (find ./pp -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
 	| gzip -c > downloads/phastCons27way.wigFix.gz)
+    #  real    0m53.020s
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/phastCons27way.wigFix.gz \
@@ -3220,7 +3216,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #############################################################################
-# phyloP for 27-way (DONE - 2014-05-09 - Pauline)
+# phyloP for 27-way (DONE - 2014-11-13 - Hiram)
     # run phyloP with score=LRT
     ssh ku
     mkdir /cluster/data/dm6/bed/multiz27way/consPhyloP
@@ -3409,3 +3405,181 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #########################################################################
+# Construct download files for 27-way (DONE - 2014-11-20 - Hiram)
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/multiz27way
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/multiz27way/maf
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/multiz27way/alignments
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/phastCons27way
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/phastCons27way/dm6.27way.phastCons
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/phyloP27way
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/phyloP27way/dm6.27way.phyloP27way
+
+    mkdir /hive/data/genomes/dm6/bed/multiz27way/downloads
+    cd /hive/data/genomes/dm6/bed/multiz27way/downloads
+    mkdir multiz27way phastCons27way phyloP27way
+    cd multiz27way
+    mkdir maf alignments
+    cd maf
+    time rsync -a -P ../../../anno/result/ ./
+    #   real    xxx
+    time gzip *.maf
+    #   real    real    8m46.494s
+    time md5sum *.maf.gz > md5sum.txt
+    #   real    0m6.206s
+
+    ln -s `pwd`/*.maf.gz `pwd`/md5sum.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/multiz27way/maf
+    cd ..
+    du -hsc maf ../../anno/result/
+    # 1.1G    maf
+    # 7.4G    ../../anno/result/
+    # 8.5G    total
+
+    grep TREE ../../4d/all.mod | sed -e 's/TREE: //' \
+       | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+          > dm6.27way.nh
+
+   ~/kent/src/hg/utils/phyloTrees/commonNames.sh dm6.27way.nh \
+       | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+          > dm6.27way.commonNames.nh
+   ~/kent/src/hg/utils/phyloTrees/scientificNames.sh dm6.27way.nh \
+       | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+          > dm6.27way.scientificNames.nh
+    md5sum *.gz *.nh > md5sum.txt
+
+    ln -s `pwd`/*.nh `pwd`/*.txt `pwd`/*.maf.gz \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/multiz27way
+
+    #####################################################################
+    cd /hive/data/genomes/dm6/bed/multiz27way/downloads/phastCons27way
+    ln -s ../../cons/all/downloads/phastCons27way.wigFix.gz .
+
+    ln -s ../../cons/all/all.mod dm6.27way.phastCons.mod
+    ln -s ../../cons/all/phastCons27way.bw dm6.27way.phastCons.bw
+    time md5sum *.mod *.bw *.gz > md5sum.txt
+    #  real    0m4.631s
+
+    ln -s `pwd`/*.gz `pwd`/*.mod `pwd`/*.bw `pwd`/*.txt \
+  /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/phastCons27way/
+
+    # obtain the README.txt from hg38/phastCons7way and update for this
+    #   situation, from:
+    # /hive/data/genomes/hg38/bed/multiz7way/downloads/phastCons7way/README.txt
+    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/*.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/phastCons27way
+
+    #####################################################################
+    cd /hive/data/genomes/dm6/bed/multiz27way/downloads/phyloP27way
+    mkdir dm6.27way.phyloP27way
+    cd dm6.27way.phyloP27way
+    ln -s ../../../consPhyloP/all/downloads/*.gz .
+    time md5sum *.gz > md5sum.txt &
+    # real    3m37.827s
+
+    ln -s `pwd`/*.gz `pwd`/md5sum.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/phyloP27way/dm6.27way.phyloP27way
+
+    cd ..
+    ln -s ../../consPhyloP/run.phyloP/all.mod dm6.27way.phyloP27way.mod
+
+    ln -s ../../consPhyloP/all/phyloP27way.bw dm6.27way.phyloP27way.bw
+
+    time md5sum *.mod *.bw > md5sum.txt &
+    #  real    4m44.724s
+
+    # obtain the README.txt from hg38/phyloP7way and update for this
+    #   situation, from:
+    # /hive/data/genomes/hg38/bed/multiz7way/downloads/phyloP7way/README.txt
+    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/*.txt \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/dm6/phyloP27way
+
+    ############################################################################
+    # creating upstream mafs (DONE - 2014-11-20 - Hiram)
+    ssh hgwdev
+
+    mkdir /hive/data/genomes/dm6/bed/multiz27way/downloads/multiz27way
+    cd /hive/data/genomes/dm6/bed/multiz27way/downloads/multiz27way
+    # run this bash script
+    cat << '_EOF_' > mkUpstream.sh
+#!/bin/sh
+DB=dm6
+GENE=refGene
+NWAY=multiz27way
+export DB GENE
+
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.${GENE}.maf"
+    echo "featureBits ${DB} ${GENE}:upstream:${S} -fa=/dev/null -bed=stdout"
+    featureBits ${DB} ${GENE}:upstreamAll:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | mafFrags ${DB} ${NWAY} stdin stdout \
+                -orgs=/hive/data/genomes/${DB}/bed/${NWAY}/species.list.txt \
+        | gzip -c > upstream${S}.${GENE}.maf.gz
+    echo "done upstream${S}.${GENE}.maf.gz"
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x mkUpstream.sh
+    time ./mkUpstream.sh
+    #   real    69m25.852s
+
+    # FIXUP/VERIFY the genbank.conf file to indicate this gene choice for the
+    #   upstream automatic generation
+    ~/kent/src/hg/makeDb/genbank/etc/genbank.conf
+# dm6.upstreamGeneTbl = refGene
+# dm6.upstreamMaf = multiz27way /hive/data/genomes/dm6/bed/multiz27way/species.list.txt
+
+    git commit -m "dm6 GeneTbl upstreamMaf set to 27-way refs #4049" genbank.conf
+    git push
+    make etc-update
+
+#############################################################################
+# hgPal downloads (DONE - 2014-11-20 - Hiram)
+#   FASTA from 27-way for refGene
+
+    ssh hgwdev
+    screen -S dm6HgPal
+    mkdir /hive/data/genomes/dm6/bed/multiz27way/pal
+    cd /hive/data/genomes/dm6/bed/multiz27way/pal
+    cat ../species.list | tr '[ ]' '[\n]' > order.list
+
+    export mz=multiz27way
+    export gp=refGene
+    export db=dm6
+    export I=0
+    mkdir exonAA exonNuc
+    for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
+    do
+        I=`echo $I | awk '{print $1+1}'`
+	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc/$C.exonNuc.fa.gz &"
+	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA/$C.exonAA.fa.gz &"
+        if [ $I -gt 6 ]; then
+            echo "date"
+            echo "wait"
+            I=0
+        fi
+    done > $gp.jobs
+    echo "date" >> $gp.jobs
+    echo "wait" >> $gp.jobs
+
+    time ./$gp.jobs > $gp.jobs.log 2>&1
+    #   real    20m2.909s
+
+    time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    #   real    0m32.720s
+
+    time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    #   real    5m53.612s
+
+    # we're only distributing exons at this time
+    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    md5sum *.fa.gz > md5sum.txt
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/
+
+    rm -rf exonAA exonNuc
+
+#############################################################################
