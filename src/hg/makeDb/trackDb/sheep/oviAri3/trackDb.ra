@@ -14,7 +14,7 @@ track xenoRefGene override
 visibility pack
 
 track genscan override
-visibility pack
+visibility hide
 
 track mrna override
 visibility hide
@@ -24,6 +24,12 @@ visibility dense
 
 track rmsk override
 visibility full
+
+track itnronEst override
+visibility hide
+
+track ensGene override
+visibility pack
 
 searchTable gold
 shortCircuit 1
