@@ -473,14 +473,23 @@ if (isNotEmpty(idText))
 	char *xrefTable, *aliasField;
 	getXrefInfo(conn, &xrefTable, NULL, &aliasField);
 	boolean xrefIsSame = xrefTable && sameString(curTable, xrefTable);
+	struct tempName tn;
+	trashDirFile(&tn, "hgt/missingIds", cartSessionId(cart), ".tmp");
+	FILE *f = mustOpen(tn.forCgi, "w");
 	int exampleCount = 0;
 	for (term = missingTerms;  term != NULL;  term = term->next)
 	    {
-	    dyStringPrintf(exampleMissingIds, "%s\n", term->name);
-	    ++exampleCount;
-	    if (exampleCount >= 20)
-		break;
+	    if (exampleCount < 10)
+		{
+		++exampleCount;
+		dyStringPrintf(exampleMissingIds, "%s\n", term->name);
+		}
+	    fprintf(f, "%s\n", term->name);
 	    }
+	carefulClose(&f);
+
+	dyStringPrintf(exampleMissingIds, "\n<a href=%s>Complete list of missing identifiers<a>\n", tn.forHtml);
+
 	warn("Note: %d of the %d given identifiers have no match in "
 	     "table %s, field %s%s%s%s%s.  "
 	     "Try the \"describe table schema\" button for more "
@@ -495,7 +504,7 @@ if (isNotEmpty(idText))
 	     (xrefTable ? aliasField : ""),
 	     exampleCount,
 	     exampleCount < missingCount ? "example " : "",
-	     dyStringCannibalize(&exampleMissingIds)
+	     exampleMissingIds->string
 	    );
 	webNewSection("Table Browser");
 	}
