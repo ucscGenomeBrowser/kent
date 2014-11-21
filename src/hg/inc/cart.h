@@ -565,5 +565,11 @@ void cgiExitTime(char *cgiName, long enteredMainTime);
 /* single stderr print out called at end of CGI binaries to record run
  * time in apache error_log */
 
+void cartHubWarn(char *format, va_list args);
+/* save up hub related warnings to put out later */
+
+void cartFlushHubWarnings();
+/* flush the hub errors (if any) */
+
 #endif /* CART_H */
 

@@ -1,0 +1,394 @@
+<!--Introduction---------------------------------------------->  
+<A NAME=adv></A>
+      <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>        
+        <TABLE BGCOLOR="#fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+          <TR><TD>        
+           <TABLE BGCOLOR="#D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%"><TR><TD>
+             <A NAME="About"></A><FONT SIZE="4"><B>&nbsp; Intermediate / Advanced Session 
+  &nbsp;&nbsp;&nbsp;   &bull; &nbsp;&nbsp;&nbsp   Th  10-22-2009 &nbsp; &bull; &nbsp; 
+  3 PM</B></FONT>
+            </TD></TR></TABLE>
+        
+            <TABLE BGCOLOR="#fffee8" WIDTH="100%" CELLPADDING=3>
+              <TR><TH HEIGHT=3></TH></TR>
+              <TR><TD WIDTH=10></TD><TD>
+              <P>
+
+<P>
+This session will focus on how to make custom tracks in the Genome Browser
+and save/share the information with colleagues.  We will start with some
+information from a clinical report of microdeletions in a patient.
+</P>
+
+<OL>
+  <LI>Open a Genome Browser in a separate window by visiting 
+  <A HREF = "http://genome.ucsc.edu" TARGET = _BLANK>genome.ucsc.edu</A>.
+  If you are using a windows-based computer, you can toggle back and forth between this
+  page the browser window page using Alt-Tab.  On a Mac: use Command (apple)-backtick 
+  (cmd-`).
+  </LI>
+
+  <LI>Click the <TT>Genome Browser</TT> link in either the top bar or the left bar.
+  </LI>
+
+  <LI>In case you have used the browser before, let's all start at the same place. 
+  <BR>Click: <TT>Click here to reset the browser user interface settings to their 
+  defaults</TT>.
+  </LI>
+
+  <LI>Use the assembly pulldown to select the Mar 2006 human assembly (hg18).
+  </LI>
+
+  <LI>Hit the <TT>Submit</TT> button to go to the hg18 browser.  
+  </LI>
+
+  <LI>Here is a <A HREF = "cincyData.html" TARGET = _BLANK>Clinical Report</A> 
+   from a microarray test on a patient, which we will use in this exercise.
+   We will investigate this report to see what we can learn about candidate genes 
+   in the region of microdeletion.
+  </LI>
+
+  <LI> Back at the Browser window, turn off all tracks using <TT>Hide All</TT> button.
+  </LI>
+
+  <LI> Beneath the now blank image, find the UCSC Genes track in the Gene and Gene
+  Prediction track group.  Use the pull-down to set this track 
+  to <TT>pack</TT>. Hit any of the <TT>refresh</TT> buttons.
+  </LI>
+
+  <LI>Type (or copy/paste from here) <TT>4p16.1;4p15.2</TT> into the 
+   <TT>position/search</TT> box. If you copy/paste the 4p16.1-4p15.2 directly 
+   from the report, you must change the hyphen to a semicolon.  
+   The <A HREF = "http://genome.ucsc.edu/cgi-bin/hgGateway" 
+   TARGET = _BLANK>Gateway</A> page gives examples of this and other search 
+   terms that work.
+   Hit the <TT>jump</TT> button. (22.7 Mb).  This turns on the Chromosome Band 
+   track automatically.
+   <BR>This is quite a bit larger than the "up to 16.3 Mb" in the report,
+   but it gets us in the right region.
+  </LI>
+
+  <LI>  Let's get started building a Custom Track with information as we 
+  gather it.  Open up a window using some bland text editor (MS Word would be 
+  ok in a pinch).  Now copy/paste the chromosome location from the 
+  <TT>position/search</TT>  
+  box into your editor and edit away the commas, colon and hyphen and add a 
+  name for this item (wholeArea) like so:
+
+<PRE>
+   chr4 5200001 27900000 wholeArea </PRE>
+
+  <LI>Let's clean up the image a bit.  There are many genes and as we are not
+  right now interested in how many splice variants there are, we want to
+  get a cleaner idea of what may be relevant. 
+  <BR>Click the blue or gray mini-button to the left of the UCSC Genes track.  
+  This will take you to the track configure page.
+
+  <LI>Unclick the <TT>splice variants</TT> checkbox. Press <TT>submit</TT>.  
+  One variant per gene un-clutters the screen.
+  </LI>
+
+  <LI>And at this resolution, we can collapse the ChromBands track.
+  <BR>Click on the gray mini-button to the left (track configure page).
+  </LI>
+
+  <LI>Use the pull-down menu to select <TT>dense</TT>.  <TT>Submit</TT>.
+  <BR><B>At this point, your browser should look like this:</B><BR> 
+<A HREF =
+"http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=Example&hgS_otherUserSessionName=hg18_ashg2009_11"
+TARGET = _BLANK><IMG SRC = "screen11.gif" WIDTH = 606 HEIGHT = 240   ></A>
+<BR>
+  <B>If it doesn't, you can click 
+  <A HREF = "http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=Example&hgS_otherUserSessionName=hg18_ashg2009_11" TARGET = _BLANK> 
+here</A> to catch up.</B>
+  </LI>
+
+<HR>
+<BR>&nbsp;
+
+  <LI>Let's get the mapping information for the two BAC clones that are
+  missing in this patient.  Copy/Paste from here or the report: 
+  <TT>RP11-787P19</TT> into the <TT>position</TT> box. Press <TT>jump</TT>.
+  </LI>
+
+  <LI>Now we have coordinates for one missing clone.  Copy them from the
+  <TT>position</TT> box to your list for a Custom Track and edit as before:
+  </LI>
+
+  <PRE>
+  chr4 9792282 9961004 RP11-787P19_missing </PRE>
+
+  <LI>Repeat for RP11-450B14:
+
+  <PRE>
+  chr4 25950045 26117117 RP11-450B14_missing</PRE>
+  </LI>
+
+  <LI>Doing the same thing for the clones <B>not</B> deleted yields:
+
+  <PRE>
+  chr4 30307071 30462078 RP11-373D2_ok
+  chr4 6927542 7114042 RP11-303M5_ok</PRE>
+  
+
+  <LI>Now that we're done with the BAC End Pairs track, let's turn it off.
+  <BR>Set it to <TT>hide</TT> using the track controls under the graphic or via
+  the mini-button.
+  </LI>
+
+  <LI>To get information about the SNPs listed in the report, simply type 
+  into the Position box: <TT>rs1006467</TT>.  This SNP shows up in a lot of 
+  tracks, but take the latest release from dbSNP (130) and follow that 
+  link.
+  <BR>Notice that the browser pads the 1 bp item by 250 bp one each
+  side for context.
+  </LI>
+
+  <LI>Repeat for <TT>rs16883928</TT>
+  </LI>
+
+  <LI>Now we have two more items for our custom track, giving us:
+
+ <PRE>
+  chr4 5200001 27900000 wholeArea
+  chr4 9792282 9961004 RP11-787P19_missing
+  chr4 25950045 26117117 RP11-450B14_missing
+  chr4 30307071 30462078 RP11-373D2_ok
+  chr4 6927542 7114042 RP11-303M5_ok
+  chr4 7738302 7738802 rs1006467_missing
+  chr4 30256030 30256530 rs16883928_missing </PRE>
+  </LI>
+
+  <LI>Turn off the SNP track as before (set to <TT>hide</TT> with the pull-down),
+  as it is a very large table (18 million rows) and there is no need to query it.
+  </LI>
+
+  <LI>To visualize all of this at once, we will copy/paste our hard-won 
+  coordinate data into the Custom Track utility on the Browser.
+  Click <TT>add custom tracks</TT> below the Browser image.
+  </LI>
+
+  <LI>Paste the track lines from above into the upper large box.
+  </LI>
+
+  <LI>Paste the following line <B>above</B> the data:
+ 
+<PRE>
+  track name="Cincinnati patient" description="16 Mb microdeletion" visibility=pack</PRE>
+  </LI>
+
+  <LI>Paste the information from the report into the lower box (this box is 
+  interpreted as HTML, so we've added tags to separate the two
+  sections):
+
+<BLOCKQUOTE>
+<PRE>
+  arr cgh 4p16.1p15.2 (RP11-787P19 -> RP11-450B14)x1
+&lt;BR&gt;
+  arr 4p16.1p15.2 (rs1006467 -> rs16883928)x1=20 
+&lt;P&gt;
+Consistent with a deletion (loss) involving chromosome 4p of up to 
+16.325 Mb of DNA involving 16 clones localizing to chromosome 4p16.1-4p15.2. 
+The proximal (centromeric) breakpoint has been mapped to within approximately 
+4.19 Mb as clone RP11-373D2 is not deleted, and the distal (telomeric) 
+breakpoint has been mapped to within approximately 2.678 Mb as clone 
+RP11-303M5 is not deleted. 
+</PRE>
+</BLOCKQUOTE>
+
+  </LI>
+ 
+  <LI>Now press <TT>submit</TT>.
+  </LI>
+ 
+  <LI>You will see the list of all your Custom Tracks (only one at the moment).
+  <BR>Click either the link in the <TT>Pos</TT> column (useful if there is more than one
+  track in list) or the <TT>go to genome browser</TT> button.  The Browser 
+  automatically displays the first record in the track.
+  </LI>
+ 
+  <LI>Now zoom out 1.5x to see that one of the clones in the report is actually
+  outside the region listed by chrom band.
+  </LI>
+ 
+  <LI>Use the drag-n-zoom feature to narrow the region to just those in the
+  track.  
+  <BR>Position your mouse near the 5,000,000 base position at the top of the
+  image just to left of the wholeArea annotation.  Click and hold, then
+  drag to the right until it is beyond the right-most BAC in your custom 
+  track.  
+  <BR>Note that both the coordinates in the Postion box and the size of 
+  the region change as you drag.  
+  <BR>Release the mouse. 
+  </LI>
+
+  <LI>Click on the mini-button to the left of your Custom Track to see the
+  details page.
+  <BR>Notice that you also now have a track control below the image for your new track.
+
+  <BR><B>At this point, your browser should look like this:</B><BR>
+<A HREF =
+"http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=Example&hgS_otherUserSessionName=hg18_ashg2009_12"
+TARGET = _BLANK><IMG SRC = "screen12.gif" WIDTH = 606 HEIGHT = 300 ></A> 
+<BR>
+  <B>If it doesn't, you can click   
+  <A HREF =
+"http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=Example&hgS_otherUserSessionName=hg18_ashg2009_12"
+TARGET = _BLANK>
+here</A> to catch up.</B>
+  </LI>
+<HR>
+
+  <LI>To get fancier still, the 9th field in this kind of file (known as BED,
+  for Browser Extensible Data) can be used to color the annotations.  You must
+  set the <TT>itemRgb</TT> variable to on.  The 6th field is the strand and must 
+  be either + or -.  To spare our colorblind friends, we've used red (255,0,0)
+  for a single-copy probe and blue (0,0,255) for a diploid.  
+
+
+ <PRE>
+  track name="Cincinnati patient color" description="16 Mb microdeletion color" visibility=dense itemRgb=on
+  chr4 5200001 27900000 wholeArea 0 + 0 0 0
+  chr4 9792282 9961004 RP11-787P19_missing 0 + 0 0 255,0,0
+  chr4 25950045 26117117 RP11-450B14_missing 0 + 0 0 255,0,0
+  chr4 30307071 30462078 RP11-373D2_ok 0 + 0 0 0,0,255
+  chr4 6927542 7114042 RP11-303M5_ok 0 + 0 0 0,0,255
+  chr4 7738302 7738802 rs1006467_missing 0 + 0  0 255,0,0
+  chr4 30256030 30256530 rs16883928_missing 0 + 0  0 255,0,0 </PRE>
+  </LI>
+
+  Note that with the track set to visibility=dense, the resulting image shows 
+  one bar for this patient, with markers missing from this sample in red
+  and those present in this patient in blue.  You may need to creep the
+  right side of the image a little to pick up some items off-screen.  Use the
+  small arrows under the image labeled "move end" until the items appear.
+  </P>
+
+
+  <B>At this point, your browser should look something like this:</B><BR>
+  <A HREF = "http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=Example&hgS_otherUserSessionName=hg18_ashg2009_13"
+    TARGET = _BLANK><IMG SRC = "screen15.gif" WIDTH = 600 HEIGHT= 286></A>
+  </P>
+
+  <B>If it doesn't, you can click   
+  <A HREF =
+"http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=Example&hgS_otherUserSessionName=hg18_ashg2009_13"
+TARGET = _BLANK>
+here</A> to catch up.</B>
+  </LI>
+
+  <P>
+  Full details for a host of variations on Custom Tracks can be found in
+  the <A HREF = "http://genome.ucsc.edu/goldenPath/help/customTrack.html" 
+  TARGET = _BLANK>help pages</A>.
+  </P>
+
+
+<HR>
+
+  <H3>Table Browser</H3>
+
+  <LI>Let's go to the Table Browser and get a list of these genes.
+  <BR>To set up your query you should know the name of the table. 
+  <BR>Before leaving the Genome Browser, hold your mouse over the
+  title bar of the UCSC Genes track, where it says:
+
+<PRE>
+   UCSC Genes Based on RefSeq... </PRE>
+
+  Notice that at the bottom of your Web Browser, you can see the link
+  that you would go to it you clicked here.  The tableName is at the end
+  of the URL:  <TT>....knownGene=pack</TT>.  That tells you what table you want to
+  work with in the Table Browser.
+  </LI>
+
+
+  <LI>The Table Browser is a full-featured interface to the tables
+  that underly the Genome Browser.
+  <BR>Click the <TT>Tables</TT> link in the blue bar at the top of the page
+  above the graphic.
+
+  <LI>Notice that the coordinates from the Genome Browser session are inherited
+  by the table browser.
+  </P>
+  <P><B>Click the button next to "position"</B>.  (If you don't, you will query the 
+  entire genome and everyone in the room will be waiting for your slow query to 
+  finish.)
+  <BR>Notice that even your Custom Track is searchable in the Table Browser.
+  </LI>
+
+  <LI>To set up your query, it is helpful to know the track group of your table
+  (knownGene is in the <TT>Genes and Gene Prediction Tracks</TT> group).   
+  You can always look through the 1000s of tables by choosing 
+  <TT>All Tables</TT> in the pulldown.  If you try this,
+  click on the table pull-down and type, <TT>kn</TT>, to get to the 
+  right section 
+  of the alphabet.  If you selected the Genes and Gene Prediction Tracks group, 
+  knownGene is the default table.
+  </LI>
+
+  <LI>Leave everything as it is except, for <TT>output format:</TT>, select 
+
+  <PRE>
+  selected fields from primary and related tables</PRE>
+
+  Click the <TT>get output</TT> button.
+  </LI>
+
+  <LI>You get a page displaying the fields for knownGene and the closely related 
+  table, kgXref (and many other linked tables below that).
+  <BR>Check <TT>name</TT> in the knownGene section and <TT>geneSymbol</TT> and 
+  <TT>description</TT> in the hgXref section. 
+  <BR>You might also be interested in chrom, txStart and txEnd in the knownGene
+  table, but we won't select them right now.
+  <BR>Click the <TT>get output</TT> button in the middle of the page.
+  </LI>
+
+  <LI>The result is a list of the genes and their descriptions for all the genes
+  in the  region of the 16 Mb microdeletion.  Note that the multiple isoforms
+  result in many gene symbols and descriptions being repeated.
+  </LI>
+
+  <LI> The top of your output should look something like this (right-click to 
+  view full-size):
+  <BR><IMG SRC = "screen13.gif" WIDTH = 360 HEIGHT = 240 > </A>
+  </LI>
+<HR>
+
+  <H3>Saving/Sharing Sessions</H3>
+  <LI>Click your browser's <TT>back</TT> button twice to get back to the 
+  Table Browser.
+  </LI>
+
+  <LI> To create a browser Session that you can save and share with others,
+  press <TT>Session</TT> in the top blue bar. This takes a snapshot of your
+  Browser image and preferences (including any Custom Tracks) and saves it.
+  You can share the exact session with colleagues.  This is how the 
+  links in this workshop were created.
+  </LI>
+
+  <LI> If you don't already have a login to our 
+  <A HREF="http://genomewiki.cse.ucsc.edu/index.php/Main_Page" TARGET=_BLANK>genomewiki</A> 
+  page, you'll need to create one now.
+  <BR>Click the link to create a login or to sign in:
+  <BR><TT>The sign-in page is handled by our wiki system: 
+  click here to sign in</TT> 
+  <BR><IMG SRC = "screen14.jpg" WIDTH = 248 HEIGHT = 236>
+  </LI>
+
+  <LI> Back at the Session page, enter a session name in the box:
+  <BR><TT>Save current settings as named session</TT> 
+  <BR>Use the <TT>Browser</TT> link to return
+  to your Session in the Genome Browser.  Or use the <TT>Email</TT> link to
+  send a permanent link to a colleague.
+  </LI>
+
+</OL>
+
+		    </P>
+                    </TD><TD WIDTH=15>
+                </TD></TR></TABLE>
+            <BR></TD></TR></TABLE>
+        </TD></TR></TABLE>
+

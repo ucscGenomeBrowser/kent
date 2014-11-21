@@ -279,6 +279,8 @@ else
     cartWebStart(theCart, db, "%s %s%s Gateway\n", trackHubSkipHubName(organism), buffer, hBrowserName());
     htmlDoEscape();
     }
+
+cartFlushHubWarnings();
 hgGateway();
 
 // TODO REMOVE AFTER AUTOUPGRADE COMPLETE: (added 2014-03-09)

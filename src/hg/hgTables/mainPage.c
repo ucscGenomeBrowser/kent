@@ -1042,6 +1042,7 @@ hPrintf("</FORM>\n");
 
 webNewSection("<A NAME=\"Help\"></A>Using the Table Browser\n");
 printMainHelp();
+cartFlushHubWarnings();
 }
 
 void doMainPage(struct sqlConnection *conn)
