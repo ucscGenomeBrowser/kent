@@ -21058,11 +21058,12 @@ retroFinder/trunk/src/pipeline/ucscStep6.sh DEF
 # to /hive/data/genomes/hg19/bed/retro/
 
 ############################################################################
-# HGMD Variants track (2013-05-29 - Max)
-wget ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/2013.1-hgmd-public.tsv
+# HGMD Variants track (updated 2014-11-21 - Max)
+# Got tsv file from Frank.Schacherer@biobase-international.com
 # HGMD seems to use 1-based coordinates
 # for insertions, this will also make 2bp features that go over the insert
 # position
+cd /hive/data/genomes/hg19/bed/hgmd/
 cat << '_EOF_' > hgmd.as
 table Bed8Hgmd
 "Browser extensible data (8 fields) plus information about hgmd mutation"
@@ -21082,10 +21083,8 @@ table Bed8Hgmd
 '_EOF_'
 
 # create an extended bigbed file
-cat 2013.1-hgmd-public.tsv | grep -v \# | tawk '{if ($5=="I") {start=$4-2; end=$4} else {start=$4-1; end=$4} print "chr"$3,start,end,$2":"$1,0,"",start,end,$2,$1,$5}' | sed -e 's/M$/substitution/' | sed -e 's/I$/insertion (between the two basepairs, sequence not provided by HGMD)/' | sed -e 's/D$/deletion (endpoint not provided by HGMD)/' | sed -e 's/X$/insertion-deletion (endpoint not provided by HGMD)/' | sed -e 's/R$/regulatory variant/' | sed -e 's/S$/splicing variant/' | sort -k1,1 -k2,2n > hgmd.bed
+cat /hive/data/outside/hgmd/2014.2-hgmd-public.tsv | grep -v \# | tawk '{if ($5=="I") {start=$4-2; end=$4} else {start=$4-1; end=$4} print "chr"$3,start,end,$2":"$1,0,"",start,end,$2,$1,$5}' | sed -e 's/M$/substitution/' | sed -e 's/I$/insertion (between the two basepairs, sequence not provided by HGMD)/' | sed -e 's/D$/deletion (endpoint not provided by HGMD)/' | sed -e 's/X$/insertion-deletion (endpoint not provided by HGMD)/' | sed -e 's/R$/regulatory variant/' | sed -e 's/S$/splicing variant/' | sort -k1,1 -k2,2n > hgmd.bed
 bedToBigBed hgmd.bed /hive/data/genomes/hg19/chrom.sizes hgmd.bb -type=bed4+2 -as=hgmd.as -tab
-mkdir /hive/data/genomes/hg19/bed/hgmd/
-cp hgmd.bb /hive/data/genomes/hg19/bed/hgmd/
 ln -s /hive/data/genomes/hg19/bed/hgmd/hgmd.bb /gbdb/hg19/bbi/hgmd.bb
 hgBbiDbLink hg19 hgmd /gbdb/hg19/bbi/hgmd.bb
 

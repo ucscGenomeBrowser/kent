@@ -51,6 +51,26 @@ else
     }
 }
 
+static struct dyString *hubWarnDy;
+
+void cartHubWarn(char *format, va_list args)
+/* save up hub related warnings to put out later */
+{
+char warning[1024];
+vsnprintf(warning,sizeof(warning),format, args);
+if (hubWarnDy == NULL)
+    hubWarnDy = newDyString(100);
+dyStringPrintf(hubWarnDy, "%s\n", warning);
+}
+
+void cartFlushHubWarnings()
+/* flush the hub warning (if any) */
+{
+if (hubWarnDy)
+    warn("%s",hubWarnDy->string);
+}
+
+
 void cartTrace(struct cart *cart, char *when, struct sqlConnection *conn)
 /* Write some properties of the cart to stderr for debugging. */
 {
@@ -701,7 +721,9 @@ setUdcTimeout(cart);
 if (cartVarExists(cart, hgHubDoDisconnect))
     doDisconnectHub(cart);
 
+pushWarnHandler(cartHubWarn);
 char *newDatabase = hubConnectLoadHubs(cart);
+popWarnHandler();
 
 #ifndef GBROWSE
 if (didSessionLoad)

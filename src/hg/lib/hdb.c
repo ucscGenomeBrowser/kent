@@ -2550,7 +2550,9 @@ if ((clade = trackHubAssemblyClade(genome)) != NULL)
 
 if (isHubTrack(genome))
     {
+    pushWarnHandler(cartHubWarn);
     warn("Current genome '%s' is supported by a hub that is no longer connected. Switching to default database.", trackHubSkipHubName(genome));
+    popWarnHandler();
     return cloneString("none");
     }
 

@@ -3,7 +3,7 @@ shortLabel FlyBase Genes
 longLabel FlyBase Protein-Coding Genes
 group genes
 priority 34
-visibility pack
+visibility hide
 color 0,100,180
 type genePred flyBaseGenePep
 
@@ -12,7 +12,7 @@ shortLabel FB Noncoding
 longLabel FlyBase Noncoding Genes
 group genes
 priority 34.1
-visibility pack
+visibility hide
 color 30,130,210
 type bed 12
 

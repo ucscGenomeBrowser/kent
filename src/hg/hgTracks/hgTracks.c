@@ -5841,6 +5841,8 @@ if(!trackImgOnly)
         }
 
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
+
+    cartFlushHubWarnings();
     }
 
 if (cartVarExists(cart, "chromInfoPage"))

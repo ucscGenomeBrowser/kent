@@ -328,7 +328,7 @@ g3a->phase = parsePhase(g3a, words[7]);
 if (sameString(g3a->type, "CDS"))
     {
     if (g3a->phase < 0)
-	g3a->phase = 0;  // assume the phase is 0
+	gff3AnnErr(g3a, "CDS feature must have phase");
     }
 else
     {

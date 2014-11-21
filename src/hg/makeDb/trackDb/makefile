@@ -64,7 +64,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
 	sorAra1 sorAra2 \
 	turTru1 turTru2 \
 	vicPac1 vicPac2 \
-	pteVam1 tarSyr1 \
+	pteVam1 tarSyr1 tarSyr2 \
 	dipOrd1 proCap1 \
 	ochPri2 ochPri3 \
 	myoLuc1 myoLuc2 \
@@ -137,7 +137,8 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
         marVir1 \
         eboVir3 eboVir2 eboVir1 bunEbo1 sudEbo1 resEbo1 taiEbo1 zaiEbo1 \
 	centromeres1 \
-	repeats2
+	repeats2 \
+	plasFalc3D7V12
 
 
 GSID_DBS = \
