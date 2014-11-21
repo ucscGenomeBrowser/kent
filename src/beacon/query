@@ -49,7 +49,7 @@ def errAbort(errMsg=None):
     print """
     A Genomics Alliance Beacon at UCSC. In collaboration with the Leiden Open Variation Database.
 
-    Data provided by Leiden Open Variation (Ivo Fokkema), NCBI ClinVar, UniProt.
+    Data provided by Leiden Open Variation (Ivo Fokkema), NCBI ClinVar, UniProt, Biobase/HGMD.
 
     parameters:
     - chrom: either a number or X/Y or UCSC format like "chr1" or INSDC accession like CM000663.1
@@ -59,7 +59,8 @@ def errAbort(errMsg=None):
 
     If the allele was found in the track, returns the string "Yes", otherwise "No".
 
-    For UniProt, an overlap with a amino acid change is enough to trigger "Yes".
+    For UniProt and HGMD, an overlap with an amino acid change is enough to trigger "Yes".
+    Therefore, the alleles are ignored for UniProt and HGMD.
     For LOVD, an overlap with a deletion or duplication returns "Maybe". 
 
     Examples:
@@ -68,7 +69,7 @@ def errAbort(errMsg=None):
     http://%(host)s/cgi-bin/beacon/query?track=uniprot&chrom=CM000663.1&pos=977027&allele=T
 
     Alternative URLs are queryLovd, queryClinvar and queryUniprot, e.g.
-    http://%(host)s.cse.ucsc.edu/cgi-bin/beacon/queryLovd?chrom=1&pos=2160493&allele=T
+    http://%(host)s/cgi-bin/beacon/queryLovd?chrom=1&pos=2160493&allele=T
     - returns "Maybe"
 
     Number of variants:
