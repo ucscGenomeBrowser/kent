@@ -14,7 +14,11 @@ searchPriority 8
 
 # Local declaration so that local gap.html is picked up.
 track gap override
+visibility hide
 html gap
+
+track genscan override
+visibility hide
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Low-res)
