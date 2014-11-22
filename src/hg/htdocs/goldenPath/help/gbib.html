@@ -121,8 +121,9 @@ GBiB will run on most modern PCs and major operating systems that meet these bas
         many tracks).</li>
     <li>Your network firewall must allow outgoing connections to the following servers and ports:
       <ul>
-        <li>To port 3306 on genome-mysql.cse.ucsc.edu (128.114.119.174), used by MySQL (to include tracks not local to your computer)</li>
-	<li>To TCP port 873 on hgdownload.cse.ucsc.edu (128.114.119.163), used by rsync (to download track data)</li>
+        <li>To port 3306 on genome-mysql.cse.ucsc.edu (128.114.119.174), used by MySQL to load tracks not local to your computer</li>
+	<li>To TCP port 873 on hgdownload.cse.ucsc.edu (128.114.119.163), used by rsync to download track data</li>
+	<li>To TCP port 80 on hgdownload.cse.ucsc.edu (128.114.119.163), used to download html descriptions on the fly</li>
       </ul>
     </li>
 </ul></p>
