@@ -4131,7 +4131,7 @@ for each cell associated with the particular TF binding location.</P>
 
         track mySecondTrack
         parent myFolder
-        visibility none
+        visibility hide
           ...    </pre>
     <P>The supertrack called "My Folder"
     contains two children.  All will be grouped under 
