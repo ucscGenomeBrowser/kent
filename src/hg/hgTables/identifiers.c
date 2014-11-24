@@ -380,7 +380,8 @@ if (isNotEmpty(idText))
     struct tempName tn;
     FILE *f;
     int totalTerms = 0, foundTerms = 0;
-    char *exampleMiss = NULL;
+    struct slName* missingTerms = NULL;
+    struct dyString *exampleMissingIds = dyStringNew(256);
     char *actualDb = database;
     if (sameWord(curTable, WIKI_TRACK_TABLE))
 	actualDb = wikiDbName();
@@ -408,6 +409,7 @@ if (isNotEmpty(idText))
 	    totalTerms++;
 	    }
 	}
+    slReverse(&allTerms);
     lineFileClose(&lf);
     char *extraWhere = NULL;
     int maxIdsInWhere = cartUsualInt(cart, "hgt_maxIdsInWhere", DEFAULT_MAX_IDS_IN_WHERE);
@@ -451,11 +453,12 @@ if (isNotEmpty(idText))
 		mustWrite(f, "\n", 1);
 		}
 	    }
-	else if (exampleMiss == NULL)
+	else 
 	    {
-	    exampleMiss = cloneString(term->name);
+	    slAddHead(&missingTerms, slNameNew(term->name));
 	    }
 	}
+    slReverse(&missingTerms);
     carefulClose(&f);
     cartSetString(cart, hgtaIdentifierDb, database);
     cartSetString(cart, hgtaIdentifierTable, curTable);
@@ -464,21 +467,45 @@ if (isNotEmpty(idText))
 	freez(&idTextForLf);
     else
 	cartRemove(cart, hgtaPastedIdentifiers);
-    if (foundTerms < totalTerms)
+    int missingCount = totalTerms - foundTerms;
+    if (missingCount > 0)
 	{
 	char *xrefTable, *aliasField;
 	getXrefInfo(conn, &xrefTable, NULL, &aliasField);
 	boolean xrefIsSame = xrefTable && sameString(curTable, xrefTable);
-	warn("Note: %d of the %d given identifiers (e.g. %s) have no match in "
+	struct tempName tn;
+	trashDirFile(&tn, "hgt/missingIds", cartSessionId(cart), ".tmp");
+	FILE *f = mustOpen(tn.forCgi, "w");
+	int exampleCount = 0;
+	for (term = missingTerms;  term != NULL;  term = term->next)
+	    {
+	    if (exampleCount < 10)
+		{
+		++exampleCount;
+		dyStringPrintf(exampleMissingIds, "%s\n", term->name);
+		}
+	    fprintf(f, "%s\n", term->name);
+	    }
+	carefulClose(&f);
+
+	dyStringPrintf(exampleMissingIds, "\n<a href=%s>Complete list of missing identifiers<a>\n", tn.forHtml);
+
+	warn("Note: %d of the %d given identifiers have no match in "
 	     "table %s, field %s%s%s%s%s.  "
 	     "Try the \"describe table schema\" button for more "
-	     "information about the table and field.",
+	     "information about the table and field.\n"
+	     "%d %smissing identifier(s):\n"
+	     "%s\n",
 	     (totalTerms - foundTerms), totalTerms,
-	     exampleMiss, curTable, idField,
+	     curTable, idField,
 	     (xrefTable ? (xrefIsSame ? "" : " or in alias table ") : ""),
 	     (xrefTable ? (xrefIsSame ? "" : xrefTable) : ""),
 	     (xrefTable ? (xrefIsSame ? " or in field " : ", field ") : ""),
-	     (xrefTable ? aliasField : ""));
+	     (xrefTable ? aliasField : ""),
+	     exampleCount,
+	     exampleCount < missingCount ? "example " : "",
+	     exampleMissingIds->string
+	    );
 	webNewSection("Table Browser");
 	}
     lmCleanup(&lm);
