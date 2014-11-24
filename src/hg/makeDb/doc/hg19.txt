@@ -29933,8 +29933,18 @@ hgsql peptideAtlas2014 -e "select peptide.peptide_accession as accession, peptid
 wc -l peptides.tab
 #1021823 peptides.tab
 
-# create protein fasta file of sequences
+# create protein fasta file of sequences for download
 awk 'NR != 1 {printf(">%s\n%s\n", $1, $2)}' peptides.tab > peptides.fa
+mkdir downloads
+mv peptides.fa downloads
+cd /usr/local/apache/htdocs-hgdownload/goldenPath/hg19
+mkdir peptideAtlas
+cd peptideAtlas
+ln -s /hive/data/genomes/hg19/bed/peptideAtlas/2014-Aug/downloads/peptides.fa .
+md5sum peptides.fa > md5sum.txt
+cat > README.txt << 'EOF'
+This directory contains peptide sequences from the August 2014 Human Build of PeptideAtlas (peptideatlas.org).
+'EOF'
 
 tail -n +2 peptides.tab | \
     hgLoadSqlTab hgFixed peptideAtlas2014Peptides ~/kent/src/hg/lib/peptideAtlasPeptide.sql stdin
@@ -29945,18 +29955,13 @@ tail -n +2 peptides.tab | \
 
 hgsql peptideAtlas2014 -e "select concat('chr', peptide_mapping.chromosome) as chr, peptide_mapping.start_in_chromosome-1 as chromStart, peptide_mapping.end_in_chromosome as chromEnd, peptide.peptide_accession as name, peptide_instance.n_samples as score, peptide_mapping.strand as strand, biosequence.biosequence_name as biosequence, biosequence.biosequence_gene_name as gene from peptide_mapping, peptide, peptide_instance, biosequence where peptide_mapping.chromosome not like '%PATCH' and peptide_mapping.chromosome not like '%CTG%' and peptide_mapping.chromosome not like '%TEST' and peptide_mapping.chromosome <> '0' and peptide.peptide_id=peptide_instance.peptide_id and peptide_mapping.peptide_instance_id=peptide_instance.peptide_instance_id and peptide_mapping.matched_biosequence_id=biosequence.biosequence_id order by chr, biosequence, chromStart" > mappings.atlas.bed
 
-# fix up chromsome names
+# lift (actually, drop) alt haplotype mappings to 0-based UCSC hap chrom coords
+tail -n +2 mappings.atlas.bed | sed 's/chrHSCHR/HSCHR/' | \
+    liftUp mappings.lifted.bed /hive/data/genomes/hg19/jkStuff/ensGene.haplotype.lift carry stdin
+
+# translate contig names to UCSC chromosome names
 
 sed \
-    -e 's/HSCHR4_1/4_ctg9_hap1/' \
-    -e 's/HSCHR17_1/17_ctg5_hap1/' \
-    -e 's/HSCHR6_MHC_APD/6_apd_hap1/' \
-    -e 's/HSCHR6_MHC_COX/6_cox_hap2/' \
-    -e 's/HSCHR6_MHC_DBB/6_dbb_hap3/' \
-    -e 's/HSCHR6_MHC_MANN/6_mann_hap4/' \
-    -e 's/HSCHR6_MHC_MCF/6_mcf_hap5/' \
-    -e 's/HSCHR6_MHC_QBL/6_qbl_hap6/' \
-    -e 's/HSCHR6_MHC_SSTO/6_ssto_hap7/' \
     -e 's/GL000191.1/1_gl000191_random/' \
     -e 's/GL000194.1/4_gl000194_random/' \
     -e 's/GL000195.1/7_gl000195_random/' \
@@ -29970,23 +29975,23 @@ sed \
     -e 's/GL000223.1/Un_gl000223/' \
     -e 's/GL000242.1/Un_gl000242/' \
     -e 's/MT/M/' \
-        mappings.atlas.bed > mappings.bed
+        mappings.lifted.bed > mappings.bed
 
 # link up exons and remove dups (peptides mapped to multiple targets at the same genomic location)
 
-splitFileByColumn mappings.bed mappings
-
+# experiments
+# %splitFileByColumn mappings.bed mappings
 # creates mappings/chr*.bed
-
 
 # ?? blat -t=dnax -q=prot -out=pslx /hive/data/genomes/hg19/hg19.2bit/ peptides.fa peptides.psl
 # fed some sequences (test.fa) to webBlat... it finds more matches, but doesn't extend across
 # exon boundaries as well (w/ default config).  In my sample, the positions corresponding
 # to peptideAtlas positions were 100% matches.
-# NOTE: many sequences are shorter than blat's requireed 14
+# NOTE: many sequences are shorter than blat's required 14
 
-# link exons and de-dup
+er link exons and de-dup
 
+# gitted in kent/src/hg/makeDb/outside/peptideAtlas
 linkPeptideMappings.pl mappings.bed > mappings.bed12
 
 wc -l mappings.bed mappings.bed12
@@ -29999,19 +30004,16 @@ hgLoadBed hg19 peptideAtlas2014 mappings.bed12
 
 # NOTE: consider using pslMap to lift these to hg38
 
-
 # count number of peptide sequences in sample dump
 awk -F',' '{print $2}' peptide_inst*tsv | sort | uniq | wc -l
 # 1021824
-
-# count number of samples in sample dump
-awk -F',' '{print $3}' peptide_inst*tsv | sort | uniq | wc -l
 
 # check if peptides match translated genome (if so we can display w/o loading in main table)
 sequenceForBed -db=hg19 -keepName -bedIn=mappings.bed12 -fastaOut=mappings.fa
 faTrans mappings.fa peptides.fa
 faToTab -type=protein peptides.fa stdout | sort | uniq > peptides.fromMappings.tab
 tail -n +2 peptides.tab | awk '{print $1,"\t", $2}' | diff - peptides.fromMappings.tab
+# yes -- they are exact matches
 
 
 ##############################################################################
