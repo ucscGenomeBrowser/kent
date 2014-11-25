@@ -2267,15 +2267,6 @@ track ucsfRnaSeqBrainSmartCoverage override
 release alpha,beta,public
 type bigWig 1 141
 
-track cooperDevDelay
-shortLabel Cooper Dev. Delay
-longLabel Copy Number Variation Morbidity Map of Developmental Delay, Cooper et al. 2011
-group phenDis
-visibility hide
-#color 0,0,200
-type gvf 
-noScoreFilter .
-
 track peptideAtlasSuper
 release alpha
 html peptideAtlas
