@@ -4230,14 +4230,18 @@ for each cell associated with the particular TF binding location.</P>
 <DIV class="dragAndDrop"><span class="types compositeTrack"></span>
 <div class="format"><code>dragAndDrop subTracks</code></div>
     <!-- <P><I>TODO: Should be made obsolete (and default behavior)</I></P> -->
-    <P>The subtrack list in the configuration page can be rearranged by setting
-    a <A onclick="return jumpTo(this);" HREF="#">sortOrder</A>, as described below, 
+    <P>When you have many subtracks in a composite track, it may be userful on the
+    Track Setting page, also known as the hgTrackUi configuration page, to rearrange
+    the subtracks.  One avenue of rearranging many subtracks is to employ the
+    <A onclick="return jumpTo(this);" HREF="#">sortOrder</A> setting, as described below, 
     or by allowing the user to drag and drop the subtracks to a new order 
-    if enabled with this setting. The changed order will also be seen in the track 
-    image.  However, the order of tracks can always be rearranged through 
-    drag and drop, directly in the image.  Reordering subtracks in the image 
-    will not be reflected in the configuration page. Note: This setting will not
-    work correctly if 'container multiWig' is specified.</P>
+    on the Track Setting page. The <code>dragAndDrop subTracks</code> setting will enable
+    dragging by clicking on the check mark next to the subtrack on the configuration page.
+    Tracks can thereby be rearranged into a final desired order, that will then be seen when
+    browsing the tracks. However, the order of tracks can also be rearranged on the hgTracks 
+    Browser image by directly dragging and dropping the displayed track data. Yet reordering subtracks
+    in the Browser image in hgTracks will not be reflected back on the hgTrackUi configuration page.
+    Note: This setting will not work correctly if 'container multiWig' is specified.</P>
 </DIV>
 
 
@@ -4267,8 +4271,8 @@ for each cell associated with the particular TF binding location.</P>
     (<code>parent</code> setting).  However, the Browser will display two buttons 
     (<code>allButtonPair</code> setting) that allow the user to
     select all subtracks, or deselect all of them and then check only those of 
-    interest.  The user may reorder the subtracks by dragging them on the composite
-    configuration page (<code>dragAndDrop</code> setting). Note: The dragAndDrop setting 
+    interest.  The user may reorder the subtracks by dragging them on the composite Track Setting
+    hgTrackUi configuration page (<code>dragAndDrop</code> setting). Note: The dragAndDrop setting 
     will not work correctly if 'container multiWig' is specified.</P>
 </DIV>
 
