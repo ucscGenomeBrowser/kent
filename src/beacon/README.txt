@@ -9,9 +9,6 @@ It's implemented as a CGI script (query) which uses bigBedToBed and a set of
 as the script and the bigBedtoBed binary. The makefile copies everything
 together into cgi-bin/beacon/.
 
-The data for the beacon, the .bb files, are copied into the cgi-bin directory
-from /hive/data/genomes/hg19/bed/beacon
-
 We don't have personal data at UCSC so the beacon in this directory serves
 primarily LOVD and HGMD, which we cannot distribute.  These tracks are also
 not in the table browser, but the beacon makes it possible to at least query
@@ -28,4 +25,12 @@ The CGI also accepts INSDC accessions instead of "chr1" or just "1". The
 mapping is stored in insdcToUcsc.tab. 
 
 The CGI currently only supports hg19.
+
+Installation:
+The data for the beacon, the .bb files, are copied into the cgi-bin directory
+from /hive/data/genomes/hg19/bed/beacon
+The get a working beacon, one needs to copy the script ("query"), bigBedToBed,
+insdcToUcsc.tab, accCounts.gdbm and the four bigBed files:
+lovd.bb, hgmd.bb, spMut.bb and clinvarMain.bb. The makefile will do all the
+copying.
 
