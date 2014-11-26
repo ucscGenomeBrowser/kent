@@ -30,7 +30,7 @@ alpha::
 	rm -f ${CGI_BIN}/beacon/query
 	cp -p query* ${CGI_BIN}/beacon/
 	cp -p accCounts.gdbm ${CGI_BIN}/beacon/
-	chmod a+w ${CGI_BIN_USER}/beacon/accCounts.gdbm
+	chmod a+w ${CGI_BIN}/beacon/accCounts.gdbm
 	cp -p insdcToUcsc.tab ${CGI_BIN}/beacon/
 	cp ${BINDIR}/bigBedToBed ${CGI_BIN}/beacon/
 	cp /hive/data/genomes/hg19/bed/beacon/*.bb ${CGI_BIN}/beacon/
@@ -42,7 +42,7 @@ beta::
 	rm -f ${CGI_BIN_BETA}/beacon/query
 	cp -p query* ${CGI_BIN_BETA}/beacon/
 	cp -p accCounts.gdbm ${CGI_BIN_BETA}/beacon/
-	chmod a+w ${CGI_BIN_USER}/beacon/accCounts.gdbm
+	chmod a+w ${CGI_BIN_BETA}/beacon/accCounts.gdbm
 	cp -p insdcToUcsc.tab ${CGI_BIN_BETA}/beacon/
 	# for beta, using the stable binary from /cluster/bin
 	cp /cluster/bin/x86_64/bigBedToBed ${CGI_BIN_BETA}/beacon/
