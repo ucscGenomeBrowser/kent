@@ -28,7 +28,7 @@ alpha::
 	pylint -E query
 	mkdir -p ${CGI_BIN}/beacon
 	rm -f ${CGI_BIN}/beacon/query
-	cp -p query* ${CGI_BIN}/beacon/
+	cp -p query ${CGI_BIN}/beacon/
 	cp -p accCounts.gdbm ${CGI_BIN}/beacon/
 	chmod a+w ${CGI_BIN}/beacon/accCounts.gdbm
 	cp -p insdcToUcsc.tab ${CGI_BIN}/beacon/
@@ -40,7 +40,7 @@ beta::
 	pylint -E query
 	mkdir -p ${CGI_BIN_BETA}/beacon
 	rm -f ${CGI_BIN_BETA}/beacon/query
-	cp -p query* ${CGI_BIN_BETA}/beacon/
+	cp -p query ${CGI_BIN_BETA}/beacon/
 	cp -p accCounts.gdbm ${CGI_BIN_BETA}/beacon/
 	chmod a+w ${CGI_BIN_BETA}/beacon/accCounts.gdbm
 	cp -p insdcToUcsc.tab ${CGI_BIN_BETA}/beacon/
