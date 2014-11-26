@@ -40,6 +40,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
 	macEug1 macEug2 \
 	calJac1 calJac3 \
 	otoGar1 otoGar3 tupBel1\
+	nasLar1 \
 	saiBol1 \
 	ailMel1 \
 	canFam1 canFam2 canFamPoodle1 canFam3 \
