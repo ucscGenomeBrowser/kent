@@ -20,7 +20,6 @@ my::
 	chmod a+w ${CGI_BIN_USER}/beacon/accCounts.gdbm
 	cp -p insdcToUcsc.tab ${CGI_BIN_USER}/beacon/
 	cp ${BINDIR}/bigBedToBed ${CGI_BIN_USER}/beacon/
-	cp /hive/data/genomes/hg19/bed/beacon/*.bb ${CGI_BIN_USER}/beacon/
 	cd ${CGI_BIN_USER}/beacon/ && ln -sf query queryHgmd && ln -sf query queryClinvar && ln -sf query queryLovd && ln -sf query queryUniprot
 
 
@@ -33,7 +32,6 @@ alpha::
 	chmod a+w ${CGI_BIN}/beacon/accCounts.gdbm
 	cp -p insdcToUcsc.tab ${CGI_BIN}/beacon/
 	cp ${BINDIR}/bigBedToBed ${CGI_BIN}/beacon/
-	cp /hive/data/genomes/hg19/bed/beacon/*.bb ${CGI_BIN}/beacon/
 	cd ${CGI_BIN}/beacon/ && ln -sf query queryHgmd && ln -sf query queryClinvar && ln -sf query queryLovd && ln -sf query queryUniprot
 
 beta::
@@ -46,7 +44,6 @@ beta::
 	cp -p insdcToUcsc.tab ${CGI_BIN_BETA}/beacon/
 	# for beta, using the stable binary from /cluster/bin
 	cp /cluster/bin/x86_64/bigBedToBed ${CGI_BIN_BETA}/beacon/
-	cp /hive/data/genomes/hg19/bed/beacon/*.bb ${CGI_BIN}/beacon/
 	cd ${CGI_BIN_BETA}/beacon/ && ln -sf query queryHgmd && ln -sf query queryClinvar && ln -sf query queryLovd && ln -sf query queryUniprot
 
 clean::
