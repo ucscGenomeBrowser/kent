@@ -2,10 +2,8 @@ track cons27way
 compositeTrack on
 shortLabel Conservation
 longLabel Multiz Alignment & Conservation (27 Species)
-subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
-subGroup2 clade drosophila=Drosophila others=Others all=All_species
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements
 dragAndDrop subTracks
-dimensions dimensionX=clade
 visibility full
 priority 1
 type bed 4
@@ -22,7 +20,7 @@ group compGeno
         subTrack cons27wayViewalign on
         shortLabel Multiz Align
         longLabel Multiz Alignments of 27 insects
-        subGroups view=align clade=all
+        subGroups view=align
         noInherit on
         summary multiz27waySummary
         irows on
@@ -33,7 +31,7 @@ group compGeno
         type wigMaf 0.0 1.0
         speciesCodonDefault dm6
         speciesGroups Drosophila Others
-        sGroup_Drosophila dm6 droSim1 droSec1 droYak3 droEre2 droBia2 droSuz1 droAna3 droBip2 droEug2 droEle2 droKik2 droTak2 droRho2 droFic2 droPse3 droPer1 droMir2 droWil2 droVir3 droMoj3 droAlb1 droGri2
+        sGroup_Drosophila droSim1 droSec1 droYak3 droEre2 droBia2 droSuz1 droAna3 droBip2 droEug2 droEle2 droKik2 droTak2 droRho2 droFic2 droPse3 droPer1 droMir2 droWil2 droVir3 droMoj3 droAlb1 droGri2
         sGroup_Others musDom2 anoGam1 apiMel4 triCas2
         itemFirstCharCase noChange
         treeImage phylo/dm6_27way.png
@@ -50,7 +48,7 @@ group compGeno
 
         track phyloP27way
         subTrack cons27wayViewphyloP
-        subGroups view=phyloP clade=all
+        subGroups view=phyloP
         shortLabel phyloP
         longLabel 27 insects Basewise Conservation by PhyloP
         noInherit on
@@ -74,7 +72,7 @@ group compGeno
 
         track phastCons27way
         subTrack cons27wayViewphastcons
-        subGroups view=phastcons clade=all
+        subGroups view=phastcons
         shortLabel phastCons
         longLabel 27 insects conservation by PhastCons
         noInherit on
@@ -97,7 +95,7 @@ group compGeno
 
         track phastConsElements27way
         subTrack cons27wayViewelements on
-        subGroups view=elements clade=all
+        subGroups view=elements
         shortLabel Cons Elements
         longLabel 27 insects Conserved Elements
         noInherit on
