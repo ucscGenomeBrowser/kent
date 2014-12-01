@@ -30016,6 +30016,37 @@ tail -n +2 peptides.tab | awk '{print $1,"\t", $2}' | diff - peptides.fromMappin
 # yes -- they are exact matches
 
 
+##############
+# experiments
+
+featureBits hg19 peptideAtlas14
+# 15624786 bases of 2897316137 (0.539%) in intersection
+
+featureBits hg19 -enrichment refGene:cds peptideAtlas2014 
+# refGene:cds 1.212%, peptideAtlas2014 0.539%, both 0.533%, cover 44.00%, enrich 81.58x
+
+# alternate mappings for the peptides, using FenyoLab PGx
+# Drag/Drop peptides.fa to web tool
+
+mkdir pgx
+cd pgx
+bedSort peptideAtlas.pgx.bed peptideAtlas.pgx.sorted.bed
+wc -l mappings.sorted.bed12 pgx/*.sorted.bed
+#1189306 mappings.sorted.bed12
+#1111981 pgx/peptideAtlas.pgx.sorted.bed
+
+hgLoadBed hg19 peptideAtlas2014Pgx peptideAtlas.pgx.sorted.bed 
+
+
+hgsql hg19 -e 'select distinct(name) from peptideAtlas2014 order by name' > peptides.mapped.txt
+hgsql hg19 -e 'select distinct(accession) from hgFixed.peptideAtlas2014Peptides order by accession' > peptides.all.txt
+
+# diff, awk, sed > peptides.unmapped.txt
+
+wc -l peptides.unmapped.txt
+# 20498
+
+
 ##############################################################################
 # DBSNP B142 / SNP142 (DONE 11/18/14)
 # originally done 11/03/14

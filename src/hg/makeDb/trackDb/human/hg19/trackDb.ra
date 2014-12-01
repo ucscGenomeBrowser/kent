@@ -2292,6 +2292,15 @@ longLabel Peptide sequences identified by tandem MS from PeptideAtlas
     scoreMin 1
     color 100, 82, 160
 
+    track pgxPeptideAtlas2014
+    parent peptideAtlasSuper
+    release alpha
+    shortLabel PeptideAtlas PGx
+    longLabel Peptide sequences identified from MS spectra of 971 samples by PeptideAtlas (PGx mapped)
+    type bed 12
+    group expression
+    color 160, 100, 50
+
     track peptideAtlasRegions2014
     release alpha
     parent peptideAtlasSuper
