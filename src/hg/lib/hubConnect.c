@@ -174,7 +174,7 @@ struct hubConnectStatus *hubConnectStatusForId(struct sqlConnection *conn, int i
 struct hubConnectStatus *hub = NULL;
 char query[1024];
 sqlSafef(query, sizeof(query), 
-    "select hubUrl,status, errorMessage,lastNotOkTime from %s where id=%d", getHubStatusTableName(), id);
+    "select hubUrl,status, errorMessage,lastNotOkTime, shortLabel from %s where id=%d", getHubStatusTableName(), id);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = sqlNextRow(sr);
 if (row != NULL)
@@ -184,6 +184,7 @@ if (row != NULL)
     hub->hubUrl = cloneString(row[0]);
     hub->status = sqlUnsigned(row[1]);
     hub->errorMessage = cloneString(row[2]);
+    char *shortLabel = row[4];
 
     if (isEmpty(row[2]) || hubTimeToCheck(hub, row[3]))
 	{
@@ -193,7 +194,7 @@ if (row != NULL)
 	hubUpdateStatus( hub->errorMessage, hub);
 	if (!isEmpty(hub->errorMessage))
 	    {
-	    warn("%s", hub->errorMessage);
+	    warn("Could not connect to hub \"%s\": %s", shortLabel, hub->errorMessage);
 	    }
 	}
     }

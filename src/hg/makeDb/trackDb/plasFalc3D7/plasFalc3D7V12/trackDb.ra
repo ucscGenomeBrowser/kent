@@ -1,0 +1,22 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+html gold
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+html gap
+
+# genome is AT rich
+track gc5BaseBw override
+viewLimits 0:40
+
+track genes
+shortLabel Genes
+longLabel PlamosDb Genes
+group genes
+visibility pack
+color 12,120,12
+type genePred
+baseColorUseCds given
+baseColorDefault genomicCodons
+

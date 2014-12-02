@@ -31,6 +31,7 @@ UTILS_APPLIST = \
 	gff3ToPsl \
 	gtfToGenePred \
 	hubCheck \
+	hubPublicCheck \
 	makeTableList \
 	oligoMatch \
 	overlapSelect \
@@ -47,7 +48,6 @@ SCRIPT_FILES = \
 
 # List of directories to build of interest only at UCSC
 DIRS = ${buildRefresh} \
-	hubPublicCheck \
 	safePush \
 	toDev64 \
 	automation \

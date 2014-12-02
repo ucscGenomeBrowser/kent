@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import logging, sys, optparse, re, os, datetime, gzip, urllib2
+import logging, sys, optparse, re, os, datetime, gzip, urllib2, subprocess
 from collections import defaultdict
 from os.path import join, basename, dirname, isfile
 from datetime import date, datetime, timedelta
@@ -69,23 +69,16 @@ if args==[] and not options.auto:
     parser.print_help()
     exit(1)
 
+outSuffix = ""
+# download from NCBI
 if options.auto:
-    date = date.today().isoformat() 
+    today = date.today().isoformat()
+    outSuffix = "%s." % today
     url = "http://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz"
-    outFname = "variant_summary.%s.txt.gz" % date
+    outFname = "variant_summary.%s.txt.gz" % today
     logging.info("Downlading %s to %s" % (url, outFname))
     open(outFname, "w").write(urllib2.urlopen(url).read())
     filename = outFname
-
-    if options.maxDiff:
-        yesterday = datetime.now() - timedelta(days=1)
-        yesterdayFname = "variant_summary.%s.txt.gz" % yesterday.date().isoformat()
-        todayLines = sum(1 for line in gzip.open(outFname))
-        yesterdayLines = sum(1 for line in gzip.open(yesterdayFname))
-        percDiff = abs(todayLines-yesterdayLines)/float(todayLines) 
-        if percDiff > options.maxDiff:
-            raise Exception("line count changed too much: yesterday %d lines, today %d lines" % (yesterdayLines, todayLines))
-
 else:
     filename = args[0]
 
@@ -112,10 +105,10 @@ line1 = ifh.readline()
 assert(line1 == clinvarExpectHeaders) # test if clinvar has changed their header line again
 
 # open out files
-hg19Bed = open("clinvarMain.hg19.bed", "w")
-hg38Bed = open("clinvarMain.hg38.bed", "w")
-hg19BedCnv = open("clinvarCnv.hg19.bed", "w")
-hg38BedCnv = open("clinvarCnv.hg38.bed", "w")
+hg19Bed = open("clinvarMain.hg19.%sbed" % outSuffix, "w")
+hg38Bed = open("clinvarMain.hg38.%sbed" % outSuffix, "w")
+hg19BedCnv = open("clinvarCnv.hg19.%sbed" % outSuffix, "w")
+hg38BedCnv = open("clinvarCnv.hg38.%sbed" % outSuffix, "w")
 
 longCount = 0
 noAssCount = 0
@@ -195,15 +188,46 @@ hg38BedCnv.close()
 logging.info("%d lines with feature name that was too long, shortened them" % longCount)
 logging.info("%d lines without, with old assembly or no chrom, skipped" % noAssCount)
 
-# sort and convert to bigBed
-fnames = ["clinvarMain.hg19.bed", "clinvarMain.hg38.bed", "clinvarCnv.hg19.bed", "clinvarCnv.hg38.bed"]
+fnames = [hg19Bed.name, hg38Bed.name, hg19BedCnv.name, hg38BedCnv.name]
+
+# sort the files
 for fname in fnames:
     cmd = "bedSort %s %s" % (fname, fname) 
     logging.debug(cmd)
     assert(os.system(cmd)==0)
 
-    db = fname.split(".")[1]
-    outFname = fname.replace(".bed", ".bb")
+# check new bed files against yesterday's bed files
+if options.maxDiff:
+    for fname in fnames:
+        yesterday = datetime.now() - timedelta(days=1)
+        yesterday = yesterday.date().isoformat()
+        yesterdayFname = fname.replace(today, yesterday)
+        todayLines = sum(1 for line in open(fname))
+        yesterdayLines = sum(1 for line in open(yesterdayFname))
+        percDiff = (todayLines-yesterdayLines)/float(todayLines)
+        if percDiff < 0:
+            raise Exception("line count change negative: %s %d, %s %d" % \
+                (yesterdayFname, yesterdayLines, fname, todayLines))
+        if percDiff > options.maxDiff:
+            raise Exception("line count increased too much: yesterday %d , today %d " % (yesterdayLines, todayLines))
+        # see RM 14350 do more than just linecount
+        # see http://stackoverflow.com/questions/1566461/how-to-count-differences-between-two-files-on-linux
+        cmd = "diff %s %s --speed-large-files | grep '^[\>\<]'  | wc -l" % (fname, yesterdayFname)
+        diffCount = int(subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT))
+        logging.info("%s: %d lines changed" % (fname, diffCount))
+        percDiff = float(diffCount)/todayLines
+        if percDiff > options.maxDiff:
+            raise Exception("too much diff: %d out of %d lines" % (diffCount, todayLines))
+
+# convert to bigBed without the date in the fname, like clinvarMain.hg19.bb
+for fname in fnames:
+    parts = fname.split(".")
+    if len(parts) == 4: # clinvarMain.hg19.2011-11-11.bed
+        base, db, date, ext = parts
+    else:
+        base, db, ext = parts
+        
+    outFname = "%s.%s.bb" % (base, db)
     cmd = "bedToBigBed -tab -type=bed9+ -as=clinvar.as %s /hive/data/genomes/%s/chrom.sizes %s" % (fname, db, outFname)
     logging.debug(cmd)
     assert(os.system(cmd)==0)

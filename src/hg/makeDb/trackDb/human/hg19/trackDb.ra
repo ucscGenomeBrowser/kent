@@ -2267,44 +2267,43 @@ track ucsfRnaSeqBrainSmartCoverage override
 release alpha,beta,public
 type bigWig 1 141
 
-track cooperDevDelay
-shortLabel Cooper Dev. Delay
-longLabel Copy Number Variation Morbidity Map of Developmental Delay, Cooper et al. 2011
-group phenDis
-visibility hide
-#color 0,0,200
-type gvf 
-noScoreFilter .
-
-
-track peptideAtlas
+track peptideAtlasSuper
 release alpha
-html peptideAtlas.html
+html peptideAtlas
 superTrack on
 group expression
 shortLabel PeptideAtlas
 longLabel Peptide sequences identified by tandem MS from PeptideAtlas
 
-    track peptideAtlas2014
-    superTrack peptideAtlas
+    track peptideAtlas
+    table peptideAtlas2014
+    parent peptideAtlasSuper
     release alpha
-    shortLabel PeptideAtlas 2014
+    shortLabel PeptideAtlas
     html peptideAtlas
-    longLabel Peptide sequences identified from tandem MS spectra of 971 samples by PeptideAtlas (2014)
+    longLabel Peptide sequences identified from MS spectra of 971 samples by PeptideAtlas
     type bed 12
-    visibility dense
     url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=433&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
     urlLabel Link to PeptideAtlas:
     group expression
-    minGrayLevel 4
-    color 82, 82, 160
     spectrum on
+    minGrayLevel 4
     scoreMax 51
     scoreMin 1
+    color 100, 82, 160
+
+    track pgxPeptideAtlas2014
+    parent peptideAtlasSuper
+    release alpha
+    shortLabel PeptideAtlas PGx
+    longLabel Peptide sequences identified from MS spectra of 971 samples by PeptideAtlas (PGx mapped)
+    type bed 12
+    group expression
+    color 160, 100, 50
 
     track peptideAtlasRegions2014
     release alpha
-    superTrack peptideAtlas
+    parent peptideAtlasSuper
     shortLabel PeptideAtlas Mappings 2014
     html peptideAtlas
     longLabel Peptide sequence mappings identified by tandem MS from PeptideAtlas (2014)
@@ -2317,7 +2316,7 @@ longLabel Peptide sequences identified by tandem MS from PeptideAtlas
     track peptideAtlasRegions2013
     table peptideAtlas
     release alpha
-    superTrack peptideAtlas
+    parent peptideAtlasSuper
     html peptideAtlas
     shortLabel PeptideAtlas Mappings 2013
     longLabel Peptide sequence mappings identified by tandem MS from PeptideAtlas (2013)

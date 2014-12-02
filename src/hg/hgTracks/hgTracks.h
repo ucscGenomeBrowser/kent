@@ -1364,6 +1364,9 @@ void rmskJoinedMethods(struct track *track);
 void lrgMethods(struct track *tg);
 /* Locus Reference Genomic (bigBed 12 +) handlers. */
 
+void peptideAtlasMethods(struct track *tg);
+/* PeptideAtlas (bed 12+) handlers */
+
 void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars);
 /* When composite/view settings changes, remove subtrack specific vis
    When superTrackChild is found and selected, shape superTrack to match. */

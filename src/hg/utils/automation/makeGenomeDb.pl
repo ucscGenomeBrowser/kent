@@ -1351,6 +1351,8 @@ src/hg/makeDb/trackDb/trackDb.chainNet.fish.ra \\
 src/hg/makeDb/trackDb/chainNetPetMar1.ra \\
 src/hg/makeDb/trackDb/chainNetPetMar2.ra \\
 src/hg/makeDb/trackDb/trackDb.nt.ra \\
+src/hg/makeDb/trackDb/joinedRmskComposite.ra \\
+src/hg/makeDb/trackDb/joinedRmsk.ra \\
 src/hg/makeDb/trackDb/trackDb.genbank.ra \\
 src/hg/makeDb/trackDb/trackDb.genbank.new.ra \\
 src/hg/makeDb/trackDb/tagTypes.tab \\

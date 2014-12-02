@@ -61,7 +61,7 @@
 				</p>
                                 <p>
                                   <b><a href="hubQuickStart.html"
-                                        target="_blank">Basic Hub Quick Start Guide</a></b><br>
+                                        target="_blank">Quick Start Guide to Basic Hubs</a></b><br>
                                   <b><a href="hubQuickStartGroups.html"
                                         target="_blank">Quick Start Guide to Organizing Track Hubs into Groupings</a></b><br>
                                   <b><a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs"
@@ -252,10 +252,10 @@ tab. This tab lists the unlisted track hubs that you have loaded into your
 browser. To import a new hub, type its URL into the text box, then click
 the Add Hub button. If the track hub is imported successfully, it will
 be added to the list. It is also possible to add a track hub by directly adding
-the hub's URL to the browser URL. If you add hubUrl=[URL] to your hgTracks URL line,
+the hub's URL to the browser URL. If you add <b>hubUrl=[URL]</b> to your hgTracks URL line,
 it will add the hub directly into the browser
 (e.g. <A HREF="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://vizhub.wustl.edu/VizHub/RoadmapRelease3.txt">
-http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://vizhub.wustl.edu/VizHub/RoadmapRelease3.txt</A>).
+http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19<b>&hubUrl=</b>http://vizhub.wustl.edu/VizHub/RoadmapRelease3.txt</A>).
 If the hub you've selected is an assembly hub, the supported assemblies will be selectable from the gateway page by selecting the name of the track hub in the group pulldown.
 <P>
 If the browser is unable to load the track hub, it will
@@ -761,12 +761,12 @@ stamp newer than the UCSC one. For performance reasons, UCSC checks the
 time stamps every 300 seconds, which can result in a 5-minute delay 
 between the time a hub file is updated and the change appears on the Genome
 Browser. Hub providers can work around this delay by inserting the CGI variable 
-<em>udcTimeout=1</em> into the Genome Browser URL, which will reduce the delay 
+<em><b>udcTimeout=1</b></em> into the Genome Browser URL, which will reduce the delay 
 to one second. To add this variable, open the Genome Browser tracks page
 and zoom or scroll the image to display a full browser URL in which the CGI 
 variables visible. Insert the CGI variable just after the
 &quot;hgTracks&quot; portion of the URL so that it reads 
-<em>http://genome.ucsc.edu/cgi-bin/hgTracks?udcTimeout=1&</em> (with the
+<em>http://genome.ucsc.edu/cgi-bin/hgTracks?<b>udcTimeout=1&</b></em> (with the
 remainder of the URL following the ampersand).  To restore the default
 timeout, a warning message will appear on hgTracks with a link to
 clear the udcTimeout variable.
@@ -831,13 +831,13 @@ your hub.txt file into the <a href="../../cgi-bin/hgHubConnect"
 target="_blank">My Hubs</a> tab of the Track Data Hubs page, you may want to consider building
 URLs to directly load the hub along with session settings.
 </p>
-<p>To build a URL that will load the hub directly, add &quot;&hubUrl=&quot; to the hgTracks
+<p>To build a URL that will load the hub directly, add &quot;<b>&hubUrl=</b>&quot; to the hgTracks
 CGI followed by the address of the hub.txt file. You also need to include the UCSC assembly you
 are displaying the hub upon such as &quot;db=hg19&quot;. For example, here is a working link that
 will visualize the ENCODE AWG hub:
 <blockquote>
 <pre>
-http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt
+http://genome.ucsc.edu/cgi-bin/hgTracks?<b>db=hg19&hubUrl=</b>http://ftp.ebi.ac.uk/pub/databases/ensembl/encode/integration_data_jan2011/hub.txt
 </pre>
 </blockquote>
 
@@ -848,11 +848,11 @@ Instructions for creating a session and saving it to a file can be found
 <A HREF="http://genome.ucsc.edu/goldenPath/help/hgSessionHelp.html#Create" TARGET="_BLANK">here</A>.</P>
 <P>By making your session file available over the Internet,
 you can build a URL that will load the session automatically
-by adding &quot;&hgS_loadUrlName=&quot; to the hgTracks CGI 
+by adding &quot;<b>&hgS_loadUrlName=</b>&quot; to the hgTracks CGI 
 followed by the URL location of the saved session file.
 The location of the saved session file should be in the same
 directory that holds your hub.txt file. Finally add
-&quot;&hgS_doLoadUrl=submit&quot; to the URL
+&quot;<b>&hgS_doLoadUrl=submit</b>&quot; to the URL
 to inform the browser to load the session.</P>
 <P>There are four required variables for your URL:
 <BLOCKQUOTE><TT>
@@ -863,12 +863,22 @@ to inform the browser to load the session.</P>
 </TT>
 </BLOCKQUOTE>
 </P>						
-<P>Here is a sample URL:</P>
+<P>Here is a sample URL that would load a session for a hub:</P>
 <BLOCKQUOTE>
 <pre>
-http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://myLab.org/myHub.txt&hgS_loadUrlName=http://mySession&hgS_doLoadUrl=submit
+http://genome.ucsc.edu/cgi-bin/hgTracks?<b>db=hg19&hubUrl=</b>http://myLab.org/myHub.txt<b>&hgS_loadUrlName=</b>http://mySession<b>&hgS_doLoadUrl=submit</b>
 </pre>
 </BLOCKQUOTE>
+<p>
+Another feature one can use in place of &quot;<b>&hubUrl=</b>&quot; is &quot<b>&hubClear=</b>&quot;,
+which will load a hub while simultaneously disconnecting, or clearing,
+hubs located at the same location.  For example adding
+<code>&hubClear=http://university.edu/lab/folder/hub10.txt</code>
+would connect the referenced hub10.txt while simultaneously disconnecting any
+hubs that might be displayed from the same <code>http://university.edu/lab/folder/</code>
+directory (for example, hub1.txt, hub2.txt, ect.).  This feature can be useful
+for dynamically generated hubs that might collect in the browser otherwise.
+</p>
                                 </TD>
                                 <TD WIDTH=15></TD>
                             </TR>

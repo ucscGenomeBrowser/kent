@@ -1,5 +1,6 @@
 LIST=\
 wgEncodeAffyRnaChip.ra \
+wgEncodeAwgDnaseMasterSites.ra \
 wgEncodeAwgDnaseUniform.ra \
 wgEncodeAwgSegmentation.ra \
 wgEncodeAwgTfbsUniform.ra \

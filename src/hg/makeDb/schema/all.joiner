@@ -4259,6 +4259,11 @@ identifier dnaseClusterSourceId
     hg19.wgEncodeRegDnaseClusteredSources.id
     hg19.wgEncodeRegDnaseClusteredV3.sourceIds comma full
 
+identifier peptideAtlasAccession external=PeptideAtlas
+"Peptide accession from peptideatlas.org"
+    hgFixed.peptideAtlas2014Peptides.accession
+    hg19.peptideAtlas2014.name
+
 # Transcription Factor and TF Motif track info
 
 identifier txnFactorGeneId

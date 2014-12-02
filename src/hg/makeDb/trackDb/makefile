@@ -40,10 +40,11 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
 	macEug1 macEug2 \
 	calJac1 calJac3 \
 	otoGar1 otoGar3 tupBel1\
+	nasLar1 \
 	saiBol1 \
 	ailMel1 \
 	canFam1 canFam2 canFamPoodle1 canFam3 \
-	felCat3 felCat4 felCat5  \
+	felCat3 felCat4 felCat5  felCat8 \
 	musFur1 \
 	mm6 mm7 mm8 mm9 mm10 mm10Patch1 mm10Strains1 \
 	rn3 rn4 rn5 rn6 \
@@ -64,7 +65,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
 	sorAra1 sorAra2 \
 	turTru1 turTru2 \
 	vicPac1 vicPac2 \
-	pteVam1 tarSyr1 \
+	pteVam1 tarSyr1 tarSyr2 \
 	dipOrd1 proCap1 \
 	ochPri2 ochPri3 \
 	myoLuc1 myoLuc2 \
@@ -96,7 +97,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
 	poeRet1 \
 	gasAcu1 \
 	gadMor1 \
-	dm1 dm2 dm3 \
+	dm1 dm2 dm3 dm6 \
 	dp2 dp3 \
 	droYak1 droYak2 \
 	droAna1 droAna2 \
@@ -137,7 +138,8 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
         marVir1 \
         eboVir3 eboVir2 eboVir1 bunEbo1 sudEbo1 resEbo1 taiEbo1 zaiEbo1 \
 	centromeres1 \
-	repeats2
+	repeats2 \
+	plasFalc3D7V12
 
 
 GSID_DBS = \

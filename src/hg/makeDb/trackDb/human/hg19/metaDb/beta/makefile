@@ -1,6 +1,7 @@
 
 LIST=\
 wgEncodeAffyRnaChip.ra \
+wgEncodeAwgDnaseMasterSites.ra \
 wgEncodeAwgDnaseUniform.ra \
 wgEncodeAwgSegmentation.ra \
 wgEncodeAwgTfbsUniform.ra \
@@ -27,7 +28,7 @@ wgEncodeHaibRnaSeq.ra \
 wgEncodeHaibTfbs.ra \
 wgEncodeMapability.ra \
 wgEncodeOpenChromChip.ra \
-wgEncodeOpenChromDnase.ra\
+wgEncodeOpenChromDnase.ra \
 wgEncodeOpenChromFaire.ra \
 wgEncodeOpenChromSynth.ra \
 wgEncodeRegDnaseClustered.ra \
