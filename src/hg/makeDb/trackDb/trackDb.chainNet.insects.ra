@@ -2,7 +2,6 @@
 # dm6 - D. melanogaster - Drosophila melanogaster - insect drosophila -9060
 ################################################################
 track chainNetDm6
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -25,7 +24,6 @@ spectrum on
 html chainNet
 
     track chainNetDm6Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -33,7 +31,6 @@ html chainNet
     spectrum on
 
         track chainDm6
-        release alpha
         parent chainNetDm6Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -42,14 +39,12 @@ html chainNet
         html chainNet
 
     track chainNetDm6Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetDm6
 
         track netDm6
-        release alpha
         parent chainNetDm6Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
