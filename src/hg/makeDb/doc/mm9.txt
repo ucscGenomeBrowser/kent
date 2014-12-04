@@ -12374,4 +12374,131 @@ TMPDIR=/scratch/tmp
 
     #For microarray tracks also need to add a section to
     #/cluster/home/pauline/kent/src/hg/makeDb/hgCgiData/Mouse/microarrayGroups.ra
+
 ##############################################################################
+# PeptideAtlas peptides mapped to the genome (DONE 2014-12-02 - Kate)
+#
+# This track has a mapping table in mm9, and a linked sequence table in hgFixed.
+# Track display is triggered by tableName 'peptideAtlas*'.
+# The sequence table name is <track tablename>Peptides
+
+# See also:  hg19.txt PeptideAtlas track
+
+# Data for this track is from peptideatlas.org:
+#   Mouse June 2013 build
+#   Build #384, based on Ensembl proteins v67.37
+
+cd /hive/data/genomes/mm9/bed
+mkdir -p peptideAtlas/2013-Jun
+cd peptideAtlas/2013-Jun
+
+# download and load up database
+hgsql '' -e 'create database peptideAtlasMouse2013'
+wget http://www.peptideatlas.org/builds/mouse/201306/atlas_build_384.mysql.gz
+zcat atlas_build_384.mysql.gz | hgsql peptideAtlasMouse2013
+
+# exploratory
+hgsql -N peptideAtlasMouse2013 -e 'select min(peptide_length), max(peptide_length) from peptide'
++------+------+
+|    7 |   71 |
++------+------+
+
+cat > scanFullDb.csh << 'EOF'
+#!/bin/csh -ef
+
+set db = $1
+
+set tables = `hgsql -s $db -e "show tables"`
+foreach t ($tables)
+    set s = `hgsql -s $db -e "select count(*) from $t"`
+    if ($s != 0) then
+        echo ""
+        echo "TABLE:    ${t} : $s"
+        hgsql $db -e "select * from $t limit 2\G"
+    endif
+end
+'EOF'
+
+csh scanFullDb.csh peptideAtlasMouse2013 > scan.out
+grep TABLE scan.out | grep peptide
+# TABLE:    modified_peptide_instance : 348140
+# TABLE:    modified_peptide_instance_search_batch : 753782
+# TABLE:    peptide : 136769
+# TABLE:    peptide_instance : 136769
+# TABLE:    peptide_instance_search_batch : 410409
+# TABLE:    peptide_mapping : 771252
+
+# ~1.4K peptides
+
+# count samples
+hgsql peptideAtlasMouse2013 -e "select count(*) from sample"
+# 172
+
+# get peptide sequences and some additional info (hydrophobicity, proteotypic score)
+hgsql peptideAtlasMouse2013 -e "select peptide.peptide_accession as accession, peptide.peptide_sequence as sequence, peptide_instance.n_samples as sampleCount, peptide.SSRCalc_relative_hydrophobicity as hydrophobicity, peptide_instance.empirical_proteotypic_score as proteotypicScore from peptide, peptide_instance where peptide_instance.peptide_id=peptide.peptide_id order by peptide.peptide_accession" > peptides.tab
+
+wc -l peptides.tab
+# 136770 peptides.tab
+
+# NOTE: some peptide_instance records have NULL for proteotypic score.  
+# Replace w/ zeroes for now and check with contributors if this is expected.
+
+sed 's/NULL/0/' peptides.tab > peptides.fixed.tab
+
+# load peptide info into database for detail pages
+tail -n +2 peptides.fixed.tab | \
+    hgLoadSqlTab hgFixed peptideAtlasMouse2013Peptides ~/kent/src/hg/lib/peptideAtlasPeptide.sql stdin
+#load of peptideAtlasMouse2013Peptides did not go as planned: 136769 record(s), 1010 row(s) skipped, 0 warning(s) loading /dev/stdin
+
+# NOTE: these are dupes -- checking with contributor why there are multiple peptide_id's for the same accession
+
+# get range of samples observed, for trackDb
+hgsql hgFixed -e 'select min(sampleCount), max(sampleCount) from peptideAtlasMouse2013Peptides'
++------------------+------------------+
+| min(sampleCount) | max(sampleCount) |
++------------------+------------------+
+|                1 |               56 |
++------------------+------------------+
+
+# dump peptides that have been 'deduped' by mysql:
+hgsql hgFixed -Ne "select * from peptideAtlasMouse2013Peptides" > peptides.uniq.tab
+
+# make fasta file of peptide sequences
+mkdir downloads
+awk 'NR != 1 {printf(">%s\n%s\n", $1, $2)}' peptides.uniq.tab > downloads/peptides.fa
+
+# extract mappings with some metadata (biosequence matched (protein and gene)))
+# use number of samples where the peptide was observed as the score
+hgsql peptideAtlasMouse2013 -e "select concat('chr', peptide_mapping.chromosome) as chr, peptide_mapping.start_in_chromosome-1 as chromStart, peptide_mapping.end_in_chromosome as chromEnd, peptide.peptide_accession as name, peptide_instance.n_samples as score, peptide_mapping.strand as strand, biosequence.biosequence_name as biosequence, biosequence.biosequence_gene_name as gene from peptide_mapping, peptide, peptide_instance, biosequence where peptide_mapping.chromosome not like '%PATCH' and peptide_mapping.chromosome not like '%CTG%' and peptide_mapping.chromosome not like '%TEST' and peptide_mapping.chromosome <> '0' and peptide.peptide_id=peptide_instance.peptide_id and peptide_mapping.peptide_instance_id=peptide_instance.peptide_instance_id and peptide_mapping.matched_biosequence_id=biosequence.biosequence_id order by chr, biosequence, chromStart" > mappings.atlas.bed
+
+# filter out contigs
+awk '{print $1}' mappings.atlas.bed | sort | uniq > chroms.txt
+sed -n -e 's/chrMT/chrM/p' -e '/chr[1-9XY]/p' mappings.atlas.bed | tail -n +2 > mappings.bed
+
+wc -l mappings*bed
+  366572 mappings.atlas.bed
+  324204 mappings.bed
+
+# link exons and dedup
+# gitted in kent/src/hg/makeDb/outside/peptideAtlas
+linkPeptideMappings.pl mappings.bed > mappings.bed12
+wc -l mappings.bed mappings.bed12
+  # 324204 mappings.bed
+  # 120059 mappings.bed12
+bedSort mappings.bed12 mappings.sorted.bed12
+
+# load in database
+hgLoadBed mm9 peptideAtlasMouse2013 mappings.bed12
+
+featureBits mm9 peptideAtlasMouse2013
+    # 3547129 bases of 2620346127 (0.135%) in intersection
+featureBits mm9 -enrichment refGene:cds peptideAtlasMouse2013
+    # refGene:cds 1.304%, peptideAtlasMouse2013 0.135%, both 0.131%, cover 10.01%, enrich 73.93x
+
+# NOTE: human had 44% CDS cov, this is only 10%
+
+wc -l mappings.bed mappings.bed12
+  # 324204 mappings.bed
+  # 120059 mappings.bed12
+
+

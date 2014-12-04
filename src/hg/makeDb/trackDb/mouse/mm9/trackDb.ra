@@ -1047,4 +1047,24 @@ searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
 termRegex Mms_NumtS_.*
 
+track peptideAtlas
+table peptideAtlasMouse2013
+release alpha
+shortLabel PeptideAtlas
+longLabel Peptide sequences identified from MS spectra of 172 samples by PeptideAtlas
+type bed 12
+url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=384&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
+urlLabel Link to PeptideAtlas:
+group regulation
+spectrum on
+minGrayLevel 4
+scoreMax 56
+scoreMin 1
+color 100, 82, 160
+#html peptideAtlas
 
+searchTable peptideAtlasMouse2013
+searchType bed
+termRegex PAp[0-9]{8}
+semiShortCircuit 1
+searchPriority 3.6

@@ -1,0 +1,154 @@
+track iedbPredClassIMac
+group immu
+compositeTrack on
+shortLabel IEDB Pred Macaque I
+longLabel Immune Epitope Database and Analysis Resource (IEDB) Predictions, Macaque HLA T-Cell Class I
+visibility hide
+color 20,20,0
+spectrum on
+scoreMin 0
+scoreMax 1000
+priority 60
+type bigBed 12 .
+parent iedbPred dense
+
+    track iedbsupp2B01
+    shortLabel B*01
+    longLabel IEDB Predicted binding Macaque HLA T-Cell Class I B*01
+    type bigBed 12 .
+    parent iedbPredClassIMac
+    visibility dense
+
+    track iedbsupp2A07
+    shortLabel A*07
+    longLabel IEDB Predicted binding Macaque HLA T-Cell Class I A*07
+    type bigBed 12 .
+    parent iedbPredClassIMac
+    visibility dense
+
+    track iedbsupp2B01001
+    shortLabel B*01001
+    longLabel IEDB Predicted binding Macaque HLA T-Cell Class I B*01001
+    type bigBed 12 .
+    parent iedbPredClassIMac
+    visibility dense
+
+    track iedbsupp2B03901
+    shortLabel B*03901
+    longLabel IEDB Predicted binding Macaque HLA T-Cell Class I B*03901
+    type bigBed 12 .
+    parent iedbPredClassIMac
+    visibility dense
+
+    track iedbsupp2A11
+    shortLabel A*11
+    longLabel IEDB Predicted binding Macaque HLA T-Cell Class I A*11
+    type bigBed 12 .
+    parent iedbPredClassIMac
+    visibility dense
+
+    track iedbsupp2B00101
+    shortLabel B*00101
+    longLabel IEDB Predicted binding Macaque HLA T-Cell Class I B*00101
+    type bigBed 12 .
+    parent iedbPredClassIMac
+    visibility dense
+
+    track iedbsupp2B08701
+    shortLabel B*08701
+    longLabel IEDB Predicted binding Macaque HLA T-Cell Class I B*08701
+    type bigBed 12 .
+    parent iedbPredClassIMac
+    visibility dense
+
+    track iedbsupp2A01
+    shortLabel A*01
+    longLabel IEDB Predicted binding Macaque HLA T-Cell Class I A*01
+    type bigBed 12 .
+    parent iedbPredClassIMac
+    visibility dense
+
+    track iedbsupp2B17
+    shortLabel B*17
+    longLabel IEDB Predicted binding Macaque HLA T-Cell Class I B*17
+    type bigBed 12 .
+    parent iedbPredClassIMac
+    visibility dense
+
+    track iedbsupp2A20102
+    shortLabel A2*0102
+    longLabel IEDB Predicted binding Macaque HLA T-Cell Class I A2*0102
+    type bigBed 12 .
+    parent iedbPredClassIMac
+    visibility dense
+
+    track iedbsupp2B09001
+    shortLabel B*09001
+    longLabel IEDB Predicted binding Macaque HLA T-Cell Class I B*09001
+    type bigBed 12 .
+    parent iedbPredClassIMac
+    visibility dense
+
+    track iedbsupp2B06601
+    shortLabel B*06601
+    longLabel IEDB Predicted binding Macaque HLA T-Cell Class I B*06601
+    type bigBed 12 .
+    parent iedbPredClassIMac
+    visibility dense
+
+    track iedbsupp2B08301
+    shortLabel B*08301
+    longLabel IEDB Predicted binding Macaque HLA T-Cell Class I B*08301
+    type bigBed 12 .
+    parent iedbPredClassIMac
+    visibility dense
+
+    track iedbsupp2A102601
+    shortLabel A1*02601
+    longLabel IEDB Predicted binding Macaque HLA T-Cell Class I A1*02601
+    type bigBed 12 .
+    parent iedbPredClassIMac
+    visibility dense
+
+    track iedbsupp2A70103
+    shortLabel A7*0103
+    longLabel IEDB Predicted binding Macaque HLA T-Cell Class I A7*0103
+    type bigBed 12 .
+    parent iedbPredClassIMac
+    visibility dense
+
+    track iedbsupp2B08
+    shortLabel B*08
+    longLabel IEDB Predicted binding Macaque HLA T-Cell Class I B*08
+    type bigBed 12 .
+    parent iedbPredClassIMac
+    visibility dense
+
+    track iedbsupp2B00301
+    shortLabel B*00301
+    longLabel IEDB Predicted binding Macaque HLA T-Cell Class I B*00301
+    type bigBed 12 .
+    parent iedbPredClassIMac
+    visibility dense
+
+    track iedbsupp2A02
+    shortLabel A*02
+    longLabel IEDB Predicted binding Macaque HLA T-Cell Class I A*02
+    type bigBed 12 .
+    parent iedbPredClassIMac
+    visibility dense
+
+    track iedbsupp2A102201
+    shortLabel A1*02201
+    longLabel IEDB Predicted binding Macaque HLA T-Cell Class I A1*02201
+    type bigBed 12 .
+    parent iedbPredClassIMac
+    visibility dense
+
+    track protL2
+    shortLabel Not analyzed
+    longLabel Not analyzed by IEDB, no predictions
+    type bigBed 4 .
+    parent iedbPredClassIMac
+    visibility dense
+
