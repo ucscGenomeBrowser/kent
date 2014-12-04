@@ -147,7 +147,7 @@ if (!trackHubDatabase(database))
 char *menuStr, buf[4096], uiVars[1024];
 safef(uiVars, sizeof(uiVars), "%s=%s", cartSessionVarName(), cartSessionId(cart));
 
-menuStr = menuBar(cart);
+menuStr = menuBar(cart, database);
 
 // Create top items in view menu
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.psOutput=on", uiVars);
