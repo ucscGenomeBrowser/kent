@@ -48,6 +48,7 @@ group immu
 type bigBed 12 .
 visibility dense
 color 0,90,100
+priority 10
 urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
 mouseOverField author
 
@@ -58,14 +59,17 @@ group immu
 type bigBed 12 .
 visibility hide
 color 0,90,100
+priority 20
 urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
 mouseOverField author
 
 track iedbTcellI
 shortLabel IEDB T Cell I
 longLabel Immune Epitope Database and Analysis Resource (IEDB) Curated T-Cell Epitopes, MHC Class I
+priority 30
 group immu
 type bigBed 12 .
+color 0,90,100
 visibility hide
 urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
 mouseOverField mHCAlleleName
@@ -73,7 +77,9 @@ mouseOverField mHCAlleleName
 track iedbTcellII
 shortLabel IEDB T Cell II
 longLabel Immune Epitope Database and Analysis Resource (IEDB) Curated T-Cell Epitopes, MHC Class II
+priority 40
 group immu
+color 0,90,100
 type bigBed 12 .
 visibility hide
 urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
@@ -101,6 +107,13 @@ shortLabel UniProt Annot.
 visibility dense
 group genes
 html spAnnot
+longLabel UniProt/SwissProt Protein Annotations
+type bigBed 12 +
+itemRgb on
+urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
+mouseOverField comments
+release alpha
+
 
 track spStruct
 shortLabel UniProt Structure
@@ -111,6 +124,29 @@ type bigBed 12 +
 itemRgb on
 urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
 mouseOverField comments
+
+track iedbPred
+shortLabel IEDB Predictions
+longLabel Immune Epitope Database and Analysis Resource (IEDB) HLA binding predictions
+group immu
+type bigBed 12 .
+superTrack on
+
+        track iedbSupp3
+        shortLabel IEDB Pred II
+        longLabel Immune Epitope Database and Analysis Resource (IEDB) Predictions, Human T-Cell Class II Epitopes
+        group immu
+        type bigBed 12 .
+        visibility hide
+        color 20,20,0
+        useScore on
+        priority 70
+        spectrum on
+        scoreMin 900
+        scoreMax 1000
+        #urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
+        #mouseOverField author
+        parent iedbPred dense
 
 track genscan override
 release alpha
@@ -123,3 +159,5 @@ include trackDb.gire.ra
 include trackDb.strainName160way.ra
 include trackDb.newSequences.ra alpha
 include trackDb.faAlign.ra alpha
+include trackDb.iedbPred1.ra
+include trackDb.iedbPred2.ra
