@@ -131,6 +131,7 @@ longLabel Immune Epitope Database and Analysis Resource (IEDB) HLA binding predi
 group immu
 type bigBed 12 .
 superTrack on
+release alpha
 
         track iedbSupp3
         shortLabel IEDB Pred II
@@ -159,5 +160,5 @@ include trackDb.gire.ra
 include trackDb.strainName160way.ra
 include trackDb.newSequences.ra alpha
 include trackDb.faAlign.ra alpha
-include trackDb.iedbPred1.ra
-include trackDb.iedbPred2.ra
+include trackDb.iedbPred1.ra alpha
+include trackDb.iedbPred2.ra alpha

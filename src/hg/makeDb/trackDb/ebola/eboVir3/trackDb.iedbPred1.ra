@@ -1,0 +1,204 @@
+track iedbPred1
+group immu
+compositeTrack on
+shortLabel IEDB Pred Human I
+longLabel Immune Epitope Database and Analysis Resource (IEDB) Predictions, Human HLA T-Cell Class I
+visibility hide
+color 0,0,0
+altColor 0,0,0
+spectrum on
+scoreMin 850
+scoreMax 1000
+priority 50
+type bigBed 12 .
+parent iedbPred dense
+
+    track iedbsupp1B5301
+    shortLabel B*53:01
+    longLabel IEDB predicted binding Human HLA T-Cell Class I B*53:01
+    type bigBed 12 .
+    parent iedbPred1 on
+    visibility dense
+
+    track iedbsupp1B0702
+    shortLabel B*07:02
+    longLabel IEDB predicted binding Human HLA T-Cell Class I B*07:02
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1B3501
+    shortLabel B*35:01
+    longLabel IEDB predicted binding Human HLA T-Cell Class I B*35:01
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1A3002
+    shortLabel A*30:02
+    longLabel IEDB predicted binding Human HLA T-Cell Class I A*30:02
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1A0206
+    shortLabel A*02:06
+    longLabel IEDB predicted binding Human HLA T-Cell Class I A*02:06
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1A0203
+    shortLabel A*02:03
+    longLabel IEDB predicted binding Human HLA T-Cell Class I A*02:03
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1A3101
+    shortLabel A*31:01
+    longLabel IEDB predicted binding Human HLA T-Cell Class I A*31:01
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1A3001
+    shortLabel A*30:01
+    longLabel IEDB predicted binding Human HLA T-Cell Class I A*30:01
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1B4001
+    shortLabel B*40:01
+    longLabel IEDB predicted binding Human HLA T-Cell Class I B*40:01
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1B4403
+    shortLabel B*44:03
+    longLabel IEDB predicted binding Human HLA T-Cell Class I B*44:03
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1A2402
+    shortLabel A*24:02
+    longLabel IEDB predicted binding Human HLA T-Cell Class I A*24:02
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1A0201
+    shortLabel A*02:01
+    longLabel IEDB predicted binding Human HLA T-Cell Class I A*02:01
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1B1501
+    shortLabel B*15:01
+    longLabel IEDB predicted binding Human HLA T-Cell Class I B*15:01
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1A2301
+    shortLabel A*23:01
+    longLabel IEDB predicted binding Human HLA T-Cell Class I A*23:01
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1A6802
+    shortLabel A*68:02
+    longLabel IEDB predicted binding Human HLA T-Cell Class I A*68:02
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1A2601
+    shortLabel A*26:01
+    longLabel IEDB predicted binding Human HLA T-Cell Class I A*26:01
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1A0101
+    shortLabel A*01:01
+    longLabel IEDB predicted binding Human HLA T-Cell Class I A*01:01
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1B0801
+    shortLabel B*08:01
+    longLabel IEDB predicted binding Human HLA T-Cell Class I B*08:01
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1A3301
+    shortLabel A*33:01
+    longLabel IEDB predicted binding Human HLA T-Cell Class I A*33:01
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1A6801
+    shortLabel A*68:01
+    longLabel IEDB predicted binding Human HLA T-Cell Class I A*68:01
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1A1101
+    shortLabel A*11:01
+    longLabel IEDB predicted binding Human HLA T-Cell Class I A*11:01
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1A0301
+    shortLabel A*03:01
+    longLabel IEDB predicted binding Human HLA T-Cell Class I A*03:01
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1A3201
+    shortLabel A*32:01
+    longLabel IEDB predicted binding Human HLA T-Cell Class I A*32:01
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1B5801
+    shortLabel B*58:01
+    longLabel IEDB predicted binding Human HLA T-Cell Class I B*58:01
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1B4402
+    shortLabel B*44:02
+    longLabel IEDB predicted binding Human HLA T-Cell Class I B*44:02
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1B5701
+    shortLabel B*57:01
+    longLabel IEDB predicted binding Human HLA T-Cell Class I B*57:01
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
+    track iedbsupp1B5101
+    shortLabel B*51:01
+    longLabel IEDB predicted binding Human HLA T-Cell Class I B*51:01
+    type bigBed 12 .
+    parent iedbPred1
+    visibility dense
+
