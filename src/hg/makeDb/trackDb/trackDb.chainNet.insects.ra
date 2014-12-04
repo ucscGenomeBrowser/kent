@@ -2,7 +2,6 @@
 # dm6 - D. melanogaster - Drosophila melanogaster - insect drosophila -9060
 ################################################################
 track chainNetDm6
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -25,7 +24,6 @@ spectrum on
 html chainNet
 
     track chainNetDm6Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -33,7 +31,6 @@ html chainNet
     spectrum on
 
         track chainDm6
-        release alpha
         parent chainNetDm6Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -42,14 +39,12 @@ html chainNet
         html chainNet
 
     track chainNetDm6Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetDm6
 
         track netDm6
-        release alpha
         parent chainNetDm6Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
@@ -62,7 +57,6 @@ html chainNet
 # droSim1 - D. simulans - Drosophila simulans - insect drosophila - 9140
 ################################################################
 track chainNetDroSim1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -85,7 +79,6 @@ spectrum on
 html chainNet
 
     track chainNetDroSim1Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -93,7 +86,6 @@ html chainNet
     spectrum on
 
         track chainDroSim1
-        release alpha
         parent chainNetDroSim1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -102,14 +94,12 @@ html chainNet
         html chainNet
 
     track chainNetDroSim1Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetDroSim1
 
         track netDroSim1
-        release alpha
         parent chainNetDroSim1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
@@ -121,7 +111,6 @@ html chainNet
 # droSec1 D. sechellia - Drosophila sechellia - insect drosophila -9190
 ################################################################
 track chainNetDroSec1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -144,7 +133,6 @@ spectrum on
 html chainNet
 
     track chainNetDroSec1Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -152,7 +140,6 @@ html chainNet
     spectrum on
 
         track chainDroSec1
-        release alpha
         parent chainNetDroSec1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -161,14 +148,12 @@ html chainNet
         html chainNet
 
     track chainNetDroSec1Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetDroSec1
 
         track netDroSec1
-        release alpha
         parent chainNetDroSec1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
@@ -1006,7 +991,6 @@ html chainNet
 # droPer1 - D. persimilis - Drosophila persimilis - insect drosophila -9440
 ################################################################
 track chainNetDroPer1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -1029,7 +1013,6 @@ spectrum on
 html chainNet
 
     track chainNetDroPer1Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -1037,7 +1020,6 @@ html chainNet
     spectrum on
 
         track chainDroPer1
-        release alpha
         parent chainNetDroPer1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -1046,14 +1028,12 @@ html chainNet
         html chainNet
 
     track chainNetDroPer1Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetDroPer1
 
         track netDroPer1
-        release alpha
         parent chainNetDroPer1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
@@ -1542,8 +1522,6 @@ html chainNet
 # anoGam1 - A. gambiae - Anopheles gambiae - insect -  diptera - 9630
 ################################################################
 track chainNetAnoGam1
-release alpha
-##release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -1566,8 +1544,6 @@ spectrum on
 html chainNet
 
     track chainNetAnoGam1Viewchain
-    release alpha
-    #release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -1575,8 +1551,6 @@ html chainNet
     spectrum on
 
         track chainAnoGam1
-        release alpha
-        #release alpha
         parent chainNetAnoGam1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -1585,16 +1559,12 @@ html chainNet
         html chainNet
 
     track chainNetAnoGam1Viewnet
-    release alpha
-    #release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetAnoGam1
 
         track netAnoGam1
-        release alpha
-        #release alpha
         parent chainNetAnoGam1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net

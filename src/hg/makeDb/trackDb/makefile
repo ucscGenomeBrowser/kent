@@ -69,6 +69,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
 	dipOrd1 proCap1 \
 	ochPri2 ochPri3 \
 	myoLuc1 myoLuc2 \
+	rhiRox1 \
 	micMur1 \
 	dasNov1 dasNov2 dasNov3 \
 	triMan1 \

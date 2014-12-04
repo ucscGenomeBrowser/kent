@@ -10,7 +10,7 @@ include trackDb.chainNet.mammal.ra
 include trackDb.chainNet.birds.ra
 include trackDb.chainNet.sarcopterygii.ra
 include trackDb.chainNet.fish.ra
-#include trackDb.chainNet.insects.ra 
+include trackDb.chainNet.insects.ra
 
 
 include trackDb.nt.ra
@@ -352,7 +352,7 @@ url http://rgd.mcw.edu/objectSearch/qtlReport.jsp?rgd_id=
 track pubs
 shortLabel Publications
 longLabel Publications: Sequences in Scientific Articles
-group pub 
+group pub
 visibility dense
 color 0,0,0
 type bed 4
