@@ -222,4 +222,7 @@ char *wikiUrl(struct wikiTrack *item);
 /* construct a URL to the wiki page for the specified item
 	free the returned string when done with it.  */
 
+struct trackDb *wikiTrackDb();
+/* Create & return a trackDb for the wiki track. */
+
 #endif /* WIKITRACK_H */

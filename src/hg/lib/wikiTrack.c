@@ -1061,3 +1061,21 @@ dyStringPrintf(itemUrl, "%s/index.php/%s TARGET=_blank", siteUrl,
         item->descriptionKey);
 return dyStringCannibalize(&itemUrl);
 }
+
+struct trackDb *wikiTrackDb()
+/* Create & return a trackDb for the wiki track. */
+{
+struct trackDb *tdb;
+AllocVar(tdb);
+tdb->track = WIKI_TRACK_TABLE;
+tdb->table = WIKI_TRACK_TABLE;
+tdb->shortLabel = WIKI_TRACK_LABEL;
+tdb->longLabel = WIKI_TRACK_LONGLABEL;
+tdb->visibility = tvFull;
+tdb->priority = WIKI_TRACK_PRIORITY;
+tdb->html = hFileContentsOrWarning(hHelpFile(tdb->track));
+tdb->type = "none";
+tdb->grp = "map";
+tdb->canPack = FALSE;
+return tdb;
+}

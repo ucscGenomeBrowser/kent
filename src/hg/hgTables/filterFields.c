@@ -12,6 +12,7 @@
 #include "jksql.h"
 #include "htmshell.h"
 #include "cart.h"
+#include "cartTrackDb.h"
 #include "jsHelper.h"
 #include "web.h"
 #include "trackDb.h"
@@ -181,7 +182,8 @@ for (in = inList; in != NULL; in = in->next)
         {
 	safef(dtName, sizeof(dtName), "%s.%s",
 		jp->b->database, jp->b->table);
-	if (!hashLookup(uniqHash, dtName) && !accessControlDenied(jp->b->database, jp->b->table))
+	if (!hashLookup(uniqHash, dtName) &&
+	   !cartTrackDbIsAccessDenied(jp->b->database, jp->b->table))
 	    {
 	    hashAdd(uniqHash, dtName, NULL);
 	    out = dbTableNew(jp->b->database, jp->b->table);

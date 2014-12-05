@@ -11,6 +11,7 @@
 #include "web.h"
 #include "cheapcgi.h"
 #include "cart.h"
+#include "cartTrackDb.h"
 #include "hui.h"
 #include "grp.h"
 #include "hCommon.h"
@@ -174,9 +175,10 @@ return dyStringCannibalize(&dy);
 void printCtAndHubButtons()
 /* Print a div with buttons for hgCustom and hgHubConnect */
 {
+boolean hasCustomTracks = customTracksExist(cart, NULL);
 puts("<div style='padding-top: 5px; padding-bottom: 5px'>");
 hOnClickButton("document.customTrackForm.submit(); return false;",
-	       hasCustomTracks(cart) ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
+	       hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
 printf(" ");
 if (hubConnectTableExists())
     hOnClickButton("document.trackHubForm.submit(); return false;", "track hubs");
@@ -2291,7 +2293,7 @@ if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
 knetUdcInstall();
 
-initGroupsTracksTables(cart, &fullTrackList, &fullGroupList);
+cartTrackDbInit(cart, &fullTrackList, &fullGroupList, TRUE);
 if (lookupPosition(cart, hgvaRange))
     {
     if (startQuery)

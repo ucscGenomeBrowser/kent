@@ -36,9 +36,7 @@ extern char *genome;		/* Name of genome - mouse, human, etc. */
 extern char *database;		/* Current database, often but not always dbDatabase. */
 extern char *freezeName;	/* Date of assembly. */
 extern struct trackDb *fullTrackList;	/* List of all tracks in database. */
-extern struct hash *fullTrackHash;     /* Hash of tracks in fullTrackList keyed by ->track field. */
 extern struct hash *fullTableToTdbHash;        /* All tracks and subtracks keyed by ->table field. */
-extern struct trackDb *forbiddenTrackList; /* List of tracks with 'tableBrowser off' setting. */
 extern struct trackDb *curTrack;	/* Currently selected track. */
 extern struct grp *fullGroupList;	/* List of all groups. */
 extern struct grp *curGroup;	/* Currently selected group. */
@@ -146,9 +144,6 @@ void dbOverrideFromTable(char buf[256], char **pDb, char **pTable);
 struct grp *findSelectedGroup(struct grp *groupList, char *cgiVar);
 /* Find user-selected group if possible.  If not then
  * go to various levels of defaults. */
-
-struct slName *tablesForTrack(struct trackDb *track, boolean useJoiner);
-/* Return list of all tables associated with track. */
 
 struct trackDb *findSelectedTrack(struct trackDb *trackList,
 	struct grp *group, char *varName);
@@ -290,10 +285,6 @@ void sqlFieldTypeFreeList(struct sqlFieldType **pList);
 struct sqlFieldType *sqlListFieldsAndTypes(struct sqlConnection *conn, char *table);
 /* Get list of fields including their names and types.  The type currently is just
  * a MySQL type string. */
-
-boolean accessControlDenied(char *db, char *table);
-/* Return TRUE if table access is restricted to some host(s) other than
- * the one we're running on. */
 
 /* ------------- Functions related to joining and filtering ------------*/
 void tabOutSelectedFields(
@@ -573,10 +564,6 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define outGalaxy "galaxyQuery"
 #define outMaf "maf"
 #define outPalOptions "fasta"
-
-/* --------- configuration options ------------ */
-boolean allowAllTables(void);
-/* determine if all tables should is allowed by configuration */
 
 /* --------- Identifier list handling stuff. ------------ */
 
@@ -1160,9 +1147,6 @@ void startBackgroundWork(char *exec, char **pWorkUrl);
  * from the child to the browser */
 
 /* --------------- wikiTrack functions --------------- */
-void wikiTrackDb(struct trackDb **list);
-/* create a trackDb entry for the wiki track */
-
 struct hTableInfo *wikiHti();
 /* Create an hTableInfo for the wikiTrack. */
 
