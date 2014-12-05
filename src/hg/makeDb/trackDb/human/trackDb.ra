@@ -4236,9 +4236,9 @@ compositeTrack on
     visibility pack
     priority 1
 
-    track cooperDevDelayDisease
-    shortLabel Disease
-    longLabel Disease
+    track cooperDevDelayCase
+    shortLabel Case
+    longLabel Case
     parent cooperDevDelay on
     type gvf
     visibility pack

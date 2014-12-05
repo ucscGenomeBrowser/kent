@@ -5921,17 +5921,17 @@ wget --timestamping 'ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_s
 
 cp /kent/src/hg/utils/automation/gvfToBed8Attrs.pl .
 mv gvfToBed8Attrs.pl gvfToBed8AttrsControl.pl
-cp gvfToBed8AttrsControl.pl gvfToBed8AttrsDisease.pl
+cp gvfToBed8AttrsControl.pl gvfToBed8AttrsCase.pl
 
 # made two local copies of Angie's gvf conversion script - one to
-# include only control individuals and one to include the rest
+# include only control individuals and one to include only case individuals
 # added line 33 to each file:
 
 # next if ($phenotype ne "not_reported"); # keep only "control" individuals
-# next if ($phenotype eq "not_reported"); # keep only "disease" individuals
+# next if ($phenotype eq "not_reported"); # keep only "case" individuals
 
 zcat nstd54_Cooper_et_al_2011.GRCh38.remap.all.germline.ucsc.gvf.gz | gvfToBed8AttrsControl.pl > cooperDevDelayAllControl.bed
-zcat nstd54_Cooper_et_al_2011.GRCh38.remap.all.germline.ucsc.gvf.gz | gvfToBed8AttrsDisease.pl > cooperDevDelayAllDisease.bed
+zcat nstd54_Cooper_et_al_2011.GRCh38.remap.all.germline.ucsc.gvf.gz | gvfToBed8AttrsCase.pl > cooperDevDelayAllCase.bed
 
 # GRCh38 data from dbVar had different naming scheme for alternate chromosomes
 # (e.g., chr1|NT_187515.1 instead of chr1_KI270762v1_alt), so needed to write
@@ -5997,15 +5997,16 @@ cp /hive/data/genomes/hg38/genbank/GCF_000001405.26.assembly.txt .
 cat GCF_000001405.26.assembly.txt | grep -v '^#\|assembled\|unplaced' | awk '{print $2 "\t" $3 "\t" $5 "\t" $7}' > hg38.xref
 
 chromXref.pl cooperDevDelayAllControl.bed cooperDevDelayAllControlUcsc.bed
-chromXref.pl cooperDevDelayAllDisease.bed cooperDevDelayAllDiseaseUcsc.bed
+chromXref.pl cooperDevDelayAllCase.bed cooperDevDelayAllCaseUcsc.bed
 
 hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
         -allowStartEqualEnd hg38 cooperDevDelayControl cooperDevDelayAllControlUcsc.bed
 
 hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
-        -allowStartEqualEnd hg38 cooperDevDelayDisease cooperDevDelayAllDiseaseUcsc.bed
+        -allowStartEqualEnd hg38 cooperDevDelayCase cooperDevDelayAllCaseUcsc.bed
 
-    checkTableCoords hg38 cooperDevDelay
+    checkTableCoords hg38 cooperDevDelayControl
+    checkTableCoords hg38 cooperDevDelayCase
 
 
 ########################################################################
