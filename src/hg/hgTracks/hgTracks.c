@@ -4518,6 +4518,7 @@ for (track = trackList; track != NULL; track = track->next)
 		lastTime = clock1000();
 
 	    checkMaxWindowToDraw(track);
+	    checkIfWiggling(cart, track);
 	    track->loadItems(track);
 
 	    if (measureTiming)
