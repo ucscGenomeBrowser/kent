@@ -148,6 +148,7 @@ release alpha
         #urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
         #mouseOverField author
         parent iedbPred dense
+        release alpha
 
 track genscan override
 release alpha

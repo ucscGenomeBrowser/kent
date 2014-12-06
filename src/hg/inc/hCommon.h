@@ -132,4 +132,7 @@ __attribute__((format(printf, 1, 2)))
 #endif
 ;
 
+boolean hAllowAllTables(void);
+/* Return TRUE if hg.conf's hgta.disableAllTables doesn't forbid an 'all tables' menu. */
+
 #endif /* HCOMMON_H */

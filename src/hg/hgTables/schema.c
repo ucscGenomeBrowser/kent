@@ -11,6 +11,7 @@
 #include "htmshell.h"
 #include "cheapcgi.h"
 #include "cart.h"
+#include "cartTrackDb.h"
 #include "jksql.h"
 #include "hdb.h"
 #include "web.h"
@@ -404,7 +405,7 @@ if (jpList != NULL)
     webNewSection("Connected Tables and Joining Fields");
     for (jp = jpList; jp != NULL; jp = jp->next)
 	{
-	if (accessControlDenied(jp->b->database, jp->b->table))
+	if (cartTrackDbIsAccessDenied(jp->b->database, jp->b->table))
 	    continue;
 	struct joinerSet *js = jp->identifier;
 	boolean aViaIndex, bViaIndex;
