@@ -4598,6 +4598,23 @@ if (boxed)
     puts("</td></tr></table>");
 }
 
+void wigOption(struct cart *cart, char *name, char *title, struct trackDb *tdb)
+/* let the user choose to see the track in wiggle mode */
+{
+char *canDoCoverage = cfgOptionEnvDefault("HGDB_CAN_DO_COVERAGE",
+                CanDoCoverageConfVariable, "off");
+if (differentString(canDoCoverage, "on"))
+    return;
+
+printf("<BR><B>Display data as a wiggle:</B> ");
+char varName[64];
+safef(varName, sizeof(varName), "%s.doWiggle", name);
+boolean option = cartUsualBoolean(cart, varName, FALSE);
+cgiMakeCheckBox(varName, option);
+printf("<BR>\n");
+wigCfgUi(cart,tdb,name,title,TRUE);
+}
+
 void wigCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* UI for the wiggle track */
 {
@@ -4842,6 +4859,7 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 endControlGrid(&cg);
 baseColorDrawOptDropDown(cart, tdb);
 indelShowOptions(cart, tdb);
+wigOption(cart, prefix, title, tdb);
 cfgEndBox(boxed);
 }
 
@@ -5521,6 +5539,8 @@ cgiMakeTextVar(optString, cartUsualStringClosestToHome(cart, tdb, parentLevel,
 if (normScoreAvailable)
     scoreCfgUi(db, cart,tdb,prefix,NULL,CHAIN_SCORE_MAXIMUM,FALSE);
 
+
+wigOption(cart, prefix, title, tdb);
 cfgEndBox(boxed);
 }
 
@@ -5862,6 +5882,7 @@ if (highlightBySet != NULL)
     filterBySetFree(&highlightBySet);
     }
 
+wigOption(cart, name, title, tdb);
 cfgEndBox(boxed);
 }
 
@@ -6385,6 +6406,9 @@ if (trackDbSettingClosestToHome(tdb, "noColorTag") == NULL)
     }
 cgiMakeRadioButton(cartVarName, BAM_COLOR_MODE_OFF, sameString(selected, BAM_COLOR_MODE_OFF));
 printf("No additional coloring");
+
+// let the user choose to see the track in wiggle mode
+wigOption(cart, name, title, tdb);
 
 //TODO: include / exclude flags
 

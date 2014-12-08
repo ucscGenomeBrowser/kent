@@ -9,6 +9,7 @@
 #include "htmshell.h"
 #include "cheapcgi.h"
 #include "cart.h"
+#include "cartTrackDb.h"
 #include "textOut.h"
 #include "jksql.h"
 #include "hdb.h"
@@ -120,9 +121,10 @@ hPrintf("<B>group:</B>\n");
 hPrintf("<SELECT NAME=%s %s>\n", groupVar, groupScript);
 for (group = groupList; group != NULL; group = group->next)
     {
-    hPrintf(" <OPTION VALUE=%s%s>%s\n", group->name,
-	(group == selGroup ? " SELECTED" : ""),
-	group->label);
+    if (allTablesOk || differentString(group->name, "allTables"))
+        hPrintf(" <OPTION VALUE=%s%s>%s\n", group->name,
+                (group == selGroup ? " SELECTED" : ""),
+                group->label);
     }
 hPrintf("</SELECT>\n");
 return selGroup;
@@ -226,110 +228,6 @@ return table;
 }
 
 
-static char *chopAtFirstDot(char *string)
-/* Terminate string at first '.' if found.  Return string for convenience. */
-{
-char *ptr = strchr(string, '.');
-if (ptr != NULL)
-    *ptr = '\0';
-return string;
-}
-
-static void hashAddSlName(struct hash *hash, char *key, char *val)
-/* If key is already in hash, add an slName for val to the head of the list;
- * otherwise just store key -> slName for val. */
-{
-struct slName *sln = slNameNew(val);
-struct hashEl *hel = hashLookup(hash, key);
-if (hel == NULL)
-    hashAdd(hash, key, sln);
-else
-    slAddHead(&(hel->val), sln);
-}
-
-static struct hash *accessControlInit(struct sqlConnection *conn)
-/* Return a hash associating restricted table/track names in the given db/conn
- * with virtual hosts, or NULL if there is no tableAccessControl table and no
- * forbiddenTrackList (see getFullTrackList). */
-{
-struct hash *acHash = NULL;
-if (sqlTableExists(conn, "tableAccessControl"))
-    {
-    struct sqlResult *sr = NULL;
-    char **row = NULL;
-    acHash = newHash(0);
-    sr = sqlGetResult(conn, "NOSQLINJ select name,host from tableAccessControl");
-    while ((row = sqlNextRow(sr)) != NULL)
-	hashAddSlName(acHash, row[0], chopAtFirstDot(row[1]));
-    sqlFreeResult(&sr);
-    }
-if (forbiddenTrackList != NULL)
-    {
-    if (acHash == NULL)
-	acHash = newHash(0);
-    struct trackDb *tdb;
-    for (tdb = forbiddenTrackList;  tdb != NULL;  tdb = tdb->next)
-	{
-	char *tbOff = cloneString(trackDbSetting(tdb, "tableBrowser"));
-	if (isEmpty(tbOff))
-	    errAbort("bug: tdb for %s is in forbiddenTrackList without 'tableBrowser off' setting",
-		     tdb->track);
-	hashAddSlName(acHash, tdb->table, "-");
-	// skip "off" and look for additional table names:
-	nextWord(&tbOff);
-	char *tbl;
-	while ((tbl = nextWord(&tbOff)) != NULL)
-	    hashAddSlName(acHash, tbl, "-");
-	}
-    }
-return acHash;
-}
-
-boolean accessControlDenied(char *db, char *table)
-/* Return TRUE if table access is restricted to some host(s) other than
- * the one we're running on. */
-{
-static char *currentHost = NULL;
-struct slName *enabledHosts = NULL;
-struct slName *sln = NULL;
-static struct hash *dbToAcHash = NULL;
-
-if (dbToAcHash == NULL)
-    dbToAcHash = hashNew(0);
-
-struct hash *acHash = hashFindVal(dbToAcHash, db);
-if (acHash == NULL)
-    {
-    struct sqlConnection *conn = hAllocConn(db);
-    acHash = accessControlInit(conn);
-    hFreeConn(&conn);
-    hashAdd(dbToAcHash, db, acHash);
-    }
-
-if (acHash == NULL)
-    return FALSE;
-enabledHosts = (struct slName *)hashFindVal(acHash, table);
-if (enabledHosts == NULL)
-    return FALSE;
-if (currentHost == NULL)
-    {
-    currentHost = cloneString(cgiServerName());
-    if (currentHost == NULL)
-	{
-	warn("accessControl: unable to determine current host");
-	return FALSE;
-	}
-    else
-	chopAtFirstDot(currentHost);
-    }
-for (sln = enabledHosts;  sln != NULL;  sln = sln->next)
-    {
-    if (sameString(currentHost, sln->name))
-	return FALSE;
-    }
-return TRUE;
-}
-
 
 struct slName *tablesForDb(char *db)
 /* Find tables associated with database. */
@@ -347,7 +245,7 @@ for (raw = rawList; raw != NULL; raw = raw->next)
 	{
 	/* Deal with tables split across chromosomes. */
 	char *root = unsplitTableName(raw->name);
-	if (accessControlDenied(db, root) || accessControlDenied(db, raw->name))
+	if (cartTrackDbIsAccessDenied(db, root) || cartTrackDbIsAccessDenied(db, raw->name))
 	    continue;
 	if (!hashLookup(uniqHash, root))
 	    {
@@ -359,7 +257,7 @@ for (raw = rawList; raw != NULL; raw = raw->next)
     else
         {
 	char dbTable[256];
-	if (accessControlDenied(db, raw->name))
+	if (cartTrackDbIsAccessDenied(db, raw->name))
 	    continue;
 	safef(dbTable, sizeof(dbTable), "%s.%s", db, raw->name);
 	cooked = slNameNew(dbTable);
@@ -381,7 +279,7 @@ char *selTable;
 if (track == NULL)
     nameList = tablesForDb(findSelDb());
 else
-    nameList = tablesForTrack(track, useJoiner);
+    nameList = cartTrackDbTablesForTrack(database, track, useJoiner);
 
 /* Get currently selected table.  If it isn't in our list
  * then revert to first in list. */
@@ -634,7 +532,7 @@ hPrintf("<TABLE BORDER=0>\n");
 /* Print group and track line. */
     {
     hPrintf("<TR><TD>");
-    selGroup = showGroupField(hgtaGroup, onChangeGroupOrTrack(), conn, allowAllTables());
+    selGroup = showGroupField(hgtaGroup, onChangeGroupOrTrack(), conn, hAllowAllTables());
     nbSpaces(3);
     curTrack = showTrackField(selGroup, hgtaTrack, onChangeGroupOrTrack());
     nbSpaces(3);

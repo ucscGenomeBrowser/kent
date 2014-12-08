@@ -11,6 +11,7 @@
 #include "htmshell.h"
 #include "cheapcgi.h"
 #include "cart.h"
+#include "cartTrackDb.h"
 #include "textOut.h"
 #include "jksql.h"
 #include "hdb.h"
@@ -59,12 +60,7 @@ char *freezeName;	/* Date of assembly. */
 struct grp *fullGroupList;	/* List of all groups. */
 struct grp *curGroup;	/* Currently selected group. */
 struct trackDb *fullTrackList;	/* List of all tracks in database. */
-struct hash *fullTrackHash;     /* Hash of all tracks in fullTrackList keyed by ->track field. */
-#ifdef UNUSED
-struct hash *fullTrackAndSubtrackHash;  /* All tracks and subtracks keyed by tdb->track field. */
-#endif /* UNUSED */
 struct hash *fullTableToTdbHash;        /* All tracks and subtracks keyed by tdb->table field. */
-struct trackDb *forbiddenTrackList; /* List of tracks with 'tableBrowser off' setting. */
 struct trackDb *curTrack;	/* Currently selected track. */
 char *curTable;		/* Currently selected table. */
 struct joiner *allJoiner;	/* Info on how to join tables. */
@@ -73,12 +69,6 @@ static struct pipeline *compressPipeline = (struct pipeline *)NULL;
 
 char *gsTemp = NULL;
 int saveStdout = -1;
-
-boolean allowAllTables(void)
-/* determine if all tables should is allowed by configuration */
-{
-return !cfgOptionBooleanDefault("hgta.disableAllTables", FALSE);
-}
 
 /* --------------- HTML Helpers ----------------- */
 
@@ -272,51 +262,6 @@ if (s != NULL)
     *s++ = 0;
     *pTable = s;
     }
-}
-
-static struct trackDb *getFullTrackList(struct grp **pHubGroups)
-{
-struct trackDb *list = hTrackDb(database);
-struct customTrack *ctList, *ct;
-
-/* exclude any track with a 'tableBrowser off' setting */
-struct trackDb *tdb, *nextTdb, *newList = NULL;
-for (tdb = list;  tdb != NULL;  tdb = nextTdb)
-    {
-    nextTdb = tdb->next;
-    if (tdbIsDownloadsOnly(tdb) || tdb->table == NULL)
-        {
-        //freeMem(tdb);  // should not free tdb's.
-        // While hdb.c should and says it does cache the tdbList, it doesn't.
-        // The most notable reason that the tdbs are not cached is this hgTables CGI !!!
-        // It needs to be rewritten to make tdbRef structures for the lists it creates here!
-        continue;
-        }
-
-    char *tbOff = trackDbSetting(tdb, "tableBrowser");
-    if (tbOff != NULL && startsWithWord("off", tbOff))
-	slAddHead(&forbiddenTrackList, tdb);
-    else
-	slAddHead(&newList, tdb);
-    }
-slReverse(&newList);
-list = newList;
-
-/* add wikiTrack if enabled */
-if (wikiTrackEnabled(database, NULL))
-    wikiTrackDb(&list);
-
-struct trackDb *tdbList = hubCollectTracks(database, pHubGroups);
-list = slCat(list, tdbList);
-
-/* Create dummy group for custom tracks if any. Add custom tracks to list */
-ctList = getCustomTracks();
-for (ct = ctList; ct != NULL; ct = ct->next)
-    {
-    slAddHead(&list, ct->tdb);
-    }
-
-return list;
 }
 
 boolean fullGenomeRegion()
@@ -916,88 +861,6 @@ if (track == NULL)
 return track;
 }
 
-struct grp *makeGroupList(struct trackDb *trackList, struct grp **pHubGrpList, boolean allTablesOk)
-/* Get list of groups that actually have something in them. */
-{
-struct grp *groupsAll, *groupList = NULL, *group;
-struct hash *groupsInTrackList = newHash(0);
-struct hash *groupsInDatabase = newHash(0);
-struct trackDb *track;
-
-/* Stream through track list building up hash of active groups. */
-for (track = trackList; track != NULL; track = track->next)
-    {
-    if (!hashLookup(groupsInTrackList,track->grp))
-        hashAdd(groupsInTrackList, track->grp, NULL);
-    }
-
-/* Scan through group table, putting in ones where we have data. */
-groupsAll = hLoadGrps(database);
-for (group = slPopHead(&groupsAll); group != NULL; group = slPopHead(&groupsAll))
-    {
-    if (hashLookup(groupsInTrackList, group->name))
-	{
-	slAddTail(&groupList, group);
-	hashAdd(groupsInDatabase, group->name, group);
-	}
-    else
-        grpFree(&group);
-    }
-
-/* if we have custom tracks, we want to add the track hubs
- * after that group */
-struct grp *addAfter = NULL;
-if ((groupList != NULL) && sameString(groupList->name, "user"))
-    addAfter = groupList;
-
-/* Add in groups from hubs. */
-for (group = slPopHead(pHubGrpList); group != NULL; group = slPopHead(pHubGrpList))
-    {
-    // if the group isn't represented in any track, don't add it to list
-    if (!hashLookup(groupsInTrackList,group->name))
-	continue;
-    /* check to see if we're inserting hubs rather than
-     * adding them to the front of the list */
-    if (addAfter != NULL)
-	{
-	group->next = addAfter->next;
-	addAfter->next = group;
-	}
-    else
-	slAddHead(&groupList, group);
-    hashAdd(groupsInDatabase, group->name, group);
-    }
-
-/* Do some error checking for tracks with group names that are
- * not in database.  Just warn about them. */
-if (!trackHubDatabase(database))
-    for (track = trackList; track != NULL; track = track->next)
-    {
-    if (!hashLookup(groupsInDatabase, track->grp))
-         warn("Track %s has group %s, which isn't in grp table",
-	 	track->table, track->grp);
-    }
-
-/* Create dummy group for all tracks. */
-AllocVar(group);
-group->name = cloneString("allTracks");
-group->label = cloneString("All Tracks");
-slAddTail(&groupList, group);
-
-/* Create another dummy group for all tables. */
-if (allTablesOk)
-    {
-    AllocVar(group);
-    group->name = cloneString("allTables");
-    group->label = cloneString("All Tables");
-    slAddTail(&groupList, group);
-    }
-
-hashFree(&groupsInTrackList);
-hashFree(&groupsInDatabase);
-return groupList;
-}
-
 static struct grp *findGroup(struct grp *groupList, char *name)
 /* Return named group in list, or NULL if not found. */
 {
@@ -1022,107 +885,6 @@ if (group == NULL)
 return group;
 }
 
-
-static void addTablesAccordingToTrackType(struct slName **pList,
-	struct hash *uniqHash, struct trackDb *track)
-/* Parse out track->type and if necessary add some tables from it. */
-{
-struct slName *name;
-char *trackDupe = cloneString(track->type);
-if (trackDupe != NULL && trackDupe[0] != 0)
-    {
-    char *s = trackDupe;
-    char *type = nextWord(&s);
-    if (sameString(type, "wigMaf"))
-        {
-	static char *wigMafAssociates[] = {"frames", "summary"};
-	int i;
-	for (i=0; i<ArraySize(wigMafAssociates); ++i)
-	    {
-	    char *setting = wigMafAssociates[i];
-	    char *table = trackDbSetting(track, setting);
-            if (table != NULL)
-                {
-                name = slNameNew(table);
-                slAddHead(pList, name);
-                hashAdd(uniqHash, table, NULL);
-                }
-	    }
-        /* include conservation wiggle tables */
-        struct consWiggle *wig, *wiggles = wigMafWiggles(database, track);
-        slReverse(&wiggles);
-        for (wig = wiggles; wig != NULL; wig = wig->next)
-            {
-            name = slNameNew(wig->table);
-            slAddHead(pList, name);
-            hashAdd(uniqHash, wig->table, NULL);
-            }
-	}
-    if (track->subtracks)
-        {
-        struct slName *subList = NULL;
-	struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(track->subtracks);
-	slSort(&tdbRefList, trackDbRefCmp);
-	struct slRef *tdbRef;
-	for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
-            {
-	    struct trackDb *subTdb = tdbRef->val;
-	    name = slNameNew(subTdb->table);
-	    slAddTail(&subList, name);
-	    hashAdd(uniqHash, subTdb->table, NULL);
-            }
-        pList = slCat(pList, subList);
-        }
-    }
-freez(&trackDupe);
-}
-
-struct slName *tablesForTrack(struct trackDb *track, boolean useJoiner)
-/* Return list of all tables associated with track. */
-{
-struct hash *uniqHash = newHash(8);
-struct slName *name, *nameList = NULL;
-char *trackTable = track->table;
-
-hashAdd(uniqHash, trackTable, NULL);
-if (useJoiner)
-    {
-    struct joinerPair *jpList, *jp;
-    jpList = joinerRelate(allJoiner, database, trackTable);
-    for (jp = jpList; jp != NULL; jp = jp->next)
-	{
-	struct joinerDtf *dtf = jp->b;
-	if (accessControlDenied(dtf->database, dtf->table))
-	    continue;
-	char buf[256];
-	char *s;
-	if (sameString(dtf->database, database))
-	    s = dtf->table;
-	else
-	    {
-	    safef(buf, sizeof(buf), "%s.%s", dtf->database, dtf->table);
-	    s = buf;
-	    }
-	if (!hashLookup(uniqHash, s))
-	    {
-	    hashAdd(uniqHash, s, NULL);
-	    name = slNameNew(s);
-	    slAddHead(&nameList, name);
-	    }
-	}
-    slNameSort(&nameList);
-    }
-/* suppress for parent tracks -- only the subtracks have tables */
-if (track->subtracks == NULL)
-    {
-    name = slNameNew(trackTable);
-    slAddHead(&nameList, name);
-    }
-addTablesAccordingToTrackType(&nameList, uniqHash, track);
-hashFree(&uniqHash);
-return nameList;
-}
-
 static char *findSelectedTable(struct trackDb *track, char *var)
 /* Find selected table.  Default to main track table if none
  * found. */
@@ -1133,7 +895,7 @@ else if (isCustomTrack(track->table))
     return track->table;
 else
     {
-    struct slName *tableList = tablesForTrack(track, TRUE);
+    struct slName *tableList = cartTrackDbTablesForTrack(database, track, TRUE);
     char *table = cartUsualString(cart, var, tableList->name);
     if (slNameInList(tableList, table))
 	return table;
@@ -1951,30 +1713,15 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 }
 
-static struct hash *hashTrackList(struct trackDb *tdbList)
-/* Return hash full of trackDb's from list, keyed by tdb->track */
-{
-struct hash *hash = hashNew(0);
-struct trackDb *tdb;
-for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
-    {
-    hashAdd(hash, tdb->track, tdb);
-    }
-return hash;
-}
-
 void initGroupsTracksTables()
 /* Get list of groups that actually have something in them, prepare hashes
  * containing all tracks and all tables. Set global variables that correspond
  * to the group, track, and table specified in the cart. */
 {
-struct grp *hubGrpList = NULL;
-fullTrackList = getFullTrackList( &hubGrpList);
-fullTrackHash = hashTrackList(fullTrackList);
+cartTrackDbInit(cart, &fullTrackList, &fullGroupList, TRUE);
 fullTableToTdbHash = hashNew(0);
 rAddTablesToHash(fullTrackList, fullTableToTdbHash);
 curTrack = findSelectedTrack(fullTrackList, NULL, hgtaTrack);
-fullGroupList = makeGroupList(fullTrackList, &hubGrpList, allowAllTables());
 
 // if there isn't a current track, then use the default group
 if (curTrack != NULL)

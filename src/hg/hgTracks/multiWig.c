@@ -289,7 +289,7 @@ if (errMsgFound)
     hvGfxBox(hvg, xOff, yOff, width, tg->height, yellow);
     }
 
-struct wigCartOptions *wigCart = tg->extraUiData;
+struct wigCartOptions *wigCart = tg->wigCartData;
 struct wigGraphOutput *wgo = setUpWgo(xOff, yOff, width, tg->height, numTracks, wigCart, hvg);
 
 /* Cope with autoScale and stacked bars - we do it here rather than in the child tracks, so that
@@ -333,7 +333,7 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     if (!isSubtrackVisible(subtrack))
 	continue;
 
-    struct wigCartOptions *wigCart = subtrack->extraUiData;
+    struct wigCartOptions *wigCart = subtrack->wigCartData;
     wigCart->minY = minVal;
     wigCart->maxY = maxVal;
     wigCart->autoScale = wiggleScaleManual;
@@ -386,7 +386,7 @@ mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->trac
 static int multiWigTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Return total height of multiWigcontainer. */
 {
-struct wigCartOptions *wigCart = tg->extraUiData;
+struct wigCartOptions *wigCart = tg->wigCartData;
 int totalHeight =  0;
 if (wigCart->aggregateFunction !=  wiggleAggregateNone)
     totalHeight =  wigTotalHeight(tg, vis);                                                        
@@ -435,7 +435,7 @@ static void multiWigLeftLabels(struct track *tg, int seqStart, int seqEnd,
 	enum trackVisibility vis)
 /* Draw left labels - by deferring to first subtrack. */
 {
-struct wigCartOptions *wigCart = tg->extraUiData;
+struct wigCartOptions *wigCart = tg->wigCartData;
 if (wigCart->aggregateFunction != wiggleAggregateNone)
     {
     struct track *firstVisibleSubtrack = NULL;

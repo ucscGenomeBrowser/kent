@@ -382,3 +382,8 @@ hVaUserAbort(format, args);
 va_end(args);
 }
 
+boolean hAllowAllTables(void)
+/* Return TRUE if hg.conf's hgta.disableAllTables doesn't forbid an 'all tables' menu. */
+{
+return !cfgOptionBooleanDefault("hgta.disableAllTables", FALSE);
+}

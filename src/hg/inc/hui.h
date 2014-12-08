@@ -1016,6 +1016,11 @@ char *compositeViewControlNameFromTdb(struct trackDb *tdb);
 void compositeViewControlNameFree(char **name);
 /* frees a string allocated by compositeViewControlNameFromTdb */
 
+#define CanDoCoverageConfVariable "canDoCoverage"
+
+void wigOption(struct cart *cart, char *name, char *title, struct trackDb *tdb);
+/* let the user choose to see the track in wiggle mode */
+
 void wigCfgUi(struct cart *cart, struct trackDb *tdb,char *name,char *title,boolean boxed);
 /* UI for the wiggle track */
 
@@ -1357,5 +1362,4 @@ struct asColumn *asColumnFind(struct asObject *asObj, char *name);
 
 struct slName *asColNames(struct asObject *as);
 // Get list of column names.
-
 #endif /* HUI_H */

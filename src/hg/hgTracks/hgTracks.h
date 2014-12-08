@@ -143,6 +143,7 @@ struct track
     /* Write out image mapping for a given item */
 
     boolean hasUi;	/* True if has an extended UI page. */
+    void *wigCartData;  /* pointer to wigCart */
     void *extraUiData;	/* Pointer for track specific filter etc. data. */
 
     void (*trackFilter)(struct track *tg);
@@ -1400,6 +1401,9 @@ int tgCmpPriority(const void *va, const void *vb);
 
 void printMenuBar();
 /* Put up the menu bar. */
+
+void checkIfWiggling(struct cart *cart, struct track *tg);
+/* check to see if a linkedFeatures track should be drawing as a wiggle */
 
 #define measureTime uglyTime
 

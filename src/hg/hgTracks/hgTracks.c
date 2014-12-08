@@ -618,9 +618,9 @@ boolean ideogramAvail = FALSE;
 int ideoWidth = round(.8 *tl.picWidth);
 int ideoHeight = 0;
 int textWidth = 0;
-struct tempName gifTn;
+struct tempName pngTn;
 if (ideoTn == NULL)
-    ideoTn = &gifTn;   // not returning value
+    ideoTn = &pngTn;   // not returning value
 
 ideoTrack = chromIdeoTrack(*pTrackList);
 
@@ -2030,7 +2030,7 @@ void makeActiveImage(struct track *trackList, char *psOutput)
 struct track *track;
 MgFont *font = tl.font;
 struct hvGfx *hvg;
-struct tempName gifTn;
+struct tempName pngTn;
 char *mapName = "map";
 int fontHeight = mgFontLineHeight(font);
 int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
@@ -2232,13 +2232,13 @@ else
 
     if (measureTiming)
         measureTime("Time at start of obtaining trash hgt png image file");
-    trashDirFile(&gifTn, "hgt", "hgt", ".png");
-    hvg = hvGfxOpenPng(pixWidth, pixHeight, gifTn.forCgi, transparentImage);
+    trashDirFile(&pngTn, "hgt", "hgt", ".png");
+    hvg = hvGfxOpenPng(pixWidth, pixHeight, pngTn.forCgi, transparentImage);
 
     if (theImgBox)
         {
         // Adds one single image for all tracks (COULD: build the track by track images)
-        theOneImg = imgBoxImageAdd(theImgBox,gifTn.forHtml,NULL,pixWidth, pixHeight,FALSE);
+        theOneImg = imgBoxImageAdd(theImgBox,pngTn.forHtml,NULL,pixWidth, pixHeight,FALSE);
         theSideImg = theOneImg; // Unlkess this is overwritten below, there is a single image
         }
     hvgSide = hvg; // Unlkess this is overwritten below, there is a single image
@@ -2247,12 +2247,12 @@ else
         {
         // TODO: It would be great to make the two images smaller,
         //       but keeping both the same full size for now
-        struct tempName gifTnSide;
-        trashDirFile(&gifTnSide, "hgtSide", "side", ".png");
-        hvgSide = hvGfxOpenPng(pixWidth, pixHeight, gifTnSide.forCgi, transparentImage);
+        struct tempName pngTnSide;
+        trashDirFile(&pngTnSide, "hgtSide", "side", ".png");
+        hvgSide = hvGfxOpenPng(pixWidth, pixHeight, pngTnSide.forCgi, transparentImage);
 
         // Also add the side image
-        theSideImg = imgBoxImageAdd(theImgBox,gifTnSide.forHtml,NULL,pixWidth, pixHeight,FALSE);
+        theSideImg = imgBoxImageAdd(theImgBox,pngTnSide.forHtml,NULL,pixWidth, pixHeight,FALSE);
         hvgSide->rc = revCmplDisp;
         initColors(hvgSide);
         }
@@ -2705,7 +2705,7 @@ if(sameString(type, "jsonp"))
     jsonObjectAdd(json, "track", newJsonString(cartString(cart, "hgt.trackNameFilter")));
     jsonObjectAdd(json, "height", newJsonNumber(pixHeight));
     jsonObjectAdd(json, "width", newJsonNumber(pixWidth));
-    jsonObjectAdd(json, "img", newJsonString(gifTn.forHtml));
+    jsonObjectAdd(json, "img", newJsonString(pngTn.forHtml));
     printf("%s(", cartString(cart, "jsonp"));
     hPrintEnable();
     jsonPrint((struct jsonElement *) json, NULL, 0);
@@ -2731,7 +2731,7 @@ else if(sameString(type, "png") || sameString(type, "pdf") || sameString(type, "
     else
         {
         printf("Content-Disposition: filename=hgTracks.png\nContent-Type: image/png\n\n");
-        file = gifTn.forCgi;
+        file = pngTn.forCgi;
         }
 
     char buf[4096];
@@ -2769,7 +2769,7 @@ else
     {
     char *titleAttr = "title='click or drag mouse in base position track to zoom in'";
     hPrintf("<IMG SRC='%s' BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s %s id='trackMap'",
-            gifTn.forHtml, pixWidth, pixHeight, mapName, titleAttr);
+            pngTn.forHtml, pixWidth, pixHeight, mapName, titleAttr);
     hPrintf("><BR>\n");
     }
 flatTracksFree(&flatTracks);
@@ -4518,6 +4518,7 @@ for (track = trackList; track != NULL; track = track->next)
 		lastTime = clock1000();
 
 	    checkMaxWindowToDraw(track);
+	    checkIfWiggling(cart, track);
 	    track->loadItems(track);
 
 	    if (measureTiming)

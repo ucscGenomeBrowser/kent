@@ -55,7 +55,7 @@ int rowOffset = 0;
 struct bedGraphItem *bgList = NULL;
 int itemsLoaded = 0;
 int colCount = 0;
-struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->extraUiData;
+struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->wigCartData;
 int graphColumn = 5;
 char *tableName;
 
@@ -275,7 +275,7 @@ track->itemHeight = tgFixedItemHeight;
 track->itemStart = tgItemNoStart;
 track->itemEnd = tgItemNoEnd;
 track->mapsSelf = TRUE;
-track->extraUiData = (void *) wigCart;
+track->wigCartData = (void *) wigCart;
 track->colorShades = shadesOfGray;
 track->drawLeftLabels = wigLeftLabels;
 track->loadPreDraw = bedGraphLoadPreDraw;

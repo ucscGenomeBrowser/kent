@@ -82,8 +82,8 @@ void jsonTdbSettingsUse(struct jsonElement *settings);
 //    "imgTbl": The HTML structure that contains individual track images.
 //              The javascript client controls the imgTbl.
 //              Thus cgi knows imgBox while html/js knows imgTbl.
-// "image": A single gif.  An image may contain mutilple tracks.
-//          Even as a single track and image may contain a data image, sideLabel and centerLabel
+// "image": A single png.  An image may contain mutilple tracks.
+//          Even as a single track and image may contain a data image, centerLabel, sideLabel and button.
 // "map": (or "mapSet") The image map for providing links to items in a data image.
 //        An image and map are a 1 to 1 pair and pixel coordinates are always image relative.
 // "slice": (or "imgSlice") The cgi concept of the portion of an image that is sent to the
@@ -97,7 +97,7 @@ void jsonTdbSettingsUse(struct jsonElement *settings);
 //          the browser. Thus, if we are sending a 3X sized data image slice, the "portal" seen
 //          in the browser spans only 1X.
 // "imgTrack": (or track image) The cgi side whole shabang for rendering one track.  It contains
-//             track specific information and three slices: data, sideLabel and centerLabel
+//             track specific information and four slices: data, centerLabel, sideLabel and button
 //             The imgBox contains N imgTracks.  Typically an ajax/JSON request gets a single
 //             imgTrack returned, which then is updated in the imgTbl containing multiple tracks.
 // image box support: This can contain all the support variables that are global to the image box
@@ -107,7 +107,7 @@ void jsonTdbSettingsUse(struct jsonElement *settings);
 // imgBox is the top level and contains all info to draw the image in HTML
 //    - contains slList of all imgTrack structs shown
 // imgTrack contains all info to display one track/subtrack in the imgBox
-//    - contains 3 imgSlice structs (data, centerLabel, sideLabel)
+//    - contains 4 imgSlice structs (data, centerLabel, sideLabel, button)
 // imgSlice contains all info to display a portion of an image file
 //    - contains 1 image struct
 // image contains all information about an image file and associated map box
@@ -193,7 +193,7 @@ struct image // IMAGEv2: single image which may have multiple imgSlices focused 
     struct mapSet *map;       // map assocated with this image (may be NULL)
     };
 
-struct image *imgCreate(char *gif,char *title,int width,int height);
+struct image *imgCreate(char *png,char *title,int width,int height);
 // Creates a single image container.
 // A map map be added with imgMapStart(),mapSetItemAdd()
 
@@ -227,7 +227,7 @@ struct imgSlice // IMAGEv2: the portion of an image that is displayable for one 
     {
     struct imgSlice *next;    // slList
     enum sliceType type;      // Type of slice (currently only 3)
-    struct image *parentImg;  // the actual image/gif
+    struct image *parentImg;  // the actual image/png
     char *title;              // slice wide title
     struct mapSet *map;       // A slice specific map.  It contains a subset of the img->map.
                               // Coordinates must be img relative NOT slice relative!
@@ -304,8 +304,8 @@ struct imgTrack // IMAGEv2: imageBox conatins list of displayed imageTracks
     boolean ajaxRetrieval;    // This track needs to be retrieved via ajax
     int order;                // Image order: This keeps track of dragReorder
     enum trackVisibility vis; // Current visibility of track image
-    struct imgSlice *slices;  // Currently there should be three slices for every track:
-                              //      data, centerLabel, sideLabel
+    struct imgSlice *slices;  // Currently there should be four slices for every track:
+                              //      data, centerLabel, sideLabel, button
     };
 
 #define IMG_ANYORDER -2
@@ -431,11 +431,11 @@ boolean imgBoxPortalDimensions(struct imgBox *imgBox,int *chromStart,int *chromE
                                double *basesPerPixel);
 // returns the imgBox portal dimensions in the OUTs  returns TRUE if portal defined
 
-struct image *imgBoxImageAdd(struct imgBox *imgBox,char *gif,char *title,int width,int height,
+struct image *imgBoxImageAdd(struct imgBox *imgBox,char *png,char *title,int width,int height,
                              boolean backGround);
 // Adds an image to an imgBox.  The image may be extended with imgMapStart(),mapSetItemAdd()
 
-struct image *imgBoxImageFind(struct imgBox *imgBox,char *gif);
+struct image *imgBoxImageFind(struct imgBox *imgBox,char *png);
 // Finds a specific image already added to this imgBox
 
 struct imgTrack *imgBoxTrackAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,
