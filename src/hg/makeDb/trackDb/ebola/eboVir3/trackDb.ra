@@ -114,8 +114,7 @@ urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http:
 mouseOverField comments
 release alpha
 
-
-track spStruct
+track spStruct override
 shortLabel UniProt Structure
 longLabel UniProt/SwissProt Protein Primary/Secondary Structure Annotations
 group genes
