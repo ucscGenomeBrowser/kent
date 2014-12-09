@@ -1754,6 +1754,7 @@ void knownGeneUI(struct trackDb *tdb)
 knownGeneIdConfig(tdb);
 knownGeneShowWhatUi(tdb);
 baseColorDrawOptDropDown(cart, tdb);
+wigOption(cart, "knownGene", "UCSC Genes", tdb);
 }
 
 void omimLocationUI(struct trackDb *tdb)

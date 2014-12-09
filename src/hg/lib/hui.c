@@ -5539,6 +5539,8 @@ cgiMakeTextVar(optString, cartUsualStringClosestToHome(cart, tdb, parentLevel,
 if (normScoreAvailable)
     scoreCfgUi(db, cart,tdb,prefix,NULL,CHAIN_SCORE_MAXIMUM,FALSE);
 
+
+wigOption(cart, prefix, title, tdb);
 cfgEndBox(boxed);
 }
 

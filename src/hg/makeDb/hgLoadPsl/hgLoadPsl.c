@@ -192,7 +192,7 @@ void loadPslTable(char *database, struct sqlConnection *conn, char *pslFile)
 /* load one psl table */
 {
 char table[128];
-char *tabFile;
+char *tabFile, tmpTabFile[PATH_LEN];
 boolean indirectLoad = FALSE;
 
 verbose(1, "Processing %s\n", pslFile);
@@ -222,7 +222,8 @@ indirectLoad = ((pslCreateOpts & PSL_WITH_BIN) != 0) || endsWith(pslFile, ".gz")
 
 if (indirectLoad)
     {
-    tabFile = "psl.tab";
+    safef(tmpTabFile, sizeof(tmpTabFile), "psl.%d.tab", getpid());
+    tabFile = tmpTabFile;
     if (pslCreateOpts & PSL_XA_FORMAT)
         copyPslXaToTab(pslFile, tabFile);
     else
