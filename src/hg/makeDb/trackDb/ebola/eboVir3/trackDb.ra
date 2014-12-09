@@ -106,11 +106,7 @@ track spUniprot override
 visibility dense
 
 track spAnnot override
-visibility dense
 shortLabel UniProt Annot.
-
-track spStruct override
-visibility dense
 
 track iedbPred
 shortLabel IEDB Predictions
