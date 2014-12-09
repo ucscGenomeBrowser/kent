@@ -556,13 +556,14 @@ type bed 4 +
 
 track msr2
 shortLabel Gene Interactions
-longLabel Gene Interactions in Abstracts
+longLabel Gene Interactions
 group pub
 visibility dense
 type bigBed 4 .
 noScoreFilter on
 release alpha
 directUrl hgcGeneGraph?gene=%s
+labelOnFeature on
 
 track pubsDev
 shortLabel Publications Beta

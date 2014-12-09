@@ -251,6 +251,7 @@ struct track
     boolean parallelLoading;    /* If loading in parallel, usually network resources. */
     struct bbiSummaryElement *summary;  /* for bigBed */
     struct bbiSummaryElement *sumAll;   /* for bigBid */
+    boolean drawLabelInBox;     /* draw labels into the features instead of next to them */
     };
 
 
@@ -1104,6 +1105,11 @@ void drawScaledBoxSample(struct hvGfx *hvg,
         int xOff, int y, int height, Color color,
         int score);
 /* Draw a box scaled from chromosome to window coordinates. */
+
+void drawScaledBoxSampleLabel(struct hvGfx *hvg,
+     int chromStart, int chromEnd, double scale,
+     int xOff, int y, int height, Color color, MgFont *font,  char *label);
+/* Draw a box scaled from chromosome to window coordinates and draw a label onto it. */
 
 struct track *trackFromTrackDb(struct trackDb *tdb);
 /* Create a track based on the tdb */

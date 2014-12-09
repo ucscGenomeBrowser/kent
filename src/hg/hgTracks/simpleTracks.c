@@ -1202,6 +1202,44 @@ if (w < 1)
 hvGfxBox(hvg, x1, y, w, height, maxColor);
 }
 
+void drawScaledBoxSampleLabel(struct hvGfx *hvg,
+     int chromStart, int chromEnd, double scale,
+     int xOff, int y, int height, Color color, MgFont *font,  char *label)
+/* Draw a box scaled from chromosome to window coordinates and draw a label onto it. */
+{
+//int i;
+int x1, x2, w;
+x1 = round((double)(chromStart-winStart)*scale) + xOff;
+x2 = round((double)(chromEnd-winStart)*scale) + xOff;
+
+if (x2 >= MAXPIXELS)
+    x2 = MAXPIXELS - 1;
+
+if (x2 < xOff)
+    x2 = xOff;
+if (x2 > xOff+insideWidth)
+    x2 = xOff+insideWidth;
+if (x1 < xOff)
+    x1 = xOff;
+if (x1 > xOff+insideWidth)
+    x1 = xOff+insideWidth;
+w = x2-x1;
+if (w < 1)
+    w = 1;
+hvGfxBox(hvg, x1, y, w, height, color);
+
+char *shortLabel = cloneString(label);
+/* calculate how many characters we can squeeze into box */
+int charsInBox = w / mgFontCharWidth(font, 'm');
+if (charsInBox > 4)
+    {
+    if (charsInBox < strlen(label))
+        strcpy(shortLabel+charsInBox-3, "...");
+    Color labelColor = hvGfxContrastingColor(hvg, color);
+    hvGfxTextCentered(hvg, x1, y, w, height, labelColor, font, shortLabel);
+    }
+}
+
 void drawScaledBoxSample(struct hvGfx *hvg,
                          int chromStart, int chromEnd, double scale,
                          int xOff, int y, int height, Color color, int score)
@@ -2761,8 +2799,18 @@ for (sf = components; sf != NULL; sf = sf->next)
 		}
 	    else
 		{
-                drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer,
-                                    color, lf->score );
+		if (tg->drawLabelInBox)
+                    {
+		    drawScaledBoxSampleLabel(hvg, s, e, scale, xOff, y, heightPer,
+                                color, font, lf->name );
+                    // exon arrows would overlap the text
+                    exonArrowsAlways = FALSE;
+                    exonArrows = FALSE;
+                    }
+
+		else
+		    drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer,
+					color, lf->score);
                 }
 
             /* Display barbs only if no intron is visible on the item.
@@ -3086,6 +3134,9 @@ int eClp = (e > winEnd)   ? winEnd   : e;
 int x1 = round((sClp - winStart)*scale) + xOff;
 int x2 = round((eClp - winStart)*scale) + xOff;
 int textX = x1;
+
+if (tg->drawLabelInBox)
+    withLeftLabels = FALSE;
 
 if (tg->itemNameColor != NULL)
     {
@@ -3452,6 +3503,10 @@ void linkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
 /* Draw linked features items. */
 {
 clearColorBin();
+
+// optional setting to draw labels onto the feature boxes, not next to them
+tg->drawLabelInBox = cartOrTdbBoolean(cart, tg->tdb, "labelOnFeature" , FALSE);
+
 if (tg->items == NULL && vis == tvDense && canDrawBigBedDense(tg))
     {
     bigBedDrawDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color);
