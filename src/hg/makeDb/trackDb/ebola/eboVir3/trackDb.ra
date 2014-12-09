@@ -102,27 +102,14 @@ html spMut
 url http://mupit-ebola.icm.jhu.edu/ResidueFileUpload?residues=chr1%20${
 urlLabel MuPIT protein structures
 
-track spAnnot override
-shortLabel UniProt Annot.
+track spUniprot override
 visibility dense
-group genes
-html spAnnot
-longLabel UniProt/SwissProt Protein Annotations
-type bigBed 12 +
-itemRgb on
-urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
-mouseOverField comments
-release alpha
+
+track spAnnot override
+visibility dense
+shortLabel UniProt Annot.
 
 track spStruct override
-shortLabel UniProt Structure
-longLabel UniProt/SwissProt Protein Primary/Secondary Structure Annotations
-group genes
-visibility hide
-type bigBed 12 +
-itemRgb on
-urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
-mouseOverField comments
 
 track iedbPred
 shortLabel IEDB Predictions
