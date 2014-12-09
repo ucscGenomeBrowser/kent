@@ -102,28 +102,11 @@ html spMut
 url http://mupit-ebola.icm.jhu.edu/ResidueFileUpload?residues=chr1%20${
 urlLabel MuPIT protein structures
 
+track spUniprot override
+visibility dense
+
 track spAnnot override
 shortLabel UniProt Annot.
-visibility dense
-group genes
-html spAnnot
-longLabel UniProt/SwissProt Protein Annotations
-type bigBed 12 +
-itemRgb on
-urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
-mouseOverField comments
-release alpha
-
-
-track spStruct
-shortLabel UniProt Structure
-longLabel UniProt/SwissProt Protein Primary/Secondary Structure Annotations
-group genes
-visibility hide
-type bigBed 12 +
-itemRgb on
-urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
-mouseOverField comments
 
 track iedbPred
 shortLabel IEDB Predictions
@@ -148,6 +131,7 @@ release alpha
         #urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
         #mouseOverField author
         parent iedbPred dense
+        release alpha
 
 track genscan override
 release alpha

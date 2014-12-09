@@ -23,10 +23,6 @@ boolean hasCustomTracks(struct cart *cart);
 void nbSpaces(int count);
 /* Print some non-breaking spaces. */
 
-void initGroupsTracksTables(struct cart *cart,
-			    struct trackDb **retFullTrackList, struct grp **retFullGroupList);
-/* Get lists of all tracks and of groups that actually have tracks in them. */
-
 struct annoAssembly *getAnnoAssembly(char *db);
 /* Make annoAssembly for db. */
 

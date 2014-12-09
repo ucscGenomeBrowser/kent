@@ -561,14 +561,14 @@ if (pMap != NULL && *pMap != NULL)
 
 /////////////////////// Images
 
-struct image *imgCreate(char *gif,char *title,int width,int height)
+struct image *imgCreate(char *png,char *title,int width,int height)
 // Creates a single image container.
 // A map map be added with imgMapStart(),mapSetItemAdd()
 {
 struct image *img;
 AllocVar(img);
-if (gif != NULL)
-    img->file   = cloneString(gif);
+if (png != NULL)
+    img->file   = cloneString(png);
 if (title != NULL)
     img->title  = cloneString(title);
 img->height = height;
@@ -901,7 +901,7 @@ struct imgTrack *imgTrackStart(struct trackDb *tdb,char *name,char *db,
 // Starts an image track which will contain all image slices needed to render one track
 // Must completed by adding slices with imgTrackAddSlice()
 {
-struct imgTrack *imgTrack;     //  gifTn.forHtml, pixWidth, mapName
+struct imgTrack *imgTrack;     //  pngTn.forHtml, pixWidth, mapName
 AllocVar(imgTrack);
 imgTrack->centerLabelSeen = clAlways;
 return imgTrackUpdate(imgTrack,tdb,name,db,chrom,chromStart,chromEnd,plusStrand,
@@ -1294,7 +1294,7 @@ struct imgBox *imgBoxStart(char *db,char *chrom,int chromStart,int chromEnd,bool
 // Starts an imgBox which should contain all info needed to draw the hgTracks image with
 // multiple tracks. The image box must be completed using imgBoxImageAdd() and imgBoxTrackAdd()
 {
-struct imgBox * imgBox;     //  gifTn.forHtml, pixWidth, mapName
+struct imgBox * imgBox;     //  pngTn.forHtml, pixWidth, mapName
 AllocVar(imgBox);
 if (db != NULL)
     imgBox->db         = cloneString(db);     // NOTE: Is allocated
@@ -1438,11 +1438,11 @@ if ( basesPerPixel   )
 return imgBox->showPortal;
 }
 
-struct image *imgBoxImageAdd(struct imgBox *imgBox,char *gif,char *title,
+struct image *imgBoxImageAdd(struct imgBox *imgBox,char *png,char *title,
                              int width,int height,boolean backGround)
 // Adds an image to an imgBox.  The image may be extended with imgMapStart(),mapSetItemAdd()
 {
-struct image *img = imgCreate(gif,title,width,height);
+struct image *img = imgCreate(png,title,width,height);
 if (backGround)
     {
     if (imgBox->bgImg != NULL)
@@ -1457,13 +1457,13 @@ slAddHead(&(imgBox->images),img);
 return imgBox->images;
 }
 
-struct image *imgBoxImageFind(struct imgBox *imgBox,char *gif)
+struct image *imgBoxImageFind(struct imgBox *imgBox,char *png)
 // Finds a specific image already added to this imgBox
 {
 struct image *img = NULL;
 for (img = imgBox->images; img != NULL; img = img->next )
     {
-    if (sameOk(img->file,gif))
+    if (sameOk(img->file,png))
         return img;
     }
 return NULL;
