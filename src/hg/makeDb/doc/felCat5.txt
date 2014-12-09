@@ -790,3 +790,24 @@ done > ensToUcsc.lift
     cat fb.felCat5.chainHg19Link.txt
     # 1453639480 bases of 2364296207 (61.483%) in intersection 
  
+############################################################################
+# construct liftOver to felCat8 (DONE - 2014-12-05 - Hiram)
+    screen -S felCat8	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/felCat5/bed/blat.felCat8.2014-12-05
+    cd /hive/data/genomes/felCat5/bed/blat.felCat8.2014-12-05
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/felCat5/jkStuff/felCat5.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev felCat5 felCat8
+    #   real    0m1.740s
+    # if that is OK, then run it:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/felCat5/jkStuff/felCat5.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev felCat5 felCat8) > do.log 2>&1
+    #   real    228m49.131s
+
+    # verify this file exists:
+    #	/gbdb/felCat5/liftOver/felCat5ToFelCat8.over.chain.gz
+    # and try out the conversion on genome-test from felCat5 to felCat8
+
+#########################################################################
