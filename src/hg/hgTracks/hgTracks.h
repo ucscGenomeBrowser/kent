@@ -1409,7 +1409,7 @@ void printMenuBar();
 /* Put up the menu bar. */
 
 void checkIfWiggling(struct cart *cart, struct track *tg);
-/* check to see if a linkedFeatures track should be drawing as a wiggle */
+/* Check to see if a linkedFeatures track should be drawing as a wiggle. */
 
 #define measureTime uglyTime
 
