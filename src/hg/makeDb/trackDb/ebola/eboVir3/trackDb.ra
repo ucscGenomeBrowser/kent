@@ -108,31 +108,6 @@ visibility dense
 track spAnnot override
 shortLabel UniProt Annot.
 
-track iedbPred
-shortLabel IEDB Predictions
-longLabel Immune Epitope Database and Analysis Resource (IEDB) HLA binding predictions
-group immu
-type bigBed 12 .
-superTrack on
-release alpha
-
-        track iedbSupp3
-        shortLabel IEDB Pred II
-        longLabel Immune Epitope Database and Analysis Resource (IEDB) Predictions, Human T-Cell Class II Epitopes
-        group immu
-        type bigBed 12 .
-        visibility hide
-        color 20,20,0
-        useScore on
-        priority 70
-        spectrum on
-        scoreMin 900
-        scoreMax 1000
-        #urls pubMedID=http://www.ncbi.nlm.nih.gov/pubmed/$$ bCellID=http://www.iedb.org/assayId/$$ referenceID=http://www.iedb.org/refId/$$ epitopeID=http://www.iedb.org/epId/$$ epitopeSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$ antigenSourceMoleculeAccession=http://www.ncbi.nlm.nih.gov/protein/$$
-        #mouseOverField author
-        parent iedbPred dense
-        release alpha
-
 track genscan override
 release alpha
 
@@ -144,5 +119,4 @@ include trackDb.gire.ra
 include trackDb.strainName160way.ra
 include trackDb.newSequences.ra alpha
 include trackDb.faAlign.ra alpha
-include trackDb.iedbPred1.ra alpha
-include trackDb.iedbPred2.ra alpha
+include trackDb.iedbPred.ra alpha
