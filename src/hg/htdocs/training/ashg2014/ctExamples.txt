@@ -1,0 +1,66 @@
+track name="myBed4" description="BED 4 track" visibility=pack
+# BED4 format::
+# chrom chromStart chromEnd name
+chr6  31690900  31692800 item0
+chr6  31691011  31691110 item1
+chr6  31691276  31691338 item2
+chr6  31691425  31691492 item3
+chr6  31691859  31691901 item4
+chr6  31692099  31692262 item5
+chr6  31692571  31692777 item6
+
+
+track name="myBed12data" description="BED12 basic data" itemRgb=on visibility=pack
+# BED12 format::
+# chrom chromStart chromEnd    name    score    strand    thickStart    thickEnd    itemRgb    blockCount    blockSizes    blockStarts 
+chr6  31691011  31692777  bed12example  0  +  31691060    31692674     255,80,80   6     99,62,67,42,163,206      0,265,414,848,1088,1560
+
+track name="paired ends" description="BED12 showing paired ends" visibility=pack itemRgb=on
+#chrom  chromStart      chromEnd        name    score   strand  thickStart thickEnd        itemRgb blockCount      blockSizes      chromStarts
+chr6	31690940	31691448	item0	999	-	0	0	200,0,0	2	31,33,	0,475,
+chr6	31690941	31691453	item1	500	+	0	0	0,0,0	2	36,35,	0,477,
+chr6	31691150	31691652	item2	500	+	0	0	0,0,0	2	35,32,	0,470,
+chr6	31691350	31691871	item3	500	+	0	0	0,0,0	2	33,34,	0,487,
+chr6	31691560	31692081	item4	500	-	0	0	200,0,0	2	33,34,	0,487,
+chr6	31691770	31692291	item5	500	-	0	0	200,0,0	2	33,34,	0,487,
+chr6	31691980	31692471	item6	500	-	0	0	200,0,0	2	33,34,	0,457,
+chr6	31692080	31692571	item7	500	+	0	0	0,0,0	2	33,34,	0,457,
+
+
+track type=bedGraph name="bedGraph" description="bedGraph data" color=150,200,100 autoScale=off maxHeightPixels=70:70:11 viewLimits=0:100 visibility=full
+# bedGraph format:
+# chrom chromStart chromEnd dataValue
+chr6  31691011  31691110  50
+chr6  31691276  31691338  100
+chr6  31691425  31691492  75
+chr6  31691859  31691901  80
+chr6  31692099  31692262  20
+chr6  31692571  31692777  70
+
+track type=wiggle_0 name="myWiggle" description="wiggle data"  maxHeightPixels=70:70:11 color=100,100,255 visibility=full
+variableStep span=10 chrom=chr6 
+# wiggle format:
+# coord value
+31691011  33
+31691021  38
+31691031  35
+31691041  24
+31691051  40
+31691061  66 
+
+track type=pgSnp db=hg19 name="pgSnp" description="My SNPs -- Personal Genome SNP format" visibility=pack
+# pgSNP format:
+# chrom chromStart 	chromEnd 	name 	alleleCount	alleleFreq	alleleScores
+chr6	31691111	31691112	G/A	2	30,60	90,70
+chr6	31691167	31691168	T/C	2	20,70	90,70
+chr6	31691181	31691182	T/G	2	20,70	90,70
+chr6	31691277	31691278	T/G/A	3	9,60,7	80,80,30
+chr6	31691420	31691420	-/CGG	2	20,80	0,0
+chr6	31691691	31691691	-/AAAT	2	30,30	0,0
+chr6	31691701	31691707	CCGTAC/-	2	30,70	0,0
+chr6	31691763	31691764	T	1	15	90
+chr6	31692097	31692098	A	1	36	80
+chr6	31692374	31692375	C/G	2	15,5	0,0
+chr6	31692677	31692678	C	1	0	0
+
+
