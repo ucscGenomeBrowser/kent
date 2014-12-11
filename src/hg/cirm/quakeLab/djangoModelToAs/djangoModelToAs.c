@@ -53,6 +53,7 @@ else
 		lf->lineIx, lf->fileName);
     }
 fprintf(f, "    (\n");
+fprintf(f, "    uint id; \"Autoincrement unique ID for this row\"\n");
 for (;;)
     {
     if (!lineFileNextReal(lf, &line))
@@ -70,6 +71,8 @@ for (;;)
 	     type = "double";
 	 else if (startsWith("IntegerField(", models))
 	     type = "int";
+	 else if (startsWith("TextField(", models))
+	     type = "lstring";
 	 else if (startsWith("ForeignKey(", models))
 	     {
 	     type = "uint";
@@ -91,7 +94,7 @@ for (;;)
 	 if (commentString == NULL)
 	     commentString = "needs comment";
 	 if (isFk)
-	     fprintf(f, "    %s %s; \"Foreign key in %s table\"\n", type, label, commentString);
+	     fprintf(f, "    %s %s; \"Foreign key (id) in %s table\"\n", type, label, commentString);
 	 else
 	     fprintf(f, "    %s %s; \"%s\"\n", type, label, commentString);
 	 }
