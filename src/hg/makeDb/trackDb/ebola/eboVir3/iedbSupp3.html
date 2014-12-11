@@ -1,0 +1,34 @@
+<h2>Description</h2>
+<p>
+This track shows peptides that are predicted to be displayed by 
+human class II MHCs.</p>
+
+<H2>Display Conventions and Configuration</H2>
+Peptides are shaded by percentile.
+
+<h2>Methods</h2>
+For human epitope predictions, 15-mer peptides overlapping by 10 aa residues
+were generated from aligned sequences, to avoid redundant peptides that share
+the same 9-mer binding core. For each 15-mer peptide, the
+binding affinity was predicted (expressed as the IEDB consensus percentile
+rank) for seven class II human HLA alleles (HLA-DRB1*03:01, HLA-DRB1*07:01,
+HLA-DRB1*15:01, HLA-DRB3*01:01, HLA-DRB3*02:02, HLADRB4*01:01 and
+HLA-DRB5*01:01), using the <a
+href="http://tools.immuneepitope.org/main/html/tcell_tools.html" target="_blank">MHC
+class I binding prediction tool</a> (&quot;IEDB recommended&quot; method). Predicted
+binders were selected based on the median consensus percentile rank estimated from the
+consensus percentile ranks for the seven alleles. All peptides with median
+consensus percentile rank &lt;= 20.0 were selected as predicted binders, the
+threshold being previously optimized for capturing 50% of class II human T cell
+responses.
+
+<!--
+<h2>References</h2>
+<p>
+Ponomarenko J, Vaughan K, Paul S, Haeussler M, Maurer-Stroh S, Peters B, Sette A.
+<a href="#" target="_blank">
+Ebola: an analysis of immunity at the molecular level
+</a>.
+<em>submitted.
+</p>
+-->

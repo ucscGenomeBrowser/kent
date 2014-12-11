@@ -5761,8 +5761,8 @@ TMPDIR=/dev/shm
     # real    78m47.312s
 
 #############################################################################
-# Building WU DNAse I ENCODE2 track (In progress 2014-09-03 Jim Kent)
-See instructions in encode3/hg38_encode2_dnase1.txt
+# Building UW DNAse I ENCODE2 track (In progress 2014-09-03 Jim Kent)
+See instructions in src/hg/makeDb/doc/encode3/hg38_encode2_dnase1.txt
 
 
 #############################################################################
@@ -5910,3 +5910,103 @@ TMPDIR=/scratch/tmp
 # NCBI ClinVar (new version -DONE - 2014-11-08 - Max)
 # see hg19.txt
 #########################################################################
+
+########################################################################
+# Cooper Developmental Delay track (2014-11-21 Steve)
+
+    mkdir /hive/data/genomes/hg38/bed/cooperDevDelay
+    cd /hive/data/genomes/hg38/bed/cooperDevDelay
+
+wget --timestamping 'ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd54_Cooper_et_al_2011/gvf/nstd54_Cooper_et_al_2011.GRCh38.remap.all.germline.ucsc.gvf.gz'
+
+cp /kent/src/hg/utils/automation/gvfToBed8Attrs.pl .
+mv gvfToBed8Attrs.pl gvfToBed8AttrsControl.pl
+cp gvfToBed8AttrsControl.pl gvfToBed8AttrsCase.pl
+
+# made two local copies of Angie's gvf conversion script - one to
+# include only control individuals and one to include only case individuals
+# added line 33 to each file:
+
+# next if ($phenotype ne "not_reported"); # keep only "control" individuals
+# next if ($phenotype eq "not_reported"); # keep only "case" individuals
+
+zcat nstd54_Cooper_et_al_2011.GRCh38.remap.all.germline.ucsc.gvf.gz | gvfToBed8AttrsControl.pl > cooperDevDelayAllControl.bed
+zcat nstd54_Cooper_et_al_2011.GRCh38.remap.all.germline.ucsc.gvf.gz | gvfToBed8AttrsCase.pl > cooperDevDelayAllCase.bed
+
+# GRCh38 data from dbVar had different naming scheme for alternate chromosomes
+# (e.g., chr1|NT_187515.1 instead of chr1_KI270762v1_alt), so needed to write
+# a script to substitute the correct UCSC names
+
+    cat << '_EOF_' > chromXref.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+sub usage() {
+  printf STDERR "usage: ./chromXref.pl <infile> <outfile>\n"
+}
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 2) {
+  usage;
+  exit 255;
+}
+
+open (file1, "<hg38.xref") or die "cannot read hg38.xref";
+
+my @accArray = ();
+my $i = 0;
+while (my $line = <file1>) {
+  chomp($line);
+  my ($type, $chr, $acc1, $acc2) = split('\t', $line);
+  ($type, undef) = split('-', $type);
+  ($acc1, my $version) = split('\.', $acc1);
+  if ($type eq "unlocalized") {
+    $type = "random";
+  }
+  my $ucscAcc = "_" . $acc1 . "v" . $version . "_" . $type;
+  $accArray[$i][0] = $ucscAcc;
+  $accArray[$i][1] = $acc2;
+  $i++;
+}
+
+close (file1);
+
+open (file2, "<$ARGV[0]") or die "cannot read $ARGV[0]";
+open (file3, ">$ARGV[1]") or die "cannot read $ARGV[1]";
+local $/;
+my $fileContents = <file2>;
+for ($i = 0; $i < scalar(@accArray); $i++) {
+  my $temp1 = $accArray[$i][1];
+  my $temp2 = $accArray[$i][0];
+  if ($fileContents =~ m/\|$temp1/) {
+    $fileContents =~ s/\|$temp1/$temp2/g;
+  }
+}
+
+print file3 $fileContents;
+close (file2);
+close (file3);
+'_EOF_'
+    # << happy emacs
+
+cp /hive/data/genomes/hg38/genbank/GCF_000001405.26.assembly.txt .
+
+cat GCF_000001405.26.assembly.txt | grep -v '^#\|assembled\|unplaced' | awk '{print $2 "\t" $3 "\t" $5 "\t" $7}' > hg38.xref
+
+chromXref.pl cooperDevDelayAllControl.bed cooperDevDelayAllControlUcsc.bed
+chromXref.pl cooperDevDelayAllCase.bed cooperDevDelayAllCaseUcsc.bed
+
+hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
+        -allowStartEqualEnd hg38 cooperDevDelayControl cooperDevDelayAllControlUcsc.bed
+
+hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
+        -allowStartEqualEnd hg38 cooperDevDelayCase cooperDevDelayAllCaseUcsc.bed
+
+    checkTableCoords hg38 cooperDevDelayControl
+    checkTableCoords hg38 cooperDevDelayCase
+
+
+########################################################################

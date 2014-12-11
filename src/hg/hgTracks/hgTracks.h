@@ -143,6 +143,7 @@ struct track
     /* Write out image mapping for a given item */
 
     boolean hasUi;	/* True if has an extended UI page. */
+    void *wigCartData;  /* pointer to wigCart */
     void *extraUiData;	/* Pointer for track specific filter etc. data. */
 
     void (*trackFilter)(struct track *tg);
@@ -250,6 +251,7 @@ struct track
     boolean parallelLoading;    /* If loading in parallel, usually network resources. */
     struct bbiSummaryElement *summary;  /* for bigBed */
     struct bbiSummaryElement *sumAll;   /* for bigBid */
+    boolean drawLabelInBox;     /* draw labels into the features instead of next to them */
     };
 
 
@@ -1104,6 +1106,11 @@ void drawScaledBoxSample(struct hvGfx *hvg,
         int score);
 /* Draw a box scaled from chromosome to window coordinates. */
 
+void drawScaledBoxSampleLabel(struct hvGfx *hvg,
+     int chromStart, int chromEnd, double scale,
+     int xOff, int y, int height, Color color, MgFont *font,  char *label);
+/* Draw a box scaled from chromosome to window coordinates and draw a label onto it. */
+
 struct track *trackFromTrackDb(struct trackDb *tdb);
 /* Create a track based on the tdb */
 
@@ -1400,6 +1407,9 @@ int tgCmpPriority(const void *va, const void *vb);
 
 void printMenuBar();
 /* Put up the menu bar. */
+
+void checkIfWiggling(struct cart *cart, struct track *tg);
+/* Check to see if a linkedFeatures track should be drawing as a wiggle. */
 
 #define measureTime uglyTime
 

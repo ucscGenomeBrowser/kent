@@ -1754,6 +1754,7 @@ void knownGeneUI(struct trackDb *tdb)
 knownGeneIdConfig(tdb);
 knownGeneShowWhatUi(tdb);
 baseColorDrawOptDropDown(cart, tdb);
+wigOption(cart, "knownGene", "UCSC Genes", tdb);
 }
 
 void omimLocationUI(struct trackDb *tdb)
@@ -1862,6 +1863,10 @@ printf("<BR>\n");
 /* Put up noncoding option and codon coloring stuff. */
 hideNoncodingOpt(tdb);
 baseColorDrawOptDropDown(cart, tdb);
+printf("<BR>\n");
+
+// let the user choose to see the track in wiggle mode
+wigOption(cart, tdb->track, tdb->shortLabel, tdb);
 }
 
 void transMapUI(struct trackDb *tdb)
@@ -2207,6 +2212,7 @@ safef(cgiVar,sizeof(cgiVar),"%s.%s",tdb->track,PUBS_COLORBY_TAG);
 cgiDropDownWithTextValsAndExtra(cgiVar, colorText, colorVals, 3, colorBy, NULL);
 puts("</P>\n");
 
+wigOption(cart, tdb->track, tdb->shortLabel, tdb);
 }
 
 void oligoMatchUi(struct trackDb *tdb)

@@ -9,6 +9,7 @@
 #include "portable.h"
 #include "cheapcgi.h"
 #include "cart.h"
+#include "cartTrackDb.h"
 #include "jksql.h"
 #include "trackDb.h"
 #include "bits.h"
@@ -273,7 +274,7 @@ static struct trackDb *showTrackFieldLimited(struct grp *selGroup,
 struct trackDb *track, *selTrack = NULL;
 if (trackScript == NULL)
     trackScript = "";
-if (sameString(selGroup->name, "allTables") && allowAllTables())
+if (sameString(selGroup->name, "allTables") && hAllowAllTables())
     {
     char *selDb = findSelDb();
     struct slName *dbList = getDbListForGenome(), *db;
@@ -515,7 +516,7 @@ char *selTable;
 if (track == NULL)
     nameList = tablesForDb(findSelDb());
 else
-    nameList = tablesForTrack(track, FALSE);
+    nameList = cartTrackDbTablesForTrack(database, track, FALSE);
 
 /* Get currently selected table.  If it isn't in our list
  * then revert to first in list. */

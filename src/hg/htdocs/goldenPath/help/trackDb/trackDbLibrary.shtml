@@ -1043,6 +1043,27 @@
     <pre>   denseCoverage 100</pre>
 </DIV>
 
+<DIV class="labelOnFeature"><span class="types bed bigBed"></span>
+<div class="format"><code>labelOnFeature &lt;on/off&gt;</code></div>
+    <P>Usually, labels (the BED name field) are drawn next to the
+    features. This statement tries to draw the feature 
+    label over the exon blocks. The effect depends on the size of the feature
+    on the screen, which in turn depends on the zoom level. If there is not enough
+    space for 4 characters, no label is drawn at all. If there is more space,
+    the label is drawn with a contrasting color onto the exon-like blocks. 
+    If they are too short for the text, it is trimmed to fit into the available space
+    and the suffix "..." appended. Note that features should not have too
+    long thin (UTR) regions, as the text might be hard to read
+    in these parts.<br>
+    To keep the text readable, the arrows that indicate the strand are shown over
+    introns, but suppressed on blocks, so the statement should be used
+    for tracks where strand is not of primary importance, not defined in the
+    BED strand field or deactivated
+    with <A onclick="jumpTo(this)" HREF="#">exonArrows</A>.  </P>
+    <P><B>Example:</B></P>
+    <pre>   labelOnFeature on</pre>
+</DIV>
+
 <DIV class="exonArrows"><span class="types genePred bed broadPeak"></span>
 <div class="format"><code>exonArrows &lt;on/off&gt;</code></div>
     <P>On tracks that show

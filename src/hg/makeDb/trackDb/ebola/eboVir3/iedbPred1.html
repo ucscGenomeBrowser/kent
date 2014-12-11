@@ -1,0 +1,34 @@
+<h2>Description</h2>
+<p>
+This track shows peptides that are predicted to be displayed by 
+human class I MHCs.
+</p>
+
+<H2>Display Conventions and Configuration</H2>
+Peptides are shaded by IC50 values and split into subtracks by HLA-alleles.
+
+<h2>Methods</h2>
+For human epitope prediction, binding affinity for all possible 9-mer peptides
+from each protein sequence to a set of 27 HLA alleles that are most frequent in
+the global population, using the SMM method available in the <a
+href="http://tools.immuneepitope.org/main/html/tcell_tools.html" target="_blank">IEDB MHC class
+I binding prediction tool</a>. All peptides with predicted binding affinity (expressed
+as IC50 nM) below previously optimized allele-specific thresholds were
+selected as predicted binders. In the case of rhesus macaque class I T cell
+epitope prediction, the binding affinity of all 9-mer peptides was predicted
+for a total of 19 alleles (7 Indian and 12 Chinese rhesus macaques) that are
+most frequent in these species. The binding affinity predictions utilized the
+&quot;IEDB recommended&quot; method from the IEDB MHC class I binding prediction tool.
+Peptides with the IEDB consensus percentile rank &lt;= 1.0 were selected. Lower
+values for either IC50 or percentile rank indicate stronger binding.<p>
+
+<!--
+<h2>References</h2>
+<p>
+Ponomarenko J, Vaughan K, Paul S, Haeussler M, Maurer-Stroh S, Peters B, Sette A.
+<a href="#" target="_blank">
+Ebola: an analysis of immunity at the molecular level
+</a>.
+<em>submitted.
+</p>
+-->

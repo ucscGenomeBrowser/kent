@@ -130,7 +130,7 @@ void wigSetCart(struct track *track, char *dataID, void *dataValue)
 /*	set one of the variables in the wigCart.  Actually just MIN_Y or MAX_Y	*/
 {
 struct wigCartOptions *wigCart;
-wigCart = (struct wigCartOptions *) track->extraUiData;
+wigCart = (struct wigCartOptions *) track->wigCartData;
 
 if (sameWord(dataID, MIN_Y))
     wigCart->minY = *((double *)dataValue);
@@ -233,7 +233,7 @@ int wigTotalHeight(struct track *tg, enum trackVisibility vis)
 struct wigCartOptions *wigCart;
 int saveHeight = tg->height;
 
-wigCart = (struct wigCartOptions *) tg->extraUiData;
+wigCart = (struct wigCartOptions *) tg->wigCartData;
 
 /*
  *      A track is just one
@@ -1231,7 +1231,7 @@ double graphUpperLimit=0;	/*	scaling choice will set these	*/
 double graphLowerLimit=0;	/*	scaling choice will set these	*/
 double graphRange=0;		/*	scaling choice will set these	*/
 double epsilon;			/*	range of data in one pixel	*/
-struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->extraUiData;
+struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->wigCartData;
 
 yLineOnOff = wigCart->yLineOnOff;
 yLineMark = wigCart->yLineMark;
@@ -1492,7 +1492,7 @@ int centerOffset = 0;
 double lines[2];	/*	lines to label	*/
 int numberOfLines = 1;	/*	at least one: 0.0	*/
 int i;			/*	loop counter	*/
-struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->extraUiData;
+struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->wigCartData;
 
 lines[0] = 0.0;
 lines[1] = wigCart->yLineMark;
@@ -1706,7 +1706,7 @@ track->itemStart = tgItemNoStart;
 track->itemEnd = tgItemNoEnd;
 /*	the wigMaf parent will turn mapsSelf off	*/
 track->mapsSelf = TRUE;
-track->extraUiData = (void *) wigCart;
+track->wigCartData = (void *) wigCart;
 track->colorShades = shadesOfGray;
 track->drawLeftLabels = wigLeftLabels;
 track->loadPreDraw = wigLoadPreDraw;

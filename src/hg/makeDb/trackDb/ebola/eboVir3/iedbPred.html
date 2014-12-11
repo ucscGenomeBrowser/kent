@@ -1,0 +1,52 @@
+<h2>Description</h2>
+<p>
+The subtracks of this track shows peptides that are predicted to be displayed by 
+human and macaque class I MHCs and human class II MHCs. Class I predictions
+are split by HLA allele, class II predictions are summarized into a single track.
+</p>
+
+<H2>Display Conventions and Configuration</H2>
+Class I peptides are shaded by IC50 values and grouped by HLA-alleles. Class II
+peptides are shaded by percentile.
+
+<h2>Methods</h2>
+<b>Class I T cell epitope prediction: </b>
+For human epitope prediction, binding affinity for all possible 9-mer peptides
+from each protein sequence to a set of 27 HLA alleles that are most frequent in
+the global population, using the SMM method available in the <a
+href="http://tools.immuneepitope.org/main/html/tcell_tools.html" target="_blank">IEDB MHC class
+I binding prediction tool</a>. All peptides with predicted binding affinity (expressed
+as IC50 nM) below previously optimized allele-specific thresholds were
+selected as predicted binders. In the case of rhesus macaque class I T cell
+epitope prediction, the binding affinity of all 9-mer peptides was predicted
+for a total of 19 alleles (7 Indian and 12 Chinese rhesus macaques) that are
+most frequent in these species. The binding affinity predictions utilized the
+&quot;IEDB recommended&quot; method from the IEDB MHC class I binding prediction tool.
+Peptides with the IEDB consensus percentile rank &lt;= 1.0 were selected. Lower
+values for either IC50 or percentile rank indicate stronger binding.<p>
+
+<b>Class II T cell epitope prediction:</b> For human epitope predictions, 15-mer
+peptides overlapping by 10 aa residues were generated from aligned sequences,
+to avoid redundant peptides that share the same 9-mer binding core.
+For each 15-mer peptide, the binding affinity was predicted (expressed
+as the IEDB consensus percentile rank) for seven class II human HLA alleles
+(HLA-DRB1*03:01, HLA-DRB1*07:01, HLA-DRB1*15:01, HLA-DRB3*01:01,
+HLA-DRB3*02:02, HLADRB4*01:01 and HLA-DRB5*01:01), using the <a
+href="http://tools.immuneepitope.org/main/html/tcell_tools.html" target="_blank">IEDB MHC class
+I binding prediction tool</a> (&quot;IEDB recommended&quot; method). Predicted binders were
+selected based on the median consensus percentile rank estimated from the
+consensus percentile ranks for the seven alleles. All peptides with median
+consensus percentile rank &lt;= 20.0 were selected as predicted binders, the
+threshold being previously optimized for capturing 50% of class II human T cell
+responses.
+
+<!--
+<h2>References</h2>
+<p>
+Ponomarenko J, Vaughan K, Paul S, Haeussler M, Maurer-Stroh S, Peters B, Sette A.
+<a href="#" target="_blank">
+Ebola: an analysis of immunity at the molecular level
+</a>.
+<em>submitted.
+</p>
+-->

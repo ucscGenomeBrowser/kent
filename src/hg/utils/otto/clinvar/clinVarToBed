@@ -143,7 +143,7 @@ for line in ifh:
     # reorder columns for bigBed
     start = str(int(start)-1) # convert to zero-based, half-open
     score = "0"
-    strand = "+"
+    strand = "."
     thickStart = start
     thickEnd = end
     itemRgb = "0"
@@ -156,6 +156,18 @@ for line in ifh:
             itemRgb = "0,0,255"
         if "deletion" in allType or "loss" in allType:
             itemRgb = "255,0,0"
+    else:
+        isPat, isBen = False, False
+        if "pathogenic" in clinSign.lower():
+            isPat = True
+        if "benign" in clinSign.lower():
+            isBen = True
+        if (isPat==True and isBen==True) or (isPat==False and isBen==False):
+            itemRgb = "128,128,128"
+        elif isPat==True:
+            itemRgb = "0,0,0"
+        else: # is benign
+            itemRgb = "200,200,200"
 
     row = [chrom, start, end, shortName, score, strand, thickStart, thickEnd, itemRgb, \
         blockCount, blockSizes, blockStarts,
@@ -217,6 +229,7 @@ if options.maxDiff:
         logging.info("%s: %d lines changed" % (fname, diffCount))
         percDiff = float(diffCount)/todayLines
         if percDiff > options.maxDiff:
+            logging.info(cmd)
             raise Exception("too much diff: %d out of %d lines" % (diffCount, todayLines))
 
 # convert to bigBed without the date in the fname, like clinvarMain.hg19.bb

@@ -11,29 +11,6 @@
 #include "hgTables.h"
 
 
-void wikiTrackDb(struct trackDb **list)
-/* create a trackDb entry for the wiki track */
-{
-struct trackDb *tdb;
-
-AllocVar(tdb);
-tdb->track = WIKI_TRACK_TABLE;
-tdb->table = WIKI_TRACK_TABLE;
-tdb->shortLabel = WIKI_TRACK_LABEL;
-tdb->longLabel = WIKI_TRACK_LONGLABEL;
-tdb->visibility = tvFull;
-tdb->priority = WIKI_TRACK_PRIORITY;
-
-tdb->html = hFileContentsOrWarning(hHelpFile(tdb->track));
-tdb->type = "none";
-tdb->grp = "map";
-tdb->canPack = FALSE;
-tdb->settingsHash = newHash(5);
-
-slAddHead(list, tdb);
-slSort(list, trackDbCmp);
-}
-
 struct hTableInfo *wikiHti()
 /* Create an hTableInfo for the wikiTrack. */
 {

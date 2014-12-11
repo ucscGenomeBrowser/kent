@@ -1796,4 +1796,22 @@ chainMergeSort $1*.chain > $2
     tail -f do.log
     ln -s blastz.dm3.swap /cluster/data/droSim1/bed/blastz.dm3
 
+###########################################################################
+# swap chain/net from dm6 (DONE 2014-08-29 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/dm6/bed/lastzDroSim1.2014-08-29
+    cat fb.dm6.chainDroSim1Link.txt
+    # 114117667 bases of 142573024 (80.042%) in intersection
 
+    #   running the swap
+    mkdir /hive/data/genomes/droSim1/bed/blastz.dm6.swap
+    cd /hive/data/genomes/droSim1/bed/blastz.dm6.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/dm6/bed/lastzDroSim1.2014-08-29/DEF \
+        -swap -syntenicNet -chainMinScore=3000 -chainLinearGap=loose \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku > swap.log 2>&1
+    # real    6m50.918s
+    cat fb.droSim1.chainDm6Link.txt
+    # 113676741 bases of 127256433 (89.329%) in intersection
+
+###########################################################################

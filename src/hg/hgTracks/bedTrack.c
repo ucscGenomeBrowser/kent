@@ -526,7 +526,12 @@ if (thickDrawItem && (w < 4))
 if (color)
     {
     hvGfxBox(hvg, x1, y, w, heightPer, color);
-    if (tg->drawName && vis != tvSquish)
+    if (tg->drawLabelInBox)
+        {
+	char *label = tg->itemName(tg, bed);
+        drawScaledBoxSampleLabel(hvg, s, e, scale, xOff, y, heightPer, color, font, label);
+        }
+    else if (tg->drawName && vis != tvSquish)
 	{
 	/* Clip here so that text will tend to be more visible... */
 	char *s = tg->itemName(tg, bed);
@@ -540,7 +545,7 @@ if (color)
                           tg->track, tg->mapItemName(tg, bed), NULL, directUrl, withHgsid, NULL);
 	}
     }
-if (tg->subType == lfWithBarbs || tg->exonArrows)
+if ((tg->subType == lfWithBarbs || tg->exonArrows) && !tg->drawLabelInBox)
     {
     int dir = 0;
     if (bed->strand[0] == '+')
@@ -562,6 +567,9 @@ void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw simple Bed items. */
 {
+// optional setting to draw labels onto the feature boxes, not next to them
+tg->drawLabelInBox = cartOrTdbBoolean(cart, tg->tdb, "labelOnFeature" , FALSE);
+
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->track);
 

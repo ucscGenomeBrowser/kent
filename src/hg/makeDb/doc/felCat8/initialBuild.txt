@@ -1,0 +1,486 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the felCat8
+# cat/Felis catus -- International Cat Genome Sequencing Consortium
+# This is the female Abyssinian cat named Cinnamon kept by
+# Dr. Kristina Narfstrom at the University of Missouri
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2014-11-20 - Hiram)
+    # NCBI has redesigned their FTP download site, new type of address
+    #      and naming scheme
+    mkdir -p /hive/data/genomes/felCat8/genbank
+    cd /hive/data/genomes/felCat8/genbank
+
+    rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Felis_catus/latest_assembly_versions/GCA_000181335.3_Felis_catus_8.0/ ./
+
+    # measure what we have here:
+    faSize \
+GCA_000181335.3_Felis_catus_8.0_assembly_structure/Primary_Assembly/assembled_chromosomes/FASTA/*.fna.gz \
+GCA_000181335.3_Felis_catus_8.0_assembly_structure/Primary_Assembly/unlocalized_scaffolds/FASTA/chr*.unlocalized.scaf.fna.gz \
+GCA_000181335.3_Felis_catus_8.0_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz
+    # 2641325249 bases (41642089 N's 2599683160 real 2599683160 upper 0 lower)
+    #   in 267624 sequences in 39 files
+    # Total size: mean 9869.5 sd 1168454.0 min 152 (AANG03201581.1)
+    #    max 240380223 (CM001378.2) median 654
+    # %0.00 masked total, %0.00 masked real
+
+    # note that these totals do not include chrM since the GenBank ftp directory
+    # did not include a non-nuclear directory
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2014-11-20 - Hiram)
+    mkdir /hive/data/genomes/felCat8/ucsc
+    cd /hive/data/genomes/felCat8/ucsc
+
+    time ~/kent/src/hg/makeDb/doc/felCat8/ucscCompositeAgp.pl \
+../genbank/GCA_000181335.3_Felis_catus_8.0_assembly_structure/Primary_Assembly
+
+# CM001393.2 E3
+# CM001383.2 B3
+# CM001382.2 B2
+#   CM001380.2 A3
+# CM001386.2 C2
+# CM001391.2 E1
+# CM001390.2 D4
+# CM001392.2 E2
+# CM001385.2 C1
+# CM001389.2 D3
+# CM001388.2 D2
+# CM001384.2 B4
+# CM001395.2 F2
+# CM001381.2 B1
+# CM001394.2 F1
+# CM001387.2 D1
+# CM001378.2 A1
+# CM001379.2 A2
+# CM001396.2 X
+
+# real    0m32.751s
+
+    time ~/kent/src/hg/makeDb/doc/felCat8/unlocalized.pl \
+../genbank/GCA_000181335.3_Felis_catus_8.0_assembly_structure/Primary_Assembly
+
+# chrD2
+# chrD3
+# chrA1
+# chrB4
+# chrA2
+# chrE1
+# chrC1
+# chrF2
+# chrB2
+# chrE3
+# chrC2
+# chrB1
+# chrX
+# chrD1
+# chrD4
+# chrA3
+# chrB3
+# chrE2
+# chrF1
+
+    # real    0m8.317s
+
+    time ~/kent/src/hg/makeDb/doc/felCat8/unplaced.pl \
+../genbank/GCA_000181335.3_Felis_catus_8.0_assembly_structure/Primary_Assembly
+    # real    0m2.527s
+
+    # verify nothing lost compared to genbank:
+    faSize *.fa
+    # 2641325249 bases (41642089 N's 2599683160 real 2599683160 upper 0 lower)
+    #   in 267624 sequences in 39 files
+    # Total size: mean 9869.5 sd 1168454.0 min 152 (chrUn_AANG03201581v1)
+    #  max 240380223 (chrA1) median 654
+    # %0.00 masked total, %0.00 masked real
+
+    # same numbers as above.
+
+#############################################################################
+#  Initial database build (DONE - 2014-11-20 - Hiram)
+
+    cd /hive/data/genomes/felCat8
+    cat << '_EOF_' > felCat8.config.ra
+# Config parameters for makeGenomeDb.pl:
+db felCat8
+clade mammal
+genomeCladePriority 17
+scientificName Felis catus
+commonName Cat
+assemblyDate Nov. 2014
+assemblyLabel International Cat Genome Sequencing Consortium
+assemblyShortLabel ICGSC Felis_catus_8.0
+orderKey 2417
+# chrM bioproject: 10762
+mitoAcc NC_001700.1
+fastaFiles /hive/data/genomes/felCat5/ucsc/*.fa
+agpFiles /hive/data/genomes/felCat5/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir cat
+photoCreditURL http://www.genome.gov/pressDisplay.cfm?photoID=42
+photoCreditName Dr. Kristina Narfstrom
+ncbiGenomeId 78
+ncbiAssemblyId 1373248
+ncbiAssemblyName Felis_catus_8.0
+ncbiBioProject 16726
+genBankAccessionID GCA_000181335.3
+taxId 9685
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and AGP are OK:
+    time makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp felCat8.config.ra > agp.log 2>&1
+    # real    3m36.748s
+
+    # then finish it off:
+    time nice -n +19 makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db felCat8.config.ra > db.log 2>&1
+    # real    27m30.762s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##########################################################################
+# running repeat masker (DONE - 2014-11-21 - Hiram)
+    mkdir /hive/data/genomes/felCat8/bed/repeatMasker
+    cd /hive/data/genomes/felCat8/bed/repeatMasker
+    time  doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku felCat8 > do.log 2>&1
+    # real    453m35.159s
+
+    cat faSize.rmsk.txt
+    # 2641342258 bases (41642089 N's 2599700169 real 1446287702 upper
+    # 1153412467 lower) in 267625 sequences in 1 files
+    # Total size: mean 9869.6 sd 1168451.9 min 152 (chrUn_AANG03201581v1)
+    #    max 240380223 (chrA1) median 654
+    # %43.67 masked total, %44.37 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps felCat8 rmsk
+    # 1154358179 bases of 2641342258 (43.703%) in intersection
+    # real    2m13.123s
+
+    # 1289639153 bases of 2670044500 (48.300%) in intersection
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE 2014-11-21 - Hiram)
+
+    mkdir /hive/data/genomes/felCat8/bed/simpleRepeat
+    cd /hive/data/genomes/felCat8/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        felCat8 > do.log 2>&1
+    # real    140m2.826s
+
+    cat fb.simpleRepeat
+    # 54549425 bases of 2599716822 (2.098%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/felCat8
+    twoBitMask felCat8.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed felCat8.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa felCat8.2bit stdout | faSize stdin > faSize.felCat8.2bit.txt
+    cat faSize.felCat8.2bit.txt
+    # 2641342258 bases (41642089 N's 2599700169 real 1445054690 upper
+    # 1154645479 lower) in 267625 sequences in 1 files
+    # Total size: mean 9869.6 sd 1168451.9 min 152 (chrUn_AANG03201581v1)
+    #    max 240380223 (chrA1) median 654
+    # %43.71 masked total, %44.41 masked real
+
+    rm /gbdb/felCat8/felCat8.2bit
+    ln -s `pwd`/felCat8.2bit /gbdb/felCat8/felCat8.2bit
+
+##########################################################################
+## WINDOWMASKER (DONE - 2014-11-21 - Hiram)
+
+    mkdir /hive/data/genomes/felCat8/bed/windowMasker
+    cd /hive/data/genomes/felCat8/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev felCat8 > do.log 2>&1
+    # real    613m12.862s
+
+    # Masking statistics
+    cat faSize.felCat8.cleanWMSdust.txt
+    # 2641342258 bases (41642089 N's 2599700169 real 1691420529 upper
+    # 908279640 lower) in 267625 sequences in 1 files
+    # Total size: mean 9869.6 sd 1168451.9 min 152 (chrUn_AANG03201581v1)
+    #   max 240380223 (chrA1) median 654
+    # %34.39 masked total, %34.94 masked real
+
+    cat fb.felCat8.rmsk.windowmaskerSdust.txt
+    # 649247774 bases of 2641342258 (24.580%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2014-11-25 - Hiram)
+    mkdir /hive/data/genomes/felCat8/bed/cpgIslands
+    cd /hive/data/genomes/felCat8/bed/cpgIslands
+    time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku felCat8 > do.log 2>&1
+    # real    1589m30.221s
+
+    cat fb.felCat8.cpgIslandExt.txt
+    # 44372623 bases of 2599716822 (1.707%) in intersection
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2014-11-25 - Hiram)
+    mkdir /hive/data/genomes/felCat8/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/felCat8/bed/cpgIslandsUnmasked
+
+    # run stepwise so the loading can be done in a different table
+    time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/felCat8/felCat8.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku felCat8 > do.log 2>&1
+    # real    1585m9.656s
+
+    cat fb.felCat8.cpgIslandExtUnmasked.txt
+    # 69023548 bases of 2599716822 (2.655%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2014-11-25 - Hiram)
+    mkdir /hive/data/genomes/felCat8/bed/cytoBand
+    cd /hive/data/genomes/felCat8/bed/cytoBand
+    makeCytoBandIdeo.csh felCat8
+
+#########################################################################
+# genscan - (DONE - 2014-11-25,12-02 - Hiram)
+    mkdir /hive/data/genomes/felCat8/bed/genscan
+    cd /hive/data/genomes/felCat8/bed/genscan
+    time doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku felCat8 > do.log 2>&1
+    # real    2252m4.489s
+    # two jobs failed, running with reduced window size 2,000,000
+# ./runGsBigLastTwo.csh chrC1 021 gtf/021/chrC1.gtf pep/021/chrC1.pep subopt/021/chrC1.bed &
+# ./runGsBigLastTwo.csh chrD1 028 gtf/028/chrD1.gtf pep/028/chrD1.pep subopt/028/chrD1.bed
+# wait
+
+    # continuing
+    time doGenscan.pl -continue=makeBed  -buildDir=`pwd` -workhorse=hgwdev \
+      -dbHost=hgwdev -bigClusterHub=ku felCat8 > makeBed.log 2>&1
+    # real    14m46.164s
+
+    cat fb.felCat8.genscan.txt
+    # 60883009 bases of 2599716822 (2.342%) in intersection
+
+    cat fb.felCat8.genscanSubopt.txt
+    # 52372380 bases of 2599716822 (2.015%) in intersection
+
+########################################################################
+# Create kluster run files (DONE - 2014-12-02 - Hiram)
+
+    # numerator is felCat8 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap felCat8 gap
+    # 36037214 bases of 2383192705 (1.512%) in intersection
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2383192705 / 2861349177 \) \* 1024
+    #  ( 2383192705 / 2861349177 ) * 1024 = 852.880644
+
+    # ==> use -repMatch=800 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/felCat8
+    time blat felCat8.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/felCat8.11.ooc \
+        -repMatch=800
+    #  Wrote 36446 overused 11-mers to jkStuff/felCat8.11.ooc
+    #  real    1m20.620s
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N -e 'select * from gap where bridge="no" order by size;' \
+       felCat8 | ave -col=7 stdin
+# Q1 100.000000
+# median 100.000000
+# Q3 100.000000
+# average 100.000000
+# min 100.000000
+# max 100.000000
+# count 303
+# total 30300.000000
+# standard deviation 0.000000
+
+    # they are all 100 bases
+    gapToLift -verbose=2 -minGap=100 felCat8 jkStuff/felCat8.nonBridged.lft \
+        -bedFile=jkStuff/felCat8.nonBridged.bed
+
+    cat jkStuff/felCat8.nonBridged.bed | awk '{printf "%s\t%d\n", $4,$3-$2}' \
+        | sort -k2nr > jkStuff/nonBridged.sizes
+    n50.pl jkStuff/nonBridged.sizes
+#       reading: nonBridged.sizes
+#       contig count: 267928, total size: 2641311958, one half size:
+#       1320655979
+# cumulative    N50 count       contig  contig size
+1307787463      44      chrC1.08        18169384
+1320655979 one half size
+1325860434      45      chrX.28 18072971
+
+########################################################################
+# GENBANK AUTO UPDATE (WORKING - 2014-12-02,05 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Felis catus     2392    923     399
+
+    # edit etc/genbank.conf to add felCat8 just before felCat5
+# Nov. 2014 International Cat Genome Sequencing Consortium Felis_catus_8.0
+# felCat8 (Cat)
+felCat8.serverGenome = /hive/data/genomes/felCat8/felCat8.2bit
+felCat8.clusterGenome = /hive/data/genomes/felCat8/felCat8.2bit
+felCat8.ooc = /hive/data/genomes/felCat8/jkStuff/felCat8.11.ooc
+felCat8.lift = /hive/data/genomes/felCat8/jkStuff/felCat8.nonBridged.lift
+felCat8.perChromTables = no
+felCat8.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+felCat8.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+felCat8.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+felCat8.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+felCat8.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+felCat8.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+felCat8.genbank.mrna.xeno.load  = yes
+felCat8.downloadDir = felCat8
+felCat8.refseq.mrna.native.load  = yes
+felCat8.refseq.mrna.xeno.load = yes
+felCat8.refseq.mrna.xeno.loadDesc  = yes
+# felCat8.upstreamGeneTbl = refGene
+# felCat8.upstreamMaf = multiz6way
+# /hive/data/genomes/felCat8/bed/multiz6way/species.list
+
+    git commit -m "Added felCat8; refs #14412" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+# Edit src/lib/gbGenome.c to add new species.  Skipped
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial felCat8
+    # logFile: var/build/logs/2014.12.02-11:51:04.felCat8.initalign.log
+    #   real    1310m38.973s
+    #   If necessary to restart from beginning, rm the dir first:
+    #     /cluster/data/genbank/work/initial.felCat8
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad felCat8
+    # logFile: var/dbload/hgwdev/logs/2014.12.03-21:03:57.felCat8.dbload.log
+    # real    82m44.925s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add felCat8 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added felCat8 - cat refs #14412" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+############################################################################
+# construct liftOver to felCat5 (DONE - 2014-12-02 - Hiram)
+    screen -S felCat5	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/felCat8/bed/blat.felCat5.2014-12-02
+    cd /hive/data/genomes/felCat8/bed/blat.felCat5.2014-12-02
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/felCat8/jkStuff/felCat8.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev felCat8 felCat5
+    #   real    0m1.838s
+    # if that is OK, then run it:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/felCat8/jkStuff/felCat8.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev felCat8 felCat5) > do.log 2>&1
+    #	real    454m20.649s
+
+    # verify this file exists:
+    #	/gbdb/felCat8/liftOver/felCat8ToFelCat5.over.chain.gz
+    # and try out the conversion on genome-test from felCat8 to felCat5
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2014-12-09 - Hiram)
+
+    mkdir /hive/data/genomes/felCat8/bed/ucscToINSDC
+    cd /hive/data/genomes/felCat8/bed/ucscToINSDC
+    # check for chrM in assembly:
+    grep chrM ../../felCat8.agp
+# chrM    1       17009   6       F       NC_001700.1     1       17009   +
+
+    # use the accession name from there in this command (blank if none)
+    ~/kent/src/hg/makeDb/doc/felCat8/ucscToINSDC.sh \
+        ../../genbank/GCA_*assembly_structure/Primary_Assembly NC_001700.1
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # should all be the same line count:
+    wc -l *
+    # 267625 name.coordinate.tab
+    # 267625 ucscToINSDC.bed
+    # 267625 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 27
+    # use the 27 in this sed
+    sed -e "s/21/27/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab felCat8 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords felCat8
+    # should cover %100 entirely:
+    featureBits -countGaps felCat8 ucscToINSDC
+    # 2641342258 bases of 2641342258 (100.000%) in intersection
+
+#########################################################################
+# set default position (DONE - 2014-12-09 - Hiram)
+
+    # equivalent to felCat5 position obtained by liftOver test in
+    # the browser from felCat5 default position (RHO gene)
+    hgsql -e \
+'update dbDb set defaultPos="chrA2:54097485-54103554" where name="felCat8";' \
+	hgcentraltest
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD 2014-10-21 - TBD)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=felCat8 -keys all.joiner
+    joinerCheck -database=felCat8 -tableCoverage all.joiner
+    joinerCheck -database=felCat8 -times all.joiner
+
+    cd /hive/data/genomes/felCat8
+    makeDownloads.pl felCat8 > do.log 2>&1
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/felCat8/pushQ
+    cd /hive/data/genomes/felCat8/pushQ
+    makePushQSql.pl felCat8 > felCat8.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/felCat8/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/felCat8/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/felCat8/bbi/quality.bw
+    # WARNING: felCat8 does not have seq
+    # WARNING: felCat8 does not have extFile
+
+    #   copy it to hgwbeta
+    scp -p felCat8.pushQ.sql qateam@hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < felCat8.pushQ.sql
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################
