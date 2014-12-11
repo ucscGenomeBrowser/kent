@@ -4,6 +4,13 @@ GIT = git
 GITUP = ${GIT} pull
 FIND=gitFiles
 
+# if you need to pick up files not checked-in yet for rsync,
+# you can run it like this:
+#
+#   make FIND=find
+#
+# but be careful as it will rsync everything over including junk
+
 ifeq (${DOCUMENTROOT_USER},)
     DOCUMENTROOT_USER=${DOCUMENTROOT}-${USER}
 endif
