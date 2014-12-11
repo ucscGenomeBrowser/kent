@@ -62,7 +62,7 @@ struct cdwFile *ef= cdwGetLocalFile(conn, twoBitFile, symLink);
 struct dyString *tags = dyStringNew(0);
 cgiEncodeIntoDy("ucsc_db", ucscDb, tags);
 cgiEncodeIntoDy("format", "2bit", tags);
-cgiEncodeIntoDy("valid_key", encode3CalcValidationKey(ef->md5, ef->size), tags);
+cgiEncodeIntoDy("valid_key", cdwCalcValidationKey(ef->md5, ef->size), tags);
 cdwUpdateFileTags(conn, ef->id, tags);
 dyStringFree(&tags);
 

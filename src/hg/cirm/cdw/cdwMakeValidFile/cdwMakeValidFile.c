@@ -26,7 +26,7 @@
 #include "cdw.h"
 #include "cdwLib.h"
 #include "fa.h"
-#include "cdw/cdwValid.h"
+#include "cdwValid.h"
 
 int maxErrCount = 1;	/* Set from command line. */
 int errCount;		/* Set as we run. */

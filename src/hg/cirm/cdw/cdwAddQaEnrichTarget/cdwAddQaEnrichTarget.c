@@ -64,7 +64,7 @@ struct cdwFile *ef = cdwGetLocalFile(conn, path, NULL);
 struct dyString *tags = dyStringNew(0);
 cgiEncodeIntoDy("ucsc_db", db, tags);
 cgiEncodeIntoDy("format", "bigBed", tags);
-cgiEncodeIntoDy("valid_key", encode3CalcValidationKey(ef->md5, ef->size), tags);
+cgiEncodeIntoDy("valid_key", cdwCalcValidationKey(ef->md5, ef->size), tags);
 cgiEncodeIntoDy("enriched_in", name, tags);
 cdwUpdateFileTags(conn, ef->id, tags);
 dyStringFree(&tags);
