@@ -15,6 +15,12 @@
 #are working directly on that contract.  This build assumes that the relevant bam
 #files are in the /hive/groups/encode/3/eap/cach directory.
 
+# To do the mapping again you'd start with fastq files and use the script
+# eap_run_bwa_se on an index that included the sponge as well as hg38
+# chromosomes (but not alternative haplotypes).   Bwa itself is run in a
+# rather vanilla mode, with no options beyond -t 4 to parallelize the
+# first pass of the alignment in 4 threads.
+
 #The detailed instructions after the bam files are available are: 
 
 ##In more detail.  First 
@@ -41,7 +47,7 @@ para time
 #Submission to last job:        128747s    2145.78m    35.76h    1.49d
 #Estimated complete:                 0s       0.00m     0.00h    0.00d
 
-## Do parasol runs on replicates
+## Do parasol runs on replicates (these are not actually currently used)
 ssh ku
 cd /hive/data/genomes/hg38/bed/uwDnase1/run_replicates
 para make
@@ -161,6 +167,6 @@ para time
 ln -s /hive/data/genomes/hg38/bed/uwDnase1/run_normalized/out/*.bw /hive/data/genomes/hg38/bed/uwDnase1/run_pooled/
 sed 's/pooled.bigWig/norm.bw/' < calcGraph/uwDnase1.tab > colors.tab
 
-# Run program to generate trackDb file
+# Run program to generate trackDb file.  The source is in /hg/makeDb/outside/uwDnaseTrackHub
 cd /hive/data/genomes/hg38/bed/uwDnase1
 uwDnaseTrackHub meta.tab run_pooled colors.tab hub
