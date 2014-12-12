@@ -19,9 +19,9 @@ def errAbort(errMsg=None):
     host = os.environ.get("HTTP_HOST", "")
 
     print """
-    A Genomics Alliance Beacon at UCSC. In collaboration with the Leiden Open Variation Database.
-
-    Data provided by Leiden Open Variation (Ivo Fokkema), Biobase/HGMD.
+    A Genomics Alliance Beacon at UCSC. 
+    
+    In collaboration with the Leiden Open Variation Database and Biobase/HGMD.
 
     parameters:
     - genome: ignored, always hg19/GRCh37
@@ -31,7 +31,7 @@ def errAbort(errMsg=None):
       (backwards compatible)
     - pos: 0-based position, like 10042537
     - allele: A,C,T,G. Ignored for HGMD (HGMD gives out only positions, not the
-      alleles, they are on the website)
+      alleles, they are only on their website)
 
     If the allele was found, returns the string "Yes", otherwise "No".
 
