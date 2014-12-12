@@ -310,10 +310,10 @@ return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
 }
 
 void checkIfWiggling(struct cart *cart, struct track *tg)
-/* check to see if a linkedFeatures track should be drawing as a wiggle */
+/* Check to see if a linkedFeatures track should be drawing as a wiggle. */
 {
-char *doWiggle = cartOrTdbString(cart, tg->tdb, "doWiggle" , "0");
-if (sameString(doWiggle, "1"))
+boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
+if (doWiggle)
     {
     tg->drawLeftLabels = wigLeftLabels;
     tg->colorShades = shadesOfGray;
@@ -422,8 +422,8 @@ int tgFixedTotalHeightOptionalOverflow(struct track *tg, enum trackVisibility vi
 /* Most fixed height track groups will use this to figure out the height
  * they use. */
 {
-char *doWiggle = cartOrTdbString(cart, tg->tdb, "doWiggle" , "0");
-if (sameString(doWiggle, "1"))
+boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
+if (doWiggle)
     {
     struct wigCartOptions *wigCart = tg->wigCartData;
     if (tg->wigCartData == NULL)
@@ -3216,8 +3216,8 @@ if (!tg->mapsSelf)
 
 static int normalizeCount(struct preDrawElement *el, double countFactor, 
     double minVal, double maxVal, double sumData, double sumSquares)
-/* normalize statistics to be based on an integer number of valid bases 
- * Integer value is the smallest integer not less than countFactor */
+/* Normalize statistics to be based on an integer number of valid bases. 
+ * Integer value is the smallest integer not less than countFactor. */
 {
 bits32 validCount = ceil(countFactor);
 double normFactor = (double)validCount/countFactor;
@@ -3232,9 +3232,8 @@ return validCount;
 }
 
 static unsigned *countOverlaps(struct track *track)
-/* count up overlap of linked features */
+/* Count up overlap of linked features. */
 {
-int ii;
 struct slList *items = track->items;
 struct slList *item;
 unsigned size = winEnd - winStart;
@@ -3244,25 +3243,21 @@ for (item = items; item; item = item->next)
     {
     unsigned start = track->itemStart(track, item);
     unsigned end = track->itemEnd(track, item);
-    if ((start >= winEnd) || (end < winStart))
+    if (positiveRangeIntersection(start, end, winStart, winEnd) > 0)
 	continue;
 
-    int x1 = start - winStart; 
-    if (x1 < 0)
-	x1 = 0;
-    int x2 = end - winStart;
-    if (x2 > size)
-	x2 = size;
+    int x1 = max(start - winStart, 0); 
+    int x2 = min(end - winStart, size);
 
-    for(ii=x1; ii < x2; ii++)
-	counts[ii]++;
+    for(; x1 < x2; x1++)
+	counts[x1]++;
     }
 
 return counts;
 }
 
 static void countsToPixelsUp(unsigned *counts, struct preDrawContainer *pre)
-/* up sample counts into pixels */
+/* Up sample counts into pixels. */
 {
 int preDrawZero = pre->preDrawZero;
 unsigned size = winEnd - winStart;
@@ -3282,7 +3277,7 @@ for (pixel=0; pixel<insideWidth; ++pixel)
 }
 
 static void countsToPixelsDown(unsigned *counts, struct preDrawContainer *pre)
-/* down sample counts into pixels */
+/* Down sample counts into pixels. */
 {
 int preDrawZero = pre->preDrawZero;
 unsigned size = winEnd - winStart;
@@ -3345,7 +3340,7 @@ for (pixel=0; pixel<insideWidth; ++pixel)
 }
 
 static void countsToPixels(unsigned *counts, struct preDrawContainer *pre)
-/* sample counts into pixels */
+/* Sample counts into pixels. */
 {
 unsigned size = winEnd - winStart;
 double countsPerPixel = size / (double) insideWidth;
@@ -3359,7 +3354,7 @@ else
 static void genericDrawItemsWiggle(struct track *tg, int seqStart, int seqEnd,
                                        struct hvGfx *hvg, int xOff, int yOff, int width,
                                        MgFont *font, Color color, enum trackVisibility vis)
-/* draw a list of linked features into a wiggle */
+/* Draw a list of linked features into a wiggle. */
 {
 struct preDrawContainer *pre = tg->preDrawContainer = initPreDrawContainer(insideWidth);
 unsigned *counts = countOverlaps(tg);
@@ -3469,8 +3464,8 @@ if (tg->mapItem == NULL)
     tg->mapItem = genericMapItem;
 if (vis != tvDense && (! bedItemRgb(tg->tdb)) && baseColorCanDraw(tg))
     baseColorInitTrack(hvg, tg);
-char *doWiggle = cartOrTdbString(cart, tg->tdb, "doWiggle" , "0");
-if (sameString(doWiggle, "1"))
+boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
+if (doWiggle)
     {
     genericDrawItemsWiggle(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
 				   font, color, vis);
