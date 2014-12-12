@@ -591,6 +591,33 @@ if (bed->name == NULL)
 return bed->name;
 }
 
+char *bedNameField1(struct track *tg, void *item)
+/* return part before first space in item name */
+{
+struct bed *bed = item;
+if (bed->name==NULL)
+    return "";
+char *nonSpc = stringIn(" ", bed->name);
+if (nonSpc==NULL)
+    return bed->name;
+int part1Len = nonSpc - bed->name;
+char *newName = cloneStringZ(bed->name, part1Len);
+return newName;
+}
+
+char *bedNameField2(struct track *tg, void *item)
+/* return part after first space in item name */
+{
+struct bed *bed = item;
+if (bed->name==NULL)
+    return "";
+
+char* spcPos = stringIn(" ", bed->name);
+if (spcPos==NULL)
+    return bed->name;
+return cloneString(spcPos+1);
+}
+
 int bedItemStart(struct track *tg, void *item)
 /* Return start position of item. */
 {
@@ -659,6 +686,13 @@ tg->itemEnd = bedItemEnd;
 // So, set tg->nextPrevExon = simpleBedNextPrevEdge case-by-case.
 tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 tg->freeItems = freeSimpleBed;
+
+if (trackDbSettingClosestToHomeOn(tg->tdb, "linkIdInName"))
+    {
+    tg->mapItemName = bedNameField1;
+    tg->itemName = bedNameField2;
+    }
+
 }
 
 void bed9Methods(struct track *tg)

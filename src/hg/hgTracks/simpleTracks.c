@@ -1343,6 +1343,34 @@ struct linkedFeatures *lf = item;
 return lf->name;
 }
 
+char *linkedFeaturesNameField1(struct track *tg, void *item)
+/* return part before first space in item name */
+{
+struct linkedFeatures *lf = item;
+if (lf->name==NULL)
+    return "";
+char* nonSpc = stringIn(" ", lf->name);
+if (nonSpc==NULL)
+    return lf->name;
+int part1Len = nonSpc - lf->name;
+char *newName = cloneStringZ(lf->name, part1Len);
+return newName;
+}
+
+char *linkedFeaturesNameField2(struct track *tg, void *item)
+/* return part after first space in item name */
+{
+struct linkedFeatures *lf = item;
+if (lf->name==NULL)
+    return "";
+
+char* spcPos = stringIn(" ", lf->name);
+if (spcPos==NULL)
+    return lf->name;
+return cloneString(spcPos+1);
+}
+
+
 void linkedFeaturesFreeList(struct linkedFeatures **pList)
 /* Free up a linked features list. */
 {
@@ -3765,6 +3793,12 @@ tg->itemEnd = linkedFeaturesItemEnd;
 tg->itemNameColor = linkedFeaturesNameColor;
 tg->nextPrevExon = linkedFeaturesNextPrevItem;
 tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
+
+if (trackDbSettingClosestToHomeOn(tg->tdb, "linkIdInName"))
+    {
+    tg->mapItemName = linkedFeaturesNameField1;
+    tg->itemName = linkedFeaturesNameField2;
+    }
 }
 
 int linkedFeaturesSeriesItemStart(struct track *tg, void *item)

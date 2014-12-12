@@ -209,6 +209,7 @@ itemImagePath bed
 itemRgb bedDetail bedGraph bed bedLogR bigBed
 lfPslTable bed
 linesAt chromGraph
+linkIdInName bed bigBed
 labelOnFeature bed bigBed
 longLabel *
 longlabel genePred
