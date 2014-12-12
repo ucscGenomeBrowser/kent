@@ -267,5 +267,6 @@ longLabel GENCODE Gene Annotations (Ensembl)
 
 include wgEncodeGencodeVM2.ra
 include wgEncodeGencodeVM3.ra
+include wgEncodeGencodeVM4.ra
 
 include defaultPriority.ra
