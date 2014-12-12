@@ -5,7 +5,7 @@ table quakeSample
     string subdir; "Subdirectory where files live"
     string fluidPlateAcc; "Shorter 5 char accession corresponding to plate?"
     uint unknown1; "Seems to be number 1-8 with some gaps"
-    string unknown2; "Form like 151 (8) (8) 151 or 101 (6) 101"
+    string seqFormat; "Form like 151 (8) (8) 151 or 101 (6) 101"
     string sequencer; "Looks like a sequencing machine id"
     string sample;  "Looks like a unique ID for each sample"
     string user;  "User name"

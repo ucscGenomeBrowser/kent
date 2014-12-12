@@ -10,7 +10,7 @@
 
 
 
-char *quakeSampleCommaSepFieldNames = "date,subdir,fluidPlateAcc,unknown1,unknown2,sequencer,sample,user,lab,ilAcc,captureArrayBarcode,cellPos";
+char *quakeSampleCommaSepFieldNames = "date,subdir,fluidPlateAcc,unknown1,seqFormat,sequencer,sample,user,lab,ilAcc,captureArrayBarcode,cellPos";
 
 void quakeSampleStaticLoad(char **row, struct quakeSample *ret)
 /* Load a row from quakeSample table into ret.  The contents of ret will
@@ -21,7 +21,7 @@ ret->date = row[0];
 ret->subdir = row[1];
 ret->fluidPlateAcc = row[2];
 ret->unknown1 = sqlUnsigned(row[3]);
-ret->unknown2 = row[4];
+ret->seqFormat = row[4];
 ret->sequencer = row[5];
 ret->sample = row[6];
 ret->user = row[7];
@@ -42,7 +42,7 @@ ret->date = cloneString(row[0]);
 ret->subdir = cloneString(row[1]);
 ret->fluidPlateAcc = cloneString(row[2]);
 ret->unknown1 = sqlUnsigned(row[3]);
-ret->unknown2 = cloneString(row[4]);
+ret->seqFormat = cloneString(row[4]);
 ret->sequencer = cloneString(row[5]);
 ret->sample = cloneString(row[6]);
 ret->user = cloneString(row[7]);
@@ -102,7 +102,7 @@ ret->date = sqlStringComma(&s);
 ret->subdir = sqlStringComma(&s);
 ret->fluidPlateAcc = sqlStringComma(&s);
 ret->unknown1 = sqlUnsignedComma(&s);
-ret->unknown2 = sqlStringComma(&s);
+ret->seqFormat = sqlStringComma(&s);
 ret->sequencer = sqlStringComma(&s);
 ret->sample = sqlStringComma(&s);
 ret->user = sqlStringComma(&s);
@@ -124,7 +124,7 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->date);
 freeMem(el->subdir);
 freeMem(el->fluidPlateAcc);
-freeMem(el->unknown2);
+freeMem(el->seqFormat);
 freeMem(el->sequencer);
 freeMem(el->sample);
 freeMem(el->user);
@@ -166,7 +166,7 @@ fputc(sep,f);
 fprintf(f, "%u", el->unknown1);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->unknown2);
+fprintf(f, "%s", el->seqFormat);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);

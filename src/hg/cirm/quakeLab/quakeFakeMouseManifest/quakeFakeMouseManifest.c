@@ -16,7 +16,7 @@ errAbort(
   "quakeFakeMouseManifest - Create a fake manifest file for pilot mouse data.\n"
   "from quake lab\n"
   "usage:\n"
-  "   quakeFakeMouseManifest inDir manifest.tab err.txt\n"
+  "   quakeFakeMouseManifest inDir manifest.tab err.txt chip.ra\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -56,7 +56,7 @@ lineFileClose(&lf);
 return sheetList;
 }
 
-void quakeFakeMouseManifest(char *inDir, char *outFile, char *errFile)
+void quakeFakeMouseManifest(char *inDir, char *outFile, char *errFile, char *metaFile)
 /* quakeFakeMouseManifest - Create a fake manifest file for pilot mouse data. */
 {
 int inDirSize = strlen(inDir) + 1;  // We'll add a / at end
@@ -136,14 +136,51 @@ for (sample = sampleList; sample != NULL; sample = sample->next)
 uglyf("Got %d files\n", fileCount);
 carefulClose(&f);
 carefulClose(&err);
+
+FILE *meta = mustOpen(metaFile, "w");
+struct quakeChip *chip;
+char *root = "quakeMouseLung";
+fprintf(meta, "meta %s\n", root);
+fprintf(meta, "pmid 24739965\n");
+fprintf(meta, "\n");
+for (chip = chipList; chip != NULL; chip = chip->next)
+    {
+    char *indent = "    ";
+    fprintf(meta, "%smeta chip%s\n", indent, chip->captureArrayBarcode);
+    fprintf(meta, "%suser %s\n", indent, chip->user);
+    fprintf(meta, "%slab %s\n", indent, chip->lab);
+    fprintf(meta, "%sdate %s\n", indent, chip->date);
+    fprintf(meta, "%ssampleType %s\n", indent, chip->sampleType);
+    fprintf(meta, "%stissue %s\n", indent, chip->tissue);
+    fprintf(meta, "%sspecies %s\n", indent, chip->species);
+    fprintf(meta, "%sstrain %s\n", indent, chip->strain);
+    fprintf(meta, "%sage %s\n", indent, chip->age);
+    fprintf(meta, "%stargetCell %s\n", indent, chip->targetCell);
+    fprintf(meta, "%ssortMethod %s\n", indent, chip->sortMethod);
+    fprintf(meta, "%smarkers %s\n", indent, chip->markers);
+    fprintf(meta, "\n");
+    for (sample = sampleList; sample != NULL; sample = sample->next)
+        {
+	if (sameString(sample->captureArrayBarcode, chip->captureArrayBarcode))
+	    {
+	    char *indent = "       ";
+	    fprintf(meta, "%smeta sample%s\n", indent, sample->sample);
+	    fprintf(meta, "%scellPos %s\n", indent, sample->cellPos);
+	    fprintf(meta, "%ssequencer %s\n", indent, sample->sequencer);
+	    fprintf(meta, "%sseqFormat %s\n", indent, sample->seqFormat);
+	    fprintf(meta, "\n");
+	    }
+	}
+    }
+carefulClose(&meta);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+if (argc != 5)
     usage();
-quakeFakeMouseManifest(argv[1], argv[2], argv[3]);
+quakeFakeMouseManifest(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
