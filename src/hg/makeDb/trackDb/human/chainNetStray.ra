@@ -43,13 +43,6 @@ html strayChainNet
         type chain macFas5
         otherDb macFas5
 
-        track chainPanPan1
-        subTrack primateStrayChainNetViewchain on
-        subGroups view=chain species=acBonobo clade=aaprimate
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain panPan1
-        otherDb panPan1
 
         track chainSaiBol1
         subTrack primateStrayChainNetViewchain on
@@ -533,14 +526,6 @@ html strayChainNet
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign macFas5 chainMacFas5
         otherDb macFas5
-
-        track netPanPan1
-        subTrack primateStrayChainNetViewnet on
-        subGroups view=net species=acBonobo clade=aaprimate
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign panPan1 chainPanPan1
-        otherDb panPan1
 
         track netSaiBol1
         subTrack primateStrayChainNetViewnet on
