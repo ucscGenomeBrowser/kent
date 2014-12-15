@@ -1,4 +1,11 @@
-#This directory contains the results of DNAse I hypersensitivity experiments from the 
+# for emacs: -*- mode: sh; -*-
+
+# Regulation tracks for hg38 / GRCh38
+
+#############################################################################
+# Building UW DNAse I ENCODE2 tracks (In progress 2014-09-03 Jim Kent)
+
+#These tracks contain the results of DNAse I hypersensitivity experiments from the 
 #John Stamatoyannapoulos lab at the University of Washington done for the ENCODE Project
 #phase 2.
 
@@ -14,6 +21,9 @@
 #really will just need to be reworked into something simpler now that we've no longer
 #are working directly on that contract.  This build assumes that the relevant bam
 #files are in the /hive/groups/encode/3/eap/cach directory.
+
+# The first section of methods here are to create a hub with peaks,  hotspots, and signal
+# from pooled replicates.
 
 #The detailed instructions after the bam files are available are: 
 
@@ -164,3 +174,91 @@ sed 's/pooled.bigWig/norm.bw/' < calcGraph/uwDnase1.tab > colors.tab
 # Run program to generate trackDb file
 cd /hive/data/genomes/hg38/bed/uwDnase1
 uwDnaseTrackHub meta.tab run_pooled colors.tab hub
+
+
+##########################################################
+# Create DNase tracks from the hub files (In progress 2014-12-09 Kate)
+
+# There are 3 tracks (Redmine #14353):
+#       1) Composite with peaks, hotspots, and signal (as on hub)
+#       2) Multiwig of signal, colored by similarity (as on hub)
+#       3) Clusters (as on hg19)
+
+# The hub data file dir is:  /hive/data/genomes/hg38/bed/uwDnase1/run_pooled
+# (and normalized signal files are linked into that dir from :
+# /hive/data/genomes/hg38/bed/uwDnase1/run_normalized/out
+# The hub trackDb file is: /hive/data/genomes/hg38/bed/uwDnase1/hub/hg38/trackDb.txt
+
+#################################
+# DNAse peaks, hotspots, and signal track, and the multiwig
+
+# Add scores to bigBeds (use signalValue)
+
+    cd /hive/data/genomes/hg38/bed/uwDnase1/run_pooled
+    mkdir -p scored/in scored/out
+    foreach f (*.narrowPeak *.broadPeak)
+        bigBedToBed $f scored/in/$f
+    end
+    cd scored/in
+    bedScore -uniform -method=reg -col=7 *.narrowPeak ../out >&! score.out &
+    bedScore -uniform -method=reg -col=7 *.broadPeak ../out >&! score.out &
+
+    cd ../out
+    foreach f (*.narrowPeak)
+        echo $f
+        bedToBigBed -type=bed6+4 -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as \
+               $f /hive/data/genomes/hg38/chrom.sizes ../$f.bb
+    end
+    foreach f (*.broadPeak)
+        echo $f
+        bedToBigBed -type=bed6+3 -as=$HOME/kent/src/hg/lib/encode/broadPeak.as \
+               $f /hive/data/genomes/hg38/chrom.sizes ../$f.bb
+    end
+
+# Link data files into gbdb and create bbi tables
+    mkdir /hive/data/gbdb/hg38/bbi/uwDnase
+    cd /hive/data/genomes/hg38/bed/uwDnase1/run_pooled/scored
+    set bbi = /gbdb/hg38/bbi/uwDnase/scored
+    mkdir $bbi
+
+    foreach f (*.broadPeak.bb)
+        echo $f
+        ln -s `pwd`/$f $bbi
+        set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
+        hgBbiDbLink hg38 uwEnc2DnaseHot${exp} $bbi/$f
+    end
+
+    foreach f (*.narrowPeak.bb)
+        echo $f
+        ln -s `pwd`/$f $bbi
+        set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
+        hgBbiDbLink hg38 uwEnc2DnasePeaks${exp} $bbi/$f
+    end
+
+    cd /hive/data/genomes/hg38/bed/uwDnase1/run_normalized/out
+    foreach f (*.bw)
+        ln -s `pwd`/$f $bbi/$f
+        set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
+        hgBbiDbLink hg38 uwEnc2DnaseSignal${exp} $bbi/$f
+        hgBbiDbLink hg38 uwEnc2DnaseWig${exp} $bbi/$f
+    end
+
+# Convert trackDb from hub to native
+
+    cd /hive/data/genomes/hg38/bed/uwDnase1/
+    mkdir tracks
+    cd tracks
+    cp ../hub/hg38/trackDb.txt .
+    sed -e 's/type bigBed/type bigBed 6 +/' -e '/bigDataUrl/d' trackDb.txt > trackDb.ra
+    cp trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg38/uwDnase.ra
+
+#################################
+# DNase clusters track
+
+    cd /hive/data/genomes/hg38/bed/uwDnase1
+    mkdir clusters
+    cd clusters
+
+
+
+

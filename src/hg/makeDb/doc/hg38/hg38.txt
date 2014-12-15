@@ -5760,53 +5760,6 @@ TMPDIR=/dev/shm
         ponAbe2 hg38) > rbest.log 2>&1
     # real    78m47.312s
 
-#############################################################################
-# Building UW DNAse I ENCODE2 track (In progress 2014-09-03 Jim Kent)
-
-# See instructions in src/hg/makeDb/doc/encode3/hg38_encode2_dnase1.txt
-# for methods for generating the track big* files and trackDb for a data hub.
-
-# The hub data file dir is:  /hive/data/genomes/hg38/bed/uwDnase1/run_pooled
-# (and normalized signal files are linked into that dir from :
-# /hive/data/genomes/hg38/bed/uwDnase1/run_normalized/out
-# The hub trackDb file is: /hive/data/genomes/hg38/bed/uwDnase1/hub/hg38/trackDb.txt
-
-# Instructions below describe importing this hub as native tracks (In progress 2014-12-09 Kate)
-
-# Link data files into gbdb and create bbi tables
-    mkdir /hive/data/gbdb/hg38/bbi/uwDnase
-    cd /hive/data/genomes/hg38/bed/uwDnase1/run_pooled
-    set bbi = /gbdb/hg38/bbi/uwDnase
-
-    foreach f (*.broadPeak)
-        ln -s `pwd`/$f $bbi/$f.bb
-        set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
-        hgBbiDbLink hg38 uwEnc2DnaseHot${exp} $bbi/$f.bb
-    end
-
-    foreach f (*.narrowPeak)
-        ln -s `pwd`/$f $bbi/$f.bb
-        set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
-        hgBbiDbLink hg38 uwEnc2DnasePeaks${exp} $bbi/$f.bb
-    end
-
-    cd ../run_normalized/out
-    foreach f (*.bw)
-        ln -s `pwd`/$f $bbi/$f
-        set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
-        hgBbiDbLink hg38 uwEnc2DnaseSignal${exp} $bbi/$f
-        hgBbiDbLink hg38 uwEnc2DnaseWig${exp} $bbi/$f
-    end
-
-# Convert trackDb from hub to native
-
-    cd /hive/data/genomes/hg38/bed/uwDnase1/
-    mkdir tracks
-    cd tracks
-    cp ../hub/hg38/trackDb.txt .
-    sed -e 's/type bigBed/type bigBed 6 +/' -e '/bigDataUrl/d' trackDb.txt > trackDb.ra
-    cp trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg38/uwDnase.ra
-
 
 
 

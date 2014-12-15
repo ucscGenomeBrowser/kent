@@ -236,7 +236,7 @@ mouseOverField bigBed
 mgiUrl bed
 mgiUrlLabel bed
 minFreq vcf vcfTabix
-minGrayLevel bed broadPeak narrowPeak bedLogR
+minGrayLevel bed broadPeak narrowPeak bedLogR bigBed
 minLimit *
 minMax chromGraph
 minQual vcf vcfTabix
