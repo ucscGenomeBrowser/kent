@@ -3271,7 +3271,7 @@ for (item = items; item; item = item->next)
     {
     unsigned start = track->itemStart(track, item);
     unsigned end = track->itemEnd(track, item);
-    if (positiveRangeIntersection(start, end, winStart, winEnd) > 0)
+    if (positiveRangeIntersection(start, end, winStart, winEnd) <= 0)
 	continue;
 
     int x1 = max(start - winStart, 0); 
