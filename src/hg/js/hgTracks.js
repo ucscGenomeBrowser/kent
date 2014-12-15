@@ -3569,7 +3569,11 @@ var imageV2 = {
             var title = $('TITLE')[0].text;
             var ttlWords = title.split(' ');
             if (ttlWords.length >= 2) {
-                ttlWords[1] = genomePos.get();
+		for (var i=1; i < ttlWords.length; i++) {
+		    if (ttlWords[i].indexOf(':') >= 0) {
+                        ttlWords[i] = genomePos.get();
+		    }
+		}
                 title = ttlWords.join(' ');
             } else
                 title = genomePos.get();
