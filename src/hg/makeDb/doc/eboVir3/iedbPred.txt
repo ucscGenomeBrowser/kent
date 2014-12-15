@@ -1,0 +1,66 @@
+# epitopes predicted by IEDB, Julia Ponomarenko, received by email
+# mapped with BLAST + pslMap (Done Max 2014-11-25)
+#
+cd /hive/data/genomes/eboVir3/bed/iedbPred/
+# got three supplemental files via email, Supplemental_file_{1,2,3}.txt
+# BUILD PSL file for PSLMAP
+# get proteins and their nucleotide-sizes
+less Supplemental_file_1.txt  | grep Zaire-2014 | cut -f5 | tabUniq -rs | cut -f1 | cut -d\| -f4 > prot.lst
+echo AIG96296.1 >> prot.lst # is only in suppl file 3
+retrEutils prot.lst prot1.fa -f fasta -o --db protein --field 3
+faSize -detailed prot1.fa | tawk '{$2*=3;print}'> prot1.sizes
+# blast and convert to nucl-space alignment on query side
+twoBitToFa ../../eboVir3.2bit eboVir3.fa
+/cluster/bin/blast/x86_64/blast-2.2.16/bin/formatdb -i eboVir3.fa -p F
+# XX Why is the coverage so low? If minCover is increased, only 9 proteins match..
+/cluster/bin/blast/x86_64/blast-2.2.16/bin/blastall -p tblastn -F F -d  eboVir3.fa -i prot1.fa | blastToPsl stdin stdout | pslCDnaFilter stdin stdout -minId=0.90 -minCover=0.55 | pslProtCnv > prot1.psl
+
+# suppl file 1
+# create bed file from IEDB Zaire 2014 annotations
+less Supplemental_file_1.txt  | grep Zaire-2014 | cut -f9,11,12,1 | tawk '{print $2,($3-1)*3,(($4)*3),$1}' | grep -v NCBI > supp1.bed
+# lift the bed file
+bedToPsl prot1.sizes supp1.bed stdout | pslMap stdin prot1.psl stdout | pslToBed stdin supp1.lifted.bed
+# remove some columns from main table into a tab
+cat Supplemental_file_1.txt | cut -f-20 | egrep 'Strain-short|Zaire-2014'| tabRemoveCol -k2,4,7,9,5  > supp1.tab
+# join bed and tab file
+bedAppend supp1.lifted.bed supp1.tab 0 supp1.join.bed supp1.as
+# reformat name and score fields
+cat supp1.join.bed  | tawk '{split($14, a, "-"); $4=a[2]; print}' | tawk '{split ($21, a, "."); $5=1000-a[1];print}' > supp1.final.bed
+# split by name, convert to bb and make links
+bedSplitOnName supp1.final.bed supp1/ -p iedb
+for i in supp1/*.bed; do bedToBigBed $i /hive/data/genomes/eboVir3/chrom.sizes supp1/`basename $i .bed`.bb -tab -type=bed12+ -as=supp1.as; done
+for i in supp1/*.bb; do ln -s `pwd`/$i /gbdb/eboVir3/bbi/`basename $i`; done
+for i in supp1/*.bb; do hgBbiDbLink eboVir3 `basename $i .bb` /gbdb/eboVir3/bbi/`basename $i`; done
+
+# same for supp 2
+less Supplemental_file_2.txt  | grep Zaire-2014 | cut -f9,11,12,1 | tawk '{print $2,($3-1)*3,$4*3,$1}' | grep -v NCBI > supp2.bed
+bedToPsl prot1.sizes supp2.bed stdout | pslMap stdin prot1.psl stdout | pslToBed stdin supp2.lifted.bed
+cat Supplemental_file_2.txt | cut -f-14 | egrep 'Strain-short|Zaire-2014'| tabRemoveCol -k2,4,7,9,5  > supp2.tab
+bedAppend supp2.lifted.bed supp2.tab 0 supp2.join.bed supp2.as
+cat supp2.join.bed  | tawk '{split($14, a, "-"); $4=a[2]; print}' | tawk '{$5=int(1000-(1000*$21));print}' > supp2.final.bed
+bedSplitOnName supp2.final.bed supp2/ -p iedb
+for i in supp2/*.bed; do bedToBigBed $i /hive/data/genomes/eboVir3/chrom.sizes supp2/`basename $i .bed`.bb -tab -type=bed12+ -as=supp2.as; done
+for i in supp2/*.bb; do ln -s `pwd`/$i /gbdb/eboVir3/bbi/`basename $i`; done
+for i in supp2/*.bb; do hgBbiDbLink eboVir3 `basename $i .bb` /gbdb/eboVir3/bbi/`basename $i`; done
+
+# similar for supp 3, but don't split into subtracks
+less Supplemental_file_3.txt  | grep Zaire-2014 | cut -f8,10,11,1 | tawk '{print $2,$3,$4,$1}' | grep -v NCBI > supp3.bed
+bedToPsl prot1.sizes supp3.bed stdout | pslProtCnv | pslMap stdin prot1.psl stdout | pslToBed stdin supp3.lifted.bed
+cat Supplemental_file_3.txt | cut -f-19 | egrep 'Strain-short|Zaire-2014'| cut -f1,3,6,8,10- > supp3.tab
+bedAppend supp3.lifted.bed supp3.tab 0 supp3.join.bed supp3.as
+cat supp3.join.bed  | tawk '{$4=$19; print}' | tawk '{split ($20, a, "."); $5=1000-(10*a[1]);print}' > supp3.final.bed
+# add a prot L feature (created manually) to indicate that L is not covered
+cat protLsupp3.bed >> supp3.final.bed
+bedToBigBed supp3.final.bed /hive/data/genomes/eboVir3/chrom.sizes iedbSupp3.bb -tab -type=bed12+ -as=supp3.as
+ln -s `pwd`/iedbSupp3.bb /gbdb/eboVir3/bbi/iedbSupp3.bb
+hgBbiDbLink eboVir3 iedbSupp3 /gbdb/eboVir3/bbi/iedbSupp3.bb
+
+# change all names to sequences, do not show the HLA types in the name field
+# anymore
+for i in supp1/*.bed; do echo $i; cat $i  | tawk '{$4=$20; print}' > temp.txt; mv temp.txt $i; done
+for i in supp2/*.bed; do echo $i; cat $i  | tawk '{$4=$20; print}' > temp.txt; mv temp.txt $i; done
+for i in supp1/*.bed; do bedToBigBed $i /hive/data/genomes/eboVir3/chrom.sizes supp1/`basename $i .bed`.bb -tab -type=bed12+ -as=supp1.as; done
+for i in supp2/*.bed; do bedToBigBed $i /hive/data/genomes/eboVir3/chrom.sizes supp2/`basename $i .bed`.bb -tab -type=bed12+ -as=supp2.as; done
+bedToBigBed protL.bed /hive/data/genomes/eboVir3/chrom.sizes protL.bb -tab -type=bed4+1 -as=protL.as
+ln -s `pwd`/protL.bb /gbdb/eboVir3/bbi/protL.bb
+hgBbiDbLink eboVir3 protL2 /gbdb/eboVir3/bbi/protL.bb
