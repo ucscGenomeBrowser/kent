@@ -5041,6 +5041,7 @@ tablesIgnored $eboVir
     spStruct
     testAllFrames
     testAllStrainFrames
+    iedbPred%
 
 tablesIgnored $snpDb125
     snp125ExceptionDesc
