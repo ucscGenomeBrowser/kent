@@ -1459,6 +1459,27 @@
     <pre>   bedNameLabel Gene Id</pre>
 </DIV>
 
+<DIV class="linkIdInName"><span class="types bed bigBed"></span>
+<div class="format"><code>linkIdIName on</code></div>
+    <P>This setting changes the meaning of the bed name field
+    to "identifier description". If it is activated, the browser
+    does not show the first word of the BED item name,
+    but uses this first word for linking out to the item detail page. This
+    allows putting both an identifier, like a gene ID, and its human-readable
+    description into the BED item name field, separated by a space.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>   linkIdInName on</pre>
+    <P>
+    A BED name field of "9005 PITX2" will be shown "PITX2" on the genome
+    browser, but when the user clicks on it, the URL will be built only from
+    the first word, by default cgi-bin/hgc?i=9005&amp;(...). The URL can be
+    changed with <A onclick="jumpTo(this)" HREF="#">directUrl</A>, where %s
+    is replaced by the identifier.
+    </P>
+
+</DIV>
+
 <DIV class="baseColorUseSequence"><span class="types all"></span>
 <div class="format"><I>Related settings:</I><BR>
     <code>baseColorUseSequence &lt; &lt;extFile {seqTable} &lt;extFile&gt; /
