@@ -1460,7 +1460,7 @@
 </DIV>
 
 <DIV class="linkIdInName"><span class="types bed bigBed"></span>
-<div class="format"><code>linkIdIName on</code></div>
+<div class="format"><code>linkIdInName on</code></div>
     <P>This setting changes the meaning of the bed name field
     to "identifier description". If it is activated, the browser
     does not show the first word of the BED item name,
