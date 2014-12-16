@@ -3271,11 +3271,11 @@ for (item = items; item; item = item->next)
     {
     unsigned start = track->itemStart(track, item);
     unsigned end = track->itemEnd(track, item);
-    if (positiveRangeIntersection(start, end, winStart, winEnd) > 0)
+    if (positiveRangeIntersection(start, end, winStart, winEnd) <= 0)
 	continue;
 
-    int x1 = max(start - winStart, 0); 
-    int x2 = min(end - winStart, size);
+    int x1 = max((int)start - (int)winStart, 0); 
+    int x2 = min((int)end - (int)winStart, size);
 
     for(; x1 < x2; x1++)
 	counts[x1]++;
