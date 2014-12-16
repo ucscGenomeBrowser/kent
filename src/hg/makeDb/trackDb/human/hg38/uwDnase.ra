@@ -1,6 +1,21 @@
+track uwEnc2DnaseClustered
+table wgEncodeRegDnaseClustered
+shortLabel ENCODE2 DNase Clusters
+longLabel ENCODE2 UW Dnase Hypersensitivity Clusters in 95 cell types
+inputTableFieldDisplay cellType treatment
+inputTrackTable uwEnc2DnaseInputs
+sourceTable uwEnc2DnaseSources
+type bed 5 .
+scoreFilter 200
+scoreFilterLimits 1:1000
+controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
+spectrum on
+visibility dense
+group regulation
+
 track uwEnc2Dnase
 compositeTrack on
-shortLabel ENCODE2 UW DNase
+shortLabel ENCODE2 DNase
 longLabel ENCODE2 University of Washington DNase I Hypersensitivity
 group regulation
 subGroup1 view Views Hot=HotSpots Peaks=Peaks Signal=Signal
@@ -2046,7 +2061,7 @@ type bed 3 +
 	type bigWig 0 72865.5
 
 track uwEnc2DnaseWig
-shortLabel ENCODE2 DNAse Col
+shortLabel ENCODE2 DNAse Signal
 longLabel ENCODE2 UW DNAse Hypersensitivity Signal Colored by Similarity
 visibility full
 type bigWig 0 10000

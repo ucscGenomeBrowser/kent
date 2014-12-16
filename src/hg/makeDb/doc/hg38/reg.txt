@@ -243,6 +243,14 @@ uwDnaseTrackHub meta.tab run_pooled colors.tab hub
         hgBbiDbLink hg38 uwEnc2DnaseWig${exp} $bbi/$f
     end
 
+# Load peaks into database (needed by hgc. we may be able to drop these with code changes)
+    cd /hive/data/genomes/hg38/bed/uwDnase1/run_pooled/scored/out
+    foreach f (*.narrowPeak)
+        echo $f
+        set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
+        hgLoadBed -fillInScore=signalValue -trimSqlTable -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg38 uwEnc2DnaseBedPeaks${exp} $f
+    end
+
 # Convert trackDb from hub to native
 
     cd /hive/data/genomes/hg38/bed/uwDnase1/
@@ -257,8 +265,60 @@ uwDnaseTrackHub meta.tab run_pooled colors.tab hub
 
     cd /hive/data/genomes/hg38/bed/uwDnase1
     mkdir clusters
-    cd clusters
+    cd run_pooled/scored/out
+    ls *.pooled.narrowPeak > ../../../clusters/peak.lst
 
+    # calculate normalization factor
+    regClusterMakeTableOfTables -verbose=3 eapDnase01Hg38 \
+        ../../../clusters/peak.lst ../../../clusters/peak.table >&! ../../../clusters/regTable.out &
+
+    # cluster
+    regCluster -bedSources ../../../clusters/peak.table /dev/null ../../../clusters/peak.bed \
+        >&! ../../../clusters/regCluster.out &
+    # 1876769 singly-linked clusters, 1934764 clusters in 86 chromosomes
+    # NOTE: more clusters (2.2M) in hg19 (which included Duke data)
+
+    # filter out low scoring
+    cd ../../../clusters
+    awk '$5 >= 100' peak.bed > peak.filtered.bed
+    wc -l peak.filtered.bed
+    # 1236194 uwEnc2DnaseClustered.bed
+    # retained 65% vs 83% in hg19 (too low ??)
+
+    # --> keep them all for now, filter with UI
+
+    # format to BED5+floatscore+sources for hgBedSources 
+    #   which will extract, uniquify, and assign ID's to sources
+    awk 'BEGIN {OFS="\t"}{print $1, $2, $3, $4, $5, 0, $7;}' peak.bed > peak.bed6
+    hgBedSources peak.bed6 regDnase
+    mv regDnaseSources.tab uwEnc2DnaseSources.tab
+
+    # load sources table
+    autoSql $HOME/kent/src/hg/lib/idName.as idName
+    hgLoadSqlTab hg38 uwEnc2DnaseSources idName.sql uwEnc2DnaseSources.tab
+
+    # merge files and format to BED5+sourceCount+sourceIds+sourceVals
+    awk '{print $8}' peak.bed > peak.vals
+    awk 'BEGIN {OFS="\t"}{print $1, $2, $3, $4, $5, $7, $8;}' regDnase.bed | \
+        paste - peak.vals > uwEnc2DnaseClustered.bed
+    hgLoadBed hg38 uwEnc2DnaseClustered -sqlTable=$HOME/kent/src/hg/lib/bed5SourceVals.sql \
+        -renameSqlTable -as=$HOME/kent/src/hg/lib/bed5SourceVals.as uwEnc2DnaseClustered.bed
+
+    # create inputs file to display metadata on details page
+    # NOTE: this can probably be jettisoned in favor of new code, since source info
+    # is now in the BED file
+cat > makeInputs.csh << 'EOF'
+    set tables = `hgsql hg38 -Ne "show tables like 'uwEnc2DnasePeaks%'"`
+    foreach t ($tables)
+        set exp = `echo $t | sed 's/uwEnc2DnasePeaksWgEncode/wgEncode/'`
+        set t = `echo $t | sed 's/Peaks/BedPeaks/'`
+        set cell = `encodeExp show $exp cellType`
+        set treatment = `encodeExp show $exp treatment`
+        echo "$t\t$cell\t$treatment"
+    end
+'EOF'
+    csh makeInputs.csh > inputs.tab
+    hgLoadSqlTab hg38 uwEnc2DnaseInputs ~/kent/src/hg/lib/clusterInputEapDnase.sql inputs.tab
 
 
 
