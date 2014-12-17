@@ -2070,7 +2070,6 @@ track uwEnc2DnaseWig
 shortLabel UW DNAse Signal
 wgEncode on
 longLabel DNaseI Hypersensitivity Signal Colored by Similarity from UW/ENCODE2
-visibility full
 type bigWig 0 10000
 maxHeightPixels 128:64:11
 container multiWig
@@ -2083,7 +2082,7 @@ priority 100.1
 html uwDnaseSignal
 
 	track uwEnc2DnaseWigWgEncodeEH000484
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel K562 Sg
 	longLabel K562 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000484
 	type bigWig 0 38914.2
@@ -2091,7 +2090,7 @@ html uwDnaseSignal
 	priority 1
 
 	track uwEnc2DnaseWigWgEncodeEH001180
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel A549 Sg
 	longLabel A549 DNAseI HS Signals from ENCODE2/UW wgEncodeEH001180
 	type bigWig 0 30091.1
@@ -2099,7 +2098,7 @@ html uwDnaseSignal
 	priority 1.00887
 
 	track uwEnc2DnaseWigWgEncodeEH001187
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel LNCaP Sg
 	longLabel LNCaP DNAseI HS Signals from ENCODE2/UW wgEncodeEH001187
 	type bigWig 0 37372.7
@@ -2107,7 +2106,7 @@ html uwDnaseSignal
 	priority 1.01793
 
 	track uwEnc2DnaseWigWgEncodeEH000503
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HMEC Sg
 	longLabel HMEC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000503
 	type bigWig 0 32097.2
@@ -2115,7 +2114,7 @@ html uwDnaseSignal
 	priority 1.02847
 
 	track uwEnc2DnaseWigWgEncodeEH002583
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel T-47D Sg
 	longLabel T-47D DNAseI HS Signals from ENCODE2/UW wgEncodeEH002583
 	type bigWig 0 34214.8
@@ -2123,7 +2122,7 @@ html uwDnaseSignal
 	priority 1.04106
 
 	track uwEnc2DnaseWigWgEncodeEH000500
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel PANC-1 Sg
 	longLabel PANC-1 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000500
 	type bigWig 0 12279.3
@@ -2131,7 +2130,7 @@ html uwDnaseSignal
 	priority 1.05908
 
 	track uwEnc2DnaseWigWgEncodeEH001162
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HCT-116 Sg
 	longLabel HCT-116 DNAseI HS Signals from ENCODE2/UW wgEncodeEH001162
 	type bigWig 0 27405.3
@@ -2139,7 +2138,7 @@ html uwDnaseSignal
 	priority 1.06881
 
 	track uwEnc2DnaseWigWgEncodeEH002582
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel NHBE_RA Sg
 	longLabel NHBE_RA DNAseI HS Signals from ENCODE2/UW wgEncodeEH002582
 	type bigWig 0 31238.7
@@ -2147,7 +2146,7 @@ html uwDnaseSignal
 	priority 1.07294
 
 	track uwEnc2DnaseWigWgEncodeEH001193
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HFF Sg
 	longLabel HFF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001193
 	type bigWig 0 17635.9
@@ -2155,7 +2154,7 @@ html uwDnaseSignal
 	priority 1.0818
 
 	track uwEnc2DnaseWigWgEncodeEH001194
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HFF-Myc Sg
 	longLabel HFF-Myc DNAseI HS Signals from ENCODE2/UW wgEncodeEH001194
 	type bigWig 0 23416.2
@@ -2163,7 +2162,7 @@ html uwDnaseSignal
 	priority 1.08427
 
 	track uwEnc2DnaseWigWgEncodeEH001887
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel NT2-D1 Sg
 	longLabel NT2-D1 DNAseI HS Signals from ENCODE2/UW wgEncodeEH001887
 	type bigWig 0 8351.64
@@ -2171,7 +2170,7 @@ html uwDnaseSignal
 	priority 1.09484
 
 	track uwEnc2DnaseWigWgEncodeEH000487
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel BJ Sg
 	longLabel BJ DNAseI HS Signals from ENCODE2/UW wgEncodeEH000487
 	type bigWig 0 28788.2
@@ -2179,7 +2178,7 @@ html uwDnaseSignal
 	priority 1.11593
 
 	track uwEnc2DnaseWigWgEncodeEH000507
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel AG09309 Sg
 	longLabel AG09309 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000507
 	type bigWig 0 29145.4
@@ -2187,7 +2186,7 @@ html uwDnaseSignal
 	priority 1.11916
 
 	track uwEnc2DnaseWigWgEncodeEH000516
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HNPCEpiC Sg
 	longLabel HNPCEpiC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000516
 	type bigWig 0 26522.6
@@ -2195,7 +2194,7 @@ html uwDnaseSignal
 	priority 1.124
 
 	track uwEnc2DnaseWigWgEncodeEH001197
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel WI-38 Sg
 	longLabel WI-38 DNAseI HS Signals from ENCODE2/UW wgEncodeEH001197
 	type bigWig 0 21133.7
@@ -2203,7 +2202,7 @@ html uwDnaseSignal
 	priority 1.13075
 
 	track uwEnc2DnaseWigWgEncodeEH002574
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel GM04503 Sg
 	longLabel GM04503 DNAseI HS Signals from ENCODE2/UW wgEncodeEH002574
 	type bigWig 0 11390.2
@@ -2211,7 +2210,7 @@ html uwDnaseSignal
 	priority 1.1425
 
 	track uwEnc2DnaseWigWgEncodeEH002575
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel GM04504 Sg
 	longLabel GM04504 DNAseI HS Signals from ENCODE2/UW wgEncodeEH002575
 	type bigWig 0 11566.9
@@ -2219,7 +2218,7 @@ html uwDnaseSignal
 	priority 1.14786
 
 	track uwEnc2DnaseWigWgEncodeEH000521
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel NHLF Sg
 	longLabel NHLF DNAseI HS Signals from ENCODE2/UW wgEncodeEH000521
 	type bigWig 0 11719.1
@@ -2227,7 +2226,7 @@ html uwDnaseSignal
 	priority 1.156
 
 	track uwEnc2DnaseWigWgEncodeEH001179
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel NH-A Sg
 	longLabel NH-A DNAseI HS Signals from ENCODE2/UW wgEncodeEH001179
 	type bigWig 0 9132.47
@@ -2235,7 +2234,7 @@ html uwDnaseSignal
 	priority 1.15667
 
 	track uwEnc2DnaseWigWgEncodeEH001178
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HBMEC Sg
 	longLabel HBMEC DNAseI HS Signals from ENCODE2/UW wgEncodeEH001178
 	type bigWig 0 11394.7
@@ -2243,7 +2242,7 @@ html uwDnaseSignal
 	priority 1.1627
 
 	track uwEnc2DnaseWigWgEncodeEH000508
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel AG09319 Sg
 	longLabel AG09319 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000508
 	type bigWig 0 28099
@@ -2251,7 +2250,7 @@ html uwDnaseSignal
 	priority 1.17288
 
 	track uwEnc2DnaseWigWgEncodeEH001175
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HPdLF Sg
 	longLabel HPdLF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001175
 	type bigWig 0 11009.1
@@ -2259,7 +2258,7 @@ html uwDnaseSignal
 	priority 1.17804
 
 	track uwEnc2DnaseWigWgEncodeEH000513
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HCF Sg
 	longLabel HCF DNAseI HS Signals from ENCODE2/UW wgEncodeEH000513
 	type bigWig 0 19295.8
@@ -2267,7 +2266,7 @@ html uwDnaseSignal
 	priority 1.18546
 
 	track uwEnc2DnaseWigWgEncodeEH000519
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HCM Sg
 	longLabel HCM DNAseI HS Signals from ENCODE2/UW wgEncodeEH000519
 	type bigWig 0 14370.2
@@ -2275,7 +2274,7 @@ html uwDnaseSignal
 	priority 1.18728
 
 	track uwEnc2DnaseWigWgEncodeEH001173
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HPAF Sg
 	longLabel HPAF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001173
 	type bigWig 0 11225.6
@@ -2283,7 +2282,7 @@ html uwDnaseSignal
 	priority 1.18958
 
 	track uwEnc2DnaseWigWgEncodeEH001161
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel AoAF Sg
 	longLabel AoAF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001161
 	type bigWig 0 10369.5
@@ -2291,7 +2290,7 @@ html uwDnaseSignal
 	priority 1.19489
 
 	track uwEnc2DnaseWigWgEncodeEH000514
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HCPEpiC Sg
 	longLabel HCPEpiC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000514
 	type bigWig 0 13163.5
@@ -2299,7 +2298,7 @@ html uwDnaseSignal
 	priority 1.20382
 
 	track uwEnc2DnaseWigWgEncodeEH001174
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HPF Sg
 	longLabel HPF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001174
 	type bigWig 0 11172
@@ -2307,7 +2306,7 @@ html uwDnaseSignal
 	priority 1.21201
 
 	track uwEnc2DnaseWigWgEncodeEH001165
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HConF Sg
 	longLabel HConF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001165
 	type bigWig 0 8320.98
@@ -2315,7 +2314,7 @@ html uwDnaseSignal
 	priority 1.2193
 
 	track uwEnc2DnaseWigWgEncodeEH001192
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HAc Sg
 	longLabel HAc DNAseI HS Signals from ENCODE2/UW wgEncodeEH001192
 	type bigWig 0 10000.7
@@ -2323,7 +2322,7 @@ html uwDnaseSignal
 	priority 1.22962
 
 	track uwEnc2DnaseWigWgEncodeEH001176
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HVMF Sg
 	longLabel HVMF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001176
 	type bigWig 0 5956.46
@@ -2331,7 +2330,7 @@ html uwDnaseSignal
 	priority 1.24127
 
 	track uwEnc2DnaseWigWgEncodeEH001184
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HIPEpiC Sg
 	longLabel HIPEpiC DNAseI HS Signals from ENCODE2/UW wgEncodeEH001184
 	type bigWig 0 8028.81
@@ -2339,7 +2338,7 @@ html uwDnaseSignal
 	priority 1.2515
 
 	track uwEnc2DnaseWigWgEncodeEH003031
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel bone_marrow_MSC Sg
 	longLabel bone_marrow_MSC DNAseI HS Signals from ENCODE2/UW wgEncodeEH003031
 	type bigWig 0 3047.47
@@ -2347,7 +2346,7 @@ html uwDnaseSignal
 	priority 1.26303
 
 	track uwEnc2DnaseWigWgEncodeEH000509
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel AG10803 Sg
 	longLabel AG10803 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000509
 	type bigWig 0 19440.9
@@ -2355,7 +2354,7 @@ html uwDnaseSignal
 	priority 1.27484
 
 	track uwEnc2DnaseWigWgEncodeEH001166
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HMF Sg
 	longLabel HMF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001166
 	type bigWig 0 12347.6
@@ -2363,7 +2362,7 @@ html uwDnaseSignal
 	priority 1.28722
 
 	track uwEnc2DnaseWigWgEncodeEH000504
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HGF Sg
 	longLabel HGF DNAseI HS Signals from ENCODE2/UW wgEncodeEH000504
 	type bigWig 0 3410.39
@@ -2371,7 +2370,7 @@ html uwDnaseSignal
 	priority 1.29794
 
 	track uwEnc2DnaseWigWgEncodeEH000518
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel NHDF-neo Sg
 	longLabel NHDF-neo DNAseI HS Signals from ENCODE2/UW wgEncodeEH000518
 	type bigWig 0 13455.2
@@ -2379,7 +2378,7 @@ html uwDnaseSignal
 	priority 1.3069
 
 	track uwEnc2DnaseWigWgEncodeEH000512
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HAEpiC Sg
 	longLabel HAEpiC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000512
 	type bigWig 0 10858.1
@@ -2387,7 +2386,7 @@ html uwDnaseSignal
 	priority 1.32226
 
 	track uwEnc2DnaseWigWgEncodeEH000490
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel SKMC Sg
 	longLabel SKMC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000490
 	type bigWig 0 2130.04
@@ -2395,7 +2394,7 @@ html uwDnaseSignal
 	priority 1.3337
 
 	track uwEnc2DnaseWigWgEncodeEH002580
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HBVSMC Sg
 	longLabel HBVSMC DNAseI HS Signals from ENCODE2/UW wgEncodeEH002580
 	type bigWig 0 3766.42
@@ -2403,7 +2402,7 @@ html uwDnaseSignal
 	priority 1.34687
 
 	track uwEnc2DnaseWigWgEncodeEH000505
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel AG04449 Sg
 	longLabel AG04449 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000505
 	type bigWig 0 20132.8
@@ -2411,7 +2410,7 @@ html uwDnaseSignal
 	priority 1.36656
 
 	track uwEnc2DnaseWigWgEncodeEH000506
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel AG04450 Sg
 	longLabel AG04450 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000506
 	type bigWig 0 18229.7
@@ -2419,7 +2418,7 @@ html uwDnaseSignal
 	priority 1.37094
 
 	track uwEnc2DnaseWigWgEncodeEH001191
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HA-h Sg
 	longLabel HA-h DNAseI HS Signals from ENCODE2/UW wgEncodeEH001191
 	type bigWig 0 10262.5
@@ -2427,7 +2426,7 @@ html uwDnaseSignal
 	priority 1.38256
 
 	track uwEnc2DnaseWigWgEncodeEH002581
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel M059J Sg
 	longLabel M059J DNAseI HS Signals from ENCODE2/UW wgEncodeEH002581
 	type bigWig 0 6527.58
@@ -2435,7 +2434,7 @@ html uwDnaseSignal
 	priority 1.39616
 
 	track uwEnc2DnaseWigWgEncodeEH003007
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel RPMI-7951 Sg
 	longLabel RPMI-7951 DNAseI HS Signals from ENCODE2/UW wgEncodeEH003007
 	type bigWig 0 7339.21
@@ -2443,7 +2442,7 @@ html uwDnaseSignal
 	priority 1.40485
 
 	track uwEnc2DnaseWigWgEncodeEH001183
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HA-sp Sg
 	longLabel HA-sp DNAseI HS Signals from ENCODE2/UW wgEncodeEH001183
 	type bigWig 0 8189.49
@@ -2451,7 +2450,7 @@ html uwDnaseSignal
 	priority 1.42221
 
 	track uwEnc2DnaseWigWgEncodeEH001164
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HCFaa Sg
 	longLabel HCFaa DNAseI HS Signals from ENCODE2/UW wgEncodeEH001164
 	type bigWig 0 3845.33
@@ -2459,7 +2458,7 @@ html uwDnaseSignal
 	priority 1.43568
 
 	track uwEnc2DnaseWigWgEncodeEH001198
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel WI-38 40HTAM Sg
 	longLabel WI-38 4OHTAM 20nM 72hr DNAseI HS Signals from ENCODE2/UW wgEncodeEH001198
 	type bigWig 0 9068.99
@@ -2467,7 +2466,7 @@ html uwDnaseSignal
 	priority 1.44843
 
 	track uwEnc2DnaseWigWgEncodeEH001177
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel NHDF-Ad Sg
 	longLabel NHDF-Ad DNAseI HS Signals from ENCODE2/UW wgEncodeEH001177
 	type bigWig 0 2200.64
@@ -2475,7 +2474,7 @@ html uwDnaseSignal
 	priority 1.46595
 
 	track uwEnc2DnaseWigWgEncodeEH001185
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HSMM Sg
 	longLabel HSMM DNAseI HS Signals from ENCODE2/UW wgEncodeEH001185
 	type bigWig 0 14177.3
@@ -2483,7 +2482,7 @@ html uwDnaseSignal
 	priority 1.48469
 
 	track uwEnc2DnaseWigWgEncodeEH003005
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel LHCN-M2 Sg
 	longLabel LHCN-M2 DNAseI HS Signals from ENCODE2/UW wgEncodeEH003005
 	type bigWig 0 16877.8
@@ -2491,7 +2490,7 @@ html uwDnaseSignal
 	priority 1.48937
 
 	track uwEnc2DnaseWigWgEncodeEH003006
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel LHCN-M2 diff 4d Sg
 	longLabel LHCN-M2 DIFF 4d DNAseI HS Signals from ENCODE2/UW wgEncodeEH003006
 	type bigWig 0 44051.9
@@ -2499,7 +2498,7 @@ html uwDnaseSignal
 	priority 1.49766
 
 	track uwEnc2DnaseWigWgEncodeEH001186
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HSMMtube Sg
 	longLabel HSMMtube DNAseI HS Signals from ENCODE2/UW wgEncodeEH001186
 	type bigWig 0 14719.7
@@ -2507,7 +2506,7 @@ html uwDnaseSignal
 	priority 1.50509
 
 	track uwEnc2DnaseWigWgEncodeEH000488
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HUVEC Sg
 	longLabel HUVEC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000488
 	type bigWig 0 6744.03
@@ -2515,7 +2514,7 @@ html uwDnaseSignal
 	priority 1.52185
 
 	track uwEnc2DnaseWigWgEncodeEH001163
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HMVEC-LBl Sg
 	longLabel HMVEC-LBl DNAseI HS Signals from ENCODE2/UW wgEncodeEH001163
 	type bigWig 0 2898.86
@@ -2523,7 +2522,7 @@ html uwDnaseSignal
 	priority 1.52972
 
 	track uwEnc2DnaseWigWgEncodeEH001168
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HMVEC-dBl-Ad Sg
 	longLabel HMVEC-dBl-Ad DNAseI HS Signals from ENCODE2/UW wgEncodeEH001168
 	type bigWig 0 6571.28
@@ -2531,7 +2530,7 @@ html uwDnaseSignal
 	priority 1.53388
 
 	track uwEnc2DnaseWigWgEncodeEH001171
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HMVEC-dLy-Neo Sg
 	longLabel HMVEC-dLy-Neo DNAseI HS Signals from ENCODE2/UW wgEncodeEH001171
 	type bigWig 0 9237.62
@@ -2539,7 +2538,7 @@ html uwDnaseSignal
 	priority 1.53734
 
 	track uwEnc2DnaseWigWgEncodeEH001169
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HMVEC-dBl-Neo Sg
 	longLabel HMVEC-dBl-Neo DNAseI HS Signals from ENCODE2/UW wgEncodeEH001169
 	type bigWig 0 6275.08
@@ -2547,7 +2546,7 @@ html uwDnaseSignal
 	priority 1.54191
 
 	track uwEnc2DnaseWigWgEncodeEH001195
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HRGEC Sg
 	longLabel HRGEC DNAseI HS Signals from ENCODE2/UW wgEncodeEH001195
 	type bigWig 0 7095.64
@@ -2555,7 +2554,7 @@ html uwDnaseSignal
 	priority 1.54737
 
 	track uwEnc2DnaseWigWgEncodeEH001167
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HMVEC-LLy Sg
 	longLabel HMVEC-LLy DNAseI HS Signals from ENCODE2/UW wgEncodeEH001167
 	type bigWig 0 21274
@@ -2563,7 +2562,7 @@ html uwDnaseSignal
 	priority 1.56304
 
 	track uwEnc2DnaseWigWgEncodeEH001172
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HMVEC-dNeo Sg
 	longLabel HMVEC-dNeo DNAseI HS Signals from ENCODE2/UW wgEncodeEH001172
 	type bigWig 0 16586
@@ -2571,7 +2570,7 @@ html uwDnaseSignal
 	priority 1.56474
 
 	track uwEnc2DnaseWigWgEncodeEH001889
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HMVEC-dAd Sg
 	longLabel HMVEC-dAd DNAseI HS Signals from ENCODE2/UW wgEncodeEH001889
 	type bigWig 0 7923.4
@@ -2579,7 +2578,7 @@ html uwDnaseSignal
 	priority 1.56686
 
 	track uwEnc2DnaseWigWgEncodeEH000493
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HRCEpiC Sg
 	longLabel HRCEpiC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000493
 	type bigWig 0 4920.93
@@ -2587,7 +2586,7 @@ html uwDnaseSignal
 	priority 1.58591
 
 	track uwEnc2DnaseWigWgEncodeEH000494
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HRE Sg
 	longLabel HRE DNAseI HS Signals from ENCODE2/UW wgEncodeEH000494
 	type bigWig 0 6938.49
@@ -2595,7 +2594,7 @@ html uwDnaseSignal
 	priority 1.59019
 
 	track uwEnc2DnaseWigWgEncodeEH000499
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel NHEK Sg
 	longLabel NHEK DNAseI HS Signals from ENCODE2/UW wgEncodeEH000499
 	type bigWig 0 9597.75
@@ -2603,7 +2602,7 @@ html uwDnaseSignal
 	priority 1.60559
 
 	track uwEnc2DnaseWigWgEncodeEH000501
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel SAEC Sg
 	longLabel SAEC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000501
 	type bigWig 0 4884.78
@@ -2611,7 +2610,7 @@ html uwDnaseSignal
 	priority 1.61604
 
 	track uwEnc2DnaseWigWgEncodeEH001888
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel PrEC Sg
 	longLabel PrEC DNAseI HS Signals from ENCODE2/UW wgEncodeEH001888
 	type bigWig 0 4302.39
@@ -2619,7 +2618,7 @@ html uwDnaseSignal
 	priority 1.62238
 
 	track uwEnc2DnaseWigWgEncodeEH000515
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HEEpiC Sg
 	longLabel HEEpiC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000515
 	type bigWig 0 20601.1
@@ -2627,7 +2626,7 @@ html uwDnaseSignal
 	priority 1.632
 
 	track uwEnc2DnaseWigWgEncodeEH000481
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel GM06990 Sg
 	longLabel GM06990 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000481
 	type bigWig 0 14706.5
@@ -2635,7 +2634,7 @@ html uwDnaseSignal
 	priority 1.65365
 
 	track uwEnc2DnaseWigWgEncodeEH000482
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HepG2 Sg
 	longLabel HepG2 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000482
 	type bigWig 0 4511.03
@@ -2643,7 +2642,7 @@ html uwDnaseSignal
 	priority 1.66426
 
 	track uwEnc2DnaseWigWgEncodeEH000486
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel Caco-2 Sg
 	longLabel Caco-2 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000486
 	type bigWig 0 4903.16
@@ -2651,7 +2650,7 @@ html uwDnaseSignal
 	priority 1.67125
 
 	track uwEnc2DnaseWigWgEncodeEH000485
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel SK-N-SH_RA Sg
 	longLabel SK-N-SH_RA DNAseI HS Signals from ENCODE2/UW wgEncodeEH000485
 	type bigWig 0 4488.56
@@ -2659,7 +2658,7 @@ html uwDnaseSignal
 	priority 1.679
 
 	track uwEnc2DnaseWigWgEncodeEH001884
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel CD20+_RO01778 Sg
 	longLabel CD20+_RO01778 DNAseI HS Signals from ENCODE2/UW wgEncodeEH001884
 	type bigWig 0 1572.73
@@ -2667,7 +2666,7 @@ html uwDnaseSignal
 	priority 1.68971
 
 	track uwEnc2DnaseWigWgEncodeEH000483
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel Th1 Sg
 	longLabel Th1 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000483
 	type bigWig 0 2056.65
@@ -2675,7 +2674,7 @@ html uwDnaseSignal
 	priority 1.69959
 
 	track uwEnc2DnaseWigWgEncodeEH000491
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel Th2 Sg
 	longLabel Th2 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000491
 	type bigWig 0 1526.14
@@ -2683,7 +2682,7 @@ html uwDnaseSignal
 	priority 1.70375
 
 	track uwEnc2DnaseWigWgEncodeEH003022
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel Th1_Wb54553204 Sg
 	longLabel Th1_Wb54553204 DNAseI HS Signals from ENCODE2/UW wgEncodeEH003022
 	type bigWig 0 593.107
@@ -2691,7 +2690,7 @@ html uwDnaseSignal
 	priority 1.70849
 
 	track uwEnc2DnaseWigWgEncodeEH000497
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel Jurkat Sg
 	longLabel Jurkat DNAseI HS Signals from ENCODE2/UW wgEncodeEH000497
 	type bigWig 0 5823.31
@@ -2699,7 +2698,7 @@ html uwDnaseSignal
 	priority 1.71966
 
 	track uwEnc2DnaseWigWgEncodeEH000492
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel GM12878 Sg
 	longLabel GM12878 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000492
 	type bigWig 0 7218.11
@@ -2707,7 +2706,7 @@ html uwDnaseSignal
 	priority 1.73349
 
 	track uwEnc2DnaseWigWgEncodeEH000520
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel GM12865 Sg
 	longLabel GM12865 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000520
 	type bigWig 0 8525.5
@@ -2715,7 +2714,7 @@ html uwDnaseSignal
 	priority 1.73856
 
 	track uwEnc2DnaseWigWgEncodeEH001196
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel Monocytes-CD14+_RO01746 Sg
 	longLabel Monocytes-CD14+_RO01746 DNAseI HS Signals from ENCODE2/UW wgEncodeEH001196
 	type bigWig 0 853.111
@@ -2723,7 +2722,7 @@ html uwDnaseSignal
 	priority 1.75089
 
 	track uwEnc2DnaseWigWgEncodeEH000489
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HL-60 Sg
 	longLabel HL-60 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000489
 	type bigWig 0 5012.92
@@ -2731,7 +2730,7 @@ html uwDnaseSignal
 	priority 1.76239
 
 	track uwEnc2DnaseWigWgEncodeEH000498
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel NB4 Sg
 	longLabel NB4 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000498
 	type bigWig 0 7662.2
@@ -2739,7 +2738,7 @@ html uwDnaseSignal
 	priority 1.77436
 
 	track uwEnc2DnaseWigWgEncodeEH000511
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel H7-hESC Sg
 	longLabel H7-hESC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000511
 	type bigWig 0 13035.4
@@ -2747,7 +2746,7 @@ html uwDnaseSignal
 	priority 1.79509
 
 	track uwEnc2DnaseWigWgEncodeEH002578
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel H7-hESC diff 5d Sg
 	longLabel H7-hESC diffProtA 5d DNAseI HS Signals from ENCODE2/UW wgEncodeEH002578
 	type bigWig 0 5836.88
@@ -2755,7 +2754,7 @@ html uwDnaseSignal
 	priority 1.80059
 
 	track uwEnc2DnaseWigWgEncodeEH002576
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel H7-hESC diff 14d Sg
 	longLabel H7-hESC diffProtA 14d DNAseI HS Signals from ENCODE2/UW wgEncodeEH002576
 	type bigWig 0 21393.7
@@ -2763,7 +2762,7 @@ html uwDnaseSignal
 	priority 1.80809
 
 	track uwEnc2DnaseWigWgEncodeEH001188
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel RPTEC Sg
 	longLabel RPTEC DNAseI HS Signals from ENCODE2/UW wgEncodeEH001188
 	type bigWig 0 22767.8
@@ -2771,7 +2770,7 @@ html uwDnaseSignal
 	priority 1.82024
 
 	track uwEnc2DnaseWigWgEncodeEH000517
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HRPEpiC Sg
 	longLabel HRPEpiC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000517
 	type bigWig 0 32404.6
@@ -2779,7 +2778,7 @@ html uwDnaseSignal
 	priority 1.84446
 
 	track uwEnc2DnaseWigWgEncodeEH001170
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HMVEC-dLy-Ad Sg
 	longLabel HMVEC-dLy-Ad DNAseI HS Signals from ENCODE2/UW wgEncodeEH001170
 	type bigWig 0 39771.9
@@ -2787,7 +2786,7 @@ html uwDnaseSignal
 	priority 1.85388
 
 	track uwEnc2DnaseWigWgEncodeEH000495
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HeLa-S3 Sg
 	longLabel HeLa-S3 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000495
 	type bigWig 0 26492
@@ -2795,7 +2794,7 @@ html uwDnaseSignal
 	priority 1.87897
 
 	track uwEnc2DnaseWigWgEncodeEH001189
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel SK-N-MC Sg
 	longLabel SK-N-MC DNAseI HS Signals from ENCODE2/UW wgEncodeEH001189
 	type bigWig 0 5864.79
@@ -2803,7 +2802,7 @@ html uwDnaseSignal
 	priority 1.90393
 
 	track uwEnc2DnaseWigWgEncodeEH000502
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel MCF-7 Sg
 	longLabel MCF-7 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000502
 	type bigWig 0 15780.8
@@ -2811,7 +2810,7 @@ html uwDnaseSignal
 	priority 1.93061
 
 	track uwEnc2DnaseWigWgEncodeEH003017
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel MCF-7 estradi 1h Sg
 	longLabel MCF-7 Estradiol 100nM 1hr DNAseI HS Signals from ENCODE2/UW wgEncodeEH003017
 	type bigWig 0 24234.6
@@ -2819,7 +2818,7 @@ html uwDnaseSignal
 	priority 1.93373
 
 	track uwEnc2DnaseWigWgEncodeEH003018
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel MCF-7 estradi 0h Sg
 	longLabel MCF-7 Estradiol ctrl 0hr DNAseI HS Signals from ENCODE2/UW wgEncodeEH003018
 	type bigWig 0 23308.2
@@ -2827,7 +2826,7 @@ html uwDnaseSignal
 	priority 1.93395
 
 	track uwEnc2DnaseWigWgEncodeEH001190
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel WERI-Rb-1 Sg
 	longLabel WERI-Rb-1 DNAseI HS Signals from ENCODE2/UW wgEncodeEH001190
 	type bigWig 0 8726.43
@@ -2835,7 +2834,7 @@ html uwDnaseSignal
 	priority 1.96205
 
 	track uwEnc2DnaseWigWgEncodeEH001181
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel BE2_C Sg
 	longLabel BE2_C DNAseI HS Signals from ENCODE2/UW wgEncodeEH001181
 	type bigWig 0 72865.5
