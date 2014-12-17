@@ -30,8 +30,6 @@ baseColorUseCds bed psl genePred
 baseColorUseSequence *
 baseQualRange bam
 bedFilter bed
-pValueFilter bed bigBed narrowPeak broadPeak
-pValueFilterLimits bed bigBed narrowPeak broadPeak
 bedNameLabel bed
 bigDataUrl customTracks bigBed bigWig bam
 blastRef psl
@@ -267,9 +265,6 @@ origTrackLine customTracks
 otherDb *
 otherDbTable bed
 otherOrg netAlign chain
-*Filter bed narrowPeak broadPeak
-*FilterLimits bed narrowPeak broadPeak
-*FilterByRange bed narrowPeak broadPeak
 pairEndsByName bam
 pairedEndUrlFormat bed
 pairwise wigMaf
@@ -289,8 +284,6 @@ priority *
 private bed
 pslSequence psl
 pslTable bed
-qValueFilter bed narrowPeak broadPeak
-qValueFilterLimits bed narrowPeak broadPeak
 refSeqAnnoVersion genePred
 release *
 ucscRetroInfo psl
@@ -333,6 +326,9 @@ sGroup_Caenorhabditis wigMaf
 sGroup_Nematode wigMaf
 sGroup_Drosophila wigMaf
 sGroup_Others wigMaf
+*Filter bed narrowPeak broadPeak
+*FilterLimits bed narrowPeak broadPeak
+*FilterByRange bed narrowPeak broadPeak
 scoreFilter broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed
 scoreFilterByRange bed peptideMapping bigBed
 scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR peptideMapping bigBed
