@@ -1,0 +1,52 @@
+<h2>Description</h2>
+<p>
+These tracks contain the results of DNAse I hypersensitivity experiments performed by the
+John Stamatoyannapoulos lab at the University of Washington for the 
+<a href="http://encodeproject.org">ENCODE Project</a>
+during the period September 2007 through January 2011.
+<p>
+The primary data for this track (along with methods descriptions, credits and references) on
+which this track is based are available from the
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwDnase">ENCODE UW DnaseI HS track</a>
+</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+This track is a composite annotation track containing multiple subtracks, one for each cell type.
+The display mode and filtering of each subtrack can be individually controlled. 
+For more information about track configuration, see
+<a target=_blank href="http://genome.ucsc.edu/goldenPath/help/multiView.html">Configuring Multi-View Tracks</a>.</p>
+<p>
+
+<h2>Methods</h2>
+<p>
+The raw sequence data files were processed according to the ENCODE DNase analysis pipeline
+defined in July 2014 (need ref).
+Briefly, sequence files were aligned to the hg38 (GRCh38) genome assembly augmented with 'sponge'
+sequence (ref).  Multi-mapped reads were removed, as were reads that aligned to 'sponge' or
+mitochondiral sequence.  Results from all replicates were pooled, and further processed by
+the Hotspot program to call peaks as well as broader regions of activity ('hotspots), and to 
+create signal density graphs.
+Signal graphs were normalized so the average value genome-wide is 1.
+</p>
+
+<h2>Credits</h2>
+<p>
+The processed data for this track were generated at UCSC using the ENCODE Analysis Pipeline for DNase.
+CODE Analysis Working Group. Credits for the primary data underlying this track are
+included in track description pages listed in the Description section above.  
+</p>
+
+<h2>References</h2>
+<p>
+Thurman RE, Rynes E, Humbert R, Vierstra J, Maurano MT, Haugen E, Sheffield NC, Stergachis AB, Wang
+H, Vernot B <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/22955617" target="_blank">
+The accessible chromatin landscape of the human genome</a>.
+<em>Nature</em>. 2012 Sep 6;489(7414):75-82.
+</p>
+<p>
+See also the references in the related
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwDnase">ENCODE UW DnaseI HS</a>
+track.
+</p>

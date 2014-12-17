@@ -1,7 +1,8 @@
 track uwEnc2DnaseClustered
 table wgEncodeRegDnaseClustered
-shortLabel ENCODE2 DNase Clusters
-longLabel ENCODE2 UW Dnase Hypersensitivity Clusters in 95 cell types
+shortLabel UW DNase Clusters
+wgEncode on
+longLabel DNaseI Hypersensitivity Clusters in 95 cell types from UW/ENCODE2
 inputTableFieldDisplay cellType treatment
 inputTrackTable uwEnc2DnaseInputs
 sourceTable uwEnc2DnaseSources
@@ -11,13 +12,17 @@ scoreFilterLimits 1:1000
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 spectrum on
 visibility dense
+html uwDnaseClusters
 group regulation
+priority 100.2
 
 track uwEnc2Dnase
 compositeTrack on
-shortLabel ENCODE2 DNase
-longLabel ENCODE2 University of Washington DNase I Hypersensitivity
+shortLabel UW DNase
+wgEncode on
+longLabel DNaseI Hypersensitivity from UW/ENCODE2
 group regulation
+priority 100.3
 subGroup1 view Views Hot=HotSpots Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line wgEncodeEH000484=K562 wgEncodeEH001180=A549 wgEncodeEH001187=LNCaP wgEncodeEH000503=HMEC wgEncodeEH002583=T-47D wgEncodeEH000500=PANC-1 wgEncodeEH001162=HCT-116 wgEncodeEH002582=NHBE_RA wgEncodeEH001193=HFF wgEncodeEH001194=HFF-Myc wgEncodeEH001887=NT2-D1 wgEncodeEH000487=BJ wgEncodeEH000507=AG09309 wgEncodeEH000516=HNPCEpiC wgEncodeEH001197=WI-38 wgEncodeEH002574=GM04503 wgEncodeEH002575=GM04504 wgEncodeEH000521=NHLF wgEncodeEH001179=NH-A wgEncodeEH001178=HBMEC wgEncodeEH000508=AG09319 wgEncodeEH001175=HPdLF wgEncodeEH000513=HCF wgEncodeEH000519=HCM wgEncodeEH001173=HPAF wgEncodeEH001161=AoAF wgEncodeEH000514=HCPEpiC wgEncodeEH001174=HPF wgEncodeEH001165=HConF wgEncodeEH001192=HAc wgEncodeEH001176=HVMF wgEncodeEH001184=HIPEpiC wgEncodeEH003031=bone_marrow_MSC wgEncodeEH000509=AG10803 wgEncodeEH001166=HMF wgEncodeEH000504=HGF wgEncodeEH000518=NHDF-neo wgEncodeEH000512=HAEpiC wgEncodeEH000490=SKMC wgEncodeEH002580=HBVSMC wgEncodeEH000505=AG04449 wgEncodeEH000506=AG04450 wgEncodeEH001191=HA-h wgEncodeEH002581=M059J wgEncodeEH003007=RPMI-7951 wgEncodeEH001183=HA-sp wgEncodeEH001164=HCFaa wgEncodeEH001198=WI-38_40HTAM wgEncodeEH001177=NHDF-Ad wgEncodeEH001185=HSMM wgEncodeEH003005=LHCN-M2 wgEncodeEH003006=LHCN-M2_diff_4d wgEncodeEH001186=HSMMtube wgEncodeEH000488=HUVEC wgEncodeEH001163=HMVEC-LBl wgEncodeEH001168=HMVEC-dBl-Ad wgEncodeEH001171=HMVEC-dLy-Neo wgEncodeEH001169=HMVEC-dBl-Neo wgEncodeEH001195=HRGEC wgEncodeEH001167=HMVEC-LLy wgEncodeEH001172=HMVEC-dNeo wgEncodeEH001889=HMVEC-dAd wgEncodeEH000493=HRCEpiC wgEncodeEH000494=HRE wgEncodeEH000499=NHEK wgEncodeEH000501=SAEC wgEncodeEH001888=PrEC wgEncodeEH000515=HEEpiC wgEncodeEH000481=GM06990 wgEncodeEH000482=HepG2 wgEncodeEH000486=Caco-2 wgEncodeEH000485=SK-N-SH_RA wgEncodeEH001884=CD20+_RO01778 wgEncodeEH000483=Th1 wgEncodeEH000491=Th2 wgEncodeEH003022=Th1_Wb54553204 wgEncodeEH000497=Jurkat wgEncodeEH000492=GM12878 wgEncodeEH000520=GM12865 wgEncodeEH001196=Monocytes-CD14+_RO01746 wgEncodeEH000489=HL-60 wgEncodeEH000498=NB4 wgEncodeEH000511=H7-hESC wgEncodeEH002578=H7-hESC_diff_5d wgEncodeEH002576=H7-hESC_diff_14d wgEncodeEH001188=RPTEC wgEncodeEH000517=HRPEpiC wgEncodeEH001170=HMVEC-dLy-Ad wgEncodeEH000495=HeLa-S3 wgEncodeEH001189=SK-N-MC wgEncodeEH000502=MCF-7 wgEncodeEH003017=MCF-7_estradi_1h wgEncodeEH003018=MCF-7_estradi_0h wgEncodeEH001190=WERI-Rb-1 wgEncodeEH001181=BE2_C
 subGroup3 treatment Treatment n_a=n/a 4OHTAM_20nM_72hr=4OHTAM_20nM_72hr diffProtA_14d=diffProtA_14d diffProtA_5d=diffProtA_5d DIFF_4d=DIFF_4d Estradiol_100nM_1hr=Estradiol_100nM_1hr Estradiol_ctrl_0hr=Estradiol_ctrl_0hr
@@ -25,6 +30,7 @@ dimensions dimensionY=cellType
 sortOrder view=+ cellType=+ treatment=+
 noInherit on
 type bed 3 +
+html uwDnase
 
     track uwEnc2DnaseHot
     shortLabel Hot Spots
@@ -2061,16 +2067,20 @@ type bed 3 +
 	type bigWig 0 72865.5
 
 track uwEnc2DnaseWig
-shortLabel ENCODE2 DNAse Signal
-longLabel ENCODE2 UW DNAse Hypersensitivity Signal Colored by Similarity
+shortLabel UW DNAse Signal
+wgEncode on
+longLabel DNaseI Hypersensitivity Signal Colored by Similarity from UW/ENCODE2
 visibility full
 type bigWig 0 10000
+maxHeightPixels 128:64:11
 container multiWig
 configurable on
 viewLimits 0:200
 showSubtrackColorOnUi on
 aggregate transparentOverlay
 group regulation
+priority 100.1
+html uwDnaseSignal
 
 	track uwEnc2DnaseWigWgEncodeEH000484
 	parent uwEnc2DnaseWig off
