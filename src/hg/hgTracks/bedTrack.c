@@ -567,9 +567,6 @@ void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw simple Bed items. */
 {
-// optional setting to draw labels onto the feature boxes, not next to them
-tg->drawLabelInBox = cartOrTdbBoolean(cart, tg->tdb, "labelOnFeature" , FALSE);
-
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->track);
 
