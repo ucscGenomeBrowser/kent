@@ -4615,6 +4615,29 @@ printf("<BR>\n");
 wigCfgUi(cart,tdb,name,title,TRUE);
 }
 
+void wiggleScaleDropDownJavascript(char *name)
+/* print some js that deactivates the min/max range if autoscaling is activated */
+{
+printf("<script type=\"text/javascript\">\n");
+printf("  $(\"[name='%s.autoScale']\").change(function()\n", name);
+printf("  {\n");
+printf("  val= $(this).find(':selected').val(); \n");
+printf("  if (val==\"auto-scale to data view\")\n");
+printf("     {\n");
+printf("     $(\"[name='%s.minY']\")[0].disabled=true;\n", name);
+printf("     $(\"[name='%s.maxY']\")[0].disabled=true;\n", name);
+printf("     $(\".%sAutoScaleDesc\").attr('style', 'color:grey;');\n", name);
+printf("     }\n");
+printf("     else\n");
+printf("     {\n");
+printf("     $(\"[name='%s.minY']\")[0].disabled=false;\n", name);
+printf("     $(\"[name='%s.maxY']\")[0].disabled=false;\n", name);
+printf("     $(\".%sAutoScaleDesc\").attr('style', 'color:black;');\n", name);
+printf("     }\n");
+printf("  });\n");
+printf("</script>\n");
+}
+
 void wigCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* UI for the wiggle track */
 {
@@ -4702,8 +4725,17 @@ printf("pixels&nbsp;(range: %d to %d)",
        minHeightPixels, maxHeightPixels);
 puts("</TD></TR>");
 
-printf("<TR valign=center><th align=right>Vertical viewing range:</th>"
-       "<td align=left>&nbsp;min:&nbsp;");
+printf("<TR valign=center><th align=right>Data view scaling:</th><td align=left colspan=3>");
+safef(option, sizeof(option), "%s.%s", name, AUTOSCALE );
+wiggleScaleDropDown(option, autoScale);
+wiggleScaleDropDownJavascript(name);
+safef(option, sizeof(option), "%s.%s", name, ALWAYSZERO);
+printf("Always include zero:&nbsp");
+wiggleAlwaysZeroDropDown(option, alwaysZero);
+puts("</TD></TR>");
+
+printf("<TR class=\"%sAutoScaleDesc\" valign=center><th align=right>Vertical viewing range:</th>"
+       "<td align=left>&nbsp;min:&nbsp;", name);
 safef(option, sizeof(option), "%s.%s", name, MIN_Y );
 cgiMakeDoubleVarWithLimits(option, minY, "Range min", 0, NO_VALUE, NO_VALUE);
 printf("</td><td align=leftv colspan=2>max:&nbsp;");
@@ -4711,14 +4743,6 @@ safef(option, sizeof(option), "%s.%s", name, MAX_Y );
 cgiMakeDoubleVarWithLimits(option, maxY, "Range max", 0, NO_VALUE, NO_VALUE);
 printf("&nbsp;(range: %g to %g)",
        tDbMinY, tDbMaxY);
-puts("</TD></TR>");
-
-printf("<TR valign=center><th align=right>Data view scaling:</th><td align=left colspan=3>");
-safef(option, sizeof(option), "%s.%s", name, AUTOSCALE );
-wiggleScaleDropDown(option, autoScale);
-safef(option, sizeof(option), "%s.%s", name, ALWAYSZERO);
-printf("Always include zero:&nbsp");
-wiggleAlwaysZeroDropDown(option, alwaysZero);
 puts("</TD></TR>");
 
 printf("<TR valign=center><th align=right>Transform function:</th><td align=left>");
