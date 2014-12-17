@@ -179,5 +179,8 @@ struct trackHubGenome *trackHubGetGenome(char *database);
 boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost,
     char **pPort);
 /* get "blat" and "transBlat" entries (if any) for an assembly hub */
+
+struct dbDb *trackHubGetBlatDbDbs();
+/* Get a list of connected track hubs that have blat servers */
 #endif /* TRACKHUB_H */
 

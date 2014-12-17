@@ -1,0 +1,46 @@
+<h2>Description</h2>
+<p>
+This track provides an integrated display of DNase hypersensitivity in multiple cell types
+using overlapping colored graphs of signal density. with graph colors assigned to cell types based
+on similarity of signal.
+The track is based on results of 
+experiments performed by the John Stamatoyannapoulos lab at the University of Washington for the 
+<a href="http://encodeproject.org">ENCODE Project</a>
+during the period September 2007 through January 2011.
+The signal graphs displayed here are also included in the comprehensive
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg38&g=uwEnc2Dnase">UW DnaseI HS track</a>,
+which also provides peak and region calls.
+</p>
+
+<h2>Methods</h2>
+<p>
+The raw sequence data files were processed according to the ENCODE DNase analysis pipeline
+defined in July 2014 (need ref).
+Briefly, sequence files were aligned to the hg38 (GRCh38) genome assembly augmented with 'sponge'
+sequence (ref).  Multi-mapped reads were removed, as were reads that aligned to 'sponge' or
+mitochondrial sequence.  Results from all replicates were pooled, and further processed by
+the Hotspot program.
+(Colors assigned by BigWigCluster).
+Signal graphs were normalized so the average value genome-wide is 1.
+</p>
+
+<h2>Credits</h2>
+<p>
+The processed data for this track were generated at UCSC using the ENCODE Analysis Pipeline for DNase.
+Credits for the primary data underlying this track are
+included in track description pages listed in the Description section above.  
+</p>
+
+<h2>References</h2>
+<p>
+Thurman RE, Rynes E, Humbert R, Vierstra J, Maurano MT, Haugen E, Sheffield NC, Stergachis AB, Wang
+H, Vernot B <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/22955617" target="_blank">
+The accessible chromatin landscape of the human genome</a>.
+<em>Nature</em>. 2012 Sep 6;489(7414):75-82.
+</p>
+<p>
+See also the references in the related
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwDnase">ENCODE UW DnaseI HS</a>
+track.
+</p>
