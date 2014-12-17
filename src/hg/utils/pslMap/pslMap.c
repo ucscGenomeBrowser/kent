@@ -117,6 +117,14 @@ idBuf->stringSize = strlen(idBuf->string);
 return idBuf->string;
 }
 
+static void mapAlnsAdd(struct genomeRangeTree* mapAlns,
+                       char *mappingId,
+                       struct mapAln *mapAln)
+/* add a map align object to the genomeRangeTree */
+{
+genomeRangeTreeAddVal(mapAlns, mappingId, mapAln->psl->qStart, mapAln->psl->qEnd, mapAln, slAddHead);
+}
+
 static struct mapAln *chainToPsl(struct chain *ch)
 /* convert a chain to a psl, ignoring match counts, etc */
 {
@@ -154,8 +162,8 @@ struct chain *ch;
 struct lineFile *chLf = lineFileOpen(chainFile, TRUE);
 while ((ch = chainRead(chLf)) != NULL)
     {
-    struct mapAln *mapAln = chainToPsl(ch);
-    genomeRangeTreeAddValList(mapAlns, mapAln->psl->qName, mapAln->psl->qStart, mapAln->psl->qEnd, mapAln);
+    struct mapAln* mapAln = chainToPsl(ch);
+    mapAlnsAdd(mapAlns, mapAln->psl->qName, mapAln);
     chainFree(&ch);
     }
 lineFileClose(&chLf);
@@ -180,6 +188,8 @@ else
     errAbort("Bad PSL line %d of %s has is %d columns instead of %d or %d%s", pslLf->lineIx, pslLf->fileName, 
              wordCount, 21+pslOffset, 23+pslOffset,
              (mapFileWithInQName ? " (including -mapFileWithInQName extra column)" : ""));
+if (swapMap)
+    pslSwap(psl, FALSE);
 return mapAlnNew(psl, id, mapFileWithInQName ? words[0] : NULL);
 }
 
@@ -194,9 +204,7 @@ struct mapAln* mapAln;
 struct lineFile *pslLf = lineFileOpen(pslFile, TRUE);
 while ((mapAln = readPslMapAln(pslLf, id)) != NULL)
     {
-    if (swapMap)
-        pslSwap(mapAln->psl, FALSE);
-    genomeRangeTreeAddValList(mapAlns, getMappingId(mapAln->psl->qName, &idBuf), mapAln->psl->qStart, mapAln->psl->qEnd, mapAln);
+    mapAlnsAdd(mapAlns, getMappingId(mapAln->psl->qName, &idBuf), mapAln);
     id++;
     }
 lineFileClose(&pslLf);

@@ -1,0 +1,37 @@
+<h2>Description</h2>
+<p>
+This track shows DNase hypersensitive areas assayed in a 95 cell types
+by the John Stamatoyannapoulos lab at the University of Washington as part
+<a target=_blank href="http://encodeproject.org">ENCODE project</a> during
+the first production and analysis phase of the project (Sept. 2007 - Jan 2011).
+Regulatory regions in general, and promoters in particular, tend to be DNase-sensitive.  
+</p>
+Additional views of this data and additional documentation on the methods used
+to identify hypersensitive sites are available from the
+<a target=_blank href=../cgi-bin/hgTrackUi?db=hg38&g=uwEnc2Dnase>UW DNaseI HS</a> track.
+The peaks in that track are the basis for the clusters shown here,  
+which combine data from the peaks of the different cell lines.</p>
+
+<h2>Display Conventions and Configuration</h2>
+<p>
+A gray box indicates the extent of the hypersensitive region.  
+The darkness is proportional to the maximum signal strength observed in any cell line.  
+The number to the left of the box shows how many cell lines are hypersensitive in the region.  
+The track can be configured to restrict the display to elements above a specified score 
+in the range 1-1000 (where score is based on signal strength).</p>
+
+<h2>Methods</h2>
+<p>
+Peaks of DNaseI hypersensitivity from the ENCODE DNase Analysis Pipeline at UCSC
+were assigned normalized scores (by UCSC regClusterMakeTableOfTables) in the range 0-1000 based
+on the 
+<a target=_blank href="../FAQ/FAQformat.html#format12">narrowPeak</a> 
+signalValue and then clustered on score (by UCSC regCluster) to generate singly-linked clusters.  
+</p>
+
+<h2>Credits</h2>
+<p>
+This track is based on sequence data from the University of Washington ENCODE group, 
+with subsequent processing by UCSC.
+For additional credits and references, see the
+<a target=_blank href=../cgi-bin/hgTrackUi?db=hg19&g=uwEnc2Dnase>UW DNaseI HS</a> track.</p>

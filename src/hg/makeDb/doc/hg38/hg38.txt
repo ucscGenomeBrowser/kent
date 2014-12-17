@@ -5760,9 +5760,7 @@ TMPDIR=/dev/shm
         ponAbe2 hg38) > rbest.log 2>&1
     # real    78m47.312s
 
-#############################################################################
-# Building UW DNAse I ENCODE2 track (In progress 2014-09-03 Jim Kent)
-See instructions in src/hg/makeDb/doc/encode3/hg38_encode2_dnase1.txt
+
 
 
 #############################################################################

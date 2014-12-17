@@ -232,5 +232,15 @@ void encodeExpUpdate(struct sqlConnection *conn, char *tableName,
  * If oldVal is non-NULL, verify it matches experiment, as a safety check.
  * Abort if experiment is accessioned (must deaccession first) */
 
+struct encodeExp *encodeExpGetByAccession(struct sqlConnection *conn, char *accession);
+/* Return experiment specified by accession from default table */
+
+char *encodeExpGetVar(struct encodeExp *exp, char *varName);
+/* Return value of an expVar, or NULL if not found */
+
+char *encodeExpGetField(struct encodeExp *exp, char *var);
+/* Return value of a field, whether part of schema or an expVar */
+
+
 #endif /* ENCODEEXP_H */
 
