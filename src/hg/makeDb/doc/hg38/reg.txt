@@ -1,4 +1,11 @@
-#This directory contains the results of DNAse I hypersensitivity experiments from the 
+# for emacs: -*- mode: sh; -*-
+
+# Regulation tracks for hg38 / GRCh38
+
+#############################################################################
+# Building UW DNAse I ENCODE2 tracks (In progress 2014-09-03 Jim Kent)
+
+#These tracks contain the results of DNAse I hypersensitivity experiments from the 
 #John Stamatoyannapoulos lab at the University of Washington done for the ENCODE Project
 #phase 2.
 
@@ -20,6 +27,8 @@
 # chromosomes (but not alternative haplotypes).   Bwa itself is run in a
 # rather vanilla mode, with no options beyond -t 4 to parallelize the
 # first pass of the alignment in 4 threads.
+# The first section of methods here are to create a hub with peaks,  hotspots, and signal
+# from pooled replicates.
 
 #The detailed instructions after the bam files are available are: 
 
@@ -170,3 +179,151 @@ sed 's/pooled.bigWig/norm.bw/' < calcGraph/uwDnase1.tab > colors.tab
 # Run program to generate trackDb file.  The source is in /hg/makeDb/outside/uwDnaseTrackHub
 cd /hive/data/genomes/hg38/bed/uwDnase1
 uwDnaseTrackHub meta.tab run_pooled colors.tab hub
+
+
+##########################################################
+# Create DNase tracks from the hub files (In progress 2014-12-09 Kate)
+
+# There are 3 tracks (Redmine #14353):
+#       1) Composite with peaks, hotspots, and signal (as on hub)
+#       2) Multiwig of signal, colored by similarity (as on hub)
+#       3) Clusters (as on hg19)
+
+# The hub data file dir is:  /hive/data/genomes/hg38/bed/uwDnase1/run_pooled
+# (and normalized signal files are linked into that dir from :
+# /hive/data/genomes/hg38/bed/uwDnase1/run_normalized/out
+# The hub trackDb file is: /hive/data/genomes/hg38/bed/uwDnase1/hub/hg38/trackDb.txt
+
+#################################
+# DNAse peaks, hotspots, and signal track, and the multiwig
+
+# Add scores to bigBeds (use signalValue)
+
+    cd /hive/data/genomes/hg38/bed/uwDnase1/run_pooled
+    mkdir -p scored/in scored/out
+    foreach f (*.narrowPeak *.broadPeak)
+        bigBedToBed $f scored/in/$f
+    end
+    cd scored/in
+    bedScore -uniform -method=reg -col=7 *.narrowPeak ../out >&! score.out &
+    bedScore -uniform -method=reg -col=7 *.broadPeak ../out >&! score.out &
+
+    cd ../out
+    foreach f (*.narrowPeak)
+        echo $f
+        bedToBigBed -type=bed6+4 -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as \
+               $f /hive/data/genomes/hg38/chrom.sizes ../$f.bb
+    end
+    foreach f (*.broadPeak)
+        echo $f
+        bedToBigBed -type=bed6+3 -as=$HOME/kent/src/hg/lib/encode/broadPeak.as \
+               $f /hive/data/genomes/hg38/chrom.sizes ../$f.bb
+    end
+
+# Link data files into gbdb and create bbi tables
+    mkdir /hive/data/gbdb/hg38/bbi/uwDnase
+    cd /hive/data/genomes/hg38/bed/uwDnase1/run_pooled/scored
+    set bbi = /gbdb/hg38/bbi/uwDnase/scored
+    mkdir $bbi
+
+    foreach f (*.broadPeak.bb)
+        echo $f
+        ln -s `pwd`/$f $bbi
+        set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
+        hgBbiDbLink hg38 uwEnc2DnaseHot${exp} $bbi/$f
+    end
+
+    foreach f (*.narrowPeak.bb)
+        echo $f
+        ln -s `pwd`/$f $bbi
+        set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
+        hgBbiDbLink hg38 uwEnc2DnasePeaks${exp} $bbi/$f
+    end
+
+    cd /hive/data/genomes/hg38/bed/uwDnase1/run_normalized/out
+    foreach f (*.bw)
+        ln -s `pwd`/$f $bbi/$f
+        set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
+        hgBbiDbLink hg38 uwEnc2DnaseSignal${exp} $bbi/$f
+        hgBbiDbLink hg38 uwEnc2DnaseWig${exp} $bbi/$f
+    end
+
+# Load peaks into database (needed by hgc. we may be able to drop these with code changes)
+    cd /hive/data/genomes/hg38/bed/uwDnase1/run_pooled/scored/out
+    foreach f (*.narrowPeak)
+        echo $f
+        set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
+        hgLoadBed -fillInScore=signalValue -trimSqlTable -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg38 uwEnc2DnaseBedPeaks${exp} $f
+    end
+
+# Convert trackDb from hub to native
+
+    cd /hive/data/genomes/hg38/bed/uwDnase1/
+    mkdir tracks
+    cd tracks
+    cp ../hub/hg38/trackDb.txt .
+    sed -e 's/type bigBed/type bigBed 6 +/' -e '/bigDataUrl/d' trackDb.txt > trackDb.ra
+    cp trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg38/uwDnase.ra
+
+#################################
+# DNase clusters track
+
+    cd /hive/data/genomes/hg38/bed/uwDnase1
+    mkdir clusters
+    cd run_pooled/scored/out
+    ls *.pooled.narrowPeak > ../../../clusters/peak.lst
+
+    # calculate normalization factor
+    regClusterMakeTableOfTables -verbose=3 eapDnase01Hg38 \
+        ../../../clusters/peak.lst ../../../clusters/peak.table >&! ../../../clusters/regTable.out &
+
+    # cluster
+    regCluster -bedSources ../../../clusters/peak.table /dev/null ../../../clusters/peak.bed \
+        >&! ../../../clusters/regCluster.out &
+    # 1876769 singly-linked clusters, 1934764 clusters in 86 chromosomes
+    # NOTE: more clusters (2.2M) in hg19 (which included Duke data)
+
+    # filter out low scoring
+    cd ../../../clusters
+    awk '$5 >= 100' peak.bed > peak.filtered.bed
+    wc -l peak.filtered.bed
+    # 1236194 uwEnc2DnaseClustered.bed
+    # retained 65% vs 83% in hg19 (too low ??)
+
+    # --> keep them all for now, filter with UI
+
+    # format to BED5+floatscore+sources for hgBedSources 
+    #   which will extract, uniquify, and assign ID's to sources
+    awk 'BEGIN {OFS="\t"}{print $1, $2, $3, $4, $5, 0, $7;}' peak.bed > peak.bed6
+    hgBedSources peak.bed6 regDnase
+    mv regDnaseSources.tab uwEnc2DnaseSources.tab
+
+    # load sources table
+    autoSql $HOME/kent/src/hg/lib/idName.as idName
+    hgLoadSqlTab hg38 uwEnc2DnaseSources idName.sql uwEnc2DnaseSources.tab
+
+    # merge files and format to BED5+sourceCount+sourceIds+sourceVals
+    awk '{print $8}' peak.bed > peak.vals
+    awk 'BEGIN {OFS="\t"}{print $1, $2, $3, $4, $5, $7, $8;}' regDnase.bed | \
+        paste - peak.vals > uwEnc2DnaseClustered.bed
+    hgLoadBed hg38 uwEnc2DnaseClustered -sqlTable=$HOME/kent/src/hg/lib/bed5SourceVals.sql \
+        -renameSqlTable -as=$HOME/kent/src/hg/lib/bed5SourceVals.as uwEnc2DnaseClustered.bed
+
+    # create inputs file to display metadata on details page
+    # NOTE: this can probably be jettisoned in favor of new code, since source info
+    # is now in the BED file
+cat > makeInputs.csh << 'EOF'
+    set tables = `hgsql hg38 -Ne "show tables like 'uwEnc2DnasePeaks%'"`
+    foreach t ($tables)
+        set exp = `echo $t | sed 's/uwEnc2DnasePeaksWgEncode/wgEncode/'`
+        set t = `echo $t | sed 's/Peaks/BedPeaks/'`
+        set cell = `encodeExp show $exp cellType`
+        set treatment = `encodeExp show $exp treatment`
+        echo "$t\t$cell\t$treatment"
+    end
+'EOF'
+    csh makeInputs.csh > inputs.tab
+    hgLoadSqlTab hg38 uwEnc2DnaseInputs ~/kent/src/hg/lib/clusterInputEapDnase.sql inputs.tab
+
+
+

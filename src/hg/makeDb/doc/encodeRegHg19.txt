@@ -293,7 +293,7 @@
     cd $dir
     awk '$4 > 1 && $5 >= 100' peak.bed > wgEncodeRegDnaseClusteredV2.bed
     wc -l wgEncodeRegDnaseClusteredV2.bed
-     1281988 wgEncodeRegDnaseClusteredV2.bed
+    # 1281988 wgEncodeRegDnaseClusteredV2.bed
     hgLoadBed hg19 wgEncodeRegDnaseClusteredV2 wgEncodeRegDnaseClusteredV2.bed
 
     # V3 of track -- don't filter out single celltype peaks!
@@ -318,8 +318,7 @@
     # Load sources table
     autoSql $HOME/kent/src/hg/lib/idName.as idName
     hgLoadSqlTab hg19 wgEncodeRegDnaseClusteredSources idName.sql wgEncodeRegDnaseClusteredSources.tab
-
-    # format to BED5+sourceCount+sourceIds+sourceVals
+    # merge files and format to BED5+sourceCount+sourceIds+sourceVals
     awk '{print $8}' peak.meta.filtered.bed > peak.vals
     awk 'BEGIN {OFS="\t"}{print $1, $2, $3, $4, $5, $7, $8;}' regDnase.bed | paste - peak.vals > wgEncodeRegDnaseClusteredV3.bed
     hgLoadBed hg19 wgEncodeRegDnaseClusteredV3 -sqlTable=$HOME/kent/src/hg/lib/bed5SourceVals.sql -renameSqlTable \
