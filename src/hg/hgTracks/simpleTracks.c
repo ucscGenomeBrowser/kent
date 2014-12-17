@@ -343,7 +343,7 @@ for (item = tg->items; item != NULL; item = item->next)
 	    start = 0;
 	else
 	    start = round((double)(baseStart - winStart)*scale);
-	if (!tg->drawName && withLabels)
+	if (!tg->drawLabelInBox && !tg->drawName && withLabels)
 	    start -= mgFontStringWidth(font,
 				       tg->itemName(tg, item)) + extraWidth;
 	if (baseEnd >= winEnd)
@@ -3526,9 +3526,6 @@ void linkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
 /* Draw linked features items. */
 {
 clearColorBin();
-
-// optional setting to draw labels onto the feature boxes, not next to them
-tg->drawLabelInBox = cartOrTdbBoolean(cart, tg->tdb, "labelOnFeature" , FALSE);
 
 if (tg->items == NULL && vis == tvDense && canDrawBigBedDense(tg))
     {
@@ -9343,6 +9340,9 @@ enum trackVisibility limitVisibility(struct track *tg)
 if (!tg->limitedVisSet)
     {
     tg->limitedVisSet = TRUE;  // Prevents recursive loop!
+    
+    // optional setting to draw labels onto the feature boxes, not next to them
+    tg->drawLabelInBox = cartOrTdbBoolean(cart, tg->tdb, "labelOnFeature" , FALSE);
     if (trackShouldUseAjaxRetrieval(tg))
         {
         tg->limitedVis = tg->visibility;
