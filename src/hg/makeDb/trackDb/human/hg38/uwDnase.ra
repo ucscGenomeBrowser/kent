@@ -11,7 +11,6 @@ scoreFilter 200
 scoreFilterLimits 1:1000
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 spectrum on
-visibility dense
 html uwDnaseClusters
 group regulation
 priority 100.2
