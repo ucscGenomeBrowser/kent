@@ -117,12 +117,20 @@ idBuf->stringSize = strlen(idBuf->string);
 return idBuf->string;
 }
 
+static void *slCatReversed(void *va, void *vb)
+/* slCat that reverses parameter order, as the first list in rangeTreeAddVal
+ * mergeVals function tends to be larger in degenerate cases of a huge number
+ * of chains */
+{
+return slCat(vb, va);
+}
+
 static void mapAlnsAdd(struct genomeRangeTree* mapAlns,
                        char *mappingId,
                        struct mapAln *mapAln)
 /* add a map align object to the genomeRangeTree */
 {
-genomeRangeTreeAddVal(mapAlns, mappingId, mapAln->psl->qStart, mapAln->psl->qEnd, mapAln, slAddHead);
+genomeRangeTreeAddVal(mapAlns, mappingId, mapAln->psl->qStart, mapAln->psl->qEnd, mapAln, slCatReversed);
 }
 
 static struct mapAln *chainToPsl(struct chain *ch)
