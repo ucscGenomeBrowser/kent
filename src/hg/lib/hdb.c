@@ -4759,6 +4759,7 @@ sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
 hashFree(&hash);
 slReverse(&dbList);
+dbList = slCat(dbList, trackHubGetBlatDbDbs());
 return dbList;
 }
 

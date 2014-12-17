@@ -30,6 +30,8 @@ baseColorUseCds bed psl genePred
 baseColorUseSequence *
 baseQualRange bam
 bedFilter bed
+pValueFilter bed bigBed
+pValueFilterLimits bed bigBed
 bedNameLabel bed
 bigDataUrl customTracks bigBed bigWig bam
 blastRef psl
@@ -235,7 +237,7 @@ mouseOverField bigBed
 mgiUrl bed
 mgiUrlLabel bed
 minFreq vcf vcfTabix
-minGrayLevel bed broadPeak narrowPeak bedLogR
+minGrayLevel bed broadPeak narrowPeak bedLogR bigBed
 minLimit *
 minMax chromGraph
 minQual vcf vcfTabix

@@ -30,7 +30,7 @@ errAbort(
   "   dump <exp.ra>	output experiment table to file\n"
   "   find <db> <exp.ra>	find unassigned experiments in metaDb and create .ra to file\n"
   "   history [<id>]	show changes to experiment entry\n"
-  "   show <id>		print experiment to stdout\n"
+  "   show <id|accession>[<var>] 	print experiment (or var from experiment) to stdout\n"
   /* This command isn't very usable -- recommend using SQL queries instead
   "   id human|mouse <lab> <dataType> <cellType> [<vars>]\n"
   "			return id for experiment (vars as 'var1:val1 var2:val2')\n"
@@ -211,7 +211,14 @@ void expShow(int id)
 struct encodeExp *exp = encodeExpGetByIdFromTable(connExp, table, id);
 if (exp == NULL)
     errAbort("Id %d not found in experiment table %s", id, table);
-encodeExpToRaFile(exp, stdout);
+if (var == NULL)
+    encodeExpToRaFile(exp, stdout);
+else
+    {
+    char *val = encodeExpGetField(exp, var);
+    if (val != NULL)
+        puts(val);
+    }
 }
 
 void expHistory(int id)
@@ -486,7 +493,11 @@ else if ( sameString("acc", command) ||
         }
     else
         {
-        id = atoi(argv[2]);
+        char *arg = argv[2];
+        if (startsWith(ENCODE_EXP_ACC_PREFIX, arg))
+            // prefix plus single char for organism
+            arg += strlen(ENCODE_EXP_ACC_PREFIX) + 1;
+        id = atoi(arg);
         if (id < 1)
             errAbort("ERROR: Bad id %d\n", id);
         if (sameString("remove", command))
@@ -504,6 +515,8 @@ else if ( sameString("acc", command) ||
             old = argv[4];
             new = argv[5];
             }
+        else if (sameString("show", command) && argc == 4)
+            var = argv[3];
         }
     }
 else if (sameString("history", command))

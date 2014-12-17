@@ -23,6 +23,7 @@
 #include "hash.h"
 #include "botDelay.h"
 #include "trashDir.h"
+#include "trackHub.h"
 
 
 struct cart *cart;	/* The user's ui state. */
@@ -51,10 +52,44 @@ int minMatchShown = 14;
 int minMatchShown = 20;
 #endif
 
+static struct serverTable *trackHubServerTable(char *db, boolean isTrans)
+/* Find out if database is a track hub with a blat server */
+{
+char *host, *port;
+
+if (!trackHubGetBlatParams(db, isTrans, &host, &port))
+    return NULL;
+
+struct serverTable *st;
+
+AllocVar(st);
+
+st->db = cloneString(db);
+st->genome = cloneString(hGenome(db));
+st->isTrans = isTrans;
+st->host = host; 
+st->port = port;
+struct trackHubGenome *genome = trackHubGetGenome(db);
+st->nibDir = cloneString(genome->twoBitPath);
+char *ptr = strrchr(st->nibDir, '/');
+// we only want the directory name
+if (ptr != NULL)
+    *ptr = 0;
+return st;
+}
+
 struct serverTable *findServer(char *db, boolean isTrans)
 /* Return server for given database.  Db can either be
  * database name or description. */
 {
+if (trackHubDatabase(db))
+    {
+    struct serverTable *hubSt = trackHubServerTable(db, isTrans);
+    if (hubSt != NULL)
+	return hubSt;
+    errAbort("Cannot get blat server parameters for track hub with database %s\n", db);
+    }
+
 static struct serverTable st;
 struct sqlConnection *conn = hConnectCentral();
 char query[256];
@@ -103,6 +138,14 @@ void findClosestServer(char **pDb, char **pOrg)
  * as hgPcr does. */
 {
 char *db = *pDb, *org = *pOrg;
+
+if (trackHubDatabase(db) && (trackHubServerTable(db, FALSE) != NULL))
+    {
+    *pDb = db;
+    *pOrg = hGenome(db);
+    return;
+    }
+
 struct sqlConnection *conn = hConnectCentral();
 char query[256];
 sqlSafef(query, sizeof(query), "select db from blatServers where db = '%s'", db);
@@ -785,6 +828,11 @@ boolean clearUserSeq = cgiBoolean("Clear");
 cart = theCart;
 dnaUtilOpen();
 
+orgChange = sameOk(cgiOptionalString("changeInfo"),"orgChange");
+if (orgChange)
+    {
+    cgiVarSet("db", hDefaultDbForGenome(cgiOptionalString("org"))); 
+    }
 getDbAndGenome(cart, &db, &organism, oldVars);
 char *oldDb = cloneString(db);
 findClosestServer(&db, &organism);
@@ -803,7 +851,7 @@ if (isEmpty(userSeq))
     }
 if (isEmpty(userSeq) || orgChange)
     {
-    cartWebStart(theCart, db, "%s BLAT Search", organism);
+    cartWebStart(theCart, db, "%s BLAT Search", trackHubSkipHubName(organism));
     if (differentString(oldDb, db))
 	printf("<HR><P><EM><B>Note:</B> BLAT search is not available for %s %s; "
 	       "defaulting to %s %s</EM></P><HR>\n",
@@ -831,11 +879,6 @@ cgiSpoof(&argc, argv);
 setUdcCacheDir();
 
 /* org has precedence over db when changeInfo='orgChange' */
-orgChange = sameOk(cgiOptionalString("changeInfo"),"orgChange");
-if (orgChange)
-    {
-    cgiVarSet("db", hDefaultDbForGenome(cgiOptionalString("org"))); 
-    }
 
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 cgiExitTime("hgBlat", enteredMainTime);
