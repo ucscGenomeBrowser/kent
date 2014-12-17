@@ -30,8 +30,8 @@ baseColorUseCds bed psl genePred
 baseColorUseSequence *
 baseQualRange bam
 bedFilter bed
-pValueFilter bed bigBed
-pValueFilterLimits bed bigBed
+pValueFilter bed bigBed narrowPeak broadPeak
+pValueFilterLimits bed bigBed narrowPeak broadPeak
 bedNameLabel bed
 bigDataUrl customTracks bigBed bigWig bam
 blastRef psl
