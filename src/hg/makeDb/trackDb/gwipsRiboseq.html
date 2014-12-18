@@ -1,0 +1,69 @@
+<h2>Description</h2> 
+
+<p>Ribosome profiling (ribo-seq) is a technique that takes advantage of NGS technology to sequence ribosome-protected mRNA fragments and consequently allows the locations of translating ribosomes to be determined at the entire transcriptome level <a href="http://www.sciencemag.org/content/324/5924/218.full" target="_blank">(Ingolia et al. 2009)</a>. 
+
+For a more detailed description of the protocol see <a href="http://www.nature.com/nprot/journal/v7/n8/full/nprot.2012.086.html" target="_blank"> Ingolia et al. (2012)</a>. For reviews on this technique and its applications please refer to <a href="http://www.nature.com/nrg/journal/v15/n3/full/nrg3645.html" target="_blank"> Ingolia et al. (2014)</a> and <a href="http://onlinelibrary.wiley.com/doi/10.1002/wrna.1172/abstract;jsessionid=C25D6348631A74F1A5C43242F62246B3.f03t02" target="_blank">Michel et al. (2014)</a>.
+
+</p>
+
+<p>The GWIPS ribo-seq track displays cumulative ribosome profiling data (ribo-seq) obtained from human cells under different conditions. Hence this track can be used for the exploration of human genome loci that are being translated. At present the track contains data from 12 studies (see Methods for details). Further details about the aggregated track and additional ribo-seq data from these and other studies including data obtained from other organisms can be found at the specialized ribo-seq browser <a href="http://gwips.ucc.ie" target="_blank">GWIPS-viz.</a></p>
+
+</p>
+
+<h2>Methods</h2>
+
+<p>The data from the following studies were used in generating this track:
+
+<p></p>
+
+<table>
+
+<tr><td><a href="http://genome.cshlp.org/content/22/11/2208.long" target="_blank">Genome-wide search for novel human uORFs and N-terminal protein extensions using ribosomal footprinting</a> by Fritsch et al. 2012</td></tr>
+
+<tr><td><a href="http://www.jneurosci.org/content/34/33/10924.long" target="_blank">Ribosome Profiling Reveals a Cell-Type-Specific Translational Landscape in Brain Tumors</a> by Gonzalez et al. 2014</td></tr>
+
+<tr><td><a href="http://www.nature.com/nature/journal/v466/n7308/full/nature09267.html" target="_blank">Mammalian microRNAs predominantly act to decrease target mRNA levels</a> by Guo et al. 2010</td></tr>
+
+<tr><td><a href="http://www.nature.com/nature/journal/v485/n7396/full/nature10912.html" target="_blank">The translational landscape of mTOR signalling steers cancer initiation and metastasis</a> by Hsieh et al. 2011</td></tr>
+
+<tr><td><a href="http://www.pnas.org/content/109/37/E2424.long" target="_blank">Global mapping of translation initiation sites in mammalian cells at single-nucleotide resolution</a> by Lee et al. 2012</td></tr>
+
+<tr><td><a href="http://www.sciencedirect.com/science/article/pii/S1097276512009860" target="_blank">Cotranslational Response to Proteotoxic Stress by Elongation Pausing of Ribosomes</a> by Liu et al. 2012</td></tr>
+
+<tr><td><a href="http://genomebiology.com/content/14/4/R32" target="_blank">p53 induces transcriptional and translational programs to suppress cell proliferation and growth</a> by Loayza-Puch et al. 2013</td></tr>
+
+<tr><td><a href="http://www.jbc.org/content/287/8/5518.long" target="_blank">Primary Role for Endoplasmic Reticulum-bound Ribosomes in Cellular Translation Identified by Ribosome Profiling</a> by Reid and Nicchitta 2011</td></tr>
+
+<tr><td><a href="http://rnajournal.cshlp.org/content/17/12/2063.long" target="_blank">Wobble base-pairing slows in vivo translation elongation in metazoans</a> by Stadler and Fire 2011</td></tr>
+
+<tr><td><a href="http://www.sciencemag.org/content/338/6110/1088.full" target="_blank">Decoding Human Cytomegalovirus</a> by Stern-Ginossar et al. 2012</td></tr>
+
+<tr><td><a href="http://www.cell.com/molecular-cell/abstract/S1097-2765%2813%2900710-7" target="_blank">The translational landscape of the mammalian cell cycle</a> by Stumpf et al. 2013</td></tr>
+
+<tr><td><a href="http://www.nature.com/nm/journal/v20/n9/abs/nm.3628.html" target="_blank">Translation from a DMD exon 5 IRES results in a functional dystrophin isoform that attenuates dystrophinopathy in humans and mice</a> by Wein et al. 2014</a></td></tr>
+
+</table>
+
+</p>
+
+<p>
+For each study, raw fastq files were downloaded from a repository (e.g. NCBI GEO Datasets). <a href="http://code.google.com/p/cutadapt/" target="_blank">Cutadapt</a> was used to trim the relevant adapter sequence from the reads, after which reads below 25 nucleotides in length were discarded. The trimmed reads were aligned to ribosomal RNA using <a href="http://bowtie-bio.sourceforge.net/index.shtml" target="_blank">Bowtie</a> and aligning reads were discarded. The remaining reads were then aligned to the hg19 (GRCh37) genome assembly using <a href="http://cbil.upenn.edu/RUM/userguide.php" target="_blank">RUM</a>. An offset of 15nt (to infer the position of the A-site) was added to the most 5' nucleotide coordinate of each uniquely mapped read.
+</p>
+
+<p>
+The alignment files from each of the aforementioned studies were merged to generate this aggregate track.
+</p>
+
+<p>
+See individual studies in  <a href="http://gwips.ucc.ie" target="_blank">GWIPS-viz</a> for a full description on the methods of data acquisition and processing.
+</p>
+
+<h2>References</h2>
+
+<table>
+
+<tr><td>Ingolia, N. T., Ghaemmaghami, S., Newman, J. R. S., & Weissman, J. S. (2009) <a href="http://www.sciencemag.org/content/324/5924/218.full" target="_blank">Genome-Wide Analysis in Vivo of Translation with Nucleotide Resolution Using Ribosome Profiling</a> <i>Science</i> (New York, N.Y.), 324(5924), 218-23 PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/19213877" target ="_blank"> 19213877</a></td></tr>
+
+<tr><td>Michel, A. M., Fox, G., Kiran, A. M., De Bo, C., O'Connor, P. B., Heaphy, S. M., Mullan, J. P., Donohue, C. A., Higgins, D. G., Baranov, P. V (2014) <a href="http://nar.oxfordjournals.org/content/42/D1/D859" target="_blank">GWIPS-viz: development of a ribo-seq genome browser.</a> <i>Nucleic Acids Res</i> PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/24185699" target="_blank"> 24185699 </a></td></tr>
+
+</table>
