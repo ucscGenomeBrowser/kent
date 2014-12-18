@@ -4,6 +4,7 @@ longLabel Immune Epitope Database and Analysis Resource (IEDB) HLA binding predi
 group immu
 type bigBed 12 .
 superTrack on
+noScoreFilter on
 
         track iedbSupp3
         shortLabel IEDB Pred II
