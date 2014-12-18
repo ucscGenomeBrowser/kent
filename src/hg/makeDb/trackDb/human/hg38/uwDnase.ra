@@ -24,7 +24,7 @@ group regulation
 priority 100.3
 subGroup1 view Views Hot=HotSpots Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line wgEncodeEH000484=K562 wgEncodeEH001180=A549 wgEncodeEH001187=LNCaP wgEncodeEH000503=HMEC wgEncodeEH002583=T-47D wgEncodeEH000500=PANC-1 wgEncodeEH001162=HCT-116 wgEncodeEH002582=NHBE_RA wgEncodeEH001193=HFF wgEncodeEH001194=HFF-Myc wgEncodeEH001887=NT2-D1 wgEncodeEH000487=BJ wgEncodeEH000507=AG09309 wgEncodeEH000516=HNPCEpiC wgEncodeEH001197=WI-38 wgEncodeEH002574=GM04503 wgEncodeEH002575=GM04504 wgEncodeEH000521=NHLF wgEncodeEH001179=NH-A wgEncodeEH001178=HBMEC wgEncodeEH000508=AG09319 wgEncodeEH001175=HPdLF wgEncodeEH000513=HCF wgEncodeEH000519=HCM wgEncodeEH001173=HPAF wgEncodeEH001161=AoAF wgEncodeEH000514=HCPEpiC wgEncodeEH001174=HPF wgEncodeEH001165=HConF wgEncodeEH001192=HAc wgEncodeEH001176=HVMF wgEncodeEH001184=HIPEpiC wgEncodeEH003031=bone_marrow_MSC wgEncodeEH000509=AG10803 wgEncodeEH001166=HMF wgEncodeEH000504=HGF wgEncodeEH000518=NHDF-neo wgEncodeEH000512=HAEpiC wgEncodeEH000490=SKMC wgEncodeEH002580=HBVSMC wgEncodeEH000505=AG04449 wgEncodeEH000506=AG04450 wgEncodeEH001191=HA-h wgEncodeEH002581=M059J wgEncodeEH003007=RPMI-7951 wgEncodeEH001183=HA-sp wgEncodeEH001164=HCFaa wgEncodeEH001198=WI-38_40HTAM wgEncodeEH001177=NHDF-Ad wgEncodeEH001185=HSMM wgEncodeEH003005=LHCN-M2 wgEncodeEH003006=LHCN-M2_diff_4d wgEncodeEH001186=HSMMtube wgEncodeEH000488=HUVEC wgEncodeEH001163=HMVEC-LBl wgEncodeEH001168=HMVEC-dBl-Ad wgEncodeEH001171=HMVEC-dLy-Neo wgEncodeEH001169=HMVEC-dBl-Neo wgEncodeEH001195=HRGEC wgEncodeEH001167=HMVEC-LLy wgEncodeEH001172=HMVEC-dNeo wgEncodeEH001889=HMVEC-dAd wgEncodeEH000493=HRCEpiC wgEncodeEH000494=HRE wgEncodeEH000499=NHEK wgEncodeEH000501=SAEC wgEncodeEH001888=PrEC wgEncodeEH000515=HEEpiC wgEncodeEH000481=GM06990 wgEncodeEH000482=HepG2 wgEncodeEH000486=Caco-2 wgEncodeEH000485=SK-N-SH_RA wgEncodeEH001884=CD20+_RO01778 wgEncodeEH000483=Th1 wgEncodeEH000491=Th2 wgEncodeEH003022=Th1_Wb54553204 wgEncodeEH000497=Jurkat wgEncodeEH000492=GM12878 wgEncodeEH000520=GM12865 wgEncodeEH001196=Monocytes-CD14+_RO01746 wgEncodeEH000489=HL-60 wgEncodeEH000498=NB4 wgEncodeEH000511=H7-hESC wgEncodeEH002578=H7-hESC_diff_5d wgEncodeEH002576=H7-hESC_diff_14d wgEncodeEH001188=RPTEC wgEncodeEH000517=HRPEpiC wgEncodeEH001170=HMVEC-dLy-Ad wgEncodeEH000495=HeLa-S3 wgEncodeEH001189=SK-N-MC wgEncodeEH000502=MCF-7 wgEncodeEH003017=MCF-7_estradi_1h wgEncodeEH003018=MCF-7_estradi_0h wgEncodeEH001190=WERI-Rb-1 wgEncodeEH001181=BE2_C
-subGroup3 treatment Treatment n_a=n/a 4OHTAM_20nM_72hr=4OHTAM_20nM_72hr diffProtA_14d=diffProtA_14d diffProtA_5d=diffProtA_5d DIFF_4d=DIFF_4d Estradiol_100nM_1hr=Estradiol_100nM_1hr Estradiol_ctrl_0hr=Estradiol_ctrl_0hr
+subGroup3 treatment Treatment n_a=n/a OHTAM=4OHTAM_20nM_72hr diffProtA_14d=diffProtA_14d diffProtA_5d=diffProtA_5d DIFF_4d=DIFF_4d Estradiol_100nM_1hr=Estradiol_100nM_1hr Estradiol_ctrl_0hr=Estradiol_ctrl_0hr
 dimensions dimensionY=cellType
 sortOrder view=+ cellType=+ treatment=+
 noInherit on
@@ -37,8 +37,8 @@ html uwDnase
     view Hot
     visibility hide
     parent uwEnc2Dnase
-    pValueFilter 0.0
-    pValueFilterLimits 1:324
+    #pValueFilter 0.0
+    #pValueFilterLimits 1:324
     scoreFilter 0
     scoreFilterLimits 0:1000
     spectrum on
@@ -377,7 +377,7 @@ html uwDnase
 	parent uwEnc2DnaseHot off
 	shortLabel WI-38 40HTAM Ht
 	longLabel WI-38 40HTAM DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001198
-	subGroups view=Hot cellType=wgEncodeEH001198 treatment=4OHTAM_20nM_72hr
+	subGroups view=Hot cellType=wgEncodeEH001198 treatment=OHTAM
 	type bigBed 6 +
 
 	track uwEnc2DnaseHotWgEncodeEH001177
@@ -715,8 +715,8 @@ html uwDnase
     view Peaks
     visibility hide
     parent uwEnc2Dnase
-    pValueFilter 0.0
-    pValueFilterLimits 1:324
+    #pValueFilter 0.0
+    #pValueFilterLimits 1:324
     scoreFilter 0
     scoreFilterLimits 0:1000
     spectrum on
@@ -1055,7 +1055,7 @@ html uwDnase
 	parent uwEnc2DnasePeaks off
 	shortLabel WI-38 40HTAM Pk
 	longLabel WI-38 40HTAM DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001198
-	subGroups view=Peaks cellType=wgEncodeEH001198 treatment=n_a
+	subGroups view=Peaks cellType=wgEncodeEH001198 treatment=OHTAM
 	type bigBed 6 +
 
 	track uwEnc2DnasePeaksWgEncodeEH001177
@@ -1733,7 +1733,7 @@ html uwDnase
 	parent uwEnc2DnaseSignal off
 	shortLabel WI-38 40HTAM Sg
 	longLabel WI-38 4OHTAM 20nM 72hr DNAseI HS Signals from ENCODE2/UW wgEncodeEH001198
-	subGroups view=Signal cellType=wgEncodeEH001198 treatment=4OHTAM_20nM_72hr
+	subGroups view=Signal cellType=wgEncodeEH001198 treatment=OHTAM
 	type bigWig 0 9068.99
 
 	track uwEnc2DnaseSignalWgEncodeEH001177
