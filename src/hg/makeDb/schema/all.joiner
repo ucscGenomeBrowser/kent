@@ -4720,6 +4720,8 @@ tablesIgnored $gbd
     sangamoDnaseHsNeg
     sangamoDnaseHsPos
     simpleRepeat
+    spAnnot
+    spStruct
     windowmaskerSdust
     sgpGene
     tableDescriptions
@@ -5036,9 +5038,7 @@ tablesIgnored $eboVir
     muPIT
     ncbiGenePfam
     pdb
-    spAnnot
     spMut
-    spStruct
     testAllFrames
     testAllStrainFrames
     iedbPred%
