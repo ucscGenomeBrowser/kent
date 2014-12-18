@@ -2876,7 +2876,7 @@ release alpha
 compositeTrack on
 
         track spAnnot
-        shortLabel UniProt Annotations
+        shortLabel UniProt Annot.
         longLabel UniProt/SwissProt Protein Annotations
         parent spUniprot
         group genes
