@@ -1013,6 +1013,9 @@ char *nextWordRespectingQuotes(char **pLine);
 char *cloneFirstWord(char *line);
 /* Clone first word in line */
 
+char *cloneNotFirstWord(char *s);
+/* Clone part of string after first word. */
+
 char *nextTabWord(char **pLine);
 /* Return next tab-separated word. */
 
