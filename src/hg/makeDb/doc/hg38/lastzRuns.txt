@@ -778,8 +778,11 @@ TMPDIR=/dev/shm
     cat fb.nasLar1.chainHg38Link.txt 
     # 2157676376 bases of 2398172200 (89.972%) in intersection
 
+    # did this in two parts when discovered this was running on ku,
+    # stopped it there, then finished it off on hgwdev.
     time (doRecipBest.pl -buildDir=`pwd` nasLar1 hg38) > rbest.log 2>&1
-XXX - running - Tue Dec 16 12:47:38 PST 2014
+    # real    119m16.828s
+    # real    536m38.397s
 
 #########################################################################
 # LASTZ human/hg38 Tree shrew/tupBel1 - (DONE - 2014-12-15 - Hiram)
