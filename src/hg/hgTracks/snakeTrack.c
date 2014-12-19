@@ -1202,18 +1202,22 @@ if (errCatchStart(errCatch))
     {
     char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
     char *otherSpecies = trackDbSetting(tg->tdb, "otherSpecies");
-    int handle = halOpenLOD(fileName);
+    char *errString;
+    int handle = halOpenLOD(fileName, &errString);
+    if (handle < 0)
+	warn("HAL open error: %s\n", errString);
     boolean isPackOrFull = (tg->visibility == tvFull) || 
 	(tg->visibility == tvPack);
     hal_dup_type_t dupMode =  (isPackOrFull) ? HAL_QUERY_AND_TARGET_DUPS :
 	HAL_QUERY_DUPS;
     hal_seqmode_type_t needSeq = isPackOrFull && (winBaseCount < showSnpWidth) ? HAL_LOD0_SEQUENCE : HAL_NO_SEQUENCE;
     int mapBackAdjacencies = (tg->visibility == tvFull);
-    struct hal_block_results_t *head = halGetBlocksInTargetRange(handle, otherSpecies, trackHubSkipHubName(database), chromName, winStart, winEnd, 0, needSeq, dupMode,mapBackAdjacencies);
+    struct hal_block_results_t *head = halGetBlocksInTargetRange(handle, otherSpecies, trackHubSkipHubName(database), chromName, winStart, winEnd, 0, needSeq, dupMode,mapBackAdjacencies, &errString);
 
     // did we get any blocks from HAL
     if (head == NULL)
 	{
+	warn("HAL get blocks error: %s\n", errString);
 	errCatchEnd(errCatch);
 	return;
 	}

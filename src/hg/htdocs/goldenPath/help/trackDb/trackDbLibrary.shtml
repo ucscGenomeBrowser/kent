@@ -326,8 +326,10 @@
     should be used to display the track within the Browser image.  This setting is
     almost always dynamically customizable by each user.  The exact configuration of the
     display for each mode depends upon the track's type, and some modes may not be supported
-    for certain track types.  Be sure to experiment with this setting to verify that it works 
-    as expected for your track type.</P>
+    for certain track types. Please note visibility settings in composite subtracks are
+    directly inherited from the parent. Therefore, any visibility lines added at the subtrack
+    level of a composite will be ignored. Be sure to experiment with this setting to
+    verify that it works as expected for your track type and track structure.</P>
     <P>Valid settings:</P>
     <UL>
     <LI><code>hide</code>: DEFAULT. The track is not displayed in the Browser image unless
@@ -4243,7 +4245,9 @@ for each cell associated with the particular TF binding location.</P>
     subtrack child, not the composite itself, through this setting. Any number of subtracks may
     belong to one composite, but display performance degrades significantly beyond a
     few hundred.  Set the <code>parent</code> setting to "on" to 
-    indicate whether a subtrack should be visible (checked, selected) by default.  
+    indicate whether a subtrack should be visible (checked, selected) by default.
+    Visibility settings in composite subtracks are directly inherited from the parent. Therefore,
+    any visibility lines added at the child subtrack level of a composite will be ignored.</p>  
 </DIV>
 
 <DIV class="allButtonPair"><span class="types compositeTrack"></span>
@@ -4701,7 +4705,9 @@ for each cell associated with the particular TF binding location.</P>
     greater than what was inherited from parents, that subtrack's
     visibility will override the inheritance.  While the subtleties of
     inheritance can be hard to explain, they are often intuitive in
-    practice.</div></P>
+    practice. In composite subtracks, visibility settings are directly
+    inherited from the parent composite, therefore, any visibility lines
+    added at the child subtrack level of a composite will be ignored.</div></P>
 </DIV>
 
 <DIV class="view"><span class="types view"></span>

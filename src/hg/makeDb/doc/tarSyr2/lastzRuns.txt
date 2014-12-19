@@ -1095,9 +1095,11 @@ TMPDIR=/dev/shm
     cat fb.rhiRox1.chainTarSyr2Link.txt 
     # 1466597880 bases of 3011966170 (48.692%) in intersection
 
+    # ran this in two steps when discovered it was running on ku
+    # stopped it there and finished off on hgwdev
     time (doRecipBest.pl -buildDir=`pwd` rhiRox1 tarSyr2) > rbest.log 2>&1 &
-XXX - running - Tue Dec 16 08:04:07 PST 2014
-    # real    42m51.925s
+    # real    403m33.738s
+    # real    445m14.301s
 
     # and for the swap:
     mkdir /hive/data/genomes/tarSyr2/bed/blastz.rhiRox1.swap
@@ -1114,8 +1116,7 @@ XXX - running - Tue Dec 16 08:04:07 PST 2014
     # 1605999410 bases of 3405755564 (47.155%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` tarSyr2 rhiRox1) > rbest.log 2>&1 &
-XXX - running - Tue Dec 16 14:51:59 PST 2014
-    # real    116m16.704s
+    # real    118m9.557s
 
 #########################################################################
 # LASTZ  Proboscis monkey/nasLar1 - Tarsier TarSyr2 (DONE - 2014-12-15 - Hiram)
@@ -1174,8 +1175,7 @@ TMPDIR=/dev/shm
     # 1466838499 bases of 2398172200 (61.165%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` nasLar1 tarSyr2) > rbest.log 2>&1 &
-XXX - running - Tue Dec 16 08:05:13 PST 2014
-    # real    42m51.925s
+    # real    439m3.009s
 
     # and for the swap:
     mkdir /hive/data/genomes/tarSyr2/bed/blastz.nasLar1.swap
@@ -1192,8 +1192,7 @@ XXX - running - Tue Dec 16 08:05:13 PST 2014
     # 1606292172 bases of 3405755564 (47.164%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` tarSyr2 nasLar1) > rbest.log 2>&1
-XXX - runnning - Tue Dec 16 14:54:57 PST 2014
-    # real    116m16.704s
+    # real    261m34.041s
 
 #########################################################################
 # LASTZ Squirrel monkey/saiBol1 - Tarsier TarSyr2 (DONE - 2014-12-15 - Hiram)
@@ -1421,7 +1420,6 @@ TMPDIR=/dev/shm
     # 1780838363 bases of 3405755564 (52.289%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` tarSyr2 panPan1) > rbest.log 2>&1
-XXX - running - Tue Dec 16 15:47:35 PST 2014
-    # real    116m16.704s
+    # real    116m16.992s
 
 #########################################################################

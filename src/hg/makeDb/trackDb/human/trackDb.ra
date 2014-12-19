@@ -4244,6 +4244,15 @@ compositeTrack on
     visibility pack
     priority 2
 
+track gwipsRiboseq
+type bigWig
+shortLabel GWIPS Ribo-seq
+longLabel GWIPS Ribo-seq
+group map
+visibility hide
+autoScale on
+html gwipsRiboseq
+
 searchTable numtSMitochondrionChrPlacement
 searchMethod exact
 searchType bed

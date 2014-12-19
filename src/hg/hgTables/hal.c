@@ -58,9 +58,15 @@ if ((tdb = findTrackDb(parentTrack, table)) == NULL)
     errAbort("cannot find track named %s under %s\n", table, parentTrack->table);
 char *fileName = trackDbSetting(tdb, "bigDataUrl");
 char *otherSpecies = trackDbSetting(tdb, "otherSpecies");
-int handle = halOpenLOD(fileName);
+char *errString;
+int handle = halOpenLOD(fileName, &errString);
+if (handle < 0)
+    errAbort("HAL open error: %s\n", errString);
 
-struct hal_species_t *speciesList = halGetSpecies(handle);
+struct hal_species_t *speciesList = halGetSpecies(handle, &errString);
+
+if (speciesList == NULL)
+    errAbort("HAL get species error: %s\n", errString);
 
 for(; speciesList; speciesList = speciesList->next)
     {
@@ -77,9 +83,11 @@ textOpen();
 
 for (region = regionList; region != NULL; region = region->next)
     {
-    halGetMAF(stdout, handle, speciesList,
+    if (halGetMAF(stdout, handle, speciesList,
 		trackHubSkipHubName(database), region->chrom,
-		region->start, region->end, FALSE);
+		region->start, region->end, FALSE, &errString) < 0 )
+	errAbort("HAL get MAF error: %s\n", errString);
+
     }
 #else // USE_HAL
 errAbort("hgTables not compiled with HAL support.");

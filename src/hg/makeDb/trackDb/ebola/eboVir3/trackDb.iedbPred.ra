@@ -5,6 +5,7 @@ group immu
 type bigBed 12 .
 noScoreFilter on
 superTrack on
+noScoreFilter on
 
         track iedbSupp3
         shortLabel IEDB Pred II

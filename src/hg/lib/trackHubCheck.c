@@ -84,8 +84,12 @@ if (errCatchStart(errCatch))
 #ifdef USE_HAL
 	    else if (startsWithWord("halSnake", type))
 		{
-		int handle = halOpenLOD(bigDataUrl);
-		halClose(handle);
+		char *errString;
+		int handle = halOpenLOD(bigDataUrl, &errString);
+		if (handle < 0)
+		    errAbort("HAL open error: %s\n", errString);
+		if (halClose(handle, &errString) < 0)
+		    errAbort("HAL close error: %s\n", errString);
 		}
 #endif
 	    else
