@@ -33,6 +33,7 @@ calJac3 -> Marmoset ;
 nasLar1 -> Proboscis_monkey ;
 rhiRox1 -> Golden_snub_nosed_monkey ;
 tarSyr1 -> Tarsier ;
+tarSyr2 -> Tarsier ;
 micMur1 -> Mouse_lemur ;
 otoGar1 -> Bushbaby ;
 otoGar3 -> Bushbaby ;
