@@ -335,7 +335,7 @@ if(feelingLucky)
        results. */
     else 
 	{
-	cartWebStart(cart, database, "%s BLAT Results", organism);
+	cartWebStart(cart, database, "%s BLAT Results", trackHubSkipHubName(organism));
 	showAliPlaces(pslName, faName, database, qType, tType, organism, FALSE);
 	cartWebEnd();
 	}
@@ -510,7 +510,7 @@ boolean feelingLucky = cgiBoolean("Lucky");
 
 getDbAndGenome(cart, &db, &genome, oldVars);
 if(!feelingLucky)
-    cartWebStart(cart, db, "%s BLAT Results", organism);
+    cartWebStart(cart, db, "%s BLAT Results",  trackHubSkipHubName(organism));
 /* Load user sequence and figure out if it is DNA or protein. */
 if (sameWord(type, "DNA"))
     {
