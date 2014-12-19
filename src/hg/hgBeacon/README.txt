@@ -21,7 +21,7 @@ not in the table browser, but the beacon makes it possible to at least query
 the positions in some way. 
 
 To get usage info, run the CGI with no option, e.g.
-http://hgwdev-max.soe.ucsc.edu/cgi-bin/hgBeacon/hgBeacon
+http://genome-test.soe.ucsc.edu/cgi-bin/hgBeacon
 
 The CGI also accepts INSDC accessions instead of "chr1" or just "1". The
 mapping is stored in insdcToUcsc.tab. 
