@@ -4244,14 +4244,14 @@ compositeTrack on
     visibility pack
     priority 2
 
-track gwipsRiboseq
+track gwipsvizRiboseq
 type bigWig
-shortLabel GWIPS Ribo-seq
-longLabel GWIPS Ribo-seq
+shortLabel GWIPS-viz Riboseq
+longLabel Ribosome Profiling from GWIPS-viz
 group map
 visibility hide
 autoScale on
-html gwipsRiboseq
+html gwipsvizRiboseq
 
 searchTable numtSMitochondrionChrPlacement
 searchMethod exact
