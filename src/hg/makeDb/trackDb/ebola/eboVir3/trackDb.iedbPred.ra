@@ -3,7 +3,6 @@ shortLabel IEDB Prediction
 longLabel Immune Epitope Database and Analysis Resource (IEDB) HLA binding predictions
 group immu
 type bigBed 12 .
-noScoreFilter on
 superTrack on
 noScoreFilter on
 
