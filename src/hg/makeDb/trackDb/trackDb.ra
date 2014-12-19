@@ -2885,6 +2885,7 @@ compositeTrack on
         itemRgb on
         urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
         mouseOverField comments
+        noScoreFilter on
         release alpha
 
         track spStruct
@@ -2897,6 +2898,7 @@ compositeTrack on
         itemRgb on
         urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
         mouseOverField comments
+        noScoreFilter on
         release alpha
 
         track ucscGenePfam
