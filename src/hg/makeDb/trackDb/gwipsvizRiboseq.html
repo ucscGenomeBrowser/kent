@@ -14,32 +14,47 @@ reviews on this technique and its applications, please refer to Ingolia et al.
 </p>
 
 <p>
-The GWIPS Ribo-seq track displays cumulative ribo-seq data obtained from human
-cells under different conditions. Hence, this track can be used for the
-exploration of human genomic loci that are being translated. At present, the
-track contains data from 12 studies (see Methods section for details). Further
-details about the aggregated track and additional ribo-seq data from these and
-other studies including data obtained from other organisms can be found at the
-specialized ribo-seq browser
-<a href="http://gwips.ucc.ie" target="_blank">GWIPS-viz</a>.
+This track displays cumulative ribo-seq data obtained from human cells under
+different conditions and can be used for the exploration of human genomic loci
+that are being translated. As of December 2014, the track contains data from 12
+studies (see References section for details). Further details about the
+aggregated track and additional ribo-seq data from these and other studies
+including data obtained from other organisms can be found at the specialized
+ribo-seq browser <a href="http://gwips.ucc.ie" target="_blank">GWIPS-viz</a>.
 </p>
 
 <h2>Methods</h2>
 
-<p>The data from the following studies were used in generating this track:
-
+<p>
+For each study used to generate this track, raw fastq files were downloaded from
+a repository (e.g., NCBI GEO datasets).
+<a href="http://code.google.com/p/cutadapt/" target="_blank">Cutadapt</a> was
+used to trim the relevant adapter sequence from the reads, after which reads
+below 25 nt in length were discarded. The trimmed reads were aligned to
+ribosomal RNA using
+<a href="http://bowtie-bio.sourceforge.net/index.shtml" target="_blank">Bowtie</a>
+and aligning reads were discarded. The remaining reads were then aligned to the
+hg19 (GRCh37) genome assembly using
+<a href="http://cbil.upenn.edu/RUM/userguide.php" target="_blank">RUM</a>. An
+offset of 15 nt (to infer the position of the A-site) was added to the most 5'
+nucleotide coordinate of each uniquely-mapped read.
 </p>
 
 <p>
-For each study, raw fastq files were downloaded from a repository (e.g. NCBI GEO Datasets). <a href="http://code.google.com/p/cutadapt/" target="_blank">Cutadapt</a> was used to trim the relevant adapter sequence from the reads, after which reads below 25 nucleotides in length were discarded. The trimmed reads were aligned to ribosomal RNA using <a href="http://bowtie-bio.sourceforge.net/index.shtml" target="_blank">Bowtie</a> and aligning reads were discarded. The remaining reads were then aligned to the hg19 (GRCh37) genome assembly using <a href="http://cbil.upenn.edu/RUM/userguide.php" target="_blank">RUM</a>. An offset of 15nt (to infer the position of the A-site) was added to the most 5' nucleotide coordinate of each uniquely mapped read.
+The alignment files from each of the included studies were merged to generate
+this aggregate track.
 </p>
 
 <p>
-The alignment files from each of the aforementioned studies were merged to generate this aggregate track.
+See individual studies at
+<a href="http://gwips.ucc.ie" target="_blank">GWIPS-viz</a> for a full
+description of the methods of data acquisition and processing.
 </p>
 
+<h2>Credits</h2>
+
 <p>
-See individual studies in  <a href="http://gwips.ucc.ie" target="_blank">GWIPS-viz</a> for a full description on the methods of data acquisition and processing.
+Thanks to Audrey Michel and GWIPS-viz for providing the data for this track.
 </p>
 
 <h2>References</h2>
@@ -164,7 +179,7 @@ PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/25108525" target="_blank">2510
 href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4165597/" target="_blank">PMC4165597</a>
 </p>
 
-<h3>Technique</h3>
+<h3>Protocol/Technique</h3>
 
 <p>
 Ingolia NT.
