@@ -1,0 +1,60 @@
+
+TransMap maps transcripts from source assemblies to destination assemblies via chains.
+
+Tracks are built across current vertebrate assemblies concurrently.  The
+concurrent build is done as the fasta files and metadata tables for the source
+transcripts are shared and stored in hgFixed/gbdb.  Modifications will be
+made to allow incrementally add destination genomes.
+
+TransMap build is based on the pslMap and other tools in the kent/src tree.
+The driver for generating the data is available in
+ 
+   hg clone /cluster/home/markd/compbio/repos/hg/transMap
+it also requires
+   hg clone /cluster/home/markd/compbio/repos/hg/pycbio
+
+The source is checkout and run in
+    /hive/data/inside/transMap/build
+
+General steps for setup, only done once:
+
+    cd /hive/data/inside/transMap/build
+    hg clone /cluster/home/markd/compbio/repos/hg/transMap
+    mkdir transMap/extern
+    cd  transMap/extern
+    hg clone /cluster/home/markd/compbio/repos/hg/pycbio
+    (cd pycbio && make)
+
+##############################################################################################
+# TransMap V3 tracks (2014-12-18 markd)
+##
+   # get data and setup batch
+   make getData
+   make batchSetup
+
+   # build mappings
+   ssk kk
+   para create -batch=para1/aln para1/aln/jobs.para
+   para try -batch=para1/aln
+   para push -batch=para1/aln -maxPush=1000000
+   para create -batch=para1/filt para1/filt/jobs.para
+   para try -batch=para1/filt
+   para push -batch=para1/filt -maxPush=1000000
+
+   # load and verify data
+   ssh hgwdev
+   make -j 8 loadDb
+   make runJoinerCheck
+
+   # create push.list which has all tables for databases active on RR or hgwbeta
+   make pushList
+
+   # create template for hg/makeDb/doc that points to this file and append it to all
+   # database in this build:
+   destDbs=$(make printDestDbs)
+   cd ~kent/src/hg/makeDb/doc
+   for db in $destDbs ; do cat /hive/data/inside/transMap/build/transMap/builds/vertebrate.2014-12-11.V3/makedb.doc.template >> $db.txt; done
+
+
+   # request push of tracks
+##############################################################################################
