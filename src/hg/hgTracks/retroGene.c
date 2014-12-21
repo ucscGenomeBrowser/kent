@@ -3,7 +3,6 @@
 
 
 #include "retroGene.h"
-#include "transMapStuff.h"
 
 /* bit set of labels to use */
 enum {useOrgCommon = 0x01,
@@ -138,7 +137,7 @@ for (label = labels; label != NULL; label = label->next)
 return labelSet;
 }
 static void getItemLabel(struct sqlConnection *conn,
-                         char *retroInfoTbl , //char *transMapGeneTbl,
+                         char *retroInfoTbl,
                          unsigned labelSet,
                          struct linkedFeatures *lf)
 /* get label for a retro item */
@@ -196,8 +195,8 @@ if (vis != tvDense)
     slSort(&tg->items, linkedFeaturesCmpStart);
 }
 
-char *transMapIdToAcc(char *id)
-/* remove all unique suffixes (starting with last `-') from any TransMap 
+char *retroGeneIdToAcc(char *id)
+/* remove all unique suffixes (starting with last `-') from any retrogene
  * id.  WARNING: static return */
 {
 static char acc[128];
@@ -208,11 +207,11 @@ if (dash != NULL)
 return acc;
 }
 
-static char *transMapGetItemDataName(struct track *tg, char *itemName)
+static char *retroGeneGetItemDataName(struct track *tg, char *itemName)
 /* translate itemName to data name (source accession).
  * WARNING: static return */
 {
-return transMapIdToAcc(itemName);
+return retroGeneIdToAcc(itemName);
 }
 
 static void retroAliMethods(struct track *tg)
@@ -221,7 +220,7 @@ static void retroAliMethods(struct track *tg)
 tg->loadItems = loadRetroAli;
 tg->itemName = refGeneName;
 tg->mapItemName = linkedFeaturesName;
-tg->itemDataName = transMapGetItemDataName;
+tg->itemDataName = retroGeneGetItemDataName;
 }
 
 void retroRegisterTrackHandlers()

@@ -1,0 +1,219 @@
+<h2>Description</h2> 
+
+<p>
+Ribosome profiling (ribo-seq) is a technique that takes advantage of NGS
+technology to sequence ribosome-protected mRNA fragments and consequently
+allows the locations of translating ribosomes to be determined at the entire
+transcriptome level (Ingolia et al., 2009).
+</p>
+
+<p>
+For a more detailed description of the protocol, see Ingolia et al. (2012). For
+reviews on this technique and its applications, please refer to Ingolia et al.
+(2014) and Michel et al. (2014).
+</p>
+
+<p>
+This track displays cumulative ribo-seq data obtained from human cells under
+different conditions and can be used for the exploration of human genomic loci
+that are being translated. As of December 2014, the track contains data from 12
+studies (see References section for details). Further details about the
+aggregated track and additional ribo-seq data from these and other studies
+including data obtained from other organisms can be found at the specialized
+ribo-seq browser <a href="http://gwips.ucc.ie" target="_blank">GWIPS-viz</a>.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+For each study used to generate this track, raw fastq files were downloaded from
+a repository (e.g., NCBI GEO datasets).
+<a href="http://code.google.com/p/cutadapt/" target="_blank">Cutadapt</a> was
+used to trim the relevant adapter sequence from the reads, after which reads
+below 25 nt in length were discarded. The trimmed reads were aligned to
+ribosomal RNA using
+<a href="http://bowtie-bio.sourceforge.net/index.shtml" target="_blank">Bowtie</a>
+and aligning reads were discarded. The remaining reads were then aligned to the
+hg19 (GRCh37) genome assembly using
+<a href="http://cbil.upenn.edu/RUM/userguide.php" target="_blank">RUM</a>. An
+offset of 15 nt (to infer the position of the A-site) was added to the most 5'
+nucleotide coordinate of each uniquely-mapped read.
+</p>
+
+<p>
+The alignment files from each of the included studies were merged to generate
+this aggregate track.
+</p>
+
+<p>
+See individual studies at
+<a href="http://gwips.ucc.ie" target="_blank">GWIPS-viz</a> for a full
+description of the methods of data acquisition and processing.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Audrey Michel and GWIPS-viz for providing the data for this track.
+</p>
+
+<h2>References</h2>
+
+<h3>Data</h3>
+
+<p>
+Fritsch C, Herrmann A, Nothnagel M, Szafranski K, Huse K, Schumann F, Schreiber S, Platzer M,
+Krawczak M, Hampe J <em>et al</em>.
+<a href="http://genome.cshlp.org/content/22/11/2208.long" target="_blank">
+Genome-wide search for novel human uORFs and N-terminal protein extensions using ribosomal
+footprinting</a>.
+<em>Genome Res</em>. 2012 Nov;22(11):2208-18.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/22879431" target="_blank">22879431</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3483550/" target="_blank">PMC3483550</a>
+</p>
+
+<p>
+Gonzalez C, Sims JS, Hornstein N, Mela A, Garcia F, Lei L, Gass DA, Amendolara B, Bruce JN, Canoll P
+<em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/25122893" target="_blank">
+Ribosome profiling reveals a cell-type-specific translational landscape in brain tumors</a>.
+<em>J Neurosci</em>. 2014 Aug 13;34(33):10924-36.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/25122893" target="_blank">25122893</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4131009/" target="_blank">PMC4131009</a>
+</p>
+
+<p>
+Guo H, Ingolia NT, Weissman JS, Bartel DP.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/20703300" target="_blank">
+Mammalian microRNAs predominantly act to decrease target mRNA levels</a>.
+<em>Nature</em>. 2010 Aug 12;466(7308):835-40.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/20703300" target="_blank">20703300</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2990499/" target="_blank">PMC2990499</a>
+</p>
+
+<p>
+Hsieh AC, Liu Y, Edlind MP, Ingolia NT, Janes MR, Sher A, Shi EY, Stumpf CR, Christensen C, Bonham
+MJ <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/22367541" target="_blank">
+The translational landscape of mTOR signalling steers cancer initiation and metastasis</a>.
+<em>Nature</em>. 2012 Feb 22;485(7396):55-61.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/22367541" target="_blank">22367541</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3663483/" target="_blank">PMC3663483</a>
+</p>
+
+<p>
+Lee S, Liu B, Lee S, Huang SX, Shen B, Qian SB.
+<a href="http://www.pnas.org/content/109/37/E2424.long" target="_blank">
+Global mapping of translation initiation sites in mammalian cells at single-nucleotide
+resolution</a>.
+<em>Proc Natl Acad Sci U S A</em>. 2012 Sep 11;109(37):E2424-32.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/22927429" target="_blank">22927429</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3443142/" target="_blank">PMC3443142</a>
+</p>
+
+<p>
+Liu B, Han Y, Qian SB.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/23290916" target="_blank">
+Cotranslational response to proteotoxic stress by elongation pausing of ribosomes</a>.
+<em>Mol Cell</em>. 2013 Feb 7;49(3):453-63.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/23290916" target="_blank">23290916</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3570626/" target="_blank">PMC3570626</a>
+</p>
+
+<p>
+Loayza-Puch F, Drost J, Rooijers K, Lopes R, Elkon R, Agami R.
+<a href="http://genomebiology.com/content/14/4/R32" target="_blank">
+p53 induces transcriptional and translational programs to suppress cell proliferation and
+growth</a>.
+<em>Genome Biol</em>. 2013 Apr 17;14(4):R32.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/23594524" target="_blank">23594524</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4053767/" target="_blank">PMC4053767</a>
+</p>
+
+<p>
+Reid DW, Nicchitta CV.
+<a href="http://www.jbc.org/content/287/8/5518.long" target="_blank">
+Primary role for endoplasmic reticulum-bound ribosomes in cellular translation identified by
+ribosome profiling</a>.
+<em>J Biol Chem</em>. 2012 Feb 17;287(8):5518-27.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/22199352" target="_blank">22199352</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3285328/" target="_blank">PMC3285328</a>
+</p>
+
+<p>
+Stadler M, Fire A.
+<a href="http://rnajournal.cshlp.org/content/17/12/2063.long" target="_blank">
+Wobble base-pairing slows in vivo translation elongation in metazoans</a>.
+<em>RNA</em>. 2011 Dec;17(12):2063-73.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/22045228" target="_blank">22045228</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3222120/" target="_blank">PMC3222120</a>
+</p>
+
+<p>
+Stern-Ginossar N, Weisburd B, Michalski A, Le VT, Hein MY, Huang SX, Ma M, Shen B, Qian SB, Hengel H
+<em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/23180859" target="_blank">
+Decoding human cytomegalovirus</a>.
+<em>Science</em>. 2012 Nov 23;338(6110):1088-93.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/23180859" target="_blank">23180859</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3817102/" target="_blank">PMC3817102</a>
+</p>
+
+<p>
+Stumpf CR, Moreno MV, Olshen AB, Taylor BS, Ruggero D.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/24120665" target="_blank">
+The translational landscape of the mammalian cell cycle</a>.
+<em>Mol Cell</em>. 2013 Nov 21;52(4):574-82.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/24120665" target="_blank">24120665</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3959127/" target="_blank">PMC3959127</a>
+</p>
+
+<p>
+Wein N, Vulin A, Falzarano MS, Szigyarto CA, Maiti B, Findlay A, Heller KN, Uhl&#233;n M,
+Bakthavachalu B, Messina S <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/25108525" target="_blank">
+Translation from a DMD exon 5 IRES results in a functional dystrophin isoform that attenuates
+dystrophinopathy in humans and mice</a>.
+<em>Nat Med</em>. 2014 Sep;20(9):992-1000.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/25108525" target="_blank">25108525</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4165597/" target="_blank">PMC4165597</a>
+</p>
+
+<h3>Protocol/Technique</h3>
+
+<p>
+Ingolia NT.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/24468696" target="_blank">
+Ribosome profiling: new views of translation, from single codons to genome scale</a>.
+<em>Nat Rev Genet</em>. 2014 Mar;15(3):205-13.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/24468696" target="_blank">24468696</a>
+</p>
+
+<p>
+Ingolia NT, Brar GA, Rouskin S, McGeachy AM, Weissman JS.
+<a href="http://www.nature.com/nprot/journal/v7/n8/full/nprot.2012.086.html" target="_blank">
+The ribosome profiling strategy for monitoring translation in vivo by deep sequencing of ribosome-
+protected mRNA fragments</a>.
+<em>Nat Protoc</em>. 2012 Jul 26;7(8):1534-50.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/22836135" target="_blank">22836135</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3535016/" target="_blank">PMC3535016</a>
+</p>
+
+<p>
+Ingolia NT, Ghaemmaghami S, Newman JR, Weissman JS.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19213877" target="_blank">
+Genome-wide analysis in vivo of translation with nucleotide resolution using ribosome profiling</a>.
+<em>Science</em>. 2009 Apr 10;324(5924):218-23.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/19213877" target="_blank">19213877</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2746483/" target="_blank">PMC2746483</a>
+</p>
+
+<p>
+Michel AM, Fox G, M Kiran A, De Bo C, O'Connor PB, Heaphy SM, Mullan JP, Donohue CA, Higgins DG,
+Baranov PV.
+<a href="http://nar.oxfordjournals.org/content/42/D1/D859.long" target="_blank">
+GWIPS-viz: development of a ribo-seq genome browser</a>.
+<em>Nucleic Acids Res</em>. 2014 Jan;42(Database issue):D859-64.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/24185699" target="_blank">24185699</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3965066/" target="_blank">PMC3965066</a>
+</p>

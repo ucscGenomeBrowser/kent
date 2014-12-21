@@ -63,7 +63,7 @@ if (getSrcRec)
 char *transMapGeneTbl = trackDbSetting(tdb, transMapGeneTblSetting);
 if (transMapGeneTbl != NULL)
     bag->gene = transMapGeneQuery(conn, transMapGeneTbl,
-                                  bag->info->srcDb, transMapIdToAcc(bag->info->srcId));
+                                  bag->info->srcDb, transMapIdToSeqId(bag->info->srcId));
 bag->srcDbIsActive = hDbIsActive(bag->info->srcDb);
 return bag;
 }
@@ -236,7 +236,7 @@ char *words[3];
 int nwords = chopByWhite(specCopy, words, ArraySize(words));
 if ((nwords != ArraySize(words)) || !sameString(words[0], "extFile"))
     errAbort("invalid %s track setting: %s", BASE_COLOR_USE_SEQUENCE, spec);
-struct dnaSeq *seq = hDnaSeqGet(NULL, name, words[1], words[2]);
+struct dnaSeq *seq = hDnaSeqMustGet(NULL, name, words[1], words[2]);
 freeMem(specCopy);
 return seq;
 }
@@ -250,7 +250,7 @@ struct genbankCds cds;
 if ((bag->gene == NULL) || (strlen(bag->gene->cds) == 0)
     || !genbankCdsParse(bag->gene->cds, &cds))
     ZeroVar(&cds);  /* can't get or parse cds */
-struct dnaSeq *seq = getCdnaSeq(tdb, transMapIdToAcc(mappedId));
+struct dnaSeq *seq = getCdnaSeq(tdb, transMapIdToSeqId(mappedId));
 
 writeFramesetType();
 puts("<HTML>");
