@@ -184,16 +184,16 @@ scripts: $(SCRIPT_FILES:%=%.scripts)
 	cp -p $* ${SCRIPTS}
 
 cgi:
-	cd bigBedToBed && make cgi
-	cd bigBedInfo && make cgi
+	cd bigBedToBed && ${MAKE} cgi
+	cd bigBedInfo && ${MAKE} cgi
 
 alpha: scripts all
-	cd bigBedToBed && make alpha
-	cd bigBedInfo && make alpha
+	cd bigBedToBed && ${MAKE} alpha
+	cd bigBedInfo && ${MAKE} alpha
 
 beta:
-	cd bigBedToBed && make beta
-	cd bigBedInfo && make beta
+	cd bigBedToBed && ${MAKE} beta
+	cd bigBedInfo && ${MAKE} beta
 
 testAll: $(ALL_APPS:%=%.testAll)
 
