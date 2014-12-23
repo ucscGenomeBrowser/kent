@@ -2,7 +2,6 @@
 # saiBol1 - Squirrel monkey - Saimiri boliviensis - primate - primate - 395
 ################################################################
 track chainNetSaiBol1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -25,7 +24,6 @@ spectrum on
 html chainNet
 
     track chainNetSaiBol1Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -33,7 +31,6 @@ html chainNet
     spectrum on
 
         track chainSaiBol1
-        release alpha
         parent chainNetSaiBol1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -42,14 +39,12 @@ html chainNet
         html chainNet
 
     track chainNetSaiBol1Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetSaiBol1
 
         track netSaiBol1
-        release alpha
         parent chainNetSaiBol1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
@@ -61,7 +56,6 @@ html chainNet
 # panPan1 - Bonobo - Pan paniscus - primate - primate - 245
 ################################################################
 track chainNetPanPan1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -84,7 +78,6 @@ spectrum on
 html chainNet
 
     track chainNetPanPan1Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -92,7 +85,6 @@ html chainNet
     spectrum on
 
         track chainPanPan1
-        release alpha
         parent chainNetPanPan1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -101,14 +93,12 @@ html chainNet
         html chainNet
 
     track chainNetPanPan1Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetPanPan1
 
         track netPanPan1
-        release alpha
         parent chainNetPanPan1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
@@ -120,7 +110,6 @@ html chainNet
 # chlSab2 - Green monkey - Chlorocebus sabaeus - primate - primate - 340
 ################################################################
 track chainNetChlSab2
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -143,7 +132,6 @@ spectrum on
 html chainNet
 
     track chainNetChlSab2Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -151,7 +139,6 @@ html chainNet
     spectrum on
 
         track chainChlSab2
-        release alpha
         parent chainNetChlSab2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -160,14 +147,12 @@ html chainNet
         html chainNet
 
     track chainNetChlSab2Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetChlSab2
 
         track netChlSab2
-        release alpha
         parent chainNetChlSab2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
@@ -238,7 +223,6 @@ html chainNet
 # nasLar1 - Proboscis monkey - Nasalis larvatus - primate - primate - 392
 ################################################################
 track chainNetNasLar1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -261,7 +245,6 @@ spectrum on
 html chainNet
 
     track chainNetNasLar1Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -269,7 +252,6 @@ html chainNet
     spectrum on
 
         track chainNasLar1
-        release alpha
         parent chainNetNasLar1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -278,14 +260,12 @@ html chainNet
         html chainNet
 
     track chainNetNasLar1Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetNasLar1
 
         track netNasLar1
-        release alpha
         parent chainNetNasLar1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
@@ -297,7 +277,6 @@ html chainNet
 # rhiRox1 - Proboscis monkey - Nasalis larvatus - primate - primate - 7608
 ################################################################
 track chainNetRhiRox1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -320,7 +299,6 @@ spectrum on
 html chainNet
 
     track chainNetRhiRox1Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -328,7 +306,6 @@ html chainNet
     spectrum on
 
         track chainRhiRox1
-        release alpha
         parent chainNetRhiRox1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -337,14 +314,12 @@ html chainNet
         html chainNet
 
     track chainNetRhiRox1Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetRhiRox1
 
         track netRhiRox1
-        release alpha
         parent chainNetRhiRox1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
@@ -410,7 +385,6 @@ html chainNet
 # macFas5 - Crab-eating macaque - Macaca fascicularis - primate - primate - 380
 ################################################################
 track chainNetMacFas5
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -433,7 +407,6 @@ spectrum on
 html chainNet
 
     track chainNetMacFas5Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -441,7 +414,6 @@ html chainNet
     spectrum on
 
         track chainMacFas5
-        release alpha
         parent chainNetMacFas5Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -450,14 +422,12 @@ html chainNet
         html chainNet
 
     track chainNetMacFas5Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetMacFas5
 
         track netMacFas5
-        release alpha
         parent chainNetMacFas5Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
