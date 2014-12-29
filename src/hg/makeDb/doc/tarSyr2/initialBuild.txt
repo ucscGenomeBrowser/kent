@@ -163,13 +163,6 @@ taxId 9478
     ln -s `pwd`/tarSyr2.2bit /gbdb/tarSyr2/tarSyr2.2bit
 
 ##########################################################################
-user    0m8.322s
-sys     0m23.811s
-[hiram@hgwdev /hive/data/genomes/tarSyr2/bed/cpgIslandsUnmasked]
-user    0m9.700s
-sys     0m27.600s
-
-##########################################################################
 ## WINDOWMASKER (DONE - 2014-11-21 - Hiram)
 
     mkdir /hive/data/genomes/tarSyr2/bed/windowMasker
@@ -216,7 +209,7 @@ sys     0m27.600s
     # 35810524 bases of 3405755564 (1.051%) in intersection
 
 #############################################################################
-# cytoBandIdeo - (DONE - 2014-11-25 - Hiram
+# cytoBandIdeo - (DONE - 2014-11-25 - Hiram)
     mkdir /hive/data/genomes/tarSyr2/bed/cytoBand
     cd /hive/data/genomes/tarSyr2/bed/cytoBand
     makeCytoBandIdeo.csh tarSyr2
@@ -236,7 +229,7 @@ sys     0m27.600s
     # 71743479 bases of 3405755564 (2.107%) in intersection
 
 ########################################################################
-# Create kluster run files (DONE - 2014-10-10 - Steve)
+# Create kluster run files (DONE - 2014-12-03 - Hiram)
 
     # numerator is tarSyr2 gapless bases "real" as reported by:
     featureBits -noRandom -noHap tarSyr2 gap
@@ -268,7 +261,7 @@ sys     0m27.600s
 #         -bedFile=jkStuff/nonBridged.bed
 
 ########################################################################
-# GENBANK AUTO UPDATE (DONE - 2014-10-10 - Steve)
+# GENBANK AUTO UPDATE (DONE - 2014-12-11 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -385,34 +378,35 @@ tarSyr2.perChromTables = no
     # tarSyr1
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (DONE 2014-10-21 - Steve)
+# all.joiner update, downloads and in pushQ - (DONE 2014-12-29 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=tarSyr2 -keys all.joiner
-XXX - running - Mon Dec 29 14:04:53 PST 2014
+    # about 50 minutes
     joinerCheck -database=tarSyr2 -tableCoverage all.joiner
     joinerCheck -database=tarSyr2 -times all.joiner
 
     cd /hive/data/genomes/tarSyr2
-    time makeDownloads.pl tarSyr2 > do.log 2>&1
-XXX - running - Mon Dec 29 14:07:11 PST 2014
+    time makeDownloads.pl tarSyr2 > downloads.log 2>&1
+    # real    22m17.544s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/tarSyr2/pushQ
     cd /hive/data/genomes/tarSyr2/pushQ
-    makePushQSql.pl tarSyr2 > tarSyr2.pushQ.sql 2> stderr.out
+    time makePushQSql.pl tarSyr2 > tarSyr2.pushQ.sql 2> stderr.out
+    # real    5m47.086s
+
     #   check for errors in stderr.out, some are OK, e.g.:
-    # WARNING: hgwdev does not have /gbdb/tarSyr2/wib/gc5Base.wib
-    # WARNING: hgwdev does not have /gbdb/tarSyr2/wib/quality.wib
-    # WARNING: hgwdev does not have /gbdb/tarSyr2/bbi/quality.bw
-    # WARNING: tarSyr2 does not have seq
-    # WARNING: tarSyr2 does not have extFile
+# WARNING: hgwdev does not have /gbdb/tarSyr2/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/tarSyr2/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/tarSyr2/bbi/qualityBw/quality.bw
+# WARNING: tarSyr2 does not have seq
+# WARNING: tarSyr2 does not have estOrientInfo
 
     #   copy it to hgwbeta
     scp -p tarSyr2.pushQ.sql qateam@hgwbeta:/tmp
-    ssh hgwbeta
-    cd /tmp
-    hgsql qapushq < tarSyr2.pushQ.sql
+    ssh qateam@hgwbeta hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/tarSyr2.pushQ.sql"
+
     #   in that pushQ entry walk through each entry and see if the
     #   sizes will set properly
 
