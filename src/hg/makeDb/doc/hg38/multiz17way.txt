@@ -1481,23 +1481,22 @@ Bushbaby - Otolemur garnettii       Mar. 2011 (Broad/otoGar3) reciprocal best
     echo "wait" >> $gp.jobs
 
     time sh -x $gp.jobs > $gp.jobs.log 2>&1
-XXX - running - Mon Dec 29 13:31:07 PST 2014
-    #   real    15m15.424s
+    #   real    21m11.977s
 
     export mz=multiz17way
     export gp=refGene
     export db=hg38
     time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
-    #   real    0m23.119s
+    #   real    0m33.580s
     time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    1m15.547s
+    #   real    1m30.018s
 
     du -hsc exonAA exonNuc refGene*.fa.gz
-    #  59M     exonAA
-    #  101M    exonNuc
-    #  59M     refGene.multiz17way.exonAA.fa.gz
-    #  101M    refGene.multiz17way.exonNuc.fa.gz
-    #  317M    total
+    # 121M    exonAA
+    # 182M    exonNuc
+    # 121M    refGene.multiz17way.exonAA.fa.gz
+    # 182M    refGene.multiz17way.exonNuc.fa.gz
+    # 605M    total
 
     rm -rf exonAA exonNuc
 
@@ -1544,12 +1543,13 @@ XXX - running - Mon Dec 29 13:31:07 PST 2014
     done > $gp.$mz.jobs
 
     time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1
-    # real    72m58.133s
+    # real    88m42.651s
+
 
     rm *.known.bed
-    mz=multiz17way
-    gp=knownCanonical
-    db=hg38
+    export mz=multiz17way
+    export gp=knownCanonical
+    export db=hg38
     zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz &
     zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz &
     zcat ppredAA/c*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz &
@@ -1557,10 +1557,10 @@ XXX - running - Mon Dec 29 13:31:07 PST 2014
 
     rm -rf exonAA exonNuc ppredAA ppredNuc
 
-    mz=multiz17way
-    gp=knownCanonical
-    db=hg38
-    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    export mz=multiz17way
+    export gp=knownCanonical
+    export db=hg38
+    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
