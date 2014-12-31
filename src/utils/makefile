@@ -183,6 +183,8 @@ scripts: $(SCRIPT_FILES:%=%.scripts)
 	echo cp -p $* ${SCRIPTS}
 	cp -p $* ${SCRIPTS}
 
+# the following three targets are for the hgBeacon CGI which needs 
+# two tools copied into the cgi-bin/utils directory
 cgi:
 	cd bigBedToBed && ${MAKE} cgi
 	cd bigBedInfo && ${MAKE} cgi
