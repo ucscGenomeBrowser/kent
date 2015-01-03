@@ -647,7 +647,11 @@ displayed in the configuration and track settings, and on the
 details pages. Suggested maximum length is 80 characters.</p>
  
 <P><em>type</em> - the format of the file specified by bigDataUrl. Must be either 
-<em>bigWig</em>, <em>bigBed</em>, <em>bam</em> or <em>vcfTabix</em>.</p>
+<em>bigWig</em>, <em>bigBed</em>, <em>bam</em> or <em>vcfTabix</em>.  If the type
+is <em>bigBed</em>, it may be followed by an optional number denoting the number
+of fields in the bigBed file (e.g., "type bigBed 12" for a file with 12 fields).
+If no number is given, a default value of 3 is assumed (a very limited display
+that omits names, strand information, and exon boundaries).</p>
 
 <P><B><em>Example 4:</em></B> Sample trackDb.txt file containing two simple tracks.</p>
 
