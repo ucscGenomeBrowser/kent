@@ -63,6 +63,8 @@ for (i = 0;  i < core->n_cigar;  i++)
     int n = bamUnpackCigarElement(cigar[i], &op);
     switch (op)
 	{
+	case 'X': // mismatch (gapless aligned block)
+	case '=': // match (gapless aligned block)
 	case 'M': // match or mismatch (gapless aligned block)
 	    blockSizes[blockCount] = n;
 	    qStarts[blockCount] = qPos;
@@ -121,6 +123,8 @@ for (i = 0;  i < core->n_cigar;  i++)
     int n = bamUnpackCigarElement(cigar[i], &op);
     switch (op)
 	{
+	case 'X': // mismatch (gapless aligned block)
+	case '=': // match (gapless aligned block)
 	case 'M': // match or mismatch (gapless aligned block)
 	    AllocVar(sf);
 	    sf->start = tPos;
@@ -865,6 +869,8 @@ for (i = 0;  i < core->n_cigar;  i++)
     int n = bamUnpackCigarElement(cigar[i], &op);
     switch (op)
 	{
+	case 'X': // mismatch (gapless aligned block)
+	case '=': // match (gapless aligned block)
 	case 'M': // match or mismatch (gapless aligned block)
 	    {
 	    int start = (int)(scale * (tPos - winStart));

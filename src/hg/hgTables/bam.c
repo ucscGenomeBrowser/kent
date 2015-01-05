@@ -219,6 +219,8 @@ while (s < end)
     char op = *s++;
     switch (op)
 	{
+	case '=': // match (gapless aligned block)
+	case 'X': // mismatch (gapless aligned block)
 	case 'M': // match or mismatch (gapless aligned block)
 	    tLength += n;
 	    break;
