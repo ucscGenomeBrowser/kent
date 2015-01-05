@@ -5,9 +5,9 @@ setenv LASTREVIEWDAY 2014-11-10         # v309 preview
 setenv REVIEW2DAY 2014-12-15        # v310 preview2
 setenv LASTREVIEW2DAY 2014-11-17    # v309 preview2
 # set these three for final build:
-setenv BRANCHNN 309
-setenv TODAY 2014-11-24                # v309 final
-setenv LASTWEEK 2014-11-03             # v308 final
+setenv BRANCHNN 310
+setenv TODAY 2015-01-05                # v310 final
+setenv LASTWEEK 2014-11-24             # v309 final
 
 setenv BUILDHOME /hive/groups/browser/newBuild
 setenv WEEKLYBLD ${BUILDHOME}/kent/src/utils/qa/weeklybld
