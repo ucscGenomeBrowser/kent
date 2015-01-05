@@ -156,13 +156,10 @@ return miList;
 struct wigMafItem *newSpeciesItems(struct track *track, int height)
 /* Make up item list for all species configured in track settings */
 {
-struct dyString *order = dyStringNew(256);
-char option[MAX_SP_SIZE];
 char *species[MAX_SP_SIZE];
 char *groups[20];
 char *defaultOff[MAX_SP_SIZE];
 char sGroup[MAX_SP_SIZE];
-struct wigMafItem *mi = NULL, *miList = NULL;
 int group;
 int i;
 int speciesCt = 0, groupCt = 1;
@@ -228,6 +225,7 @@ if (tdbIsContainerChild(track->tdb))
 
 /* Make up items for other organisms by scanning through group & species
    track settings */
+struct wigMafItem *mi = NULL, *miList = NULL;
 for (group = 0; group < groupCt; group++)
     {
     if (groupCt != 1 || !speciesOrder)
@@ -239,31 +237,16 @@ for (group = 0; group < groupCt; group++)
     speciesCt = chopLine(cloneString(speciesOrder), species);
     for (i = 0; i < speciesCt; i++)
         {
-        /* skip this species if UI checkbox was unchecked */
-        if (!cartVarExistsAnyLevel(cart, track->tdb,FALSE,species[i]))
-            {
-            if (hashLookup(speciesOffHash, species[i]))
-                {
-                safef(option, sizeof(option), "%s.%s", prefix, species[i]);
-                cartSetBoolean(cart, option, FALSE);
-                }
-            }
-        if (!cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, species[i],TRUE))
-            continue;
-        mi = newMafItem(species[i], group, lowerFirstChar);
-        slAddHead(&miList, mi);
+	boolean defaultOn = (hashLookup(speciesOffHash, species[i]) == NULL);
+
+	if (cartUsualBooleanClosestToHome(cart, track->tdb, FALSE, species[i],defaultOn))
+	    {
+	    mi = newMafItem(species[i], group, lowerFirstChar);
+	    mi->height = height;
+	    slAddHead(&miList, mi);
+	    }
         }
     }
-
-slReverse(&miList);
-for (mi = miList; mi != NULL; mi = mi->next)
-    {
-    mi->height = height;
-    dyStringPrintf(order, "%s ",mi->db);
-    }
-safef(option, sizeof(option), "%s.speciesOrder", prefix);
-cartSetString(cart, option, order->string);
-slReverse(&miList);
 
 return miList;
 }
@@ -1147,7 +1130,6 @@ struct hashCookie cookie;
 struct dyString *where = dyStringNew(256);
 char *whereClause = NULL;
 boolean useIrowChains = TRUE;
-char option[64];
 
 if (miList == NULL)
     return FALSE;
@@ -1167,8 +1149,6 @@ else
     char *irowString = trackDbSetting(track->tdb, "irows");
     if (irowString && sameString(irowString, "off"))
 	useIrowChains = FALSE;
-    safef(option, sizeof(option), "%s.%s", prefix, MAF_CHAIN_VAR);
-    cartSetBoolean(cart, option, useIrowChains);
     }
 
 /* Create SQL where clause that will load up just the
@@ -1375,7 +1355,6 @@ struct wigMafItem *miList = track->items, *mi = miList;
 int graphHeight = 0;
 Color pairColor = (vis == tvFull ? track->ixAltColor : color);
 boolean useIrowChains = TRUE;
-char option[64];
 boolean doSnpMode = (vis == tvPack) &&(trackDbSetting(track->tdb, "snpMode") != NULL);
 
 char *prefix = track->track; // use when setting things to the cart
@@ -1393,8 +1372,6 @@ else
     char *irowString = trackDbSetting(track->tdb, "irows");
     if (irowString && sameString(irowString, "off"))
 	useIrowChains = FALSE;
-    safef(option, sizeof(option), "%s.%s", prefix, MAF_CHAIN_VAR);
-    cartSetBoolean(cart, option, useIrowChains);
     }
 
 if (vis == tvFull)
@@ -1847,7 +1824,6 @@ struct dnaSeq *seq = NULL;
 struct hash *miHash = newHash(9);
 struct hash *srcHash = newHash(0);
 char dbChrom[64];
-char option[64];
 int alignLineLength = winBaseCount * 2;
         /* doubled to allow space for insert counts */
 boolean complementBases = cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE);
@@ -1925,8 +1901,6 @@ else
     if (dotString && sameString(dotString, "on"))
 	{
 	dots = TRUE;
-        safef(option, sizeof(option), "%s.%s", prefix, MAF_DOT_VAR);
-	cartSetBoolean(cart, option, TRUE);
 	}
     }
 
@@ -1959,8 +1933,6 @@ else
     char *irowString = trackDbSetting(track->tdb, "irows");
     if (irowString && sameString(irowString, "off"))
 	useIrowChains = FALSE;
-    safef(option, sizeof(option), "%s.%s", prefix, MAF_CHAIN_VAR);
-    cartSetBoolean(cart, option, useIrowChains);
     }
 
 /* Allocate a line of characters for each item. */
