@@ -555,15 +555,16 @@ visibility hide
 type bed 4 +
 
 track msr2
-shortLabel Gene Interactions
-longLabel Gene Interactions
+shortLabel Pathways
+longLabel Pathways and Protein Interactions
 group pub
-visibility dense
-type bigBed 4 .
+visibility hide
+type bigBed 4
 noScoreFilter on
 release alpha
 directUrl hgcGeneGraph?gene=%s
 labelOnFeature on
+linkIdInName on
 
 track pubsDev
 shortLabel Publications Beta

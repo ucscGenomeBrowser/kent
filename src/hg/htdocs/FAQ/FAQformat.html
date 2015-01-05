@@ -191,6 +191,13 @@ it on your own server, you should use the
         <I>chromStart</I>. The number of items in
         this list should correspond to <I>blockCount</I>.
 </OL>
+
+<P>
+In BED files with block definitions, the first <i>blockStart</i> value must
+be 0, so that the first block begins at <i>chromStart</i>.  Similarly, the final
+<i>blockStart</i> position plus the final <i>blockSize</i> value must equal
+<i>chromEnd</i>.  Blocks may not overlap.
+
 <P><B><I>Example:</I></B><BR>
 Here's an example of an annotation track that uses a complete BED definition:</P>
 <PRE>track name=pairedReads description=&quot;Clone Paired Reads&quot; useScore=1

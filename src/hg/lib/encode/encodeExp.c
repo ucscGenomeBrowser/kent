@@ -345,11 +345,11 @@ static char *encodeExpGetUpdateTime(struct encodeExp *exp)
 return cloneString(exp->updateTime);
 }
 
-typedef char * (*encodeExpGetField)(struct encodeExp *exp);
+typedef char * (*encodeExpGetFieldFunc)(struct encodeExp *exp);
 
 struct encodeExpField {
     char *name;
-    encodeExpGetField get;
+    encodeExpGetFieldFunc get;
     boolean required;
 } encodeExpField;
 
@@ -757,6 +757,15 @@ struct encodeExp *encodeExpGetById(struct sqlConnection *conn, int id)
 return encodeExpGetByIdFromTable(conn, ENCODE_EXP_TABLE, id);
 }
 
+struct encodeExp *encodeExpGetByAccession(struct sqlConnection *conn, char *accession)
+/* Return experiment specified by accession from default table */
+{
+if (accession == NULL || strlen(accession) <= encodeExpIdOffset())
+    return NULL;
+int id = atoi(accession + encodeExpIdOffset());
+return encodeExpGetById(conn, id);
+}
+
 static char *encodeExpMakeAccession(struct encodeExp *exp)
 /* Make accession string from prefix + organism + id */
 {
@@ -880,6 +889,30 @@ if (var == NULL)
 return (sameString(var, ENCODE_EXP_FIELD_LAB) ||
     sameString(var, ENCODE_EXP_FIELD_DATA_TYPE) ||
     sameString(var, ENCODE_EXP_FIELD_CELL_TYPE));
+}
+
+char *encodeExpGetVar(struct encodeExp *exp, char *var)
+/* Return value of an expVar, or NULL if not found */
+{
+struct slPair *vars = slPairListFromString(exp->expVars, FALSE); 
+return slPairFindVal(vars, var);
+}
+
+char *encodeExpGetField(struct encodeExp *exp, char *var)
+/* Return value of a field, whether part of schema or an expVar */
+{
+if (var == NULL)
+    return FALSE;
+int i;
+for (i = 0; i < ENCODEEXP_NUM_COLS; i++)
+    {
+    struct encodeExpField *fp = &encodeExpFields[i];
+    assert(fp->name != NULL);
+    if (sameString(fp->name, var))
+        return fp->get(exp);
+    }
+// not a schema field, it may be an expVar
+return encodeExpGetVar(exp, var);
 }
 
 static boolean cvTermIsValid(char *type, char *val)

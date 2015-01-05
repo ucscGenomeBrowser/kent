@@ -567,9 +567,6 @@ void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw simple Bed items. */
 {
-// optional setting to draw labels onto the feature boxes, not next to them
-tg->drawLabelInBox = cartOrTdbBoolean(cart, tg->tdb, "labelOnFeature" , FALSE);
-
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->track);
 
@@ -595,27 +592,14 @@ char *bedNameField1(struct track *tg, void *item)
 /* return part before first space in item name */
 {
 struct bed *bed = item;
-if (bed->name==NULL)
-    return "";
-char *nonSpc = stringIn(" ", bed->name);
-if (nonSpc==NULL)
-    return bed->name;
-int part1Len = nonSpc - bed->name;
-char *newName = cloneStringZ(bed->name, part1Len);
-return newName;
+return cloneFirstWord(bed->name);
 }
 
-char *bedNameField2(struct track *tg, void *item)
+char *bedNameNotField1(struct track *tg, void *item)
 /* return part after first space in item name */
 {
 struct bed *bed = item;
-if (bed->name==NULL)
-    return "";
-
-char* spcPos = stringIn(" ", bed->name);
-if (spcPos==NULL)
-    return bed->name;
-return cloneString(spcPos+1);
+return cloneNotFirstWord(bed->name);
 }
 
 int bedItemStart(struct track *tg, void *item)
@@ -690,7 +674,7 @@ tg->freeItems = freeSimpleBed;
 if (trackDbSettingClosestToHomeOn(tg->tdb, "linkIdInName"))
     {
     tg->mapItemName = bedNameField1;
-    tg->itemName = bedNameField2;
+    tg->itemName = bedNameNotField1;
     }
 
 }

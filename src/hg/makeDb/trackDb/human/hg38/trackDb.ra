@@ -1,4 +1,5 @@
 include trackDb.wgEncode.ra
+include uwDnase.ra
 
 track par override
 group x
@@ -194,6 +195,7 @@ group x
     html altSequence
 
 include trackDb.7way.ra
+include trackDb.17way.ra
 
 track ucscRetroAli8
 shortLabel Retroposed Genes 8.0

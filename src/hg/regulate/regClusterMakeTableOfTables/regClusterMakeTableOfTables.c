@@ -7,6 +7,8 @@
 #include "sqlNum.h"
 #include "hmmstats.h"
 #include "mdb.h"
+#include "cv.h"
+#include "encode/encodeExp.h"
 #include "jksql.h"
 
 int scoreColIx = 7;
@@ -27,6 +29,7 @@ errAbort(
   "        enh01 - From enhancer picks\n"
   "        awgDnase01 - AWG uniform dnase peaks, named wgEncodeAwgDnase<lab><cell>Peak.bigBed from Jan 2011 ENCODE freeze\n"
   "        awgDnase01Hg19 - AWG uniform dnase peaks, with cell type + treatment metadata from hg19 metaDb\n"
+  "        eapDnase01Hg38 - Uniform dnase peaks from Encode Analysis Pipeline named by expemnt. Cell type + treatment metadata from experiment table\n"
   "options:\n"
   "    scoreColIx=N (default %d) Index (1 based) of score column in files.  Use 5 for bed,\n"
   "               7 for narrowPeak"
@@ -148,7 +151,6 @@ fprintf(f, "\t.");
 }
 
 
-/* Version of function used for AWG DNase with metadata */
 static struct sqlConnection *conn = NULL;
 
 void awgDnase01Hg19MetaOut(FILE *f, char *objName)
@@ -171,6 +173,19 @@ if (obj && obj->varHash != NULL)
         treatment = var->val;
     }
 fprintf(f, "\t%s", cell);
+if (treatment != NULL && differentString(treatment, "None"))
+    fprintf(f, "+%s", treatment);
+}
+
+void eapDnase01Hg38MetaOut(FILE *f, char *accession)
+/* Version of function used for EAP processed DNase with metadata. 
+   Gets metadata from experiment table */
+{
+if (conn == NULL)
+    conn = sqlConnect("hgFixed");
+struct encodeExp *exp = encodeExpGetByAccession(conn, accession);
+fprintf(f, "\t%s", exp->cellType);
+char *treatment = encodeExpGetVar(exp, CV_TERM_TREATMENT);
 if (treatment != NULL && differentString(treatment, "None"))
     fprintf(f, "+%s", treatment);
 }
@@ -357,6 +372,14 @@ for (in = inList; in != NULL; in = in->next)
         // strip extension to get mdbObject name 
         chopSuffix(s);
         awgDnase01Hg19MetaOut(f, s);
+        }
+    else if (sameString(type, "eapDnase01Hg38"))
+        {
+        // strip off all extensions to get experiment accession (wgEncodeEH*)
+        char *e = strchr(s, '.');
+        if (e != NULL)
+            *e = 0;
+        eapDnase01Hg38MetaOut(f, s);
         }
     else
 	errAbort("Unknown type '%s' in first command line parameter.", type);

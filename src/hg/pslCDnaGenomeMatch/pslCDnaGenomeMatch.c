@@ -11,7 +11,7 @@
 #include "axt.h"
 #include "dnautil.h"
 #include "dnaseq.h"
-#include "nib.h"
+#include "twoBit.h"
 #include "fa.h"
 #include "dlist.h"
 #include "dystring.h"
@@ -46,11 +46,12 @@ int lociCounter = 0;
 bool passthru = FALSE;
 bool computeSS = FALSE;
 struct dlList *fileCache = NULL;
-struct hash *nibHash = NULL;
+//struct hash *nibHash = NULL;
 FILE *outFile = NULL; /* output tab sep file */
 FILE *bedFile = NULL; /* output bed file */
 FILE *scoreFile = NULL; /* output score file */
-struct twoBitFile *twoBitFile = NULL;
+struct twoBitFile *cdnaSeqFile = NULL;
+struct twoBitFile *genomeSeqFile = NULL;
 char *species1 = NULL;
 char *species2 = NULL;
 char *nibdir1 = NULL;
@@ -121,7 +122,7 @@ struct alignment
     struct alignment *next;
     struct psl *psl;        /* alignment of mrna for this species */
     char *db;                   /* name of database of species */
-    char *nibDir;               /* directory containing nib files */
+    struct twoBitFile *twoBitSeqFile;           /* open two bit file */
     char *mrnaPath;             /* path to location of mrna sequence */
     struct dnaSeq *tSeq;        /* sequence in genome */
     struct dnaSeq *qSeq;        /* mrna sequence */
@@ -137,26 +138,17 @@ struct cachedFile
     FILE *f;		/* Open file. */
     };
 
-struct seqFilePos
-/* Where a sequence is in a file. */
-    {
-    struct filePos *next;	/* Next in list. */
-    char *name;	/* Sequence name. Allocated in hash. */
-    char *file;	/* Sequence file name, allocated in hash. */
-    long pos; /* Position in fa file/size of nib. */
-    bool isNib;	/* True if a nib file. */
-    };
 void usage()
 /* Print usage instructions and exit. */
 {
 errAbort(
     "pslCDnaGenomeMatch - check if retroGene aligns better to parent or retroGene \n"
     "usage:\n"
-    "    pslCDnaGenomeMatch input.psl chrom.sizes cdna.2bit nibDir output.psl\n"
+    "    pslCDnaGenomeMatch input.psl chrom.sizes cdna.2bit genome.2bit output.psl\n"
     "input.psl contains input mRNA/EST alignment psl file SORTED by qName\n"
     "chrom.sizes is a list of chromosome followed by size\n"
-    "cdna.2bit contains fasta sequences of all mrnas/EST \n"
-    "directory containing nibs of genome\n"
+    "cdna.2bit contains fasta sequences of all mrnas/EST in 2bit format\n"
+    "genome.2bit contains fasta genome sequences in 2bit format\n"
     "output.psl contains filtered alignments for best matches and cases where no filtering occurred.\n\n"
     "Options: \n"
     "    -score=output.tab  is output containing mismatch info\n" 
@@ -190,7 +182,6 @@ tSeq = el->tSeq;
 qSeq = el->qSeq;
 freeDnaSeq(&tSeq);
 freeDnaSeq(&qSeq);
-//freeMem(el->db);
 freez(pEl);
 }
 
@@ -206,13 +197,6 @@ for (el = *pList; el != NULL; el = next)
     alignFree(&el);
     }
 *pList = NULL;
-}
-
-struct dnaSeq *nibInfoLoadSeq(struct nibInfo *nib, int start, int size)
-/* Load in a sequence in mixed case from nib file. */
-{
-return nibLdPartMasked(NIB_MASK_MIXED, nib->fileName, nib->f, nib->size, 
-	start, size);
 }
 
 bool purine(char a)
@@ -239,30 +223,34 @@ else
     return FALSE;
 }
 
-struct dnaSeq *nibInfoLoadStrand(struct nibInfo *nib, char *seqName, int start, int end,
+struct dnaSeq *twoBitGetSeqForStrand(struct twoBitFile *tbf, char *seqName, int start, int end,
 	char strand)
-/* Load in a mixed case sequence from nib file, from reverse strand if
+/* Load in a mixed case sequence from from a twoBit file, from reverse strand if
  * strand is '-'. */
 {
 struct dnaSeq *seq;
 int size = end - start;
+int seqSize = twoBitSeqSize(tbf, seqName);
 assert(size >= 0);
+
 if (strand == '-')
     {
     verbose(6,"before start %d end %d size %d %s\n",
-            start, end, nib->size, seqName);
-    reverseIntRange(&start, &end, nib->size);
+            start, end, size, seqName);
+    reverseIntRange(&start, &end, seqSize);
     verbose(6,"after start %d end %d size %d %s\n",
-            start, end, nib->size, seqName);
+            start, end, size, seqName);
     assert(start >= 0);
-    seq = nibInfoLoadSeq(nib, start, size);
+    seq = twoBitReadSeqFrag(tbf, seqName, start, end);
+    //seq = nibInfoLoadSeq(nib, start, size);
 //    seq = nibTwoCacheSeqPart(ntc, seqName, 
 //	start, size, &retFullSeqSize);
     reverseComplement(seq->dna, seq->size);
     }
 else
     {
-    seq = nibInfoLoadSeq(nib, start, size);
+    seq = twoBitReadSeqFrag(tbf, seqName, start, end);
+    //seq = nibInfoLoadSeq(nib, start, size);
 //    seq = nibTwoCacheSeqPart(ntc, seqName, 
 //	start, size, &retFullSeqSize);
     }
@@ -960,7 +948,7 @@ void computeSuffStats(struct misMatch **misMatchList, struct alignment *align, s
 int blockIx = 0;
 //int i, j,    sum = 0;
 struct psl *psl = align->psl;
-struct nibInfo *tNib = nibInfoFromCache(nibHash, align->nibDir, psl->tName);
+//struct nibInfo *tNib = nibInfoFromCache(nibHash, align->nibDir, psl->tName);
 //nibTwoCache
 static struct dnaSeq *tSeq = NULL;
 int tStart = psl->tStart;
@@ -973,12 +961,12 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     /* for each alignment block get sequence for both strands */
     {
     struct snp125 *snp = NULL, *snpList = NULL;
-    if (hashFindVal(twoBitFile->hash, psl->qName) == NULL)
+    if (hashFindVal(cdnaSeqFile->hash, psl->qName) == NULL)
         {
         printf("skipping %s not found \n",psl->qName);
         return;
         }
-    int size = twoBitSeqSize(twoBitFile, psl->qName);
+    int size = twoBitSeqSize(cdnaSeqFile, psl->qName);
     int i = 0;
     int ts = psl->tStarts[blockIx];
     int te = psl->tStarts[blockIx]+(psl->blockSizes[blockIx]);
@@ -989,7 +977,7 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
         printf("skipping %s %d > %d \n",psl->qName, qe, size );
         return;
         }
-    qSeq = twoBitReadSeqFrag(twoBitFile, psl->qName, psl->qStarts[blockIx], 
+    qSeq = twoBitReadSeqFrag(cdnaSeqFile, psl->qName, psl->qStarts[blockIx], 
             psl->qStarts[blockIx]+(psl->blockSizes[blockIx]));
 
     if (genomeStrand == '-')
@@ -998,7 +986,8 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     verbose(5,"  xyz %s t %s:%d-%d q %d-%d %s strand %c\n",
             psl->qName, psl->tName, ts, te, psl->qStarts[blockIx], 
             psl->qStarts[blockIx]+psl->blockSizes[blockIx], psl->strand, genomeStrand);
-    tSeq = nibInfoLoadStrand(tNib, psl->tName, psl->tStarts[blockIx], 
+    tSeq = twoBitGetSeqForStrand(align->twoBitSeqFile, psl->tName,
+            psl->tStarts[blockIx], 
             psl->tStarts[blockIx]+(psl->blockSizes[blockIx]), genomeStrand);
 
     verbose(6,"tSeq %s len %d %d\n",tSeq->dna, tSeq->size, (int)strlen(tSeq->dna));
@@ -1052,7 +1041,7 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     }
 }
 
-void addOtherAlignments( struct alignment *alignList, struct hash *speciesHash, char *name, char *nibDir, char *mrnaPath)
+void addOtherAlignments( struct alignment *alignList, struct hash *speciesHash, char *name, struct twoBitFile *twoBitFile, char *mrnaPath)
 {
 /* add alignemnts from other species to the list */
 struct hashEl *speciesList = NULL , *el = NULL;
@@ -1065,7 +1054,7 @@ for (el = speciesList ; el != NULL ; el = el->next)
     struct psl *psl = el->val;
     AllocVar(align);
     align->psl = psl;
-    align->nibDir = nibDir;
+    align->twoBitSeqFile = twoBitFile;
     align->mrnaPath = mrnaPath;
     slAddHead(&alignList, align);
     }
@@ -1079,7 +1068,7 @@ void fillinMatches(struct misMatch **misMatchList, struct alignment *align, stru
     static struct dnaSeq *tSeq = NULL;
 
     struct psl *psl = align->psl;
-    struct nibInfo *tNib = nibInfoFromCache(nibHash, align->nibDir, psl->tName);
+    //struct nibInfo *tNib = nibInfoFromCache(nibHash, align->nibDir, psl->tName);
     int tStart = psl->tStart;
     int tEnd   = psl->tEnd;
     char genomeStrand = psl->strand[1] == '-' ? '-' : '+';
@@ -1091,7 +1080,7 @@ void fillinMatches(struct misMatch **misMatchList, struct alignment *align, stru
     for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
         /* for each alignment block get sequence for both strands */
         {
-        struct dnaSeq *qSeq = twoBitReadSeqFrag(twoBitFile, psl->qName, psl->qStarts[blockIx], 
+        struct dnaSeq *qSeq = twoBitReadSeqFrag(cdnaSeqFile, psl->qName, psl->qStarts[blockIx], 
                 psl->qStarts[blockIx]+(psl->blockSizes[blockIx]));
         int ts = psl->tStarts[blockIx];
         int te = psl->tStarts[blockIx]+(psl->blockSizes[blockIx]);
@@ -1102,7 +1091,7 @@ void fillinMatches(struct misMatch **misMatchList, struct alignment *align, stru
         if (genomeStrand == '-')
             reverseIntRange(&ts, &te, psl->tSize);
 
-        tSeq = nibInfoLoadStrand(tNib, psl->tName, psl->tStarts[blockIx], 
+        tSeq = twoBitGetSeqForStrand(align->twoBitSeqFile, psl->tName, psl->tStarts[blockIx], 
                 psl->tStarts[blockIx]+(psl->blockSizes[blockIx]), genomeStrand);
 
         for (mm = *misMatchList ; mm != NULL ; mm = mm->next)
@@ -1175,7 +1164,7 @@ void buildMisMatches(struct misMatch **misMatchList, struct alignment *align, st
 {
 int blockIx = 0;
 struct psl *psl = align->psl;
-struct nibInfo *tNib = nibInfoFromCache(nibHash, align->nibDir, psl->tName);
+//struct nibInfo *tNib = nibInfoFromCache(nibHash, align->nibDir, psl->tName);
 static struct dnaSeq *tSeq = NULL;
 int tStart = psl->tStart;
 int tEnd   = psl->tEnd;
@@ -1188,7 +1177,7 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     /* for each alignment block get sequence for both strands */
     {
     struct snp125 *snp = NULL, *snpList = NULL;
-    struct dnaSeq *qSeq = twoBitReadSeqFrag(twoBitFile, psl->qName, psl->qStarts[blockIx], 
+    struct dnaSeq *qSeq = twoBitReadSeqFrag(cdnaSeqFile, psl->qName, psl->qStarts[blockIx], 
             psl->qStarts[blockIx]+(psl->blockSizes[blockIx]));
     int i = 0;
     int ts = psl->tStarts[blockIx];
@@ -1197,7 +1186,7 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     if (genomeStrand == '-')
         reverseIntRange(&ts, &te, psl->tSize);
 
-    tSeq = nibInfoLoadStrand(tNib, psl->tName, psl->tStarts[blockIx], 
+    tSeq = twoBitGetSeqForStrand(align->twoBitSeqFile, psl->tName, psl->tStarts[blockIx], 
             psl->tStarts[blockIx]+(psl->blockSizes[blockIx]), genomeStrand);
 
     verbose(5,"  buildMisMatches for blk %s t %s:%d-%d q %d-%d %s strand %c\n",
@@ -1389,7 +1378,7 @@ else if (computeSS)
 lociFreeList(&lociList);
 }
 
-void pslCDnaGenomeMatch(char *inName, char *tNibDir)
+void pslCDnaGenomeMatch(char *inName)
 {
 struct psl *psl = NULL, *pslList = NULL ;
 struct alignment *subList = NULL;
@@ -1427,7 +1416,7 @@ while (psl != NULL )
     psl = psl->next;
     align->psl = newPsl; 
     align->db = "db";
-    align->nibDir = tNibDir;
+    align->twoBitSeqFile = genomeSeqFile;
     align->mrnaPath = NULL;
     rm = slRemoveEl(&pslList, newPsl);
     if (rm)
@@ -1492,15 +1481,16 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc != 6)
     usage();
-if (nibHash == NULL)
-    nibHash = hashNew(0);
+//if (nibHash == NULL)
+//    nibHash = hashNew(0);
 lociCounter = 0;
 fileCache = newDlList();
 verbosity = optionInt("verbose", verbosity);
 verboseSetLogFile("stdout");
 verboseSetLevel(verbosity);
 ss = axtScoreSchemeDefault();
-twoBitFile = twoBitOpen(argv[3]);
+cdnaSeqFile = twoBitOpen(argv[3]);
+genomeSeqFile = twoBitOpen(argv[4]);
 outFile = fopen(argv[5],"w");
 
 initSS();
@@ -1530,13 +1520,14 @@ mrna1 = optionVal("mrna1", NULL);
 mrna2 = optionVal("mrna2", NULL);
 passthru = optionExists("passthru");
 verbose(1,"Reading alignments from %s\n",argv[1]);
-pslCDnaGenomeMatch(argv[1], argv[4]);
+pslCDnaGenomeMatch(argv[1]);
 fclose(outFile);
 if (bedOut != NULL)
     fclose(bedFile);
 if (scoreOut != NULL)
     fclose(scoreFile);
 freeDlList(&fileCache);
-twoBitClose(&twoBitFile);
+twoBitClose(&cdnaSeqFile);
+twoBitClose(&genomeSeqFile);
 return(0);
 }

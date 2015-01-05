@@ -1,6 +1,6 @@
         track chainOtoGar1
         subTrack primateChainNetViewchain off
-        subGroups view=chain species=ajBushbaby clade=adStrepsirrhini
+        subGroups view=chain species=apBushbaby clade=afStrepsirrhini
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain otoGar1
@@ -8,7 +8,7 @@
 
         track netOtoGar1
         subTrack primateChainNetViewnet on
-        subGroups view=net species=ajBushbaby clade=adStrepsirrhini
+        subGroups view=net species=apBushbaby clade=afStrepsirrhini
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign otoGar1 chainOtoGar1

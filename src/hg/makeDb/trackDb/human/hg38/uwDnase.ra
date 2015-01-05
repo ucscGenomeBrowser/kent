@@ -1,0 +1,2842 @@
+track uwEnc2DnaseClustered
+table wgEncodeRegDnaseClustered
+shortLabel UW DNase Clusters
+wgEncode on
+longLabel DNaseI Hypersensitivity Clusters in 95 cell types from UW/ENCODE2
+inputTableFieldDisplay cellType treatment
+inputTrackTable uwEnc2DnaseInputs
+sourceTable uwEnc2DnaseSources
+type bed 5 .
+scoreFilter 200
+scoreFilterLimits 1:1000
+controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
+spectrum on
+html uwDnaseClusters
+group regulation
+priority 100.2
+
+track uwEnc2Dnase
+compositeTrack on
+shortLabel UW DNase
+wgEncode on
+longLabel DNaseI Hypersensitivity from UW/ENCODE2
+group regulation
+priority 100.3
+subGroup1 view Views Hot=HotSpots Peaks=Peaks Signal=Signal
+subGroup2 cellType Cell_Line wgEncodeEH000484=K562 wgEncodeEH001180=A549 wgEncodeEH001187=LNCaP wgEncodeEH000503=HMEC wgEncodeEH002583=T-47D wgEncodeEH000500=PANC-1 wgEncodeEH001162=HCT-116 wgEncodeEH002582=NHBE_RA wgEncodeEH001193=HFF wgEncodeEH001194=HFF-Myc wgEncodeEH001887=NT2-D1 wgEncodeEH000487=BJ wgEncodeEH000507=AG09309 wgEncodeEH000516=HNPCEpiC wgEncodeEH001197=WI-38 wgEncodeEH002574=GM04503 wgEncodeEH002575=GM04504 wgEncodeEH000521=NHLF wgEncodeEH001179=NH-A wgEncodeEH001178=HBMEC wgEncodeEH000508=AG09319 wgEncodeEH001175=HPdLF wgEncodeEH000513=HCF wgEncodeEH000519=HCM wgEncodeEH001173=HPAF wgEncodeEH001161=AoAF wgEncodeEH000514=HCPEpiC wgEncodeEH001174=HPF wgEncodeEH001165=HConF wgEncodeEH001192=HAc wgEncodeEH001176=HVMF wgEncodeEH001184=HIPEpiC wgEncodeEH003031=bone_marrow_MSC wgEncodeEH000509=AG10803 wgEncodeEH001166=HMF wgEncodeEH000504=HGF wgEncodeEH000518=NHDF-neo wgEncodeEH000512=HAEpiC wgEncodeEH000490=SKMC wgEncodeEH002580=HBVSMC wgEncodeEH000505=AG04449 wgEncodeEH000506=AG04450 wgEncodeEH001191=HA-h wgEncodeEH002581=M059J wgEncodeEH003007=RPMI-7951 wgEncodeEH001183=HA-sp wgEncodeEH001164=HCFaa wgEncodeEH001198=WI-38_40HTAM wgEncodeEH001177=NHDF-Ad wgEncodeEH001185=HSMM wgEncodeEH003005=LHCN-M2 wgEncodeEH003006=LHCN-M2_diff_4d wgEncodeEH001186=HSMMtube wgEncodeEH000488=HUVEC wgEncodeEH001163=HMVEC-LBl wgEncodeEH001168=HMVEC-dBl-Ad wgEncodeEH001171=HMVEC-dLy-Neo wgEncodeEH001169=HMVEC-dBl-Neo wgEncodeEH001195=HRGEC wgEncodeEH001167=HMVEC-LLy wgEncodeEH001172=HMVEC-dNeo wgEncodeEH001889=HMVEC-dAd wgEncodeEH000493=HRCEpiC wgEncodeEH000494=HRE wgEncodeEH000499=NHEK wgEncodeEH000501=SAEC wgEncodeEH001888=PrEC wgEncodeEH000515=HEEpiC wgEncodeEH000481=GM06990 wgEncodeEH000482=HepG2 wgEncodeEH000486=Caco-2 wgEncodeEH000485=SK-N-SH_RA wgEncodeEH001884=CD20+_RO01778 wgEncodeEH000483=Th1 wgEncodeEH000491=Th2 wgEncodeEH003022=Th1_Wb54553204 wgEncodeEH000497=Jurkat wgEncodeEH000492=GM12878 wgEncodeEH000520=GM12865 wgEncodeEH001196=Monocytes-CD14+_RO01746 wgEncodeEH000489=HL-60 wgEncodeEH000498=NB4 wgEncodeEH000511=H7-hESC wgEncodeEH002578=H7-hESC_diff_5d wgEncodeEH002576=H7-hESC_diff_14d wgEncodeEH001188=RPTEC wgEncodeEH000517=HRPEpiC wgEncodeEH001170=HMVEC-dLy-Ad wgEncodeEH000495=HeLa-S3 wgEncodeEH001189=SK-N-MC wgEncodeEH000502=MCF-7 wgEncodeEH003017=MCF-7_estradi_1h wgEncodeEH003018=MCF-7_estradi_0h wgEncodeEH001190=WERI-Rb-1 wgEncodeEH001181=BE2_C
+subGroup3 treatment Treatment n_a=n/a OHTAM=4OHTAM_20nM_72hr diffProtA_14d=diffProtA_14d diffProtA_5d=diffProtA_5d DIFF_4d=DIFF_4d Estradiol_100nM_1hr=Estradiol_100nM_1hr Estradiol_ctrl_0hr=Estradiol_ctrl_0hr
+dimensions dimensionY=cellType
+sortOrder view=+ cellType=+ treatment=+
+noInherit on
+type bed 3 +
+html uwDnase
+
+    track uwEnc2DnaseHot
+    shortLabel Hot Spots
+    longLabel HotSpot5 hotspot calls on BWA. Dupe, sponge and mitochondria filtered
+    view Hot
+    visibility hide
+    parent uwEnc2Dnase
+    #pValueFilter 0.0
+    #pValueFilterLimits 1:324
+    scoreFilter 0
+    scoreFilterLimits 0:1000
+    spectrum on
+    minGrayLevel 2
+
+	track uwEnc2DnaseHotWgEncodeEH000484
+	parent uwEnc2DnaseHot off
+	shortLabel K562 Ht
+	longLabel K562 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000484
+	subGroups view=Hot cellType=wgEncodeEH000484 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001180
+	parent uwEnc2DnaseHot off
+	shortLabel A549 Ht
+	longLabel A549 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001180
+	subGroups view=Hot cellType=wgEncodeEH001180 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001187
+	parent uwEnc2DnaseHot off
+	shortLabel LNCaP Ht
+	longLabel LNCaP DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001187
+	subGroups view=Hot cellType=wgEncodeEH001187 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000503
+	parent uwEnc2DnaseHot off
+	shortLabel HMEC Ht
+	longLabel HMEC DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000503
+	subGroups view=Hot cellType=wgEncodeEH000503 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH002583
+	parent uwEnc2DnaseHot off
+	shortLabel T-47D Ht
+	longLabel T-47D DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH002583
+	subGroups view=Hot cellType=wgEncodeEH002583 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000500
+	parent uwEnc2DnaseHot off
+	shortLabel PANC-1 Ht
+	longLabel PANC-1 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000500
+	subGroups view=Hot cellType=wgEncodeEH000500 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001162
+	parent uwEnc2DnaseHot off
+	shortLabel HCT-116 Ht
+	longLabel HCT-116 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001162
+	subGroups view=Hot cellType=wgEncodeEH001162 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH002582
+	parent uwEnc2DnaseHot off
+	shortLabel NHBE_RA Ht
+	longLabel NHBE_RA DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH002582
+	subGroups view=Hot cellType=wgEncodeEH002582 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001193
+	parent uwEnc2DnaseHot off
+	shortLabel HFF Ht
+	longLabel HFF DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001193
+	subGroups view=Hot cellType=wgEncodeEH001193 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001194
+	parent uwEnc2DnaseHot off
+	shortLabel HFF-Myc Ht
+	longLabel HFF-Myc DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001194
+	subGroups view=Hot cellType=wgEncodeEH001194 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001887
+	parent uwEnc2DnaseHot off
+	shortLabel NT2-D1 Ht
+	longLabel NT2-D1 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001887
+	subGroups view=Hot cellType=wgEncodeEH001887 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000487
+	parent uwEnc2DnaseHot off
+	shortLabel BJ Ht
+	longLabel BJ DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000487
+	subGroups view=Hot cellType=wgEncodeEH000487 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000507
+	parent uwEnc2DnaseHot off
+	shortLabel AG09309 Ht
+	longLabel AG09309 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000507
+	subGroups view=Hot cellType=wgEncodeEH000507 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000516
+	parent uwEnc2DnaseHot off
+	shortLabel HNPCEpiC Ht
+	longLabel HNPCEpiC DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000516
+	subGroups view=Hot cellType=wgEncodeEH000516 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001197
+	parent uwEnc2DnaseHot off
+	shortLabel WI-38 Ht
+	longLabel WI-38 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001197
+	subGroups view=Hot cellType=wgEncodeEH001197 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH002574
+	parent uwEnc2DnaseHot off
+	shortLabel GM04503 Ht
+	longLabel GM04503 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH002574
+	subGroups view=Hot cellType=wgEncodeEH002574 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH002575
+	parent uwEnc2DnaseHot off
+	shortLabel GM04504 Ht
+	longLabel GM04504 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH002575
+	subGroups view=Hot cellType=wgEncodeEH002575 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000521
+	parent uwEnc2DnaseHot off
+	shortLabel NHLF Ht
+	longLabel NHLF DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000521
+	subGroups view=Hot cellType=wgEncodeEH000521 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001179
+	parent uwEnc2DnaseHot off
+	shortLabel NH-A Ht
+	longLabel NH-A DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001179
+	subGroups view=Hot cellType=wgEncodeEH001179 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001178
+	parent uwEnc2DnaseHot off
+	shortLabel HBMEC Ht
+	longLabel HBMEC DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001178
+	subGroups view=Hot cellType=wgEncodeEH001178 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000508
+	parent uwEnc2DnaseHot off
+	shortLabel AG09319 Ht
+	longLabel AG09319 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000508
+	subGroups view=Hot cellType=wgEncodeEH000508 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001175
+	parent uwEnc2DnaseHot off
+	shortLabel HPdLF Ht
+	longLabel HPdLF DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001175
+	subGroups view=Hot cellType=wgEncodeEH001175 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000513
+	parent uwEnc2DnaseHot off
+	shortLabel HCF Ht
+	longLabel HCF DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000513
+	subGroups view=Hot cellType=wgEncodeEH000513 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000519
+	parent uwEnc2DnaseHot off
+	shortLabel HCM Ht
+	longLabel HCM DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000519
+	subGroups view=Hot cellType=wgEncodeEH000519 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001173
+	parent uwEnc2DnaseHot off
+	shortLabel HPAF Ht
+	longLabel HPAF DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001173
+	subGroups view=Hot cellType=wgEncodeEH001173 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001161
+	parent uwEnc2DnaseHot off
+	shortLabel AoAF Ht
+	longLabel AoAF DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001161
+	subGroups view=Hot cellType=wgEncodeEH001161 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000514
+	parent uwEnc2DnaseHot off
+	shortLabel HCPEpiC Ht
+	longLabel HCPEpiC DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000514
+	subGroups view=Hot cellType=wgEncodeEH000514 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001174
+	parent uwEnc2DnaseHot off
+	shortLabel HPF Ht
+	longLabel HPF DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001174
+	subGroups view=Hot cellType=wgEncodeEH001174 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001165
+	parent uwEnc2DnaseHot off
+	shortLabel HConF Ht
+	longLabel HConF DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001165
+	subGroups view=Hot cellType=wgEncodeEH001165 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001192
+	parent uwEnc2DnaseHot off
+	shortLabel HAc Ht
+	longLabel HAc DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001192
+	subGroups view=Hot cellType=wgEncodeEH001192 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001176
+	parent uwEnc2DnaseHot off
+	shortLabel HVMF Ht
+	longLabel HVMF DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001176
+	subGroups view=Hot cellType=wgEncodeEH001176 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001184
+	parent uwEnc2DnaseHot off
+	shortLabel HIPEpiC Ht
+	longLabel HIPEpiC DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001184
+	subGroups view=Hot cellType=wgEncodeEH001184 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH003031
+	parent uwEnc2DnaseHot off
+	shortLabel bone_marrow_MSC Ht
+	longLabel bone_marrow_MSC DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH003031
+	subGroups view=Hot cellType=wgEncodeEH003031 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000509
+	parent uwEnc2DnaseHot off
+	shortLabel AG10803 Ht
+	longLabel AG10803 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000509
+	subGroups view=Hot cellType=wgEncodeEH000509 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001166
+	parent uwEnc2DnaseHot off
+	shortLabel HMF Ht
+	longLabel HMF DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001166
+	subGroups view=Hot cellType=wgEncodeEH001166 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000504
+	parent uwEnc2DnaseHot off
+	shortLabel HGF Ht
+	longLabel HGF DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000504
+	subGroups view=Hot cellType=wgEncodeEH000504 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000518
+	parent uwEnc2DnaseHot off
+	shortLabel NHDF-neo Ht
+	longLabel NHDF-neo DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000518
+	subGroups view=Hot cellType=wgEncodeEH000518 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000512
+	parent uwEnc2DnaseHot off
+	shortLabel HAEpiC Ht
+	longLabel HAEpiC DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000512
+	subGroups view=Hot cellType=wgEncodeEH000512 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000490
+	parent uwEnc2DnaseHot off
+	shortLabel SKMC Ht
+	longLabel SKMC DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000490
+	subGroups view=Hot cellType=wgEncodeEH000490 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH002580
+	parent uwEnc2DnaseHot off
+	shortLabel HBVSMC Ht
+	longLabel HBVSMC DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH002580
+	subGroups view=Hot cellType=wgEncodeEH002580 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000505
+	parent uwEnc2DnaseHot off
+	shortLabel AG04449 Ht
+	longLabel AG04449 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000505
+	subGroups view=Hot cellType=wgEncodeEH000505 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000506
+	parent uwEnc2DnaseHot off
+	shortLabel AG04450 Ht
+	longLabel AG04450 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000506
+	subGroups view=Hot cellType=wgEncodeEH000506 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001191
+	parent uwEnc2DnaseHot off
+	shortLabel HA-h Ht
+	longLabel HA-h DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001191
+	subGroups view=Hot cellType=wgEncodeEH001191 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH002581
+	parent uwEnc2DnaseHot off
+	shortLabel M059J Ht
+	longLabel M059J DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH002581
+	subGroups view=Hot cellType=wgEncodeEH002581 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH003007
+	parent uwEnc2DnaseHot off
+	shortLabel RPMI-7951 Ht
+	longLabel RPMI-7951 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH003007
+	subGroups view=Hot cellType=wgEncodeEH003007 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001183
+	parent uwEnc2DnaseHot off
+	shortLabel HA-sp Ht
+	longLabel HA-sp DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001183
+	subGroups view=Hot cellType=wgEncodeEH001183 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001164
+	parent uwEnc2DnaseHot off
+	shortLabel HCFaa Ht
+	longLabel HCFaa DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001164
+	subGroups view=Hot cellType=wgEncodeEH001164 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001198
+	parent uwEnc2DnaseHot off
+	shortLabel WI-38 40HTAM Ht
+	longLabel WI-38 40HTAM DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001198
+	subGroups view=Hot cellType=wgEncodeEH001198 treatment=OHTAM
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001177
+	parent uwEnc2DnaseHot off
+	shortLabel NHDF-Ad Ht
+	longLabel NHDF-Ad DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001177
+	subGroups view=Hot cellType=wgEncodeEH001177 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001185
+	parent uwEnc2DnaseHot off
+	shortLabel HSMM Ht
+	longLabel HSMM DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001185
+	subGroups view=Hot cellType=wgEncodeEH001185 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH003005
+	parent uwEnc2DnaseHot off
+	shortLabel LHCN-M2 Ht
+	longLabel LHCN-M2 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH003005
+	subGroups view=Hot cellType=wgEncodeEH003005 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH003006
+	parent uwEnc2DnaseHot off
+	shortLabel LHCN-M2 diff 4d Ht
+	longLabel LHCN-M2 diff 4d DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH003006
+	subGroups view=Hot cellType=wgEncodeEH003006 treatment=DIFF_4d
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001186
+	parent uwEnc2DnaseHot off
+	shortLabel HSMMtube Ht
+	longLabel HSMMtube DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001186
+	subGroups view=Hot cellType=wgEncodeEH001186 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000488
+	parent uwEnc2DnaseHot off
+	shortLabel HUVEC Ht
+	longLabel HUVEC DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000488
+	subGroups view=Hot cellType=wgEncodeEH000488 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001163
+	parent uwEnc2DnaseHot off
+	shortLabel HMVEC-LBl Ht
+	longLabel HMVEC-LBl DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001163
+	subGroups view=Hot cellType=wgEncodeEH001163 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001168
+	parent uwEnc2DnaseHot off
+	shortLabel HMVEC-dBl-Ad Ht
+	longLabel HMVEC-dBl-Ad DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001168
+	subGroups view=Hot cellType=wgEncodeEH001168 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001171
+	parent uwEnc2DnaseHot off
+	shortLabel HMVEC-dLy-Neo Ht
+	longLabel HMVEC-dLy-Neo DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001171
+	subGroups view=Hot cellType=wgEncodeEH001171 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001169
+	parent uwEnc2DnaseHot off
+	shortLabel HMVEC-dBl-Neo Ht
+	longLabel HMVEC-dBl-Neo DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001169
+	subGroups view=Hot cellType=wgEncodeEH001169 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001195
+	parent uwEnc2DnaseHot off
+	shortLabel HRGEC Ht
+	longLabel HRGEC DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001195
+	subGroups view=Hot cellType=wgEncodeEH001195 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001167
+	parent uwEnc2DnaseHot off
+	shortLabel HMVEC-LLy Ht
+	longLabel HMVEC-LLy DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001167
+	subGroups view=Hot cellType=wgEncodeEH001167 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001172
+	parent uwEnc2DnaseHot off
+	shortLabel HMVEC-dNeo Ht
+	longLabel HMVEC-dNeo DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001172
+	subGroups view=Hot cellType=wgEncodeEH001172 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001889
+	parent uwEnc2DnaseHot off
+	shortLabel HMVEC-dAd Ht
+	longLabel HMVEC-dAd DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001889
+	subGroups view=Hot cellType=wgEncodeEH001889 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000493
+	parent uwEnc2DnaseHot off
+	shortLabel HRCEpiC Ht
+	longLabel HRCEpiC DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000493
+	subGroups view=Hot cellType=wgEncodeEH000493 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000494
+	parent uwEnc2DnaseHot off
+	shortLabel HRE Ht
+	longLabel HRE DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000494
+	subGroups view=Hot cellType=wgEncodeEH000494 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000499
+	parent uwEnc2DnaseHot off
+	shortLabel NHEK Ht
+	longLabel NHEK DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000499
+	subGroups view=Hot cellType=wgEncodeEH000499 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000501
+	parent uwEnc2DnaseHot off
+	shortLabel SAEC Ht
+	longLabel SAEC DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000501
+	subGroups view=Hot cellType=wgEncodeEH000501 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001888
+	parent uwEnc2DnaseHot off
+	shortLabel PrEC Ht
+	longLabel PrEC DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001888
+	subGroups view=Hot cellType=wgEncodeEH001888 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000515
+	parent uwEnc2DnaseHot off
+	shortLabel HEEpiC Ht
+	longLabel HEEpiC DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000515
+	subGroups view=Hot cellType=wgEncodeEH000515 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000481
+	parent uwEnc2DnaseHot off
+	shortLabel GM06990 Ht
+	longLabel GM06990 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000481
+	subGroups view=Hot cellType=wgEncodeEH000481 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000482
+	parent uwEnc2DnaseHot off
+	shortLabel HepG2 Ht
+	longLabel HepG2 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000482
+	subGroups view=Hot cellType=wgEncodeEH000482 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000486
+	parent uwEnc2DnaseHot off
+	shortLabel Caco-2 Ht
+	longLabel Caco-2 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000486
+	subGroups view=Hot cellType=wgEncodeEH000486 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000485
+	parent uwEnc2DnaseHot off
+	shortLabel SK-N-SH_RA Ht
+	longLabel SK-N-SH_RA DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000485
+	subGroups view=Hot cellType=wgEncodeEH000485 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001884
+	parent uwEnc2DnaseHot off
+	shortLabel CD20+_RO01778 Ht
+	longLabel CD20+_RO01778 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001884
+	subGroups view=Hot cellType=wgEncodeEH001884 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000483
+	parent uwEnc2DnaseHot off
+	shortLabel Th1 Ht
+	longLabel Th1 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000483
+	subGroups view=Hot cellType=wgEncodeEH000483 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000491
+	parent uwEnc2DnaseHot off
+	shortLabel Th2 Ht
+	longLabel Th2 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000491
+	subGroups view=Hot cellType=wgEncodeEH000491 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH003022
+	parent uwEnc2DnaseHot off
+	shortLabel Th1_Wb54553204 Ht
+	longLabel Th1_Wb54553204 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH003022
+	subGroups view=Hot cellType=wgEncodeEH003022 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000497
+	parent uwEnc2DnaseHot off
+	shortLabel Jurkat Ht
+	longLabel Jurkat DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000497
+	subGroups view=Hot cellType=wgEncodeEH000497 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000492
+	parent uwEnc2DnaseHot off
+	shortLabel GM12878 Ht
+	longLabel GM12878 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000492
+	subGroups view=Hot cellType=wgEncodeEH000492 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000520
+	parent uwEnc2DnaseHot off
+	shortLabel GM12865 Ht
+	longLabel GM12865 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000520
+	subGroups view=Hot cellType=wgEncodeEH000520 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001196
+	parent uwEnc2DnaseHot off
+	shortLabel Monocytes-CD14+_RO01746 Ht
+	longLabel Monocytes-CD14+_RO01746 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001196
+	subGroups view=Hot cellType=wgEncodeEH001196 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000489
+	parent uwEnc2DnaseHot off
+	shortLabel HL-60 Ht
+	longLabel HL-60 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000489
+	subGroups view=Hot cellType=wgEncodeEH000489 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000498
+	parent uwEnc2DnaseHot off
+	shortLabel NB4 Ht
+	longLabel NB4 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000498
+	subGroups view=Hot cellType=wgEncodeEH000498 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000511
+	parent uwEnc2DnaseHot off
+	shortLabel H7-hESC Ht
+	longLabel H7-hESC DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000511
+	subGroups view=Hot cellType=wgEncodeEH000511 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH002578
+	parent uwEnc2DnaseHot off
+	shortLabel H7-hESC diff 5d Ht
+	longLabel H7-hESC diff 5d DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH002578
+	subGroups view=Hot cellType=wgEncodeEH002578 treatment=diffProtA_5d
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH002576
+	parent uwEnc2DnaseHot off
+	shortLabel H7-hESC diff 14d Ht
+	longLabel H7-hESC diff 14d DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH002576
+	subGroups view=Hot cellType=wgEncodeEH002576 treatment=diffProtA_14d
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001188
+	parent uwEnc2DnaseHot off
+	shortLabel RPTEC Ht
+	longLabel RPTEC DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001188
+	subGroups view=Hot cellType=wgEncodeEH001188 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000517
+	parent uwEnc2DnaseHot off
+	shortLabel HRPEpiC Ht
+	longLabel HRPEpiC DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000517
+	subGroups view=Hot cellType=wgEncodeEH000517 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001170
+	parent uwEnc2DnaseHot off
+	shortLabel HMVEC-dLy-Ad Ht
+	longLabel HMVEC-dLy-Ad DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001170
+	subGroups view=Hot cellType=wgEncodeEH001170 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000495
+	parent uwEnc2DnaseHot off
+	shortLabel HeLa-S3 Ht
+	longLabel HeLa-S3 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000495
+	subGroups view=Hot cellType=wgEncodeEH000495 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001189
+	parent uwEnc2DnaseHot off
+	shortLabel SK-N-MC Ht
+	longLabel SK-N-MC DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001189
+	subGroups view=Hot cellType=wgEncodeEH001189 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH000502
+	parent uwEnc2DnaseHot off
+	shortLabel MCF-7 Ht
+	longLabel MCF-7 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH000502
+	subGroups view=Hot cellType=wgEncodeEH000502 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH003017
+	parent uwEnc2DnaseHot off
+	shortLabel MCF-7 estradi 1h Ht
+	longLabel MCF-7 estradi 1h DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH003017
+	subGroups view=Hot cellType=wgEncodeEH003017 treatment=Estradiol_100nM_1hr
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH003018
+	parent uwEnc2DnaseHot off
+	shortLabel MCF-7 estradi 0h Ht
+	longLabel MCF-7 estradi 0h DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH003018
+	subGroups view=Hot cellType=wgEncodeEH003018 treatment=Estradiol_ctrl_0hr
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001190
+	parent uwEnc2DnaseHot off
+	shortLabel WERI-Rb-1 Ht
+	longLabel WERI-Rb-1 DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001190
+	subGroups view=Hot cellType=wgEncodeEH001190 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnaseHotWgEncodeEH001181
+	parent uwEnc2DnaseHot off
+	shortLabel BE2_C Ht
+	longLabel BE2_C DNAseI HS HotSpots from ENCODE2/UW wgEncodeEH001181
+	subGroups view=Hot cellType=wgEncodeEH001181 treatment=n_a
+	type bigBed 6 +
+
+    track uwEnc2DnasePeaks
+    shortLabel Peaks
+    longLabel HotSpot5 peak calls on BWA. Dupe, sponge and mitochondria filtered
+    view Peaks
+    visibility hide
+    parent uwEnc2Dnase
+    #pValueFilter 0.0
+    #pValueFilterLimits 1:324
+    scoreFilter 0
+    scoreFilterLimits 0:1000
+    spectrum on
+    minGrayLevel 2
+
+	track uwEnc2DnasePeaksWgEncodeEH000484
+	parent uwEnc2DnasePeaks off
+	shortLabel K562 Pk
+	longLabel K562 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000484
+	subGroups view=Peaks cellType=wgEncodeEH000484 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001180
+	parent uwEnc2DnasePeaks off
+	shortLabel A549 Pk
+	longLabel A549 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001180
+	subGroups view=Peaks cellType=wgEncodeEH001180 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001187
+	parent uwEnc2DnasePeaks off
+	shortLabel LNCaP Pk
+	longLabel LNCaP DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001187
+	subGroups view=Peaks cellType=wgEncodeEH001187 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000503
+	parent uwEnc2DnasePeaks off
+	shortLabel HMEC Pk
+	longLabel HMEC DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000503
+	subGroups view=Peaks cellType=wgEncodeEH000503 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH002583
+	parent uwEnc2DnasePeaks off
+	shortLabel T-47D Pk
+	longLabel T-47D DNAseI HS Peaks from ENCODE2/UW wgEncodeEH002583
+	subGroups view=Peaks cellType=wgEncodeEH002583 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000500
+	parent uwEnc2DnasePeaks off
+	shortLabel PANC-1 Pk
+	longLabel PANC-1 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000500
+	subGroups view=Peaks cellType=wgEncodeEH000500 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001162
+	parent uwEnc2DnasePeaks off
+	shortLabel HCT-116 Pk
+	longLabel HCT-116 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001162
+	subGroups view=Peaks cellType=wgEncodeEH001162 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH002582
+	parent uwEnc2DnasePeaks off
+	shortLabel NHBE_RA Pk
+	longLabel NHBE_RA DNAseI HS Peaks from ENCODE2/UW wgEncodeEH002582
+	subGroups view=Peaks cellType=wgEncodeEH002582 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001193
+	parent uwEnc2DnasePeaks off
+	shortLabel HFF Pk
+	longLabel HFF DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001193
+	subGroups view=Peaks cellType=wgEncodeEH001193 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001194
+	parent uwEnc2DnasePeaks off
+	shortLabel HFF-Myc Pk
+	longLabel HFF-Myc DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001194
+	subGroups view=Peaks cellType=wgEncodeEH001194 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001887
+	parent uwEnc2DnasePeaks off
+	shortLabel NT2-D1 Pk
+	longLabel NT2-D1 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001887
+	subGroups view=Peaks cellType=wgEncodeEH001887 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000487
+	parent uwEnc2DnasePeaks off
+	shortLabel BJ Pk
+	longLabel BJ DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000487
+	subGroups view=Peaks cellType=wgEncodeEH000487 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000507
+	parent uwEnc2DnasePeaks off
+	shortLabel AG09309 Pk
+	longLabel AG09309 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000507
+	subGroups view=Peaks cellType=wgEncodeEH000507 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000516
+	parent uwEnc2DnasePeaks off
+	shortLabel HNPCEpiC Pk
+	longLabel HNPCEpiC DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000516
+	subGroups view=Peaks cellType=wgEncodeEH000516 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001197
+	parent uwEnc2DnasePeaks off
+	shortLabel WI-38 Pk
+	longLabel WI-38 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001197
+	subGroups view=Peaks cellType=wgEncodeEH001197 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH002574
+	parent uwEnc2DnasePeaks off
+	shortLabel GM04503 Pk
+	longLabel GM04503 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH002574
+	subGroups view=Peaks cellType=wgEncodeEH002574 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH002575
+	parent uwEnc2DnasePeaks off
+	shortLabel GM04504 Pk
+	longLabel GM04504 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH002575
+	subGroups view=Peaks cellType=wgEncodeEH002575 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000521
+	parent uwEnc2DnasePeaks off
+	shortLabel NHLF Pk
+	longLabel NHLF DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000521
+	subGroups view=Peaks cellType=wgEncodeEH000521 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001179
+	parent uwEnc2DnasePeaks off
+	shortLabel NH-A Pk
+	longLabel NH-A DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001179
+	subGroups view=Peaks cellType=wgEncodeEH001179 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001178
+	parent uwEnc2DnasePeaks off
+	shortLabel HBMEC Pk
+	longLabel HBMEC DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001178
+	subGroups view=Peaks cellType=wgEncodeEH001178 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000508
+	parent uwEnc2DnasePeaks off
+	shortLabel AG09319 Pk
+	longLabel AG09319 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000508
+	subGroups view=Peaks cellType=wgEncodeEH000508 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001175
+	parent uwEnc2DnasePeaks off
+	shortLabel HPdLF Pk
+	longLabel HPdLF DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001175
+	subGroups view=Peaks cellType=wgEncodeEH001175 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000513
+	parent uwEnc2DnasePeaks off
+	shortLabel HCF Pk
+	longLabel HCF DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000513
+	subGroups view=Peaks cellType=wgEncodeEH000513 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000519
+	parent uwEnc2DnasePeaks off
+	shortLabel HCM Pk
+	longLabel HCM DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000519
+	subGroups view=Peaks cellType=wgEncodeEH000519 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001173
+	parent uwEnc2DnasePeaks off
+	shortLabel HPAF Pk
+	longLabel HPAF DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001173
+	subGroups view=Peaks cellType=wgEncodeEH001173 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001161
+	parent uwEnc2DnasePeaks off
+	shortLabel AoAF Pk
+	longLabel AoAF DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001161
+	subGroups view=Peaks cellType=wgEncodeEH001161 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000514
+	parent uwEnc2DnasePeaks off
+	shortLabel HCPEpiC Pk
+	longLabel HCPEpiC DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000514
+	subGroups view=Peaks cellType=wgEncodeEH000514 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001174
+	parent uwEnc2DnasePeaks off
+	shortLabel HPF Pk
+	longLabel HPF DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001174
+	subGroups view=Peaks cellType=wgEncodeEH001174 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001165
+	parent uwEnc2DnasePeaks off
+	shortLabel HConF Pk
+	longLabel HConF DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001165
+	subGroups view=Peaks cellType=wgEncodeEH001165 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001192
+	parent uwEnc2DnasePeaks off
+	shortLabel HAc Pk
+	longLabel HAc DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001192
+	subGroups view=Peaks cellType=wgEncodeEH001192 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001176
+	parent uwEnc2DnasePeaks off
+	shortLabel HVMF Pk
+	longLabel HVMF DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001176
+	subGroups view=Peaks cellType=wgEncodeEH001176 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001184
+	parent uwEnc2DnasePeaks off
+	shortLabel HIPEpiC Pk
+	longLabel HIPEpiC DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001184
+	subGroups view=Peaks cellType=wgEncodeEH001184 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH003031
+	parent uwEnc2DnasePeaks off
+	shortLabel bone_marrow_MSC Pk
+	longLabel bone_marrow_MSC DNAseI HS Peaks from ENCODE2/UW wgEncodeEH003031
+	subGroups view=Peaks cellType=wgEncodeEH003031 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000509
+	parent uwEnc2DnasePeaks off
+	shortLabel AG10803 Pk
+	longLabel AG10803 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000509
+	subGroups view=Peaks cellType=wgEncodeEH000509 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001166
+	parent uwEnc2DnasePeaks off
+	shortLabel HMF Pk
+	longLabel HMF DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001166
+	subGroups view=Peaks cellType=wgEncodeEH001166 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000504
+	parent uwEnc2DnasePeaks off
+	shortLabel HGF Pk
+	longLabel HGF DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000504
+	subGroups view=Peaks cellType=wgEncodeEH000504 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000518
+	parent uwEnc2DnasePeaks off
+	shortLabel NHDF-neo Pk
+	longLabel NHDF-neo DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000518
+	subGroups view=Peaks cellType=wgEncodeEH000518 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000512
+	parent uwEnc2DnasePeaks off
+	shortLabel HAEpiC Pk
+	longLabel HAEpiC DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000512
+	subGroups view=Peaks cellType=wgEncodeEH000512 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000490
+	parent uwEnc2DnasePeaks off
+	shortLabel SKMC Pk
+	longLabel SKMC DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000490
+	subGroups view=Peaks cellType=wgEncodeEH000490 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH002580
+	parent uwEnc2DnasePeaks off
+	shortLabel HBVSMC Pk
+	longLabel HBVSMC DNAseI HS Peaks from ENCODE2/UW wgEncodeEH002580
+	subGroups view=Peaks cellType=wgEncodeEH002580 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000505
+	parent uwEnc2DnasePeaks off
+	shortLabel AG04449 Pk
+	longLabel AG04449 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000505
+	subGroups view=Peaks cellType=wgEncodeEH000505 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000506
+	parent uwEnc2DnasePeaks off
+	shortLabel AG04450 Pk
+	longLabel AG04450 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000506
+	subGroups view=Peaks cellType=wgEncodeEH000506 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001191
+	parent uwEnc2DnasePeaks off
+	shortLabel HA-h Pk
+	longLabel HA-h DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001191
+	subGroups view=Peaks cellType=wgEncodeEH001191 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH002581
+	parent uwEnc2DnasePeaks off
+	shortLabel M059J Pk
+	longLabel M059J DNAseI HS Peaks from ENCODE2/UW wgEncodeEH002581
+	subGroups view=Peaks cellType=wgEncodeEH002581 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH003007
+	parent uwEnc2DnasePeaks off
+	shortLabel RPMI-7951 Pk
+	longLabel RPMI-7951 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH003007
+	subGroups view=Peaks cellType=wgEncodeEH003007 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001183
+	parent uwEnc2DnasePeaks off
+	shortLabel HA-sp Pk
+	longLabel HA-sp DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001183
+	subGroups view=Peaks cellType=wgEncodeEH001183 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001164
+	parent uwEnc2DnasePeaks off
+	shortLabel HCFaa Pk
+	longLabel HCFaa DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001164
+	subGroups view=Peaks cellType=wgEncodeEH001164 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001198
+	parent uwEnc2DnasePeaks off
+	shortLabel WI-38 40HTAM Pk
+	longLabel WI-38 40HTAM DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001198
+	subGroups view=Peaks cellType=wgEncodeEH001198 treatment=OHTAM
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001177
+	parent uwEnc2DnasePeaks off
+	shortLabel NHDF-Ad Pk
+	longLabel NHDF-Ad DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001177
+	subGroups view=Peaks cellType=wgEncodeEH001177 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001185
+	parent uwEnc2DnasePeaks off
+	shortLabel HSMM Pk
+	longLabel HSMM DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001185
+	subGroups view=Peaks cellType=wgEncodeEH001185 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH003005
+	parent uwEnc2DnasePeaks off
+	shortLabel LHCN-M2 Pk
+	longLabel LHCN-M2 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH003005
+	subGroups view=Peaks cellType=wgEncodeEH003005 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH003006
+	parent uwEnc2DnasePeaks off
+	shortLabel LHCN-M2 diff 4d Pk
+	longLabel LHCN-M2 diff 4d DNAseI HS Peaks from ENCODE2/UW wgEncodeEH003006
+	subGroups view=Peaks cellType=wgEncodeEH003006 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001186
+	parent uwEnc2DnasePeaks off
+	shortLabel HSMMtube Pk
+	longLabel HSMMtube DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001186
+	subGroups view=Peaks cellType=wgEncodeEH001186 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000488
+	parent uwEnc2DnasePeaks off
+	shortLabel HUVEC Pk
+	longLabel HUVEC DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000488
+	subGroups view=Peaks cellType=wgEncodeEH000488 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001163
+	parent uwEnc2DnasePeaks off
+	shortLabel HMVEC-LBl Pk
+	longLabel HMVEC-LBl DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001163
+	subGroups view=Peaks cellType=wgEncodeEH001163 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001168
+	parent uwEnc2DnasePeaks off
+	shortLabel HMVEC-dBl-Ad Pk
+	longLabel HMVEC-dBl-Ad DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001168
+	subGroups view=Peaks cellType=wgEncodeEH001168 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001171
+	parent uwEnc2DnasePeaks off
+	shortLabel HMVEC-dLy-Neo Pk
+	longLabel HMVEC-dLy-Neo DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001171
+	subGroups view=Peaks cellType=wgEncodeEH001171 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001169
+	parent uwEnc2DnasePeaks off
+	shortLabel HMVEC-dBl-Neo Pk
+	longLabel HMVEC-dBl-Neo DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001169
+	subGroups view=Peaks cellType=wgEncodeEH001169 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001195
+	parent uwEnc2DnasePeaks off
+	shortLabel HRGEC Pk
+	longLabel HRGEC DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001195
+	subGroups view=Peaks cellType=wgEncodeEH001195 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001167
+	parent uwEnc2DnasePeaks off
+	shortLabel HMVEC-LLy Pk
+	longLabel HMVEC-LLy DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001167
+	subGroups view=Peaks cellType=wgEncodeEH001167 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001172
+	parent uwEnc2DnasePeaks off
+	shortLabel HMVEC-dNeo Pk
+	longLabel HMVEC-dNeo DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001172
+	subGroups view=Peaks cellType=wgEncodeEH001172 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001889
+	parent uwEnc2DnasePeaks off
+	shortLabel HMVEC-dAd Pk
+	longLabel HMVEC-dAd DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001889
+	subGroups view=Peaks cellType=wgEncodeEH001889 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000493
+	parent uwEnc2DnasePeaks off
+	shortLabel HRCEpiC Pk
+	longLabel HRCEpiC DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000493
+	subGroups view=Peaks cellType=wgEncodeEH000493 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000494
+	parent uwEnc2DnasePeaks off
+	shortLabel HRE Pk
+	longLabel HRE DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000494
+	subGroups view=Peaks cellType=wgEncodeEH000494 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000499
+	parent uwEnc2DnasePeaks off
+	shortLabel NHEK Pk
+	longLabel NHEK DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000499
+	subGroups view=Peaks cellType=wgEncodeEH000499 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000501
+	parent uwEnc2DnasePeaks off
+	shortLabel SAEC Pk
+	longLabel SAEC DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000501
+	subGroups view=Peaks cellType=wgEncodeEH000501 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001888
+	parent uwEnc2DnasePeaks off
+	shortLabel PrEC Pk
+	longLabel PrEC DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001888
+	subGroups view=Peaks cellType=wgEncodeEH001888 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000515
+	parent uwEnc2DnasePeaks off
+	shortLabel HEEpiC Pk
+	longLabel HEEpiC DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000515
+	subGroups view=Peaks cellType=wgEncodeEH000515 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000481
+	parent uwEnc2DnasePeaks off
+	shortLabel GM06990 Pk
+	longLabel GM06990 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000481
+	subGroups view=Peaks cellType=wgEncodeEH000481 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000482
+	parent uwEnc2DnasePeaks off
+	shortLabel HepG2 Pk
+	longLabel HepG2 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000482
+	subGroups view=Peaks cellType=wgEncodeEH000482 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000486
+	parent uwEnc2DnasePeaks off
+	shortLabel Caco-2 Pk
+	longLabel Caco-2 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000486
+	subGroups view=Peaks cellType=wgEncodeEH000486 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000485
+	parent uwEnc2DnasePeaks off
+	shortLabel SK-N-SH_RA Pk
+	longLabel SK-N-SH_RA DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000485
+	subGroups view=Peaks cellType=wgEncodeEH000485 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001884
+	parent uwEnc2DnasePeaks off
+	shortLabel CD20+_RO01778 Pk
+	longLabel CD20+_RO01778 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001884
+	subGroups view=Peaks cellType=wgEncodeEH001884 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000483
+	parent uwEnc2DnasePeaks off
+	shortLabel Th1 Pk
+	longLabel Th1 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000483
+	subGroups view=Peaks cellType=wgEncodeEH000483 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000491
+	parent uwEnc2DnasePeaks off
+	shortLabel Th2 Pk
+	longLabel Th2 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000491
+	subGroups view=Peaks cellType=wgEncodeEH000491 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH003022
+	parent uwEnc2DnasePeaks off
+	shortLabel Th1_Wb54553204 Pk
+	longLabel Th1_Wb54553204 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH003022
+	subGroups view=Peaks cellType=wgEncodeEH003022 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000497
+	parent uwEnc2DnasePeaks off
+	shortLabel Jurkat Pk
+	longLabel Jurkat DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000497
+	subGroups view=Peaks cellType=wgEncodeEH000497 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000492
+	parent uwEnc2DnasePeaks off
+	shortLabel GM12878 Pk
+	longLabel GM12878 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000492
+	subGroups view=Peaks cellType=wgEncodeEH000492 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000520
+	parent uwEnc2DnasePeaks off
+	shortLabel GM12865 Pk
+	longLabel GM12865 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000520
+	subGroups view=Peaks cellType=wgEncodeEH000520 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001196
+	parent uwEnc2DnasePeaks off
+	shortLabel Monocytes-CD14+_RO01746 Pk
+	longLabel Monocytes-CD14+_RO01746 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001196
+	subGroups view=Peaks cellType=wgEncodeEH001196 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000489
+	parent uwEnc2DnasePeaks off
+	shortLabel HL-60 Pk
+	longLabel HL-60 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000489
+	subGroups view=Peaks cellType=wgEncodeEH000489 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000498
+	parent uwEnc2DnasePeaks off
+	shortLabel NB4 Pk
+	longLabel NB4 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000498
+	subGroups view=Peaks cellType=wgEncodeEH000498 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000511
+	parent uwEnc2DnasePeaks off
+	shortLabel H7-hESC Pk
+	longLabel H7-hESC DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000511
+	subGroups view=Peaks cellType=wgEncodeEH000511 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH002578
+	parent uwEnc2DnasePeaks off
+	shortLabel H7-hESC diff 5d Pk
+	longLabel H7-hESC diff 5d DNAseI HS Peaks from ENCODE2/UW wgEncodeEH002578
+	subGroups view=Peaks cellType=wgEncodeEH002578 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH002576
+	parent uwEnc2DnasePeaks off
+	shortLabel H7-hESC diff 14d Pk
+	longLabel H7-hESC diff 14d DNAseI HS Peaks from ENCODE2/UW wgEncodeEH002576
+	subGroups view=Peaks cellType=wgEncodeEH002576 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001188
+	parent uwEnc2DnasePeaks off
+	shortLabel RPTEC Pk
+	longLabel RPTEC DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001188
+	subGroups view=Peaks cellType=wgEncodeEH001188 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000517
+	parent uwEnc2DnasePeaks off
+	shortLabel HRPEpiC Pk
+	longLabel HRPEpiC DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000517
+	subGroups view=Peaks cellType=wgEncodeEH000517 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001170
+	parent uwEnc2DnasePeaks off
+	shortLabel HMVEC-dLy-Ad Pk
+	longLabel HMVEC-dLy-Ad DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001170
+	subGroups view=Peaks cellType=wgEncodeEH001170 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000495
+	parent uwEnc2DnasePeaks off
+	shortLabel HeLa-S3 Pk
+	longLabel HeLa-S3 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000495
+	subGroups view=Peaks cellType=wgEncodeEH000495 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001189
+	parent uwEnc2DnasePeaks off
+	shortLabel SK-N-MC Pk
+	longLabel SK-N-MC DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001189
+	subGroups view=Peaks cellType=wgEncodeEH001189 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH000502
+	parent uwEnc2DnasePeaks off
+	shortLabel MCF-7 Pk
+	longLabel MCF-7 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH000502
+	subGroups view=Peaks cellType=wgEncodeEH000502 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH003017
+	parent uwEnc2DnasePeaks off
+	shortLabel MCF-7 estradi 1h Pk
+	longLabel MCF-7 estradi 1h DNAseI HS Peaks from ENCODE2/UW wgEncodeEH003017
+	subGroups view=Peaks cellType=wgEncodeEH003017 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH003018
+	parent uwEnc2DnasePeaks off
+	shortLabel MCF-7 estradi 0h Pk
+	longLabel MCF-7 estradi 0h DNAseI HS Peaks from ENCODE2/UW wgEncodeEH003018
+	subGroups view=Peaks cellType=wgEncodeEH003018 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001190
+	parent uwEnc2DnasePeaks off
+	shortLabel WERI-Rb-1 Pk
+	longLabel WERI-Rb-1 DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001190
+	subGroups view=Peaks cellType=wgEncodeEH001190 treatment=n_a
+	type bigBed 6 +
+
+	track uwEnc2DnasePeaksWgEncodeEH001181
+	parent uwEnc2DnasePeaks off
+	shortLabel BE2_C Pk
+	longLabel BE2_C DNAseI HS Peaks from ENCODE2/UW wgEncodeEH001181
+	subGroups view=Peaks cellType=wgEncodeEH001181 treatment=n_a
+	type bigBed 6 +
+
+    track uwEnc2DnaseSignal
+    shortLabel Signal
+    longLabel HotSpot5 signal on BWA. Dupe, sponge and mitochondria filtered
+    view Signal
+    visibility full
+    parent uwEnc2Dnase
+    viewLimits 0:100
+    minLimit 0
+    maxLimit 100000
+    autoScale off
+    maxHeightPixels 100:32:16
+    windowingFunction mean+whiskers
+
+	track uwEnc2DnaseSignalWgEncodeEH000484
+	parent uwEnc2DnaseSignal off
+	shortLabel K562 Sg
+	longLabel K562 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000484
+	subGroups view=Signal cellType=wgEncodeEH000484 treatment=n_a
+	type bigWig 0 38914.2
+
+	track uwEnc2DnaseSignalWgEncodeEH001180
+	parent uwEnc2DnaseSignal off
+	shortLabel A549 Sg
+	longLabel A549 DNAseI HS Signals from ENCODE2/UW wgEncodeEH001180
+	subGroups view=Signal cellType=wgEncodeEH001180 treatment=n_a
+	type bigWig 0 30091.1
+
+	track uwEnc2DnaseSignalWgEncodeEH001187
+	parent uwEnc2DnaseSignal off
+	shortLabel LNCaP Sg
+	longLabel LNCaP DNAseI HS Signals from ENCODE2/UW wgEncodeEH001187
+	subGroups view=Signal cellType=wgEncodeEH001187 treatment=n_a
+	type bigWig 0 37372.7
+
+	track uwEnc2DnaseSignalWgEncodeEH000503
+	parent uwEnc2DnaseSignal off
+	shortLabel HMEC Sg
+	longLabel HMEC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000503
+	subGroups view=Signal cellType=wgEncodeEH000503 treatment=n_a
+	type bigWig 0 32097.2
+
+	track uwEnc2DnaseSignalWgEncodeEH002583
+	parent uwEnc2DnaseSignal off
+	shortLabel T-47D Sg
+	longLabel T-47D DNAseI HS Signals from ENCODE2/UW wgEncodeEH002583
+	subGroups view=Signal cellType=wgEncodeEH002583 treatment=n_a
+	type bigWig 0 34214.8
+
+	track uwEnc2DnaseSignalWgEncodeEH000500
+	parent uwEnc2DnaseSignal off
+	shortLabel PANC-1 Sg
+	longLabel PANC-1 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000500
+	subGroups view=Signal cellType=wgEncodeEH000500 treatment=n_a
+	type bigWig 0 12279.3
+
+	track uwEnc2DnaseSignalWgEncodeEH001162
+	parent uwEnc2DnaseSignal off
+	shortLabel HCT-116 Sg
+	longLabel HCT-116 DNAseI HS Signals from ENCODE2/UW wgEncodeEH001162
+	subGroups view=Signal cellType=wgEncodeEH001162 treatment=n_a
+	type bigWig 0 27405.3
+
+	track uwEnc2DnaseSignalWgEncodeEH002582
+	parent uwEnc2DnaseSignal off
+	shortLabel NHBE_RA Sg
+	longLabel NHBE_RA DNAseI HS Signals from ENCODE2/UW wgEncodeEH002582
+	subGroups view=Signal cellType=wgEncodeEH002582 treatment=n_a
+	type bigWig 0 31238.7
+
+	track uwEnc2DnaseSignalWgEncodeEH001193
+	parent uwEnc2DnaseSignal off
+	shortLabel HFF Sg
+	longLabel HFF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001193
+	subGroups view=Signal cellType=wgEncodeEH001193 treatment=n_a
+	type bigWig 0 17635.9
+
+	track uwEnc2DnaseSignalWgEncodeEH001194
+	parent uwEnc2DnaseSignal off
+	shortLabel HFF-Myc Sg
+	longLabel HFF-Myc DNAseI HS Signals from ENCODE2/UW wgEncodeEH001194
+	subGroups view=Signal cellType=wgEncodeEH001194 treatment=n_a
+	type bigWig 0 23416.2
+
+	track uwEnc2DnaseSignalWgEncodeEH001887
+	parent uwEnc2DnaseSignal off
+	shortLabel NT2-D1 Sg
+	longLabel NT2-D1 DNAseI HS Signals from ENCODE2/UW wgEncodeEH001887
+	subGroups view=Signal cellType=wgEncodeEH001887 treatment=n_a
+	type bigWig 0 8351.64
+
+	track uwEnc2DnaseSignalWgEncodeEH000487
+	parent uwEnc2DnaseSignal off
+	shortLabel BJ Sg
+	longLabel BJ DNAseI HS Signals from ENCODE2/UW wgEncodeEH000487
+	subGroups view=Signal cellType=wgEncodeEH000487 treatment=n_a
+	type bigWig 0 28788.2
+
+	track uwEnc2DnaseSignalWgEncodeEH000507
+	parent uwEnc2DnaseSignal off
+	shortLabel AG09309 Sg
+	longLabel AG09309 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000507
+	subGroups view=Signal cellType=wgEncodeEH000507 treatment=n_a
+	type bigWig 0 29145.4
+
+	track uwEnc2DnaseSignalWgEncodeEH000516
+	parent uwEnc2DnaseSignal off
+	shortLabel HNPCEpiC Sg
+	longLabel HNPCEpiC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000516
+	subGroups view=Signal cellType=wgEncodeEH000516 treatment=n_a
+	type bigWig 0 26522.6
+
+	track uwEnc2DnaseSignalWgEncodeEH001197
+	parent uwEnc2DnaseSignal off
+	shortLabel WI-38 Sg
+	longLabel WI-38 DNAseI HS Signals from ENCODE2/UW wgEncodeEH001197
+	subGroups view=Signal cellType=wgEncodeEH001197 treatment=n_a
+	type bigWig 0 21133.7
+
+	track uwEnc2DnaseSignalWgEncodeEH002574
+	parent uwEnc2DnaseSignal off
+	shortLabel GM04503 Sg
+	longLabel GM04503 DNAseI HS Signals from ENCODE2/UW wgEncodeEH002574
+	subGroups view=Signal cellType=wgEncodeEH002574 treatment=n_a
+	type bigWig 0 11390.2
+
+	track uwEnc2DnaseSignalWgEncodeEH002575
+	parent uwEnc2DnaseSignal off
+	shortLabel GM04504 Sg
+	longLabel GM04504 DNAseI HS Signals from ENCODE2/UW wgEncodeEH002575
+	subGroups view=Signal cellType=wgEncodeEH002575 treatment=n_a
+	type bigWig 0 11566.9
+
+	track uwEnc2DnaseSignalWgEncodeEH000521
+	parent uwEnc2DnaseSignal off
+	shortLabel NHLF Sg
+	longLabel NHLF DNAseI HS Signals from ENCODE2/UW wgEncodeEH000521
+	subGroups view=Signal cellType=wgEncodeEH000521 treatment=n_a
+	type bigWig 0 11719.1
+
+	track uwEnc2DnaseSignalWgEncodeEH001179
+	parent uwEnc2DnaseSignal off
+	shortLabel NH-A Sg
+	longLabel NH-A DNAseI HS Signals from ENCODE2/UW wgEncodeEH001179
+	subGroups view=Signal cellType=wgEncodeEH001179 treatment=n_a
+	type bigWig 0 9132.47
+
+	track uwEnc2DnaseSignalWgEncodeEH001178
+	parent uwEnc2DnaseSignal off
+	shortLabel HBMEC Sg
+	longLabel HBMEC DNAseI HS Signals from ENCODE2/UW wgEncodeEH001178
+	subGroups view=Signal cellType=wgEncodeEH001178 treatment=n_a
+	type bigWig 0 11394.7
+
+	track uwEnc2DnaseSignalWgEncodeEH000508
+	parent uwEnc2DnaseSignal off
+	shortLabel AG09319 Sg
+	longLabel AG09319 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000508
+	subGroups view=Signal cellType=wgEncodeEH000508 treatment=n_a
+	type bigWig 0 28099
+
+	track uwEnc2DnaseSignalWgEncodeEH001175
+	parent uwEnc2DnaseSignal off
+	shortLabel HPdLF Sg
+	longLabel HPdLF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001175
+	subGroups view=Signal cellType=wgEncodeEH001175 treatment=n_a
+	type bigWig 0 11009.1
+
+	track uwEnc2DnaseSignalWgEncodeEH000513
+	parent uwEnc2DnaseSignal off
+	shortLabel HCF Sg
+	longLabel HCF DNAseI HS Signals from ENCODE2/UW wgEncodeEH000513
+	subGroups view=Signal cellType=wgEncodeEH000513 treatment=n_a
+	type bigWig 0 19295.8
+
+	track uwEnc2DnaseSignalWgEncodeEH000519
+	parent uwEnc2DnaseSignal off
+	shortLabel HCM Sg
+	longLabel HCM DNAseI HS Signals from ENCODE2/UW wgEncodeEH000519
+	subGroups view=Signal cellType=wgEncodeEH000519 treatment=n_a
+	type bigWig 0 14370.2
+
+	track uwEnc2DnaseSignalWgEncodeEH001173
+	parent uwEnc2DnaseSignal off
+	shortLabel HPAF Sg
+	longLabel HPAF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001173
+	subGroups view=Signal cellType=wgEncodeEH001173 treatment=n_a
+	type bigWig 0 11225.6
+
+	track uwEnc2DnaseSignalWgEncodeEH001161
+	parent uwEnc2DnaseSignal off
+	shortLabel AoAF Sg
+	longLabel AoAF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001161
+	subGroups view=Signal cellType=wgEncodeEH001161 treatment=n_a
+	type bigWig 0 10369.5
+
+	track uwEnc2DnaseSignalWgEncodeEH000514
+	parent uwEnc2DnaseSignal off
+	shortLabel HCPEpiC Sg
+	longLabel HCPEpiC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000514
+	subGroups view=Signal cellType=wgEncodeEH000514 treatment=n_a
+	type bigWig 0 13163.5
+
+	track uwEnc2DnaseSignalWgEncodeEH001174
+	parent uwEnc2DnaseSignal off
+	shortLabel HPF Sg
+	longLabel HPF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001174
+	subGroups view=Signal cellType=wgEncodeEH001174 treatment=n_a
+	type bigWig 0 11172
+
+	track uwEnc2DnaseSignalWgEncodeEH001165
+	parent uwEnc2DnaseSignal off
+	shortLabel HConF Sg
+	longLabel HConF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001165
+	subGroups view=Signal cellType=wgEncodeEH001165 treatment=n_a
+	type bigWig 0 8320.98
+
+	track uwEnc2DnaseSignalWgEncodeEH001192
+	parent uwEnc2DnaseSignal off
+	shortLabel HAc Sg
+	longLabel HAc DNAseI HS Signals from ENCODE2/UW wgEncodeEH001192
+	subGroups view=Signal cellType=wgEncodeEH001192 treatment=n_a
+	type bigWig 0 10000.7
+
+	track uwEnc2DnaseSignalWgEncodeEH001176
+	parent uwEnc2DnaseSignal off
+	shortLabel HVMF Sg
+	longLabel HVMF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001176
+	subGroups view=Signal cellType=wgEncodeEH001176 treatment=n_a
+	type bigWig 0 5956.46
+
+	track uwEnc2DnaseSignalWgEncodeEH001184
+	parent uwEnc2DnaseSignal off
+	shortLabel HIPEpiC Sg
+	longLabel HIPEpiC DNAseI HS Signals from ENCODE2/UW wgEncodeEH001184
+	subGroups view=Signal cellType=wgEncodeEH001184 treatment=n_a
+	type bigWig 0 8028.81
+
+	track uwEnc2DnaseSignalWgEncodeEH003031
+	parent uwEnc2DnaseSignal off
+	shortLabel bone_marrow_MSC Sg
+	longLabel bone_marrow_MSC DNAseI HS Signals from ENCODE2/UW wgEncodeEH003031
+	subGroups view=Signal cellType=wgEncodeEH003031 treatment=n_a
+	type bigWig 0 3047.47
+
+	track uwEnc2DnaseSignalWgEncodeEH000509
+	parent uwEnc2DnaseSignal off
+	shortLabel AG10803 Sg
+	longLabel AG10803 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000509
+	subGroups view=Signal cellType=wgEncodeEH000509 treatment=n_a
+	type bigWig 0 19440.9
+
+	track uwEnc2DnaseSignalWgEncodeEH001166
+	parent uwEnc2DnaseSignal off
+	shortLabel HMF Sg
+	longLabel HMF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001166
+	subGroups view=Signal cellType=wgEncodeEH001166 treatment=n_a
+	type bigWig 0 12347.6
+
+	track uwEnc2DnaseSignalWgEncodeEH000504
+	parent uwEnc2DnaseSignal off
+	shortLabel HGF Sg
+	longLabel HGF DNAseI HS Signals from ENCODE2/UW wgEncodeEH000504
+	subGroups view=Signal cellType=wgEncodeEH000504 treatment=n_a
+	type bigWig 0 3410.39
+
+	track uwEnc2DnaseSignalWgEncodeEH000518
+	parent uwEnc2DnaseSignal off
+	shortLabel NHDF-neo Sg
+	longLabel NHDF-neo DNAseI HS Signals from ENCODE2/UW wgEncodeEH000518
+	subGroups view=Signal cellType=wgEncodeEH000518 treatment=n_a
+	type bigWig 0 13455.2
+
+	track uwEnc2DnaseSignalWgEncodeEH000512
+	parent uwEnc2DnaseSignal off
+	shortLabel HAEpiC Sg
+	longLabel HAEpiC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000512
+	subGroups view=Signal cellType=wgEncodeEH000512 treatment=n_a
+	type bigWig 0 10858.1
+
+	track uwEnc2DnaseSignalWgEncodeEH000490
+	parent uwEnc2DnaseSignal off
+	shortLabel SKMC Sg
+	longLabel SKMC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000490
+	subGroups view=Signal cellType=wgEncodeEH000490 treatment=n_a
+	type bigWig 0 2130.04
+
+	track uwEnc2DnaseSignalWgEncodeEH002580
+	parent uwEnc2DnaseSignal off
+	shortLabel HBVSMC Sg
+	longLabel HBVSMC DNAseI HS Signals from ENCODE2/UW wgEncodeEH002580
+	subGroups view=Signal cellType=wgEncodeEH002580 treatment=n_a
+	type bigWig 0 3766.42
+
+	track uwEnc2DnaseSignalWgEncodeEH000505
+	parent uwEnc2DnaseSignal off
+	shortLabel AG04449 Sg
+	longLabel AG04449 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000505
+	subGroups view=Signal cellType=wgEncodeEH000505 treatment=n_a
+	type bigWig 0 20132.8
+
+	track uwEnc2DnaseSignalWgEncodeEH000506
+	parent uwEnc2DnaseSignal off
+	shortLabel AG04450 Sg
+	longLabel AG04450 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000506
+	subGroups view=Signal cellType=wgEncodeEH000506 treatment=n_a
+	type bigWig 0 18229.7
+
+	track uwEnc2DnaseSignalWgEncodeEH001191
+	parent uwEnc2DnaseSignal off
+	shortLabel HA-h Sg
+	longLabel HA-h DNAseI HS Signals from ENCODE2/UW wgEncodeEH001191
+	subGroups view=Signal cellType=wgEncodeEH001191 treatment=n_a
+	type bigWig 0 10262.5
+
+	track uwEnc2DnaseSignalWgEncodeEH002581
+	parent uwEnc2DnaseSignal off
+	shortLabel M059J Sg
+	longLabel M059J DNAseI HS Signals from ENCODE2/UW wgEncodeEH002581
+	subGroups view=Signal cellType=wgEncodeEH002581 treatment=n_a
+	type bigWig 0 6527.58
+
+	track uwEnc2DnaseSignalWgEncodeEH003007
+	parent uwEnc2DnaseSignal off
+	shortLabel RPMI-7951 Sg
+	longLabel RPMI-7951 DNAseI HS Signals from ENCODE2/UW wgEncodeEH003007
+	subGroups view=Signal cellType=wgEncodeEH003007 treatment=n_a
+	type bigWig 0 7339.21
+
+	track uwEnc2DnaseSignalWgEncodeEH001183
+	parent uwEnc2DnaseSignal off
+	shortLabel HA-sp Sg
+	longLabel HA-sp DNAseI HS Signals from ENCODE2/UW wgEncodeEH001183
+	subGroups view=Signal cellType=wgEncodeEH001183 treatment=n_a
+	type bigWig 0 8189.49
+
+	track uwEnc2DnaseSignalWgEncodeEH001164
+	parent uwEnc2DnaseSignal off
+	shortLabel HCFaa Sg
+	longLabel HCFaa DNAseI HS Signals from ENCODE2/UW wgEncodeEH001164
+	subGroups view=Signal cellType=wgEncodeEH001164 treatment=n_a
+	type bigWig 0 3845.33
+
+	track uwEnc2DnaseSignalWgEncodeEH001198
+	parent uwEnc2DnaseSignal off
+	shortLabel WI-38 40HTAM Sg
+	longLabel WI-38 4OHTAM 20nM 72hr DNAseI HS Signals from ENCODE2/UW wgEncodeEH001198
+	subGroups view=Signal cellType=wgEncodeEH001198 treatment=OHTAM
+	type bigWig 0 9068.99
+
+	track uwEnc2DnaseSignalWgEncodeEH001177
+	parent uwEnc2DnaseSignal off
+	shortLabel NHDF-Ad Sg
+	longLabel NHDF-Ad DNAseI HS Signals from ENCODE2/UW wgEncodeEH001177
+	subGroups view=Signal cellType=wgEncodeEH001177 treatment=n_a
+	type bigWig 0 2200.64
+
+	track uwEnc2DnaseSignalWgEncodeEH001185
+	parent uwEnc2DnaseSignal off
+	shortLabel HSMM Sg
+	longLabel HSMM DNAseI HS Signals from ENCODE2/UW wgEncodeEH001185
+	subGroups view=Signal cellType=wgEncodeEH001185 treatment=n_a
+	type bigWig 0 14177.3
+
+	track uwEnc2DnaseSignalWgEncodeEH003005
+	parent uwEnc2DnaseSignal off
+	shortLabel LHCN-M2 Sg
+	longLabel LHCN-M2 DNAseI HS Signals from ENCODE2/UW wgEncodeEH003005
+	subGroups view=Signal cellType=wgEncodeEH003005 treatment=n_a
+	type bigWig 0 16877.8
+
+	track uwEnc2DnaseSignalWgEncodeEH003006
+	parent uwEnc2DnaseSignal off
+	shortLabel LHCN-M2 diff 4d Sg
+	longLabel LHCN-M2 DIFF 4d DNAseI HS Signals from ENCODE2/UW wgEncodeEH003006
+	subGroups view=Signal cellType=wgEncodeEH003006 treatment=DIFF_4d
+	type bigWig 0 44051.9
+
+	track uwEnc2DnaseSignalWgEncodeEH001186
+	parent uwEnc2DnaseSignal off
+	shortLabel HSMMtube Sg
+	longLabel HSMMtube DNAseI HS Signals from ENCODE2/UW wgEncodeEH001186
+	subGroups view=Signal cellType=wgEncodeEH001186 treatment=n_a
+	type bigWig 0 14719.7
+
+	track uwEnc2DnaseSignalWgEncodeEH000488
+	parent uwEnc2DnaseSignal off
+	shortLabel HUVEC Sg
+	longLabel HUVEC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000488
+	subGroups view=Signal cellType=wgEncodeEH000488 treatment=n_a
+	type bigWig 0 6744.03
+
+	track uwEnc2DnaseSignalWgEncodeEH001163
+	parent uwEnc2DnaseSignal off
+	shortLabel HMVEC-LBl Sg
+	longLabel HMVEC-LBl DNAseI HS Signals from ENCODE2/UW wgEncodeEH001163
+	subGroups view=Signal cellType=wgEncodeEH001163 treatment=n_a
+	type bigWig 0 2898.86
+
+	track uwEnc2DnaseSignalWgEncodeEH001168
+	parent uwEnc2DnaseSignal off
+	shortLabel HMVEC-dBl-Ad Sg
+	longLabel HMVEC-dBl-Ad DNAseI HS Signals from ENCODE2/UW wgEncodeEH001168
+	subGroups view=Signal cellType=wgEncodeEH001168 treatment=n_a
+	type bigWig 0 6571.28
+
+	track uwEnc2DnaseSignalWgEncodeEH001171
+	parent uwEnc2DnaseSignal off
+	shortLabel HMVEC-dLy-Neo Sg
+	longLabel HMVEC-dLy-Neo DNAseI HS Signals from ENCODE2/UW wgEncodeEH001171
+	subGroups view=Signal cellType=wgEncodeEH001171 treatment=n_a
+	type bigWig 0 9237.62
+
+	track uwEnc2DnaseSignalWgEncodeEH001169
+	parent uwEnc2DnaseSignal off
+	shortLabel HMVEC-dBl-Neo Sg
+	longLabel HMVEC-dBl-Neo DNAseI HS Signals from ENCODE2/UW wgEncodeEH001169
+	subGroups view=Signal cellType=wgEncodeEH001169 treatment=n_a
+	type bigWig 0 6275.08
+
+	track uwEnc2DnaseSignalWgEncodeEH001195
+	parent uwEnc2DnaseSignal off
+	shortLabel HRGEC Sg
+	longLabel HRGEC DNAseI HS Signals from ENCODE2/UW wgEncodeEH001195
+	subGroups view=Signal cellType=wgEncodeEH001195 treatment=n_a
+	type bigWig 0 7095.64
+
+	track uwEnc2DnaseSignalWgEncodeEH001167
+	parent uwEnc2DnaseSignal off
+	shortLabel HMVEC-LLy Sg
+	longLabel HMVEC-LLy DNAseI HS Signals from ENCODE2/UW wgEncodeEH001167
+	subGroups view=Signal cellType=wgEncodeEH001167 treatment=n_a
+	type bigWig 0 21274
+
+	track uwEnc2DnaseSignalWgEncodeEH001172
+	parent uwEnc2DnaseSignal off
+	shortLabel HMVEC-dNeo Sg
+	longLabel HMVEC-dNeo DNAseI HS Signals from ENCODE2/UW wgEncodeEH001172
+	subGroups view=Signal cellType=wgEncodeEH001172 treatment=n_a
+	type bigWig 0 16586
+
+	track uwEnc2DnaseSignalWgEncodeEH001889
+	parent uwEnc2DnaseSignal off
+	shortLabel HMVEC-dAd Sg
+	longLabel HMVEC-dAd DNAseI HS Signals from ENCODE2/UW wgEncodeEH001889
+	subGroups view=Signal cellType=wgEncodeEH001889 treatment=n_a
+	type bigWig 0 7923.4
+
+	track uwEnc2DnaseSignalWgEncodeEH000493
+	parent uwEnc2DnaseSignal off
+	shortLabel HRCEpiC Sg
+	longLabel HRCEpiC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000493
+	subGroups view=Signal cellType=wgEncodeEH000493 treatment=n_a
+	type bigWig 0 4920.93
+
+	track uwEnc2DnaseSignalWgEncodeEH000494
+	parent uwEnc2DnaseSignal off
+	shortLabel HRE Sg
+	longLabel HRE DNAseI HS Signals from ENCODE2/UW wgEncodeEH000494
+	subGroups view=Signal cellType=wgEncodeEH000494 treatment=n_a
+	type bigWig 0 6938.49
+
+	track uwEnc2DnaseSignalWgEncodeEH000499
+	parent uwEnc2DnaseSignal off
+	shortLabel NHEK Sg
+	longLabel NHEK DNAseI HS Signals from ENCODE2/UW wgEncodeEH000499
+	subGroups view=Signal cellType=wgEncodeEH000499 treatment=n_a
+	type bigWig 0 9597.75
+
+	track uwEnc2DnaseSignalWgEncodeEH000501
+	parent uwEnc2DnaseSignal off
+	shortLabel SAEC Sg
+	longLabel SAEC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000501
+	subGroups view=Signal cellType=wgEncodeEH000501 treatment=n_a
+	type bigWig 0 4884.78
+
+	track uwEnc2DnaseSignalWgEncodeEH001888
+	parent uwEnc2DnaseSignal off
+	shortLabel PrEC Sg
+	longLabel PrEC DNAseI HS Signals from ENCODE2/UW wgEncodeEH001888
+	subGroups view=Signal cellType=wgEncodeEH001888 treatment=n_a
+	type bigWig 0 4302.39
+
+	track uwEnc2DnaseSignalWgEncodeEH000515
+	parent uwEnc2DnaseSignal off
+	shortLabel HEEpiC Sg
+	longLabel HEEpiC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000515
+	subGroups view=Signal cellType=wgEncodeEH000515 treatment=n_a
+	type bigWig 0 20601.1
+
+	track uwEnc2DnaseSignalWgEncodeEH000481
+	parent uwEnc2DnaseSignal off
+	shortLabel GM06990 Sg
+	longLabel GM06990 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000481
+	subGroups view=Signal cellType=wgEncodeEH000481 treatment=n_a
+	type bigWig 0 14706.5
+
+	track uwEnc2DnaseSignalWgEncodeEH000482
+	parent uwEnc2DnaseSignal off
+	shortLabel HepG2 Sg
+	longLabel HepG2 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000482
+	subGroups view=Signal cellType=wgEncodeEH000482 treatment=n_a
+	type bigWig 0 4511.03
+
+	track uwEnc2DnaseSignalWgEncodeEH000486
+	parent uwEnc2DnaseSignal off
+	shortLabel Caco-2 Sg
+	longLabel Caco-2 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000486
+	subGroups view=Signal cellType=wgEncodeEH000486 treatment=n_a
+	type bigWig 0 4903.16
+
+	track uwEnc2DnaseSignalWgEncodeEH000485
+	parent uwEnc2DnaseSignal off
+	shortLabel SK-N-SH_RA Sg
+	longLabel SK-N-SH_RA DNAseI HS Signals from ENCODE2/UW wgEncodeEH000485
+	subGroups view=Signal cellType=wgEncodeEH000485 treatment=n_a
+	type bigWig 0 4488.56
+
+	track uwEnc2DnaseSignalWgEncodeEH001884
+	parent uwEnc2DnaseSignal off
+	shortLabel CD20+_RO01778 Sg
+	longLabel CD20+_RO01778 DNAseI HS Signals from ENCODE2/UW wgEncodeEH001884
+	subGroups view=Signal cellType=wgEncodeEH001884 treatment=n_a
+	type bigWig 0 1572.73
+
+	track uwEnc2DnaseSignalWgEncodeEH000483
+	parent uwEnc2DnaseSignal off
+	shortLabel Th1 Sg
+	longLabel Th1 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000483
+	subGroups view=Signal cellType=wgEncodeEH000483 treatment=n_a
+	type bigWig 0 2056.65
+
+	track uwEnc2DnaseSignalWgEncodeEH000491
+	parent uwEnc2DnaseSignal off
+	shortLabel Th2 Sg
+	longLabel Th2 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000491
+	subGroups view=Signal cellType=wgEncodeEH000491 treatment=n_a
+	type bigWig 0 1526.14
+
+	track uwEnc2DnaseSignalWgEncodeEH003022
+	parent uwEnc2DnaseSignal off
+	shortLabel Th1_Wb54553204 Sg
+	longLabel Th1_Wb54553204 DNAseI HS Signals from ENCODE2/UW wgEncodeEH003022
+	subGroups view=Signal cellType=wgEncodeEH003022 treatment=n_a
+	type bigWig 0 593.107
+
+	track uwEnc2DnaseSignalWgEncodeEH000497
+	parent uwEnc2DnaseSignal off
+	shortLabel Jurkat Sg
+	longLabel Jurkat DNAseI HS Signals from ENCODE2/UW wgEncodeEH000497
+	subGroups view=Signal cellType=wgEncodeEH000497 treatment=n_a
+	type bigWig 0 5823.31
+
+	track uwEnc2DnaseSignalWgEncodeEH000492
+	parent uwEnc2DnaseSignal off
+	shortLabel GM12878 Sg
+	longLabel GM12878 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000492
+	subGroups view=Signal cellType=wgEncodeEH000492 treatment=n_a
+	type bigWig 0 7218.11
+
+	track uwEnc2DnaseSignalWgEncodeEH000520
+	parent uwEnc2DnaseSignal off
+	shortLabel GM12865 Sg
+	longLabel GM12865 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000520
+	subGroups view=Signal cellType=wgEncodeEH000520 treatment=n_a
+	type bigWig 0 8525.5
+
+	track uwEnc2DnaseSignalWgEncodeEH001196
+	parent uwEnc2DnaseSignal off
+	shortLabel Monocytes-CD14+_RO01746 Sg
+	longLabel Monocytes-CD14+_RO01746 DNAseI HS Signals from ENCODE2/UW wgEncodeEH001196
+	subGroups view=Signal cellType=wgEncodeEH001196 treatment=n_a
+	type bigWig 0 853.111
+
+	track uwEnc2DnaseSignalWgEncodeEH000489
+	parent uwEnc2DnaseSignal off
+	shortLabel HL-60 Sg
+	longLabel HL-60 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000489
+	subGroups view=Signal cellType=wgEncodeEH000489 treatment=n_a
+	type bigWig 0 5012.92
+
+	track uwEnc2DnaseSignalWgEncodeEH000498
+	parent uwEnc2DnaseSignal off
+	shortLabel NB4 Sg
+	longLabel NB4 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000498
+	subGroups view=Signal cellType=wgEncodeEH000498 treatment=n_a
+	type bigWig 0 7662.2
+
+	track uwEnc2DnaseSignalWgEncodeEH000511
+	parent uwEnc2DnaseSignal off
+	shortLabel H7-hESC Sg
+	longLabel H7-hESC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000511
+	subGroups view=Signal cellType=wgEncodeEH000511 treatment=n_a
+	type bigWig 0 13035.4
+
+	track uwEnc2DnaseSignalWgEncodeEH002578
+	parent uwEnc2DnaseSignal off
+	shortLabel H7-hESC diff 5d Sg
+	longLabel H7-hESC diffProtA 5d DNAseI HS Signals from ENCODE2/UW wgEncodeEH002578
+	subGroups view=Signal cellType=wgEncodeEH002578 treatment=diffProtA_5d
+	type bigWig 0 5836.88
+
+	track uwEnc2DnaseSignalWgEncodeEH002576
+	parent uwEnc2DnaseSignal off
+	shortLabel H7-hESC diff 14d Sg
+	longLabel H7-hESC diffProtA 14d DNAseI HS Signals from ENCODE2/UW wgEncodeEH002576
+	subGroups view=Signal cellType=wgEncodeEH002576 treatment=diffProtA_14d
+	type bigWig 0 21393.7
+
+	track uwEnc2DnaseSignalWgEncodeEH001188
+	parent uwEnc2DnaseSignal off
+	shortLabel RPTEC Sg
+	longLabel RPTEC DNAseI HS Signals from ENCODE2/UW wgEncodeEH001188
+	subGroups view=Signal cellType=wgEncodeEH001188 treatment=n_a
+	type bigWig 0 22767.8
+
+	track uwEnc2DnaseSignalWgEncodeEH000517
+	parent uwEnc2DnaseSignal off
+	shortLabel HRPEpiC Sg
+	longLabel HRPEpiC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000517
+	subGroups view=Signal cellType=wgEncodeEH000517 treatment=n_a
+	type bigWig 0 32404.6
+
+	track uwEnc2DnaseSignalWgEncodeEH001170
+	parent uwEnc2DnaseSignal off
+	shortLabel HMVEC-dLy-Ad Sg
+	longLabel HMVEC-dLy-Ad DNAseI HS Signals from ENCODE2/UW wgEncodeEH001170
+	subGroups view=Signal cellType=wgEncodeEH001170 treatment=n_a
+	type bigWig 0 39771.9
+
+	track uwEnc2DnaseSignalWgEncodeEH000495
+	parent uwEnc2DnaseSignal off
+	shortLabel HeLa-S3 Sg
+	longLabel HeLa-S3 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000495
+	subGroups view=Signal cellType=wgEncodeEH000495 treatment=n_a
+	type bigWig 0 26492
+
+	track uwEnc2DnaseSignalWgEncodeEH001189
+	parent uwEnc2DnaseSignal off
+	shortLabel SK-N-MC Sg
+	longLabel SK-N-MC DNAseI HS Signals from ENCODE2/UW wgEncodeEH001189
+	subGroups view=Signal cellType=wgEncodeEH001189 treatment=n_a
+	type bigWig 0 5864.79
+
+	track uwEnc2DnaseSignalWgEncodeEH000502
+	parent uwEnc2DnaseSignal off
+	shortLabel MCF-7 Sg
+	longLabel MCF-7 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000502
+	subGroups view=Signal cellType=wgEncodeEH000502 treatment=n_a
+	type bigWig 0 15780.8
+
+	track uwEnc2DnaseSignalWgEncodeEH003017
+	parent uwEnc2DnaseSignal off
+	shortLabel MCF-7 estradi 1h Sg
+	longLabel MCF-7 Estradiol 100nM 1hr DNAseI HS Signals from ENCODE2/UW wgEncodeEH003017
+	subGroups view=Signal cellType=wgEncodeEH003017 treatment=Estradiol_100nM_1hr
+	type bigWig 0 24234.6
+
+	track uwEnc2DnaseSignalWgEncodeEH003018
+	parent uwEnc2DnaseSignal off
+	shortLabel MCF-7 estradi 0h Sg
+	longLabel MCF-7 Estradiol ctrl 0hr DNAseI HS Signals from ENCODE2/UW wgEncodeEH003018
+	subGroups view=Signal cellType=wgEncodeEH003018 treatment=Estradiol_ctrl_0hr
+	type bigWig 0 23308.2
+
+	track uwEnc2DnaseSignalWgEncodeEH001190
+	parent uwEnc2DnaseSignal off
+	shortLabel WERI-Rb-1 Sg
+	longLabel WERI-Rb-1 DNAseI HS Signals from ENCODE2/UW wgEncodeEH001190
+	subGroups view=Signal cellType=wgEncodeEH001190 treatment=n_a
+	type bigWig 0 8726.43
+
+	track uwEnc2DnaseSignalWgEncodeEH001181
+	parent uwEnc2DnaseSignal off
+	shortLabel BE2_C Sg
+	longLabel BE2_C DNAseI HS Signals from ENCODE2/UW wgEncodeEH001181
+	subGroups view=Signal cellType=wgEncodeEH001181 treatment=n_a
+	type bigWig 0 72865.5
+
+track uwEnc2DnaseWig
+shortLabel UW DNAse Signal
+wgEncode on
+longLabel DNaseI Hypersensitivity Signal Colored by Similarity from UW/ENCODE2
+type bigWig 0 10000
+maxHeightPixels 128:64:11
+container multiWig
+configurable on
+viewLimits 0:200
+showSubtrackColorOnUi on
+aggregate transparentOverlay
+group regulation
+priority 100.1
+html uwDnaseSignal
+
+	track uwEnc2DnaseWigWgEncodeEH000484
+	parent uwEnc2DnaseWig on
+	shortLabel K562 Sg
+	longLabel K562 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000484
+	type bigWig 0 38914.2
+	color 255,85,85
+	priority 1
+
+	track uwEnc2DnaseWigWgEncodeEH001180
+	parent uwEnc2DnaseWig on
+	shortLabel A549 Sg
+	longLabel A549 DNAseI HS Signals from ENCODE2/UW wgEncodeEH001180
+	type bigWig 0 30091.1
+	color 254,93,85
+	priority 1.00887
+
+	track uwEnc2DnaseWigWgEncodeEH001187
+	parent uwEnc2DnaseWig on
+	shortLabel LNCaP Sg
+	longLabel LNCaP DNAseI HS Signals from ENCODE2/UW wgEncodeEH001187
+	type bigWig 0 37372.7
+	color 255,102,85
+	priority 1.01793
+
+	track uwEnc2DnaseWigWgEncodeEH000503
+	parent uwEnc2DnaseWig on
+	shortLabel HMEC Sg
+	longLabel HMEC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000503
+	type bigWig 0 32097.2
+	color 255,112,85
+	priority 1.02847
+
+	track uwEnc2DnaseWigWgEncodeEH002583
+	parent uwEnc2DnaseWig on
+	shortLabel T-47D Sg
+	longLabel T-47D DNAseI HS Signals from ENCODE2/UW wgEncodeEH002583
+	type bigWig 0 34214.8
+	color 255,124,85
+	priority 1.04106
+
+	track uwEnc2DnaseWigWgEncodeEH000500
+	parent uwEnc2DnaseWig on
+	shortLabel PANC-1 Sg
+	longLabel PANC-1 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000500
+	type bigWig 0 12279.3
+	color 255,141,85
+	priority 1.05908
+
+	track uwEnc2DnaseWigWgEncodeEH001162
+	parent uwEnc2DnaseWig on
+	shortLabel HCT-116 Sg
+	longLabel HCT-116 DNAseI HS Signals from ENCODE2/UW wgEncodeEH001162
+	type bigWig 0 27405.3
+	color 255,150,85
+	priority 1.06881
+
+	track uwEnc2DnaseWigWgEncodeEH002582
+	parent uwEnc2DnaseWig on
+	shortLabel NHBE_RA Sg
+	longLabel NHBE_RA DNAseI HS Signals from ENCODE2/UW wgEncodeEH002582
+	type bigWig 0 31238.7
+	color 255,154,85
+	priority 1.07294
+
+	track uwEnc2DnaseWigWgEncodeEH001193
+	parent uwEnc2DnaseWig on
+	shortLabel HFF Sg
+	longLabel HFF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001193
+	type bigWig 0 17635.9
+	color 255,163,85
+	priority 1.0818
+
+	track uwEnc2DnaseWigWgEncodeEH001194
+	parent uwEnc2DnaseWig on
+	shortLabel HFF-Myc Sg
+	longLabel HFF-Myc DNAseI HS Signals from ENCODE2/UW wgEncodeEH001194
+	type bigWig 0 23416.2
+	color 255,165,85
+	priority 1.08427
+
+	track uwEnc2DnaseWigWgEncodeEH001887
+	parent uwEnc2DnaseWig on
+	shortLabel NT2-D1 Sg
+	longLabel NT2-D1 DNAseI HS Signals from ENCODE2/UW wgEncodeEH001887
+	type bigWig 0 8351.64
+	color 255,173,85
+	priority 1.09484
+
+	track uwEnc2DnaseWigWgEncodeEH000487
+	parent uwEnc2DnaseWig on
+	shortLabel BJ Sg
+	longLabel BJ DNAseI HS Signals from ENCODE2/UW wgEncodeEH000487
+	type bigWig 0 28788.2
+	color 255,184,85
+	priority 1.11593
+
+	track uwEnc2DnaseWigWgEncodeEH000507
+	parent uwEnc2DnaseWig on
+	shortLabel AG09309 Sg
+	longLabel AG09309 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000507
+	type bigWig 0 29145.4
+	color 255,186,85
+	priority 1.11916
+
+	track uwEnc2DnaseWigWgEncodeEH000516
+	parent uwEnc2DnaseWig on
+	shortLabel HNPCEpiC Sg
+	longLabel HNPCEpiC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000516
+	type bigWig 0 26522.6
+	color 255,188,85
+	priority 1.124
+
+	track uwEnc2DnaseWigWgEncodeEH001197
+	parent uwEnc2DnaseWig on
+	shortLabel WI-38 Sg
+	longLabel WI-38 DNAseI HS Signals from ENCODE2/UW wgEncodeEH001197
+	type bigWig 0 21133.7
+	color 255,192,85
+	priority 1.13075
+
+	track uwEnc2DnaseWigWgEncodeEH002574
+	parent uwEnc2DnaseWig on
+	shortLabel GM04503 Sg
+	longLabel GM04503 DNAseI HS Signals from ENCODE2/UW wgEncodeEH002574
+	type bigWig 0 11390.2
+	color 255,200,85
+	priority 1.1425
+
+	track uwEnc2DnaseWigWgEncodeEH002575
+	parent uwEnc2DnaseWig on
+	shortLabel GM04504 Sg
+	longLabel GM04504 DNAseI HS Signals from ENCODE2/UW wgEncodeEH002575
+	type bigWig 0 11566.9
+	color 255,204,85
+	priority 1.14786
+
+	track uwEnc2DnaseWigWgEncodeEH000521
+	parent uwEnc2DnaseWig on
+	shortLabel NHLF Sg
+	longLabel NHLF DNAseI HS Signals from ENCODE2/UW wgEncodeEH000521
+	type bigWig 0 11719.1
+	color 255,209,85
+	priority 1.156
+
+	track uwEnc2DnaseWigWgEncodeEH001179
+	parent uwEnc2DnaseWig on
+	shortLabel NH-A Sg
+	longLabel NH-A DNAseI HS Signals from ENCODE2/UW wgEncodeEH001179
+	type bigWig 0 9132.47
+	color 255,210,85
+	priority 1.15667
+
+	track uwEnc2DnaseWigWgEncodeEH001178
+	parent uwEnc2DnaseWig on
+	shortLabel HBMEC Sg
+	longLabel HBMEC DNAseI HS Signals from ENCODE2/UW wgEncodeEH001178
+	type bigWig 0 11394.7
+	color 255,214,85
+	priority 1.1627
+
+	track uwEnc2DnaseWigWgEncodeEH000508
+	parent uwEnc2DnaseWig on
+	shortLabel AG09319 Sg
+	longLabel AG09319 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000508
+	type bigWig 0 28099
+	color 255,221,85
+	priority 1.17288
+
+	track uwEnc2DnaseWigWgEncodeEH001175
+	parent uwEnc2DnaseWig on
+	shortLabel HPdLF Sg
+	longLabel HPdLF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001175
+	type bigWig 0 11009.1
+	color 255,224,85
+	priority 1.17804
+
+	track uwEnc2DnaseWigWgEncodeEH000513
+	parent uwEnc2DnaseWig on
+	shortLabel HCF Sg
+	longLabel HCF DNAseI HS Signals from ENCODE2/UW wgEncodeEH000513
+	type bigWig 0 19295.8
+	color 255,229,85
+	priority 1.18546
+
+	track uwEnc2DnaseWigWgEncodeEH000519
+	parent uwEnc2DnaseWig on
+	shortLabel HCM Sg
+	longLabel HCM DNAseI HS Signals from ENCODE2/UW wgEncodeEH000519
+	type bigWig 0 14370.2
+	color 255,230,85
+	priority 1.18728
+
+	track uwEnc2DnaseWigWgEncodeEH001173
+	parent uwEnc2DnaseWig on
+	shortLabel HPAF Sg
+	longLabel HPAF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001173
+	type bigWig 0 11225.6
+	color 255,232,85
+	priority 1.18958
+
+	track uwEnc2DnaseWigWgEncodeEH001161
+	parent uwEnc2DnaseWig on
+	shortLabel AoAF Sg
+	longLabel AoAF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001161
+	type bigWig 0 10369.5
+	color 255,236,85
+	priority 1.19489
+
+	track uwEnc2DnaseWigWgEncodeEH000514
+	parent uwEnc2DnaseWig on
+	shortLabel HCPEpiC Sg
+	longLabel HCPEpiC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000514
+	type bigWig 0 13163.5
+	color 255,242,85
+	priority 1.20382
+
+	track uwEnc2DnaseWigWgEncodeEH001174
+	parent uwEnc2DnaseWig on
+	shortLabel HPF Sg
+	longLabel HPF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001174
+	type bigWig 0 11172
+	color 255,247,85
+	priority 1.21201
+
+	track uwEnc2DnaseWigWgEncodeEH001165
+	parent uwEnc2DnaseWig on
+	shortLabel HConF Sg
+	longLabel HConF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001165
+	type bigWig 0 8320.98
+	color 255,252,85
+	priority 1.2193
+
+	track uwEnc2DnaseWigWgEncodeEH001192
+	parent uwEnc2DnaseWig on
+	shortLabel HAc Sg
+	longLabel HAc DNAseI HS Signals from ENCODE2/UW wgEncodeEH001192
+	type bigWig 0 10000.7
+	color 250,255,85
+	priority 1.22962
+
+	track uwEnc2DnaseWigWgEncodeEH001176
+	parent uwEnc2DnaseWig on
+	shortLabel HVMF Sg
+	longLabel HVMF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001176
+	type bigWig 0 5956.46
+	color 242,255,85
+	priority 1.24127
+
+	track uwEnc2DnaseWigWgEncodeEH001184
+	parent uwEnc2DnaseWig on
+	shortLabel HIPEpiC Sg
+	longLabel HIPEpiC DNAseI HS Signals from ENCODE2/UW wgEncodeEH001184
+	type bigWig 0 8028.81
+	color 236,255,85
+	priority 1.2515
+
+	track uwEnc2DnaseWigWgEncodeEH003031
+	parent uwEnc2DnaseWig on
+	shortLabel bone_marrow_MSC Sg
+	longLabel bone_marrow_MSC DNAseI HS Signals from ENCODE2/UW wgEncodeEH003031
+	type bigWig 0 3047.47
+	color 228,255,85
+	priority 1.26303
+
+	track uwEnc2DnaseWigWgEncodeEH000509
+	parent uwEnc2DnaseWig on
+	shortLabel AG10803 Sg
+	longLabel AG10803 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000509
+	type bigWig 0 19440.9
+	color 220,255,85
+	priority 1.27484
+
+	track uwEnc2DnaseWigWgEncodeEH001166
+	parent uwEnc2DnaseWig on
+	shortLabel HMF Sg
+	longLabel HMF DNAseI HS Signals from ENCODE2/UW wgEncodeEH001166
+	type bigWig 0 12347.6
+	color 212,255,85
+	priority 1.28722
+
+	track uwEnc2DnaseWigWgEncodeEH000504
+	parent uwEnc2DnaseWig on
+	shortLabel HGF Sg
+	longLabel HGF DNAseI HS Signals from ENCODE2/UW wgEncodeEH000504
+	type bigWig 0 3410.39
+	color 204,255,85
+	priority 1.29794
+
+	track uwEnc2DnaseWigWgEncodeEH000518
+	parent uwEnc2DnaseWig on
+	shortLabel NHDF-neo Sg
+	longLabel NHDF-neo DNAseI HS Signals from ENCODE2/UW wgEncodeEH000518
+	type bigWig 0 13455.2
+	color 198,255,85
+	priority 1.3069
+
+	track uwEnc2DnaseWigWgEncodeEH000512
+	parent uwEnc2DnaseWig on
+	shortLabel HAEpiC Sg
+	longLabel HAEpiC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000512
+	type bigWig 0 10858.1
+	color 189,255,85
+	priority 1.32226
+
+	track uwEnc2DnaseWigWgEncodeEH000490
+	parent uwEnc2DnaseWig on
+	shortLabel SKMC Sg
+	longLabel SKMC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000490
+	type bigWig 0 2130.04
+	color 182,255,85
+	priority 1.3337
+
+	track uwEnc2DnaseWigWgEncodeEH002580
+	parent uwEnc2DnaseWig on
+	shortLabel HBVSMC Sg
+	longLabel HBVSMC DNAseI HS Signals from ENCODE2/UW wgEncodeEH002580
+	type bigWig 0 3766.42
+	color 176,255,85
+	priority 1.34687
+
+	track uwEnc2DnaseWigWgEncodeEH000505
+	parent uwEnc2DnaseWig on
+	shortLabel AG04449 Sg
+	longLabel AG04449 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000505
+	type bigWig 0 20132.8
+	color 152,255,85
+	priority 1.36656
+
+	track uwEnc2DnaseWigWgEncodeEH000506
+	parent uwEnc2DnaseWig on
+	shortLabel AG04450 Sg
+	longLabel AG04450 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000506
+	type bigWig 0 18229.7
+	color 144,255,85
+	priority 1.37094
+
+	track uwEnc2DnaseWigWgEncodeEH001191
+	parent uwEnc2DnaseWig on
+	shortLabel HA-h Sg
+	longLabel HA-h DNAseI HS Signals from ENCODE2/UW wgEncodeEH001191
+	type bigWig 0 10262.5
+	color 122,255,85
+	priority 1.38256
+
+	track uwEnc2DnaseWigWgEncodeEH002581
+	parent uwEnc2DnaseWig on
+	shortLabel M059J Sg
+	longLabel M059J DNAseI HS Signals from ENCODE2/UW wgEncodeEH002581
+	type bigWig 0 6527.58
+	color 96,255,85
+	priority 1.39616
+
+	track uwEnc2DnaseWigWgEncodeEH003007
+	parent uwEnc2DnaseWig on
+	shortLabel RPMI-7951 Sg
+	longLabel RPMI-7951 DNAseI HS Signals from ENCODE2/UW wgEncodeEH003007
+	type bigWig 0 7339.21
+	color 85,255,90
+	priority 1.40485
+
+	track uwEnc2DnaseWigWgEncodeEH001183
+	parent uwEnc2DnaseWig on
+	shortLabel HA-sp Sg
+	longLabel HA-sp DNAseI HS Signals from ENCODE2/UW wgEncodeEH001183
+	type bigWig 0 8189.49
+	color 85,255,124
+	priority 1.42221
+
+	track uwEnc2DnaseWigWgEncodeEH001164
+	parent uwEnc2DnaseWig on
+	shortLabel HCFaa Sg
+	longLabel HCFaa DNAseI HS Signals from ENCODE2/UW wgEncodeEH001164
+	type bigWig 0 3845.33
+	color 85,255,150
+	priority 1.43568
+
+	track uwEnc2DnaseWigWgEncodeEH001198
+	parent uwEnc2DnaseWig on
+	shortLabel WI-38 40HTAM Sg
+	longLabel WI-38 4OHTAM 20nM 72hr DNAseI HS Signals from ENCODE2/UW wgEncodeEH001198
+	type bigWig 0 9068.99
+	color 85,255,171
+	priority 1.44843
+
+	track uwEnc2DnaseWigWgEncodeEH001177
+	parent uwEnc2DnaseWig on
+	shortLabel NHDF-Ad Sg
+	longLabel NHDF-Ad DNAseI HS Signals from ENCODE2/UW wgEncodeEH001177
+	type bigWig 0 2200.64
+	color 85,255,180
+	priority 1.46595
+
+	track uwEnc2DnaseWigWgEncodeEH001185
+	parent uwEnc2DnaseWig on
+	shortLabel HSMM Sg
+	longLabel HSMM DNAseI HS Signals from ENCODE2/UW wgEncodeEH001185
+	type bigWig 0 14177.3
+	color 85,255,190
+	priority 1.48469
+
+	track uwEnc2DnaseWigWgEncodeEH003005
+	parent uwEnc2DnaseWig on
+	shortLabel LHCN-M2 Sg
+	longLabel LHCN-M2 DNAseI HS Signals from ENCODE2/UW wgEncodeEH003005
+	type bigWig 0 16877.8
+	color 85,255,193
+	priority 1.48937
+
+	track uwEnc2DnaseWigWgEncodeEH003006
+	parent uwEnc2DnaseWig on
+	shortLabel LHCN-M2 diff 4d Sg
+	longLabel LHCN-M2 DIFF 4d DNAseI HS Signals from ENCODE2/UW wgEncodeEH003006
+	type bigWig 0 44051.9
+	color 85,255,198
+	priority 1.49766
+
+	track uwEnc2DnaseWigWgEncodeEH001186
+	parent uwEnc2DnaseWig on
+	shortLabel HSMMtube Sg
+	longLabel HSMMtube DNAseI HS Signals from ENCODE2/UW wgEncodeEH001186
+	type bigWig 0 14719.7
+	color 85,255,204
+	priority 1.50509
+
+	track uwEnc2DnaseWigWgEncodeEH000488
+	parent uwEnc2DnaseWig on
+	shortLabel HUVEC Sg
+	longLabel HUVEC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000488
+	type bigWig 0 6744.03
+	color 85,255,215
+	priority 1.52185
+
+	track uwEnc2DnaseWigWgEncodeEH001163
+	parent uwEnc2DnaseWig on
+	shortLabel HMVEC-LBl Sg
+	longLabel HMVEC-LBl DNAseI HS Signals from ENCODE2/UW wgEncodeEH001163
+	type bigWig 0 2898.86
+	color 85,255,220
+	priority 1.52972
+
+	track uwEnc2DnaseWigWgEncodeEH001168
+	parent uwEnc2DnaseWig on
+	shortLabel HMVEC-dBl-Ad Sg
+	longLabel HMVEC-dBl-Ad DNAseI HS Signals from ENCODE2/UW wgEncodeEH001168
+	type bigWig 0 6571.28
+	color 85,255,224
+	priority 1.53388
+
+	track uwEnc2DnaseWigWgEncodeEH001171
+	parent uwEnc2DnaseWig on
+	shortLabel HMVEC-dLy-Neo Sg
+	longLabel HMVEC-dLy-Neo DNAseI HS Signals from ENCODE2/UW wgEncodeEH001171
+	type bigWig 0 9237.62
+	color 85,255,226
+	priority 1.53734
+
+	track uwEnc2DnaseWigWgEncodeEH001169
+	parent uwEnc2DnaseWig on
+	shortLabel HMVEC-dBl-Neo Sg
+	longLabel HMVEC-dBl-Neo DNAseI HS Signals from ENCODE2/UW wgEncodeEH001169
+	type bigWig 0 6275.08
+	color 85,255,229
+	priority 1.54191
+
+	track uwEnc2DnaseWigWgEncodeEH001195
+	parent uwEnc2DnaseWig on
+	shortLabel HRGEC Sg
+	longLabel HRGEC DNAseI HS Signals from ENCODE2/UW wgEncodeEH001195
+	type bigWig 0 7095.64
+	color 85,255,232
+	priority 1.54737
+
+	track uwEnc2DnaseWigWgEncodeEH001167
+	parent uwEnc2DnaseWig on
+	shortLabel HMVEC-LLy Sg
+	longLabel HMVEC-LLy DNAseI HS Signals from ENCODE2/UW wgEncodeEH001167
+	type bigWig 0 21274
+	color 85,255,243
+	priority 1.56304
+
+	track uwEnc2DnaseWigWgEncodeEH001172
+	parent uwEnc2DnaseWig on
+	shortLabel HMVEC-dNeo Sg
+	longLabel HMVEC-dNeo DNAseI HS Signals from ENCODE2/UW wgEncodeEH001172
+	type bigWig 0 16586
+	color 85,255,244
+	priority 1.56474
+
+	track uwEnc2DnaseWigWgEncodeEH001889
+	parent uwEnc2DnaseWig on
+	shortLabel HMVEC-dAd Sg
+	longLabel HMVEC-dAd DNAseI HS Signals from ENCODE2/UW wgEncodeEH001889
+	type bigWig 0 7923.4
+	color 85,255,246
+	priority 1.56686
+
+	track uwEnc2DnaseWigWgEncodeEH000493
+	parent uwEnc2DnaseWig on
+	shortLabel HRCEpiC Sg
+	longLabel HRCEpiC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000493
+	type bigWig 0 4920.93
+	color 85,251,255
+	priority 1.58591
+
+	track uwEnc2DnaseWigWgEncodeEH000494
+	parent uwEnc2DnaseWig on
+	shortLabel HRE Sg
+	longLabel HRE DNAseI HS Signals from ENCODE2/UW wgEncodeEH000494
+	type bigWig 0 6938.49
+	color 85,248,255
+	priority 1.59019
+
+	track uwEnc2DnaseWigWgEncodeEH000499
+	parent uwEnc2DnaseWig on
+	shortLabel NHEK Sg
+	longLabel NHEK DNAseI HS Signals from ENCODE2/UW wgEncodeEH000499
+	type bigWig 0 9597.75
+	color 85,238,255
+	priority 1.60559
+
+	track uwEnc2DnaseWigWgEncodeEH000501
+	parent uwEnc2DnaseWig on
+	shortLabel SAEC Sg
+	longLabel SAEC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000501
+	type bigWig 0 4884.78
+	color 85,231,255
+	priority 1.61604
+
+	track uwEnc2DnaseWigWgEncodeEH001888
+	parent uwEnc2DnaseWig on
+	shortLabel PrEC Sg
+	longLabel PrEC DNAseI HS Signals from ENCODE2/UW wgEncodeEH001888
+	type bigWig 0 4302.39
+	color 85,226,255
+	priority 1.62238
+
+	track uwEnc2DnaseWigWgEncodeEH000515
+	parent uwEnc2DnaseWig on
+	shortLabel HEEpiC Sg
+	longLabel HEEpiC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000515
+	type bigWig 0 20601.1
+	color 85,220,255
+	priority 1.632
+
+	track uwEnc2DnaseWigWgEncodeEH000481
+	parent uwEnc2DnaseWig on
+	shortLabel GM06990 Sg
+	longLabel GM06990 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000481
+	type bigWig 0 14706.5
+	color 85,205,255
+	priority 1.65365
+
+	track uwEnc2DnaseWigWgEncodeEH000482
+	parent uwEnc2DnaseWig on
+	shortLabel HepG2 Sg
+	longLabel HepG2 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000482
+	type bigWig 0 4511.03
+	color 85,198,255
+	priority 1.66426
+
+	track uwEnc2DnaseWigWgEncodeEH000486
+	parent uwEnc2DnaseWig on
+	shortLabel Caco-2 Sg
+	longLabel Caco-2 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000486
+	type bigWig 0 4903.16
+	color 85,193,255
+	priority 1.67125
+
+	track uwEnc2DnaseWigWgEncodeEH000485
+	parent uwEnc2DnaseWig on
+	shortLabel SK-N-SH_RA Sg
+	longLabel SK-N-SH_RA DNAseI HS Signals from ENCODE2/UW wgEncodeEH000485
+	type bigWig 0 4488.56
+	color 85,189,255
+	priority 1.679
+
+	track uwEnc2DnaseWigWgEncodeEH001884
+	parent uwEnc2DnaseWig on
+	shortLabel CD20+_RO01778 Sg
+	longLabel CD20+_RO01778 DNAseI HS Signals from ENCODE2/UW wgEncodeEH001884
+	type bigWig 0 1572.73
+	color 85,183,255
+	priority 1.68971
+
+	track uwEnc2DnaseWigWgEncodeEH000483
+	parent uwEnc2DnaseWig on
+	shortLabel Th1 Sg
+	longLabel Th1 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000483
+	type bigWig 0 2056.65
+	color 85,178,255
+	priority 1.69959
+
+	track uwEnc2DnaseWigWgEncodeEH000491
+	parent uwEnc2DnaseWig on
+	shortLabel Th2 Sg
+	longLabel Th2 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000491
+	type bigWig 0 1526.14
+	color 85,176,255
+	priority 1.70375
+
+	track uwEnc2DnaseWigWgEncodeEH003022
+	parent uwEnc2DnaseWig on
+	shortLabel Th1_Wb54553204 Sg
+	longLabel Th1_Wb54553204 DNAseI HS Signals from ENCODE2/UW wgEncodeEH003022
+	type bigWig 0 593.107
+	color 85,173,255
+	priority 1.70849
+
+	track uwEnc2DnaseWigWgEncodeEH000497
+	parent uwEnc2DnaseWig on
+	shortLabel Jurkat Sg
+	longLabel Jurkat DNAseI HS Signals from ENCODE2/UW wgEncodeEH000497
+	type bigWig 0 5823.31
+	color 85,165,255
+	priority 1.71966
+
+	track uwEnc2DnaseWigWgEncodeEH000492
+	parent uwEnc2DnaseWig on
+	shortLabel GM12878 Sg
+	longLabel GM12878 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000492
+	type bigWig 0 7218.11
+	color 85,152,255
+	priority 1.73349
+
+	track uwEnc2DnaseWigWgEncodeEH000520
+	parent uwEnc2DnaseWig on
+	shortLabel GM12865 Sg
+	longLabel GM12865 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000520
+	type bigWig 0 8525.5
+	color 85,147,255
+	priority 1.73856
+
+	track uwEnc2DnaseWigWgEncodeEH001196
+	parent uwEnc2DnaseWig on
+	shortLabel Monocytes-CD14+_RO01746 Sg
+	longLabel Monocytes-CD14+_RO01746 DNAseI HS Signals from ENCODE2/UW wgEncodeEH001196
+	type bigWig 0 853.111
+	color 85,135,255
+	priority 1.75089
+
+	track uwEnc2DnaseWigWgEncodeEH000489
+	parent uwEnc2DnaseWig on
+	shortLabel HL-60 Sg
+	longLabel HL-60 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000489
+	type bigWig 0 5012.92
+	color 85,124,255
+	priority 1.76239
+
+	track uwEnc2DnaseWigWgEncodeEH000498
+	parent uwEnc2DnaseWig on
+	shortLabel NB4 Sg
+	longLabel NB4 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000498
+	type bigWig 0 7662.2
+	color 85,112,255
+	priority 1.77436
+
+	track uwEnc2DnaseWigWgEncodeEH000511
+	parent uwEnc2DnaseWig on
+	shortLabel H7-hESC Sg
+	longLabel H7-hESC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000511
+	type bigWig 0 13035.4
+	color 85,93,255
+	priority 1.79509
+
+	track uwEnc2DnaseWigWgEncodeEH002578
+	parent uwEnc2DnaseWig on
+	shortLabel H7-hESC diff 5d Sg
+	longLabel H7-hESC diffProtA 5d DNAseI HS Signals from ENCODE2/UW wgEncodeEH002578
+	type bigWig 0 5836.88
+	color 85,88,255
+	priority 1.80059
+
+	track uwEnc2DnaseWigWgEncodeEH002576
+	parent uwEnc2DnaseWig on
+	shortLabel H7-hESC diff 14d Sg
+	longLabel H7-hESC diffProtA 14d DNAseI HS Signals from ENCODE2/UW wgEncodeEH002576
+	type bigWig 0 21393.7
+	color 89,85,255
+	priority 1.80809
+
+	track uwEnc2DnaseWigWgEncodeEH001188
+	parent uwEnc2DnaseWig on
+	shortLabel RPTEC Sg
+	longLabel RPTEC DNAseI HS Signals from ENCODE2/UW wgEncodeEH001188
+	type bigWig 0 22767.8
+	color 100,85,255
+	priority 1.82024
+
+	track uwEnc2DnaseWigWgEncodeEH000517
+	parent uwEnc2DnaseWig on
+	shortLabel HRPEpiC Sg
+	longLabel HRPEpiC DNAseI HS Signals from ENCODE2/UW wgEncodeEH000517
+	type bigWig 0 32404.6
+	color 124,85,255
+	priority 1.84446
+
+	track uwEnc2DnaseWigWgEncodeEH001170
+	parent uwEnc2DnaseWig on
+	shortLabel HMVEC-dLy-Ad Sg
+	longLabel HMVEC-dLy-Ad DNAseI HS Signals from ENCODE2/UW wgEncodeEH001170
+	type bigWig 0 39771.9
+	color 133,85,255
+	priority 1.85388
+
+	track uwEnc2DnaseWigWgEncodeEH000495
+	parent uwEnc2DnaseWig on
+	shortLabel HeLa-S3 Sg
+	longLabel HeLa-S3 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000495
+	type bigWig 0 26492
+	color 157,85,255
+	priority 1.87897
+
+	track uwEnc2DnaseWigWgEncodeEH001189
+	parent uwEnc2DnaseWig on
+	shortLabel SK-N-MC Sg
+	longLabel SK-N-MC DNAseI HS Signals from ENCODE2/UW wgEncodeEH001189
+	type bigWig 0 5864.79
+	color 176,85,255
+	priority 1.90393
+
+	track uwEnc2DnaseWigWgEncodeEH000502
+	parent uwEnc2DnaseWig on
+	shortLabel MCF-7 Sg
+	longLabel MCF-7 DNAseI HS Signals from ENCODE2/UW wgEncodeEH000502
+	type bigWig 0 15780.8
+	color 190,85,255
+	priority 1.93061
+
+	track uwEnc2DnaseWigWgEncodeEH003017
+	parent uwEnc2DnaseWig on
+	shortLabel MCF-7 estradi 1h Sg
+	longLabel MCF-7 Estradiol 100nM 1hr DNAseI HS Signals from ENCODE2/UW wgEncodeEH003017
+	type bigWig 0 24234.6
+	color 192,85,255
+	priority 1.93373
+
+	track uwEnc2DnaseWigWgEncodeEH003018
+	parent uwEnc2DnaseWig on
+	shortLabel MCF-7 estradi 0h Sg
+	longLabel MCF-7 Estradiol ctrl 0hr DNAseI HS Signals from ENCODE2/UW wgEncodeEH003018
+	type bigWig 0 23308.2
+	color 192,85,255
+	priority 1.93395
+
+	track uwEnc2DnaseWigWgEncodeEH001190
+	parent uwEnc2DnaseWig on
+	shortLabel WERI-Rb-1 Sg
+	longLabel WERI-Rb-1 DNAseI HS Signals from ENCODE2/UW wgEncodeEH001190
+	type bigWig 0 8726.43
+	color 211,85,255
+	priority 1.96205
+
+	track uwEnc2DnaseWigWgEncodeEH001181
+	parent uwEnc2DnaseWig on
+	shortLabel BE2_C Sg
+	longLabel BE2_C DNAseI HS Signals from ENCODE2/UW wgEncodeEH001181
+	type bigWig 0 72865.5
+	color 237,85,255
+	priority 2
+

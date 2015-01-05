@@ -84,7 +84,7 @@ if (labelSet & (useOrgCommon|useOrgAbbrv|useOrgDb|useGene))
 if ((labelSet & useGene) && (geneConn != NULL))
     {
     gene = transMapGeneQuery(geneConn, transMapGeneTbl,
-                             info->srcDb, transMapIdToAcc(info->srcId));
+                             info->srcDb, transMapIdToSeqId(info->srcId));
     }
 
 struct dyString *label = dyStringNew(64);
@@ -144,7 +144,7 @@ static char *transMapGetItemDataName(struct track *tg, char *itemName)
 /* translate itemName to data name (source accession).
  * WARNING: static return */
 {
-return transMapIdToAcc(itemName);
+return transMapIdToSeqId(itemName);
 }
 
 static void transMapMethods(struct track *tg)

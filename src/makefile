@@ -26,12 +26,15 @@ hgLib:
 libs: topLibs hgLib
 
 cgi: libs
+	cd utils && ${MAKE} cgi
 	cd hg && ${MAKE} cgi
 
 cgi-alpha: libs
+	cd utils && ${MAKE} alpha
 	cd hg && ${MAKE} alpha
 
 cgi-beta: check-beta libs
+	cd utils && ${MAKE} beta
 	cd hg && ${MAKE} beta
 
 check-beta:
@@ -107,8 +110,11 @@ tags:
 	ctags ${LIB_TAGS_IN}
 
 cscope: 
-	find `pwd` -name '*.c' -o -name '*.h' > sourceFiles
-	cscope -Rb `cat sourceFiles`
+	find `pwd` -name '*.c' -o -name '*.h' > cscope.files
+	cscope -qRb `cat cscope.files`
+search:
+	cscope -d
+
 # build emacs tags for libraries
 .PHONY: etags
 etags:

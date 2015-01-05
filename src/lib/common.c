@@ -2261,6 +2261,17 @@ else
     return cloneStringZ(startFirstWord, endFirstWord - startFirstWord);
 }
 
+char *cloneNotFirstWord(char *s)
+/* return part of string after first space, not changing s. Result has to be freed. */
+{
+if (s==NULL)
+    return "";
+char* spcPos = stringIn(" ", s);
+if (spcPos==NULL)
+    return cloneString(s);
+return cloneString(spcPos+1);
+}
+
 char *lastWordInLine(char *line)
 /* Returns last word in line if any (white space separated).
  * Returns NULL if string is empty.  Removes any terminating white space

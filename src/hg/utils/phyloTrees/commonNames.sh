@@ -26,10 +26,14 @@ chlSab1 -> Green_monkey ;
 chlSab2 -> Green_monkey ;
 nomLeu1 -> Gibbon ;
 nomLeu3 -> Gibbon ;
+papAnu2 -> Baboon ;
 papHam1 -> Baboon ;
 saiBol1 -> Squirrel_monkey ;
 calJac3 -> Marmoset ;
+nasLar1 -> Proboscis_monkey ;
+rhiRox1 -> Golden_snub_nosed_monkey ;
 tarSyr1 -> Tarsier ;
+tarSyr2 -> Tarsier ;
 micMur1 -> Mouse_lemur ;
 otoGar1 -> Bushbaby ;
 otoGar3 -> Bushbaby ;
@@ -232,4 +236,4 @@ calMil1 -> Elephant_shark ;
 letCam1 -> Arctic_lamprey ;
 petMar1 -> Lamprey ;
 petMar2 -> Lamprey ;" \
-	${F} | sed -e "s/X_trop/X._trop/; s/Burton_s/Burton's/; s/Brand_s/Brand's/; s/David_s/David's/; s/Parnell_s/Parnell's/; s/will_s/will's/; s/Anna_s/Anna's/; s/Star_nosed/Star-nosed/; s/00*)/)/g; s/00*,/,/g"
+	${F} | sed -e "s/X_trop/X._trop/; s/Burton_s/Burton's/; s/Brand_s/Brand's/; s/David_s/David's/; s/Parnell_s/Parnell's/; s/will_s/will's/; s/Anna_s/Anna's/; s/_nosed/-nosed/; s/00*)/)/g; s/00*,/,/g"
