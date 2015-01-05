@@ -256,12 +256,16 @@ uwDnaseTrackHub meta.tab run_pooled colors.tab hub
         hgLoadBed -fillInScore=signalValue -trimSqlTable -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg38 uwEnc2DnaseBedPeaks${exp} $f
     end
 
-# Convert trackDb from hub to native
+# Use cell curation to make more informative long labels
+    cd /hive/data/genomes/hg38/bed/uwDnase1
+    hgsql hgFixed -Ne 'select * from wgEncodeCell' > cells/cellInfo.tab
+    uwDnaseTrackHub -cellFile=cells/cellInfo.tab meta.tab run_pooled colors.tab kateHub4
 
+# Convert trackDb from hub to native
     cd /hive/data/genomes/hg38/bed/uwDnase1/
     mkdir tracks
     cd tracks
-    cp ../hub/hg38/trackDb.txt .
+    cp ../kateHub4/hg38/trackDb.txt .
     sed -e 's/type bigBed/type bigBed 6 +/' -e '/bigDataUrl/d' trackDb.txt > trackDb.ra
     cp trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg38/uwDnase.ra
 
@@ -326,4 +330,20 @@ cat > makeInputs.csh << 'EOF'
     hgLoadSqlTab hg38 uwEnc2DnaseInputs ~/kent/src/hg/lib/clusterInputEapDnase.sql inputs.tab
 
 
+#################
+# Cell table (use for cell metadata, instead of metaDb)
+
+    cd /hive/data/genomes/hg38/bed/uwDnase1
+    mkdir cells
+    cd cells
+
+    # collect cell info from ENCODE2 and ENCODE3
+
+    # load to google spreadsheet and clean 
+    #https://docs.google.com/a/soe.ucsc.edu/spreadsheets/d/10EWdr-JTtDvfLKKLPvP3T2ft6MZ5KVdKbBzY76SRaug/edit#gid=1783710206
+
+    # extract useful columns to file and load
+    tail -n +2 wgEncodeCell.tab | \
+        nl -v 0 | \
+        hgLoadSqlTab hgFixed wgEncodeCell ~/kent/src/hg/lib/encode/wgEncodeCell.sql stdin
 
