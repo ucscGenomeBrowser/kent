@@ -1,5 +1,5 @@
 track iedbPred
-shortLabel IEDB Predictions
+shortLabel IEDB Prediction
 longLabel Immune Epitope Database and Analysis Resource (IEDB) HLA binding predictions
 group immu
 type bigBed 12 .
@@ -8,7 +8,7 @@ noScoreFilter on
 
         track iedbSupp3
         shortLabel IEDB Pred II
-        longLabel Immune Epitope Database and Analysis Resource (IEDB) Predictions, Human T-Cell Class II Epitopes
+        longLabel IEDB Epitope Predictions, Human T-Cell Class II
         group immu
         type bigBed 12 .
         visibility hide
@@ -24,13 +24,14 @@ track iedbPred1
 group immu
 compositeTrack on
 shortLabel IEDB Pred Human I
-longLabel Immune Epitope Database and Analysis Resource (IEDB) Predictions, Human HLA T-Cell Class I
+longLabel IEDB Epitope Predictions, Human T-Cell Class I
 visibility hide
 color 0,0,0
 altColor 0,0,0
 spectrum on
 scoreMin 850
 scoreMax 1000
+noScoreFilter on
 priority 50
 type bigBed 12 .
 parent iedbPred dense
@@ -228,12 +229,13 @@ track iedbPredClassIMac
 group immu
 compositeTrack on
 shortLabel IEDB Pred Macaque I
-longLabel Immune Epitope Database and Analysis Resource (IEDB) Predictions, Macaque HLA T-Cell Class I
+longLabel IEDB Epitope Predictions, Macaque T-Cell Class I
 visibility hide
 color 20,20,0
 spectrum on
 scoreMin 0
 scoreMax 1000
+noScoreFilter on
 priority 60
 type bigBed 12 .
 parent iedbPred dense

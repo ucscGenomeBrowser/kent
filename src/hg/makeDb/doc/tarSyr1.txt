@@ -411,3 +411,18 @@ tarSyr1.perChromTables = no
     ssh hgwbeta "hgsql qapushq < /tmp/tarSyr1.sql"
 
 ############################################################################
+# LIFTOVER TO tarSyr2 (DONE - 2014-12-11 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/tarSyr1/bed/blat.tarSyr2.2014-12-11
+    cd /hive/data/genomes/tarSyr1/bed/blat.tarSyr2.2014-12-11
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/tarSyr1/tarSyr1.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         tarSyr1 tarSyr2) > do.log 2>&1
+    # real    11534m13.107s
+    # 8 days of run time, the tarSyr2 to tarSyr1 is taking even longer
+
+    # verify the convert link on the test browser is now active from tarSyr1 to
+    # tarSyr1
+
+#########################################################################

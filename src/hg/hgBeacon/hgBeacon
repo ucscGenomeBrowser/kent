@@ -62,7 +62,7 @@ def parseHgConf():
     hgConf = dict() # python dict = hash table
 
     confDir = dirname(__file__)
-    fname = join(confDir, "..", "hg.conf")
+    fname = join(confDir, "hg.conf")
     hgConf = parseConf(fname)
 
     return hgConf
@@ -95,10 +95,10 @@ def errAbort(errMsg=None):
     For LOVD, an overlap with a short deletion or duplication returns "Maybe". 
 
     Examples:
-    http://%(host)s/cgi-bin/hgBeacon/hgBeacon?dataset=lovd&chrom=chr1&pos=808921&allele=A
+    http://%(host)s/cgi-bin/hgBeacon?dataset=lovd&chrom=chr1&pos=808921&allele=A
     - returns "Yes"
 
-    http://%(host)s/cgi-bin/hgBeacon/hgBeacon?dataset=hgmd?chrom=1&pos=2160493&allele=T
+    http://%(host)s/cgi-bin/hgBeacon?dataset=hgmd?chrom=1&pos=2160493&allele=T
     - returns "Maybe", because the allele is in a small deletion
 
     Number of variants:
@@ -170,7 +170,7 @@ def main():
     pos = int(pos)
 
     # run tool
-    args = ["./bigBedToBed", trackFname, "stdout", "-chrom=%s"%chrom, "-start=%d"%pos, "-end=%d"%(pos+1)]
+    args = ["utils/bigBedToBed", trackFname, "stdout", "-chrom=%s"%chrom, "-start=%d"%pos, "-end=%d"%(pos+1)]
     p = subprocess.Popen(args, stdout=subprocess.PIPE)
 
     # parse output

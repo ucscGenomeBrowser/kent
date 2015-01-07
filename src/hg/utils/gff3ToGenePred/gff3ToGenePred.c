@@ -236,9 +236,10 @@ static boolean addCdsFrame(struct genePred *gp, struct gff3AnnRef *cdsBlks)
 /* assign frame based on CDS regions.  Return FALSE error */
 {
 struct gff3AnnRef *cds;
+int iExon = -1; // caches current position, start before first exon
 for (cds = cdsBlks; cds != NULL; cds = cds->next)
     {
-    int iExon = findCdsExon(gp, cds->ann, -1);
+    iExon = findCdsExon(gp, cds->ann, iExon);
     if (iExon < 0)
         return FALSE; // error
     gp->exonFrames[iExon] = gff3PhaseToFrame(cds->ann->phase);
@@ -257,7 +258,7 @@ return cdsUtrBlks;
 }
 
 static struct genePred *mrnaToGenePred(struct gff3Ann *gene, struct gff3Ann *mrna)
-/* construct a genePred from an mRNA, return NULL if there is an error */
+/* construct a genePred from an mRNA or transript record, return NULL if there is an error */
 {
 // allow for only having UTR/CDS children
 struct gff3AnnRef *exons = getChildFeatures(mrna, gff3FeatExon);
@@ -280,30 +281,8 @@ slFreeList(&cdsUtrBlks);
 return gp;  // NULL if error above
 }
 
-static struct genePred *transcriptToGenePred(struct gff3Ann *gene, struct gff3Ann *transcript)
-/* construct a genePred from an transcript record, return NULL if there is an error */
-{
-// allow for only having UTR/CDS children
-struct gff3AnnRef *exons = getChildFeatures(transcript, gff3FeatExon);
-struct genePred *gp = makeGenePred((gene != NULL) ? gene : transcript, transcript, exons, NULL);
-if (gp != NULL)
-    addExons(gp, exons);
-slFreeList(&exons);
-return gp;  // NULL if error above
-}
-
-static void processTranscript(FILE *gpFh, struct gff3Ann *gene, struct gff3Ann *transcript, struct hash *processed)
-/* process a transcript node in the tree; gene can be NULL. Error count increment on error and genePred discarded */
-{
-recProcessed(processed, transcript);
-
-struct genePred *gp = transcriptToGenePred(gene, transcript);
-if (gp != NULL)
-    outputGenePredAndFree(gpFh, gp);
-}
-
 static void processMRna(FILE *gpFh, struct gff3Ann *gene, struct gff3Ann *mrna, struct hash *processed)
-/* process a mRNA node in the tree; gene can be NULL. Error count increment on error and genePred discarded */
+/* process a mRNA/transcript node in the tree; gene can be NULL. Error count increment on error and genePred discarded */
 {
 recProcessed(processed, mrna);
 
@@ -320,10 +299,9 @@ recProcessed(processed, gene);
 struct gff3AnnRef *child;
 for (child = gene->children; child != NULL; child = child->next)
     {
-    if (sameString(child->ann->type, gff3FeatMRna) && !isProcessed(processed, child->ann))
+    if ((sameString(child->ann->type, gff3FeatMRna) || sameString(child->ann->type, gff3FeatTranscript))
+        && !isProcessed(processed, child->ann))
         processMRna(gpFh, gene, child->ann, processed);
-    else if (sameString(child->ann->type, gff3FeatTranscript) && !isProcessed(processed, child->ann))
-        processTranscript(gpFh, gene, child->ann, processed);
     if (convertErrCnt >= maxConvertErrors)
         break;
     }
@@ -336,10 +314,8 @@ recProcessed(processed, node);
 
 if (sameString(node->type, gff3FeatGene))
     processGene(gpFh, node, processed);
-else if (sameString(node->type, gff3FeatMRna))
+else if (sameString(node->type, gff3FeatMRna) || sameString(node->type, gff3FeatTranscript))
     processMRna(gpFh, NULL, node, processed);
-else if (sameString(node->type, gff3FeatTranscript))
-    processTranscript(gpFh, NULL, node, processed);
 }
 
 static void gff3ToGenePred(char *inGff3File, char *outGpFile)

@@ -864,3 +864,82 @@ TMPDIR=/dev/shm
     # real    142m10.914s
 
 #########################################################################
+# LASTZ human/hg38 Mouse lemur/micMur1 - (DONE - 2014-12-19 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzMicMur1.2014-12-19
+    cd /hive/data/genomes/hg38/bed/lastzMicMur1.2014-12-19
+
+    cp -p \
+/hive/users/hiram/multiz/100way/hg38.micMur1/hg38.micMur1.tuning.top400.txt \
+     ./hg38.micMur1.tuning.Q.txt
+
+    cat << '_EOF_' > DEF
+# human vs Mouse lemur
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/hg38.micMur1/hg38.micMur1.tuning.top400.txt
+
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=254
+BLASTZ_X=1000
+BLASTZ_Y=3400
+BLASTZ_Q=/hive/data/genomes/hg38/bed/lastzMicMur1.2014-12-19/hg38.micMur1.tuning.Q.txt
+#       A     C     G     T
+# A   100  -159   -37  -128
+# C  -159    93  -186   -37
+# G   -37  -186    93  -159
+# T  -128   -37  -159   100
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=10
+SEQ1_LAP=10000
+
+# QUERY: Mouse lemur micMur1
+SEQ2_DIR=/hive/data/genomes/micMur1/micMur1.2bit
+SEQ2_LEN=/hive/data/genomes/micMur1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzMicMur1.2014-12-19
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    223m50.753s
+
+    cat fb.hg38.chainMicMur1Link.txt 
+    # 1300627579 bases of 3049335806 (42.653%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hg38 micMur1) > rbest.log 2>&1 &
+    # real    39m44.440s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/micMur1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/micMur1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzMicMur1.2014-12-19/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    223m37.152s
+
+    cat fb.micMur1.chainHg38Link.txt 
+    # 1253236864 bases of 1852394361 (67.655%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` micMur1 hg38) > rbest.log 2>&1
+    # real    182m5.563s
+
+#########################################################################

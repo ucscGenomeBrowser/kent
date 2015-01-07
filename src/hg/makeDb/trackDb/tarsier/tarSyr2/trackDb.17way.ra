@@ -1,0 +1,105 @@
+track cons17way
+compositeTrack on
+shortLabel Conservation
+longLabel Multiz Alignment & Conservation (17 Species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility full
+priority 1
+type bed 4
+group compGeno
+
+    track cons17wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons17way
+
+        track multiz17way
+        subTrack cons17wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 17 Primates
+        subGroups view=align
+        noInherit on
+        irows on
+        summary multiz17waySummary
+        frames multiz17wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault tarSyr2
+        speciesGroups Primates
+        sGroup_Primates panPan1 panTro4 ponAbe2 gorGor3 nomLeu3 macFas5 papAnu2 rheMac3 chlSab2 hg38 rhiRox1 nasLar1 saiBol1 micMur1 calJac3 otoGar3
+        itemFirstCharCase noChange
+        treeImage phylo/tarSyr2_17way.png
+        priority 100
+
+    # PhyloP conservation
+    track cons17wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons17way
+    viewLimits -3:0.5
+    viewLimitsMax -4.611:0.934
+
+        track phyloP17way
+        subTrack cons17wayViewphyloP off
+        subGroups view=phyloP
+        shortLabel 17 Primates Cons
+        longLabel 17 primates Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -4.711 0.934
+        maxHeightPixels 100:50:11
+        viewLimits -3.107:0.934
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track cons17wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack cons17way
+
+        track phastCons17way
+        subTrack cons17wayViewphastcons off
+        subGroups view=phastcons
+        shortLabel 17 Primates Cons
+        longLabel 17 primates conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons17wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons17way
+
+        track phastConsElements17way
+        subTrack cons17wayViewelements on
+        subGroups view=elements
+        shortLabel 17 Primates El
+        longLabel 17 primates Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23
+
+

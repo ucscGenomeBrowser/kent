@@ -811,3 +811,6 @@ done > ensToUcsc.lift
     # and try out the conversion on genome-test from felCat5 to felCat8
 
 #########################################################################
+##############################################################################
+# TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
+##############################################################################

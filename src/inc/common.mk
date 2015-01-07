@@ -45,7 +45,7 @@ endif
 
 # autodetect UCSC installation of hal:
 ifeq (${HALDIR},)
-    HALDIR = /hive/groups/browser/hal
+    HALDIR = /hive/groups/browser/hal/halRelease
     ifneq ($(wildcard ${HALDIR}),)
         ifeq (${USE_HAL},)
           USE_HAL=1
@@ -54,9 +54,9 @@ ifeq (${HALDIR},)
 endif
 
 ifeq (${USE_HAL},1)
-    HALLIBS=${HALDIR}/hal/lib/halMaf.a ${HALDIR}/hal/lib/halChain.a ${HALDIR}/hal/lib/halMaf.a ${HALDIR}/hal/lib/halLiftover.a ${HALDIR}/hal/lib/halLod.a ${HALDIR}/hal/lib/halLib.a ${HALDIR}/sonLib/lib/sonLib.a ${HALDIR}/hdf5-1.8.11/hdf5//lib/libhdf5_cpp.a ${HALDIR}/hdf5-1.8.11/hdf5//lib/libhdf5.a ${HALDIR}/hdf5-1.8.11/hdf5//lib/libhdf5_hl.a 
+    HALLIBS=${HALDIR}/lib/halMaf.a ${HALDIR}/lib/halChain.a ${HALDIR}/lib/halMaf.a ${HALDIR}/lib/halLiftover.a ${HALDIR}/lib/halLod.a ${HALDIR}/lib/halLib.a ${HALDIR}/lib/sonLib.a ${HALDIR}/lib/libhdf5_cpp.a ${HALDIR}/lib/libhdf5.a ${HALDIR}/lib/libhdf5_hl.a 
     HG_DEFS+=-DUSE_HAL
-    HG_INC+=-I${HALDIR}/hal/chain/inc/
+    HG_INC+=-I${HALDIR}/inc
 endif
 
 

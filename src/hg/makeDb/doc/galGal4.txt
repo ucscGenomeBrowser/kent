@@ -1400,3 +1400,6 @@ EOF
 
     wget http://www.animalgenome.org/hu/share/GbandCoord.tar.gz
 
+##############################################################################
+# TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
+##############################################################################

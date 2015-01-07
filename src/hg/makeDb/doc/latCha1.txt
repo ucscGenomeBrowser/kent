@@ -454,3 +454,6 @@ http://upload.wikimedia.org/wikipedia/commons/4/4b/Coelacanth.png
     # verify the track link to INSDC functions
 
 ##############################################################################
+##############################################################################
+# TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
+##############################################################################
