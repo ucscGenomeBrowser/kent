@@ -25,6 +25,10 @@ struct annoStreamer
     void (*setAutoSqlObject)(struct annoStreamer *self, struct asObject *asObj);
     /* Get and set autoSql representation (do not modify or free asObj!) */
 
+    char *(*getName)(struct annoStreamer *self);
+    void (*setName)(struct annoStreamer *self, char *name);
+    /* Get and set name (short identifier, unique among streamers in a query). */
+
     void (*setRegion)(struct annoStreamer *self, char *chrom, uint rStart, uint rEnd);
     /* Set genomic region for query; if chrom is NULL, region is whole genome.
      * This must be called on all annoGrator components in query, not a subset. */
@@ -72,6 +76,12 @@ struct asObject *annoStreamerGetAutoSqlObject(struct annoStreamer *self);
 
 void annoStreamerSetAutoSqlObject(struct annoStreamer *self, struct asObject *asObj);
 /* Use new asObj and update internal state derived from asObj. */
+
+char *annoStreamerGetName(struct annoStreamer *self);
+/* Returns cloned name of streamer; free when done. */
+
+void annoStreamerSetName(struct annoStreamer *self, char *name);
+/* Sets streamer name to clone of name. */
 
 void annoStreamerSetRegion(struct annoStreamer *self, char *chrom, uint rStart, uint rEnd);
 /* Set genomic region for query; if chrom is NULL, position is genome.
