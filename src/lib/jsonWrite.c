@@ -10,6 +10,12 @@
 #include "jsonParse.h"
 #include "jsonWrite.h"
 
+// Separator between elements; set this to "\n" to see elements on separate lines.
+// Newlines are fine in Javascript, e.g. in an embedded <script>.
+// However, unescaped \n is illegal in JSON and web browsers may reject it.
+// Web browser plugins can pretty-print JSON nicely.
+#define JW_SEP " "
+
 struct jsonWrite *jsonWriteNew()
 /* Return new empty jsonWrite struct. */
 {
@@ -49,24 +55,36 @@ if (stackIx < 0)
 jw->stackIx = stackIx;
 }
 
+INLINE void jsonWriteMaybeComma(struct jsonWrite *jw)
+/* If this is not the first item added to an object or list, write a comma. */
+{
+if (jw->objStack[jw->stackIx] != 0)
+    dyStringAppend(jw->dy, ","JW_SEP);
+else
+    jw->objStack[jw->stackIx] = 1;
+}
+
 void jsonWriteTag(struct jsonWrite *jw, char *var)
 /* Print out quoted tag followed by colon. Print out preceding comma if need be.  */
 {
-struct dyString *dy = jw->dy;
-if (jw->objStack[jw->stackIx] != 0)
-    dyStringAppend(dy, ",\n");
-else
-    jw->objStack[jw->stackIx] = 1;
 if (var != NULL)
+    {
+    jsonWriteMaybeComma(jw);
     dyStringPrintf(jw->dy, "\"%s\": ", var);
+    }
 }
 
 void jsonWriteString(struct jsonWrite *jw, char *var, char *string)
-/* Print out "var": "val".  If var is NULL then just print out "val" */
+/* Print out "var": "val".  If var is NULL, print val only.  If string is NULL, "var": null . */
 {
-struct dyString *dy = jw->dy;
-jsonWriteTag(jw, var);
-dyStringPrintf(dy, "\"%s\"", string);
+if (var)
+    jsonWriteTag(jw, var);
+else
+    jsonWriteMaybeComma(jw);
+if (string)
+    dyStringPrintf(jw->dy, "\"%s\"", string);
+else
+    dyStringAppend(jw->dy, "null");
 }
 
 void jsonWriteDateFromUnix(struct jsonWrite *jw, char *var, long long unixTimeVal)
@@ -112,7 +130,7 @@ void jsonWriteListStart(struct jsonWrite *jw, char *var)
 {
 struct dyString *dy = jw->dy;
 jsonWriteTag(jw, var);
-dyStringAppend(dy, "[\n");
+dyStringAppend(dy, "["JW_SEP);
 jsonWritePushObjStack(jw, FALSE);
 }
 
@@ -120,15 +138,19 @@ void jsonWriteListEnd(struct jsonWrite *jw)
 /* End an array in JSON */
 {
 struct dyString *dy = jw->dy;
-dyStringAppend(dy, "]\n");
+dyStringAppend(dy, "]"JW_SEP);
 jsonWritePopObjStack(jw);
 }
 
-void jsonWriteObjectStart(struct jsonWrite *jw)
-/* Print start of object */
+void jsonWriteObjectStart(struct jsonWrite *jw, char *var)
+/* Print start of object, preceded by tag if var is non-NULL. */
 {
+if (var)
+    jsonWriteTag(jw, var);
+else
+    jsonWriteMaybeComma(jw);
 struct dyString *dy = jw->dy;
-dyStringAppend(dy, "{\n");
+dyStringAppend(dy, "{"JW_SEP);
 jsonWritePushObjStack(jw, FALSE);
 }
 
@@ -136,7 +158,54 @@ void jsonWriteObjectEnd(struct jsonWrite *jw)
 /* End object in JSON */
 {
 struct dyString *dy = jw->dy;
-dyStringAppend(dy, "}\n");
+dyStringAppend(dy, "}"JW_SEP);
 jsonWritePopObjStack(jw);
 }
 
+void jsonWriteStringf(struct jsonWrite *jw, char *var, char *format, ...)
+/* Write "var": "val" where val is jsonStringEscape'd formatted string. */
+{
+// Since we're using jsonStringEscape(), we need to use a temporary dyString
+// instead of jw->dy.
+struct dyString *tmpDy = dyStringNew(0);
+va_list args;
+va_start(args, format);
+dyStringVaPrintf(tmpDy, format, args);
+va_end(args);
+char *escaped = jsonStringEscape(tmpDy->string);
+jsonWriteString(jw, var, escaped);
+freeMem(escaped);
+dyStringFree(&tmpDy);
+}
+
+void jsonWriteBoolean(struct jsonWrite *jw, char *var, boolean val)
+/* Write out "var": true or "var": false depending on val (no quotes around true/false). */
+{
+jsonWriteTag(jw, var);
+dyStringAppend(jw->dy, val ? "true" : "false");
+}
+
+void jsonWriteValueLabelList(struct jsonWrite *jw, char *var, struct slPair *pairList)
+/* Print out a named list of {"value": "<pair->name>", "label": "<pair->val>"} objects. */
+{
+jsonWriteListStart(jw, var);
+struct slPair *pair;
+for (pair = pairList;  pair != NULL;  pair = pair->next)
+    {
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "value", pair->name);
+    jsonWriteString(jw, "label", (char *)(pair->val));
+    jsonWriteObjectEnd(jw);
+    }
+jsonWriteListEnd(jw);
+}
+
+void jsonWriteSlNameList(struct jsonWrite *jw, char *var, struct slName *slnList)
+/* Print out a named list of strings from slnList. */
+{
+jsonWriteListStart(jw, var);
+struct slName *sln;
+for (sln = slnList;  sln != NULL;  sln = sln->next)
+    jsonWriteString(jw, NULL, sln->name);
+jsonWriteListEnd(jw);
+}

@@ -61,7 +61,7 @@ struct jsonWrite *readSearchJson(char **setIds, int setCount, char *chrom, int s
 /* Return a jsonWrite object set up to make the search reads in region query. */
 {
 struct jsonWrite *jw = jsonWriteNew();
-jsonWriteObjectStart(jw);
+jsonWriteObjectStart(jw, NULL);
 jsonWriteListStart(jw, "readsetIds");
 int i;
 for (i=0; i<setCount; ++i)
