@@ -63,7 +63,7 @@ priority 100.3
 	track uwEnc2DnaseHotWgEncodeEH001187
 	parent uwEnc2DnaseHot off
 	shortLabel LNCaP Ht
-	longLabel LNCaP prostate adenocarcinoma cell line DNAseI HS HotSpots from UW/ENCODE2
+	longLabel LNCaP prostate adenocarcinoma cell lline DNAseI HS HotSpots from UW/ENCODE2
 	subGroups view=Hot cellType=LNCaP treatment=n_a tissue=prostate cancer=cancer
 	type bigBed 6 +
 	color 255,102,85
@@ -391,7 +391,7 @@ priority 100.3
 	track uwEnc2DnaseHotWgEncodeEH002581
 	parent uwEnc2DnaseHot off
 	shortLabel M059J Ht
-	longLabel M059J glioblastoma celll line DNAseI HS HotSpots from UW/ENCODE2
+	longLabel M059J glioblastoma cell line DNAseI HS HotSpots from UW/ENCODE2
 	subGroups view=Hot cellType=M059J treatment=n_a tissue=brain cancer=cancer
 	type bigBed 6 +
 	color 96,255,85
@@ -834,7 +834,7 @@ priority 100.3
 	track uwEnc2DnasePeaksWgEncodeEH001187
 	parent uwEnc2DnasePeaks off
 	shortLabel LNCaP Pk
-	longLabel LNCaP prostate adenocarcinoma cell line DNAseI HS Peaks from UW/ENCODE2
+	longLabel LNCaP prostate adenocarcinoma cell lline DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=LNCaP treatment=n_a tissue=prostate cancer=cancer
 	type bigBed 6 +
 	color 255,102,85
@@ -1162,7 +1162,7 @@ priority 100.3
 	track uwEnc2DnasePeaksWgEncodeEH002581
 	parent uwEnc2DnasePeaks off
 	shortLabel M059J Pk
-	longLabel M059J glioblastoma celll line DNAseI HS Peaks from UW/ENCODE2
+	longLabel M059J glioblastoma cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=M059J treatment=n_a tissue=brain cancer=cancer
 	type bigBed 6 +
 	color 96,255,85
@@ -1607,7 +1607,7 @@ priority 100.3
 	track uwEnc2DnaseSignalWgEncodeEH001187
 	parent uwEnc2DnaseSignal off
 	shortLabel LNCaP Sg
-	longLabel LNCaP prostate adenocarcinoma cell line DNAseI HS Signal from UW/ENCODE2
+	longLabel LNCaP prostate adenocarcinoma cell lline DNAseI HS Signal from UW/ENCODE2
 	subGroups view=Signal cellType=LNCaP treatment=n_a tissue=prostate cancer=cancer
 	type bigWig 0 37372.7
 	color 255,102,85
@@ -1935,7 +1935,7 @@ priority 100.3
 	track uwEnc2DnaseSignalWgEncodeEH002581
 	parent uwEnc2DnaseSignal off
 	shortLabel M059J Sg
-	longLabel M059J glioblastoma celll line DNAseI HS Signal from UW/ENCODE2
+	longLabel M059J glioblastoma cell line DNAseI HS Signal from UW/ENCODE2
 	subGroups view=Signal cellType=M059J treatment=n_a tissue=brain cancer=cancer
 	type bigWig 0 6527.58
 	color 96,255,85
@@ -2391,7 +2391,7 @@ sortOrder cellType=+ tissue=+ cancer=+ treatment=+
 	track uwEnc2DnaseWigWgEncodeEH001187
 	parent uwEnc2DnaseWig off
 	shortLabel LNCaP Sg
-	longLabel LNCaP prostate adenocarcinoma cell line DNAseI HS Signal from UW/ENCODE2
+	longLabel LNCaP prostate adenocarcinoma cell lline DNAseI HS Signal from UW/ENCODE2
 	subGroups cellType=LNCaP treatment=n_a tissue=prostate cancer=cancer
 	type bigWig 0 37372.7
 	color 255,102,85
@@ -2760,7 +2760,7 @@ sortOrder cellType=+ tissue=+ cancer=+ treatment=+
 	track uwEnc2DnaseWigWgEncodeEH002581
 	parent uwEnc2DnaseWig off
 	shortLabel M059J Sg
-	longLabel M059J glioblastoma celll line DNAseI HS Signal from UW/ENCODE2
+	longLabel M059J glioblastoma cell line DNAseI HS Signal from UW/ENCODE2
 	subGroups cellType=M059J treatment=n_a tissue=brain cancer=cancer
 	type bigWig 0 6527.58
 	color 96,255,85
