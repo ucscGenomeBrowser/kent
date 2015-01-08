@@ -128,4 +128,7 @@ char *jsonOptionalStringField(struct jsonElement *object, char *field, char *def
 char *jsonStringField(struct jsonElement *object, char *field);
 /* Return string valued field of object or abort if field doesn't exist. */
 
+boolean jsonOptionalBooleanField(struct jsonElement *object, char *field, boolean defaultVal);
+/* Return boolean valued field of object, or defaultVal if it doesn't exist. */
+
 #endif /* JSONPARSE_H */

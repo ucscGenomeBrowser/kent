@@ -1,0 +1,6 @@
+#/bin/tcsh -efx
+bigWigToBedGraph $1 stdout | liftOver stdin $3 stdout /dev/null | sort -k1,1 -k2,2n| bedRemoveOverlap stdin stdout | bedGraphPack stdin tmp.bedGraph
+bedGraphToBigWig tmp.bedGraph $4 $2
+rm tmp.bedGraph
+
+

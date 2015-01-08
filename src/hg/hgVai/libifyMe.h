@@ -17,28 +17,7 @@ boolean lookupPosition(struct cart *cart, char *cartVar);
  * and a warning box was displayed, in which case it's good to reset position
  * to cart's lastPosition before proceeding. */
 
-boolean hasCustomTracks(struct cart *cart);
-/* Return TRUE if cart has custom tracks for the current db. */
-
 void nbSpaces(int count);
 /* Print some non-breaking spaces. */
-
-struct annoAssembly *getAnnoAssembly(char *db);
-/* Make annoAssembly for db. */
-
-struct annoStreamer *streamerFromTrack(struct annoAssembly *assembly, char *selTable,
-				       struct trackDb *tdb, char *chrom, int maxOutRows);
-/* Figure out the source and type of data and make an annoStreamer. */
-
-struct annoGrator *gratorFromBigDataFileOrUrl(char *fileOrUrl, struct annoAssembly *assembly,
-					      int maxOutRows, enum annoGratorOverlap overlapRule);
-/* Determine what kind of big data file/url we have, make an annoStreamer & in annoGrator. */
-
-struct annoGrator *gratorFromTrackDb(struct annoAssembly *assembly, char *selTable,
-				     struct trackDb *tdb, char *chrom, int maxOutRows,
-				     struct asObject *primaryAsObj,
-				     enum annoGratorOverlap overlapRule);
-/* Figure out the source and type of data, make an annoStreamer & wrap in annoGrator.
- * If not NULL, primaryAsObj is used to determine whether we can make an annoGratorGpVar. */
 
 #endif//ndef LIBIFYME_H
