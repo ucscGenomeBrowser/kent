@@ -676,6 +676,19 @@ struct dbDb *hGetIndexedDatabasesForClade(char *db);
 /* Get list of active databases in db's clade.
  * Dispose of this with dbDbFreeList. */
 
+struct slPair *hGetCladeOptions();
+/* Return a list of slPairs, each containing clade menu value (hgcentral.clade.name, e.g. 'mammal')
+ * and clade menu label (hgcentral.clade.label, e.g. 'Mammal'),
+ * useful for constructing a clade menu. */
+
+struct slPair *hGetGenomeOptionsForClade(char *clade);
+/* Return a list of slPairs, each containing genome menu value and menu label,
+ * useful for constructing a genome menu for the given clade. */
+
+struct slPair *hGetDbOptionsForGenome(char *genome);
+/* Return a list of slPairs, each containing db menu value and menu label,
+ * useful for constructing an assembly menu for the given genome. */
+
 struct slName *hLiftOverFromDbs(void);
 /* Return a list of names of the DBs in the
  * fromDb column of the liftOverChain.*/

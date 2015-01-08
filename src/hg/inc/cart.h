@@ -347,6 +347,13 @@ void cartEmptyShell(void (*doMiddle)(struct cart *cart), char *cookieName,
  * oldVars - those in cart that are overlayed by cgi-vars are
  * put in optional hash oldVars. */
 
+void cartEmptyShellNoContent(void (*doMiddle)(struct cart *cart), char *cookieName,
+                             char **exclude, struct hash *oldVars);
+/* Get cart and cookies and set up error handling.
+ * The doMiddle function must write the Content-Type header line.
+ * oldVars - those in cart that are overlayed by cgi-vars are
+ * put in optional hash oldVars. */
+
 void cartHtmlStart(char *title);
 /* Write HTML header and put in normal error handler. Needed with cartEmptyShell,
  * but not cartHtmlShell. */

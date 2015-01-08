@@ -166,11 +166,17 @@ lmCleanup(&(self->intervalQueryLm));
 annoStreamerFree(pVSelf);
 }
 
+struct asObject *annoStreamBigWigAsObject()
+/* Return an asObj that describes annoRow contents for wiggle (just float value). */
+{
+return asParseText(annoRowBigWigAsText);
+}
+
 struct annoStreamer *annoStreamBigWigNew(char *fileOrUrl, struct annoAssembly *aa)
 /* Create an annoStreamer (subclass) object from a file or URL. */
 {
 struct bbiFile *bbi = bigWigFileOpen(fileOrUrl);
-struct asObject *asObj = asParseText(annoRowBigWigAsText);
+struct asObject *asObj = annoStreamBigWigAsObject();
 struct annoStreamBigWig *self = NULL;
 AllocVar(self);
 struct annoStreamer *streamer = &(self->streamer);

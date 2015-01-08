@@ -59,7 +59,7 @@
 <!-- CONTEXT_SPECIFIC_HELP -->
 <li><a href="../FAQ/">FAQs</a></li>
 <li><a href="../goldenPath/help/hgTracksHelp.html">Browser Documentation</a></li>
-<li><a href="../training.html">Training</a></li>
+<li><a href="../training/index.html">Training</a></li>
 <li><a href="../contacts.html">Mailing Lists</a></li>
 <li class="last"><a href="http://genomewiki.ucsc.edu/" target="_blank">GenomeWiki</a></li>
 </ul>

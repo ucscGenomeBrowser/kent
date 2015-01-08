@@ -181,6 +181,9 @@ struct customTrack *customTrackAddToList(struct customTrack *ctList,
 void customTrackHandleLift(char *db, struct customTrack *ctList);
 /* lift any tracks with contig coords */
 
+boolean customTracksExistDb(struct cart *cart, char *db, char **retCtFileName);
+/* determine if there are any custom tracks for db.  Cleanup from expired tracks */
+
 boolean customTracksExist(struct cart *cart, char **retCtFileName);
 /* determine if there are any custom tracks.  Cleanup from expired tracks */
 
