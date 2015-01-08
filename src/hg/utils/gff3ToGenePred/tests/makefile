@@ -8,7 +8,7 @@ cmdShouldFail = echo "Error: command should have failed" >&2; false
 all::
 
 test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest discontinuousTest multCdsOutOfExonTest \
-	noIdTest errCases1Test bogusQuotesTest noExonsTest geneTranscriptTest
+	noIdTest errCases1Test bogusQuotesTest noExonsTest geneTranscriptTest transcriptCdsParentTest
 
 geneMRnaTest: mkout
 	${gff3ToGenePred} input/geneMRna.gff3 output/$@.gp
@@ -55,6 +55,10 @@ geneTranscriptTest: mkout
 	${gff3ToGenePred} input/geneTranscript.gff3 output/$@.gp
 	diff expected/$@.gp output/$@.gp
 
+# it also appears that gene->transcript->exon->cds is valid
+transcriptCdsParentTest: mkout
+	${gff3ToGenePred} input/transcriptCdsParent.gff3 output/$@.gp
+	diff expected/$@.gp output/$@.gp
 
 mkout:
 	@mkdir -p output

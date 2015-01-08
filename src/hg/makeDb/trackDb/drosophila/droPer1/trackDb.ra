@@ -10,4 +10,8 @@ track blastDm2FB override
 shortLabel D. mel. Proteins 
 longLabel D. melanogaster Proteins
 
+track chainDm3 override
+release alpha
 
+track netDm3 override
+release alpha

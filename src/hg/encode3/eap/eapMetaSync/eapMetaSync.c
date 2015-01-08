@@ -125,7 +125,7 @@ struct jsonWrite *jsonForSoftware(struct eapSoftware *sw)
  */
 {
 struct jsonWrite *jw = jsonWriteNew(0);
-jsonWriteObjectStart(jw);
+jsonWriteObjectStart(jw, NULL);
 jsonWriteString(jw, "name", sw->name);
 jsonWriteString(jw, "title", sw->name);
 jsonWriteString(jw, "url", sw->url);
@@ -166,7 +166,7 @@ if (sw == NULL || isEmpty(sw->metaUuid))
     }
 uglyf("sw id %u, softare %s, metaUuid %s\n",  sw->id, sw->name, sw->metaUuid);
 struct jsonWrite *jw = jsonWriteNew(0);
-jsonWriteObjectStart(jw);
+jsonWriteObjectStart(jw, NULL);
 jsonWriteString(jw, "software", sw->metaUuid);
 jsonWriteString(jw, "version", ver->version);
 jsonWriteString(jw, "dcc_md5", ver->md5);
@@ -221,7 +221,7 @@ struct jsonWrite *jsonForStep(struct sqlConnection *conn, struct eapStep *step)
  * for an example. */
 {
 struct jsonWrite *jw = jsonWriteNew();
-jsonWriteObjectStart(jw);
+jsonWriteObjectStart(jw, NULL);
 
 /* Write name and description. */
 jsonWriteString(jw, "name", step->name);
@@ -266,7 +266,7 @@ jsonWriteListStart(jw, "inputs");
 int i;
 for (i=0; i<step->inCount; ++i)
     {
-    jsonWriteObjectStart(jw);
+    jsonWriteObjectStart(jw, NULL);
     jsonWriteString(jw, "format", step->inputFormats[i]);
     jsonWriteString(jw, "name", step->inputTypes[i]);
     jsonWriteString(jw, "description", step->inputDescriptions[i]);
@@ -278,7 +278,7 @@ jsonWriteListEnd(jw);
 jsonWriteListStart(jw, "outputs");
 for (i=0; i<step->outCount; ++i)
     {
-    jsonWriteObjectStart(jw);
+    jsonWriteObjectStart(jw, NULL);
     jsonWriteString(jw, "format", step->outputFormats[i]);
     jsonWriteString(jw, "name", step->outputTypes[i]);
     jsonWriteString(jw, "description", step->outputDescriptions[i]);

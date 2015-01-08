@@ -2280,7 +2280,6 @@ release alpha,beta,public
 type bigWig 1 141
 
 track peptideAtlasSuper
-release alpha
 html peptideAtlas
 superTrack on
 group expression
@@ -2290,7 +2289,6 @@ longLabel Peptide sequences identified by tandem MS from PeptideAtlas
     track peptideAtlas
     table peptideAtlas2014
     parent peptideAtlasSuper
-    release alpha
     shortLabel PeptideAtlas
     html peptideAtlas
     longLabel Peptide sequences identified from MS spectra of 971 samples by PeptideAtlas
