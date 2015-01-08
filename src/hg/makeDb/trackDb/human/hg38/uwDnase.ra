@@ -63,7 +63,7 @@ priority 100.3
 	track uwEnc2DnaseHotWgEncodeEH001187
 	parent uwEnc2DnaseHot off
 	shortLabel LNCaP Ht
-	longLabel LNCaP prostate adenocarcinoma cell lline DNAseI HS HotSpots from UW/ENCODE2
+	longLabel LNCaP prostate adenocarcinoma cell line DNAseI HS HotSpots from UW/ENCODE2
 	subGroups view=Hot cellType=LNCaP treatment=n_a tissue=prostate cancer=cancer
 	type bigBed 6 +
 	color 255,102,85
@@ -87,7 +87,7 @@ priority 100.3
 	track uwEnc2DnaseHotWgEncodeEH000500
 	parent uwEnc2DnaseHot off
 	shortLabel PANC-1 Ht
-	longLabel PANC-1 pancreatic ccarcinoma cell line DNAseI HS HotSpots from UW/ENCODE2
+	longLabel PANC-1 pancreatic carcinoma cell line DNAseI HS HotSpots from UW/ENCODE2
 	subGroups view=Hot cellType=PANC-1 treatment=n_a tissue=pancreas cancer=cancer
 	type bigBed 6 +
 	color 255,141,85
@@ -834,7 +834,7 @@ priority 100.3
 	track uwEnc2DnasePeaksWgEncodeEH001187
 	parent uwEnc2DnasePeaks off
 	shortLabel LNCaP Pk
-	longLabel LNCaP prostate adenocarcinoma cell lline DNAseI HS Peaks from UW/ENCODE2
+	longLabel LNCaP prostate adenocarcinoma cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=LNCaP treatment=n_a tissue=prostate cancer=cancer
 	type bigBed 6 +
 	color 255,102,85
@@ -858,7 +858,7 @@ priority 100.3
 	track uwEnc2DnasePeaksWgEncodeEH000500
 	parent uwEnc2DnasePeaks off
 	shortLabel PANC-1 Pk
-	longLabel PANC-1 pancreatic ccarcinoma cell line DNAseI HS Peaks from UW/ENCODE2
+	longLabel PANC-1 pancreatic carcinoma cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=PANC-1 treatment=n_a tissue=pancreas cancer=cancer
 	type bigBed 6 +
 	color 255,141,85
@@ -1607,7 +1607,7 @@ priority 100.3
 	track uwEnc2DnaseSignalWgEncodeEH001187
 	parent uwEnc2DnaseSignal off
 	shortLabel LNCaP Sg
-	longLabel LNCaP prostate adenocarcinoma cell lline DNAseI HS Signal from UW/ENCODE2
+	longLabel LNCaP prostate adenocarcinoma cell line DNAseI HS Signal from UW/ENCODE2
 	subGroups view=Signal cellType=LNCaP treatment=n_a tissue=prostate cancer=cancer
 	type bigWig 0 37372.7
 	color 255,102,85
@@ -1631,7 +1631,7 @@ priority 100.3
 	track uwEnc2DnaseSignalWgEncodeEH000500
 	parent uwEnc2DnaseSignal off
 	shortLabel PANC-1 Sg
-	longLabel PANC-1 pancreatic ccarcinoma cell line DNAseI HS Signal from UW/ENCODE2
+	longLabel PANC-1 pancreatic carcinoma cell line DNAseI HS Signal from UW/ENCODE2
 	subGroups view=Signal cellType=PANC-1 treatment=n_a tissue=pancreas cancer=cancer
 	type bigWig 0 12279.3
 	color 255,141,85
@@ -2391,7 +2391,7 @@ sortOrder cellType=+ tissue=+ cancer=+ treatment=+
 	track uwEnc2DnaseWigWgEncodeEH001187
 	parent uwEnc2DnaseWig off
 	shortLabel LNCaP Sg
-	longLabel LNCaP prostate adenocarcinoma cell lline DNAseI HS Signal from UW/ENCODE2
+	longLabel LNCaP prostate adenocarcinoma cell line DNAseI HS Signal from UW/ENCODE2
 	subGroups cellType=LNCaP treatment=n_a tissue=prostate cancer=cancer
 	type bigWig 0 37372.7
 	color 255,102,85
@@ -2418,7 +2418,7 @@ sortOrder cellType=+ tissue=+ cancer=+ treatment=+
 	track uwEnc2DnaseWigWgEncodeEH000500
 	parent uwEnc2DnaseWig off
 	shortLabel PANC-1 Sg
-	longLabel PANC-1 pancreatic ccarcinoma cell line DNAseI HS Signal from UW/ENCODE2
+	longLabel PANC-1 pancreatic carcinoma cell line DNAseI HS Signal from UW/ENCODE2
 	subGroups cellType=PANC-1 treatment=n_a tissue=pancreas cancer=cancer
 	type bigWig 0 12279.3
 	color 255,141,85
