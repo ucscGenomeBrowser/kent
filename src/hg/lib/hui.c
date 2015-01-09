@@ -4013,12 +4013,6 @@ if (dividers)
 hierarchy_t *hierarchy = hierarchySettingGet(parentTdb);
 
 membersForAll_t* membersForAll = membersForAllSubGroupsGet(parentTdb,NULL);
-int dimCount=0,di;
-for (di=0;di<membersForAll->dimMax;di++)
-    {
-    if (membersForAll->members[di])
-        dimCount++;
-    }
 sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
 boolean preSorted = FALSE;
 boolean useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
@@ -4300,6 +4294,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     //  (e.g. class='subCB GM12878 CTCF Peak')
     dyStringClear(dyHtml);
     dyStringAppend(dyHtml, "subCB"); // always first
+    int di;
     if (membersForAll->dimensions)
         {
         for (di=dimX;di<membersForAll->dimMax;di++)
