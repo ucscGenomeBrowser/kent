@@ -106,7 +106,6 @@ A:active IMG {  border-width: 0px; padding: 0px; margin: 0px;}
     background-color: #fcecc0;
 }
 
-
 /* A subheading bar is the light blue bar that appears at the top of web.c section boxes */
 .subheadingBar {font-weight: bold; font-size:1.1em; color:#000000; background-color:#D9E4F8;
                 width:100%; text-align:left; vertical-align:bottom;
@@ -573,4 +572,58 @@ div#haplotypes .textInfo  { color:#006600; } /* dark green */
 div#haplotypes .textAlert { color:#DC143C; } /* dark red */
 
 .hidden { display:none; } /* allows toggling visibility by addClass/removeClass */
+
+/* Added for Angie's React UI stuff */
+.sectionBorder {
+    border: 1px solid gray;
+    margin-top: 5px;
+}
+
+.sectionHeader {
+    background-color: #D9E4F8;
+    font-weight: bold;
+    font-size: larger;
+    color: #000000;
+    text-align: left;
+    vertical-align: bottom;
+    white-space: nowrap;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 3px;
+}
+
+.sectionContents {
+    margin: 5px;
+}
+
+.bigBoldText {
+    margin-top: 5px;
+    font-weight: bold;
+    font-size: larger;
+    color: #000000;
+    text-align: left;
+    vertical-align: bottom;
+    white-space: nowrap;
+}
+
+div.topLabelSelect {
+  display: inline-block;
+  padding-right: 5px;
+}
+
+.sortHandle:hover {
+  cursor: ns-resize;
+}
+
+.floatLeft {
+  float: left;
+}
+
+.floatRight {
+  float: right;
+}
+
+.clear {
+  clear: both;
+}
 
