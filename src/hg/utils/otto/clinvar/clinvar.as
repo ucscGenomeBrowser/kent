@@ -17,7 +17,7 @@ table clinVarBed
     string type;         "Type of Variant"
     string geneId;         "NCBI Entrez Gene ID"
     string geneSym;         "NCBI Entrez Gene Symbol"
-    string clinSign;         "Clinical significance:"
+    string clinSign;         "Clinical significance"
     string snpId;         "dbSNP ID"
     string nsvId;         "dbVar ID"
     string rcvAcc;         "ClinVar ID"

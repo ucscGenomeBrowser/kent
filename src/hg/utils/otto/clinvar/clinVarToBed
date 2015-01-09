@@ -89,7 +89,7 @@ if options.auto:
     today = date.today().isoformat()
     outSuffix = "%s." % today
     url = "http://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summary.txt.gz"
-    outFname = "variant_summary.%s.txt.gz" % today
+    outFname = "archive/variant_summary.%s.txt.gz" % today
     logging.info("Downlading %s to %s" % (url, outFname))
     open(outFname, "w").write(urllib2.urlopen(url).read())
     filename = outFname
@@ -119,10 +119,10 @@ line1 = ifh.readline()
 assert(line1 == clinvarExpectHeaders) # test if clinvar has changed their header line again
 
 # open out files
-hg19Bed = open("clinvarMain.hg19.%sbed" % outSuffix, "w")
-hg38Bed = open("clinvarMain.hg38.%sbed" % outSuffix, "w")
-hg19BedCnv = open("clinvarCnv.hg19.%sbed" % outSuffix, "w")
-hg38BedCnv = open("clinvarCnv.hg38.%sbed" % outSuffix, "w")
+hg19Bed = open("archive/clinvarMain.hg19.%sbed" % outSuffix, "w")
+hg38Bed = open("archive/clinvarMain.hg38.%sbed" % outSuffix, "w")
+hg19BedCnv = open("archive/clinvarCnv.hg19.%sbed" % outSuffix, "w")
+hg38BedCnv = open("archive/clinvarCnv.hg38.%sbed" % outSuffix, "w")
 
 longCount = 0
 noAssCount = 0
@@ -150,6 +150,10 @@ for line in ifh:
         shortName = shortName[:15]+"..."
         longCount+=1
 
+    if start=="" or end=="":
+        print "undefined start or end coordinate. record %s"% irvcAcc
+        continue
+        
     # sometimes they seem to inverse their coordinates
     if int(start)>int(end):
         start, end = end, start
@@ -198,7 +202,6 @@ for line in ifh:
              newRow.append(x)
     row = newRow
 
-
     if assembly=="GRCh37":
         if chrom=="chrM":
             continue # we don't have the same MT chrom as NCBI, skip these
@@ -246,7 +249,7 @@ if options.maxDiff:
             raise Exception("line count change negative: %s %d, %s %d" % \
                 (previousFname, previousCount, fname, todayCount))
         if percDiff > options.maxDiff:
-            raise Exception("line count increased too much: yesterday %d , today %d " % (previousCount, todayCount))
+            raise Exception("line count increased too much: yesterday %d , today %d. Check if the input file is OK. If yes, remove the --maxDiff option from the clinVarToBed, call it only with the --auto option." % (previousCount, todayCount))
         # see RM 14350 do more than just linecount
         # see http://stackoverflow.com/questions/1566461/how-to-count-differences-between-two-files-on-linux
         cmd = "diff %s %s --speed-large-files | grep '^[\>\<]'  | wc -l" % (fname, previousFname)
