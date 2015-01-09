@@ -69,6 +69,7 @@ UTILS_APPLIST = \
 	paraFetch \
 	paraSync \
 	pslLiftSubrangeBlat \
+	pslPosTarget \
 	pslScore \
 	pslToPslx \
 	randomLines \

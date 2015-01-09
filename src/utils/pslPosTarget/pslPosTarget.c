@@ -12,7 +12,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "pslPosTarget - flip psl strands so target is positive\n"
+  "pslPosTarget - flip psl strands so target is positive and implicit\n"
   "usage:\n"
   "   pslPosTarget inPsl outPsl\n"
   );
@@ -22,36 +22,18 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-char flipStrand(char strand)
-/* Turn + to - and vice versa. */
-{
-return (strand == '-' ? '+' : '-');
-}
-
 void pslPosTarget(char *pslFileName, char *outFileName)
 /* pslPosTarget - flip psl strands so target is positive. */
 {
 struct lineFile *pslLf = pslFileOpen(pslFileName);
 FILE *out = mustOpen(outFileName, "w");
 struct psl *psl;
-int ii;
 
 while ((psl = pslNext(pslLf)) != NULL)
     {
     if (psl->strand[1] == '-')
-	{
-	    psl->strand[0] = flipStrand(psl->strand[0]);
-	    psl->strand[1] = '+';
-	    reverseInts(psl->blockSizes, psl->blockCount);
-	    reverseInts(psl->qStarts, psl->blockCount);
-	    reverseInts(psl->tStarts, psl->blockCount);
-	    for(ii=0; ii < psl->blockCount; ii++)
-		psl->qStarts[ii] = psl->qSize - 
-		    (psl->qStarts[ii] + psl->blockSizes[ii]);
-	    for(ii=0; ii < psl->blockCount; ii++)
-		psl->tStarts[ii] = psl->tSize - 
-		    (psl->tStarts[ii] + psl->blockSizes[ii]);
-	}
+        pslRc(psl);
+    psl->strand[1] = '\0';
     pslTabOut(psl, out);
     }
 lineFileClose(&pslLf);
