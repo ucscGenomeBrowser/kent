@@ -14,8 +14,8 @@ input file is ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/variant_summa
 """) 
 
 parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages") 
-parser.add_option("-a", "--auto", dest="auto", action="store_true", help="download the file from NCBIi into the current dir and it bigBeds") 
-parser.add_option("", "--maxDiff", dest="maxDiff", action="store", type="float", help="look for yesterday's download file in current dir and accept this much, expressed as a ratio. Can only be used with --auto.")
+parser.add_option("-a", "--auto", dest="auto", action="store_true", help="download the file from NCBI into the current dir and convert to bigBed")
+parser.add_option("", "--maxDiff", dest="maxDiff", action="store", type="float", help="look for last month's download file in current dir and accept this much difference, expressed as a ratio. Can only be used with --auto.")
 (options, args) = parser.parse_args()
 
 if options.debug:
@@ -63,6 +63,20 @@ def shortenName(name):
                 ins = ""
             name = dup+dele+ins+pos
     return name
+
+def lastMonth(d,x=1):
+    """ returns same day as this month, but last month, e.g. for 2013-01-01 
+    return 2012-12-01 
+    """
+
+    days_of_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    newmonth = ((( d.month - 1) - x ) % 12 ) + 1
+    newyear  = d.year + ((( d.month - 1) - x ) // 12 ) 
+    if d.day > days_of_month[newmonth-1]:
+      newday = days_of_month[newmonth-1]
+    else:
+      newday = d.day
+    return datetime( newyear, newmonth, newday)
 
 # ----------- MAIN --------------
 if args==[] and not options.auto:
@@ -175,6 +189,16 @@ for line in ifh:
         snpAcc, dbVarAcc, irvcAcc, inGtr, phenotypeIds, origin, assembly, cytogenetic,
         reviewStatus, hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds]
 
+    # replace clinvar's placeholders with real empty fields
+    newRow = []
+    for x in row:
+        if x in ["-1", "-"]:
+            newRow.append("")
+        else:
+             newRow.append(x)
+    row = newRow
+
+
     if assembly=="GRCh37":
         if chrom=="chrM":
             continue # we don't have the same MT chrom as NCBI, skip these
@@ -208,29 +232,30 @@ for fname in fnames:
     logging.debug(cmd)
     assert(os.system(cmd)==0)
 
-# check new bed files against yesterday's bed files
+# check new bed files against last months's bed files
 if options.maxDiff:
     for fname in fnames:
-        yesterday = datetime.now() - timedelta(days=1)
-        yesterday = yesterday.date().isoformat()
-        yesterdayFname = fname.replace(today, yesterday)
-        todayLines = sum(1 for line in open(fname))
-        yesterdayLines = sum(1 for line in open(yesterdayFname))
-        percDiff = (todayLines-yesterdayLines)/float(todayLines)
+        # go back one month from current date
+        previousDate = lastMonth(date.today())
+        previousDate = previousDate.date().isoformat()
+        previousFname = fname.replace(today, previousDate)
+        todayCount = sum(1 for line in open(fname))
+        previousCount = sum(1 for line in open(previousFname))
+        percDiff = (todayCount-previousCount)/float(todayCount)
         if percDiff < 0:
             raise Exception("line count change negative: %s %d, %s %d" % \
-                (yesterdayFname, yesterdayLines, fname, todayLines))
+                (previousFname, previousCount, fname, todayCount))
         if percDiff > options.maxDiff:
-            raise Exception("line count increased too much: yesterday %d , today %d " % (yesterdayLines, todayLines))
+            raise Exception("line count increased too much: yesterday %d , today %d " % (previousCount, todayCount))
         # see RM 14350 do more than just linecount
         # see http://stackoverflow.com/questions/1566461/how-to-count-differences-between-two-files-on-linux
-        cmd = "diff %s %s --speed-large-files | grep '^[\>\<]'  | wc -l" % (fname, yesterdayFname)
+        cmd = "diff %s %s --speed-large-files | grep '^[\>\<]'  | wc -l" % (fname, previousFname)
         diffCount = int(subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT))
         logging.info("%s: %d lines changed" % (fname, diffCount))
-        percDiff = float(diffCount)/todayLines
+        percDiff = float(diffCount)/todayCount
         if percDiff > options.maxDiff:
             logging.info(cmd)
-            raise Exception("too much diff: %d out of %d lines" % (diffCount, todayLines))
+            raise Exception("too much diff: %d out of %d lines" % (diffCount, todayCount))
 
 # convert to bigBed without the date in the fname, like clinvarMain.hg19.bb
 for fname in fnames:
