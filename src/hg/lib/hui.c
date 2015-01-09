@@ -4437,6 +4437,14 @@ dyStringFree(&dyHtml)
 membersForAllSubGroupsFree(parentTdb,&membersForAll);
 }
 
+static boolean membersHaveMatrix(membersForAll_t *membersForAll)
+/* Check for matrix */
+{
+if (membersForAll->members[dimX] == NULL && membersForAll->members[dimY] == NULL)
+    return false;
+return true;
+}
+
 static void printSubtrackTable(struct trackDb *parentTdb, struct slRef *subtrackRefList,
                                 struct subtrackConfigSettings *settings, struct cart *cart)
 /* Print table of subtracks */
@@ -4525,11 +4533,15 @@ if (sortOrder != NULL)
     printf("all</B>");
     if (slCount(subtrackRefList) > 5)
         printf("&nbsp;&nbsp;&nbsp;&nbsp;(<span class='subCBcount'></span>)");
-    makeTopLink(parentTdb);
+    if (membersHaveMatrix(membersForAll))
+        makeTopLink(parentTdb);
     printf("</td></tr></table>");
     }
 else
-    makeTopLink(parentTdb);
+    {
+    if (membersHaveMatrix(membersForAll))
+        makeTopLink(parentTdb);
+    }
 
 // Get info for subtrack list
 struct subtrackConfigSettings *subtrackConfig = NULL;
@@ -6751,7 +6763,7 @@ return cloneString(label);
 }
 
 #ifdef BUTTONS_BY_CSS
-#define BUTTON_MAT "<span class='pmButton' onclick=\"matSetMatrixCheckBoxes(%s%s%s%s)\">%c</span>"
+#define BUTTON_MAT "<span class='pmButton' onclick=\"matSeteatrixCheckBoxes(%s%s%s%s)\">%c</span>"
 #else///ifndef BUTTONS_BY_CSS
 #define PM_BUTTON_UC "<IMG height=18 width=18 onclick=\"return " \
                      "(matSetMatrixCheckBoxes(%s%s%s%s%s%s) == false);\" id='btn_%s' " \
