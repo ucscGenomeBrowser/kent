@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 include ../install.mk
 
-SUBDIRS= lib hgChooseDb
+SUBDIRS= lib hgAi hgChooseDb
 
 include ../subdirs.mk
