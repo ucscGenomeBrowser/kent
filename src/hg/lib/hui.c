@@ -3102,6 +3102,8 @@ if (value && *value)
 
 #define SORT_ON_TRACK_NAME "trackName"
 #define SORT_ON_RESTRICTED "dateUnrestricted"
+#define SUBTRACK_COLOR_PATCH "subtrackColor"
+#define SUBTRACK_COLOR_HEADER "Color"
 
 sortOrder_t *sortOrderGet(struct cart *cart,struct trackDb *parentTdb)
 // Parses any list sort order instructions for parent of subtracks (from cart or trackDb)
@@ -3113,6 +3115,13 @@ int ix;
 char *setting = trackDbSetting(parentTdb, "sortOrder");
 if (setting == NULL) // Must be in trackDb or not a sortable table
     return NULL;
+if (trackDbSetting(parentTdb, "showSubtrackColorOnUi"))
+    {
+    // insert color sort indicator as first column
+    struct dyString *ds = newDyString(0);
+    dyStringPrintf(ds, "%s=+ %s", SUBTRACK_COLOR_PATCH, setting);
+    setting = dyStringCannibalize(&ds);
+    }
 
 sortOrder_t *sortOrder = needMem(sizeof(sortOrder_t));
 sortOrder->htmlId = needMem(strlen(parentTdb->track)+15);
@@ -3126,6 +3135,7 @@ if (cart != NULL && strlen(cartSetting) > strlen(setting))
 else
     sortOrder->sortOrder = cloneString(setting);      // old cart value is abandoned!
 
+/* parse setting into sortOrder */
 sortOrder->setting = cloneString(setting);
 sortOrder->count   = chopByWhite(sortOrder->setting,NULL,0);  // Get size
 if (cart && !stringIn(SORT_ON_TRACK_NAME,setting))
@@ -3195,7 +3205,13 @@ for (ix = 0; ix<sortOrder->count; ix++)
         sortOrder->order[ix] = ix+1;
         }
     if (ix < foundColumns)
-        subgroupFindTitle(parentTdb,sortOrder->column[ix],&(sortOrder->title[ix]));
+        {
+        // Subtrack color column requires special handling
+        if (ix == 0 && sameString(SUBTRACK_COLOR_PATCH, sortOrder->column[ix]))
+            sortOrder->title[ix] = SUBTRACK_COLOR_HEADER;
+        else
+            subgroupFindTitle(parentTdb,sortOrder->column[ix],&(sortOrder->title[ix]));
+        }
     }
 return sortOrder;  // NOTE cloneString:words[0]==*sortOrder->column[0]
 }                  // and will be freed when sortOrder is freed
@@ -4021,8 +4037,6 @@ if (sortOrder != NULL)
     colspan = sortOrder->count+2;
 else if (!tdbIsMultiTrack(parentTdb)) // An extra column for subVis/wrench so dragAndDrop works
     colspan++;
-if (settings->colorPatch)
-    colspan += 1;
 int columnCount = 0;
 if (sortOrder != NULL)
     printf("<TR id=\"subtracksHeader\" class='sortable%s'>\n",
