@@ -4248,7 +4248,7 @@ track gwipsvizRiboseq
 type bigWig
 shortLabel GWIPS-viz Riboseq
 longLabel Ribosome Profiling from GWIPS-viz
-group map
+group expression
 visibility hide
 autoScale on
 html gwipsvizRiboseq
