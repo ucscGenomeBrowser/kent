@@ -4354,18 +4354,11 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         }
     printf("</TD>");
 
-    // A color patch which helps distinguish subtracks in some types of composites
-    if (settings->colorPatch)
-        {
-        printf("<TD BGCOLOR='#%02X%02X%02X'>&nbsp;&nbsp;&nbsp;&nbsp;</TD>",
-               subtrack->colorR, subtrack->colorG, subtrack->colorB);
-        }
-
     // If sortable, then there must be a column per sortable dimension
     if (sortOrder != NULL)
         {
         int sIx=0;
-        for (sIx=0;sIx<sortOrder->count;sIx++)
+        for (sIx=0; sIx <sortOrder->count; sIx++)
             {
             ix = stringArrayIx(sortOrder->column[sIx], membership->subgroups, membership->count);
                                 // TODO: Sort needs to expand from subGroups to labels as well
@@ -4383,6 +4376,17 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                 printf("%s",titleRoot);
                 puts("</TD>");
                 freeMem(titleRoot);
+                }
+            else if (settings->colorPatch && sIx == 0)
+                {
+                struct rgbColor rgbColor;
+                rgbColor.r = subtrack->colorR;
+                rgbColor.g = subtrack->colorG;
+                rgbColor.b = subtrack->colorB;
+                struct hslColor hslColor = mgRgbToHsl(rgbColor);
+                int hue = hslColor.h * 10;
+                printf("<TD id='%s_%s' abbr='%04d' bgcolor='#%02X%02X%02X'>&nbsp;&nbsp;&nbsp;&nbsp;</TD>",
+                    subtrack->track, sortOrder->column[sIx], hue, rgbColor.r, rgbColor.g, rgbColor.b);
                 }
             }
         }
