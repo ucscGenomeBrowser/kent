@@ -1,0 +1,169 @@
+#############################################################################
+# AFFY U95 (DONE 2015-01-09 braney)
+    # Align probes
+    ssh ku
+    cd /hive/data/genomes/hg38/bed
+    mkdir -p affyProbes/affyU95/run
+    cd affyProbes/affyU95/run
+    mkdir psl
+    ls -1 /scratch/data/hg38/nib/*.nib > genome.lst
+    ls -1 /hive/data/outside/affyProbes/HG-U95Av2_all.fa > mrna.lst
+
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/blat -fine -ooc=/scratch/data/hg38/hg38.11.ooc  $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    gensub2 genome.lst mrna.lst gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+    para time
+# Completed: 455 of 455 jobs
+# CPU time in finished jobs:       2064s      34.40m     0.57h    0.02d  0.000
+# IO & Wait Time:                  1352s      22.53m     0.38h    0.02d  0.000
+# Average job time:                   8s       0.13m     0.00h    0.00d
+# Longest finished job:             100s       1.67m     0.03h    0.00d
+# Submission to last job:           429s       7.15m     0.12h    0.00d
+
+    # Do sort, best in genome filter.
+    # to create affyU95.psl.
+    pslSort dirs raw.psl tmp psl
+    pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl ../affyU95.psl /dev/null
+    # Processed 51099 alignments
+    rm -r raw.psl psl
+
+    # Load probes and alignments into database.
+    ssh hgwdev
+    cd /hive/data/genomes/hg38/bed/affyProbes/affyU95
+
+    # remove prefix
+    perl -pi.bak -e "s/U95Av2://" affyU95.psl
+    hgLoadPsl hg38 affyU95.psl
+    hgLoadSeq -abbr=U95Av2: hg38 /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
+	 # 12386 sequences  
+
+    # Added knownToU95 table
+    hgMapToGene hg38 affyU95 knownGene knownToU95
+
+#############################################################################
+# AFFY U133AB (DONE 2015-01-09 braney)
+    # Align probes
+    ssh ku
+    cd /cluster/data/hg38/bed
+    mkdir -p affyProbes/affyU133/run
+    cd affyProbes/affyU133/run
+    mkdir psl
+    ls -1 /scratch/data/hg38/nib/*.nib > genome.lst
+    ls -1 /hive/data/outside/affyProbes/HG-U133AB_all.fa > mrna.lst
+
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/blat -fine -ooc=/scratch/data/hg38/hg38.11.ooc  $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    gensub2 genome.lst mrna.lst gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+    para time
+#Completed: 455 of 455 jobs
+#CPU time in finished jobs:      14904s     248.40m     4.14h    0.17d  0.000
+#y
+#IO & Wait Time:                  1351s      22.52m     0.38h    0.02d  0.000
+#y
+#Average job time:                  36s       0.60m     0.01h    0.00d
+#Longest finished job:            1009s      16.82m     0.28h    0.01d
+#Submission to last job:          1029s      17.15m     0.29h    0.01d
+#
+
+
+    # Do sort, best in genome filter.
+    # to create affyU133.psl.
+    pslSort dirs raw.psl tmp psl
+    pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl ../affyU133.psl /dev/null
+# Processed 477800 alignments
+    rm -r raw.psl psl
+
+    # Load probes and alignments into database.
+    ssh hgwdev
+    cd /cluster/data/hg38/bed/affyProbes/affyU133
+    hgLoadPsl hg38 affyU133.psl
+    hgLoadSeq hg38 /gbdb/hgFixed/affyProbes/HG-U133AB_all.fa
+#44792 sequences
+    #
+    # Added knownToU133 table
+    hgMapToGene hg38 affyU133 knownGene knownToU133
+    # trim unwanted chip-prefix to be backwards compatible with hg17 and hg18
+    hgsql hg38 -e 'update knownToU133 set value=substring(value,7)'
+
+    # remove the trailing ";" from the value field (redmine #1685)
+    hgsql hg38 -e 'update knownToU133 set value=trim(trailing ";" from value);'
+#
+##########################################################################
+# GNF ATLAS 2  p(DONE 2015-01-09 braney)
+    # Align probes from GNF1H chip.
+    ssh ku
+    cd /cluster/data/hg38/bed
+    mkdir -p geneAtlas2/run/psl
+    cd geneAtlas2/run
+    mkdir psl
+    ls -1 /scratch/data/hg38/nib/*.nib > genome.lst
+    ls -1 /hive/data/outside/gnf/human/atlas2/gnf1h.fa > mrna.lst
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/blat -fine -ooc=/scratch/data/hg38/hg38.11.ooc  $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    gensub2 genome.lst mrna.lst gsub jobList
+    para cREATE JOBLIST
+    para try
+    para check
+    para push
+    para time
+#Completed: 93 of 93 jobs
+#CPU time in finished jobs:       3299s      54.98m     0.92h    0.04d  0.000 y
+#IO & Wait Time:                   330s       5.50m     0.09h    0.00d  0.000 y
+#Average job time:                  39s       0.65m     0.01h    0.00d
+#Longest finished job:             370s       6.17m     0.10h    0.00d
+#Submission to last job:           477s       7.95m     0.13h    0.01d
+
+
+    # Do sort, best in genome filter
+    # to create gnf1h.psl.
+    pslSort dirs raw.psl tmp psl
+    pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl ../affyGnf1h.psl /dev/null
+# Processed 50668 alignments
+    rm -r raw.psl psl
+
+    # Load probes and alignments from GNF1H into database.
+    ssh hgwdev
+    cd /hive/data/genomes/hg38/bed/geneAtlas2
+    hgLoadPsl hg38 affyGnf1h.psl
+    hgLoadSeq hg38 /gbdb/hgFixed/affyProbes/gnf1h.fa
+# 11406 sequences
+
+    grep -v U133B ../affyProbes/affyU133/affyU133.psl \
+	| sed -e "s/exemplar://; s/consensus://; s/U133A://" \
+	| sed -e "s/;//" > affyU133A.psl
+
+
+    hgMapMicroarray gnfAtlas2.bed hgFixed.gnfHumanAtlas2MedianRatio \
+    	affyU133A.psl  affyGnf1h.psl
+
+    # Loaded 44696 rows of expression data from
+    # Mapped 33213,  multiply-mapped 5025, missed 50, unmapped 11483
+
+    hgLoadBed hg38 gnfAtlas2 gnfAtlas2.bed
+    # Read 38238 elements of size 15 from gnfAtlas2.bed
+
+    # Added knownToGnf1h table
+    hgMapToGene hg38 affyGnf1h knownGene knownToGnf1h
