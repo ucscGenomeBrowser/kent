@@ -3115,13 +3115,6 @@ int ix;
 char *setting = trackDbSetting(parentTdb, "sortOrder");
 if (setting == NULL) // Must be in trackDb or not a sortable table
     return NULL;
-if (trackDbSetting(parentTdb, "showSubtrackColorOnUi"))
-    {
-    // insert color sort indicator as first column
-    struct dyString *ds = newDyString(0);
-    dyStringPrintf(ds, "%s=+ %s", SUBTRACK_COLOR_PATCH, setting);
-    setting = dyStringCannibalize(&ds);
-    }
 
 sortOrder_t *sortOrder = needMem(sizeof(sortOrder_t));
 sortOrder->htmlId = needMem(strlen(parentTdb->track)+15);
@@ -3206,11 +3199,7 @@ for (ix = 0; ix<sortOrder->count; ix++)
         }
     if (ix < foundColumns)
         {
-        // Subtrack color column requires special handling
-        if (ix == 0 && sameString(SUBTRACK_COLOR_PATCH, sortOrder->column[ix]))
-            sortOrder->title[ix] = SUBTRACK_COLOR_HEADER;
-        else
-            subgroupFindTitle(parentTdb,sortOrder->column[ix],&(sortOrder->title[ix]));
+        subgroupFindTitle(parentTdb,sortOrder->column[ix],&(sortOrder->title[ix]));
         }
     }
 return sortOrder;  // NOTE cloneString:words[0]==*sortOrder->column[0]
@@ -4013,7 +4002,7 @@ struct subtrackConfigSettings
     sortOrder_t *sortOrder; /* from trackDb setting */
     boolean useDragAndDrop; /* from trackDb setting */
     boolean restrictions;   /* from metadata ? */
-    boolean colorPatch;     /* from trackDb setting */
+    //boolean colorPatch;     /* from trackDb setting */
     boolean displayAll;     /* from radiobutton */
     int bgColorIx;          /* from logic over other settings */
     int columnCount;        /* determined from trackDb settings */
@@ -4377,7 +4366,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                 puts("</TD>");
                 freeMem(titleRoot);
                 }
-            else if (settings->colorPatch && sIx == 0)
+            else if (sameString(sortOrder->column[sIx], SUBTRACK_COLOR_PATCH))
                 {
                 struct rgbColor rgbColor;
                 rgbColor.r = subtrack->colorR;
@@ -4577,7 +4566,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         break;
         }
     }
-subtrackConfig->colorPatch = trackDbSettingOn(parentTdb, "showSubtrackColorOnUi");
+//subtrackConfig->colorPatch = trackDbSettingOn(parentTdb, "showSubtrackColorOnUi");
 subtrackConfig->useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
 subtrackConfig->sortOrder = sortOrder;
 subtrackConfig->displayAll = displayAll;
