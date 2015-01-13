@@ -21,14 +21,17 @@ shortLabel UW DNase
 longLabel DNase I Hypersensitivity from UW/ENCODE2
 wgEncode on
 group regulation
+showSubtrackColorOnUi on
 subGroup1 view Views Hot=HotSpots Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line Monocytes_CD14_RO01746=Monocytes-CD14+_RO01746 NT2-D1=NT2-D1 LHCN-M2=LHCN-M2 HRCEpiC=HRCEpiC AoAF=AoAF Th2=Th2 Th1=Th1 HL-60=HL-60 HCFaa=HCFaa HMVEC-dLy-Ad=HMVEC-dLy-Ad HeLa-S3=HeLa-S3 Jurkat=Jurkat HAEpiC=HAEpiC HBVSMC=HBVSMC HFF-Myc=HFF-Myc GM06990=GM06990 HMVEC-LLy=HMVEC-LLy H7-hESC=H7-hESC HBMEC=HBMEC HMVEC-LBl=HMVEC-LBl MCF-7=MCF-7 HRPEpiC=HRPEpiC A549=A549 PANC-1=PANC-1 HPdLF=HPdLF T-47D=T-47D SK-N-SH_RA=SK-N-SH_RA HConF=HConF HVMF=HVMF NB4=NB4 HepG2=HepG2 GM12878=GM12878 GM12865=GM12865 PrEC=PrEC HSMM=HSMM NHDF-Ad=NHDF-Ad HRE=HRE HPF=HPF HMF=HMF HGF=HGF HFF=HFF HAc=HAc HCM=HCM HCF=HCF HPAF=HPAF HMVEC-dBl-Ad=HMVEC-dBl-Ad NHDF-neo=NHDF-neo K562=K562 RPMI-7951=RPMI-7951 HCPEpiC=HCPEpiC HMEC=HMEC HRGEC=HRGEC NHLF=NHLF NHEK=NHEK SKMC=SKMC NH-A=NH-A HMVEC-dNeo=HMVEC-dNeo RPTEC=RPTEC WI-38=WI-38 AG04449=AG04449 AG04450=AG04450 GM04504=GM04504 GM04503=GM04503 HUVEC=HUVEC AG10803=AG10803 HCT-116=HCT-116 bone_marrow_MSC=bone_marrow_MSC NHBE_RA=NHBE_RA HEEpiC=HEEpiC HMVEC-dAd=HMVEC-dAd WERI-Rb-1=WERI-Rb-1 AG09319=AG09319 AG09309=AG09309 SAEC=SAEC HA-h=HA-h BE2_C=BE2_C HNPCEpiC=HNPCEpiC SK-N-MC=SK-N-MC Caco-2=Caco-2 HMVEC-dBl-Neo=HMVEC-dBl-Neo LNCaP=LNCaP HMVEC-dLy-Neo=HMVEC-dLy-Neo HSMMtube=HSMMtube BJ=BJ CD20_RO01778=CD20+_RO01778 Th1_Wb54553204=Th1_Wb54553204 M059J=M059J HA-sp=HA-sp HIPEpiC=HIPEpiC
 subGroup3 treatment Treatment diffProtA_5d=diffProtA_5d diffProtA_14d=diffProtA_14d DIFF_4d=DIFF_4d n_a=n/a OHTAM_20nM_72hr=4OHTAM_20nM_72hr Estradiol_ctrl_0hr=Estradiol_ctrl_0hr Estradiol_100nM_1hr=Estradiol_100nM_1hr
 subGroup4 tissue Tissue kidney=kidney esophagus=esophagus cervix=cervix skin=skin lung=lung heart=heart colon=colon blood=blood prostate=prostate embryo=embryo pancreas=pancreas breast=breast bone_marrow=bone_marrow periodontum=periodontum muscle=muscle brain=brain blood_vessel=blood_vessel spinal_cord=spinal_cord placenta=placenta eye=eye liver=liver periodontium=periodontium testis=testis
 subGroup5 cancer Cancer cancer=cancer normal=normal unknown=unknown
+subGroup6 subtrackColor Similarity
 dimensions dimA=tissue dimB=cancer
 filterComposite dimA
-sortOrder view=+ cellType=+ tissue=+ cancer=+ treatment=+
+sortOrder view=+ cellType=+ subtrackColor=+ tissue=+
+dragAndDrop subTracks
 noInherit on
 type bed 3 +
 html uwDnase
@@ -46,7 +49,7 @@ priority 100.3
     minGrayLevel 2
 
 	track uwEnc2DnaseHotWgEncodeEH000484
-	parent uwEnc2DnaseHot off
+	parent uwEnc2DnaseHot on
 	shortLabel K562 Ht
 	longLabel K562 lymphoblast chronic myeloid leukemia (CML) cell line DNAseI HS HotSpots from UW/ENCODE2
 	subGroups view=Hot cellType=K562 treatment=n_a tissue=bone_marrow cancer=cancer
@@ -94,7 +97,7 @@ priority 100.3
 	color 255,141,85
 
 	track uwEnc2DnaseHotWgEncodeEH001162
-	parent uwEnc2DnaseHot off
+	parent uwEnc2DnaseHot on
 	shortLabel HCT-116 Ht
 	longLabel HCT-116 colorectal carcinoma cell line DNAseI HS HotSpots from UW/ENCODE2
 	subGroups view=Hot cellType=HCT-116 treatment=n_a tissue=colon cancer=cancer
@@ -190,7 +193,7 @@ priority 100.3
 	color 255,209,85
 
 	track uwEnc2DnaseHotWgEncodeEH001179
-	parent uwEnc2DnaseHot off
+	parent uwEnc2DnaseHot on
 	shortLabel NH-A Ht
 	longLabel NH-A astrocyte DNAseI HS HotSpots from UW/ENCODE2
 	subGroups view=Hot cellType=NH-A treatment=n_a tissue=brain cancer=normal
@@ -374,7 +377,7 @@ priority 100.3
 	color 152,255,85
 
 	track uwEnc2DnaseHotWgEncodeEH000506
-	parent uwEnc2DnaseHot off
+	parent uwEnc2DnaseHot on
 	shortLabel AG04450 Ht
 	longLabel AG04450 fetal lung fibroblast DNAseI HS HotSpots from UW/ENCODE2
 	subGroups view=Hot cellType=AG04450 treatment=n_a tissue=lung cancer=normal
@@ -470,7 +473,7 @@ priority 100.3
 	color 85,255,204
 
 	track uwEnc2DnaseHotWgEncodeEH000488
-	parent uwEnc2DnaseHot off
+	parent uwEnc2DnaseHot on
 	shortLabel HUVEC Ht
 	longLabel HUVEC umbilical vein endothelial cell DNAseI HS HotSpots from UW/ENCODE2
 	subGroups view=Hot cellType=HUVEC treatment=n_a tissue=blood_vessel cancer=normal
@@ -598,7 +601,7 @@ priority 100.3
 	color 85,205,255
 
 	track uwEnc2DnaseHotWgEncodeEH000482
-	parent uwEnc2DnaseHot off
+	parent uwEnc2DnaseHot on
 	shortLabel HepG2 Ht
 	longLabel HepG2 hepatocellular carcinoma cell line DNAseI HS HotSpots from UW/ENCODE2
 	subGroups view=Hot cellType=HepG2 treatment=n_a tissue=liver cancer=cancer
@@ -662,7 +665,7 @@ priority 100.3
 	color 85,165,255
 
 	track uwEnc2DnaseHotWgEncodeEH000492
-	parent uwEnc2DnaseHot off
+	parent uwEnc2DnaseHot on
 	shortLabel GM12878 Ht
 	longLabel GM12878 B-lymphocyte, lymphoblastoid cell line DNAseI HS HotSpots from UW/ENCODE2
 	subGroups view=Hot cellType=GM12878 treatment=n_a tissue=blood cancer=normal
@@ -702,7 +705,7 @@ priority 100.3
 	color 85,112,255
 
 	track uwEnc2DnaseHotWgEncodeEH000511
-	parent uwEnc2DnaseHot off
+	parent uwEnc2DnaseHot on
 	shortLabel H7-hESC Ht
 	longLabel H7-hESC embryonic stem cell DNAseI HS HotSpots from UW/ENCODE2
 	subGroups view=Hot cellType=H7-hESC treatment=n_a tissue=embryo cancer=unknown
@@ -750,7 +753,7 @@ priority 100.3
 	color 133,85,255
 
 	track uwEnc2DnaseHotWgEncodeEH000495
-	parent uwEnc2DnaseHot off
+	parent uwEnc2DnaseHot on
 	shortLabel HeLa-S3 Ht
 	longLabel HeLa-S3 cervical epithelial adenocarcinoma cell line DNAseI HS HotSpots from UW/ENCODE2
 	subGroups view=Hot cellType=HeLa-S3 treatment=n_a tissue=cervix cancer=cancer
@@ -766,7 +769,7 @@ priority 100.3
 	color 176,85,255
 
 	track uwEnc2DnaseHotWgEncodeEH000502
-	parent uwEnc2DnaseHot off
+	parent uwEnc2DnaseHot on
 	shortLabel MCF-7 Ht
 	longLabel MCF-7 mammary adenocarcinoma cell line DNAseI HS HotSpots from UW/ENCODE2
 	subGroups view=Hot cellType=MCF-7 treatment=n_a tissue=breast cancer=cancer
@@ -809,7 +812,7 @@ priority 100.3
     shortLabel Peaks
     longLabel HotSpot5 peak calls on BWA. Dupe, sponge and mitochondria filtered
     view Peaks
-    visibility hide
+    visibility dense
     parent uwEnc2Dnase
     scoreFilter 0
     scoreFilterLimits 0:1000
@@ -817,7 +820,7 @@ priority 100.3
     minGrayLevel 2
 
 	track uwEnc2DnasePeaksWgEncodeEH000484
-	parent uwEnc2DnasePeaks off
+	parent uwEnc2DnasePeaks on
 	shortLabel K562 Pk
 	longLabel K562 lymphoblast chronic myeloid leukemia (CML) cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=K562 treatment=n_a tissue=bone_marrow cancer=cancer
@@ -865,7 +868,7 @@ priority 100.3
 	color 255,141,85
 
 	track uwEnc2DnasePeaksWgEncodeEH001162
-	parent uwEnc2DnasePeaks off
+	parent uwEnc2DnasePeaks on
 	shortLabel HCT-116 Pk
 	longLabel HCT-116 colorectal carcinoma cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HCT-116 treatment=n_a tissue=colon cancer=cancer
@@ -961,7 +964,7 @@ priority 100.3
 	color 255,209,85
 
 	track uwEnc2DnasePeaksWgEncodeEH001179
-	parent uwEnc2DnasePeaks off
+	parent uwEnc2DnasePeaks on
 	shortLabel NH-A Pk
 	longLabel NH-A astrocyte DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=NH-A treatment=n_a tissue=brain cancer=normal
@@ -1145,7 +1148,7 @@ priority 100.3
 	color 152,255,85
 
 	track uwEnc2DnasePeaksWgEncodeEH000506
-	parent uwEnc2DnasePeaks off
+	parent uwEnc2DnasePeaks on
 	shortLabel AG04450 Pk
 	longLabel AG04450 fetal lung fibroblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=AG04450 treatment=n_a tissue=lung cancer=normal
@@ -1241,7 +1244,7 @@ priority 100.3
 	color 85,255,204
 
 	track uwEnc2DnasePeaksWgEncodeEH000488
-	parent uwEnc2DnasePeaks off
+	parent uwEnc2DnasePeaks on
 	shortLabel HUVEC Pk
 	longLabel HUVEC umbilical vein endothelial cell DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HUVEC treatment=n_a tissue=blood_vessel cancer=normal
@@ -1369,7 +1372,7 @@ priority 100.3
 	color 85,205,255
 
 	track uwEnc2DnasePeaksWgEncodeEH000482
-	parent uwEnc2DnasePeaks off
+	parent uwEnc2DnasePeaks on
 	shortLabel HepG2 Pk
 	longLabel HepG2 hepatocellular carcinoma cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HepG2 treatment=n_a tissue=liver cancer=cancer
@@ -1433,7 +1436,7 @@ priority 100.3
 	color 85,165,255
 
 	track uwEnc2DnasePeaksWgEncodeEH000492
-	parent uwEnc2DnasePeaks off
+	parent uwEnc2DnasePeaks on
 	shortLabel GM12878 Pk
 	longLabel GM12878 B-lymphocyte, lymphoblastoid cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=GM12878 treatment=n_a tissue=blood cancer=normal
@@ -1473,7 +1476,7 @@ priority 100.3
 	color 85,112,255
 
 	track uwEnc2DnasePeaksWgEncodeEH000511
-	parent uwEnc2DnasePeaks off
+	parent uwEnc2DnasePeaks on
 	shortLabel H7-hESC Pk
 	longLabel H7-hESC embryonic stem cell DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=H7-hESC treatment=n_a tissue=embryo cancer=unknown
@@ -1521,7 +1524,7 @@ priority 100.3
 	color 133,85,255
 
 	track uwEnc2DnasePeaksWgEncodeEH000495
-	parent uwEnc2DnasePeaks off
+	parent uwEnc2DnasePeaks on
 	shortLabel HeLa-S3 Pk
 	longLabel HeLa-S3 cervical epithelial adenocarcinoma cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HeLa-S3 treatment=n_a tissue=cervix cancer=cancer
@@ -1537,7 +1540,7 @@ priority 100.3
 	color 176,85,255
 
 	track uwEnc2DnasePeaksWgEncodeEH000502
-	parent uwEnc2DnasePeaks off
+	parent uwEnc2DnasePeaks on
 	shortLabel MCF-7 Pk
 	longLabel MCF-7 mammary adenocarcinoma cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=MCF-7 treatment=n_a tissue=breast cancer=cancer
@@ -1580,7 +1583,7 @@ priority 100.3
     shortLabel Signal
     longLabel HotSpot5 signal on BWA. Dupe, sponge and mitochondria filtered
     view Signal
-    visibility full
+    visibility hide
     parent uwEnc2Dnase
     viewLimits 0:100
     minLimit 0
@@ -1590,7 +1593,7 @@ priority 100.3
     windowingFunction mean+whiskers
 
 	track uwEnc2DnaseSignalWgEncodeEH000484
-	parent uwEnc2DnaseSignal off
+	parent uwEnc2DnaseSignal on
 	shortLabel K562 Sg
 	longLabel K562 lymphoblast chronic myeloid leukemia (CML) cell line DNAseI HS Signal from UW/ENCODE2
 	subGroups view=Signal cellType=K562 treatment=n_a tissue=bone_marrow cancer=cancer
@@ -1638,7 +1641,7 @@ priority 100.3
 	color 255,141,85
 
 	track uwEnc2DnaseSignalWgEncodeEH001162
-	parent uwEnc2DnaseSignal off
+	parent uwEnc2DnaseSignal on
 	shortLabel HCT-116 Sg
 	longLabel HCT-116 colorectal carcinoma cell line DNAseI HS Signal from UW/ENCODE2
 	subGroups view=Signal cellType=HCT-116 treatment=n_a tissue=colon cancer=cancer
@@ -1734,7 +1737,7 @@ priority 100.3
 	color 255,209,85
 
 	track uwEnc2DnaseSignalWgEncodeEH001179
-	parent uwEnc2DnaseSignal off
+	parent uwEnc2DnaseSignal on
 	shortLabel NH-A Sg
 	longLabel NH-A astrocyte DNAseI HS Signal from UW/ENCODE2
 	subGroups view=Signal cellType=NH-A treatment=n_a tissue=brain cancer=normal
@@ -1918,7 +1921,7 @@ priority 100.3
 	color 152,255,85
 
 	track uwEnc2DnaseSignalWgEncodeEH000506
-	parent uwEnc2DnaseSignal off
+	parent uwEnc2DnaseSignal on
 	shortLabel AG04450 Sg
 	longLabel AG04450 fetal lung fibroblast DNAseI HS Signal from UW/ENCODE2
 	subGroups view=Signal cellType=AG04450 treatment=n_a tissue=lung cancer=normal
@@ -2014,7 +2017,7 @@ priority 100.3
 	color 85,255,204
 
 	track uwEnc2DnaseSignalWgEncodeEH000488
-	parent uwEnc2DnaseSignal off
+	parent uwEnc2DnaseSignal on
 	shortLabel HUVEC Sg
 	longLabel HUVEC umbilical vein endothelial cell DNAseI HS Signal from UW/ENCODE2
 	subGroups view=Signal cellType=HUVEC treatment=n_a tissue=blood_vessel cancer=normal
@@ -2142,7 +2145,7 @@ priority 100.3
 	color 85,205,255
 
 	track uwEnc2DnaseSignalWgEncodeEH000482
-	parent uwEnc2DnaseSignal off
+	parent uwEnc2DnaseSignal on
 	shortLabel HepG2 Sg
 	longLabel HepG2 hepatocellular carcinoma cell line DNAseI HS Signal from UW/ENCODE2
 	subGroups view=Signal cellType=HepG2 treatment=n_a tissue=liver cancer=cancer
@@ -2206,7 +2209,7 @@ priority 100.3
 	color 85,165,255
 
 	track uwEnc2DnaseSignalWgEncodeEH000492
-	parent uwEnc2DnaseSignal off
+	parent uwEnc2DnaseSignal on
 	shortLabel GM12878 Sg
 	longLabel GM12878 B-lymphocyte, lymphoblastoid cell line DNAseI HS Signal from UW/ENCODE2
 	subGroups view=Signal cellType=GM12878 treatment=n_a tissue=blood cancer=normal
@@ -2246,7 +2249,7 @@ priority 100.3
 	color 85,112,255
 
 	track uwEnc2DnaseSignalWgEncodeEH000511
-	parent uwEnc2DnaseSignal off
+	parent uwEnc2DnaseSignal on
 	shortLabel H7-hESC Sg
 	longLabel H7-hESC embryonic stem cell DNAseI HS Signal from UW/ENCODE2
 	subGroups view=Signal cellType=H7-hESC treatment=n_a tissue=embryo cancer=unknown
@@ -2294,7 +2297,7 @@ priority 100.3
 	color 133,85,255
 
 	track uwEnc2DnaseSignalWgEncodeEH000495
-	parent uwEnc2DnaseSignal off
+	parent uwEnc2DnaseSignal on
 	shortLabel HeLa-S3 Sg
 	longLabel HeLa-S3 cervical epithelial adenocarcinoma cell line DNAseI HS Signal from UW/ENCODE2
 	subGroups view=Signal cellType=HeLa-S3 treatment=n_a tissue=cervix cancer=cancer
@@ -2310,7 +2313,7 @@ priority 100.3
 	color 176,85,255
 
 	track uwEnc2DnaseSignalWgEncodeEH000502
-	parent uwEnc2DnaseSignal off
+	parent uwEnc2DnaseSignal on
 	shortLabel MCF-7 Sg
 	longLabel MCF-7 mammary adenocarcinoma cell line DNAseI HS Signal from UW/ENCODE2
 	subGroups view=Signal cellType=MCF-7 treatment=n_a tissue=breast cancer=cancer
@@ -2371,10 +2374,10 @@ subGroup2 treatment Treatment diffProtA_5d=diffProtA_5d diffProtA_14d=diffProtA_
 subGroup3 tissue Tissue kidney=kidney esophagus=esophagus cervix=cervix skin=skin lung=lung heart=heart colon=colon blood=blood prostate=prostate embryo=embryo pancreas=pancreas breast=breast bone_marrow=bone_marrow periodontum=periodontum muscle=muscle brain=brain blood_vessel=blood_vessel spinal_cord=spinal_cord placenta=placenta eye=eye liver=liver periodontium=periodontium testis=testis
 subGroup4 cancer Cancer cancer=cancer normal=normal unknown=unknown
 subGroup5 subtrackColor Similarity
-sortOrder subtrackColor=+ cellType=+ tissue=+ cancer=+ treatment=+
+sortOrder subtrackColor=+ cellType=+ tissue=+
 
 	track uwEnc2DnaseWigWgEncodeEH000484
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel K562 Sg
 	longLabel K562 lymphoblast chronic myeloid leukemia (CML) cell line DNAseI HS Signal from UW/ENCODE2
 	subGroups cellType=K562 treatment=n_a tissue=bone_marrow cancer=cancer
@@ -2428,7 +2431,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+ cancer=+ treatment=+
 	priority 1.05908
 
 	track uwEnc2DnaseWigWgEncodeEH001162
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HCT-116 Sg
 	longLabel HCT-116 colorectal carcinoma cell line DNAseI HS Signal from UW/ENCODE2
 	subGroups cellType=HCT-116 treatment=n_a tissue=colon cancer=cancer
@@ -2536,7 +2539,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+ cancer=+ treatment=+
 	priority 1.156
 
 	track uwEnc2DnaseWigWgEncodeEH001179
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel NH-A Sg
 	longLabel NH-A astrocyte DNAseI HS Signal from UW/ENCODE2
 	subGroups cellType=NH-A treatment=n_a tissue=brain cancer=normal
@@ -2617,7 +2620,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+ cancer=+ treatment=+
 	priority 1.20382
 
 	track uwEnc2DnaseWigWgEncodeEH001174
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HPF Sg
 	longLabel HPF pulmonary fibroblast DNAseI HS Signal from UW/ENCODE2
 	subGroups cellType=HPF treatment=n_a tissue=lung cancer=normal
@@ -2743,7 +2746,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+ cancer=+ treatment=+
 	priority 1.36656
 
 	track uwEnc2DnaseWigWgEncodeEH000506
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel AG04450 Sg
 	longLabel AG04450 fetal lung fibroblast DNAseI HS Signal from UW/ENCODE2
 	subGroups cellType=AG04450 treatment=n_a tissue=lung cancer=normal
@@ -2851,7 +2854,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+ cancer=+ treatment=+
 	priority 1.50509
 
 	track uwEnc2DnaseWigWgEncodeEH000488
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HUVEC Sg
 	longLabel HUVEC umbilical vein endothelial cell DNAseI HS Signal from UW/ENCODE2
 	subGroups cellType=HUVEC treatment=n_a tissue=blood_vessel cancer=normal
@@ -2995,7 +2998,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+ cancer=+ treatment=+
 	priority 1.65365
 
 	track uwEnc2DnaseWigWgEncodeEH000482
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HepG2 Sg
 	longLabel HepG2 hepatocellular carcinoma cell line DNAseI HS Signal from UW/ENCODE2
 	subGroups cellType=HepG2 treatment=n_a tissue=liver cancer=cancer
@@ -3067,7 +3070,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+ cancer=+ treatment=+
 	priority 1.71966
 
 	track uwEnc2DnaseWigWgEncodeEH000492
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel GM12878 Sg
 	longLabel GM12878 B-lymphocyte, lymphoblastoid cell line DNAseI HS Signal from UW/ENCODE2
 	subGroups cellType=GM12878 treatment=n_a tissue=blood cancer=normal
@@ -3112,7 +3115,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+ cancer=+ treatment=+
 	priority 1.77436
 
 	track uwEnc2DnaseWigWgEncodeEH000511
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel H7-hESC Sg
 	longLabel H7-hESC embryonic stem cell DNAseI HS Signal from UW/ENCODE2
 	subGroups cellType=H7-hESC treatment=n_a tissue=embryo cancer=unknown
@@ -3166,7 +3169,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+ cancer=+ treatment=+
 	priority 1.85388
 
 	track uwEnc2DnaseWigWgEncodeEH000495
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel HeLa-S3 Sg
 	longLabel HeLa-S3 cervical epithelial adenocarcinoma cell line DNAseI HS Signal from UW/ENCODE2
 	subGroups cellType=HeLa-S3 treatment=n_a tissue=cervix cancer=cancer
@@ -3184,7 +3187,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+ cancer=+ treatment=+
 	priority 1.90393
 
 	track uwEnc2DnaseWigWgEncodeEH000502
-	parent uwEnc2DnaseWig off
+	parent uwEnc2DnaseWig on
 	shortLabel MCF-7 Sg
 	longLabel MCF-7 mammary adenocarcinoma cell line DNAseI HS Signal from UW/ENCODE2
 	subGroups cellType=MCF-7 treatment=n_a tissue=breast cancer=cancer

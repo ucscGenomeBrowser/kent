@@ -3100,10 +3100,16 @@ if (value && *value)
     freez(value);
 }
 
+boolean subgroupRequired(char *value)
+/* Returns whether subgroup much be specified for each track.
+ * Generally true.  Exceptions are specially defined subgroups */
+{
+return differentString(SUBTRACK_COLOR_SUBGROUP, value);
+}
+
 #define SORT_ON_TRACK_NAME "trackName"
 #define SORT_ON_RESTRICTED "dateUnrestricted"
-#define SUBTRACK_COLOR_PATCH "subtrackColor"
-#define SUBTRACK_COLOR_HEADER "Color"
+
 
 sortOrder_t *sortOrderGet(struct cart *cart,struct trackDb *parentTdb)
 // Parses any list sort order instructions for parent of subtracks (from cart or trackDb)
@@ -4366,7 +4372,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                 puts("</TD>");
                 freeMem(titleRoot);
                 }
-            else if (sameString(sortOrder->column[sIx], SUBTRACK_COLOR_PATCH))
+            else if (sameString(sortOrder->column[sIx], SUBTRACK_COLOR_SUBGROUP))
                 {
                 struct rgbColor rgbColor;
                 rgbColor.r = subtrack->colorR;
@@ -4566,7 +4572,6 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         break;
         }
     }
-//subtrackConfig->colorPatch = trackDbSettingOn(parentTdb, "showSubtrackColorOnUi");
 subtrackConfig->useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
 subtrackConfig->sortOrder = sortOrder;
 subtrackConfig->displayAll = displayAll;
