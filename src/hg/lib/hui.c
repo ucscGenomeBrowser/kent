@@ -290,7 +290,7 @@ return TRUE;
 }
 
 void extraUiLinks(char *db,struct trackDb *tdb)
-// Show downlaods, schema and metadata links where appropriate
+// Show downloads, schema and metadata links where appropriate
 {
 boolean schemaLink = (!tdbIsDownloadsOnly(tdb) && !trackHubDatabase(db)
                   && isCustomTrack(tdb->table) == FALSE)
