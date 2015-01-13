@@ -3,9 +3,23 @@
 use strict;
 use warnings;
 
+sub usage() {
+  printf STDERR "usage: scanAssemblyReport.pl <chrom.sizes> <faCount.GRCH38.p2.txt> <GCA_000001405.17_GRCh38.p2_assembly_report.txt>\n";
+}
+
+my $argc = scalar(@ARGV);
+if ($argc != 3) {
+  usage;
+  exit 255;
+}
+
+my $chromSizes = shift;
+my $faCount = shift;
+my $asmReport = shift;
+
 my %chrSize;
 
-open (FH, "<../../../chrom.sizes") or die "can not read ../../../chrom.sizes";
+open (FH, "<$chromSizes") or die "can not read $chromSizes";
 while (my $line = <FH>) {
   chomp $line;
   my ($chr, $size) = split('\t', $line);
@@ -14,7 +28,7 @@ while (my $line = <FH>) {
 close (FH);
 
 my %patchSize;
-open (FH, "<faCount.GRCH38.p2.txt") or die "can not read faCount.GRCH38.p2.txt";
+open (FH, "<$faCount") or die "can not read $faCount";
 while (my $line = <FH>) {
   next if ($line =~ m/^#seq|^total/);
   chomp $line;
@@ -33,9 +47,7 @@ close (FH);
 # J01415.2	16569	5124	5181	2169	4094	1	435
 # total	3221487035	901716923	626373718	628977988	904389966	160028440	31134771
 
-my $file = "GCA_000001405.17_GRCh38.p2_assembly_report.txt";
-
-open (FH, "<$file") or die "can not read $file";
+open (FH, "<$asmReport") or die "can not read $asmReport";
 while (my $line = <FH>) {
    next if ($line =~ m/^#/);
    chomp $line;
@@ -51,8 +63,8 @@ while (my $line = <FH>) {
    elsif ($a[1] =~ m/assembled-molecule/) { $ucscName = "chr${chrN}"; }
    elsif ($a[1] =~ m/unplaced-scaffold/) { $ucscName = "chrUn_${accession}"; }
    elsif ($a[1] =~ m/fix-patch/) { $ucscName = "chr${chrN}_${accession}_fix"; }
-   elsif ($a[1] =~ m/novel-patch/) { $ucscName = "chr${chrN}_${accession}_novel"; }
-   else { die "do not recognize $a[1]";
+   elsif ($a[1] =~ m/novel-patch/) { $ucscName = "chr${chrN}_${accession}_alt"; }
+   else { die "do not recognize type: '$a[1]'";
    }
    my $warnings = "";
    if (length($ucscName) > 31) { $warnings .= "\t# warning size"; }
