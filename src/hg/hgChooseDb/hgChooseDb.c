@@ -1,0 +1,287 @@
+/* hgChooseDb - auto-complete db/organism search */
+#include "common.h"
+#include "cart.h"
+#include "cartJson.h"
+#include "cheapcgi.h"
+#include "hCommon.h"
+#include "hdb.h"
+#include "hui.h"
+#include "jsonParse.h"
+#include "obscure.h"  // for readInGulp
+#include "trackHub.h"
+#include "web.h"
+
+/* Global Variables */
+struct cart *cart = NULL;             /* CGI and other variables */
+
+#define SEARCH_TERM "hgcd_term"
+
+static char *getPhotoForGenome(char *genome, char *db)
+/* If the expected file for this genome's description page photo exists, return the filename. */
+{
+if (db == NULL)
+    db = hDefaultDbForGenome(genome);
+char baseName[PATH_LEN];
+if (sameString("Human", genome))
+    safecpy(baseName, sizeof(baseName), "human.jpg");
+else
+    {
+    safef(baseName, sizeof(baseName), "%s.jpg", hScientificName(db));
+    subChar(baseName, ' ', '_');
+    }
+char fileName[PATH_LEN];
+safef(fileName, sizeof(fileName), "%s/images/%s", hDocumentRoot(), baseName);
+if (fileExists(fileName))
+    {
+    // Reformat for URL:
+    safef(fileName, sizeof(fileName), "../images/%s", baseName);
+    return cloneString(fileName);
+    }
+else
+    return NULL;
+}
+
+static void writeGenomeInfo(struct jsonWrite *jw, char *genome, char *db)
+// Write menu options, selected db etc. for genome and db.  If db is NULL use default for genome.
+{
+if (db == NULL)
+    db = hDefaultDbForGenome(genome);
+struct slPair *dbOptions = hGetDbOptionsForGenome(genome);
+jsonWriteValueLabelList(jw, "dbOptions", dbOptions);
+jsonWriteString(jw, "db", db);
+jsonWriteString(jw, "genome", genome);
+jsonWriteString(jw, "img", getPhotoForGenome(genome, db));
+}
+
+static void writeDbMenuData(struct jsonWrite *jw, char *genome, char *db)
+// Set dbMenuData to use genome's info.
+{
+jsonWriteObjectStart(jw, "dbMenuData");
+writeGenomeInfo(jw, genome, db);
+jsonWriteObjectEnd(jw);
+}
+
+static void getDbMenu(struct cartJson *cj, struct hash *paramHash)
+/* Write a dbMenu for the selected search term match.  */
+{
+char *genome = cartJsonRequiredParam(paramHash, "genome", cj->jw, "getDbMenu");
+char *db = cartJsonOptionalParam(paramHash, "db");
+writeDbMenuData(cj->jw, genome, db);
+}
+
+static char *popularSpecies[] =
+    { "Human", "Mouse", "Rat", "D. melanogaster", "C. elegans", NULL };
+
+static void writeOnePopularSpecies(struct jsonWrite *jw, char *genome, char *db)
+// Write a nameless object with info about this species.
+{
+jsonWriteObjectStart(jw, NULL);
+writeGenomeInfo(jw, genome, db);
+jsonWriteObjectEnd(jw);
+}
+
+static void getPopularSpecies(struct cartJson *cj, struct hash *paramHash)
+/* Return a list of popular species' names, images and db menu info. */
+{
+jsonWriteListStart(cj->jw, "popularSpecies");
+char *currentDb = cartOptionalString(cart, "db");
+char *currentGenome = currentDb ? hGenome(currentDb) : NULL;
+boolean gotCurrent = FALSE;
+int i;
+for (i = 0;  popularSpecies[i] != NULL;  i++)
+    {
+    char *db = NULL;
+    if (sameOk(popularSpecies[i], currentGenome))
+        {
+        gotCurrent = TRUE;
+        db = currentDb;
+        }
+    writeOnePopularSpecies(cj->jw, popularSpecies[i], db);
+    }
+if (! gotCurrent)
+    writeOnePopularSpecies(cj->jw, currentGenome, currentDb);
+jsonWriteListEnd(cj->jw);
+if (currentGenome != NULL)
+    writeDbMenuData(cj->jw, currentGenome, currentDb);
+}
+
+static void getDescriptionHtml(struct cartJson *cj, struct hash *paramHash)
+/* Return assembly description html for the given db. */
+{
+char *db = cartJsonRequiredParam(paramHash, "db", cj->jw, "getDescriptionHtml");
+char *htmlPath = hHtmlPath(db);
+char *htmlString = NULL;
+if (htmlPath != NULL)
+    {
+    if (fileExists(htmlPath))
+	readInGulp(htmlPath, &htmlString, NULL);
+    else if (   startsWith("http://" , htmlPath) ||
+		startsWith("https://", htmlPath) ||
+		startsWith("ftp://"  , htmlPath))
+	{
+	struct lineFile *lf = udcWrapShortLineFile(htmlPath, NULL, 256*1024);
+	htmlString =  lineFileReadAll(lf);
+	lineFileClose(&lf);
+	}
+    }
+if (isNotEmpty(htmlString))
+    {
+//#*** TODO: move jsonStringEscape inside jsonWriteString
+    htmlString = jsonStringEscape(htmlString);
+    jsonWriteObjectStart(cj->jw, "assemblyDescription");
+    jsonWriteString(cj->jw, "db", db);
+    jsonWriteString(cj->jw, "description", htmlString);
+    jsonWriteObjectEnd(cj->jw);
+    }
+}
+
+static void doCartJson()
+/* Perform UI commands to update the cart and/or retrieve cart vars & metadata. */
+{
+struct cartJson *cj = cartJsonNew(cart);
+cartJsonRegisterHandler(cj, "getPopularSpecies", getPopularSpecies);
+cartJsonRegisterHandler(cj, "getDbMenu", getDbMenu);
+cartJsonRegisterHandler(cj, "getDescriptionHtml", getDescriptionHtml);
+cartJsonExecute(cj);
+}
+
+static void doMainPage()
+/* Send HTML with javascript to bootstrap the user interface. */
+{
+
+//#*** A lot of this is copied from hgAi... libify!
+
+char *db = cartUsualString(cart, "db", hDefaultDb());
+webStartWrapperDetailedNoArgs(cart, trackHubSkipHubName(db),
+                              "", "UCSC Genome Browser Databases",
+                              TRUE, FALSE, TRUE, TRUE);
+
+// Ideally these would go in the <HEAD>
+puts("<link rel=\"stylesheet\" href=\"//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css\">");
+puts("<link rel=\"stylesheet\" href=\"//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css\">");
+
+puts("<div id=\"appContainer\">Loading...</div>");
+
+// Set a global JS variable hgsid.
+// Plain old "var ..." doesn't work (other scripts can't see it), it has to belong to window.
+printf("<script>window.%s='%s';</script>\n", cartSessionVarName(), cartSessionId(cart));
+
+// We need a package manager and require-handling system... bower and browserify?
+puts("<script src=\"../js/es5-shim.4.0.3.min.js\"></script>");
+puts("<script src=\"../js/es5-sham.4.0.3.min.js\"></script>");
+puts("<script src=\"../js/lodash.2.4.1.compat.min.js\"></script>");
+puts("<script src=\"//code.jquery.com/jquery-1.9.1.min.js\"></script>");
+puts("<script src=\"//code.jquery.com/ui/1.10.3/jquery-ui.min.js\"></script>");
+puts("<script src=\"//fb.me/react-with-addons-0.12.2.min.js\"></script>");
+puts("<script src=\"../js/immutable.3.2.1.min.js\"></script>");
+puts("<script src=\"../js/BackboneExtend.js\"></script>");
+puts("<script src=\"../js/cart.js\"></script>");
+puts("<script src=\"../js/ImModel.js\"></script>");
+puts("<script src=\"../js/PathUpdate.js\"></script>");
+puts("<script src=\"../js/PathUpdateOptional.js\"></script>");
+puts("<script src=\"../js/ImmutableUpdate.js\"></script>");
+puts("<script src=\"../js/reactLibBundle.js\"></script>");
+puts("<script src=\"../js/reactHgChooseDb.js\"></script>");
+puts("<script src=\"../js/hgChooseDbModel.js\"></script>");
+
+// Invisible form for jumping to hgTracks
+printf("\n<form action=\"%s\" method=%s id='mainForm'>\n",
+       hgTracksName(), cartUsualString(cart, "formMethod", "GET"));
+cartSaveSession(cart);
+cgiMakeHiddenVar("db", db);
+puts("</form>");
+webEnd();
+}
+
+void doMiddle(struct cart *theCart)
+/* Depending on invocation, either perform a query and print out results
+ * or display the main page. */
+{
+cart = theCart;
+if (cgiOptionalString(CARTJSON_COMMAND))
+    doCartJson();
+else
+    doMainPage();
+}
+
+static void fail(char *msg)
+//#*** Copied from hgSuggest... libify to cheapCgi?
+{
+puts("Status: 400\n\n");
+puts(msg);
+exit(-1);
+}
+
+INLINE void addIfStartsWithNoCase(char *term, char *target, struct dbDb *dbDb,
+                                  struct hash *matchHash)
+{
+if (startsWithNoCase(term, target))
+    {
+    if (! hashLookup(matchHash, target))
+        hashAdd(matchHash, target, dbDb);
+    }
+}
+
+static void lookupTerm()
+/* Look for matches to term in hgCentral and print as JSON if found. */
+{
+char *term = cgiOptionalString(SEARCH_TERM);
+if (isEmpty(term))
+    fail("Missing search term parameter");
+
+// Write JSON response with list of matches
+puts("Content-Type:text/javascript\n");
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteListStart(jw, NULL);
+
+// Search dbDb for matches
+struct hash *matchHash = hashNew(0);
+struct dbDb *dbDbList = hDbDbList(), *dbDb;
+for (dbDb = dbDbList;  dbDb != NULL; dbDb = dbDb->next)
+    {
+    if (startsWithNoCase(term, dbDb->name))
+        {
+        jsonWriteObjectStart(jw, NULL);
+        char description[PATH_LEN];
+        safef(description, sizeof(description), "%s (%s %s)",
+              dbDb->name, dbDb->genome, dbDb->description);
+        jsonWriteString(jw, "value", description);
+        jsonWriteString(jw, "genome", dbDb->genome);
+        jsonWriteString(jw, "db", dbDb->name);
+        jsonWriteObjectEnd(jw);
+        }
+    addIfStartsWithNoCase(term, dbDb->genome, dbDb, matchHash);
+    addIfStartsWithNoCase(term, dbDb->scientificName, dbDb, matchHash);
+    addIfStartsWithNoCase(term, dbDb->sourceName, dbDb, matchHash);
+    }
+
+struct hashEl *hel;
+struct hashCookie cookie = hashFirst(matchHash);
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    dbDb = hel->val;
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "value", hel->name);
+    jsonWriteString(jw, "genome", dbDb->genome);
+    jsonWriteObjectEnd(jw);
+    }
+jsonWriteListEnd(jw);
+puts(jw->dy->string);
+}
+
+int main(int argc, char *argv[])
+/* Process CGI / command line. */
+{
+/* Null terminated list of CGI Variables we don't want to save
+ * permanently. */
+char *excludeVars[] = {SEARCH_TERM, CARTJSON_COMMAND, NULL,};
+struct hash *oldVars = NULL;
+cgiSpoof(&argc, argv);
+setUdcCacheDir();
+if (cgiOptionalString(SEARCH_TERM))
+    // Skip the cart for speedy searches
+    lookupTerm();
+else
+    cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
+return 0;
+}

@@ -1248,8 +1248,14 @@ void drawScaledBoxSample(struct hvGfx *hvg,
 {
 //int i;
 int x1, x2, w;
-x1 = round((double)(chromStart-winStart)*scale) + xOff;
-x2 = round((double)(chromEnd-winStart)*scale) + xOff;
+int ourStart = chromStart;
+if (ourStart < winStart) 
+    ourStart = winStart;
+int ourEnd = chromEnd;
+if (ourEnd > winEnd) 
+    ourEnd = winEnd;
+x1 = round((double)(ourStart-winStart)*scale) + xOff;
+x2 = round((double)(ourEnd-winStart)*scale) + xOff;
 
 if (x2 >= MAXPIXELS)
     x2 = MAXPIXELS - 1;
@@ -2713,8 +2719,14 @@ if ((tallStart == 0 && tallEnd == 0) && lf->start != 0 && !sameWord(tg->table, "
     tallStart = lf->start;
     tallEnd   = lf->end;
     }
-x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
-x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+int ourStart = lf->start;
+if (ourStart < winStart) 
+    ourStart = winStart;
+int ourEnd = lf->end;
+if (ourEnd > winEnd) 
+    ourEnd = winEnd;
+x1 = round((double)((int)ourStart-winStart)*scale) + xOff;
+x2 = round((double)((int)ourEnd-winStart)*scale) + xOff;
 w = x2-x1;
 if (lf->start==lf->end && w==0) // like a SNP insertion point of size=0
     {

@@ -1398,6 +1398,21 @@ for (i=0; ;i += 1)
     }
 }
 
+boolean startsWithNoCase(const char *start, const char *string)
+/* Returns TRUE if string begins with start, case-insensitive. */
+{
+char c;
+int i;
+
+for (i=0; ;i += 1)
+    {
+    if ((c = tolower(start[i])) == 0)
+        return TRUE;
+    if (tolower(string[i]) != c)
+        return FALSE;
+    }
+}
+
 boolean startsWithWord(char *firstWord, char *line)
 /* Return TRUE if first white-space-delimited word in line
  * is same as firstWord.  Comparison is case sensitive. */

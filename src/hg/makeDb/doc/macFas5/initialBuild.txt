@@ -1,0 +1,480 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the macFas5
+# Macaca fascicularis/Crab-eating macaque
+
+# DATE:   12-Jun-2013
+# ORGANISM:       Macaca fascicularis
+# TAXID:  9541
+# ASSEMBLY LONG NAME:     Macaca_fascicularis_5.0
+# ASSEMBLY SHORT NAME:    Macaca_fascicularis_5.0
+# ASSEMBLY SUBMITTER:     Washington University (WashU)
+# ASSEMBLY TYPE:  Haploid
+# NUMBER OF ASSEMBLY-UNITS:       1
+# ASSEMBLY ACCESSION:     GCA_000364345.1
+# FTP-RELEASE DATE: 26-Jun-2013
+
+#  chrMT: NC_012670
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2013-06-27 - Hiram)
+    # NCBI has redesigned their FTP download site, new type of address
+    #      and naming scheme
+    mkdir -p /hive/data/genomes/macFas5/genbank
+    cd /hive/data/genomes/macFas5/genbank
+
+    rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Macaca_fascicularis/Macaca_fascicularis_5.0/ ./
+    # sent 4283 bytes  received 2107814896 bytes  4806885.24 bytes/sec
+    #   total size is 2107542107  speedup is 1.00
+
+    # measure what we have here:
+    faSize Primary_Assembly/assembled_chromosomes/FASTA/*.fa.gz \
+Primary_Assembly/unlocalized_scaffolds/FASTA/*.unlocalized.scaf.fa.gz \
+Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+    # 2946827162 bases (142977352 N's 2803849810 real 2803849810 upper
+    #  0 lower) in 7600 sequences in 43 files
+    # Total size: mean 387740.4 sd 7560161.6
+    #  min 218 (gi|505496605|gb|AQIA01081996.1|)
+    #   max 227556264 (gi|511747355|gb|CM001919.1|) median 3505
+
+    # note that these totals do not include chrM since the GenBank ftp directory
+    # did not include a non-nuclear directory
+
+    # pick up the same photo used at NCBI
+    #   http://www.ncbi.nlm.nih.gov/genome/776
+    mkdir /hive/data/genomes/macFas5/photo
+    cd /hive/data/genomes/macFas5/photo
+    wget --timestamping \
+ http://mongabay-images.s3.amazonaws.com/images/indonesia/bali/bali8025.JPG
+    convert -quality 80 -geometry 400x400 bali8025.JPG Macaca_fascicularis.jpg
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2013-06-27 - Hiram)
+    mkdir /hive/data/genomes/macFas5/ucsc
+    cd /hive/data/genomes/macFas5/ucsc
+
+    # fetch chrM sequence:
+    export mitoAcc=NC_012670
+    wget -O ${mitoAcc}.fa \
+ "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$mitoAcc"
+
+    echo ">chrM" > chrM.fa
+    grep -v "^>" ${mitoAcc}.fa >> chrM.fa
+
+    export mSize=`faCount chrM.fa | grep total | awk '{print $2}'`
+
+    /bin/echo -e "chrM\t1\t$mSize\t1\tF\t$mitoAcc\t1\t$mSize\t+" > chrM.agp
+
+    # scripts (that have become much more generic since this time)
+    $HOME/kent/src/hg/makeDb/doc/macFas5/ucscCompositeAgp.pl
+    $HOME/kent/src/hg/makeDb/doc/macFas5/unlocalized.pl
+    $HOME/kent/src/hg/makeDb/doc/macFas5/unplaced.pl
+
+    # verify what we have here:
+    faSize chr*.fa
+    # 2946843737 bases (142977352 N's 2803866385 real 2803866385 upper
+    #    0 lower) in 7601 sequences in 44 files
+    # Total size: mean 387691.6 sd 7559665.4
+    #   min 218 (chrUn_AQIA01081996) max 227556264 (chr1) median 3505
+
+    # add chrM to the original genbank to verify this increased size:
+    calc 2946827162 \+ 16575
+    #  2946827162 + 16575 = 2946843737
+
+#############################################################################
+#  Initial database build (DONE - 2013-06-27 - Hiram)
+
+    cd /hive/data/genomes/macFas5
+
+    cat << '_EOF_' > macFas5.config.ra
+# Config parameters for makeGenomeDb.pl:
+db macFas5
+clade primate
+genomeCladePriority 16
+scientificName Macaca fascicularis
+commonName Crab-eating macaque
+assemblyDate Jun. 2013
+assemblyLabel Washington University (WashU)
+assemblyShortLabel Macaca_fascicularis_5.0
+orderKey 3705
+# chrM bioproject: 37941 - already included in ucsc directory
+# mitoAcc NC_012670.1
+mitoAcc none
+fastaFiles /hive/data/genomes/macFas5/ucsc/chr*.fa
+agpFiles /hive/data/genomes/macFas5/ucsc/chr*.agp
+# qualFiles none
+dbDbSpeciesDir macaca
+photoCreditURL http://travel.mongabay.com/indonesia/images/bali8025.html
+photoCreditName Rhett A. Butler mongabay.com
+ncbiGenomeId 776
+ncbiAssemblyId  704988
+ncbiAssemblyName CMacaca_fascicularis_5.0
+ncbiBioProject 215851
+genBankAccessionID GCA_000364345.1
+taxId 9541
+'_EOF_'
+    # << happy emacs
+
+    # this assembly was constructed without makeGenomeDb.pl
+    # for example, after the .fa and .agp files made above:
+    cd /hive/data/genomes/macFas5/ucsc
+    faToTwoBit chr*.fa ../macFas5.unmasked.2bit
+    cat chr*.agp > ../macFas5.agp
+
+    cd /hive/data/genomes/macFas5
+    time checkAgpAndFa macFas5.agp macFas5.unmasked.2bit 2>&1 | tail
+    # Valid Fasta file entry
+    # All AGP and FASTA entries agree - both files are valid
+    # real    0m12.280s
+
+    # this step was performed 2015-01-08 after the config.ra file was created:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db macFas5.config.ra) > db.log 2>&1
+    # real    24m21.493s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##########################################################################
+# running repeat masker (DONE - 2014-12-12 - Hiram)
+    mkdir /hive/data/genomes/macFas5/bed/repeatMasker
+    cd /hive/data/genomes/macFas5/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -stop=mask \
+       -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+       -species  "Macaca fascicularis" -useRMBlastn \
+       -smallClusterHub=encodek macFas5 > mask.log 2>&1
+    # real    395m54.339s
+
+    # this failed during the cat step due to difficulties, finishing
+    doRepeatMasker.pl -buildDir=`pwd` -stop=mask \
+       -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+       -continue=mask -species  "Macaca fascicularis" -useRMBlastn \
+       -smallClusterHub=encodek macFas5 > finiMask.log 2>&1
+    #  *** All done!  (through the 'mask' step) - Elapsed time: 2m5s
+
+    # install step performed 2015-01-08
+    doRepeatMasker.pl -buildDir=`pwd` -debug \
+       -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+       -continue=install -species  "Macaca fascicularis" -useRMBlastn \
+       -smallClusterHub=ku macFas5
+
+    time doRepeatMasker.pl -buildDir=`pwd` \
+       -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+       -continue=cleanup -species  "Macaca fascicularis" -useRMBlastn \
+       -smallClusterHub=ku macFas5
+
+    cat faSize.rmsk.txt
+    # 3011982740 bases (614872980 N's 2397109760 real 1287460374 upper 1109649386 lower) in 319550 sequences in 1 files
+    # Total size: mean 9425.7 sd 1088157.1 min 201 (chrUn_JMHX01238739v1) max 215897965 (chr1) median 823
+    # %36.84 masked total, %46.29 masked real
+
+    # running cleanUp step manually:
+    time doRepeatMasker.pl -buildDir=`pwd` -bigClusterHub=swarm \
+       -dbHost=hgwdev -workhorse=hgwdev  -continue=cleanup \
+       -species  "Macaca fascicularis" -useRMBlastn -smallClusterHub=ku macFas5
+    # real    20m7.569s
+
+    egrep -i "versi|relea" mask.log
+    # RepeatMasker version open-4.0.3
+    #    June 20 2013 (open-4-0-3) version of RepeatMasker
+    #    CC   RELEASE 20130422;                                            *
+
+    time featureBits -countGaps macFas5 rmsk
+    # 1403493819 bases of 2946843737 (47.627%) in intersection
+    # real    0m39.963s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE 2013-06-27 - Hiram)
+
+    mkdir /hive/data/genomes/macFas5/bed/simpleRepeat
+    cd /hive/data/genomes/macFas5/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` \
+       -smallClusterHub=swarm -workhorse=hgwdev -stop=filter \
+       macFas5 > filter.log 2>&1
+    # real    72m50.488s
+
+    doSimpleRepeat.pl -buildDir=`pwd` \
+       -smallClusterHub=ku -workhorse=hgwdev -continue=load macFas5
+
+    cat fb.simpleRepeat
+    # 95343382 bases of 2803866698 (3.400%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/macFas5
+    twoBitMask macFas5.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed macFas5.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa macFas5.2bit stdout | faSize stdin > faSize.macFas5.2bit.txt
+    cat faSize.macFas5.2bit.txt
+    # 2946843737 bases (142977352 N's 2803866385 real 1398959329 upper
+    #    1404907056 lower) in 7601 sequences in 1 files
+    # Total size: mean 387691.6 sd 7559665.4 min 218 (chrUn_AQIA01081996)
+    #    max 227556264 (chr1) median 3505
+    # %47.67 masked total, %50.11 masked real
+
+    rm /gbdb/macFas5/macFas5.2bit
+    ln -s `pwd`/macFas5.2bit /gbdb/macFas5/macFas5.2bit
+
+##########################################################################
+## WINDOWMASKER (DONE - 2013-06-27 - Hiram)
+
+    mkdir /hive/data/genomes/macFas5/bed/windowMasker
+    cd /hive/data/genomes/macFas5/bed/windowMasker
+    time doWindowMasker.pl -stop=twobit -buildDir=`pwd` \
+       -workhorse=hgwdev macFas5 > twobit.log 2>&1
+    # real    205m59.525s
+
+    # Masking statistics
+    cat faSize.macFas5.cleanWMSdust.txt
+    # 2946843737 bases (142977352 N's 2803866385 real 1750648586 upper
+    #    1053217799 lower) in 7601 sequences in 1 files
+    # Total size: mean 387691.6 sd 7559665.4 min 218 (chrUn_AQIA01081996)
+    #   max 227556264 (chr1) median 3505
+    # %35.74 masked total, %37.56 masked real
+
+    time featureBits -countGaps macFas5 rmsk windowmaskerSdust \
+        > fb.macFas5.rmsk.windowmaskerSdust.txt 2>&1
+    # real    5m55.718s
+    cat fb.macFas5.rmsk.windowmaskerSdust.txt
+    # 820214292 bases of 2946843737 (27.834%) in intersection
+
+    doWindowMasker.pl -continue=cleanup -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev macFas5
+    #    Elapsed time: 1m56s
+
+##########################################################################
+# cpgIslands - (DONE - 2013-11-25 - Hiram)
+    mkdir /hive/data/genomes/macFas5/bed/cpgIslands
+    cd /hive/data/genomes/macFas5/bed/cpgIslands
+    doCpgIslands.pl -buildDir=`pwd` -bigClusterHub=ku \
+      -dbHost=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+       macFas5 > run.log 2>&1
+    # Elapsed time: 8m47s
+
+    cat fb.macFas5.cpgIslandExt.txt
+    # 18918384 bases of 2803866698 (0.675%) in intersection
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2014-07-16 - Hiram)
+    mkdir /hive/data/genomes/macFas5/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/macFas5/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/macFas5/macFas5.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku macFas5) > do.log 2>&1
+    # real    16m26.998s
+
+    cat fb.macFas5.cpgIslandExtUnmasked.txt
+    # 33488708 bases of 2803866698 (1.194%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-01-09 - Hiram)
+    mkdir /hive/data/genomes/macFas5/bed/cytoBand
+    cd /hive/data/genomes/macFas5/bed/cytoBand
+    makeCytoBandIdeo.csh macFas5
+
+#########################################################################
+# genscan - (DONE - 2014-09-10 - Hiram)
+    mkdir /hive/data/genomes/macFas5/bed/genscan
+    cd /hive/data/genomes/macFas5/bed/genscan
+    doGenscan.pl -stop=makeBed \
+      -buildDir=/hive/data/genomes/macFas5/bed/genscan \
+        -bigClusterHub=ku -workhorse=hgwdev -dbHost=hgwdev macFas5 > do.log 2>&1
+    #  Elapsed time: 187m25s
+
+    doGenscan.pl -continue=load -stop=load  \
+      -buildDir=/hive/data/genomes/macFas5/bed/genscan \
+        -bigClusterHub=ku -workhorse=hgwdev \
+            -dbHost=hgwdev macFas5 > load.log 2>&1
+    #  Elapsed time: 0m25s
+
+    doGenscan.pl -continue=cleanup \
+       -buildDir=/hive/data/genomes/macFas5/bed/genscan \
+         -bigClusterHub=ku -workhorse=hgwdev \
+            -dbHost=hgwdev macFas5 > cleanup.log 2>&1
+    #  Elapsed time: 0m18s
+
+    cat fb.macFas5.genscan.txt
+    # 52296622 bases of 2803866698 (1.865%) in intersection
+
+    cat fb.macFas5.genscanSubopt.txt
+    # 52200998 bases of 2803866698 (1.862%) in intersection
+
+########################################################################
+# ucscToINSDC table/track (DONE - 2015-01-09 - Hiram)
+    # reusing the old-style script since this genbank download is still
+    # the old style, this script copied from rn6/bed/ucscToINSDC
+    grep chrM ../../*.agp
+# chrM    1       16575   1       F       NC_012670       1       16575   +
+    ./translateNames.sh  NC_012670.1
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify they are all accounted for:
+    wc -l ucscToINSDC.bed ../../chrom.sizes
+    #   7601 ucscToINSDC.bed
+    #   7601 ../../chrom.sizes
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 25
+    # use the 25 in this sed
+    sed -e "s/21/25/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab macFas5 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords macFas5
+    # should cover %100 entirely:
+    featureBits -countGaps macFas5 ucscToINSDC
+    # 2946843737 bases of 2946843737 (100.000%) in intersection
+
+#########################################################################
+# Create kluster run files (DONE - 2015-01-09 - Hiram)
+
+    cd /hive/data/genomes/macFas5
+    # numerator is macFas5 gapless bases "real" as reported by:
+    head -1 faSize.macFas5.2bit.txt
+# 2946843737 bases (142977352 N's 2803866385 real 1398959329 upper 1404907056
+# lower) in 7601 sequences in 1 files
+
+# 3011982740 bases (614872980 N's 2397109760 real 1286534225 upper 1110575535 lower) in 319550 sequences in 1 files
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2803866385 / 2861349177 \) \* 1024
+    # ( 2803866385 / 2861349177 ) * 1024 = 1003.428453
+
+    # ==> use -repMatch=1000 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/macFas5
+    time blat macFas5.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/macFas5.11.ooc \
+        -repMatch=1000
+    # Wrote 29333 overused 11-mers to jkStuff/macFas5.11.ooc
+    #  real    0m50.948s
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N -e 'select * from gap where bridge="no" order by size;' macFas5         | ave -tableOut -col=7 stdin
+# # min Q1 median Q3 max mean N sum stddev
+# 100 1e+06 1e+06 1e+06 1e+06 875012 24 2.10003e+07 337798
+
+ # note the minimum non-bridged gap size is 100 and there are only 24 such gaps
+ # on the other hand, there are 68,162 gaps size >= 100
+    hgsql -N -e 'select * from gap where size>99 order by size;' macFas5 \
+       | ave -tableOut -col=7 stdin
+# # min Q1 median Q3 max mean N sum stddev
+# 100 100 377 1082 1e+06 2088.37 68162 1.42347e+08 20953.7
+
+    gapToLift -verbose=2 -minGap=100 macFas5 jkStuff/macFas5.nonBridged.lft \
+        -bedFile=jkStuff/macFas5.nonBridged.bed
+
+########################################################################
+# GENBANK AUTO UPDATE (DONE - 2015-01-09 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Macaca fascicularis     11994   163304  2152
+
+    # edit etc/genbank.conf to add macFas5 just before rheMac2
+
+# macFas5 (Crab-eating macaque)
+macFas5.serverGenome = /hive/data/genomes/macFas5/macFas5.2bit
+macFas5.clusterGenome = /hive/data/genomes/macFas5/macFas5.2bit
+macFas5.ooc = /hive/data/genomes/macFas5/jkStuff/macFas5.11.ooc
+macFas5.lift = /hive/data/genomes/macFas5/jkStuff/macFas5.nonBridged.lft
+macFas5.perChromTables = no
+macFas5.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+macFas5.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+macFas5.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+macFas5.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+macFas5.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+macFas5.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+macFas5.downloadDir = macFas5
+macFas5.refseq.mrna.native.load  = yes
+macFas5.refseq.mrna.native.loadDesc  = yes
+macFas5.refseq.mrna.xeno.load = yes
+macFas5.refseq.mrna.xeno.loadDesc  = yes
+macFas5.genbank.mrna.native.load  = yes
+macFas5.genbank.mrna.native.loadDesc  = yes
+macFas5.genbank.est.native.load  = yes
+macFas5.upstreamGeneTbl = refGene
+
+    # Edit src/lib/gbGenome.c to add new species
+
+    git commit -m "Added macFas5; refs #11174" etc/genbank.conf src/lib/gbGenome.c
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+    make install-server
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial macFas5
+XXX - running - Fri Jan  9 10:39:11 PST 2015
+    # logFile: var/build/logs/2015.01.09-10:38:58.macFas5.initalign.log
+    #   real    53m1.297s
+    # verify completed successfully:
+    tail var/build/logs/2015.01.09-10:38:58.macFas5.initalign.log
+# hgwdev 2015.01.06-11:43:02 macFas5.initalign: Succeeded: macFas5
+# hgwdev 2015.01.06-11:46:23 macFas5.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.macFas5
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad -verbose=10 macFas5
+    # logFile: var/dbload/hgwdev/logs/2015.01.06-13:41:18.macFas5.dbload.log
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add macFas5 to:
+    #   etc/align.dbs
+    #   etc/hgwdev.dbs
+    git add etc/align.dbs
+    git add etc/hgwdev.dbs
+    git commit -m "Added macFas5 - Cow" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2015-01-09 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=macFas5 -keys all.joiner
+    joinerCheck -database=macFas5 -tableCoverage all.joiner
+    joinerCheck -database=macFas5 -times all.joiner
+
+    cd /hive/data/genomes/macFas5
+    makeDownloads.pl macFas5 > do.log 2>&1
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/macFas5/pushQ
+    cd /hive/data/genomes/macFas5/pushQ
+    makePushQSql.pl macFas5 > macFas5.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/macFas5/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/macFas5/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/macFas5/bbi/quality.bw
+    # WARNING: macFas5 does not have seq
+    # WARNING: macFas5 does not have extFile
+
+    #   copy it to hgwbeta
+    scp -p macFas5.pushQ.sql qateam@hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < macFas5.pushQ.sql
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################
