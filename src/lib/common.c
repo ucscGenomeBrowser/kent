@@ -2748,6 +2748,17 @@ if ((pFile != NULL) && ((f = *pFile) != NULL))
 	    ok = FALSE;
 	    }
         }
+    else
+        {
+        // One expects close() to actually flush the file and close it.  If
+        // the file was opened using the magic name "stdout" and then does a
+        // setvbuf(), writes to file, calls carefulClose, then frees the
+        // buffer, the FILE object points to invalid memory.  Then the exit()
+        // I/O cleanup causes the invalid memory to be written to the file,
+        // possible outputting corruption data.  If would be consistent with
+        // stdio behavior to have "stdout" magic name open "/dev/stdout".
+        fflush(f);
+        }
     *pFile = NULL;
     }
 return ok;
