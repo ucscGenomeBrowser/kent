@@ -292,6 +292,10 @@ if (errMsgFound)
 struct wigCartOptions *wigCart = tg->wigCartData;
 struct wigGraphOutput *wgo = setUpWgo(xOff, yOff, width, tg->height, numTracks, wigCart, hvg);
 
+// we want to the order to be the same in all the modes 
+if (wigCart->aggregateFunction == wiggleAggregateStacked)
+    slReverse(&tg->subtracks);
+
 /* Cope with autoScale and stacked bars - we do it here rather than in the child tracks, so that
  * all children can be on same scale. */
 double minVal, maxVal;
