@@ -45,8 +45,7 @@ hgsql -N -e 'SELECT chrom, size FROM chromInfo' $db > $db.chroms
 hgsql -N -e 'SELECT chrom, chromStart, chromEnd FROM gap WHERE type = "centromere"' $db \
   | sort > $db.cens
 
-file $db.cens | grep empty > /dev/null
-if ( $status ) then # process cens
+if ( -s $db.cens ) then # process cens
   # get the names only
   cat $db.cens | awk '{print $1}' > $db.cenNames
 

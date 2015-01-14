@@ -1,0 +1,145 @@
+# for emacs: -*- mode: sh; -*-
+
+##############################################################################
+# hg38 patch 2 build
+##############################################################################
+
+mkdir /hive/data/genomes/hg38/bed/hg38Patch2
+cd /hive/data/genomes/hg38/bed/hg38Patch2
+mkdir genbank
+cd genbank
+rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Homo_sapiens/all_assembly_versions/GCA_000001405.17_GRCh38.p2/ ./
+
+# appears to be the entire assembly:
+faSize GCA_000001405.17_GRCh38.p2_genomic.fna.gz
+# 3221487035 bases (160028440 N's 3061458595 real 1898327994 upper 1163130601 lower) in 486 sequences in 1 files
+# Total size: mean 6628574.1 sd 30567681.1 min 970 (KI270394.1) max 248956422 (CM000663.2) median 162429
+# %36.11 masked total, %37.99 masked real
+
+# so the question is, what is new here compared to what we have in hg38
+
+cd /hive/data/genomes/hg38/bed/hg38Patch2
+time faCount genbank/GCA_000001405.17_GRCh38.p2_genomic.fna.gz \
+   > faCount.GRCH38.p2.txt
+#  real    1m7.182s
+
+~/kent/src/hg/makeDb/doc/hg38/scanAssemblyReport.pl ../../chrom.sizes \
+  faCount.GRCH38.p2.txt genbank/GCA_000001405.17_GRCh38.p2_assembly_report.txt \
+   | grep new | sed -e 's/^/# /'
+
+# chr1_KN196472v1_fix   186494  KN196472.1      new
+# chr1_KN196473v1_fix   166200  KN196473.1      new
+# chr1_KN196474v1_fix   122022  KN196474.1      new
+# chr1_KN538360v1_fix   460100  KN538360.1      new
+# chr1_KN538361v1_fix   305542  KN538361.1      new
+# chr2_KN538362v1_fix   208149  KN538362.1      new
+# chr2_KN538363v1_fix   365499  KN538363.1      new
+# chr3_KN196475v1_fix   451168  KN196475.1      new
+# chr3_KN196476v1_fix   305979  KN196476.1      new
+# chr3_KN538364v1_fix   415308  KN538364.1      new
+# chr5_KN196477v1_alt   139087  KN196477.1      new
+# chr6_KN196478v1_fix   268330  KN196478.1      new
+# chr9_KN196479v1_fix   330164  KN196479.1      new
+# chr10_KN196480v1_fix  277797  KN196480.1      new
+# chr10_KN538365v1_fix  14347   KN538365.1      new
+# chr10_KN538366v1_fix  85284   KN538366.1      new
+# chr10_KN538367v1_fix  420164  KN538367.1      new
+# chr11_KN538368v1_alt  203552  KN538368.1      new
+# chr11_KN196481v1_fix  108875  KN196481.1      new
+# chr12_KN196482v1_fix  211377  KN196482.1      new
+# chr12_KN538369v1_fix  541038  KN538369.1      new
+# chr12_KN538370v1_fix  86533   KN538370.1      new
+# chr13_KN196483v1_fix  35455   KN196483.1      new
+# chr13_KN538371v1_fix  206320  KN538371.1      new
+# chr13_KN538372v1_fix  356766  KN538372.1      new
+# chr13_KN538373v1_fix  148762  KN538373.1      new
+# chr15_KN538374v1_fix  4998962 KN538374.1      new
+# chr19_KN196484v1_fix  370917  KN196484.1      new
+# chr22_KN196485v1_alt  156562  KN196485.1      new
+# chr22_KN196486v1_alt  153027  KN196486.1      new
+# chrY_KN196487v1_fix   101150  KN196487.1      new
+
+# how much sequence:
+~/kent/src/hg/makeDb/doc/hg38/scanAssemblyReport.pl ../../chrom.sizes \
+  faCount.GRCH38.p2.txt genbank/GCA_000001405.17_GRCh38.p2_assembly_report.txt \
+     | grep new | awk '{sum += $2; printf "%d\t%s\n", sum, $0}' | tail
+#  12200930        chrY_KN196487v1_fix     101150  KN196487.1      new
+
+~/kent/src/hg/makeDb/doc/hg38/scanAssemblyReport.pl ../../chrom.sizes \
+  faCount.GRCH38.p2.txt genbank/GCA_000001405.17_GRCh38.p2_assembly_report.txt \
+     | grep new > new.sequences.list
+
+cut -f3 new.sequences.list > extract.new.list
+awk '{printf "s/%s/%s/; ", $3,$1}' new.sequences.list > genbankToUCSC.sed
+
+~/kent/src/hg/makeDb/doc/hg38/scanAssemblyReport.pl ../../chrom.sizes \
+  faCount.GRCH38.p2.txt genbank/GCA_000001405.17_GRCh38.p2_assembly_report.txt \
+     | grep -v new > existing.sequences.list
+
+cut -f3 existing.sequences.list > extract.exist.list
+
+faSomeRecords genbank/GCA_000001405.17_GRCh38.p2_genomic.fna.gz \
+    extract.new.list stdout | sed -e 's/ .*//;' | \
+      sed -f genbankToUCSC.sed | gzip -c > hg38Patch2.fa.gz
+
+faSomeRecords genbank/GCA_000001405.17_GRCh38.p2_genomic.fna.gz \
+  extract.exist.list stdout | sed -e 's/ .*//;' | gzip -c > existing.fa.gz
+
+# verify same amount of sequence here as hg38:
+faSize existing.fa.gz
+# 3209286105 bases (159970322 N's 3049315783 real 1890811945 upper 1158503838 lower) in 455 sequences in 1 files
+# check it is the same as hg38:  (masking is different, that is expected)
+head -1 ../../faSize.hg38.2bit.txt 
+# 3209286105 bases (159970322 N's 3049315783 real 1460684798 upper 1588630985 lower) in 455 sequences in 1 files
+
+# verify correct amount of patch2 sequence here:
+faSize hg38Patch2.fa.gz
+# 12200930 bases (58118 N's 12142812 real 7516049 upper 4626763 lower) in 31 sequences in 1 files
+# this is what was measured above:
+#  12200930        chrY_KN196487v1_fix     101150  KN196487.1      new
+
+# construct 2bit file:
+faToTwoBit hg38Patch2.fa.gz hg38Patch2.2bit
+twoBitInfo hg38Patch2.2bit stdout | sort -k2nr > hg38Patch2.chrom.sizes
+# take a look at that to verify it looks OK:
+cat hg38Patch2.chrom.sizes | sed -e 's/^/# /;'
+# chr15_KN538374v1_fix  4998962
+# chr12_KN538369v1_fix  541038
+# chr1_KN538360v1_fix   460100
+# chr3_KN196475v1_fix   451168
+# chr10_KN538367v1_fix  420164
+# chr3_KN538364v1_fix   415308
+# chr19_KN196484v1_fix  370917
+# chr2_KN538363v1_fix   365499
+# chr13_KN538372v1_fix  356766
+# chr9_KN196479v1_fix   330164
+# chr3_KN196476v1_fix   305979
+# chr1_KN538361v1_fix   305542
+# chr10_KN196480v1_fix  277797
+# chr6_KN196478v1_fix   268330
+# chr12_KN196482v1_fix  211377
+# chr2_KN538362v1_fix   208149
+# chr13_KN538371v1_fix  206320
+# chr11_KN538368v1_alt  203552
+# chr1_KN196472v1_fix   186494
+# chr1_KN196473v1_fix   166200
+# chr22_KN196485v1_alt  156562
+# chr22_KN196486v1_alt  153027
+# chr13_KN538373v1_fix  148762
+# chr5_KN196477v1_alt   139087
+# chr1_KN196474v1_fix   122022
+# chr11_KN196481v1_fix  108875
+# chrY_KN196487v1_fix   101150
+# chr12_KN538370v1_fix  86533
+# chr10_KN538366v1_fix  85284
+# chr13_KN196483v1_fix  35455
+# chr10_KN538365v1_fix  14347
+
+zcat genbank/GCA_000001405.17_GRCh38.p2_assembly_structure/PATCHES/alt_scaffolds/AGP/alt.scaf.agp.gz \
+   | sed -f genbankToUCSC.sed > hg38Patch2.agp
+
+checkAgpAndFa hg38Patch2.agp hg38Patch2.2bit | tail -1
+
+# All AGP and FASTA entries agree - both files are valid
+

@@ -1309,21 +1309,24 @@ if(scriptName)
     {
     // Provide hgTables options for some CGIs.
     char hgTablesOptions[1024] = "";
-    char *table = (cart == NULL ? NULL :
+    char *track = (cart == NULL ? NULL :
                    (endsWith(scriptName, "hgGene") ?
                     cartOptionalString(cart, "hgg_type") :
                     cartOptionalString(cart, "g")));
-    if (table && cart && db &&
+    if (track && cart && db &&
         (endsWith(scriptName, "hgc") || endsWith(scriptName, "hgTrackUi") ||
          endsWith(scriptName, "hgGene")))
         {
-        struct trackDb *tdb = hTrackDbForTrack(db, table);
-        if (tdb != NULL)
-            safef(hgTablesOptions, sizeof  hgTablesOptions, 
+        struct trackDb *tdb = hTrackDbForTrack(db, track);
+        if (tdb)
+	    {
+	    struct trackDb *topLevel = trackDbTopLevelSelfOrParent(tdb); 
+	    safef(hgTablesOptions, sizeof  hgTablesOptions, 
 		    "../cgi-bin/hgTables?hgta_doMainPage=1&hgta_group=%s&hgta_track=%s&hgta_table=%s&", 
-		    tdb->grp, tdb->track, tdb->table);
-	menuStr = replaceChars(menuStr, "../cgi-bin/hgTables?", hgTablesOptions);
-        trackDbFree(&tdb);
+		    topLevel->grp, topLevel->track, tdb->table);
+	    menuStr = replaceChars(menuStr, "../cgi-bin/hgTables?", hgTablesOptions);
+	    trackDbFree(&tdb);
+	    }
         }
     }
 

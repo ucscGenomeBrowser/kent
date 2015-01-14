@@ -2,9 +2,12 @@
  *                   handler. This is an extension of the original
  *                   rmskTrack.c written by UCSC.
  *
- *  Written by Robert Hubley 10/2012
+ *  Written by Robert Hubley 10/2012-11/2014
  *
  *  Modifications:
+ *
+ *  11/2014
+ *     Request for traditional pack/squish modes.
  *
  *  7/2014
  *     With the help of Jim Kent we modified the
@@ -64,7 +67,7 @@ struct subTrack
   // The number of display levels used in levels[]
 int levelCount;
   // The rmskJoined records from table query
-struct rmskJoined *levels[30];
+struct rmskJoined **levels;
 };
 
 
@@ -81,18 +84,12 @@ static char *rptClasses[] = {
 };
 
 
-/* Repeat class to color mappings. I took these from a
- * online color dictionary website:
- *
- *     http://people.csail.mit.edu/jaffer/Color/Dictionaries
- *
- *  I used the html4 catalog and tried to the 10 most distinct
- *  colors.
+/* Repeat class to color mappings.  
+ *   - Currently borrowed from snakePalette.
  *
  *  NOTE: If these are changed, do not forget to update the
  *        help table in joinedRmskTrack.html
  */
-// trying colors from snakePalette
 static Color rmskJoinedClassColors[] = {
 0xff1f77b4,			// SINE - red
 0xffff7f0e,			// LINE - lime
@@ -105,20 +102,6 @@ static Color rmskJoinedClassColors[] = {
 0xffbcbd22,			// Other - teal
 0xff17becf,			// Unknown - aqua
 };
-/*
-static Color rmskJoinedClassColors[] = {
-0xff0000ff,			// SINE - red
-0xff00ff00,			// LINE - lime
-0xff000080,			// LTR - maroon
-0xffff00ff,			// DNA - fuchsia
-0xff00ffff,			// Simple - yellow
-0xff008080,			// LowComplex - olive
-0xffff0000,			// Satellite - blue
-0xff008000,			// RNA - green
-0xff808000,			// Other - teal
-0xffffff00,			// Unknown - aqua
-};
-*/
 
 // Basic range type
 struct Extents
@@ -135,7 +118,6 @@ static struct Extents * getExtents(struct rmskJoined *rm)
  * of this track's glyph.  This is due to the mixture
  * of graphic and text elements within the glyph.
  *
- * TODO: Consider changing to graphics (ie. pixel) space.
  */
 {
 static struct Extents ex;
@@ -144,14 +126,18 @@ char lenLabel[20];
 if (rm == NULL)
     return NULL;
 
-ex.start = rm->alignStart
-    -
+// Start position is anchored by the alignment start
+// coordinates.  Then we subtract from that space for 
+// the label.
+ex.start = rm->alignStart -
     (int) ((mgFontStringWidth(tl.font, rm->name) +
 	    LABEL_PADDING) / pixelsPerBase);
 
-
+// Now subtract out space for the unaligned sequence
+// bar starting off the graphics portion of the glyph.
 if ((rm->blockSizes[0] * pixelsPerBase) > MAX_UNALIGNED_PIXEL_LEN)
     {
+    // Unaligned sequence bar needs length label -- account for that.
     safef(lenLabel, sizeof(lenLabel), "%d", rm->blockSizes[0]);
     ex.start -= (int) (MAX_UNALIGNED_PIXEL_LEN / pixelsPerBase) +
 	(int) ((mgFontStringWidth(tl.font, lenLabel) +
@@ -184,7 +170,10 @@ return &ex;
 
 // A better way to organize the display
 static int cmpRepeatDiv(const void *va, const void *vb)
-/* Sort repeats by divergence.
+/* Sort repeats by divergence. TODO: Another way to do this
+   would be to sort by containment.  How many annotations
+   are contained within the repeat.  This would require
+   a "contained_count" be precalculated for each annotation.
  */
 {
 struct rmskJoined *a = *((struct rmskJoined **) va);
@@ -193,49 +182,43 @@ struct rmskJoined *b = *((struct rmskJoined **) vb);
 return (b->score - a->score);
 }
 
-//static int cmpRepeatVisStart(const void *va, const void *vb)
-/* Sort repeats by display start position.  Note: We
- * account for the fact we may not start the visual
- * display at chromStart.  See MAX_UNALIGNED_PIXEL_LEN.
- */
-/*
-{
-struct rmskJoined *a = *((struct rmskJoined **) va);
-struct rmskJoined *b = *((struct rmskJoined **) vb);
-
-struct Extents *ext = NULL;
-ext = getExtents(a);
-int aStart = ext->start;
-ext = getExtents(b);
-int bStart = ext->start;
-
-return (aStart - bStart);
-}
-*/
+struct repeatItem *classRIList = NULL;
+struct repeatItem *fullRIList = NULL;
 
 static struct repeatItem * makeJRepeatItems()
 /* Initialize the track */
 {
-classHash = newHash(6);
-struct repeatItem *ri, *riList = NULL;
 int i;
-int numClasses = ArraySize(rptClasses);
-for (i = 0; i < numClasses; ++i)
+struct repeatItem *ri = NULL;
+
+// Build a permanent hash for mapping
+// class names to colors.  Used by glyph
+// drawing routine.  Also build the
+// classRIList primarily for use in tvDense
+// mode.
+if (!classHash)
     {
-    AllocVar(ri);
-    ri->class = rptClasses[i];
-    ri->className = rptClassNames[i];
-    // New color attribute
-    ri->color = rmskJoinedClassColors[i];
-    slAddHead(&riList, ri);
-    // Hash now prebuilt to hold color attributes
-    hashAdd(classHash, ri->class, ri);
-    if (sameString(rptClassNames[i], "Other"))
-        otherRepeatItem = ri;
+    classHash = newHash(6);
+    int numClasses = ArraySize(rptClasses);
+    for (i = 0; i < numClasses; ++i)
+        {
+        AllocVar(ri);
+        ri->class = rptClasses[i];
+        ri->className = rptClassNames[i];
+        // New color attribute
+        ri->color = rmskJoinedClassColors[i];
+        slAddHead(&classRIList, ri);
+        // Hash now prebuilt to hold color attributes
+        hashAdd(classHash, ri->class, ri);
+        if (sameString(rptClassNames[i], "Other"))
+            otherRepeatItem = ri;
+        }
+    slReverse(&classRIList);
     }
-slReverse(&riList);
-return riList;
+return classRIList;
 }
+
+
 
 static void rmskJoinedLoadItems(struct track *tg)
 /* We do the query(ies) here so we can report how deep the track(s)
@@ -246,18 +229,21 @@ static void rmskJoinedLoadItems(struct track *tg)
    * Initialize the subtracks hash - This will eventually contain
    * all the repeat data for each displayed subtrack.
    */
+
 if (!subTracksHash)
     subTracksHash = newHash(20);
 
-tg->items = makeJRepeatItems();
+//tg->items = makeJRepeatItems();
+ makeJRepeatItems();
 
 int baseWidth = winEnd - winStart;
 pixelsPerBase = (float) insideWidth / (float) baseWidth;
-if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
+if ((tg->visibility == tvFull || tg->visibility == tvSquish || 
+     tg->visibility == tvPack) && baseWidth <= DETAIL_VIEW_MAX_SCALE)
     {
+    struct repeatItem *ri = NULL;
     struct subTrack *st = NULL;
     AllocVar(st);
-    st->levels[0] = NULL;
     st->levelCount = 0;
     struct rmskJoined *rm = NULL;
     char **row;
@@ -272,11 +258,12 @@ if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
         rm = rmskJoinedLoad(row + rowOffset);
         slAddHead(&detailList, rm);
         }
-    //slSort(&detailList, cmpRepeatVisStart);
     slSort(&detailList, cmpRepeatDiv);
 
     sqlFreeResult(&sr);
     hFreeConn(&conn);
+
+    AllocArray( st->levels, slCount(&detailList));
 
     int crChromStart, crChromEnd;
     while (detailList)
@@ -295,37 +282,53 @@ if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
         crChromStart = ext->start;
         crChromEnd = ext->end;
 
-        while (rm)
-            {
-            ext = getExtents(rm);
-            rmChromStart = ext->start;
-            rmChromEnd = ext->end;
 
-            if (rmChromStart > crChromEnd)
-                {
-                cr->next = rm;
-                cr = rm;
-                crChromStart = rmChromStart;
-                crChromEnd = rmChromEnd;
-                if (prev)
-                    prev->next = rm->next;
-                else
-                    detailList = rm->next;
+        if ( tg->visibility == tvFull )
+        {
+        AllocVar(ri);
+        ri->className = cr->name;
+        slAddHead(&fullRIList, ri);
+        }
 
-                rm = rm->next;
-                cr->next = NULL;
-                }
-            else
-                {
-                // Save for a lower level
-                prev = rm;
-                rm = rm->next;
-                }
-            }		// while ( rm )
-        }			// while ( detailList )
+        // tvFull is one-per-line -- no need to group items in levels
+        if ( tg->visibility == tvSquish || tg->visibility == tvPack )
+             {
+             while (rm)
+                 {
+                 ext = getExtents(rm);
+                 rmChromStart = ext->start;
+                 rmChromEnd = ext->end;
+     
+                 if (rmChromStart > crChromEnd)
+                     {
+                     cr->next = rm;
+                     cr = rm;
+                     crChromStart = rmChromStart;
+                     crChromEnd = rmChromEnd;
+                     if (prev)
+                         prev->next = rm->next;
+                     else
+                         detailList = rm->next;
+     
+                     rm = rm->next;
+                     cr->next = NULL;
+                     }
+                 else
+                     {
+                     // Save for a lower level
+                     prev = rm;
+                     rm = rm->next;
+                     }
+                 } // while ( rm )
+             } // else if ( tg->visibility == tvSquish ...
+        } // while ( detailList )
     // Create Hash Entry
     hashReplace(subTracksHash, tg->table, st);
-    }				// if ( tg->visibility == tvFull
+    slReverse(&fullRIList);
+    tg->items = fullRIList;
+    } // if ((tg->visibility == tvFull || ...
+    else 
+       tg->items = classRIList;
 }
 
 static void rmskJoinedFreeItems(struct track *tg)
@@ -344,7 +347,8 @@ struct repeatItem *ri = item;
    * levels.  No need to display a label at each level.  Instead
    * Just return a label for the first level.
    */
-if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
+if ((tg->visibility == tvSquish || 
+     tg->visibility == tvPack) && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
     {
     if (strcmp(ri->className, "SINE") == 0)
 	return("Repeats");
@@ -359,7 +363,14 @@ int rmskJoinedItemHeight(struct track *tg, void *item)
 {
   // Are we in full view mode and at the scale needed to display
   // the detail view?
-if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
+if (tg->limitedVis == tvSquish && winBaseCount <= DETAIL_VIEW_MAX_SCALE )
+    {
+    if ( tg->heightPer < (MINHEIGHT/2) )
+      return (MINHEIGHT/2);
+    else
+      return tg->heightPer;
+    }
+else if ((tg->limitedVis == tvFull || tg->limitedVis == tvPack) && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
     {
     if ( tg->heightPer < MINHEIGHT )
       return MINHEIGHT;
@@ -368,7 +379,7 @@ if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
     }
 else
     {
-    return tgFixedItemHeight(tg, item);
+      return tgFixedItemHeight(tg, item);
     }
 }
 
@@ -376,17 +387,35 @@ int rmskJoinedTotalHeight(struct track *tg, enum trackVisibility vis)
 {
   // Are we in full view mode and at the scale needed to display
   // the detail view?
-if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
+if ((tg->limitedVis == tvFull || tg->limitedVis == tvSquish ||
+     tg->limitedVis == tvPack) && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
     {
     // Lookup the depth of this subTrack and report it
     struct subTrack *st = hashFindVal(subTracksHash, tg->table);
     if (st)
+        {
+        tg->height = ((st->levelCount + 1) * rmskJoinedItemHeight(tg, NULL) );
         return ((st->levelCount + 1) * rmskJoinedItemHeight(tg, NULL) );
+        }
     else
+        {
+        tg->height = rmskJoinedItemHeight(tg, NULL);
         return (rmskJoinedItemHeight(tg, NULL));	// Just display one line
+        }
     }
 else
-return tgFixedTotalHeightNoOverflow(tg, vis);
+    {
+    if ( vis == tvDense )
+      {
+      tg->height = tgFixedTotalHeightNoOverflow(tg, tvDense );
+      return tgFixedTotalHeightNoOverflow(tg, tvDense );
+      }
+    else
+      {
+      tg->height = tgFixedTotalHeightNoOverflow(tg, tvFull );
+      return tgFixedTotalHeightNoOverflow(tg, tvFull );
+      }
+    }
 }
 
 static void drawDashedHorizLine(struct hvGfx *hvg, int x1, int x2,
@@ -537,7 +566,8 @@ clippedBarbs(hvg, x1 + 1, midY, width, ((height >> 1) - 2), 5,
 }
 
 static void drawRMGlyph(struct hvGfx *hvg, int y, int heightPer,
-	     int width, int baseWidth, int xOff, struct rmskJoined *rm)
+	    int width, int baseWidth, int xOff, struct rmskJoined *rm,
+            enum trackVisibility vis)
 /*
  *  Draw a detailed RepeatMasker annotation glyph given
  *  a single rmskJoined structure.
@@ -771,14 +801,19 @@ for (idx = 0; idx < rm->blockCount; idx++)
 		       y + unalignedBlockOffset + 3, black);
 
 	    // Draw labels
-	    MgFont *font = tl.font;
-	    int fontHeight = tl.fontHeight;
-	    int stringWidth =
-		mgFontStringWidth(font, rm->name) + LABEL_PADDING;
-	    hvGfxTextCentered(hvg, lx1 - stringWidth,
+	    if ( vis != tvSquish && vis != tvFull )
+                 {
+	         MgFont *font = tl.font;
+	         int fontHeight = tl.fontHeight;
+	         int stringWidth =
+	     	     mgFontStringWidth(font, rm->name) + LABEL_PADDING;
+	         hvGfxTextCentered(hvg, lx1 - stringWidth,
 			       heightPer - fontHeight + y,
 			       stringWidth, fontHeight, MG_BLACK, font,
 			       rm->name);
+                 }
+
+
 
 
 	    }
@@ -967,7 +1002,6 @@ for (idx = 0; idx < rm->blockCount; idx++)
 	    }
 	}
     }
-
 }
 
 static void origRepeatDraw(struct track *tg, int seqStart, int seqEnd,
@@ -983,7 +1017,6 @@ int y = yOff;
 int heightPer = tg->heightPer;
 int lineHeight = tg->lineHeight;
 int x1, x2, w;
-boolean isFull = (vis == tvFull);
 Color col;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
@@ -991,7 +1024,7 @@ char **row;
 int rowOffset;
 
 
-if (isFull)
+if (vis == tvFull || vis == tvSquish || vis == tvPack)
     {
     /*
      * Do grayscale representation spread out among tracks.
@@ -1147,15 +1180,15 @@ pixelsPerBase = (float) width / (float) baseWidth;
    * int heightPer = tg->heightPer;
    */
 int heightPer = rmskJoinedItemHeight(tg, NULL);
-boolean isFull = (vis == tvFull);
+//boolean isFull = (vis == tvFull);
 struct rmskJoined *rm;
+// DEBUG REMOVE
 
   // If we are in full view mode and the scale is sufficient,
   // display the new visualization.
-if (isFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
+if ((vis == tvFull || vis == tvSquish || vis == tvPack) && baseWidth <= DETAIL_VIEW_MAX_SCALE)
     {
     int level = yOff;
-
     struct subTrack *st = hashFindVal(subTracksHash, tg->table);
     if (!st)
 	return;
@@ -1167,7 +1200,7 @@ if (isFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
 	rm = st->levels[currLevel];
 	while (rm)
 	    {
-	    drawRMGlyph(hvg, level, heightPer, width, baseWidth, xOff, rm);
+	    drawRMGlyph(hvg, level, heightPer, width, baseWidth, xOff, rm, vis );
 
 	    char statusLine[128];
 	    int ss1 = roundingScale(rm->alignStart - winStart,
@@ -1185,12 +1218,13 @@ if (isFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
 	        w = 1;
 
 	    mapBoxHc(hvg, rm->alignStart, rm->alignEnd, ss1, level,
-		      w, heightPer, tg->track, rm->id, statusLine);
+   	             w, heightPer, tg->track, rm->id, statusLine);
 	    rm = rm->next;
 	    }
 	level += heightPer;
 	rmskJoinedFreeList(&(st->levels[currLevel]));
-	}
+        }
+
     }
 else
     {
@@ -1213,4 +1247,5 @@ tg->itemHeight = rmskJoinedItemHeight;
 tg->itemStart = tgItemNoStart;
 tg->itemEnd = tgItemNoEnd;
 tg->mapsSelf = TRUE;
+tg->canPack = TRUE;
 }

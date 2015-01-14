@@ -4391,6 +4391,87 @@ struct dbDb *hGetIndexedDatabasesForClade(char *db)
 return hGetIndexedDbsMaybeClade(db);
 }
 
+struct slPair *hGetCladeOptions()
+/* Return a list of slPairs, each containing clade menu value (hgcentral.clade.name, e.g. 'mammal')
+ * and clade menu label (hgcentral.clade.label, e.g. 'Mammal'),
+ * useful for constructing a clade menu. */
+{
+// get only the clades that have actual active genomes
+char *query = "NOSQLINJ "
+    "SELECT DISTINCT(c.name), c.label "
+    "FROM clade c, genomeClade g, dbDb d "
+    "WHERE c.name=g.clade AND d.organism=g.genome AND d.active=1 "
+    "ORDER BY c.priority";
+struct sqlConnection *conn = hConnectCentral();
+struct slPair *nativeClades = sqlQuickPairList(conn, query);
+hDisconnectCentral(&conn);
+
+struct slPair *trackHubClades = trackHubGetCladeLabels();
+
+return slCat(nativeClades, trackHubClades);
+}
+
+struct slPair *hGetGenomeOptionsForClade(char *clade)
+/* Return a list of slPairs, each containing genome menu value and menu label,
+ * useful for constructing a genome menu for the given clade. */
+{
+struct slPair *pairList = NULL;
+if (isHubTrack(clade))
+    {
+    struct dbDb *hubDbDbList = trackHubGetDbDbs(clade), *dbDb;
+    for (dbDb = hubDbDbList;  dbDb != NULL;  dbDb = dbDb->next)
+	slAddHead(&pairList, slPairNew(dbDb->genome, cloneString(dbDb->genome)));
+    }
+else
+    {
+    struct dyString *dy =
+	sqlDyStringCreate("select distinct(dbDb.genome) from dbDb,genomeClade "
+			  "where dbDb.genome=genomeClade.genome and genomeClade.clade = '%s' "
+			  "order by orderKey", clade);
+    // Although clade and db menus have distinct values vs. labels, we actually use the
+    // same strings for values and labels in the genome menu!  So we get a plain list
+    // from the query and turn it into a pair list.
+    struct sqlConnection *conn = hConnectCentral();
+    struct slName *nativeGenomes = sqlQuickList(conn, dy->string), *g;
+    hDisconnectCentral(&conn);
+    dyStringFree(&dy);
+    for (g = nativeGenomes;  g != NULL;  g = g->next)
+	slAddHead(&pairList, slPairNew(g->name, cloneString(g->name)));
+    }
+slReverse(&pairList);
+return pairList;
+}
+
+struct slPair *hGetDbOptionsForGenome(char *genome)
+/* Return a list of slPairs, each containing db menu value and menu label,
+ * useful for constructing an assembly menu for the given genome. */
+{
+struct slPair *pairList = NULL;
+if (isHubTrack(genome))
+    {
+    char *clade = trackHubAssemblyClade(genome);
+    struct dbDb *hubDbDbList = trackHubGetDbDbs(clade), *dbDb;
+    for (dbDb = hubDbDbList;  dbDb != NULL;  dbDb = dbDb->next)
+	{
+	char *db = dbDb->name;
+	if (isEmpty(db))
+	    db = dbDb->genome;
+	slAddHead(&pairList, slPairNew(db, cloneString(db)));
+	}
+    slReverse(&pairList);
+    }
+else
+    {
+    struct dyString *dy = sqlDyStringCreate("select name,description from dbDb "
+					    "where genome = '%s' order by orderKey", genome);
+    struct sqlConnection *conn = hConnectCentral();
+    pairList = sqlQuickPairList(conn, dy->string);
+    hDisconnectCentral(&conn);
+    dyStringFree(&dy);
+    }
+return pairList;
+}
+
 struct slName *hLiftOverFromDbs()
 /* Return a list of names of the DBs in the
  * fromDb column of the liftOverChain.*/

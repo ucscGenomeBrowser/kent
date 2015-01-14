@@ -362,6 +362,8 @@ struct psl *psl;
 
 while ((psl = pslNext(lf)) != NULL)
     {
+    if (psl->strand[1] != '\0')
+        errAbort("requires PSLs to have implicit positive strand, found `%s'", psl->strand);
     dyStringClear(dy);
     dyStringPrintf(dy, "%s%s%s", psl->qName, psl->strand, psl->tName);
     sp = hashFindVal(pairHash, dy->string);

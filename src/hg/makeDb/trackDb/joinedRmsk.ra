@@ -7,5 +7,4 @@ priority 1
 spectrum on
 type bed 3 +
 maxWindowToDraw 10000000
-canPack off
 html joinedRmsk

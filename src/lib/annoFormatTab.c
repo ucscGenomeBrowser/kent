@@ -9,34 +9,90 @@
 
 struct annoFormatTab
     {
-    struct annoFormatter formatter;
-    char *fileName;
-    FILE *f;
+    struct annoFormatter formatter;     // External interface
+    char *fileName;                     // Output file name, can be "stdout"
+    FILE *f;                            // Output file handle
+    struct hash *columnVis;             // Hash of columns that have been explicitly selected
+                                        // or deselected by user.
     boolean needHeader;			// TRUE if we should print out the header
     };
 
-static void printHeaderColumns(FILE *f, struct annoStreamer *source, boolean isFirst)
+static void makeFullColumnName(char *fullName, size_t size, char *sourceName, char *colName)
+/* If sourceName is non-full, make fullName sourceName.colName, otherwise just colName. */
+{
+if (sourceName)
+    safef(fullName, size, "%s.%s", sourceName, colName);
+else
+    safecpy(fullName, size, colName);
+}
+
+void annoFormatTabSetColumnVis(struct annoFormatter *vSelf, char *sourceName, char *colName,
+                               boolean enabled)
+/* Explicitly include or exclude column in output.  sourceName must be the same
+ * as the corresponding annoStreamer source's name. */
+{
+struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
+if (! self->columnVis)
+    self->columnVis = hashNew(0);
+char fullName[PATH_LEN];
+makeFullColumnName(fullName, sizeof(fullName), sourceName, colName);
+hashAddInt(self->columnVis, fullName, enabled);
+}
+
+static boolean columnIsIncluded(struct annoFormatTab *self, char *sourceName, char *colName)
+// Return TRUE if column has not been explicitly deselected.
+{
+if (self->columnVis)
+    {
+    char fullName[PATH_LEN];
+    makeFullColumnName(fullName, sizeof(fullName), sourceName, colName);
+    int vis = hashIntValDefault(self->columnVis, fullName, 1);
+    if (vis == 0)
+        return FALSE;
+    }
+return TRUE;
+}
+
+static void printHeaderColumns(struct annoFormatTab *self, struct annoStreamer *source,
+                               boolean isFirst)
 /* Print names of included columns from this source. */
 {
+FILE *f = self->f;
+char *sourceName = source->name;
 if (source->rowType == arWig)
     {
     // Fudge in the row's chrom, start, end as output columns even though they're not in autoSql
     if (isFirst)
 	{
-	fputs("#chrom", f);
+        if (sourceName)
+            fprintf(f, "#%s.chrom", sourceName);
+        else
+            fputs("#chrom", f);
 	isFirst = FALSE;
 	}
-    fputs("\tstart\tend", f);
+    if (sourceName)
+        fprintf(f, "\t%s.start\t%s.end", sourceName, sourceName);
+    else
+        fputs("\tstart\tend", f);
     }
 struct asColumn *col;
 int i;
 for (col = source->asObj->columnList, i = 0;  col != NULL;  col = col->next, i++)
     {
-    if (isFirst && i == 0)
-	fputc('#', f);
-    else
-	fputc('\t', f);
-    fputs(col->name, f);
+    if (columnIsIncluded(self, sourceName, col->name))
+        {
+        if (isFirst)
+            {
+            fputc('#', f);
+            isFirst = FALSE;
+            }
+        else
+            fputc('\t', f);
+        if (sourceName)
+            fprintf(f, "%s.%s", sourceName, col->name);
+        else
+            fputs(col->name, f);
+        }
     }
 }
 
@@ -50,10 +106,10 @@ if (self->needHeader)
     char *primaryHeader = primary->getHeader(primary);
     if (isNotEmpty(primaryHeader))
 	fprintf(self->f, "# Header from primary input:\n%s", primaryHeader);
-    printHeaderColumns(self->f, primary, TRUE);
+    printHeaderColumns(self, primary, TRUE);
     struct annoStreamer *grator;
     for (grator = integrators;  grator != NULL;  grator = grator->next)
-	printHeaderColumns(self->f, grator, FALSE);
+	printHeaderColumns(self, grator, FALSE);
     fputc('\n', self->f);
     self->needHeader = FALSE;
     }
@@ -126,10 +182,12 @@ if (retFreeWhenDone != NULL)
 return words;
 }
 
-static void printColumns(FILE *f, struct annoStreamer *streamer, struct annoRow *row,
-			 boolean isFirst)
+static void printColumns(struct annoFormatTab *self, struct annoStreamer *streamer,
+			 struct annoRow *row, boolean isFirst)
 /* Print columns in streamer's row (if NULL, print the right number of empty fields). */
 {
+FILE *f = self->f;
+char *sourceName = streamer->name;
 boolean freeWhenDone = FALSE;
 char **words = wordsFromRow(row, streamer, &freeWhenDone);
 if (streamer->rowType == arWig)
@@ -146,14 +204,19 @@ if (streamer->rowType == arWig)
     else
 	fputs("\t\t", f);
     }
-int colCount = slCount(streamer->asObj->columnList);
+struct asColumn *col;
 int i;
-for (i = 0;  i < colCount;  i++)
+for (col = streamer->asObj->columnList, i = 0;  col != NULL;  col = col->next, i++)
     {
-    if (!isFirst || i > 0)
-	fputc('\t', f);
-    if (words != NULL)
-	fputs((words[i] ? words[i] : ""), f);
+    if (columnIsIncluded(self, sourceName, col->name))
+        {
+        if (isFirst)
+            isFirst = FALSE;
+        else
+            fputc('\t', f);
+        if (words != NULL)
+            fputs((words[i] ? words[i] : ""), f);
+        }
     }
 if (freeWhenDone)
     {
@@ -190,11 +253,11 @@ for (iG = 0;  iG < gratorCount;  iG++)
 int iR;
 for (iR = 0;  iR < maxRows;  iR++)
     {
-    printColumns(self->f, primaryData->streamer, primaryData->rowList, TRUE);
+    printColumns(self, primaryData->streamer, primaryData->rowList, TRUE);
     for (iG = 0;  iG < gratorCount;  iG++)
 	{
 	struct annoRow *gratorRow = slElementFromIx(gratorData[iG].rowList, iR);
-	printColumns(self->f, gratorData[iG].streamer, gratorRow, FALSE);
+	printColumns(self, gratorData[iG].streamer, gratorRow, FALSE);
 	}
     fputc('\n', self->f);
     }

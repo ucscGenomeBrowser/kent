@@ -997,10 +997,10 @@ if (err)
 return ctList;
 }
 
-boolean customTracksExist(struct cart *cart, char **retCtFileName)
-/* determine if there are any custom tracks.  Cleanup from expired tracks */
+boolean customTracksExistDb(struct cart *cart, char *db, char **retCtFileName)
+/* determine if there are any custom tracks for db.  Cleanup from expired tracks */
 {
-char *ctFileVar = customTrackFileVar(cartString(cart, "db"));
+char *ctFileVar = customTrackFileVar(db);
 char *ctFileName = cartOptionalString(cart, ctFileVar);
 if (ctFileName)
     {
@@ -1015,6 +1015,12 @@ if (ctFileName)
     cartRemovePrefix(cart, CT_PREFIX);
     }
 return FALSE;
+}
+
+boolean customTracksExist(struct cart *cart, char **retCtFileName)
+/* determine if there are any custom tracks.  Cleanup from expired tracks */
+{
+return customTracksExistDb(cart, cartString(cart, "db"), retCtFileName);
 }
 
 boolean isCustomTrack(char *track)
