@@ -2,6 +2,8 @@ var CladeOrgDbMixin = function(myPath) {
     // This is a model mixin that manages UI state and server interaction for
     // the clade, org and db (aka group, genome, assembly) menus.
 
+    'use strict';
+
     var myCartVars = ['clade', 'org', 'db', 'cladeOptions', 'orgOptions', 'dbOptions'];
 
     // Server event handler

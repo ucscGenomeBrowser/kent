@@ -1,6 +1,9 @@
 // Send requests to a CGI that returns JSON responses
 
 var cart = (function() {
+
+    'use strict';
+
     // The CGI-generated HTML should include an inline script that sets window.hgsid:
     var hgsid = window.hgsid || '0';
 
@@ -16,15 +19,16 @@ var cart = (function() {
 	        throw(['commandObjToString: commandObj is not an object',
 		       commandObj]);
             }
+            // Setting CGI variables will be done the usual way, in the CGI request string.
+            // Make sure that commandObj children are objects, and make an object cmdNoChiVar
+            // that contains all children of commandObj except cgiVar if present.
+            var cmdNoCgiVar = {};
             Object.keys(commandObj).forEach(function(key) {
 	        var value = commandObj[key];
 	        if (value && ! $.isPlainObject(value)) {
 	            throw(['commandObjToString: commandObj.' + key +
 		          ' is not an object', value]);
 	        }
-            });
-            var cmdNoCgiVar = {};
-            Object.keys(commandObj).forEach(function(key) {
 	        if (key !== 'cgiVar') {
 	            cmdNoCgiVar[key] = commandObj[key];
 	        }

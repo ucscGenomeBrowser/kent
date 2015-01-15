@@ -2,6 +2,8 @@ var ImModel = (function() {
     // A base class for an app-specific subclass that manages immutable UI
     // state, communication with the CGI/server, and UI events.
 
+    'use strict';
+
     var ImModel = function(render) {
         // construct a new instance of (a subclass of) ImModel and bind its functions
         // so that "this" means this.
@@ -86,8 +88,8 @@ var ImModel = (function() {
             _.forEach(partialPath, function(index, depth) {
                 var nextIndex = partialPath[depth+1];
                 if (! node.children[index]) {
-                    // children.[index] doesn't yet exist; look at next element in partialPath,
-                    // if any, to determine whether children.[index].children should be an array,
+                    // children[index] doesn't yet exist; look at next element in partialPath,
+                    // if any, to determine whether children[index].children should be an array,
                     // object, or if handler should be added to node.handlers instead.
                     if (nextIndex) {
                         node.children[index] = { handlers: {}, children: {} };
@@ -108,7 +110,7 @@ var ImModel = (function() {
             }, this);
             if (! done) {
                 this.error('registerUiHandler: error in tree logic since partialPath was neither '+
-                           'found nor created:', path, this.uiHandlers);
+                           'found nor created:', partialPath, this.uiHandlers);
             }
         },
 
@@ -207,7 +209,7 @@ var ImModel = (function() {
             console.log('ImModel.update:', path, data);
             this.bumpUiState(function(mutState) {
                 this.mutState = mutState;
-                var node = this.uiHandlers, handlers;
+                var node = this.uiHandlers;
                 _.forEach(path, function(index, depth) {
                     var nextIndex = path[depth+1];
                     var handlers = node.handlers[index];

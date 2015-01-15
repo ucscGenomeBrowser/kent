@@ -2,6 +2,8 @@ var PositionSearchMixin = function(myPath) {
     // This is a model mixin that manages UI state and server interaction for
     // the position/search term input and the pop-up that displays multiple results.
 
+    'use strict';
+
     var myCartVars = ['position', 'positionMatches', 'geneSuggestTrack'];
 
     // Server event handler
