@@ -67,6 +67,6 @@ dataVersion GRCh38 Patch 2 update, Dec. 2014
         parent hg38Patch2Align
         subGroups view=psl
         shortLabel Alignment
-        longLabel GRCh38 Patches to GRCh38 Alignments
+        longLabel Alignments of the patch 2 sequences to the reference GRCh38 
         html hg38Patch2
         priority 3
