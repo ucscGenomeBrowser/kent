@@ -64,6 +64,14 @@ if (errCatchStart(errCatch))
 		{
 		/* Just open and close to verify file exists and is correct type. */
 		struct bbiFile *bbi = bigBedFileOpen(bigDataUrl);
+		char *typeString = cloneString(type);
+		nextWord(&typeString);
+		if (typeString != NULL)
+		    {
+		    unsigned numFields = sqlUnsigned(nextWord(&typeString));
+		    if (numFields > bbi->fieldCount)
+			errAbort("fewer fields in bigBed (%d) than in type statement (%d) for track %s with bigDataUrl %s\n", bbi->fieldCount, numFields, trackHubSkipHubName(tdb->track), bigDataUrl);
+		    }
 		bbiFileClose(&bbi);
 		}
 	    else if (startsWithWord("vcfTabix", type))

@@ -45,6 +45,7 @@ static char *papHamNames[] = {"Papio hamadryas", "Papio hamadryas hamadryas", "P
 static char *ponAbeNames[] = {"Pongo abelii", "Pongo pygmaeus",
 		"Pongo pygmaeus pygmaeus", "Pongo pygmaeus abelii", NULL};
 static char *rheMacNames[] = {"Macaca mulatta", NULL};
+static char *macFasNames[] = {"Macaca fascicularis", NULL};
 static char *monDomNames[] = {"Monodelphis domestica", NULL};
 static char *galGalNames[] = {"Gallus gallus", "Gallus sp.", NULL};
 static char *ceNames[] = {"Caenorhabditis elegans", NULL};
@@ -157,6 +158,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"papHam", papHamNames},
     {"ponAbe", ponAbeNames},
     {"rheMac", rheMacNames},
+    {"macFas", macFasNames},
     {"monDom", monDomNames},
     {"galGal", galGalNames},
     {"ce", ceNames},

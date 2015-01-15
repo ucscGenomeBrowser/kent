@@ -290,7 +290,7 @@ return TRUE;
 }
 
 void extraUiLinks(char *db,struct trackDb *tdb)
-// Show downlaods, schema and metadata links where appropriate
+// Show downloads, schema and metadata links where appropriate
 {
 boolean schemaLink = (!tdbIsDownloadsOnly(tdb) && !trackHubDatabase(db)
                   && isCustomTrack(tdb->table) == FALSE)
@@ -4728,6 +4728,15 @@ printf("     $(\"[name='%s.minY']\")[0].disabled=false;\n", name);
 printf("     $(\"[name='%s.maxY']\")[0].disabled=false;\n", name);
 printf("     $(\".%sAutoScaleDesc\").attr('style', 'color:black;');\n", name);
 printf("     }\n");
+printf("  });\n");
+printf("\n");
+printf("  $( document ).ready(function()\n");
+printf("  {\n");
+printf("  val= $(\"[name='%s.autoScale']\").find(':selected').val(); \n", name);
+printf("  if (val==\"auto-scale to data view\")\n");
+printf("     $(\"[name='%s.minY']\")[0].disabled=true;\n", name);
+printf("     $(\"[name='%s.maxY']\")[0].disabled=true;\n", name);
+printf("     $(\".%sAutoScaleDesc\").attr('style', 'color:grey;');\n", name);
 printf("  });\n");
 printf("</script>\n");
 }

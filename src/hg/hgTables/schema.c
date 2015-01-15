@@ -30,7 +30,6 @@
 #include "hubConnect.h"
 #include "errCatch.h"
 
-
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
 {
@@ -381,9 +380,11 @@ hPrintf("<B>Database:</B> %s", db);
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Primary Table:</B> %s", table);
 if (!sameString(splitTable, table))
     hPrintf(" (%s)", splitTable);
-hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Row Count:</B> ");
+hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Row Count: </B>  ");
 printLongWithCommas(stdout, sqlTableSize(conn, splitTable));
-hPrintf("<BR>\n");
+char *date = firstWordInLine(sqlTableUpdate(conn, table));
+if (date != NULL)
+    printf("&nbsp&nbsp<B> Data last updated:&nbsp;</B>%s<BR>\n", date);
 if (asObj != NULL)
     hPrintf("<B>Format description:</B> %s<BR>", asObj->comment);
 describeFields(db, splitTable, asObj, conn);
