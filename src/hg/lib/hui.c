@@ -4032,7 +4032,7 @@ struct subtrackConfigSettings
     sortOrder_t *sortOrder; /* from trackDb setting */
     boolean useDragAndDrop; /* from trackDb setting */
     boolean restrictions;   /* from metadata ? */
-    //boolean colorPatch;     /* from trackDb setting */
+    boolean colorPatch;     /* from trackDb setting */
     boolean displayAll;     /* from radiobutton */
     int bgColorIx;          /* from logic over other settings */
     int columnCount;        /* determined from trackDb settings */
@@ -4055,6 +4055,8 @@ int colspan = 3;
 if (sortOrder != NULL)
     colspan = sortOrder->count+2;
 else if (!tdbIsMultiTrack(parentTdb)) // An extra column for subVis/wrench so dragAndDrop works
+    colspan++;
+if (settings->colorPatch)
     colspan++;
 int columnCount = 0;
 if (sortOrder != NULL)
@@ -4409,6 +4411,12 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         }
     else  // Non-sortable tables do not have sort by columns but will display a short label
         { // (which may be a configurable link)
+        if (settings->colorPatch)
+            {
+            printf("<TD BGCOLOR='#%02X%02X%02X'>&nbsp;&nbsp;&nbsp;&nbsp;</TD>",
+                           subtrack->colorR, subtrack->colorG, subtrack->colorB);
+
+            }
         printf("<TD>&nbsp;");
         hierarchy_t *hierarchy = hierarchySettingGet(parentTdb);
         indentIfNeeded(hierarchy,membership);
@@ -4579,26 +4587,27 @@ else
     }
 
 // Get info for subtrack list
-struct subtrackConfigSettings *subtrackConfig = NULL;
-AllocVar(subtrackConfig);
+struct subtrackConfigSettings *settings = NULL;
+AllocVar(settings);
 
 // Determine whether there is a restricted until date column
-subtrackConfig->restrictions = FALSE;
+settings->restrictions = FALSE;
 for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
     {
     subtrack = subtrackRef->val;
     (void)metadataForTable(db,subtrack,NULL);
     if (NULL != metadataFindValue(subtrack,"dateUnrestricted"))
         {
-        subtrackConfig->restrictions = TRUE;
+        settings->restrictions = TRUE;
         break;
         }
     }
-subtrackConfig->useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
-subtrackConfig->sortOrder = sortOrder;
-subtrackConfig->displayAll = displayAll;
+settings->useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
+settings->sortOrder = sortOrder;
+settings->displayAll = displayAll;
+settings->colorPatch = (trackDbSetting(parentTdb, SUBTRACK_COLOR_PATCH) != NULL);
 
-printSubtrackTable(parentTdb, subtrackRefList, subtrackConfig, cart);
+printSubtrackTable(parentTdb, subtrackRefList, settings, cart);
 
 if (sortOrder == NULL)
     printf("</td></tr></table>");
