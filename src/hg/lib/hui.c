@@ -3078,6 +3078,20 @@ if (membership != NULL)
 return FALSE;
 }
 
+static char *subtrackColorToCompare(struct trackDb *subtrack)
+/* Convert RGB color to string with scaled hue, suitable for alpha sort */
+{
+struct rgbColor rgbColor;
+rgbColor.r = subtrack->colorR;
+rgbColor.g = subtrack->colorG;
+rgbColor.b = subtrack->colorB;
+struct hslColor hslColor = mgRgbToHsl(rgbColor);
+int hue = hslColor.h * 10;
+char buf[5];
+safef(buf, 5, "%04d", hue);
+return cloneString(buf);
+}
+
 boolean subgroupFindTitle(struct trackDb *parentTdb, char *name,char **value)
 // looks for a a subgroup matching the name and returns the title if found
 {
@@ -3109,7 +3123,6 @@ return differentString(SUBTRACK_COLOR_SUBGROUP, value);
 
 #define SORT_ON_TRACK_NAME "trackName"
 #define SORT_ON_RESTRICTED "dateUnrestricted"
-
 
 sortOrder_t *sortOrderGet(struct cart *cart,struct trackDb *parentTdb)
 // Parses any list sort order instructions for parent of subtracks (from cart or trackDb)
@@ -3229,6 +3242,8 @@ if (sortOrder && *sortOrder)
 }
 
 
+
+
 sortableTdbItem *sortableTdbItemCreate(struct trackDb *tdbChild,sortOrder_t *sortOrder)
 // creates a sortable tdb item struct, given a child tdb and its parent's sort table
 // Errors in interpreting a passed in sortOrder will return NULL
@@ -3246,12 +3261,21 @@ if (sortOrder != NULL)   // Add some sort buttons
         sortColumn *column = NULL;
         AllocVar(column);
         column->fwd = sortOrder->forward[sIx];
-        if (!subgroupFind(item->tdb,sortOrder->column[sIx],&(column->value)))
+        char *col = sortOrder->column[sIx];
+        if (!subgroupFind(item->tdb, col, &(column->value)))
             {
-            char *setting = trackDbSetting(item->tdb,sortOrder->column[sIx]);
-            if (setting != NULL)
-                column->value = cloneString(setting);
-            // No subgroup, assume there is a matching setting (eg longLabel)
+            if (sameString(col, SUBTRACK_COLOR_SUBGROUP))
+                {
+                // convert RGB color to hue so alpha sort can compare
+                column->value = subtrackColorToCompare(tdbChild);
+                }
+            else
+                {
+                char *setting = trackDbSetting(item->tdb,col);
+                if (setting != NULL)
+                    column->value = cloneString(setting);
+                // No subgroup, assume there is a matching setting (eg longLabel)
+                }
             }
         if (column->value != NULL)
             slAddHead(&(item->columns), column);
@@ -4355,33 +4379,31 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         int sIx=0;
         for (sIx=0; sIx <sortOrder->count; sIx++)
             {
-            ix = stringArrayIx(sortOrder->column[sIx], membership->subgroups, membership->count);
+            char *col = sortOrder->column[sIx];
+            ix = stringArrayIx(col, membership->subgroups, membership->count);
                                 // TODO: Sort needs to expand from subGroups to labels as well
             if (ix >= 0)
                 {
                 char *titleRoot=NULL;
-                if (cvTermIsEmpty(sortOrder->column[sIx],membership->titles[ix]))
+                if (cvTermIsEmpty(col, membership->titles[ix]))
                     titleRoot = cloneString(" &nbsp;");
                 else
                     titleRoot = labelRoot(membership->titles[ix],NULL);
                 // Each sortable column requires hidden goop (in the "abbr" field currently)
                 // which is the actual sort on value
                 printf("<TD id='%s_%s' abbr='%s' align='left'>&nbsp;",
-                       subtrack->track,sortOrder->column[sIx],membership->membership[ix]);
+                       subtrack->track, col, membership->membership[ix]);
                 printf("%s",titleRoot);
                 puts("</TD>");
                 freeMem(titleRoot);
                 }
-            else if (sameString(sortOrder->column[sIx], SUBTRACK_COLOR_SUBGROUP))
+            else if (sameString(col, SUBTRACK_COLOR_SUBGROUP))
                 {
-                struct rgbColor rgbColor;
-                rgbColor.r = subtrack->colorR;
-                rgbColor.g = subtrack->colorG;
-                rgbColor.b = subtrack->colorB;
-                struct hslColor hslColor = mgRgbToHsl(rgbColor);
-                int hue = hslColor.h * 10;
-                printf("<TD id='%s_%s' abbr='%04d' bgcolor='#%02X%02X%02X'>&nbsp;&nbsp;&nbsp;&nbsp;</TD>",
-                    subtrack->track, sortOrder->column[sIx], hue, rgbColor.r, rgbColor.g, rgbColor.b);
+                char *hue = subtrackColorToCompare(subtrack);
+                printf("<TD id='%s_%s' abbr='%s' bgcolor='#%02X%02X%02X'>"
+                        "&nbsp;&nbsp;&nbsp;&nbsp;</TD>",
+                    subtrack->track, col, hue, 
+                        subtrack->colorR, subtrack->colorG, subtrack->colorB);
                 }
             }
         }
