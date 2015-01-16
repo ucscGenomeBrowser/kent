@@ -3,6 +3,7 @@ var CladeOrgDbMixin = function(myPath) {
     // the clade, org and db (aka group, genome, assembly) menus.
 
     'use strict';
+    /*jshint validthis: true */
 
     var myCartVars = ['clade', 'org', 'db', 'cladeOptions', 'orgOptions', 'dbOptions'];
 

@@ -5,6 +5,7 @@ var PositionSearchMixin = function(myPath) {
     'use strict';
 
     var myCartVars = ['position', 'positionMatches', 'geneSuggestTrack'];
+    /*jshint validthis: true */
 
     // Server event handler
     function posMergeServerResponse(cartVar, newValue) {
