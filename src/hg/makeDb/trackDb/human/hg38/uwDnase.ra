@@ -30,7 +30,7 @@ subGroup5 cancer Cancer cancer=cancer normal=normal unknown=unknown
 subGroup6 subtrackColor Similarity
 dimensions dimA=tissue dimB=cancer
 filterComposite dimA
-sortOrder view=+ cellType=+ subtrackColor=+ tissue=+
+sortOrder view=+ subtrackColor=+ cellType=+ tissue=+
 dragAndDrop subTracks
 noInherit on
 type bed 3 +
