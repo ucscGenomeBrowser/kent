@@ -10,6 +10,7 @@ var CheckboxLabel = React.createClass({
     propTypes: { // Optional
                  checked: pt.bool,           // is checkbox checked?  (initially)
                  label: pt.string,           // text to the right of checkbox
+                 className: pt.string,       // class(es) to pass to input
                  style: pt.object            // style to pass to input
                },
 
@@ -28,7 +29,7 @@ var CheckboxLabel = React.createClass({
     render: function() {
         return (
           <div key={this.props.ref} 
-               style={this.props.style} >
+               className={this.props.className} style={this.props.style} >
             <input type='checkbox' checked={this.props.checked}
                    onChange={this.handleClick} />
             {this.props.label}

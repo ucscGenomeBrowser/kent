@@ -12,7 +12,8 @@ var TextInput = React.createClass({
     propTypes: { // Optional
                  value: pt.string,            // initial value of text input (before user changes)
                  ref: pt.string,              // React ref handle for parent to invoke this.refs[ref]
-                 size: pt.number              // size attribute to pass on to input element
+                 size: pt.number,             // size attribute to pass on to input element
+                 className: pt.string         // class(es) to pass to input
                },
 
     getInitialState: function() {
@@ -51,6 +52,7 @@ var TextInput = React.createClass({
     render: function() {
         return (
               <input size={this.props.size} value={this.state.value} ref={this.props.ref}
+                     className={this.props.className}
                      onKeyPress={this.onKeyPress}
                      onBlur={this.onBlur}
                      onChange={this.localOnChange} />

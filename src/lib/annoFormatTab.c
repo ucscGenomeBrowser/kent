@@ -18,9 +18,9 @@ struct annoFormatTab
     };
 
 static void makeFullColumnName(char *fullName, size_t size, char *sourceName, char *colName)
-/* If sourceName is non-full, make fullName sourceName.colName, otherwise just colName. */
+/* If sourceName is non-empty, make fullName sourceName.colName, otherwise just colName. */
 {
-if (sourceName)
+if (isNotEmpty(sourceName))
     safef(fullName, size, "%s.%s", sourceName, colName);
 else
     safecpy(fullName, size, colName);
@@ -59,21 +59,20 @@ static void printHeaderColumns(struct annoFormatTab *self, struct annoStreamer *
 {
 FILE *f = self->f;
 char *sourceName = source->name;
+char fullName[PATH_LEN];
 if (source->rowType == arWig)
     {
     // Fudge in the row's chrom, start, end as output columns even though they're not in autoSql
     if (isFirst)
 	{
-        if (sourceName)
-            fprintf(f, "#%s.chrom", sourceName);
-        else
-            fputs("#chrom", f);
+        makeFullColumnName(fullName, sizeof(fullName), sourceName, "chrom");
+        fprintf(f, "#%s", fullName);
 	isFirst = FALSE;
 	}
-    if (sourceName)
-        fprintf(f, "\t%s.start\t%s.end", sourceName, sourceName);
-    else
-        fputs("\tstart\tend", f);
+    makeFullColumnName(fullName, sizeof(fullName), sourceName, "start");
+    fprintf(f, "\t%s", fullName);
+    makeFullColumnName(fullName, sizeof(fullName), sourceName, "end");
+    fprintf(f, "\t%s", fullName);
     }
 struct asColumn *col;
 int i;
@@ -88,10 +87,8 @@ for (col = source->asObj->columnList, i = 0;  col != NULL;  col = col->next, i++
             }
         else
             fputc('\t', f);
-        if (sourceName)
-            fprintf(f, "%s.%s", sourceName, col->name);
-        else
-            fputs(col->name, f);
+        makeFullColumnName(fullName, sizeof(fullName), sourceName, col->name);
+        fputs(fullName, f);
         }
     }
 }

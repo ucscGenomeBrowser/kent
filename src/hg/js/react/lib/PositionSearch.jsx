@@ -18,7 +18,12 @@ var PositionSearch = React.createClass({
                  //   positionMatches (Immutable.Vector of Maps): multiple search results for popup
                  //   geneSuggestTrack: optional track to use for autocomplete
                  // }
-                 db: pt.string // must be given if positionInfo includes geneSuggestTrack
+
+                 // Conditionally required
+                 db: pt.string,         // must be given if positionInfo includes geneSuggestTrack
+
+                 // Optional
+                 className: pt.string   // class(es) to pass to wrapper div
                },
 
     autoCompleteSourceFactory: function(db) {
@@ -126,7 +131,7 @@ var PositionSearch = React.createClass({
         var spinner = null, posPopup = null;
         var loading = posInfo.get('loading');
         if (loading) {
-            spinner = <Icon type="spinner" extraClass="floatRight" />;
+            spinner = <Icon type="spinner" className="floatRight" />;
         }
         var matches = posInfo.get('positionMatches');
         if (matches) {
@@ -139,7 +144,7 @@ var PositionSearch = React.createClass({
             $(this.refs.input.getDOMNode()).blur();
         }
         return (
-            <div style={{display: "inline-block"}}>
+            <div className={this.props.className}>
               <TextInput value={posInfo.get('position')}
                          path={this.props.path.concat('position')} update={this.props.update}
                          size={45} ref='input' />
