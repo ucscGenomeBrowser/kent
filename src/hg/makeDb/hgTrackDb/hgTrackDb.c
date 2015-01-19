@@ -598,8 +598,8 @@ struct hashCookie cookie = hashFirst(sgd->nameHash);
 struct hashEl *hel;
 while ((hel = hashNext(&cookie)) != NULL)
     {
-    if (hashLookup(foundHash, hel->name) == NULL)
-	errAbort("subtrack %s is missing required subGroup %s\n",
+    if (subgroupRequired(hel->name) && hashLookup(foundHash, hel->name) == NULL)
+        errAbort("subtrack %s is missing required subGroup %s\n",
 	    td->track, hel->name);
     }
 
