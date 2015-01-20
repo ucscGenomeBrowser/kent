@@ -102,7 +102,7 @@ faSize hg38Patch2.fa.gz
 # construct locations file:
 ~/kent/src/hg/makeDb/doc/hg38/regionScan.pl extract.new.list \
    genbank/GCA_000001405.17_GRCh38.p2_assembly_regions.txt \
-     > patchLocation.bed
+     > patchLocations.bed
 
 # separate haplotypes from fix patches for two tracks:
 grep -v fix patchLocations.bed | sed -e 's/_alt//;' \
@@ -308,8 +308,8 @@ end
 
 #############################################################################
 # run this same business with hg38 as target, Patch2 sequence as query
-mkdir /hive/data/genomes/hg38/bed/hg38Patch2/lastzHg38Patch2.2015-01-14
-cd /hive/data/genomes/hg38/bed/hg38Patch2/lastzHg38Patch2.2015-01-14
+mkdir /hive/data/genomes/hg38/bed/hg38Patch2/lastzHg38Patch2.2015-01-16
+cd /hive/data/genomes/hg38/bed/hg38Patch2/lastzHg38Patch2.2015-01-16
 
 cat << '_EOF_' > DEF
 # human vs human
@@ -344,14 +344,15 @@ SEQ2_LAP=0
 SEQ2_IN_CONTIGS=0
 SEQ2_LIMIT=1
 
-BASE=/hive/data/genomes/hg38/bed/hg38Patch2/lastzHg38Patch2.2015-01-14
+BASE=/hive/data/genomes/hg38/bed/hg38Patch2/lastzHg38Patch2.2015-01-16
 TMPDIR=/dev/shm
 '_EOF_'
     # << hapy emacs
 
 
-rm -fr run.blastz run.blastz/tParts run.blastz/qParts psl
-mkdir -p run.blastz run.blastz/tParts run.blastz/qParts psl
+rm -f ../hg38Bits.lift
+rm -fr hg38Bits run.blastz
+mkdir -p hg38Bits run.blastz/tParts run.blastz/qParts
 cut -f4 ../patchLocations.bed | while read FIX
 do
   chr=`grep "${FIX}" ../patchLocations.bed | cut -f1`
@@ -361,30 +362,34 @@ do
   chrSize=`grep -w "${chr}" ../../../chrom.sizes | cut -f2`
   fixSize=`grep "${FIX}" ../hg38Patch2.chrom.sizes | cut -f2`
   echo ${chr}:${start}-${end} vs. ${FIX}:0-${fixSize} 1>&2
-  echo -e "/hive/data/genomes/hg38/bed/hg38Patch2/hg38Patch2.2bit:${FIX}:0-${fixSize}" > run.blastz/qParts/${FIX}.lst
+  twoBitToFa /gbdb/hg38/hg38.2bit:${chr}:${start}-${end} stdout \
+    | sed -e "s/${chr}\(:${start}-${end}\)*/${FIX}_${start}-${end}/g"  \
+      > hg38Bits/${FIX}.fa
+  echo -e "${start}\t${FIX}_${start}-${end}\t${chr}\t${chrSize}" >> ../hg38Bits.lift
   echo -e "/hive/data/genomes/hg38/bed/hg38Patch2/hg38Bits.2bit:${FIX}_${start}-${end}:0-${bitSize}" > run.blastz/tParts/${FIX}.lst
-  echo -e "/cluster/bin/scripts/blastz-run-ucsc -outFormat psl tParts/${FIX}.lst qParts/${FIX}.lst ../DEF {check out exists ../psl/${FIX}.psl}"  >> run.blastz/jobList
+  echo -e "/hive/data/genomes/hg38/bed/hg38Patch2/hg38Patch2.2bit:${FIX}:0-${fixSize}" > run.blastz/qParts/${FIX}.lst
+  echo -e "/cluster/bin/scripts/blastz-run-ucsc -outFormat psl tParts/${FIX}.lst qParts/${FIX}.lst ../DEF {check out exists ../psl/${FIX}.psl}" >> run.blastz/jobList
 done
 
 ssh ku
-cd /hive/data/genomes/hg38/bed/hg38Patch2/lastzHg38Patch2.2015-01-14/run.blastz
+cd /hive/data/genomes/hg38/bed/hg38Patch2/lastzHg38Patch2.2015-01-16/run.blastz
 para create jobList
 para try ... check ... push ... etc
 para time
 # Completed: 31 of 31 jobs
 # CPU time in finished jobs:         31s       0.51m     0.01h    0.00d  0.000 y
-# IO & Wait Time:                    89s       1.49m     0.02h    0.00d  0.000 y
-# Average job time:                   4s       0.06m     0.00h    0.00d
-# Longest finished job:              16s       0.27m     0.00h    0.00d
-# Submission to last job:            37s       0.62m     0.01h    0.00d
+# IO & Wait Time:                    73s       1.22m     0.02h    0.00d  0.000 y
+# Average job time:                   3s       0.06m     0.00h    0.00d
+# Longest finished job:              17s       0.28m     0.00h    0.00d
+# Submission to last job:            22s       0.37m     0.01h    0.00d
 
 # put together the individual results
 mkdir pslParts
 cat psl/chr*.psl | gzip -c > pslParts/hg38.hg38Patch2.psl.gz
 
 #   constructing a chain from those results
-mkdir -p /hive/data/genomes/hg38/bed/hg38Patch2/lastzHg38Patch2.2015-01-14/axtChain/run
-cd /hive/data/genomes/hg38/bed/hg38Patch2/lastzHg38Patch2.2015-01-14/axtChain/run
+mkdir -p /hive/data/genomes/hg38/bed/hg38Patch2/lastzHg38Patch2.2015-01-16/axtChain/run
+cd /hive/data/genomes/hg38/bed/hg38Patch2/lastzHg38Patch2.2015-01-16/axtChain/run
 
 time zcat ../../pslParts/hg38.hg38Patch2.psl.gz \
 | axtChain -psl -verbose=0 -scoreScheme=/scratch/data/blastz/human_chimp.v2.q -minScore=2000 -linearGap=medium stdin \
@@ -399,7 +404,7 @@ liftUp hg38.hg38Patch2.lifted.chain \
     ../../../hg38Bits.lift carry hg38.hg38Patch2.preLift.chain
 
 # constructing the net files:
-cd /hive/data/genomes/hg38/bed/hg38Patch2/lastzHg38Patch2.2015-01-14/axtChain
+cd /hive/data/genomes/hg38/bed/hg38Patch2/lastzHg38Patch2.2015-01-16/axtChain
 
 chainMergeSort run/hg38.hg38Patch2.lifted.chain \
         | gzip -c > hg38.hg38Patch2.all.chain.gz
@@ -439,7 +444,7 @@ foreach f (axtNet/*.hg38.hg38Patch2.net.axt.gz)
   | gzip -c > mafNet/$f:t:r:r:r:r:r.maf.gz
 end
 
-cd /hive/data/genomes/hg38/bed/hg38Patch2/lastzHg38Patch2.2015-01-14/axtChain
+cd /hive/data/genomes/hg38/bed/hg38Patch2/lastzHg38Patch2.2015-01-16/axtChain
 mkdir -p queryChains
 chainSplit -q queryChains hg38.hg38Patch2.all.chain.gz
 
@@ -486,7 +491,8 @@ pslCheck -db=hg38 fixup.hg38.hg38Patch2.over.psl
 # checked: 38 failed: 0 errors: 0
 
 # load this PSL track
-hgLoadPsl hg38 -table=hg38Patch2PSL fixup.hg38.hg38Patch2.over.psl
+#     this table name prefix altSeqLiftOverPsl is recognized in hgc clicks
+hgLoadPsl hg38 -table=altSeqLiftOverPslP2 fixup.hg38.hg38Patch2.over.psl
 
 mkdir /hive/data/genomes/hg38/bed/hg38Patch2/seqExt
 cd /hive/data/genomes/hg38/bed/hg38Patch2/seqExt
