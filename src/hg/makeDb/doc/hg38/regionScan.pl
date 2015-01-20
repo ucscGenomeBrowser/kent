@@ -54,7 +54,7 @@ while (my $line = <FH>) {
     $newUcscName =~ s/_.*//;
     my $ucscName = $genbankAcc;
     $ucscName =~ s/\./v/;
-    printf "%s\t%d\t%d\t%s_%s_%s\n", $chrName, $chrStart, $chrEnd, $newUcscName, $ucscName, $extn;
+    printf "%s\t%d\t%d\t%s_%s_%s\n", $chrName, $chrStart-1, $chrEnd, $newUcscName, $ucscName, $extn;
   }
 }
 close (FH);
