@@ -5,7 +5,7 @@
 #ifndef WGENCODECELL_H
 #define WGENCODECELL_H
 
-#define WGENCODECELL_NUM_COLS 13
+#define WGENCODECELL_NUM_COLS 14
 
 extern char *wgEncodeCellCommaSepFieldNames;
 
@@ -23,6 +23,7 @@ struct wgEncodeCell
     char *sex;	/* M, F, or U for unknown */
     char *vendor;	/* name of vendor or lab provider */
     char *vendorId;	/* vendor product code or identifier */
+    char *url;	/* order URL or protocol document */
     char *ontoTerm;	/* ontology term */
     char *btOntoTerm;	/* ontology term from Brenda Tissue Ontology */
     char *donor;	/* donor accession at encodeproject.org */

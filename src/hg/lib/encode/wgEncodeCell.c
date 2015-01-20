@@ -9,7 +9,8 @@
 #include "encode/wgEncodeCell.h"
 
 
-char *wgEncodeCellCommaSepFieldNames = "id,term,description,tissue,type,cancer,developmental,sex,vendor,vendorId,ontoTerm,btOntoTerm,donor";
+
+char *wgEncodeCellCommaSepFieldNames = "id,term,description,tissue,type,cancer,developmental,sex,vendor,vendorId,url,ontoTerm,btOntoTerm,donor";
 
 void wgEncodeCellStaticLoad(char **row, struct wgEncodeCell *ret)
 /* Load a row from wgEncodeCell table into ret.  The contents of ret will
@@ -26,9 +27,10 @@ ret->developmental = row[6];
 ret->sex = row[7];
 ret->vendor = row[8];
 ret->vendorId = row[9];
-ret->ontoTerm = row[10];
-ret->btOntoTerm = row[11];
-ret->donor = row[12];
+ret->url = row[10];
+ret->ontoTerm = row[11];
+ret->btOntoTerm = row[12];
+ret->donor = row[13];
 }
 
 struct wgEncodeCell *wgEncodeCellLoad(char **row)
@@ -48,9 +50,10 @@ ret->developmental = cloneString(row[6]);
 ret->sex = cloneString(row[7]);
 ret->vendor = cloneString(row[8]);
 ret->vendorId = cloneString(row[9]);
-ret->ontoTerm = cloneString(row[10]);
-ret->btOntoTerm = cloneString(row[11]);
-ret->donor = cloneString(row[12]);
+ret->url = cloneString(row[10]);
+ret->ontoTerm = cloneString(row[11]);
+ret->btOntoTerm = cloneString(row[12]);
+ret->donor = cloneString(row[13]);
 return ret;
 }
 
@@ -60,7 +63,7 @@ struct wgEncodeCell *wgEncodeCellLoadAll(char *fileName)
 {
 struct wgEncodeCell *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[13];
+char *row[14];
 
 while (lineFileRow(lf, row))
     {
@@ -78,7 +81,7 @@ struct wgEncodeCell *wgEncodeCellLoadAllByChar(char *fileName, char chopper)
 {
 struct wgEncodeCell *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[13];
+char *row[14];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -109,6 +112,7 @@ ret->developmental = sqlStringComma(&s);
 ret->sex = sqlStringComma(&s);
 ret->vendor = sqlStringComma(&s);
 ret->vendorId = sqlStringComma(&s);
+ret->url = sqlStringComma(&s);
 ret->ontoTerm = sqlStringComma(&s);
 ret->btOntoTerm = sqlStringComma(&s);
 ret->donor = sqlStringComma(&s);
@@ -132,6 +136,7 @@ freeMem(el->developmental);
 freeMem(el->sex);
 freeMem(el->vendor);
 freeMem(el->vendorId);
+freeMem(el->url);
 freeMem(el->ontoTerm);
 freeMem(el->btOntoTerm);
 freeMem(el->donor);
@@ -190,6 +195,10 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->vendorId);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->url);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);

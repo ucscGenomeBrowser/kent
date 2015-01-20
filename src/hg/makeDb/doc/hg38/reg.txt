@@ -338,6 +338,7 @@ cat > makeInputs.csh << 'EOF'
     cd cells
 
     # collect cell info from ENCODE2 and ENCODE3
+    ~/kent/src/hg/encode3/cellsFromEncode3.py > cells.tsv
 
     # load to google spreadsheet and clean 
     #https://docs.google.com/a/soe.ucsc.edu/spreadsheets/d/10EWdr-JTtDvfLKKLPvP3T2ft6MZ5KVdKbBzY76SRaug/edit#gid=1783710206
@@ -347,3 +348,8 @@ cat > makeInputs.csh << 'EOF'
         nl -v 0 | \
         hgLoadSqlTab hgFixed wgEncodeCell ~/kent/src/hg/lib/encode/wgEncodeCell.sql stdin
 
+    # add order URL's
+    #https://docs.google.com/spreadsheets/d/14HvZfqJdClt6mfcwf2w0xRPvdhk5o7bgV77LMc1qTcU/edit?usp=sharing
+    tail -n +2 wgEncodeCellUrl.tsv | \
+        nl -v 0 | \
+        hgLoadSqlTab hgFixed wgEncodeCell ~/kent/src/hg/lib/encode/wgEncodeCell.sql stdin

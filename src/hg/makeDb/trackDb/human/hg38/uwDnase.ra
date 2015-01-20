@@ -28,6 +28,7 @@ subGroup3 treatment Treatment diffProtA_5d=diffProtA_5d diffProtA_14d=diffProtA_
 subGroup4 tissue Tissue kidney=kidney esophagus=esophagus cervix=cervix skin=skin lung=lung heart=heart colon=colon blood=blood prostate=prostate embryo=embryo pancreas=pancreas breast=breast bone_marrow=bone_marrow periodontum=periodontum muscle=muscle brain=brain blood_vessel=blood_vessel spinal_cord=spinal_cord placenta=placenta eye=eye liver=liver periodontium=periodontium testis=testis
 subGroup5 cancer Cancer cancer=cancer normal=normal unknown=unknown
 subGroup6 subtrackColor Similarity
+subGroupMetaTables cellType=hgFixed.wgEncodeCell
 dimensions dimA=tissue dimB=cancer
 filterComposite dimA
 sortOrder view=+ subtrackColor=+ cellType=+ tissue=+

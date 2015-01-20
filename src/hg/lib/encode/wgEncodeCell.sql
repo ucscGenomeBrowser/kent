@@ -15,6 +15,7 @@ CREATE TABLE wgEncodeCell (
     sex varchar(255) not null,	# M, F, or U for unknown
     vendor varchar(255) not null,	# name of vendor or lab provider
     vendorId varchar(255) not null,	# vendor product code or identifier
+    url varchar(255) not null,	# order URL or protocol document
     ontoTerm varchar(255) not null,	# ontology term
     btOntoTerm varchar(255) not null,	# ontology term from Brenda Tissue Ontology
     donor varchar(255) not null,	# donor accession at encodeproject.org
