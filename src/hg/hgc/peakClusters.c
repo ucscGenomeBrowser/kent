@@ -135,10 +135,11 @@ if (fieldList != NULL)
 dyStringFree(&fields);
 }
 
-static void printPeakClusterTableHits(struct bed *cluster, struct sqlConnection *conn,
-	char *inputTrackTable, struct slName *fieldList, char *vocab)
-/* Put out a lines in an html table that shows assayed sources that have hits in this
- * cluster, or if invert is set, that have misses. */
+
+static void printPeakClusterInfo(struct sqlConnection *conn, char *inputTrackTable, 
+                                struct slName *fieldList, char *vocab, struct bed *cluster)
+/* Print an HTML table showing sources with hits in the cluster, along with signal.
+   If cluster is NULL, show all sources assayed */
 {
 char *vocabFile = NULL;
 struct hash *vocabHash = NULL;
@@ -159,52 +160,21 @@ struct sqlResult *sr = sqlGetResult(conn, query->string);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    char *table = row[0];
-    double signal = getSignalAt(table, cluster);
-    if (signal != 0)
-	{
-	printf("</TR><TR>\n");
-	webPrintIntCell(++displayNo);
-	webPrintDoubleCell(signal);
-	printControlledVocabFields(row+1, fieldCount, fieldList, vocabFile, vocabHash);
-	printMetadataForTable(table);
-	}
-    }
-sqlFreeResult(&sr);
-freez(&vocabFile);
-dyStringFree(&query);
-}
-
-static void printPeakClusterInputs(struct sqlConnection *conn,
-	char *inputTrackTable, struct slName *fieldList, char *vocab)
-/* Print out all input tables for clustering. */
-{
-char *vocabFile = NULL;
-struct hash *vocabHash = NULL;
-if (vocab)
-    {
-    vocabFile = cloneFirstWord(vocab);
-    vocabHash = getVocabHash(vocabFile);
-    }
-
-/* Make the SQL query to get the table and all other fields we want to show
- * from inputTrackTable. */
-struct dyString *query = dyStringNew(0);
-queryInputTrackTable(query, inputTrackTable, fieldList);
-
-int displayNo = 0;
-int fieldCount = slCount(fieldList);
-struct sqlResult *sr = sqlGetResult(conn, query->string);
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
+    double signal = 0;
+    if (cluster != NULL)
+        {
+        char *table = row[0];
+        signal = getSignalAt(table, cluster);
+        if (signal == 0)
+            continue;
+        }
     printf("</TR><TR>\n");
     webPrintIntCell(++displayNo);
+    if (signal != 0)
+	webPrintDoubleCell(signal);
     printControlledVocabFields(row+1, fieldCount, fieldList, vocabFile, vocabHash);
     printMetadataForTable(row[0]);
     }
-
-
 sqlFreeResult(&sr);
 freez(&vocabFile);
 dyStringFree(&query);
@@ -306,7 +276,8 @@ if (inputTableFieldDisplay)
     printClusterTableHeader(fieldList, FALSE, FALSE, FALSE);
     char *vocab = trackDbSetting(clusterTdb, "controlledVocabulary");
     char *inputTrackTable = trackDbRequiredSetting(clusterTdb, "inputTrackTable");
-    printPeakClusterInputs(conn, inputTrackTable, fieldList, vocab);
+    printPeakClusterInfo(conn, inputTrackTable, fieldList, vocab, NULL);
+    //http://genome-test.cse.ucsc.edu/cgi-bin/hgTables?db=hg38&hgta_table=uwEnc2DnasePeaksWgEncodeEH000507
     }
 else
     errAbort("Missing required trackDb setting %s for track %s", "inputTableFieldDisplay", 
@@ -357,7 +328,7 @@ if (cluster != NULL)
 	webNewSection("List of Items in Cluster");
 	webPrintLinkTableStart();
 	printClusterTableHeader(fieldList, FALSE, FALSE, TRUE);
-	printPeakClusterTableHits(cluster, conn, inputTrackTable, fieldList, vocab);
+	printPeakClusterInfo(conn, inputTrackTable, fieldList, vocab, cluster);
 	}
     else
 	errAbort("Missing required trackDb setting %s for track %s",
