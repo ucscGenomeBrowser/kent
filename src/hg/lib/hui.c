@@ -4186,22 +4186,43 @@ if (subCount > 5 || (restrictions && sortOrder != NULL))
     printf("</TD></TR></TFOOT>\n");
     }
 }
-/********************/
-/* Metadata for subgroups */
 
-struct meta {
+/********************/
+/* Basic metadata for subgroups and input fields */
+
+struct metaBasic {
+    struct metaBasic *next;
     char *term;
     char *description;
     char *url;
 };
 
-static struct hash *metaForAllSubGroupsGet(struct trackDb *parentTdb, struct cart *cart)
-/* Get description and URL for all subgroupMetaTables. Returns a hash of hashes */
-{
-char *setting = trackDbSetting(parentTdb, "subGroupMetaTables");
-if (!setting)
+char *metaVocabLink(struct hash *metaFieldHash, char *term, char *title)
+/* Make an anchor with mouseover containing description and link if present */
+{   
+struct metaBasic *meta = hashFindVal(metaFieldHash, term);
+if (meta == NULL)
     return NULL;
-struct slPair *metaTables = slPairFromString(setting);
+struct dyString *ds = dyStringNew(0);
+if (meta->url == NULL || strlen(meta->url) == 0)
+    dyStringPrintf(ds, "<A title='%s' style='cursor: pointer;'>%s</A>",
+                        meta->description, term);
+else
+    dyStringPrintf(ds, "<A target='_blank' class='cv' title='%s' href='%s'>%s</A>\n",
+                        meta->description, meta->url, term);
+return dyStringCannibalize(&ds);
+}
+
+struct hash *metaBasicFromSetting(struct trackDb *parentTdb, struct cart *cart, char *setting)
+/* Get description and URL for all metaTables. Returns a hash of hashes */
+{
+if (differentString(setting, "subGroupMetaTables") &&
+    differentString(setting, "inputFieldMetaTables"))
+        return NULL;
+char *spec = trackDbSetting(parentTdb, setting);
+if (!spec)
+    return NULL;
+struct slPair *metaTables = slPairFromString(spec);
 struct hash *tableHash = hashNew(0);
 struct slPair *metaTable;
 struct sqlResult *sr;
@@ -4231,7 +4252,7 @@ for (metaTable = metaTables; metaTable != NULL; metaTable = metaTables->next)
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-        struct meta *meta = NULL;
+        struct metaBasic *meta = NULL;
         AllocVar(meta);
         meta->term = cloneString(row[0]);
         meta->description = cloneString(row[1]);
@@ -4239,7 +4260,7 @@ for (metaTable = metaTables; metaTable != NULL; metaTable = metaTables->next)
             meta->url = cloneString(row[2]);
         hashAdd(subgroupHash, meta->term, meta);
         }
-sqlFreeResult(&sr);
+    sqlFreeResult(&sr);
     hFreeConn(&conn);
     }
 return tableHash;
@@ -4275,7 +4296,7 @@ else
 // Finally the big "for loop" to list each subtrack as a table row.
 printf("\n<!-- ----- subtracks list ----- -->\n");
 membersForAll_t* membersForAll = membersForAllSubGroupsGet(parentTdb,NULL);
-struct hash *subgroupMetaHash = metaForAllSubGroupsGet(parentTdb, cart);
+struct hash *subgroupMetaHash = metaBasicFromSetting(parentTdb, cart, "subGroupMetaTables");
 struct slRef *subtrackRef;
 
 /* Color handling ?? */
@@ -4456,28 +4477,14 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                 // which is the actual sort on value
                 printf("<TD id='%s_%s' abbr='%s' align='left'>", subtrack->track, col, term);
                 printf("&nbsp");
-                boolean printed = FALSE;
+                char *link = NULL;
                 if (subgroupMetaHash)
                     {
                     struct hash *colHash = hashFindVal(subgroupMetaHash, col);
                     if (colHash)
-                        {
-                        struct meta *meta = hashFindVal(colHash, term);
-                        if (meta != NULL)
-                            {
-                            if (meta->url == NULL || strlen(meta->url) == 0)
-                                /* add pointer to suggest hover */
-                                printf("<A title='%s' style='cursor: pointer;'>%s</A>", 
-                                            meta->description, titleRoot);
-                            else
-                                printf("<A target='_blank' class='cv' title='%s' href='%s'>%s</A>\n", 
-                                        meta->description, meta->url, titleRoot);
-                            printed = TRUE;
-                            }
-                        }
+                        link = metaVocabLink(colHash, term, titleRoot);
                     }
-                if (!printed)
-                    printf("%s",titleRoot);
+                printf("%s", link ? link : titleRoot);
                 puts("</TD>");
                 freeMem(titleRoot);
                 }

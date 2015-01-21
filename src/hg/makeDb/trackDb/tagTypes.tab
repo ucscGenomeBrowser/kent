@@ -187,6 +187,7 @@ indelPolyA psl bam
 indelQueryInsert psl bam bigBed
 informant genePred
 initialPos customTracks
+inputFieldMetaTables *
 inputType customTracks
 interTable encodeFiveC
 interTableKind encodeFiveC
