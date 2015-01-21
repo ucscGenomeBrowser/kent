@@ -601,7 +601,7 @@ searchPriority 8
     mkdir /hive/data/genomes/oviAri3/bed/cytoBand
     cd /hive/data/genomes/oviAri3/bed/cytoBand
 
-    wget http://www.animalgenome.org/QTLdb/tmp/QTL_OAR_3.1.ubed.txt.gz 
+    wget http://www.animalgenome.org/QTLdb/tmp/QTL_OAR_3.1.ubed.txt.gz
     zcat QTL_OAR_3.1.ubed.txt.gz >> oviAri3.animalQtl.bed
 
 ##############################################################################
@@ -618,11 +618,11 @@ searchPriority 8
     checkTableCoords oviAri3 animalQtl
     # no results - yay!
 
-    #added entries in trackDb for track and search 
+    #added entries in trackDb for track and search
 
     #script to determine what to include in search rule:
 
-cat > findNames <<EOF 
+cat > findNames <<EOF
 #!/bin/sh
 #hgsql -N -e 'select name from animalQtl;' bosTau7 | sort >
 #/tmp/bosTau7.animalQtl.name.txt
@@ -708,4 +708,29 @@ mysql>  LOAD DATA LOCAL INFILE "oviAri3.cytoBand" INTO TABLE cytoBandIdeo;
     #	/gbdb/oviAri3/liftOver/oviAri3ToOviAri1.over.chain.gz
     # and try out the conversion on genome-test from oviAri3 to oviAri1
 
-############################################################################
+
+##############################################################################
+# swap LASTZ pig/susScr3 sheep/oviAri3 - (DONE - 2014-05-19 - Hiram)
+    # orginal alignment
+    cd /hive/data/genomes/susScr3/bed/lastzOviAri3.2014-05-19
+    cat fb.susScr3.chainOviAri3Link.txt
+    # 1453348100 bases of 2525294057 (57.552%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oviAri3/bed/blastz.susScr3.swap
+    cd /hive/data/genomes/oviAri3/bed/blastz.susScr3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/susScr3/bed/lastzOviAri3.2014-05-19/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    155m31.793s
+
+    cat fb.oviAri3.chainSusScr3Link.txt
+    # 1311099603 bases of 2534335866 (51.733%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` oviAri3 susScr3) > rbest.log 2>&1
+    # real    42m24.943s
+
+#########################################################################

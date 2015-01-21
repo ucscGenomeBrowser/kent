@@ -1,9 +1,9 @@
 # set for preview 1:
-setenv REVIEWDAY 2014-01-12             # v311 preview
+setenv REVIEWDAY 2015-01-12             # v311 preview
 setenv LASTREVIEWDAY 2014-12-08         # v310 preview
 # set for preview 2:
-setenv REVIEW2DAY 2014-12-15        # v310 preview2
-setenv LASTREVIEW2DAY 2014-11-17    # v309 preview2
+setenv REVIEW2DAY 2015-01-20        # v311 preview2
+setenv LASTREVIEW2DAY 2014-12-15    # v310 preview2
 # set these three for final build:
 setenv BRANCHNN 310
 setenv TODAY 2015-01-05                # v310 final

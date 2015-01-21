@@ -3579,6 +3579,11 @@ identifier snpName132
     $gbd.snp132CodingDbSnp.name minCheck=.90
     $hg.snp132OrthoPt2Pa2Rm2.name
 
+identifier snpException132
+"Exceptions that UCSC annotated on dbSNP version 132"
+    $gbd.snp132ExceptionDesc.exception
+    $gbd.snp132.exceptions comma
+
 identifier snpName135
 "dbSNP version 135 rs* identifiers"
     $gbd.snp135.name dupeOk
@@ -3588,6 +3593,11 @@ identifier snpName135
     $gbd.snp135Seq.acc minCheck=.98
     $gbd.snp135CodingDbSnp.name minCheck=.90
     $hg.snp135OrthoPt3Pa2Rm2.name
+
+identifier snpException135
+"Exceptions that UCSC annotated on dbSNP version 135"
+    $gbd.snp135ExceptionDesc.exception
+    $gbd.snp135.exceptions comma
 
 identifier snpName137
 "dbSNP version 137 rs* identifiers"
@@ -3602,6 +3612,11 @@ identifier snpName137
     # and update trackDb settings if we remap to new dbSNP version:
     hg19.gwasCatalog.name minCheck=0.99
 
+identifier snpException137
+"Exceptions that UCSC annotated on dbSNP version 137"
+    $gbd.snp137ExceptionDesc.exception
+    $gbd.snp137.exceptions comma
+
 identifier snpName138
 "dbSNP version 138 rs* identifiers"
     $gbd.snp138.name dupeOk
@@ -3611,6 +3626,11 @@ identifier snpName138
     $gbd.snp138Seq.acc minCheck=.98
     $gbd.snp138CodingDbSnp.name minCheck=.90
     $hg.snp138OrthoPt4Pa2Rm3.name
+
+identifier snpException138
+"Exceptions that UCSC annotated on dbSNP version 138"
+    $gbd.snp138ExceptionDesc.exception
+    $gbd.snp138.exceptions comma
 
 identifier snpName141
 "dbSNP version 141 rs* identifiers"
@@ -3622,6 +3642,11 @@ identifier snpName141
     $gbd.snp141CodingDbSnp.name minCheck=.90
     $hg.snp141OrthoPt4Pa2Rm3.name
 
+identifier snpException141
+"Exceptions that UCSC annotated on dbSNP version 141"
+    $gbd.snp141ExceptionDesc.exception
+    $gbd.snp141.exceptions comma
+
 identifier snpName142
 "dbSNP version 142 rs* identifiers"
     $gbd.snp142.name dupeOk
@@ -3631,6 +3656,11 @@ identifier snpName142
     $gbd.snp142Seq.acc minCheck=.98
     $gbd.snp142CodingDbSnp.name minCheck=.90
     $hg.snp142OrthoPt4Pa2Rm3.name
+
+identifier snpException142
+"Exceptions that UCSC annotated on dbSNP version 142"
+    $gbd.snp142ExceptionDesc.exception
+    $gbd.snp142.exceptions comma
 
 # Other NCBI Identifiers
 
@@ -4919,12 +4949,15 @@ tablesIgnored $gbd
     uwNucOccDennis
     uwNucOccMec
     ws210Gene
+<<<<<<< HEAD
     snp132ExceptionDesc
     snp135ExceptionDesc
     snp137ExceptionDesc
     snp138ExceptionDesc
     snp141ExceptionDesc
     snp142ExceptionDesc
+=======
+>>>>>>> Added snp*ExceptionDesc for versions starting with 132 (#3606).  Added snp142 (#14189).
 
 tablesIgnored $kgDb
     pbAaDist_
