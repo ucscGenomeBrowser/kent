@@ -71,4 +71,8 @@ priority 143.4
 track xenoRefGene override
 visibility pack
 
+track chainDm3 override
+release alpha
 
+track netDm3 override
+release alpha

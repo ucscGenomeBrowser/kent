@@ -28,6 +28,7 @@
 #include "knetUdc.h"
 #include "md5.h"
 #include "regexHelper.h"
+#include "hAnno.h"
 #include "annoGratorQuery.h"
 #include "annoGratorGpVar.h"
 #include "annoFormatVep.h"
@@ -1179,9 +1180,10 @@ if (grator != NULL)
     }
 // If not in gratorsByName, then attempt to construct it here:
 if (fileName != NULL)
-    grator = gratorFromBigDataFileOrUrl(fileName, assembly, NO_MAXROWS, overlapRule);
+    grator = hAnnoGratorFromBigFileUrl(fileName, assembly, NO_MAXROWS, overlapRule);
 else
-    grator = gratorFromTrackDb(assembly, tdb->table, tdb, chrom, NO_MAXROWS, NULL, overlapRule);
+    grator = hAnnoGratorFromTrackDb(assembly, tdb->table, tdb, chrom, NO_MAXROWS,
+                                    NULL, overlapRule);
 if (grator != NULL)
     hashAdd(gratorsByName, tdb->table, grator);
 return grator;
@@ -1301,8 +1303,8 @@ if (hashFindVal(gratorsByName, seqChangeTable) == NULL)
     if (fileName == NULL)
 	errAbort("'%s' requested, but I can't find fileName for %s",
 		 trackName, seqChangeTable);
-    struct annoGrator *grator = gratorFromBigDataFileOrUrl(fileName, assembly, NO_MAXROWS,
-							   agoNoConstraint);
+    struct annoGrator *grator = hAnnoGratorFromBigFileUrl(fileName, assembly, NO_MAXROWS,
+                                                          agoNoConstraint);
     updateGratorList(grator, pGratorList);
     hashAdd(gratorsByName, seqChangeTable, grator);
     }
@@ -1433,15 +1435,15 @@ for (trackVar = trackVars;  trackVar != NULL;  trackVar = trackVar->next)
 	addDbNsfpSeqChange(trackName, assembly, gratorsByName, pGratorList);
 	char *fileName = fileNameFromTable(trackName);
 	if (fileName != NULL)
-	    grator = gratorFromBigDataFileOrUrl(fileName, assembly, NO_MAXROWS, agoNoConstraint);
+	    grator = hAnnoGratorFromBigFileUrl(fileName, assembly, NO_MAXROWS, agoNoConstraint);
 	}
     else
 	{
 	struct trackDb *tdb = tdbForTrack(database, trackName, &fullTrackList);
 	if (tdb != NULL)
 	    {
-	    grator = gratorFromTrackDb(assembly, tdb->table, tdb, chrom, NO_MAXROWS, NULL,
-				       agoNoConstraint);
+	    grator = hAnnoGratorFromTrackDb(assembly, tdb->table, tdb, chrom, NO_MAXROWS, NULL,
+                                            agoNoConstraint);
 	    if (grator != NULL)
 		{
 		//#*** Need something more sophisticated but this works for our
@@ -1489,8 +1491,8 @@ if (cartUsualBoolean(cart, "hgva_require_consEl", FALSE))
 	{
 	struct trackDb *tdb = tdbForTrack(database, consElTrack, &fullTrackList);
 	if (tdb != NULL)
-	    grator = gratorFromTrackDb(assembly, tdb->table, tdb, chrom, NO_MAXROWS, NULL,
-				       agoMustOverlap);
+	    grator = hAnnoGratorFromTrackDb(assembly, tdb->table, tdb, chrom, NO_MAXROWS, NULL,
+                                            agoMustOverlap);
 	updateGratorList(grator, pGratorList);
 	}
     else
@@ -1736,8 +1738,8 @@ char *sampleFile = sampleVariantsPath(assembly, geneTdb->track);
 boolean forceRebuild = cartUsualBoolean(cart, "hgva_rebuildSampleVariants", FALSE);
 if (! fileExists(sampleFile) || forceRebuild)
     {
-    struct annoStreamer *geneStream = streamerFromTrack(assembly, geneTdb->table, geneTdb, NULL,
-							NO_MAXROWS);
+    struct annoStreamer *geneStream = hAnnoStreamerFromTrackDb(assembly, geneTdb->table, geneTdb,
+                                                               NULL, NO_MAXROWS);
     boolean gotCoding = FALSE, gotNonCoding = FALSE;
     struct genePred *gpList = genesFromPosition(geneStream, &gotCoding, &gotNonCoding);
     FILE *f = mustOpen(sampleFile, "w");
@@ -2152,7 +2154,7 @@ char *chrom = NULL;
 uint start = 0, end = 0;
 if (sameString(regionType, hgvaRegionTypeRange))
     getCartPosOrDie(&chrom, &start, &end);
-struct annoAssembly *assembly = getAnnoAssembly(database);
+struct annoAssembly *assembly = hAnnoGetAssembly(database);
 
 char *geneTrack = cartString(cart, "hgva_geneTrack");
 struct trackDb *geneTdb = tdbForTrack(database, geneTrack, &fullTrackList);
@@ -2192,12 +2194,12 @@ else
 	doUi();
 	return;
 	}
-    primary = streamerFromTrack(assembly, varTdb->table, varTdb, chrom, maxVarRows);
+    primary = hAnnoStreamerFromTrackDb(assembly, varTdb->table, varTdb, chrom, maxVarRows);
     primaryLongLabel = varTdb->longLabel;
     }
 
 enum annoGratorOverlap geneOverlapRule = agoMustOverlap;
-struct annoGrator *gpVarGrator = gratorFromTrackDb(assembly, geneTdb->table, geneTdb, chrom,
+struct annoGrator *gpVarGrator = hAnnoGratorFromTrackDb(assembly, geneTdb->table, geneTdb, chrom,
 						   NO_MAXROWS, primary->asObj, geneOverlapRule);
 setGpVarFuncFilter(gpVarGrator);
 

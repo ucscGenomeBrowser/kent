@@ -52,6 +52,7 @@ void bigBedInfo(char *fileName)
 {
 struct bbiFile *bbi = bigBedFileOpen(fileName);
 printf("version: %d\n", bbi->version);
+printf("fieldCount: %d\n", bbi->fieldCount);
 printf("hasHeaderExtension: %s\n", (bbi->extensionOffset != 0 ? "yes" : "no"));
 printf("isCompressed: %s\n", (bbi->uncompressBufSize > 0 ? "yes" : "no"));
 printf("isSwapped: %d\n", bbi->isSwapped);

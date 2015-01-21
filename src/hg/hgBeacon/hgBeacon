@@ -1,0 +1,203 @@
+#!/usr/bin/env python
+# A beacon for tracks we can't distribute: LOVD and HGMD
+# see ga4gh.org/#/beacon and redmine 14393
+# Please do read the GA4GH website on the background of this CGI, otherwise
+# the functionality provided does not make any sense, without the context
+
+import cgi, subprocess, sys, cgitb, os, datetime, socket
+from os.path import join, isfile, dirname, isdir
+cgitb.enable() # deactivate this on the RR, but useful for debugging: prints a http header on errors
+
+# dir for bigBed files and insdcToUcsc.tab
+DATADIR = "/gbdb/hg19/beacon"
+
+# cache of hg.conf dict
+hgConf = None
+
+def queryBottleneck(host, port, ip):
+    " contact bottleneck server to get current delay time "
+    # send ip address
+    s =  socket.socket()
+    s.connect((host, int(port)))
+    msg = ip
+    d = chr(len(msg))+msg
+    s.send(d)
+
+    # read delay time
+    expLen = ord(s.recv(1))
+    totalLen = 0
+    buf = list()
+    while True:
+        resp = s.recv(1024)
+        buf.append(resp)
+        totalLen+= len(resp)
+        if totalLen==expLen:
+            break
+    return int("".join(buf))
+
+def parseConf(fname):
+    " parse a hg.conf style file, return as dict key -> value (all strings) "
+    conf = {}
+    for line in open(fname):
+        line = line.strip()
+        if line.startswith("#"):
+            continue
+        elif line.startswith("include "):
+            inclFname = line.split()[1]
+            inclPath = join(dirname(fname), inclFname)
+            if isfile(inclPath):
+                inclDict = parseConf(inclPath)
+                conf.update(inclDict)
+        elif "=" in line: # string search for "="
+            key, value = line.split("=")
+            conf[key] = value
+    return conf
+
+def parseHgConf():
+    """ return hg.conf as dict key:value """
+    global hgConf
+    if hgConf is not None:
+        return hgConf
+
+    hgConf = dict() # python dict = hash table
+
+    confDir = dirname(__file__)
+    fname = join(confDir, "hg.conf")
+    hgConf = parseConf(fname)
+
+    return hgConf
+
+def errAbort(errMsg=None):
+    print "<html><body><pre>"
+    if errMsg is not None:
+        print "error: "+errMsg
+
+    host = os.environ.get("HTTP_HOST", "")
+
+    print """
+    A Genomics Alliance Beacon at UCSC. 
+    
+    In collaboration with the Leiden Open Variation Database and Biobase/HGMD.
+
+    parameters:
+    - genome: ignored, always hg19/GRCh37
+    - chrom: either a number or X/Y or UCSC format like "chr1" or INSDC
+      accession like CM000663.1
+    - dataset: either lovd or hgmd. This parameter can also be called "track"
+      (backwards compatible)
+    - pos: 0-based position, like 10042537
+    - allele: A,C,T,G. Ignored for HGMD (HGMD gives out only positions, not the
+      alleles, they are only on their website)
+
+    If the allele was found, returns the string "Yes", otherwise "No".
+
+    For HGMD, an overlap with a variant is enough to trigger a "Yes", we don't have the alleles.
+    For LOVD, an overlap with a short deletion or duplication returns "Maybe". 
+
+    Examples:
+    http://%(host)s/cgi-bin/hgBeacon?dataset=lovd&chrom=chr1&pos=808921&allele=A
+    - returns "Yes"
+
+    http://%(host)s/cgi-bin/hgBeacon?dataset=hgmd?chrom=1&pos=2160493&allele=T
+    - returns "Maybe", because the allele is in a small deletion
+
+    Number of variants:
+    - LOVD: 180k, version from Nov 2014
+    - HGMD: 97k, "public" version from end of 2014
+    """ % locals()
+    print "</body></pre></html>"
+    sys.exit(0)
+
+def main():
+    # send ip address of client to bottleneck and get delay
+    print "Content-Type: text/html\n"
+
+    global hgConf
+    hgConf = parseHgConf()
+    ip = os.environ["REMOTE_ADDR"]
+    delay = queryBottleneck(hgConf["bottleneck.host"], hgConf["bottleneck.port"], ip)
+
+    if not isdir(DATADIR):
+        errAbort("hgBeacon is intended to be run at UCSC. <br> On this "
+            "machine the directory %s does not exist so the program will not run.<p>" \
+            % DATADIR)
+
+    # parse INSDC -> ucsc chrom name table
+    insdcToUcsc = {}
+    for line in open(join(DATADIR, "insdcToUcsc.tab")):
+        name, chrom = line.rstrip("\n").split("\t")
+        insdcToUcsc[name] = chrom
+
+    # get CGI parameters
+    form = cgi.FieldStorage()
+
+    track = form.getfirst("dataset")
+    if track is None:
+        track = form.getfirst("track")
+
+    chrom = form.getfirst("chrom")
+    pos = form.getfirst("pos")
+    allele = form.getfirst("allele")
+
+    # check parameters
+    if chrom==None:
+        errAbort()
+    if pos==None or not pos.isdigit():
+        errAbort("pos parameter is not an int")
+    if allele==None:
+        errAbort("need allele parameter")
+    if allele==None or len(allele)!=1 or allele[0].lower() not in "actg":
+        errAbort("invalid allele, can only be a single letter and ACTG")
+    if chrom.isdigit() or chrom in "XY":
+        chrom = "chr"+chrom
+    if track is None:
+        errAbort("missing dataset parameter")
+    if not track.isalpha():
+        errAbort("dataset/track parameter must contain only alphanumberic characters")
+
+    trackFname = join(DATADIR, track+".bb")
+    if not isfile(trackFname):
+        errAbort("illegal dataset/track name %s" % track)
+
+    # convert chrom from genbank acc to ucsc string like "chr1"
+    if chrom not in insdcToUcsc.values():
+        chrom = insdcToUcsc.get(chrom, None)
+    if chrom==None:
+        errAbort( "ERROR: illegal chrom identifier %s" % chrom)
+        
+    # change parameters slightly
+    allele = allele.upper()
+    pos = int(pos)
+
+    # run tool
+    args = ["utils/bigBedToBed", trackFname, "stdout", "-chrom=%s"%chrom, "-start=%d"%pos, "-end=%d"%(pos+1)]
+    p = subprocess.Popen(args, stdout=subprocess.PIPE)
+
+    # parse output
+    isMaybe = False
+    for line in p.stdout:
+        fs = line.rstrip("\n").split("\t")
+        if fs[-1]=="maybe":
+            isMaybe=True
+        bedLen = int(fs[2])-int(fs[1])
+        # uniprot features are longer than one basepair
+        if bedLen != 1 and track != "uniprot":
+            continue
+        # hgmd and uniprot do not have alleles
+        if fs[3][-1]==allele or track in ["hgmd", "uniprot"]:
+            print "Yes"
+            sys.exit(0)
+
+    if isMaybe:
+        print "Maybe"
+        sys.exit(0)
+
+    # cannot check exit code, no overlap makes bigBedToBed return an error, too
+    # so the following does not work
+    #if p.returncode != 0:
+        #print("Unable to run command")
+        #sys.exit(0)
+
+    print "No"
+
+main()

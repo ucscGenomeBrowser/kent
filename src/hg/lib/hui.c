@@ -290,7 +290,7 @@ return TRUE;
 }
 
 void extraUiLinks(char *db,struct trackDb *tdb)
-// Show downlaods, schema and metadata links where appropriate
+// Show downloads, schema and metadata links where appropriate
 {
 boolean schemaLink = (!tdbIsDownloadsOnly(tdb) && !trackHubDatabase(db)
                   && isCustomTrack(tdb->table) == FALSE)
@@ -3078,6 +3078,20 @@ if (membership != NULL)
 return FALSE;
 }
 
+static char *subtrackColorToCompare(struct trackDb *subtrack)
+/* Convert RGB color to string with scaled hue, suitable for alpha sort */
+{
+struct rgbColor rgbColor;
+rgbColor.r = subtrack->colorR;
+rgbColor.g = subtrack->colorG;
+rgbColor.b = subtrack->colorB;
+struct hslColor hslColor = mgRgbToHsl(rgbColor);
+int hue = hslColor.h * 10;
+char buf[5];
+safef(buf, 5, "%04d", hue);
+return cloneString(buf);
+}
+
 boolean subgroupFindTitle(struct trackDb *parentTdb, char *name,char **value)
 // looks for a a subgroup matching the name and returns the title if found
 {
@@ -3098,6 +3112,13 @@ void subgroupFree(char **value)
 {
 if (value && *value)
     freez(value);
+}
+
+boolean subgroupRequired(char *value)
+/* Returns whether subgroup much be specified for each track.
+ * Generally true.  Exceptions are specially defined subgroups */
+{
+return differentString(SUBTRACK_COLOR_SUBGROUP, value);
 }
 
 #define SORT_ON_TRACK_NAME "trackName"
@@ -3126,6 +3147,7 @@ if (cart != NULL && strlen(cartSetting) > strlen(setting))
 else
     sortOrder->sortOrder = cloneString(setting);      // old cart value is abandoned!
 
+/* parse setting into sortOrder */
 sortOrder->setting = cloneString(setting);
 sortOrder->count   = chopByWhite(sortOrder->setting,NULL,0);  // Get size
 if (cart && !stringIn(SORT_ON_TRACK_NAME,setting))
@@ -3195,7 +3217,9 @@ for (ix = 0; ix<sortOrder->count; ix++)
         sortOrder->order[ix] = ix+1;
         }
     if (ix < foundColumns)
+        {
         subgroupFindTitle(parentTdb,sortOrder->column[ix],&(sortOrder->title[ix]));
+        }
     }
 return sortOrder;  // NOTE cloneString:words[0]==*sortOrder->column[0]
 }                  // and will be freed when sortOrder is freed
@@ -3218,6 +3242,8 @@ if (sortOrder && *sortOrder)
 }
 
 
+
+
 sortableTdbItem *sortableTdbItemCreate(struct trackDb *tdbChild,sortOrder_t *sortOrder)
 // creates a sortable tdb item struct, given a child tdb and its parent's sort table
 // Errors in interpreting a passed in sortOrder will return NULL
@@ -3235,12 +3261,21 @@ if (sortOrder != NULL)   // Add some sort buttons
         sortColumn *column = NULL;
         AllocVar(column);
         column->fwd = sortOrder->forward[sIx];
-        if (!subgroupFind(item->tdb,sortOrder->column[sIx],&(column->value)))
+        char *col = sortOrder->column[sIx];
+        if (!subgroupFind(item->tdb, col, &(column->value)))
             {
-            char *setting = trackDbSetting(item->tdb,sortOrder->column[sIx]);
-            if (setting != NULL)
-                column->value = cloneString(setting);
-            // No subgroup, assume there is a matching setting (eg longLabel)
+            if (sameString(col, SUBTRACK_COLOR_SUBGROUP))
+                {
+                // convert RGB color to hue so alpha sort can compare
+                column->value = subtrackColorToCompare(tdbChild);
+                }
+            else
+                {
+                char *setting = trackDbSetting(item->tdb,col);
+                if (setting != NULL)
+                    column->value = cloneString(setting);
+                // No subgroup, assume there is a matching setting (eg longLabel)
+                }
             }
         if (column->value != NULL)
             slAddHead(&(item->columns), column);
@@ -3990,136 +4025,46 @@ if (metadataForTable(db,trackDb,NULL) != NULL)
 return date;
 }
 
-static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb)
-// Display list of subtracks and descriptions with checkboxes to control visibility and
-// possibly other nice things including links to schema and metadata and a release date.
-{
-struct trackDb *subtrack;
-struct dyString *dyHtml = newDyString(SMALLBUF);
-//char *colors[2]   = { COLOR_BG_DEFAULT,
-//                      COLOR_BG_ALTDEFAULT };
-char *colors[2]   = { "bgLevel1",
-                      "bgLevel1" };
-int colorIx = COLOR_BG_DEFAULT_IX; // Start with non-default allows alternation
+/* Subtrack configuration settings */
 
-// Get list of leaf subtracks to work with
-struct slRef *subtrackRef, *subtrackRefList = trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
-
-// Look for dividers, heirarchy, dimensions, sort and dragAndDrop!
-char **lastDivide = NULL;
-dividers_t *dividers = dividersSettingGet(parentTdb);
-if (dividers)
-    lastDivide = needMem(sizeof(char*)*dividers->count);
-hierarchy_t *hierarchy = hierarchySettingGet(parentTdb);
-
-membersForAll_t* membersForAll = membersForAllSubGroupsGet(parentTdb,NULL);
-int dimCount=0,di;
-for (di=0;di<membersForAll->dimMax;di++)
+struct subtrackConfigSettings 
     {
-    if (membersForAll->members[di])
-        dimCount++;
-    }
-sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
-boolean preSorted = FALSE;
-boolean useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
-char buffer[SMALLBUF];
-char *displaySubs = NULL;
-int subCount = slCount(subtrackRefList);
+    sortOrder_t *sortOrder; /* from trackDb setting */
+    boolean useDragAndDrop; /* from trackDb setting */
+    boolean restrictions;   /* from metadata ? */
+    boolean colorPatch;     /* from trackDb setting */
+    boolean displayAll;     /* from radiobutton */
+    int bgColorIx;          /* from logic over other settings */
+    int columnCount;        /* determined from trackDb settings */
+    };
 #define LARGE_COMPOSITE_CUTOFF 30
-if (subCount > LARGE_COMPOSITE_CUTOFF && membersForAll->dimensions != NULL)
-    {
-    // ignore displaySubtracks setting for large composites with a matrix as
-    // matrix effectively shows all
-    safef(buffer,SMALLBUF,"%s.displaySubtracks",parentTdb->track);
-    displaySubs = cartUsualString(cart, buffer,"some"); // track specific defaults to only selected
-    }
-else
-    {
-    displaySubs = cartUsualString(cart, "displaySubtracks", "all"); // browser wide defaults to all
-    }
-boolean displayAll = sameString(displaySubs, "all");
 
-// Determine whether there is a restricted until date column
-boolean restrictions = FALSE;
-for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
-    {
-    subtrack = subtrackRef->val;
-    (void)metadataForTable(db,subtrack,NULL);
-    if (NULL != metadataFindValue(subtrack,"dateUnrestricted"))
-        {
-        restrictions = TRUE;
-        break;
-        }
-    }
-
-// Table wraps around entire list so that "Top" link can float to the correct place.
-cgiDown(0.7);
-printf("<table><tr><td class='windowSize'>");
-printf("<A NAME='DISPLAY_SUBTRACKS'></A>");
+static void printSubtrackTableHeader(struct trackDb *parentTdb, struct slRef *subtrackRefList,
+                                    struct subtrackConfigSettings *settings)
+/* Print header of subtrack table, including classes describing display appearance and behavior.
+   Return number of columns */
+{
+char buffer[SMALLBUF];
+boolean useDragAndDrop = settings->useDragAndDrop;
+sortOrder_t *sortOrder = settings->sortOrder;
 if (sortOrder != NULL)
-    {
-    // First table row contains the display "selected/visible" or "all" radio buttons
-    // NOTE: list subtrack radio buttons are inside tracklist table header if
-    //       there are no sort columns.  The reason is to ensure spacing of lines
-    //       column headers when the only column header is "Restricted Until"
-    printf("<B>List subtracks:&nbsp;");
-    char javascript[JBUFSIZE];
-    safef(javascript, sizeof(javascript),
-          "class='allOrOnly' onclick='showOrHideSelectedSubtracks(true);'");
-    if (subCount > LARGE_COMPOSITE_CUTOFF)
-        safef(buffer,SMALLBUF,"%s.displaySubtracks",parentTdb->track);
-    else
-        safecpy(buffer,SMALLBUF,"displaySubtracks");
-    cgiMakeOnClickRadioButton(buffer, "selected", !displayAll,javascript);
-    puts("only selected/visible &nbsp;&nbsp;");
-    safef(javascript, sizeof(javascript),
-          "class='allOrOnly' onclick='showOrHideSelectedSubtracks(false);'");
-    cgiMakeOnClickRadioButton(buffer, "all", displayAll,javascript);
-    printf("all</B>");
-    if (slCount(subtrackRefList) > 5)
-        printf("&nbsp;&nbsp;&nbsp;&nbsp;(<span class='subCBcount'></span>)");
-    makeTopLink(parentTdb);
-    printf("</td></tr></table>");
-    }
+    puts("<THEAD class=sortable>");
 else
-    makeTopLink(parentTdb);
-
-// Now we can start in on the table of subtracks  It may be sortable and/or dragAndDroppable
-printf("\n<TABLE CELLSPACING='2' CELLPADDING='0' border='0'");
-dyStringClear(dyHtml);
-if (sortOrder != NULL)
-    dyStringPrintf(dyHtml, "sortable");
-if (useDragAndDrop)
-    {
-    if (dyStringLen(dyHtml) > 0)
-        dyStringAppendC(dyHtml,' ');
-    dyStringPrintf(dyHtml, "tableWithDragAndDrop");
-    }
-printf(" class='subtracks");
-if (dyStringLen(dyHtml) > 0)
-    {
-    printf(" bglevel1 %s'",dyStringContents(dyHtml));
-    colorIx = COLOR_BG_ALTDEFAULT_IX;
-    }
-if (sortOrder != NULL)
-    puts("'><THEAD class=sortable>");
-else
-    puts("'><THEAD>");
-
-boolean doColorPatch = trackDbSettingOn(parentTdb, "showSubtrackColorOnUi");
+    puts("<THEAD>");
 int colspan = 3;
 if (sortOrder != NULL)
     colspan = sortOrder->count+2;
 else if (!tdbIsMultiTrack(parentTdb)) // An extra column for subVis/wrench so dragAndDrop works
     colspan++;
-if (doColorPatch)
-    colspan += 1;
+if (settings->colorPatch)
+    colspan++;
 int columnCount = 0;
 if (sortOrder != NULL)
-    printf("<TR id=\"subtracksHeader\" class='sortable%s'>\n",useDragAndDrop?" nodrop nodrag":"");
+    printf("<TR id=\"subtracksHeader\" class='sortable%s'>\n",
+                useDragAndDrop ? " nodrop nodrag" : "");
 else
     {
-    printf("<TR%s>",useDragAndDrop?" id='noDrag' class='nodrop nodrag'":"");
+    printf("<TR%s>", useDragAndDrop ? " id='noDrag' class='nodrop nodrag'" : "");
     // First table row contains the display "selected/visible" or "all" radio buttons
     // NOTE: list subtrack radio buttons are inside tracklist table header if
     //       there are no sort columns.  The reason is to ensure spacing of lines
@@ -4128,17 +4073,18 @@ else
     char javascript[JBUFSIZE];
     safef(javascript, sizeof(javascript),
           "class='allOrOnly' onclick='showOrHideSelectedSubtracks(true);'");
+    int subCount = slCount(subtrackRefList);
     if (subCount > LARGE_COMPOSITE_CUTOFF)
         safef(buffer,SMALLBUF,"%s.displaySubtracks",parentTdb->track);
     else
         safecpy(buffer,SMALLBUF,"displaySubtracks");
-    cgiMakeOnClickRadioButton(buffer, "selected", !displayAll,javascript);
+    cgiMakeOnClickRadioButton(buffer, "selected", !settings->displayAll,javascript);
     puts("only selected/visible &nbsp;&nbsp;");
     safef(javascript, sizeof(javascript),
           "class='allOrOnly' onclick='showOrHideSelectedSubtracks(false);'");
-    cgiMakeOnClickRadioButton(buffer, "all", displayAll,javascript);
+    cgiMakeOnClickRadioButton(buffer, "all", settings->displayAll,javascript);
     printf("all</B>");
-    if (slCount(subtrackRefList) > 5)
+    if (subCount > 5)
         printf("&nbsp;&nbsp;&nbsp;&nbsp;(<span class='subCBcount'></span>)");
     puts("</TD>");
     columnCount = colspan;
@@ -4188,7 +4134,7 @@ puts("<TH>&nbsp;</TH>"); // schema column
 columnCount++;
 
 // Finally there may be a restricted until column
-if (restrictions)
+if (settings->restrictions)
     {
     if (sortOrder != NULL)
         {
@@ -4210,14 +4156,56 @@ if (restrictions)
     columnCount++;
     }
 puts("</TR></THEAD>"); // The end of the header section.
+settings->columnCount = columnCount;
+}
+
+static void printSubtrackTableFooter(int subCount, struct subtrackConfigSettings *settings)
+/* Print footer with restriction policy if needed */
+{
+boolean restrictions = settings->restrictions;
+sortOrder_t *sortOrder = settings->sortOrder;
+int columnCount = settings->columnCount;
+
+if (subCount > 5 || (restrictions && sortOrder != NULL))
+    {
+    printf("<TFOOT style='background-color:%s;'><TR valign='top'>", COLOR_BG_DEFAULT_DARKER);
+    if (restrictions && sortOrder != NULL)
+        printf("<TD colspan=%d>&nbsp;&nbsp;&nbsp;&nbsp;",columnCount-1);
+    else
+        printf("<TD colspan=%d>&nbsp;&nbsp;&nbsp;&nbsp;",columnCount);
+
+    // Count of subtracks is filled in by javascript.
+    if (subCount > 5)
+        printf("<span class='subCBcount'></span>\n");
+
+    // Restriction policy needs a link
+    if (restrictions && sortOrder != NULL)
+        printf("</TD><TH><A HREF='%s' TARGET=BLANK style='font-size:.9em;'>Restriction Policy</A>",
+               ENCODE_DATA_RELEASE_POLICY);
+
+    printf("</TD></TR></TFOOT>\n");
+    }
+}
+
+static void printSubtrackTableBody(struct trackDb *parentTdb, struct slRef *subtrackRefList,
+                                    struct subtrackConfigSettings *settings, struct cart *cart)
+/* Print list of subtracks */
+{
+sortOrder_t *sortOrder = settings->sortOrder;
+boolean useDragAndDrop = settings->useDragAndDrop;
+boolean restrictions = settings->restrictions;
+struct dyString *dyHtml = newDyString(SMALLBUF);
+char buffer[SMALLBUF];
+char *db = cartString(cart, "db");
 
 // The subtracks need to be sorted by priority but only sortable and dragable will have
 // non-default (cart) priorities to sort on
+boolean preSorted = FALSE;
 if (sortOrder != NULL || useDragAndDrop)
     {
     // preserves user's prev sort/drags
     preSorted = tdbRefSortPrioritiesFromCart(cart, &subtrackRefList);
-    printf("<TBODY class='%saltColors'>\n",(sortOrder != NULL ? "sortable " : "") );
+    printf("<TBODY class='%saltColors'>\n", (sortOrder != NULL ? "sortable " : "") );
     }
 else
     {
@@ -4228,9 +4216,19 @@ else
 
 // Finally the big "for loop" to list each subtrack as a table row.
 printf("\n<!-- ----- subtracks list ----- -->\n");
+membersForAll_t* membersForAll = membersForAllSubGroupsGet(parentTdb,NULL);
+struct slRef *subtrackRef;
+
+/* Color handling ?? */
+//char *colors[2]   = { COLOR_BG_DEFAULT,
+//                      COLOR_BG_ALTDEFAULT };
+char *colors[2]   = { "bgLevel1",
+                      "bgLevel1" };
+int colorIx = settings->bgColorIx;
+
 for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
     {
-    subtrack = subtrackRef->val;
+    struct trackDb *subtrack = subtrackRef->val;
     int ix;
 
     // Determine whether subtrack is checked, visible, configurable, has group membership, etc.
@@ -4271,16 +4269,22 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 
     if (sortOrder == NULL && !useDragAndDrop)
         {
-        if ( divisionIfNeeded(lastDivide,dividers,membership) )
+        char **lastDivide = NULL;
+        dividers_t *dividers = dividersSettingGet(parentTdb);
+        if (dividers)
+            lastDivide = needMem(sizeof(char*)*dividers->count);
+        if (divisionIfNeeded(lastDivide,dividers,membership) )
             colorIx = (colorIx == COLOR_BG_DEFAULT_IX ? COLOR_BG_ALTDEFAULT_IX
                                                       : COLOR_BG_DEFAULT_IX);
+        dividersFree(&dividers);
         }
 
     // Start the TR which must have an id that is directly related to the checkBox id
     char *id = checkBoxIdMakeForTrack(subtrack,membersForAll->members,membersForAll->dimMax,
                                       membership); // view is known tag
-    printf("<TR valign='top' class='%s%s'",colors[colorIx],(useDragAndDrop?" trDraggable":""));
-    printf(" id=tr_%s%s>\n",id,(!visibleCB && !displayAll?" style='display:none'":""));
+    printf("<TR valign='top' class='%s%s'",
+                colors[colorIx],(useDragAndDrop?" trDraggable":""));
+    printf(" id=tr_%s%s>\n",id,(!visibleCB && !settings->displayAll?" style='display:none'":""));
 
     // Now the TD that holds the checkbox
     printf("<TD%s%s>",
@@ -4300,6 +4304,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     //  (e.g. class='subCB GM12878 CTCF Peak')
     dyStringClear(dyHtml);
     dyStringAppend(dyHtml, "subCB"); // always first
+    int di;
     if (membersForAll->dimensions)
         {
         for (di=dimX;di<membersForAll->dimMax;di++)
@@ -4336,6 +4341,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     else
         cgiMakeCheckBoxFourWay(buffer,checkedCB,enabledCB,id,dyStringContents(dyHtml),
                                "onclick='matSubCbClick(this);' style='cursor:pointer'");
+
     if (useDragAndDrop)
         printf("&nbsp;");
 
@@ -4369,42 +4375,52 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         }
     printf("</TD>");
 
-    // A color patch which helps distinguish subtracks in some types of composites
-    if (doColorPatch)
-        {
-        printf("<TD BGCOLOR='#%02X%02X%02X'>&nbsp;&nbsp;&nbsp;&nbsp;</TD>",
-               subtrack->colorR, subtrack->colorG, subtrack->colorB);
-        }
-
     // If sortable, then there must be a column per sortable dimension
     if (sortOrder != NULL)
         {
         int sIx=0;
-        for (sIx=0;sIx<sortOrder->count;sIx++)
+        for (sIx=0; sIx <sortOrder->count; sIx++)
             {
-            ix = stringArrayIx(sortOrder->column[sIx], membership->subgroups, membership->count);
+            char *col = sortOrder->column[sIx];
+            ix = stringArrayIx(col, membership->subgroups, membership->count);
                                 // TODO: Sort needs to expand from subGroups to labels as well
             if (ix >= 0)
                 {
                 char *titleRoot=NULL;
-                if (cvTermIsEmpty(sortOrder->column[sIx],membership->titles[ix]))
+                if (cvTermIsEmpty(col, membership->titles[ix]))
                     titleRoot = cloneString(" &nbsp;");
                 else
                     titleRoot = labelRoot(membership->titles[ix],NULL);
                 // Each sortable column requires hidden goop (in the "abbr" field currently)
                 // which is the actual sort on value
                 printf("<TD id='%s_%s' abbr='%s' align='left'>&nbsp;",
-                       subtrack->track,sortOrder->column[sIx],membership->membership[ix]);
+                       subtrack->track, col, membership->membership[ix]);
                 printf("%s",titleRoot);
                 puts("</TD>");
                 freeMem(titleRoot);
+                }
+            else if (sameString(col, SUBTRACK_COLOR_SUBGROUP))
+                {
+                char *hue = subtrackColorToCompare(subtrack);
+                printf("<TD id='%s_%s' abbr='%s' bgcolor='#%02X%02X%02X'>"
+                        "&nbsp;&nbsp;&nbsp;&nbsp;</TD>",
+                    subtrack->track, col, hue, 
+                        subtrack->colorR, subtrack->colorG, subtrack->colorB);
                 }
             }
         }
     else  // Non-sortable tables do not have sort by columns but will display a short label
         { // (which may be a configurable link)
+        if (settings->colorPatch)
+            {
+            printf("<TD BGCOLOR='#%02X%02X%02X'>&nbsp;&nbsp;&nbsp;&nbsp;</TD>",
+                           subtrack->colorR, subtrack->colorG, subtrack->colorB);
+
+            }
         printf("<TD>&nbsp;");
+        hierarchy_t *hierarchy = hierarchySettingGet(parentTdb);
         indentIfNeeded(hierarchy,membership);
+        hierarchyFree(&hierarchy);
         printf("%s",subtrack->shortLabel);
         puts("</TD>");
         }
@@ -4460,35 +4476,144 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 
 // End of the table
 puts("</TBODY>");
-if (slCount(subtrackRefList) > 5 || (restrictions && sortOrder != NULL))
+dyStringFree(&dyHtml)
+membersForAllSubGroupsFree(parentTdb,&membersForAll);
+}
+
+static boolean membersHaveMatrix(membersForAll_t *membersForAll)
+/* Check for matrix */
+{
+if (membersForAll->members[dimX] == NULL && membersForAll->members[dimY] == NULL)
+    return false;
+return true;
+}
+
+static void printSubtrackTable(struct trackDb *parentTdb, struct slRef *subtrackRefList,
+                                struct subtrackConfigSettings *settings, struct cart *cart)
+/* Print table of subtracks */
+{
+// Print table tag
+printf("\n<TABLE CELLSPACING='2' CELLPADDING='0' border='0'");
+struct dyString *dyHtml = newDyString(SMALLBUF);
+if (settings->sortOrder != NULL)
+    dyStringPrintf(dyHtml, "sortable");
+if (settings->useDragAndDrop)
     {
-    printf("<TFOOT style='background-color:%s;'><TR valign='top'>", COLOR_BG_DEFAULT_DARKER);
-    if (restrictions && sortOrder != NULL)
-        printf("<TD colspan=%d>&nbsp;&nbsp;&nbsp;&nbsp;",columnCount-1);
-    else
-        printf("<TD colspan=%d>&nbsp;&nbsp;&nbsp;&nbsp;",columnCount);
-
-    // Count of subtracks is filled in by javascript.
-    if (slCount(subtrackRefList) > 5)
-        printf("<span class='subCBcount'></span>\n");
-
-    // Restriction policy needs a link
-    if (restrictions && sortOrder != NULL)
-        printf("</TD><TH><A HREF='%s' TARGET=BLANK style='font-size:.9em;'>Restriction Policy</A>",
-               ENCODE_DATA_RELEASE_POLICY);
-
-    printf("</TD></TR></TFOOT>\n");
+    if (dyStringLen(dyHtml) > 0)
+        dyStringAppendC(dyHtml,' ');
+    dyStringPrintf(dyHtml, "tableWithDragAndDrop");
     }
+printf(" class='subtracks");
+if (dyStringLen(dyHtml) > 0)
+    {
+    printf(" bglevel1 %s'",dyStringContents(dyHtml));
+    settings->bgColorIx = COLOR_BG_ALTDEFAULT_IX;
+    }
+else
+    settings->bgColorIx = COLOR_BG_DEFAULT_IX; // Start with non-default allows alternation
+puts("'>");
+dyStringFree(&dyHtml)
+
+// save count of subtracks for use by footer code
+int subCount = slCount(subtrackRefList);
+
+printSubtrackTableHeader(parentTdb, subtrackRefList, settings);
+printSubtrackTableBody(parentTdb, subtrackRefList, settings, cart);
+printSubtrackTableFooter(subCount, settings);
 puts("</TABLE>");
+}
+
+static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb)
+// Display list of subtracks and descriptions with checkboxes to control visibility and
+// possibly other nice things including links to schema and metadata and a release date.
+{
+char buffer[SMALLBUF];
+struct trackDb *subtrack;
+
+// Get list of leaf subtracks to work with
+struct slRef *subtrackRef, *subtrackRefList = trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
+
+membersForAll_t* membersForAll = membersForAllSubGroupsGet(parentTdb,NULL);
+sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
+char *displaySubs = NULL;
+int subCount = slCount(subtrackRefList);
+if (subCount > LARGE_COMPOSITE_CUTOFF && membersForAll->dimensions != NULL)
+    {
+    // ignore displaySubtracks setting for large composites with a matrix as
+    // matrix effectively shows all
+    safef(buffer,SMALLBUF,"%s.displaySubtracks",parentTdb->track);
+    displaySubs = cartUsualString(cart, buffer,"some"); // track specific defaults to only selected
+    }
+else
+    {
+    displaySubs = cartUsualString(cart, "displaySubtracks", "all"); // browser wide defaults to all
+    }
+boolean displayAll = sameString(displaySubs, "all");
+
+// Table wraps around entire list so that "Top" link can float to the correct place.
+cgiDown(0.7);
+printf("<table><tr><td class='windowSize'>");
+printf("<A NAME='DISPLAY_SUBTRACKS'></A>");
+if (sortOrder != NULL)
+    {
+    // First table row contains the display "selected/visible" or "all" radio buttons
+    // NOTE: list subtrack radio buttons are inside tracklist table header if
+    //       there are no sort columns.  The reason is to ensure spacing of lines
+    //       column headers when the only column header is "Restricted Until"
+    printf("<B>List subtracks:&nbsp;");
+    char javascript[JBUFSIZE];
+    safef(javascript, sizeof(javascript),
+          "class='allOrOnly' onclick='showOrHideSelectedSubtracks(true);'");
+    if (subCount > LARGE_COMPOSITE_CUTOFF)
+        safef(buffer,SMALLBUF,"%s.displaySubtracks",parentTdb->track);
+    else
+        safecpy(buffer,SMALLBUF,"displaySubtracks");
+    cgiMakeOnClickRadioButton(buffer, "selected", !displayAll,javascript);
+    puts("only selected/visible &nbsp;&nbsp;");
+    safef(javascript, sizeof(javascript),
+          "class='allOrOnly' onclick='showOrHideSelectedSubtracks(false);'");
+    cgiMakeOnClickRadioButton(buffer, "all", displayAll,javascript);
+    printf("all</B>");
+    if (slCount(subtrackRefList) > 5)
+        printf("&nbsp;&nbsp;&nbsp;&nbsp;(<span class='subCBcount'></span>)");
+    if (membersHaveMatrix(membersForAll))
+        makeTopLink(parentTdb);
+    printf("</td></tr></table>");
+    }
+else
+    {
+    if (membersHaveMatrix(membersForAll))
+        makeTopLink(parentTdb);
+    }
+
+// Get info for subtrack list
+struct subtrackConfigSettings *settings = NULL;
+AllocVar(settings);
+
+// Determine whether there is a restricted until date column
+settings->restrictions = FALSE;
+for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
+    {
+    subtrack = subtrackRef->val;
+    (void)metadataForTable(db,subtrack,NULL);
+    if (NULL != metadataFindValue(subtrack,"dateUnrestricted"))
+        {
+        settings->restrictions = TRUE;
+        break;
+        }
+    }
+settings->useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
+settings->sortOrder = sortOrder;
+settings->displayAll = displayAll;
+settings->colorPatch = (trackDbSetting(parentTdb, SUBTRACK_COLOR_PATCH) != NULL);
+
+printSubtrackTable(parentTdb, subtrackRefList, settings, cart);
+
 if (sortOrder == NULL)
     printf("</td></tr></table>");
 
-// Finally we are free of all this
 membersForAllSubGroupsFree(parentTdb,&membersForAll);
-dyStringFree(&dyHtml)
 sortOrderFree(&sortOrder);
-dividersFree(&dividers);
-hierarchyFree(&hierarchy);
 }
 
 static void compositeUiSubtracksMatchingPrimary(char *db, struct cart *cart,
@@ -4615,6 +4740,38 @@ printf("<BR>\n");
 wigCfgUi(cart,tdb,name,title,TRUE);
 }
 
+void wiggleScaleDropDownJavascript(char *name)
+/* print some js that deactivates the min/max range if autoscaling is activated */
+{
+printf("<script type=\"text/javascript\">\n");
+printf("  $(\"[name='%s.autoScale']\").change(function()\n", name);
+printf("  {\n");
+printf("  val= $(this).find(':selected').val(); \n");
+printf("  if (val==\"auto-scale to data view\")\n");
+printf("     {\n");
+printf("     $(\"[name='%s.minY']\")[0].disabled=true;\n", name);
+printf("     $(\"[name='%s.maxY']\")[0].disabled=true;\n", name);
+printf("     $(\".%sAutoScaleDesc\").attr('style', 'color:grey;');\n", name);
+printf("     }\n");
+printf("     else\n");
+printf("     {\n");
+printf("     $(\"[name='%s.minY']\")[0].disabled=false;\n", name);
+printf("     $(\"[name='%s.maxY']\")[0].disabled=false;\n", name);
+printf("     $(\".%sAutoScaleDesc\").attr('style', 'color:black;');\n", name);
+printf("     }\n");
+printf("  });\n");
+printf("\n");
+printf("  $( document ).ready(function()\n");
+printf("  {\n");
+printf("  val= $(\"[name='%s.autoScale']\").find(':selected').val(); \n", name);
+printf("  if (val==\"auto-scale to data view\")\n");
+printf("     $(\"[name='%s.minY']\")[0].disabled=true;\n", name);
+printf("     $(\"[name='%s.maxY']\")[0].disabled=true;\n", name);
+printf("     $(\".%sAutoScaleDesc\").attr('style', 'color:grey;');\n", name);
+printf("  });\n");
+printf("</script>\n");
+}
+
 void wigCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* UI for the wiggle track */
 {
@@ -4702,8 +4859,17 @@ printf("pixels&nbsp;(range: %d to %d)",
        minHeightPixels, maxHeightPixels);
 puts("</TD></TR>");
 
-printf("<TR valign=center><th align=right>Vertical viewing range:</th>"
-       "<td align=left>&nbsp;min:&nbsp;");
+printf("<TR valign=center><th align=right>Data view scaling:</th><td align=left colspan=3>");
+safef(option, sizeof(option), "%s.%s", name, AUTOSCALE );
+wiggleScaleDropDown(option, autoScale);
+wiggleScaleDropDownJavascript(name);
+safef(option, sizeof(option), "%s.%s", name, ALWAYSZERO);
+printf("Always include zero:&nbsp");
+wiggleAlwaysZeroDropDown(option, alwaysZero);
+puts("</TD></TR>");
+
+printf("<TR class=\"%sAutoScaleDesc\" valign=center><th align=right>Vertical viewing range:</th>"
+       "<td align=left>&nbsp;min:&nbsp;", name);
 safef(option, sizeof(option), "%s.%s", name, MIN_Y );
 cgiMakeDoubleVarWithLimits(option, minY, "Range min", 0, NO_VALUE, NO_VALUE);
 printf("</td><td align=leftv colspan=2>max:&nbsp;");
@@ -4711,14 +4877,6 @@ safef(option, sizeof(option), "%s.%s", name, MAX_Y );
 cgiMakeDoubleVarWithLimits(option, maxY, "Range max", 0, NO_VALUE, NO_VALUE);
 printf("&nbsp;(range: %g to %g)",
        tDbMinY, tDbMaxY);
-puts("</TD></TR>");
-
-printf("<TR valign=center><th align=right>Data view scaling:</th><td align=left colspan=3>");
-safef(option, sizeof(option), "%s.%s", name, AUTOSCALE );
-wiggleScaleDropDown(option, autoScale);
-safef(option, sizeof(option), "%s.%s", name, ALWAYSZERO);
-printf("Always include zero:&nbsp");
-wiggleAlwaysZeroDropDown(option, alwaysZero);
 puts("</TD></TR>");
 
 printf("<TR valign=center><th align=right>Transform function:</th><td align=left>");
@@ -6657,7 +6815,7 @@ return cloneString(label);
 }
 
 #ifdef BUTTONS_BY_CSS
-#define BUTTON_MAT "<span class='pmButton' onclick=\"matSetMatrixCheckBoxes(%s%s%s%s)\">%c</span>"
+#define BUTTON_MAT "<span class='pmButton' onclick=\"matSeteatrixCheckBoxes(%s%s%s%s)\">%c</span>"
 #else///ifndef BUTTONS_BY_CSS
 #define PM_BUTTON_UC "<IMG height=18 width=18 onclick=\"return " \
                      "(matSetMatrixCheckBoxes(%s%s%s%s%s%s) == false);\" id='btn_%s' " \

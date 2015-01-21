@@ -1,5 +1,6 @@
 
 all::   benchMark100.commonNames.nh benchMark100.scientificNames.nh \
+	183way.commonNames.nh 183way.scientificNames.nh \
 	181way.commonNames.nh 181way.scientificNames.nh \
 	174way.commonNames.nh 174way.scientificNames.nh \
 	172way.commonNames.nh 172way.scientificNames.nh \
@@ -24,6 +25,9 @@ all::   benchMark100.commonNames.nh benchMark100.scientificNames.nh \
 	96way.commonNames.nh 96way.scientificNames.nh
 
 benchMark100.commonNames.nh: benchMark100.nh
+	./commonNames.sh $< | ./asciiTree.pl /dev/stdin > $@
+
+183way.commonNames.nh: 183way.nh commonNames.sh
 	./commonNames.sh $< | ./asciiTree.pl /dev/stdin > $@
 
 181way.commonNames.nh: 181way.nh commonNames.sh
@@ -93,6 +97,9 @@ benchMark100.commonNames.nh: benchMark100.nh
 	./commonNames.sh $< | ./asciiTree.pl /dev/stdin > $@
 
 benchMark100.scientificNames.nh: benchMark100.nh
+	./scientificNames.sh $< | ./asciiTree.pl /dev/stdin > $@
+
+183way.scientificNames.nh: 183way.nh scientificNames.sh
 	./scientificNames.sh $< | ./asciiTree.pl /dev/stdin > $@
 
 181way.scientificNames.nh: 181way.nh scientificNames.sh

@@ -536,6 +536,145 @@ searchType psl
 searchMethod prefix
 searchPriority 2.31
 
+track transMapV3
+superTrack on
+shortLabel TransMap V3
+longLabel TransMap Alignments V3
+group genes
+
+    track transMapAlnEnsemblV3
+    superTrack transMap pack
+    shortLabel TransMap GENCODE/Ensembl V3
+    longLabel TransMap GENCODE/Ensembl Mappings V3
+    group genes
+    type psl
+    priority 37.001
+    color 0,100,0
+    visibility pack
+    transMapInfo transMapInfoEnsemblV3
+    transMapSrc hgFixed.transMapSrcEnsemblV3
+    transMapGene hgFixed.transMapGeneEnsemblV3
+    transMapTypeDesc UCSC Gene
+    baseColorDefault diffCodons
+    baseColorUseCds table hgFixed.transMapGeneEnsemblV3
+    baseColorUseSequence extFile hgFixed.transMapSeqEnsemblV3 hgFixed.transMapExtFileEnsemblV3
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsAllScales .
+    showCdsMaxZoom 10000.0
+
+searchTable transMapAlnEnsemblV3
+searchType psl
+searchMethod prefix
+searchPriority 2.31
+
+    track transMapAlnUcscGenesV3
+    superTrack transMap pack
+    shortLabel TransMap UCSC V3
+    longLabel TransMap UCSC Gene Mappings V3
+    group genes
+    type psl
+    priority 37.002
+    color 0,100,0
+    visibility pack
+    transMapInfo transMapInfoUcscGenesV3
+    transMapSrc hgFixed.transMapSrcUcscGenesV3
+    transMapGene hgFixed.transMapGeneUcscGenesV3
+    transMapTypeDesc UCSC Gene
+    baseColorDefault diffCodons
+    baseColorUseCds table hgFixed.transMapGeneUcscGenesV3
+    baseColorUseSequence extFile hgFixed.transMapSeqUcscGenesV3 hgFixed.transMapExtFileUcscGenesV3
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsAllScales .
+    showCdsMaxZoom 10000.0
+
+searchTable transMapAlnUcscGenesV3
+searchType psl
+searchMethod prefix
+searchPriority 2.31
+
+    track transMapAlnRefSeqV3
+    superTrack transMap pack
+    shortLabel TransMap RefGene V3
+    longLabel TransMap RefSeq Gene Mappings V3
+    group genes
+    type psl
+    priority 37.003
+    color 0,100,0
+    visibility pack
+    transMapInfo transMapInfoRefSeqV3
+    transMapSrc hgFixed.transMapSrcRefSeqV3
+    transMapGene hgFixed.transMapGeneRefSeqV3
+    baseColorDefault diffCodons
+    baseColorUseCds table hgFixed.transMapGeneRefSeqV3
+    baseColorUseSequence extFile hgFixed.transMapSeqRefSeqV3 hgFixed.transMapExtFileRefSeqV3
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsAllScales .
+    showCdsMaxZoom 10000.0
+
+searchTable transMapAlnRefSeqV3
+searchType psl
+searchMethod prefix
+searchPriority 2.31
+
+    track transMapAlnMRnaV3
+    superTrack transMap pack
+    shortLabel TransMap mRNA V3
+    longLabel TransMap GenBank mRNA Mappings V3
+    group genes
+    type psl
+    priority 37.004
+    color 0,100,0
+    visibility pack
+    transMapInfo transMapInfoMRnaV3
+    transMapSrc hgFixed.transMapSrcMRnaV3
+    transMapGene hgFixed.transMapGeneMRnaV3
+    baseColorDefault diffCodons
+    baseColorUseCds table hgFixed.transMapGeneMRnaV3
+    baseColorUseSequence extFile hgFixed.transMapSeqMRnaV3 hgFixed.transMapExtFileMRnaV3
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsAllScales .
+    showCdsMaxZoom 10000.0
+
+searchTable transMapAlnMRnaV3
+searchType psl
+searchMethod prefix
+searchPriority 2.31
+
+    track transMapAlnSplicedEstV3
+    superTrack transMap hide
+    shortLabel TransMap ESTs V3
+    longLabel TransMap Spliced EST Mappings V3
+    group genes
+    type psl
+    priority 37.005
+    color 0,100,0
+    visibility hide
+    transMapInfo transMapInfoSplicedEstV3
+    transMapSrc hgFixed.transMapSrcSplicedEstV3
+    baseColorDefault none
+    baseColorUseSequence extFile hgFixed.transMapSeqSplicedEstV3 hgFixed.transMapExtFileSplicedEstV3
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+
+searchTable transMapAlnSplicedEstV3
+searchType psl
+searchMethod prefix
+searchPriority 2.31
+
 track reconTransMap
 superTrack on
 shortLabel Recon TransMap
@@ -2615,7 +2754,6 @@ group genes
 type bed 12
 color 20,0,250
 url http://pfam.sanger.ac.uk/family/$$
-release beta,public
 
 track numtSeq2012
 compositeTrack on
@@ -2733,11 +2871,10 @@ group genes
 visibility hide
 type bigBed 12 +
 itemRgb on
-release alpha
 compositeTrack on
 
         track spAnnot
-        shortLabel UniProt Annotations
+        shortLabel UniProt Annot.
         longLabel UniProt/SwissProt Protein Annotations
         parent spUniprot
         group genes
@@ -2746,7 +2883,7 @@ compositeTrack on
         itemRgb on
         urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
         mouseOverField comments
-        release alpha
+        noScoreFilter on
 
         track spStruct
         shortLabel UniProt Structure
@@ -2758,17 +2895,17 @@ compositeTrack on
         itemRgb on
         urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
         mouseOverField comments
-        release alpha
+        noScoreFilter on
 
-        track ucscGenePfam
-        shortLabel Pfam in UCSC Gene
-        longLabel Pfam Domains in UCSC Genes
-        parent spUniprot
-        group genes
-        type bed 12
-        color 20,0,250
-        url http://pfam.sanger.ac.uk/family/$$
-        release alpha
+#        track ucscGenePfam
+#        shortLabel Pfam in UCSC Gene
+#        longLabel Pfam Domains in UCSC Genes
+#        parent spUniprot
+#        group genes
+#        type bed 12
+#        color 20,0,250
+#        url http://pfam.sanger.ac.uk/family/$$
+#        release alpha
 
 searchTable ucscToINSDC
 shortCircuit 1

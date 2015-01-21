@@ -116,7 +116,7 @@ taxId 9478
 
     egrep -i "versi|relea" do.log
     #    January 31 2015 (open-4-0-5) version of RepeatMasker
-    #  CC   RELEASE 20140131;     
+    #  CC   RELEASE 20140131;
 
     time featureBits -countGaps tarSyr2 rmsk
     #  1631014044 bases of 3453864774 (47.223%) in intersection
@@ -161,13 +161,6 @@ taxId 9478
 
     rm /gbdb/tarSyr2/tarSyr2.2bit
     ln -s `pwd`/tarSyr2.2bit /gbdb/tarSyr2/tarSyr2.2bit
-
-##########################################################################
-user    0m8.322s
-sys     0m23.811s
-[hiram@hgwdev /hive/data/genomes/tarSyr2/bed/cpgIslandsUnmasked]
-user    0m9.700s
-sys     0m27.600s
 
 ##########################################################################
 ## WINDOWMASKER (DONE - 2014-11-21 - Hiram)
@@ -216,7 +209,7 @@ sys     0m27.600s
     # 35810524 bases of 3405755564 (1.051%) in intersection
 
 #############################################################################
-# cytoBandIdeo - (DONE - 2014-11-25 - Hiram
+# cytoBandIdeo - (DONE - 2014-11-25 - Hiram)
     mkdir /hive/data/genomes/tarSyr2/bed/cytoBand
     cd /hive/data/genomes/tarSyr2/bed/cytoBand
     makeCytoBandIdeo.csh tarSyr2
@@ -236,7 +229,7 @@ sys     0m27.600s
     # 71743479 bases of 3405755564 (2.107%) in intersection
 
 ########################################################################
-# Create kluster run files (DONE - 2014-10-10 - Steve)
+# Create kluster run files (DONE - 2014-12-03 - Hiram)
 
     # numerator is tarSyr2 gapless bases "real" as reported by:
     featureBits -noRandom -noHap tarSyr2 gap
@@ -268,7 +261,7 @@ sys     0m27.600s
 #         -bedFile=jkStuff/nonBridged.bed
 
 ########################################################################
-# GENBANK AUTO UPDATE (DONE - 2014-10-10 - Steve)
+# GENBANK AUTO UPDATE (DONE - 2014-12-11 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -330,275 +323,91 @@ tarSyr2.perChromTables = no
     make etc-update
 
 #########################################################################
-#  SWAP hg38 LASTZ (DONE - 2014-10-15 - Steve)
-    #   original alignment done at hg38.txt
-    cd /hive/data/genomes/hg38/bed/lastzBosTau8.2014-10-15
+# ucscToINSDC table/track (DONE - 2014-12-11 - Hiram)
 
-    cat fb.hg38.chainBosTau8Link.txt
-    # 1401921010 bases of 3049335806 (45.975%) in intersection
-    # Create link
-    cd /hive/data/genomes/hg38/bed
-    ln -s  lastzBosTau8.2014-10-15 lastz.tarSyr2
+    mkdir /hive/data/genomes/tarSyr2/bed/ucscToINSDC
+    cd /hive/data/genomes/tarSyr2/bed/ucscToINSDC
+    # check for chrM in assembly:
+    grep chrM ../../tarSyr2.agp
+# chrM    1       17004   12      F       NC_012774.1     1       17004   +
 
-    #   running the swap
-    mkdir /hive/data/genomes/tarSyr2/bed/blastz.hg38.swap
-    cd /hive/data/genomes/tarSyr2/bed/blastz.hg38.swap
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/hg38/bed/lastzBosTau8.2014-10-15/DEF \
-        -swap  -syntenicNet \
-        -noLoadChainSplit \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
-    #   real     116m32.121s
-    cat fb.tarSyr2.chainHg38Link.txt
-    #   1336307377 bases of 2649307237 (50.440%) in intersection
-    cd /hive/data/genomes/tarSyr2/bed
-    ln -s blastz.hg38.swap lastz.hg38
+    # use the accession name from there in this command (blank if none)
+    ~/kent/src/hg/makeDb/doc/felCat8/ucscToINSDC.sh \
+        ../../genbank/GCA_*assembly_structure/Primary_Assembly NC_012774.1
 
-#########################################################################
-#  SWAP mm10 LASTZ (DONE - 2014-10-15 - Steve)
-    #   original alignment done at mm10.txt
-    cd /hive/data/genomes/mm10/bed/lastzBosTau8.2014-10-15
-
-    cat fb.mm10.chainBosTau8Link.txt
-    # 698722925 bases of 2652783500 (26.339%) in intersection
-    # Create link
-    cd /hive/data/genomes/mm10/bed
-    ln -s  lastzBosTau8.2014-10-15 lastz.tarSyr2
-
-    #   and the swap
-    mkdir /hive/data/genomes/tarSyr2/bed/blastz.mm10.swap
-    cd /hive/data/genomes/tarSyr2/bed/blastz.mm10.swap
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/mm10/bed/lastzBosTau8.2014-10-15/DEF \
-        -swap -syntenicNet  \
-        -noLoadChainSplit \
-        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
-    #   real    58m4.272s
-    cat fb.tarSyr2.chainMm10Link.txt
-    # 687270584 bases of 2649307237 (25.942%) in intersection
-    # Create link
-    cd /hive/data/genomes/tarSyr2/bed
-    ln -s blastz.mm10.swap lastz.mm10
-
-#########################################################################
-# LIFTOVER TO bosTau6 (DONE - 2014-10-21 - Steve)
-    ssh hgwdev
-    cd /hive/data/genomes/tarSyr2
-    ln -s jkStuff/tarSyr2.11.ooc 11.ooc
-    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         tarSyr2 bosTau6 > doLiftOverToBosTau6.log 2>&1
-    # real    82m56.388s
-
-    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/tarSyr2/liftOver/
-    md5sum tarSyr2ToBosTau6.over.chain.gz >> md5sum.txt
-    popd
-
-#########################################################################
-# LIFTOVER TO bosTau7 (DONE - 2014-10-21 - Steve)
-    ssh hgwdev
-    cd /hive/data/genomes/tarSyr2
-    ln -s jkStuff/tarSyr2.11.ooc 11.ooc
-    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-         tarSyr2 bosTau7 > doLiftOverToBosTau7.log 2>&1
-    # real    105m34.448s
-
-    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/tarSyr2/liftOver/
-    md5sum tarSyr2ToBosTau7.over.chain.gz >> md5sum.txt
-    popd
-
-#########################################################################
-# all.joiner update, downloads and in pushQ - (DONE 2014-10-21 - Steve)
-    cd $HOME/kent/src/hg/makeDb/schema
-    # fixup all.joiner until this is a clean output
-    joinerCheck -database=tarSyr2 -keys all.joiner
-    joinerCheck -database=tarSyr2 -tableCoverage all.joiner
-    joinerCheck -database=tarSyr2 -times all.joiner
-
-    cd /hive/data/genomes/tarSyr2
-    makeDownloads.pl tarSyr2 > do.log 2>&1
-
-    #   now ready for pushQ entry
-    mkdir /hive/data/genomes/tarSyr2/pushQ
-    cd /hive/data/genomes/tarSyr2/pushQ
-    makePushQSql.pl tarSyr2 > tarSyr2.pushQ.sql 2> stderr.out
-    #   check for errors in stderr.out, some are OK, e.g.:
-    # WARNING: hgwdev does not have /gbdb/tarSyr2/wib/gc5Base.wib
-    # WARNING: hgwdev does not have /gbdb/tarSyr2/wib/quality.wib
-    # WARNING: hgwdev does not have /gbdb/tarSyr2/bbi/quality.bw
-    # WARNING: tarSyr2 does not have seq
-    # WARNING: tarSyr2 does not have extFile
-
-    #   copy it to hgwbeta
-    scp -p tarSyr2.pushQ.sql qateam@hgwbeta:/tmp
-    ssh hgwbeta
-    cd /tmp
-    hgsql qapushq < tarSyr2.pushQ.sql
-    #   in that pushQ entry walk through each entry and see if the
-    #   sizes will set properly
-
-#########################################################################
-# uscsToINSDC table/track (DONE - 2014-10-21 - Hiram)
-    # fixup the translateNames.sh file from rn6 work to use the new
-    # genbank structure  (copied over from rn6/bed/ucscToINSDC)
-    ./translateNames.sh  NC_006853.1
     awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
          | sort > name.coordinate.tab
     join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
          > ucscToINSDC.bed
+    # should all be the same line count:
+    wc -l *
+    # 337189 name.coordinate.tab
+    # 337189 ucscToINSDC.bed
+    # 337189 ucscToINSDC.txt
+
     cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
-    # 16
-    # use the 16 in this sed
-    sed -e "s/21/16/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
          | hgLoadSqlTab tarSyr2 ucscToINSDC stdin ucscToINSDC.bed
     checkTableCoords tarSyr2
     # should cover %100 entirely:
     featureBits -countGaps tarSyr2 ucscToINSDC
-    # 2670044500 bases of 2670044500 (100.000%) in intersection
+    # 3453864774 bases of 3453864774 (100.000%) in intersection
 
 #########################################################################
-# lastz Horse equCab2 (DONE - 2014-10-27 - Hiram)
-    # a tuning run to determine lastz parameters, this process should move
-    # out of this directory to a tarSyr2/bed/lastz... directory:
+# LIFTOVER TO tarSyr1 (DONE - 2014-12-11 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/tarSyr2/bed/blat.tarSyr1.2014-12-11
+    cd /hive/data/genomes/tarSyr2/bed/blat.tarSyr1.2014-12-11
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/tarSyr2/jkStuff/tarSyr2.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         tarSyr2 tarSyr1) > do.log 2>&1
+    # real    13948m39.233s
+    # this was a tough job, that long time was not necessarily due
+    # to cluster contention.  the blat run took over 9 days:
+# Completed: 361089 of 361089 jobs
+# CPU time in finished jobs:  229192746s 3819879.10m 63664.65h 2652.69d  7.268 y
+# IO & Wait Time:              11337726s  188962.10m  3149.37h  131.22d  0.360 y
+# Average job time:                 666s      11.10m     0.19h    0.01d
+# Longest finished job:            1492s      24.87m     0.41h    0.02d
+# Submission to last job:        811729s   13528.82m   225.48h    9.40d
 
-    mkdir /hive/users/hiram/multiz/100way/tarSyr2.equCab2
-    cd /hive/users/hiram/multiz/100way/tarSyr2.equCab2
-    zcat /hive/data/genomes/equCab2/bed/genscan/genscan.pep.gz \
-       > equCab2.genscan.pep
-    zcat /hive/data/genomes/equCab2/bed/genscan/genscan.gp.gz \
-       > equCab2.genscan.gp
-    zcat /hive/data/genomes/tarSyr2/bed/genscan/genscan.pep.gz \
-       > tarSyr2.genscan.pep
-    zcat /hive/data/genomes/tarSyr2/bed/genscan/genscan.gp.gz \
-       > tarSyr2.genscan.gp
+    # verify the convert link on the test browser is now active from tarSyr2 to
+    # tarSyr1
 
-    # determine a correspondence between genes in the two sequences:
-    time (blat -prot -oneOff=1 tarSyr2.genscan.pep equCab2.genscan.pep \
-       -out=maf tarSyr2.equCab2.oneOff.maf) > blat.log 2>&1
-    #  real    282m40.628s
-    ../mafScoreSizeScan.pl tarSyr2.equCab2.oneOff.maf  > mafScoreSizeScan.list
-    ave mafScoreSizeScan.list | grep "^Q3" | awk '{print $2}' \
-       | sed -e 's/.000000//' > mafScoreSizeScan.Q3
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE 2014-12-29 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=tarSyr2 -keys all.joiner
+    # about 50 minutes
+    joinerCheck -database=tarSyr2 -tableCoverage all.joiner
+    joinerCheck -database=tarSyr2 -times all.joiner
 
-    # with those regions identified, extract corresponding sequence to
-    # use in the lastz tuning operation.  Filter all the scores for the
-    # top quartile:
-    Q3=`cat mafScoreSizeScan.Q3`
-    awk '$1 > '$Q3' && $2 > 100 && $7 > 80 && $8 > 80' mafScoreSizeScan.list \
-            > top.all.list
-    cut -f3,4 top.all.list | sort > selected.topAll.list
-    topCount=`cat selected.topAll.list | wc -l`
-    echo "number of top scorers: $topCount"
-    #  number of top scorers: 3240
-    for N in 100 200 300 400
-do
-  cat top.all.list | randomLines -decomment stdin $N top.$N.list
-  cut -f3,4 top.$N.list | sort > selected.top$N.list
-  $TOP/selectedFasta.sh $target $query top$N
-            ./tune.top$N.sh &
-  /cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz_D \
-     --inferonly=/hive/users/hiram/multiz/100way/create_scores_file.control \
-        tarSyr2.top${N}.fa equCab2.top${N}.fa \
-          | /hive/users/hiram/multiz/100way/expand_scores_file.py \
-             > tarSyr2.equCab2.tuning.top${N}.txt 2>&1
-done
+    cd /hive/data/genomes/tarSyr2
+    time makeDownloads.pl tarSyr2 > downloads.log 2>&1
+    # real    22m17.544s
 
-    # scan the four result files to see the range in the matrix scores
-    # hopefully not too wildly different:
-    ../matrixSummary.pl
-#  read 4 .txt files    tarSyr2.equCab2
-      A     C     G     T       averages        4 files tarSyr2.equCab2
-A    81  -119   -30  -133
-C  -119   100   -95   -30
-G   -30   -95   100  -119
-T  -133   -30  -119    81
-      A     C     G     T       ranges  4 files tarSyr2.equCab2
-A    12    13     4    11
-C    13     0    31     4
-G     4    31     0    13
-T    11     4    13    12
-      A     C     G     T       ranges percent  4 files tarSyr2.equCab2
-A  14.7  10.9  13.0   8.2
-C  10.9   0.0  32.6  13.0
-G  13.0  32.6  -0.0  10.9
-T   8.2  13.0  10.9  14.7
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/tarSyr2/pushQ
+    cd /hive/data/genomes/tarSyr2/pushQ
+    time makePushQSql.pl tarSyr2 > tarSyr2.pushQ.sql 2> stderr.out
+    # real    5m47.086s
 
-     # looks good, using the results from the top400:
+    #   check for errors in stderr.out, some are OK, e.g.:
+# WARNING: hgwdev does not have /gbdb/tarSyr2/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/tarSyr2/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/tarSyr2/bbi/qualityBw/quality.bw
+# WARNING: tarSyr2 does not have seq
+# WARNING: tarSyr2 does not have estOrientInfo
 
-     mkdir /hive/data/genomes/tarSyr2/bed/lastzEquCab2.2014-10-27
-     cd /hive/data/genomes/tarSyr2/bed/lastzEquCab2.2014-10-27
+    #   copy it to hgwbeta
+    scp -p tarSyr2.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/tarSyr2.pushQ.sql"
 
-     cp -p /hive/users/hiram/multiz/100way/tarSyr2.equCab2/tarSyr2.equCab2.tuning.top400.txt \
-        ./tarSyr2.equCab2.tuning.Q.txt
-
-     cat << '_EOF_' > DEF
-# Horse pig vs Horse
-# parameters obtained from a tuning run of lastz_D
-# /hive/users/hiram/multiz/100way/tarSyr2.equCab2/tarSyr2.equCab2.tuning.top400.txt
-BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
-
-BLASTZ_T=2
-BLASTZ_O=400
-BLASTZ_E=30
-BLASTZ_M=50
-BLASTZ_X=880
-BLASTZ_Y=3400
-BLASTZ_Q=/hive/data/genomes/tarSyr2/bed/lastzEquCab2.2014-10-27/tarSyr2.equCab2.tuning.Q.txt
-#       A     C     G     T
-# A    88  -111   -31  -128
-# C  -111   100   -75   -31
-# G   -31   -75   100  -111
-# T  -128   -31  -111    88
-
-# TARGET: Cow tarSyr2
-SEQ1_DIR=/hive/data/genomes/tarSyr2/tarSyr2.2bit
-SEQ1_LEN=/hive/data/genomes/tarSyr2/chrom.sizes
-SEQ1_CHUNK=20000000
-SEQ1_LIMIT=40
-SEQ1_LAP=0
-
-# QUERY: Horse equCab2
-SEQ2_DIR=/hive/data/genomes/equCab2/equCab2.2bit
-SEQ2_LEN=/hive/data/genomes/equCab2/chrom.sizes
-SEQ2_CHUNK=10000000
-SEQ2_LIMIT=500
-SEQ2_LAP=0
-
-BASE=/hive/data/genomes/tarSyr2/bed/lastzEquCab2.2014-10-27
-TMPDIR=/dev/shm
-'_EOF_'
-    # << happy emacs
-
-        time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
-        -chainMinScore=3000 -chainLinearGap=medium \
-          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-            -syntenicNet) > do.log 2>&1
-    # real    292m42.862s
-    cat fb.tarSyr2.chainEquCab2Link.txt
-    #  1463490656 bases of 2649307237 (55.241%) in intersection
-
-    time (doRecipBest.pl tarSyr2 equCab2 -buildDir=`pwd` -workhorse=hgwdev) \
-	> best.log 2>&1
-    # real    60m9.228s
-
-    #	and the swap
-    mkdir /hive/data/genomes/equCab2/bed/blastz.tarSyr2.swap
-    cd /hive/data/genomes/equCab2/bed/blastz.tarSyr2.swap
-    time (doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/tarSyr2/bed/lastzEquCab2.2014-10-27/DEF \
-	-swap -syntenicNet \
-	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
-	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
-    #   real    139m36.654s
-
-    cat fb.equCab2.chainBosTau8Link.txt
-    #	1497036779 bases of 2428790173 (61.637%) in intersection
-
-    time (doRecipBest.pl equCab2 tarSyr2 -buildDir=`pwd` -workhorse=hgwdev) \
-	> best.log 2>&1
-    #   real    75m31.777s
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
 
 #########################################################################

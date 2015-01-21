@@ -74,12 +74,16 @@ return twoBitList;
 }
 
 
-void addMasking(struct hash *bitmapHash, char *seqName,
+void addMasking(struct hash *twoBitHash, struct hash *bitmapHash, char *seqName,
 		unsigned start, unsigned end)
 /* Set bits in range. */
 {
 if (end > start)
     {
+    struct twoBit *tb = (struct twoBit *)hashMustFindVal(twoBitHash, seqName);
+    if ((end > tb->size) || (start >= tb->size))
+	errAbort("bed range (%d - %d) is off the end of chromosome %s size %d",
+	    start, end, seqName, tb->size);
     Bits *bits = (Bits *)hashMustFindVal(bitmapHash, seqName);
     bitSetRange(bits, start, (end - start));
     }
@@ -174,7 +178,7 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
 	alreadyWarned = TRUE;
 	}
     bedStaticLoad(words, &bed);
-    addMasking(bitmapHash, bed.chrom, bed.chromStart, bed.chromEnd);
+    addMasking(tbHash, bitmapHash, bed.chrom, bed.chromStart, bed.chromEnd);
     }
 bitmapToMaskArray(bitmapHash, tbHash);
 }
@@ -216,7 +220,7 @@ while (lineFileNext(lf, &line, &lineSize))
     seqName = rmo.qName;
     start = rmo.qStart - 1;
     end = rmo.qEnd;
-    addMasking(bitmapHash, seqName, start, end);
+    addMasking(tbHash, bitmapHash, seqName, start, end);
     }
 bitmapToMaskArray(bitmapHash, tbHash);
 }

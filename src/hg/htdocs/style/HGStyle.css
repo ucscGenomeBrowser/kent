@@ -13,6 +13,10 @@ body.hgTracks {
 	background: url("../../images/internal_bg1.jpg") repeat-x fixed left bottom #F9F9F7;
 }
 
+body.training {
+        background: url("../../images/internal_bg1.jpg") repeat-x fixed left bottom #F9F9F7;
+}
+
 a:link {color: #121E9A;}
 
 pre.code {
@@ -101,7 +105,6 @@ A:active IMG {  border-width: 0px; padding: 0px; margin: 0px;}
 .stdTblHead {
     background-color: #fcecc0;
 }
-
 
 /* A subheading bar is the light blue bar that appears at the top of web.c section boxes */
 .subheadingBar {font-weight: bold; font-size:1.1em; color:#000000; background-color:#D9E4F8;
@@ -570,3 +573,119 @@ div#haplotypes .textAlert { color:#DC143C; } /* dark red */
 
 .hidden { display:none; } /* allows toggling visibility by addClass/removeClass */
 
+/* Added for Angie's React UI stuff */
+.sectionBorder {
+    border: 1px solid gray;
+    margin-top: 5px;
+}
+
+.sectionHeader {
+    background-color: #D9E4F8;
+    font-weight: bold;
+    font-size: larger;
+    color: #000000;
+    text-align: left;
+    vertical-align: bottom;
+    white-space: nowrap;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 3px;
+}
+
+.sectionContents {
+    margin: 5px;
+}
+
+.sectionRow {
+  margin-top: 5px;
+}
+
+.sectionItem {
+  display: inline-block;
+  padding-right: 5px;
+}
+
+.subsectionBox {
+  padding: 5px;
+  border: black solid 1px;
+}
+
+.bigBoldText {
+  font-weight: bold;
+  font-size: larger;
+  color: #000000;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.disabledMessage {
+  padding: 5px;
+  color: gray;
+  font-style: italic;
+}
+
+.sortHandle:hover {
+  cursor: ns-resize;
+}
+
+.smallText {
+  font-size: small;
+}
+
+.floatLeft {
+  float: left;
+}
+
+.floatRight {
+  float: right;
+}
+
+.clear {
+  clear: both;
+}
+
+
+/* react/lib/Modal-specific */
+.absoluteModal {
+  position: absolute;
+  display: inline-block;
+  top: 75px;
+  left: 75px;
+  width: 80%;
+  height: 80%;
+  z-index: 100;
+  background-color: #FFFEE8;
+  border-style: solid;
+  border-width: 2px;
+  border-color: black;
+  padding: 10px;
+  overflow: auto;
+}
+
+/* react/lib/LoadingImage-specific */
+.loadingMessage {
+    color: red;
+    font-style: italic;
+}
+
+/* hgAi-specific */
+.dataSourceSubsection {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+/* hgChooseDb-specific */
+img.speciesIcon {
+  width: 50px;
+  height: 50px;
+  border-width: 1px;
+  border-style: solid;
+  margin: 5px;
+}
+
+.speciesButton {
+  display: inline-block;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: center
+}

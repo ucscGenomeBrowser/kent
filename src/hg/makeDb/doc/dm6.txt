@@ -572,7 +572,28 @@ close (FH);
       -makeOoc=jkStuff/dm3.11.ooc -repMatch=100
     # Wrote 7657 overused 11-mers to /hive/data/genomes/dm3/11.ooc
 
-#########################################################################
+#############################################################################
+# dm6 LIFTOVER to dm3 (DONE - 2015-01-20 - Hiram)
+    sh hgwdev
+    mkdir /hive/data/genomes/dm6/bed/blat.dm3.2015-01-20
+    cd /hive/data/genomes/dm6/bed/blat.dm3.2015-01-20
+
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -ooc=/hive/data/genomes/dm6/jkStuff/dm6.11.ooc \
+          -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         dm6 dm3
+
+    # if that appears OK, then running:
+    time doSameSpeciesLiftOver.pl -verbose=2 \
+        -ooc=/hive/data/genomes/dm6/jkStuff/dm6.11.ooc \
+          -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         dm6 dm3 > do.log 2>&1
+    # about 36 minutes
+
+    # verify the convert link on the browser is now active from hg19 to hg38
+
+#############################################################################
 # dm3 LIFTOVER to dm6 (DONE - 2014-08-28 - Chin)
 # will move steps to dm3.txt when dm6 is released.
     sh hgwdev
@@ -2973,6 +2994,9 @@ rm -f $c.gp $c.maf $c.ss
     cd /hive/data/genomes/dm6/bed/multiz27way/cons/SS
     mkdir result done
 
+    # XXX beware missed jobs in this procedure.  The first time through this,
+    # the chr3R was missed.  It was caught up manually 2014-12-04
+
     cat << '_EOF_' > mkSS.csh
 #!/bin/csh -ef
 set c = $1
@@ -3120,6 +3144,9 @@ rm -fr $tmp
 
     # load into database
     time hgLoadBed dm6 phastConsElements27way mostConserved.bed
+    # Read 1427898 elements of size 5 from mostConserved.bed
+    # real    0m13.345s
+
     # Read 1078721 elements of size 5 from mostConserved.bed
     # real    0m9.166s
 
@@ -3127,8 +3154,8 @@ rm -fr $tmp
     # most bets are off here for that goal, these alignments are too few
     #	and too far between
     featureBits dm6 -enrichment refGene:cds phastConsElements27way
-    # refGene:cds 16.071%, phastConsElements27way 38.789%, both 9.915%,
-    #   cover 61.70%, enrich 1.59x
+    # refGene:cds 16.046%, phastConsElements27way 51.675%, both 13.124%,
+    #   cover 81.79%, enrich 1.58x
 
     # Create merged posterier probability file and wiggle track data files
     cd /hive/data/genomes/dm6/bed/multiz27way/cons/all
@@ -3137,7 +3164,7 @@ rm -fr $tmp
     time (find ./pp -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
 	| gzip -c > downloads/phastCons27way.wigFix.gz)
-    #  real    0m53.020s
+    #  real    1m12.361s
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/phastCons27way.wigFix.gz \
@@ -3152,15 +3179,15 @@ rm -fr $tmp
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 132,465,967
-# primaryIndexSize: 2,918,428
+# primaryDataSize: 172,458,601
+# primaryIndexSize: 3,804,252
 # zoomLevels: 10
-# chromCount: 150
-# basesCovered: 89,437,277
-# mean: 0.618592
+# chromCount: 151
+# basesCovered: 117,294,910
+# mean: 0.627817
 # min: 0.000000
 # max: 1.000000
-# std: 0.448759
+# std: 0.446656
 
     #	encode those files into wiggle data
     time (zcat downloads/phastCons27way.wigFix.gz \
@@ -3169,9 +3196,9 @@ rm -fr $tmp
     # real    0m25.328s
 
     du -hsc *.wi?
-    # 86M     phastCons27way.wib
-    # 8.2M    phastCons27way.wig
-    # 94M     total
+    #    112M    phastCons27way.wib
+    #    11M     phastCons27way.wig
+    #    123M    total
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phastCons27way.wib /gbdb/dm6/multiz27way/phastCons27way.wib
@@ -3271,7 +3298,7 @@ rmdir --ignore-fail-on-non-empty $cons/tmp
 	| sed -e "s/.ss$//; s#^../../cons/SS/result/##" > ss.list
     # make sure the list looks good
     wc -l ss.list
-    #   158 ss.list
+    #   162 ss.list
 
     # Create template file
     #	file1 == $chr/$chunk/file name without .ss suffix
@@ -3317,34 +3344,33 @@ rmdir --ignore-fail-on-non-empty $cons/tmp
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/dm6/chrom.sizes \
 	phyloP27way.bw) > bigWig.log 2>&1
     egrep "real|VmPeak" bigWig.log
-    # pid=50896: VmPeak:     1054100 kB
-    #  real    1m19.700s
+    # pid=523: VmPeak:       1372692 kB
+    # real    1m13.231s
 
     bigWigInfo phyloP27way.bw
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 249,799,729
-# primaryIndexSize: 2,918,428
+# primaryDataSize: 328,237,985
+# primaryIndexSize: 3,804,252
 # zoomLevels: 10
-# chromCount: 150
-# basesCovered: 89,437,277
-# mean: 1.175026
+# chromCount: 151
+# basesCovered: 117,294,910
+# mean: 1.206203
 # min: -8.216000
 # max: 7.073000
-# std: 1.662353
-
+# std: 1.669809
 
     #	encode those files into wiggle data
     time (zcat downloads/phyloP27way.wigFix.gz \
 	| wigEncode stdin phyloP27way.wig phyloP27way.wib)
     #   Converted stdin, upper limit 7.07, lower limit -8.22
-    #   real    0m31.268s
+    #   real    0m35.814s
 
     du -hsc *.wi?
-    #	86M     phyloP27way.wib
-    #	8.7M    phyloP27way.wig
-    #	94M     total
+    #   112M    phyloP27way.wib
+    #   12M     phyloP27way.wig
+    #   124M    total
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phyloP27way.wib /gbdb/dm6/multiz27way/phyloP27way.wib
@@ -3356,8 +3382,8 @@ rmdir --ignore-fail-on-non-empty $cons/tmp
 
     wigTableStats.sh dm6 phyloP27way
     # db.table      min max mean count sumData stdDev viewLimits
-    # dm6.phyloP27way -8.216 7.073 1.17503 89437277 1.05091e+08 1.66235
-    # viewLimits=-7.13674:7.073
+    # dm6.phyloP27way -8.216 7.073 1.2062 117294910 1.41482e+08 1.66981
+    # viewLimits=-7.14284:7.073
 
     calc 8.216\+7.7073
     #  8.216+7.7073 = 15.923300
@@ -3366,19 +3392,19 @@ rmdir --ignore-fail-on-non-empty $cons/tmp
     time nice -n +19 hgWiggle -doHistogram -db=dm6 \
 	-hBinSize=0.0161 -hBinCount=1000 -hMinVal=-8.3 -verbose=2 \
 	    phyloP27way > histogram.data 2>&1
-    #	real    0m6.048s
+    #	real    0m7.284s
 
     # find out the range for the 2:5 graph
     grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin
-    # Q1 0.000014
+    # Q1 0.000012
     # median 0.000255
     # Q3 0.001728
-    # average 0.001144
+    # average 0.001134
     # min 0.000000
-    # max 0.009537
-    # count 874
-    # total 0.999992
-    # standard deviation 0.001677
+    # max 0.009261
+    # count 882
+    # total 0.999997
+    # standard deviation 0.001655
 
     #	create plot of histogram:
 

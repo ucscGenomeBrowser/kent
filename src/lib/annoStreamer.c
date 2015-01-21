@@ -21,6 +21,19 @@ self->asObj = asObj;
 self->numCols = slCount(asObj->columnList);
 }
 
+char *annoStreamerGetName(struct annoStreamer *self)
+/* Returns cloned name of streamer; free when done. */
+{
+return cloneString(self->name);
+}
+
+void annoStreamerSetName(struct annoStreamer *self, char *name)
+/* Sets streamer name to clone of name. */
+{
+freez(&(self->name));
+self->name = cloneString(name);
+}
+
 void annoStreamerSetRegion(struct annoStreamer *self, char *chrom, uint rStart, uint rEnd)
 /* Set genomic region for query; if chrom is NULL, position is genome.
  * Many subclasses should make their own setRegion method that calls this and

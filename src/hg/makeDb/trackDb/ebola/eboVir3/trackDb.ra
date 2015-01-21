@@ -105,9 +105,6 @@ urlLabel MuPIT protein structures
 track spUniprot override
 visibility dense
 
-track spAnnot override
-shortLabel UniProt Annot.
-
 track genscan override
 release alpha
 
@@ -118,5 +115,5 @@ include trackDb.160way.ra
 include trackDb.gire.ra
 include trackDb.strainName160way.ra
 include trackDb.newSequences.ra alpha
-include trackDb.faAlign.ra alpha
-include trackDb.iedbPred.ra alpha
+# include trackDb.faAlign.ra alpha
+include trackDb.iedbPred.ra

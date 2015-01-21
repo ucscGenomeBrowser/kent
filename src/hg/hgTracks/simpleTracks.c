@@ -343,7 +343,7 @@ for (item = tg->items; item != NULL; item = item->next)
 	    start = 0;
 	else
 	    start = round((double)(baseStart - winStart)*scale);
-	if (!tg->drawName && withLabels)
+	if (!tg->drawLabelInBox && !tg->drawName && withLabels)
 	    start -= mgFontStringWidth(font,
 				       tg->itemName(tg, item)) + extraWidth;
 	if (baseEnd >= winEnd)
@@ -1205,7 +1205,8 @@ hvGfxBox(hvg, x1, y, w, height, maxColor);
 void drawScaledBoxSampleLabel(struct hvGfx *hvg,
      int chromStart, int chromEnd, double scale,
      int xOff, int y, int height, Color color, MgFont *font,  char *label)
-/* Draw a box scaled from chromosome to window coordinates and draw a label onto it. */
+/* Draw a box scaled from chromosome to window coordinates and draw a label onto it. 
+ * Lots of code copied from drawScaledBoxSample */
 {
 //int i;
 int x1, x2, w;
@@ -1229,7 +1230,7 @@ if (w < 1)
 hvGfxBox(hvg, x1, y, w, height, color);
 
 char *shortLabel = cloneString(label);
-/* calculate how many characters we can squeeze into box */
+/* calculate how many characters we can squeeze into the box */
 int charsInBox = w / mgFontCharWidth(font, 'm');
 if (charsInBox > 4)
     {
@@ -1247,8 +1248,14 @@ void drawScaledBoxSample(struct hvGfx *hvg,
 {
 //int i;
 int x1, x2, w;
-x1 = round((double)(chromStart-winStart)*scale) + xOff;
-x2 = round((double)(chromEnd-winStart)*scale) + xOff;
+int ourStart = chromStart;
+if (ourStart < winStart) 
+    ourStart = winStart;
+int ourEnd = chromEnd;
+if (ourEnd > winEnd) 
+    ourEnd = winEnd;
+x1 = round((double)(ourStart-winStart)*scale) + xOff;
+x2 = round((double)(ourEnd-winStart)*scale) + xOff;
 
 if (x2 >= MAXPIXELS)
     x2 = MAXPIXELS - 1;
@@ -1341,6 +1348,20 @@ char *linkedFeaturesName(struct track *tg, void *item)
 {
 struct linkedFeatures *lf = item;
 return lf->name;
+}
+
+char *linkedFeaturesNameField1(struct track *tg, void *item)
+/* return part before first space in item name */
+{
+struct linkedFeatures *lf = item;
+return cloneFirstWord(lf->name);
+}
+
+char *linkedFeaturesNameNotField1(struct track *tg, void *item)
+/* return part after first space in item name */
+{
+struct linkedFeatures *lf = item;
+return cloneNotFirstWord(lf->name);
 }
 
 void linkedFeaturesFreeList(struct linkedFeatures **pList)
@@ -2698,8 +2719,14 @@ if ((tallStart == 0 && tallEnd == 0) && lf->start != 0 && !sameWord(tg->table, "
     tallStart = lf->start;
     tallEnd   = lf->end;
     }
-x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
-x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+int ourStart = lf->start;
+if (ourStart < winStart) 
+    ourStart = winStart;
+int ourEnd = lf->end;
+if (ourEnd > winEnd) 
+    ourEnd = winEnd;
+x1 = round((double)((int)ourStart-winStart)*scale) + xOff;
+x2 = round((double)((int)ourEnd-winStart)*scale) + xOff;
 w = x2-x1;
 if (lf->start==lf->end && w==0) // like a SNP insertion point of size=0
     {
@@ -3243,11 +3270,11 @@ for (item = items; item; item = item->next)
     {
     unsigned start = track->itemStart(track, item);
     unsigned end = track->itemEnd(track, item);
-    if (positiveRangeIntersection(start, end, winStart, winEnd) > 0)
+    if (positiveRangeIntersection(start, end, winStart, winEnd) <= 0)
 	continue;
 
-    int x1 = max(start - winStart, 0); 
-    int x2 = min(end - winStart, size);
+    int x1 = max((int)start - (int)winStart, 0); 
+    int x2 = min((int)end - (int)winStart, size);
 
     for(; x1 < x2; x1++)
 	counts[x1]++;
@@ -3498,9 +3525,6 @@ void linkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
 /* Draw linked features items. */
 {
 clearColorBin();
-
-// optional setting to draw labels onto the feature boxes, not next to them
-tg->drawLabelInBox = cartOrTdbBoolean(cart, tg->tdb, "labelOnFeature" , FALSE);
 
 if (tg->items == NULL && vis == tvDense && canDrawBigBedDense(tg))
     {
@@ -3765,6 +3789,12 @@ tg->itemEnd = linkedFeaturesItemEnd;
 tg->itemNameColor = linkedFeaturesNameColor;
 tg->nextPrevExon = linkedFeaturesNextPrevItem;
 tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
+
+if (trackDbSettingClosestToHomeOn(tg->tdb, "linkIdInName"))
+    {
+    tg->mapItemName = linkedFeaturesNameField1;
+    tg->itemName = linkedFeaturesNameNotField1;
+    }
 }
 
 int linkedFeaturesSeriesItemStart(struct track *tg, void *item)
@@ -9309,6 +9339,9 @@ enum trackVisibility limitVisibility(struct track *tg)
 if (!tg->limitedVisSet)
     {
     tg->limitedVisSet = TRUE;  // Prevents recursive loop!
+    
+    // optional setting to draw labels onto the feature boxes, not next to them
+    tg->drawLabelInBox = cartOrTdbBoolean(cart, tg->tdb, "labelOnFeature" , FALSE);
     if (trackShouldUseAjaxRetrieval(tg))
         {
         tg->limitedVis = tg->visibility;

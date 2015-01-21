@@ -1,0 +1,15 @@
+        track chainTarSyr1
+        subTrack primateChainNetViewchain off
+        subGroups view=chain species=anTarsier clade=aeHaplorrhini
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain tarSyr1
+        otherDb tarSyr1
+
+        track netTarSyr1
+        subTrack primateChainNetViewnet off
+        subGroups view=net species=anTarsier clade=aeHaplorrhini
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign tarSyr1 chainTarSyr1
+        otherDb tarSyr1

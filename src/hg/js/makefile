@@ -1,13 +1,15 @@
 include ../../inc/common.mk
+include install.mk
 
-# recursive target to do install to DEST, with extra excludes EXCL.
+SUBDIRS= external model react
+include subdirs.mk
 
 # UCSC js files must pass jshint
 UCSC_JS_FILES=ajax.js alleles.js autocomplete.js edwPersona.js \
     hgCustom.js hgGateway.js hgHubConnect.js hgTracks.js \
     hgVarAnnogrator.js hui.js jsHelper.js utils.js ddcl.js subCfg.js \
     encodeProject.js encodeDataSummary.js encodeDataMatrix.js encodeChipMatrix.js encodeMatrix.js
-    
+
 # STATIC files must pass jshint
 STATIC_FILES=staticDoc.js
 
@@ -31,32 +33,10 @@ ifdef LOWELAB
     SYMLINKED_FILES += lowetooltip.js loweautocomplete.js
 endif
 
-user:
-	if test -d ${DOCUMENTROOT}-${USER}; then \
-	    ${MAKE} doInstall DEST=${DOCUMENTROOT}-${USER}/js; \
-	else \
-	    ${MAKE} doInstall DEST=${DOCUMENTROOT}/js/${USER}; \
-	fi
-
-alpha:
-	${GITUP}
-	${MAKE} doInstall DEST=${DOCUMENTROOT}/js
-
-beta:
-	${GITUP} 
-	${MAKE} doInstall DEST=${DOCUMENTROOT}-beta/js extra=-forceVersionNumbers
-
-clean:
-
-compile:
-
-install:
-	${MAKE} doInstall DEST=${DOCUMENTROOT}/js
-
 jshint:
 	${JSHINT} ${UCSC_JS_FILES} ${STATIC_FILES}
 
-doInstall: jshint
+doInstall: jshint ${SUBDIRS:%=%.doInstall}
 	@mkdir -p ${DEST}/
 	../utils/cpAndLinkToResourceFiles.pl ${extra} -exclude='makefile' \
 			-versionFile=../inc/versionInfo.h -destDir=${DEST} ${SYMLINKED_FILES}

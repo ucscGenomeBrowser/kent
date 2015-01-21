@@ -567,9 +567,6 @@ void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw simple Bed items. */
 {
-// optional setting to draw labels onto the feature boxes, not next to them
-tg->drawLabelInBox = cartOrTdbBoolean(cart, tg->tdb, "labelOnFeature" , FALSE);
-
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->track);
 
@@ -589,6 +586,20 @@ struct bed *bed = item;
 if (bed->name == NULL)
     return "";
 return bed->name;
+}
+
+char *bedNameField1(struct track *tg, void *item)
+/* return part before first space in item name */
+{
+struct bed *bed = item;
+return cloneFirstWord(bed->name);
+}
+
+char *bedNameNotField1(struct track *tg, void *item)
+/* return part after first space in item name */
+{
+struct bed *bed = item;
+return cloneNotFirstWord(bed->name);
 }
 
 int bedItemStart(struct track *tg, void *item)
@@ -659,6 +670,13 @@ tg->itemEnd = bedItemEnd;
 // So, set tg->nextPrevExon = simpleBedNextPrevEdge case-by-case.
 tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 tg->freeItems = freeSimpleBed;
+
+if (trackDbSettingClosestToHomeOn(tg->tdb, "linkIdInName"))
+    {
+    tg->mapItemName = bedNameField1;
+    tg->itemName = bedNameNotField1;
+    }
+
 }
 
 void bed9Methods(struct track *tg)

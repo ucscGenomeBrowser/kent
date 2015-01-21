@@ -20,7 +20,11 @@ type bed 12 .
 url http://komar.embl-heidelberg.de/AnoEST/anoest.php?search=estCL&query=$$
 urlLabel AnoEST query: 
 
+track chainDm3 override
+release alpha
 
+track netDm3 override
+release alpha
 
 searchTable anoEstTcl
 searchType bed

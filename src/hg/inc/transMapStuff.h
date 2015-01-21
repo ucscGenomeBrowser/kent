@@ -15,7 +15,16 @@ struct trackDb;
 #define transMapSrcTblSetting     "transMapSrc"
 #define transMapGeneTblSetting    "transMapGene"
 
-char *transMapIdToAcc(char *id);
+char* transMapSkipGenomeDbPrefix(char *id);
+/* Skip the source genome db prefix (e.g. hg19:) in a TransMap identifier.
+ * Return the full id if no db prefix is found for compatibility with older
+ * version of transmap. */
+
+char *transMapIdToSeqId(char *id);
 /* remove all unique suffixes (starting with last `-') from any TransMap 
- * id.  WARNING: static return */
+ * id, leaving the database prefix in place.  WARNING: static return */
+
+char *transMapIdToAcc(char *id);
+/* remove database prefix and all unique suffixes (starting with last `-')
+ * from any TransMap id.  WARNING: static return */
 #endif

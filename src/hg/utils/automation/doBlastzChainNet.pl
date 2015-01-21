@@ -1550,6 +1550,9 @@ rm -fr $runDir/synNet
 rm -fr $runDir/chain
 cd mafSynNet
 md5sum *.maf.gz > md5sum.txt
+mkdir -p $HgAutomate::goldenPath/$tDb/vs$QDb/mafSynNet
+cd $HgAutomate::goldenPath/$tDb/vs$QDb/mafSynNet
+ln -s $runDir/mafSynNet/* .
 _EOF_
       );
   } else {
@@ -1565,6 +1568,13 @@ netToAxt $tDb.$qDb.syn.net.gz $tDb.$qDb.all.chain.gz \\
     stdout \\
 | gzip -c > $tDb.$qDb.synNet.maf.gz
 md5sum $tDb.$qDb.syn.net.gz $tDb.$qDb.synNet.maf.gz > synNet.md5sum.txt
+mkdir -p $HgAutomate::goldenPath/$tDb/vs$QDb
+cd $HgAutomate::goldenPath/$tDb/vs$QDb
+ln -s $runDir/$tDb.$qDb.synNet.maf.gz .
+cat $runDir/synNet.md5sum.txt >> md5sum.txt
+sort -u md5sum.txt > tmp.sum
+cat tmp.sum > md5sum.txt
+rm -f tmp.sum
 _EOF_
       );
   }

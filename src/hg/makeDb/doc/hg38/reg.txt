@@ -1,0 +1,349 @@
+# for emacs: -*- mode: sh; -*-
+
+# Regulation tracks for hg38 / GRCh38
+
+#############################################################################
+# Building UW DNAse I ENCODE2 tracks (In progress 2014-09-03 Jim Kent)
+
+#These tracks contain the results of DNAse I hypersensitivity experiments from the 
+#John Stamatoyannapoulos lab at the University of Washington done for the ENCODE Project
+#phase 2.
+
+#The data was processed according to the July 2014 version of the ENCODE 3 DNAse
+#processing pipeline.  At a high level this means pooling aligning the reads
+#with the bwa program against hg38 with the 'sponge' sequence, removing multiple
+#mapping reads, and reads that aligned to the sponge or mitochondria,  pooling
+#the results for all replicates, and running the hotspot program.  The bigWig output
+#was normalized so that the average value genome-wide is 1.
+
+#The bam files were created by the encode analysis pipeline on each replicate separately
+#and the process for doing this won't be described here.  It is a bit complex, and
+#really will just need to be reworked into something simpler now that we've no longer
+#are working directly on that contract.  This build assumes that the relevant bam
+#files are in the /hive/groups/encode/3/eap/cach directory.
+
+# To do the mapping again you'd start with fastq files and use the script
+# eap_run_bwa_se on an index that included the sponge as well as hg38
+# chromosomes (but not alternative haplotypes).   Bwa itself is run in a
+# rather vanilla mode, with no options beyond -t 4 to parallelize the
+# first pass of the alignment in 4 threads.
+# The first section of methods here are to create a hub with peaks,  hotspots, and signal
+# from pooled replicates.
+
+#The detailed instructions after the bam files are available are: 
+
+##In more detail.  First 
+mkdir /hive/data/genomes/hg38/bed/uwDnase1
+
+## Run program to generate most of parasol batches
+ssh encode-02
+cd /hive/data/genomes/hg38/bed/uwDnase1
+dnaseHg38Batch batchDir
+
+## By hand edit split batchDir into pooled and single replicate versions in directories
+## run_pooled and run_replicates (sorry for the hand work)
+
+## Do parasol runs on pooled
+ssh ku
+cd cd /hive/data/genomes/hg38/bed/uwDnase1/run_pooled
+para make
+para time
+#Completed: 95 of 95 jobs
+#CPU time in finished jobs:    2908517s   48475.28m   807.92h   33.66d  0.092 y
+#IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+#Average job time:               27838s     463.96m     7.73h    0.32d
+#Longest finished job:          128043s    2134.05m    35.57h    1.48d
+#Submission to last job:        128747s    2145.78m    35.76h    1.49d
+#Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+## Do parasol runs on replicates (these are not actually currently used)
+ssh ku
+cd /hive/data/genomes/hg38/bed/uwDnase1/run_replicates
+para make
+para time
+#completed: 189 of 189 jobs
+#CPU time in finished jobs:    4025020s   67083.66m  1118.06h   46.59d  0.128 y
+#IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+#Average job time:               20115s     335.25m     5.59h    0.23d
+#Longest finished job:          110245s    1837.42m    30.62h    1.28d
+#Submission to last job:        111410s    1856.83m    30.95h    1.29d
+#Estimated complete:                 0s       0.00m     0.00h    0.00d
+#Note that one of the experiments only has replicate 2.  It's because both
+#iterations of replicate 1 were deprecated.
+
+## Augment metadata
+ssh hgwdev
+cd /hive/data/genomes/hg38/bed/uwDnase1
+dnaseHg38AddTreatments batchDir/meta.tab meta.tab
+
+## Do correlations between all pooled experiments 
+ssh ku
+cd /hive/data/genomes/hg38/bed/uwDnase1
+mkdir run_correlations
+cd run_correlations
+
+# Create little script to make tab separated output out of bigWigCorrelate results
+cat << '_EOF_' > corr2
+#!/bin/tcsh -efx
+echo -n "$1\t$2\t" > $3
+bigWigCorrelate $1 $2 >> $3
+'_EOF_'
+  # << happy emacs
+
+# Create gensub2 input
+cat << '_EOF_' > gsub
+#LOOP
+corr2 $(path1) $(path2) out/$(root1)_vs_$(root2)
+#ENDLOOP
+'_EOF_'
+  # << happy emacs
+
+# Run gensub2 with brand new selfPair method on all pooled files
+ls -1 /hive/data/genomes/hg38/bed/uwDnase1/run_pooled/*.bigWig > fileList
+gensub2 fileList selfPair gsub jobList
+
+# The parasol run using just 10 CPUs because we are i/o heavy
+para create jobList
+para push -maxJob=10
+para time
+#Completed: 4465 of 4465 jobs
+#CPU time in finished jobs:     349724s    5828.74m    97.15h    4.05d  0.011 y
+#IO & Wait Time:                 58019s     966.98m    16.12h    0.67d  0.002 y
+#Average job time:                  91s       1.52m     0.03h    0.00d
+#Longest finished job:             701s      11.68m     0.19h    0.01d
+#Submission to last job:         47080s     784.67m    13.08h    0.54d
+#Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+# Concatenate results
+cat out/* > ../correlation.tab
+
+# Set up inputs for clustering run to choose colors and make tree
+cd /hive/data/genomes/hg38/bed/uwDnase1
+ls -1 /hive/data/genomes/hg38/bed/uwDnase1/run_pooled/*.bigWig > ../pooled.lst
+grep -v '^#' meta.tab | cut -f 6 > foo
+paste pooled.lst foo > pooled.labels
+
+# Run clustering program, which takes about 20 hours
+mkdir /hive/data/genomes/hg38/bed/uwDnase1/calcGraph
+cd /hive/data/genomes/hg38/bed/uwDnase1/calcGraph
+mkdir -p /scratch/kent/tmpDir
+bigWigCluster ../pooled.lst /hive data/genomes/hg38/chrom.sizes uwDnase1.json uwDnase1.tab -precalc=../correlation.tab -threads=10 -tmpDir=/scratch/kent/tmpDir -labels=../pooled.labels
+
+## Make normalized versions of wigs (Might be able to encorperate this into
+# the pooled job maker in the future
+ssh ku
+cd /hive/data/genomes/hg38/bed/uwDnase1
+mkdir run_normalized
+ls -1 /hive/data/genomes/hg38/bed/uwDnase1/run_pooled/*.bigWig | \
+	sed 's/.pooled.bigwig//' > run_normalized/fileList
+cd run_normalized
+mkdir out
+
+# Make normalization script
+cat << '_EOF_' > norm1
+#!/bin/tcsh -efx
+set m = `bigWigInfo $1 | awk '/mean/ {print 1.0/$2}'`
+bigWigToBedGraph $1 stdout | colTransform 4 stdin 0 $m tmp.bedGraph
+bedGraphToBigWig tmp.bedGraph /hive/data/genomes/hg38/chrom.sizes tmp.bw
+rm tmp.bedGraph
+mv tmp.bw $2
+'_EOF_'
+  # << happy emacs
+ 
+# Create gensub2 input
+cat << '_EOF_' > gsub
+#LOOP
+edwCdJob /hive/data/genomes/hg38/bed/uwDnase1/run_normalized/norm1 $(path1).pooled.bigWig /hive/data/genomes/hg38/bed/uwDnase1/run_normalized/out/$(root1).norm.bw
+#ENDLOOP
+#ENDLOOP
+'_EOF_'
+  # << happy emacs
+
+# Do parasol run
+gensub2 fileList single gsub jobList
+para make jobList -maxJob=20
+para time
+#Completed: 95 of 95 jobs
+#CPU time in finished jobs:      20273s     337.88m     5.63h    0.23d  0.001 y
+#IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+#Average job time:                 189s       3.15m     0.05h    0.00d
+#Longest finished job:             364s       6.07m     0.10h    0.00d
+#Submission to last job:          2006s      33.43m     0.56h    0.02d
+#Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+
+# Link results into pooled directory
+ln -s /hive/data/genomes/hg38/bed/uwDnase1/run_normalized/out/*.bw /hive/data/genomes/hg38/bed/uwDnase1/run_pooled/
+sed 's/pooled.bigWig/norm.bw/' < calcGraph/uwDnase1.tab > colors.tab
+
+# Run program to generate trackDb file.  The source is in /hg/makeDb/outside/uwDnaseTrackHub
+cd /hive/data/genomes/hg38/bed/uwDnase1
+uwDnaseTrackHub meta.tab run_pooled colors.tab hub
+
+
+##########################################################
+# Create DNase tracks from the hub files (In progress 2014-12-09 Kate)
+
+# There are 3 tracks (Redmine #14353):
+#       1) Composite with peaks, hotspots, and signal (as on hub)
+#       2) Multiwig of signal, colored by similarity (as on hub)
+#       3) Clusters (as on hg19)
+
+# The hub data file dir is:  /hive/data/genomes/hg38/bed/uwDnase1/run_pooled
+# (and normalized signal files are linked into that dir from :
+# /hive/data/genomes/hg38/bed/uwDnase1/run_normalized/out
+# The hub trackDb file is: /hive/data/genomes/hg38/bed/uwDnase1/hub/hg38/trackDb.txt
+
+#################################
+# DNAse peaks, hotspots, and signal track, and the multiwig
+
+# Add scores to bigBeds (use signalValue)
+
+    cd /hive/data/genomes/hg38/bed/uwDnase1/run_pooled
+    mkdir -p scored/in scored/out
+    foreach f (*.narrowPeak *.broadPeak)
+        bigBedToBed $f scored/in/$f
+    end
+    cd scored/in
+    bedScore -uniform -method=reg -col=7 *.narrowPeak ../out >&! score.out &
+    bedScore -uniform -method=reg -col=7 *.broadPeak ../out >&! score.out &
+
+    cd ../out
+    foreach f (*.narrowPeak)
+        echo $f
+        bedToBigBed -type=bed6+4 -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as \
+               $f /hive/data/genomes/hg38/chrom.sizes ../$f.bb
+    end
+    foreach f (*.broadPeak)
+        echo $f
+        bedToBigBed -type=bed6+3 -as=$HOME/kent/src/hg/lib/encode/broadPeak.as \
+               $f /hive/data/genomes/hg38/chrom.sizes ../$f.bb
+    end
+
+# Link data files into gbdb and create bbi tables
+    mkdir /hive/data/gbdb/hg38/bbi/uwDnase
+    cd /hive/data/genomes/hg38/bed/uwDnase1/run_pooled/scored
+    set bbi = /gbdb/hg38/bbi/uwDnase/scored
+    mkdir $bbi
+
+    foreach f (*.broadPeak.bb)
+        echo $f
+        ln -s `pwd`/$f $bbi
+        set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
+        hgBbiDbLink hg38 uwEnc2DnaseHot${exp} $bbi/$f
+    end
+
+    foreach f (*.narrowPeak.bb)
+        echo $f
+        ln -s `pwd`/$f $bbi
+        set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
+        hgBbiDbLink hg38 uwEnc2DnasePeaks${exp} $bbi/$f
+    end
+
+    cd /hive/data/genomes/hg38/bed/uwDnase1/run_normalized/out
+    foreach f (*.bw)
+        ln -s `pwd`/$f $bbi/$f
+        set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
+        hgBbiDbLink hg38 uwEnc2DnaseSignal${exp} $bbi/$f
+        hgBbiDbLink hg38 uwEnc2DnaseWig${exp} $bbi/$f
+    end
+
+# Load peaks into database (needed by hgc. we may be able to drop these with code changes)
+    cd /hive/data/genomes/hg38/bed/uwDnase1/run_pooled/scored/out
+    foreach f (*.narrowPeak)
+        echo $f
+        set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
+        hgLoadBed -fillInScore=signalValue -trimSqlTable -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg38 uwEnc2DnaseBedPeaks${exp} $f
+    end
+
+# Use cell curation to make more informative long labels
+    cd /hive/data/genomes/hg38/bed/uwDnase1
+    hgsql hgFixed -Ne 'select * from wgEncodeCell' > cells/cellInfo.tab
+    uwDnaseTrackHub -cellFile=cells/cellInfo.tab meta.tab run_pooled colors.tab kateHub4
+
+# Convert trackDb from hub to native
+    cd /hive/data/genomes/hg38/bed/uwDnase1/
+    mkdir tracks
+    cd tracks
+    cp ../kateHub4/hg38/trackDb.txt .
+    sed -e 's/type bigBed/type bigBed 6 +/' -e '/bigDataUrl/d' trackDb.txt > trackDb.ra
+    cp trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg38/uwDnase.ra
+
+#################################
+# DNase clusters track
+
+    cd /hive/data/genomes/hg38/bed/uwDnase1
+    mkdir clusters
+    cd run_pooled/scored/out
+    ls *.pooled.narrowPeak > ../../../clusters/peak.lst
+
+    # calculate normalization factor
+    regClusterMakeTableOfTables -verbose=3 eapDnase01Hg38 \
+        ../../../clusters/peak.lst ../../../clusters/peak.table >&! ../../../clusters/regTable.out &
+
+    # cluster
+    regCluster -bedSources ../../../clusters/peak.table /dev/null ../../../clusters/peak.bed \
+        >&! ../../../clusters/regCluster.out &
+    # 1876769 singly-linked clusters, 1934764 clusters in 86 chromosomes
+    # NOTE: more clusters (2.2M) in hg19 (which included Duke data)
+
+    # filter out low scoring
+    cd ../../../clusters
+    awk '$5 >= 100' peak.bed > peak.filtered.bed
+    wc -l peak.filtered.bed
+    # 1236194 uwEnc2DnaseClustered.bed
+    # retained 65% vs 83% in hg19 (too low ??)
+
+    # --> keep them all for now, filter with UI
+
+    # format to BED5+floatscore+sources for hgBedSources 
+    #   which will extract, uniquify, and assign ID's to sources
+    awk 'BEGIN {OFS="\t"}{print $1, $2, $3, $4, $5, 0, $7;}' peak.bed > peak.bed6
+    hgBedSources peak.bed6 regDnase
+    mv regDnaseSources.tab uwEnc2DnaseSources.tab
+
+    # load sources table
+    autoSql $HOME/kent/src/hg/lib/idName.as idName
+    hgLoadSqlTab hg38 uwEnc2DnaseSources idName.sql uwEnc2DnaseSources.tab
+
+    # merge files and format to BED5+sourceCount+sourceIds+sourceVals
+    awk '{print $8}' peak.bed > peak.vals
+    awk 'BEGIN {OFS="\t"}{print $1, $2, $3, $4, $5, $7, $8;}' regDnase.bed | \
+        paste - peak.vals > uwEnc2DnaseClustered.bed
+    hgLoadBed hg38 uwEnc2DnaseClustered -sqlTable=$HOME/kent/src/hg/lib/bed5SourceVals.sql \
+        -renameSqlTable -as=$HOME/kent/src/hg/lib/bed5SourceVals.as uwEnc2DnaseClustered.bed
+
+    # create inputs file to display metadata on details page
+    # NOTE: this can probably be jettisoned in favor of new code, since source info
+    # is now in the BED file
+cat > makeInputs.csh << 'EOF'
+    set tables = `hgsql hg38 -Ne "show tables like 'uwEnc2DnasePeaks%'"`
+    foreach t ($tables)
+        set exp = `echo $t | sed 's/uwEnc2DnasePeaksWgEncode/wgEncode/'`
+        set t = `echo $t | sed 's/Peaks/BedPeaks/'`
+        set cell = `encodeExp show $exp cellType`
+        set treatment = `encodeExp show $exp treatment`
+        echo "$t\t$cell\t$treatment"
+    end
+'EOF'
+    csh makeInputs.csh > inputs.tab
+    hgLoadSqlTab hg38 uwEnc2DnaseInputs ~/kent/src/hg/lib/clusterInputEapDnase.sql inputs.tab
+
+
+#################
+# Cell table (use for cell metadata, instead of metaDb)
+
+    cd /hive/data/genomes/hg38/bed/uwDnase1
+    mkdir cells
+    cd cells
+
+    # collect cell info from ENCODE2 and ENCODE3
+
+    # load to google spreadsheet and clean 
+    #https://docs.google.com/a/soe.ucsc.edu/spreadsheets/d/10EWdr-JTtDvfLKKLPvP3T2ft6MZ5KVdKbBzY76SRaug/edit#gid=1783710206
+
+    # extract useful columns to file and load
+    tail -n +2 wgEncodeCell.tab | \
+        nl -v 0 | \
+        hgLoadSqlTab hgFixed wgEncodeCell ~/kent/src/hg/lib/encode/wgEncodeCell.sql stdin
+

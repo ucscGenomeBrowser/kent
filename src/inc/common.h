@@ -793,6 +793,9 @@ int cmpWordsWithEmbeddedNumbers(const char *a, const char *b);
 boolean startsWith(const char *start, const char *string);
 /* Returns TRUE if string begins with start. */
 
+boolean startsWithNoCase(const char *start, const char *string);
+/* Returns TRUE if string begins with start, case-insensitive. */
+
 boolean startsWithWord(char *firstWord, char *line);
 /* Return TRUE if first white-space-delimited word in line
  * is same as firstWord.  Comparison is case sensitive. */
@@ -1012,6 +1015,9 @@ char *nextWordRespectingQuotes(char **pLine);
 
 char *cloneFirstWord(char *line);
 /* Clone first word in line */
+
+char *cloneNotFirstWord(char *s);
+/* Clone part of string after first word. */
 
 char *nextTabWord(char **pLine);
 /* Return next tab-separated word. */

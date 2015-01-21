@@ -905,6 +905,7 @@ bedIntersect -minCoverage=1 ucscGenes.bed antibody.bed abGenes.bed
 cat abGenes.bed |awk '{ print $4}' > abGenes.txt
 # no ensembl
 # hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db ensGene knownGene knownToEnsembl
+hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db  wgEncodeGencodeCompV20 knownGene knownToGencodeV20
 hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db refGene knownGene knownToRefSeq
 hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" $db > refToLl.txt
 hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db refGene knownGene knownToLocusLink -lookup=refToLl.txt
@@ -949,8 +950,7 @@ hgLoadPsl $tempDb ucscProtMap.psl -table=kgProtMap2
 # hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db allenBrainAli -type=psl knownGene knownToAllenBrain
 
 
-# TODO: no gnfAtlas2
-#hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
 
 # TODO: Create knownToTreefam table.
 mkdir -p $dir/treeFam
@@ -984,12 +984,11 @@ if ($db =~ hg*) then
 endif
 
 if ($db =~ hg*) then
-    # TODO
-    #time hgExpDistance $tempDb hgFixed.gnfHumanU95MedianRatio \
-#	    hgFixed.gnfHumanU95Exps gnfU95Distance  -lookup=knownToU95
-#    time hgExpDistance $tempDb hgFixed.gnfHumanAtlas2MedianRatio \
-#	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
-#	-lookup=knownToGnfAtlas2
+    time hgExpDistance $tempDb hgFixed.gnfHumanU95MedianRatio \
+	    hgFixed.gnfHumanU95Exps gnfU95Distance  -lookup=knownToU95
+    time hgExpDistance $tempDb hgFixed.gnfHumanAtlas2MedianRatio \
+	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
+	-lookup=knownToGnfAtlas2
 endif
 
 if ($db =~ mm*) then

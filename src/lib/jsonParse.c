@@ -310,10 +310,12 @@ while ((c = *in++) != 0)
         case '/':
         case '\b':
         case '\f':
-        case '\n':
+            outSize += 2;
+            break;
         case '\r':
         case '\t':
-            outSize += 2;
+        case '\n':
+            outSize += 3;
             break;
         default:
             outSize += 1;
@@ -333,13 +335,24 @@ while ((c = *in++) != 0)
         case '/':
         case '\b':
         case '\f':
-        case '\n':
+            *out++ = '\\';
+            *out++ = c;
+            break;
         case '\r':
+            *out++ = '\\';
+            *out++ = 'r';
+            break;
         case '\t':
             *out++ = '\\';
+            *out++ = 't';
             break;
+        case '\n':
+            *out++ = '\\';
+            *out++ = 'n';
+            break;
+        default:
+            *out++ = c;
         }
-    *out++ = c;
     }
 *out++ = 0;
 return outString;
@@ -685,3 +698,11 @@ if (val == NULL)
 return val;
 }
 
+boolean jsonOptionalBooleanField(struct jsonElement *object, char *field, boolean defaultVal)
+/* Return boolean valued field of object, or defaultVal if it doesn't exist. */
+{
+struct jsonElement *ele = jsonFindNamedField(object, "", field);
+if (ele == NULL)
+     return defaultVal;
+return jsonBooleanVal(ele, field);
+}

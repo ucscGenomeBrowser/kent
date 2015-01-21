@@ -4244,6 +4244,15 @@ compositeTrack on
     visibility pack
     priority 2
 
+track gwipsvizRiboseq
+type bigWig
+shortLabel GWIPS-viz Riboseq
+longLabel Ribosome Profiling from GWIPS-viz
+group expression
+visibility hide
+autoScale on
+html gwipsvizRiboseq
+
 searchTable numtSMitochondrionChrPlacement
 searchMethod exact
 searchType bed

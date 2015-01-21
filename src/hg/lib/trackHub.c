@@ -182,8 +182,8 @@ for(;trackHub; trackHub = trackHub->next)
 return cladeList;
 }
 
-struct dbDb *trackHubGetDbDbs(char *clade)
-/* Get a list of dbDb structures for all the tracks in this clade/hub. */
+static struct dbDb *getDbDbs(char *clade, boolean blatEnabled)
+/* Get a list of struct dbDbs from track hubs.  Only get blat enabled ones if asked */
 {
 struct dbDb *db, *dbList = NULL;
 
@@ -199,7 +199,10 @@ if (globalAssemblyHubList != NULL)
 	struct trackHubGenome *hubGenome = trackHub->genomeList;
 	for(; hubGenome; hubGenome = hubGenome->next)
 	    {
-	    if (hubGenome->twoBitPath != NULL)
+	    boolean blatCheck = !blatEnabled ||
+		((hashFindVal(hubGenome->settingsHash,"transBlat") != NULL) || 
+		(hashFindVal(hubGenome->settingsHash,"blat") != NULL));
+	    if ( blatCheck && (hubGenome->twoBitPath != NULL))
 		{
 		db = makeDbDbFromAssemblyGenome(hubGenome);
 		slAddHead(&dbList, db);
@@ -211,6 +214,18 @@ if (globalAssemblyHubList != NULL)
 slReverse(&dbList);
 slSort(&dbList, hDbDbCmpOrderKey);
 return dbList;
+}
+
+struct dbDb *trackHubGetBlatDbDbs()
+/* Get a list of connected track hubs that have blat servers */
+{
+return getDbDbs(NULL, TRUE);
+}
+
+struct dbDb *trackHubGetDbDbs(char *clade)
+/* Get a list of dbDb structures for all the tracks in this clade/hub. */
+{
+return getDbDbs(clade, FALSE);
 }
 
 struct slName *trackHubAllChromNames(char *database)

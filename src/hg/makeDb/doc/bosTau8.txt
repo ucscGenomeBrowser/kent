@@ -616,8 +616,8 @@ T   8.2  13.0  10.9  14.7
 
      # looks good, using the results from the top400:
 
-     mkdir /hive/data/genomes/bosTau8/bed/lastzEquCab2.2014-10-27
-     cd /hive/data/genomes/bosTau8/bed/lastzEquCab2.2014-10-27
+     mkdir /hive/data/genomes/bosTau8/bed/lastzEquCab2.2014-12-11
+     cd /hive/data/genomes/bosTau8/bed/lastzEquCab2.2014-12-11
 
      cp -p /hive/users/hiram/multiz/100way/bosTau8.equCab2/bosTau8.equCab2.tuning.top400.txt \
         ./bosTau8.equCab2.tuning.Q.txt
@@ -634,7 +634,7 @@ BLASTZ_E=30
 BLASTZ_M=50
 BLASTZ_X=880
 BLASTZ_Y=3400
-BLASTZ_Q=/hive/data/genomes/bosTau8/bed/lastzEquCab2.2014-10-27/bosTau8.equCab2.tuning.Q.txt
+BLASTZ_Q=/hive/data/genomes/bosTau8/bed/lastzEquCab2.2014-12-11/bosTau8.equCab2.tuning.Q.txt
 #       A     C     G     T
 # A    88  -111   -31  -128
 # C  -111   100   -75   -31
@@ -646,7 +646,7 @@ SEQ1_DIR=/hive/data/genomes/bosTau8/bosTau8.2bit
 SEQ1_LEN=/hive/data/genomes/bosTau8/chrom.sizes
 SEQ1_CHUNK=20000000
 SEQ1_LIMIT=40
-SEQ1_LAP=0
+SEQ1_LAP=10000
 
 # QUERY: Horse equCab2
 SEQ2_DIR=/hive/data/genomes/equCab2/equCab2.2bit
@@ -655,7 +655,7 @@ SEQ2_CHUNK=10000000
 SEQ2_LIMIT=500
 SEQ2_LAP=0
 
-BASE=/hive/data/genomes/bosTau8/bed/lastzEquCab2.2014-10-27
+BASE=/hive/data/genomes/bosTau8/bed/lastzEquCab2.2014-12-11
 TMPDIR=/dev/shm
 '_EOF_'
     # << happy emacs
@@ -664,19 +664,19 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-    # real    292m42.862s
+    # real    365m26.314s
     cat fb.bosTau8.chainEquCab2Link.txt
-    #  1463490656 bases of 2649307237 (55.241%) in intersection
+    #  1463493515 bases of 2649307237 (55.241%) in intersection
 
     time (doRecipBest.pl bosTau8 equCab2 -buildDir=`pwd` -workhorse=hgwdev) \
-	> best.log 2>&1
-    # real    60m9.228s
+	> best.log 2>&1 &
+    # real    59m58.918s
 
     #	and the swap
     mkdir /hive/data/genomes/equCab2/bed/blastz.bosTau8.swap
     cd /hive/data/genomes/equCab2/bed/blastz.bosTau8.swap
     time (doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/bosTau8/bed/lastzEquCab2.2014-10-27/DEF \
+        /hive/data/genomes/bosTau8/bed/lastzEquCab2.2014-12-11/DEF \
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
 	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
@@ -687,6 +687,9 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl equCab2 bosTau8 -buildDir=`pwd` -workhorse=hgwdev) \
 	> best.log 2>&1
-    #   real    75m31.777s
+    #   real    75m13.344s
 
 #########################################################################
+##############################################################################
+# TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
+##############################################################################

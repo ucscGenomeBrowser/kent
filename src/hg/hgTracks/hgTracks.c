@@ -5753,14 +5753,19 @@ cgiVarExcludeExcept(except);
 void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
+cart = theCart;
+measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
+if (measureTiming)
+    measureTime("Startup");
+
 hgBotDelay();
+if (measureTiming)
+    measureTime("Bottleneck delay");
+
 char *debugTmp = NULL;
 /* Uncomment this to see parameters for debugging. */
 /* struct dyString *state = NULL; */
 /* Initialize layout and database. */
-cart = theCart;
-
-measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
 if (measureTiming)
     measureTime("Get cart of %d for user:%u session:%u", theCart->hash->elCount,
 	    theCart->userId, theCart->sessionId);

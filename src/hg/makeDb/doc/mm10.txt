@@ -10671,3 +10671,54 @@ TMPDIR=/scratch/tmp
     ln -s blastz.mm10.swap lastz.mm10
 
 ############################################################################
+# 2014-12-05: import of UCSC GENCODE group processing of GENCODE VM4 (markd)
+
+    # download files
+    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM4/data
+    cd /hive/data/genomes/mm10/bed/gencodeVM4
+
+    # create Makefile from previous one.
+    cp  /hive/data/genomes/hg38/bed/gencodeV21/Makefile .
+
+    # download, build and load tables
+    (time nice make -j 10) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.
+        make cmpRelease >gencode-cmp.tsv
+
+    ## Copy and update trackDb files from previous release.
+    ## Change version and use lower priority so it sorts to top of
+    ## super track page.
+    ## Important to make sure filter attrs.transcriptType matches current set
+    ## figured out with
+    select distinct transcriptType from wgEncodeGencodeAttrsVM4 order by transcriptType;
+    cd kent/src/hg/makeDb/trackDb
+    cp mouse/mm10/wgEncodeGencodeVM2.ra mouse/mm10/wgEncodeGencodeVM4.ra
+    cp mouse/mm10/wgEncodeGencodeVM2.html mouse/mm10/wgEncodeGencodeVM4.html
+
+    # edit these plus mouse/mm10/trackDb.wgEncode.ra
+    # - set priorities in wgEncodeGencodeVM4.ra in reverse order with previous
+    #   tracks so newest shows up first
+    #     priority - set to previous version priority minus 0.001
+    #     searchPriority - set each to previous minus 0.001
+    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
+    #     superTrack wgEncodeGencodeSuper pack
+    # - Update wgEncodeGencodeSuper.html to describe new release and to
+    #   pick up other updates.
+
+    ### IMPORTANT: make sure that hgTracks/gencodeTracks.c registers
+    ### track handler for this version of gencode:
+    registerTrackHandler("wgEncodeGencodeVM4", gencodeGeneMethods);
+
+    # update all.joiner and validate
+    # look for the last section `begin Gencode VM?' in all.joiner
+    # and copy and update version
+    # repeat this until happy, editing minCheck as needed
+    cd /hive/data/genomes/mm10/bed/gencodeVM4
+    make joinerCheck  # output in check/joiner.out
+
+##############################################################################
+##############################################################################
+# TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
+##############################################################################

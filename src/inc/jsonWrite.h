@@ -25,7 +25,7 @@ void jsonWriteEndLine(struct jsonWrite *jw);
 /* Write comma if in middle, and then newline regardless. */
 
 void jsonWriteString(struct jsonWrite *jw, char *var, char *string);
-/* Print out "var": "val".  If var is NULL then just print out "val" */
+/* Print out "var": "val".  If var is NULL, print val only.  If string is NULL, "var": null . */
 
 void jsonWriteDateFromUnix(struct jsonWrite *jw, char *var, long long unixTimeVal);
 /* Add "var": YYYY-MM-DDT-HH:MM:SSZ given a Unix time stamp. Var may be NULL. */
@@ -47,10 +47,22 @@ void jsonWriteListStart(struct jsonWrite *jw, char *var);
 void jsonWriteListEnd(struct jsonWrite *jw);
 /* End an array in JSON */
 
-void jsonWriteObjectStart(struct jsonWrite *dy);
-/* Print start of object */
+void jsonWriteObjectStart(struct jsonWrite *jw, char *var);
+/* Print start of object, preceded by tag if var is non-NULL. */
 
 void jsonWriteObjectEnd(struct jsonWrite *jw);
 /* End object in JSON */
+
+void jsonWriteStringf(struct jsonWrite *jw, char *var, char *format, ...);
+/* Write "var": "val" where val is jsonStringEscape'd formatted string. */
+
+void jsonWriteBoolean(struct jsonWrite *jw, char *var, boolean val);
+/* Write out "var": true or "var": false depending on val (no quotes around true/false). */
+
+void jsonWriteValueLabelList(struct jsonWrite *jw, char *var, struct slPair *pairList);
+/* Print out a named list of {"value": "<pair->name>", "label": "<pair->val>"} objects. */
+
+void jsonWriteSlNameList(struct jsonWrite *jw, char *var, struct slName *slnList);
+/* Print out a named list of strings from slnList. */
 
 #endif /* JSONWRITE_H */

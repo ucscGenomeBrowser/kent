@@ -1398,6 +1398,21 @@ for (i=0; ;i += 1)
     }
 }
 
+boolean startsWithNoCase(const char *start, const char *string)
+/* Returns TRUE if string begins with start, case-insensitive. */
+{
+char c;
+int i;
+
+for (i=0; ;i += 1)
+    {
+    if ((c = tolower(start[i])) == 0)
+        return TRUE;
+    if (tolower(string[i]) != c)
+        return FALSE;
+    }
+}
+
 boolean startsWithWord(char *firstWord, char *line)
 /* Return TRUE if first white-space-delimited word in line
  * is same as firstWord.  Comparison is case sensitive. */
@@ -2261,6 +2276,17 @@ else
     return cloneStringZ(startFirstWord, endFirstWord - startFirstWord);
 }
 
+char *cloneNotFirstWord(char *s)
+/* return part of string after first space, not changing s. Result has to be freed. */
+{
+if (s==NULL)
+    return "";
+char* spcPos = stringIn(" ", s);
+if (spcPos==NULL)
+    return cloneString(s);
+return cloneString(spcPos+1);
+}
+
 char *lastWordInLine(char *line)
 /* Returns last word in line if any (white space separated).
  * Returns NULL if string is empty.  Removes any terminating white space
@@ -2736,6 +2762,17 @@ if ((pFile != NULL) && ((f = *pFile) != NULL))
             errnoWarn("fclose failed");
 	    ok = FALSE;
 	    }
+        }
+    else
+        {
+        // One expects close() to actually flush the file and close it.  If
+        // the file was opened using the magic name "stdout" and then does a
+        // setvbuf(), writes to file, calls carefulClose, then frees the
+        // buffer, the FILE object points to invalid memory.  Then the exit()
+        // I/O cleanup causes the invalid memory to be written to the file,
+        // possible outputting corruption data.  If would be consistent with
+        // stdio behavior to have "stdout" magic name open "/dev/stdout".
+        fflush(f);
         }
     *pFile = NULL;
     }

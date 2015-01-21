@@ -555,15 +555,16 @@ visibility hide
 type bed 4 +
 
 track msr2
-shortLabel Gene Interactions
-longLabel Gene Interactions
+shortLabel Pathways
+longLabel Pathways and Protein Interactions
 group pub
-visibility dense
-type bigBed 4 .
+visibility hide
+type bigBed 4
 noScoreFilter on
 release alpha
 directUrl hgcGeneGraph?gene=%s
 labelOnFeature on
+linkIdInName on
 
 track pubsDev
 shortLabel Publications Beta
@@ -2279,7 +2280,6 @@ release alpha,beta,public
 type bigWig 1 141
 
 track peptideAtlasSuper
-release alpha
 html peptideAtlas
 superTrack on
 group expression
@@ -2289,10 +2289,10 @@ longLabel Peptide sequences identified by tandem MS from PeptideAtlas
     track peptideAtlas
     table peptideAtlas2014
     parent peptideAtlasSuper
-    release alpha
     shortLabel PeptideAtlas
     html peptideAtlas
     longLabel Peptide sequences identified from MS spectra of 971 samples by PeptideAtlas
+    visibility squish
     type bed 12
     url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=433&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
     urlLabel Link to PeptideAtlas:

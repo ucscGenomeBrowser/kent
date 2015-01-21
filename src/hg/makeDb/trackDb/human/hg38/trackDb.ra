@@ -1,4 +1,5 @@
 include trackDb.wgEncode.ra
+include uwDnase.ra
 
 track par override
 group x
@@ -194,6 +195,7 @@ group x
     html altSequence
 
 include trackDb.7way.ra
+include trackDb.17way.ra
 
 track ucscRetroAli8
 shortLabel Retroposed Genes 8.0
@@ -283,3 +285,5 @@ track sibTxGraph override
 url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=hg38&species=H.+sapiens&tromer=$$
 
 include trackDb.cloneEnd.ra
+
+include hg38Patch2.ra

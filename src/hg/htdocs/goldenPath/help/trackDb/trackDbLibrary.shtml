@@ -326,8 +326,10 @@
     should be used to display the track within the Browser image.  This setting is
     almost always dynamically customizable by each user.  The exact configuration of the
     display for each mode depends upon the track's type, and some modes may not be supported
-    for certain track types.  Be sure to experiment with this setting to verify that it works 
-    as expected for your track type.</P>
+    for certain track types. Please note visibility settings in composite subtracks are
+    directly inherited from the parent. Therefore, any visibility lines added at the subtrack
+    level of a composite will be ignored. Be sure to experiment with this setting to
+    verify that it works as expected for your track type and track structure.</P>
     <P>Valid settings:</P>
     <UL>
     <LI><code>hide</code>: DEFAULT. The track is not displayed in the Browser image unless
@@ -1457,6 +1459,27 @@
     setting, the label will be "Item:".</P>
     <P><B>Example:</B></P>
     <pre>   bedNameLabel Gene Id</pre>
+</DIV>
+
+<DIV class="linkIdInName"><span class="types bed bigBed"></span>
+<div class="format"><code>linkIdInName on</code></div>
+    <P>This setting changes the meaning of the bed name field
+    to "identifier description". If it is activated, the browser
+    does not show the first word of the BED item name,
+    but uses this first word for linking out to the item detail page. This
+    allows putting both an identifier, like a gene ID, and its human-readable
+    description into the BED item name field, separated by a space.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>   linkIdInName on</pre>
+    <P>
+    A BED name field of "9005 PITX2" will be shown "PITX2" on the genome
+    browser, but when the user clicks on it, the URL will be built only from
+    the first word, by default cgi-bin/hgc?i=9005&amp;(...). The URL can be
+    changed with <A onclick="jumpTo(this)" HREF="#">directUrl</A>, where %s
+    is replaced by the identifier.
+    </P>
+
 </DIV>
 
 <DIV class="baseColorUseSequence"><span class="types all"></span>
@@ -4222,7 +4245,9 @@ for each cell associated with the particular TF binding location.</P>
     subtrack child, not the composite itself, through this setting. Any number of subtracks may
     belong to one composite, but display performance degrades significantly beyond a
     few hundred.  Set the <code>parent</code> setting to "on" to 
-    indicate whether a subtrack should be visible (checked, selected) by default.  
+    indicate whether a subtrack should be visible (checked, selected) by default.
+    Visibility settings in composite subtracks are directly inherited from the parent. Therefore,
+    any visibility lines added at the child subtrack level of a composite will be ignored.</p>  
 </DIV>
 
 <DIV class="allButtonPair"><span class="types compositeTrack"></span>
@@ -4680,7 +4705,9 @@ for each cell associated with the particular TF binding location.</P>
     greater than what was inherited from parents, that subtrack's
     visibility will override the inheritance.  While the subtleties of
     inheritance can be hard to explain, they are often intuitive in
-    practice.</div></P>
+    practice. In composite subtracks, visibility settings are directly
+    inherited from the parent composite, therefore, any visibility lines
+    added at the child subtrack level of a composite will be ignored.</div></P>
 </DIV>
 
 <DIV class="view"><span class="types view"></span>

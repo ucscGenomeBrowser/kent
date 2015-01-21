@@ -19,6 +19,8 @@ s/camFer1/Camelus_ferus/;
 s/canLup1/Canus_lupus/;
 s/chlSab1/Chlorocebus_sabaeus/;
 s/chlSab2/Chlorocebus_sabaeus/;
+s/nasLar1/Nasalis_larvatus/;
+s/rhiRox1/Rhinopithecus_roxellana/;
 s/panHod1/Pantholops_hodgsonii/;
 s/capHir1/Capra_hircus/;
 s/equPrz1/Equus_przewalskii/;
