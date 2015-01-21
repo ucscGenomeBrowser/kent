@@ -1552,7 +1552,7 @@ cd mafSynNet
 md5sum *.maf.gz > md5sum.txt
 mkdir -p $HgAutomate::goldenPath/$tDb/vs$QDb/mafSynNet
 cd $HgAutomate::goldenPath/$tDb/vs$QDb/mafSynNet
-ln -s $runDir/mafSynNet/* .
+ln -s $buildDir/mafSynNet/* .
 _EOF_
       );
   } else {
