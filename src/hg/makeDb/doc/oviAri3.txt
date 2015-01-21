@@ -734,3 +734,27 @@ mysql>  LOAD DATA LOCAL INFILE "oviAri3.cytoBand" INTO TABLE cytoBandIdeo;
     # real    42m24.943s
 
 #########################################################################
+# SWAP LASTZ mouse/mm10 sheep/oviAri3 - (DONE - 2015-01-21 - Hiram)
+    # the original alignment
+    cd /hive/data/genomes/mm10/bed/lastzOviAri3.2015-01-08
+    cat fb.mm10.chainOviAri3Link.txt
+    # 432006690 bases of 2652783500 (16.285%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oviAri3/bed/blastz.mm10.swap
+    cd /hive/data/genomes/oviAri3/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzOviAri3.2015-01-08/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    31m27.481s
+
+    cat fb.oviAri3.chainMm10Link.txt
+    #422549165 bases of 2534335866 (16.673%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` oviAri3 mm10) > rbest.log 2>&1
+    # real    16m45.956s
+
+#########################################################################
