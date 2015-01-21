@@ -10722,3 +10722,79 @@ TMPDIR=/scratch/tmp
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+# LASTZ mouse/mm10 sheep/oviAri3 - (DONE - 2015-01-08 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzOviAri3.2015-01-08
+    cd /hive/data/genomes/mm10/bed/lastzOviAri3.2015-01-08
+
+    cp -p \
+/hive/users/hiram/multiz/100way/mm10.oviAri3/mm10.oviAri3.tuning.top400.txt \
+     ./mm10.oviAri3.tuning.Q.txt
+
+    cat << '_EOF_' > DEF
+# mouse vs sheep
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/mm10.oviAri3/mm10.oviAri3.tuning.top400.txt
+
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=254
+BLASTZ_X=890
+BLASTZ_Y=3400
+BLASTZ_Q=/hive/data/genomes/mm10/bed/lastzOviAri3.2015-01-08/mm10.oviAri3.tuning.Q.txt
+#       A     C     G     T
+# A    89  -172   -40  -184
+# C  -172   100  -121   -40
+# G   -40  -121   100  -172
+# T  -184   -40  -172    89
+
+# TARGET: mouse mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=2
+SEQ1_LAP=10000
+
+# QUERY: sheep oviAri3
+SEQ2_DIR=/hive/data/genomes/oviAri3/oviAri3.2bit
+SEQ2_LEN=/hive/data/genomes/oviAri3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=10
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzOviAri3.2015-01-08
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    75m27.412s
+
+    cat fb.mm10.chainOviAri3Link.txt
+    # 432006690 bases of 2652783500 (16.285%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` mm10 oviAri3) > rbest.log 2>&1 &
+    # real    17m24.577s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oviAri3/bed/blastz.mm10.swap
+    cd /hive/data/genomes/oviAri3/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzOviAri3.2015-01-08/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    31m27.481s
+
+    cat fb.oviAri3.chainMm10Link.txt
+    #422549165 bases of 2534335866 (16.673%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` oviAri3 mm10) > rbest.log 2>&1
+    # real    16m45.956s
+
+#########################################################################
