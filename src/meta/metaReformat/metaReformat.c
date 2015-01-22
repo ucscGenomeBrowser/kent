@@ -8,6 +8,7 @@
 
 int indent = META_DEFAULT_INDENT;
 boolean withParent = FALSE;
+int depth = 0;
 
 void usage()
 /* Explain usage and exit. */
@@ -20,6 +21,7 @@ errAbort(
   "options:\n"
   "   -withParent - if set include parent tag in output\n"
   "   -indent=N - sets indentation level\n"
+  "   -depth=N - if set restricts output to top N levels (root is level 1)\n"
   );
 }
 
@@ -27,6 +29,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"withParent", OPTION_BOOLEAN},
    {"indent", OPTION_INT},
+   {"depth", OPTION_INT},
    {NULL, 0},
 };
 
@@ -35,7 +38,7 @@ void metaReformat(char *input, char *output)
  * indenting. */
 {
 struct meta *metaList = metaLoadAll(input, "meta", "parent", FALSE, FALSE);
-metaWriteAll(metaList, output, indent, withParent);
+metaWriteAll(metaList, output, indent, withParent, depth);
 }
 
 int main(int argc, char *argv[])
@@ -45,6 +48,7 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 indent = optionInt("indent", indent);
+depth = optionInt("depth", depth);
 withParent = optionExists("withParent");
 metaReformat(argv[1], argv[2]);
 return 0;

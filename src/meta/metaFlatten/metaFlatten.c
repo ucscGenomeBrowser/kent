@@ -66,7 +66,7 @@ void metaFlatten(char *input, char *output)
 {
 struct meta *metaList = metaLoadAll(input, "meta", "parent", FALSE, FALSE);
 rMetaFlatten(metaList);
-metaWriteAll(metaList, output, indent, withParent);
+metaWriteAll(metaList, output, indent, withParent, 0);
 }
 
 int main(int argc, char *argv[])
