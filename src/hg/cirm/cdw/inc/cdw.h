@@ -678,7 +678,7 @@ struct cdwBiosample
     {
     struct cdwBiosample *next;  /* Next in singly linked list. */
     unsigned id;	/* Biosample id */
-    char *term;	/* Human readable.  Shared with ENCODE2. */
+    char *term;	/* Human readable.. */
     unsigned taxon;	/* NCBI taxon number - 9606 for human. */
     char *sex;	/* One letter code: M male, F female, B both, U unknown */
     };
@@ -746,7 +746,7 @@ struct cdwExperiment
 /* An experiment - ideally will include a couple of biological replicates. Downloaded from Stanford. */
     {
     struct cdwExperiment *next;  /* Next in singly linked list. */
-    char accession[17];	/* Something like ENCSR000CFA. ID shared with Stanford. */
+    char accession[17];	/* ID shared with metadata system. */
     char *dataType;	/* Something liek RNA-seq, DNase-seq, ChIP-seq. Computed at UCSC. */
     char *lab;	/* Lab PI name and institution. Is lab.title at Stanford. */
     char *biosample;	/* Cell line name, tissue source, etc. Is biosample_term_name at Stanford. */
@@ -839,7 +839,7 @@ struct cdwValidFile
     double depth;	/* Estimated genome-equivalents covered by possibly overlapping data */
     signed char singleQaStatus;	/* 0 = untested, 1 =  pass, -1 = fail, 2 = forced pass, -2 = forced fail */
     signed char replicateQaStatus;	/* 0 = untested, 1 = pass, -1 = fail, 2 = forced pass, -2 = forced fail */
-    char *technicalReplicate;	/* Manifest's technical_replicate tag. Values 1,2,3... pooled or '' */
+    char *part;	/* Manifest's file part. Values 1,2,3... Used for fastqs split for analysis */
     char *pairedEnd;	/* The paired_end tag from the manifest.  Values 1,2 or '' */
     signed char qaVersion;	/* Version of QA pipeline making status decisions */
     double uniqueMapRatio;	/* Fraction of reads that map uniquely to genome for bams and fastqs */

@@ -167,7 +167,7 @@ table cdwValidFile
     double depth;   "Estimated genome-equivalents covered by possibly overlapping data"
     byte singleQaStatus;  "0 = untested, 1 =  pass, -1 = fail, 2 = forced pass, -2 = forced fail"
     byte replicateQaStatus;  "0 = untested, 1 = pass, -1 = fail, 2 = forced pass, -2 = forced fail"
-    string technicalReplicate; "Manifest's technical_replicate tag. Values 1,2,3... pooled or ''"
+    string part; "Manifest's file part. Values 1,2,3... Used for fastqs split for analysis"
     string pairedEnd; "The paired_end tag from the manifest.  Values 1,2 or ''"
     byte qaVersion; "Version of QA pipeline making status decisions"
     double uniqueMapRatio; "Fraction of reads that map uniquely to genome for bams and fastqs"

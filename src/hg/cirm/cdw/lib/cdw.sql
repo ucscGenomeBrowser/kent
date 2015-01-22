@@ -156,7 +156,7 @@ CREATE TABLE cdwAssembly (
 #A biosample - not much info here, just enough to drive analysis pipeline
 CREATE TABLE cdwBiosample (
     id int unsigned auto_increment,	# Biosample id
-    term varchar(255) default '',	# Human readable.  Shared with ENCODE2.
+    term varchar(255) default '',	# Human readable..
     taxon int unsigned default 0,	# NCBI taxon number - 9606 for human.
     sex varchar(255) default '',	# One letter code: M male, F female, B both, U unknown
               #Indices
@@ -166,7 +166,7 @@ CREATE TABLE cdwBiosample (
 
 #An experiment - ideally will include a couple of biological replicates. Downloaded from Stanford.
 CREATE TABLE cdwExperiment (
-    accession char(16) default '',	# Something like ENCSR000CFA. ID shared with Stanford.
+    accession char(16) default '',	# ID shared with metadata system.
     dataType varchar(255) default '',	# Something liek RNA-seq, DNase-seq, ChIP-seq. Computed at UCSC.
     lab varchar(255) default '',	# Lab PI name and institution. Is lab.title at Stanford.
     biosample varchar(255) default '',	# Cell line name, tissue source, etc. Is biosample_term_name at Stanford.
@@ -200,7 +200,7 @@ CREATE TABLE cdwValidFile (
     depth double default 0,	# Estimated genome-equivalents covered by possibly overlapping data
     singleQaStatus tinyint default 0,	# 0 = untested, 1 =  pass, -1 = fail, 2 = forced pass, -2 = forced fail
     replicateQaStatus tinyint default 0,	# 0 = untested, 1 = pass, -1 = fail, 2 = forced pass, -2 = forced fail
-    technicalReplicate varchar(255) default '',	# Manifest's technical_replicate tag. Values 1,2,3... pooled or ''
+    part varchar(255) default '',	# Manifest's file part. Values 1,2,3... Used for fastqs split for analysis
     pairedEnd varchar(255) default '',	# The paired_end tag from the manifest.  Values 1,2 or ''
     qaVersion tinyint default 0,	# Version of QA pipeline making status decisions
     uniqueMapRatio double default 0,	# Fraction of reads that map uniquely to genome for bams and fastqs

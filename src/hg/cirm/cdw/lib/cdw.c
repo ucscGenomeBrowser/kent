@@ -2028,7 +2028,7 @@ fputc(lastSep,f);
 }
 
 
-char *cdwValidFileCommaSepFieldNames = "id,licensePlate,fileId,format,outputType,experiment,replicate,validKey,enrichedIn,ucscDb,itemCount,basesInItems,sampleCount,basesInSample,sampleBed,mapRatio,sampleCoverage,depth,singleQaStatus,replicateQaStatus,technicalReplicate,pairedEnd,qaVersion,uniqueMapRatio";
+char *cdwValidFileCommaSepFieldNames = "id,licensePlate,fileId,format,outputType,experiment,replicate,validKey,enrichedIn,ucscDb,itemCount,basesInItems,sampleCount,basesInSample,sampleBed,mapRatio,sampleCoverage,depth,singleQaStatus,replicateQaStatus,part,pairedEnd,qaVersion,uniqueMapRatio";
 
 void cdwValidFileStaticLoad(char **row, struct cdwValidFile *ret)
 /* Load a row from cdwValidFile table into ret.  The contents of ret will
@@ -2055,7 +2055,7 @@ ret->sampleCoverage = sqlDouble(row[16]);
 ret->depth = sqlDouble(row[17]);
 ret->singleQaStatus = sqlSigned(row[18]);
 ret->replicateQaStatus = sqlSigned(row[19]);
-ret->technicalReplicate = row[20];
+ret->part = row[20];
 ret->pairedEnd = row[21];
 ret->qaVersion = sqlSigned(row[22]);
 ret->uniqueMapRatio = sqlDouble(row[23]);
@@ -2092,7 +2092,7 @@ void cdwValidFileSaveToDb(struct sqlConnection *conn, struct cdwValidFile *el, c
 {
 struct dyString *update = newDyString(updateSize);
 sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%lld,%lld,%lld,%lld,'%s',%g,%g,%g,%d,%d,'%s','%s',%d,%g)", 
-	tableName,  el->id,  el->licensePlate,  el->fileId,  el->format,  el->outputType,  el->experiment,  el->replicate,  el->validKey,  el->enrichedIn,  el->ucscDb,  el->itemCount,  el->basesInItems,  el->sampleCount,  el->basesInSample,  el->sampleBed,  el->mapRatio,  el->sampleCoverage,  el->depth,  el->singleQaStatus,  el->replicateQaStatus,  el->technicalReplicate,  el->pairedEnd,  el->qaVersion,  el->uniqueMapRatio);
+	tableName,  el->id,  el->licensePlate,  el->fileId,  el->format,  el->outputType,  el->experiment,  el->replicate,  el->validKey,  el->enrichedIn,  el->ucscDb,  el->itemCount,  el->basesInItems,  el->sampleCount,  el->basesInSample,  el->sampleBed,  el->mapRatio,  el->sampleCoverage,  el->depth,  el->singleQaStatus,  el->replicateQaStatus,  el->part,  el->pairedEnd,  el->qaVersion,  el->uniqueMapRatio);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -2124,7 +2124,7 @@ ret->sampleCoverage = sqlDouble(row[16]);
 ret->depth = sqlDouble(row[17]);
 ret->singleQaStatus = sqlSigned(row[18]);
 ret->replicateQaStatus = sqlSigned(row[19]);
-ret->technicalReplicate = cloneString(row[20]);
+ret->part = cloneString(row[20]);
 ret->pairedEnd = cloneString(row[21]);
 ret->qaVersion = sqlSigned(row[22]);
 ret->uniqueMapRatio = sqlDouble(row[23]);
@@ -2196,7 +2196,7 @@ ret->sampleCoverage = sqlDoubleComma(&s);
 ret->depth = sqlDoubleComma(&s);
 ret->singleQaStatus = sqlSignedComma(&s);
 ret->replicateQaStatus = sqlSignedComma(&s);
-ret->technicalReplicate = sqlStringComma(&s);
+ret->part = sqlStringComma(&s);
 ret->pairedEnd = sqlStringComma(&s);
 ret->qaVersion = sqlSignedComma(&s);
 ret->uniqueMapRatio = sqlDoubleComma(&s);
@@ -2219,7 +2219,7 @@ freeMem(el->validKey);
 freeMem(el->enrichedIn);
 freeMem(el->ucscDb);
 freeMem(el->sampleBed);
-freeMem(el->technicalReplicate);
+freeMem(el->part);
 freeMem(el->pairedEnd);
 freez(pEl);
 }
@@ -2299,7 +2299,7 @@ fputc(sep,f);
 fprintf(f, "%d", el->replicateQaStatus);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->technicalReplicate);
+fprintf(f, "%s", el->part);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
