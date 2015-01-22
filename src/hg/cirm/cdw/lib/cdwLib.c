@@ -782,6 +782,8 @@ boolean cdwIsSupportedBigBedFormat(char *format)
 /* Return TRUE if it's one of the bigBed formats we support. */
 {
 int i;
+if (sameString(format, "bigBed"))   // Generic bigBed ok
+    return TRUE;
 for (i=0; i<cdwBedTypeCount; ++i)
     {
     if (sameString(format, cdwBedTypeTable[i].name))
@@ -1107,7 +1109,7 @@ dyStringPrintf(dy, " sampleCoverage=%g,", el->sampleCoverage);
 dyStringPrintf(dy, " depth=%g,", el->depth);
 dyStringPrintf(dy, " singleQaStatus=0,");
 dyStringPrintf(dy, " replicateQaStatus=0,");
-dyStringPrintf(dy, " technicalReplicate='%s',", el->technicalReplicate);
+dyStringPrintf(dy, " part='%s',", el->part);
 dyStringPrintf(dy, " pairedEnd='%s',", el->pairedEnd);
 dyStringPrintf(dy, " qaVersion='%d',", el->qaVersion);
 dyStringPrintf(dy, " uniqueMapRatio=%g", el->uniqueMapRatio);
@@ -1140,7 +1142,7 @@ vf->replicate = cloneString(findTagOrEmpty(tags, "replicate"));
 vf->validKey = cloneString(hashFindVal(tags->hash, "valid_key"));
 vf->enrichedIn = cloneString(findTagOrEmpty(tags, "enriched_in"));
 vf->ucscDb = cloneString(findTagOrEmpty(tags, "ucsc_db"));
-vf->technicalReplicate = cloneString(findTagOrEmpty(tags, "technical_replicate"));
+vf->part = cloneString(findTagOrEmpty(tags, "part"));
 vf->pairedEnd = cloneString(findTagOrEmpty(tags, "paired_end"));
 #if (CDWVALIDFILE_NUM_COLS != 24)
    #error "Please update this routine with new column"
@@ -1522,8 +1524,8 @@ char query[1024];
 sqlSafef(query, sizeof(query), 
     "select cdwValidFile.* from cdwValidFile join cdwFile on cdwValidFile.fileId=cdwFile.id"
     " where experiment='%s' and outputType='%s' and replicate='%s' "
-    " and technicalReplicate='%s' and pairedEnd='%s' and itemCount=%lld and deprecated=''"
-    , vf->experiment, vf->outputType, vf->replicate, vf->technicalReplicate, otherEnd
+    " and part='%s' and pairedEnd='%s' and itemCount=%lld and deprecated=''"
+    , vf->experiment, vf->outputType, vf->replicate, vf->part, otherEnd
     , vf->itemCount);
 struct cdwValidFile *otherVf = cdwValidFileLoadByQuery(conn, query);
 if (otherVf == NULL)

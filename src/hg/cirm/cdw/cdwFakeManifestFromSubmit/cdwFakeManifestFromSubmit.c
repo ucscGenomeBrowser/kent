@@ -52,7 +52,7 @@ va_end(args);
 void printSharedHeader(FILE *f)
 /* Print out part of header shared by manifest and validated.txt */
 {
-fprintf(f, "#file_name\tformat\toutput_type\texperiment\tenriched_in\tucsc_db\treplicate\ttechnical_replicate\tpaired_end");
+fprintf(f, "#file_name\tformat\toutput_type\texperiment\tenriched_in\tucsc_db\treplicate\tpart\tpaired_end");
 }
 
 void cdwFakeManifestFromSubmit(char *submitIdString, char *outDir)
@@ -109,7 +109,7 @@ for (ef = efList; ef != NULL; ef = ef->next)
 	fprint2(maniF, valiF, "\t%s", naForEmpty(vf->enrichedIn));
 	fprint2(maniF, valiF, "\t%s", naForEmpty(vf->ucscDb));
 	fprint2(maniF, valiF, "\t%s", naForEmpty(vf->replicate));
-	fprint2(maniF, valiF, "\t%s", naForEmpty(vf->technicalReplicate));
+	fprint2(maniF, valiF, "\t%s", naForEmpty(vf->part));
 	fprint2(maniF, valiF, "\t%s", naForEmpty(vf->pairedEnd));
 	fprintf(maniF, "\n");
 
