@@ -10899,13 +10899,13 @@ foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Y)
     >> S1.len
 end
 
-# NOTE: in futrure, use /hive/data/genomes/mm10/chrom.sizes for S1.len 
+# NOTE: in future, use /hive/data/genomes/mm10/chrom.sizes for S1.len 
 # and just remove randoms and chrM. 
 cd /hive/groups/gencode/pseudogenes/retroFinder/mm10.20150102
 mkdir mrnaBlastz
 cd mrnaBlastz
 cp ../DEF .
-cp /hive/data/genomes/mm10/bed/mrnaBlastz.6/S1.len
+cp /hive/data/genomes/mm10/bed/mrnaBlastz.6/S1.len .
 
 screen
 # Run steps 1 to 5 of RetroFinder pipeline from scripts in CCDS SVN source tree:
