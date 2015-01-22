@@ -15,11 +15,13 @@ All mRNAs of a species from GenBank were aligned to the genome using
 <a href="http://www.bx.psu.edu/~rsharris/lastz/" target="_blank">lastz</a>
 (Miller lab, Pennsylvania State University). mRNAs that aligned twice in the genome
 (once with introns and once without introns) were initially screened. Next, a series
-of features were scored to determine candidates for retrotransposition events. These
-features included position and length of the polyA tail, degree of synteny with human,
-coverage of repetitive elements, number of exons that can still be aligned to the
-retrogene and degree of divergence from the parent gene. Retrogenes were classified
-using a threshold score function that is a linear combination of this set of features.
+of features were scored to determine candidates for retrotransposition events. 
+These features included position and length of the polyA tail, percent coverage of the 
+retrogene alignment to the parent, degree of synteny with mouse, coverage of repetitive 
+elements, number of exons that can still be aligned to the retrogene, number of putative 
+introns removed at the retrogene locus and degree of divergence from the parent gene.
+Retrogenes were classified using a threshold score function that is a linear combination 
+of this set of features.
 Retrogenes in the final set were selected using a score threshold based on a ROC plot
 against the <a href="http://vega.sanger.ac.uk" target="_blank">Vega</a> annotated
 pseudogenes.
@@ -49,7 +51,7 @@ pseudogenes.
     <li><em>expressed shuffle</em> indicates that the retrogene was inserted into
     a pre-existing annotated gene.</li>
   </ul>
-  <li><b>Score:</b> Based on features of the potential retrogene.</li>
+  <li><b>Score:</b> Weighted sum of features (mentioned above) of the potential retrogene.</li>
   <li><b>Percent Gene Alignment Coverage (Bases Matching Parent):</b> Shows
   the percentage of the parent gene aligning to this region.</li>
   <li><b>Intron Count:</b> Number of introns is the number of gaps in
@@ -75,11 +77,15 @@ Retrogenes inserted into the genome since the mouse/human divergence show a brea
 in the human genome syntenic net alignments to the mouse genome. A break in orthology score is 
 calculated and weighted before contributing to the final retrogene score. The break in orthology score
 ranges from 0-130 and it represents the portion of the genome that is missing in each species relative
-to the reference genome (mouse mm10) at the retrogene locus as defined by syntenic
+to the reference genome (human hg38) at the retrogene locus as defined by syntenic
 alignment nets. If the score is 0, there is orthologous DNA and no break in ortholog with the other species; this 
 could be an ancient retrogene; duplicated pseudogenes may also score low because they are often generated 
 via large segmental duplication events so the size of the pseudogene is small relative to the size of the 
-inserted duplicated sequence. Breaks in orthology with human and dog tend to be due to genomic
+inserted duplicated sequence. Scores greater than 100 represent cases where the retrogene alignment has no 
+flanking alignment resulting from an ancient insertion or other complex rearrangement.
+</p>
+<p>
+Breaks in orthology with human and dog tend to be due to genomic
 insertions in the rodent lineage so sequence gaps are not treated as orthology breaks. 
 Relative orthology of human/mouse and dog/mouse nets are used to avoid false positives due to deletions 
 in the human genome. Since older retrogenes will not show a break in orthology, this feature is 
