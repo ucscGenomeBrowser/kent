@@ -266,6 +266,7 @@ showDiffBasesAllScales .
 showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
+dataVersion Jan. 2015
 
 searchName ucscRetroInfoRefSeq6
 searchTable ucscRetroAli6
