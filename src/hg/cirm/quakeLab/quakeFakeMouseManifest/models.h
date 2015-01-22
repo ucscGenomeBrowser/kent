@@ -17,7 +17,7 @@ struct quakeSample
     char *subdir;	/* Subdirectory where files live */
     char *fluidPlateAcc;	/* Shorter 5 char accession corresponding to plate? */
     unsigned unknown1;	/* Seems to be number 1-8 with some gaps */
-    char *unknown2;	/* Form like 151 (8) (8) 151 or 101 (6) 101 */
+    char *seqFormat;	/* Form like 151 (8) (8) 151 or 101 (6) 101 */
     char *sequencer;	/* Looks like a sequencing machine id */
     char *sample;	/* Looks like a unique ID for each sample */
     char *user;	/* User name */
