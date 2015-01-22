@@ -329,6 +329,14 @@ cat > makeInputs.csh << 'EOF'
     csh makeInputs.csh > inputs.tab
     hgLoadSqlTab hg38 uwEnc2DnaseInputs ~/kent/src/hg/lib/clusterInputEapDnase.sql inputs.tab
 
+    # try bigBed version
+    sed 's/BedPeaks/Peaks/' inputs.tab > bigInputs.tab
+    hgsql hg38 -e 'alter table uwEnc2DnaseInputs rename to uwEnc2DnaseInputs_old'
+    hgLoadSqlTab hg38 uwEnc2DnaseInputs ~/kent/src/hg/lib/clusterInputEapDnase.sql bigInputs.tab
+
+    #Hmm, hgc peakClusters doesn't appear to work with bigBed peak files...
+    # Revert trackDb to BED peak files
+
 
 #################
 # Cell table (use for cell metadata, instead of metaDb)
@@ -353,3 +361,14 @@ cat > makeInputs.csh << 'EOF'
     tail -n +2 wgEncodeCellUrl.tsv | \
         nl -v 0 | \
         hgLoadSqlTab hgFixed wgEncodeCell ~/kent/src/hg/lib/encode/wgEncodeCell.sql stdin
+
+# Treatment table
+
+    # create term/description tab sep file (currently just treatments in UW DNase)
+    cd /hive/data/genomes/hg38/bed/uwDnase1
+    cd cells
+    tail -n +2 treatments.tab | \
+        nl -v 0 | \
+        hgLoadSqlTab hgFixed wgEncodeTreatment ~/kent/src/hg/lib/encode/wgEncodeTreatment.sql stdin
+
+

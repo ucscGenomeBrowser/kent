@@ -819,765 +819,671 @@ priority 100.3
     scoreFilterLimits 0:1000
     spectrum on
     minGrayLevel 2
+    type narrowPeak
 
-	track uwEnc2DnasePeaksWgEncodeEH000484
+	track uwEnc2DnaseBedPeaksWgEncodeEH000484
 	parent uwEnc2DnasePeaks on
 	shortLabel K562 Pk
 	longLabel K562 lymphoblast chronic myeloid leukemia (CML) cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=K562 treatment=n_a tissue=bone_marrow cancer=cancer
-	type bigBed 6 +
 	color 255,85,85
 
-	track uwEnc2DnasePeaksWgEncodeEH001180
+	track uwEnc2DnaseBedPeaksWgEncodeEH001180
 	parent uwEnc2DnasePeaks off
 	shortLabel A549 Pk
 	longLabel A549 lung adenocarcinoma cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=A549 treatment=n_a tissue=lung cancer=cancer
-	type bigBed 6 +
 	color 254,93,85
 
-	track uwEnc2DnasePeaksWgEncodeEH001187
+	track uwEnc2DnaseBedPeaksWgEncodeEH001187
 	parent uwEnc2DnasePeaks off
 	shortLabel LNCaP Pk
 	longLabel LNCaP prostate adenocarcinoma cell lline DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=LNCaP treatment=n_a tissue=prostate cancer=cancer
-	type bigBed 6 +
 	color 255,102,85
 
-	track uwEnc2DnasePeaksWgEncodeEH000503
+	track uwEnc2DnaseBedPeaksWgEncodeEH000503
 	parent uwEnc2DnasePeaks off
 	shortLabel HMEC Pk
 	longLabel HMEC mammary epithelium DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HMEC treatment=n_a tissue=breast cancer=normal
-	type bigBed 6 +
 	color 255,112,85
 
-	track uwEnc2DnasePeaksWgEncodeEH002583
+	track uwEnc2DnaseBedPeaksWgEncodeEH002583
 	parent uwEnc2DnasePeaks off
 	shortLabel T-47D Pk
 	longLabel T-47D mammary ductal carcinoma cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=T-47D treatment=n_a tissue=breast cancer=cancer
-	type bigBed 6 +
 	color 255,124,85
 
-	track uwEnc2DnasePeaksWgEncodeEH000500
+	track uwEnc2DnaseBedPeaksWgEncodeEH000500
 	parent uwEnc2DnasePeaks off
 	shortLabel PANC-1 Pk
 	longLabel PANC-1 pancreatic carcinoma cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=PANC-1 treatment=n_a tissue=pancreas cancer=cancer
-	type bigBed 6 +
 	color 255,141,85
 
-	track uwEnc2DnasePeaksWgEncodeEH001162
+	track uwEnc2DnaseBedPeaksWgEncodeEH001162
 	parent uwEnc2DnasePeaks on
 	shortLabel HCT-116 Pk
 	longLabel HCT-116 colorectal carcinoma cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HCT-116 treatment=n_a tissue=colon cancer=cancer
-	type bigBed 6 +
 	color 255,150,85
 
-	track uwEnc2DnasePeaksWgEncodeEH002582
+	track uwEnc2DnaseBedPeaksWgEncodeEH002582
 	parent uwEnc2DnasePeaks off
 	shortLabel NHBE_RA Pk
 	longLabel NHBE_RA bronchial epithelium, RA treated DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=NHBE_RA treatment=n_a tissue=lung cancer=normal
-	type bigBed 6 +
 	color 255,154,85
 
-	track uwEnc2DnasePeaksWgEncodeEH001193
+	track uwEnc2DnaseBedPeaksWgEncodeEH001193
 	parent uwEnc2DnasePeaks off
 	shortLabel HFF Pk
 	longLabel HFF foreskin fibroblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HFF treatment=n_a tissue=skin cancer=normal
-	type bigBed 6 +
 	color 255,163,85
 
-	track uwEnc2DnasePeaksWgEncodeEH001194
+	track uwEnc2DnaseBedPeaksWgEncodeEH001194
 	parent uwEnc2DnasePeaks off
 	shortLabel HFF-Myc Pk
 	longLabel HFF-Myc foreskin fibroblast cell line, cMyc DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HFF-Myc treatment=n_a tissue=skin cancer=normal
-	type bigBed 6 +
 	color 255,165,85
 
-	track uwEnc2DnasePeaksWgEncodeEH001887
+	track uwEnc2DnaseBedPeaksWgEncodeEH001887
 	parent uwEnc2DnasePeaks off
 	shortLabel NT2-D1 Pk
 	longLabel NT2-D1 embryonal carcinoma (NTera2) cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=NT2-D1 treatment=n_a tissue=testis cancer=cancer
-	type bigBed 6 +
 	color 255,173,85
 
-	track uwEnc2DnasePeaksWgEncodeEH000487
+	track uwEnc2DnaseBedPeaksWgEncodeEH000487
 	parent uwEnc2DnasePeaks off
 	shortLabel BJ Pk
 	longLabel BJ foreskin fibroblast cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=BJ treatment=n_a tissue=skin cancer=normal
-	type bigBed 6 +
 	color 255,184,85
 
-	track uwEnc2DnasePeaksWgEncodeEH000507
+	track uwEnc2DnaseBedPeaksWgEncodeEH000507
 	parent uwEnc2DnasePeaks off
 	shortLabel AG09309 Pk
 	longLabel AG09309 skin fibroblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=AG09309 treatment=n_a tissue=skin cancer=unknown
-	type bigBed 6 +
 	color 255,186,85
 
-	track uwEnc2DnasePeaksWgEncodeEH000516
+	track uwEnc2DnaseBedPeaksWgEncodeEH000516
 	parent uwEnc2DnasePeaks off
 	shortLabel HNPCEpiC Pk
 	longLabel HNPCEpiC non-pigmented ciliary epithelium (NPCEC) DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HNPCEpiC treatment=n_a tissue=eye cancer=normal
-	type bigBed 6 +
 	color 255,188,85
 
-	track uwEnc2DnasePeaksWgEncodeEH001197
+	track uwEnc2DnaseBedPeaksWgEncodeEH001197
 	parent uwEnc2DnasePeaks off
 	shortLabel WI-38 Pk
 	longLabel WI-38 embryonic lung fibroblast cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=WI-38 treatment=n_a tissue=lung cancer=normal
-	type bigBed 6 +
 	color 255,192,85
 
-	track uwEnc2DnasePeaksWgEncodeEH002574
+	track uwEnc2DnaseBedPeaksWgEncodeEH002574
 	parent uwEnc2DnasePeaks off
 	shortLabel GM04503 Pk
 	longLabel GM04503 skin fibroblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=GM04503 treatment=n_a tissue=skin cancer=normal
-	type bigBed 6 +
 	color 255,200,85
 
-	track uwEnc2DnasePeaksWgEncodeEH002575
+	track uwEnc2DnaseBedPeaksWgEncodeEH002575
 	parent uwEnc2DnasePeaks off
 	shortLabel GM04504 Pk
 	longLabel GM04504 skin fibroblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=GM04504 treatment=n_a tissue=skin cancer=normal
-	type bigBed 6 +
 	color 255,204,85
 
-	track uwEnc2DnasePeaksWgEncodeEH000521
+	track uwEnc2DnaseBedPeaksWgEncodeEH000521
 	parent uwEnc2DnasePeaks off
 	shortLabel NHLF Pk
 	longLabel NHLF lung fibroblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=NHLF treatment=n_a tissue=lung cancer=normal
-	type bigBed 6 +
 	color 255,209,85
 
-	track uwEnc2DnasePeaksWgEncodeEH001179
+	track uwEnc2DnaseBedPeaksWgEncodeEH001179
 	parent uwEnc2DnasePeaks on
 	shortLabel NH-A Pk
 	longLabel NH-A astrocyte DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=NH-A treatment=n_a tissue=brain cancer=normal
-	type bigBed 6 +
 	color 255,210,85
 
-	track uwEnc2DnasePeaksWgEncodeEH001178
+	track uwEnc2DnaseBedPeaksWgEncodeEH001178
 	parent uwEnc2DnasePeaks off
 	shortLabel HBMEC Pk
 	longLabel HBMEC brain microvascular endothelial cell (MEC) DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HBMEC treatment=n_a tissue=blood_vessel cancer=normal
-	type bigBed 6 +
 	color 255,214,85
 
-	track uwEnc2DnasePeaksWgEncodeEH000508
+	track uwEnc2DnaseBedPeaksWgEncodeEH000508
 	parent uwEnc2DnasePeaks off
 	shortLabel AG09319 Pk
 	longLabel AG09319 gingival fibroblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=AG09319 treatment=n_a tissue=periodontium cancer=normal
-	type bigBed 6 +
 	color 255,221,85
 
-	track uwEnc2DnasePeaksWgEncodeEH001175
+	track uwEnc2DnaseBedPeaksWgEncodeEH001175
 	parent uwEnc2DnasePeaks off
 	shortLabel HPdLF Pk
 	longLabel HPdLF periodontal ligament fibroblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HPdLF treatment=n_a tissue=periodontium cancer=normal
-	type bigBed 6 +
 	color 255,224,85
 
-	track uwEnc2DnasePeaksWgEncodeEH000513
+	track uwEnc2DnaseBedPeaksWgEncodeEH000513
 	parent uwEnc2DnasePeaks off
 	shortLabel HCF Pk
 	longLabel HCF cardiac fibroblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HCF treatment=n_a tissue=heart cancer=normal
-	type bigBed 6 +
 	color 255,229,85
 
-	track uwEnc2DnasePeaksWgEncodeEH000519
+	track uwEnc2DnaseBedPeaksWgEncodeEH000519
 	parent uwEnc2DnasePeaks off
 	shortLabel HCM Pk
 	longLabel HCM cardiac myocyte DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HCM treatment=n_a tissue=heart cancer=normal
-	type bigBed 6 +
 	color 255,230,85
 
-	track uwEnc2DnasePeaksWgEncodeEH001173
+	track uwEnc2DnaseBedPeaksWgEncodeEH001173
 	parent uwEnc2DnasePeaks off
 	shortLabel HPAF Pk
 	longLabel HPAF pulmonary artery fibroblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HPAF treatment=n_a tissue=blood_vessel cancer=normal
-	type bigBed 6 +
 	color 255,232,85
 
-	track uwEnc2DnasePeaksWgEncodeEH001161
+	track uwEnc2DnaseBedPeaksWgEncodeEH001161
 	parent uwEnc2DnasePeaks off
 	shortLabel AoAF Pk
 	longLabel AoAF aorta fibroblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=AoAF treatment=n_a tissue=blood_vessel cancer=normal
-	type bigBed 6 +
 	color 255,236,85
 
-	track uwEnc2DnasePeaksWgEncodeEH000514
+	track uwEnc2DnaseBedPeaksWgEncodeEH000514
 	parent uwEnc2DnasePeaks off
 	shortLabel HCPEpiC Pk
 	longLabel HCPEpiC choroid plexus epithelium DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HCPEpiC treatment=n_a tissue=brain cancer=normal
-	type bigBed 6 +
 	color 255,242,85
 
-	track uwEnc2DnasePeaksWgEncodeEH001174
+	track uwEnc2DnaseBedPeaksWgEncodeEH001174
 	parent uwEnc2DnasePeaks off
 	shortLabel HPF Pk
 	longLabel HPF pulmonary fibroblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HPF treatment=n_a tissue=lung cancer=normal
-	type bigBed 6 +
 	color 255,247,85
 
-	track uwEnc2DnasePeaksWgEncodeEH001165
+	track uwEnc2DnaseBedPeaksWgEncodeEH001165
 	parent uwEnc2DnasePeaks off
 	shortLabel HConF Pk
 	longLabel HConF conjunctival fibroblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HConF treatment=n_a tissue=eye cancer=unknown
-	type bigBed 6 +
 	color 255,252,85
 
-	track uwEnc2DnasePeaksWgEncodeEH001192
+	track uwEnc2DnaseBedPeaksWgEncodeEH001192
 	parent uwEnc2DnasePeaks off
 	shortLabel HAc Pk
 	longLabel HAc cerebellar astrocyte DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HAc treatment=n_a tissue=brain cancer=normal
-	type bigBed 6 +
 	color 250,255,85
 
-	track uwEnc2DnasePeaksWgEncodeEH001176
+	track uwEnc2DnaseBedPeaksWgEncodeEH001176
 	parent uwEnc2DnasePeaks off
 	shortLabel HVMF Pk
 	longLabel HVMF villous mesenchymal fibroblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HVMF treatment=n_a tissue=placenta cancer=normal
-	type bigBed 6 +
 	color 242,255,85
 
-	track uwEnc2DnasePeaksWgEncodeEH001184
+	track uwEnc2DnaseBedPeaksWgEncodeEH001184
 	parent uwEnc2DnasePeaks off
 	shortLabel HIPEpiC Pk
 	longLabel HIPEpiC iris pigment epithelium DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HIPEpiC treatment=n_a tissue=eye cancer=normal
-	type bigBed 6 +
 	color 236,255,85
 
-	track uwEnc2DnasePeaksWgEncodeEH003031
+	track uwEnc2DnaseBedPeaksWgEncodeEH003031
 	parent uwEnc2DnasePeaks off
 	shortLabel bone_marrow_MSC Pk
 	longLabel bone_marrow_MSC bone marrow fibroblastoid DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=bone_marrow_MSC treatment=n_a tissue=bone_marrow cancer=normal
-	type bigBed 6 +
 	color 228,255,85
 
-	track uwEnc2DnasePeaksWgEncodeEH000509
+	track uwEnc2DnaseBedPeaksWgEncodeEH000509
 	parent uwEnc2DnasePeaks off
 	shortLabel AG10803 Pk
 	longLabel AG10803 skin fibroblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=AG10803 treatment=n_a tissue=skin cancer=unknown
-	type bigBed 6 +
 	color 220,255,85
 
-	track uwEnc2DnasePeaksWgEncodeEH001166
+	track uwEnc2DnaseBedPeaksWgEncodeEH001166
 	parent uwEnc2DnasePeaks off
 	shortLabel HMF Pk
 	longLabel HMF mammary fibroblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HMF treatment=n_a tissue=breast cancer=unknown
-	type bigBed 6 +
 	color 212,255,85
 
-	track uwEnc2DnasePeaksWgEncodeEH000504
+	track uwEnc2DnaseBedPeaksWgEncodeEH000504
 	parent uwEnc2DnasePeaks off
 	shortLabel HGF Pk
 	longLabel HGF gingival fibroblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HGF treatment=n_a tissue=periodontum cancer=normal
-	type bigBed 6 +
 	color 204,255,85
 
-	track uwEnc2DnasePeaksWgEncodeEH000518
+	track uwEnc2DnaseBedPeaksWgEncodeEH000518
 	parent uwEnc2DnasePeaks off
 	shortLabel NHDF-neo Pk
 	longLabel NHDF-neo dermal fibroblast, neonate DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=NHDF-neo treatment=n_a tissue=skin cancer=normal
-	type bigBed 6 +
 	color 198,255,85
 
-	track uwEnc2DnasePeaksWgEncodeEH000512
+	track uwEnc2DnaseBedPeaksWgEncodeEH000512
 	parent uwEnc2DnasePeaks off
 	shortLabel HAEpiC Pk
 	longLabel HAEpiC amniotic epithelium (AEC) DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HAEpiC treatment=n_a tissue=embryo cancer=normal
-	type bigBed 6 +
 	color 189,255,85
 
-	track uwEnc2DnasePeaksWgEncodeEH000490
+	track uwEnc2DnaseBedPeaksWgEncodeEH000490
 	parent uwEnc2DnasePeaks off
 	shortLabel SKMC Pk
 	longLabel SKMC skeletal muscle cell DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=SKMC treatment=n_a tissue=muscle cancer=normal
-	type bigBed 6 +
 	color 182,255,85
 
-	track uwEnc2DnasePeaksWgEncodeEH002580
+	track uwEnc2DnaseBedPeaksWgEncodeEH002580
 	parent uwEnc2DnasePeaks off
 	shortLabel HBVSMC Pk
 	longLabel HBVSMC brain vascular smooth muscle DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HBVSMC treatment=n_a tissue=blood_vessel cancer=normal
-	type bigBed 6 +
 	color 176,255,85
 
-	track uwEnc2DnasePeaksWgEncodeEH000505
+	track uwEnc2DnaseBedPeaksWgEncodeEH000505
 	parent uwEnc2DnasePeaks off
 	shortLabel AG04449 Pk
 	longLabel AG04449 fetal skin fibroblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=AG04449 treatment=n_a tissue=skin cancer=normal
-	type bigBed 6 +
 	color 152,255,85
 
-	track uwEnc2DnasePeaksWgEncodeEH000506
+	track uwEnc2DnaseBedPeaksWgEncodeEH000506
 	parent uwEnc2DnasePeaks on
 	shortLabel AG04450 Pk
 	longLabel AG04450 fetal lung fibroblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=AG04450 treatment=n_a tissue=lung cancer=normal
-	type bigBed 6 +
 	color 144,255,85
 
-	track uwEnc2DnasePeaksWgEncodeEH001191
+	track uwEnc2DnaseBedPeaksWgEncodeEH001191
 	parent uwEnc2DnasePeaks off
 	shortLabel HA-h Pk
 	longLabel HA-h hippocampal astrocyte DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HA-h treatment=n_a tissue=brain cancer=normal
-	type bigBed 6 +
 	color 122,255,85
 
-	track uwEnc2DnasePeaksWgEncodeEH002581
+	track uwEnc2DnaseBedPeaksWgEncodeEH002581
 	parent uwEnc2DnasePeaks off
 	shortLabel M059J Pk
 	longLabel M059J glioblastoma cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=M059J treatment=n_a tissue=brain cancer=cancer
-	type bigBed 6 +
 	color 96,255,85
 
-	track uwEnc2DnasePeaksWgEncodeEH003007
+	track uwEnc2DnaseBedPeaksWgEncodeEH003007
 	parent uwEnc2DnasePeaks off
 	shortLabel RPMI-7951 Pk
 	longLabel RPMI-7951 melanoma cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=RPMI-7951 treatment=n_a tissue=skin cancer=cancer
-	type bigBed 6 +
 	color 85,255,90
 
-	track uwEnc2DnasePeaksWgEncodeEH001183
+	track uwEnc2DnaseBedPeaksWgEncodeEH001183
 	parent uwEnc2DnasePeaks off
 	shortLabel HA-sp Pk
 	longLabel HA-sp spinal cord astrocyte DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HA-sp treatment=n_a tissue=spinal_cord cancer=normal
-	type bigBed 6 +
 	color 85,255,124
 
-	track uwEnc2DnasePeaksWgEncodeEH001164
+	track uwEnc2DnaseBedPeaksWgEncodeEH001164
 	parent uwEnc2DnasePeaks off
 	shortLabel HCFaa Pk
 	longLabel HCFaa cardiac fibroblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HCFaa treatment=n_a tissue=heart cancer=normal
-	type bigBed 6 +
 	color 85,255,150
 
-	track uwEnc2DnasePeaksWgEncodeEH001198
+	track uwEnc2DnaseBedPeaksWgEncodeEH001198
 	parent uwEnc2DnasePeaks off
 	shortLabel WI-38 40HTAM Pk
 	longLabel WI-38 embryonic lung fibroblast cell line (40HTAM) DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=WI-38 treatment=OHTAM_20nM_72hr tissue=lung cancer=normal
-	type bigBed 6 +
 	color 85,255,171
 
-	track uwEnc2DnasePeaksWgEncodeEH001177
+	track uwEnc2DnaseBedPeaksWgEncodeEH001177
 	parent uwEnc2DnasePeaks off
 	shortLabel NHDF-Ad Pk
 	longLabel NHDF-Ad dermal fibroblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=NHDF-Ad treatment=n_a tissue=skin cancer=normal
-	type bigBed 6 +
 	color 85,255,180
 
-	track uwEnc2DnasePeaksWgEncodeEH001185
+	track uwEnc2DnaseBedPeaksWgEncodeEH001185
 	parent uwEnc2DnasePeaks off
 	shortLabel HSMM Pk
 	longLabel HSMM skeletal muscle myoblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HSMM treatment=n_a tissue=muscle cancer=normal
-	type bigBed 6 +
 	color 85,255,190
 
-	track uwEnc2DnasePeaksWgEncodeEH003005
+	track uwEnc2DnaseBedPeaksWgEncodeEH003005
 	parent uwEnc2DnasePeaks off
 	shortLabel LHCN-M2 Pk
 	longLabel LHCN-M2 skeletal myoblast DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=LHCN-M2 treatment=n_a tissue=muscle cancer=unknown
-	type bigBed 6 +
 	color 85,255,193
 
-	track uwEnc2DnasePeaksWgEncodeEH003006
+	track uwEnc2DnaseBedPeaksWgEncodeEH003006
 	parent uwEnc2DnasePeaks off
 	shortLabel LHCN-M2 diff 4d Pk
 	longLabel LHCN-M2 skeletal myoblast (diff 4d) DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=LHCN-M2 treatment=DIFF_4d tissue=muscle cancer=unknown
-	type bigBed 6 +
 	color 85,255,198
 
-	track uwEnc2DnasePeaksWgEncodeEH001186
+	track uwEnc2DnaseBedPeaksWgEncodeEH001186
 	parent uwEnc2DnasePeaks off
 	shortLabel HSMMtube Pk
 	longLabel HSMMtube skeletal muscle myotube DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HSMMtube treatment=n_a tissue=muscle cancer=normal
-	type bigBed 6 +
 	color 85,255,204
 
-	track uwEnc2DnasePeaksWgEncodeEH000488
+	track uwEnc2DnaseBedPeaksWgEncodeEH000488
 	parent uwEnc2DnasePeaks on
 	shortLabel HUVEC Pk
 	longLabel HUVEC umbilical vein endothelial cell DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HUVEC treatment=n_a tissue=blood_vessel cancer=normal
-	type bigBed 6 +
 	color 85,255,215
 
-	track uwEnc2DnasePeaksWgEncodeEH001163
+	track uwEnc2DnaseBedPeaksWgEncodeEH001163
 	parent uwEnc2DnasePeaks off
 	shortLabel HMVEC-LBl Pk
 	longLabel HMVEC-LBl lung microvascular epithelium. blood DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HMVEC-LBl treatment=n_a tissue=blood_vessel cancer=normal
-	type bigBed 6 +
 	color 85,255,220
 
-	track uwEnc2DnasePeaksWgEncodeEH001168
+	track uwEnc2DnaseBedPeaksWgEncodeEH001168
 	parent uwEnc2DnasePeaks off
 	shortLabel HMVEC-dBl-Ad Pk
 	longLabel HMVEC-dBl-Ad dermal microvascular endothelial cell, blood DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HMVEC-dBl-Ad treatment=n_a tissue=blood_vessel cancer=normal
-	type bigBed 6 +
 	color 85,255,224
 
-	track uwEnc2DnasePeaksWgEncodeEH001171
+	track uwEnc2DnaseBedPeaksWgEncodeEH001171
 	parent uwEnc2DnasePeaks off
 	shortLabel HMVEC-dLy-Neo Pk
 	longLabel HMVEC-dLy-Neo dermal microvascular endothelial cell, neonate lymph DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HMVEC-dLy-Neo treatment=n_a tissue=blood_vessel cancer=normal
-	type bigBed 6 +
 	color 85,255,226
 
-	track uwEnc2DnasePeaksWgEncodeEH001169
+	track uwEnc2DnaseBedPeaksWgEncodeEH001169
 	parent uwEnc2DnasePeaks off
 	shortLabel HMVEC-dBl-Neo Pk
 	longLabel HMVEC-dBl-Neo dermal microvascular endothelial cell, neonate blood DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HMVEC-dBl-Neo treatment=n_a tissue=blood_vessel cancer=normal
-	type bigBed 6 +
 	color 85,255,229
 
-	track uwEnc2DnasePeaksWgEncodeEH001195
+	track uwEnc2DnaseBedPeaksWgEncodeEH001195
 	parent uwEnc2DnasePeaks off
 	shortLabel HRGEC Pk
 	longLabel HRGEC renal glomerular endothelial cell DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HRGEC treatment=n_a tissue=kidney cancer=normal
-	type bigBed 6 +
 	color 85,255,232
 
-	track uwEnc2DnasePeaksWgEncodeEH001167
+	track uwEnc2DnaseBedPeaksWgEncodeEH001167
 	parent uwEnc2DnasePeaks off
 	shortLabel HMVEC-LLy Pk
 	longLabel HMVEC-LLy lung microvascular endothelial cell, lymph DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HMVEC-LLy treatment=n_a tissue=blood_vessel cancer=normal
-	type bigBed 6 +
 	color 85,255,243
 
-	track uwEnc2DnasePeaksWgEncodeEH001172
+	track uwEnc2DnaseBedPeaksWgEncodeEH001172
 	parent uwEnc2DnasePeaks off
 	shortLabel HMVEC-dNeo Pk
 	longLabel HMVEC-dNeo dermal microvascular endothelial cell, neonate DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HMVEC-dNeo treatment=n_a tissue=blood_vessel cancer=normal
-	type bigBed 6 +
 	color 85,255,244
 
-	track uwEnc2DnasePeaksWgEncodeEH001889
+	track uwEnc2DnaseBedPeaksWgEncodeEH001889
 	parent uwEnc2DnasePeaks off
 	shortLabel HMVEC-dAd Pk
 	longLabel HMVEC-dAd dermal microvascular endothelial cell DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HMVEC-dAd treatment=n_a tissue=blood_vessel cancer=normal
-	type bigBed 6 +
 	color 85,255,246
 
-	track uwEnc2DnasePeaksWgEncodeEH000493
+	track uwEnc2DnaseBedPeaksWgEncodeEH000493
 	parent uwEnc2DnasePeaks off
 	shortLabel HRCEpiC Pk
 	longLabel HRCEpiC renal cortical epithelium DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HRCEpiC treatment=n_a tissue=kidney cancer=normal
-	type bigBed 6 +
 	color 85,251,255
 
-	track uwEnc2DnasePeaksWgEncodeEH000494
+	track uwEnc2DnaseBedPeaksWgEncodeEH000494
 	parent uwEnc2DnasePeaks off
 	shortLabel HRE Pk
 	longLabel HRE renal epithelium DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HRE treatment=n_a tissue=kidney cancer=normal
-	type bigBed 6 +
 	color 85,248,255
 
-	track uwEnc2DnasePeaksWgEncodeEH000499
+	track uwEnc2DnaseBedPeaksWgEncodeEH000499
 	parent uwEnc2DnasePeaks off
 	shortLabel NHEK Pk
 	longLabel NHEK epidermal keratinocyte DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=NHEK treatment=n_a tissue=skin cancer=normal
-	type bigBed 6 +
 	color 85,238,255
 
-	track uwEnc2DnasePeaksWgEncodeEH000501
+	track uwEnc2DnaseBedPeaksWgEncodeEH000501
 	parent uwEnc2DnasePeaks off
 	shortLabel SAEC Pk
 	longLabel SAEC small airway epithelium DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=SAEC treatment=n_a tissue=lung cancer=normal
-	type bigBed 6 +
 	color 85,231,255
 
-	track uwEnc2DnasePeaksWgEncodeEH001888
+	track uwEnc2DnaseBedPeaksWgEncodeEH001888
 	parent uwEnc2DnasePeaks off
 	shortLabel PrEC Pk
 	longLabel PrEC prostate epithelium DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=PrEC treatment=n_a tissue=prostate cancer=normal
-	type bigBed 6 +
 	color 85,226,255
 
-	track uwEnc2DnasePeaksWgEncodeEH000515
+	track uwEnc2DnaseBedPeaksWgEncodeEH000515
 	parent uwEnc2DnasePeaks off
 	shortLabel HEEpiC Pk
 	longLabel HEEpiC esophageal epithelium DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HEEpiC treatment=n_a tissue=esophagus cancer=normal
-	type bigBed 6 +
 	color 85,220,255
 
-	track uwEnc2DnasePeaksWgEncodeEH000481
+	track uwEnc2DnaseBedPeaksWgEncodeEH000481
 	parent uwEnc2DnasePeaks off
 	shortLabel GM06990 Pk
 	longLabel GM06990 B-lymphocyte, lymphoblastoid cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=GM06990 treatment=n_a tissue=blood cancer=unknown
-	type bigBed 6 +
 	color 85,205,255
 
-	track uwEnc2DnasePeaksWgEncodeEH000482
+	track uwEnc2DnaseBedPeaksWgEncodeEH000482
 	parent uwEnc2DnasePeaks on
 	shortLabel HepG2 Pk
 	longLabel HepG2 hepatocellular carcinoma cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HepG2 treatment=n_a tissue=liver cancer=cancer
-	type bigBed 6 +
 	color 85,198,255
 
-	track uwEnc2DnasePeaksWgEncodeEH000486
+	track uwEnc2DnaseBedPeaksWgEncodeEH000486
 	parent uwEnc2DnasePeaks off
 	shortLabel Caco-2 Pk
 	longLabel Caco-2 colon adenocarcinoma cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=Caco-2 treatment=n_a tissue=colon cancer=cancer
-	type bigBed 6 +
 	color 85,193,255
 
-	track uwEnc2DnasePeaksWgEncodeEH000485
+	track uwEnc2DnaseBedPeaksWgEncodeEH000485
 	parent uwEnc2DnasePeaks off
 	shortLabel SK-N-SH_RA Pk
 	longLabel SK-N-SH_RA neuroblastoma cell line, RA treated DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=SK-N-SH_RA treatment=n_a tissue=brain cancer=cancer
-	type bigBed 6 +
 	color 85,189,255
 
-	track uwEnc2DnasePeaksWgEncodeEH001884
+	track uwEnc2DnaseBedPeaksWgEncodeEH001884
 	parent uwEnc2DnasePeaks off
 	shortLabel CD20+_RO01778 Pk
 	longLabel CD20+_RO01778 B-lymphocyte, CD20+ DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=CD20_RO01778 treatment=n_a tissue=blood cancer=normal
-	type bigBed 6 +
 	color 85,183,255
 
-	track uwEnc2DnasePeaksWgEncodeEH000483
+	track uwEnc2DnaseBedPeaksWgEncodeEH000483
 	parent uwEnc2DnasePeaks off
 	shortLabel Th1 Pk
 	longLabel Th1 T-lymphocyte, helper type 1 DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=Th1 treatment=n_a tissue=blood cancer=unknown
-	type bigBed 6 +
 	color 85,178,255
 
-	track uwEnc2DnasePeaksWgEncodeEH000491
+	track uwEnc2DnaseBedPeaksWgEncodeEH000491
 	parent uwEnc2DnasePeaks off
 	shortLabel Th2 Pk
 	longLabel Th2 T-lymphocyte, helper type 2 DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=Th2 treatment=n_a tissue=blood cancer=unknown
-	type bigBed 6 +
 	color 85,176,255
 
-	track uwEnc2DnasePeaksWgEncodeEH003022
+	track uwEnc2DnaseBedPeaksWgEncodeEH003022
 	parent uwEnc2DnasePeaks off
 	shortLabel Th1_Wb54553204 Pk
 	longLabel Th1_Wb54553204 T-lymphocyte, helper type 1 DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=Th1_Wb54553204 treatment=n_a tissue=blood cancer=normal
-	type bigBed 6 +
 	color 85,173,255
 
-	track uwEnc2DnasePeaksWgEncodeEH000497
+	track uwEnc2DnaseBedPeaksWgEncodeEH000497
 	parent uwEnc2DnasePeaks off
 	shortLabel Jurkat Pk
 	longLabel Jurkat T-lymphocyte acute leukemia cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=Jurkat treatment=n_a tissue=blood cancer=cancer
-	type bigBed 6 +
 	color 85,165,255
 
-	track uwEnc2DnasePeaksWgEncodeEH000492
+	track uwEnc2DnaseBedPeaksWgEncodeEH000492
 	parent uwEnc2DnasePeaks on
 	shortLabel GM12878 Pk
 	longLabel GM12878 B-lymphocyte, lymphoblastoid cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=GM12878 treatment=n_a tissue=blood cancer=normal
-	type bigBed 6 +
 	color 85,152,255
 
-	track uwEnc2DnasePeaksWgEncodeEH000520
+	track uwEnc2DnaseBedPeaksWgEncodeEH000520
 	parent uwEnc2DnasePeaks off
 	shortLabel GM12865 Pk
 	longLabel GM12865 B-lymphocyte, lymphoblastoid cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=GM12865 treatment=n_a tissue=blood cancer=unknown
-	type bigBed 6 +
 	color 85,147,255
 
-	track uwEnc2DnasePeaksWgEncodeEH001196
+	track uwEnc2DnaseBedPeaksWgEncodeEH001196
 	parent uwEnc2DnasePeaks off
 	shortLabel Monocytes-CD14+_RO01746 Pk
 	longLabel Monocytes-CD14+_RO01746 monocyte, CD14+ DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=Monocytes_CD14_RO01746 treatment=n_a tissue=blood cancer=normal
-	type bigBed 6 +
 	color 85,135,255
 
-	track uwEnc2DnasePeaksWgEncodeEH000489
+	track uwEnc2DnaseBedPeaksWgEncodeEH000489
 	parent uwEnc2DnasePeaks off
 	shortLabel HL-60 Pk
 	longLabel HL-60 acute promyelocytic leukemia (APL) cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HL-60 treatment=n_a tissue=blood cancer=cancer
-	type bigBed 6 +
 	color 85,124,255
 
-	track uwEnc2DnasePeaksWgEncodeEH000498
+	track uwEnc2DnaseBedPeaksWgEncodeEH000498
 	parent uwEnc2DnasePeaks off
 	shortLabel NB4 Pk
 	longLabel NB4 acute promyelocytic leukemia (APL) cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=NB4 treatment=n_a tissue=bone_marrow cancer=cancer
-	type bigBed 6 +
 	color 85,112,255
 
-	track uwEnc2DnasePeaksWgEncodeEH000511
+	track uwEnc2DnaseBedPeaksWgEncodeEH000511
 	parent uwEnc2DnasePeaks on
 	shortLabel H7-hESC Pk
 	longLabel H7-hESC embryonic stem cell DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=H7-hESC treatment=n_a tissue=embryo cancer=unknown
-	type bigBed 6 +
 	color 85,93,255
 
-	track uwEnc2DnasePeaksWgEncodeEH002578
+	track uwEnc2DnaseBedPeaksWgEncodeEH002578
 	parent uwEnc2DnasePeaks off
 	shortLabel H7-hESC diff 5d Pk
 	longLabel H7-hESC embryonic stem cell (diff 5d) DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=H7-hESC treatment=diffProtA_5d tissue=embryo cancer=unknown
-	type bigBed 6 +
 	color 85,88,255
 
-	track uwEnc2DnasePeaksWgEncodeEH002576
+	track uwEnc2DnaseBedPeaksWgEncodeEH002576
 	parent uwEnc2DnasePeaks off
 	shortLabel H7-hESC diff 14d Pk
 	longLabel H7-hESC embryonic stem cell (diff 14d) DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=H7-hESC treatment=diffProtA_14d tissue=embryo cancer=unknown
-	type bigBed 6 +
 	color 89,85,255
 
-	track uwEnc2DnasePeaksWgEncodeEH001188
+	track uwEnc2DnaseBedPeaksWgEncodeEH001188
 	parent uwEnc2DnasePeaks off
 	shortLabel RPTEC Pk
 	longLabel RPTEC renal proximal tubule epithelium DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=RPTEC treatment=n_a tissue=kidney cancer=normal
-	type bigBed 6 +
 	color 100,85,255
 
-	track uwEnc2DnasePeaksWgEncodeEH000517
+	track uwEnc2DnaseBedPeaksWgEncodeEH000517
 	parent uwEnc2DnasePeaks off
 	shortLabel HRPEpiC Pk
 	longLabel HRPEpiC retinal pigment epithelium DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HRPEpiC treatment=n_a tissue=eye cancer=normal
-	type bigBed 6 +
 	color 124,85,255
 
-	track uwEnc2DnasePeaksWgEncodeEH001170
+	track uwEnc2DnaseBedPeaksWgEncodeEH001170
 	parent uwEnc2DnasePeaks off
 	shortLabel HMVEC-dLy-Ad Pk
 	longLabel HMVEC-dLy-Ad dermal microvascular endothelial cell, lymph DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HMVEC-dLy-Ad treatment=n_a tissue=blood_vessel cancer=normal
-	type bigBed 6 +
 	color 133,85,255
 
-	track uwEnc2DnasePeaksWgEncodeEH000495
+	track uwEnc2DnaseBedPeaksWgEncodeEH000495
 	parent uwEnc2DnasePeaks on
 	shortLabel HeLa-S3 Pk
 	longLabel HeLa-S3 cervical epithelial adenocarcinoma cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=HeLa-S3 treatment=n_a tissue=cervix cancer=cancer
-	type bigBed 6 +
 	color 157,85,255
 
-	track uwEnc2DnasePeaksWgEncodeEH001189
+	track uwEnc2DnaseBedPeaksWgEncodeEH001189
 	parent uwEnc2DnasePeaks off
 	shortLabel SK-N-MC Pk
 	longLabel SK-N-MC neuroepithelioma cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=SK-N-MC treatment=n_a tissue=brain cancer=cancer
-	type bigBed 6 +
 	color 176,85,255
 
-	track uwEnc2DnasePeaksWgEncodeEH000502
+	track uwEnc2DnaseBedPeaksWgEncodeEH000502
 	parent uwEnc2DnasePeaks on
 	shortLabel MCF-7 Pk
 	longLabel MCF-7 mammary adenocarcinoma cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=MCF-7 treatment=n_a tissue=breast cancer=cancer
-	type bigBed 6 +
 	color 190,85,255
 
-	track uwEnc2DnasePeaksWgEncodeEH003017
+	track uwEnc2DnaseBedPeaksWgEncodeEH003017
 	parent uwEnc2DnasePeaks off
 	shortLabel MCF-7 estradi 1h Pk
 	longLabel MCF-7 mammary adenocarcinoma cell line (estradi 1h) DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=MCF-7 treatment=Estradiol_100nM_1hr tissue=breast cancer=cancer
-	type bigBed 6 +
 	color 192,85,255
 
-	track uwEnc2DnasePeaksWgEncodeEH003018
+	track uwEnc2DnaseBedPeaksWgEncodeEH003018
 	parent uwEnc2DnasePeaks off
 	shortLabel MCF-7 estradi 0h Pk
 	longLabel MCF-7 mammary adenocarcinoma cell line (estradi 0h) DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=MCF-7 treatment=Estradiol_ctrl_0hr tissue=breast cancer=cancer
-	type bigBed 6 +
 	color 192,85,255
 
-	track uwEnc2DnasePeaksWgEncodeEH001190
+	track uwEnc2DnaseBedPeaksWgEncodeEH001190
 	parent uwEnc2DnasePeaks off
 	shortLabel WERI-Rb-1 Pk
 	longLabel WERI-Rb-1 retinoblastoma cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=WERI-Rb-1 treatment=n_a tissue=eye cancer=cancer
-	type bigBed 6 +
 	color 211,85,255
 
-	track uwEnc2DnasePeaksWgEncodeEH001181
+	track uwEnc2DnaseBedPeaksWgEncodeEH001181
 	parent uwEnc2DnasePeaks off
 	shortLabel BE2_C Pk
 	longLabel BE2_C neuroblastoma cell line DNAseI HS Peaks from UW/ENCODE2
 	subGroups view=Peaks cellType=BE2_C treatment=n_a tissue=brain cancer=cancer
-	type bigBed 6 +
 	color 237,85,255
 
     track uwEnc2DnaseSignal

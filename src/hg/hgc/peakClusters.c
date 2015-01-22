@@ -115,8 +115,14 @@ webPrintLinkCellStart();
 struct trackDb *tdb = hashFindVal(trackHash, table);
 if (tdb == NULL)
     printf("%s info n/a", table);
-else
-    compositeMetadataToggle(database, tdb, "metadata", TRUE, FALSE);
+else if (!compositeMetadataToggle(database, tdb, "metadata", TRUE, FALSE))
+    {
+    /* no metadata, but there is a track table to point TB at */
+    struct trackDb *parent = trackDbTopLevelSelfOrParent(tdb);
+    printf("<A target='_blank' title='browse table' "
+                "href='%s?db=%s&hgta_table=%s&hgta_group=%s&hgta_track=%s'>%s</A>",
+                    hgTablesName(), database, table, parent->grp, parent->track, table);
+    }
 webPrintLinkCellEnd();
 }
 
@@ -174,7 +180,6 @@ static void printPeakClusterInfo(struct trackDb *tdb, struct cart *cart,
 /* Print an HTML table showing sources with hits in the cluster, along with signal.
    If cluster is NULL, show all sources assayed */
 {
-
 /* Make the SQL query to get the table and all other fields we want to show
  * from inputTrackTable. */
 struct dyString *query = dyStringNew(0);
@@ -306,7 +311,6 @@ if (inputTableFieldDisplay)
     printClusterTableHeader(fieldList, FALSE, FALSE, FALSE);
     char *inputTrackTable = trackDbRequiredSetting(clusterTdb, "inputTrackTable");
     printPeakClusterInfo(clusterTdb, cart, conn, inputTrackTable, fieldList, NULL);
-    //http://genome-test.cse.ucsc.edu/cgi-bin/hgTables?db=hg38&hgta_table=uwEnc2DnasePeaksWgEncodeEH000507
     }
 else
     errAbort("Missing required trackDb setting %s for track %s", "inputTableFieldDisplay", 
