@@ -10928,6 +10928,7 @@ retroFinder/branches/version2/src/pipeline/analyseExpress.sh
 # copied
 # /hive/groups/gencode/pseudogenes/retroFinder/mm10.20150102/retro/version6/mm10/trackDb.retro
 # entry to kent/src/hg/makeDb/trackDb/mouse/mm10/trackDb.ra
-# and edited it to add version number and date.
+# and edited it to remove the full data and add:
+# dataVersion Jan. 2015
 # Scripts copied ucscRetroAli6.psl, ucscRetroInfo6.bed and ucscRetroCds6.tab
 # to /hive/data/genomes/mm10/bed/retro/
