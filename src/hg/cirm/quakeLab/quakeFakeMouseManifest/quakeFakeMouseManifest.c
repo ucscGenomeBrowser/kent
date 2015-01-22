@@ -37,10 +37,15 @@ for (chip = chipList; chip != NULL; chip = chip->next)
 return hash;
 }
 
-struct quakeSheet *readSheet(char *fileName)
+struct quakeSheet *readSheet(char *fileName, FILE *err)
 /* Read in comma separated sheet file */
 {
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct lineFile *lf = lineFileMayOpen(fileName, TRUE);
+if (lf == NULL)
+    {
+    fprintf(err, "Can't open %s\n", fileName);
+    return NULL;
+    }
 char *line;
 lineFileNeedNext(lf, &line, NULL);
 struct quakeSheet *sheetList = NULL;
@@ -64,15 +69,15 @@ int inDirSize = strlen(inDir) + 1;  // We'll add a / at end
 char chipsPath[PATH_LEN];
 safef(chipsPath, sizeof(chipsPath), "%s/%s", inDir, chipsFile);
 struct quakeChip *chipList = quakeChipLoadAllByChar(chipsPath, ',');
-uglyf("Loaded %d from %s\n", slCount(chipList), chipsPath);
+verbose(1, "Loaded %d from %s\n", slCount(chipList), chipsPath);
 struct hash *chipHash = barcodeToChipHash(chipList);
-uglyf("chipHash has %d elements\n", chipHash->elCount);
+verbose(1, "chipHash has %d elements\n", chipHash->elCount);
 
 /* Load up metadata about each productive cell sample. */
 char samplePath[PATH_LEN];
 safef(samplePath, sizeof(samplePath), "%s/%s", inDir, sampleFile);
 struct quakeSample *sampleList = quakeSampleLoadAllByChar(samplePath, '\t');
-uglyf("Loaded %d from %s\n", slCount(sampleList), samplePath);
+verbose(1, "Loaded %d from %s\n", slCount(sampleList), samplePath);
 
 /* Open manifest file and write out header */
 FILE *f = mustOpen(outFile, "w");
@@ -93,8 +98,11 @@ for (sample = sampleList; sample != NULL; sample = sample->next)
     safef(subdir, sizeof(subdir), "%s/%s/Sample_%s", inDir, sample->subdir, sample->sample);
     char sheetPath[PATH_LEN];
     safef(sheetPath, sizeof(sheetPath), "%s/%s", subdir, "SampleSheet.csv");
-    struct quakeSheet *sheet, *sheetList = readSheet(sheetPath);
+    verbose(2, "%s\n", sheetPath);
+    struct quakeSheet *sheet, *sheetList = readSheet(sheetPath, err);
     int sheetCount = slCount(sheetList);
+    if (sheetCount == 0)
+        continue;
     if (sheetCount != 1 && sheetCount != 2)
          errAbort("%d items in %s, expecting 1 or 2\n", sheetCount, sheetPath);
  
@@ -133,7 +141,7 @@ for (sample = sampleList; sample != NULL; sample = sample->next)
 	    }
 	}
     }
-uglyf("Got %d files\n", fileCount);
+verbose(1, "Got %d files\n", fileCount);
 carefulClose(&f);
 carefulClose(&err);
 
