@@ -1,0 +1,11 @@
+# Config parameters for makeGenomeDb.pl:
+db droMoj3
+clade insect
+scientificName Drosophila mojavensis
+assemblyDate Feb. 2006
+assemblyLabel Agencourt CAF1
+orderKey 57
+mitoAcc none
+fastaFiles /cluster/data/droMoj3/downloads/dmoj/scaffolds.bases
+agpFiles /cluster/data/droMoj3/downloads/dmoj/assembly.agp
+dbDbSpeciesDir drosophila

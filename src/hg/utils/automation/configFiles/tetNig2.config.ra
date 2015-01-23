@@ -1,0 +1,14 @@
+# Config parameters for makeGenomeDb.pl:
+db tetNig2
+clade vertebrate
+scientificName Tetraodon nigroviridis
+commonName Tetraodon
+assemblyDate Mar. 2007
+assemblyLabel Genoscope Tetraodon v8.0 (NCBI project 12350, CAAE01000000)
+orderKey 459
+mitoAcc NC_007176
+fastaFiles /hive/data/genomes/tetNig2/genoscope/chr*.fa.gz
+agpFiles /hive/data/genomes/tetNig2/genoscope/ucsc.agp
+# qualFiles none
+dbDbSpeciesDir tetraodon
+taxId 99883

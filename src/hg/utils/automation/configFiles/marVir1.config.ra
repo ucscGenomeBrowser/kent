@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db marVir1
+clade virus
+genomeCladePriority 2020
+scientificName Marburg virus
+commonName Marburg virus
+assemblyDate Sep. 2014
+assemblyLabel NCBI NIH NC_024781.1
+assemblyShortLabel NC_024781.1
+orderKey 12000
+mitoAcc none
+fastaFiles /hive/data/genomes/marVir1/ucsc/*.fa
+agpFiles /hive/data/genomes/marVir1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir ebola
+photoCreditURL http://phil.cdc.gov/phil/details.asp?pid=1873
+photoCreditName CDC/Dr. Fred Murphy, J. Nakano, Public Health Image Library (PHIL)
+ncbiGenomeId 5314
+ncbiAssemblyId NC_024781.1
+ncbiAssemblyName NC_024781.1
+ncbiBioProject 15199
+genBankAccessionID DQ447649.1
+taxId 11269

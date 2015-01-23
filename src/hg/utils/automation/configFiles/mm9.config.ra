@@ -1,0 +1,12 @@
+# Config parameters for makeGenomeDb.pl:
+db mm9
+scientificName Mus musculus
+commonName Mouse
+assemblyDate Jul. 2007
+assemblyLabel NCBI Build 37
+orderKey 121
+mitoAcc none
+fastaFiles /cluster/data/mm9/mouse_37/mm9.fragorder.assembled.fa
+agpFiles /cluster/data/mm9/mouse_37/mm9.fragments.agp
+# qualFiles /dev/null
+dbDbSpeciesDir mouse

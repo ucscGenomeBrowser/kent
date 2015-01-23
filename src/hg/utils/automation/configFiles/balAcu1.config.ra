@@ -1,0 +1,22 @@
+# Config parameters for makeGenomeDb.pl:
+db balAcu1
+clade mammal
+genomeCladePriority 35
+scientificName Balaenoptera acutorostrata scammoni
+commonName Minke whale
+assemblyDate Oct. 2013
+assemblyLabel Korea Ocean Research & Development Institute
+assemblyShortLabel BalAcu1.0
+orderKey 2369
+mitoAcc NC_005271.1
+fastaFiles /hive/data/genomes/balAcu1/ucsc/balAcu1.ucsc.fa.gz
+agpFiles /hive/data/genomes/balAcu1/ucsc/balAcu1.ucsc.agp
+dbDbSpeciesDir balAcu
+photoCreditURL http://www.noaa.gov/
+photoCreditName NOAA - National Oceanic and Atmospheric Administration
+ncbiGenomeId 10769
+ncbiAssemblyId 78761
+ncbiAssemblyName BalAcu1.0
+ncbiBioProject 237330
+genBankAccessionID GCA_000493695.1
+taxId 310752

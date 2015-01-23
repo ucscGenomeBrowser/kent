@@ -1,0 +1,17 @@
+# Config parameters for makeGenomeDb.pl:
+db lotGig1
+clade deuterostome
+genomeCladePriority 35
+scientificName  Lottia gigantea
+commonName Limpet
+assemblyDate Jul. 2007
+assemblyLabel JGI
+orderKey 236.5                                                         
+#mitoAcc AJ222767
+mitoAcc none
+fastaFiles /cluster/data/lotGig1/jgi/Lotgi1_assembly_scaffolds.fasta.gz
+fakeAgpMinContigGap 25
+fakeAgpMinScaffoldGap 25
+# agpFiles /cluster/data/lotGig1/broad/assembly.agp
+# qualFiles /cluster/data/lotGig1/broad/lotGig1.qual.qac
+dbDbSpeciesDir limpet

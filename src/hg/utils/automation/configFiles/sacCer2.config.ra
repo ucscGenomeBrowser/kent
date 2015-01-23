@@ -1,0 +1,15 @@
+# Config parameters for makeGenomeDb.pl:
+db sacCer2
+scientificName Saccharomyces cerevisiae
+commonName S. cerevisiae
+assemblyDate June 2008
+assemblyLabel SGD June 2008
+orderKey 998
+mitoAcc NC_001224
+#	override the check for max size of 25,000
+mitoSize	90000
+fastaFiles /hive/data/genomes/sacCer2/download/chromosomes/*.fa
+agpFiles /hive/data/genomes/sacCer2/download/sacCer2.agp
+# qualFiles /dev/null
+dbDbSpeciesDir sacCer
+taxId	4932

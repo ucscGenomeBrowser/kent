@@ -1,0 +1,15 @@
+# Config parameters for makeGenomeDb.pl:
+db myoLuc1
+clade mammal
+genomeCladePriority 35
+scientificName  Myotis lucifugus
+commonName Microbat
+assemblyDate Mar. 2006
+assemblyLabel Broad Institute myoLuc1
+orderKey 236.5
+#mitoAcc AJ222767
+mitoAcc none
+fastaFiles /cluster/data/myoLuc1/broad/assembly.bases.gz
+agpFiles /cluster/data/myoLuc1/broad/assembly.agp
+qualFiles /cluster/data/myoLuc1/broad/myoLuc1.qual.qac
+dbDbSpeciesDir microbat

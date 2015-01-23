@@ -1,0 +1,11 @@
+# Config parameters for makeGenomeDb.pl:
+db droWil1
+clade insect
+scientificName Drosophila willistoni
+assemblyDate Feb. 2006
+assemblyLabel TIGR CAF1
+orderKey 57
+mitoAcc none
+fastaFiles /cluster/data/droWil1/downloads/dwil/scaffolds.bases
+agpFiles /cluster/data/droWil1/downloads/dwil/assembly.agp
+dbDbSpeciesDir drosophila

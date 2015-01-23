@@ -1,0 +1,11 @@
+# Config parameters for makeGenomeDb.pl:
+db droGri2
+clade insect
+scientificName Drosophila grimshawi
+assemblyDate Feb. 2006
+assemblyLabel Agencourt CAF1
+orderKey 57
+mitoAcc none
+fastaFiles /cluster/data/droGri2/downloads/dgri/scaffolds.bases
+agpFiles /cluster/data/droGri2/downloads/dgri/assembly.agp
+dbDbSpeciesDir drosophila

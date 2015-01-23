@@ -1,0 +1,15 @@
+# Config parameters for makeGenomeDb.pl:
+db oreNil1
+clade vertebrate
+genomeCladePriority 85
+scientificName Oreochromis niloticus
+commonName Nile tilapia
+assemblyDate Jan. 2011
+assemblyLabel Broad Institute of MIT and Harvard Orenil1.0 (GCA_000188235.1)
+assemblyShortLabel Nile tilapia
+orderKey 468
+mitoAcc NC_013663
+fastaFiles /cluster/data/oreNil1/genbank/ucsc.fa.gz
+agpFiles /cluster/data/oreNil1/genbank/ucsc.agp
+dbDbSpeciesDir oreNil
+taxId 8128

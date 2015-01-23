@@ -1,0 +1,17 @@
+# Config parameters for makeGenomeDb.pl:
+db mm10
+clade mammal
+genomeCladePriority 40
+scientificName Mus musculus
+commonName Mouse
+assemblyDate Dec. 2011
+assemblyLabel Genome Reference Consortium Mouse Build 38 (GCA_000001635.2)
+assemblyShortLabel GRCm38
+orderKey 1209
+mitoAcc none
+fastaFiles /hive/data/genomes/mm10/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/mm10/ucsc/*.agp.gz
+dbDbSpeciesDir mouse
+taxId   10090
+ncbiAssemblyId   165668
+ncbiAssemblyName   GRCm38

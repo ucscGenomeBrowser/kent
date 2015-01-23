@@ -1,0 +1,17 @@
+# Config parameters for makeGenomeDb.pl:
+db gorGor1
+clade mammal
+genomeCladePriority 12
+scientificName  Gorilla gorilla gorilla
+commonName Gorilla
+assemblyDate Oct. 2008
+assemblyLabel Sanger Institute genome_31265
+orderKey 10
+mitoAcc NC_011120
+# fastaFiles /hive/data/genomes/gorGor1/sanger/gorilla_draft_genome_31265.fragments.gz
+fastaFiles /hive/data/genomes/gorGor1/sanger/clean.fragments.fa.gz
+# fastaFiles /hive/data/genomes/gorGor1/sanger/genome_31265.fa
+# agpFiles /hive/data/genomes/gorGor1/sanger/gorilla_draft_genome_31265.agp.gz
+agpFiles /hive/data/genomes/gorGor1/sanger/clean.agp
+# qualFiles none
+dbDbSpeciesDir gorilla

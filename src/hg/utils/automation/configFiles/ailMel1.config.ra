@@ -1,0 +1,15 @@
+# Config parameters for makeGenomeDb.pl:
+db ailMel1
+clade mammal
+genomeCladePriority 19
+scientificName Ailuropoda melanoleuca
+commonName Panda
+assemblyDate Jul. 2009
+assemblyLabel BGI-Shenzhen AilMel 1.0 Jul. 2009 (GCA_000004335.1)
+orderKey 220
+mitoAcc NC_009492
+fastaFiles /hive/data/genomes/ailMel1/genbank/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+agpFiles /hive/data/genomes/ailMel1/genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz
+# qualFiles none
+dbDbSpeciesDir panda
+taxId 9646

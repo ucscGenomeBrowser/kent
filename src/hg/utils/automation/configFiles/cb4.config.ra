@@ -1,0 +1,17 @@
+# Config parameters for makeGenomeDb.pl:
+db cb4
+# clade worm
+# genomeCladePriority 10
+scientificName Caenorhabditis briggsae
+commonName C. briggsae
+assemblyDate Apr. 2011
+assemblyShortLabel WS225
+assemblyLabel Washington University School of Medicine GSC and Sanger Institute cb4 
+orderKey 867
+# used to be: AC186293 == 95102164
+mitoAcc NC_009885.1
+fastaFiles /hive/data/genomes/cb4/ws225/ws225.cb4.fa.gz
+agpFiles /hive/data/genomes/cb4/ws225/ws225.cb4.agp
+# qualFiles /dev/null
+dbDbSpeciesDir worm
+taxId 6238

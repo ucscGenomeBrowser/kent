@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db tarSyr2
+clade mammal
+genomeCladePriority 35
+scientificName Tarsius syrichta
+commonName Tarsier
+assemblyDate Sep. 2013
+assemblyLabel Washington University
+assemblyShortLabel Tarsius_syrichta-2.0.1
+orderKey 409
+# chrM bioProject: 38399 -> NC_012774.1
+mitoAcc NC_012774.1
+fastaFiles /cluster/data/tarSyr2/ucsc/tarSyr2.fa.gz
+agpFiles /cluster/data/tarSyr2/ucsc/tarSyr2.agp
+# qualFiles /cluster/data/tarSyr2/ucsc/tarSyr2.qual.qac
+dbDbSpeciesDir tarsier
+photoCreditURL http://en.wikipedia.org/wiki/File:Tarsier_Hugs_Mossy_Branch.jpg
+photoCreditName Waldir, Wikipedia Commons
+ncbiGenomeId 766
+ncbiAssemblyId 784738
+ncbiAssemblyName Tarsius_syrichta-2.0.1
+ncbiBioProject 20339
+genBankAccessionID GCA_000164805.2
+taxId 9478

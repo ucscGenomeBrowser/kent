@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db caeSp71
+clade worm
+genomeCladePriority 67
+scientificName Caenorhabditis sp7. JU1286
+commonName C. sp. 7 JU1286
+assemblyDate Nov. 2010
+assemblyShortLabel WUSTL 4.0.1
+assemblyLabel Washington University School of Medicine GSC Caenorhabditis sp. 7 JU1286 MAF-2007 4.0.1 (GCA_000186785.1)
+orderKey 880
+mitoAcc none
+fastaFiles /hive/data/genomes/caeSp71/genbank/caeSp71.scaf.fa.gz
+agpFiles /hive/data/genomes/caeSp71/genbank/caeSp71.scaf.agp.gz
+# qualFiles none
+dbDbSpeciesDir worm
+taxId 870436

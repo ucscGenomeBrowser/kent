@@ -1,0 +1,15 @@
+# Config parameters for makeGenomeDb.pl:
+db vicPac1
+clade mammal
+genomeCladePriority 35
+scientificName  Vicugna pacos
+commonName Alpaca
+assemblyDate Jul. 2008
+assemblyLabel Broad Institute vicPac1
+orderKey 99
+#mitoAcc AJ222767
+mitoAcc none
+fastaFiles /cluster/data/vicPac1/broad/assembly.bases.gz
+agpFiles /cluster/data/vicPac1/broad/assembly.agp
+qualFiles /cluster/data/vicPac1/broad/vicPac1.qual.qac
+dbDbSpeciesDir alpaca

@@ -1,0 +1,25 @@
+# Config parameters for makeGenomeDb.pl:
+db vicPac2
+clade mammal
+# genomeCladePriority 35
+scientificName Vicugna pacos
+# for chrM fetching only:
+# scientificName Lama pacos
+commonName Alpaca
+assemblyDate Mar. 2013
+assemblyLabel Broad Institute
+assemblyShortLabel Vicugna_pacos-2.0.1
+orderKey 2359
+mitoAcc NC_002504
+fastaFiles /cluster/data/vicPac2/ucsc/vicPac2.clean.fa.gz
+agpFiles /cluster/data/vicPac2/ucsc/vicPac2.clean.agp
+# qualFiles none
+dbDbSpeciesDir alpaca
+photoCreditURL http://genome.wustl.edu/genomes/view/vicugna_pacos/
+photoCreditName Photo courtesy of the USDA
+ncbiGenomeId 905
+ncbiAssemblyId 557168
+ncbiAssemblyName Vicugna_pacos-2.0.1
+ncbiBioProject 30567
+genBankAccessionID GCA_000164845.2
+taxId 30538

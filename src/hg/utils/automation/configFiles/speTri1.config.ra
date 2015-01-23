@@ -1,0 +1,15 @@
+# Config parameters for makeGenomeDb.pl:
+db speTri1
+clade mammal
+genomeCladePriority 35
+scientificName  Spermophilus tridecemlineatus
+commonName Squirrel
+assemblyDate Feb. 2008
+assemblyLabel Broad Institute speTri1
+orderKey 236.5
+#mitoAcc AJ222767
+mitoAcc none
+fastaFiles /cluster/data/speTri1/broad/assembly.bases.gz
+agpFiles /cluster/data/speTri1/broad/assembly.agp
+qualFiles /cluster/data/speTri1/broad/speTri1.qual.qac
+dbDbSpeciesDir squirrel

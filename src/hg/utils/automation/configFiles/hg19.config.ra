@@ -1,0 +1,13 @@
+# Config parameters for makeGenomeDb.pl:
+db hg19
+scientificName Homo sapiens
+commonName Human
+assemblyDate Feb. 2009
+assemblyLabel GRCh37 Genome Reference Consortium Human Reference 37 (GCA_000001405.1)
+orderKey 14
+mitoAcc NC_001807
+fastaFiles /hive/data/genomes/hg19/download/ucscChr/*.fa
+agpFiles /hive/data/genomes/hg19/download/ucscChr/*.agp
+# qualFiles /dev/null
+dbDbSpeciesDir human
+taxId	9606

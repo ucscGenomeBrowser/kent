@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db plasFalc3D7V12
+clade protista
+genomeCladePriority 1186
+commonName Plasmodium falciparum 3D7
+scientificName Plasmodium falciparum 3D7
+assemblyDate 10 Sept 2014
+assemblyLabel Version 12.0
+assemblyShortLabel V12.0
+orderKey 500
+fakeAgpMinContigGap 100
+fakeAgpMinScaffoldGap 2000 
+mitoAcc none
+fastaFiles /hive/data/genomes/plasFalc3D7V12/genome/PlasmoDB-12.0_Pfalciparum3D7_Genome.fasta
+dbDbSpeciesDir plasFalc3D7
+photoCreditURL http://upload.wikimedia.org/wikipedia/commons/f/f1/Malaria.jpg
+photoCreditName Ute Frevert and Margaret Shear
+ncbiGenomeId GCF_000002765.3
+ncbiAssemblyId 360518
+ncbiAssemblyName ASM276v1
+ncbiBioProject PRJNA148
+genBankAccessionID GCA_000002765.1
+taxId 36329

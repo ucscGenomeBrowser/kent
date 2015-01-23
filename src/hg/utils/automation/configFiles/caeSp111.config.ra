@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db caeSp111
+clade worm
+genomeCladePriority 69
+scientificName Caenorhabditis sp. 11 JU1373
+commonName C. sp. 11 JU1373
+assemblyDate Nov. 2010
+assemblyShortLabel WUSTL 3.0.1
+assemblyLabel Washington University School of Medicine GSC Caenorhabditis sp. 9 JU1422 MAF-2010 3.0.1 (GCA_000186765.1)
+orderKey 880
+mitoAcc none
+fastaFiles /hive/data/genomes/caeSp111/genbank/caeSp111.scaf.fa.gz
+agpFiles /hive/data/genomes/caeSp111/genbank/caeSp111.scaf.agp.gz
+# qualFiles none 
+dbDbSpeciesDir worm
+taxId 886184

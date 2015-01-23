@@ -1,0 +1,15 @@
+# Config parameters for makeGenomeDb.pl:
+db loxAfr3
+clade mammal
+genomeCladePriority 35
+scientificName Loxodonta africana
+commonName Elephant
+assemblyDate Jul. 2009
+assemblyLabel Broad Institute loxAfr3 (NCBI project 12569, AAGU03000000)
+orderKey 344
+mitoAcc NC_000934
+fastaFiles /hive/data/genomes/loxAfr3/broad/assembly.bases.gz
+agpFiles /hive/data/genomes/loxAfr3/broad/assembly.agp
+qualFiles /hive/data/genomes/loxAfr3/broad/loxAfr3.quals.qac
+dbDbSpeciesDir elephant
+taxId 9785

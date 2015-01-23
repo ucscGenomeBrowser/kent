@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db nasLar1
+clade primate
+genomeCladePriority 15
+scientificName Nasalis larvatus
+commonName Proboscis monkey
+assemblyDate Nov. 2014
+assemblyLabel Proboscis Monkey Functional Genome Consortium
+assemblyShortLabel Charlie1.0
+orderKey 392
+# chrM bioproject: 17205
+mitoAcc NC_008216.1
+fastaFiles /hive/data/genomes/nasLar1/ucsc/*.fa
+agpFiles /hive/data/genomes/nasLar1/ucsc/ucsc.agp
+# qualFiles none
+dbDbSpeciesDir proboscis
+photoCreditURL https://www.flickr.com/people/50852241@N00
+photoCreditName David Dennis - Wikimedia Commons
+ncbiGenomeId 7994
+ncbiAssemblyId 221311
+ncbiAssemblyName Charlie1.0
+ncbiBioProject 241312
+genBankAccessionID GCA_000772465.1
+taxId 43780

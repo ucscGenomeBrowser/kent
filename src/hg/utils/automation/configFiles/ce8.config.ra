@@ -1,0 +1,15 @@
+# Config parameters for makeGenomeDb.pl:
+db ce8
+clade worm
+genomeCladePriority 10
+scientificName Caenorhabditis elegans
+commonName C. elegans
+assemblyDate Jun 2009
+assemblyLabel Washington University School of Medicine GSC and Sanger Institute WS204
+orderKey 824
+mitoAcc none
+fastaFiles /hive/data/genomes/ce8/sanger/UCSC.fa.gz
+agpFiles   /hive/data/genomes/ce8/sanger/UCSC.agp
+# qualFiles /dev/null
+dbDbSpeciesDir worm
+taxId 6239

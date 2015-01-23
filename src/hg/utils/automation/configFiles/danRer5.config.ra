@@ -1,0 +1,12 @@
+db danRer5
+clade vertebrate
+scientificName Danio rerio
+commonName Zebrafish
+assemblyDate Jul. 2007
+assemblyLabel Sanger Centre, Danio rerio Sequencing Project Zv7
+orderKey 449
+dbDbSpeciesDir zebrafish
+# NC_002333.2
+mitoAcc 15079186
+agpFiles /cluster/data/danRer5/Zv7release/agps/Zv7ScafToChromAndRandom.agp
+fastaFiles /cluster/data/danRer5/Zv7release/fasta/Zv7ChromsAndRandomScafs.fa

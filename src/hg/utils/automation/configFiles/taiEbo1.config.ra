@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db taiEbo1
+clade virus
+genomeCladePriority 2000
+scientificName Tai Forest ebolavirus
+commonName Tai Forest ebolavirus
+assemblyDate Aug. 2014
+assemblyLabel NCBI NIH NC_014372.1
+assemblyShortLabel NC_014372.1
+orderKey 10970
+mitoAcc none
+fastaFiles /hive/data/genomes/taiEbo1/ucsc/*.fa
+agpFiles /hive/data/genomes/taiEbo1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir ebola
+photoCreditURL http://phil.cdc.gov/phil/details.asp?pid=1836
+photoCreditName CDC Public Health Image Library (PHIL)
+ncbiGenomeId 4022
+ncbiAssemblyId NC_014372.1
+ncbiAssemblyName NC_014372.1
+ncbiBioProject 51257
+genBankAccessionID FJ217162.1
+taxId 186541

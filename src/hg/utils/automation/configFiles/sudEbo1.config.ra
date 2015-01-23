@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db sudEbo1
+clade virus
+genomeCladePriority 2000
+scientificName Sudan ebolavirus
+commonName Sudan ebolavirus
+assemblyDate Aug. 2014
+assemblyLabel NCBI NIH NC_006432.1
+assemblyShortLabel NC_006432.1
+orderKey 10930
+mitoAcc none
+fastaFiles /hive/data/genomes/sudEbo1/ucsc/*.fa
+agpFiles /hive/data/genomes/sudEbo1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir ebola
+photoCreditURL http://phil.cdc.gov/phil/details.asp?pid=1833
+photoCreditName CDC Public Health Image Library (PHIL)
+ncbiGenomeId 5152
+ncbiAssemblyId 35896
+ncbiAssemblyName NC_006432.1
+ncbiBioProject 15012
+genBankAccessionID AY729654.1
+taxId 186540

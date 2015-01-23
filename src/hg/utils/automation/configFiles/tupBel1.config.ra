@@ -13,6 +13,7 @@ fakeAgpMinScaffoldGap 2000
 # there is one now: NC_002521.1
 mitoAcc none
 fastaFiles /cluster/data/tupBel1/fromBroad/Draft_v1.agp.chromosome.fasta.gz
+agpFiles /cluster/data/tupBel1/fromBroad/ucsc.agp
 #agpFiles /cluster/data/tupBel1/downloads/chr*.agp
 dbDbSpeciesDir treeShrew
 photoCreditURL http://commons.wikimedia.org/wiki/Image:Tupaia_belangeri.JPEG

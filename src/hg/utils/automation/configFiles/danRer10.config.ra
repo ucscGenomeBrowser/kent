@@ -1,0 +1,22 @@
+# Config parameters for makeGenomeDb.pl:
+db danRer10
+clade vertebrate
+scientificName Danio rerio
+commonName Zebrafish
+assemblyDate Sep. 2014
+assemblyLabel Genome Reference Consortium Zebrafish Build 10
+assemblyShortLabel GRCz10
+orderKey 26173
+fastaFiles /hive/data/genomes/danRer10/ucsc/chr*.fa.gz
+agpFiles /hive/data/genomes/danRer10/ucsc/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir zebrafish
+mitoAcc NC_002333.2
+photoCreditURL http://www.genome.gov/dmd/img.cfm?node=Photos/Animals/Zebrafish&id=79130
+photoCreditName NHGRI Press Photos
+ncbiGenomeId 50
+ncbiAssemblyId 210611
+ncbiAssemblyName GRCz10
+ncbiBioProject 13922
+genBankAccessionID GCA_000002035.3
+taxId 7955
