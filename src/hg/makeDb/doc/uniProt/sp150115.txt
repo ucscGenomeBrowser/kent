@@ -1,0 +1,92 @@
+#!/bin/tcsh -efx
+# Script to create a relational version of UniProt database.  Should be run on
+# hgwdev.
+
+set DBDATE=150115
+set DB=sp$DBDATE
+
+# Set up working directory
+mkdir -p /hive/data/outside/uniProt/$DBDATE/build
+
+# Download uniProt. This will take about 12 hours
+cd /hive/data/outside/uniProt/$DBDATE/build
+wget ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.dat.gz
+#  523,470,864 16.0M/s   in 41s  
+wget ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_trembl.dat.gz
+# 50,308,178,357 12.4M/s   in 67m 44s
+wget ftp://ftp.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot_varsplic.fasta.gz
+#  7,860,658   1.95M/s   in 4.2s
+
+# Turn flat file into relational tab-separated files.
+time zcat *.dat.gz | spToDb stdin ../tabFiles
+# real    32m21.930s
+
+# Create the database.  
+hgsql mm10 -e "create database sp$DBDATE"
+
+# Load it up with table definitions from source directory
+hgsql sp$DBDATE < ~/kent/src/hg/protein/spToDb/spDb.sql
+
+# Load up the data from tab files.  This takes about an hour.
+set s=`date +%s`
+cd /hive/data/outside/uniProt/$DBDATE/tabFiles
+foreach i (*.txt)
+  hgsqlimport --local sp$DBDATE $i
+end
+set e=`date +%s`
+expr $e - $s
+
+# 25008
+
+#sp150115.accToKeyword: Records: 245969321  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.accToTaxon: Records: 195476699  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.author: Records: 519132  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.citation: Records: 103481762  Deleted: 0  Skipped: 0  Warnings: 0
+##sp150115.citationRc: Records: 94630513  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.citationRp: Records: 182487  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.comment: Records: 157223115  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.commentType: Records: 29  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.commentVal: Records: 63318383  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.commonName: Records: 16266  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.description: Records: 89998523  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.displayId: Records: 89998523  Deleted: 0  Skipped: 0  Warnings: 25239204
+#sp150115.extDb: Records: 134  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.extDbRef: Records: 1008183274  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.feature: Records: 62626218  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.featureClass: Records: 39  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.featureId: Records: 1607588  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.featureType: Records: 8323269  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.gene: Records: 112347433  Deleted: 0  Skipped: 0  Warnings: 112347433
+#sp150115.geneLogic: Records: 87599078  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.info: Records: 89998523  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.keyword: Records: 24477768  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.organelle: Records: 1579123  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.otherAcc: Records: 356531  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.pathogenHost: Records: 6939  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.protein: Records: 89998523  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.proteinEvidence: Records: 89998523  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.proteinEvidenceType: Records: 5  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.rcType: Records: 4  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.rcVal: Records: 79400856  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.reference: Records: 356011  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.referenceAuthors: Records: 2034079  Deleted: 0  Skipped: 0  Warnings: 0
+#sp150115.taxon: Records: 13166  Deleted: 0  Skipped: 0  Warnings: 0
+
+# Add varsplice info 
+zcat ../build/uniprot_sprot_varsplic.fasta.gz | spDbAddVarSplice sp$DBDATE stdin .
+hgLoadSqlTab sp$DBDATE -notOnServer -append varProtein /dev/null varProtein.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append protein /dev/null varProtein.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append varAcc /dev/null varAcc.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append displayId /dev/null varDisplayId.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append accToTaxon /dev/null varAccToTaxon.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append geneLogic /dev/null varGeneLogic.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append gene /dev/null varGene.txt
+hgLoadSqlTab sp$DBDATE -notOnServer -append description /dev/null varDescription.txt
+
+# Add table descriptions
+makeTableDescriptions sp$DBDATE ~/kent/src/hg/protein/spToDb/spDbTables.as
+
+# Zip up tab files for people who prefer them to database.
+gzip *.txt
+
+
