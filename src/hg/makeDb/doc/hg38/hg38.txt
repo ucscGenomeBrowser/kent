@@ -6007,4 +6007,130 @@ hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
     checkTableCoords hg38 cooperDevDelayCase
 
 
-########################################################################
+#########################################################################
+# RETROFINDER RETROPOSED GENES ucscRetro track VERSION 9
+# (2015-01-12 - 2015-01-20, hartera, DONE)
+ssh hgwdev
+mkdir -p /hive/groups/gencode/pseudogenes/retroFinder/hg38.20150112
+cd /hive/groups/gencode/pseudogenes/retroFinder/hg38.20150112
+
+cat << '_EOF_' > DEF
+
+RETRO_OPTIONS="-verbose=4 -minAli=0.98 -nearTop=0.005 "
+VERSION=9
+RUNDATE="2015-01-12"
+DB=hg38
+SCORETHRESH=550
+GENOMENAME='Homo sapiens'
+GBDB=hg
+DATE=20150112
+RUNDIR=/hive/groups/gencode/pseudogenes/retroFinder/$DB.$DATE
+BINDIR=/hive/users/hartera/GencodeWG/retroFinder/branches/version2/bin
+KENTDIR=/cluster/home/hartera/kent
+KENTBINDIR=/cluster/home/hartera/bin/x86_64
+MRNABASE=/hive/data/genomes/$DB/bed/mrnaBlastz.$VERSION
+TMPMRNA=$RUNDIR/mrnaBlastz/$DB
+TMPEST=$RUNDIR/est/$DB
+USEALTSEQS=0
+EST=all_est
+SPLICED_EST=intronEst
+SPLIT_EST=0
+SPLIT_SPLICED_EST=0
+LASTZPROG=/cluster/bin/penn/x86_64/lastz
+SCRIPT=/hive/users/hartera/GencodeWG/retroFinder/branches/version2/src/pipeline
+GENOME=/hive/data/genomes
+RETRODIR=$GENOME/$DB/bed/retro
+BASE=$RUNDIR/retro
+OUTDIR=${BASE}/version${VERSION}/${DB}
+RESULT=$OUTDIR/result
+RESULTSPLIT=$OUTDIR/resultSplit
+LOG=$OUTDIR/log
+OUT=$OUTDIR/out
+OVERLAPDIR=$OUTDIR/run.o
+TABLE=ucscRetroInfo$VERSION
+ORTHOTABLE=ucscRetroOrtho$VERSION
+ALIGN=ucscRetroAli$VERSION
+LOCAL=/scratch/data/$DB
+TWOBIT=$GENOME/$DB/$DB.2bit
+RMSK=rmsk
+NET1=netMm10
+NET2=netCanFam3
+NET3=netRheMac3
+# these two nets determine which retros are classified as ancient, 
+# use two farthest nets 
+ANCIENT1=netMm10
+ANCIENT2=netCanFam3
+GENE1=knownGene
+GENE2=refGene
+GENE3=wgEncodeGencodeCompV19
+CLUSTER=ku
+SPECIES="hg38 mm10"
+ROOTDIR="/cluster/home/hartera/public_html/retro/hg38Jun14"
+WEBROOT=$ROOTDIR/retro.$VERSION
+WEBSERVER=http://hgwdev-hartera.cse.ucsc.edu
+SHUFFLEDIR=shuffle
+SHUFFLEROOT=$WEBROOT/$SHUFFLEDIR
+DUPDIR=dups
+DUPROOT=$WEBROOT/$DUPDIR
+AGEDIR=age
+AGEROOT=$WEBROOT/$AGEDIR
+EXPDIR=exp
+GENEPFAM=knownGene
+PFAM=knownToPfam
+PFAMIDFIELD=name
+PFAMDOMAIN=value
+ALTSPICE=
+#ALTSPLICE=sibTxGraph
+SPLITBYAGE=$SCRIPT/splitRetrosByAge
+PDB=proteins140122
+#ARRAY=gnfAtlas2
+#AFFYPROBE="affyU133A,affyGnf1h"
+#ARRAYMEDIAN=hgFixed.gnfHumanAtlas2Median 
+#ARRAYRATIO=hgFixed.gnfHumanAtlas2AllRatio
+#ARRAYABS=hgFixed.gnfHumanAtlas2All   
+#ARRAYEXP=hgFixed.gnfHumanAtlas2MedianExps 
+#ARRAYEXPALL=hgFixed.gnfHumanAtlas2AllExps
+#ARRAYLOOKUP=knownToGnfAtlas2 
+#ARRAYPSLS="/hive/data/genomes/hg19/bed/geneAtlas2/affyU133A.psl /hive/data/genomes/hg19/bed/geneAtlas2/affyGnf1h.psl"
+'_EOF_'
+    # << happy emacs
+chmod +x DEF
+
+mkdir -p /hive/data/genomes/hg38/bed/retro
+mkdir -p /hive/data/genomes/hg38/bed/mrnaBlastz.9
+mkdir -p /hive/groups/gencode/pseudogenes/retroFinder/hg38.20150112/mrnaBlastz
+cd /hive/groups/gencode/pseudogenes/retroFinder/hg38.20150112/mrnaBlastz
+cp ../DEF .
+
+# Create S1.len file
+rom.sizes without random chroms or chrM, there are many alt loci also
+# in hg38 that were not in hg19 so 285 chroms total. 
+cat /hive/data/genomes/hg38/chrom.sizes | grep -v random \
+   | grep -v chrUn | grep -v chrM > S1.len
+cp S1.len /hive/data/genomes/hg38/bed/mrnaBlastz.9
+
+screen
+# Run steps 1 to 5 of RetroFinder pipeline from scripts in CCDS SVN source tree:
+retroFinder/branches/version2/src/pipeline/ucscStep1.sh DEF
+# check cluster jobs on ku
+retroFinder/branches/version2/src/pipeline/ucscStep2.sh DEF
+retroFinder/branches/version2/src/pipeline/ucscStep3.sh DEF
+#check cluster jobs on ku
+retroFinder/branches/version2/src/pipeline/ucscStep4.sh DEF
+#check cluster jobs on ku
+    # Load the track
+retroFinder/branches/version2/src/pipeline/ucscStep5.sh DEF
+cd /hive/groups/gencode/pseudogenes/retroFinder/hg38.20150112/retro/version9/hg38
+retroFinder/branches/version2/src/pipeline/filterMrna.sh
+retroFinder/branches/version2/src/pipeline/filterEst.sh
+# Check cluster jobs on ku
+retroFinder/branches/version2/src/pipeline/analyseExpress.sh
+# Check cluster jobs on ku
+#added ucscRetroAli9 to kent/src/hg/makeDb/human/hg38/trackDb.ra
+# copied
+# /hive/groups/gencode/pseudogenes/retroFinder/hg38.20150112/retro/version9/hg38/trackDb.retro
+# entry to kent/src/hg/makeDb/trackDb/human/hg38/trackDb.ra and edited it to 
+# remove the full date and add: 
+# dataVersion Jan. 2015
+# Scripts copied ucscRetroAli9.psl, ucscRetroInfo9.bed and ucscRetroCds9.tab
+# to /hive/data/genomes/hg38/bed/retro/

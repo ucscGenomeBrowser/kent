@@ -88,7 +88,7 @@ var AssemblySearch = React.createClass({
         var searchTerm = this.props.searchTerm;
         return (
             <div>
-              <span style={{marginRight: '5px'}}>
+              <span className='sectionItem'>
                 Search for an organism's common name, scientific name or database prefix:
               </span>
               <TextInput value={searchTerm}
@@ -99,12 +99,6 @@ var AssemblySearch = React.createClass({
     }
 
 }); // AssemblySearch
-
-var imgStyle = { width: '50px',
-                 height: '50px',
-                 borderWidth: '1px',
-                 borderStyle: 'solid',
-                 margin: '5px' };
 
 var noImg = '../images/DOT.gif';
 
@@ -127,17 +121,13 @@ var AppComponent = React.createClass({
         if (name === 'C. elegans')
             displayName = 'Worm';
         var imgPath = species.get('img') || noImg;
-        var divStyle = { display: 'inline-block',
-                         marginTop: '5px',
-                         marginBottom: '5px',
-                         textAlign: 'center' };
         var onClick = function(ev) {
             this.props.update(['popular', name]);
         }.bind(this);
         return (
-            <div key={name} style={divStyle} onClick={onClick}>
+            <div key={name} className='speciesButton' onClick={onClick}>
               {displayName} <br />
-              <img src={imgPath} style={imgStyle} />
+              <img src={imgPath} className='speciesIcon' />
             </div>
         );
     },
@@ -151,9 +141,9 @@ var AppComponent = React.createClass({
         var menuLabel = 'Choose ' + menuData.get('genome') + ' assembly version' +
                                                  ', or choose a different species above:';
         var imgPath = menuData.get('img');
-        var img = imgPath ? <img src={imgPath} style={imgStyle} /> : null;
+        var img = imgPath ? <img src={imgPath} className='speciesIcon' /> : null;
         return (
-            <div style={{marginTop: 5}}>
+            <div className='sectionRow'>
               {img}
               <LabeledSelect label={menuLabel} selected={menuData.get('db')}
                              options={menuData.get('dbOptions')}

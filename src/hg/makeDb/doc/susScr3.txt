@@ -133,7 +133,7 @@ while (my $line = <FH>) {
     if ($line =~ m/^#/) {
         print UC $line;
     } else {
-        $line =~ s/\./-/;    
+        $line =~ s/\./-/;
         printf UC "%s", $line;
     }
 }
@@ -147,7 +147,7 @@ while (my $line = <FH>) {
         chomp $line;
         $line =~ s/.*gb\|//;
         $line =~ s/\|.*//;
-        $line =~ s/\./-/;    
+        $line =~ s/\./-/;
         printf UC ">$line\n";
     } else {
         print UC $line;
@@ -235,7 +235,7 @@ taxId 9823
 
     egrep -i "versi|relea" do.log
 #    April 26 2011 (open-3-3-0) version of RepeatMasker
-# CC   RELEASE 20110920; 
+# CC   RELEASE 20110920;
 # RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
 
     featureBits -countGaps susScr3 rmsk
@@ -253,7 +253,7 @@ taxId 9823
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
 	susScr3 > do.log 2>&1 &
     #   real    9m41.939s
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
     #   29525418 bases of 2525996391 (1.169%) in intersection
 
     # add to rmsk after it is done:
@@ -488,7 +488,7 @@ close (FH);
     # to decide which "native" mrna or ests you want to specify in genbank.conf
 #       ORGANISM:       Sus scrofa
 
-    ssh hgwdev  
+    ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # edit etc/genbank.conf to add:
@@ -609,7 +609,7 @@ susScr3.genbank.est.native.load = yes
     zcat QTL_SS_10.2.ubed.txt >> susScr3.animalQtl.bed
     cut -f1-4 susScr3.animalQtl.bed > susScr3.animalQtl.bed4
     hgLoadBed susScr3 animalQtl susScr3.animalQtl.bed4
- 
+
     checkTableCoords susScr3 animalQtl
     # no results - yay!
 
@@ -617,12 +617,12 @@ susScr3.genbank.est.native.load = yes
     cut -f1-4  QTL_OAR_3.1.ubed.txt > susScr3.animalQtlTEST.bed4
     hgLoadBed susScr3 animalQtl susScr3.animalQtlTEST.bed4
 
-    #added entries in trackDb for track and search 
+    #added entries in trackDb for track and search
 
 
     #script to determine what to include in search rule:
 
-cat > findNames <<EOF 
+cat > findNames <<EOF
 #!/bin/sh
 hgsql -N -e 'select name from animalQtl;' bosTau7  > /tmp/bosTau7.animalQtl.name.txt
 hgsql -N -e 'select name from animalQtl;' galGal4  >> /tmp/bosTau7.animalQtl.name.txt
@@ -683,7 +683,7 @@ EOF
     cat > config.ra <<EOF
 db susScr3
 build 138
-buildAssembly 
+buildAssembly
 orgDir pig_9823
 EOF
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >& do.log & tail -f do.log
@@ -698,7 +698,7 @@ EOF
 #*** Check the auto-generated suggested.lft to see if it covers all
 #*** 9906 contigs; if it does, add 'liftUp suggested.lft' to config.ra.
 #*** Then run again with -continue=loadDbSnp .
-    head  -5 cantLiftUpSeqNames.txt 
+    head  -5 cantLiftUpSeqNames.txt
 #unplaced-scaffold (no chrUn_GL892100 in chrom.sizes)    NW_003536876    na
 #unplaced-scaffold (no chrUn_GL892101 in chrom.sizes)    NW_003536877    na
 #unplaced-scaffold (no chrUn_GL892102 in chrom.sizes)    NW_003536878    na
@@ -767,8 +767,8 @@ EOF
     | sort -n | uniq -c
 # 129680 3   (coding-synon)
 # 207072 8   (cds-reference)
-#   1041 41  (nonsense) 
-#  77449 42  (missense) 
+#   1041 41  (nonsense)
+#  77449 42  (missense)
 #    161 43  (stop-loss)
 #    107 44  (frameshift)
 #     93 45  (cds-indel)
@@ -787,3 +787,82 @@ EOF
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+# LASTZ pig/susScr3 sheep/oviAri3 - (DONE - 2014-05-19 - Hiram)
+    mkdir /hive/data/genomes/susScr3/bed/lastzOviAri3.2014-05-19
+    cd /hive/data/genomes/susScr3/bed/lastzOviAri3.2014-05-19
+
+    cp -p \
+/hive/users/hiram/multiz/100way/susScr3.oviAri3/susScr3.oviAri3.tuning.top400.txt \
+     ./susScr3.oviAri3.tuning.Q.txt
+
+    cat << '_EOF_' > DEF
+# Pig vs. Sheep
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/susScr3.oviAri3/susScr3.oviAri3.tuning.top400.txt
+
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=50
+
+BLASTZ_X=800
+BLASTZ_Y=3400
+BLASTZ_K=3000
+BLASTZ_L=3000
+BLASTZ_Q=/hive/data/genomes/susScr3/bed/lastzOviAri3.2014-05-19/susScr3.oviAri3.tuning.Q.txt
+#       A     C     G     T
+# A    80  -115   -29  -130
+# C  -115   100   -93   -29
+# G   -29   -93   100  -115
+# T  -130   -29  -115    80
+
+# TARGET: Pig susScr3
+SEQ1_DIR=/hive/data/genomes/susScr3/susScr3.2bit
+SEQ1_LEN=/hive/data/genomes/susScr3/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Sheep oviAri3
+SEQ2_DIR=/hive/data/genomes/oviAri3/oviAri3.2bit
+SEQ2_LEN=/hive/data/genomes/oviAri3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/susScr3/bed/lastzOviAri3.2014-05-19
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+      -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+          -syntenicNet) > do.log 2>&1
+
+    # real    1170m6.492s
+
+    cat fb.susScr3.chainOviAri3Link.txt
+    # 1453348100 bases of 2525294057 (57.552%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` susScr3 oviAri3) > rbest.log 2>&1 &
+    # real    109m38.929s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oviAri3/bed/blastz.susScr3.swap
+    cd /hive/data/genomes/oviAri3/bed/blastz.susScr3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/susScr3/bed/lastzOviAri3.2014-05-19/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    155m31.793s
+
+    cat fb.oviAri3.chainSusScr3Link.txt
+    # 1311099603 bases of 2534335866 (51.733%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` oviAri3 susScr3) > rbest.log 2>&1
+    # real    42m24.943s
+
+#########################################################################

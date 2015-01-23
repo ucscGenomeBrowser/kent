@@ -248,6 +248,60 @@ xrefTable kgXref, ucscRetroInfo8
 xrefQuery select ucscRetroInfo8.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
 
+track ucscRetroAli9
+shortLabel Retroposed Genes V9
+longLabel Retroposed Genes V9, Including Pseudogenes
+group genes
+type psl
+priority 37.14
+color 20,0,250
+visibility pack
+nextItemButton on
+ucscRetroInfo ucscRetroInfo9
+baseColorDefault diffCodons
+baseColorUseCds table ucscRetroCds9
+baseColorUseSequence extFile ucscRetroSeq9 ucscRetroExtFile9
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+dataVersion Jan. 2015
+
+searchName ucscRetroInfoRefSeq9
+searchTable ucscRetroAli9
+searchDescription Retroposed Genes V9, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+xrefTable refLink, ucscRetroInfo9
+dontCheckXrefQueryFormat 1
+xrefQuery select ucscRetroInfo9.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+searchPriority 3.52
+
+searchName ucscRetroInfoMrna9
+searchTable ucscRetroAli9
+searchDescription Retroposed Genes V9, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+searchPriority 3.55
+
+searchName ucscRetroUniProt9
+searchTable ucscRetroAli9
+searchDescription Retroposed Genes V9, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo9
+xrefQuery select ucscRetroInfo9.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
+searchPriority 3.54
+
+searchName ucscRetroKnownGene9
+searchTable ucscRetroAli9
+searchDescription Retroposed Genes V9, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo9
+xrefQuery select ucscRetroInfo9.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
+searchPriority 3.53
+
 track snp141Mult override
 snpSeqFile /gbdb/hg38/snp/snp141.fa
 

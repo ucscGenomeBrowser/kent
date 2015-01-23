@@ -230,9 +230,9 @@ else
             mi->tblPre, mi->geneSet);
 
 printf("<TABLE class=\"transMap\">\n");
-printf("<H3><A HREF=\"#orthology\">Breaks in Orthology:</A></H3>\n");
+printf("<H3><A HREF=\"#orthology\">Break in Orthology:</A></H3>\n");
 printf("<THEAD>\n");
-printf("<TR><TH>Organism<TH>%% Coverage</TR>\n");
+printf("<TR><TH>Organism<TH>Score</TR>\n");
 printf("</THEAD><TBODY>\n");
 if (hTableExists(database, orthoTable))
     {

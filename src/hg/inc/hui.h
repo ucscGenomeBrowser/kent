@@ -141,6 +141,12 @@ char *hCgiRoot();
 /* SwitchGear TSS default filter. */
 #define SWITCHDBTSS_FILTER 10
 
+/* Subtrack color support in UI */
+#define SUBTRACK_COLOR_PATCH    "showSubtrackColorOnUi"
+// for use with subGroup and sortOrder settings
+// ie. subGroup1 subtrackColor Color; sortOrder subtrackColor=+ cellType=+
+#define SUBTRACK_COLOR_SUBGROUP "subtrackColor"
+
 void netUi(struct trackDb *tdb);
 
 struct controlGrid
@@ -981,6 +987,10 @@ boolean subgroupFind(struct trackDb *childTrack, char *name,char **value);
 void subgroupFree(char **value);
 /* frees subgroup memory */
 
+boolean subgroupRequired(char *value);
+/* Returns whether subgroup much be specified for each track.
+ * Generally true.  Exceptions are specially defined subgroups */
+
 int multViewCount(struct trackDb *parentTdb);
 /* returns the number of multiView views declared */
 
@@ -1362,4 +1372,14 @@ struct asColumn *asColumnFind(struct asObject *asObj, char *name);
 
 struct slName *asColNames(struct asObject *as);
 // Get list of column names.
+
+/********************/
+/* Basic metadata for subgroups and input fields */
+
+char *metaVocabLink(struct hash *metaFieldHash, char *term, char *title);
+/* Make an anchor with mouseover containing description and link if present */
+
+struct hash *metaBasicFromSetting(struct trackDb *parentTdb, struct cart *cart, char *setting);
+/* Get description and URL for all metaTables. Returns a hash of hashes */
+
 #endif /* HUI_H */

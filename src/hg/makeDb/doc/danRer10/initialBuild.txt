@@ -1,0 +1,440 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the danRer10
+
+# Assembly Name:  GRCz10
+# Description:    Genome Reference Consortium Zebrafish Build 10
+# Organism name:  Danio rerio
+# Taxid:          7955
+# Submitter:      Genome Reference Consortium
+# Date:           2014-9-2
+# BioSample:      SAMN03020626
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Chromosome
+# Genome representation: full
+# GenBank Assembly Accession: GCA_000002035.3 (latest)
+# RefSeq Assembly Accession: GCF_000002035.5 (species-representative latest)
+# RefSeq Assembly and GenBank Assemblies Identical: no
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000000175.3      GCF_000000175.4 Primary Assembly
+##      GCF_000002055.1 non-nuclear
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2015-01-22 - Hiram)
+    # now using the new NCBI naming scheme hierarchy
+    mkdir -p /hive/data/genomes/danRer10/genbank
+    cd /hive/data/genomes/danRer10/genbank
+
+    time rsync -L -a -P rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_other/Danio_rerio/all_assembly_versions/GCA_000002035.3_GRCz10/ ./
+    # real    1m18.054s
+
+    # measure what we have here:
+    faSize GCA_000002035.3_GRCz10_genomic.fna.gz
+
+    # 1371702787 bases (2087465 N's 1369615322 real 696150664 upper
+    #   673464658 lower) in 1060 sequences in 1 files
+    # Total size: mean 1294059.2 sd 8275856.7 min 650 (KN150525.1)
+    #   max 76625712 (CM002888.1) median 18168
+    # %49.10 masked total, %49.17 masked real
+
+    # note that these totals do not include chrM since the GenBank ftp directory
+    # did not include a non-nuclear directory
+
+    # same measurement on the individual files:
+
+    faSize GCA_000002035.3_GRCz10_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz \
+      GCA_000002035.3_GRCz10_assembly_structure/Primary_Assembly/assembled_chromosomes/FASTA/*.fna.gz
+    # 1371702787 bases (2087465 N's 1369615322 real 1369615322 upper
+    #    0 lower) in 1060 sequences in 26 files
+    # Total size: mean 1294059.2 sd 8275856.7 min 650 (KN150525.1)
+    #    max 76625712 (CM002888.1) median 18168
+    # %0.00 masked total, %0.00 masked real
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2015-01-22 - Hiram)
+    mkdir /hive/data/genomes/danRer10/ucsc
+    cd /hive/data/genomes/danRer10/ucsc
+
+    time ~/kent/src/hg/makeDb/doc/danRer10/ucscCompositeAgp.pl \
+        ../genbank/GCA_000002035.3_GRCz10_assembly_structure/Primary_Assembly
+
+    # this unplaced.pl script is generic enough at this point, it should
+    # go into utils/automation/
+    time ~/kent/src/hg/makeDb/doc/danRer10/unplaced.pl \
+        ../genbank/GCA_000002035.3_GRCz10_assembly_structure/Primary_Assembly
+    zcat ../genbank/GCA_000164805.2_Tarsius_syrichta-2.0.1_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+
+    # verify we haven't lost anything:
+    faSize chr*.fa
+    # 1371702787 bases (2087465 N's 1369615322 real 1369615322 upper 0 lower)
+    #    in 1060 sequences in 26 files
+    # Total size: mean 1294059.2 sd 8275856.7 min 650 (chrUn_KN150525v1)
+    #    max 76625712 (chr4) median 18168
+    # %0.00 masked total, %0.00 masked real
+
+    # same numbers as above.
+
+    time gzip chr*.fa chr*.agp
+    #  real    7m27.555s
+
+#############################################################################
+#  Initial database build (DONE - 2014-11-20 - Hiram)
+
+    cd /hive/data/genomes/danRer10
+    cat << '_EOF_' > danRer10.config.ra
+# Config parameters for makeGenomeDb.pl:
+db danRer10
+clade vertebrate
+scientificName Danio rerio
+commonName Zebrafish
+assemblyDate Sep. 2014
+assemblyLabel Genome Reference Consortium Zebrafish Build 10
+assemblyShortLabel Zv10
+orderKey 26173
+fastaFiles /hive/data/genomes/danRer10/ucsc/chr*.fa.gz
+agpFiles /hive/data/genomes/danRer10/ucsc/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir zebrafish
+mitoAcc NC_002333.2
+photoCreditURL http://www.genome.gov/dmd/img.cfm?node=Photos/Animals/Zebrafish&id=79130
+photoCreditName NHGRI Press Photos
+ncbiGenomeId 50
+ncbiAssemblyId 210611
+ncbiAssemblyName GRCz10
+ncbiBioProject 13922
+genBankAccessionID GCA_000002035.3
+taxId 7955
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and AGP are OK:
+    time makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp danRer10.config.ra > agp.log 2>&1
+    # real    1m21.490s
+
+    # then finish it off:
+    time makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db danRer10.config.ra > db.log 2>&1
+    # real    11m8.084s
+
+    # check in the trackDb files created here
+
+##########################################################################
+# running repeat masker (DONE - 2015-01-22 - Hiram)
+    mkdir /hive/data/genomes/danRer10/bed/repeatMasker
+    cd /hive/data/genomes/danRer10/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku danRer10) > do.log 2>&1
+XXX - running - Thu Jan 22 10:48:22 PST 2015
+    # real    750m50.942s
+
+    cat faSize.rmsk.txt
+    # 3453864774 bases (48109210 N's 3405755564 real 1778461643 upper
+    #   1627293921 lower) in 337189 sequences in 1 files
+    # Total size: mean 10243.1 sd 72185.9 min 202 (ABRT02344103v1)
+    #   max 4032379 (KE950501v1) median 773
+    # %47.12 masked total, %47.78 masked real
+
+    egrep -i "versi|relea" do.log
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    #  CC   RELEASE 20140131;
+
+    time featureBits -countGaps danRer10 rmsk
+    #  1631014044 bases of 3453864774 (47.223%) in intersection
+
+    #  real    3m0.934s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE 2015-01-22 - Hiram)
+
+    mkdir /hive/data/genomes/danRer10/bed/simpleRepeat
+    cd /hive/data/genomes/danRer10/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        danRer10) > do.log 2>&1
+XXX - running - Thu Jan 22 13:04:59 PST 2015
+    # real    75m31.505s
+
+    cat fb.simpleRepeat
+    # 85367852 bases of 3405755564 (2.507%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/danRer10
+    twoBitMask danRer10.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed danRer10.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    twoBitToFa danRer10.2bit stdout | faSize stdin > faSize.danRer10.2bit.txt
+    cat faSize.danRer10.2bit.txt
+    # 3453864774 bases (48109210 N's 3405755564 real 1776164022 upper
+    #    1629591542 lower) in 337189 sequences in 1 files
+    # Total size: mean 10243.1 sd 72185.9 min 202 (ABRT02344103v1)
+    #    max 4032379 (KE950501v1) median 773
+    # %47.18 masked total, %47.85 masked real
+    # 2670044500 bases (20740269 N's 2649304231 real 1359475670 upper
+    #    1289828561 lower) in 3179 sequences in 1 files
+    # Total size: mean 839900.8 sd 9113794.6 min 224 (chrUn_GJ060330v1)
+    #    max 158337067 (chr1) median 1356
+    # %48.31 masked total, %48.69 masked real
+
+    rm /gbdb/danRer10/danRer10.2bit
+    ln -s `pwd`/danRer10.2bit /gbdb/danRer10/danRer10.2bit
+
+##########################################################################
+## WINDOWMASKER (DONE - 2014-11-21 - Hiram)
+
+    mkdir /hive/data/genomes/danRer10/bed/windowMasker
+    cd /hive/data/genomes/danRer10/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev danRer10) > do.log 2>&1
+XXX - running - Thu Jan 22 13:05:31 PST 2015
+    # real    801m33.192s
+
+    # Masking statistics
+    cat faSize.danRer10.cleanWMSdust.txt
+    # 3453864774 bases (48109210 N's 3405755564 real 2023347923 upper
+    #    1382407641 lower) in 337189 sequences in 1 files
+    # Total size: mean 10243.1 sd 72185.9 min 202 (ABRT02344103v1)
+    #    max 4032379 (KE950501v1) median 773
+    # %40.02 masked total, %40.59 masked real
+
+    cat fb.danRer10.rmsk.windowmaskerSdust.txt
+    # 976090281 bases of 3453864774 (28.261%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2014-11-25,27 - Hiram)
+    mkdir /hive/data/genomes/danRer10/bed/cpgIslands
+    cd /hive/data/genomes/danRer10/bed/cpgIslands
+    time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku danRer10 > do.log 2>&1
+    #  real    2250m21.599s
+
+    cat fb.danRer10.cpgIslandExt.txt
+    # 23569257 bases of 3405755564 (0.692%) in intersection
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2015-01-22 - Hiram)
+    mkdir /hive/data/genomes/danRer10/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/danRer10/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/danRer10/danRer10.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku danRer10) > do.log 2>&1
+XXX - running - Thu Jan 22 13:06:22 PST 2015
+    # real    2229m13.108s
+
+    cat fb.danRer10.cpgIslandExtUnmasked.txt
+    # 35810524 bases of 3405755564 (1.051%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-01-22 - Hiram)
+    mkdir /hive/data/genomes/danRer10/bed/cytoBand
+    cd /hive/data/genomes/danRer10/bed/cytoBand
+    makeCytoBandIdeo.csh danRer10
+
+#########################################################################
+# genscan - (DONE 2014-11-25,27 - Hiram)
+    mkdir /hive/data/genomes/danRer10/bed/genscan
+    cd /hive/data/genomes/danRer10/bed/genscan
+    time doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku danRer10 > do.log 2>&1
+    # real    2786m14.622s
+
+    cat fb.danRer10.genscan.txt
+    # 63545533 bases of 3405755564 (1.866%) in intersection
+
+    cat fb.danRer10.genscanSubopt.txt
+    # 71743479 bases of 3405755564 (2.107%) in intersection
+
+########################################################################
+# Create kluster run files (DONE - 2014-12-03 - Hiram)
+
+    # numerator is danRer10 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap danRer10 gap
+    # 48109210 bases of 3405755564 (1.413%) in intersection
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 3405755564 / 2861349177 \) \* 1024
+    # ( 3405755564 / 2861349177 ) * 1024 = 1218.828420
+
+
+    # ==> use -repMatch=1200 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/danRer10
+    time blat danRer10.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/danRer10.11.ooc \
+        -repMatch=1200
+    # Wrote 32323 overused 11-mers to jkStuff/danRer10.11.ooc
+    # real    0m57.833s
+
+    #   there are no non-bridged gaps, don't need this
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N -e 'select * from gap where bridge="no" order by size;' \
+       danRer10 | ave -col=7 stdin
+    # this does nothing
+#     gapToLift -verbose=2 -minGap=100 bosTau7 jkStuff/nonBridged.lft \
+#         -bedFile=jkStuff/nonBridged.bed
+
+########################################################################
+# GENBANK AUTO UPDATE (DONE - 2014-12-11 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Tarsius syrichta        8       0       0
+
+    # edit etc/genbank.conf to add danRer10 just before tarSyr1
+
+# danRer10 (Tarsier)
+danRer10.serverGenome = /hive/data/genomes/danRer10/danRer10.2bit
+danRer10.clusterGenome = /hive/data/genomes/danRer10/danRer10.2bit
+danRer10.ooc = /hive/data/genomes/danRer10/jkStuff/danRer10.11.ooc
+danRer10.lift = no
+danRer10.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+danRer10.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+danRer10.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+danRer10.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+danRer10.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+danRer10.refseq.mrna.native.load = no
+danRer10.refseq.mrna.xeno.load = yes
+danRer10.genbank.mrna.xeno.load = no
+danRer10.genbank.est.native.load = yes
+danRer10.downloadDir = danRer10
+danRer10.perChromTables = no
+
+
+    git commit -m "Added danRer10; refs #14410" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+# Edit src/lib/gbGenome.c to add new species.  Skipped
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial danRer10
+    # logFile: var/build/logs/2014.12.03-15:37:55.danRer10.initalign.log
+    #   real    369m37.727s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.danRer10
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad -verbose=10 danRer10
+    # logFile: var/dbload/hgwdev/logs/2014.12.11-11:06:27.danRer10.dbload.log
+    # real    35m42.214s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add danRer10 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added danRer10 - Tarsier refs #14410" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2015-01-22 - Hiram)
+
+    mkdir /hive/data/genomes/danRer10/bed/ucscToINSDC
+    cd /hive/data/genomes/danRer10/bed/ucscToINSDC
+    # check for chrM in assembly:
+    grep chrM ../../danRer10.agp
+# chrM    1       16596   4       F       NC_002333.2     1       16596   +
+
+    # use the accession name from there in this command (blank if none)
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+        ../../genbank/GCA_*assembly_structure/Primary_Assembly NC_002333.2
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # should all be the same line count:
+    wc -l *
+#  1061 name.coordinate.tab
+#  1061 ucscToINSDC.bed
+#  1061 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 16
+    # use the 16 in this sed
+    sed -e "s/21/16/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab danRer10 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords danRer10
+    # should cover %100 entirely:
+    featureBits -countGaps danRer10 ucscToINSDC
+    # 1371719383 bases of 1371719383 (100.000%) in intersection
+
+#########################################################################
+# LIFTOVER TO danRer7 (DONE - 2015-01-22 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/danRer10/bed/blat.danRer7.2015-01-22
+    cd /hive/data/genomes/danRer10/bed/blat.danRer7.2015-01-22
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/danRer10/jkStuff/danRer10.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         danRer10 danRer7) > do.log 2>&1
+    # real    13948m39.233s
+    # this was a tough job, that long time was not necessarily due
+    # to cluster contention.  the blat run took over 9 days:
+# Completed: 361089 of 361089 jobs
+# CPU time in finished jobs:  229192746s 3819879.10m 63664.65h 2652.69d  7.268 y
+# IO & Wait Time:              11337726s  188962.10m  3149.37h  131.22d  0.360 y
+# Average job time:                 666s      11.10m     0.19h    0.01d
+# Longest finished job:            1492s      24.87m     0.41h    0.02d
+# Submission to last job:        811729s   13528.82m   225.48h    9.40d
+
+    # verify the convert link on the test browser is now active from danRer10 to
+    # danRer7
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE 2014-12-29 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=danRer10 -keys all.joiner
+    # about 50 minutes
+    joinerCheck -database=danRer10 -tableCoverage all.joiner
+    joinerCheck -database=danRer10 -times all.joiner
+
+    cd /hive/data/genomes/danRer10
+    time makeDownloads.pl danRer10 > downloads.log 2>&1
+    # real    22m17.544s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/danRer10/pushQ
+    cd /hive/data/genomes/danRer10/pushQ
+    time makePushQSql.pl danRer10 > danRer10.pushQ.sql 2> stderr.out
+    # real    5m47.086s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+# WARNING: hgwdev does not have /gbdb/danRer10/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/danRer10/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/danRer10/bbi/qualityBw/quality.bw
+# WARNING: danRer10 does not have seq
+# WARNING: danRer10 does not have estOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p danRer10.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/danRer10.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

@@ -14,6 +14,7 @@ var Sortable = React.createClass({
     propTypes: { // Optional:
                  sortableConfig: pt.object,  // extra configuration settings for JQuery Sortable
                  idPrefix: pt.string,        // prefix for forming unique child-wrapper keys
+                 className: pt.string,       // extra class(es) for wrapper div
                  style: pt.object            // extra style directives for wrapper div
                },
 
@@ -61,7 +62,11 @@ var Sortable = React.createClass({
             var id = this.intToId(ix);
             return <div id={id} key={id}>{child}</div>;
         }.bind(this));
-        return <div style={this.props.style}>{wrappedChildren}</div>;
+        return (
+            <div className={this.props.className} style={this.props.style}>
+              {wrappedChildren}
+            </div>
+        );
     }
 
 });

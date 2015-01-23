@@ -18,7 +18,7 @@ var LoadingImage = React.createClass({
         if (this.props.loading) {
             return (
               <div><img id='loadingImg' src='../images/loading.gif' />
-	        <p style={{color: 'red', fontStyle: 'italic'}}>
+	        <p className='loadingMessage'>
 		  {this.props.message}
                 </p>
               </div>

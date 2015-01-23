@@ -80,30 +80,31 @@ else
 
 static void printControlledVocabFields(char **row, int fieldCount, 
 	struct slName *fieldList, char *vocabFile, struct hash *vocabHash)
-/* Print out fields from row, linking them to controlled vocab if need be. */
+/* Print out fields from row, linking them to controlled vocab if need be. 
+ * If vocabFile is NULL, the vocabHash is a metaHash, so links + mouseovers are
+ * generated differently */
 {
 int i;
 struct slName *field;
 for (i=0, field = fieldList; i<fieldCount; ++i, field = field->next)
     {
+    char *link = NULL;
     char *fieldVal = row[i];
     if (vocabFile && hashLookup(vocabHash, field->name))
-	{
-	char *link = controlledVocabLink(vocabFile, "term", 
-		fieldVal, fieldVal, fieldVal, "");
-	webPrintLinkCell(link);
-	}
-    else
-	webPrintLinkCell(fieldVal);
-    }
-}
+        {
+        // controlled vocabulary
+        link = controlledVocabLink(vocabFile, "term", fieldVal, fieldVal, fieldVal, "");
+        }
+    else if (!vocabFile && vocabHash != NULL)
+        {
+        // meta tables
+        struct hash *fieldHash = hashFindVal(vocabHash, field->name);
+        if (fieldHash != NULL)
+            link = metaVocabLink(fieldHash, fieldVal, fieldVal);
 
-struct hash *getVocabHash(char *fileName)
-/* Get vocabulary term hash */
-{
-struct hash *hash = raTagVals(fileName, "type");
-hashAdd(hash, "cellType", NULL);	/* Will the kludge never end, no, never! */
-return hash;
+        }
+    webPrintLinkCell(link != NULL ? link : fieldVal);
+    }
 }
 
 static void printMetadataForTable(char *table)
@@ -114,8 +115,14 @@ webPrintLinkCellStart();
 struct trackDb *tdb = hashFindVal(trackHash, table);
 if (tdb == NULL)
     printf("%s info n/a", table);
-else
-    compositeMetadataToggle(database, tdb, "metadata", TRUE, FALSE);
+else if (!compositeMetadataToggle(database, tdb, "metadata", TRUE, FALSE))
+    {
+    /* no metadata, but there is a track table to point TB at */
+    struct trackDb *parent = trackDbTopLevelSelfOrParent(tdb);
+    printf("<A target='_blank' title='browse table' "
+                "href='%s?db=%s&hgta_table=%s&hgta_group=%s&hgta_track=%s'>%s</A>",
+                    hgTablesName(), database, table, parent->grp, parent->track, table);
+    }
 webPrintLinkCellEnd();
 }
 
@@ -135,62 +142,52 @@ if (fieldList != NULL)
 dyStringFree(&fields);
 }
 
-static void printPeakClusterTableHits(struct bed *cluster, struct sqlConnection *conn,
-	char *inputTrackTable, struct slName *fieldList, char *vocab)
-/* Put out a lines in an html table that shows assayed sources that have hits in this
- * cluster, or if invert is set, that have misses. */
+static struct hash *getVocabHash(char *fileName)
+/* Get vocabulary term hash */
 {
-char *vocabFile = NULL;
-struct hash *vocabHash = NULL;
-if (vocab)
-    {
-    vocabFile = cloneFirstWord(vocab);
-    vocabHash = getVocabHash(vocabFile);
-    }
-
-/* Make the SQL query to get the table and all other fields we want to show
- * from inputTrackTable. */
-struct dyString *query = dyStringNew(0);
-queryInputTrackTable(query, inputTrackTable, fieldList);
-
-int displayNo = 0;
-int fieldCount = slCount(fieldList);
-struct sqlResult *sr = sqlGetResult(conn, query->string);
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    char *table = row[0];
-    double signal = getSignalAt(table, cluster);
-    if (signal != 0)
-	{
-	printf("</TR><TR>\n");
-	webPrintIntCell(++displayNo);
-	webPrintDoubleCell(signal);
-	printControlledVocabFields(row+1, fieldCount, fieldList, vocabFile, vocabHash);
-	printMetadataForTable(table);
-	}
-    }
-sqlFreeResult(&sr);
-freez(&vocabFile);
-dyStringFree(&query);
+struct hash *hash = raTagVals(fileName, "type");
+hashAdd(hash, "cellType", NULL);	/* Will the kludge never end, no, never! */
+return hash;
 }
 
-static void printPeakClusterInputs(struct sqlConnection *conn,
-	char *inputTrackTable, struct slName *fieldList, char *vocab)
-/* Print out all input tables for clustering. */
+static void getVocab(struct trackDb *tdb, struct cart *cart, 
+                        char **vocabFile, struct hash **vocabHash)
+/* Get vocabulary info from trackDb settings (CV or meta tables) */
 {
-char *vocabFile = NULL;
-struct hash *vocabHash = NULL;
+
+char *file = NULL;
+struct hash *hash = NULL;
+char *vocab = trackDbSetting(tdb, "controlledVocabulary");
+struct hash *metaHash = metaBasicFromSetting(tdb, cart, "inputFieldMetaTables");
 if (vocab)
     {
-    vocabFile = cloneFirstWord(vocab);
-    vocabHash = getVocabHash(vocabFile);
+    file = cloneFirstWord(vocab);
+    hash = getVocabHash(file);
     }
+else if (metaHash)
+    {
+    hash = metaHash;
+    }
+if (vocabFile != NULL)
+    *vocabFile = file;
+if (hash != NULL)
+    *vocabHash = hash;
+}
 
+static void printPeakClusterInfo(struct trackDb *tdb, struct cart *cart,
+                                struct sqlConnection *conn, char *inputTrackTable, 
+                                struct slName *fieldList, struct bed *cluster)
+/* Print an HTML table showing sources with hits in the cluster, along with signal.
+   If cluster is NULL, show all sources assayed */
+{
 /* Make the SQL query to get the table and all other fields we want to show
  * from inputTrackTable. */
 struct dyString *query = dyStringNew(0);
 queryInputTrackTable(query, inputTrackTable, fieldList);
+
+char *vocabFile = NULL;
+struct hash *vocabHash = NULL;
+getVocab(tdb, cart, &vocabFile, &vocabHash);
 
 int displayNo = 0;
 int fieldCount = slCount(fieldList);
@@ -198,13 +195,21 @@ struct sqlResult *sr = sqlGetResult(conn, query->string);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    double signal = 0;
+    if (cluster != NULL)
+        {
+        char *table = row[0];
+        signal = getSignalAt(table, cluster);
+        if (signal == 0)
+            continue;
+        }
     printf("</TR><TR>\n");
     webPrintIntCell(++displayNo);
+    if (signal != 0)
+	webPrintDoubleCell(signal);
     printControlledVocabFields(row+1, fieldCount, fieldList, vocabFile, vocabHash);
     printMetadataForTable(row[0]);
     }
-
-
 sqlFreeResult(&sr);
 freez(&vocabFile);
 dyStringFree(&query);
@@ -304,9 +309,8 @@ if (inputTableFieldDisplay)
     {
     struct slName *fieldList = stringToSlNames(inputTableFieldDisplay);
     printClusterTableHeader(fieldList, FALSE, FALSE, FALSE);
-    char *vocab = trackDbSetting(clusterTdb, "controlledVocabulary");
     char *inputTrackTable = trackDbRequiredSetting(clusterTdb, "inputTrackTable");
-    printPeakClusterInputs(conn, inputTrackTable, fieldList, vocab);
+    printPeakClusterInfo(clusterTdb, cart, conn, inputTrackTable, fieldList, NULL);
     }
 else
     errAbort("Missing required trackDb setting %s for track %s", "inputTableFieldDisplay", 
@@ -344,7 +348,6 @@ if (cluster != NULL)
     if (inputTableFieldDisplay != NULL)
         {
 	struct slName *fieldList = stringToSlNames(inputTableFieldDisplay);
-	char *vocab = trackDbSetting(tdb, "controlledVocabulary");
 	char *inputTrackTable = trackDbRequiredSetting(tdb, "inputTrackTable");
 
 	/* Print out some information about the cluster overall. */
@@ -357,7 +360,7 @@ if (cluster != NULL)
 	webNewSection("List of Items in Cluster");
 	webPrintLinkTableStart();
 	printClusterTableHeader(fieldList, FALSE, FALSE, TRUE);
-	printPeakClusterTableHits(cluster, conn, inputTrackTable, fieldList, vocab);
+	printPeakClusterInfo(tdb, cart, conn, inputTrackTable, fieldList, cluster);
 	}
     else
 	errAbort("Missing required trackDb setting %s for track %s",

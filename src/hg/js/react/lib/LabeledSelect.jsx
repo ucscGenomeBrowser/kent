@@ -10,7 +10,8 @@ var LabeledSelect = React.createClass({
     propTypes: { label: pt.string.isRequired,  // label that appears above select input
                  // Optional:
                  selected: pt.string,          // initial selected value
-                 options: pt.object            // Immutable.Vector [ .Map{value: x, label: y}, ... ]
+                 options: pt.object,           // Immutable.Vector [ .Map{value: x, label: y}, ... ]
+                 className: pt.string          // class(es) to pass to wrapper div
                },
 
     optionFromValueLabel: function(item) {
@@ -28,8 +29,10 @@ var LabeledSelect = React.createClass({
         if (this.props.options)
             opts = this.props.options.map(this.optionFromValueLabel).toJS();
         return (
-            <div className='topLabelSelect'>
-              <label style={{ display: 'block' }}>{this.props.label}</label>
+            <div className={this.props.className}>
+              <div>
+                {this.props.label}
+              </div>
               <select className='groupMenu' value={this.props.selected} onChange={this.onChange}>
 	        {opts}
               </select>

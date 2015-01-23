@@ -1436,18 +1436,20 @@ done
     done > $gp.jobs
     echo "date" >> $gp.jobs
     echo "wait" >> $gp.jobs
-XXX - running - Mon Dec 29 13:24:47 PST 2014
 
-    time ./$gp.jobs > $gp.jobs.log 2>&1 &
-    #   real    28m46.919s
-
-    time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
-    #   real    0m23.798s
-    time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    1m28.197s
+    time sh -x ./$gp.jobs > $gp.jobs.log 2>&1 &
+    #   real    163m13.655s
 
     export mz=multiz17way
-    export gp=knownGene
+    export gp=xenoRefGene
+    find ./exonAA -type f | grep exonAA.fa.gz | xargs zcat \
+     | gzip -c > $gp.$mz.exonAA.fa.gz
+    time find ./exonNuc -type f | grep exonNuc.fa.gz | xargs zcat \
+     | gzip -c > $gp.$mz.exonNuc.fa.gz
+    #   real    11m34.407s
+
+    export mz=multiz17way
+    export gp=xenoRefGene
     export db=tarSyr2
     export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
@@ -1457,114 +1459,6 @@ XXX - running - Mon Dec 29 13:24:47 PST 2014
     ln -s `pwd`/md5sum.txt $pd/
 
     rm -rf exonAA exonNuc
-
-    ### need other gene track alignments also
-    # running up refGene
-    cd /hive/data/genomes/tarSyr2/bed/multiz17way/pal
-    export mz=multiz17way
-    export gp=refGene
-    export db=tarSyr2
-    export I=0
-    mkdir exonAA exonNuc
-    for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
-    do
-        I=`echo $I | awk '{print $1+1}'`
-	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc/$C.exonNuc.fa.gz &"
-	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA/$C.exonAA.fa.gz &"
-        if [ $I -gt 6 ]; then
-            echo "date"
-            echo "wait"
-            I=0
-        fi
-    done > $gp.jobs
-    echo "date" >> $gp.jobs
-    echo "wait" >> $gp.jobs
-
-    time sh -x $gp.jobs > $gp.jobs.log 2>&1
-    #   real    15m15.424s
-
-    export mz=multiz17way
-    export gp=refGene
-    export db=tarSyr2
-    time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
-    #   real    0m23.119s
-    time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    1m15.547s
-
-    du -hsc exonAA exonNuc refGene*.fa.gz
-    #  59M     exonAA
-    #  101M    exonNuc
-    #  59M     refGene.multiz17way.exonAA.fa.gz
-    #  101M    refGene.multiz17way.exonNuc.fa.gz
-    #  317M    total
-
-    rm -rf exonAA exonNuc
-
-    # we're only distributing exons at the moment
-    export mz=multiz17way
-    export gp=refGene
-    export db=tarSyr2
-    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
-    mkdir -p $pd
-    md5sum *.fa.gz > md5sum.txt
-    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
-    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
-    ln -s `pwd`/md5sum.txt $pd/
-
-    ### And knownCanonical
-    cd /hive/data/genomes/tarSyr2/bed/multiz17way/pal
-    export mz=multiz17way
-    export gp=knownCanonical
-    export db=tarSyr2
-    mkdir exonAA exonNuc ppredAA ppredNuc knownCanonical
-
-    cut -f1 ../../../chrom.sizes | while read C
-    do
-        echo $C
-	hgsql tarSyr2 -N -e "select chrom, chromStart, chromEnd, transcript from knownCanonical where chrom='$C'" > knownCanonical/$C.known.bed
-    done
-
-    ls knownCanonical/*.known.bed | while read F
-    do
-      if [ -s $F ]; then
-         echo $F | sed -e 's#knownCanonical/##; s/.known.bed//'
-      fi
-    done | while read C
-    do
-	echo "date"
-	echo "mafGene -geneBeds=knownCanonical/$C.known.bed  $db $mz knownGene order.list stdout | \
-	    gzip -c > ppredAA/$C.ppredAA.fa.gz"
-	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -noTrans $db $mz knownGene order.list stdout | \
-	    gzip -c > ppredNuc/$C.ppredNuc.fa.gz"
-	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons -noTrans $db $mz knownGene order.list stdout | \
-	    gzip -c > exonNuc/$C.exonNuc.fa.gz"
-	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons $db $mz knownGene order.list stdout | \
-	    gzip -c > exonAA/$C.exonAA.fa.gz"
-    done > $gp.$mz.jobs
-
-    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1
-    # real    72m58.133s
-
-    rm *.known.bed
-    mz=multiz17way
-    gp=knownCanonical
-    db=tarSyr2
-    zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz &
-    zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz &
-    zcat ppredAA/c*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz &
-    zcat ppredNuc/c*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
-
-    rm -rf exonAA exonNuc ppredAA ppredNuc
-
-    mz=multiz17way
-    gp=knownCanonical
-    db=tarSyr2
-    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
-    mkdir -p $pd
-    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
-    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
-    cd  $pd
-    md5sum *.exon*.fa.gz > md5sum.txt
 
 #############################################################################
 # wiki page for 17-way (DONE - 2014-06-04 - Hiram)

@@ -955,7 +955,7 @@ webIncludeFile(hHelpFile(fileRoot));
 void webPrintLinkTableStart()
 /* Print link table start in our colors. */
 {
-printf("<TABLE><TR><TD BGCOLOR='#888888'>\n");
+printf("<TABLE><TR><TD BGCOLOR='#" HG_COL_BORDER "'>\n");
 printf("<TABLE CELLSPACING=1 CELLPADDING=3><TR>\n");
 }
 

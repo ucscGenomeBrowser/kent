@@ -19,34 +19,18 @@ var Modal = React.createClass({
     propTypes: { title: pt.renderable.isRequired,  // title string or React.DOM object
                },
 
-    defaultPopupStyle: { position: 'absolute',
-                     display: 'inline-block',
-                     top: '75px',
-                     left: '75px',
-                     width: '80%',
-                     height: '80%',
-                     zIndex: '100',
-                     backgroundColor: '#FFFEE8',
-                     borderStyle: 'solid',
-                     borderWidth: '2px',
-                     borderColor: 'black',
-                     padding: '10px',
-                     overflow: 'auto'
-                   },
-
     render: function() {
-        var thisPopupStyle = this.defaultPopupStyle;
-        thisPopupStyle.top = getScrollHeight() + 75; // px is default unit in React style
+        var myTop = getScrollHeight() + 75; // px is default unit in React style
         var path = this.props.path || [];
         return (
-            <div style={thisPopupStyle}>
+            <div style={{top: myTop}} className='absoluteModal'>
               <div>
-                <span style={{float: "left"}}>
+                <span className='floatLeft'>
                   {this.props.title}
                 </span>
-                <Icon type="remove" extraClass = "removeButton floatRight"
+                <Icon type="remove" className="removeButton floatRight"
                       path={path.concat('remove')} update={this.props.update} />
-                <div style={{clear: 'both'}} />
+                <div className='clear' />
                 </div>
                 {this.props.children}
               </div>
