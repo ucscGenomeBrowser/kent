@@ -1,0 +1,13 @@
+# Config parameters for makeGenomeDb.pl:
+db canFamPoodle1
+scientificName Canis lupus familiaris
+commonName Dog
+assemblyDate May 2003
+assemblyLabel TIGR Poodle WGS (AACN010000000)
+orderKey 229
+mitoAcc NC_002008
+fastaFiles /hive/data/genomes/canFamPoodle1/download/canFamPoodle1.fa.gz
+agpFiles /hive/data/genomes/canFamPoodle1/download/canFamPoodle1.agp
+# qualFiles /dev/null
+dbDbSpeciesDir dog
+taxId	9615

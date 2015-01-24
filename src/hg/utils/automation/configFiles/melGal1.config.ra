@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db melGal1
+clade vertebrate
+genomeCladePriority 55
+scientificName Meleagris gallopavo
+commonName Turkey
+assemblyDate Dec. 2009
+assemblyLabel TGC (NCBI Project ID: 10805, Accession: GCA_000146605.1)
+assemblyShortLabel TGC Turkey_2.01
+orderKey 438
+mitoAcc NC_010195
+fastaFiles /hive/data/genomes/melGal1/genbank/ucscChr/chr*.fa.gz
+agpFiles /hive/data/genomes/melGal1/genbank/ucscChr/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir turkey
+taxId 9103

@@ -1,0 +1,15 @@
+# Config parameters for makeGenomeDb.pl:
+db otoGar1
+clade vertebrate
+genomeCladePriority 16
+commonName Bushbaby
+scientificName Otolemur garnetti 
+assemblyDate Dec. 2006
+assemblyLabel Broad version 1
+orderKey 16
+fakeAgpMinContigGap 25
+fakeAgpMinScaffoldGap 25 
+mitoAcc none
+fastaFiles /cluster/data/otoGar1/fromBroad/Draft_v1.agp.chromosome.fasta
+#agpFiles /cluster/data/otoGar1/downloads/chr*.agp
+dbDbSpeciesDir bushbaby

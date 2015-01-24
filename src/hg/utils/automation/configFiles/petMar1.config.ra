@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db petMar1
+clade vertebrate
+genomeCladePriority 130
+scientificName Petromyzon marinus
+commonName Lamprey
+assemblyDate Mar. 2007
+assemblyLabel WUSTL v.3.0 (March 2007)
+assemblyShortLabel
+orderKey 480
+mitoAcc 5835065
+fastaFiles /cluster/data/petMar1/downloads/supercontigs.fa.gz
+agpFiles /cluster/data/petMar1/downloads/supers.agp.gz
+# qualFiles none
+dbDbSpeciesDir lamprey
+photoCreditURL http://epa.gov/greatlakes/image/index.htm
+photoCreditName U.S. Environmental Protection Agency
+ncbiGenomeId 287
+ncbiAssemblyId
+ncbiAssemblyName WUSTL 3.0
+ncbiBioProject
+genBankAccessionID
+taxId   7757

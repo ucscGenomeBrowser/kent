@@ -1,0 +1,15 @@
+# Config parameters for makeGenomeDb.pl:
+db hg19Haps
+scientificName Homo sapiens
+commonName hg19Haplotypes
+assemblyDate Feb. 2009
+assemblyLabel GRCh37 hg19 haplotypes only (GCA_000001405.1)
+orderKey 14
+mitoAcc none
+fastaFiles /hive/data/genomes/hg19Haps/download/*.fa
+agpFiles /hive/data/genomes/hg19Haps/download/*.agp
+# qualFiles /dev/null
+dbDbSpeciesDir human
+taxId	9606
+clade haplotypes
+genomeCladePriority 140

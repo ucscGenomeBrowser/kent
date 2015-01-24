@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db rn6
+clade mammal
+scientificName Rattus norvegicus
+commonName Rat
+assemblyDate Jul. 2014
+assemblyLabel RGSC Rnor_6.0
+assemblyShortLabel RGSC 6.0
+orderKey 1558
+# chrMt NC_001665.2 included in the genbank release
+mitoAcc none
+fastaFiles /hive/data/genomes/rn6/ucsc/chr*.fa.gz
+agpFiles /hive/data/genomes/rn6/ucsc/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir rat
+photoCreditURL http://www.genome.gov/10005141
+photoCreditName NHGRI Press Photos
+ncbiGenomeId 73
+ncbiAssemblyId 382928
+ncbiAssemblyName Rnor_6.0
+ncbiBioProject 10629
+genBankAccessionID GCA_000001895.4
+taxId 10116
+# http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AABR07

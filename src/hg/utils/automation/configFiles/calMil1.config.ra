@@ -1,0 +1,22 @@
+# Config parameters for makeGenomeDb.pl:
+db calMil1
+clade vertebrate
+genomeCladePriority 70
+scientificName Callorhinchus milii
+commonName Elephant shark
+assemblyDate Dec. 2013
+assemblyLabel Institute of Molecular and Cell Biology, Singapore
+assemblyShortLabel Callorhinchus_milii-6.1.3
+orderKey 4796
+mitoAcc NC_014285.1
+fastaFiles /hive/data/genomes/calMil1/ucsc/calMil1.ucsc.fa.gz
+agpFiles /hive/data/genomes/calMil1/ucsc/calMil1.ucsc.agp
+dbDbSpeciesDir calMil
+photoCreditURL http://www.flagstaffotos.com.au/
+photoCreditName Flagstaff Fotos/Wikipedia
+ncbiGenomeId 689
+ncbiAssemblyId 85971
+ncbiAssemblyName Callorhinchus_milii-6.1.3
+ncbiBioProject 18361
+genBankAccessionID GCA_000165045.2
+taxId 7868

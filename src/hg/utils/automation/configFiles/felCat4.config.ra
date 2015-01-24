@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db felCat4
+clade mammal
+genomeCladePriority 16
+scientificName Felis catus
+commonName Cat
+assemblyDate Dec. 2008
+assemblyLabel NHGRI/Genome Technology Branch (NCBI project 10703, accession ACBE0100000)
+assemblyShortLabel NHGRI/GTB 4
+orderKey 216
+mitoAcc NC_001700
+fastaFiles /hive/data/genomes/felCat4/genbank/ucscChr/chr*.fa.gz
+agpFiles /hive/data/genomes/felCat4/genbank/ucscChr/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir cat
+taxId 9685

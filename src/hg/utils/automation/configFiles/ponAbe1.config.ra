@@ -1,0 +1,15 @@
+# Config parameters for makeGenomeDb.pl:
+db ponAbe1
+scientificName Pongo pygmaeus abelii
+commonName Orangutan
+assemblyDate Jul. 2007
+assemblyLabel WUSTL 2.0.2
+orderKey 31
+clade mammal
+genomeCladePriority 11
+# mitoAcc gi:1743294
+mitoAcc X97707.1
+fastaFiles /cluster/data/ponAbe1/wustl/supercontigs.fa.gz
+agpFiles /cluster/data/ponAbe1/wustl/supercontigs.agp.gz
+# qualFiles /dev/null
+dbDbSpeciesDir orangutan

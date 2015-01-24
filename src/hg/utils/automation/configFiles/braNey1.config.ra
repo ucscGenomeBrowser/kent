@@ -1,0 +1,26 @@
+# Config parameters for makeGenomeDb.pl:
+db braNey1
+clade other
+genomeCladePriority 16
+scientificName  braney test
+commonName braney test
+assemblyDate Jul. 2013
+assemblyLabel braNey1
+assemblyShortLabel braNey1
+orderKey 216
+mitoAcc none
+#mitoAcc NC_001700
+fastaFiles  /hive/data/genomes/hg19/download/ucscChr/*.fa
+fakeAgpMinContigGap 25
+fakeAgpMinScaffoldGap 25
+taxId 1
+#agpFiles /hive/data/genomes/felCat4/genbank/ucscChr/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir braney
+photoCreditURL none
+photoCreditName none
+ncbiGenomeId none
+ncbiAssemblyName none
+ncbiAssemblyId none
+ncbiBioProject none
+genBankAccessionID none

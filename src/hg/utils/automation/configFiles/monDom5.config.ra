@@ -1,0 +1,13 @@
+# Config parameters for makeGenomeDb.pl:
+db monDom5
+clade mammal
+scientificName Monodelphis domestica
+commonName Opossum
+assemblyDate Oct. 2006
+assemblyLabel Broad Institute monDom5 (NCBI project 12561, accession AAFR03000000)
+orderKey 354
+mitoAcc NC_006299
+fastaFiles /hive/data/genomes/monDom5/broad/ucscChroms.fa
+agpFiles /hive/data/genomes/monDom5/broad/Monodelphis5.0.agp
+qualFiles /hive/data/genomes/monDom5/broad/ucscChroms.qac
+dbDbSpeciesDir opossum

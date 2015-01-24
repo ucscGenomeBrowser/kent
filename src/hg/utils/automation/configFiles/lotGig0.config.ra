@@ -1,0 +1,26 @@
+# Config parameters for makeGenomeDb.pl:
+db lotGig0
+clade other
+genomeCladePriority 16
+scientificName  Lottia gigantea
+commonName Limpet
+assemblyDate Jul. 2013
+assemblyLabel lotGig0
+assemblyShortLabel lotGig0
+orderKey 216
+mitoAcc none
+#mitoAcc NC_001700
+fastaFiles /hive/users/braney/limpet/ucsc/lotGig0.unmasked.fa
+fakeAgpMinContigGap 25
+fakeAgpMinScaffoldGap 25
+taxId 1
+#agpFiles /hive/data/genomes/felCat4/genbank/ucscChr/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir limpet
+photoCreditURL none
+photoCreditName none
+ncbiGenomeId none
+ncbiAssemblyName none
+ncbiAssemblyId none
+ncbiBioProject none
+genBankAccessionID none

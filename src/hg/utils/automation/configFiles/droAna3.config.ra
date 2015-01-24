@@ -1,0 +1,11 @@
+# Config parameters for makeGenomeDb.pl:
+db droAna3
+clade insect
+scientificName Drosophila ananassae
+assemblyDate Feb. 2006
+assemblyLabel Agencourt CAF1
+orderKey 54
+mitoAcc none
+fastaFiles /cluster/data/droAna3/downloads/dana/scaffolds.bases
+agpFiles /cluster/data/droAna3/downloads/dana/assembly.agp
+dbDbSpeciesDir drosophila

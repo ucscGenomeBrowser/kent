@@ -1,0 +1,13 @@
+db danRer6
+clade vertebrate
+scientificName Danio rerio
+commonName Zebrafish
+assemblyDate Dec. 2008
+assemblyLabel Wellcome Trust Sanger Institute, Zv8 assembly (CAAK00000000.5)
+orderKey 449
+genomeCladePriority 90
+dbDbSpeciesDir zebrafish
+mitoAcc NC_002333.2
+agpFiles /hive/data/genomes/danRer6/download/danRer6.agp
+fastaFiles /hive/data/genomes/danRer6/download/danRer6.fa
+taxId 7955

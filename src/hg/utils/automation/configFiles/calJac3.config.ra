@@ -1,0 +1,15 @@
+# Config parameters for makeGenomeDb.pl:
+db calJac3
+clade mammal
+genomeCladePriority 16
+scientificName Callithrix jacchus
+commonName Marmoset
+assemblyDate Mar. 2009
+assemblyLabel WUSTL 3.2 (GCA_000004665.1)
+orderKey 40
+mitoAcc none
+fastaFiles /hive/data/genomes/calJac3/genbank/ucscChr/*.fa
+agpFiles /hive/data/genomes/calJac3/genbank/ucscChr/*.agp
+# qualFiles none
+dbDbSpeciesDir marmoset
+taxId 9483

@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db caeJap2a
+clade worm
+genomeCladePriority 70
+scientificName Caenorhabditis japonica
+commonName C. japonica
+assemblyDate Sep. 2010
+assemblyLabel WormBase WS210
+assemblyShortLabel WS210
+orderKey 881
+mitoAcc none
+fastaFiles /hive/data/genomes/caeJap2a/ws210/sequences/dna/c_japonica.WS210.dna.fa.gz
+agpFiles /hive/data/genomes/caeJap2a/ws210/caeJap2a.agp
+# qualFiles /hive/data/genomes/caeJap2/able0.3/ABLE000.ucsc.qac
+dbDbSpeciesDir worm
+taxId 281687

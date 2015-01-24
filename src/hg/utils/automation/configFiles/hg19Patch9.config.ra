@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db hg19Patch9
+clade haplotypes
+genomeCladePriority 138
+scientificName Homo sapiens
+commonName GRCh37.p9
+assemblyDate Jul. 2012
+assemblyLabel GRCh37 Patch 9 Genome Reference Consortium Human Reference 37 
+assemblyShortLabel GRCh37.p9
+orderKey 144
+mitoAcc none
+fastaFiles /hive/data/genomes/hg19Patch9/sequence/*.fa
+agpFiles /hive/data/genomes/hg19Patch9/sequence/hg19Patch9.agp
+# qualFiles /dev/null
+dbDbSpeciesDir human
+photoCreditURL http://www.cbse.ucsc.edu/
+photoCreditName CBSE
+ncbiGenomeId 51
+# this is patch8: 368578 can't find the patch 9 id right now
+ncbiAssemblyId 368578
+ncbiAssemblyName GRCh37.p9
+ncbiBioProject 31257
+genBankAccessionID GCA_000001405.10
+taxId   9606

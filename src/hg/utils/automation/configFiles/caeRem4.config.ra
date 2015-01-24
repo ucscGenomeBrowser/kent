@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db caeRem4
+# clade worm
+# genomeCladePriority 10
+scientificName Caenorhabditis remanei
+commonName C. remanei
+assemblyDate Jul. 2007
+assemblyLabel Washington University School of Medicine GSC C. remanei 15.0.1
+assemblyShortLabel WS220
+orderKey 877
+mitoAcc none
+fastaFiles /hive/data/genomes/caeRem4/ws220/sequences/dna/c_remanei.WS220.dna.fa.gz
+agpFiles /hive/data/genomes/caeRem4/ws220/caeRem4.ws220.fake.agp
+# qualFiles none
+dbDbSpeciesDir worm
+taxId 31234

@@ -1,0 +1,12 @@
+# Config parameters for makeGenomeDb.pl:
+db felCat3
+clade vertebrate
+scientificName Felis Catus
+assemblyDate March 2006
+assemblyLabel Broad Release 3
+orderKey 17
+dbDbSpeciesDir cat
+mitoAcc none
+agpFiles /cluster/data/felCat3/downloads/assembly.agp
+fastaFiles /cluster/data/felCat3/fixup/fasta.fix.gz
+qualFiles /cluster/data/felCat3/fixup/qual.fix.gz

@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db myoLuc2
+clade mammal
+genomeCladePriority 35
+scientificName Myotis lucifugus
+commonName Microbat
+assemblyDate Jul. 2010
+assemblyLabel  Broad Institute (NCBI Project ID: 16951, Accession: GCA_000147115.1)
+assemblyShortLabel  Broad Institute Myoluc2.0
+orderKey 236.5
+mitoAcc none
+fastaFiles /hive/data/genomes/myoLuc2/genbank/myoLuc2.fa.gz
+agpFiles /hive/data/genomes/myoLuc2/genbank/myoLuc2.agp.gz
+# qualFiles none
+dbDbSpeciesDir microbat
+taxId 59463

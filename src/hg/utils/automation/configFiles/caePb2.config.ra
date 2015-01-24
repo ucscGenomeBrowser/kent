@@ -1,0 +1,14 @@
+# Config parameters for makeGenomeDb.pl:
+db caePb2
+clade worm
+genomeCladePriority 66
+scientificName Caenorhabditis brenneri
+commonName C. brenneri
+assemblyDate Apr. 2008
+assemblyLabel Washington University School of Medicine GSC Caenorhabditis brenneri(PB2801) 6.0.1 
+orderKey 839
+mitoAcc none
+fastaFiles /cluster/data/caePb2/downloads/contigs.fa.gz
+agpFiles /cluster/data/caePb2/downloads/chrUn.agp.gz
+# qualFiles none
+dbDbSpeciesDir worm

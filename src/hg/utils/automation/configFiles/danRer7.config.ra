@@ -1,0 +1,15 @@
+# Config parameters for makeGenomeDb.pl:
+db danRer7
+clade vertebrate
+scientificName Danio rerio
+commonName Zebrafish
+assemblyDate Jul. 2010
+assemblyLabel Wellcome Trust Sanger Institute Zv9 (GCA_000002035.2)
+assemblyShortLabel Zv9
+orderKey 447
+fastaFiles /hive/data/genomes/danRer7/genbank/ucsc/chr*.fa.gz
+agpFiles /hive/data/genomes/danRer7/genbank/ucsc/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir zebrafish
+mitoAcc NC_002333.2
+taxId 7955

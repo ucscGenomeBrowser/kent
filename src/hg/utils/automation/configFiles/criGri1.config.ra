@@ -1,0 +1,22 @@
+# Config parameters for makeGenomeDb.pl:
+db criGri1
+clade glires
+genomeCladePriority 40
+scientificName Cricetulus griseus
+commonName Chinese hamster
+assemblyDate Jul. 2013
+assemblyLabel Beijing Genomics Institution-Shenzhen
+assemblyShortLabel C_griseus_v1.0
+orderKey 1610
+mitoAcc NC_007936.1
+fastaFiles /hive/data/genomes/criGri1/ucsc/criGri1.ucsc.fa.gz
+agpFiles /hive/data/genomes/criGri1/ucsc/criGri1.ucsc.agp
+dbDbSpeciesDir criGri
+photoCreditURL http://en.wikipedia.org/wiki/File:Chinesedsaffa.jpg
+photoCreditName Wikimedia Commons
+ncbiGenomeId 2791
+ncbiAssemblyId 40911
+ncbiAssemblyName C_griseus_v1.0
+ncbiBioProject 167053
+genBankAccessionID GCA_000419365.1
+taxId 10029

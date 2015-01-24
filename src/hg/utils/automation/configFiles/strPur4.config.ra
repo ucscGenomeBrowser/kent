@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db strPur4
+clade deuterostome
+genomeCladePriority 20
+scientificName Strongylocentrotus purpuratus
+commonName S. purpuratus
+assemblyDate Jun. 2011
+assemblyLabel Baylor College of Medicine Human Genome Sequencing Center (BCM-HGSC) Spur_v3.1
+assemblyShortLabel BCM-HGSC Spur_v3.1
+orderKey 817
+mitoAcc NC_001453
+fastaFiles /hive/data/genomes/strPur4/ucsc.spur3_1.fa.gz
+agpFiles /hive/data/genomes/strPur4/ucsc.spur3_1.agp.gz
+#qualFiles /hive/data/genomes/strPur4/ucsc.spur3_1.qual.fa.gz
+dbDbSpeciesDir urchin
+taxId 7668

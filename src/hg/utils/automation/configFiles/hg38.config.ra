@@ -1,0 +1,21 @@
+# Config parameters for makeGenomeDb.pl:
+db hg38
+scientificName Homo sapiens
+commonName Human
+assemblyDate Dec. 2013
+assemblyLabel GRCh38 Genome Reference Consortium Human Reference 38 (GCA_000001405.2)
+assemblyShortLabel GRCh38
+orderKey 13
+mitoAcc none
+fastaFiles /hive/data/genomes/hg38/ucsc/chr*.fa
+agpFiles /hive/data/genomes/hg38/ucsc/chr*.agp
+# qualFiles /dev/null
+dbDbSpeciesDir human
+photoCreditURL http://www.cbse.ucsc.edu/
+photoCreditName Graphic courtesy of CBSE
+ncbiGenomeId 51
+ncbiAssemblyId 883148
+ncbiAssemblyName GRCh38
+ncbiBioProject 31257
+genBankAccessionID GCA_000001305.2
+taxId	9606

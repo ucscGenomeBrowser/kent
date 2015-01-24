@@ -1,0 +1,14 @@
+# Config parameters for makeGenomeDb.pl:
+db oryCun2
+clade vertebrate
+scientificName Oryctolagus cuniculus
+commonName Rabbit
+assemblyDate Apr. 2009
+assemblyLabel Broad Institute oryCun2 (NCBI project 12819, AAGW00000000)
+orderKey 189
+mitoAcc NC_001913
+fastaFiles /hive/data/genomes/oryCun2/broad/assembly.bases.gz
+agpFiles /hive/data/genomes/oryCun2/broad/Chromosomes.agp
+qualFiles /hive/data/genomes/oryCun2/broad/chromosomes.qual.qac
+dbDbSpeciesDir rabbit
+taxId 9986

@@ -1,4 +1,4 @@
-# jsInstall.mk - user/alpha/beta installation rules shared by all js dirs.
+# install.mk - user/alpha/beta installation rules shared by all js dirs.
 
 user:
 	if test -d ${DOCUMENTROOT}-${USER}; then \

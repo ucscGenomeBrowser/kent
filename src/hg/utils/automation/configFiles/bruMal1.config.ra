@@ -1,0 +1,18 @@
+# Config parameters for makeGenomeDb.pl:
+db bruMal1
+clade worm
+genomeCladePriority 80
+scientificName Brugia malayi
+commonName B. malayi
+assemblyDate Sep. 2007
+assemblyLabel TIGR and the Sanger Institute
+assemblyShortLabel TIGR 1.0
+orderKey 890
+mitoAcc NC_004298.1
+fastaFiles /hive/data/genomes/bruMal1/ws210/sequences/dna/b_malayi.WS210.dna.fa.gz
+agpFiles /hive/data/genomes/bruMal1/ws210/ucsc.fake.bruMal1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+taxId 6279
+
+

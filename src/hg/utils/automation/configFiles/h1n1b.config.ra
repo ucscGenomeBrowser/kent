@@ -1,0 +1,18 @@
+# Config parameters for makeGenomeDb.pl:
+db h1n1b
+scientificName Homo sapiens
+commonName H1N1 A
+assemblyDate Apr. 2009
+assemblyLabel Influenza A virus (A/California/04/2009(H1N1))
+orderKey 104
+fastaFiles /hive/data/genomes/h1n1b/ALL.fa
+# agpFiles /hive/data/genomes/hg19/download/ucscChr/*.agp
+# qualFiles /dev/null
+mitoAcc none
+clade other
+genomeCladePriority 20
+fakeAgpMinContigGap 100
+fakeAgpMinScaffoldGap 100
+#gapFiles fakeAgpMinScaffoldGap
+dbDbSpeciesDir h1n1
+taxId	641501

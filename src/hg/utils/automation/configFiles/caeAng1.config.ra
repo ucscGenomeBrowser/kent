@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db caeAng1
+clade worm
+genomeCladePriority 70
+scientificName Caenorhabditis angaria
+commonName C. angaria
+assemblyDate Oct. 2010
+assemblyShortLabel WS225
+assemblyLabel Division of Biology, California Institute of Technology(PS1010) ps10rel4 (GCA_000165025.1)
+orderKey 838
+mitoAcc none
+fastaFiles /hive/data/genomes/caeAng1/genbank/caeAng1.scaf.fa.gz
+agpFiles /hive/data/genomes/caeAng1/genbank/caeAng1.scaf.agp.gz
+# qualFiles none
+dbDbSpeciesDir worm
+taxId 96668

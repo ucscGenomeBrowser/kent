@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db mm10Strains1
+clade haplotypes
+genomeCladePriority 200
+scientificName Mus musculus
+commonName mm10Haps
+assemblyDate Dec. 2011
+assemblyLabel GRCm38 Genome Reference Consortium Mouse Reference 38, alternate strains
+assemblyShortLabel Mouse strains
+orderKey 1300
+mitoAcc none
+fastaFiles /hive/data/genomes/mm10Strains1/genbank/ucsc.fa.gz
+agpFiles /hive/data/genomes/mm10Strains1/genbank/ucsc.agp
+# qualFiles /dev/null
+dbDbSpeciesDir mouse
+photoCreditURL http://www.jax.org/
+photoCreditName Photo courtesy The Jackson Laboratory
+ncbiGenomeId 52
+ncbiAssemblyId   416688
+ncbiAssemblyName   GRCm38.p1
+ncbiBioProject 51977
+genBankAccessionID GCA_000001635.3
+taxId   10090
