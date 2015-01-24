@@ -1,0 +1,15 @@
+# Config parameters for makeGenomeDb.pl:
+db cb3
+clade worm
+genomeCladePriority 10
+scientificName Caenorhabditis briggsae
+commonName C. briggsae
+assemblyDate Jan. 2007
+assemblyLabel Washington University School of Medicine GSC and Sanger Institute cb3
+orderKey 868
+# AC186293
+mitoAcc 95102164
+fastaFiles /cluster/data/cb3/wormbase/chr*.fa.gz
+agpFiles /cluster/data/cb3/wormbase/chr*.agp.gz
+# qualFiles /dev/null
+dbDbSpeciesDir worm

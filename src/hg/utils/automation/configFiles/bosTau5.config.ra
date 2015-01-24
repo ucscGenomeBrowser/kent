@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db bosTau5
+clade mammal
+genomeCladePriority 31
+scientificName Bos taurus
+commonName Cow
+assemblyDate Apr. 2009
+assemblyLabel Baylor (NCBI project 10708, accession GCA_000000095.5)
+assemblyShortLabel Baylor Btau_4.2
+orderKey 236
+mitoAcc 60101824
+fastaFiles /hive/data/genomes/bosTau5/genbank/ucscChr/chr*.fa.gz
+agpFiles /hive/data/genomes/bosTau5/genbank/ucscChr/chr*.agp.gz
+#qualFiles none
+dbDbSpeciesDir cow
+taxId 9913

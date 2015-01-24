@@ -1,0 +1,22 @@
+# Config parameters for makeGenomeDb.pl:
+db panPan1
+clade primate
+genomeCladePriority 10
+scientificName Pan paniscus
+commonName Bonobo
+assemblyDate May. 2012
+assemblyLabel Max-Planck Institute panpan1 (GCA_000258665.1)
+assemblyShortLabel panpan1
+orderKey 242
+mitoAcc NC_001644.1
+fastaFiles /hive/data/genomes/panPan1/ucsc/ucsc.fa.gz
+agpFiles /hive/data/genomes/panPan1/ucsc/ucsc.agp.gz
+dbDbSpeciesDir bonobo
+photoCreditURL http://a-z-animals.com/animals/bonobo/pictures/2955/
+photoCreditName Photo courtesy of Kabir Bakie
+ncbiGenomeId 10729
+ncbiAssemblyId 382348
+ncbiAssemblyName Max-Planck panpan1
+ncbiBioProject 49285
+genBankAccessionID GCA_000258655.1
+taxId 9597

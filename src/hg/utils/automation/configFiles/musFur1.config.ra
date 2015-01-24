@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db musFur1
+clade vertebrate
+genomeCladePriority 16 
+scientificName Mustela putorius furo
+commonName Ferret 
+assemblyDate Apr. 2011
+assemblyLabel Ferret Genome Sequencing Consortium
+assemblyShortLabel MusPutFur1.0
+orderKey 2430
+mitoAcc none
+fastaFiles /hive/data/genomes/musFur1/genbank/ucsc.noDup.fa
+agpFiles /hive/data/genomes/musFur1/genbank/ucsc.noDup.agp
+# qualFiles none
+dbDbSpeciesDir ferret
+photoCreditURL http://commons.wikimedia.org/wiki/File:Ferret_2008.png
+photoCreditName Alfredo Gutiérrez and Wikimedia Commons
+ncbiGenomeId 3295
+ncbiAssemblyId 286418
+ncbiAssemblyName MusPutFur1.0
+ncbiBioProject 59869
+genBankAccessionID GCA_000215625.1
+taxId 9669

@@ -1,0 +1,13 @@
+# Config parameters for makeGenomeDb.pl:
+db ornAna1
+clade vertebrate
+genomeCladePriority 335
+commonName Platypus
+scientificName Ornithorhynchus anatinus
+assemblyDate Dec. 2006
+assemblyLabel WUSTL version 6.0?
+orderKey 365
+mitoAcc 5836058
+fastaFiles /cluster/data/ornAna1/downloads/chr*.fa
+agpFiles /cluster/data/ornAna1/downloads/chr*.agp
+dbDbSpeciesDir platypus

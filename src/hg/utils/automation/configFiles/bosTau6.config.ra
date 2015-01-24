@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db bosTau6
+clade mammal
+genomeCladePriority 31
+scientificName Bos taurus
+commonName Cow
+assemblyDate Nov. 2009
+assemblyLabel UMD_3.1 (NCBI project 10708, accession GCA_000003055.3)
+assemblyShortLabel Bos_taurus_UMD_3.1
+orderKey 236
+mitoAcc NC_006853
+fastaFiles /hive/data/genomes/bosTau6/genbank/ucscChr/chr*.fa.gz
+agpFiles /hive/data/genomes/bosTau6/genbank/ucscChr/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir cow
+taxId 9913

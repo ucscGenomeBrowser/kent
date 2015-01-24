@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db braFlo2
+clade deuterostome
+genomeCladePriority 20
+scientificName Branchiostoma floridae
+commonName Lancelet
+assemblyDate Apr. 2008
+assemblyLabel US DOE Joint Genome Institute v2.0
+assemblyShortLabel JGI v2.0
+orderKey 7989
+mitoAcc NC_000834
+fastaFiles /hive/data/genomes/braFlo2/jgi/Branchiostoma_floridae_v2.0.assembly.fasta.gz
+agpFiles /hive/data/genomes/braFlo2/jgi/braFlo2.agp
+# qualFiles none
+dbDbSpeciesDir lancelet
+# http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABEP01
+photoCreditURL http://www.obs-banyuls.fr/UMR7628/
+photoCreditName Photo courtesy of Michael Fuentes and Héctor Escrivà, Observatoire Océanologique de Banyuls sur mer, All rights reserved.
+ncbiGenomeId 11839
+ncbiAssemblyId 4918
+ncbiAssemblyName Version 2
+ncbiBioProject 20249
+genBankAccessionID GCA_000003815.1
+taxId 7739

@@ -1,0 +1,14 @@
+# Config parameters for makeGenomeDb.pl:
+db calJac1
+scientificName Callithrix jacchus
+commonName Marmoset
+assemblyDate Jun. 2007
+assemblyLabel WUSTL 2.0.2
+orderKey 40
+clade mammal
+genomeCladePriority 16
+mitoAcc none
+fastaFiles /cluster/data/calJac1/wustl/supercontigs.fa.gz
+agpFiles /cluster/data/calJac1/wustl/supercontigs.agp.gz
+# qualFiles /dev/null
+dbDbSpeciesDir marmoset

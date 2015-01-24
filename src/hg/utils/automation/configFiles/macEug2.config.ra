@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db macEug2
+clade mammal
+genomeCladePriority 67
+scientificName Macropus eugenii
+commonName Wallaby
+assemblyDate Sep. 2009
+assemblyLabel TWGS (NCBI Project ID: 12586, Accession: GCA_000004035.1)
+assemblyShortLabel TWGS Meug_1.1
+orderKey 278
+mitoAcc none
+fastaFiles /hive/data/genomes/macEug2/genbank/macEug2.fa.gz
+agpFiles /hive/data/genomes/macEug2/genbank/macEug2.agp.gz
+# qualFiles none
+dbDbSpeciesDir wallaby
+taxId 9315

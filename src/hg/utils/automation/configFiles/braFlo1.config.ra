@@ -1,0 +1,14 @@
+# Config parameters for makeGenomeDb.pl:
+db braFlo1
+clade cephalochordata
+genomeCladePriority 20
+scientificName Branchiostoma floridae
+commonName Lancelet
+assemblyDate Mar. 2006
+assemblyLabel JGI v.1.0 (March 2006)
+orderKey 799
+mitoAcc 5881414
+fastaFiles /cluster/data/braFlo1/downloads/Branchiostoma.fasta
+agpFiles /cluster/data/braFlo1/downloads/Branchiostoma.agp
+# qualFiles none
+dbDbSpeciesDir lancelet

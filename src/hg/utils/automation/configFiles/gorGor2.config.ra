@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db gorGor2
+clade mammal
+genomeCladePriority 12
+scientificName  Gorilla gorilla gorilla
+commonName Gorilla
+assemblyDate Aug. 2009
+assemblyLabel Sanger Institute Aug 2009 (NCBI project 31265)
+orderKey 26
+# chrM sequence is included in the release and AGP file
+mitoAcc none
+fastaFiles /hive/data/genomes/gorGor2/sanger/ucsc.split.fa.gz
+agpFiles /hive/data/genomes/gorGor2/sanger/ucsc.agp.gz
+# qualFiles none
+dbDbSpeciesDir gorilla
+taxId 9595

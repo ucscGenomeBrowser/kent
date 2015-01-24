@@ -1,0 +1,25 @@
+# Config parameters for makeGenomeDb.pl:
+db rhiRox1
+clade primate
+genomeCladePriority 15
+scientificName Rhinopithecus roxellana
+commonName Golden snub-nosed monkey
+assemblyDate Oct. 2014
+assemblyLabel Novogene
+assemblyShortLabel Rrox_v1
+orderKey 394
+# chrM bioproject: 17209
+# mitoAcc NC_008218.1 already included
+mitoAcc none
+fastaFiles /hive/data/genomes/nasLar1/ucsc/*.fa
+agpFiles /hive/data/genomes/nasLar1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir rhinopithecus
+photoCreditURL http://jackhynes.com
+photoCreditName Jack Hynes - Wikimedia Commons
+ncbiGenomeId 7996
+ncbiAssemblyId 218671
+ncbiAssemblyName Rrox_v1
+ncbiBioProject 266995
+genBankAccessionID GCA_000769185.1
+taxId 61622

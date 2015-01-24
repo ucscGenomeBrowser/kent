@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db bosTau8
+clade mammal
+genomeCladePriority 31
+scientificName Bos taurus
+commonName Cow
+assemblyDate Dec. 2009
+assemblyLabel University of Maryland Bos_taurus_UMD_3.1.1
+assemblyShortLabel UMD_3.1.1
+orderKey 2378
+mitoAcc none
+# mito included in assembly NC_006853.1
+fastaFiles /hive/data/genomes/bosTau8/ucsc/chr*.fa
+agpFiles /hive/data/genomes/bosTau8/ucsc/chr*.agp
+# qualFiles none
+dbDbSpeciesDir cow
+photoCreditURL http://www.genome.gov/10005141
+photoCreditName NHGRI Press Photos
+ncbiGenomeId 82
+ncbiAssemblyId 189361
+ncbiAssemblyName Bos_taurus_UMD_3.1.1
+ncbiBioProject 33843
+genBankAccessionID GCA_000003055.4
+taxId 9913

@@ -1,0 +1,13 @@
+# Config parameters for makeGenomeDb.pl:
+db bosTau3
+clade vertebrate
+genomeCladePriority 30
+scientificName Bos Taurus
+assemblyDate August 2006
+assemblyLabel Baylor Release 3.1
+orderKey 19
+dbDbSpeciesDir cow
+mitoAcc none
+agpFiles /cluster/data/bosTau3/fixup/UCSC.agp
+fastaFiles /cluster/data/bosTau3/fixup/UCSC.bosTau3.fa.gz
+qualFiles /cluster/data/bosTau3/fixup/chrom.qac

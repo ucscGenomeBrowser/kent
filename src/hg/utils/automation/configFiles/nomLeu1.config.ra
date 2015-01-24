@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db nomLeu1
+clade mammal
+genomeCladePriority 13
+scientificName Nomascus leucogenys
+commonName Gibbon
+assemblyDate Jan. 2010
+assemblyLabel GGSC (NCBI project 13974, accession GCA_000146795.1)
+assemblyShortLabel GGSC Nleu1.0
+orderKey 33
+mitoAcc none
+fastaFiles /hive/data/genomes/nomLeu1/genbank/nomLeu1.fa.gz
+agpFiles /hive/data/genomes/nomLeu1/genbank/nomLeu1.agp.gz
+# qualFiles none
+dbDbSpeciesDir gibbon
+taxId 61853

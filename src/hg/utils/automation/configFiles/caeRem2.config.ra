@@ -1,0 +1,14 @@
+# Config parameters for makeGenomeDb.pl:
+db caeRem2
+clade worm
+genomeCladePriority 10
+scientificName Caenorhabditis remanei
+commonName C. remanei
+assemblyDate Mar. 2006
+assemblyLabel Washington University School of Medicine GSC C. remanei 1.0
+orderKey 879
+mitoAcc none
+fastaFiles /cluster/data/caeRem2/downloads/supercontigs.fa.gz
+agpFiles /cluster/data/caeRem2/downloads/caeRem2.chrUn.agp
+# qualFiles /cluster/data/caeRem2/downloads/chrUn.qac
+dbDbSpeciesDir worm

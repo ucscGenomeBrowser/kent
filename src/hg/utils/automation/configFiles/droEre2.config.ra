@@ -1,0 +1,11 @@
+# Config parameters for makeGenomeDb.pl:
+db droEre2
+clade insect
+scientificName Drosophila erecta
+assemblyDate Feb. 2006
+assemblyLabel Agencourt CAF1
+orderKey 53
+mitoAcc none
+fastaFiles /cluster/data/droEre2/downloads/dere/scaffolds.bases
+agpFiles /cluster/data/droEre2/downloads/dere/assembly.agp
+dbDbSpeciesDir drosophila

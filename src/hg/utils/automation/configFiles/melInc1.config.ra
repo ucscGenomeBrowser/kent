@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db melInc1
+clade worm
+genomeCladePriority 84
+scientificName Meloidogyne incognita
+commonName M. incognita
+assemblyDate Feb. 2008
+assemblyLabel Sanger and Genoscope Genbank: CABB00000000
+assemblyShortLabel M. incognita WS210
+orderKey 897
+mitoAcc none
+fastaFiles /hive/data/genomes/melInc1/ws210/sequences/dna/m_incognita.WS210.dna.fa.gz
+agpFiles /hive/data/genomes/melInc1/ws210/ucsc.fake.melInc1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+taxId 6306

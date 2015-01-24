@@ -1,0 +1,15 @@
+# Config parameters for makeGenomeDb.pl:
+db nemVec1
+# new clade? cnidarian 
+clade other
+genomeCladePriority 18
+scientificName Nematostella vectensis
+commonName Starlet sea anemone
+assemblyDate Jun. 2007
+assemblyLabel US DOE JGI-PGF Nemve1
+orderKey 227
+mitoAcc none
+fastaFiles /cluster/data/nemVec1/downloads/Nemve1.fasta.gz
+agpFiles   /cluster/data/nemVec1/downloads/nemVec1.agp
+# qualFiles /dev/null
+dbDbSpeciesDir other

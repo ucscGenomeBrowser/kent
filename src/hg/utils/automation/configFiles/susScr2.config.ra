@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db susScr2
+clade mammal
+genomeCladePriority 35
+scientificName Sus scrofa
+commonName Pig
+assemblyDate Nov. 2009
+assemblyLabel SGSC Sscrofa9.2 (NCBI project 10718, GCA_000003025.2)
+assemblyShortLabel SGSC Sscrofa9.2
+orderKey 234
+mitoAcc NC_012095
+fastaFiles /hive/data/genomes/susScr2/genbank/ucscChr/chr*.fa.gz
+agpFiles /hive/data/genomes/susScr2/genbank/ucscChr/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir pig
+taxId 9823

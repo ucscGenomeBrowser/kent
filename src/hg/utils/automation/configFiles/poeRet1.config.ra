@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db poeRet1
+clade vertebrate
+genomeCladePriority 70
+scientificName Poecilia reticulata
+commonName Guppy
+assemblyDate Apr. 2014
+assemblyLabel Max Planck Institute for Developmental Biology
+assemblyShortLabel Guppy_female_1.0
+orderKey 4743
+mitoAcc KJ013505
+fastaFiles /hive/data/genomes/poeRet1/ucsc/chr*.fa.gz
+agpFiles /hive/data/genomes/poeRet1/ucsc/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir poeRet
+photoCreditURL http://en.wikipedia.org/wiki/File:Guppy_coppia_gialla.jpg
+photoCreditName Wikimedia Commons user Marrabbio2
+ncbiGenomeId 23338
+ncbiAssemblyId 150471
+ncbiAssemblyName Guppy_female_1.0
+ncbiBioProject 238429
+genBankAccessionID GCA_000633615.1
+taxId   8081

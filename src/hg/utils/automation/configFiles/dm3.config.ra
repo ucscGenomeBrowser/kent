@@ -1,0 +1,12 @@
+# Config parameters for makeGenomeDb.pl:
+db dm3
+clade insect
+scientificName Drosophila melanogaster
+assemblyDate Apr. 2006
+assemblyLabel BDGP Release 5
+orderKey 50
+mitoAcc 5835233
+fastaFiles /cluster/data/dm3/downloads/renamedChromFa/*.fa
+dbDbSpeciesDir drosophila
+fakeAgpMinContigGap 20
+fakeAgpMinScaffoldGap 50000

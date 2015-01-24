@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db oviAri3
+clade mammal
+# genomeCladePriority 31
+scientificName Ovis aries
+commonName Sheep
+assemblyDate Aug. 2012
+assemblyLabel International Sheep Genome Consortium
+assemblyShortLabel ISGC Oar_v3.1
+orderKey 2369
+mitoAcc NC_001941
+fastaFiles /hive/data/genomes/oviAri3/ucsc/chr*.fa.gz
+agpFiles /hive/data/genomes/oviAri3/ucsc/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir sheep
+photoCreditURL http://www.ars.usda.gov/is/graphics/photos/
+photoCreditName Agricultural Research Service
+ncbiGenomeId 83
+ncbiAssemblyId 457978
+ncbiAssemblyName Oar_v3.1
+ncbiBioProject 179263
+genBankAccessionID GCA_000298735.1
+taxId 9940

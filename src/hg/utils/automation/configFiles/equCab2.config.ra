@@ -1,0 +1,15 @@
+# Config parameters for makeGenomeDb.pl:
+db equCab2
+clade vertebrate
+genomeCladePriority 40
+scientificName Equus caballus
+commonName Horse
+assemblyDate Sep. 2007
+assemblyLabel Broad Institute EquCab2
+orderKey 232
+# NC_001640
+mitoAcc 5835107
+fastaFiles /cluster/data/equCab2/broad/assembly.bases.gz
+agpFiles /cluster/data/equCab2/broad/ucsc.agp
+qualFiles /cluster/data/equCab2/broad/equCab2.qual.qac
+dbDbSpeciesDir horse

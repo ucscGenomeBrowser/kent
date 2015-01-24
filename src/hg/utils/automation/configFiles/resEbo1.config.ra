@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db resEbo1
+clade virus
+genomeCladePriority 2000
+scientificName Reston ebolavirus
+commonName Reston ebolavirus
+assemblyDate Aug. 2014
+assemblyLabel NCBI NIH NC_004161.1
+assemblyShortLabel NC_004161.1
+orderKey 10950
+mitoAcc none
+fastaFiles /hive/data/genomes/resEbo1/ucsc/*.fa
+agpFiles /hive/data/genomes/resEbo1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir ebola
+photoCreditURL http://phil.cdc.gov/phil/details.asp?pid=1832
+photoCreditName CDC Public Health Image Library (PHIL)
+ncbiGenomeId 5147
+ncbiAssemblyId 35891
+ncbiAssemblyName NC_004161.1
+ncbiBioProject 15006
+genBankAccessionID AF522874.1
+taxId 186539

@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db orySat1 
+clade plant
+genomeCladePriority 13
+scientificName Oryza sativa
+commonName Rice
+assemblyDate Feb. 2011
+assemblyLabel Oryza sativa Indica Group 
+assemblyShortLabel orySat1 
+orderKey 4850
+mitoAcc none
+fastaFiles /hive/data/genomes/orySat1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/orySat1/ucsc/*.agp.gz
+# qualFiles none
+dbDbSpeciesDir rice
+photoCreditURL http://25.media.tumblr.com/tumblr_l3ufzbYoU31qagdeao1_500.jpg
+photoCreditName Rachelle Abellar 
+ncbiGenomeId 4530
+ncbiAssemblyId 309328
+ncbiAssemblyName OrySat_Feb2011
+ncbiBioProject 174121
+genBankAccessionID GCA_000004655.2
+taxId 39946

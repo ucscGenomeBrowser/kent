@@ -1,0 +1,14 @@
+# Config parameters for makeGenomeDb.pl:
+db priPac1
+clade worm
+genomeCladePriority 76
+scientificName Pristionchus pacificus
+commonName P. pacificus
+assemblyDate Feb. 2007
+assemblyLabel Washington University School of Medicine GSC Pristionchus pacificus 5.0
+orderKey 885
+mitoAcc none
+fastaFiles /cluster/data/priPac1/downloads/supercontigs.fa.gz
+agpFiles /cluster/data/priPac1/downloads/priPac1.chrUn.agp
+qualFiles /cluster/data/priPac1/downloads/chrUn.qac
+dbDbSpeciesDir worm

@@ -1,0 +1,26 @@
+# Config parameters for makeGenomeDb.pl:
+db bioGla0
+clade other
+genomeCladePriority 16
+scientificName Biomphalaria glabrata
+commonName Snail
+assemblyDate Jun. 2013
+assemblyLabel bioGla0
+assemblyShortLabel bioGla0
+orderKey 216
+mitoAcc none
+#mitoAcc NC_001700
+fastaFiles /hive/users/braney/snail/ucsc/bioGla0.unmasked.fa
+fakeAgpMinContigGap 25
+fakeAgpMinScaffoldGap 25
+taxId 1
+#agpFiles /hive/data/genomes/felCat4/genbank/ucscChr/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir snail
+photoCreditURL none
+photoCreditName none
+ncbiGenomeId none
+ncbiAssemblyName none
+ncbiAssemblyId none
+ncbiBioProject none
+genBankAccessionID none

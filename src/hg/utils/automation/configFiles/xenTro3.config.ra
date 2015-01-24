@@ -1,0 +1,15 @@
+# Config parameters for makeGenomeDb.pl:
+db xenTro3
+clade vertebrate
+genomeCladePriority 80
+scientificName Xenopus (Silurana) tropicalis
+commonName X. tropicalis
+assemblyDate Nov. 2009
+assemblyLabel US DOE Joint Genome Institute (JGI-PGF) (GCA_000004195.1)
+assemblyShortLabel X. tropicalis v4.2
+orderKey 444
+mitoAcc NC_006839
+fastaFiles /cluster/data/xenTro3/genbank/xenTro3.fa.gz
+agpFiles /cluster/data/xenTro3/genbank/xenTro3.agp.gz
+dbDbSpeciesDir xenTro
+taxId 8364

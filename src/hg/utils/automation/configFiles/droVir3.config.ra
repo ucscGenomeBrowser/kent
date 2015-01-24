@@ -1,0 +1,11 @@
+# Config parameters for makeGenomeDb.pl:
+db droVir3
+clade insect
+scientificName Drosophila virilis
+assemblyDate Feb. 2006
+assemblyLabel Agencourt CAF1
+orderKey 57
+mitoAcc none
+fastaFiles /cluster/data/droVir3/downloads/dvir/scaffolds.bases
+agpFiles /cluster/data/droVir3/downloads/dvir/assembly.agp
+dbDbSpeciesDir drosophila

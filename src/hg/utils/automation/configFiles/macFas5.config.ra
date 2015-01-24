@@ -1,0 +1,25 @@
+# Config parameters for makeGenomeDb.pl:
+db macFas5
+clade primate
+genomeCladePriority 16
+scientificName Macaca fascicularis
+commonName Crab-eating macaque
+assemblyDate Jun. 2013
+assemblyLabel Washington University (WashU)
+assemblyShortLabel Macaca_fascicularis_5.0
+orderKey 3705
+# chrM bioproject: 37941 - already included in ucsc directory
+# mitoAcc NC_012670.1
+mitoAcc none
+fastaFiles /hive/data/genomes/macFas5/ucsc/chr*.fa
+agpFiles /hive/data/genomes/macFas5/ucsc/chr*.agp
+# qualFiles none
+dbDbSpeciesDir macaca
+photoCreditURL http://travel.mongabay.com/indonesia/images/bali8025.html
+photoCreditName Rhett A. Butler mongabay.com
+ncbiGenomeId 776
+ncbiAssemblyId  704988
+ncbiAssemblyName CMacaca_fascicularis_5.0
+ncbiBioProject 215851
+genBankAccessionID GCA_000364345.1
+taxId 9541

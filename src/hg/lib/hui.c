@@ -6904,7 +6904,7 @@ return cloneString(label);
 }
 
 #ifdef BUTTONS_BY_CSS
-#define BUTTON_MAT "<span class='pmButton' onclick=\"matSeteatrixCheckBoxes(%s%s%s%s)\">%c</span>"
+#define BUTTON_MAT "<span class='pmButton' onclick=\"matSetMatrixCheckBoxes(%s%s%s%s)\">%c</span>"
 #else///ifndef BUTTONS_BY_CSS
 #define PM_BUTTON_UC "<IMG height=18 width=18 onclick=\"return " \
                      "(matSetMatrixCheckBoxes(%s%s%s%s%s%s) == false);\" id='btn_%s' " \

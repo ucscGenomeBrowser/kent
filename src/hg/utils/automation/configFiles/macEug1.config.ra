@@ -1,0 +1,13 @@
+db macEug1
+clade mammal
+scientificName Macropus eugenii
+assemblyDate Nov. 2007
+assemblyLabel Baylor Release 1.0
+orderKey 278
+genomeCladePriority 67
+dbDbSpeciesDir wallaby
+mitoAcc none
+agpFiles /hive/data/genomes/macEug1/baylor/macEug1.agp
+fastaFiles /hive/data/genomes/macEug1/baylor/macEug1.contigs.fa.gz
+commonName Wallaby
+taxId 9315

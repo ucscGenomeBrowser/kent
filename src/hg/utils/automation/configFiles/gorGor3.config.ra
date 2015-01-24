@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db gorGor3
+clade mammal
+genomeCladePriority 12
+scientificName  Gorilla gorilla gorilla
+commonName Gorilla
+assemblyDate May 2011
+assemblyLabel Wellcome Trust Sanger Institute May 2011 (NCBI project 31265, GCA_000151905.1)
+assemblyShortLabel gorGor3.1
+orderKey 25
+mitoAcc NC_011120
+fastaFiles /hive/data/genomes/gorGor3/genbank/ucsc.*fa.gz
+agpFiles /hive/data/genomes/gorGor3/genbank/ucsc.*agp.gz
+# qualFiles none
+dbDbSpeciesDir gorilla
+taxId 9595

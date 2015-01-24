@@ -1,4 +1,14 @@
-/* hgChooseDb - auto-complete db/organism search */
+/* hgChooseDb - bootstrapper / back end for demo app: auto-complete db/organism search
+ * This CGI has three modes of operation:
+ *  - HTML output for minimal main page with a <div> container to be filled in by javascript
+ *    (default, in the absence of special CGI params)
+ *  - cart-based JSON responses to ajax requests from javascript (using hg/lib/cartJson.c)
+ *    (if CGI param CARTJSON_COMMAND exists)
+ *  - no cart; fast JSON responses to species-search autocomplete requests
+ *    (if CGI param SEARCH_TERM exists)
+ * The UI view top level is in ../js/react/hgChooseDb/hgChooseDb.jsx
+ * The UI model top level is in ../js/model/hgChooseDb/hgChooseDbModel.js
+ */
 #include "common.h"
 #include "cart.h"
 #include "cartJson.h"
