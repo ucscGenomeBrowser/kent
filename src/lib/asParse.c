@@ -169,7 +169,7 @@ static struct asColumn *mustFindColumn(struct asObject *table, char *colName)
 struct asColumn *col = findColumn(table, colName);
 if (!col)
     errAbort("Couldn't find column %s", colName);
-return NULL;
+return col;
 }
 
 static struct asObject *findObType(struct asObject *objList, char *obName)
