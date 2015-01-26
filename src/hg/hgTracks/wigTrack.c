@@ -1506,7 +1506,7 @@ if (withCenterLabels)
 if (tg->limitedVis == tvDense)
     {
     hvGfxTextRight(hvg, xOff, yOff+centerOffset, width - 1, height-centerOffset,
-	tg->ixColor, font, shortLabel);
+	color, font, shortLabel);
     }
 else if (tg->limitedVis == tvFull)
     {
@@ -1514,7 +1514,7 @@ else if (tg->limitedVis == tvFull)
     int labelWidth = mgFontStringWidth(font, shortLabel);
 
     /* track label is centered in the whole region */
-    hvGfxText(hvg, xOff, yOff+centerLabel, tg->ixColor, font, shortLabel);
+    hvGfxText(hvg, xOff, yOff+centerLabel, color, font, shortLabel);
 
     /*	Is there room left to draw the min, max ?	*/
     if (showNumbers && height >= (3 * fontHeight))
@@ -1567,11 +1567,11 @@ else if (tg->limitedVis == tvFull)
                 safef(lower, sizeof(lower), "%g _", graphLowerLimit);
                 }
 	    }
-	drawColor = tg->ixColor;
+	drawColor = color;
 	if (graphUpperLimit < 0.0) drawColor = tg->ixAltColor;
 	hvGfxTextRight(hvg, xOff, yOff, width - 1, fontHeight, drawColor,
 	    font, upper);
-	drawColor = tg->ixColor;
+	drawColor = color;
 	if (graphLowerLimit < 0.0) drawColor = tg->ixAltColor;
 	hvGfxTextRight(hvg, xOff, yOff+height-fontHeight, width - 1, fontHeight,
 	    drawColor, font, lower);
