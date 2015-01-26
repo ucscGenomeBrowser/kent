@@ -469,8 +469,9 @@ else
 		}
 	    else
 		{
+                // black labels for readability 
 		wigLeftAxisLabels(subtrack, seqStart, seqEnd, hvg, xOff, y, width, height, 
-			withCenterLabels, font, subtrack->ixColor, vis, subtrack->shortLabel, 
+			withCenterLabels, font, MG_BLACK, vis, subtrack->shortLabel, 
 			subtrack->graphUpperLimit, subtrack->graphLowerLimit, TRUE);
 		}
 	    y += height+1;
