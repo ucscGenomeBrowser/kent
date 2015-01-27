@@ -57,7 +57,7 @@ var GroupTrackTable = React.createClass({
     // update(path + group|track|table) called when user changes group|track|table
 
     propTypes: { trackPath: pt.object.isRequired,    // Immutable.Map { group, track, table }
-                 trackDbInfo: pt.object.isRequired,  // Immutable.Map { groupOptions, groupTracks,
+                 trackDbInfo: pt.object.isRequired   // Immutable.Map { groupOptions, groupTracks,
                                                      // trackTables }
     },
 
@@ -101,6 +101,17 @@ var GroupTrackTable = React.createClass({
     }
 }); // GroupTrackTable
 
+function makeSchemaLink(db, group, track, table) {
+    // Return a React component link to hgTables' schema page.
+    var schemaUrl = 'hgTables?db=' + db + '&hgta_group=' + group + '&hgta_track=' + track +
+                    '&hgta_table=' + table + '&hgta_doSchema=1';
+    return <span className='smallText sectionItem'>
+              <a href={schemaUrl} target="ucscSchema"
+                 title="Open table schema in new window">
+                View table schema
+              </a></span>;
+}
+
 var AddDataSource = React.createClass({
     // A section-lite with group/track/table (or someday group/composite/view/etc) selects
     // and a button to add the selected track/table
@@ -116,8 +127,7 @@ var AddDataSource = React.createClass({
                                       //   groupOptions: pt.array, group menu options
                                       //   groupTracks: pt.object, maps groups to track menu options
                                       //   trackTables: pt.object  maps tracks to table lists
-                 // Optional
-                 schemaLink: pt.node                 // React component: link to hgTables schema
+                 db: pt.string.isRequired            // needed for schema link
                },
 
     onAdd: function() {
@@ -144,6 +154,9 @@ var AddDataSource = React.createClass({
             return <Icon type='spinner' />;
         }
 
+        var trackPath = this.props.trackPath;
+        var schemaLink = makeSchemaLink(this.props.db, trackPath.get('group'),
+                                        trackPath.get('track'), trackPath.get('table'));
         return (
             <div>
               <div className='bigBoldText sectionRow'>
@@ -153,7 +166,7 @@ var AddDataSource = React.createClass({
                                trackDbInfo={trackDbInfo}
                                path={path.concat('addDsTrackPath')} update={this.props.update}
                                />
-              {this.props.schemaLink}
+              {schemaLink}
               <input type='button' value='Add' onClick={this.onAdd} />
               <br />
               <div className='sectionRow'>
@@ -324,17 +337,6 @@ function getLabelForValue(valLabelVec, val) {
     return val;
 }
 
-function makeSchemaLink(db, group, track, table) {
-    // Return a React component link to hgTables' schema page.
-    var schemaUrl = 'hgTables?db=' + db + '&hgta_group=' + group + '&hgta_track=' + track +
-                    '&hgta_table=' + table + '&hgta_doSchema=1';
-    return <span className='smallText sectionItem'>
-              <a href={schemaUrl} target="ucscSchema"
-                 title="Open table schema in new window">
-                View table schema
-              </a></span>;
-}
-
 var AppComponent = React.createClass({
     // AnnoGrator interface
 
@@ -413,8 +415,6 @@ var AppComponent = React.createClass({
         var trackDbInfo = appState.get('trackDbInfo'); // groupOptions, groupTracks, trackTables
         var trackPath = appState.get('addDsTrackPath');
         var db = cladeOrgDbInfo.get('db');
-        var schemaLink = makeSchemaLink(db, trackPath.get('group'), trackPath.get('track'),
-                                        trackPath.get('table'));
         if (! (cladeOrgDbInfo && trackDbInfo && trackPath)) {
             // Waiting for initial data from server
             return <span>Loading...</span>;
@@ -448,7 +448,7 @@ var AppComponent = React.createClass({
                 {this.renderDataSources(dataSources)}
                 <AddDataSource trackPath={trackPath}
                                trackDbInfo={trackDbInfo}
-                               schemaLink={schemaLink}
+                               db={db}
                                path={[]} update={this.props.update} />
               </Section>
 
