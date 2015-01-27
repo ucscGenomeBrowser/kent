@@ -28,7 +28,7 @@ rsync $rsyncOpts $gbRRServer:$gbRRRoot/etc $gbRRServer:$gbRRRoot/bin $gbRRServer
 databases=$(gbGetDatabases etc/hgwbeta.dbs etc/rr.dbs)
 
 # local location of /gbdb
-gbdb=/data2/gbdb
+gbdb=/data/gbdb
 
 
 # Checking for an existing lock file, Silently exits if lock file exists

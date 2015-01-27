@@ -12,7 +12,7 @@ otherOpts=""
 gbBuildServer=hgwdev.sdsc.edu
 rsyncPort="ssh"
 gbBuildRoot=/hive/data/outside/genbank
-gbRoot=/data2/genbank
+gbRoot=/data/genbank
 cd $gbRoot
 
 # update the etc, bin, and lib directories
@@ -24,7 +24,7 @@ rsync -ra $rsyncOpts $gbRRServer:$gbRRRoot/etc $gbRRServer:$gbRRRoot/bin $gbRRSe
 databases=`gbGetDatabases etc/rr.dbs`
 
 # workdir is a local dir
-workdir=/data2/tmp/genbank
+workdir=/data/tmp/genbank
 
 # wait for copy to hgwnfs1
 copyTime=var/copy/copy.time
