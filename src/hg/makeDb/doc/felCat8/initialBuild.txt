@@ -454,7 +454,7 @@ felCat8.refseq.mrna.xeno.loadDesc  = yes
 	hgcentraltest
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD 2014-10-21 - TBD)
+# all.joiner update, downloads and in pushQ - (DONE 2015-01-27 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=felCat8 -keys all.joiner
@@ -462,12 +462,14 @@ felCat8.refseq.mrna.xeno.loadDesc  = yes
     joinerCheck -database=felCat8 -times all.joiner
 
     cd /hive/data/genomes/felCat8
-    makeDownloads.pl felCat8 > do.log 2>&1
+    time makeDownloads.pl felCat8 > downloads.log 2>&1
+    #  real    23m40.246s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/felCat8/pushQ
     cd /hive/data/genomes/felCat8/pushQ
-    makePushQSql.pl felCat8 > felCat8.pushQ.sql 2> stderr.out
+    # do not want transMap in the output:
+    makePushQSql.pl felCat8 2> stderr.out | grep -v transMap > felCat8.pushQ.sql
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: hgwdev does not have /gbdb/felCat8/wib/gc5Base.wib
     # WARNING: hgwdev does not have /gbdb/felCat8/wib/quality.wib
@@ -477,9 +479,7 @@ felCat8.refseq.mrna.xeno.loadDesc  = yes
 
     #   copy it to hgwbeta
     scp -p felCat8.pushQ.sql qateam@hgwbeta:/tmp
-    ssh hgwbeta
-    cd /tmp
-    hgsql qapushq < felCat8.pushQ.sql
+    ssh qateam@hgwbeta './bin/x86_64/hgsql qapushq < /tmp/felCat8.pushQ.sql'
     #   in that pushQ entry walk through each entry and see if the
     #   sizes will set properly
 
