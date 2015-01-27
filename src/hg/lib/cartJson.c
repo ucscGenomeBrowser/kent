@@ -458,8 +458,20 @@ void cartJsonGetGroupsTracksTables(struct cartJson *cj, struct hash *paramHash)
 struct trackDb *fullTrackList = NULL;
 struct grp *fullGroupList = NULL;
 cartTrackDbInit(cj->cart, &fullTrackList, &fullGroupList, /* useAccessControl=*/TRUE);
-jsonWriteObjectStart(cj->jw, "trackDbInfo");
 // Print out options for the track group menu:
+// Remove All Tracks & All Tables from the end of the list for now.
+struct grp *grp, *nextGrp = NULL;
+for (grp = fullGroupList;  grp != NULL;  grp = nextGrp)
+    {
+    nextGrp = grp->next;
+    if (nextGrp && (sameString(nextGrp->name, "allTracks") ||
+                    sameString(nextGrp->name, "allTables")))
+        {
+        grp->next = nextGrp->next;
+        nextGrp = grp;
+        }
+    }
+jsonWriteObjectStart(cj->jw, "trackDbInfo");
 jsonWriteValueLabelList(cj->jw, "groupOptions", (struct slPair *)fullGroupList);
 // Print out an object that maps group names to their tracks:
 printGroupTracks(cj, fullTrackList);

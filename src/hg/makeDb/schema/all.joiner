@@ -4967,15 +4967,6 @@ tablesIgnored $gbd
     uwNucOccDennis
     uwNucOccMec
     ws210Gene
-<<<<<<< HEAD
-    snp132ExceptionDesc
-    snp135ExceptionDesc
-    snp137ExceptionDesc
-    snp138ExceptionDesc
-    snp141ExceptionDesc
-    snp142ExceptionDesc
-=======
->>>>>>> Added snp*ExceptionDesc for versions starting with 132 (#3606).  Added snp142 (#14189).
 
 tablesIgnored $kgDb
     pbAaDist_

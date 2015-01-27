@@ -15,22 +15,11 @@
 # - hgdownload is offline
 # - if a flagFile on hgDownload is not more recent than a local flag file
 
-# an interrupted update script will not touch the local flagfile, so they will
-# be restarted after the next reboot or when the cronjob is run, whichever
-# comes first
-
-# To find out why the script did not run, use the command echo $? to show the
-# exit code of the script
-
 # parameters:
 # - parameter "hgwdev": does not update itself, copies only the beta/alpha CGIs/htdocs from hgwdev
 # - parameter "notSelf": does not update itself and does not check flagfile
 
-# this script is not using the bash options pipefail or errabort.
-# In case something goes wrong it continues, this is intentional to 
-# avoid a machine that does not update itself anymore
-
-# rsync options help:
+# rsync options:
 # l = preserve symlinks
 # t = preserve time
 # r = recurse
@@ -38,7 +27,7 @@
 # v = verbose
 # h = human readable
 # u = skip if file is newer on receiver
-RSYNCOPTS="-ltrzvh --partial"
+RSYNCOPTS="-ltrzvh"
 # rsync server for CGIs and html files
 RSYNCSRC="rsync://hgdownload.cse.ucsc.edu"
 RSYNCCGIBIN=cgi-bin
@@ -73,6 +62,11 @@ if [ ${RUNNING} -gt 3 ] ; then
     exit 2
 fi
 	
+# check if auto-updates were deactivated from the Vbox host via a property
+if VBoxControl guestproperty get gbibAutoUpdateOff | grep -xq "Value: yes" ; then
+    exit 6
+fi
+
 # check if we have internet
 wget -q --tries=1 --timeout=10 --spider http://hgdownload.soe.ucsc.edu -O /dev/null
 if [ $? -ne 0 ] ; then
@@ -159,18 +153,12 @@ if [ "$1" == "hgwdev" ] ; then
 else
     # update CGIs
     echo updating CGIs...
-    rsync --delete -u $RSYNCOPTS $RSYNCSRC/$RSYNCCGIBIN /usr/local/apache/cgi-bin/ --exclude=hg.conf --exclude=hg.conf.local --exclude edw* --exclude *private --exclude hgNearData --exclude visiGeneData --exclude Neandertal 
+    rsync --delete $RSYNCOPTS $RSYNCSRC/$RSYNCCGIBIN /usr/local/apache/cgi-bin/ --exclude=hg.conf --exclude edw* --exclude *private --exclude hgNearData --exclude visiGeneData --exclude Neandertal 
 
     echo updating HTML files...
-    rsync --delete -u $RSYNCOPTS $RSYNCSRC/$RSYNCHTDOCS/ /usr/local/apache/htdocs/ --include **/customTracks/*.html --exclude ENCODE/ --exclude *.bam --exclude *.bb --exclude */*.bw --exclude */*.gz --exclude favicon.ico --exclude folders --exclude ancestors --exclude admin --exclude goldenPath/customTracks --exclude images/mammalPsg --exclude style/gbib.css --exclude images/title.jpg --exclude images/homeIconSprite.png --exclude goldenPath/**.pdf --exclude training
+    rsync --delete $RSYNCOPTS $RSYNCSRC/$RSYNCHTDOCS/ /usr/local/apache/htdocs/ --include **/customTracks/*.html --exclude ENCODE/ --exclude *.bam --exclude *.bb --exclude */*.bw --exclude */*.gz --exclude favicon.ico --exclude folders --exclude ancestors --exclude admin --exclude goldenPath/customTracks --exclude images/mammalPsg --exclude style/gbib.css --exclude images/title.jpg --exclude images/homeIconSprite.png --exclude goldenPath/**.pdf --exclude training
 
     PUSHLOC=hgdownload.cse.ucsc.edu::gbib/push/
-fi
-
-# hg.conf.local is not updated from hgdownload, but re-created if it does not exist
-if [ ! -f /usr/local/apache/cgi-bin/hg.conf.local ]; then
-    echo "Creating hg.conf.local"
-    echo allowHgMirror=false > /usr/local/apache/cgi-bin/hg.conf.local
 fi
 
 chown -R www-data.www-data /usr/local/apache/cgi-bin/*

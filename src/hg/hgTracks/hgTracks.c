@@ -1416,14 +1416,18 @@ if (track->limitedVis != tvHide)
         int insideHeight = fontHeight-1;
 	boolean toggleDone = FALSE;
         char *label = track->longLabel;
+        Color labelColor = (track->labelColor ?
+                            track->labelColor : track->ixColor);
         if (isCenterLabelConditional(track))
             {
             struct trackDb* tdbComposite = tdbGetComposite(track->tdb);
             if (tdbComposite != NULL)
+                {
                 label = tdbComposite->longLabel;
+                labelColor = hvGfxFindColorIx(hvg, tdbComposite->colorR, 
+                                                tdbComposite->colorG, tdbComposite->colorB);
+                }
             }
-        Color labelColor = (track->labelColor ?
-                            track->labelColor : track->ixColor);
         hvGfxTextCentered(hvg, insideX, y+1, insideWidth, insideHeight,
                           labelColor, font, label);
         if (track->nextItemButtonable && track->nextPrevItem && !tdbIsComposite(track->tdb))

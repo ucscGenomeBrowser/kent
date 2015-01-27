@@ -2763,7 +2763,7 @@ if ((pFile != NULL) && ((f = *pFile) != NULL))
 	    ok = FALSE;
 	    }
         }
-    else
+    else if (f == stdout)
         {
         // One expects close() to actually flush the file and close it.  If
         // the file was opened using the magic name "stdout" and then does a

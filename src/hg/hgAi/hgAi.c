@@ -90,7 +90,10 @@ struct grp *fullGroupList = NULL;
 cartTrackDbInit(cj->cart, &fullTrackList, &fullGroupList, /* useAccessControl= */TRUE);
 for (table = tables;  table != NULL;  table = table->next)
     {
-    struct trackDb *tdb = tdbForTrack(NULL, table->name, &fullTrackList);
+    char *tableName = table->name;
+    if (startsWith("all_", tableName))
+        tableName += strlen("all_");
+    struct trackDb *tdb = tdbForTrack(NULL, tableName, &fullTrackList);
     if (tdb)
         {
         struct asObject *asObj = hAnnoGetAutoSqlForTdb(db, hDefaultChrom(db), tdb);
@@ -108,6 +111,8 @@ for (table = tables;  table != NULL;  table = table->next)
             jsonWriteObjectEnd(cj->jw);
             }
         }
+    else
+        warn("No tdb for %s", table->name);
     }
 jsonWriteObjectEnd(cj->jw);
 slFreeList(&tables);

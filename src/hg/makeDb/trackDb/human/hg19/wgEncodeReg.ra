@@ -315,9 +315,10 @@ canPack On
 	color 255,128,212
 	type bigWig 0 3851
 
+    # This is first version of the DNase clusters track
     track wgEncodeRegDnaseClusteredV1
     table wgEncodeRegDnaseClustered
-    release alpha, beta
+    release alpha
     shortLabel DNase Clusters V1
     longLabel Digital DNaseI Hypersensitivity Clusters in 74 cell types (2 reps) from ENCODE
     type bed 5 .
@@ -332,12 +333,14 @@ canPack On
     html wgEncodeRegDnaseClustered
     priority 1.6
 
+    # This is second version of the DNase clusters track -- newer data, missing single-cell
+    #   clusters (a mistake, fixed in V3)
     track wgEncodeRegDnaseClusteredV2
-    release alpha, beta
+    release alpha
     shortLabel DNase Clusters V2
     longLabel Digital DNaseI Hypersensitivity Clusters in 125 cell types from ENCODE (V2)
     type bed 5 .
-    superTrack wgEncodeReg dense
+    superTrack wgEncodeReg hide
     inputTrackTable wgEncodeRegDnaseClusteredInputsV2
     inputTableFieldDisplay cellType treatment lab
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
@@ -347,6 +350,7 @@ canPack On
     scoreFilterLimits 100:1000
     priority 1.6
 
+    # This is current DNase clusters track -- newer data, includes single-cell clusters
     track wgEncodeRegDnaseClustered
     table wgEncodeRegDnaseClusteredV3
     shortLabel DNase Clusters
@@ -367,10 +371,10 @@ canPack On
     #nameFilterLimits 1:125
     #nameFilterByRange on
 
+    # This is previous version of TFBS track
     track wgEncodeRegTfbsClusteredV2
-    release beta, public
     shortLabel Txn Fac ChIP V2
-    longLabel Transcription Factor ChIP-seq from ENCODE V2
+    longLabel Transcription Factor ChIP-seq from ENCODE (V2)
     type factorSource
     superTrack wgEncodeReg hide
     sourceTable wgEncodeRegTfbsCells
@@ -381,41 +385,9 @@ canPack On
     useScore 1
     priority 1.73
     html wgEncodeRegTfbsClustered.release2
-
-    track wgEncodeRegTfbsClusteredV2
-    release alpha
-    shortLabel Txn Fac ChIP V2
-    longLabel Transcription Factor ChIP-seq Clusters V2 (148 antibodies, 114 targets) from ENCODE
-    type factorSource
-    superTrack wgEncodeReg dense
-    sourceTable wgEncodeRegTfbsCells
-    inputTrackTable wgEncodeRegTfbsClusteredInputs
-    inputTableFieldDisplay cellType factor treatment lab
-    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
-    visibility hide
-    useScore 1
-    priority 1.73
-    html wgEncodeRegTfbsClustered.release2
     dataVersion ENCODE Jan 2011 Freeze
 
-    # This was previous candidate for release (V2 format)
-    #track wgEncodeRegTfbsClusteredV3Slow
-    #release alpha
-    #shortLabel Slow Txn Factor ChIP
-    #longLabel Slow Transcription Factor ChIP-seq Clusters V3 (161 targets, 189 antibodies) from ENCODE
-    #type factorSource
-    #superTrack wgEncodeReg dense
-    #sourceTable wgEncodeRegTfbsCellsV3
-    #inputTrackTable wgEncodeRegTfbsClusteredInputsV3
-    #inputTableFieldDisplay cellType factor antibody treatment lab
-    #controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
-    #visibility dense
-    #useScore 1
-    #priority 1.71
-    #maxWindowToDraw 10000000
-    #dataVersion ENCODE Jul 2012 Freeze
-
-    # This is released track with new TF Motif feature
+    # This is current TFBS track with TF Motif feature
     track wgEncodeRegTfbsClusteredV3
     shortLabel Txn Factor ChIP
     longLabel Transcription Factor ChIP-seq (161 factors) from ENCODE with Factorbook Motifs
@@ -602,20 +574,20 @@ canPack On
         ZZZ3
 
     # This is alternate cluster version -- antibody-based, as done in V2
-    track wgEncodeRegTfbsClusteredV3a
-    release alpha
-    shortLabel Txn Fac ChIP V3a
-    longLabel Transcription Factor ChIP-seq Clusters V3a (189 antibodies, 162 targets) from ENCODE
-    type factorSource
-    superTrack wgEncodeReg hide
-    sourceTable wgEncodeRegTfbsCellsV4
-    inputTrackTable wgEncodeRegTfbsClusteredInputsV4
-    inputTableFieldDisplay cellType factor treatment lab
-    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
-    visibility hide
-    useScore 1
-    priority 1.72
-    dataVersion ENCODE Jul 2012 Freeze
+    # track wgEncodeRegTfbsClusteredV3a
+    # release alpha
+    # shortLabel Txn Fac ChIP V3a
+    # longLabel Transcription Factor ChIP-seq Clusters V3a (189 antibodies, 162 targets) from ENCODE
+    # type factorSource
+    # superTrack wgEncodeReg hide
+    # sourceTable wgEncodeRegTfbsCellsV4
+    # inputTrackTable wgEncodeRegTfbsClusteredInputsV4
+    # inputTableFieldDisplay cellType factor treatment lab
+    # controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    # visibility hide
+    # useScore 1
+    # priority 1.72
+    # dataVersion ENCODE Jul 2012 Freeze
 
 ###
 
@@ -631,13 +603,13 @@ canPack On
     color 22,182,33
     priority 1.8
 
-    track wgEncodeRegTfbsClusteredMotifs_larry
-    release alpha
-    shortLabel Txn Fac Motifs LM
-    longLabel Transcription Factor Motifs (LarryM)
-    type bed 6
+    # track wgEncodeRegTfbsClusteredMotifs_larry
+    # release alpha
+    # shortLabel Txn Fac Motifs LM
+    # longLabel Transcription Factor Motifs (LarryM)
+    # type bed 6
     # color 0,250,50
-    color 25, 204, 37
-    superTrack wgEncodeReg hide
-    priority 1.8
+    # color 25, 204, 37
+    # superTrack wgEncodeReg hide
+    # priority 1.8
 
