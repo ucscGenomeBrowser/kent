@@ -602,7 +602,7 @@ EOF
 
 
 ##############################################################################
-# DBSNP B142 / SNP142 (DONE 11/18/14)
+# DBSNP B142 / SNP142 (DONE 11/18/14; snp142ExceptionDesc reloaded 1/23/15)
 # originally done 10/24/14
 # 11/17/14: Allele dump file was outdated at time of download -- it was re-dumped a couple weeks
 #           after release.  snp142 was missing some frequencies due to incomplete join with Allele.
@@ -701,6 +701,23 @@ EOF
     mkdir `cat workingDir`
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=bigJoin \
       >>& do.log & tail -f do.log
+
+    # 1/23/15: Jonathan noticed that NonIntegerChromCount's count in snp142ExceptionDesc
+    # was much higher than the number of snp142 rows with NonIntegerChromCount; turns out
+    # it was tallied per allele not per variant.  Fixed, regenerate;
+    cd /hive/data/outside/dbSNP/142/human_hg38
+    snpNcbiToUcsc -snp132Ext -par=par.bed.gz ucscNcbiSnp.bed.gz /hive/data/genomes/hg38/hg38.2bit \
+        snp142RedoExceptionDesc
+    # Takes ~45min.  Make sure there are no changes to snp142.bed:
+    zcat snp142.bed.gz > /data/tmp/snp142.bed
+    cmp /data/tmp/snp142.bed snp142RedoExceptionDesc.bed
+    # No output -- good.
+    rm /data/tmp/snp142.bed
+    mv snp142ExceptionDesc.tab.gz snp142ExceptionDesc.tab.bak.gz
+    mv snp142RedoExceptionDescExceptionDesc.tab snp142ExceptionDesc.tab
+    hgLoadSqlTab hg38 snp142ExceptionDesc $HOME/kent/src/hg/lib/snp125ExceptionDesc.sql \
+      snp142ExceptionDesc.tab
+    rm snp142RedoExceptionDesc*
 
 
 ##############################################################################
