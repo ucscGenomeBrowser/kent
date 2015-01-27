@@ -1,0 +1,73 @@
+#########################################################################
+# LASTZ dog/felCat8 cat/canFam3 - (DONE - 2014-12-11 - Hiram)
+    mkdir /hive/data/genomes/canFam3/bed/lastzFelCat8.2014-12-11
+    cd /hive/data/genomes/canFam3/bed/lastzFelCat8.2014-12-11
+
+    cat << '_EOF_' > DEF
+# dog vs cat
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/felCat8.canFam3/felCat8.canFam3.tuning.top400.txt
+
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=50
+BLASTZ_X=950
+BLASTZ_Y=3400
+BLASTZ_Q=/hive/data/genomes/canFam3/bed/lastzFelCat8.2014-12-11/felCat8.canFam3.tuning.Q.txt
+#       A     C     G     T
+# A    95  -160   -43  -141
+# C  -160   100  -121   -43
+# G   -43  -121   100  -160
+# T  -141   -43  -160    95
+
+# TARGET: dog canFam3
+SEQ1_DIR=/hive/data/genomes/canFam3/canFam3.2bit
+SEQ1_LEN=/hive/data/genomes/canFam3/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=80
+SEQ1_LAP=0
+
+# QUERY: cat felCat8
+SEQ2_DIR=/hive/data/genomes/felCat8/felCat8.2bit
+SEQ2_LEN=/hive/data/genomes/felCat8/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=500
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/canFam3/bed/lastzFelCat8.2014-12-11
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    446m41.291s
+
+    cat fb.canFam3.chainFelCat8Link.txt 
+    # 1670282681 bases of 2392715236 (69.807%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` canFam3 felCat8) > rbest.log 2>&1 &
+    # real    45m20.309s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/felCat8/bed/blastz.canFam3.swap
+    cd /hive/data/genomes/felCat8/bed/blastz.canFam3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/canFam3/bed/lastzFelCat8.2014-12-11/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    421m11.236s
+
+    cat fb.felCat8.chainCanFam3Link.txt 
+    # 1727969628 bases of 2599716822 (66.468%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` felCat8 canFam3) > rbest.log 2>&1
+    # real    125m28.602s
+
+#########################################################################
