@@ -199,6 +199,7 @@ boolean withIndividualLabels = TRUE;    /* print labels on item-by-item basis (f
 boolean withCenterLabels = TRUE;	/* Display center labels? */
 boolean withGuidelines = TRUE;		/* Display guidelines? */
 boolean withNextExonArrows = FALSE;	/* Display next exon navigation buttons near center labels? */
+boolean withExonNumbers = FALSE;	/* Display exon and intron numbers in mouseOver instead of item name */
 boolean revCmplDisp = FALSE;          /* reverse-complement display */
 
 boolean measureTiming = FALSE;	/* DON'T EDIT THIS -- use CGI param "&measureTiming=." . */
@@ -1919,6 +1920,133 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
 slFreeList(&exonList);
 }
 
+void linkedFeaturesItemExonMaps(struct track *tg, struct hvGfx *hvg, void *item, double scale,
+    int y, int heightPer, int sItem, int eItem,
+    boolean lButton, boolean rButton, int buttonW)
+/* Draw mapBoxes over exons and introns labeled with exon/intron numbers */
+{
+struct linkedFeatures *lf = item;
+struct simpleFeature *exons = lf->components;
+struct simpleFeature *exon = exons;
+char *exonText, *intronText;
+int numExons = 0;
+int exonIx = 1;
+struct slRef *exonList = NULL, *ref;
+// TODO this exonText (and intronText) setting is just a made-up placeholder.
+// could add a real setting name. Maybe someday extend to exon names (LRG?) instead of just exon numbers
+if (startsWith("chain", tg->tdb->type) || startsWith("lrg", tg->tdb->track))
+    {
+    exonText   = trackDbSettingClosestToHomeOrDefault(tg->tdb, "exonText"  , "Block");
+    intronText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "intronText", "Gap"  ); // what really goes here for chain type?
+    }
+else
+    {
+    exonText   = trackDbSettingClosestToHomeOrDefault(tg->tdb, "exonText"  , "Exon"  );
+    intronText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "intronText", "Intron");
+    }
+while (exon != NULL)
+/* Make a stupid list of exons separate from what's given. */
+/* It seems like lf->components isn't necessarily sorted. */
+    {
+    refAdd(&exonList, exon);
+    exon = exon->next;
+    }
+/* Now sort it. */
+slSort(&exonList, exonSlRefCmp);
+numExons = slCount(exonList);
+boolean revStrand = (lf->orientation == -1);
+int eLast = -1;
+int s = -1;
+int e = -1;
+char mouseOverText[256];
+boolean isExon = TRUE;
+int picStart = insideX;
+int picEnd = picStart + insideWidth;
+if (lButton)
+    picStart += buttonW;
+if (rButton)
+    picEnd -= buttonW;
+for (ref = exonList; TRUE; )
+    {
+    exon = ref->val;
+    if (isExon)
+	{
+	s = exon->start;
+	e = exon->end;
+	}
+    else
+	{
+	s = eLast;
+	e = exon->start;
+	}
+    // skip exons and introns that are completely outside the window
+    if (!(s > winEnd) || (e < winStart))
+	{
+	int sClp = (s < winStart) ? winStart : s;
+	int eClp = (e > winEnd)   ? winEnd   : e;
+
+	int sx = round((sClp - winStart)*scale) + insideX;
+	int ex = round((eClp - winStart)*scale) + insideX;
+
+        // skip regions entirely outside available picture 
+        // (accounts for space taken by exon arrows buttons)
+	if (!(sx > picEnd) || (ex < picStart))
+	    {
+	    // clip it to avail pic 
+	    sx = (sx < picStart) ? picStart : sx;
+    	    ex = (ex > picEnd)   ? picEnd   : ex;
+
+	    int w = ex - sx;
+
+	    int exonIntronNumber;
+	    char *exonIntronText;
+	    int numExonIntrons = numExons;
+	    if (isExon)
+		{
+		exonIntronText = exonText;
+		}
+	    else
+		{
+		exonIntronText = intronText;
+		--numExonIntrons;  // introns are one fewer than exons
+		}
+
+	    if (!revStrand)
+		exonIntronNumber = exonIx;
+	    else
+		exonIntronNumber = numExonIntrons-exonIx+1;
+
+	    safef(mouseOverText, sizeof(mouseOverText), "%s (%d/%d)", exonIntronText, exonIntronNumber, numExonIntrons);
+
+	    if (w > 0) // draw exon or intron if width is greater than 0
+		{
+		tg->mapItem(tg, hvg, item, mouseOverText, tg->mapItemName(tg, item),
+		    sItem, eItem, sx, y, w, heightPer);
+		picStart = ex;  // prevent pileups. is this right? add 1? does it work?
+		}
+	    }
+	}
+
+    if (isExon)
+	{
+    	eLast = e;
+	ref = ref->next;
+	if (!ref)
+	    break;
+	}
+    else
+	{
+	exonIx++;
+	}
+    isExon = !isExon;
+
+    if (s > winEnd) // since the rest will also be outside the window
+	break;
+
+    }
+slFreeList(&exonList);
+}
+
 void linkedFeaturesLabelNextPrevItem(struct track *tg, boolean next)
 /* Default next-gene function for linkedFeatures.  Changes winStart/winEnd
  * and updates position in cart. */
@@ -2990,6 +3118,14 @@ boolean nextItemCompatible(struct track *tg)
 return (withNextExonArrows && tg->nextExonButtonable && tg->nextPrevExon);
 }
 
+boolean exonNumberMapsCompatible(struct track *tg, enum trackVisibility vis)
+/* Check to see if we draw exon and intron maps labeling their number. */
+{
+boolean exonNumbers = sameString(trackDbSettingOrDefault(tg->tdb, "exonNumbers", "on"), "on");
+return (withExonNumbers && exonNumbers && (vis==tvFull || vis==tvPack) && (winEnd - winStart < 400000) 
+ && (tg->nextPrevExon==linkedFeaturesNextPrevItem));
+}
+
 void genericMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 		    char *itemName, char *mapItemName, int start, int end,
 		    int x, int y, int width, int height)
@@ -3007,8 +3143,8 @@ if (!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
 }
 
 void genericDrawNextItemStuff(struct track *tg, struct hvGfx *hvg, enum trackVisibility vis,
-                              struct slList *item, int x2, int textX, int y, int heightPer,
-                              Color color)
+                              struct slList *item, double scale, int x2, int x1, int textX, int y, int heightPer,
+                              Color color, boolean doButtons)
 /* After the item is drawn in genericDrawItems, draw next/prev item related */
 /* buttons and the corresponding mapboxes. */
 {
@@ -3018,18 +3154,29 @@ int e = tg->itemEnd(tg, item);
 boolean rButton = FALSE;
 boolean lButton = FALSE;
 /* Draw the actual triangles.  These are always at the edge of the window. */
-if (s < winStart)
+if (doButtons && (s < winStart))
     {
     lButton = TRUE;
     hvGfxNextItemButton(hvg, insideX + NEXT_ITEM_ARROW_BUFFER, y,
                         heightPer-1, heightPer-1, color, MG_WHITE, FALSE);
     }
-if (e > winEnd)
+if (doButtons && (e > winEnd))
     {
     rButton = TRUE;
     hvGfxNextItemButton(hvg, insideX + insideWidth - NEXT_ITEM_ARROW_BUFFER - heightPer,
                         y, heightPer-1, heightPer-1, color, MG_WHITE, TRUE);
     }
+
+if ((vis == tvFull) || (vis == tvPack))
+    {
+    /* Make the button mapboxes. */
+    if (lButton)
+        tg->nextPrevExon(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
+    if (rButton)
+        tg->nextPrevExon(tg, hvg, item, insideX + insideWidth - buttonW, y, buttonW, heightPer, TRUE);
+    }
+
+boolean compat = exonNumberMapsCompatible(tg, vis);
 if (vis == tvPack)
     {
     int w = x2-textX;
@@ -3037,23 +3184,33 @@ if (vis == tvPack)
         { // if left-button, the label will be on far left, split out a map just for that label.
 	tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
                     s, e, textX, y, insideX-textX, heightPer);
-	tg->nextPrevExon(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
 	textX = insideX + buttonW; // continue on the right side of the left exon button
 	w = x2-textX;
 	}
     if (rButton)
         {
-	tg->nextPrevExon(tg, hvg, item, x2-buttonW, y, buttonW, heightPer, TRUE);
 	w -= buttonW;
         }
-    tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
+
+    if (compat)
+	{  // draw labeled exon/intron maps with exon/intron numbers
+	linkedFeaturesItemExonMaps(tg, hvg, item, scale, y, heightPer, s, e, lButton, rButton, buttonW);
+	x2 = x1;
+	w = x2-textX;
+	}
+    // if not already mapped, pick up the label
+    if (!(lButton && compat))
+	{
+        tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
 		s, e, textX, y, w, heightPer);
+	}
     }
+
 else if (vis == tvFull)
     {
     int geneMapBoxX = insideX;
     int geneMapBoxW = insideWidth;
-    /* Draw the first gene mapbox, in the left margin. */
+    /* Draw the first gene label mapbox, in the left margin. */
 #ifndef IMAGEv2_NO_LEFTLABEL_ON_FULL
     int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
 #ifdef IMAGEv2_SHORT_MAPITEMS
@@ -3066,24 +3223,16 @@ else if (vis == tvFull)
                 s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
 #endif///ndef IMAGEv2_SHORT_MAPITEMS
 #endif///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
-    /* Make the button mapboxes. */
-    if (lButton)
-        tg->nextPrevExon(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
-    if (rButton)
-        tg->nextPrevExon(tg, hvg, item, insideX + insideWidth - buttonW, y, buttonW, heightPer, TRUE);
     /* Depending on which button mapboxes we drew, draw the remaining mapbox. */
-    if (lButton && rButton)
-        {
-        geneMapBoxX += buttonW;
-        geneMapBoxW -= 2 * buttonW;
-        }
-    else if (lButton)
+    if (lButton)
         {
         geneMapBoxX += buttonW;
         geneMapBoxW -= buttonW;
         }
-    else if (rButton)
+    if (rButton)
+	{
         geneMapBoxW -= buttonW;
+	}
 #ifdef IMAGEv2_SHORT_MAPITEMS
     if (x2 > 0)
         {
@@ -3096,10 +3245,33 @@ else if (vis == tvFull)
             }
         }
 #endif//def IMAGEv2_SHORT_MAPITEMS
-    tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
-                s, e, geneMapBoxX, y, geneMapBoxW, heightPer);
+    if (compat)
+	{  // draw labeled exon/intron maps with exon/intron numbers
+	linkedFeaturesItemExonMaps(tg, hvg, item, scale, y, heightPer, s, e, lButton, rButton, buttonW);
+	if (!lButton)
+	    {
+	    int w = x1 - geneMapBoxX;
+	    if (w > 0)
+		tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
+		    s, e, geneMapBoxX, y, w, heightPer);
+	    }
+	if (!rButton)
+	    {
+	    int w = geneMapBoxX + geneMapBoxW - x2;
+	    if (w > 0)
+		tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
+		    s, e, x2, y, w, heightPer);
+	    }
+	}
+    else
+	{
+	tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
+		    s, e, geneMapBoxX, y, geneMapBoxW, heightPer);
+	}
     }
 }
+
+
 
 static void genericDrawOverflowItem(struct track *tg, struct spaceNode *sn,
                                     struct hvGfx *hvg, int xOff, int yOff, int width,
@@ -3230,7 +3402,9 @@ if (!tg->mapsSelf)
     if (w > 0)
         {
         if (nextItemCompatible(tg))
-            genericDrawNextItemStuff(tg, hvg, vis, item, x2, textX, y, tg->heightPer, color);
+            genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, textX, y, tg->heightPer, color, TRUE);
+        else if (exonNumberMapsCompatible(tg, vis))
+            genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, textX, y, tg->heightPer, color, FALSE);
         else
             {
             tg->mapItem(tg, hvg, item, tg->itemName(tg, item),
@@ -3471,10 +3645,30 @@ for (item = tg->items; item != NULL; item = item->next)
                     }
                 }
         #endif ///def IMAGEv2_NO_LEFTLABEL_ON_FULL
-            genericDrawNextItemStuff(tg, hvg, vis, item, x2, x1, y, tg->heightPer, color);
+            genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, x1, y, tg->heightPer, color);
             }
 #else//ifndef IMAGEv2_SHORT_MAPITEMS
-            genericDrawNextItemStuff(tg, hvg, vis, item, -1, -1, y, tg->heightPer, color);
+            {
+            // Convert start/end coordinates to pix
+            int s = tg->itemStart(tg, item);
+            int e = tg->itemEnd(tg, item);
+            int sClp = (s < winStart) ? winStart : s;
+            int eClp = (e > winEnd)   ? winEnd   : e;
+            int x1 = round((sClp - winStart)*scale) + xOff;
+            int x2 = round((eClp - winStart)*scale) + xOff;
+            genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, -1, y, tg->heightPer, color, TRUE); // was -1, -1, -1
+	    }
+        else if (exonNumberMapsCompatible(tg, vis))
+            {
+            // Convert start/end coordinates to pix
+            int s = tg->itemStart(tg, item);
+            int e = tg->itemEnd(tg, item);
+            int sClp = (s < winStart) ? winStart : s;
+            int eClp = (e > winEnd)   ? winEnd   : e;
+            int x1 = round((sClp - winStart)*scale) + xOff;
+            int x2 = round((eClp - winStart)*scale) + xOff;
+            genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, -1, y, tg->heightPer, color, FALSE); // was -1, -1, -1
+	    }
 #endif//ndef IMAGEv2_SHORT_MAPITEMS
         y += tg->lineHeight;
         }
@@ -12805,7 +12999,6 @@ track->isRemoteSql =  (track->remoteSqlHost != NULL && track->remoteSqlUser != N
 			&& track->remoteSqlDatabase != NULL && track->remoteSqlTable !=NULL);
 
 exonArrows = trackDbSetting(tdb, "exonArrows");
-nextItem = trackDbSetting(tdb, "nextItemButton");
 /* default exonArrows to on, except for tracks in regulation/expression group */
 if (exonArrows == NULL)
     {
@@ -12816,6 +13009,7 @@ if (exonArrows == NULL)
     }
 track->exonArrows = sameString(exonArrows, "on");
 track->nextExonButtonable = TRUE;
+nextItem = trackDbSetting(tdb, "nextItemButton");
 if (nextItem && sameString(nextItem, "off"))
     track->nextExonButtonable = FALSE;
 track->nextItemButtonable = track->nextExonButtonable;

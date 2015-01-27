@@ -471,6 +471,12 @@ hPrintf("Next/previous exon navigation");
 hPrintf("</TD></TR>\n");
 
 hPrintf("<TR><TD>");
+hCheckBox("exonNumbers", cartUsualBoolean(cart, "exonNumbers", TRUE));
+hPrintf("</TD><TD>");
+hPrintf("Show exon numbers");
+hPrintf("</TD></TR>\n");
+
+hPrintf("<TR><TD>");
 hCheckBox("enableHighlightingDialog", cartUsualBoolean(cart, "enableHighlightingDialog", TRUE));
 hPrintf("</TD><TD>");
 hPrintf("Enable highlight with drag-and-select "
