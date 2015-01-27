@@ -193,6 +193,8 @@ uwDnaseTrackHub meta.tab run_pooled colors.tab hub
 # (and normalized signal files are linked into that dir from :
 # /hive/data/genomes/hg38/bed/uwDnase1/run_normalized/out
 # The hub trackDb file is: /hive/data/genomes/hg38/bed/uwDnase1/hub/hg38/trackDb.txt
+#
+# Jim has a public URL here:  http://hgwdev.soe.ucsc.edu/~kent/hubs/uwDnase1/hub.txt
 
 #################################
 # DNAse peaks, hotspots, and signal track, and the multiwig
@@ -247,6 +249,13 @@ uwDnaseTrackHub meta.tab run_pooled colors.tab hub
         hgBbiDbLink hg38 uwEnc2DnaseSignal${exp} $bbi/$f
         hgBbiDbLink hg38 uwEnc2DnaseWig${exp} $bbi/$f
     end
+
+# Test load of non-normalized signal
+    cd /hive/data/genomes/hg38/bed/uwDnase1/run_pooled
+    set f = wgEncodeEH000484.pooled.bigWig
+    set bbi = /gbdb/hg38/bbi/uwDnase/
+    ln -s `pwd`/$f $bbi/$f
+    hgBbiDbLink hg38 testDnaseSignalWgEncodeEH000484 $bbi/$f
 
 # Load peaks into database (needed by hgc. we may be able to drop these with code changes)
     cd /hive/data/genomes/hg38/bed/uwDnase1/run_pooled/scored/out
@@ -337,6 +346,16 @@ cat > makeInputs.csh << 'EOF'
     #Hmm, hgc peakClusters doesn't appear to work with bigBed peak files...
     # Revert trackDb to BED peak files
 
+#################
+# Defaults
+
+# Initially, picked 11, focusing on tier1 & tier2, and spectrum spread:
+#       AG04450, GM12878, H7-hESC, HCT-116, HeLa-S3, HepG2, HPF, HUVEC, K562, MCF-7, NH-A 
+
+# Later, changed default on to same cell types as ENCODE Reg Transcription track:
+#       GM12878, H7-hESC (sub for H1-hESC), HeLa-S3, HepG2, HSMM, HUVEC, K562, NHEK, NHLF 
+       
+
 
 #################
 # Cell table (use for cell metadata, instead of metaDb)
@@ -370,5 +389,6 @@ cat > makeInputs.csh << 'EOF'
     tail -n +2 treatments.tab | \
         nl -v 0 | \
         hgLoadSqlTab hgFixed wgEncodeTreatment ~/kent/src/hg/lib/encode/wgEncodeTreatment.sql stdin
+
 
 

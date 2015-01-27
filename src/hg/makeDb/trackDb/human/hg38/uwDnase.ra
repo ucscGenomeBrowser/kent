@@ -29,8 +29,8 @@ subGroup4 tissue Tissue kidney=kidney esophagus=esophagus cervix=cervix skin=ski
 subGroup5 cancer Cancer cancer=cancer normal=normal unknown=unknown
 subGroup6 subtrackColor Similarity
 subGroupMetaTables cellType=hgFixed.wgEncodeCell
-dimensions dimA=tissue dimB=cancer
-filterComposite dimA
+dimensions dimA=cellType dimB=tissue dimC=cancer
+filterComposite dimA dimB dimC
 sortOrder view=+ subtrackColor=+ cellType=+ tissue=+
 dragAndDrop subTracks
 noInherit on
@@ -1503,6 +1503,14 @@ priority 100.3
 	parent uwEnc2DnaseSignal on
 	shortLabel K562 Sg
 	longLabel K562 lymphoblast chronic myeloid leukemia (CML) cell line DNaseI Signal from ENCODE
+	subGroups view=Signal cellType=K562 treatment=n_a tissue=bone_marrow cancer=cancer
+	type bigWig 0 38914.2
+	color 255,85,85
+
+        track testDnaseSignalWgEncodeEH000484
+	parent uwEnc2DnaseSignal on
+	shortLabel K562 USg
+	longLabel K562 Non-normalized DNaseI Signal from ENCODE
 	subGroups view=Signal cellType=K562 treatment=n_a tissue=bone_marrow cancer=cancer
 	type bigWig 0 38914.2
 	color 255,85,85
