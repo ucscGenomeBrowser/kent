@@ -49,7 +49,7 @@ SCRIPT_FILES = \
 # List of directories to build of interest only at UCSC
 DIRS = ${buildRefresh} \
 	automation \
-	checkUrlsInTables \
+	checkUrlsInTable \
 	geoMirrorNode \
 	makeTrackIndex \
 	mysqlSecurityCheck \
