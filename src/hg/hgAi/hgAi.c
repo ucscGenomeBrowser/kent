@@ -38,7 +38,9 @@ struct cart *cart = NULL;             /* CGI and other variables */
 static void writeDbMetadata(struct cartJson *cj, struct hash *paramHash)
 /* Send all the info that we'll need for working with a specific assembly db. */
 {
-cartJsonGetGroupsTracksTables(cj, paramHash);
+struct hash *gtdbParamHash = hashNew(0);
+hashAdd(gtdbParamHash, "fields", newJsonString("track,table,shortLabel,parent,subtracks"));
+cartJsonGetGroupedTrackDb(cj, gtdbParamHash);
 //#*** TODO: move jsonStringEscape inside jsonWriteString
 char *encoded = jsonStringEscape(cartOptionalString(cart, QUERY_SPEC));
 jsonWriteString(cj->jw, QUERY_SPEC, encoded);
@@ -228,13 +230,21 @@ int i;
 for (i = 0, dsRef = dataSources;  dsRef != NULL;  i++, dsRef = dsRef->next)
     {
     struct jsonElement *dsObj = dsRef->val;
-    char *table = jsonStringField(dsObj, "table");
-    char *track = jsonStringField(dsObj, "track");
-    struct trackDb *tdb = tdbForTrack(db, table, &fullTrackList);
+    struct slRef *trackPath = jsonListVal(jsonMustFindNamedField(dsObj, "dataSource", "trackPath"),
+                                          "trackPath");
+    // The first item in trackPath is group.  The second is track (or composite):
+    struct jsonElement *trackEl = (struct jsonElement *)(trackPath->next->val);
+    // and the last item in trackPath is track or leaf subtrack.
+    struct slRef *leafRef = slLastEl(trackPath);
+    struct jsonElement *leafEl = (struct jsonElement *)(leafRef->val);
+    char *leafTrack = jsonStringVal(leafEl, "leaf");
+    char *track = jsonStringVal(trackEl, "track");
+    struct trackDb *tdb = tdbForTrack(db, leafTrack, &fullTrackList);
     if (!tdb)
         tdb = tdbForTrack(db, track, &fullTrackList);
     if (!tdb)
-        errAbort("doQuery: no tdb for track %s, table %s", track, table);
+        errAbort("doQuery: no tdb for track %s, leaf %s", track, leafTrack);
+    char *table = tdb->table;
     if (i == 0)
         {
         primary = hAnnoStreamerFromTrackDb(assembly, table, tdb, chrom, NO_MAXROWS);

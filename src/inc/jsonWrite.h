@@ -33,6 +33,9 @@ void jsonWriteDateFromUnix(struct jsonWrite *jw, char *var, long long unixTimeVa
 void jsonWriteNumber(struct jsonWrite *jw, char *var, long long val);
 /* print out "var": val as number. Var may be NULL. */
 
+void jsonWriteDouble(struct jsonWrite *jw, char *var, double val);
+/* print out "var": val as number. Var may be NULL. */
+
 void jsonWriteLink(struct jsonWrite *jw, char *var, char *objRoot, char *name);
 /* Print out the jsony type link to another object.  objRoot will start and end with a '/'
  * and may have additional slashes in this usage. Var may be NULL. */

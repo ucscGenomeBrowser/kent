@@ -6,6 +6,8 @@ var HgAiModel = ImModel.extend({
     mixins: [ CladeOrgDbMixin(['cladeOrgDb']),
               PositionSearchMixin(['positionInfo']) ],
 
+    maxDataSources: 5,
+
     handleCartVar: function(mutState, cartVar, newValue) {
         // Some cart variables require special action (not simply being merged into top-level state)
         if (cartVar === 'hgai_querySpec') {
@@ -21,16 +23,6 @@ var HgAiModel = ImModel.extend({
         } else if (cartVar === 'hgai_range') {
             // Bundle this with positionInfo for fast immutable-prop checking
             mutState.setIn(['positionInfo', cartVar], newValue);
-        } else if (cartVar === 'trackDbInfo') {
-            var trackDbInfo = newValue;
-            mutState.set(cartVar, Immutable.fromJS(trackDbInfo));
-            // Update addDsTrackPath to something that we know for sure is in this db
-            var firstGroup = trackDbInfo.groupOptions[0].value;
-            var firstTrack = trackDbInfo.groupTracks[firstGroup][0].value;
-            var firstTable = trackDbInfo.trackTables[firstTrack][0];
-            mutState.set('addDsTrackPath',
-                              Immutable.Map({ group: firstGroup, track: firstTrack,
-                                              table: firstTable }));
         } else if (cartVar === 'tableFields') {
             // The server has sent an object mapping table names to lists of fields.
             // Construct an immutable map of table names to ordered maps of fields to
@@ -61,60 +53,402 @@ var HgAiModel = ImModel.extend({
         }
     },
 
-    isInTrackDb: function(mutState, dataSource) {
-        // Search trackDbInfo with dataSource's track/table; return true if found.
-        var track = dataSource.get('track');
-        var table = dataSource.get('table');
-        var tableList = mutState.getIn(['trackDbInfo', 'trackTables', track]);
-        return tableList && tableList.find(function(listedTable) {
-            return listedTable === table;
+    getAddDsTrackPath: function(mutState) {
+        // Return Immutable.List of currently selected items in the menus for adding a data source.
+        // That serves as a path through group, track, and maybe view and/or subtrack.
+        // If menus haven't been built yet, returns empty Immutable.List.
+        var addDsMenus = mutState.getIn(['addDsInfo', 'menus']) || Immutable.List();
+        return addDsMenus.map(function(menuInfo) { return menuInfo.get('selected'); });
+    },
+
+    findGroupedTrack: function(mutState, trackPath) {
+        // Return the group or track object found by following trackPath through groupedTrackDb,
+        // or null.
+        var objList = mutState.get('groupedTrackDb');
+        var selectedObj = null;
+        trackPath.forEach(function(selected, ix) {
+            var valueField = (ix === 0) ? 'name' : 'track';
+            var childField = (ix === 0) ? 'tracks' : 'subtracks';
+            selectedObj = objList ? this.findObjByField(objList, valueField, selected) : null;
+            if (! selectedObj) {
+                return false;
+            }
+            objList = selectedObj.get(childField);
+        }, this);
+        return selectedObj;
+    },
+
+    isInGroupedTrackDb: function(mutState, trackPath) {
+        // Search for trackPath in groupedTrackDb; return true if found.
+        return this.findGroupedTrack(mutState, trackPath) ? true : false;
+    },
+
+    schemaUrlFromTrackPath: function(mutState, trackPath) {
+        // Formulate a link to hgTables' table schema for trackPath's group/track/table.
+        var db = mutState.getIn(['cladeOrgDb', 'db']);
+        var group = trackPath.first();
+        var track = trackPath.get(1);
+        var table = trackPath.last();
+        return 'hgTables?db=' + db + '&hgta_group=' + group + '&hgta_track=' + track +
+                        '&hgta_table=' + table + '&hgta_doSchema=1';
+    },
+
+    findObjByField: function(objList, field, value) {
+        // Return the first Immutable object from Immutable.List objList whose value of field
+        // matches the given value, if there is one.
+        return objList.find(function(obj) {
+            return obj.get(field) === value;
         });
     },
 
-    validateCart: function(mutState) {
-        // We usually get trackDbInfo and hgai_query in the same server response.
-        // When both have been incorporated into mutState, trim any data sources
-        // from hgai_query that aren't found in trackDbInfo (e.g. after a db change).
-        var dataSources = mutState.getIn(['hgai_querySpec', 'dataSources']) || [];
-        var newDataSources = dataSources.filter(function(ds) {
-            return this.isInTrackDb(mutState, ds);
+    findObjByFieldOrFirst: function(objList, field, selectedValue) {
+        // Use use selectedValue to identify the selected object by field if possible;
+        // otherwise just return the first object.
+        var selectedObj;
+        if (! selectedValue ||
+            ! (selectedObj =
+               this.findObjByField(objList, field, selectedValue))) {
+            selectedObj = objList.first();
+        }
+        return selectedObj;
+    },
+
+    makeValLabel: function(value, label) {
+        // Return a {value, label} object suitable for describing <LabeledSelect> options
+        return Immutable.Map({ value: value, label: label });
+    },
+
+    groupLabel: function(groupObj) {
+        return groupObj.get('label');
+    },
+
+    trackLabel: function(trackObj) {
+        // Make a nice label for a track, fitting in extra info for superTrack children
+        // or leaves.
+        var label = trackObj.get('shortLabel');
+        var parent = trackObj.get('parent');
+        var parentLabel;
+        var subtracks = trackObj.get('subtracks');
+        if (parent && Immutable.Map.isMap(parent)) {
+            // parent is a superTrack -- add its shortLabel unless redundant
+            parentLabel = parent.get('shortLabel');
+            if (! _.startsWith(label, parentLabel)) {
+                label = parentLabel + ' - ' + label;
+            }
+        }
+        if (subtracks) {
+            label += '...';
+        } else {
+            label += ' (' + trackObj.get('table') + ')';
+        }
+        return label;
+    },
+
+    makeMenu: function(objList, selectedObj, label, valueField, labelFunc, hidden) {
+        // Return an Immutable menu descriptor object suitable for <LabeledSelectRow>.
+        // objList must be an Immutable.List of Immutable objects that have valueField.
+        // labelFunc, when called on a member of objList, returns a string.
+        // selectedObj must be a member of objList or falsey.
+        var valLabels = objList.map(function(obj) {
+            return this.makeValLabel(obj.get(valueField), labelFunc(obj));
         }, this);
-        if (! newDataSources.equals(dataSources)) {
-            mutState.setIn(['hgai_querySpec', 'dataSources'], newDataSources);
+        var selected = selectedObj ? selectedObj.get(valueField) : null;
+        return Immutable.fromJS({ valLabels: valLabels,
+                                  selected: selected,
+                                  label: label,
+                                  hide: hidden });
+    },
+
+    updateAddDsMenu: function(mutState, changedIx, ix, objList, selectedValue,
+                              menuLabel, valueField, labelFunc, childField) {
+        // If ix >= changedIx, or if selectedValue doesn't match the selected value of the
+        // ixth level of addDsMenus, then rebuild the ixth level of addDsMenus and truncate
+        // any member(s) of addDsMenus past ix.
+        // If selectedValue can't be found in objList, use the first obj in objList.
+        // If there's only one trackObj at a non-leaf level, don't make a menu for that level.
+        // Return the selected member of objList so its children can be used to form the
+        // next level of addDsMenus.
+        var selectedObj = this.findObjByFieldOrFirst(objList, valueField, selectedValue);
+        var atLeaf = ! (selectedObj && selectedObj.get(childField));
+        var addDsMenus = mutState.getIn(['addDsInfo', 'menus']) || Immutable.List();
+        var hidden = false;
+        if (changedIx <= ix ||
+            addDsMenus.getIn([ix, 'selected']) !== selectedObj.get(valueField)) {
+            // If this level is changing, so are the levels below it.  Rebuild addDsMenus[ix]
+            // and truncate anything after ix.
+            // Tweak label if it's a top-level track or view-in-the-middle not a subtrack:
+            if (menuLabel === 'subtrack') {
+                if (ix === 1) {
+                    menuLabel = 'track';
+                } else if (ix === 2 && !atLeaf) {
+                    menuLabel = 'view';
+                }
+            }
+            // If this is a non-leaf level (e.g. view) with only one option, don't show a
+            // menu for this level, but keep its info in addDsMenus for trackPath sanity.
+            hidden = (! atLeaf && objList.size === 1);
+            mutState.setIn(['addDsInfo', 'menus'],
+                           addDsMenus.splice(ix, addDsMenus.size,
+                                             this.makeMenu(objList, selectedObj, menuLabel,
+                                                           valueField, labelFunc, hidden)));
+        }
+        return selectedObj;
+    },
+
+    rMakeSubtrackMenus: function(mutState, trackObjList, changedIx, trackPath, ix) {
+        // Recursively build subtrack (or view) menus (when the selected track has subtracks).
+        // Use shortLabel for menu labels.
+        var selectedTrackObj = this.updateAddDsMenu(mutState, changedIx, ix,
+                                                    trackObjList, trackPath.get(ix),
+                                                    'subtrack', 'track', this.trackLabel,
+                                                    'subtracks');
+        var subtrackObjList = selectedTrackObj.get('subtracks');
+        if (subtrackObjList) {
+            this.rMakeSubtrackMenus(mutState, subtrackObjList, changedIx, trackPath, ix+1);
+        }
+    },
+
+    updateAddDsSchemaUrl: function(mutState) {
+        // Read the selected path back out of addDsInfo.menus and update addDsInfo.schemaUrl.
+        var trackPath = this.getAddDsTrackPath(mutState);
+        var leafObj = this.findGroupedTrack(mutState, trackPath);
+        if (leafObj) {
+            trackPath = trackPath.set(trackPath.size-1, leafObj.get('table'));
+            mutState.setIn(['addDsInfo', 'schemaUrl'],
+                           this.schemaUrlFromTrackPath(mutState, trackPath));
+        } else {
+            this.error('updateAddDsSchemaUrl: can\'t find trackPath ' + trackPath.toString());
+            mutState.setIn(['addDsInfo', 'schemaUrl'], null);
+        }
+    },
+
+    updateAddDsDisable: function(mutState) {
+        // If user has added the max # of data sources, or has already added the currently
+        // selected track, disable the Add button.
+        var dataSources = mutState.getIn(['hgai_querySpec', 'dataSources']);
+        if (! dataSources) {
+            return;
+        }
+        var addDsTrackPath = this.getAddDsTrackPath(mutState);
+        var alreadyAddedTrack = dataSources.some(function(ds) {
+            var trackPath = ds.get('trackPath');
+            return trackPath.equals(addDsTrackPath);
+        });
+        mutState.setIn(['addDsInfo', 'disabled'],
+                       (dataSources.size >= this.maxDataSources || alreadyAddedTrack));
+    },
+
+    disableDataSourcesInAddDsMenus: function (mutState) {
+        // Disable the leaf (rightmost) menu's options only for already-added data sources.
+        var dataSources = mutState.getIn(['hgai_querySpec', 'dataSources']);
+        if (! dataSources) {
+            return;
+        }
+        var addDsMenusPath = ['addDsInfo', 'menus'];
+        var addDsMenus = mutState.getIn(addDsMenusPath);
+        var leafIx = addDsMenus.size - 1;
+        var leafOptionsPath = _.flatten([addDsMenusPath, leafIx, 'valLabels']);
+        // Remove all menu options' disabled flags:
+        addDsMenus.forEach(function(menuInfo, menuIx) {
+            menuInfo.get('valLabels').forEach(function(valLabel, optionIx) {
+                var fullPath = _.flatten([addDsMenusPath, menuIx, 'valLabels',
+                                          optionIx, 'disabled']);
+                mutState.removeIn(fullPath);
+            });
+        });
+        // Disable any leaf menu option that matches any data source path:
+        dataSources.forEach(function(ds) {
+            var trackPath = ds.get('trackPath').toJS();
+            if (trackPath.length !== addDsMenus.size) {
+                // Leaves can't match, so skip this one:
+                return true;
+            }
+            _.forEach(trackPath, function(tpValue, tpIx) {
+                if (tpIx === leafIx) {
+                    mutState.getIn(leafOptionsPath).forEach(function(option, opIx) {
+                        var optionDisablePath;
+                        if (option.get('value') === tpValue) {
+                            optionDisablePath = _.flatten([leafOptionsPath, opIx, 'disabled']);
+                            mutState.setIn(optionDisablePath, 'true');
+                            // All done -- break out of forEach
+                            return false;
+                        }
+                        return true;
+                    });
+                } else if (tpValue !== addDsMenus.getIn([tpIx, 'selected'])) {
+                    // Mismatch at non-leaf level -- break out of _.forEach
+                    return false;
+                }
+            });
+        });
+    },
+
+    groupedTrackDbToMenus: function (mutState, trackPath, changedIx) {
+        // Build or update the list of menu descriptors for rendering group, track, and possibly
+        // view and subtrack menus for choosing a data source.  Use trackPath as a record of
+        // selected items, if it's consistent with groupedTrackDb.
+        // If changedIx is given and trackPath[<changedIx] is consistent with addDsMenus,
+        // rebuild only from changedIx on down, otherwise completely rebuild.
+        var grpTrackDb = mutState.get('groupedTrackDb');
+        var selectedGroupObj, trackObjList, ix;
+        changedIx = changedIx || 0;
+        // The first menu is for track groups:
+        ix = 0;
+        selectedGroupObj = this.updateAddDsMenu(mutState, changedIx, ix,
+                                                grpTrackDb, trackPath.get(ix),
+                                                'track group', 'name', this.groupLabel, 'tracks');
+        // The second menu is for tracks or composites in the selected group; if there
+        // are views and/or subtracks, recursively descend to those.
+        ix = 1;
+        trackObjList = selectedGroupObj.get('tracks');
+        this.rMakeSubtrackMenus(mutState, trackObjList, changedIx, trackPath, ix);
+
+        // Now update the things that depend on menus and other state:
+        this.disableDataSourcesInAddDsMenus(mutState);
+        this.updateAddDsDisable(mutState);
+        this.updateAddDsSchemaUrl(mutState);
+    },
+
+    handleGroupedTrackDb: function(mutState, cartVar, newValue) {
+        // Server just sent new groupedTrackDb; build group/track/etc menus for <AddDataSource>.
+        if (cartVar === 'groupedTrackDb') {
+            mutState.set('groupedTrackDb', Immutable.fromJS(newValue));
+            // If the cart includes a saved trackPath consistent with groupedTrackDb, use that:
+            var addDsTrackPath = mutState.get('hgai_addDsTrackPath');
+            if (! addDsTrackPath ||
+                ! this.isInGroupedTrackDb(mutState, addDsTrackPath)) {
+                addDsTrackPath = Immutable.List();
+            }
+            this.groupedTrackDbToMenus(mutState, addDsTrackPath, 0);
+        } else {
+            this.error('handleGroupedTrackDb: expecting cartVar groupedTrackDb, got ',
+                       cartVar, newValue);
+        }
+    },
+
+    handleJsonBlob: function(mutState, cartVar, newValue) {
+        // Parse JSON cartVar and store as Immutable state -- or remove if set to empty.
+        if (newValue) {
+            mutState.set(cartVar, Immutable.fromJS(JSON.parse(newValue)));
+        } else {
+            mutState.remove(cartVar);
+        }
+    },
+
+    labelFromTrackPath: function(mutState, trackPath) {
+        // Return a text label for the dataSource identified by trackPath
+        var trackLeafObj = this.findGroupedTrack(mutState, trackPath);
+        var compositeObj, label;
+        if (trackLeafObj) {
+            if (trackPath.size > 2) {
+                // Get the composite object too, using a truncated trackPath:
+                compositeObj = this.findGroupedTrack(mutState,
+                                                     trackPath.splice(2, trackPath.size));
+                label = compositeObj.get('shortLabel') + ' - ' + trackLeafObj.get('shortLabel');
+            } else {
+                label = trackLeafObj.get('shortLabel');
+            }
+        } else {
+            this.error('labelFromTrackPath: can\'t find track for trackPath ' +
+                       trackPath.toString(), trackPath);
+            label = trackPath.last();
+        }
+        return label;
+    },
+
+    validateCart: function(mutState) {
+        // When both groupedTrackDb and hgai_query have been incorporated into mutState,
+        // trim any data sources from hgai_query that aren't found in groupedTrackDb
+        // (e.g. after a db change).
+        // Also make sure that labels and schema links are consistent w/latest db & trackDb.
+        var dataSources = mutState.getIn(['hgai_querySpec', 'dataSources']) || Immutable.List();
+        var addDsInfo = mutState.get('addDsInfo');
+        if (dataSources && addDsInfo) {
+            var newDataSources = dataSources.filter(function(ds) {
+                var trackPath = ds.get('trackPath');
+                return trackPath && this.isInGroupedTrackDb(mutState, trackPath);
+            }, this
+                                                    ).map(function(ds) {
+                var trackPath = ds.get('trackPath');
+                ds = ds.set('label', this.labelFromTrackPath(mutState, trackPath));
+                ds = ds.set('schemaUrl', this.schemaUrlFromTrackPath(mutState, trackPath));
+                return ds;
+            }, this);
+            if (! newDataSources.equals(dataSources)) {
+                mutState.setIn(['hgai_querySpec', 'dataSources'], newDataSources);
+            }
+            this.disableDataSourcesInAddDsMenus(mutState);
+            this.updateAddDsDisable(mutState);
         }
     },
 
     cartSendQuerySpec: function(mutState) {
         // When some part of querySpec changes, update the cart variable.
         var state = mutState || this.state;
-        this.cartSet('hgai_querySpec', JSON.stringify(state.get('hgai_querySpec').toJS()));
+        var querySpec = state.get('hgai_querySpec').toJS();
+        // Remove UI-only fields from dataSources:
+        querySpec.dataSources = _.map(querySpec.dataSources, function(ds) {
+            return _.omit(ds, ['schemaUrl', 'label']);
+        });
+        this.cartSet('hgai_querySpec', JSON.stringify(querySpec));
     },
 
-    changeAddDsTrackPath: function(mutState, path, newValue) {
-        // User changed group, track or table in the 'Add Data Source' section.
-        // Changing group or track has side effects on lower-level menus.
-        mutState.setIn(path, newValue);
-        var which = path.pop();
-        var newTrack, newTable;
-        if (which === 'group') {
-            newTrack = mutState.getIn(['trackDbInfo', 'groupTracks', newValue, 0, 'value']);
-            newTable = mutState.getIn(['trackDbInfo', 'trackTables', newTrack, 0]);
-            mutState.setIn(path.concat('track'), newTrack);
-            mutState.setIn(path.concat('table'), newTable);
-        } else if (which === 'track') {
-            newTable = mutState.getIn(['trackDbInfo', 'trackTables', newValue, 0]);
-            mutState.setIn(path.concat('table'), newTable);
-        } else if (which !== 'table') {
-            console.error('changeAddDsTrackPath: bad path "' + which + '"');
+    changeAddDsMenu: function(mutState, uiPath, newValue) {
+        // User changed group, track, view, or subtrack in the 'Add Data Source' section.
+        // Changing group or track (or view) has side effects on lower-level menus.
+        var ix = uiPath.pop();
+        var trackPath = this.getAddDsTrackPath(mutState);
+        if (trackPath.size === 0) {
+            this.error('changeAddDsMenu: getAddDsTrackPath came up empty?! ix=' + ix);
+            ix = 0;
+        } else if (ix >= trackPath.size) {
+            this.error('changeAddDsMenu: trackPath size is ' + trackPath.size +
+                       ' but got ix ' + ix, trackPath, ix);
+            // Rebuild menus from scratch
+            trackPath = Immutable.List();
+            ix = 0;
+        } else {
+            // Normal case: plop newValue into trackPath[ix], truncating anything after ix:
+            trackPath = trackPath.splice(ix, trackPath.size, newValue);
         }
+        // Regenerate menus
+        this.groupedTrackDbToMenus(mutState, trackPath, ix);
+        // store in cart
+        this.cartSet('hgai_addDsTrackPath',
+                     JSON.stringify(this.getAddDsTrackPath(mutState).toJS()));
     },
 
     addDataSource: function(mutState) {
-        // User clicked button to add a new data source (track/table); tell server and render.
-        var clonedTrackPath = Immutable.fromJS(mutState.get('addDsTrackPath').toJS());
-        mutState.updateIn(['hgai_querySpec', 'dataSources'], function(list) {
-            return list.push(clonedTrackPath);
+        // User clicked button to add a new data source (track/table); tell server and render,
+        // unless they have reached the max number of allowed data sources, or are trying to
+        // add a data source that has already been added.
+        if (mutState.getIn(['hgai_querySpec', 'dataSources']).size >= this.maxDataSources) {
+            alert("Sorry, you can choose a maximum of " + this.maxDataSources + " data sources.");
+            return;
+        }
+        var addDsTrackPath = this.getAddDsTrackPath(mutState);
+        var label = this.labelFromTrackPath(mutState, addDsTrackPath);
+        var alreadyAdded = false;
+        mutState.getIn(['hgai_querySpec', 'dataSources']).forEach(function (ds) {
+            var dsTrackPath = ds.get('trackPath');
+            if (dsTrackPath.equals(addDsTrackPath)) {
+                alreadyAdded = true;
+                return false;
+            }
         });
+        if (alreadyAdded) {
+            alert(label + ' has already been added above.');
+            return;
+        }
+        var schemaUrl = this.schemaUrlFromTrackPath(mutState, addDsTrackPath);
+        var dataSource = Immutable.fromJS({ trackPath: addDsTrackPath,
+                                            label: label,
+                                            schemaUrl: schemaUrl});
+        mutState.updateIn(['hgai_querySpec', 'dataSources'], function(list) {
+            return list.push(dataSource);
+        });
+        this.disableDataSourcesInAddDsMenus(mutState);
+        this.updateAddDsDisable(mutState);
         this.cartSendQuerySpec(mutState);
     },
 
@@ -164,6 +498,8 @@ var HgAiModel = ImModel.extend({
                 mutState.updateIn(['hgai_querySpec', 'dataSources'], function(oldList) {
                     return oldList.remove(ix);
                 });
+                this.disableDataSourcesInAddDsMenus(mutState);
+                this.updateAddDsDisable(mutState);
                 this.cartSendQuerySpec(mutState);
             } else if (action && action === 'moreOptions') {
                 var track = mutState.getIn(['hgai_querySpec', 'dataSources', ix, 'track']);
@@ -177,8 +513,8 @@ var HgAiModel = ImModel.extend({
     doChooseFields: function(mutState) {
         // User clicked the 'Choose fields' button -- get field info from server.
         var dataSources = mutState.getIn(['hgai_querySpec', 'dataSources']);
-        var tables = dataSources.map(function(trackPath) {
-            return trackPath.get('table');
+        var tables = dataSources.map(function(dataSource) {
+            return dataSource.get('trackPath').last();
         });
         this.cartDo({ getFields: { tables: tables.join(',') } });
     },
@@ -204,7 +540,7 @@ var HgAiModel = ImModel.extend({
                 mutState.getIn(['tableFields', table, 'fields']).forEach(function(val, field) {
                     mutState.setIn(['hgai_querySpec', 'outFileOptions', 'tableFields',
                                          table, field], val);
-                }.bind(this));
+                });
             }
             this.cartSendQuerySpec(mutState);
         }
@@ -242,30 +578,62 @@ var HgAiModel = ImModel.extend({
         }
     },
 
+    changeCladeOrgDb: function(mutState) {
+        // The CladeOrgDbPos mixin handles the clade/org/db menus, position, and
+        // notifies the server about the change.  However, for databases that have
+        // giant trackDbs, it can take a long time before that info shows up -- long
+        // enough for the user to start playing with Add Data Source menus if they
+        // are left in place.  So, clear out db-specific state until the new data arrive.
+        mutState.remove('groupedTrackDb');
+        mutState.remove('addDsInfo');
+    },
+
     initialize: function() {
-        // Register handlers for cart info and ui events:
-        this.registerCartVarHandler(['hgai_querySpec', 'hgai_range', 'tableFields', 'trackDbInfo'],
+        // Register handlers for cart variables that need special treatment:
+        this.registerCartVarHandler(['hgai_querySpec', 'hgai_range', 'tableFields'],
                                     this.handleCartVar);
+        this.registerCartVarHandler('hgai_addDsTrackPath', this.handleJsonBlob);
+        this.registerCartVarHandler('groupedTrackDb', this.handleGroupedTrackDb);
         this.registerCartValidateHandler(this.validateCart);
+        // Register handlers for UI events:
         this.registerUiHandler(['positionInfo', 'hgai_range'], this.changeCartVar);
-        this.registerUiHandler(['addDsTrackPath'], this.changeAddDsTrackPath);
+        this.registerUiHandler(['addDsMenuSelect'], this.changeAddDsMenu);
         this.registerUiHandler(['addDataSource'], this.addDataSource);
         this.registerUiHandler(['trackHubs'], this.goToTrackHubs);
         this.registerUiHandler(['customTracks'], this.goToCustomTracks);
         this.registerUiHandler(['dataSources'], this.dataSourceClick);
         this.registerUiHandler(['outFileOptions'], this.outFileOptionsClick);
+        this.registerUiHandler(['cladeOrgDb'], this.changeCladeOrgDb);
 
         // Bootstrap initial state from page or by server request, then render:
         if (window.initialAppState) {
             this.state = Immutable.fromJS(window.initialAppState);
-            this.render();
         } else {
+            this.state = Immutable.Map();
+            // Fire off some requests in parallel -- some are much slower than others.
+            // For starters, get only the first two levels of groupedTrackDb (groups
+            // and top-level tracks) because the entire structure is so large for hg19
+            // and other well-annotated genomes that the volume of compressed JSON
+            // takes a long time on the wire.
             this.cartDo({ getCladeOrgDbPos: {},
-                          getGroupsTracksTables: {},
-                          getStaticHtml: {tag: 'helpText', file: 'goldenPath/help/hgAiHelp.html'},
-                          get: {'var': 'hgai_range,hgai_querySpec'}
+                          getGroupedTrackDb: {
+                            fields: 'track,table,shortLabel,parent,subtracks',
+                            maxDepth: '1',
+                          },
+                          get: {'var': 'hgai_range,hgai_querySpec,hgai_addDsTrackPath'}
+                        });
+            // This one takes a long time for hg19 though not for tiny dbs.
+            this.cartDo({ getGroupedTrackDb: {
+                            fields: 'track,table,shortLabel,parent,subtracks'
+                          }
+                        });
+            // This one shouldn't take long.
+            this.cartDo({ getStaticHtml: {
+                            tag: 'helpText', file: 'goldenPath/help/hgAiHelp.html'
+                          }
                         });
         }
+        this.render();
     }
 
 

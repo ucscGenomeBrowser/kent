@@ -52,7 +52,8 @@ void cartJsonChangeOrg(struct cartJson *cj, struct hash *paramHash);
 void cartJsonChangeClade(struct cartJson *cj, struct hash *paramHash);
 /* Change clade to new value, update cart, and print JSON of new org & db menus, new position etc */
 
-void cartJsonGetGroupsTracksTables(struct cartJson *cj, struct hash *paramHash);
-/* Print info necessary for group/track/table menus. */
+void cartJsonGetGroupedTrackDb(struct cartJson *cj, struct hash *paramHash);
+/* Translate trackDb list (only a subset of the fields) into JSON array of track group objects;
+ * each group contains an array of track objects that may have subtracks. */
 
 #endif /* CARTJSON_H */
