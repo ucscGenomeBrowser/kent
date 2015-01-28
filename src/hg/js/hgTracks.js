@@ -1498,6 +1498,23 @@ var dragReorder = {
             if (rightClick.currentMapItem) {
                 rightClick.currentMapItem.href = this.href;
                 rightClick.currentMapItem.title = this.title;
+
+		// Handle linked features with separate clickmaps for each exon/intron 
+		if ((this.title.indexOf('Exon ') === 0) || (this.title.indexOf('Intron ') === 0)) {
+		    // if the title is Exon ... or Intron ... 
+		    // then search for the sibling with the same href
+		    // that has the real title item label
+		    var elem = this.parentNode.firstChild;
+		    while (elem) {
+			if ((elem.href === this.href)
+			    && !((elem.title.indexOf('Exon ') === 0) || (elem.title.indexOf('Intron ') === 0))) {
+			    rightClick.currentMapItem.title = elem.title;
+			    break;
+			}
+			elem = elem.nextSibling;
+		    }
+		}
+
             }
         }
     },
