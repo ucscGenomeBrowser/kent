@@ -693,3 +693,82 @@ TMPDIR=/dev/shm
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+##############################################################################
+# LASTZ mouse/bosTau8 sheep/oviAri3 - (DONE - 2015-01-20 - Hiram)
+    mkdir /hive/data/genomes/bosTau8/bed/lastzOviAri3.2015-01-20
+    cd /hive/data/genomes/bosTau8/bed/lastzOviAri3.2015-01-20
+
+    cp -p \
+/hive/users/hiram/multiz/100way/bosTau8.oviAri3/bosTau8.oviAri3.tuning.top400.txt \
+     ./bosTau8.oviAri3.tuning.Q.txt
+
+    cat << '_EOF_' > DEF
+# Horse vs. Sheep
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/bosTau8.oviAri3/bosTau8.oviAri3.tuning.top400.txt
+
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=50
+BLASTZ_X=1000
+BLASTZ_Y=3400
+BLASTZ_K=3000
+BLASTZ_L=3000
+BLASTZ_Q=/hive/data/genomes/bosTau8/bed/lastzOviAri3.2015-01-20/bosTau8.oviAri3.tuning.Q.txt
+#       A     C     G     T
+# A   100  -172   -55  -173
+# C  -172    95  -212   -55
+# G   -55  -212    95  -172
+# T  -173   -55  -172   100
+
+# TARGET: Horse bosTau8
+SEQ1_DIR=/hive/data/genomes/bosTau8/bosTau8.2bit
+SEQ1_LEN=/hive/data/genomes/bosTau8/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Sheep oviAri3
+SEQ2_DIR=/hive/data/genomes/oviAri3/oviAri3.2bit
+SEQ2_LEN=/hive/data/genomes/oviAri3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=40
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/bosTau8/bed/lastzOviAri3.2015-01-20
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+      -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+          -syntenicNet) > do.log 2>&1
+    # real    1312m54.887s
+
+    cat fb.bosTau8.chainOviAri3Link.txt
+    # 2236790379 bases of 2649307237 (84.429%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` bosTau8 oviAri3) > rbest.log 2>&1 &
+    # real    38m9.755s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oviAri3/bed/blastz.bosTau8.swap
+    cd /hive/data/genomes/oviAri3/bed/blastz.bosTau8.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/bosTau8/bed/lastzOviAri3.2015-01-20/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    477m36.613s
+
+    cat fb.oviAri3.chainBosTau8Link.txt
+    # 2217800123 bases of 2534335866 (87.510%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` oviAri3 bosTau8) > rbest.log 2>&1
+    # real    44m43.976s
+
+#########################################################################
