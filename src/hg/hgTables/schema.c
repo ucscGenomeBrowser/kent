@@ -375,14 +375,13 @@ struct joiner *joiner = allJoiner;
 struct joinerPair *jpList, *jp;
 struct asObject *asObj = asForTable(conn, table);
 char *splitTable = chromTable(conn, table);
-
 hPrintf("<B>Database:</B> %s", db);
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Primary Table:</B> %s", table);
 if (!sameString(splitTable, table))
     hPrintf(" (%s)", splitTable);
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Row Count: </B>  ");
 printLongWithCommas(stdout, sqlTableSize(conn, splitTable));
-char *date = firstWordInLine(sqlTableUpdate(conn, table));
+char *date = firstWordInLine(sqlTableUpdate(conn, splitTable));
 if (date != NULL)
     printf("&nbsp&nbsp<B> Data last updated:&nbsp;</B>%s<BR>\n", date);
 if (asObj != NULL)
