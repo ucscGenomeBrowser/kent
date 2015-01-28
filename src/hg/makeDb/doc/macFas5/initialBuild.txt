@@ -408,7 +408,7 @@ macFas5.upstreamGeneTbl = refGene
 
     # Edit src/lib/gbGenome.c to add new species
 
-    git commit -m "Added macFas5; refs #11174" etc/genbank.conf src/lib/gbGenome.c
+ git commit -m "Added macFas5; refs #11174" etc/genbank.conf src/lib/gbGenome.c
     git push
     # update /cluster/data/genbank/:
     make etc-update
@@ -418,13 +418,13 @@ macFas5.upstreamGeneTbl = refGene
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial macFas5
-XXX - running - Fri Jan  9 10:39:11 PST 2015
     # logFile: var/build/logs/2015.01.09-10:38:58.macFas5.initalign.log
-    #   real    53m1.297s
+    #   real    170m25.901s
+
     # verify completed successfully:
     tail var/build/logs/2015.01.09-10:38:58.macFas5.initalign.log
-# hgwdev 2015.01.06-11:43:02 macFas5.initalign: Succeeded: macFas5
-# hgwdev 2015.01.06-11:46:23 macFas5.initalign: finish
+# hgwdev 2015.01.09-13:25:18 macFas5.initalign: Succeeded: macFas5
+# hgwdev 2015.01.09-13:29:24 macFas5.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.macFas5
@@ -433,7 +433,8 @@ XXX - running - Fri Jan  9 10:39:11 PST 2015
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad -verbose=10 macFas5
-    # logFile: var/dbload/hgwdev/logs/2015.01.06-13:41:18.macFas5.dbload.log
+    # logFile: var/dbload/hgwdev/logs/2015.01.20-14:14:51.macFas5.dbload.log
+    # real    41m8.893s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -443,12 +444,12 @@ XXX - running - Fri Jan  9 10:39:11 PST 2015
     #   etc/hgwdev.dbs
     git add etc/align.dbs
     git add etc/hgwdev.dbs
-    git commit -m "Added macFas5 - Cow" etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added macFas5 - crab-eating macaque refs #11174" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2015-01-09 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2015-01-27 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=macFas5 -keys all.joiner
@@ -456,24 +457,27 @@ XXX - running - Fri Jan  9 10:39:11 PST 2015
     joinerCheck -database=macFas5 -times all.joiner
 
     cd /hive/data/genomes/macFas5
-    makeDownloads.pl macFas5 > do.log 2>&1
+    time (makeDownloads.pl -workhorse=hgwdev -dbHost=hgwdev macFas5) \
+       > downloads.log 2>&1
+    # real    25m37.738s
+
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/macFas5/pushQ
     cd /hive/data/genomes/macFas5/pushQ
-    makePushQSql.pl macFas5 > macFas5.pushQ.sql 2> stderr.out
+    time makePushQSql.pl macFas5 > macFas5.pushQ.sql 2> stderr.out
+    #  real    5m23.179s
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: hgwdev does not have /gbdb/macFas5/wib/gc5Base.wib
     # WARNING: hgwdev does not have /gbdb/macFas5/wib/quality.wib
-    # WARNING: hgwdev does not have /gbdb/macFas5/bbi/quality.bw
+    # WARNING: hgwdev does not have /gbdb/macFas5/bbi/gc5BaseBw/gc5Base.bw
+    # WARNING: hgwdev does not have /gbdb/macFas5/bbi/qualityBw/quality.bw
     # WARNING: macFas5 does not have seq
     # WARNING: macFas5 does not have extFile
 
     #   copy it to hgwbeta
     scp -p macFas5.pushQ.sql qateam@hgwbeta:/tmp
-    ssh hgwbeta
-    cd /tmp
-    hgsql qapushq < macFas5.pushQ.sql
+    ssh qateam@hgwbeta './bin/x86_64/hgsql qapushq < /tmp/macFas5.pushQ.sql'
     #   in that pushQ entry walk through each entry and see if the
     #   sizes will set properly
 
