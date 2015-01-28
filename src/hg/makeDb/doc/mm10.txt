@@ -10845,8 +10845,8 @@ ALIGN=ucscRetroAli$VERSION
 LOCAL=/scratch/data/$DB
 NIB=$LOCAL/nib
 RMSK=rmsk
-NET1=netHg38 
-NET2=netCanFam3 
+NET1=netHg38
+NET2=netCanFam3
 NET3=netRn5
 GENE1=knownGene
 GENE2=refGene
@@ -10869,12 +10869,12 @@ PFAMIDFIELD=name
 PFAMDOMAIN=value
 ARRAY=gnfAtlas2
 AFFYPROBE=affyGnf1m
-ARRAYMEDIAN=hgFixed.gnfMouseAtlas2Median 
+ARRAYMEDIAN=hgFixed.gnfMouseAtlas2Median
 ARRAYRATIO=hgFixed.gnfMouseAtlas2AllRatio
 ARRAYABS=hgFixed.gnfMouseAtlas2All
-ARRAYEXP=hgFixed.gnfMouseAtlas2MedianExps 
+ARRAYEXP=hgFixed.gnfMouseAtlas2MedianExps
 ARRAYEXPALL=hgFixed.gnfMouseAtlas2AllExps
-# ARRAYLOOKUP=knownToGnfAtlas2 
+# ARRAYLOOKUP=knownToGnfAtlas2
 #ARRAYPSLS="/hive/data/genomes/mm9/bed/geneAtlas2/affyGnf1m.psl"
 ALTSPLICE=sibTxGraph
 SPLITBYAGE=$SCRIPT/splitRetrosByAgeMouse
@@ -10899,8 +10899,8 @@ foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Y)
     >> S1.len
 end
 
-# NOTE: in future, use /hive/data/genomes/mm10/chrom.sizes for S1.len 
-# and just remove randoms and chrM. 
+# NOTE: in future, use /hive/data/genomes/mm10/chrom.sizes for S1.len
+# and just remove randoms and chrM.
 cd /hive/groups/gencode/pseudogenes/retroFinder/mm10.20150102
 mkdir mrnaBlastz
 cd mrnaBlastz
