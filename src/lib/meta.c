@@ -13,6 +13,8 @@
  *            meta lowLevel
  *            fileName hg19/chipSeq/helaH3k4me3.narrowPeak.bigBed
  * The file is interpreted so that lower level stanzas inherit tags from higher level ones.
+ * NOTE: this file has largely been superceded by the tagStorm module, which does not
+ * require meta tags, but is otherwise similar. 
  */
 
 #include "common.h"
