@@ -398,6 +398,7 @@ extern boolean withLeftLabels;		/* Display left labels? */
 extern boolean withCenterLabels;	/* Display center labels? */
 extern boolean withGuidelines;		/* Display guidelines? */
 extern boolean withNextExonArrows;	/* Display next exon navigation buttons near center labels? */
+extern boolean withExonNumbers;	/* Display exon and intron numbers in mouseOver instead of item name */
 extern struct hvGfx *hvgSide;  // An extra pointer to side label image that can be built if needed
 
 extern int seqBaseCount;  /* Number of bases in sequence. */

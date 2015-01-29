@@ -381,14 +381,20 @@ cat > makeInputs.csh << 'EOF'
         nl -v 0 | \
         hgLoadSqlTab hgFixed wgEncodeCell ~/kent/src/hg/lib/encode/wgEncodeCell.sql stdin
 
+    # to verify links
+    checkUrlsInTable hgFixed wgEncodeCell > errs.txt
+
+
+
 # Treatment table
+# TBD
 
     # create term/description tab sep file (currently just treatments in UW DNase)
-    cd /hive/data/genomes/hg38/bed/uwDnase1
-    cd cells
-    tail -n +2 treatments.tab | \
-        nl -v 0 | \
-        hgLoadSqlTab hgFixed wgEncodeTreatment ~/kent/src/hg/lib/encode/wgEncodeTreatment.sql stdin
+    #cd /hive/data/genomes/hg38/bed/uwDnase1
+    #cd cells
+    #tail -n +2 treatments.tab | \
+        #nl -v 0 | \
+        #hgLoadSqlTab hgFixed wgEncodeTreatment ~/kent/src/hg/lib/encode/wgEncodeTreatment.sql stdin
 
 
 

@@ -48,15 +48,16 @@ SCRIPT_FILES = \
 
 # List of directories to build of interest only at UCSC
 DIRS = ${buildRefresh} \
+	automation \
+	checkUrlsInTable \
+	geoMirrorNode \
+	makeTrackIndex \
+	mysqlSecurityCheck \
+	pslUniq \
+	refSeqGet \
 	safePush \
 	toDev64 \
-	automation \
-	refSeqGet \
-	wigBedToStep \
-	pslUniq \
-	makeTrackIndex \
-	geoMirrorNode \
-	mysqlSecurityCheck
+	wigBedToStep
 
 TEST_DIRS = \
 	gff3ToGenePred \

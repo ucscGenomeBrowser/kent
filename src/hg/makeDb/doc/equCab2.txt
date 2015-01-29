@@ -2682,3 +2682,82 @@ echo
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+##############################################################################
+# LASTZ mouse/equCab2 sheep/oviAri3 - (DONE - 2015-01-20 - Hiram)
+    mkdir /hive/data/genomes/equCab2/bed/lastzOviAri3.2015-01-20
+    cd /hive/data/genomes/equCab2/bed/lastzOviAri3.2015-01-20
+
+    cp -p \
+/hive/users/hiram/multiz/100way/equCab2.oviAri3/equCab2.oviAri3.tuning.top400.txt \
+     ./equCab2.oviAri3.tuning.Q.txt
+
+    cat << '_EOF_' > DEF
+# Horse vs. Sheep
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/equCab2.oviAri3/equCab2.oviAri3.tuning.top400.txt
+
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=50
+BLASTZ_X=790
+BLASTZ_Y=3400
+BLASTZ_K=3000
+BLASTZ_L=3000
+BLASTZ_Q=/hive/data/genomes/equCab2/bed/lastzOviAri3.2015-01-20/equCab2.oviAri3.tuning.Q.txt
+#       A     C     G     T
+# A    79  -116   -28  -129
+# C  -116   100   -93   -28
+# G   -28   -93   100  -116
+# T  -129   -28  -116    79
+
+# TARGET: Horse equCab2
+SEQ1_DIR=/hive/data/genomes/equCab2/equCab2.2bit
+SEQ1_LEN=/hive/data/genomes/equCab2/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=20
+
+# QUERY: Sheep oviAri3
+SEQ2_DIR=/hive/data/genomes/oviAri3/oviAri3.2bit
+SEQ2_LEN=/hive/data/genomes/oviAri3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/equCab2/bed/lastzOviAri3.2015-01-20
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+      -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+          -syntenicNet) > do.log 2>&1
+    # real    499m40.931s
+
+    cat fb.equCab2.chainOviAri3Link.txt
+    # 1466221911 bases of 2428790173 (60.368%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` equCab2 oviAri3) > rbest.log 2>&1 &
+    # real    40m37.576s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oviAri3/bed/blastz.equCab2.swap
+    cd /hive/data/genomes/oviAri3/bed/blastz.equCab2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/equCab2/bed/lastzOviAri3.2015-01-20/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real    117m5.548s
+
+    cat fb.oviAri3.chainEquCab2Link.txt
+    # 1426475061 bases of 2534335866 (56.286%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` oviAri3 equCab2) > rbest.log 2>&1
+    # real    40m15.262s
+
+#########################################################################

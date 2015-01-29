@@ -5291,6 +5291,7 @@ if (!cartUsualBoolean(cart, "hgt.imageV1", FALSE))
     withNextItemArrows = cartUsualBoolean(cart, "nextItemArrows", FALSE);
 
 withNextExonArrows = cartUsualBoolean(cart, "nextExonArrows", TRUE);
+withExonNumbers = cartUsualBoolean(cart, "exonNumbers", TRUE);
 if (!hIsGsidServer())
     {
     revCmplDisp = cartUsualBooleanDb(cart, database, REV_CMPL_DISP, FALSE);
