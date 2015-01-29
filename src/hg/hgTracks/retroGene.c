@@ -225,9 +225,13 @@ tg->itemDataName = retroGeneGetItemDataName;
 
 void retroRegisterTrackHandlers()
 {
-registerTrackHandler("ucscRetroAli1", retroAliMethods);
-registerTrackHandler("ucscRetroAli2", retroAliMethods);
-registerTrackHandler("ucscRetroAli3", retroAliMethods);
-registerTrackHandler("ucscRetroAli4", retroAliMethods);
-registerTrackHandler("ucscRetroAli5", retroAliMethods);
+int i;
+// Configure track handlers for first N handles.  Really need a way to
+// register for a pattern
+for (i = 0; i < 20; i++)
+    {
+    char trackName[32];
+    safef(trackName, sizeof(trackName), "ucscRetroAli%d", i);
+    registerTrackHandler(trackName, retroAliMethods);
+    }
 }
