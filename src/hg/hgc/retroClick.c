@@ -711,7 +711,6 @@ struct psl *pslList = NULL;
 char *table;
 
 genericHeader(tdb, mappedId);
-printf("<B>Description:</B> Retrogenes are processed mRNAs that are inserted back into the genome. Most are pseudogenes, and some are functional genes or anti-sense transcripts that may impede mRNA translation.<p>\n");
 printf("<TABLE border=0>\n");
 printf("<TR CLASS=\"transMapLayout\">\n");
 printf("<TD COLSPAN=3>\n");
