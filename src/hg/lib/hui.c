@@ -4223,20 +4223,21 @@ char *spec = trackDbSetting(parentTdb, setting);
 if (!spec)
     return NULL;
 struct slPair *metaTables = slPairFromString(spec);
+struct slPair *metaTable = NULL;
 struct hash *tableHash = hashNew(0);
-struct slPair *metaTable;
 struct sqlResult *sr;
 char **row;
 char query[256];
 char *database = cartString(cart, "db");
-char *db = database;
-for (metaTable = metaTables; metaTable != NULL; metaTable = metaTables->next)
+for (metaTable = metaTables; metaTable != NULL; metaTable = metaTable->next)
     {
-    char *tableName = chopPrefix(cloneString(metaTable->val));
-    if (differentString(tableName, metaTable->val))
+    char *db = database;
+    char *tableSpec = (char *)metaTable->val;
+    char *tableName = chopPrefix(tableSpec);
+    if (differentString(tableName, tableSpec))
         {
-        chopSuffix(metaTable->val);
-        db = metaTable->val;
+        chopSuffix(tableSpec);
+        db = tableSpec;
         }
     struct sqlConnection *conn = hAllocConn(db);
     boolean hasUrl = FALSE;
