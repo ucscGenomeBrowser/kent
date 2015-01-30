@@ -117,8 +117,7 @@ var ImModel = (function() {
         mergeServerResponse: function(jsonData) {
             // For each object in jsonData, if it has special handler(s) associated with it,
             // invoke the handler(s); otherwise, just put it in the top level of mutState.
-            Object.keys(jsonData).forEach(function(key) {
-                var newValue = jsonData[key];
+            _.forEach(jsonData, function(newValue, key) {
                 var handlers = this.cartJsonHandlers[key];
                 if (handlers) {
                     handlers.forEach(function(handler) {
