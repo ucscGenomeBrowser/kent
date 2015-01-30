@@ -81,6 +81,22 @@ sqlSafef(query, sizeof(query),
 sqlUpdate(conn, query);
 }
 
+
+void parseLocalOrUrl(char *path, struct netParsedUrl *parsed)
+/* Parse something that may or may not have a protocol:// prefix into
+ * netParsedUrl struct.  If it doesn't have protocol:// add
+ * local:// to it before parsing. */
+{
+char buf[PATH_LEN];
+char *url = path;
+if (stringIn("://", path) == NULL)
+    {
+    safef(buf, sizeof(buf), "local://localhost/%s", url);
+    url = buf;
+    }
+netParseUrl(url, parsed);
+}
+
 int cdwOpenAndRecordInDir(struct sqlConnection *conn, 
 	char *submitDir, char *submitFile, char *url,
 	int *retHostId, int *retDirId)
@@ -107,7 +123,7 @@ if (errCatch->gotError)
 /* Parse url into pieces */
 struct netParsedUrl npu;
 ZeroVar(&npu);
-netParseUrl(url, &npu);
+parseLocalOrUrl(url, &npu);
 char urlDir[PATH_LEN], urlFileName[PATH_LEN], urlExtension[PATH_LEN];
 splitPath(npu.file, urlDir, urlFileName, urlExtension);
 
