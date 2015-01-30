@@ -1,4 +1,5 @@
-/* testTagStorm - Test speed of loading tag storms.. */
+/* tagStormReformat - reformat tag storm file */
+
 #include "common.h"
 #include "linefile.h"
 #include "localmem.h"
@@ -18,9 +19,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "testTagStorm - Test speed of loading tag storms.\n"
+  "tagStormReformat - reformat tag storm file.\n"
   "usage:\n"
-  "   testTagStorm input output\n"
+  "   tagStormReformat input output\n"
   "options:\n"
   "   -withParent  If set a parent tag will be added. You'll need the idTag option too\n"
   "   -idTag=name Name of tag to used as primary identifier\n"
@@ -40,20 +41,10 @@ static struct optionSpec options[] = {
 };
 
 
-void testTagStorm(char *input, char *output)
+void tagStormReformat(char *input, char *output)
+/* Write input to output with possibly some conversions */
 {
 struct tagStorm *tagStorm = tagStormFromFile(input);
-uglyf("%d high level tags in %s\n", slCount(tagStorm->forest), tagStorm->fileName);
-struct hash *fileHash = tagStormIndex(tagStorm, "file");
-uglyf("Got %d stanzas with file\n", fileHash->elCount);
-#ifdef SOON
-struct hash *qualityHash = tagStormIndex(tagStorm, "lab_kent_quality");
-uglyf("Got %d stanzas with quality\n", qualityHash->elCount);
-struct hash *sexHash = tagStormIndex(tagStorm, "sex");
-uglyf("Got %d stanzas with sex\n", sexHash->elCount);
-struct hash *labHash = tagStormIndex(tagStorm, "lab");
-uglyf("Got %d stanzas with lab\n", labHash->elCount);
-#endif /* SOON */
 if (flatten)
     tagStormWriteAsFlatRa(tagStorm, output, idTag, withParent, maxDepth);
 else if (tab)
@@ -76,6 +67,6 @@ tab = optionExists("tab");
 if (withParent && !idTag)
     errAbort("Please specify idTag option if using withParent option");
 maxDepth = optionInt("maxDepth", maxDepth);
-testTagStorm(argv[1], argv[2]);
+tagStormReformat(argv[1], argv[2]);
 return 0;
 }
