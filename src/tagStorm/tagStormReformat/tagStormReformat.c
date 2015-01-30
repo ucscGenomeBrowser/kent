@@ -27,6 +27,7 @@ errAbort(
   "   -idTag=name Name of tag to used as primary identifier\n"
   "   -maxDepth=n Maximum depth of storm to write\n"
   "   -tab   If set will be output in tab-separated format\n"
+  "   -flatten If set output all fields in each record\n"
   );
 }
 
