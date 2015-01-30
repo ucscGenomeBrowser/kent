@@ -146,15 +146,16 @@ slReverse(&list);
 return list;
 }
 
-boolean findBestParting(struct fieldedTable *table, struct fieldInfo **retFields)
+boolean findBestParting(struct fieldedTable *table, struct fieldInfo *allFields,
+    struct slRef **retFields)
 /* Return list of fields that make best partition of table so that it will
  * cause the most information from table to be moved to a higher level.  All the
  * returned fields will move in lock-step. */
 {
-struct fieldInfo *allFields = makeFieldInfo(table), *field;
 
 /* Find count of number of values in field with fewest values */
 int smallestValCount = BIGNUM;
+struct fieldInfo *field;
 for (field = allFields; field != NULL; field = field->next)
     {
     int valCount = field->valHash->elCount;
@@ -206,36 +207,72 @@ for (ref = mostLockedList; ref != NULL; ref = ref->next)
     }
 
 /* Move chosen fields to return list, and free the rest */
-struct fieldInfo *retList = NULL, *next;
-for (field = allFields; field != NULL; field = next)
+struct slRef *retList = NULL;
+for (field = allFields; field != NULL; field = field->next)
     {
-    next = field->next;
     if (field->chosen)
-        slAddHead(&retList, field);
-    else
-        fieldInfoFree(&field);
+	refAdd(&retList, field);
     }
 slReverse(&retList);
 *retFields = retList;
 return TRUE;
 }
 
+static boolean inFieldRefList(struct slRef *fieldRefList, char *name)
+/* Look for named field in fieldRefList */
+{
+struct slRef *ref;
+for (ref = fieldRefList; ref != NULL; ref = ref->next)
+    {
+    struct fieldInfo *field = ref->val;
+    if (sameString(field->name, name))
+         return TRUE;
+    }
+return FALSE;
+}
+
+void makeSubtableExcluding(struct fieldedTable *table, struct slRef *excludedFields,
+    struct fieldedTable **retSubtable, int ixTranslator[])
+/* Make up a subtable that contains all the fields of the table except the excluded ones */
+{
+int excludedCount = slCount(excludedFields);
+int subFieldCount = table->fieldCount - excludedCount;
+assert(subFieldCount > 0);
+char *subFields[subFieldCount];
+int i, subI=0;
+for (i=0; i<table->fieldCount; ++i)
+    {
+    char *field = table->fields[i];
+    ixTranslator[i] = -1;
+    if (!inFieldRefList(excludedFields, field))
+        {
+	subFields[subI] = field;
+	ixTranslator[i] = subI;
+	++subI;
+	}
+    }
+assert(subI == subFieldCount);
+struct fieldedTable *subtable = fieldedTableNew("subtable", subFields, subFieldCount);
+*retSubtable = subtable;
+}
 
 void rPartition(struct fieldedTable *table, struct tagStorm *tagStorm, struct tagStanza *parent)
 /* Recursively partition table and add to tagStorm. */
 {
-struct fieldInfo *partingFields = NULL;
-if (!findBestParting(table, &partingFields))
+struct fieldInfo *allFields = makeFieldInfo(table);
+struct slRef *partingFields = NULL;
+if (!findBestParting(table, allFields, &partingFields))
     return;
 
-int firstFieldIx = partingFields->ix;
+struct fieldInfo *partingField = partingFields->val;
+int firstFieldIx = partingField->ix;
 
 /* Since the parting values are sorted by where they appear in table, we can
  * just scan through the table once.  We'll output the values at the first
  * place they appear. */
 struct fieldedRow *row = table->rowList;
 struct slRef *partVal;
-for (partVal = partingFields->valList; partVal != NULL; partVal = partVal->next)
+for (partVal = partingField->valList; partVal != NULL; partVal = partVal->next)
     {
     struct tagStanza *stanza = tagStanzaNew(tagStorm, parent);
     char *val = partVal->val;
@@ -249,15 +286,19 @@ for (partVal = partingFields->valList; partVal != NULL; partVal = partVal->next)
 	if (sameString(row->row[firstFieldIx], val))
 	    {
 	    struct fieldInfo *field;
-	    for (field = partingFields; field != NULL; field = field->next)
+	    struct slRef *ref;
+	    for (ref = partingFields; ref != NULL; ref = ref->next)
+		{
+		field = ref->val;
 		tagStanzaAdd(tagStorm, stanza, field->name, row->row[field->ix]);
+		}
 	    break;
 	    }
 	row = row->next;
 	}
     }
-
-fieldInfoFreeList(&partingFields);
+slFreeList(&partingFields);
+fieldInfoFreeList(&allFields);
 }
 
 void tagStormFromTab(char *input, char *output)
