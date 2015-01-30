@@ -34,6 +34,7 @@ struct fieldInfo
      int ix;	    /* Field position */
      struct hash *valHash;   /* Each unique value */
      struct slRef *valList;  /* String valued list of possible values for this field */
+     struct slRef *valCursor; /* Where we are in valList */
      boolean captured;	/* Used internally when finding best partitioning */
      boolean chosen;	/* Used internally to mark best partition */
      };
@@ -264,18 +265,36 @@ struct slRef *partingFields = NULL;
 if (!findBestParting(table, allFields, &partingFields))
     return;
 
+/* Position field cursors within partingFields */
+struct slRef *ref;
+for (ref = partingFields; ref != NULL; ref = ref->next)
+    {
+    struct fieldInfo *field = ref->val;
+    field->valCursor = field->valList;
+    }
+
 struct fieldInfo *partingField = partingFields->val;
-int firstFieldIx = partingField->ix;
 
 /* Since the parting values are sorted by where they appear in table, we can
  * just scan through the table once.  We'll output the values at the first
  * place they appear. */
+#ifdef OLD
+int firstFieldIx = partingField->ix;
 struct fieldedRow *row = table->rowList;
+#endif /* OLD */
 struct slRef *partVal;
 for (partVal = partingField->valList; partVal != NULL; partVal = partVal->next)
     {
     struct tagStanza *stanza = tagStanzaNew(tagStorm, parent);
-    char *val = partVal->val;
+    for (ref = partingFields; ref != NULL; ref = ref->next)
+        {
+	struct fieldInfo *field = ref->val;
+	char *val = field->valCursor->val;
+	field->valCursor = field->valCursor->next;
+	tagStanzaAdd(tagStorm, stanza, field->name, val);
+	}
+
+#ifdef OLD
     for (;;)
         {
 	if (row == NULL)
@@ -296,6 +315,7 @@ for (partVal = partingField->valList; partVal != NULL; partVal = partVal->next)
 	    }
 	row = row->next;
 	}
+#endif /* OLD */
     }
 slFreeList(&partingFields);
 fieldInfoFreeList(&allFields);
