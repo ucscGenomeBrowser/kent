@@ -387,14 +387,28 @@ cat > makeInputs.csh << 'EOF'
 
 
 # Treatment table
-# TBD
+# create term/description tab sep file (currently just treatments in UW DNase)
 
-    # create term/description tab sep file (currently just treatments in UW DNase)
-    #cd /hive/data/genomes/hg38/bed/uwDnase1
-    #cd cells
-    #tail -n +2 treatments.tab | \
-        #nl -v 0 | \
-        #hgLoadSqlTab hgFixed wgEncodeTreatment ~/kent/src/hg/lib/encode/wgEncodeTreatment.sql stdin
+    cd /hive/data/genomes/hg38/bed/uwDnase1
+    cd cells
+    tail -n +2 treatments.tab | \
+        nl -v 0 | \
+        hgLoadSqlTab hgFixed wgEncodeTreatment ~/kent/src/hg/lib/encode/wgEncodeTreatment.sql stdin
+
+# Correct mis-curated experiments (add RA treatments)
+
+    cp bigInputs.tab uwEnc2DnaseInputs.tab
+
+    # hand-edit to add RA treatment to the _RA cell types.
+    # NOTE: Estradiol_ctrl_0hr appears to be no treatment; from GEO:
+    # "treatment description: No hormone control, zero timepoint, used to distinguish untreated sample in series (Stam).  As there is already an untreated MCF-7 in the cluster, we'll keep the
+    # bogus treatment to distinguish.  It appears there are actually 2 identical experiments
+    # performed at different times.  Maybe replicates for both should be pooled ?   Or one
+    # set dropped?
+
+    hgLoadSqlTab hg38 uwEnc2DnaseInputs ~/kent/src/hg/lib/clusterInputEapDnase.sql uwEnc2DnaseInputs.tab
+
+    # Also add RA treatment (not official ENCODE term) to treatment table
 
 
 
