@@ -281,6 +281,111 @@ rTsWriteAsFlatRa(tagStorm->forest, f, idTag, withParent, maxDepth, 0);
 carefulClose(&f);
 }
 
+static void rTsWriteAsFlatTab(struct tagStanza *list, struct slName *fieldList,
+    FILE *f, char *idTag, boolean withParent,
+     int maxDepth, int depth)
+/* Recursively write out list to file */
+{
+if (depth > maxDepth)
+    return;
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    char *idVal = NULL;
+    if (idTag != NULL)
+	{
+        idVal = slPairFindVal(stanza->tagList, idTag);
+	}
+    if (idTag == NULL || idVal != NULL)
+	{
+	struct hash *uniq = hashNew(0);
+	if (withParent && stanza->parent != NULL && idTag != NULL)
+	    {
+	    char *parentVal = slPairFindVal(stanza->parent->tagList, idTag);
+	    if (parentVal != NULL)
+		{
+		hashAdd(uniq, "parent", parentVal);
+		}
+	    }
+	struct tagStanza *family;
+	for (family = stanza; family != NULL; family = family->parent)
+	    {
+	    struct slPair *pair;
+	    for (pair = family->tagList; pair != NULL; pair = pair->next)
+		{
+		if (!hashLookup(uniq, pair->name))
+		    {
+		    hashAdd(uniq, pair->name, pair->val);
+		    }
+		}
+	    }
+	struct slName *field;
+	for (field = fieldList; field != NULL; field = field->next)
+	    {
+	    if (field != fieldList)
+		fputc('\t', f);
+	    char *val = naForNull(hashFindVal(uniq, field->name));
+	    fputs(val, f);
+	    }
+	fputc('\n', f);
+	hashFree(&uniq);
+	}
+
+    rTsWriteAsFlatTab(stanza->children, fieldList, f, idTag, withParent, maxDepth, depth+1);
+    }
+}
+
+static void rGetAllFields(struct tagStanza *list, struct hash *uniqHash, struct slName **pList)
+/* Recursively add all fields in tag-storm */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    struct slPair *pair;
+    for (pair = stanza->tagList; pair != NULL; pair = pair->next)
+        {
+	if (hashLookup(uniqHash, pair->name) == NULL)
+	    {
+	    hashAdd(uniqHash, pair->name, pair->val);
+	    slNameAddHead(pList, pair->name);
+	    }
+	rGetAllFields(stanza->children, uniqHash, pList);
+	}
+    }
+}
+
+
+static struct slName *getAllFields(struct tagStorm *tagStorm)
+/* Return list of all fields */
+{
+struct slName *list = NULL;
+struct hash *uniqHash = hashNew(0);
+rGetAllFields(tagStorm->forest, uniqHash, &list);
+hashFree(&uniqHash);
+slReverse(&list);
+return list;
+}
+ 
+void tagStormWriteAsFlatTab(struct tagStorm *tagStorm, char *fileName, char *idTag, 
+    boolean withParent, int maxDepth)
+/* Write tag storm flattening out hierarchy so kids have all of parents tags in .ra format */
+{
+FILE *f = mustOpen(fileName, "w");
+struct slName *fieldList = getAllFields(tagStorm), *field;
+if (withParent && slNameFind(fieldList, "parent") == NULL)
+    slNameAddHead(&fieldList, "parent");
+fputc('#', f);
+for (field = fieldList; field != NULL; field = field->next)
+    {
+    if (field != fieldList)
+	fputc('\t', f);
+    fprintf(f, "%s", field->name);
+    }
+fputc('\n', f);
+rTsWriteAsFlatTab(tagStorm->forest, fieldList, f, idTag, withParent, maxDepth, 0);
+carefulClose(&f);
+}
+
 void tagStormAdd(struct tagStorm *tagStorm, struct tagStanza *stanza, char *tag, char *val)
 /* Add tag to stanza in storm, replacing existing tag if any */
 {

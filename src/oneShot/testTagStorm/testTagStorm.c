@@ -10,6 +10,7 @@
 
 boolean withParent = FALSE;
 boolean flatten = FALSE;
+boolean tab = FALSE;
 char *idTag = NULL;
 int maxDepth = BIGNUM;
 
@@ -24,6 +25,7 @@ errAbort(
   "   -withParent  If set a parent tag will be added. You'll need the idTag option too\n"
   "   -idTag=name Name of tag to used as primary identifier\n"
   "   -maxDepth=n Maximum depth of storm to write\n"
+  "   -tab   If set will be output in tab-separated format\n"
   );
 }
 
@@ -33,8 +35,10 @@ static struct optionSpec options[] = {
    {"idTag", OPTION_STRING},
    {"maxDepth", OPTION_INT},
    {"flatten", OPTION_BOOLEAN},
+   {"tab", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
 
 void testTagStorm(char *input, char *output)
 {
@@ -52,6 +56,8 @@ uglyf("Got %d stanzas with lab\n", labHash->elCount);
 #endif /* SOON */
 if (flatten)
     tagStormWriteAsFlatRa(tagStorm, output, idTag, withParent, maxDepth);
+else if (tab)
+    tagStormWriteAsFlatTab(tagStorm, output, idTag, withParent, maxDepth);
 else
     tagStormWrite(tagStorm, output, maxDepth);
 tagStormFree(&tagStorm);
@@ -66,6 +72,7 @@ if (argc != 3)
 idTag = optionVal("idTag", idTag);
 withParent = optionExists("withParent");
 flatten = optionExists("flatten");
+tab = optionExists("tab");
 if (withParent && !idTag)
     errAbort("Please specify idTag option if using withParent option");
 maxDepth = optionInt("maxDepth", maxDepth);
