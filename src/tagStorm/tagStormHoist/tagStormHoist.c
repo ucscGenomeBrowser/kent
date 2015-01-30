@@ -47,7 +47,7 @@ void hoistOne(struct tagStorm *tagStorm, struct tagStanza *stanza, char *tag, ch
 /* We've already determined that tag exists and has same value in all children.
  * What we do here is add it to ourselves and remove it from children. */
 {
-tagStormAddTag(tagStorm, stanza, tag, val);
+tagStormUpdateTag(tagStorm, stanza, tag, val);
 struct tagStanza *child;
 for (child = stanza->children; child != NULL; child = child->next)
     localTagRemove(child, tag);
