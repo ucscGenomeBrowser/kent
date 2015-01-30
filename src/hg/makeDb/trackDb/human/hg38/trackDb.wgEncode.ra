@@ -8,3 +8,4 @@ longLabel GENCODE Gene Annotations (Ensembl)
 include wgEncodeGencodeV19.ra
 include wgEncodeGencodeV20.ra
 include wgEncodeGencodeV21.ra alpha
+include wgEncodeReg.ra

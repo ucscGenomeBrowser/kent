@@ -1,4 +1,9 @@
-# WORKING - 2014-11-10 - Hiram
+# These new sequences are found at NCBI Entriz in the Nucleotide search:
+#   (ebola[title] or ebolavirus[title]) and genome
+#
+# download the resulting list of accessions and compare to the existing
+# list to see what it new to be done.
+
 
 # adding new sequences to the eboVir3 browser in a format similar
 # to the multiple alignment
@@ -7,6 +12,25 @@
 
 mkdir /hive/data/genomes/eboVir3/bed/newSequences
 cd /hive/data/genomes/eboVir3/bed/newSequences
+
+# added 2015-01-30
+# KP342330.1
+# KP658432.1
+
+# added 2015-01-06
+# KP260799.1
+# KP260800.1
+# KP260801.1
+# KP260802.1
+# KP271018.1
+# KP271019.1
+# KP271020.1
+
+# added 2014-12-03
+# KP178538.1
+# KP184503.1
+# DI389180.1-does not work, this is the vaccine, no protein sequence to annotate
+# DI389182.1-does not work, this is the vaccine, no protein sequence to annotate
 
 # added 2014-11-18:
 # KP096420.1
@@ -40,7 +64,7 @@ do
       wget -O gbk/${accV}.gbk \
          "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=gb&sendto=on&id=$acc"
     fi
-done  
+done
 
 # verify UCSC names are reasonable:
     faCount ucsc/*.fa
@@ -52,6 +76,7 @@ done
 # KP096422v1      18958   6050    4050    3758    5100    0       477
 # KP120616v1      18920   6034    4047    3748    5091    0       474
 # NC_016144v1     18927   5842    4831    3874    4380    0       514
+# ... etc ...
 
     #######################################################################
 # construct the genePred records:
@@ -75,7 +100,8 @@ done
     twoBitToFa ../../../eboVir3.2bit stdout > KM034562v1.target.fa
     ln -s ../../../chrom.sizes ./KM034562v1.sizes
 
-    ls ../ucsc/*.fa | sed -e 's/.fa//; s#../ucsc/##;' | while read A
+    ls ../ucsc/*.fa | egrep -v "DI389180|DI389182" \
+      | sed -e 's/.fa//; s#../ucsc/##;' | while read A
 do
   if [ ../ucsc/${A}.fa -nt sizes/${A}.sizes ]; then
     faToTwoBit ../ucsc/${A}.fa stdout | twoBitInfo stdin sizes/${A}.sizes
@@ -91,14 +117,27 @@ do
 done
 
     # examine pslScore ranges:
-    pslScore psl/*
-# KM034562v1      3       18956   KM519951v1:0-18953      17741   96.90
-# KM034562v1      45      18841   KM655246v1:0-18796      17682   97.10
-# KM034562v1      0       18957   KP096420v1:0-18957      18935   100.00
-# KM034562v1      0       18957   KP096421v1:0-18957      18937   100.00
-# KM034562v1      0       18957   KP096422v1:0-18957      18941   100.00
-# KM034562v1      36      18956   KP120616v1:0-18920      18898   100.00
-# KM034562v1      4       18336   NC_016144v1:0-18925     3194    58.90
+    pslScore psl/* | sort -k5n | sed -e 's/^/# /;'
+# KM034562v1    6038    8065    DI389182v1:0-2026       614     65.90
+# KM034562v1    5967    8270    DI389180v1:1-2300       2080    95.40
+# KM034562v1    4       18336   NC_016144v1:0-18925     3194    58.90
+# KM034562v1    176     18936   KP271019v1:0-18760      15340   96.70
+# KM034562v1    53      18914   KP271020v1:0-18861      17635   96.80
+# KM034562v1    45      18841   KM655246v1:0-18796      17682   97.10
+# KM034562v1    16      18955   KP271018v1:0-18939      17713   96.80
+# KM034562v1    3       18956   KM519951v1:0-18953      17741   96.90
+# KM034562v1    29      18957   KP658432v1:0-18928      18894   100.00
+# KM034562v1    36      18956   KP120616v1:0-18920      18898   100.00
+# KM034562v1    0       18957   KP260802v1:0-18957      18923   100.00
+# KM034562v1    0       18957   KP260801v1:0-18957      18925   100.00
+# KM034562v1    0       18957   KP260800v1:0-18957      18927   100.00
+# KM034562v1    1       18957   KP184503v1:0-18956      18932   100.00
+# KM034562v1    0       18957   KP260799v1:0-18957      18933   100.00
+# KM034562v1    0       18957   KP096420v1:0-18957      18935   100.00
+# KM034562v1    0       18957   KP096421v1:0-18957      18937   100.00
+# KM034562v1    0       18957   KP096422v1:0-18957      18941   100.00
+# KM034562v1    0       18957   KP178538v1:0-18957      18941   100.00
+# KM034562v1    0       18957   KP342330v1:0-18957      18941   100.00
 
     #######################################################################
     # construct gene frames
@@ -108,7 +147,7 @@ done
     genePredSingleCover ../ncbiGene/correct.txStart.ncbiGene.gp \
          singleCover/KM034562v1.gp
 
-    ls faAlign/maf/*.maf | sed -e 's/.maf//g; s#faAlign/##g;' | while read M
+    ls faAlign/maf/*.maf | egrep -v "DI389180|DI389182" | sed -e 's/.maf//g; s#faAlign/##g;' | while read M
 do
   if [ gp/${M}.gp -nt singleCover/${M}.gp ]; then
     genePredSingleCover gp/${M}.gp singleCover/${M}.gp
@@ -118,14 +157,17 @@ do
   fi
 done
 
-sort -u frames/*.bed | sort -k1,1 -k2,2n > newSequencesFrames.bed
-hgLoadMafFrames eboVir3 newSequencesFrames newSequencesFrames.bed
+   ls frames/*.bed | egrep -v "DI389180|DI389182" | xargs sort -u \
+      | sort -k1,1 -k2,2n > newSequencesFrames.bed
+
+   hgLoadMafFrames eboVir3 newSequencesFrames newSequencesFrames.bed
 
     #######################################################################
     # add iRows
     cd /hive/data/genomes/eboVir3/bed/newSequences
     mkdir iRows
-    ls faAlign/maf/*.maf | sed -e 's/.maf//g; s#faAlign/##g;' | while read M
+    ls faAlign/maf/*.maf | egrep -v "DI389180|DI389182" \
+       | sed -e 's/.maf//g; s#faAlign/##g;' | while read M
 do
   if [ faAlign/maf/${M}.maf -nt iRows/${M}.nBeds ]; then
     echo "${M}.bed" > iRows/${M}.nBeds
@@ -150,6 +192,9 @@ done
 
     #######################################################################
     # construct SNP display bed files
+    cd /hive/data/genomes/eboVir3/bed/newSequences
+    ./mkSnpView.sh
+
 rm -fr /hive/data/genomes/eboVir3/bed/newSequences/snpView
 mkdir -p  /hive/data/genomes/eboVir3/bed/newSequences/snpView
 cd /hive/data/genomes/eboVir3/bed/newSequences/snpView

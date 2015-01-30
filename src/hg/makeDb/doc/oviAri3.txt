@@ -758,3 +758,52 @@ mysql>  LOAD DATA LOCAL INFILE "oviAri3.cytoBand" INTO TABLE cytoBandIdeo;
     # real    16m45.956s
 
 #########################################################################
+# SWAP LASTZ cow/bosTau8 sheep/oviAri3 - (DONE - 2015-01-26 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/bosTau8/bed/lastzOviAri3.2015-01-20
+    cat fb.bosTau8.chainOviAri3Link.txt
+    # 2236790379 bases of 2649307237 (84.429%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oviAri3/bed/blastz.bosTau8.swap
+    cd /hive/data/genomes/oviAri3/bed/blastz.bosTau8.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/bosTau8/bed/lastzOviAri3.2015-01-20/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    477m36.613s
+
+    cat fb.oviAri3.chainBosTau8Link.txt
+    # 2217800123 bases of 2534335866 (87.510%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` oviAri3 bosTau8) > rbest.log 2>&1
+    # real    44m43.976s
+
+#########################################################################
+# SWAP LASTZ horse/equCab2 sheep/oviAri3 - (DONE - 2015-01-21 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/equCab2/bed/lastzOviAri3.2015-01-20
+    cat fb.equCab2.chainOviAri3Link.txt
+    # 1466221911 bases of 2428790173 (60.368%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oviAri3/bed/blastz.equCab2.swap
+    cd /hive/data/genomes/oviAri3/bed/blastz.equCab2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/equCab2/bed/lastzOviAri3.2015-01-20/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real    117m5.548s
+
+
+    cat fb.oviAri3.chainEquCab2Link.txt
+    # 1426475061 bases of 2534335866 (56.286%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` oviAri3 equCab2) > rbest.log 2>&1
+    # real    40m15.262s
+
+#########################################################################
