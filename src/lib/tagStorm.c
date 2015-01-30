@@ -141,7 +141,6 @@ while (raSkipLeadingEmptyLines(lf, NULL))
     stanza->tagList = pairList;
     }
 lineFileClose(&lf);
-printf("%d tags in %d stanzas\n", tagCount, stanzaCount);
 rReverseStanzaList(&tagStorm->forest);
 return tagStorm;
 }
