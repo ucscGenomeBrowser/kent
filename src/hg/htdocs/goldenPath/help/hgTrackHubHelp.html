@@ -60,10 +60,6 @@
 				target="_blank">24227676</a>
 				</p>
                                 <p>
-                                  <b><a href="hubQuickStart.html"
-                                        target="_blank">Quick Start Guide to Basic Hubs</a></b><br>
-                                  <b><a href="hubQuickStartGroups.html"
-                                        target="_blank">Quick Start Guide to Organizing Track Hubs into Groupings</a></b><br>
                                   <b><a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs"
                                         target="_blank">Assembly Hubs Wiki</a></b><br>
                                   <b><a href="trackDb/trackDbHub.html"
@@ -71,6 +67,12 @@
                                   &mdash; A reference guide for trackDb parameter definitions.<br>
                                   <b><a href="http://genomewiki.ucsc.edu/index.php/Public_Hub_Guidelines"
                                         target="_blank">Public Hub Guidelines Wiki</a></b><br>
+                                  <b><a href="hubQuickStart.html"
+                                        target="_blank">Quick Start Guide to Basic Hubs</a></b><br>
+                                  <b><a href="hubQuickStartGroups.html"
+                                        target="_blank">Quick Start Guide to Organizing Track Hubs into Groupings</a></b><br>
+                                  <b><a href="hubQuickStartAssembly.html"
+                                        target="_blank">Quick Start Guide to Assembly Hubs with Blat</a></b><br>
                                 </p>
 				<div>
 		                <FORM name="googleForm1" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   site:genome.ucsc.edu/goldenPath/help';">
@@ -112,7 +114,8 @@
 				<P>
 Track hubs are web-accessible directories of genomic data that can
 be viewed on the UCSC Genome Browser (please note that hosting hub
-files on HTTP tends to work even better than FTP).  
+files on HTTP tends to work even better than FTP and local hubs can be displayed
+on <a  href="hubQuickStartAssembly.html#blatGbib" target="_blank">GBiB</a>).  
 Track hubs can be displayed on genomes that UCSC directly supports, or on
 your own sequence.
 Hubs are a useful tool for visualizing a large number of genome-wide 
@@ -194,7 +197,8 @@ and remove data from their display as needed.
 				researchers to include the underlying reference sequence, as well as data tracks that annotate that 
 				sequence. Sequence is stored in the UCSC twoBit format, and the annotation tracks are stored in the 
 				same manner as Track Data Hubs. For more information on how to setup your own Assembly Data Hub, please refer
-				to the <A HREF="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs">Assembly Hub wiki</A>. 
+				to the <A HREF="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs">Assembly Hub wiki</A> and see the
+                                <a href="hubQuickStartAssembly.html" target="_blank">Quick Start Guide to Assembly Hubs</a>.
 				</p>
                                 </TD>
                                 <TD WIDTH=15></TD>
@@ -232,10 +236,12 @@ the &quot;track hubs&quot; button on the Genome Browser gateway or
 annotation tracks page. 
 The Public Hubs tab on the Track Hubs page lists the hubs that are
 available for display in the browser. To add
-a hub to your display, check the Display checkbox in front of the hub's
-name, then click the &quot;Use Selected Hubs&quot; button. Tracks
-from the selected hub will be displayed in a separate track
-group below the browser image. The tracks can be 
+a hub to your display, click the &quot;Connect&quot; button next
+to the hub. You can also click &quot;Description&quot; and &quot;Hub Name&quot;
+to see more details about some Public Hubs. After connecting to the hub,
+click the &quot;Genome Browser&quot; link from the top
+blue bar. The default assembly for the selected hub will be displayed
+with hub tracks in a separate track group below the browser image. The tracks can be 
 <A HREF="hgTracksHelp.html#FineTuning">configured and manipulated</A> in the 
 same fashion as native browser tracks. As with any very large track in
 the Genome Browser, exercise caution when viewing a broad genomic region
@@ -263,16 +269,14 @@ display an error message. Some common causes for an import to
 fail include typos in the URL, attempting to add a track hub from a different
 assembly, a hub server that is offline, or errors in the track hub files. 
 Once you have successfully loaded a hub, you can view it in the browser
-by clicking the &quot;Use Selected Hubs&quot; button. Please note that
+by clicking the &quot;Connect&quot; button. Please note that
 unlisted hubs are in no way secure. The URL helps to obfuscate the
-location of the data; it is a simple barrier to casual users.
+location of the data; it is a simple barrier to casual users. Please 
+also know that hubs can be loaded from a local directory when using
+<a  href="hubQuickStartAssembly.html#blatGbib" target="_blank">GBiB</a>.
 <P>
-To remove a track hub from your Genome Browser display, uncheck its 
-Display checkbox on the Track Hubs page. The hub will
-no longer be visible on the browser tracks page, but will still be available 
-from the Track Hubs page. To completely remove an unlisted hub from your My 
-Hubs list, click the &quot;Disconnect&quot; button next to the track hub you wish to
-discard.
+To remove a track hub from your Genome Browser display, click the
+&quot;Disconnect&quot; button on the Track Data Hubs page.
 <P>
 Occasionally, remote track hubs may be missing, off-line, or otherwise 
 unavailable.  If a user
@@ -806,6 +810,7 @@ Free-text searches can also be enabled by creating a TRIX index file that maps i
 
 <P>
 See the searchIndex and searchTrix fields in the Hub Track Database Definition document for information on how to set up your bigBed to enable searching.
+See an example <a href="examples/hubExamples/hubIndexedBigBedSearchable/" target="_blank">searchable hub</a>.
 
 			        </TD>
 			        <TD WIDTH=15></TD>
@@ -858,22 +863,20 @@ The location of the saved session file should be in the same
 directory that holds your hub.txt file. Finally add
 &quot;<b>&hgS_doLoadUrl=submit</b>&quot; to the URL
 to inform the browser to load the session.</P>
-<P>There are four required variables for your URL:
+<ul>
+<P>There are four required variables for your URL to load a session with a hub and an example URL:
 <BLOCKQUOTE><TT>
 <B>db</B> - name of the assembly (e.g. hg19 or mm10)<BR>
 <B>hubUrl</B> - URL to your track hub<BR>
 <B>hgS_loadUrlName</B> - URL to your session file<BR>
 <B>hgS_doLoadUrl</B> - value should be "submit"<BR>
 </TT>
-</BLOCKQUOTE>
-</P>						
-<P>Here is a sample URL that would load a session for a hub:</P>
-<BLOCKQUOTE>
 <pre>
-http://genome.ucsc.edu/cgi-bin/hgTracks?<b>db=hg19&hubUrl=</b>http://myLab.org/myHub.txt<b>&hgS_loadUrlName=</b>http://mySession<b>&hgS_doLoadUrl=submit</b>
+http://genome.ucsc.edu/cgi-bin/hgTracks<b>?db=</b>hg19<b>&hubUrl=</b>http://myLab.org/myHub.txt<b>&hgS_loadUrlName=</b>http://mySession<b>&hgS_doLoadUrl=submit</b>
 </pre>
 </BLOCKQUOTE>
 <p>
+</ul>
 Another feature one can use in place of &quot;<b>&hubUrl=</b>&quot; is &quot<b>&hubClear=</b>&quot;,
 which will load a hub while simultaneously disconnecting, or clearing,
 hubs located at the same location.  For example adding

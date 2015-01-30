@@ -20,10 +20,11 @@
 <div class="sectionContent">
 <p>
 Assembly Hubs allow researchers to create Track Data Hubs on assemblies that are not in
-the UCSC Browser. By including the underlying reference sequence in UCSC twoBit format,
+the UCSC Browser. By including the underlying reference sequence in UCSC
+<a href="twoBit.html" target="_blank">twoBit</a> format,
 as well as data tracks, researchers can browse and annotate any genome. For more information
 please refer to the <a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs"
-target="_blank">Assembly Hub Wiki</a>.
+target="_blank">Assembly Hub Wiki</a>. Below is also a section about starting <a href="#blatGbib">GBiB Assembly Hubs</a>.
 </p>
 <p>
 <ul>
@@ -41,8 +42,10 @@ Perform the curl -O option in the location you wish to copy the files:
 <p>
 <em>If you use curl</eM>, be sure to recreate the structure with matching araTha1 and
 araTha1/bbi directories. Double check you have all the files by looking here:
+<tt>
 <a href="http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/" 
 target="_blank">http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/</a>
+</tt>
 </p>
 </ul>
 <p>
@@ -59,8 +62,10 @@ http://genome.ucsc.edu/cgi-bin/hgHubConnect?hgHub_do_redirect=on&hgHubConnect.re
 </tt>
 <p>
 This URL should work the same as using the original data just copied:<br>
+<tt>
 <a href="http://genome.ucsc.edu/cgi-bin/hgHubConnect?hgHub_do_redirect=on&hgHubConnect.remakeTrackHub=on&hgHub_do_firstDb=1&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt"
 target="_blank">http://genome.ucsc.edu/cgi-bin/hgHubConnect?hgHub_do_redirect=on&hgHubConnect.remakeTrackHub=on&hgHub_do_firstDb=1&<b>hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/hub.txt</b></a>
+</tt>
 </p>
 </ul>
 <p>
@@ -79,7 +84,8 @@ displays: <tt>curl -I http://yourURL/hub.txt</tt>
 Now that you have the assembly hub copied from above, you can copy the directory
 and start to edit some of the documents like genomes.txt, groups.txt, and trackDb.txt to understand
 how they work. Refer to the <a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs"
-target="_blank">Assembly Hub Wiki</a> to understand how to build a twoBit file for your
+target="_blank">Assembly Hub Wiki</a> to understand how to build a 
+<a href="twoBit.html" target="_blank">twoBit</a> file for your
 own original fasta files. Read more about <a href="trackDb/trackDbHub.html"
 target="_blank">trackDb settings</a> in the definition document.
 </p>
@@ -156,7 +162,9 @@ transBlat http://yourLab.yourInstitution.edu 17777<br>
 blat http://yourLab.yourInstitution.edu 17779<br>
 </tt>
 </ul>
-For more information, see the &quot;Adding BLAT servers&quot;
+See an example genomes.txt with commented out lines 
+<a href="http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/genomes.txt"
+target="_blank">here</a>. For more information, see the &quot;Adding BLAT servers&quot;
 section of the <a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs#Adding_BLAT_servers" 
 target="_blank">Assembly Hub Wiki</a>.
 The <a href="http://hgdownload.cse.ucsc.edu/downloads.html#source_downloads" 
@@ -191,8 +199,8 @@ target="_blank">blog post</a> and the related OpenHelix
 <em>SSH into your GBiB</em>
 <ul>
 <p>
-2. With your GBiB operational you use your computer's terminal program to ssh
-into your GBiB: <tt>ssh browser@localhost -p 1235</tt>, use "browser" for the password.
+2. With your GBiB operational, use your computer's terminal program to ssh
+into your GBiB: <tt>ssh browser@localhost -p 1235</tt>, using <tt>browser</tt> for the password.
 </p>
 <p>
 </ul>
@@ -206,7 +214,9 @@ Then use sudo to wget this
 assembly hub:
 </p>
 <p>
+<ul>
 <tt>sudo wget -r --no-parent --reject "index.html*" -nH --cut-dirs=3 http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/</tt>
+</ul>
 </p>
 </ul>
 <em>Enable blat lines in genomes.txt</em>
@@ -216,14 +226,16 @@ assembly hub:
 </p>
 <p>
 Edit the currently commented-out blat lines with <tt>sudo vi genomes.txt</tt>.
-Use &quot;x&quot; when the cursor is over # at the start of the line to remove it and 
+Use &quot;x&quot; when the cursor is over the <tt>#</tt> at the start of the line to remove it and 
 <tt>:w!</tt> to save the changes and <tt>:q</tt> to quit.
 </p>
 <p>
+<ul>
 <tt>
 blat localhost 17779<br>
 transBlat localhost 17777<br>
 </tt>
+</ul>
 </ul>
 <em>Start gfServers on your assembly hub</em>
 <ul>
@@ -234,23 +246,29 @@ transBlat localhost 17777<br>
 Run the two gfserver commands to start the blat servers:
 </p>
 <p>
+<ul>
 <tt>
 gfServer start localhost 17777 -trans -mask araTha1.2bit &<br>
 gfServer start localhost 17779 -stepSize=5 araTha1.2bit &<br>
 </tt>
+</ul>
 </p>
 </ul>
 <em>Load hub and use blat</em>
 <ul>
 <p>
-6. Load this GBiB by using this URL and selecting it under the &quot;group&quot; category where
+6. Load this plant assembly hub by using this URL and selecting it under the &quot;group&quot; category where
 &quot;Plant araTha1&quot; displays:<br>
+<ul>
+<tt>
 <a href="http://127.0.0.1:1234/cgi-bin/hgGateway?hubUrl=http://127.0.0.1:1234/folders/hubExamples/hubAssembly/plantAraTha1/hub.txt"
 target="_blank">http://127.0.0.1:1234/cgi-bin/hgGateway?hubUrl=http://127.0.0.1:1234/folders/hubExamples/hubAssembly/plantAraTha1/hub.txt</a>
+</tt>
+</ul>
 </p>
 <p>
-On the blat page, <a href="http://127.0.0.1:1234/cgi-bin/hgBlat" target="_blank">
-http://127.0.0.1:1234/cgi-bin/hgBlat</a>, you can now select the <em>Arabidopsis thaliana</em>
+On the blat page, <tt><a href="http://127.0.0.1:1234/cgi-bin/hgBlat" target="_blank">
+http://127.0.0.1:1234/cgi-bin/hgBlat</a></tt>, you can now select the <em>Arabidopsis thaliana</em>
 assembly and blat plant amino acid sequences, like <tt>IYQTRENKYIIGEIQITESERDRRRSSLPGNH</tt>
 or DNA sequences, like <tt>TAAGTAAAAAATAATATGATTAAGACTAATAAATCTTAATAGTTAATACT</tt>.
 </div> <!--- section-->
