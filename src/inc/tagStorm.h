@@ -70,7 +70,25 @@ struct hash *tagStormIndex(struct tagStorm *tagStorm, char *tag);
 /* Produce a hash of stanzas containing a tag (or whose parents contain tag
  * keyed by tag value */
 
-void tagStormAdd(struct tagStorm *tagStorm, struct tagStanza *stanza, char *tag, char *val);
-/* Add tag to stanza in storm, replacing existing tag if any */
+void tagStormUpdateTag(struct tagStorm *tagStorm, struct tagStanza *stanza, char *tag, char *val);
+/* Add tag to stanza in storm, replacing existing tag if any. If tag is added it's added to
+ * end. */
+
+/** Stuff for constructing a tag storm a tag at a time rather than building it from file */
+
+struct tagStorm *tagStormNew(char *fileName);
+/* Create a new, empty, tagStorm. */
+
+struct tagStanza *tagStanzaNew(struct tagStorm *tagStorm, struct tagStanza *parent);
+/* Create a new, empty stanza that is added as to head of child list of parent,
+ * or to tagStorm->forest if parent is NULL. */
+
+struct slPair *tagStanzaAdd(struct tagStorm *tagStorm, struct tagStanza *stanza, 
+    char *tag, char *val);
+/* Add tag with given value to stanza */
+
+void tagStormReverseAll(struct tagStorm *tagStorm);
+/* Reverse order of all lists in tagStorm.  Use when all done with tagStanzaNew
+ * and tagStanzaAdd (which for speed build lists backwards). */
 
 #endif /* TAGSTORM_H */

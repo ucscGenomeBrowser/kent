@@ -34,6 +34,47 @@
 #include "errAbort.h"
 
 
+struct tagStorm *tagStormNew(char *fileName)
+/* Create a new, empty, tagStorm. */
+{
+struct lm *lm = lmInit(0);
+struct tagStorm *tagStorm = lmAlloc(lm, sizeof(*tagStorm));
+tagStorm->lm = lm;
+tagStorm->fileName = lmCloneString(lm, fileName);
+return tagStorm;
+}
+
+struct tagStanza *tagStanzaNew(struct tagStorm *tagStorm, struct tagStanza *parent)
+/* Create a new, empty stanza that is added as to head of child list of parent,
+ * or to tagStorm->forest if parent is NULL. */
+{
+struct tagStanza *stanza;
+lmAllocVar(tagStorm->lm, stanza);
+if (parent != NULL)
+    {
+    stanza->parent = parent;
+    slAddHead(&parent->children, stanza);
+    }
+else
+    {
+    slAddHead(&tagStorm->forest, stanza);
+    }
+return stanza;
+}
+
+struct slPair *tagStanzaAdd(struct tagStorm *tagStorm, struct tagStanza *stanza, 
+    char *tag, char *val)
+/* Add tag with given value to stanza */
+{
+struct lm *lm = tagStorm->lm;
+struct slPair *pair;
+lmAllocVar(lm, pair);
+pair->name = lmCloneString(lm, tag);
+pair->val = lmCloneString(lm, val);
+slAddHead(&stanza->tagList, pair);
+return pair;
+}
+
 static void rReverseStanzaList(struct tagStanza **pList)
 /* Reverse order of stanzas, used to compensate for all of the add-heads */
 {
@@ -46,6 +87,13 @@ for (stanza = *pList; stanza != NULL; stanza = stanza->next)
     }
 }
 
+void tagStormReverseAll(struct tagStorm *tagStorm)
+/* Reverse order of all lists in tagStorm.  Use when all done with tagStormAddStanza
+ * and tagStanzaAddTag (which for speed build lists backwards). */
+{
+rReverseStanzaList(&tagStorm->forest);
+}
+
 struct tagStorm *tagStormFromFile(char *fileName)
 /* Load up all tags from file.  */
 {
@@ -56,11 +104,9 @@ indentStack[0] = 0;
 /* Open up file first thing.  Abort if there's a problem here. */
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 
-/* Set up local memory pool and put tagStorm base structure in it. */
-struct lm *lm = lmInit(0);
-struct tagStorm *tagStorm = lmAlloc(lm, sizeof(*tagStorm));
-tagStorm->lm = lm;
-tagStorm->fileName = lmCloneString(lm, fileName);
+/* Set up new empty tag storm and get local pointer to memory pool. */
+struct tagStorm *tagStorm = tagStormNew(fileName);
+struct lm *lm = tagStorm->lm;
 
 struct tagStanza *stanza, *parent = NULL, *lastStanza = NULL;
 int currentIndent = 0;
@@ -385,8 +431,9 @@ rTsWriteAsFlatTab(tagStorm->forest, fieldList, f, idTag, withParent, maxDepth, 0
 carefulClose(&f);
 }
 
-void tagStormAdd(struct tagStorm *tagStorm, struct tagStanza *stanza, char *tag, char *val)
-/* Add tag to stanza in storm, replacing existing tag if any */
+void tagStormUpdateTag(struct tagStorm *tagStorm, struct tagStanza *stanza, char *tag, char *val)
+/* Add tag to stanza in storm, replacing existing tag if any. If tag is added it's added to
+ * end. */
 {
 struct lm *lm = tagStorm->lm;
 
