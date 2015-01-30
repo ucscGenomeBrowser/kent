@@ -52,8 +52,16 @@ struct tagStorm *tagStormFromFile(char *fileName);
 void tagStormFree(struct tagStorm **pTagStorm);
 /* Free up memory associated with tag storm */
 
-void tagStormWriteAll(struct tagStorm *tagStorm, char *fileName);
+void tagStormWrite(struct tagStorm *tagStorm, char *fileName, int maxDepth);
 /* Write all of tag storm to file */
+
+void tagStormWriteAsFlatRa(struct tagStorm *tagStorm, char *fileName, char *idTag, 
+    boolean withParent, int maxDepth);
+/* Write tag storm flattening out hierarchy so kids have all of parents tags in .ra format */
+
+void tagStormWriteAsFlatTab(struct tagStorm *tagStorm, char *fileName, char *idTag,
+    boolean withParent, int maxDepth);
+/* Write tag storm flattening out hierarchy so kids have all of parents tags in tab-sep format */
 
 char *tagStanzaVal(struct tagStanza *stanza, char *tag);
 /* Return value associated with tag in stanza or any of parent stanzas */

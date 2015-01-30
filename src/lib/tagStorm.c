@@ -195,9 +195,11 @@ rAddIndex(tagStorm->forest, hash, tag, NULL);
 return hash;
 }
 
-static void rTsWrite(struct tagStanza *list, FILE *f, int depth)
+static void rTsWrite(struct tagStanza *list, FILE *f, int maxDepth, int depth)
 /* Recursively write out list to file */
 {
+if (depth >= maxDepth)
+    return;
 struct tagStanza *stanza;
 int indent = depth * 3;
 for (stanza = list; stanza != NULL; stanza = stanza->next)
@@ -209,15 +211,73 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	fprintf(f, "%s %s\n", pair->name, (char*)(pair->val));
 	}
     fputc('\n', f);
-    rTsWrite(stanza->children, f, depth+1);
+    rTsWrite(stanza->children, f, maxDepth, depth+1);
     }
 }
  
-void tagStormWriteAll(struct tagStorm *tagStorm, char *fileName)
-/* Write all of tag storm to file */
+void tagStormWrite(struct tagStorm *tagStorm, char *fileName, int maxDepth)
+/* Write all of tag storm to file.  If maxDepth is nonzero, just write up to that depth */
 {
 FILE *f = mustOpen(fileName, "w");
-rTsWrite(tagStorm->forest, f, 0);
+if (maxDepth == 0)
+    maxDepth = BIGNUM;
+rTsWrite(tagStorm->forest, f, maxDepth, 0);
+carefulClose(&f);
+}
+
+static void rTsWriteAsFlatRa(struct tagStanza *list, FILE *f, char *idTag, boolean withParent,
+     int maxDepth, int depth)
+/* Recursively write out list to file */
+{
+if (depth > maxDepth)
+    return;
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    char *idVal = NULL;
+    if (idTag != NULL)
+        idVal = slPairFindVal(stanza->tagList, idTag);
+    struct hash *uniq = hashNew(0);
+    if (idVal != NULL)
+        {
+	fprintf(f, "%s %s\n", idTag, idVal);
+	hashAdd(uniq, idTag, idVal);
+	}
+    if (withParent && stanza->parent != NULL && idTag != NULL)
+	{
+	char *parentVal = slPairFindVal(stanza->parent->tagList, idTag);
+	if (parentVal != NULL)
+	    {
+	    fprintf(f, "parent %s\n", parentVal);
+	    hashAdd(uniq, "parent", parentVal);
+	    }
+	}
+    struct tagStanza *family;
+    for (family = stanza; family != NULL; family = family->parent)
+	{
+	struct slPair *pair;
+	for (pair = family->tagList; pair != NULL; pair = pair->next)
+	    {
+	    if (!hashLookup(uniq, pair->name))
+		{
+		fprintf(f, "%s %s\n", pair->name, (char*)(pair->val));
+		hashAdd(uniq, pair->name, pair->val);
+		}
+	    }
+	}
+    fputc('\n', f);
+    hashFree(&uniq);
+
+    rTsWriteAsFlatRa(stanza->children, f, idTag, withParent, maxDepth, depth+1);
+    }
+}
+ 
+void tagStormWriteAsFlatRa(struct tagStorm *tagStorm, char *fileName, char *idTag, 
+    boolean withParent, int maxDepth)
+/* Write tag storm flattening out hierarchy so kids have all of parents tags in .ra format */
+{
+FILE *f = mustOpen(fileName, "w");
+rTsWriteAsFlatRa(tagStorm->forest, f, idTag, withParent, maxDepth, 0);
 carefulClose(&f);
 }
 

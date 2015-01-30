@@ -8,20 +8,31 @@
 #include "tagStorm.h"
 #include "errAbort.h"
 
+boolean withParent = FALSE;
+boolean flatten = FALSE;
+char *idTag = NULL;
+int maxDepth = BIGNUM;
+
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
   "testTagStorm - Test speed of loading tag storms.\n"
   "usage:\n"
-  "   testTagStorm input.ra\n"
+  "   testTagStorm input output\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -withParent  If set a parent tag will be added. You'll need the idTag option too\n"
+  "   -idTag=name Name of tag to used as primary identifier\n"
+  "   -maxDepth=n Maximum depth of storm to write\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"withParent", OPTION_BOOLEAN},
+   {"idTag", OPTION_STRING},
+   {"maxDepth", OPTION_INT},
+   {"flatten", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -39,7 +50,10 @@ uglyf("Got %d stanzas with sex\n", sexHash->elCount);
 struct hash *labHash = tagStormIndex(tagStorm, "lab");
 uglyf("Got %d stanzas with lab\n", labHash->elCount);
 #endif /* SOON */
-tagStormWriteAll(tagStorm, output);
+if (flatten)
+    tagStormWriteAsFlatRa(tagStorm, output, idTag, withParent, maxDepth);
+else
+    tagStormWrite(tagStorm, output, maxDepth);
 tagStormFree(&tagStorm);
 }
 
@@ -49,6 +63,12 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+idTag = optionVal("idTag", idTag);
+withParent = optionExists("withParent");
+flatten = optionExists("flatten");
+if (withParent && !idTag)
+    errAbort("Please specify idTag option if using withParent option");
+maxDepth = optionInt("maxDepth", maxDepth);
 testTagStorm(argv[1], argv[2]);
 return 0;
 }
