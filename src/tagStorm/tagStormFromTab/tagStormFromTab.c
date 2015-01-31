@@ -274,17 +274,15 @@ for (ref = partingFields; ref != NULL; ref = ref->next)
     }
 
 struct fieldInfo *partingField = partingFields->val;
+int partingFieldIx = partingField->ix;
 
 /* Since the parting values are sorted by where they appear in table, we can
  * just scan through the table once.  We'll output the values at the first
  * place they appear. */
-#ifdef OLD
-int firstFieldIx = partingField->ix;
-struct fieldedRow *row = table->rowList;
-#endif /* OLD */
 struct slRef *partVal;
 for (partVal = partingField->valList; partVal != NULL; partVal = partVal->next)
     {
+    /* Add constant bits to tagStorm */
     struct tagStanza *stanza = tagStanzaNew(tagStorm, parent);
     for (ref = partingFields; ref != NULL; ref = ref->next)
         {
@@ -293,29 +291,33 @@ for (partVal = partingField->valList; partVal != NULL; partVal = partVal->next)
 	field->valCursor = field->valCursor->next;
 	tagStanzaAdd(tagStorm, stanza, field->name, val);
 	}
+    slReverse(&stanza->tagList);
 
-#ifdef OLD
-    for (;;)
+    /* Make subtable with nonconstant bits starting with header. */
+    char *val = partVal->val;
+    int ixTranslator[table->fieldCount];
+    struct fieldedTable *subtable = NULL;
+    makeSubtableExcluding(table, partingFields, &subtable, ixTranslator);
+
+    /* Loop through old table saving parts from nonconstant tags in subtable */
+    int subcount = subtable->fieldCount;
+    char *subrow[subcount];
+    struct fieldedRow *row = table->rowList;
+    for (row = table->rowList; row != NULL; row = row->next)
         {
-	if (row == NULL)
+	if (sameString(row->row[partingFieldIx], val))
 	    {
-	    warn("partingValues not sorted");
-	    internalErr();
-	    }
-	if (sameString(row->row[firstFieldIx], val))
-	    {
-	    struct fieldInfo *field;
-	    struct slRef *ref;
-	    for (ref = partingFields; ref != NULL; ref = ref->next)
-		{
-		field = ref->val;
-		tagStanzaAdd(tagStorm, stanza, field->name, row->row[field->ix]);
+	    int i;
+	    for (i=0; i<table->fieldCount; ++i)
+	        {
+		int subi = ixTranslator[i];
+		if (subi >= 0)
+		    subrow[subi] = row->row[i];
 		}
-	    break;
+	    fieldedTableAdd(subtable, subrow, subcount, row->id);
 	    }
-	row = row->next;
 	}
-#endif /* OLD */
+    rPartition(subtable, tagStorm, stanza);
     }
 slFreeList(&partingFields);
 fieldInfoFreeList(&allFields);
