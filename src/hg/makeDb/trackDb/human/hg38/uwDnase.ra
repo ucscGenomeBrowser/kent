@@ -2300,6 +2300,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 38914.2
 	color 255,85,85
 	priority 1
+	table uwEnc2DnaseSignalWgEncodeEH000484
 
 	track uwEnc2DnaseWigWgEncodeEH001180
 	parent uwEnc2DnaseWig off
@@ -2309,6 +2310,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 30091.1
 	color 254,93,85
 	priority 1.00887
+	table uwEnc2DnaseSignalWgEncodeEH001180
 
 	track uwEnc2DnaseWigWgEncodeEH001187
 	parent uwEnc2DnaseWig off
@@ -2318,6 +2320,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 37372.7
 	color 255,102,85
 	priority 1.01793
+	table uwEnc2DnaseSignalWgEncodeEH001187
 
 	track uwEnc2DnaseWigWgEncodeEH000503
 	parent uwEnc2DnaseWig off
@@ -2327,6 +2330,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 32097.2
 	color 255,112,85
 	priority 1.02847
+	table uwEnc2DnaseSignalWgEncodeEH000503
 
 	track uwEnc2DnaseWigWgEncodeEH002583
 	parent uwEnc2DnaseWig off
@@ -2336,6 +2340,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 34214.8
 	color 255,124,85
 	priority 1.04106
+	table uwEnc2DnaseSignalWgEncodeEH002583
 
 	track uwEnc2DnaseWigWgEncodeEH000500
 	parent uwEnc2DnaseWig off
@@ -2345,6 +2350,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 12279.3
 	color 255,141,85
 	priority 1.05908
+	table uwEnc2DnaseSignalWgEncodeEH000500
 
 	track uwEnc2DnaseWigWgEncodeEH001162
 	parent uwEnc2DnaseWig off
@@ -2354,6 +2360,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 27405.3
 	color 255,150,85
 	priority 1.06881
+	table uwEnc2DnaseSignalWgEncodeEH001162
 
 	track uwEnc2DnaseWigWgEncodeEH002582
 	parent uwEnc2DnaseWig off
@@ -2363,6 +2370,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 31238.7
 	color 255,154,85
 	priority 1.07294
+	table uwEnc2DnaseSignalWgEncodeEH002582
 
 	track uwEnc2DnaseWigWgEncodeEH001193
 	parent uwEnc2DnaseWig off
@@ -2372,6 +2380,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 17635.9
 	color 255,163,85
 	priority 1.0818
+	table uwEnc2DnaseSignalWgEncodeEH001193
 
 	track uwEnc2DnaseWigWgEncodeEH001194
 	parent uwEnc2DnaseWig off
@@ -2381,6 +2390,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 23416.2
 	color 255,165,85
 	priority 1.08427
+	table uwEnc2DnaseSignalWgEncodeEH001194
 
 	track uwEnc2DnaseWigWgEncodeEH001887
 	parent uwEnc2DnaseWig off
@@ -2390,6 +2400,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 8351.64
 	color 255,173,85
 	priority 1.09484
+	table uwEnc2DnaseSignalWgEncodeEH001887
 
 	track uwEnc2DnaseWigWgEncodeEH000487
 	parent uwEnc2DnaseWig off
@@ -2399,6 +2410,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 28788.2
 	color 255,184,85
 	priority 1.11593
+	table uwEnc2DnaseSignalWgEncodeEH000487
 
 	track uwEnc2DnaseWigWgEncodeEH000507
 	parent uwEnc2DnaseWig off
@@ -2408,6 +2420,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 29145.4
 	color 255,186,85
 	priority 1.11916
+	table uwEnc2DnaseSignalWgEncodeEH000507
 
 	track uwEnc2DnaseWigWgEncodeEH000516
 	parent uwEnc2DnaseWig off
@@ -2417,6 +2430,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 26522.6
 	color 255,188,85
 	priority 1.124
+	table uwEnc2DnaseSignalWgEncodeEH000516
 
 	track uwEnc2DnaseWigWgEncodeEH001197
 	parent uwEnc2DnaseWig off
@@ -2426,6 +2440,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 21133.7
 	color 255,192,85
 	priority 1.13075
+	table uwEnc2DnaseSignalWgEncodeEH001197
 
 	track uwEnc2DnaseWigWgEncodeEH002574
 	parent uwEnc2DnaseWig off
@@ -2435,6 +2450,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 11390.2
 	color 255,200,85
 	priority 1.1425
+	table uwEnc2DnaseSignalWgEncodeEH002574
 
 	track uwEnc2DnaseWigWgEncodeEH002575
 	parent uwEnc2DnaseWig off
@@ -2444,6 +2460,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 11566.9
 	color 255,204,85
 	priority 1.14786
+	table uwEnc2DnaseSignalWgEncodeEH002575
 
 	track uwEnc2DnaseWigWgEncodeEH000521
 	parent uwEnc2DnaseWig on
@@ -2453,6 +2470,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 11719.1
 	color 255,209,85
 	priority 1.156
+	table uwEnc2DnaseSignalWgEncodeEH000521
 
 	track uwEnc2DnaseWigWgEncodeEH001179
 	parent uwEnc2DnaseWig off
@@ -2462,6 +2480,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 9132.47
 	color 255,210,85
 	priority 1.15667
+	table uwEnc2DnaseSignalWgEncodeEH001179
 
 	track uwEnc2DnaseWigWgEncodeEH001178
 	parent uwEnc2DnaseWig off
@@ -2471,6 +2490,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 11394.7
 	color 255,214,85
 	priority 1.1627
+	table uwEnc2DnaseSignalWgEncodeEH001178
 
 	track uwEnc2DnaseWigWgEncodeEH000508
 	parent uwEnc2DnaseWig off
@@ -2480,6 +2500,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 28099
 	color 255,221,85
 	priority 1.17288
+	table uwEnc2DnaseSignalWgEncodeEH000508
 
 	track uwEnc2DnaseWigWgEncodeEH001175
 	parent uwEnc2DnaseWig off
@@ -2489,6 +2510,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 11009.1
 	color 255,224,85
 	priority 1.17804
+	table uwEnc2DnaseSignalWgEncodeEH001175
 
 	track uwEnc2DnaseWigWgEncodeEH000513
 	parent uwEnc2DnaseWig off
@@ -2498,6 +2520,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 19295.8
 	color 255,229,85
 	priority 1.18546
+	table uwEnc2DnaseSignalWgEncodeEH000513
 
 	track uwEnc2DnaseWigWgEncodeEH000519
 	parent uwEnc2DnaseWig off
@@ -2507,6 +2530,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 14370.2
 	color 255,230,85
 	priority 1.18728
+	table uwEnc2DnaseSignalWgEncodeEH000519
 
 	track uwEnc2DnaseWigWgEncodeEH001173
 	parent uwEnc2DnaseWig off
@@ -2516,6 +2540,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 11225.6
 	color 255,232,85
 	priority 1.18958
+	table uwEnc2DnaseSignalWgEncodeEH001173
 
 	track uwEnc2DnaseWigWgEncodeEH001161
 	parent uwEnc2DnaseWig off
@@ -2525,6 +2550,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 10369.5
 	color 255,236,85
 	priority 1.19489
+	table uwEnc2DnaseSignalWgEncodeEH001161
 
 	track uwEnc2DnaseWigWgEncodeEH000514
 	parent uwEnc2DnaseWig off
@@ -2534,6 +2560,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 13163.5
 	color 255,242,85
 	priority 1.20382
+	table uwEnc2DnaseSignalWgEncodeEH000514
 
 	track uwEnc2DnaseWigWgEncodeEH001174
 	parent uwEnc2DnaseWig off
@@ -2543,6 +2570,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 11172
 	color 255,247,85
 	priority 1.21201
+	table uwEnc2DnaseSignalWgEncodeEH001174
 
 	track uwEnc2DnaseWigWgEncodeEH001165
 	parent uwEnc2DnaseWig off
@@ -2552,6 +2580,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 8320.98
 	color 255,252,85
 	priority 1.2193
+	table uwEnc2DnaseSignalWgEncodeEH001165
 
 	track uwEnc2DnaseWigWgEncodeEH001192
 	parent uwEnc2DnaseWig off
@@ -2561,6 +2590,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 10000.7
 	color 250,255,85
 	priority 1.22962
+	table uwEnc2DnaseSignalWgEncodeEH001192
 
 	track uwEnc2DnaseWigWgEncodeEH001176
 	parent uwEnc2DnaseWig off
@@ -2570,6 +2600,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 5956.46
 	color 242,255,85
 	priority 1.24127
+	table uwEnc2DnaseSignalWgEncodeEH001176
 
 	track uwEnc2DnaseWigWgEncodeEH001184
 	parent uwEnc2DnaseWig off
@@ -2579,6 +2610,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 8028.81
 	color 236,255,85
 	priority 1.2515
+	table uwEnc2DnaseSignalWgEncodeEH001184
 
 	track uwEnc2DnaseWigWgEncodeEH003031
 	parent uwEnc2DnaseWig off
@@ -2588,6 +2620,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 3047.47
 	color 228,255,85
 	priority 1.26303
+	table uwEnc2DnaseSignalWgEncodeEH003031
 
 	track uwEnc2DnaseWigWgEncodeEH000509
 	parent uwEnc2DnaseWig off
@@ -2597,6 +2630,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 19440.9
 	color 220,255,85
 	priority 1.27484
+	table uwEnc2DnaseSignalWgEncodeEH000509
 
 	track uwEnc2DnaseWigWgEncodeEH001166
 	parent uwEnc2DnaseWig off
@@ -2606,6 +2640,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 12347.6
 	color 212,255,85
 	priority 1.28722
+	table uwEnc2DnaseSignalWgEncodeEH001166
 
 	track uwEnc2DnaseWigWgEncodeEH000504
 	parent uwEnc2DnaseWig off
@@ -2615,6 +2650,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 3410.39
 	color 204,255,85
 	priority 1.29794
+	table uwEnc2DnaseSignalWgEncodeEH000504
 
 	track uwEnc2DnaseWigWgEncodeEH000518
 	parent uwEnc2DnaseWig off
@@ -2624,6 +2660,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 13455.2
 	color 198,255,85
 	priority 1.3069
+	table uwEnc2DnaseSignalWgEncodeEH000518
 
 	track uwEnc2DnaseWigWgEncodeEH000512
 	parent uwEnc2DnaseWig off
@@ -2633,6 +2670,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 10858.1
 	color 189,255,85
 	priority 1.32226
+	table uwEnc2DnaseSignalWgEncodeEH000512
 
 	track uwEnc2DnaseWigWgEncodeEH000490
 	parent uwEnc2DnaseWig off
@@ -2642,6 +2680,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 2130.04
 	color 182,255,85
 	priority 1.3337
+	table uwEnc2DnaseSignalWgEncodeEH000490
 
 	track uwEnc2DnaseWigWgEncodeEH002580
 	parent uwEnc2DnaseWig off
@@ -2651,6 +2690,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 3766.42
 	color 176,255,85
 	priority 1.34687
+	table uwEnc2DnaseSignalWgEncodeEH002580
 
 	track uwEnc2DnaseWigWgEncodeEH000505
 	parent uwEnc2DnaseWig off
@@ -2660,6 +2700,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 20132.8
 	color 152,255,85
 	priority 1.36656
+	table uwEnc2DnaseSignalWgEncodeEH000505
 
 	track uwEnc2DnaseWigWgEncodeEH000506
 	parent uwEnc2DnaseWig off
@@ -2669,6 +2710,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 18229.7
 	color 144,255,85
 	priority 1.37094
+	table uwEnc2DnaseSignalWgEncodeEH000506
 
 	track uwEnc2DnaseWigWgEncodeEH001191
 	parent uwEnc2DnaseWig off
@@ -2678,6 +2720,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 10262.5
 	color 122,255,85
 	priority 1.38256
+	table uwEnc2DnaseSignalWgEncodeEH001191
 
 	track uwEnc2DnaseWigWgEncodeEH002581
 	parent uwEnc2DnaseWig off
@@ -2687,6 +2730,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 6527.58
 	color 96,255,85
 	priority 1.39616
+	table uwEnc2DnaseSignalWgEncodeEH002581
 
 	track uwEnc2DnaseWigWgEncodeEH003007
 	parent uwEnc2DnaseWig off
@@ -2696,6 +2740,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 7339.21
 	color 85,255,90
 	priority 1.40485
+	table uwEnc2DnaseSignalWgEncodeEH003007
 
 	track uwEnc2DnaseWigWgEncodeEH001183
 	parent uwEnc2DnaseWig off
@@ -2705,6 +2750,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 8189.49
 	color 85,255,124
 	priority 1.42221
+	table uwEnc2DnaseSignalWgEncodeEH001183
 
 	track uwEnc2DnaseWigWgEncodeEH001164
 	parent uwEnc2DnaseWig off
@@ -2714,6 +2760,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 3845.33
 	color 85,255,150
 	priority 1.43568
+	table uwEnc2DnaseSignalWgEncodeEH001164
 
 	track uwEnc2DnaseWigWgEncodeEH001198
 	parent uwEnc2DnaseWig off
@@ -2723,6 +2770,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 9068.99
 	color 85,255,171
 	priority 1.44843
+	table uwEnc2DnaseSignalWgEncodeEH001198
 
 	track uwEnc2DnaseWigWgEncodeEH001177
 	parent uwEnc2DnaseWig off
@@ -2732,6 +2780,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 2200.64
 	color 85,255,180
 	priority 1.46595
+	table uwEnc2DnaseSignalWgEncodeEH001177
 
 	track uwEnc2DnaseWigWgEncodeEH001185
 	parent uwEnc2DnaseWig on
@@ -2741,6 +2790,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 14177.3
 	color 85,255,190
 	priority 1.48469
+	table uwEnc2DnaseSignalWgEncodeEH001185
 
 	track uwEnc2DnaseWigWgEncodeEH003005
 	parent uwEnc2DnaseWig off
@@ -2750,6 +2800,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 16877.8
 	color 85,255,193
 	priority 1.48937
+	table uwEnc2DnaseSignalWgEncodeEH003005
 
 	track uwEnc2DnaseWigWgEncodeEH003006
 	parent uwEnc2DnaseWig off
@@ -2759,6 +2810,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 44051.9
 	color 85,255,198
 	priority 1.49766
+	table uwEnc2DnaseSignalWgEncodeEH003006
 
 	track uwEnc2DnaseWigWgEncodeEH001186
 	parent uwEnc2DnaseWig off
@@ -2768,6 +2820,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 14719.7
 	color 85,255,204
 	priority 1.50509
+	table uwEnc2DnaseSignalWgEncodeEH001186
 
 	track uwEnc2DnaseWigWgEncodeEH000488
 	parent uwEnc2DnaseWig on
@@ -2777,6 +2830,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 6744.03
 	color 85,255,215
 	priority 1.52185
+	table uwEnc2DnaseSignalWgEncodeEH000488
 
 	track uwEnc2DnaseWigWgEncodeEH001163
 	parent uwEnc2DnaseWig off
@@ -2786,6 +2840,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 2898.86
 	color 85,255,220
 	priority 1.52972
+	table uwEnc2DnaseSignalWgEncodeEH001163
 
 	track uwEnc2DnaseWigWgEncodeEH001168
 	parent uwEnc2DnaseWig off
@@ -2795,6 +2850,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 6571.28
 	color 85,255,224
 	priority 1.53388
+	table uwEnc2DnaseSignalWgEncodeEH001168
 
 	track uwEnc2DnaseWigWgEncodeEH001171
 	parent uwEnc2DnaseWig off
@@ -2804,6 +2860,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 9237.62
 	color 85,255,226
 	priority 1.53734
+	table uwEnc2DnaseSignalWgEncodeEH001171
 
 	track uwEnc2DnaseWigWgEncodeEH001169
 	parent uwEnc2DnaseWig off
@@ -2813,6 +2870,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 6275.08
 	color 85,255,229
 	priority 1.54191
+	table uwEnc2DnaseSignalWgEncodeEH001169
 
 	track uwEnc2DnaseWigWgEncodeEH001195
 	parent uwEnc2DnaseWig off
@@ -2822,6 +2880,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 7095.64
 	color 85,255,232
 	priority 1.54737
+	table uwEnc2DnaseSignalWgEncodeEH001195
 
 	track uwEnc2DnaseWigWgEncodeEH001167
 	parent uwEnc2DnaseWig off
@@ -2831,6 +2890,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 21274
 	color 85,255,243
 	priority 1.56304
+	table uwEnc2DnaseSignalWgEncodeEH001167
 
 	track uwEnc2DnaseWigWgEncodeEH001172
 	parent uwEnc2DnaseWig off
@@ -2840,6 +2900,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 16586
 	color 85,255,244
 	priority 1.56474
+	table uwEnc2DnaseSignalWgEncodeEH001172
 
 	track uwEnc2DnaseWigWgEncodeEH001889
 	parent uwEnc2DnaseWig off
@@ -2849,6 +2910,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 7923.4
 	color 85,255,246
 	priority 1.56686
+	table uwEnc2DnaseSignalWgEncodeEH001889
 
 	track uwEnc2DnaseWigWgEncodeEH000493
 	parent uwEnc2DnaseWig off
@@ -2858,6 +2920,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 4920.93
 	color 85,251,255
 	priority 1.58591
+	table uwEnc2DnaseSignalWgEncodeEH000493
 
 	track uwEnc2DnaseWigWgEncodeEH000494
 	parent uwEnc2DnaseWig off
@@ -2867,6 +2930,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 6938.49
 	color 85,248,255
 	priority 1.59019
+	table uwEnc2DnaseSignalWgEncodeEH000494
 
 	track uwEnc2DnaseWigWgEncodeEH000499
 	parent uwEnc2DnaseWig on
@@ -2876,6 +2940,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 9597.75
 	color 85,238,255
 	priority 1.60559
+	table uwEnc2DnaseSignalWgEncodeEH000499
 
 	track uwEnc2DnaseWigWgEncodeEH000501
 	parent uwEnc2DnaseWig off
@@ -2885,6 +2950,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 4884.78
 	color 85,231,255
 	priority 1.61604
+	table uwEnc2DnaseSignalWgEncodeEH000501
 
 	track uwEnc2DnaseWigWgEncodeEH001888
 	parent uwEnc2DnaseWig off
@@ -2894,6 +2960,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 4302.39
 	color 85,226,255
 	priority 1.62238
+	table uwEnc2DnaseSignalWgEncodeEH001888
 
 	track uwEnc2DnaseWigWgEncodeEH000515
 	parent uwEnc2DnaseWig off
@@ -2903,6 +2970,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 20601.1
 	color 85,220,255
 	priority 1.632
+	table uwEnc2DnaseSignalWgEncodeEH000515
 
 	track uwEnc2DnaseWigWgEncodeEH000481
 	parent uwEnc2DnaseWig off
@@ -2912,6 +2980,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 14706.5
 	color 85,205,255
 	priority 1.65365
+	table uwEnc2DnaseSignalWgEncodeEH000481
 
 	track uwEnc2DnaseWigWgEncodeEH000482
 	parent uwEnc2DnaseWig on
@@ -2921,6 +2990,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 4511.03
 	color 85,198,255
 	priority 1.66426
+	table uwEnc2DnaseSignalWgEncodeEH000482
 
 	track uwEnc2DnaseWigWgEncodeEH000486
 	parent uwEnc2DnaseWig off
@@ -2930,6 +3000,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 4903.16
 	color 85,193,255
 	priority 1.67125
+	table uwEnc2DnaseSignalWgEncodeEH000486
 
 	track uwEnc2DnaseWigWgEncodeEH000485
 	parent uwEnc2DnaseWig off
@@ -2939,6 +3010,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 4488.56
 	color 85,189,255
 	priority 1.679
+	table uwEnc2DnaseSignalWgEncodeEH000485
 
 	track uwEnc2DnaseWigWgEncodeEH001884
 	parent uwEnc2DnaseWig off
@@ -2948,6 +3020,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 1572.73
 	color 85,183,255
 	priority 1.68971
+	table uwEnc2DnaseSignalWgEncodeEH001884
 
 	track uwEnc2DnaseWigWgEncodeEH000483
 	parent uwEnc2DnaseWig off
@@ -2957,6 +3030,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 2056.65
 	color 85,178,255
 	priority 1.69959
+	table uwEnc2DnaseSignalWgEncodeEH000483
 
 	track uwEnc2DnaseWigWgEncodeEH000491
 	parent uwEnc2DnaseWig off
@@ -2966,6 +3040,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 1526.14
 	color 85,176,255
 	priority 1.70375
+	table uwEnc2DnaseSignalWgEncodeEH000491
 
 	track uwEnc2DnaseWigWgEncodeEH003022
 	parent uwEnc2DnaseWig off
@@ -2975,6 +3050,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 593.107
 	color 85,173,255
 	priority 1.70849
+	table uwEnc2DnaseSignalWgEncodeEH003022
 
 	track uwEnc2DnaseWigWgEncodeEH000497
 	parent uwEnc2DnaseWig off
@@ -2984,6 +3060,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 5823.31
 	color 85,165,255
 	priority 1.71966
+	table uwEnc2DnaseSignalWgEncodeEH000497
 
 	track uwEnc2DnaseWigWgEncodeEH000492
 	parent uwEnc2DnaseWig on
@@ -2993,6 +3070,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 7218.11
 	color 85,152,255
 	priority 1.73349
+	table uwEnc2DnaseSignalWgEncodeEH000492
 
 	track uwEnc2DnaseWigWgEncodeEH000520
 	parent uwEnc2DnaseWig off
@@ -3002,6 +3080,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 8525.5
 	color 85,147,255
 	priority 1.73856
+	table uwEnc2DnaseSignalWgEncodeEH000520
 
 	track uwEnc2DnaseWigWgEncodeEH001196
 	parent uwEnc2DnaseWig off
@@ -3011,6 +3090,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 853.111
 	color 85,135,255
 	priority 1.75089
+	table uwEnc2DnaseSignalWgEncodeEH001196
 
 	track uwEnc2DnaseWigWgEncodeEH000489
 	parent uwEnc2DnaseWig off
@@ -3020,6 +3100,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 5012.92
 	color 85,124,255
 	priority 1.76239
+	table uwEnc2DnaseSignalWgEncodeEH000489
 
 	track uwEnc2DnaseWigWgEncodeEH000498
 	parent uwEnc2DnaseWig off
@@ -3029,6 +3110,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 7662.2
 	color 85,112,255
 	priority 1.77436
+	table uwEnc2DnaseSignalWgEncodeEH000498
 
 	track uwEnc2DnaseWigWgEncodeEH000511
 	parent uwEnc2DnaseWig on
@@ -3038,6 +3120,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 13035.4
 	color 85,93,255
 	priority 1.79509
+	table uwEnc2DnaseSignalWgEncodeEH000511
 
 	track uwEnc2DnaseWigWgEncodeEH002578
 	parent uwEnc2DnaseWig off
@@ -3047,6 +3130,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 5836.88
 	color 85,88,255
 	priority 1.80059
+	table uwEnc2DnaseSignalWgEncodeEH002578
 
 	track uwEnc2DnaseWigWgEncodeEH002576
 	parent uwEnc2DnaseWig off
@@ -3056,6 +3140,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 21393.7
 	color 89,85,255
 	priority 1.80809
+	table uwEnc2DnaseSignalWgEncodeEH002576
 
 	track uwEnc2DnaseWigWgEncodeEH001188
 	parent uwEnc2DnaseWig off
@@ -3065,6 +3150,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 22767.8
 	color 100,85,255
 	priority 1.82024
+	table uwEnc2DnaseSignalWgEncodeEH001188
 
 	track uwEnc2DnaseWigWgEncodeEH000517
 	parent uwEnc2DnaseWig off
@@ -3074,6 +3160,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 32404.6
 	color 124,85,255
 	priority 1.84446
+	table uwEnc2DnaseSignalWgEncodeEH000517
 
 	track uwEnc2DnaseWigWgEncodeEH001170
 	parent uwEnc2DnaseWig off
@@ -3083,6 +3170,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 39771.9
 	color 133,85,255
 	priority 1.85388
+	table uwEnc2DnaseSignalWgEncodeEH001170
 
 	track uwEnc2DnaseWigWgEncodeEH000495
 	parent uwEnc2DnaseWig on
@@ -3092,6 +3180,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 26492
 	color 157,85,255
 	priority 1.87897
+	table uwEnc2DnaseSignalWgEncodeEH000495
 
 	track uwEnc2DnaseWigWgEncodeEH001189
 	parent uwEnc2DnaseWig off
@@ -3101,6 +3190,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 5864.79
 	color 176,85,255
 	priority 1.90393
+	table uwEnc2DnaseSignalWgEncodeEH001189
 
 	track uwEnc2DnaseWigWgEncodeEH000502
 	parent uwEnc2DnaseWig off
@@ -3110,6 +3200,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 15780.8
 	color 190,85,255
 	priority 1.93061
+	table uwEnc2DnaseSignalWgEncodeEH000502
 
 	track uwEnc2DnaseWigWgEncodeEH003017
 	parent uwEnc2DnaseWig off
@@ -3119,6 +3210,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 24234.6
 	color 192,85,255
 	priority 1.93373
+	table uwEnc2DnaseSignalWgEncodeEH003017
 
 	track uwEnc2DnaseWigWgEncodeEH003018
 	parent uwEnc2DnaseWig off
@@ -3128,6 +3220,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 23308.2
 	color 192,85,255
 	priority 1.93395
+	table uwEnc2DnaseSignalWgEncodeEH003018
 
 	track uwEnc2DnaseWigWgEncodeEH001190
 	parent uwEnc2DnaseWig off
@@ -3137,6 +3230,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 8726.43
 	color 211,85,255
 	priority 1.96205
+	table uwEnc2DnaseSignalWgEncodeEH001190
 
 	track uwEnc2DnaseWigWgEncodeEH001181
 	parent uwEnc2DnaseWig off
@@ -3146,4 +3240,5 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	type bigWig 0 72865.5
 	color 237,85,255
 	priority 2
+	table uwEnc2DnaseSignalWgEncodeEH001181
 
