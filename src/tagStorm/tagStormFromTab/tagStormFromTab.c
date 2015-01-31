@@ -263,7 +263,18 @@ void rPartition(struct fieldedTable *table, struct tagStorm *tagStorm, struct ta
 struct fieldInfo *allFields = makeFieldInfo(table);
 struct slRef *partingFields = NULL;
 if (!findBestParting(table, allFields, &partingFields))
+    {
+    // Here is where we should output whole table... 
+    struct fieldedRow *row;
+    for (row = table->rowList; row != NULL; row = row->next)
+        {
+	struct tagStanza *stanza = tagStanzaNew(tagStorm, parent);
+	int i;
+	for (i=0; i<table->fieldCount; ++i)
+	    tagStanzaAdd(tagStorm, stanza, table->fields[i], row->row[i]);
+	}
     return;
+    }
 
 /* Position field cursors within partingFields */
 struct slRef *ref;
