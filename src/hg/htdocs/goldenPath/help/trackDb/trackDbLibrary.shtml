@@ -1078,7 +1078,7 @@
     <pre>   exonArrows off</pre>
 </DIV>
 
-<DIV class="exonNumbers"><span class="types genePred bed broadPeak"></span>
+<DIV class="exonNumbers"><span class="types genePred bed broadPeak psl"></span>
 <div class="format"><code>exonNumbers &lt;on/off&gt;</code></div>
     <P>On tracks that show
     exons or blocks within features, mouseover/hover shows exon and intron numbers. 
