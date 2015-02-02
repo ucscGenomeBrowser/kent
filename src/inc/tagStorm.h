@@ -67,8 +67,11 @@ char *tagStanzaVal(struct tagStanza *stanza, char *tag);
 /* Return value associated with tag in stanza or any of parent stanzas */
 
 struct hash *tagStormIndex(struct tagStorm *tagStorm, char *tag);
-/* Produce a hash of stanzas containing a tag (or whose parents contain tag
- * keyed by tag value */
+/* Produce a hash of stanzas containing a tag keyed by tag value */
+
+struct hash *tagStormUniqueIndex(struct tagStorm *tagStorm, char *tag);
+/* Produce a hash of stanzas containing a tag where tag is unique across
+ * stanzas */
 
 void tagStormUpdateTag(struct tagStorm *tagStorm, struct tagStanza *stanza, char *tag, char *val);
 /* Add tag to stanza in storm, replacing existing tag if any. If tag is added it's added to

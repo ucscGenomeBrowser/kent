@@ -215,7 +215,8 @@ while (stanza != NULL)
 return NULL;
 }
 
-static void rAddIndex(struct tagStanza *list, struct hash *hash, char *tag, char *parentVal)
+static void rAddIndex(struct tagStanza *list, struct hash *hash, char *tag, char *parentVal,
+    boolean unique)
 /* Add stanza to hash index if it has a value for tag, or if val is passed in. */
 {
 struct tagStanza *stanza;
@@ -225,18 +226,34 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     if (val == NULL)
 	val = parentVal;
     if (val != NULL)
+	{
+	if (unique)
+	    {
+	    struct tagStanza *oldStanza = hashFindVal(hash, val);
+	    if (oldStanza != NULL)
+	        errAbort("tag %s value %s not unique", tag, val);
+	    }
 	hashAdd(hash, val, stanza);
+	}
     if (stanza->children != NULL)
-        rAddIndex(stanza->children, hash, tag, val);
+        rAddIndex(stanza->children, hash, tag, val, unique);
     }
 }
 
 struct hash *tagStormIndex(struct tagStorm *tagStorm, char *tag)
-/* Produce a hash of stanzas containing a tag (or whose parents contain tag
- * keyed by tag value */
+/* Produce a hash of stanzas containing a tag keyed by tag value */
 {
 struct hash *hash = hashNew(0);
-rAddIndex(tagStorm->forest, hash, tag, NULL);
+rAddIndex(tagStorm->forest, hash, tag, NULL, FALSE);
+return hash;
+}
+
+struct hash *tagStormUniqueIndex(struct tagStorm *tagStorm, char *tag)
+/* Produce a hash of stanzas containing a tag where tag is unique across
+ * stanzas */
+{
+struct hash *hash = hashNew(0);
+rAddIndex(tagStorm->forest, hash, tag, NULL, TRUE);
 return hash;
 }
 
