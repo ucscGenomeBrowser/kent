@@ -364,7 +364,7 @@ void cdwSubmitDirOutput(struct cdwSubmitDir *el, FILE *f, char sep, char lastSep
 #define cdwSubmitDirCommaOut(el,f) cdwSubmitDirOutput(el,f,',',',');
 /* Print out cdwSubmitDir as a comma separated list including final comma. */
 
-#define CDWFILE_NUM_COLS 14
+#define CDWFILE_NUM_COLS 15
 
 extern char *cdwFileCommaSepFieldNames;
 
@@ -375,6 +375,7 @@ struct cdwFile
     unsigned id;	/* Autoincrementing file id */
     unsigned submitId;	/* Links to id in submit table */
     unsigned submitDirId;	/* Links to id in submitDir table */
+    unsigned userId;	/* Id in user table of file owner */
     char *submitFileName;	/* File name in submit relative to submit dir */
     char *cdwFileName;	/* File name in big data warehouse relative to cdw root dir */
     long long startUploadTime;	/* Time when upload started - 0 if not started */
@@ -443,7 +444,7 @@ void cdwFileOutput(struct cdwFile *el, FILE *f, char sep, char lastSep);
 #define cdwFileCommaOut(el,f) cdwFileOutput(el,f,',',',');
 /* Print out cdwFile as a comma separated list including final comma. */
 
-#define CDWSUBMIT_NUM_COLS 16
+#define CDWSUBMIT_NUM_COLS 17
 
 extern char *cdwSubmitCommaSepFieldNames;
 
@@ -456,7 +457,8 @@ struct cdwSubmit
     long long startUploadTime;	/* Time at start of submit */
     long long endUploadTime;	/* Time at end of upload - 0 if not finished */
     unsigned userId;	/* Connects to user table id field */
-    unsigned submitFileId;	/* Points to validated.txt file for submit. */
+    unsigned manifestFileId;	/* Points to metadata.txt file for submit. */
+    unsigned metaFileId;	/* Points to meta.txt file for submit */
     unsigned submitDirId;	/* Points to the submitDir */
     unsigned fileCount;	/* Number of files that will be in submit if it were complete. */
     unsigned oldFiles;	/* Number of files in submission that were already in warehouse. */

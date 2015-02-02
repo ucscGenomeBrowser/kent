@@ -80,6 +80,7 @@ CREATE TABLE cdwFile (
     id int unsigned auto_increment,	# Autoincrementing file id
     submitId int unsigned default 0,	# Links to id in submit table
     submitDirId int unsigned default 0,	# Links to id in submitDir table
+    userId int unsigned default 0,	# Id in user table of file owner
     submitFileName longblob,	# File name in submit relative to submit dir
     cdwFileName longblob,	# File name in big data warehouse relative to cdw root dir
     startUploadTime bigint default 0,	# Time when upload started - 0 if not started
@@ -95,6 +96,7 @@ CREATE TABLE cdwFile (
     PRIMARY KEY(id),
     INDEX(submitId),
     INDEX(submitDirId),
+    INDEX(userId),
     INDEX(submitFileName(64)),
     INDEX(cdwFileName(32)),
     INDEX(md5)
@@ -107,7 +109,8 @@ CREATE TABLE cdwSubmit (
     startUploadTime bigint default 0,	# Time at start of submit
     endUploadTime bigint default 0,	# Time at end of upload - 0 if not finished
     userId int unsigned default 0,	# Connects to user table id field
-    submitFileId int unsigned default 0,	# Points to validated.txt file for submit.
+    manifestFileId int unsigned default 0,	# Points to metadata.txt file for submit.
+    metaFileId int unsigned default 0,	# Points to meta.txt file for submit
     submitDirId int unsigned default 0,	# Points to the submitDir
     fileCount int unsigned default 0,	# Number of files that will be in submit if it were complete.
     oldFiles int unsigned default 0,	# Number of files in submission that were already in warehouse.
@@ -122,7 +125,8 @@ CREATE TABLE cdwSubmit (
     PRIMARY KEY(id),
     INDEX(url(32)),
     INDEX(userId),
-    INDEX(submitFileId),
+    INDEX(manifestFileId),
+    INDEX(metaFileId),
     INDEX(submitDirId)
 );
 
