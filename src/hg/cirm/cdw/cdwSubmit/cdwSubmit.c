@@ -916,6 +916,45 @@ else
     return s;
 }
 
+int storeSubmissionFile(struct sqlConnection *conn,
+    char *submitFileName, int submitId, int submitDirId, int userId)
+/* Save file to warehouse and make a record for it.  This is for tagless files,
+ * just the ones that make up the submission metadata. */
+{
+/* Calculate md5sum and see if we have it already. */
+char *md5 = md5HexForFile(submitFileName);
+int oldFileId = findFileGivenMd5AndSubmitDir(conn, md5, submitDirId);
+if (oldFileId != 0)
+    {
+    freeMem(md5);
+    return oldFileId;
+    }
+
+long long size = fileSize(submitFileName);
+long long updateTime = fileModTime(submitFileName);
+int fileId = makeNewEmptyFileRecord(conn, submitId, submitDirId, submitFileName, size);
+char cdwFile[PATH_LEN] = "", cdwPath[PATH_LEN];
+cdwMakeFileNameAndPath(fileId, submitFileName,  cdwFile, cdwPath);
+long long startUploadTime = cdwNow();
+copyFile(submitFileName, cdwPath);
+long long endUploadTime = cdwNow();
+
+char query[3*PATH_LEN];
+sqlSafef(query, sizeof(query), "update cdwFile set "
+		      "  submitId=%d, submitDirId=%d,"
+		      "  cdwFileName='%s', startUploadTime=%lld, endUploadTime=%lld,"
+		      "  md5='%s', updateTime=%lld where id=%d"
+       , submitId, submitDirId
+       , cdwPath, startUploadTime, endUploadTime
+       , md5, updateTime, fileId);
+uglyf("%s\n", query);
+sqlUpdate(conn, query);
+freeMem(md5);
+return fileId;
+}
+
+    
+
 void cdwSubmit(char *email, char *manifestFile, char *metaFile)
 /* cdwSubmit - Submit URL with validated.txt to warehouse. */
 {
@@ -959,6 +998,10 @@ int submitDirId = cdwGetSubmitDir(conn, hostId, submitDir);
 
 /* Create a submission record */
 int submitId = makeNewEmptySubmitRecord(conn, submitUrl, user->id);
+
+/* Put our manifest and metadata files */
+int manifestFileId= storeSubmissionFile(conn, manifestFile, submitId, submitDirId, user->id);
+int metaFileId= storeSubmissionFile(conn, metaFile, submitId, submitDirId, user->id);
 
 /* We'll make a loop through list figuring out which files are new and which are old.
  * We wrap errCatch block around these so that error message ends up in submission
@@ -1025,8 +1068,11 @@ if (errCatchStart(errCatch))
 
     /* Update submission record database with what we know now. */
     sqlSafef(query, sizeof(query), 
-	"update cdwSubmit set submitDirId=%d,oldFiles=%d,oldBytes=%lld,byteCount=%lld where id=%u", 
-	    submitDirId,oldCount, oldBytes, byteCount, submitId);
+	"update cdwSubmit set manifestFileId=%d,metaFileId=%d,submitDirId=%d,"
+	"oldFiles=%d,oldBytes=%lld,byteCount=%lld where id=%u", 
+	    manifestFileId, metaFileId,submitDirId,
+	    oldCount, oldBytes, byteCount, submitId);
+    uglyf("updating submission:\n%s\n", query);
     sqlUpdate(conn, query);
 
     /* Deal with old files. This may throw an error.  We do it before downloading new
