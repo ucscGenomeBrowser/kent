@@ -249,7 +249,7 @@ xrefQuery select ucscRetroInfo8.name, geneSymbol from %s where geneSymbol like '
 searchPriority 3.53
 
 track ucscRetroAli9
-shortLabel Retroposed Genes V9
+shortLabel RetroGenes V9
 longLabel Retroposed Genes V9, Including Pseudogenes
 group genes
 type psl
@@ -267,6 +267,7 @@ showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
 dataVersion Jan. 2015
+exonNumbers off
 
 searchName ucscRetroInfoRefSeq9
 searchTable ucscRetroAli9
