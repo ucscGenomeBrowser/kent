@@ -191,7 +191,6 @@ CREATE TABLE cdwValidFile (
     outputType varchar(255) default '',	# What output_type it is from manifest
     experiment varchar(255) default '',	# What experiment it's in from manifest
     replicate varchar(255) default '',	# What replicate it is from manifest.  Values 1,2,3... pooled, or ''
-    validKey varchar(255) default '',	# The valid_key tag from manifest
     enrichedIn varchar(255) default '',	# The enriched_in tag from manifest
     ucscDb varchar(255) default '',	# Something like hg19 or mm9
     itemCount bigint default 0,	# # of items in file: reads for fastqs, lines for beds, bases w/data for wig.

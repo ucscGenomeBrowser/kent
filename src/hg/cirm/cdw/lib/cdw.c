@@ -2038,7 +2038,7 @@ fputc(lastSep,f);
 }
 
 
-char *cdwValidFileCommaSepFieldNames = "id,licensePlate,fileId,format,outputType,experiment,replicate,validKey,enrichedIn,ucscDb,itemCount,basesInItems,sampleCount,basesInSample,sampleBed,mapRatio,sampleCoverage,depth,singleQaStatus,replicateQaStatus,part,pairedEnd,qaVersion,uniqueMapRatio";
+char *cdwValidFileCommaSepFieldNames = "id,licensePlate,fileId,format,outputType,experiment,replicate,enrichedIn,ucscDb,itemCount,basesInItems,sampleCount,basesInSample,sampleBed,mapRatio,sampleCoverage,depth,singleQaStatus,replicateQaStatus,part,pairedEnd,qaVersion,uniqueMapRatio";
 
 void cdwValidFileStaticLoad(char **row, struct cdwValidFile *ret)
 /* Load a row from cdwValidFile table into ret.  The contents of ret will
@@ -2052,23 +2052,22 @@ ret->format = row[3];
 ret->outputType = row[4];
 ret->experiment = row[5];
 ret->replicate = row[6];
-ret->validKey = row[7];
-ret->enrichedIn = row[8];
-ret->ucscDb = row[9];
-ret->itemCount = sqlLongLong(row[10]);
-ret->basesInItems = sqlLongLong(row[11]);
-ret->sampleCount = sqlLongLong(row[12]);
-ret->basesInSample = sqlLongLong(row[13]);
-ret->sampleBed = row[14];
-ret->mapRatio = sqlDouble(row[15]);
-ret->sampleCoverage = sqlDouble(row[16]);
-ret->depth = sqlDouble(row[17]);
-ret->singleQaStatus = sqlSigned(row[18]);
-ret->replicateQaStatus = sqlSigned(row[19]);
-ret->part = row[20];
-ret->pairedEnd = row[21];
-ret->qaVersion = sqlSigned(row[22]);
-ret->uniqueMapRatio = sqlDouble(row[23]);
+ret->enrichedIn = row[7];
+ret->ucscDb = row[8];
+ret->itemCount = sqlLongLong(row[9]);
+ret->basesInItems = sqlLongLong(row[10]);
+ret->sampleCount = sqlLongLong(row[11]);
+ret->basesInSample = sqlLongLong(row[12]);
+ret->sampleBed = row[13];
+ret->mapRatio = sqlDouble(row[14]);
+ret->sampleCoverage = sqlDouble(row[15]);
+ret->depth = sqlDouble(row[16]);
+ret->singleQaStatus = sqlSigned(row[17]);
+ret->replicateQaStatus = sqlSigned(row[18]);
+ret->part = row[19];
+ret->pairedEnd = row[20];
+ret->qaVersion = sqlSigned(row[21]);
+ret->uniqueMapRatio = sqlDouble(row[22]);
 }
 
 struct cdwValidFile *cdwValidFileLoadByQuery(struct sqlConnection *conn, char *query)
@@ -2101,8 +2100,8 @@ void cdwValidFileSaveToDb(struct sqlConnection *conn, struct cdwValidFile *el, c
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%lld,%lld,%lld,%lld,'%s',%g,%g,%g,%d,%d,'%s','%s',%d,%g)", 
-	tableName,  el->id,  el->licensePlate,  el->fileId,  el->format,  el->outputType,  el->experiment,  el->replicate,  el->validKey,  el->enrichedIn,  el->ucscDb,  el->itemCount,  el->basesInItems,  el->sampleCount,  el->basesInSample,  el->sampleBed,  el->mapRatio,  el->sampleCoverage,  el->depth,  el->singleQaStatus,  el->replicateQaStatus,  el->part,  el->pairedEnd,  el->qaVersion,  el->uniqueMapRatio);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s',%lld,%lld,%lld,%lld,'%s',%g,%g,%g,%d,%d,'%s','%s',%d,%g)", 
+	tableName,  el->id,  el->licensePlate,  el->fileId,  el->format,  el->outputType,  el->experiment,  el->replicate,  el->enrichedIn,  el->ucscDb,  el->itemCount,  el->basesInItems,  el->sampleCount,  el->basesInSample,  el->sampleBed,  el->mapRatio,  el->sampleCoverage,  el->depth,  el->singleQaStatus,  el->replicateQaStatus,  el->part,  el->pairedEnd,  el->qaVersion,  el->uniqueMapRatio);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -2121,23 +2120,22 @@ ret->format = cloneString(row[3]);
 ret->outputType = cloneString(row[4]);
 ret->experiment = cloneString(row[5]);
 ret->replicate = cloneString(row[6]);
-ret->validKey = cloneString(row[7]);
-ret->enrichedIn = cloneString(row[8]);
-ret->ucscDb = cloneString(row[9]);
-ret->itemCount = sqlLongLong(row[10]);
-ret->basesInItems = sqlLongLong(row[11]);
-ret->sampleCount = sqlLongLong(row[12]);
-ret->basesInSample = sqlLongLong(row[13]);
-ret->sampleBed = cloneString(row[14]);
-ret->mapRatio = sqlDouble(row[15]);
-ret->sampleCoverage = sqlDouble(row[16]);
-ret->depth = sqlDouble(row[17]);
-ret->singleQaStatus = sqlSigned(row[18]);
-ret->replicateQaStatus = sqlSigned(row[19]);
-ret->part = cloneString(row[20]);
-ret->pairedEnd = cloneString(row[21]);
-ret->qaVersion = sqlSigned(row[22]);
-ret->uniqueMapRatio = sqlDouble(row[23]);
+ret->enrichedIn = cloneString(row[7]);
+ret->ucscDb = cloneString(row[8]);
+ret->itemCount = sqlLongLong(row[9]);
+ret->basesInItems = sqlLongLong(row[10]);
+ret->sampleCount = sqlLongLong(row[11]);
+ret->basesInSample = sqlLongLong(row[12]);
+ret->sampleBed = cloneString(row[13]);
+ret->mapRatio = sqlDouble(row[14]);
+ret->sampleCoverage = sqlDouble(row[15]);
+ret->depth = sqlDouble(row[16]);
+ret->singleQaStatus = sqlSigned(row[17]);
+ret->replicateQaStatus = sqlSigned(row[18]);
+ret->part = cloneString(row[19]);
+ret->pairedEnd = cloneString(row[20]);
+ret->qaVersion = sqlSigned(row[21]);
+ret->uniqueMapRatio = sqlDouble(row[22]);
 return ret;
 }
 
@@ -2147,7 +2145,7 @@ struct cdwValidFile *cdwValidFileLoadAll(char *fileName)
 {
 struct cdwValidFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[24];
+char *row[23];
 
 while (lineFileRow(lf, row))
     {
@@ -2165,7 +2163,7 @@ struct cdwValidFile *cdwValidFileLoadAllByChar(char *fileName, char chopper)
 {
 struct cdwValidFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[24];
+char *row[23];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -2193,7 +2191,6 @@ ret->format = sqlStringComma(&s);
 ret->outputType = sqlStringComma(&s);
 ret->experiment = sqlStringComma(&s);
 ret->replicate = sqlStringComma(&s);
-ret->validKey = sqlStringComma(&s);
 ret->enrichedIn = sqlStringComma(&s);
 ret->ucscDb = sqlStringComma(&s);
 ret->itemCount = sqlLongLongComma(&s);
@@ -2225,7 +2222,6 @@ freeMem(el->format);
 freeMem(el->outputType);
 freeMem(el->experiment);
 freeMem(el->replicate);
-freeMem(el->validKey);
 freeMem(el->enrichedIn);
 freeMem(el->ucscDb);
 freeMem(el->sampleBed);
@@ -2272,10 +2268,6 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->replicate);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->validKey);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);

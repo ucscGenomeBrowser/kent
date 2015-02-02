@@ -155,7 +155,6 @@ table cdwValidFile
     string outputType index[16]; "What output_type it is from manifest"
     string experiment index[16]; "What experiment it's in from manifest"
     string replicate;  "What replicate it is from manifest.  Values 1,2,3... pooled, or ''"
-    string validKey;  "The valid_key tag from manifest"
     string enrichedIn; "The enriched_in tag from manifest"
     string ucscDb;    "Something like hg19 or mm9"
 

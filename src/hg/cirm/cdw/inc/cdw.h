@@ -813,7 +813,7 @@ void cdwExperimentOutput(struct cdwExperiment *el, FILE *f, char sep, char lastS
 #define cdwExperimentCommaOut(el,f) cdwExperimentOutput(el,f,',',',');
 /* Print out cdwExperiment as a comma separated list including final comma. */
 
-#define CDWVALIDFILE_NUM_COLS 24
+#define CDWVALIDFILE_NUM_COLS 23
 
 extern char *cdwValidFileCommaSepFieldNames;
 
@@ -828,7 +828,6 @@ struct cdwValidFile
     char *outputType;	/* What output_type it is from manifest */
     char *experiment;	/* What experiment it's in from manifest */
     char *replicate;	/* What replicate it is from manifest.  Values 1,2,3... pooled, or '' */
-    char *validKey;	/* The valid_key tag from manifest */
     char *enrichedIn;	/* The enriched_in tag from manifest */
     char *ucscDb;	/* Something like hg19 or mm9 */
     long long itemCount;	/* # of items in file: reads for fastqs, lines for beds, bases w/data for wig. */
