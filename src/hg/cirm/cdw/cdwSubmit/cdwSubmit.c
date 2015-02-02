@@ -1041,6 +1041,7 @@ if (errCatchStart(errCatch))
 
     /* Partition list into old and new files */
     struct submitFileRow *next;
+    int fileCount = 0;
     for (sfr = sfrList; sfr != NULL; sfr = next)
 	{
 	next = sfr->next;
@@ -1062,6 +1063,7 @@ if (errCatchStart(errCatch))
 	    }
 	sfrList = next;
 	byteCount += file->size;
+	fileCount += 1;
 	}
     slReverse(&newList);
     slReverse(&oldList);
@@ -1069,9 +1071,9 @@ if (errCatchStart(errCatch))
     /* Update submission record database with what we know now. */
     sqlSafef(query, sizeof(query), 
 	"update cdwSubmit set manifestFileId=%d,metaFileId=%d,submitDirId=%d,"
-	"oldFiles=%d,oldBytes=%lld,byteCount=%lld where id=%u", 
+	"fileCount=%d,oldFiles=%d,oldBytes=%lld,byteCount=%lld where id=%u", 
 	    manifestFileId, metaFileId,submitDirId,
-	    oldCount, oldBytes, byteCount, submitId);
+	    fileCount,oldCount, oldBytes, byteCount, submitId);
     uglyf("updating submission:\n%s\n", query);
     sqlUpdate(conn, query);
 
