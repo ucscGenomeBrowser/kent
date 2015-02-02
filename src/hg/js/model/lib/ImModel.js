@@ -77,41 +77,26 @@ var ImModel = (function() {
             // arguments path and optional data.
             if (_.isString(partialPath) || _.isNumber(partialPath)) {
                 partialPath = [partialPath];
+            } else {
+                partialPath = _.clone(partialPath);
             }
-            // Follow partialPath as far as it already goes in this.uiHandlers;
-            // add nodes to this.uiHandlers if part or all of partialPath isn't there yet.
-            // Each node of uiHandlers is an object with an array of handlers and,
-            // if not a leaf node, an array or object of child nodes.
-            // The last component of path becomes an index into the handlers array
-            // of the next-to-last component's node.
-            var node = this.uiHandlers, done = false;
+            // Follow partialPath through this.uiHandlers, adding nodes if necessary.
+            // The last member of partialPath is an index into a node.handler object that
+            // contains function(s) corresponding to partialPath.
+            // Preceding members of partialPath are indexes into node.children objects that
+            // contain child nodes.
+            var node = this.uiHandlers;
+            var lastIndex = partialPath.pop();
             _.forEach(partialPath, function(index, depth) {
-                var nextIndex = partialPath[depth+1];
+                // Descend to child, creating the child first if necessary.
                 if (! node.children[index]) {
-                    // children[index] doesn't yet exist; look at next element in partialPath,
-                    // if any, to determine whether children[index].children should be an array,
-                    // object, or if handler should be added to node.handlers instead.
-                    if (nextIndex) {
-                        node.children[index] = { handlers: {}, children: {} };
-                    } else {
-                        // last index in partialPath -- assign handler:
-                        node.handlers[index] = node.handlers[index] || [];
-                        node.handlers[index].push(handler);
-                        done = true;
-                    }
-                } else if (! nextIndex) {
-                    // found node for last index in partialPath -- assign handler to current node:
-                    node.handlers[index] = node.handlers[index] || [];
-                    node.handlers[index].push(handler);
-                    done = true;
+                    node.children[index] = { handlers: {}, children: {} };
                 }
-                // Now node.children[index] definitely exists; descend to it.
                 node = node.children[index];
-            }, this);
-            if (! done) {
-                this.error('registerUiHandler: error in tree logic since partialPath was neither '+
-                           'found nor created:', partialPath, this.uiHandlers);
-            }
+            });
+            // Install handler in node.
+            node.handlers[lastIndex] = node.handlers[lastIndex] || [];
+            node.handlers[lastIndex].push(handler);
         },
 
         mergeServerResponse: function(jsonData) {
@@ -206,25 +191,26 @@ var ImModel = (function() {
             // that help the handler function figure out what changed but don't point to any
             // handler.  Some data may or may not be given; pass whatever we get to the handler.
             console.log('ImModel.update:', path, data);
+            // Follow path through uiHandlers and collect all handlers along the path:
+            var node = this.uiHandlers;
+            var handlers = [];
+            _.forEach(path, function(index, depth) {
+                handlers = handlers.concat(node.handlers[index] || []);
+                if (node.children[index]) {
+                    node = node.children[index];
+                } else {
+                    // path continues past contents of uiHandlers -- we're done
+                    return false; // break out of _.forEach
+                }
+            });
+            // Advance to the next immutable state by calling all handlers with a temporarily
+            // mutable copy of the current state:
             this.bumpUiState(function(mutState) {
-                this.mutState = mutState;
-                var node = this.uiHandlers;
-                _.forEach(path, function(index, depth) {
-                    var nextIndex = path[depth+1];
-                    var handlers = node.handlers[index];
-                    if (handlers) {
-                        _.forEach(handlers, function(handler) {
-                            handler.call(this, path, data);
-                        }, this);
-                    }
-                    if (node.children[index]) {
-                        node = node.children[index];
-                    } else if (nextIndex) {
-                        // path continues past contents of uiHandlers -- we're done
-                        return false; // break out of _.forEach
-                    }
+                this.mutState = mutState;  //#*** UGLY FIXME
+                _.forEach(handlers, function(handler) {
+                    handler.call(this, path, data);
                 }, this);
-                this.mutState = null;
+                this.mutState = null;      //#*** UGLY FIXME
             });
             this.render();
         },
