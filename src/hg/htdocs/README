@@ -1,0 +1,14 @@
+
+##############################
+#
+# REMEMBER: HTDOCSEXTRA 
+#
+# htdocsExtra is a separate repository that contains large files that we
+# do not wish to burden the main kent repo with (kent/src/hg/htdocs, this directory).
+# You can check it out and make there too. 
+# It also rsyncs its files to the web servers htdocs directory.
+#
+# If you think there is a file missing, see if it is under the htdocsExtra repo.
+#
+##############################
+
