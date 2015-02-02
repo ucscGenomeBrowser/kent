@@ -114,7 +114,7 @@ for (ef = efList; ef != NULL; ef = ef->next)
 	fprintf(maniF, "\n");
 
 	/* Print out remaining fields in validated.txt */
-	fprintf(valiF, "\t%s\t%lld\t%lld\t%s\n", ef->md5, ef->size, ef->updateTime, vf->validKey);
+	fprintf(valiF, "\t%s\t%lld\t%lld\n", ef->md5, ef->size, ef->updateTime);
 	}
     }
 carefulClose(&maniF);
