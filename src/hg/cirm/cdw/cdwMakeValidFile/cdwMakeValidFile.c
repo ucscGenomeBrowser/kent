@@ -270,7 +270,6 @@ fprintf(f, "vf->format = %s\n", vf->format);
 fprintf(f, "vf->outputType = %s\n", vf->outputType);
 fprintf(f, "vf->experiment = %s\n", vf->experiment);
 fprintf(f, "vf->replicate = %s\n", vf->replicate);
-fprintf(f, "vf->validKey = %s\n", vf->validKey);
 fprintf(f, "vf->enrichedIn = %s\n", vf->enrichedIn);
 fprintf(f, "vf->ucscDb = %s\n", vf->ucscDb);
 fprintf(f, "vf->itemCount = %lld\n", vf->itemCount);
@@ -465,15 +464,8 @@ vf->fileId = ef->id;
 cdwValidFileFieldsFromTags(vf, tags);
 vf->sampleBed = "";
 
-if (vf->format && vf->validKey)	// We only can validate if we have something for format 
+if (vf->format)	// We only can validate if we have something for format 
     {
-    uglyf("Validating %s\n", vf->format);
-
-    /* Check validation key */
-    char *validKey = cdwCalcValidationKey(ef->md5, ef->size);
-    if (!sameString(validKey, vf->validKey))
-        errAbort("valid_key does not check.  Make sure to use validateManifest.");
-
     /* Look up assembly. */
     struct cdwAssembly *assembly = NULL;
     if (!isEmpty(vf->ucscDb) && !sameString(vf->ucscDb, "unknown"))
