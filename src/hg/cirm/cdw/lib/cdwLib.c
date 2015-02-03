@@ -1136,7 +1136,7 @@ void cdwValidFileFieldsFromTags(struct cdwValidFile *vf, struct cgiParsedVars *t
 {
 vf->format = cloneString(hashFindVal(tags->hash, "format"));
 vf->outputType = cloneString(findTagOrEmpty(tags, "output_type"));
-vf->experiment = cloneString(findTagOrEmpty(tags, "experiment"));
+vf->experiment = cloneString(findTagOrEmpty(tags, "meta"));
 vf->replicate = cloneString(findTagOrEmpty(tags, "replicate"));
 vf->enrichedIn = cloneString(findTagOrEmpty(tags, "enriched_in"));
 vf->ucscDb = cloneString(findTagOrEmpty(tags, "ucsc_db"));
@@ -1481,7 +1481,7 @@ cdwReserveTempFile(sampleBed);
 
 /* Make system call to make ra and bed, and then another system call to zip bed.*/
 char command[3*PATH_LEN];
-safef(command, sizeof(command), "cdwBamStats -sampleBed=%s -sampleBedSize=%d %s %s",
+safef(command, sizeof(command), "edwBamStats -sampleBed=%s -sampleBedSize=%d %s %s",
     sampleBed, cdwSampleTargetSize, path, statsFile);
 mustSystem(command);
 safef(command, sizeof(command), "gzip %s", sampleBed);
