@@ -6,19 +6,19 @@
  *         target H3K4Me3
  *         antibody abCamAntiH3k4me3
  *       
- *            fileName hg19/chipSeq/helaH3k4me3.narrowPeak.bigBed
+ *            file hg19/chipSeq/helaH3k4me3.narrowPeak.bigBed
  *            format narrowPeak
  *
- *            fileName hg19/chipSeq/helaH3K4me3.broadPeak.bigBed
+ *            file hg19/chipSeq/helaH3K4me3.broadPeak.bigBed
  *            formet broadPeak
  *
  *         target CTCF
  *         antibody abCamAntiCtcf
  *
- *            fileName hg19/chipSeq/helaCTCF.narrowPeak.bigBed
+ *            file hg19/chipSeq/helaCTCF.narrowPeak.bigBed
  *            format narrowPeak
  *
- *            fileName hg19/chipSeq/helaCTCF.broadPeak.bigBed
+ *            file hg19/chipSeq/helaCTCF.broadPeak.bigBed
  *            formet broadPeak
  *
  * The file is interpreted so that lower level stanzas inherit tags from higher level ones.
@@ -471,3 +471,32 @@ pair->val = lmCloneString(lm, val);
 slAddTail(&stanza->tagList, pair);
 }
 
+char *tagFindLocalVal(struct tagStanza *stanza, char *name)
+/* Return value of tag of given name within stanza, or NULL * if tag does not exist. 
+ * This does *not* look at parent tags. */
+{
+return slPairFindVal(stanza->tagList, name);
+}
+
+char *tagFindVal(struct tagStanza *stanza, char *name)
+/* Return value of tag of given name within stanza or any of it's parents. */
+{
+struct tagStanza *ancestor;
+for (ancestor = stanza; ancestor != NULL; ancestor = ancestor->next)
+    {
+    char *val = slPairFindVal(ancestor->tagList, name);
+    if (val != NULL)
+        return val;
+    }
+return NULL;
+}
+
+char *tagMustFindVal(struct tagStanza *stanza, char *name)
+/* Return value of tag of given name within stanza or any of it's parents. Abort if
+ * not found. */
+{
+char *val = tagFindVal(stanza, name);
+if (val == NULL)
+    errAbort("Can't find tag named %s in stanza", name);
+return val;
+}
