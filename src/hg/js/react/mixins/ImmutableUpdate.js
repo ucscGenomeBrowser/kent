@@ -1,9 +1,8 @@
-var pt = React.PropTypes;
-
 var ImmutableUpdate = {
+
     // This is actually not a React component but rather a mixin for React components that
     // receive immutable props.  Immutable objects, even deeply nested structures, can be
-    // compared using === to detect changes.
+    // compared using a top-level === to detect changes.
 
     shouldComponentUpdate: function(nextProps, nextState) {
         // If we can see a change in props or state, then yes we should re-render.
@@ -23,7 +22,7 @@ var ImmutableUpdate = {
             var nextVal = nextProps[key];
             var thisIsImmutable = thisVal instanceof Immutable.Iterable;
             var nextIsImmutable = nextVal instanceof Immutable.Iterable;
-            if (thisIsImmutable != nextIsImmutable &&
+            if (thisIsImmutable !== nextIsImmutable &&
                 !_.isNull(thisVal) && !_.isUndefined(thisVal) &&
                 !_.isNull(nextVal) && !_.isUndefined(nextVal)) {
                 console.warn('ImmutableUpdate.shouldComponentUpdate: inconsistent use of ' +
@@ -41,9 +40,10 @@ var ImmutableUpdate = {
                     return false; // to break out of _.forEach
                 }
             } else if (! _.isEqual(thisVal, nextVal)) {
-                if (this.debug)
+                if (this.debug) {
                     console.log('ImmutableUpdate: mutable prop', key, 'changed from',
                                 thisVal, 'to', nextVal);
+                }
                 foundChange = true;
                 return false; // to break out of _.forEach
             }
@@ -54,9 +54,10 @@ var ImmutableUpdate = {
         // If this app is using state, then a deeper comparison is required for nested objects.
         stateKeys.forEach(function(key) {
             if (! _.isEqual(thisState[key], nextState[key])) {
-                if (this.debug)
+                if (this.debug) {
                     console.log('ImmutableUpdate: state', key, 'changed from', thisState[key],
                                 'to', nextState[key]);
+                }
                 foundChange = true;
                 return false; // to break out of _.forEach
             }            
@@ -66,3 +67,5 @@ var ImmutableUpdate = {
 
 };
 
+// Without this, jshint complains that ImmutableUpdate is not used.  Module system would help.
+ImmutableUpdate = ImmutableUpdate;

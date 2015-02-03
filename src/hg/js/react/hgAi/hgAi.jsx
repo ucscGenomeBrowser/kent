@@ -1,4 +1,7 @@
 /** @jsx React.DOM */
+/* global ImmutableUpdate, PathUpdate, CheckboxLabel, CladeOrgDb, Icon, LabeledSelect */
+/* global LoadingImage, Modal, PositionSearch, Section, SetClearButtons, Sortable, TextInput */
+
 var pt = React.PropTypes;
 
 // AnnoGrator interface.
@@ -31,12 +34,13 @@ var RegionOrGenome = React.createClass({
         var props = this.props;
         var posInfo = props.positionInfo;
         var positionInput = null;
-        if (posInfo.get('hgai_range') !== 'genome')
+        if (posInfo.get('hgai_range') !== 'genome') {
             positionInput = <PositionSearch positionInfo={posInfo}
                                             className='sectionItem'
                                             db={props.db}
                                             path={props.path} update={props.update}
                             />;
+        }
         return (
             <div className='sectionRow'>
               <LabeledSelect label='region to annotate'
@@ -72,8 +76,9 @@ var GroupTrackTable = React.createClass({
         var trackTables = props.trackDbInfo.get('trackTables');
         var trackOptions = groupTracks.get(group);
         var tableNames = trackTables.get(track);
-        if (! tableNames)
+        if (! tableNames) {
             tableNames = trackTables.get(trackOptions.getIn([0, 'value']));
+        }
         var tableOptions;
         if (tableNames) {
             tableOptions = tableNames.map(function(name) {
@@ -361,10 +366,6 @@ var AppComponent = React.createClass({
         var db = this.props.appState.getIn(['cladeOrgDb', 'db']);
         var schemaLink = makeSchemaLink(db, group, track, table);
 
-        var onMoreOptions = function (ev) {
-            this.props.update(this.props.path.concat(['dataSources', i, 'moreOptions']));
-        }.bind(this);
-
         return (
             <div key={trackPathKey} className='dataSourceSubsection'>
                 <div className='sortHandle'>
@@ -383,7 +384,6 @@ var AppComponent = React.createClass({
                 </div>
             </div>
         );
-        //                <input type='button' value='More options...' onClick={onMoreOptions} />
     },
 
     renderDataSources: function(dataSources) {
@@ -472,3 +472,6 @@ var AppComponent = React.createClass({
     }
 
 });
+
+// Without this, jshint complains that AppComponent is not used.  Module system would help.
+AppComponent = AppComponent;

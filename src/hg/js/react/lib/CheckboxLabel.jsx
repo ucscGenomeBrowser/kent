@@ -1,4 +1,5 @@
 /** @jsx React.DOM */
+/* global ImmutableUpdate, PathUpdate */
 var pt = React.PropTypes;
 
 var CheckboxLabel = React.createClass({
@@ -37,3 +38,6 @@ var CheckboxLabel = React.createClass({
         );
       }
 });
+
+// Without this, jshint complains that CheckboxLabel is not used.  Module system would help.
+CheckboxLabel = CheckboxLabel;

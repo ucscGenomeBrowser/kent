@@ -1,4 +1,4 @@
-var pt = React.PropTypes;
+/* global ImmutableUpdate, PathUpdate */
 
 var SetClearButtons = React.createClass({
     // Return a div with buttons labeled "Set all" and "Clear all"; when clicked,
@@ -25,3 +25,6 @@ var SetClearButtons = React.createClass({
     }
 
 });
+
+// Without this, jshint complains that SetClearButtons is not used.  Module system would help.
+SetClearButtons = SetClearButtons;

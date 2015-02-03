@@ -1,36 +1,36 @@
+/* global AppComponent, ImModel, cart */
+
 var HgChooseDbModel = ImModel.extend({
 
-    popularSpeciesClick: function(path) {
+    popularSpeciesClick: function(mutState, path) {
         // User clicked on a popular species button; show db menu for that species.
         var clickedSpecies = path.pop();
         // TODO: make server request here and move the following to a handleCartVar.
-        var popularSpecies = this.mutState.get('popularSpecies');
+        var popularSpecies = mutState.get('popularSpecies');
         var clickedSpeciesData = popularSpecies.find(function(popSpecies) {
             return (popSpecies.get('genome') === clickedSpecies);
         });
-        this.mutState.set('dbMenuData', clickedSpeciesData);
+        mutState.set('dbMenuData', clickedSpeciesData);
     },
 
-    searchDone: function(path, uiItem) {
+    searchDone: function(mutState, path, uiItem) {
         // Use uiItem object (from jqueryui autocomplete data) to update state & get new menu
-        this.mutState.set('searchTerm', uiItem.value);
+        mutState.set('searchTerm', uiItem.value);
         this.cartDo({ getDbMenu: uiItem });
     },
 
-    changeDb: function(path, newDb) {
-        this.mutState.setIn(['dbMenuData', 'db'], newDb);
+    changeDb: function(mutState, path, newDb) {
+        mutState.setIn(['dbMenuData', 'db'], newDb);
     },
 
-    goToHgTracks: function() {
+    goToHgTracks: function(mutState) {
         // Update the invisible form with the selected db and submit it (to hgTracks).
-        $('input[name="db"]').val(this.mutState.getIn(['dbMenuData', 'db']));
+        $('input[name="db"]').val(mutState.getIn(['dbMenuData', 'db']));
         $('#mainForm')[0].submit();
     },
 
     initialize: function() {
-        // Register handlers for cart info and ui events:
-//        this.registerCartVarHandler(['hgai_querySpec', 'hgai_range', 'tableFields', 'trackDbInfo'],
-//                                    this.handleCartVar);
+        // Register handlers for ui events (no cart responses yet):
         this.registerUiHandler(['popular'], this.popularSpeciesClick);
         this.registerUiHandler(['searchDone'], this.searchDone);
         this.registerUiHandler(['db'], this.changeDb);

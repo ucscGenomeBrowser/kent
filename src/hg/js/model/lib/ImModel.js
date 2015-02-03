@@ -1,3 +1,5 @@
+/* global backboneExtend, cart */
+
 var ImModel = (function() {
     // A base class for an app-specific subclass that manages immutable UI
     // state, communication with the CGI/server, and UI events.
@@ -53,7 +55,7 @@ var ImModel = (function() {
         registerCartVarHandler: function(cartVars, handler) {
             // Associate handler with each name in cartVars so that when the server sends
             // a response including that name, handler will be invoked with this and 
-            // arguments (cartVar, newValue).
+            // arguments mutState (mutable copy of state), cartVar, and newValue.
             if (_.isString(cartVars)) {
                 cartVars = [cartVars];
             }
@@ -74,7 +76,7 @@ var ImModel = (function() {
         registerUiHandler: function(partialPath, handler) {
             // Associate handler with partialPath so that when the UI sends an event whose
             // path begins with partialPath, handler will be invoked with this and
-            // arguments path and optional data.
+            // arguments mutState (mutable copy of state), path, and optional data.
             if (_.isString(partialPath) || _.isNumber(partialPath)) {
                 partialPath = [partialPath];
             } else {
@@ -87,7 +89,7 @@ var ImModel = (function() {
             // contain child nodes.
             var node = this.uiHandlers;
             var lastIndex = partialPath.pop();
-            _.forEach(partialPath, function(index, depth) {
+            _.forEach(partialPath, function(index) {
                 // Descend to child, creating the child first if necessary.
                 if (! node.children[index]) {
                     node.children[index] = { handlers: {}, children: {} };
@@ -99,20 +101,20 @@ var ImModel = (function() {
             node.handlers[lastIndex].push(handler);
         },
 
-        mergeServerResponse: function(jsonData) {
+        mergeServerResponse: function(mutState, jsonData) {
             // For each object in jsonData, if it has special handler(s) associated with it,
             // invoke the handler(s); otherwise, just put it in the top level of mutState.
             _.forEach(jsonData, function(newValue, key) {
                 var handlers = this.cartJsonHandlers[key];
                 if (handlers) {
                     handlers.forEach(function(handler) {
-                        handler.call(this, key, newValue);
+                        handler.call(this, mutState, key, newValue);
                     }, this);
                 } else if (key === 'error') {
                     // Default, can be overridden of course
                     this.error('error message from CGI:', newValue);
                 } else {
-                    this.mutState.set(key, Immutable.fromJS(newValue));
+                    mutState.set(key, Immutable.fromJS(newValue));
                 }
             }, this);
         },
@@ -122,14 +124,12 @@ var ImModel = (function() {
             console.log('from server:', jsonData);
             // No plan to support undo/redo for server updates, so just change this.state in place:
             this.state = this.state.withMutations(function(mutState) {
-                this.mutState = mutState;
                 // Update state with data from server:
-                this.mergeServerResponse(jsonData);
+                this.mergeServerResponse(mutState, jsonData);
                 // Call validation/cleanup handler(s) if any:
                 _.forEach(this.cartValidateHandlers, function(handler) {
-                    handler.call(this);
+                    handler.call(this, mutState);
                 }, this);
-                this.mutState = null;
             }.bind(this));
             this.render();
         },
@@ -194,7 +194,7 @@ var ImModel = (function() {
             // Follow path through uiHandlers and collect all handlers along the path:
             var node = this.uiHandlers;
             var handlers = [];
-            _.forEach(path, function(index, depth) {
+            _.forEach(path, function(index) {
                 handlers = handlers.concat(node.handlers[index] || []);
                 if (node.children[index]) {
                     node = node.children[index];
@@ -206,11 +206,9 @@ var ImModel = (function() {
             // Advance to the next immutable state by calling all handlers with a temporarily
             // mutable copy of the current state:
             this.bumpUiState(function(mutState) {
-                this.mutState = mutState;  //#*** UGLY FIXME
                 _.forEach(handlers, function(handler) {
-                    handler.call(this, path, data);
+                    handler.call(this, mutState, path, data);
                 }, this);
-                this.mutState = null;      //#*** UGLY FIXME
             });
             this.render();
         },
@@ -232,10 +230,10 @@ var ImModel = (function() {
             this.cartSend({cgiVar: setting});
         },
 
-        changeCartVar: function(path, newValue) {
+        changeCartVar: function(mutState, path, newValue) {
             // Change state's [path][cartVar] to newValue (if they differ), tell the server about it,
             // and re-render.
-            this.mutState.setIn(path, newValue);
+            mutState.setIn(path, newValue);
             var cartVar = path.pop();
             this.cartSet(cartVar, newValue);
             this.render();

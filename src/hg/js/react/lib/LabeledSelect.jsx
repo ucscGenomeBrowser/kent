@@ -1,4 +1,5 @@
 /** @jsx React.DOM */
+/* global ImmutableUpdate, PathUpdate */
 var pt = React.PropTypes;
 
 var LabeledSelect = React.createClass({
@@ -26,17 +27,22 @@ var LabeledSelect = React.createClass({
 
     render: function() {
         var opts = null;
-        if (this.props.options)
+        if (this.props.options) {
             opts = this.props.options.map(this.optionFromValueLabel).toJS();
+        }
         return (
             <div className={this.props.className}>
               <div>
                 {this.props.label}
               </div>
-              <select className='groupMenu' value={this.props.selected} onChange={this.onChange}>
+              <select className='groupMenu' value={this.props.selected}
+                      onChange={this.onChange}>
 	        {opts}
               </select>
             </div>
         );
     }
 });
+
+// Without this, jshint complains that LabeledSelect is not used.  Module system would help.
+LabeledSelect = LabeledSelect;

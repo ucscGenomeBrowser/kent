@@ -1,6 +1,7 @@
 include ../../../../inc/common.mk
-include ../../install.mk
 
+JS_DIR=../..
 JS_FILES= ImModel.js cart.js CladeOrgDbMixin.js PositionSearchMixin.js
 
-include ../../simple.mk
+include ${JS_DIR}/install.mk
+include ${JS_DIR}/simple.mk

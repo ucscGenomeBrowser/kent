@@ -1,4 +1,5 @@
 /** @jsx React.DOM */
+/* global Icon, PathUpdate */
 var pt = React.PropTypes;
 
 function getScrollHeight() {
@@ -6,7 +7,8 @@ function getScrollHeight() {
     // FIXME: This belongs in a regular .js lib file.
     var supportPageOffset = window.pageXOffset !== undefined;
     var isCSS1Compat = ((document.compatMode || "") === "CSS1Compat");
-    return supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop;
+    return supportPageOffset ? window.pageYOffset :
+           isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop;
 }
 
 var Modal = React.createClass({
@@ -37,3 +39,6 @@ var Modal = React.createClass({
         );
     }
 });
+
+// Without this, jshint complains that Modal is not used.  Module system would help.
+Modal = Modal;

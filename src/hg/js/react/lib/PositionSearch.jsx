@@ -1,5 +1,8 @@
 /** @jsx React.DOM */
+/* global ImmutableUpdate, PathUpdate, Icon, Modal, TextInput */
 var pt = React.PropTypes;
+
+var PositionPopup = null;  // subcomponent, defined below
 
 var PositionSearch = React.createClass({
     // Text input for position or search term, optionally with autocomplete if
@@ -54,7 +57,7 @@ var PositionSearch = React.createClass({
 	};
     },
 
-    autoCompleteMenuOpen: function(event, ui) {
+    autoCompleteMenuOpen: function() {
 	// This is an 'open' event callback for autocomplete to let us know when the
 	// menu showing completions is opened.
 	// See http://api.jqueryui.com/autocomplete/#event-open
@@ -66,10 +69,11 @@ var PositionSearch = React.createClass({
             var maxHeight = $(window).height() - pos - 30;
             var auto = $('.ui-autocomplete');
             var curHeight = $(auto).children().length * 21;
-            if (curHeight > maxHeight)
+            if (curHeight > maxHeight) {
                 $(auto).css({maxHeight: maxHeight+'px', overflow:'scroll', zIndex: 12});
-            else
+            } else {
                 $(auto).css({maxHeight: 'none', overflow:'hidden', zIndex: 12});
+            }
         }
     },
 
@@ -156,7 +160,7 @@ var PositionSearch = React.createClass({
 
 }); // PositionSearch
 
-var PositionPopup = React.createClass({
+PositionPopup = React.createClass({
     // Helper component: when there are multiple matches from position/search,
     // display them in a popup box with links for the user to choose a position.
 
@@ -217,3 +221,6 @@ var PositionPopup = React.createClass({
     }
 
 }); // PositionPopup
+
+// Without this, jshint complains that PositionSearch is not used.  Module system would help.
+PositionSearch = PositionSearch;

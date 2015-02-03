@@ -1,5 +1,6 @@
 include ../../../../inc/common.mk
-include ../../install.mk
+
+JS_DIR=../..
 
 # The original JSX source files
 JSX_FILES= CheckboxLabel.jsx CladeOrgDb.jsx Icon.jsx LabeledSelect.jsx LoadingImage.jsx \
@@ -9,5 +10,6 @@ JSX_FILES= CheckboxLabel.jsx CladeOrgDb.jsx Icon.jsx LabeledSelect.jsx LoadingIm
 # The final product after compiling and bundling
 BUNDLE_FILE=reactLibBundle.js
 
+include ${JS_DIR}/install.mk
 include ../react.mk
 

@@ -51,7 +51,7 @@ var cart = (function() {
         return url;
     }
 
-    function defaultErrorCallback(jqXHR, textStatus, errorThrown) {
+    function defaultErrorCallback(jqXHR, textStatus) {
         console.log('Request failed: ', arguments);
         alert('Request failed: ' + textStatus);
     }
@@ -71,3 +71,6 @@ var cart = (function() {
         }
     };
 })();
+
+// Without this, jshint complains that cart is not used.  Module system would help.
+cart = cart;
