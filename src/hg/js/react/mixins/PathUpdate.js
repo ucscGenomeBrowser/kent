@@ -1,6 +1,10 @@
 var pt = React.PropTypes;
 
+/* jshint unused:false */
+// Without the above setting, jshint complains that PathUpdate is not used.  Module system would help.
+
 var PathUpdate = {
+
     // This is a mixin that requires propTypes path and update for a system in which
     // there is one model with one update function for handling any UI event.
     // The path is a list of successive indices into the model's state and/or keywords

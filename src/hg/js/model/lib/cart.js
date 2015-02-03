@@ -1,6 +1,11 @@
 // Send requests to a CGI that returns JSON responses
 
+/* jshint unused:false */
+// Without the above setting, jshint complains that cart is not used.  Module system would help.
+
 var cart = (function() {
+
+/* jshint unused:true */
 
     'use strict';
 
@@ -51,7 +56,7 @@ var cart = (function() {
         return url;
     }
 
-    function defaultErrorCallback(jqXHR, textStatus, errorThrown) {
+    function defaultErrorCallback(jqXHR, textStatus) {
         console.log('Request failed: ', arguments);
         alert('Request failed: ' + textStatus);
     }

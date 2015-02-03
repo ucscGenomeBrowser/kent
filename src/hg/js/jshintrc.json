@@ -1,0 +1,16 @@
+{
+    "camelcase": true,
+    "curly": true,
+    "eqeqeq": true,
+    "freeze": true,
+    "funcscope": true,
+    "immed": true,
+    "indent": 4,
+    "latedef": "nofunc",
+    "maxlen": 120,
+    "notypeof": true,
+    "predef": ["_", "$", "Immutable", "React",
+               "alert", "console", "document", "window"],
+    "undef": true,
+    "unused": true
+}
