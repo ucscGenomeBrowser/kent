@@ -35,8 +35,8 @@ struct paraMd5
     char *md5;	    /* Md5sum */
     };
 
-void doPowerCalc(void *item, void *context)
-/* This routine does the actual work. */
+void doOneMd5(void *item, void *context)
+/* This routine does the actual work on each paraMd5 item. */
 {
 struct paraMd5 *p = item; // Convert item to known type
 p->md5 = md5HexForFile(p->fileName);
@@ -55,7 +55,7 @@ for (i=0; i<fileCount; ++i)
     slAddHead(&list, el);
     }
 slReverse(&list);
-pthreadDoList(threads, list, doPowerCalc, NULL);
+pthreadDoList(threads, list, doOneMd5, NULL);
 for (el = list; el != NULL; el = el->next)
     {
     printf("%s  %s\n", el->md5, el->fileName);
