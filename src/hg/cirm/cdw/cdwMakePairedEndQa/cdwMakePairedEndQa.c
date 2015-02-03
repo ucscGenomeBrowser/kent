@@ -238,7 +238,7 @@ mustSystem(command);
 /* Make ra file with pairing statistics */
 char *tmpRa = cloneString(rTempName(cdwTempDir(), "cdwPairSample", ".ra"));
 safef(command, sizeof(command), 
-    "cdwSamPairedEndStats -maxInsert=%d %s %s", maxInsert, tmpSam, tmpRa);
+    "edwSamPairedEndStats -maxInsert=%d %s %s", maxInsert, tmpSam, tmpRa);
 mustSystem(command);
 
 /* Read RA file into variables. */
