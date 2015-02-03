@@ -1,4 +1,5 @@
 /** @jsx React.DOM */
+/* global ImmutableUpdate, PathUpdate, LabeledSelect, Section, TextInput */
 var pt = React.PropTypes;
 
 // Graphical / auto-complete interface for choosing an organism and assembly.
@@ -8,6 +9,9 @@ var AssemblySearch = React.createClass({
 
     mixins: [PathUpdate, ImmutableUpdate],
     // update(path + 'searchDone', autoCompleteObject) called when user changes search term
+
+    propTypes: { searchTerm: pt.string  // Contents of search input
+               },
 
     autoCompleteSourceFactory: function() {
 	// This returns a 'source' callback function for jqueryui.autocomplete.
@@ -40,7 +44,7 @@ var AssemblySearch = React.createClass({
 	};
     },
 
-    autoCompleteMenuOpen: function(event, ui) {
+    autoCompleteMenuOpen: function() {
 
         //#*** everything below is copied from hgAi -- libify!
 
@@ -55,10 +59,11 @@ var AssemblySearch = React.createClass({
             var maxHeight = $(window).height() - pos - 30;
             var auto = $('.ui-autocomplete');
             var curHeight = $(auto).children().length * 21;
-            if (curHeight > maxHeight)
+            if (curHeight > maxHeight) {
                 $(auto).css({maxHeight: maxHeight+'px', overflow:'scroll', zIndex: 12});
-            else
+            } else {
                 $(auto).css({maxHeight: 'none', overflow:'hidden', zIndex: 12});
+            }
         }
     },
 
@@ -116,12 +121,13 @@ var AppComponent = React.createClass({
         // Show a labeled image button for a species such as Human or Mouse
         var name = species.get('genome');
         var displayName = name;
-        if (name === 'D. melanogaster')
+        if (name === 'D. melanogaster') {
             displayName = 'Fruitfly';
-        if (name === 'C. elegans')
+        } else if (name === 'C. elegans') {
             displayName = 'Worm';
+        }
         var imgPath = species.get('img') || noImg;
-        var onClick = function(ev) {
+        var onClick = function() {
             this.props.update(['popular', name]);
         }.bind(this);
         return (
@@ -135,8 +141,9 @@ var AppComponent = React.createClass({
     renderDbSelect: function(menuData) {
         // If our state includes db menu options, display a menu and Go button,
         // otherwise nothing.
-        if (! menuData)
+        if (! menuData) {
             return null;
+        }
         var path = this.props.path || [];
         var menuLabel = 'Choose ' + menuData.get('genome') + ' assembly version' +
                                                  ', or choose a different species above:';
@@ -175,3 +182,6 @@ var AppComponent = React.createClass({
     }
 
 });
+
+// Without this, jshint complains that AppComponent is not used.  Module system would help.
+AppComponent = AppComponent;

@@ -1,4 +1,5 @@
 /** @jsx React.DOM */
+/* global ImmutableUpdate, PathUpdateOptional */
 var pt = React.PropTypes;
 
 var Icon = React.createClass({
@@ -41,15 +42,17 @@ var Icon = React.createClass({
                 faClass += 'fa-arrows-v';
                 break;
             default:
-                warn('Icon: Unrecognized type "' + this.props.type + '"');
+                console.warn('Icon: Unrecognized type "' + this.props.type + '"');
         }
         faClass += ' iconButton';
-        if (this.props.className)
+        if (this.props.className) {
             faClass += ' ' + this.props.className;
-
+        }
         return (
             <i className={faClass} onClick={this.onClick}/>
         );
     }
 });
 
+// Without this, jshint complains that Icon is not used.  Module system would help.
+Icon = Icon;

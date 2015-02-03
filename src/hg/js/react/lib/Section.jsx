@@ -20,3 +20,6 @@ var Section = React.createClass({
         );
     }
 });
+
+// Without this, jshint complains that Section is not used.  Module system would help.
+Section = Section;
