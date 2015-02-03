@@ -1,8 +1,4 @@
-/* jshint unused:false */
-// Without the above setting, jshint complains that CladeOrgDbMixin is not used.  Module system would help.
-
 var PositionSearchMixin = function(myPath) {
-/* jshint unused:true */
     // This is a model mixin that manages UI state and server interaction for
     // the position/search term input and the pop-up that displays multiple results.
 
@@ -59,3 +55,6 @@ var PositionSearchMixin = function(myPath) {
     // Mixin object with initialize
     return { initialize: initialize };
 };
+
+// Without this, jshint complains that PositionSearchMixin is not used.  Module system would help.
+PositionSearchMixin = PositionSearchMixin;

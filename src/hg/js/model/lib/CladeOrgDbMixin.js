@@ -1,9 +1,4 @@
-/* jshint unused:false */
-// Without the above setting, jshint complains that CladeOrgDbMixin is not used.  Module system would help.
-
 var CladeOrgDbMixin = function(myPath) {
-
-/* jshint unused:true */
     // This is a model mixin that manages UI state and server interaction for
     // the clade, org and db (aka group, genome, assembly) menus.
 
@@ -51,3 +46,6 @@ var CladeOrgDbMixin = function(myPath) {
     // Mixin object with initialize
     return { initialize: initialize };
 };
+
+// Without this, jshint complains that CladeOrgDbMixin is not used.  Module system would help.
+CladeOrgDbMixin = CladeOrgDbMixin;

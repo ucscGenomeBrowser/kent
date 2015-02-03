@@ -1,11 +1,6 @@
 // Send requests to a CGI that returns JSON responses
 
-/* jshint unused:false */
-// Without the above setting, jshint complains that cart is not used.  Module system would help.
-
 var cart = (function() {
-
-/* jshint unused:true */
 
     'use strict';
 
@@ -76,3 +71,6 @@ var cart = (function() {
         }
     };
 })();
+
+// Without this, jshint complains that cart is not used.  Module system would help.
+cart = cart;

@@ -1,6 +1,3 @@
-/* jshint unused:false */
-// Without the above setting, jshint complains that ImmutableUpdate is not used.  Module system would help.
-
 var ImmutableUpdate = {
 
     // This is actually not a React component but rather a mixin for React components that
@@ -70,3 +67,5 @@ var ImmutableUpdate = {
 
 };
 
+// Without this, jshint complains that ImmutableUpdate is not used.  Module system would help.
+ImmutableUpdate = ImmutableUpdate;

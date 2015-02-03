@@ -1,10 +1,6 @@
 var pt = React.PropTypes;
 
-/* jshint unused:false */
-// Without the above setting, jshint complains that PathUpdateOptional is not used.  Module system would help.
-
 var PathUpdateOptional = {
-
     // This is a mixin that specifies optional propTypes path and update for a system in which
     // there is one model with one update function for handling any UI event.
     // The path is a list of successive indices into the model's state and/or keywords
@@ -21,3 +17,6 @@ var PathUpdateOptional = {
                  // A component may add to path if the component has more than one UI event.
                }
 };
+
+// Without this, jshint complains that PathUpdateOptional is not used.  Module system would help.
+PathUpdateOptional = PathUpdateOptional;
