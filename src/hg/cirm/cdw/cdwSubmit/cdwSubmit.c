@@ -246,13 +246,15 @@ dyStringFree(&query);
 return sqlLastAutoId(conn);
 }
 
-int makeNewEmptyFileRecord(struct sqlConnection *conn, unsigned submitId, unsigned submitDirId,
+int makeNewEmptyFileRecord(struct sqlConnection *conn, unsigned userId,
+    unsigned submitId, unsigned submitDirId,
     char *submitFileName, long long size)
 /* Make a new, largely empty, record around file and submit info. */
 {
 struct dyString *query = dyStringNew(0);
-sqlDyStringAppend(query, "insert cdwFile (submitId, submitDirId, submitFileName, size) ");
-dyStringPrintf(query, "VALUES(%u, %u, '%s', %lld)", submitId, submitDirId, submitFileName, size);
+sqlDyStringAppend(query, "insert cdwFile (submitId, submitDirId, userId, submitFileName, size) ");
+dyStringPrintf(query, "VALUES(%u, %u, %u, '%s', %lld)", 
+    submitId, submitDirId, userId, submitFileName, size);
 sqlUpdate(conn, query->string);
 dyStringFree(&query);
 return sqlLastAutoId(conn);
@@ -334,21 +336,13 @@ return context->isInterrupted;
 }
 
 int cdwFileFetch(struct sqlConnection *conn, struct cdwFile *ef, int fd, 
-	char *submitUrl, unsigned submitId, unsigned submitDirId, unsigned hostId)
+	char *submitUrl, unsigned submitId, unsigned submitDirId, unsigned hostId,
+	unsigned userId)
 /* Fetch file and if successful update a bunch of the fields in ef with the result. 
  * Returns fileId. */
 {
 /* Create file record in database */
-ef->id = makeNewEmptyFileRecord(conn, submitId, submitDirId, ef->submitFileName, ef->size);
-
-#ifdef UNUSED
-/* Move file data into warehouse dir */
-char *submitFileName = submitUrl;
-if (startsWith(localPrefix, submitFileName))
-    submitFileName += strlen(localPrefix);
-else
-    errAbort("Currently can only handle urls with %s prefix.", localPrefix);
-#endif /* UNUSED */
+ef->id = makeNewEmptyFileRecord(conn, userId, submitId, submitDirId, ef->submitFileName, ef->size);
 
 char cdwFile[PATH_LEN] = "", cdwPath[PATH_LEN];
 cdwMakeFileNameAndPath(ef->id, ef->submitFileName,  cdwFile, cdwPath);
@@ -674,7 +668,7 @@ cdwSubmitFree(&old);
 }
 
 void getSubmittedFile(struct sqlConnection *conn, struct cdwFile *bf,  
-    char *submitDir, char *submitUrl, int submitId)
+    char *submitDir, char *submitUrl, int submitId, int userId)
 /* We know the submission, we know what the file is supposed to look like.  Fetch it.
  * If things go badly catch the error, attach it to the submission record, and then
  * keep throwing. */
@@ -689,7 +683,7 @@ if (errCatchStart(errCatch))
     int fd = cdwOpenAndRecordInDir(conn, submitDir, bf->submitFileName, submitUrl,
 	&hostId, &submitDirId);
 
-    int fileId = cdwFileFetch(conn, bf, fd, submitUrl, submitId, submitDirId, hostId);
+    int fileId = cdwFileFetch(conn, bf, fd, submitUrl, submitId, submitDirId, hostId, userId);
 
     close(fd);
     cdwAddQaJob(conn, fileId);
@@ -932,7 +926,7 @@ if (oldFileId != 0)
 
 long long size = fileSize(submitFileName);
 long long updateTime = fileModTime(submitFileName);
-int fileId = makeNewEmptyFileRecord(conn, submitId, submitDirId, submitFileName, size);
+int fileId = makeNewEmptyFileRecord(conn, userId, submitId, submitDirId, submitFileName, size);
 char cdwFile[PATH_LEN] = "", cdwPath[PATH_LEN];
 cdwMakeFileNameAndPath(fileId, submitFileName,  cdwFile, cdwPath);
 long long startUploadTime = cdwNow();
@@ -1049,7 +1043,6 @@ if (errCatchStart(errCatch))
 
 	/* See if it is already in repository */
 	int oldFileId = findFileGivenMd5AndSubmitDir(conn, file->md5, submitDirId);
-	uglyf("oldFileId=%d\n", oldFileId);
 	if (oldFileId != 0)
 	    {
 	    slAddHead(&oldList, sfr);
@@ -1088,7 +1081,7 @@ if (errCatchStart(errCatch))
     for (sfr = newList; sfr != NULL; sfr = sfr->next)
 	{
 	struct cdwFile *bf = sfr->file;
-	getSubmittedFile(conn, bf, submitDir, submitUrl, submitId);
+	getSubmittedFile(conn, bf, submitDir, submitUrl, submitId, user->id);
 
 	/* Update submit record with progress (getSubmittedFile might be
 	 * long and get interrupted) */
