@@ -41,8 +41,7 @@ var HgAiModel = ImModel.extend({
             } else {
                 current = {};
             }
-            Object.keys(newValue).forEach(function(table) {
-                var info = newValue[table];
+            tfDefaults = _.mapValues(newValue, function(info, table) {
                 var currentFieldSettings = current[table] || {};
                 var newFieldSettings = Immutable.OrderedMap();
                 info.fields.forEach(function(field) {
@@ -52,7 +51,7 @@ var HgAiModel = ImModel.extend({
                     }
                     newFieldSettings = newFieldSettings.set(field, checked);
                 }, this);
-                tfDefaults[table] = Immutable.Map({ fields: newFieldSettings, label: info.label});
+                return Immutable.Map({ fields: newFieldSettings, label: info.label});
             }, this);
             this.mutState.set('tableFields', Immutable.OrderedMap(tfDefaults));
         } else {
