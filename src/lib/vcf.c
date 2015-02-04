@@ -168,6 +168,28 @@ __attribute__((format(printf, 2, 3)))
 #endif
 ;
 
+static void vaVcfWarn(struct vcfFile *vcff, char *format, va_list args)
+/* Add a little bit of info like file position to warning */
+{
+if (vcff->lf != NULL)
+    {
+    char formatPlus[1024];
+    safef(formatPlus, sizeof(formatPlus), 
+	"%s:%d: %s", vcff->lf->fileName, vcff->lf->lineIx, format);
+    vaWarn(formatPlus, args);
+    }
+else
+    vaWarn(format, args);
+}
+
+static void vcfFileWarn(struct vcfFile *vcff, char *format, ...)
+/* Send error message to errabort stack's warn handler and abort */
+{
+va_list args;
+va_start(args, format);
+vaVcfWarn(vcff, format, args);
+}
+
 static void vcfFileErr(struct vcfFile *vcff, char *format, ...)
 /* Send error message to errabort stack's warn handler and abort */
 {
@@ -176,13 +198,7 @@ if (vcff->maxErr == VCF_IGNORE_ERRS)
     return;
 va_list args;
 va_start(args, format);
-char formatPlus[1024];
-if (vcff->lf != NULL)
-    sprintf(formatPlus, "%s:%d: %s", vcff->lf->fileName, vcff->lf->lineIx, format);
-else
-    strcpy(formatPlus, format);
-vaWarn(formatPlus, args);
-va_end(args);
+vaVcfWarn(vcff, format, args);
 if (vcfFileStopDueToErrors(vcff))
     errAbort("VCF: %d parser errors, quitting", vcff->errCnt);
 }
@@ -382,16 +398,12 @@ if (! sameString(exp1, words[ix]))
 // There might be a whole lot of genotype columns...
 #define VCF_MAX_COLUMNS 16 * 1024
 
+char *vcfDefaultHeader = "#CHROM POS ID REF ALT QUAL FILTER INFO";
+/* Default header if we have none. */
+
 static void parseColumnHeaderRow(struct vcfFile *vcff, char *line)
 /* Make sure column names are as we expect, and store genotype sample IDs if any are given. */
 {
-if (line[0] != '#')
-    {
-    vcfFileErr(vcff, "Expected to find # followed by column names (\"#CHROM POS ...\"), "
-	       "not \"%s\"", line);
-    lineFileReuse(vcff->lf);
-    return;
-    }
 char *words[VCF_MAX_COLUMNS];
 int wordCount = chopLine(line+1, words);
 if (wordCount >= VCF_MAX_COLUMNS)
@@ -481,7 +493,11 @@ slReverse(&(vcff->filterDefs));
 slReverse(&(vcff->gtFormatDefs));
 // Did we get the bare minimum VCF header with supported version?
 if (vcff->majorVersion == 0)
-    vcfFileErr(vcff, "missing ##fileformat= header line?  Assuming 4.1.");
+    {
+    vcfFileWarn(vcff, "missing ##fileformat= header line?  Assuming 4.1.");
+    vcff->majorVersion = 4;
+    vcff->minorVersion = 1;
+    }
 if ((vcff->majorVersion != 4 || (vcff->minorVersion != 0 && vcff->minorVersion != 1)) &&
     (vcff->majorVersion != 3))
     vcfFileErr(vcff, "VCFv%d.%d not supported -- only v3.*, v4.0 or v4.1",
@@ -490,6 +506,15 @@ if ((vcff->majorVersion != 4 || (vcff->minorVersion != 0 && vcff->minorVersion !
 if (line == NULL)
     // EOF after metadata
     return vcff;
+char headerLineBuf[256];
+if (line[0] != '#')
+    {
+    lineFileReuse(lf);
+    vcfFileWarn(vcff, "Expected to find # followed by column names (\"#CHROM POS ...\"), "
+	       "assuming default VCF 4.1 columns");
+    safef(headerLineBuf, sizeof(headerLineBuf), "%s", vcfDefaultHeader);
+    line = headerLineBuf;
+    }
 dyStringAppend(dyHeader, line);
 dyStringAppendC(dyHeader, '\n');
 parseColumnHeaderRow(vcff, line);
