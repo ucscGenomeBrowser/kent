@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db xenTro7
+clade vertebrate
+# genomeCladePriority 80
+# this name doesn't work, the (parens) cause trouble everywhere
+# scientificName Xenopus (Silurana) tropicalis
+scientificName Xenopus tropicalis
+commonName X. tropicalis
+assemblyDate Sep. 2012
+assemblyLabel US DOE Joint Genome Institute (JGI-PGF)
+assemblyShortLabel Xtropicalis v7
+orderKey 4439
+mitoAcc NC_006839
+fastaFiles /cluster/data/xenTro7/ucsc/xenTro7.ucsc.fa.gz
+agpFiles /cluster/data/xenTro7/ucsc/xenTro7.ucsc.agp
+dbDbSpeciesDir xenTro
+photoCreditURL http://www.unc.edu/
+photoCreditName UNC Chapel Hill, Chris Showell, all rights reserved
+ncbiGenomeId 80
+ncbiAssemblyId 515038
+ncbiAssemblyName Xtropicalis_v7
+ncbiBioProject 12348
+genBankAccessionID GCA_000004195.2
+taxId 8364

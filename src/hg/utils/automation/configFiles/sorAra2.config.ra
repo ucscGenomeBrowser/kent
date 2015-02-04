@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db sorAra2
+clade mammal
+genomeCladePriority 20.1
+scientificName Sorex araneus
+commonName Shrew
+assemblyDate Aug. 2008
+assemblyLabel Broad Institute SorAra2.0
+assemblyShortLabel SorAra2.0
+orderKey 2579
+mitoAcc none
+fastaFiles /cluster/data/sorAra2/ucsc/sorAra2.ucsc.fa.gz
+agpFiles /cluster/data/sorAra2/ucsc/sorAra2.ucsc.agp
+# qualFiles /cluster/data/sorAra2/ucsc/sorAra1.quals.qac
+dbDbSpeciesDir shrew
+photoCreditURL http://en.wikipedia.org/wiki/File:Common_Shrew.jpg
+photoCreditName Sjonge, Wikipedia Commons
+ncbiGenomeId 226
+ncbiAssemblyId 228978
+ncbiAssemblyName SorAra2.0
+ncbiBioProject 13689
+genBankAccessionID GCA_000181275.2
+taxId 42254

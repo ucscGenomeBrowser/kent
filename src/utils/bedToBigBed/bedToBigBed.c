@@ -17,8 +17,9 @@
 #include "bPlusTree.h"
 #include "bigBed.h"
 
-char *version = "2.6";
+char *version = "2.7";
 /* Version history from 2.6 on at least -
+ *   2.7 - Added check for duplicate field names in asParse.c
  *   2.6 - Made it not crash on empty input.  
  *   */
 

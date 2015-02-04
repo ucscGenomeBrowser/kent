@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db aciBauTYTH_1
+clade other
+genomeCladePriority 40
+scientificName Acinetobacter baumannii_TYTH_1
+commonName Acinetobacter baumannii
+assemblyDate Oct. 2012
+assemblyLabel National Tsing Hua University
+assemblyShortLabel aciBauTYTH_1
+orderKey 9999
+mitoAcc none
+fastaFiles /hive/data/genomes/aciBauTYTH_1/ucscChr/chr_CP003856.fa
+fakeAgpMinContigGap 20
+fakeAgpMinScaffoldGap 50000
+dbDbSpeciesDir cciBauTYTH_1
+photoCreditURL http://commons.wikimedia.org/wiki/File:Drosophila_melanogaster.jpg
+photoCreditName Wikimedia Commons
+ncbiGenomeId 438588
+ncbiAssemblyId 302575
+ncbiAssemblyName Acinetobacter_baumannii_TYTH_1_uid74551
+ncbiBioProject 176498
+genBankAccessionID GCA_000302575
+taxId 1100841

@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db	amaVit1
+clade	vertebrate
+genomeCladePriority	60
+orderKey	4310
+commonName	Parrot
+dbDbSpeciesDir	birds
+scientificName	Amazona vittata
+assemblyDate	Jan. 2013
+assemblyLabel	Puerto Rican Parrot Genome Project AV1
+assemblyShortLabel	AV1
+fastaFiles	/hive/data/genomes/amaVit1/ucsc/*.fa.gz
+agpFiles	/hive/data/genomes/amaVit1/ucsc/*.agp
+mitoAcc	none
+# qualFiles none
+photoCreditURL	http://www.fws.gov/caribbean/ES/Parrot-Gallery.html
+photoCreditName	Tom MacKenzie, U.S. Fish and Wildlife Service
+ncbiGenomeId	15170
+ncbiAssemblyName	AV1
+genBankAccessionID	GCA_000332375.1
+ncbiAssemblyId	529068
+ncbiBioProject	171587
+taxId	241585

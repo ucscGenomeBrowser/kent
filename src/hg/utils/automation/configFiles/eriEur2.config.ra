@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db eriEur2
+clade mammal
+# genomeCladePriority 20.2
+scientificName Erinaceus europaeus
+commonName Hedgehog
+assemblyDate May 2012
+assemblyLabel Broad Institute EriEur2.0
+assemblyShortLabel EriEur2.0
+orderKey 2569
+# chrM already included in agp and fa files
+mitoAcc none
+fastaFiles /cluster/data/eriEur2/ucsc/eriEur2.ucsc.fa.gz
+agpFiles /cluster/data/eriEur2/ucsc/eriEur2.ucsc.agp
+# qualFiles none
+dbDbSpeciesDir hedgehog
+photoCreditURL http://en.wikipedia.org/wiki/File:West_European_Hedgehog_%28Erinaceus_europaeus%292.jpg
+photoCreditName Papa Lima Whiskey, Wikipedia Commons
+ncbiGenomeId 227
+ncbiAssemblyId 426148
+ncbiAssemblyName EriEur2.0
+ncbiBioProject 74585
+genBankAccessionID GCA_000296755.1
+taxId 9365

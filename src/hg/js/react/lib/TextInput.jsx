@@ -1,4 +1,5 @@
 /** @jsx React.DOM */
+/* global ImmutableUpdate, PathUpdate */
 var pt = React.PropTypes;
 
 var ENTER_KEY = 13;
@@ -59,3 +60,6 @@ var TextInput = React.createClass({
                );
     }
 });
+
+// Without this, jshint complains that TextInput is not used.  Module system would help.
+TextInput = TextInput;

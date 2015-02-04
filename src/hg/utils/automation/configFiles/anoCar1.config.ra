@@ -1,0 +1,14 @@
+# Config parameters for makeGenomeDb.pl:
+db anoCar1
+clade vertebrate
+genomeCladePriority 66
+scientificName Anolis carolinensis
+commonName Lizard
+assemblyDate Jan. 2007
+assemblyLabel Broad Institute AnoCar (1.0)
+orderKey 440
+mitoAcc none
+fastaFiles /cluster/data/anoCar1/downloads/assembly.bases.gz
+agpFiles /cluster/data/anoCar1/downloads/assembly.agp
+qualFiles /cluster/data/anoCar1/downloads/scaffold.lifted.qac
+dbDbSpeciesDir lizard

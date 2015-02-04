@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db haeCon1
+clade worm
+genomeCladePriority 86
+scientificName Haemonchus contortus
+commonName H. contortus
+assemblyDate Dec. 2009
+assemblyLabel Sanger Institute
+assemblyShortLabel WormBase WS210
+orderKey 898
+mitoAcc NC_010383.2
+fastaFiles /hive/data/genomes/haeCon1/ws210/sequences/dna/h_contortus.WS210.dna.fa.gz
+agpFiles /hive/data/genomes/haeCon1/ws210/haeCon1.ucsc.agp
+# qualFiles none
+dbDbSpeciesDir worm
+taxId 6289

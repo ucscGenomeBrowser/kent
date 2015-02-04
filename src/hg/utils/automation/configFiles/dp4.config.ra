@@ -1,0 +1,11 @@
+# Config parameters for makeGenomeDb.pl:
+db dp4
+clade insect
+scientificName Drosophila pseudoobscura
+assemblyDate Feb. 2006
+assemblyLabel Baylor CAF1
+orderKey 57
+mitoAcc none
+fastaFiles /cluster/data/dp4/downloads/dpse/UCSC.fa
+agpFiles /cluster/data/dp4/downloads/dpse/UCSC.agp
+dbDbSpeciesDir drosophila

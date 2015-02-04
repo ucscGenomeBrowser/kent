@@ -1,0 +1,14 @@
+# Config parameters for makeGenomeDb.pl:
+db caePb1
+clade worm
+genomeCladePriority 66
+scientificName Caenorhabditis PB2801
+commonName C. PB2801
+assemblyDate Jan. 2007
+assemblyLabel Washington University School of Medicine GSC Caenorhabditis n. sp. PB2801
+orderKey 876
+mitoAcc none
+fastaFiles /cluster/data/caePb1/downloads/supercontigs.fa.gz
+agpFiles /cluster/data/caePb1/downloads/scaffold.agp.gz
+qualFiles /cluster/data/caePb1/downloads/chrUn.qac
+dbDbSpeciesDir worm

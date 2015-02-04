@@ -11,6 +11,7 @@ table wgEncodeCell
         string sex; "M, F, or U for unknown"
         string vendor; "name of vendor or lab provider"
         string vendorId; "vendor product code or identifier"
+        string url; "order URL or protocol document"
         string ontoTerm; "ontology term"
         string btOntoTerm; "ontology term from Brenda Tissue Ontology"
         string donor; "donor accession at encodeproject.org"

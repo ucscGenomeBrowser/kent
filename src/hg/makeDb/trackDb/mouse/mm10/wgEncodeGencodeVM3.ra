@@ -6,7 +6,7 @@
 ##
 track wgEncodeGencodeVM3
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel GENCODE VM3 (Ensembl 76)
 longLabel Gene Annotations from ENCODE/GENCODE Version M3 (Ensembl 76)
 group genes

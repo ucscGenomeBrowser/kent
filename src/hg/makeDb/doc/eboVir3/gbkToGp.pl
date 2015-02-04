@@ -53,6 +53,7 @@ sub coordRange($) {
     printf STDERR "ERROR: do not recognize range line: '%s'\n", $line;
   } else {
     ($start, $end) = split('\.\.', $a[1]);
+    $start =~ s/^<//;   # skip incomplete CDS marker
     if (! defined($start) || ! defined($end)) {
       printf STDERR "ERROR: do not recognize range line: '%s'\n", $line;
       $start = -1;

@@ -10722,3 +10722,213 @@ TMPDIR=/scratch/tmp
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+# LASTZ mouse/mm10 sheep/oviAri3 - (DONE - 2015-01-08 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzOviAri3.2015-01-08
+    cd /hive/data/genomes/mm10/bed/lastzOviAri3.2015-01-08
+
+    cp -p \
+/hive/users/hiram/multiz/100way/mm10.oviAri3/mm10.oviAri3.tuning.top400.txt \
+     ./mm10.oviAri3.tuning.Q.txt
+
+    cat << '_EOF_' > DEF
+# mouse vs sheep
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/mm10.oviAri3/mm10.oviAri3.tuning.top400.txt
+
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=254
+BLASTZ_X=890
+BLASTZ_Y=3400
+BLASTZ_Q=/hive/data/genomes/mm10/bed/lastzOviAri3.2015-01-08/mm10.oviAri3.tuning.Q.txt
+#       A     C     G     T
+# A    89  -172   -40  -184
+# C  -172   100  -121   -40
+# G   -40  -121   100  -172
+# T  -184   -40  -172    89
+
+# TARGET: mouse mm10
+SEQ1_DIR=/hive/data/genomes/mm10/mm10.2bit
+SEQ1_LEN=/hive/data/genomes/mm10/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=2
+SEQ1_LAP=10000
+
+# QUERY: sheep oviAri3
+SEQ2_DIR=/hive/data/genomes/oviAri3/oviAri3.2bit
+SEQ2_LEN=/hive/data/genomes/oviAri3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=10
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzOviAri3.2015-01-08
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    75m27.412s
+
+    cat fb.mm10.chainOviAri3Link.txt
+    # 432006690 bases of 2652783500 (16.285%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` mm10 oviAri3) > rbest.log 2>&1 &
+    # real    17m24.577s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oviAri3/bed/blastz.mm10.swap
+    cd /hive/data/genomes/oviAri3/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzOviAri3.2015-01-08/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    31m27.481s
+
+    cat fb.oviAri3.chainMm10Link.txt
+    #422549165 bases of 2534335866 (16.673%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` oviAri3 mm10) > rbest.log 2>&1
+    # real    16m45.956s
+
+#########################################################################
+# RETROFINDER RETROPOSED GENES ucscRetro track VERSION 6
+# (2015-01-02 - 2015-01-07, hartera, DONE)
+ssh hgwdev
+mkdir -p /hive/hive/groups/gencode/pseudogenes/retroFinder/mm10.20150102
+cd /hive/groups/gencode/pseudogenes/retroFinder/mm10.20150102
+
+cat << '_EOF_' > DEF
+
+RETRO_OPTIONS="-verbose=4 -minAli=0.98 -nearTop=0.005 "
+RUNDATE="2015-01-02"
+DB=mm10
+SCORETHRESH=510
+GENOMENAME='Mus musculus'
+GBDB=mm
+DATE=20150102
+VERSION=6
+RUNDIR=/hive/groups/gencode/pseudogenes/retroFinder/$DB.$DATE
+BINDIR=/hive/users/hartera/GencodeWG/retroFinder/branches/version2/bin
+KENTDIR=/cluster/home/hartera/kent
+KENTBINDIR=/cluster/bin/x86_64
+MRNABASE=/hive/data/genomes/$DB/bed/mrnaBlastz.$VERSION
+TMPMRNA=$RUNDIR/mrnaBlastz/$DB
+TMPEST=$RUNDIR/est/$DB
+USEALTSEQS=0
+EST=all_est
+SPLICED_EST=intronEst
+SPLIT_EST=0
+SPLIT_SPLICED_EST=1
+LASTZPROG=/cluster/bin/penn/x86_64/lastz
+SCRIPT=/hive/users/hartera/GencodeWG/retroFinder/branches/version2/src/pipeline
+GENOME=/hive/data/genomes
+TWOBIT=$GENOME/$DB/$DB.2bit
+RETRODIR=$GENOME/$DB/bed/retro
+BASE=$RUNDIR/retro
+BASE=/hive/groups/gencode/pseudogenes/retroFinder/mm10.${DATE}/retro
+OUTDIR=${BASE}/version${VERSION}/${DB}
+RESULT=$OUTDIR/result
+RESULTSPLIT=$OUTDIR/resultSplit
+LOG=$OUTDIR/log
+OUT=$OUTDIR/out
+OVERLAPDIR=$OUTDIR/run.o
+TABLE=ucscRetroInfo$VERSION
+ORTHOTABLE=ucscRetroOrtho$VERSION
+ALIGN=ucscRetroAli$VERSION
+LOCAL=/scratch/data/$DB
+NIB=$LOCAL/nib
+RMSK=rmsk
+NET1=netHg38
+NET2=netCanFam3
+NET3=netRn5
+GENE1=knownGene
+GENE2=refGene
+GENE3=wgEncodeGencodeCompVM4
+CLUSTER=ku
+SPECIES="hg38 mm10"
+ROOTDIR="~/public_html/retro/mm10Jul14"
+WEBROOT=$ROOTDIR/retro.$RUNDATE
+WEBSERVER=http://hgwdev-hartera.cse.ucsc.edu
+SHUFFLEDIR=shuffle
+SHUFFLEROOT=$WEBROOT/$SHUFFLEDIR
+DUPDIR=dups
+DUPROOT=$WEBROOT/$DUPDIR
+AGEDIR=age
+AGEROOT=$WEBROOT/$AGEDIR
+EXPDIR=exp
+GENEPFAM=knownGene
+PFAM=knownToPfam
+PFAMIDFIELD=name
+PFAMDOMAIN=value
+ARRAY=gnfAtlas2
+AFFYPROBE=affyGnf1m
+ARRAYMEDIAN=hgFixed.gnfMouseAtlas2Median
+ARRAYRATIO=hgFixed.gnfMouseAtlas2AllRatio
+ARRAYABS=hgFixed.gnfMouseAtlas2All
+ARRAYEXP=hgFixed.gnfMouseAtlas2MedianExps
+ARRAYEXPALL=hgFixed.gnfMouseAtlas2AllExps
+# ARRAYLOOKUP=knownToGnfAtlas2
+#ARRAYPSLS="/hive/data/genomes/mm9/bed/geneAtlas2/affyGnf1m.psl"
+ALTSPLICE=sibTxGraph
+SPLITBYAGE=$SCRIPT/splitRetrosByAgeMouse
+PDB=proteins140122
+BREAKS=0,8,16,24,32
+XLIM=34
+YLIM=0.1
+YLIM1=4000
+YLIM2=160
+MAXDIVERGENCE=32
+'_EOF_'
+    # << happy emacs
+chmod +x DEF
+
+mkdir -p /hive/data/genomes/mm10/bed/retro
+mkdir -p /hive/data/genomes/mm10/bed/mrnaBlastz.6
+cd /hive/data/genomes/mm10/bed/mrnaBlastz.6
+# Create S1.len file
+foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X Y)
+  echo $c
+  hgsql -Ne "select chrom, size from chromInfo where chrom='chr${c}';" mm10 \
+    >> S1.len
+end
+
+# NOTE: in future, use /hive/data/genomes/mm10/chrom.sizes for S1.len
+# and just remove randoms and chrM.
+cd /hive/groups/gencode/pseudogenes/retroFinder/mm10.20150102
+mkdir mrnaBlastz
+cd mrnaBlastz
+cp ../DEF .
+cp /hive/data/genomes/mm10/bed/mrnaBlastz.6/S1.len .
+
+screen
+# Run steps 1 to 5 of RetroFinder pipeline from scripts in CCDS SVN source tree:
+retroFinder/branches/version2/src/pipeline/ucscStep1.sh DEF
+# check cluster jobs on ku
+retroFinder/branches/version2/src/pipeline/ucscStep2.sh DEF
+retroFinder/branches/version2/src/pipeline/ucscStep3.sh DEF
+#check cluster jobs on ku
+retroFinder/branches/version2/src/pipeline/ucscStep4.sh DEF
+#check cluster jobs on ku
+    # Load the track
+retroFinder/branches/version2/src/pipeline/ucscStep5.sh DEF
+cd /hive/groups/gencode/pseudogenes/retroFinder/mm10.20150102/retro/version6/mm10
+retroFinder/branches/version2/src/pipeline/filterMrna.sh
+retroFinder/branches/version2/src/pipeline/filterEst.sh
+# Check cluster jobs on ku
+retroFinder/branches/version2/src/pipeline/analyseExpress.sh
+# Check cluster jobs on ku
+#added ucscRetroAli6 to kent/src/hg/makeDb/mouse/mm10/trackDb.ra
+# copied
+# /hive/groups/gencode/pseudogenes/retroFinder/mm10.20150102/retro/version6/mm10/trackDb.retro
+# entry to kent/src/hg/makeDb/trackDb/mouse/mm10/trackDb.ra
+# and edited it to remove the full data and add:
+# dataVersion Jan. 2015
+# Scripts copied ucscRetroAli6.psl, ucscRetroInfo6.bed and ucscRetroCds6.tab
+# to /hive/data/genomes/mm10/bed/retro/

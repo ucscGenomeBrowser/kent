@@ -1,0 +1,14 @@
+# Config parameters for makeGenomeDb.pl:
+db bosTauMd3
+clade mammal
+scientificName Bos Taurus
+assemblyDate Aug. 2009
+assemblyLabel Univ. Maryland Release 3.0
+orderKey 236
+dbDbSpeciesDir cow
+mitoAcc 60101824
+commonName Cow
+taxId 9913
+fastaFiles /hive/data/genomes/bosTauMd3/download/bos_taurus.fa.gz
+agpFiles /hive/data/genomes/bosTauMd3/download/bos_taurus.agp
+subsetLittleIds Y

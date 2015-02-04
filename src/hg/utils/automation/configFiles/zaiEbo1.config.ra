@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db zaiEbo1
+clade virus
+genomeCladePriority 2000
+scientificName Zaire ebolavirus
+commonName Zaire ebolavirus
+assemblyDate Aug. 2014
+assemblyLabel NCBI NIH NC_002549.1
+assemblyShortLabel NC_002549.1
+orderKey 10900
+mitoAcc none
+fastaFiles /hive/data/genomes/zaiEbo1/ucsc/*.fa
+agpFiles /hive/data/genomes/zaiEbo1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir ebola
+photoCreditURL http://phil.cdc.gov/phil/details.asp?pid=10815
+photoCreditName CDC Public Health Image Library (PHIL)
+ncbiGenomeId 4887
+ncbiAssemblyId NC_002549.1
+ncbiAssemblyName NC_002549.1
+ncbiBioProject 14703
+genBankAccessionID AF086833.2
+taxId 186538

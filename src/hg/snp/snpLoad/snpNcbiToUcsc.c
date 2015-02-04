@@ -1738,14 +1738,17 @@ if (checkCount != *pAlleleFreqCount)
 // Length of alleleNs and alleleFreqs was already checked during parsing.
 int i;
 double total = 0.0;
+boolean nonIntChromCount = FALSE;
 for (i=0;  i < *pAlleleFreqCount;  i++)
     {
     double leftover = alleleNs[i] - trunc(alleleNs[i]);
     if (leftover > ALLELE_N_ROUNDING_ERROR && leftover < 1.0-ALLELE_N_ROUNDING_ERROR)
-	writeException(NonIntegerChromCount);
+        nonIntChromCount = TRUE;
     if (alleleFreqs != NULL)
 	total += alleleFreqs[i];
     }
+if (nonIntChromCount)
+    writeException(NonIntegerChromCount);
 if (total < 1.0-ALLELE_FREQ_ROUNDING_ERROR || total > 1.0+ALLELE_FREQ_ROUNDING_ERROR)
     writeException(AlleleFreqSumNot1);
 else if (*pAlleleFreqCount == 1)

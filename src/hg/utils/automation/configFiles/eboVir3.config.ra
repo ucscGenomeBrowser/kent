@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db eboVir3
+clade virus
+genomeCladePriority 2000
+scientificName Filoviridae ebolavirus
+commonName Ebola virus 2014
+assemblyDate Jun. 2014
+assemblyLabel West Africa 01 June 2014 EBOV/G3683/KM034562.1
+assemblyShortLabel G3683/KM034562.1
+orderKey 10798
+mitoAcc none
+fastaFiles /hive/data/genomes/eboVir3/ucsc/KM034562v1.fa.gz
+agpFiles /hive/data/genomes/eboVir3/ucsc/KM034562v1.agp
+# qualFiles none
+dbDbSpeciesDir ebola
+photoCreditURL http://phil.cdc.gov/phil/details.asp?pid=1836
+photoCreditName CDC/Cynthia Goldsmith Public Health Image Library (PHIL)
+ncbiGenomeId 4887
+ncbiAssemblyId KM034561
+ncbiAssemblyName KM034561
+ncbiBioProject 257197
+genBankAccessionID KM034561
+# http://www.ncbi.nlm.nih.gov/biosample/SAMN02951977
+taxId 186538

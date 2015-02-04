@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db eboVir1
+clade virus
+genomeCladePriority 2000
+scientificName Ebola virus
+commonName Ebola virus
+assemblyDate Aug. 2014
+assemblyLabel 46 strains Ebola virus
+assemblyShortLabel 46 strains eboVir1
+orderKey 10800
+mitoAcc none
+fastaFiles /hive/data/genomes/eboVir1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/eboVir1/ucsc/eboVir1.agp
+# qualFiles none
+dbDbSpeciesDir ebola
+photoCreditURL http://phil.cdc.gov/phil/details.asp?pid=1836
+photoCreditName CDC/Cynthia Goldsmith Public Health Image Library (PHIL)
+ncbiGenomeId 4887
+ncbiAssemblyId NC_002549.1
+ncbiAssemblyName NC_002549.1
+ncbiBioProject 14703
+genBankAccessionID AF086833.2
+taxId 186538

@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db felCat8
+clade mammal
+genomeCladePriority 17
+scientificName Felis catus
+commonName Cat
+assemblyDate Nov. 2014
+assemblyLabel International Cat Genome Sequencing Consortium
+assemblyShortLabel ICGSC Felis_catus_8.0
+orderKey 2417
+# chrM bioproject: 10762
+mitoAcc NC_001700.1
+fastaFiles /hive/data/genomes/felCat8/ucsc/*.fa
+agpFiles /hive/data/genomes/felCat8/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir cat
+photoCreditURL http://www.genome.gov/pressDisplay.cfm?photoID=42
+photoCreditName Dr. Kristina Narfstrom
+ncbiGenomeId 78
+ncbiAssemblyId 1373248
+ncbiAssemblyName Felis_catus_8.0
+ncbiBioProject 16726
+genBankAccessionID GCA_000181335.3
+taxId 9685

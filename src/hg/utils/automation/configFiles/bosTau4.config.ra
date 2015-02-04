@@ -1,0 +1,12 @@
+db bosTau4
+clade mammal
+scientificName Bos Taurus
+assemblyDate October 2006
+assemblyLabel Baylor Release 4.0
+orderKey 236
+dbDbSpeciesDir cow
+mitoAcc 60101824
+agpFiles /cluster/data/bosTau4/baylor/bosTau4.agp
+fastaFiles /cluster/data/bosTau4/baylor/bosTau4.contigs.fa.gz
+qualFiles /cluster/data/bosTau4/baylor/bosTau4.qual.qac
+commonName Cow

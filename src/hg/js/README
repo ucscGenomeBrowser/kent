@@ -1,7 +1,7 @@
-The js directory should hold all refereenced javascript files for normal browser CGIs.
+The js directory should hold all referenced javascript files for normal browser CGIs.
 
-The contents includes the versions of jQuery package files mostly unmodified by UCSC, 
-as well as several that are specific tothe browser.  Files should be named for the 
+The contents include the versions of jQuery package files mostly unmodified by UCSC,
+as well as several that are specific to the browser.  Files should be named for the
 CGI or the library that uses them:
    hgTracks.js  included by hgTracks CGI.
    hui.js       included by hui.c library code.
@@ -20,10 +20,10 @@ symlinks that contain the timestamps of the files.  The symlinks are created by 
 makefile, which runs cpAndLinkToResourceFiles.pl on the JS_FILES list.
 
 IMPORTANT:
-In for a user to test changes to javascript files on a named browser a setting must be 
-added to the hg.conf file of that browser.  For example for the browser "hgwdev-larrym",
-if apache/htdocs-larrym/ exists then the following line should appear in
-apache/cgi-bin-larrym/hg.conf:
+In order to test changes to javascript files on an hgwdev-$USER vhost, the setting
+browser.documentRoot must be added to the hg.conf file of that browser.
+For example for hgwdev-larrym, if apache/htdocs-larrym/ exists then the following line
+should appear in apache/cgi-bin-larrym/hg.conf:
    browser.documentRoot=/usr/local/apache/htdocs-larrym
 
 If that directory does not exist, then the following line must appear in
@@ -32,3 +32,50 @@ apache/cgi-bin-larrym/hg.conf instead:
 
 This will allow the CGIs to find the js files that "make" copies into place.
 
+
+NEW IN 2015 -- new UI framework using ReactJS, JSX and ImmutableJS:
+
+See http://genomewiki.ucsc.edu/genecats/index.php/UI_with_ReactJS_and_ImmutableJS
+for background and overview of the new framework.  For information about ReactJS
+and its JSX syntax, see this in particular:
+  http://genomewiki.ucsc.edu/genecats/index.php/UI_with_ReactJS_and_ImmutableJS#ReactJS_.26_JSX
+
+Javascript and JSX files for the new framework live in three subdirectories:
+
+- external/ has minified releases of MIT- or BSD-licensed, well-tested external libraries
+  that are not already hosted on sufficiently fast content delivery networks (CDNs).
+  We can use CDNs for ReactJS, JQuery and JQueryUI.
+
+- model/ has code for the "brains" of a CGI's UI: it maintains a data structure that encodes
+  the state of the UI, sends ajax requests to the CGI when necessary to respond to user actions,
+  and updates the UI state data structure in response to user actions and ajax responses.
+  model has a lib/ subdirectory and one subdir per CGI.
+  model/lib/ has these modules:
+  - cart.js: functions for sending JSON-encoded ajax requests to CGI with hgsid
+  - ImModel.js: base class for UI model that uses ImmutableJS to efficiently maintain
+    a series of immutable data structures encoding the entire UI state.  This enables
+    simpler reasoning about state changes, and as a bonus, easy undo/redo of user actions.
+  - CladeOrgDbMixin.js: this can be "mixed in" to a subclass of ImModel to handle
+    hgGateway-style clade, org/genome and db menus.
+  - PositionSearchMixin.js: this can be "mixed in" to a subclass of ImModel to handle
+    position search with autocomplete for genes (when a db has that info)
+
+- react/ has code for the UI view, i.e. the elements that appear on the page and trigger
+  events when the user does something.  The React library efficiently implements a virtual
+  top-down re-render of the entire UI state whenever something changes, making DOM calls
+  only for DOM elements that need to change.  The use of ImmutableJS for the UI state
+  enables very efficient detection of changes.
+  The view modules are written in JSX, a superset of Javascript that adds HTML-like
+  syntax for instantiation of UI elements.  Compiling JSX to JS requires the installation
+  of node, npm (node package manager) and the react-tools package.  In order to avoid
+  that requirement for mirror installations, a bundle of compiled JSX files has been added
+  to git.  Developers who change .JSX files must set the JSX environment variable to jsx
+  (or complete path to jsx), and should also set JSXHINT to jsxhint.
+  react/ has the following subdirs:
+  - bundle/ contains compiled and minified version of JSX code
+  - lib/ has UI components written in JSX, some very basic (Section.jsx, CheckboxLabel.jsx),
+    some more complex (PositionSearch.jsx)
+  - mixins/ has JS (not JSX) modules that add functionality to components; PathUpdate.js
+    checks for properties that must be passed down in order to work with ImModel,
+    ImmutableUpdate adds efficient change detection using ImmutableJS.
+  - each CGI has a subdir for its JSX code

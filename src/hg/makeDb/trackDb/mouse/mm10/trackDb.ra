@@ -247,6 +247,60 @@ xrefTable kgXref, ucscRetroInfo5
 xrefQuery select ucscRetroInfo5.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
 
+track ucscRetroAli6
+shortLabel RetroGenes V6
+longLabel Retroposed Genes V6, Including Pseudogenes
+group genes
+type psl
+priority 37.14
+color 20,0,250
+visibility pack
+ucscRetroInfo ucscRetroInfo6
+baseColorDefault diffCodons
+baseColorUseCds table ucscRetroCds6
+baseColorUseSequence extFile ucscRetroSeq6 ucscRetroExtFile6
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+dataVersion Jan. 2015
+exonNumbers off
+
+searchName ucscRetroInfoRefSeq6
+searchTable ucscRetroAli6
+searchDescription Retroposed Genes V6, Including Pseudogene
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+xrefTable refLink, ucscRetroInfo6
+dontCheckXrefQueryFormat 1
+xrefQuery select ucscRetroInfo6.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+searchPriority 3.52
+
+searchName ucscRetroInfoMrna6
+searchTable ucscRetroAli6
+searchDescription Retroposed Genes V6, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+searchPriority 3.55
+
+searchName ucscRetroUniProt6
+searchTable ucscRetroAli6
+searchDescription Retroposed Genes V6, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo6
+xrefQuery select ucscRetroInfo6.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
+searchPriority 3.54
+
+searchName ucscRetroKnownGene6
+searchTable ucscRetroAli6
+searchDescription Retroposed Genes V6, Including Pseudogenes
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo6
+xrefQuery select ucscRetroInfo6.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
+searchPriority 3.53
+
 track jaxQtl override
 shortLabel MGI QTL 
 longLabel Mouse Genome Informatics Quantitative Trait Loci ***Lifted from NCBI 37 (mm9)***

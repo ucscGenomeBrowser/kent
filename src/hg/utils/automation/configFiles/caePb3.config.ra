@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db caePb3
+# clade worm
+# genomeCladePriority 66
+scientificName Caenorhabditis brenneri
+commonName C. brenneri
+assemblyDate Nov. 2010
+assemblyShortLabel C. brenneri 6.0.1b
+assemblyLabel The Caenorhabditis brenneri Sequencing and Analysis Consortium (GCA_000143925.2)
+orderKey 838
+mitoAcc none
+fastaFiles /hive/data/genomes/caePb3/genbank/caePb3.scaf.fa.gz
+agpFiles /hive/data/genomes/caePb3/genbank/caePb3.scaf.agp.gz
+# qualFiles none
+dbDbSpeciesDir worm
+taxId 135651

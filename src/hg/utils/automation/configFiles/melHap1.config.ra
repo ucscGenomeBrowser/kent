@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db melHap1
+clade worm
+genomeCladePriority 82
+scientificName Meloidogyne hapla
+commonName M. hapla
+assemblyDate Sep. 2008
+assemblyLabel The Center for the Biology of Nematode Parasitism, N.C. State
+assemblyShortLabel M. hapla VW9 WS210
+orderKey 895
+mitoAcc none
+fastaFiles /hive/data/genomes/melHap1/ws210/sequences/dna/m_hapla.WS210.dna.fa.gz
+agpFiles /hive/data/genomes/melHap1/ws210/ucsc.fake.melHap1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+taxId 6305

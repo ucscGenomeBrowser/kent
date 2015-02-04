@@ -1,0 +1,15 @@
+# Config parameters for makeGenomeDb.pl:
+db cavPor3
+clade mammal
+genomeCladePriority 35
+scientificName Cavia porcellus
+commonName Guinea Pig
+assemblyDate Feb. 2008
+assemblyLabel Broad Institute cavPor3 
+orderKey 99
+#mitoAcc AJ222767
+mitoAcc 5679797
+fastaFiles /cluster/data/cavPor3/broad/assembly.bases.gz
+agpFiles /cluster/data/cavPor3/broad/assembly.agp
+qualFiles /cluster/data/cavPor3/broad/cavPor3.qual.qac
+dbDbSpeciesDir guineaPig

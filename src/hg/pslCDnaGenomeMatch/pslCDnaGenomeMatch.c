@@ -46,7 +46,6 @@ int lociCounter = 0;
 bool passthru = FALSE;
 bool computeSS = FALSE;
 struct dlList *fileCache = NULL;
-//struct hash *nibHash = NULL;
 FILE *outFile = NULL; /* output tab sep file */
 FILE *bedFile = NULL; /* output bed file */
 FILE *scoreFile = NULL; /* output score file */
@@ -193,7 +192,6 @@ struct alignment *el, *next;
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    //pslFreeList(&el->psl);
     alignFree(&el);
     }
 *pList = NULL;
@@ -242,17 +240,11 @@ if (strand == '-')
             start, end, size, seqName);
     assert(start >= 0);
     seq = twoBitReadSeqFrag(tbf, seqName, start, end);
-    //seq = nibInfoLoadSeq(nib, start, size);
-//    seq = nibTwoCacheSeqPart(ntc, seqName, 
-//	start, size, &retFullSeqSize);
     reverseComplement(seq->dna, seq->size);
     }
 else
     {
     seq = twoBitReadSeqFrag(tbf, seqName, start, end);
-    //seq = nibInfoLoadSeq(nib, start, size);
-//    seq = nibTwoCacheSeqPart(ntc, seqName, 
-//	start, size, &retFullSeqSize);
     }
 return seq;
 }
@@ -556,7 +548,6 @@ for (l = lociList ; l != NULL ; l = l->next)
     else
             misMatch = newMisMatch(name, offset, '-', mrnaBase, na, -1, mrnaLoc, '.' , 
                     l->index, lociList, snpList);
-    //printMisMatch(&misMatch);
     slAddHead(misMatchList, misMatch);
     }
 }
@@ -602,13 +593,10 @@ for (mme = mm ; mme != NULL ; mme = mme->next)
         AllocArray(mrnaMisMatch->snps, seqCount);
         if (mme->snpCount > 0)
             {
-//            for (j = 0 ; j<mrnaMisMatch->snpCount; j++)
-                {
-                mrnaMisMatch->snps[i] = cloneString(mme->snps[0]);
-                mrnaMisMatch->snpCount++;
-                verbose(4,"mrnaloc %d mmsnp [%d] loci [%d] %s\n",
-                        mrnaMisMatch->mrnaLoc,i, mme->loci, mrnaMisMatch->snps[i]);
-                }
+            mrnaMisMatch->snps[i] = cloneString(mme->snps[0]);
+            mrnaMisMatch->snpCount++;
+            verbose(4,"mrnaloc %d mmsnp [%d] loci [%d] %s\n",
+                    mrnaMisMatch->mrnaLoc,i, mme->loci, mrnaMisMatch->snps[i]);
             }
         }
     mrnaMisMatch->chroms[i] = cloneString(mme->chrom);
@@ -851,14 +839,6 @@ for (l = lociList ; l != NULL; l=l->next)
         outputCount++;
         filterCount++;
         qNameCount++;
-        /* 
-        freez(&missCount);
-        freez(&goodCount);
-        freez(&gapCount);
-        freez(&neither);
-        freez(&snpCount);
-        return TRUE;
-        */
         }
     else
         {
@@ -946,14 +926,10 @@ void computeSuffStats(struct misMatch **misMatchList, struct alignment *align, s
 /* compute sufficient statistics from each alignment */
 {
 int blockIx = 0;
-//int i, j,    sum = 0;
 struct psl *psl = align->psl;
-//struct nibInfo *tNib = nibInfoFromCache(nibHash, align->nibDir, psl->tName);
-//nibTwoCache
 static struct dnaSeq *tSeq = NULL;
 int tStart = psl->tStart;
 int tEnd   = psl->tEnd;
-//int misMatchCount = 0;
 char genomeStrand = psl->strand[1] == '-' ? '-' : '+';
 if (genomeStrand == '-')
     reverseIntRange(&tStart, &tEnd, psl->tSize);
@@ -963,7 +939,7 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     struct snp125 *snp = NULL, *snpList = NULL;
     if (hashFindVal(cdnaSeqFile->hash, psl->qName) == NULL)
         {
-        printf("skipping %s not found \n",psl->qName);
+        verbose(5, "Skipping %s not found \n",psl->qName);
         return;
         }
     int size = twoBitSeqSize(cdnaSeqFile, psl->qName);
@@ -974,7 +950,7 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     struct dnaSeq *qSeq = NULL;
     if (qe > size)
         {
-        printf("skipping %s %d > %d \n",psl->qName, qe, size );
+        verbose(5, "Skipping %s %d > %d \n",psl->qName, qe, size );
         return;
         }
     qSeq = twoBitReadSeqFrag(cdnaSeqFile, psl->qName, psl->qStarts[blockIx], 
@@ -1000,10 +976,9 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
         char t = toupper(tSeq->dna[i]);
         char q = toupper(qSeq->dna[i]);
         int genomeStart = ts+i;
-        //int mrnaLoc = psl->qStarts[blockIx]+i;
 
         if (q == 'n' || q == 'N')
-            printf("N in sequence %s\n",psl->qName);
+            verbose(5, "N in sequence %s\n",psl->qName);
         updateCount(t,q);
 
         if (genomeStrand == '-')
@@ -1023,7 +998,6 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
                {
                verbose(4,"snp mismatch genome %c snpbase %c mrna %c ts %d snp %d valid %s\n",
                        t, snpBase, q, ts, snp->chromStart, snp->valid);
-//                        assert(snpBase == t);
                }
            else
             verbose(4,"       [%d] snp match %s %s %s:%d %s %s offset %d gs %c ts %d genomic%c %c valid %s\n",
@@ -1031,11 +1005,6 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
                     snp->strand, offset, genomeStrand, ts, genomeStrand, t, snp->valid);
             }
         }
-    /* add indel for portions of mrna that do not align at all */
-//    for (i = 0 ; i < psl->qStarts[0] ; i++)
-//        {
-//        char q = toupper(qSeq->dna[i]);
-//        }
     freeDnaSeq(&tSeq);
     freeDnaSeq(&qSeq);
     }
@@ -1068,7 +1037,6 @@ void fillinMatches(struct misMatch **misMatchList, struct alignment *align, stru
     static struct dnaSeq *tSeq = NULL;
 
     struct psl *psl = align->psl;
-    //struct nibInfo *tNib = nibInfoFromCache(nibHash, align->nibDir, psl->tName);
     int tStart = psl->tStart;
     int tEnd   = psl->tEnd;
     char genomeStrand = psl->strand[1] == '-' ? '-' : '+';
@@ -1101,7 +1069,8 @@ void fillinMatches(struct misMatch **misMatchList, struct alignment *align, stru
             int genomeStart = ts+i;
             if (genomeStrand == '-')
                 genomeStart = te-i-1;
-            /* if genomic chr not filled in yet (only mismatches are filled in ), and we are within the block, lookup genomic loc and  base*/
+            /* if genomic chr not filled in yet (only mismatches are filled in ), and we are within the block, 
+             * lookup genomic loc and base*/
             if (index == mm->loci)
                 {
                 if (sameString(mm->chrom , na) && 
@@ -1114,7 +1083,6 @@ void fillinMatches(struct misMatch **misMatchList, struct alignment *align, stru
                     if (i > 0 || i <= qe-qs) 
                         verbose(6," i %d qs %d qe %d\n",i,qs,qe);
                     assert (i > 0 || i <= qe-qs) ;
-//                    verbose(6, "WAS %s not %s\n",mm->chrom, psl->tName);
                     mm->chrom = cloneString(psl->tName);
                     mm->chromStart = genomeStart;
                     mm->genomeBase = t;
@@ -1142,18 +1110,6 @@ void fillinMatches(struct misMatch **misMatchList, struct alignment *align, stru
                     }
                 }
             }
-        /*
-        snpList = getSnpList(psl->tName, ts, te, genomeStrand) ;
-        for (snp = snpList ; snp != NULL ; snp = snp->next)
-            {
-            int offset = (snp->chromStart)-ts;
-            if (genomeStrand == '-')
-                offset = (tSeq->size - offset)-1;
-            verbose(4,"       snp %s %s %s:%d offset %d %s %s gs %c ts %d genomic%c valid %s\n",
-                    snp->name, psl->qName, snp->chrom, snp->chromStart, offset, snp->observed, 
-                    snp->strand, genomeStrand, ts, genomeStrand, snp->valid);
-            }
-            */
         freeDnaSeq(&tSeq);
         freeDnaSeq(&qSeq);
         }
@@ -1164,7 +1120,6 @@ void buildMisMatches(struct misMatch **misMatchList, struct alignment *align, st
 {
 int blockIx = 0;
 struct psl *psl = align->psl;
-//struct nibInfo *tNib = nibInfoFromCache(nibHash, align->nibDir, psl->tName);
 static struct dnaSeq *tSeq = NULL;
 int tStart = psl->tStart;
 int tEnd   = psl->tEnd;
@@ -1231,7 +1186,6 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
                    {
                    verbose(4,"snp mismatch genome %c snpbase %c mrna %c ts %d snp %d valid %s\n",
                            t, snpBase, q, ts, snp->chromStart, snp->valid);
-//                        assert(snpBase == t);
                    }
                else
                 verbose(4,"       [%d] snp match %s %s %s:%d %s %s offset %d gs %c ts %d genomic%c %c valid %s\n",
@@ -1248,43 +1202,13 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
             matchCount++;
             }
         }
-//    /* add indel for portions of mrna that do not align at all */
-//    for (i = 0 ; i < psl->qStarts[0] ; i++)
-//        {
-//        char q = toupper(qSeq->dna[i]);
-//
-//            verbose(4, "mismatch gap %c offset %d \n",
-//                    q, i);
-//        newMisMatches(misMatchList, psl->qName, i ,'-', q, psl->tName, 
-//                -1, i, genomeStrand, lociList, snpList);
-//        }
-
-
-//    if (misMatchCount == 0)
-//        newMisMatches(misMatchList, psl->qName, -1 ,'.', '.', psl->tName, 
-//                    0, -1, genomeStrand, lociList, snpList);
     printMisMatch(misMatchList);
-    /*
-    snpList = getSnpList(psl->tName, ts, te, genomeStrand) ;
-    for (snp = snpList ; snp != NULL ; snp = snp->next)
-        {
-        int offset = (snp->chromStart)-ts;
-        if (genomeStrand == '-')
-            offset = (tSeq->size - offset)-1;
-        verbose(4,"       snp %s %s %s:%d offset %d %s %s gs %c ts %d genomic%c valid %s\n",
-                snp->name, psl->qName, snp->chrom, snp->chromStart, offset, snp->observed, 
-                snp->strand, genomeStrand, ts, genomeStrand, snp->valid);
-        }
-        */
     freeDnaSeq(&tSeq);
     freeDnaSeq(&qSeq);
     }
     verbose(4,"buildMismatches final score %s:%d-%d %s %s #match %d misMatch %d \n",
             psl->tName, tStart, tEnd, psl->strand,
             psl->qName, matchCount, misMatchCount);
-//    fprintf(scoreFile,"%s\t%d\t%d\t%s\t%d\n",
-//            psl->tName, psl->tStart, psl->tEnd, psl->qName, 
-//            misMatchCount);
 }
 
 void doOneMrna(char *name, struct alignment *alignList)
@@ -1323,8 +1247,6 @@ for (align = alignList ; align != NULL ; align= align->next)
 verbose(5, "name %s alignList %d loci %d \n",
         name, slCount(alignList), slCount(lociList));
 
-//addOtherAlignments(&alignList, species1Hash, name, nibDir1, mrna1);
-//addOtherAlignments(&alignList, species2Hash, name, nibDir2, mrna2);
 if (alignList != NULL) 
     verbose(5,"buildMisMatch %s aList count %d \n",name, slCount(alignList));
 for (align = alignList; align != NULL ; align = align->next)
@@ -1429,7 +1351,6 @@ verbose(5,"last doOneMrna\n");
 slSort(&subList, pslCmpMatch);
 doOneMrna(lastName, subList);
 alignFreeList(&subList);
-//pslFreeList(&pslList);
 verbose(1,"Wrote %d alignments out of %d \n", outputCount, aliCount);
 verbose(1,"%d out of %d mRNAs passed strict criteria (pass thru not counted)\n", filterCount, mrnaCount);
 if (computeSS)
@@ -1481,8 +1402,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc != 6)
     usage();
-//if (nibHash == NULL)
-//    nibHash = hashNew(0);
 lociCounter = 0;
 fileCache = newDlList();
 verbosity = optionInt("verbose", verbosity);

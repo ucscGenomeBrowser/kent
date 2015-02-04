@@ -230,9 +230,9 @@ else
             mi->tblPre, mi->geneSet);
 
 printf("<TABLE class=\"transMap\">\n");
-printf("<H3><A HREF=\"#orthology\">Breaks in Orthology:</A></H3>\n");
+printf("<H3><A HREF=\"#orthology\">Break in Orthology:</A></H3>\n");
 printf("<THEAD>\n");
-printf("<TR><TH>Organism<TH>%% Coverage</TR>\n");
+printf("<TR><TH>Organism<TH>Score</TR>\n");
 printf("</THEAD><TBODY>\n");
 if (hTableExists(database, orthoTable))
     {
@@ -711,7 +711,6 @@ struct psl *pslList = NULL;
 char *table;
 
 genericHeader(tdb, mappedId);
-printf("<B>Description:</B> Retrogenes are processed mRNAs that are inserted back into the genome. Most are pseudogenes, and some are functional genes or anti-sense transcripts that may impede mRNA translation.<p>\n");
 printf("<TABLE border=0>\n");
 printf("<TR CLASS=\"transMapLayout\">\n");
 printf("<TD COLSPAN=3>\n");

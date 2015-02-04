@@ -1,7 +1,9 @@
 /** @jsx React.DOM */
+/* global ImmutableUpdate, PathUpdate, LabeledSelect */
 var pt = React.PropTypes;
 
 var CladeOrgDb = React.createClass({
+
     // LabeledSelect's for clade, org and db.
 
     mixins: [PathUpdate, ImmutableUpdate],
@@ -33,3 +35,6 @@ var CladeOrgDb = React.createClass({
         );
     }
 });
+
+// Without this, jshint complains that CladeOrgDb is not used.  Module system would help.
+CladeOrgDb = CladeOrgDb;

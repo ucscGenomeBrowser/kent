@@ -94,6 +94,7 @@ ensemblIdUrl genePred
 ensArchive genePred
 exonArrows genePred bed broadPeak
 exonArrowsDense bed
+exonNumbers genePred bed broadPeak psl
 expDrawExons expRatio
 expProbeTable expRatio
 expScale bed expRatio
@@ -187,6 +188,7 @@ indelPolyA psl bam
 indelQueryInsert psl bam bigBed
 informant genePred
 initialPos customTracks
+inputFieldMetaTables *
 inputType customTracks
 interTable encodeFiveC
 interTableKind encodeFiveC
@@ -381,6 +383,7 @@ subGroup7 *
 subGroup8 *
 subGroup9 *
 subGroups *
+subGroupMetaTables *
 subTrack *
 subgroups bed
 summary wigMaf

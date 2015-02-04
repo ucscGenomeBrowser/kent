@@ -1,0 +1,14 @@
+db oryLat2
+scientificName Oryzias latipes
+assemblyDate Oct. 2005
+assemblyLabel MEDAKA1
+#       Just above oryLat1
+orderKey 474
+#       NC_004387
+mitoAcc 25057156
+fastaFiles /cluster/data/oryLat2/ucsc/ucsc.source.fa
+dbDbSpeciesDir medaka
+agpFiles /cluster/data/oryLat2/ucsc/chromUltraScaff.agp
+commonName Medaka
+clade Vertebrate
+genomeCladePriority 105

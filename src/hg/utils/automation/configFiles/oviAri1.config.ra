@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db oviAri1
+clade mammal
+genomeCladePriority 31
+scientificName Ovis aries
+commonName Sheep
+assemblyDate Feb. 2010
+assemblyLabel ISGC (NCBI project 10709, accession GCA_000005525.1)
+assemblyShortLabel ISGC Ovis_aries_1.0
+orderKey 236
+mitoAcc NC_001941
+fastaFiles /hive/data/genomes/oviAri1/genbank/ucscChr/chr*.fa.gz
+agpFiles /hive/data/genomes/oviAri1/genbank/ucscChr/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir sheep
+taxId 9940

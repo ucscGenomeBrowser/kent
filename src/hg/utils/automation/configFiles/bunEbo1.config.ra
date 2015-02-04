@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db bunEbo1
+clade virus
+genomeCladePriority 2000
+scientificName Bundibugyo ebolavirus
+commonName Bundibugyo ebolavirus
+assemblyDate Aug. 2014
+assemblyLabel NCBI NIH NC_014373.1
+assemblyShortLabel NC_014373.1
+orderKey 11000
+mitoAcc none
+fastaFiles /hive/data/genomes/bunEbo1/ucsc/*.fa
+agpFiles /hive/data/genomes/bunEbo1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir ebola
+photoCreditURL http://phil.cdc.gov/phil/details.asp?pid=10816
+photoCreditName CDC Public Health Image Library (PHIL)
+ncbiGenomeId 4021
+ncbiAssemblyId NC_014373.1
+ncbiAssemblyName NC_014373.1
+ncbiBioProject 51245
+genBankAccessionID FJ217161.1
+taxId 565995

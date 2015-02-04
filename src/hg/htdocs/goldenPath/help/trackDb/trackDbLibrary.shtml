@@ -1078,6 +1078,18 @@
     <pre>   exonArrows off</pre>
 </DIV>
 
+<DIV class="exonNumbers"><span class="types genePred bed broadPeak psl"></span>
+<div class="format"><code>exonNumbers &lt;on/off&gt;</code></div>
+    <P>On tracks that show
+    exons or blocks within features, mouseover/hover shows exon and intron numbers. 
+    Exon and intron numbers are typically shown by default
+    in these types of tracks, with the exception of tracks in the Regulation group. 
+    The mouseover exon and intron numbers can be explicitly shown or hidden using this setting.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>   exonNumbers off</pre>
+</DIV>
+
 <DIV class="Filter"><span class="types bed narrowPeak broadPeak"></span>
 <div class="format">
     <code>&lt;column&gt;Filter &lt;low&gt;[:&lt;high&gt;]</code><BR>

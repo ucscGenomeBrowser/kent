@@ -1,0 +1,16 @@
+# Config parameters for makeGenomeDb.pl:
+db hg19Patch2
+scientificName Homo sapiens
+commonName GRCh37.p2
+assemblyDate Aug. 2009
+assemblyLabel GRCh37 Patch 2 Genome Reference Consortium Human Reference 37 (GCA_000001405.1)
+orderKey 14
+mitoAcc none
+fastaFiles /hive/data/genomes/hg19Patch2/sequence/*.fa
+agpFiles /hive/data/genomes/hg19Patch2/sequence/hg19Patch2.agp
+# qualFiles /dev/null
+dbDbSpeciesDir human
+taxId	9606
+clade haplotypes
+genomeCladePriority 139
+assemblyShortLabel GRCh37.p2

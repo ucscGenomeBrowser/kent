@@ -4187,6 +4187,85 @@ if (subCount > 5 || (restrictions && sortOrder != NULL))
     }
 }
 
+/********************/
+/* Basic metadata for subgroups and input fields */
+
+struct metaBasic {
+    struct metaBasic *next;
+    char *term;
+    char *description;
+    char *url;
+};
+
+char *metaVocabLink(struct hash *metaFieldHash, char *term, char *title)
+/* Make an anchor with mouseover containing description and link if present */
+{   
+struct metaBasic *meta = hashFindVal(metaFieldHash, term);
+if (meta == NULL)
+    return NULL;
+struct dyString *ds = dyStringNew(0);
+if (meta->url == NULL || strlen(meta->url) == 0)
+    dyStringPrintf(ds, "<A title='%s' style='cursor: pointer;'>%s</A>",
+                        meta->description, term);
+else
+    dyStringPrintf(ds, "<A target='_blank' class='cv' title='%s' href='%s'>%s</A>\n",
+                        meta->description, meta->url, term);
+return dyStringCannibalize(&ds);
+}
+
+struct hash *metaBasicFromSetting(struct trackDb *parentTdb, struct cart *cart, char *setting)
+/* Get description and URL for all metaTables. Returns a hash of hashes */
+{
+if (differentString(setting, "subGroupMetaTables") &&
+    differentString(setting, "inputFieldMetaTables"))
+        return NULL;
+char *spec = trackDbSetting(parentTdb, setting);
+if (!spec)
+    return NULL;
+struct slPair *metaTables = slPairFromString(spec);
+struct hash *tableHash = hashNew(0);
+struct slPair *metaTable;
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *database = cartString(cart, "db");
+char *db = database;
+for (metaTable = metaTables; metaTable != NULL; metaTable = metaTables->next)
+    {
+    char *tableName = chopPrefix(cloneString(metaTable->val));
+    if (differentString(tableName, metaTable->val))
+        {
+        chopSuffix(metaTable->val);
+        db = metaTable->val;
+        }
+    struct sqlConnection *conn = hAllocConn(db);
+    boolean hasUrl = FALSE;
+    struct hash *subgroupHash = hashNew(0);
+    hashAdd(tableHash, metaTable->name, subgroupHash);
+    if (hHasField(db, tableName, "url"))
+        {
+        sqlSafef(query, sizeof(query), "select term, description, url from %s", tableName);
+        hasUrl = TRUE;
+        }
+    else
+        sqlSafef(query, sizeof(query), "select term, description from %s", tableName);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        struct metaBasic *meta = NULL;
+        AllocVar(meta);
+        meta->term = cloneString(row[0]);
+        meta->description = cloneString(row[1]);
+        if (hasUrl)
+            meta->url = cloneString(row[2]);
+        hashAdd(subgroupHash, meta->term, meta);
+        }
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+return tableHash;
+}
+
 static void printSubtrackTableBody(struct trackDb *parentTdb, struct slRef *subtrackRefList,
                                     struct subtrackConfigSettings *settings, struct cart *cart)
 /* Print list of subtracks */
@@ -4217,6 +4296,7 @@ else
 // Finally the big "for loop" to list each subtrack as a table row.
 printf("\n<!-- ----- subtracks list ----- -->\n");
 membersForAll_t* membersForAll = membersForAllSubGroupsGet(parentTdb,NULL);
+struct hash *subgroupMetaHash = metaBasicFromSetting(parentTdb, cart, "subGroupMetaTables");
 struct slRef *subtrackRef;
 
 /* Color handling ?? */
@@ -4386,16 +4466,25 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                                 // TODO: Sort needs to expand from subGroups to labels as well
             if (ix >= 0)
                 {
+                char *term = membership->membership[ix];
+                char *title = membership->titles[ix];
                 char *titleRoot=NULL;
-                if (cvTermIsEmpty(col, membership->titles[ix]))
+                if (cvTermIsEmpty(col, title))
                     titleRoot = cloneString(" &nbsp;");
                 else
-                    titleRoot = labelRoot(membership->titles[ix],NULL);
+                    titleRoot = labelRoot(title, NULL);
                 // Each sortable column requires hidden goop (in the "abbr" field currently)
                 // which is the actual sort on value
-                printf("<TD id='%s_%s' abbr='%s' align='left'>&nbsp;",
-                       subtrack->track, col, membership->membership[ix]);
-                printf("%s",titleRoot);
+                printf("<TD id='%s_%s' abbr='%s' align='left'>", subtrack->track, col, term);
+                printf("&nbsp");
+                char *link = NULL;
+                if (subgroupMetaHash)
+                    {
+                    struct hash *colHash = hashFindVal(subgroupMetaHash, col);
+                    if (colHash)
+                        link = metaVocabLink(colHash, term, titleRoot);
+                    }
+                printf("%s", link ? link : titleRoot);
                 puts("</TD>");
                 freeMem(titleRoot);
                 }
@@ -4765,9 +4854,11 @@ printf("  $( document ).ready(function()\n");
 printf("  {\n");
 printf("  val= $(\"[name='%s.autoScale']\").find(':selected').val(); \n", name);
 printf("  if (val==\"auto-scale to data view\")\n");
+printf("     {\n");
 printf("     $(\"[name='%s.minY']\")[0].disabled=true;\n", name);
 printf("     $(\"[name='%s.maxY']\")[0].disabled=true;\n", name);
 printf("     $(\".%sAutoScaleDesc\").attr('style', 'color:grey;');\n", name);
+printf("     }\n");
 printf("  });\n");
 printf("</script>\n");
 }
@@ -6815,7 +6906,7 @@ return cloneString(label);
 }
 
 #ifdef BUTTONS_BY_CSS
-#define BUTTON_MAT "<span class='pmButton' onclick=\"matSeteatrixCheckBoxes(%s%s%s%s)\">%c</span>"
+#define BUTTON_MAT "<span class='pmButton' onclick=\"matSetMatrixCheckBoxes(%s%s%s%s)\">%c</span>"
 #else///ifndef BUTTONS_BY_CSS
 #define PM_BUTTON_UC "<IMG height=18 width=18 onclick=\"return " \
                      "(matSetMatrixCheckBoxes(%s%s%s%s%s%s) == false);\" id='btn_%s' " \

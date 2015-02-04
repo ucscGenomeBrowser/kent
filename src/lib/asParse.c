@@ -141,8 +141,8 @@ for (i = 0;  i < ArraySize(asTypes);  i++)
 return NULL;
 }
 
-static struct asColumn *mustFindColumn(struct asObject *table, char *colName)
-/* Return column or die. */
+static struct asColumn *findColumn(struct asObject *table, char *colName)
+/* Return column or null. */
 {
 struct asColumn *col;
 
@@ -151,8 +151,25 @@ for (col = table->columnList; col != NULL; col = col->next)
     if (sameWord(col->name, colName))
 	return col;
     }
-errAbort("Couldn't find column %s", colName);
 return NULL;
+}
+
+static void mustNotFindColumn(struct asObject *table, char *colName)
+/* Die if column found. */
+{
+struct asColumn *col = findColumn(table, colName);
+if (col)
+    errAbort("duplicate column names found: %s, %s", col->name, colName);
+}
+
+
+static struct asColumn *mustFindColumn(struct asObject *table, char *colName)
+/* Return column or die. */
+{
+struct asColumn *col = findColumn(table, colName);
+if (!col)
+    errAbort("Couldn't find column %s", colName);
+return col;
 }
 
 static struct asObject *findObType(struct asObject *objList, char *obName)
@@ -270,6 +287,7 @@ else if (tkz->string[0] == '(')
     asParseColSymSpec(tkz, obj, col);
 
 col->name = cloneString(tkz->string);
+mustNotFindColumn(obj, col->name);  // check for duplicate column name
 tokenizerMustHaveNext(tkz);
 col->index = asParseIndex(tkz, col);
 if (sameString(tkz->string, "auto"))

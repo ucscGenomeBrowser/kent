@@ -14,6 +14,7 @@ update:
 	${MAKE} clean
 
 topLibs:
+	@./checkUmask.sh
 	@MACHTYPE=${MACHTYPE} ./machTest.sh
 	cd lib && ${MAKE}
 	cd jkOwnLib && ${MAKE}

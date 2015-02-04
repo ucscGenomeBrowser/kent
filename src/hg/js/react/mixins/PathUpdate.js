@@ -14,3 +14,6 @@ var PathUpdate = {
                  // A component may add to path if the component has more than one UI event.
                }
 };
+
+// Without this, jshint complains that PathUpdate is not used.  Module system would help.
+PathUpdate = PathUpdate;

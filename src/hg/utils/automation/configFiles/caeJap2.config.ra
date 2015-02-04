@@ -1,0 +1,15 @@
+# Config parameters for makeGenomeDb.pl:
+db caeJap2
+clade worm
+genomeCladePriority 10
+scientificName Caenorhabditis japonica
+commonName C. japonica
+assemblyDate Jan. 2009
+assemblyLabel Washington University School of Medicine GSC C. japonica 4.0.1
+orderKey 881
+mitoAcc none
+fastaFiles /hive/data/genomes/caeJap2/wustl/contigs.fa.gz
+agpFiles /hive/data/genomes/caeJap2/wustl/chrUn.agp
+qualFiles /hive/data/genomes/caeJap2/wustl/chrUn.qual.qac
+dbDbSpeciesDir worm
+taxId 281687

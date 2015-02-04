@@ -1,4 +1,7 @@
 /** @jsx React.DOM */
+/* global ImmutableUpdate, PathUpdate, CheckboxLabel, CladeOrgDb, Icon, LabeledSelect */
+/* global LoadingImage, Modal, PositionSearch, Section, SetClearButtons, Sortable, TextInput */
+
 var pt = React.PropTypes;
 
 // AnnoGrator interface.
@@ -31,12 +34,13 @@ var RegionOrGenome = React.createClass({
         var props = this.props;
         var posInfo = props.positionInfo;
         var positionInput = null;
-        if (posInfo.get('hgai_range') !== 'genome')
+        if (posInfo.get('hgai_range') !== 'genome') {
             positionInput = <PositionSearch positionInfo={posInfo}
                                             className='sectionItem'
                                             db={props.db}
                                             path={props.path} update={props.update}
                             />;
+        }
         return (
             <div className='sectionRow'>
               <LabeledSelect label='region to annotate'
@@ -57,7 +61,7 @@ var GroupTrackTable = React.createClass({
     // update(path + group|track|table) called when user changes group|track|table
 
     propTypes: { trackPath: pt.object.isRequired,    // Immutable.Map { group, track, table }
-                 trackDbInfo: pt.object.isRequired,  // Immutable.Map { groupOptions, groupTracks,
+                 trackDbInfo: pt.object.isRequired   // Immutable.Map { groupOptions, groupTracks,
                                                      // trackTables }
     },
 
@@ -72,8 +76,9 @@ var GroupTrackTable = React.createClass({
         var trackTables = props.trackDbInfo.get('trackTables');
         var trackOptions = groupTracks.get(group);
         var tableNames = trackTables.get(track);
-        if (! tableNames)
+        if (! tableNames) {
             tableNames = trackTables.get(trackOptions.getIn([0, 'value']));
+        }
         var tableOptions;
         if (tableNames) {
             tableOptions = tableNames.map(function(name) {
@@ -101,6 +106,17 @@ var GroupTrackTable = React.createClass({
     }
 }); // GroupTrackTable
 
+function makeSchemaLink(db, group, track, table) {
+    // Return a React component link to hgTables' schema page.
+    var schemaUrl = 'hgTables?db=' + db + '&hgta_group=' + group + '&hgta_track=' + track +
+                    '&hgta_table=' + table + '&hgta_doSchema=1';
+    return <span className='smallText sectionItem'>
+              <a href={schemaUrl} target="ucscSchema"
+                 title="Open table schema in new window">
+                View table schema
+              </a></span>;
+}
+
 var AddDataSource = React.createClass({
     // A section-lite with group/track/table (or someday group/composite/view/etc) selects
     // and a button to add the selected track/table
@@ -116,8 +132,7 @@ var AddDataSource = React.createClass({
                                       //   groupOptions: pt.array, group menu options
                                       //   groupTracks: pt.object, maps groups to track menu options
                                       //   trackTables: pt.object  maps tracks to table lists
-                 // Optional
-                 schemaLink: pt.node                 // React component: link to hgTables schema
+                 db: pt.string.isRequired            // needed for schema link
                },
 
     onAdd: function() {
@@ -144,6 +159,9 @@ var AddDataSource = React.createClass({
             return <Icon type='spinner' />;
         }
 
+        var trackPath = this.props.trackPath;
+        var schemaLink = makeSchemaLink(this.props.db, trackPath.get('group'),
+                                        trackPath.get('track'), trackPath.get('table'));
         return (
             <div>
               <div className='bigBoldText sectionRow'>
@@ -153,7 +171,7 @@ var AddDataSource = React.createClass({
                                trackDbInfo={trackDbInfo}
                                path={path.concat('addDsTrackPath')} update={this.props.update}
                                />
-              {this.props.schemaLink}
+              {schemaLink}
               <input type='button' value='Add' onClick={this.onAdd} />
               <br />
               <div className='sectionRow'>
@@ -324,17 +342,6 @@ function getLabelForValue(valLabelVec, val) {
     return val;
 }
 
-function makeSchemaLink(db, group, track, table) {
-    // Return a React component link to hgTables' schema page.
-    var schemaUrl = 'hgTables?db=' + db + '&hgta_group=' + group + '&hgta_track=' + track +
-                    '&hgta_table=' + table + '&hgta_doSchema=1';
-    return <span className='smallText sectionItem'>
-              <a href={schemaUrl} target="ucscSchema"
-                 title="Open table schema in new window">
-                View table schema
-              </a></span>;
-}
-
 var AppComponent = React.createClass({
     // AnnoGrator interface
 
@@ -359,10 +366,6 @@ var AppComponent = React.createClass({
         var db = this.props.appState.getIn(['cladeOrgDb', 'db']);
         var schemaLink = makeSchemaLink(db, group, track, table);
 
-        var onMoreOptions = function (ev) {
-            this.props.update(this.props.path.concat(['dataSources', i, 'moreOptions']));
-        }.bind(this);
-
         return (
             <div key={trackPathKey} className='dataSourceSubsection'>
                 <div className='sortHandle'>
@@ -381,7 +384,6 @@ var AppComponent = React.createClass({
                 </div>
             </div>
         );
-        //                <input type='button' value='More options...' onClick={onMoreOptions} />
     },
 
     renderDataSources: function(dataSources) {
@@ -413,8 +415,6 @@ var AppComponent = React.createClass({
         var trackDbInfo = appState.get('trackDbInfo'); // groupOptions, groupTracks, trackTables
         var trackPath = appState.get('addDsTrackPath');
         var db = cladeOrgDbInfo.get('db');
-        var schemaLink = makeSchemaLink(db, trackPath.get('group'), trackPath.get('track'),
-                                        trackPath.get('table'));
         if (! (cladeOrgDbInfo && trackDbInfo && trackPath)) {
             // Waiting for initial data from server
             return <span>Loading...</span>;
@@ -448,7 +448,7 @@ var AppComponent = React.createClass({
                 {this.renderDataSources(dataSources)}
                 <AddDataSource trackPath={trackPath}
                                trackDbInfo={trackDbInfo}
-                               schemaLink={schemaLink}
+                               db={db}
                                path={[]} update={this.props.update} />
               </Section>
 
@@ -472,3 +472,6 @@ var AppComponent = React.createClass({
     }
 
 });
+
+// Without this, jshint complains that AppComponent is not used.  Module system would help.
+AppComponent = AppComponent;

@@ -17099,7 +17099,7 @@ TMPDIR=/scratch/tmp
     #  606 GRtitle_shortname_NBKid.txt
     # 2792 NBKid_shortname_OMIM.txt
     # 1337 NBKid_shortname_genesymbol.txt
-        
+
     cp -p NBKid_shortname_genesymbol.txt /hive/data/genomes/hg19/bed/geneReviews/.
     cp -p NBKid_shortname_OMIM.txt /hive/data/genomes/hg19/bed/geneReviews/.
     cp -p GRtitle_shortname_NBKid.txt /hive/data/genomes/hg19/bed/geneReviews/.
@@ -17109,7 +17109,7 @@ TMPDIR=/scratch/tmp
     cat NBKid_shortname_genesymbol.txt | grep -v "^#" \
      | awk  '{FS="\t"} {OFS="\t"} {if ($3!="Not applicable") \
       print $3,$2,$1}' | sort -k1 > geneReviewsGrshortNBKid.tab
-    # Create geneReviewsGrshortNBKid table 
+    # Create geneReviewsGrshortNBKid table
     cat << '_EOF_' > $HOME/kent/src/hg/lib/geneReviewsGrshortNBKid.sql
 CREATE TABLE geneReviewsGrshortNBKid (
     geneSymbol  varchar(255) not null,   # refSeq gene symbol
@@ -17133,7 +17133,7 @@ CREATE TABLE geneReviewsGrshortNBKid (
     # 1126 grRefGene.lst
 
     # Note: awk bug -- when reading the first input line, awk treat space as
-    # TAB. So need to work around it by print out all line, then use grep to 
+    # TAB. So need to work around it by print out all line, then use grep to
     # filter first header line
     cat GRtitle_shortname_NBKid.txt | awk  '{FS="\t"} {OFS="\t"}  {print $1,$2,$3}' |  grep -v "^#" | sort -k1 > geneReviewsGrshortTitleNBKid.tab
     # Create and load geneReviewsGrshortTitleNBKid
@@ -17177,7 +17177,7 @@ CREATE TABLE geneReviewsGrshortTitleNBKid (
     # load the collapsed bed4 file to hg19,
     hgLoadBed hg19 geneReviews geneReviews.tab
 
-    # Create and load geneReviewsDetail table 
+    # Create and load geneReviewsDetail table
     # the new table will replace the old geneReviewsRefGene with diseaseID in
     # it.
     cat << '_EOF_' > $HOME/kent/src/hg/lib/geneReviewsDetail.sql
@@ -17199,10 +17199,10 @@ CREATE TABLE geneReviewsDetail (
     hgLoadSqlTab -warn hg19 geneReviewsDetail \
       $HOME/kent/src/hg/lib/geneReviewsDetail.sql geneReviewsDetail.tab
 
-    # Check in the following to git:  
+    # Check in the following to git:
     # $HOME/kent/src/hg/lib/geneReviewsGrshortNBKid.sql
     # $HOME/kent/src/hg/lib/geneReviewsGrshortTitleNBKid.sql
-    # $HOME/kent/src/hg/lib/geneReviewsDetail.sql    
+    # $HOME/kent/src/hg/lib/geneReviewsDetail.sql
     # Update the human/trackDb.ra and human/geneReviews.html
 
 
@@ -23499,7 +23499,7 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium >& swap.log
 
     cat fb.felCat5.chainHg19Link.txt
-    # 1453639480 bases of 2364296207 (61.483%) in intersection 
+    # 1453639480 bases of 2364296207 (61.483%) in intersection
 
     cd /hive/data/genomes/felCat5/bed
     ln -s blastz.hg19.swap lastz.hg19
@@ -24548,12 +24548,12 @@ EOF
    # How many & what kinds of function types?
    cut -f 6 ncbiFuncAnnotationsFixed.txt \
    | sort -n | uniq -c
-#1013446 3  (coding-synon)            
+#1013446 3  (coding-synon)
 #2830106 8  (cds-reference -- ignored)
-#  50753 41 (nonsense)                
-#1762922 42 (missense)                
-#   1623 43 (stop-loss)               
-#  51453 44 (frameshift)              
+#  50753 41 (nonsense)
+#1762922 42 (missense)
+#   1623 43 (stop-loss)
+#  51453 44 (frameshift)
 # 477493 45 (cds-indel)
 
    # In b138, the functional annotations include non-coding (frame = NULL),
@@ -28774,7 +28774,7 @@ _EOF_
     liftOver -genePred lrgTranscriptsUnmapped.gp lrgMap.chain lrgTLiftOver.gp noMap
     # The noMap file has a few "Boundary problem" errors because liftOver doesn't have
     # sophisticated handling of exonFrames and indels.  Also, liftOver carries over exonFrames
-    # as-is without regard to strand, so they end up being reversed for LRG's on the - strand.  
+    # as-is without regard to strand, so they end up being reversed for LRG's on the - strand.
     # That's why we're using MarkD's method above!
     # Ignore exonFrames and compare:
     cut -f 1-14 lrgTranscriptsHg19.gp > t1
@@ -29443,7 +29443,7 @@ EOF
     # First, make some files for dbSNP, directly from their download files.
     # To prepare for join, '.'-concat location, rs# ID, ori and allele fields of b138 SNPContigLoc:
     zcat data/b138_SNPContigLoc.bcp.gz \
-    | awk -F"\t" '{print $3"."$4"."$5".rs"$2"\t"$15"\t"$16;}' 
+    | awk -F"\t" '{print $3"."$4"."$5".rs"$2"\t"$15"\t"$16;}'
     | sort \
       > hg19_b138_locOriAl.txt
     # Likewise for b141 on GRCh37:
@@ -29839,7 +29839,7 @@ wget --no-check-certificate -c "https://db.systemsbiology.net/sbeams/cgi/Peptide
 
 wget http://www.peptideatlas.org/builds/human/201408/coordinate_mapping.txt -O peptideAtlas.201408.tsv
 wc -l peptideAtlas.201408.tsv
-# 12858738 
+# 12858738
 
 grep -v UNKNOWN peptideAtlas.201408.tsv > known.txt
  wc -l known.txt
@@ -30030,7 +30030,7 @@ tail -n +2 peptides.tab | awk '{print $1,"\t", $2}' | diff - peptides.fromMappin
 featureBits hg19 peptideAtlas14
 # 15624786 bases of 2897316137 (0.539%) in intersection
 
-featureBits hg19 -enrichment refGene:cds peptideAtlas2014 
+featureBits hg19 -enrichment refGene:cds peptideAtlas2014
 # refGene:cds 1.212%, peptideAtlas2014 0.539%, both 0.533%, cover 44.00%, enrich 81.58x
 
 # alternate mappings for the peptides, using FenyoLab PGx
@@ -30043,7 +30043,7 @@ wc -l mappings.sorted.bed12 pgx/*.sorted.bed
 #1189306 mappings.sorted.bed12
 #1111981 pgx/peptideAtlas.pgx.sorted.bed
 
-hgLoadBed hg19 peptideAtlas2014Pgx peptideAtlas.pgx.sorted.bed 
+hgLoadBed hg19 peptideAtlas2014Pgx peptideAtlas.pgx.sorted.bed
 
 
 hgsql hg19 -e 'select distinct(name) from peptideAtlas2014 order by name' > peptides.mapped.txt
@@ -30056,7 +30056,7 @@ wc -l peptides.unmapped.txt
 
 
 ##############################################################################
-# DBSNP B142 / SNP142 (DONE 11/18/14)
+# DBSNP B142 / SNP142 (DONE 11/18/14; snp142ExceptionDesc reloaded 1/23/15)
 # originally done 11/03/14
 # 11/17/14: Allele dump file was outdated at time of download -- it was re-dumped a couple weeks
 #           after release.  snp142 was missing some frequencies due to incomplete join with Allele.
@@ -30156,7 +30156,7 @@ EOF
     cut -d\| -f 2,4- --output-delimiter='	' 1kg_70K_phase_update.txt\
     | awk '$4 != $8 || $5 != $9' \
     | head
-#532008114       1       5366489 -       TTTTG   1       5366485 -       TTTGT   
+#532008114       1       5366489 -       TTTTG   1       5366485 -       TTTGT
 #543956793       1       6266877 AG      -       1       6266874 GA      -
 #558079733       1       7056752 GAA     -       1       7056750 AAG     -
 #566669620       1       8121175 -       AATAATAATAA     1       8121167 -       AATAATAAAAT
@@ -30209,6 +30209,23 @@ EOF
     mkdir `cat workingDir`
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=bigJoin \
       >>& do.log & tail -f do.log
+
+    # 1/23/15: Jonathan noticed that NonIntegerChromCount's count in snp142ExceptionDesc
+    # was much higher than the number of snp142 rows with NonIntegerChromCount; turns out
+    # it was tallied per allele not per variant.  Fixed, regenerate;
+    cd /hive/data/outside/dbSNP/142/human_hg19
+    snpNcbiToUcsc -snp132Ext -par=par.bed.gz ucscNcbiSnp.bed.gz /hive/data/genomes/hg19/hg19.2bit \
+      snp142RedoExceptionDesc
+    # Takes ~45min.  Make sure there are no changes to snp142.bed:
+    zcat snp142.bed.gz > /data/tmp/snp142.bed
+    cmp /data/tmp/snp142.bed snp142RedoExceptionDesc.bed
+    # No output -- good.
+    rm /data/tmp/snp142.bed
+    mv snp142ExceptionDesc.tab.gz snp142ExceptionDesc.tab.bak.gz
+    mv snp142RedoExceptionDescExceptionDesc.tab snp142ExceptionDesc.tab
+    hgLoadSqlTab hg19 snp142ExceptionDesc $HOME/kent/src/hg/lib/snp125ExceptionDesc.sql \
+      snp142ExceptionDesc.tab
+    rm snp142RedoExceptionDesc*
 
 
 ##############################################################################
@@ -30424,12 +30441,12 @@ EOF
 
 ##############################################################################
 # UniProt annotations (DONE 11/10/14 max) RM 13688
-# 
+#
 # the uniprot parser is part of the publications pipeline, see github.com/maximilianh/pubMunch
 ~max/projects/pubs/tools/pubParseDb uniprot 9606
 ~/kent/src/hg/utils/uniprotMutations/makeUniProtToHg.sh hg19
-uniprotLift 9606 hg19 uniProtTohg19.psl 
-hgBbiDbLink hg19 spStruct /gbdb/hg19/bbi/spMut.bb 
+uniprotLift 9606 hg19 uniProtTohg19.psl
+hgBbiDbLink hg19 spStruct /gbdb/hg19/bbi/spMut.bb
 hgBbiDbLink hg19 spStruct /gbdb/hg19/bbi/spStruct.bb
 hgBbiDbLink hg19 spAnnot /gbdb/hg19/bbi/spAnnot.bb
 

@@ -1,4 +1,14 @@
-/* hgAi - General annotation integrator interface. */
+/* hgAi - bootstrapper / back end for the Annotation Integrator user interface
+ * This CGI has three modes of operation:
+ *  - HTML output for minimal main page with a <div> container to be filled in by javascript
+ *    (default, in the absence of special CGI params)
+ *  - JSON responses to ajax requests from javascript (using hg/lib/cartJson.c)
+ *    (if CGI param CARTJSON_COMMAND exists)
+ *  - text output for annoGrator queries on track data
+ *    (if CGI param DO_QUERY exists)
+ * The UI view top level is in ../js/react/hgAi/hgAi.jsx
+ * The UI model top level is in ../js/model/hgAi/hgAiModel.js
+ */
 #include "common.h"
 #include "cart.h"
 #include "cartJson.h"
@@ -80,7 +90,10 @@ struct grp *fullGroupList = NULL;
 cartTrackDbInit(cj->cart, &fullTrackList, &fullGroupList, /* useAccessControl= */TRUE);
 for (table = tables;  table != NULL;  table = table->next)
     {
-    struct trackDb *tdb = tdbForTrack(NULL, table->name, &fullTrackList);
+    char *tableName = table->name;
+    if (startsWith("all_", tableName))
+        tableName += strlen("all_");
+    struct trackDb *tdb = tdbForTrack(NULL, tableName, &fullTrackList);
     if (tdb)
         {
         struct asObject *asObj = hAnnoGetAutoSqlForTdb(db, hDefaultChrom(db), tdb);
@@ -98,6 +111,8 @@ for (table = tables;  table != NULL;  table = table->next)
             jsonWriteObjectEnd(cj->jw);
             }
         }
+    else
+        warn("No tdb for %s", table->name);
     }
 jsonWriteObjectEnd(cj->jw);
 slFreeList(&tables);

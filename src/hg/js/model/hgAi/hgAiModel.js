@@ -1,32 +1,34 @@
+/* global AppComponent, ImModel, CladeOrgDbMixin, PositionSearchMixin, cart */
+
 var HgAiModel = ImModel.extend({
     // Handle hgAi's UI state and events and interaction with the server/CGI/cart.
 
     mixins: [ CladeOrgDbMixin(['cladeOrgDb']),
               PositionSearchMixin(['positionInfo']) ],
 
-    handleCartVar: function(cartVar, newValue) {
+    handleCartVar: function(mutState, cartVar, newValue) {
         // Some cart variables require special action (not simply being merged into top-level state)
         if (cartVar === 'hgai_querySpec') {
             if (newValue === '') {
                 // No querySpec in cart yet -- make an empty one for rendering:
-                this.mutState.set(cartVar,
+                mutState.set(cartVar,
                                   Immutable.fromJS({ dataSources: [], outFileOptions: {} }));
             } else {
                 newValue = decodeURIComponent(newValue);
                 newValue = JSON.parse(newValue);
-                this.mutState.set(cartVar, Immutable.fromJS(newValue));
+                mutState.set(cartVar, Immutable.fromJS(newValue));
             }
         } else if (cartVar === 'hgai_range') {
             // Bundle this with positionInfo for fast immutable-prop checking
-            this.mutState.setIn(['positionInfo', cartVar], newValue);
+            mutState.setIn(['positionInfo', cartVar], newValue);
         } else if (cartVar === 'trackDbInfo') {
             var trackDbInfo = newValue;
-            this.mutState.set(cartVar, Immutable.fromJS(trackDbInfo));
+            mutState.set(cartVar, Immutable.fromJS(trackDbInfo));
             // Update addDsTrackPath to something that we know for sure is in this db
             var firstGroup = trackDbInfo.groupOptions[0].value;
             var firstTrack = trackDbInfo.groupTracks[firstGroup][0].value;
             var firstTable = trackDbInfo.trackTables[firstTrack][0];
-            this.mutState.set('addDsTrackPath',
+            mutState.set('addDsTrackPath',
                               Immutable.Map({ group: firstGroup, track: firstTrack,
                                               table: firstTable }));
         } else if (cartVar === 'tableFields') {
@@ -35,14 +37,13 @@ var HgAiModel = ImModel.extend({
             // booleans for checkboxes; if hgai_querySpec contains saved settings,
             // use those; otherwise true unless field is bin.
             var tfDefaults = {};
-            var current = this.mutState.getIn(['hgai_querySpec', 'outFileOptions', 'tableFields']);
+            var current = mutState.getIn(['hgai_querySpec', 'outFileOptions', 'tableFields']);
             if (current) {
                 current = current.toJS();
             } else {
                 current = {};
             }
-            Object.keys(newValue).forEach(function(table) {
-                var info = newValue[table];
+            tfDefaults = _.mapValues(newValue, function(info, table) {
                 var currentFieldSettings = current[table] || {};
                 var newFieldSettings = Immutable.OrderedMap();
                 info.fields.forEach(function(field) {
@@ -52,69 +53,69 @@ var HgAiModel = ImModel.extend({
                     }
                     newFieldSettings = newFieldSettings.set(field, checked);
                 }, this);
-                tfDefaults[table] = Immutable.Map({ fields: newFieldSettings, label: info.label});
+                return Immutable.Map({ fields: newFieldSettings, label: info.label});
             }, this);
-            this.mutState.set('tableFields', Immutable.OrderedMap(tfDefaults));
+            mutState.set('tableFields', Immutable.OrderedMap(tfDefaults));
         } else {
             this.error('handleCartVar: unexpectedly given', cartVar, newValue);
         }
     },
 
-    isInTrackDb: function(dataSource) {
+    isInTrackDb: function(mutState, dataSource) {
         // Search trackDbInfo with dataSource's track/table; return true if found.
         var track = dataSource.get('track');
         var table = dataSource.get('table');
-        var tableList = this.mutState.getIn(['trackDbInfo', 'trackTables', track]);
+        var tableList = mutState.getIn(['trackDbInfo', 'trackTables', track]);
         return tableList && tableList.find(function(listedTable) {
             return listedTable === table;
         });
     },
 
-    validateCart: function() {
+    validateCart: function(mutState) {
         // We usually get trackDbInfo and hgai_query in the same server response.
         // When both have been incorporated into mutState, trim any data sources
         // from hgai_query that aren't found in trackDbInfo (e.g. after a db change).
-        var dataSources = this.mutState.getIn(['hgai_querySpec', 'dataSources']) || [];
+        var dataSources = mutState.getIn(['hgai_querySpec', 'dataSources']) || [];
         var newDataSources = dataSources.filter(function(ds) {
-            return this.isInTrackDb(ds);
+            return this.isInTrackDb(mutState, ds);
         }, this);
         if (! newDataSources.equals(dataSources)) {
-            this.mutState.setIn(['hgai_querySpec', 'dataSources'], newDataSources);
+            mutState.setIn(['hgai_querySpec', 'dataSources'], newDataSources);
         }
     },
 
-    cartSendQuerySpec: function() {
+    cartSendQuerySpec: function(mutState) {
         // When some part of querySpec changes, update the cart variable.
-        var state = this.mutState || this.state;
+        var state = mutState || this.state;
         this.cartSet('hgai_querySpec', JSON.stringify(state.get('hgai_querySpec').toJS()));
     },
 
-    changeAddDsTrackPath: function(path, newValue) {
+    changeAddDsTrackPath: function(mutState, path, newValue) {
         // User changed group, track or table in the 'Add Data Source' section.
         // Changing group or track has side effects on lower-level menus.
-        this.mutState.setIn(path, newValue);
+        mutState.setIn(path, newValue);
         var which = path.pop();
         var newTrack, newTable;
         if (which === 'group') {
-            newTrack = this.mutState.getIn(['trackDbInfo', 'groupTracks', newValue, 0, 'value']);
-            newTable = this.mutState.getIn(['trackDbInfo', 'trackTables', newTrack, 0]);
-            this.mutState.setIn(path.concat('track'), newTrack);
-            this.mutState.setIn(path.concat('table'), newTable);
+            newTrack = mutState.getIn(['trackDbInfo', 'groupTracks', newValue, 0, 'value']);
+            newTable = mutState.getIn(['trackDbInfo', 'trackTables', newTrack, 0]);
+            mutState.setIn(path.concat('track'), newTrack);
+            mutState.setIn(path.concat('table'), newTable);
         } else if (which === 'track') {
-            newTable = this.mutState.getIn(['trackDbInfo', 'trackTables', newValue, 0]);
-            this.mutState.setIn(path.concat('table'), newTable);
+            newTable = mutState.getIn(['trackDbInfo', 'trackTables', newValue, 0]);
+            mutState.setIn(path.concat('table'), newTable);
         } else if (which !== 'table') {
             console.error('changeAddDsTrackPath: bad path "' + which + '"');
         }
     },
 
-    addDataSource: function() {
+    addDataSource: function(mutState) {
         // User clicked button to add a new data source (track/table); tell server and render.
-        var clonedTrackPath = Immutable.fromJS(this.mutState.get('addDsTrackPath').toJS());
-        this.mutState.updateIn(['hgai_querySpec', 'dataSources'], function(list) {
+        var clonedTrackPath = Immutable.fromJS(mutState.get('addDsTrackPath').toJS());
+        mutState.updateIn(['hgai_querySpec', 'dataSources'], function(list) {
             return list.push(clonedTrackPath);
         });
-        this.cartSendQuerySpec();
+        this.cartSendQuerySpec(mutState);
     },
 
     goToCgi: function(cgiName) {
@@ -132,10 +133,10 @@ var HgAiModel = ImModel.extend({
         this.goToCgi("hgCustom");
     },
 
-    reorderDataSources: function(path, reordering) {
+    reorderDataSources: function(mutState, path, reordering) {
         // User dragged and dropped a Data Source section to a new position; update accordingly.
         // reordering is an array whose indices are new positions and values are old positions.
-        this.mutState.updateIn(['hgai_querySpec', 'dataSources'], function(dataSources) {
+        mutState.updateIn(['hgai_querySpec', 'dataSources'], function(dataSources) {
             if (reordering.length !== dataSources.size) {
                 console.warn(dataSources, reordering);
                 this.error('reorderDataSources: there are', dataSources.size, 'data sources but',
@@ -148,24 +149,24 @@ var HgAiModel = ImModel.extend({
             }
             return Immutable.List(newDataSources);
         });
-        this.cartSendQuerySpec();
+        this.cartSendQuerySpec(mutState);
     },
 
-    dataSourceClick: function(path, data) {
+    dataSourceClick: function(mutState, path, data) {
         // User clicked on something in a DataSource
         if (path[1] === 'reorder') {
-            this.reorderDataSources(path, data);
+            this.reorderDataSources(mutState, path, data);
         } else if (path.length < 2) {
             this.error('appModel.click: path has dataSources but not ix:', path);
         } else {
             var ix = path[1], action = path[2];
             if (action && action === 'remove') {
-                this.mutState.updateIn(['hgai_querySpec', 'dataSources'], function(oldList) {
+                mutState.updateIn(['hgai_querySpec', 'dataSources'], function(oldList) {
                     return oldList.remove(ix);
                 });
-                this.cartSendQuerySpec();
+                this.cartSendQuerySpec(mutState);
             } else if (action && action === 'moreOptions') {
-                var track = this.mutState.getIn(['hgai_querySpec', 'dataSources', ix, 'track']);
+                var track = mutState.getIn(['hgai_querySpec', 'dataSources', ix, 'track']);
                 alert('more options ' + track);
             } else {
                 this.error('dataSourceClick: unrecognized path', path);
@@ -173,68 +174,67 @@ var HgAiModel = ImModel.extend({
         }
     },
 
-    doChooseFields: function() {
+    doChooseFields: function(mutState) {
         // User clicked the 'Choose fields' button -- get field info from server.
-        var dataSources = this.mutState.getIn(['hgai_querySpec', 'dataSources']);
+        var dataSources = mutState.getIn(['hgai_querySpec', 'dataSources']);
         var tables = dataSources.map(function(trackPath) {
             return trackPath.get('table');
         });
         this.cartDo({ getFields: { tables: tables.join(',') } });
     },
 
-    doFieldSelect: function(path, newValue) {
+    doFieldSelect: function(mutState, path, newValue) {
         // User clicked something on the field selection popup
         if (path[2] === 'remove') {
-            this.mutState.set('tableFields', null);
+            mutState.set('tableFields', null);
         } else {
             var table = path[2], field = path[3];
             if (field) {
                 // Update field's status in UI state and hgai_querySpec
-                this.mutState.setIn(['tableFields', table, 'fields', field], newValue);
-                this.mutState.setIn(['hgai_querySpec', 'outFileOptions', 'tableFields',
+                mutState.setIn(['tableFields', table, 'fields', field], newValue);
+                mutState.setIn(['hgai_querySpec', 'outFileOptions', 'tableFields',
                                      table, field], newValue);
             } else {
                 // 'Set all' or 'Clear all' according to newValue
-                this.mutState.updateIn(['tableFields', table, 'fields'], function(fieldVals) {
+                mutState.updateIn(['tableFields', table, 'fields'], function(fieldVals) {
                     return fieldVals.map(function() { return newValue; });
                 });
                 // hgai_querySpec might not yet contain any explicit choices for table's fields,
                 // so iterate over the complete set of fields in top-level tableFields:
-                this.mutState.getIn(['tableFields', table, 'fields']).forEach(function(val, field) {
-                    this.mutState.setIn(['hgai_querySpec', 'outFileOptions', 'tableFields',
+                mutState.getIn(['tableFields', table, 'fields']).forEach(function(val, field) {
+                    mutState.setIn(['hgai_querySpec', 'outFileOptions', 'tableFields',
                                          table, field], val);
                 }.bind(this));
             }
-            this.cartSendQuerySpec();
+            this.cartSendQuerySpec(mutState);
         }
     },
 
-    doGetOutput: function() {
+    doGetOutput: function(mutState) {
         // User clicked 'Get output' button; make a form and submit it.
-        var hgsid = window.hgsid || 0;
-        var querySpec = this.mutState.get('hgai_querySpec').toJS();
+        var querySpec = mutState.get('hgai_querySpec').toJS();
         if (querySpec.dataSources.length < 1) {
             alert('Please add at least one data source.');
         } else {
-            this.mutState.set('submitted', true);
+            mutState.set('submitted', true);
             querySpec = encodeURIComponent(JSON.stringify(querySpec));
             $('input[name="hgai_querySpec"]').val(querySpec);
             $('#queryForm')[0].submit();
         }
     },
 
-    outFileOptionsClick: function(path, newValue) {
+    outFileOptionsClick: function(mutState, path, newValue) {
         // User clicked on something in OutFileOptions; path[1] is either an action or
         // the piece of state that needs to be updated on server
         if (path[1] === 'chooseFields') {
-            this.doChooseFields();
+            this.doChooseFields(mutState);
         } else if (path[1] === 'fieldSelect') {
-            this.doFieldSelect(path, newValue);
+            this.doFieldSelect(mutState, path, newValue);
         } else if (path[1] === 'getOutput') {
-            this.doGetOutput();
+            this.doGetOutput(mutState);
         } else {
-            this.mutState.setIn(['hgai_querySpec'].concat(path), newValue);
-            this.cartSendQuerySpec();
+            mutState.setIn(['hgai_querySpec'].concat(path), newValue);
+            this.cartSendQuerySpec(mutState);
         }
     },
 

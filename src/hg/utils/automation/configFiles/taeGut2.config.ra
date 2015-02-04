@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db taeGut2
+clade vertebrate
+genomeCladePriority 68
+scientificName Taeniopygia guttata
+commonName Zebra finch
+assemblyDate Feb. 2013
+assemblyLabel Washington University School of Medicine
+assemblyShortLabel WashU taeGut324
+orderKey 436
+mitoAcc NC_007897
+fastaFiles /cluster/data/taeGut2/ucsc/chr*.fa.gz
+agpFiles /cluster/data/taeGut2/ucsc/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir zebraFinch
+photoCreditURL http://www.physci.ucla.edu/html/arnold.htm
+photoCreditName UCLA Department of Physiological Science
+ncbiGenomeId 367
+ncbiAssemblyId 524908
+ncbiAssemblyName Taeniopygia_guttata-3.2.4
+ncbiBioProject 17289
+genBankAccessionID GCA_000151805.2
+taxId   59729

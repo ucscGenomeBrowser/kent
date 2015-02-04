@@ -1,0 +1,18 @@
+# Config parameters for makeGenomeDb.pl:
+db fr3
+clade vertebrate
+genomeCladePriority 110
+scientificName Takifugu Rubripes
+commonName Fugu
+assemblyDate Oct. 2011
+assemblyLabel Fugu Genome Sequencing Consortium - FUGU5 (NCBI project 1434, GCA_000180615.2)
+assemblyShortLabel fr3.1
+# orderKey = fr2.orderKey - 1
+orderKey 463
+#       GI: 23397366
+mitoAcc NC_004299
+fastaFiles /hive/data/genomes/fr3/genbank/ucsc.*fa.gz
+agpFiles /hive/data/genomes/fr3/genbank/ucsc.*agp.gz
+dbDbSpeciesDir fugu
+# qualFiles none
+taxId 31033

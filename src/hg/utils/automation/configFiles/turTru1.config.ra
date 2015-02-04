@@ -1,0 +1,15 @@
+# Config parameters for makeGenomeDb.pl:
+db turTru1
+clade mammal
+genomeCladePriority 35
+scientificName  Tursiops truncatus
+commonName Dolphin
+assemblyDate Feb. 2008
+assemblyLabel Broad Institute turTru1
+orderKey 236.5
+#mitoAcc AJ222767
+mitoAcc none
+fastaFiles /cluster/data/turTru1/broad/assembly.bases.gz
+agpFiles /cluster/data/turTru1/broad/assembly.agp
+qualFiles /cluster/data/turTru1/broad/turTru1.qual.qac
+dbDbSpeciesDir dolphin

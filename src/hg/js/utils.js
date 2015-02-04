@@ -1612,22 +1612,22 @@ var sortTable = {
         sortTable.caseSensitive = sensitive;
     },
 
-    row: function (tr,sortColumns,row)  // UNUSED: sortTable.fieldCmp works fine
+    row: function (tr,sortColumns)
     {
         this.fields  = [];
         this.reverse = [];
-        this.row     = row;
+        this.row = tr;
         for (var ix=0; ix < sortColumns.cellIxs.length; ix++)
             {
-            var th = tr.cells[sortColumns.cellIxs[ix]];
-            this.fields[ix]  = (sortColumns.useAbbr[ix] ? th.abbr : $(th).text());
+            var cell = tr.cells[sortColumns.cellIxs[ix]];
+            this.fields[ix]  = (sortColumns.useAbbr[ix] ? cell.abbr : $(cell).text());
             if (!sortTable.caseSensitive) 
                 this.fields[ix]  = this.fields[ix].toLowerCase(); // case insensitive sorts
             this.reverse[ix] = sortColumns.reverse[ix];
             }
     },
 
-    rowCmp: function (a,b)  // UNUSED: sortTable.fieldCmp works fine
+    rowCmp: function (a,b)
     {
         for (var ix=0; ix < a.fields.length; ix++) {
             if (a.fields[ix] > b.fields[ix])
@@ -1667,23 +1667,21 @@ var sortTable = {
         // FIXME: Until better methods are developed, only sortOrder based sorts are supported
         //        and fnCompare is obsolete
 
-        // Create array of the primary sort column's text
-        var cols = [];
+        // Create an array of rows to sort
+        var rows = [];
         var trs = tbody.rows;
         $(trs).each(function(ix) {
-            var th = this.cells[sortColumns.cellIxs[0]];
-            if (sortColumns.useAbbr[0])
-                cols.push(new sortTable.field(th.abbr,sortColumns.reverse[0],this));
-            else
-                cols.push(new sortTable.field($(th).text(),sortColumns.reverse[0],this));
+            rows.push(new sortTable.row(this, sortColumns));
         });
 
         // Sort the array
-        cols.sort(sortTable.fieldCmp);
+        rows.sort(sortTable.rowCmp);
 
         // most efficient reload of sorted rows I have found
-        var sortedRows = jQuery.map(cols, function(col, i) { return col.row; });
-        $(tbody).append( sortedRows );
+        var sortedRows = jQuery.map(rows, function(row, i) { 
+                return row.row; 
+        });
+        $(tbody).append(sortedRows);
 
         sortTable.tbody=tbody;
         sortTable.columns=sortColumns;

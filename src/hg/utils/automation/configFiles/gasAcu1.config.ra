@@ -1,0 +1,14 @@
+# Config parameters for makeGenomeDb.pl:
+db gasAcu1
+clade vertebrate
+genomeCladePriority 120
+scientificName Gasterosteus aculeatus
+commonName Stickleback
+assemblyDate Feb. 2006
+assemblyLabel Broad Institute gasAcu1 (1.0)
+orderKey 40
+mitoAcc 16356995
+fastaFiles /cluster/data/gasAcu1/downloads/assembly.bases.gz
+agpFiles /cluster/data/gasAcu1/downloads/UCSC.gasAcu1.agp
+qualFiles /cluster/data/gasAcu1/downloads/UCSC.gasAcu1.qual
+dbDbSpeciesDir stickleback

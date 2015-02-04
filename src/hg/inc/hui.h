@@ -1372,4 +1372,14 @@ struct asColumn *asColumnFind(struct asObject *asObj, char *name);
 
 struct slName *asColNames(struct asObject *as);
 // Get list of column names.
+
+/********************/
+/* Basic metadata for subgroups and input fields */
+
+char *metaVocabLink(struct hash *metaFieldHash, char *term, char *title);
+/* Make an anchor with mouseover containing description and link if present */
+
+struct hash *metaBasicFromSetting(struct trackDb *parentTdb, struct cart *cart, char *setting);
+/* Get description and URL for all metaTables. Returns a hash of hashes */
+
 #endif /* HUI_H */

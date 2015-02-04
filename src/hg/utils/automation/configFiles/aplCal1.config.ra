@@ -1,0 +1,15 @@
+# Config parameters for makeGenomeDb.pl:
+db aplCal1
+scientificName Aplysia californica
+commonName Sea Hare
+assemblyDate Sept. 2008
+assemblyLabel Broad Institute v. 1.0
+orderKey 825
+clade other
+genomeCladePriority 19
+mitoAcc NC_005827
+fastaFiles /hive/data/genomes/aplCal1/download/assembly_supers.fasta.fix.gz
+agpFiles /hive/data/genomes/aplCal1/download/assembly.agp
+qualFiles /hive/data/genomes/aplCal1/download/assembly_supers.qual.fix.gz
+dbDbSpeciesDir seaHare
+taxId 6500

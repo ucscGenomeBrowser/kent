@@ -113,7 +113,6 @@ int lineSize;
 char *line;
 struct commit *commits = NULL, *commit = NULL;
 struct files *files = NULL, *f = NULL;
-char *sep = "";
 while (lineFileNext(lf, &line, &lineSize))
     {
     char *w = nextWord(&line);
@@ -160,15 +159,13 @@ while (lineFileNext(lf, &line, &lineSize))
     /* collect the comment-lines */
     struct dyString *dy = NULL;
     dy = dyStringNew(0);
-    sep = "";
     files = NULL;
     while (lineFileNext(lf, &line, &lineSize))
 	{
 	if (sameString("", line))
 	    break;
 	w = skipLeadingSpaces(line);
-	dyStringPrintf(dy, "%s%s", w, sep);
-	sep = "\n";
+	dyStringPrintf(dy, "%s\n", w);
 	}
     commit->comment = cloneString(dy->string);
     freeDyString(&dy);
@@ -184,8 +181,10 @@ while (lineFileNext(lf, &line, &lineSize))
 	    {
 	    if (sameString("", line))
 		break;
-	    AllocVar(f);
 	    w = nextWord(&line);
+            if (startsWith("src/hg/js/react/bundle/", line))
+                continue;
+	    AllocVar(f);
 	    f->type = w[0];
 	    f->path = cloneString(line);
 	    slAddHead(&files, f);

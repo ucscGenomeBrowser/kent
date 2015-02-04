@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db hg19Patch10
+clade haplotypes
+genomeCladePriority 136
+scientificName Homo sapiens
+commonName GRCh37.p10
+assemblyDate Sep. 2012
+assemblyLabel GRCh37 Patch 10 Genome Reference Consortium Human Reference 37
+assemblyShortLabel GRCh37.p10
+orderKey 145
+mitoAcc none
+fastaFiles /hive/data/genomes/hg19Patch10/sequence/*.fa
+agpFiles /hive/data/genomes/hg19Patch10/sequence/hg19Patch10.agp
+# qualFiles /dev/null
+dbDbSpeciesDir human
+photoCreditURL http://www.cbse.ucsc.edu/
+photoCreditName CBSE
+ncbiGenomeId 51
+ncbiAssemblyId 420368
+ncbiAssemblyName GRCh37.p10
+ncbiBioProject 31257
+genBankAccessionID GCA_000001405.11
+taxId   9606
