@@ -16,14 +16,12 @@ errAbort(
   "usage:\n"
   "   tagStormInfo input.tags\n"
   "options:\n"
-  "   -names - if set output names of each tag in comma sep list\n"
-  "   -counts - if set output names and counts of each tag\n"
+  "   -counts - if set output names and use counts of each tag\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
-   {"names", OPTION_BOOLEAN},
    {"counts", OPTION_BOOLEAN},
    {NULL, 0},
 };
@@ -72,19 +70,16 @@ else
     printf("tags\t%ld\n", tagCount);
     printf("storm\t%ld\n", expandedTagCount);
     printf("types\t%d\n", tagHash->elCount);
-    if (doNames)
-        {
-	printf("names\t");
-	struct hashEl *el, *list = hashElListHash(tagHash);
-	slSort(&list, hashElCmp);
-	for (el = list; el != NULL; el = el->next)
-	    {
-	    printf("%s", el->name);
-	    if (el->next != NULL)
-	       printf(",");
-	    }
-	printf("\n");
+    printf("fields\t");
+    struct hashEl *el, *list = hashElListHash(tagHash);
+    slSort(&list, hashElCmp);
+    for (el = list; el != NULL; el = el->next)
+	{
+	printf("%s", el->name);
+	if (el->next != NULL)
+	   printf(",");
 	}
+    printf("\n");
     }
 }
 
@@ -95,7 +90,6 @@ optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
 doCounts = optionExists("counts");
-doNames = optionExists("names");
 tagStormInfo(argv[1]);
 return 0;
 }
