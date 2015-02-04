@@ -1,0 +1,942 @@
+title Genomic characterization before and after IPS treatment of sibling cell lines.
+lab baldwin
+user rvnair
+assay WGS
+pipeline Macrogen MGX-WGS-0101
+biosample_date 10 Oct 2014
+
+   lab_baldwin_treatment Episome no VPA
+   ips episome_ips_protocol.pdf
+
+      lab_baldwin_parent A1
+
+         meta Env_A1A
+         cell_line Env A1 A
+
+            file Env_A1A/141107_H0ET2_Env_A1A_L004_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Env_A1A/141107_H0ET2_Env_A1A_L004_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Env_A1A/1411UNHS-0002_Env_A1A.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Env_A1A/1411UNHS-0002_Env_A1A_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Env_A1A/1411UNHS-0002_Env_A1A_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Env_A1A/1411UNHS-0002_Env_A1A_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+         meta Env_A1B
+         cell_line Env A1 B
+
+            file Env_A1B/141107_H0ET2_Env_A1B_L005_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Env_A1B/141107_H0ET2_Env_A1B_L005_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Env_A1B/1411UNHS-0002_Env_A1B.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Env_A1B/1411UNHS-0002_Env_A1B_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Env_A1B/1411UNHS-0002_Env_A1B_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Env_A1B/1411UNHS-0002_Env_A1B_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+      lab_baldwin_parent A4
+
+         meta Env_A4A
+         cell_line Env A4 A
+
+            file Env_A4A/141107_H0ET2_Env_A4A_L006_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Env_A4A/141107_H0ET2_Env_A4A_L006_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Env_A4A/1411UNHS-0002_Env_A4A.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Env_A4A/1411UNHS-0002_Env_A4A_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Env_A4A/1411UNHS-0002_Env_A4A_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Env_A4A/1411UNHS-0002_Env_A4A_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+         meta Env_A4B
+         cell_line Env A4 B
+
+            file Env_A4B/141107_H0ET2_Env_A4B_L007_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Env_A4B/141107_H0ET2_Env_A4B_L007_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Env_A4B/1411UNHS-0002_Env_A4B.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Env_A4B/1411UNHS-0002_Env_A4B_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Env_A4B/1411UNHS-0002_Env_A4B_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Env_A4B/1411UNHS-0002_Env_A4B_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+      lab_baldwin_parent B2
+
+         meta Env_B2A
+         cell_line Env B2 A
+
+            file Env_B2A/141107_H0ET2_Env_B2A_L008_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Env_B2A/141107_H0ET2_Env_B2A_L008_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Env_B2A/1411UNHS-0002_Env_B2A.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Env_B2A/1411UNHS-0002_Env_B2A_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Env_B2A/1411UNHS-0002_Env_B2A_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Env_B2A/1411UNHS-0002_Env_B2A_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+         meta Env_B2B
+         cell_line Env B2 B
+
+            file Env_B2B/141107_H0ERG_Env_B2B_L001_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Env_B2B/141107_H0ERG_Env_B2B_L001_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Env_B2B/1411UNHS-0002_Env_B2B.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Env_B2B/1411UNHS-0002_Env_B2B_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Env_B2B/1411UNHS-0002_Env_B2B_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Env_B2B/1411UNHS-0002_Env_B2B_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+   lab_baldwin_treatment Episome + VPA
+   ips episome_ips_protocol.pdf
+   treatment vpa_treatment.pdf
+
+      lab_baldwin_parent C4
+
+         meta Ev_C4B
+         cell_line Ev C4 B
+
+            file Ev_C4B/141107_H0ERG_Ev_C4B_L003_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Ev_C4B/141107_H0ERG_Ev_C4B_L003_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Ev_C4B/1411UNHS-0002_Ev_C4B.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Ev_C4B/1411UNHS-0002_Ev_C4B_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Ev_C4B/1411UNHS-0002_Ev_C4B_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Ev_C4B/1411UNHS-0002_Ev_C4B_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+         meta Ev_C4_A
+         cell_line Ev C4 A
+
+            file Ev_C4_A/141121_H22HN_Ev_C4_A_L007_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Ev_C4_A/141121_H22HN_Ev_C4_A_L007_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Ev_C4_A/1411UNHS-0002_Ev_C4_A.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Ev_C4_A/1411UNHS-0002_Ev_C4_A_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Ev_C4_A/1411UNHS-0002_Ev_C4_A_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Ev_C4_A/1411UNHS-0002_Ev_C4_A_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+      lab_baldwin_parent C6
+
+         meta Ev_C6B
+         cell_line Ev C6 B
+
+            file Ev_C6B/141107_H0ERG_Ev_C6B_L005_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Ev_C6B/141107_H0ERG_Ev_C6B_L005_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Ev_C6B/1411UNHS-0002_Ev_C6B.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Ev_C6B/1411UNHS-0002_Ev_C6B_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Ev_C6B/1411UNHS-0002_Ev_C6B_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Ev_C6B/1411UNHS-0002_Ev_C6B_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+         meta Ev_C6_A
+         cell_line Ev C6 A
+
+            file Ev_C6_A/141121_H22HN_Ev_C6_A_L008_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Ev_C6_A/141121_H22HN_Ev_C6_A_L008_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Ev_C6_A/1411UNHS-0002_Ev_C6_A.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Ev_C6_A/1411UNHS-0002_Ev_C6_A_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Ev_C6_A/1411UNHS-0002_Ev_C6_A_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Ev_C6_A/1411UNHS-0002_Ev_C6_A_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+      lab_baldwin_parent D6
+
+         meta Ev_D6B
+         cell_line Ev D6 B
+
+            file Ev_D6B/141107_H0ERG_Ev_D6B_L007_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Ev_D6B/141107_H0ERG_Ev_D6B_L007_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Ev_D6B/1411UNHS-0002_Ev_D6B.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Ev_D6B/1411UNHS-0002_Ev_D6B_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Ev_D6B/1411UNHS-0002_Ev_D6B_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Ev_D6B/1411UNHS-0002_Ev_D6B_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+         meta Ev_D6_A
+         cell_line Ev D6 A
+
+            file Ev_D6_A/1411UNHS-0002_Ev_D6_A.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Ev_D6_A/1411UNHS-0002_Ev_D6_A_CNV.vcf
+            paired_end 2
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Ev_D6_A/1411UNHS-0002_Ev_D6_A_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Ev_D6_A/1411UNHS-0002_Ev_D6_A_SV.vcf
+            format vcf
+            output cv
+            ucsc_db hg19
+
+            file Ev_D6_A/141204_H25WC_Ev_D6_A_L006_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Ev_D6_A/141204_H25WC_Ev_D6_A_L006_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+   lab_baldwin_treatment Lentivirus no VPA
+   ips lentivirus_ips_protocol.pdf
+
+      lab_baldwin_parent H9.1
+
+         meta Lnv_H_9_1_A
+         cell_line Lnv H 9.1 A
+
+            file Lnv_H_9_1_A/141121_H233Y_Lnv_H_9_1_A_L001_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lnv_H_9_1_A/141121_H233Y_Lnv_H_9_1_A_L001_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lnv_H_9_1_A/1411UNHS-0002_Lnv_H_9_1_A.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Lnv_H_9_1_A/1411UNHS-0002_Lnv_H_9_1_A_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Lnv_H_9_1_A/1411UNHS-0002_Lnv_H_9_1_A_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Lnv_H_9_1_A/1411UNHS-0002_Lnv_H_9_1_A_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+            file Lnv_H_9_1_A/sorted.bam
+            format bam
+            output mapping
+            ucsc_db hg19
+
+            file Lnv_H_9_1_A/sorted.bam.bai
+            format vcf
+            output mapping_index
+            ucsc_db hg19
+
+         meta Lnv_H_9_1_B
+         cell_line Lnv H 9.1 B
+
+            file Lnv_H_9_1_B/141121_H233Y_Lnv_H_9_1_B_L002_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lnv_H_9_1_B/141121_H233Y_Lnv_H_9_1_B_L002_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lnv_H_9_1_B/1411UNHS-0002_Lnv_H_9_1_B.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Lnv_H_9_1_B/1411UNHS-0002_Lnv_H_9_1_B_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Lnv_H_9_1_B/1411UNHS-0002_Lnv_H_9_1_B_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Lnv_H_9_1_B/1411UNHS-0002_Lnv_H_9_1_B_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+            file Lnv_H_9_1_B/sorted.bam
+            format bam
+            output mapping
+            ucsc_db hg19
+
+            file Lnv_H_9_1_B/sorted.bam.bai
+            format vcf
+            output mapping_index
+            ucsc_db hg19
+
+      lab_baldwin_parent I9.1
+
+         meta Lnv_I_9_1_A
+         cell_line Lnv I 9.1 A
+
+            file Lnv_I_9_1_A/141121_H233Y_Lnv_I_9_1_A_L003_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lnv_I_9_1_A/141121_H233Y_Lnv_I_9_1_A_L003_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lnv_I_9_1_A/1411UNHS-0002_Lnv_I_9_1_A.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Lnv_I_9_1_A/1411UNHS-0002_Lnv_I_9_1_A_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Lnv_I_9_1_A/1411UNHS-0002_Lnv_I_9_1_A_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Lnv_I_9_1_A/1411UNHS-0002_Lnv_I_9_1_A_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+         meta Lnv_I_9_1_B
+         cell_line Lnv I 9.1 B
+
+            file Lnv_I_9_1_B/141121_H233Y_Lnv_I_9_1_B_L004_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lnv_I_9_1_B/141121_H233Y_Lnv_I_9_1_B_L004_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lnv_I_9_1_B/1411UNHS-0002_Lnv_I_9_1_B.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Lnv_I_9_1_B/1411UNHS-0002_Lnv_I_9_1_B_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Lnv_I_9_1_B/1411UNHS-0002_Lnv_I_9_1_B_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Lnv_I_9_1_B/1411UNHS-0002_Lnv_I_9_1_B_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+      lab_baldwin_parent I9.2
+
+         meta Lnv_I_9_2_A
+         cell_line Lnv I 9.2 A
+
+            file Lnv_I_9_2_A/141121_H233Y_Lnv_I_9_2_A_L005_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lnv_I_9_2_A/141121_H233Y_Lnv_I_9_2_A_L005_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lnv_I_9_2_A/1411UNHS-0002_Lnv_I_9_2_A.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Lnv_I_9_2_A/1411UNHS-0002_Lnv_I_9_2_A_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Lnv_I_9_2_A/1411UNHS-0002_Lnv_I_9_2_A_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Lnv_I_9_2_A/1411UNHS-0002_Lnv_I_9_2_A_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+         meta Lnv_I_9_2_B
+         cell_line Lnv I 9.2 B
+
+            file Lnv_I_9_2_B/141121_H233Y_Lnv_I_9_2_B_L006_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lnv_I_9_2_B/141121_H233Y_Lnv_I_9_2_B_L006_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lnv_I_9_2_B/1411UNHS-0002_Lnv_I_9_2_B.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Lnv_I_9_2_B/1411UNHS-0002_Lnv_I_9_2_B_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Lnv_I_9_2_B/1411UNHS-0002_Lnv_I_9_2_B_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Lnv_I_9_2_B/1411UNHS-0002_Lnv_I_9_2_B_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+   lab_baldwin_treatment Lentivirus + VPA
+   ips lentivirus_ips_protocol.pdf
+   treatment vpa_treatment.pdf
+
+      lab_baldwin_parent F9.2
+
+         meta Lv_F9_2A
+         cell_line Lv F9.2 A
+
+            file Lv_F9_2A/141121_H233Y_Lv_F9_2A_L007_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lv_F9_2A/141121_H233Y_Lv_F9_2A_L007_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lv_F9_2A/1411UNHS-0002_Lv_F9_2A.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Lv_F9_2A/1411UNHS-0002_Lv_F9_2A_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Lv_F9_2A/1411UNHS-0002_Lv_F9_2A_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Lv_F9_2A/1411UNHS-0002_Lv_F9_2A_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+         meta Lv_F9_2B
+         cell_line Lv F9.2 B
+
+            file Lv_F9_2B/1411UNHS-0002_Lv_F9_2B.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Lv_F9_2B/1411UNHS-0002_Lv_F9_2B_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Lv_F9_2B/1411UNHS-0002_Lv_F9_2B_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Lv_F9_2B/1411UNHS-0002_Lv_F9_2B_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+            file Lv_F9_2B/141204_H25WC_Lv_F9_2B_L007_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lv_F9_2B/141204_H25WC_Lv_F9_2B_L007_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+      lab_baldwin_parent G9.3
+
+         meta Lv_G_9_3A
+         cell_line Lv G 9.3 A
+
+            file Lv_G_9_3A/141121_H22NH_Lv_G_9_3A_L001_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lv_G_9_3A/141121_H22NH_Lv_G_9_3A_L001_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lv_G_9_3A/1411UNHS-0002_Lv_G_9_3A.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Lv_G_9_3A/1411UNHS-0002_Lv_G_9_3A_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Lv_G_9_3A/1411UNHS-0002_Lv_G_9_3A_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Lv_G_9_3A/1411UNHS-0002_Lv_G_9_3A_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+         meta Lv_G_9_3B
+         cell_line Lv G 9.3 B
+
+            file Lv_G_9_3B/141121_H22NH_Lv_G_9_3B_L002_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lv_G_9_3B/141121_H22NH_Lv_G_9_3B_L002_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lv_G_9_3B/1411UNHS-0002_Lv_G_9_3B.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Lv_G_9_3B/1411UNHS-0002_Lv_G_9_3B_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Lv_G_9_3B/1411UNHS-0002_Lv_G_9_3B_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Lv_G_9_3B/1411UNHS-0002_Lv_G_9_3B_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+      lab_baldwin_parent L9.2
+
+         meta Lv_L_9_2_A
+         cell_line Lv L 9.2 A
+
+            file Lv_L_9_2_A/141121_H22NH_Lv_L_9_2_A_L003_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lv_L_9_2_A/141121_H22NH_Lv_L_9_2_A_L003_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lv_L_9_2_A/1411UNHS-0002_Lv_L_9_2_A.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Lv_L_9_2_A/1411UNHS-0002_Lv_L_9_2_A_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Lv_L_9_2_A/1411UNHS-0002_Lv_L_9_2_A_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Lv_L_9_2_A/1411UNHS-0002_Lv_L_9_2_A_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+         meta Lv_L_9_2_B
+         cell_line Lv L 9.2 B
+
+            file Lv_L_9_2_B/141121_H22NH_Lv_L_9_2_B_L004_R1.fastq.gz
+            paired_end 1
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lv_L_9_2_B/141121_H22NH_Lv_L_9_2_B_L004_R2.fastq.gz
+            paired_end 2
+            format fastq
+            output reads
+            ucsc_db hg19
+
+            file Lv_L_9_2_B/1411UNHS-0002_Lv_L_9_2_B.pdf
+            format pdf
+            output report
+            ucsc_db hg19
+
+            file Lv_L_9_2_B/1411UNHS-0002_Lv_L_9_2_B_CNV.vcf
+            format vcf
+            output cnv
+            ucsc_db hg19
+
+            file Lv_L_9_2_B/1411UNHS-0002_Lv_L_9_2_B_SNP_INDEL.vcf
+            format vcf
+            output snp_indel
+            ucsc_db hg19
+
+            file Lv_L_9_2_B/1411UNHS-0002_Lv_L_9_2_B_SV.vcf
+            format vcf
+            output sv
+            ucsc_db hg19
+
+   meta HDF_fib
+   lab_baldwin_treatment Fibroblast starting cells
+   control untreated
+
+      file HDF_fib/141107_H0ERG_HDF_fib_L008_R1.fastq.gz
+      paired_end 1
+      format fastq
+      output reads
+      ucsc_db hg19
+
+      file HDF_fib/141107_H0ERG_HDF_fib_L008_R2.fastq.gz
+      paired_end 2
+      format fastq
+      output reads
+      ucsc_db hg19
+
+      file HDF_fib/1411UNHS-0002_HDF_fib.pdf
+      format pdf
+      output report
+      ucsc_db hg19
+
+      file HDF_fib/1411UNHS-0002_HDF_fib_CNV.vcf
+      format vcf
+      output cnv
+      ucsc_db hg19
+
+      file HDF_fib/1411UNHS-0002_HDF_fib_SNP_INDEL.vcf
+      format vcf
+      output snp_indel
+      ucsc_db hg19
+
+      file HDF_fib/1411UNHS-0002_HDF_fib_SV.vcf
+      format vcf
+      output sv
+      ucsc_db hg19
+
