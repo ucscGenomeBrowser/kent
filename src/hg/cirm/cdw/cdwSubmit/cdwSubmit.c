@@ -39,15 +39,18 @@ errAbort(
   "options:\n"
   "   -believe If set, believe MD5 sums rather than checking them\n"
   "   -update  If set, will update metadata on file it already has. The default behavior is to\n"
-  "            report an error if metadata doesn't match.\n");
+  "            report an error if metadata doesn't match.\n"
+  "   -md5=md5sum.txt Take list of file MD5s from output of md5sum command on list of files\n");
 }
 
 char *localPrefix = "local://localhost/";
+struct hash *md5Hash;
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"update", OPTION_BOOLEAN},
    {"believe", OPTION_BOOLEAN},
+   {"md5", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -348,6 +351,7 @@ char cdwFile[PATH_LEN] = "", cdwPath[PATH_LEN];
 cdwMakeFileNameAndPath(ef->id, ef->submitFileName,  cdwFile, cdwPath);
 ef->startUploadTime = cdwNow();
 copyFile(ef->submitFileName, cdwPath);
+chmod(cdwPath, 0444);
 ef->cdwFileName = cloneString(cdwFile);
 ef->endUploadTime = cdwNow();
 
@@ -524,7 +528,7 @@ static char *otherSupportedFormats[] = {"unknown", "fastq", "bam", "bed", "gtf",
     "bedLogR", "bedRrbs", "bedMethyl", "broadPeak", "narrowPeak", 
     "bed_bedLogR", "bed_bedRrbs", "bed_bedMethyl", "bed_broadPeak", "bed_narrowPeak",
     "bedRnaElements", "openChromCombinedPeaks", "peptideMapping", "shortFrags", 
-    "rcc", "idat", "fasta", "customTrack",
+    "rcc", "idat", "fasta", "customTrack", "pdf", "vcf",
     };
 static int otherSupportedFormatsCount = ArraySize(otherSupportedFormats);
 if (stringArrayIx(format, otherSupportedFormats, otherSupportedFormatsCount) >= 0)
@@ -755,14 +759,12 @@ int handleOldFileTags(struct sqlConnection *conn, struct submitFileRow *sfrList,
  * warehouse.   We may want to update metadata on these. This returns the number
  * of files with tags updated. */
 {
-uglyf("handleOldFileTags on %d\n", slCount(sfrList));
 struct submitFileRow *sfr;
 int updateCount = 0;
 for (sfr = sfrList; sfr != NULL; sfr = sfr->next)
     {
     struct cdwFile *newFile = sfr->file;
     struct cdwFile *oldFile = cdwFileFromId(conn, sfr->md5MatchFileId);
-    uglyf("newFile %p, oldFile %p\n", newFile, oldFile);
     verbose(2, "looking at old file %s (%s)\n", oldFile->submitFileName, newFile->submitFileName);
     struct cgiDictionary *newTags = cgiDictionaryFromEncodedString(newFile->tags);
     struct cgiDictionary *oldTags = cgiDictionaryFromEncodedString(oldFile->tags);
@@ -788,6 +790,7 @@ for (sfr = sfrList; sfr != NULL; sfr = sfr->next)
 		     newFile->submitFileName, oldFile->cdwFileName,
 		     name, oldVal, newVal);
 	    }
+	verbose(1, "updating tags for %s\n", newFile->submitFileName);
 	cdwFileResetTags(conn, oldFile, newFile->tags, TRUE);
 	}
     if (updateTags || updateName)
@@ -931,6 +934,7 @@ char cdwFile[PATH_LEN] = "", cdwPath[PATH_LEN];
 cdwMakeFileNameAndPath(fileId, submitFileName,  cdwFile, cdwPath);
 long long startUploadTime = cdwNow();
 copyFile(submitFileName, cdwPath);
+chmod(cdwPath, 0444);
 long long endUploadTime = cdwNow();
 
 char query[3*PATH_LEN];
@@ -948,6 +952,33 @@ return fileId;
 }
 
     
+char *cacheMd5(struct sqlConnection *conn, char *fileName, 
+    char *submitDir, long long updateTime, long long size)
+/* Get md5sum for fileName, using cached version if possible */
+{
+char *md5 = hashFindVal(md5Hash, fileName);
+if (md5 == NULL)
+    {
+    /* Not in cache, let's look in database */
+    char query[PATH_LEN*2];
+    sqlSafef(query, sizeof(query), 
+		   "select md5 from cdwFile,cdwSubmitDir "
+                   "where cdwSubmitDir.id=cdwFile.submitDirId "
+		   "and cdwSubmitDir.url='%s' "
+		   "and submitFileName='%s' and updateTime=%lld and size=%lld"
+		   , submitDir, fileName, updateTime, size);
+    md5 = sqlQuickString(conn, query);
+
+    /* Not in database, let's go do the calc. */
+    if (md5 == NULL)
+	{
+	verbose(1, "Patience, md5summing %s\n", fileName);
+	md5 = md5HexForFile(fileName);
+	}
+    hashAdd(md5Hash, fileName, md5);
+    }
+return md5;
+}
 
 void cdwSubmit(char *email, char *manifestFile, char *metaFile)
 /* cdwSubmit - Submit URL with validated.txt to warehouse. */
@@ -1019,8 +1050,8 @@ if (errCatchStart(errCatch))
 
 	/* Fill in and check MD5 sums */
 	char *oldMd5 = nullForNaOrEmpty(sfr->file->md5);
-	char *newMd5 = md5HexForFile(fileName);
-	uglyf("md5 for %s is %s\n", fileName, newMd5);
+	char *newMd5 = cacheMd5(conn, fileName, submitDir, file->updateTime, file->size);
+	verbose(2, "md5 for %s is %s\n", fileName, newMd5);
 	if (oldMd5 == NULL)
 	    {
 	    memcpy(sfr->file->md5, newMd5, 32);
@@ -1121,6 +1152,15 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 doUpdate = optionExists("update");
 doBelieve = optionExists("believe");
+if (optionExists("md5"))
+    {
+    md5Hash = md5FileHash(optionVal("md5", NULL));
+    }
+else
+    {
+    md5Hash = hashNew(0);
+    }
+    
 if (argc != 4)
     usage();
 cdwSubmit(argv[1], argv[2], argv[3]);
