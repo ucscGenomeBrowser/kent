@@ -41,15 +41,12 @@ boolean raNextTagValWithIndent(struct lineFile *lf, char **retTag, char **retVal
 // tag and val, but dy will be filled with the unedited multiple lines containing the continuation chars.
 // NOTE: retTag & retVal, if returned, point to static mem which will be overwritten on next call!
 
-INLINE boolean raNextTagVal(struct lineFile *lf, char **retTag, char **retVal, struct dyString  *dy)
+boolean raNextTagVal(struct lineFile *lf, char **retTag, char **retVal, struct dyString  *dy);
 // Read next line.  Return FALSE at end of file or blank line.  Otherwise fill in
 // *retTag and *retVal and return TRUE.  If dy parameter is non-null, then the text parsed
 // gets appended to dy. Continuation lines in RA file will be joined to produce tag and val,
 // but dy will be filled with the unedited multiple lines containing the continuation chars.
 // NOTE: retTag & retVal, if returned, point to static mem which will be overwritten on next call!
-{
-return raNextTagValWithIndent(lf, retTag, retVal, dy, NULL);
-}
 
 struct hash *raFromString(char *string);
 /* Return hash of key/value pairs from string.
