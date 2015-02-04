@@ -62,6 +62,25 @@ else
 return stanza;
 }
 
+struct tagStanza *tagStanzaNewAtEnd(struct tagStorm *tagStorm, struct tagStanza *parent)
+/* Create a new, empty stanza that is added as to head of child list of parent,
+ * or to tagStorm->forest if parent is NULL. */
+/* Create new empty stanza that is added at tail of child list of parent */
+{
+struct tagStanza *stanza;
+lmAllocVar(tagStorm->lm, stanza);
+if (parent != NULL)
+    {
+    stanza->parent = parent;
+    slAddTail(&parent->children, stanza);
+    }
+else
+    {
+    slAddTail(&tagStorm->forest, stanza);
+    }
+return stanza;
+}
+
 struct slPair *tagStanzaAdd(struct tagStorm *tagStorm, struct tagStanza *stanza, 
     char *tag, char *val)
 /* Add tag with given value to stanza */
@@ -482,7 +501,7 @@ char *tagFindVal(struct tagStanza *stanza, char *name)
 /* Return value of tag of given name within stanza or any of it's parents. */
 {
 struct tagStanza *ancestor;
-for (ancestor = stanza; ancestor != NULL; ancestor = ancestor->next)
+for (ancestor = stanza; ancestor != NULL; ancestor = ancestor->parent)
     {
     char *val = slPairFindVal(ancestor->tagList, name);
     if (val != NULL)

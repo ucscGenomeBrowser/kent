@@ -92,6 +92,11 @@ struct tagStanza *tagStanzaNew(struct tagStorm *tagStorm, struct tagStanza *pare
 /* Create a new, empty stanza that is added as to head of child list of parent,
  * or to tagStorm->forest if parent is NULL. */
 
+struct tagStanza *tagStanzaNewAtEnd(struct tagStorm *tagStorm, struct tagStanza *parent);
+/* Create a new, empty stanza that is added as to head of child list of parent,
+ * or to tagStorm->forest if parent is NULL. */
+/* Create new empty stanza that is added at tail of child list of parent */
+
 struct slPair *tagStanzaAdd(struct tagStorm *tagStorm, struct tagStanza *stanza, 
     char *tag, char *val);
 /* Add tag with given value to stanza */
