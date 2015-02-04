@@ -107,6 +107,13 @@ if (!fileStartsWithOneOfPair(path, "IDAT", "DITA"))
     errAbort("%s is not a valid .idat file, it does not start with IDAT or DITA", fileNameOnly(path));
 }
 
+void cdwValidatePdf(char *path)
+/* Make sure PDF really is PDF */
+{
+if (!fileStartsWithOneOfPair(path, "%PDF", "%PDF"))
+    errAbort("%s in not a valid .pdf file, it does not start with %%PDF", fileNameOnly(path));
+}
+
 boolean cdwIsGzipped(char *path)
 /* Return TRUE if file at path starts with GZIP signature */
 {
