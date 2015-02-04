@@ -2,9 +2,12 @@
  *                   handler. This is an extension of the original
  *                   rmskTrack.c written by UCSC.
  *
- *  Written by Robert Hubley 10/2012-11/2014
+ *  Written by Robert Hubley 10/2012-01/2015
  *
  *  Modifications:
+ *
+ *  1/2015
+ *     Request to revert back to only Full/Dense modes.
  *
  *  11/2014
  *     Request for traditional pack/squish modes.
@@ -84,7 +87,7 @@ static char *rptClasses[] = {
 };
 
 
-/* Repeat class to color mappings.  
+/* Repeat class to color mappings.
  *   - Currently borrowed from snakePalette.
  *
  *  NOTE: If these are changed, do not forget to update the
@@ -127,7 +130,7 @@ if (rm == NULL)
     return NULL;
 
 // Start position is anchored by the alignment start
-// coordinates.  Then we subtract from that space for 
+// coordinates.  Then we subtract from that space for
 // the label.
 ex.start = rm->alignStart -
     (int) ((mgFontStringWidth(tl.font, rm->name) +
@@ -238,8 +241,10 @@ if (!subTracksHash)
 
 int baseWidth = winEnd - winStart;
 pixelsPerBase = (float) insideWidth / (float) baseWidth;
-if ((tg->visibility == tvFull || tg->visibility == tvSquish || 
-     tg->visibility == tvPack) && baseWidth <= DETAIL_VIEW_MAX_SCALE)
+//Disabled
+//if ((tg->visibility == tvFull || tg->visibility == tvSquish ||
+//     tg->visibility == tvPack) && baseWidth <= DETAIL_VIEW_MAX_SCALE)
+if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
     {
     struct repeatItem *ri = NULL;
     struct subTrack *st = NULL;
@@ -290,15 +295,16 @@ if ((tg->visibility == tvFull || tg->visibility == tvSquish ||
         slAddHead(&fullRIList, ri);
         }
 
-        // tvFull is one-per-line -- no need to group items in levels
-        if ( tg->visibility == tvSquish || tg->visibility == tvPack )
+        //Disabled
+        //if ( tg->visibility == tvSquish || tg->visibility == tvPack )
+        if ( tg->visibility == tvFull )
              {
              while (rm)
                  {
                  ext = getExtents(rm);
                  rmChromStart = ext->start;
                  rmChromEnd = ext->end;
-     
+
                  if (rmChromStart > crChromEnd)
                      {
                      cr->next = rm;
@@ -309,7 +315,7 @@ if ((tg->visibility == tvFull || tg->visibility == tvSquish ||
                          prev->next = rm->next;
                      else
                          detailList = rm->next;
-     
+
                      rm = rm->next;
                      cr->next = NULL;
                      }
@@ -327,7 +333,7 @@ if ((tg->visibility == tvFull || tg->visibility == tvSquish ||
     slReverse(&fullRIList);
     tg->items = fullRIList;
     } // if ((tg->visibility == tvFull || ...
-    else 
+    else
        tg->items = classRIList;
 }
 
@@ -347,8 +353,10 @@ struct repeatItem *ri = item;
    * levels.  No need to display a label at each level.  Instead
    * Just return a label for the first level.
    */
-if ((tg->visibility == tvSquish || 
-     tg->visibility == tvPack) && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
+//Disabled
+//if ((tg->visibility == tvSquish ||
+//     tg->visibility == tvPack) && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
+if (tg->visibility == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
     {
     if (strcmp(ri->className, "SINE") == 0)
 	return("Repeats");
@@ -363,14 +371,16 @@ int rmskJoinedItemHeight(struct track *tg, void *item)
 {
   // Are we in full view mode and at the scale needed to display
   // the detail view?
-if (tg->limitedVis == tvSquish && winBaseCount <= DETAIL_VIEW_MAX_SCALE )
-    {
-    if ( tg->heightPer < (MINHEIGHT/2) )
-      return (MINHEIGHT/2);
-    else
-      return tg->heightPer;
-    }
-else if ((tg->limitedVis == tvFull || tg->limitedVis == tvPack) && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
+//Disabled
+//if (tg->limitedVis == tvSquish && winBaseCount <= DETAIL_VIEW_MAX_SCALE )
+//    {
+//    if ( tg->heightPer < (MINHEIGHT/2) )
+//      return (MINHEIGHT/2);
+//    else
+//      return tg->heightPer;
+//    }
+//else if ((tg->limitedVis == tvFull || tg->limitedVis == tvPack) && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
+if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
     {
     if ( tg->heightPer < MINHEIGHT )
       return MINHEIGHT;
@@ -387,8 +397,10 @@ int rmskJoinedTotalHeight(struct track *tg, enum trackVisibility vis)
 {
   // Are we in full view mode and at the scale needed to display
   // the detail view?
-if ((tg->limitedVis == tvFull || tg->limitedVis == tvSquish ||
-     tg->limitedVis == tvPack) && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
+//Disabled
+//if ((tg->limitedVis == tvFull || tg->limitedVis == tvSquish ||
+//     tg->limitedVis == tvPack) && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
+if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
     {
     // Lookup the depth of this subTrack and report it
     struct subTrack *st = hashFindVal(subTracksHash, tg->table);
@@ -801,8 +813,9 @@ for (idx = 0; idx < rm->blockCount; idx++)
 		       y + unalignedBlockOffset + 3, black);
 
 	    // Draw labels
-	    if ( vis != tvSquish && vis != tvFull )
-                 {
+	    //Disabled
+	    //if ( vis != tvSquish && vis != tvFull )
+            //     {
 	         MgFont *font = tl.font;
 	         int fontHeight = tl.fontHeight;
 	         int stringWidth =
@@ -811,7 +824,7 @@ for (idx = 0; idx < rm->blockCount; idx++)
 			       heightPer - fontHeight + y,
 			       stringWidth, fontHeight, MG_BLACK, font,
 			       rm->name);
-                 }
+             //    }
 
 
 
@@ -1023,8 +1036,9 @@ struct sqlResult *sr = NULL;
 char **row;
 int rowOffset;
 
-
-if (vis == tvFull || vis == tvSquish || vis == tvPack)
+//Disabled
+//if (vis == tvFull || vis == tvSquish || vis == tvPack)
+if (vis == tvFull)
     {
     /*
      * Do grayscale representation spread out among tracks.
@@ -1186,7 +1200,9 @@ struct rmskJoined *rm;
 
   // If we are in full view mode and the scale is sufficient,
   // display the new visualization.
-if ((vis == tvFull || vis == tvSquish || vis == tvPack) && baseWidth <= DETAIL_VIEW_MAX_SCALE)
+//Disabled
+//if ((vis == tvFull || vis == tvSquish || vis == tvPack) && baseWidth <= DETAIL_VIEW_MAX_SCALE)
+if (vis == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
     {
     int level = yOff;
     struct subTrack *st = hashFindVal(subTracksHash, tg->table);
@@ -1247,5 +1263,5 @@ tg->itemHeight = rmskJoinedItemHeight;
 tg->itemStart = tgItemNoStart;
 tg->itemEnd = tgItemNoEnd;
 tg->mapsSelf = TRUE;
-tg->canPack = TRUE;
+//tg->canPack = TRUE;
 }
