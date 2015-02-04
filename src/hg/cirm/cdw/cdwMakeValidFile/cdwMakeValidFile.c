@@ -27,6 +27,7 @@
 #include "cdwLib.h"
 #include "fa.h"
 #include "cdwValid.h"
+#include "vcf.h"
 
 int maxErrCount = 1;	/* Set from command line. */
 int errCount;		/* Set as we run. */
@@ -348,6 +349,20 @@ while (faSpeedReadNext(lf, &dna, &size, &name))
 lineFileClose(&lf);
 }
 
+void makeValidVcf( struct sqlConnection *conn, char *path, struct cdwFile *ef, struct cdwValidFile *vf)
+/* Fill out fields of vf from a variant call format (vcf) file.  */
+{
+struct vcfFile *vcf = vcfFileMayOpen(path, NULL, 0, 0, 0, 0, FALSE);
+if (vcf == NULL)
+    errAbort("Couldn't open %s as a VCF file", path);
+struct vcfRecord *rec;
+while ((rec = vcfNextRecord(vcf)) != NULL)
+    {
+    vf->itemCount += 1;
+    }
+vcfFileFree(&vcf);
+}
+
 void makeValidGtf(struct sqlConnection *conn, char *path, struct cdwFile *ef, 
     struct cdwAssembly *assembly, struct cdwValidFile *vf)
 /* Fill in info about a gtf file. */
@@ -400,6 +415,12 @@ void makeValidIdat(struct sqlConnection *conn, char *path, struct cdwFile *ef, s
 /* Fill in info about a illumina idac file. */
 {
 cdwValidateIdat(path);
+}
+
+void makeValidPdf(struct sqlConnection *conn, char *path, struct cdwFile *ef, struct cdwValidFile *vf)
+/* Check it is really pdf. */
+{
+cdwValidatePdf(path);
 }
 
 void makeValidCustomTrack(struct sqlConnection *conn, char *path, 
@@ -560,6 +581,16 @@ if (vf->format)	// We only can validate if we have something for format
 	assert(endsWith(ef->submitFileName, ".gz"));
 	suffix = cdwFindDoubleFileSuffix(ef->submitFileName);
 	}
+    else if (sameString(format, "pdf"))
+        {
+	makeValidPdf(conn, path, ef, vf);
+	suffix = ".pdf";
+	}
+    else if (sameString(format, "vcf"))
+        {
+	makeValidVcf(conn, path, ef, vf);
+	suffix = ".vcf";
+	}
     else if (sameString(format, "unknown"))
         {
 	/* No specific validation needed for unknown format. */
@@ -644,6 +675,7 @@ if (errCatch->gotError)
     }
 else
     {
+    warn("%s", errCatch->message->string);  // Make status output legible
     char query[256];
     sqlSafef(query, sizeof(query), "update cdwFile set errorMessage='' where id=%lld",
 	(long long)ef->id);
