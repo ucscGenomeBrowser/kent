@@ -7,6 +7,7 @@
  * granted for all use - public, private or commercial. */
 
 #ifndef RA_H
+#define RA_H
 
 struct hash *raNextStanza(struct lineFile *lf);
 // Return a hash containing next record.
