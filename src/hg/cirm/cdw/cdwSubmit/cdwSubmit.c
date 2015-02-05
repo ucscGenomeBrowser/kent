@@ -943,9 +943,8 @@ sqlSafef(query, sizeof(query), "update cdwFile set "
 		      "  cdwFileName='%s', startUploadTime=%lld, endUploadTime=%lld,"
 		      "  md5='%s', updateTime=%lld where id=%d"
        , submitId, submitDirId
-       , cdwPath, startUploadTime, endUploadTime
+       , cdwFile, startUploadTime, endUploadTime
        , md5, updateTime, fileId);
-uglyf("%s\n", query);
 sqlUpdate(conn, query);
 freeMem(md5);
 return fileId;
