@@ -40,5 +40,11 @@ struct fieldedTable *fieldedTableFromTabFile(char *fileName, char *url, char *re
  * should be the same as fileName for most purposes.  This is used by edwSubmit though which
  * first copies to a local file, and we want to report errors from the url. */
 
+struct hash *fieldedTableIndex(struct fieldedTable *table, char *field);
+/* Return hash of fieldedRows keyed by values of given field */
+
+struct hash *fieldedTableUniqueIndex(struct fieldedTable *table, char *field);
+/* Return hash of fieldedRows keyed by values of given field, which must be unique. */
+
 #endif /* FIELDEDTABLE_H */
 
