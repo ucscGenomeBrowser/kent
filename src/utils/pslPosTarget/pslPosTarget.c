@@ -35,6 +35,7 @@ while ((psl = pslNext(pslLf)) != NULL)
         pslRc(psl);
     psl->strand[1] = '\0';
     pslTabOut(psl, out);
+    pslFree(&psl);
     }
 lineFileClose(&pslLf);
 fclose(out);
