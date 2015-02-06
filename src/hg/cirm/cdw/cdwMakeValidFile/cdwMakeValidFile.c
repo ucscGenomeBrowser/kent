@@ -21,6 +21,7 @@
 #include "bigWig.h"
 #include "bigBed.h"
 #include "bamFile.h"
+#include "htmlPage.h"
 #include "portable.h"
 #include "gff.h"
 #include "cdw.h"
@@ -349,7 +350,8 @@ while (faSpeedReadNext(lf, &dna, &size, &name))
 lineFileClose(&lf);
 }
 
-void makeValidVcf( struct sqlConnection *conn, char *path, struct cdwFile *ef, struct cdwValidFile *vf)
+void makeValidVcf( struct sqlConnection *conn, char *path, struct cdwFile *ef, 
+    struct cdwValidFile *vf)
 /* Fill out fields of vf from a variant call format (vcf) file.  */
 {
 struct vcfFile *vcf = vcfFileMayOpen(path, NULL, 0, 0, 0, 0, FALSE);
@@ -361,6 +363,36 @@ while ((rec = vcfNextRecord(vcf)) != NULL)
     vf->itemCount += 1;
     }
 vcfFileFree(&vcf);
+}
+
+void makeValidText(struct sqlConnection *conn, char *path, struct cdwFile *ef, 
+    struct cdwValidFile *vf)
+/* Fill in info about a text file. */
+{
+struct lineFile *lf = lineFileOpen(path, FALSE);
+char *line;
+int lineSize;
+while (lineFileNext(lf, &line, &lineSize))
+    {
+    int i;
+    for (i=0; i<lineSize; ++i)
+         {
+	 if (line[i] == 0)
+	     errAbort("%s is not a text file,  has binary zeroes.", ef->submitFileName);
+	 }
+    vf->itemCount += 1;
+    }
+lineFileClose(&lf);
+}
+
+void makeValidHtml(struct sqlConnection *conn, char *path, struct cdwFile *ef, 
+    struct cdwValidFile *vf)
+/* Fill in info about html file */
+{
+struct htmlPage *page = htmlPageGet(path);
+htmlPageValidateOrAbort(page);
+vf->itemCount = slCount(page->tags);
+htmlPageFree(&page);
 }
 
 void makeValidGtf(struct sqlConnection *conn, char *path, struct cdwFile *ef, 
@@ -590,6 +622,24 @@ if (vf->format)	// We only can validate if we have something for format
         {
 	makeValidVcf(conn, path, ef, vf);
 	suffix = ".vcf";
+	}
+    else if (sameString(format, "cram"))
+        {
+	cdwValidateCram(path);
+	suffix = ".cram";
+	}
+    else if (sameString(format, "jpg"))
+        {
+	cdwValidateJpg(path);
+	suffix = ".jpg";
+	}
+    else if (sameString(format, "text"))
+        {
+	makeValidText(conn, path, ef, vf);
+	}
+    else if (sameString(format, "html"))
+        {
+	makeValidHtml(conn, path, ef, vf);
 	}
     else if (sameString(format, "unknown"))
         {
