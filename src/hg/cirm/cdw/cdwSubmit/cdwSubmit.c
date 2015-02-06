@@ -528,7 +528,7 @@ static char *otherSupportedFormats[] = {"unknown", "fastq", "bam", "bed", "gtf",
     "bedLogR", "bedRrbs", "bedMethyl", "broadPeak", "narrowPeak", 
     "bed_bedLogR", "bed_bedRrbs", "bed_bedMethyl", "bed_broadPeak", "bed_narrowPeak",
     "bedRnaElements", "openChromCombinedPeaks", "peptideMapping", "shortFrags", 
-    "rcc", "idat", "fasta", "customTrack", "pdf", "vcf",
+    "rcc", "idat", "fasta", "customTrack", "pdf", "vcf", "cram", "jpg", "text", "html"
     };
 static int otherSupportedFormatsCount = ArraySize(otherSupportedFormats);
 if (stringArrayIx(format, otherSupportedFormats, otherSupportedFormatsCount) >= 0)
@@ -874,6 +874,27 @@ for (seconds = 0; seconds < maxSeconds; seconds += secondsPer)
 doValidatedEmail(submit, FALSE);
 }
 
+static void rCheckTagValid(struct tagStorm *tagStorm, struct tagStanza *list)
+/* Check tagStorm tags */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    struct slPair *pair;
+    for (pair = stanza->tagList; pair != NULL; pair = pair->next)
+	{
+	if (!cdwValidateTagVal(pair->name, pair->val))
+	    errAbort("Unknown tag '%s' in %s", pair->name, tagStorm->fileName);
+	}
+    rCheckTagValid(tagStorm, stanza->children);
+    }
+}
+
+void checkMetaTags(struct tagStorm *tagStorm)
+/* Check tags are all good. */
+{
+rCheckTagValid(tagStorm, tagStorm->forest);
+}
 
 void checkManifestAndMetadata( struct fieldedTable *table, int fileIx, int formatIx, int metaIx,
     struct tagStorm *tagStorm, struct hash *metaHash)
@@ -902,6 +923,18 @@ for (row = table->rowList; row != NULL; row = row->next)
     if (!hashLookup(metaHash, meta))
         errAbort("Meta ID %s is in %s but not %s", meta, table->name, tagStorm->fileName);
     }
+
+/* Check manifest.txt tags */
+int i;
+for (i=0; i<table->fieldCount; ++i)
+    {
+    char *field = table->fields[i];
+    if (!cdwValidateTagName(field))
+	errAbort("Unknown field '%s' in %s", field, table->name);
+    }
+
+/* Check meta.txt tags */
+checkMetaTags(tagStorm);
 }
 
 char *nullForNaOrEmpty(char *s)
