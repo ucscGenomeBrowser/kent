@@ -153,7 +153,7 @@ struct meta *metaList = metaLoadAll(inFile, keyTag, parentTag, FALSE, FALSE);
 struct meta *meta;
 for (meta = metaList; meta != NULL; meta = meta->next)
     metaTreeHoist(meta);
-metaWriteAll(metaList, outFile, indent, withParent);
+metaWriteAll(metaList, outFile, indent, withParent, 0);
 }
 
 int main(int argc, char *argv[])

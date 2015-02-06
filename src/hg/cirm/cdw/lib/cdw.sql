@@ -80,6 +80,7 @@ CREATE TABLE cdwFile (
     id int unsigned auto_increment,	# Autoincrementing file id
     submitId int unsigned default 0,	# Links to id in submit table
     submitDirId int unsigned default 0,	# Links to id in submitDir table
+    userId int unsigned default 0,	# Id in user table of file owner
     submitFileName longblob,	# File name in submit relative to submit dir
     cdwFileName longblob,	# File name in big data warehouse relative to cdw root dir
     startUploadTime bigint default 0,	# Time when upload started - 0 if not started
@@ -95,6 +96,7 @@ CREATE TABLE cdwFile (
     PRIMARY KEY(id),
     INDEX(submitId),
     INDEX(submitDirId),
+    INDEX(userId),
     INDEX(submitFileName(64)),
     INDEX(cdwFileName(32)),
     INDEX(md5)
@@ -107,7 +109,8 @@ CREATE TABLE cdwSubmit (
     startUploadTime bigint default 0,	# Time at start of submit
     endUploadTime bigint default 0,	# Time at end of upload - 0 if not finished
     userId int unsigned default 0,	# Connects to user table id field
-    submitFileId int unsigned default 0,	# Points to validated.txt file for submit.
+    manifestFileId int unsigned default 0,	# Points to metadata.txt file for submit.
+    metaFileId int unsigned default 0,	# Points to meta.txt file for submit
     submitDirId int unsigned default 0,	# Points to the submitDir
     fileCount int unsigned default 0,	# Number of files that will be in submit if it were complete.
     oldFiles int unsigned default 0,	# Number of files in submission that were already in warehouse.
@@ -122,7 +125,8 @@ CREATE TABLE cdwSubmit (
     PRIMARY KEY(id),
     INDEX(url(32)),
     INDEX(userId),
-    INDEX(submitFileId),
+    INDEX(manifestFileId),
+    INDEX(metaFileId),
     INDEX(submitDirId)
 );
 
@@ -156,7 +160,7 @@ CREATE TABLE cdwAssembly (
 #A biosample - not much info here, just enough to drive analysis pipeline
 CREATE TABLE cdwBiosample (
     id int unsigned auto_increment,	# Biosample id
-    term varchar(255) default '',	# Human readable.  Shared with ENCODE2.
+    term varchar(255) default '',	# Human readable..
     taxon int unsigned default 0,	# NCBI taxon number - 9606 for human.
     sex varchar(255) default '',	# One letter code: M male, F female, B both, U unknown
               #Indices
@@ -166,7 +170,7 @@ CREATE TABLE cdwBiosample (
 
 #An experiment - ideally will include a couple of biological replicates. Downloaded from Stanford.
 CREATE TABLE cdwExperiment (
-    accession char(16) default '',	# Something like ENCSR000CFA. ID shared with Stanford.
+    accession char(16) default '',	# ID shared with metadata system.
     dataType varchar(255) default '',	# Something liek RNA-seq, DNase-seq, ChIP-seq. Computed at UCSC.
     lab varchar(255) default '',	# Lab PI name and institution. Is lab.title at Stanford.
     biosample varchar(255) default '',	# Cell line name, tissue source, etc. Is biosample_term_name at Stanford.
@@ -187,7 +191,6 @@ CREATE TABLE cdwValidFile (
     outputType varchar(255) default '',	# What output_type it is from manifest
     experiment varchar(255) default '',	# What experiment it's in from manifest
     replicate varchar(255) default '',	# What replicate it is from manifest.  Values 1,2,3... pooled, or ''
-    validKey varchar(255) default '',	# The valid_key tag from manifest
     enrichedIn varchar(255) default '',	# The enriched_in tag from manifest
     ucscDb varchar(255) default '',	# Something like hg19 or mm9
     itemCount bigint default 0,	# # of items in file: reads for fastqs, lines for beds, bases w/data for wig.
@@ -200,7 +203,7 @@ CREATE TABLE cdwValidFile (
     depth double default 0,	# Estimated genome-equivalents covered by possibly overlapping data
     singleQaStatus tinyint default 0,	# 0 = untested, 1 =  pass, -1 = fail, 2 = forced pass, -2 = forced fail
     replicateQaStatus tinyint default 0,	# 0 = untested, 1 = pass, -1 = fail, 2 = forced pass, -2 = forced fail
-    technicalReplicate varchar(255) default '',	# Manifest's technical_replicate tag. Values 1,2,3... pooled or ''
+    part varchar(255) default '',	# Manifest's file part. Values 1,2,3... Used for fastqs split for analysis
     pairedEnd varchar(255) default '',	# The paired_end tag from the manifest.  Values 1,2 or ''
     qaVersion tinyint default 0,	# Version of QA pipeline making status decisions
     uniqueMapRatio double default 0,	# Fraction of reads that map uniquely to genome for bams and fastqs

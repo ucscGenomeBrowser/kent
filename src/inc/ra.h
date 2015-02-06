@@ -33,11 +33,20 @@ boolean raSkipLeadingEmptyLines(struct lineFile *lf, struct dyString *dy);
  * Together with raNextTagVal you can construct your own raNextRecord....
  * If dy parameter is non-null, then the text parsed gets placed into dy. */
 
+boolean raNextTagValWithIndent(struct lineFile *lf, char **retTag, char **retVal, struct dyString  *dy,
+	int *retIndent);
+// Read next line.  Return FALSE at end of file or blank line.  Otherwise fill in
+// *retTag and *retVal and *retIndent and return TRUE.  If dy parameter is non-null, then 
+// the text parsed gets appended to dy. Continuation lines in RA file will be joined to produce 
+// tag and val, but dy will be filled with the unedited multiple lines containing the continuation chars.
+// NOTE: retTag & retVal, if returned, point to static mem which will be overwritten on next call!
+
 boolean raNextTagVal(struct lineFile *lf, char **retTag, char **retVal, struct dyString  *dy);
 // Read next line.  Return FALSE at end of file or blank line.  Otherwise fill in
 // *retTag and *retVal and return TRUE.  If dy parameter is non-null, then the text parsed
 // gets appended to dy. Continuation lines in RA file will be joined to produce tag and val,
 // but dy will be filled with the unedited multiple lines containing the continuation chars.
+// NOTE: retTag & retVal, if returned, point to static mem which will be overwritten on next call!
 
 struct hash *raFromString(char *string);
 /* Return hash of key/value pairs from string.

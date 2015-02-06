@@ -16,6 +16,9 @@ void cdwValidateRcc(char *path);
 void cdwValidateIdat(char *path);
 /* Validate illumina idat file. */
 
+void cdwValidatePdf(char *path);
+/* Make sure PDF really is PDF */
+
 boolean cdwIsGzipped(char *path);
 /* Return TRUE if file at path starts with GZIP signature */
 

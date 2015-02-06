@@ -22,25 +22,47 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void freen(char *input)
+void freen(char *output)
 /* Test something */
 {
-verboseTimeInit();
-char *old = md5HexForFile(input);
-verboseTime(1, "old: %s", old);
-char *nu1 = md5HexForFile(input);
-verboseTime(1, "nu1: %s", nu1);
-unsigned char md5[16];
-md5ForFile(input, md5);
-verboseTime(1, "nu2: %s", md5ToHex(md5));
-char *gulp;
-size_t gulpSize = 0;
-readInGulp(input, &gulp, &gulpSize);
-verboseTime(1, "read gulp");
-char *nu3 = md5HexForBuf(gulp, gulpSize);
-verboseTime(1, "nu3: %s", nu3);
-char *nu4 = md5HexForString(gulp);
-verboseTime(1, "nu4: %s", nu4);
+int i,j,k,l;
+FILE *f = mustOpen(output, "w");
+
+for (i=0; i<20; ++i)
+    {
+    fprintf(f, "meta experiment_%03d\n", i);
+    fprintf(f, "lab lab_%d\n", i%3 + 1);
+    fprintf(f, "assay %s\n", (i%1 == 0) ? "RNA-seq" : "WGBS");
+    fprintf(f, "access all\n");
+    fprintf(f, "organ brain\n");
+    fprintf(f, "\n");
+    for (j=0; j<20; ++j)
+        {
+	fprintf(f, "    donor %03X\n", j);
+	fprintf(f, "    age %d\n", 5 + j%10);
+	fprintf(f, "    age_units weeks\n");
+	fprintf(f, "    life_stage embryo\n");
+	fprintf(f, "    sex %s\n", (j%3 == 0) ? "male" : "female");
+	fprintf(f, "    biosample_date 2015-01-%02d\n", j); 
+	fprintf(f, "\n");
+	for (k=0; k<20; ++k)
+	    {
+	    fprintf(f, "        organ %s\n", (k%3 == 0) ? "brain" : "liver");
+	    fprintf(f, "        lab_kent_disassociation_protocol %s\n", 
+		(k%3 == 0) ? "fetal_brain_digest.pdf" : "fetal_liver_digest.pdf");
+	    fprintf(f, "        lab_kent_quality %g\n",  k*k%100 * 0.01);
+	    fprintf(f, "\n");
+	    for (l=0; l<20; ++l)
+	        {
+		fprintf(f, "            file ex%02ddo%02dor%02dfa%02d.fq.gz\n", i, j, k, l);
+		fprintf(f, "            format fastq\n");
+		fprintf(f, "            part %d\n", l+1);
+		fprintf(f, "\n");
+		}
+	    }
+	}
+    }
+
 }
 
 int main(int argc, char *argv[])

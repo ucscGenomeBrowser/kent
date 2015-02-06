@@ -43,11 +43,12 @@ lineFileReuse(lf);
 return TRUE;
 }
 
-boolean raNextTagVal(struct lineFile *lf, char **retTag, char **retVal, struct dyString *dyRecord)
+boolean raNextTagValWithIndent(struct lineFile *lf, char **retTag, char **retVal, struct dyString  *dy,
+	int *retIndent)
 // Read next line.  Return FALSE at end of file or blank line.  Otherwise fill in
-// *retTag and *retVal and return TRUE.  If dy parameter is non-null, then the text parsed
-// gets appended to dy. Continuation lines in RA file will be joined to produce tag and val,
-// but dy will be filled with the unedited multiple lines containing the continuation chars.
+// *retTag and *retVal and *retIndent and return TRUE.  If dy parameter is non-null, then 
+// the text parsed gets appended to dy. Continuation lines in RA file will be joined to produce 
+// tag and val, but dy will be filled with the unedited multiple lines containing the continuation chars.
 // NOTE: retTag & retVal, if returned, point to static mem which will be overwritten on next call!
 {
 *retTag = NULL;
@@ -59,7 +60,7 @@ int lineLen,rawLen;
 // Don't bother with raw if it isn't used.
 char **pRaw    = NULL;
 int   *pRawLen = NULL;
-if (dyRecord != NULL)
+if (dy != NULL)
     {
     pRaw    = &raw;
     pRawLen = &rawLen;
@@ -70,19 +71,33 @@ while (lineFileNextFull(lf, &line, &lineLen, pRaw, pRawLen)) // Joins continuati
     char *clippedText = skipLeadingSpaces(line);
     if (*clippedText == 0)
         {
-        if (dyRecord)
+        if (dy)
             lineFileReuse(lf);   // Just so don't loose leading space in dy.
         return FALSE;
         }
+    if (retIndent != NULL)
+        {
+	int indentLevel = 0;
+	char *s = line;
+	while (s < clippedText)
+	     {
+	     char c = *s++;
+	     if (c == '\t')
+	         indentLevel = ((indentLevel+8) & 0xfffffff8);
+	     else
+	         indentLevel += 1;
+	     }
+	*retIndent = indentLevel;
+	}
 
     // Append whatever line was read from file.
-    if (dyRecord)
+    if (dy)
         {
         if (raw != NULL)
-            dyStringAppendN(dyRecord, raw, rawLen);
+            dyStringAppendN(dy, raw, rawLen);
         else
-            dyStringAppendN(dyRecord, line, lineLen);
-        dyStringAppendC(dyRecord,'\n');
+            dyStringAppendN(dy, line, lineLen);
+        dyStringAppendC(dy,'\n');
         }
 
     // Skip comments
@@ -99,6 +114,17 @@ while (lineFileNextFull(lf, &line, &lineLen, pRaw, pRawLen)) // Joins continuati
     }
 return FALSE;
 }
+
+boolean raNextTagVal(struct lineFile *lf, char **retTag, char **retVal, struct dyString  *dy)
+// Read next line.  Return FALSE at end of file or blank line.  Otherwise fill in
+// *retTag and *retVal and return TRUE.  If dy parameter is non-null, then the text parsed
+// gets appended to dy. Continuation lines in RA file will be joined to produce tag and val,
+// but dy will be filled with the unedited multiple lines containing the continuation chars.
+// NOTE: retTag & retVal, if returned, point to static mem which will be overwritten on next call!
+{
+return raNextTagValWithIndent(lf, retTag, retVal, dy, NULL);
+}
+
 
 struct hash *raNextStanza(struct lineFile *lf)
 // Return a hash containing next record.

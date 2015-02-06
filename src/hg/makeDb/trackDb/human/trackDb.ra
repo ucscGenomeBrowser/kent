@@ -3023,41 +3023,11 @@ shortLabel ClinVar Variants
 longLabel ClinVar Variants
 group phenDis
 visibility hide
-type bigBed 4 .
-itemRgb on
-urls rcvAcc="http://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="http://www.ncbi.nlm.nih.gov/gene/$$" snpId="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="http://www.ncbi.nlm.nih.gov/dbvar/variants/$$/"
-mouseOverField clinSign
-noScoreFilter on
-release beta,public
-
-    track clinvarMain
-    shortLabel ClinVar Main
-    longLabel ClinVar Variants, CNVs Excluded
-    visibility pack
-    parent clinvar
-    priority 1
-    release beta,public
-
-    track clinvarCnv
-    shortLabel ClinVar CNVs
-    longLabel ClinVar Variants, CNVs Only
-    visibility pack
-    parent clinvar
-    priority 2
-    release beta,public
-
-track clinvar
-compositeTrack on
-shortLabel ClinVar Variants
-longLabel ClinVar Variants
-group phenDis
-visibility hide
 type bigBed 12 .
 itemRgb on
 urls rcvAcc="http://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="http://www.ncbi.nlm.nih.gov/gene/$$" snpId="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="http://www.ncbi.nlm.nih.gov/dbvar/variants/$$/"
 mouseOverField clinSign
 noScoreFilter on
-release alpha
 
     track clinvarMain
     shortLabel ClinVar Main
@@ -3065,7 +3035,6 @@ release alpha
     visibility pack
     parent clinvar
     priority 1
-    release alpha
 
     track clinvarCnv
     shortLabel ClinVar CNVs
@@ -3073,7 +3042,6 @@ release alpha
     visibility pack
     parent clinvar
     priority 2
-    release alpha
 
 searchName cosmicId
 searchTable cosmic

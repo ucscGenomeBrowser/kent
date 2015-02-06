@@ -10,6 +10,8 @@
  *            meta lowLevel
  *            fileName hg19/chipSeq/helaH3k4me3.narrowPeak.bigBed
  * The file is interpreted so that lower level stanzas inherit tags from higher level ones.
+ * NOTE: this file has largely been superceded by the tagStorm module, which does not
+ * require meta tags, but is otherwise similar. 
  */
 
 #ifndef META_H
@@ -69,9 +71,11 @@ void metaFreeList(struct meta **pList);
 
 #define META_DEFAULT_INDENT 4	/* Default size for meta indentation */
 
-void metaWriteAll(struct meta *metaList, char *fileName, int indent, boolean withParent);
+void metaWriteAll(struct meta *metaList, char *fileName, int indent, boolean withParent, 
+    int maxDepth);
 /* Write out metadata, including children, optionally adding meta tag.   By convention
- * for out meta.txt/meta.ra files, indent is 4, withParent is FALSE. */
+ * for out meta.txt/meta.ra files, indent is 4, withParent is FALSE.  If maxDepth is
+ * non-zero just write out up to that many levels.  Root level is 0. */
 
 char *metaLocalTagVal(struct meta *meta, char *tag);
 /* Return value of tag found in this node, not going up to parents. */

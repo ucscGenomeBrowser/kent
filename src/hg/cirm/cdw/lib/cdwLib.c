@@ -782,6 +782,8 @@ boolean cdwIsSupportedBigBedFormat(char *format)
 /* Return TRUE if it's one of the bigBed formats we support. */
 {
 int i;
+if (sameString(format, "bigBed"))   // Generic bigBed ok
+    return TRUE;
 for (i=0; i<cdwBedTypeCount; ++i)
     {
     if (sameString(format, cdwBedTypeTable[i].name))
@@ -1094,7 +1096,6 @@ dyStringPrintf(dy, " format='%s',", el->format);
 dyStringPrintf(dy, " outputType='%s',", el->outputType);
 dyStringPrintf(dy, " experiment='%s',", el->experiment);
 dyStringPrintf(dy, " replicate='%s',", el->replicate);
-dyStringPrintf(dy, " validKey='%s',", el->validKey);
 dyStringPrintf(dy, " enrichedIn='%s',", el->enrichedIn);
 dyStringPrintf(dy, " ucscDb='%s',", el->ucscDb);
 dyStringPrintf(dy, " itemCount=%lld,", (long long)el->itemCount);
@@ -1107,11 +1108,11 @@ dyStringPrintf(dy, " sampleCoverage=%g,", el->sampleCoverage);
 dyStringPrintf(dy, " depth=%g,", el->depth);
 dyStringPrintf(dy, " singleQaStatus=0,");
 dyStringPrintf(dy, " replicateQaStatus=0,");
-dyStringPrintf(dy, " technicalReplicate='%s',", el->technicalReplicate);
+dyStringPrintf(dy, " part='%s',", el->part);
 dyStringPrintf(dy, " pairedEnd='%s',", el->pairedEnd);
 dyStringPrintf(dy, " qaVersion='%d',", el->qaVersion);
 dyStringPrintf(dy, " uniqueMapRatio=%g", el->uniqueMapRatio);
-#if (CDWVALIDFILE_NUM_COLS != 24)
+#if (CDWVALIDFILE_NUM_COLS != 23)
    #error "Please update this routine with new column"
 #endif
 dyStringPrintf(dy, " where id=%lld\n", (long long)id);
@@ -1135,14 +1136,13 @@ void cdwValidFileFieldsFromTags(struct cdwValidFile *vf, struct cgiParsedVars *t
 {
 vf->format = cloneString(hashFindVal(tags->hash, "format"));
 vf->outputType = cloneString(findTagOrEmpty(tags, "output_type"));
-vf->experiment = cloneString(findTagOrEmpty(tags, "experiment"));
+vf->experiment = cloneString(findTagOrEmpty(tags, "meta"));
 vf->replicate = cloneString(findTagOrEmpty(tags, "replicate"));
-vf->validKey = cloneString(hashFindVal(tags->hash, "valid_key"));
 vf->enrichedIn = cloneString(findTagOrEmpty(tags, "enriched_in"));
 vf->ucscDb = cloneString(findTagOrEmpty(tags, "ucsc_db"));
-vf->technicalReplicate = cloneString(findTagOrEmpty(tags, "technical_replicate"));
+vf->part = cloneString(findTagOrEmpty(tags, "part"));
 vf->pairedEnd = cloneString(findTagOrEmpty(tags, "paired_end"));
-#if (CDWVALIDFILE_NUM_COLS != 24)
+#if (CDWVALIDFILE_NUM_COLS != 23)
    #error "Please update this routine with new column"
 #endif
 }
@@ -1481,7 +1481,7 @@ cdwReserveTempFile(sampleBed);
 
 /* Make system call to make ra and bed, and then another system call to zip bed.*/
 char command[3*PATH_LEN];
-safef(command, sizeof(command), "cdwBamStats -sampleBed=%s -sampleBedSize=%d %s %s",
+safef(command, sizeof(command), "edwBamStats -sampleBed=%s -sampleBedSize=%d %s %s",
     sampleBed, cdwSampleTargetSize, path, statsFile);
 mustSystem(command);
 safef(command, sizeof(command), "gzip %s", sampleBed);
@@ -1522,8 +1522,8 @@ char query[1024];
 sqlSafef(query, sizeof(query), 
     "select cdwValidFile.* from cdwValidFile join cdwFile on cdwValidFile.fileId=cdwFile.id"
     " where experiment='%s' and outputType='%s' and replicate='%s' "
-    " and technicalReplicate='%s' and pairedEnd='%s' and itemCount=%lld and deprecated=''"
-    , vf->experiment, vf->outputType, vf->replicate, vf->technicalReplicate, otherEnd
+    " and part='%s' and pairedEnd='%s' and itemCount=%lld and deprecated=''"
+    , vf->experiment, vf->outputType, vf->replicate, vf->part, otherEnd
     , vf->itemCount);
 struct cdwValidFile *otherVf = cdwValidFileLoadByQuery(conn, query);
 if (otherVf == NULL)

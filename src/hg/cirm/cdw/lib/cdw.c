@@ -872,7 +872,7 @@ fputc(lastSep,f);
 }
 
 
-char *cdwFileCommaSepFieldNames = "id,submitId,submitDirId,submitFileName,cdwFileName,startUploadTime,endUploadTime,updateTime,size,md5,tags,errorMessage,deprecated,replacedBy";
+char *cdwFileCommaSepFieldNames = "id,submitId,submitDirId,userId,submitFileName,cdwFileName,startUploadTime,endUploadTime,updateTime,size,md5,tags,errorMessage,deprecated,replacedBy";
 
 void cdwFileStaticLoad(char **row, struct cdwFile *ret)
 /* Load a row from cdwFile table into ret.  The contents of ret will
@@ -882,17 +882,18 @@ void cdwFileStaticLoad(char **row, struct cdwFile *ret)
 ret->id = sqlUnsigned(row[0]);
 ret->submitId = sqlUnsigned(row[1]);
 ret->submitDirId = sqlUnsigned(row[2]);
-ret->submitFileName = row[3];
-ret->cdwFileName = row[4];
-ret->startUploadTime = sqlLongLong(row[5]);
-ret->endUploadTime = sqlLongLong(row[6]);
-ret->updateTime = sqlLongLong(row[7]);
-ret->size = sqlLongLong(row[8]);
-safecpy(ret->md5, sizeof(ret->md5), row[9]);
-ret->tags = row[10];
-ret->errorMessage = row[11];
-ret->deprecated = row[12];
-ret->replacedBy = sqlUnsigned(row[13]);
+ret->userId = sqlUnsigned(row[3]);
+ret->submitFileName = row[4];
+ret->cdwFileName = row[5];
+ret->startUploadTime = sqlLongLong(row[6]);
+ret->endUploadTime = sqlLongLong(row[7]);
+ret->updateTime = sqlLongLong(row[8]);
+ret->size = sqlLongLong(row[9]);
+safecpy(ret->md5, sizeof(ret->md5), row[10]);
+ret->tags = row[11];
+ret->errorMessage = row[12];
+ret->deprecated = row[13];
+ret->replacedBy = sqlUnsigned(row[14]);
 }
 
 struct cdwFile *cdwFileLoadByQuery(struct sqlConnection *conn, char *query)
@@ -925,8 +926,8 @@ void cdwFileSaveToDb(struct sqlConnection *conn, struct cdwFile *el, char *table
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,'%s','%s',%lld,%lld,%lld,%lld,'%s','%s','%s','%s',%u)", 
-	tableName,  el->id,  el->submitId,  el->submitDirId,  el->submitFileName,  el->cdwFileName,  el->startUploadTime,  el->endUploadTime,  el->updateTime,  el->size,  el->md5,  el->tags,  el->errorMessage,  el->deprecated,  el->replacedBy);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,%u,'%s','%s',%lld,%lld,%lld,%lld,'%s','%s','%s','%s',%u)", 
+	tableName,  el->id,  el->submitId,  el->submitDirId,  el->userId,  el->submitFileName,  el->cdwFileName,  el->startUploadTime,  el->endUploadTime,  el->updateTime,  el->size,  el->md5,  el->tags,  el->errorMessage,  el->deprecated,  el->replacedBy);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -941,17 +942,18 @@ AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
 ret->submitId = sqlUnsigned(row[1]);
 ret->submitDirId = sqlUnsigned(row[2]);
-ret->submitFileName = cloneString(row[3]);
-ret->cdwFileName = cloneString(row[4]);
-ret->startUploadTime = sqlLongLong(row[5]);
-ret->endUploadTime = sqlLongLong(row[6]);
-ret->updateTime = sqlLongLong(row[7]);
-ret->size = sqlLongLong(row[8]);
-safecpy(ret->md5, sizeof(ret->md5), row[9]);
-ret->tags = cloneString(row[10]);
-ret->errorMessage = cloneString(row[11]);
-ret->deprecated = cloneString(row[12]);
-ret->replacedBy = sqlUnsigned(row[13]);
+ret->userId = sqlUnsigned(row[3]);
+ret->submitFileName = cloneString(row[4]);
+ret->cdwFileName = cloneString(row[5]);
+ret->startUploadTime = sqlLongLong(row[6]);
+ret->endUploadTime = sqlLongLong(row[7]);
+ret->updateTime = sqlLongLong(row[8]);
+ret->size = sqlLongLong(row[9]);
+safecpy(ret->md5, sizeof(ret->md5), row[10]);
+ret->tags = cloneString(row[11]);
+ret->errorMessage = cloneString(row[12]);
+ret->deprecated = cloneString(row[13]);
+ret->replacedBy = sqlUnsigned(row[14]);
 return ret;
 }
 
@@ -961,7 +963,7 @@ struct cdwFile *cdwFileLoadAll(char *fileName)
 {
 struct cdwFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[14];
+char *row[15];
 
 while (lineFileRow(lf, row))
     {
@@ -979,7 +981,7 @@ struct cdwFile *cdwFileLoadAllByChar(char *fileName, char chopper)
 {
 struct cdwFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[14];
+char *row[15];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -1003,6 +1005,7 @@ if (ret == NULL)
 ret->id = sqlUnsignedComma(&s);
 ret->submitId = sqlUnsignedComma(&s);
 ret->submitDirId = sqlUnsignedComma(&s);
+ret->userId = sqlUnsignedComma(&s);
 ret->submitFileName = sqlStringComma(&s);
 ret->cdwFileName = sqlStringComma(&s);
 ret->startUploadTime = sqlLongLongComma(&s);
@@ -1055,6 +1058,8 @@ fprintf(f, "%u", el->submitId);
 fputc(sep,f);
 fprintf(f, "%u", el->submitDirId);
 fputc(sep,f);
+fprintf(f, "%u", el->userId);
+fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->submitFileName);
 if (sep == ',') fputc('"',f);
@@ -1092,7 +1097,7 @@ fputc(lastSep,f);
 }
 
 
-char *cdwSubmitCommaSepFieldNames = "id,url,startUploadTime,endUploadTime,userId,submitFileId,submitDirId,fileCount,oldFiles,newFiles,byteCount,oldBytes,newBytes,errorMessage,fileIdInTransit,metaChangeCount";
+char *cdwSubmitCommaSepFieldNames = "id,url,startUploadTime,endUploadTime,userId,manifestFileId,metaFileId,submitDirId,fileCount,oldFiles,newFiles,byteCount,oldBytes,newBytes,errorMessage,fileIdInTransit,metaChangeCount";
 
 void cdwSubmitStaticLoad(char **row, struct cdwSubmit *ret)
 /* Load a row from cdwSubmit table into ret.  The contents of ret will
@@ -1104,17 +1109,18 @@ ret->url = row[1];
 ret->startUploadTime = sqlLongLong(row[2]);
 ret->endUploadTime = sqlLongLong(row[3]);
 ret->userId = sqlUnsigned(row[4]);
-ret->submitFileId = sqlUnsigned(row[5]);
-ret->submitDirId = sqlUnsigned(row[6]);
-ret->fileCount = sqlUnsigned(row[7]);
-ret->oldFiles = sqlUnsigned(row[8]);
-ret->newFiles = sqlUnsigned(row[9]);
-ret->byteCount = sqlLongLong(row[10]);
-ret->oldBytes = sqlLongLong(row[11]);
-ret->newBytes = sqlLongLong(row[12]);
-ret->errorMessage = row[13];
-ret->fileIdInTransit = sqlUnsigned(row[14]);
-ret->metaChangeCount = sqlUnsigned(row[15]);
+ret->manifestFileId = sqlUnsigned(row[5]);
+ret->metaFileId = sqlUnsigned(row[6]);
+ret->submitDirId = sqlUnsigned(row[7]);
+ret->fileCount = sqlUnsigned(row[8]);
+ret->oldFiles = sqlUnsigned(row[9]);
+ret->newFiles = sqlUnsigned(row[10]);
+ret->byteCount = sqlLongLong(row[11]);
+ret->oldBytes = sqlLongLong(row[12]);
+ret->newBytes = sqlLongLong(row[13]);
+ret->errorMessage = row[14];
+ret->fileIdInTransit = sqlUnsigned(row[15]);
+ret->metaChangeCount = sqlUnsigned(row[16]);
 }
 
 struct cdwSubmit *cdwSubmitLoadByQuery(struct sqlConnection *conn, char *query)
@@ -1147,8 +1153,8 @@ void cdwSubmitSaveToDb(struct sqlConnection *conn, struct cdwSubmit *el, char *t
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%u,%u,%u,%u,%u,%u,%lld,%lld,%lld,'%s',%u,%u)", 
-	tableName,  el->id,  el->url,  el->startUploadTime,  el->endUploadTime,  el->userId,  el->submitFileId,  el->submitDirId,  el->fileCount,  el->oldFiles,  el->newFiles,  el->byteCount,  el->oldBytes,  el->newBytes,  el->errorMessage,  el->fileIdInTransit,  el->metaChangeCount);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,%u,%u,%u,%u,%u,%u,%u,%lld,%lld,%lld,'%s',%u,%u)", 
+	tableName,  el->id,  el->url,  el->startUploadTime,  el->endUploadTime,  el->userId,  el->manifestFileId,  el->metaFileId,  el->submitDirId,  el->fileCount,  el->oldFiles,  el->newFiles,  el->byteCount,  el->oldBytes,  el->newBytes,  el->errorMessage,  el->fileIdInTransit,  el->metaChangeCount);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -1165,17 +1171,18 @@ ret->url = cloneString(row[1]);
 ret->startUploadTime = sqlLongLong(row[2]);
 ret->endUploadTime = sqlLongLong(row[3]);
 ret->userId = sqlUnsigned(row[4]);
-ret->submitFileId = sqlUnsigned(row[5]);
-ret->submitDirId = sqlUnsigned(row[6]);
-ret->fileCount = sqlUnsigned(row[7]);
-ret->oldFiles = sqlUnsigned(row[8]);
-ret->newFiles = sqlUnsigned(row[9]);
-ret->byteCount = sqlLongLong(row[10]);
-ret->oldBytes = sqlLongLong(row[11]);
-ret->newBytes = sqlLongLong(row[12]);
-ret->errorMessage = cloneString(row[13]);
-ret->fileIdInTransit = sqlUnsigned(row[14]);
-ret->metaChangeCount = sqlUnsigned(row[15]);
+ret->manifestFileId = sqlUnsigned(row[5]);
+ret->metaFileId = sqlUnsigned(row[6]);
+ret->submitDirId = sqlUnsigned(row[7]);
+ret->fileCount = sqlUnsigned(row[8]);
+ret->oldFiles = sqlUnsigned(row[9]);
+ret->newFiles = sqlUnsigned(row[10]);
+ret->byteCount = sqlLongLong(row[11]);
+ret->oldBytes = sqlLongLong(row[12]);
+ret->newBytes = sqlLongLong(row[13]);
+ret->errorMessage = cloneString(row[14]);
+ret->fileIdInTransit = sqlUnsigned(row[15]);
+ret->metaChangeCount = sqlUnsigned(row[16]);
 return ret;
 }
 
@@ -1185,7 +1192,7 @@ struct cdwSubmit *cdwSubmitLoadAll(char *fileName)
 {
 struct cdwSubmit *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[16];
+char *row[17];
 
 while (lineFileRow(lf, row))
     {
@@ -1203,7 +1210,7 @@ struct cdwSubmit *cdwSubmitLoadAllByChar(char *fileName, char chopper)
 {
 struct cdwSubmit *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[16];
+char *row[17];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -1229,7 +1236,8 @@ ret->url = sqlStringComma(&s);
 ret->startUploadTime = sqlLongLongComma(&s);
 ret->endUploadTime = sqlLongLongComma(&s);
 ret->userId = sqlUnsignedComma(&s);
-ret->submitFileId = sqlUnsignedComma(&s);
+ret->manifestFileId = sqlUnsignedComma(&s);
+ret->metaFileId = sqlUnsignedComma(&s);
 ret->submitDirId = sqlUnsignedComma(&s);
 ret->fileCount = sqlUnsignedComma(&s);
 ret->oldFiles = sqlUnsignedComma(&s);
@@ -1284,7 +1292,9 @@ fprintf(f, "%lld", el->endUploadTime);
 fputc(sep,f);
 fprintf(f, "%u", el->userId);
 fputc(sep,f);
-fprintf(f, "%u", el->submitFileId);
+fprintf(f, "%u", el->manifestFileId);
+fputc(sep,f);
+fprintf(f, "%u", el->metaFileId);
 fputc(sep,f);
 fprintf(f, "%u", el->submitDirId);
 fputc(sep,f);
@@ -2028,7 +2038,7 @@ fputc(lastSep,f);
 }
 
 
-char *cdwValidFileCommaSepFieldNames = "id,licensePlate,fileId,format,outputType,experiment,replicate,validKey,enrichedIn,ucscDb,itemCount,basesInItems,sampleCount,basesInSample,sampleBed,mapRatio,sampleCoverage,depth,singleQaStatus,replicateQaStatus,technicalReplicate,pairedEnd,qaVersion,uniqueMapRatio";
+char *cdwValidFileCommaSepFieldNames = "id,licensePlate,fileId,format,outputType,experiment,replicate,enrichedIn,ucscDb,itemCount,basesInItems,sampleCount,basesInSample,sampleBed,mapRatio,sampleCoverage,depth,singleQaStatus,replicateQaStatus,part,pairedEnd,qaVersion,uniqueMapRatio";
 
 void cdwValidFileStaticLoad(char **row, struct cdwValidFile *ret)
 /* Load a row from cdwValidFile table into ret.  The contents of ret will
@@ -2042,23 +2052,22 @@ ret->format = row[3];
 ret->outputType = row[4];
 ret->experiment = row[5];
 ret->replicate = row[6];
-ret->validKey = row[7];
-ret->enrichedIn = row[8];
-ret->ucscDb = row[9];
-ret->itemCount = sqlLongLong(row[10]);
-ret->basesInItems = sqlLongLong(row[11]);
-ret->sampleCount = sqlLongLong(row[12]);
-ret->basesInSample = sqlLongLong(row[13]);
-ret->sampleBed = row[14];
-ret->mapRatio = sqlDouble(row[15]);
-ret->sampleCoverage = sqlDouble(row[16]);
-ret->depth = sqlDouble(row[17]);
-ret->singleQaStatus = sqlSigned(row[18]);
-ret->replicateQaStatus = sqlSigned(row[19]);
-ret->technicalReplicate = row[20];
-ret->pairedEnd = row[21];
-ret->qaVersion = sqlSigned(row[22]);
-ret->uniqueMapRatio = sqlDouble(row[23]);
+ret->enrichedIn = row[7];
+ret->ucscDb = row[8];
+ret->itemCount = sqlLongLong(row[9]);
+ret->basesInItems = sqlLongLong(row[10]);
+ret->sampleCount = sqlLongLong(row[11]);
+ret->basesInSample = sqlLongLong(row[12]);
+ret->sampleBed = row[13];
+ret->mapRatio = sqlDouble(row[14]);
+ret->sampleCoverage = sqlDouble(row[15]);
+ret->depth = sqlDouble(row[16]);
+ret->singleQaStatus = sqlSigned(row[17]);
+ret->replicateQaStatus = sqlSigned(row[18]);
+ret->part = row[19];
+ret->pairedEnd = row[20];
+ret->qaVersion = sqlSigned(row[21]);
+ret->uniqueMapRatio = sqlDouble(row[22]);
 }
 
 struct cdwValidFile *cdwValidFileLoadByQuery(struct sqlConnection *conn, char *query)
@@ -2091,8 +2100,8 @@ void cdwValidFileSaveToDb(struct sqlConnection *conn, struct cdwValidFile *el, c
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s','%s',%lld,%lld,%lld,%lld,'%s',%g,%g,%g,%d,%d,'%s','%s',%d,%g)", 
-	tableName,  el->id,  el->licensePlate,  el->fileId,  el->format,  el->outputType,  el->experiment,  el->replicate,  el->validKey,  el->enrichedIn,  el->ucscDb,  el->itemCount,  el->basesInItems,  el->sampleCount,  el->basesInSample,  el->sampleBed,  el->mapRatio,  el->sampleCoverage,  el->depth,  el->singleQaStatus,  el->replicateQaStatus,  el->technicalReplicate,  el->pairedEnd,  el->qaVersion,  el->uniqueMapRatio);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%u,'%s','%s','%s','%s','%s','%s',%lld,%lld,%lld,%lld,'%s',%g,%g,%g,%d,%d,'%s','%s',%d,%g)", 
+	tableName,  el->id,  el->licensePlate,  el->fileId,  el->format,  el->outputType,  el->experiment,  el->replicate,  el->enrichedIn,  el->ucscDb,  el->itemCount,  el->basesInItems,  el->sampleCount,  el->basesInSample,  el->sampleBed,  el->mapRatio,  el->sampleCoverage,  el->depth,  el->singleQaStatus,  el->replicateQaStatus,  el->part,  el->pairedEnd,  el->qaVersion,  el->uniqueMapRatio);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -2111,23 +2120,22 @@ ret->format = cloneString(row[3]);
 ret->outputType = cloneString(row[4]);
 ret->experiment = cloneString(row[5]);
 ret->replicate = cloneString(row[6]);
-ret->validKey = cloneString(row[7]);
-ret->enrichedIn = cloneString(row[8]);
-ret->ucscDb = cloneString(row[9]);
-ret->itemCount = sqlLongLong(row[10]);
-ret->basesInItems = sqlLongLong(row[11]);
-ret->sampleCount = sqlLongLong(row[12]);
-ret->basesInSample = sqlLongLong(row[13]);
-ret->sampleBed = cloneString(row[14]);
-ret->mapRatio = sqlDouble(row[15]);
-ret->sampleCoverage = sqlDouble(row[16]);
-ret->depth = sqlDouble(row[17]);
-ret->singleQaStatus = sqlSigned(row[18]);
-ret->replicateQaStatus = sqlSigned(row[19]);
-ret->technicalReplicate = cloneString(row[20]);
-ret->pairedEnd = cloneString(row[21]);
-ret->qaVersion = sqlSigned(row[22]);
-ret->uniqueMapRatio = sqlDouble(row[23]);
+ret->enrichedIn = cloneString(row[7]);
+ret->ucscDb = cloneString(row[8]);
+ret->itemCount = sqlLongLong(row[9]);
+ret->basesInItems = sqlLongLong(row[10]);
+ret->sampleCount = sqlLongLong(row[11]);
+ret->basesInSample = sqlLongLong(row[12]);
+ret->sampleBed = cloneString(row[13]);
+ret->mapRatio = sqlDouble(row[14]);
+ret->sampleCoverage = sqlDouble(row[15]);
+ret->depth = sqlDouble(row[16]);
+ret->singleQaStatus = sqlSigned(row[17]);
+ret->replicateQaStatus = sqlSigned(row[18]);
+ret->part = cloneString(row[19]);
+ret->pairedEnd = cloneString(row[20]);
+ret->qaVersion = sqlSigned(row[21]);
+ret->uniqueMapRatio = sqlDouble(row[22]);
 return ret;
 }
 
@@ -2137,7 +2145,7 @@ struct cdwValidFile *cdwValidFileLoadAll(char *fileName)
 {
 struct cdwValidFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[24];
+char *row[23];
 
 while (lineFileRow(lf, row))
     {
@@ -2155,7 +2163,7 @@ struct cdwValidFile *cdwValidFileLoadAllByChar(char *fileName, char chopper)
 {
 struct cdwValidFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[24];
+char *row[23];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -2183,7 +2191,6 @@ ret->format = sqlStringComma(&s);
 ret->outputType = sqlStringComma(&s);
 ret->experiment = sqlStringComma(&s);
 ret->replicate = sqlStringComma(&s);
-ret->validKey = sqlStringComma(&s);
 ret->enrichedIn = sqlStringComma(&s);
 ret->ucscDb = sqlStringComma(&s);
 ret->itemCount = sqlLongLongComma(&s);
@@ -2196,7 +2203,7 @@ ret->sampleCoverage = sqlDoubleComma(&s);
 ret->depth = sqlDoubleComma(&s);
 ret->singleQaStatus = sqlSignedComma(&s);
 ret->replicateQaStatus = sqlSignedComma(&s);
-ret->technicalReplicate = sqlStringComma(&s);
+ret->part = sqlStringComma(&s);
 ret->pairedEnd = sqlStringComma(&s);
 ret->qaVersion = sqlSignedComma(&s);
 ret->uniqueMapRatio = sqlDoubleComma(&s);
@@ -2215,11 +2222,10 @@ freeMem(el->format);
 freeMem(el->outputType);
 freeMem(el->experiment);
 freeMem(el->replicate);
-freeMem(el->validKey);
 freeMem(el->enrichedIn);
 freeMem(el->ucscDb);
 freeMem(el->sampleBed);
-freeMem(el->technicalReplicate);
+freeMem(el->part);
 freeMem(el->pairedEnd);
 freez(pEl);
 }
@@ -2265,10 +2271,6 @@ fprintf(f, "%s", el->replicate);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->validKey);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->enrichedIn);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
@@ -2299,7 +2301,7 @@ fputc(sep,f);
 fprintf(f, "%d", el->replicateQaStatus);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->technicalReplicate);
+fprintf(f, "%s", el->part);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);

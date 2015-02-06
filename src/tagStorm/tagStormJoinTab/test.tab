@@ -1,0 +1,155 @@
+#file	meta	paired_end	format	output	ucsc_db
+Env_A1A/141107_H0ET2_Env_A1A_L004_R1.fastq.gz	Env_A1A	1	fastq	reads	hg19
+Env_A1A/141107_H0ET2_Env_A1A_L004_R2.fastq.gz	Env_A1A	2	fastq	reads	hg19
+Env_A1A/1411UNHS-0002_Env_A1A.pdf	Env_A1A		pdf	report	hg19
+Env_A1A/1411UNHS-0002_Env_A1A_CNV.vcf	Env_A1A		vcf	cnv	hg19
+Env_A1A/1411UNHS-0002_Env_A1A_SNP_INDEL.vcf	Env_A1A		vcf	snp_indel	hg19
+Env_A1A/1411UNHS-0002_Env_A1A_SV.vcf	Env_A1A		vcf	sv	hg19
+Env_A1B/141107_H0ET2_Env_A1B_L005_R1.fastq.gz	Env_A1B	1	fastq	reads	hg19
+Env_A1B/141107_H0ET2_Env_A1B_L005_R2.fastq.gz	Env_A1B	2	fastq	reads	hg19
+Env_A1B/1411UNHS-0002_Env_A1B.pdf	Env_A1B		pdf	report	hg19
+Env_A1B/1411UNHS-0002_Env_A1B_CNV.vcf	Env_A1B		vcf	cnv	hg19
+Env_A1B/1411UNHS-0002_Env_A1B_SNP_INDEL.vcf	Env_A1B		vcf	snp_indel	hg19
+Env_A1B/1411UNHS-0002_Env_A1B_SV.vcf	Env_A1B		vcf	sv	hg19
+Env_A4A/141107_H0ET2_Env_A4A_L006_R1.fastq.gz	Env_A4A	1	fastq	reads	hg19
+Env_A4A/141107_H0ET2_Env_A4A_L006_R2.fastq.gz	Env_A4A	2	fastq	reads	hg19
+Env_A4A/1411UNHS-0002_Env_A4A.pdf	Env_A4A		pdf	report	hg19
+Env_A4A/1411UNHS-0002_Env_A4A_CNV.vcf	Env_A4A		vcf	cnv	hg19
+Env_A4A/1411UNHS-0002_Env_A4A_SNP_INDEL.vcf	Env_A4A		vcf	snp_indel	hg19
+Env_A4A/1411UNHS-0002_Env_A4A_SV.vcf	Env_A4A		vcf	sv	hg19
+Env_A4B/141107_H0ET2_Env_A4B_L007_R1.fastq.gz	Env_A4B	1	fastq	reads	hg19
+Env_A4B/141107_H0ET2_Env_A4B_L007_R2.fastq.gz	Env_A4B	2	fastq	reads	hg19
+Env_A4B/1411UNHS-0002_Env_A4B.pdf	Env_A4B		pdf	report	hg19
+Env_A4B/1411UNHS-0002_Env_A4B_CNV.vcf	Env_A4B		vcf	cnv	hg19
+Env_A4B/1411UNHS-0002_Env_A4B_SNP_INDEL.vcf	Env_A4B		vcf	snp_indel	hg19
+Env_A4B/1411UNHS-0002_Env_A4B_SV.vcf	Env_A4B		vcf	sv	hg19
+Env_B2A/141107_H0ET2_Env_B2A_L008_R1.fastq.gz	Env_B2A	1	fastq	reads	hg19
+Env_B2A/141107_H0ET2_Env_B2A_L008_R2.fastq.gz	Env_B2A	2	fastq	reads	hg19
+Env_B2A/1411UNHS-0002_Env_B2A.pdf	Env_B2A		pdf	report	hg19
+Env_B2A/1411UNHS-0002_Env_B2A_CNV.vcf	Env_B2A		vcf	cnv	hg19
+Env_B2A/1411UNHS-0002_Env_B2A_SNP_INDEL.vcf	Env_B2A		vcf	snp_indel	hg19
+Env_B2A/1411UNHS-0002_Env_B2A_SV.vcf	Env_B2A		vcf	sv	hg19
+Env_B2B/141107_H0ERG_Env_B2B_L001_R1.fastq.gz	Env_B2B	1	fastq	reads	hg19
+Env_B2B/141107_H0ERG_Env_B2B_L001_R2.fastq.gz	Env_B2B	2	fastq	reads	hg19
+Env_B2B/1411UNHS-0002_Env_B2B.pdf	Env_B2B		pdf	report	hg19
+Env_B2B/1411UNHS-0002_Env_B2B_CNV.vcf	Env_B2B		vcf	cnv	hg19
+Env_B2B/1411UNHS-0002_Env_B2B_SNP_INDEL.vcf	Env_B2B		vcf	snp_indel	hg19
+Env_B2B/1411UNHS-0002_Env_B2B_SV.vcf	Env_B2B		vcf	sv	hg19
+Ev_C4B/141107_H0ERG_Ev_C4B_L003_R1.fastq.gz	Ev_C4B	1	fastq	reads	hg19
+Ev_C4B/141107_H0ERG_Ev_C4B_L003_R2.fastq.gz	Ev_C4B	2	fastq	reads	hg19
+Ev_C4B/1411UNHS-0002_Ev_C4B.pdf	Ev_C4B		pdf	report	hg19
+Ev_C4B/1411UNHS-0002_Ev_C4B_CNV.vcf	Ev_C4B		vcf	cnv	hg19
+Ev_C4B/1411UNHS-0002_Ev_C4B_SNP_INDEL.vcf	Ev_C4B		vcf	snp_indel	hg19
+Ev_C4B/1411UNHS-0002_Ev_C4B_SV.vcf	Ev_C4B		vcf	sv	hg19
+Ev_C4_A/141121_H22HN_Ev_C4_A_L007_R1.fastq.gz	Ev_C4_A	1	fastq	reads	hg19
+Ev_C4_A/141121_H22HN_Ev_C4_A_L007_R2.fastq.gz	Ev_C4_A	2	fastq	reads	hg19
+Ev_C4_A/1411UNHS-0002_Ev_C4_A.pdf	Ev_C4_A		pdf	report	hg19
+Ev_C4_A/1411UNHS-0002_Ev_C4_A_CNV.vcf	Ev_C4_A		vcf	cnv	hg19
+Ev_C4_A/1411UNHS-0002_Ev_C4_A_SNP_INDEL.vcf	Ev_C4_A		vcf	snp_indel	hg19
+Ev_C4_A/1411UNHS-0002_Ev_C4_A_SV.vcf	Ev_C4_A		vcf	sv	hg19
+Ev_C6B/141107_H0ERG_Ev_C6B_L005_R1.fastq.gz	Ev_C6B	1	fastq	reads	hg19
+Ev_C6B/141107_H0ERG_Ev_C6B_L005_R2.fastq.gz	Ev_C6B	2	fastq	reads	hg19
+Ev_C6B/1411UNHS-0002_Ev_C6B.pdf	Ev_C6B		pdf	report	hg19
+Ev_C6B/1411UNHS-0002_Ev_C6B_CNV.vcf	Ev_C6B		vcf	cnv	hg19
+Ev_C6B/1411UNHS-0002_Ev_C6B_SNP_INDEL.vcf	Ev_C6B		vcf	snp_indel	hg19
+Ev_C6B/1411UNHS-0002_Ev_C6B_SV.vcf	Ev_C6B		vcf	sv	hg19
+Ev_C6_A/141121_H22HN_Ev_C6_A_L008_R1.fastq.gz	Ev_C6_A	1	fastq	reads	hg19
+Ev_C6_A/141121_H22HN_Ev_C6_A_L008_R2.fastq.gz	Ev_C6_A	2	fastq	reads	hg19
+Ev_C6_A/1411UNHS-0002_Ev_C6_A.pdf	Ev_C6_A		pdf	report	hg19
+Ev_C6_A/1411UNHS-0002_Ev_C6_A_CNV.vcf	Ev_C6_A		vcf	cnv	hg19
+Ev_C6_A/1411UNHS-0002_Ev_C6_A_SNP_INDEL.vcf	Ev_C6_A		vcf	snp_indel	hg19
+Ev_C6_A/1411UNHS-0002_Ev_C6_A_SV.vcf	Ev_C6_A		vcf	sv	hg19
+Ev_D6B/141107_H0ERG_Ev_D6B_L007_R1.fastq.gz	Ev_D6B	1	fastq	reads	hg19
+Ev_D6B/141107_H0ERG_Ev_D6B_L007_R2.fastq.gz	Ev_D6B	2	fastq	reads	hg19
+Ev_D6B/1411UNHS-0002_Ev_D6B.pdf	Ev_D6B		pdf	report	hg19
+Ev_D6B/1411UNHS-0002_Ev_D6B_CNV.vcf	Ev_D6B		vcf	cnv	hg19
+Ev_D6B/1411UNHS-0002_Ev_D6B_SNP_INDEL.vcf	Ev_D6B		vcf	snp_indel	hg19
+Ev_D6B/1411UNHS-0002_Ev_D6B_SV.vcf	Ev_D6B		vcf	sv	hg19
+Ev_D6_A/1411UNHS-0002_Ev_D6_A.pdf	Ev_D6_A		pdf	report	hg19
+Ev_D6_A/1411UNHS-0002_Ev_D6_A_CNV.vcf	Ev_D6_A	2	vcf	cnv	hg19
+Ev_D6_A/1411UNHS-0002_Ev_D6_A_SNP_INDEL.vcf	Ev_D6_A		vcf	snp_indel	hg19
+Ev_D6_A/1411UNHS-0002_Ev_D6_A_SV.vcf	Ev_D6_A		vcf	cv	hg19
+Ev_D6_A/141204_H25WC_Ev_D6_A_L006_R1.fastq.gz	Ev_D6_A	1	fastq	reads	hg19
+Ev_D6_A/141204_H25WC_Ev_D6_A_L006_R2.fastq.gz	Ev_D6_A	2	fastq	reads	hg19
+HDF_fib/141107_H0ERG_HDF_fib_L008_R1.fastq.gz	HDF_fib	1	fastq	reads	hg19
+HDF_fib/141107_H0ERG_HDF_fib_L008_R2.fastq.gz	HDF_fib	2	fastq	reads	hg19
+HDF_fib/1411UNHS-0002_HDF_fib.pdf	HDF_fib		pdf	report	hg19
+HDF_fib/1411UNHS-0002_HDF_fib_CNV.vcf	HDF_fib		vcf	cnv	hg19
+HDF_fib/1411UNHS-0002_HDF_fib_SNP_INDEL.vcf	HDF_fib		vcf	snp_indel	hg19
+HDF_fib/1411UNHS-0002_HDF_fib_SV.vcf	HDF_fib		vcf	sv	hg19
+Lnv_H_9_1_A/141121_H233Y_Lnv_H_9_1_A_L001_R1.fastq.gz	Lnv_H_9_1_A	1	fastq	reads	hg19
+Lnv_H_9_1_A/141121_H233Y_Lnv_H_9_1_A_L001_R2.fastq.gz	Lnv_H_9_1_A	2	fastq	reads	hg19
+Lnv_H_9_1_A/1411UNHS-0002_Lnv_H_9_1_A.pdf	Lnv_H_9_1_A		pdf	report	hg19
+Lnv_H_9_1_A/1411UNHS-0002_Lnv_H_9_1_A_CNV.vcf	Lnv_H_9_1_A		vcf	cnv	hg19
+Lnv_H_9_1_A/1411UNHS-0002_Lnv_H_9_1_A_SNP_INDEL.vcf	Lnv_H_9_1_A		vcf	snp_indel	hg19
+Lnv_H_9_1_A/1411UNHS-0002_Lnv_H_9_1_A_SV.vcf	Lnv_H_9_1_A		vcf	sv	hg19
+Lnv_H_9_1_A/sorted.bam	Lnv_H_9_1_A		bam	mapping	hg19
+Lnv_H_9_1_A/sorted.bam.bai	Lnv_H_9_1_A		vcf	mapping_index	hg19
+Lnv_H_9_1_B/141121_H233Y_Lnv_H_9_1_B_L002_R1.fastq.gz	Lnv_H_9_1_B	1	fastq	reads	hg19
+Lnv_H_9_1_B/141121_H233Y_Lnv_H_9_1_B_L002_R2.fastq.gz	Lnv_H_9_1_B	2	fastq	reads	hg19
+Lnv_H_9_1_B/1411UNHS-0002_Lnv_H_9_1_B.pdf	Lnv_H_9_1_B		pdf	report	hg19
+Lnv_H_9_1_B/1411UNHS-0002_Lnv_H_9_1_B_CNV.vcf	Lnv_H_9_1_B		vcf	cnv	hg19
+Lnv_H_9_1_B/1411UNHS-0002_Lnv_H_9_1_B_SNP_INDEL.vcf	Lnv_H_9_1_B		vcf	snp_indel	hg19
+Lnv_H_9_1_B/1411UNHS-0002_Lnv_H_9_1_B_SV.vcf	Lnv_H_9_1_B		vcf	sv	hg19
+Lnv_H_9_1_B/sorted.bam	Lnv_H_9_1_B		bam	mapping	hg19
+Lnv_H_9_1_B/sorted.bam.bai	Lnv_H_9_1_B		vcf	mapping_index	hg19
+Lnv_I_9_1_A/141121_H233Y_Lnv_I_9_1_A_L003_R1.fastq.gz	Lnv_I_9_1_A	1	fastq	reads	hg19
+Lnv_I_9_1_A/141121_H233Y_Lnv_I_9_1_A_L003_R2.fastq.gz	Lnv_I_9_1_A	2	fastq	reads	hg19
+Lnv_I_9_1_A/1411UNHS-0002_Lnv_I_9_1_A.pdf	Lnv_I_9_1_A		pdf	report	hg19
+Lnv_I_9_1_A/1411UNHS-0002_Lnv_I_9_1_A_CNV.vcf	Lnv_I_9_1_A		vcf	cnv	hg19
+Lnv_I_9_1_A/1411UNHS-0002_Lnv_I_9_1_A_SNP_INDEL.vcf	Lnv_I_9_1_A		vcf	snp_indel	hg19
+Lnv_I_9_1_A/1411UNHS-0002_Lnv_I_9_1_A_SV.vcf	Lnv_I_9_1_A		vcf	sv	hg19
+Lnv_I_9_1_B/141121_H233Y_Lnv_I_9_1_B_L004_R1.fastq.gz	Lnv_I_9_1_B	1	fastq	reads	hg19
+Lnv_I_9_1_B/141121_H233Y_Lnv_I_9_1_B_L004_R2.fastq.gz	Lnv_I_9_1_B	2	fastq	reads	hg19
+Lnv_I_9_1_B/1411UNHS-0002_Lnv_I_9_1_B.pdf	Lnv_I_9_1_B		pdf	report	hg19
+Lnv_I_9_1_B/1411UNHS-0002_Lnv_I_9_1_B_CNV.vcf	Lnv_I_9_1_B		vcf	cnv	hg19
+Lnv_I_9_1_B/1411UNHS-0002_Lnv_I_9_1_B_SNP_INDEL.vcf	Lnv_I_9_1_B		vcf	snp_indel	hg19
+Lnv_I_9_1_B/1411UNHS-0002_Lnv_I_9_1_B_SV.vcf	Lnv_I_9_1_B		vcf	sv	hg19
+Lnv_I_9_2_A/141121_H233Y_Lnv_I_9_2_A_L005_R1.fastq.gz	Lnv_I_9_2_A	1	fastq	reads	hg19
+Lnv_I_9_2_A/141121_H233Y_Lnv_I_9_2_A_L005_R2.fastq.gz	Lnv_I_9_2_A	2	fastq	reads	hg19
+Lnv_I_9_2_A/1411UNHS-0002_Lnv_I_9_2_A.pdf	Lnv_I_9_2_A		pdf	report	hg19
+Lnv_I_9_2_A/1411UNHS-0002_Lnv_I_9_2_A_CNV.vcf	Lnv_I_9_2_A		vcf	cnv	hg19
+Lnv_I_9_2_A/1411UNHS-0002_Lnv_I_9_2_A_SNP_INDEL.vcf	Lnv_I_9_2_A		vcf	snp_indel	hg19
+Lnv_I_9_2_A/1411UNHS-0002_Lnv_I_9_2_A_SV.vcf	Lnv_I_9_2_A		vcf	sv	hg19
+Lnv_I_9_2_B/141121_H233Y_Lnv_I_9_2_B_L006_R1.fastq.gz	Lnv_I_9_2_B	1	fastq	reads	hg19
+Lnv_I_9_2_B/141121_H233Y_Lnv_I_9_2_B_L006_R2.fastq.gz	Lnv_I_9_2_B	2	fastq	reads	hg19
+Lnv_I_9_2_B/1411UNHS-0002_Lnv_I_9_2_B.pdf	Lnv_I_9_2_B		pdf	report	hg19
+Lnv_I_9_2_B/1411UNHS-0002_Lnv_I_9_2_B_CNV.vcf	Lnv_I_9_2_B		vcf	cnv	hg19
+Lnv_I_9_2_B/1411UNHS-0002_Lnv_I_9_2_B_SNP_INDEL.vcf	Lnv_I_9_2_B		vcf	snp_indel	hg19
+Lnv_I_9_2_B/1411UNHS-0002_Lnv_I_9_2_B_SV.vcf	Lnv_I_9_2_B		vcf	sv	hg19
+Lv_F9_2A/141121_H233Y_Lv_F9_2A_L007_R1.fastq.gz	Lv_F9_2A	1	fastq	reads	hg19
+Lv_F9_2A/141121_H233Y_Lv_F9_2A_L007_R2.fastq.gz	Lv_F9_2A	2	fastq	reads	hg19
+Lv_F9_2A/1411UNHS-0002_Lv_F9_2A.pdf	Lv_F9_2A		pdf	report	hg19
+Lv_F9_2A/1411UNHS-0002_Lv_F9_2A_CNV.vcf	Lv_F9_2A		vcf	cnv	hg19
+Lv_F9_2A/1411UNHS-0002_Lv_F9_2A_SNP_INDEL.vcf	Lv_F9_2A		vcf	snp_indel	hg19
+Lv_F9_2A/1411UNHS-0002_Lv_F9_2A_SV.vcf	Lv_F9_2A		vcf	sv	hg19
+Lv_F9_2B/1411UNHS-0002_Lv_F9_2B.pdf	Lv_F9_2B		pdf	report	hg19
+Lv_F9_2B/1411UNHS-0002_Lv_F9_2B_CNV.vcf	Lv_F9_2B		vcf	cnv	hg19
+Lv_F9_2B/1411UNHS-0002_Lv_F9_2B_SNP_INDEL.vcf	Lv_F9_2B		vcf	snp_indel	hg19
+Lv_F9_2B/1411UNHS-0002_Lv_F9_2B_SV.vcf	Lv_F9_2B		vcf	sv	hg19
+Lv_F9_2B/141204_H25WC_Lv_F9_2B_L007_R1.fastq.gz	Lv_F9_2B	1	fastq	reads	hg19
+Lv_F9_2B/141204_H25WC_Lv_F9_2B_L007_R2.fastq.gz	Lv_F9_2B	2	fastq	reads	hg19
+Lv_G_9_3A/141121_H22NH_Lv_G_9_3A_L001_R1.fastq.gz	Lv_G_9_3A	1	fastq	reads	hg19
+Lv_G_9_3A/141121_H22NH_Lv_G_9_3A_L001_R2.fastq.gz	Lv_G_9_3A	2	fastq	reads	hg19
+Lv_G_9_3A/1411UNHS-0002_Lv_G_9_3A.pdf	Lv_G_9_3A		pdf	report	hg19
+Lv_G_9_3A/1411UNHS-0002_Lv_G_9_3A_CNV.vcf	Lv_G_9_3A		vcf	cnv	hg19
+Lv_G_9_3A/1411UNHS-0002_Lv_G_9_3A_SNP_INDEL.vcf	Lv_G_9_3A		vcf	snp_indel	hg19
+Lv_G_9_3A/1411UNHS-0002_Lv_G_9_3A_SV.vcf	Lv_G_9_3A		vcf	sv	hg19
+Lv_G_9_3B/141121_H22NH_Lv_G_9_3B_L002_R1.fastq.gz	Lv_G_9_3B	1	fastq	reads	hg19
+Lv_G_9_3B/141121_H22NH_Lv_G_9_3B_L002_R2.fastq.gz	Lv_G_9_3B	2	fastq	reads	hg19
+Lv_G_9_3B/1411UNHS-0002_Lv_G_9_3B.pdf	Lv_G_9_3B		pdf	report	hg19
+Lv_G_9_3B/1411UNHS-0002_Lv_G_9_3B_CNV.vcf	Lv_G_9_3B		vcf	cnv	hg19
+Lv_G_9_3B/1411UNHS-0002_Lv_G_9_3B_SNP_INDEL.vcf	Lv_G_9_3B		vcf	snp_indel	hg19
+Lv_G_9_3B/1411UNHS-0002_Lv_G_9_3B_SV.vcf	Lv_G_9_3B		vcf	sv	hg19
+Lv_L_9_2_A/141121_H22NH_Lv_L_9_2_A_L003_R1.fastq.gz	Lv_L_9_2_A	1	fastq	reads	hg19
+Lv_L_9_2_A/141121_H22NH_Lv_L_9_2_A_L003_R2.fastq.gz	Lv_L_9_2_A	2	fastq	reads	hg19
+Lv_L_9_2_A/1411UNHS-0002_Lv_L_9_2_A.pdf	Lv_L_9_2_A		pdf	report	hg19
+Lv_L_9_2_A/1411UNHS-0002_Lv_L_9_2_A_CNV.vcf	Lv_L_9_2_A		vcf	cnv	hg19
+Lv_L_9_2_A/1411UNHS-0002_Lv_L_9_2_A_SNP_INDEL.vcf	Lv_L_9_2_A		vcf	snp_indel	hg19
+Lv_L_9_2_A/1411UNHS-0002_Lv_L_9_2_A_SV.vcf	Lv_L_9_2_A		vcf	sv	hg19
+Lv_L_9_2_B/141121_H22NH_Lv_L_9_2_B_L004_R1.fastq.gz	Lv_L_9_2_B	1	fastq	reads	hg19
+Lv_L_9_2_B/141121_H22NH_Lv_L_9_2_B_L004_R2.fastq.gz	Lv_L_9_2_B	2	fastq	reads	hg19
+Lv_L_9_2_B/1411UNHS-0002_Lv_L_9_2_B.pdf	Lv_L_9_2_B		pdf	report	hg19
+Lv_L_9_2_B/1411UNHS-0002_Lv_L_9_2_B_CNV.vcf	Lv_L_9_2_B		vcf	cnv	hg19
+Lv_L_9_2_B/1411UNHS-0002_Lv_L_9_2_B_SNP_INDEL.vcf	Lv_L_9_2_B		vcf	snp_indel	hg19
+Lv_L_9_2_B/1411UNHS-0002_Lv_L_9_2_B_SV.vcf	Lv_L_9_2_B		vcf	sv	hg19
