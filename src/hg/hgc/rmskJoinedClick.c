@@ -330,10 +330,12 @@ if (offset >= 0)
 		    ro->genoStart + 1, ro->genoEnd);
 	    char *tbl = cgiUsualString ("table", cgiString ("g"));
 	    printf
-		(" - <A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&"
+		(" - <A HREF=\"%s&o=%d&g=getDna&i=%s#%s/%s&c=%s&l=%d&r=%d&"
 		 "strand=%s&table=%s\">"
 		 "DNA</A>\n", hgcPathAndSettings (), ro->genoStart,
 		 (ro->repName != NULL ? cgiEncode (ro->repName) : ""),
+		 (ro->repClass != NULL ? cgiEncode (ro->repClass) : ""),
+		 (ro->repFamily != NULL ? cgiEncode (ro->repFamily) : ""),
 		 seqName, ro->genoStart, ro->genoEnd, cgiEncode (ro->strand),
 		 tbl);
 
