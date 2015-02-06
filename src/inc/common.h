@@ -848,6 +848,12 @@ boolean sqlMatchLike(char *wildCard, char *string);
 boolean anyWild(const char *string);
 /* Return TRUE if any wild card characters in string. */
 
+struct slName *wildExpandList(struct slName *allList, struct slName *wildList, 
+    boolean abortMissing);
+/* Wild list is a list of names, possibly including * and ? wildcard characters.  This 
+ * function returns names taken from allList that match patterns in wildList.  Works much
+ * like wildcard expansion over a file system but expands over allList instead. */
+
 char *memMatch(char *needle, int nLen, char *haystack, int hLen);
 /* Returns first place where needle (of nLen chars) matches
  * haystack (of hLen chars) */
