@@ -72,23 +72,6 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     }
 }
 
-int addMatching(char *pattern, struct slName *itemList, struct slName **retMatchList)
-/* Add all items that match pattern to retMatchList */
-{
-int count = 0;
-struct slName *item;
-for (item = itemList; item != NULL; item = item->next)
-    {
-    char *name = item->name;
-    if (wildMatch(pattern, name))
-         {
-	 slNameAddHead(retMatchList, name);
-	 ++count;
-	 }
-    }
-return count;
-}
-
 void tagStormQuery(char *query)
 /* tagStormQuery - Find stanzas in tag storm based on SQL-like query.. */
 {
@@ -102,30 +85,10 @@ char *tagsFileName = rql->tableList->name;
 
 /* Read in tags */
 struct tagStorm *tags = tagStormFromFile(tagsFileName);
-struct hash *fieldHash = tagTreeFieldHash(tags);
-struct slName *allFieldList = tagTreeFieldList(tags);
 
 /* Expand any field names with wildcards. */
-struct slName *expandedList = NULL;
-struct slName *field;
-for (field = rql->fieldList; field != NULL; field = field->next)
-    {
-    char *name = field->name;
-    if (anyWild(name))
-        {
-	int addCount = addMatching(name, allFieldList, &expandedList);
-	if (addCount == 0)
-	    errAbort("No fields matching %s", name);
-	}
-    else
-        {
-	if (!hashLookup(fieldHash, name))
-	    errAbort("No field matching %s", name);
-	slNameAddHead(&expandedList, name);
-	}
-    }
-slReverse(&expandedList);
-rql->fieldList = expandedList;
+struct slName *allFieldList = tagTreeFieldList(tags);
+rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
 
 /* Traverse tree applying query */
 struct lm *lm = lmInit(0);
