@@ -136,13 +136,13 @@ Passed 16890026 of 25763098 of 25763098, 65.56%
 # UPDATE GO DATABASE
 # Download the terms and make the database.
 ssh hgwdev
-mkdir /hive/data/outside/geneOntology/20140213
-cd  /hive/data/outside/geneOntology/20140213
+mkdir /hive/data/outside/geneOntology/20150121
+cd  /hive/data/outside/geneOntology/20150121
 
-wget "http://archive.geneontology.org/full/2014-02-01/go_201402-assocdb-tables.tar.gz"
+wget "http://archive.geneontology.org/full/2015-01-01/go_201501-assocdb-tables.tar.gz"
 
-hgsql -e 'create database go140213'
-tar xvfz go_201402-assocdb-tables.tar.gz
+hgsql -e 'create database go150121'
+tar xvfz go_201501-assocdb-tables.tar.gz
 
 cd go_201402-assocdb-tables
 for i in *.txt
@@ -172,4 +172,45 @@ zcat gene_association.goa_uniprot.gz |hgGoAssociation go140213 goaPart stdin
 
 # Ask sys-admin to switch the database pointer go to point to go140213
 ##########################################################################
+### UPDATE GO DATABASE (DONE 2015-01-21 braney)
+
+# UPDATE GO DATABASE
+# Download the terms and make the database.
+ssh hgwdev
+mkdir /hive/data/outside/geneOntology/20150121
+cd  /hive/data/outside/geneOntology/20150121
+
+wget "http://archive.geneontology.org/full/2015-01-01/go_201501-assocdb-tables.tar.gz"
+
+hgsql -e 'create database go150121'
+tar xvfz go_201501-assocdb-tables.tar.gz
+
+cd go_201501-assocdb-tables
+for i in *.txt
+do
+    if test -s $i
+    then
+	cat `basename  $i .txt`.sql
+    fi
+done | hgsql go150121
+
+for i in *.txt
+do 
+    if test -s $i
+    then
+	echo $i
+	echo "load data local infile '$i' into table `basename $i .txt`" | hgsql go150121
+    fi
+done
+
+# Please note the new place to get gene_association.goa_uniprot.gz
+wget --timestamping \
+ftp://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/gene_association.goa_uniprot.gz
+
+zcat gene_association.goa_uniprot.gz |hgGoAssociation go150121 goaPart stdin
+# Passed 300033664 of 401499085 of 401499085, 74.73%
+
+# Ask sys-admin to switch the database pointer go to point to go150121
+##########################################################################
+
 
