@@ -2994,6 +2994,16 @@ type bed 4
 hgsid on
 url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=
 
+track cosmicNew
+shortLabel COSMIC
+longLabel COSMIC: Catalogue Of Somatic Mutations In Cancer
+group phenDis
+visibility hide
+color 200,0,0
+type bigBed 4 +
+url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=
+html cosmic
+
 track lovd
 shortLabel LOVD Variants
 longLabel Leiden Open Variation Database Public Variants
