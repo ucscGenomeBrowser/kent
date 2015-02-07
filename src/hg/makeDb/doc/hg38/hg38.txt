@@ -5808,6 +5808,7 @@ TMPDIR=/dev/shm
     cd /hive/data/genomes/hg38/bed/gencodeV21
 
     # create Makefile from previous one.
+    # WARNING: next build start with hg/makeDb/outside/gencode/gencodeLoad.mk
     cp /hive/data/genomes/hg38/bed/gencodeV20/Makefile .
 
     # download, build and load tables
