@@ -636,6 +636,40 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
+boolean cgiParseNext(char **pInput, char **retVar, char **retVal)
+/* Parse out next var/val in a var=val&var=val... cgi formatted string 
+ * This will insert zeroes and other things into string. 
+ * Usage:
+ *     char *pt = cgiStringStart;
+ *     char *var, *val
+ *     while (cgiParseNext(&pt, &var, &val))
+ *          printf("%s\t%s\n", var, val); */
+{
+char *var = *pInput;
+if (var == NULL || var[0] == 0)
+    return FALSE;
+char *val = strchr(var, '=');
+if (val == NULL)
+    errAbort("Mangled CGI input string %s", var);
+*val++ = 0;
+char *end = strchr(val, '&');
+if (end == NULL)
+    end = strchr(val, ';');  // For DAS
+if (end == NULL)
+    {
+    end = val + strlen(val);
+    *pInput = NULL;
+    }
+else
+    {
+    *pInput = end+1;
+    *end = 0;
+    }
+*retVar = var;
+*retVal = val;
+cgiDecode(val,val,end-val);
+return TRUE;
+}
 
 void cgiParseInputAbort(char *input, struct hash **retHash,
         struct cgiVar **retList)
@@ -2304,3 +2338,25 @@ if (tags != NULL)
     }
 }
 
+void cgiEncodeHash(struct hash *hash, struct dyString *dy)
+/* Put a cgi-encoding of a string valued hash into dy.  Tags are always
+ * alphabetical to make it easier to compare if two hashes are same. */
+{
+struct hashEl *el, *elList = hashElListHash(hash);
+slSort(&elList, hashElCmp);
+boolean firstTime = TRUE;
+char *s = NULL;
+for (el = elList; el != NULL; el = el->next)
+    {
+    if (firstTime)
+	firstTime = FALSE;
+    else
+	dyStringAppendC(dy, '&');
+    dyStringAppend(dy, el->name);
+    dyStringAppendC(dy, '=');
+    s = cgiEncode(el->val);
+    dyStringAppend(dy, s);
+    freez(&s);
+    }
+hashElFreeList(&elList);
+}
