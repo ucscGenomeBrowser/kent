@@ -440,9 +440,9 @@ void doMiddle()
 userEmail = cdwGetEmailAndVerify();
 noPrevSubmission = FALSE;
 if (userEmail == NULL)
-    printf("<H3>Welcome to the CIRM data submission browser</H3>\n");
+    printf("<H3>Welcome to the CIRM stem cell hub data submission browser</H3>\n");
 else
-    printf("<H3>Browse submissions</H3>\n");
+    printf("<H3>Browse submissions to CIRM stem cell hub</H3>\n");
 
 cdwWebBrowseMenuItem(FALSE);
 printf("<div id=\"userId\">");
