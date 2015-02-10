@@ -59,117 +59,30 @@ void traverse(struct tagStorm *tags, struct tagStanza *list,
 struct tagStanza *stanza;
 for (stanza = list; stanza != NULL; stanza = stanza->next)
     {
-    if (stanza->children)
-	traverse(tags, stanza->children, rql, lm);
-    else    /* Just apply query to leaves */
+    if (rql->limit < 0 || rql->limit > matchCount)
 	{
-	if (statementMatch(rql, stanza, lm))
+	if (stanza->children)
+	    traverse(tags, stanza->children, rql, lm);
+	else    /* Just apply query to leaves */
 	    {
-	    ++matchCount;
-	    if (doSelect)
+	    if (statementMatch(rql, stanza, lm))
 		{
-		struct slName *field;
-		for (field = rql->fieldList; field != NULL; field = field->next)
+		++matchCount;
+		if (doSelect)
 		    {
-		    char *val = tagFindVal(stanza, field->name);
-		    if (val != NULL)
-			printf("%s\t%s\n", field->name, val);
+		    struct slName *field;
+		    for (field = rql->fieldList; field != NULL; field = field->next)
+			{
+			char *val = tagFindVal(stanza, field->name);
+			if (val != NULL)
+			    printf("%s\t%s\n", field->name, val);
+			}
+		    printf("\n");
 		    }
-		printf("\n");
 		}
 	    }
 	}
     }
-}
-
-void tagStanzaAddLongLong(struct tagStorm *tagStorm, struct tagStanza *stanza, char *var, 
-    long long val)
-/* Add long long integer valued tag to stanza */
-{
-char buf[32];
-safef(buf, sizeof(buf), "%lld", val);
-tagStanzaAdd(tagStorm, stanza, var, buf);
-}
-
-void tagStanzaAddDouble(struct tagStorm *tagStorm, struct tagStanza *stanza, char *var, 
-    double val)
-/* Add double valued tag to stanza */
-{
-char buf[32];
-safef(buf, sizeof(buf), "%g", val);
-tagStanzaAdd(tagStorm, stanza, var, buf);
-}
-
-struct tagStorm *tagStormFromDatabase(struct sqlConnection *conn)
-/* Load  cdwMetaTags.tags, cdwFile.tags, and select other fields into a tag
- * storm for searching */
-{
-/* First pass through the cdwMetaTags table.  Make up a high level stanza for each
- * row, and save a reference to it in metaTree. */
-struct tagStorm *tagStorm = tagStormNew("constructed from cdwMetaTags and cdwFile");
-struct rbTree *metaTree = intValTreeNew();
-char query[512];
-sqlSafef(query, sizeof(query), "select id,tags from cdwMetaTags");
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    unsigned id = sqlUnsigned(row[0]);
-    char *cgiVars = row[1];
-    struct tagStanza *stanza = tagStanzaNew(tagStorm, NULL);
-    char *var, *val;
-    while (cgiParseNext(&cgiVars, &var, &val))
-	 {
-         tagStanzaAdd(tagStorm, stanza, var, val);
-	 }
-    slReverse(&stanza->tagList);
-    intValTreeAdd(metaTree, id, stanza);
-    }
-sqlFreeResult(&sr);
-
-
-/* Now go through the cdwFile table, adding it files as substanzas to 
- * meta cdwMetaTags stanzas. */
-sqlSafef(query, sizeof(query), 
-    "select cdwFile.*,cdwValidFile.* from cdwFile,cdwValidFile "
-    "where cdwFile.id=cdwValidFile.fileId ");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct cdwFile ef;
-    struct cdwValidFile vf;
-    cdwFileStaticLoad(row, &ef);
-    cdwValidFileStaticLoad(row + CDWFILE_NUM_COLS, &vf);
-    struct tagStanza *metaStanza = intValTreeFind(metaTree, ef.metaTagsId);
-    if (metaStanza != NULL)
-	{
-	struct tagStanza *stanza = tagStanzaNew(tagStorm, metaStanza);
-
-	/* Add stuff we want from non-tag fields */
-	tagStanzaAdd(tagStorm, stanza, "accession", vf.licensePlate);
-	if (!isEmpty(ef.deprecated))
-	    tagStanzaAdd(tagStorm, stanza, "deprecated", ef.deprecated);
-	tagStanzaAdd(tagStorm, stanza, "md5", ef.md5);
-	tagStanzaAdd(tagStorm, stanza, "submit_file_name", ef.submitFileName);
-	tagStanzaAdd(tagStorm, stanza, "cdw_file_name", ef.cdwFileName);
-	tagStanzaAddLongLong(tagStorm, stanza, "size", ef.size);
-	if (vf.itemCount != 0)
-	    tagStanzaAddLongLong(tagStorm, stanza, "item_count", vf.itemCount);
-	if (vf.mapRatio != 0)
-	    tagStanzaAddDouble(tagStorm, stanza, "map_ratio", vf.mapRatio);
-
-	/* Add tag field */
-	char *cgiVars = ef.tags;
-	char *var,*val;
-	while (cgiParseNext(&cgiVars, &var, &val))
-	    tagStanzaAdd(tagStorm, stanza, var, val);
-
-	slReverse(&stanza->tagList);
-	}
-    }
-sqlFreeResult(&sr);
-rbTreeFree(&metaTree);
-return tagStorm;
 }
 
 void cdwQuery(char *rqlQuery)
@@ -181,7 +94,7 @@ struct rqlStatement *rql = rqlStatementParse(lf);
 
 /* Load tags from database */
 struct sqlConnection *conn = cdwConnect();
-struct tagStorm *tags = tagStormFromDatabase(conn);
+struct tagStorm *tags = cdwTagStorm(conn);
 
 /* Get list of all tag types in tree and use it to expand wildcards in the query
  * field list. */
