@@ -16,6 +16,8 @@
 #include "portable.h"
 #include "cheapcgi.h"
 #include "genomeRangeTree.h"
+#include "tagStorm.h"
+#include "intValTree.h"
 #include "md5.h"
 #include "htmshell.h"
 #include "obscure.h"
@@ -1689,5 +1691,139 @@ void cdwWebSubmitMenuItem(boolean on)
 /* Toggle visibility of 'Submit data' link on navigation menu */
 {
 printf("<script type='text/javascript'>$('#cdw-submit').%s();</script>", on ? "show" : "hide");
+}
+
+struct tagStorm *cdwTagStorm(struct sqlConnection *conn)
+/* Load  cdwMetaTags.tags, cdwFile.tags, and select other fields into a tag
+ * storm for searching */
+{
+/* Build up a cache of cdwSubmitDir */
+char query[512];
+sqlSafef(query, sizeof(query), "select * from cdwSubmitDir");
+struct cdwSubmitDir *dir, *dirList = cdwSubmitDirLoadByQuery(conn, query);
+struct rbTree *submitDirTree = intValTreeNew();
+for (dir = dirList; dir != NULL; dir = dir->next)
+   intValTreeAdd(submitDirTree, dir->id, dir);
+verbose(2, "cdwTagStorm: %d items in submitDirTree\n", submitDirTree->n);
+
+/* First pass through the cdwMetaTags table.  Make up a high level stanza for each
+ * row, and save a reference to it in metaTree. */
+struct tagStorm *tagStorm = tagStormNew("constructed from cdwMetaTags and cdwFile");
+struct rbTree *metaTree = intValTreeNew();
+sqlSafef(query, sizeof(query), "select id,tags from cdwMetaTags");
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    unsigned id = sqlUnsigned(row[0]);
+    char *cgiVars = row[1];
+    struct tagStanza *stanza = tagStanzaNew(tagStorm, NULL);
+    char *var, *val;
+    while (cgiParseNext(&cgiVars, &var, &val))
+	 {
+         tagStanzaAdd(tagStorm, stanza, var, val);
+	 }
+    slReverse(&stanza->tagList);
+    intValTreeAdd(metaTree, id, stanza);
+    }
+sqlFreeResult(&sr);
+verbose(2, "cdwTagStorm: %d items in metaTree\n", metaTree->n);
+
+
+/* Now go through the cdwFile table, adding its files as substanzas to 
+ * meta cdwMetaTags stanzas. */
+sqlSafef(query, sizeof(query), 
+    "select cdwFile.*,cdwValidFile.* from cdwFile,cdwValidFile "
+    "where cdwFile.id=cdwValidFile.fileId ");
+sr = sqlGetResult(conn, query);
+struct rbTree *fileTree = intValTreeNew();
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct cdwFile ef;
+    struct cdwValidFile vf;
+    cdwFileStaticLoad(row, &ef);
+    cdwValidFileStaticLoad(row + CDWFILE_NUM_COLS, &vf);
+    struct tagStanza *metaStanza = intValTreeFind(metaTree, ef.metaTagsId);
+    if (metaStanza != NULL)
+	{
+	/* Figure out file name independent of cdw location */
+	char name[FILENAME_LEN], extension[FILEEXT_LEN];
+	splitPath(ef.cdwFileName, NULL, name, extension);
+	char fileName[PATH_LEN];
+	safef(fileName, sizeof(fileName), "%s%s", name, extension);
+
+
+	struct tagStanza *stanza = tagStanzaNew(tagStorm, metaStanza);
+	intValTreeAdd(fileTree, ef.id, stanza);
+
+	/** Add stuff we want in addition to what is in ef.tags */
+
+	/* Deprecated is important to know */
+	if (!isEmpty(ef.deprecated))
+	    tagStanzaAdd(tagStorm, stanza, "deprecated", ef.deprecated);
+
+	/* Basic file name info */
+	tagStanzaAdd(tagStorm, stanza, "file_name", fileName);
+	tagStanzaAddLongLong(tagStorm, stanza, "file_size", ef.size);
+	tagStanzaAdd(tagStorm, stanza, "md5", ef.md5);
+
+	/* Stuff gathered from submission */
+	tagStanzaAdd(tagStorm, stanza, "submit_file_name", ef.submitFileName);
+	struct cdwSubmitDir *dir = intValTreeFind(submitDirTree, ef.submitDirId);
+	if (dir != NULL)
+	    {
+	    tagStanzaAdd(tagStorm, stanza, "submit_dir", dir->url);
+	    }
+
+	tagStanzaAdd(tagStorm, stanza, "cdw_file_name", ef.cdwFileName);
+	tagStanzaAdd(tagStorm, stanza, "accession", vf.licensePlate);
+	if (vf.itemCount != 0)
+	    tagStanzaAddLongLong(tagStorm, stanza, "item_count", vf.itemCount);
+	if (vf.mapRatio != 0)
+	    tagStanzaAddDouble(tagStorm, stanza, "map_ratio", vf.mapRatio);
+
+	/* Add tag field */
+	char *cgiVars = ef.tags;
+	char *var,*val;
+	while (cgiParseNext(&cgiVars, &var, &val))
+	    tagStanzaAdd(tagStorm, stanza, var, val);
+
+	slReverse(&stanza->tagList);
+	}
+    }
+sqlFreeResult(&sr);
+verbose(2, "cdwTagStorm: %d items in fileTree\n", fileTree->n);
+
+/* Add selected tags from other tables as part of stanza tags. */
+sqlSafef(query, sizeof(query), "select * from cdwFastqFile");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct cdwFastqFile *fq = cdwFastqFileLoad(row);
+    struct tagStanza *stanza = intValTreeFind(fileTree, fq->fileId);
+    if (stanza != NULL)
+	{
+	if (fq->readSizeMin == fq->readSizeMax)
+	    tagStanzaAddLongLong(tagStorm, stanza, "read_size", fq->readSizeMin);
+	else
+	    {
+	    tagStanzaAddDouble(tagStorm, stanza, "read_size_mean", fq->readSizeMean);
+	    tagStanzaAddDouble(tagStorm, stanza, "read_size_min", fq->readSizeMin);
+	    tagStanzaAddDouble(tagStorm, stanza, "read_size_max", fq->readSizeMax);
+	    tagStanzaAddDouble(tagStorm, stanza, "read_size_std", fq->readSizeStd);
+	    }
+	tagStanzaAdd(tagStorm, stanza, "fastq_qual_type", fq->qualType);
+	tagStanzaAddDouble(tagStorm, stanza, "fastq_qual_mean", fq->qualMean);
+	tagStanzaAddDouble(tagStorm, stanza, "at_ratio", fq->atRatio);
+	cdwFastqFileFree(&fq);
+	}
+    }
+sqlFreeResult(&sr);
+
+/* Clean up and go home */
+rbTreeFree(&submitDirTree);
+rbTreeFree(&metaTree);
+rbTreeFree(&fileTree);
+return tagStorm;
 }
 
