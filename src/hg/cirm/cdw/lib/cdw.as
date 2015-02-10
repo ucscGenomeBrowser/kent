@@ -56,6 +56,14 @@ table cdwSubmitDir
     bigInt historyBits; "Open history with most recent in least significant bit. 0 for upload failed, 1 for success"
     )
 
+table cdwMetaTags
+"Where we keep expanded metadata tags for each file, though many share."
+    (
+    uint id primary auto;                    "Autoincrementing table id"
+    char[32] md5 index;               "md5 sum of tags string"
+    lstring tags;               "CGI encoded name=val pairs from manifest"
+    )
+
 table cdwFile
 "A file we are tracking that we intend to and maybe have uploaded"
     (
@@ -71,6 +79,7 @@ table cdwFile
     bigInt size;                "File size in manifest"
     char[32] md5 index;               "md5 sum of file contents"
     lstring tags;               "CGI encoded name=val pairs from manifest"
+    uint metaTagsId;      "ID of associated metadata tags"
     lstring errorMessage; "If non-empty contains last error message from upload. If empty upload is ok"
     string deprecated; "If non-empty why you shouldn't use this file any more."
     uint replacedBy;   "If non-zero id of file that replaces this one."

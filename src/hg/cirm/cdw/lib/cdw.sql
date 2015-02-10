@@ -75,6 +75,16 @@ CREATE TABLE cdwSubmitDir (
     INDEX(hostId)
 );
 
+#Where we keep expanded metadata tags for each file, though many share.
+CREATE TABLE cdwMetaTags (
+    id int unsigned auto_increment,	# Autoincrementing table id
+    md5 char(32) default '',	# md5 sum of tags string
+    tags longblob,	# CGI encoded name=val pairs from manifest
+              #Indices
+    PRIMARY KEY(id),
+    INDEX(md5)
+);
+
 #A file we are tracking that we intend to and maybe have uploaded
 CREATE TABLE cdwFile (
     id int unsigned auto_increment,	# Autoincrementing file id
@@ -89,6 +99,7 @@ CREATE TABLE cdwFile (
     size bigint default 0,	# File size in manifest
     md5 char(32) default '',	# md5 sum of file contents
     tags longblob,	# CGI encoded name=val pairs from manifest
+    metaTagsId int unsigned default 0,	# ID of associated metadata tags
     errorMessage longblob,	# If non-empty contains last error message from upload. If empty upload is ok
     deprecated varchar(255) default '',	# If non-empty why you shouldn't use this file any more.
     replacedBy int unsigned default 0,	# If non-zero id of file that replaces this one.
@@ -203,7 +214,7 @@ CREATE TABLE cdwValidFile (
     depth double default 0,	# Estimated genome-equivalents covered by possibly overlapping data
     singleQaStatus tinyint default 0,	# 0 = untested, 1 =  pass, -1 = fail, 2 = forced pass, -2 = forced fail
     replicateQaStatus tinyint default 0,	# 0 = untested, 1 = pass, -1 = fail, 2 = forced pass, -2 = forced fail
-    part varchar(255) default '',	# Manifest's file part. Values 1,2,3... Used for fastqs split for analysis
+    part varchar(255) default '',	# Manifest's file_part. Values 1,2,3... Used for fastqs split for analysis
     pairedEnd varchar(255) default '',	# The paired_end tag from the manifest.  Values 1,2 or ''
     qaVersion tinyint default 0,	# Version of QA pipeline making status decisions
     uniqueMapRatio double default 0,	# Fraction of reads that map uniquely to genome for bams and fastqs
