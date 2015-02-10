@@ -380,6 +380,11 @@ struct hashEl **oldTable = hash->table;
 
 if (powerOfTwoSize == 0)
     powerOfTwoSize = 12;
+if (powerOfTwoSize > hashMaxSize)
+    powerOfTwoSize =  hashMaxSize;
+if (hash->powerOfTwoSize == powerOfTwoSize)
+    return;
+
 assert(powerOfTwoSize <= hashMaxSize && powerOfTwoSize > 0);
 hash->powerOfTwoSize = powerOfTwoSize;
 hash->size = (1<<powerOfTwoSize);
