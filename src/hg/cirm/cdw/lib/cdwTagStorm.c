@@ -23,6 +23,31 @@ tagStanzaAddDouble(tagStorm, stanza, "paired_end_distance_max", pair->distanceMa
 tagStanzaAddDouble(tagStorm, stanza, "paired_end_distance_std", pair->distanceStd);
 }
 
+void addRepeatInfo(struct sqlConnection *conn, struct tagStorm *tagStorm,
+    struct rbTree *fileTree, char *repeatClass, char *label)
+/* Add info for given repeat class to tag storm. */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select * from cdwQaRepeat where repeatClass='%s'",
+         repeatClass);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct cdwQaRepeat rep;
+    cdwQaRepeatStaticLoad(row, &rep);
+    struct tagStanza *stanza = intValTreeFind(fileTree, rep.fileId);
+    if (stanza != NULL)
+	{
+	char tagName[128];
+	safef(tagName, sizeof(tagName), "map_to_%s", label);
+	tagStanzaAddDouble(tagStorm, stanza, tagName, rep.mapRatio);
+	}
+    }
+sqlFreeResult(&sr);
+}
+
+
 struct tagStorm *cdwTagStorm(struct sqlConnection *conn)
 /* Load  cdwMetaTags.tags, cdwFile.tags, and select other fields into a tag
  * storm for searching */
@@ -209,7 +234,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    if (onTarget)
 	        {
 		char tagName[128];
-		safef(tagName, sizeof(tagName), "enriched_%s", targetName);
+		safef(tagName, sizeof(tagName), "enrichment_%s", targetName);
 		if (!tagFindVal(stanza, tagName))
 		    tagStanzaAddDouble(tagStorm, stanza, tagName, rich.enrichment);
 		safef(tagName, sizeof(tagName), "coverage_%s", targetName);
@@ -222,6 +247,10 @@ while ((row = sqlNextRow(sr)) != NULL)
         verbose(2, "Missing on qaEnrichTargetId %u\n", rich.qaEnrichTargetId);
     }
 sqlFreeResult(&sr);
+
+/* Add cdwQaRepeat - here we'll supply rRNA, and total mapRatio out of the table */
+addRepeatInfo(conn, tagStorm, fileTree, "rRNA", "ribosome");
+addRepeatInfo(conn, tagStorm, fileTree, "total", "repeat");
 
 
 /* Clean up and go home */
