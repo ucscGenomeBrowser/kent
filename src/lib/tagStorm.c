@@ -34,13 +34,13 @@
 #include "errAbort.h"
 
 
-struct tagStorm *tagStormNew(char *fileName)
+struct tagStorm *tagStormNew(char *name)
 /* Create a new, empty, tagStorm. */
 {
 struct lm *lm = lmInit(0);
 struct tagStorm *tagStorm = lmAlloc(lm, sizeof(*tagStorm));
 tagStorm->lm = lm;
-tagStorm->fileName = lmCloneString(lm, fileName);
+tagStorm->fileName = lmCloneString(lm, name);
 return tagStorm;
 }
 

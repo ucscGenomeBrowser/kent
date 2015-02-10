@@ -94,7 +94,7 @@ void tagStormUpdateTag(struct tagStorm *tagStorm, struct tagStanza *stanza, char
 
 /** Stuff for constructing a tag storm a tag at a time rather than building it from file  */
 
-struct tagStorm *tagStormNew(char *fileName);
+struct tagStorm *tagStormNew(char *name);
 /* Create a new, empty, tagStorm. */
 
 struct tagStanza *tagStanzaNew(struct tagStorm *tagStorm, struct tagStanza *parent);
