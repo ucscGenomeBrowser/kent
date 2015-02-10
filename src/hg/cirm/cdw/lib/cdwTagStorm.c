@@ -48,6 +48,34 @@ sqlFreeResult(&sr);
 }
 
 
+void addContamInfo(struct sqlConnection *conn, struct tagStorm *tagStorm,
+    struct rbTree *fileTree, int taxon, char *label)
+/* Add info for given contamination mapping to tag storm. */
+{
+char query[256];
+sqlSafef(query, sizeof(query), 
+    "select cdwQaContam.* from cdwQaContam,cdwQaContamTarget,cdwAssembly "
+    "where cdwQaContam.qaContamTargetId = cdwQaContamTarget.id "
+    "and cdwQaContamTarget.assemblyId = cdwAssembly.id "
+    "and taxon=%d", taxon);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct cdwQaContam item;
+    cdwQaContamStaticLoad(row, &item);
+    struct tagStanza *stanza = intValTreeFind(fileTree, item.fileId);
+    if (stanza != NULL)
+	{
+	char tagName[128];
+	safef(tagName, sizeof(tagName), "map_to_%s", label);
+	tagStanzaAddDouble(tagStorm, stanza, tagName, item.mapRatio);
+	}
+    }
+sqlFreeResult(&sr);
+}
+
+
 struct tagStorm *cdwTagStorm(struct sqlConnection *conn)
 /* Load  cdwMetaTags.tags, cdwFile.tags, and select other fields into a tag
  * storm for searching */
@@ -252,6 +280,14 @@ sqlFreeResult(&sr);
 addRepeatInfo(conn, tagStorm, fileTree, "rRNA", "ribosome");
 addRepeatInfo(conn, tagStorm, fileTree, "total", "repeat");
 
+/* Add contamination targets */
+addContamInfo(conn, tagStorm, fileTree, 9606, "human");
+addContamInfo(conn, tagStorm, fileTree, 10090, "mouse");
+addContamInfo(conn, tagStorm, fileTree, 10116, "rat");
+addContamInfo(conn, tagStorm, fileTree, 7227, "fly");
+addContamInfo(conn, tagStorm, fileTree, 559292, "yeast");
+addContamInfo(conn, tagStorm, fileTree, 6239, "worm");
+addContamInfo(conn, tagStorm, fileTree, 562, "ecoli");
 
 /* Clean up and go home */
 rbTreeFree(&submitDirTree);
