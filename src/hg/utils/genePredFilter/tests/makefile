@@ -2,14 +2,16 @@ include ../../../../inc/common.mk
 
 genePredFilter = ${DESTBINDIR}/genePredFilter
 
+# -verbose=0 used to kept automated test from complaining
+
 test:: gencodeHackTest gencodeHackDbTest
 
 gencodeHackTest: mkout
-	${genePredFilter} input/gencodeHack.gp output/$@.gp
+	${genePredFilter} -verbose=0 input/gencodeHack.gp output/$@.gp
 	diff expected/$@.gp output/$@.gp
 
 gencodeHackDbTest: mkout
-	${genePredFilter} -db=hg38 input/gencodeHack.gp output/$@.gp
+	${genePredFilter} -db=hg38 -verbose=0 input/gencodeHack.gp output/$@.gp
 	diff expected/$@.gp output/$@.gp
 
 
