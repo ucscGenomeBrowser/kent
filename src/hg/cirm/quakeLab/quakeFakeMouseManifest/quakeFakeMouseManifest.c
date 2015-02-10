@@ -94,6 +94,8 @@ fprintf(f, "#file\tformat\toutput\tmeta\tenriched_in\tucsc_db\tpaired_end\tfile_
 int fileCount = 0;
 FILE *err = mustOpen(errFile, "w");
 
+struct hash *fileHash = hashNew(0);
+
 /* Loop through samples */
 struct quakeSample *sample;
 for (sample = sampleList; sample != NULL; sample = sample->next)
@@ -138,11 +140,15 @@ for (sample = sampleList; sample != NULL; sample = sample->next)
 		    gotAllParts = TRUE;
 		    break;
 		    }
-		++fileCount;
 		char *fastqFile = fastqPath + inDirSize;
-		fprintf(f, "%s\tfastq\treads\t%s\texon\tmm10\t%d\t%d\t%s\t%s\n", 
-		    fastqFile, sampleMetaName(sample), mate, part, 
-		    chip->captureArrayBarcode, sample->cellPos);
+		if (!hashLookup(fileHash, fastqFile))
+		    {
+		    hashAdd(fileHash, fastqFile, NULL);
+		    ++fileCount;
+		    fprintf(f, "%s\tfastq\treads\t%s\texon\tmm10\t%d\t%d\t%s\t%s\n", 
+			fastqFile, sampleMetaName(sample), mate, part, 
+			chip->captureArrayBarcode, sample->cellPos);
+		    }
 		}
 	    if (gotAllParts)
 	        break;
@@ -163,7 +169,7 @@ for (chip = chipList; chip != NULL; chip = chip->next)
     {
     char *indent = "    ";
     fprintf(meta, "%smeta chip%s\n", indent, chip->captureArrayBarcode);
-    fprintf(meta, "%suser %s\n", indent, chip->user);
+    fprintf(meta, "%ssubmitter %s\n", indent, chip->user);
     fprintf(meta, "%slab %s\n", indent, chip->lab);
     fprintf(meta, "%sbiosample_date %s\n", indent, chip->date);
     fprintf(meta, "%slab_quake_sample_type %s\n", indent, chip->sampleType);
