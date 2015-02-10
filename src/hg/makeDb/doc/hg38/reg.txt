@@ -235,28 +235,53 @@ uwDnaseTrackHub meta.tab run_pooled colors.tab hub
         hgBbiDbLink hg38 uwEnc2DnaseHot${exp} $bbi/$f
     end
 
-    foreach f (*.narrowPeak.bb)
-        echo $f
-        ln -s `pwd`/$f $bbi
-        set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
-        hgBbiDbLink hg38 uwEnc2DnasePeaks${exp} $bbi/$f
-    end
+    # TODO: REMOVE THESE -- not needed
+    #foreach f (*.narrowPeak.bb)
+        #echo $f
+        #ln -s `pwd`/$f $bbi
+        #set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
+        #hgBbiDbLink hg38 uwEnc2DnasePeaks${exp} $bbi/$f
+    #end
 
     cd /hive/data/genomes/hg38/bed/uwDnase1/run_normalized/out
     foreach f (*.bw)
         ln -s `pwd`/$f $bbi/$f
         set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
         hgBbiDbLink hg38 uwEnc2DnaseSignal${exp} $bbi/$f
+        # TODO: REMOVE THESE -- not needed
         hgBbiDbLink hg38 uwEnc2DnaseWig${exp} $bbi/$f
     end
 
 # Test load of non-normalized signal
-    cd /hive/data/genomes/hg38/bed/uwDnase1/run_pooled
-    set f = wgEncodeEH000484.pooled.bigWig
-    set bbi = /gbdb/hg38/bbi/uwDnase/
-    ln -s `pwd`/$f $bbi/$f
-    hgBbiDbLink hg38 testDnaseSignalWgEncodeEH000484 $bbi/$f
+    #cd /hive/data/genomes/hg38/bed/uwDnase1/run_pooled
+    #set f = wgEncodeEH000484.pooled.bigWig
+    #set bbi = /gbdb/hg38/bbi/uwDnase/
+    #ln -s `pwd`/$f $bbi/$f
 
+    # TODO: REMOVE THIS -- not needed
+    #hgBbiDbLink hg38 testDnaseSignalWgEncodeEH000484 $bbi/$f
+
+
+# Rename everything
+
+    cd /gbdb/hg38/bbi
+    #rm -fr uwDnase
+    mkdir wgEncodeRegDnase
+    set bbi = /gbdb/hg38/bbi/wgEncodeRegDnase
+    # link broadPeaks
+    #cd /hive/data/genomes/hg38/bed/uwDnase1/run_pooled/scored/out
+    #foreach f (*.broadPeak.bb)
+    #end
+    # link signals
+    cd /hive/data/genomes/hg38/bed/uwDnase1/run_normalized/out
+    foreach f (*.bw)
+        set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/\1/'`
+        set t = wgEncodeRegUwDnaseSignal${cell}${treat}
+        ln -s `pwd`/$f $bbi/$t
+        hgBbiDbLink hg38 $t $bbi/$t.bw
+    end
+
+    
 # Load peaks into database (needed by hgc. we may be able to drop these with code changes)
     cd /hive/data/genomes/hg38/bed/uwDnase1/run_pooled/scored/out
     foreach f (*.narrowPeak)
@@ -409,6 +434,10 @@ cat > makeInputs.csh << 'EOF'
     hgLoadSqlTab hg38 uwEnc2DnaseInputs ~/kent/src/hg/lib/clusterInputEapDnase.sql uwEnc2DnaseInputs.tab
 
     # Also add RA treatment (not official ENCODE term) to treatment table
+
+
+# Rename tables for user friendliness, i.e. include metadata (as in hg19)
+
 
 
 
