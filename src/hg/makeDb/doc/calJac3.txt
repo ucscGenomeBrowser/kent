@@ -3114,3 +3114,76 @@ one broken job:
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+# LASTZ chimp panTro4 (DONE - 2015-02-09 - Hiram)
+    mkdir /hive/data/genomes/calJac3/bed/lastzPanTro4.2015-02-09
+    cd /hive/data/genomes/calJac3/bed/lastzPanTro4.2015-02-09
+
+    cat << '_EOF_' > DEF
+# Marmoset vs chimp
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/calJac3.panTro4/calJac3.panTro4.tuning.top300.txt
+
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+
+BLASTZ_T=2
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=50
+BLASTZ_X=1000
+BLASTZ_Y=3400
+BLASTZ_Q=/hive/data/genomes/calJac3/bed/lastzPanTro4.2015-02-09/calJac3.panTro4.tuning.Q.txt
+#       A     C     G     T
+# A   100  -177   -40  -144
+# C  -177    94  -185   -40
+# G   -40  -185    94  -177
+# T  -144   -40  -177   100
+
+# TARGET: Marmoset calJac3
+SEQ1_DIR=/hive/data/genomes/calJac3/calJac3.2bit
+SEQ1_LEN=/hive/data/genomes/calJac3/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=100
+SEQ1_LAP=10000
+
+# QUERY: chimp panTro4
+SEQ2_DIR=/hive/data/genomes/panTro4/panTro4.2bit
+SEQ2_LEN=/hive/data/genomes/panTro4/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=150
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/calJac3/bed/lastzPanTro4.2015-02-09
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    #	real    323m11.555s
+
+    cat fb.calJac3.chainPanTro4Link.txt
+    #	2076330774 bases of 2752505800 (75.434%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` calJac3 panTro4) > rbest.log 2>&1 &
+    #  real    55m50.180s
+
+    #	running the swap
+    mkdir /hive/data/genomes/panTro4/bed/blastz.calJac3.swap
+    cd /hive/data/genomes/panTro4/bed/blastz.calJac3.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/calJac3/bed/lastzPanTro4.2015-02-09/DEF \
+	-swap -syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=ku \
+	-bigClusterHub=ku) > swap.log 2>&1
+    #	real    114m27.647s
+
+    cat fb.panTro4.chainCalJac3Link.txt
+    #	2113187925 bases of 2902338967 (72.810%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` panTro4 calJac3) > rbest.log 2>&1 &
+    # real    44m18.149s
+
+############################################################################
