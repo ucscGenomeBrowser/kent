@@ -46,6 +46,9 @@ else
     }
 }
 
+int matchCount = 0;
+boolean doSelect = FALSE;
+
 void traverse(struct tagStorm *tags, struct tagStanza *list, 
     struct rqlStatement *rql, struct lm *lm)
 /* Recursively traverse stanzas on list. */
@@ -59,14 +62,18 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	{
 	if (statementMatch(rql, stanza, lm))
 	    {
-	    struct slName *field;
-	    for (field = rql->fieldList; field != NULL; field = field->next)
+	    ++matchCount;
+	    if (doSelect)
 		{
-		char *val = tagFindVal(stanza, field->name);
-		if (val != NULL)
-		    printf("%s\t%s\n", field->name, val);
+		struct slName *field;
+		for (field = rql->fieldList; field != NULL; field = field->next)
+		    {
+		    char *val = tagFindVal(stanza, field->name);
+		    if (val != NULL)
+			printf("%s\t%s\n", field->name, val);
+		    }
+		printf("\n");
 		}
-	    printf("\n");
 	    }
 	}
     }
@@ -92,8 +99,11 @@ rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
 
 /* Traverse tree applying query */
 struct lm *lm = lmInit(0);
+doSelect = sameWord(rql->command, "select");
 traverse(tags, tags->forest, rql, lm);
 tagStormFree(&tags);
+if (sameWord(rql->command, "count"))
+    printf("%d\n", matchCount);
 }
 
 int main(int argc, char *argv[])
