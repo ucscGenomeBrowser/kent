@@ -94,6 +94,24 @@ slAddHead(&stanza->tagList, pair);
 return pair;
 }
 
+void tagStanzaAddLongLong(struct tagStorm *tagStorm, struct tagStanza *stanza, char *var, 
+    long long val)
+/* Add long long integer valued tag to stanza */
+{
+char buf[32];
+safef(buf, sizeof(buf), "%lld", val);
+tagStanzaAdd(tagStorm, stanza, var, buf);
+}
+
+void tagStanzaAddDouble(struct tagStorm *tagStorm, struct tagStanza *stanza, char *var, 
+    double val)
+/* Add double valued tag to stanza */
+{
+char buf[32];
+safef(buf, sizeof(buf), "%g", val);
+tagStanzaAdd(tagStorm, stanza, var, buf);
+}
+
 static void rReverseStanzaList(struct tagStanza **pList)
 /* Reverse order of stanzas, used to compensate for all of the add-heads */
 {

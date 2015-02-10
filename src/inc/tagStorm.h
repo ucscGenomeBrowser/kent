@@ -110,6 +110,14 @@ struct slPair *tagStanzaAdd(struct tagStorm *tagStorm, struct tagStanza *stanza,
     char *tag, char *val);
 /* Add tag with given value to stanza */
 
+void tagStanzaAddLongLong(struct tagStorm *tagStorm, struct tagStanza *stanza, char *var, 
+    long long val);
+/* Add long long integer valued tag to stanza */
+
+void tagStanzaAddDouble(struct tagStorm *tagStorm, struct tagStanza *stanza, char *var, 
+    double val);
+/* Add double valued tag to stanza */
+
 void tagStormReverseAll(struct tagStorm *tagStorm);
 /* Reverse order of all lists in tagStorm.  Use when all done with tagStanzaNew
  * and tagStanzaAdd (which for speed build lists backwards). */
