@@ -100,6 +100,7 @@ struct tagStorm *tags = cdwTagStorm(conn);
  * field list. */
 struct slName *allFieldList = tagTreeFieldList(tags);
 rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
+slSort(&rql->fieldList, slNameCmp);
 
 /* Traverse tag tree outputting when rql statement matches in select case, just
  * updateing count in count case. */
