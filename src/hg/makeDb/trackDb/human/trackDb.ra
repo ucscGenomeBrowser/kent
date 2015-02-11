@@ -864,7 +864,7 @@ track snp141Common
 shortLabel Common SNPs(141)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 141) Found in >= 1% of Samples
 group varRep
-visibility dense
+visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp141Seq
@@ -878,7 +878,6 @@ orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
-priority 1
 
 track snp141Flagged
 shortLabel Flagged SNPs(141)
