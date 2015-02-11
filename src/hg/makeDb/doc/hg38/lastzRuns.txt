@@ -1651,3 +1651,852 @@ TMPDIR=/dev/shm
     # real    4m46.757s
 
 #########################################################################
+# LASTZ human/hg38 vs. Aardvark/oryAfe1 - (DONE - 2015-02-10 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzOryAfe1.2015-02-10
+    cd /hive/data/genomes/hg38/bed/lastzOryAfe1.2015-02-10
+
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/hg38.oryAfe1/hg38.oryAfe1.tuning.top400.txt
+    cp -p /hive/users/hiram/multiz/100way/hg38.oryAfe1/hg38.oryAfe1.tuning.top400.txt \
+         ./hg38.oryAfe1.tuning.Q.txt
+
+    cat << '_EOF_' > DEF
+# human vs Aardvark
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_X=750
+BLASTZ_Y=3400
+BLASTZ_M=50
+BLASTZ_Q=/hive/data/genomes/hg38/bed/lastzOryAfe1.2015-02-10/hg38.oryAfe1.tuning.Q.txt
+#       A     C     G     T
+# A    75  -111   -29  -131
+# C  -111   100  -107   -29
+# G   -29  -107   100  -111
+# T  -131   -29  -111    75
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=10
+SEQ1_LAP=10000
+
+# QUERY: Aardvark oryAfe1
+SEQ2_DIR=/hive/data/genomes/oryAfe1/oryAfe1.2bit
+SEQ2_LEN=/hive/data/genomes/oryAfe1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzOryAfe1.2015-02-10
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    #  real    807m27.960s
+
+    cat fb.hg38.chainOryAfe1Link.txt
+    # 1113801383 bases of 3049335806 (36.526%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hg38 oryAfe1) > rbest.log 2>&1 &
+    # real    29m27.923s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oryAfe1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/oryAfe1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzOryAfe1.2015-02-10/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    76m24.229s
+
+    cat fb.oryAfe1.chainHg38Link.txt
+    # 1048528734 bases of 3415340621 (30.701%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` oryAfe1 hg38) > rbest.log 2>&1
+    # real    45m1.363s
+
+#########################################################################
+# LASTZ human/hg38 vs. White rhinoceros/cerSim1 - (DONE - 2015-02-10 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzCerSim1.2015-02-10
+    cd /hive/data/genomes/hg38/bed/lastzCerSim1.2015-02-10
+
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/hg38.cerSim1/hg38.cerSim1.tuning.top400.txt
+    cp -p /hive/users/hiram/multiz/100way/hg38.cerSim1/hg38.cerSim1.tuning.top400.txt \
+         ./hg38.cerSim1.tuning.Q.txt
+
+    cat << '_EOF_' > DEF
+# human vs White rhinoceros
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_X=710
+BLASTZ_Y=3400
+BLASTZ_M=50
+BLASTZ_Q=/hive/data/genomes/hg38/bed/lastzCerSim1.2015-02-10/hg38.cerSim1.tuning.Q.txt
+#       A     C     G     T
+# A    71  -115   -26  -128
+# C  -115   100  -112   -26
+# G   -26  -112   100  -115
+# T  -128   -26  -115    71
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=5
+SEQ1_LAP=10000
+
+# QUERY: White rhinoceros cerSim1
+SEQ2_DIR=/hive/data/genomes/cerSim1/cerSim1.2bit
+SEQ2_LEN=/hive/data/genomes/cerSim1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzCerSim1.2015-02-10
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    910m49.311s
+
+    cat fb.hg38.chainCerSim1Link.txt
+    # 1618425081 bases of 3049335806 (53.075%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hg38 cerSim1) > rbest.log 2>&1 &
+    # real    99m4.475s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/cerSim1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/cerSim1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzCerSim1.2015-02-10/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    92m53.992s
+
+    cat fb.cerSim1.chainHg38Link.txt
+    # 1534238724 bases of 2366858012 (64.822%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` cerSim1 hg38) > rbest.log 2>&1
+XXX - running - Wed Feb 11 14:00:36 PST 2015
+    # real    4m46.757s
+
+#########################################################################
+# LASTZ human/hg38 vs. Cape golden mole/chrAsi1 - (DONE - 2015-02-10 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzChrAsi1.2015-02-10
+    cd /hive/data/genomes/hg38/bed/lastzChrAsi1.2015-02-10
+
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/hg38.chrAsi1/hg38.chrAsi1.tuning.top400.txt
+    cp -p /hive/users/hiram/multiz/100way/hg38.chrAsi1/hg38.chrAsi1.tuning.top400.txt \
+         ./hg38.chrAsi1.tuning.Q.txt
+
+    cat << '_EOF_' > DEF
+# human vs Cape golden mole
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_X=820
+BLASTZ_Y=3400
+BLASTZ_M=50
+BLASTZ_Q=/hive/data/genomes/hg38/bed/lastzChrAsi1.2015-02-10/hg38.chrAsi1.tuning.Q.txt
+#       A     C     G     T
+# A    82  -118   -40  -126
+# C  -118   100  -113   -40
+# G   -40  -113   100  -118
+# T  -126   -40  -118    82
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=10
+SEQ1_LAP=10000
+
+# QUERY: Cape golden mole chrAsi1
+SEQ2_DIR=/hive/data/genomes/chrAsi1/chrAsi1.2bit
+SEQ2_LEN=/hive/data/genomes/chrAsi1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzChrAsi1.2015-02-10
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    810m41.790s
+
+    cat fb.hg38.chainChrAsi1Link.txt
+    # 890642858 bases of 3049335806 (29.208%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hg38 chrAsi1) > rbest.log 2>&1 &
+    # real    25m58.608s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/chrAsi1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/chrAsi1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzChrAsi1.2015-02-10/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    73m29.578s
+
+    cat fb.chrAsi1.chainHg38Link.txt
+    # 860103179 bases of 3363564316 (25.571%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` chrAsi1 hg38) > rbest.log 2>&1
+XXX - running - Wed Feb 11 12:05:51 PST 2015
+    # real    44m1.005s
+
+#########################################################################
+# LASTZ human/hg38 vs. Big brown bat/eptFus1 - (DONE - 2015-02-10 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzEptFus1.2015-02-10
+    cd /hive/data/genomes/hg38/bed/lastzEptFus1.2015-02-10
+
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/hg38.eptFus1/hg38.eptFus1.tuning.top400.txt
+    cp -p /hive/users/hiram/multiz/100way/hg38.eptFus1/hg38.eptFus1.tuning.top400.txt \
+         ./hg38.eptFus1.tuning.Q.txt
+
+    cat << '_EOF_' > DEF
+# human vs Big brown bat
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_X=820
+BLASTZ_Y=3400
+BLASTZ_M=50
+BLASTZ_Q=/hive/data/genomes/hg38/bed/lastzEptFus1.2015-02-10/hg38.eptFus1.tuning.Q.txt
+#       A     C     G     T
+# A    82  -118   -40  -126
+# C  -118   100  -113   -40
+# G   -40  -113   100  -118
+# T  -126   -40  -118    82
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=10
+SEQ1_LAP=10000
+
+# QUERY: Big brown bat eptFus1
+SEQ2_DIR=/hive/data/genomes/eptFus1/eptFus1.2bit
+SEQ2_LEN=/hive/data/genomes/eptFus1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzEptFus1.2015-02-10
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    700m35.258s
+
+    cat fb.hg38.chainEptFus1Link.txt
+    # 1109543782 bases of 3049335806 (36.386%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hg38 eptFus1) > rbest.log 2>&1 &
+    # real    29m11.971s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/eptFus1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/eptFus1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzEptFus1.2015-02-10/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    72m41.403s
+
+    cat fb.eptFus1.chainHg38Link.txt
+    # 1051896885 bases of 1811378799 (58.072%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` eptFus1 hg38) > rbest.log 2>&1
+    # real    45m10.323s
+
+#########################################################################
+# LASTZ human/hg38 vs. Chinese tree shrew/tupChi1 - (DONE - 2015-02-10 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzTupChi1.2015-02-10
+    cd /hive/data/genomes/hg38/bed/lastzTupChi1.2015-02-10
+
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/hg38.tupChi1/hg38.tupChi1.tuning.top400.txt
+    cp -p /hive/users/hiram/multiz/100way/hg38.tupChi1/hg38.tupChi1.tuning.top400.txt \
+         ./hg38.tupChi1.tuning.Q.txt
+
+    cat << '_EOF_' > DEF
+# human vs Chinese tree shrew
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_X=1000
+BLASTZ_Y=3400
+BLASTZ_M=50
+BLASTZ_Q=/hive/data/genomes/hg38/bed/lastzTupChi1.2015-02-10/hg38.tupChi1.tuning.Q.txt
+#       A     C     G     T
+# A   100  -147   -73  -170
+# C  -147    75  -135   -73
+# G   -73  -135    75  -147
+# T  -170   -73  -147   100
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=20
+SEQ1_LAP=10000
+
+# QUERY: Chinese tree shrew tupChi1
+SEQ2_DIR=/hive/data/genomes/tupChi1/tupChi1.2bit
+SEQ2_LEN=/hive/data/genomes/tupChi1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=120
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzTupChi1.2015-02-10
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    205m27.529s
+
+    cat fb.hg38.chainTupChi1Link.txt
+    # 1128940197 bases of 3049335806 (37.022%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hg38 tupChi1) > rbest.log 2>&1 &
+    # real    30m1.323s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/tupChi1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/tupChi1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzTupChi1.2015-02-10/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    75m3.360s
+
+    cat fb.tupChi1.chainHg38Link.txt
+    # 1114482238 bases of 2706389135 (41.180%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` tupChi1 hg38) > rbest.log 2>&1
+XXX - running - Wed Feb 11 14:05:39 PST 2015
+    # real    4m46.757s
+
+#########################################################################
+# LASTZ human/hg38 vs. horse/equCab2 - (DONE - 2015-02-10 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzEquCab2.2015-02-10
+    cd /hive/data/genomes/hg38/bed/lastzEquCab2.2015-02-10
+
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/hg38.equCab2/hg38.equCab2.tuning.top400.txt
+    cp -p /hive/users/hiram/multiz/100way/hg38.equCab2/hg38.equCab2.tuning.top400.txt \
+         ./hg38.equCab2.tuning.Q.txt
+
+    cat << '_EOF_' > DEF
+# human vs horse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_X=720
+BLASTZ_Y=3400
+BLASTZ_M=50
+BLASTZ_Q=/hive/data/genomes/hg38/bed/lastzEquCab2.2015-02-10/hg38.equCab2.tuning.Q.txt
+#       A     C     G     T
+# A    72  -113   -25  -128
+# C  -113   100  -107   -25
+# G   -25  -107   100  -113
+# T  -128   -25  -113    72
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=20
+SEQ1_LAP=10000
+
+# QUERY: horse equCab2
+SEQ2_DIR=/hive/data/genomes/equCab2/equCab2.2bit
+SEQ2_LEN=/hive/data/genomes/equCab2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=10
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzEquCab2.2015-02-10
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    802m27.320s
+
+    cat fb.hg38.chainEquCab2Link.txt
+    # 1588178706 bases of 3049335806 (52.083%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hg38 equCab2) > rbest.log 2>&1 &
+    # real    86m29.518s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/equCab2/bed/blastz.hg38.swap
+    cd /hive/data/genomes/equCab2/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzEquCab2.2015-02-10/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    98m18.932s
+
+    cat fb.equCab2.chainHg38Link.txt
+    # 1516707888 bases of 2428790173 (62.447%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` equCab2 hg38) > rbest.log 2>&1
+XXX - running - Wed Feb 11 14:04:32 PST 2015
+    # real    4m46.757s
+
+#########################################################################
+# LASTZ human/hg38 vs. Bactrian camel/camFer1 - (DONE - 2015-02-11 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzCamFer1.2015-02-11
+    cd /hive/data/genomes/hg38/bed/lastzCamFer1.2015-02-11
+
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/hg38.camFer1/hg38.camFer1.tuning.top400.txt
+    cp -p /hive/users/hiram/multiz/100way/hg38.camFer1/hg38.camFer1.tuning.top400.txt \
+         ./hg38.camFer1.tuning.Q.txt
+
+    cat << '_EOF_' > DEF
+# human vs Bactrian camel
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_X=730
+BLASTZ_Y=3400
+BLASTZ_M=50
+BLASTZ_Q=/hive/data/genomes/hg38/bed/lastzCamFer1.2015-02-11/hg38.camFer1.tuning.Q.txt
+#       A     C     G     T
+# A    73  -121   -22  -136
+# C  -121   100  -118   -22
+# G   -22  -118   100  -121
+# T  -136   -22  -121    73
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=20
+SEQ1_LAP=10000
+
+# QUERY: Bactrian camel camFer1
+SEQ2_DIR=/hive/data/genomes/camFer1/camFer1.2bit
+SEQ2_LEN=/hive/data/genomes/camFer1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzCamFer1.2015-02-11
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    183m22.962s
+
+    cat fb.hg38.chainCamFer1Link.txt
+    # 1408973544 bases of 3049335806 (46.206%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hg38 camFer1) > rbest.log 2>&1 &
+XXX - running - Wed Feb 11 13:59:19 PST 2015
+    # real    2m51.935s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/camFer1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/camFer1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzCamFer1.2015-02-11/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+XXX - running - Wed Feb 11 13:59:19 PST 2015
+    #  real    8m48.057s
+
+    cat fb.camFer1.chainHg38Link.txt
+    # 25633579 bases of 647368134 (3.960%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` camFer1 hg38) > rbest.log 2>&1
+    # real    4m46.757s
+
+#########################################################################
+# LASTZ human/hg38 vs. alpaca/vicPac2 - (DONE - 2015-02-10 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzVicPac2.2015-02-10
+    cd /hive/data/genomes/hg38/bed/lastzVicPac2.2015-02-10
+
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/hg38.vicPac2/hg38.vicPac2.tuning.top400.txt
+    cp -p /hive/users/hiram/multiz/100way/hg38.vicPac2/hg38.vicPac2.tuning.top400.txt \
+         ./hg38.vicPac2.tuning.Q.txt
+
+    cat << '_EOF_' > DEF
+# human vs alpaca
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_X=710
+BLASTZ_Y=3400
+BLASTZ_M=50
+BLASTZ_Q=/hive/data/genomes/hg38/bed/lastzVicPac2.2015-02-10/hg38.vicPac2.tuning.Q.txt
+#       A     C     G     T
+# A    71  -127   -16  -143
+# C  -127   100  -123   -16
+# G   -16  -123   100  -127
+# T  -143   -16  -127    71
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=30
+SEQ1_LAP=10000
+
+# QUERY: alpaca vicPac2
+SEQ2_DIR=/hive/data/genomes/vicPac2/vicPac2.2bit
+SEQ2_LEN=/hive/data/genomes/vicPac2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzVicPac2.2015-02-10
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    700m5.411s
+
+    cat fb.hg38.chainVicPac2Link.txt
+    # 1399262189 bases of 3049335806 (45.887%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hg38 vicPac2) > rbest.log 2>&1 &
+    # real    56m47.132s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/vicPac2/bed/blastz.hg38.swap
+    cd /hive/data/genomes/vicPac2/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzVicPac2.2015-02-10/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    174m42.441s
+
+    cat fb.vicPac2.chainHg38Link.txt
+    # 1342041434 bases of 2078582856 (64.565%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` vicPac2 hg38) > rbest.log 2>&1
+XXX - running - Wed Feb 11 14:06:43 PST 2015
+    # real    4m46.757s
+
+#########################################################################
+# LASTZ human/hg38 vs. dolphin/turTru2 - (DONE - 2015-02-10 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzTurTru2.2015-02-10
+    cd /hive/data/genomes/hg38/bed/lastzTurTru2.2015-02-10
+
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/hg38.turTru2/hg38.turTru2.tuning.top400.txt
+    cp -p /hive/users/hiram/multiz/100way/hg38.turTru2/hg38.turTru2.tuning.top400.txt \
+         ./hg38.turTru2.tuning.Q.txt
+
+    cat << '_EOF_' > DEF
+# human vs dolphin
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_X=710
+BLASTZ_Y=3400
+BLASTZ_M=50
+BLASTZ_Q=/hive/data/genomes/hg38/bed/lastzTurTru2.2015-02-10/hg38.turTru2.tuning.Q.txt
+#       A     C     G     T
+# A    71  -127   -16  -143
+# C  -127   100  -123   -16
+# G   -16  -123   100  -127
+# T  -143   -16  -127    71
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=30
+SEQ1_LAP=10000
+
+# QUERY: dolphin turTru2
+SEQ2_DIR=/hive/data/genomes/turTru2/turTru2.2bit
+SEQ2_LEN=/hive/data/genomes/turTru2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzTurTru2.2015-02-10
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    685m28.161s
+
+    cat fb.hg38.chainTurTru2Link.txt
+    # 1404889155 bases of 3049335806 (46.072%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hg38 turTru2) > rbest.log 2>&1 &
+    # real    61m54.109s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/turTru2/bed/blastz.hg38.swap
+    cd /hive/data/genomes/turTru2/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzTurTru2.2015-02-10/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    193m48.445s
+
+    cat fb.turTru2.chainHg38Link.txt
+    # 1329424627 bases of 2332402443 (56.998%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` turTru2 hg38) > rbest.log 2>&1
+XXX - running - Wed Feb 11 14:01:49 PST 2015
+    # real    4m46.757s
+
+#########################################################################
+# LASTZ human/hg38 vs. Killer whale/orcOrc1 - (DONE - 2015-02-10 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzOrcOrc1.2015-02-10
+    cd /hive/data/genomes/hg38/bed/lastzOrcOrc1.2015-02-10
+
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/hg38.orcOrc1/hg38.orcOrc1.tuning.top400.txt
+    cp -p /hive/users/hiram/multiz/100way/hg38.orcOrc1/hg38.orcOrc1.tuning.top400.txt \
+         ./hg38.orcOrc1.tuning.Q.txt
+
+    cat << '_EOF_' > DEF
+# human vs Killer whale
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_X=710
+BLASTZ_Y=3400
+BLASTZ_M=50
+BLASTZ_Q=/hive/data/genomes/hg38/bed/lastzOrcOrc1.2015-02-10/hg38.orcOrc1.tuning.Q.txt
+#       A     C     G     T
+# A    71  -120   -24  -134
+# C  -120   100  -115   -24
+# G   -24  -115   100  -120
+# T  -134   -24  -120    71
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=30
+SEQ1_LAP=10000
+
+# QUERY: Killer whale orcOrc1
+SEQ2_DIR=/hive/data/genomes/orcOrc1/orcOrc1.2bit
+SEQ2_LEN=/hive/data/genomes/orcOrc1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=5
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzOrcOrc1.2015-02-10
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    787m1.476s
+
+    cat fb.hg38.chainOrcOrc1Link.txt
+    # 1441746760 bases of 3049335806 (47.281%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hg38 orcOrc1) > rbest.log 2>&1 &
+    # real    97m6.901s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/orcOrc1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/orcOrc1/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzOrcOrc1.2015-02-10/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    81m1.036s
+
+    cat fb.orcOrc1.chainHg38Link.txt
+    # 1354015119 bases of 2249582127 (60.190%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` orcOrc1 hg38) > rbest.log 2>&1
+XXX - running - Wed Feb 11 14:07:51 PST 2015
+    # real    4m46.757s
+
+#########################################################################
+# LASTZ human/hg38 vs. squirrel/speTri2 - (DONE - 2015-02-10 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzSpeTri2.2015-02-10
+    cd /hive/data/genomes/hg38/bed/lastzSpeTri2.2015-02-10
+
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/hg38.speTri2/hg38.speTri2.tuning.top400.txt
+    cp -p /hive/users/hiram/multiz/100way/hg38.speTri2/hg38.speTri2.tuning.top400.txt \
+         ./hg38.speTri2.tuning.Q.txt
+
+    cat << '_EOF_' > DEF
+# human vs squirrel
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_T=2
+BLASTZ_X=1000
+BLASTZ_Y=3400
+BLASTZ_M=50
+BLASTZ_Q=/hive/data/genomes/hg38/bed/lastzSpeTri2.2015-02-10/hg38.speTri2.tuning.Q.txt
+#       A     C     G     T
+# A   100  -167   -27  -120
+# C  -167    95  -200   -27
+# G   -27  -200    95  -167
+# T  -120   -27  -167   100
+
+# TARGET: human hg38
+SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/hg38.contigs.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/hg38.contigs.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/jkStuff/hg38.contigs.lift
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=30
+SEQ1_LAP=10000
+
+# QUERY: squirrel speTri2
+SEQ2_DIR=/hive/data/genomes/speTri2/speTri2.2bit
+SEQ2_LEN=/hive/data/genomes/speTri2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=20
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg38/bed/lastzSpeTri2.2015-02-10
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    327m49.502s
+
+    cat fb.hg38.chainSpeTri2Link.txt
+    # 1363949428 bases of 3049335806 (44.729%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hg38 speTri2) > rbest.log 2>&1 &
+XXX - running - Wed Feb 11 14:03:12 PST 2015
+    # real    2m51.935s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/speTri2/bed/blastz.hg38.swap
+    cd /hive/data/genomes/speTri2/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzSpeTri2.2015-02-10/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    96m56.082s
+
+    cat fb.speTri2.chainHg38Link.txt
+    # 1323562747 bases of 2311060300 (57.271%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` speTri2 hg38) > rbest.log 2>&1
+XXX  see above too
+XXX - running - Wed Feb 11 14:03:12 PST 2015
+    # real    4m46.757s
+
+#########################################################################
