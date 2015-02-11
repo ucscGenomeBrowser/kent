@@ -75,6 +75,20 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
+static void addReadSizeInfo(struct tagStorm *tagStorm, struct tagStanza *stanza, 
+    double readSizeMin, double readSizeMax, double readSizeMean, double readSizeStd)
+/* Store read size info in stanza */
+{
+if (readSizeMin == readSizeMax)
+    tagStanzaAddLongLong(tagStorm, stanza, "read_size", readSizeMin);
+else
+    {
+    tagStanzaAddDouble(tagStorm, stanza, "read_size_mean", readSizeMean);
+    tagStanzaAddDouble(tagStorm, stanza, "read_size_min", readSizeMin);
+    tagStanzaAddDouble(tagStorm, stanza, "read_size_max", readSizeMax);
+    tagStanzaAddDouble(tagStorm, stanza, "read_size_std", readSizeStd);
+    }
+}
 
 struct tagStorm *cdwTagStorm(struct sqlConnection *conn)
 /* Load  cdwMetaTags.tags, cdwFile.tags, and select other fields into a tag
@@ -187,15 +201,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     struct tagStanza *stanza = intValTreeFind(fileTree, fq->fileId);
     if (stanza != NULL)
 	{
-	if (fq->readSizeMin == fq->readSizeMax)
-	    tagStanzaAddLongLong(tagStorm, stanza, "read_size", fq->readSizeMin);
-	else
-	    {
-	    tagStanzaAddDouble(tagStorm, stanza, "read_size_mean", fq->readSizeMean);
-	    tagStanzaAddDouble(tagStorm, stanza, "read_size_min", fq->readSizeMin);
-	    tagStanzaAddDouble(tagStorm, stanza, "read_size_max", fq->readSizeMax);
-	    tagStanzaAddDouble(tagStorm, stanza, "read_size_std", fq->readSizeStd);
-	    }
+	addReadSizeInfo(tagStorm, stanza, fq->readSizeMin, fq->readSizeMax, fq->readSizeMean,
+	    fq->readSizeStd);
 	tagStanzaAdd(tagStorm, stanza, "fastq_qual_type", fq->qualType);
 	tagStanzaAddDouble(tagStorm, stanza, "fastq_qual_mean", fq->qualMean);
 	tagStanzaAddDouble(tagStorm, stanza, "at_ratio", fq->atRatio);
@@ -288,6 +295,27 @@ addContamInfo(conn, tagStorm, fileTree, 7227, "fly");
 addContamInfo(conn, tagStorm, fileTree, 559292, "yeast");
 addContamInfo(conn, tagStorm, fileTree, 6239, "worm");
 addContamInfo(conn, tagStorm, fileTree, 562, "ecoli");
+
+/* Add info from cdwBamFile */
+sqlSafef(query, sizeof(query), "select * from cdwBamFile");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct cdwBamFile bam;
+    cdwBamFileStaticLoad(row, &bam);
+    struct tagStanza *stanza = intValTreeFind(fileTree, bam.fileId);
+    if (stanza != NULL)
+	{
+	tagStanzaAddLongLong(tagStorm, stanza, "paired_end_reads", bam.isPaired);
+	tagStanzaAddLongLong(tagStorm, stanza, "sorted_by_target", bam.isSortedByTarget);
+	addReadSizeInfo(tagStorm, stanza, bam.readSizeMin, bam.readSizeMax, bam.readSizeMean,
+	    bam.readSizeStd);
+	tagStanzaAddDouble(tagStorm, stanza, "u4m_unique_ratio", bam.u4mUniqueRatio);
+	tagStanzaAddLongLong(tagStorm, stanza, "map_target_base_count", bam.targetBaseCount);
+	tagStanzaAddLongLong(tagStorm, stanza, "map_target_seq_count", bam.targetSeqCount);
+	}
+    }
+sqlFreeResult(&sr);
 
 /* Clean up and go home */
 rbTreeFree(&submitDirTree);
