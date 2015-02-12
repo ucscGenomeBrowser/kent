@@ -8,6 +8,7 @@
 #include "common.h"
 #include "localmem.h"
 #include "linefile.h"
+#include "hash.h"
 #include "fieldedTable.h"
 
 struct fieldedTable *fieldedTableNew(char *name, char **fields, int fieldCount)
@@ -120,5 +121,43 @@ while (lineFileRowTab(lf, fields))
 /* Clean up and go home. */
 lineFileClose(&lf);
 return table;
+}
+
+int fieldedTableMustFindFieldIx(struct fieldedTable *table, char *field)
+/* Find index of field in table's row.  Abort if field not found. */
+{
+int ix = stringArrayIx(field, table->fields, table->fieldCount);
+if (ix < 0)
+    errAbort("Field %s not found in table %s", field, table->name);
+return ix;
+}
+
+struct hash *fieldedTableIndex(struct fieldedTable *table, char *field)
+/* Return hash of fieldedRows keyed by values of given field */
+{
+int fieldIx = fieldedTableMustFindFieldIx(table, field);
+struct hash *hash = hashNew(0);
+struct fieldedRow *fr;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
+    {
+    hashAdd(hash,fr->row[fieldIx], fr);
+    }
+return hash;
+}
+
+struct hash *fieldedTableUniqueIndex(struct fieldedTable *table, char *field)
+/* Return hash of fieldedRows keyed by values of given field, which must be unique. */
+{
+int fieldIx = fieldedTableMustFindFieldIx(table, field);
+struct hash *hash = hashNew(0);
+struct fieldedRow *fr;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
+    {
+    char *key = fr->row[fieldIx];
+    if (hashLookup(hash, key))
+        errAbort("%s duplicated in %s field of %s", key, field, table->name);
+    hashAdd(hash,fr->row[fieldIx], fr);
+    }
+return hash;
 }
 

@@ -364,7 +364,75 @@ void cdwSubmitDirOutput(struct cdwSubmitDir *el, FILE *f, char sep, char lastSep
 #define cdwSubmitDirCommaOut(el,f) cdwSubmitDirOutput(el,f,',',',');
 /* Print out cdwSubmitDir as a comma separated list including final comma. */
 
-#define CDWFILE_NUM_COLS 15
+#define CDWMETATAGS_NUM_COLS 3
+
+extern char *cdwMetaTagsCommaSepFieldNames;
+
+struct cdwMetaTags
+/* Where we keep expanded metadata tags for each file, though many share. */
+    {
+    struct cdwMetaTags *next;  /* Next in singly linked list. */
+    unsigned id;	/* Autoincrementing table id */
+    char md5[33];	/* md5 sum of tags string */
+    char *tags;	/* CGI encoded name=val pairs from manifest */
+    };
+
+void cdwMetaTagsStaticLoad(char **row, struct cdwMetaTags *ret);
+/* Load a row from cdwMetaTags table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct cdwMetaTags *cdwMetaTagsLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all cdwMetaTags from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with cdwMetaTagsFreeList(). */
+
+void cdwMetaTagsSaveToDb(struct sqlConnection *conn, struct cdwMetaTags *el, char *tableName, int updateSize);
+/* Save cdwMetaTags as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct cdwMetaTags *cdwMetaTagsLoad(char **row);
+/* Load a cdwMetaTags from row fetched with select * from cdwMetaTags
+ * from database.  Dispose of this with cdwMetaTagsFree(). */
+
+struct cdwMetaTags *cdwMetaTagsLoadAll(char *fileName);
+/* Load all cdwMetaTags from whitespace-separated file.
+ * Dispose of this with cdwMetaTagsFreeList(). */
+
+struct cdwMetaTags *cdwMetaTagsLoadAllByChar(char *fileName, char chopper);
+/* Load all cdwMetaTags from chopper separated file.
+ * Dispose of this with cdwMetaTagsFreeList(). */
+
+#define cdwMetaTagsLoadAllByTab(a) cdwMetaTagsLoadAllByChar(a, '\t');
+/* Load all cdwMetaTags from tab separated file.
+ * Dispose of this with cdwMetaTagsFreeList(). */
+
+struct cdwMetaTags *cdwMetaTagsCommaIn(char **pS, struct cdwMetaTags *ret);
+/* Create a cdwMetaTags out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new cdwMetaTags */
+
+void cdwMetaTagsFree(struct cdwMetaTags **pEl);
+/* Free a single dynamically allocated cdwMetaTags such as created
+ * with cdwMetaTagsLoad(). */
+
+void cdwMetaTagsFreeList(struct cdwMetaTags **pList);
+/* Free a list of dynamically allocated cdwMetaTags's */
+
+void cdwMetaTagsOutput(struct cdwMetaTags *el, FILE *f, char sep, char lastSep);
+/* Print out cdwMetaTags.  Separate fields with sep. Follow last field with lastSep. */
+
+#define cdwMetaTagsTabOut(el,f) cdwMetaTagsOutput(el,f,'\t','\n');
+/* Print out cdwMetaTags as a line in a tab-separated file. */
+
+#define cdwMetaTagsCommaOut(el,f) cdwMetaTagsOutput(el,f,',',',');
+/* Print out cdwMetaTags as a comma separated list including final comma. */
+
+#define CDWFILE_NUM_COLS 16
 
 extern char *cdwFileCommaSepFieldNames;
 
@@ -384,6 +452,7 @@ struct cdwFile
     long long size;	/* File size in manifest */
     char md5[33];	/* md5 sum of file contents */
     char *tags;	/* CGI encoded name=val pairs from manifest */
+    unsigned metaTagsId;	/* ID of associated metadata tags */
     char *errorMessage;	/* If non-empty contains last error message from upload. If empty upload is ok */
     char *deprecated;	/* If non-empty why you shouldn't use this file any more. */
     unsigned replacedBy;	/* If non-zero id of file that replaces this one. */
@@ -840,7 +909,7 @@ struct cdwValidFile
     double depth;	/* Estimated genome-equivalents covered by possibly overlapping data */
     signed char singleQaStatus;	/* 0 = untested, 1 =  pass, -1 = fail, 2 = forced pass, -2 = forced fail */
     signed char replicateQaStatus;	/* 0 = untested, 1 = pass, -1 = fail, 2 = forced pass, -2 = forced fail */
-    char *part;	/* Manifest's file part. Values 1,2,3... Used for fastqs split for analysis */
+    char *part;	/* Manifest's file_part. Values 1,2,3... Used for fastqs split for analysis */
     char *pairedEnd;	/* The paired_end tag from the manifest.  Values 1,2 or '' */
     signed char qaVersion;	/* Version of QA pipeline making status decisions */
     double uniqueMapRatio;	/* Fraction of reads that map uniquely to genome for bams and fastqs */

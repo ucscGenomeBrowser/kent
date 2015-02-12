@@ -89,7 +89,7 @@ switch (type)
         fprintf(f, "%s", val.s);
 	break;
     case rqlTypeInt:
-        fprintf(f, "%d", val.i);
+        fprintf(f, "%lld", val.i);
 	break;
     case rqlTypeDouble:
         fprintf(f, "%f", val.x);
@@ -159,7 +159,7 @@ else if (isdigit(c))
 	    {
 	    char buf[32];
 	    tok = tokenizerMustHaveNext(tkz);
-	    safef(buf, sizeof(buf), "%d.%s", p->val.i, tok);
+	    safef(buf, sizeof(buf), "%lld.%s", p->val.i, tok);
 	    p->type = rqlTypeDouble;
 	    p->val.x = sqlDouble(buf);
 	    }

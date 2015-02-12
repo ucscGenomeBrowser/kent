@@ -4,6 +4,7 @@
  * See README in this or parent directory for licensing information. */
 
 #include "common.h"
+#include "hash.h"
 #include "hex.h"
 #include "linefile.h"
 #include "cdwValid.h"
@@ -114,6 +115,20 @@ if (!fileStartsWithOneOfPair(path, "%PDF", "%PDF"))
     errAbort("%s in not a valid .pdf file, it does not start with %%PDF", fileNameOnly(path));
 }
 
+void cdwValidateCram(char *path)
+/* Validate cram file. */
+{
+if (!fileStartsWithOneOfPair(path, "CRAM", "CRAM"))
+    errAbort("%s is not a valid .cram file, it does not start with CRAM", fileNameOnly(path));
+}
+
+void cdwValidateJpg(char *path)
+/* Check jpg file is really jpg */
+{
+if (!fileStartsWithOneOfPair(path, "\xff\xd8\xff\xe0", "\xff\xd8\xff\xe1"))
+    errAbort("%s is not a valid .jpeg file", fileNameOnly(path));
+}
+
 boolean cdwIsGzipped(char *path)
 /* Return TRUE if file at path starts with GZIP signature */
 {
@@ -166,4 +181,89 @@ if (bedType == NULL)
 return bedType;
 }
 
+char *cdwAllowedTags[] = {
+    "title",
+    "lab",
+    "submitter",
+    "pmid",
+    "file",
+    "file_part",
+    "format",
+    "access",
+    "md5",
+    "antibody",
+    "assay",
+    "control",
+    "data_set_id",
+    "enriched_in",
+    "keywords",
+    "ratio_260_280",
+    "replicate",
+    "sequencer",
+    "seq_library",
+    "seq_sample",
+    "assay_seq",
+    "t",
+    "t_unit",
+    "target_epitope",
+    "target_gene",
+    "treatment",
+    "paired_end",
+    "life_stage",
+    "age",
+    "age_units",
+    "cell_line",
+    "cell_pair",
+    "cell_count",
+    "differentiation",
+    "donor",
+    "consent",
+    "species",
+    "strain",
+    "body_part",
+    "organ",
+    "sorting",
+    "ips",
+    "sex",
+    "biosample_date",
+    "disease",
+    "inputs",
+    "ucsc_db",
+    "pipeline",
+    "output",
+    "meta",
+    };
 
+struct hash *cdwAllowedTagsHash()
+/* Get hash of all allowed tags */
+{
+static struct hash *allowedHash = NULL;
+if (allowedHash == NULL)
+    {
+    allowedHash = hashNew(7);
+    int i;
+    for (i=0; i<ArraySize(cdwAllowedTags); ++i)
+	hashAdd(allowedHash, cdwAllowedTags[i], NULL);
+    }
+return allowedHash;
+}
+
+boolean cdwValidateTagName(char *tag)
+/* Make sure that tag is one of the allowed ones. */
+{
+if (startsWith("lab_", tag) || startsWith("user_", tag))
+    {
+    return TRUE;
+    }
+else
+    {
+    return hashLookup(cdwAllowedTagsHash(), tag) != NULL;
+    }
+}
+
+boolean cdwValidateTagVal(char *tag, char *val)
+/* Make sure that tag is one of the allowed ones and that
+ * val is compatible */
+{
+return cdwValidateTagName(tag);
+}

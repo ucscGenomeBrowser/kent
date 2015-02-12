@@ -406,8 +406,8 @@ if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
     struct subTrack *st = hashFindVal(subTracksHash, tg->table);
     if (st)
         {
-        tg->height = ((st->levelCount + 1) * rmskJoinedItemHeight(tg, NULL) );
-        return ((st->levelCount + 1) * rmskJoinedItemHeight(tg, NULL) );
+        tg->height = ((st->levelCount ) * rmskJoinedItemHeight(tg, NULL) );
+        return ((st->levelCount ) * rmskJoinedItemHeight(tg, NULL));
         }
     else
         {

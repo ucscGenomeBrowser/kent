@@ -275,7 +275,7 @@ switch (p->op)
     case rqlOpStringToInt:
 	res = rqlLocalEval(p->children, record, lookup, lm);
 	res.type = rqlTypeInt;
-	res.val.i = atoi(res.val.s);
+	res.val.i = atoll(res.val.s);
 	break;
     case rqlOpDoubleToInt:
 	res = rqlLocalEval(p->children, record, lookup, lm);

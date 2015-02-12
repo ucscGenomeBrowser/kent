@@ -61,6 +61,14 @@ lineFileClose(&lf);
 return sheetList;
 }
 
+char *sampleMetaName(struct quakeSample *sample)
+/* Return name that will be unique for this sample and not too cryptic */
+{
+static char buf[128];
+safef(buf, sizeof(buf), "%s_%u_%s", sample->fluidPlateAcc, sample->unknown1, sample->sample);
+return buf;
+}
+
 void quakeFakeMouseManifest(char *inDir, char *outFile, char *errFile, char *metaFile)
 /* quakeFakeMouseManifest - Create a fake manifest file for pilot mouse data. */
 {
@@ -81,10 +89,12 @@ verbose(1, "Loaded %d from %s\n", slCount(sampleList), samplePath);
 
 /* Open manifest file and write out header */
 FILE *f = mustOpen(outFile, "w");
-fprintf(f, "#file_name\tformat\toutput_type\texperiment\tenriched_in\tucsc_db\tpaired_end\ttechnical_replicate\tfluidics_chip\tfluidics_cell\n");
+fprintf(f, "#file\tformat\toutput\tmeta\tenriched_in\tucsc_db\tpaired_end\tfile_part\tlab_quake_fluidics_chip\tlab_quake_fluidics_cell\n");
 
 int fileCount = 0;
 FILE *err = mustOpen(errFile, "w");
+
+struct hash *fileHash = hashNew(0);
 
 /* Loop through samples */
 struct quakeSample *sample;
@@ -130,11 +140,15 @@ for (sample = sampleList; sample != NULL; sample = sample->next)
 		    gotAllParts = TRUE;
 		    break;
 		    }
-		++fileCount;
 		char *fastqFile = fastqPath + inDirSize;
-		fprintf(f, "%s\tfastq\treads\t%s\texon\tmm10\t%d\t%d\t%s\t%s\n", 
-		    fastqFile, sample->sample, mate, part, 
-		    chip->captureArrayBarcode, sample->cellPos);
+		if (!hashLookup(fileHash, fastqFile))
+		    {
+		    hashAdd(fileHash, fastqFile, NULL);
+		    ++fileCount;
+		    fprintf(f, "%s\tfastq\treads\t%s\texon\tmm10\t%d\t%d\t%s\t%s\n", 
+			fastqFile, sampleMetaName(sample), mate, part, 
+			chip->captureArrayBarcode, sample->cellPos);
+		    }
 		}
 	    if (gotAllParts)
 	        break;
@@ -155,27 +169,28 @@ for (chip = chipList; chip != NULL; chip = chip->next)
     {
     char *indent = "    ";
     fprintf(meta, "%smeta chip%s\n", indent, chip->captureArrayBarcode);
-    fprintf(meta, "%suser %s\n", indent, chip->user);
+    fprintf(meta, "%ssubmitter %s\n", indent, chip->user);
     fprintf(meta, "%slab %s\n", indent, chip->lab);
-    fprintf(meta, "%sdate %s\n", indent, chip->date);
-    fprintf(meta, "%ssampleType %s\n", indent, chip->sampleType);
-    fprintf(meta, "%stissue %s\n", indent, chip->tissue);
+    fprintf(meta, "%sbiosample_date %s\n", indent, chip->date);
+    fprintf(meta, "%slab_quake_sample_type %s\n", indent, chip->sampleType);
+    fprintf(meta, "%sbody_part %s\n", indent, chip->tissue);
     fprintf(meta, "%sspecies %s\n", indent, chip->species);
     fprintf(meta, "%sstrain %s\n", indent, chip->strain);
-    fprintf(meta, "%sage %s\n", indent, chip->age);
-    fprintf(meta, "%stargetCell %s\n", indent, chip->targetCell);
-    fprintf(meta, "%ssortMethod %s\n", indent, chip->sortMethod);
-    fprintf(meta, "%smarkers %s\n", indent, chip->markers);
+    fprintf(meta, "%slab_quake_age %s\n", indent, chip->age);
+    fprintf(meta, "%slab_quake_target_cell %s\n", indent, chip->targetCell);
+    fprintf(meta, "%slab_quake_sort_method %s\n", indent, chip->sortMethod);
+    fprintf(meta, "%slab_quake_markers %s\n", indent, chip->markers);
     fprintf(meta, "\n");
     for (sample = sampleList; sample != NULL; sample = sample->next)
         {
 	if (sameString(sample->captureArrayBarcode, chip->captureArrayBarcode))
 	    {
 	    char *indent = "       ";
-	    fprintf(meta, "%smeta sample%s\n", indent, sample->sample);
-	    fprintf(meta, "%scellPos %s\n", indent, sample->cellPos);
+	    fprintf(meta, "%smeta %s\n", indent, sampleMetaName(sample));
+	    fprintf(meta, "%slab_quake_sample %s\n", indent, sample->sample);
+	    fprintf(meta, "%slab_quake_cell_pos %s\n", indent, sample->cellPos);
 	    fprintf(meta, "%ssequencer %s\n", indent, sample->sequencer);
-	    fprintf(meta, "%sseqFormat %s\n", indent, sample->seqFormat);
+	    fprintf(meta, "%slab_quake_seq_format %s\n", indent, sample->seqFormat);
 	    fprintf(meta, "\n");
 	    }
 	}

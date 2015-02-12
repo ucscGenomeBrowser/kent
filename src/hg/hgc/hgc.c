@@ -8591,6 +8591,7 @@ char *proteinID = NULL;
 char *ensPep;
 char *chp;
 char ensUrl[256];
+char *ensemblIdUrl = trackDbSettingOrDefault(tdb, "ensemblIdUrl", "http://www.ensembl.org");
 
 /* shortItemName is the name without the "." + version */
 shortItemName = cloneString(itemName);
@@ -8609,11 +8610,11 @@ if (genomeStrEnsembl == NULL)
     }
 
 /* print URL that links to Ensembl transcript details */
-if (archive != NULL)
+if (sameString(ensemblIdUrl, "http://www.ensembl.org") && archive != NULL)
     safef(ensUrl, sizeof(ensUrl), "http://%s.archive.ensembl.org/%s",
             archive, genomeStrEnsembl);
 else
-    safef(ensUrl, sizeof(ensUrl), "http://www.ensembl.org/%s", genomeStrEnsembl);
+    safef(ensUrl, sizeof(ensUrl), "%s/%s", ensemblIdUrl, genomeStrEnsembl);
 
 char query[512];
 char *geneName = NULL;

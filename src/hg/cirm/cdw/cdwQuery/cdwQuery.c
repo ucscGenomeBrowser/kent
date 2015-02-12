@@ -7,6 +7,7 @@
 #include "cdw.h"
 #include "cdwLib.h"
 #include "rql.h"
+#include "intValTree.h"
 #include "tagStorm.h"
 
 void usage()
@@ -48,6 +49,9 @@ else
     }
 }
 
+int matchCount = 0;
+boolean doSelect = FALSE;
+
 void traverse(struct tagStorm *tags, struct tagStanza *list, 
     struct rqlStatement *rql, struct lm *lm)
 /* Recursively traverse stanzas on list. */
@@ -55,96 +59,59 @@ void traverse(struct tagStorm *tags, struct tagStanza *list,
 struct tagStanza *stanza;
 for (stanza = list; stanza != NULL; stanza = stanza->next)
     {
-    if (stanza->children)
-	traverse(tags, stanza->children, rql, lm);
-    else    /* Just apply query to leaves */
+    if (rql->limit < 0 || rql->limit > matchCount)
 	{
-	if (statementMatch(rql, stanza, lm))
+	if (stanza->children)
+	    traverse(tags, stanza->children, rql, lm);
+	else    /* Just apply query to leaves */
 	    {
-	    struct slName *field;
-	    for (field = rql->fieldList; field != NULL; field = field->next)
+	    if (statementMatch(rql, stanza, lm))
 		{
-		char *val = tagFindVal(stanza, field->name);
-		if (val != NULL)
-		    printf("%s\t%s\n", field->name, val);
+		++matchCount;
+		if (doSelect)
+		    {
+		    struct slName *field;
+		    for (field = rql->fieldList; field != NULL; field = field->next)
+			{
+			char *val = tagFindVal(stanza, field->name);
+			if (val != NULL)
+			    printf("%s\t%s\n", field->name, val);
+			}
+		    printf("\n");
+		    }
 		}
-	    printf("\n");
 	    }
 	}
     }
 }
 
-void cdwQuery(char *query)
+void cdwQuery(char *rqlQuery)
 /* cdwQuery - Get list of tagged files.. */
 {
-struct lineFile *lf = lineFileOnString("query", TRUE, cloneString(query));
+/* Turn rqlQuery string into a parsed out rqlStatement. */
+struct lineFile *lf = lineFileOnString("query", TRUE, cloneString(rqlQuery));
 struct rqlStatement *rql = rqlStatementParse(lf);
+
+/* Load tags from database */
 struct sqlConnection *conn = cdwConnect();
+struct tagStorm *tags = cdwTagStorm(conn);
+
+/* Get list of all tag types in tree and use it to expand wildcards in the query
+ * field list. */
+struct slName *allFieldList = tagTreeFieldList(tags);
+rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
+slSort(&rql->fieldList, slNameCmp);
+
+/* Traverse tag tree outputting when rql statement matches in select case, just
+ * updateing count in count case. */
+doSelect = sameWord(rql->command, "select");
 struct lm *lm = lmInit(0);
-struct slName *file;
-for (file = rql->tableList; file != NULL; file = file->next)
-    {
-    struct tagStorm *tags = tagStormFromFile(file->name);
-    struct hash *hash = tagStormUniqueIndex(tags, "meta");
-    char query[2048];
-    sqlSafef(query, sizeof(query), 
-	    "select %s from cdwFile,cdwValidFile where cdwFile.id=cdwValidFile.fileId "
-	    "order by cdwFile.id ",
-		"experiment meta,tags,cdwFileName,licensePlate accession,size,md5,format,"
-		"submitFileName submit_file_name,"
-		"outputType output,itemCount item_count,"
-		"mapRatio map_ratio,depth,part file_part,pairedEnd paired_end ");
-    int metaIx = 0, tagsIx = 1, cdwFileNameIx = 2;
-    struct sqlResult *sr = sqlGetResult(conn, query);
-    char *fieldNames[200];
-    int fieldIx;
-    for (fieldIx=0; fieldIx < ArraySize(fieldNames); ++fieldIx)
-        {
-	char *field = sqlFieldName(sr);
-	if (field == NULL)
-	    break;
-	fieldNames[fieldIx] = field;
-	}
-    int fieldCount = fieldIx;
-    char **row;
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	char *joiner = row[metaIx];
-	char *cgiTags = row[tagsIx];
-	char *cdwFileName = row[cdwFileNameIx];
-	struct tagStanza *parent = hashFindVal(hash, joiner);
-	if (parent != NULL)
-	    {
-	    struct tagStanza *stanza = tagStanzaNewAtEnd(tags, parent);
-	    char fileName[PATH_LEN];
-	    safef(fileName, sizeof(fileName), "%s%s", cdwRootDir, cdwFileName);
-	    tagStanzaAdd(tags, stanza, "file", fileName);
-	    int rowIx=0;
-	    for (rowIx = 0; rowIx < fieldCount; ++rowIx)
-	        {
-		char *name = fieldNames[rowIx];
-		if (rowIx != 1)  // avoid tags column
-		    {
-		    char *val = row[rowIx];
-		    if (!isEmpty(val))
-			tagStanzaAdd(tags, stanza, name, val);
-		    }
-		}
-	    struct cgiParsedVars *cgis = cgiParsedVarsNew(cgiTags);
-	    struct cgiVar *var;
-	    for (var = cgis->list; var != NULL; var = var->next)
-		{
-		if (!isEmpty(var->val))
-		    tagStanzaAdd(tags, stanza, var->name, var->val);
-		}
-	    cgiParsedVarsFree(&cgis);
-	    slReverse(&stanza->tagList);
-	    }
-	}
-    sqlFreeResult(&sr);
-    traverse(tags, tags->forest, rql, lm);
-    tagStormFree(&tags);
-    }
+traverse(tags, tags->forest, rql, lm);
+if (sameWord(rql->command, "count"))
+    printf("%d\n", matchCount);
+
+/* Clean up and go home. */
+tagStormFree(&tags);
 }
 
 int main(int argc, char *argv[])

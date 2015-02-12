@@ -28,6 +28,7 @@ static struct optionSpec options[] = {
 
 void rFillInStats(struct tagStanza *list, int expansion, struct hash *tagHash,
     long *retStanzaCount, long *retTagCount, long *retExpandedCount)
+/* Recursively traverse stanza tree filling in values */
 {
 struct tagStanza *stanza;
 for (stanza = list; stanza != NULL; stanza = stanza->next)

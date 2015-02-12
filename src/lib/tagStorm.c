@@ -34,13 +34,13 @@
 #include "errAbort.h"
 
 
-struct tagStorm *tagStormNew(char *fileName)
+struct tagStorm *tagStormNew(char *name)
 /* Create a new, empty, tagStorm. */
 {
 struct lm *lm = lmInit(0);
 struct tagStorm *tagStorm = lmAlloc(lm, sizeof(*tagStorm));
 tagStorm->lm = lm;
-tagStorm->fileName = lmCloneString(lm, fileName);
+tagStorm->fileName = lmCloneString(lm, name);
 return tagStorm;
 }
 
@@ -92,6 +92,24 @@ pair->name = lmCloneString(lm, tag);
 pair->val = lmCloneString(lm, val);
 slAddHead(&stanza->tagList, pair);
 return pair;
+}
+
+void tagStanzaAddLongLong(struct tagStorm *tagStorm, struct tagStanza *stanza, char *var, 
+    long long val)
+/* Add long long integer valued tag to stanza */
+{
+char buf[32];
+safef(buf, sizeof(buf), "%lld", val);
+tagStanzaAdd(tagStorm, stanza, var, buf);
+}
+
+void tagStanzaAddDouble(struct tagStorm *tagStorm, struct tagStanza *stanza, char *var, 
+    double val)
+/* Add double valued tag to stanza */
+{
+char buf[32];
+safef(buf, sizeof(buf), "%g", val);
+tagStanzaAdd(tagStorm, stanza, var, buf);
 }
 
 static void rReverseStanzaList(struct tagStanza **pList)
@@ -221,6 +239,7 @@ if (tagStorm != NULL)
     }
 }
 
+#ifdef OLD
 char *tagStanzaVal(struct tagStanza *stanza, char *tag)
 /* Return value associated with tag in stanza or any of parent stanzas */
 {
@@ -233,8 +252,10 @@ while (stanza != NULL)
     }
 return NULL;
 }
+#endif /* OLD */
 
-static void rAddIndex(struct tagStanza *list, struct hash *hash, char *tag, char *parentVal,
+static void rAddIndex(struct tagStorm *tagStorm, struct tagStanza *list, 
+    struct hash *hash, char *tag, char *parentVal,
     boolean unique)
 /* Add stanza to hash index if it has a value for tag, or if val is passed in. */
 {
@@ -250,12 +271,12 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	    {
 	    struct tagStanza *oldStanza = hashFindVal(hash, val);
 	    if (oldStanza != NULL)
-	        errAbort("tag %s value %s not unique", tag, val);
+	        errAbort("tag %s value %s not unique in %s", tag, val, tagStorm->fileName);
 	    }
 	hashAdd(hash, val, stanza);
 	}
     if (stanza->children != NULL)
-        rAddIndex(stanza->children, hash, tag, val, unique);
+        rAddIndex(tagStorm, stanza->children, hash, tag, val, unique);
     }
 }
 
@@ -263,7 +284,7 @@ struct hash *tagStormIndex(struct tagStorm *tagStorm, char *tag)
 /* Produce a hash of stanzas containing a tag keyed by tag value */
 {
 struct hash *hash = hashNew(0);
-rAddIndex(tagStorm->forest, hash, tag, NULL, FALSE);
+rAddIndex(tagStorm, tagStorm->forest, hash, tag, NULL, FALSE);
 return hash;
 }
 
@@ -272,7 +293,7 @@ struct hash *tagStormUniqueIndex(struct tagStorm *tagStorm, char *tag)
  * stanzas */
 {
 struct hash *hash = hashNew(0);
-rAddIndex(tagStorm->forest, hash, tag, NULL, TRUE);
+rAddIndex(tagStorm, tagStorm->forest, hash, tag, NULL, TRUE);
 return hash;
 }
 
@@ -282,13 +303,12 @@ static void rTsWrite(struct tagStanza *list, FILE *f, int maxDepth, int depth)
 if (depth >= maxDepth)
     return;
 struct tagStanza *stanza;
-int indent = depth * 3;
 for (stanza = list; stanza != NULL; stanza = stanza->next)
     {
     struct slPair *pair;
     for (pair = stanza->tagList; pair != NULL; pair = pair->next)
         {
-	spaceOut(f, indent);
+	repeatCharOut(f, '\t', depth);
 	fprintf(f, "%s %s\n", pair->name, (char*)(pair->val));
 	}
     fputc('\n', f);
@@ -519,3 +539,57 @@ if (val == NULL)
     errAbort("Can't find tag named %s in stanza", name);
 return val;
 }
+
+static void rListFields(struct tagStanza *stanzaList, struct hash *uniq, struct slName **retList)
+/* Recurse through stanzas adding tags we've never seen before to uniq hash and *retList */
+{
+struct tagStanza *stanza;
+for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
+    {
+    struct slPair *pair;
+    for (pair = stanza->tagList; pair != NULL; pair = pair->next)
+        {
+	if (!hashLookup(uniq, pair->name))
+	    {
+	    hashAdd(uniq, pair->name, NULL);
+	    slNameAddHead(retList, pair->name);
+	    }
+	}
+    rListFields(stanza->children, uniq, retList);
+    }
+}
+
+struct slName *tagTreeFieldList(struct tagStorm *tagStorm)
+/* Return list of all fields in storm. */
+{
+struct slName *list = NULL;
+struct hash *uniq = hashNew(0);
+rListFields(tagStorm->forest, uniq, &list);
+hashFree(&uniq);
+slReverse(&list);
+return list;
+}
+
+static void rCountFields(struct tagStanza *stanzaList, struct hash *hash)
+/* Recurse through stanzas adding tags we've never seen before to uniq hash and *retList */
+{
+struct tagStanza *stanza;
+for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
+    {
+    struct slPair *pair;
+    for (pair = stanza->tagList; pair != NULL; pair = pair->next)
+	hashIncInt(hash, pair->name);
+    rCountFields(stanza->children, hash);
+    }
+}
+
+struct hash *tagTreeFieldHash(struct tagStorm *tagStorm)
+/* Return an integer-valued hash of fields, keyed by tag name and with value
+ * number of times field is used.  For most purposes just used to make sure
+ * field exists though. */
+{
+struct hash *hash = hashNew(0);
+rCountFields(tagStorm->forest, hash);
+return hash;
+}
+

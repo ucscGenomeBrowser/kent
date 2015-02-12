@@ -5,16 +5,17 @@
  * See README in this or parent directory for licensing information. */
 
 #include "common.h"
-#include "hex.h"
+#include "hash.h"
 #include "dystring.h"
 #include "jksql.h"
 #include "errAbort.h"
+#include "cheapcgi.h"
+#include "hex.h"
 #include "openssl/sha.h"
 #include "base64.h"
 #include "basicBed.h"
 #include "bigBed.h"
 #include "portable.h"
-#include "cheapcgi.h"
 #include "genomeRangeTree.h"
 #include "md5.h"
 #include "htmshell.h"
@@ -669,7 +670,7 @@ struct cdwFile *cdwFileAllIntactBetween(struct sqlConnection *conn, int startId,
 char query[256];
 sqlSafef(query, sizeof(query), 
     "select * from cdwFile where id>=%d and id<=%d and endUploadTime != 0 "
-    "and updateTime != 0 and errorMessage = '' and deprecated = ''", 
+    "and updateTime != 0 and (errorMessage = '' or errorMessage is NULL) and deprecated = ''", 
     startId, endId);
 return cdwFileLoadByQuery(conn, query);
 }
@@ -1140,7 +1141,7 @@ vf->experiment = cloneString(findTagOrEmpty(tags, "meta"));
 vf->replicate = cloneString(findTagOrEmpty(tags, "replicate"));
 vf->enrichedIn = cloneString(findTagOrEmpty(tags, "enriched_in"));
 vf->ucscDb = cloneString(findTagOrEmpty(tags, "ucsc_db"));
-vf->part = cloneString(findTagOrEmpty(tags, "part"));
+vf->part = cloneString(findTagOrEmpty(tags, "file_part"));
 vf->pairedEnd = cloneString(findTagOrEmpty(tags, "paired_end"));
 #if (CDWVALIDFILE_NUM_COLS != 23)
    #error "Please update this routine with new column"

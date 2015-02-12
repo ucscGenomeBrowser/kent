@@ -46,6 +46,9 @@ else
     }
 }
 
+int matchCount = 0;
+boolean doSelect = FALSE;
+
 void traverse(struct tagStorm *tags, struct tagStanza *list, 
     struct rqlStatement *rql, struct lm *lm)
 /* Recursively traverse stanzas on list. */
@@ -59,14 +62,18 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	{
 	if (statementMatch(rql, stanza, lm))
 	    {
-	    struct slName *field;
-	    for (field = rql->fieldList; field != NULL; field = field->next)
+	    ++matchCount;
+	    if (doSelect)
 		{
-		char *val = tagFindVal(stanza, field->name);
-		if (val != NULL)
-		    printf("%s\t%s\n", field->name, val);
+		struct slName *field;
+		for (field = rql->fieldList; field != NULL; field = field->next)
+		    {
+		    char *val = tagFindVal(stanza, field->name);
+		    if (val != NULL)
+			printf("%s\t%s\n", field->name, val);
+		    }
+		printf("\n");
 		}
-	    printf("\n");
 	    }
 	}
     }
@@ -75,16 +82,28 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 void tagStormQuery(char *query)
 /* tagStormQuery - Find stanzas in tag storm based on SQL-like query.. */
 {
+/* Get parsed out query */
 struct lineFile *lf = lineFileOnString("query", TRUE, cloneString(query));
 struct rqlStatement *rql = rqlStatementParse(lf);
+int stormCount = slCount(rql->tableList);
+if (stormCount != 1)
+    errAbort("Can only handle one tag storm file in query, got %d", stormCount);
+char *tagsFileName = rql->tableList->name;
+
+/* Read in tags */
+struct tagStorm *tags = tagStormFromFile(tagsFileName);
+
+/* Expand any field names with wildcards. */
+struct slName *allFieldList = tagTreeFieldList(tags);
+rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
+
+/* Traverse tree applying query */
 struct lm *lm = lmInit(0);
-struct slName *file;
-for (file = rql->tableList; file != NULL; file = file->next)
-    {
-    struct tagStorm *tags = tagStormFromFile(file->name);
-    traverse(tags, tags->forest, rql, lm);
-    tagStormFree(&tags);
-    }
+doSelect = sameWord(rql->command, "select");
+traverse(tags, tags->forest, rql, lm);
+tagStormFree(&tags);
+if (sameWord(rql->command, "count"))
+    printf("%d\n", matchCount);
 }
 
 int main(int argc, char *argv[])

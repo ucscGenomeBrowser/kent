@@ -234,6 +234,10 @@ char *cgiEncodeFull(char *inString);
  * Alphanumerics/./_ kept as is and all other characters translated to
  * %hexVal. */
 
+void cgiEncodeHash(struct hash *hash, struct dyString *dy);
+/* Put a cgi-encoding of a string valued hash into dy.  Tags are always
+ * alphabetical to make it easier to compare if two hashes are same. */
+
 void cgiMakeButtonWithMsg(char *name, char *value, char *msg);
 /* Make 'submit' type button. Display msg on mouseover, if present*/
 
@@ -545,6 +549,15 @@ char *javaScriptLiteralEncode(char *inString);
  * Intended that the encoded string will be
  * put between quotes at a higher level and
  * then interpreted by Javascript. */
+
+boolean cgiParseNext(char **pInput, char **retVar, char **retVal);
+/* Parse out next var/val in a var=val&var=val... cgi formatted string 
+ * This will insert zeroes and other things into string. 
+ * Usage:
+ *     char *pt = cgiStringStart;
+ *     char *var, *val
+ *     while (cgiParseNext(&pt, &var, &val))
+ *          printf("%s\t%s\n", var, val); */
 
 struct cgiParsedVars
 /* A parsed out cgi variable string */

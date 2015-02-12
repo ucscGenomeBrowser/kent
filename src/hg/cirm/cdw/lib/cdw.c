@@ -872,7 +872,160 @@ fputc(lastSep,f);
 }
 
 
-char *cdwFileCommaSepFieldNames = "id,submitId,submitDirId,userId,submitFileName,cdwFileName,startUploadTime,endUploadTime,updateTime,size,md5,tags,errorMessage,deprecated,replacedBy";
+char *cdwMetaTagsCommaSepFieldNames = "id,md5,tags";
+
+void cdwMetaTagsStaticLoad(char **row, struct cdwMetaTags *ret)
+/* Load a row from cdwMetaTags table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+safecpy(ret->md5, sizeof(ret->md5), row[1]);
+ret->tags = row[2];
+}
+
+struct cdwMetaTags *cdwMetaTagsLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all cdwMetaTags from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with cdwMetaTagsFreeList(). */
+{
+struct cdwMetaTags *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = cdwMetaTagsLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void cdwMetaTagsSaveToDb(struct sqlConnection *conn, struct cdwMetaTags *el, char *tableName, int updateSize)
+/* Save cdwMetaTags as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s')", 
+	tableName,  el->id,  el->md5,  el->tags);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+struct cdwMetaTags *cdwMetaTagsLoad(char **row)
+/* Load a cdwMetaTags from row fetched with select * from cdwMetaTags
+ * from database.  Dispose of this with cdwMetaTagsFree(). */
+{
+struct cdwMetaTags *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+safecpy(ret->md5, sizeof(ret->md5), row[1]);
+ret->tags = cloneString(row[2]);
+return ret;
+}
+
+struct cdwMetaTags *cdwMetaTagsLoadAll(char *fileName) 
+/* Load all cdwMetaTags from a whitespace-separated file.
+ * Dispose of this with cdwMetaTagsFreeList(). */
+{
+struct cdwMetaTags *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileRow(lf, row))
+    {
+    el = cdwMetaTagsLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct cdwMetaTags *cdwMetaTagsLoadAllByChar(char *fileName, char chopper) 
+/* Load all cdwMetaTags from a chopper separated file.
+ * Dispose of this with cdwMetaTagsFreeList(). */
+{
+struct cdwMetaTags *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = cdwMetaTagsLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct cdwMetaTags *cdwMetaTagsCommaIn(char **pS, struct cdwMetaTags *ret)
+/* Create a cdwMetaTags out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new cdwMetaTags */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+sqlFixedStringComma(&s, ret->md5, sizeof(ret->md5));
+ret->tags = sqlStringComma(&s);
+*pS = s;
+return ret;
+}
+
+void cdwMetaTagsFree(struct cdwMetaTags **pEl)
+/* Free a single dynamically allocated cdwMetaTags such as created
+ * with cdwMetaTagsLoad(). */
+{
+struct cdwMetaTags *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->tags);
+freez(pEl);
+}
+
+void cdwMetaTagsFreeList(struct cdwMetaTags **pList)
+/* Free a list of dynamically allocated cdwMetaTags's */
+{
+struct cdwMetaTags *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    cdwMetaTagsFree(&el);
+    }
+*pList = NULL;
+}
+
+void cdwMetaTagsOutput(struct cdwMetaTags *el, FILE *f, char sep, char lastSep) 
+/* Print out cdwMetaTags.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->md5);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->tags);
+if (sep == ',') fputc('"',f);
+fputc(lastSep,f);
+}
+
+
+char *cdwFileCommaSepFieldNames = "id,submitId,submitDirId,userId,submitFileName,cdwFileName,startUploadTime,endUploadTime,updateTime,size,md5,tags,metaTagsId,errorMessage,deprecated,replacedBy";
 
 void cdwFileStaticLoad(char **row, struct cdwFile *ret)
 /* Load a row from cdwFile table into ret.  The contents of ret will
@@ -891,9 +1044,10 @@ ret->updateTime = sqlLongLong(row[8]);
 ret->size = sqlLongLong(row[9]);
 safecpy(ret->md5, sizeof(ret->md5), row[10]);
 ret->tags = row[11];
-ret->errorMessage = row[12];
-ret->deprecated = row[13];
-ret->replacedBy = sqlUnsigned(row[14]);
+ret->metaTagsId = sqlUnsigned(row[12]);
+ret->errorMessage = row[13];
+ret->deprecated = row[14];
+ret->replacedBy = sqlUnsigned(row[15]);
 }
 
 struct cdwFile *cdwFileLoadByQuery(struct sqlConnection *conn, char *query)
@@ -926,8 +1080,8 @@ void cdwFileSaveToDb(struct sqlConnection *conn, struct cdwFile *el, char *table
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,%u,'%s','%s',%lld,%lld,%lld,%lld,'%s','%s','%s','%s',%u)", 
-	tableName,  el->id,  el->submitId,  el->submitDirId,  el->userId,  el->submitFileName,  el->cdwFileName,  el->startUploadTime,  el->endUploadTime,  el->updateTime,  el->size,  el->md5,  el->tags,  el->errorMessage,  el->deprecated,  el->replacedBy);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,%u,'%s','%s',%lld,%lld,%lld,%lld,'%s','%s',%u,'%s','%s',%u)", 
+	tableName,  el->id,  el->submitId,  el->submitDirId,  el->userId,  el->submitFileName,  el->cdwFileName,  el->startUploadTime,  el->endUploadTime,  el->updateTime,  el->size,  el->md5,  el->tags,  el->metaTagsId,  el->errorMessage,  el->deprecated,  el->replacedBy);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -951,9 +1105,10 @@ ret->updateTime = sqlLongLong(row[8]);
 ret->size = sqlLongLong(row[9]);
 safecpy(ret->md5, sizeof(ret->md5), row[10]);
 ret->tags = cloneString(row[11]);
-ret->errorMessage = cloneString(row[12]);
-ret->deprecated = cloneString(row[13]);
-ret->replacedBy = sqlUnsigned(row[14]);
+ret->metaTagsId = sqlUnsigned(row[12]);
+ret->errorMessage = cloneString(row[13]);
+ret->deprecated = cloneString(row[14]);
+ret->replacedBy = sqlUnsigned(row[15]);
 return ret;
 }
 
@@ -963,7 +1118,7 @@ struct cdwFile *cdwFileLoadAll(char *fileName)
 {
 struct cdwFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[15];
+char *row[16];
 
 while (lineFileRow(lf, row))
     {
@@ -981,7 +1136,7 @@ struct cdwFile *cdwFileLoadAllByChar(char *fileName, char chopper)
 {
 struct cdwFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[15];
+char *row[16];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -1014,6 +1169,7 @@ ret->updateTime = sqlLongLongComma(&s);
 ret->size = sqlLongLongComma(&s);
 sqlFixedStringComma(&s, ret->md5, sizeof(ret->md5));
 ret->tags = sqlStringComma(&s);
+ret->metaTagsId = sqlUnsignedComma(&s);
 ret->errorMessage = sqlStringComma(&s);
 ret->deprecated = sqlStringComma(&s);
 ret->replacedBy = sqlUnsignedComma(&s);
@@ -1083,6 +1239,8 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->tags);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->metaTagsId);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->errorMessage);
