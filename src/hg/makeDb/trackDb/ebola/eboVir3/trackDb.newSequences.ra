@@ -6,7 +6,6 @@ subGroup1 view Views align=Multiz_Alignments
 visibility hide
 priority 1
 type bed 4
-group x
 group compGeno
 
     track newSeqsViewalign
