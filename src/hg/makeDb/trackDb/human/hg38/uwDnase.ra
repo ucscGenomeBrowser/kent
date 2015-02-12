@@ -4,7 +4,7 @@ shortLabel DNase Clusters
 pennantIcon encodeThumbnail.jpg ../ENCODE "ENCODE project at UCSC"
 longLabel DNase I Hypersensitivity Peak Clusters from ENCODE
 inputTableFieldDisplay cellType treatment
-inputFieldMetaTables treatment=cellType=hgFixed.wgEncodeCell hgFixed.wgEncodeTreatment 
+inputFieldMetaTables cellType=hgFixed.wgEncodeCell treatment=hgFixed.wgEncodeTreatment 
 inputTrackTable uwEnc2DnaseInputs
 sourceTable uwEnc2DnaseSources
 type bed 5 .
