@@ -27,6 +27,7 @@ UTILS_APPLIST = \
 	crTreeIndexBed \
 	crTreeSearchBed \
 	gapToLift \
+	genePredFilter \
 	gff3ToGenePred \
 	gff3ToPsl \
 	gtfToGenePred \
@@ -60,6 +61,7 @@ DIRS = ${buildRefresh} \
 	wigBedToStep
 
 TEST_DIRS = \
+	genePredFilter \
 	gff3ToGenePred \
 	gff3ToPsl \
 	gtfToGenePred \

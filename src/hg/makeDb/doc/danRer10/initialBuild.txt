@@ -413,7 +413,7 @@ danRer10.orfeome = yes
     # danRer7
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (DONE 2014-12-29 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE 2015-02-04 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=danRer10 -keys all.joiner
@@ -421,10 +421,9 @@ danRer10.orfeome = yes
     joinerCheck -database=danRer10 -tableCoverage all.joiner
     joinerCheck -database=danRer10 -times all.joiner
 
-XXX - ready after liftOvers - Thu Jan 29 12:54:14 PST 2015
     cd /hive/data/genomes/danRer10
     time makeDownloads.pl danRer10 > downloads.log 2>&1
-    # real    22m17.544s
+    # real    10m5.488s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/danRer10/pushQ
@@ -437,7 +436,7 @@ XXX - ready after liftOvers - Thu Jan 29 12:54:14 PST 2015
 # WARNING: hgwdev does not have /gbdb/danRer10/wib/quality.wib
 # WARNING: hgwdev does not have /gbdb/danRer10/bbi/qualityBw/quality.bw
 # WARNING: danRer10 does not have seq
-# WARNING: danRer10 does not have estOrientInfo
+# WARNING: danRer10 does not have extFile
 
     #   copy it to hgwbeta
     scp -p danRer10.pushQ.sql qateam@hgwbeta:/tmp

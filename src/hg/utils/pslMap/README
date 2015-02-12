@@ -46,14 +46,16 @@ Mapping cDNAs between organism using syntenic chains of genomic alignments:
    # map a PSL file of mouse cDNA to genomic (mm8) alignments to hg18 in
    # mmCDna.mm8.psl
 
-   chainDir=/cluster/data/mm8/bed/blastz.hg18/axtChain
+   # chains are mm8 query to hg18 target
+   chainDir=/cluster/data/hg18/bed/blastz.mm8/axtChain
 
    # create a subset of syntenic chains for 
-   netFilter -syn $chainDir/mm8.hg18.net.gz >mm8.hg18.syn.net
-   netChainSubset -wholeChains mm8.hg18.syn.net $chainDir/mm8.hg18.all.chain.gz mm8.hg18.syn.chain
+   netFilter -syn $chainDir/hg18.mm8.net.gz >hg18.mm8.syn.net
+   netChainSubset -wholeChains hg18.mm8.syn.net $chainDir/hg18.mm8.all.chain.gz hg18.mm8.syn.chain
 
-   # since target of the chains is mm8, we must use -swapMap option
-   pslMap -chainMapFile -swapMap mmCDna.mm8.psl hg18.syn.chain mmCDna.hg18.psl
+   pslMap -chainMapFile mmCDna.mm8.psl hg18.mm8.syn.chain mmCDna.hg18.psl
+
+   # depending on desired results, pslCDnaFilter can be used to filter results
 
 Citation:
   Jingchun Zhu, J. Zachary Sanborn, Mark Diekhans, Craig B. Lowe, Tom H. Pringle, and David Haussler.

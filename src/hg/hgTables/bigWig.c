@@ -59,6 +59,8 @@ char *bigWigFileName(char *table, struct sqlConnection *conn)
 /* Return file name associated with bigWig.  This handles differences whether it's
  * a custom or built-in track.  Do a freeMem on returned string when done. */
 {
+if (isCustomTrack(table) || isHubTrack(table))
+   return bigFileNameFromCtOrHub(table, conn);
 struct trackDb *tdb = hashMustFindVal(fullTableToTdbHash, table);
 return tdbBigFileName(conn, tdb);
 }

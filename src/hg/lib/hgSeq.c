@@ -230,7 +230,7 @@ struct hTableInfo *hti;
 char chrom[32];
 char rootName[256];
 
-if (startsWith("hub_", table))
+if (isCustomTrack(table) || startsWith("hub_", table))
     {
     // we asssume that this is a bigGenePred table if we got here with it
     hgSeqFeatureRegionOptions(cart, TRUE, TRUE);

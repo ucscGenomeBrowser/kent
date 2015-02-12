@@ -310,7 +310,6 @@ snpSeqFile /gbdb/hg38/snp/snp141.fa
 
 track snp141Common override
 snpSeqFile /gbdb/hg38/snp/snp141.fa
-priority 1
 
 track snp141 override
 snpSeqFile /gbdb/hg38/snp/snp141.fa

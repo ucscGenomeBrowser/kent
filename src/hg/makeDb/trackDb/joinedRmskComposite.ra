@@ -4,11 +4,12 @@ shortLabel RepeatMasker Viz.
 longLabel Detailed Visualization of RepeatMasker Annotations
 group rep
 allButtonPair on
-visibility pack
+visibility hide
 spectrum on
 type bed 3 +
 maxWindowToDraw 10000000
 html joinedRmsk
+canPack off
 
 	track rmskJoinedBaseline
 	parent joinedRmsk on

@@ -254,12 +254,17 @@ boolean genePredCdsExon(struct genePred *gp, int iExon, int *startPtr, int *endP
 /* Get the CDS range in an exon.  If there is no CDS, return FALSE and then
  * set start == end */
 
-int genePredCheck(char *desc, FILE* out, int chromSize, 
+int genePredCheck(char *desc, FILE* errFh, int chromSize, 
                   struct genePred* gp);
 /* Validate a genePred for consistency.  desc is printed the error messages
- * to file out (open /dev/null to discard).  chromSize should contain
+ * to file errFh (open /dev/null to discard).  chromSize should contain
  * size of chromosome, or 0 if chrom is not valid, or -1 to not check
  * chromosome bounds. Returns count of errors. */
+
+int genePredCheckDb(char *desc, FILE* errFh, char* db, struct genePred* gp);
+/* Validate a genePred for consistency.  desc is printed the error messages
+ * to file errFh (open /dev/null to discard).  Lookup chromosome size in database if
+ * db is not NULL. Returns count of errors. */
 
 boolean genePredNmdTarget(struct genePred *gp);
 /* Return TRUE if cds end is more than 50bp upstream of
