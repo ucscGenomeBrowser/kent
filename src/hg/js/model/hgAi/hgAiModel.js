@@ -213,10 +213,14 @@ var HgAiModel = ImModel.extend({
     doGetOutput: function(mutState) {
         // User clicked 'Get output' button; make a form and submit it.
         var querySpec = mutState.get('hgai_querySpec').toJS();
+        var doFile = mutState.getIn(['hgai_querySpec', 'outFileOptions', 'doFile']);
         if (querySpec.dataSources.length < 1) {
             alert('Please add at least one data source.');
         } else {
-            mutState.set('submitted', true);
+            if (! doFile) {
+                // Show loading image and message that the query might take a while.
+                mutState.set('showLoadingImage', true);
+            }
             querySpec = encodeURIComponent(JSON.stringify(querySpec));
             $('input[name="hgai_querySpec"]').val(querySpec);
             $('#queryForm')[0].submit();
