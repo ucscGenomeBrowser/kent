@@ -163,7 +163,7 @@ if (!trackHubDatabase(db) && hTableOrSplitExists(db, tdb->table))
 return FALSE;
 }
 
-char *controlledVocabLink(char *file,char *term,char *value,char *title, char *label,char *suffix)
+char *wgEncodeVocabLink(char *file,char *term,char *value,char *title, char *label,char *suffix)
 // returns allocated string of HTML link to controlled vocabulary term
 {
 #define VOCAB_LINK_WITH_FILE "<A HREF='hgEncodeVocab?ra=%s&%s=\"%s\"' title='%s details' " \
@@ -243,12 +243,12 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
                 if (!cvTermIsHidden(mdbVar->var))
                     {
                     char *label = (char *)cvLabel(NULL,mdbVar->var);
-                    char *linkOfType = controlledVocabLink(NULL,CV_TYPE,mdbVar->var,label,
+                    char *linkOfType = wgEncodeVocabLink(NULL,CV_TYPE,mdbVar->var,label,
                                                            label,NULL);
                     if (cvTermIsCvDefined(mdbVar->var))
                         {
                         label = (char *)cvLabel(mdbVar->var,mdbVar->val);
-                        char *linkOfTerm = controlledVocabLink(NULL,CV_TERM,mdbVar->val,label,
+                        char *linkOfTerm = wgEncodeVocabLink(NULL,CV_TERM,mdbVar->val,label,
                                                                label,NULL);
                         dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap>"
                                                "<i>%s:</i></td><td nowrap>%s</td></tr>",
@@ -6880,7 +6880,7 @@ for (ix=1;ix<count && !found;ix++)
     {
     if (sameString(vocabType,words[ix])) // controlledVocabulary setting matches tag
         {                               // so all labels are linked
-        char *link = controlledVocabLink(words[0],"term",words[ix],rootLabel,rootLabel,suffix);
+        char *link = wgEncodeVocabLink(words[0],"term",words[ix],rootLabel,rootLabel,suffix);
         return link;
         }
     else if (countChars(words[ix],'=') == 1 && childTdb != NULL)
@@ -6893,7 +6893,7 @@ for (ix=1;ix<count && !found;ix++)
             const char * cvTerm = metadataFindValue(childTdb,cvSetting);
             if (cvTerm != NULL)
                 {
-                char *link = controlledVocabLink(words[0],(sameWord(cvSetting,"antibody") ?
+                char *link = wgEncodeVocabLink(words[0],(sameWord(cvSetting,"antibody") ?
                                                                                 "target" : "term"),
                                                  (char *)cvTerm,(char *)cvTerm,rootLabel,suffix);
                 return link;
