@@ -6858,24 +6858,25 @@ return TRUE;
 }
 
 char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct trackDb *childTdb,
-	char *vocabType, char *label)
+	                                char *vocabType, char *label)
 // If the parentTdb has a controlledVocabulary setting and the vocabType is found,
 // then label will be wrapped with the link to display it.  Return string is cloned.
 {
 char *vocab = trackDbSetting(parentTdb, "controlledVocabulary");
-(void)metadataForTable(db,childTdb,NULL);
 if (vocab == NULL)
     return cloneString(label); // No wrapping!
 
-char *words[15];
-int count,ix;
-boolean found=FALSE;
-if ((count = chopByWhite(cloneString(vocab), words,15)) <= 1)
+#define BUFSIZ 16
+char *words[BUFSIZ];
+int count;
+if ((count = chopByWhite(cloneString(vocab), words, BUFSIZ)) <= 1)
     return cloneString(label);
 
-char *suffix=NULL;
-char *rootLabel = labelRoot(label,&suffix);
+char *suffix = NULL;
+char *rootLabel = labelRoot(label, &suffix);
 
+boolean found = FALSE;
+int ix;
 for (ix=1;ix<count && !found;ix++)
     {
     if (sameString(vocabType,words[ix])) // controlledVocabulary setting matches tag
@@ -6893,9 +6894,9 @@ for (ix=1;ix<count && !found;ix++)
             const char * cvTerm = metadataFindValue(childTdb,cvSetting);
             if (cvTerm != NULL)
                 {
-                char *link = wgEncodeVocabLink(words[0],(sameWord(cvSetting,"antibody") ?
-                                                                                "target" : "term"),
-                                                 (char *)cvTerm,(char *)cvTerm,rootLabel,suffix);
+                char *link = wgEncodeVocabLink(words[0],
+                                    (sameWord(cvSetting,"antibody") ?  "target" : "term"),
+                                    (char *)cvTerm,(char *)cvTerm,rootLabel,suffix);
                 return link;
                 }
             }
