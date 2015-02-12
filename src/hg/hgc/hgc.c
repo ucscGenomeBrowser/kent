@@ -8041,13 +8041,11 @@ hFreeConn(&conn);
 return gpList;
 }
 
-struct genePred *getGenePredForPositionBigBed(char *table, char *geneName)
-/* find the genePred to the current gene using a bigGenePred */
+struct genePred *getGenePredForPositionBigGene(struct trackDb *tdb,  char *geneName)
+/* Find the genePred to the current gene using a bigGenePred. */
 {
-struct trackDb *tdb = hubConnectAddHubForTrackAndFindTdb( database, table, NULL, trackHash);
-struct bbiFile *bbi;
 char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
-bbi = bigBedFileOpen(fileName);
+struct bbiFile *bbi = bigBedFileOpen(fileName);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, seqName, winStart, winEnd, 0, lm);
 struct genePred *gpList = NULL;
@@ -8062,12 +8060,32 @@ lmCleanup(&lm);
 return gpList;
 }
 
+static struct trackDb *getCustomTrackTdb(char *table)
+/* Find the trackDb structure for a custom track table. */
+{
+struct customTrack *ctList = getCtList();
+struct customTrack *ct = NULL;
+for (ct = ctList; ct != NULL; ct = ct->next)
+    if (sameString(table, ct->tdb->track))
+	return  ct->tdb;
+return NULL;
+}
+
 static struct genePred *getGenePredForPosition(char *table, char *geneName)
+/* Build a genePred list for the given table and gene name. */
 {
 struct genePred *gpList = NULL;
 
-if (isHubTrack(table))
-    gpList =  getGenePredForPositionBigBed(table, geneName);
+if (isCustomTrack(table))
+    {
+    struct trackDb *tdb = getCustomTrackTdb(table);
+    gpList = getGenePredForPositionBigGene(tdb,  geneName);
+    }
+else if (isHubTrack(table))
+    {
+    struct trackDb *tdb = hubConnectAddHubForTrackAndFindTdb( database, table, NULL, trackHash);
+    gpList =  getGenePredForPositionBigGene(tdb, geneName);
+    }
 else
     gpList =  getGenePredForPositionSql(table, geneName);
 
@@ -8376,10 +8394,9 @@ for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
 }
 
 
-static struct bed *getBedsFromBigBedRange(char *table, char *geneName)
+static struct bed *getBedsFromBigBedRange(struct trackDb *tdb, char *geneName)
 /* get a list of beds from a bigBed in the current range */
 {
-struct trackDb *tdb = hubConnectAddHubForTrackAndFindTdb( database, table, NULL, trackHash);
 struct bbiFile *bbi;
 char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
 bbi = bigBedFileOpen(fileName);
@@ -8400,6 +8417,22 @@ lmCleanup(&lm);
 return bedList;
 }
 
+static int getSeqForBigGene(struct trackDb *tdb, char *geneName)
+/* Output sequence for a gene in a bigGenePred file. */
+{
+struct hTableInfo *hti;
+AllocVar(hti);
+hti->hasCDS = TRUE;
+hti->hasBlocks = TRUE;
+hti->rootName = tdb->table;
+
+struct bed *bedList = getBedsFromBigBedRange(tdb, geneName);
+int itemCount = hgSeqBed(database, hti, bedList);
+freez(&hti);
+bedFreeList(&bedList);
+return itemCount;
+}
+
 void htcDnaNearGene( char *geneName)
 /* Fetch DNA near a gene. */
 {
@@ -8407,18 +8440,17 @@ char *table    = cartString(cart, "o");
 int itemCount;
 char *quotedItem = makeQuotedString(geneName, '\'');
 puts("<PRE>");
-if (isHubTrack( table))
-    {
-    struct hTableInfo *hti;
-    AllocVar(hti);
-    hti->hasCDS = TRUE;
-    hti->hasBlocks = TRUE;
-    hti->rootName = table;
+struct trackDb *tdb = NULL;
 
-    struct bed *bedList = getBedsFromBigBedRange(table, geneName);
-    itemCount = hgSeqBed(database, hti, bedList);
-    freez(&hti);
-    bedFreeList(&bedList);
+if (isHubTrack(table))
+    {
+    tdb = hubConnectAddHubForTrackAndFindTdb( database, table, NULL, trackHash);
+    itemCount = getSeqForBigGene(tdb, geneName);
+    }
+else if (isCustomTrack(table))
+    {
+    tdb = getCustomTrackTdb(table);
+    itemCount = getSeqForBigGene(tdb, geneName);
     }
 else
     {
@@ -20477,7 +20509,7 @@ else if (sameWord(type, "encodePeak"))
     doEncodePeak(ct->tdb, ct, fileName);
 else if (sameWord(type, "bigWig"))
     bigWigCustomClick(ct->tdb);
-else if (sameWord(type, "bigBed"))
+else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred"))
     bigBedCustomClick(ct->tdb);
 #ifdef USE_BAM
 else if (sameWord(type, "bam"))

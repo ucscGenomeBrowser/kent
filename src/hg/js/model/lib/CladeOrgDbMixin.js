@@ -8,13 +8,13 @@ var CladeOrgDbMixin = function(myPath) {
     var myCartVars = ['clade', 'org', 'db', 'cladeOptions', 'orgOptions', 'dbOptions'];
 
     // Server event handler
-    function codMergeServerResponse(cartVar, newValue) {
+    function codMergeServerResponse(mutState, cartVar, newValue) {
         // cart vars in myCartVars all live in state[myPath] for Immutable efficiency but can arrive
         // independently from server; when we get one, update just that piece of state[myPath].
-        this.mutState.setIn(myPath.concat(cartVar), Immutable.fromJS(newValue));
+        mutState.setIn(myPath.concat(cartVar), Immutable.fromJS(newValue));
         // Turn off the loading spinner when we get result(s) from cart:
         if (cartVar === 'position' || cartVar === 'positionMatches') {
-            this.mutState.setIn(['positionInfo', 'loading'], false);
+            mutState.setIn(['positionInfo', 'loading'], false);
         }
     }
 
@@ -26,11 +26,11 @@ var CladeOrgDbMixin = function(myPath) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-    function changeCladeOrgDb(path, newValue) {
+    function changeCladeOrgDb(mutState, path, newValue) {
         // path is myPath + either 'clade', 'org' or 'db'.
         // User changed clade, org or db; tell server, which will send a lot of db-specific info
         // and menu changes if clade or org was changed (handleServerResponse gets those).
-        this.mutState.setIn(path, newValue);
+        mutState.setIn(path, newValue);
         var which = path.pop();
         var command = {};
         var commandName = 'change' + capitalizeFirstLetter(which);
@@ -46,3 +46,6 @@ var CladeOrgDbMixin = function(myPath) {
     // Mixin object with initialize
     return { initialize: initialize };
 };
+
+// Without this, jshint complains that CladeOrgDbMixin is not used.  Module system would help.
+CladeOrgDbMixin = CladeOrgDbMixin;

@@ -14,6 +14,7 @@
 #include "genbank.h"
 #include "rangeTree.h"
 #include "hdb.h"
+#include "chromInfo.h"
 
 
 /* SQL to create a genePred table */
@@ -1466,77 +1467,66 @@ if (endPtr != NULL)
 return (start < end);
 }
 
-/* state for genePredCheck */
-static int gpErrorCnt = 0;  /* error count for gpError */
-static FILE *gpErrFh = NULL;  /* error output for gpError */
-
-static void gpError(char *format, ...)
+static void gpError(FILE* errFh, int* errorCnt, char *format, ...)
 /* print and count an error */
 {
 va_list args;
-fprintf(gpErrFh, "Error: ");
+fprintf(errFh, "Error: ");
 va_start(args, format);
-vfprintf(gpErrFh, format, args);
+vfprintf(errFh, format, args);
 va_end(args);
-fputc('\n', gpErrFh);
-gpErrorCnt++;
+fputc('\n', errFh);
+(*errorCnt)++;
 }
 
-static void checkExon(char *desc, struct genePred* gp, int iExon)
+static void checkExon(FILE* errFh, int* errorCnt, char *desc, struct genePred* gp, int iExon)
 /* check one exon of a genePred */
 {
 unsigned exonStart = gp->exonStarts[iExon];
 unsigned exonEnd = gp->exonEnds[iExon];
 if (exonStart >= exonEnd)
-    gpError("%s: %s exon %u start %u >= end %u", desc, gp->name,
-            iExon, exonStart, exonEnd);
+    gpError(errFh, errorCnt, "%s: %s exon %u start %u >= end %u", desc, gp->name, iExon, exonStart, exonEnd);
 if (exonStart < gp->txStart)
-    gpError("%s: %s exon %u start %u < txStart %u", desc, gp->name,
-            iExon, exonStart, gp->txStart);
+    gpError(errFh, errorCnt, "%s: %s exon %u start %u < txStart %u", desc, gp->name, iExon, exonStart, gp->txStart);
 if (exonEnd > gp->txEnd)
-    gpError("%s: %s exon %u end %u > txEnd %u", desc, gp->name,
-            iExon, exonEnd, gp->txEnd);
+    gpError(errFh, errorCnt, "%s: %s exon %u end %u > txEnd %u", desc, gp->name, iExon, exonEnd, gp->txEnd);
 if (iExon > 0)
     {
     /* other than first exon */
     unsigned prevExonEnd = gp->exonEnds[iExon-1];
     if (exonStart < prevExonEnd)
-        gpError("%s: %s exon %u overlaps previous exon", desc,
-                gp->name, iExon);
+        gpError(errFh, errorCnt, "%s: %s exon %u overlaps previous exon", desc, gp->name, iExon);
     }
 
 if (gp->optFields & genePredExonFramesFld)
     {
     int frame = gp->exonFrames[iExon];
     if ((frame < -1) || (frame > 2))
-        gpError("%s: %s invalid exonFrame: %d", desc, gp->name, frame);
+        gpError(errFh, errorCnt, "%s: %s invalid exonFrame: %d", desc, gp->name, frame);
     if ((exonEnd > gp->cdsStart) && (exonStart < gp->cdsEnd))
         {
         if (frame == -1)
-            gpError("%s: %s no exonFrame on CDS exon %d", desc, gp->name, iExon);
+            gpError(errFh, errorCnt, "%s: %s no exonFrame on CDS exon %d", desc, gp->name, iExon);
         }
     else
         {
         if (frame != -1)
-            gpError("%s: %s exonFrame on non-CDS exon %d", desc, gp->name, iExon);
+            gpError(errFh, errorCnt, "%s: %s exonFrame on non-CDS exon %d", desc, gp->name, iExon);
         }
     }
 }
 
-static void checkCdsBounds(char *desc, FILE* out, struct genePred* gp)
+static void checkCdsBounds(FILE* errFh, int* errorCnt, char *desc, struct genePred* gp)
 /* check cdsStart/cdsEnd */
 {
 int iExon;
 boolean foundCdsStart = FALSE, foundCdsEnd = FALSE;
 if (gp->cdsStart > gp->cdsEnd)
-    gpError("%s: %s cdsStart %u > cdsEnd %u", desc, gp->name,
-            gp->cdsStart, gp->cdsEnd);
+    gpError(errFh, errorCnt, "%s: %s cdsStart %u > cdsEnd %u", desc, gp->name, gp->cdsStart, gp->cdsEnd);
 if ((gp->cdsStart < gp->txStart) || (gp->cdsStart > gp->txEnd))
-    gpError("%s: %s cdsStart %u not in tx bounds %u-%u", desc,
-            gp->name, gp->cdsStart, gp->txStart, gp->txEnd);
+    gpError(errFh, errorCnt, "%s: %s cdsStart %u not in tx bounds %u-%u", desc, gp->name, gp->cdsStart, gp->txStart, gp->txEnd);
 if ((gp->cdsEnd < gp->txStart) || (gp->cdsEnd > gp->txEnd))
-    gpError("%s: %s cdsEnd %u not in tx bounds %u-%u", desc, 
-            gp->name, gp->cdsEnd, gp->txStart, gp->txEnd);
+    gpError(errFh, errorCnt, "%s: %s cdsEnd %u not in tx bounds %u-%u", desc, gp->name, gp->cdsEnd, gp->txStart, gp->txEnd);
 /*  is cdsStart/cdsEnd in an exon?  */
 for (iExon = 0; iExon < gp->exonCount; iExon++)
     {
@@ -1548,57 +1538,85 @@ for (iExon = 0; iExon < gp->exonCount; iExon++)
         foundCdsEnd = TRUE;
     }
 if (!foundCdsStart)
-    gpError("%s: %s cdsStart %u not in an exon", desc, gp->name, gp->cdsStart);
+    gpError(errFh, errorCnt, "%s: %s cdsStart %u not in an exon", desc, gp->name, gp->cdsStart);
 if (!foundCdsEnd)
-    gpError("%s: %s cdsEnd %u not in an exon", desc, gp->name, gp->cdsEnd);
+    gpError(errFh, errorCnt, "%s: %s cdsEnd %u not in an exon", desc, gp->name, gp->cdsEnd);
 }
 
-int genePredCheck(char *desc, FILE* out, int chromSize, 
-                  struct genePred* gp)
+int genePredCheck(char *desc, FILE* errFh, int chromSize, struct genePred* gp)
 /* Validate a genePred for consistency.  desc is printed the error messages
- * to file out (open /dev/null to discard).  chromSize should contain
+ * to file errFh (open /dev/null to discard).  chromSize should contain
  * size of chromosome, or 0 if chrom is not valid, or -1 to not check
  * chromosome bounds. Returns count of errors. */
 {
 int iExon;
-gpErrorCnt = 0;
-gpErrFh = out;
+int errorCnt = 0;
 if (!(sameString(gp->strand, "+") || sameString(gp->strand, "-")))
-    gpError("%s: %s invalid strand: \"%s\"", desc, gp->name, gp->strand);
+    gpError(errFh, &errorCnt, "%s: %s invalid strand: \"%s\"", desc, gp->name, gp->strand);
 
 /* check chrom */
 if (chromSize == 0)
-    gpError("%s: %s chrom not a valid chromosome: \"%s\"", desc, gp->name, gp->chrom);
+    gpError(errFh, &errorCnt, "%s: %s chrom not a valid chromosome: \"%s\"", desc, gp->name, gp->chrom);
 else if (chromSize > 0)
     {
     if (gp->txEnd > chromSize)
-        gpError("%s: %s txEnd %u >= chromSize %u", desc, gp->name,
-                gp->txEnd, chromSize);
+        gpError(errFh, &errorCnt, "%s: %s txEnd %u >= chromSize %u", desc, gp->name, gp->txEnd, chromSize);
     }
 
 /* check internal consistency */
 if (gp->txStart >= gp->txEnd)
-    gpError("%s: %s txStart %u >= txEnd %u", desc, gp->name,
-            gp->txStart, gp->txEnd);
+    gpError(errFh, &errorCnt, "%s: %s txStart %u >= txEnd %u", desc, gp->name, gp->txStart, gp->txEnd);
 
 /* no CDS is indicated by cdsStart == cdsEnd */
 if (gp->cdsStart != gp->cdsEnd)
-    checkCdsBounds(desc, out, gp);
+    checkCdsBounds(errFh, &errorCnt, desc, gp);
 
 /* make sure first/last exons match tx range */
 if (gp->txStart != gp->exonStarts[0])
-    gpError("%s: %s first exon start %u doesn't match txStart %u", desc, 
-            gp->name, gp->exonStarts[0], gp->txStart);
+    gpError(errFh, &errorCnt, "%s: %s first exon start %u doesn't match txStart %u", desc, gp->name, gp->exonStarts[0], gp->txStart);
 if (gp->txEnd != gp->exonEnds[gp->exonCount-1])
-    gpError("%s: %s last exon end %u doesn't match txEnd %u", desc, 
-            gp->name, gp->exonEnds[gp->exonCount-1], gp->txEnd);
+    gpError(errFh, &errorCnt, "%s: %s last exon end %u doesn't match txEnd %u", desc, gp->name, gp->exonEnds[gp->exonCount-1], gp->txEnd);
 
 
 /* check each exon */
 for (iExon = 0; iExon < gp->exonCount; iExon++)
-    checkExon(desc, gp, iExon);
+    checkExon(errFh, &errorCnt, desc, gp, iExon);
 
-return gpErrorCnt;
+return errorCnt;
+}
+
+static int lookupChromSize(char *desc, FILE* errFh, char* db, struct genePred* gp, int *errorCnt)
+/* lookup the chromosome size in the database, -1 if invalid */
+{
+// hGetChromInfo is case independent
+struct chromInfo *ci = hGetChromInfo(db, gp->chrom);
+if (ci == NULL)
+    {
+    fprintf(errFh, "Error: %s: %s has invalid chrom for %s: %s\n", desc, gp->name, db, gp->chrom);
+    (*errorCnt)++;
+    return -1;  // don't validate
+    }
+else if (differentString(gp->chrom, ci->chrom)) // verify case dependent equal
+    {
+    fprintf(errFh, "Error: %s: %s has invalid chrom for %s: %s\n", desc, gp->name, db, gp->chrom);
+    (*errorCnt)++;
+    return -1;  // don't validate
+    }
+else
+    return ci->size;
+}
+
+int genePredCheckDb(char *desc, FILE* errFh, char* db, struct genePred* gp)
+/* Validate a genePred for consistency.  desc is printed the error messages
+ * to file errFh (open /dev/null to discard).  Lookup chromosome size in database if
+ * db is not NULL. Returns count of errors. */
+{
+int errorCnt = 0;
+int chromSize = -1;  /* default to not checking */
+if (db != NULL)
+    chromSize = lookupChromSize(desc, errFh, db, gp, &errorCnt);
+errorCnt += genePredCheck(desc, errFh, chromSize, gp);
+return errorCnt;
 }
 
 boolean genePredNmdTarget(struct genePred *gp) 

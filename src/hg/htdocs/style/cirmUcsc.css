@@ -1,0 +1,58 @@
+/* Customizations (on top of Stanford CSS) for use in UCSC ENCODE3 web cgis (edwWeb*) */
+
+/* override fixed width input box and set alignment */
+input {
+    width: auto;
+}
+
+/* align input boxes with buttons */
+.input-row input[type="submit"] {
+    vertical-align: text-bottom;
+}
+
+/* avoid using background image of dna */
+
+body {
+    background: #e8ecef;
+}
+
+/* avoid using background image */
+.navbar-inverse .navbar-inner {
+  background: #0a253d;
+}
+
+/* override character code for external link icon, 'fa-external-link'
+The character code in css pulled from Stanford produces a list icon
+*/
+.panel a[href^="http"]:after, td a[href^="http"]:after {
+  /* content: " \f036"; */ /* Stanford */
+  /* content: " \f03a"; */ /* interim */
+  content: " \f08e";
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+  -webkit-font-smoothing: antialiased;
+  /* sprites.less reset */
+  display: inline;
+  width: auto;
+  height: auto;
+  line-height: normal;
+  vertical-align: baseline;
+  background-image: none;
+  background-position: 0% 0%;
+  background-repeat: repeat;
+  margin-top: 0;
+}
+
+/* problem with layout (nav bar overlaps content when window shrunk)
+  requires use of margin instead of padding. */
+
+#content {
+  margin-top: 75px;
+  padding-top: 0px;
+}
+
+hr {
+    border-bottom: 1px solid #bababa;
+}

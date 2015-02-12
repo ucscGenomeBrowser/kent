@@ -4,6 +4,7 @@
  * granted for all use - public, private or commercial. */
 
 #include "common.h"
+#include "hash.h"
 
 
 static int subMatch(const char *str, const char *wild, char single, char multi)
@@ -114,3 +115,56 @@ boolean sqlMatchLike(char *wildCard, char *string)
 {
 return globMatch(wildCard, string, '_', '%');
 }
+
+static int addMatching(char *pattern, struct slName *itemList, struct slName **retMatchList)
+/* Add all items that match pattern to retMatchList */
+{
+int count = 0;
+struct slName *item;
+for (item = itemList; item != NULL; item = item->next)
+    {
+    char *name = item->name;
+    if (wildMatch(pattern, name))
+         {
+	 slNameAddHead(retMatchList, name);
+	 ++count;
+	 }
+    }
+return count;
+}
+
+struct slName *wildExpandList(struct slName *allList, struct slName *wildList, boolean abortMissing)
+/* Wild list is a list of names, possibly including * and ? wildcard characters.  This 
+ * function returns names taken from allList that match patterns in wildList.  Works much
+ * like wildcard expansion over a file system but expands over allList instead. */
+{
+/* Build hash of allList */
+struct hash *allHash = hashNew(0);
+struct slName *name;
+for (name = allList; name != NULL; name = name->next)
+    hashAdd(allHash, name->name, NULL);
+
+/* Expand any field names with wildcards. */
+struct slName *expandedList = NULL;
+struct slName *field;
+for (field = wildList; field != NULL; field = field->next)
+    {
+    char *name = field->name;
+    if (anyWild(name))
+        {
+	int addCount = addMatching(name, allList, &expandedList);
+	if (addCount == 0 && abortMissing)
+	    errAbort("No match for %s", name);
+	}
+    else
+        {
+	if (abortMissing && !hashLookup(allHash, name))
+	    errAbort("No match for %s", name);
+	slNameAddHead(&expandedList, name);
+	}
+    }
+hashFree(&allHash);
+slReverse(&expandedList);
+return expandedList;
+}
+

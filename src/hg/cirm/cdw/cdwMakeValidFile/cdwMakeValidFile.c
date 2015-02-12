@@ -21,12 +21,14 @@
 #include "bigWig.h"
 #include "bigBed.h"
 #include "bamFile.h"
+#include "htmlPage.h"
 #include "portable.h"
 #include "gff.h"
 #include "cdw.h"
 #include "cdwLib.h"
 #include "fa.h"
 #include "cdwValid.h"
+#include "vcf.h"
 
 int maxErrCount = 1;	/* Set from command line. */
 int errCount;		/* Set as we run. */
@@ -270,7 +272,6 @@ fprintf(f, "vf->format = %s\n", vf->format);
 fprintf(f, "vf->outputType = %s\n", vf->outputType);
 fprintf(f, "vf->experiment = %s\n", vf->experiment);
 fprintf(f, "vf->replicate = %s\n", vf->replicate);
-fprintf(f, "vf->validKey = %s\n", vf->validKey);
 fprintf(f, "vf->enrichedIn = %s\n", vf->enrichedIn);
 fprintf(f, "vf->ucscDb = %s\n", vf->ucscDb);
 fprintf(f, "vf->itemCount = %lld\n", vf->itemCount);
@@ -349,6 +350,51 @@ while (faSpeedReadNext(lf, &dna, &size, &name))
 lineFileClose(&lf);
 }
 
+void makeValidVcf( struct sqlConnection *conn, char *path, struct cdwFile *ef, 
+    struct cdwValidFile *vf)
+/* Fill out fields of vf from a variant call format (vcf) file.  */
+{
+struct vcfFile *vcf = vcfFileMayOpen(path, NULL, 0, 0, 0, 0, FALSE);
+if (vcf == NULL)
+    errAbort("Couldn't open %s as a VCF file", path);
+struct vcfRecord *rec;
+while ((rec = vcfNextRecord(vcf)) != NULL)
+    {
+    vf->itemCount += 1;
+    }
+vcfFileFree(&vcf);
+}
+
+void makeValidText(struct sqlConnection *conn, char *path, struct cdwFile *ef, 
+    struct cdwValidFile *vf)
+/* Fill in info about a text file. */
+{
+struct lineFile *lf = lineFileOpen(path, FALSE);
+char *line;
+int lineSize;
+while (lineFileNext(lf, &line, &lineSize))
+    {
+    int i;
+    for (i=0; i<lineSize; ++i)
+         {
+	 if (line[i] == 0)
+	     errAbort("%s is not a text file,  has binary zeroes.", ef->submitFileName);
+	 }
+    vf->itemCount += 1;
+    }
+lineFileClose(&lf);
+}
+
+void makeValidHtml(struct sqlConnection *conn, char *path, struct cdwFile *ef, 
+    struct cdwValidFile *vf)
+/* Fill in info about html file */
+{
+struct htmlPage *page = htmlPageGet(path);
+htmlPageValidateOrAbort(page);
+vf->itemCount = slCount(page->tags);
+htmlPageFree(&page);
+}
+
 void makeValidGtf(struct sqlConnection *conn, char *path, struct cdwFile *ef, 
     struct cdwAssembly *assembly, struct cdwValidFile *vf)
 /* Fill in info about a gtf file. */
@@ -401,6 +447,12 @@ void makeValidIdat(struct sqlConnection *conn, char *path, struct cdwFile *ef, s
 /* Fill in info about a illumina idac file. */
 {
 cdwValidateIdat(path);
+}
+
+void makeValidPdf(struct sqlConnection *conn, char *path, struct cdwFile *ef, struct cdwValidFile *vf)
+/* Check it is really pdf. */
+{
+cdwValidatePdf(path);
 }
 
 void makeValidCustomTrack(struct sqlConnection *conn, char *path, 
@@ -465,15 +517,8 @@ vf->fileId = ef->id;
 cdwValidFileFieldsFromTags(vf, tags);
 vf->sampleBed = "";
 
-if (vf->format && vf->validKey)	// We only can validate if we have something for format 
+if (vf->format)	// We only can validate if we have something for format 
     {
-    uglyf("Validating %s\n", vf->format);
-
-    /* Check validation key */
-    char *validKey = cdwCalcValidationKey(ef->md5, ef->size);
-    if (!sameString(validKey, vf->validKey))
-        errAbort("valid_key does not check.  Make sure to use validateManifest.");
-
     /* Look up assembly. */
     struct cdwAssembly *assembly = NULL;
     if (!isEmpty(vf->ucscDb) && !sameString(vf->ucscDb, "unknown"))
@@ -568,6 +613,34 @@ if (vf->format && vf->validKey)	// We only can validate if we have something for
 	assert(endsWith(ef->submitFileName, ".gz"));
 	suffix = cdwFindDoubleFileSuffix(ef->submitFileName);
 	}
+    else if (sameString(format, "pdf"))
+        {
+	makeValidPdf(conn, path, ef, vf);
+	suffix = ".pdf";
+	}
+    else if (sameString(format, "vcf"))
+        {
+	makeValidVcf(conn, path, ef, vf);
+	suffix = ".vcf";
+	}
+    else if (sameString(format, "cram"))
+        {
+	cdwValidateCram(path);
+	suffix = ".cram";
+	}
+    else if (sameString(format, "jpg"))
+        {
+	cdwValidateJpg(path);
+	suffix = ".jpg";
+	}
+    else if (sameString(format, "text"))
+        {
+	makeValidText(conn, path, ef, vf);
+	}
+    else if (sameString(format, "html"))
+        {
+	makeValidHtml(conn, path, ef, vf);
+	}
     else if (sameString(format, "unknown"))
         {
 	/* No specific validation needed for unknown format. */
@@ -652,6 +725,7 @@ if (errCatch->gotError)
     }
 else
     {
+    warn("%s", errCatch->message->string);  // Make status output legible
     char query[256];
     sqlSafef(query, sizeof(query), "update cdwFile set errorMessage='' where id=%lld",
 	(long long)ef->id);

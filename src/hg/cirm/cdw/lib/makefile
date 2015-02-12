@@ -1,6 +1,7 @@
 include ../../../../inc/common.mk
 
-O = cdw.o cdwBamFileFromRa.o cdwFastqFileFromRa.o cdwLib.o cdwQaWigSpotFromRa.o cdwValid.o
+O = cdw.o cdwBamFileFromRa.o cdwFastqFileFromRa.o cdwLib.o cdwQaWigSpotFromRa.o cdwTagStorm.o \
+	cdwValid.o
 
 ${MACHTYPE}/cdwlib.a: ${O}
 	mkdir -p ${MACHTYPE}

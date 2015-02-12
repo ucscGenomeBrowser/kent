@@ -941,3 +941,26 @@ echo -e "chrM\tNC_001643.1"
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+# lastz swap calJac3/panTro4 (DONE - 2015-02-10 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/calJac3/bed/lastzPanTro4.2015-02-09
+    cat fb.calJac3.chainPanTro4Link.txt
+    #	2076330774 bases of 2752505800 (75.434%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/panTro4/bed/blastz.calJac3.swap
+    cd /hive/data/genomes/panTro4/bed/blastz.calJac3.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/calJac3/bed/lastzPanTro4.2015-02-09/DEF \
+	-swap -syntenicNet -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=ku \
+	-bigClusterHub=ku) > swap.log 2>&1
+    #	real    114m27.647s
+
+    cat fb.panTro4.chainCalJac3Link.txt
+    #	2113187925 bases of 2902338967 (72.810%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` panTro4 calJac3) > rbest.log 2>&1 &
+    # real    44m18.149s
+
+############################################################################

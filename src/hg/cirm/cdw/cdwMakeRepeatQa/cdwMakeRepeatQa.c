@@ -83,7 +83,7 @@ mustSystem(cmd);
 remove(saiName);
 
 char *raName = cloneString(rTempName(cdwTempDir(), "cdwQaRepeat", ".ra"));
-safef(cmd, sizeof(cmd), "cdwSamRepeatAnalysis %s %s", samName, raName);
+safef(cmd, sizeof(cmd), "edwSamRepeatAnalysis %s %s", samName, raName);
 mustSystem(cmd);
 verbose(2, "mustSystem(%s)\n", cmd);
 remove(samName);

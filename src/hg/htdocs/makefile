@@ -11,6 +11,12 @@ FIND=gitFiles
 #
 # but be careful as it will rsync everything over including junk
 
+# REMEMBER: HTDOCSEXTRA 
+# htdocsExtra is a repository that contains large files that we
+# do not wish to burden the main kent repo with.
+# You can check it out and make there too.
+# If you think there is a file missing, see if it is under the htdocsExtra repo.
+
 ifeq (${DOCUMENTROOT_USER},)
     DOCUMENTROOT_USER=${DOCUMENTROOT}-${USER}
 endif

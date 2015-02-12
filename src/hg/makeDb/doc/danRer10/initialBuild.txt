@@ -302,7 +302,7 @@ taxId 7955
         -bedFile=jkStuff/nonBridged.bed
 
 ########################################################################
-# GENBANK AUTO UPDATE (DONE - 2014-12-11 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2015-01-29 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -343,9 +343,8 @@ danRer10.orfeome = yes
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial danRer10
-XXX - running - Tue Jan 27 11:27:20 PST 2015
     # logFile: var/build/logs/2015.01.27-11:27:05.danRer10.initalign.log
-    #   real    369m37.727s
+    #   real    770m4.239s
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.danRer10
@@ -354,15 +353,15 @@ XXX - running - Tue Jan 27 11:27:20 PST 2015
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad -verbose=10 danRer10
-    # logFile: var/dbload/hgwdev/logs/2014.12.11-11:06:27.danRer10.dbload.log
-    # real    35m42.214s
+    # logFile: var/dbload/hgwdev/logs/2015.01.28-11:07:50.danRer10.dbload.log
+    # real    97m40.551s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add danRer10 to:
     #   vi etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added danRer10 - Tarsier refs #14410" etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added danRer10 - Zebrafish refs #14017" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
@@ -400,29 +399,21 @@ XXX - running - Tue Jan 27 11:27:20 PST 2015
     # 1371719383 bases of 1371719383 (100.000%) in intersection
 
 #########################################################################
-# LIFTOVER TO danRer7 (DONE - 2015-01-22 - Hiram)
+# LIFTOVER TO danRer7 (DONE - 2015-01-29 - Hiram)
     ssh hgwdev
-    mkdir /hive/data/genomes/danRer10/bed/blat.danRer7.2015-01-22
-    cd /hive/data/genomes/danRer10/bed/blat.danRer7.2015-01-22
+    mkdir /hive/data/genomes/danRer10/bed/blat.danRer7.2015-01-29
+    cd /hive/data/genomes/danRer10/bed/blat.danRer7.2015-01-29
     time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
 	-ooc=/hive/data/genomes/danRer10/jkStuff/danRer10.11.ooc \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
          danRer10 danRer7) > do.log 2>&1
-    # real    13948m39.233s
-    # this was a tough job, that long time was not necessarily due
-    # to cluster contention.  the blat run took over 9 days:
-# Completed: 361089 of 361089 jobs
-# CPU time in finished jobs:  229192746s 3819879.10m 63664.65h 2652.69d  7.268 y
-# IO & Wait Time:              11337726s  188962.10m  3149.37h  131.22d  0.360 y
-# Average job time:                 666s      11.10m     0.19h    0.01d
-# Longest finished job:            1492s      24.87m     0.41h    0.02d
-# Submission to last job:        811729s   13528.82m   225.48h    9.40d
+    # real    253m49.880s
 
     # verify the convert link on the test browser is now active from danRer10 to
     # danRer7
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (DONE 2014-12-29 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE 2015-02-04 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=danRer10 -keys all.joiner
@@ -432,7 +423,7 @@ XXX - running - Tue Jan 27 11:27:20 PST 2015
 
     cd /hive/data/genomes/danRer10
     time makeDownloads.pl danRer10 > downloads.log 2>&1
-    # real    22m17.544s
+    # real    10m5.488s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/danRer10/pushQ
@@ -445,7 +436,7 @@ XXX - running - Tue Jan 27 11:27:20 PST 2015
 # WARNING: hgwdev does not have /gbdb/danRer10/wib/quality.wib
 # WARNING: hgwdev does not have /gbdb/danRer10/bbi/qualityBw/quality.bw
 # WARNING: danRer10 does not have seq
-# WARNING: danRer10 does not have estOrientInfo
+# WARNING: danRer10 does not have extFile
 
     #   copy it to hgwbeta
     scp -p danRer10.pushQ.sql qateam@hgwbeta:/tmp

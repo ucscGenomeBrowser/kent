@@ -1,7 +1,7 @@
 # simple.mk: simply jshint and rsync JS_FILES.  Include this after defining JS_FILES.
 
 jshint:
-	${JSHINT} ${JS_FILES}
+	${JSHINT} --config ${JS_DIR}/jshintrc.json ${JS_FILES}
 
 compile: jshint
 

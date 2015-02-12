@@ -364,7 +364,75 @@ void cdwSubmitDirOutput(struct cdwSubmitDir *el, FILE *f, char sep, char lastSep
 #define cdwSubmitDirCommaOut(el,f) cdwSubmitDirOutput(el,f,',',',');
 /* Print out cdwSubmitDir as a comma separated list including final comma. */
 
-#define CDWFILE_NUM_COLS 14
+#define CDWMETATAGS_NUM_COLS 3
+
+extern char *cdwMetaTagsCommaSepFieldNames;
+
+struct cdwMetaTags
+/* Where we keep expanded metadata tags for each file, though many share. */
+    {
+    struct cdwMetaTags *next;  /* Next in singly linked list. */
+    unsigned id;	/* Autoincrementing table id */
+    char md5[33];	/* md5 sum of tags string */
+    char *tags;	/* CGI encoded name=val pairs from manifest */
+    };
+
+void cdwMetaTagsStaticLoad(char **row, struct cdwMetaTags *ret);
+/* Load a row from cdwMetaTags table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct cdwMetaTags *cdwMetaTagsLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all cdwMetaTags from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with cdwMetaTagsFreeList(). */
+
+void cdwMetaTagsSaveToDb(struct sqlConnection *conn, struct cdwMetaTags *el, char *tableName, int updateSize);
+/* Save cdwMetaTags as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct cdwMetaTags *cdwMetaTagsLoad(char **row);
+/* Load a cdwMetaTags from row fetched with select * from cdwMetaTags
+ * from database.  Dispose of this with cdwMetaTagsFree(). */
+
+struct cdwMetaTags *cdwMetaTagsLoadAll(char *fileName);
+/* Load all cdwMetaTags from whitespace-separated file.
+ * Dispose of this with cdwMetaTagsFreeList(). */
+
+struct cdwMetaTags *cdwMetaTagsLoadAllByChar(char *fileName, char chopper);
+/* Load all cdwMetaTags from chopper separated file.
+ * Dispose of this with cdwMetaTagsFreeList(). */
+
+#define cdwMetaTagsLoadAllByTab(a) cdwMetaTagsLoadAllByChar(a, '\t');
+/* Load all cdwMetaTags from tab separated file.
+ * Dispose of this with cdwMetaTagsFreeList(). */
+
+struct cdwMetaTags *cdwMetaTagsCommaIn(char **pS, struct cdwMetaTags *ret);
+/* Create a cdwMetaTags out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new cdwMetaTags */
+
+void cdwMetaTagsFree(struct cdwMetaTags **pEl);
+/* Free a single dynamically allocated cdwMetaTags such as created
+ * with cdwMetaTagsLoad(). */
+
+void cdwMetaTagsFreeList(struct cdwMetaTags **pList);
+/* Free a list of dynamically allocated cdwMetaTags's */
+
+void cdwMetaTagsOutput(struct cdwMetaTags *el, FILE *f, char sep, char lastSep);
+/* Print out cdwMetaTags.  Separate fields with sep. Follow last field with lastSep. */
+
+#define cdwMetaTagsTabOut(el,f) cdwMetaTagsOutput(el,f,'\t','\n');
+/* Print out cdwMetaTags as a line in a tab-separated file. */
+
+#define cdwMetaTagsCommaOut(el,f) cdwMetaTagsOutput(el,f,',',',');
+/* Print out cdwMetaTags as a comma separated list including final comma. */
+
+#define CDWFILE_NUM_COLS 16
 
 extern char *cdwFileCommaSepFieldNames;
 
@@ -375,6 +443,7 @@ struct cdwFile
     unsigned id;	/* Autoincrementing file id */
     unsigned submitId;	/* Links to id in submit table */
     unsigned submitDirId;	/* Links to id in submitDir table */
+    unsigned userId;	/* Id in user table of file owner */
     char *submitFileName;	/* File name in submit relative to submit dir */
     char *cdwFileName;	/* File name in big data warehouse relative to cdw root dir */
     long long startUploadTime;	/* Time when upload started - 0 if not started */
@@ -383,6 +452,7 @@ struct cdwFile
     long long size;	/* File size in manifest */
     char md5[33];	/* md5 sum of file contents */
     char *tags;	/* CGI encoded name=val pairs from manifest */
+    unsigned metaTagsId;	/* ID of associated metadata tags */
     char *errorMessage;	/* If non-empty contains last error message from upload. If empty upload is ok */
     char *deprecated;	/* If non-empty why you shouldn't use this file any more. */
     unsigned replacedBy;	/* If non-zero id of file that replaces this one. */
@@ -443,7 +513,7 @@ void cdwFileOutput(struct cdwFile *el, FILE *f, char sep, char lastSep);
 #define cdwFileCommaOut(el,f) cdwFileOutput(el,f,',',',');
 /* Print out cdwFile as a comma separated list including final comma. */
 
-#define CDWSUBMIT_NUM_COLS 16
+#define CDWSUBMIT_NUM_COLS 17
 
 extern char *cdwSubmitCommaSepFieldNames;
 
@@ -456,7 +526,8 @@ struct cdwSubmit
     long long startUploadTime;	/* Time at start of submit */
     long long endUploadTime;	/* Time at end of upload - 0 if not finished */
     unsigned userId;	/* Connects to user table id field */
-    unsigned submitFileId;	/* Points to validated.txt file for submit. */
+    unsigned manifestFileId;	/* Points to metadata.txt file for submit. */
+    unsigned metaFileId;	/* Points to meta.txt file for submit */
     unsigned submitDirId;	/* Points to the submitDir */
     unsigned fileCount;	/* Number of files that will be in submit if it were complete. */
     unsigned oldFiles;	/* Number of files in submission that were already in warehouse. */
@@ -678,7 +749,7 @@ struct cdwBiosample
     {
     struct cdwBiosample *next;  /* Next in singly linked list. */
     unsigned id;	/* Biosample id */
-    char *term;	/* Human readable.  Shared with ENCODE2. */
+    char *term;	/* Human readable.. */
     unsigned taxon;	/* NCBI taxon number - 9606 for human. */
     char *sex;	/* One letter code: M male, F female, B both, U unknown */
     };
@@ -746,7 +817,7 @@ struct cdwExperiment
 /* An experiment - ideally will include a couple of biological replicates. Downloaded from Stanford. */
     {
     struct cdwExperiment *next;  /* Next in singly linked list. */
-    char accession[17];	/* Something like ENCSR000CFA. ID shared with Stanford. */
+    char accession[17];	/* ID shared with metadata system. */
     char *dataType;	/* Something liek RNA-seq, DNase-seq, ChIP-seq. Computed at UCSC. */
     char *lab;	/* Lab PI name and institution. Is lab.title at Stanford. */
     char *biosample;	/* Cell line name, tissue source, etc. Is biosample_term_name at Stanford. */
@@ -811,7 +882,7 @@ void cdwExperimentOutput(struct cdwExperiment *el, FILE *f, char sep, char lastS
 #define cdwExperimentCommaOut(el,f) cdwExperimentOutput(el,f,',',',');
 /* Print out cdwExperiment as a comma separated list including final comma. */
 
-#define CDWVALIDFILE_NUM_COLS 24
+#define CDWVALIDFILE_NUM_COLS 23
 
 extern char *cdwValidFileCommaSepFieldNames;
 
@@ -826,7 +897,6 @@ struct cdwValidFile
     char *outputType;	/* What output_type it is from manifest */
     char *experiment;	/* What experiment it's in from manifest */
     char *replicate;	/* What replicate it is from manifest.  Values 1,2,3... pooled, or '' */
-    char *validKey;	/* The valid_key tag from manifest */
     char *enrichedIn;	/* The enriched_in tag from manifest */
     char *ucscDb;	/* Something like hg19 or mm9 */
     long long itemCount;	/* # of items in file: reads for fastqs, lines for beds, bases w/data for wig. */
@@ -839,7 +909,7 @@ struct cdwValidFile
     double depth;	/* Estimated genome-equivalents covered by possibly overlapping data */
     signed char singleQaStatus;	/* 0 = untested, 1 =  pass, -1 = fail, 2 = forced pass, -2 = forced fail */
     signed char replicateQaStatus;	/* 0 = untested, 1 = pass, -1 = fail, 2 = forced pass, -2 = forced fail */
-    char *technicalReplicate;	/* Manifest's technical_replicate tag. Values 1,2,3... pooled or '' */
+    char *part;	/* Manifest's file_part. Values 1,2,3... Used for fastqs split for analysis */
     char *pairedEnd;	/* The paired_end tag from the manifest.  Values 1,2 or '' */
     signed char qaVersion;	/* Version of QA pipeline making status decisions */
     double uniqueMapRatio;	/* Fraction of reads that map uniquely to genome for bams and fastqs */

@@ -1,0 +1,122 @@
+title	Genomic characterization before and after IPS treatment of sibling cell lines.
+lab	baldwin
+user	rvnair
+assay	WGS
+pipeline	Macrogen MGX-WGS-0101
+biosample_date	10 Oct 2014
+
+	lab_baldwin_treatment	Episome no VPA
+	ips	episome_ips_protocol.pdf
+
+		lab_baldwin_parent	A1
+
+			meta	Env_A1A
+			cell_line	Env A1 A
+
+			meta	Env_A1B
+			cell_line	Env A1 B
+
+		lab_baldwin_parent	A4
+
+			meta	Env_A4A
+			cell_line	Env A4 A
+
+			meta	Env_A4B
+			cell_line	Env A4 B
+
+		lab_baldwin_parent	B2
+
+			meta	Env_B2A
+			cell_line	Env B2 A
+
+			meta	Env_B2B
+			cell_line	Env B2 B
+
+	lab_baldwin_treatment	Episome + VPA
+	ips	episome_ips_protocol.pdf
+	treatment	vpa_treatment.pdf
+
+		lab_baldwin_parent	C4
+
+			meta	Ev_C4B
+			cell_line	Ev C4 B
+
+			meta	Ev_C4_A
+			cell_line	Ev C4 A
+
+		lab_baldwin_parent	C6
+
+			meta	Ev_C6B
+			cell_line	Ev C6 B
+
+			meta	Ev_C6_A
+			cell_line	Ev C6 A
+
+		lab_baldwin_parent	D6
+
+			meta	Ev_D6B
+			cell_line	Ev D6 B
+
+			meta	Ev_D6_A
+			cell_line	Ev D6 A
+
+	lab_baldwin_treatment	Lentivirus no VPA
+	ips	lentivirus_ips_protocol.pdf
+
+		lab_baldwin_parent	H9.1
+
+			meta	Lnv_H_9_1_A
+			cell_line	Lnv H 9.1 A
+
+			meta	Lnv_H_9_1_B
+			cell_line	Lnv H 9.1 B
+
+		lab_baldwin_parent	I9.1
+
+			meta	Lnv_I_9_1_A
+			cell_line	Lnv I 9.1 A
+
+			meta	Lnv_I_9_1_B
+			cell_line	Lnv I 9.1 B
+
+		lab_baldwin_parent	I9.2
+
+			meta	Lnv_I_9_2_A
+			cell_line	Lnv I 9.2 A
+
+			meta	Lnv_I_9_2_B
+			cell_line	Lnv I 9.2 B
+
+
+	lab_baldwin_treatment	Lentivirus + VPA
+	ips	lentivirus_ips_protocol.pdf
+	treatment	vpa_treatment.pdf
+
+		lab_baldwin_parent	F9.2
+
+			meta	Lv_F9_2A
+			cell_line Lv F9.2 A
+
+			meta	Lv_F9_2B
+			cell_line Lv F9.2 B
+
+		lab_baldwin_parent	G9.3
+
+			meta	Lv_G_9_3A
+			cell_line Lv G 9.3 A
+
+			meta	Lv_G_9_3B
+			cell_line Lv G 9.3 B
+
+		lab_baldwin_parent	L9.2
+
+			meta	Lv_L_9_2_A
+			cell_line Lv L 9.2 A
+
+			meta	Lv_L_9_2_B
+			cell_line Lv L 9.2 B
+
+	meta	HDF_fib
+	lab_baldwin_treatment	Fibroblast starting cells
+	control	untreated
+

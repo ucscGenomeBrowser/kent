@@ -1,0 +1,26 @@
+#cell_line	Conc Qubit	260/280
+Lv F9.2A	20	1.78
+Lv F9.2B	16	1.79
+Lv G 9.3A	20	1.8
+Lv G 9.3B	13	1.81
+Lv L 9.2 A	10	1.76
+Lv L 9.2 B	10	1.75
+Lnv I 9.2 A	13	1.85
+Lnv I 9.2 B	15	1.86
+Lnv I 9.1 A	16	1.77
+Lnv I 9.1 B	13	1.81
+Lnv H 9.1 A	13.7	1.86
+Lnv H 9.1 B	17	1.93
+Ev C4 A	18	1.8
+Ev C4 B	13	1.83
+Ev C6 A	20	1.82
+Ev C6 B	18.5	1.87
+Ev D6 A	18.7	1.8
+Ev D6 B	20	1.82
+Env A1 A	13	1.82
+Env A1 B	13	1.86
+Env A4 A	20	1.84
+Env A4 B	18	1.83
+Env B2A	11	1.9
+Env B2B	18.2	1.89
+HDF fib	15	1.75

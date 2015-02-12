@@ -744,13 +744,13 @@ endif
     para create jobList
     para try ... check
     para time
-XXX - running - Fri Dec 19 18:48:07 PST 2014
-# Completed: 353 of 353 jobs
-# CPU time in finished jobs:        836s      13.93m     0.23h    0.01d  0.000 y
-# IO & Wait Time:                  1172s      19.54m     0.33h    0.01d  0.000 y
-# Average job time:                   6s       0.09m     0.00h    0.00d
-# Longest finished job:              72s       1.20m     0.02h    0.00d
-# Submission to last job:            89s       1.48m     0.02h    0.00d
+# Completed: 83379 of 83384 jobs
+# Crashed: 5 jobs
+# CPU time in finished jobs:       3908s      65.14m     1.09h    0.05d  0.000 y
+# IO & Wait Time:                212761s    3546.01m    59.10h    2.46d  0.007 y
+# Average job time:                   3s       0.04m     0.00h    0.00d
+# Longest finished job:               7s       0.12m     0.00h    0.00d
+# Submission to last job:          2023s      33.72m     0.56h    0.02d
 
     # Not all results have contents, that is OK
 
@@ -1075,33 +1075,31 @@ done > tmpMostConserved.bed
     #	encode those files into wiggle data
     time (zcat downloads/phastCons17way.wigFix.gz \
 	| wigEncode stdin phastCons17way.wig phastCons17way.wib)
-XXX - running - Wed Dec 24 08:35:05 PST 2014
     #   Converted stdin, upper limit 1.00, lower limit 0.00
     #   real    15m28.525s
 
     du -hsc *.wi?
-    #  2.7G    phastCons17way.wib
-    #  282M    phastCons17way.wig
-    #  3.0G    total
+    # 1.9G    phastCons17way.wib
+    # 299M    phastCons17way.wig
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phastCons17way.wib /gbdb/tarSyr2/multiz17way/phastCons17way.wib
-    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/tarSyr2/multiz17way \
+    time hgLoadWiggle -pathPrefix=/gbdb/tarSyr2/multiz17way \
 	tarSyr2 phastCons17way phastCons17way.wig
-    #   real    0m33.502s
+    #   real    0m35.695s
 
     # use to set trackDb.ra entries for wiggle min and max
     # and verify table is loaded correctly
 
     wigTableStats.sh tarSyr2 phastCons17way
 # db.table          min max mean       count sumData      stdDev  viewLimits
-tarSyr2.phastCons17way 0 1 0.168088 2898191577 4.87152e+08 0.233827 viewLimits=0:1
+tarSyr2.phastCons17way 0 1 0.0789454 1972832579 1.55746e+08 0.200359 viewLimits=0:1
 
     #  Create histogram to get an overview of all the data
-    time nice -n +19 hgWiggle -doHistogram -db=tarSyr2 \
+    time hgWiggle -doHistogram -db=tarSyr2 \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    phastCons17way > histogram.data 2>&1
-    #	real    2m40.179s
+    #	real    4m45.685s
 
     #	create plot of histogram:
 
@@ -1111,7 +1109,7 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Human tarSyr2 Histogram phastCons17way track"
+set title " Tarsier tarSyr2 Histogram phastCons17way track"
 set xlabel " phastCons17way score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
@@ -1143,7 +1141,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 	../../cons/all/all.mod 0.519 > all.mod
     # verify, the BACKGROUND should now be paired up:
     grep BACK all.mod
-    #   BACKGROUND: 0.240500 0.259500 0.259500 0.240500 
+    #   BACKGROUND: 0.240500 0.259500 0.259500 0.240500
 
     cat << '_EOF_' > doPhyloP.csh
 #!/bin/csh -fe

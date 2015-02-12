@@ -1,4 +1,7 @@
 /** @jsx React.DOM */
+/* global ImmutableUpdate, PathUpdate, CheckboxLabel, CladeOrgDb, Icon, LabeledSelect */
+/* global LoadingImage, Modal, PositionSearch, Section, SetClearButtons, Sortable, TextInput */
+
 var pt = React.PropTypes;
 
 // AnnoGrator interface.
@@ -31,12 +34,13 @@ var RegionOrGenome = React.createClass({
         var props = this.props;
         var posInfo = props.positionInfo;
         var positionInput = null;
-        if (posInfo.get('hgai_range') !== 'genome')
+        if (posInfo.get('hgai_range') !== 'genome') {
             positionInput = <PositionSearch positionInfo={posInfo}
                                             className='sectionItem'
                                             db={props.db}
                                             path={props.path} update={props.update}
                             />;
+        }
         return (
             <div className='sectionRow'>
               <LabeledSelect label='region to annotate'
@@ -72,8 +76,9 @@ var GroupTrackTable = React.createClass({
         var trackTables = props.trackDbInfo.get('trackTables');
         var trackOptions = groupTracks.get(group);
         var tableNames = trackTables.get(track);
-        if (! tableNames)
+        if (! tableNames) {
             tableNames = trackTables.get(trackOptions.getIn([0, 'value']));
+        }
         var tableOptions;
         if (tableNames) {
             tableOptions = tableNames.map(function(name) {
@@ -257,13 +262,13 @@ var OutFileOptions = React.createClass({
                  options: pt.object,    // Immutable.Map {doFile, fileName, doGzip}
                  fieldInfo: pt.object,  // table/field info from server following click on
                                         // 'Choose fields' button
-                 submitted: pt.bool,    // If true, show loading image
+                 showLoadingImage: pt.bool,    // If true, show loading image
                  disableGetOutput: pt.bool,         // If true, disable Get output button
                  disableGetOutputMessage: pt.node   // If disableGetOutput, show this message
                },
 
     getDefaultProps: function() {
-        return { submitted: false };
+        return { showLoadingImage: false };
     },
 
     onChooseFields: function() {
@@ -314,7 +319,7 @@ var OutFileOptions = React.createClass({
                 <br />
                 <input type='button' value='Get output' onClick={this.onGetOutput} />
               </div>
-              <LoadingImage loading={this.props.submitted} />
+              <LoadingImage loading={this.props.showLoadingImage} />
             </div>
         );
     }
@@ -361,10 +366,6 @@ var AppComponent = React.createClass({
         var db = this.props.appState.getIn(['cladeOrgDb', 'db']);
         var schemaLink = makeSchemaLink(db, group, track, table);
 
-        var onMoreOptions = function (ev) {
-            this.props.update(this.props.path.concat(['dataSources', i, 'moreOptions']));
-        }.bind(this);
-
         return (
             <div key={trackPathKey} className='dataSourceSubsection'>
                 <div className='sortHandle'>
@@ -383,7 +384,6 @@ var AppComponent = React.createClass({
                 </div>
             </div>
         );
-        //                <input type='button' value='More options...' onClick={onMoreOptions} />
     },
 
     renderDataSources: function(dataSources) {
@@ -423,7 +423,7 @@ var AppComponent = React.createClass({
         var dataSources = querySpec.get('dataSources');
         var outputInfo = querySpec.get('outFileOptions') || Immutable.Map();
         var tableFields = appState.get('tableFields');
-        var submitted = appState.get('submitted');
+        var showLoadingImage = appState.get('showLoadingImage');
         var disableGetOutput = (! (dataSources && dataSources.size));
         var disableGetOutputMessage =
         <span className='disabledMessage'>
@@ -455,7 +455,7 @@ var AppComponent = React.createClass({
               <Section title='Output Options'>
                 <OutFileOptions options={outputInfo}
                                 fieldInfo={tableFields}
-                                submitted={submitted}
+                                showLoadingImage={showLoadingImage}
                                 disableGetOutput={disableGetOutput}
                                 disableGetOutputMessage={disableGetOutputMessage}
                                 path={['outFileOptions']} update={this.props.update}
@@ -472,3 +472,6 @@ var AppComponent = React.createClass({
     }
 
 });
+
+// Without this, jshint complains that AppComponent is not used.  Module system would help.
+AppComponent = AppComponent;

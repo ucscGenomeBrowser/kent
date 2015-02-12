@@ -361,10 +361,13 @@ struct bigBedInterval *ivList = getNElements(bbi, chromList, lm, 10);
 struct asObject *as = bigBedAsOrDefault(bbi);
 
 hPrintf("<B>Database:</B> %s", database);
-hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Primary Table:</B> %s", table);
-char *date = firstWordInLine(sqlTableUpdate(conn, table));
-if (date != NULL)
-    printf("&nbsp&nbsp<B> Data last updated:&nbsp;</B>%s<BR>\n", date);
+hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Primary Table:</B> %s ", table);
+if (!(isHubTrack(table) || isCustomTrack(table)))
+    {
+    char *date = firstWordInLine(sqlTableUpdate(conn, table));
+    if (date != NULL)
+	printf("&nbsp&nbsp<B>Data last updated:&nbsp;</B>%s<BR>\n", date);
+    }
 hPrintf("<B>Big Bed File:</B> %s", fileName);
 if (bbi->version >= 2)
     {

@@ -56,12 +56,21 @@ table cdwSubmitDir
     bigInt historyBits; "Open history with most recent in least significant bit. 0 for upload failed, 1 for success"
     )
 
+table cdwMetaTags
+"Where we keep expanded metadata tags for each file, though many share."
+    (
+    uint id primary auto;                    "Autoincrementing table id"
+    char[32] md5 index;               "md5 sum of tags string"
+    lstring tags;               "CGI encoded name=val pairs from manifest"
+    )
+
 table cdwFile
 "A file we are tracking that we intend to and maybe have uploaded"
     (
     uint id primary auto;                    "Autoincrementing file id"
     uint submitId index;              "Links to id in submit table"
     uint submitDirId index;           "Links to id in submitDir table"
+    uint userId index;		      "Id in user table of file owner"
     lstring submitFileName index[64];     "File name in submit relative to submit dir"
     lstring cdwFileName index[32];        "File name in big data warehouse relative to cdw root dir"
     bigInt startUploadTime;     "Time when upload started - 0 if not started"
@@ -70,6 +79,7 @@ table cdwFile
     bigInt size;                "File size in manifest"
     char[32] md5 index;               "md5 sum of file contents"
     lstring tags;               "CGI encoded name=val pairs from manifest"
+    uint metaTagsId;      "ID of associated metadata tags"
     lstring errorMessage; "If non-empty contains last error message from upload. If empty upload is ok"
     string deprecated; "If non-empty why you shouldn't use this file any more."
     uint replacedBy;   "If non-zero id of file that replaces this one."
@@ -83,7 +93,8 @@ table cdwSubmit
     bigInt startUploadTime;   "Time at start of submit"
     bigInt endUploadTime;     "Time at end of upload - 0 if not finished"
     uint userId index;        "Connects to user table id field"
-    uint submitFileId index;       "Points to validated.txt file for submit."
+    uint manifestFileId index;       "Points to metadata.txt file for submit."
+    uint metaFileId index;  "Points to meta.txt file for submit"
     uint submitDirId index;    "Points to the submitDir"
     uint fileCount;          "Number of files that will be in submit if it were complete."
     uint oldFiles;           "Number of files in submission that were already in warehouse."
@@ -153,7 +164,6 @@ table cdwValidFile
     string outputType index[16]; "What output_type it is from manifest"
     string experiment index[16]; "What experiment it's in from manifest"
     string replicate;  "What replicate it is from manifest.  Values 1,2,3... pooled, or ''"
-    string validKey;  "The valid_key tag from manifest"
     string enrichedIn; "The enriched_in tag from manifest"
     string ucscDb;    "Something like hg19 or mm9"
 
@@ -167,7 +177,7 @@ table cdwValidFile
     double depth;   "Estimated genome-equivalents covered by possibly overlapping data"
     byte singleQaStatus;  "0 = untested, 1 =  pass, -1 = fail, 2 = forced pass, -2 = forced fail"
     byte replicateQaStatus;  "0 = untested, 1 = pass, -1 = fail, 2 = forced pass, -2 = forced fail"
-    string technicalReplicate; "Manifest's technical_replicate tag. Values 1,2,3... pooled or ''"
+    string part; "Manifest's file_part. Values 1,2,3... Used for fastqs split for analysis"
     string pairedEnd; "The paired_end tag from the manifest.  Values 1,2 or ''"
     byte qaVersion; "Version of QA pipeline making status decisions"
     double uniqueMapRatio; "Fraction of reads that map uniquely to genome for bams and fastqs"

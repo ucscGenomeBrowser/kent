@@ -13,6 +13,8 @@
  *            meta lowLevel
  *            fileName hg19/chipSeq/helaH3k4me3.narrowPeak.bigBed
  * The file is interpreted so that lower level stanzas inherit tags from higher level ones.
+ * NOTE: this file has largely been superceded by the tagStorm module, which does not
+ * require meta tags, but is otherwise similar. 
  */
 
 #include "common.h"
@@ -301,11 +303,12 @@ return forest;
 }
 
 static void rMetaListWrite(struct meta *metaList, struct meta *parent,
-    boolean level, int indent, boolean withParent, FILE *f)
+    int level, int maxLevel, int indent, boolean withParent, FILE *f)
 /* Write out list of stanzas at same level to file,  their children too. */
 {
 int totalIndent = level * indent;
 struct meta *meta;
+int nextLevel = level+1;
 for (meta = metaList; meta != NULL; meta = meta->next)
     {
     struct metaTagVal *mtv;
@@ -328,16 +331,20 @@ for (meta = metaList; meta != NULL; meta = meta->next)
 	fprintf(f, "%s %s\n", "parent", parent->name);
 	}
     fprintf(f, "\n");
-    if (meta->children)
-        rMetaListWrite(meta->children, meta, level+1, indent, withParent, f);
+    if (meta->children && nextLevel < maxLevel)
+        rMetaListWrite(meta->children, meta, nextLevel, maxLevel, indent, withParent, f);
     }
 }
 
-void metaWriteAll(struct meta *metaList, char *fileName, int indent, boolean withParent)
-/* Write out metadata, optionally adding meta tag. */
+void metaWriteAll(struct meta *metaList, char *fileName, int indent, boolean withParent, 
+    int maxDepth)
+/* Write out metadata, optionally adding meta tag.  If maxDepth is non-zero just write 
+ * up to that many levels.  Root level is 0. */
 {
 FILE *f = mustOpen(fileName, "w");
-rMetaListWrite(metaList, NULL, 0, indent, withParent, f);
+if (maxDepth == 0)
+    maxDepth = BIGNUM;
+rMetaListWrite(metaList, NULL, 0, maxDepth, indent, withParent, f);
 carefulClose(&f);
 }
 

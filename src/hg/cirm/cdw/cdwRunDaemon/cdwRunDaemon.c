@@ -92,8 +92,27 @@ job->returnCode = status;
 
 /* Read in stderr */
 size_t errorMessageSize;
-readInGulp(run->errFileName, &job->stderr, &errorMessageSize);
+char *errMessage;
+readInGulp(run->errFileName, &errMessage, &errorMessageSize);
 remove(run->errFileName);
+
+/* Clean up stderr a bit before putting it into SQL - first making sure it is not too big. */
+int maxStderr = 100000;
+if (errorMessageSize >= maxStderr)
+    {
+    errorMessageSize = maxStderr;
+    errMessage[maxStderr] = 0;
+    }
+/* And then cleaning up nonprintable characters converting non-ascii to spaces */
+int i;
+for (i=0; i<errorMessageSize; ++i)
+    {
+    char c = errMessage[i];
+    if (c < '\n')
+        errMessage[i] = ' ' ;
+    }
+job->stderr = errMessage;
+
 
 /* Update database with job results */
 struct dyString *dy = dyStringNew(0);

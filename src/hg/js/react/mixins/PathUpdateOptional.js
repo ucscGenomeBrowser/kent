@@ -17,3 +17,6 @@ var PathUpdateOptional = {
                  // A component may add to path if the component has more than one UI event.
                }
 };
+
+// Without this, jshint complains that PathUpdateOptional is not used.  Module system would help.
+PathUpdateOptional = PathUpdateOptional;

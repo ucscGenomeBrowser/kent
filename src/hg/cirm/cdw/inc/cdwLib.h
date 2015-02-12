@@ -366,4 +366,11 @@ void cdwWebBrowseMenuItem(boolean on);
 void cdwWebSubmitMenuItem(boolean on);
 /* Toggle visibility of 'Submit data' link on navigation menu */
 
+/***/
+/* Metadata queries */
+
+struct tagStorm *cdwTagStorm(struct sqlConnection *conn);
+/* Load  cdwMetaTags.tags, cdwFile.tags, and select other fields into a tag
+ * storm for searching */
+
 #endif /* CDWLIB_H */

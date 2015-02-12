@@ -864,7 +864,7 @@ track snp141Common
 shortLabel Common SNPs(141)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 141) Found in >= 1% of Samples
 group varRep
-visibility dense
+visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp141Seq
@@ -878,7 +878,6 @@ orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
-priority 1
 
 track snp141Flagged
 shortLabel Flagged SNPs(141)
@@ -2994,6 +2993,16 @@ type bed 4
 hgsid on
 url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=
 
+track cosmicNew
+shortLabel COSMIC
+longLabel COSMIC: Catalogue Of Somatic Mutations In Cancer
+group phenDis
+visibility hide
+color 200,0,0
+type bigBed 4 +
+url http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=
+html cosmic
+
 track lovd
 shortLabel LOVD Variants
 longLabel Leiden Open Variation Database Public Variants
@@ -3023,41 +3032,11 @@ shortLabel ClinVar Variants
 longLabel ClinVar Variants
 group phenDis
 visibility hide
-type bigBed 4 .
-itemRgb on
-urls rcvAcc="http://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="http://www.ncbi.nlm.nih.gov/gene/$$" snpId="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="http://www.ncbi.nlm.nih.gov/dbvar/variants/$$/"
-mouseOverField clinSign
-noScoreFilter on
-release beta,public
-
-    track clinvarMain
-    shortLabel ClinVar Main
-    longLabel ClinVar Variants, CNVs Excluded
-    visibility pack
-    parent clinvar
-    priority 1
-    release beta,public
-
-    track clinvarCnv
-    shortLabel ClinVar CNVs
-    longLabel ClinVar Variants, CNVs Only
-    visibility pack
-    parent clinvar
-    priority 2
-    release beta,public
-
-track clinvar
-compositeTrack on
-shortLabel ClinVar Variants
-longLabel ClinVar Variants
-group phenDis
-visibility hide
 type bigBed 12 .
 itemRgb on
 urls rcvAcc="http://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="http://www.ncbi.nlm.nih.gov/gene/$$" snpId="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="http://www.ncbi.nlm.nih.gov/dbvar/variants/$$/"
 mouseOverField clinSign
 noScoreFilter on
-release alpha
 
     track clinvarMain
     shortLabel ClinVar Main
@@ -3065,7 +3044,6 @@ release alpha
     visibility pack
     parent clinvar
     priority 1
-    release alpha
 
     track clinvarCnv
     shortLabel ClinVar CNVs
@@ -3073,7 +3051,6 @@ release alpha
     visibility pack
     parent clinvar
     priority 2
-    release alpha
 
 searchName cosmicId
 searchTable cosmic

@@ -21,6 +21,8 @@
 #ifndef TRACKHUB_H
 #define TRACKHUB_H
 
+#include "dystring.h"
+
 
 struct trackHub 
 /* A track hub. */

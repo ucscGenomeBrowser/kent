@@ -2443,7 +2443,6 @@ return cnt;
 }
 
 int stringArrayIx(char *string, char *array[], int arraySize)
-
 /* Return index of string in array or -1 if not there. */
 {
 int i;

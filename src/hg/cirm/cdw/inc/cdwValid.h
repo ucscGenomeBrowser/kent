@@ -16,6 +16,15 @@ void cdwValidateRcc(char *path);
 void cdwValidateIdat(char *path);
 /* Validate illumina idat file. */
 
+void cdwValidatePdf(char *path);
+/* Make sure PDF really is PDF */
+
+void cdwValidateCram(char *path);
+/* Validate cram file. */
+
+void cdwValidateJpg(char *path);
+/* Check jpg file is really jpg */
+
 boolean cdwIsGzipped(char *path);
 /* Return TRUE if file at path starts with GZIP signature */
 
@@ -38,5 +47,17 @@ struct cdwBedType *cdwBedTypeFind(char *name);
     
 struct cdwBedType *cdwBedTypeMayFind(char *name);
 /* Return cdwBedType of given name, just return NULL if not found. */
+
+extern char *cdwAllowedTags[];
+
+struct hash *cdwAllowedTagsHash();
+/* Get hash of all allowed tags */
+
+boolean cdwValidateTagName(char *tag);
+/* Make sure that tag is one of the allowed ones. */
+
+boolean cdwValidateTagVal(char *tag, char *val);
+/* Make sure that tag is one of the allowed ones and that
+ * val is compatible */
 
 #endif /* CDWVALID_H */

@@ -9,7 +9,6 @@
 #include "hdb.h"
 #include "genePred.h"
 #include "genePredReader.h"
-#include "chromInfo.h"
 
 
 /* Command line option specifications */
@@ -41,32 +40,10 @@ errAbort(
 static void checkAGenePred(char *fileTbl, int iRec, struct genePred *gp)
 /* check one genePred */
 {
-int chromSize = -1;  /* default to not checking */
-char desc[512];
+char desc[2*PATH_LEN];
 
 safef(desc, sizeof(desc), "%s:%d", fileTbl, iRec);
-if (gDb != NULL)
-    {
-    // hGetChromInfo is case independent
-    struct chromInfo *ci = hGetChromInfo(gDb, gp->chrom);
-    if (ci == NULL)
-        {
-        fprintf(stderr, "Error: %s: %s has invalid chrom for %s: %s\n",
-                desc, gp->name, gDb, gp->chrom);
-        gErrCount++;
-        chromSize = -1;  // don't validate
-        }
-    else if (differentString(gp->chrom, ci->chrom)) // verify case dependent ==
-        {
-        fprintf(stderr, "Error: %s: %s has invalid chrom for %s: %s\n",
-                desc, gp->name, gDb, gp->chrom);
-        gErrCount++;
-        chromSize = -1;  // don't validate
-        }
-    else
-        chromSize = ci->size;
-    }
-gErrCount += genePredCheck(desc, stderr, chromSize, gp);
+gErrCount += genePredCheckDb(desc, stderr, gDb, gp);
 gChkCount++;
 }
 

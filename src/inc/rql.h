@@ -65,7 +65,7 @@ union rqlVal
     {
     boolean b;
     char *s;
-    int i;
+    long long i;
     double x;
     };
 
