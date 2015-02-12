@@ -100,7 +100,7 @@ for (i=0, field = fieldList; i<fieldCount; ++i, field = field->next)
         // meta tables
         struct hash *fieldHash = hashFindVal(vocabHash, field->name);
         if (fieldHash != NULL)
-            link = metaVocabLink(fieldHash, fieldVal, fieldVal);
+            link = vocabLink(fieldHash, fieldVal, fieldVal);
 
         }
     webPrintLinkCell(link != NULL ? link : fieldVal);
@@ -158,7 +158,7 @@ static void getVocab(struct trackDb *tdb, struct cart *cart,
 char *file = NULL;
 struct hash *hash = NULL;
 char *vocab = trackDbSetting(tdb, "controlledVocabulary");
-struct hash *metaHash = metaBasicFromSetting(tdb, cart, "inputFieldMetaTables");
+struct hash *metaHash = vocabBasicFromSetting(tdb, cart, "inputFieldMetaTables");
 if (vocab)
     {
     file = cloneFirstWord(vocab);

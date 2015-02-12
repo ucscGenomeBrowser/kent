@@ -4188,33 +4188,33 @@ if (subCount > 5 || (restrictions && sortOrder != NULL))
 }
 
 /********************/
-/* Basic metadata for subgroups and input fields */
+/* Basic info for a controlled vocabulary term */
 
-struct metaBasic {
-    struct metaBasic *next;
+struct vocabBasic {
+    struct vocabBasic *next;
     char *term;
     char *description;
     char *url;
 };
 
-char *metaVocabLink(struct hash *metaFieldHash, char *term, char *title)
+char *vocabLink(struct hash *vocabFieldHash, char *term, char *title)
 /* Make an anchor with mouseover containing description and link if present */
 {   
-struct metaBasic *meta = hashFindVal(metaFieldHash, term);
-if (meta == NULL)
+struct vocabBasic *vocab = hashFindVal(vocabFieldHash, term);
+if (vocab == NULL)
     return NULL;
 struct dyString *ds = dyStringNew(0);
-if (meta->url == NULL || strlen(meta->url) == 0)
+if (vocab->url == NULL || strlen(vocab->url) == 0)
     dyStringPrintf(ds, "<A title='%s' style='cursor: pointer;'>%s</A>",
-                        meta->description, term);
+                        vocab->description, term);
 else
     dyStringPrintf(ds, "<A target='_blank' class='cv' title='%s' href='%s'>%s</A>\n",
-                        meta->description, meta->url, term);
+                        vocab->description, vocab->url, term);
 return dyStringCannibalize(&ds);
 }
 
-struct hash *metaBasicFromSetting(struct trackDb *parentTdb, struct cart *cart, char *setting)
-/* Get description and URL for all metaTables. Returns a hash of hashes */
+struct hash *vocabBasicFromSetting(struct trackDb *parentTdb, struct cart *cart, char *setting)
+/* Get description and URL for all vocabTables. Returns a hash of hashes */
 {
 if (differentString(setting, "subGroupMetaTables") &&
     differentString(setting, "inputFieldMetaTables"))
@@ -4222,17 +4222,17 @@ if (differentString(setting, "subGroupMetaTables") &&
 char *spec = trackDbSetting(parentTdb, setting);
 if (!spec)
     return NULL;
-struct slPair *metaTables = slPairFromString(spec);
-struct slPair *metaTable = NULL;
+struct slPair *vocabTables = slPairFromString(spec);
+struct slPair *vocabTable = NULL;
 struct hash *tableHash = hashNew(0);
 struct sqlResult *sr;
 char **row;
 char query[256];
 char *database = cartString(cart, "db");
-for (metaTable = metaTables; metaTable != NULL; metaTable = metaTable->next)
+for (vocabTable = vocabTables; vocabTable != NULL; vocabTable = vocabTable->next)
     {
     char *db = database;
-    char *tableSpec = (char *)metaTable->val;
+    char *tableSpec = (char *)vocabTable->val;
     char *tableName = chopPrefix(tableSpec);
     if (differentString(tableName, tableSpec))
         {
@@ -4242,7 +4242,7 @@ for (metaTable = metaTables; metaTable != NULL; metaTable = metaTable->next)
     struct sqlConnection *conn = hAllocConn(db);
     boolean hasUrl = FALSE;
     struct hash *subgroupHash = hashNew(0);
-    hashAdd(tableHash, metaTable->name, subgroupHash);
+    hashAdd(tableHash, vocabTable->name, subgroupHash);
     if (hHasField(db, tableName, "url"))
         {
         sqlSafef(query, sizeof(query), "select term, description, url from %s", tableName);
@@ -4253,13 +4253,13 @@ for (metaTable = metaTables; metaTable != NULL; metaTable = metaTable->next)
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-        struct metaBasic *meta = NULL;
-        AllocVar(meta);
-        meta->term = cloneString(row[0]);
-        meta->description = cloneString(row[1]);
+        struct vocabBasic *vocab = NULL;
+        AllocVar(vocab);
+        vocab->term = cloneString(row[0]);
+        vocab->description = cloneString(row[1]);
         if (hasUrl)
-            meta->url = cloneString(row[2]);
-        hashAdd(subgroupHash, meta->term, meta);
+            vocab->url = cloneString(row[2]);
+        hashAdd(subgroupHash, vocab->term, vocab);
         }
     sqlFreeResult(&sr);
     hFreeConn(&conn);
@@ -4297,7 +4297,7 @@ else
 // Finally the big "for loop" to list each subtrack as a table row.
 printf("\n<!-- ----- subtracks list ----- -->\n");
 membersForAll_t* membersForAll = membersForAllSubGroupsGet(parentTdb,NULL);
-struct hash *subgroupMetaHash = metaBasicFromSetting(parentTdb, cart, "subGroupMetaTables");
+struct hash *subgroupMetaHash = vocabBasicFromSetting(parentTdb, cart, "subGroupMetaTables");
 struct slRef *subtrackRef;
 
 /* Color handling ?? */
@@ -4483,7 +4483,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                     {
                     struct hash *colHash = hashFindVal(subgroupMetaHash, col);
                     if (colHash)
-                        link = metaVocabLink(colHash, term, titleRoot);
+                        link = vocabLink(colHash, term, titleRoot);
                     }
                 printf("%s", link ? link : titleRoot);
                 puts("</TD>");
