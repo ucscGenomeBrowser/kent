@@ -4297,7 +4297,7 @@ else
 // Finally the big "for loop" to list each subtrack as a table row.
 printf("\n<!-- ----- subtracks list ----- -->\n");
 membersForAll_t* membersForAll = membersForAllSubGroupsGet(parentTdb,NULL);
-struct hash *subgroupMetaHash = vocabBasicFromSetting(parentTdb, cart, "subGroupMetaTables");
+struct hash *vocabHash = vocabBasicFromSetting(parentTdb, cart, "subGroupMetaTables");
 struct slRef *subtrackRef;
 
 /* Color handling ?? */
@@ -4479,9 +4479,9 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                 printf("<TD id='%s_%s' abbr='%s' align='left'>", subtrack->track, col, term);
                 printf("&nbsp");
                 char *link = NULL;
-                if (subgroupMetaHash)
+                if (vocabHash)
                     {
-                    struct hash *colHash = hashFindVal(subgroupMetaHash, col);
+                    struct hash *colHash = hashFindVal(vocabHash, col);
                     if (colHash)
                         link = vocabLink(colHash, term, titleRoot);
                     }
