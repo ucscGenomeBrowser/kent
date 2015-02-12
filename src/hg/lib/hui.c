@@ -4197,6 +4197,16 @@ struct vocabBasic {
     char *url;
 };
 
+boolean vocabSettingIsEncode(char *setting)
+/* Distinguish ENCODE controlled vocab settings (first arg is cv.ra filename) from non-ENCODE 
+    (table-based vocabs)
+*/
+{
+if (setting && (strchr(cloneFirstWord(setting), '=') == NULL))
+    return TRUE;
+return FALSE;
+}
+
 char *vocabLink(struct hash *vocabFieldHash, char *term, char *title)
 /* Make an anchor with mouseover containing description and link if present */
 {   
@@ -4213,15 +4223,16 @@ else
 return dyStringCannibalize(&ds);
 }
 
-struct hash *vocabBasicFromSetting(struct trackDb *parentTdb, struct cart *cart, char *setting)
+struct hash *vocabBasicFromSetting(struct trackDb *parentTdb, struct cart *cart)
 /* Get description and URL for all vocabTables. Returns a hash of hashes */
 {
-if (differentString(setting, "subGroupMetaTables") &&
-    differentString(setting, "inputFieldMetaTables"))
-        return NULL;
-char *spec = trackDbSetting(parentTdb, setting);
+char *spec = trackDbSetting(parentTdb, "controlledVocabulary");
 if (!spec)
     return NULL;
+// Not yet implemented for ENCODE-style CV
+if (vocabSettingIsEncode(spec))
+    return NULL;
+
 struct slPair *vocabTables = slPairFromString(spec);
 struct slPair *vocabTable = NULL;
 struct hash *tableHash = hashNew(0);
@@ -4297,7 +4308,7 @@ else
 // Finally the big "for loop" to list each subtrack as a table row.
 printf("\n<!-- ----- subtracks list ----- -->\n");
 membersForAll_t* membersForAll = membersForAllSubGroupsGet(parentTdb,NULL);
-struct hash *vocabHash = vocabBasicFromSetting(parentTdb, cart, "subGroupMetaTables");
+struct hash *vocabHash = vocabBasicFromSetting(parentTdb, cart);
 struct slRef *subtrackRef;
 
 /* Color handling ?? */
@@ -6863,14 +6874,22 @@ char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct tra
 // then label will be wrapped with the link to display it.  Return string is cloned.
 {
 char *vocab = trackDbSetting(parentTdb, "controlledVocabulary");
+
+// WARNING: this is needed to cache metadata in trackDb object (accessed by metadataFindValue)
+(void)metadataForTable(db,childTdb,NULL);
+
 if (vocab == NULL)
     return cloneString(label); // No wrapping!
 
-#define BUFSIZ 16
-char *words[BUFSIZ];
-int count;
-if ((count = chopByWhite(cloneString(vocab), words, BUFSIZ)) <= 1)
+// Currently implemented just for ENCODE style vocab
+if (!vocabSettingIsEncode(vocab))
     return cloneString(label);
+
+char *words[SMALLBUF];
+int count;
+if ((count = chopByWhite(cloneString(vocab), words, SMALLBUF)) <= 1)
+    return cloneString(label);
+
 
 char *suffix = NULL;
 char *rootLabel = labelRoot(label, &suffix);

@@ -4,7 +4,8 @@ shortLabel DNase Clusters
 pennantIcon encodeThumbnail.jpg ../ENCODE "ENCODE project at UCSC"
 longLabel DNase I Hypersensitivity Peak Clusters from ENCODE
 inputTableFieldDisplay cellType treatment
-inputFieldMetaTables cellType=hgFixed.wgEncodeCell treatment=hgFixed.wgEncodeTreatment 
+controlledVocabulary cellType=hgFixed.wgEncodeCell treatment=hgFixed.wgEncodeTreatment 
+#inputFieldMetaTables treatment=cellType=hgFixed.wgEncodeCell hgFixed.wgEncodeTreatment 
 inputTrackTable uwEnc2DnaseInputs
 sourceTable uwEnc2DnaseSources
 type bed 5 .
@@ -28,7 +29,8 @@ subGroup3 treatment Treatment diffProtA_5d=diffProtA_5d diffProtA_14d=diffProtA_
 subGroup4 tissue Tissue kidney=kidney esophagus=esophagus cervix=cervix skin=skin lung=lung heart=heart colon=colon blood=blood prostate=prostate embryo=embryo pancreas=pancreas breast=breast bone_marrow=bone_marrow periodontum=periodontum muscle=muscle brain=brain blood_vessel=blood_vessel spinal_cord=spinal_cord placenta=placenta eye=eye liver=liver periodontium=periodontium testis=testis
 subGroup5 cancer Cancer cancer=cancer normal=normal unknown=unknown
 subGroup6 subtrackColor Similarity
-subGroupMetaTables cellType=hgFixed.wgEncodeCell
+controlledVocabulary cellType=hgFixed.wgEncodeCell
+#subGroupMetaTables cellType=hgFixed.wgEncodeCell
 dimensions dimA=cellType dimB=tissue dimC=cancer
 filterComposite dimA dimB dimC
 sortOrder view=+ subtrackColor=+ cellType=+ tissue=+
@@ -2289,7 +2291,8 @@ subGroup2 treatment Treatment diffProtA_5d=diffProtA_5d diffProtA_14d=diffProtA_
 subGroup3 tissue Tissue kidney=kidney esophagus=esophagus cervix=cervix skin=skin lung=lung heart=heart colon=colon blood=blood prostate=prostate embryo=embryo pancreas=pancreas breast=breast bone_marrow=bone_marrow periodontum=periodontum muscle=muscle brain=brain blood_vessel=blood_vessel spinal_cord=spinal_cord placenta=placenta eye=eye liver=liver periodontium=periodontium testis=testis
 subGroup4 cancer Cancer cancer=cancer normal=normal unknown=unknown
 subGroup5 subtrackColor Similarity
-subGroupMetaTables cellType=hgFixed.wgEncodeCell
+controlledVocabulary cellType=hgFixed.wgEncodeCell
+#subGroupMetaTables cellType=hgFixed.wgEncodeCell
 sortOrder subtrackColor=+ cellType=+ tissue=+
 
 	track uwEnc2DnaseWigWgEncodeEH000484
