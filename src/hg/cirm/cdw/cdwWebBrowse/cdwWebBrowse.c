@@ -139,9 +139,9 @@ else
 int matchCount = 0;
 boolean doSelect = FALSE;
 
-void traverse(struct tagStorm *tags, struct tagStanza *list, 
+void rMatchesToRa(struct tagStorm *tags, struct tagStanza *list, 
     struct rqlStatement *rql, struct lm *lm)
-/* Recursively traverse stanzas on list. */
+/* Recursively traverse stanzas on list outputting matching stanzas as ra. */
 {
 struct tagStanza *stanza;
 for (stanza = list; stanza != NULL; stanza = stanza->next)
@@ -149,7 +149,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     if (rql->limit < 0 || rql->limit > matchCount)
 	{
 	if (stanza->children)
-	    traverse(tags, stanza->children, rql, lm);
+	    rMatchesToRa(tags, stanza->children, rql, lm);
 	else    /* Just apply query to leaves */
 	    {
 	    if (statementMatch(rql, stanza, lm))
@@ -189,10 +189,19 @@ rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
  * updateing count in count case. */
 doSelect = sameWord(rql->command, "select");
 struct lm *lm = lmInit(0);
-traverse(tags, tags->forest, rql, lm);
+rMatchesToRa(tags, tags->forest, rql, lm);
 if (sameWord(rql->command, "count"))
     printf("%d\n", matchCount);
 
+}
+
+int labCount(struct tagStorm *tags)
+/* Return number of different labs in tags */
+{
+struct hash *hash = tagCountVals(tags, "lab");
+int count = hash->elCount;
+hashFree(&hash);
+return count;
 }
 
 void doHome(struct sqlConnection *conn)
@@ -206,7 +215,80 @@ sqlSafef(query, sizeof(query),
 long long totalBytes = sqlQuickLongLong(conn, query);
 printf("and ");
 printLongWithCommas(stdout, totalBytes);
-printf(" bytes of data.");
+struct tagStorm *tags = cdwTagStorm(conn);
+printf(" bytes of data from %d labs.", labCount(tags));
+}
+
+void rMatchesToTab(struct tagStorm *tags, struct tagStanza *list, 
+    struct rqlStatement *rql, struct lm *lm)
+/* Recursively traverse stanzas on list outputting matching stanzas as tab separated
+ * in order determined by rql->fieldList. */
+{
+struct tagStanza *stanza;
+
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    if (rql->limit < 0 || rql->limit > matchCount)
+	{
+	if (stanza->children)
+	    rMatchesToTab(tags, stanza->children, rql, lm);
+	else
+	    {
+	    if (statementMatch(rql, stanza, lm))
+		{
+		++matchCount;
+		printf("<TR>\n");
+		struct slName *field;
+		for (field = rql->fieldList; field != NULL; field = field->next)
+		    {
+		    char *val = tagFindVal(stanza, field->name);
+		    webPrintLinkCellStart();
+		    printf("%s", emptyForNull(val));
+		    webPrintLinkCellEnd();
+		    }
+		printf("</TR>\n");
+		}
+	    }
+	}
+    }
+}
+
+void showTableFromQuery(struct tagStorm *tags, char *fields, char *where,  int limit)
+/* Construct query and display results as a table */
+{
+char rqlQuery[1024];
+safef(rqlQuery, sizeof(rqlQuery), 
+    "select %s from x where %s limit %d", fields, where, limit);
+
+/* Turn rqlQuery string into a parsed out rqlStatement. */
+struct lineFile *lf = lineFileOnString("rqlQuery", TRUE, cloneString(rqlQuery));
+struct rqlStatement *rql = rqlStatementParse(lf);
+
+/* Set up our table within table look. */
+webPrintLinkTableStart();
+
+/* Print column labels */
+struct slName *field;
+for (field = rql->fieldList; field != NULL; field = field->next)
+    webPrintLabelCell(field->name);
+
+/* Call recursive routine to show rest */
+struct lm *lm = lmInit(0);
+rMatchesToTab(tags, tags->forest, rql, lm);
+
+/* Get rid of table within table look */
+webPrintLinkTableEnd();
+}
+
+
+void doBrowseFiles(struct sqlConnection *conn)
+/* Print list of files */
+{
+struct tagStorm *tags = cdwTagStorm(conn);
+showTableFromQuery(tags, 
+    "file_name,lab,assay,data_set_id,format,item_count,map_ratio,"
+    "map_to_ribosome,map_to_repeat,paired_end_mate",
+    "file_name", 100);
 }
 
 void doSearch(struct sqlConnection *conn)
@@ -250,6 +332,10 @@ else if (sameString(command, "search"))
 else if (sameString(command, "summary"))
     {
     doSummary(conn);
+    }
+else if (sameString(command, "browseFiles"))
+    {
+    doBrowseFiles(conn);
     }
 else
     {
@@ -310,7 +396,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.04");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.05");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
