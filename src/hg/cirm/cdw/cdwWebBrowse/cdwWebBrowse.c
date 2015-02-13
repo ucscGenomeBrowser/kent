@@ -21,6 +21,10 @@
 #include "web.h"
 #include "jsHelper.h"
 
+/* Global vars */
+struct cart *cart;	// User variables saved from click to click
+struct hash *oldVars;	// Previous cart, before current round of CGI vars folded in
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -28,9 +32,6 @@ errAbort(
   "cdwWebBrowse is a cgi script not meant to be run from command line.\n"
   );
 }
-
-struct cart *cart;
-struct hash *oldVars;
 
 void rTagStormCountDistinct(struct tagStanza *list, char *tag, struct hash *uniq)
 /* Fill in hash with number of times have seen each value of tag */
@@ -194,26 +195,6 @@ if (sameWord(rql->command, "count"))
 
 }
 
-void browseCdw(struct sqlConnection *conn)
-/* Show some overall information about cdw */
-{
-struct tagStorm *tags = cdwTagStorm(conn);
-uglyf("BROWSING CDW 9!<BR>\n");
-printf("<PRE><TT>\n");
-highLevelSummary(conn, tags, highLevelTags, ArraySize(highLevelTags));
-printf("</TT></PRE>\n");
-printf("query: ");
-char *queryVar = "cdwWebBrowse.query";
-char *query = cartUsualString(cart, queryVar, "select * from x where file_name limit 3");
-cgiMakeTextVar("cdwWebBrowse.query", query, 80);
-cgiMakeSubmitButton();
-
-
-printf("<PRE><TT>\n");
-showMatching(query, tags);
-printf("</TT></PRE>\n");
-}
-
 void doHome(struct sqlConnection *conn)
 /* Print home page message.  Welcome user, provide brief instructions and hi level stats. */
 {
@@ -233,7 +214,7 @@ void doSearch(struct sqlConnection *conn)
 {
 printf("query: ");
 char *queryVar = "cdwWebBrowse.query";
-char *query = cartUsualString(cart, queryVar, "select * where file_name limit 10");
+char *query = cartUsualString(cart, queryVar, "select * from x where file_name limit 3");
 cgiMakeTextVar(queryVar, query, 80);
 cgiMakeSubmitButton();
 
@@ -245,6 +226,7 @@ printf("</TT></PRE>\n");
 }
 
 void doSummary(struct sqlConnection *conn)
+/* Put up summary page */
 {
 struct tagStorm *tags = cdwTagStorm(conn);
 printf("<PRE><TT>\n");
@@ -254,7 +236,7 @@ printf("</TT></PRE>\n");
 
 
 void dispatch(struct sqlConnection *conn)
-/* Dispatch page after the menu bar to routine depending on cdwCommand variable */
+/* Dispatch page after to routine depending on cdwCommand variable */
 {
 char *command = cartOptionalString(cart, "cdwCommand");
 if (command == NULL)
@@ -272,12 +254,11 @@ else if (sameString(command, "summary"))
 else
     {
     uglyf("unrecognized command %s<BR>\n", command);
-    browseCdw(conn);
     }
 }
 
 void doMiddle()
-/* Write what goes between BODY and /BODY */
+/* Menu bar has been drawn.  We are in the middle of first section. */
 {
 printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 struct sqlConnection *conn = sqlConnect(cdwDatabase);
@@ -287,8 +268,7 @@ printf("</FORM>\n");
 }
 
 static char *localMenuBar()
-/* Return menu bar string and also make sure that all the javascript and css that
- * menu bar needs are in place. */
+/* Return menu bar string */
 {
 // menu bar html is in a stringified .h file
 char *rawHtml = 
@@ -300,89 +280,43 @@ safef(uiVars, sizeof(uiVars), "%s=%s", cartSessionVarName(), cartSessionId(cart)
 return menuBarAddUiVars(rawHtml, "/cgi-bin/cdw", uiVars);
 }
 
-static void webStartWrapperDetailedInternal(char *title)
-/* output a CGI and HTML header with the given title in printf format */
+void localWebStartWrapper(char *titleString)
+/* Output a HTML header with the given title.  Start table layout.  Draw menu bar. */
 {
-/* Print out <!DOCTYPE> <HTML> <HEAD> ... </HEAD> */
+/* Do html header. We do this a little differently than web.c routines, mostly
+ * in that we are strict rather than transitional HTML 4.01 */
     {
     puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" "
              "\"http://www.w3.org/TR/html4/strict.dtd\">");
-    puts(
-	"<HTML>" "\n"
-	"<HEAD>" "\n"
-	);
-    printf("\t<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">" "\n"
-	 "\t<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">" "\n"
-         "\t<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">" "\n"
-         "\t<META HTTP-EQUIV=\"Expires\" CONTENT=\"-1\">" "\n"
-	 "\t<TITLE>"
-	 );
-    htmlTextOut(title);
-    printf("	</TITLE>\n    ");
+    puts("<HTML><HEAD>\n");
+    webPragmasEtc();
+    printf("<TITLE>%s</TITLE>\n", titleString);
+    webIncludeResourceFile("HGStyle.css");
     jsIncludeFile("jquery.js", NULL);
     jsIncludeFile("jquery.plugins.js", NULL);
-    jsIncludeFile("utils.js", NULL);
-    jsIncludeFile("ajax.js", NULL);
     webIncludeResourceFile("nice_menu.css");
-    webIncludeResourceFile("HGStyle.css");
     printf("</HEAD>\n");
     printBodyTag(stdout);
-    htmlWarnBoxSetup(stdout);// Sets up a warning box which can be filled with errors as they occur
-    puts(commonCssStyles());
     }
 
-
-/* Put up the hot links bar. */
-
-puts(
-    "<A NAME=\"TOP\"></A>" "\n"
-    "" "\n"
-    "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=\"100%\">" "\n");
-
-char *menuStr = localMenuBar();
-puts(menuStr);
+webStartSectionTables();    // Start table layout code
+puts(localMenuBar());	    // Menu bar after tables open but before first section
+webFirstSection(titleString);	// Open first section
+webPushErrHandlers();	    // Now can do improved error handler
+}
 
 
-/* this HTML must be in calling code if skipSectionHeader is TRUE */
-    {
-    puts( // TODO: Replace nested tables with CSS (difficulty is that tables are closed elsewhere)
-         "<!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->" "\n"
-         "<TR><TD COLSPAN=3>\n"
-         "<div id=firstSection>"
-         "      <!--outer table is for border purposes-->\n"
-         "      <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' "
-                     "CELLPADDING='1'><TR><TD>\n"
-         "    <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' "
-                     "CELLPADDING='0'><TR><TD>\n"
-         "     <div class='subheadingBar'><div class='windowSize' id='sectTtl'>"
-         );
-    htmlTextOut(title);
-
-    puts("     </div></div>\n"
-         "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>"
-              "<TR><TH HEIGHT=10></TH></TR>\n"
-         "     <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n"
-         );
-    }
-webPushErrHandlers();
-/* set the flag */
-}	/*	static void webStartWrapperDetailedInternal()	*/
-
-
-void localWebWrap()
+void localWebWrap(struct cart *theCart)
+/* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
-webStartWrapperDetailedInternal("CIRM Stem Cell Hub Browser V3");
+cart = theCart;
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.04");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
 printf("</BODY></HTML>\n");
 }
 
-void doAfterCart(struct cart *theCart)
-{
-cart = theCart;
-localWebWrap();
-}
 
 char *excludeVars[] = {"cdwCommand", NULL};
 
@@ -394,6 +328,6 @@ if (!isFromWeb && !cgiSpoof(&argc, argv))
     usage();
 dnaUtilOpen();
 oldVars = hashNew(0);
-cartEmptyShell(doAfterCart, hUserCookie(), excludeVars, oldVars);
+cartEmptyShell(localWebWrap, hUserCookie(), excludeVars, oldVars);
 return 0;
 }
