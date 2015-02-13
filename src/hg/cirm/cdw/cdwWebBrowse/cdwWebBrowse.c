@@ -172,6 +172,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 }
 
 void showMatching(char *rqlQuery, struct tagStorm *tags)
+/* Show stanzas that match query */
 {
 /* Turn rqlQuery string into a parsed out rqlStatement. */
 struct lineFile *lf = lineFileOnString("query", TRUE, cloneString(rqlQuery));
@@ -197,7 +198,7 @@ void browseCdw(struct sqlConnection *conn)
 /* Show some overall information about cdw */
 {
 struct tagStorm *tags = cdwTagStorm(conn);
-uglyf("BROWSING CDW 5!<BR>\n");
+uglyf("BROWSING CDW 8!<BR>\n");
 printf("<PRE><TT>\n");
 highLevelSummary(conn, tags, highLevelTags, ArraySize(highLevelTags));
 printf("</TT></PRE>\n");
@@ -213,15 +214,78 @@ showMatching(query, tags);
 printf("</TT></PRE>\n");
 }
 
+void doHome(struct sqlConnection *conn)
+/* Print home page message.  Welcome user, provide brief instructions and hi level stats. */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select count(*) from cdwValidFile");
+printf("The CIRM Stem Cell Hub contains %d files\n", sqlQuickNum(conn, query));
+sqlSafef(query, sizeof(query),
+    "select sum(size) from cdwFile,cdwValidFile where cdwFile.id=cdwValidFile.id");
+long long totalBytes = sqlQuickLongLong(conn, query);
+printf("and ");
+printLongWithCommas(stdout, totalBytes);
+printf(" bytes of data.");
+}
+
+void doSearch(struct sqlConnection *conn)
+/* Print up search page */
+{
+printf("query: ");
+char *queryVar = "cdwWebBrowse.query";
+char *query = cartUsualString(cart, queryVar, "select * where file_name limit 10");
+cgiMakeTextVar(queryVar, query, 80);
+cgiMakeSubmitButton();
+
+
+printf("<PRE><TT>\n");
+struct tagStorm *tags = cdwTagStorm(conn);
+showMatching(query, tags);
+printf("</TT></PRE>\n");
+}
+
+void doSummary(struct sqlConnection *conn)
+{
+struct tagStorm *tags = cdwTagStorm(conn);
+printf("<PRE><TT>\n");
+highLevelSummary(conn, tags, highLevelTags, ArraySize(highLevelTags));
+printf("</TT></PRE>\n");
+}
+
+
+void dispatch(struct sqlConnection *conn)
+/* Dispatch page after the menu bar to routine depending on cdwCommand variable */
+{
+char *command = cartOptionalString(cart, "cdwCommand");
+if (command == NULL)
+    {
+    doHome(conn);
+    }
+else if (sameString(command, "search"))
+    {
+    doSearch(conn);
+    }
+else if (sameString(command, "summary"))
+    {
+    doSummary(conn);
+    }
+else
+    {
+    uglyf("unrecognized command %s<BR>\n", command);
+    browseCdw(conn);
+    }
+}
+
 void doMiddle()
 /* Write what goes between BODY and /BODY */
 {
 printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 struct sqlConnection *conn = sqlConnect(cdwDatabase);
-browseCdw(conn);
+dispatch(conn);
 sqlDisconnect(&conn);
 printf("</FORM>\n");
 }
+
 
 static char *localMenuBar(struct cart *cart)
 // Return HTML for the menu bar (read from a configuration file);
@@ -247,13 +311,15 @@ jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("jquery.plugins.js", NULL);
 webIncludeResourceFile("nice_menu.css");
 
-// Read in menu bar html
-char *menuStr = cloneString(
+// Read in stringified menu bar html 
+char *menuStr = 
 #include "cdwNavBar.h"
-);
+    ;
+
 int len = strlen(menuStr);
 // fixup internal CGIs to have hgsid
     {
+    menuStr = cloneString(menuStr);
     int offset, err;
     safef(buf, sizeof(buf), "/cgi-bin/cdw[A-Za-z]+(%c%c?)", '\\', '?');
     err = regcomp(&re, buf, REG_EXTENDED);
@@ -275,30 +341,21 @@ int len = strlen(menuStr);
     menuStr = dyStringCannibalize(&dy);
     }
 
-
 #ifdef SOON
 if(!loginSystemEnabled())
     stripRegEx(menuStr, "<\\!-- LOGIN_START -->.*<\\!-- LOGIN_END -->", REG_ICASE);
 #endif /* SOON */
 
-
-
-
 return menuStr;
 }
 
-static void webStartWrapperDetailedInternal(struct cart *theCart, char *title)
+static void webStartWrapperDetailedInternal(char *title)
 /* output a CGI and HTML header with the given title in printf format */
 {
 /* Print out <!DOCTYPE> <HTML> <HEAD> ... </HEAD> */
     {
-    char *browserVersion;
-    if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '8')
-        puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
-    else
-        puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
-             "\"http://www.w3.org/TR/html4/loose.dtd\">");
-    // Strict would be nice since it fixes atleast one IE problem (use of :hover CSS pseudoclass)
+    puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" "
+             "\"http://www.w3.org/TR/html4/strict.dtd\">");
     puts(
 	"<HTML>" "\n"
 	"<HEAD>" "\n"
@@ -311,6 +368,9 @@ static void webStartWrapperDetailedInternal(struct cart *theCart, char *title)
 	 );
     htmlTextOut(title);
     printf("	</TITLE>\n    ");
+    jsIncludeFile("jquery.js", NULL);
+    jsIncludeFile("utils.js", NULL);
+    jsIncludeFile("ajax.js", NULL);
     webIncludeResourceFile("HGStyle.css");
     printf("</HEAD>\n");
     printBodyTag(stdout);
@@ -321,16 +381,16 @@ static void webStartWrapperDetailedInternal(struct cart *theCart, char *title)
 
 /* Put up the hot links bar. */
 
-char *menuStr = localMenuBar(theCart);
-if(menuStr)
-    {
-    puts(menuStr);
-    }
-
 puts(
     "<A NAME=\"TOP\"></A>" "\n"
     "" "\n"
     "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=\"100%\">" "\n");
+
+char *menuStr = localMenuBar(cart);
+if(menuStr)
+    {
+    puts(menuStr);
+    }
 
 
 /* this HTML must be in calling code if skipSectionHeader is TRUE */
@@ -361,18 +421,11 @@ webPushErrHandlers();
 
 void localWebWrap()
 {
-// cartWebStart(theCart, "hg38", "CIRM Stem Cell Hub File Browser");
-jsIncludeFile("jquery.js", NULL);
-jsIncludeFile("utils.js", NULL);
-jsIncludeFile("ajax.js", NULL);
+webStartWrapperDetailedInternal("CIRM Stem Cell Hub Browser V3");
 pushWarnHandler(htmlVaWarn);
-// webStartWrapper(cart, "hg38", format, args, FALSE, FALSE);
-// webStartWrapperGatewayHeader(cart, "hg38", "", format, args, FALSE, FALSE, FALSE);
-// startWrapperDetailedArgs(cart, "hg38", "", format, args, FALSE, FALSE, FALSE, TRUE);
-// startWrapperDetailedArgs(cart, "hg38", "", format, args, TRUE);
-webStartWrapperDetailedInternal(cart, "CIRM Stem Cell Hub Browser");
 doMiddle();
-cartWebEnd();
+webEndSectionTables();
+printf("</BODY></HTML>\n");
 }
 
 void doAfterCart(struct cart *theCart)
@@ -381,7 +434,7 @@ cart = theCart;
 localWebWrap();
 }
 
-char *excludeVars[] = {NULL};
+char *excludeVars[] = {"cdwCommand", NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
