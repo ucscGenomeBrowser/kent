@@ -950,6 +950,7 @@ sqlSafef(query, sizeof(query),
 return cdwValidFileLoadByQuery(conn, query);
 }
 
+#ifdef OLD
 void cdwWebHeaderWithPersona(char *title)
 /* Print out HTTP and HTML header through <BODY> tag with persona info */
 {
@@ -977,14 +978,17 @@ puts("<BODY>\n");
 
 cdwWebNavBarStart();
 }
+#endif /* OLD */
 
 
+#ifdef OLD
 void cdwWebFooterWithPersona()
 /* Print out end tags and persona script stuff */
 {
 cdwWebNavBarEnd();
 htmlEnd();
 }
+#endif /* OLD */
 
 
 void cdwCreateNewUser(char *email)
