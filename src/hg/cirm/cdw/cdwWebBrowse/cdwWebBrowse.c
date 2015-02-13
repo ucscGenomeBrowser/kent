@@ -198,13 +198,13 @@ void browseCdw(struct sqlConnection *conn)
 /* Show some overall information about cdw */
 {
 struct tagStorm *tags = cdwTagStorm(conn);
-uglyf("BROWSING CDW 8!<BR>\n");
+uglyf("BROWSING CDW 9!<BR>\n");
 printf("<PRE><TT>\n");
 highLevelSummary(conn, tags, highLevelTags, ArraySize(highLevelTags));
 printf("</TT></PRE>\n");
 printf("query: ");
 char *queryVar = "cdwWebBrowse.query";
-char *query = cartUsualString(cart, queryVar, "select * where file_name limit 10");
+char *query = cartUsualString(cart, queryVar, "select * from x where file_name limit 3");
 cgiMakeTextVar("cdwWebBrowse.query", query, 80);
 cgiMakeSubmitButton();
 
@@ -286,67 +286,18 @@ sqlDisconnect(&conn);
 printf("</FORM>\n");
 }
 
-
-static char *localMenuBar(struct cart *cart)
-// Return HTML for the menu bar (read from a configuration file);
-// we fixup internal CGI's to add hgsid's and include the appropriate js and css files.
-//
-// Note this function is also called by hgTracks which extends the menu bar
-//  with a View menu defined in hgTracks/menu.c
+static char *localMenuBar()
+/* Return menu bar string and also make sure that all the javascript and css that
+ * menu bar needs are in place. */
 {
-char *docRoot = hDocumentRoot();
-char buf[4096], uiVars[128];
-regex_t re;
-regmatch_t match[2];
-if (cart)
-    safef(uiVars, sizeof(uiVars), "%s=%s", cartSessionVarName(), cartSessionId(cart));
-else
-    uiVars[0] = 0;
-
-if(docRoot == NULL)
-    // tolerate missing docRoot (i.e. don't bother with menu when running from command line)
-    return NULL;
-
-jsIncludeFile("jquery.js", NULL);
-jsIncludeFile("jquery.plugins.js", NULL);
-webIncludeResourceFile("nice_menu.css");
-
-// Read in stringified menu bar html 
-char *menuStr = 
+// menu bar html is in a stringified .h file
+char *rawHtml = 
 #include "cdwNavBar.h"
-    ;
+   ;
 
-int len = strlen(menuStr);
-// fixup internal CGIs to have hgsid
-    {
-    menuStr = cloneString(menuStr);
-    int offset, err;
-    safef(buf, sizeof(buf), "/cgi-bin/cdw[A-Za-z]+(%c%c?)", '\\', '?');
-    err = regcomp(&re, buf, REG_EXTENDED);
-    if(err)
-	errAbort("regcomp failed; err: %d", err);
-    struct dyString *dy = newDyString(0);
-    for(offset = 0; offset < len && !regexec(&re, menuStr + offset, ArraySize(match), match, 0); offset += match[0].rm_eo)
-	{
-	dyStringAppendN(dy, menuStr + offset, match[0].rm_eo);
-	if(match[1].rm_so == match[1].rm_eo)
-	    dyStringAppend(dy, "?");
-	dyStringAppend(dy, uiVars);
-	if(match[1].rm_so != match[1].rm_eo)
-	    dyStringAppend(dy, "&");
-	}
-    if(offset < len)
-	dyStringAppend(dy, menuStr + offset);
-    freez(&menuStr);
-    menuStr = dyStringCannibalize(&dy);
-    }
-
-#ifdef SOON
-if(!loginSystemEnabled())
-    stripRegEx(menuStr, "<\\!-- LOGIN_START -->.*<\\!-- LOGIN_END -->", REG_ICASE);
-#endif /* SOON */
-
-return menuStr;
+char uiVars[128];
+safef(uiVars, sizeof(uiVars), "%s=%s", cartSessionVarName(), cartSessionId(cart));
+return menuBarAddUiVars(rawHtml, "/cgi-bin/cdw", uiVars);
 }
 
 static void webStartWrapperDetailedInternal(char *title)
@@ -369,8 +320,10 @@ static void webStartWrapperDetailedInternal(char *title)
     htmlTextOut(title);
     printf("	</TITLE>\n    ");
     jsIncludeFile("jquery.js", NULL);
+    jsIncludeFile("jquery.plugins.js", NULL);
     jsIncludeFile("utils.js", NULL);
     jsIncludeFile("ajax.js", NULL);
+    webIncludeResourceFile("nice_menu.css");
     webIncludeResourceFile("HGStyle.css");
     printf("</HEAD>\n");
     printBodyTag(stdout);
@@ -386,11 +339,8 @@ puts(
     "" "\n"
     "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=\"100%\">" "\n");
 
-char *menuStr = localMenuBar(cart);
-if(menuStr)
-    {
-    puts(menuStr);
-    }
+char *menuStr = localMenuBar();
+puts(menuStr);
 
 
 /* this HTML must be in calling code if skipSectionHeader is TRUE */
