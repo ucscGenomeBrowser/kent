@@ -197,7 +197,7 @@ void browseCdw(struct sqlConnection *conn)
 /* Show some overall information about cdw */
 {
 struct tagStorm *tags = cdwTagStorm(conn);
-uglyf("BROWSING CDW 5!<BR>\n");
+uglyf("BROWSING CDW 7!<BR>\n");
 printf("<PRE><TT>\n");
 highLevelSummary(conn, tags, highLevelTags, ArraySize(highLevelTags));
 printf("</TT></PRE>\n");
@@ -248,12 +248,14 @@ jsIncludeFile("jquery.plugins.js", NULL);
 webIncludeResourceFile("nice_menu.css");
 
 // Read in menu bar html
-char *menuStr = cloneString(
+char *menuStr = 
 #include "cdwNavBar.h"
-);
+    ;
+
 int len = strlen(menuStr);
 // fixup internal CGIs to have hgsid
     {
+    menuStr = cloneString(menuStr);
     int offset, err;
     safef(buf, sizeof(buf), "/cgi-bin/cdw[A-Za-z]+(%c%c?)", '\\', '?');
     err = regcomp(&re, buf, REG_EXTENDED);
@@ -292,13 +294,8 @@ static void webStartWrapperDetailedInternal(struct cart *theCart, char *title)
 {
 /* Print out <!DOCTYPE> <HTML> <HEAD> ... </HEAD> */
     {
-    char *browserVersion;
-    if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '8')
-        puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
-    else
-        puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" "
-             "\"http://www.w3.org/TR/html4/loose.dtd\">");
-    // Strict would be nice since it fixes atleast one IE problem (use of :hover CSS pseudoclass)
+    puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" "
+             "\"http://www.w3.org/TR/html4/strict.dtd\">");
     puts(
 	"<HTML>" "\n"
 	"<HEAD>" "\n"
