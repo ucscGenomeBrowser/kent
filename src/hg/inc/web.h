@@ -37,6 +37,16 @@ void webStartWrapperDetailedNoArgs(struct cart *theCart, char *db,
 /* output a CGI and HTML header with the given title in printf format with
  * quite a few options.  Same as above without va_list args */
 
+void webPragmasEtc();
+/* Print out stuff that tells people not to cache us, and that we use the
+ * usual character set and scripting langauge. (Normally done by webStartWrap) */
+
+void webStartSectionTables();
+/* Put up start of nepharious table layout stuff. (Normally done by webStartWrap). */
+
+void webFirstSection(char *title);
+/* Put up the first section (normally done by webStartWrap). */
+
 void webNewSection(char* format, ...);
 /* create a new section on the web page */
 
