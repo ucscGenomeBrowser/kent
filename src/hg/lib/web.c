@@ -1243,6 +1243,38 @@ if(label)
     contextSpecificHelpLabel = cloneString(label);
 }
 
+char *menuBarAddUiVars(char *oldString, char *cgiPrefix, char *uiVars)
+/* Look for CGI program calls in oldString, and add session vars hgsid to them */
+{
+int len = strlen(oldString);
+char buf[4096];
+
+/* Create a regular expression and compile it */
+regex_t re;
+regmatch_t match[2];
+safef(buf, sizeof(buf), "%s[A-Za-z]+(%c%c?)", cgiPrefix, '\\', '?');
+int err = regcomp(&re, buf, REG_EXTENDED);
+if(err)
+    errAbort("regcomp failed; err: %d", err);
+
+/* Search through oldString with regex, and build up new string in dy */
+struct dyString *dy = newDyString(0);
+int offset;
+for(offset = 0; offset < len && !regexec(&re, oldString + offset, ArraySize(match), match, 0); 
+    offset += match[0].rm_eo)
+    {
+    dyStringAppendN(dy, oldString + offset, match[0].rm_eo);
+    if(match[1].rm_so == match[1].rm_eo)
+	dyStringAppend(dy, "?");
+    dyStringAppend(dy, uiVars);
+    if(match[1].rm_so != match[1].rm_eo)
+	dyStringAppend(dy, "&");
+    }
+if(offset < len)
+    dyStringAppend(dy, oldString + offset);
+return dyStringCannibalize(&dy);
+}
+
 char *menuBar(struct cart *cart, char *db)
 // Return HTML for the menu bar (read from a configuration file);
 // we fixup internal CGI's to add hgsid's and include the appropriate js and css files.
@@ -1253,11 +1285,8 @@ char *menuBar(struct cart *cart, char *db)
 char *docRoot = hDocumentRoot();
 char *menuStr, buf[4096], uiVars[128];
 FILE *fd;
-int len, offset, err;
 char *navBarFile = "inc/globalNavBar.inc";
 struct stat statBuf;
-regex_t re;
-regmatch_t match[2];
 char *scriptName = cgiScriptName();
 if (cart)
     safef(uiVars, sizeof(uiVars), "%s=%s", cartSessionVarName(), cartSessionId(cart));
@@ -1276,7 +1305,7 @@ webIncludeResourceFile("nice_menu.css");
 safef(buf, sizeof(buf), "%s/%s", docRoot, navBarFile);
 fd = mustOpen(buf, "r");
 fstat(fileno(fd), &statBuf);
-len = statBuf.st_size;
+int len = statBuf.st_size;
 menuStr = needMem(len + 1);
 mustRead(fd, menuStr, statBuf.st_size);
 menuStr[len] = 0;
@@ -1284,25 +1313,9 @@ carefulClose(&fd);
 
 if (cart)
     {
-    // fixup internal CGIs to have hgsid
-    safef(buf, sizeof(buf), "/cgi-bin/hg[A-Za-z]+(%c%c?)", '\\', '?');
-    err = regcomp(&re, buf, REG_EXTENDED);
-    if(err)
-	errAbort("regcomp failed; err: %d", err);
-    struct dyString *dy = newDyString(0);
-    for(offset = 0; offset < len && !regexec(&re, menuStr + offset, ArraySize(match), match, 0); offset += match[0].rm_eo)
-	{
-	dyStringAppendN(dy, menuStr + offset, match[0].rm_eo);
-	if(match[1].rm_so == match[1].rm_eo)
-	    dyStringAppend(dy, "?");
-	dyStringAppend(dy, uiVars);
-	if(match[1].rm_so != match[1].rm_eo)
-	    dyStringAppend(dy, "&");
-	}
-    if(offset < len)
-	dyStringAppend(dy, menuStr + offset);
+    char *newMenuStr = menuBarAddUiVars(menuStr, "/cgi-bin/hg", uiVars);
     freez(&menuStr);
-    menuStr = dyStringCannibalize(&dy);
+    menuStr = newMenuStr;
     }
 
 if(scriptName)
