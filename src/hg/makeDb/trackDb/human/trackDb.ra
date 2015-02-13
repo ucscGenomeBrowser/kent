@@ -3976,7 +3976,7 @@ type bed 3
     parent iscaComposite
     type gvf
     noScoreFilter .
-    url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
+    url http://www.ncbi.nlm.nih.gov/dbvar/?term=$$
     urlLabel ISCA details:
 
 	track iscaCuratedPathogenic
