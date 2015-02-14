@@ -54,7 +54,7 @@ struct tagStanza
     struct tagStanza *next;	/* Pointer to next younger sibling. */
     struct tagStanza *children;	/* Pointer to eldest child. */
     struct tagStanza *parent;	/* Pointer to parent. */
-    struct slPair *tagList;	/* All tags, including the "meta" one. */
+    struct slPair *tagList;	/* All tags. Best not to count on the order. */
     };
 
 /** Read and write tag storms from/to files. */
