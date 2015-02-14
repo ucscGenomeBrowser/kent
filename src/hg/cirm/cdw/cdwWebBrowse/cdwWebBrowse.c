@@ -101,17 +101,21 @@ void highLevelSummary(struct sqlConnection *conn, struct tagStorm *tags,
 int i;
 for (i=0; i<tagArraySize; ++i)
     {
+    printf("<TR>");
     char *tag = tagArray[i];
     struct hash *hash = tagCountVals(tags, tag);
     int count = hash->elCount;
-    struct dyString *dy = printPopularTags(hash, 120);
-    printf("<B>%s (%d):</B>\t%s\n", tag, count, dy->string);
+    struct dyString *dy = printPopularTags(hash, 100);
+    webPrintLinkCell(tag);
+    webPrintIntCell(count);
+    webPrintLinkCell(dy->string);
     dyStringFree(&dy);
     hashFree(&hash);
+    printf("</TR>");
     }
 }
 
-char *highLevelTags[] = {"file_name", "lab", "meta", "seq_sample", "lab_quake_sample", "format", 
+char *highLevelTags[] = {"data_set_id", "lab", "assay", "seq_sample", "format", 
     "body_part", "submit_dir", "lab_quake_fluidics_cell", "lab_quake_markers", "species"};
 
 static char *lookupField(void *record, char *key)
@@ -209,7 +213,10 @@ void doHome(struct sqlConnection *conn)
 {
 char query[256];
 sqlSafef(query, sizeof(query), "select count(*) from cdwValidFile");
-printf("The CIRM Stem Cell Hub contains %d files\n", sqlQuickNum(conn, query));
+printf("The CIRM Stem Cell Hub contains ");
+long long fileCount = sqlQuickLongLong(conn, query);
+printLongWithCommas(stdout, fileCount);
+printf(" files\n");
 sqlSafef(query, sizeof(query),
     "select sum(size) from cdwFile,cdwValidFile where cdwFile.id=cdwValidFile.id");
 long long totalBytes = sqlQuickLongLong(conn, query);
@@ -291,9 +298,37 @@ showTableFromQuery(tags,
     "file_name", 100);
 }
 
+void doBrowsePopular(struct sqlConnection *conn, char *tag)
+/* Print list of most popular tags of type */
+{
+struct tagStorm *tags = cdwTagStorm(conn);
+struct hash *hash = tagCountVals(tags, tag);
+printf("most popular %s values\n", tag);
+struct hashEl *hel, *helList = hashElListHash(hash);
+slSort(&helList, hashElCmpIntVal);
+webPrintLinkTableStart();
+webPrintLabelCell(tag);
+webPrintLabelCell("matching files");
+int valIx = 0, maxValIx = 10;
+for (hel = helList; hel != NULL && valIx < maxValIx; hel = hel->next, ++maxValIx)
+    {
+    printf("<TR>\n");
+    webPrintLinkCellStart();
+    printf("%s", hel->name);
+    webPrintLinkCellEnd();
+    webPrintLinkCellStart();
+    printf("%d", ptToInt(hel->val));
+    webPrintLinkCellEnd();
+    printf("</TR>\n");
+    }
+webPrintLinkTableEnd();
+}
+
 void doSearch(struct sqlConnection *conn)
 /* Print up search page */
 {
+printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
+cgiMakeHiddenVar("cdwCommand", "search");
 printf("query: ");
 char *queryVar = "cdwWebBrowse.query";
 char *query = cartUsualString(cart, queryVar, "select * from x where file_name limit 3");
@@ -305,15 +340,20 @@ printf("<PRE><TT>\n");
 struct tagStorm *tags = cdwTagStorm(conn);
 showMatching(query, tags);
 printf("</TT></PRE>\n");
+printf("</FORM>\n");
 }
 
 void doSummary(struct sqlConnection *conn)
 /* Put up summary page */
 {
 struct tagStorm *tags = cdwTagStorm(conn);
-printf("<PRE><TT>\n");
+printf("This is a summary of important tags and the number of files associated with each.");
+webPrintLinkTableStart();
+webPrintLabelCell("tag name");
+webPrintLabelCell("# val");
+webPrintLabelCell("Popular values (files)...");
 highLevelSummary(conn, tags, highLevelTags, ArraySize(highLevelTags));
-printf("</TT></PRE>\n");
+webPrintLinkTableEnd();
 }
 
 
@@ -337,6 +377,18 @@ else if (sameString(command, "browseFiles"))
     {
     doBrowseFiles(conn);
     }
+else if (sameString(command, "browseLabs"))
+    {
+    doBrowsePopular(conn, "lab");
+    }
+else if (sameString(command, "browseDataSets"))
+    {
+    doBrowsePopular(conn, "data_set_id");
+    }
+else if (sameString(command, "browseFormats"))
+    {
+    doBrowsePopular(conn, "format");
+    }
 else
     {
     uglyf("unrecognized command %s<BR>\n", command);
@@ -346,11 +398,9 @@ else
 void doMiddle()
 /* Menu bar has been drawn.  We are in the middle of first section. */
 {
-printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 struct sqlConnection *conn = sqlConnect(cdwDatabase);
 dispatch(conn);
 sqlDisconnect(&conn);
-printf("</FORM>\n");
 }
 
 static char *localMenuBar()
