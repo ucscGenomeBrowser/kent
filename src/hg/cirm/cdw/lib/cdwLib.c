@@ -1125,28 +1125,34 @@ sqlUpdate(conn, dy->string);
 freeDyString(&dy);
 }
 
-static char *findTagOrEmpty(struct cgiParsedVars *tags, char *key)
-/* Find key in tags.  If it is not there, or empty, or 'n/a' valued return empty string
- * otherwise return val */
+char *cdwLookupTag(struct cgiParsedVars *list, char *tag)
+/* Return first occurence of tag on list, or empty string if not found */
 {
-char *val = hashFindVal(tags->hash, key);
-if (val == NULL || sameString(val, "n/a"))
-   return "";
-else
-   return val;
+char *ret = "";
+struct cgiParsedVars *tags;
+for (tags = list; tags != NULL; tags = tags->next)
+    {
+    char *val = hashFindVal(tags->hash, tag);
+    if (val != NULL && !sameString(val, "n/a"))
+	{
+	ret = val;
+	break;
+	}
+    }
+return ret;
 }
 
 void cdwValidFileFieldsFromTags(struct cdwValidFile *vf, struct cgiParsedVars *tags)
 /* Fill in many of vf's fields from tags. */
 {
-vf->format = cloneString(hashFindVal(tags->hash, "format"));
-vf->outputType = cloneString(findTagOrEmpty(tags, "output_type"));
-vf->experiment = cloneString(findTagOrEmpty(tags, "meta"));
-vf->replicate = cloneString(findTagOrEmpty(tags, "replicate"));
-vf->enrichedIn = cloneString(findTagOrEmpty(tags, "enriched_in"));
-vf->ucscDb = cloneString(findTagOrEmpty(tags, "ucsc_db"));
-vf->part = cloneString(findTagOrEmpty(tags, "file_part"));
-vf->pairedEnd = cloneString(findTagOrEmpty(tags, "paired_end"));
+vf->format = cloneString(cdwLookupTag(tags, "format"));
+vf->outputType = cloneString(cdwLookupTag(tags, "output_type"));
+vf->experiment = cloneString(cdwLookupTag(tags, "meta"));
+vf->replicate = cloneString(cdwLookupTag(tags, "replicate"));
+vf->enrichedIn = cloneString(cdwLookupTag(tags, "enriched_in"));
+vf->ucscDb = cloneString(cdwLookupTag(tags, "ucsc_db"));
+vf->part = cloneString(cdwLookupTag(tags, "file_part"));
+vf->pairedEnd = cloneString(cdwLookupTag(tags, "paired_end"));
 #if (CDWVALIDFILE_NUM_COLS != 23)
    #error "Please update this routine with new column"
 #endif
