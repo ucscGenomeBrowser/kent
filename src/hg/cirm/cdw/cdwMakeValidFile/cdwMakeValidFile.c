@@ -775,12 +775,24 @@ for (ef = efList; ef != NULL; ef = ef->next)
 	    if (vfId != 0)
 	        cdwClearFileError(conn, ef->id);
 	    struct cgiParsedVars *tags = cgiParsedVarsNew(ef->tags);
+	    struct cgiParsedVars *parentTags = NULL;
+	    char query[256];
+	    sqlSafef(query, sizeof(query), 
+		"select tags from cdwMetaTags where id=%u", ef->metaTagsId);
+	    char *metaCgi = sqlQuickString(conn, query);
+	    if (metaCgi != NULL)
+	        {
+		parentTags = cgiParsedVarsNew(metaCgi);
+		tags->next = parentTags;
+		}
 	    if (!makeValidFile(conn, ef, tags, vfId))
 	        {
 		if (++errCount >= maxErrCount)
 		    errAbort("Aborting after %d errors", errCount);
 		}
 	    cgiParsedVarsFree(&tags);
+	    freez(&metaCgi);
+	    cgiParsedVarsFree(&parentTags);
 	    }
 	else
 	    {
