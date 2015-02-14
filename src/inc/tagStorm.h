@@ -110,6 +110,10 @@ struct slPair *tagStanzaAdd(struct tagStorm *tagStorm, struct tagStanza *stanza,
     char *tag, char *val);
 /* Add tag with given value to stanza */
 
+struct slPair *tagStanzaAppend(struct tagStorm *tagStorm, struct tagStanza *stanza, 
+    char *tag, char *val);
+/* Add tag with given value to the end of the stanza */
+
 void tagStanzaAddLongLong(struct tagStorm *tagStorm, struct tagStanza *stanza, char *var, 
     long long val);
 /* Add long long integer valued tag to stanza */
