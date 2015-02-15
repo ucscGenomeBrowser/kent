@@ -139,53 +139,51 @@ while ((row = sqlNextRow(sr)) != NULL)
     struct cdwValidFile vf;
     cdwFileStaticLoad(row, &ef);
     cdwValidFileStaticLoad(row + CDWFILE_NUM_COLS, &vf);
+
+    /* Figure out file name independent of cdw location */
+    char name[FILENAME_LEN], extension[FILEEXT_LEN];
+    splitPath(ef.cdwFileName, NULL, name, extension);
+    char fileName[PATH_LEN];
+    safef(fileName, sizeof(fileName), "%s%s", name, extension);
+
+
     struct tagStanza *metaStanza = intValTreeFind(metaTree, ef.metaTagsId);
-    if (metaStanza != NULL)
+    struct tagStanza *stanza = tagStanzaNew(tagStorm, metaStanza);
+    intValTreeAdd(fileTree, ef.id, stanza);
+
+    /** Add stuff we want in addition to what is in ef.tags */
+
+    /* Deprecated is important to know */
+    if (!isEmpty(ef.deprecated))
+	tagStanzaAdd(tagStorm, stanza, "deprecated", ef.deprecated);
+
+    /* Basic file name info */
+    tagStanzaAdd(tagStorm, stanza, "file_name", fileName);
+    tagStanzaAddLongLong(tagStorm, stanza, "file_size", ef.size);
+    tagStanzaAdd(tagStorm, stanza, "md5", ef.md5);
+
+    /* Stuff gathered from submission */
+    tagStanzaAdd(tagStorm, stanza, "submit_file_name", ef.submitFileName);
+    struct cdwSubmitDir *dir = intValTreeFind(submitDirTree, ef.submitDirId);
+    if (dir != NULL)
 	{
-	/* Figure out file name independent of cdw location */
-	char name[FILENAME_LEN], extension[FILEEXT_LEN];
-	splitPath(ef.cdwFileName, NULL, name, extension);
-	char fileName[PATH_LEN];
-	safef(fileName, sizeof(fileName), "%s%s", name, extension);
-
-
-	struct tagStanza *stanza = tagStanzaNew(tagStorm, metaStanza);
-	intValTreeAdd(fileTree, ef.id, stanza);
-
-	/** Add stuff we want in addition to what is in ef.tags */
-
-	/* Deprecated is important to know */
-	if (!isEmpty(ef.deprecated))
-	    tagStanzaAdd(tagStorm, stanza, "deprecated", ef.deprecated);
-
-	/* Basic file name info */
-	tagStanzaAdd(tagStorm, stanza, "file_name", fileName);
-	tagStanzaAddLongLong(tagStorm, stanza, "file_size", ef.size);
-	tagStanzaAdd(tagStorm, stanza, "md5", ef.md5);
-
-	/* Stuff gathered from submission */
-	tagStanzaAdd(tagStorm, stanza, "submit_file_name", ef.submitFileName);
-	struct cdwSubmitDir *dir = intValTreeFind(submitDirTree, ef.submitDirId);
-	if (dir != NULL)
-	    {
-	    tagStanzaAdd(tagStorm, stanza, "submit_dir", dir->url);
-	    }
-
-	tagStanzaAdd(tagStorm, stanza, "cdw_file_name", ef.cdwFileName);
-	tagStanzaAdd(tagStorm, stanza, "accession", vf.licensePlate);
-	if (vf.itemCount != 0)
-	    tagStanzaAddLongLong(tagStorm, stanza, "item_count", vf.itemCount);
-	if (vf.depth != 0)
-	    tagStanzaAddDouble(tagStorm, stanza, "seq_depth", vf.depth);
-	if (vf.mapRatio != 0)
-	    tagStanzaAddDouble(tagStorm, stanza, "map_ratio", vf.mapRatio);
-
-	/* Add tag field */
-	char *cgiVars = ef.tags;
-	char *var,*val;
-	while (cgiParseNext(&cgiVars, &var, &val))
-	    tagStanzaAdd(tagStorm, stanza, var, val);
+	tagStanzaAdd(tagStorm, stanza, "submit_dir", dir->url);
 	}
+
+    tagStanzaAdd(tagStorm, stanza, "cdw_file_name", ef.cdwFileName);
+    tagStanzaAdd(tagStorm, stanza, "accession", vf.licensePlate);
+    if (vf.itemCount != 0)
+	tagStanzaAddLongLong(tagStorm, stanza, "item_count", vf.itemCount);
+    if (vf.depth != 0)
+	tagStanzaAddDouble(tagStorm, stanza, "seq_depth", vf.depth);
+    if (vf.mapRatio != 0)
+	tagStanzaAddDouble(tagStorm, stanza, "map_ratio", vf.mapRatio);
+
+    /* Add tag field */
+    char *cgiVars = ef.tags;
+    char *var,*val;
+    while (cgiParseNext(&cgiVars, &var, &val))
+	tagStanzaAdd(tagStorm, stanza, var, val);
     }
 sqlFreeResult(&sr);
 verbose(2, "cdwTagStorm: %d items in fileTree\n", fileTree->n);
