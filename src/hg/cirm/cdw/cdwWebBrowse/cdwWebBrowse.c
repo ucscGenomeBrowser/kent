@@ -16,6 +16,7 @@
 #include "cart.h"
 #include "cdw.h"
 #include "cdwLib.h"
+#include "cdwValid.h"
 #include "hui.h"
 #include "hgColors.h"
 #include "web.h"
@@ -185,7 +186,6 @@ if (filtersVar)
 	}
     }
 
-uglyf("query: %s<BR>\n", rqlQuery->string);
 /* Turn rqlQuery string into a parsed out rqlStatement. */
 struct slRef *refList = tagStanzasMatchingQuery(tags, rqlQuery->string);
 
@@ -272,18 +272,48 @@ void doBrowsePopular(struct sqlConnection *conn, char *tag)
 {
 struct tagStorm *tags = cdwTagStorm(conn);
 struct hash *hash = tagStormCountTagVals(tags, tag);
-printf("most popular %s values\n", tag);
+printf("%s tag values ordered by usage\n", tag);
 struct hashEl *hel, *helList = hashElListHash(hash);
 slSort(&helList, hashElCmpIntValDesc);
 webPrintLinkTableStart();
+webPrintLabelCell("#");
 webPrintLabelCell(tag);
 webPrintLabelCell("matching files");
-int valIx = 0, maxValIx = 10;
-for (hel = helList; hel != NULL && valIx < maxValIx; hel = hel->next, ++maxValIx)
+int valIx = 0, maxValIx = 100;
+for (hel = helList; hel != NULL && ++valIx <= maxValIx; hel = hel->next)
     {
     printf("<TR>\n");
+    webPrintIntCell(valIx);
     webPrintLinkCell(hel->name);
     webPrintIntCell(ptToInt(hel->val));
+    printf("</TR>\n");
+    }
+webPrintLinkTableEnd();
+}
+
+void doBrowseFormat(struct sqlConnection *conn)
+/* Browse through available formats */
+{
+struct tagStorm *tags = cdwTagStorm(conn);
+struct hash *countHash = tagStormCountTagVals(tags, "format");
+struct slPair *format, *formatList = cdwFormatList();
+struct hash *formatHash = hashNew(0);
+for (format = formatList; format != NULL; format = format->next)
+    hashAdd(formatHash, format->name, format->val);
+
+printf("file formats ordered by usage\n");
+webPrintLinkTableStart();
+webPrintLabelCell("count");
+webPrintLabelCell("format");
+webPrintLabelCell("description");
+struct hashEl *hel, *helList = hashElListHash(countHash);
+slSort(&helList, hashElCmpIntValDesc);
+for (hel = helList; hel != NULL; hel = hel->next)
+    {
+    printf("<TR>\n");
+    webPrintIntCell(ptToInt(hel->val));
+    webPrintLinkCell(hel->name);
+    webPrintLinkCell(emptyForNull(hashFindVal(formatHash, hel->name)));
     printf("</TR>\n");
     }
 webPrintLinkTableEnd();
@@ -389,7 +419,8 @@ printf(" from %d labs.<BR><BR>\n", labCount(tags));
 static char *highLevelTags[] = 
     {"data_set_id", "lab", "assay", "format", "read_size",
     "body_part", "submit_dir", "lab_quake_markers", "species"};
-printf("This table is a summary of important tags and the number of files associated with each. ");
+printf("This table is a summary of important metadata tags and the number of files associated ");
+printf("with each. ");
 printf("For a full table of all tags select Browse Tags from the menus.");
 webPrintLinkTableStart();
 webPrintLabelCell("tag name");
@@ -458,7 +489,7 @@ else if (sameString(command, "browseDataSets"))
     }
 else if (sameString(command, "browseFormats"))
     {
-    doBrowsePopular(conn, "format");
+    doBrowseFormat(conn);
     }
 else if (sameString(command, "help"))
     {
