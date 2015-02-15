@@ -26,6 +26,18 @@ CREATE TABLE cdwUser (
     INDEX(uuid)
 );
 
+#A contributing lab
+CREATE TABLE cdwLab (
+    id int unsigned auto_increment,	# Autoincremented user ID
+    name varchar(255) default '',	# Shorthand name for lab, all lower case
+    pi varchar(255) default '',	# Principle investigator responsible for lab
+    institution varchar(255) default '',	# University or other institution hosting lab
+    url varchar(255) default '',	# URL of lab page
+              #Indices
+    PRIMARY KEY(id),
+    UNIQUE(name)
+);
+
 #A script that is authorized to submit on behalf of a user
 CREATE TABLE cdwScriptRegistry (
     id int unsigned auto_increment,	# Autoincremented script ID

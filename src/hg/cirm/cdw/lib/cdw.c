@@ -322,6 +322,176 @@ fputc(lastSep,f);
 }
 
 
+char *cdwLabCommaSepFieldNames = "id,name,pi,institution,url";
+
+void cdwLabStaticLoad(char **row, struct cdwLab *ret)
+/* Load a row from cdwLab table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+ret->name = row[1];
+ret->pi = row[2];
+ret->institution = row[3];
+ret->url = row[4];
+}
+
+struct cdwLab *cdwLabLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all cdwLab from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with cdwLabFreeList(). */
+{
+struct cdwLab *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = cdwLabLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void cdwLabSaveToDb(struct sqlConnection *conn, struct cdwLab *el, char *tableName, int updateSize)
+/* Save cdwLab as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s')", 
+	tableName,  el->id,  el->name,  el->pi,  el->institution,  el->url);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+struct cdwLab *cdwLabLoad(char **row)
+/* Load a cdwLab from row fetched with select * from cdwLab
+ * from database.  Dispose of this with cdwLabFree(). */
+{
+struct cdwLab *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+ret->name = cloneString(row[1]);
+ret->pi = cloneString(row[2]);
+ret->institution = cloneString(row[3]);
+ret->url = cloneString(row[4]);
+return ret;
+}
+
+struct cdwLab *cdwLabLoadAll(char *fileName) 
+/* Load all cdwLab from a whitespace-separated file.
+ * Dispose of this with cdwLabFreeList(). */
+{
+struct cdwLab *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[5];
+
+while (lineFileRow(lf, row))
+    {
+    el = cdwLabLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct cdwLab *cdwLabLoadAllByChar(char *fileName, char chopper) 
+/* Load all cdwLab from a chopper separated file.
+ * Dispose of this with cdwLabFreeList(). */
+{
+struct cdwLab *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[5];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = cdwLabLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct cdwLab *cdwLabCommaIn(char **pS, struct cdwLab *ret)
+/* Create a cdwLab out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new cdwLab */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->name = sqlStringComma(&s);
+ret->pi = sqlStringComma(&s);
+ret->institution = sqlStringComma(&s);
+ret->url = sqlStringComma(&s);
+*pS = s;
+return ret;
+}
+
+void cdwLabFree(struct cdwLab **pEl)
+/* Free a single dynamically allocated cdwLab such as created
+ * with cdwLabLoad(). */
+{
+struct cdwLab *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->name);
+freeMem(el->pi);
+freeMem(el->institution);
+freeMem(el->url);
+freez(pEl);
+}
+
+void cdwLabFreeList(struct cdwLab **pList)
+/* Free a list of dynamically allocated cdwLab's */
+{
+struct cdwLab *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    cdwLabFree(&el);
+    }
+*pList = NULL;
+}
+
+void cdwLabOutput(struct cdwLab *el, FILE *f, char sep, char lastSep) 
+/* Print out cdwLab.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->pi);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->institution);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->url);
+if (sep == ',') fputc('"',f);
+fputc(lastSep,f);
+}
+
+
 char *cdwScriptRegistryCommaSepFieldNames = "id,userId,name,description,secretHash,submitCount";
 
 void cdwScriptRegistryStaticLoad(char **row, struct cdwScriptRegistry *ret)

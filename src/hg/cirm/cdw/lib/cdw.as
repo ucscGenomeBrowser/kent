@@ -15,6 +15,16 @@ table cdwUser
     byte isAdmin;	"If true the use can modify other people's files too."
     )
 
+table cdwLab
+"A contributing lab"
+    (
+    uint id primary auto;      "Autoincremented user ID"
+    string name unique;	"Shorthand name for lab, all lower case"
+    string pi;   	"Principle investigator responsible for lab"
+    string institution; "University or other institution hosting lab"
+    string url;		"URL of lab page"
+    )
+
 table cdwScriptRegistry
 "A script that is authorized to submit on behalf of a user"
     (
