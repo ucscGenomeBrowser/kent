@@ -706,6 +706,15 @@ if (extra != NULL)
 return rql;
 }
 
+struct rqlStatement *rqlStatementParseString(char *string)
+/* Return a parsed-out RQL statement based on string */
+{
+struct lineFile *lf = lineFileOnString("query", TRUE, cloneString(string));
+struct rqlStatement *rql = rqlStatementParse(lf);
+lineFileClose(&lf);
+return rql;
+}
+
 void rqlStatementDump(struct rqlStatement *rql, FILE *f)
 /* Print out statement to file. */
 {
