@@ -25,10 +25,12 @@
 #include "web.h"
 #include "cdwValid.h"
 #include "cdw.h"
-#include "cdwLib.h"
 #include "cdwFastqFileFromRa.h"
 #include "cdwBamFileFromRa.h"
 #include "cdwQaWigSpotFromRa.h"
+#include "rql.h"
+#include "tagStorm.h"
+#include "cdwLib.h"
 
 
 /* System globals - just a few ... for now.  Please seriously not too many more. */
@@ -1700,5 +1702,60 @@ void cdwWebSubmitMenuItem(boolean on)
 /* Toggle visibility of 'Submit data' link on navigation menu */
 {
 printf("<script type='text/javascript'>$('#cdw-submit').%s();</script>", on ? "show" : "hide");
+}
+
+char *cdwRqlLookupField(void *record, char *key)
+/* Lookup a field in a tagStanza. */
+{
+struct tagStanza *stanza = record;
+return tagFindVal(stanza, key);
+}
+
+boolean cdwRqlStatementMatch(struct rqlStatement *rql, struct tagStanza *stanza,
+	struct lm *lm)
+/* Return TRUE if where clause and tableList in statement evaluates true for stanza. */
+{
+struct rqlParse *whereClause = rql->whereClause;
+if (whereClause == NULL)
+    return TRUE;
+else
+    {
+    struct rqlEval res = rqlEvalOnRecord(whereClause, stanza, cdwRqlLookupField, lm);
+    res = rqlEvalCoerceToBoolean(res);
+    return res.val.b;
+    }
+}
+
+static void rBuildStanzaRefList(struct tagStorm *tags, struct tagStanza *stanzaList,
+    struct rqlStatement *rql, struct lm *lm, int *pMatchCount, struct slRef **pList)
+/* Recursively add stanzas that match query to list */
+{
+struct tagStanza *stanza;
+for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
+    {
+    if (rql->limit < 0 || rql->limit > *pMatchCount)
+	{
+	if (cdwRqlStatementMatch(rql, stanza, lm))
+	    {
+	    refAdd(pList, stanza);
+	    *pMatchCount += 1;
+	    }
+	if (stanza->children != NULL)
+	    rBuildStanzaRefList(tags, stanza->children, rql, lm, pMatchCount, pList);
+	}
+    }
+}
+
+struct slRef *tagStanzasMatchingQuery(struct tagStorm *tags, char *query)
+/* Return list of references to stanzas that match RQL query */
+{
+struct rqlStatement *rql = rqlStatementParseString(query);
+int matchCount = 0;
+struct slRef *list = NULL;
+struct lm *lm = lmInit(0);
+rBuildStanzaRefList(tags, tags->forest, rql, lm, &matchCount, &list);
+rqlStatementFree(&rql);
+lmCleanup(&lm);
+return list;
 }
 

@@ -369,8 +369,23 @@ void cdwWebSubmitMenuItem(boolean on);
 /***/
 /* Metadata queries */
 
+/* Declarations of some structures so don't need all the include files */
+struct rqlStatement;
+struct tagStorm;
+struct tagStanza;
+
 struct tagStorm *cdwTagStorm(struct sqlConnection *conn);
 /* Load  cdwMetaTags.tags, cdwFile.tags, and select other fields into a tag
  * storm for searching */
+
+char *cdwRqlLookupField(void *record, char *key);
+/* Lookup a field in a tagStanza. */
+
+boolean cdwRqlStatementMatch(struct rqlStatement *rql, struct tagStanza *stanza,
+	struct lm *lm);
+/* Return TRUE if where clause and tableList in statement evaluates true for stanza. */
+
+struct slRef *tagStanzasMatchingQuery(struct tagStorm *tags, char *query);
+/* Return list of references to stanzas that match RQL query */
 
 #endif /* CDWLIB_H */
