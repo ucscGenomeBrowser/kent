@@ -383,9 +383,9 @@ if (tok != NULL)
     else if (sameString(tok, "<"))
         {
 	if (eatMatchingTok(tkz, "="))
-	    op = rqlOpGe;
-	else
 	    op = rqlOpLe;
+	else
+	    op = rqlOpLt;
 	}
     else if (sameString(tok, "not"))
         {
