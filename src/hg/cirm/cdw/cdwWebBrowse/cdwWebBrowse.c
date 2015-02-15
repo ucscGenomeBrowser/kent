@@ -33,6 +33,70 @@ errAbort(
   );
 }
 
+struct rqlStatement *rqlStatementParseString(char *string)
+/* Return a parsed-out RQL statement based on string */
+{
+struct lineFile *lf = lineFileOnString("query", TRUE, cloneString(string));
+struct rqlStatement *rql = rqlStatementParse(lf);
+lineFileClose(&lf);
+return rql;
+}
+
+static char *lookupField(void *record, char *key)
+/* Lookup a field in a tagStanza. */
+{
+struct tagStanza *stanza = record;
+return tagFindVal(stanza, key);
+}
+
+boolean statementMatch(struct rqlStatement *rql, struct tagStanza *stanza,
+	struct lm *lm)
+/* Return TRUE if where clause and tableList in statement evaluates true for tdb. */
+{
+struct rqlParse *whereClause = rql->whereClause;
+if (whereClause == NULL)
+    return TRUE;
+else
+    {
+    struct rqlEval res = rqlEvalOnRecord(whereClause, stanza, lookupField, lm);
+    res = rqlEvalCoerceToBoolean(res);
+    return res.val.b;
+    }
+}
+
+void rBuildStanzaRefList(struct tagStorm *tags, struct tagStanza *stanzaList,
+    struct rqlStatement *rql, struct lm *lm, int *pMatchCount, struct slRef **pList)
+/* Recursively add stanzas that match query to list */
+{
+struct tagStanza *stanza;
+for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
+    {
+    if (rql->limit < 0 || rql->limit > *pMatchCount)
+	{
+	if (statementMatch(rql, stanza, lm))
+	    {
+	    refAdd(pList, stanza);
+	    *pMatchCount += 1;
+	    }
+	if (stanza->children != NULL)
+	    rBuildStanzaRefList(tags, stanza->children, rql, lm, pMatchCount, pList);
+	}
+    }
+}
+
+struct slRef *tagStanzasMatchingQuery(struct tagStorm *tags, char *query)
+/* Return list of references to stanzas that match RQL query */
+{
+struct rqlStatement *rql = rqlStatementParseString(query);
+int matchCount = 0;
+struct slRef *list = NULL;
+struct lm *lm = lmInit(0);
+rBuildStanzaRefList(tags, tags->forest, rql, lm, &matchCount, &list);
+rqlStatementFree(&rql);
+lmCleanup(&lm);
+return list;
+}
+
 void rTagStormCountDistinct(struct tagStanza *list, char *tag, struct hash *uniq)
 /* Fill in hash with number of times have seen each value of tag */
 {
@@ -95,50 +159,20 @@ hashElFreeList(&helList);
 return dy;
 }
 
-void highLevelSummary(struct sqlConnection *conn, struct tagStorm *tags,
-    char *tagArray[], int tagArraySize)
+long long sumCounts(struct hash *hash)
+/* Figuring hash is integer valued, return sum of all vals in hash */
 {
-int i;
-for (i=0; i<tagArraySize; ++i)
+long long total = 0;
+struct hashEl *hel, *helList = hashElListHash(hash);
+for (hel = helList; hel != NULL; hel = hel->next)
     {
-    printf("<TR>");
-    char *tag = tagArray[i];
-    struct hash *hash = tagCountVals(tags, tag);
-    int count = hash->elCount;
-    struct dyString *dy = printPopularTags(hash, 100);
-    webPrintLinkCell(tag);
-    webPrintIntCell(count);
-    webPrintLinkCell(dy->string);
-    dyStringFree(&dy);
-    hashFree(&hash);
-    printf("</TR>");
+    int val = ptToInt(hel->val);
+    total += val;
     }
+hashElFreeList(&helList);
+return total;
 }
 
-char *highLevelTags[] = {"data_set_id", "lab", "assay", "seq_sample", "format", 
-    "body_part", "submit_dir", "lab_quake_fluidics_cell", "lab_quake_markers", "species"};
-
-static char *lookupField(void *record, char *key)
-/* Lookup a field in a tagStanza. */
-{
-struct tagStanza *stanza = record;
-return tagFindVal(stanza, key);
-}
-
-boolean statementMatch(struct rqlStatement *rql, struct tagStanza *stanza,
-	struct lm *lm)
-/* Return TRUE if where clause and tableList in statement evaluates true for tdb. */
-{
-struct rqlParse *whereClause = rql->whereClause;
-if (whereClause == NULL)
-    return TRUE;
-else
-    {
-    struct rqlEval res = rqlEvalOnRecord(whereClause, stanza, lookupField, lm);
-    res = rqlEvalCoerceToBoolean(res);
-    return res.val.b;
-    }
-}
 
 int matchCount = 0;
 boolean doSelect = FALSE;
@@ -179,9 +213,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 void showMatching(char *rqlQuery, struct tagStorm *tags)
 /* Show stanzas that match query */
 {
-/* Turn rqlQuery string into a parsed out rqlStatement. */
-struct lineFile *lf = lineFileOnString("query", TRUE, cloneString(rqlQuery));
-struct rqlStatement *rql = rqlStatementParse(lf);
+struct rqlStatement *rql = rqlStatementParseString(rqlQuery);
 
 /* Get list of all tag types in tree and use it to expand wildcards in the query
  * field list. */
@@ -208,80 +240,109 @@ hashFree(&hash);
 return count;
 }
 
-void doHome(struct sqlConnection *conn)
-/* Print home page message.  Welcome user, provide brief instructions and hi level stats. */
+void showTableFromQuery(struct tagStorm *tags, char *fields, char *where,  int limit,
+    char *filtersVar)
+/* Construct query and display results as a table */
 {
-char query[256];
-sqlSafef(query, sizeof(query), "select count(*) from cdwValidFile");
-printf("The CIRM Stem Cell Hub contains ");
-long long fileCount = sqlQuickLongLong(conn, query);
-printLongWithCommas(stdout, fileCount);
-printf(" files\n");
-sqlSafef(query, sizeof(query),
-    "select sum(size) from cdwFile,cdwValidFile where cdwFile.id=cdwValidFile.id");
-long long totalBytes = sqlQuickLongLong(conn, query);
-printf("and ");
-printLongWithCommas(stdout, totalBytes);
-struct tagStorm *tags = cdwTagStorm(conn);
-printf(" bytes of data from %d labs.", labCount(tags));
-}
+struct dyString *rqlQuery = dyStringNew(0);
+struct slName *field, *fieldList = commaSepToSlNames(fields);
 
-void rMatchesToTab(struct tagStorm *tags, struct tagStanza *list, 
-    struct rqlStatement *rql, struct lm *lm)
-/* Recursively traverse stanzas on list outputting matching stanzas as tab separated
- * in order determined by rql->fieldList. */
-{
-struct tagStanza *stanza;
-
-for (stanza = list; stanza != NULL; stanza = stanza->next)
+dyStringPrintf(rqlQuery, "select %s from files where (%s)", fields, where);
+if (filtersVar)
     {
-    if (rql->limit < 0 || rql->limit > matchCount)
-	{
-	if (stanza->children)
-	    rMatchesToTab(tags, stanza->children, rql, lm);
-	else
+    for (field = fieldList; field != NULL; field = field->next)
+        {
+	char varName[128];
+	safef(varName, sizeof(varName), "%s_%s", filtersVar, field->name);
+	char *val = trimSpaces(cartUsualString(cart, varName, ""));
+	if (!isEmpty(val))
 	    {
-	    if (statementMatch(rql, stanza, lm))
-		{
-		++matchCount;
-		printf("<TR>\n");
-		struct slName *field;
-		for (field = rql->fieldList; field != NULL; field = field->next)
-		    {
-		    char *val = tagFindVal(stanza, field->name);
-		    webPrintLinkCellStart();
-		    printf("%s", emptyForNull(val));
-		    webPrintLinkCellEnd();
-		    }
-		printf("</TR>\n");
-		}
+	    dyStringPrintf(rqlQuery, " and ");
+	    if (anyWild(val))
+	         {
+		 char *converted = sqlLikeFromWild(val);
+		 char *escaped = makeEscapedString(converted, '"');
+		 dyStringPrintf(rqlQuery, "%s like \"%s\"", field->name, escaped);
+		 freez(&escaped);
+		 freez(&converted);
+		 }
+	    else if (val[0] == '>' || val[0] == '<')
+	         {
+		 dyStringPrintf(rqlQuery, "%s and %s %s", field->name, field->name, val);
+		 }
+	    else
+	         {
+		 char *escaped = makeEscapedString(val, '"');
+		 dyStringPrintf(rqlQuery, "%s = \"%s\"", field->name, escaped);
+		 freez(&escaped);
+		 }
 	    }
 	}
     }
-}
 
-void showTableFromQuery(struct tagStorm *tags, char *fields, char *where,  int limit)
-/* Construct query and display results as a table */
-{
-char rqlQuery[1024];
-safef(rqlQuery, sizeof(rqlQuery), 
-    "select %s from x where %s limit %d", fields, where, limit);
-
+uglyf("query: %s<BR>\n", rqlQuery->string);
 /* Turn rqlQuery string into a parsed out rqlStatement. */
-struct lineFile *lf = lineFileOnString("rqlQuery", TRUE, cloneString(rqlQuery));
-struct rqlStatement *rql = rqlStatementParse(lf);
+struct slRef *refList = tagStanzasMatchingQuery(tags, rqlQuery->string);
 
 /* Set up our table within table look. */
+if (filtersVar)
+    {
+    printf("First row of table below, above labels, can be used to filter results. ");    
+    printf("Wildcard * and ? characters are allowed in text fields. ");
+    printf("&GT;min or &LT;max, is allowed in numerical fields. ");
+    cgiMakeButton("submit", "update");
+    printf(" %d pass filter", slCount(refList));
+    }
+
 webPrintLinkTableStart();
 
+if (filtersVar)
+    {
+    char varName[256];
+    printf("<TR>");
+    for (field = fieldList; field != NULL; field = field->next)
+        {
+	safef(varName, sizeof(varName), "%s_%s", filtersVar, field->name);
+	webPrintLinkCellStart();
+	cartMakeTextVar(cart, varName, "", 12);
+	webPrintLinkCellEnd();
+	}
+    printf("</TR>");
+    }
+
 /* Print column labels */
-struct slName *field;
-for (field = rql->fieldList; field != NULL; field = field->next)
+for (field = fieldList; field != NULL; field = field->next)
     webPrintLabelCell(field->name);
 
-/* Call recursive routine to show rest */
-struct lm *lm = lmInit(0);
-rMatchesToTab(tags, tags->forest, rql, lm);
+struct slRef *ref;
+int count = 0;
+for (ref = refList; ref != NULL; ref = ref->next)
+    {
+    if (++count > limit)
+         break;
+    struct tagStanza *stanza = ref->val;
+    printf("<TR>\n");
+    struct slName *field;
+    for (field = fieldList; field != NULL; field = field->next)
+	{
+	char *val = emptyForNull(tagFindVal(stanza, field->name));
+	int valLen = strlen(val);
+	int maxLen = 18;
+	char shortVal[maxLen+1];
+	if (valLen > maxLen)
+	    {
+	    memcpy(shortVal, val, maxLen-3);
+	    shortVal[maxLen-3] = 0;
+	    strcat(shortVal, "...");
+	    }
+	else
+	    strcpy(shortVal, val);
+	webPrintLinkCellStart();
+	printf("%s", shortVal);
+	webPrintLinkCellEnd();
+	}
+    printf("</TR>\n");
+    }
 
 /* Get rid of table within table look */
 webPrintLinkTableEnd();
@@ -291,11 +352,15 @@ webPrintLinkTableEnd();
 void doBrowseFiles(struct sqlConnection *conn)
 /* Print list of files */
 {
+printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
+cartSaveSession(cart);
+cgiMakeHiddenVar("cdwCommand", "browseFiles");
 struct tagStorm *tags = cdwTagStorm(conn);
 showTableFromQuery(tags, 
-    "file_name,lab,assay,data_set_id,format,item_count,map_ratio,"
-    "map_to_ribosome,map_to_repeat,paired_end_mate",
-    "file_name", 100);
+    "file_name,lab,assay,data_set_id,format,paired_end_mate,read_size,item_count,map_ratio,"
+    "species,lab_quake_markers,body_part",
+    "file_name", 200, "cdwFilter");
+printf("</FORM>\n");
 }
 
 void doBrowsePopular(struct sqlConnection *conn, char *tag)
@@ -313,22 +378,56 @@ int valIx = 0, maxValIx = 10;
 for (hel = helList; hel != NULL && valIx < maxValIx; hel = hel->next, ++maxValIx)
     {
     printf("<TR>\n");
+    webPrintLinkCell(hel->name);
+    webPrintIntCell(ptToInt(hel->val));
+    printf("</TR>\n");
+    }
+webPrintLinkTableEnd();
+}
+
+void doBrowseLab(struct sqlConnection *conn)
+/* Put up information on labs */
+{
+struct tagStorm *tags = cdwTagStorm(conn);
+printf("Here is a table of labs that have contributed data<BR>\n");
+webPrintLinkTableStart();
+webPrintLabelCell("name");
+webPrintLabelCell("#files");
+webPrintLabelCell("PI");
+webPrintLabelCell("institution");
+webPrintLabelCell("web page");
+char query[256];
+sqlSafef(query, sizeof(query), "select * from cdwLab");
+struct cdwLab *lab, *labList = cdwLabLoadByQuery(conn, query);
+for (lab = labList; lab != NULL; lab = lab->next)
+    {
+    printf("<TR>\n");
+    webPrintLinkCell(lab->name);
+    char rqlQuery[256];
+    safef(rqlQuery, sizeof(rqlQuery), "select * from files where file_name and lab='%s'", 
+	lab->name);
+    struct slRef *labFileList = tagStanzasMatchingQuery(tags, rqlQuery);
+    int fileCount = slCount(labFileList);
+    slFreeList(&labFileList);
+    webPrintIntCell(fileCount);
+    webPrintLinkCell(lab->pi);
+    webPrintLinkCell(lab->institution);
     webPrintLinkCellStart();
-    printf("%s", hel->name);
-    webPrintLinkCellEnd();
-    webPrintLinkCellStart();
-    printf("%d", ptToInt(hel->val));
+    printf("<A HREF=\"%s\">%s</A>", lab->url, lab->url);
     webPrintLinkCellEnd();
     printf("</TR>\n");
     }
 webPrintLinkTableEnd();
 }
 
+
 void doSearch(struct sqlConnection *conn)
 /* Print up search page */
 {
+printf("Enter a SQL query below using  'file' for the table name.<BR><BR>\n");
 printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
-cgiMakeHiddenVar("cdwCommand", "search");
+cartSaveSession(cart);
+cgiMakeHiddenVar("cdwCommand", "query");
 printf("query: ");
 char *queryVar = "cdwWebBrowse.query";
 char *query = cartUsualString(cart, queryVar, "select * from x where file_name limit 3");
@@ -343,17 +442,79 @@ printf("</TT></PRE>\n");
 printf("</FORM>\n");
 }
 
-void doSummary(struct sqlConnection *conn)
-/* Put up summary page */
+void tagSummaryRow(struct tagStorm *tags, char *tag)
+/* Print out row in a high level tag counting table */
 {
+printf("<TR>");
+struct hash *hash = tagCountVals(tags, tag);
+int count = hash->elCount;
+struct dyString *dy = printPopularTags(hash, 120);
+webPrintLinkCell(tag);
+webPrintIntCell(count);
+webPrintLinkCell(dy->string);
+int fileCount = sumCounts(hash);
+webPrintIntCell(fileCount);
+dyStringFree(&dy);
+hashFree(&hash);
+printf("</TR>");
+}
+
+void doHome(struct sqlConnection *conn)
+/* Put up home/summary page */
+{
+static char *highLevelTags[] = 
+    {"data_set_id", "lab", "assay", "format", "read_size",
+    "body_part", "submit_dir", "lab_quake_markers", "species"};
+
 struct tagStorm *tags = cdwTagStorm(conn);
-printf("This is a summary of important tags and the number of files associated with each.");
+char query[256];
+sqlSafef(query, sizeof(query), "select count(*) from cdwValidFile");
+printf("The CIRM Stem Cell Hub contains ");
+long long fileCount = sqlQuickLongLong(conn, query);
+printLongWithCommas(stdout, fileCount);
+printf(" files\n");
+sqlSafef(query, sizeof(query),
+    "select sum(size) from cdwFile,cdwValidFile where cdwFile.id=cdwValidFile.id");
+long long totalBytes = sqlQuickLongLong(conn, query);
+printf("and ");
+printLongWithCommas(stdout, totalBytes);
+printf(" bytes of data from %d labs.<BR><BR>\n", labCount(tags));
+printf("This table is a summary of important tags and the number of files associated with each. ");
+printf("For a full table of all tags select Browse Tags from the menus.");
 webPrintLinkTableStart();
 webPrintLabelCell("tag name");
 webPrintLabelCell("# val");
-webPrintLabelCell("Popular values (files)...");
-highLevelSummary(conn, tags, highLevelTags, ArraySize(highLevelTags));
+webPrintLabelCell("popular values (files)...");
+webPrintLabelCell("# files");
+int i;
+for (i=0; i<ArraySize(highLevelTags); ++i)
+    tagSummaryRow(tags, highLevelTags[i]);
 webPrintLinkTableEnd();
+}
+
+void doBrowseTags(struct sqlConnection *conn)
+/* Put up browse tags page */
+{
+struct tagStorm *tags = cdwTagStorm(conn);
+struct slName *tag, *tagList = tagTreeFieldList(tags);
+slSort(&tagList, slNameCmp);
+printf("This is a list of all tags and their most popular values.");
+webPrintLinkTableStart();
+webPrintLabelCell("tag name");
+webPrintLabelCell("# val");
+webPrintLabelCell("popular values (files)...");
+webPrintLabelCell("# files");
+for (tag = tagList; tag != NULL; tag = tag->next)
+    tagSummaryRow(tags, tag->name);
+webPrintLinkTableEnd();
+tagStormFree(&tags);
+}
+
+void doHelp(struct sqlConnection *con)
+/* Put up help page */
+{
+printf("This being a prototype, there's not much help available.  Try clicking and hovering over the menu bar.");
+printf("The search option has you type in a SQL-like query. Try 'select * from x where file_name' to get all data.\n");
 }
 
 
@@ -365,21 +526,21 @@ if (command == NULL)
     {
     doHome(conn);
     }
-else if (sameString(command, "search"))
+else if (sameString(command, "query"))
     {
     doSearch(conn);
-    }
-else if (sameString(command, "summary"))
-    {
-    doSummary(conn);
     }
 else if (sameString(command, "browseFiles"))
     {
     doBrowseFiles(conn);
     }
+else if (sameString(command, "browseTags"))
+    {
+    doBrowseTags(conn);
+    }
 else if (sameString(command, "browseLabs"))
     {
-    doBrowsePopular(conn, "lab");
+    doBrowseLab(conn);
     }
 else if (sameString(command, "browseDataSets"))
     {
@@ -388,6 +549,10 @@ else if (sameString(command, "browseDataSets"))
 else if (sameString(command, "browseFormats"))
     {
     doBrowsePopular(conn, "format");
+    }
+else if (sameString(command, "help"))
+    {
+    doHelp(conn);
     }
 else
     {
@@ -446,7 +611,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.05");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.07");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
@@ -454,7 +619,7 @@ printf("</BODY></HTML>\n");
 }
 
 
-char *excludeVars[] = {"cdwCommand", NULL};
+char *excludeVars[] = {"cdwCommand", "submit", NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
