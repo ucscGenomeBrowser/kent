@@ -261,7 +261,7 @@ cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "browseFiles");
 struct tagStorm *tags = cdwTagStorm(conn);
 showTableFromQuery(tags, 
-    "file_name,lab,assay,data_set_id,format,paired_end_mate,read_size,item_count,map_ratio,"
+    "file_name,lab,assay,data_set_id,output,format,read_size,item_count,map_ratio,"
     "species,lab_quake_markers,body_part",
     "file_name", 200, "cdwFilter");
 printf("</FORM>\n");
@@ -357,24 +357,40 @@ webPrintLinkTableEnd();
 void doQuery(struct sqlConnection *conn)
 /* Print up query page */
 {
+/* Do stuff that keeps us here after a routine submit */
 printf("Enter a SQL query below using  'file' for the table name.<BR><BR>\n");
 printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "query");
-printf("query: ");
-char *queryVar = "cdwQuerySql";
-char *query = cartUsualString(cart, queryVar, "select * from files where md5");
-cgiMakeTextVar(queryVar, query, 80);
-printf(" limit: ");
+
+
+/* Print out select fields */
+printf("select ");
+char *fieldsVar = "cdwQueryFields";
+char *fields = cartUsualString(cart, fieldsVar, "*");
+cgiMakeTextVar(fieldsVar, fields, 40);
+struct dyString *rqlQuery = dyStringCreate("select %s from files ", fields);
+printf("from files ");
+
+/* Print out where fields */
+char *whereVar = "cdwQueryWhere";
+char *where = cartUsualString(cart, whereVar, "");
+if (!isEmpty(where))
+    dyStringPrintf(rqlQuery, "where %s", where);
+printf("where ");
+cgiMakeTextVar(whereVar, where, 40);
+
+/* Print out limit bits */
+printf(" limit ");
 char *limitVar = "cdwQueryLimit";
 int limit = cartUsualInt(cart, limitVar, 10);
 cgiMakeIntVar(limitVar, limit, 7);
 cgiMakeSubmitButton();
 
-
 printf("<PRE><TT>\n");
 struct tagStorm *tags = cdwTagStorm(conn);
-showMatching(query, limit, tags);
+uglyf("query '%s'<BR>\n<BR>\n", rqlQuery->string);
+showMatching(rqlQuery->string, limit, tags);
 printf("</TT></PRE>\n");
 printf("</FORM>\n");
 }
