@@ -124,13 +124,19 @@ void tagStormReverseAll(struct tagStorm *tagStorm);
 
 /** Information about a tag storm */
 
-struct slName *tagTreeFieldList(struct tagStorm *tagStorm);
+struct slName *tagStormFieldList(struct tagStorm *tagStorm);
 /* Return list of all fields in storm */
 
-struct hash *tagTreeFieldHash(struct tagStorm *tagStorm);
+struct hash *tagStormFieldHash(struct tagStorm *tagStorm);
 /* Return an integer-valued hash of fields, keyed by tag name and with value
  * number of times field is used.  For most purposes just used to make sure
  * field exists though. */
+
+struct hash *tagStormCountTagVals(struct tagStorm *tags, char *tag);
+/* Return an integer valued hash keyed by all the different values
+ * of tag seen in tagStorm.  The hash is filled with counts of the
+ * number of times each value is used that can be recovered with 
+ * hashIntVal(hash, key) */
 
 /** Stuff for finding tags within a stanza */
 
