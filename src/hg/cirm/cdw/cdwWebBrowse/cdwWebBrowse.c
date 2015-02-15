@@ -110,10 +110,15 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     }
 }
 
-void showMatching(char *rqlQuery, struct tagStorm *tags)
+void showMatching(char *rqlQuery, int limit, struct tagStorm *tags)
 /* Show stanzas that match query */
 {
-struct rqlStatement *rql = rqlStatementParseString(rqlQuery);
+struct dyString *dy = dyStringCreate("%s", rqlQuery);
+int maxLimit = 10000;
+if (limit > maxLimit)
+    limit = maxLimit;
+dyStringPrintf(dy, " limit %d", limit);
+struct rqlStatement *rql = rqlStatementParseString(dy->string);
 
 /* Get list of all tag types in tree and use it to expand wildcards in the query
  * field list. */
@@ -319,23 +324,27 @@ for (lab = labList; lab != NULL; lab = lab->next)
 webPrintLinkTableEnd();
 }
 
-void doSearch(struct sqlConnection *conn)
-/* Print up search page */
+void doQuery(struct sqlConnection *conn)
+/* Print up query page */
 {
 printf("Enter a SQL query below using  'file' for the table name.<BR><BR>\n");
 printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "query");
 printf("query: ");
-char *queryVar = "cdwWebBrowse.query";
-char *query = cartUsualString(cart, queryVar, "select * from x where file_name limit 3");
+char *queryVar = "cdwQuerySql";
+char *query = cartUsualString(cart, queryVar, "select * from files where md5");
 cgiMakeTextVar(queryVar, query, 80);
+printf(" limit: ");
+char *limitVar = "cdwQueryLimit";
+int limit = cartUsualInt(cart, limitVar, 10);
+cgiMakeIntVar(limitVar, limit, 7);
 cgiMakeSubmitButton();
 
 
 printf("<PRE><TT>\n");
 struct tagStorm *tags = cdwTagStorm(conn);
-showMatching(query, tags);
+showMatching(query, limit, tags);
 printf("</TT></PRE>\n");
 printf("</FORM>\n");
 }
@@ -429,7 +438,7 @@ if (command == NULL)
     }
 else if (sameString(command, "query"))
     {
-    doSearch(conn);
+    doQuery(conn);
     }
 else if (sameString(command, "browseFiles"))
     {
