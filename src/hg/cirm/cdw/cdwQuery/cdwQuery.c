@@ -98,7 +98,7 @@ struct tagStorm *tags = cdwTagStorm(conn);
 
 /* Get list of all tag types in tree and use it to expand wildcards in the query
  * field list. */
-struct slName *allFieldList = tagTreeFieldList(tags);
+struct slName *allFieldList = tagStormFieldList(tags);
 rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
 slSort(&rql->fieldList, slNameCmp);
 
