@@ -33,106 +33,6 @@ errAbort(
   );
 }
 
-struct rqlStatement *rqlStatementParseString(char *string)
-/* Return a parsed-out RQL statement based on string */
-{
-struct lineFile *lf = lineFileOnString("query", TRUE, cloneString(string));
-struct rqlStatement *rql = rqlStatementParse(lf);
-lineFileClose(&lf);
-return rql;
-}
-
-static char *lookupField(void *record, char *key)
-/* Lookup a field in a tagStanza. */
-{
-struct tagStanza *stanza = record;
-return tagFindVal(stanza, key);
-}
-
-boolean statementMatch(struct rqlStatement *rql, struct tagStanza *stanza,
-	struct lm *lm)
-/* Return TRUE if where clause and tableList in statement evaluates true for tdb. */
-{
-struct rqlParse *whereClause = rql->whereClause;
-if (whereClause == NULL)
-    return TRUE;
-else
-    {
-    struct rqlEval res = rqlEvalOnRecord(whereClause, stanza, lookupField, lm);
-    res = rqlEvalCoerceToBoolean(res);
-    return res.val.b;
-    }
-}
-
-void rBuildStanzaRefList(struct tagStorm *tags, struct tagStanza *stanzaList,
-    struct rqlStatement *rql, struct lm *lm, int *pMatchCount, struct slRef **pList)
-/* Recursively add stanzas that match query to list */
-{
-struct tagStanza *stanza;
-for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
-    {
-    if (rql->limit < 0 || rql->limit > *pMatchCount)
-	{
-	if (statementMatch(rql, stanza, lm))
-	    {
-	    refAdd(pList, stanza);
-	    *pMatchCount += 1;
-	    }
-	if (stanza->children != NULL)
-	    rBuildStanzaRefList(tags, stanza->children, rql, lm, pMatchCount, pList);
-	}
-    }
-}
-
-struct slRef *tagStanzasMatchingQuery(struct tagStorm *tags, char *query)
-/* Return list of references to stanzas that match RQL query */
-{
-struct rqlStatement *rql = rqlStatementParseString(query);
-int matchCount = 0;
-struct slRef *list = NULL;
-struct lm *lm = lmInit(0);
-rBuildStanzaRefList(tags, tags->forest, rql, lm, &matchCount, &list);
-rqlStatementFree(&rql);
-lmCleanup(&lm);
-return list;
-}
-
-void rTagStormCountDistinct(struct tagStanza *list, char *tag, struct hash *uniq)
-/* Fill in hash with number of times have seen each value of tag */
-{
-char *requiredTag = "accession";
-struct tagStanza *stanza;
-for (stanza = list; stanza != NULL; stanza = stanza->next)
-    {
-    if (tagFindVal(stanza, requiredTag))
-	{
-	char *val = tagFindVal(stanza, tag);
-	if (val != NULL)
-	    {
-	    hashIncInt(uniq, val);
-	    }
-	}
-    rTagStormCountDistinct(stanza->children, tag, uniq);
-    }
-}
-
-struct hash *tagCountVals(struct tagStorm *tags, char *tag)
-/* Return an integer valued hash filled with counts of the
- * number of times each value is used */
-{
-struct hash *uniq = hashNew(0);
-rTagStormCountDistinct(tags->forest, tag, uniq);
-return uniq;
-}
-
-int hashElCmpIntVal(const void *va, const void *vb)
-/* Compare two hashEl val with highest going first. */
-{
-struct hashEl *a = *((struct hashEl **)va);
-struct hashEl *b = *((struct hashEl **)vb);
-return b->val - a->val;
-}
-
 struct dyString *printPopularTags(struct hash *hash, int maxSize)
 /* Get all hash elements, sorted by count, and print all the ones that fit */
 {
@@ -140,7 +40,7 @@ maxSize -= 3;  // Leave room for ...
 struct dyString *dy = dyStringNew(0);
 
 struct hashEl *hel, *helList = hashElListHash(hash);
-slSort(&helList, hashElCmpIntVal);
+slSort(&helList, hashElCmpIntValDesc);
 for (hel = helList; hel != NULL; hel = hel->next)
     {
     int oldSize = dy->stringSize;
@@ -174,10 +74,10 @@ return total;
 }
 
 
-int matchCount = 0;
-boolean doSelect = FALSE;
+static int matchCount = 0;
+static boolean doSelect = FALSE;
 
-void rMatchesToRa(struct tagStorm *tags, struct tagStanza *list, 
+static void rMatchesToRa(struct tagStorm *tags, struct tagStanza *list, 
     struct rqlStatement *rql, struct lm *lm)
 /* Recursively traverse stanzas on list outputting matching stanzas as ra. */
 {
@@ -190,7 +90,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	    rMatchesToRa(tags, stanza->children, rql, lm);
 	else    /* Just apply query to leaves */
 	    {
-	    if (statementMatch(rql, stanza, lm))
+	    if (cdwRqlStatementMatch(rql, stanza, lm))
 		{
 		++matchCount;
 		if (doSelect)
@@ -217,7 +117,7 @@ struct rqlStatement *rql = rqlStatementParseString(rqlQuery);
 
 /* Get list of all tag types in tree and use it to expand wildcards in the query
  * field list. */
-struct slName *allFieldList = tagTreeFieldList(tags);
+struct slName *allFieldList = tagStormFieldList(tags);
 slSort(&allFieldList, slNameCmp);
 rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
 
@@ -234,7 +134,7 @@ if (sameWord(rql->command, "count"))
 int labCount(struct tagStorm *tags)
 /* Return number of different labs in tags */
 {
-struct hash *hash = tagCountVals(tags, "lab");
+struct hash *hash = tagStormCountTagVals(tags, "lab");
 int count = hash->elCount;
 hashFree(&hash);
 return count;
@@ -348,7 +248,6 @@ for (ref = refList; ref != NULL; ref = ref->next)
 webPrintLinkTableEnd();
 }
 
-
 void doBrowseFiles(struct sqlConnection *conn)
 /* Print list of files */
 {
@@ -367,10 +266,10 @@ void doBrowsePopular(struct sqlConnection *conn, char *tag)
 /* Print list of most popular tags of type */
 {
 struct tagStorm *tags = cdwTagStorm(conn);
-struct hash *hash = tagCountVals(tags, tag);
+struct hash *hash = tagStormCountTagVals(tags, tag);
 printf("most popular %s values\n", tag);
 struct hashEl *hel, *helList = hashElListHash(hash);
-slSort(&helList, hashElCmpIntVal);
+slSort(&helList, hashElCmpIntValDesc);
 webPrintLinkTableStart();
 webPrintLabelCell(tag);
 webPrintLabelCell("matching files");
@@ -420,7 +319,6 @@ for (lab = labList; lab != NULL; lab = lab->next)
 webPrintLinkTableEnd();
 }
 
-
 void doSearch(struct sqlConnection *conn)
 /* Print up search page */
 {
@@ -446,7 +344,7 @@ void tagSummaryRow(struct tagStorm *tags, char *tag)
 /* Print out row in a high level tag counting table */
 {
 printf("<TR>");
-struct hash *hash = tagCountVals(tags, tag);
+struct hash *hash = tagStormCountTagVals(tags, tag);
 int count = hash->elCount;
 struct dyString *dy = printPopularTags(hash, 120);
 webPrintLinkCell(tag);
@@ -462,23 +360,26 @@ printf("</TR>");
 void doHome(struct sqlConnection *conn)
 /* Put up home/summary page */
 {
-static char *highLevelTags[] = 
-    {"data_set_id", "lab", "assay", "format", "read_size",
-    "body_part", "submit_dir", "lab_quake_markers", "species"};
-
 struct tagStorm *tags = cdwTagStorm(conn);
+
+/* Print sentence with summary of bytes, files, and labs */
 char query[256];
-sqlSafef(query, sizeof(query), "select count(*) from cdwValidFile");
 printf("The CIRM Stem Cell Hub contains ");
-long long fileCount = sqlQuickLongLong(conn, query);
-printLongWithCommas(stdout, fileCount);
-printf(" files\n");
 sqlSafef(query, sizeof(query),
     "select sum(size) from cdwFile,cdwValidFile where cdwFile.id=cdwValidFile.id");
 long long totalBytes = sqlQuickLongLong(conn, query);
-printf("and ");
 printLongWithCommas(stdout, totalBytes);
-printf(" bytes of data from %d labs.<BR><BR>\n", labCount(tags));
+printf(" bytes of data in ");
+sqlSafef(query, sizeof(query), "select count(*) from cdwValidFile");
+long long fileCount = sqlQuickLongLong(conn, query);
+printLongWithCommas(stdout, fileCount);
+printf(" files");
+printf(" from %d labs.<BR><BR>\n", labCount(tags));
+
+/* Print out high level tags table */
+static char *highLevelTags[] = 
+    {"data_set_id", "lab", "assay", "format", "read_size",
+    "body_part", "submit_dir", "lab_quake_markers", "species"};
 printf("This table is a summary of important tags and the number of files associated with each. ");
 printf("For a full table of all tags select Browse Tags from the menus.");
 webPrintLinkTableStart();
@@ -496,7 +397,7 @@ void doBrowseTags(struct sqlConnection *conn)
 /* Put up browse tags page */
 {
 struct tagStorm *tags = cdwTagStorm(conn);
-struct slName *tag, *tagList = tagTreeFieldList(tags);
+struct slName *tag, *tagList = tagStormFieldList(tags);
 slSort(&tagList, slNameCmp);
 printf("This is a list of all tags and their most popular values.");
 webPrintLinkTableStart();
@@ -513,8 +414,8 @@ tagStormFree(&tags);
 void doHelp(struct sqlConnection *con)
 /* Put up help page */
 {
-printf("This being a prototype, there's not much help available.  Try clicking and hovering over the menu bar.");
-printf("The search option has you type in a SQL-like query. Try 'select * from x where file_name' to get all data.\n");
+printf("This being a prototype, there's not much help available.  Try clicking and hovering over the menu bar. ");
+printf("The query option has you type in a SQL-like query. Try 'select * from files where accession' to get all metadata tags from files that have passed basic format validations.\n");
 }
 
 
@@ -611,7 +512,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.07");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.08");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
