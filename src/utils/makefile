@@ -41,6 +41,7 @@ UTILS_APPLIST = \
 	chopFaLines \
 	colTransform \
 	countChars \
+	faAlign \
 	fastqToFa \
 	faCmp \
 	faCount \
@@ -108,7 +109,6 @@ UCSC_APPS = \
 	convolve \
 	detab \
 	endsInLf \
-	faAlign \
 	faFlyBaseToUcsc \
 	faGapLocs \
 	faGapSizes \

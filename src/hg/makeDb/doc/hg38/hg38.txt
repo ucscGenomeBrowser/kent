@@ -6135,3 +6135,12 @@ retroFinder/branches/version2/src/pipeline/analyseExpress.sh
 # dataVersion Jan. 2015
 # Scripts copied ucscRetroAli9.psl, ucscRetroInfo9.bed and ucscRetroCds9.tab
 # to /hive/data/genomes/hg38/bed/retro/
+
+##########
+# Make dbVar chrom to UCSC chrom lift file
+#  DONE braney 2/12/15
+cd /cluster/data/hg38/jkStuff
+sort /cluster/data/hg38/chrom.sizes > tmpChrom
+grep -v '^#\|assembled' /hive/data/genomes/hg38/genbank/GCF_000001405.26.assembly.txt | awk 'BEGIN {OFS="\t"} {print "chr" $3 "_" $5 "_" $2, "chr" $3 "|"$7}' | sed 's/-scaffold//' | sed 's/unlocalized/random/' | sed 's/_unplaced//' | sed 's/chrna/chrUn/g' | sed 's/\./v/'  | sort | join /dev/stdin tmpChrom | awk 'BEGIN {OFS="\t"} {print 0, $2, $3, $1, $3}'  > dbVar.lift
+awk 'BEGIN {OFS="\t"} {print 0, $1, $2, $1, $2}' /cluster/data/hg38/chrom.sizes >> dbVar.lift
+rm tmpChrom

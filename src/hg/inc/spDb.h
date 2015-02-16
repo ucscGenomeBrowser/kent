@@ -74,10 +74,17 @@ char *spIdToAcc(struct sqlConnection *conn, char *id);
  * accession. Returns NULL if the conversion fails. 
  * (doesn't abort). */
 
+char *spLookupPrimaryAccMaybe(struct sqlConnection *conn, 
+	char *anyAcc); 	/* Primary or secondary accession. */
+/* This will return the primary accession.  It's ok to pass in
+ * either a primary or secondary accession. Return NULL if
+ * not found. */
+
 char *spLookupPrimaryAcc(struct sqlConnection *conn, 
 	char *anyAcc); 	/* Primary or secondary accession. */
 /* This will return the primary accession.  It's ok to pass in
- * either a primary or secondary accession. */
+ * either a primary or secondary accession. ErrAbort if
+ * not found */
 
 char *spDescription(struct sqlConnection *conn, char *acc);
 /* Return protein description.  FreeMem this when done. */

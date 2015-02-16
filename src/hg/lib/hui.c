@@ -4573,8 +4573,8 @@ static boolean membersHaveMatrix(membersForAll_t *membersForAll)
 /* Check for matrix */
 {
 if (membersForAll->members[dimX] == NULL && membersForAll->members[dimY] == NULL)
-    return false;
-return true;
+    return FALSE;
+return TRUE;
 }
 
 static void printSubtrackTable(struct trackDb *parentTdb, struct slRef *subtrackRefList,

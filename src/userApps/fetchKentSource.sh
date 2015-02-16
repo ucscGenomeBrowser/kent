@@ -40,6 +40,7 @@ echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 git archive --format=zip -9 --remote=git://genome-source.cse.ucsc.edu/kent.git \
 --prefix=kent/ ${branch} \
 src/machTest.sh \
+src/checkUmask.sh \
 src/ameme \
 src/aladdin \
 src/blat \

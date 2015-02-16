@@ -77,7 +77,8 @@ return sqlQuickString(conn, query);
 }
 
 
-char *spLookupPrimaryAcc(struct sqlConnection *conn, 
+
+char *spLookupPrimaryAccMaybe(struct sqlConnection *conn, 
 	char *anyAcc) 	/* Primary or secondary accession. */
 /* This will return the primary accession.  It's ok to pass in
  * either a primary or secondary accession. */
@@ -89,8 +90,21 @@ else
      {
      sqlSafef(query, sizeof(query), 
     	"select acc from otherAcc where val = '%s'", anyAcc);
-     return sqlNeedQuickString(conn, query);
+     return sqlQuickString(conn, query);
      }
+}
+
+char *spLookupPrimaryAcc(struct sqlConnection *conn, 
+	char *anyAcc) 	/* Primary or secondary accession. */
+/* This will return the primary accession.  It's ok to pass in
+ * either a primary or secondary accession. */
+{
+char *acc = spLookupPrimaryAccMaybe(conn, anyAcc);
+
+if (acc == NULL)
+    errAbort("accession not found: %s", anyAcc);
+
+return acc;
 }
 
 char *spDescription(struct sqlConnection *conn, char *acc)

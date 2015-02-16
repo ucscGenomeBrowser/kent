@@ -11,7 +11,7 @@ setenv LASTWEEK 2015-01-05             # v310 final
 
 setenv BUILDHOME /hive/groups/browser/newBuild
 setenv WEEKLYBLD ${BUILDHOME}/kent/src/utils/qa/weeklybld
-setenv REPLYTO ann@soe.ucsc.edu
+setenv REPLYTO donnak@soe.ucsc.edu
 
 setenv GITSHAREDREPO hgwdev.cse.ucsc.edu:/data/git/kent.git
 
