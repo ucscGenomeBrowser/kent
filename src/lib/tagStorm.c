@@ -623,3 +623,26 @@ rTagStormCountDistinct(tags->forest, tag, uniq);
 return uniq;
 }
 
+struct slPair *tagListIncludingParents(struct tagStanza *stanza)
+/* Return a list of all tags including ones defined in parents. */
+{
+struct hash *uniq = hashNew(0);
+struct slPair *list = NULL;
+struct tagStanza *ts;
+for (ts = stanza; ts != NULL; ts = ts->parent)
+    {
+    struct slPair *pair;
+    for (pair = ts->tagList; pair != NULL; pair = pair->next)
+       {
+       if (!hashLookup(uniq, pair->name))
+           {
+	   slPairAdd(&list, pair->name, pair->val);
+	   hashAdd(uniq, pair->name, pair);
+	   }
+       }
+    }
+hashFree(&uniq);
+slReverse(&list);
+return list;
+}
+

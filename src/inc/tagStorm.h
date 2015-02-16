@@ -152,4 +152,7 @@ char *tagMustFindVal(struct tagStanza *stanza, char *name);
 /* Return value of tag of given name within stanza or any of it's parents. Abort if
  * not found. */
 
+struct slPair *tagListIncludingParents(struct tagStanza *stanza);
+/* Return a list of all tags including ones defined in parents. */
+
 #endif /* TAGSTORM_H */
