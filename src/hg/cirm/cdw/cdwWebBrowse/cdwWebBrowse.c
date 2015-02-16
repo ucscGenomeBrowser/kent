@@ -180,7 +180,7 @@ return tags;
 }
 
 void showTableFromQuery(struct sqlConnection *conn, char *fields, char *where,  int limit,
-    char *filtersVar)
+    char *filtersVar, char *orderVar)
 /* Construct query and display results as a table */
 {
 struct dyString *query = dyStringNew(0);
@@ -188,6 +188,7 @@ struct slName *field, *fieldList = commaSepToSlNames(fields);
 boolean gotWhere = FALSE;
 sqlDyStringPrintf(query, "%s", ""); // TODO check with Galt on how to get reasonable checking back.
 dyStringPrintf(query, "select %s from cdwFileTags", fields);
+char *orderFields = cartUsualString(cart, orderVar, "");
 if (!isEmpty(where))
     {
     dyStringPrintf(query, "where %s", where);
@@ -219,6 +220,7 @@ if (filtersVar)
 		 }
 	    else if (val[0] == '>' || val[0] == '<')
 	         {
+		 // TODO - sanitize val for nothing but numbers - and . 
 		 dyStringPrintf(query, "%s %s", field->name, val);
 		 }
 	    else
@@ -228,6 +230,16 @@ if (filtersVar)
 		 freez(&escaped);
 		 }
 	    }
+	}
+    }
+if (!isEmpty(orderVar))
+    {
+    if (!isEmpty(orderFields))
+        {
+	if (orderFields[0] == '-')
+	    dyStringPrintf(query, " order by %s desc", orderFields+1);
+	else
+	    dyStringPrintf(query, " order by %s", orderFields);
 	}
     }
 
@@ -246,6 +258,7 @@ if (filtersVar)
 /* Set up our table within table look. */
 webPrintLinkTableStart();
 
+/* Draw optional filters cells ahead of column labels*/
 if (filtersVar)
     {
     char varName[256];
@@ -262,7 +275,21 @@ if (filtersVar)
 
 /* Print column labels */
 for (field = fieldList; field != NULL; field = field->next)
-    webPrintLabelCell(field->name);
+    {
+    webPrintLabelCellStart();
+    printf("<A class=\"topbar\" HREF=\"");
+    printf("../cgi-bin/cdwWebBrowse?");
+    printf("%s", cartSidUrlString(cart));
+    printf("&cdwCommand=browseFiles");
+    printf("&%s=", orderVar);
+    if (!isEmpty(orderFields) && sameString(orderFields, field->name))
+        printf("-");
+    printf("%s", field->name);
+    printf("\">");
+    printf("%s", field->name);
+    printf("</A>");
+    webPrintLabelCellEnd();
+    }
 
 int count = 0;
 struct tagStanza *stanza;
@@ -306,7 +333,7 @@ cgiMakeHiddenVar("cdwCommand", "browseFiles");
 showTableFromQuery(conn, 
     "file_name,lab,assay,data_set_id,output,format,read_size,item_count,map_ratio,"
     "species,lab_quake_markers,body_part",
-    NULL, 200, "cdwFilter");
+    NULL, 200, "cdwFilter", "cdwOrder");
 printf("</FORM>\n");
 }
 
@@ -621,7 +648,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.09");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.10");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
