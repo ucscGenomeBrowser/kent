@@ -60,4 +60,8 @@ boolean cdwValidateTagVal(char *tag, char *val);
 /* Make sure that tag is one of the allowed ones and that
  * val is compatible */
 
+struct slPair *cdwFormatList();
+/* Return list of formats.  The name of the list items are the format names.
+ * The vals are short descriptions. */
+
 #endif /* CDWVALID_H */

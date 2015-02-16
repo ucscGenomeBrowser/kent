@@ -1045,13 +1045,33 @@ printf("%4.2f", val);
 webPrintLinkCellEnd();
 }
 
-void webPrintWideLabelCell(char *label, int colSpan)
-/* Print label cell over multiple columns in our colors. */
+void webPrintWideLabelCellStart(int colSpan)
+/* Print start of wrapper around a label in a table. */
 {
 printf("<TD BGCOLOR='#"HG_COL_TABLE_LABEL"'");
 if (colSpan > 1)
     printf(" COLSPAN=%d", colSpan);
-printf("><span style='color:#FFFFFF;'><B>%s</B></span></TD>", label);
+printf("><span style='color:#FFFFFF;'><B>");
+}
+
+void webPrintLabelCellStart()
+/* Print start of wrapper around a label in a table. */
+{
+webPrintWideLabelCellStart(1);
+}
+
+void webPrintLabelCellEnd()
+/* Print end of wrapper around a label in a table. */
+{
+printf("</B></span></TD>");
+}
+
+void webPrintWideLabelCell(char *label, int colSpan)
+/* Print label cell over multiple columns in our colors. */
+{
+webPrintWideLabelCellStart(colSpan);
+printf("%s", label);
+webPrintLabelCellEnd();
 }
 
 void webPrintWideCenteredLabelCell(char *label, int colSpan)

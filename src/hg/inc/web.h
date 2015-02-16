@@ -275,6 +275,12 @@ void webPrintWideLabelCell(char *label, int colSpan);
 void webPrintWideCenteredLabelCell(char *label, int colSpan);
 /* Print label cell over multiple columns in our colors and centered. */
 
+void webPrintLabelCellStart();
+/* Print start of wrapper around a label in a table. */
+
+void webPrintLabelCellEnd();
+/* Print end of wrapper around a label in a table. */
+
 void webPrintLinkTableNewRow();
 /* start a new row */
 
