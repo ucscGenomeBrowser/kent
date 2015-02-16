@@ -118,7 +118,6 @@ struct dyString *dy = dyStringCreate("%s", rqlQuery);
 int maxLimit = 10000;
 if (limit > maxLimit)
     limit = maxLimit;
-dyStringPrintf(dy, " limit %d", limit);
 struct rqlStatement *rql = rqlStatementParseString(dy->string);
 
 /* Get list of all tag types in tree and use it to expand wildcards in the query
@@ -130,6 +129,8 @@ rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
 /* Traverse tag tree outputting when rql statement matches in select case, just
  * updateing count in count case. */
 doSelect = sameWord(rql->command, "select");
+if (doSelect)
+    rql->limit = limit;
 struct lm *lm = lmInit(0);
 rMatchesToRa(tags, tags->forest, rql, lm);
 if (sameWord(rql->command, "count"))
@@ -146,14 +147,52 @@ hashFree(&hash);
 return count;
 }
 
-void showTableFromQuery(struct tagStorm *tags, char *fields, char *where,  int limit,
+struct tagStorm *tagStormFromCdwFileTags(struct sqlConnection *conn, char *query)
+/* Query our relationalized version and return just the non-null items */
+{
+struct sqlResult *sr = sqlGetResult(conn, query);
+struct slName *field, *fieldList = NULL;
+char *name;
+while ((name = sqlFieldName(sr)) != NULL)
+    {
+    slNameAddHead(&fieldList, name);
+    }
+slReverse(&fieldList);
+
+char **row;
+struct tagStorm *tags = tagStormNew("cdw.cdwFileTags");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct tagStanza *stanza = tagStanzaNew(tags, NULL);
+    int rowIx=0;
+    for (field = fieldList; field != NULL; field = field->next, ++rowIx)
+        {
+	char *val = row[rowIx];
+	if (val != NULL)
+	    {
+	    tagStanzaAdd(tags, stanza, field->name, val);
+	    }
+	}
+    slReverse(&stanza->tagList);
+    }
+tagStormReverseAll(tags);
+return tags;
+}
+
+void showTableFromQuery(struct sqlConnection *conn, char *fields, char *where,  int limit,
     char *filtersVar)
 /* Construct query and display results as a table */
 {
-struct dyString *rqlQuery = dyStringNew(0);
+struct dyString *query = dyStringNew(0);
 struct slName *field, *fieldList = commaSepToSlNames(fields);
-
-dyStringPrintf(rqlQuery, "select %s from files where (%s)", fields, where);
+boolean gotWhere = FALSE;
+sqlDyStringPrintf(query, "%s", ""); // TODO check with Galt on how to get reasonable checking back.
+dyStringPrintf(query, "select %s from cdwFileTags", fields);
+if (!isEmpty(where))
+    {
+    dyStringPrintf(query, "where %s", where);
+    gotWhere = TRUE;
+    }
 if (filtersVar)
     {
     for (field = fieldList; field != NULL; field = field->next)
@@ -163,42 +202,48 @@ if (filtersVar)
 	char *val = trimSpaces(cartUsualString(cart, varName, ""));
 	if (!isEmpty(val))
 	    {
-	    dyStringPrintf(rqlQuery, " and ");
+	    if (gotWhere)
+		dyStringPrintf(query, " and ");
+	    else
+		{
+	        dyStringPrintf(query, " where ");
+		gotWhere = TRUE;
+		}
 	    if (anyWild(val))
 	         {
 		 char *converted = sqlLikeFromWild(val);
 		 char *escaped = makeEscapedString(converted, '"');
-		 dyStringPrintf(rqlQuery, "%s like \"%s\"", field->name, escaped);
+		 dyStringPrintf(query, "%s like \"%s\"", field->name, escaped);
 		 freez(&escaped);
 		 freez(&converted);
 		 }
 	    else if (val[0] == '>' || val[0] == '<')
 	         {
-		 dyStringPrintf(rqlQuery, "%s and %s %s", field->name, field->name, val);
+		 dyStringPrintf(query, "%s %s", field->name, val);
 		 }
 	    else
 	         {
 		 char *escaped = makeEscapedString(val, '"');
-		 dyStringPrintf(rqlQuery, "%s = \"%s\"", field->name, escaped);
+		 dyStringPrintf(query, "%s = \"%s\"", field->name, escaped);
 		 freez(&escaped);
 		 }
 	    }
 	}
     }
 
-/* Turn rqlQuery string into a parsed out rqlStatement. */
-struct slRef *refList = tagStanzasMatchingQuery(tags, rqlQuery->string);
+struct tagStorm *tags = tagStormFromCdwFileTags(conn, query->string);
+struct tagStanza *stanzaList = tags->forest;
 
-/* Set up our table within table look. */
 if (filtersVar)
     {
     printf("First row of table below, above labels, can be used to filter results. ");    
     printf("Wildcard * and ? characters are allowed in text fields. ");
     printf("&GT;min or &LT;max, is allowed in numerical fields. ");
     cgiMakeButton("submit", "update");
-    printf(" %d pass filter", slCount(refList));
+    printf(" %d pass filter", slCount(stanzaList));
     }
 
+/* Set up our table within table look. */
 webPrintLinkTableStart();
 
 if (filtersVar)
@@ -219,13 +264,12 @@ if (filtersVar)
 for (field = fieldList; field != NULL; field = field->next)
     webPrintLabelCell(field->name);
 
-struct slRef *ref;
 int count = 0;
-for (ref = refList; ref != NULL; ref = ref->next)
+struct tagStanza *stanza;
+for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
     {
     if (++count > limit)
          break;
-    struct tagStanza *stanza = ref->val;
     printf("<TR>\n");
     struct slName *field;
     for (field = fieldList; field != NULL; field = field->next)
@@ -259,11 +303,10 @@ void doBrowseFiles(struct sqlConnection *conn)
 printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "browseFiles");
-struct tagStorm *tags = cdwTagStorm(conn);
-showTableFromQuery(tags, 
+showTableFromQuery(conn, 
     "file_name,lab,assay,data_set_id,output,format,read_size,item_count,map_ratio,"
     "species,lab_quake_markers,body_part",
-    "file_name", 200, "cdwFilter");
+    NULL, 200, "cdwFilter");
 printf("</FORM>\n");
 }
 
@@ -358,38 +401,48 @@ void doQuery(struct sqlConnection *conn)
 /* Print up query page */
 {
 /* Do stuff that keeps us here after a routine submit */
-printf("Enter a SQL query below using  'file' for the table name.<BR><BR>\n");
 printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "query");
 
+/* Get values from text inputs and make up an RQL query string out of fields, where, limit
+ * clauses */
 
-/* Print out select fields */
-printf("select ");
+/* Fields clause */
 char *fieldsVar = "cdwQueryFields";
 char *fields = cartUsualString(cart, fieldsVar, "*");
-cgiMakeTextVar(fieldsVar, fields, 40);
 struct dyString *rqlQuery = dyStringCreate("select %s from files ", fields);
-printf("from files ");
 
-/* Print out where fields */
+/* Where clause */
 char *whereVar = "cdwQueryWhere";
 char *where = cartUsualString(cart, whereVar, "");
+dyStringPrintf(rqlQuery, "where accession");
 if (!isEmpty(where))
-    dyStringPrintf(rqlQuery, "where %s", where);
-printf("where ");
-cgiMakeTextVar(whereVar, where, 40);
+    dyStringPrintf(rqlQuery, " and (%s)", where);
 
-/* Print out limit bits */
-printf(" limit ");
+/* Limit clause */
 char *limitVar = "cdwQueryLimit";
 int limit = cartUsualInt(cart, limitVar, 10);
+
+struct tagStorm *tags = cdwTagStorm(conn);
+struct slRef *matchList = tagStanzasMatchingQuery(tags, rqlQuery->string);
+int matchCount = slCount(matchList);
+printf("Enter a SQL-like query below. ");
+printf("In the box after 'select' you can put in a list of tag names including wildcards. ");
+printf("In the box after 'where' you can put in filters based on boolean operations. <BR>");
+/** Write out select [  ] from files whre [  ] limit [ ] <submit> **/
+printf("select ");
+cgiMakeTextVar(fieldsVar, fields, 40);
+printf("from files ");
+printf("where ");
+cgiMakeTextVar(whereVar, where, 40);
+printf(" limit ");
 cgiMakeIntVar(limitVar, limit, 7);
 cgiMakeSubmitButton();
 
-printf("<PRE><TT>\n");
-struct tagStorm *tags = cdwTagStorm(conn);
-uglyf("query '%s'<BR>\n<BR>\n", rqlQuery->string);
+printf("<PRE><TT>");
+printLongWithCommas(stdout, matchCount);
+printf(" files match\n\n");
 showMatching(rqlQuery->string, limit, tags);
 printf("</TT></PRE>\n");
 printf("</FORM>\n");
@@ -568,7 +621,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.08");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.09");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
