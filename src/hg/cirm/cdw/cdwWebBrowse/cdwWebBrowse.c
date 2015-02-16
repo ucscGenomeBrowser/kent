@@ -9,6 +9,7 @@
 #include "obscure.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
+#include "fieldedTable.h"
 #include "portable.h"
 #include "paraFetch.h"
 #include "tagStorm.h"
@@ -179,8 +180,142 @@ tagStormReverseAll(tags);
 return tags;
 }
 
-void showTableFromQuery(struct sqlConnection *conn, char *fields, char *where,  int limit,
-    char *filtersVar, char *orderVar)
+struct slName *sqlResultFieldList(struct sqlResult *sr)
+/* Return slName list of all fields */
+{
+struct slName *list = NULL;
+char *field;
+while ((field = sqlFieldName(sr)) != NULL)
+    slNameAddHead(&list, field);
+slReverse(&list);
+return list;
+}
+
+int sqlResultFieldArray(struct sqlResult *sr, char ***retArray)
+/* Get the fields of sqlResult,  returning count, and the results
+ * themselves in *retArray. */
+{
+struct slName *el, *list = sqlResultFieldList(sr);
+int count = slCount(list);
+char **array;
+AllocArray(array, count);
+int i;
+for (el=list,i=0; el != NULL; el = el->next, ++i)
+    array[i] = cloneString(el->name);
+*retArray = array;
+return count;
+}
+
+struct fieldedTable *fieldedTableFromDbQuery(struct sqlConnection *conn, char *query)
+/* Return fieldedTable from a database query */
+{
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **fields;
+int fieldCount = sqlResultFieldArray(sr, &fields);
+struct fieldedTable *table = fieldedTableNew(query, fields, fieldCount);
+char **row;
+int i = 0;
+while ((row = sqlNextRow(sr)) != NULL)
+    fieldedTableAdd(table, row, fieldCount, ++i);
+sqlFreeResult(&sr);
+return table;
+}
+
+void showFieldedTable(struct fieldedTable *table, int limit, char *returnUrl, char *varPrefix,
+    boolean withFilters)
+/* Show a fielded table that can be sorted by clicking on column labels and optionally
+ * that includes a row of filter controls above the labels */
+{
+if (strchr(returnUrl, '?') == NULL)
+     errAbort("Expecting returnUrl to include ? in showFieldedTable\nIt's %s", returnUrl);
+
+if (withFilters)
+    {
+    printf("First row of table below, above labels, can be used to filter results. ");    
+    printf("Wildcard * and ? characters are allowed in text fields. ");
+    printf("&GT;min or &LT;max, is allowed in numerical fields. ");
+    cgiMakeButton("submit", "update");
+    printf(" %d pass filter", slCount(table->rowList));
+    }
+
+/* Set up our table within table look. */
+webPrintLinkTableStart();
+
+/* Draw optional filters cells ahead of column labels*/
+if (withFilters)
+    {
+    printf("<TR>");
+    int i;
+    for (i=0; i<table->fieldCount; ++i)
+        {
+	char *field = table->fields[i];
+	char varName[256];
+	safef(varName, sizeof(varName), "%s_f_%s", varPrefix, field);
+	webPrintLinkCellStart();
+	cartMakeTextVar(cart, varName, "", 12);
+	webPrintLinkCellEnd();
+	}
+    printf("</TR>");
+    }
+
+/* Get order var */
+char orderVar[256];
+safef(orderVar, sizeof(orderVar), "%s_order", varPrefix);
+char *orderFields = cartUsualString(cart, orderVar, "");
+
+/* Print column labels */
+int i;
+for (i=0; i<table->fieldCount; ++i)
+    {
+    webPrintLabelCellStart();
+    printf("<A class=\"topbar\" HREF=\"");
+    printf("%s", returnUrl);
+    printf("&%s=", orderVar);
+    char *field = table->fields[i];
+    if (!isEmpty(orderFields) && sameString(orderFields, field))
+        printf("-");
+    printf("%s", field);
+    printf("\">");
+    printf("%s", field);
+    printf("</A>");
+    webPrintLabelCellEnd();
+    }
+
+int count = 0;
+struct fieldedRow *row;
+for (row = table->rowList; row != NULL; row = row->next)
+    {
+    if (++count > limit)
+         break;
+    printf("<TR>\n");
+    int fieldIx = 0;
+    for (fieldIx=0; fieldIx<table->fieldCount; ++fieldIx)
+	{
+	char *val = emptyForNull(row->row[fieldIx]);
+	int valLen = strlen(val);
+	int maxLen = 18;
+	char shortVal[maxLen+1];
+	if (valLen > maxLen)
+	    {
+	    memcpy(shortVal, val, maxLen-3);
+	    shortVal[maxLen-3] = 0;
+	    strcat(shortVal, "...");
+	    }
+	else
+	    strcpy(shortVal, val);
+	webPrintLinkCellStart();
+	printf("%s", shortVal);
+	webPrintLinkCellEnd();
+	}
+    printf("</TR>\n");
+    }
+
+/* Get rid of table within table look */
+webPrintLinkTableEnd();
+}
+
+void showFileFieldsWhere(struct sqlConnection *conn, char *fields, char *where,  int limit,
+    char *returnUrl, char *varPrefix, boolean withFilters)
 /* Construct query and display results as a table */
 {
 struct dyString *query = dyStringNew(0);
@@ -188,18 +323,17 @@ struct slName *field, *fieldList = commaSepToSlNames(fields);
 boolean gotWhere = FALSE;
 sqlDyStringPrintf(query, "%s", ""); // TODO check with Galt on how to get reasonable checking back.
 dyStringPrintf(query, "select %s from cdwFileTags", fields);
-char *orderFields = cartUsualString(cart, orderVar, "");
 if (!isEmpty(where))
     {
     dyStringPrintf(query, "where %s", where);
     gotWhere = TRUE;
     }
-if (filtersVar)
+if (withFilters)
     {
     for (field = fieldList; field != NULL; field = field->next)
         {
 	char varName[128];
-	safef(varName, sizeof(varName), "%s_%s", filtersVar, field->name);
+	safef(varName, sizeof(varName), "%s_f_%s", varPrefix, field->name);
 	char *val = trimSpaces(cartUsualString(cart, varName, ""));
 	if (!isEmpty(val))
 	    {
@@ -232,96 +366,23 @@ if (filtersVar)
 	    }
 	}
     }
-if (!isEmpty(orderVar))
+
+/* We do order here (as well as in showFieldedTable) so as to keep order when fetching
+ * more than fits in window. */
+char orderVar[256];
+safef(orderVar, sizeof(orderVar), "%s_order", varPrefix);
+char *orderFields = cartUsualString(cart, orderVar, "");
+if (!isEmpty(orderFields))
     {
-    if (!isEmpty(orderFields))
-        {
-	if (orderFields[0] == '-')
-	    dyStringPrintf(query, " order by %s desc", orderFields+1);
-	else
-	    dyStringPrintf(query, " order by %s", orderFields);
-	}
+    if (orderFields[0] == '-')
+	dyStringPrintf(query, " order by %s desc", orderFields+1);
+    else
+	dyStringPrintf(query, " order by %s", orderFields);
     }
 
-struct tagStorm *tags = tagStormFromCdwFileTags(conn, query->string);
-struct tagStanza *stanzaList = tags->forest;
-
-if (filtersVar)
-    {
-    printf("First row of table below, above labels, can be used to filter results. ");    
-    printf("Wildcard * and ? characters are allowed in text fields. ");
-    printf("&GT;min or &LT;max, is allowed in numerical fields. ");
-    cgiMakeButton("submit", "update");
-    printf(" %d pass filter", slCount(stanzaList));
-    }
-
-/* Set up our table within table look. */
-webPrintLinkTableStart();
-
-/* Draw optional filters cells ahead of column labels*/
-if (filtersVar)
-    {
-    char varName[256];
-    printf("<TR>");
-    for (field = fieldList; field != NULL; field = field->next)
-        {
-	safef(varName, sizeof(varName), "%s_%s", filtersVar, field->name);
-	webPrintLinkCellStart();
-	cartMakeTextVar(cart, varName, "", 12);
-	webPrintLinkCellEnd();
-	}
-    printf("</TR>");
-    }
-
-/* Print column labels */
-for (field = fieldList; field != NULL; field = field->next)
-    {
-    webPrintLabelCellStart();
-    printf("<A class=\"topbar\" HREF=\"");
-    printf("../cgi-bin/cdwWebBrowse?");
-    printf("%s", cartSidUrlString(cart));
-    printf("&cdwCommand=browseFiles");
-    printf("&%s=", orderVar);
-    if (!isEmpty(orderFields) && sameString(orderFields, field->name))
-        printf("-");
-    printf("%s", field->name);
-    printf("\">");
-    printf("%s", field->name);
-    printf("</A>");
-    webPrintLabelCellEnd();
-    }
-
-int count = 0;
-struct tagStanza *stanza;
-for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
-    {
-    if (++count > limit)
-         break;
-    printf("<TR>\n");
-    struct slName *field;
-    for (field = fieldList; field != NULL; field = field->next)
-	{
-	char *val = emptyForNull(tagFindVal(stanza, field->name));
-	int valLen = strlen(val);
-	int maxLen = 18;
-	char shortVal[maxLen+1];
-	if (valLen > maxLen)
-	    {
-	    memcpy(shortVal, val, maxLen-3);
-	    shortVal[maxLen-3] = 0;
-	    strcat(shortVal, "...");
-	    }
-	else
-	    strcpy(shortVal, val);
-	webPrintLinkCellStart();
-	printf("%s", shortVal);
-	webPrintLinkCellEnd();
-	}
-    printf("</TR>\n");
-    }
-
-/* Get rid of table within table look */
-webPrintLinkTableEnd();
+struct fieldedTable *table = fieldedTableFromDbQuery(conn, query->string);
+showFieldedTable(table, limit, returnUrl, varPrefix, withFilters);
+fieldedTableFree(&table);
 }
 
 void doBrowseFiles(struct sqlConnection *conn)
@@ -330,10 +391,13 @@ void doBrowseFiles(struct sqlConnection *conn)
 printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "browseFiles");
-showTableFromQuery(conn, 
+char returnUrl[PATH_LEN*2];
+safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s",
+    cartSidUrlString(cart) );
+showFileFieldsWhere(conn, 
     "file_name,lab,assay,data_set_id,output,format,read_size,item_count,map_ratio,"
     "species,lab_quake_markers,body_part",
-    NULL, 200, "cdwFilter", "cdwOrder");
+    NULL, 200, returnUrl, "cdwFile", TRUE);
 printf("</FORM>\n");
 }
 
@@ -648,7 +712,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.10");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.12");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
