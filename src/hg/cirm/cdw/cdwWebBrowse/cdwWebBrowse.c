@@ -221,10 +221,60 @@ sqlFreeResult(&sr);
 return table;
 }
 
+int slPairCmpNamesWithEmbeddedNumbers(const void *va, const void *vb)
+/* Compare strings such as gene names that may have embedded numbers,
+ * so that bmp4a comes before bmp14a */
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+return cmpStringsWithEmbeddedNumbers(a->name, b->name);
+}
+
+void fieldedTableSortOnField(struct fieldedTable *table, char *field, boolean doReverse)
+/* Sort on field */
+{
+/* Figure out field position */
+int fieldIx = stringArrayIx(field, table->fields, table->fieldCount);
+if (fieldIx < 0)
+    errAbort("%s is not found in table %s", field, table->name);
+
+/* Make up pair list in local memory which points to rows */
+struct lm *lm = lmInit(0);
+struct slPair *pairList=NULL, *pair;
+struct fieldedRow *fr;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
+    {
+    char *val = emptyForNull(fr->row[fieldIx]);
+    lmAllocVar(lm, pair);
+    pair->name = val;
+    pair->val = fr;
+    slAddHead(&pairList, pair);
+    }
+slReverse(&pairList);  
+
+/* Sort this list. */
+slSort(&pairList, slPairCmpNamesWithEmbeddedNumbers);
+if (doReverse)
+    slReverse(&pairList);
+
+/* Convert rowList to have same order. */
+struct fieldedRow *newList = NULL;
+for (pair = pairList; pair != NULL; pair = pair->next)
+    {
+    fr = pair->val;
+    slAddHead(&newList, fr);
+    }
+slReverse(&newList);
+table->rowList = newList;
+lmCleanup(&lm);
+}
+
 void showFieldedTable(struct fieldedTable *table, int limit, char *returnUrl, char *varPrefix,
-    boolean withFilters)
+    boolean withFilters, int maxLenField)
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
- * that includes a row of filter controls above the labels */
+ * that includes a row of filter controls above the labels .
+ * The maxLenField is maximum character length of field before truncation with ...
+ * Pass in 0 for no max*/
 {
 if (strchr(returnUrl, '?') == NULL)
      errAbort("Expecting returnUrl to include ? in showFieldedTable\nIt's %s", returnUrl);
@@ -281,6 +331,19 @@ for (i=0; i<table->fieldCount; ++i)
     webPrintLabelCellEnd();
     }
 
+/* Sort on field */
+if (!isEmpty(orderFields))
+    {
+    boolean doReverse = FALSE;
+    char *field = orderFields;
+    if (field[0] == '-')
+        {
+	field += 1;
+	doReverse = TRUE;
+	}
+    fieldedTableSortOnField(table, field, doReverse);
+    }
+
 int count = 0;
 struct fieldedRow *row;
 for (row = table->rowList; row != NULL; row = row->next)
@@ -293,18 +356,18 @@ for (row = table->rowList; row != NULL; row = row->next)
 	{
 	char *val = emptyForNull(row->row[fieldIx]);
 	int valLen = strlen(val);
-	int maxLen = 18;
-	char shortVal[maxLen+1];
-	if (valLen > maxLen)
+	if (maxLenField > 0 && maxLenField < valLen)
 	    {
-	    memcpy(shortVal, val, maxLen-3);
-	    shortVal[maxLen-3] = 0;
-	    strcat(shortVal, "...");
+	    char shortVal[maxLenField+1];
+	    if (valLen > maxLenField)
+		{
+		memcpy(shortVal, val, maxLenField-3);
+		shortVal[maxLenField-3] = 0;
+		val = shortVal;
+		}
 	    }
-	else
-	    strcpy(shortVal, val);
 	webPrintLinkCellStart();
-	printf("%s", shortVal);
+	printf("%s", val);
 	webPrintLinkCellEnd();
 	}
     printf("</TR>\n");
@@ -381,7 +444,7 @@ if (!isEmpty(orderFields))
     }
 
 struct fieldedTable *table = fieldedTableFromDbQuery(conn, query->string);
-showFieldedTable(table, limit, returnUrl, varPrefix, withFilters);
+showFieldedTable(table, limit, returnUrl, varPrefix, withFilters, 18);
 fieldedTableFree(&table);
 }
 
@@ -456,36 +519,33 @@ webPrintLinkTableEnd();
 void doBrowseLab(struct sqlConnection *conn)
 /* Put up information on labs */
 {
-struct tagStorm *tags = cdwTagStorm(conn);
+static char *labels[] = {"name", "#files", "PI", "institution", "web page"};
+int fieldCount = ArraySize(labels);
+char *row[fieldCount];
+struct fieldedTable *table = fieldedTableNew("Data contributing labs", labels, fieldCount);
+
 printf("Here is a table of labs that have contributed data<BR>\n");
-webPrintLinkTableStart();
-webPrintLabelCell("name");
-webPrintLabelCell("#files");
-webPrintLabelCell("PI");
-webPrintLabelCell("institution");
-webPrintLabelCell("web page");
 char query[256];
 sqlSafef(query, sizeof(query), "select * from cdwLab");
 struct cdwLab *lab, *labList = cdwLabLoadByQuery(conn, query);
+int i = 0;
 for (lab = labList; lab != NULL; lab = lab->next)
     {
-    printf("<TR>\n");
-    webPrintLinkCell(lab->name);
-    char rqlQuery[256];
-    safef(rqlQuery, sizeof(rqlQuery), "select * from files where file_name and lab='%s'", 
-	lab->name);
-    struct slRef *labFileList = tagStanzasMatchingQuery(tags, rqlQuery);
-    int fileCount = slCount(labFileList);
-    slFreeList(&labFileList);
-    webPrintIntCell(fileCount);
-    webPrintLinkCell(lab->pi);
-    webPrintLinkCell(lab->institution);
-    webPrintLinkCellStart();
-    printf("<A HREF=\"%s\">%s</A>", lab->url, lab->url);
-    webPrintLinkCellEnd();
-    printf("</TR>\n");
+    row[0] = lab->name;
+    char countString[16];
+    sqlSafef(query, sizeof(query), "select count(*) from cdwFileTags where lab='%s'", lab->name);
+    sqlQuickQuery(conn, query, countString, sizeof(countString));
+    row[1] = countString;
+    row[2] = lab->pi;
+    row[3] = lab->institution;
+    row[4] = lab->url;
+    fieldedTableAdd(table, row, fieldCount, ++i);
     }
-webPrintLinkTableEnd();
+char returnUrl[PATH_LEN*2];
+safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseLabs&%s",
+    cartSidUrlString(cart) );
+showFieldedTable(table, 200, returnUrl, "cdwLab", FALSE, 0);
+fieldedTableFree(&table);
 }
 
 void doQuery(struct sqlConnection *conn)
