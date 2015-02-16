@@ -344,6 +344,7 @@ if (!isEmpty(orderFields))
     fieldedTableSortOnField(table, field, doReverse);
     }
 
+/* Render data rows into HTML */
 int count = 0;
 struct fieldedRow *row;
 for (row = table->rowList; row != NULL; row = row->next)
@@ -491,29 +492,29 @@ webPrintLinkTableEnd();
 void doBrowseFormat(struct sqlConnection *conn)
 /* Browse through available formats */
 {
-struct tagStorm *tags = cdwTagStorm(conn);
-struct hash *countHash = tagStormCountTagVals(tags, "format");
+static char *labels[] = {"count", "format", "description"};
+int fieldCount = ArraySize(labels);
+char *row[fieldCount];
+struct fieldedTable *table = fieldedTableNew("Data formats", labels, fieldCount);
 struct slPair *format, *formatList = cdwFormatList();
-struct hash *formatHash = hashNew(0);
-for (format = formatList; format != NULL; format = format->next)
-    hashAdd(formatHash, format->name, format->val);
 
-printf("file formats ordered by usage\n");
-webPrintLinkTableStart();
-webPrintLabelCell("count");
-webPrintLabelCell("format");
-webPrintLabelCell("description");
-struct hashEl *hel, *helList = hashElListHash(countHash);
-slSort(&helList, hashElCmpIntValDesc);
-for (hel = helList; hel != NULL; hel = hel->next)
+for (format = formatList; format != NULL; format = format->next)
     {
-    printf("<TR>\n");
-    webPrintIntCell(ptToInt(hel->val));
-    webPrintLinkCell(hel->name);
-    webPrintLinkCell(emptyForNull(hashFindVal(formatHash, hel->name)));
-    printf("</TR>\n");
+    char countString[16];
+    char query[256];
+    sqlSafef(query, sizeof(query), "select count(*) from cdwFileTags where format='%s'", 
+	format->name);
+    sqlQuickQuery(conn, query, countString, sizeof(countString));
+    row[0] = countString;
+    row[1] = format->name;
+    row[2] = format->val;
+    fieldedTableAdd(table, row, fieldCount, 0);
     }
-webPrintLinkTableEnd();
+char returnUrl[PATH_LEN*2];
+safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseFormats&%s",
+    cartSidUrlString(cart) );
+showFieldedTable(table, 200, returnUrl, "cdwFormats", FALSE, 0);
+fieldedTableFree(&table);
 }
 
 void doBrowseLab(struct sqlConnection *conn)
@@ -772,7 +773,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.12");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.13");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
