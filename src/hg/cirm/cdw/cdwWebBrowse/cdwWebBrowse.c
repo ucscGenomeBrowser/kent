@@ -237,7 +237,7 @@ const struct slPair *a = *((struct slPair **)va);
 const struct slPair *b = *((struct slPair **)vb);
 double aVal = atof(a->name);
 double bVal = atof(b->name);
-double diff = aVal - bVal;
+double diff = bVal - aVal;
 if (diff < 0)
     return -1;
 else if (diff > 0)
@@ -507,7 +507,7 @@ char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s",
     cartSidUrlString(cart) );
 showFileFieldsWhere(conn, 
-    "file_name,lab,assay,data_set_id,output,format,read_size,item_count,map_ratio,"
+    "file_name,lab,assay,data_set_id,output,format,read_size,item_count,"
     "species,lab_quake_markers,body_part",
     NULL, 200, returnUrl, "cdwFile", TRUE);
 printf("</FORM>\n");
@@ -698,16 +698,15 @@ sqlSafef(query, sizeof(query), "select count(*) from cdwValidFile");
 long long fileCount = sqlQuickLongLong(conn, query);
 printLongWithCommas(stdout, fileCount);
 printf(" files");
-printf(" from %d labs.<BR><BR>\n", labCount(tags));
+printf(" from %d labs.<BR>\n", labCount(tags));
+printf("Try using the browse menu on files or tags. ");
+printf("The query link allows simple SQL-like queries of the metadata.");
+printf("<BR><BR>\n");
 
 /* Print out high level tags table */
 static char *highLevelTags[] = 
     {"data_set_id", "lab", "assay", "format", "read_size",
     "body_part", "submit_dir", "lab_quake_markers", "species"};
-printf("This table is a summary of important metadata tags, the number of values for each tag,");
-printf("and the number of files annotated with the tag. ");
-printf("For a full table of all tags select Browse Tags from the menus.");
-
 
 struct fieldedTable *table = fieldedTableNew("Important tags", tagPopularityFields, 
     ArraySize(tagPopularityFields));
@@ -717,6 +716,13 @@ for (i=0; i<ArraySize(highLevelTags); ++i)
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?%s", cartSidUrlString(cart) );
 showFieldedTable(table, 200, returnUrl, "cdwHome", FALSE, 0);
+
+printf("This table is a summary of important metadata tags including the tag name, the number of ");
+printf("values and the most popular values of the tag, and the number of files marked with ");
+printf("the tag.");
+
+printf("<BR>\n");
+
 tagStormFree(&tags);
 }
 
@@ -741,8 +747,14 @@ tagStormFree(&tags);
 void doHelp(struct sqlConnection *con)
 /* Put up help page */
 {
-printf("This being a prototype, there's not much help available.  Try clicking and hovering over the menu bar. ");
-printf("The query option has you type in a SQL-like query. Try 'select * from files where accession' to get all metadata tags from files that have passed basic format validations.\n");
+printf("This being a prototype, there's not much help available.  Try clicking and hovering over the Browse link on the top bar to expose a menu. The trickiest part of the system is the query link.");
+printf("The query link has you type in a SQL-like query. ");
+printf("Try 'select * from files where accession' to get all metadata tags ");
+printf("from files that have passed basic format validations. Instead of '*' you ");
+printf("could use a comma separated list of tag names. ");
+printf("Instead of 'accession' you could put in a boolean expression involving field names and ");
+printf("constants. String constants need to be surrounded by quotes - either single or double.");
+printf("<BR><BR>");
 }
 
 
@@ -839,7 +851,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.13");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.14");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
