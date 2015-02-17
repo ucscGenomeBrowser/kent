@@ -122,13 +122,13 @@ include chainNetFelCat5.ra
         type chain myoLuc1
         otherDb myoLuc1
 
-        track chainBosTau7
+        track chainBosTau8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=lCow clade=bLaura
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain bosTau7
-        otherDb bosTau7
+        type chain bosTau8
+        otherDb bosTau8
 
         track chainCavPor3
         subTrack placentalChainNetViewchain off
@@ -309,13 +309,13 @@ include chainNetTurTru2.ra alpha
         type netAlign myoLuc1 chainMyoLuc1
         otherDb myoLuc1
 
-        track netBosTau7
+        track netBosTau8
         subTrack placentalChainNetViewnet on
         subGroups view=net species=lCow clade=bLaura
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign bosTau7 chainBosTau7
-        otherDb bosTau7
+        type netAlign bosTau8 chainBosTau8
+        otherDb bosTau8
 
         track netCavPor3
         subTrack placentalChainNetViewnet off
