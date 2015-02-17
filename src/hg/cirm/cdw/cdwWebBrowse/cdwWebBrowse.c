@@ -316,8 +316,10 @@ table->rowList = newList;
 lmCleanup(&lm);
 }
 
+typedef void wrapHtmlPrint(char *tag, char *val);
+
 void showFieldedTable(struct fieldedTable *table, int limit, char *returnUrl, char *varPrefix,
-    boolean withFilters, int maxLenField)
+    boolean withFilters, int maxLenField, struct hash *htmlOutputWrappers)
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
  * that includes a row of filter controls above the labels .
  * The maxLenField is maximum character length of field before truncation with ...
@@ -416,7 +418,20 @@ for (row = table->rowList; row != NULL; row = row->next)
 		}
 	    }
 	webPrintLinkCellStart();
-	printf("%s", val);
+	boolean printed = FALSE;
+	if (htmlOutputWrappers != NULL && !isEmpty(val))
+	    {
+	    char *field = table->fields[fieldIx];
+	    wrapHtmlPrint *printer = hashFindVal(htmlOutputWrappers, field);
+	    if (printer != NULL)
+		{
+		printer(field, val);
+		printed = TRUE;
+		}
+	    
+	    }
+	if (!printed)
+	    printf("%s", val);
 	webPrintLinkCellEnd();
 	}
     printf("</TR>\n");
@@ -424,6 +439,22 @@ for (row = table->rowList; row != NULL; row = row->next)
 
 /* Get rid of table within table look */
 webPrintLinkTableEnd();
+}
+
+void wrapFileName(char *tag, char *val)
+/* Write out wrapper that links us to something nice */
+{
+printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=oneFile&cdwFileTag=%s&cdwFileVal=%s&%s\">",
+    tag, val, cartSidUrlString(cart));
+printf("%s</A>", val);
+}
+
+void wrapTagField(char *tag, char *val)
+/* Write out wrapper that links us to something nice */
+{
+printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=oneTag&cdwTagName=%s&%s\">",
+    val, cartSidUrlString(cart));
+printf("%s</A>", val);
 }
 
 void showFileFieldsWhere(struct sqlConnection *conn, char *fields, char *where,  int limit,
@@ -502,8 +533,116 @@ if (!isEmpty(orderFields))
     }
 
 struct fieldedTable *table = fieldedTableFromDbQuery(conn, query->string);
-showFieldedTable(table, limit, returnUrl, varPrefix, withFilters, 18);
+struct hash *browseFileWrappers = hashNew(0);
+hashAdd(browseFileWrappers, "file_name", wrapFileName);
+showFieldedTable(table, limit, returnUrl, varPrefix, withFilters, 18, browseFileWrappers);
 fieldedTableFree(&table);
+}
+
+static char *mustFindFieldInRow(char *field, struct slName *fieldList, char **row)
+/* Assuming field is in list, which is ordered same as row, return row cell
+ * corrsepondint to field */
+{
+int fieldIx = 0;
+struct slName *el;
+for (el = fieldList; el != NULL; el = el->next)
+    {
+    if (sameString(el->name, field))
+        {
+	return row[fieldIx];
+	}
+    ++fieldIx;
+    }
+errAbort("Couldn't find field %s in row", field);
+return NULL;
+}
+
+void doOneTag(struct sqlConnection *conn)
+/* Put up information on one tag */
+{
+char *tag = cartString(cart, "cdwTagName");
+char query[512];
+sqlSafef(query, sizeof(query), "select count(*) from cdwFileTags where %s is not null", tag);
+int taggedFileCount = sqlQuickNum(conn, query);
+sqlSafef(query, sizeof(query), "select count(distinct(%s)) from cdwFileTags where %s is not null", 
+    tag, tag);
+int distinctCount = sqlQuickNum(conn, query);
+printf("The <B>%s</B> tag has %d distinct values and is used on %d files. ", 
+    tag, distinctCount, taggedFileCount);
+int maxLimit = 100;
+int limit = min(maxLimit, taggedFileCount);
+if (taggedFileCount > maxLimit)
+    printf("The %d most popular values of %s are:<BR>\n", maxLimit, tag);
+else
+    printf("The values for %s are:<BR>\n", tag);
+
+sqlSafef(query, sizeof(query), 
+    "select count(%s) ct,%s from cdwFileTags group by %s order by ct desc", 
+    tag, tag, tag);
+uglyf("%s<BR>\n", query);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char *labels[] = {"files", "value"};
+int fieldCount = ArraySize(labels);
+struct fieldedTable *table = fieldedTableNew("Tag Values", labels, fieldCount);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (row[1] != NULL)
+	fieldedTableAdd(table, row, fieldCount, 0);
+    }
+
+char returnUrl[PATH_LEN*2];
+safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=oneTag&cdwTagName=%s&%s",
+    tag, cartSidUrlString(cart) );
+showFieldedTable(table, limit, returnUrl, "cdwOneTag", FALSE, 0, NULL);
+fieldedTableFree(&table);
+}
+
+void doOneFile(struct sqlConnection *conn)
+/* Put up a page with info on one file */
+{
+char *idTag = cartUsualString(cart, "cdwFileTag", "accession");
+char *idVal = cartString(cart, "cdwFileVal");
+char query[512];
+sqlSafef(query, sizeof(query), "select * from cdwFileTags where %s='%s'", idTag, idVal);
+struct sqlResult *sr = sqlGetResult(conn, query);
+struct slName *el, *list = sqlResultFieldList(sr);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *fileName = mustFindFieldInRow("file_name", list, row);
+    char *fileSize = mustFindFieldInRow("file_size", list, row);
+    char *format = mustFindFieldInRow("format", list, row);
+    long long size = atoll(fileSize);
+    printf("Tags associated with %s a %s format file of size ", fileName, format);
+    printLongWithCommas(stdout, size);
+    printf("<BR>\n");
+
+
+    static char *outputFields[] = {"tag", "value"};
+    struct fieldedTable *table = fieldedTableNew("File Tags", outputFields,ArraySize(outputFields));
+    int fieldIx = 0;
+    for (el = list; el != NULL; el = el->next)
+        {
+	char *outRow[2];
+	char *val = row[fieldIx];
+	if (val != NULL)
+	    {
+	    outRow[0] = el->name;
+	    outRow[1] = row[fieldIx];
+	    fieldedTableAdd(table, outRow, 2, fieldIx);
+	    }
+	++fieldIx;
+	}
+    char returnUrl[PATH_LEN*2];
+    safef(returnUrl, sizeof(returnUrl), 
+	"../cgi-bin/cdwWebBrowse?cdwCommand=oneFile&cdwFileTag=%s&cdwFileVal=%s&%s",
+	idTag, idVal, cartSidUrlString(cart) );
+    struct hash *outputWrappers = hashNew(0);
+    hashAdd(outputWrappers, "tag", wrapTagField);
+    showFieldedTable(table, BIGNUM, returnUrl, "cdwOneFile", FALSE, 0, outputWrappers);
+    fieldedTableFree(&table);
+    }
 }
 
 void doBrowseFiles(struct sqlConnection *conn)
@@ -570,7 +709,7 @@ for (format = formatList; format != NULL; format = format->next)
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseFormats&%s",
     cartSidUrlString(cart) );
-showFieldedTable(table, 200, returnUrl, "cdwFormats", FALSE, 0);
+showFieldedTable(table, 200, returnUrl, "cdwFormats", FALSE, 0, NULL);
 fieldedTableFree(&table);
 }
 
@@ -602,7 +741,7 @@ for (lab = labList; lab != NULL; lab = lab->next)
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseLabs&%s",
     cartSidUrlString(cart) );
-showFieldedTable(table, 200, returnUrl, "cdwLab", FALSE, 0);
+showFieldedTable(table, 200, returnUrl, "cdwLab", FALSE, 0, NULL);
 fieldedTableFree(&table);
 }
 
@@ -724,7 +863,9 @@ for (i=0; i<ArraySize(highLevelTags); ++i)
     tagSummaryRow(table, tags, highLevelTags[i]);
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?%s", cartSidUrlString(cart) );
-showFieldedTable(table, 200, returnUrl, "cdwHome", FALSE, 0);
+struct hash *outputWrappers = hashNew(0);
+    hashAdd(outputWrappers, "tag name", wrapTagField);
+showFieldedTable(table, 200, returnUrl, "cdwHome", FALSE, 0, outputWrappers);
 
 printf("This table is a summary of important metadata tags including the tag name, the number of ");
 printf("values and the most popular values of the tag, and the number of files marked with ");
@@ -749,7 +890,9 @@ for (tag = tagList; tag != NULL; tag = tag->next)
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseTags&%s",
     cartSidUrlString(cart) );
-showFieldedTable(table, 200, returnUrl, "cdwFiles", FALSE, 0);
+struct hash *outputWrappers = hashNew(0);
+    hashAdd(outputWrappers, "tag name", wrapTagField);
+showFieldedTable(table, 200, returnUrl, "cdwFiles", FALSE, 0, outputWrappers);
 tagStormFree(&tags);
 }
 
@@ -798,6 +941,14 @@ else if (sameString(command, "browseDataSets"))
 else if (sameString(command, "browseFormats"))
     {
     doBrowseFormat(conn);
+    }
+else if (sameString(command, "oneFile"))
+    {
+    doOneFile(conn);
+    }
+else if (sameString(command, "oneTag"))
+    {
+    doOneTag(conn);
     }
 else if (sameString(command, "help"))
     {
