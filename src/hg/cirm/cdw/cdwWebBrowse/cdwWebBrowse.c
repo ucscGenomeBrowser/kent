@@ -466,8 +466,17 @@ if (withFilters)
 		 }
 	    else if (val[0] == '>' || val[0] == '<')
 	         {
-		 // TODO - sanitize val for nothing but numbers - and . 
-		 dyStringPrintf(query, "%s %s", field->name, val);
+		 char *remaining = val+1;
+		 if (remaining[0] == '=')
+		     remaining += 1;
+		 remaining = skipLeadingSpaces(remaining);
+		 if (isNumericString(remaining))
+		     dyStringPrintf(query, "%s %s", field->name, val);
+		 else
+		     {
+		     warn("Filter for %s doesn't parse:  %s", field->name, val);
+		     dyStringPrintf(query, "%s is not null", field->name); // Let query continue
+		     }
 		 }
 	    else
 	         {
@@ -507,8 +516,8 @@ char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s",
     cartSidUrlString(cart) );
 showFileFieldsWhere(conn, 
-    "file_name,lab,assay,data_set_id,output,format,read_size,item_count,"
-    "species,lab_quake_markers,body_part",
+    "file_name,file_size,lab,assay,data_set_id,output,format,read_size,item_count,"
+    "species,body_part",
     NULL, 200, returnUrl, "cdwFile", TRUE);
 printf("</FORM>\n");
 }
