@@ -8,6 +8,7 @@
 #include "options.h"
 #include "obscure.h"
 #include "cheapcgi.h"
+#include "sqlSanity.h"
 #include "htmshell.h"
 #include "fieldedTable.h"
 #include "portable.h"
@@ -330,7 +331,7 @@ if (strchr(returnUrl, '?') == NULL)
 
 if (withFilters)
     {
-    printf("Filter (leave blank for none): ");
+    printf("Boolean Filter (leave blank for none): ");
     char filterVar[256];
     safef(filterVar, sizeof(filterVar), "%s_filter", varPrefix);
     char *filterVal = cartUsualString(cart, filterVar, "");
@@ -488,7 +489,8 @@ sqlDyStringPrintf(query, "%s", ""); // TODO check with Galt on how to get reason
 dyStringPrintf(query, "select %s from cdwFileTags", fields);
 if (!isEmpty(where))
     {
-    dyStringPrintf(query, " where %s", where);
+    dyStringPrintf(query, " where ");
+    sqlSanityCheckWhere(where, query);
     gotWhere = TRUE;
     }
 if (withFilters)
@@ -1034,7 +1036,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.14");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.15");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
