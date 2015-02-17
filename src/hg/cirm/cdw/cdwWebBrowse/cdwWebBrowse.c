@@ -330,11 +330,18 @@ if (strchr(returnUrl, '?') == NULL)
 
 if (withFilters)
     {
-    printf("First row of table below, above labels, can be used to filter results. ");    
-    printf("Wildcard * and ? characters are allowed in text fields. ");
-    printf("&GT;min or &LT;max, is allowed in numerical fields. ");
+    printf("Filter (leave blank for none): ");
+    char filterVar[256];
+    safef(filterVar, sizeof(filterVar), "%s_filter", varPrefix);
+    char *filterVal = cartUsualString(cart, filterVar, "");
+    cgiMakeTextVar(filterVar, filterVal, 40);
     cgiMakeButton("submit", "update");
+    printf(" ?Maybe paging goes here? %s ", filterVar);
     printf(" %d pass filter", slCount(table->rowList));
+    printf("<BR>\n");
+    printf("First row of table below, above labels, can be used to filter individual fields. ");    
+    printf("Wildcard * and ? characters are allowed in text fields. ");
+    printf("&GT;min or &LT;max, is allowed in numerical fields.<BR>\n");
     }
 
 /* Set up our table within table look. */
@@ -457,6 +464,19 @@ printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=oneTag&cdwTagName=%s&%s\">"
 printf("%s</A>", val);
 }
 
+void wrapTagValueInFiles(char *tag, char *val)
+/* Write out wrapper that links us to something nice */
+{
+printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s&",
+    cartSidUrlString(cart));
+char query[2*PATH_LEN];
+safef(query, sizeof(query), "%s = '%s'", tag, val);
+char *escapedQuery = cgiEncode(query);
+printf("%s=%s", "cdwFile_filter", escapedQuery);
+freez(&escapedQuery);
+printf("\">%s</A>", val);
+}
+
 void showFileFieldsWhere(struct sqlConnection *conn, char *fields, char *where,  int limit,
     char *returnUrl, char *varPrefix, boolean withFilters)
 /* Construct query and display results as a table */
@@ -468,7 +488,7 @@ sqlDyStringPrintf(query, "%s", ""); // TODO check with Galt on how to get reason
 dyStringPrintf(query, "select %s from cdwFileTags", fields);
 if (!isEmpty(where))
     {
-    dyStringPrintf(query, "where %s", where);
+    dyStringPrintf(query, " where %s", where);
     gotWhere = TRUE;
     }
 if (withFilters)
@@ -581,7 +601,7 @@ sqlSafef(query, sizeof(query),
     tag, tag, tag);
 uglyf("%s<BR>\n", query);
 struct sqlResult *sr = sqlGetResult(conn, query);
-char *labels[] = {"files", "value"};
+char *labels[] = {"files", tag};
 int fieldCount = ArraySize(labels);
 struct fieldedTable *table = fieldedTableNew("Tag Values", labels, fieldCount);
 char **row;
@@ -594,7 +614,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=oneTag&cdwTagName=%s&%s",
     tag, cartSidUrlString(cart) );
-showFieldedTable(table, limit, returnUrl, "cdwOneTag", FALSE, 0, NULL);
+struct hash *outputWrappers = hashNew(0);
+hashAdd(outputWrappers, tag, wrapTagValueInFiles);
+showFieldedTable(table, limit, returnUrl, "cdwOneTag", FALSE, 0, outputWrappers);
 fieldedTableFree(&table);
 }
 
@@ -654,10 +676,11 @@ cgiMakeHiddenVar("cdwCommand", "browseFiles");
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s",
     cartSidUrlString(cart) );
+char *where = cartUsualString(cart, "cdwFile_filter", "");
 showFileFieldsWhere(conn, 
     "file_name,file_size,lab,assay,data_set_id,output,format,read_size,item_count,"
     "species,body_part",
-    NULL, 200, returnUrl, "cdwFile", TRUE);
+    where, 200, returnUrl, "cdwFile", TRUE);
 printf("</FORM>\n");
 }
 
