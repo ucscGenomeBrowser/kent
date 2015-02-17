@@ -230,6 +230,49 @@ const struct slPair *b = *((struct slPair **)vb);
 return cmpStringsWithEmbeddedNumbers(a->name, b->name);
 }
 
+int slPairCmpNumbers(const void *va, const void *vb)
+/* Compare slPairs where name is interpreted as floating point number */
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+double aVal = atof(a->name);
+double bVal = atof(b->name);
+double diff = aVal - bVal;
+if (diff < 0)
+    return -1;
+else if (diff > 0)
+    return 1;
+else
+    return 0;
+}
+
+
+boolean isNumericString(char *s)
+/* Return TRUE if string is numeric (integer or floating point) */
+{
+char *end;
+strtod(s, &end);
+return (end != s && *end == 0);
+}
+
+boolean fieldedTableColumnIsNumeric(struct fieldedTable *table, int fieldIx)
+/* Return TRUE if field has numeric values wherever non-null */
+{
+struct fieldedRow *fr;
+boolean anyVals = FALSE;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
+    {
+    char *s = fr->row[fieldIx];
+    if (s != NULL)
+        {
+	anyVals = TRUE;
+	if (!isNumericString(s))
+	    return FALSE;
+	}
+    }
+return anyVals;
+}
+
 void fieldedTableSortOnField(struct fieldedTable *table, char *field, boolean doReverse)
 /* Sort on field */
 {
@@ -237,6 +280,7 @@ void fieldedTableSortOnField(struct fieldedTable *table, char *field, boolean do
 int fieldIx = stringArrayIx(field, table->fields, table->fieldCount);
 if (fieldIx < 0)
     errAbort("%s is not found in table %s", field, table->name);
+boolean fieldIsNumeric = fieldedTableColumnIsNumeric(table, fieldIx);
 
 /* Make up pair list in local memory which points to rows */
 struct lm *lm = lmInit(0);
@@ -253,7 +297,10 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 slReverse(&pairList);  
 
 /* Sort this list. */
-slSort(&pairList, slPairCmpNamesWithEmbeddedNumbers);
+if (fieldIsNumeric)
+    slSort(&pairList, slPairCmpNumbers);
+else
+    slSort(&pairList, slPairCmpNamesWithEmbeddedNumbers);
 if (doReverse)
     slReverse(&pairList);
 
@@ -355,15 +402,16 @@ for (row = table->rowList; row != NULL; row = row->next)
     int fieldIx = 0;
     for (fieldIx=0; fieldIx<table->fieldCount; ++fieldIx)
 	{
+	char shortVal[maxLenField+1];
 	char *val = emptyForNull(row->row[fieldIx]);
 	int valLen = strlen(val);
 	if (maxLenField > 0 && maxLenField < valLen)
 	    {
-	    char shortVal[maxLenField+1];
 	    if (valLen > maxLenField)
 		{
 		memcpy(shortVal, val, maxLenField-3);
 		shortVal[maxLenField-3] = 0;
+		strcat(shortVal, "...");
 		val = shortVal;
 		}
 	    }
@@ -520,7 +568,7 @@ fieldedTableFree(&table);
 void doBrowseLab(struct sqlConnection *conn)
 /* Put up information on labs */
 {
-static char *labels[] = {"name", "#files", "PI", "institution", "web page"};
+static char *labels[] = {"name", "files", "PI", "institution", "web page"};
 int fieldCount = ArraySize(labels);
 char *row[fieldCount];
 struct fieldedTable *table = fieldedTableNew("Data contributing labs", labels, fieldCount);
@@ -600,22 +648,38 @@ printf("</TT></PRE>\n");
 printf("</FORM>\n");
 }
 
-void tagSummaryRow(struct tagStorm *tags, char *tag)
+void tagSummaryRow(struct fieldedTable *table, struct tagStorm *tags, char *tag)
 /* Print out row in a high level tag counting table */
 {
-printf("<TR>");
+/* Do analysis hash */
 struct hash *hash = tagStormCountTagVals(tags, tag);
-int count = hash->elCount;
-struct dyString *dy = printPopularTags(hash, 120);
-webPrintLinkCell(tag);
-webPrintIntCell(count);
-webPrintLinkCell(dy->string);
+
+/* Convert count of distinct values to string */
+int valCount = hash->elCount;
+char valCountString[32];
+safef(valCountString, sizeof(valCountString), "%d", valCount);
+
+/* Convert count of files using tag to string */
 int fileCount = sumCounts(hash);
-webPrintIntCell(fileCount);
+char fileCountString[32];
+safef(fileCountString, sizeof(fileCountString), "%d", fileCount);
+
+struct dyString *dy = printPopularTags(hash, 120);
+
+/* Add data to fielded table */
+char *row[4];
+row[0] = tag;
+row[1] = valCountString;
+row[2] = dy->string;
+row[3] = fileCountString;
+fieldedTableAdd(table, row, ArraySize(row), 0);
+
+/* Clean up */
 dyStringFree(&dy);
 hashFree(&hash);
-printf("</TR>");
 }
+
+char *tagPopularityFields[] = { "tag name", "vals", "popular values (files)...", "files",};
 
 void doHome(struct sqlConnection *conn)
 /* Put up home/summary page */
@@ -640,18 +704,20 @@ printf(" from %d labs.<BR><BR>\n", labCount(tags));
 static char *highLevelTags[] = 
     {"data_set_id", "lab", "assay", "format", "read_size",
     "body_part", "submit_dir", "lab_quake_markers", "species"};
-printf("This table is a summary of important metadata tags and the number of files associated ");
-printf("with each. ");
+printf("This table is a summary of important metadata tags, the number of values for each tag,");
+printf("and the number of files annotated with the tag. ");
 printf("For a full table of all tags select Browse Tags from the menus.");
-webPrintLinkTableStart();
-webPrintLabelCell("tag name");
-webPrintLabelCell("# val");
-webPrintLabelCell("popular values (files)...");
-webPrintLabelCell("# files");
+
+
+struct fieldedTable *table = fieldedTableNew("Important tags", tagPopularityFields, 
+    ArraySize(tagPopularityFields));
 int i;
 for (i=0; i<ArraySize(highLevelTags); ++i)
-    tagSummaryRow(tags, highLevelTags[i]);
-webPrintLinkTableEnd();
+    tagSummaryRow(table, tags, highLevelTags[i]);
+char returnUrl[PATH_LEN*2];
+safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?%s", cartSidUrlString(cart) );
+showFieldedTable(table, 200, returnUrl, "cdwHome", FALSE, 0);
+tagStormFree(&tags);
 }
 
 void doBrowseTags(struct sqlConnection *conn)
@@ -661,14 +727,14 @@ struct tagStorm *tags = cdwTagStorm(conn);
 struct slName *tag, *tagList = tagStormFieldList(tags);
 slSort(&tagList, slNameCmp);
 printf("This is a list of all tags and their most popular values.");
-webPrintLinkTableStart();
-webPrintLabelCell("tag name");
-webPrintLabelCell("# val");
-webPrintLabelCell("popular values (files)...");
-webPrintLabelCell("# files");
+struct fieldedTable *table = fieldedTableNew("Important tags", tagPopularityFields, 
+    ArraySize(tagPopularityFields));
 for (tag = tagList; tag != NULL; tag = tag->next)
-    tagSummaryRow(tags, tag->name);
-webPrintLinkTableEnd();
+    tagSummaryRow(table, tags, tag->name);
+char returnUrl[PATH_LEN*2];
+safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseTags&%s",
+    cartSidUrlString(cart) );
+showFieldedTable(table, 200, returnUrl, "cdwFiles", FALSE, 0);
 tagStormFree(&tags);
 }
 
