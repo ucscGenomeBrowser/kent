@@ -950,9 +950,7 @@ for (i=0; i<ArraySize(highLevelTags); ++i)
     tagSummaryRow(table, tags, highLevelTags[i]);
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?%s", cartSidUrlString(cart) );
-struct hash *outputWrappers = hashNew(0);
-    hashAdd(outputWrappers, "tag name", wrapTagField);
-showFieldedTable(table, 100, returnUrl, "cdwHome", FALSE, 0, outputWrappers, NULL);
+showFieldedTable(table, 100, returnUrl, "cdwHome", FALSE, 0, NULL, NULL);
 
 printf("This table is a summary of important metadata tags including the tag name, the number of ");
 printf("values and the most popular values of the tag, and the number of files marked with ");
@@ -1098,7 +1096,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.15");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.16");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
