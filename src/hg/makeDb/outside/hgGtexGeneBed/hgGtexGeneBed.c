@@ -207,6 +207,7 @@ FILE *bedFile = hgCreateTabFile(tabDir,table);
 slSort(&geneBeds, bedCmp);
 for (geneBed = geneBeds; geneBed != NULL; geneBed = geneBed->next)
     {
+    verbose(3, "Writing gene %s\n", geneBed->name);
     gtexGeneBedOutput(geneBed, bedFile, '\t', '\n');
     }
 carefulClose(&bedFile);
