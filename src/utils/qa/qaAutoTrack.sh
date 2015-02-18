@@ -142,10 +142,10 @@ fi
 # set currLogFile
 currLogFile="$logDir"/"$db.$tableName.$currDate.txt"
 
-# look for previous log file
-if [ -e $logDir/$db.$tableName.*.txt ]
+# set info for prevLog
+prevLogDate+=$(ls -Llt --time-style long-iso $logDir|grep -v total|egrep -m 1 -oh "$db\.$tableName\.[0-9]{4}-[0-9]{2}-[0-9]{2}"|sed -e "s/$db\.$tableName\.//g")
+if [ -e $logDir/$db.$tableName.$prevLogDate.txt ]
 then
-	prevLogDate+=$(ls -Llt --time-style long-iso $logDir|grep -v total|egrep -m 1 -oh "$db\.$tableName\.[0-9]{4}-[0-9]{2}-[0-9]{2}"|sed -e "s/$db\.$tableName\.//g")
 	prevLogFile="$logDir"/"$db.$tableName.$prevLogDate.txt"
 fi
 
@@ -233,9 +233,14 @@ else
                 	if [[ $tbl == "omimGene2" ]] || [[ $tbl == "omimAvSnp" ]] || [[ $tbl == "omimLocation" ]] || [[ $tableName == "isca" ]]
                 	then
                         	tblCov=$(ssh qateam@hgwbeta "featureBits -countGaps $db $tbl 2>&1")
+				# temporary holder so we don't loose original input tableName
+				tableNameTemp=$tableName
+				# set tableName to tbl temporarily so we can use one output function for all tables
 				tableName=$tbl
 				
 				outputCovDiff
+				# reset tableName to original name
+				tableName=$tableNameTemp
 			# Output for tables that don't contain coordinates
 			else
 				output+="$tbl\nLast updated: $tblDate\n\n"
