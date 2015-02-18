@@ -5240,6 +5240,9 @@ tablesIgnored $eboVir
     mafSnp160way
     mafSnpStrainName160way
     muPIT
+    newSequences
+    newSequencesFrames
+    newSequencesSnpView
     ncbiGenePfam
     pdb
     spMut
