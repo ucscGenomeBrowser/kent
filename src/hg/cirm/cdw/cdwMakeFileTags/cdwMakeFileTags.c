@@ -17,16 +17,69 @@ void usage()
 errAbort(
   "cdwMakeFileTags - Create cdwFileTags table from tagStorm on same database.\n"
   "usage:\n"
-  "   cdwMakeFileTags database table\n"
+  "   cdwMakeFileTags now\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -table=tableName What table to store results in, default cdwFileTags\n"
+  "   -database=databaseName What database to store results in, default cdw\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"table", OPTION_STRING},
+   {"database", OPTION_STRING},
    {NULL, 0},
 };
+
+static void rInfer(struct tagStanza *list, struct hash *hash)
+/* Traverse recursively updating hash with type of each field. */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    struct slPair *pair;
+    for (pair = stanza->tagList; pair != NULL; pair = pair->next)
+        {
+	char *tag = pair->name;
+	char *val = pair->val;
+	char *oldType = NULL;
+	struct hashEl *oldHel = hashLookup(hash, tag);
+	if (oldHel != NULL)
+	     oldType = oldHel->val;
+	if (isNumericString(val))
+	    {
+	    if (oldType == NULL)
+	        {
+		hashAdd(hash, tag, "float");
+		}
+	    }
+	else
+	    {
+	    if (oldType == NULL)
+	        {
+		hashAdd(hash, tag, "string");
+		}
+	    else 
+	        {
+		oldHel->val = "string";
+		}
+	    }
+	}
+    if (stanza->children)
+        rInfer(stanza->children, hash);
+    }
+}
+
+struct hash *tagStanzaInferType(struct tagStorm *tags)
+/* Go through every tag/value in storm and return a hash that is
+ * keyed by tag and has one of three string values:
+ *     "int", "float", "string"
+ * depending on the values seen at a field. */
+{
+struct hash *hash = hashNew(0);
+rInfer(tags->forest, hash);
+return hash;
+}
 
 void cdwMakeFileTags(char *database, char *table)
 /* cdwMakeFileTags - Create cdwFileTags table from tagStorm on same database.. */
@@ -37,12 +90,33 @@ struct slName *field, *fieldList = tagStormFieldList(tags);
 slSort(&fieldList, slNameCmp);
 struct hash *fieldHash = tagStormFieldHash(tags);
 
+/* Build up hash of column types */
+struct hash *tagType = tagStanzaInferType(tags);
+uglyf("Got %d els in tagType\n", tagType->elCount);
+
+
 struct dyString *query = dyStringNew(0);
 sqlDyStringPrintf(query, "CREATE TABLE %s (", table);
 char *connector = "";
 for (field = fieldList; field != NULL; field = field->next)
     {
-    sqlDyStringPrintf(query, "%s%s varchar(255)", connector, field->name);
+    char *sqlType = NULL;
+    char *type = hashFindVal(tagType, field->name);
+    assert(type != NULL);
+    if (sameString(type, "string"))
+        {
+	sqlType = "varchar(255)";
+	}
+    else if (sameString(type, "float"))
+        {
+	sqlType = "double";
+	}
+    else
+        {
+	errAbort("Unrecoginzed tag %s type in cdwMakeFileTags", type);
+	}
+
+    sqlDyStringPrintf(query, "%s%s %s", connector, field->name, sqlType);
     connector = ", ";
     }
 
@@ -67,7 +141,20 @@ for (i=0; i<ArraySize(keyFields); ++i)
     char *key = keyFields[i];
     if (hashLookup(fieldHash, key))
         {
-	sqlDyStringPrintf(query, "%sINDEX(%s(16))", connector, key);
+	char *type = hashFindVal(tagType, key);
+	assert(type != NULL);
+	if (sameString(type, "string"))
+	    {
+	    sqlDyStringPrintf(query, "%sINDEX(%s(16))", connector, key);
+	    }
+	else if (sameString(type, "float"))
+	    {
+	    sqlDyStringPrintf(query, "%sINDEX(%s)", connector, key);
+	    }
+	else
+	    {
+	    errAbort("Unrecoginzed tag %s type in cdwMakeFileTags2", type);
+	    }
 	}
     }
 sqlDyStringPrintf(query, ")");
@@ -106,8 +193,10 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 2)
     usage();
-cdwMakeFileTags(argv[1], argv[2]);
+char *database = optionVal("database", "cdw");
+char *table = optionVal("table", "cdwFileTags");
+cdwMakeFileTags(database, table);
 return 0;
 }
