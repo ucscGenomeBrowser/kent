@@ -280,7 +280,7 @@ void fieldedTableSortOnField(struct fieldedTable *table, char *field, boolean do
 /* Figure out field position */
 int fieldIx = stringArrayIx(field, table->fields, table->fieldCount);
 if (fieldIx < 0)
-    errAbort("%s is not found in table %s", field, table->name);
+    fieldIx = 0;
 boolean fieldIsNumeric = fieldedTableColumnIsNumeric(table, fieldIx);
 
 /* Make up pair list in local memory which points to rows */
@@ -342,36 +342,14 @@ if (strchr(returnUrl, '?') == NULL)
 
 if (withFilters)
     {
-    printf("Boolean Filter (leave blank for none): ");
-    char filterVar[256];
-    safef(filterVar, sizeof(filterVar), "%s_filter", varPrefix);
-    char *filterVal = cartUsualString(cart, filterVar, "");
-    cgiMakeTextVar(filterVar, filterVal, 40);
-    cgiMakeButton("submit", "update");
-
     /* Print info on matching */
     int matchCount = slCount(table->rowList);
     if (largerContext != NULL)  // Need to page?
 	 matchCount = largerContext->tableSize;
     printf(" %d files match. ", matchCount);
+    cgiMakeButton("submit", "update");
 
-    /* Handle paging if any */
-    if (largerContext != NULL)  // Need to page?
-	 {
-	 if (pageSize < largerContext->tableSize)
-	    {
-	    int curPage = largerContext->tableOffset/pageSize;
-	    int totalPages = (largerContext->tableSize + pageSize - 1)/pageSize;
 
-	    printf("Displaying page ");
-
-	    char pageVar[64];
-	    safef(pageVar, sizeof(pageVar), "%s_page", varPrefix);
-	    cgiMakeIntVar(pageVar, curPage+1, 3);
-
-	    printf(" of %d", totalPages);
-	    }
-	 }
     printf("<BR>\n");
     printf("First row of table below, above labels, can be used to filter individual fields. ");    
     printf("Wildcard * and ? characters are allowed in text fields. ");
@@ -480,6 +458,24 @@ for (row = table->rowList; row != NULL; row = row->next)
 
 /* Get rid of table within table look */
 webPrintLinkTableEnd();
+
+/* Handle paging if any */
+if (largerContext != NULL)  // Need to page?
+     {
+     if (pageSize < largerContext->tableSize)
+	{
+	int curPage = largerContext->tableOffset/pageSize;
+	int totalPages = (largerContext->tableSize + pageSize - 1)/pageSize;
+
+	printf("Displaying page ");
+
+	char pageVar[64];
+	safef(pageVar, sizeof(pageVar), "%s_page", varPrefix);
+	cgiMakeIntVar(pageVar, curPage+1, 3);
+
+	printf(" of %d", totalPages);
+	}
+     }
 }
 
 void wrapFileName(char *tag, char *val)
@@ -525,7 +521,7 @@ dyStringPrintf(query, "select %s from cdwFileTags", fields);
 if (!isEmpty(initialWhere))
     {
     dyStringPrintf(where, " where ");
-    sqlSanityCheckWhere(initialWhere, query);
+    sqlSanityCheckWhere(initialWhere, where);
     gotWhere = TRUE;
     }
 if (withFilters)
@@ -594,7 +590,6 @@ if (!isEmpty(orderFields))
 struct dyString *countQuery = dyStringNew(0);
 sqlDyStringPrintf(countQuery, "select count(*) from cdwFileTags");
 dyStringAppend(countQuery, where->string);
-uglyf("countQuery: %s<BR>\n", countQuery->string);
 int resultsSize = sqlQuickNum(conn, countQuery->string);
 dyStringFree(&countQuery);
 
@@ -665,7 +660,6 @@ else
 sqlSafef(query, sizeof(query), 
     "select count(%s) ct,%s from cdwFileTags group by %s order by ct desc", 
     tag, tag, tag);
-uglyf("%s<BR>\n", query);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char *labels[] = {"files", tag};
 int fieldCount = ArraySize(labels);
@@ -743,10 +737,14 @@ char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s",
     cartSidUrlString(cart) );
 char *where = cartUsualString(cart, "cdwFile_filter", "");
+if (!isEmpty(where))
+    {
+    printf("Restricting files to where %s. ", where);
+    }
 showFileFieldsWhere(conn, 
     "file_name,file_size,lab,assay,data_set_id,output,format,read_size,item_count,"
     "species,body_part",
-    where, 10, returnUrl, "cdwFile", TRUE);
+    where, 100, returnUrl, "cdwBrowseFiles", TRUE);
 printf("</FORM>\n");
 }
 
