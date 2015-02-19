@@ -34,6 +34,8 @@
 #include "net.h"
 #include "cheapcgi.h"
 #include "udc.h"
+#include "hex.h"
+#include <openssl/sha.h>
 
 
 #define udcBlockSize (8*1024)
@@ -784,12 +786,53 @@ void udcParseUrl(char *url, char **retProtocol, char **retAfterProtocol, char **
 udcParseUrlFull(url, retProtocol, retAfterProtocol, retColon, NULL);
 }
 
+static void addElementToDy(struct dyString *dy, char *name)
+/* add one element of a path to a dyString, hashing it if it's longer 
+ * than NAME_MAX */
+{
+if (strlen(name) > NAME_MAX)
+    {
+    unsigned char hash[SHA_DIGEST_LENGTH];
+    char newName[(SHA_DIGEST_LENGTH + 1) * 2];
+
+    SHA1((const unsigned char *)name, strlen(name), hash);
+    hexBinaryString(hash,  SHA_DIGEST_LENGTH, newName, (SHA_DIGEST_LENGTH + 1) * 2);
+    
+    dyStringAppend(dy, newName);
+    }
+else
+    dyStringAppend(dy, name);
+}
+
+static char *longDirHash(char *name)
+/* take a path and hash the elements that are longer than NAME_MAX */
+{
+struct dyString *dy = newDyString(strlen(name));
+char *ptr = strchr(name, '/');
+
+while(ptr)
+    {
+    *ptr = 0;
+    addElementToDy(dy, name);
+
+    dyStringAppend(dy, "/");
+
+    name = ptr + 1;
+    ptr = strchr(name, '/');
+    }
+
+addElementToDy(dy, name);
+
+return dyStringCannibalize(&dy);
+}
+
 void udcPathAndFileNames(struct udcFile *file, char *cacheDir, char *protocol, char *afterProtocol)
 /* Initialize udcFile path and names */
 {
-int len = strlen(cacheDir) + 1 + strlen(protocol) + 1 + strlen(afterProtocol) + 1;
+char *hashedAfterProtocol = longDirHash(afterProtocol);
+int len = strlen(cacheDir) + 1 + strlen(protocol) + 1 + strlen(hashedAfterProtocol) + 1;
 file->cacheDir = needMem(len);
-safef(file->cacheDir, len, "%s/%s/%s", cacheDir, protocol, afterProtocol);
+safef(file->cacheDir, len, "%s/%s/%s", cacheDir, protocol, hashedAfterProtocol);
 
 /* Create file names for bitmap and data portions. */
 file->bitmapFileName = fileNameInCacheDir(file, bitmapName);
