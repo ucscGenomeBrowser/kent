@@ -222,13 +222,13 @@ sqlFreeResult(&sr);
 return table;
 }
 
-int slPairCmpNamesWithEmbeddedNumbers(const void *va, const void *vb)
+int slPairCmpName(const void *va, const void *vb)
 /* Compare strings such as gene names that may have embedded numbers,
  * so that bmp4a comes before bmp14a */
 {
 const struct slPair *a = *((struct slPair **)va);
 const struct slPair *b = *((struct slPair **)vb);
-return cmpStringsWithEmbeddedNumbers(a->name, b->name);
+return strcmp(a->name, b->name);
 }
 
 int slPairCmpNumbers(const void *va, const void *vb)
@@ -238,7 +238,7 @@ const struct slPair *a = *((struct slPair **)va);
 const struct slPair *b = *((struct slPair **)vb);
 double aVal = atof(a->name);
 double bVal = atof(b->name);
-double diff = bVal - aVal;
+double diff = aVal - bVal;
 if (diff < 0)
     return -1;
 else if (diff > 0)
@@ -247,14 +247,6 @@ else
     return 0;
 }
 
-
-boolean isNumericString(char *s)
-/* Return TRUE if string is numeric (integer or floating point) */
-{
-char *end;
-strtod(s, &end);
-return (end != s && *end == 0);
-}
 
 boolean fieldedTableColumnIsNumeric(struct fieldedTable *table, int fieldIx)
 /* Return TRUE if field has numeric values wherever non-null */
@@ -301,7 +293,7 @@ slReverse(&pairList);
 if (fieldIsNumeric)
     slSort(&pairList, slPairCmpNumbers);
 else
-    slSort(&pairList, slPairCmpNamesWithEmbeddedNumbers);
+    slSort(&pairList, slPairCmpName);
 if (doReverse)
     slReverse(&pairList);
 
@@ -319,6 +311,25 @@ lmCleanup(&lm);
 
 typedef void wrapHtmlPrint(char *tag, char *val);
 
+int fieldedTableMaxColChars(struct fieldedTable *table, int colIx)
+{
+if (colIx >= table->fieldCount)
+    errAbort("fieldedTableMaxColChars on %d, but only have %d columns", colIx, table->fieldCount);
+int max = strlen(table->fields[colIx]) + 1;
+struct fieldedRow *fr;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
+    {
+    char *val = fr->row[colIx];
+    if (val != NULL)
+        {
+	int len = strlen(val);
+	if (len > max)
+	   max = len;
+	}
+    }
+return max;
+}
+
 struct sftSegment
 /* Information on a segment we're processing out of something larger */
     {
@@ -328,8 +339,9 @@ struct sftSegment
     int tableOffset;	// Where we are in larger structure
     };
 
-void showFieldedTable(struct fieldedTable *table, int pageSize, char *returnUrl, char *varPrefix,
-    boolean withFilters, int maxLenField, struct hash *htmlOutputWrappers, 
+void showFieldedTable(struct fieldedTable *table, 
+    int pageSize, char *returnUrl, char *varPrefix,
+    boolean withFilters, char *itemPlural, int maxLenField, struct hash *htmlOutputWrappers, 
     struct sftSegment *largerContext)
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
  * that includes a row of filter controls above the labels .
@@ -346,7 +358,7 @@ if (withFilters)
     int matchCount = slCount(table->rowList);
     if (largerContext != NULL)  // Need to page?
 	 matchCount = largerContext->tableSize;
-    printf(" %d files match. ", matchCount);
+    printf(" %d %s found. ", matchCount, itemPlural);
     cgiMakeButton("submit", "update");
 
 
@@ -370,7 +382,15 @@ if (withFilters)
 	char varName[256];
 	safef(varName, sizeof(varName), "%s_f_%s", varPrefix, field);
 	webPrintLinkCellStart();
-	cartMakeTextVar(cart, varName, "", 12);
+#ifdef MAKES_TOO_WIDE
+	char *oldVal = cartUsualString(cart, varName, "");
+	printf("<input type=\"text\" name=\"%s\" style=\"display:table-cell; width=100%%\""
+	       " value=\"%s\">", varName, oldVal);
+#endif /* MAKES_TOO_WIDE */
+	int size = fieldedTableMaxColChars(table, i);
+	if (size > maxLenField)
+	    size = maxLenField;
+	cartMakeTextVar(cart, varName, "", size + 1);
 	webPrintLinkCellEnd();
 	}
     printf("</TR>");
@@ -381,6 +401,9 @@ char orderVar[256];
 safef(orderVar, sizeof(orderVar), "%s_order", varPrefix);
 char *orderFields = cartUsualString(cart, orderVar, "");
 
+char pageVar[64];
+safef(pageVar, sizeof(pageVar), "%s_page", varPrefix);
+
 /* Print column labels */
 int i;
 for (i=0; i<table->fieldCount; ++i)
@@ -388,6 +411,7 @@ for (i=0; i<table->fieldCount; ++i)
     webPrintLabelCellStart();
     printf("<A class=\"topbar\" HREF=\"");
     printf("%s", returnUrl);
+    printf("&%s=1", pageVar);
     printf("&%s=", orderVar);
     char *field = table->fields[i];
     if (!isEmpty(orderFields) && sameString(orderFields, field))
@@ -478,6 +502,8 @@ if (largerContext != NULL)  // Need to page?
      }
 }
 
+
+
 void wrapFileName(char *tag, char *val)
 /* Write out wrapper that links us to something nice */
 {
@@ -507,9 +533,8 @@ freez(&escapedQuery);
 printf("\">%s</A>", val);
 }
 
-void showFileFieldsWhere(struct sqlConnection *conn, char *fields, char *initialWhere,  
-    int pageSize,
-    char *returnUrl, char *varPrefix, boolean withFilters)
+void showFieldsWhere(struct sqlConnection *conn, char *itemPlural, char *fields, char *initialWhere,  
+    int pageSize, char *returnUrl, char *varPrefix, boolean withFilters, struct hash *tagOutWrappers)
 /* Construct query and display results as a table */
 {
 struct dyString *query = dyStringNew(0);
@@ -573,8 +598,7 @@ if (withFilters)
     }
 dyStringAppend(query, where->string);
 
-/* We do order here (as well as in showFieldedTable) so as to keep order when fetching
- * more than fits in window. */
+/* We do order here so as to keep order when working with tables bigger than a page. */
 char orderVar[256];
 safef(orderVar, sizeof(orderVar), "%s_order", varPrefix);
 char *orderFields = cartUsualString(cart, orderVar, "");
@@ -610,10 +634,8 @@ if (resultsSize > pageSize)
     }
 
 struct fieldedTable *table = fieldedTableFromDbQuery(conn, query->string);
-struct hash *browseFileWrappers = hashNew(0);
-hashAdd(browseFileWrappers, "file_name", wrapFileName);
-showFieldedTable(table, pageSize, returnUrl, varPrefix, withFilters, 
-    18, browseFileWrappers, &context);
+showFieldedTable(table, pageSize, returnUrl, varPrefix, withFilters, itemPlural,
+    18, tagOutWrappers, &context);
 fieldedTableFree(&table);
 
 dyStringFree(&query);
@@ -676,7 +698,7 @@ safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=oneTag&c
     tag, cartSidUrlString(cart) );
 struct hash *outputWrappers = hashNew(0);
 hashAdd(outputWrappers, tag, wrapTagValueInFiles);
-showFieldedTable(table, limit, returnUrl, "cdwOneTag", FALSE, 0, outputWrappers, NULL);
+showFieldedTable(table, limit, returnUrl, "cdwOneTag", FALSE, NULL, 0, outputWrappers, NULL);
 fieldedTableFree(&table);
 }
 
@@ -722,7 +744,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	idTag, idVal, cartSidUrlString(cart) );
     struct hash *outputWrappers = hashNew(0);
     hashAdd(outputWrappers, "tag", wrapTagField);
-    showFieldedTable(table, BIGNUM, returnUrl, "cdwOneFile", FALSE, 0, outputWrappers, NULL);
+    showFieldedTable(table, BIGNUM, returnUrl, "cdwOneFile", FALSE, NULL, 0, outputWrappers, NULL);
     fieldedTableFree(&table);
     }
 }
@@ -741,12 +763,76 @@ if (!isEmpty(where))
     {
     printf("Restricting files to where %s. ", where);
     }
-showFileFieldsWhere(conn, 
+struct hash *wrappers = hashNew(0);
+hashAdd(wrappers, "file_name", wrapFileName);
+showFieldsWhere(conn, "files",
     "file_name,file_size,lab,assay,data_set_id,output,format,read_size,item_count,"
     "species,body_part",
-    where, 100, returnUrl, "cdwBrowseFiles", TRUE);
+    where, 100, returnUrl, "cdwBrowseFiles", TRUE, wrappers);
 printf("</FORM>\n");
 }
+
+struct sqlConnection *wrapperConn;
+
+struct dyString *customTextForFile(struct sqlConnection *conn, 
+    struct cdwFile *cf, struct cdwValidFile *vf)
+/* Create custom track text */
+{
+struct dyString *dy = dyStringNew(0);
+char *format = vf->format;
+dyStringPrintf(dy, "track name='CIRM %s' ", vf->licensePlate);
+char *host = hHttpHost();
+dyStringPrintf(dy, "bigDataUrl=http://%s/cdw/%s type=%s", host, cf->cdwFileName, format);
+return dy;
+}
+
+void wrapTrackAccession(char *tag, char *val)
+/* Write out wrapper to link us to genome browser */
+{
+assert(wrapperConn != NULL);
+struct sqlConnection *conn = wrapperConn;
+struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, val);
+if (vf != NULL)
+    {
+    struct cdwFile *cf = cdwFileFromId(conn, vf->fileId);
+    if (cf != NULL)
+        {
+	/* Create custom track text */
+	struct dyString *track = customTextForFile(conn, cf, vf);
+	char *encoded = cgiEncode(track->string);
+
+	printf("<A HREF=\"../cgi-bin/hgTracks?%s", cartSidUrlString(cart));
+	printf("&db=%s", vf->ucscDb);
+	printf("&hgt.customText=");
+	printf("%s", encoded);
+	printf("\">");	       // Finish HREF quote and A tag
+	printf("%s</A>", val);
+	freez(&encoded);
+	dyStringFree(&track);
+	}
+    }
+}
+
+void doBrowseTracks(struct sqlConnection *conn)
+/* Print list of files */
+{
+printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
+cartSaveSession(cart);
+cgiMakeHiddenVar("cdwCommand", "browseTracks");
+char returnUrl[PATH_LEN*2];
+safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseTracks&%s",
+    cartSidUrlString(cart) );
+char *where = "format in ('bam','bigBed', 'bigWig', 'vcf')";
+struct hash *wrappers = hashNew(0);
+wrapperConn = conn;
+hashAdd(wrappers, "accession", wrapTrackAccession);
+showFieldsWhere(conn, "tracks",
+    "accession,format,file_size,lab,assay,data_set_id,output,"
+    "strain,lab_quake_markers,body_part",
+    where, 100, returnUrl, "cdwBrowseTracks", TRUE, wrappers);
+printf("</FORM>\n");
+}
+
 
 void doBrowsePopular(struct sqlConnection *conn, char *tag)
 /* Print list of most popular tags of type */
@@ -796,7 +882,7 @@ for (format = formatList; format != NULL; format = format->next)
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseFormats&%s",
     cartSidUrlString(cart) );
-showFieldedTable(table, 200, returnUrl, "cdwFormats", FALSE, 0, NULL, NULL);
+showFieldedTable(table, 200, returnUrl, "cdwFormats", FALSE, NULL, 0, NULL, NULL);
 fieldedTableFree(&table);
 }
 
@@ -828,7 +914,7 @@ for (lab = labList; lab != NULL; lab = lab->next)
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseLabs&%s",
     cartSidUrlString(cart) );
-showFieldedTable(table, 200, returnUrl, "cdwLab", FALSE, 0, NULL, NULL);
+showFieldedTable(table, 200, returnUrl, "cdwLab", FALSE, NULL, 0, NULL, NULL);
 fieldedTableFree(&table);
 }
 
@@ -950,7 +1036,7 @@ for (i=0; i<ArraySize(highLevelTags); ++i)
     tagSummaryRow(table, tags, highLevelTags[i]);
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?%s", cartSidUrlString(cart) );
-showFieldedTable(table, 100, returnUrl, "cdwHome", FALSE, 0, NULL, NULL);
+showFieldedTable(table, 100, returnUrl, "cdwHome", FALSE, NULL, 0, NULL, NULL);
 
 printf("This table is a summary of important metadata tags including the tag name, the number of ");
 printf("values and the most popular values of the tag, and the number of files marked with ");
@@ -977,7 +1063,7 @@ safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseTa
     cartSidUrlString(cart) );
 struct hash *outputWrappers = hashNew(0);
     hashAdd(outputWrappers, "tag name", wrapTagField);
-showFieldedTable(table, 300, returnUrl, "cdwBrowseTags", FALSE, 0, outputWrappers, NULL);
+showFieldedTable(table, 300, returnUrl, "cdwBrowseTags", FALSE, NULL, 0, outputWrappers, NULL);
 tagStormFree(&tags);
 }
 
@@ -1010,6 +1096,10 @@ else if (sameString(command, "query"))
 else if (sameString(command, "browseFiles"))
     {
     doBrowseFiles(conn);
+    }
+else if (sameString(command, "browseTracks"))
+    {
+    doBrowseTracks(conn);
     }
 else if (sameString(command, "browseTags"))
     {
@@ -1096,7 +1186,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.16");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.17");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
