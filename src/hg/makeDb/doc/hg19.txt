@@ -30061,6 +30061,8 @@ wc -l peptides.unmapped.txt
 # 11/17/14: Allele dump file was outdated at time of download -- it was re-dumped a couple weeks
 #           after release.  snp142 was missing some frequencies due to incomplete join with Allele.
 #           Rebuilding all tables that have allele frequencies (just the track tables & exceptions).
+# 2/17/14: User reported missing validation info (#14836); Jonathan found that SNP.bcp.gz
+#          had been updated 1/30/15, argh.  Rebuilding parts that depend on the SNP table.
     # Redmine #14189
     mkdir -p /hive/data/outside/dbSNP/142/human_hg19
     cd /hive/data/outside/dbSNP/142/human_hg19
@@ -30226,6 +30228,37 @@ EOF
     hgLoadSqlTab hg19 snp142ExceptionDesc $HOME/kent/src/hg/lib/snp125ExceptionDesc.sql \
       snp142ExceptionDesc.tab
     rm snp142RedoExceptionDesc*
+
+    # 2/17/14: User reported missing validation info (#14836); Jonathan found that SNP.bcp.gz
+    #          had been updated 1/30/15, argh.  Rebuilding parts that depend on the SNP table.
+    # First get a baseline, so we know whether the updated file has fixed the problem:
+    hgsql hg19 -e 'select count(*) from snp142 where valid = "unknown"'
+#| 107373843 |
+
+    cd /hive/data/outside/dbSNP/142/human_hg19/data
+    mv SNP.bcp.gz SNP.orig.bcp.gz
+    # dbSNP updated only the GRCh38 copy of the file, but SNP.bcp.gz has assembly-independent
+    # info so just link to the GRCh38 copy (see hg38/variation.txt):
+    ln -s ../../human_hg38/data/SNP.bcp.gz .
+    # Empty out hg19snp142.SNP because our loading command uses -oldTable because of table.sql...:
+    hgsql hg19snp142 -e 'delete from SNP'
+    # from loadDbSnp.csh:
+    zcat /hive/data/outside/dbSNP/142/human_hg19/data/SNP.bcp.gz \
+    | perl -wpe 's/(\d\d:\d\d:\d\d)\.\d+/$1/g; s/\t(\t|\n)/\t\\N$1/g; s/\t(\t|\n)/\t\\N$1/g;' \
+    | hgLoadSqlTab -oldTable hg19snp142 SNP placeholder stdin
+    # Make sure there's no need to (re)create the index on snp_id as in loadDbSnp.csh.
+    hgsql hg19snp142 -e 'show index from SNP'
+#| SNP   |          1 | snp_id   |            1 | snp_id      | A         |   112745696 |     NULL | NULL   | YES  | BTREE      |         |               |
+    # yep, the index is still there.
+    # Now re-run from bigJoin onward.
+    mkdir -p `cat workingDir`
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=bigJoin -stop=filter \
+      >>& do.log & tail -f do.log
+    # Make sure the updated file has fixed the problem (i.e. has << 107373843 missing 'valid' vals):
+    hgsql hg19 -e 'select count(*) from snp142 where valid = "unknown"'
+#| 24180022 |
+    # 24M out of 113M is significantly less than 107M/113M, but still -- that's a lot!!
+    # By way of comparison, snp138 has -- wow, 20M out of 65M!  Never realized it was that bad.
 
 
 ##############################################################################
