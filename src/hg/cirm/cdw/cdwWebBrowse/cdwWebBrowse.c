@@ -334,7 +334,6 @@ struct sftSegment
 /* Information on a segment we're processing out of something larger */
     {
     char *database;	// Name of database
-    char *table;	// Name of table
     int tableSize;	// Size of larger structure
     int tableOffset;	// Where we are in larger structure
     };
@@ -533,7 +532,8 @@ freez(&escapedQuery);
 printf("\">%s</A>", val);
 }
 
-void showFieldsWhere(struct sqlConnection *conn, char *itemPlural, char *fields, char *initialWhere,  
+void showFieldsWhere(struct sqlConnection *conn, char *itemPlural, char *fields, 
+    char *from, char *initialWhere,  
     int pageSize, char *returnUrl, char *varPrefix, boolean withFilters, struct hash *tagOutWrappers)
 /* Construct query and display results as a table */
 {
@@ -542,7 +542,7 @@ struct dyString *where = dyStringNew(0);
 struct slName *field, *fieldList = commaSepToSlNames(fields);
 boolean gotWhere = FALSE;
 sqlDyStringPrintf(query, "%s", ""); // TODO check with Galt on how to get reasonable checking back.
-dyStringPrintf(query, "select %s from cdwFileTags", fields);
+dyStringPrintf(query, "select %s from %s", fields, from);
 if (!isEmpty(initialWhere))
     {
     dyStringPrintf(where, " where ");
@@ -612,7 +612,8 @@ if (!isEmpty(orderFields))
 
 /* Figure out size of query result */
 struct dyString *countQuery = dyStringNew(0);
-sqlDyStringPrintf(countQuery, "select count(*) from cdwFileTags");
+sqlDyStringPrintf(countQuery, "%s", ""); // TODO check with Galt on how to get reasonable checking back.
+dyStringPrintf(countQuery, "select count(*) from %s", from);
 dyStringAppend(countQuery, where->string);
 int resultsSize = sqlQuickNum(conn, countQuery->string);
 dyStringFree(&countQuery);
@@ -620,7 +621,7 @@ dyStringFree(&countQuery);
 char pageVar[64];
 safef(pageVar, sizeof(pageVar), "%s_page", varPrefix);
 int page = 0;
-struct sftSegment context = { .database = "cdw", .table = "cdwFileTags", .tableSize=resultsSize};
+struct sftSegment context = { .database = "cdw", .tableSize=resultsSize};
 if (resultsSize > pageSize)
     {
     page = cartUsualInt(cart, pageVar, 0) - 1;
@@ -765,25 +766,32 @@ if (!isEmpty(where))
     }
 struct hash *wrappers = hashNew(0);
 hashAdd(wrappers, "file_name", wrapFileName);
-showFieldsWhere(conn, "files",
+showFieldsWhere(conn, "files", 
     "file_name,file_size,lab,assay,data_set_id,output,format,read_size,item_count,"
     "species,body_part",
-    where, 100, returnUrl, "cdwBrowseFiles", TRUE, wrappers);
+    "cdwFileTags", where, 100, returnUrl, "cdwBrowseFiles", TRUE, wrappers);
 printf("</FORM>\n");
 }
 
 struct sqlConnection *wrapperConn;
 
-struct dyString *customTextForFile(struct sqlConnection *conn, 
-    struct cdwFile *cf, struct cdwValidFile *vf)
+struct dyString *customTextForFile(struct sqlConnection *conn, struct cdwTrackViz *viz)
 /* Create custom track text */
 {
 struct dyString *dy = dyStringNew(0);
-char *format = vf->format;
-dyStringPrintf(dy, "track name='CIRM %s' ", vf->licensePlate);
+dyStringPrintf(dy, "track name=\"%s\" ", viz->shortLabel);
+dyStringPrintf(dy, "description=\"%s\" ", viz->longLabel);
 char *host = hHttpHost();
-dyStringPrintf(dy, "bigDataUrl=http://%s/cdw/%s type=%s", host, cf->cdwFileName, format);
+dyStringPrintf(dy, "bigDataUrl=http://%s/cdw/%s type=%s", host, viz->bigDataFile, viz->type);
 return dy;
+}
+
+struct cdwTrackViz *cdwTrackVizFromFileId(struct sqlConnection *conn, long long fileId)
+/* Return cdwTrackViz if any associated with file ID */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select * from cdwTrackViz where fileId=%lld", fileId);
+return cdwTrackVizLoadByQuery(conn, query);
 }
 
 void wrapTrackAccession(char *tag, char *val)
@@ -794,22 +802,22 @@ struct sqlConnection *conn = wrapperConn;
 struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, val);
 if (vf != NULL)
     {
-    struct cdwFile *cf = cdwFileFromId(conn, vf->fileId);
-    if (cf != NULL)
+    struct cdwTrackViz *viz = cdwTrackVizFromFileId(conn, vf->fileId);
+    if (viz != NULL)
         {
-	/* Create custom track text */
-	struct dyString *track = customTextForFile(conn, cf, vf);
+	struct dyString *track = customTextForFile(conn, viz);
 	char *encoded = cgiEncode(track->string);
-
-	printf("<A HREF=\"../cgi-bin/hgTracks?%s", cartSidUrlString(cart));
-	printf("&db=%s", vf->ucscDb);
+	printf("<A HREF=\"../cgi-bin/hgTracks");
+	printf("?db=%s", vf->ucscDb);
 	printf("&hgt.customText=");
 	printf("%s", encoded);
-	printf("\">");	       // Finish HREF quote and A tag
+	printf("\" target=\"_blank\">");	       // Finish HREF quote and A tag
 	printf("%s</A>", val);
 	freez(&encoded);
 	dyStringFree(&track);
 	}
+    else
+	printf("%s (needs viz)", val);
     }
 }
 
@@ -822,19 +830,19 @@ cgiMakeHiddenVar("cdwCommand", "browseTracks");
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseTracks&%s",
     cartSidUrlString(cart) );
-char *where = "format in ('bam','bigBed', 'bigWig', 'vcf')";
+char *where = "fileId=file_id and format in ('bam','bigBed', 'bigWig', 'vcf')";
 struct hash *wrappers = hashNew(0);
 wrapperConn = conn;
 hashAdd(wrappers, "accession", wrapTrackAccession);
-showFieldsWhere(conn, "tracks",
-    "accession,format,file_size,lab,assay,data_set_id,output,"
-    "strain,lab_quake_markers,body_part",
-    where, 100, returnUrl, "cdwBrowseTracks", TRUE, wrappers);
+showFieldsWhere(conn, "tracks", 
+    "accession,ucsc_db,format,file_size,lab,assay,data_set_id,output,"
+    "strain,lab_quake_markers,body_part,submit_file_name",
+    "cdwFileTags,cdwTrackViz", where, 100, returnUrl, "cdwBrowseTracks", TRUE, wrappers);
 printf("</FORM>\n");
 }
 
 
-void doBrowsePopular(struct sqlConnection *conn, char *tag)
+void doBrowsePopularTags(struct sqlConnection *conn, char *tag)
 /* Print list of most popular tags of type */
 {
 struct tagStorm *tags = cdwTagStorm(conn);
@@ -1111,7 +1119,7 @@ else if (sameString(command, "browseLabs"))
     }
 else if (sameString(command, "browseDataSets"))
     {
-    doBrowsePopular(conn, "data_set_id");
+    doBrowsePopularTags(conn, "data_set_id");
     }
 else if (sameString(command, "browseFormats"))
     {
@@ -1186,7 +1194,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.17");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.18");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
