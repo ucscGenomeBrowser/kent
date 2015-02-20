@@ -293,6 +293,10 @@ void doBrowseFiles(struct sqlConnection *conn)
 printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "browseFiles");
+
+printf("<B>Files</B> - sort and select lists of files. Click on file's name to see full metadata.");
+
+/* Put up big filtered table of files */
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s",
     cartSidUrlString(cart) );
@@ -369,6 +373,8 @@ void doBrowseTracks(struct sqlConnection *conn)
 printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "browseTracks");
+
+printf("<B>Tracks</B> - Click on track's accession to open UCSC Genome Browser.");
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseTracks&%s",
     cartSidUrlString(cart) );
@@ -378,10 +384,10 @@ wrapperConn = conn;
 hashAdd(wrappers, "accession", wrapTrackAccession);
 webFilteredSqlTable(cart, conn, 
     "accession,ucsc_db,format,file_size,lab,assay,data_set_id,output,"
-    "body_part,submit_file_name",
+    "enriched_in,body_part,submit_file_name",
     "cdwFileTags,cdwTrackViz", where, 
     returnUrl, "cdwBrowseTracks", 
-    30, wrappers, TRUE, "tracks", 100);
+    22, wrappers, TRUE, "tracks", 100);
 printf("</FORM>\n");
 }
 
@@ -572,7 +578,7 @@ long long fileCount = sqlQuickLongLong(conn, query);
 printLongWithCommas(stdout, fileCount);
 printf(" files");
 printf(" from %d labs.<BR>\n", labCount(tags));
-printf("Try using the browse menu on files or tags. ");
+printf("Try using the browse menu on files, tracks or tags. ");
 printf("The query link allows simple SQL-like queries of the metadata.");
 printf("<BR><BR>\n");
 
