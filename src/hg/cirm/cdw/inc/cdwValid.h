@@ -25,6 +25,9 @@ void cdwValidateCram(char *path);
 void cdwValidateJpg(char *path);
 /* Check jpg file is really jpg */
 
+void cdwValidateBamIndex(char *path);
+/* Check .bam.bai really is index. */
+
 boolean cdwIsGzipped(char *path);
 /* Return TRUE if file at path starts with GZIP signature */
 
@@ -59,5 +62,9 @@ boolean cdwValidateTagName(char *tag);
 boolean cdwValidateTagVal(char *tag, char *val);
 /* Make sure that tag is one of the allowed ones and that
  * val is compatible */
+
+struct slPair *cdwFormatList();
+/* Return list of formats.  The name of the list items are the format names.
+ * The vals are short descriptions. */
 
 #endif /* CDWVALID_H */

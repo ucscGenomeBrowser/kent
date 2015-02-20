@@ -114,6 +114,6 @@ release alpha
 include trackDb.160way.ra
 include trackDb.gire.ra
 include trackDb.strainName160way.ra
-include trackDb.newSequences.ra alpha
+include trackDb.newSequences.ra
 # include trackDb.faAlign.ra alpha
 include trackDb.iedbPred.ra

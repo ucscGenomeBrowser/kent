@@ -56,3 +56,7 @@ chainLinearGap loose
 
 track chainNetGalGal3 override
 priority 580.3
+
+track chainNetBosTau8 override
+priority 250.3
+matrix 16 88,-111,-31,-128,-111,100,-75,-31,-31,-75,100,-111,-128,-31,-111,88

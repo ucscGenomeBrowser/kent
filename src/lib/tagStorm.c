@@ -572,7 +572,7 @@ for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
     }
 }
 
-struct slName *tagTreeFieldList(struct tagStorm *tagStorm)
+struct slName *tagStormFieldList(struct tagStorm *tagStorm)
 /* Return list of all fields in storm. */
 {
 struct slName *list = NULL;
@@ -596,7 +596,7 @@ for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
     }
 }
 
-struct hash *tagTreeFieldHash(struct tagStorm *tagStorm)
+struct hash *tagStormFieldHash(struct tagStorm *tagStorm)
 /* Return an integer-valued hash of fields, keyed by tag name and with value
  * number of times field is used.  For most purposes just used to make sure
  * field exists though. */
@@ -604,5 +604,58 @@ struct hash *tagTreeFieldHash(struct tagStorm *tagStorm)
 struct hash *hash = hashNew(0);
 rCountFields(tagStorm->forest, hash);
 return hash;
+}
+
+static void rTagStormCountDistinct(struct tagStanza *list, char *tag, struct hash *uniq)
+/* Fill in hash with number of times have seen each value of tag */
+{
+char *requiredTag = "accession";
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    if (tagFindVal(stanza, requiredTag))
+	{
+	char *val = tagFindVal(stanza, tag);
+	if (val != NULL)
+	    {
+	    hashIncInt(uniq, val);
+	    }
+	}
+    rTagStormCountDistinct(stanza->children, tag, uniq);
+    }
+}
+
+struct hash *tagStormCountTagVals(struct tagStorm *tags, char *tag)
+/* Return an integer valued hash keyed by all the different values
+ * of tag seen in tagStorm.  The hash is filled with counts of the
+ * number of times each value is used that can be recovered with 
+ * hashIntVal(hash, key) */
+{
+struct hash *uniq = hashNew(0);
+rTagStormCountDistinct(tags->forest, tag, uniq);
+return uniq;
+}
+
+struct slPair *tagListIncludingParents(struct tagStanza *stanza)
+/* Return a list of all tags including ones defined in parents. */
+{
+struct hash *uniq = hashNew(0);
+struct slPair *list = NULL;
+struct tagStanza *ts;
+for (ts = stanza; ts != NULL; ts = ts->parent)
+    {
+    struct slPair *pair;
+    for (pair = ts->tagList; pair != NULL; pair = pair->next)
+       {
+       if (!hashLookup(uniq, pair->name))
+           {
+	   slPairAdd(&list, pair->name, pair->val);
+	   hashAdd(uniq, pair->name, pair);
+	   }
+       }
+    }
+hashFree(&uniq);
+slReverse(&list);
+return list;
 }
 

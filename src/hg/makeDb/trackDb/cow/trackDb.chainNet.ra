@@ -49,3 +49,9 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 
 track chainNetSusScr2 override
 priority 200.3
+
+track chainNetEquCab2 override
+priority 270.3
+matrixHeader A, C, G, T
+matrix 16 88,-111,-31,-128,-111,100,-75,-31,-31,-75,100,-111,-128,-31,-111,88
+

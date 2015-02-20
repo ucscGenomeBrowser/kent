@@ -526,6 +526,7 @@ boolean isSupportedFormat(char *format)
 {
 /* First deal with non bigBed */
 static char *otherSupportedFormats[] = {"unknown", "fastq", "bam", "bed", "gtf", 
+    "bam.bai", "vcf.gz.tbi",
     "bigWig", "bigBed", 
     "bedLogR", "bedRrbs", "bedMethyl", "broadPeak", "narrowPeak", 
     "bed_bedLogR", "bed_bedRrbs", "bed_bedMethyl", "bed_broadPeak", "bed_narrowPeak",
@@ -551,132 +552,18 @@ if (isEmpty(s))
 return sameWord(s, "n/a");
 }
 
-
-#ifdef UNUSED
-void cdwParseSubmitFile(struct sqlConnection *conn, char *submitLocalPath, char *submitUrl, 
-    struct submitFileRow **retSubmitList)
-/* Load and parse up this file as fielded table, make sure all required fields are there,
- * and calculate indexes of required fields.   This produces an cdwFile list, but with
- * still quite a few fields missing - just what can be filled in from submit filled in. 
- * The submitUrl is just used for error reporting.  If it's local, just make it the
- * same as submitLocalPath. */
+void prefetchChecks(char *format, char *fileName)
+/* Perform some basic format checks. */
 {
-char *requiredFields[] = {"file", "format", "meta", };
-struct fieldedTable *table = fieldedTableFromTabFile(submitLocalPath, submitUrl,
-	requiredFields, ArraySize(requiredFields));
-
-/* Get offsets of all required fields */
-int fileIx = stringArrayIx("file", table->fields, table->fieldCount);
-int formatIx = stringArrayIx("format", table->fields, table->fieldCount);
-int metaIx = stringArrayIx("meta", table->fields, table->fieldCount);
-
-
-#ifdef SOON
-/* Get offsets of some other handy fields too */
-int outputIx = stringArrayIx("output_type", table->fields, table->fieldCount);
-int experimentIx = stringArrayIx("experiment", table->fields, table->fieldCount);
-int replicateIx = stringArrayIx("replicate", table->fields, table->fieldCount);
-int enrichedIx = stringArrayIx("enriched_in", table->fields, table->fieldCount);
-int md5Ix = stringArrayIx("md5_sum", table->fields, table->fieldCount);
-int sizeIx = stringArrayIx("size", table->fields, table->fieldCount);
-int modifiedIx = stringArrayIx("modified", table->fields, table->fieldCount);
-int validIx = stringArrayIx("valid_key", table->fields, table->fieldCount);
-
-/* See if we're doing replacement and check have all columns needed if so. */
-int replacesIx = stringArrayIx(replacesTag, table->fields, table->fieldCount);
-int replaceReasonIx = stringArrayIx(replaceReasonTag, table->fields, table->fieldCount);
-boolean doReplace = (replacesIx != -1);
-if (doReplace)
-    if (replaceReasonIx == -1)
-        errAbort("Error: got \"%s\" column without \"%s\" column in %s.", 
-	    replacesTag, replaceReasonTag, submitUrl);
-
-/* Loop through and make sure all field values are ok */
-struct fieldedRow *fr;
-for (fr = table->rowList; fr != NULL; fr = fr->next)
+if (sameString(format, "fastq") || sameString(format, "vcf"))
     {
-    char **row = fr->row;
-    char *fileName = row[fileIx];
-    allGoodFileNameChars(fileName);
-    char *format = row[formatIx];
-    if (!isSupportedFormat(format))
-	errAbort("Format %s is not supported", format);
-    allGoodSymbolChars(row[outputIx]);
-    char *experiment = row[experimentIx];
-    if (!isExperimentId(experiment))
-        errAbort("%s in experiment field does not seem to be experiment id", experiment);
-    char *replicate = row[replicateIx];
-    if (differentString(replicate, "pooled") && differentString(replicate, "n/a") )
-	if (!isAllNum(replicate))
-	    errAbort("%s is not a good value for the replicate column", replicate);
-    char *enriched = row[enrichedIx];
-    if (!cdwCheckEnrichedIn(enriched))
-        errAbort("Enriched_in %s is not supported", enriched);
-    char *md5 = row[md5Ix];
-    if (strlen(md5) != 32 || !isAllHexLower(md5))
-        errAbort("md5 '%s' is not in all lower case 32 character hexadecimal format.", md5);
-    char *size = row[sizeIx];
-    if (!isAllNum(size))
-        errAbort("Invalid size '%s'", size);
-    char *modified = row[modifiedIx];
-    if (!isAllNum(modified))
-        errAbort("Invalid modification time '%s'", modified);
-    char *validIn = row[validIx];
-    char *realValid = cdwCalcValidationKey(md5, sqlLongLong(size));
-    if (!sameString(validIn, realValid))
-        errAbort("The valid_key %s for %s doesn't fit", validIn, fileName);
-    freez(&realValid);
-
-    if (doReplace)
-	{
-	char *replaces = row[replacesIx];
-	char *reason = row[replaceReasonIx];
-	if (!isEmptyOrNa(replaces))
-	    {
-	    char *prefix = cdwLicensePlateHead(conn);
-	    if (!startsWith(prefix, replaces))
-		errAbort("%s in replaces column is not an CIRM file accession", replaces);
-	    if (isEmptyOrNa(reason))
-		errAbort("Replacing %s without a reason\n", replaces);
-	    }
-	}
+    if (!cdwIsGzipped(fileName))
+        errAbort("%s file %s must be gzipped", format, fileName);
     }
-
-*retSubmitList = submitFileRowFromFieldedTable(conn, table, 
-    fileIx, md5Ix, sizeIx, modifiedIx, replacesIx, replaceReasonIx);
-#endif /* SOON */
-uglyAbort("cdwParseSubmittedFile not fully implemented");
 }
-#endif /* UNUSED */
 
-#ifdef UNUSED
-void notOverlappingSelf(struct sqlConnection *conn, char *url)
-/* Ensure we are only submission going on for this URL, allowing for time out
- * and command line override. */
-{
-#ifdef OLD
-if (doNow) // Allow command line override
-    return; 
-#endif /* OLD */
-
-/* Fetch most recent submission from this URL. */
-struct cdwSubmit *old = cdwMostRecentSubmission(conn, url);
-if (old == NULL)
-    return;
-
-/* See if we have something in progress, meaning started but not ended. */
-if (old->endUploadTime == 0 && isEmpty(old->errorMessage))
-    {
-    /* Check submission last alive time against our usual time out. */
-    long long maxStartTime = cdwSubmitMaxStartTime(old, conn);
-    if (cdwNow() - maxStartTime < cdwSingleFileTimeout)
-        errAbort("Submission of %s already is in progress.  Please come back in an hour", url);
-    }
-cdwSubmitFree(&old);
-}
-#endif /* UNUSED */
-
-void getSubmittedFile(struct sqlConnection *conn, struct tagStorm *tagStorm, struct cdwFile *bf,  
+void getSubmittedFile(struct sqlConnection *conn, char *format,
+    struct tagStorm *tagStorm, struct cdwFile *bf,  
     char *submitDir, char *submitUrl, int submitId, int userId)
 /* We know the submission, we know what the file is supposed to look like.  Fetch it.
  * If things go badly catch the error, attach it to the submission record, and then
@@ -692,8 +579,8 @@ if (errCatchStart(errCatch))
     int fd = cdwOpenAndRecordInDir(conn, submitDir, bf->submitFileName, submitUrl,
 	&hostId, &submitDirId);
 
+    prefetchChecks(format, bf->submitFileName);
     int fileId = cdwFileFetch(conn, bf, fd, submitUrl, submitId, submitDirId, hostId, userId);
-
     close(fd);
     cdwAddQaJob(conn, fileId);
     tellSubscribers(conn, submitDir, bf->submitFileName, fileId);
@@ -1238,7 +1125,8 @@ if (errCatchStart(errCatch))
     for (sfr = newList; sfr != NULL; sfr = sfr->next)
 	{
 	struct cdwFile *bf = sfr->file;
-	getSubmittedFile(conn, tagStorm, bf, submitDir, submitUrl, submitId, user->id);
+	char *format = sfr->fr->row[formatIx];
+	getSubmittedFile(conn, format, tagStorm, bf, submitDir, submitUrl, submitId, user->id);
 
 	/* Update submit record with progress (getSubmittedFile might be
 	 * long and get interrupted) */

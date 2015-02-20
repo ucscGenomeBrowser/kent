@@ -143,6 +143,76 @@ void cdwUserOutput(struct cdwUser *el, FILE *f, char sep, char lastSep);
 #define cdwUserCommaOut(el,f) cdwUserOutput(el,f,',',',');
 /* Print out cdwUser as a comma separated list including final comma. */
 
+#define CDWLAB_NUM_COLS 5
+
+extern char *cdwLabCommaSepFieldNames;
+
+struct cdwLab
+/* A contributing lab */
+    {
+    struct cdwLab *next;  /* Next in singly linked list. */
+    unsigned id;	/* Autoincremented user ID */
+    char *name;	/* Shorthand name for lab, all lower case */
+    char *pi;	/* Principle investigator responsible for lab */
+    char *institution;	/* University or other institution hosting lab */
+    char *url;	/* URL of lab page */
+    };
+
+void cdwLabStaticLoad(char **row, struct cdwLab *ret);
+/* Load a row from cdwLab table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct cdwLab *cdwLabLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all cdwLab from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with cdwLabFreeList(). */
+
+void cdwLabSaveToDb(struct sqlConnection *conn, struct cdwLab *el, char *tableName, int updateSize);
+/* Save cdwLab as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct cdwLab *cdwLabLoad(char **row);
+/* Load a cdwLab from row fetched with select * from cdwLab
+ * from database.  Dispose of this with cdwLabFree(). */
+
+struct cdwLab *cdwLabLoadAll(char *fileName);
+/* Load all cdwLab from whitespace-separated file.
+ * Dispose of this with cdwLabFreeList(). */
+
+struct cdwLab *cdwLabLoadAllByChar(char *fileName, char chopper);
+/* Load all cdwLab from chopper separated file.
+ * Dispose of this with cdwLabFreeList(). */
+
+#define cdwLabLoadAllByTab(a) cdwLabLoadAllByChar(a, '\t');
+/* Load all cdwLab from tab separated file.
+ * Dispose of this with cdwLabFreeList(). */
+
+struct cdwLab *cdwLabCommaIn(char **pS, struct cdwLab *ret);
+/* Create a cdwLab out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new cdwLab */
+
+void cdwLabFree(struct cdwLab **pEl);
+/* Free a single dynamically allocated cdwLab such as created
+ * with cdwLabLoad(). */
+
+void cdwLabFreeList(struct cdwLab **pList);
+/* Free a list of dynamically allocated cdwLab's */
+
+void cdwLabOutput(struct cdwLab *el, FILE *f, char sep, char lastSep);
+/* Print out cdwLab.  Separate fields with sep. Follow last field with lastSep. */
+
+#define cdwLabTabOut(el,f) cdwLabOutput(el,f,'\t','\n');
+/* Print out cdwLab as a line in a tab-separated file. */
+
+#define cdwLabCommaOut(el,f) cdwLabOutput(el,f,',',',');
+/* Print out cdwLab as a comma separated list including final comma. */
+
 #define CDWSCRIPTREGISTRY_NUM_COLS 6
 
 extern char *cdwScriptRegistryCommaSepFieldNames;
@@ -2013,7 +2083,7 @@ struct cdwSubmitJob
 /* A submission job to be run asynchronously and not too many all at once. */
     {
     struct cdwSubmitJob *next;  /* Next in singly linked list. */
-    unsigned id;	/* Job id */
+    unsigned id;	/* Submit id */
     char *commandLine;	/* Command line of job */
     long long startTime;	/* Start time in seconds since 1970 */
     long long endTime;	/* End time in seconds since 1970 */
@@ -2076,6 +2146,77 @@ void cdwSubmitJobOutput(struct cdwSubmitJob *el, FILE *f, char sep, char lastSep
 
 #define cdwSubmitJobCommaOut(el,f) cdwSubmitJobOutput(el,f,',',',');
 /* Print out cdwSubmitJob as a comma separated list including final comma. */
+
+#define CDWTRACKVIZ_NUM_COLS 6
+
+extern char *cdwTrackVizCommaSepFieldNames;
+
+struct cdwTrackViz
+/* Some files can be visualized as a track. Stuff to help define that track goes here. */
+    {
+    struct cdwTrackViz *next;  /* Next in singly linked list. */
+    unsigned id;	/* Id of this row in the table */
+    unsigned fileId;	/* File this is a viz of */
+    char *shortLabel;	/* Up to 17 char label for track */
+    char *longLabel;	/* Up to 100 char label for track */
+    char *type;	/* One of the customTrack types such as bam,vcfTabix,bigWig,bigBed */
+    char *bigDataFile;	/* Where big data file lives relative to cdwRootDir */
+    };
+
+void cdwTrackVizStaticLoad(char **row, struct cdwTrackViz *ret);
+/* Load a row from cdwTrackViz table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct cdwTrackViz *cdwTrackVizLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all cdwTrackViz from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with cdwTrackVizFreeList(). */
+
+void cdwTrackVizSaveToDb(struct sqlConnection *conn, struct cdwTrackViz *el, char *tableName, int updateSize);
+/* Save cdwTrackViz as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct cdwTrackViz *cdwTrackVizLoad(char **row);
+/* Load a cdwTrackViz from row fetched with select * from cdwTrackViz
+ * from database.  Dispose of this with cdwTrackVizFree(). */
+
+struct cdwTrackViz *cdwTrackVizLoadAll(char *fileName);
+/* Load all cdwTrackViz from whitespace-separated file.
+ * Dispose of this with cdwTrackVizFreeList(). */
+
+struct cdwTrackViz *cdwTrackVizLoadAllByChar(char *fileName, char chopper);
+/* Load all cdwTrackViz from chopper separated file.
+ * Dispose of this with cdwTrackVizFreeList(). */
+
+#define cdwTrackVizLoadAllByTab(a) cdwTrackVizLoadAllByChar(a, '\t');
+/* Load all cdwTrackViz from tab separated file.
+ * Dispose of this with cdwTrackVizFreeList(). */
+
+struct cdwTrackViz *cdwTrackVizCommaIn(char **pS, struct cdwTrackViz *ret);
+/* Create a cdwTrackViz out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new cdwTrackViz */
+
+void cdwTrackVizFree(struct cdwTrackViz **pEl);
+/* Free a single dynamically allocated cdwTrackViz such as created
+ * with cdwTrackVizLoad(). */
+
+void cdwTrackVizFreeList(struct cdwTrackViz **pList);
+/* Free a list of dynamically allocated cdwTrackViz's */
+
+void cdwTrackVizOutput(struct cdwTrackViz *el, FILE *f, char sep, char lastSep);
+/* Print out cdwTrackViz.  Separate fields with sep. Follow last field with lastSep. */
+
+#define cdwTrackVizTabOut(el,f) cdwTrackVizOutput(el,f,'\t','\n');
+/* Print out cdwTrackViz as a line in a tab-separated file. */
+
+#define cdwTrackVizCommaOut(el,f) cdwTrackVizOutput(el,f,',',',');
+/* Print out cdwTrackViz as a comma separated list including final comma. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 

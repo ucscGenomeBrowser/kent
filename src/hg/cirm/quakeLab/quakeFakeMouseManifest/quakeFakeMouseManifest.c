@@ -162,8 +162,11 @@ carefulClose(&err);
 FILE *meta = mustOpen(metaFile, "w");
 struct quakeChip *chip;
 char *root = "quakeMouseLung";
-fprintf(meta, "meta %s\n", root);
+fprintf(meta, "data_set_id %s\n", root);
+fprintf(meta, "title Single cell RNA sequencing of the embryonic mouse lung\n");
+fprintf(meta, "lab quake\n");
 fprintf(meta, "pmid 24739965\n");
+fprintf(meta, "assay long-RNA-seq\n");
 fprintf(meta, "\n");
 for (chip = chipList; chip != NULL; chip = chip->next)
     {
@@ -187,6 +190,7 @@ for (chip = chipList; chip != NULL; chip = chip->next)
 	    {
 	    char *indent = "       ";
 	    fprintf(meta, "%smeta %s\n", indent, sampleMetaName(sample));
+	    fprintf(meta, "%sseq_sample %s\n", indent, sampleMetaName(sample));
 	    fprintf(meta, "%slab_quake_sample %s\n", indent, sample->sample);
 	    fprintf(meta, "%slab_quake_cell_pos %s\n", indent, sample->cellPos);
 	    fprintf(meta, "%ssequencer %s\n", indent, sample->sequencer);
