@@ -39,7 +39,7 @@ run: load mkdirs ${TESTS}
 
 ${TESTS}:
 	${CTC} test ${@}Good
-	-${CTC} test ${@}Bad > output/${@}Bad.out
+	-${CTC} test ${@}Bad > output/${@}Bad.out || true
 	diff expected/${@}Bad.out output/${@}Bad.out
 
 # angie I removed -verbose=2 from the Bad test because it is unstable.

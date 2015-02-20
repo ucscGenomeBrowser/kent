@@ -262,13 +262,13 @@ var OutFileOptions = React.createClass({
                  options: pt.object,    // Immutable.Map {doFile, fileName, doGzip}
                  fieldInfo: pt.object,  // table/field info from server following click on
                                         // 'Choose fields' button
-                 submitted: pt.bool,    // If true, show loading image
+                 showLoadingImage: pt.bool,    // If true, show loading image
                  disableGetOutput: pt.bool,         // If true, disable Get output button
                  disableGetOutputMessage: pt.node   // If disableGetOutput, show this message
                },
 
     getDefaultProps: function() {
-        return { submitted: false };
+        return { showLoadingImage: false };
     },
 
     onChooseFields: function() {
@@ -319,7 +319,7 @@ var OutFileOptions = React.createClass({
                 <br />
                 <input type='button' value='Get output' onClick={this.onGetOutput} />
               </div>
-              <LoadingImage loading={this.props.submitted} />
+              <LoadingImage loading={this.props.showLoadingImage} />
             </div>
         );
     }
@@ -423,7 +423,7 @@ var AppComponent = React.createClass({
         var dataSources = querySpec.get('dataSources');
         var outputInfo = querySpec.get('outFileOptions') || Immutable.Map();
         var tableFields = appState.get('tableFields');
-        var submitted = appState.get('submitted');
+        var showLoadingImage = appState.get('showLoadingImage');
         var disableGetOutput = (! (dataSources && dataSources.size));
         var disableGetOutputMessage =
         <span className='disabledMessage'>
@@ -455,7 +455,7 @@ var AppComponent = React.createClass({
               <Section title='Output Options'>
                 <OutFileOptions options={outputInfo}
                                 fieldInfo={tableFields}
-                                submitted={submitted}
+                                showLoadingImage={showLoadingImage}
                                 disableGetOutput={disableGetOutput}
                                 disableGetOutputMessage={disableGetOutputMessage}
                                 path={['outFileOptions']} update={this.props.update}

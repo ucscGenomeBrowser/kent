@@ -5,13 +5,13 @@ setenv LASTREVIEWDAY 2015-01-12         # v311 preview
 setenv REVIEW2DAY 2015-02-09        # v312 preview2
 setenv LASTREVIEW2DAY 2015-01-20    # v311 preview2
 # set these three for final build:
-setenv BRANCHNN 311
-setenv TODAY 2015-01-26                # v311 final
-setenv LASTWEEK 2015-01-05             # v310 final
+setenv BRANCHNN 312
+setenv TODAY 2015-02-16                # v312 final
+setenv LASTWEEK 2015-01-26             # v311 final
 
 setenv BUILDHOME /hive/groups/browser/newBuild
 setenv WEEKLYBLD ${BUILDHOME}/kent/src/utils/qa/weeklybld
-setenv REPLYTO ann@soe.ucsc.edu
+setenv REPLYTO donnak@soe.ucsc.edu
 
 setenv GITSHAREDREPO hgwdev.cse.ucsc.edu:/data/git/kent.git
 

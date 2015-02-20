@@ -11,6 +11,7 @@
 #include "cirTree.h"
 #include "bPlusTree.h"
 #include "bbiFile.h"
+#include "net.h"
 #include "obscure.h"
 
 void bbiWriteDummyHeader(FILE *f)
@@ -93,7 +94,7 @@ struct hash *bbiChromSizesFromFile(char *fileName)
 /* Read two column file into hash keyed by chrom. */
 {
 struct hash *hash = hashNew(0);
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct lineFile *lf = netLineFileOpen(fileName);
 char *row[2];
 while (lineFileRow(lf, row))
     hashAddInt(hash, row[0], sqlUnsigned(row[1]));

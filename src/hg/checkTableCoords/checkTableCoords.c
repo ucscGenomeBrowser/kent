@@ -453,7 +453,6 @@ for (curTable = tableList;  curTable != NULL;  curTable = curTable->next)
     struct slName *chromList = NULL, *chromPtr = NULL;
     char *table = curTable->name;
     char tableChrom[32], trackName[128], tableChromPrefix[33];
-    boolean gotError = FALSE;
     hParseTableName(db, table, trackName, tableChrom);
     hti = hFindTableInfo(db, tableChrom, trackName);
     if (hti != NULL && hti->isPos)

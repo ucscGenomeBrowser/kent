@@ -112,10 +112,9 @@ while (lineFileRowTab(lf, words))
 
     /* If we've got a uniProt ID, use that to get more info from uniProt. */
     char *acc = x->spID;
-    if (acc[0] != 0)
+    if ((acc[0] != 0)  && (acc = spLookupPrimaryAccMaybe(uConn, acc)) != NULL)
         {
 	/* Get current accession and output a bunch of easy protein aliases. */
-	acc = spLookupPrimaryAcc(uConn, acc);
 	outProt(fProt, id, acc, acc);
 	outProt(fProt, id, acc, x->spDisplayID);
 	outProt(fProt, id, acc, x->geneSymbol);

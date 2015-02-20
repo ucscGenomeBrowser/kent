@@ -1,3 +1,89 @@
+<h2>Description</h2>
+<p>
+This track shows the alignments of recently sequenced Ebola
+samples to the $Organism reference sequence G3683/KM034562.1.
+</p>
+
+<H2>Display Conventions and Configuration</H2>
+<P>
+Pairwise alignments of each species to the $Organism genome are
+displayed as a series of colored blocks indicating the functional effect of polymorphisms (in pack
+mode), or as a wiggle (in full mode) that indicates alignment quality.
+In dense display mode, percent identity of the whole alignments is shown in grayscale using
+darker values to indicate higher levels of identity.
+<P>
+In pack mode, regions that align with 100% identity are not shown.   When there is not 100% percent
+identity, blocks of four colors are drawn.
+<ul>
+<li>Red blocks are drawn when a polymorphism in a coding region results in a change in the amino
+acid that is generated.</li>
+<li>Green blocks are drawn when a polymorphism in a coding region results in no change to the amino
+acid that is generated.</li>
+<li>Blue blocks are drawn when a polymorphism is outside a coding region.</li>
+<li>Pale yellow blocks are drawn when there is no aligning bases to that region in the reference
+genome.</li>
+</ul>
+<P>
+Checkboxes on the track configuration page allow selection of the
+species to include in the pairwise display.
+Configuration buttons are available to select all of the species
+(<EM>Set all</EM>), deselect all of the species (<EM>Clear all</EM>), or
+use the default settings (<EM>Set defaults</EM>).
+<P>
+To view detailed information about the alignments at a specific
+position, zoom the display in to 30,000 or fewer bases, then click on
+the alignment.</P>
+
+<H3>Base Level</H3>
+<P>
+When zoomed-in to the base-level display, the track shows the base
+composition of each alignment.
+The numbers and symbols on the Gaps
+line indicate the lengths of gaps in the $Organism sequence at those
+alignment positions relative to the longest non-$Organism sequence.
+If there is sufficient space in the display, the size of the gap is shown.
+If the space is insufficient and the gap size is a multiple of 3, a
+&quot;*&quot; is displayed; other gap sizes are indicated by &quot;+&quot;.</P>
+<P>
+Codon translation is available in base-level display mode if the
+displayed region is identified as a coding segment. To display this annotation, select the species
+for translation from the pull-down menu in the Codon
+Translation configuration section at the top of the page. Then, select one of
+the following modes:
+<UL>
+<LI>
+<B>No codon translation:</B> The gene annotation is not used; the bases are
+displayed without translation.
+<LI>
+<B>Use default species reading frames for translation:</B> The annotations from
+the genome displayed in the <EM>Default species to establish reading frame</EM>
+pull-down menu are used to translate all the aligned species present in the
+alignment.
+<LI>
+<B>Use reading frames for species if available, otherwise no translation:</B>
+Codon translation is performed only for those species where the region is
+annotated as protein coding.
+<LI><B>Use reading frames for species if available, otherwise use default species:</B>
+Codon translation is done on those species that are annotated as being protein
+coding over the aligned region using species-specific annotation; the remaining
+species are translated using the default species annotation.
+</UL></P>
+
+<h2>Methods</h2>
+<p>
+Ebola sequences are found NCBI Nucleotide with the search term:
+<a href="http://www.ncbi.nlm.nih.gov/nuccore/?term=%28ebola%5Btitle%5D+or+ebolavirus%5Btitle%5D%29+and+genome"
+target=_blank>(ebola[title] or ebolavirus[title]) and genome</a>
+</p>
+<p>
+The sequences are aligned to the reference sequence with an ordinary
+Smith-Waterman alignment command
+<a href="http://hgdownload.cse.ucsc.edu/downloads.html#source_downloads"
+target=_blank>faAlign</a> from the 'kent' source utilities.
+</p>
+
+<h2>Source information</h2>
+<p>
 <table border=1><tr><th colspan=10 align=center>psl score of alignments</th></tr>
 <tr><th align=left>reference</th><th>chrStart</th><th>chrEnd</th><th>query</th><th>query<br>size</th><th>score</th><th>identity</th><th>collection<br>date</th><th>country</th><th>isolate</th></tr>
 <tr><td>KM034562v1</td><td align=right>0</td><td align=right>18957</td><td><a href="http://www.ncbi.nlm.nih.gov/nuccore/KP096422" target=_blank>KP096422v1</a></td><td align=right>18958</td><td align=right>18941</td><td align=right>100.00</td><td align=right>Mar-2014</td><td align=right>Guinea</td><td align=left>H.sapiens-tc/GIN/14/WPG-C15</td></tr>
@@ -19,3 +105,4 @@
 <tr><td>KM034562v1</td><td align=right>176</td><td align=right>18936</td><td><a href="http://www.ncbi.nlm.nih.gov/nuccore/KP271019" target=_blank>KP271019v1</a></td><td align=right>18760</td><td align=right>15340</td><td align=right>96.70</td><td align=right>20-Aug-2014</td><td align=right>DRC</td><td align=left>Ebola virus/H.sapiens/COD/2014/Lomela-Lokolia17</td></tr>
 <tr><td>KM034562v1</td><td align=right>4</td><td align=right>18336</td><td><a href="http://www.ncbi.nlm.nih.gov/nuccore/NC_016144" target=_blank>NC_016144v1</a></td><td align=right>18927</td><td align=right>3194</td><td align=right>58.90</td><td align=right>2003</td><td align=right>Spain</td><td align=left>Lloviu virus</td></tr>
 </table>
+</p>

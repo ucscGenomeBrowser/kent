@@ -29,7 +29,12 @@ and <a href="trackDb/trackDbHub.html#superTrack" target="_blank">superTrack on</
 <p>
 <ul>
 <b>STEP 1:</b> In a publicly-accessible directory, copy the hub.txt, genomes.txt,
-trackDb.txt, and examplePage.html files using the following commands:<br>
+trackDb.txt, and examplePage.html files using the following command:<br>
+<p>
+<tt>wget -r --no-parent --reject "index.html*" -nH --cut-dirs=3 http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/
+</tt>
+</p>
+<ul>Alternatively, <em>if you do not have wget installed</em>, use curl:</br>
 <tt>curl -O http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/hub.txt<br>
 curl -O http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/genomes.txt<br>
 mkdir hg19<br>
@@ -38,9 +43,10 @@ curl -O http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings
 curl -O http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubGroupings/hg19/examplePage.html<br>
 </tt>
 <p>
-If you do not have curl, you can alternatively use a text editor and
+If you do not have curl, you can use a text editor and
 directly recreate the above three files.
 </p>
+</ul>
 <p>
 <b>STEP 2:</b> Paste your hub.txt link (<tt>http://yourURL/hub.txt</tt>) into the
 <a href="../../cgi-bin/hgHubConnect" target="_blank">My Hubs</a>
@@ -96,6 +102,8 @@ target="_blank">Assembly Hubs Wiki</a></b>
 target="_blank">Public Hub Guidelines Wiki</a></b>
 <li><b><a href="hubQuickStart.html"
 target="_blank">Basic Hub Quick Start Guide</a></b>
+<li><b><a href="hubQuickStartAssembly.html"
+target="_blank">Assembly Hub Quick Start Guide</a></b>
 </ul>
 </div> <!-- end sectionContent-->
 </div> <!-- end section-->

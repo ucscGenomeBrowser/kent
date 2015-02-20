@@ -1,12 +1,12 @@
 track newSeqs
 compositeTrack on
 shortLabel New sequences
-longLabel Recent related sequences from genbank
+longLabel Recent related sequences from GenBank
 subGroup1 view Views align=Multiz_Alignments
 visibility hide
 priority 1
 type bed 4
-group x
+group compGeno
 
     track newSeqsViewalign
     shortLabel New sequences
@@ -18,7 +18,7 @@ group x
         track newSequences
         subTrack newSeqsViewalign on
         shortLabel New sequences
-        longLabel Recent related sequences from genbank
+        longLabel Recent related sequences from GenBank
         subGroups view=align
         noInherit on
         irows on

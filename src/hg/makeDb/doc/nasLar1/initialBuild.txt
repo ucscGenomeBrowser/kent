@@ -1,0 +1,546 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the nasLar1
+# Proboscis monkey/Nasalis larvatus
+
+# Assembly Statistics Report
+# Assembly Name:  Charlie1.0
+# Organism name:  Nasalis larvatus
+# Taxid:          43780
+# Submitter:      Proboscis Monkey Functional Genome Consortium
+# Date:           2014-11-10
+# BioSample:      SAMN02689222
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Chromosome
+# Genome representation: full
+# GenBank Assembly ID: GCA_000772465.1 (species-representative latest)
+#
+## Assembly-Units:
+## GenBank Unit ID      RefSeq Unit ID  Assembly-Unit name
+## GCA_000772475.1              Primary Assembly
+
+#  chrMT: NC_008216.1 bioproject PRJNA17205
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2014-11-26 - Hiram)
+    # NCBI has redesigned their FTP download site, new type of address
+    #      and naming scheme
+    mkdir -p /hive/data/genomes/nasLar1/genbank
+    cd /hive/data/genomes/nasLar1/genbank
+
+    rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Nasalis_larvatus/all_assembly_versions/GCA_000772465.1_Charlie1.0/ ./
+
+    # measure what we have here:
+    faSize GCA_000772465.1_Charlie1.0_genomic.fna.gz
+    # 3011966170 bases (614872980 N's 2397093190 real 1644030343 upper
+    #    753062847 lower) in 319549 sequences in 1 files
+    # Total size: mean 9425.7 sd 1088158.8 min 201 (JMHX01238739.1)
+    #    max 215897965 (CM002998.1) median 823
+    # %25.00 masked total, %31.42 masked real
+
+    faSize \
+GCA_000772465.1_Charlie1.0_assembly_structure/Primary_Assembly/assembled_chromosomes/FASTA/*.fna.gz \
+GCA_000772465.1_Charlie1.0_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz
+    # 3011966170 bases (614872980 N's 2397093190 real 2397093190 upper
+    #    0 lower) in 319549 sequences in 22 files
+    # Total size: mean 9425.7 sd 1088158.8 min 201 (JMHX01238739.1)
+    #    max 215897965 (CM002998.1) median 823
+
+    # note that these totals do not include chrM since the GenBank ftp directory
+    # did not include a non-nuclear directory
+
+    # typical chrom names in component_localID2acc
+#Component ID   Accession.version
+Nasalis_CHR1    JMHX01319529.1
+Nasalis_CHR10   JMHX01319539.1
+Nasalis_CHR11   JMHX01319540.1
+...
+Nlarvatus_CHRUc1        JMHX01143513.1
+Nlarvatus_CHRUc10       JMHX01143514.1
+Nlarvatus_CHRUc100      JMHX01143515.1
+Nlarvatus_CHRUc1000     JMHX01143516.1
+...
+Nlarvatus_CHRUc99996    JMHX01319525.1
+Nlarvatus_CHRUc99997    JMHX01319526.1
+Nlarvatus_CHRUc99998    JMHX01319527.1
+Nlarvatus_CHRUc99999    JMHX01319528.1
+
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2014-11-25 - Hiram)
+    mkdir /hive/data/genomes/nasLar1/ucsc
+    cd /hive/data/genomes/nasLar1/ucsc
+
+    # script fixed up to alter the given NCBI chrom names into more useful
+    # UCSC names
+    time ./ucscCompositeAgp.pl ../genbank/GCA_000772465.1_Charlie1.0_assembly_structure/Primary_Assembly
+
+# CM003001.1 12
+# CM003017.1 9
+# CM003008.1 19
+# CM003002.1 13
+# CM003014.1 6
+# CM003012.1 4
+# CM003010.1 20
+# CM003007.1 18
+# CM003016.1 8
+# CM003006.1 17
+# CM002998.1 1
+# CM002999.1 10
+# CM003000.1 11
+# CM003015.1 7
+# CM003013.1 5
+# CM003004.1 15
+# CM003011.1 3
+# CM003018.1 X
+# CM003009.1 2
+# CM003005.1 16
+# CM003003.1 14
+
+# real    0m47.851s
+
+    time ./unplaced.pl ../genbank/GCA_000772465.1_Charlie1.0_assembly_structure/Primary_Assembly
+    # real    0m6.736s
+
+    # verify nothing lost compared to genbank:
+    faSize *.fa
+    # 3011966170 bases (614872980 N's 2397093190 real 2397093190 upper
+    #    0 lower) in 319549 sequences in 22 files
+    # Total size: mean 9425.7 sd 1088158.8 min 201 (chrUn_JMHX01238739v1)
+    #    max 215897965 (chr1) median 823
+    # %0.00 masked total, %0.00 masked real
+
+    # same numbers as above.
+
+    # the supplied AGP files are useless, there are no gaps declared
+    # construct fake gaps:
+    cat *.fa | hgFakeAgp stdin ucsc.agp
+
+#############################################################################
+#  Initial database build (DONE - 2014-11-20 - Hiram)
+
+    cd /hive/data/genomes/nasLar1
+    cat << '_EOF_' > nasLar1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db nasLar1
+clade primate
+genomeCladePriority 15
+scientificName Nasalis larvatus
+commonName Proboscis monkey
+assemblyDate Nov. 2014
+assemblyLabel Proboscis Monkey Functional Genome Consortium
+assemblyShortLabel Charlie1.0
+orderKey 392
+# chrM bioproject: 17205
+mitoAcc NC_008216.1
+fastaFiles /hive/data/genomes/nasLar1/ucsc/*.fa
+agpFiles /hive/data/genomes/nasLar1/ucsc/ucsc.agp
+# qualFiles none
+dbDbSpeciesDir proboscis
+photoCreditURL https://www.flickr.com/people/50852241@N00
+photoCreditName David Dennis - Wikimedia Commons
+ncbiGenomeId 7994
+ncbiAssemblyId 221311
+ncbiAssemblyName Charlie1.0
+ncbiBioProject 241312
+genBankAccessionID GCA_000772465.1
+taxId 43780
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp nasLar1.config.ra) > agp.log 2>&1
+    # real    4m56.562s
+
+    # verify end of agp.log indicates:
+    # *** All done!  (through the 'agp' step)
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db nasLar1.config.ra) > db.log 2>&1
+    # real    24m21.493s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##########################################################################
+# running repeat masker (DONE - 2014-12-12 - Hiram)
+    mkdir /hive/data/genomes/nasLar1/bed/repeatMasker
+    cd /hive/data/genomes/nasLar1/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku nasLar1) > do.log 2>&1
+    # real    1298m51.515s
+
+    cat faSize.rmsk.txt
+    # 3011982740 bases (614872980 N's 2397109760 real 1287460374 upper 1109649386 lower) in 319550 sequences in 1 files
+    # Total size: mean 9425.7 sd 1088157.1 min 201 (chrUn_JMHX01238739v1) max 215897965 (chr1) median 823
+    # %36.84 masked total, %46.29 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2014 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps nasLar1 rmsk
+    # 1113442810 bases of 3011982740 (36.967%) in intersection
+    # real    2m26.058s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE 2014-12-11 - Hiram)
+
+    mkdir /hive/data/genomes/nasLar1/bed/simpleRepeat
+    cd /hive/data/genomes/nasLar1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        nasLar1) > do.log 2>&1
+    # real    171m2.051s
+
+    cat fb.simpleRepeat
+    # 41400812 bases of 2398172200 (1.726%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/nasLar1
+    twoBitMask nasLar1.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed nasLar1.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa nasLar1.2bit stdout | faSize stdin > faSize.nasLar1.2bit.txt
+    cat faSize.nasLar1.2bit.txt
+    # 3011982740 bases (614872980 N's 2397109760 real 1286534225 upper
+    # 1110575535 lower) in 319550 sequences in 1 files
+    # Total size: mean 9425.7 sd 1088157.1 min 201 (chrUn_JMHX01238739v1)
+    #   max 215897965 (chr1) median 823
+    # %36.87 masked total, %46.33 masked real
+
+    rm /gbdb/nasLar1/nasLar1.2bit
+    ln -s `pwd`/nasLar1.2bit /gbdb/nasLar1/nasLar1.2bit
+
+##########################################################################
+## WINDOWMASKER (DONE - 2014-12-11 - Hiram)
+
+    mkdir /hive/data/genomes/nasLar1/bed/windowMasker
+    cd /hive/data/genomes/nasLar1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev nasLar1) > do.log 2>&1
+    # real    1019m50.392s
+
+    # Masking statistics
+    cat faSize.nasLar1.cleanWMSdust.txt
+    # 3011982740 bases (614872980 N's 2397109760 real 1630689943 upper
+    # 766419817 lower) in 319550 sequences in 1 files
+    # Total size: mean 9425.7 sd 1088157.1 min 201 (chrUn_JMHX01238739v1)
+    #   max 215897965 (chr1) median 823
+    # %25.45 masked total, %31.97 masked real
+
+    time featureBits -countGaps nasLar1 rmsk windowmaskerSdust \
+        > fb.nasLar1.rmsk.windowmaskerSdust.txt 2>&1
+    # real    5m55.718s
+    cat fb.nasLar1.rmsk.windowmaskerSdust.txt
+    # 553352708 bases of 3011982740 (18.372%) in intersection
+
+    doWindowMasker.pl -continue=cleanup -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev nasLar1
+    #   Elapsed time: 1m53s
+
+##########################################################################
+# cpgIslands - (DONE - 2014-12-13 - Hiram)
+    mkdir /hive/data/genomes/nasLar1/bed/cpgIslands
+    cd /hive/data/genomes/nasLar1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku nasLar1) > do.log 2>&1
+    # real    436m47.169s
+
+    cat fb.nasLar1.cpgIslandExt.txt
+    # 11894127 bases of 2398172200 (0.496%) in intersection
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2014-12-13 - Hiram)
+    mkdir /hive/data/genomes/nasLar1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/nasLar1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/nasLar1/nasLar1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku nasLar1) > do.log 2>&1
+    # real    436m29.843s
+
+    cat fb.nasLar1.cpgIslandExtUnmasked.txt
+    # 14182180 bases of 2398172200 (0.591%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2014-12-13 - Hiram)
+    mkdir /hive/data/genomes/nasLar1/bed/cytoBand
+    cd /hive/data/genomes/nasLar1/bed/cytoBand
+    makeCytoBandIdeo.csh nasLar1
+
+#########################################################################
+# genscan - (DONE - 2014-12-13 - Hiram)
+    mkdir /hive/data/genomes/nasLar1/bed/genscan
+    cd /hive/data/genomes/nasLar1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku nasLar1) > do.log 2>&1
+    # real    65m53.319s
+    # broken on eight chroms, finish off with split procedure
+    mkdir splitRun
+    cd splitRun
+    rm -f file.list
+
+for N in 13 19 8 14 20 3 1 X
+do
+    twoBitToFa ../../../nasLar1.2bit:chr${N} stdout \
+       | maskOutFa stdin hard chr${N}.fa
+    mkdir chr${N}
+    faSplit -lift=chr${N}.lift gap chr${N}.fa 2000000 chr${N}/chr${N}_
+    find ./chr${N} -type f | sed -e 's#^./##;' >>  file.list
+done
+
+    cat << '_EOF_' > runGsBig.csh
+#!/bin/csh -ef
+set chrom = $1
+set dir = $2
+set resultGtf = $3
+set resultPep = $4
+set resultSubopt = $5
+mkdir -p gtf/$dir pep/$dir subopt/$dir
+set seqFile = $dir/$chrom.fa
+/cluster/bin/x86_64/gsBig $seqFile $resultGtf -trans=$resultPep -subopt=$resultSubopt -exe=/scratch/data/genscan/genscan -par=/scratch/data/genscan/HumanIso.smat -tmp=/tmp -window=2400000
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > template
+#LOOP
+./runGsBig.csh $(root1) $(lastDir1) {check out exists gtf/$(lastDir1)/$(root1).gtf} {check out exists pep/$(lastDir1)/$(root1).pep} {check out exists subopt/$(lastDir1)/$(root1).bed}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 file.list single template jobList
+
+# Completed: 521 of 521 jobs
+# CPU time in finished jobs:      32672s     544.54m     9.08h    0.38d  0.001 y
+# IO & Wait Time:                  2417s      40.28m     0.67h    0.03d  0.000 y
+# Average job time:                  67s       1.12m     0.02h    0.00d
+# Longest finished job:            1834s      30.57m     0.51h    0.02d
+# Submission to last job:          2027s      33.78m     0.56h    0.02d
+
+    # combine results
+export TOP="/hive/data/genomes/nasLar1/bed/genscan/splitRun"
+
+for C in chr1 chr13 chr14 chr19 chr20 chr3 chr8 chrX
+do
+  cd ${TOP}/${C}
+  cat ../gtf/${C}/*.gtf | liftUp -type=.gtf stdout ../${C}.lift error stdin \
+    | sed -e "s/${C}_0\([0-4]\)\./${C}.\1/g" > ${C}.gtf
+  cat ../subopt/${C}/*.bed | liftUp -type=.bed stdout ../${C}.lift error stdin \
+    | sed -e "s/${C}_0\([0-4]\)\./${C}.\1/g" > ${C}.subopt.bed
+  cat ../pep/${C}/*.pep | sed -e "s/${C}_0\([0-4]\)\./${C}.\1/g" > ${C}.pep
+  ls -ogrt ${C}.gtf ${C}.subopt.bed ${C}.pep
+  cd ${TOP}
+done
+    # copy over these split results
+for C in chr1 chr13 chr14 chr19 chr20 chr3 chr8 chrX
+do
+  ls -ld ../gtf/*/${C}.gtf
+  ls -ld ../pep/*/${C}.pep
+  ls -ld ../subopt/*/${C}.bed
+  ls -og ${C}/${C}.gtf ${C}/${C}.pep ${C}/${C}.subopt.bed
+  cp -p ${C}/${C}.gtf ../gtf/*/${C}.gtf
+  cp -p ${C}/${C}.pep ../pep/*/${C}.pep
+  cp -p ${C}/${C}.subopt.bed ../subopt/*/${C}.bed
+  ls -ld ../gtf/*/${C}.gtf
+  ls -ld ../pep/*/${C}.pep
+  ls -ld ../subopt/*/${C}.bed
+done
+
+    # after finishing off laggards with the splitRun procedure, continuing:
+
+    time (doGenscan.pl -continue=makeBed -workhorse=hgwdev -dbHost=hgwdev \
+       nasLar1 ) > makeBed.log 2>&1
+    # real    12m32.631s
+
+    cat fb.nasLar1.genscan.txt
+    # 42866785 bases of 2398172200 (1.787%) in intersection
+
+    cat fb.nasLar1.genscanSubopt.txt
+    # 46110660 bases of 2398172200 (1.923%) in intersection
+
+########################################################################
+# Create kluster run files (DONE - 2015-01-06 - Hiram)
+
+    cd /hive/data/genomes/nasLar1
+    # numerator is nasLar1 gapless bases "real" as reported by:
+    head -1 faSize.nasLar1.2bit.txt
+# 3011982740 bases (614872980 N's 2397109760 real 1286534225 upper 1110575535 lower) in 319550 sequences in 1 files
+
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2397109760 / 2861349177 \) \* 1024
+    # ( 2397109760 / 2861349177 ) * 1024 = 857.861184
+
+    # ==> use -repMatch=800 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/nasLar1
+    blat nasLar1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/nasLar1.11.ooc \
+        -repMatch=800
+    #   Wrote 28620 overused 11-mers to jkStuff/nasLar1.11.ooc
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N -e 'select * from gap where bridge="no" order by size;' nasLar1         | ave -tableOut -col=7 stdin
+# # min Q1 median Q3 max mean N sum stddev
+# 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006
+
+    # note the minimum non-bridged gap size is 50,076
+
+    gapToLift -verbose=2 -minGap=50000 nasLar1 jkStuff/nasLar1.nonBridged.lft \
+        -bedFile=jkStuff/nasLar1.nonBridged.bed
+
+########################################################################
+# GENBANK AUTO UPDATE (DONE - 2015-01-06 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Nasalis larvatus        4       0       0
+
+    # edit etc/genbank.conf to add nasLar1 just after bosTau7
+
+# nasLar1 (Proboscis monkey)
+nasLar1.serverGenome = /hive/data/genomes/nasLar1/nasLar1.2bit
+nasLar1.clusterGenome = /hive/data/genomes/nasLar1/nasLar1.2bit
+nasLar1.ooc = /hive/data/genomes/nasLar1/jkStuff/nasLar1.11.ooc
+nasLar1.lift = /hive/data/genomes/nasLar1/jkStuff/nasLar1.nonBridged.lft
+nasLar1.perChromTables = no
+nasLar1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+nasLar1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+nasLar1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+nasLar1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+nasLar1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+nasLar1.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+nasLar1.downloadDir = nasLar1
+nasLar1.refseq.mrna.native.load  = no
+nasLar1.refseq.mrna.native.loadDesc  = no
+nasLar1.refseq.mrna.xeno.load = yes
+nasLar1.refseq.mrna.xeno.loadDesc  = yes
+nasLar1.genbank.mrna.native.load  = no
+nasLar1.genbank.mrna.native.loadDesc  = no
+nasLar1.genbank.est.native.load  = no
+nasLar1.upstreamGeneTbl = refGene
+
+    # Edit src/lib/gbGenome.c to add new species
+
+    git commit -m "Added nasLar1; refs #14437" etc/genbank.conf src/lib/gbGenome.c
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+    make install-server
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial nasLar1
+    # logFile: var/build/logs/2015.01.06-10:53:22.nasLar1.initalign.log
+    #   real    53m1.297s
+    # verify completed successfully:
+    tail var/build/logs/2015.01.06-10:53:22.nasLar1.initalign.log
+# hgwdev 2015.01.06-11:43:02 nasLar1.initalign: Succeeded: nasLar1
+# hgwdev 2015.01.06-11:46:23 nasLar1.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.nasLar1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad -verbose=10 nasLar1
+    # logFile: var/dbload/hgwdev/logs/2015.01.06-13:41:18.nasLar1.dbload.log
+    # real    6m52.226s
+
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add nasLar1 to:
+    #   etc/align.dbs
+    #   etc/hgwdev.dbs
+    git commit -m "Added nasLar1 - Proboscis monkey refs #14437" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# uscsToINSDC table/track (DONE - 2015-02-18 - Hiram)
+    mkdir /hive/data/genomes/nasLar1/bed/ucscToINSDC
+    cd /hive/data/genomes/nasLar1/bed/ucscToINSDC
+
+    # check for chrM
+    grep chrM ../../*.agp
+# chrM    1       16570   735352  F       NC_008216.1     1       16570   +
+    # use that accession here:
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+     ../../genbank/GCA_000772465.1_Charlie1.0_assembly_structure/Primary_Assembly \
+       NC_008216.1
+    # fixup chr names to UCSC names:
+    sed -e 's/chralign_Mm/chr/;' ucscToINSDC.txt | sort > ucscChrNames.txt
+    
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscChrNames.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are translated properly:
+    wc -l *.bed ../../chrom.sizes
+#  319550 ucscToINSDC.bed
+#  319550 ../../chrom.sizes
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 20
+    # use the 20 in this sed
+    sed -e "s/21/20/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab nasLar1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords nasLar1
+    # should cover %100 entirely:
+    featureBits -countGaps nasLar1 ucscToINSDC
+    # 3011982740 bases of 3011982740 (100.000%) in intersection
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE 2015-02-18 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=nasLar1 -keys all.joiner
+    joinerCheck -database=nasLar1 -tableCoverage all.joiner
+    joinerCheck -database=nasLar1 -times all.joiner
+
+    cd /hive/data/genomes/nasLar1
+    time makeDownloads.pl nasLar1 > do.log 2>&1
+    # real    16m28.538s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/nasLar1/pushQ
+    cd /hive/data/genomes/nasLar1/pushQ
+    makePushQSql.pl nasLar1 > nasLar1.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+# WARNING: hgwdev does not have /gbdb/nasLar1/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/nasLar1/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/nasLar1/bbi/qualityBw/quality.bw
+# WARNING: nasLar1 does not have seq
+# WARNING: nasLar1 does not have extFile
+# WARNING: nasLar1 does not have estOrientInfo
+# WARNING: nasLar1 does not have mrnaOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p nasLar1.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/nasLar1.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

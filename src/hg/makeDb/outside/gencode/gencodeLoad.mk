@@ -34,6 +34,7 @@ mach = $(shell uname -m)
 ##
 #db = mm10
 db = hg38
+$(error modify to get TSL levels out of gff file)
 ifeq (${db},mm10)
     prevDb = mm10
     grcRefAssembly = GRCm38
@@ -43,7 +44,7 @@ ifeq (${db},mm10)
     ensemblVer = 77_38
     ensemblCDnaDb = mus_musculus_cdna_${ensemblVer}
     transSupBuild = 2014-12-03
-    transSupDir = /hive/users/markd/ccds/branches/transSupV${ver}
+    transSupDir = ${HOME}/ccds/branches/transSupV${ver}
     patchSeqs = KB469740.1 KB469738.2 JH792833.1 KB469741.1 JH792826.1 KK082443.1 KB469739.1 JH792832.1 KK082442.1 JH792831.1 KB469742.1 JH792834.1 JH792827.1 KK082441.1 JH792830.1 JH792828.1
 else
     prevDb = hg38
@@ -54,7 +55,7 @@ else
     ensemblVer = 77_38
     ensemblCDnaDb = mus_musculus_cdna_${ensemblVer}
     transSupBuild = 2014-10-03
-    transSupDir = /hive/users/markd/ccds/branches/transSupV${ver}
+    transSupDir = ${HOME}/ccds/branches/transSupV${ver}
     patchSeqs =
 endif
 # END EDIT THESE EACH RELEASE
@@ -74,7 +75,7 @@ transSupResultsTab = ${transSupResultsDir}/gencode.v${ver}.transcriptionSupportL
 
 ccdsBinDir = ${transSupDir}/output/bin/$(mach)/opt
 export PATH:=${ccdsBinDir}:${PATH}
-encodeAutoSqlDir = /cluster/home/markd/kent/src/hg/lib/encode
+encodeAutoSqlDir = ${HOME}/kent/src/hg/lib/encode
 
 ##
 # intermediate data not loaded into tracks
