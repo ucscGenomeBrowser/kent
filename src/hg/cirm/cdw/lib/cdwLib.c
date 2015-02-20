@@ -677,6 +677,22 @@ sqlSafef(query, sizeof(query),
 return cdwFileLoadByQuery(conn, query);
 }
 
+long long cdwFindInSameSubmitDir(struct sqlConnection *conn, 
+    struct cdwFile *ef, char *submitFileName)
+/* Return fileId of most recent file of given submitFileName from submitDir
+ * associated with file */
+{
+char query[3*PATH_LEN];
+sqlSafef(query, sizeof(query),
+    "select cdwFile.id from cdwFile,cdwSubmitDir "
+    "where cdwFile.submitDirId = cdwSubmitDir.id and "
+    "cdwSubmitDir.id = %d and "
+    "cdwFile.submitFileName = '%s' order by cdwFile.id desc"
+    ,  ef->submitDirId, submitFileName);
+uglyf("cdwFindInSameSubmitDir query %s\n", query);
+return sqlQuickLongLong(conn, query);
+}
+
 struct cdwFile *cdwFileFromId(struct sqlConnection *conn, long long fileId)
 /* Return cdwValidFile given fileId - return NULL if not found. */
 {
@@ -699,6 +715,14 @@ struct cdwValidFile *cdwValidFileFromFileId(struct sqlConnection *conn, long lon
 {
 char query[128];
 sqlSafef(query, sizeof(query), "select * from cdwValidFile where fileId=%lld", fileId);
+return cdwValidFileLoadByQuery(conn, query);
+}
+
+struct cdwValidFile *cdwValidFileFromLicensePlate(struct sqlConnection *conn, char *licensePlate)
+/* Return cdwValidFile from license plate - returns NULL if not found. */
+{
+char query[128];
+sqlSafef(query, sizeof(query), "select * from cdwValidFile where licensePlate='%s'", licensePlate);
 return cdwValidFileLoadByQuery(conn, query);
 }
 

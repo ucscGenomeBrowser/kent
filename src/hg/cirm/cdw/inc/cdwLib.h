@@ -149,8 +149,16 @@ struct cdwFile *cdwFileAllIntactBetween(struct sqlConnection *conn, int startId,
 /* Return list of all files that are intact (finished uploading and MD5 checked) 
  * with file IDs between startId and endId - including endId*/
 
+long long cdwFindInSameSubmitDir(struct sqlConnection *conn, 
+    struct cdwFile *ef, char *submitFileName);
+/* Return fileId of most recent file of given submitFileName from submitDir
+ * associated with file */
+
 struct cdwValidFile *cdwValidFileFromFileId(struct sqlConnection *conn, long long fileId);
 /* Return cdwValidFile give fileId - returns NULL if not validated. */
+
+struct cdwValidFile *cdwValidFileFromLicensePlate(struct sqlConnection *conn, char *licensePlate);
+/* Return cdwValidFile from license plate - returns NULL if not found. */
 
 void cdwValidFileUpdateDb(struct sqlConnection *conn, struct cdwValidFile *el, long long id);
 /* Save cdwValidFile as a row to the table specified by tableName, replacing existing record at 
@@ -387,5 +395,6 @@ boolean cdwRqlStatementMatch(struct rqlStatement *rql, struct tagStanza *stanza,
 
 struct slRef *tagStanzasMatchingQuery(struct tagStorm *tags, char *query);
 /* Return list of references to stanzas that match RQL query */
+
 
 #endif /* CDWLIB_H */
