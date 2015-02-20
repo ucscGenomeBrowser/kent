@@ -81,6 +81,32 @@ INLINE void hvGfxBox(struct hvGfx *hvg, int x, int y,
 vgBox(hvg->vg, hvGfxAdjXW(hvg, x, width), y, width, height, colorIx);
 }
 
+INLINE void hvGfxOutlinedBox(struct hvGfx *hvg, int x, int y,
+                  int width, int height, int fillColorIx, int lineColorIx)
+/* Draw a box in fillColor outlined by lineColor */
+{
+/* If nothing to draw bail out early. */
+if (width <= 0 || height <= 0)
+    return;
+
+/* Draw outline first, it may be all we need. We may not even need all 4 lines of it. */
+hvGfxBox(hvg, x, y, width, 1, lineColorIx);
+if (height == 1)
+    return;
+hvGfxBox(hvg, x, y+1, 1, height-1, lineColorIx);
+if (width == 1)
+    return;
+hvGfxBox(hvg, x+width-1, y+1, 1, height-1, lineColorIx);
+if (width == 2)
+    return;
+hvGfxBox(hvg, x+1, y+height-1, width-2, 1, lineColorIx);
+if (height == 2)
+    return;
+
+/* Can draw fill with a single  */
+hvGfxBox(hvg, x+1, y+1, width-2, height-2, fillColorIx);
+}
+
 INLINE void hvGfxLine(struct hvGfx *hvg, 
                    int x1, int y1, int x2, int y2, int colorIx)
 /* Draw a line from one point to another. */
