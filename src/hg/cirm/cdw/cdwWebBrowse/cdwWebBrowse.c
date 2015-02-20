@@ -249,7 +249,7 @@ if (!isEmpty(orderFields))
 }
 
 void showTableDataRows(struct fieldedTable *table, int pageSize, int maxLenField,
-    struct hash *htmlOutputWrappers)
+    struct hash *tagOutputWrappers)
 /* Render data rows into HTML */
 {
 int count = 0;
@@ -277,10 +277,10 @@ for (row = table->rowList; row != NULL; row = row->next)
 	    }
 	webPrintLinkCellStart();
 	boolean printed = FALSE;
-	if (htmlOutputWrappers != NULL && !isEmpty(val))
+	if (tagOutputWrappers != NULL && !isEmpty(val))
 	    {
 	    char *field = table->fields[fieldIx];
-	    wrapHtmlPrint *printer = hashFindVal(htmlOutputWrappers, field);
+	    wrapHtmlPrint *printer = hashFindVal(tagOutputWrappers, field);
 	    if (printer != NULL)
 		{
 		printer(field, val);
@@ -321,7 +321,7 @@ if (largerContext != NULL)  // Need to page?
 
 void showFieldedTable(struct fieldedTable *table, 
     int pageSize, char *returnUrl, char *varPrefix,
-    boolean withFilters, char *itemPlural, int maxLenField, struct hash *htmlOutputWrappers, 
+    boolean withFilters, char *itemPlural, int maxLenField, struct hash *tagOutputWrappers, 
     struct sftSegment *largerContext)
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
  * that includes a row of filter controls above the labels .
@@ -343,7 +343,7 @@ if (withFilters)
     showTableFilterControlRow(table, cart, varPrefix, maxLenField);
 
 showTableSortingLabelRow(table, cart, varPrefix, returnUrl);
-showTableDataRows(table, pageSize, maxLenField, htmlOutputWrappers);
+showTableDataRows(table, pageSize, maxLenField, tagOutputWrappers);
 
 /* Get rid of table within table look */
 webPrintLinkTableEnd();
@@ -383,12 +383,27 @@ freez(&escapedQuery);
 printf("\">%s</A>", val);
 }
 
-void showFieldsWhere(struct sqlConnection *conn, char *itemPlural, char *fields, 
-    char *from, char *initialWhere,  
+#ifdef COMPARE
+void showFieldedTable(struct fieldedTable *table, 
+    int pageSize, char *returnUrl, char *varPrefix,
+    boolean withFilters, char *itemPlural, int maxLenField, struct hash *tagOutputWrappers, 
+    struct sftSegment *largerContext)
+#endif /* COMPARE */
+
+void showSqlFieldsWhere(struct sqlConnection *conn, char *itemPlural, 
+    char *fields, char *from, char *initialWhere,  
     int pageSize, char *returnUrl, char *varPrefix, int maxFieldWidth, boolean withFilters, 
     struct hash *tagOutWrappers)
-/* Construct query and display results as a table */
+/* Given a query to the database in conn that is basically a select query broken into
+ * separate clauses, construct and display an HTML table around results. This HTML table has
+ * column names that will sort the table, and optionally (if withFilters is set)
+ * it will also allow field-by-field wildcard queries on a set of controls it draws above
+ * the labels. 
+ *    Much of the functionality rests on the call to showFieldedTable.  This function
+ * does the work needed to bring in sections of potentially huge results sets into
+ * the fieldedTable. */
 {
+/* Construct select, from and where clauses in query, keeping an additional copy of where */
 struct dyString *query = dyStringNew(0);
 struct dyString *where = dyStringNew(0);
 struct slName *field, *fieldList = commaSepToSlNames(fields);
@@ -401,6 +416,8 @@ if (!isEmpty(initialWhere))
     sqlSanityCheckWhere(initialWhere, where);
     gotWhere = TRUE;
     }
+
+/* If we're doing filters, have to loop through the row of filter controls */
 if (withFilters)
     {
     for (field = fieldList; field != NULL; field = field->next)
@@ -618,7 +635,7 @@ if (!isEmpty(where))
     }
 struct hash *wrappers = hashNew(0);
 hashAdd(wrappers, "file_name", wrapFileName);
-showFieldsWhere(conn, "files", 
+showSqlFieldsWhere(conn, "files", 
     "file_name,file_size,lab,assay,data_set_id,output,format,read_size,item_count,"
     "species,body_part",
     "cdwFileTags", where, 100, returnUrl, "cdwBrowseFiles", 18, TRUE, wrappers);
@@ -687,7 +704,7 @@ char *where = "fileId=file_id and format in ('bam','bigBed', 'bigWig', 'vcf', 'n
 struct hash *wrappers = hashNew(0);
 wrapperConn = conn;
 hashAdd(wrappers, "accession", wrapTrackAccession);
-showFieldsWhere(conn, "tracks", 
+showSqlFieldsWhere(conn, "tracks", 
     "accession,ucsc_db,format,file_size,lab,assay,data_set_id,output,"
     "body_part,submit_file_name",
     "cdwFileTags,cdwTrackViz", where, 100, returnUrl, "cdwBrowseTracks", 30, TRUE, wrappers);
