@@ -193,8 +193,6 @@ uwDnaseTrackHub meta.tab run_pooled colors.tab hub
 # (and normalized signal files are linked into that dir from :
 # /hive/data/genomes/hg38/bed/uwDnase1/run_normalized/out
 # The hub trackDb file is: /hive/data/genomes/hg38/bed/uwDnase1/hub/hg38/trackDb.txt
-#
-# Jim has a public URL here:  http://hgwdev.soe.ucsc.edu/~kent/hubs/uwDnase1/hub.txt
 
 #################################
 # DNAse peaks, hotspots, and signal track, and the multiwig
@@ -207,15 +205,10 @@ uwDnaseTrackHub meta.tab run_pooled colors.tab hub
         bigBedToBed $f scored/in/$f
     end
     cd scored/in
-    bedScore -uniform -method=reg -col=7 *.narrowPeak ../out >&! score.out &
-    bedScore -uniform -method=reg -col=7 *.broadPeak ../out >&! score.out &
+    bedScore -uniform -method=reg -col=7 *.narrowPeak ../out >&! score.out
+    bedScore -uniform -method=reg -col=7 *.broadPeak ../out >>&! score.out &
 
     cd ../out
-    foreach f (*.narrowPeak)
-        echo $f
-        bedToBigBed -type=bed6+4 -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as \
-               $f /hive/data/genomes/hg38/chrom.sizes ../$f.bb
-    end
     foreach f (*.broadPeak)
         echo $f
         bedToBigBed -type=bed6+3 -as=$HOME/kent/src/hg/lib/encode/broadPeak.as \
@@ -235,59 +228,28 @@ uwDnaseTrackHub meta.tab run_pooled colors.tab hub
         hgBbiDbLink hg38 uwEnc2DnaseHot${exp} $bbi/$f
     end
 
-    # TODO: REMOVE THESE -- not needed
-    #foreach f (*.narrowPeak.bb)
-        #echo $f
-        #ln -s `pwd`/$f $bbi
-        #set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
-        #hgBbiDbLink hg38 uwEnc2DnasePeaks${exp} $bbi/$f
-    #end
+    foreach f (*.narrowPeak.bb)
+        echo $f
+        ln -s `pwd`/$f $bbi
+        set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
+        hgBbiDbLink hg38 uwEnc2DnasePeaks${exp} $bbi/$f
+    end
 
     cd /hive/data/genomes/hg38/bed/uwDnase1/run_normalized/out
     foreach f (*.bw)
         ln -s `pwd`/$f $bbi/$f
         set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
         hgBbiDbLink hg38 uwEnc2DnaseSignal${exp} $bbi/$f
-        # TODO: REMOVE THESE -- not needed
         hgBbiDbLink hg38 uwEnc2DnaseWig${exp} $bbi/$f
     end
 
-# Test load of non-normalized signal
-    #cd /hive/data/genomes/hg38/bed/uwDnase1/run_pooled
-    #set f = wgEncodeEH000484.pooled.bigWig
-    #set bbi = /gbdb/hg38/bbi/uwDnase/
-    #ln -s `pwd`/$f $bbi/$f
-
-    # TODO: REMOVE THIS -- not needed
-    #hgBbiDbLink hg38 testDnaseSignalWgEncodeEH000484 $bbi/$f
-
-
-# Rename everything
-
-    cd /gbdb/hg38/bbi
-    #rm -fr uwDnase
-    mkdir wgEncodeRegDnase
-    set bbi = /gbdb/hg38/bbi/wgEncodeRegDnase
-    # link broadPeaks
-    #cd /hive/data/genomes/hg38/bed/uwDnase1/run_pooled/scored/out
-    #foreach f (*.broadPeak.bb)
-    #end
-    # link signals
-    cd /hive/data/genomes/hg38/bed/uwDnase1/run_normalized/out
-    foreach f (*.bw)
-        set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/\1/'`
-        set t = wgEncodeRegUwDnaseSignal${cell}${treat}
-        ln -s `pwd`/$f $bbi/$t
-        hgBbiDbLink hg38 $t $bbi/$t.bw
-    end
-
-    
 # Load peaks into database (needed by hgc. we may be able to drop these with code changes)
     cd /hive/data/genomes/hg38/bed/uwDnase1/run_pooled/scored/out
     foreach f (*.narrowPeak)
         echo $f
         set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
-        hgLoadBed -fillInScore=signalValue -trimSqlTable -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg38 uwEnc2DnaseBedPeaks${exp} $f
+        #hgLoadBed -fillInScore=signalValue -trimSqlTable -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg38 uwEnc2DnaseBedPeaks${exp} $f
+        hgLoadBed -trimSqlTable -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg38 uwEnc2DnaseBedPeaks${exp} $f
     end
 
 # Use cell curation to make more informative long labels
@@ -308,7 +270,8 @@ uwDnaseTrackHub meta.tab run_pooled colors.tab hub
 
     cd /hive/data/genomes/hg38/bed/uwDnase1
     mkdir clusters
-    cd run_pooled/scored/out
+    # cd run_pooled/scored/out
+    cd run_pooled_hotspot5.1/scored/out
     ls *.pooled.narrowPeak > ../../../clusters/peak.lst
 
     # calculate normalization factor
@@ -318,15 +281,15 @@ uwDnaseTrackHub meta.tab run_pooled colors.tab hub
     # cluster
     regCluster -bedSources ../../../clusters/peak.table /dev/null ../../../clusters/peak.bed \
         >&! ../../../clusters/regCluster.out &
-    # 1876769 singly-linked clusters, 1934764 clusters in 86 chromosomes
+    2011652 singly-linked clusters, 2076756 clusters in 96 chromosomes
     # NOTE: more clusters (2.2M) in hg19 (which included Duke data)
 
     # filter out low scoring
     cd ../../../clusters
     awk '$5 >= 100' peak.bed > peak.filtered.bed
     wc -l peak.filtered.bed
-    # 1236194 uwEnc2DnaseClustered.bed
-    # retained 65% vs 83% in hg19 (too low ??)
+    # 1330766 peak.filtered.bed
+    # retained 66% vs 83% in hg19 (seems low ??)
 
     # --> keep them all for now, filter with UI
 
@@ -335,6 +298,10 @@ uwDnaseTrackHub meta.tab run_pooled colors.tab hub
     awk 'BEGIN {OFS="\t"}{print $1, $2, $3, $4, $5, 0, $7;}' peak.bed > peak.bed6
     hgBedSources peak.bed6 regDnase
     mv regDnaseSources.tab uwEnc2DnaseSources.tab
+
+    # hand edit to fix curation --  add RA treatments where needed
+    # NHBE_RA -> NHBE_RA+RA
+    # SK-N-SH_RA -> SK-N-SH_RA+RA
 
     # load sources table
     autoSql $HOME/kent/src/hg/lib/idName.as idName
@@ -371,15 +338,53 @@ cat > makeInputs.csh << 'EOF'
     #Hmm, hgc peakClusters doesn't appear to work with bigBed peak files...
     # Revert trackDb to BED peak files
 
+
 #################
-# Defaults
+# Rename everything -- replace wgEncodeEH* with cell and treatment, to help users.  Change prefix
+# to match hg19
 
-# Initially, picked 11, focusing on tier1 & tier2, and spectrum spread:
-#       AG04450, GM12878, H7-hESC, HCT-116, HeLa-S3, HepG2, HPF, HUVEC, K562, MCF-7, NH-A 
+    cd /hive/data/genomes/hg38/bed/uwDnase1
+    mkdir rename
+cat > expToFile.csh << 'EOF'
+#!/bin/csh -ef
+    set exp = `echo $1 | sed 's/wgEncodeEH\([0-9]*\).*/\1/'`
+    set cell = `encodeExp show $exp cellType | sed -e 's/[-+_]//g' -e 's/\(.\)\(.*\)/\U\1\L\2/'`
+    set treatment = `encodeExp show $exp treatment | sed -e 's/[-+_]//g' -e 's/\(.\)\(.*\)/\U\1\L\2/'`
+    echo ${cell}${treatment}
+'EOF'
 
-# Later, changed default on to same cell types as ENCODE Reg Transcription track:
-#       GM12878, H7-hESC (sub for H1-hESC), HeLa-S3, HepG2, HSMM, HUVEC, K562, NHEK, NHLF 
-       
+cat > renameWig.csh << 'EOF'
+#!/bin/csh -ef
+set bbi = /gbdb/hg38/bbi/wgEncodeRegDnase
+mkdir -p $bbi
+set path = (`pwd` $path)
+set build = /hive/data/genomes/hg38/bed/wgEncodeRegDnase
+set data = run_normalized/out
+set wd = `pwd`
+pushd $build/$data
+rm $wd/edit.csh
+foreach f (*.norm.bw)
+    echo "${f} "
+    set exp = $f:r:r
+    set vars = `expToFile.csh $exp`
+    set t = wgEncodeRegDnaseUw${vars}Signal
+    echo "-e s/uwEnc2DnaseSignal${exp}/$t/ \" >> $wd/edit.csh
+    ln -s $build/$data/$f $bbi/$t.bw
+    hgBbiDbLink hg38 $t $bbi/$t.bw
+end
+popd
+'EOF'
+
+# Manually tweak edit.csh and run to replace table and track names in trackDb.ra
+# Do same for broadPeak bigBeds, and narrowPeak tables
+
+csh edit5.csh ../clusters/bigInputs.tab > ../clusters/wgEncodeRegDnaseClusteredInputs.tab
+cd ../clusters
+hgLoadSqlTab hg38 wgEncodeRegDnaseClusteredInputs \
+        ~/kent/src/hg/lib/clusterInputEapDnase.sql wgEncodeRegDnaseClusteredInputs.tab
+
+hgql hg38 -e "alter table uwEnc2DnaseClustered rename to wgEncodeRegDnaseClustered"
+hgsql hg38 -e "alter table uwEnc2DnaseSources rename to wgEncodeRegDnasedClusteredSource"
 
 
 #################
@@ -410,34 +415,14 @@ cat > makeInputs.csh << 'EOF'
     checkUrlsInTable hgFixed wgEncodeCell > errs.txt
 
 
-
 # Treatment table
-# create term/description tab sep file (currently just treatments in UW DNase)
+# TBD
 
-    cd /hive/data/genomes/hg38/bed/uwDnase1
-    cd cells
-    tail -n +2 treatments.tab | \
-        nl -v 0 | \
-        hgLoadSqlTab hgFixed wgEncodeTreatment ~/kent/src/hg/lib/encode/wgEncodeTreatment.sql stdin
-
-# Correct mis-curated experiments (add RA treatments)
-
-    cp bigInputs.tab uwEnc2DnaseInputs.tab
-
-    # hand-edit to add RA treatment to the _RA cell types.
-    # NOTE: Estradiol_ctrl_0hr appears to be no treatment; from GEO:
-    # "treatment description: No hormone control, zero timepoint, used to distinguish untreated sample in series (Stam).  As there is already an untreated MCF-7 in the cluster, we'll keep the
-    # bogus treatment to distinguish.  It appears there are actually 2 identical experiments
-    # performed at different times.  Maybe replicates for both should be pooled ?   Or one
-    # set dropped?
-
-    hgLoadSqlTab hg38 uwEnc2DnaseInputs ~/kent/src/hg/lib/clusterInputEapDnase.sql uwEnc2DnaseInputs.tab
-
-    # Also add RA treatment (not official ENCODE term) to treatment table
-
-
-# Rename tables for user friendliness, i.e. include metadata (as in hg19)
-
-
+    # create term/description tab sep file (currently just treatments in UW DNase)
+    #cd /hive/data/genomes/hg38/bed/uwDnase1
+    #cd cells
+    #tail -n +2 treatments.tab | \
+        #nl -v 0 | \
+        #hgLoadSqlTab hgFixed wgEncodeTreatment ~/kent/src/hg/lib/encode/wgEncodeTreatment.sql stdin
 
 
