@@ -22,6 +22,7 @@
 #include "hui.h"
 #include "hgColors.h"
 #include "web.h"
+#include "tablesTables.h"
 #include "jsHelper.h"
 
 /* Global vars */
@@ -149,194 +150,59 @@ hashFree(&hash);
 return count;
 }
 
-struct tagStorm *tagStormFromCdwFileTags(struct sqlConnection *conn, char *query)
-/* Query our relationalized version and return just the non-null items */
-{
-struct sqlResult *sr = sqlGetResult(conn, query);
-struct slName *field, *fieldList = NULL;
-char *name;
-while ((name = sqlFieldName(sr)) != NULL)
-    {
-    slNameAddHead(&fieldList, name);
-    }
-slReverse(&fieldList);
-
-char **row;
-struct tagStorm *tags = tagStormNew("cdw.cdwFileTags");
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct tagStanza *stanza = tagStanzaNew(tags, NULL);
-    int rowIx=0;
-    for (field = fieldList; field != NULL; field = field->next, ++rowIx)
-        {
-	char *val = row[rowIx];
-	if (val != NULL)
-	    {
-	    tagStanzaAdd(tags, stanza, field->name, val);
-	    }
-	}
-    slReverse(&stanza->tagList);
-    }
-tagStormReverseAll(tags);
-return tags;
-}
-
-struct slName *sqlResultFieldList(struct sqlResult *sr)
-/* Return slName list of all fields */
-{
-struct slName *list = NULL;
-char *field;
-while ((field = sqlFieldName(sr)) != NULL)
-    slNameAddHead(&list, field);
-slReverse(&list);
-return list;
-}
-
-int sqlResultFieldArray(struct sqlResult *sr, char ***retArray)
-/* Get the fields of sqlResult,  returning count, and the results
- * themselves in *retArray. */
-{
-struct slName *el, *list = sqlResultFieldList(sr);
-int count = slCount(list);
-char **array;
-AllocArray(array, count);
-int i;
-for (el=list,i=0; el != NULL; el = el->next, ++i)
-    array[i] = cloneString(el->name);
-*retArray = array;
-return count;
-}
-
-struct fieldedTable *fieldedTableFromDbQuery(struct sqlConnection *conn, char *query)
-/* Return fieldedTable from a database query */
-{
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **fields;
-int fieldCount = sqlResultFieldArray(sr, &fields);
-struct fieldedTable *table = fieldedTableNew(query, fields, fieldCount);
-char **row;
-int i = 0;
-while ((row = sqlNextRow(sr)) != NULL)
-    fieldedTableAdd(table, row, fieldCount, ++i);
-sqlFreeResult(&sr);
-return table;
-}
-
-int slPairCmpNameNoCase(const void *va, const void *vb)
-/* Compare strings such as gene names that may have embedded numbers,
- * so that bmp4a comes before bmp14a */
-{
-const struct slPair *a = *((struct slPair **)va);
-const struct slPair *b = *((struct slPair **)vb);
-return strcasecmp(a->name, b->name);
-}
-
-int slPairCmpNumbers(const void *va, const void *vb)
-/* Compare slPairs where name is interpreted as floating point number */
-{
-const struct slPair *a = *((struct slPair **)va);
-const struct slPair *b = *((struct slPair **)vb);
-double aVal = atof(a->name);
-double bVal = atof(b->name);
-double diff = aVal - bVal;
-if (diff < 0)
-    return -1;
-else if (diff > 0)
-    return 1;
-else
-    return 0;
-}
-
-
-boolean fieldedTableColumnIsNumeric(struct fieldedTable *table, int fieldIx)
-/* Return TRUE if field has numeric values wherever non-null */
-{
-struct fieldedRow *fr;
-boolean anyVals = FALSE;
-for (fr = table->rowList; fr != NULL; fr = fr->next)
-    {
-    char *s = fr->row[fieldIx];
-    if (s != NULL)
-        {
-	anyVals = TRUE;
-	if (!isNumericString(s))
-	    return FALSE;
-	}
-    }
-return anyVals;
-}
-
-void fieldedTableSortOnField(struct fieldedTable *table, char *field, boolean doReverse)
-/* Sort on field */
-{
-/* Figure out field position */
-int fieldIx = stringArrayIx(field, table->fields, table->fieldCount);
-if (fieldIx < 0)
-    fieldIx = 0;
-boolean fieldIsNumeric = fieldedTableColumnIsNumeric(table, fieldIx);
-
-/* Make up pair list in local memory which points to rows */
-struct lm *lm = lmInit(0);
-struct slPair *pairList=NULL, *pair;
-struct fieldedRow *fr;
-for (fr = table->rowList; fr != NULL; fr = fr->next)
-    {
-    char *val = emptyForNull(fr->row[fieldIx]);
-    lmAllocVar(lm, pair);
-    pair->name = val;
-    pair->val = fr;
-    slAddHead(&pairList, pair);
-    }
-slReverse(&pairList);  
-
-/* Sort this list. */
-if (fieldIsNumeric)
-    slSort(&pairList, slPairCmpNumbers);
-else
-    slSort(&pairList, slPairCmpNameNoCase);
-if (doReverse)
-    slReverse(&pairList);
-
-/* Convert rowList to have same order. */
-struct fieldedRow *newList = NULL;
-for (pair = pairList; pair != NULL; pair = pair->next)
-    {
-    fr = pair->val;
-    slAddHead(&newList, fr);
-    }
-slReverse(&newList);
-table->rowList = newList;
-lmCleanup(&lm);
-}
-
 typedef void wrapHtmlPrint(char *tag, char *val);
-
-int fieldedTableMaxColChars(struct fieldedTable *table, int colIx)
-{
-if (colIx >= table->fieldCount)
-    errAbort("fieldedTableMaxColChars on %d, but only have %d columns", colIx, table->fieldCount);
-int max = strlen(table->fields[colIx]) + 1;
-struct fieldedRow *fr;
-for (fr = table->rowList; fr != NULL; fr = fr->next)
-    {
-    char *val = fr->row[colIx];
-    if (val != NULL)
-        {
-	int len = strlen(val);
-	if (len > max)
-	   max = len;
-	}
-    }
-return max;
-}
 
 struct sftSegment
 /* Information on a segment we're processing out of something larger */
     {
-    char *database;	// Name of database
     int tableSize;	// Size of larger structure
     int tableOffset;	// Where we are in larger structure
     };
+
+static void showTableFilterInstructionsEtc(struct fieldedTable *table, 
+    char *itemPlural, struct  sftSegment *largerContext)
+/* Print instructional text, and basic summary info on who passes filter, and a submit
+ * button just in case user needs it */
+{
+/* Print info on matching */
+int matchCount = slCount(table->rowList);
+if (largerContext != NULL)  // Need to page?
+     matchCount = largerContext->tableSize;
+printf(" %d %s found. ", matchCount, itemPlural);
+cgiMakeButton("submit", "update");
+
+
+printf("<BR>\n");
+printf("First row of table below, above labels, can be used to filter individual fields. ");    
+printf("Wildcard * and ? characters are allowed in text fields. ");
+printf("&GT;min or &LT;max, is allowed in numerical fields.<BR>\n");
+}
+
+static void showTableFilterControlRow(struct fieldedTable *table, struct cart *cart, 
+    char *varPrefix, int maxLenField)
+/* Assuming we are in table already drow control row */
+{
+printf("<TR>");
+int i;
+for (i=0; i<table->fieldCount; ++i)
+    {
+    char *field = table->fields[i];
+    char varName[256];
+    safef(varName, sizeof(varName), "%s_f_%s", varPrefix, field);
+    webPrintLinkCellStart();
+#ifdef MAKES_TOO_WIDE
+    char *oldVal = cartUsualString(cart, varName, "");
+    printf("<input type=\"text\" name=\"%s\" style=\"display:table-cell; width=100%%\""
+	   " value=\"%s\">", varName, oldVal);
+#endif /* MAKES_TOO_WIDE */
+    int size = fieldedTableMaxColChars(table, i);
+    if (size > maxLenField)
+	size = maxLenField;
+    cartMakeTextVar(cart, varName, "", size + 1);
+    webPrintLinkCellEnd();
+    }
+printf("</TR>");
+}
 
 void showFieldedTable(struct fieldedTable *table, 
     int pageSize, char *returnUrl, char *varPrefix,
@@ -352,48 +218,14 @@ if (strchr(returnUrl, '?') == NULL)
 
 
 if (withFilters)
-    {
-    /* Print info on matching */
-    int matchCount = slCount(table->rowList);
-    if (largerContext != NULL)  // Need to page?
-	 matchCount = largerContext->tableSize;
-    printf(" %d %s found. ", matchCount, itemPlural);
-    cgiMakeButton("submit", "update");
-
-
-    printf("<BR>\n");
-    printf("First row of table below, above labels, can be used to filter individual fields. ");    
-    printf("Wildcard * and ? characters are allowed in text fields. ");
-    printf("&GT;min or &LT;max, is allowed in numerical fields.<BR>\n");
-    }
+    showTableFilterInstructionsEtc(table, itemPlural, largerContext);
 
 /* Set up our table within table look. */
 webPrintLinkTableStart();
 
 /* Draw optional filters cells ahead of column labels*/
 if (withFilters)
-    {
-    printf("<TR>");
-    int i;
-    for (i=0; i<table->fieldCount; ++i)
-        {
-	char *field = table->fields[i];
-	char varName[256];
-	safef(varName, sizeof(varName), "%s_f_%s", varPrefix, field);
-	webPrintLinkCellStart();
-#ifdef MAKES_TOO_WIDE
-	char *oldVal = cartUsualString(cart, varName, "");
-	printf("<input type=\"text\" name=\"%s\" style=\"display:table-cell; width=100%%\""
-	       " value=\"%s\">", varName, oldVal);
-#endif /* MAKES_TOO_WIDE */
-	int size = fieldedTableMaxColChars(table, i);
-	if (size > maxLenField)
-	    size = maxLenField;
-	cartMakeTextVar(cart, varName, "", size + 1);
-	webPrintLinkCellEnd();
-	}
-    printf("</TR>");
-    }
+    showTableFilterControlRow(table, cart, varPrefix, maxLenField);
 
 /* Get order var */
 char orderVar[256];
@@ -622,7 +454,7 @@ dyStringFree(&countQuery);
 char pageVar[64];
 safef(pageVar, sizeof(pageVar), "%s_page", varPrefix);
 int page = 0;
-struct sftSegment context = { .database = "cdw", .tableSize=resultsSize};
+struct sftSegment context = { .tableSize=resultsSize};
 if (resultsSize > pageSize)
     {
     page = cartUsualInt(cart, pageVar, 0) - 1;
@@ -1196,7 +1028,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.21");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.22");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
