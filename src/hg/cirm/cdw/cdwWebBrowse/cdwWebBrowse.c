@@ -383,17 +383,9 @@ freez(&escapedQuery);
 printf("\">%s</A>", val);
 }
 
-#ifdef COMPARE
-void showFieldedTable(struct fieldedTable *table, 
-    int pageSize, char *returnUrl, char *varPrefix,
-    boolean withFilters, char *itemPlural, int maxLenField, struct hash *tagOutputWrappers, 
-    struct sftSegment *largerContext)
-#endif /* COMPARE */
-
-void showSqlFieldsWhere(struct sqlConnection *conn, char *itemPlural, 
-    char *fields, char *from, char *initialWhere,  
-    int pageSize, char *returnUrl, char *varPrefix, int maxFieldWidth, boolean withFilters, 
-    struct hash *tagOutWrappers)
+void showSqlFieldsWhere(struct sqlConnection *conn, char *fields, char *from, char *initialWhere,  
+    int pageSize, char *returnUrl, char *varPrefix, boolean withFilters, char *itemPlural, 
+    int maxFieldWidth, struct hash *tagOutWrappers)
 /* Given a query to the database in conn that is basically a select query broken into
  * separate clauses, construct and display an HTML table around results. This HTML table has
  * column names that will sort the table, and optionally (if withFilters is set)
@@ -635,10 +627,12 @@ if (!isEmpty(where))
     }
 struct hash *wrappers = hashNew(0);
 hashAdd(wrappers, "file_name", wrapFileName);
-showSqlFieldsWhere(conn, "files", 
+showSqlFieldsWhere(conn, 
     "file_name,file_size,lab,assay,data_set_id,output,format,read_size,item_count,"
-    "species,body_part",
-    "cdwFileTags", where, 100, returnUrl, "cdwBrowseFiles", 18, TRUE, wrappers);
+           "species,body_part",
+    "cdwFileTags", where, 
+    100, returnUrl, "cdwBrowseFiles", TRUE, "files", 
+    18, wrappers);
 printf("</FORM>\n");
 }
 
@@ -704,10 +698,12 @@ char *where = "fileId=file_id and format in ('bam','bigBed', 'bigWig', 'vcf', 'n
 struct hash *wrappers = hashNew(0);
 wrapperConn = conn;
 hashAdd(wrappers, "accession", wrapTrackAccession);
-showSqlFieldsWhere(conn, "tracks", 
+showSqlFieldsWhere(conn, 
     "accession,ucsc_db,format,file_size,lab,assay,data_set_id,output,"
     "body_part,submit_file_name",
-    "cdwFileTags,cdwTrackViz", where, 100, returnUrl, "cdwBrowseTracks", 30, TRUE, wrappers);
+    "cdwFileTags,cdwTrackViz", where, 
+    100, returnUrl, "cdwBrowseTracks", TRUE, "tracks", 
+    30, wrappers);
 printf("</FORM>\n");
 }
 
@@ -1064,7 +1060,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.22");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.23");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
