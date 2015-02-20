@@ -1362,6 +1362,9 @@ void pgSnpMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemNam
 void gvfMethods(struct track *tg);
 /* Load GVF variant data. */
 
+void gtexGeneMethods(struct track *tg);
+/* Gene-Tissue Expression (GTEX) gene track*/
+
 void messageLineMethods(struct track *track);
 /* Methods for drawing a single-height message line instead of track items,
  * e.g. if source was compiled without a necessary library. */

@@ -1,3 +1,9 @@
+track gtexGene
+type bed 6 +
+shortLabel GTEX
+longLabel GTEX Gene-Tissue Median Expression
+group expression
+
 # ENCODE tracks
 include trackDb.encode.ra
 
