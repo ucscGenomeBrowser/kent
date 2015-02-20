@@ -443,7 +443,8 @@ void makeValidRcc(struct sqlConnection *conn, char *path, struct cdwFile *ef, st
 cdwValidateRcc(path);
 }
 
-void makeValidIdat(struct sqlConnection *conn, char *path, struct cdwFile *ef, struct cdwValidFile *vf)
+void makeValidIdat(struct sqlConnection *conn, char *path, 
+    struct cdwFile *ef, struct cdwValidFile *vf)
 /* Fill in info about a illumina idac file. */
 {
 cdwValidateIdat(path);
@@ -453,6 +454,23 @@ void makeValidPdf(struct sqlConnection *conn, char *path, struct cdwFile *ef, st
 /* Check it is really pdf. */
 {
 cdwValidatePdf(path);
+}
+
+void validateVcfGzTbi(struct sqlConnection *conn, char *path, 
+    struct cdwFile *ef, struct cdwValidFile *vf)
+/* Given a path to a tabix on a vcf, validate it is tabix, and that the 
+ * vcf it refers to exists and has correct name */
+{
+char dir[PATH_LEN], name[FILENAME_LEN], extension[FILEEXT_LEN];
+splitPath(path, dir, name, extension);
+char vcfPath[PATH_LEN];
+safef(vcfPath, sizeof(vcfPath), "%s%s%s", dir, name, extension);
+if (!fileExists(vcfPath))
+    {
+    /* Look for it under cdwPathName */
+    if (!cdwFindInSameSubmitDir(conn, ef, vcfPath))
+	errAbort("%s, the original of %s doesn't exist", vcfPath, path);
+    }
 }
 
 void makeValidCustomTrack(struct sqlConnection *conn, char *path, 
@@ -581,6 +599,11 @@ if (vf->format)	// We only can validate if we have something for format
 	makeValidBam(conn, path, ef, assembly, vf);
 	suffix = ".bam";
 	}
+    else if (sameString(format, "bam.bai"))
+        {
+	cdwValidateBamIndex(path);
+	suffix = ".bam.bai";
+	}
     else if (sameString(format, "2bit"))
         {
 	makeValid2Bit(conn, path, ef, vf);
@@ -621,7 +644,15 @@ if (vf->format)	// We only can validate if we have something for format
     else if (sameString(format, "vcf"))
         {
 	makeValidVcf(conn, path, ef, vf);
-	suffix = ".vcf";
+	if (endsWith(ef->submitFileName, ".gz"))
+	    suffix = ".vcf.gz";
+	else
+	    suffix = ".vcf";
+	}
+    else if (sameString(format, "vcf.gz.tbi"))
+        {
+	validateVcfGzTbi(conn, path, ef, vf);
+	suffix = ".vcf.gz.tbi";
 	}
     else if (sameString(format, "cram"))
         {
