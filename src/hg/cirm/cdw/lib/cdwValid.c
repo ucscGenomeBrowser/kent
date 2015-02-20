@@ -129,6 +129,13 @@ if (!fileStartsWithOneOfPair(path, "\xff\xd8\xff\xe0", "\xff\xd8\xff\xe1"))
     errAbort("%s is not a valid .jpeg file", fileNameOnly(path));
 }
 
+void cdwValidateBamIndex(char *path)
+/* Check .bam.bai really is index. */
+{
+if (!fileStartsWithOneOfPair(path, "BAI", "BAI"))
+    errAbort("%s is not a valid .bam.bai file", fileNameOnly(path));
+}
+
 boolean cdwIsGzipped(char *path)
 /* Return TRUE if file at path starts with GZIP signature */
 {
