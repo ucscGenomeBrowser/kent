@@ -25,7 +25,7 @@
  * The file is interpreted so that lower level stanzas inherit tags from higher level ones.
  * This file might be used as so:
  *   struct tagStorm *tags = tagStormFromFile("metadata.txt");
- *   struct hash *fileIndex = tagStormIndexUnique(tags, "file");
+ *   struct hash *fileIndex = tagStormUniqueIndex(tags, "file");
  *   struct tagStanza *stanza = hashMustFindVal(fileIndex,"hg19/chipSeq/helaCTCF.broadPeak.bigBed");
  *   char *target = tagFindVal(stanza, "target");	// Target is CTCF
  *
