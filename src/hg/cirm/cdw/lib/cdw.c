@@ -5471,5 +5471,180 @@ fprintf(f, "%d", el->pid);
 fputc(lastSep,f);
 }
 
+
+char *cdwTrackVizCommaSepFieldNames = "id,fileId,shortLabel,longLabel,type,bigDataFile";
+
+void cdwTrackVizStaticLoad(char **row, struct cdwTrackViz *ret)
+/* Load a row from cdwTrackViz table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+ret->fileId = sqlUnsigned(row[1]);
+ret->shortLabel = row[2];
+ret->longLabel = row[3];
+ret->type = row[4];
+ret->bigDataFile = row[5];
+}
+
+struct cdwTrackViz *cdwTrackVizLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all cdwTrackViz from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with cdwTrackVizFreeList(). */
+{
+struct cdwTrackViz *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = cdwTrackVizLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void cdwTrackVizSaveToDb(struct sqlConnection *conn, struct cdwTrackViz *el, char *tableName, int updateSize)
+/* Save cdwTrackViz as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,'%s','%s','%s','%s')", 
+	tableName,  el->id,  el->fileId,  el->shortLabel,  el->longLabel,  el->type,  el->bigDataFile);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+struct cdwTrackViz *cdwTrackVizLoad(char **row)
+/* Load a cdwTrackViz from row fetched with select * from cdwTrackViz
+ * from database.  Dispose of this with cdwTrackVizFree(). */
+{
+struct cdwTrackViz *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+ret->fileId = sqlUnsigned(row[1]);
+ret->shortLabel = cloneString(row[2]);
+ret->longLabel = cloneString(row[3]);
+ret->type = cloneString(row[4]);
+ret->bigDataFile = cloneString(row[5]);
+return ret;
+}
+
+struct cdwTrackViz *cdwTrackVizLoadAll(char *fileName) 
+/* Load all cdwTrackViz from a whitespace-separated file.
+ * Dispose of this with cdwTrackVizFreeList(). */
+{
+struct cdwTrackViz *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[6];
+
+while (lineFileRow(lf, row))
+    {
+    el = cdwTrackVizLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct cdwTrackViz *cdwTrackVizLoadAllByChar(char *fileName, char chopper) 
+/* Load all cdwTrackViz from a chopper separated file.
+ * Dispose of this with cdwTrackVizFreeList(). */
+{
+struct cdwTrackViz *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[6];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = cdwTrackVizLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct cdwTrackViz *cdwTrackVizCommaIn(char **pS, struct cdwTrackViz *ret)
+/* Create a cdwTrackViz out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new cdwTrackViz */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->fileId = sqlUnsignedComma(&s);
+ret->shortLabel = sqlStringComma(&s);
+ret->longLabel = sqlStringComma(&s);
+ret->type = sqlStringComma(&s);
+ret->bigDataFile = sqlStringComma(&s);
+*pS = s;
+return ret;
+}
+
+void cdwTrackVizFree(struct cdwTrackViz **pEl)
+/* Free a single dynamically allocated cdwTrackViz such as created
+ * with cdwTrackVizLoad(). */
+{
+struct cdwTrackViz *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->shortLabel);
+freeMem(el->longLabel);
+freeMem(el->type);
+freeMem(el->bigDataFile);
+freez(pEl);
+}
+
+void cdwTrackVizFreeList(struct cdwTrackViz **pList)
+/* Free a list of dynamically allocated cdwTrackViz's */
+{
+struct cdwTrackViz *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    cdwTrackVizFree(&el);
+    }
+*pList = NULL;
+}
+
+void cdwTrackVizOutput(struct cdwTrackViz *el, FILE *f, char sep, char lastSep) 
+/* Print out cdwTrackViz.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+fprintf(f, "%u", el->fileId);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->shortLabel);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->longLabel);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->type);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->bigDataFile);
+if (sep == ',') fputc('"',f);
+fputc(lastSep,f);
+}
+
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 

@@ -396,12 +396,23 @@ table cdwJob
 table cdwSubmitJob
 "A submission job to be run asynchronously and not too many all at once."
     (
-    uint id primary auto;    "Job id"
+    uint id primary auto;    "Submit id"
     lstring commandLine; "Command line of job"
     bigInt startTime; "Start time in seconds since 1970"
     bigInt endTime; "End time in seconds since 1970"
     lstring stderr; "The output to stderr of the run - may be nonempty even with success"
     int returnCode; "The return code from system command - 0 for success"
     int pid;	"Process ID for running processes"
+    )
+
+table cdwTrackViz
+"Some files can be visualized as a track. Stuff to help define that track goes here."
+    (
+    uint id primary auto; "Id of this row in the table"
+    uint fileId;	"File this is a viz of"
+    string shortLabel;	"Up to 17 char label for track"
+    string longLabel; "Up to 100 char label for track"
+    string type;  "One of the customTrack types such as bam,vcfTabix,bigWig,bigBed"
+    string bigDataFile; "Where big data file lives relative to cdwRootDir"
     )
 
