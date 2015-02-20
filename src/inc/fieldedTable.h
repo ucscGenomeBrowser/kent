@@ -40,6 +40,15 @@ struct fieldedTable *fieldedTableFromTabFile(char *fileName, char *url, char *re
  * should be the same as fileName for most purposes.  This is used by edwSubmit though which
  * first copies to a local file, and we want to report errors from the url. */
 
+boolean fieldedTableColumnIsNumeric(struct fieldedTable *table, int fieldIx);
+/* Return TRUE if field has numeric values wherever non-null */
+
+int fieldedTableMaxColChars(struct fieldedTable *table, int colIx);
+/* Calculate the maximum number of characters in a cell for a column */
+
+void fieldedTableSortOnField(struct fieldedTable *table, char *field, boolean doReverse);
+/* Sort on field.  Distinguishes between numerical and text fields appropriately.  */
+
 struct hash *fieldedTableIndex(struct fieldedTable *table, char *field);
 /* Return hash of fieldedRows keyed by values of given field */
 
