@@ -25333,7 +25333,7 @@ else if (sameWord(table, "transRegCodeProbe"))
     doTransRegCodeProbe(tdb, item, "transRegCode", "transRegCodeMotif",
                         "transRegCodeCondition", "growthCondition");
     }
-else if (startsWith("wgEncodeRegDnaseClustered", table))
+else if (startsWith("wgEncodeRegDnaseClustered", tdb->track))
     {
     doPeakClusters(tdb, item);
     }
