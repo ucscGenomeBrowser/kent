@@ -63,7 +63,7 @@ hashElFreeList(&helList);
 return dy;
 }
 
-long long sumCounts(struct hash *hash)
+static long long sumCounts(struct hash *hash)
 /* Figuring hash is integer valued, return sum of all vals in hash */
 {
 long long total = 0;
@@ -76,7 +76,6 @@ for (hel = helList; hel != NULL; hel = hel->next)
 hashElFreeList(&helList);
 return total;
 }
-
 
 static int matchCount = 0;
 static boolean doSelect = FALSE;
@@ -114,7 +113,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     }
 }
 
-void showMatching(char *rqlQuery, int limit, struct tagStorm *tags)
+void showMatchingAsRa(char *rqlQuery, int limit, struct tagStorm *tags)
 /* Show stanzas that match query */
 {
 struct dyString *dy = dyStringCreate("%s", rqlQuery);
@@ -204,29 +203,10 @@ for (i=0; i<table->fieldCount; ++i)
 printf("</TR>");
 }
 
-void showFieldedTable(struct fieldedTable *table, 
-    int pageSize, char *returnUrl, char *varPrefix,
-    boolean withFilters, char *itemPlural, int maxLenField, struct hash *htmlOutputWrappers, 
-    struct sftSegment *largerContext)
-/* Show a fielded table that can be sorted by clicking on column labels and optionally
- * that includes a row of filter controls above the labels .
- * The maxLenField is maximum character length of field before truncation with ...
- * Pass in 0 for no max*/
+void showTableSortingLabelRow(struct fieldedTable *table, struct cart *cart, char *varPrefix,
+    char *returnUrl)
+/* Put up the label row with sorting fields attached.  ALso actually sort table.  */
 {
-if (strchr(returnUrl, '?') == NULL)
-     errAbort("Expecting returnUrl to include ? in showFieldedTable\nIt's %s", returnUrl);
-
-
-if (withFilters)
-    showTableFilterInstructionsEtc(table, itemPlural, largerContext);
-
-/* Set up our table within table look. */
-webPrintLinkTableStart();
-
-/* Draw optional filters cells ahead of column labels*/
-if (withFilters)
-    showTableFilterControlRow(table, cart, varPrefix, maxLenField);
-
 /* Get order var */
 char orderVar[256];
 safef(orderVar, sizeof(orderVar), "%s_order", varPrefix);
@@ -266,8 +246,12 @@ if (!isEmpty(orderFields))
 	}
     fieldedTableSortOnField(table, field, doReverse);
     }
+}
 
+void showTableDataRows(struct fieldedTable *table, int pageSize, int maxLenField,
+    struct hash *htmlOutputWrappers)
 /* Render data rows into HTML */
+{
 int count = 0;
 struct fieldedRow *row;
 for (row = table->rowList; row != NULL; row = row->next)
@@ -310,10 +294,12 @@ for (row = table->rowList; row != NULL; row = row->next)
 	}
     printf("</TR>\n");
     }
+}
 
-/* Get rid of table within table look */
-webPrintLinkTableEnd();
-
+void showTablePaging(struct fieldedTable *table, struct cart *cart, char *varPrefix,
+    struct sftSegment *largerContext, int pageSize)
+/* If larger context exists and is bigger than current display, then draw paging controls. */
+{
 /* Handle paging if any */
 if (largerContext != NULL)  // Need to page?
      {
@@ -331,6 +317,39 @@ if (largerContext != NULL)  // Need to page?
 	printf(" of %d", totalPages);
 	}
      }
+}
+
+void showFieldedTable(struct fieldedTable *table, 
+    int pageSize, char *returnUrl, char *varPrefix,
+    boolean withFilters, char *itemPlural, int maxLenField, struct hash *htmlOutputWrappers, 
+    struct sftSegment *largerContext)
+/* Show a fielded table that can be sorted by clicking on column labels and optionally
+ * that includes a row of filter controls above the labels .
+ * The maxLenField is maximum character length of field before truncation with ...
+ * Pass in 0 for no max*/
+{
+if (strchr(returnUrl, '?') == NULL)
+     errAbort("Expecting returnUrl to include ? in showFieldedTable\nIt's %s", returnUrl);
+
+
+if (withFilters)
+    showTableFilterInstructionsEtc(table, itemPlural, largerContext);
+
+/* Set up our table within table look. */
+webPrintLinkTableStart();
+
+/* Draw optional filters cells ahead of column labels*/
+if (withFilters)
+    showTableFilterControlRow(table, cart, varPrefix, maxLenField);
+
+showTableSortingLabelRow(table, cart, varPrefix, returnUrl);
+showTableDataRows(table, pageSize, maxLenField, htmlOutputWrappers);
+
+/* Get rid of table within table look */
+webPrintLinkTableEnd();
+
+if (largerContext != NULL)
+    showTablePaging(table, cart, varPrefix, largerContext, pageSize);
 }
 
 
@@ -664,7 +683,7 @@ cgiMakeHiddenVar("cdwCommand", "browseTracks");
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseTracks&%s",
     cartSidUrlString(cart) );
-char *where = "fileId=file_id and format in ('bam','bigBed', 'bigWig', 'vcf')";
+char *where = "fileId=file_id and format in ('bam','bigBed', 'bigWig', 'vcf', 'narrowPeak', 'broadPeak')";
 struct hash *wrappers = hashNew(0);
 wrapperConn = conn;
 hashAdd(wrappers, "accession", wrapTrackAccession);
@@ -806,7 +825,7 @@ cgiMakeSubmitButton();
 printf("<PRE><TT>");
 printLongWithCommas(stdout, matchCount);
 printf(" files match\n\n");
-showMatching(rqlQuery->string, limit, tags);
+showMatchingAsRa(rqlQuery->string, limit, tags);
 printf("</TT></PRE>\n");
 printf("</FORM>\n");
 }
