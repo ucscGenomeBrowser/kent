@@ -159,6 +159,7 @@ struct gtexTissueData *gtexData;
 struct sqlConnection *connFixed = sqlConnect("hgFixed");
 sqlSafef(query, sizeof(query),"SELECT * from %s%s", GTEX_TISSUE_DATA_TABLE, gtexVersion);
 sr = sqlGetResult(connFixed, query);
+float maxVal = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     gtexData = gtexTissueDataLoad(row);
@@ -194,6 +195,12 @@ while ((row = sqlNextRow(sr)) != NULL)
         warn("Can't find transcript %s in wgEncodeGencodeAttrs%s", transcriptId, gtexVersion);
         continue;
         }
+     int i;
+    if (geneBed->expScores[0] > 0)
+        {
+        for (i=0; i<geneBed->expCount; i++)
+            maxVal = (geneBed->expScores[i] > maxVal ? geneBed->expScores[i] : maxVal);
+        }
     geneBed->transcriptClass = ga->transcriptClass;
     geneBed->name = ga->geneName;
     slAddHead(&geneBeds, geneBed);
@@ -221,6 +228,7 @@ if (doLoad)
     }
 
 sqlDisconnect(&conn);
+printf("Max score: %f\n", maxVal);
 }
 
 int main(int argc, char *argv[])
