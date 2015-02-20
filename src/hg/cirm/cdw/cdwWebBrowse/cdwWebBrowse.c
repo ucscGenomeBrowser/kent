@@ -534,7 +534,8 @@ printf("\">%s</A>", val);
 
 void showFieldsWhere(struct sqlConnection *conn, char *itemPlural, char *fields, 
     char *from, char *initialWhere,  
-    int pageSize, char *returnUrl, char *varPrefix, boolean withFilters, struct hash *tagOutWrappers)
+    int pageSize, char *returnUrl, char *varPrefix, int maxFieldWidth, boolean withFilters, 
+    struct hash *tagOutWrappers)
 /* Construct query and display results as a table */
 {
 struct dyString *query = dyStringNew(0);
@@ -636,7 +637,7 @@ if (resultsSize > pageSize)
 
 struct fieldedTable *table = fieldedTableFromDbQuery(conn, query->string);
 showFieldedTable(table, pageSize, returnUrl, varPrefix, withFilters, itemPlural,
-    18, tagOutWrappers, &context);
+    maxFieldWidth, tagOutWrappers, &context);
 fieldedTableFree(&table);
 
 dyStringFree(&query);
@@ -769,11 +770,9 @@ hashAdd(wrappers, "file_name", wrapFileName);
 showFieldsWhere(conn, "files", 
     "file_name,file_size,lab,assay,data_set_id,output,format,read_size,item_count,"
     "species,body_part",
-    "cdwFileTags", where, 100, returnUrl, "cdwBrowseFiles", TRUE, wrappers);
+    "cdwFileTags", where, 100, returnUrl, "cdwBrowseFiles", 18, TRUE, wrappers);
 printf("</FORM>\n");
 }
-
-struct sqlConnection *wrapperConn;
 
 struct dyString *customTextForFile(struct sqlConnection *conn, struct cdwTrackViz *viz)
 /* Create custom track text */
@@ -794,6 +793,8 @@ sqlSafef(query, sizeof(query), "select * from cdwTrackViz where fileId=%lld", fi
 return cdwTrackVizLoadByQuery(conn, query);
 }
 
+static struct sqlConnection *wrapperConn;
+
 void wrapTrackAccession(char *tag, char *val)
 /* Write out wrapper to link us to genome browser */
 {
@@ -808,10 +809,11 @@ if (vf != NULL)
 	struct dyString *track = customTextForFile(conn, viz);
 	char *encoded = cgiEncode(track->string);
 	printf("<A HREF=\"../cgi-bin/hgTracks");
-	printf("?db=%s", vf->ucscDb);
+	printf("?%s", cartSidUrlString(cart));
+	printf("&db=%s", vf->ucscDb);
 	printf("&hgt.customText=");
 	printf("%s", encoded);
-	printf("\" target=\"_blank\">");	       // Finish HREF quote and A tag
+	printf("\">");	       // Finish HREF quote and A tag
 	printf("%s</A>", val);
 	freez(&encoded);
 	dyStringFree(&track);
@@ -836,8 +838,8 @@ wrapperConn = conn;
 hashAdd(wrappers, "accession", wrapTrackAccession);
 showFieldsWhere(conn, "tracks", 
     "accession,ucsc_db,format,file_size,lab,assay,data_set_id,output,"
-    "strain,lab_quake_markers,body_part,submit_file_name",
-    "cdwFileTags,cdwTrackViz", where, 100, returnUrl, "cdwBrowseTracks", TRUE, wrappers);
+    "body_part,submit_file_name",
+    "cdwFileTags,cdwTrackViz", where, 100, returnUrl, "cdwBrowseTracks", 30, TRUE, wrappers);
 printf("</FORM>\n");
 }
 
@@ -1139,7 +1141,7 @@ else if (sameString(command, "help"))
     }
 else
     {
-    uglyf("unrecognized command %s<BR>\n", command);
+    printf("unrecognized command %s<BR>\n", command);
     }
 }
 
@@ -1194,7 +1196,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.20");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.21");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
