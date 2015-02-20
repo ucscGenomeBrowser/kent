@@ -125,7 +125,7 @@ struct rqlStatement *rql = rqlStatementParseString(dy->string);
 /* Get list of all tag types in tree and use it to expand wildcards in the query
  * field list. */
 struct slName *allFieldList = tagStormFieldList(tags);
-slSort(&allFieldList, slNameCmp);
+slSort(&allFieldList, slNameCmpCase);
 rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
 
 /* Traverse tag tree outputting when rql statement matches in select case, just
@@ -222,13 +222,13 @@ sqlFreeResult(&sr);
 return table;
 }
 
-int slPairCmpName(const void *va, const void *vb)
+int slPairCmpNameNoCase(const void *va, const void *vb)
 /* Compare strings such as gene names that may have embedded numbers,
  * so that bmp4a comes before bmp14a */
 {
 const struct slPair *a = *((struct slPair **)va);
 const struct slPair *b = *((struct slPair **)vb);
-return strcmp(a->name, b->name);
+return strcasecmp(a->name, b->name);
 }
 
 int slPairCmpNumbers(const void *va, const void *vb)
@@ -293,7 +293,7 @@ slReverse(&pairList);
 if (fieldIsNumeric)
     slSort(&pairList, slPairCmpNumbers);
 else
-    slSort(&pairList, slPairCmpName);
+    slSort(&pairList, slPairCmpNameNoCase);
 if (doReverse)
     slReverse(&pairList);
 
