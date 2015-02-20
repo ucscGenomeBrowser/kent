@@ -374,8 +374,15 @@ char **sqlNextRow(struct sqlResult *sr);
  * will then return a NULL row. */
 
 char* sqlFieldName(struct sqlResult *sr);
-/* repeated calls to this function returns the names of the fields
- * the given result */
+/* Repeated calls to this function returns the names of the fields
+ * the given result. */
+
+struct slName *sqlResultFieldList(struct sqlResult *sr);
+/* Return slName list of all fields in query.  Can just be done once per query. */
+
+int sqlResultFieldArray(struct sqlResult *sr, char ***retArray);
+/* Get the fields of sqlResult,  returning count, and the results
+ * themselves in *retArray. */
 
 int sqlFieldColumn(struct sqlResult *sr, char *colName);
 /* get the column number of the specified field in the result, or
