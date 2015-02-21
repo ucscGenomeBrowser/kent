@@ -22,7 +22,7 @@ longLabel DNase I Hypersensitivity in 95 cell types from ENCODE
 pennantIcon encodeThumbnail.jpg ../ENCODE "ENCODE project at UCSC"
 group regulation
 showSubtrackColorOnUi on
-subGroup1 view Views Hot=Hotspots Peaks=Peaks Signal=Signal
+subGroup1 view Views a_Peaks=Peaks b_Hot=Hotspots c_Signal=Signal
 subGroup2 cellType Cell_Type Monocytes_CD14_RO01746=Monocytes-CD14+_RO01746 NT2-D1=NT2-D1 LHCN-M2=LHCN-M2 HRCEpiC=HRCEpiC AoAF=AoAF Th2=Th2 Th1=Th1 HL-60=HL-60 HCFaa=HCFaa HMVEC-dLy-Ad=HMVEC-dLy-Ad HeLa-S3=HeLa-S3 Jurkat=Jurkat HAEpiC=HAEpiC HBVSMC=HBVSMC HFF-Myc=HFF-Myc GM06990=GM06990 HMVEC-LLy=HMVEC-LLy H7-hESC=H7-hESC HBMEC=HBMEC HMVEC-LBl=HMVEC-LBl MCF-7=MCF-7 HRPEpiC=HRPEpiC A549=A549 PANC-1=PANC-1 HPdLF=HPdLF T-47D=T-47D SK-N-SH_RA=SK-N-SH_RA HConF=HConF HVMF=HVMF NB4=NB4 HepG2=HepG2 GM12878=GM12878 GM12865=GM12865 PrEC=PrEC HSMM=HSMM NHDF-Ad=NHDF-Ad HRE=HRE HPF=HPF HMF=HMF HGF=HGF HFF=HFF HAc=HAc HCM=HCM HCF=HCF HPAF=HPAF HMVEC-dBl-Ad=HMVEC-dBl-Ad NHDF-neo=NHDF-neo K562=K562 RPMI-7951=RPMI-7951 HCPEpiC=HCPEpiC HMEC=HMEC HRGEC=HRGEC NHLF=NHLF NHEK=NHEK SKMC=SKMC NH-A=NH-A HMVEC-dNeo=HMVEC-dNeo RPTEC=RPTEC WI-38=WI-38 AG04449=AG04449 AG04450=AG04450 GM04504=GM04504 GM04503=GM04503 HUVEC=HUVEC AG10803=AG10803 HCT-116=HCT-116 bone_marrow_MSC=bone_marrow_MSC NHBE_RA=NHBE_RA HEEpiC=HEEpiC HMVEC-dAd=HMVEC-dAd WERI-Rb-1=WERI-Rb-1 AG09319=AG09319 AG09309=AG09309 SAEC=SAEC HA-h=HA-h BE2_C=BE2_C HNPCEpiC=HNPCEpiC SK-N-MC=SK-N-MC Caco-2=Caco-2 HMVEC-dBl-Neo=HMVEC-dBl-Neo LNCaP=LNCaP HMVEC-dLy-Neo=HMVEC-dLy-Neo HSMMtube=HSMMtube BJ=BJ CD20_RO01778=CD20+_RO01778 Th1_Wb54553204=Th1_Wb54553204 M059J=M059J HA-sp=HA-sp HIPEpiC=HIPEpiC
 subGroup3 treatment Treatment diffProtA_5d=diffProtA_5d diffProtA_14d=diffProtA_14d DIFF_4d=DIFF_4d n_a=n/a OHTAM_20nM_72hr=4OHTAM_20nM_72hr Estradiol_ctrl_0hr=Estradiol_ctrl_0hr Estradiol_100nM_1hr=Estradiol_100nM_1hr
 subGroup4 tissue Tissue kidney=kidney esophagus=esophagus cervix=cervix skin=skin lung=lung heart=heart colon=colon blood=blood prostate=prostate embryo=embryo pancreas=pancreas breast=breast bone_marrow=bone_marrow periodontum=periodontum muscle=muscle brain=brain blood_vessel=blood_vessel spinal_cord=spinal_cord placenta=placenta eye=eye liver=liver periodontium=periodontium testis=testis
@@ -42,7 +42,7 @@ priority 100.3
     track wgEncodeRegDnaseHotspot
     shortLabel Hotspots
     longLabel Hotspot5 hotspot calls on BWA. Dupe, sponge and mitochondria filtered
-    view Hot
+    view b_Hot
     visibility hide
     parent wgEncodeRegDnase
     scoreFilter 0
@@ -54,7 +54,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot on
 	shortLabel K562 Ht
 	longLabel K562 lymphoblast chronic myeloid leukemia (CML) cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=K562 treatment=n_a tissue=bone_marrow cancer=cancer
+	subGroups view=b_Hot cellType=K562 treatment=n_a tissue=bone_marrow cancer=cancer
 	type bigBed 6 +
 	color 255,85,85
 
@@ -62,7 +62,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel A549 Ht
 	longLabel A549 lung adenocarcinoma cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=A549 treatment=n_a tissue=lung cancer=cancer
+	subGroups view=b_Hot cellType=A549 treatment=n_a tissue=lung cancer=cancer
 	type bigBed 6 +
 	color 254,93,85
 
@@ -70,7 +70,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel LNCaP Ht
 	longLabel LNCaP prostate adenocarcinoma cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=LNCaP treatment=n_a tissue=prostate cancer=cancer
+	subGroups view=b_Hot cellType=LNCaP treatment=n_a tissue=prostate cancer=cancer
 	type bigBed 6 +
 	color 255,102,85
 
@@ -78,7 +78,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HMEC Ht
 	longLabel HMEC mammary epithelium DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HMEC treatment=n_a tissue=breast cancer=normal
+	subGroups view=b_Hot cellType=HMEC treatment=n_a tissue=breast cancer=normal
 	type bigBed 6 +
 	color 255,112,85
 
@@ -86,7 +86,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel T-47D Ht
 	longLabel T-47D mammary ductal carcinoma cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=T-47D treatment=n_a tissue=breast cancer=cancer
+	subGroups view=b_Hot cellType=T-47D treatment=n_a tissue=breast cancer=cancer
 	type bigBed 6 +
 	color 255,124,85
 
@@ -94,7 +94,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel PANC-1 Ht
 	longLabel PANC-1 pancreatic carcinoma cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=PANC-1 treatment=n_a tissue=pancreas cancer=cancer
+	subGroups view=b_Hot cellType=PANC-1 treatment=n_a tissue=pancreas cancer=cancer
 	type bigBed 6 +
 	color 255,141,85
 
@@ -102,7 +102,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HCT-116 Ht
 	longLabel HCT-116 colorectal carcinoma cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HCT-116 treatment=n_a tissue=colon cancer=cancer
+	subGroups view=b_Hot cellType=HCT-116 treatment=n_a tissue=colon cancer=cancer
 	type bigBed 6 +
 	color 255,150,85
 
@@ -110,7 +110,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel NHBE_RA Ht
 	longLabel NHBE_RA bronchial epithelium, RA treated DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=NHBE_RA treatment=n_a tissue=lung cancer=normal
+	subGroups view=b_Hot cellType=NHBE_RA treatment=n_a tissue=lung cancer=normal
 	type bigBed 6 +
 	color 255,154,85
 
@@ -118,7 +118,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HFF Ht
 	longLabel HFF foreskin fibroblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HFF treatment=n_a tissue=skin cancer=normal
+	subGroups view=b_Hot cellType=HFF treatment=n_a tissue=skin cancer=normal
 	type bigBed 6 +
 	color 255,163,85
 
@@ -126,7 +126,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HFF-Myc Ht
 	longLabel HFF-Myc foreskin fibroblast cell line, cMyc DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HFF-Myc treatment=n_a tissue=skin cancer=normal
+	subGroups view=b_Hot cellType=HFF-Myc treatment=n_a tissue=skin cancer=normal
 	type bigBed 6 +
 	color 255,165,85
 
@@ -134,7 +134,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel NT2-D1 Ht
 	longLabel NT2-D1 embryonal carcinoma (NTera2) cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=NT2-D1 treatment=n_a tissue=testis cancer=cancer
+	subGroups view=b_Hot cellType=NT2-D1 treatment=n_a tissue=testis cancer=cancer
 	type bigBed 6 +
 	color 255,173,85
 
@@ -142,7 +142,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel BJ Ht
 	longLabel BJ foreskin fibroblast cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=BJ treatment=n_a tissue=skin cancer=normal
+	subGroups view=b_Hot cellType=BJ treatment=n_a tissue=skin cancer=normal
 	type bigBed 6 +
 	color 255,184,85
 
@@ -150,7 +150,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel AG09309 Ht
 	longLabel AG09309 skin fibroblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=AG09309 treatment=n_a tissue=skin cancer=unknown
+	subGroups view=b_Hot cellType=AG09309 treatment=n_a tissue=skin cancer=unknown
 	type bigBed 6 +
 	color 255,186,85
 
@@ -158,7 +158,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HNPCEpiC Ht
 	longLabel HNPCEpiC non-pigmented ciliary epithelium (NPCEC) DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HNPCEpiC treatment=n_a tissue=eye cancer=normal
+	subGroups view=b_Hot cellType=HNPCEpiC treatment=n_a tissue=eye cancer=normal
 	type bigBed 6 +
 	color 255,188,85
 
@@ -166,7 +166,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel WI-38 Ht
 	longLabel WI-38 embryonic lung fibroblast cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=WI-38 treatment=n_a tissue=lung cancer=normal
+	subGroups view=b_Hot cellType=WI-38 treatment=n_a tissue=lung cancer=normal
 	type bigBed 6 +
 	color 255,192,85
 
@@ -174,7 +174,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel GM04503 Ht
 	longLabel GM04503 skin fibroblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=GM04503 treatment=n_a tissue=skin cancer=normal
+	subGroups view=b_Hot cellType=GM04503 treatment=n_a tissue=skin cancer=normal
 	type bigBed 6 +
 	color 255,200,85
 
@@ -182,7 +182,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel GM04504 Ht
 	longLabel GM04504 skin fibroblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=GM04504 treatment=n_a tissue=skin cancer=normal
+	subGroups view=b_Hot cellType=GM04504 treatment=n_a tissue=skin cancer=normal
 	type bigBed 6 +
 	color 255,204,85
 
@@ -190,7 +190,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot on
 	shortLabel NHLF Ht
 	longLabel NHLF lung fibroblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=NHLF treatment=n_a tissue=lung cancer=normal
+	subGroups view=b_Hot cellType=NHLF treatment=n_a tissue=lung cancer=normal
 	type bigBed 6 +
 	color 255,209,85
 
@@ -198,7 +198,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel NH-A Ht
 	longLabel NH-A astrocyte DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=NH-A treatment=n_a tissue=brain cancer=normal
+	subGroups view=b_Hot cellType=NH-A treatment=n_a tissue=brain cancer=normal
 	type bigBed 6 +
 	color 255,210,85
 
@@ -206,7 +206,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HBMEC Ht
 	longLabel HBMEC brain microvascular endothelial cell (MEC) DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HBMEC treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=b_Hot cellType=HBMEC treatment=n_a tissue=blood_vessel cancer=normal
 	type bigBed 6 +
 	color 255,214,85
 
@@ -214,7 +214,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel AG09319 Ht
 	longLabel AG09319 gingival fibroblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=AG09319 treatment=n_a tissue=periodontium cancer=normal
+	subGroups view=b_Hot cellType=AG09319 treatment=n_a tissue=periodontium cancer=normal
 	type bigBed 6 +
 	color 255,221,85
 
@@ -222,7 +222,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HPdLF Ht
 	longLabel HPdLF periodontal ligament fibroblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HPdLF treatment=n_a tissue=periodontium cancer=normal
+	subGroups view=b_Hot cellType=HPdLF treatment=n_a tissue=periodontium cancer=normal
 	type bigBed 6 +
 	color 255,224,85
 
@@ -230,7 +230,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HCF Ht
 	longLabel HCF cardiac fibroblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HCF treatment=n_a tissue=heart cancer=normal
+	subGroups view=b_Hot cellType=HCF treatment=n_a tissue=heart cancer=normal
 	type bigBed 6 +
 	color 255,229,85
 
@@ -238,7 +238,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HCM Ht
 	longLabel HCM cardiac myocyte DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HCM treatment=n_a tissue=heart cancer=normal
+	subGroups view=b_Hot cellType=HCM treatment=n_a tissue=heart cancer=normal
 	type bigBed 6 +
 	color 255,230,85
 
@@ -246,7 +246,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HPAF Ht
 	longLabel HPAF pulmonary artery fibroblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HPAF treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=b_Hot cellType=HPAF treatment=n_a tissue=blood_vessel cancer=normal
 	type bigBed 6 +
 	color 255,232,85
 
@@ -254,7 +254,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel AoAF Ht
 	longLabel AoAF aorta fibroblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=AoAF treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=b_Hot cellType=AoAF treatment=n_a tissue=blood_vessel cancer=normal
 	type bigBed 6 +
 	color 255,236,85
 
@@ -262,7 +262,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HCPEpiC Ht
 	longLabel HCPEpiC choroid plexus epithelium DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HCPEpiC treatment=n_a tissue=brain cancer=normal
+	subGroups view=b_Hot cellType=HCPEpiC treatment=n_a tissue=brain cancer=normal
 	type bigBed 6 +
 	color 255,242,85
 
@@ -270,7 +270,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HPF Ht
 	longLabel HPF pulmonary fibroblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HPF treatment=n_a tissue=lung cancer=normal
+	subGroups view=b_Hot cellType=HPF treatment=n_a tissue=lung cancer=normal
 	type bigBed 6 +
 	color 255,247,85
 
@@ -278,7 +278,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HConF Ht
 	longLabel HConF conjunctival fibroblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HConF treatment=n_a tissue=eye cancer=unknown
+	subGroups view=b_Hot cellType=HConF treatment=n_a tissue=eye cancer=unknown
 	type bigBed 6 +
 	color 255,252,85
 
@@ -286,7 +286,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HAc Ht
 	longLabel HAc cerebellar astrocyte DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HAc treatment=n_a tissue=brain cancer=normal
+	subGroups view=b_Hot cellType=HAc treatment=n_a tissue=brain cancer=normal
 	type bigBed 6 +
 	color 250,255,85
 
@@ -294,7 +294,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HVMF Ht
 	longLabel HVMF villous mesenchymal fibroblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HVMF treatment=n_a tissue=placenta cancer=normal
+	subGroups view=b_Hot cellType=HVMF treatment=n_a tissue=placenta cancer=normal
 	type bigBed 6 +
 	color 242,255,85
 
@@ -302,7 +302,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HIPEpiC Ht
 	longLabel HIPEpiC iris pigment epithelium DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HIPEpiC treatment=n_a tissue=eye cancer=normal
+	subGroups view=b_Hot cellType=HIPEpiC treatment=n_a tissue=eye cancer=normal
 	type bigBed 6 +
 	color 236,255,85
 
@@ -310,7 +310,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel bone_marrow_MSC Ht
 	longLabel bone_marrow_MSC bone marrow fibroblastoid DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=bone_marrow_MSC treatment=n_a tissue=bone_marrow cancer=normal
+	subGroups view=b_Hot cellType=bone_marrow_MSC treatment=n_a tissue=bone_marrow cancer=normal
 	type bigBed 6 +
 	color 228,255,85
 
@@ -318,7 +318,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel AG10803 Ht
 	longLabel AG10803 skin fibroblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=AG10803 treatment=n_a tissue=skin cancer=unknown
+	subGroups view=b_Hot cellType=AG10803 treatment=n_a tissue=skin cancer=unknown
 	type bigBed 6 +
 	color 220,255,85
 
@@ -326,7 +326,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HMF Ht
 	longLabel HMF mammary fibroblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HMF treatment=n_a tissue=breast cancer=unknown
+	subGroups view=b_Hot cellType=HMF treatment=n_a tissue=breast cancer=unknown
 	type bigBed 6 +
 	color 212,255,85
 
@@ -334,7 +334,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HGF Ht
 	longLabel HGF gingival fibroblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HGF treatment=n_a tissue=periodontum cancer=normal
+	subGroups view=b_Hot cellType=HGF treatment=n_a tissue=periodontum cancer=normal
 	type bigBed 6 +
 	color 204,255,85
 
@@ -342,7 +342,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel NHDF-neo Ht
 	longLabel NHDF-neo dermal fibroblast, neonate DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=NHDF-neo treatment=n_a tissue=skin cancer=normal
+	subGroups view=b_Hot cellType=NHDF-neo treatment=n_a tissue=skin cancer=normal
 	type bigBed 6 +
 	color 198,255,85
 
@@ -350,7 +350,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HAEpiC Ht
 	longLabel HAEpiC amniotic epithelium (AEC) DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HAEpiC treatment=n_a tissue=embryo cancer=normal
+	subGroups view=b_Hot cellType=HAEpiC treatment=n_a tissue=embryo cancer=normal
 	type bigBed 6 +
 	color 189,255,85
 
@@ -358,7 +358,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel SKMC Ht
 	longLabel SKMC skeletal muscle cell DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=SKMC treatment=n_a tissue=muscle cancer=normal
+	subGroups view=b_Hot cellType=SKMC treatment=n_a tissue=muscle cancer=normal
 	type bigBed 6 +
 	color 182,255,85
 
@@ -366,7 +366,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HBVSMC Ht
 	longLabel HBVSMC brain vascular smooth muscle DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HBVSMC treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=b_Hot cellType=HBVSMC treatment=n_a tissue=blood_vessel cancer=normal
 	type bigBed 6 +
 	color 176,255,85
 
@@ -374,7 +374,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel AG04449 Ht
 	longLabel AG04449 fetal skin fibroblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=AG04449 treatment=n_a tissue=skin cancer=normal
+	subGroups view=b_Hot cellType=AG04449 treatment=n_a tissue=skin cancer=normal
 	type bigBed 6 +
 	color 152,255,85
 
@@ -382,7 +382,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel AG04450 Ht
 	longLabel AG04450 fetal lung fibroblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=AG04450 treatment=n_a tissue=lung cancer=normal
+	subGroups view=b_Hot cellType=AG04450 treatment=n_a tissue=lung cancer=normal
 	type bigBed 6 +
 	color 144,255,85
 
@@ -390,7 +390,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HA-h Ht
 	longLabel HA-h hippocampal astrocyte DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HA-h treatment=n_a tissue=brain cancer=normal
+	subGroups view=b_Hot cellType=HA-h treatment=n_a tissue=brain cancer=normal
 	type bigBed 6 +
 	color 122,255,85
 
@@ -398,7 +398,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel M059J Ht
 	longLabel M059J glioblastoma cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=M059J treatment=n_a tissue=brain cancer=cancer
+	subGroups view=b_Hot cellType=M059J treatment=n_a tissue=brain cancer=cancer
 	type bigBed 6 +
 	color 96,255,85
 
@@ -406,7 +406,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel RPMI-7951 Ht
 	longLabel RPMI-7951 melanoma cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=RPMI-7951 treatment=n_a tissue=skin cancer=cancer
+	subGroups view=b_Hot cellType=RPMI-7951 treatment=n_a tissue=skin cancer=cancer
 	type bigBed 6 +
 	color 85,255,90
 
@@ -414,7 +414,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HA-sp Ht
 	longLabel HA-sp spinal cord astrocyte DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HA-sp treatment=n_a tissue=spinal_cord cancer=normal
+	subGroups view=b_Hot cellType=HA-sp treatment=n_a tissue=spinal_cord cancer=normal
 	type bigBed 6 +
 	color 85,255,124
 
@@ -422,7 +422,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HCFaa Ht
 	longLabel HCFaa cardiac fibroblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HCFaa treatment=n_a tissue=heart cancer=normal
+	subGroups view=b_Hot cellType=HCFaa treatment=n_a tissue=heart cancer=normal
 	type bigBed 6 +
 	color 85,255,150
 
@@ -430,7 +430,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel WI-38 40HTAM Ht
 	longLabel WI-38 embryonic lung fibroblast cell line (40HTAM) DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=WI-38 treatment=OHTAM_20nM_72hr tissue=lung cancer=normal
+	subGroups view=b_Hot cellType=WI-38 treatment=OHTAM_20nM_72hr tissue=lung cancer=normal
 	type bigBed 6 +
 	color 85,255,171
 
@@ -438,7 +438,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel NHDF-Ad Ht
 	longLabel NHDF-Ad dermal fibroblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=NHDF-Ad treatment=n_a tissue=skin cancer=normal
+	subGroups view=b_Hot cellType=NHDF-Ad treatment=n_a tissue=skin cancer=normal
 	type bigBed 6 +
 	color 85,255,180
 
@@ -446,7 +446,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot on
 	shortLabel HSMM Ht
 	longLabel HSMM skeletal muscle myoblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HSMM treatment=n_a tissue=muscle cancer=normal
+	subGroups view=b_Hot cellType=HSMM treatment=n_a tissue=muscle cancer=normal
 	type bigBed 6 +
 	color 85,255,190
 
@@ -454,7 +454,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel LHCN-M2 Ht
 	longLabel LHCN-M2 skeletal myoblast DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=LHCN-M2 treatment=n_a tissue=muscle cancer=unknown
+	subGroups view=b_Hot cellType=LHCN-M2 treatment=n_a tissue=muscle cancer=unknown
 	type bigBed 6 +
 	color 85,255,193
 
@@ -462,7 +462,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel LHCN-M2 diff 4d Ht
 	longLabel LHCN-M2 skeletal myoblast (diff 4d) DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=LHCN-M2 treatment=DIFF_4d tissue=muscle cancer=unknown
+	subGroups view=b_Hot cellType=LHCN-M2 treatment=DIFF_4d tissue=muscle cancer=unknown
 	type bigBed 6 +
 	color 85,255,198
 
@@ -470,7 +470,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HSMMtube Ht
 	longLabel HSMMtube skeletal muscle myotube DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HSMMtube treatment=n_a tissue=muscle cancer=normal
+	subGroups view=b_Hot cellType=HSMMtube treatment=n_a tissue=muscle cancer=normal
 	type bigBed 6 +
 	color 85,255,204
 
@@ -478,7 +478,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot on
 	shortLabel HUVEC Ht
 	longLabel HUVEC umbilical vein endothelial cell DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HUVEC treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=b_Hot cellType=HUVEC treatment=n_a tissue=blood_vessel cancer=normal
 	type bigBed 6 +
 	color 85,255,215
 
@@ -486,7 +486,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HMVEC-LBl Ht
 	longLabel HMVEC-LBl lung microvascular epithelium. blood DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HMVEC-LBl treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=b_Hot cellType=HMVEC-LBl treatment=n_a tissue=blood_vessel cancer=normal
 	type bigBed 6 +
 	color 85,255,220
 
@@ -494,7 +494,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HMVEC-dBl-Ad Ht
 	longLabel HMVEC-dBl-Ad dermal microvascular endothelial cell, blood DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HMVEC-dBl-Ad treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=b_Hot cellType=HMVEC-dBl-Ad treatment=n_a tissue=blood_vessel cancer=normal
 	type bigBed 6 +
 	color 85,255,224
 
@@ -502,7 +502,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HMVEC-dLy-Neo Ht
 	longLabel HMVEC-dLy-Neo dermal microvascular endothelial cell, neonate lymph DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HMVEC-dLy-Neo treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=b_Hot cellType=HMVEC-dLy-Neo treatment=n_a tissue=blood_vessel cancer=normal
 	type bigBed 6 +
 	color 85,255,226
 
@@ -510,7 +510,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HMVEC-dBl-Neo Ht
 	longLabel HMVEC-dBl-Neo dermal microvascular endothelial cell, neonate blood DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HMVEC-dBl-Neo treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=b_Hot cellType=HMVEC-dBl-Neo treatment=n_a tissue=blood_vessel cancer=normal
 	type bigBed 6 +
 	color 85,255,229
 
@@ -518,7 +518,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HRGEC Ht
 	longLabel HRGEC renal glomerular endothelial cell DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HRGEC treatment=n_a tissue=kidney cancer=normal
+	subGroups view=b_Hot cellType=HRGEC treatment=n_a tissue=kidney cancer=normal
 	type bigBed 6 +
 	color 85,255,232
 
@@ -526,7 +526,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HMVEC-LLy Ht
 	longLabel HMVEC-LLy lung microvascular endothelial cell, lymph DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HMVEC-LLy treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=b_Hot cellType=HMVEC-LLy treatment=n_a tissue=blood_vessel cancer=normal
 	type bigBed 6 +
 	color 85,255,243
 
@@ -534,7 +534,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HMVEC-dNeo Ht
 	longLabel HMVEC-dNeo dermal microvascular endothelial cell, neonate DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HMVEC-dNeo treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=b_Hot cellType=HMVEC-dNeo treatment=n_a tissue=blood_vessel cancer=normal
 	type bigBed 6 +
 	color 85,255,244
 
@@ -542,7 +542,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HMVEC-dAd Ht
 	longLabel HMVEC-dAd dermal microvascular endothelial cell DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HMVEC-dAd treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=b_Hot cellType=HMVEC-dAd treatment=n_a tissue=blood_vessel cancer=normal
 	type bigBed 6 +
 	color 85,255,246
 
@@ -550,7 +550,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HRCEpiC Ht
 	longLabel HRCEpiC renal cortical epithelium DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HRCEpiC treatment=n_a tissue=kidney cancer=normal
+	subGroups view=b_Hot cellType=HRCEpiC treatment=n_a tissue=kidney cancer=normal
 	type bigBed 6 +
 	color 85,251,255
 
@@ -558,7 +558,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HRE Ht
 	longLabel HRE renal epithelium DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HRE treatment=n_a tissue=kidney cancer=normal
+	subGroups view=b_Hot cellType=HRE treatment=n_a tissue=kidney cancer=normal
 	type bigBed 6 +
 	color 85,248,255
 
@@ -566,7 +566,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot on
 	shortLabel NHEK Ht
 	longLabel NHEK epidermal keratinocyte DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=NHEK treatment=n_a tissue=skin cancer=normal
+	subGroups view=b_Hot cellType=NHEK treatment=n_a tissue=skin cancer=normal
 	type bigBed 6 +
 	color 85,238,255
 
@@ -574,7 +574,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel SAEC Ht
 	longLabel SAEC small airway epithelium DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=SAEC treatment=n_a tissue=lung cancer=normal
+	subGroups view=b_Hot cellType=SAEC treatment=n_a tissue=lung cancer=normal
 	type bigBed 6 +
 	color 85,231,255
 
@@ -582,7 +582,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel PrEC Ht
 	longLabel PrEC prostate epithelium DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=PrEC treatment=n_a tissue=prostate cancer=normal
+	subGroups view=b_Hot cellType=PrEC treatment=n_a tissue=prostate cancer=normal
 	type bigBed 6 +
 	color 85,226,255
 
@@ -590,7 +590,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HEEpiC Ht
 	longLabel HEEpiC esophageal epithelium DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HEEpiC treatment=n_a tissue=esophagus cancer=normal
+	subGroups view=b_Hot cellType=HEEpiC treatment=n_a tissue=esophagus cancer=normal
 	type bigBed 6 +
 	color 85,220,255
 
@@ -598,7 +598,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel GM06990 Ht
 	longLabel GM06990 B-lymphocyte, lymphoblastoid cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=GM06990 treatment=n_a tissue=blood cancer=unknown
+	subGroups view=b_Hot cellType=GM06990 treatment=n_a tissue=blood cancer=unknown
 	type bigBed 6 +
 	color 85,205,255
 
@@ -606,7 +606,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot on
 	shortLabel HepG2 Ht
 	longLabel HepG2 hepatocellular carcinoma cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HepG2 treatment=n_a tissue=liver cancer=cancer
+	subGroups view=b_Hot cellType=HepG2 treatment=n_a tissue=liver cancer=cancer
 	type bigBed 6 +
 	color 85,198,255
 
@@ -614,7 +614,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel Caco-2 Ht
 	longLabel Caco-2 colon adenocarcinoma cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=Caco-2 treatment=n_a tissue=colon cancer=cancer
+	subGroups view=b_Hot cellType=Caco-2 treatment=n_a tissue=colon cancer=cancer
 	type bigBed 6 +
 	color 85,193,255
 
@@ -622,7 +622,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel SK-N-SH_RA Ht
 	longLabel SK-N-SH_RA neuroblastoma cell line, RA treated DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=SK-N-SH_RA treatment=n_a tissue=brain cancer=cancer
+	subGroups view=b_Hot cellType=SK-N-SH_RA treatment=n_a tissue=brain cancer=cancer
 	type bigBed 6 +
 	color 85,189,255
 
@@ -630,7 +630,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel CD20+_RO01778 Ht
 	longLabel CD20+_RO01778 B-lymphocyte, CD20+ DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=CD20_RO01778 treatment=n_a tissue=blood cancer=normal
+	subGroups view=b_Hot cellType=CD20_RO01778 treatment=n_a tissue=blood cancer=normal
 	type bigBed 6 +
 	color 85,183,255
 
@@ -638,7 +638,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel Th1 Ht
 	longLabel Th1 T-lymphocyte, helper type 1 DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=Th1 treatment=n_a tissue=blood cancer=unknown
+	subGroups view=b_Hot cellType=Th1 treatment=n_a tissue=blood cancer=unknown
 	type bigBed 6 +
 	color 85,178,255
 
@@ -646,7 +646,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel Th2 Ht
 	longLabel Th2 T-lymphocyte, helper type 2 DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=Th2 treatment=n_a tissue=blood cancer=unknown
+	subGroups view=b_Hot cellType=Th2 treatment=n_a tissue=blood cancer=unknown
 	type bigBed 6 +
 	color 85,176,255
 
@@ -654,7 +654,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel Th1_Wb54553204 Ht
 	longLabel Th1_Wb54553204 T-lymphocyte, helper type 1 DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=Th1_Wb54553204 treatment=n_a tissue=blood cancer=normal
+	subGroups view=b_Hot cellType=Th1_Wb54553204 treatment=n_a tissue=blood cancer=normal
 	type bigBed 6 +
 	color 85,173,255
 
@@ -662,7 +662,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel Jurkat Ht
 	longLabel Jurkat T-lymphocyte acute leukemia cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=Jurkat treatment=n_a tissue=blood cancer=cancer
+	subGroups view=b_Hot cellType=Jurkat treatment=n_a tissue=blood cancer=cancer
 	type bigBed 6 +
 	color 85,165,255
 
@@ -670,7 +670,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot on
 	shortLabel GM12878 Ht
 	longLabel GM12878 B-lymphocyte, lymphoblastoid cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=GM12878 treatment=n_a tissue=blood cancer=normal
+	subGroups view=b_Hot cellType=GM12878 treatment=n_a tissue=blood cancer=normal
 	type bigBed 6 +
 	color 85,152,255
 
@@ -678,7 +678,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel GM12865 Ht
 	longLabel GM12865 B-lymphocyte, lymphoblastoid cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=GM12865 treatment=n_a tissue=blood cancer=unknown
+	subGroups view=b_Hot cellType=GM12865 treatment=n_a tissue=blood cancer=unknown
 	type bigBed 6 +
 	color 85,147,255
 
@@ -686,7 +686,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel Monocytes-CD14+_RO01746 Ht
 	longLabel Monocytes-CD14+_RO01746 monocyte, CD14+ DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=Monocytes_CD14_RO01746 treatment=n_a tissue=blood cancer=normal
+	subGroups view=b_Hot cellType=Monocytes_CD14_RO01746 treatment=n_a tissue=blood cancer=normal
 	type bigBed 6 +
 	color 85,135,255
 
@@ -694,7 +694,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HL-60 Ht
 	longLabel HL-60 acute promyelocytic leukemia (APL) cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HL-60 treatment=n_a tissue=blood cancer=cancer
+	subGroups view=b_Hot cellType=HL-60 treatment=n_a tissue=blood cancer=cancer
 	type bigBed 6 +
 	color 85,124,255
 
@@ -702,7 +702,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel NB4 Ht
 	longLabel NB4 acute promyelocytic leukemia (APL) cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=NB4 treatment=n_a tissue=bone_marrow cancer=cancer
+	subGroups view=b_Hot cellType=NB4 treatment=n_a tissue=bone_marrow cancer=cancer
 	type bigBed 6 +
 	color 85,112,255
 
@@ -710,7 +710,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot on
 	shortLabel H7-hESC Ht
 	longLabel H7-hESC embryonic stem cell DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=H7-hESC treatment=n_a tissue=embryo cancer=unknown
+	subGroups view=b_Hot cellType=H7-hESC treatment=n_a tissue=embryo cancer=unknown
 	type bigBed 6 +
 	color 85,93,255
 
@@ -718,7 +718,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel H7-hESC diff 5d Ht
 	longLabel H7-hESC embryonic stem cell (diff 5d) DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=H7-hESC treatment=diffProtA_5d tissue=embryo cancer=unknown
+	subGroups view=b_Hot cellType=H7-hESC treatment=diffProtA_5d tissue=embryo cancer=unknown
 	type bigBed 6 +
 	color 85,88,255
 
@@ -726,7 +726,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel H7-hESC diff 14d Ht
 	longLabel H7-hESC embryonic stem cell (diff 14d) DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=H7-hESC treatment=diffProtA_14d tissue=embryo cancer=unknown
+	subGroups view=b_Hot cellType=H7-hESC treatment=diffProtA_14d tissue=embryo cancer=unknown
 	type bigBed 6 +
 	color 89,85,255
 
@@ -734,7 +734,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel RPTEC Ht
 	longLabel RPTEC renal proximal tubule epithelium DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=RPTEC treatment=n_a tissue=kidney cancer=normal
+	subGroups view=b_Hot cellType=RPTEC treatment=n_a tissue=kidney cancer=normal
 	type bigBed 6 +
 	color 100,85,255
 
@@ -742,7 +742,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HRPEpiC Ht
 	longLabel HRPEpiC retinal pigment epithelium DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HRPEpiC treatment=n_a tissue=eye cancer=normal
+	subGroups view=b_Hot cellType=HRPEpiC treatment=n_a tissue=eye cancer=normal
 	type bigBed 6 +
 	color 124,85,255
 
@@ -750,7 +750,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HMVEC-dLy-Ad Ht
 	longLabel HMVEC-dLy-Ad dermal microvascular endothelial cell, lymph DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HMVEC-dLy-Ad treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=b_Hot cellType=HMVEC-dLy-Ad treatment=n_a tissue=blood_vessel cancer=normal
 	type bigBed 6 +
 	color 133,85,255
 
@@ -758,7 +758,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot on
 	shortLabel HeLa-S3 Ht
 	longLabel HeLa-S3 cervical epithelial adenocarcinoma cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=HeLa-S3 treatment=n_a tissue=cervix cancer=cancer
+	subGroups view=b_Hot cellType=HeLa-S3 treatment=n_a tissue=cervix cancer=cancer
 	type bigBed 6 +
 	color 157,85,255
 
@@ -766,7 +766,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel SK-N-MC Ht
 	longLabel SK-N-MC neuroepithelioma cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=SK-N-MC treatment=n_a tissue=brain cancer=cancer
+	subGroups view=b_Hot cellType=SK-N-MC treatment=n_a tissue=brain cancer=cancer
 	type bigBed 6 +
 	color 176,85,255
 
@@ -774,7 +774,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel MCF-7 Ht
 	longLabel MCF-7 mammary adenocarcinoma cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=MCF-7 treatment=n_a tissue=breast cancer=cancer
+	subGroups view=b_Hot cellType=MCF-7 treatment=n_a tissue=breast cancer=cancer
 	type bigBed 6 +
 	color 190,85,255
 
@@ -782,7 +782,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel MCF-7 estradi 1h Ht
 	longLabel MCF-7 mammary adenocarcinoma cell line (estradi 1h) DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=MCF-7 treatment=Estradiol_100nM_1hr tissue=breast cancer=cancer
+	subGroups view=b_Hot cellType=MCF-7 treatment=Estradiol_100nM_1hr tissue=breast cancer=cancer
 	type bigBed 6 +
 	color 192,85,255
 
@@ -790,7 +790,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel MCF-7 estradi 0h Ht
 	longLabel MCF-7 mammary adenocarcinoma cell line (estradi 0h) DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=MCF-7 treatment=Estradiol_ctrl_0hr tissue=breast cancer=cancer
+	subGroups view=b_Hot cellType=MCF-7 treatment=Estradiol_ctrl_0hr tissue=breast cancer=cancer
 	type bigBed 6 +
 	color 192,85,255
 
@@ -798,7 +798,7 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel WERI-Rb-1 Ht
 	longLabel WERI-Rb-1 retinoblastoma cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=WERI-Rb-1 treatment=n_a tissue=eye cancer=cancer
+	subGroups view=b_Hot cellType=WERI-Rb-1 treatment=n_a tissue=eye cancer=cancer
 	type bigBed 6 +
 	color 211,85,255
 
@@ -806,14 +806,14 @@ priority 100.3
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel BE2_C Ht
 	longLabel BE2_C neuroblastoma cell line DNaseI Hotspots from ENCODE
-	subGroups view=Hot cellType=BE2_C treatment=n_a tissue=brain cancer=cancer
+	subGroups view=b_Hot cellType=BE2_C treatment=n_a tissue=brain cancer=cancer
 	type bigBed 6 +
 	color 237,85,255
 
     track wgEncodeRegDnasePeak
     shortLabel Peaks
     longLabel HotSpot5 peak calls on BWA. Dupe, sponge and mitochondria filtered
-    view Peaks
+    view a_Peaks
     visibility dense
     parent wgEncodeRegDnase
     scoreFilter 0
@@ -826,671 +826,671 @@ priority 100.3
 	parent wgEncodeRegDnasePeak on
 	shortLabel K562 Pk
 	longLabel K562 lymphoblast chronic myeloid leukemia (CML) cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=K562 treatment=n_a tissue=bone_marrow cancer=cancer
+	subGroups view=a_Peaks cellType=K562 treatment=n_a tissue=bone_marrow cancer=cancer
 	color 255,85,85
 
 	track wgEncodeRegDnaseUwA549Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel A549 Pk
 	longLabel A549 lung adenocarcinoma cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=A549 treatment=n_a tissue=lung cancer=cancer
+	subGroups view=a_Peaks cellType=A549 treatment=n_a tissue=lung cancer=cancer
 	color 254,93,85
 
 	track wgEncodeRegDnaseUwLncapPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel LNCaP Pk
 	longLabel LNCaP prostate adenocarcinoma cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=LNCaP treatment=n_a tissue=prostate cancer=cancer
+	subGroups view=a_Peaks cellType=LNCaP treatment=n_a tissue=prostate cancer=cancer
 	color 255,102,85
 
 	track wgEncodeRegDnaseUwHmecPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HMEC Pk
 	longLabel HMEC mammary epithelium DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HMEC treatment=n_a tissue=breast cancer=normal
+	subGroups view=a_Peaks cellType=HMEC treatment=n_a tissue=breast cancer=normal
 	color 255,112,85
 
 	track wgEncodeRegDnaseUwT47dPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel T-47D Pk
 	longLabel T-47D mammary ductal carcinoma cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=T-47D treatment=n_a tissue=breast cancer=cancer
+	subGroups view=a_Peaks cellType=T-47D treatment=n_a tissue=breast cancer=cancer
 	color 255,124,85
 
 	track wgEncodeRegDnaseUwPanc1Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel PANC-1 Pk
 	longLabel PANC-1 pancreatic carcinoma cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=PANC-1 treatment=n_a tissue=pancreas cancer=cancer
+	subGroups view=a_Peaks cellType=PANC-1 treatment=n_a tissue=pancreas cancer=cancer
 	color 255,141,85
 
 	track wgEncodeRegDnaseUwHct116Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HCT-116 Pk
 	longLabel HCT-116 colorectal carcinoma cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HCT-116 treatment=n_a tissue=colon cancer=cancer
+	subGroups view=a_Peaks cellType=HCT-116 treatment=n_a tissue=colon cancer=cancer
 	color 255,150,85
 
 	track wgEncodeRegDnaseUwNhberaPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel NHBE_RA Pk
 	longLabel NHBE_RA bronchial epithelium, RA treated DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=NHBE_RA treatment=n_a tissue=lung cancer=normal
+	subGroups view=a_Peaks cellType=NHBE_RA treatment=n_a tissue=lung cancer=normal
 	color 255,154,85
 
 	track wgEncodeRegDnaseUwHffPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HFF Pk
 	longLabel HFF foreskin fibroblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HFF treatment=n_a tissue=skin cancer=normal
+	subGroups view=a_Peaks cellType=HFF treatment=n_a tissue=skin cancer=normal
 	color 255,163,85
 
 	track wgEncodeRegDnaseUwHffmycPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HFF-Myc Pk
 	longLabel HFF-Myc foreskin fibroblast cell line, cMyc DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HFF-Myc treatment=n_a tissue=skin cancer=normal
+	subGroups view=a_Peaks cellType=HFF-Myc treatment=n_a tissue=skin cancer=normal
 	color 255,165,85
 
 	track wgEncodeRegDnaseUwNt2d1Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel NT2-D1 Pk
 	longLabel NT2-D1 embryonal carcinoma (NTera2) cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=NT2-D1 treatment=n_a tissue=testis cancer=cancer
+	subGroups view=a_Peaks cellType=NT2-D1 treatment=n_a tissue=testis cancer=cancer
 	color 255,173,85
 
 	track wgEncodeRegDnaseUwBjPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel BJ Pk
 	longLabel BJ foreskin fibroblast cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=BJ treatment=n_a tissue=skin cancer=normal
+	subGroups view=a_Peaks cellType=BJ treatment=n_a tissue=skin cancer=normal
 	color 255,184,85
 
 	track wgEncodeRegDnaseUwAg09309Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel AG09309 Pk
 	longLabel AG09309 skin fibroblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=AG09309 treatment=n_a tissue=skin cancer=unknown
+	subGroups view=a_Peaks cellType=AG09309 treatment=n_a tissue=skin cancer=unknown
 	color 255,186,85
 
 	track wgEncodeRegDnaseUwHnpcepicPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HNPCEpiC Pk
 	longLabel HNPCEpiC non-pigmented ciliary epithelium (NPCEC) DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HNPCEpiC treatment=n_a tissue=eye cancer=normal
+	subGroups view=a_Peaks cellType=HNPCEpiC treatment=n_a tissue=eye cancer=normal
 	color 255,188,85
 
 	track wgEncodeRegDnaseUwWi38Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel WI-38 Pk
 	longLabel WI-38 embryonic lung fibroblast cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=WI-38 treatment=n_a tissue=lung cancer=normal
+	subGroups view=a_Peaks cellType=WI-38 treatment=n_a tissue=lung cancer=normal
 	color 255,192,85
 
 	track wgEncodeRegDnaseUwGm04503Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel GM04503 Pk
 	longLabel GM04503 skin fibroblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=GM04503 treatment=n_a tissue=skin cancer=normal
+	subGroups view=a_Peaks cellType=GM04503 treatment=n_a tissue=skin cancer=normal
 	color 255,200,85
 
 	track wgEncodeRegDnaseUwGm04504Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel GM04504 Pk
 	longLabel GM04504 skin fibroblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=GM04504 treatment=n_a tissue=skin cancer=normal
+	subGroups view=a_Peaks cellType=GM04504 treatment=n_a tissue=skin cancer=normal
 	color 255,204,85
 
 	track wgEncodeRegDnaseUwNhlfPeak
 	parent wgEncodeRegDnasePeak on
 	shortLabel NHLF Pk
 	longLabel NHLF lung fibroblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=NHLF treatment=n_a tissue=lung cancer=normal
+	subGroups view=a_Peaks cellType=NHLF treatment=n_a tissue=lung cancer=normal
 	color 255,209,85
 
 	track wgEncodeRegDnaseUwNhaPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel NH-A Pk
 	longLabel NH-A astrocyte DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=NH-A treatment=n_a tissue=brain cancer=normal
+	subGroups view=a_Peaks cellType=NH-A treatment=n_a tissue=brain cancer=normal
 	color 255,210,85
 
 	track wgEncodeRegDnaseUwHbmecPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HBMEC Pk
 	longLabel HBMEC brain microvascular endothelial cell (MEC) DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HBMEC treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=a_Peaks cellType=HBMEC treatment=n_a tissue=blood_vessel cancer=normal
 	color 255,214,85
 
 	track wgEncodeRegDnaseUwAg09319Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel AG09319 Pk
 	longLabel AG09319 gingival fibroblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=AG09319 treatment=n_a tissue=periodontium cancer=normal
+	subGroups view=a_Peaks cellType=AG09319 treatment=n_a tissue=periodontium cancer=normal
 	color 255,221,85
 
 	track wgEncodeRegDnaseUwHpdlfPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HPdLF Pk
 	longLabel HPdLF periodontal ligament fibroblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HPdLF treatment=n_a tissue=periodontium cancer=normal
+	subGroups view=a_Peaks cellType=HPdLF treatment=n_a tissue=periodontium cancer=normal
 	color 255,224,85
 
 	track wgEncodeRegDnaseUwHcfPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HCF Pk
 	longLabel HCF cardiac fibroblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HCF treatment=n_a tissue=heart cancer=normal
+	subGroups view=a_Peaks cellType=HCF treatment=n_a tissue=heart cancer=normal
 	color 255,229,85
 
 	track wgEncodeRegDnaseUwHcmPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HCM Pk
 	longLabel HCM cardiac myocyte DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HCM treatment=n_a tissue=heart cancer=normal
+	subGroups view=a_Peaks cellType=HCM treatment=n_a tissue=heart cancer=normal
 	color 255,230,85
 
 	track wgEncodeRegDnaseUwHpafPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HPAF Pk
 	longLabel HPAF pulmonary artery fibroblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HPAF treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=a_Peaks cellType=HPAF treatment=n_a tissue=blood_vessel cancer=normal
 	color 255,232,85
 
 	track wgEncodeRegDnaseUwAoafPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel AoAF Pk
 	longLabel AoAF aorta fibroblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=AoAF treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=a_Peaks cellType=AoAF treatment=n_a tissue=blood_vessel cancer=normal
 	color 255,236,85
 
 	track wgEncodeRegDnaseUwHcpepicPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HCPEpiC Pk
 	longLabel HCPEpiC choroid plexus epithelium DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HCPEpiC treatment=n_a tissue=brain cancer=normal
+	subGroups view=a_Peaks cellType=HCPEpiC treatment=n_a tissue=brain cancer=normal
 	color 255,242,85
 
 	track wgEncodeRegDnaseUwHpfPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HPF Pk
 	longLabel HPF pulmonary fibroblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HPF treatment=n_a tissue=lung cancer=normal
+	subGroups view=a_Peaks cellType=HPF treatment=n_a tissue=lung cancer=normal
 	color 255,247,85
 
 	track wgEncodeRegDnaseUwHconfPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HConF Pk
 	longLabel HConF conjunctival fibroblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HConF treatment=n_a tissue=eye cancer=unknown
+	subGroups view=a_Peaks cellType=HConF treatment=n_a tissue=eye cancer=unknown
 	color 255,252,85
 
 	track wgEncodeRegDnaseUwHacPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HAc Pk
 	longLabel HAc cerebellar astrocyte DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HAc treatment=n_a tissue=brain cancer=normal
+	subGroups view=a_Peaks cellType=HAc treatment=n_a tissue=brain cancer=normal
 	color 250,255,85
 
 	track wgEncodeRegDnaseUwHvmfPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HVMF Pk
 	longLabel HVMF villous mesenchymal fibroblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HVMF treatment=n_a tissue=placenta cancer=normal
+	subGroups view=a_Peaks cellType=HVMF treatment=n_a tissue=placenta cancer=normal
 	color 242,255,85
 
 	track wgEncodeRegDnaseUwHipepicPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HIPEpiC Pk
 	longLabel HIPEpiC iris pigment epithelium DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HIPEpiC treatment=n_a tissue=eye cancer=normal
+	subGroups view=a_Peaks cellType=HIPEpiC treatment=n_a tissue=eye cancer=normal
 	color 236,255,85
 
 	track wgEncodeRegDnaseUwBonemarrowmscPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel bone_marrow_MSC Pk
 	longLabel bone_marrow_MSC bone marrow fibroblastoid DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=bone_marrow_MSC treatment=n_a tissue=bone_marrow cancer=normal
+	subGroups view=a_Peaks cellType=bone_marrow_MSC treatment=n_a tissue=bone_marrow cancer=normal
 	color 228,255,85
 
 	track wgEncodeRegDnaseUwAg10803Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel AG10803 Pk
 	longLabel AG10803 skin fibroblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=AG10803 treatment=n_a tissue=skin cancer=unknown
+	subGroups view=a_Peaks cellType=AG10803 treatment=n_a tissue=skin cancer=unknown
 	color 220,255,85
 
 	track wgEncodeRegDnaseUwHmfPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HMF Pk
 	longLabel HMF mammary fibroblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HMF treatment=n_a tissue=breast cancer=unknown
+	subGroups view=a_Peaks cellType=HMF treatment=n_a tissue=breast cancer=unknown
 	color 212,255,85
 
 	track wgEncodeRegDnaseUwHgfPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HGF Pk
 	longLabel HGF gingival fibroblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HGF treatment=n_a tissue=periodontum cancer=normal
+	subGroups view=a_Peaks cellType=HGF treatment=n_a tissue=periodontum cancer=normal
 	color 204,255,85
 
 	track wgEncodeRegDnaseUwNhdfneoPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel NHDF-neo Pk
 	longLabel NHDF-neo dermal fibroblast, neonate DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=NHDF-neo treatment=n_a tissue=skin cancer=normal
+	subGroups view=a_Peaks cellType=NHDF-neo treatment=n_a tissue=skin cancer=normal
 	color 198,255,85
 
 	track wgEncodeRegDnaseUwHaepicPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HAEpiC Pk
 	longLabel HAEpiC amniotic epithelium (AEC) DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HAEpiC treatment=n_a tissue=embryo cancer=normal
+	subGroups view=a_Peaks cellType=HAEpiC treatment=n_a tissue=embryo cancer=normal
 	color 189,255,85
 
 	track wgEncodeRegDnaseUwSkmcPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel SKMC Pk
 	longLabel SKMC skeletal muscle cell DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=SKMC treatment=n_a tissue=muscle cancer=normal
+	subGroups view=a_Peaks cellType=SKMC treatment=n_a tissue=muscle cancer=normal
 	color 182,255,85
 
 	track wgEncodeRegDnaseUwHbvsmcPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HBVSMC Pk
 	longLabel HBVSMC brain vascular smooth muscle DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HBVSMC treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=a_Peaks cellType=HBVSMC treatment=n_a tissue=blood_vessel cancer=normal
 	color 176,255,85
 
 	track wgEncodeRegDnaseUwAg04449Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel AG04449 Pk
 	longLabel AG04449 fetal skin fibroblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=AG04449 treatment=n_a tissue=skin cancer=normal
+	subGroups view=a_Peaks cellType=AG04449 treatment=n_a tissue=skin cancer=normal
 	color 152,255,85
 
 	track wgEncodeRegDnaseUwAg04450Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel AG04450 Pk
 	longLabel AG04450 fetal lung fibroblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=AG04450 treatment=n_a tissue=lung cancer=normal
+	subGroups view=a_Peaks cellType=AG04450 treatment=n_a tissue=lung cancer=normal
 	color 144,255,85
 
 	track wgEncodeRegDnaseUwHahPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HA-h Pk
 	longLabel HA-h hippocampal astrocyte DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HA-h treatment=n_a tissue=brain cancer=normal
+	subGroups view=a_Peaks cellType=HA-h treatment=n_a tissue=brain cancer=normal
 	color 122,255,85
 
 	track wgEncodeRegDnaseUwM059jPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel M059J Pk
 	longLabel M059J glioblastoma cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=M059J treatment=n_a tissue=brain cancer=cancer
+	subGroups view=a_Peaks cellType=M059J treatment=n_a tissue=brain cancer=cancer
 	color 96,255,85
 
 	track wgEncodeRegDnaseUwRpmi7951Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel RPMI-7951 Pk
 	longLabel RPMI-7951 melanoma cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=RPMI-7951 treatment=n_a tissue=skin cancer=cancer
+	subGroups view=a_Peaks cellType=RPMI-7951 treatment=n_a tissue=skin cancer=cancer
 	color 85,255,90
 
 	track wgEncodeRegDnaseUwHaspPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HA-sp Pk
 	longLabel HA-sp spinal cord astrocyte DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HA-sp treatment=n_a tissue=spinal_cord cancer=normal
+	subGroups view=a_Peaks cellType=HA-sp treatment=n_a tissue=spinal_cord cancer=normal
 	color 85,255,124
 
 	track wgEncodeRegDnaseUwHcfaaPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HCFaa Pk
 	longLabel HCFaa cardiac fibroblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HCFaa treatment=n_a tissue=heart cancer=normal
+	subGroups view=a_Peaks cellType=HCFaa treatment=n_a tissue=heart cancer=normal
 	color 85,255,150
 
 	track wgEncodeRegDnaseUwWi384ohtam20nm72hrPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel WI-38 40HTAM Pk
 	longLabel WI-38 embryonic lung fibroblast cell line (40HTAM) DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=WI-38 treatment=OHTAM_20nM_72hr tissue=lung cancer=normal
+	subGroups view=a_Peaks cellType=WI-38 treatment=OHTAM_20nM_72hr tissue=lung cancer=normal
 	color 85,255,171
 
 	track wgEncodeRegDnaseUwNhdfadPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel NHDF-Ad Pk
 	longLabel NHDF-Ad dermal fibroblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=NHDF-Ad treatment=n_a tissue=skin cancer=normal
+	subGroups view=a_Peaks cellType=NHDF-Ad treatment=n_a tissue=skin cancer=normal
 	color 85,255,180
 
 	track wgEncodeRegDnaseUwHsmmPeak
 	parent wgEncodeRegDnasePeak on
 	shortLabel HSMM Pk
 	longLabel HSMM skeletal muscle myoblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HSMM treatment=n_a tissue=muscle cancer=normal
+	subGroups view=a_Peaks cellType=HSMM treatment=n_a tissue=muscle cancer=normal
 	color 85,255,190
 
 	track wgEncodeRegDnaseUwLhcnm2Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel LHCN-M2 Pk
 	longLabel LHCN-M2 skeletal myoblast DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=LHCN-M2 treatment=n_a tissue=muscle cancer=unknown
+	subGroups view=a_Peaks cellType=LHCN-M2 treatment=n_a tissue=muscle cancer=unknown
 	color 85,255,193
 
 	track wgEncodeRegDnaseUwLhcnm2Diff4dPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel LHCN-M2 diff 4d Pk
 	longLabel LHCN-M2 skeletal myoblast (diff 4d) DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=LHCN-M2 treatment=DIFF_4d tissue=muscle cancer=unknown
+	subGroups view=a_Peaks cellType=LHCN-M2 treatment=DIFF_4d tissue=muscle cancer=unknown
 	color 85,255,198
 
 	track wgEncodeRegDnaseUwHsmmtubePeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HSMMtube Pk
 	longLabel HSMMtube skeletal muscle myotube DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HSMMtube treatment=n_a tissue=muscle cancer=normal
+	subGroups view=a_Peaks cellType=HSMMtube treatment=n_a tissue=muscle cancer=normal
 	color 85,255,204
 
 	track wgEncodeRegDnaseUwHuvecPeak
 	parent wgEncodeRegDnasePeak on
 	shortLabel HUVEC Pk
 	longLabel HUVEC umbilical vein endothelial cell DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HUVEC treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=a_Peaks cellType=HUVEC treatment=n_a tissue=blood_vessel cancer=normal
 	color 85,255,215
 
 	track wgEncodeRegDnaseUwHmveclblPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HMVEC-LBl Pk
 	longLabel HMVEC-LBl lung microvascular epithelium. blood DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HMVEC-LBl treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=a_Peaks cellType=HMVEC-LBl treatment=n_a tissue=blood_vessel cancer=normal
 	color 85,255,220
 
 	track wgEncodeRegDnaseUwHmvecdbladPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HMVEC-dBl-Ad Pk
 	longLabel HMVEC-dBl-Ad dermal microvascular endothelial cell, blood DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HMVEC-dBl-Ad treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=a_Peaks cellType=HMVEC-dBl-Ad treatment=n_a tissue=blood_vessel cancer=normal
 	color 85,255,224
 
 	track wgEncodeRegDnaseUwHmvecdlyneoPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HMVEC-dLy-Neo Pk
 	longLabel HMVEC-dLy-Neo dermal microvascular endothelial cell, neonate lymph DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HMVEC-dLy-Neo treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=a_Peaks cellType=HMVEC-dLy-Neo treatment=n_a tissue=blood_vessel cancer=normal
 	color 85,255,226
 
 	track wgEncodeRegDnaseUwHmvecdblneoPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HMVEC-dBl-Neo Pk
 	longLabel HMVEC-dBl-Neo dermal microvascular endothelial cell, neonate blood DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HMVEC-dBl-Neo treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=a_Peaks cellType=HMVEC-dBl-Neo treatment=n_a tissue=blood_vessel cancer=normal
 	color 85,255,229
 
 	track wgEncodeRegDnaseUwHrgecPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HRGEC Pk
 	longLabel HRGEC renal glomerular endothelial cell DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HRGEC treatment=n_a tissue=kidney cancer=normal
+	subGroups view=a_Peaks cellType=HRGEC treatment=n_a tissue=kidney cancer=normal
 	color 85,255,232
 
 	track wgEncodeRegDnaseUwHmvecllyPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HMVEC-LLy Pk
 	longLabel HMVEC-LLy lung microvascular endothelial cell, lymph DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HMVEC-LLy treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=a_Peaks cellType=HMVEC-LLy treatment=n_a tissue=blood_vessel cancer=normal
 	color 85,255,243
 
 	track wgEncodeRegDnaseUwHmvecdneoPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HMVEC-dNeo Pk
 	longLabel HMVEC-dNeo dermal microvascular endothelial cell, neonate DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HMVEC-dNeo treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=a_Peaks cellType=HMVEC-dNeo treatment=n_a tissue=blood_vessel cancer=normal
 	color 85,255,244
 
 	track wgEncodeRegDnaseUwHmvecdadPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HMVEC-dAd Pk
 	longLabel HMVEC-dAd dermal microvascular endothelial cell DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HMVEC-dAd treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=a_Peaks cellType=HMVEC-dAd treatment=n_a tissue=blood_vessel cancer=normal
 	color 85,255,246
 
 	track wgEncodeRegDnaseUwHrcepicPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HRCEpiC Pk
 	longLabel HRCEpiC renal cortical epithelium DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HRCEpiC treatment=n_a tissue=kidney cancer=normal
+	subGroups view=a_Peaks cellType=HRCEpiC treatment=n_a tissue=kidney cancer=normal
 	color 85,251,255
 
 	track wgEncodeRegDnaseUwHrePeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HRE Pk
 	longLabel HRE renal epithelium DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HRE treatment=n_a tissue=kidney cancer=normal
+	subGroups view=a_Peaks cellType=HRE treatment=n_a tissue=kidney cancer=normal
 	color 85,248,255
 
 	track wgEncodeRegDnaseUwNhekPeak
 	parent wgEncodeRegDnasePeak on
 	shortLabel NHEK Pk
 	longLabel NHEK epidermal keratinocyte DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=NHEK treatment=n_a tissue=skin cancer=normal
+	subGroups view=a_Peaks cellType=NHEK treatment=n_a tissue=skin cancer=normal
 	color 85,238,255
 
 	track wgEncodeRegDnaseUwSaecPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel SAEC Pk
 	longLabel SAEC small airway epithelium DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=SAEC treatment=n_a tissue=lung cancer=normal
+	subGroups view=a_Peaks cellType=SAEC treatment=n_a tissue=lung cancer=normal
 	color 85,231,255
 
 	track wgEncodeRegDnaseUwPrecPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel PrEC Pk
 	longLabel PrEC prostate epithelium DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=PrEC treatment=n_a tissue=prostate cancer=normal
+	subGroups view=a_Peaks cellType=PrEC treatment=n_a tissue=prostate cancer=normal
 	color 85,226,255
 
 	track wgEncodeRegDnaseUwHeepicPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HEEpiC Pk
 	longLabel HEEpiC esophageal epithelium DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HEEpiC treatment=n_a tissue=esophagus cancer=normal
+	subGroups view=a_Peaks cellType=HEEpiC treatment=n_a tissue=esophagus cancer=normal
 	color 85,220,255
 
 	track wgEncodeRegDnaseUwGm06990Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel GM06990 Pk
 	longLabel GM06990 B-lymphocyte, lymphoblastoid cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=GM06990 treatment=n_a tissue=blood cancer=unknown
+	subGroups view=a_Peaks cellType=GM06990 treatment=n_a tissue=blood cancer=unknown
 	color 85,205,255
 
 	track wgEncodeRegDnaseUwHepg2Peak
 	parent wgEncodeRegDnasePeak on
 	shortLabel HepG2 Pk
 	longLabel HepG2 hepatocellular carcinoma cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HepG2 treatment=n_a tissue=liver cancer=cancer
+	subGroups view=a_Peaks cellType=HepG2 treatment=n_a tissue=liver cancer=cancer
 	color 85,198,255
 
 	track wgEncodeRegDnaseUwCaco2Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel Caco-2 Pk
 	longLabel Caco-2 colon adenocarcinoma cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=Caco-2 treatment=n_a tissue=colon cancer=cancer
+	subGroups view=a_Peaks cellType=Caco-2 treatment=n_a tissue=colon cancer=cancer
 	color 85,193,255
 
 	track wgEncodeRegDnaseUwSknshraPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel SK-N-SH_RA Pk
 	longLabel SK-N-SH_RA neuroblastoma cell line, RA treated DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=SK-N-SH_RA treatment=n_a tissue=brain cancer=cancer
+	subGroups view=a_Peaks cellType=SK-N-SH_RA treatment=n_a tissue=brain cancer=cancer
 	color 85,189,255
 
 	track wgEncodeRegDnaseUwCd20ro01778Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel CD20+_RO01778 Pk
 	longLabel CD20+_RO01778 B-lymphocyte, CD20+ DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=CD20_RO01778 treatment=n_a tissue=blood cancer=normal
+	subGroups view=a_Peaks cellType=CD20_RO01778 treatment=n_a tissue=blood cancer=normal
 	color 85,183,255
 
 	track wgEncodeRegDnaseUwTh1Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel Th1 Pk
 	longLabel Th1 T-lymphocyte, helper type 1 DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=Th1 treatment=n_a tissue=blood cancer=unknown
+	subGroups view=a_Peaks cellType=Th1 treatment=n_a tissue=blood cancer=unknown
 	color 85,178,255
 
 	track wgEncodeRegDnaseUwTh2Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel Th2 Pk
 	longLabel Th2 T-lymphocyte, helper type 2 DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=Th2 treatment=n_a tissue=blood cancer=unknown
+	subGroups view=a_Peaks cellType=Th2 treatment=n_a tissue=blood cancer=unknown
 	color 85,176,255
 
 	track wgEncodeRegDnaseUwTh1wb54553204Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel Th1_Wb54553204 Pk
 	longLabel Th1_Wb54553204 T-lymphocyte, helper type 1 DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=Th1_Wb54553204 treatment=n_a tissue=blood cancer=normal
+	subGroups view=a_Peaks cellType=Th1_Wb54553204 treatment=n_a tissue=blood cancer=normal
 	color 85,173,255
 
 	track wgEncodeRegDnaseUwJurkatPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel Jurkat Pk
 	longLabel Jurkat T-lymphocyte acute leukemia cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=Jurkat treatment=n_a tissue=blood cancer=cancer
+	subGroups view=a_Peaks cellType=Jurkat treatment=n_a tissue=blood cancer=cancer
 	color 85,165,255
 
 	track wgEncodeRegDnaseUwGm12878Peak
 	parent wgEncodeRegDnasePeak on
 	shortLabel GM12878 Pk
 	longLabel GM12878 B-lymphocyte, lymphoblastoid cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=GM12878 treatment=n_a tissue=blood cancer=normal
+	subGroups view=a_Peaks cellType=GM12878 treatment=n_a tissue=blood cancer=normal
 	color 85,152,255
 
 	track wgEncodeRegDnaseUwGm12865Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel GM12865 Pk
 	longLabel GM12865 B-lymphocyte, lymphoblastoid cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=GM12865 treatment=n_a tissue=blood cancer=unknown
+	subGroups view=a_Peaks cellType=GM12865 treatment=n_a tissue=blood cancer=unknown
 	color 85,147,255
 
 	track wgEncodeRegDnaseUwMonocytescd14ro01746Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel Monocytes-CD14+_RO01746 Pk
 	longLabel Monocytes-CD14+_RO01746 monocyte, CD14+ DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=Monocytes_CD14_RO01746 treatment=n_a tissue=blood cancer=normal
+	subGroups view=a_Peaks cellType=Monocytes_CD14_RO01746 treatment=n_a tissue=blood cancer=normal
 	color 85,135,255
 
 	track wgEncodeRegDnaseUwHl60Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HL-60 Pk
 	longLabel HL-60 acute promyelocytic leukemia (APL) cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HL-60 treatment=n_a tissue=blood cancer=cancer
+	subGroups view=a_Peaks cellType=HL-60 treatment=n_a tissue=blood cancer=cancer
 	color 85,124,255
 
 	track wgEncodeRegDnaseUwNb4Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel NB4 Pk
 	longLabel NB4 acute promyelocytic leukemia (APL) cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=NB4 treatment=n_a tissue=bone_marrow cancer=cancer
+	subGroups view=a_Peaks cellType=NB4 treatment=n_a tissue=bone_marrow cancer=cancer
 	color 85,112,255
 
 	track wgEncodeRegDnaseUwH7hescPeak
 	parent wgEncodeRegDnasePeak on
 	shortLabel H7-hESC Pk
 	longLabel H7-hESC embryonic stem cell DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=H7-hESC treatment=n_a tissue=embryo cancer=unknown
+	subGroups view=a_Peaks cellType=H7-hESC treatment=n_a tissue=embryo cancer=unknown
 	color 85,93,255
 
 	track wgEncodeRegDnaseUwH7hescDiffprota5dPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel H7-hESC diff 5d Pk
 	longLabel H7-hESC embryonic stem cell (diff 5d) DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=H7-hESC treatment=diffProtA_5d tissue=embryo cancer=unknown
+	subGroups view=a_Peaks cellType=H7-hESC treatment=diffProtA_5d tissue=embryo cancer=unknown
 	color 85,88,255
 
 	track wgEncodeRegDnaseUwH7hescDiffprota14dPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel H7-hESC diff 14d Pk
 	longLabel H7-hESC embryonic stem cell (diff 14d) DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=H7-hESC treatment=diffProtA_14d tissue=embryo cancer=unknown
+	subGroups view=a_Peaks cellType=H7-hESC treatment=diffProtA_14d tissue=embryo cancer=unknown
 	color 89,85,255
 
 	track wgEncodeRegDnaseUwRptecPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel RPTEC Pk
 	longLabel RPTEC renal proximal tubule epithelium DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=RPTEC treatment=n_a tissue=kidney cancer=normal
+	subGroups view=a_Peaks cellType=RPTEC treatment=n_a tissue=kidney cancer=normal
 	color 100,85,255
 
 	track wgEncodeRegDnaseUwHrpepicPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HRPEpiC Pk
 	longLabel HRPEpiC retinal pigment epithelium DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HRPEpiC treatment=n_a tissue=eye cancer=normal
+	subGroups view=a_Peaks cellType=HRPEpiC treatment=n_a tissue=eye cancer=normal
 	color 124,85,255
 
 	track wgEncodeRegDnaseUwHmvecdlyadPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HMVEC-dLy-Ad Pk
 	longLabel HMVEC-dLy-Ad dermal microvascular endothelial cell, lymph DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HMVEC-dLy-Ad treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=a_Peaks cellType=HMVEC-dLy-Ad treatment=n_a tissue=blood_vessel cancer=normal
 	color 133,85,255
 
 	track wgEncodeRegDnaseUwHelas3Peak
 	parent wgEncodeRegDnasePeak on
 	shortLabel HeLa-S3 Pk
 	longLabel HeLa-S3 cervical epithelial adenocarcinoma cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=HeLa-S3 treatment=n_a tissue=cervix cancer=cancer
+	subGroups view=a_Peaks cellType=HeLa-S3 treatment=n_a tissue=cervix cancer=cancer
 	color 157,85,255
 
 	track wgEncodeRegDnaseUwSknmcPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel SK-N-MC Pk
 	longLabel SK-N-MC neuroepithelioma cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=SK-N-MC treatment=n_a tissue=brain cancer=cancer
+	subGroups view=a_Peaks cellType=SK-N-MC treatment=n_a tissue=brain cancer=cancer
 	color 176,85,255
 
 	track wgEncodeRegDnaseUwMcf7Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel MCF-7 Pk
 	longLabel MCF-7 mammary adenocarcinoma cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=MCF-7 treatment=n_a tissue=breast cancer=cancer
+	subGroups view=a_Peaks cellType=MCF-7 treatment=n_a tissue=breast cancer=cancer
 	color 190,85,255
 
 	track wgEncodeRegDnaseUwMcf7Estradiol100nm1hrPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel MCF-7 estradi 1h Pk
 	longLabel MCF-7 mammary adenocarcinoma cell line (estradi 1h) DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=MCF-7 treatment=Estradiol_100nM_1hr tissue=breast cancer=cancer
+	subGroups view=a_Peaks cellType=MCF-7 treatment=Estradiol_100nM_1hr tissue=breast cancer=cancer
 	color 192,85,255
 
 	track wgEncodeRegDnaseUwMcf7Estradiolctrl0hrPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel MCF-7 estradi 0h Pk
 	longLabel MCF-7 mammary adenocarcinoma cell line (estradi 0h) DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=MCF-7 treatment=Estradiol_ctrl_0hr tissue=breast cancer=cancer
+	subGroups view=a_Peaks cellType=MCF-7 treatment=Estradiol_ctrl_0hr tissue=breast cancer=cancer
 	color 192,85,255
 
 	track wgEncodeRegDnaseUwWerirb1Peak
 	parent wgEncodeRegDnasePeak off
 	shortLabel WERI-Rb-1 Pk
 	longLabel WERI-Rb-1 retinoblastoma cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=WERI-Rb-1 treatment=n_a tissue=eye cancer=cancer
+	subGroups view=a_Peaks cellType=WERI-Rb-1 treatment=n_a tissue=eye cancer=cancer
 	color 211,85,255
 
 	track wgEncodeRegDnaseUwBe2cPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel BE2_C Pk
 	longLabel BE2_C neuroblastoma cell line DNaseI Peaks from ENCODE
-	subGroups view=Peaks cellType=BE2_C treatment=n_a tissue=brain cancer=cancer
+	subGroups view=a_Peaks cellType=BE2_C treatment=n_a tissue=brain cancer=cancer
 	color 237,85,255
 
     track wgEncodeRegDnaseSignal
     shortLabel Signal
     longLabel HotSpot5 signal on BWA. Dupe, sponge and mitochondria filtered
-    view Signal
+    view c_Signal
     visibility hide
     parent wgEncodeRegDnase
     viewLimits 0:100
@@ -1504,7 +1504,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal on
 	shortLabel K562 Sg
 	longLabel K562 lymphoblast chronic myeloid leukemia (CML) cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=K562 treatment=n_a tissue=bone_marrow cancer=cancer
+	subGroups view=c_Signal cellType=K562 treatment=n_a tissue=bone_marrow cancer=cancer
 	type bigWig 0 38914.2
 	color 255,85,85
 
@@ -1512,7 +1512,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal on
 	shortLabel K562 USg
 	longLabel K562 Non-normalized DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=K562 treatment=n_a tissue=bone_marrow cancer=cancer
+	subGroups view=c_Signal cellType=K562 treatment=n_a tissue=bone_marrow cancer=cancer
 	type bigWig 0 38914.2
 	color 255,85,85
 
@@ -1520,7 +1520,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel A549 Sg
 	longLabel A549 lung adenocarcinoma cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=A549 treatment=n_a tissue=lung cancer=cancer
+	subGroups view=c_Signal cellType=A549 treatment=n_a tissue=lung cancer=cancer
 	type bigWig 0 30091.1
 	color 254,93,85
 
@@ -1528,7 +1528,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel LNCaP Sg
 	longLabel LNCaP prostate adenocarcinoma cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=LNCaP treatment=n_a tissue=prostate cancer=cancer
+	subGroups view=c_Signal cellType=LNCaP treatment=n_a tissue=prostate cancer=cancer
 	type bigWig 0 37372.7
 	color 255,102,85
 
@@ -1536,7 +1536,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HMEC Sg
 	longLabel HMEC mammary epithelium DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HMEC treatment=n_a tissue=breast cancer=normal
+	subGroups view=c_Signal cellType=HMEC treatment=n_a tissue=breast cancer=normal
 	type bigWig 0 32097.2
 	color 255,112,85
 
@@ -1544,7 +1544,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel T-47D Sg
 	longLabel T-47D mammary ductal carcinoma cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=T-47D treatment=n_a tissue=breast cancer=cancer
+	subGroups view=c_Signal cellType=T-47D treatment=n_a tissue=breast cancer=cancer
 	type bigWig 0 34214.8
 	color 255,124,85
 
@@ -1552,7 +1552,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel PANC-1 Sg
 	longLabel PANC-1 pancreatic carcinoma cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=PANC-1 treatment=n_a tissue=pancreas cancer=cancer
+	subGroups view=c_Signal cellType=PANC-1 treatment=n_a tissue=pancreas cancer=cancer
 	type bigWig 0 12279.3
 	color 255,141,85
 
@@ -1560,7 +1560,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HCT-116 Sg
 	longLabel HCT-116 colorectal carcinoma cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HCT-116 treatment=n_a tissue=colon cancer=cancer
+	subGroups view=c_Signal cellType=HCT-116 treatment=n_a tissue=colon cancer=cancer
 	type bigWig 0 27405.3
 	color 255,150,85
 
@@ -1568,7 +1568,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel NHBE_RA Sg
 	longLabel NHBE_RA bronchial epithelium, RA treated DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=NHBE_RA treatment=n_a tissue=lung cancer=normal
+	subGroups view=c_Signal cellType=NHBE_RA treatment=n_a tissue=lung cancer=normal
 	type bigWig 0 31238.7
 	color 255,154,85
 
@@ -1576,7 +1576,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HFF Sg
 	longLabel HFF foreskin fibroblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HFF treatment=n_a tissue=skin cancer=normal
+	subGroups view=c_Signal cellType=HFF treatment=n_a tissue=skin cancer=normal
 	type bigWig 0 17635.9
 	color 255,163,85
 
@@ -1584,7 +1584,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HFF-Myc Sg
 	longLabel HFF-Myc foreskin fibroblast cell line, cMyc DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HFF-Myc treatment=n_a tissue=skin cancer=normal
+	subGroups view=c_Signal cellType=HFF-Myc treatment=n_a tissue=skin cancer=normal
 	type bigWig 0 23416.2
 	color 255,165,85
 
@@ -1592,7 +1592,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel NT2-D1 Sg
 	longLabel NT2-D1 embryonal carcinoma (NTera2) cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=NT2-D1 treatment=n_a tissue=testis cancer=cancer
+	subGroups view=c_Signal cellType=NT2-D1 treatment=n_a tissue=testis cancer=cancer
 	type bigWig 0 8351.64
 	color 255,173,85
 
@@ -1600,7 +1600,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel BJ Sg
 	longLabel BJ foreskin fibroblast cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=BJ treatment=n_a tissue=skin cancer=normal
+	subGroups view=c_Signal cellType=BJ treatment=n_a tissue=skin cancer=normal
 	type bigWig 0 28788.2
 	color 255,184,85
 
@@ -1608,7 +1608,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel AG09309 Sg
 	longLabel AG09309 skin fibroblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=AG09309 treatment=n_a tissue=skin cancer=unknown
+	subGroups view=c_Signal cellType=AG09309 treatment=n_a tissue=skin cancer=unknown
 	type bigWig 0 29145.4
 	color 255,186,85
 
@@ -1616,7 +1616,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HNPCEpiC Sg
 	longLabel HNPCEpiC non-pigmented ciliary epithelium (NPCEC) DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HNPCEpiC treatment=n_a tissue=eye cancer=normal
+	subGroups view=c_Signal cellType=HNPCEpiC treatment=n_a tissue=eye cancer=normal
 	type bigWig 0 26522.6
 	color 255,188,85
 
@@ -1624,7 +1624,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel WI-38 Sg
 	longLabel WI-38 embryonic lung fibroblast cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=WI-38 treatment=n_a tissue=lung cancer=normal
+	subGroups view=c_Signal cellType=WI-38 treatment=n_a tissue=lung cancer=normal
 	type bigWig 0 21133.7
 	color 255,192,85
 
@@ -1632,7 +1632,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel GM04503 Sg
 	longLabel GM04503 skin fibroblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=GM04503 treatment=n_a tissue=skin cancer=normal
+	subGroups view=c_Signal cellType=GM04503 treatment=n_a tissue=skin cancer=normal
 	type bigWig 0 11390.2
 	color 255,200,85
 
@@ -1640,7 +1640,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel GM04504 Sg
 	longLabel GM04504 skin fibroblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=GM04504 treatment=n_a tissue=skin cancer=normal
+	subGroups view=c_Signal cellType=GM04504 treatment=n_a tissue=skin cancer=normal
 	type bigWig 0 11566.9
 	color 255,204,85
 
@@ -1648,7 +1648,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal on
 	shortLabel NHLF Sg
 	longLabel NHLF lung fibroblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=NHLF treatment=n_a tissue=lung cancer=normal
+	subGroups view=c_Signal cellType=NHLF treatment=n_a tissue=lung cancer=normal
 	type bigWig 0 11719.1
 	color 255,209,85
 
@@ -1656,7 +1656,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel NH-A Sg
 	longLabel NH-A astrocyte DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=NH-A treatment=n_a tissue=brain cancer=normal
+	subGroups view=c_Signal cellType=NH-A treatment=n_a tissue=brain cancer=normal
 	type bigWig 0 9132.47
 	color 255,210,85
 
@@ -1664,7 +1664,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HBMEC Sg
 	longLabel HBMEC brain microvascular endothelial cell (MEC) DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HBMEC treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=c_Signal cellType=HBMEC treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 11394.7
 	color 255,214,85
 
@@ -1672,7 +1672,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel AG09319 Sg
 	longLabel AG09319 gingival fibroblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=AG09319 treatment=n_a tissue=periodontium cancer=normal
+	subGroups view=c_Signal cellType=AG09319 treatment=n_a tissue=periodontium cancer=normal
 	type bigWig 0 28099
 	color 255,221,85
 
@@ -1680,7 +1680,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HPdLF Sg
 	longLabel HPdLF periodontal ligament fibroblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HPdLF treatment=n_a tissue=periodontium cancer=normal
+	subGroups view=c_Signal cellType=HPdLF treatment=n_a tissue=periodontium cancer=normal
 	type bigWig 0 11009.1
 	color 255,224,85
 
@@ -1688,7 +1688,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HCF Sg
 	longLabel HCF cardiac fibroblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HCF treatment=n_a tissue=heart cancer=normal
+	subGroups view=c_Signal cellType=HCF treatment=n_a tissue=heart cancer=normal
 	type bigWig 0 19295.8
 	color 255,229,85
 
@@ -1696,7 +1696,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HCM Sg
 	longLabel HCM cardiac myocyte DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HCM treatment=n_a tissue=heart cancer=normal
+	subGroups view=c_Signal cellType=HCM treatment=n_a tissue=heart cancer=normal
 	type bigWig 0 14370.2
 	color 255,230,85
 
@@ -1704,7 +1704,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HPAF Sg
 	longLabel HPAF pulmonary artery fibroblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HPAF treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=c_Signal cellType=HPAF treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 11225.6
 	color 255,232,85
 
@@ -1712,7 +1712,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel AoAF Sg
 	longLabel AoAF aorta fibroblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=AoAF treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=c_Signal cellType=AoAF treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 10369.5
 	color 255,236,85
 
@@ -1720,7 +1720,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HCPEpiC Sg
 	longLabel HCPEpiC choroid plexus epithelium DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HCPEpiC treatment=n_a tissue=brain cancer=normal
+	subGroups view=c_Signal cellType=HCPEpiC treatment=n_a tissue=brain cancer=normal
 	type bigWig 0 13163.5
 	color 255,242,85
 
@@ -1728,7 +1728,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HPF Sg
 	longLabel HPF pulmonary fibroblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HPF treatment=n_a tissue=lung cancer=normal
+	subGroups view=c_Signal cellType=HPF treatment=n_a tissue=lung cancer=normal
 	type bigWig 0 11172
 	color 255,247,85
 
@@ -1736,7 +1736,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HConF Sg
 	longLabel HConF conjunctival fibroblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HConF treatment=n_a tissue=eye cancer=unknown
+	subGroups view=c_Signal cellType=HConF treatment=n_a tissue=eye cancer=unknown
 	type bigWig 0 8320.98
 	color 255,252,85
 
@@ -1744,7 +1744,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HAc Sg
 	longLabel HAc cerebellar astrocyte DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HAc treatment=n_a tissue=brain cancer=normal
+	subGroups view=c_Signal cellType=HAc treatment=n_a tissue=brain cancer=normal
 	type bigWig 0 10000.7
 	color 250,255,85
 
@@ -1752,7 +1752,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HVMF Sg
 	longLabel HVMF villous mesenchymal fibroblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HVMF treatment=n_a tissue=placenta cancer=normal
+	subGroups view=c_Signal cellType=HVMF treatment=n_a tissue=placenta cancer=normal
 	type bigWig 0 5956.46
 	color 242,255,85
 
@@ -1760,7 +1760,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HIPEpiC Sg
 	longLabel HIPEpiC iris pigment epithelium DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HIPEpiC treatment=n_a tissue=eye cancer=normal
+	subGroups view=c_Signal cellType=HIPEpiC treatment=n_a tissue=eye cancer=normal
 	type bigWig 0 8028.81
 	color 236,255,85
 
@@ -1768,7 +1768,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel bone_marrow_MSC Sg
 	longLabel bone_marrow_MSC bone marrow fibroblastoid DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=bone_marrow_MSC treatment=n_a tissue=bone_marrow cancer=normal
+	subGroups view=c_Signal cellType=bone_marrow_MSC treatment=n_a tissue=bone_marrow cancer=normal
 	type bigWig 0 3047.47
 	color 228,255,85
 
@@ -1776,7 +1776,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel AG10803 Sg
 	longLabel AG10803 skin fibroblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=AG10803 treatment=n_a tissue=skin cancer=unknown
+	subGroups view=c_Signal cellType=AG10803 treatment=n_a tissue=skin cancer=unknown
 	type bigWig 0 19440.9
 	color 220,255,85
 
@@ -1784,7 +1784,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HMF Sg
 	longLabel HMF mammary fibroblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HMF treatment=n_a tissue=breast cancer=unknown
+	subGroups view=c_Signal cellType=HMF treatment=n_a tissue=breast cancer=unknown
 	type bigWig 0 12347.6
 	color 212,255,85
 
@@ -1792,7 +1792,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HGF Sg
 	longLabel HGF gingival fibroblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HGF treatment=n_a tissue=periodontum cancer=normal
+	subGroups view=c_Signal cellType=HGF treatment=n_a tissue=periodontum cancer=normal
 	type bigWig 0 3410.39
 	color 204,255,85
 
@@ -1800,7 +1800,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel NHDF-neo Sg
 	longLabel NHDF-neo dermal fibroblast, neonate DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=NHDF-neo treatment=n_a tissue=skin cancer=normal
+	subGroups view=c_Signal cellType=NHDF-neo treatment=n_a tissue=skin cancer=normal
 	type bigWig 0 13455.2
 	color 198,255,85
 
@@ -1808,7 +1808,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HAEpiC Sg
 	longLabel HAEpiC amniotic epithelium (AEC) DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HAEpiC treatment=n_a tissue=embryo cancer=normal
+	subGroups view=c_Signal cellType=HAEpiC treatment=n_a tissue=embryo cancer=normal
 	type bigWig 0 10858.1
 	color 189,255,85
 
@@ -1816,7 +1816,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel SKMC Sg
 	longLabel SKMC skeletal muscle cell DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=SKMC treatment=n_a tissue=muscle cancer=normal
+	subGroups view=c_Signal cellType=SKMC treatment=n_a tissue=muscle cancer=normal
 	type bigWig 0 2130.04
 	color 182,255,85
 
@@ -1824,7 +1824,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HBVSMC Sg
 	longLabel HBVSMC brain vascular smooth muscle DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HBVSMC treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=c_Signal cellType=HBVSMC treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 3766.42
 	color 176,255,85
 
@@ -1832,7 +1832,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel AG04449 Sg
 	longLabel AG04449 fetal skin fibroblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=AG04449 treatment=n_a tissue=skin cancer=normal
+	subGroups view=c_Signal cellType=AG04449 treatment=n_a tissue=skin cancer=normal
 	type bigWig 0 20132.8
 	color 152,255,85
 
@@ -1840,7 +1840,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel AG04450 Sg
 	longLabel AG04450 fetal lung fibroblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=AG04450 treatment=n_a tissue=lung cancer=normal
+	subGroups view=c_Signal cellType=AG04450 treatment=n_a tissue=lung cancer=normal
 	type bigWig 0 18229.7
 	color 144,255,85
 
@@ -1848,7 +1848,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HA-h Sg
 	longLabel HA-h hippocampal astrocyte DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HA-h treatment=n_a tissue=brain cancer=normal
+	subGroups view=c_Signal cellType=HA-h treatment=n_a tissue=brain cancer=normal
 	type bigWig 0 10262.5
 	color 122,255,85
 
@@ -1856,7 +1856,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel M059J Sg
 	longLabel M059J glioblastoma cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=M059J treatment=n_a tissue=brain cancer=cancer
+	subGroups view=c_Signal cellType=M059J treatment=n_a tissue=brain cancer=cancer
 	type bigWig 0 6527.58
 	color 96,255,85
 
@@ -1864,7 +1864,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel RPMI-7951 Sg
 	longLabel RPMI-7951 melanoma cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=RPMI-7951 treatment=n_a tissue=skin cancer=cancer
+	subGroups view=c_Signal cellType=RPMI-7951 treatment=n_a tissue=skin cancer=cancer
 	type bigWig 0 7339.21
 	color 85,255,90
 
@@ -1872,7 +1872,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HA-sp Sg
 	longLabel HA-sp spinal cord astrocyte DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HA-sp treatment=n_a tissue=spinal_cord cancer=normal
+	subGroups view=c_Signal cellType=HA-sp treatment=n_a tissue=spinal_cord cancer=normal
 	type bigWig 0 8189.49
 	color 85,255,124
 
@@ -1880,7 +1880,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HCFaa Sg
 	longLabel HCFaa cardiac fibroblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HCFaa treatment=n_a tissue=heart cancer=normal
+	subGroups view=c_Signal cellType=HCFaa treatment=n_a tissue=heart cancer=normal
 	type bigWig 0 3845.33
 	color 85,255,150
 
@@ -1888,7 +1888,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel WI-38 40HTAM Sg
 	longLabel WI-38 embryonic lung fibroblast cell line (40HTAM) DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=WI-38 treatment=OHTAM_20nM_72hr tissue=lung cancer=normal
+	subGroups view=c_Signal cellType=WI-38 treatment=OHTAM_20nM_72hr tissue=lung cancer=normal
 	type bigWig 0 9068.99
 	color 85,255,171
 
@@ -1896,7 +1896,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel NHDF-Ad Sg
 	longLabel NHDF-Ad dermal fibroblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=NHDF-Ad treatment=n_a tissue=skin cancer=normal
+	subGroups view=c_Signal cellType=NHDF-Ad treatment=n_a tissue=skin cancer=normal
 	type bigWig 0 2200.64
 	color 85,255,180
 
@@ -1904,7 +1904,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal on
 	shortLabel HSMM Sg
 	longLabel HSMM skeletal muscle myoblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HSMM treatment=n_a tissue=muscle cancer=normal
+	subGroups view=c_Signal cellType=HSMM treatment=n_a tissue=muscle cancer=normal
 	type bigWig 0 14177.3
 	color 85,255,190
 
@@ -1912,7 +1912,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel LHCN-M2 Sg
 	longLabel LHCN-M2 skeletal myoblast DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=LHCN-M2 treatment=n_a tissue=muscle cancer=unknown
+	subGroups view=c_Signal cellType=LHCN-M2 treatment=n_a tissue=muscle cancer=unknown
 	type bigWig 0 16877.8
 	color 85,255,193
 
@@ -1920,7 +1920,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel LHCN-M2 diff 4d Sg
 	longLabel LHCN-M2 skeletal myoblast (diff 4d) DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=LHCN-M2 treatment=DIFF_4d tissue=muscle cancer=unknown
+	subGroups view=c_Signal cellType=LHCN-M2 treatment=DIFF_4d tissue=muscle cancer=unknown
 	type bigWig 0 44051.9
 	color 85,255,198
 
@@ -1928,7 +1928,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HSMMtube Sg
 	longLabel HSMMtube skeletal muscle myotube DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HSMMtube treatment=n_a tissue=muscle cancer=normal
+	subGroups view=c_Signal cellType=HSMMtube treatment=n_a tissue=muscle cancer=normal
 	type bigWig 0 14719.7
 	color 85,255,204
 
@@ -1936,7 +1936,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal on
 	shortLabel HUVEC Sg
 	longLabel HUVEC umbilical vein endothelial cell DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HUVEC treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=c_Signal cellType=HUVEC treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 6744.03
 	color 85,255,215
 
@@ -1944,7 +1944,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HMVEC-LBl Sg
 	longLabel HMVEC-LBl lung microvascular epithelium. blood DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HMVEC-LBl treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=c_Signal cellType=HMVEC-LBl treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 2898.86
 	color 85,255,220
 
@@ -1952,7 +1952,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HMVEC-dBl-Ad Sg
 	longLabel HMVEC-dBl-Ad dermal microvascular endothelial cell, blood DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HMVEC-dBl-Ad treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=c_Signal cellType=HMVEC-dBl-Ad treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 6571.28
 	color 85,255,224
 
@@ -1960,7 +1960,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HMVEC-dLy-Neo Sg
 	longLabel HMVEC-dLy-Neo dermal microvascular endothelial cell, neonate lymph DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HMVEC-dLy-Neo treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=c_Signal cellType=HMVEC-dLy-Neo treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 9237.62
 	color 85,255,226
 
@@ -1968,7 +1968,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HMVEC-dBl-Neo Sg
 	longLabel HMVEC-dBl-Neo dermal microvascular endothelial cell, neonate blood DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HMVEC-dBl-Neo treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=c_Signal cellType=HMVEC-dBl-Neo treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 6275.08
 	color 85,255,229
 
@@ -1976,7 +1976,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HRGEC Sg
 	longLabel HRGEC renal glomerular endothelial cell DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HRGEC treatment=n_a tissue=kidney cancer=normal
+	subGroups view=c_Signal cellType=HRGEC treatment=n_a tissue=kidney cancer=normal
 	type bigWig 0 7095.64
 	color 85,255,232
 
@@ -1984,7 +1984,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HMVEC-LLy Sg
 	longLabel HMVEC-LLy lung microvascular endothelial cell, lymph DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HMVEC-LLy treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=c_Signal cellType=HMVEC-LLy treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 21274
 	color 85,255,243
 
@@ -1992,7 +1992,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HMVEC-dNeo Sg
 	longLabel HMVEC-dNeo dermal microvascular endothelial cell, neonate DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HMVEC-dNeo treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=c_Signal cellType=HMVEC-dNeo treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 16586
 	color 85,255,244
 
@@ -2000,7 +2000,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HMVEC-dAd Sg
 	longLabel HMVEC-dAd dermal microvascular endothelial cell DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HMVEC-dAd treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=c_Signal cellType=HMVEC-dAd treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 7923.4
 	color 85,255,246
 
@@ -2008,7 +2008,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HRCEpiC Sg
 	longLabel HRCEpiC renal cortical epithelium DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HRCEpiC treatment=n_a tissue=kidney cancer=normal
+	subGroups view=c_Signal cellType=HRCEpiC treatment=n_a tissue=kidney cancer=normal
 	type bigWig 0 4920.93
 	color 85,251,255
 
@@ -2016,7 +2016,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HRE Sg
 	longLabel HRE renal epithelium DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HRE treatment=n_a tissue=kidney cancer=normal
+	subGroups view=c_Signal cellType=HRE treatment=n_a tissue=kidney cancer=normal
 	type bigWig 0 6938.49
 	color 85,248,255
 
@@ -2024,7 +2024,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal on
 	shortLabel NHEK Sg
 	longLabel NHEK epidermal keratinocyte DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=NHEK treatment=n_a tissue=skin cancer=normal
+	subGroups view=c_Signal cellType=NHEK treatment=n_a tissue=skin cancer=normal
 	type bigWig 0 9597.75
 	color 85,238,255
 
@@ -2032,7 +2032,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel SAEC Sg
 	longLabel SAEC small airway epithelium DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=SAEC treatment=n_a tissue=lung cancer=normal
+	subGroups view=c_Signal cellType=SAEC treatment=n_a tissue=lung cancer=normal
 	type bigWig 0 4884.78
 	color 85,231,255
 
@@ -2040,7 +2040,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel PrEC Sg
 	longLabel PrEC prostate epithelium DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=PrEC treatment=n_a tissue=prostate cancer=normal
+	subGroups view=c_Signal cellType=PrEC treatment=n_a tissue=prostate cancer=normal
 	type bigWig 0 4302.39
 	color 85,226,255
 
@@ -2048,7 +2048,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HEEpiC Sg
 	longLabel HEEpiC esophageal epithelium DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HEEpiC treatment=n_a tissue=esophagus cancer=normal
+	subGroups view=c_Signal cellType=HEEpiC treatment=n_a tissue=esophagus cancer=normal
 	type bigWig 0 20601.1
 	color 85,220,255
 
@@ -2056,7 +2056,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel GM06990 Sg
 	longLabel GM06990 B-lymphocyte, lymphoblastoid cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=GM06990 treatment=n_a tissue=blood cancer=unknown
+	subGroups view=c_Signal cellType=GM06990 treatment=n_a tissue=blood cancer=unknown
 	type bigWig 0 14706.5
 	color 85,205,255
 
@@ -2064,7 +2064,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal on
 	shortLabel HepG2 Sg
 	longLabel HepG2 hepatocellular carcinoma cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HepG2 treatment=n_a tissue=liver cancer=cancer
+	subGroups view=c_Signal cellType=HepG2 treatment=n_a tissue=liver cancer=cancer
 	type bigWig 0 4511.03
 	color 85,198,255
 
@@ -2072,7 +2072,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel Caco-2 Sg
 	longLabel Caco-2 colon adenocarcinoma cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=Caco-2 treatment=n_a tissue=colon cancer=cancer
+	subGroups view=c_Signal cellType=Caco-2 treatment=n_a tissue=colon cancer=cancer
 	type bigWig 0 4903.16
 	color 85,193,255
 
@@ -2080,7 +2080,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel SK-N-SH_RA Sg
 	longLabel SK-N-SH_RA neuroblastoma cell line, RA treated DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=SK-N-SH_RA treatment=n_a tissue=brain cancer=cancer
+	subGroups view=c_Signal cellType=SK-N-SH_RA treatment=n_a tissue=brain cancer=cancer
 	type bigWig 0 4488.56
 	color 85,189,255
 
@@ -2088,7 +2088,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel CD20+_RO01778 Sg
 	longLabel CD20+_RO01778 B-lymphocyte, CD20+ DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=CD20_RO01778 treatment=n_a tissue=blood cancer=normal
+	subGroups view=c_Signal cellType=CD20_RO01778 treatment=n_a tissue=blood cancer=normal
 	type bigWig 0 1572.73
 	color 85,183,255
 
@@ -2096,7 +2096,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel Th1 Sg
 	longLabel Th1 T-lymphocyte, helper type 1 DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=Th1 treatment=n_a tissue=blood cancer=unknown
+	subGroups view=c_Signal cellType=Th1 treatment=n_a tissue=blood cancer=unknown
 	type bigWig 0 2056.65
 	color 85,178,255
 
@@ -2104,7 +2104,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel Th2 Sg
 	longLabel Th2 T-lymphocyte, helper type 2 DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=Th2 treatment=n_a tissue=blood cancer=unknown
+	subGroups view=c_Signal cellType=Th2 treatment=n_a tissue=blood cancer=unknown
 	type bigWig 0 1526.14
 	color 85,176,255
 
@@ -2112,7 +2112,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel Th1_Wb54553204 Sg
 	longLabel Th1_Wb54553204 T-lymphocyte, helper type 1 DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=Th1_Wb54553204 treatment=n_a tissue=blood cancer=normal
+	subGroups view=c_Signal cellType=Th1_Wb54553204 treatment=n_a tissue=blood cancer=normal
 	type bigWig 0 593.107
 	color 85,173,255
 
@@ -2120,7 +2120,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel Jurkat Sg
 	longLabel Jurkat T-lymphocyte acute leukemia cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=Jurkat treatment=n_a tissue=blood cancer=cancer
+	subGroups view=c_Signal cellType=Jurkat treatment=n_a tissue=blood cancer=cancer
 	type bigWig 0 5823.31
 	color 85,165,255
 
@@ -2128,7 +2128,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal on
 	shortLabel GM12878 Sg
 	longLabel GM12878 B-lymphocyte, lymphoblastoid cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=GM12878 treatment=n_a tissue=blood cancer=normal
+	subGroups view=c_Signal cellType=GM12878 treatment=n_a tissue=blood cancer=normal
 	type bigWig 0 7218.11
 	color 85,152,255
 
@@ -2136,7 +2136,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel GM12865 Sg
 	longLabel GM12865 B-lymphocyte, lymphoblastoid cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=GM12865 treatment=n_a tissue=blood cancer=unknown
+	subGroups view=c_Signal cellType=GM12865 treatment=n_a tissue=blood cancer=unknown
 	type bigWig 0 8525.5
 	color 85,147,255
 
@@ -2144,7 +2144,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel Monocytes-CD14+_RO01746 Sg
 	longLabel Monocytes-CD14+_RO01746 monocyte, CD14+ DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=Monocytes_CD14_RO01746 treatment=n_a tissue=blood cancer=normal
+	subGroups view=c_Signal cellType=Monocytes_CD14_RO01746 treatment=n_a tissue=blood cancer=normal
 	type bigWig 0 853.111
 	color 85,135,255
 
@@ -2152,7 +2152,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HL-60 Sg
 	longLabel HL-60 acute promyelocytic leukemia (APL) cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HL-60 treatment=n_a tissue=blood cancer=cancer
+	subGroups view=c_Signal cellType=HL-60 treatment=n_a tissue=blood cancer=cancer
 	type bigWig 0 5012.92
 	color 85,124,255
 
@@ -2160,7 +2160,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel NB4 Sg
 	longLabel NB4 acute promyelocytic leukemia (APL) cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=NB4 treatment=n_a tissue=bone_marrow cancer=cancer
+	subGroups view=c_Signal cellType=NB4 treatment=n_a tissue=bone_marrow cancer=cancer
 	type bigWig 0 7662.2
 	color 85,112,255
 
@@ -2168,7 +2168,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal on
 	shortLabel H7-hESC Sg
 	longLabel H7-hESC embryonic stem cell DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=H7-hESC treatment=n_a tissue=embryo cancer=unknown
+	subGroups view=c_Signal cellType=H7-hESC treatment=n_a tissue=embryo cancer=unknown
 	type bigWig 0 13035.4
 	color 85,93,255
 
@@ -2176,7 +2176,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel H7-hESC diff 5d Sg
 	longLabel H7-hESC embryonic stem cell (diff 5d) DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=H7-hESC treatment=diffProtA_5d tissue=embryo cancer=unknown
+	subGroups view=c_Signal cellType=H7-hESC treatment=diffProtA_5d tissue=embryo cancer=unknown
 	type bigWig 0 5836.88
 	color 85,88,255
 
@@ -2184,7 +2184,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel H7-hESC diff 14d Sg
 	longLabel H7-hESC embryonic stem cell (diff 14d) DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=H7-hESC treatment=diffProtA_14d tissue=embryo cancer=unknown
+	subGroups view=c_Signal cellType=H7-hESC treatment=diffProtA_14d tissue=embryo cancer=unknown
 	type bigWig 0 21393.7
 	color 89,85,255
 
@@ -2192,7 +2192,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel RPTEC Sg
 	longLabel RPTEC renal proximal tubule epithelium DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=RPTEC treatment=n_a tissue=kidney cancer=normal
+	subGroups view=c_Signal cellType=RPTEC treatment=n_a tissue=kidney cancer=normal
 	type bigWig 0 22767.8
 	color 100,85,255
 
@@ -2200,7 +2200,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HRPEpiC Sg
 	longLabel HRPEpiC retinal pigment epithelium DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HRPEpiC treatment=n_a tissue=eye cancer=normal
+	subGroups view=c_Signal cellType=HRPEpiC treatment=n_a tissue=eye cancer=normal
 	type bigWig 0 32404.6
 	color 124,85,255
 
@@ -2208,7 +2208,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HMVEC-dLy-Ad Sg
 	longLabel HMVEC-dLy-Ad dermal microvascular endothelial cell, lymph DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HMVEC-dLy-Ad treatment=n_a tissue=blood_vessel cancer=normal
+	subGroups view=c_Signal cellType=HMVEC-dLy-Ad treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 39771.9
 	color 133,85,255
 
@@ -2216,7 +2216,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal on
 	shortLabel HeLa-S3 Sg
 	longLabel HeLa-S3 cervical epithelial adenocarcinoma cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=HeLa-S3 treatment=n_a tissue=cervix cancer=cancer
+	subGroups view=c_Signal cellType=HeLa-S3 treatment=n_a tissue=cervix cancer=cancer
 	type bigWig 0 26492
 	color 157,85,255
 
@@ -2224,7 +2224,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel SK-N-MC Sg
 	longLabel SK-N-MC neuroepithelioma cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=SK-N-MC treatment=n_a tissue=brain cancer=cancer
+	subGroups view=c_Signal cellType=SK-N-MC treatment=n_a tissue=brain cancer=cancer
 	type bigWig 0 5864.79
 	color 176,85,255
 
@@ -2232,7 +2232,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel MCF-7 Sg
 	longLabel MCF-7 mammary adenocarcinoma cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=MCF-7 treatment=n_a tissue=breast cancer=cancer
+	subGroups view=c_Signal cellType=MCF-7 treatment=n_a tissue=breast cancer=cancer
 	type bigWig 0 15780.8
 	color 190,85,255
 
@@ -2240,7 +2240,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel MCF-7 estradi 1h Sg
 	longLabel MCF-7 mammary adenocarcinoma cell line (estradi 1h) DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=MCF-7 treatment=Estradiol_100nM_1hr tissue=breast cancer=cancer
+	subGroups view=c_Signal cellType=MCF-7 treatment=Estradiol_100nM_1hr tissue=breast cancer=cancer
 	type bigWig 0 24234.6
 	color 192,85,255
 
@@ -2248,7 +2248,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel MCF-7 estradi 0h Sg
 	longLabel MCF-7 mammary adenocarcinoma cell line (estradi 0h) DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=MCF-7 treatment=Estradiol_ctrl_0hr tissue=breast cancer=cancer
+	subGroups view=c_Signal cellType=MCF-7 treatment=Estradiol_ctrl_0hr tissue=breast cancer=cancer
 	type bigWig 0 23308.2
 	color 192,85,255
 
@@ -2256,7 +2256,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel WERI-Rb-1 Sg
 	longLabel WERI-Rb-1 retinoblastoma cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=WERI-Rb-1 treatment=n_a tissue=eye cancer=cancer
+	subGroups view=c_Signal cellType=WERI-Rb-1 treatment=n_a tissue=eye cancer=cancer
 	type bigWig 0 8726.43
 	color 211,85,255
 
@@ -2264,7 +2264,7 @@ priority 100.3
 	parent wgEncodeRegDnaseSignal off
 	shortLabel BE2_C Sg
 	longLabel BE2_C neuroblastoma cell line DNaseI Signal from ENCODE
-	subGroups view=Signal cellType=BE2_C treatment=n_a tissue=brain cancer=cancer
+	subGroups view=c_Signal cellType=BE2_C treatment=n_a tissue=brain cancer=cancer
 	type bigWig 0 72865.5
 	color 237,85,255
 
