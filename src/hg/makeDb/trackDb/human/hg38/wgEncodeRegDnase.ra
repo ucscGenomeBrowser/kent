@@ -1,7 +1,10 @@
+# DNase from ENCODE, processed by UCSC ENCODE Analysis Pipeline
+
 track wgEncodeRegDnaseClustered
+superTrack wgEncodeReg dense
 shortLabel DNase Clusters
 pennantIcon encodeThumbnail.jpg ../ENCODE "ENCODE project at UCSC"
-longLabel DNase I Hypersensitivity Peak Clusters from ENCODE
+longLabel DNase I Hypersensitivity Peak Clusters from ENCODE (95 cell type)
 inputTableFieldDisplay cellType treatment
 controlledVocabulary cellType=hgFixed.wgEncodeCell treatment=hgFixed.wgEncodeTreatment 
 #inputFieldMetaTables treatment=cellType=hgFixed.wgEncodeCell hgFixed.wgEncodeTreatment 
@@ -11,11 +14,12 @@ type bed 5 .
 scoreFilter 200
 scoreFilterLimits 1:1000
 spectrum on
-html uwDnaseClusters
+html wgEncodeRegDnaseClustered
 group regulation
 priority 100.2
 
 track wgEncodeRegDnase
+superTrack wgEncodeReg hide
 compositeTrack on
 shortLabel DNase HS
 longLabel DNase I Hypersensitivity in 95 cell types from ENCODE
@@ -36,7 +40,7 @@ sortOrder view=+ subtrackColor=+ cellType=+ tissue=+
 dragAndDrop subTracks
 noInherit on
 type bed 3 +
-html uwDnase
+html wgEncodeRegDnase
 priority 100.3
 
     track wgEncodeRegDnaseHotspot
@@ -1508,14 +1512,6 @@ priority 100.3
 	type bigWig 0 38914.2
 	color 255,85,85
 
-        track testDnaseSignalWgEncodeEH000484
-	parent wgEncodeRegDnaseSignal on
-	shortLabel K562 USg
-	longLabel K562 Non-normalized DNaseI Signal from ENCODE
-	subGroups view=c_Signal cellType=K562 treatment=n_a tissue=bone_marrow cancer=cancer
-	type bigWig 0 38914.2
-	color 255,85,85
-
 	track wgEncodeRegDnaseUwA549Signal
 	parent wgEncodeRegDnaseSignal off
 	shortLabel A549 Sg
@@ -2269,6 +2265,7 @@ priority 100.3
 	color 237,85,255
 
 track wgEncodeRegDnaseWig
+superTrack wgEncodeReg hide
 shortLabel DNase Signal
 longLabel DNase I Hypersensitivity Signal Colored by Similarity from ENCODE
 pennantIcon encodeThumbnail.jpg ../ENCODE "ENCODE project at UCSC"
@@ -2281,7 +2278,7 @@ viewLimits 0:200
 showSubtrackColorOnUi on
 aggregate transparentOverlay
 priority 100.1
-html uwDnaseSignal
+html wgEncodeRegDnaseSignal
 dimensions dimA=tissue dimB=cancer
 filterComposite dimA
 group regulation
