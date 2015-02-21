@@ -11,25 +11,6 @@ canPack On
 
 include wgEncodeRegDnase.ra
 
-    # Lifted from hg19, for comparison
-    track wgEncodeRegDnaseClusteredLifted
-    release alpha
-    superTrack wgEncodeReg hide
-    shortLabel DNase Clusters (Lifted)
-    pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
-    origAssembly hg19
-    longLabel DNase I Hypersensitivity Peak Clusters from ENCODE (125 cell types, Lifted)
-    inputTableFieldDisplay cellType treatment lab
-    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
-    inputTrackTable wgEncodeRegDnaseClusteredInputsV2Lifted
-    sourceTable wgEncodeRegDnaseClusteredSourcesLifted
-    type bed 5 .
-    scoreFilter 100
-    scoreFilterLimits 100:1000
-    spectrum on
-    group regulation
-    priority 100.2
-
     track wgEncodeRegTxn
     container multiWig
     noInherit on
@@ -592,14 +573,13 @@ include wgEncodeRegDnase.ra
         ZZZ3
 
     # This is current DNase clusters track -- newer data, includes single-cell clusters
-    track wgEncodeRegDnaseClustered
-    table wgEncodeRegDnaseClusteredLifted
+    track wgEncodeRegDnaseClusteredLifted
     shortLabel DNase Clusters
-    longLabel DNaseI Hypersensitivity Clusters in 125 cell types from ENCODE 
+    longLabel DNaseI Hypersensitivity Clusters in 125 cell types from ENCODE (Lifted)
     type bed 5 .
     pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
     origAssembly hg19
-    superTrack wgEncodeReg dense
+    superTrack wgEncodeReg hide
     inputTrackTable wgEncodeRegDnaseClusteredInputsV2
     inputTableFieldDisplay cellType treatment lab
     sourceTable wgEncodeRegDnaseClusteredSources
