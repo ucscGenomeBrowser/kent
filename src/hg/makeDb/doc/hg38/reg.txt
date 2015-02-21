@@ -426,3 +426,29 @@ hgsql hg38 -e "alter table uwEnc2DnaseSources rename to wgEncodeRegDnasedCluster
         #hgLoadSqlTab hgFixed wgEncodeTreatment ~/kent/src/hg/lib/encode/wgEncodeTreatment.sql stdin
 
 
+# Comparison to lifted track (Chris Eisenhart)
+# Visually, new track is appears noisy. This is not unexpected as it excludes Duke data.
+# There are more elements in new track: 2076756 vs 1867194
+
+# Coverage is similar:
+
+ featureBits hg38 wgEncodeRegDnaseClustered
+ # 451551920 bases of 3049335806 (14.808%) in intersection
+
+ featureBits hg38 wgEncodeRegDnaseClusteredLifted
+ # 477271764 bases of 3049335806 (15.652%) in intersection
+
+# Comparing chr1:
+
+ featureBits hg38 -chrom=chr1 wgEncodeRegDnaseClustered
+ #41505780 bases of 230486321 (18.008%) in intersection
+ featureBits hg38 -chrom=chr1 wgEncodeRegDnaseClusteredLifted
+ #46543116 bases of 230486321 (20.193%) in intersection
+
+# Greater number of elements must be due to mappings on new alt chroms
+# (96 chroms in new track, 38 in old)
+
+
+
+
+
