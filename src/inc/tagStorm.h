@@ -25,7 +25,7 @@
  * The file is interpreted so that lower level stanzas inherit tags from higher level ones.
  * This file might be used as so:
  *   struct tagStorm *tags = tagStormFromFile("metadata.txt");
- *   struct hash *fileIndex = tagStormIndexUnique(tags, "file");
+ *   struct hash *fileIndex = tagStormUniqueIndex(tags, "file");
  *   struct tagStanza *stanza = hashMustFindVal(fileIndex,"hg19/chipSeq/helaCTCF.broadPeak.bigBed");
  *   char *target = tagFindVal(stanza, "target");	// Target is CTCF
  *
@@ -54,7 +54,7 @@ struct tagStanza
     struct tagStanza *next;	/* Pointer to next younger sibling. */
     struct tagStanza *children;	/* Pointer to eldest child. */
     struct tagStanza *parent;	/* Pointer to parent. */
-    struct slPair *tagList;	/* All tags, including the "meta" one. */
+    struct slPair *tagList;	/* All tags. Best not to count on the order. */
     };
 
 /** Read and write tag storms from/to files. */
@@ -110,6 +110,10 @@ struct slPair *tagStanzaAdd(struct tagStorm *tagStorm, struct tagStanza *stanza,
     char *tag, char *val);
 /* Add tag with given value to stanza */
 
+struct slPair *tagStanzaAppend(struct tagStorm *tagStorm, struct tagStanza *stanza, 
+    char *tag, char *val);
+/* Add tag with given value to the end of the stanza */
+
 void tagStanzaAddLongLong(struct tagStorm *tagStorm, struct tagStanza *stanza, char *var, 
     long long val);
 /* Add long long integer valued tag to stanza */
@@ -124,13 +128,19 @@ void tagStormReverseAll(struct tagStorm *tagStorm);
 
 /** Information about a tag storm */
 
-struct slName *tagTreeFieldList(struct tagStorm *tagStorm);
+struct slName *tagStormFieldList(struct tagStorm *tagStorm);
 /* Return list of all fields in storm */
 
-struct hash *tagTreeFieldHash(struct tagStorm *tagStorm);
+struct hash *tagStormFieldHash(struct tagStorm *tagStorm);
 /* Return an integer-valued hash of fields, keyed by tag name and with value
  * number of times field is used.  For most purposes just used to make sure
  * field exists though. */
+
+struct hash *tagStormCountTagVals(struct tagStorm *tags, char *tag);
+/* Return an integer valued hash keyed by all the different values
+ * of tag seen in tagStorm.  The hash is filled with counts of the
+ * number of times each value is used that can be recovered with 
+ * hashIntVal(hash, key) */
 
 /** Stuff for finding tags within a stanza */
 
@@ -145,5 +155,8 @@ char *tagFindVal(struct tagStanza *stanza, char *name);
 char *tagMustFindVal(struct tagStanza *stanza, char *name);
 /* Return value of tag of given name within stanza or any of it's parents. Abort if
  * not found. */
+
+struct slPair *tagListIncludingParents(struct tagStanza *stanza);
+/* Return a list of all tags including ones defined in parents. */
 
 #endif /* TAGSTORM_H */

@@ -96,7 +96,14 @@ To create a bigBed track, follow these steps:<BR>
   <A HREF="../../cgi-bin/hgCustom">custom track</A> management page.
 </OL>
 
+The <tt>bedToBigBed</tt> program can also be run with several additional options.
+Some of them, like the <tt>-as</tt> and <tt>-type</tt> options, are used in examples
+below.  A full list of the available options can be seen by running
+<tt>bedToBigBed</tt> by itself with no arguments to display the usage message.
+
+<p>
 <H3>Example One</H3>
+</p>
 <P>In this example, you will use an existing bigBed file to create a bigBed 
 custom track.  A bigBed file that contains data on chromosome 21 on the hg19 
 assembly has been placed on our http server.  
@@ -190,7 +197,7 @@ and the first of the extra fields to be used for track item search.
   BED file contains data only on chromsome 7.
  <LI> If you are using the bigBed file in a track hub, then you can use the
 additional indices for track item searches. See the setting "searchIndex" in the
-<A href="http://hgwdev.cse.ucsc.edu/goldenPath/help/trackDb/trackDbHub.html#searchIndex">Track Database Definition Document</A>
+<A href="trackDb/trackDbHub.html#searchIndex">Track Database Definition Document</A>
 for more information. For example, if you ran your bedToBigBed with the
 option of "-extraIndex=name", you will only be able to search on the name field by
 adding the following line, "searchIndex name" to the stanza about your bigBed

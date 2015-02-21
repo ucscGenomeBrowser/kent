@@ -11,6 +11,10 @@ O = $A.o
 
 include $(kentSrc)/inc/cgi_build_rules.mk
 
-compile: $O 
+compile: $O cdwNavBar.h
 	${CC} $O ${MYLIBS} ${L} 
 	mv ${AOUT} $A${EXE}
+
+cdwNavBar.h: cdwNavBar.html
+	stringify cdwNavBar.html > cdwNavBar.h
+

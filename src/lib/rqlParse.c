@@ -383,9 +383,9 @@ if (tok != NULL)
     else if (sameString(tok, "<"))
         {
 	if (eatMatchingTok(tkz, "="))
-	    op = rqlOpGe;
-	else
 	    op = rqlOpLe;
+	else
+	    op = rqlOpLt;
 	}
     else if (sameString(tok, "not"))
         {
@@ -703,6 +703,15 @@ char *extra = tokenizerNext(tkz);
 if (extra != NULL)
     errAbort("Extra stuff starting with '%s' past end of statement line %d of %s", 
     	extra, lf->lineIx, lf->fileName);
+return rql;
+}
+
+struct rqlStatement *rqlStatementParseString(char *string)
+/* Return a parsed-out RQL statement based on string */
+{
+struct lineFile *lf = lineFileOnString("query", TRUE, cloneString(string));
+struct rqlStatement *rql = rqlStatementParse(lf);
+lineFileClose(&lf);
 return rql;
 }
 

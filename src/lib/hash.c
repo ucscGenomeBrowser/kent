@@ -483,6 +483,15 @@ const struct hashEl *b = *((struct hashEl **)vb);
 return cmpStringsWithEmbeddedNumbers(a->name, b->name);
 }
 
+int hashElCmpIntValDesc(const void *va, const void *vb)
+/* Compare two hashEl from a hashInt type hash, with highest integer values
+ * comingFirst. */
+{
+struct hashEl *a = *((struct hashEl **)va);
+struct hashEl *b = *((struct hashEl **)vb);
+return b->val - a->val;
+}
+
 void *hashElFindVal(struct hashEl *list, char *name)
 /* Look up name in hashEl list and return val or NULL if not found. */
 {

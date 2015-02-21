@@ -110,6 +110,9 @@ struct rqlParse *rqlParseExpression(struct tokenizer *tkz);
 struct rqlStatement *rqlStatementParse(struct lineFile *lf);
 /* Parse an RQL statement out of text */
 
+struct rqlStatement *rqlStatementParseString(char *string);
+/* Return a parsed-out RQL statement based on string */
+
 void rqlStatementFree(struct rqlStatement **pRql);
 /* Free up an rql statement. */
 
