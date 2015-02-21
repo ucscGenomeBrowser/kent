@@ -942,11 +942,11 @@ char *compositeGroupId(struct trackDb *tdb, char *group, char *id);
 
 char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct trackDb *childTdb,
 	char *vocabType, char *label);
-/* If the parentTdb has a controlledVocabulary setting and the vocabType is found,
+/* If the parentTdb has an ENCODE controlledVocabulary setting and the vocabType is found,
    then label will be wrapped with the link to display it.  Return string is cloned. */
 
-char *controlledVocabLink(char *file,char *term,char *value,char *title, char *label,char *suffix);
-// returns allocated string of HTML link to controlled vocabulary term
+char *wgEncodeVocabLink(char *file,char *term,char *value,char *title, char *label,char *suffix);
+// returns allocated string of HTML link to ENCODE controlled vocabulary term
 
 char *metadataAsHtmlTable(char *db,struct trackDb *tdb,boolean
         showLongLabel,boolean showShortLabel);
@@ -1374,12 +1374,17 @@ struct slName *asColNames(struct asObject *as);
 // Get list of column names.
 
 /********************/
-/* Basic metadata for subgroups and input fields */
+/* Basic info for controlled vocabulary terms (e.g. to display for composites, or cluster tracks */
 
-char *metaVocabLink(struct hash *metaFieldHash, char *term, char *title);
+char *vocabLink(struct hash *vocabFieldHash, char *term, char *title);
 /* Make an anchor with mouseover containing description and link if present */
 
-struct hash *metaBasicFromSetting(struct trackDb *parentTdb, struct cart *cart, char *setting);
-/* Get description and URL for all metaTables. Returns a hash of hashes */
+struct hash *vocabBasicFromSetting(struct trackDb *parentTdb, struct cart *cart);
+/* Get description and URL for all vocabTables. Returns a hash of hashes */
+
+boolean vocabSettingIsEncode(char *setting);
+/* Distinguish ENCODE controlled vocab settings (first arg is cv.ra filename) from non-ENCODE 
+    (table-based vocabs)
+*/
 
 #endif /* HUI_H */

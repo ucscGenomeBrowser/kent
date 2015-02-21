@@ -81,7 +81,7 @@ else
 static void printControlledVocabFields(char **row, int fieldCount, 
 	struct slName *fieldList, char *vocabFile, struct hash *vocabHash)
 /* Print out fields from row, linking them to controlled vocab if need be. 
- * If vocabFile is NULL, the vocabHash is a metaHash, so links + mouseovers are
+ * If vocabFile is NULL, the vocabHash is not ENCODE, so links + mouseovers are
  * generated differently */
 {
 int i;
@@ -93,14 +93,14 @@ for (i=0, field = fieldList; i<fieldCount; ++i, field = field->next)
     if (vocabFile && hashLookup(vocabHash, field->name))
         {
         // controlled vocabulary
-        link = controlledVocabLink(vocabFile, "term", fieldVal, fieldVal, fieldVal, "");
+        link = wgEncodeVocabLink(vocabFile, "term", fieldVal, fieldVal, fieldVal, "");
         }
     else if (!vocabFile && vocabHash != NULL)
         {
         // meta tables
         struct hash *fieldHash = hashFindVal(vocabHash, field->name);
         if (fieldHash != NULL)
-            link = metaVocabLink(fieldHash, fieldVal, fieldVal);
+            link = vocabLink(fieldHash, fieldVal, fieldVal);
 
         }
     webPrintLinkCell(link != NULL ? link : fieldVal);
@@ -152,21 +152,20 @@ return hash;
 
 static void getVocab(struct trackDb *tdb, struct cart *cart, 
                         char **vocabFile, struct hash **vocabHash)
-/* Get vocabulary info from trackDb settings (CV or meta tables) */
+/* Get vocabulary info from trackDb settings (CV or vocab tables) */
 {
 
 char *file = NULL;
 struct hash *hash = NULL;
 char *vocab = trackDbSetting(tdb, "controlledVocabulary");
-struct hash *metaHash = metaBasicFromSetting(tdb, cart, "inputFieldMetaTables");
-if (vocab)
+if (vocabSettingIsEncode(vocab))
     {
     file = cloneFirstWord(vocab);
     hash = getVocabHash(file);
     }
-else if (metaHash)
+else
     {
-    hash = metaHash;
+    hash = vocabBasicFromSetting(tdb, cart);
     }
 if (vocabFile != NULL)
     *vocabFile = file;
@@ -221,7 +220,7 @@ static char *factorSourceVocabLink(char *vocabFile, char *fieldName, char *field
 {
 char *vocabType = (sameString(fieldName, "target") || sameString(fieldName, "factor")) ?
                     "target" : "term";
-return controlledVocabLink(vocabFile, vocabType, fieldVal, fieldVal, fieldVal, "");
+return wgEncodeVocabLink(vocabFile, vocabType, fieldVal, fieldVal, fieldVal, "");
 }
 
 static void printFactorSourceTableHits(struct factorSource *cluster, struct sqlConnection *conn,
@@ -489,7 +488,7 @@ char *vocab = trackDbSetting(tdb, "controlledVocabulary");
 if (vocab != NULL)
     {
     char *file = cloneFirstWord(vocab);
-    factorLink = controlledVocabLink(file, "term", factorLink, factorLink, factorLink, "");
+    factorLink = wgEncodeVocabLink(file, "term", factorLink, factorLink, factorLink, "");
     }
 printf("<B>Factor:</B> %s<BR>\n", factorLink);
 printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);

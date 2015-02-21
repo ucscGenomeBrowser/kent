@@ -163,7 +163,7 @@ if (!trackHubDatabase(db) && hTableOrSplitExists(db, tdb->table))
 return FALSE;
 }
 
-char *controlledVocabLink(char *file,char *term,char *value,char *title, char *label,char *suffix)
+char *wgEncodeVocabLink(char *file,char *term,char *value,char *title, char *label,char *suffix)
 // returns allocated string of HTML link to controlled vocabulary term
 {
 #define VOCAB_LINK_WITH_FILE "<A HREF='hgEncodeVocab?ra=%s&%s=\"%s\"' title='%s details' " \
@@ -243,12 +243,12 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
                 if (!cvTermIsHidden(mdbVar->var))
                     {
                     char *label = (char *)cvLabel(NULL,mdbVar->var);
-                    char *linkOfType = controlledVocabLink(NULL,CV_TYPE,mdbVar->var,label,
+                    char *linkOfType = wgEncodeVocabLink(NULL,CV_TYPE,mdbVar->var,label,
                                                            label,NULL);
                     if (cvTermIsCvDefined(mdbVar->var))
                         {
                         label = (char *)cvLabel(mdbVar->var,mdbVar->val);
-                        char *linkOfTerm = controlledVocabLink(NULL,CV_TERM,mdbVar->val,label,
+                        char *linkOfTerm = wgEncodeVocabLink(NULL,CV_TERM,mdbVar->val,label,
                                                                label,NULL);
                         dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap>"
                                                "<i>%s:</i></td><td nowrap>%s</td></tr>",
@@ -4188,60 +4188,72 @@ if (subCount > 5 || (restrictions && sortOrder != NULL))
 }
 
 /********************/
-/* Basic metadata for subgroups and input fields */
+/* Basic info for a controlled vocabulary term */
 
-struct metaBasic {
-    struct metaBasic *next;
+struct vocabBasic {
+    struct vocabBasic *next;
     char *term;
     char *description;
     char *url;
 };
 
-char *metaVocabLink(struct hash *metaFieldHash, char *term, char *title)
+boolean vocabSettingIsEncode(char *setting)
+/* Distinguish ENCODE controlled vocab settings (first arg is cv.ra filename) from non-ENCODE 
+    (table-based vocabs)
+*/
+{
+if (setting && (strchr(cloneFirstWord(setting), '=') == NULL))
+    return TRUE;
+return FALSE;
+}
+
+char *vocabLink(struct hash *vocabFieldHash, char *term, char *title)
 /* Make an anchor with mouseover containing description and link if present */
 {   
-struct metaBasic *meta = hashFindVal(metaFieldHash, term);
-if (meta == NULL)
+struct vocabBasic *vocab = hashFindVal(vocabFieldHash, term);
+if (vocab == NULL)
     return NULL;
 struct dyString *ds = dyStringNew(0);
-if (meta->url == NULL || strlen(meta->url) == 0)
+if (vocab->url == NULL || strlen(vocab->url) == 0)
     dyStringPrintf(ds, "<A title='%s' style='cursor: pointer;'>%s</A>",
-                        meta->description, term);
+                        vocab->description, term);
 else
     dyStringPrintf(ds, "<A target='_blank' class='cv' title='%s' href='%s'>%s</A>\n",
-                        meta->description, meta->url, term);
+                        vocab->description, vocab->url, term);
 return dyStringCannibalize(&ds);
 }
 
-struct hash *metaBasicFromSetting(struct trackDb *parentTdb, struct cart *cart, char *setting)
-/* Get description and URL for all metaTables. Returns a hash of hashes */
+struct hash *vocabBasicFromSetting(struct trackDb *parentTdb, struct cart *cart)
+/* Get description and URL for all vocabTables. Returns a hash of hashes */
 {
-if (differentString(setting, "subGroupMetaTables") &&
-    differentString(setting, "inputFieldMetaTables"))
-        return NULL;
-char *spec = trackDbSetting(parentTdb, setting);
+char *spec = trackDbSetting(parentTdb, "controlledVocabulary");
 if (!spec)
     return NULL;
-struct slPair *metaTables = slPairFromString(spec);
+// Not yet implemented for ENCODE-style CV
+if (vocabSettingIsEncode(spec))
+    return NULL;
+
+struct slPair *vocabTables = slPairFromString(spec);
+struct slPair *vocabTable = NULL;
 struct hash *tableHash = hashNew(0);
-struct slPair *metaTable;
 struct sqlResult *sr;
 char **row;
 char query[256];
 char *database = cartString(cart, "db");
-char *db = database;
-for (metaTable = metaTables; metaTable != NULL; metaTable = metaTables->next)
+for (vocabTable = vocabTables; vocabTable != NULL; vocabTable = vocabTable->next)
     {
-    char *tableName = chopPrefix(cloneString(metaTable->val));
-    if (differentString(tableName, metaTable->val))
+    char *db = database;
+    char *tableSpec = (char *)vocabTable->val;
+    char *tableName = chopPrefix(tableSpec);
+    if (differentString(tableName, tableSpec))
         {
-        chopSuffix(metaTable->val);
-        db = metaTable->val;
+        chopSuffix(tableSpec);
+        db = tableSpec;
         }
     struct sqlConnection *conn = hAllocConn(db);
     boolean hasUrl = FALSE;
     struct hash *subgroupHash = hashNew(0);
-    hashAdd(tableHash, metaTable->name, subgroupHash);
+    hashAdd(tableHash, vocabTable->name, subgroupHash);
     if (hHasField(db, tableName, "url"))
         {
         sqlSafef(query, sizeof(query), "select term, description, url from %s", tableName);
@@ -4252,13 +4264,13 @@ for (metaTable = metaTables; metaTable != NULL; metaTable = metaTables->next)
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-        struct metaBasic *meta = NULL;
-        AllocVar(meta);
-        meta->term = cloneString(row[0]);
-        meta->description = cloneString(row[1]);
+        struct vocabBasic *vocab = NULL;
+        AllocVar(vocab);
+        vocab->term = cloneString(row[0]);
+        vocab->description = cloneString(row[1]);
         if (hasUrl)
-            meta->url = cloneString(row[2]);
-        hashAdd(subgroupHash, meta->term, meta);
+            vocab->url = cloneString(row[2]);
+        hashAdd(subgroupHash, vocab->term, vocab);
         }
     sqlFreeResult(&sr);
     hFreeConn(&conn);
@@ -4296,7 +4308,7 @@ else
 // Finally the big "for loop" to list each subtrack as a table row.
 printf("\n<!-- ----- subtracks list ----- -->\n");
 membersForAll_t* membersForAll = membersForAllSubGroupsGet(parentTdb,NULL);
-struct hash *subgroupMetaHash = metaBasicFromSetting(parentTdb, cart, "subGroupMetaTables");
+struct hash *vocabHash = vocabBasicFromSetting(parentTdb, cart);
 struct slRef *subtrackRef;
 
 /* Color handling ?? */
@@ -4478,11 +4490,11 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                 printf("<TD id='%s_%s' abbr='%s' align='left'>", subtrack->track, col, term);
                 printf("&nbsp");
                 char *link = NULL;
-                if (subgroupMetaHash)
+                if (vocabHash)
                     {
-                    struct hash *colHash = hashFindVal(subgroupMetaHash, col);
+                    struct hash *colHash = hashFindVal(vocabHash, col);
                     if (colHash)
-                        link = metaVocabLink(colHash, term, titleRoot);
+                        link = vocabLink(colHash, term, titleRoot);
                     }
                 printf("%s", link ? link : titleRoot);
                 puts("</TD>");
@@ -6857,29 +6869,38 @@ return TRUE;
 }
 
 char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct trackDb *childTdb,
-	char *vocabType, char *label)
+	                                char *vocabType, char *label)
 // If the parentTdb has a controlledVocabulary setting and the vocabType is found,
 // then label will be wrapped with the link to display it.  Return string is cloned.
 {
 char *vocab = trackDbSetting(parentTdb, "controlledVocabulary");
+
+// WARNING: this is needed to cache metadata in trackDb object (accessed by metadataFindValue)
 (void)metadataForTable(db,childTdb,NULL);
+
 if (vocab == NULL)
     return cloneString(label); // No wrapping!
 
-char *words[15];
-int count,ix;
-boolean found=FALSE;
-if ((count = chopByWhite(cloneString(vocab), words,15)) <= 1)
+// Currently implemented just for ENCODE style vocab
+if (!vocabSettingIsEncode(vocab))
     return cloneString(label);
 
-char *suffix=NULL;
-char *rootLabel = labelRoot(label,&suffix);
+char *words[SMALLBUF];
+int count;
+if ((count = chopByWhite(cloneString(vocab), words, SMALLBUF)) <= 1)
+    return cloneString(label);
 
+
+char *suffix = NULL;
+char *rootLabel = labelRoot(label, &suffix);
+
+boolean found = FALSE;
+int ix;
 for (ix=1;ix<count && !found;ix++)
     {
     if (sameString(vocabType,words[ix])) // controlledVocabulary setting matches tag
         {                               // so all labels are linked
-        char *link = controlledVocabLink(words[0],"term",words[ix],rootLabel,rootLabel,suffix);
+        char *link = wgEncodeVocabLink(words[0],"term",words[ix],rootLabel,rootLabel,suffix);
         return link;
         }
     else if (countChars(words[ix],'=') == 1 && childTdb != NULL)
@@ -6892,9 +6913,9 @@ for (ix=1;ix<count && !found;ix++)
             const char * cvTerm = metadataFindValue(childTdb,cvSetting);
             if (cvTerm != NULL)
                 {
-                char *link = controlledVocabLink(words[0],(sameWord(cvSetting,"antibody") ?
-                                                                                "target" : "term"),
-                                                 (char *)cvTerm,(char *)cvTerm,rootLabel,suffix);
+                char *link = wgEncodeVocabLink(words[0],
+                                    (sameWord(cvSetting,"antibody") ?  "target" : "term"),
+                                    (char *)cvTerm,(char *)cvTerm,rootLabel,suffix);
                 return link;
                 }
             }
