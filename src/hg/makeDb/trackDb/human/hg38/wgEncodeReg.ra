@@ -574,7 +574,7 @@ include wgEncodeRegDnase.ra
 
     # This is current DNase clusters track -- newer data, includes single-cell clusters
     track wgEncodeRegDnaseClusteredLifted
-    shortLabel DNase Clusters
+    shortLabel DNase Clusters (Lifted)
     longLabel DNaseI Hypersensitivity Clusters in 125 cell types from ENCODE (Lifted)
     type bed 5 .
     pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
@@ -589,7 +589,7 @@ include wgEncodeRegDnase.ra
     scoreFilter 100
     scoreFilterLimits 100:1000
     html wgEncodeRegDnaseClusteredLifted
-    priority 1.6
+    priority 1.8
     release alpha
     #nameFilter 1:125
     #nameFilterLimits 1:125

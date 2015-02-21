@@ -16,7 +16,7 @@ scoreFilterLimits 1:1000
 spectrum on
 html wgEncodeRegDnaseClustered
 group regulation
-priority 100.2
+priority 1.6
 
 track wgEncodeRegDnase
 superTrack wgEncodeReg hide
@@ -41,7 +41,7 @@ dragAndDrop subTracks
 noInherit on
 type bed 3 +
 html wgEncodeRegDnase
-priority 100.3
+priority 1.9
 
     track wgEncodeRegDnaseHotspot
     shortLabel Hotspots
@@ -2277,7 +2277,7 @@ configurable on
 viewLimits 0:200
 showSubtrackColorOnUi on
 aggregate transparentOverlay
-priority 100.1
+priority 1.8
 html wgEncodeRegDnaseSignal
 dimensions dimA=tissue dimB=cancer
 filterComposite dimA
