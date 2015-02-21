@@ -94,6 +94,19 @@ slAddHead(&stanza->tagList, pair);
 return pair;
 }
 
+struct slPair *tagStanzaAppend(struct tagStorm *tagStorm, struct tagStanza *stanza, 
+    char *tag, char *val)
+/* Add tag with given value to stanza */
+{
+struct lm *lm = tagStorm->lm;
+struct slPair *pair;
+lmAllocVar(lm, pair);
+pair->name = lmCloneString(lm, tag);
+pair->val = lmCloneString(lm, val);
+slAddTail(&stanza->tagList, pair);
+return pair;
+}
+
 void tagStanzaAddLongLong(struct tagStorm *tagStorm, struct tagStanza *stanza, char *var, 
     long long val)
 /* Add long long integer valued tag to stanza */
