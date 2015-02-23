@@ -99,8 +99,8 @@ if ($status) exit $status
 echo
 set wc = `grep "*\*\* ERROR stopped" $targetDir/buildWithUse.log | wc -w`
 if ( "$wc" != "0" ) then
-    echo "*** Nightly build completed with ERRORs in at least one USE case." > /dev/stderr
-    echo "Details found in: $targetDir/buildWithUse.log" > /dev/stderr
+    echo "*** Nightly build completed with ERRORs in at least one USE case." | bash -c "cat - 1>&2"
+    echo "Details found in: $targetDir/buildWithUse.log" | bash -c "cat - 1>&2"
     exit -1
 endif
 echo "*** Nightly build completed successfully."
