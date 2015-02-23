@@ -37,6 +37,16 @@ void webStartWrapperDetailedNoArgs(struct cart *theCart, char *db,
 /* output a CGI and HTML header with the given title in printf format with
  * quite a few options.  Same as above without va_list args */
 
+void webPragmasEtc();
+/* Print out stuff that tells people not to cache us, and that we use the
+ * usual character set and scripting langauge. (Normally done by webStartWrap) */
+
+void webStartSectionTables();
+/* Put up start of nepharious table layout stuff. (Normally done by webStartWrap). */
+
+void webFirstSection(char *title);
+/* Put up the first section (normally done by webStartWrap). */
+
 void webNewSection(char* format, ...);
 /* create a new section on the web page */
 
@@ -265,6 +275,12 @@ void webPrintWideLabelCell(char *label, int colSpan);
 void webPrintWideCenteredLabelCell(char *label, int colSpan);
 /* Print label cell over multiple columns in our colors and centered. */
 
+void webPrintLabelCellStart();
+/* Print start of wrapper around a label in a table. */
+
+void webPrintLabelCellEnd();
+/* Print end of wrapper around a label in a table. */
+
 void webPrintLinkTableNewRow();
 /* start a new row */
 
@@ -300,6 +316,9 @@ void lazarusLives(unsigned long newExpireSeconds);
 
 void setContextSpecificHelp(char *link, char *label);
 // Override default behavior for the context specific help link
+
+char *menuBarAddUiVars(char *oldString, char *cgiPrefix, char *uiVars);
+/* Look for CGI program calls in oldString, and add session vars hgsid to them */
 
 char *menuBar(struct cart *cart, char *db);
 // return HTML for the menu bar (read from a configuration file).

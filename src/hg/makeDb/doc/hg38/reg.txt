@@ -205,15 +205,10 @@ uwDnaseTrackHub meta.tab run_pooled colors.tab hub
         bigBedToBed $f scored/in/$f
     end
     cd scored/in
-    bedScore -uniform -method=reg -col=7 *.narrowPeak ../out >&! score.out &
-    bedScore -uniform -method=reg -col=7 *.broadPeak ../out >&! score.out &
+    bedScore -uniform -method=reg -col=7 *.narrowPeak ../out >&! score.out
+    bedScore -uniform -method=reg -col=7 *.broadPeak ../out >>&! score.out &
 
     cd ../out
-    foreach f (*.narrowPeak)
-        echo $f
-        bedToBigBed -type=bed6+4 -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as \
-               $f /hive/data/genomes/hg38/chrom.sizes ../$f.bb
-    end
     foreach f (*.broadPeak)
         echo $f
         bedToBigBed -type=bed6+3 -as=$HOME/kent/src/hg/lib/encode/broadPeak.as \
@@ -253,7 +248,8 @@ uwDnaseTrackHub meta.tab run_pooled colors.tab hub
     foreach f (*.narrowPeak)
         echo $f
         set exp = `echo $f | sed 's/wgEncodeEH\([0-9]*\).*/WgEncodeEH\1/'`
-        hgLoadBed -fillInScore=signalValue -trimSqlTable -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg38 uwEnc2DnaseBedPeaks${exp} $f
+        #hgLoadBed -fillInScore=signalValue -trimSqlTable -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg38 uwEnc2DnaseBedPeaks${exp} $f
+        hgLoadBed -trimSqlTable -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql -renameSqlTable -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg38 uwEnc2DnaseBedPeaks${exp} $f
     end
 
 # Use cell curation to make more informative long labels
@@ -274,7 +270,8 @@ uwDnaseTrackHub meta.tab run_pooled colors.tab hub
 
     cd /hive/data/genomes/hg38/bed/uwDnase1
     mkdir clusters
-    cd run_pooled/scored/out
+    # cd run_pooled/scored/out
+    cd run_pooled_hotspot5.1/scored/out
     ls *.pooled.narrowPeak > ../../../clusters/peak.lst
 
     # calculate normalization factor
@@ -284,15 +281,15 @@ uwDnaseTrackHub meta.tab run_pooled colors.tab hub
     # cluster
     regCluster -bedSources ../../../clusters/peak.table /dev/null ../../../clusters/peak.bed \
         >&! ../../../clusters/regCluster.out &
-    # 1876769 singly-linked clusters, 1934764 clusters in 86 chromosomes
+    2011652 singly-linked clusters, 2076756 clusters in 96 chromosomes
     # NOTE: more clusters (2.2M) in hg19 (which included Duke data)
 
     # filter out low scoring
     cd ../../../clusters
     awk '$5 >= 100' peak.bed > peak.filtered.bed
     wc -l peak.filtered.bed
-    # 1236194 uwEnc2DnaseClustered.bed
-    # retained 65% vs 83% in hg19 (too low ??)
+    # 1330766 peak.filtered.bed
+    # retained 66% vs 83% in hg19 (seems low ??)
 
     # --> keep them all for now, filter with UI
 
@@ -301,6 +298,10 @@ uwDnaseTrackHub meta.tab run_pooled colors.tab hub
     awk 'BEGIN {OFS="\t"}{print $1, $2, $3, $4, $5, 0, $7;}' peak.bed > peak.bed6
     hgBedSources peak.bed6 regDnase
     mv regDnaseSources.tab uwEnc2DnaseSources.tab
+
+    # hand edit to fix curation --  add RA treatments where needed
+    # NHBE_RA -> NHBE_RA+RA
+    # SK-N-SH_RA -> SK-N-SH_RA+RA
 
     # load sources table
     autoSql $HOME/kent/src/hg/lib/idName.as idName
@@ -339,6 +340,54 @@ cat > makeInputs.csh << 'EOF'
 
 
 #################
+# Rename everything -- replace wgEncodeEH* with cell and treatment, to help users.  Change prefix
+# to match hg19
+
+    cd /hive/data/genomes/hg38/bed/uwDnase1
+    mkdir rename
+cat > expToFile.csh << 'EOF'
+#!/bin/csh -ef
+    set exp = `echo $1 | sed 's/wgEncodeEH\([0-9]*\).*/\1/'`
+    set cell = `encodeExp show $exp cellType | sed -e 's/[-+_]//g' -e 's/\(.\)\(.*\)/\U\1\L\2/'`
+    set treatment = `encodeExp show $exp treatment | sed -e 's/[-+_]//g' -e 's/\(.\)\(.*\)/\U\1\L\2/'`
+    echo ${cell}${treatment}
+'EOF'
+
+cat > renameWig.csh << 'EOF'
+#!/bin/csh -ef
+set bbi = /gbdb/hg38/bbi/wgEncodeRegDnase
+mkdir -p $bbi
+set path = (`pwd` $path)
+set build = /hive/data/genomes/hg38/bed/wgEncodeRegDnase
+set data = run_normalized/out
+set wd = `pwd`
+pushd $build/$data
+rm $wd/edit.csh
+foreach f (*.norm.bw)
+    echo "${f} "
+    set exp = $f:r:r
+    set vars = `expToFile.csh $exp`
+    set t = wgEncodeRegDnaseUw${vars}Signal
+    echo "-e s/uwEnc2DnaseSignal${exp}/$t/ \" >> $wd/edit.csh
+    ln -s $build/$data/$f $bbi/$t.bw
+    hgBbiDbLink hg38 $t $bbi/$t.bw
+end
+popd
+'EOF'
+
+# Manually tweak edit.csh and run to replace table and track names in trackDb.ra
+# Do same for broadPeak bigBeds, and narrowPeak tables
+
+csh edit5.csh ../clusters/bigInputs.tab > ../clusters/wgEncodeRegDnaseClusteredInputs.tab
+cd ../clusters
+hgLoadSqlTab hg38 wgEncodeRegDnaseClusteredInputs \
+        ~/kent/src/hg/lib/clusterInputEapDnase.sql wgEncodeRegDnaseClusteredInputs.tab
+
+hgql hg38 -e "alter table uwEnc2DnaseClustered rename to wgEncodeRegDnaseClustered"
+hgsql hg38 -e "alter table uwEnc2DnaseSources rename to wgEncodeRegDnasedClusteredSource"
+
+
+#################
 # Cell table (use for cell metadata, instead of metaDb)
 
     cd /hive/data/genomes/hg38/bed/uwDnase1
@@ -366,7 +415,6 @@ cat > makeInputs.csh << 'EOF'
     checkUrlsInTable hgFixed wgEncodeCell > errs.txt
 
 
-
 # Treatment table
 # TBD
 
@@ -376,5 +424,31 @@ cat > makeInputs.csh << 'EOF'
     #tail -n +2 treatments.tab | \
         #nl -v 0 | \
         #hgLoadSqlTab hgFixed wgEncodeTreatment ~/kent/src/hg/lib/encode/wgEncodeTreatment.sql stdin
+
+
+# Comparison to lifted track (Chris Eisenhart)
+# Visually, new track is appears noisy. This is not unexpected as it excludes Duke data.
+# There are more elements in new track: 2076756 vs 1867194
+
+# Coverage is similar:
+
+ featureBits hg38 wgEncodeRegDnaseClustered
+ # 451551920 bases of 3049335806 (14.808%) in intersection
+
+ featureBits hg38 wgEncodeRegDnaseClusteredLifted
+ # 477271764 bases of 3049335806 (15.652%) in intersection
+
+# Comparing chr1:
+
+ featureBits hg38 -chrom=chr1 wgEncodeRegDnaseClustered
+ #41505780 bases of 230486321 (18.008%) in intersection
+ featureBits hg38 -chrom=chr1 wgEncodeRegDnaseClusteredLifted
+ #46543116 bases of 230486321 (20.193%) in intersection
+
+# Greater number of elements must be due to mappings on new alt chroms
+# (96 chroms in new track, 38 in old)
+
+
+
 
 

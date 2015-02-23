@@ -90,6 +90,17 @@ void webSetStyle(char *style)
 extraStyle = style;
 }
 
+void webPragmasEtc()
+/* Print out stuff that tells people not to cache us, and that we use the
+ * usual character set and scripting langauge. (Normally done by webStartWrap) */
+{
+printf("<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">" "\n"
+     "<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">" "\n"
+     "<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">" "\n"
+     "<META HTTP-EQUIV=\"Expires\" CONTENT=\"-1\">" "\n"
+     );
+}
+
 void webStartText()
 /* output the head for a text page */
 {
@@ -166,12 +177,10 @@ if (withHtmlHeader)
 	"<HEAD>" "\n"
 	);
     printf("\t%s\n", headerText);
-    printf("\t<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">" "\n"
-	 "\t<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">" "\n"
-         "\t<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">" "\n"
-         "\t<META HTTP-EQUIV=\"Expires\" CONTENT=\"-1\">" "\n"
-	 "\t<TITLE>"
-	 );
+    webPragmasEtc();
+
+    printf("\t<TITLE>");
+
     /* we need to take any HTML formatting out of the titlebar string */
     newString = cloneString(textOutBuf);
 
@@ -196,10 +205,7 @@ if (withHtmlHeader)
     htmlWarnBoxSetup(stdout);// Sets up a warning box which can be filled with errors as they occur
     puts(commonCssStyles());
     }
-puts(
-    "<A NAME=\"TOP\"></A>" "\n"
-    "" "\n"
-    "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=\"100%\">" "\n");
+webStartSectionTables();
 
 if (withLogo)
     {
@@ -262,24 +268,7 @@ if (endsWith(scriptName, "hgGateway") && geoMirrorEnabled())
 if(!skipSectionHeader)
 /* this HTML must be in calling code if skipSectionHeader is TRUE */
     {
-    puts( // TODO: Replace nested tables with CSS (difficulty is that tables are closed elsewhere)
-         "<!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->" "\n"
-         "<TR><TD COLSPAN=3>\n"
-         "<div id=firstSection>"
-         "      <!--outer table is for border purposes-->\n"
-         "      <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' "
-                     "CELLPADDING='1'><TR><TD>\n"
-         "    <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' "
-                     "CELLPADDING='0'><TR><TD>\n"
-         "     <div class='subheadingBar'><div class='windowSize' id='sectTtl'>"
-         );
-    htmlTextOut(textOutBuf);
-
-    puts("     </div></div>\n"
-         "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>"
-              "<TR><TH HEIGHT=10></TH></TR>\n"
-         "     <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n"
-         );
+    webFirstSection(textOutBuf);
     };
 webPushErrHandlers();
 /* set the flag */
@@ -370,6 +359,37 @@ puts(
     "	</TD></TR></TABLE>" "\n"
     "	" );
 puts("</div>");
+}
+
+void webStartSectionTables()
+/* Put up start of nepharious table layout stuff. (Normally done by webStartWrap). */
+{
+puts(
+    "<A NAME=\"TOP\"></A>" "\n"
+    "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH=\"100%\">" "\n");
+}
+
+void webFirstSection(char *title)
+/* Put up the first section (normally done by webStartWrap). */
+{
+puts( // TODO: Replace nested tables with CSS (difficulty is that tables are closed elsewhere)
+     "<!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->" "\n"
+     "<TR><TD COLSPAN=3>\n"
+     "<div id=firstSection>"
+     "      <!--outer table is for border purposes-->\n"
+     "      <TABLE WIDTH='100%' BGCOLOR='#" HG_COL_BORDER "' BORDER='0' CELLSPACING='0' "
+		 "CELLPADDING='1'><TR><TD>\n"
+     "    <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%'  BORDER='0' CELLSPACING='0' "
+		 "CELLPADDING='0'><TR><TD>\n"
+     "     <div class='subheadingBar'><div class='windowSize' id='sectTtl'>"
+     );
+htmlTextOut(title);
+
+puts("     </div></div>\n"
+     "     <TABLE BGCOLOR='#" HG_COL_INSIDE "' WIDTH='100%' CELLPADDING=0>"
+	  "<TR><TH HEIGHT=10></TH></TR>\n"
+     "     <TR><TD WIDTH=10>&nbsp;</TD><TD>\n\n"
+     );
 }
 
 void webNewSectionHeaderStart(boolean hasTitle)
@@ -1025,13 +1045,33 @@ printf("%4.2f", val);
 webPrintLinkCellEnd();
 }
 
-void webPrintWideLabelCell(char *label, int colSpan)
-/* Print label cell over multiple columns in our colors. */
+void webPrintWideLabelCellStart(int colSpan)
+/* Print start of wrapper around a label in a table. */
 {
 printf("<TD BGCOLOR='#"HG_COL_TABLE_LABEL"'");
 if (colSpan > 1)
     printf(" COLSPAN=%d", colSpan);
-printf("><span style='color:#FFFFFF;'><B>%s</B></span></TD>", label);
+printf("><span style='color:#FFFFFF;'><B>");
+}
+
+void webPrintLabelCellStart()
+/* Print start of wrapper around a label in a table. */
+{
+webPrintWideLabelCellStart(1);
+}
+
+void webPrintLabelCellEnd()
+/* Print end of wrapper around a label in a table. */
+{
+printf("</B></span></TD>");
+}
+
+void webPrintWideLabelCell(char *label, int colSpan)
+/* Print label cell over multiple columns in our colors. */
+{
+webPrintWideLabelCellStart(colSpan);
+printf("%s", label);
+webPrintLabelCellEnd();
 }
 
 void webPrintWideCenteredLabelCell(char *label, int colSpan)
@@ -1243,6 +1283,38 @@ if(label)
     contextSpecificHelpLabel = cloneString(label);
 }
 
+char *menuBarAddUiVars(char *oldString, char *cgiPrefix, char *uiVars)
+/* Look for CGI program calls in oldString, and add session vars hgsid to them */
+{
+int len = strlen(oldString);
+char buf[4096];
+
+/* Create a regular expression and compile it */
+regex_t re;
+regmatch_t match[2];
+safef(buf, sizeof(buf), "%s[A-Za-z]+(%c%c?)", cgiPrefix, '\\', '?');
+int err = regcomp(&re, buf, REG_EXTENDED);
+if(err)
+    errAbort("regcomp failed; err: %d", err);
+
+/* Search through oldString with regex, and build up new string in dy */
+struct dyString *dy = newDyString(0);
+int offset;
+for(offset = 0; offset < len && !regexec(&re, oldString + offset, ArraySize(match), match, 0); 
+    offset += match[0].rm_eo)
+    {
+    dyStringAppendN(dy, oldString + offset, match[0].rm_eo);
+    if(match[1].rm_so == match[1].rm_eo)
+	dyStringAppend(dy, "?");
+    dyStringAppend(dy, uiVars);
+    if(match[1].rm_so != match[1].rm_eo)
+	dyStringAppend(dy, "&");
+    }
+if(offset < len)
+    dyStringAppend(dy, oldString + offset);
+return dyStringCannibalize(&dy);
+}
+
 char *menuBar(struct cart *cart, char *db)
 // Return HTML for the menu bar (read from a configuration file);
 // we fixup internal CGI's to add hgsid's and include the appropriate js and css files.
@@ -1253,11 +1325,8 @@ char *menuBar(struct cart *cart, char *db)
 char *docRoot = hDocumentRoot();
 char *menuStr, buf[4096], uiVars[128];
 FILE *fd;
-int len, offset, err;
 char *navBarFile = "inc/globalNavBar.inc";
 struct stat statBuf;
-regex_t re;
-regmatch_t match[2];
 char *scriptName = cgiScriptName();
 if (cart)
     safef(uiVars, sizeof(uiVars), "%s=%s", cartSessionVarName(), cartSessionId(cart));
@@ -1276,7 +1345,7 @@ webIncludeResourceFile("nice_menu.css");
 safef(buf, sizeof(buf), "%s/%s", docRoot, navBarFile);
 fd = mustOpen(buf, "r");
 fstat(fileno(fd), &statBuf);
-len = statBuf.st_size;
+int len = statBuf.st_size;
 menuStr = needMem(len + 1);
 mustRead(fd, menuStr, statBuf.st_size);
 menuStr[len] = 0;
@@ -1284,25 +1353,9 @@ carefulClose(&fd);
 
 if (cart)
     {
-    // fixup internal CGIs to have hgsid
-    safef(buf, sizeof(buf), "/cgi-bin/hg[A-Za-z]+(%c%c?)", '\\', '?');
-    err = regcomp(&re, buf, REG_EXTENDED);
-    if(err)
-	errAbort("regcomp failed; err: %d", err);
-    struct dyString *dy = newDyString(0);
-    for(offset = 0; offset < len && !regexec(&re, menuStr + offset, ArraySize(match), match, 0); offset += match[0].rm_eo)
-	{
-	dyStringAppendN(dy, menuStr + offset, match[0].rm_eo);
-	if(match[1].rm_so == match[1].rm_eo)
-	    dyStringAppend(dy, "?");
-	dyStringAppend(dy, uiVars);
-	if(match[1].rm_so != match[1].rm_eo)
-	    dyStringAppend(dy, "&");
-	}
-    if(offset < len)
-	dyStringAppend(dy, menuStr + offset);
+    char *newMenuStr = menuBarAddUiVars(menuStr, "/cgi-bin/hg", uiVars);
     freez(&menuStr);
-    menuStr = dyStringCannibalize(&dy);
+    menuStr = newMenuStr;
     }
 
 if(scriptName)

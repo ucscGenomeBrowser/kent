@@ -8,7 +8,9 @@
 #include "options.h"
 #include "obscure.h"
 #include "cheapcgi.h"
+#include "sqlSanity.h"
 #include "htmshell.h"
+#include "fieldedTable.h"
 #include "portable.h"
 #include "paraFetch.h"
 #include "tagStorm.h"
@@ -16,7 +18,15 @@
 #include "cart.h"
 #include "cdw.h"
 #include "cdwLib.h"
+#include "cdwValid.h"
 #include "hui.h"
+#include "hgColors.h"
+#include "web.h"
+#include "jsHelper.h"
+
+/* Global vars */
+struct cart *cart;	// User variables saved from click to click
+struct hash *oldVars;	// Previous cart, before current round of CGI vars folded in
 
 void usage()
 /* Explain usage and exit. */
@@ -26,456 +36,6 @@ errAbort(
   );
 }
 
-char *userEmail = NULL; /* User's email handle. */
-boolean noPrevSubmission; /* No previous submission */
-struct cart *cart;
-
-boolean queryIntoTable(struct sqlConnection *conn, char *query, char *title, struct hash *wraps)
-/* Make query and show result in a html table.  Return FALSE (and make no output)
- * if there is no result to query. */
-{
-boolean didHeader = FALSE;
-struct sqlResult *sr = sqlGetResult(conn, query);
-int colCount = sqlCountColumns(sr);
-char *fields[colCount];
-if (colCount > 0)
-    {
-    char **row;
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	if (!didHeader)
-	    {
-	    printf("<H4>%s</H4>\n", title);
-	    printf("<TABLE>\n");
-	    printf("<TR>");
-	    char *field;
-	    int fieldIx = 0;
-	    while ((field = sqlFieldName(sr)) != NULL)
-		{
-		fields[fieldIx++] = cloneString(field);
-		printf("<TH>%s</TH>", field);
-		}
-	    printf("</TR>\n");
-	    didHeader = TRUE;
-	    }
-	printf("<TR>");
-	int i;
-	for (i=0; i<colCount; ++i)
-	    {
-	    printf("<TD>");
-	    boolean done = FALSE;
-	    if (wraps != NULL)
-	        {
-		char *format = hashFindVal(wraps, fields[i]);
-		char *val = row[i];
-		if (format != NULL && val != NULL)
-		    {
-		    printf(format, val, val);
-		    done = TRUE;
-		    }
-		} 
-	    if (!done)
-		printf("%s", naForNull(row[i]));
-	    printf("</TD>");
-	    }
-	printf("</TR>\n");
-	}
-    printf("</TABLE>\n");
-    }
-sqlFreeResult(&sr);
-return didHeader;
-}
-
-void printSubmitState(struct cdwSubmit *submit, struct sqlConnection *conn)
-/* Try and summarize submission status in a short statement. */
-{
-if (!isEmpty(submit->errorMessage))
-    printf("has problems");
-else if (submit->endUploadTime != 0)
-    {
-    int validCount = cdwSubmitCountNewValid(submit, conn);
-    if (validCount == submit->newFiles)
-        {
-	printf("is uploaded and validated");  // Would be nice to report enrichment/qa status here
-	}
-    else
-        {
-	printf("is uploaded and is being validated");
-	}
-    }
-else   /* Upload not complete. */
-    {
-    long long lastAlive = cdwSubmitMaxStartTime(submit, conn);
-    struct cdwFile *ef = cdwFileInProgress(conn, submit->id);
-    long long now = cdwNow();
-    if (ef != NULL)
-        {
-	char path[PATH_LEN];
-	safef(path, sizeof(path), "%s%s", cdwRootDir, ef->cdwFileName);
-	if (ef->endUploadTime > 0)
-	    lastAlive = fileModTime(path);
-	else
-	    lastAlive =  paraFetchTempUpdateTime(path);
-	}
-    long long duration = now - lastAlive;
-
-
-    long long oneHourInSeconds = 60*60;
-    // uglyf("now %lld, lastAlive %lld,  duration %lld,  oneHourInSeconds %lld<BR>\n", now, lastAlive, duration, oneHourInSeconds);
-    if (duration < oneHourInSeconds)  
-        {
-	struct dyString *time = cdwFormatDuration(now - submit->startUploadTime);
-	printf("has been in progress for %s", time->string);
-	}
-    else
-	{
-	struct dyString *time = cdwFormatDuration(duration);
-	printf("has been stalled for %s", time->string);
-	dyStringFree(&time);
-	}
-    }
-}
-
-void printSubmitSummary(struct cdwSubmit *submit, struct sqlConnection *conn)
-/* Print a little summary information about the submission overall */
-{
-if (!isEmpty(submit->errorMessage))
-    printf("<B>%s</B><BR>\n", submit->errorMessage);
-
-printf("%d files in validated.txt including %d already in warehouse<BR>\n",
-    submit->fileCount, submit->oldFiles);
-if (submit->newFiles > 0)
-    printf("%d of %d new files are uploaded<BR>\n", submit->newFiles,
-        submit->fileCount-submit->oldFiles);
-else
-    printf("No file in validated.txt has been uploaded or validated again<BR>\n");
-
-if (submit->metaChangeCount != 0)
-    printf("%d of %d old files have updated tags<BR>\n",
-        submit->metaChangeCount, submit->oldFiles);
-int newValid = cdwSubmitCountNewValid(submit, conn);
-if (submit->newFiles > 0)
-    printf("%d of %d uploaded files are validated<BR>\n", newValid, submit->newFiles);
-
-}
-
-struct cdwValidFile *newReplicatesList(struct cdwSubmit *submit, struct sqlConnection *conn)
-/* Return list of new files in submission that are supposed to be part of replicated set. */
-{
-char query[256];
-sqlSafef(query, sizeof(query), 
-    "select v.* from cdwFile f,cdwValidFile v"
-    "  where f.id = v.fileId and f.submitId=%u and v.replicate != '' and v.replicate != 'n/a' "
-    "  and v.replicate != 'pooled'",
-    // If expanding this list of special replicate case, remember to expand bits in 
-    // cdwMakeReplicateQa as well
-    submit->id);
-return cdwValidFileLoadByQuery(conn, query);
-}
-
-boolean matchInListExceptSelf(struct cdwValidFile *v, struct cdwValidFile *list)
-/* Return TRUE if there's something in list that is a different replica than ours */
-{
-struct cdwValidFile *el;
-for (el = list; el != NULL; el = el->next)
-    {
-    if (sameString(el->format, v->format) && sameString(el->outputType, el->outputType)
-        && sameString(el->experiment, v->experiment) && !sameString(el->replicate, v->replicate))
-	{
-	return TRUE;
-	}
-    }
-return FALSE;
-}
-
-
-static void countPairings(struct sqlConnection *conn, struct cdwValidFile *replicatesList, 
-			  int *retOldPairs, int *retInnerPairs, int *retUnpaired, 
-			  int *retPairCount, int *retPairsDone)
-/* Show users files grouped by submission sorted with most recent first. */
-{
-int oldPairs = 0, innerPairs = 0, unpaired = 0, pairCount = 0, pairsDone = 0;
-struct cdwValidFile *v;
-for (v = replicatesList; v != NULL; v = v->next)
-    {
-    struct cdwValidFile *elderList = cdwFindElderReplicates(conn, v);
-    boolean isInternallyReplicated = matchInListExceptSelf(v, replicatesList);
-    if (isInternallyReplicated)
-        ++innerPairs;
-    else if (elderList != NULL)
-        ++oldPairs;
-    else
-        ++unpaired;
-    struct cdwValidFile *ev;
-    for (ev = elderList; ev != NULL; ev = ev->next)
-        {
-	char query[256];
-	boolean onePairDone = FALSE;
-	sqlSafef(query, sizeof(query), 
-	    "select count(*) from cdwQaPairCorrelation"
-	    " where elderFileId=%lld and youngerFileId=%lld"
-	    , (long long)ev->fileId, (long long)v->fileId);
-	if (sqlQuickNum(conn, query) > 0)
-	    onePairDone = TRUE;
-	else
-	    {
-	    sqlSafef(query, sizeof(query), 
-		"select count(*) from cdwQaPairSampleOverlap"
-		" where elderFileId=%lld and youngerFileId=%lld"
-		, (long long)ev->fileId, (long long)v->fileId);
-	    if (sqlQuickNum(conn, query) > 0)
-		onePairDone = TRUE;
-	    }
-	if (onePairDone)
-	    ++pairsDone;
-	pairCount += 1;
-	}
-    }
-*retOldPairs = oldPairs, *retInnerPairs=innerPairs; 
-*retUnpaired = unpaired, *retPairCount = pairCount, *retPairsDone = pairsDone;
-}
-
-void slNameToCharArray(struct slName *list, int *retCount,  char ***retArray)
-/* Return an array filled with the strings in list. */
-{
-int count = slCount(list);
-char **array = NULL;
-if (count != 0)
-    {
-    AllocArray(array, count);
-    int i;
-    struct slName *el;
-    for (i=0, el=list;  el != NULL; el = el->next, ++i)
-        array[i] = el->name;
-    }
-else /* No submission record from this user */
-    {
-    AllocArray(array, 1);
-    array[0] = userEmail;    
-    count = 1;
-    noPrevSubmission = TRUE;
-    }
-*retCount = count;
-*retArray = array;
-}
-
-char *printUserControl(struct sqlConnection *conn, char *cgiVarName, char *defaultUser)
-/* Print out control and return currently selected user. */
-{
-char query[256];
-
-if (cdwUserIsAdmin(conn,userEmail))
-    sqlSafef(query, sizeof(query), 
-	"select distinct email from cdwUser,cdwSubmit where cdwUser.id = cdwSubmit.userId order by email");
-else 
-    sqlSafef(query, sizeof(query), 
-	"select distinct email from cdwUser,cdwSubmit where cdwUser.id = cdwSubmit.userId and email='%s' order by email", defaultUser);
-
-struct slName *userList = sqlQuickList(conn, query);
-int userCount = 0;
-char **userArray;
-slNameToCharArray(userList, &userCount, &userArray);
-char *curUser = cgiUsualString(cgiVarName, defaultUser);
-cgiMakeDropList(cgiVarName, userArray, userCount, curUser);
-freez(&userArray);
-return curUser;
-}
-
-
-void showRecentFiles(struct sqlConnection *conn)
-/* Show users files grouped by submission sorted with most recent first. */
-{
-char *user = userEmail;
-if (cdwUserIsAdmin(conn, userEmail))
-    {
-    printf("<div>");
-    printf("Select whose files to browse: ");
-    user = printUserControl(conn, "selectUser", userEmail);
-    printf("</div>");
-    }
-
-puts("<div class='input-row'>");
-
-puts("Maximum number of submissions to view: ");
-
-/* Get user choice from CGI var or cookie */
-int maxSubCount = 0;
-if (!cgiVarExists("maxSubCount"))
-    {
-    char *subs = findCookieData("cdwWeb.maxSubCount");
-    if (subs)
-        maxSubCount = atoi(subs);
-    }
-if (maxSubCount == 0)
-    maxSubCount = cgiOptionalInt("maxSubCount", 3);
-cgiMakeIntVar("maxSubCount", maxSubCount, 3);
-
-puts("&nbsp;");
-cgiMakeButton("Submit", "update view");
-puts("</div>");
-
-/* Get id for user. */
-char query[1024];
-sqlSafef(query, sizeof(query), "select id from cdwUser where email='%s'", user);
-int userId = sqlQuickNum(conn, query);
-if (userId == 0)
-    {
-    printf("No user with email %s.  Contact your wrangler to make an account", user);
-    return;
-    }
-
-/* Select all submissions, most recent first. */
-sqlSafef(query, sizeof(query), 
-    "select * from cdwSubmit where userId=%d "
-    "and (newFiles != 0 or metaChangeCount != 0 or errorMessage is not NULL or fileIdInTransit != 0)"
-    " order by id desc limit %d", userId, maxSubCount);
-struct cdwSubmit *submit, *submitList = cdwSubmitLoadByQuery(conn, query);
-int printedSubCount = 0;
-
-if (noPrevSubmission)
-    {
-    printf("<H4>There are no files submitted by %s</H4>\n",user);
-    return;
-    }
-
-for (submit = submitList; submit != NULL; submit = submit->next)
-    {
-    /* Figure out and print upload time */
-    sqlSafef(query, sizeof(query), 
-	"select from_unixtime(startUploadTime) from cdwSubmit where id=%u", submit->id);
-    char *dateTime = sqlQuickString(conn, query);
-
-    printf("<HR><H4>%s <A HREF=\"cdwWebSubmit?url=%s&monitor=on\">%s</A> ", 
-                dateTime, cgiEncode(submit->url), submit->url);
-    printSubmitState(submit, conn);
-    printf("</H4>\n");
-    printedSubCount += 1;
-
-    /* Print a little summary information about the submission overall before getting down to the
-     * file by file info. */
-    printSubmitSummary(submit, conn);
-
-    struct cdwValidFile *replicatesList = newReplicatesList(submit, conn);
-    if (replicatesList != NULL)
-	{
-	int oldPairs = 0, innerPairs = 0, unpaired = 0, pairsToCompute = 0, pairsDone = 0;
-	countPairings(conn, replicatesList, &oldPairs, &innerPairs, &unpaired, &pairsToCompute,
-	    &pairsDone);
-	printf("%d of %d replicate comparisons have been computed<BR>\n", 
-	    pairsDone, pairsToCompute);
-	printf("%d replicates still are unpaired<BR>\n", unpaired);
-	}
-
-    /* Make wrapper for experiments. */
-    struct hash *experimentWrap = hashNew(0);
-    hashAdd(experimentWrap, "experiment", 
-	"<A HREF=\"https://www.encodedcc.org/%s/\">%s</A>");
-    /* Get and print file-by-file info. */
-    char title[256];
-    safef(title, sizeof(title), "Files and enrichments for %d new files", submit->newFiles);
-    sqlSafef(query, sizeof(query),
-        "select v.licensePlate ID, v.itemCount items, v.basesInItems bases,"
-	"v.format format,truncate(v.mapRatio,2) 'map ratio', "
-	       "t.name 'enriched in', truncate(e.enrichment,2) X, "
-	       "v.experiment experiment, f.submitFileName 'file name' "
-	"from cdwFile f left join cdwValidFile v on f.id = v.fileId "
-	               "left join cdwQaEnrich e on v.fileId = e.fileId "
-		       "left join cdwQaEnrichTarget t on e.qaEnrichTargetId = t.id "
-	"where f.submitId = %u and f.tags != ''"
- 	" and (v.enrichedIn = t.name or v.enrichedIn = 'unknown' or v.enrichedIn is NULL or t.name is NULL)"
-	" order by f.id desc"
-	, submit->id);
-    queryIntoTable(conn, query, title, experimentWrap);
-
-    sqlSafef(query, sizeof(query), 
-	"select ev.experiment,ev.outputType 'output type',ev.format,\n"
-	"       yv.replicate repA,ev.replicate repB, ev.licensePlate idA, yv.licensePlate idB,\n"
-	"       ev.enrichedIn target,p.sampleSampleEnrichment xEnrichment\n"
-	"from cdwFile e,cdwQaPairSampleOverlap p, cdwFile y,cdwValidFile ev,cdwValidFile yv \n"
-        "where e.id=p.elderFileId and y.id=p.youngerFileId and ev.fileId=e.id and yv.fileId=y.id\n"
-        "      and y.submitId = %u \n"
-        "      order by ev.experiment,'output type',format,repA,repB,idA,idB\n"
-	, submit->id);
-    queryIntoTable(conn, query, "Cross-enrichment between replicates in target areas", experimentWrap);
-
-    sqlSafef(query, sizeof(query), 
-	"select ev.experiment,ev.outputType 'output type',ev.format,\n"
-	"       yv.replicate repA,ev.replicate repB, ev.licensePlate idA, yv.licensePlate idB,\n"
-	"       ev.enrichedIn target,p.pearsonInEnriched 'R in targets'\n"
-	"from cdwFile e,cdwQaPairCorrelation p, cdwFile y,cdwValidFile ev,cdwValidFile yv \n"
-        "where e.id=p.elderFileId and y.id=p.youngerFileId and ev.fileId=e.id and yv.fileId=y.id\n"
-        "      and y.submitId = %u \n"
-        "      order by ev.experiment,'output type',format,repA,repB,idA,idB\n"
-	, submit->id);
-    queryIntoTable(conn, query, "Correlation between replicates in target areas", experimentWrap);
-    }
-/* Print validation information for submission which contains only files
- * that have been validated already. */
-sqlSafef(query, sizeof(query),
-    "select * from cdwSubmit where userId=%d "
-    "and oldFiles != 0 and newFiles = 0 "
-    "and not(metaChangeCount != 0 or errorMessage is not NULL or fileIdInTransit != 0) "
-    " order by id desc limit %d", userId, maxSubCount - printedSubCount);
-struct cdwSubmit  *oldSubmitList = cdwSubmitLoadByQuery(conn, query);
-boolean  noNewFilePrinted = FALSE;
-for (submit = oldSubmitList; submit != NULL; submit = submit->next)
-    {
-    if (!noNewFilePrinted)
-	{	
-	printf("<HR><H3>Submissions without new data:</H3>\n");
-	noNewFilePrinted = TRUE;
-	}
-    /* Figure out and print upload time */
-    sqlSafef(query, sizeof(query),
-        "select from_unixtime(startUploadTime) from cdwSubmit where id=%u", submit->id);
-    char *dateTime = sqlQuickString(conn, query);
-
-    printf("<HR><H4>%s <A HREF=\"cdwWebSubmit?url=%s&monitor=on\">%s</A> ",
-                dateTime, cgiEncode(submit->url), submit->url);
-    printSubmitState(submit, conn);
-    printf("</H4>\n");
-
-    /* Print a little summary information about the submission overall */
-    printSubmitSummary(submit, conn);
-    }
-}
-
-void rTagStormCountDistinct(struct tagStanza *list, char *tag, struct hash *uniq)
-/* Fill in hash with number of times have seen each value of tag */
-{
-char *requiredTag = "accession";
-struct tagStanza *stanza;
-for (stanza = list; stanza != NULL; stanza = stanza->next)
-    {
-    if (tagFindVal(stanza, requiredTag))
-	{
-	char *val = tagFindVal(stanza, tag);
-	if (val != NULL)
-	    {
-	    hashIncInt(uniq, val);
-	    }
-	}
-    rTagStormCountDistinct(stanza->children, tag, uniq);
-    }
-}
-
-struct hash *tagCountVals(struct tagStorm *tags, char *tag)
-/* Return an integer valued hash filled with counts of the
- * number of times each value is used */
-{
-struct hash *uniq = hashNew(0);
-rTagStormCountDistinct(tags->forest, tag, uniq);
-return uniq;
-}
-
-int hashElCmpIntVal(const void *va, const void *vb)
-/* Compare two hashEl val with highest going first. */
-{
-struct hashEl *a = *((struct hashEl **)va);
-struct hashEl *b = *((struct hashEl **)vb);
-return b->val - a->val;
-}
-
 struct dyString *printPopularTags(struct hash *hash, int maxSize)
 /* Get all hash elements, sorted by count, and print all the ones that fit */
 {
@@ -483,7 +43,7 @@ maxSize -= 3;  // Leave room for ...
 struct dyString *dy = dyStringNew(0);
 
 struct hashEl *hel, *helList = hashElListHash(hash);
-slSort(&helList, hashElCmpIntVal);
+slSort(&helList, hashElCmpIntValDesc);
 for (hel = helList; hel != NULL; hel = hel->next)
     {
     int oldSize = dy->stringSize;
@@ -502,53 +62,27 @@ hashElFreeList(&helList);
 return dy;
 }
 
-void highLevelSummary(struct sqlConnection *conn, struct tagStorm *tags,
-    char *tagArray[], int tagArraySize)
+long long sumCounts(struct hash *hash)
+/* Figuring hash is integer valued, return sum of all vals in hash */
 {
-int i;
-for (i=0; i<tagArraySize; ++i)
+long long total = 0;
+struct hashEl *hel, *helList = hashElListHash(hash);
+for (hel = helList; hel != NULL; hel = hel->next)
     {
-    char *tag = tagArray[i];
-    struct hash *hash = tagCountVals(tags, tag);
-    int count = hash->elCount;
-    struct dyString *dy = printPopularTags(hash, 90);
-    printf("<B>%s (%d):</B>\t%s\n", tag, count, dy->string);
-    dyStringFree(&dy);
-    hashFree(&hash);
+    int val = ptToInt(hel->val);
+    total += val;
     }
+hashElFreeList(&helList);
+return total;
 }
 
-char *highLevelTags[] = {"file_name", "lab", "format", 
-    "body_part", "submit_dir", "lab_quake_fluidics_cell"};
 
-static char *lookupField(void *record, char *key)
-/* Lookup a field in a tagStanza. */
-{
-struct tagStanza *stanza = record;
-return tagFindVal(stanza, key);
-}
+static int matchCount = 0;
+static boolean doSelect = FALSE;
 
-boolean statementMatch(struct rqlStatement *rql, struct tagStanza *stanza,
-	struct lm *lm)
-/* Return TRUE if where clause and tableList in statement evaluates true for tdb. */
-{
-struct rqlParse *whereClause = rql->whereClause;
-if (whereClause == NULL)
-    return TRUE;
-else
-    {
-    struct rqlEval res = rqlEvalOnRecord(whereClause, stanza, lookupField, lm);
-    res = rqlEvalCoerceToBoolean(res);
-    return res.val.b;
-    }
-}
-
-int matchCount = 0;
-boolean doSelect = FALSE;
-
-void traverse(struct tagStorm *tags, struct tagStanza *list, 
+static void rMatchesToRa(struct tagStorm *tags, struct tagStanza *list, 
     struct rqlStatement *rql, struct lm *lm)
-/* Recursively traverse stanzas on list. */
+/* Recursively traverse stanzas on list outputting matching stanzas as ra. */
 {
 struct tagStanza *stanza;
 for (stanza = list; stanza != NULL; stanza = stanza->next)
@@ -556,10 +90,10 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     if (rql->limit < 0 || rql->limit > matchCount)
 	{
 	if (stanza->children)
-	    traverse(tags, stanza->children, rql, lm);
+	    rMatchesToRa(tags, stanza->children, rql, lm);
 	else    /* Just apply query to leaves */
 	    {
-	    if (statementMatch(rql, stanza, lm))
+	    if (cdwRqlStatementMatch(rql, stanza, lm))
 		{
 		++matchCount;
 		if (doSelect)
@@ -579,85 +113,1096 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     }
 }
 
-void showMatching(char *rqlQuery, struct tagStorm *tags)
+void showMatching(char *rqlQuery, int limit, struct tagStorm *tags)
+/* Show stanzas that match query */
 {
-/* Turn rqlQuery string into a parsed out rqlStatement. */
-struct lineFile *lf = lineFileOnString("query", TRUE, cloneString(rqlQuery));
-struct rqlStatement *rql = rqlStatementParse(lf);
+struct dyString *dy = dyStringCreate("%s", rqlQuery);
+int maxLimit = 10000;
+if (limit > maxLimit)
+    limit = maxLimit;
+struct rqlStatement *rql = rqlStatementParseString(dy->string);
 
 /* Get list of all tag types in tree and use it to expand wildcards in the query
  * field list. */
-struct slName *allFieldList = tagTreeFieldList(tags);
+struct slName *allFieldList = tagStormFieldList(tags);
 slSort(&allFieldList, slNameCmp);
 rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
 
 /* Traverse tag tree outputting when rql statement matches in select case, just
  * updateing count in count case. */
 doSelect = sameWord(rql->command, "select");
+if (doSelect)
+    rql->limit = limit;
 struct lm *lm = lmInit(0);
-traverse(tags, tags->forest, rql, lm);
+rMatchesToRa(tags, tags->forest, rql, lm);
 if (sameWord(rql->command, "count"))
     printf("%d\n", matchCount);
 
 }
 
-void browseCdw(struct sqlConnection *conn)
-/* Show some overall information about cdw */
+int labCount(struct tagStorm *tags)
+/* Return number of different labs in tags */
 {
-struct tagStorm *tags = cdwTagStorm(conn);
-printf("<PRE><TT>\n");
-highLevelSummary(conn, tags, highLevelTags, ArraySize(highLevelTags));
-printf("</TT></PRE>\n");
-printf("query: ");
-char *queryVar = "cdwWebBrowse.query";
-char *query = cartUsualString(cart, queryVar, "select * where file_name limit 10");
-cgiMakeTextArea("cdwWebBrowse.query", query, 2, 80);
-cgiMakeSubmitButton();
-
-
-printf("<PRE><TT>\n");
-showMatching(query, tags);
-printf("</TT></PRE>\n");
+struct hash *hash = tagStormCountTagVals(tags, "lab");
+int count = hash->elCount;
+hashFree(&hash);
+return count;
 }
 
-void doMiddle()
-/* Write what goes between BODY and /BODY */
+struct tagStorm *tagStormFromCdwFileTags(struct sqlConnection *conn, char *query)
+/* Query our relationalized version and return just the non-null items */
 {
-userEmail = cdwGetEmailAndVerify();
-noPrevSubmission = FALSE;
-if (userEmail == NULL)
-    printf("<H3>Welcome to the CIRM stem cell hub data submission browser</H3>\n");
+struct sqlResult *sr = sqlGetResult(conn, query);
+struct slName *field, *fieldList = NULL;
+char *name;
+while ((name = sqlFieldName(sr)) != NULL)
+    {
+    slNameAddHead(&fieldList, name);
+    }
+slReverse(&fieldList);
+
+char **row;
+struct tagStorm *tags = tagStormNew("cdw.cdwFileTags");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct tagStanza *stanza = tagStanzaNew(tags, NULL);
+    int rowIx=0;
+    for (field = fieldList; field != NULL; field = field->next, ++rowIx)
+        {
+	char *val = row[rowIx];
+	if (val != NULL)
+	    {
+	    tagStanzaAdd(tags, stanza, field->name, val);
+	    }
+	}
+    slReverse(&stanza->tagList);
+    }
+tagStormReverseAll(tags);
+return tags;
+}
+
+struct slName *sqlResultFieldList(struct sqlResult *sr)
+/* Return slName list of all fields */
+{
+struct slName *list = NULL;
+char *field;
+while ((field = sqlFieldName(sr)) != NULL)
+    slNameAddHead(&list, field);
+slReverse(&list);
+return list;
+}
+
+int sqlResultFieldArray(struct sqlResult *sr, char ***retArray)
+/* Get the fields of sqlResult,  returning count, and the results
+ * themselves in *retArray. */
+{
+struct slName *el, *list = sqlResultFieldList(sr);
+int count = slCount(list);
+char **array;
+AllocArray(array, count);
+int i;
+for (el=list,i=0; el != NULL; el = el->next, ++i)
+    array[i] = cloneString(el->name);
+*retArray = array;
+return count;
+}
+
+struct fieldedTable *fieldedTableFromDbQuery(struct sqlConnection *conn, char *query)
+/* Return fieldedTable from a database query */
+{
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **fields;
+int fieldCount = sqlResultFieldArray(sr, &fields);
+struct fieldedTable *table = fieldedTableNew(query, fields, fieldCount);
+char **row;
+int i = 0;
+while ((row = sqlNextRow(sr)) != NULL)
+    fieldedTableAdd(table, row, fieldCount, ++i);
+sqlFreeResult(&sr);
+return table;
+}
+
+int slPairCmpName(const void *va, const void *vb)
+/* Compare strings such as gene names that may have embedded numbers,
+ * so that bmp4a comes before bmp14a */
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+return strcmp(a->name, b->name);
+}
+
+int slPairCmpNumbers(const void *va, const void *vb)
+/* Compare slPairs where name is interpreted as floating point number */
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+double aVal = atof(a->name);
+double bVal = atof(b->name);
+double diff = aVal - bVal;
+if (diff < 0)
+    return -1;
+else if (diff > 0)
+    return 1;
 else
-    printf("<H3>Browse submissions to CIRM stem cell hub</H3>\n");
+    return 0;
+}
 
-cdwWebBrowseMenuItem(FALSE);
-printf("<div id=\"userId\">");
-if (userEmail == NULL)
+
+boolean fieldedTableColumnIsNumeric(struct fieldedTable *table, int fieldIx)
+/* Return TRUE if field has numeric values wherever non-null */
+{
+struct fieldedRow *fr;
+boolean anyVals = FALSE;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
     {
-    cdwWebSubmitMenuItem(FALSE);
-    printf("Please sign in with Persona&nbsp;");
-    printf("<INPUT TYPE=SUBMIT NAME=\"signIn\" VALUE=\"sign in\" id=\"signin\">");
+    char *s = fr->row[fieldIx];
+    if (s != NULL)
+        {
+	anyVals = TRUE;
+	if (!isNumericString(s))
+	    return FALSE;
+	}
     }
-printf("</div>");
+return anyVals;
+}
 
+void fieldedTableSortOnField(struct fieldedTable *table, char *field, boolean doReverse)
+/* Sort on field */
+{
+/* Figure out field position */
+int fieldIx = stringArrayIx(field, table->fields, table->fieldCount);
+if (fieldIx < 0)
+    fieldIx = 0;
+boolean fieldIsNumeric = fieldedTableColumnIsNumeric(table, fieldIx);
+
+/* Make up pair list in local memory which points to rows */
+struct lm *lm = lmInit(0);
+struct slPair *pairList=NULL, *pair;
+struct fieldedRow *fr;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
+    {
+    char *val = emptyForNull(fr->row[fieldIx]);
+    lmAllocVar(lm, pair);
+    pair->name = val;
+    pair->val = fr;
+    slAddHead(&pairList, pair);
+    }
+slReverse(&pairList);  
+
+/* Sort this list. */
+if (fieldIsNumeric)
+    slSort(&pairList, slPairCmpNumbers);
+else
+    slSort(&pairList, slPairCmpName);
+if (doReverse)
+    slReverse(&pairList);
+
+/* Convert rowList to have same order. */
+struct fieldedRow *newList = NULL;
+for (pair = pairList; pair != NULL; pair = pair->next)
+    {
+    fr = pair->val;
+    slAddHead(&newList, fr);
+    }
+slReverse(&newList);
+table->rowList = newList;
+lmCleanup(&lm);
+}
+
+typedef void wrapHtmlPrint(char *tag, char *val);
+
+int fieldedTableMaxColChars(struct fieldedTable *table, int colIx)
+{
+if (colIx >= table->fieldCount)
+    errAbort("fieldedTableMaxColChars on %d, but only have %d columns", colIx, table->fieldCount);
+int max = strlen(table->fields[colIx]) + 1;
+struct fieldedRow *fr;
+for (fr = table->rowList; fr != NULL; fr = fr->next)
+    {
+    char *val = fr->row[colIx];
+    if (val != NULL)
+        {
+	int len = strlen(val);
+	if (len > max)
+	   max = len;
+	}
+    }
+return max;
+}
+
+struct sftSegment
+/* Information on a segment we're processing out of something larger */
+    {
+    char *database;	// Name of database
+    int tableSize;	// Size of larger structure
+    int tableOffset;	// Where we are in larger structure
+    };
+
+void showFieldedTable(struct fieldedTable *table, 
+    int pageSize, char *returnUrl, char *varPrefix,
+    boolean withFilters, char *itemPlural, int maxLenField, struct hash *htmlOutputWrappers, 
+    struct sftSegment *largerContext)
+/* Show a fielded table that can be sorted by clicking on column labels and optionally
+ * that includes a row of filter controls above the labels .
+ * The maxLenField is maximum character length of field before truncation with ...
+ * Pass in 0 for no max*/
+{
+if (strchr(returnUrl, '?') == NULL)
+     errAbort("Expecting returnUrl to include ? in showFieldedTable\nIt's %s", returnUrl);
+
+
+if (withFilters)
+    {
+    /* Print info on matching */
+    int matchCount = slCount(table->rowList);
+    if (largerContext != NULL)  // Need to page?
+	 matchCount = largerContext->tableSize;
+    printf(" %d %s found. ", matchCount, itemPlural);
+    cgiMakeButton("submit", "update");
+
+
+    printf("<BR>\n");
+    printf("First row of table below, above labels, can be used to filter individual fields. ");    
+    printf("Wildcard * and ? characters are allowed in text fields. ");
+    printf("&GT;min or &LT;max, is allowed in numerical fields.<BR>\n");
+    }
+
+/* Set up our table within table look. */
+webPrintLinkTableStart();
+
+/* Draw optional filters cells ahead of column labels*/
+if (withFilters)
+    {
+    printf("<TR>");
+    int i;
+    for (i=0; i<table->fieldCount; ++i)
+        {
+	char *field = table->fields[i];
+	char varName[256];
+	safef(varName, sizeof(varName), "%s_f_%s", varPrefix, field);
+	webPrintLinkCellStart();
+#ifdef MAKES_TOO_WIDE
+	char *oldVal = cartUsualString(cart, varName, "");
+	printf("<input type=\"text\" name=\"%s\" style=\"display:table-cell; width=100%%\""
+	       " value=\"%s\">", varName, oldVal);
+#endif /* MAKES_TOO_WIDE */
+	int size = fieldedTableMaxColChars(table, i);
+	if (size > maxLenField)
+	    size = maxLenField;
+	cartMakeTextVar(cart, varName, "", size + 1);
+	webPrintLinkCellEnd();
+	}
+    printf("</TR>");
+    }
+
+/* Get order var */
+char orderVar[256];
+safef(orderVar, sizeof(orderVar), "%s_order", varPrefix);
+char *orderFields = cartUsualString(cart, orderVar, "");
+
+char pageVar[64];
+safef(pageVar, sizeof(pageVar), "%s_page", varPrefix);
+
+/* Print column labels */
+int i;
+for (i=0; i<table->fieldCount; ++i)
+    {
+    webPrintLabelCellStart();
+    printf("<A class=\"topbar\" HREF=\"");
+    printf("%s", returnUrl);
+    printf("&%s=1", pageVar);
+    printf("&%s=", orderVar);
+    char *field = table->fields[i];
+    if (!isEmpty(orderFields) && sameString(orderFields, field))
+        printf("-");
+    printf("%s", field);
+    printf("\">");
+    printf("%s", field);
+    printf("</A>");
+    webPrintLabelCellEnd();
+    }
+
+/* Sort on field */
+if (!isEmpty(orderFields))
+    {
+    boolean doReverse = FALSE;
+    char *field = orderFields;
+    if (field[0] == '-')
+        {
+	field += 1;
+	doReverse = TRUE;
+	}
+    fieldedTableSortOnField(table, field, doReverse);
+    }
+
+/* Render data rows into HTML */
+int count = 0;
+struct fieldedRow *row;
+for (row = table->rowList; row != NULL; row = row->next)
+    {
+    if (++count > pageSize)
+         break;
+    printf("<TR>\n");
+    int fieldIx = 0;
+    for (fieldIx=0; fieldIx<table->fieldCount; ++fieldIx)
+	{
+	char shortVal[maxLenField+1];
+	char *val = emptyForNull(row->row[fieldIx]);
+	int valLen = strlen(val);
+	if (maxLenField > 0 && maxLenField < valLen)
+	    {
+	    if (valLen > maxLenField)
+		{
+		memcpy(shortVal, val, maxLenField-3);
+		shortVal[maxLenField-3] = 0;
+		strcat(shortVal, "...");
+		val = shortVal;
+		}
+	    }
+	webPrintLinkCellStart();
+	boolean printed = FALSE;
+	if (htmlOutputWrappers != NULL && !isEmpty(val))
+	    {
+	    char *field = table->fields[fieldIx];
+	    wrapHtmlPrint *printer = hashFindVal(htmlOutputWrappers, field);
+	    if (printer != NULL)
+		{
+		printer(field, val);
+		printed = TRUE;
+		}
+	    
+	    }
+	if (!printed)
+	    printf("%s", val);
+	webPrintLinkCellEnd();
+	}
+    printf("</TR>\n");
+    }
+
+/* Get rid of table within table look */
+webPrintLinkTableEnd();
+
+/* Handle paging if any */
+if (largerContext != NULL)  // Need to page?
+     {
+     if (pageSize < largerContext->tableSize)
+	{
+	int curPage = largerContext->tableOffset/pageSize;
+	int totalPages = (largerContext->tableSize + pageSize - 1)/pageSize;
+
+	printf("Displaying page ");
+
+	char pageVar[64];
+	safef(pageVar, sizeof(pageVar), "%s_page", varPrefix);
+	cgiMakeIntVar(pageVar, curPage+1, 3);
+
+	printf(" of %d", totalPages);
+	}
+     }
+}
+
+
+
+void wrapFileName(char *tag, char *val)
+/* Write out wrapper that links us to something nice */
+{
+printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=oneFile&cdwFileTag=%s&cdwFileVal=%s&%s\">",
+    tag, val, cartSidUrlString(cart));
+printf("%s</A>", val);
+}
+
+void wrapTagField(char *tag, char *val)
+/* Write out wrapper that links us to something nice */
+{
+printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=oneTag&cdwTagName=%s&%s\">",
+    val, cartSidUrlString(cart));
+printf("%s</A>", val);
+}
+
+void wrapTagValueInFiles(char *tag, char *val)
+/* Write out wrapper that links us to something nice */
+{
+printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s&",
+    cartSidUrlString(cart));
+char query[2*PATH_LEN];
+safef(query, sizeof(query), "%s = '%s'", tag, val);
+char *escapedQuery = cgiEncode(query);
+printf("%s=%s", "cdwFile_filter", escapedQuery);
+freez(&escapedQuery);
+printf("\">%s</A>", val);
+}
+
+void showFieldsWhere(struct sqlConnection *conn, char *itemPlural, char *fields, 
+    char *from, char *initialWhere,  
+    int pageSize, char *returnUrl, char *varPrefix, boolean withFilters, struct hash *tagOutWrappers)
+/* Construct query and display results as a table */
+{
+struct dyString *query = dyStringNew(0);
+struct dyString *where = dyStringNew(0);
+struct slName *field, *fieldList = commaSepToSlNames(fields);
+boolean gotWhere = FALSE;
+sqlDyStringPrintf(query, "%s", ""); // TODO check with Galt on how to get reasonable checking back.
+dyStringPrintf(query, "select %s from %s", fields, from);
+if (!isEmpty(initialWhere))
+    {
+    dyStringPrintf(where, " where ");
+    sqlSanityCheckWhere(initialWhere, where);
+    gotWhere = TRUE;
+    }
+if (withFilters)
+    {
+    for (field = fieldList; field != NULL; field = field->next)
+        {
+	char varName[128];
+	safef(varName, sizeof(varName), "%s_f_%s", varPrefix, field->name);
+	char *val = trimSpaces(cartUsualString(cart, varName, ""));
+	if (!isEmpty(val))
+	    {
+	    if (gotWhere)
+		dyStringPrintf(where, " and ");
+	    else
+		{
+	        dyStringPrintf(where, " where ");
+		gotWhere = TRUE;
+		}
+	    if (anyWild(val))
+	         {
+		 char *converted = sqlLikeFromWild(val);
+		 char *escaped = makeEscapedString(converted, '"');
+		 dyStringPrintf(where, "%s like \"%s\"", field->name, escaped);
+		 freez(&escaped);
+		 freez(&converted);
+		 }
+	    else if (val[0] == '>' || val[0] == '<')
+	         {
+		 char *remaining = val+1;
+		 if (remaining[0] == '=')
+		     remaining += 1;
+		 remaining = skipLeadingSpaces(remaining);
+		 if (isNumericString(remaining))
+		     dyStringPrintf(where, "%s %s", field->name, val);
+		 else
+		     {
+		     warn("Filter for %s doesn't parse:  %s", field->name, val);
+		     dyStringPrintf(where, "%s is not null", field->name); // Let query continue
+		     }
+		 }
+	    else
+	         {
+		 char *escaped = makeEscapedString(val, '"');
+		 dyStringPrintf(where, "%s = \"%s\"", field->name, escaped);
+		 freez(&escaped);
+		 }
+	    }
+	}
+    }
+dyStringAppend(query, where->string);
+
+/* We do order here so as to keep order when working with tables bigger than a page. */
+char orderVar[256];
+safef(orderVar, sizeof(orderVar), "%s_order", varPrefix);
+char *orderFields = cartUsualString(cart, orderVar, "");
+if (!isEmpty(orderFields))
+    {
+    if (orderFields[0] == '-')
+	dyStringPrintf(query, " order by %s desc", orderFields+1);
+    else
+	dyStringPrintf(query, " order by %s", orderFields);
+    }
+
+/* Figure out size of query result */
+struct dyString *countQuery = dyStringNew(0);
+sqlDyStringPrintf(countQuery, "%s", ""); // TODO check with Galt on how to get reasonable checking back.
+dyStringPrintf(countQuery, "select count(*) from %s", from);
+dyStringAppend(countQuery, where->string);
+int resultsSize = sqlQuickNum(conn, countQuery->string);
+dyStringFree(&countQuery);
+
+char pageVar[64];
+safef(pageVar, sizeof(pageVar), "%s_page", varPrefix);
+int page = 0;
+struct sftSegment context = { .database = "cdw", .tableSize=resultsSize};
+if (resultsSize > pageSize)
+    {
+    page = cartUsualInt(cart, pageVar, 0) - 1;
+    if (page < 0)
+        page = 0;
+    int lastPage = (resultsSize-1)/pageSize;
+    if (page > lastPage)
+        page = lastPage;
+    context.tableOffset = page * pageSize;
+    dyStringPrintf(query, " limit %d offset %d", pageSize, context.tableOffset);
+    }
+
+struct fieldedTable *table = fieldedTableFromDbQuery(conn, query->string);
+showFieldedTable(table, pageSize, returnUrl, varPrefix, withFilters, itemPlural,
+    18, tagOutWrappers, &context);
+fieldedTableFree(&table);
+
+dyStringFree(&query);
+dyStringFree(&where);
+}
+
+static char *mustFindFieldInRow(char *field, struct slName *fieldList, char **row)
+/* Assuming field is in list, which is ordered same as row, return row cell
+ * corrsepondint to field */
+{
+int fieldIx = 0;
+struct slName *el;
+for (el = fieldList; el != NULL; el = el->next)
+    {
+    if (sameString(el->name, field))
+        {
+	return row[fieldIx];
+	}
+    ++fieldIx;
+    }
+errAbort("Couldn't find field %s in row", field);
+return NULL;
+}
+
+void doOneTag(struct sqlConnection *conn)
+/* Put up information on one tag */
+{
+char *tag = cartString(cart, "cdwTagName");
+char query[512];
+sqlSafef(query, sizeof(query), "select count(*) from cdwFileTags where %s is not null", tag);
+int taggedFileCount = sqlQuickNum(conn, query);
+sqlSafef(query, sizeof(query), "select count(distinct(%s)) from cdwFileTags where %s is not null", 
+    tag, tag);
+int distinctCount = sqlQuickNum(conn, query);
+printf("The <B>%s</B> tag has %d distinct values and is used on %d files. ", 
+    tag, distinctCount, taggedFileCount);
+int maxLimit = 100;
+int limit = min(maxLimit, taggedFileCount);
+if (taggedFileCount > maxLimit)
+    printf("The %d most popular values of %s are:<BR>\n", maxLimit, tag);
+else
+    printf("The values for %s are:<BR>\n", tag);
+
+sqlSafef(query, sizeof(query), 
+    "select count(%s) ct,%s from cdwFileTags group by %s order by ct desc", 
+    tag, tag, tag);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char *labels[] = {"files", tag};
+int fieldCount = ArraySize(labels);
+struct fieldedTable *table = fieldedTableNew("Tag Values", labels, fieldCount);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (row[1] != NULL)
+	fieldedTableAdd(table, row, fieldCount, 0);
+    }
+
+char returnUrl[PATH_LEN*2];
+safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=oneTag&cdwTagName=%s&%s",
+    tag, cartSidUrlString(cart) );
+struct hash *outputWrappers = hashNew(0);
+hashAdd(outputWrappers, tag, wrapTagValueInFiles);
+showFieldedTable(table, limit, returnUrl, "cdwOneTag", FALSE, NULL, 0, outputWrappers, NULL);
+fieldedTableFree(&table);
+}
+
+void doOneFile(struct sqlConnection *conn)
+/* Put up a page with info on one file */
+{
+char *idTag = cartUsualString(cart, "cdwFileTag", "accession");
+char *idVal = cartString(cart, "cdwFileVal");
+char query[512];
+sqlSafef(query, sizeof(query), "select * from cdwFileTags where %s='%s'", idTag, idVal);
+struct sqlResult *sr = sqlGetResult(conn, query);
+struct slName *el, *list = sqlResultFieldList(sr);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *fileName = mustFindFieldInRow("file_name", list, row);
+    char *fileSize = mustFindFieldInRow("file_size", list, row);
+    char *format = mustFindFieldInRow("format", list, row);
+    long long size = atoll(fileSize);
+    printf("Tags associated with %s a %s format file of size ", fileName, format);
+    printLongWithCommas(stdout, size);
+    printf("<BR>\n");
+
+
+    static char *outputFields[] = {"tag", "value"};
+    struct fieldedTable *table = fieldedTableNew("File Tags", outputFields,ArraySize(outputFields));
+    int fieldIx = 0;
+    for (el = list; el != NULL; el = el->next)
+        {
+	char *outRow[2];
+	char *val = row[fieldIx];
+	if (val != NULL)
+	    {
+	    outRow[0] = el->name;
+	    outRow[1] = row[fieldIx];
+	    fieldedTableAdd(table, outRow, 2, fieldIx);
+	    }
+	++fieldIx;
+	}
+    char returnUrl[PATH_LEN*2];
+    safef(returnUrl, sizeof(returnUrl), 
+	"../cgi-bin/cdwWebBrowse?cdwCommand=oneFile&cdwFileTag=%s&cdwFileVal=%s&%s",
+	idTag, idVal, cartSidUrlString(cart) );
+    struct hash *outputWrappers = hashNew(0);
+    hashAdd(outputWrappers, "tag", wrapTagField);
+    showFieldedTable(table, BIGNUM, returnUrl, "cdwOneFile", FALSE, NULL, 0, outputWrappers, NULL);
+    fieldedTableFree(&table);
+    }
+}
+
+void doBrowseFiles(struct sqlConnection *conn)
+/* Print list of files */
+{
 printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
-if (userEmail != NULL)
+cartSaveSession(cart);
+cgiMakeHiddenVar("cdwCommand", "browseFiles");
+char returnUrl[PATH_LEN*2];
+safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s",
+    cartSidUrlString(cart) );
+char *where = cartUsualString(cart, "cdwFile_filter", "");
+if (!isEmpty(where))
     {
-    struct sqlConnection *conn = sqlConnect(cdwDatabase);
-    browseCdw(conn);
-    sqlDisconnect(&conn);
+    printf("Restricting files to where %s. ", where);
     }
+struct hash *wrappers = hashNew(0);
+hashAdd(wrappers, "file_name", wrapFileName);
+showFieldsWhere(conn, "files", 
+    "file_name,file_size,lab,assay,data_set_id,output,format,read_size,item_count,"
+    "species,body_part",
+    "cdwFileTags", where, 100, returnUrl, "cdwBrowseFiles", TRUE, wrappers);
 printf("</FORM>\n");
 }
 
-void doAfterCart(struct cart *theCart)
+struct sqlConnection *wrapperConn;
+
+struct dyString *customTextForFile(struct sqlConnection *conn, struct cdwTrackViz *viz)
+/* Create custom track text */
+{
+struct dyString *dy = dyStringNew(0);
+dyStringPrintf(dy, "track name=\"%s\" ", viz->shortLabel);
+dyStringPrintf(dy, "description=\"%s\" ", viz->longLabel);
+char *host = hHttpHost();
+dyStringPrintf(dy, "bigDataUrl=http://%s/cdw/%s type=%s", host, viz->bigDataFile, viz->type);
+return dy;
+}
+
+struct cdwTrackViz *cdwTrackVizFromFileId(struct sqlConnection *conn, long long fileId)
+/* Return cdwTrackViz if any associated with file ID */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select * from cdwTrackViz where fileId=%lld", fileId);
+return cdwTrackVizLoadByQuery(conn, query);
+}
+
+void wrapTrackAccession(char *tag, char *val)
+/* Write out wrapper to link us to genome browser */
+{
+assert(wrapperConn != NULL);
+struct sqlConnection *conn = wrapperConn;
+struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, val);
+if (vf != NULL)
+    {
+    struct cdwTrackViz *viz = cdwTrackVizFromFileId(conn, vf->fileId);
+    if (viz != NULL)
+        {
+	struct dyString *track = customTextForFile(conn, viz);
+	char *encoded = cgiEncode(track->string);
+	printf("<A HREF=\"../cgi-bin/hgTracks");
+	printf("?db=%s", vf->ucscDb);
+	printf("&hgt.customText=");
+	printf("%s", encoded);
+	printf("\" target=\"_blank\">");	       // Finish HREF quote and A tag
+	printf("%s</A>", val);
+	freez(&encoded);
+	dyStringFree(&track);
+	}
+    else
+	printf("%s (needs viz)", val);
+    }
+}
+
+void doBrowseTracks(struct sqlConnection *conn)
+/* Print list of files */
+{
+printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
+cartSaveSession(cart);
+cgiMakeHiddenVar("cdwCommand", "browseTracks");
+char returnUrl[PATH_LEN*2];
+safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseTracks&%s",
+    cartSidUrlString(cart) );
+char *where = "fileId=file_id and format in ('bam','bigBed', 'bigWig', 'vcf')";
+struct hash *wrappers = hashNew(0);
+wrapperConn = conn;
+hashAdd(wrappers, "accession", wrapTrackAccession);
+showFieldsWhere(conn, "tracks", 
+    "accession,ucsc_db,format,file_size,lab,assay,data_set_id,output,"
+    "strain,lab_quake_markers,body_part,submit_file_name",
+    "cdwFileTags,cdwTrackViz", where, 100, returnUrl, "cdwBrowseTracks", TRUE, wrappers);
+printf("</FORM>\n");
+}
+
+
+void doBrowsePopularTags(struct sqlConnection *conn, char *tag)
+/* Print list of most popular tags of type */
+{
+struct tagStorm *tags = cdwTagStorm(conn);
+struct hash *hash = tagStormCountTagVals(tags, tag);
+printf("%s tag values ordered by usage\n", tag);
+struct hashEl *hel, *helList = hashElListHash(hash);
+slSort(&helList, hashElCmpIntValDesc);
+webPrintLinkTableStart();
+webPrintLabelCell("#");
+webPrintLabelCell(tag);
+webPrintLabelCell("matching files");
+int valIx = 0, maxValIx = 100;
+for (hel = helList; hel != NULL && ++valIx <= maxValIx; hel = hel->next)
+    {
+    printf("<TR>\n");
+    webPrintIntCell(valIx);
+    webPrintLinkCell(hel->name);
+    webPrintIntCell(ptToInt(hel->val));
+    printf("</TR>\n");
+    }
+webPrintLinkTableEnd();
+}
+
+void doBrowseFormat(struct sqlConnection *conn)
+/* Browse through available formats */
+{
+static char *labels[] = {"count", "format", "description"};
+int fieldCount = ArraySize(labels);
+char *row[fieldCount];
+struct fieldedTable *table = fieldedTableNew("Data formats", labels, fieldCount);
+struct slPair *format, *formatList = cdwFormatList();
+
+for (format = formatList; format != NULL; format = format->next)
+    {
+    char countString[16];
+    char query[256];
+    sqlSafef(query, sizeof(query), "select count(*) from cdwFileTags where format='%s'", 
+	format->name);
+    sqlQuickQuery(conn, query, countString, sizeof(countString));
+    row[0] = countString;
+    row[1] = format->name;
+    row[2] = format->val;
+    fieldedTableAdd(table, row, fieldCount, 0);
+    }
+char returnUrl[PATH_LEN*2];
+safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseFormats&%s",
+    cartSidUrlString(cart) );
+showFieldedTable(table, 200, returnUrl, "cdwFormats", FALSE, NULL, 0, NULL, NULL);
+fieldedTableFree(&table);
+}
+
+void doBrowseLab(struct sqlConnection *conn)
+/* Put up information on labs */
+{
+static char *labels[] = {"name", "files", "PI", "institution", "web page"};
+int fieldCount = ArraySize(labels);
+char *row[fieldCount];
+struct fieldedTable *table = fieldedTableNew("Data contributing labs", labels, fieldCount);
+
+printf("Here is a table of labs that have contributed data<BR>\n");
+char query[256];
+sqlSafef(query, sizeof(query), "select * from cdwLab");
+struct cdwLab *lab, *labList = cdwLabLoadByQuery(conn, query);
+int i = 0;
+for (lab = labList; lab != NULL; lab = lab->next)
+    {
+    row[0] = lab->name;
+    char countString[16];
+    sqlSafef(query, sizeof(query), "select count(*) from cdwFileTags where lab='%s'", lab->name);
+    sqlQuickQuery(conn, query, countString, sizeof(countString));
+    row[1] = countString;
+    row[2] = lab->pi;
+    row[3] = lab->institution;
+    row[4] = lab->url;
+    fieldedTableAdd(table, row, fieldCount, ++i);
+    }
+char returnUrl[PATH_LEN*2];
+safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseLabs&%s",
+    cartSidUrlString(cart) );
+showFieldedTable(table, 200, returnUrl, "cdwLab", FALSE, NULL, 0, NULL, NULL);
+fieldedTableFree(&table);
+}
+
+void doQuery(struct sqlConnection *conn)
+/* Print up query page */
+{
+/* Do stuff that keeps us here after a routine submit */
+printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
+cartSaveSession(cart);
+cgiMakeHiddenVar("cdwCommand", "query");
+
+/* Get values from text inputs and make up an RQL query string out of fields, where, limit
+ * clauses */
+
+/* Fields clause */
+char *fieldsVar = "cdwQueryFields";
+char *fields = cartUsualString(cart, fieldsVar, "*");
+struct dyString *rqlQuery = dyStringCreate("select %s from files ", fields);
+
+/* Where clause */
+char *whereVar = "cdwQueryWhere";
+char *where = cartUsualString(cart, whereVar, "");
+dyStringPrintf(rqlQuery, "where accession");
+if (!isEmpty(where))
+    dyStringPrintf(rqlQuery, " and (%s)", where);
+
+/* Limit clause */
+char *limitVar = "cdwQueryLimit";
+int limit = cartUsualInt(cart, limitVar, 10);
+
+struct tagStorm *tags = cdwTagStorm(conn);
+struct slRef *matchList = tagStanzasMatchingQuery(tags, rqlQuery->string);
+int matchCount = slCount(matchList);
+printf("Enter a SQL-like query below. ");
+printf("In the box after 'select' you can put in a list of tag names including wildcards. ");
+printf("In the box after 'where' you can put in filters based on boolean operations. <BR>");
+/** Write out select [  ] from files whre [  ] limit [ ] <submit> **/
+printf("select ");
+cgiMakeTextVar(fieldsVar, fields, 40);
+printf("from files ");
+printf("where ");
+cgiMakeTextVar(whereVar, where, 40);
+printf(" limit ");
+cgiMakeIntVar(limitVar, limit, 7);
+cgiMakeSubmitButton();
+
+printf("<PRE><TT>");
+printLongWithCommas(stdout, matchCount);
+printf(" files match\n\n");
+showMatching(rqlQuery->string, limit, tags);
+printf("</TT></PRE>\n");
+printf("</FORM>\n");
+}
+
+void tagSummaryRow(struct fieldedTable *table, struct tagStorm *tags, char *tag)
+/* Print out row in a high level tag counting table */
+{
+/* Do analysis hash */
+struct hash *hash = tagStormCountTagVals(tags, tag);
+
+/* Convert count of distinct values to string */
+int valCount = hash->elCount;
+char valCountString[32];
+safef(valCountString, sizeof(valCountString), "%d", valCount);
+
+/* Convert count of files using tag to string */
+int fileCount = sumCounts(hash);
+char fileCountString[32];
+safef(fileCountString, sizeof(fileCountString), "%d", fileCount);
+
+struct dyString *dy = printPopularTags(hash, 120);
+
+/* Add data to fielded table */
+char *row[4];
+row[0] = tag;
+row[1] = valCountString;
+row[2] = dy->string;
+row[3] = fileCountString;
+fieldedTableAdd(table, row, ArraySize(row), 0);
+
+/* Clean up */
+dyStringFree(&dy);
+hashFree(&hash);
+}
+
+char *tagPopularityFields[] = { "tag name", "vals", "popular values (files)...", "files",};
+
+void doHome(struct sqlConnection *conn)
+/* Put up home/summary page */
+{
+struct tagStorm *tags = cdwTagStorm(conn);
+
+/* Print sentence with summary of bytes, files, and labs */
+char query[256];
+printf("The CIRM Stem Cell Hub contains ");
+sqlSafef(query, sizeof(query),
+    "select sum(size) from cdwFile,cdwValidFile where cdwFile.id=cdwValidFile.id");
+long long totalBytes = sqlQuickLongLong(conn, query);
+printLongWithCommas(stdout, totalBytes);
+printf(" bytes of data in ");
+sqlSafef(query, sizeof(query), "select count(*) from cdwValidFile");
+long long fileCount = sqlQuickLongLong(conn, query);
+printLongWithCommas(stdout, fileCount);
+printf(" files");
+printf(" from %d labs.<BR>\n", labCount(tags));
+printf("Try using the browse menu on files or tags. ");
+printf("The query link allows simple SQL-like queries of the metadata.");
+printf("<BR><BR>\n");
+
+/* Print out high level tags table */
+static char *highLevelTags[] = 
+    {"data_set_id", "lab", "assay", "format", "read_size",
+    "body_part", "submit_dir", "lab_quake_markers", "species"};
+
+struct fieldedTable *table = fieldedTableNew("Important tags", tagPopularityFields, 
+    ArraySize(tagPopularityFields));
+int i;
+for (i=0; i<ArraySize(highLevelTags); ++i)
+    tagSummaryRow(table, tags, highLevelTags[i]);
+char returnUrl[PATH_LEN*2];
+safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?%s", cartSidUrlString(cart) );
+showFieldedTable(table, 100, returnUrl, "cdwHome", FALSE, NULL, 0, NULL, NULL);
+
+printf("This table is a summary of important metadata tags including the tag name, the number of ");
+printf("values and the most popular values of the tag, and the number of files marked with ");
+printf("the tag.");
+
+printf("<BR>\n");
+
+tagStormFree(&tags);
+}
+
+void doBrowseTags(struct sqlConnection *conn)
+/* Put up browse tags page */
+{
+struct tagStorm *tags = cdwTagStorm(conn);
+struct slName *tag, *tagList = tagStormFieldList(tags);
+slSort(&tagList, slNameCmp);
+printf("This is a list of all tags and their most popular values.");
+struct fieldedTable *table = fieldedTableNew("Important tags", tagPopularityFields, 
+    ArraySize(tagPopularityFields));
+for (tag = tagList; tag != NULL; tag = tag->next)
+    tagSummaryRow(table, tags, tag->name);
+char returnUrl[PATH_LEN*2];
+safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseTags&%s",
+    cartSidUrlString(cart) );
+struct hash *outputWrappers = hashNew(0);
+    hashAdd(outputWrappers, "tag name", wrapTagField);
+showFieldedTable(table, 300, returnUrl, "cdwBrowseTags", FALSE, NULL, 0, outputWrappers, NULL);
+tagStormFree(&tags);
+}
+
+void doHelp(struct sqlConnection *con)
+/* Put up help page */
+{
+printf("This being a prototype, there's not much help available.  Try clicking and hovering over the Browse link on the top bar to expose a menu. The trickiest part of the system is the query link.");
+printf("The query link has you type in a SQL-like query. ");
+printf("Try 'select * from files where accession' to get all metadata tags ");
+printf("from files that have passed basic format validations. Instead of '*' you ");
+printf("could use a comma separated list of tag names. ");
+printf("Instead of 'accession' you could put in a boolean expression involving field names and ");
+printf("constants. String constants need to be surrounded by quotes - either single or double.");
+printf("<BR><BR>");
+}
+
+
+void dispatch(struct sqlConnection *conn)
+/* Dispatch page after to routine depending on cdwCommand variable */
+{
+char *command = cartOptionalString(cart, "cdwCommand");
+if (command == NULL)
+    {
+    doHome(conn);
+    }
+else if (sameString(command, "query"))
+    {
+    doQuery(conn);
+    }
+else if (sameString(command, "browseFiles"))
+    {
+    doBrowseFiles(conn);
+    }
+else if (sameString(command, "browseTracks"))
+    {
+    doBrowseTracks(conn);
+    }
+else if (sameString(command, "browseTags"))
+    {
+    doBrowseTags(conn);
+    }
+else if (sameString(command, "browseLabs"))
+    {
+    doBrowseLab(conn);
+    }
+else if (sameString(command, "browseDataSets"))
+    {
+    doBrowsePopularTags(conn, "data_set_id");
+    }
+else if (sameString(command, "browseFormats"))
+    {
+    doBrowseFormat(conn);
+    }
+else if (sameString(command, "oneFile"))
+    {
+    doOneFile(conn);
+    }
+else if (sameString(command, "oneTag"))
+    {
+    doOneTag(conn);
+    }
+else if (sameString(command, "help"))
+    {
+    doHelp(conn);
+    }
+else
+    {
+    uglyf("unrecognized command %s<BR>\n", command);
+    }
+}
+
+void doMiddle()
+/* Menu bar has been drawn.  We are in the middle of first section. */
+{
+struct sqlConnection *conn = sqlConnect(cdwDatabase);
+dispatch(conn);
+sqlDisconnect(&conn);
+}
+
+static char *localMenuBar()
+/* Return menu bar string */
+{
+// menu bar html is in a stringified .h file
+char *rawHtml = 
+#include "cdwNavBar.h"
+   ;
+
+char uiVars[128];
+safef(uiVars, sizeof(uiVars), "%s=%s", cartSessionVarName(), cartSessionId(cart));
+return menuBarAddUiVars(rawHtml, "/cgi-bin/cdw", uiVars);
+}
+
+void localWebStartWrapper(char *titleString)
+/* Output a HTML header with the given title.  Start table layout.  Draw menu bar. */
+{
+/* Do html header. We do this a little differently than web.c routines, mostly
+ * in that we are strict rather than transitional HTML 4.01 */
+    {
+    puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" "
+             "\"http://www.w3.org/TR/html4/strict.dtd\">");
+    puts("<HTML><HEAD>\n");
+    webPragmasEtc();
+    printf("<TITLE>%s</TITLE>\n", titleString);
+    webIncludeResourceFile("HGStyle.css");
+    jsIncludeFile("jquery.js", NULL);
+    jsIncludeFile("jquery.plugins.js", NULL);
+    webIncludeResourceFile("nice_menu.css");
+    printf("</HEAD>\n");
+    printBodyTag(stdout);
+    }
+
+webStartSectionTables();    // Start table layout code
+puts(localMenuBar());	    // Menu bar after tables open but before first section
+webFirstSection(titleString);	// Open first section
+webPushErrHandlers();	    // Now can do improved error handler
+}
+
+
+void localWebWrap(struct cart *theCart)
+/* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-cdwWebHeaderWithPersona("");
-// TODO: find a better place for menu update
-htmEmptyShell(doMiddle, NULL);
-cdwWebFooterWithPersona();
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.20");
+pushWarnHandler(htmlVaWarn);
+doMiddle();
+webEndSectionTables();
+printf("</BODY></HTML>\n");
 }
+
+
+char *excludeVars[] = {"cdwCommand", "submit", NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -665,9 +1210,8 @@ int main(int argc, char *argv[])
 boolean isFromWeb = cgiIsOnWeb();
 if (!isFromWeb && !cgiSpoof(&argc, argv))
     usage();
-if (cgiVarExists("maxSubCount"))
-    htmlSetCookie("cdwWeb.maxSubCount", cgiString("maxSubCount"), NULL, NULL, NULL, FALSE);
-cartEmptyShell(doAfterCart, hUserCookie(), NULL, NULL);
-
+dnaUtilOpen();
+oldVars = hashNew(0);
+cartEmptyShell(localWebWrap, hUserCookie(), excludeVars, oldVars);
 return 0;
 }

@@ -1405,6 +1405,9 @@ void uglyTime(char *label, ...);
 void makeDirs(char* path);
 /* make a directory, including parent directories */
 
+boolean isNumericString(char *s);
+/* Return TRUE if string is numeric (integer or floating point) */
+
 char *skipNumeric(char *s);
 /* Return first char of s that's not a digit */
 
