@@ -10,7 +10,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "genePredToBigGenePred - converts genePred or genePredExt to bigGenePred input\n"
+  "genePredToBigGenePred - converts genePred or genePredExt to bigGenePred input (bed format with extra fields)\n"
   "usage:\n"
   "   genePredToBigGenePred file.gp file.bgpInput\n"
   "NOTE: to build bigBed:\n"
