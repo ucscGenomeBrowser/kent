@@ -112,7 +112,6 @@ long long itemCount = 0;
 int countDp=0;
 double minDp = 0, maxDp = 0, sumDp = 0, sumSquareDp = 0;
 long long countPass=0;
-long long snpPassCount = 0;
 long long haveFilterCount=0;
 long long snpCount = 0;
 long long phasedCount = 0, haploidCount = 0, totalGenotypes = 0;
@@ -140,10 +139,6 @@ while ((rec = vcfNextRecord(vcf)) != NULL)
 	if (sameString(rec->filters[0], "PASS"))
 	    {
 	    ++countPass;
-	    if (isSnp)
-	        {
-		++snpPassCount;
-		}
 	    }
 	}
 
@@ -204,7 +199,6 @@ fprintf(f, "snpItemCount %lld\n", snpCount);
 if (itemCount > 0)
     fprintf(f, "snpRatio %g\n", (double)snpCount/itemCount);
 
-fprintf(f, "passSnpCount %lld\n", snpPassCount);
 fprintf(f, "sumOfSizes %lld\n", sumOfSizes);
 fprintf(f, "basesCovered %lld\n", basesCovered);
 
