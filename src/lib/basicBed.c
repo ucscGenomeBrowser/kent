@@ -1483,12 +1483,14 @@ if (bedFieldCount > 10)
 	}
     if (count != bed->blockCount)
 	lineFileAbort(lf, "Expecting %d elements in blockSizes list, found at least %d", bed->blockCount, count);
+#ifdef NOTNOW
     int i;
     for (i=0; i < bed->blockCount;  i++)
 	{
         if (!(blockSizes[i] > 0))
 		lineFileAbort(lf, "BED blockSizes must be greater than 0, blockSize[%d] = %d", i, blockSizes[i]);
 	}
+#endif
     }
 if (bedFieldCount > 11)
     {
