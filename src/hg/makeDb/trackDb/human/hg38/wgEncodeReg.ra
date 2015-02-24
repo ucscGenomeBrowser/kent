@@ -9,6 +9,8 @@ group regulation
 priority 1
 canPack On
 
+include wgEncodeRegDnase.ra
+
     track wgEncodeRegTxn
     container multiWig
     noInherit on
@@ -382,3 +384,213 @@ canPack On
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
+    # This is released track with new TF Motif feature
+    track wgEncodeRegTfbsClusteredV3
+    shortLabel Txn Factor ChIP
+    longLabel Transcription Factor ChIP-seq (161 factors) from ENCODE with Factorbook Motifs
+    type factorSource
+    pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
+    origAssembly hg19
+    superTrack wgEncodeReg dense
+    sourceTable wgEncodeRegTfbsCellsV3
+    inputTrackTable wgEncodeRegTfbsClusteredInputsV3
+    inputTableFieldDisplay cellType factor antibody treatment lab
+    motifTable factorbookMotifPos
+    motifPwmTable factorbookMotifPwm
+    motifMapTable factorbookMotifCanonical
+    motifMaxWindow 50000
+    motifDrawDefault on
+    urlLabel Factorbook Link:
+    url http://www.factorbook.org/mediawiki/index.php/$$
+    idInUrlSql select value from factorbookGeneAlias where name='%s'
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    visibility dense
+    useScore 1
+    priority 1.9
+    maxWindowToDraw 10000000
+    dataVersion ENCODE Mar 2012 Freeze
+    filterBy name:factor=\
+        ARID3A,\
+        ATF1,\
+        ATF2,\
+        ATF3,\
+        BACH1,\
+        BATF,\
+        BCL11A,\
+        BCL3,\
+        BCLAF1,\
+        BDP1,\
+        BHLHE40,\
+        BRCA1,\
+        BRF1,\
+        BRF2,\
+        CBX3,\
+        CCNT2,\
+        CEBPB,\
+        CEBPD,\
+        CHD1,\
+        CHD2,\
+        CREB1,\
+        CTBP2,\
+        CTCF,\
+        CTCFL,\
+        E2F1,\
+        E2F4,\
+        E2F6,\
+        EBF1,\
+        EGR1,\
+        ELF1,\
+        ELK1,\
+        ELK4,\
+        EP300,\
+        ESR1,\
+        ESRRA,\
+        ETS1,\
+        EZH2,\
+        FAM48A,\
+        FOS,\
+        FOSL1,\
+        FOSL2,\
+        FOXA1,\
+        FOXA2,\
+        FOXM1,\
+        FOXP2,\
+        GABPA,\
+        GATA1,\
+        GATA2,\
+        GATA3,\
+        GRp20,\
+        GTF2B,\
+        GTF2F1,\
+        GTF3C2,\
+        HDAC1,\
+        HDAC2,\
+        HDAC6,\
+        HDAC8,\
+        HMGN3,\
+        HNF4A,\
+        HNF4G,\
+        HSF1,\
+        IKZF1,\
+        IRF1,\
+        IRF3,\
+        IRF4,\
+        JUN,\
+        JUNB,\
+        JUND,\
+        KAP1,\
+        KDM5A,\
+        KDM5B,\
+        MAFF,\
+        MAFK,\
+        MAX,\
+        MAZ,\
+        MBD4,\
+        MEF2A,\
+        MEF2C,\
+        MTA3,\
+        MXI1,\
+        MYBL2,\
+        MYC,\
+        NANOG,\
+        NFATC1,\
+        NFE2,\
+        NFIC,\
+        NFYA,\
+        NFYB,\
+        NR2C2,\
+        NR2F2,\
+        NR3C1,\
+        NRF1,\
+        PAX5,\
+        PBX3,\
+        PHF8,\
+        PML,\
+        POLR2A,\
+        POLR3G,\
+        POU2F2,\
+        POU5F1,\
+        PPARGC1A,\
+        PRDM1,\
+        RAD21,\
+        RBBP5,\
+        RCOR1,\
+        RDBP,\
+        RELA,\
+        REST,\
+        RFX5,\
+        RPC155,\
+        RUNX3,\
+        RXRA,\
+        SAP30,\
+        SETDB1,\
+        SIN3A,\
+        SIN3AK20,\
+        SIRT6,\
+        SIX5,\
+        SMARCA4,\
+        SMARCB1,\
+        SMARCC1,\
+        SMARCC2,\
+        SMC3,\
+        SP1,\
+        SP2,\
+        SP4,\
+        SPI1,\
+        SREBP1,\
+        SRF,\
+        STAT1,\
+        STAT2,\
+        STAT3,\
+        STAT5A,\
+        SUZ12,\
+        TAF1,\
+        TAF7,\
+        TAL1,\
+        TBL1XR1,\
+        TBP,\
+        TCF12,\
+        TCF3,\
+        TCF7L2,\
+        TEAD4,\
+        TFAP2A,\
+        TFAP2C,\
+        THAP1,\
+        TRIM28,\
+        UBTF,\
+        USF1,\
+        USF2,\
+        WRNIP1,\
+        YY1,\
+        ZBTB33,\
+        ZBTB7A,\
+        ZEB1,\
+        ZKSCAN1,\
+        ZNF143,\
+        ZNF217,\
+        ZNF263,\
+        ZNF274,\
+        ZZZ3
+
+    # This is current DNase clusters track -- newer data, includes single-cell clusters
+    track wgEncodeRegDnaseClusteredLifted
+    shortLabel DNase Clusters (Lifted)
+    longLabel DNaseI Hypersensitivity Clusters in 125 cell types from ENCODE (Lifted)
+    type bed 5 .
+    pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
+    origAssembly hg19
+    superTrack wgEncodeReg hide
+    inputTrackTable wgEncodeRegDnaseClusteredInputsV2
+    inputTableFieldDisplay cellType treatment lab
+    sourceTable wgEncodeRegDnaseClusteredSources
+    controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
+    visibility dense
+    useScore 1
+    scoreFilter 100
+    scoreFilterLimits 100:1000
+    html wgEncodeRegDnaseClusteredLifted
+    priority 1.8
+    release alpha
+    #nameFilter 1:125
+    #nameFilterLimits 1:125
+    #nameFilterByRange on

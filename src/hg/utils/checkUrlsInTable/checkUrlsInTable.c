@@ -10,6 +10,9 @@
 #include "htmlPage.h"
 #include "verbose.h"
 
+// Might want to parameterize this later
+#define urlColumn "url" 
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -23,9 +26,6 @@ errAbort(
 static struct optionSpec options[] = {
    {NULL, 0},
 };
-
-// Might want to parameterize this later
-#define urlColumn "url" 
 
 int checkUrlsInTable(char *database, char *table)
 /* Read url. Switch on command and dispatch to appropriate routine. */
