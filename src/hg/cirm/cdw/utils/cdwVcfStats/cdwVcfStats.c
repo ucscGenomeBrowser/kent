@@ -142,6 +142,37 @@ while ((rec = vcfNextRecord(vcf)) != NULL)
 	    }
 	}
 
+    int infoIx;
+    for (infoIx=0; infoIx<rec->infoCount; ++infoIx)
+	{
+	struct vcfInfoElement *info = &rec->infoElements[infoIx];
+	if (sameString(info->key, "DP"))
+	    {
+	    int i;
+	    for (i=0; i<info->count; ++i)
+		{
+		union vcfDatum *uv = &info->values[i];
+		double dp = uv->datInt;
+		if (countDp == 0)
+		    {
+		    minDp = maxDp = sumDp = dp;
+		    sumSquareDp = dp*dp;
+		    countDp = 1;
+		    }
+		else
+		    {
+		    if (minDp > dp)
+			minDp = dp;
+		    if (maxDp < dp)
+			maxDp = dp;
+		    sumDp += dp;
+		    sumSquareDp += dp*dp;
+		    countDp += 1;
+		    }
+		}
+	    }
+	}
+
     vcfParseGenotypes(rec);
     int genoIx;
     for (genoIx=0; genoIx<vcf->genotypeCount; ++genoIx)
@@ -152,36 +183,6 @@ while ((rec = vcfNextRecord(vcf)) != NULL)
 	    ++phasedCount;
 	if (g->isHaploid)
 	    ++haploidCount;
-	int infoIx;
-	for (infoIx=0; infoIx<g->infoCount; ++infoIx)
-	    {
-	    struct vcfInfoElement *info = &g->infoElements[infoIx];
-	    if (sameString(info->key, "DP"))
-	        {
-		int i;
-		for (i=0; i<info->count; ++i)
-		    {
-		    union vcfDatum *uv = &info->values[i];
-		    double dp = uv->datInt;
-		    if (countDp == 0)
-		        {
-			minDp = maxDp = sumDp = dp;
-			sumSquareDp = dp*dp;
-			countDp = 1;
-			}
-		    else
-		        {
-			if (minDp > dp)
-			    minDp = dp;
-			if (maxDp < dp)
-			    maxDp = dp;
-			sumDp += dp;
-			sumSquareDp += dp*dp;
-			countDp += 1;
-			}
-		    }
-		}
-	    }
 	}
     }
 
@@ -217,10 +218,10 @@ fprintf(f, "mBasesCovered %lld\n", chromCoverage(grt, "chrM"));
 fprintf(f, "gotDepth %d\n", (int)(countDp > 0));
 if (countDp > 0)
     {
-    fprintf(f, "depthMean = %g\n", sumDp/countDp);
-    fprintf(f, "depthMin = %g\n", minDp);
-    fprintf(f, "depthMax = %g\n", maxDp);
-    fprintf(f, "depthStd = %g\n", calcStdFromSums(sumDp, sumSquareDp, countDp));
+    fprintf(f, "depthMean %g\n", sumDp/countDp);
+    fprintf(f, "depthMin %g\n", minDp);
+    fprintf(f, "depthMax %g\n", maxDp);
+    fprintf(f, "depthStd %g\n", calcStdFromSums(sumDp, sumSquareDp, countDp));
     }
 
 carefulClose(&f);
