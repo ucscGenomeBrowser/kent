@@ -150,15 +150,17 @@ return count;
 }
 
 
-void wrapFileName(char *tag, char *val)
+void wrapFileName(struct fieldedTable *table, struct fieldedRow *row, 
+    char *field, char *val, void *context)
 /* Write out wrapper that links us to something nice */
 {
 printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=oneFile&cdwFileTag=%s&cdwFileVal=%s&%s\">",
-    tag, val, cartSidUrlString(cart));
+    field, val, cartSidUrlString(cart));
 printf("%s</A>", val);
 }
 
-void wrapTagField(char *tag, char *val)
+void wrapTagField(struct fieldedTable *table, struct fieldedRow *row, 
+    char *field, char *val, void *context)
 /* Write out wrapper that links us to something nice */
 {
 printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=oneTag&cdwTagName=%s&%s\">",
@@ -166,13 +168,14 @@ printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=oneTag&cdwTagName=%s&%s\">"
 printf("%s</A>", val);
 }
 
-void wrapTagValueInFiles(char *tag, char *val)
+void wrapTagValueInFiles(struct fieldedTable *table, struct fieldedRow *row, 
+    char *field, char *val, void *context)
 /* Write out wrapper that links us to something nice */
 {
 printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s&",
     cartSidUrlString(cart));
 char query[2*PATH_LEN];
-safef(query, sizeof(query), "%s = '%s'", tag, val);
+safef(query, sizeof(query), "%s = '%s'", field, val);
 char *escapedQuery = cgiEncode(query);
 printf("%s=%s", "cdwFile_filter", escapedQuery);
 freez(&escapedQuery);
@@ -236,7 +239,7 @@ safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=oneTag&c
     tag, cartSidUrlString(cart) );
 struct hash *outputWrappers = hashNew(0);
 hashAdd(outputWrappers, tag, wrapTagValueInFiles);
-webSortableFieldedTable(cart, table, returnUrl, "cdwOneTag", 0, outputWrappers);
+webSortableFieldedTable(cart, table, returnUrl, "cdwOneTag", 0, outputWrappers, NULL);
 fieldedTableFree(&table);
 }
 
@@ -282,39 +285,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	idTag, idVal, cartSidUrlString(cart) );
     struct hash *outputWrappers = hashNew(0);
     hashAdd(outputWrappers, "tag", wrapTagField);
-    webSortableFieldedTable(cart, table, returnUrl, "cdwOneFile", 0, outputWrappers);
+    webSortableFieldedTable(cart, table, returnUrl, "cdwOneFile", 0, outputWrappers, NULL);
     fieldedTableFree(&table);
     }
-}
-
-void doBrowseFiles(struct sqlConnection *conn)
-/* Print list of files */
-{
-printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
-cartSaveSession(cart);
-cgiMakeHiddenVar("cdwCommand", "browseFiles");
-
-printf("<B>Files</B> - sort and select lists of files. Click on file's name to see full metadata.");
-
-/* Put up big filtered table of files */
-char returnUrl[PATH_LEN*2];
-safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s",
-    cartSidUrlString(cart) );
-char *where = cartUsualString(cart, "cdwFile_filter", "");
-if (!isEmpty(where))
-    {
-    printf("Restricting files to where %s. ", where);
-    }
-struct hash *wrappers = hashNew(0);
-hashAdd(wrappers, "file_name", wrapFileName);
-webFilteredSqlTable(cart, conn, 
-    "file_name,file_size,lab,assay,data_set_id,output,format,read_size,item_count,"
-         "species,body_part",
-    "cdwFileTags", where, 
-    returnUrl, "cdwBrowseFiles",
-    18, wrappers, TRUE, "files", 100);
-
-printf("</FORM>\n");
 }
 
 struct dyString *customTextForFile(struct sqlConnection *conn, struct cdwTrackViz *viz)
@@ -336,36 +309,147 @@ sqlSafef(query, sizeof(query), "select * from cdwTrackViz where fileId=%lld", fi
 return cdwTrackVizLoadByQuery(conn, query);
 }
 
-static struct sqlConnection *wrapperConn;
 
-void wrapTrackAccession(char *tag, char *val)
-/* Write out wrapper to link us to genome browser */
+boolean wrapTrackVis(struct sqlConnection *conn, struct cdwValidFile *vf, char *unwrapped)
+/* Attempt to wrap genome browser link around unwrapped text.  Link goes to file in vf. */
 {
-assert(wrapperConn != NULL);
-struct sqlConnection *conn = wrapperConn;
-struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, val);
-if (vf != NULL)
-    {
-    struct cdwTrackViz *viz = cdwTrackVizFromFileId(conn, vf->fileId);
-    if (viz != NULL)
-        {
-	struct dyString *track = customTextForFile(conn, viz);
-	char *encoded = cgiEncode(track->string);
-	printf("<A HREF=\"../cgi-bin/hgTracks");
-	printf("?%s", cartSidUrlString(cart));
-	printf("&db=%s", vf->ucscDb);
-	printf("&hgt.customText=");
-	printf("%s", encoded);
-	printf("\">");	       // Finish HREF quote and A tag
-	printf("%s</A>", val);
-	freez(&encoded);
-	dyStringFree(&track);
-	}
-    else
-	printf("%s (needs viz)", val);
-    }
+if (vf == NULL)
+    return FALSE;
+struct cdwTrackViz *viz = cdwTrackVizFromFileId(conn, vf->fileId);
+if (viz == NULL)
+    return FALSE;
+struct dyString *track = customTextForFile(conn, viz);
+char *encoded = cgiEncode(track->string);
+printf("<A HREF=\"../cgi-bin/hgTracks");
+printf("?%s", cartSidUrlString(cart));
+printf("&db=%s", vf->ucscDb);
+printf("&hgt.customText=");
+printf("%s", encoded);
+printf("\">");	       // Finish HREF quote and A tag
+printf("%s</A>", unwrapped);
+freez(&encoded);
+dyStringFree(&track);
+return TRUE;
 }
 
+
+#ifdef UNUSED
+void wrapTrackAccession(struct fieldedTable *table, struct fieldedRow *row, char *tag, char *val, 
+    void *context)
+/* Write out wrapper to link us to genome browser */
+{
+struct sqlConnection *conn = context;
+struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, val);
+if (!wrapTrackVis(conn, vf, val))
+    {
+    printf("%s (needs viz)", val);
+    }
+}
+#endif /* UNUSED */
+
+void wrapTrackNearFileName(struct fieldedTable *table, struct fieldedRow *row, char *tag, char *val,
+    void *context)
+/* Construct wrapper to UCSC if row actually is a track */
+{
+struct sqlConnection *conn = context;
+int fileNameIx = stringArrayIx("file_name", table->fields, table->fieldCount);
+if (fileNameIx >= 0)
+    {
+    char *fileName = row->row[fileNameIx];
+    char acc[FILENAME_LEN];
+    safef(acc, sizeof(acc), "%s", fileName);
+    char *dot = strchr(acc, '.');
+    if (dot != NULL)
+        *dot = 0;
+    struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, acc);
+    if (!wrapTrackVis(conn, vf, val))
+	printf("%s", val);
+    }
+else
+    printf("%s", val);
+}
+
+void wrapTrackNearAccession(struct fieldedTable *table, struct fieldedRow *row, 
+    char *tag, char *val, void *context)
+/* Construct wrapper that can link to Genome Browser if any field in table
+ * is an accession */
+{
+struct sqlConnection *conn = context;
+int accIx = stringArrayIx("accession", table->fields, table->fieldCount);
+if (accIx >= 0)
+    {
+    char *acc = row->row[accIx];
+    if (acc != NULL)
+	{
+	struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, acc);
+	if (!wrapTrackVis(conn, vf, val))
+	    printf("%s", val);
+	}
+    }
+else
+    printf("%s", val);
+}
+
+void wrapMetaNearAccession(struct fieldedTable *table, struct fieldedRow *row, 
+    char *field, char *val, void *context)
+/* Write out wrapper on a column that looks for accession in same table and uses
+ * that to link us to oneFile display. */
+{
+struct sqlConnection *conn = context;
+int accIx = stringArrayIx("accession", table->fields, table->fieldCount);
+boolean wrapped = FALSE;
+if (accIx >= 0)
+    {
+    char *acc = row->row[accIx];
+    if (acc != NULL)
+        {
+	struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, acc);
+	if (vf != NULL)
+	    {
+	    wrapped = TRUE;
+	    printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=oneFile&cdwFileTag=accession&cdwFileVal=%s&%s\">",
+		acc, cartSidUrlString(cart));
+	    printf("%s</A>", val);
+	    }
+	}
+    }
+
+if (!wrapped)
+    printf("%s", val);
+}
+
+
+void doBrowseFiles(struct sqlConnection *conn)
+/* Print list of files */
+{
+printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
+cartSaveSession(cart);
+cgiMakeHiddenVar("cdwCommand", "browseFiles");
+
+printf("<B>Files</B> - sort and select lists of files. Click on file's name to see full metadata.");
+printf(" Links in ucsc_db go to the Genome Browser. &nbsp;&nbsp;&nbsp;&nbsp;");
+
+/* Put up big filtered table of files */
+char returnUrl[PATH_LEN*2];
+safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s",
+    cartSidUrlString(cart) );
+char *where = cartUsualString(cart, "cdwFile_filter", "");
+if (!isEmpty(where))
+    {
+    printf("<BR>Restricting files to where %s. ", where);
+    }
+struct hash *wrappers = hashNew(0);
+hashAdd(wrappers, "file_name", wrapFileName);
+hashAdd(wrappers, "ucsc_db", wrapTrackNearFileName);
+webFilteredSqlTable(cart, conn, 
+    "file_name,file_size,ucsc_db,lab,assay,data_set_id,output,format,read_size,item_count,"
+         "body_part",
+    "cdwFileTags", where, 
+    returnUrl, "cdwBrowseFiles",
+    18, wrappers, conn, TRUE, "files", 100);
+
+printf("</FORM>\n");
+}
 
 void doBrowseTracks(struct sqlConnection *conn)
 /* Print list of files */
@@ -374,20 +458,21 @@ printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "browseTracks");
 
-printf("<B>Tracks</B> - Click on track's accession to open UCSC Genome Browser.");
+printf("<B>Tracks</B> - Click on ucsc_db to open Genome Browser. ");
+printf("The accession link shows more metadata. &nbsp;&nbsp;&nbsp;&nbsp;");
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseTracks&%s",
     cartSidUrlString(cart) );
 char *where = "fileId=file_id and format in ('bam','bigBed', 'bigWig', 'vcf', 'narrowPeak', 'broadPeak')";
 struct hash *wrappers = hashNew(0);
-wrapperConn = conn;
-hashAdd(wrappers, "accession", wrapTrackAccession);
+hashAdd(wrappers, "accession", wrapMetaNearAccession);
+hashAdd(wrappers, "ucsc_db", wrapTrackNearAccession);
 webFilteredSqlTable(cart, conn, 
-    "accession,ucsc_db,format,file_size,lab,assay,data_set_id,output,"
+    "ucsc_db,accession,format,chrom,file_size,lab,assay,data_set_id,output,"
     "enriched_in,body_part,submit_file_name",
     "cdwFileTags,cdwTrackViz", where, 
     returnUrl, "cdwBrowseTracks", 
-    22, wrappers, TRUE, "tracks", 100);
+    22, wrappers, conn, TRUE, "tracks", 100);
 printf("</FORM>\n");
 }
 
@@ -440,7 +525,7 @@ for (format = formatList; format != NULL; format = format->next)
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseFormats&%s",
     cartSidUrlString(cart) );
-webSortableFieldedTable(cart, table, returnUrl, "cdwFormats", 0, NULL);
+webSortableFieldedTable(cart, table, returnUrl, "cdwFormats", 0, NULL, NULL);
 fieldedTableFree(&table);
 }
 
@@ -472,7 +557,7 @@ for (lab = labList; lab != NULL; lab = lab->next)
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseLabs&%s",
     cartSidUrlString(cart) );
-webSortableFieldedTable(cart, table, returnUrl, "cdwLab", 0, NULL);
+webSortableFieldedTable(cart, table, returnUrl, "cdwLab", 0, NULL, NULL);
 fieldedTableFree(&table);
 }
 
@@ -594,7 +679,7 @@ for (i=0; i<ArraySize(highLevelTags); ++i)
     tagSummaryRow(table, tags, highLevelTags[i]);
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?%s", cartSidUrlString(cart) );
-webSortableFieldedTable(cart, table, returnUrl, "cdwHome", 0, NULL);
+webSortableFieldedTable(cart, table, returnUrl, "cdwHome", 0, NULL, NULL);
 
 printf("This table is a summary of important metadata tags including the tag name, the number of ");
 printf("values and the most popular values of the tag, and the number of files marked with ");
@@ -621,7 +706,7 @@ safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseTa
     cartSidUrlString(cart) );
 struct hash *outputWrappers = hashNew(0);
     hashAdd(outputWrappers, "tag name", wrapTagField);
-webSortableFieldedTable(cart, table, returnUrl, "cdwBrowseTags", 0, outputWrappers);
+webSortableFieldedTable(cart, table, returnUrl, "cdwBrowseTags", 0, outputWrappers, NULL);
 tagStormFree(&tags);
 }
 
@@ -744,7 +829,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.23");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.26");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
