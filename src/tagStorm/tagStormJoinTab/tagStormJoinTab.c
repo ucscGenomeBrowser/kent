@@ -6,6 +6,8 @@
 #include "tagStorm.h"
 #include "fieldedTable.h"
 
+boolean clAppend = FALSE; 
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -15,12 +17,13 @@ errAbort(
   "   tagStormJoinTab tag in.tab in.tags out.tags\n"
   "Where 'tag' is the field to join on.\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -append=Append the new information to the stanza in which the key is found rather than creating a new child stanza\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"append", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -30,9 +33,11 @@ void tagStormJoinTab(char *joinTag, char *inTab, char *inTags, char *outTags)
 {
 /* Open input and make sure it looks reasonable.  Index it. */
 struct fieldedTable *table = fieldedTableFromTabFile(inTab, inTab, NULL, 0);
-uglyf("Got %d rows in %s\n", slCount(table->rowList), inTab);
+verbose(2, "Got %d rows in %s\n", slCount(table->rowList), inTab);
 struct tagStorm *tags = tagStormFromFile(inTags);
-uglyf("Got %d trees in %s\n", slCount(tags->forest), inTags);
+verbose(2, "Got %d trees in %s\n", slCount(tags->forest), inTags);
+// hash is a hash table that connects the user supplied key joinTag with the corresponding
+// values in the user supplied tagStorm file inTags. 
 struct hash *hash = tagStormIndex(tags, joinTag);
 if (hash->elCount == 0)
     errAbort("No %s tags in %s", joinTag, inTags);
@@ -51,6 +56,8 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
         {
 	struct tagStanza *parent = hel->val;
 	struct tagStanza *stanza = tagStanzaNew(tags, parent);
+	// char *temp = parent->tagList->name;
+	// uglyf("this is the hashEl name %s this is the value %s \n", hel->name, temp);
 	int i;
 	for (i=0; i<table->fieldCount; ++i)
 	    {
@@ -58,7 +65,16 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 	        {
 		char *val = row[i];
 		if (!isEmpty(val))
-		    tagStanzaAdd(tags, stanza, table->fields[i], val);
+		    {
+		    if (clAppend)
+		        {
+			tagStanzaAppend(tags,hel->val,table->fields[i], val);
+			}
+		    else
+		        {
+			tagStanzaAdd(tags, stanza, table->fields[i], val);	
+			}
+		    }
 		}
 	    }
 	slReverse(&stanza->tagList);
@@ -72,6 +88,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+clAppend = optionExists("append");
 if (argc != 5)
     usage();
 tagStormJoinTab(argv[1], argv[2], argv[3], argv[4]);

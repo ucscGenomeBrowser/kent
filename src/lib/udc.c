@@ -35,6 +35,7 @@
 #include "cheapcgi.h"
 #include "udc.h"
 #include "hex.h"
+#include <dirent.h>
 #include <openssl/sha.h>
 
 
@@ -788,9 +789,9 @@ udcParseUrlFull(url, retProtocol, retAfterProtocol, retColon, NULL);
 
 static void addElementToDy(struct dyString *dy, char *name)
 /* add one element of a path to a dyString, hashing it if it's longer 
- * than NAME_MAX */
+ * than MAXNAMLEN */
 {
-if (strlen(name) > NAME_MAX)
+if (strlen(name) > MAXNAMLEN)
     {
     unsigned char hash[SHA_DIGEST_LENGTH];
     char newName[(SHA_DIGEST_LENGTH + 1) * 2];
@@ -805,7 +806,7 @@ else
 }
 
 static char *longDirHash(char *name)
-/* take a path and hash the elements that are longer than NAME_MAX */
+/* take a path and hash the elements that are longer than MAXNAMLEN */
 {
 struct dyString *dy = newDyString(strlen(name));
 char *ptr = strchr(name, '/');

@@ -1,5 +1,4 @@
 include trackDb.wgEncode.ra
-include uwDnase.ra
 
 track par override
 group x

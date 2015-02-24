@@ -3409,6 +3409,14 @@ while((*next != '\0')
 makeDir(pathBuf);
 }
 
+boolean isNumericString(char *s)
+/* Return TRUE if string is numeric (integer or floating point) */
+{
+char *end;
+strtod(s, &end);
+return (end != s && *end == 0);
+}
+
 char *skipNumeric(char *s)
 /* Return first char of s that's not a digit */
 {

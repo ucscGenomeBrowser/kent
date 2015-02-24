@@ -73,32 +73,6 @@ for (i=1; i<count; ++i)
 return val;
 }
 
-void drawOutlinedBox(struct hvGfx *hvg, int x, int y, int width, int height, 
-    int fillColorIx, int lineColorIx)
-/* Draw a box in fillColor outlined by lineColor */
-{
-/* If nothing to draw bail out early. */
-if (width <= 0 || height <= 0)
-    return;
-
-/* Draw outline first, it may be all we need. We may not even need all 4 lines of it. */
-hvGfxBox(hvg, x, y, width, 1, lineColorIx);
-if (height == 1)
-    return;
-hvGfxBox(hvg, x, y+1, 1, height-1, lineColorIx);
-if (width == 1)
-    return;
-hvGfxBox(hvg, x+width-1, y+1, 1, height-1, lineColorIx);
-if (width == 2)
-    return;
-hvGfxBox(hvg, x+1, y+height-1, width-2, 1, lineColorIx);
-if (height == 2)
-    return;
-
-/* Can draw fill with a single box. */
-hvGfxBox(hvg, x+1, y+1, width-2, height-2, fillColorIx);
-}
-
 struct sampleVals
 /* An array of double values. */
     {
@@ -219,7 +193,7 @@ void svBar(struct hvGfx *hvg, int fillColorIx, int lineColorIx, int x, int y,
 {
 int yMedian = valToY(sv->median, maxExp, graphHeight) + y;
 int yZero = valToY(0, maxExp, graphHeight) + y;
-drawOutlinedBox(hvg, x, yMedian, barWidth, yZero - yMedian, 
+hvGfxOutlinedBox(hvg, x, yMedian, barWidth, yZero - yMedian, 
 	fillColorIx, lineColorIx);
 }
 
@@ -229,7 +203,7 @@ void svBarDown(struct hvGfx *hvg, int fillColorIx, int lineColorIx, int x, int y
 {
 double scaled = sv->median/maxExp;
 int yMedian = scaled * (graphHeight-1);
-drawOutlinedBox(hvg, x, y, barWidth, yMedian, 
+hvGfxOutlinedBox(hvg, x, y, barWidth, yMedian, 
 	fillColorIx, lineColorIx);
 }
 
@@ -267,7 +241,7 @@ if (sv->size > 1)
 
     /* Draw a filled box that covers the middle two quarters */
     int qHeight = yQ1 - yQ3 + 1;
-    drawOutlinedBox(hvg, x,  yQ3, barWidth, qHeight, fillColorIx, lineColorIx);
+    hvGfxOutlinedBox(hvg, x,  yQ3, barWidth, qHeight, fillColorIx, lineColorIx);
     
     /* Figure out whiskers as 1.5x distance from median to nearest quarter */
     double iq3 = q3 - median;
