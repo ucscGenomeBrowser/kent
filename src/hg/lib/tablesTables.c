@@ -29,8 +29,6 @@ sqlFreeResult(&sr);
 return table;
 }
 
-typedef void webTableOutputWrapperType(char *tag, char *val);
-
 static void showTableFilterInstructionsEtc(struct fieldedTable *table, 
     char *itemPlural, struct  fieldedTableSegment *largerContext)
 /* Print instructional text, and basic summary info on who passes filter, and a submit
@@ -122,7 +120,7 @@ if (!isEmpty(orderFields))
 }
 
 static void showTableDataRows(struct fieldedTable *table, int pageSize, int maxLenField,
-    struct hash *tagOutputWrappers)
+    struct hash *tagOutputWrappers, void *wrapperContext)
 /* Render data rows into HTML */
 {
 int count = 0;
@@ -156,7 +154,7 @@ for (row = table->rowList; row != NULL; row = row->next)
 	    webTableOutputWrapperType *printer = hashFindVal(tagOutputWrappers, field);
 	    if (printer != NULL)
 		{
-		printer(field, val);
+		printer(table, row, field, val, wrapperContext);
 		printed = TRUE;
 		}
 	    
@@ -195,7 +193,7 @@ if (largerContext != NULL)  // Need to page?
 
 void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table, 
     char *returnUrl, char *varPrefix,
-    int maxLenField, struct hash *tagOutputWrappers, 
+    int maxLenField, struct hash *tagOutputWrappers, void *wrapperContext,
     boolean withFilters, char *itemPlural, 
     int pageSize, struct fieldedTableSegment *largerContext)
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
@@ -218,7 +216,7 @@ if (withFilters)
     showTableFilterControlRow(table, cart, varPrefix, maxLenField);
 
 showTableSortingLabelRow(table, cart, varPrefix, returnUrl);
-showTableDataRows(table, pageSize, maxLenField, tagOutputWrappers);
+showTableDataRows(table, pageSize, maxLenField, tagOutputWrappers, wrapperContext);
 
 /* Get rid of table within table look */
 webPrintLinkTableEnd();
@@ -229,13 +227,13 @@ if (largerContext != NULL)
 
 void webSortableFieldedTable(struct cart *cart, struct fieldedTable *table, 
     char *returnUrl, char *varPrefix,
-    int maxLenField, struct hash *tagOutputWrappers)
+    int maxLenField, struct hash *tagOutputWrappers, void *wrapperContext)
 /* Display all of table including a sortable label row.  The tagOutputWrappers
  * is an optional way to enrich output of specific columns of the table.  It is keyed
  * by column name and has for values functions of type webTableOutputWrapperType. */
 {
 webFilteredFieldedTable(cart, table, returnUrl, varPrefix, 
-    maxLenField, tagOutputWrappers, 
+    maxLenField, tagOutputWrappers, wrapperContext,
     FALSE, NULL, 
     slCount(table->rowList), NULL);
 }
@@ -243,7 +241,8 @@ webFilteredFieldedTable(cart, table, returnUrl, varPrefix,
 
 void webFilteredSqlTable(struct cart *cart, struct sqlConnection *conn, 
     char *fields, char *from, char *initialWhere,  
-    char *returnUrl, char *varPrefix, int maxFieldWidth, struct hash *tagOutWrappers,
+    char *returnUrl, char *varPrefix, int maxFieldWidth, 
+    struct hash *tagOutWrappers, void *wrapperContext,
     boolean withFilters, char *itemPlural, int pageSize)
 /* Given a query to the database in conn that is basically a select query broken into
  * separate clauses, construct and display an HTML table around results. This HTML table has
@@ -355,8 +354,8 @@ if (resultsSize > pageSize)
     }
 
 struct fieldedTable *table = fieldedTableFromDbQuery(conn, query->string);
-webFilteredFieldedTable(cart, table, returnUrl, varPrefix, maxFieldWidth, tagOutWrappers, 
-    withFilters, itemPlural, pageSize, &context);
+webFilteredFieldedTable(cart, table, returnUrl, varPrefix, maxFieldWidth, 
+    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, &context);
 fieldedTableFree(&table);
 
 dyStringFree(&query);

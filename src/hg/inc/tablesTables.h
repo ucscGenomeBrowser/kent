@@ -8,9 +8,14 @@
 struct fieldedTable *fieldedTableFromDbQuery(struct sqlConnection *conn, char *query);
 /* Return fieldedTable from a database query */
 
+typedef void webTableOutputWrapperType(struct fieldedTable *table, struct fieldedRow *row,
+    char *field, char *val, void *context);
+/* If we want more than just text output we have to provide a function for a column
+ * of this type.  This is responsible for rendering the tag as we want. */
+
 void webSortableFieldedTable(struct cart *cart, struct fieldedTable *table, 
    char *returnUrl, char *varPrefix,
-    int maxLenField, struct hash *tagOutputWrappers);
+    int maxLenField, struct hash *tagOutputWrappers, void *wrapperContext);
 /* Display all of table including a sortable label row.  The tagOutputWrappers
  * is an optional way to enrich output of specific columns of the table.  It is keyed
  * by column name and has for values functions of type webTableOutputWrapperType. */
@@ -23,7 +28,8 @@ struct fieldedTableSegment
     };
 
 void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table, 
-    char *returnUrl, char *varPrefix, int maxLenField, struct hash *tagOutputWrappers, 
+    char *returnUrl, char *varPrefix, int maxLenField, 
+    struct hash *tagOutputWrappers, void *wrapperContext,
     boolean withFilters, char *itemPlural, 
     int pageSize, struct fieldedTableSegment *largerContext);
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
@@ -34,7 +40,8 @@ void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table,
 
 void webFilteredSqlTable(struct cart *cart, struct sqlConnection *conn, 
     char *fields, char *from, char *initialWhere,  
-    char *returnUrl, char *varPrefix, int maxFieldWidth, struct hash *tagOutWrappers,
+    char *returnUrl, char *varPrefix, int maxFieldWidth, 
+    struct hash *tagOutWrappers, void *wrapperContext,
     boolean withFilters, char *itemPlural, int pageSize);
 /* Given a query to the database in conn that is basically a select query broken into
  * separate clauses, construct and display an HTML table around results. This HTML table has
