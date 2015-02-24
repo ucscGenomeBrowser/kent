@@ -249,6 +249,36 @@ table cdwBamFile
     uint targetSeqCount; "Number of chromosomes or other distinct sequences in mapping target"
     )
 
+table cdwVcfFile
+"Info on what is in a vcf file beyond whet's in cdwValidFile"
+    (
+    uint id primary auto;   "ID in this table"
+    uint fileId unique;	"ID in cdwFile table."
+    int vcfMajorVersion; "VCF file major version"
+    int vcfMinorVersion; "VCF file minor version"
+    int genotypeCount; "How many genotypes of data"
+    bigInt itemCount; "Number of records in VCF file"
+    int chromsHit;  "Number of chromosomes (or contigs) with data"
+    bigInt passItemCount; "Number of records that PASS listed filter"
+    double passRatio; "passItemCount/itemCount"
+    bigInt snpItemCount; "Number of records that are just single base substitution, no indels"
+    double snpRatio;  "snpItemCount/itemCount"
+    bigInt sumOfSizes; "The sum of sizes of all records"
+    bigInt basesCovered; "Bases with data. Equals sumOfSizes if no overlap of records."
+    int xBasesCovered; "Number of bases of chrX covered"
+    int yBasesCovered; "Number of bases of chrY covered"
+    int mBasesCovered; "Number of bases of chrM covered"
+    bigInt haploidCount; "Number of genotype calls that are haploid"
+    double haploidRatio;  "Ratio of hapload to total calls"
+    bigInt phasedCount;	"Number of genotype calls that are phased"
+    double phasedRatio;	"Ration of phased calls to total calls"
+    byte gotDepth; "If true then have DP value in file and in depth stats below"
+    double depthMin;  "Min DP reported depth"
+    double depthMean; "Mean DP value"
+    double depthMax;	"Max DP value"
+    double depthStd;	"Standard DP deviation"
+    )
+
 table cdwQaFail
 "Record of a QA failure."
     (
