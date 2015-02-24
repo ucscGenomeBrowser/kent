@@ -703,6 +703,7 @@ for (sfr = sfrList; sfr != NULL; sfr = sfr->next)
 return updateCount;
 }
 
+#ifdef UNUSED
 void doValidatedEmail(struct cdwSubmit *submit, boolean isComplete)
 /* Send an email with info on all validated files */
 {
@@ -754,7 +755,9 @@ mailViaPipe(user->email, "CDW Validation Results", message->string, cdwDaemonEma
 sqlDisconnect(&conn);
 dyStringFree(&message);
 }
+#endif /* UNUSED */
 
+#ifdef UNUSED
 void waitForValidationAndSendEmail(struct cdwSubmit *submit, char *email)
 /* Poll database every 5 minute or so to see if finished. */
 {
@@ -775,6 +778,7 @@ for (seconds = 0; seconds < maxSeconds; seconds += secondsPer)
     }
 doValidatedEmail(submit, FALSE);
 }
+#endif /* UNUSED */
 
 static void rCheckTagValid(struct tagStorm *tagStorm, struct tagStanza *list)
 /* Check tagStorm tags */
