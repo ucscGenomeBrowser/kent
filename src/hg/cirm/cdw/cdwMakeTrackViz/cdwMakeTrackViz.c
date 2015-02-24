@@ -270,6 +270,14 @@ for (ef = efList; ef != NULL; ef = ef->next)
 	    {
 	    compressAndBuildTabix(conn, ef, vf);
 	    }
+	else if (sameString(format, "narrowPeak"))
+	    {
+	    cdwTrackBigViz(conn, ef, vf, format);
+	    }
+	else if (sameString(format, "broadPeak"))
+	    {
+	    cdwTrackBigViz(conn, ef, vf, format);
+	    }
 	else if (sameString(format, "bigWig"))
 	    {
 	    cdwTrackBigViz(conn, ef, vf, format);
