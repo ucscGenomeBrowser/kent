@@ -319,6 +319,14 @@ struct cdwQaWigSpot *cdwQaWigSpotFor(struct sqlConnection *conn,
     long long wigFileId, long long spotFileId);
 /* Return wigSpot relationship if any we have in database for these two files. */
 
+struct cdwVcfFile * cdwMakeVcfStatsAndSample(struct sqlConnection *conn, long long fileId, 
+    char sampleBed[PATH_LEN]);
+/* Run cdwVcfStats and put results into cdwVcfFile table, and also a sample bed.
+ * The sampleBed will be filled in by this routine. */
+
+struct cdwVcfFile *cdwVcfFileFromFileId(struct sqlConnection *conn, long long fileId);
+/* Get cdwVcfFile with given fileId or NULL if none such */
+
 char *cdwOppositePairedEndString(char *end);
 /* Return "1" for "2" and vice versa */
 
