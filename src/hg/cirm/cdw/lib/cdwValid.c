@@ -239,6 +239,7 @@ char *cdwAllowedTags[] = {
     "pipeline",
     "output",
     "meta",
+    "chrom",
     };
 
 struct hash *cdwAllowedTagsHash()

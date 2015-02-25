@@ -28,6 +28,7 @@
 #include "cdwFastqFileFromRa.h"
 #include "cdwBamFileFromRa.h"
 #include "cdwQaWigSpotFromRa.h"
+#include "cdwVcfFileFromRa.h"
 #include "rql.h"
 #include "tagStorm.h"
 #include "cdwLib.h"
@@ -1206,6 +1207,10 @@ if (revalidate)
     /* Get rid of records referring to file in other validation and qa tables. */
     sqlSafef(query, sizeof(query), "delete from cdwFastqFile where fileId=%lld", fileId);
     sqlUpdate(conn, query);
+    sqlSafef(query, sizeof(query), "delete from cdwBamFile where fileId=%lld", fileId);
+    sqlUpdate(conn, query);
+    sqlSafef(query, sizeof(query), "delete from cdwVcfFile where fileId=%lld", fileId);
+    sqlUpdate(conn, query);
     sqlSafef(query, sizeof(query),
 	"delete from cdwQaPairSampleOverlap where elderFileId=%lld or youngerFileId=%lld",
 	fileId, fileId);
@@ -1363,6 +1368,14 @@ struct cdwFastqFile *cdwFastqFileFromFileId(struct sqlConnection *conn, long lon
 char query[256];
 sqlSafef(query, sizeof(query), "select * from cdwFastqFile where fileId=%lld", fileId);
 return cdwFastqFileLoadByQuery(conn, query);
+}
+
+struct cdwVcfFile *cdwVcfFileFromFileId(struct sqlConnection *conn, long long fileId)
+/* Get cdwVcfFile with given fileId or NULL if none such */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select * from cdwVcfFile where fileId=%lld", fileId);
+return cdwVcfFileLoadByQuery(conn, query);
 }
 
 static int mustMkstemp(char *template)
@@ -1536,6 +1549,44 @@ freez(&path);
 return ebf;
 }
 
+struct cdwVcfFile * cdwMakeVcfStatsAndSample(struct sqlConnection *conn, long long fileId, 
+    char sampleBed[PATH_LEN])
+/* Run cdwVcfStats and put results into cdwVcfFile table, and also a sample bed.
+ * The sampleBed will be filled in by this routine. */
+{
+/* Remove any old record for file. */
+char query[256];
+sqlSafef(query, sizeof(query), "delete from cdwVcfFile where fileId=%lld", fileId);
+sqlUpdate(conn, query);
+
+/* Figure out file names */
+char *path = cdwPathForFileId(conn, fileId);
+char statsFile[PATH_LEN];
+safef(statsFile, PATH_LEN, "%scdwVcfStatsXXXXXX", cdwTempDir());
+cdwReserveTempFile(statsFile);
+char dayTempDir[PATH_LEN];
+safef(sampleBed, PATH_LEN, "%scdwVcfSampleXXXXXX", cdwTempDirForToday(dayTempDir));
+cdwReserveTempFile(sampleBed);
+
+/* Make system call to make ra and bed, and then another system call to zip bed.*/
+char command[3*PATH_LEN];
+safef(command, sizeof(command), "cdwVcfStats -bed=%s %s %s",
+    sampleBed, path, statsFile);
+mustSystem(command);
+safef(command, sizeof(command), "gzip %s", sampleBed);
+mustSystem(command);
+strcat(sampleBed, ".gz");
+
+/* Parse out ra file,  save it to database, and remove ra file. */
+struct cdwVcfFile *vcf = cdwVcfFileOneFromRa(statsFile);
+vcf->fileId = fileId;
+cdwVcfFileSaveToDb(conn, vcf, "cdwVcfFile", 1024);
+remove(statsFile);
+
+/* Clean up and go home. */
+freez(&path);
+return vcf;
+}
 
 char *cdwOppositePairedEndString(char *end)
 /* Return "1" for "2" and vice versa */

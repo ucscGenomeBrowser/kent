@@ -10,7 +10,7 @@
 #include "intValTree.h"
 #include "tagStorm.h"
 
-char *clFormat = "ra";
+char *clOut = "ra";
 
 void usage()
 /* Explain usage and exit. */
@@ -20,13 +20,13 @@ errAbort(
   "usage:\n"
   "   cdwQuery 'sql-like query'\n"
   "options:\n"
-  "   -format=format where format is ra, tab, or tags\n"
+  "   -out=output format where format is ra, tab, or tags\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
-   {"format", OPTION_STRING},
+   {"out", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -56,9 +56,9 @@ int matchCount = 0;
 boolean doSelect = FALSE;
 
 void output(int depth, struct rqlStatement *rql, struct tagStorm *tags, struct tagStanza *stanza)
-/* Output stanza according to clFormat */
+/* Output stanza according to clOut */
 {
-char *format = clFormat;
+char *format = clOut;
 if (sameString(format, "ra"))
     {
     if (stanza->children == NULL)
@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-clFormat = optionVal("format", clFormat);
+clOut = optionVal("out", clOut);
 if (argc != 2)
     usage();
 cdwQuery(argv[1]);
