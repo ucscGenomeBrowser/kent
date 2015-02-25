@@ -68,5 +68,8 @@ void grpSuperimpose(struct grp **listA, struct grp **listB);
  * The function returns with the new list A, and the empty list
  * B. */
 
+struct grp *grpDup(struct grp *grp);
+/* duplicate a grp structure */
+
 #endif /* GRP_H */
 

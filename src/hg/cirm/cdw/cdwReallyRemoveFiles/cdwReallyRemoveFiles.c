@@ -54,6 +54,10 @@ sqlSafef(query, sizeof(query), "delete from cdwBamFile where fileId=%lld", fileI
 maybeDoUpdate(conn, query, really);
 sqlSafef(query, sizeof(query), "delete from cdwFastqFile where fileId=%lld", fileId);
 maybeDoUpdate(conn, query, really);
+sqlSafef(query, sizeof(query), "delete from cdwVcfFile where fileId=%lld", fileId);
+maybeDoUpdate(conn, query, really);
+sqlSafef(query, sizeof(query), "delete from cdwTrackViz where fileId=%lld", fileId);
+maybeDoUpdate(conn, query, really);
 sqlSafef(query, sizeof(query), "delete from cdwQaContam where fileId=%lld", fileId);
 maybeDoUpdate(conn, query, really);
 sqlSafef(query, sizeof(query), "delete from cdwQaEnrich where fileId=%lld", fileId);

@@ -1212,6 +1212,96 @@ void cdwBamFileOutput(struct cdwBamFile *el, FILE *f, char sep, char lastSep);
 #define cdwBamFileCommaOut(el,f) cdwBamFileOutput(el,f,',',',');
 /* Print out cdwBamFile as a comma separated list including final comma. */
 
+#define CDWVCFFILE_NUM_COLS 25
+
+extern char *cdwVcfFileCommaSepFieldNames;
+
+struct cdwVcfFile
+/* Info on what is in a vcf file beyond whet's in cdwValidFile */
+    {
+    struct cdwVcfFile *next;  /* Next in singly linked list. */
+    unsigned id;	/* ID in this table */
+    unsigned fileId;	/* ID in cdwFile table. */
+    int vcfMajorVersion;	/* VCF file major version */
+    int vcfMinorVersion;	/* VCF file minor version */
+    int genotypeCount;	/* How many genotypes of data */
+    long long itemCount;	/* Number of records in VCF file */
+    int chromsHit;	/* Number of chromosomes (or contigs) with data */
+    long long passItemCount;	/* Number of records that PASS listed filter */
+    double passRatio;	/* passItemCount/itemCount */
+    long long snpItemCount;	/* Number of records that are just single base substitution, no indels */
+    double snpRatio;	/* snpItemCount/itemCount */
+    long long sumOfSizes;	/* The sum of sizes of all records */
+    long long basesCovered;	/* Bases with data. Equals sumOfSizes if no overlap of records. */
+    int xBasesCovered;	/* Number of bases of chrX covered */
+    int yBasesCovered;	/* Number of bases of chrY covered */
+    int mBasesCovered;	/* Number of bases of chrM covered */
+    long long haploidCount;	/* Number of genotype calls that are haploid */
+    double haploidRatio;	/* Ratio of hapload to total calls */
+    long long phasedCount;	/* Number of genotype calls that are phased */
+    double phasedRatio;	/* Ration of phased calls to total calls */
+    signed char gotDepth;	/* If true then have DP value in file and in depth stats below */
+    double depthMin;	/* Min DP reported depth */
+    double depthMean;	/* Mean DP value */
+    double depthMax;	/* Max DP value */
+    double depthStd;	/* Standard DP deviation */
+    };
+
+void cdwVcfFileStaticLoad(char **row, struct cdwVcfFile *ret);
+/* Load a row from cdwVcfFile table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct cdwVcfFile *cdwVcfFileLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all cdwVcfFile from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with cdwVcfFileFreeList(). */
+
+void cdwVcfFileSaveToDb(struct sqlConnection *conn, struct cdwVcfFile *el, char *tableName, int updateSize);
+/* Save cdwVcfFile as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct cdwVcfFile *cdwVcfFileLoad(char **row);
+/* Load a cdwVcfFile from row fetched with select * from cdwVcfFile
+ * from database.  Dispose of this with cdwVcfFileFree(). */
+
+struct cdwVcfFile *cdwVcfFileLoadAll(char *fileName);
+/* Load all cdwVcfFile from whitespace-separated file.
+ * Dispose of this with cdwVcfFileFreeList(). */
+
+struct cdwVcfFile *cdwVcfFileLoadAllByChar(char *fileName, char chopper);
+/* Load all cdwVcfFile from chopper separated file.
+ * Dispose of this with cdwVcfFileFreeList(). */
+
+#define cdwVcfFileLoadAllByTab(a) cdwVcfFileLoadAllByChar(a, '\t');
+/* Load all cdwVcfFile from tab separated file.
+ * Dispose of this with cdwVcfFileFreeList(). */
+
+struct cdwVcfFile *cdwVcfFileCommaIn(char **pS, struct cdwVcfFile *ret);
+/* Create a cdwVcfFile out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new cdwVcfFile */
+
+void cdwVcfFileFree(struct cdwVcfFile **pEl);
+/* Free a single dynamically allocated cdwVcfFile such as created
+ * with cdwVcfFileLoad(). */
+
+void cdwVcfFileFreeList(struct cdwVcfFile **pList);
+/* Free a list of dynamically allocated cdwVcfFile's */
+
+void cdwVcfFileOutput(struct cdwVcfFile *el, FILE *f, char sep, char lastSep);
+/* Print out cdwVcfFile.  Separate fields with sep. Follow last field with lastSep. */
+
+#define cdwVcfFileTabOut(el,f) cdwVcfFileOutput(el,f,'\t','\n');
+/* Print out cdwVcfFile as a line in a tab-separated file. */
+
+#define cdwVcfFileCommaOut(el,f) cdwVcfFileOutput(el,f,',',',');
+/* Print out cdwVcfFile as a comma separated list including final comma. */
+
 #define CDWQAFAIL_NUM_COLS 4
 
 extern char *cdwQaFailCommaSepFieldNames;

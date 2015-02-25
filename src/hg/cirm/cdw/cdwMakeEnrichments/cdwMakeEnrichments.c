@@ -442,7 +442,7 @@ struct cdwValidFile *vf = cdwValidFileFromFileId(conn, ef->id);
 if (vf == NULL)
     return;	/* We can only work if have validFile table entry */
 
-if (!isEmpty(vf->enrichedIn) && !sameWord(vf->ucscDb, "unknown") 
+if (!isEmpty(vf->enrichedIn) && !sameWord(vf->ucscDb, "unknown") && !isEmpty(vf->ucscDb)
     && !sameWord(vf->format, "unknown"))
     {
     /* Get our assembly */
@@ -487,6 +487,8 @@ if (!isEmpty(vf->enrichedIn) && !sameWord(vf->ucscDb, "unknown")
 	else if (sameString(format, "gff"))
 	    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
 	else if (sameString(format, "bam"))
+	    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
+	else if (sameString(format, "vcf"))
 	    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
 	else if (sameString(format, "idat"))
 	    verbose(2, "Ignoring idat %s, in doEnrichments.", ef->cdwFileName);

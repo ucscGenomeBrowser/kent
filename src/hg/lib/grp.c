@@ -203,3 +203,15 @@ while (*listB != NULL)
     replaceOrAdd(listA, newone);
     }
 }
+
+struct grp *grpDup(struct grp *oldGroup)
+/* duplicate a grp structure */
+{
+struct grp *grp;
+AllocVar(grp);
+grp->name = cloneString(oldGroup->name);
+grp->label = cloneString(oldGroup->label);
+grp->defaultIsClosed = oldGroup->defaultIsClosed;
+grp->priority = oldGroup->priority;
+return grp;
+}
