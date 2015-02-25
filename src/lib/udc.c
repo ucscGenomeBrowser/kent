@@ -791,6 +791,7 @@ static void addElementToDy(struct dyString *dy, char *name)
 /* add one element of a path to a dyString, hashing it if it's longer 
  * than MAXNAMLEN */
 {
+#ifdef USE_SSL
 if (strlen(name) > MAXNAMLEN)
     {
     unsigned char hash[SHA_DIGEST_LENGTH];
@@ -802,6 +803,7 @@ if (strlen(name) > MAXNAMLEN)
     dyStringAppend(dy, newName);
     }
 else
+#endif
     dyStringAppend(dy, name);
 }
 
