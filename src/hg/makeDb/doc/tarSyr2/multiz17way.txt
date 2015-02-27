@@ -1,5 +1,5 @@
 #############################################################################
-## 17-Way Multiz (DONE - 2014-12-18 - Hiram)
+## 17-Way Multiz (DONE - 2015-02-20 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/tarSyr2/bed/multiz17way
     cd /hive/data/genomes/tarSyr2/bed/multiz17way
@@ -256,7 +256,7 @@ do
 	../../mafLinks/${D}/*.maf.gz
     cd ..
 done
-    # takes about an hour
+    # real    20m8.894s
 
     # construct a list of all possible maf file names.
     # they do not all exist in each of the species directories
@@ -327,11 +327,12 @@ popd > /dev/null
     para create jobList
     para try ... check ... push ... etc...
 # Completed: 256 of 256 jobs
-# CPU time in finished jobs:    1579155s   26319.26m   438.65h   18.28d  0.050 y
-# IO & Wait Time:                 11946s     199.09m     3.32h    0.14d  0.000 y
-# Average job time:                6215s     103.59m     1.73h    0.07d
-# Longest finished job:           10741s     179.02m     2.98h    0.12d
-# Submission to last job:         15320s     255.33m     4.26h    0.18d
+# CPU time in finished jobs:    1284867s   21414.44m   356.91h   14.87d  0.041 y
+# IO & Wait Time:                  1864s      31.07m     0.52h    0.02d  0.000 y
+# Average job time:                5026s      83.77m     1.40h    0.06d
+# Longest finished job:            8641s     144.02m     2.40h    0.10d
+# Submission to last job:          8645s     144.08m     2.40h    0.10d
+
 
     # combine into one file  (the 1>&2 redirect sends the echo to stderr)
     cd /hive/data/genomes/tarSyr2/bed/multiz17way
@@ -342,6 +343,9 @@ do
     egrep -v "^#" ${F}
 done >> multiz17way.maf
     tail -1 splitRun/maf/017.maf >> multiz17way.maf
+# with rhiRox1 sequence fixed:
+# -rw-rw-r--  1 41314187431 Feb 24 21:53 multiz17way.maf
+# when rhiRox1 was identical to nasLar1:
 # -rw-rw-r--  1 40684011591 Dec 19 17:29 multiz17way.maf
 
     # Load into database
@@ -351,12 +355,23 @@ done >> multiz17way.maf
     ln -s `pwd`/multiz17way.maf /gbdb/tarSyr2/multiz17way
     cd /dev/shm
     time hgLoadMaf tarSyr2 multiz17way
+# with the corrected rhiRox1:
+#   Loaded 20987827 mafs in 1 files from /gbdb/tarSyr2/multiz17way
+#   real    9m47.586s
+
+# when rhiRox1 was identical to nasLar1:
     # Loaded 20146045 mafs in 1 files from /gbdb/tarSyr2/multiz17way
     # real    9m47.206s
 
     time hgLoadMafSummary -verbose=2 -minSize=30000 \
 	-mergeGap=1500 -maxSize=200000 tarSyr2 multiz17waySummary \
 	/gbdb/tarSyr2/multiz17way/multiz17way.maf
+# with the corrected rhiRox1:
+# Created 544917 summary blocks from 35182976 components and 20987827 mafs
+#   from /gbdb/tarSyr2/multiz17way/multiz17way.maf
+# real    9m26.111s
+
+# when rhiRox1 was identical to nasLar1:
     # Created 548828 summary blocks from 33964759 components and 20146045 mafs
     # from /gbdb/tarSyr2/multiz17way/multiz17way.maf
     # real    9m21.738s
@@ -364,7 +379,12 @@ done >> multiz17way.maf
 # -rw-rw-r-- 1 1118299516 Dec 23 13:24 multiz17way.tab
 # -rw-rw-r-- 1   27414484 Dec 23 13:42 multiz17waySummary.tab
 
+# with the corrected rhiRox1:
     wc -l multiz17way*.tab
+#   20987827 multiz17way.tab
+#     544917 multiz17waySummary.tab
+
+# when rhiRox1 was identical to nasLar1:
 
     # 21859861 multiz17way.tab
     #   548828 multiz17waySummary.tab
@@ -372,7 +392,7 @@ done >> multiz17way.maf
     rm multiz17way*.tab
 
 ##############################################################################
-# GAP ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE - 2014-12-23 - Hiram)
+# GAP ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE - 2015-02-25 - Hiram)
     # mafAddIRows has to be run on single chromosome maf files, it does not
     #	function correctly when more than one reference sequence
     #	are in a single file.  Need to split of the maf file into individual
@@ -382,7 +402,7 @@ done >> multiz17way.maf
 
     time mafSplit -outDirDepth=2 -byTarget -useFullSequenceName \
         /dev/null . ../../multiz17way.maf
-    #   real    13m11.610s
+    #   real    13m22.989s
 
     find . -type f | wc -l
     #   83384
@@ -393,8 +413,8 @@ done >> multiz17way.maf
 do
     if [ ! -s /hive/data/genomes/${DB}/${DB}.N.bed ]; then
         echo "MISS: ${DB}"
-#        cd /hive/data/genomes/${DB}
-#        twoBitInfo -nBed ${DB}.2bit ${DB}.N.bed
+#         cd /hive/data/genomes/${DB}
+#         twoBitInfo -nBed ${DB}.2bit ${DB}.N.bed
     else
         echo "  OK: ${DB}"
     fi
@@ -416,10 +436,10 @@ done
     ssh ku
     cd /hive/data/genomes/tarSyr2/bed/multiz17way/anno
     mkdir result
-    for D in `ls mafSplit`
+    find ./mafSplit -type d | sed -e 's#./mafSplit/##' | while read D
 do
-    echo mkdir result/${D}
-    mkdir result/${D}
+    echo mkdir -p result/${D}
+    mkdir -p result/${D}
 done
     cat << '_EOF_' > template
 #LOOP
@@ -433,12 +453,12 @@ mafAddIRows -nBeds=nBeds mafSplit/$(path1) /hive/data/genomes/tarSyr2/tarSyr2.2b
     # limit jobs on a node with the ram=32g requirement because they go fast
     para -ram=32g create jobList
     para try ... check ... push ...
-# Completed: 83384 of 83384 jobs
-# CPU time in finished jobs:     181067s    3017.78m    50.30h    2.10d  0.006 y
-# IO & Wait Time:                247374s    4122.90m    68.72h    2.86d  0.008 y
-# Average job time:                   5s       0.09m     0.00h    0.00d
-# Longest finished job:              20s       0.33m     0.01h    0.00d
-# Submission to last job:           517s       8.62m     0.14h    0.01d
+# Completed: 85286 of 85286 jobs
+# CPU time in finished jobs:     147701s    2461.69m    41.03h    1.71d  0.005 y
+# IO & Wait Time:                218828s    3647.13m    60.79h    2.53d  0.007 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest finished job:               9s       0.15m     0.00h    0.00d
+# Submission to last job:           436s       7.27m     0.12h    0.01d
 
     # verify all result files have some content, look for 0 size files:
     find ./result -type f -size 0
@@ -447,22 +467,26 @@ mafAddIRows -nBeds=nBeds mafSplit/$(path1) /hive/data/genomes/tarSyr2/tarSyr2.2b
     find ./result -type f | xargs ls -og | sort -k3nr | tail
 
     # combine into one file  (the 1>&2 redirect sends the echo to stderr)
-    head -q -n 1 result/0/0/KE937989v1.maf > tarSyr2.17way.maf
-    find ./result -type f | while read F
+    head -q -n 1 ./result/9/0/ABRT02487300v1.maf > tarSyr2.17way.maf
+    time find ./result -type f | while read F
 do
     echo "${F}" 1>&2
     grep -h -v "^#" ${F}
 done >> tarSyr2.17way.maf
+    # real    27m53.591s
 
     #	these maf files do not have the end marker, this does nothing:
     #	tail -q -n 1 result/0/chr8.maf >> tarSyr2.17way.maf
     # How about an official end marker:
     echo "##eof maf" >> tarSyr2.17way.maf
     ls -og
+# with the updated rhiRox1:
+# -rw-rw-r--  1 56742200769 Feb 25 08:24 tarSyr2.17way.maf
+# when rhiRox1 was equal to nasLar1:
 # -rw-rw-r--  1 55608068101 Dec 23 13:11 tarSyr2.17way.maf
 
     du -hsc tarSyr2.17way.maf
-    # 52G     tarSyr2.17way.maf
+    # 53G     tarSyr2.17way.maf
 
     # construct symlinks to get the individual maf files into gbdb:
     rm /gbdb/tarSyr2/multiz17way/multiz17way.maf   # remove previous results
@@ -470,24 +494,35 @@ done >> tarSyr2.17way.maf
 
     # Load into database
     cd /dev/shm
-    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/tarSyr2/multiz17way \
-        tarSyr2 multiz17way
+    time hgLoadMaf -pathPrefix=/gbdb/tarSyr2/multiz17way tarSyr2 multiz17way
+# with the updated rhiRox1:
+    # Loaded 22724566 mafs in 1 files from /gbdb/tarSyr2/multiz17way
+    # real    13m21.485s
+# when rhiRox1 was equal to nasLar1:
     # Loaded 21859861 mafs in 1 files from /gbdb/tarSyr2/multiz17way
     # real    13m5.326s
 
     time hgLoadMafSummary -verbose=2 -minSize=30000 \
 	-mergeGap=1500 -maxSize=200000 tarSyr2 multiz17waySummary \
         /gbdb/tarSyr2/multiz17way/multiz17way.maf
+# with the updated rhiRox1:
+    # Created 544917 summary blocks from 35182976 components and 22724566 mafs
+    #   from /gbdb/tarSyr2/multiz17way/multiz17way.maf
+    # real    12m45.559s
+# when rhiRox1 was equal to nasLar1:
     # Created 548828 summary blocks from 33964759 components and 21859861 mafs
     # from /gbdb/tarSyr2/multiz17way/multiz17way.maf
     # real    12m24.762s
 
+# with the updated rhiRox1:
+    # -rw-rw-r--  1 27218581 Feb 25 11:14 multiz17waySummary.tab
+# when rhiRox1 was equal to nasLar1:
     # -rw-rw-r-- 1  27414484 Dec 23 14:27 multiz17waySummary.tab
 
     rm multiz17way*.tab
 
 ######################################################################
-# MULTIZ7WAY MAF FRAMES (DONE - 2014-12-23 - Hiram)
+# MULTIZ7WAY MAF FRAMES (DONE - 2015-02-25 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/tarSyr2/bed/multiz17way/frames
     cd /hive/data/genomes/tarSyr2/bed/multiz17way/frames
@@ -520,25 +555,25 @@ end
     # << happy emacs
     chmod +x ./showGenes.csh
     time ./showGenes.csh
-# tarSyr2: xenoRefGene: 313844, Mrnas: 8
-# hg38: ensGene: 208239, knownGene: 104178, mgcGenes: 34081, refGene: 56836, xenoRefGene: 176051, Mrnas: 10761621
-# panTro4: ensGene: 29160, refGene: 2677, xenoRefGene: 286931, Mrnas: 11215
-# panPan1: xenoRefGene: 374364, Mrnas: 564
-# gorGor3: ensGene: 35410, xenoRefGene: 343094, Mrnas: 1
-# ponAbe2: ensGene: 29447, refGene: 3565, xenoRefGene: 296013, Mrnas: 0
-# nomLeu3: xenoRefGene: 195334, Mrnas: 46
-# rheMac3: refGene: 6500, xenoRefGene: 281471, Mrnas: 443897
-# macFas5: Mrnas: 177444
-# papAnu2: ensGene: 29028, refGene: 492, xenoRefGene: 301568, Mrnas: 146332
-# chlSab2: Mrnas: 37893
-# nasLar1: Mrnas: 4
-# rhiRox1: Mrnas: 10
-# calJac3: ensGene: 55116, refGene: 219, xenoRefGene: 310005, Mrnas: 294477
-# saiBol1: xenoRefGene: 439158, Mrnas: 84
-# micMur1: ensGene: 37458, xenoRefGene: 549416, Mrnas: 59
-# otoGar3: ensGene: 28565, xenoRefGene: 415285, Mrnas: 13
+# tarSyr2: xenoRefGene: 316130, Mrnas: 8
+# hg38: ensGene: 208239, knownGene: 104178, mgcGenes: 34081, refGene: 57605, xenoRefGene: 177303, Mrnas: 10985630
+# panTro4: ensGene: 29160, refGene: 2685, xenoRefGene: 289610, Mrnas: 11222
+# panPan1: xenoRefGene: 395518, Mrnas: 566
+# gorGor3: ensGene: 35410, xenoRefGene: 350333, Mrnas: 1
+# ponAbe2: ensGene: 29447, refGene: 3566, xenoRefGene: 298170, Mrnas: 0
+# nomLeu3: xenoRefGene: 197285, Mrnas: 49
+# rheMac3: refGene: 6532, xenoRefGene: 283691, Mrnas: 443910
+# macFas5: refGene: 2270, xenoRefGene: 284910, Mrnas: 177455
+# papAnu2: ensGene: 29028, refGene: 492, xenoRefGene: 305210, Mrnas: 146334
+# chlSab2: Mrnas: 37897
+# nasLar1: xenoRefGene: 322057, Mrnas: 4
+# rhiRox1: xenoRefGene: 330346, Mrnas: 11
+# calJac3: ensGene: 55116, refGene: 220, xenoRefGene: 313007, Mrnas: 294478
+# saiBol1: xenoRefGene: 442134, Mrnas: 85
+# micMur1: ensGene: 37458, xenoRefGene: 553557, Mrnas: 59
+# otoGar3: ensGene: 28565, xenoRefGene: 418416, Mrnas: 13
 
-# real    4m41.892s
+# real   5m0.514s
 
     # from that summary, use these gene sets:
     # transMap - tarSyr2 panPan1 nomLeu3 macFas5 chlSab2 saiBol1
@@ -624,35 +659,35 @@ done
 	| nice -n +19 genePredToMafFrames tarSyr2 stdin stdout \
 	     `sed -e "s/nasLar1 rhiRox1 //;" ../species.list | sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g;"` \
 		| gzip > multiz17wayFrames.bed.gz)
-    #   real    12m23.581s
+    #   real    12m44.568s
 
     # verify there are frames on everything, should be 15 species:
     zcat multiz17wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c
-# 223583 calJac3
-# 218423 chlSab2
-# 221317 gorGor3
-# 220352 hg38
-# 219391 macFas5
-# 200657 micMur1
-# 221748 nomLeu3
-# 213818 otoGar3
-# 212884 panPan1
-# 204979 panTro4
-# 209136 papAnu2
-# 218954 ponAbe2
-#  45947 rheMac3
-# 227710 saiBol1
+# 223792 calJac3
+# 218720 chlSab2
+# 221525 gorGor3
+# 220680 hg38
+# 219688 macFas5
+# 200729 micMur1
+# 222040 nomLeu3
+# 213999 otoGar3
+# 213067 panPan1
+# 205259 panTro4
+# 209470 papAnu2
+# 219179 ponAbe2
+#  45984 rheMac3
+# 227812 saiBol1
 # 189705 tarSyr2
 
     #   load the resulting file
     ssh hgwdev
     cd /hive/data/genomes/tarSyr2/bed/multiz17way/frames
     time hgLoadMafFrames tarSyr2 multiz17wayFrames multiz17wayFrames.bed.gz
-    #   real    0m32.169s
+    #   real    0m31.822s
 
     time featureBits -countGaps tarSyr2 multiz17wayFrames
-    #  37818853 bases of 3453864774 (1.095%) in intersection
-    #  real    1m58.265s
+    #  37818274 bases of 3453864774 (1.095%) in intersection
+    #  real    2m6.071s
 
     #   enable the trackDb entries:
 # frames multiz17wayFrames
@@ -660,7 +695,7 @@ done
     #   appears to work OK
 
 #########################################################################
-# Phylogenetic tree from 17-way (DONE - 2014-12-19 - Hiram)
+# Phylogenetic tree from 17-way (DONE - 2015-02-25 - Hiram)
     mkdir /hive/data/genomes/tarSyr2/bed/multiz17way/4d
     cd /hive/data/genomes/tarSyr2/bed/multiz17way/4d
 
@@ -682,23 +717,14 @@ done
     # the annotated maf is:
     ../anno/tarSyr2.17way.maf
 
-    # using xenoRefGene for tarSyr2
-    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from xenoRefGene" tarSyr2 > tarSyr2.xenoRefGene.gp
-
-    genePredSingleCover tarSyr2.xenoRefGene.gp stdout \
-       | sort > tarSyr2.xenoRefGeneNR.gp
-    wc -l tarSyr2.xenoRefGeneNR.gp
-    #	29274 tarSyr2.knownGeneNR.gp
-
     mkdir annoSplit
     cd annoSplit
     time mafSplit -verbose=2 -outDirDepth=2 -byTarget -useFullSequenceName \
-        /dev/null . ../multiz17way.maf
-    # real    44m46.136s
-#         /dev/null . ../../anno/tarSyr2.17way.maf
+	/dev/null . ../../anno/tarSyr2.17way.maf
+    # real    20m48.389s
 
     find . -type f | wc -l
-    #   83386
+    #   85286
     ssh ku
     mkdir /hive/data/genomes/tarSyr2/bed/multiz17way/4d/run
     cd /hive/data/genomes/tarSyr2/bed/multiz17way/4d/run
@@ -744,13 +770,13 @@ endif
     para create jobList
     para try ... check
     para time
-# Completed: 83379 of 83384 jobs
+# Completed: 85281 of 85286 jobs
 # Crashed: 5 jobs
-# CPU time in finished jobs:       3908s      65.14m     1.09h    0.05d  0.000 y
-# IO & Wait Time:                212761s    3546.01m    59.10h    2.46d  0.007 y
-# Average job time:                   3s       0.04m     0.00h    0.00d
-# Longest finished job:               7s       0.12m     0.00h    0.00d
-# Submission to last job:          2023s      33.72m     0.56h    0.02d
+# CPU time in finished jobs:       4125s      68.76m     1.15h    0.05d  0.000 y
+# IO & Wait Time:                282626s    4710.43m    78.51h    3.27d  0.009 y
+# Average job time:                   3s       0.06m     0.00h    0.00d
+# Longest finished job:               8s       0.13m     0.00h    0.00d
+# Submission to last job:           342s       5.70m     0.10h    0.00d
 
     # Not all results have contents, that is OK
 
@@ -767,13 +793,13 @@ endif
     cat empty.list | xargs rm -f
     # see what is left:
     ls -ogrt mfa/*/*/*.mfa | sort -k3nr | wc
-    # 5500   38500  308548
+    #    5668   39676  318006
 
     # want comma-less species.list
     time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
 	--aggregate "`cat ../species.list`" mfa/*/*/*.mfa | sed s/"> "/">"/ \
 	    > 4d.all.mfa
-    # real    0m51.521s
+    # real    1m10.961s
 
     # check they are all in there:
     grep "^>" 4d.all.mfa | wc -l
@@ -806,12 +832,20 @@ endif
     time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
 	    --EM --precision MED --msa-format FASTA --subst-mod REV \
 		--tree tree_commas.nh 4d.all.mfa
-    #  real    0m51.549s
+    #  real    0m48.734s
 
     mv phyloFit.mod all.mod
 
     grep TREE all.mod
-# TREE: ((tarSyr2:0.0969653,(((((((hg38:0.0070795,panTro4:0.00223167):5.70818e-05,panPan1:0.0021914):0.00400558,gorGor3:0.00689205):0.0065184,ponAbe2:0.013282):0.00221959,nomLeu3:0.0156355):0.00792707,((((rheMac3:0.00221923,macFas5:0.00142763):0.00355698,papAnu2:0.0055863):0.00272772,chlSab2:0.00890481):0.00422851,(nasLar1:4.71873e-05,rhiRox1:4.65711e-05):0.0139408):0.0145069):0.0144824,(calJac3:0.0242389,saiBol1:0.0230025):0.0256488):0.0430112):0.0140581,(micMur1:0.0636474,otoGar3:0.0873782):0.0140581);
+# TREE:
+# ((tarSyr2:0.113568,(((((((hg38:0.00825003,panTro4:0.0025377):0.00169634,
+# panPan1:0.00227249):0.0045418,gorGor3:0.00765382):0.0075491,
+# ponAbe2:0.0153708):0.00267461,nomLeu3:0.0182718):0.00914422,
+# ((((rheMac3:0.00259256,macFas5:0.00182686):0.00414736,
+# papAnu2:0.00644973):0.0031585,chlSab2:0.0103741):0.00480915,
+# (nasLar1:0.00691038,rhiRox1:0.00533296):0.00967672):0.0172367):0.0168527,
+# (calJac3:0.0285916,saiBol1:0.0270545):0.0301916):0.0512419):0.0167565,
+# (micMur1:0.0751551,otoGar3:0.105243):0.0167565);
 
     # compare these calculated lengths to the tree extracted from 183way:
     grep TREE all.mod | sed -e 's/TREE: //' \
@@ -823,22 +857,22 @@ endif
     join new.dists old.dists | awk '{
   printf "#\t%s\t%8.6f\t%8.6f\t%8.6f\t%8.6f\n", $1, $2, $3, $2-$3, 100*($2-$3)/$3 }' \
       | sort -k3n
-#       panPan1 0.177321        0.219364        -0.042043       -19.165861
-#       panTro4 0.177418        0.219584        -0.042166       -19.202674
-#       ponAbe2 0.177888        0.219771        -0.041883       -19.057564
-#       gorGor3 0.178016        0.219488        -0.041472       -18.894883
-#       nomLeu3 0.178021        0.219630        -0.041609       -18.945044
-#       macFas5 0.180907        0.222921        -0.042014       -18.847035
-#       papAnu2 0.181508        0.222972        -0.041464       -18.596057
-#       rheMac3 0.181698        0.222921        -0.041223       -18.492201
-#       chlSab2 0.182099        0.222320        -0.040221       -18.091490
-#       hg38    0.182266        0.219294        -0.037028       -16.885095
-#       rhiRox1 0.182953        0.220320        -0.037367       -16.960330
-#       nasLar1 0.182954        0.220320        -0.037366       -16.959877
-#       saiBol1 0.188628        0.193490        -0.004862       -2.512791
-#       micMur1 0.188729        0.238040        -0.049311       -20.715426
-#       calJac3 0.189864        0.233140        -0.043276       -18.562237
-#       otoGar3 0.212460        0.271840        -0.059380       -21.843732
+#       panPan1 0.207845        0.219364        -0.011519       -5.251090
+#       gorGor3 0.208684        0.219488        -0.010804       -4.922365
+#       ponAbe2 0.208852        0.219771        -0.010919       -4.968353
+#       nomLeu3 0.209079        0.219630        -0.010551       -4.803989
+#       panTro4 0.209806        0.219584        -0.009778       -4.452966
+#       macFas5 0.212841        0.222921        -0.010080       -4.521781
+#       papAnu2 0.213317        0.222972        -0.009655       -4.330140
+#       rheMac3 0.213607        0.222921        -0.009314       -4.178162
+#       rhiRox1 0.213909        0.220320        -0.006411       -2.909858
+#       chlSab2 0.214083        0.222320        -0.008237       -3.705020
+#       nasLar1 0.215486        0.220320        -0.004834       -2.194081
+#       hg38    0.215519        0.219294        -0.003775       -1.721433
+#       saiBol1 0.222056        0.193490        0.028566        14.763554
+#       micMur1 0.222236        0.238040        -0.015804       -6.639220
+#       calJac3 0.223593        0.233140        -0.009547       -4.094964
+#       otoGar3 0.252324        0.271840        -0.019516       -7.179223
 
 #########################################################################
 # phastCons 17-way (DONE - 2014-06-04 - Hiram)
@@ -889,29 +923,31 @@ mkSS.csh $(dir1) $(root1) {check out line+ done/$(dir1)/$(root1)}
 '_EOF_'
     # << happy emacs
 
-    #	do the easy ones first to see some immediate results
     find ../../anno/result -type f | sed -e "s#../../anno/result/##" > maf.list
+
+    ssh ku
+    cd /hive/data/genomes/tarSyr2/bed/multiz17way/cons/SS
 
     gensub2 maf.list single template jobList
     # beware overwhelming the cluster with these quick high I/O jobs
     para create jobList
     para try ... check ... etc
-# Completed: 83355 of 83384 jobs
-# Crashed: 29 jobs
-# CPU time in finished jobs:       6155s     102.59m     1.71h    0.07d  0.000 y
-# IO & Wait Time:                406844s    6780.73m   113.01h    4.71d  0.013 y
-# Average job time:                   5s       0.08m     0.00h    0.00d
-# Longest finished job:              12s       0.20m     0.00h    0.00d
-# Submission to last job:         17819s     296.98m     4.95h    0.21d
+# Completed: 85260 of 85286 jobs
+# Crashed: 26 jobs
+# CPU time in finished jobs:       6326s     105.43m     1.76h    0.07d  0.000 y
+# IO & Wait Time:                689530s   11492.17m   191.54h    7.98d  0.022 y
+# Average job time:                   8s       0.14m     0.00h    0.00d
+# Longest finished job:              26s       0.43m     0.01h    0.00d
+# Submission to last job:          1109s      18.48m     0.31h    0.01d
 
-    # the 29 jobs that failed are due to tiny one base MAF files as input
+    # the 26 jobs that failed are due to tiny one base MAF files as input
     # and there are lots of results that are completely empty, tried one:
 # ./mkSS.csh 0/0 KE937989v1 done/0/0/KE937989v1
 # Creating partition 1 (column 1 to column 8575)...
 # WARNING: skipping partition 1; insufficient informative sites.
 
     find ./result -type f | wc -l
-    #	 18507
+    #	 18775
 
     # Run phastCons
     #	This job is I/O intensive in its output files, beware where this
@@ -985,7 +1021,7 @@ rmdir --ignore-fail-on-non-empty $cons/tmp/$d:h
 
     find ../SS/result -type f | sed -e "s#../SS/result/##" > ss.list
     wc -l ss.list
-    #	18507 ss.list
+    #	18775 ss.list
 
     # Create parasol batch and run it
     # run for all species
@@ -999,12 +1035,12 @@ rmdir --ignore-fail-on-non-empty $cons/tmp/$d:h
     para -ram=32g create jobList
     para try ... check ...
     para push
-# Completed: 18507 of 18507 jobs
-# CPU time in finished jobs:       8355s     139.25m     2.32h    0.10d  0.000 y
-# IO & Wait Time:                129996s    2166.60m    36.11h    1.50d  0.004 y
-# Average job time:                   7s       0.12m     0.00h    0.00d
-# Longest finished job:              20s       0.33m     0.01h    0.00d
-# Submission to last job:           978s      16.30m     0.27h    0.01d
+# Completed: 18775 of 18775 jobs
+# CPU time in finished jobs:       8584s     143.06m     2.38h    0.10d  0.000 y
+# IO & Wait Time:                218123s    3635.39m    60.59h    2.52d  0.007 y
+# Average job time:                  12s       0.20m     0.00h    0.00d
+# Longest finished job:              31s       0.52m     0.01h    0.00d
+# Submission to last job:          1986s      33.10m     0.55h    0.02d
 
     # create Most Conserved track
     cd /hive/data/genomes/tarSyr2/bed/multiz17way/cons/all
@@ -1020,6 +1056,11 @@ done > tmpMostConserved.bed
     # real    45m56.370s
 
     /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+    # with the updated rhiRox1 sequence:
+    # -rw-rw-r--  1 21646094 Feb 25 23:17 tmpMostConserved.bed
+    # -rw-rw-r--  1 22232572 Feb 25 23:37 mostConserved.bed
+
+    # when rhiRox1 was identical to nasLar1:
     # -rw-rw-r--  1 21162810 Dec 23 22:23 tmpMostConserved.bed
     # -rw-rw-r--  1 21736376 Dec 23 22:54 mostConserved.bed
 
@@ -1027,6 +1068,11 @@ done > tmpMostConserved.bed
     ssh hgwdev
     cd /hive/data/genomes/tarSyr2/bed/multiz17way/cons/all
     time hgLoadBed tarSyr2 phastConsElements17way mostConserved.bed
+    # with the updated rhiRox1 sequence:
+    # Read 624532 elements of size 5 from mostConserved.bed
+    # real    0m5.934s
+
+    # when rhiRox1 was identical to nasLar1:
     # Read 610580 elements of size 5 from mostConserved.bed
     # real    0m5.918s
 
@@ -1047,40 +1093,39 @@ done > tmpMostConserved.bed
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
 	| sed -e 's/\.[0-9][0-9]*-[0-9][0-9]* start/ start/' \
         | gzip -c > downloads/phastCons17way.wigFix.gz)
-    #   real    28m17.595s
-
+    #   real    23m3.356s
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/phastCons17way.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/tarSyr2/chrom.sizes \
 	    phastCons17way.bw) > bigWig.log 2>&1
     tail bigWig.log
-    # pid=58326: VmPeak:    21587460 kB
-    #  real    29m21.503s
+    # pid=59611: VmPeak:    21648512 kB
+    #   real    29m25.920s
 
     bigWigInfo phastCons17way.bw | sed -e 's/^/# /;'
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 3,065,820,119
-# primaryIndexSize: 95,714,080
+# primaryDataSize: 3,081,040,044
+# primaryIndexSize: 96,370,688
 # zoomLevels: 10
-# chromCount: 18507
-# basesCovered: 1,972,832,579
-# mean: 0.078945
+# chromCount: 18775
+# basesCovered: 1,978,224,575
+# mean: 0.079609
 # min: 0.000000
 # max: 1.000000
-# std: 0.200359
+# std: 0.201288
 
     #	encode those files into wiggle data
     time (zcat downloads/phastCons17way.wigFix.gz \
 	| wigEncode stdin phastCons17way.wig phastCons17way.wib)
     #   Converted stdin, upper limit 1.00, lower limit 0.00
-    #   real    15m28.525s
+    #   real    10m11.911s
 
     du -hsc *.wi?
     # 1.9G    phastCons17way.wib
-    # 299M    phastCons17way.wig
+    # 301M    phastCons17way.wig
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phastCons17way.wib /gbdb/tarSyr2/multiz17way/phastCons17way.wib
@@ -1093,13 +1138,13 @@ done > tmpMostConserved.bed
 
     wigTableStats.sh tarSyr2 phastCons17way
 # db.table          min max mean       count sumData      stdDev  viewLimits
-tarSyr2.phastCons17way 0 1 0.0789454 1972832579 1.55746e+08 0.200359 viewLimits=0:1
+tarSyr2.phastCons17way 0 1 0.0796086 1978224575 1.57484e+08 0.201288 viewLimits=0:1
 
     #  Create histogram to get an overview of all the data
     time hgWiggle -doHistogram -db=tarSyr2 \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    phastCons17way > histogram.data 2>&1
-    #	real    4m45.685s
+    #	real    5m54.551s
 
     #	create plot of histogram:
 
@@ -1125,7 +1170,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #########################################################################
-# phyloP for 17-way (DONE - 2014-06-04 - Hiram)
+# phyloP for 17-way (DONE - 2015-02-26 - Hiram)
     # run phyloP with score=LRT
     ssh ku
     mkdir /cluster/data/tarSyr2/bed/multiz17way/consPhyloP
@@ -1135,13 +1180,13 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     cd run.phyloP
     # Adjust model file base composition background and rate matrix to be
     # representative of the chromosomes in play
-    grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    grep BACKGROUND ../../4d/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
     #	0.519
     /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
-	../../cons/all/all.mod 0.519 > all.mod
+	../../4d/all.mod 0.519 > all.mod
     # verify, the BACKGROUND should now be paired up:
     grep BACK all.mod
-    #   BACKGROUND: 0.240500 0.259500 0.259500 0.240500
+    #   BACKGROUND: 0.240500 0.259500 0.259500 0.240500 
 
     cat << '_EOF_' > doPhyloP.csh
 #!/bin/csh -fe
@@ -1181,7 +1226,7 @@ sleep 4
 	| sed -e "s/.ss$//; s#^../../cons/SS/result/##" > ss.list
     # make sure the list looks good
     wc -l ss.list
-    #	18507 ss.list
+    #	18775 ss.list
 
     # Create template file
     #	file1 == $chr/$chunk/file name without .ss suffix
@@ -1204,53 +1249,51 @@ sleep 4
     para create jobList
     para try ... check ... push ... etc ...
     para time > run.time
-# Completed: 18507 of 18507 jobs
-# CPU time in finished jobs:     159119s    2651.98m    44.20h    1.84d  0.005 y
-# IO & Wait Time:                126010s    2100.17m    35.00h    1.46d  0.004 y
-# Average job time:                  15s       0.26m     0.00h    0.00d
-# Longest finished job:             164s       2.73m     0.05h    0.00d
-# Submission to last job:           456s       7.60m     0.13h    0.01d
+# Completed: 18775 of 18775 jobs
+# CPU time in finished jobs:     161600s    2693.33m    44.89h    1.87d  0.005 y
+# IO & Wait Time:                434274s    7237.91m   120.63h    5.03d  0.014 y
+# Average job time:                  32s       0.53m     0.01h    0.00d
+# Longest finished job:             196s       3.27m     0.05h    0.00d
+# Submission to last job:          1825s      30.42m     0.51h    0.02d
 
     mkdir downloads
 
     time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
 	| gzip -c > downloads/phyloP17way.wigFix.gz)
-    #   real    36m36.127s
+    #   real    31m37.742s
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/phyloP17way.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/tarSyr2/chrom.sizes \
 	phyloP17way.bw) > bigWig.log 2>&1
     egrep "real|VmPeak" bigWig.log
-    # pid=6009: VmPeak:     21587456 kB
-    # real    30m20.572s
-
+    # pid=60552: VmPeak:    21648508 kB
+    # real    30m51.598s
 
     bigWigInfo phyloP17way.bw | sed -e 's/^/# /;'
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 3,544,150,156
-# primaryIndexSize: 95,714,080
+# primaryDataSize: 3,557,190,036
+# primaryIndexSize: 96,370,688
 # zoomLevels: 10
-# chromCount: 18507
-# basesCovered: 1,972,832,579
-# mean: 0.011062
-# min: -15.477000
-# max: 0.611000
-# std: 0.664252
+# chromCount: 18775
+# basesCovered: 1,978,224,575
+# mean: 0.012791
+# min: -15.353000
+# max: 0.617000
+# std: 0.666438
 
     #	encode those files into wiggle data
     time (zcat downloads/phyloP17way.wigFix.gz \
 	| wigEncode stdin phyloP17way.wig phyloP17way.wib)
-    # Converted stdin, upper limit 0.61, lower limit -15.48
-    # real    10m55.980s
+    # Converted stdin, upper limit 0.62, lower limit -15.35
+    #  real    11m11.206s
 
     du -hsc *.wi?
     # 1.9G    phyloP17way.wib
-    # 306M    phyloP17way.wig
-    # 2.2G    total
+    # 308M    phyloP17way.wig
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phyloP17way.wib /gbdb/tarSyr2/multiz17way/phyloP17way.wib
@@ -1263,30 +1306,29 @@ sleep 4
 
     wigTableStats.sh tarSyr2 phyloP17way
 # db.table      min max mean count sumData
-# tarSyr2.phyloP17way     -15.477 0.611 0.011062 1972832579 2.18236e+07
+# tarSyr2.phyloP17way  -15.353 0.617 0.0127915 1978224575 2.53044e+07
 #       stdDev viewLimits
-#     0.664252 viewLimits=-3.3102:0.611
+#     0.666438 viewLimits=-3.3194:0.617
 
-    #	that range is: 15.477+0.611 = 16.088 for hBinSize=0.016088
+    #	that range is: 15.353+0.617 = 15.970 for hBinSize=0.015970
 
     #  Create histogram to get an overview of all the data
     time hgWiggle -doHistogram \
-	-hBinSize=0.016088 -hBinCount=1000 -hMinVal=-15.477 -verbose=2 \
+	-hBinSize=0.015970 -hBinCount=1000 -hMinVal=-15.353 -verbose=2 \
 	    -db=tarSyr2 phyloP17way > histogram.data 2>&1
-    #   real    6m57.518s
 
     # find out the range for the 2:5 graph
     grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin \
       | sed -e 's/^/# /;'
 # Q1 0.000000
 # median 0.000001
-# Q3 0.000069
-# average 0.001148
+# Q3 0.000060
+# average 0.001094
 # min 0.000000
-# max 0.078533
-# count 871
-# total 0.999970
-# standard deviation 0.005011
+# max 0.077666
+# count 914
+# total 0.999974
+# standard deviation 0.004847
 
     #	create plot of histogram:
     cat << '_EOF_' | gnuplot > histo.png
@@ -1312,7 +1354,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #############################################################################
-# construct download files for 17-way (DONE - 2014-06-05 - Hiram)
+# construct download files for 17-way (DONE - 2014-06-05 2015-02-26 - Hiram)
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/tarSyr2/multiz17way
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/tarSyr2/phastCons17way
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/tarSyr2/phyloP17way
@@ -1322,14 +1364,18 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     cd multiz17way
     time cp -p ../../anno/tarSyr2.17way.maf .
     #   real    1m34.045s
-    # -rw-rw-r-- 1 55608068101 Dec 23 13:11 tarSyr2.17way.maf
+    # -rw-rw-r-- 1 hiram genecats 56742200769 Feb 25 08:24 tarSyr2.17way.maf
 
     time gzip *.maf
     #   real    66m50.134s
-    #  -rw-rw-r-- 1 7688118840 Dec 23 13:11 tarSyr2.17way.maf.gz
+    # -rw-rw-r-- 1 7932395685 Feb 25 08:24 tarSyr2.17way.maf.gz
 
-    ln -s ../../tarSyr2.17way.nh .
-    ln -s ../../tarSyr2.17way.commonNames.nh .
+    grep TREE ../../4d/all.mod | sed -e 's/TREE: //' \
+      | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+         > tarSyr2.17way.nh
+    ~/kent/src/hg/utils/phyloTrees/commonNames.sh tarSyr2.17way.nh \
+      | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+         > tarSyr2.17way.commonNames.nh
     time md5sum *.nh *.maf.gz > md5sum.txt
     #   real    0m28.593s
 
@@ -1337,8 +1383,8 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         /usr/local/apache/htdocs-hgdownload/goldenPath/tarSyr2/multiz17way
 
     du -hsc *.maf.gz ../../anno/tarSyr2.17way.maf
-    # 7.2G    tarSyr2.17way.maf.gz
-    # 52G     ../../anno/tarSyr2.17way.maf
+    # 7.4G    tarSyr2.17way.maf.gz
+    #  53G     ../../anno/tarSyr2.17way.maf
 
     # obtain the README.txt from hg38/multiz17way and update for this
     #   situation
@@ -1391,7 +1437,8 @@ do
         | gzip -c > upstream${S}.${geneTbl}.maf.gz
     echo "done upstream${S}.${geneTbl}.maf.gz"
 done
-    #   real    66m12.733s
+    #   real    68m14.920s
+
 
     md5sum upstream*.gz >> md5sum.txt
 
@@ -1402,7 +1449,7 @@ done
         /usr/local/apache/htdocs-hgdownload/goldenPath/tarSyr2/multiz17way
 
 #############################################################################
-# hgPal downloads (DONE - 2014-06-06 - Hiram)
+# hgPal downloads (DONE - 2014-06-06 - 2015-02-26 - Hiram)
 #   FASTA from 17-way for knownGene, refGene and knownCanonical
 
     ssh hgwdev
@@ -1436,15 +1483,17 @@ done
     echo "wait" >> $gp.jobs
 
     time sh -x ./$gp.jobs > $gp.jobs.log 2>&1 &
-    #   real    163m13.655s
+    #   real    121m17.114s
 
     export mz=multiz17way
     export gp=xenoRefGene
-    find ./exonAA -type f | grep exonAA.fa.gz | xargs zcat \
+    time find ./exonAA -type f | grep exonAA.fa.gz | xargs zcat \
      | gzip -c > $gp.$mz.exonAA.fa.gz
+    # real    9m23.976s
+
     time find ./exonNuc -type f | grep exonNuc.fa.gz | xargs zcat \
      | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    11m34.407s
+    #   real    12m41.635s
 
     export mz=multiz17way
     export gp=xenoRefGene
