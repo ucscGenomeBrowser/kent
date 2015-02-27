@@ -328,6 +328,14 @@ if (user == NULL)
 return user;
 }
 
+struct cdwGroup *cdwGroupFromName(struct sqlConnection *conn, char *name)
+/* Return cdwGroup of given name or NULL if not found. */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select * from cdwGroup where name='%s'", name);
+return cdwGroupLoadByQuery(conn, query);
+}
+
 int cdwGetHost(struct sqlConnection *conn, char *hostName)
 /* Look up host name in table and return associated ID.  If not found
  * make up new table entry. */

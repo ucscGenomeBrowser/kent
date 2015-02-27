@@ -100,6 +100,9 @@ boolean cdwUserIsAdmin(struct sqlConnection *conn, char *userEmail);
 void cdwWarnUnregisteredUser(char *email);
 /* Put up warning message about unregistered user and tell them how to register. */
 
+struct cdwGroup *cdwGroupFromName(struct sqlConnection *conn, char *name);
+/* Return cdwGroup of given name or NULL if not found. */
+
 int cdwGetHost(struct sqlConnection *conn, char *hostName);
 /* Look up host name in table and return associated ID.  If not found
  * make up new host table entry. */
