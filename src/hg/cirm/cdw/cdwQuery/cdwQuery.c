@@ -143,8 +143,21 @@ struct tagStorm *tags = cdwTagStorm(conn);
 /* Get list of all tag types in tree and use it to expand wildcards in the query
  * field list. */
 struct slName *allFieldList = tagStormFieldList(tags);
+slSort(&allFieldList, slNameCmp);
 rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
-slSort(&rql->fieldList, slNameCmp);
+
+/* Output header row in tab case */
+if (sameString(clOut, "tab"))
+    {
+    char before = '#';
+    struct slName *field;
+    for (field = rql->fieldList; field != NULL; field = field->next)
+        {
+	printf("%c%s", before, field->name);
+	before = '\t';
+	}
+    printf("\n");
+    }
 
 /* Traverse tag tree outputting when rql statement matches in select case, just
  * updateing count in count case. */
