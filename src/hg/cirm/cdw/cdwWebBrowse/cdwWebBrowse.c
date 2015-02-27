@@ -468,7 +468,7 @@ struct hash *wrappers = hashNew(0);
 hashAdd(wrappers, "accession", wrapMetaNearAccession);
 hashAdd(wrappers, "ucsc_db", wrapTrackNearAccession);
 webFilteredSqlTable(cart, conn, 
-    "ucsc_db,accession,format,chrom,file_size,lab,assay,data_set_id,output,"
+    "ucsc_db,chrom,accession,format,file_size,lab,assay,data_set_id,output,"
     "enriched_in,body_part,submit_file_name",
     "cdwFileTags,cdwTrackViz", where, 
     returnUrl, "cdwBrowseTracks", 
@@ -829,7 +829,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.26");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.27");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
