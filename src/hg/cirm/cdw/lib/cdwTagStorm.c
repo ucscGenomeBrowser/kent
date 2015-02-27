@@ -241,6 +241,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 
+/* Build up in-memory random access data structure for common_snp enrichments.  We'll
+ * use this later in the VCF bits. */
+struct rbTree *snpEnrichTree = intValTreeNew();
+
 /* Add cdwQaEnrich - here we'll supply exon, chrY, and whatever they put in their enriched_in
  * data, a subset of all */
 sqlSafef(query, sizeof(query), "select * from cdwQaEnrich");
@@ -253,6 +257,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (target != NULL)
         {
 	char *targetName = target->name;
+	if (sameString(targetName, "common_snp"))
+	    {
+	    struct cdwQaEnrich *keepRich = cloneMem(&rich, sizeof(rich));
+	    intValTreeAdd(snpEnrichTree, keepRich->fileId, keepRich);
+	    }
 	struct tagStanza *stanza = intValTreeFind(fileTree, rich.fileId);
 	if (stanza != NULL)
 	    {
@@ -264,6 +273,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	        onTarget = TRUE;
 	    else if (sameWord(targetName, "promoter"))
 	        onTarget = TRUE;
+	    else if (sameWord(targetName, "chrX"))
+	        onTarget = TRUE;
 	    else if (sameWord(targetName, "chrY"))
 	        onTarget = TRUE;
 	    if (onTarget)
@@ -272,9 +283,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 		safef(tagName, sizeof(tagName), "enrichment_%s", targetName);
 		if (!tagFindVal(stanza, tagName))
 		    tagStanzaAddDouble(tagStorm, stanza, tagName, rich.enrichment);
-		safef(tagName, sizeof(tagName), "coverage_%s", targetName);
-		if (!tagFindVal(stanza, tagName))
-		    tagStanzaAddDouble(tagStorm, stanza, tagName, rich.coverage);
 		}
 	    }
 	}
@@ -313,6 +321,37 @@ while ((row = sqlNextRow(sr)) != NULL)
 	tagStanzaAddDouble(tagStorm, stanza, "u4m_unique_ratio", bam.u4mUniqueRatio);
 	tagStanzaAddLongLong(tagStorm, stanza, "map_target_base_count", bam.targetBaseCount);
 	tagStanzaAddLongLong(tagStorm, stanza, "map_target_seq_count", bam.targetSeqCount);
+	}
+    }
+sqlFreeResult(&sr);
+
+/* Add info from cdwVcfFile */
+sqlSafef(query, sizeof(query), "select * from cdwVcfFile");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct cdwVcfFile vcf;
+    cdwVcfFileStaticLoad(row, &vcf);
+    struct tagStanza *stanza = intValTreeFind(fileTree, vcf.fileId);
+    if (stanza != NULL)
+	{
+	tagStanzaAddLongLong(tagStorm, stanza, "vcf_genotype_count", vcf.genotypeCount);
+	tagStanzaAddDouble(tagStorm, stanza, "vcf_pass_ratio", vcf.passRatio);
+	tagStanzaAddDouble(tagStorm, stanza, "vcf_snp_ratio", vcf.snpRatio);
+	tagStanzaAddLongLong(tagStorm, stanza, "vcf_genotype_count", vcf.genotypeCount);
+	if (vcf.haploidCount > 0)
+	    tagStanzaAddDouble(tagStorm, stanza, "vcf_haploid_ratio", vcf.haploidRatio);
+	if (vcf.phasedCount > 0)
+	    tagStanzaAddDouble(tagStorm, stanza, "vcf_phased_ratio", vcf.phasedRatio);
+	if (vcf.gotDepth)
+	    tagStanzaAddDouble(tagStorm, stanza, "vcf_dp", vcf.depthMean);
+	struct cdwQaEnrich *commonEnrich = intValTreeFind(snpEnrichTree, vcf.fileId);
+	if (commonEnrich != NULL)
+	    {
+	    // Attempt to calculate coverage of data set by common snps
+	    double commonCov = (double)commonEnrich->targetBaseHits / vcf.sumOfSizes;
+	    tagStanzaAddDouble(tagStorm, stanza, "vcf_common_snp_ratio", commonCov);
+	    }
 	}
     }
 sqlFreeResult(&sr);
