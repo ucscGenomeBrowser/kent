@@ -133,8 +133,7 @@ void cdwQuery(char *rqlQuery)
 /* cdwQuery - Get list of tagged files.. */
 {
 /* Turn rqlQuery string into a parsed out rqlStatement. */
-struct lineFile *lf = lineFileOnString("query", TRUE, cloneString(rqlQuery));
-struct rqlStatement *rql = rqlStatementParse(lf);
+struct rqlStatement *rql = rqlStatementParseString(rqlQuery);
 
 /* Load tags from database */
 struct sqlConnection *conn = cdwConnect();
