@@ -1,4 +1,5 @@
 /* cdwGroupFile - Associate a file with a group.. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -17,7 +18,7 @@ void usage()
 errAbort(
   "cdwGroupFile - Associate a file with a group.\n"
   "usage:\n"
-  "   cdwGroupFile group 'rqlQuery'\n"
+  "   cdwGroupFile group 'boolean expression like after a SQL where'\n"
   "options:\n"
   "   -dry - if set just print what we _would_ add group to.\n"
   );
@@ -28,15 +29,6 @@ static struct optionSpec options[] = {
    {"dry", OPTION_BOOLEAN},
    {NULL, 0},
 };
-
-boolean cdwFileInGroup(struct sqlConnection *conn, unsigned int fileId, unsigned int groupId)
-/* Return TRUE if user is in group */
-{
-char query[256];
-sqlSafef(query, sizeof(query), "select count(*) from cdwGroupFile where fileId=%u and groupId=%u",
-    fileId, groupId);
-return sqlQuickNum(conn, query) > 0;
-}
 
 void addGroupToValidFile(struct sqlConnection *conn, 
     struct cdwValidFile *vf, struct cdwGroup *group)
@@ -51,7 +43,7 @@ if (!dry)
     sqlUpdate(conn, query);
 }
 
-void cdwGroupFile(char *groupName, char *rqlQuery)
+void cdwGroupFile(char *groupName, char *where)
 /* cdwGroupFile - Associate a file with a group.. */
 {
 /* Get group from database, error out if no good */
@@ -60,7 +52,11 @@ struct cdwGroup *group = cdwNeedGroupFromName(conn, groupName);
 
 /* Get list of all stanzas matching query */
 struct tagStorm *tags = cdwTagStorm(conn);
-struct slRef *ref, *matchRefList = tagStanzasMatchingQuery(tags, rqlQuery);
+struct dyString *rqlQuery = dyStringNew(0);
+dyStringPrintf(rqlQuery, "select accession from cdwFileTags where accession");
+if (where != NULL)
+    dyStringPrintf(rqlQuery, " and %s", where);
+struct slRef *ref, *matchRefList = tagStanzasMatchingQuery(tags, rqlQuery->string);
 
 /* Make one pass through mostly for early error reporting and building up 
  * hash of cdwValidFiles keyed by accession */
@@ -78,6 +74,8 @@ for (ref = matchRefList; ref != NULL; ref = ref->next)
 	}
     }
 
+/* Second pass through matching list we call routine that actually adds
+ * the group/file relationship. */
 for (ref = matchRefList; ref != NULL; ref = ref->next)
     {
     struct tagStanza *stanza = ref->val;
