@@ -40,9 +40,7 @@ void cdwGroupUser(char *groupName, int userCount, char *userEmails[])
 /* cdwGroupUser - Change user group settings.. */
 {
 struct sqlConnection *conn = cdwConnectReadWrite();
-struct cdwGroup *group = cdwGroupFromName(conn, groupName);
-if (group == NULL)
-    errAbort("Group %s doesn't exist", groupName);
+struct cdwGroup *group = cdwNeedGroupFromName(conn, groupName);
  
 /* Build up array of all users, in the process aborting if user not
  * found */
