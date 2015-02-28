@@ -651,6 +651,7 @@ hashFree(&hash);
 
 char *tagPopularityFields[] = { "tag name", "vals", "popular values (files)...", "files",};
 
+#ifdef UNUSED
 long long totalAccessibleFiles(struct sqlConnection *conn, struct cdwUser *user)
 /* Return count of total number of files accessible by user */
 {
@@ -667,6 +668,7 @@ for (ef = efList; ef != NULL; ef = ef->next)
     }
 return count;
 }
+#endif /* UNUSED */
 
 void doHome(struct sqlConnection *conn)
 /* Put up home/summary page */
@@ -687,7 +689,7 @@ printLongWithCommas(stdout, fileCount);
 printf(" files");
 printf(" from %d labs. ", labCount(tags));
 printf("You have access to ");
-printLongWithCommas(stdout, totalAccessibleFiles(conn, user));
+printLongWithCommas(stdout, cdwCountAccessible(conn, user));
 printf(" files.<BR>\n");
 printf("Try using the browse menu on files, tracks or tags. ");
 printf("The query link allows simple SQL-like queries of the metadata.");
@@ -905,7 +907,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.28");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.29");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();

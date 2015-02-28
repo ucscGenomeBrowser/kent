@@ -30,6 +30,7 @@
 #include "cdwQaWigSpotFromRa.h"
 #include "cdwVcfFileFromRa.h"
 #include "rql.h"
+#include "intValTree.h"
 #include "tagStorm.h"
 #include "cdwLib.h"
 
@@ -367,12 +368,36 @@ verbose(2, "%s\n", query);
 return sqlQuickNum(conn, query);
 }
 
-boolean cdwCheckAccess(struct sqlConnection *conn, struct cdwFile *ef,
-    struct cdwUser *user, int accessType)
+struct rbTree *cdwFilesWithSharedGroup(struct sqlConnection *conn, int userId)
+/* Make an intVal type tree where the keys are fileIds and the val is null 
+ * This contains all files that are associated with any group that user is part of. 
+ * Can be used to do quicker version of cdwCheckAccess. */
+{
+struct rbTree *groupedFiles = intValTreeNew();
+char query[256];
+sqlSafef(query, sizeof(query), 
+    "select distinct(fileId) from cdwGroupFile,cdwGroupUser "
+    " where cdwGroupUser.groupId = cdwGroupFile.groupId "
+    " and cdwGroupUser.userId = %d", userId);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    long long fileId = sqlLongLong(row[0]);
+    intValTreeAdd(groupedFiles, fileId, NULL);
+    }
+sqlFreeResult(&sr);
+return groupedFiles;
+}
+
+static boolean checkAccess(struct rbTree *groupedFiles, struct sqlConnection *conn, 
+    struct cdwFile *ef, struct cdwUser *user, int accessType)
 /* See if user should be allowed this level of access.  The accessType is one of
  * cdwAccessRead or cdwAccessWrite.  Write access implies read access too. 
  * This can be called with user as NULL, in which case only access to shared-with-all
- * files is granted. */
+ * files is granted. 
+ * Since the most time consuming part of the operation involved the group access
+ * check, parts of this can be precomputed in the groupedFiles tree. */
 {
 /* First check for public access. */
 if (ef->allAccess >= accessType)
@@ -392,9 +417,66 @@ if (user->isAdmin)
 
 /* Check group access, this involves SQL query  */
 if (ef->groupAccess >= accessType)
-    return cdwUserFileGroupsIntersect(conn, ef->id, user->id);
+    {
+    if (groupedFiles != NULL)
+	return intValTreeLookup(groupedFiles, ef->id) != NULL;
+    else
+	return cdwUserFileGroupsIntersect(conn, ef->id, user->id);
+    }
     
 return FALSE;
+}
+
+boolean cdwCheckAccess(struct sqlConnection *conn, struct cdwFile *ef,
+    struct cdwUser *user, int accessType)
+/* See if user should be allowed this level of access.  The accessType is one of
+ * cdwAccessRead or cdwAccessWrite.  Write access implies read access too. 
+ * This can be called with user as NULL, in which case only access to shared-with-all
+ * files is granted. This function takes almost a millisecond.  If you are doing it
+ * to many files consider using cdwQuickCheckAccess instead. */
+{
+return checkAccess(NULL, conn, ef, user, accessType);
+}
+
+boolean cdwQuickCheckAccess(struct rbTree *groupedFiles, struct cdwFile *ef,
+    struct cdwUser *user, int accessType)
+/* See if user should be allowed this level of access.  The groupedFiles is
+ * the result of a call to cdwFilesWithSharedGroup. The other parameters are as
+ * cdwCheckAccess.  If you are querying thousands of files, this function is hundreds
+ * of times faster though. */
+{
+return checkAccess(groupedFiles, NULL, ef, user, accessType);
+}
+
+long long cdwCountAccessible(struct sqlConnection *conn, struct cdwUser *user)
+/* Return total number of files associated user can access */
+{
+long long count = 0;
+if (user == NULL)
+    {
+    char query[256];
+    sqlSafef(query, sizeof(query), 
+	"select count(*) from cdwFile,cdwValidFile "
+	" where cdwFile.id = cdwValidFile.fileId and allAccess > 0");
+    count = sqlQuickLongLong(conn, query);
+    }
+else
+    {
+    struct rbTree *groupedFiles = cdwFilesWithSharedGroup(conn, user->id);
+    char query[256];
+    sqlSafef(query, sizeof(query), 
+	"select cdwFile.* from cdwFile,cdwValidFile "
+	" where cdwFile.id = cdwValidFile.fileId");
+    struct cdwFile *ef, *efList = cdwFileLoadByQuery(conn, query);
+    for (ef = efList; ef != NULL; ef = ef->next)
+	{
+	if (cdwQuickCheckAccess(groupedFiles, ef, user, cdwAccessRead))
+	    ++count;
+	}
+    cdwFileFree(&efList);
+    rbTreeFree(&groupedFiles);
+    }
+return count;
 }
 
 int cdwGetHost(struct sqlConnection *conn, char *hostName)

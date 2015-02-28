@@ -117,7 +117,23 @@ boolean cdwCheckAccess(struct sqlConnection *conn, struct cdwFile *ef,
 /* See if user should be allowed this level of access.  The accessType is one of
  * cdwAccessRead or cdwAccessWrite.  Write access implies read access too. 
  * This can be called with user as NULL, in which case only access to shared-with-all
- * files is granted. */
+ * files is granted. This function takes almost a millisecond.  If you are doing it
+ * to many files consider using cdwQuickCheckAccess instead. */
+
+boolean cdwQuickCheckAccess(struct rbTree *groupedFiles, struct cdwFile *ef,
+    struct cdwUser *user, int accessType);
+/* See if user should be allowed this level of access.  The groupedFiles is
+ * the result of a call to cdwFilesWithSharedGroup. The other parameters are as
+ * cdwCheckAccess.  If you are querying thousands of files, this function is hundreds
+ * of times faster though. */
+
+struct rbTree *cdwFilesWithSharedGroup(struct sqlConnection *conn, int userId);
+/* Make an intVal type tree where the keys are fileIds and the val is null 
+ * This contains all files that are associated with any group that user is part of. 
+ * Can be used to do quicker version of cdwCheckAccess. */
+
+long long cdwCountAccessible(struct sqlConnection *conn, struct cdwUser *user);
+/* Return total number of files associated user can access */
 
 int cdwGetHost(struct sqlConnection *conn, char *hostName);
 /* Look up host name in table and return associated ID.  If not found
