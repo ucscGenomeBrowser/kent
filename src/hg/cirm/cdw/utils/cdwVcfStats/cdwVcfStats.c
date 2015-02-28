@@ -82,6 +82,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	genomeRangeTreeAdd(grt, chromName, el->start, el->end);
     lmCleanup(&lm);
     }
+bbiFileClose(&bbi);
 return grt;
 }
 
