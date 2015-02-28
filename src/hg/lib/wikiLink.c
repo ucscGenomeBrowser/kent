@@ -89,11 +89,12 @@ safef(retBuf, sizeof(retBuf), "http%s://%s/cgi-bin/hgSession?hgsid=%s",
 return cgiEncode(retBuf);
 }
 
-char *wikiLinkUserLoginUrl(char *hgsid)
+
+
+char *wikiLinkUserLoginUrlReturning(char *hgsid, char *returnUrl)
 /* Return the URL for the wiki user login page. */
 {
 char buf[2048];
-char *retEnc = encodedHgSessionReturnUrl(hgsid);
 if (loginSystemEnabled())
     {
     if (! wikiLinkEnabled())
@@ -101,7 +102,7 @@ if (loginSystemEnabled())
            "(specified in hg.conf).");
     safef(buf, sizeof(buf),
         "http%s://%s/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1&returnto=%s",
-        cgiAppendSForHttps(), wikiLinkHost(), retEnc);
+        cgiAppendSForHttps(), wikiLinkHost(), returnUrl);
     } 
 else 
     {
@@ -110,18 +111,24 @@ else
             "in hg.conf).");
     safef(buf, sizeof(buf),
         "http://%s/index.php?title=Special:UserloginUCSC&returnto=%s",
-        wikiLinkHost(), retEnc);
+        wikiLinkHost(), returnUrl);
     }   
-freez(&retEnc);
 return(cloneString(buf));
 }
 
-char *wikiLinkUserLogoutUrl(char *hgsid)
+char *wikiLinkUserLoginUrl(char *hgsid)
+/* Return the URL for the wiki user login page with return going to hgSessions. */
+{
+char *retUrl = encodedHgSessionReturnUrl(hgsid);
+char *result = wikiLinkUserLoginUrlReturning(hgsid, retUrl);
+freez(&retUrl);
+return result;
+}
+
+char *wikiLinkUserLogoutUrlReturning(char *hgsid, char *returnUrl)
 /* Return the URL for the wiki user logout page. */
 {
 char buf[2048];
-char *retEnc = encodedHgSessionReturnUrl(hgsid);
-
 if (loginSystemEnabled())
     {
     if (! wikiLinkEnabled())
@@ -129,7 +136,7 @@ if (loginSystemEnabled())
             "(specified in hg.conf).");
     safef(buf, sizeof(buf),
         "http%s://%s/cgi-bin/hgLogin?hgLogin.do.displayLogout=1&returnto=%s",
-        cgiAppendSForHttps(), wikiLinkHost(), retEnc);
+        cgiAppendSForHttps(), wikiLinkHost(), returnUrl);
     } 
 else
     {
@@ -138,10 +145,18 @@ else
             "in hg.conf).");
     safef(buf, sizeof(buf),
         "http://%s/index.php?title=Special:UserlogoutUCSC&returnto=%s",
-         wikiLinkHost(), retEnc);
+         wikiLinkHost(), returnUrl);
     }
-freez(&retEnc);
 return(cloneString(buf));
+}
+
+char *wikiLinkUserLogoutUrl(char *hgsid)
+/* Return the URL for the wiki user logout page that returns to hgSessions. */
+{
+char *retEnc = encodedHgSessionReturnUrl(hgsid);
+char *result = wikiLinkUserLoginUrlReturning(hgsid, retEnc);
+freez(&retEnc);
+return result;
 }
 
 char *wikiLinkUserSignupUrl(char *hgsid)
