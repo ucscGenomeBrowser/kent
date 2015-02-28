@@ -336,6 +336,67 @@ sqlSafef(query, sizeof(query), "select * from cdwGroup where name='%s'", name);
 return cdwGroupLoadByQuery(conn, query);
 }
 
+struct cdwGroup *cdwNeedGroupFromName(struct sqlConnection *conn, char *groupName)
+/* Get named group or die trying */
+{
+struct cdwGroup *group = cdwGroupFromName(conn, groupName);
+if (group == NULL)
+    errAbort("Group %s doesn't exist", groupName);
+return group;
+}
+
+boolean cdwFileInGroup(struct sqlConnection *conn, unsigned int fileId, unsigned int groupId)
+/* Return TRUE if file is in group */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select count(*) from cdwGroupFile where fileId=%u and groupId=%u",
+    fileId, groupId);
+return sqlQuickNum(conn, query) > 0;
+}
+
+int cdwUserFileGroupsIntersect(struct sqlConnection *conn, long long fileId, int userId)
+/* Return the number of groups file and user have in common,  zero for no match */
+{
+char query[512];
+sqlSafef(query, sizeof(query),
+    "select count(*) from cdwGroupUser,cdwGroupFile "
+    " where cdwGroupUser.groupId = cdwGroupFile.groupId "
+    " and cdwGroupUser.userId = %d and cdwGroupFile.fileId = %lld"
+    , userId, fileId);
+verbose(2, "%s\n", query);
+return sqlQuickNum(conn, query);
+}
+
+boolean cdwCheckAccess(struct sqlConnection *conn, struct cdwFile *ef,
+    struct cdwUser *user, int accessType)
+/* See if user should be allowed this level of access.  The accessType is one of
+ * cdwAccessRead or cdwAccessWrite.  Write access implies read access too. 
+ * This can be called with user as NULL, in which case only access to shared-with-all
+ * files is granted. */
+{
+/* First check for public access. */
+if (ef->allAccess >= accessType)
+    return TRUE;
+
+/* Everything else requires an actual user */
+if (user == NULL)
+    return FALSE;
+
+/* Check for user individual access */
+if (ef->userId == user->id && ef->userAccess >= accessType)
+    return TRUE;
+
+/* Check admin-level access */
+if (user->isAdmin)
+    return TRUE;
+
+/* Check group access, this involves SQL query  */
+if (ef->groupAccess >= accessType)
+    return cdwUserFileGroupsIntersect(conn, ef->id, user->id);
+    
+return FALSE;
+}
+
 int cdwGetHost(struct sqlConnection *conn, char *hostName)
 /* Look up host name in table and return associated ID.  If not found
  * make up new table entry. */

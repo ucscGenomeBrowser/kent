@@ -73,9 +73,6 @@ struct cdwUser *cdwUserFromEmail(struct sqlConnection *conn, char *email);
 struct cdwUser *cdwMustGetUserFromEmail(struct sqlConnection *conn, char *email);
 /* Return user associated with email or put up error message. */
 
-struct cdwUser *cdwUserFromEmail(struct sqlConnection *conn, char *email);
-/* Return user associated with that email or NULL if not found */
-
 struct cdwUser *cdwUserFromId(struct sqlConnection *conn, int id);
 /* Return user associated with that id or NULL if not found */
 
@@ -102,6 +99,25 @@ void cdwWarnUnregisteredUser(char *email);
 
 struct cdwGroup *cdwGroupFromName(struct sqlConnection *conn, char *name);
 /* Return cdwGroup of given name or NULL if not found. */
+
+struct cdwGroup *cdwNeedGroupFromName(struct sqlConnection *conn, char *groupName);
+/* Get named group or die trying */
+
+boolean cdwFileInGroup(struct sqlConnection *conn, unsigned int fileId, unsigned int groupId);
+/* Return TRUE if file is in group */
+
+int cdwUserFileGroupsIntersect(struct sqlConnection *conn, long long fileId, int userId);
+/* Return the number of groups file and user have in common,  zero for no match */
+
+#define cdwAccessRead 1
+#define cdwAccessWrite 2
+
+boolean cdwCheckAccess(struct sqlConnection *conn, struct cdwFile *ef,
+    struct cdwUser *user, int accessType);
+/* See if user should be allowed this level of access.  The accessType is one of
+ * cdwAccessRead or cdwAccessWrite.  Write access implies read access too. 
+ * This can be called with user as NULL, in which case only access to shared-with-all
+ * files is granted. */
 
 int cdwGetHost(struct sqlConnection *conn, char *hostName);
 /* Look up host name in table and return associated ID.  If not found

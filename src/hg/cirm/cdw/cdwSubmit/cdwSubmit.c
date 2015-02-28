@@ -343,12 +343,13 @@ return context->isInterrupted;
 
 int cdwFileFetch(struct sqlConnection *conn, struct cdwFile *ef, int fd, 
 	char *submitUrl, unsigned submitId, unsigned submitDirId, unsigned hostId,
-	unsigned userId)
+	struct cdwUser *user)
 /* Fetch file and if successful update a bunch of the fields in ef with the result. 
  * Returns fileId. */
 {
 /* Create file record in database */
-ef->id = makeNewEmptyFileRecord(conn, userId, submitId, submitDirId, ef->submitFileName, ef->size);
+ef->id = makeNewEmptyFileRecord(conn, user->id, submitId, submitDirId, 
+    ef->submitFileName, ef->size);
 
 char cdwFile[PATH_LEN] = "", cdwPath[PATH_LEN];
 cdwMakeFileNameAndPath(ef->id, ef->submitFileName,  cdwFile, cdwPath);
@@ -357,6 +358,8 @@ copyFile(ef->submitFileName, cdwPath);
 chmod(cdwPath, 0444);
 ef->cdwFileName = cloneString(cdwFile);
 ef->endUploadTime = cdwNow();
+ef->userAccess = cdwAccessWrite;
+ef->groupAccess = cdwAccessRead;
 
 /* Now we got the file.  We'll go ahead and save rest of cdwFile record.  This
  * includes tags that may be long, so we make query in a dy. Node that the
@@ -364,15 +367,26 @@ ef->endUploadTime = cdwNow();
 struct dyString *dy = dyStringNew(0);  /* Includes tag so query may be long */
 sqlDyStringPrintf(dy, "update cdwFile set "
 		      "  cdwFileName='%s', startUploadTime=%lld, endUploadTime=%lld,"
-		      "  md5='%s', size=%lld, updateTime=%lld, metaTagsId=%u"
+		      "  md5='%s', size=%lld, updateTime=%lld, metaTagsId=%u, "
+		      "  userAccess=%d, groupAccess=%d, allAccess=%d"
        , ef->cdwFileName, ef->startUploadTime, ef->endUploadTime
-       , ef->md5, ef->size, ef->updateTime, ef->metaTagsId);
+       , ef->md5, ef->size, ef->updateTime, ef->metaTagsId
+       , ef->userAccess, ef->groupAccess, ef->allAccess);
 dyStringAppend(dy, ", tags='");
 dyStringAppend(dy, ef->tags);
 dyStringPrintf(dy, "' where id=%d", ef->id);
 sqlUpdate(conn, dy->string);
-dyStringFree(&dy);
 
+/* We also will add file to the group */
+if (user->primaryGroup != 0)
+    {
+    dyStringClear(dy);
+    sqlDyStringPrintf(dy, "insert into cdwGroupFile (fileId,groupId) values (%u,%u)",
+	ef->id, user->primaryGroup);
+    sqlUpdate(conn, dy->string);
+    }
+
+dyStringFree(&dy);
 return ef->id;
 }
 
@@ -563,8 +577,8 @@ if (sameString(format, "fastq") || sameString(format, "vcf"))
 }
 
 void getSubmittedFile(struct sqlConnection *conn, char *format,
-    struct tagStorm *tagStorm, struct cdwFile *bf,  
-    char *submitDir, char *submitUrl, int submitId, int userId)
+    struct tagStorm *tagStorm, struct cdwFile *ef,  
+    char *submitDir, char *submitUrl, int submitId, struct cdwUser *user)
 /* We know the submission, we know what the file is supposed to look like.  Fetch it.
  * If things go badly catch the error, attach it to the submission record, and then
  * keep throwing. */
@@ -572,18 +586,18 @@ void getSubmittedFile(struct sqlConnection *conn, char *format,
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    if (freeSpaceOnFileSystem(cdwRootDir) < 2*bf->size)
+    if (freeSpaceOnFileSystem(cdwRootDir) < 2*ef->size)
 	errAbort("No space left in warehouse!!");
 
     int hostId=0, submitDirId = 0;
-    int fd = cdwOpenAndRecordInDir(conn, submitDir, bf->submitFileName, submitUrl,
+    int fd = cdwOpenAndRecordInDir(conn, submitDir, ef->submitFileName, submitUrl,
 	&hostId, &submitDirId);
 
-    prefetchChecks(format, bf->submitFileName);
-    int fileId = cdwFileFetch(conn, bf, fd, submitUrl, submitId, submitDirId, hostId, userId);
+    prefetchChecks(format, ef->submitFileName);
+    int fileId = cdwFileFetch(conn, ef, fd, submitUrl, submitId, submitDirId, hostId, user);
     close(fd);
     cdwAddQaJob(conn, fileId);
-    tellSubscribers(conn, submitDir, bf->submitFileName, fileId);
+    tellSubscribers(conn, submitDir, ef->submitFileName, fileId);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -1130,7 +1144,7 @@ if (errCatchStart(errCatch))
 	{
 	struct cdwFile *bf = sfr->file;
 	char *format = sfr->fr->row[formatIx];
-	getSubmittedFile(conn, format, tagStorm, bf, submitDir, submitUrl, submitId, user->id);
+	getSubmittedFile(conn, format, tagStorm, bf, submitDir, submitUrl, submitId, user);
 
 	/* Update submit record with progress (getSubmittedFile might be
 	 * long and get interrupted) */

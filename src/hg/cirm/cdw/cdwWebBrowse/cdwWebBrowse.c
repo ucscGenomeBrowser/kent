@@ -20,14 +20,17 @@
 #include "cdwLib.h"
 #include "cdwValid.h"
 #include "hui.h"
+#include "hgConfig.h"
 #include "hgColors.h"
 #include "web.h"
 #include "tablesTables.h"
 #include "jsHelper.h"
+#include "wikiLink.h"
 
 /* Global vars */
 struct cart *cart;	// User variables saved from click to click
 struct hash *oldVars;	// Previous cart, before current round of CGI vars folded in
+struct cdwUser *user;	// Our logged in user if any
 
 void usage()
 /* Explain usage and exit. */
@@ -353,6 +356,7 @@ void wrapTrackNearFileName(struct fieldedTable *table, struct fieldedRow *row, c
 {
 struct sqlConnection *conn = context;
 int fileNameIx = stringArrayIx("file_name", table->fields, table->fieldCount);
+boolean printed = FALSE;
 if (fileNameIx >= 0)
     {
     char *fileName = row->row[fileNameIx];
@@ -362,10 +366,11 @@ if (fileNameIx >= 0)
     if (dot != NULL)
         *dot = 0;
     struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, acc);
-    if (!wrapTrackVis(conn, vf, val))
-	printf("%s", val);
+    struct cdwFile *ef = cdwFileFromId(conn, vf->fileId);
+    if (cdwCheckAccess(conn, ef, user, cdwAccessRead))
+	printed = wrapTrackVis(conn, vf, val);
     }
-else
+if (!printed)
     printf("%s", val);
 }
 
@@ -376,17 +381,19 @@ void wrapTrackNearAccession(struct fieldedTable *table, struct fieldedRow *row,
 {
 struct sqlConnection *conn = context;
 int accIx = stringArrayIx("accession", table->fields, table->fieldCount);
+boolean printed = FALSE;
 if (accIx >= 0)
     {
     char *acc = row->row[accIx];
     if (acc != NULL)
 	{
 	struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, acc);
-	if (!wrapTrackVis(conn, vf, val))
-	    printf("%s", val);
+	struct cdwFile *ef = cdwFileFromId(conn, vf->fileId);
+	if (cdwCheckAccess(conn, ef, user, cdwAccessRead))
+	    printed = wrapTrackVis(conn, vf, val);
 	}
     }
-else
+if (!printed)
     printf("%s", val);
 }
 
@@ -442,11 +449,10 @@ struct hash *wrappers = hashNew(0);
 hashAdd(wrappers, "file_name", wrapFileName);
 hashAdd(wrappers, "ucsc_db", wrapTrackNearFileName);
 webFilteredSqlTable(cart, conn, 
-    "file_name,file_size,ucsc_db,lab,assay,data_set_id,output,format,read_size,item_count,"
-         "body_part",
-    "cdwFileTags", where, 
-    returnUrl, "cdwBrowseFiles",
-    18, wrappers, conn, TRUE, "files", 100);
+  "file_name,file_size,ucsc_db,lab,assay,data_set_id,output,format,read_size,item_count,body_part",
+  "cdwFileTags", where, 
+  returnUrl, "cdwBrowseFiles",
+  18, wrappers, conn, TRUE, "files", 100);
 
 printf("</FORM>\n");
 }
@@ -645,6 +651,23 @@ hashFree(&hash);
 
 char *tagPopularityFields[] = { "tag name", "vals", "popular values (files)...", "files",};
 
+long long totalAccessibleFiles(struct sqlConnection *conn, struct cdwUser *user)
+/* Return count of total number of files accessible by user */
+{
+char query[256];
+sqlSafef(query, sizeof(query), 
+    "select cdwFile.* from cdwFile,cdwValidFile where cdwFile.id=cdwValidFile.fileId");
+struct cdwFile *ef, *efList = cdwFileLoadByQuery(conn, query);
+long long count = 0;
+for (ef = efList; ef != NULL; ef = ef->next)
+    {
+    boolean access = cdwCheckAccess(conn, ef, user, cdwAccessRead);
+    if (access)
+        ++count;
+    }
+return count;
+}
+
 void doHome(struct sqlConnection *conn)
 /* Put up home/summary page */
 {
@@ -662,7 +685,10 @@ sqlSafef(query, sizeof(query), "select count(*) from cdwValidFile");
 long long fileCount = sqlQuickLongLong(conn, query);
 printLongWithCommas(stdout, fileCount);
 printf(" files");
-printf(" from %d labs.<BR>\n", labCount(tags));
+printf(" from %d labs. ", labCount(tags));
+printf("You have access to ");
+printLongWithCommas(stdout, totalAccessibleFiles(conn, user));
+printf(" files.<BR>\n");
 printf("Try using the browse menu on files, tracks or tags. ");
 printf("The query link allows simple SQL-like queries of the metadata.");
 printf("<BR><BR>\n");
@@ -732,6 +758,10 @@ if (command == NULL)
     {
     doHome(conn);
     }
+else if (sameString(command, "home"))
+    {
+    doHome(conn);
+    }
 else if (sameString(command, "query"))
     {
     doQuery(conn);
@@ -782,21 +812,67 @@ void doMiddle()
 /* Menu bar has been drawn.  We are in the middle of first section. */
 {
 struct sqlConnection *conn = sqlConnect(cdwDatabase);
+char *userName = wikiLinkUserName();
+if (userName != NULL)
+    {
+    /* Look up email vial hgCentral table */
+    struct sqlConnection *cc = hConnectCentral();
+    char query[512];
+    sqlSafef(query, sizeof(query), "select email from gbMembers where userName='%s'", userName);
+    char *email = sqlQuickString(cc, query);
+    hDisconnectCentral(&cc);
+    user = cdwUserFromEmail(conn, email);
+    }
 dispatch(conn);
 sqlDisconnect(&conn);
+}
+
+struct dyString *getLoginBits()
+/* Get a little HTML fragment that has login/logout bit of menu */
+{
+/* Construct URL to return back to this page */
+char *command = cartUsualString(cart, "cdwCommand", "home");
+char *sidString = cartSidUrlString(cart);
+char returnUrl[PATH_LEN*2];
+safef(returnUrl, sizeof(returnUrl), "http%s://%s/cgi-bin/cdwWebBrowse?cdwCommand=%s&%s",
+    cgiAppendSForHttps(), cgiServerNamePort(), command, sidString );
+char *encodedReturn = cgiEncode(returnUrl);
+
+/* Write a little html into loginBits */
+struct dyString *loginBits = dyStringNew(0);
+dyStringAppend(loginBits, "<li id=\"query\"><a href=\"");
+char *wikiUserName = wikiLinkUserName();
+if (wikiUserName == NULL)
+    {
+    dyStringPrintf(loginBits, "../cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1&returnto=%s&%s",
+	    encodedReturn, sidString);
+    dyStringPrintf(loginBits, "\">Login</a></li>");
+    }
+else
+    {
+    dyStringPrintf(loginBits, "../cgi-bin/hgLogin?hgLogin.do.displayLogout=1&returnto=%s&%s",
+	    encodedReturn, sidString);
+    dyStringPrintf(loginBits, "\">Logout %s</a></li>", wikiUserName);
+    }
+
+/* Clean up and go home */
+freez(&encodedReturn);
+return loginBits;
 }
 
 static char *localMenuBar()
 /* Return menu bar string */
 {
-// menu bar html is in a stringified .h file
-char *rawHtml = 
-#include "cdwNavBar.h"
-   ;
+struct dyString *loginBits = getLoginBits();
 
-char uiVars[128];
-safef(uiVars, sizeof(uiVars), "%s=%s", cartSessionVarName(), cartSessionId(cart));
-return menuBarAddUiVars(rawHtml, "/cgi-bin/cdw", uiVars);
+// menu bar html is in a stringified .h file
+struct dyString *dy = dyStringNew(4*1024);
+dyStringPrintf(dy, 
+#include "cdwNavBar.h"
+       , loginBits->string);
+
+
+return menuBarAddUiVars(dy->string, "/cgi-bin/cdw", cartSidUrlString(cart));
 }
 
 void localWebStartWrapper(char *titleString)
@@ -829,7 +905,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.27");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.28");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
