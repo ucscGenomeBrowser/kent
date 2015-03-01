@@ -425,6 +425,48 @@ if (!wrapped)
     printf("%s", val);
 }
 
+void accessibleFilesTable(struct cart *cart, struct sqlConnection *conn, 
+    char *fields, char *from, char *initialWhere,  
+    char *returnUrl, char *varPrefix, int maxFieldWidth, 
+    struct hash *tagOutWrappers, void *wrapperContext,
+    boolean withFilters, char *itemPlural, int pageSize)
+{
+/* Do precalculation for quicker auth check */
+int userId = 0;
+if (user != NULL)
+    userId = user->id;
+struct rbTree *groupedFiles = cdwFilesWithSharedGroup(conn, userId);
+
+/* Loop through all files constructing a SQL where clause that restricts us
+ * to just the ones that we're authorized to hit, and that also pass initial where clause
+ * if any. */
+struct cdwFile *ef, *efList = cdwFileLoadAllValid(conn);
+struct dyString *where = dyStringNew(0);
+if (!isEmpty(initialWhere))
+     dyStringPrintf(where, "(%s) and ", initialWhere);
+dyStringPrintf(where, "file_id in ");
+char sep = '(';
+int accessCount = 0;
+for (ef = efList; ef != NULL; ef = ef->next)
+    {
+    if (cdwQuickCheckAccess(groupedFiles, ef, user, cdwAccessRead))
+        {
+	dyStringPrintf(where, "%c%u", sep, ef->id);
+	sep = ',';
+	++accessCount;
+	}
+    }
+dyStringAppendC(where, ')');
+
+/* Let the sql system handle the rest.  Might be one long 'in' clause.... */
+webFilteredSqlTable(cart, conn, fields, from, where->string, returnUrl, varPrefix, maxFieldWidth,
+    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize);
+
+/* Clean up and go home. */
+rbTreeFree(&groupedFiles);
+cdwFileFreeList(&efList);
+dyStringFree(&where);
+}
 
 void doBrowseFiles(struct sqlConnection *conn)
 /* Print list of files */
@@ -448,12 +490,11 @@ if (!isEmpty(where))
 struct hash *wrappers = hashNew(0);
 hashAdd(wrappers, "file_name", wrapFileName);
 hashAdd(wrappers, "ucsc_db", wrapTrackNearFileName);
-webFilteredSqlTable(cart, conn, 
+accessibleFilesTable(cart, conn, 
   "file_name,file_size,ucsc_db,lab,assay,data_set_id,output,format,read_size,item_count,body_part",
   "cdwFileTags", where, 
   returnUrl, "cdwBrowseFiles",
   18, wrappers, conn, TRUE, "files", 100);
-
 printf("</FORM>\n");
 }
 
@@ -473,7 +514,7 @@ char *where = "fileId=file_id and format in ('bam','bigBed', 'bigWig', 'vcf', 'n
 struct hash *wrappers = hashNew(0);
 hashAdd(wrappers, "accession", wrapMetaNearAccession);
 hashAdd(wrappers, "ucsc_db", wrapTrackNearAccession);
-webFilteredSqlTable(cart, conn, 
+accessibleFilesTable(cart, conn, 
     "ucsc_db,chrom,accession,format,file_size,lab,assay,data_set_id,output,"
     "enriched_in,body_part,submit_file_name",
     "cdwFileTags,cdwTrackViz", where, 
@@ -486,7 +527,7 @@ printf("</FORM>\n");
 void doBrowsePopularTags(struct sqlConnection *conn, char *tag)
 /* Print list of most popular tags of type */
 {
-struct tagStorm *tags = cdwTagStorm(conn);
+struct tagStorm *tags = cdwUserTagStorm(conn, user);
 struct hash *hash = tagStormCountTagVals(tags, tag);
 printf("%s tag values ordered by usage\n", tag);
 struct hashEl *hel, *helList = hashElListHash(hash);
@@ -594,7 +635,7 @@ if (!isEmpty(where))
 char *limitVar = "cdwQueryLimit";
 int limit = cartUsualInt(cart, limitVar, 10);
 
-struct tagStorm *tags = cdwTagStorm(conn);
+struct tagStorm *tags = cdwUserTagStorm(conn, user);
 struct slRef *matchList = tagStanzasMatchingQuery(tags, rqlQuery->string);
 int matchCount = slCount(matchList);
 printf("Enter a SQL-like query below. ");
@@ -651,25 +692,6 @@ hashFree(&hash);
 
 char *tagPopularityFields[] = { "tag name", "vals", "popular values (files)...", "files",};
 
-#ifdef UNUSED
-long long totalAccessibleFiles(struct sqlConnection *conn, struct cdwUser *user)
-/* Return count of total number of files accessible by user */
-{
-char query[256];
-sqlSafef(query, sizeof(query), 
-    "select cdwFile.* from cdwFile,cdwValidFile where cdwFile.id=cdwValidFile.fileId");
-struct cdwFile *ef, *efList = cdwFileLoadByQuery(conn, query);
-long long count = 0;
-for (ef = efList; ef != NULL; ef = ef->next)
-    {
-    boolean access = cdwCheckAccess(conn, ef, user, cdwAccessRead);
-    if (access)
-        ++count;
-    }
-return count;
-}
-#endif /* UNUSED */
-
 void doHome(struct sqlConnection *conn)
 /* Put up home/summary page */
 {
@@ -679,11 +701,16 @@ struct tagStorm *tags = cdwTagStorm(conn);
 char query[256];
 printf("The CIRM Stem Cell Hub contains ");
 sqlSafef(query, sizeof(query),
-    "select sum(size) from cdwFile,cdwValidFile where cdwFile.id=cdwValidFile.id");
+    "select sum(size) from cdwFile,cdwValidFile where cdwFile.id=cdwValidFile.id "
+    " and (errorMessage = '' or errorMessage is null)"
+    );
 long long totalBytes = sqlQuickLongLong(conn, query);
 printLongWithCommas(stdout, totalBytes);
 printf(" bytes of data in ");
-sqlSafef(query, sizeof(query), "select count(*) from cdwValidFile");
+sqlSafef(query, sizeof(query),
+    "select count(*) from cdwFile,cdwValidFile where cdwFile.id=cdwValidFile.id "
+    " and (errorMessage = '' or errorMessage is null)"
+    );
 long long fileCount = sqlQuickLongLong(conn, query);
 printLongWithCommas(stdout, fileCount);
 printf(" files");
@@ -698,7 +725,7 @@ printf("<BR><BR>\n");
 /* Print out high level tags table */
 static char *highLevelTags[] = 
     {"data_set_id", "lab", "assay", "format", "read_size",
-    "body_part", "submit_dir", "lab_quake_markers", "species"};
+    "body_part", "species"};
 
 struct fieldedTable *table = fieldedTableNew("Important tags", tagPopularityFields, 
     ArraySize(tagPopularityFields));
@@ -721,7 +748,7 @@ tagStormFree(&tags);
 void doBrowseTags(struct sqlConnection *conn)
 /* Put up browse tags page */
 {
-struct tagStorm *tags = cdwTagStorm(conn);
+struct tagStorm *tags = cdwUserTagStorm(conn, user);
 struct slName *tag, *tagList = tagStormFieldList(tags);
 slSort(&tagList, slNameCmp);
 printf("This is a list of all tags and their most popular values.");
@@ -907,7 +934,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.29");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.31");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
