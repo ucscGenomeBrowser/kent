@@ -90,7 +90,7 @@ else
     }
 }
 
-struct tagStorm *cdwTagStorm(struct sqlConnection *conn)
+struct tagStorm *cdwTagStormRestricted(struct sqlConnection *conn, struct rbTree *restrictTo)
 /* Load  cdwMetaTags.tags, cdwFile.tags, and select other fields into a tag
  * storm for searching */
 {
@@ -130,7 +130,9 @@ verbose(2, "cdwTagStorm: %d items in metaTree\n", metaTree->n);
  * meta cdwMetaTags stanzas. */
 sqlSafef(query, sizeof(query), 
     "select cdwFile.*,cdwValidFile.* from cdwFile,cdwValidFile "
-    "where cdwFile.id=cdwValidFile.fileId ");
+    "where cdwFile.id=cdwValidFile.fileId "
+    "and (errorMessage='' or errorMessage is null)"
+    );
 sr = sqlGetResult(conn, query);
 struct rbTree *fileTree = intValTreeNew();
 while ((row = sqlNextRow(sr)) != NULL)
@@ -139,6 +141,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     struct cdwValidFile vf;
     cdwFileStaticLoad(row, &cf);
     cdwValidFileStaticLoad(row + CDWFILE_NUM_COLS, &vf);
+
+    if (restrictTo != NULL && intValTreeFind(restrictTo, cf.id) == NULL)
+        continue;
 
     /* Figure out file name independent of cdw location */
     char name[FILENAME_LEN], extension[FILEEXT_LEN];
@@ -363,4 +368,43 @@ rbTreeFree(&fileTree);
 tagStormReverseAll(tagStorm);
 return tagStorm;
 }
+
+struct tagStorm *cdwTagStorm(struct sqlConnection *conn)
+/* Load  cdwMetaTags.tags, cdwFile.tags, and select other fields into a tag
+ * storm for searching */
+{
+return cdwTagStormRestricted(conn, NULL);
+}
+
+static struct rbTree *accessForUser(struct sqlConnection *conn, struct cdwUser *user, 
+    struct cdwFile *efList)
+/* Construct intVal tree of files from efList that we have access to.  The
+ * key is the fileId,  the value is the cdwFile object */
+{
+int userId = 0;
+if (user != NULL)
+    userId = user->id;
+struct rbTree *groupedFiles = cdwFilesWithSharedGroup(conn, userId);
+struct rbTree *accessTree = intValTreeNew(0);
+struct cdwFile *ef;
+for (ef = efList; ef != NULL; ef = ef->next)
+    {
+    if (cdwQuickCheckAccess(groupedFiles, ef, user, cdwAccessRead))
+	intValTreeAdd(accessTree, ef->id, ef);
+    }
+rbTreeFree(&groupedFiles);
+return accessTree;
+}
+
+struct tagStorm *cdwUserTagStorm(struct sqlConnection *conn, struct cdwUser *user)
+/* Return tag storm just for files user has access to. */
+{
+struct cdwFile *efList = cdwFileLoadAllValid(conn);
+struct rbTree *accessTree = accessForUser(conn, user, efList);
+struct tagStorm *tags = cdwTagStormRestricted(conn, accessTree);
+rbTreeFree(&accessTree);
+cdwFileFreeList(&efList);
+return tags;
+}
+
 

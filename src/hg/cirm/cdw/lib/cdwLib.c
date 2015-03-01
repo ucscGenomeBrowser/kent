@@ -457,7 +457,9 @@ if (user == NULL)
     char query[256];
     sqlSafef(query, sizeof(query), 
 	"select count(*) from cdwFile,cdwValidFile "
-	" where cdwFile.id = cdwValidFile.fileId and allAccess > 0");
+	" where cdwFile.id = cdwValidFile.fileId and allAccess > 0"
+	" and (errorMessage='' or errorMessage is null)"
+	);
     count = sqlQuickLongLong(conn, query);
     }
 else
@@ -466,7 +468,9 @@ else
     char query[256];
     sqlSafef(query, sizeof(query), 
 	"select cdwFile.* from cdwFile,cdwValidFile "
-	" where cdwFile.id = cdwValidFile.fileId");
+	" where cdwFile.id = cdwValidFile.fileId "
+	" and (errorMessage='' or errorMessage is null)"
+	);
     struct cdwFile *ef, *efList = cdwFileLoadByQuery(conn, query);
     for (ef = efList; ef != NULL; ef = ef->next)
 	{
@@ -814,6 +818,17 @@ sqlUpdate(conn, query);
 
 /* Now, it's a bit of a time waste, but cheap in code, to just load it back from DB. */
 sqlSafef(query, sizeof(query), "select * from cdwFile where id=%lld", fileId);
+return cdwFileLoadByQuery(conn, query);
+}
+
+struct cdwFile *cdwFileLoadAllValid(struct sqlConnection *conn)
+/* Get list of cdwFiles that have been validated with no error */
+{
+char query[256];
+sqlSafef(query, sizeof(query), 
+    "select cdwFile.* from cdwFile,cdwValidFile "
+    " where cdwFile.id=cdwValidFile.fileId "
+    " and (cdwFile.errorMessage='' or cdwFile.errorMessage is null)");
 return cdwFileLoadByQuery(conn, query);
 }
 

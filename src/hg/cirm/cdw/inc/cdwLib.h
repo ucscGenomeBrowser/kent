@@ -180,6 +180,9 @@ struct cdwFile *cdwGetLocalFile(struct sqlConnection *conn, char *localAbsoluteP
 void cdwUpdateFileTags(struct sqlConnection *conn, long long fileId, struct dyString *tags);
 /* Update tags field in cdwFile with given value */
 
+struct cdwFile *cdwFileLoadAllValid(struct sqlConnection *conn);
+/* Get list of cdwFiles that have been validated with no error */
+
 struct cdwFile *cdwFileAllIntactBetween(struct sqlConnection *conn, int startId, int endId);
 /* Return list of all files that are intact (finished uploading and MD5 checked) 
  * with file IDs between startId and endId - including endId*/
@@ -428,6 +431,9 @@ struct tagStanza;
 struct tagStorm *cdwTagStorm(struct sqlConnection *conn);
 /* Load  cdwMetaTags.tags, cdwFile.tags, and select other fields into a tag
  * storm for searching */
+
+struct tagStorm *cdwUserTagStorm(struct sqlConnection *conn, struct cdwUser *user);
+/* Return tag storm just for files user has access to. */
 
 char *cdwRqlLookupField(void *record, char *key);
 /* Lookup a field in a tagStanza. */
