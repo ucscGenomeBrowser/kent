@@ -28,9 +28,6 @@ searchPriority 5
 track intronEst override
 visibility hide
 
-track chainNetMm10 override
-visibility dense
-
 searchTable gold
 searchMethod prefix
 searchType bed
