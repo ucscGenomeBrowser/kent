@@ -154,25 +154,25 @@ return count;
 
 
 void wrapFileName(struct fieldedTable *table, struct fieldedRow *row, 
-    char *field, char *val, void *context)
+    char *field, char *val, char *shortVal, void *context)
 /* Write out wrapper that links us to something nice */
 {
 printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=oneFile&cdwFileTag=%s&cdwFileVal=%s&%s\">",
     field, val, cartSidUrlString(cart));
-printf("%s</A>", val);
+printf("%s</A>", shortVal);
 }
 
 void wrapTagField(struct fieldedTable *table, struct fieldedRow *row, 
-    char *field, char *val, void *context)
+    char *field, char *val, char *shortVal, void *context)
 /* Write out wrapper that links us to something nice */
 {
 printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=oneTag&cdwTagName=%s&%s\">",
     val, cartSidUrlString(cart));
-printf("%s</A>", val);
+printf("%s</A>", shortVal);
 }
 
 void wrapTagValueInFiles(struct fieldedTable *table, struct fieldedRow *row, 
-    char *field, char *val, void *context)
+    char *field, char *val, char *shortVal, void *context)
 /* Write out wrapper that links us to something nice */
 {
 printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s&",
@@ -182,7 +182,7 @@ safef(query, sizeof(query), "%s = '%s'", field, val);
 char *escapedQuery = cgiEncode(query);
 printf("%s=%s", "cdwFile_filter", escapedQuery);
 freez(&escapedQuery);
-printf("\">%s</A>", val);
+printf("\">%s</A>", shortVal);
 }
 
 static char *mustFindFieldInRow(char *field, struct slName *fieldList, char **row)
@@ -206,37 +206,32 @@ return NULL;
 void doOneTag(struct sqlConnection *conn)
 /* Put up information on one tag */
 {
-char *tag = cartString(cart, "cdwTagName");
-char query[512];
-sqlSafef(query, sizeof(query), "select count(*) from cdwFileTags where %s is not null", tag);
-int taggedFileCount = sqlQuickNum(conn, query);
-sqlSafef(query, sizeof(query), "select count(distinct(%s)) from cdwFileTags where %s is not null", 
-    tag, tag);
-int distinctCount = sqlQuickNum(conn, query);
-printf("The <B>%s</B> tag has %d distinct values and is used on %d files. ", 
-    tag, distinctCount, taggedFileCount);
-int maxLimit = 100;
-int limit = min(maxLimit, taggedFileCount);
-if (distinctCount > maxLimit)
-    printf("The %d most popular values of %s are:<BR>\n", maxLimit, tag);
-else
-    printf("The values for %s are:<BR>\n", tag);
+/* Get all tags on user accessible files */
+struct tagStorm *tags = cdwUserTagStorm(conn, user);
 
-sqlSafef(query, sizeof(query), 
-    "select count(%s) ct,%s from cdwFileTags group by %s order by ct desc "
-    " limit %d ", 
-    tag, tag, tag, limit);
-struct sqlResult *sr = sqlGetResult(conn, query);
+/* Look up which tag we're working on from cart, and make summary info hash and report stats */
+char *tag = cartString(cart, "cdwTagName");
+struct hash *hash = tagStormCountTagVals(tags, tag);
+printf("The <B>%s</B> tag has %d distinct values and is used on %lld files. ", 
+    tag, hash->elCount, sumCounts(hash));
+
+/* Initially sort from most popular to least popular */
+struct hashEl *hel, *helList = hashElListHash(hash);
+slSort(&helList, hashElCmpIntValDesc);
+
+/* Create fielded table containing tag values */
 char *labels[] = {"files", tag};
 int fieldCount = ArraySize(labels);
 struct fieldedTable *table = fieldedTableNew("Tag Values", labels, fieldCount);
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
+for (hel = helList; hel != NULL; hel = hel->next)
     {
-    if (row[1] != NULL)
-	fieldedTableAdd(table, row, fieldCount, 0);
+    char numBuf[16];
+    safef(numBuf, sizeof(numBuf), "%d", ptToInt(hel->val));
+    char *row[2] = {numBuf, hel->name};
+    fieldedTableAdd(table, row, fieldCount, 0);
     }
 
+/* Draw sortable table */
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=oneTag&cdwTagName=%s&%s",
     tag, cartSidUrlString(cart) );
@@ -336,22 +331,8 @@ return TRUE;
 }
 
 
-#ifdef UNUSED
-void wrapTrackAccession(struct fieldedTable *table, struct fieldedRow *row, char *tag, char *val, 
-    void *context)
-/* Write out wrapper to link us to genome browser */
-{
-struct sqlConnection *conn = context;
-struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, val);
-if (!wrapTrackVis(conn, vf, val))
-    {
-    printf("%s (needs viz)", val);
-    }
-}
-#endif /* UNUSED */
-
 void wrapTrackNearFileName(struct fieldedTable *table, struct fieldedRow *row, char *tag, char *val,
-    void *context)
+    char *shortVal, void *context)
 /* Construct wrapper to UCSC if row actually is a track */
 {
 struct sqlConnection *conn = context;
@@ -368,14 +349,14 @@ if (fileNameIx >= 0)
     struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, acc);
     struct cdwFile *ef = cdwFileFromId(conn, vf->fileId);
     if (cdwCheckAccess(conn, ef, user, cdwAccessRead))
-	printed = wrapTrackVis(conn, vf, val);
+	printed = wrapTrackVis(conn, vf, shortVal);
     }
 if (!printed)
-    printf("%s", val);
+    printf("%s", shortVal);
 }
 
 void wrapTrackNearAccession(struct fieldedTable *table, struct fieldedRow *row, 
-    char *tag, char *val, void *context)
+    char *tag, char *val, char *shortVal, void *context)
 /* Construct wrapper that can link to Genome Browser if any field in table
  * is an accession */
 {
@@ -390,15 +371,15 @@ if (accIx >= 0)
 	struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, acc);
 	struct cdwFile *ef = cdwFileFromId(conn, vf->fileId);
 	if (cdwCheckAccess(conn, ef, user, cdwAccessRead))
-	    printed = wrapTrackVis(conn, vf, val);
+	    printed = wrapTrackVis(conn, vf, shortVal);
 	}
     }
 if (!printed)
-    printf("%s", val);
+    printf("%s", shortVal);
 }
 
 void wrapMetaNearAccession(struct fieldedTable *table, struct fieldedRow *row, 
-    char *field, char *val, void *context)
+    char *field, char *val, char *shortVal, void *context)
 /* Write out wrapper on a column that looks for accession in same table and uses
  * that to link us to oneFile display. */
 {
@@ -416,13 +397,13 @@ if (accIx >= 0)
 	    wrapped = TRUE;
 	    printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=oneFile&cdwFileTag=accession&cdwFileVal=%s&%s\">",
 		acc, cartSidUrlString(cart));
-	    printf("%s</A>", val);
+	    printf("%s</A>", shortVal);
 	    }
 	}
     }
 
 if (!wrapped)
-    printf("%s", val);
+    printf("%s", shortVal);
 }
 
 void accessibleFilesTable(struct cart *cart, struct sqlConnection *conn, 
@@ -667,26 +648,29 @@ struct hash *hash = tagStormCountTagVals(tags, tag);
 
 /* Convert count of distinct values to string */
 int valCount = hash->elCount;
-char valCountString[32];
-safef(valCountString, sizeof(valCountString), "%d", valCount);
+if (valCount > 0)
+    {
+    char valCountString[32];
+    safef(valCountString, sizeof(valCountString), "%d", valCount);
 
-/* Convert count of files using tag to string */
-int fileCount = sumCounts(hash);
-char fileCountString[32];
-safef(fileCountString, sizeof(fileCountString), "%d", fileCount);
+    /* Convert count of files using tag to string */
+    int fileCount = sumCounts(hash);
+    char fileCountString[32];
+    safef(fileCountString, sizeof(fileCountString), "%d", fileCount);
 
-struct dyString *dy = printPopularTags(hash, 120);
+    struct dyString *dy = printPopularTags(hash, 120);
 
-/* Add data to fielded table */
-char *row[4];
-row[0] = tag;
-row[1] = valCountString;
-row[2] = dy->string;
-row[3] = fileCountString;
-fieldedTableAdd(table, row, ArraySize(row), 0);
+    /* Add data to fielded table */
+    char *row[4];
+    row[0] = tag;
+    row[1] = valCountString;
+    row[2] = dy->string;
+    row[3] = fileCountString;
+    fieldedTableAdd(table, row, ArraySize(row), 0);
 
-/* Clean up */
-dyStringFree(&dy);
+    /* Clean up */
+    dyStringFree(&dy);
+    }
 hashFree(&hash);
 }
 
@@ -705,10 +689,11 @@ sqlSafef(query, sizeof(query),
     " and (errorMessage = '' or errorMessage is null)"
     );
 long long totalBytes = sqlQuickLongLong(conn, query);
-printLongWithCommas(stdout, totalBytes);
-printf(" bytes of data in ");
+// printLongWithCommas(stdout, totalBytes);
+printWithGreekByte(stdout, totalBytes);
+printf(" of data in ");
 sqlSafef(query, sizeof(query),
-    "select count(*) from cdwFile,cdwValidFile where cdwFile.id=cdwValidFile.id "
+    "select count(*) from cdwFile,cdwValidFile where cdwFile.id=cdwValidFile.fileId "
     " and (errorMessage = '' or errorMessage is null)"
     );
 long long fileCount = sqlQuickLongLong(conn, query);
@@ -934,7 +919,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.31");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.32");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
