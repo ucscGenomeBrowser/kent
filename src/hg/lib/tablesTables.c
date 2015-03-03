@@ -134,7 +134,8 @@ for (row = table->rowList; row != NULL; row = row->next)
     for (fieldIx=0; fieldIx<table->fieldCount; ++fieldIx)
 	{
 	char shortVal[maxLenField+1];
-	char *val = emptyForNull(row->row[fieldIx]);
+	char *longVal = emptyForNull(row->row[fieldIx]);
+	char *val = longVal;
 	int valLen = strlen(val);
 	if (maxLenField > 0 && maxLenField < valLen)
 	    {
@@ -154,7 +155,7 @@ for (row = table->rowList; row != NULL; row = row->next)
 	    webTableOutputWrapperType *printer = hashFindVal(tagOutputWrappers, field);
 	    if (printer != NULL)
 		{
-		printer(table, row, field, val, wrapperContext);
+		printer(table, row, field, longVal, val, wrapperContext);
 		printed = TRUE;
 		}
 	    

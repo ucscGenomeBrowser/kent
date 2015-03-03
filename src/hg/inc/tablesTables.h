@@ -9,7 +9,7 @@ struct fieldedTable *fieldedTableFromDbQuery(struct sqlConnection *conn, char *q
 /* Return fieldedTable from a database query */
 
 typedef void webTableOutputWrapperType(struct fieldedTable *table, struct fieldedRow *row,
-    char *field, char *val, void *context);
+    char *field, char *val, char *shortVal, void *context);
 /* If we want more than just text output we have to provide a function for a column
  * of this type.  This is responsible for rendering the tag as we want. */
 
