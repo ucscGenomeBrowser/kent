@@ -95,6 +95,7 @@ include ../chainNetPrimate.ra
 include ../chainNetPlacental.ra
 include ../chainNetVertebrate.ra
 include ../chainNetLegacy.ra alpha
+include ../newChainNet.ra alpha
 
 track contigAlignmentSegments
 shortLabel ContigSegments
