@@ -25,6 +25,9 @@ void printLongWithCommas(FILE *f, long long l);
 void sprintWithGreekByte(char *s, int slength, long long size);
 /* Numbers formatted with PB, TB, GB, MB, KB, B */
 
+void printWithGreekByte(FILE *f, long long l);
+/* Print with formatting in gigabyte, terabyte, etc. */
+
 void writeGulp(char *file, char *buf, int size);
 /* Write out a bunch of memory. */
 
