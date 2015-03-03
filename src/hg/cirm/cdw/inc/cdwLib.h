@@ -135,6 +135,9 @@ struct rbTree *cdwFilesWithSharedGroup(struct sqlConnection *conn, int userId);
 long long cdwCountAccessible(struct sqlConnection *conn, struct cdwUser *user);
 /* Return total number of files associated user can access */
 
+struct cdwFile *cdwAccessibleFileList(struct sqlConnection *conn, struct cdwUser *user);
+/* Get list of all files user can access.  Null user means just publicly accessible.  */
+
 int cdwGetHost(struct sqlConnection *conn, char *hostName);
 /* Look up host name in table and return associated ID.  If not found
  * make up new host table entry. */

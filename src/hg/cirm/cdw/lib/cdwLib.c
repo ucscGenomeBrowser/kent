@@ -483,6 +483,41 @@ else
 return count;
 }
 
+struct cdwFile *cdwAccessibleFileList(struct sqlConnection *conn, struct cdwUser *user)
+/* Get list of all files user can access.  Null user means just publicly accessible.  */
+{
+if (user == NULL)  // No user, just publicly readable files then
+    {
+    char query[256];
+    sqlSafef(query, sizeof(query), 
+	"select cdwFile.* from cdwFile,cdwValidFile "
+	" where cdwFile.id = cdwValidFile.fileId and allAccess > 0"
+	" and (errorMessage='' or errorMessage is null)");
+    return cdwFileLoadByQuery(conn, query);
+    }
+else	// Load all valid files and check access one at a time
+    {
+    struct rbTree *groupedFiles = cdwFilesWithSharedGroup(conn, user->id);
+    struct cdwFile *accessibleList = NULL, *validList = cdwFileLoadAllValid(conn);
+    struct cdwFile *ef, *next;
+    for (ef = validList; ef != NULL; ef = next)
+        {
+	next = ef->next;
+	if (cdwQuickCheckAccess(groupedFiles, ef, user, cdwAccessRead))
+	    {
+	    slAddHead(&accessibleList, ef);
+	    }
+	else
+	    {
+	    cdwFileFree(&ef);
+	    }
+	}
+    rbTreeFree(&groupedFiles);
+    slReverse(&accessibleList);
+    return accessibleList;
+    }
+}
+
 int cdwGetHost(struct sqlConnection *conn, char *hostName)
 /* Look up host name in table and return associated ID.  If not found
  * make up new table entry. */
@@ -856,7 +891,6 @@ sqlSafef(query, sizeof(query),
     "cdwSubmitDir.id = %d and "
     "cdwFile.submitFileName = '%s' order by cdwFile.id desc"
     ,  ef->submitDirId, submitFileName);
-uglyf("cdwFindInSameSubmitDir query %s\n", query);
 return sqlQuickLongLong(conn, query);
 }
 
