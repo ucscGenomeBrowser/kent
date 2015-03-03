@@ -28,7 +28,7 @@
 #include "tagStorm.h"
 
 boolean doUpdate = FALSE;
-boolean doBelieve = FALSE;
+boolean noRevalidate = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -38,9 +38,9 @@ errAbort(
   "usage:\n"
   "   cdwSubmit email /path/to/manifest.tab meta.tag\n"
   "options:\n"
-  "   -believe If set, believe MD5 sums rather than checking them\n"
   "   -update  If set, will update metadata on file it already has. The default behavior is to\n"
   "            report an error if metadata doesn't match.\n"
+  "   -noRevalidate - if set don't run revalidator on update\n"
   "   -md5=md5sum.txt Take list of file MD5s from output of md5sum command on list of files\n");
 }
 
@@ -50,7 +50,7 @@ struct hash *md5Hash;
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"update", OPTION_BOOLEAN},
-   {"believe", OPTION_BOOLEAN},
+   {"noRevalidate", OPTION_BOOLEAN},
    {"md5", OPTION_STRING},
    {NULL, 0},
 };
@@ -668,7 +668,8 @@ sqlSafef(query, sizeof(query), "update cdwFile set metaTagsId=%lld where id=%lld
 sqlUpdate(conn, query);
 }
 
-int handleOldFileTags(struct sqlConnection *conn, struct submitFileRow *sfrList, boolean update)
+int handleOldFileTags(struct sqlConnection *conn, 
+    struct hash *metaIdHash, struct submitFileRow *sfrList, boolean update)
 /* Check metadata on files mentioned in manifest that by MD5 sum we already have in
  * warehouse.   We may want to update metadata on these. This returns the number
  * of files with tags updated. */
@@ -684,6 +685,8 @@ for (sfr = sfrList; sfr != NULL; sfr = sfr->next)
     struct cgiDictionary *oldTags = cgiDictionaryFromEncodedString(oldFile->tags);
     boolean updateName = !sameString(oldFile->submitFileName, newFile->submitFileName);
     boolean updateTags = !cgiDictionarySame(oldTags, newTags);
+    boolean updateMeta = (newFile->metaTagsId != oldFile->metaTagsId);
+
     if (updateName)
 	{
 	if (!update)
@@ -691,6 +694,13 @@ for (sfr = sfrList; sfr != NULL; sfr = sfr->next)
 	             "want to give it a new name.",  
 		     newFile->submitFileName, oldFile->submitFileName);
         updateSubmitName(conn, oldFile->id,  newFile->submitFileName);
+	}
+    if (updateMeta)
+	{
+	if (!update)
+	    errAbort("Old file %s has new metadata.  Please use the 'update' option to allow "
+	             "this.", newFile->submitFileName);
+	cdwFileUpdateMetaTagsId(conn, oldFile->id, newFile->metaTagsId);
 	}
     if (updateTags)
 	{
@@ -705,11 +715,10 @@ for (sfr = sfrList; sfr != NULL; sfr = sfr->next)
 		     name, oldVal, newVal);
 	    }
 	verbose(1, "updating tags for %s\n", newFile->submitFileName);
-	cdwFileResetTags(conn, oldFile, newFile->tags, TRUE);
 	}
-    if (newFile->metaTagsId != oldFile->metaTagsId)
-	cdwFileUpdateMetaTagsId(conn, oldFile->id, newFile->metaTagsId);
-    if (updateTags || updateName)
+    if (updateMeta || updateTags)
+	cdwFileResetTags(conn, oldFile, newFile->tags, !noRevalidate);
+    if (updateTags || updateName || updateMeta)
 	++updateCount;
     cgiDictionaryFree(&oldTags);
     cgiDictionaryFree(&newTags);
@@ -1134,7 +1143,7 @@ if (errCatchStart(errCatch))
 
     /* Deal with old files. This may throw an error.  We do it before downloading new
      * files since we want to fail fast if we are going to fail. */
-    int updateCount = handleOldFileTags(conn, oldList, doUpdate);
+    int updateCount = handleOldFileTags(conn, metaIdHash, oldList, doUpdate);
     sqlSafef(query, sizeof(query), 
 	"update cdwSubmit set metaChangeCount=%d where id=%u",  updateCount, submitId);
     sqlUpdate(conn, query);
@@ -1183,7 +1192,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 doUpdate = optionExists("update");
-doBelieve = optionExists("believe");
+noRevalidate = optionExists("noRevalidate");
 if (optionExists("md5"))
     {
     char *md5File = optionVal("md5", NULL);
