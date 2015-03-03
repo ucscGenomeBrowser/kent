@@ -38,51 +38,58 @@
     <!-- start news -->
         <hr>
         <p>
+        <font face="courier" size="3"><b>04 March 2015 - Use UDR for Quick Sizeable Downloads</b></font>
+        <p>
+        The UCSC Genome Browser is pleased to share a download protocol to use when downloading
+        large sets of files from our download servers: <b>UDR (UDT Enabled Rsync)</b>. UDR utilizes rsync
+        as the transport mechanism, but sends the data over the UDT protocol, which enables huge
+        amounts of data to be downloaded efficiently over long distances.</p>
+        <p>
+        Protocols like http, ftp and rsync can have a problem in that the further
+        away the download source is from the user, the slower the speed becomes. Protocols like UDT/UDR
+        allow for many UDP packets to be sent in batch, thus allowing for much higher transmit speeds
+        over long distances. UDR will be especially useful for users who are downloading from places
+        that are far away from California. The US East Coast and the international community will likely
+        see much higher download speeds by using UDR rather than rsync, http or ftp.
+        <a href="goldenPath/newsarch.html#030415">Read more</a>.
+        <hr>
+        <p>
         <font face="courier" size="3"><b>26 February 2015 - New Training Video!</b></font>
         <p>
 	Ever wondered how to find the tables associated with your favorite Browser track?
 	Find out how in our new training video. See our
         <a href="training/index.html" target="_blank">training page</a>, our
-        <a href="http://bit.ly/genomebrowserYoutube" target=_blank">YouTube channel</a>, and our
+        <a href="http://bit.ly/genomebrowserYoutube" target="_blank">YouTube channel</a>, and our
         <a href="http://genome.ucsc.edu/blog/introducing-the-genome-browser-youtube-channel/" target="_blank">blog</a> for details.
-
-        <hr>
-        <p>
-  <font face="courier" size="3"><b>12 February 2015 - Blat Your Assembly Hub</b></font>
-        <p>
-        Assembly data hubs, track hubs that allow researchers to annotate genomes that are
-        not in the UCSC Genome Browser, can now use blat to quickly find DNA and protein
-        sequences in their unique assemblies.
-        </p>
-        <p>
-        While running remote blat servers with the gfServer utility, you can now add lines to your
-        assembly hub's genomes.txt file to inform the Browser where to send blat searches.
-        Or by downloading and installing a virtual machine Genome Browser In a Box
-        <a href="goldenPath/help/gbib.html" target="_blank">(GBiB)</a>,
-        you can alternatively locally run gfServers, preinstalled on GBiB, all from your laptop.
-        For more information see the <a href="http://genomewiki.ucsc.edu/index.php/Assembly_Hubs"
-        target="_blank">Assembly Hub Wiki</a> and the new <a href="goldenPath/help/hubQuickStartAssembly.html"
-        target="_blank">Quick Start Guide to Assembly Hubs</a>.
         </p>
 
         <hr>
 
         <!-- start archives -->
 <!--
+        <font face="courier" size="3"><b>04 March 2015 - Use UDR for Quick Sizeable Downloads</b>: </font>
+        <p>
+        The UCSC Genome Browser is pleased to share a download protocol to use when downloading
+        large sets of files from our download servers: <b>UDR (UDT Enabled Rsync)</b>. UDR utilizes rsync
+        as the transport mechanism, but sends the data over the UDT protocol, which enables huge
+        amounts of data to be downloaded efficiently over long distances.
+        <a href="goldenPath/newsarch.html#030415">Read more</a>.
+
+
         <p>
         <font face="courier" size="3"><b>26 February 2015 - New Training Video!</b>: </font>
         <p>
         View it now on our
-        <a href="http://bit.ly/genomebrowserYoutube" target=_blank">YouTube channel</a>.
+        <a href="http://bit.ly/genomebrowserYoutube" target="_blank">YouTube channel</a>.
         <a href="goldenPath/newsarch.html#022615">Read more</a>.
-
-  <p>
+--> 
+ <p>
         <font face="courier" size="3"><b>12 February 2015 - Blat Your Assembly Hub</b>: </font>
         Assembly data hubs, track hubs that allow researchers to annotate genomes that are
         not in the UCSC Genome Browser, can now use blat to quickly find DNA and protein
         sequences in their unique assemblies.
         <a href="goldenPath/newsarch.html#021215">Read more</a>.
---> 
+
   <p>
         <font face="courier" size="3"><b>11 February 2015 - dbSNP 142 Available for hg19 and hg38</b>: </font>
         We are pleased to announce the release of four tracks derived from NCBI
