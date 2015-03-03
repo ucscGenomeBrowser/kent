@@ -19,21 +19,14 @@ var CladeOrgDbMixin = function(myPath) {
     }
 
     // UI event handler
-
-    // TODO: libify this
-    function capitalizeFirstLetter(string) {
-    // http://stackoverflow.com/questions/1026069/capitalize-the-first-letter-of-string-in-javascript
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
     function changeCladeOrgDb(mutState, path, newValue) {
         // path is myPath + either 'clade', 'org' or 'db'.
         // User changed clade, org or db; tell server, which will send a lot of db-specific info
         // and menu changes if clade or org was changed (handleServerResponse gets those).
         mutState.setIn(path, newValue);
-        var which = path.pop();
+        var which = _.last(path);
         var command = {};
-        var commandName = 'change' + capitalizeFirstLetter(which);
+        var commandName = 'change' + _.capitalize(which);
         command[commandName] = {newValue: newValue};
         this.cartDo(command);
     }
