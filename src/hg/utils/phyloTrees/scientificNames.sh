@@ -149,10 +149,11 @@ sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d; s/(//g; s/)//g; s
     | xargs echo | tr '[ ]' '[\n]' | sort | while read DB
 do
     sciName=`hgsql -N -e "select scientificName from dbDb where name=\"${DB}\";" hgcentraltest 2> /dev/null | sed -e 's/ /_/g;'`
-    echo "$DB -> $sciName from hgcentraltest" 1>&2
     if [ "X${sciName}Y" = "XY" ]; then
        sciName=`notYetInDbDb $DB`
        echo "$DB -> $sciName from sed statement" 1>&2
+    else
+       echo "$DB -> $sciName from hgcentraltest" 1>&2
     fi
     treeDocString="${treeDocString} $DB -> $sciName ;"
 #    echo "$treeDocString" 1>&2
