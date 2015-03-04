@@ -236,7 +236,7 @@ var ImModel = (function() {
             this.cartSend({cgiVar: setting});
         },
 
-        changeCartVar: function(mutState, path, newValue) {
+        changeCartString: function(mutState, path, newValue) {
             // Change state's [path][cartVar] to newValue (if they differ), tell the server about it,
             // and re-render.
             mutState.setIn(path, newValue);

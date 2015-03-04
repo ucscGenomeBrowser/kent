@@ -46,11 +46,18 @@ var PositionSearchMixin = function(myPath) {
         mutState.setIn(myPath.concat('positionMatches'), null);
     }
 
+    // Method for use outside this mixin, e.g. for when user just changed database
+    function setPosition(mutState, newPos) {
+        mutState.setIn(myPath.concat('position'), newPos);
+    }
+
     function initialize() {
         this.registerCartVarHandler(myCartVars, posMergeServerResponse);
         this.registerUiHandler(myPath.concat('position'), lookupPosition);
         this.registerUiHandler(myPath.concat('positionMatch'), positionMatchClick);
         this.registerUiHandler(myPath.concat('hidePosPopup'), hidePosPopup);
+        // Install convenience methods for use outside this mixin:
+        this.setPosition = setPosition;
     }
 
     // Mixin object with initialize

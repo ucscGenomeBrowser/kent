@@ -35,38 +35,6 @@ struct cart *cart = NULL;             /* CGI and other variables */
 //#*** duplicated from hgVai... put in some anno*.h?
 #define NO_MAXROWS 0
 
-static void writeDbMetadata(struct cartJson *cj, struct hash *paramHash)
-/* Send all the info that we'll need for working with a specific assembly db. */
-{
-struct hash *gtdbParamHash = hashNew(0);
-hashAdd(gtdbParamHash, "fields", newJsonString("track,table,shortLabel,parent,subtracks"));
-cartJsonGetGroupedTrackDb(cj, gtdbParamHash);
-//#*** TODO: move jsonStringEscape inside jsonWriteString
-char *encoded = jsonStringEscape(cartOptionalString(cart, QUERY_SPEC));
-jsonWriteString(cj->jw, QUERY_SPEC, encoded);
-}
-
-static void changeDb(struct cartJson *cj, struct hash *paramHash)
-/* The user has changed db; send groups, tracks, tables etc. for the new db. */
-{
-cartJsonChangeDb(cj, paramHash);
-writeDbMetadata(cj, paramHash);
-}
-
-static void changeOrg(struct cartJson *cj, struct hash *paramHash)
-/* The user has changed org/genome; send groups, tracks, tables etc. for the new default db. */
-{
-cartJsonChangeOrg(cj, paramHash);
-writeDbMetadata(cj, paramHash);
-}
-
-static void changeClade(struct cartJson *cj, struct hash *paramHash)
-/* The user has changed clade; send groups, tracks, tables etc. for the new default db. */
-{
-cartJsonChangeClade(cj, paramHash);
-writeDbMetadata(cj, paramHash);
-}
-
 static void makeTrackLabel(struct trackDb *tdb, char *table, char *label, size_t labelSize)
 /* Write tdb->shortLabel into label if table is the same as tdb->track; otherwise, write shortLabel
  * followed by table name in parens. */
@@ -123,10 +91,11 @@ slFreeList(&tables);
 void doCartJson()
 /* Perform UI commands to update the cart and/or retrieve cart vars & metadata. */
 {
+// When cart is brand new, we need to set db in the cart because several cartJson functions
+// require it to be there.
+if (! cartOptionalString(cart, "db"))
+    cartSetString(cart, "db", hDefaultDb());
 struct cartJson *cj = cartJsonNew(cart);
-cartJsonRegisterHandler(cj, "changeDb", changeDb);
-cartJsonRegisterHandler(cj, "changeOrg", changeOrg);
-cartJsonRegisterHandler(cj, "changeClade", changeClade);
 cartJsonRegisterHandler(cj, "getFields", getFields);
 cartJsonExecute(cj);
 }

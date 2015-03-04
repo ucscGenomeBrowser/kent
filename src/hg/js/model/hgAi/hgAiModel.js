@@ -413,9 +413,10 @@ var HgAiModel = ImModel.extend({
         }
         // Regenerate menus
         this.groupedTrackDbToMenus(mutState, trackPath, ix);
-        // store in cart
-        this.cartSet('hgai_addDsTrackPath',
-                     JSON.stringify(this.getAddDsTrackPath(mutState).toJS()));
+        // Store updated trackPath in state and cart
+        trackPath = this.getAddDsTrackPath(mutState);
+        mutState.set('hgai_addDsTrackPath', trackPath);
+        this.cartSet('hgai_addDsTrackPath', JSON.stringify(trackPath.toJS()));
     },
 
     addDataSource: function(mutState) {
@@ -578,7 +579,7 @@ var HgAiModel = ImModel.extend({
         }
     },
 
-    changeCladeOrgDb: function(mutState) {
+    onChangeDb: function(mutState) {
         // The CladeOrgDbPos mixin handles the clade/org/db menus, position, and
         // notifies the server about the change.  However, for databases that have
         // giant trackDbs, it can take a long time before that info shows up -- long
@@ -586,6 +587,20 @@ var HgAiModel = ImModel.extend({
         // are left in place.  So, clear out db-specific state until the new data arrive.
         mutState.remove('groupedTrackDb');
         mutState.remove('addDsInfo');
+        var db = this.getDb(mutState);
+        // Update PositionSearchMixin's position:
+        var newPos = this.getDefaultPos(mutState);
+        this.setPosition(mutState, newPos);
+        // Parallel requests for little top-level trackDb and potentially huge full trackDb:
+        this.cartDo({ cgiVar: { db: db, position: newPos },
+                      get: { 'var': 'position,hgai_querySpec' },
+                      getGeneSuggestTrack: {},
+                      getGroupedTrackDb: {
+                            fields: 'track,table,shortLabel,parent,subtracks',
+                            maxDepth: '1',
+                          } });
+        this.cartDo({ cgiVar: { db: db },
+                      getGroupedTrackDb: { fields: 'track,table,shortLabel,parent,subtracks' } });
     },
 
     initialize: function() {
@@ -596,14 +611,13 @@ var HgAiModel = ImModel.extend({
         this.registerCartVarHandler('groupedTrackDb', this.handleGroupedTrackDb);
         this.registerCartValidateHandler(this.validateCart);
         // Register handlers for UI events:
-        this.registerUiHandler(['positionInfo', 'hgai_range'], this.changeCartVar);
+        this.registerUiHandler(['positionInfo', 'hgai_range'], this.changeCartString);
         this.registerUiHandler(['addDsMenuSelect'], this.changeAddDsMenu);
         this.registerUiHandler(['addDataSource'], this.addDataSource);
         this.registerUiHandler(['trackHubs'], this.goToTrackHubs);
         this.registerUiHandler(['customTracks'], this.goToCustomTracks);
         this.registerUiHandler(['dataSources'], this.dataSourceClick);
         this.registerUiHandler(['outFileOptions'], this.outFileOptionsClick);
-        this.registerUiHandler(['cladeOrgDb'], this.changeCladeOrgDb);
 
         // Bootstrap initial state from page or by server request, then render:
         if (window.initialAppState) {

@@ -38,36 +38,6 @@ if (param == NULL)
 return param;
 }
 
-static void printClade(struct jsonWrite *jw, char *clade)
-/* Print out clade menu's option list and selected item */
-{
-struct slPair *cladeOptions = hGetCladeOptions();
-jsonWriteValueLabelList(jw, "cladeOptions", cladeOptions);
-jsonWriteString(jw, "clade", clade);
-}
-
-static void printOrg(struct jsonWrite *jw, char *clade, char *org)
-/* Print out org menu's option list and selected item */
-{
-struct slPair *orgOptions = hGetGenomeOptionsForClade(clade);
-jsonWriteValueLabelList(jw, "orgOptions", orgOptions);
-jsonWriteString(jw, "org", org);
-}
-
-static void printDb(struct jsonWrite *jw, char *org, char *db)
-/* Print out db menu's option list and selected item */
-{
-struct slPair *dbOptions = hGetDbOptionsForGenome(org);
-jsonWriteValueLabelList(jw, "dbOptions", dbOptions);
-jsonWriteString(jw, "db", db);
-}
-
-static void printPosition(struct jsonWrite *jw, char *position)
-/* Print the position as given (it's up to caller to ensure this is consistent w/cart). */
-{
-jsonWriteString(jw, "position", position);
-}
-
 static char *stripAnchor(char *textIn)
 /* If textIn contains an HTML anchor tag, strip it out (and its end tag). */
 {
@@ -242,7 +212,7 @@ if (hgp && hgp->singlePos)
     char newPosBuf[128];
     safef(newPosBuf, sizeof(newPosBuf), "%s:%d-%d", chrom, start+1, end);
     cartSetString(cj->cart, "position", newPosBuf);
-    printPosition(cj->jw, newPosBuf);
+    jsonWriteString(cj->jw, "position", newPosBuf);
     }
 else
     // Search failed; restore position from cart
@@ -269,65 +239,12 @@ char *track = assemblyGeneSuggestTrack(db);
 jsonWriteString(cj->jw, "geneSuggestTrack", track);
 }
 
-static void changeDb(struct cartJson *cj, char *newDb)
-/* Change db to new value, update cart and print JSON of new position & gene suggest track. */
+static void getGeneSuggestTrack(struct cartJson *cj, struct hash *paramHash)
+/* Get the gene track used by hgSuggest for db (defaulting to cart db), or null if
+ * there is none for this assembly. */
 {
-cartSetString(cj->cart, "db", newDb);
-jsonWriteString(cj->jw, "db", newDb);
-char *defaultPosition = hDefaultPos(newDb);
-changePosition(cj, defaultPosition);
-printGeneSuggestTrack(cj, newDb);
-}
-
-void cartJsonChangeDb(struct cartJson *cj, struct hash *paramHash)
-/* Change db to new value, update cart and print JSON of new position & gene suggest track. */
-{
-char *newDb = cartJsonRequiredParam(paramHash, "newValue", cj->jw, "changeDb");
-if (newDb)
-    changeDb(cj, newDb);
-}
-
-static void changeOrg(struct cartJson *cj, char *newOrg)
-/* Change org to new value, update cart variables and print JSON of new db menu etc. */
-{
-char *newDb = hDefaultDbForGenome(newOrg);
-if (isEmpty(newDb))
-    {
-    jsonWriteStringf(cj->jw, "error",
-		     "changeOrg: can't find default db for '%s'", newOrg);
-    return;
-    }
-cartSetString(cj->cart, "org", newOrg);
-jsonWriteString(cj->jw, "org", newOrg);
-printDb(cj->jw, newOrg, newDb);
-changeDb(cj, newDb);
-}
-
-void cartJsonChangeOrg(struct cartJson *cj, struct hash *paramHash)
-/* Change org to new value, update cart and print JSON of new db menu, new position etc. */
-{
-char *newOrg = cartJsonRequiredParam(paramHash, "newValue", cj->jw, "changeOrg");
-if (newOrg)
-    changeOrg(cj, newOrg);
-}
-
-void cartJsonChangeClade(struct cartJson *cj, struct hash *paramHash)
-/* Change clade to new value, update cart, and print JSON of new org & db menus, new position etc */
-{
-char *newClade = cartJsonRequiredParam(paramHash, "newValue", cj->jw, "changeClade");
-if (! newClade)
-    return;
-char *newOrg = hDefaultGenomeForClade(newClade);
-if (isEmpty(newOrg))
-    {
-    jsonWriteStringf(cj->jw, "error",
-		     "changeClade: can't find default genome for '%s'", newClade);
-    return;
-    }
-cartSetString(cj->cart, "clade", newClade);
-jsonWriteString(cj->jw, "clade", newClade);
-printOrg(cj->jw, newClade, newOrg);
-changeOrg(cj, newOrg);
+char *db = cartJsonOptionalParam(paramHash, "db");
+printGeneSuggestTrack(cj, db);
 }
 
 static void getVar(struct cartJson *cj, struct hash *paramHash)
@@ -596,19 +513,71 @@ while ((hel = hashNext(&cookie)) != NULL)
     }
 }
 
+static void jsonWriteValueLabel(struct jsonWrite *jw, char *value, char *label)
+/* Assuming we're already in an object, write out value and label tags & strings. */
+{
+jsonWriteString(jw, "value", value);
+jsonWriteString(jw, "label", label);
+}
+
+static void printCladeOrgDbTree(struct jsonWrite *jw)
+/* Print out the tree of clades, organisms and dbs as JSON.  Each node has value and label
+ * for menu options; clade nodes and org nodes also have children and default. */
+{
+jsonWriteListStart(jw, "cladeOrgDb");
+struct slPair *clade, *cladeOptions = hGetCladeOptions();
+struct dbDb *centralDbDbList = hDbDbList();
+for (clade = cladeOptions;  clade != NULL;  clade = clade->next)
+    {
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteValueLabel(jw, clade->name, clade->val);
+    jsonWriteListStart(jw, "children");
+    struct slPair *org, *orgOptions = hGetGenomeOptionsForClade(clade->name);
+    for (org = orgOptions;  org != NULL;  org = org->next)
+        {
+        jsonWriteObjectStart(jw, NULL);
+        jsonWriteValueLabel(jw, org->name, org->val);
+        jsonWriteListStart(jw, "children");
+        struct dbDb *dbDb, *dbDbList;
+        if (isHubTrack(org->name))
+            dbDbList = trackHubGetDbDbs(clade->name);
+        else
+            dbDbList = centralDbDbList;
+        for (dbDb = dbDbList;  dbDb != NULL;  dbDb = dbDb->next)
+            {
+            if (sameString(org->name, dbDb->genome))
+                {
+                jsonWriteObjectStart(jw, NULL);
+                jsonWriteValueLabel(jw, dbDb->name, dbDb->description);
+                jsonWriteString(jw, "defaultPos", dbDb->defaultPos);
+                jsonWriteObjectEnd(jw);
+                }
+            }
+        jsonWriteListEnd(jw);   // children (dbs)
+        jsonWriteString(jw, "default", hDefaultDbForGenome(org->name));
+        jsonWriteObjectEnd(jw); // org
+        }
+    jsonWriteListEnd(jw);   // children (orgs)
+    jsonWriteString(jw, "default", hDefaultGenomeForClade(clade->name));
+    jsonWriteObjectEnd(jw); // clade
+    }
+jsonWriteListEnd(jw);
+}
+
 static void getCladeOrgDbPos(struct cartJson *cj, struct hash *paramHash)
 /* Get cart's current clade, org, db, position and geneSuggest track. */
 {
+printCladeOrgDbTree(cj->jw);
 char *db = cartString(cj->cart, "db");
-char *genome = cartUsualString(cj->cart, "org", hGenome(db));
-char *clade = cartUsualString(cj->cart, "clade", hClade(genome));
-printClade(cj->jw, clade);
-printOrg(cj->jw, clade, genome);
-printDb(cj->jw, genome, db);
+jsonWriteString(cj->jw, "db", db);
+char *org = cartUsualString(cj->cart, "org", hGenome(db));
+jsonWriteString(cj->jw, "org", org);
+char *clade = cartUsualString(cj->cart, "clade", hClade(org));
+jsonWriteString(cj->jw, "clade", clade);
 char *position = cartOptionalString(cj->cart, "position");
 if (isEmpty(position))
     position = hDefaultPos(db);
-printPosition(cj->jw, position);
+jsonWriteString(cj->jw, "position", position);
 printGeneSuggestTrack(cj, db);
 }
 
@@ -633,27 +602,20 @@ hashAdd(cj->handlerHash, command, handler);
 }
 
 struct cartJson *cartJsonNew(struct cart *cart)
-/* Allocate and return a cartJson object with default handlers. */
+/* Allocate and return a cartJson object with default handlers.
+ * cart must have "db" set already. */
 {
 struct cartJson *cj;
 AllocVar(cj);
 cj->handlerHash = hashNew(0);
 cj->jw = jsonWriteNew();
 cj->cart = cart;
-char *db = cartOptionalString(cj->cart, "db");
-if (isEmpty(db) || ! hDbIsActive(db))
-    {
-    db = hDefaultDb();
-    cartSetString(cj->cart, "db", db);
-    }
 cartJsonRegisterHandler(cj, "getCladeOrgDbPos", getCladeOrgDbPos);
-cartJsonRegisterHandler(cj, "changeClade", cartJsonChangeClade);
-cartJsonRegisterHandler(cj, "changeOrg", cartJsonChangeOrg);
-cartJsonRegisterHandler(cj, "changeDb", cartJsonChangeDb);
 cartJsonRegisterHandler(cj, "changePosition", changePositionHandler);
 cartJsonRegisterHandler(cj, "get", getVar);
 cartJsonRegisterHandler(cj, "getGroupedTrackDb", cartJsonGetGroupedTrackDb);
 cartJsonRegisterHandler(cj, "getAssemblyInfo", getAssemblyInfo);
+cartJsonRegisterHandler(cj, "getGeneSuggestTrack", getGeneSuggestTrack);
 cartJsonRegisterHandler(cj, "getHasCustomTracks", getHasCustomTracks);
 cartJsonRegisterHandler(cj, "getIsSpecialHost", getIsSpecialHost);
 cartJsonRegisterHandler(cj, "getHasHubTable", getHasHubTable);
