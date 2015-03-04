@@ -12,10 +12,6 @@ var CladeOrgDbMixin = function(myPath) {
         // cart vars in myCartVars all live in state[myPath] for Immutable efficiency but can arrive
         // independently from server; when we get one, update just that piece of state[myPath].
         mutState.setIn(myPath.concat(cartVar), Immutable.fromJS(newValue));
-        // Turn off the loading spinner when we get result(s) from cart:
-        if (cartVar === 'position' || cartVar === 'positionMatches') {
-            mutState.setIn(['positionInfo', 'loading'], false);
-        }
     }
 
     // UI event handler
