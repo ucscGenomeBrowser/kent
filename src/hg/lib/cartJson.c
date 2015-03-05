@@ -399,7 +399,9 @@ return hash;
 
 void cartJsonGetGroupedTrackDb(struct cartJson *cj, struct hash *paramHash)
 /* Translate trackDb list (only a subset of the fields) into JSON array of track group objects;
- * each group contains an array of track objects that may have subtracks. */
+ * each group contains an array of track objects that may have subtracks.  Send it in a wrapper
+ * object that includes the database from which it was taken; it's possible that by the time
+ * this reaches the client, the user might have switched to a new db. */
 {
 struct trackDb *fullTrackList = NULL;
 struct grp *fullGroupList = NULL;
@@ -414,6 +416,8 @@ char *maxDepthStr = cartJsonOptionalParam(paramHash, "maxDepth");
 if (isNotEmpty(maxDepthStr))
     maxDepth = atoi(maxDepthStr);
 struct jsonWrite *jw = cj->jw;
+jsonWriteObjectStart(jw, "groupedTrackDb");
+jsonWriteString(jw, "db", cartString(cj->cart, "db"));
 jsonWriteListStart(jw, "groupedTrackDb");
 struct grp *grp;
 for (grp = fullGroupList;  grp != NULL;  grp = grp->next)
@@ -433,6 +437,7 @@ for (grp = fullGroupList;  grp != NULL;  grp = grp->next)
     jsonWriteObjectEnd(jw);
     }
 jsonWriteListEnd(jw);
+jsonWriteObjectEnd(jw);
 }
 
 static char *hAssemblyDescription(char *db)

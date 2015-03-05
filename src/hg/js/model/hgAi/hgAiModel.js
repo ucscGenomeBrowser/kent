@@ -310,16 +310,23 @@ var HgAiModel = ImModel.extend({
     },
 
     handleGroupedTrackDb: function(mutState, cartVar, newValue) {
-        // Server just sent new groupedTrackDb; build group/track/etc menus for <AddDataSource>.
+        // Server just sent new groupedTrackDb; if it is for the current db,
+        // build group/track/etc menus for <AddDataSource>.
+        var currentDb, addDsTrackPath;
         if (cartVar === 'groupedTrackDb') {
-            mutState.set('groupedTrackDb', Immutable.fromJS(newValue));
-            // If the cart includes a saved trackPath consistent with groupedTrackDb, use that:
-            var addDsTrackPath = mutState.get('hgai_addDsTrackPath');
-            if (! addDsTrackPath ||
-                ! this.isInGroupedTrackDb(mutState, addDsTrackPath)) {
-                addDsTrackPath = Immutable.List();
+            // The groupedTrackDb from cartJson is a wrapper object with children db
+            // and groupedTrackDb.  If db matches current db, store the inner groupedTrackDb.
+            currentDb = this.getDb(mutState);
+            if (! currentDb || newValue.db === currentDb) {
+                mutState.set('groupedTrackDb', Immutable.fromJS(newValue.groupedTrackDb));
+                // If the cart includes a saved trackPath consistent with groupedTrackDb, use that:
+                addDsTrackPath = mutState.get('hgai_addDsTrackPath');
+                if (! addDsTrackPath ||
+                    ! this.isInGroupedTrackDb(mutState, addDsTrackPath)) {
+                    addDsTrackPath = Immutable.List();
+                }
+                this.groupedTrackDbToMenus(mutState, addDsTrackPath, 0);
             }
-            this.groupedTrackDbToMenus(mutState, addDsTrackPath, 0);
         } else {
             this.error('handleGroupedTrackDb: expecting cartVar groupedTrackDb, got ',
                        cartVar, newValue);
