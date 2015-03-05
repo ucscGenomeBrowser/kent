@@ -5,7 +5,7 @@ SUBDIRS= external model react
 include subdirs.mk
 
 # UCSC js files must pass jshint
-UCSC_JS_FILES=ajax.js alleles.js autocomplete.js cdwPersona.js edwPersona.js \
+UCSC_JS_FILES=ajax.js alleles.js autocomplete.js cdwSuggest.js edwPersona.js \
     hgCustom.js hgGateway.js hgHubConnect.js hgTracks.js \
     hgVarAnnogrator.js hui.js jsHelper.js utils.js ddcl.js subCfg.js \
     encodeProject.js encodeDataSummary.js encodeDataMatrix.js encodeChipMatrix.js encodeMatrix.js
