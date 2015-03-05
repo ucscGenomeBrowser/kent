@@ -203,6 +203,28 @@ errAbort("Couldn't find field %s in row", field);
 return NULL;
 }
 
+char *tagDescription(char *tag)
+/* Return tag description given tag name. */
+{
+char *unparsed[] = {
+#include "tagDescriptions.h"
+    };
+int unparsedCount = ArraySize(unparsed);
+
+int i;
+for (i=0; i<unparsedCount; ++i)
+    {
+    char *s = unparsed[i];
+    if (startsWithWord(tag, s))
+        {
+	int tagLen = strlen(tag);
+	s = skipLeadingSpaces(s + tagLen);
+	return s;
+	}
+    }
+return NULL;
+}
+
 void doOneTag(struct sqlConnection *conn)
 /* Put up information on one tag */
 {
@@ -211,6 +233,13 @@ struct tagStorm *tags = cdwUserTagStorm(conn, user);
 
 /* Look up which tag we're working on from cart, and make summary info hash and report stats */
 char *tag = cartString(cart, "cdwTagName");
+
+/* Print out tag description */
+char *description = tagDescription(tag);
+if (description != NULL)
+    printf("<B>%s tag description</B>: %s<BR>\n", tag, description);
+
+/* Print out some summary stats */
 struct hash *hash = tagStormCountTagVals(tags, tag);
 printf("The <B>%s</B> tag has %d distinct values and is used on %lld files. ", 
     tag, hash->elCount, sumCounts(hash));
@@ -750,7 +779,7 @@ webSortableFieldedTable(cart, table, returnUrl, "cdwBrowseTags", 0, outputWrappe
 tagStormFree(&tags);
 }
 
-void doHelp(struct sqlConnection *con)
+void doHelp(struct sqlConnection *conn)
 /* Put up help page */
 {
 printf("This being a prototype, there's not much help available.  Try clicking and hovering over the Browse link on the top bar to expose a menu. The trickiest part of the system is the query link.");
@@ -763,6 +792,50 @@ printf("constants. String constants need to be surrounded by quotes - either sin
 printf("<BR><BR>");
 }
 
+void doTest(struct sqlConnection *conn)
+/* Test out something */
+{
+printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
+cartSaveSession(cart);
+char *field = "data_set_id", *table = "cdwFileTags", *prefix = "";
+int limit = 5;
+
+/* Print out input control and some text. */
+// printf("<input type=\"text\" class=\"%s\" name=\"cdw_f_%s\" id=\"f_%s\" size=12>", 
+  //   "positionInput", field, field);
+printf("<input id=\"f_%s\" size=12>", field);
+printf("Hello from the test page");
+
+/* Print out javascript for auto-completion of lab tag */
+printf("<script>");
+printf("$(function () {\n");
+printf(" var availableTags = ");
+
+/* Print out array filled with our most popular values */
+char query[1024];
+sqlSafef(query, sizeof(query), 
+    "select %s from %s where %s like '%s%%' group by %s order by count(%s) desc limit %d"
+    , field, table, field, prefix, field, field, limit);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+char separator = '[';
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    printf("%c\"%s\"", separator, row[0]);
+    separator = ',';
+    }
+printf("];\n");
+
+/* Finish up javascripts */
+printf("  $(\"#f_%s\").autocomplete({\n", field);
+printf("    source: availableTags,\n");
+printf("    delay: 100,\n");
+printf("    minLength: 0\n");
+printf("  });\n");
+printf("});\n");
+printf("</script>");
+printf("</FORM>");
+}
 
 void dispatch(struct sqlConnection *conn)
 /* Dispatch page after to routine depending on cdwCommand variable */
@@ -815,6 +888,10 @@ else if (sameString(command, "oneTag"))
 else if (sameString(command, "help"))
     {
     doHelp(conn);
+    }
+else if (sameString(command, "test"))
+    {
+    doTest(conn);
     }
 else
     {
@@ -901,9 +978,16 @@ void localWebStartWrapper(char *titleString)
     webPragmasEtc();
     printf("<TITLE>%s</TITLE>\n", titleString);
     webIncludeResourceFile("HGStyle.css");
+    webIncludeResourceFile("jquery-ui.css");
     jsIncludeFile("jquery.js", NULL);
     jsIncludeFile("jquery.plugins.js", NULL);
+    jsIncludeFile("jquery-ui.js", NULL);
+    jsIncludeFile("ajax.js", NULL);
     webIncludeResourceFile("nice_menu.css");
+    jsIncludeFile("cdwSuggest.js", NULL);
+#ifdef SOON
+    jsIncludeFile("cdwWebBrowse.js", NULL);
+#endif /* SOON */
     printf("</HEAD>\n");
     printBodyTag(stdout);
     }
@@ -919,7 +1003,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.32");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.39");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
