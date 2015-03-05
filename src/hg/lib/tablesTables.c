@@ -60,17 +60,51 @@ for (i=0; i<table->fieldCount; ++i)
     char varName[256];
     safef(varName, sizeof(varName), "%s_f_%s", varPrefix, field);
     webPrintLinkCellStart();
+
 #ifdef MAKES_TOO_WIDE
+    /* Print out input control.  As you can see from all the commented out bits
+     * this part has been a challenge.  We'd like to make the input cell fit the
+     * table size, but if we do it with style it makes whole table wider. */
     char *oldVal = cartUsualString(cart, varName, "");
     printf("<input type=\"text\" name=\"%s\" style=\"display:table-cell; width=100%%\""
 	   " value=\"%s\">", varName, oldVal);
 #endif /* MAKES_TOO_WIDE */
+
+    /* Approximate size of input control in characters */
     int size = fieldedTableMaxColChars(table, i);
     if (size > maxLenField)
 	size = maxLenField;
+
+#ifdef ACTUALLY_WORKS
+    /* This way does work last I checked and is just a line of code.
+     * Getting an id= property on the input tag though isn't possible this way. */
     cartMakeTextVar(cart, varName, "", size + 1);
+#endif
+
+    /* Print input control getting previous value from cart.  Set an id=
+     * so auto-suggest can find this control. */
+    char *oldVal = cartUsualString(cart, varName, "");
+    printf("<INPUT TYPE=TEXT NAME=\"%s\" id=\"%s\" SIZE=%d VALUE=\"%s\">",
+	varName, varName, size+1, oldVal);
+
+
     webPrintLinkCellEnd();
     }
+
+/* Write out javascript to initialize autosuggest */
+printf("<script>\n");
+printf("$(document).ready(function() {\n");
+for (i=0; i<table->fieldCount; ++i)
+    {
+    char *field = table->fields[i];
+    char varName[256];
+    safef(varName, sizeof(varName), "%s_f_%s", varPrefix, field);
+    printf("    cdwSuggest.init(\"%s\", $(\"#%s\"));\n", field, varName);
+    }
+printf("});\n");
+printf("</script>\n");
+
+
 printf("</TR>");
 }
 
