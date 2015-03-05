@@ -591,14 +591,11 @@ var HgAiModel = ImModel.extend({
         // Update PositionSearchMixin's position:
         var newPos = this.getDefaultPos(mutState);
         this.setPosition(mutState, newPos);
-        // Parallel requests for little top-level trackDb and potentially huge full trackDb:
+        // Parallel requests for little stuff that we need ASAP and potentially huge trackDb:
         this.cartDo({ cgiVar: { db: db, position: newPos },
                       get: { 'var': 'position,hgai_querySpec' },
                       getGeneSuggestTrack: {},
-                      getGroupedTrackDb: {
-                            fields: 'track,table,shortLabel,parent,subtracks',
-                            maxDepth: '1',
-                          } });
+                      });
         this.cartDo({ cgiVar: { db: db },
                       getGroupedTrackDb: { fields: 'track,table,shortLabel,parent,subtracks' } });
     },
@@ -625,18 +622,12 @@ var HgAiModel = ImModel.extend({
         } else {
             this.state = Immutable.Map();
             // Fire off some requests in parallel -- some are much slower than others.
-            // For starters, get only the first two levels of groupedTrackDb (groups
-            // and top-level tracks) because the entire structure is so large for hg19
-            // and other well-annotated genomes that the volume of compressed JSON
-            // takes a long time on the wire.
+            // Get clade/org/db and important small cart variables.
             this.cartDo({ getCladeOrgDbPos: {},
-                          getGroupedTrackDb: {
-                            fields: 'track,table,shortLabel,parent,subtracks',
-                            maxDepth: '1',
-                          },
                           get: {'var': 'hgai_range,hgai_querySpec,hgai_addDsTrackPath'}
                         });
-            // This one takes a long time for hg19 though not for tiny dbs.
+            // The groupedTrackDb structure is so large for hg19 and other well-annotated
+            // genomes that the volume of compressed JSON takes a long time on the wire.
             this.cartDo({ getGroupedTrackDb: {
                             fields: 'track,table,shortLabel,parent,subtracks'
                           }
