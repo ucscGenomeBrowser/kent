@@ -138,6 +138,11 @@ long long cdwCountAccessible(struct sqlConnection *conn, struct cdwUser *user);
 struct cdwFile *cdwAccessibleFileList(struct sqlConnection *conn, struct cdwUser *user);
 /* Get list of all files user can access.  Null user means just publicly accessible.  */
 
+struct rbTree *cdwAccessTreeForUser(struct sqlConnection *conn, struct cdwUser *user, 
+    struct cdwFile *efList, struct rbTree *groupedFiles);
+/* Construct intVal tree of files from efList that we have access to.  The
+ * key is the fileId,  the value is the cdwFile object */
+
 int cdwGetHost(struct sqlConnection *conn, char *hostName);
 /* Look up host name in table and return associated ID.  If not found
  * make up new host table entry. */

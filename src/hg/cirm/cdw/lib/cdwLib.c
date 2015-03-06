@@ -518,6 +518,25 @@ else	// Load all valid files and check access one at a time
     }
 }
 
+struct rbTree *cdwAccessTreeForUser(struct sqlConnection *conn, struct cdwUser *user, 
+    struct cdwFile *efList, struct rbTree *groupedFiles)
+/* Construct intVal tree of files from efList that we have access to.  The
+ * key is the fileId,  the value is the cdwFile object */
+{
+int userId = 0;
+if (user != NULL)
+    userId = user->id;
+struct rbTree *accessTree = intValTreeNew(0);
+struct cdwFile *ef;
+for (ef = efList; ef != NULL; ef = ef->next)
+    {
+    if (cdwQuickCheckAccess(groupedFiles, ef, user, cdwAccessRead))
+	intValTreeAdd(accessTree, ef->id, ef);
+    }
+return accessTree;
+}
+
+
 int cdwGetHost(struct sqlConnection *conn, char *hostName)
 /* Look up host name in table and return associated ID.  If not found
  * make up new table entry. */
