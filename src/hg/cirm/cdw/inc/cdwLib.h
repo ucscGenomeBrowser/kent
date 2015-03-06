@@ -438,6 +438,9 @@ struct tagStorm *cdwTagStorm(struct sqlConnection *conn);
 struct tagStorm *cdwUserTagStorm(struct sqlConnection *conn, struct cdwUser *user);
 /* Return tag storm just for files user has access to. */
 
+struct tagStorm *cdwUserTagStormFromList(struct sqlConnection *conn, 
+    struct cdwUser *user, struct cdwFile *validList ,struct rbTree *groupedFiles);
+
 char *cdwRqlLookupField(void *record, char *key);
 /* Lookup a field in a tagStanza. */
 

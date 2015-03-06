@@ -377,14 +377,13 @@ return cdwTagStormRestricted(conn, NULL);
 }
 
 static struct rbTree *accessForUser(struct sqlConnection *conn, struct cdwUser *user, 
-    struct cdwFile *efList)
+    struct cdwFile *efList, struct rbTree *groupedFiles)
 /* Construct intVal tree of files from efList that we have access to.  The
  * key is the fileId,  the value is the cdwFile object */
 {
 int userId = 0;
 if (user != NULL)
     userId = user->id;
-struct rbTree *groupedFiles = cdwFilesWithSharedGroup(conn, userId);
 struct rbTree *accessTree = intValTreeNew(0);
 struct cdwFile *ef;
 for (ef = efList; ef != NULL; ef = ef->next)
@@ -392,19 +391,28 @@ for (ef = efList; ef != NULL; ef = ef->next)
     if (cdwQuickCheckAccess(groupedFiles, ef, user, cdwAccessRead))
 	intValTreeAdd(accessTree, ef->id, ef);
     }
-rbTreeFree(&groupedFiles);
 return accessTree;
+}
+
+struct tagStorm *cdwUserTagStormFromList(struct sqlConnection *conn, 
+    struct cdwUser *user, struct cdwFile *validList ,struct rbTree *groupedFiles)
+/* Return tag storm just for files user has access to with the list
+ * of validated files and the list of files the user shares group rights to
+ * already calculated */
+{
+struct rbTree *accessTree = accessForUser(conn, user, validList, groupedFiles);
+struct tagStorm *tags = cdwTagStormRestricted(conn, accessTree);
+rbTreeFree(&accessTree);
+return tags;
 }
 
 struct tagStorm *cdwUserTagStorm(struct sqlConnection *conn, struct cdwUser *user)
 /* Return tag storm just for files user has access to. */
 {
-struct cdwFile *efList = cdwFileLoadAllValid(conn);
-struct rbTree *accessTree = accessForUser(conn, user, efList);
-struct tagStorm *tags = cdwTagStormRestricted(conn, accessTree);
-rbTreeFree(&accessTree);
-cdwFileFreeList(&efList);
+struct cdwFile *validList = cdwFileLoadAllValid(conn);
+struct rbTree *groupedFiles = cdwFilesWithSharedGroup(conn, user->id);
+struct tagStorm *tags = cdwUserTagStormFromList(conn, user, validList, groupedFiles);
+rbTreeFree(&groupedFiles);
+cdwFileFreeList(&validList);
 return tags;
 }
-
-
