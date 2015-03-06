@@ -468,18 +468,74 @@ if (diff == 0)
 return diff;
 }
 
-struct hash *accessibleSuggestHash(struct sqlConnection *conn, char *fields,
-    struct cdwUser *user, struct cdwFile *validList, struct rbTree *groupedFiles)
+struct suggestBuilder
+/* A structure to help build a list of suggestions for each file */
+    {
+    struct suggestBuilder *next;
+    char *name;		/* Field name */
+    struct hash *hash;  /* Keyed by field values, values are # of times seen */
+    };
+
+struct hash *accessibleSuggestHash(struct sqlConnection *conn, char *fields, 
+    struct cdwFile *efList)
 /* Create hash keyed by field name and with values the distinct values of this
  * field.  Only do this on fields where it looks like suggest would be useful. */
 {
 struct hash *suggestHash = hashNew(0);
-struct tagStorm *tags = cdwUserTagStormFromList(conn, user, validList, groupedFiles);
-int totalFiles = tagStormCountStanzasWithLocal(tags, "accession");
-struct slName *field, *fieldList = slNameListFromComma(fields);
+int totalFiles = slCount(efList);
+
+/* Make up list of helper structures */
+struct slName *name, *nameList = slNameListFromComma(fields);
+struct suggestBuilder *field, *fieldList = NULL;
+for (name = nameList; name != NULL; name = name->next)
+    {
+    AllocVar(field);
+    field->name = name->name;
+    field->hash = hashNew(0);
+    slAddHead(&fieldList, field);
+    }
+slReverse(&fieldList);
+
+/* Build up sql query to fetch all our fields */
+struct dyString *query = dyStringNew(0);
+sqlDyStringPrintf(query, "%s", "");   // Get header correct
+char *separator = "select ";  // This will get printed before first one
 for (field = fieldList; field != NULL; field = field->next)
     {
-    struct hash *valHash = tagStormCountTagVals(tags, field->name);
+    dyStringPrintf(query, "%s%s", separator, field->name);
+    separator = ",";
+    }
+
+/* Put where on it to limit it to accessible files */
+dyStringPrintf(query, " from cdwFileTags where file_id in (");
+
+struct cdwFile *ef;
+separator = "";
+for (ef = efList; ef != NULL; ef = ef->next)
+    {
+    dyStringPrintf(query, "%s%u", separator, ef->id);
+    separator = ",";
+    }
+dyStringPrintf(query, ")");
+
+struct sqlResult *sr = sqlGetResult(conn, query->string);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    int fieldIx = 0;
+    for (field = fieldList; field != NULL; field = field->next, ++fieldIx)
+        {
+	char *val = row[fieldIx];
+	if (val != NULL)
+	    hashIncInt(field->hash, val);
+	}
+    }
+sqlFreeResult(&sr);
+
+/* Loop through fields making suggestion hash entries where appropriate */
+for (field = fieldList; field != NULL; field = field->next)
+    {
+    struct hash *valHash = field->hash;
     if (valHash->elCount < 20 || valHash->elCount < totalFiles/3)
         {
 	struct hashEl *hel, *helList = hashElListHash(valHash);
@@ -495,9 +551,11 @@ for (field = fieldList; field != NULL; field = field->next)
 	slReverse(&valList);
 	hashAdd(suggestHash, field->name, valList);
 	}
-    hashFree(&valHash);
+    hashFree(&field->hash);
     }
 slFreeList(&fieldList);
+slFreeList(&nameList);
+dyStringFree(&query);
 return suggestHash;
 }
 
@@ -512,12 +570,11 @@ void accessibleFilesTable(struct cart *cart, struct sqlConnection *conn,
 int userId = 0;
 if (user != NULL)
     userId = user->id;
-struct rbTree *groupedFiles = cdwFilesWithSharedGroup(conn, userId);
 
 /* Loop through all files constructing a SQL where clause that restricts us
  * to just the ones that we're authorized to hit, and that also pass initial where clause
  * if any. */
-struct cdwFile *ef, *efList = cdwFileLoadAllValid(conn);
+struct cdwFile *ef, *efList = cdwAccessibleFileList(conn, user);
 struct dyString *where = dyStringNew(0);
 if (!isEmpty(initialWhere))
      dyStringPrintf(where, "(%s) and ", initialWhere);
@@ -526,22 +583,18 @@ char sep = '(';
 int accessCount = 0;
 for (ef = efList; ef != NULL; ef = ef->next)
     {
-    if (cdwQuickCheckAccess(groupedFiles, ef, user, cdwAccessRead))
-        {
-	dyStringPrintf(where, "%c%u", sep, ef->id);
-	sep = ',';
-	++accessCount;
-	}
+    dyStringPrintf(where, "%c%u", sep, ef->id);
+    sep = ',';
+    ++accessCount;
     }
 dyStringAppendC(where, ')');
 
 /* Let the sql system handle the rest.  Might be one long 'in' clause.... */
-struct hash *suggestHash = accessibleSuggestHash(conn, fields, user, efList, groupedFiles);
+struct hash *suggestHash = accessibleSuggestHash(conn, fields, efList);
 webFilteredSqlTable(cart, conn, fields, from, where->string, returnUrl, varPrefix, maxFieldWidth,
     tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, suggestHash);
 
 /* Clean up and go home. */
-rbTreeFree(&groupedFiles);
 cdwFileFreeList(&efList);
 dyStringFree(&where);
 }
@@ -560,7 +613,7 @@ printf(" Links in ucsc_db go to the Genome Browser. &nbsp;&nbsp;&nbsp;&nbsp;");
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s",
     cartSidUrlString(cart) );
-char *where = cartUsualString(cart, "cdwFile_filter", "");
+char *where = cartUsualString(cart, "cdw_file_filter", "");
 if (!isEmpty(where))
     {
     printf("<BR>Restricting files to where %s. ", where);
@@ -596,7 +649,7 @@ accessibleFilesTable(cart, conn,
     "ucsc_db,chrom,accession,format,file_size,lab,assay,data_set_id,output,"
     "enriched_in,body_part,submit_file_name",
     "cdwFileTags,cdwTrackViz", where, 
-    returnUrl, "cdwBrowseTracks", 
+    returnUrl, "cdw_track_filter", 
     22, wrappers, conn, TRUE, "tracks", 100);
 printf("</FORM>\n");
 }
@@ -908,7 +961,13 @@ printf("  });\n");
 printf("});\n");
 printf("</script>\n");
 
-
+printf("<BR>");
+printf("<input type=\"text\" id=\"watered\" value=\"\">");
+printf("<script>\n");
+printf("$(function () {\n");
+printf("  $('#watered').Watermark(\"hello there\", \"#686868\");\n");
+printf("});\n");
+printf("</script>\n");
 
 printf("</FORM>");
 }
@@ -1008,8 +1067,8 @@ char *encodedReturn = cgiEncode(returnUrl);
 /* Write a little html into loginBits */
 struct dyString *loginBits = dyStringNew(0);
 dyStringAppend(loginBits, "<li id=\"query\"><a href=\"");
-char *wikiUserName = wikiLinkUserName();
-if (wikiUserName == NULL)
+char *userName = wikiLinkUserName();
+if (userName == NULL)
     {
     dyStringPrintf(loginBits, "../cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1&returnto=%s&%s",
 	    encodedReturn, sidString);
@@ -1019,7 +1078,7 @@ else
     {
     dyStringPrintf(loginBits, "../cgi-bin/hgLogin?hgLogin.do.displayLogout=1&returnto=%s&%s",
 	    encodedReturn, sidString);
-    dyStringPrintf(loginBits, "\">Logout %s</a></li>", wikiUserName);
+    dyStringPrintf(loginBits, "\">Logout %s</a></li>", userName);
     }
 
 /* Clean up and go home */
@@ -1055,15 +1114,12 @@ void localWebStartWrapper(char *titleString)
     printf("<TITLE>%s</TITLE>\n", titleString);
     webIncludeResourceFile("HGStyle.css");
     webIncludeResourceFile("jquery-ui.css");
+    webIncludeResourceFile("nice_menu.css");
     jsIncludeFile("jquery.js", NULL);
     jsIncludeFile("jquery.plugins.js", NULL);
     jsIncludeFile("jquery-ui.js", NULL);
+    jsIncludeFile("jquery.watermarkinput.js", NULL);
     jsIncludeFile("ajax.js", NULL);
-    webIncludeResourceFile("nice_menu.css");
-    jsIncludeFile("cdwSuggest.js", NULL);
-#ifdef SOON
-    jsIncludeFile("cdwWebBrowse.js", NULL);
-#endif /* SOON */
     printf("</HEAD>\n");
     printBodyTag(stdout);
     }
@@ -1079,7 +1135,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.40");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.42");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
