@@ -75,6 +75,7 @@ var cdwSuggest = {
         // $(textInput).focus();
         $(textInput).change(function(event) {
             if (!lastSelected || lastSelected !== $(textInput).val()) {
+		$.submit();
                 // This handles case where user typed or edited something rather than choosing from a suggest list;
 //                var val = $(textInput).val();
 //		alert("cdwSuggest.js changed to " + val);
