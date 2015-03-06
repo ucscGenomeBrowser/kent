@@ -435,6 +435,73 @@ if (!wrapped)
     printf("%s", shortVal);
 }
 
+static void rSumLocalMatching(struct tagStanza *list, char *field, int *pSum)
+/* Recurse through tree adding matches to *pSum */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    if (tagFindLocalVal(stanza, field))
+        *pSum += 1;
+    if (stanza->children != NULL)
+         rSumLocalMatching(stanza->children, field, pSum);
+    }
+}
+
+int tagStormCountStanzasWithLocal(struct tagStorm *tags, char *localField)
+/* Return count of all stanzas that include locally a given field */
+{
+int sum = 0;
+rSumLocalMatching(tags->forest, localField, &sum);
+return sum;
+}
+
+int hashElCmpIntValDescNameAsc(const void *va, const void *vb)
+/* Compare two hashEl from a hashInt type hash, with highest integer values
+ * comingFirst. */
+{
+struct hashEl *a = *((struct hashEl **)va);
+struct hashEl *b = *((struct hashEl **)vb);
+int diff = b->val - a->val;
+if (diff == 0)
+    diff = strcmp(b->name, a->name);
+return diff;
+}
+
+struct hash *accessibleSuggestHash(struct sqlConnection *conn, char *fields,
+    struct cdwUser *user, struct cdwFile *validList, struct rbTree *groupedFiles)
+/* Create hash keyed by field name and with values the distinct values of this
+ * field.  Only do this on fields where it looks like suggest would be useful. */
+{
+struct hash *suggestHash = hashNew(0);
+struct tagStorm *tags = cdwUserTagStormFromList(conn, user, validList, groupedFiles);
+int totalFiles = tagStormCountStanzasWithLocal(tags, "accession");
+struct slName *field, *fieldList = slNameListFromComma(fields);
+for (field = fieldList; field != NULL; field = field->next)
+    {
+    struct hash *valHash = tagStormCountTagVals(tags, field->name);
+    if (valHash->elCount < 20 || valHash->elCount < totalFiles/3)
+        {
+	struct hashEl *hel, *helList = hashElListHash(valHash);
+	slSort(&helList, hashElCmpIntValDescNameAsc);
+	struct slName *valList = NULL;
+	int limit = 200;
+	for (hel = helList ; hel != NULL; hel = hel->next)
+	    {
+	    if (--limit < 0)
+	        break;
+	    slNameAddHead(&valList, hel->name);
+	    }
+	slReverse(&valList);
+	hashAdd(suggestHash, field->name, valList);
+	}
+    hashFree(&valHash);
+    }
+slFreeList(&fieldList);
+return suggestHash;
+}
+
+
 void accessibleFilesTable(struct cart *cart, struct sqlConnection *conn, 
     char *fields, char *from, char *initialWhere,  
     char *returnUrl, char *varPrefix, int maxFieldWidth, 
@@ -469,8 +536,9 @@ for (ef = efList; ef != NULL; ef = ef->next)
 dyStringAppendC(where, ')');
 
 /* Let the sql system handle the rest.  Might be one long 'in' clause.... */
+struct hash *suggestHash = accessibleSuggestHash(conn, fields, user, efList, groupedFiles);
 webFilteredSqlTable(cart, conn, fields, from, where->string, returnUrl, varPrefix, maxFieldWidth,
-    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize);
+    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, suggestHash);
 
 /* Clean up and go home. */
 rbTreeFree(&groupedFiles);
@@ -797,43 +865,51 @@ void doTest(struct sqlConnection *conn)
 {
 printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
-char *field = "data_set_id", *table = "cdwFileTags", *prefix = "";
-int limit = 5;
+char *id = "test_id_12";
 
 /* Print out input control and some text. */
 // printf("<input type=\"text\" class=\"%s\" name=\"cdw_f_%s\" id=\"f_%s\" size=12>", 
   //   "positionInput", field, field);
-printf("<input id=\"f_%s\" size=12>", field);
 printf("Hello from the test page");
+printf("<input type=\"text\" id=\"%s\">", id);
 
-/* Print out javascript for auto-completion of lab tag */
+/* Print out javascript to wrap data picker around this */
 printf("<script>");
 printf("$(function () {\n");
-printf(" var availableTags = ");
-
-/* Print out array filled with our most popular values */
-char query[1024];
-sqlSafef(query, sizeof(query), 
-    "select %s from %s where %s like '%s%%' group by %s order by count(%s) desc limit %d"
-    , field, table, field, prefix, field, field, limit);
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-char separator = '[';
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    printf("%c\"%s\"", separator, row[0]);
-    separator = ',';
-    }
-printf("];\n");
-
-/* Finish up javascripts */
-printf("  $(\"#f_%s\").autocomplete({\n", field);
-printf("    source: availableTags,\n");
-printf("    delay: 100,\n");
-printf("    minLength: 0\n");
-printf("  });\n");
+printf("  $('#%s').datepicker();\n", id);
 printf("});\n");
 printf("</script>");
+
+/* Try a menu, why not */
+printf("<BR>\n");
+printf("<ul id=\"menu_xyz\">\n");
+printf("<li id=\"xyz_1\">xyz 1</li>\n");
+printf("<li id=\"xyz_2\">xyz 2</li>\n");
+printf("</ul>\n");
+
+printf("<script>\n");
+printf("$(function () {\n");
+printf("$('#menu_xyz').menu({\n");
+printf("  select: function(event, ui) {alert('hi');}\n");
+printf("});\n");
+printf("});\n");
+printf("</script>\n");
+#ifdef SOON
+#endif /* SOON */
+
+printf("<button id='just_a_button'>say hello button</button>\n");
+printf("<script>\n");
+printf("$(function () {\n");
+printf("  $('#just_a_button').click(function (event) {\n");
+printf("    alert(\"A hi that doesn't submit\");\n");
+printf("    event.preventDefault();\n");
+printf("    event.stopPropagation();\n");
+printf("  });\n");
+printf("});\n");
+printf("</script>\n");
+
+
+
 printf("</FORM>");
 }
 
@@ -1003,7 +1079,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.39");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.40");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
