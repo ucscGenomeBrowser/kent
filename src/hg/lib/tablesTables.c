@@ -48,9 +48,33 @@ printf("Wildcard * and ? characters are allowed in text fields. ");
 printf("&GT;min or &LT;max, is allowed in numerical fields.<BR>\n");
 }
 
+static void printSuggestScript(char *id, struct slName *suggestList)
+/* Print out a little javascript to wrap auto-suggester around control with given ID */
+{
+printf("<script>\n");
+printf("$(document).ready(function() {\n");
+printf("    $('#%s').autocomplete({\n", id);
+printf("       delay: 100,\n");
+printf("       minLength: 0,\n");
+printf("       source: [");
+char *separator = "";
+struct slName *suggest;
+for (suggest = suggestList; suggest != NULL; suggest = suggest->next)
+    {
+    printf("%s\"%s\"", separator, suggest->name);
+    separator = ",";
+    }
+printf("]\n");
+printf("    });\n");
+printf("});\n");
+printf("</script>\n");
+}
+
 static void showTableFilterControlRow(struct fieldedTable *table, struct cart *cart, 
-    char *varPrefix, int maxLenField)
-/* Assuming we are in table already drow control row */
+    char *varPrefix, int maxLenField, struct hash *suggestHash)
+/* Assuming we are in table already drow control row.
+ * The suggestHash is keyed by field name.  If something is there we'll assume
+ * it's value is slName list of suggestion values */
 {
 printf("<TR>");
 int i;
@@ -84,25 +108,20 @@ for (i=0; i<table->fieldCount; ++i)
     /* Print input control getting previous value from cart.  Set an id=
      * so auto-suggest can find this control. */
     char *oldVal = cartUsualString(cart, varName, "");
-    printf("<INPUT TYPE=TEXT NAME=\"%s\" id=\"%s\" SIZE=%d VALUE=\"%s\">",
+    printf("<INPUT TYPE=TEXT NAME=\"%s\" id=\"%s\" SIZE=%d VALUE=\"%s\">\n",
 	varName, varName, size+1, oldVal);
 
-
+    /* Write out javascript to initialize autosuggest on control */
+    if (suggestHash != NULL)
+        {
+	struct slName *suggestList = hashFindVal(suggestHash, field);
+	if (suggestList != NULL)
+	    {
+	    printSuggestScript(varName, suggestList);
+	    }
+	}
     webPrintLinkCellEnd();
     }
-
-/* Write out javascript to initialize autosuggest */
-printf("<script>\n");
-printf("$(document).ready(function() {\n");
-for (i=0; i<table->fieldCount; ++i)
-    {
-    char *field = table->fields[i];
-    char varName[256];
-    safef(varName, sizeof(varName), "%s_f_%s", varPrefix, field);
-    printf("    cdwSuggest.init(\"%s\", $(\"#%s\"));\n", field, varName);
-    }
-printf("});\n");
-printf("</script>\n");
 
 
 printf("</TR>");
@@ -230,7 +249,7 @@ void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table,
     char *returnUrl, char *varPrefix,
     int maxLenField, struct hash *tagOutputWrappers, void *wrapperContext,
     boolean withFilters, char *itemPlural, 
-    int pageSize, struct fieldedTableSegment *largerContext)
+    int pageSize, struct fieldedTableSegment *largerContext, struct hash *suggestHash)
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
  * that includes a row of filter controls above the labels .
  * The maxLenField is maximum character length of field before truncation with ...
@@ -248,7 +267,7 @@ webPrintLinkTableStart();
 
 /* Draw optional filters cells ahead of column labels*/
 if (withFilters)
-    showTableFilterControlRow(table, cart, varPrefix, maxLenField);
+    showTableFilterControlRow(table, cart, varPrefix, maxLenField, suggestHash);
 
 showTableSortingLabelRow(table, cart, varPrefix, returnUrl);
 showTableDataRows(table, pageSize, maxLenField, tagOutputWrappers, wrapperContext);
@@ -270,7 +289,7 @@ void webSortableFieldedTable(struct cart *cart, struct fieldedTable *table,
 webFilteredFieldedTable(cart, table, returnUrl, varPrefix, 
     maxLenField, tagOutputWrappers, wrapperContext,
     FALSE, NULL, 
-    slCount(table->rowList), NULL);
+    slCount(table->rowList), NULL, NULL);
 }
 
 
@@ -278,7 +297,7 @@ void webFilteredSqlTable(struct cart *cart, struct sqlConnection *conn,
     char *fields, char *from, char *initialWhere,  
     char *returnUrl, char *varPrefix, int maxFieldWidth, 
     struct hash *tagOutWrappers, void *wrapperContext,
-    boolean withFilters, char *itemPlural, int pageSize)
+    boolean withFilters, char *itemPlural, int pageSize, struct hash *suggestHash)
 /* Given a query to the database in conn that is basically a select query broken into
  * separate clauses, construct and display an HTML table around results. This HTML table has
  * column names that will sort the table, and optionally (if withFilters is set)
@@ -390,7 +409,7 @@ if (resultsSize > pageSize)
 
 struct fieldedTable *table = fieldedTableFromDbQuery(conn, query->string);
 webFilteredFieldedTable(cart, table, returnUrl, varPrefix, maxFieldWidth, 
-    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, &context);
+    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, &context, suggestHash);
 fieldedTableFree(&table);
 
 dyStringFree(&query);
