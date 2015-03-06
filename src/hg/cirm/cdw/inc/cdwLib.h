@@ -149,8 +149,16 @@ struct cdwFile *cdwFileAllIntactBetween(struct sqlConnection *conn, int startId,
 /* Return list of all files that are intact (finished uploading and MD5 checked) 
  * with file IDs between startId and endId - including endId*/
 
+long long cdwFindInSameSubmitDir(struct sqlConnection *conn, 
+    struct cdwFile *ef, char *submitFileName);
+/* Return fileId of most recent file of given submitFileName from submitDir
+ * associated with file */
+
 struct cdwValidFile *cdwValidFileFromFileId(struct sqlConnection *conn, long long fileId);
 /* Return cdwValidFile give fileId - returns NULL if not validated. */
+
+struct cdwValidFile *cdwValidFileFromLicensePlate(struct sqlConnection *conn, char *licensePlate);
+/* Return cdwValidFile from license plate - returns NULL if not found. */
 
 void cdwValidFileUpdateDb(struct sqlConnection *conn, struct cdwValidFile *el, long long id);
 /* Save cdwValidFile as a row to the table specified by tableName, replacing existing record at 
@@ -311,6 +319,14 @@ struct cdwQaWigSpot *cdwQaWigSpotFor(struct sqlConnection *conn,
     long long wigFileId, long long spotFileId);
 /* Return wigSpot relationship if any we have in database for these two files. */
 
+struct cdwVcfFile * cdwMakeVcfStatsAndSample(struct sqlConnection *conn, long long fileId, 
+    char sampleBed[PATH_LEN]);
+/* Run cdwVcfStats and put results into cdwVcfFile table, and also a sample bed.
+ * The sampleBed will be filled in by this routine. */
+
+struct cdwVcfFile *cdwVcfFileFromFileId(struct sqlConnection *conn, long long fileId);
+/* Get cdwVcfFile with given fileId or NULL if none such */
+
 char *cdwOppositePairedEndString(char *end);
 /* Return "1" for "2" and vice versa */
 
@@ -369,8 +385,24 @@ void cdwWebSubmitMenuItem(boolean on);
 /***/
 /* Metadata queries */
 
+/* Declarations of some structures so don't need all the include files */
+struct rqlStatement;
+struct tagStorm;
+struct tagStanza;
+
 struct tagStorm *cdwTagStorm(struct sqlConnection *conn);
 /* Load  cdwMetaTags.tags, cdwFile.tags, and select other fields into a tag
  * storm for searching */
+
+char *cdwRqlLookupField(void *record, char *key);
+/* Lookup a field in a tagStanza. */
+
+boolean cdwRqlStatementMatch(struct rqlStatement *rql, struct tagStanza *stanza,
+	struct lm *lm);
+/* Return TRUE if where clause and tableList in statement evaluates true for stanza. */
+
+struct slRef *tagStanzasMatchingQuery(struct tagStorm *tags, char *query);
+/* Return list of references to stanzas that match RQL query */
+
 
 #endif /* CDWLIB_H */

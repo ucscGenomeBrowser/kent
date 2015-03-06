@@ -1842,6 +1842,32 @@ if(field == NULL)
 return field->name;
 }
 
+struct slName *sqlResultFieldList(struct sqlResult *sr)
+/* Return slName list of all fields in query.  Can just be done once per query. */
+{
+struct slName *list = NULL;
+char *field;
+while ((field = sqlFieldName(sr)) != NULL)
+    slNameAddHead(&list, field);
+slReverse(&list);
+return list;
+}
+
+int sqlResultFieldArray(struct sqlResult *sr, char ***retArray)
+/* Get the fields of sqlResult,  returning count, and the results
+ * themselves in *retArray. */
+{
+struct slName *el, *list = sqlResultFieldList(sr);
+int count = slCount(list);
+char **array;
+AllocArray(array, count);
+int i;
+for (el=list,i=0; el != NULL; el = el->next, ++i)
+    array[i] = cloneString(el->name);
+*retArray = array;
+return count;
+}
+
 int sqlFieldColumn(struct sqlResult *sr, char *colName)
 /* get the column number of the specified field in the result, or
  * -1 if the result doesn't contailed the field.*/

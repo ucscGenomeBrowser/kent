@@ -54,6 +54,10 @@ sqlSafef(query, sizeof(query), "delete from cdwBamFile where fileId=%lld", fileI
 maybeDoUpdate(conn, query, really);
 sqlSafef(query, sizeof(query), "delete from cdwFastqFile where fileId=%lld", fileId);
 maybeDoUpdate(conn, query, really);
+sqlSafef(query, sizeof(query), "delete from cdwVcfFile where fileId=%lld", fileId);
+maybeDoUpdate(conn, query, really);
+sqlSafef(query, sizeof(query), "delete from cdwTrackViz where fileId=%lld", fileId);
+maybeDoUpdate(conn, query, really);
 sqlSafef(query, sizeof(query), "delete from cdwQaContam where fileId=%lld", fileId);
 maybeDoUpdate(conn, query, really);
 sqlSafef(query, sizeof(query), "delete from cdwQaEnrich where fileId=%lld", fileId);
@@ -106,7 +110,10 @@ for (i = 0; i<fileCount; ++i)
 struct sqlConnection *conn = cdwConnectReadWrite();
 struct cdwUser *user = cdwMustGetUserFromEmail(conn, email);
 char query[256];
-sqlSafef(query, sizeof(query), "select id,fileCount from cdwSubmit where userId=%d and url='%s'",
+sqlSafef(query, sizeof(query), 
+    " select cdwSubmit.id,cdwSubmitDir.id from cdwSubmit,cdwSubmitDir "
+    " where cdwSubmit.submitDirId=cdwSubmitDir.id and userId=%d "
+    " and cdwSubmitDir.url='%s' ",
     user->id, submitUrl);
 struct hash *submitHash = sqlQuickHash(conn, query);
 
@@ -120,7 +127,7 @@ for (i=0; i<fileCount; ++i)
     if (result == NULL)
         errAbort("%lld is not a fileId in the warehouse", fileId);
     if (hashLookup(submitHash, result) == NULL)
-        errAbort("File ID %lld does not belong to submission set", fileId);
+        errAbort("File ID %lld does not belong to submission set based on %s", fileId, submitUrl);
     }
 
 /* OK - paranoid checking is done, now let's remove each file from the tables it is in. */

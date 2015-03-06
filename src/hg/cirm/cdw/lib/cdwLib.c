@@ -25,10 +25,13 @@
 #include "web.h"
 #include "cdwValid.h"
 #include "cdw.h"
-#include "cdwLib.h"
 #include "cdwFastqFileFromRa.h"
 #include "cdwBamFileFromRa.h"
 #include "cdwQaWigSpotFromRa.h"
+#include "cdwVcfFileFromRa.h"
+#include "rql.h"
+#include "tagStorm.h"
+#include "cdwLib.h"
 
 
 /* System globals - just a few ... for now.  Please seriously not too many more. */
@@ -675,6 +678,22 @@ sqlSafef(query, sizeof(query),
 return cdwFileLoadByQuery(conn, query);
 }
 
+long long cdwFindInSameSubmitDir(struct sqlConnection *conn, 
+    struct cdwFile *ef, char *submitFileName)
+/* Return fileId of most recent file of given submitFileName from submitDir
+ * associated with file */
+{
+char query[3*PATH_LEN];
+sqlSafef(query, sizeof(query),
+    "select cdwFile.id from cdwFile,cdwSubmitDir "
+    "where cdwFile.submitDirId = cdwSubmitDir.id and "
+    "cdwSubmitDir.id = %d and "
+    "cdwFile.submitFileName = '%s' order by cdwFile.id desc"
+    ,  ef->submitDirId, submitFileName);
+uglyf("cdwFindInSameSubmitDir query %s\n", query);
+return sqlQuickLongLong(conn, query);
+}
+
 struct cdwFile *cdwFileFromId(struct sqlConnection *conn, long long fileId)
 /* Return cdwValidFile given fileId - return NULL if not found. */
 {
@@ -697,6 +716,14 @@ struct cdwValidFile *cdwValidFileFromFileId(struct sqlConnection *conn, long lon
 {
 char query[128];
 sqlSafef(query, sizeof(query), "select * from cdwValidFile where fileId=%lld", fileId);
+return cdwValidFileLoadByQuery(conn, query);
+}
+
+struct cdwValidFile *cdwValidFileFromLicensePlate(struct sqlConnection *conn, char *licensePlate)
+/* Return cdwValidFile from license plate - returns NULL if not found. */
+{
+char query[128];
+sqlSafef(query, sizeof(query), "select * from cdwValidFile where licensePlate='%s'", licensePlate);
 return cdwValidFileLoadByQuery(conn, query);
 }
 
@@ -950,6 +977,7 @@ sqlSafef(query, sizeof(query),
 return cdwValidFileLoadByQuery(conn, query);
 }
 
+#ifdef OLD
 void cdwWebHeaderWithPersona(char *title)
 /* Print out HTTP and HTML header through <BODY> tag with persona info */
 {
@@ -977,14 +1005,17 @@ puts("<BODY>\n");
 
 cdwWebNavBarStart();
 }
+#endif /* OLD */
 
 
+#ifdef OLD
 void cdwWebFooterWithPersona()
 /* Print out end tags and persona script stuff */
 {
 cdwWebNavBarEnd();
 htmlEnd();
 }
+#endif /* OLD */
 
 
 void cdwCreateNewUser(char *email)
@@ -1121,28 +1152,34 @@ sqlUpdate(conn, dy->string);
 freeDyString(&dy);
 }
 
-static char *findTagOrEmpty(struct cgiParsedVars *tags, char *key)
-/* Find key in tags.  If it is not there, or empty, or 'n/a' valued return empty string
- * otherwise return val */
+char *cdwLookupTag(struct cgiParsedVars *list, char *tag)
+/* Return first occurence of tag on list, or empty string if not found */
 {
-char *val = hashFindVal(tags->hash, key);
-if (val == NULL || sameString(val, "n/a"))
-   return "";
-else
-   return val;
+char *ret = "";
+struct cgiParsedVars *tags;
+for (tags = list; tags != NULL; tags = tags->next)
+    {
+    char *val = hashFindVal(tags->hash, tag);
+    if (val != NULL && !sameString(val, "n/a"))
+	{
+	ret = val;
+	break;
+	}
+    }
+return ret;
 }
 
 void cdwValidFileFieldsFromTags(struct cdwValidFile *vf, struct cgiParsedVars *tags)
 /* Fill in many of vf's fields from tags. */
 {
-vf->format = cloneString(hashFindVal(tags->hash, "format"));
-vf->outputType = cloneString(findTagOrEmpty(tags, "output_type"));
-vf->experiment = cloneString(findTagOrEmpty(tags, "meta"));
-vf->replicate = cloneString(findTagOrEmpty(tags, "replicate"));
-vf->enrichedIn = cloneString(findTagOrEmpty(tags, "enriched_in"));
-vf->ucscDb = cloneString(findTagOrEmpty(tags, "ucsc_db"));
-vf->part = cloneString(findTagOrEmpty(tags, "file_part"));
-vf->pairedEnd = cloneString(findTagOrEmpty(tags, "paired_end"));
+vf->format = cloneString(cdwLookupTag(tags, "format"));
+vf->outputType = cloneString(cdwLookupTag(tags, "output_type"));
+vf->experiment = cloneString(cdwLookupTag(tags, "meta"));
+vf->replicate = cloneString(cdwLookupTag(tags, "replicate"));
+vf->enrichedIn = cloneString(cdwLookupTag(tags, "enriched_in"));
+vf->ucscDb = cloneString(cdwLookupTag(tags, "ucsc_db"));
+vf->part = cloneString(cdwLookupTag(tags, "file_part"));
+vf->pairedEnd = cloneString(cdwLookupTag(tags, "paired_end"));
 #if (CDWVALIDFILE_NUM_COLS != 23)
    #error "Please update this routine with new column"
 #endif
@@ -1169,6 +1206,10 @@ if (revalidate)
 
     /* Get rid of records referring to file in other validation and qa tables. */
     sqlSafef(query, sizeof(query), "delete from cdwFastqFile where fileId=%lld", fileId);
+    sqlUpdate(conn, query);
+    sqlSafef(query, sizeof(query), "delete from cdwBamFile where fileId=%lld", fileId);
+    sqlUpdate(conn, query);
+    sqlSafef(query, sizeof(query), "delete from cdwVcfFile where fileId=%lld", fileId);
     sqlUpdate(conn, query);
     sqlSafef(query, sizeof(query),
 	"delete from cdwQaPairSampleOverlap where elderFileId=%lld or youngerFileId=%lld",
@@ -1327,6 +1368,14 @@ struct cdwFastqFile *cdwFastqFileFromFileId(struct sqlConnection *conn, long lon
 char query[256];
 sqlSafef(query, sizeof(query), "select * from cdwFastqFile where fileId=%lld", fileId);
 return cdwFastqFileLoadByQuery(conn, query);
+}
+
+struct cdwVcfFile *cdwVcfFileFromFileId(struct sqlConnection *conn, long long fileId)
+/* Get cdwVcfFile with given fileId or NULL if none such */
+{
+char query[256];
+sqlSafef(query, sizeof(query), "select * from cdwVcfFile where fileId=%lld", fileId);
+return cdwVcfFileLoadByQuery(conn, query);
 }
 
 static int mustMkstemp(char *template)
@@ -1500,6 +1549,44 @@ freez(&path);
 return ebf;
 }
 
+struct cdwVcfFile * cdwMakeVcfStatsAndSample(struct sqlConnection *conn, long long fileId, 
+    char sampleBed[PATH_LEN])
+/* Run cdwVcfStats and put results into cdwVcfFile table, and also a sample bed.
+ * The sampleBed will be filled in by this routine. */
+{
+/* Remove any old record for file. */
+char query[256];
+sqlSafef(query, sizeof(query), "delete from cdwVcfFile where fileId=%lld", fileId);
+sqlUpdate(conn, query);
+
+/* Figure out file names */
+char *path = cdwPathForFileId(conn, fileId);
+char statsFile[PATH_LEN];
+safef(statsFile, PATH_LEN, "%scdwVcfStatsXXXXXX", cdwTempDir());
+cdwReserveTempFile(statsFile);
+char dayTempDir[PATH_LEN];
+safef(sampleBed, PATH_LEN, "%scdwVcfSampleXXXXXX", cdwTempDirForToday(dayTempDir));
+cdwReserveTempFile(sampleBed);
+
+/* Make system call to make ra and bed, and then another system call to zip bed.*/
+char command[3*PATH_LEN];
+safef(command, sizeof(command), "cdwVcfStats -bed=%s %s %s",
+    sampleBed, path, statsFile);
+mustSystem(command);
+safef(command, sizeof(command), "gzip %s", sampleBed);
+mustSystem(command);
+strcat(sampleBed, ".gz");
+
+/* Parse out ra file,  save it to database, and remove ra file. */
+struct cdwVcfFile *vcf = cdwVcfFileOneFromRa(statsFile);
+vcf->fileId = fileId;
+cdwVcfFileSaveToDb(conn, vcf, "cdwVcfFile", 1024);
+remove(statsFile);
+
+/* Clean up and go home. */
+freez(&path);
+return vcf;
+}
 
 char *cdwOppositePairedEndString(char *end)
 /* Return "1" for "2" and vice versa */
@@ -1690,5 +1777,60 @@ void cdwWebSubmitMenuItem(boolean on)
 /* Toggle visibility of 'Submit data' link on navigation menu */
 {
 printf("<script type='text/javascript'>$('#cdw-submit').%s();</script>", on ? "show" : "hide");
+}
+
+char *cdwRqlLookupField(void *record, char *key)
+/* Lookup a field in a tagStanza. */
+{
+struct tagStanza *stanza = record;
+return tagFindVal(stanza, key);
+}
+
+boolean cdwRqlStatementMatch(struct rqlStatement *rql, struct tagStanza *stanza,
+	struct lm *lm)
+/* Return TRUE if where clause and tableList in statement evaluates true for stanza. */
+{
+struct rqlParse *whereClause = rql->whereClause;
+if (whereClause == NULL)
+    return TRUE;
+else
+    {
+    struct rqlEval res = rqlEvalOnRecord(whereClause, stanza, cdwRqlLookupField, lm);
+    res = rqlEvalCoerceToBoolean(res);
+    return res.val.b;
+    }
+}
+
+static void rBuildStanzaRefList(struct tagStorm *tags, struct tagStanza *stanzaList,
+    struct rqlStatement *rql, struct lm *lm, int *pMatchCount, struct slRef **pList)
+/* Recursively add stanzas that match query to list */
+{
+struct tagStanza *stanza;
+for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
+    {
+    if (rql->limit < 0 || rql->limit > *pMatchCount)
+	{
+	if (cdwRqlStatementMatch(rql, stanza, lm))
+	    {
+	    refAdd(pList, stanza);
+	    *pMatchCount += 1;
+	    }
+	if (stanza->children != NULL)
+	    rBuildStanzaRefList(tags, stanza->children, rql, lm, pMatchCount, pList);
+	}
+    }
+}
+
+struct slRef *tagStanzasMatchingQuery(struct tagStorm *tags, char *query)
+/* Return list of references to stanzas that match RQL query */
+{
+struct rqlStatement *rql = rqlStatementParseString(query);
+int matchCount = 0;
+struct slRef *list = NULL;
+struct lm *lm = lmInit(0);
+rBuildStanzaRefList(tags, tags->forest, rql, lm, &matchCount, &list);
+rqlStatementFree(&rql);
+lmCleanup(&lm);
+return list;
 }
 

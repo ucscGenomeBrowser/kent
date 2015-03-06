@@ -108,14 +108,15 @@ for (group = slPopHead(pHubGrpList); group != NULL; group = slPopHead(pHubGrpLis
 	continue;
     /* check to see if we're inserting hubs rather than
      * adding them to the front of the list */
+    struct grp *newGrp = grpDup(group);
     if (addAfter != NULL)
 	{
-	group->next = addAfter->next;
-	addAfter->next = group;
+	newGrp->next = addAfter->next;
+	addAfter->next = newGrp;
 	}
     else
-	slAddHead(&groupList, group);
-    hashAdd(groupsInDatabase, group->name, group);
+	slAddHead(&groupList, newGrp);
+    hashAdd(groupsInDatabase, newGrp->name, newGrp);
     }
 
 /* Do some error checking for tracks with group names that are

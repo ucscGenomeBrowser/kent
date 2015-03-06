@@ -26,6 +26,18 @@ CREATE TABLE cdwUser (
     INDEX(uuid)
 );
 
+#A contributing lab
+CREATE TABLE cdwLab (
+    id int unsigned auto_increment,	# Autoincremented user ID
+    name varchar(255) default '',	# Shorthand name for lab, all lower case
+    pi varchar(255) default '',	# Principle investigator responsible for lab
+    institution varchar(255) default '',	# University or other institution hosting lab
+    url varchar(255) default '',	# URL of lab page
+              #Indices
+    PRIMARY KEY(id),
+    UNIQUE(name)
+);
+
 #A script that is authorized to submit on behalf of a user
 CREATE TABLE cdwScriptRegistry (
     id int unsigned auto_increment,	# Autoincremented script ID
@@ -287,6 +299,38 @@ CREATE TABLE cdwBamFile (
     UNIQUE(fileId)
 );
 
+#Info on what is in a vcf file beyond whet's in cdwValidFile
+CREATE TABLE cdwVcfFile (
+    id int unsigned auto_increment,	# ID in this table
+    fileId int unsigned default 0,	# ID in cdwFile table.
+    vcfMajorVersion int default 0,	# VCF file major version
+    vcfMinorVersion int default 0,	# VCF file minor version
+    genotypeCount int default 0,	# How many genotypes of data
+    itemCount bigint default 0,	# Number of records in VCF file
+    chromsHit int default 0,	# Number of chromosomes (or contigs) with data
+    passItemCount bigint default 0,	# Number of records that PASS listed filter
+    passRatio double default 0,	# passItemCount/itemCount
+    snpItemCount bigint default 0,	# Number of records that are just single base substitution, no indels
+    snpRatio double default 0,	# snpItemCount/itemCount
+    sumOfSizes bigint default 0,	# The sum of sizes of all records
+    basesCovered bigint default 0,	# Bases with data. Equals sumOfSizes if no overlap of records.
+    xBasesCovered int default 0,	# Number of bases of chrX covered
+    yBasesCovered int default 0,	# Number of bases of chrY covered
+    mBasesCovered int default 0,	# Number of bases of chrM covered
+    haploidCount bigint default 0,	# Number of genotype calls that are haploid
+    haploidRatio double default 0,	# Ratio of hapload to total calls
+    phasedCount bigint default 0,	# Number of genotype calls that are phased
+    phasedRatio double default 0,	# Ration of phased calls to total calls
+    gotDepth tinyint default 0,	# If true then have DP value in file and in depth stats below
+    depthMin double default 0,	# Min DP reported depth
+    depthMean double default 0,	# Mean DP value
+    depthMax double default 0,	# Max DP value
+    depthStd double default 0,	# Standard DP deviation
+              #Indices
+    PRIMARY KEY(id),
+    UNIQUE(fileId)
+);
+
 #Record of a QA failure.
 CREATE TABLE cdwQaFail (
     id int unsigned auto_increment,	# ID of failure
@@ -460,13 +504,25 @@ CREATE TABLE cdwJob (
 
 #A submission job to be run asynchronously and not too many all at once.
 CREATE TABLE cdwSubmitJob (
-    id int unsigned auto_increment,	# Job id
+    id int unsigned auto_increment,	# Submit id
     commandLine longblob,	# Command line of job
     startTime bigint default 0,	# Start time in seconds since 1970
     endTime bigint default 0,	# End time in seconds since 1970
     stderr longblob,	# The output to stderr of the run - may be nonempty even with success
     returnCode int default 0,	# The return code from system command - 0 for success
     pid int default 0,	# Process ID for running processes
+              #Indices
+    PRIMARY KEY(id)
+);
+
+#Some files can be visualized as a track. Stuff to help define that track goes here.
+CREATE TABLE cdwTrackViz (
+    id int unsigned auto_increment,	# Id of this row in the table
+    fileId int unsigned default 0,	# File this is a viz of
+    shortLabel varchar(255) default '',	# Up to 17 char label for track
+    longLabel varchar(255) default '',	# Up to 100 char label for track
+    type varchar(255) default '',	# One of the customTrack types such as bam,vcfTabix,bigWig,bigBed
+    bigDataFile varchar(255) default '',	# Where big data file lives relative to cdwRootDir
               #Indices
     PRIMARY KEY(id)
 );

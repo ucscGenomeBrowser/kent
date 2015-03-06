@@ -10,6 +10,8 @@
 #include "intValTree.h"
 #include "tagStorm.h"
 
+char *clOut = "ra";
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -18,12 +20,13 @@ errAbort(
   "usage:\n"
   "   cdwQuery 'sql-like query'\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -out=output format where format is ra, tab, or tags\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"out", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -52,7 +55,58 @@ else
 int matchCount = 0;
 boolean doSelect = FALSE;
 
-void traverse(struct tagStorm *tags, struct tagStanza *list, 
+void output(int depth, struct rqlStatement *rql, struct tagStorm *tags, struct tagStanza *stanza)
+/* Output stanza according to clOut */
+{
+char *format = clOut;
+if (sameString(format, "ra"))
+    {
+    if (stanza->children == NULL)
+	{
+	struct slName *field;
+	for (field = rql->fieldList; field != NULL; field = field->next)
+	    {
+	    char *val = tagFindVal(stanza, field->name);
+	    if (val != NULL)
+		printf("%s\t%s\n", field->name, val);
+	    }
+	printf("\n");
+	}
+    }
+else if (sameString(format, "tab"))
+    {
+    if (stanza->children == NULL)
+	{
+	struct slName *field;
+	char *connector = "";
+	for (field = rql->fieldList; field != NULL; field = field->next)
+	    {
+	    char *val = emptyForNull(tagFindVal(stanza, field->name));
+	    printf("%s%s", connector, val);
+	    connector = "\t";
+	    }
+	printf("\n");
+	}
+    }
+else if (sameString(format, "tags"))
+    {
+    struct slName *field;
+    for (field = rql->fieldList; field != NULL; field = field->next)
+	{
+	char *val = tagFindLocalVal(stanza, field->name);
+	if (val != NULL)
+	    {
+	    repeatCharOut(stdout, '\t', depth);
+	    printf("%s\t%s\n", field->name, val);
+	    }
+	}
+    printf("\n");
+    }
+else
+    errAbort("Unrecognized format %s", format);
+}
+
+void traverse(int depth, struct tagStorm *tags, struct tagStanza *list, 
     struct rqlStatement *rql, struct lm *lm)
 /* Recursively traverse stanzas on list. */
 {
@@ -61,26 +115,16 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     {
     if (rql->limit < 0 || rql->limit > matchCount)
 	{
-	if (stanza->children)
-	    traverse(tags, stanza->children, rql, lm);
-	else    /* Just apply query to leaves */
+	if (statementMatch(rql, stanza, lm))
 	    {
-	    if (statementMatch(rql, stanza, lm))
+	    ++matchCount;
+	    if (doSelect)
 		{
-		++matchCount;
-		if (doSelect)
-		    {
-		    struct slName *field;
-		    for (field = rql->fieldList; field != NULL; field = field->next)
-			{
-			char *val = tagFindVal(stanza, field->name);
-			if (val != NULL)
-			    printf("%s\t%s\n", field->name, val);
-			}
-		    printf("\n");
-		    }
+		output(depth, rql, tags, stanza);
 		}
 	    }
+	if (stanza->children)
+	    traverse(depth+1, tags, stanza->children, rql, lm);
 	}
     }
 }
@@ -98,7 +142,7 @@ struct tagStorm *tags = cdwTagStorm(conn);
 
 /* Get list of all tag types in tree and use it to expand wildcards in the query
  * field list. */
-struct slName *allFieldList = tagTreeFieldList(tags);
+struct slName *allFieldList = tagStormFieldList(tags);
 rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
 slSort(&rql->fieldList, slNameCmp);
 
@@ -106,7 +150,7 @@ slSort(&rql->fieldList, slNameCmp);
  * updateing count in count case. */
 doSelect = sameWord(rql->command, "select");
 struct lm *lm = lmInit(0);
-traverse(tags, tags->forest, rql, lm);
+traverse(0, tags, tags->forest, rql, lm);
 if (sameWord(rql->command, "count"))
     printf("%d\n", matchCount);
 
@@ -118,6 +162,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+clOut = optionVal("out", clOut);
 if (argc != 2)
     usage();
 cdwQuery(argv[1]);

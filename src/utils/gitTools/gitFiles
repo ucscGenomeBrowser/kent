@@ -11,10 +11,10 @@ while [[ $1 == -* ]] ; do
     opt=$1
     shift
     case "$opt" in 
-        -h) echo "$usage" > /dev/stderr
+        -h) echo "$usage" 1>&2
             exit 1 ;;
-        *)  echo "Error: invalid option: $opt" > /dev/stderr
-            echo "$usage" > /dev/stderr
+        *)  echo "Error: invalid option: $opt" 1>&2
+            echo "$usage" 1>&2
             exit 1 ;;
     esac
 done

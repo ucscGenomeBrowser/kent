@@ -32,6 +32,7 @@
 
 int maxErrCount = 1;	/* Set from command line. */
 int errCount;		/* Set as we run. */
+boolean redo = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -42,12 +43,14 @@ errAbort(
   "   cdwMakeValidFile startId endId\n"
   "options:\n"
   "   maxErrCount=N - maximum errors allowed before it stops, default %d\n"
+  "   -redo - redo validation even if have it already\n"
   , maxErrCount);
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"maxErrCount", OPTION_INT},
+   {"redo", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -299,7 +302,7 @@ vf->mapRatio = (double)ebf->mappedCount/ebf->readCount;
 vf->uniqueMapRatio = (double)ebf->uniqueMappedCount/ebf->readCount;
 vf->depth = vf->basesInItems*vf->mapRatio/assembly->baseCount;
 
-/* Scan through the bed file to make up information about the sample bits */
+/* Scan through the bam file to make up information about the sample bits */
 struct genomeRangeTree *grt = genomeRangeTreeNew();
 struct lineFile *lf = lineFileOpen(sampleFileName, TRUE);
 char *row[3];
@@ -350,20 +353,44 @@ while (faSpeedReadNext(lf, &dna, &size, &name))
 lineFileClose(&lf);
 }
 
-void makeValidVcf( struct sqlConnection *conn, char *path, struct cdwFile *ef, 
-    struct cdwValidFile *vf)
-/* Fill out fields of vf from a variant call format (vcf) file.  */
+void genomeRangeTreeWriteAsBed3(struct genomeRangeTree *grt, char *fileName)
+/* Write as bed4 file */
 {
-struct vcfFile *vcf = vcfFileMayOpen(path, NULL, 0, 0, 0, 0, FALSE);
-if (vcf == NULL)
-    errAbort("Couldn't open %s as a VCF file", path);
-struct vcfRecord *rec;
-while ((rec = vcfNextRecord(vcf)) != NULL)
+FILE *f = mustOpen(fileName, "w");
+struct hashEl *chrom, *chromList = hashElListHash(grt->hash);
+slSort(&chromList, hashElCmpWithEmbeddedNumbers);
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
-    vf->itemCount += 1;
+    char *chromName = chrom->name;
+    struct rbTree *rangeTree = chrom->val;
+    struct range *range, *rangeList = rangeTreeList(rangeTree);
+    for (range = rangeList; range != NULL; range = range->next)
+	fprintf(f, "%s\t%d\t%d\n", chromName, range->start, range->end);
     }
-vcfFileFree(&vcf);
+carefulClose(&f);
 }
+
+void makeValidVcf( struct sqlConnection *conn, char *path, struct cdwFile *ef, 
+	struct cdwAssembly *assembly, struct cdwValidFile *vf)
+/* Fill out fields of vf from a variant call format (vcf) file.  Create bed file. */
+{
+/* Have cdwVcfStats do most of the work. */
+char sampleFileName[PATH_LEN];
+struct cdwVcfFile *vcf = cdwMakeVcfStatsAndSample(conn, ef->id, sampleFileName);
+
+/* Fill in some of validFile record from bamFile record */
+vf->sampleBed = cloneString(sampleFileName);
+vf->itemCount = vcf->itemCount;
+vf->basesInItems = vcf->sumOfSizes;
+vf->mapRatio = 1;
+vf->uniqueMapRatio = 1;
+vf->depth = (double)vcf->sumOfSizes/assembly->baseCount;
+vf->sampleCount =  vcf->itemCount;
+vf->basesInSample = vcf->sumOfSizes;
+vf->sampleCoverage = (double)vcf->basesCovered/assembly->baseCount;
+cdwVcfFileFree(&vcf);
+}
+
 
 void makeValidText(struct sqlConnection *conn, char *path, struct cdwFile *ef, 
     struct cdwValidFile *vf)
@@ -443,7 +470,8 @@ void makeValidRcc(struct sqlConnection *conn, char *path, struct cdwFile *ef, st
 cdwValidateRcc(path);
 }
 
-void makeValidIdat(struct sqlConnection *conn, char *path, struct cdwFile *ef, struct cdwValidFile *vf)
+void makeValidIdat(struct sqlConnection *conn, char *path, 
+    struct cdwFile *ef, struct cdwValidFile *vf)
 /* Fill in info about a illumina idac file. */
 {
 cdwValidateIdat(path);
@@ -453,6 +481,23 @@ void makeValidPdf(struct sqlConnection *conn, char *path, struct cdwFile *ef, st
 /* Check it is really pdf. */
 {
 cdwValidatePdf(path);
+}
+
+void validateVcfGzTbi(struct sqlConnection *conn, char *path, 
+    struct cdwFile *ef, struct cdwValidFile *vf)
+/* Given a path to a tabix on a vcf, validate it is tabix, and that the 
+ * vcf it refers to exists and has correct name */
+{
+char dir[PATH_LEN], name[FILENAME_LEN], extension[FILEEXT_LEN];
+splitPath(path, dir, name, extension);
+char vcfPath[PATH_LEN];
+safef(vcfPath, sizeof(vcfPath), "%s%s%s", dir, name, extension);
+if (!fileExists(vcfPath))
+    {
+    /* Look for it under cdwPathName */
+    if (!cdwFindInSameSubmitDir(conn, ef, vcfPath))
+	errAbort("%s, the original of %s doesn't exist", vcfPath, path);
+    }
 }
 
 void makeValidCustomTrack(struct sqlConnection *conn, char *path, 
@@ -581,6 +626,11 @@ if (vf->format)	// We only can validate if we have something for format
 	makeValidBam(conn, path, ef, assembly, vf);
 	suffix = ".bam";
 	}
+    else if (sameString(format, "bam.bai"))
+        {
+	cdwValidateBamIndex(path);
+	suffix = ".bam.bai";
+	}
     else if (sameString(format, "2bit"))
         {
 	makeValid2Bit(conn, path, ef, vf);
@@ -620,8 +670,16 @@ if (vf->format)	// We only can validate if we have something for format
 	}
     else if (sameString(format, "vcf"))
         {
-	makeValidVcf(conn, path, ef, vf);
-	suffix = ".vcf";
+	makeValidVcf(conn, path, ef, assembly, vf);
+	if (endsWith(ef->submitFileName, ".gz"))
+	    suffix = ".vcf.gz";
+	else
+	    suffix = ".vcf";
+	}
+    else if (sameString(format, "vcf.gz.tbi"))
+        {
+	validateVcfGzTbi(conn, path, ef, vf);
+	suffix = ".vcf.gz.tbi";
 	}
     else if (sameString(format, "cram"))
         {
@@ -761,7 +819,7 @@ for (ef = efList; ef != NULL; ef = ef->next)
     char query[256];
     sqlSafef(query, sizeof(query), "select id from cdwValidFile where fileId=%lld", (long long)ef->id);
     long long vfId = sqlQuickLongLong(conn, query);
-    if (vfId != 0 && isEmpty(ef->errorMessage))
+    if (vfId != 0 && isEmpty(ef->errorMessage) && !redo)
 	{
         verbose(2, "already validated %s %s\n", ef->cdwFileName, ef->submitFileName);
 	}
@@ -775,12 +833,24 @@ for (ef = efList; ef != NULL; ef = ef->next)
 	    if (vfId != 0)
 	        cdwClearFileError(conn, ef->id);
 	    struct cgiParsedVars *tags = cgiParsedVarsNew(ef->tags);
+	    struct cgiParsedVars *parentTags = NULL;
+	    char query[256];
+	    sqlSafef(query, sizeof(query), 
+		"select tags from cdwMetaTags where id=%u", ef->metaTagsId);
+	    char *metaCgi = sqlQuickString(conn, query);
+	    if (metaCgi != NULL)
+	        {
+		parentTags = cgiParsedVarsNew(metaCgi);
+		tags->next = parentTags;
+		}
 	    if (!makeValidFile(conn, ef, tags, vfId))
 	        {
 		if (++errCount >= maxErrCount)
 		    errAbort("Aborting after %d errors", errCount);
 		}
 	    cgiParsedVarsFree(&tags);
+	    freez(&metaCgi);
+	    cgiParsedVarsFree(&parentTags);
 	    }
 	else
 	    {
@@ -799,6 +869,7 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 maxErrCount = optionInt("maxErrCount", maxErrCount);
+redo = optionExists("redo");
 cdwMakeValidFile(sqlUnsigned(argv[1]), sqlUnsigned(argv[2]));
 return 0;
 }

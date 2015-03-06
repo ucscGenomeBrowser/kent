@@ -179,7 +179,7 @@ printf("<script>window.%s='%s';</script>\n", cartSessionVarName(), cartSessionId
 // We need a package manager and require-handling system... bower and browserify?
 puts("<script src=\"../js/es5-shim.4.0.3.min.js\"></script>");
 puts("<script src=\"../js/es5-sham.4.0.3.min.js\"></script>");
-puts("<script src=\"../js/lodash.2.4.1.compat.min.js\"></script>");
+puts("<script src=\"../js/lodash.3.3.1.compat.min.js\"></script>");
 puts("<script src=\"//code.jquery.com/jquery-1.9.1.min.js\"></script>");
 puts("<script src=\"//code.jquery.com/ui/1.10.3/jquery-ui.min.js\"></script>");
 puts("<script src=\"//fb.me/react-with-addons-0.12.2.min.js\"></script>");

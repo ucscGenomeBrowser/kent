@@ -107,6 +107,14 @@ jsonWriteTag(jw, var);
 dyStringPrintf(dy, "%lld", val);
 }
 
+void jsonWriteDouble(struct jsonWrite *jw, char *var, double val)
+/* print out "var": val as number. Var may be NULL. */
+{
+struct dyString *dy = jw->dy;
+jsonWriteTag(jw, var);
+dyStringPrintf(dy, "%lf", val);
+}
+
 void jsonWriteLink(struct jsonWrite *jw, char *var, char *objRoot, char *name)
 /* Print out the jsony type link to another object.  objRoot will start and end with a '/'
  * and may have additional slashes in this usage. Var may be NULL. */

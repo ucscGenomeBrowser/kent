@@ -13,6 +13,7 @@ rheMac3	Rhesus	Macaca mulatta	primate	primate	359
 macFas5	Crab-eating macaque	Macaca fascicularis	primate	primate	380
 papHam1	Baboon	Papio hamadryas	primate	primate	390
 papAnu2	Baboon	Papio anubis	primate	primate	390
+nasLar1	Proboscis monkey	Nasalis larvatus	primate	primate	392
 saiBol1	Squirrel monkey	Saimiri boliviensis	primate	primate	395
 calJac3	Marmoset	Callithrix jacchus	primate	primate	400
 tarSyr1	Tarsier	Tarsius syrichta	primate	primate	410
@@ -169,6 +170,7 @@ chrPic2	Painted turtle	Chrysemys picta bellii	vertebrate	testudines	4404
 chrPic1	Painted turtle	Chrysemys picta bellii	vertebrate	testudines	4405
 xenTro7	Frog (X. tropicalis)	Xenopus tropicalis	vertebrate	tetrapoda	4439
 xenTro3	Frog (X. tropicalis)	Xenopus tropicalis	vertebrate	tetrapoda	4440
+xenTro1	Frog (X. tropicalis)	Xenopus tropicalis	vertebrate	tetrapoda	4460
 latCha1	Coelacanth	Latimeria chalumnae	vertebrate	sarcopterygii	4465
 tetNig2	Tetraodon	Tetraodon nigroviridis	vertebrate	tetraodontidae	4599
 fr3	Fugu	Takifugu rubripes	vertebrate	tetraodontidae	4628

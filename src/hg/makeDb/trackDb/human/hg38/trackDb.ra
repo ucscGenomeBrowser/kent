@@ -1,5 +1,4 @@
 include trackDb.wgEncode.ra
-include uwDnase.ra
 
 track par override
 group x
@@ -96,6 +95,7 @@ include ../chainNetPrimate.ra
 include ../chainNetPlacental.ra
 include ../chainNetVertebrate.ra
 include ../chainNetLegacy.ra alpha
+include ../newChainNet.ra alpha
 
 track contigAlignmentSegments
 shortLabel ContigSegments

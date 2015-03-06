@@ -12,6 +12,7 @@ var PositionSearchMixin = function(myPath) {
         // cart vars in myCartVars all live in state[myPath] for Immutable efficiency but can arrive
         // independently from server; when we get one, update just that piece of state[myPath].
         mutState.setIn(myPath.concat(cartVar), Immutable.fromJS(newValue));
+        // Turn off the loading spinner when we get result(s) from cart:
         if (cartVar === 'position' || cartVar === 'positionMatches') {
             mutState.setIn(myPath.concat('loading'), false);
         }
@@ -45,11 +46,18 @@ var PositionSearchMixin = function(myPath) {
         mutState.setIn(myPath.concat('positionMatches'), null);
     }
 
+    // Method for use outside this mixin, e.g. for when user just changed database
+    function setPosition(mutState, newPos) {
+        mutState.setIn(myPath.concat('position'), newPos);
+    }
+
     function initialize() {
         this.registerCartVarHandler(myCartVars, posMergeServerResponse);
         this.registerUiHandler(myPath.concat('position'), lookupPosition);
         this.registerUiHandler(myPath.concat('positionMatch'), positionMatchClick);
         this.registerUiHandler(myPath.concat('hidePosPopup'), hidePosPopup);
+        // Install convenience methods for use outside this mixin:
+        this.setPosition = setPosition;
     }
 
     // Mixin object with initialize

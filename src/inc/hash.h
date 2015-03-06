@@ -194,6 +194,10 @@ int hashElCmpWithEmbeddedNumbers(const void *va, const void *vb);
 /* Compare two hashEl by name sorting including numbers within name,
  * suitable for chromosomes, genes, etc. */
 
+int hashElCmpIntValDesc(const void *va, const void *vb);
+/* Compare two hashEl from a hashInt type hash, with highest integer values
+ * comingFirst. */
+
 void *hashElFindVal(struct hashEl *list, char *name);
 /* Look up name in hashEl list and return val or NULL if not found. */
 

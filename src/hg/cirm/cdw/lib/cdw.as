@@ -15,6 +15,16 @@ table cdwUser
     byte isAdmin;	"If true the use can modify other people's files too."
     )
 
+table cdwLab
+"A contributing lab"
+    (
+    uint id primary auto;      "Autoincremented user ID"
+    string name unique;	"Shorthand name for lab, all lower case"
+    string pi;   	"Principle investigator responsible for lab"
+    string institution; "University or other institution hosting lab"
+    string url;		"URL of lab page"
+    )
+
 table cdwScriptRegistry
 "A script that is authorized to submit on behalf of a user"
     (
@@ -239,6 +249,36 @@ table cdwBamFile
     uint targetSeqCount; "Number of chromosomes or other distinct sequences in mapping target"
     )
 
+table cdwVcfFile
+"Info on what is in a vcf file beyond whet's in cdwValidFile"
+    (
+    uint id primary auto;   "ID in this table"
+    uint fileId unique;	"ID in cdwFile table."
+    int vcfMajorVersion; "VCF file major version"
+    int vcfMinorVersion; "VCF file minor version"
+    int genotypeCount; "How many genotypes of data"
+    bigInt itemCount; "Number of records in VCF file"
+    int chromsHit;  "Number of chromosomes (or contigs) with data"
+    bigInt passItemCount; "Number of records that PASS listed filter"
+    double passRatio; "passItemCount/itemCount"
+    bigInt snpItemCount; "Number of records that are just single base substitution, no indels"
+    double snpRatio;  "snpItemCount/itemCount"
+    bigInt sumOfSizes; "The sum of sizes of all records"
+    bigInt basesCovered; "Bases with data. Equals sumOfSizes if no overlap of records."
+    int xBasesCovered; "Number of bases of chrX covered"
+    int yBasesCovered; "Number of bases of chrY covered"
+    int mBasesCovered; "Number of bases of chrM covered"
+    bigInt haploidCount; "Number of genotype calls that are haploid"
+    double haploidRatio;  "Ratio of hapload to total calls"
+    bigInt phasedCount;	"Number of genotype calls that are phased"
+    double phasedRatio;	"Ration of phased calls to total calls"
+    byte gotDepth; "If true then have DP value in file and in depth stats below"
+    double depthMin;  "Min DP reported depth"
+    double depthMean; "Mean DP value"
+    double depthMax;	"Max DP value"
+    double depthStd;	"Standard DP deviation"
+    )
+
 table cdwQaFail
 "Record of a QA failure."
     (
@@ -386,12 +426,23 @@ table cdwJob
 table cdwSubmitJob
 "A submission job to be run asynchronously and not too many all at once."
     (
-    uint id primary auto;    "Job id"
+    uint id primary auto;    "Submit id"
     lstring commandLine; "Command line of job"
     bigInt startTime; "Start time in seconds since 1970"
     bigInt endTime; "End time in seconds since 1970"
     lstring stderr; "The output to stderr of the run - may be nonempty even with success"
     int returnCode; "The return code from system command - 0 for success"
     int pid;	"Process ID for running processes"
+    )
+
+table cdwTrackViz
+"Some files can be visualized as a track. Stuff to help define that track goes here."
+    (
+    uint id primary auto; "Id of this row in the table"
+    uint fileId;	"File this is a viz of"
+    string shortLabel;	"Up to 17 char label for track"
+    string longLabel; "Up to 100 char label for track"
+    string type;  "One of the customTrack types such as bam,vcfTabix,bigWig,bigBed"
+    string bigDataFile; "Where big data file lives relative to cdwRootDir"
     )
 

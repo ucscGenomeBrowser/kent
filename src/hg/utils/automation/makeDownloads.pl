@@ -218,6 +218,7 @@ end
 # soft- and hard-masked .fa:
 cd $topDir
 ln -s $topDir/$db.2bit $runDir/bigZips/$db.2bit
+ln -s $topDir/chrom.sizes $runDir/bigZips/$db.chrom.sizes
 
 tar cvzf $runDir/bigZips/chromAgp.tar.gz @chromAgpFiles
 _EOF_
@@ -290,6 +291,7 @@ sub compressScaffoldFiles {
 cd $runDir/bigZips
 
 ln -s $topDir/$db.2bit ./$db.2bit
+ln -s $topDir/chrom.sizes ./$db.chrom.sizes
 
 gzip -c $agpFile > $db.agp.gz
 gzip -c $outFile > $db.fa.out.gz
@@ -738,6 +740,9 @@ $db.2bit - contains the complete $organism/$db genome sequence
         http://genome.ucsc.edu/admin/git.html
 	http://genome.ucsc.edu/admin/jk-install.html
 
+$db.chrom.sizes - Two-column tab-separated text file containing assembly
+    sequence names and sizes.
+
 _EOF_
   ;
   if ($chromBased) {
@@ -1074,7 +1079,7 @@ foreach d (bigZips $chromGz database liftOver)
   cd $runDir/\$d
   if (\$d != "database" && \$d != "liftOver") then
     if (-s $db.2bit) then
-	md5sum $db.2bit *.gz > md5sum.txt
+	md5sum $db.2bit $db.chrom.sizes *.gz > md5sum.txt
     else
 	md5sum *.gz > md5sum.txt
     endif
