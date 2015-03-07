@@ -27,15 +27,12 @@ hgLib:
 libs: topLibs hgLib
 
 cgi: libs
-	cd utils && ${MAKE} cgi
 	cd hg && ${MAKE} cgi
 
 cgi-alpha: libs
-	cd utils && ${MAKE} alpha
 	cd hg && ${MAKE} alpha
 
 cgi-beta: check-beta libs
-	cd utils && ${MAKE} beta
 	cd hg && ${MAKE} beta
 
 check-beta:
