@@ -149,7 +149,6 @@ utils-alpha: libs
                 x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
             fi ;\
 	done
-	cd utils && ${MAKE} alpha
 	cd hg && ${MAKE} utils
 
 DIRS = ameme blat index dnaDust protDust weblet aladdin primeMate fuse meta tagStorm
