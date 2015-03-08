@@ -571,20 +571,30 @@ int userId = 0;
 if (user != NULL)
     userId = user->id;
 
+/* Get list of files we are authorized to see, and return early if empty */
+struct cdwFile *ef, *efList = cdwAccessibleFileList(conn, user);
+if (efList == NULL)
+    {
+    if (user != NULL && user->isAdmin)
+	printf("<BR>The file database is empty.");
+    else
+	printf("<BR>Unfortunately there are no %s you are authorized to see.", itemPlural);
+    return;
+    }
+
 /* Loop through all files constructing a SQL where clause that restricts us
  * to just the ones that we're authorized to hit, and that also pass initial where clause
  * if any. */
-struct cdwFile *ef, *efList = cdwAccessibleFileList(conn, user);
 struct dyString *where = dyStringNew(0);
 if (!isEmpty(initialWhere))
      dyStringPrintf(where, "(%s) and ", initialWhere);
-dyStringPrintf(where, "file_id in ");
-char sep = '(';
+dyStringPrintf(where, "file_id in (");
+char *sep = "";
 int accessCount = 0;
 for (ef = efList; ef != NULL; ef = ef->next)
     {
-    dyStringPrintf(where, "%c%u", sep, ef->id);
-    sep = ',';
+    dyStringPrintf(where, "%s%u", sep, ef->id);
+    sep = ",";
     ++accessCount;
     }
 dyStringAppendC(where, ')');
