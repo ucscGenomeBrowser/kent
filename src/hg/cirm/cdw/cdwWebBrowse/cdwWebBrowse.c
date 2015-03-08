@@ -928,6 +928,8 @@ void doTest(struct sqlConnection *conn)
 {
 printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
+cgiMakeHiddenVar("cdwCommand", "test");
+
 char *id = "test_id_12";
 
 /* Print out input control and some text. */
@@ -971,11 +973,15 @@ printf("  });\n");
 printf("});\n");
 printf("</script>\n");
 
+printf("<button>submit me</button>\n");
 printf("<BR>");
-printf("<input type=\"text\" id=\"watered\" value=\"\">");
+
+char *varName = "cdw_test_foo_23";
+char *val = cartUsualString(cart, varName, "");
+printf("<input name=\"%s\" type=\"text\" id=\"watered\" value=\"%s\">", varName, val);
 printf("<script>\n");
 printf("$(function () {\n");
-printf("  $('#watered').Watermark(\"hello there\", \"#686868\");\n");
+printf("  $('#watered').watermark(\"why hello there\");\n");
 printf("});\n");
 printf("</script>\n");
 
@@ -1128,7 +1134,7 @@ void localWebStartWrapper(char *titleString)
     jsIncludeFile("jquery.js", NULL);
     jsIncludeFile("jquery.plugins.js", NULL);
     jsIncludeFile("jquery-ui.js", NULL);
-    jsIncludeFile("jquery.watermarkinput.js", NULL);
+    jsIncludeFile("jquery.watermark.js", NULL);
     jsIncludeFile("ajax.js", NULL);
     printf("</HEAD>\n");
     printBodyTag(stdout);
@@ -1145,7 +1151,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.42");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.43");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
