@@ -43,8 +43,8 @@ cgiMakeButton("submit", "update");
 
 
 printf("<BR>\n");
-printf("First row of table below, above labels, can be used to filter individual fields. ");    
-printf("Wildcard * and ? characters are allowed in text fields. ");
+printf("First row of table below can filter. ");    
+printf("Wildcard * and ? characters are allowed in text filters. ");
 printf("&GT;min or &LT;max, is allowed in numerical fields.<BR>\n");
 }
 
@@ -53,10 +53,10 @@ static void printSuggestScript(char *id, struct slName *suggestList)
 {
 printf("<script>\n");
 printf("$(document).ready(function() {\n");
-printf("    $('#%s').autocomplete({\n", id);
-printf("       delay: 100,\n");
-printf("       minLength: 0,\n");
-printf("       source: [");
+printf("  $('#%s').autocomplete({\n", id);
+printf("    delay: 100,\n");
+printf("    minLength: 0,\n");
+printf("    source: [");
 char *separator = "";
 struct slName *suggest;
 for (suggest = suggestList; suggest != NULL; suggest = suggest->next)
@@ -68,6 +68,18 @@ printf("]\n");
 printf("    });\n");
 printf("});\n");
 printf("</script>\n");
+}
+
+static void printWatermark(char *id, char *watermark)
+/* Print light text filter prompt as watermark. */
+{
+#ifdef SOON
+printf("<script>\n");
+printf("$(function() {\n");
+printf("  $('#%s').Watermark(\"%s\");\n", id, watermark);
+printf("});\n");
+printf("</script>\n");
+#endif /* SOON */
 }
 
 static void showTableFilterControlRow(struct fieldedTable *table, struct cart *cart, 
@@ -119,6 +131,7 @@ for (i=0; i<table->fieldCount; ++i)
 	    {
 	    printSuggestScript(varName, suggestList);
 	    }
+	printWatermark(varName, "filter");
 	}
     webPrintLinkCellEnd();
     }
