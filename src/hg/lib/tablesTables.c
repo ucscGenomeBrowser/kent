@@ -7,6 +7,7 @@
 #include "obscure.h"
 #include "linefile.h"
 #include "jksql.h"
+#include "jsHelper.h"
 #include "sqlSanity.h"
 #include "fieldedTable.h"
 #include "cheapcgi.h"
@@ -73,13 +74,11 @@ printf("</script>\n");
 static void printWatermark(char *id, char *watermark)
 /* Print light text filter prompt as watermark. */
 {
-#ifdef SOON
 printf("<script>\n");
 printf("$(function() {\n");
-printf("  $('#%s').Watermark(\"%s\");\n", id, watermark);
+printf("  $('#%s').watermark(\"%s\");\n", id, watermark);
 printf("});\n");
 printf("</script>\n");
-#endif /* SOON */
 }
 
 static void showTableFilterControlRow(struct fieldedTable *table, struct cart *cart, 
@@ -88,8 +87,15 @@ static void showTableFilterControlRow(struct fieldedTable *table, struct cart *c
  * The suggestHash is keyed by field name.  If something is there we'll assume
  * it's value is slName list of suggestion values */
 {
-printf("<TR>");
+/* Include javascript and style we need  */
+webIncludeResourceFile("jquery-ui.css");
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("jquery.plugins.js", NULL);
+jsIncludeFile("jquery-ui.js", NULL);
+jsIncludeFile("jquery.watermark.js", NULL);
+
 int i;
+printf("<TR>");
 for (i=0; i<table->fieldCount; ++i)
     {
     char *field = table->fields[i];
@@ -124,6 +130,7 @@ for (i=0; i<table->fieldCount; ++i)
 	varName, varName, size+1, oldVal);
 
     /* Write out javascript to initialize autosuggest on control */
+    printWatermark(varName, " filter ");
     if (suggestHash != NULL)
         {
 	struct slName *suggestList = hashFindVal(suggestHash, field);
@@ -131,7 +138,6 @@ for (i=0; i<table->fieldCount; ++i)
 	    {
 	    printSuggestScript(varName, suggestList);
 	    }
-	printWatermark(varName, "filter");
 	}
     webPrintLinkCellEnd();
     }
