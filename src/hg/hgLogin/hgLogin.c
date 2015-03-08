@@ -723,6 +723,9 @@ hPrintf("<form method=post action=\"hgLogin\" name=\"accountLoginForm\" id=\"acc
     "   <input type=\"submit\" name=\"hgLogin.do.displayLogin\" value=\"Login\" class=\"largeButton\">"
     "    &nbsp;<a href=\"%s\">Cancel</a>"
     "</div>"
+    , username, getReturnToURL());
+cartSaveSession(cart);
+hPrintf(
     "</form>"
     "\n"
     "\n"
@@ -734,8 +737,7 @@ hPrintf("<form method=post action=\"hgLogin\" name=\"accountLoginForm\" id=\"acc
     "\n"
     "\n"
     "</body>"
-    "</html>", username, getReturnToURL());
-cartSaveSession(cart);
+    "</html>");
 }
 
 void activateAccount(struct sqlConnection *conn)
