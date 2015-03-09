@@ -7,7 +7,7 @@ parameters:
 - chromosome: 1 - 22, X, Y or M
 - position: 0-based position on chromosome
 - dataset: either "lovd" or "hgmd". If not provided, queries both LOVD and HGMD.
-"- reference: optional. if specified, has to be "GRCh37"
+- reference: optional. if specified, has to be "GRCh37"
 - alternateBases: A,C,T or G. Ignored for HGMD (HGMD gives out only
   positions, not the alleles, these are only on their website)
 - format: if "text",  does not return JSON, but just one of the words "true",
