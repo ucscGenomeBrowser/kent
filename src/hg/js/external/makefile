@@ -7,6 +7,7 @@ JS_FILES= BackboneExtend.js \
 	lodash.3.3.1.compat.min.js
 
 # Don't bother jshint'ing external libs.
+jshint:
 
 doInstall:
 	@mkdir -p ${DEST}/

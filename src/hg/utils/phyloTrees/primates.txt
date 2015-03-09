@@ -34,6 +34,12 @@ macFas	Haplorrhini; Simiiformes; Catarrhini; Cercopithecoidea; Cercopithecidae; 
 # baboon - papio hamadryas
 papHam	Haplorrhini; Simiiformes; Catarrhini; Cercopithecoidea; Cercopithecidae; Cercopithecinae; Papio
 
+# Proboscis monkey - Nasalis larvatus
+nasLar	Haplorrhini; Simiiformes; Catarrhini; Cercopithecoidea; Cercopithecidae; Colobinae; Nasalis
+
+# Golden snub-nosed monkey - Rhinopithecus roxellana
+rhiRox	Haplorrhini; Simiiformes; Catarrhini; Cercopithecoidea; Cercopithecidae; Colobinae; Rhinopithecus
+
 # squirrel monkey - Saimiri boliviensis
 saiBol	Haplorrhini; Simiiformes; Platyrrhini; Cebidae; Saimiriinae; Saimiri
 

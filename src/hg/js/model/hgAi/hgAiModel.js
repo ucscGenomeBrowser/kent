@@ -310,16 +310,23 @@ var HgAiModel = ImModel.extend({
     },
 
     handleGroupedTrackDb: function(mutState, cartVar, newValue) {
-        // Server just sent new groupedTrackDb; build group/track/etc menus for <AddDataSource>.
+        // Server just sent new groupedTrackDb; if it is for the current db,
+        // build group/track/etc menus for <AddDataSource>.
+        var currentDb, addDsTrackPath;
         if (cartVar === 'groupedTrackDb') {
-            mutState.set('groupedTrackDb', Immutable.fromJS(newValue));
-            // If the cart includes a saved trackPath consistent with groupedTrackDb, use that:
-            var addDsTrackPath = mutState.get('hgai_addDsTrackPath');
-            if (! addDsTrackPath ||
-                ! this.isInGroupedTrackDb(mutState, addDsTrackPath)) {
-                addDsTrackPath = Immutable.List();
+            // The groupedTrackDb from cartJson is a wrapper object with children db
+            // and groupedTrackDb.  If db matches current db, store the inner groupedTrackDb.
+            currentDb = this.getDb(mutState);
+            if (! currentDb || newValue.db === currentDb) {
+                mutState.set('groupedTrackDb', Immutable.fromJS(newValue.groupedTrackDb));
+                // If the cart includes a saved trackPath consistent with groupedTrackDb, use that:
+                addDsTrackPath = mutState.get('hgai_addDsTrackPath');
+                if (! addDsTrackPath ||
+                    ! this.isInGroupedTrackDb(mutState, addDsTrackPath)) {
+                    addDsTrackPath = Immutable.List();
+                }
+                this.groupedTrackDbToMenus(mutState, addDsTrackPath, 0);
             }
-            this.groupedTrackDbToMenus(mutState, addDsTrackPath, 0);
         } else {
             this.error('handleGroupedTrackDb: expecting cartVar groupedTrackDb, got ',
                        cartVar, newValue);
@@ -413,9 +420,10 @@ var HgAiModel = ImModel.extend({
         }
         // Regenerate menus
         this.groupedTrackDbToMenus(mutState, trackPath, ix);
-        // store in cart
-        this.cartSet('hgai_addDsTrackPath',
-                     JSON.stringify(this.getAddDsTrackPath(mutState).toJS()));
+        // Store updated trackPath in state and cart
+        trackPath = this.getAddDsTrackPath(mutState);
+        mutState.set('hgai_addDsTrackPath', trackPath);
+        this.cartSet('hgai_addDsTrackPath', JSON.stringify(trackPath.toJS()));
     },
 
     addDataSource: function(mutState) {
@@ -578,7 +586,7 @@ var HgAiModel = ImModel.extend({
         }
     },
 
-    changeCladeOrgDb: function(mutState) {
+    onChangeDb: function(mutState) {
         // The CladeOrgDbPos mixin handles the clade/org/db menus, position, and
         // notifies the server about the change.  However, for databases that have
         // giant trackDbs, it can take a long time before that info shows up -- long
@@ -586,6 +594,17 @@ var HgAiModel = ImModel.extend({
         // are left in place.  So, clear out db-specific state until the new data arrive.
         mutState.remove('groupedTrackDb');
         mutState.remove('addDsInfo');
+        var db = this.getDb(mutState);
+        // Update PositionSearchMixin's position:
+        var newPos = this.getDefaultPos(mutState);
+        this.setPosition(mutState, newPos);
+        // Parallel requests for little stuff that we need ASAP and potentially huge trackDb:
+        this.cartDo({ cgiVar: { db: db, position: newPos },
+                      get: { 'var': 'position,hgai_querySpec' },
+                      getGeneSuggestTrack: {},
+                      });
+        this.cartDo({ cgiVar: { db: db },
+                      getGroupedTrackDb: { fields: 'track,table,shortLabel,parent,subtracks' } });
     },
 
     initialize: function() {
@@ -596,14 +615,13 @@ var HgAiModel = ImModel.extend({
         this.registerCartVarHandler('groupedTrackDb', this.handleGroupedTrackDb);
         this.registerCartValidateHandler(this.validateCart);
         // Register handlers for UI events:
-        this.registerUiHandler(['positionInfo', 'hgai_range'], this.changeCartVar);
+        this.registerUiHandler(['positionInfo', 'hgai_range'], this.changeCartString);
         this.registerUiHandler(['addDsMenuSelect'], this.changeAddDsMenu);
         this.registerUiHandler(['addDataSource'], this.addDataSource);
         this.registerUiHandler(['trackHubs'], this.goToTrackHubs);
         this.registerUiHandler(['customTracks'], this.goToCustomTracks);
         this.registerUiHandler(['dataSources'], this.dataSourceClick);
         this.registerUiHandler(['outFileOptions'], this.outFileOptionsClick);
-        this.registerUiHandler(['cladeOrgDb'], this.changeCladeOrgDb);
 
         // Bootstrap initial state from page or by server request, then render:
         if (window.initialAppState) {
@@ -611,18 +629,12 @@ var HgAiModel = ImModel.extend({
         } else {
             this.state = Immutable.Map();
             // Fire off some requests in parallel -- some are much slower than others.
-            // For starters, get only the first two levels of groupedTrackDb (groups
-            // and top-level tracks) because the entire structure is so large for hg19
-            // and other well-annotated genomes that the volume of compressed JSON
-            // takes a long time on the wire.
+            // Get clade/org/db and important small cart variables.
             this.cartDo({ getCladeOrgDbPos: {},
-                          getGroupedTrackDb: {
-                            fields: 'track,table,shortLabel,parent,subtracks',
-                            maxDepth: '1',
-                          },
                           get: {'var': 'hgai_range,hgai_querySpec,hgai_addDsTrackPath'}
                         });
-            // This one takes a long time for hg19 though not for tiny dbs.
+            // The groupedTrackDb structure is so large for hg19 and other well-annotated
+            // genomes that the volume of compressed JSON takes a long time on the wire.
             this.cartDo({ getGroupedTrackDb: {
                             fields: 'track,table,shortLabel,parent,subtracks'
                           }

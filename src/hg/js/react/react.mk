@@ -27,8 +27,10 @@ clean:
 
 compile: jsx
 
-jsx:
+jshint:
 	${JSXHINT} --config ${JS_DIR}/jshintrc.json ${JSX_FILES}
+
+jsx: jshint
 	mkdir -p ${COMPILED_JS_DESTDIR}
 	${JSX} -x jsx . ${COMPILED_JS_DESTDIR} 2>&1
 	${UGLIFYJS} ${COMPILED_JS_DESTDIR}/*.js -o ${BUNDLE_DESTDIR}/${BUNDLE_FILE}

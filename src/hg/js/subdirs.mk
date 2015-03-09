@@ -6,6 +6,11 @@
 
 clean: ${SUBDIRS:%=%.clean}
 
+%.jshint:
+	cd $* && echo $* && ${MAKE} jshint
+
+jshint: ${SUBDIRS:%=%.jshint}
+
 %.compile:
 	cd $* && echo $* && ${MAKE} compile
 
