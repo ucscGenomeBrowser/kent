@@ -20,5 +20,18 @@ http://genome-test.soe.ucsc.edu/cgi-bin/hgBeacon
 
 The CGI currently only supports hg19.
 
+The file help.txt is used as a flag: if it is not present, hgBeacon will just
+output an error message that it is not activated on this machine. This makes
+sure that mirrors do not get confused by a additional CGI.
+
 API ref at
 https://docs.google.com/document/d/154GBOixuZxpoPykGKcPOyrYUcgEXVe2NvKx61P4Ybn4
+
+"test" is a special chromosome that can be used for testing. Chromosome="test"
+and position="0" will always return "true".
+
+the 'testBeacon' script can be used to test a beacon. The first parameter can be a URL
+to the hgBeacon, e.g. on hgwbeta. It will test the usual replies, true false
+and some meta data.
+example:
+        testBeacon http://genome-test.soe.ucsc.edu/cgi-bin/hgBeacon

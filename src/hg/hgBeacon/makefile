@@ -14,20 +14,20 @@ endif
 PATH:=$(PATH):/cluster/software/bin
 
 my::
-	pylint -E --rcfile=pylint.rc hgBeacon
 	rm -f ${CGI_BIN_USER}/hgBeacon
+	cp -p hgBeacon ${CGI_BIN_USER}/
 	mkdir -p ${CGI_BIN_USER}/beacon2
 	ln -sf ${CGI_BIN_USER}/hgBeacon ${CGI_BIN_USER}/beacon2/info
 	ln -sf ${CGI_BIN_USER}/hgBeacon ${CGI_BIN_USER}/beacon2/query
-	cp -p hgBeacon ${CGI_BIN_USER}/
+	cp help.txt /gbdb/hg19/beacon/
 beta::
-	pylint -E --rcfile=pylint.rc hgBeacon
 	rm -f ${CGI_BIN_BETA}/hgBeacon
 	cp -p hgBeacon ${CGI_BIN_BETA}/
 alpha::
-	pylint -E --rcfile=pylint.rc hgBeacon
 	rm -f ${CGI_BIN}/hgBeacon
 	cp -p hgBeacon ${CGI_BIN}/
+lint:
+	pylint -E --rcfile=pylint.rc hgBeacon
 clean::
 
 compile::

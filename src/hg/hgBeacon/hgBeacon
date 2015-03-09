@@ -5,7 +5,7 @@
 
 import cgi, subprocess, sys, cgitb, os, socket, time, json, glob, urlparse, time
 import sqlite3, gzip, optparse, gc, string, re, socket
-from os.path import join, isfile, dirname, isdir, basename
+from os.path import join, isfile, dirname, isdir, basename, exists
 
 # general info about this beacon
 hostName = os.environ.get("HTTP_HOST", "localhost")
@@ -113,6 +113,7 @@ def errAbort(errMsg=None):
 
 def printHelp():
     " print help text to stdout and exit "
+    print "Content-Type: text/html\n"
     print "<html><body>"
     host = hostName # convert from global to local var
     if host.endswith(".ucsc.edu"):
@@ -121,7 +122,7 @@ def printHelp():
         helpDir = dirname(__file__)
 
     helpPath = join(helpDir, "help.txt")
-    if not isfile(helpPath):
+    if not exists(helpPath):
         errAbort("no file %s found. The beacon is not activated on this machine" % helpPath)
 
     helpText = open(helpPath).read()
@@ -157,6 +158,7 @@ def beaconInfo():
         }
 
 def printJson(data):
+    print "Content-Type: application/json\n"
     print json.dumps(data, indent=4, sort_keys=True,separators=(',', ': '))
 
 def hgBotDelay():
@@ -170,7 +172,7 @@ def hgBotDelay():
     if delay>10000:
         time.sleep(delay/1000.0)
     if delay>20000:
-        print("Blocked")
+        errAbort("IP blocked")
         sys.exit(0)
 
 def checkParams(chrom, pos, allele, reference, track):
@@ -182,14 +184,14 @@ def checkParams(chrom, pos, allele, reference, track):
     if chrom==None or chrom=="":
         errAbort("missing chromosome parameter")
     if allele==None or allele=="":
-        errAbort("missing allele parameter")
+        errAbort("missing alternateBases parameter")
 
     allele = allele.upper()
     if not (re.compile("[ACTG]+").match(allele)!=None or \
        re.compile("I[ACTG]+").match(allele)!=None or \
        re.compile("D[0-9]+").match(allele)!=None):
-        errAbort("invalid allele parameter, can only be a [ACTG]+ or I[ACTG]+ or D[0-9]+")
-    if track is not None:
+        errAbort("invalid alternateBases parameter, can only be a [ACTG]+ or I[ACTG]+ or D[0-9]+")
+    if track is not None and track!="":
         if not track.isalnum():
             errAbort("'dataset' parameter must contain only alphanumeric characters")
         if len(track)>100:
@@ -211,7 +213,7 @@ def lookupAllele(chrom, pos, allele, reference, dataset):
     " check if an allele is present in a sqlite DB "
     conn = dbOpen(mustExist=True)
     tableList = dbListTables(conn)
-    if dataset!=None:
+    if dataset!=None and dataset!="":
         if dataset not in tableList:
             errAbort("dataset %s is not present on this server" % dataset)
         tableList = [dataset]
@@ -231,17 +233,18 @@ def lookupAllele(chrom, pos, allele, reference, dataset):
 
     return "false"
 
-def lookupAlleleJson(chrom, pos, allele, reference, dataset):
+def lookupAlleleJson(chrom, pos, altBases, refBases, reference, dataset):
     " call lookupAllele and wrap the result into dictionaries "
-    chrom, pos, allele, reference, dataset = checkParams(chrom, pos, allele, reference, dataset)
+    chrom, pos, altBases, reference, dataset = checkParams(chrom, pos, altBases, reference, dataset)
 
-    exists = lookupAllele(chrom, pos, allele, reference, dataset)
+    exists = lookupAllele(chrom, pos, altBases, reference, dataset)
 
     if chrom=="test" and pos==0:
         exists = "true"
 
     query = {
-        "allele": allele,
+        "alternateBases": altBases,
+        "referenceBases" : refBases,
         "chromosome": chrom.replace("chr",""),
         "position": pos,
         "reference": reference,
@@ -253,9 +256,8 @@ def lookupAlleleJson(chrom, pos, allele, reference, dataset):
 def main():
     # detect if running under apache or was run from command line
     if 'REQUEST_METHOD' in os.environ:
-        fqdn = socket.getfqdn()
-        if not (fqdn.startswith("hgw") and fqdn.endswith("ucsc.edu")) \
-            or fqdn.startswith("hgwdev."):
+        if not (hostName.startswith("hgw") and hostName.endswith("ucsc.edu")) \
+            or hostName.startswith("hgwdev."):
             # enable special CGI error handler not on the RR, but on hgwdev
             cgitb.enable()
         mainCgi()
@@ -302,11 +304,14 @@ def dbMakeTable(conn, tableName):
 def dbOpen(mustExist=False):
     " open the sqlite db and return a DB connection object "
     dbDir = dirname(__file__) # directory where script is located
-    if hostName.endswith("ucsc.edu"): # data is not in CGI directory at UCSC
+    fqdn = socket.getfqdn()
+    if hostName.endswith("ucsc.edu") or fqdn.endswith(".ucsc.edu") or fqdn.endswith(".sdsc.edu"):
+        # at UCSC, the data is not in the CGI-BIN directory
         dbDir = "/gbdb/hg19/beacon/"
+
     dbName = join(dbDir, SQLITEDB)
 
-    if not isfile(dbName) and mustExist:
+    if not exists(dbName) and mustExist:
         errAbort("Database file %s does not exist. This beacon is not serving any data." % dbName)
     conn = sqlite3.Connection(dbName)
     return conn
@@ -513,7 +518,6 @@ def mainCommandLine():
     importFile(fileName, datasetName, options.format)
     
 def mainCgi():
-    print "Content-Type: text/html\n"
 
     url = os.environ["REQUEST_URI"]
     parsedUrl = urlparse.urlparse(url)
@@ -531,17 +535,19 @@ def mainCgi():
 
     chrom = form.getfirst("chromosome")
     pos = form.getfirst("position")
-    allele = form.getfirst("allele")
+    refBases = form.getfirst("referenceBases")
+    altBases = form.getfirst("alternateBases")
     reference = form.getfirst("reference")
     dataset = form.getfirst("dataset")
     format = form.getfirst("format")
 
-    if chrom==None and pos==None and allele==None:
+    if chrom==None and pos==None and altBases==None:
         printHelp()
         sys.exit(0)
 
-    ret = lookupAlleleJson(chrom, pos, allele, reference, dataset)
+    ret = lookupAlleleJson(chrom, pos, altBases, refBases, reference, dataset)
     if format=="text":
+        print "Content-Type: text/html\n"
         print ret["response"]["exists"]
     else:
         printJson(ret)

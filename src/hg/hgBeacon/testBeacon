@@ -15,12 +15,12 @@ baseUrl = None
 if len(sys.argv)!=1:
     baseUrl = sys.argv[1]
 
-def queryServer(chrom, pos, allele, reference, dataset):
+def queryServer(chrom, pos, allele, referenceBases, reference, dataset):
     " if baseUrl is set, query via http. Otherwise just call the script directly "
     if baseUrl == None:
-        ret = hgBeacon.lookupAlleleJson(chrom, pos, allele, reference, dataset)
+        ret = hgBeacon.lookupAlleleJson(chrom, pos, allele, None, reference, dataset)
     else:
-        url = baseUrl+"?chromosome=%s&position=%s&allele=%s" % (chrom, str(pos), allele)
+        url = baseUrl+"?chromosome=%s&position=%s&alternateBases=%s" % (chrom, str(pos), allele)
         if reference!="":
             url=url+"&reference=%s" % reference
         if dataset!="":
@@ -35,10 +35,10 @@ class TestBeacon(unittest.TestCase):
     def test_outside(self):
         " test query, beacon "
         maxInt = 2147483646
-        rep = queryServer("1", str(maxInt), "T", "", "test")
+        rep = queryServer("1", str(maxInt), "T", None, "", "")
         self.assertTrue(rep["query"]["position"]==maxInt)
         self.assertTrue(rep["query"]["reference"]=="GRCh37")
-        self.assertTrue(rep["query"]["allele"]=="T")
+        self.assertTrue(rep["query"]["alternateBases"]=="T")
         self.assertTrue(rep["query"]["chromosome"]=="1")
         self.assertTrue(rep["response"]["exists"]=="false")
 
@@ -52,13 +52,13 @@ class TestBeacon(unittest.TestCase):
     def test_allele(self):
         " test true reply with the special testing chromosome"
         pos = 0
-        rep = queryServer("test", str(pos), "A", "", "")
+        rep = queryServer("test", str(pos), "A", None, "", "")
         self.assertTrue(rep["response"]["exists"]=="true")
 
     def test_allele_false(self):
         " test false reply "
         pos = 10000
-        rep = queryServer("test", str(pos), "A", "", "test")
+        rep = queryServer("test", str(pos), "A", None, "", "")
         self.assertTrue(rep["response"]["exists"]=="false")
 
 #if __name__ == '__main__':
