@@ -1212,7 +1212,10 @@ if (errCatchStart(errCatch))
 	HAL_QUERY_DUPS;
     hal_seqmode_type_t needSeq = isPackOrFull && (winBaseCount < showSnpWidth) ? HAL_LOD0_SEQUENCE : HAL_NO_SEQUENCE;
     int mapBackAdjacencies = (tg->visibility == tvFull);
-    struct hal_block_results_t *head = halGetBlocksInTargetRange(handle, otherSpecies, trackHubSkipHubName(database), chromName, winStart, winEnd, 0, needSeq, dupMode,mapBackAdjacencies, &errString);
+    char codeVarName[1024];
+    safef(codeVarName, sizeof codeVarName, "%s.coalescent", tg->tdb->track);
+    char *coalescent = cartOptionalString(cart, codeVarName);
+    struct hal_block_results_t *head = halGetBlocksInTargetRange(handle, otherSpecies, trackHubSkipHubName(database), chromName, winStart, winEnd, 0, needSeq, dupMode,mapBackAdjacencies, coalescent, &errString);
 
     // did we get any blocks from HAL
     if (head == NULL)
