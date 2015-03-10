@@ -121,7 +121,7 @@ hPrintf("(The \"describe table schema\" button shows more information about "
 	"the table fields.)\n");
 
 // on a browserbox, db is on the UCSC server, so cannot select into db, even if temporary
-if (!isCustomTrack(curTable) && !hIsBrowserbox())
+if (!isCustomTrack(curTable) && !hIsBrowserbox() && sqlCanCreateTemp(conn))
     {
     struct slName *exampleList = NULL, *ex;
     hPrintf("Some example values:<BR>\n");
