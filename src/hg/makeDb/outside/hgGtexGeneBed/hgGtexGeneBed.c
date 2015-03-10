@@ -45,8 +45,8 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
-    {"-gtexVersion", OPTION_STRING},
-    {"-gencodeVersion", OPTION_STRING},
+    {"gtexVersion", OPTION_STRING},
+    {"gencodeVersion", OPTION_STRING},
     {"noLoad", OPTION_BOOLEAN},
     {NULL, 0},
 };
