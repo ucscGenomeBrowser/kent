@@ -31,7 +31,7 @@ group compGeno
         type wigMaf 0.0 1.0
         speciesCodonDefault tarSyr2
         speciesGroups Primates
-        sGroup_Primates panPan1 panTro4 ponAbe2 gorGor3 nomLeu3 macFas5 papAnu2 rheMac3 chlSab2 hg38 rhiRox1 nasLar1 saiBol1 micMur1 calJac3 otoGar3
+        sGroup_Primates panPan1 gorGor3 ponAbe2 nomLeu3 panTro4 macFas5 papAnu2 rheMac3 rhiRox1 chlSab2 nasLar1 hg38 saiBol1 micMur1 calJac3 otoGar3
         itemFirstCharCase noChange
         treeImage phylo/tarSyr2_17way.png
         priority 100
