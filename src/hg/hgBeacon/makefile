@@ -20,6 +20,7 @@ my::
 	ln -sf ${CGI_BIN_USER}/hgBeacon ${CGI_BIN_USER}/beacon2/info
 	ln -sf ${CGI_BIN_USER}/hgBeacon ${CGI_BIN_USER}/beacon2/query
 	cp help.txt /gbdb/hg19/beacon/
+	cp testBeacon ${DESTDIR}${BINDIR}/
 beta::
 	rm -f ${CGI_BIN_BETA}/hgBeacon
 	cp -p hgBeacon ${CGI_BIN_BETA}/
