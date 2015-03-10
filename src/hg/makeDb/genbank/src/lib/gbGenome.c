@@ -85,6 +85,7 @@ static char *anoGamNames[] = {"Anopheles gambiae", NULL};
 static char *apiMelNames[] = {"Apis mellifera", NULL};
 static char *triCasNames[] = {"Tribolium castaneum", NULL};
 static char *tetNigNames[] = {"Tetraodon nigroviridis", NULL};
+static char *bisBisNames[] = {"Bison bison", "Bison bison bison", NULL};
 static char *bosTauNames[] = {"Bos taurus", NULL};
 static char *xenTroNames[] = {"Xenopus tropicalis", 
                               "Xenopus (Silurana) tropicalis", NULL};
@@ -202,6 +203,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"apiMel", apiMelNames},
     {"triCas", triCasNames},
     {"tetNig", tetNigNames},
+    {"bisBis", bisBisNames},
     {"bosTau", bosTauNames},
     {"xenTro", xenTroNames},
     {"anoCar", anoCarNames},
