@@ -173,6 +173,20 @@ for (i=0; i<table->fieldCount; ++i)
     printf("%s", field);
     printf("\">");
     printf("%s", field);
+    if (!isEmpty(orderFields))
+        {
+	char *s = orderFields;
+	boolean isRev = (s[0] == '-');
+	if (isRev)
+	    ++s;
+	if (sameString(field, s))
+	    {
+	    if (isRev)
+	        printf("&uarr;");
+	    else
+	        printf("&darr;");
+	    }
+	}
     printf("</A>");
     webPrintLabelCellEnd();
     }
