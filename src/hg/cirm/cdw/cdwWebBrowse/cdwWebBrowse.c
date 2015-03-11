@@ -985,6 +985,35 @@ printf("  $('#watered').watermark(\"why hello there\");\n");
 printf("});\n");
 printf("</script>\n");
 
+printf("<TABLE><TR><TH>file name</TH><TH>image</TH></TR>\n");
+char *imageFiles[] = {
+"up.gif",
+"down.gif",
+"arrows-ffffff.png",
+"ab_down.gif",
+"ab_left.gif",
+"ab_left2.gif",
+"ab_right.gif",
+"ab_right2.gif",
+"ab_up.gif",
+"add.gif",
+"add_sm.gif",
+"aw_down.gif",
+"aw_left.gif",
+"aw_right.gif",
+"aw_up.gif",
+"upBlue.png",
+"downBlue.png",
+"toggle.png",
+"magnify.png",
+};
+int imageIx;
+for (imageIx=0; imageIx <ArraySize(imageFiles);  ++imageIx)
+    {
+    char *name = imageFiles[imageIx];
+    printf("<TR><TD>%s</TD><TD><IMG SRC=\"../images/%s\"></TD>\n", name, name);
+    }
+printf("</TABLE>\n");
 printf("</FORM>");
 }
 
@@ -1151,7 +1180,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.43");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.44");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
