@@ -218,7 +218,7 @@ char *cdwAllowedTags[] = {
     "paired_end",
     "life_stage",
     "age",
-    "age_units",
+    "age_unit",
     "cell_line",
     "cell_pair",
     "cell_count",
