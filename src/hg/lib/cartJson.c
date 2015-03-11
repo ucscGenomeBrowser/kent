@@ -235,7 +235,9 @@ static void printGeneSuggestTrack(struct cartJson *cj, char *db)
 {
 if (isEmpty(db))
     db = cartString(cj->cart, "db");
-char *track = assemblyGeneSuggestTrack(db);
+char *track = NULL;
+if (! trackHubDatabase(db))
+    track = assemblyGeneSuggestTrack(db);
 jsonWriteString(cj->jw, "geneSuggestTrack", track);
 }
 
