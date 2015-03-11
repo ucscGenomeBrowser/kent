@@ -9,37 +9,46 @@
 #include "cheapcgi.h"
 #include "cart.h"
 #include "hui.h"
+#include "rainbow.h"
 
 /* Global Variables */
 struct cart *cart;             /* CGI and other variables */
 struct hash *oldVars = NULL;
 
-void drawPrettyPieGraph(struct slPair *data, char *id)
+void drawPrettyPieGraph(struct slPair *data, char *id, char *title, char *subtitle)
+/* Draw a pretty pie graph using D3. Import D3 and D3pie before use. */
 {
+// Some D3 administrative stuff, the title, subtitle, sizing etc. 
 printf("<script>\nvar pie = new d3pie(\"%s\", {\n\"header\": {", id);
-printf("\"title\": { \"text\": \"Testing pretty pie graph function\",");
-printf("\"fontSize\": 24,");
+printf("\"title\": { \"text\": \"%s\",", title);
+printf("\"fontSize\": 16,");
 printf("\"font\": \"open sans\",},");
-printf("\"subtitle\": { \"text\": \"Things should be pretty...\",");
+printf("\"subtitle\": { \"text\": \"%s\",", subtitle);
 printf("\"color\": \"#999999\",");
-printf("\"fontSize\": 12,");
-printf("\"font\": \"open sans\",},\"titleSubtitlePadding\":9 },\n");
+printf("\"fontSize\": 10,");
+printf("\"font\": \"open sans\",},");
+printf("\"titleSubtitlePadding\":9 },\n");
 printf("\"footer\": {\"color\": \"#999999\",");
-printf("\"fontSize\": 12,");
+printf("\"fontSize\": 10,");
 printf("\"font\": \"open sans\",");
 printf("\"location\": \"bottom-left\",},\n");
-printf("\"size\": { \"canvasWidth\": 590},\n");
+printf("\"size\": { \"canvasWidth\": 300, \"canvasHeight\": 300},\n");
 printf("\"data\": { \"sortOrder\": \"value-desc\", \"content\": [\n");
 struct slPair *start = NULL;
+float colorOffset = 1;
+int totalFields =  slCount(data);
 for (start=data; start!=NULL; start=start->next)
 {
-char * temp = start->val;
-printf("\t{\"label\": \"%s\",\n\t\"value\": %s,\n\t\"color\": \"#2484c1\"}", start->name, temp);
+float currentColor = colorOffset/totalFields;
+struct rgbColor color = saturatedRainbowAtPos(currentColor);
+char *temp = start->val;
+printf("\t{\"label\": \"%s\",\n\t\"value\": %s,\n\t\"color\": \"rgb(%i,%i,%i)\"}", start->name, temp, color.r, color.b, color.g);
 if (start->next!=NULL) printf(",\n");
+++colorOffset;
 }
 printf("]},\n\"labels\": {");
-printf("\"outer\":{\"pieDistance\":32},");
-printf("\"inner\":{\"hideWhenLessThanPercentage\":10},");
+printf("\"outer\":{\"pieDistance\":20},");
+printf("\"inner\":{\"hideWhenLessThanPercentage\":5},");
 printf("\"mainLabel\":{\"fontSize\":11},");
 printf("\"percentage\":{\"color\":\"#ffffff\", \"decimalPlaces\": 0},");
 printf("\"value\":{\"color\":\"#adadad\", \"fontSize\":11},");
@@ -101,14 +110,23 @@ slPairAdd(&data, "B", "10");
 slPairAdd(&data, "C", "1");
 slReverse(&data);
 printf("<div id=\"pieChart1\">\n");
-drawPrettyPieGraph(data, "pieChart1");
+drawPrettyPieGraph(data, "pieChart1", "Title", "Subtitle");
 printf("</div>\n");
+slPairAdd(&data, "D", "10");
 printf("<div id=\"pieChart2\">\n");
-drawPrettyPieGraph(data, "pieChart2");
+drawPrettyPieGraph(data, "pieChart1", "A new title", "cool subtitle!");
 printf("</div>\n");
+slPairAdd(&data, "W", "15");
+printf("<div id=\"pieChart3\">\n");
+drawPrettyPieGraph(data, "pieChart1", "Title", "Testing out what a much longer subtitle will look like... How many characters can I put here?");
+printf("</div>\n");
+slPairAdd(&data, "Z", "30");
+printf("<div id=\"pieChart4\">\n");
+drawPrettyPieGraph(data, "pieChart1", "How do much largers titles look?", "Subtitle");
+printf("</div>\n");
+printf("<style>\npieChart1{\n align:center;} </style>");
 #ifdef SOON
 drawPieGraph(data);
-slPairAdd(&data, "D", "10");
 drawPieGraph(data);
 slPairAdd(&data, "E", "15");
 drawPieGraph(data);
