@@ -492,7 +492,7 @@ int hgSeqBed(char *db, struct hTableInfo *hti, struct bed *bedList)
  * Returns number of FASTA records printed out. */
 {
 struct bed *bedItem;
-char itemName[128];
+char itemName[512];
 boolean isRc;
 int count;
 unsigned *starts = NULL;

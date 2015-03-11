@@ -484,6 +484,10 @@ struct slName *sqlRandomSampleConn(struct sqlConnection *conn, char *table,
 struct slName *sqlRandomSampleWithSeed(char *db, char *table, char *field, int count, int seed);
 /* Get random sample from database specifiying rand number seed, or -1 for none */
 
+bool sqlCanCreateTemp(struct sqlConnection *conn);
+/* Return True if it looks like we can write into temp tables in the current database
+ * Can be used to check if sqlRandomSampleWithSeed-functions are safe to call.
+ * */
 
 struct sqlFieldInfo
 /* information about fields of a table; free with sqlFieldInfoFreeList */

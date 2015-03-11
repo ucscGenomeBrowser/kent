@@ -70,6 +70,9 @@ var ImModel = (function() {
         registerCartValidateHandler: function(handler) {
             // After all of the registered cart var handlers have been called,
             // the registered validation / cleanup function will be called.
+            if (! handler || ! _.isFunction(handler)) {
+                this.error("registerUiHandler called without a valid handler", handler);
+            }
             this.cartValidateHandlers.push(handler);
         },
 
@@ -77,6 +80,9 @@ var ImModel = (function() {
             // Associate handler with partialPath so that when the UI sends an event whose
             // path begins with partialPath, handler will be invoked with this and
             // arguments mutState (mutable copy of state), path, and optional data.
+            if (! handler || ! _.isFunction(handler)) {
+                this.error("registerUiHandler called without a valid handler", handler);
+            }
             if (_.isString(partialPath) || _.isNumber(partialPath)) {
                 partialPath = [partialPath];
             } else {
@@ -230,7 +236,7 @@ var ImModel = (function() {
             this.cartSend({cgiVar: setting});
         },
 
-        changeCartVar: function(mutState, path, newValue) {
+        changeCartString: function(mutState, path, newValue) {
             // Change state's [path][cartVar] to newValue (if they differ), tell the server about it,
             // and re-render.
             mutState.setIn(path, newValue);

@@ -95,7 +95,7 @@ boolean checkRepeat(struct rmskOut2 *r, struct lineFile *lf)
 /* check for bogus repeat */
 {
 /* this is bogus on both strands */
-if (r->repEnd < 0 || r->repStart > r->repEnd)
+if (r->repStart > r->repEnd)
     {
     badRepCnt++;
     if (verboseLevel() > 1)

@@ -2,7 +2,7 @@
 
 import logging, sys, optparse, re, os, datetime, gzip, urllib2, subprocess
 from collections import defaultdict
-from os.path import join, basename, dirname, isfile
+from os.path import join, basename, dirname, isfile, abspath
 from datetime import date, datetime, timedelta
 
 # === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
@@ -258,7 +258,10 @@ if options.maxDiff:
         percDiff = float(diffCount)/todayCount
         if percDiff > options.maxDiff:
             logging.info(cmd)
-            raise Exception("too much diff: %d out of %d lines" % (diffCount, todayCount))
+            diffFname =  abspath(join("archive", "lastDiff.txt"))
+            cmd = "diff %s %s --speed-large-files > %s" % (fname, previousFname, diffFname)
+            assert(os.system(cmd)==0)
+            raise Exception("too many differences: %d out of %d lines. Look at the differences n the file %s. If you are OK with them, run '/hive/data/outside/otto/clinvar/doUpdate.sh -nocheck'" % (diffCount, todayCount, diffFname))
 
 # convert to bigBed without the date in the fname, like clinvarMain.hg19.bb
 for fname in fnames:

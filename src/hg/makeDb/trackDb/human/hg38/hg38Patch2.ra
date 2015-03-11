@@ -109,3 +109,10 @@ searchType bed
 shortCircuit 1
 termRegex KN[0-9]+(\.[0-9]+)?
 searchPriority 18
+
+searchTable hg38Patch2Haplotypes
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex KN[0-9]+(\.[0-9]+)?
+searchPriority 18

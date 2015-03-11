@@ -1,0 +1,68 @@
+#!/usr/bin/env python
+import sys, json, urllib2
+import unittest
+import imp
+import os.path
+
+if os.path.isfile("query"):
+    imp.load_source("query", "query") # hgBeacon does not have the .py extension
+    import query as hgBeacon
+else:
+    imp.load_source("hgBeacon", "hgBeacon") # hgBeacon does not have the .py extension
+    import hgBeacon
+
+baseUrl = None
+if len(sys.argv)!=1:
+    baseUrl = sys.argv[1]
+
+def queryServer(chrom, pos, allele, referenceBases, reference, dataset):
+    " if baseUrl is set, query via http. Otherwise just call the script directly "
+    if baseUrl == None:
+        ret = hgBeacon.lookupAlleleJson(chrom, pos, allele, None, reference, dataset)
+    else:
+        url = baseUrl+"?chromosome=%s&position=%s&alternateBases=%s" % (chrom, str(pos), allele)
+        if reference!="":
+            url=url+"&reference=%s" % reference
+        if dataset!="":
+            url=url+"&dataset=%s" % dataset
+
+        data = urllib2.urlopen(url).read()
+        ret = json.loads(data)
+    return ret
+
+class TestBeacon(unittest.TestCase):
+
+    def test_outside(self):
+        " test query, beacon "
+        maxInt = 2147483646
+        rep = queryServer("1", str(maxInt), "T", None, "", "")
+        self.assertTrue(rep["query"]["position"]==maxInt)
+        self.assertTrue(rep["query"]["reference"]=="GRCh37")
+        self.assertTrue(rep["query"]["alternateBases"]=="T")
+        self.assertTrue(rep["query"]["chromosome"]=="1")
+        self.assertTrue(rep["response"]["exists"]=="false")
+
+        bi = rep["beacon"]
+        self.assertTrue(bi["id"] != "")
+        self.assertTrue(bi["name"] != "")
+        self.assertTrue(bi["organization"] != "")
+        self.assertTrue(bi["description"] != "")
+        self.assertTrue(bi["api"] != "")
+
+    def test_allele(self):
+        " test true reply with the special testing chromosome"
+        pos = 0
+        rep = queryServer("test", str(pos), "A", None, "", "")
+        self.assertTrue(rep["response"]["exists"]=="true")
+
+    def test_allele_false(self):
+        " test false reply "
+        pos = 10000
+        rep = queryServer("test", str(pos), "A", None, "", "")
+        self.assertTrue(rep["response"]["exists"]=="false")
+
+#if __name__ == '__main__':
+    #unittest.main()
+suite = unittest.TestLoader().loadTestsFromTestCase(TestBeacon)
+unittest.TextTestRunner(verbosity=2).run(suite)
+

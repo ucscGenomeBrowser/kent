@@ -11,13 +11,14 @@ var LabeledSelect = React.createClass({
     propTypes: { label: pt.string.isRequired,  // label that appears above select input
                  // Optional:
                  selected: pt.string,          // initial selected value
-                 options: pt.object,           // Immutable.Vector [ .Map{value: x, label: y}, ... ]
+                 options: pt.object,           // Immutable.List [ .Map{value: x, label: y,
+                                               //                       disabled: false}, ... ]
                  className: pt.string          // class(es) to pass to wrapper div
                },
 
     optionFromValueLabel: function(item) {
-        var value = item.get('value'), label = item.get('label');
-        return <option value={value} key={value}>{label}</option>;
+        var value = item.get('value'), label = item.get('label'), disabled = item.get('disabled');
+        return <option value={value} key={value} disabled={disabled}>{label}</option>;
     },
 
     onChange: function(e) {

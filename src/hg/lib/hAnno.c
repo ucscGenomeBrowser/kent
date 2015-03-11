@@ -10,6 +10,7 @@
 #include "hui.h"
 #include "jksql.h"
 #include "pgSnp.h"
+#include "trackHub.h"
 #include "vcf.h"
 #include "annoGratorQuery.h"
 #include "annoGratorGpVar.h"
@@ -31,14 +32,23 @@ struct annoAssembly *hAnnoGetAssembly(char *db)
 static struct annoAssembly *aa = NULL;
 if (aa == NULL)
     {
-    char *nibOrTwoBitDir = hDbDbNibPath(db);
-    if (nibOrTwoBitDir == NULL)
-        errAbort("Can't find .2bit for db '%s'", db);
-    char twoBitPath[HDB_MAX_PATH_STRING];
-    safef(twoBitPath, sizeof(twoBitPath), "%s/%s.2bit", nibOrTwoBitDir, db);
-    char *path = hReplaceGbdb(twoBitPath);
-    aa = annoAssemblyNew(db, path);
-    freeMem(path);
+    if (trackHubDatabase(db))
+        {
+        struct trackHubGenome *thg = trackHubGetGenome(db);
+        char *url = thg->twoBitPath;
+        aa = annoAssemblyNew(db, url);
+        }
+    else
+        {
+        char *nibOrTwoBitDir = hDbDbNibPath(db);
+        if (nibOrTwoBitDir == NULL)
+            errAbort("Can't find .2bit for db '%s'", db);
+        char twoBitPath[HDB_MAX_PATH_STRING];
+        safef(twoBitPath, sizeof(twoBitPath), "%s/%s.2bit", nibOrTwoBitDir, db);
+        char *path = hReplaceGbdb(twoBitPath);
+        aa = annoAssemblyNew(db, path);
+        freeMem(path);
+        }
     }
 return aa;
 }
@@ -120,10 +130,17 @@ else
 static char *getBigDataFileName(char *db, struct trackDb *tdb, char *selTable, char *chrom)
 /* Get fileName from bigBed/bigWig/BAM/VCF database table, or bigDataUrl from custom track. */
 {
-struct sqlConnection *conn = hAllocConn(db);
-char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, selTable, chrom);
-hFreeConn(&conn);
-return fileOrUrl;
+if (trackHubDatabase(db))
+    {
+    return trackDbSetting(tdb, "bigDataUrl");
+    }
+else
+    {
+    struct sqlConnection *conn = hAllocConn(db);
+    char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, selTable, chrom);
+    hFreeConn(&conn);
+    return fileOrUrl;
+    }
 }
 
 struct annoStreamer *hAnnoStreamerFromTrackDb(struct annoAssembly *assembly, char *selTable,

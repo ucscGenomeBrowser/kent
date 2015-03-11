@@ -2985,6 +2985,32 @@ return sqlRandomSampleWithSeed(db, table, field, count, -1);
 }
 
 
+bool sqlCanCreateTemp(struct sqlConnection *conn)
+/* Return True if it looks like we can write temp tables into the current database
+ * Can be used to check if sqlRandomSampleWithSeed-functions are safe to call.
+ * */
+{
+// assume we can write if the current connection has no failOver connection 
+if (conn->failoverConn==NULL)
+    {
+    return TRUE;
+    }
+
+char *err;
+unsigned int errNo;
+
+// try a create temp query
+char *query = "CREATE TEMPORARY TABLE testTemp (number INT); DROP TABLE testTemp;";
+struct sqlResult *sr = sqlGetResultExt(conn, query, &errNo, &err);
+if (sr==NULL)
+    {
+    return FALSE;
+    }
+
+sqlFreeResult(&sr);
+return TRUE;
+}
+
 static struct sqlFieldInfo *sqlFieldInfoParse(char **row)
 /* parse a row into a sqlFieldInfo object */
 {

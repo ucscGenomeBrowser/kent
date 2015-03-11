@@ -85,6 +85,7 @@ static char *anoGamNames[] = {"Anopheles gambiae", NULL};
 static char *apiMelNames[] = {"Apis mellifera", NULL};
 static char *triCasNames[] = {"Tribolium castaneum", NULL};
 static char *tetNigNames[] = {"Tetraodon nigroviridis", NULL};
+static char *bisBisNames[] = {"Bison bison", "Bison bison bison", NULL};
 static char *bosTauNames[] = {"Bos taurus", NULL};
 static char *xenTroNames[] = {"Xenopus tropicalis", 
                               "Xenopus (Silurana) tropicalis", NULL};
@@ -137,6 +138,7 @@ static char *calMilNames[] = {"Callorhinchus milii", NULL};
 static char *criGriNames[] = {"Cricetulus griseus", NULL};
 static char *nasLarNames[] = {"Nasalis larvatus", NULL};
 static char *rhiRoxNames[] = {"Rhinopithecus roxellana", NULL};
+static char *aquChrNames[] = {"Aquila chrysaetos canadensis", NULL};
 
 static char *endNames[] = {NULL};
 
@@ -201,6 +203,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"apiMel", apiMelNames},
     {"triCas", triCasNames},
     {"tetNig", tetNigNames},
+    {"bisBis", bisBisNames},
     {"bosTau", bosTauNames},
     {"xenTro", xenTroNames},
     {"anoCar", anoCarNames},
@@ -248,6 +251,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"criGri", criGriNames},
     {"nasLar", nasLarNames},
     {"rhiRox", rhiRoxNames},
+    {"aquChr", aquChrNames},
     {"CHM", hgNames},
     {"braNey", hgNames},
     {NULL, endNames}

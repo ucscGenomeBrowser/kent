@@ -18,7 +18,8 @@ struct cartJson
     };
 
 struct cartJson *cartJsonNew(struct cart *cart);
-/* Allocate and return a cartJson object with default handlers. */
+/* Allocate and return a cartJson object with default handlers.
+ * cart must have "db" set already. */
 
 typedef void CartJsonHandler(struct cartJson *cj, struct hash *paramHash);
 /* Implementation of some command; paramHash associates parameter names with
@@ -42,17 +43,5 @@ void cartJsonExecute(struct cartJson *cj);
 
 void cartJsonFree(struct cartJson **pCj);
 /* Close **pCj's contents and nullify *pCj. */
-
-void cartJsonChangeDb(struct cartJson *cj, struct hash *paramHash);
-/* Change db to new value, update cart and print JSON of new position & gene suggest track. */
-
-void cartJsonChangeOrg(struct cartJson *cj, struct hash *paramHash);
-/* Change org to new value, update cart and print JSON of new db menu, new position etc. */
-
-void cartJsonChangeClade(struct cartJson *cj, struct hash *paramHash);
-/* Change clade to new value, update cart, and print JSON of new org & db menus, new position etc */
-
-void cartJsonGetGroupsTracksTables(struct cartJson *cj, struct hash *paramHash);
-/* Print info necessary for group/track/table menus. */
 
 #endif /* CARTJSON_H */

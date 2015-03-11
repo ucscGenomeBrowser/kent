@@ -38,36 +38,6 @@ if (param == NULL)
 return param;
 }
 
-static void printClade(struct jsonWrite *jw, char *clade)
-/* Print out clade menu's option list and selected item */
-{
-struct slPair *cladeOptions = hGetCladeOptions();
-jsonWriteValueLabelList(jw, "cladeOptions", cladeOptions);
-jsonWriteString(jw, "clade", clade);
-}
-
-static void printOrg(struct jsonWrite *jw, char *clade, char *org)
-/* Print out org menu's option list and selected item */
-{
-struct slPair *orgOptions = hGetGenomeOptionsForClade(clade);
-jsonWriteValueLabelList(jw, "orgOptions", orgOptions);
-jsonWriteString(jw, "org", org);
-}
-
-static void printDb(struct jsonWrite *jw, char *org, char *db)
-/* Print out db menu's option list and selected item */
-{
-struct slPair *dbOptions = hGetDbOptionsForGenome(org);
-jsonWriteValueLabelList(jw, "dbOptions", dbOptions);
-jsonWriteString(jw, "db", db);
-}
-
-static void printPosition(struct jsonWrite *jw, char *position)
-/* Print the position as given (it's up to caller to ensure this is consistent w/cart). */
-{
-jsonWriteString(jw, "position", position);
-}
-
 static char *stripAnchor(char *textIn)
 /* If textIn contains an HTML anchor tag, strip it out (and its end tag). */
 {
@@ -242,7 +212,7 @@ if (hgp && hgp->singlePos)
     char newPosBuf[128];
     safef(newPosBuf, sizeof(newPosBuf), "%s:%d-%d", chrom, start+1, end);
     cartSetString(cj->cart, "position", newPosBuf);
-    printPosition(cj->jw, newPosBuf);
+    jsonWriteString(cj->jw, "position", newPosBuf);
     }
 else
     // Search failed; restore position from cart
@@ -265,69 +235,18 @@ static void printGeneSuggestTrack(struct cartJson *cj, char *db)
 {
 if (isEmpty(db))
     db = cartString(cj->cart, "db");
-char *track = assemblyGeneSuggestTrack(db);
+char *track = NULL;
+if (! trackHubDatabase(db))
+    track = assemblyGeneSuggestTrack(db);
 jsonWriteString(cj->jw, "geneSuggestTrack", track);
 }
 
-static void changeDb(struct cartJson *cj, char *newDb)
-/* Change db to new value, update cart and print JSON of new position & gene suggest track. */
+static void getGeneSuggestTrack(struct cartJson *cj, struct hash *paramHash)
+/* Get the gene track used by hgSuggest for db (defaulting to cart db), or null if
+ * there is none for this assembly. */
 {
-cartSetString(cj->cart, "db", newDb);
-jsonWriteString(cj->jw, "db", newDb);
-char *defaultPosition = hDefaultPos(newDb);
-changePosition(cj, defaultPosition);
-printGeneSuggestTrack(cj, newDb);
-}
-
-void cartJsonChangeDb(struct cartJson *cj, struct hash *paramHash)
-/* Change db to new value, update cart and print JSON of new position & gene suggest track. */
-{
-char *newDb = cartJsonRequiredParam(paramHash, "newValue", cj->jw, "changeDb");
-if (newDb)
-    changeDb(cj, newDb);
-}
-
-static void changeOrg(struct cartJson *cj, char *newOrg)
-/* Change org to new value, update cart variables and print JSON of new db menu etc. */
-{
-char *newDb = hDefaultDbForGenome(newOrg);
-if (isEmpty(newDb))
-    {
-    jsonWriteStringf(cj->jw, "error",
-		     "changeOrg: can't find default db for '%s'", newOrg);
-    return;
-    }
-cartSetString(cj->cart, "org", newOrg);
-jsonWriteString(cj->jw, "org", newOrg);
-printDb(cj->jw, newOrg, newDb);
-changeDb(cj, newDb);
-}
-
-void cartJsonChangeOrg(struct cartJson *cj, struct hash *paramHash)
-/* Change org to new value, update cart and print JSON of new db menu, new position etc. */
-{
-char *newOrg = cartJsonRequiredParam(paramHash, "newValue", cj->jw, "changeOrg");
-if (newOrg)
-    changeOrg(cj, newOrg);
-}
-
-void cartJsonChangeClade(struct cartJson *cj, struct hash *paramHash)
-/* Change clade to new value, update cart, and print JSON of new org & db menus, new position etc */
-{
-char *newClade = cartJsonRequiredParam(paramHash, "newValue", cj->jw, "changeClade");
-if (! newClade)
-    return;
-char *newOrg = hDefaultGenomeForClade(newClade);
-if (isEmpty(newOrg))
-    {
-    jsonWriteStringf(cj->jw, "error",
-		     "changeClade: can't find default genome for '%s'", newClade);
-    return;
-    }
-cartSetString(cj->cart, "clade", newClade);
-jsonWriteString(cj->jw, "clade", newClade);
-printOrg(cj->jw, newClade, newOrg);
-changeOrg(cj, newOrg);
+char *db = cartJsonOptionalParam(paramHash, "db");
+printGeneSuggestTrack(cj, db);
 }
 
 static void getVar(struct cartJson *cj, struct hash *paramHash)
@@ -360,57 +279,107 @@ for (var = varList;  var != NULL;  var = var->next)
 slFreeList(&varList);
 }
 
-static struct slPair *trackLabelPairsFromTdbRefs(struct slRef *tdbRefList)
-/* For each tdb in tdbRefList, make a pair of {track, shortLabel}. */
+INLINE boolean nameIsTdbField(char *name)
+/* Return TRUE if name is a tdb->{field}, e.g. "track" or "shortLabel" etc. */
 {
-struct slPair *pairList = NULL;
-struct slRef *slr;
-for (slr = tdbRefList;  slr != NULL;  slr = slr->next)
+static char *tdbFieldNames[] =
+    { "track", "table", "shortLabel", "longLabel", "type", "priority", "grp", "parent",
+      "subtracks", "visibility" };
+return (stringArrayIx(name, tdbFieldNames, ArraySize(tdbFieldNames)) >= 0);
+}
+
+INLINE boolean fieldOk(char *field, struct hash *fieldHash)
+/* Return TRUE if fieldHash is NULL or field exists in fieldHash. */
+{
+return (fieldHash == NULL || hashLookup(fieldHash, field));
+}
+
+static void writeTdbSimple(struct jsonWrite *jw, struct trackDb *tdb, struct hash *fieldHash)
+/* Write JSON for the non-parent/child fields of tdb */
+{
+if (fieldOk("track", fieldHash))
+    jsonWriteString(jw, "track", tdb->track);
+if (fieldOk("table", fieldHash))
+    jsonWriteString(jw, "table", tdb->table);
+if (fieldOk("shortLabel", fieldHash))
+    jsonWriteString(jw, "shortLabel", tdb->shortLabel);
+if (fieldOk("longLabel", fieldHash))
+    jsonWriteString(jw, "longLabel", tdb->longLabel);
+if (fieldOk("type", fieldHash))
+    jsonWriteString(jw, "type", tdb->type);
+if (fieldOk("priority", fieldHash))
+    jsonWriteDouble(jw, "priority", tdb->priority);
+if (fieldOk("grp", fieldHash))
+    jsonWriteString(jw, "grp", tdb->grp);
+// NOTE: if you add a new field here, then also add it to nameIsTdbField above.
+if (tdb->settingsHash)
     {
-    struct trackDb *tdb = slr->val;
-    slAddHead(&pairList, slPairNew(tdb->track, tdb->shortLabel));
+    struct hashEl *hel;
+    struct hashCookie cookie = hashFirst(tdb->settingsHash);
+    while ((hel = hashNext(&cookie)) != NULL)
+        {
+        if (! nameIsTdbField(hel->name) && fieldOk(hel->name, fieldHash))
+            {
+            //#*** TODO: move jsonStringEscape inside jsonWriteString
+            char *encoded = jsonStringEscape((char *)hel->val);
+            jsonWriteString(jw, hel->name, encoded);
+            }
+        }
     }
-slReverse(&pairList);
-return pairList;
 }
 
-static int trackDbRefCmpShortLabel(const void *va, const void *vb)
-/* Case-insensitive comparison of max 32 chars of tdb->shortLabel in slRefs. */
+static void rWriteTdb(struct jsonWrite *jw, struct trackDb *tdb, struct hash *fieldHash,
+                      int depth, int maxDepth)
+/* Recursively write JSON for tdb and its subtracks if any.  If fieldHash is non-NULL,
+ * include only the field names indexed in fieldHash. */
 {
-const struct slRef *aRef = *((struct slRef **)va);
-const struct slRef *bRef = *((struct slRef **)vb);
-const struct trackDb *tdbA = aRef->val, *tdbB = bRef->val;
-char shortLabelA[33], shortLabelB[33];
-strncpy(shortLabelA, tdbA->shortLabel, 32);
-shortLabelA[32] = '\0';
-strncpy(shortLabelB, tdbB->shortLabel, 32);
-shortLabelB[32] = '\0';
-tolowers(shortLabelA);
-tolowers(shortLabelB);
-return strcmp(shortLabelA, shortLabelB);
+if (maxDepth >= 0 && depth > maxDepth)
+    return;
+jsonWriteObjectStart(jw, NULL);
+writeTdbSimple(jw, tdb, fieldHash);
+if (tdb->parent && fieldOk("parent", fieldHash))
+    {
+    // We can't link to an object in JSON and better not recurse here or else infinite loop.
+    if (tdbIsSuperTrackChild(tdb))
+        {
+        // Supertracks have been omitted from fullTrackList, so add the supertrack object's
+        // non-parent/child info here.
+        jsonWriteObjectStart(jw, "parent");
+        writeTdbSimple(jw, tdb->parent, fieldHash);
+        jsonWriteObjectEnd(jw);
+        }
+    else
+        // Just the name so we don't have infinite loops.
+        jsonWriteString(jw, "parent", tdb->parent->track);
+    }
+if (tdb->subtracks && fieldOk("subtracks", fieldHash))
+    {
+    jsonWriteListStart(jw, "subtracks");
+    struct trackDb *subTdb;
+    for (subTdb = tdb->subtracks;  subTdb != NULL;  subTdb = subTdb->next)
+        rWriteTdb(jw, subTdb, fieldHash, depth+1, maxDepth);
+    jsonWriteListEnd(jw);
+    }
+jsonWriteObjectEnd(jw);
 }
 
-static void printAllTracks(struct cartJson *cj, struct trackDb *trackList)
-/* Print a mapping of "allTracks" to {track, shortLabel} for all tracks,
- * alphabetized by shortLabel. */
+static struct hash *hashFromCommaString(char *commaString)
+/* Return a hash that stores words in comma-separated string, or NULL if string is NULL or empty. */
 {
-struct slRef *refList = refListFromSlList(trackList);
-slSort(&refList, trackDbRefCmpShortLabel);
-struct slPair *trackLabelPairs = trackLabelPairsFromTdbRefs(refList);
-jsonWriteValueLabelList(cj->jw, "allTracks", trackLabelPairs);
+struct hash *hash = NULL;
+if (isNotEmpty(commaString))
+    {
+    hash = hashNew(0);
+    char *words[1024];
+    int i, wordCount = chopCommas(commaString, words);
+    for (i = 0;  i < wordCount;  i++)
+        hashStoreName(hash, words[i]);
+    }
+return hash;
 }
 
-static void printOneGroupTracks(struct cartJson *cj, char *groupName, struct slRef *tdbRefList)
-/* Given a group and value is an slRef list of trackDbs, sort the list by trackDb priority
- * and print out JSON mapping the group name to list of trackDb {value, label} objects. */
-{
-slSort(&tdbRefList, trackDbRefCmp);
-struct slPair *trackLabelPairs = trackLabelPairsFromTdbRefs(tdbRefList);
-jsonWriteValueLabelList(cj->jw, groupName, trackLabelPairs);
-}
-
-static void printGroupTracks(struct cartJson *cj, struct trackDb *trackList)
-/* Hash group names to lists of tracks in those groups, and print out the structure as JSON. */
+static struct hash *hashTracksByGroup(struct trackDb *trackList)
+/* Hash group names to lists of tracks in those groups; sort each list by trackDb priority. */
 {
 struct hash *hash = hashNew(0);
 struct trackDb *tdb;
@@ -423,61 +392,54 @@ for (tdb = trackList;  tdb != NULL;  tdb = tdb->next)
     else
 	hashAdd(hash, tdb->grp, slr);
     }
-jsonWriteObjectStart(cj->jw, "groupTracks");
-printAllTracks(cj, trackList);
 struct hashCookie cookie = hashFirst(hash);
 struct hashEl *hel;
 while ((hel = hashNext(&cookie)) != NULL)
-    {
-    char *groupName = hel->name;
-    struct slRef *tdbRefList = hel->val;
-    printOneGroupTracks(cj, groupName, tdbRefList);
-    }
-jsonWriteObjectEnd(cj->jw);
-hashFree(&hash);
+    slSort(&hel->val, trackDbRefCmp);
+return hash;
 }
 
-static void printTrackTables(struct cartJson *cj, struct trackDb *trackList)
-/* Hash track names to lists of tables in those tracks, and print out the structure as JSON. */
-{
-jsonWriteObjectStart(cj->jw, "trackTables");
-char *db = cartString(cj->cart, "db");
-struct trackDb *tdb;
-for (tdb = trackList;  tdb != NULL;  tdb = tdb->next)
-    {
-    struct slName *tableList = cartTrackDbTablesForTrack(db, tdb, FALSE); // no useJoiner for now
-    jsonWriteSlNameList(cj->jw, tdb->track, tableList);
-    slFreeList(&tableList);
-    }
-jsonWriteObjectEnd(cj->jw);
-}
-
-void cartJsonGetGroupsTracksTables(struct cartJson *cj, struct hash *paramHash)
-/* Print info necessary for group/track/table menus. */
+void cartJsonGetGroupedTrackDb(struct cartJson *cj, struct hash *paramHash)
+/* Translate trackDb list (only a subset of the fields) into JSON array of track group objects;
+ * each group contains an array of track objects that may have subtracks.  Send it in a wrapper
+ * object that includes the database from which it was taken; it's possible that by the time
+ * this reaches the client, the user might have switched to a new db. */
 {
 struct trackDb *fullTrackList = NULL;
 struct grp *fullGroupList = NULL;
 cartTrackDbInit(cj->cart, &fullTrackList, &fullGroupList, /* useAccessControl=*/TRUE);
-// Print out options for the track group menu:
-// Remove All Tracks & All Tables from the end of the list for now.
-struct grp *grp, *nextGrp = NULL;
-for (grp = fullGroupList;  grp != NULL;  grp = nextGrp)
+struct hash *groupedTrackRefList = hashTracksByGroup(fullTrackList);
+// If the optional param 'fields' is given, hash the field names that should be returned.
+char *fields = cartJsonOptionalParam(paramHash, "fields");
+struct hash *fieldHash = hashFromCommaString(fields);
+// Also check for optional parameter 'maxDepth':
+int maxDepth = -1;
+char *maxDepthStr = cartJsonOptionalParam(paramHash, "maxDepth");
+if (isNotEmpty(maxDepthStr))
+    maxDepth = atoi(maxDepthStr);
+struct jsonWrite *jw = cj->jw;
+jsonWriteObjectStart(jw, "groupedTrackDb");
+jsonWriteString(jw, "db", cartString(cj->cart, "db"));
+jsonWriteListStart(jw, "groupedTrackDb");
+struct grp *grp;
+for (grp = fullGroupList;  grp != NULL;  grp = grp->next)
     {
-    nextGrp = grp->next;
-    if (nextGrp && (sameString(nextGrp->name, "allTracks") ||
-                    sameString(nextGrp->name, "allTables")))
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "name", grp->name);
+    jsonWriteString(jw, "label", grp->label);
+    jsonWriteListStart(jw, "tracks");
+    struct slRef *tdbRefList = hashFindVal(groupedTrackRefList, grp->name);
+    struct slRef *tdbRef;
+    for (tdbRef = tdbRefList;  tdbRef != NULL;  tdbRef = tdbRef->next)
         {
-        grp->next = nextGrp->next;
-        nextGrp = grp;
+        struct trackDb *tdb = tdbRef->val;
+        rWriteTdb(jw, tdb, fieldHash, 1, maxDepth);
         }
+    jsonWriteListEnd(jw);
+    jsonWriteObjectEnd(jw);
     }
-jsonWriteObjectStart(cj->jw, "trackDbInfo");
-jsonWriteValueLabelList(cj->jw, "groupOptions", (struct slPair *)fullGroupList);
-// Print out an object that maps group names to their tracks:
-printGroupTracks(cj, fullTrackList);
-// Print out an object that maps track names to tables:
-printTrackTables(cj, fullTrackList);
-jsonWriteObjectEnd(cj->jw);
+jsonWriteListEnd(jw);
+jsonWriteObjectEnd(jw);
 }
 
 static char *hAssemblyDescription(char *db)
@@ -558,20 +520,72 @@ while ((hel = hashNext(&cookie)) != NULL)
     }
 }
 
+static void jsonWriteValueLabel(struct jsonWrite *jw, char *value, char *label)
+/* Assuming we're already in an object, write out value and label tags & strings. */
+{
+jsonWriteString(jw, "value", value);
+jsonWriteString(jw, "label", label);
+}
+
+static void printCladeOrgDbTree(struct jsonWrite *jw)
+/* Print out the tree of clades, organisms and dbs as JSON.  Each node has value and label
+ * for menu options; clade nodes and org nodes also have children and default. */
+{
+jsonWriteListStart(jw, "cladeOrgDb");
+struct slPair *clade, *cladeOptions = hGetCladeOptions();
+struct dbDb *centralDbDbList = hDbDbList();
+for (clade = cladeOptions;  clade != NULL;  clade = clade->next)
+    {
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteValueLabel(jw, clade->name, clade->val);
+    jsonWriteListStart(jw, "children");
+    struct slPair *org, *orgOptions = hGetGenomeOptionsForClade(clade->name);
+    for (org = orgOptions;  org != NULL;  org = org->next)
+        {
+        jsonWriteObjectStart(jw, NULL);
+        jsonWriteValueLabel(jw, org->name, org->val);
+        jsonWriteListStart(jw, "children");
+        struct dbDb *dbDb, *dbDbList;
+        if (isHubTrack(org->name))
+            dbDbList = trackHubGetDbDbs(clade->name);
+        else
+            dbDbList = centralDbDbList;
+        for (dbDb = dbDbList;  dbDb != NULL;  dbDb = dbDb->next)
+            {
+            if (sameString(org->name, dbDb->genome))
+                {
+                jsonWriteObjectStart(jw, NULL);
+                jsonWriteValueLabel(jw, dbDb->name, dbDb->description);
+                jsonWriteString(jw, "defaultPos", dbDb->defaultPos);
+                jsonWriteObjectEnd(jw);
+                }
+            }
+        jsonWriteListEnd(jw);   // children (dbs)
+        jsonWriteString(jw, "default", hDefaultDbForGenome(org->name));
+        jsonWriteObjectEnd(jw); // org
+        }
+    jsonWriteListEnd(jw);   // children (orgs)
+    jsonWriteString(jw, "default", hDefaultGenomeForClade(clade->name));
+    jsonWriteObjectEnd(jw); // clade
+    }
+jsonWriteListEnd(jw);
+}
+
 static void getCladeOrgDbPos(struct cartJson *cj, struct hash *paramHash)
 /* Get cart's current clade, org, db, position and geneSuggest track. */
 {
+printCladeOrgDbTree(cj->jw);
 char *db = cartString(cj->cart, "db");
-char *genome = hGenome(db);
-char *clade = hClade(genome);
-printClade(cj->jw, clade);
-printOrg(cj->jw, clade, genome);
-printDb(cj->jw, genome, db);
+jsonWriteString(cj->jw, "db", db);
+char *org = cartUsualString(cj->cart, "org", hGenome(db));
+jsonWriteString(cj->jw, "org", org);
+char *clade = cartUsualString(cj->cart, "clade", hClade(org));
+jsonWriteString(cj->jw, "clade", clade);
 char *position = cartOptionalString(cj->cart, "position");
 if (isEmpty(position))
     position = hDefaultPos(db);
-printPosition(cj->jw, position);
-printGeneSuggestTrack(cj, cartString(cj->cart, "db"));
+jsonWriteString(cj->jw, "position", position);
+printGeneSuggestTrack(cj, db);
 }
 
 static void getStaticHtml(struct cartJson *cj, struct hash *paramHash)
@@ -595,7 +609,8 @@ hashAdd(cj->handlerHash, command, handler);
 }
 
 struct cartJson *cartJsonNew(struct cart *cart)
-/* Allocate and return a cartJson object with default handlers. */
+/* Allocate and return a cartJson object with default handlers.
+ * cart must have "db" set already. */
 {
 struct cartJson *cj;
 AllocVar(cj);
@@ -603,13 +618,11 @@ cj->handlerHash = hashNew(0);
 cj->jw = jsonWriteNew();
 cj->cart = cart;
 cartJsonRegisterHandler(cj, "getCladeOrgDbPos", getCladeOrgDbPos);
-cartJsonRegisterHandler(cj, "changeClade", cartJsonChangeClade);
-cartJsonRegisterHandler(cj, "changeOrg", cartJsonChangeOrg);
-cartJsonRegisterHandler(cj, "changeDb", cartJsonChangeDb);
 cartJsonRegisterHandler(cj, "changePosition", changePositionHandler);
 cartJsonRegisterHandler(cj, "get", getVar);
-cartJsonRegisterHandler(cj, "getGroupsTracksTables", cartJsonGetGroupsTracksTables);
+cartJsonRegisterHandler(cj, "getGroupedTrackDb", cartJsonGetGroupedTrackDb);
 cartJsonRegisterHandler(cj, "getAssemblyInfo", getAssemblyInfo);
+cartJsonRegisterHandler(cj, "getGeneSuggestTrack", getGeneSuggestTrack);
 cartJsonRegisterHandler(cj, "getHasCustomTracks", getHasCustomTracks);
 cartJsonRegisterHandler(cj, "getIsSpecialHost", getIsSpecialHost);
 cartJsonRegisterHandler(cj, "getHasHubTable", getHasHubTable);

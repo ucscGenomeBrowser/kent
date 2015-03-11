@@ -98,7 +98,9 @@
 			to the data.</p>
 			
 			<p>You can download sequence and annotation data <a href="../goldenPath/help/ftp.html">
-			using our FTP server</a>.
+			using our FTP server</a>, but we recommend using rsync, which has the
+                        advantage of starting up where it left off after a failure, when run again.
+                        Please see the previous link for examples.
 			
 			<P>You can also download data from our 
 			<A HREF="http://hgdownload.cse.ucsc.edu/downloads.html">Downloads</A>
@@ -112,6 +114,15 @@
 			<P>
 			For more information on using the UCSC DAS server, see 
 			<A HREF="#downloads">Downloading data from the UCSC DAS server</A>.
+                        <p>
+                        <b>To quickly download large volumes of data you can use
+                        UDR (UDT Enabled Rysnc):</b> UDR provides users much faster download rates.
+                        Here is an example using UDR, once installed, to download all the mouse mm9
+                        ENCODE information that amounts to several terabytes:</p>
+                        <pre class="code">$ udr rsync -avP hgdownload.cse.ucsc.edu::goldenPath/mm9/encodeDCC/ /my/local/mm9/</pre>
+                        Please read more about the new UDR method
+                        <a href="../../goldenPath/newsarch.html#030315" target="_blank">here</a>.
+                        </p>
 		    </TD><TD WIDTH=15></TD>
 		</TR>
 	    </TABLE>

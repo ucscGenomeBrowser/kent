@@ -73,7 +73,7 @@ if (length($chainFile) < 1) {
     exit 255;
 }
 
-printf "looking in file:\n  $chainFile\n";
+printf STDERR "looking in file:\n  $chainFile\n";
 my %foundSome;
 
 open (FH, "<$chainFile") or die "can not read $chainFile";
@@ -84,13 +84,17 @@ while (my $line = <FH>) {
 	if ($a[$i] =~ m/-minScore=|-scoreScheme=|-linearGap/ ) {
 	    my ($tag, $value) = split('=',$a[$i]);
 	    $foundSome{$tag} = $value;
-	    printf "%s\n", $a[$i];
+            $tag =~ s/-minScore/chainMinScore/;
+            $tag =~ s/-linearGap/chainLinearGap/;
 	    if ( $a[$i] =~ m/-scoreScheme/ ) {
+	        printf STDERR "%s\n", $a[$i];
 		if ( -s $value ) {
 		    my $matrix=`tail -5 $value | sed -e 's/^[ACGT] //' | egrep -v "A|O" | xargs echo | sed -e "s/ /,/g"`;
 		    chomp($matrix);
 		    printf "matrix 16 %s\n", $matrix;
 		}
+	    } else {
+	        printf "%s %s\n", $tag, $value;
 	    }
 	}
     }
@@ -99,7 +103,7 @@ my $foundCount = 0;
 foreach my $key (keys %foundSome) {
     ++$foundCount;
 }
-printf "default values:\n" if ($foundCount != 3);
+printf STDERR "default values:\n" if ($foundCount != 3);
 if (! exists($foundSome{'-minScore'}) ) {
     printf "chainMinScore 1000\n";
 }
