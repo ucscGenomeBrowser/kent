@@ -30,6 +30,31 @@
                 <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
 	          <TR><TH HEIGHT=10></TH></TR>
 	          <TR><TD WIDTH=10>&nbsp;</TD><TD>
+<!--#if expr='"$SERVER_NAME" != /.*.ucsc.edu/ && "$SERVER_NAME" != /.*.sdsc.edu/ && "$SERVER_NAME" != /browser/'-->
+<!-- 'browser' = GBiB -->
+<P>
+The page you requested resulted in a server problem on this system.
+<P> 
+<P>
+<B>This website <!--#echo var="HTTP_HOST" --> is a "mirror" not run by UCSC.</B><BR>
+You might want to contact the person that manages this server and tell them about the error.
+If you are unable to resolve it, you can contact support for Genome Browser mirror websites at
+<A HREF="mailto:&#103;&#101;&#110;&#111;&#109;e&#45;m&#105;&#114;&#114;&#111;r&#64;&#115;&#111;&#101;.u&#99;&#115;&#99;.e&#100;&#117;">&#103;&#101;&#110;&#111;&#109;e&#45;m&#105;&#114;&#114;&#111;r&#64;&#115;&#111;&#101;.
+u&#99;&#115;&#99;.e&#100;&#117;</A>. Please include this mirror's address "http://<!--#echo var="HTTP_HOST" -->" in the email.
+</P>
+<!-- above address is genome-mirror at soe.ucsc.edu -->
+<P>
+		    If you are unable to access commonly-used features on our 
+		    website, it is possible that you may need to reset your 
+		    Genome Browser with the following URL: 
+		    <A HREF="../cgi-bin/cartReset">http://<!--#echo var="HTTP_HOST" -->/cgi-bin/cartReset</A>.
+		    This will replace your stored settings with the default 
+		    configuration and will return your Browser to the state 
+		    it was in when you first accessed it.
+ 		    <P>
+ 		    We apologize for the inconvenience.
+</P>
+<!--#else -->
 	 	    <P>
  		    The page you requested resulted in a server problem on our
 		    systems.
@@ -53,6 +78,8 @@
 		    it was in when you first accessed it.
  		    <P>
  		    We apologize for the inconvenience.
+<!--#endif -->
+
                   </TD><TD WIDTH=15></TD></TR>
 	        </TABLE>
               <BR></TD></TR>
