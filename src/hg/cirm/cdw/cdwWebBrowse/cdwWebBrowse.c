@@ -22,6 +22,7 @@
 #include "hui.h"
 #include "hgConfig.h"
 #include "hgColors.h"
+#include "rainbow.h"
 #include "web.h"
 #include "tablesTables.h"
 #include "jsHelper.h"
@@ -834,6 +835,86 @@ if (valCount > 0)
 hashFree(&hash);
 }
 
+void drawPrettyPieGraph(struct slPair *data, char *id, char *title, char *subtitle)
+/* Draw a pretty pie graph using D3. Import D3 and D3pie before use. */
+{
+// Some D3 administrative stuff, the title, subtitle, sizing etc. 
+printf("<script>\nvar pie = new d3pie(\"%s\", {\n\"header\": {", id);
+printf("\"title\": { \"text\": \"%s\",", title);
+printf("\"fontSize\": 16,");
+printf("\"font\": \"open sans\",},");
+printf("\"subtitle\": { \"text\": \"%s\",", subtitle);
+printf("\"color\": \"#999999\",");
+printf("\"fontSize\": 10,");
+printf("\"font\": \"open sans\",},");
+printf("\"titleSubtitlePadding\":9 },\n");
+printf("\"footer\": {\"color\": \"#999999\",");
+printf("\"fontSize\": 10,");
+printf("\"font\": \"open sans\",");
+printf("\"location\": \"bottom-left\",},\n");
+printf("\"size\": { \"canvasWidth\": 250, \"canvasHeight\": 250},\n");
+printf("\"data\": { \"sortOrder\": \"value-desc\", \"content\": [\n");
+struct slPair *start = NULL;
+float colorOffset = 1;
+int totalFields =  slCount(data);
+for (start=data; start!=NULL; start=start->next)
+    {
+    float currentColor = colorOffset/totalFields;
+    struct rgbColor color = saturatedRainbowAtPos(currentColor);
+    char *temp = start->val;
+    printf("\t{\"label\": \"%s\",\n\t\"value\": %s,\n\t\"color\": \"rgb(%i,%i,%i)\"}", 
+	start->name, temp, color.r, color.b, color.g);
+    if (start->next!=NULL) 
+	printf(",\n");
+    ++colorOffset;
+    }
+printf("]},\n\"labels\": {");
+printf("\"outer\":{\"pieDistance\":20},");
+printf("\"inner\":{\"hideWhenLessThanPercentage\":5},");
+printf("\"mainLabel\":{\"fontSize\":11},");
+printf("\"percentage\":{\"color\":\"#ffffff\", \"decimalPlaces\": 0},");
+printf("\"value\":{\"color\":\"#adadad\", \"fontSize\":11},");
+printf("\"lines\":{\"enabled\":true},},\n");
+printf("\"effects\":{\"pullOutSegmentOnClick\":{");
+printf("\"effect\": \"linear\",");
+printf("\"speed\": 400,");
+printf("\"size\": 8}},\n");
+printf("\"misc\":{\"gradient\":{");
+printf("\"enabled\": true,");
+printf("\"percentage\": 100}}});");
+printf("</script>\n");
+
+}
+
+void pieOnTag(struct tagStorm *tags, char *tag, char *divId)
+/* Write a pie chart base on the values of given tag in storm */
+{
+/* Do analysis hash */
+struct hash *hash = tagStormCountTagVals(tags, tag);
+
+/* Convert count of distinct values to string */
+int valCount = hash->elCount;
+if (valCount > 0)
+    {
+    /* Get a list of values, sorted by how often they occur */
+    struct hashEl *hel, *helList = hashElListHash(hash);
+    slSort(&helList, hashElCmpIntValDesc);
+
+    /* Convert hashEl to slPair the way the pie charter wants */
+    struct slPair *pairList = NULL;
+    for (hel = helList; hel != NULL; hel = hel->next)
+        {
+	char numString[32];
+	safef(numString, sizeof(numString), "%d", ptToInt(hel->val));
+	slPairAdd(&pairList, hel->name, cloneString(numString));
+	}
+    slReverse(&pairList);
+
+    drawPrettyPieGraph(pairList, divId, tag, "");
+    }
+hashFree(&hash);
+}
+
 char *tagPopularityFields[] = { "tag name", "vals", "popular values (files)...", "files",};
 
 void doHome(struct sqlConnection *conn)
@@ -867,6 +948,23 @@ printf("Try using the browse menu on files, tracks or tags. ");
 printf("The query link allows simple SQL-like queries of the metadata.");
 printf("<BR><BR>\n");
 
+/* Print out some pie charts on important fields */
+static char *pieTags[] = 
+   // {"data_set_id"};
+    {"data_set_id", "lab", "assay", "format", };
+int i;
+printf("<TABLE><TR>\n");
+for (i=0; i<ArraySize(pieTags); ++i)
+    {
+    char *field = pieTags[i];
+    char pieDivId[64];
+    safef(pieDivId, sizeof(pieDivId), "pie_%d", i);
+    printf("<TD id=\"%s\"><TD>", pieDivId);
+    pieOnTag(tags, field, pieDivId);
+    }
+printf("</TR></TABLE>\n");
+
+
 /* Print out high level tags table */
 static char *highLevelTags[] = 
     {"data_set_id", "lab", "assay", "format", "read_size",
@@ -874,7 +972,6 @@ static char *highLevelTags[] =
 
 struct fieldedTable *table = fieldedTableNew("Important tags", tagPopularityFields, 
     ArraySize(tagPopularityFields));
-int i;
 for (i=0; i<ArraySize(highLevelTags); ++i)
     tagSummaryRow(table, tags, highLevelTags[i]);
 char returnUrl[PATH_LEN*2];
@@ -985,35 +1082,18 @@ printf("  $('#watered').watermark(\"why hello there\");\n");
 printf("});\n");
 printf("</script>\n");
 
-printf("<TABLE><TR><TH>file name</TH><TH>image</TH></TR>\n");
-char *imageFiles[] = {
-"up.gif",
-"down.gif",
-"arrows-ffffff.png",
-"ab_down.gif",
-"ab_left.gif",
-"ab_left2.gif",
-"ab_right.gif",
-"ab_right2.gif",
-"ab_up.gif",
-"add.gif",
-"add_sm.gif",
-"aw_down.gif",
-"aw_left.gif",
-"aw_right.gif",
-"aw_up.gif",
-"upBlue.png",
-"downBlue.png",
-"toggle.png",
-"magnify.png",
-};
-int imageIx;
-for (imageIx=0; imageIx <ArraySize(imageFiles);  ++imageIx)
+/* Make a pie chart */
     {
-    char *name = imageFiles[imageIx];
-    printf("<TR><TD>%s</TD><TD><IMG SRC=\"../images/%s\"></TD>\n", name, name);
+    struct slPair *dataList = NULL;
+    slPairAdd(&dataList, "A", "2");
+    slPairAdd(&dataList, "B", "3");
+    slPairAdd(&dataList, "C", "4");
+    slPairAdd(&dataList, "D", "5");
+    printf("<DIV id=\"pie1\">");
+    drawPrettyPieGraph(dataList, "pie1", "abcd", "bigger and bigger");
+    printf("</DIV>\n");
     }
-printf("</TABLE>\n");
+
 printf("</FORM>");
 }
 
@@ -1165,6 +1245,8 @@ void localWebStartWrapper(char *titleString)
     jsIncludeFile("jquery-ui.js", NULL);
     jsIncludeFile("jquery.watermark.js", NULL);
     jsIncludeFile("ajax.js", NULL);
+    jsIncludeFile("d3pie.min.js", NULL);
+    printf("<script src=\"//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js\"></script>");
     printf("</HEAD>\n");
     printBodyTag(stdout);
     }
@@ -1180,7 +1262,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.44");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.45");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
