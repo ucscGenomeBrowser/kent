@@ -33,7 +33,7 @@ void usage()
 errAbort(
   "axtChain - Chain together axt alignments.\n"
   "usage:\n"
-  "   axtChain -linearGap=loose in.axt tNibDir qNibDir out.chain\n"
+  "   axtChain [options] -linearGap=loose in.axt tNibDir qNibDir out.chain\n"
   "Where tNibDir/qNibDir are either directories full of nib files, the name\n"
   "of a .2bit file, or a single fasta file with additional -faQ or -faT options.\n"
   "options:\n"
