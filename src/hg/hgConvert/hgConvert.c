@@ -111,8 +111,8 @@ static double scoreLiftOverChain(struct liftOverChain *chain,
 {
 double score = 0;
 
-char *chainFromOrg = hArchiveOrganism(chain->fromDb);
-char *chainToOrg = hArchiveOrganism(chain->toDb);
+char *chainFromOrg = hOrganism(chain->fromDb);
+char *chainToOrg = hOrganism(chain->toDb);
 int fromRank = hashIntValDefault(dbRank, chain->fromDb, 0);
 int toRank = hashIntValDefault(dbRank, chain->toDb, 0);
 int maxRank = hashIntVal(dbRank, "maxRank");
