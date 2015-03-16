@@ -392,7 +392,10 @@ struct tagStorm *cdwUserTagStorm(struct sqlConnection *conn, struct cdwUser *use
 /* Return tag storm just for files user has access to. */
 {
 struct cdwFile *validList = cdwFileLoadAllValid(conn);
-struct rbTree *groupedFiles = cdwFilesWithSharedGroup(conn, user->id);
+int userId = 0;
+if (user != NULL)
+    userId = user->id;
+struct rbTree *groupedFiles = cdwFilesWithSharedGroup(conn, userId);
 struct tagStorm *tags = cdwUserTagStormFromList(conn, user, validList, groupedFiles);
 rbTreeFree(&groupedFiles);
 cdwFileFreeList(&validList);
