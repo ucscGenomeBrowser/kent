@@ -159,7 +159,7 @@ static void doMainPage()
 /* Send HTML with javascript to bootstrap the user interface. */
 {
 
-//#*** A lot of this is copied from hgAi... libify!
+//#*** A lot of this is copied from hgIntegrator... libify!
 
 char *db = cartUsualString(cart, "db", hDefaultDb());
 webStartWrapperDetailedNoArgs(cart, trackHubSkipHubName(db),

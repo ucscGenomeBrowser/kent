@@ -1,4 +1,4 @@
-/* hgAi - bootstrapper / back end for the Annotation Integrator user interface
+/* hgIntegrator - bootstrapper / back end for the Annotation Integrator user interface
  * This CGI has three modes of operation:
  *  - HTML output for minimal main page with a <div> container to be filled in by javascript
  *    (default, in the absence of special CGI params)
@@ -6,8 +6,8 @@
  *    (if CGI param CARTJSON_COMMAND exists)
  *  - text output for annoGrator queries on track data
  *    (if CGI param DO_QUERY exists)
- * The UI view top level is in ../js/react/hgAi/hgAi.jsx
- * The UI model top level is in ../js/model/hgAi/hgAiModel.js
+ * The UI view top level is in ../js/react/hgIntegrator/hgIntegrator.jsx
+ * The UI model top level is in ../js/model/hgIntegrator/hgIntegratorModel.js
  */
 #include "common.h"
 #include "cart.h"
@@ -29,8 +29,8 @@
 /* Global Variables */
 struct cart *cart = NULL;             /* CGI and other variables */
 
-#define QUERY_SPEC "hgai_querySpec"
-#define DO_QUERY "hgai_doQuery"
+#define QUERY_SPEC "hgi_querySpec"
+#define DO_QUERY "hgi_doQuery"
 
 //#*** duplicated from hgVai... put in some anno*.h?
 #define NO_MAXROWS 0
@@ -111,7 +111,7 @@ if (outFileOptions)
     boolean doFile = jsonOptionalBooleanField(outFileOptions, "doFile", FALSE);
     if (doFile)
         {
-        fileName = jsonOptionalStringField(outFileOptions, "fileName", "hgAiResults");
+        fileName = jsonOptionalStringField(outFileOptions, "fileName", "hgIntegratorResults");
         boolean doGzip = jsonOptionalBooleanField(outFileOptions, "doGzip", FALSE);
         if (doGzip)
             compressType = textOutCompressGzip;
@@ -168,7 +168,7 @@ void doQuery()
 char *db = cartString(cart, "db");
 char *chrom = NULL;
 uint start = 0, end = 0;
-char *regionType = cartUsualString(cart, "hgai_range", "position");
+char *regionType = cartUsualString(cart, "hgi_range", "position");
 if (sameString(regionType, "position"))
     {
     char *position = cartUsualString(cart, "position", hDefaultPos(db));
@@ -284,12 +284,12 @@ puts("<script src=\"../js/PathUpdate.js\"></script>");
 puts("<script src=\"../js/PathUpdateOptional.js\"></script>");
 puts("<script src=\"../js/ImmutableUpdate.js\"></script>");
 puts("<script src=\"../js/reactLibBundle.js\"></script>");
-puts("<script src=\"../js/reactHgAi.js\"></script>");
-puts("<script src=\"../js/hgAiModel.js\"></script>");
+puts("<script src=\"../js/reactHgIntegrator.js\"></script>");
+puts("<script src=\"../js/hgIntegratorModel.js\"></script>");
 
 // Invisible form for submitting a query
 printf("\n<form action=\"%s\" method=%s id='queryForm'>\n",
-       hgAiName(), cartUsualString(cart, "formMethod", "GET"));
+       hgIntegratorName(), cartUsualString(cart, "formMethod", "GET"));
 cartSaveSession(cart);
 cgiMakeHiddenVar(QUERY_SPEC, cartUsualString(cart, QUERY_SPEC, ""));
 cgiMakeHiddenVar(DO_QUERY, "go");
