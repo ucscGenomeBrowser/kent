@@ -29,17 +29,16 @@ static struct optionSpec options[] = {
 };
 
 
-void cdwFreen(char *output)
+void cdwFreen(char *table)
 /* cdwFreen - Temporary scaffolding frequently repurposed. */
 {
-FILE *f = mustOpen(output, "w");
 struct sqlConnection *conn = cdwConnect();
-struct tagStorm *tags = cdwTagStorm(conn);
-struct slName *field, *fieldList = tagStormFieldList(tags);
-slSort(&fieldList, slNameCmp);
-for (field = fieldList; field != NULL; field = field->next)
-    fprintf(f, "%s\n", field->name);
-carefulClose(&f);
+struct sqlResult *sr = sqlDescribe(conn, table);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    printf("%s\t%s\n", row[0], row[1]);
+    }
 }
 
 int main(int argc, char *argv[])
