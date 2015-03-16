@@ -59,9 +59,9 @@ char **allFields = NULL;
 int fieldCount = sqlResultFieldArray(sr, &allFields);
 
 /* Accession is special, make sure it's there */
-int accIx = stringArrayIx("accession", allFields, fieldCount);
-if (accIx < 0)
-    errAbort("Can't find accession in cdwFileTags");
+int idIx = stringArrayIx("file_id", allFields, fieldCount);
+if (idIx < 0)
+    errAbort("Can't find file_id in cdwFileTags");
 
 /* Make up an array that tells us the order of fields we'll output, starting with priority fields */
 /* Get all priority fields first */
@@ -93,10 +93,10 @@ FILE *f = mustOpen(outFile, "w");
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    char *acc = row[accIx];
-    if (acc != NULL)
+    char *id = row[idIx];
+    if (id != NULL)
 	{
-	fprintf(f, "%s", acc);
+	fprintf(f, "%s", id);
 	for (i=0; i<fieldsUsed; ++i)
 	    {
 	    char *val = row[order[i]];
