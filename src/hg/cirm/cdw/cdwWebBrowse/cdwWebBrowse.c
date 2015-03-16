@@ -9,12 +9,14 @@
 #include "obscure.h"
 #include "cheapcgi.h"
 #include "sqlSanity.h"
+#include "trix.h"
 #include "htmshell.h"
 #include "fieldedTable.h"
 #include "portable.h"
 #include "paraFetch.h"
 #include "tagStorm.h"
 #include "rql.h"
+#include "intValTree.h"
 #include "cart.h"
 #include "cdw.h"
 #include "cdwLib.h"
@@ -562,7 +564,7 @@ return suggestHash;
 
 
 void accessibleFilesTable(struct cart *cart, struct sqlConnection *conn, 
-    char *fields, char *from, char *initialWhere,  
+    char *searchString, char *fields, char *from, char *initialWhere,  
     char *returnUrl, char *varPrefix, int maxFieldWidth, 
     struct hash *tagOutWrappers, void *wrapperContext,
     boolean withFilters, char *itemPlural, int pageSize)
@@ -583,20 +585,38 @@ if (efList == NULL)
     return;
     }
 
+struct rbTree *searchPassTree = NULL;
+if (!isEmpty(searchString))
+    {
+    searchPassTree = intValTreeNew(0);
+    char *lowered = cloneString(searchString);
+    tolowers(lowered);
+    char *words[128];
+    int wordCount = chopLine(lowered, words);
+    char *trixPath = "/gbdb/cdw/cdw.ix";
+    struct trix *trix = trixOpen(trixPath);
+    struct trixSearchResult *tsr, *tsrList = trixSearch(trix, wordCount, words, TRUE);
+    for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
+        {
+	intValTreeAdd(searchPassTree, sqlUnsigned(tsr->itemId), tsr);
+	}
+    }
+
 /* Loop through all files constructing a SQL where clause that restricts us
  * to just the ones that we're authorized to hit, and that also pass initial where clause
  * if any. */
 struct dyString *where = dyStringNew(0);
 if (!isEmpty(initialWhere))
      dyStringPrintf(where, "(%s) and ", initialWhere);
-dyStringPrintf(where, "file_id in (");
-char *sep = "";
+dyStringPrintf(where, "file_id in (0");	 // initial 0 never found, just makes code smaller
 int accessCount = 0;
 for (ef = efList; ef != NULL; ef = ef->next)
     {
-    dyStringPrintf(where, "%s%u", sep, ef->id);
-    sep = ",";
-    ++accessCount;
+    if (searchPassTree == NULL || intValTreeFind(searchPassTree, ef->id) != NULL)
+	{
+	dyStringPrintf(where, ",%u", ef->id);
+	++accessCount;
+	}
     }
 dyStringAppendC(where, ')');
 
@@ -608,6 +628,24 @@ webFilteredSqlTable(cart, conn, fields, from, where->string, returnUrl, varPrefi
 /* Clean up and go home. */
 cdwFileFreeList(&efList);
 dyStringFree(&where);
+rbTreeFree(&searchPassTree);
+}
+
+char *showSearchControl(char *varName, char *itemPlural)
+/* Put up the search control text and stuff. Returns current search string. */
+{
+char *varVal = cartUsualString(cart, varName, "");
+printf("Search <input name=\"%s\" type=\"text\" id=\"%s\" value=\"%s\" size=60>", 
+    varName, varName, varVal);
+printf("&nbsp;");
+printf("<img src=\"../images/magnify.png\">\n");
+printf("<script>\n");
+printf("$(function () {\n");
+printf("  $('#%s').watermark(\"type in words or starts of words to find specific %s\");\n", 
+    varName, itemPlural);
+printf("});\n");
+printf("</script>\n");
+return varVal;
 }
 
 void doBrowseFiles(struct sqlConnection *conn)
@@ -618,13 +656,14 @@ cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "browseFiles");
 
 printf("<B>Files</B> - sort and select lists of files. Click on file's name to see full metadata.");
-printf(" Links in ucsc_db go to the Genome Browser. &nbsp;&nbsp;&nbsp;&nbsp;");
+printf(" Links in ucsc_db go to the Genome Browser. <BR>\n");
+char *searchString = showSearchControl("cdwFileSearch", "files");
 
 /* Put up big filtered table of files */
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&%s",
     cartSidUrlString(cart) );
-char *where = cartUsualString(cart, "cdw_file_filter", "");
+char *where = cartUsualString(cart, "cdwFile_filter", "");
 if (!isEmpty(where))
     {
     printf("<BR>Restricting files to where %s. ", where);
@@ -632,7 +671,7 @@ if (!isEmpty(where))
 struct hash *wrappers = hashNew(0);
 hashAdd(wrappers, "file_name", wrapFileName);
 hashAdd(wrappers, "ucsc_db", wrapTrackNearFileName);
-accessibleFilesTable(cart, conn, 
+accessibleFilesTable(cart, conn, searchString,
   "file_name,file_size,ucsc_db,lab,assay,data_set_id,output,format,read_size,item_count,body_part",
   "cdwFileTags", where, 
   returnUrl, "cdwBrowseFiles",
@@ -648,7 +687,7 @@ cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "browseTracks");
 
 printf("<B>Tracks</B> - Click on ucsc_db to open Genome Browser. ");
-printf("The accession link shows more metadata. &nbsp;&nbsp;&nbsp;&nbsp;");
+printf("The accession link shows more metadata.<BR>");
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseTracks&%s",
     cartSidUrlString(cart) );
@@ -656,7 +695,8 @@ char *where = "fileId=file_id and format in ('bam','bigBed', 'bigWig', 'vcf', 'n
 struct hash *wrappers = hashNew(0);
 hashAdd(wrappers, "accession", wrapMetaNearAccession);
 hashAdd(wrappers, "ucsc_db", wrapTrackNearAccession);
-accessibleFilesTable(cart, conn, 
+char *searchString = showSearchControl("cdwTrackSearch", "tracks");
+accessibleFilesTable(cart, conn, searchString,
     "ucsc_db,chrom,accession,format,file_size,lab,assay,data_set_id,output,"
     "enriched_in,body_part,submit_file_name",
     "cdwFileTags,cdwTrackViz", where, 
@@ -819,7 +859,7 @@ if (valCount > 0)
     char fileCountString[32];
     safef(fileCountString, sizeof(fileCountString), "%d", fileCount);
 
-    struct dyString *dy = printPopularTags(hash, 120);
+    struct dyString *dy = printPopularTags(hash, 110);
 
     /* Add data to fielded table */
     char *row[4];
@@ -840,19 +880,25 @@ void drawPrettyPieGraph(struct slPair *data, char *id, char *title, char *subtit
 {
 // Some D3 administrative stuff, the title, subtitle, sizing etc. 
 printf("<script>\nvar pie = new d3pie(\"%s\", {\n\"header\": {", id);
-printf("\"title\": { \"text\": \"%s\",", title);
-printf("\"fontSize\": 16,");
-printf("\"font\": \"open sans\",},");
-printf("\"subtitle\": { \"text\": \"%s\",", subtitle);
-printf("\"color\": \"#999999\",");
-printf("\"fontSize\": 10,");
-printf("\"font\": \"open sans\",},");
+if (title != NULL)
+    {
+    printf("\"title\": { \"text\": \"%s\",", title);
+    printf("\"fontSize\": 16,");
+    printf("\"font\": \"open sans\",},");
+    }
+if (subtitle != NULL)
+    {
+    printf("\"subtitle\": { \"text\": \"%s\",", subtitle);
+    printf("\"color\": \"#999999\",");
+    printf("\"fontSize\": 10,");
+    printf("\"font\": \"open sans\",},");
+    }
 printf("\"titleSubtitlePadding\":9 },\n");
 printf("\"footer\": {\"color\": \"#999999\",");
 printf("\"fontSize\": 10,");
 printf("\"font\": \"open sans\",");
 printf("\"location\": \"bottom-left\",},\n");
-printf("\"size\": { \"canvasWidth\": 250, \"canvasHeight\": 250},\n");
+printf("\"size\": { \"canvasWidth\": 270, \"canvasHeight\": 220},\n");
 printf("\"data\": { \"sortOrder\": \"value-desc\", \"content\": [\n");
 struct slPair *start = NULL;
 float colorOffset = 1;
@@ -910,7 +956,7 @@ if (valCount > 0)
 	}
     slReverse(&pairList);
 
-    drawPrettyPieGraph(pairList, divId, tag, "");
+    drawPrettyPieGraph(pairList, divId, tag, NULL);
     }
 hashFree(&hash);
 }
@@ -921,6 +967,9 @@ void doHome(struct sqlConnection *conn)
 /* Put up home/summary page */
 {
 struct tagStorm *tags = cdwTagStorm(conn);
+printf("<table><tr><td>");
+printf("<img src=\"../images/stem-cell-talk-57210.jpg\" width=%d height=%d>\n", 210, 260);
+printf("</td><td>");
 
 /* Print sentence with summary of bytes, files, and labs */
 char query[256];
@@ -944,14 +993,14 @@ printf(" from %d labs. ", labCount(tags));
 printf("You have access to ");
 printLongWithCommas(stdout, cdwCountAccessible(conn, user));
 printf(" files.<BR>\n");
-printf("Try using the browse menu on files, tracks or tags. ");
+printf("Try using the browse menu on files or tracks. ");
 printf("The query link allows simple SQL-like queries of the metadata.");
-printf("<BR><BR>\n");
+printf("<BR>\n");
 
 /* Print out some pie charts on important fields */
 static char *pieTags[] = 
    // {"data_set_id"};
-    {"data_set_id", "lab", "assay", "format", };
+    {"lab", "format", "assay", };
 int i;
 printf("<TABLE><TR>\n");
 for (i=0; i<ArraySize(pieTags); ++i)
@@ -963,6 +1012,7 @@ for (i=0; i<ArraySize(pieTags); ++i)
     pieOnTag(tags, field, pieDivId);
     }
 printf("</TR></TABLE>\n");
+printf("</td></tr></table>\n");
 
 
 /* Print out high level tags table */
@@ -978,11 +1028,12 @@ char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?%s", cartSidUrlString(cart) );
 webSortableFieldedTable(cart, table, returnUrl, "cdwHome", 0, NULL, NULL);
 
-printf("This table is a summary of important metadata tags including the tag name, the number of ");
-printf("values and the most popular values of the tag, and the number of files marked with ");
-printf("the tag.");
+printf("This table is a summary of important metadata tags and number of files they ");
+printf("are attached to. Use browse tags menu to see all tags.");
 
 printf("<BR>\n");
+printf("<center>");
+printf("</center>");
 
 tagStormFree(&tags);
 }
@@ -1262,7 +1313,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.45");
+localWebStartWrapper("CIRM Stem Cell Hub Browser V0.47");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
