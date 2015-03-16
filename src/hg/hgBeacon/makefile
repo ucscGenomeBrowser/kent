@@ -19,7 +19,9 @@ my::
 	mkdir -p ${CGI_BIN_USER}/beacon2
 	ln -sf ${CGI_BIN_USER}/hgBeacon ${CGI_BIN_USER}/beacon2/info
 	ln -sf ${CGI_BIN_USER}/hgBeacon ${CGI_BIN_USER}/beacon2/query
-	cp help.txt /gbdb/hg19/beacon/
+	@if test -d /gbdb/hg19/beacon; then \
+	  cp help.txt /gbdb/hg19/beacon/; \
+	fi
 	cp testBeacon ${DESTDIR}${BINDIR}/
 beta::
 	rm -f ${CGI_BIN_BETA}/hgBeacon
