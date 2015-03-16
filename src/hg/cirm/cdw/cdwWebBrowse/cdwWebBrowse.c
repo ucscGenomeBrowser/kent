@@ -438,6 +438,13 @@ if (!wrapped)
     printf("%s", shortVal);
 }
 
+void wrapExternalUrl(struct fieldedTable *table, struct fieldedRow *row, 
+    char *field, char *val, char *shortVal, void *context)
+/* Attempt to wrap genome browser link around unwrapped text.  Link goes to file in vf. */
+{
+printf("<A HREF=\"%s\" target=\"_blank\">%s</A>", val, shortVal);
+}
+
 static void rSumLocalMatching(struct tagStanza *list, char *field, int *pSum)
 /* Recurse through tree adding matches to *pSum */
 {
@@ -655,7 +662,8 @@ printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "browseFiles");
 
-printf("<B>Files</B> - sort and select lists of files. Click on file's name to see full metadata.");
+printf("<B>Files</B> - search, filter, and sort files. ");
+printf("Click on file's name to see full metadata.");
 printf(" Links in ucsc_db go to the Genome Browser. <BR>\n");
 char *searchString = showSearchControl("cdwFileSearch", "files");
 
@@ -758,7 +766,7 @@ webSortableFieldedTable(cart, table, returnUrl, "cdwFormats", 0, NULL, NULL);
 fieldedTableFree(&table);
 }
 
-void doBrowseLab(struct sqlConnection *conn)
+void doBrowseLabs(struct sqlConnection *conn)
 /* Put up information on labs */
 {
 static char *labels[] = {"name", "files", "PI", "institution", "web page"};
@@ -786,7 +794,9 @@ for (lab = labList; lab != NULL; lab = lab->next)
 char returnUrl[PATH_LEN*2];
 safef(returnUrl, sizeof(returnUrl), "../cgi-bin/cdwWebBrowse?cdwCommand=browseLabs&%s",
     cartSidUrlString(cart) );
-webSortableFieldedTable(cart, table, returnUrl, "cdwLab", 0, NULL, NULL);
+struct hash *outputWrappers = hashNew(0);
+hashAdd(outputWrappers, "web page", wrapExternalUrl);
+webSortableFieldedTable(cart, table, returnUrl, "cdwLab", 0, outputWrappers, NULL);
 fieldedTableFree(&table);
 }
 
@@ -1178,7 +1188,7 @@ else if (sameString(command, "browseTags"))
     }
 else if (sameString(command, "browseLabs"))
     {
-    doBrowseLab(conn);
+    doBrowseLabs(conn);
     }
 else if (sameString(command, "browseDataSets"))
     {
