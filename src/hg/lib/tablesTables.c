@@ -39,14 +39,15 @@ static void showTableFilterInstructionsEtc(struct fieldedTable *table,
 int matchCount = slCount(table->rowList);
 if (largerContext != NULL)  // Need to page?
      matchCount = largerContext->tableSize;
-printf(" %d %s found. ", matchCount, itemPlural);
-cgiMakeButton("submit", "update");
+cgiMakeButton("submit", "search");
+printf("&nbsp;&nbsp;&nbsp&nbsp;");
+printf("%d&nbsp;%s&nbsp;found. ", matchCount, itemPlural);
 
 
 printf("<BR>\n");
-printf("First row of table below can filter. ");    
-printf("Wildcard * and ? characters are allowed in text filters. ");
-printf("&GT;min or &LT;max, is allowed in numerical fields.<BR>\n");
+printf("You can further filter search results field by field below. ");    
+printf("Wildcard * and ? characters are allowed in text fields. ");
+printf("&GT;min or &LT;max are allowed in numerical fields.<BR>\n");
 }
 
 static void printSuggestScript(char *id, struct slName *suggestList)
@@ -211,6 +212,11 @@ static void showTableDataRows(struct fieldedTable *table, int pageSize, int maxL
 {
 int count = 0;
 struct fieldedRow *row;
+boolean isNum[table->fieldCount];
+int i;
+for (i=0; i<table->fieldCount; ++i)
+    isNum[i] = fieldedTableColumnIsNumeric(table, i);
+
 for (row = table->rowList; row != NULL; row = row->next)
     {
     if (++count > pageSize)
@@ -233,7 +239,10 @@ for (row = table->rowList; row != NULL; row = row->next)
 		val = shortVal;
 		}
 	    }
-	webPrintLinkCellStart();
+	if (isNum[fieldIx])
+	    webPrintLinkCellRightStart();
+	else
+	    webPrintLinkCellStart();
 	boolean printed = FALSE;
 	if (tagOutputWrappers != NULL && !isEmpty(val))
 	    {
