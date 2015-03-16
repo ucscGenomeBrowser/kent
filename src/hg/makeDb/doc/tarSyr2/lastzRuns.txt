@@ -1040,9 +1040,9 @@ TMPDIR=/dev/shm
     # real    124m28.833s
 
 #########################################################################
-# LASTZ Golden snub-nosed monkey/rhiRox1 - Tarsier TarSyr2 (DONE - 2014-12-15 - Hiram)
-    mkdir /hive/data/genomes/rhiRox1/bed/lastzTarSyr2.2014-12-15
-    cd /hive/data/genomes/rhiRox1/bed/lastzTarSyr2.2014-12-15
+# LASTZ Golden snub-nosed monkey/rhiRox1 - Tarsier TarSyr2 (DONE - 2015-02-22 - Hiram)
+    mkdir /hive/data/genomes/rhiRox1/bed/lastzTarSyr2.2015-02-22
+    cd /hive/data/genomes/rhiRox1/bed/lastzTarSyr2.2015-02-22
 
     cp -p /hive/users/hiram/multiz/100way/rhiRox1.tarSyr2/rhiRox1.tarSyr2.tuning.top400.txt \
       ./rhiRox1.tarSyr2.tuning.Q.txt
@@ -1052,7 +1052,7 @@ TMPDIR=/dev/shm
 # parameters obtained from a tuning run of lastz_D
 # /hive/users/hiram/multiz/100way/rhiRox1.tarSyr2/rhiRox1.tarSyr2.tuning.top400.txt
 
-BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
 
 BLASTZ_T=2
 BLASTZ_O=400
@@ -1060,12 +1060,12 @@ BLASTZ_E=30
 BLASTZ_M=50
 BLASTZ_X=1000
 BLASTZ_Y=3400
-BLASTZ_Q=/hive/data/genomes/rhiRox1/bed/lastzTarSyr2.2014-12-15/rhiRox1.tarSyr2.tuning.Q.txt
+BLASTZ_Q=/hive/data/genomes/rhiRox1/bed/lastzTarSyr2.2015-02-22/rhiRox1.tarSyr2.tuning.Q.txt
 #       A     C     G     T
-# A   100  -175   -26  -124
-# C  -175    97  -177   -26
-# G   -26  -177    97  -175
-# T  -124   -26  -175   100
+# A   100  -173   -26  -121
+# C  -173    96  -172   -26
+# G   -26  -172    96  -173
+# T  -121   -26  -173   100
 
 # TARGET: Golden snub-nosed monkey rhiRox1
 SEQ1_DIR=/hive/data/genomes/rhiRox1/rhiRox1.2bit
@@ -1081,7 +1081,7 @@ SEQ2_CHUNK=20000000
 SEQ2_LIMIT=1000
 SEQ2_LAP=0
 
-BASE=/hive/data/genomes/rhiRox1/bed/lastzTarSyr2.2014-12-15
+BASE=/hive/data/genomes/rhiRox1/bed/lastzTarSyr2.2015-02-22
 TMPDIR=/dev/shm
 '_EOF_'
     # << happy emacs
@@ -1090,33 +1090,32 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-    #   real    952m13.652s
+    # real    231m8.344s
 
     cat fb.rhiRox1.chainTarSyr2Link.txt 
-    # 1466597880 bases of 3011966170 (48.692%) in intersection
+    #   1614951617 bases of 2856044136 (56.545%) in intersection
 
-    # ran this in two steps when discovered it was running on ku
-    # stopped it there and finished off on hgwdev
-    time (doRecipBest.pl -buildDir=`pwd` rhiRox1 tarSyr2) > rbest.log 2>&1 &
-    # real    403m33.738s
-    # real    445m14.301s
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` rhiRox1 tarSyr2) \
+       > rbest.log 2>&1 &
+    # real    72m29.259s
 
     # and for the swap:
     mkdir /hive/data/genomes/tarSyr2/bed/blastz.rhiRox1.swap
     cd /hive/data/genomes/tarSyr2/bed/blastz.rhiRox1.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/rhiRox1/bed/lastzTarSyr2.2014-12-15/DEF \
+      /hive/data/genomes/rhiRox1/bed/lastzTarSyr2.2015-02-23/DEF \
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    390m22.898s
+    #  real    372m37.027s
 
     cat fb.tarSyr2.chainRhiRox1Link.txt 
-    # 1605999410 bases of 3405755564 (47.155%) in intersection
+    # 1755301727 bases of 3405755564 (51.539%) in intersection
 
-    time (doRecipBest.pl -buildDir=`pwd` tarSyr2 rhiRox1) > rbest.log 2>&1 &
-    # real    118m9.557s
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` tarSyr2 rhiRox1) \
+      > rbest.log 2>&1
+    # real    148m53.108s
 
 #########################################################################
 # LASTZ  Proboscis monkey/nasLar1 - Tarsier TarSyr2 (DONE - 2014-12-15 - Hiram)

@@ -523,7 +523,9 @@ int numClades = 0;
 
 struct sqlConnection *conn = hConnectCentral();  // after hClade since it access hgcentral too
 // get only the clades that have actual active genomes
-struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ SELECT DISTINCT(c.name), c.label FROM clade c, genomeClade g, dbDb d WHERE c.name=g.clade AND d.organism=g.genome AND d.active=1 ORDER BY c.priority");
+char query[4096];
+safef(query, sizeof query, "NOSQLINJ SELECT DISTINCT(c.name), c.label FROM %s c, %s g, %s d WHERE c.name=g.clade AND d.organism=g.genome AND d.active=1 ORDER BY c.priority", cladeTable(),genomeCladeTable(), dbDbTable());
+struct sqlResult *sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     clades[numClades] = cloneString(row[0]);
@@ -567,7 +569,7 @@ char *orgList[1024];
 int numGenomes = 0;
 struct dbDb *cur = NULL;
 struct hash *hash = hashNew(10); // 2^^10 entries = 1024
-char *selGenome = hGenomeOrArchive(db);
+char *selGenome = hGenome(db);
 char *values [1024];
 char *cgiName;
 
@@ -673,7 +675,7 @@ char *assemblyList[128];
 char *values[128];
 int numAssemblies = 0;
 struct dbDb *cur = NULL;
-char *genome = hGenomeOrArchive(db);
+char *genome = hGenome(db);
 char *selAssembly = NULL;
 
 if (genome == NULL)
@@ -763,42 +765,6 @@ If NULL, no default selection.
  */
 struct dbDb *dbList = hGetBlatIndexedDatabases();
 printSomeAssemblyListHtml(db, dbList, NULL);
-}
-
-void printOrgAssemblyListAxtInfo(char *dbCgi, char *javascript)
-/* Find all the organisms/assemblies that are referenced in axtInfo,
- * and print the dropdown list. */
-{
-struct dbDb *dbList = hGetAxtInfoDbs(dbCgi);
-char *assemblyList[128];
-char *values[128];
-int numAssemblies = 0;
-struct dbDb *cur = NULL;
-char *assembly = cgiOptionalString(dbCgi);
-char orgAssembly[256];
-
-for (cur = dbList; ((cur != NULL) && (numAssemblies < 128)); cur = cur->next)
-    {
-    safef(orgAssembly, sizeof(orgAssembly), "%s %s",
-	  cur->organism, cur->description);
-    assemblyList[numAssemblies] = cloneString(orgAssembly);
-    values[numAssemblies] = cur->name;
-    numAssemblies++;
-    }
-
-#ifdef OLD
-// Have to use the "menu" name, not the value, to mark selected:
-if (assembly != NULL)
-    {
-    char *selOrg    = hOrganism(assembly);
-    char *selFreeze = hFreezeFromDb(assembly);
-    safef(orgAssembly, sizeof(orgAssembly), "%s %s", selOrg, selFreeze);
-    assembly = cloneString(orgAssembly);
-    }
-#endif /* OLD */
-
-cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, assembly,
-		    javascript);
 }
 
 static char *getDbForGenome(char *genome, struct cart *cart)

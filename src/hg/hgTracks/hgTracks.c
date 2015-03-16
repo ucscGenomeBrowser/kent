@@ -5687,6 +5687,23 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+static void chromSizesDownloadRow()
+/* Show link to chrom.sizes file at end of chromInfo table (unless this is a hub) */
+{
+if (! trackHubDatabase(database))
+    {
+    cgiSimpleTableRowStart();
+    cgiSimpleTableFieldStart();
+    puts("Download as file");
+    cgiTableFieldEnd();
+    cgiSimpleTableFieldStart();
+    printf("<A HREF='http://%s/goldenPath/%s/bigZips/%s.chrom.sizes'>%s.chrom.sizes</A>",
+           hDownloadsServer(), database, database, database);
+    cgiTableFieldEnd();
+    cgiTableRowEnd();
+    }
+}
+
 void chromInfoPage()
 /* Show list of chromosomes (or scaffolds, etc) on which this db is based. */
 {
@@ -5731,6 +5748,7 @@ else if ((startsWith("chr", defaultChrom) || startsWith("Group", defaultChrom)) 
     chromInfoRowsChrom();
 else
     chromInfoRowsNonChrom(1000);
+chromSizesDownloadRow();
 
 hTableEnd();
 cgiDown(0.9);

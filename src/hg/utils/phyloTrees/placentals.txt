@@ -22,8 +22,14 @@ ochPri	Eutheria; Euarchontoglires; Glires; Lagomorpha; Ochotonidae; Ochotona
 # brush-tailed rat - Octodon degus
 octDeg	Eutheria; Euarchontoglires; Glires; Rodentia; Hystricognathi; Octodontidae; Octodon
 
+# Damara mole rat - Fukomys damarensis
+fukDam	Eutheria; Boreoeutheria; Euarchontoglires; Glires; Rodentia; Hystricognathi; Bathyergidae; Fukomys
+
 # Naked mole-rat Heterocephalus glaber
 hetGla	Eutheria; Euarchontoglires; Glires; Rodentia; Hystricognathi; Bathyergidae; Heterocephalus
+
+# Brazilian guinea pig - Cavia aperea
+cavAep	Eutheria; Boreoeutheria; Euarchontoglires; Glires; Rodentia; Hystricognathi; Caviidae; Cavia
 
 # Guinea pig Cavia porcellus
 cavPor	Eutheria; Euarchontoglires; Glires; Rodentia; Hystricognathi; Caviidae; Cavia
@@ -83,14 +89,26 @@ phyCat	Eutheria; Boreoeutheria; Laurasiatheria; Cetartiodactyla; Cetacea; Odonto
 # Alpaca - Vicugna pacos
 vicPac	Eutheria; Laurasiatheria; Cetartiodactyla; Tylopoda; Camelidae; Vicugna
 
-# Bactrian camel - Camelus ferus
+# Bactrian camel - Camelus bactrianus
+camBac	Eutheria; Boreoeutheria; Laurasiatheria; Cetartiodactyla; Tylopoda; Camelidae; Camelus
+
+# Arabian camel - Camelus dromedarius
+camDro	Eutheria; Boreoeutheria; Laurasiatheria; Cetartiodactyla; Tylopoda; Camelidae; Camelus
+
+# Wild bactrian camel - Camelus ferus
 camFer Eutheria; Laurasiatheria; Cetartiodactyla; Tylopoda; Camelidae; Camelus
 
 # Tibetan antelope - Pantholops hodgsonii
 panHod	Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Antilopinae; Pantholops
 
+# Zebu - Bos indicus
+bosInd	Eutheria; Boreoeutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Bovinae; Bos
+
 # Cow - Bos taurus
 bosTau	Eutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Bovinae; Bos
+
+# Bison - Bison bison bison
+bisBis	Eutheria; Boreoeutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Bovinae; Bison; Bison bison
 
 # Water buffalo - Bubalus bubalis
 bubBub	Eutheria; Boreoeutheria; Laurasiatheria; Cetartiodactyla; Ruminantia; Pecora; Bovidae; Bovinae; Bubalus

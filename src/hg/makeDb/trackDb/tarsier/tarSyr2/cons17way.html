@@ -3,7 +3,7 @@
 This track shows multiple alignments of 17 species and measurements of
 evolutionary conservation using
 two methods (<em>phastCons</em> and <em>phyloP</em>) from the
-<A HREF="http://compgen.bscb.cornell.edu/phast/" target=_BLANK>
+<A HREF="http://compgen.cshl.edu/phast/" target=_BLANK>
 PHAST package</A>, for all seventeen species.
 The multiple alignments were generated using multiz and
 other tools in the UCSC/<A HREF="http://www.bx.psu.edu/miller_lab/"
@@ -63,7 +63,7 @@ level (see <EM>Gap Annotation</EM>, below). </P>
 <TR ALIGN=left><TD>Chimp</TD><TD>Pan troglodytes</TD><TD>Feb. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=panTro4" TARGET=_blank>GSAC 2.1.4/panTro4</A></TD><TD>Syntenic net</TD></TR>
 <TR ALIGN=left><TD>Crab-eating macaque</TD><TD>Macaca fascicularis</TD><TD>Jun. 2013</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/macFas5" TARGET=_blank>WashU 5.0/macFas5</A></TD><TD>Syntenic net</TD></TR>
 <TR ALIGN=left><TD>Gibbon</TD><TD>Nomascus leucogenys</TD><TD>Oct. 2012</TD><TD><A HREF="../cgi-bin/hgGateway?db=nomLeu3" TARGET=_blank>GGSC Nleu3.0/nomLeu3</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Golden snub-nosed monkey</TD><TD>Rhinopithecus roxellana</TD><TD>Oct. 2014</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/rhiRox1" TARGET=_blank>GGSC Nleu3.0/nomLeu3</A></TD><TD>Reciprocal best net</TD></TR>
+<TR ALIGN=left><TD>Golden snub-nosed monkey</TD><TD>Rhinopithecus roxellana</TD><TD>Oct. 2014</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/rhiRox1" TARGET=_blank>Rrox_v1/rhiRox1</A></TD><TD>Reciprocal best net</TD></TR>
 <TR ALIGN=left><TD>Gorilla</TD><TD>Gorilla gorilla gorilla</TD><TD>May. 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=gorGor3" TARGET=_blank>WTSI gorGor3.1/gorGor3</A></TD><TD>Reciprocal best net</TD></TR>
 <TR ALIGN=left><TD>Green monkey</TD><TD>Chlorocebus sabaeus</TD><TD>Mar. 2014</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/chlSab2" TARGET=_blank>VGC Chlorocebus_sabeus 1.1/chlSab2</A></TD><TD>Syntenic net</TD></TR>
 <TR ALIGN=left><TD>Human</TD><TD>Homo sapiens</TD><TD>Dec. 2013</TD><TD><A HREF="../cgi-bin/hgGateway?db=hg38" TARGET=_blank>GRCh38/hg38</A></TD><TD>Syntenic net</TD></TR>
@@ -231,8 +231,8 @@ assemblies.
 <P>
 <BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
 <TR ALIGN=left><TD><B>type of net alignment</B></TD><TD><B>Species</B></TD></TR>
-<TR ALIGN=left><TD>Syntenic Net</TD><TD>chimp, orangutan, gibbon, green monkey, crab-eating macaque, rhesus, baboon, marmoset</TD></TR>
-<TR ALIGN=left><TD>Reciprocal best Net</TD><TD>bonobo, gorilla, proboscis monkey, golden snub-nosed monkey, squirrel monkey, tarsier, mouse lemur, bushbaby</TD></TR>
+<TR ALIGN=left><TD>Syntenic Net</TD><TD>chimp, orangutan, gibbon, green monkey, crab-eating macaque, rhesus, baboon, marmoset, human</TD></TR>
+<TR ALIGN=left><TD>Reciprocal best Net</TD><TD>bonobo, gorilla, proboscis monkey, golden snub-nosed monkey, squirrel monkey, mouse lemur, bushbaby</TD></TR>
 </TD></TR>
 </TABLE>
 <B>Table 3.</B> <EM>Type of Net alignment</EM>
@@ -305,7 +305,7 @@ target-coverage=0.3, rho=0.3.</P>
 The phyloP program supports several different methods for computing
 p-values of conservation or acceleration, for individual nucleotides or
 larger elements
-(<a href="http://compgen.bscb.cornell.edu/phast/" target="_blank">http://compgen.bscb.cornell.edu/phast/</a>).
+(<a href="http://compgen.cshl.edu/phast/" target="_blank">http://compgen.cshl.edu/phast/</a>).
 Here it was used
 to produce separate scores at each base (--wig-scores option), considering
 all branches of the phylogeny rather than a particular subtree or lineage
@@ -337,8 +337,8 @@ TARGET=_blank>Penn State Bioinformatics Group</A>
 <LI> Chaining and Netting:  axtChain, chainNet by Jim Kent at UCSC
 <LI> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view and
 other programs in PHAST by
-<A HREF="http://compgen.bscb.cornell.edu/~acs/software.html"
-TARGET=_blank>Adam Siepel</A> at Cornell University (original development
+<A HREF="http://siepellab.labsites.cshl.edu/"
+TARGET=_blank>Adam Siepel</A> at Cold Spring Harbor Laboratory (original development
 done at the Haussler lab at UCSC).
 <LI> MAF Annotation tools: mafAddIRows by Brian Raney, UCSC; mafAddQRows
 by Richard Burhans, Penn State; genePredToMafFrames by Mark Diekhans, UCSC

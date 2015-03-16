@@ -46,7 +46,7 @@ char *hgPalName();
 char *hgVarAnnogratorName();
 /* Relative URL to variant annotation integrator program. */
 
-char *hgAiName();
+char *hgIntegratorName();
 /* Relative URL to annotation integrator program. */
 
 void fragToCloneName(char *fragName, char cloneName[128]);

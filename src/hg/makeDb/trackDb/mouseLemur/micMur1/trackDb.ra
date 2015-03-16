@@ -18,15 +18,6 @@ visibility hide
 track rmsk override
 visibility hide
 
-track chainNetCalJac3 override
-visibility pack
-
-track chainNetGorGor3 override
-visibility pack
-
-track chainNetMm10 override
-visibility pack
-
 searchTable gold
 searchMethod prefix
 searchType bed
@@ -34,3 +25,5 @@ shortCircuit 1
 termRegex contig_[0-9]+
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
+
+include trackDb.chainNet.ra

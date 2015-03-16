@@ -1,7 +1,7 @@
 # install.mk - user/alpha/beta installation rules shared by all js dirs.
 
 user:
-	if test -d ${DOCUMENTROOT}-${USER}; then \
+	@if test -d ${DOCUMENTROOT}-${USER}; then \
 	    ${MAKE} doInstall DEST=${DOCUMENTROOT}-${USER}/js; \
 	else \
 	    ${MAKE} doInstall DEST=${DOCUMENTROOT}/js/${USER}; \

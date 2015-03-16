@@ -15,7 +15,7 @@ var RegionOrGenome = React.createClass({
     // update(path + 'hidePosPopup') called when user clicks to hide popup
     // update(path + 'positionMatch', matches): user clicks position link in popup
     //                                          (matches obj is from hgFind)
-    // update(path + 'hgai_range') called when user changes genome/position select
+    // update(path + 'hgi_range') called when user changes genome/position select
 
     propTypes: { positionInfo: pt.object.isRequired,  // Immutable.Map {
                  //   position: initial value of position input
@@ -34,7 +34,7 @@ var RegionOrGenome = React.createClass({
         var props = this.props;
         var posInfo = props.positionInfo;
         var positionInput = null;
-        if (posInfo.get('hgai_range') !== 'genome') {
+        if (posInfo.get('hgi_range') !== 'genome') {
             positionInput = <PositionSearch positionInfo={posInfo}
                                             className='sectionItem'
                                             db={props.db}
@@ -45,76 +45,62 @@ var RegionOrGenome = React.createClass({
             <div className='sectionRow'>
               <LabeledSelect label='region to annotate'
                              className='sectionItem'
-                             selected={posInfo.get('hgai_range')} options={this.menuOptions}
-                             update={props.update} path={props.path.concat('hgai_range')} />
+                             selected={posInfo.get('hgi_range')} options={this.menuOptions}
+                             update={props.update} path={props.path.concat('hgi_range')} />
               {positionInput}
             </div>
         );
     }
 }); // RegionOrGenome
 
-var GroupTrackTable = React.createClass({
-    // LabeledSelect's for group, track and table.
-    //#*** This should be fancier than just g/t/t -- it should handle composites & views.
+var LabeledSelectRow = React.createClass({
+    // Build a row of LabeledSelect's from an Immutable.List of Immutable descriptor objects
+    // like {label, valLabels, selected} (or null, in which case skip to the next descriptor).
 
     mixins: [PathUpdate, ImmutableUpdate],
-    // update(path + group|track|table) called when user changes group|track|table
+    // update(path + ix) called when user changes the ixth menu
 
-    propTypes: { trackPath: pt.object.isRequired,    // Immutable.Map { group, track, table }
-                 trackDbInfo: pt.object.isRequired   // Immutable.Map { groupOptions, groupTracks,
-                                                     // trackTables }
+    propTypes: { descriptors: pt.object.isRequired, // Immutable.List[{ valLabels, selected }]
+               },
+
+    makeMenuFromDescriptor: function(descriptor, ix) {
+        // Make a LabeledSelect using fields of descriptor
+        if (! descriptor || descriptor.get('hide')) {
+            return null;
+        } else {
+            var key = 'lsrMenu' + ix;
+            return (
+                <LabeledSelect label={descriptor.get('label')}
+                               selected={descriptor.get('selected')}
+                               options={descriptor.get('valLabels')}
+                               key={key}
+                               className='sectionItem'
+                               update={this.props.update} path={this.props.path.concat(ix)} />
+            );
+        }
     },
 
     render: function() {
-        var props = this.props;
-        var path = props.path || [];
-        var group = props.trackPath.get('group');
-        var track = props.trackPath.get('track');
-        var table = props.trackPath.get('table');
-        var groupOptions = props.trackDbInfo.get('groupOptions');
-        var groupTracks = props.trackDbInfo.get('groupTracks');
-        var trackTables = props.trackDbInfo.get('trackTables');
-        var trackOptions = groupTracks.get(group);
-        var tableNames = trackTables.get(track);
-        if (! tableNames) {
-            tableNames = trackTables.get(trackOptions.getIn([0, 'value']));
-        }
-        var tableOptions;
-        if (tableNames) {
-            tableOptions = tableNames.map(function(name) {
-                return Immutable.Map({ label: name, value: name });
-            });
-        }
-        var tableSelect;
-        if (track !== table) {
-            tableSelect =
-              <LabeledSelect label='table' selected={table} options={tableOptions}
-                             className='sectionItem'
-                             update={props.update} path={path.concat(['table'])} />;
-        }
+        var descriptors = this.props.descriptors;
         return (
           <div className='sectionRow sectionItem'>
-            <LabeledSelect label='track group' selected={group} options={groupOptions}
-                           className='sectionItem'
-                           update={props.update} path={path.concat(['group'])} />
-            <LabeledSelect label='track' selected={track} options={trackOptions}
-                           className='sectionItem'
-                           update={props.update} path={path.concat(['track'])} />
-            {tableSelect}
+            {descriptors.map(this.makeMenuFromDescriptor).toJS()}
           </div>
         );
     }
-}); // GroupTrackTable
+}); // LabeledSelectRow
 
-function makeSchemaLink(db, group, track, table) {
+function makeSchemaLink(schemaUrl) {
     // Return a React component link to hgTables' schema page.
-    var schemaUrl = 'hgTables?db=' + db + '&hgta_group=' + group + '&hgta_track=' + track +
-                    '&hgta_table=' + table + '&hgta_doSchema=1';
-    return <span className='smallText sectionItem'>
-              <a href={schemaUrl} target="ucscSchema"
-                 title="Open table schema in new window">
-                View table schema
-              </a></span>;
+    if (schemaUrl) {
+        return <span className='smallText sectionItem'>
+            <a href={schemaUrl} target="ucscSchema"
+               title="Open table schema in new window">
+              View table schema
+            </a></span>;
+    } else {
+        return null;
+    }
 }
 
 var AddDataSource = React.createClass({
@@ -123,16 +109,12 @@ var AddDataSource = React.createClass({
 
     mixins: [PathUpdate, ImmutableUpdate],
     // update(path + 'addDataSource') called when user clicks Add button
-    // update(path + 'addDsTrackPath' + group|track|table) called when user changes group|track|table
+    // update(path + 'addDsMenuSelect' + ix) called when user changes the ixth menu
     // update(path + 'trackHubs') called when user clicks track hubs button
     // update(path + 'customTracks') called when user clicks custom tracks button
 
-    propTypes: { trackPath: pt.object.isRequired,    // currently selected group, track, table
-                 trackDbInfo: pt.object.isRequired,  // Immutable.Map {
-                                      //   groupOptions: pt.array, group menu options
-                                      //   groupTracks: pt.object, maps groups to track menu options
-                                      //   trackTables: pt.object  maps tracks to table lists
-                 db: pt.string.isRequired            // needed for schema link
+    propTypes: { addDsInfo: pt.object.isRequired   // Immutable obj w/List of menu descriptors,
+                                                   // hgTables schema URL, & disabled flag
                },
 
     onAdd: function() {
@@ -152,27 +134,25 @@ var AddDataSource = React.createClass({
 
     render: function() {
         var path = this.props.path || [];
-        var trackDbInfo = this.props.trackDbInfo;
-        var groupTracks = trackDbInfo && trackDbInfo.get('groupTracks');
-        if (! groupTracks) {
+        var addDsInfo = this.props.addDsInfo;
+        if (! (addDsInfo && addDsInfo.size)) {
             // Still waiting for data from server
             return <Icon type='spinner' />;
         }
 
-        var trackPath = this.props.trackPath;
-        var schemaLink = makeSchemaLink(this.props.db, trackPath.get('group'),
-                                        trackPath.get('track'), trackPath.get('table'));
+        var schemaLink = makeSchemaLink(addDsInfo.get('schemaUrl'));
         return (
             <div>
               <div className='bigBoldText sectionRow'>
                 Add Data Source
               </div>
-              <GroupTrackTable trackPath={this.props.trackPath}
-                               trackDbInfo={trackDbInfo}
-                               path={path.concat('addDsTrackPath')} update={this.props.update}
-                               />
+              <LabeledSelectRow descriptors={addDsInfo.get('menus')}
+                                path={path.concat('addDsMenuSelect')}
+                                update={this.props.update} />
               {schemaLink}
-              <input type='button' value='Add' onClick={this.onAdd} />
+              <input type='button' value='Add'
+                     disabled={addDsInfo.get('disabled')}
+                     onClick={this.onAdd} />
               <br />
               <div className='sectionRow'>
                 get more data:<br />
@@ -325,54 +305,34 @@ var OutFileOptions = React.createClass({
     }
 }); // OutFileOptions
 
+var QueryBuilder = React.createClass({
+    // Interface for adding and configuring data sources and output options
 
-function getLabelForValue(valLabelVec, val) {
-    // Given an Immutable.Vector of Immutable.Map tuples of value and label, look for the
-    // tuple with value equal to val and return the label from that tuple.
-    // If no vector, or val is not found, return val as its own label.
-    //#*** Libify?
-    if (valLabelVec) {
-        var ix;
-        for (ix = 0;  ix < valLabelVec.size;  ix++) {
-            if (valLabelVec.getIn([ix, 'value']) === val) {
-                return valLabelVec.getIn([ix, 'label']);
-            }
-        }
-    }
-    return val;
-}
+    mixins: [PathUpdate, ImmutableUpdate],
+    // update() calls: see OutFileOptions; also:
+    // update(path + 'dataSources' + 'reorder'): user finished drag&drop of Sortable dataSource
+    // update(path + 'dataSources' + i + 'remove'): remove the ith dataSource
 
-var AppComponent = React.createClass({
-    // AnnoGrator interface
+    propTypes: { // Optional:
+                 querySpec: pt.object,      // Data sources and output options
+                 addDsInfo: pt.object,      // Options for adding a data source
+                 tableFields: pt.object,    // If present, show 'Choose fields' modal
+                 showLoadingImage: pt.bool  // If true, show loading image (for query execution)
+               },
 
-    mixins: [ImmutableUpdate],
-
-    getDefaultProps: function() {
-        return { path: [] };
-    },
-
-    renderDataSource: function(trackPath, i) {
-        // Render a single dataSource ({group, track, table}).
-        var trackPathKey = 'ds' + i;
+    renderDataSource: function(dataSource, i) {
+        // Render a single dataSource ({ trackPath, label, schemaUrl }).
+        var dsKey = 'ds' + i;
         var path = ['dataSources', i];
-        var group = trackPath.get('group');
-        var track = trackPath.get('track');
-        var table = trackPath.get('table');
-        var groupTracks = this.props.appState.getIn(['trackDbInfo', 'groupTracks', group]);
-        var trackLabel = getLabelForValue(groupTracks, track);
-        if (track !== table) {
-            trackLabel += ' (' + table + ')';
-        }
-        var db = this.props.appState.getIn(['cladeOrgDb', 'db']);
-        var schemaLink = makeSchemaLink(db, group, track, table);
+        var schemaLink = makeSchemaLink(dataSource.get('schemaUrl'));
 
         return (
-            <div key={trackPathKey} className='dataSourceSubsection'>
+            <div key={dsKey} className='dataSourceSubsection'>
                 <div className='sortHandle'>
                   <span className='floatLeft'>
                     <Icon type='upDown' className='sectionItem'/>
                     <span className='bigBoldText sectionItem'>
-                      {trackLabel}
+                      {dataSource.get('label')}
                     </span>
                     <span className='sectionItem'>
                       {schemaLink}
@@ -388,8 +348,7 @@ var AppComponent = React.createClass({
 
     renderDataSources: function(dataSources) {
         // Wrap Sortable around rendered dataSources if we have enough data.
-        if (this.props.appState.getIn(['trackDbInfo', 'groupTracks']) && dataSources &&
-            dataSources.size) {
+        if (dataSources && dataSources.size) {
             return (
                 <Sortable sortableConfig={{ handle: '.sortHandle', axis: 'y' }}
                           path={['dataSources', 'reorder']} update={this.props.update}
@@ -407,28 +366,102 @@ var AppComponent = React.createClass({
     },
 
     render: function() {
+        var addDsInfo = this.props.addDsInfo;
+        var querySpec = this.props.querySpec;
+        if (! (addDsInfo && querySpec)) {
+            // Waiting for data from server
+            return <Section title='Loading...' />;
+        } else {
+            var dataSources = querySpec.get('dataSources');
+            var outputInfo = querySpec.get('outFileOptions') || Immutable.Map();
+            var tableFields = this.props.tableFields;
+            var disableGetOutput = (! (dataSources && dataSources.size));
+            var disableGetOutputMessage =
+              <span className='disabledMessage'>
+                At least one data source must be added.
+              </span>;
+            return (
+              <div>
+                <Section title='Configure Data Sources'>
+                  {this.renderDataSources(dataSources)}
+                  <AddDataSource addDsInfo={addDsInfo}
+                                 path={[]} update={this.props.update} />
+                </Section>
+
+                <Section title='Output Options'>
+                  <OutFileOptions options={outputInfo}
+                                  fieldInfo={tableFields}
+                                  showLoadingImage={this.props.showLoadingImage}
+                                  disableGetOutput={disableGetOutput}
+                                  disableGetOutputMessage={disableGetOutputMessage}
+                                  path={['outFileOptions']} update={this.props.update}
+                                  />
+                </Section>
+              </div>
+            );
+        }
+    }
+}); // QueryBuilder
+
+var DbPosAndQueryBuilder = React.createClass({
+    // Container for selecting a species, configuring position/genome, and building a query.
+
+    mixins: [PathUpdate, ImmutableUpdate],
+    // update() calls: see CladeOrgDb, RegionOrGenome and QueryBuilder
+
+    propTypes: { // Optional:
+                 cladeOrgDbInfo: pt.object, // See CladeOrgDb
+                 positionInfo: pt.object,   // See RegionOrGenome
+                 querySpec: pt.object,      // Data sources and output options
+                 addDsInfo: pt.object,      // Options for adding a data source
+                 tableFields: pt.object,    // If present, show 'Choose fields' modal
+                 showLoadingImage: pt.bool  // If true, show loading image (for query execution)
+    },
+
+    render: function() {
+        var path = this.props.path;
+        var cladeOrgDbInfo = this.props.cladeOrgDbInfo;
+        if (! cladeOrgDbInfo) {
+            // Waiting for initial data from server
+            return <Section title='Loading...' />;
+        } else {
+            return (
+              <div>
+                <Section title='Select Genome Assembly and Region'>
+                  <CladeOrgDb menuData={cladeOrgDbInfo}
+                              path={path.concat('cladeOrgDb')} update={this.props.update}/>
+                  <RegionOrGenome positionInfo={this.props.positionInfo}
+                                  db={cladeOrgDbInfo.get('db')}
+                                  path={path.concat('positionInfo')} update={this.props.update}/>
+                </Section>
+
+                <QueryBuilder addDsInfo={this.props.addDsInfo}
+                              querySpec={this.props.querySpec}
+                              tableFields={this.props.tableFields}
+                              showLoadingImage={this.props.showLoadingImage}
+                              path={path} update={this.props.update}
+                              />
+              </div>
+            );
+        }
+    }
+}); // dbPosAndQueryBuilder
+
+
+var AppComponent = React.createClass({
+    // AnnoGrator interface
+
+    mixins: [ImmutableUpdate],
+
+    getDefaultProps: function() {
+        return { path: [] };
+    },
+
+    render: function() {
         var appState = this.props.appState;
         var appStateJS = appState.toJS();
         console.log('top-level render:', appStateJS);
-        var cladeOrgDbInfo = appState.get('cladeOrgDb'); // {clade|org|db}{,Options}
-        var positionInfo = appState.get('positionInfo'); // selected=hgai_range, pos{,Matches,Loading, geneSuggestTrack
-        var trackDbInfo = appState.get('trackDbInfo'); // groupOptions, groupTracks, trackTables
-        var trackPath = appState.get('addDsTrackPath');
-        var db = cladeOrgDbInfo.get('db');
-        if (! (cladeOrgDbInfo && trackDbInfo && trackPath)) {
-            // Waiting for initial data from server
-            return <span>Loading...</span>;
-        }
-        var querySpec = appState.get('hgai_querySpec');
-        var dataSources = querySpec.get('dataSources');
-        var outputInfo = querySpec.get('outFileOptions') || Immutable.Map();
-        var tableFields = appState.get('tableFields');
-        var showLoadingImage = appState.get('showLoadingImage');
-        var disableGetOutput = (! (dataSources && dataSources.size));
-        var disableGetOutputMessage =
-        <span className='disabledMessage'>
-          At least one data source must be added.
-        </span>;
+        var path = this.props.path;
         var helpText = appState.get('helpText') || '';
         return (
             <div className='sectionContents'>
@@ -437,36 +470,19 @@ var AppComponent = React.createClass({
                      onClick={this.props.undo} disabled={!appState.get('canUndo')} />
               <input type='button' value='Redo'
                      onClick={this.props.redo} disabled={!appState.get('canRedo')} />
-              <Section title='Select Genome Assembly and Region'>
-                <CladeOrgDb menuData={cladeOrgDbInfo}
-                            path={['cladeOrgDb']} update={this.props.update}/>
-                <RegionOrGenome positionInfo={positionInfo} db={db}
-                                path={['positionInfo']} update={this.props.update}/>
-              </Section>
 
-              <Section title='Configure Data Sources'>
-                {this.renderDataSources(dataSources)}
-                <AddDataSource trackPath={trackPath}
-                               trackDbInfo={trackDbInfo}
-                               db={db}
-                               path={[]} update={this.props.update} />
-              </Section>
-
-              <Section title='Output Options'>
-                <OutFileOptions options={outputInfo}
-                                fieldInfo={tableFields}
-                                showLoadingImage={showLoadingImage}
-                                disableGetOutput={disableGetOutput}
-                                disableGetOutputMessage={disableGetOutputMessage}
-                                path={['outFileOptions']} update={this.props.update}
-                                />
-              </Section>
+              <DbPosAndQueryBuilder cladeOrgDbInfo={appState.get('cladeOrgDb')}
+                                    positionInfo={appState.get('positionInfo')}
+                                    addDsInfo={appState.get('addDsInfo')}
+                                    querySpec={appState.get('hgi_querySpec')}
+                                    tableFields={appState.get('tableFields')}
+                                    showLoadingImage={appState.get('showLoadingImage')}
+                                    path={path} update={this.props.update}
+                                    />
 
               <Section title='Using the Annotation Integrator'>
                 <div dangerouslySetInnerHTML={{__html: helpText}} />
               </Section>
-
-              { /* <pre>this.props.appState: {JSON.stringify(appStateJS, null, 2)}</pre> */ }
             </div>
         );
     }

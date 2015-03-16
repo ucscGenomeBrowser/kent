@@ -366,6 +366,58 @@ danRer10.orfeome = yes
     make etc-update
 
 #########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2014-05-01 - Hiram)
+    hgsql -N -e "select frag from gold;" danRer10 | sort -u \
+        > /tmp/danRer10.frag.gold.txt
+
+
+    export maxLen=`awk '{print length($0)}' /tmp/danRer10.frag.gold.txt | sort -rn | head -1`
+    echo "scan to column: $maxLen"
+
+export C=1
+while [ $C -le $maxLen ];
+do
+echo -n " $C: "
+awk '{ print substr($0,'$C',1) }' /tmp/danRer10.frag.gold.txt | sort -u | xargs echo | sed -e 's/ //g'
+C=`echo $C | awk '{print $1+1}'`
+done
+ 1: ABCFLN
+ 2: ACKLOPQRTUX
+ 3: 0123456789B_
+ 4: 0123456789Z
+ 5: 0123456789
+ 6: 0123456789
+ 7: 0123456789
+ 8: 0123456789
+ 9: .0123456789
+ 10: .0123456789
+ 11: 0123456789
+ 12: 0123456789
+ 13: .
+ 14: 1
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" danRer10 | wc -l
+    # 34028
+
+    hgsql -N -e "select frag from gold;" danRer10 \
+       | egrep -e '[ABCFLN][ACKLOPQRTUX][B0-9_][Z0-9][0-9]+(\.[0-9]+)?' | wc -l
+    # 34028
+
+    hgsql -N -e "select frag from gold;" danRer10 \
+       | egrep -v -e '[ABCFLN][ACKLOPQRTUX][B0-9_][Z0-9][0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/zebrafish/danRer10/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [ABCFLN][ACKLOPQRTUX][B0-9_][Z0-9][0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+#########################################################################
+
+#########################################################################
 # ucscToINSDC table/track (DONE - 2015-01-22 - Hiram)
 
     mkdir /hive/data/genomes/danRer10/bed/ucscToINSDC

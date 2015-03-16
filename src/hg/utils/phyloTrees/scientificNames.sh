@@ -16,6 +16,8 @@ s/araMac1/Ara_macao/;
 s/apiMel4/Apis_mellifera/;
 s/macFas5/Macaca_fascicularis/;
 s/camFer1/Camelus_ferus/;
+s/camBac1/Camelus_bactrianus/;
+s/camDro1/Camelus_dromedarius/;
 s/canLup1/Canus_lupus/;
 s/chlSab1/Chlorocebus_sabaeus/;
 s/chlSab2/Chlorocebus_sabaeus/;
@@ -40,7 +42,9 @@ s/conCri1/Condylura_cristata/;
 s/criGri1/Cricetulus_griseus/;
 s/mesAur1/Mesocricetus_auratus/;
 s/croPor1/Crocodylus_porosus/;
+s/croPor2/Crocodylus_porosus/;
 s/croPor0/Crocodylus_porosus/;
+s/vipBer1/Vipera_berus_berus/;
 s/dm4/Drosophila_melanogaster/;
 s/echTel2/Echinops_telfairi/;
 s/eleEdw1/Elephantulus_edwardii/;
@@ -49,9 +53,11 @@ s/eriEur2/Erinaceus_europaeus/;
 s/falChe1/Falco_cherrug/;
 s/falPer1/Falco_peregrinus/;
 s/aquChr1/Aquila_chrysaetos_canadensis/;
+s/aquChr2/Aquila_chrysaetos_canadensis/;
 s/halAlb1/Haliaeetus_albicilla/;
 s/manVit2/Manacus_vitellinus/;
 s/manVit1/Manacus_vitellinus/;
+s/melGal5/Meleagris_gallopavo/;
 s/corBra1/Corvus_brachyrhynchos/;
 s/corCor1/Corvus_cornix_cornix/;
 s/acaChl1/Acanthisitta_chloris/;
@@ -122,13 +128,16 @@ s/taeGut2/Taeniopygia_guttata/;
 s/tupChi1/Tupaia_chinensis/;
 s/chrPic2/Chrysemys_picta_bellii/;
 s/xenTro7/Xenopus_tropicalis/;
+s/nanPar1/Nanorana_parkeri/;
 s/astMex1/Astyanax_mexicanus/;
 s/angJap1/Anguilla_japonica/;
 s/calMil1/Callorhinchus_milii/;
 s/perManBai1/Peromyscus_maniculatus_bairdii/;
 s/panTig1/Panthera_tigris_altaica/;
 s/bubBub1/Bubalus_bubalis/;
+s/bosInd1/Bos_indicus/;
 s/bosMut1/Bos_mutus/;
+s/bisBis1/Bison_bison_bison/;
 s/lipVex1/Lipotes_vexillifer/;
 s/bosTau8/Bos_taurus/;
 s/bosTau7/Bos_taurus/;
@@ -140,7 +149,14 @@ s/sebRub1/Sebastes_rubrivinctus/;
 s/poeFor1/Poecilia_formosa/;
 s/esoLuc1/Esox_lucius/;
 s/poeReg1/Poecilia_reticulata/;
-s/xipMac1/Xiphophorus_maculatus/;'
+s/xipMac1/Xiphophorus_maculatus/;
+s/dipOrd2/Dipodomys_ordii/;
+s/fukDam1/Fukomys_damarensis/;
+s/cavApe1/Cavia_aperea/;
+s/pteVam2/Pteropus_vampyrus/;
+s/proCap2/Procavia_capensis/;
+s/ornAna5/Ornithorhynchus_anatinus/;
+s/ponAbe3/Pongo_abelii/;'
 }
 
 export F=$1
@@ -149,10 +165,16 @@ sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d; s/(//g; s/)//g; s
     | xargs echo | tr '[ ]' '[\n]' | sort | while read DB
 do
     sciName=`hgsql -N -e "select scientificName from dbDb where name=\"${DB}\";" hgcentraltest 2> /dev/null | sed -e 's/ /_/g;'`
-    echo "$DB -> $sciName from hgcentraltest" 1>&2
     if [ "X${sciName}Y" = "XY" ]; then
        sciName=`notYetInDbDb $DB`
-       echo "$DB -> $sciName from sed statement" 1>&2
+       if [ "${DB}" = "${sciName}" ]; then
+         sciName="${DB}_missing"
+         echo "$DB -> ${sciName}" 1>&2
+       else 
+         echo "$DB -> $sciName from sed statement" 1>&2
+       fi
+    else
+       echo "$DB -> $sciName from hgcentraltest" 1>&2
     fi
     treeDocString="${treeDocString} $DB -> $sciName ;"
 #    echo "$treeDocString" 1>&2

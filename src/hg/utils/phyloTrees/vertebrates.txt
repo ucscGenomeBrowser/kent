@@ -20,6 +20,9 @@ ornAna	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Mammalia; Prototheria; M
 # Rock pigeon - Columba livia
 colLiv	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Columbiformes; Columbidae; Columba
 
+# Golden eagle Aquila chrysaetos canadensis
+aquChr	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Archelosauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Falconiformes; Accipitridae; Accipitrinae; Aquila; Aquila chrysaetos
+
 # Saker falcon - Falco cherrug
 falChe	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Falconiformes; Falconidae; Falco; Falco cherrug
 
@@ -70,6 +73,9 @@ amaVit	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Arch
 # Scarlet Macaw - Ara macao
 araMac	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Dinosauria; Saurischia; Theropoda; Coelurosauria; Aves; Neognathae; Psittaciformes; Psittacidae; Ara
 
+# Gharial - Gavialis gangeticus
+gavGan	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Archelosauria; Archosauria; Crocodylia; Longirostres; Gavialidae; Gavialinae; Gavialis
+
 # Australian Saltwater crocodile Crocodylus porosus
 croPor	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Archosauria; Crocodylidae; Crocodylinae; Crocodylus
 
@@ -78,6 +84,9 @@ allMis	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Sauria; Arch
 
 # Chinese Alligator - Alligator sinensis
 allSin	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Testudines + Archosauria group; Archosauria; Crocodylia; Alligatoridae; Alligatorinae; Alligator
+
+# adder - Vipera berus berus
+vipBer	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Lepidosauria; Squamata; Bifurcata; Unidentata; Episquamata; Toxicofera; Serpentes; Colubroidea; Viperidae; Viperinae; Vipera; Vipera berus
 
 # Burmese python - Python molurus bivittatus
 pytBiv	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; Sauropsida; Sauria; Lepidosauria; Squamata; Bifurcata; Unidentata; Episquamata; Toxicofera; Serpentes; Henophidia; Pythonidae; Python
@@ -96,6 +105,9 @@ apaSpi  Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amniota; S
 
 # Western painted turtle Chrysemys picta bellii
 chrPic	Euteleostomi; Sarcopterygii; Tetrapoda; Amniota; Sauropsida; Testudines; Cryptodira; Testudinoidea; Emydidae; Chrysemys; Chrysemys picta
+
+# Tibetan frog - Nanorana parkeri
+nanPar	Euteleostomi; Sarcopterygii; Dipnotetrapodomorpha; Tetrapoda; Amphibia; Batrachia; Anura; Neobatrachia; Ranoidea; Dicroglossidae; Dicroglossinae; Nanorana
 
 # Western Clawed Frog Xenopus (Silurana) tropicalis
 xenTro	Euteleostomi; Sarcopterygii; Tetrapoda; Amphibia; Batrachia; Anura; Mesobatrachia; Pipoidea; Pipidae; Xenopodinae; Xenopus; Silurana

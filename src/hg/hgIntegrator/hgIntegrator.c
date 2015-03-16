@@ -1,4 +1,4 @@
-/* hgAi - bootstrapper / back end for the Annotation Integrator user interface
+/* hgIntegrator - bootstrapper / back end for the Annotation Integrator user interface
  * This CGI has three modes of operation:
  *  - HTML output for minimal main page with a <div> container to be filled in by javascript
  *    (default, in the absence of special CGI params)
@@ -6,8 +6,8 @@
  *    (if CGI param CARTJSON_COMMAND exists)
  *  - text output for annoGrator queries on track data
  *    (if CGI param DO_QUERY exists)
- * The UI view top level is in ../js/react/hgAi/hgAi.jsx
- * The UI model top level is in ../js/model/hgAi/hgAiModel.js
+ * The UI view top level is in ../js/react/hgIntegrator/hgIntegrator.jsx
+ * The UI model top level is in ../js/model/hgIntegrator/hgIntegratorModel.js
  */
 #include "common.h"
 #include "cart.h"
@@ -29,41 +29,11 @@
 /* Global Variables */
 struct cart *cart = NULL;             /* CGI and other variables */
 
-#define QUERY_SPEC "hgai_querySpec"
-#define DO_QUERY "hgai_doQuery"
+#define QUERY_SPEC "hgi_querySpec"
+#define DO_QUERY "hgi_doQuery"
 
 //#*** duplicated from hgVai... put in some anno*.h?
 #define NO_MAXROWS 0
-
-static void writeDbMetadata(struct cartJson *cj, struct hash *paramHash)
-/* Send all the info that we'll need for working with a specific assembly db. */
-{
-cartJsonGetGroupsTracksTables(cj, paramHash);
-//#*** TODO: move jsonStringEscape inside jsonWriteString
-char *encoded = jsonStringEscape(cartOptionalString(cart, QUERY_SPEC));
-jsonWriteString(cj->jw, QUERY_SPEC, encoded);
-}
-
-static void changeDb(struct cartJson *cj, struct hash *paramHash)
-/* The user has changed db; send groups, tracks, tables etc. for the new db. */
-{
-cartJsonChangeDb(cj, paramHash);
-writeDbMetadata(cj, paramHash);
-}
-
-static void changeOrg(struct cartJson *cj, struct hash *paramHash)
-/* The user has changed org/genome; send groups, tracks, tables etc. for the new default db. */
-{
-cartJsonChangeOrg(cj, paramHash);
-writeDbMetadata(cj, paramHash);
-}
-
-static void changeClade(struct cartJson *cj, struct hash *paramHash)
-/* The user has changed clade; send groups, tracks, tables etc. for the new default db. */
-{
-cartJsonChangeClade(cj, paramHash);
-writeDbMetadata(cj, paramHash);
-}
 
 static void makeTrackLabel(struct trackDb *tdb, char *table, char *label, size_t labelSize)
 /* Write tdb->shortLabel into label if table is the same as tdb->track; otherwise, write shortLabel
@@ -121,10 +91,11 @@ slFreeList(&tables);
 void doCartJson()
 /* Perform UI commands to update the cart and/or retrieve cart vars & metadata. */
 {
+// When cart is brand new, we need to set db in the cart because several cartJson functions
+// require it to be there.
+if (! cartOptionalString(cart, "db"))
+    cartSetString(cart, "db", hDefaultDb());
 struct cartJson *cj = cartJsonNew(cart);
-cartJsonRegisterHandler(cj, "changeDb", changeDb);
-cartJsonRegisterHandler(cj, "changeOrg", changeOrg);
-cartJsonRegisterHandler(cj, "changeClade", changeClade);
 cartJsonRegisterHandler(cj, "getFields", getFields);
 cartJsonExecute(cj);
 }
@@ -140,7 +111,7 @@ if (outFileOptions)
     boolean doFile = jsonOptionalBooleanField(outFileOptions, "doFile", FALSE);
     if (doFile)
         {
-        fileName = jsonOptionalStringField(outFileOptions, "fileName", "hgAiResults");
+        fileName = jsonOptionalStringField(outFileOptions, "fileName", "hgIntegratorResults");
         boolean doGzip = jsonOptionalBooleanField(outFileOptions, "doGzip", FALSE);
         if (doGzip)
             compressType = textOutCompressGzip;
@@ -197,7 +168,7 @@ void doQuery()
 char *db = cartString(cart, "db");
 char *chrom = NULL;
 uint start = 0, end = 0;
-char *regionType = cartUsualString(cart, "hgai_range", "position");
+char *regionType = cartUsualString(cart, "hgi_range", "position");
 if (sameString(regionType, "position"))
     {
     char *position = cartUsualString(cart, "position", hDefaultPos(db));
@@ -228,13 +199,21 @@ int i;
 for (i = 0, dsRef = dataSources;  dsRef != NULL;  i++, dsRef = dsRef->next)
     {
     struct jsonElement *dsObj = dsRef->val;
-    char *table = jsonStringField(dsObj, "table");
-    char *track = jsonStringField(dsObj, "track");
-    struct trackDb *tdb = tdbForTrack(db, table, &fullTrackList);
+    struct slRef *trackPath = jsonListVal(jsonMustFindNamedField(dsObj, "dataSource", "trackPath"),
+                                          "trackPath");
+    // The first item in trackPath is group.  The second is track (or composite):
+    struct jsonElement *trackEl = (struct jsonElement *)(trackPath->next->val);
+    // and the last item in trackPath is track or leaf subtrack.
+    struct slRef *leafRef = slLastEl(trackPath);
+    struct jsonElement *leafEl = (struct jsonElement *)(leafRef->val);
+    char *leafTrack = jsonStringVal(leafEl, "leaf");
+    char *track = jsonStringVal(trackEl, "track");
+    struct trackDb *tdb = tdbForTrack(db, leafTrack, &fullTrackList);
     if (!tdb)
         tdb = tdbForTrack(db, track, &fullTrackList);
     if (!tdb)
-        errAbort("doQuery: no tdb for track %s, table %s", track, table);
+        errAbort("doQuery: no tdb for track %s, leaf %s", track, leafTrack);
+    char *table = tdb->table;
     if (i == 0)
         {
         primary = hAnnoStreamerFromTrackDb(assembly, table, tdb, chrom, NO_MAXROWS);
@@ -291,7 +270,7 @@ printf("<script>window.%s='%s';</script>\n", cartSessionVarName(), cartSessionId
 // We need a package manager and require-handling system... bower and browserify?
 puts("<script src=\"../js/es5-shim.4.0.3.min.js\"></script>");
 puts("<script src=\"../js/es5-sham.4.0.3.min.js\"></script>");
-puts("<script src=\"../js/lodash.2.4.1.compat.min.js\"></script>");
+puts("<script src=\"../js/lodash.3.3.1.compat.min.js\"></script>");
 puts("<script src=\"//code.jquery.com/jquery-1.9.1.min.js\"></script>");
 puts("<script src=\"//code.jquery.com/ui/1.10.3/jquery-ui.min.js\"></script>");
 puts("<script src=\"//fb.me/react-with-addons-0.12.2.min.js\"></script>");
@@ -305,12 +284,12 @@ puts("<script src=\"../js/PathUpdate.js\"></script>");
 puts("<script src=\"../js/PathUpdateOptional.js\"></script>");
 puts("<script src=\"../js/ImmutableUpdate.js\"></script>");
 puts("<script src=\"../js/reactLibBundle.js\"></script>");
-puts("<script src=\"../js/reactHgAi.js\"></script>");
-puts("<script src=\"../js/hgAiModel.js\"></script>");
+puts("<script src=\"../js/reactHgIntegrator.js\"></script>");
+puts("<script src=\"../js/hgIntegratorModel.js\"></script>");
 
 // Invisible form for submitting a query
 printf("\n<form action=\"%s\" method=%s id='queryForm'>\n",
-       hgAiName(), cartUsualString(cart, "formMethod", "GET"));
+       hgIntegratorName(), cartUsualString(cart, "formMethod", "GET"));
 cartSaveSession(cart);
 cgiMakeHiddenVar(QUERY_SPEC, cartUsualString(cart, QUERY_SPEC, ""));
 cgiMakeHiddenVar(DO_QUERY, "go");

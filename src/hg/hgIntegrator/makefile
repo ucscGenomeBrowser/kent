@@ -4,10 +4,8 @@ L += $(MYSQLLIBS) -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-A = hgAi
-O = hgAi.o
-
-A = hgAi
+A = hgIntegrator
+O = ${A}.o
 
 include ../../inc/cgi_build_rules.mk
 

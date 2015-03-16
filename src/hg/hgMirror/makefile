@@ -24,6 +24,9 @@ clean::
 
 compile::
 
+lint::
+	pylint -E hgMirror
+
 install::
 	rm -f ${DESTDIR}${CGI_BIN}/hgMirror
 	cp -p hgMirror ${DESTDIR}${CGI_BIN}/
