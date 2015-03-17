@@ -15,7 +15,7 @@ var RegionOrGenome = React.createClass({
     // update(path + 'hidePosPopup') called when user clicks to hide popup
     // update(path + 'positionMatch', matches): user clicks position link in popup
     //                                          (matches obj is from hgFind)
-    // update(path + 'hgai_range') called when user changes genome/position select
+    // update(path + 'hgi_range') called when user changes genome/position select
 
     propTypes: { positionInfo: pt.object.isRequired,  // Immutable.Map {
                  //   position: initial value of position input
@@ -34,7 +34,7 @@ var RegionOrGenome = React.createClass({
         var props = this.props;
         var posInfo = props.positionInfo;
         var positionInput = null;
-        if (posInfo.get('hgai_range') !== 'genome') {
+        if (posInfo.get('hgi_range') !== 'genome') {
             positionInput = <PositionSearch positionInfo={posInfo}
                                             className='sectionItem'
                                             db={props.db}
@@ -45,8 +45,8 @@ var RegionOrGenome = React.createClass({
             <div className='sectionRow'>
               <LabeledSelect label='region to annotate'
                              className='sectionItem'
-                             selected={posInfo.get('hgai_range')} options={this.menuOptions}
-                             update={props.update} path={props.path.concat('hgai_range')} />
+                             selected={posInfo.get('hgi_range')} options={this.menuOptions}
+                             update={props.update} path={props.path.concat('hgi_range')} />
               {positionInput}
             </div>
         );
@@ -474,7 +474,7 @@ var AppComponent = React.createClass({
               <DbPosAndQueryBuilder cladeOrgDbInfo={appState.get('cladeOrgDb')}
                                     positionInfo={appState.get('positionInfo')}
                                     addDsInfo={appState.get('addDsInfo')}
-                                    querySpec={appState.get('hgai_querySpec')}
+                                    querySpec={appState.get('hgi_querySpec')}
                                     tableFields={appState.get('tableFields')}
                                     showLoadingImage={appState.get('showLoadingImage')}
                                     path={path} update={this.props.update}

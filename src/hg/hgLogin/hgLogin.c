@@ -723,6 +723,9 @@ hPrintf("<form method=post action=\"hgLogin\" name=\"accountLoginForm\" id=\"acc
     "   <input type=\"submit\" name=\"hgLogin.do.displayLogin\" value=\"Login\" class=\"largeButton\">"
     "    &nbsp;<a href=\"%s\">Cancel</a>"
     "</div>"
+    , username, getReturnToURL());
+cartSaveSession(cart);
+hPrintf(
     "</form>"
     "\n"
     "\n"
@@ -734,8 +737,7 @@ hPrintf("<form method=post action=\"hgLogin\" name=\"accountLoginForm\" id=\"acc
     "\n"
     "\n"
     "</body>"
-    "</html>", username, getReturnToURL());
-cartSaveSession(cart);
+    "</html>");
 }
 
 void activateAccount(struct sqlConnection *conn)
@@ -1187,6 +1189,20 @@ else
     return cloneString(returnToDomain);
 }
 
+char *getCookieDomainString()
+/* Get a string that will look something like " domain=.ucsc.edu;" if getCookieDomainName
+ * returns something good,  otherwise just " " */
+{
+char buf[256];
+char *domain = getCookieDomainName();
+if (domain != NULL && strchr(domain, '.') != NULL)
+    safef(buf, sizeof(buf), " domain=%s;", domain);
+else
+    safef(buf, sizeof(buf), " ");
+freeMem(domain);
+return cloneString(buf);
+}
+
 void displayLoginSuccess(char *userName, int userID)
 /* display login success msg, and set cookie */
 {
@@ -1197,18 +1213,19 @@ hPrintf(
     "<span style='color:red;'></span>"
     "\n");
 /* Set cookies */
-char *domainName=getCookieDomainName();
+char *domainString=getCookieDomainString();
+
 char *userNameCookie=cookieNameForUserName();
 char *userIDCookie=cookieNameForUserID();
 hPrintf("<script language=\"JavaScript\">"
     " document.write(\"Login successful, setting cookies now...\");"
     "</script>\n"
     "<script language=\"JavaScript\">"
-    "document.cookie = \"%s=%s; domain=%s; expires=Thu, 30-Dec-2037 23:59:59 GMT; path=/;\";"
+    "document.cookie = \"%s=%s;%s expires=Thu, 30-Dec-2037 23:59:59 GMT; path=/;\";"
     "\n"
-    "document.cookie = \"%s=%d; domain=%s; expires=Thu, 30-Dec-2037 23:59:59 GMT; path=/;\";"
+    "document.cookie = \"%s=%d;%s expires=Thu, 30-Dec-2037 23:59:59 GMT; path=/;\";"
     " </script>"
-    "\n", userNameCookie, userName, domainName, userIDCookie, userID, domainName);
+    "\n", userNameCookie, userName, domainString, userIDCookie, userID, domainString);
 cartRemove(cart,"hgLogin_userName");
 returnToURL(150);
 }
@@ -1289,14 +1306,14 @@ hPrintf(
     "</p>"
     "<span style='color:red;'></span>"
     "\n");
-char *domainName=getCookieDomainName();
+char *domainString=getCookieDomainString();
 char *userNameCookie=cookieNameForUserName();
 char *userIDCookie=cookieNameForUserID();
 hPrintf("<script language=\"JavaScript\">"
-    "document.cookie = \"%s=; domain=%s; expires=Thu, 1-Jan-1970 0:0:0 GMT; path=/;\";"
+    "document.cookie = \"%s=;%s expires=Thu, 1-Jan-1970 0:0:0 GMT; path=/;\";"
     "\n"
-    "document.cookie = \"%s=; domain=%s; expires=Thu, 1-Jan-1970 0:0:0 GMT; path=/;\";"
-    "</script>\n", userNameCookie, domainName, userIDCookie, domainName);
+    "document.cookie = \"%s=;%s expires=Thu, 1-Jan-1970 0:0:0 GMT; path=/;\";"
+    "</script>\n", userNameCookie, domainString, userIDCookie, domainString);
 /* return to "returnto" URL */
 returnToURL(150);
 }

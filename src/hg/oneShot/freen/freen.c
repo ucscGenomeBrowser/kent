@@ -8,6 +8,9 @@
 #include "hash.h"
 #include "options.h"
 #include "cheapcgi.h"
+#include "jksql.h"
+#include "genePred.h"
+#include "rangeTree.h"
 
 void usage()
 {
@@ -19,15 +22,30 @@ errAbort("freen - test some hairbrained thing.\n"
  //  {NULL, 0},
 //};
 
-void freen(char *input)
+void freen(char *chrom)
 /* Test something */
 {
-char *pt = cloneString(input);
-char *var, *val;
-while (cgiParseNext(&pt, &var, &val))
+uglyTime(NULL);
+struct sqlConnection *conn = sqlConnect("hg19");
+uglyTime("connect");
+char query[512];
+sqlSafef(query, sizeof(query), "select * from knownGene where chrom='%s'", chrom);
+struct sqlResult *sr = sqlGetResult(conn, query);
+uglyTime("get result");
+char **row;
+struct rbTree *rt = rangeTreeNew();
+while ((row = sqlNextRow(sr)) != NULL)
     {
-    printf("%s\t%s\n", var, val); 
+    struct genePred *gp = genePredLoad(row);
+    int i;
+    int exonCount = gp->exonCount;
+    for (i=0; i<exonCount; ++i)
+        rangeTreeAdd(rt, gp->exonStarts[i], gp->exonEnds[i]);
     }
+uglyTime("Add rows");
+struct range *list = rangeTreeList(rt);
+uglyTime("Did list");
+uglyf("%d items in chrom %s\n", slCount(list), chrom);
 }
 
 int main(int argc, char *argv[])

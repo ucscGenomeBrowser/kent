@@ -600,6 +600,14 @@ else
     safef(s,slength,"%3.0f %s",((double)size)/d, greek[i]);
 }
 
+void printWithGreekByte(FILE *f, long long l)
+/* Print with formatting in gigabyte, terabyte, etc. */
+{
+char buf[32];
+sprintWithGreekByte(buf, sizeof(buf), l);
+fprintf(f, "%s", buf);
+}
+
 void shuffleArrayOfChars(char *array, int arraySize)
 /* Shuffle array of characters of given size given number of times. */
 {

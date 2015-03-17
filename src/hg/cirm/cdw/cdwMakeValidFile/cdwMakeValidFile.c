@@ -670,6 +670,7 @@ if (vf->format)	// We only can validate if we have something for format
 	}
     else if (sameString(format, "vcf"))
         {
+	needAssembly(ef, format, assembly);
 	makeValidVcf(conn, path, ef, assembly, vf);
 	if (endsWith(ef->submitFileName, ".gz"))
 	    suffix = ".vcf.gz";

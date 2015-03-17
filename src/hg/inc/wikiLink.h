@@ -34,7 +34,13 @@ char *wikiLinkUserName();
 char *wikiLinkUserLoginUrl(char *hgsid);
 /* Return the URL for the wiki user login page. */
 
+char *wikiLinkUserLoginUrlReturning(char *hgsid, char *returnUrl);
+/* Return the URL for the wiki user login page. */
+
 char *wikiLinkUserLogoutUrl(char *hgsid);
+/* Return the URL for the wiki user logout page. */
+
+char *wikiLinkUserLogoutUrlReturning(char *hgsid, char *returnUrl);
 /* Return the URL for the wiki user logout page. */
 
 char *wikiLinkUserSignupUrl(char *hgsid);

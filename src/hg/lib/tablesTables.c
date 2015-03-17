@@ -7,6 +7,7 @@
 #include "obscure.h"
 #include "linefile.h"
 #include "jksql.h"
+#include "jsHelper.h"
 #include "sqlSanity.h"
 #include "fieldedTable.h"
 #include "cheapcgi.h"
@@ -38,39 +39,111 @@ static void showTableFilterInstructionsEtc(struct fieldedTable *table,
 int matchCount = slCount(table->rowList);
 if (largerContext != NULL)  // Need to page?
      matchCount = largerContext->tableSize;
-printf(" %d %s found. ", matchCount, itemPlural);
-cgiMakeButton("submit", "update");
+cgiMakeButton("submit", "search");
+printf("&nbsp;&nbsp;&nbsp&nbsp;");
+printf("%d&nbsp;%s&nbsp;found. ", matchCount, itemPlural);
 
 
 printf("<BR>\n");
-printf("First row of table below, above labels, can be used to filter individual fields. ");    
+printf("You can further filter search results field by field below. ");    
 printf("Wildcard * and ? characters are allowed in text fields. ");
-printf("&GT;min or &LT;max, is allowed in numerical fields.<BR>\n");
+printf("&GT;min or &LT;max are allowed in numerical fields.<BR>\n");
+}
+
+static void printSuggestScript(char *id, struct slName *suggestList)
+/* Print out a little javascript to wrap auto-suggester around control with given ID */
+{
+printf("<script>\n");
+printf("$(document).ready(function() {\n");
+printf("  $('#%s').autocomplete({\n", id);
+printf("    delay: 100,\n");
+printf("    minLength: 0,\n");
+printf("    source: [");
+char *separator = "";
+struct slName *suggest;
+for (suggest = suggestList; suggest != NULL; suggest = suggest->next)
+    {
+    printf("%s\"%s\"", separator, suggest->name);
+    separator = ",";
+    }
+printf("]\n");
+printf("    });\n");
+printf("});\n");
+printf("</script>\n");
+}
+
+static void printWatermark(char *id, char *watermark)
+/* Print light text filter prompt as watermark. */
+{
+printf("<script>\n");
+printf("$(function() {\n");
+printf("  $('#%s').watermark(\"%s\");\n", id, watermark);
+printf("});\n");
+printf("</script>\n");
 }
 
 static void showTableFilterControlRow(struct fieldedTable *table, struct cart *cart, 
-    char *varPrefix, int maxLenField)
-/* Assuming we are in table already drow control row */
+    char *varPrefix, int maxLenField, struct hash *suggestHash)
+/* Assuming we are in table already drow control row.
+ * The suggestHash is keyed by field name.  If something is there we'll assume
+ * it's value is slName list of suggestion values */
 {
-printf("<TR>");
+/* Include javascript and style we need  */
+webIncludeResourceFile("jquery-ui.css");
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("jquery.plugins.js", NULL);
+jsIncludeFile("jquery-ui.js", NULL);
+jsIncludeFile("jquery.watermark.js", NULL);
+
 int i;
+printf("<TR>");
 for (i=0; i<table->fieldCount; ++i)
     {
     char *field = table->fields[i];
     char varName[256];
     safef(varName, sizeof(varName), "%s_f_%s", varPrefix, field);
     webPrintLinkCellStart();
+
 #ifdef MAKES_TOO_WIDE
+    /* Print out input control.  As you can see from all the commented out bits
+     * this part has been a challenge.  We'd like to make the input cell fit the
+     * table size, but if we do it with style it makes whole table wider. */
     char *oldVal = cartUsualString(cart, varName, "");
     printf("<input type=\"text\" name=\"%s\" style=\"display:table-cell; width=100%%\""
 	   " value=\"%s\">", varName, oldVal);
 #endif /* MAKES_TOO_WIDE */
+
+    /* Approximate size of input control in characters */
     int size = fieldedTableMaxColChars(table, i);
     if (size > maxLenField)
 	size = maxLenField;
+
+#ifdef ACTUALLY_WORKS
+    /* This way does work last I checked and is just a line of code.
+     * Getting an id= property on the input tag though isn't possible this way. */
     cartMakeTextVar(cart, varName, "", size + 1);
+#endif
+
+    /* Print input control getting previous value from cart.  Set an id=
+     * so auto-suggest can find this control. */
+    char *oldVal = cartUsualString(cart, varName, "");
+    printf("<INPUT TYPE=TEXT NAME=\"%s\" id=\"%s\" SIZE=%d VALUE=\"%s\">\n",
+	varName, varName, size+1, oldVal);
+
+    /* Write out javascript to initialize autosuggest on control */
+    printWatermark(varName, " filter ");
+    if (suggestHash != NULL)
+        {
+	struct slName *suggestList = hashFindVal(suggestHash, field);
+	if (suggestList != NULL)
+	    {
+	    printSuggestScript(varName, suggestList);
+	    }
+	}
     webPrintLinkCellEnd();
     }
+
+
 printf("</TR>");
 }
 
@@ -101,6 +174,20 @@ for (i=0; i<table->fieldCount; ++i)
     printf("%s", field);
     printf("\">");
     printf("%s", field);
+    if (!isEmpty(orderFields))
+        {
+	char *s = orderFields;
+	boolean isRev = (s[0] == '-');
+	if (isRev)
+	    ++s;
+	if (sameString(field, s))
+	    {
+	    if (isRev)
+	        printf("&uarr;");
+	    else
+	        printf("&darr;");
+	    }
+	}
     printf("</A>");
     webPrintLabelCellEnd();
     }
@@ -125,6 +212,11 @@ static void showTableDataRows(struct fieldedTable *table, int pageSize, int maxL
 {
 int count = 0;
 struct fieldedRow *row;
+boolean isNum[table->fieldCount];
+int i;
+for (i=0; i<table->fieldCount; ++i)
+    isNum[i] = fieldedTableColumnIsNumeric(table, i);
+
 for (row = table->rowList; row != NULL; row = row->next)
     {
     if (++count > pageSize)
@@ -134,7 +226,8 @@ for (row = table->rowList; row != NULL; row = row->next)
     for (fieldIx=0; fieldIx<table->fieldCount; ++fieldIx)
 	{
 	char shortVal[maxLenField+1];
-	char *val = emptyForNull(row->row[fieldIx]);
+	char *longVal = emptyForNull(row->row[fieldIx]);
+	char *val = longVal;
 	int valLen = strlen(val);
 	if (maxLenField > 0 && maxLenField < valLen)
 	    {
@@ -146,7 +239,10 @@ for (row = table->rowList; row != NULL; row = row->next)
 		val = shortVal;
 		}
 	    }
-	webPrintLinkCellStart();
+	if (isNum[fieldIx])
+	    webPrintLinkCellRightStart();
+	else
+	    webPrintLinkCellStart();
 	boolean printed = FALSE;
 	if (tagOutputWrappers != NULL && !isEmpty(val))
 	    {
@@ -154,7 +250,7 @@ for (row = table->rowList; row != NULL; row = row->next)
 	    webTableOutputWrapperType *printer = hashFindVal(tagOutputWrappers, field);
 	    if (printer != NULL)
 		{
-		printer(table, row, field, val, wrapperContext);
+		printer(table, row, field, longVal, val, wrapperContext);
 		printed = TRUE;
 		}
 	    
@@ -195,7 +291,7 @@ void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table,
     char *returnUrl, char *varPrefix,
     int maxLenField, struct hash *tagOutputWrappers, void *wrapperContext,
     boolean withFilters, char *itemPlural, 
-    int pageSize, struct fieldedTableSegment *largerContext)
+    int pageSize, struct fieldedTableSegment *largerContext, struct hash *suggestHash)
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
  * that includes a row of filter controls above the labels .
  * The maxLenField is maximum character length of field before truncation with ...
@@ -213,7 +309,7 @@ webPrintLinkTableStart();
 
 /* Draw optional filters cells ahead of column labels*/
 if (withFilters)
-    showTableFilterControlRow(table, cart, varPrefix, maxLenField);
+    showTableFilterControlRow(table, cart, varPrefix, maxLenField, suggestHash);
 
 showTableSortingLabelRow(table, cart, varPrefix, returnUrl);
 showTableDataRows(table, pageSize, maxLenField, tagOutputWrappers, wrapperContext);
@@ -235,7 +331,7 @@ void webSortableFieldedTable(struct cart *cart, struct fieldedTable *table,
 webFilteredFieldedTable(cart, table, returnUrl, varPrefix, 
     maxLenField, tagOutputWrappers, wrapperContext,
     FALSE, NULL, 
-    slCount(table->rowList), NULL);
+    slCount(table->rowList), NULL, NULL);
 }
 
 
@@ -243,7 +339,7 @@ void webFilteredSqlTable(struct cart *cart, struct sqlConnection *conn,
     char *fields, char *from, char *initialWhere,  
     char *returnUrl, char *varPrefix, int maxFieldWidth, 
     struct hash *tagOutWrappers, void *wrapperContext,
-    boolean withFilters, char *itemPlural, int pageSize)
+    boolean withFilters, char *itemPlural, int pageSize, struct hash *suggestHash)
 /* Given a query to the database in conn that is basically a select query broken into
  * separate clauses, construct and display an HTML table around results. This HTML table has
  * column names that will sort the table, and optionally (if withFilters is set)
@@ -355,7 +451,7 @@ if (resultsSize > pageSize)
 
 struct fieldedTable *table = fieldedTableFromDbQuery(conn, query->string);
 webFilteredFieldedTable(cart, table, returnUrl, varPrefix, maxFieldWidth, 
-    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, &context);
+    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, &context, suggestHash);
 fieldedTableFree(&table);
 
 dyStringFree(&query);
