@@ -496,8 +496,10 @@ searchPriority 8
 
     mkdir /hive/data/genomes/xenTro7/pushQ
     cd /hive/data/genomes/xenTro7/pushQ
-    time makePushQSql.pl xenTro7 2> stderr.txt > xenTro7.pushQ.sql
-    #  real	2m55.404s
+    # do not allow transMap to go out
+    time makePushQSql.pl xenTro7 2> stderr.txt \
+       | grep -v transMap > xenTro7.pushQ.sql
+    #  real    6m59.942s
 
     # check the stderr.txt for bad stuff, these kinds of warnings are OK:
 # WARNING: hgwdev does not have /gbdb/xenTro7/wib/gc5Base.wib
@@ -509,7 +511,7 @@ searchPriority 8
 
     #   copy it to hgwbeta
     scp -p xenTro7.pushQ.sql qateam@hgwbeta:/tmp
-    ssh qateam@hgwbeta hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/xenTro7.pushQ.sql"
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/xenTro7.pushQ.sql"
 
     #   in that pushQ entry walk through each entry and see if the
     #   sizes will set properly
