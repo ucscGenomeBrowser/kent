@@ -259,8 +259,22 @@ sys     0m0.067s
     cat fb.xenTro7.cpgIslandExt.txt
     #   4641665 bases of 1365936747 (0.340%) in intersection
 
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2014-07-16 - Hiram)
+    mkdir /hive/data/genomes/xenTro7/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/xenTro7/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/xenTro7/xenTro7.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku xenTro7) > do.log 2>&1
+    # real    13m17.561s
+
+    cat fb.xenTro7.cpgIslandExtUnmasked.txt
+    # 14815116 bases of 1365936747 (1.085%) in intersection
+
 #########################################################################
-# genscan - (WORKING - 2013-06-26 - Hiram)
+# genscan - (DONE - 2013-06-26 - Hiram)
     mkdir /hive/data/genomes/xenTro7/bed/genscan
     cd /hive/data/genomes/xenTro7/bed/genscan
     time doGenscan.pl xenTro7 > do.log 2>&1 
@@ -365,101 +379,191 @@ xenTro7.mgc = yes
     make etc-update
 
 #########################################################################
-# set default position to RHO gene displays  (TBD - 2013-03-08 -Pauline)
+# set default position same as xenTro3  (DONE - 2015-03-18 - Hiram)
     hgsql -e \
-'update dbDb set defaultPos="chr21:52,409,568-52,414,485" where name="xenTro7";' \
-	hgcentraltest
-    # a bit wider for a little more context (2013-03-28 - Hiram)
-    hgsql -e \
-'update dbDb set defaultPos="chr21:52408339-52415715" where name="xenTro7";' \
+'update dbDb set defaultPos="KB021661:77920643-77933995" where name="xenTro7";' \
 	hgcentraltest
 
+#########################################################################
+# LIFTOVER TO xenTro7 (DONE - 2015-03-17 - Hiram)
+#  procedure outlined in xenTro3
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2015-03-18 - Hiram)
+
+    mkdir /hive/data/genomes/xenTro7/bed/ucscToINSDC
+    cd /hive/data/genomes/xenTro7/bed/ucscToINSDC
+    # check for chrM in assembly:
+    grep chrM ../../xenTro7.agp
+# chrM    1       17610   4       F       NC_006839       1       17610   +
+
+    # use the accession name from there in this command (blank if none)
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+        ../../genbank/Primary_Assembly NC_006839
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    # do NOT need the v1 on these names, wasn't used originally:
+    sed --in-place -e 's/v1//' ucscToINSDC.txt
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # should all be the same line count:
+    wc -l *
+#    7728 name.coordinate.tab
+#    7728 ucscToINSDC.bed
+#    7728 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 8
+    # use the 8 in this sed
+    sed -e "s/21/8/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab xenTro7 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords xenTro7
+    # should cover %100 entirely:
+    featureBits -countGaps xenTro7 ucscToINSDC
+    # 1437530879 bases of 1437530879 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2014-05-01 - Hiram)
+    hgsql -N -e "select frag from gold;" xenTro7 | sort -u \
+        > /tmp/xenTro7.frag.gold.txt
+
+
+    export maxLen=`awk '{print length($0)}' /tmp/xenTro7.frag.gold.txt | sort -rn | head -1`
+    echo "scan to column: $maxLen"
+
+export C=1
+while [ $C -le $maxLen ];
+do
+echo -n " $C: "
+awk '{ print substr($0,'$C',1) }' /tmp/xenTro7.frag.gold.txt | sort -u | xargs echo | sed -e 's/ //g'
+C=`echo $C | awk '{print $1+1}'`
+done
+ 1: AN
+ 2: AC
+ 3: M_
+ 4: 0C
+ 5: 0
+ 6: 26
+ 7: 08
+ 8: 012345
+ 9: 0123456789
+ 10: 0123456789
+ 11: 0123456789
+ 12: 0123456789
+ 13: .
+ 14: 1
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" xenTro7 | wc -l
+    # 55150
+
+    hgsql -N -e "select frag from gold;" xenTro7 \
+       | egrep -e '[AN][AC][M_][C0]0[0-9]+(\.1)?' | wc -l
+    # 55150
+
+    hgsql -N -e "select frag from gold;" xenTro7 \
+       | egrep -v -e '[AN][AC][M_][C0]0[0-9]+(\.1)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/zebrafish/xenTro7/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [AN][AC][M_][C0]0[0-9]+(\.1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
 ############################################################################
-# downloads and pushQ entry (TBD - 2013-03-08 - Pauline)
-    # after adding xenTro7 to the all.joiner file and verifying that
-    #   joinerCheck is clean (i.e. run joinerCheck w -times and -keys flags
-    #   to make sure there are no errors), can construct the downloads:
-    cd /hive/data/genomes/xenTro7
-    /usr/bin/time -p makeDownloads.pl -workhorse=hgwdev xenTro7
-    #   real 1400.59
-
-    mkdir /hive/data/genomes/xenTro7/pushQ
-    cd /hive/data/genomes/xenTro7/pushQ
-    # Mark says don't let the transMap track get there
-    time makePushQSql.pl xenTro7 2> stderr.txt > xenTro7.sql
-    #  real	2m55.404s
-
-    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
-# WARNING: hgwdev does not have /gbdb/xenTro7/wib/gc5Base.wib
-# WARNING: hgwdev does not have /gbdb/xenTro7/wib/quality.wib
-# WARNING: hgwdev does not have /gbdb/xenTro7/bbi/quality.bw
-# WARNING: xenTro7 does not have seq
-# WARNING: xenTro7 does not have extFile
-# WARNING: xenTro7 does not have estOrientInfo
-
-    scp -p xenTro7.sql hgwbeta:/tmp/
-    ssh hgwbeta "hgsql qapushq < /tmp/xenTro7.sql"
-
-
-############################################################################
-# construct liftOver to xenTro7 (TBD - 2013-03-07 - Pauline)
-    screen -S lift	# manage this longish running job in a screen
-    mkdir /hive/data/genomes/nomLeu2/bed/blat.xenTro7.2013-03-06
-    cd /hive/data/genomes/nomLeu2/bed/blat.xenTro7.2013-03-06
-    # check it with -debug first to see if it is going to work:
-    /usr/bin/time -p doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
-	-ooc=/hive/data/genomes/nomLeu2/jkStuff/nomLeu2.11.ooc \
-	-debug -dbHost=hgwdev -workhorse=hgwdev nomLeu2 xenTro7
-    #   real    0m1.838s
-    # if that is OK, then run it:
-    /usr/bin/time -p doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
-	-ooc=/hive/data/genomes/nomLeu2/jkStuff/nomLeu2.11.ooc \
-	-dbHost=hgwdev -workhorse=hgwdev nomLeu2 xenTro7 >& do.log
-    #	real    277m26.138s
-
-    # verify this file exists:
-    #	/gbdb/nomLeu2/liftOver/nomLeu2.over.chain.gz
-    # and try out the conversion on genome-test from nomLeu2 to xenTro7
-
-############################################################################
- #  BLATSERVERS ENTRY (TBD - 2013-03-12 - Pauline)
+ #  BLATSERVERS ENTRY (DONE - 2015-03-18 - Hiram)
  #	After getting a blat server assigned by the Blat Server Gods,
      ssh hgwdev
 
      hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
- 	VALUES ("xenTro7", "blat4c", "17840", "1", "0"); \
+ 	VALUES ("xenTro7", "blat4b", "17856", "1", "0"); \
  	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
- 	VALUES ("xenTro7", "blat4c", "17841", "0", "1");' \
+ 	VALUES ("xenTro7", "blat4b", "17857", "0", "1");' \
  	    hgcentraltest
      #	test it with some sequence
 
 ############################################################################
-# reset dbDb description to be like the previous nomLeu
-#       (TBD - 2013-03-21 - Hiram)
-    hgsql hgcentraltest -e 'update dbDb set description = "Oct. 2012 (GGSC Nleu3.0/xenTro7)"" where name = "xenTro7";' \
-          | hgsql -h genome-testdb hgcentraltest
+# downloads and pushQ entry (DONE - 2015-03-18 - Hiram)
+    # after adding xenTro7 to the all.joiner file and verifying that
+    #   joinerCheck is clean (i.e. run joinerCheck w -times and -keys flags
+    #   to make sure there are no errors), can construct the downloads:
+    cd /hive/data/genomes/xenTro7
+    time makeDownloads.pl -workhorse=hgwdev xenTro7 > downloads.log 2>&1
+    #   real    25m29.328s
+
+    mkdir /hive/data/genomes/xenTro7/pushQ
+    cd /hive/data/genomes/xenTro7/pushQ
+    # do not allow transMap to go out
+    time makePushQSql.pl xenTro7 2> stderr.txt \
+       | grep -v transMap > xenTro7.pushQ.sql
+    #  real    6m59.942s
+
+    # check the stderr.txt for bad stuff, these kinds of warnings are OK:
+# WARNING: hgwdev does not have /gbdb/xenTro7/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/xenTro7/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/xenTro7/bbi/gc5BaseBw/gc5Base.bw
+# WARNING: hgwdev does not have /gbdb/xenTro7/bbi/qualityBw/quality.bw
+# WARNING: xenTro7 does not have seq
+# WARNING: xenTro7 does not have extFile
+
+    #   copy it to hgwbeta
+    scp -p xenTro7.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/xenTro7.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
 
 ############################################################################
-# SWAP hg19/Human chain/net (TBD - 2013-03-26 - Pauline)
+# SWAP hg38/Human chain/net (DONE - 2015-02-20 - Hiram)
     # original alignment
-    cd /hive/data/genomes/hg19/bed/lastzXenTro7.2013-03-06
-    cat fb.hg19.chainXenTro7Link.txt
-    #   2542790081 bases of 2897316137 (87.764%) in intersection
+    cd /hive/data/genomes/hg38/bed/lastzXenTro7.2015-02-18
+    cat fb.hg38.chainXenTro7Link.txt
+    # 116213822 bases of 3049335806 (3.811%) in intersection
 
-    #   running this swap - TBD - 2013-03-26
+    # and for the swap:
+    mkdir /hive/data/genomes/xenTro7/bed/blastz.hg38.swap
+    cd /hive/data/genomes/xenTro7/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzXenTro7.2015-02-18/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    53m28.988s
+
+    cat fb.xenTro7.chainHg38Link.txt
+    # 108823737 bases of 1365936747 (7.967%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` xenTro7 hg38) \
+       > rbest.log 2>&1
+    # real    16m4.622s
+
+############################################################################
+# SWAP hg19/Human chain/net (TBD - 2013-08-29 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg19/bed/lastzXenTro7.2013-08-28
+    cat fb.hg19.chainXenTro7Link.txt
+    #   91350514 bases of 2897316137 (3.153%) in intersection
+
+    #   and for the swap
     mkdir /hive/data/genomes/xenTro7/bed/blastz.hg19.swap
     cd /hive/data/genomes/xenTro7/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/hg19/bed/lastzXenTro7.2013-03-06/DEF \
-        -swap -syntenicNet \
-        -noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        > swap.log 2>&1 &
-    #   real   138m48s
-    cat fb.xenTro7.chainHg19Link.txt
-    #   2479386532 bases of 2756609047 (89.943%) in intersection
+        /hive/data/genomes/hg19/bed/lastzXenTro7.2013-08-28/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku \
+        -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real     62m38.163s
+    cat  fb.xenTro7.chainHg19Link.txt
+    #   92294714 bases of 1365936747 (6.757%) in intersection
 
-##############################################################################
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/xenTro7/bed
+    ln -s blastz.hg19.swap lastz.hg19
+
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
