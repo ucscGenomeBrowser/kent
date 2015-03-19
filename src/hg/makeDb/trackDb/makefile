@@ -87,6 +87,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
 	melGal1 \
 	taeGut1 taeGut2 \
 	latCha1 \
+	nanPar1 \
 	xenTro1 xenTro2 xenTro3 xenTro7 \
 	tetNig1 tetNig2 \
 	oryLat1 oryLat2 \
