@@ -450,6 +450,20 @@ searchPriority 8
     featureBits -countGaps danRer10 ucscToINSDC
     # 1371719383 bases of 1371719383 (100.000%) in intersection
 
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2015-03-20 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+     ssh hgwdev
+
+     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("danRer10", "blat4c", "17862", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("danRer10", "blat4c", "17863", "0", "1");' \
+		hgcentraltest
+     #	test it with some sequence
+
+############################################################################
+
 #########################################################################
 # LIFTOVER TO danRer7 (DONE - 2015-01-29 - Hiram)
     ssh hgwdev
