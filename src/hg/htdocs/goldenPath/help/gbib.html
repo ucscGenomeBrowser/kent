@@ -623,8 +623,8 @@ inquire about ways to open this port. </p>
 <b>Problem: </b>Error when using BLAT</p>
 <p>
 BLAT is opening outgoing TCP connections to the BLAT servers running at UCSC. Each organism/assembly
-has its own pair or ports that need to be open from your GBiB to the UCSC BLAT servers.<br>
-<em>Solution</em>To find out which hostnames and ports BLAT is contacting, use the following Mysql query:<br>
+has its own pair of ports that need to be open from your GBiB to the UCSC BLAT servers. You will need to contact the system administrators at your institution and ask them to open outgoing TCP connections to a list UCSC hosts and a list of ports. The commands below will allow you to find out what the names of these hosts and their port numbers are.<p>
+<em>Solution: </em>To find out which hostnames and ports BLAT is contacting at UCSC, use the following Mysql query:<br>
 <pre>mysql hgcentral -e 'select * from blatServers where db="YOURDB"'</pre><br>
 For example, if you want to enable BLAT for hg19 and hg38, you can issue this command:<br>
 <pre>mysql hgcentral -e 'select * from blatServers where db="hg38" or db="hg19"'</pre>
