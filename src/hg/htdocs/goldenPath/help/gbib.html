@@ -620,6 +620,23 @@ the command <tt>sudo ifup --force eth0</tt> to reset the network connection.</p>
 outgoing TCP data on port 3306/MySQL. In this case, contact your institution's IT support staff to 
 inquire about ways to open this port. </p>
 <p>
+<b>Problem: </b>Error when using BLAT</p>
+<p>
+BLAT is opening outgoing TCP connections to the BLAT servers running at UCSC. Each organism/assembly
+has its own pair or ports that need to be open from your GBiB to the UCSC BLAT servers.<br>
+<em>Solution</em>To find out which hostnames and ports BLAT is contacting, use the following Mysql query:<br>
+<pre>mysql hgcentral -e 'select * from blatServers where db="YOURDB"'</pre><br>
+For example, if you want to enable BLAT for hg19 and hg38, you can issue this command:<br>
+<pre>mysql hgcentral -e 'select * from blatServers where db="hg38" or db="hg19"'</pre>
+<pre>+------+---------------------+-------+---------+--------+
+| db   | host                | port  | isTrans | canPcr |
++------+---------------------+-------+---------+--------+
+| hg19 | blat4a.cse.ucsc.edu | 17779 |       0 |      1 |
+| hg19 | blat4a.cse.ucsc.edu | 17778 |       1 |      0 |
+| hg38 | blat4c.cse.ucsc.edu | 17781 |       0 |      1 |
+| hg38 | blat4c.cse.ucsc.edu | 17780 |       1 |      0 |
++------+---------------------+-------+---------+--------+</pre>
+<p>
 <b>Problem: </b>GBiB is functioning incorrectly or stops working.</p>
 <p>
 <em>Solution 1: </em>If you have previously turned off automatic updates, your software or data 
