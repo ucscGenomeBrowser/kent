@@ -444,6 +444,28 @@ felCat8.refseq.mrna.xeno.loadDesc  = yes
     featureBits -countGaps felCat8 ucscToINSDC
     # 2641342258 bases of 2641342258 (100.000%) in intersection
 
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2015-03-20 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+     ssh hgwdev
+
+     # verify doesn't exist yet:
+     hgsql -e 'select * from blatServers;' hgcentraltest | grep -i felcat
+     # only shows felCat4 and felCat5
+
+     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("felCat8", "blat4d", "17856", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("felCat8", "blat4d", "17857", "0", "1");' \
+		hgcentraltest
+
+     # verify entry:
+     hgsql -e 'select * from blatServers;' hgcentraltest | grep -i felcat
+     #    felCat8 blat4d  17856   1       0
+     #    felCat8 blat4d  17857   0       1
+
+     #	test it with some sequence
+
 #########################################################################
 # set default position (DONE - 2014-12-09 - Hiram)
 
