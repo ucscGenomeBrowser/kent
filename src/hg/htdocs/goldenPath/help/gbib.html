@@ -620,11 +620,17 @@ the command <tt>sudo ifup --force eth0</tt> to reset the network connection.</p>
 outgoing TCP data on port 3306/MySQL. In this case, contact your institution's IT support staff to 
 inquire about ways to open this port. </p>
 <p>
-<b>Problem: </b>Error when using BLAT</p>
+<b>Problem: </b>Error when using BLAT.</p>
 <p>
-BLAT is opening outgoing TCP connections to the BLAT servers running at UCSC. Each organism/assembly
-has its own pair of ports that need to be open from your GBiB to the UCSC BLAT servers. You will need to contact the system administrators at your institution and ask them to open outgoing TCP connections to a list UCSC hosts and a list of ports. The commands below will allow you to find out what the names of these hosts and their port numbers are.<p>
-<em>Solution: </em>To find out which hostnames and ports BLAT is contacting at UCSC, use the following Mysql query:<br>
+When you use BLAT on your GBiB machine, it attempts to open outgoing TCP connections to the BLAT 
+servers running at UCSC. Each assembly has two ports that need to be open from your GBiB machine
+to the UCSC BLAT servers. You will likely need to contact the system administrators at your 
+institution and ask them to open outgoing TCP connections to a list of UCSC hostnames and ports. 
+The commands below will allow you to find out the names of these hosts and ports.</p>
+
+<p>
+<em>Solution: </em>To find the hostname-port combination to open from your GBiB machine, 
+use the following Mysql query:<br>
 <pre>mysql hgcentral -e 'select * from blatServers where db="YOURDB"'</pre><br>
 For example, if you want to enable BLAT for hg19 and hg38, you can issue this command:<br>
 <pre>mysql hgcentral -e 'select * from blatServers where db="hg38" or db="hg19"'</pre>
