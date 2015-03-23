@@ -78,7 +78,10 @@ UTILS_APPLIST = \
 	genePredToBed \
 	genePredToFakePsl \
 	genePredToMafFrames \
+	getRna \
+	getRnaPred \
 	gigAssembler/checkAgpAndFa \
+	hgSpeciesRna \
 	hgsql \
 	hgsqldump \
 	maskOutFa \
@@ -143,8 +146,6 @@ UTIL_DIRS = \
 	gbToFaRa \
 	geneBounds \
 	getFeatDna \
-	getRna \
-	getRnaPred \
 	gpStats \
 	gpToGtf \
 	gpcrParser \
@@ -154,7 +155,6 @@ UTIL_DIRS = \
 	hgGetAnn \
 	hgKnownGeneList \
 	hgSelect \
-	hgSpeciesRna \
 	hgsqlLocal \
 	hgsqladmin \
 	hgsqldumpLocal \

@@ -58,8 +58,6 @@
 static struct sqlConnCache *hdbCc = NULL;  /* cache for primary database connection */
 static struct sqlConnCache *centralCc = NULL;
 static char *centralDb = NULL;
-static struct sqlConnCache *centralArchiveCc = NULL;
-static char *centralArchiveDb = NULL;
 static struct sqlConnCache *cartCc = NULL;  /* cache for cart; normally same as centralCc */
 static char *cartDb = NULL;
 static char *hdbTrackDb = NULL;
@@ -72,6 +70,46 @@ static char *hdbTrackDb = NULL;
  */
 static struct hash *tableList = NULL; // db to track to tables
 static struct hash *tableListProfChecked = NULL;  // profile:db that have been check
+
+char *dbDbTable()
+/* Return the name of the dbDb table. */
+{
+static char *dbDbTable = NULL;
+if (dbDbTable == NULL)
+    dbDbTable = cfgOptionEnvDefault("HGDB_DBDBTABLE",
+	    dbdDbTableConfVariable, defaultDbdDbTableName);
+return dbDbTable;
+}
+
+char *genomeCladeTable()
+/* Return the name of the genomeClade table. */
+{
+static char *genomeCladeTable = NULL;
+if (genomeCladeTable == NULL)
+    genomeCladeTable = cfgOptionEnvDefault("HGDB_GENOMECLADETABLE",
+	    genomeCladeTableConfVariable, defaultGenomeCladeTableName);
+return genomeCladeTable;
+}
+
+char *defaultDbTable()
+/* Return the name of the defaultDb table. */
+{
+static char *defaultDbTable = NULL;
+if (defaultDbTable == NULL)
+    defaultDbTable = cfgOptionEnvDefault("HGDB_DEFAULTDBTABLE",
+	    defaultDbTableConfVariable, defaultDefaultDbTableName);
+return defaultDbTable;
+}
+
+char *cladeTable()
+/* Return the name of the clade table. */
+{
+static char *cladeTable = NULL;
+if (cladeTable == NULL)
+    cladeTable = cfgOptionEnvDefault("HGDB_CLADETABLE",
+	    cladeTableConfVariable, defaultCladeTableName);
+return cladeTable;
+}
 
 static struct chromInfo *lookupChromInfo(char *db, char *chrom)
 /* Query db.chromInfo for the first entry matching chrom. */
@@ -263,23 +301,6 @@ freeHash(&nameHash);
 return list;
 }
 
-boolean hArchiveDbExists(char *database)
-/*
-  Function to check if this is a valid db name in the dbDbArch table
-  of archived databases.
-*/
-{
-struct sqlConnection *conn = hConnectCentral();
-char buf[128];
-char query[256];
-boolean res = FALSE;
-sqlSafef(query, sizeof(query), "select name from dbDbArch where name = '%s'",
-      database);
-res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL);
-hDisconnectCentral(&conn);
-return res;
-}
-
 boolean hDbExists(char *database)
 /*
   Function to check if this is a valid db name
@@ -305,7 +326,7 @@ if (trackHubDatabase(database))
 struct sqlConnection *conn = hConnectCentral();
 char buf[128];
 char query[256];
-sqlSafef(query, sizeof(query), "select name from dbDb where name = '%s'", database);
+sqlSafef(query, sizeof(query), "select name from %s where name = '%s'",dbDbTable(),  database);
 boolean res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL);
 if (res)
     {
@@ -345,7 +366,7 @@ char buf[128];
 char query[256];
 boolean res = FALSE;
 sqlSafef(query, sizeof(query),
-      "select name from dbDb where name = '%s' and active = 1", database);
+      "select name from %s where name = '%s' and active = 1",dbDbTable(),  database);
 res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL);
 hDisconnectCentral(&conn);
 hashAddInt(dbsChecked, database, res);
@@ -377,8 +398,8 @@ if (NULL == genome)
     }
 
 /* Get proper default from defaultDb table */
-sqlSafef(query, sizeof(query), "select * from defaultDb where genome = '%s'",
-      genome);
+sqlSafef(query, sizeof(query), "select * from %s where genome = '%s'",
+      defaultDbTable(), genome);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -390,14 +411,14 @@ if (db == NULL)
      *	This is for the product browser which may have none of
      *	the usual UCSC genomes, but it needs to be able to function.
      */
-    sqlSafef(query, sizeof(query), "select * from defaultDb");
+    sqlSafef(query, sizeof(query), "select * from %s", defaultDbTable());
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
 	{
 	db = defaultDbLoad(row);
 	}
     if (db == NULL)
-	errAbort("Can't find genome \"%s\" in central database table defaultDb.\n", genome);
+	errAbort("Can't find genome \"%s\" in central database table %s.\n", genome, defaultDbTable());
     }
 
 sqlFreeResult(&sr);
@@ -421,11 +442,11 @@ char query[512];
  * gets pushed from hgwdev to hgwbeta/RR with genomes whose dbs haven't been
  * pushed yet, they'll be ignored. */
 sqlSafef(query, sizeof(query),
-      "select genomeClade.genome from genomeClade,dbDb "
-      "where genomeClade.clade = '%s' and genomeClade.genome = dbDb.genome "
-      "and dbDb.active = 1 "
-      "order by genomeClade.priority limit 1",
-      clade);
+      "select g.genome from %s d,%s g "
+      "where g.clade = '%s' and g.genome = d.genome "
+      "and d.active = 1 "
+      "order by g.priority limit 1",
+      dbDbTable(), genomeCladeTable(), clade);
 genome = sqlQuickString(conn, query);
 hDisconnectCentral(&conn);
 return genome;
@@ -439,9 +460,9 @@ char query[256];
 struct sqlConnection *centralConn = hConnectCentral();
 
 sqlSafef(query, sizeof(query),
-    "select defaultDb.name from dbDb,defaultDb "
-    "where dbDb.scientificName='%s' "
-    "and dbDb.name = defaultDb.name ", sciName);
+    "select f.name from %s d,%s f "
+    "where d.scientificName='%s' "
+    "and d.name = f.name ", dbDbTable(), defaultDbTable(), sciName);
 db = sqlQuickString(centralConn, query);
 hDisconnectCentral(&centralConn);
 
@@ -467,10 +488,10 @@ if (binomial != NULL)
     {
     struct sqlConnection *centralConn = hConnectCentral();
     sqlSafef(query, sizeof(query),
-        "select defaultDb.name from dbDb,defaultDb "
-	"where dbDb.scientificName='%s' "
-	"and dbDb.name not like 'zoo%%' "
-	"and dbDb.name = defaultDb.name ", binomial);
+        "select f.name from %s d,%s f "
+	"where d.scientificName='%s' "
+	"and d.name not like 'zoo%%' "
+	"and d.name = f.name ", dbDbTable(), defaultDbTable(), binomial);
     db = sqlQuickString(centralConn, query);
     hDisconnectCentral(&centralConn);
     }
@@ -687,45 +708,6 @@ void hDisconnectCentral(struct sqlConnection **pConn)
 {
 if (*pConn != NULL)
     sqlConnCacheDealloc(centralCc, pConn);
-}
-
-static void hArchiveCentralMkCache()
-/* create the archive central database cache, trying to connect to the
- * database and failing over if needed */
-{
-char *archiveProfile = "archivecentral";
-centralArchiveDb = cfgOption2(archiveProfile, "db");
-centralArchiveCc = sqlConnCacheNewProfile(archiveProfile);
-struct sqlConnection *conn = sqlConnCacheMayAlloc(centralArchiveCc, centralArchiveDb);
-if (conn == NULL)
-    {
-    sqlConnCacheDealloc(centralArchiveCc, &conn);
-    sqlConnCacheFree(&centralArchiveCc);
-    archiveProfile = "archivebackup";
-    centralDb = cfgOption2(archiveProfile, "database");
-    centralCc = sqlConnCacheNewProfile(archiveProfile);
-    conn = sqlConnCacheAlloc(centralCc, centralDb);
-    }
-/* now that a profile has been determined, make sure this database goes
- * through that profile */
-sqlProfileAddDb(archiveProfile, centralArchiveDb);
-sqlConnCacheDealloc(centralCc, &conn);
-}
-
-struct sqlConnection *hConnectArchiveCentral()
-/* Connect to central database for archives.
- * Free this up with hDisconnectCentralArchive(). */
-{
-if (centralArchiveCc == NULL)
-    hArchiveCentralMkCache();
-return sqlConnCacheAlloc(centralArchiveCc, centralArchiveDb);
-}
-
-void hDisconnectArchiveCentral(struct sqlConnection **pConn)
-/* Put back connection for reuse. */
-{
-if (*pConn != NULL)
-    sqlConnCacheDealloc(centralArchiveCc, pConn);
 }
 
 static void hCartMkCache()
@@ -2299,9 +2281,9 @@ char *ret = NULL;
 struct dyString *dy = newDyString(128);
 
 if (database != NULL)
-    sqlDyStringPrintf(dy, "select description from dbDb where name = '%s'", database);
+    sqlDyStringPrintf(dy, "select description from %s where name = '%s'", dbDbTable(), database);
 else if (freeze != NULL)
-    sqlDyStringPrintf(dy, "select name from dbDb where description = '%s'", freeze);
+    sqlDyStringPrintf(dy, "select name from %s where description = '%s'", dbDbTable(), freeze);
 else
     internalErr();
 sr = sqlGetResult(conn, dy->string);
@@ -2336,7 +2318,7 @@ struct sqlConnection *conn = hConnectCentral();
 char query[256];
 boolean ok;
 sqlSafef(query, sizeof(query),
-	"select hgNearOk from dbDb where name = '%s'", database);
+	"select hgNearOk from %s where name = '%s'", dbDbTable(), database);
 ok = sqlQuickNum(conn, query);
 hDisconnectCentral(&conn);
 return ok;
@@ -2355,7 +2337,7 @@ hDisconnectCentral(&conn);
 return ok;
 }
 
-char *hArchiveOrCentralDbDbOptionalField(char *database, char *field, boolean archive)
+char *hCentralDbDbOptionalField(char *database, char *field)
 /* Look up field in dbDb table keyed by database,
  * Return NULL if database doesn't exist.
  * Free this string when you are done. Look in
@@ -2365,16 +2347,10 @@ char *hArchiveOrCentralDbDbOptionalField(char *database, char *field, boolean ar
 struct sqlConnection *conn = hConnectCentral();
 char buf[128];
 char query[256];
-char dbDbTable[128];
 char *res = NULL;
 
-if (archive)
-    safef(dbDbTable, sizeof(dbDbTable), "dbDbArch");
-else
-    safef(dbDbTable, sizeof(dbDbTable), "dbDb");
-
 sqlSafef(query, sizeof(query), "select %s from %s where name = '%s'",
-      field, dbDbTable, database);
+      field, dbDbTable(), database);
 if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
     res = cloneString(buf);
 
@@ -2382,16 +2358,9 @@ hDisconnectCentral(&conn);
 return res;
 }
 
-char *hArchiveDbDbOptionalField(char *database, char *field)
-/* Wrapper for hArchiveOrCentralDbDbOptionalField to
- * look up in the archive database. */
-{
-return hArchiveOrCentralDbDbOptionalField(database, field, TRUE);
-}
 
 char *hDbDbOptionalField(char *database, char *field)
-/* Wrapper for hArchiveOrCentralDbDbOptionalField to
- * look up in the regular central database. */
+ /* Look up in the regular central database. */
 {
 if (trackHubDatabase(database))
     {
@@ -2404,7 +2373,7 @@ if (trackHubDatabase(database))
     return trackHubAssemblyField(database, field);
     }
 
-char *res = hArchiveOrCentralDbDbOptionalField(database, field, FALSE);
+char *res = hCentralDbDbOptionalField(database, field);
 
 return res;
 }
@@ -2434,24 +2403,6 @@ char *hOrganism(char *database)
 if (sameString(database, "rep"))    /* bypass dbDb if repeat */
     return cloneString("Repeat");
 return hDbDbOptionalField(database, "organism");
-}
-
-char *hArchiveOrganism(char *database)
-/* Return organism name from the archive database.  E.g. "hg12". */
-{
-char *organism = hOrganism(database);
-if (!organism)
-    organism = hArchiveDbDbOptionalField(database, "organism");
-return organism;
-}
-
-char *hGenomeOrArchive(char *database)
-/* Return genome name associated from the regular or the archive database. */
-{
-char *genome = hGenome(database);
-if (!genome)
-    genome = hArchiveDbDbOptionalField(database, "genome");
-return genome;
 }
 
 char *hDbDbNibPath(char *database)
@@ -2528,7 +2479,7 @@ return ret;
 static boolean hGotCladeConn(struct sqlConnection *conn)
 /* Return TRUE if central db contains clade info tables. */
 {
-return (sqlTableExists(conn, "clade") && sqlTableExists(conn, "genomeClade"));
+return (sqlTableExists(conn, cladeTable()) && sqlTableExists(conn, genomeCladeTable()));
 }
 
 boolean hGotClade()
@@ -2545,6 +2496,9 @@ char *hClade(char *genome)
  * given genome; otherwise return NULL. */
 {
 char *clade;
+if (genome == NULL)
+    return NULL;
+
 if ((clade = trackHubAssemblyClade(genome)) != NULL)
     return clade;
 
@@ -2561,13 +2515,13 @@ if (hGotCladeConn(conn))
     {
     char query[512];
     sqlSafef(query, sizeof(query),
-	  "select clade from genomeClade where genome = '%s'", genome);
+	  "select clade from %s where genome = '%s'", genomeCladeTable(), genome);
     clade = sqlQuickString(conn, query);
     hDisconnectCentral(&conn);
     if (clade == NULL)
 	{
-	warn("Warning: central database genomeClade doesn't contain "
-	     "genome \"%s\"", genome);
+	warn("Warning: central database %s doesn't contain "
+	     "genome \"%s\"", genomeCladeTable(), genome);
 	return cloneString("other");
 	}
     else
@@ -2592,7 +2546,7 @@ char **row;
 struct dbDb *db = NULL;
 
 struct dyString *ds = dyStringNew(0);
-sqlDyStringPrintf(ds, "select * from dbDb where name='%s'", database);
+sqlDyStringPrintf(ds, "select * from %s where name='%s'", dbDbTable(), database);
 sr = sqlGetResult(conn, ds->string);
 if ((row = sqlNextRow(sr)) != NULL)
     db = dbDbLoad(row);
@@ -2613,7 +2567,9 @@ char **row;
 struct dbDb *dbList = NULL, *db;
 struct hash *hash = sqlHashOfDatabases();
 
-sr = sqlGetResult(conn, "NOSQLINJ select * from dbDb order by orderKey,name desc");
+char query[1024];
+safef(query, sizeof query,  "NOSQLINJ select * from %s order by orderKey,name desc", dbDbTable());
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     db = dbDbLoad(row);
@@ -2647,90 +2603,13 @@ static struct dbDb *hDbDbListDeadOrAlive()
 return hDbDbListMaybeCheck(FALSE);
 }
 
-struct dbDb *archiveDbDbLoad(char **row)
-/* Load a archive dbDb from row fetched with select * from dbDb
-         from database.  Dispose of this with dbDbFree().
-  NOTE: this table schema is now detached from the
-  main production dbDb, so we are not using the autoSql functions */
-{
-    struct dbDb *ret;
-
-    AllocVar(ret);
-    ret->name = cloneString(row[0]);
-    ret->description = cloneString(row[1]);
-    ret->nibPath = cloneString(row[2]);
-    ret->organism = cloneString(row[3]);
-    ret->defaultPos = cloneString(row[4]);
-    ret->active = sqlSigned(row[5]);
-    ret->orderKey = sqlSigned(row[6]);
-    ret->genome = cloneString(row[7]);
-    ret->scientificName = cloneString(row[8]);
-    ret->htmlPath = cloneString(row[9]);
-    ret->hgNearOk = sqlSigned(row[10]);
-    return ret;
-}
-
-struct dbDb *hArchiveDbDbList()
-/* Return list of databases in archive central dbDb.
- * Free this with dbDbFree. */
-{
-struct sqlConnection *conn;
-struct sqlResult *sr;
-char **row;
-struct dbDb *dbList = NULL, *db;
-char *assembly;
-char *next;
-
-conn = hConnectCentral();
-
-if (conn)
-    {
-    /* NOTE: archive orderKey convention is opposite of production server! */
-    sr = sqlGetResult(conn, "NOSQLINJ select * from dbDbArch order by orderKey desc,name desc");
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        db = archiveDbDbLoad(row);
-        /* strip organism out of assembly description if it's there
-         * (true in hg6-hg11 entries) */
-        next = assembly = cloneString(db->description);
-        if (sameString(nextWord(&next), db->genome))
-            {
-            freez(&db->description);
-            db->description = cloneString(next);
-            }
-        freez(&assembly);
-        slAddHead(&dbList, db);
-        }
-    sqlFreeResult(&sr);
-
-    hDisconnectCentral(&conn);
-    slReverse(&dbList);
-    }
-return dbList;
-}
-
 struct hash *hDbDbHash()
 /* The hashed-up version of the entire dbDb table, keyed on the db */
-/* this is likely better to use than hArchiveOrganism if it's likely to be */
-/* repeatedly called */
 {
 struct hash *dbDbHash = newHash(16);
 struct dbDb *list = hDbDbList();
 struct dbDb *dbdb;
 for (dbdb = list; dbdb != NULL; dbdb = dbdb->next)
-    hashAdd(dbDbHash, dbdb->name, dbdb);
-return dbDbHash;
-}
-
-struct hash *hDbDbAndArchiveHash()
-/* hDbDbHash() plus the dbDb rows from the archive table */
-{
-struct hash *dbDbHash = newHash(16);
-struct dbDb *archList = hArchiveDbDbList();
-struct dbDb *list = hDbDbList();
-struct dbDb *bothList = slCat(list, archList);
-struct dbDb *dbdb;
-for (dbdb = bothList; dbdb != NULL; dbdb = dbdb->next)
     hashAdd(dbDbHash, dbdb->name, dbdb);
 return dbDbHash;
 }
@@ -4358,14 +4237,18 @@ if (theClade != NULL)
     {
     char query[1024];
     sqlSafef(query, sizeof(query),
-	  "select dbDb.* from dbDb,genomeClade where dbDb.active = 1 and "
-	  "dbDb.genome = genomeClade.genome and genomeClade.clade = \"%s\" "
-	  "order by dbDb.orderKey,dbDb.name desc", theClade);
+	  "select d.* from %s d,%s g where d.active = 1 and "
+	  "d.genome = g.genome and g.clade = \"%s\" "
+	  "order by d.orderKey,d.name desc", dbDbTable(),genomeCladeTable(),    theClade);
     sr = sqlGetResult(conn, query);
     }
     else
-	sr = sqlGetResult(conn,
-	   "NOSQLINJ select * from dbDb where active = 1 order by orderKey,name desc");
+    {
+    char query[1024];
+    sqlSafef(query, sizeof(query),
+	   "select * from %s where active = 1 order by orderKey,name desc", dbDbTable());
+    sr = sqlGetResult(conn, query);
+    }
 while ((row = sqlNextRow(sr)) != NULL)
     {
     db = dbDbLoad(row);
@@ -4399,11 +4282,13 @@ struct slPair *hGetCladeOptions()
 // get only the clades that have actual active genomes
 char *query = "NOSQLINJ "
     "SELECT DISTINCT(c.name), c.label "
-    "FROM clade c, genomeClade g, dbDb d "
+    "FROM %s c, %s g, %s d "
     "WHERE c.name=g.clade AND d.organism=g.genome AND d.active=1 "
     "ORDER BY c.priority";
+char queryBuf[4096];
+safef(queryBuf, sizeof queryBuf, query, cladeTable(),  genomeCladeTable(), dbDbTable());
 struct sqlConnection *conn = hConnectCentral();
-struct slPair *nativeClades = sqlQuickPairList(conn, query);
+struct slPair *nativeClades = sqlQuickPairList(conn, queryBuf);
 hDisconnectCentral(&conn);
 
 struct slPair *trackHubClades = trackHubGetCladeLabels();
@@ -4425,9 +4310,9 @@ if (isHubTrack(clade))
 else
     {
     struct dyString *dy =
-	sqlDyStringCreate("select distinct(dbDb.genome) from dbDb,genomeClade "
-			  "where dbDb.genome=genomeClade.genome and genomeClade.clade = '%s' "
-			  "order by orderKey", clade);
+	sqlDyStringCreate("select distinct(d.genome) from %s d,%s g "
+			  "where d.genome=g.genome and g.clade = '%s' "
+			  "order by orderKey", dbDbTable(), genomeCladeTable(), clade);
     // Although clade and db menus have distinct values vs. labels, we actually use the
     // same strings for values and labels in the genome menu!  So we get a plain list
     // from the query and turn it into a pair list.
@@ -4462,8 +4347,8 @@ if (isHubTrack(genome))
     }
 else
     {
-    struct dyString *dy = sqlDyStringCreate("select name,description from dbDb "
-					    "where genome = '%s' order by orderKey", genome);
+    struct dyString *dy = sqlDyStringCreate("select name,description from %s "
+					    "where genome = '%s' order by orderKey", dbDbTable(), genome);
     struct sqlConnection *conn = hConnectCentral();
     pairList = sqlQuickPairList(conn, dy->string);
     hDisconnectCentral(&conn);
@@ -4505,7 +4390,7 @@ struct slName *hLiftOverOrgs(boolean from, char *fromDb)
 struct slName *dbs = (from) ? hLiftOverFromDbs() : hLiftOverToDbs(fromDb);
 struct slName *names = NULL, *org;
 for (org = dbs; org != NULL; org = org->next)
-    slNameStore(&names, hArchiveOrganism(org->name));
+    slNameStore(&names, hOrganism(org->name));
 slReverse(&names);
 slFreeList(&dbs);
 return names;
@@ -4533,14 +4418,12 @@ struct hash *hGetDatabaseRank()
 /* Get list of databases and make a hash of order rank
  * Dispose of this with hashFree. */
 {
-struct dbDb *allDbList = NULL, *regDb = NULL, *archDb = NULL, *dbDb;
+struct dbDb *allDbList = NULL, *dbDb;
 struct hash *dbNameHash = newHash(3);
 int rank = 0;
 
 /* Get list of all current and archived databases */
-regDb = hDbDbListDeadOrAlive();
-archDb = hArchiveDbDbList();
-allDbList = slCat(regDb, archDb);
+allDbList = hDbDbListDeadOrAlive();
 
 /* Create a hash all dbs with rank number */
 for (dbDb = allDbList; dbDb != NULL; dbDb = dbDb->next)
@@ -4561,7 +4444,7 @@ struct dbDb *hGetLiftOverFromDatabases()
  * from this assembly to another.
  * Dispose of this with dbDbFreeList. */
 {
-struct dbDb *allDbList = NULL, *regDb = NULL, *archDb = NULL;
+struct dbDb *allDbList = NULL;
 struct dbDb *liftOverDbList = NULL, *dbDb, *nextDbDb;
 struct liftOverChain *chainList = NULL, *chain;
 struct hash *hash = newHash(0), *dbNameHash = newHash(3);
@@ -4577,9 +4460,7 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     }
 
 /* Get list of all current and archived databases */
-regDb = hDbDbList();
-archDb = hArchiveDbDbList();
-allDbList = slCat(regDb, archDb);
+allDbList = hDbDbList();
 
 /* Create a new dbDb list of all entries in the liftOver hash */
 for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
@@ -4625,7 +4506,7 @@ for (chain = chainList; chain != NULL; chain = chain->next)
 	hashAdd(hash, chain->toDb, chain->toDb);
 
 /* Get list of all current databases */
-allDbList = slCat(hDbDbListDeadOrAlive(),hArchiveDbDbList());
+allDbList = hDbDbListDeadOrAlive();
 
 /* Create a new dbDb list of all entries in the liftOver hash */
 for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)
@@ -4649,165 +4530,6 @@ slSort(&liftOverDbList, hDbDbCmpOrderKey);
 return liftOverDbList;
 }
 
-#ifndef GBROWSE
-struct dbDb *hGetAxtInfoDbs(char *db)
-/* Get list of db's where we have axt files listed in axtInfo .
- * The db's with the same organism as current db go last.
- * Dispose of result with dbDbFreeList. */
-{
-struct dbDb *dbDbList = NULL, *dbDb;
-struct hash *hash = hashNew(7); // 2^^7 entries = 128
-struct slName *dbNames = NULL, *dbName;
-struct dyString *query = newDyString(256);
-struct sqlConnection *conn = hAllocConn(db);
-struct sqlResult *sr = NULL;
-char **row;
-char *organism = hOrganism(db);
-int count;
-
-if (! hTableExists(db, "axtInfo"))
-    {
-    dyStringFree(&query);
-    hashFree(&hash);
-    hFreeConn(&conn);
-    return NULL;
-    }
-
-/* "species" is a misnomer, we're really looking up database names. */
-sr = sqlGetResult(conn, "NOSQLINJ select species from axtInfo");
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    // uniquify database names and make sure the databases still exist
-    if ((hashLookup(hash, row[0]) == NULL) && hDbExists(row[0]))
-	{
-	struct slName *sln = newSlName(cloneString(row[0]));
-	slAddHead(&dbNames, sln);
-	hashStoreName(hash, cloneString(row[0]));
-	}
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-
-/* Traverse the uniquified list of databases twice: first for db's with
- * a different organism, then for db's with this organism. */
-conn = hConnectCentral();
-dyStringClear(query);
-sqlDyStringAppend(query, "SELECT * from dbDb");
-count = 0;
-for (dbName = dbNames;  dbName != NULL;  dbName = dbName->next)
-    {
-    char *dbOrg = hOrganism(dbName->name);
-    if (! sameString(dbOrg, organism))
-	{
-	count++;
-	if (count == 1)
-	    sqlDyStringPrintf(query, " where active = 1 and (name = '%s'",
-			   dbName->name);
-	else
-	    sqlDyStringPrintf(query, " or name = '%s'", dbName->name);
-	}
-    }
-dyStringPrintf(query, ") order by orderKey desc");
-if (count > 0)
-    {
-    sr = sqlGetResult(conn, query->string);
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	dbDb = dbDbLoad(row);
-	slAddHead(&dbDbList, dbDb);
-	}
-    sqlFreeResult(&sr);
-    }
-dyStringClear(query);
-sqlDyStringAppend(query, "SELECT * from dbDb");
-count = 0;
-for (dbName = dbNames;  dbName != NULL;  dbName = dbName->next)
-    {
-    char *dbOrg = hOrganism(dbName->name);
-    if (sameString(dbOrg, organism))
-	{
-	count++;
-	if (count == 1)
-	    sqlDyStringPrintf(query, " where active = 1 and (name = '%s'",
-			   dbName->name);
-	else
-	    sqlDyStringPrintf(query, " or name = '%s'", dbName->name);
-	}
-    }
-dyStringPrintf(query, ") order by orderKey, name desc");
-if (count > 0)
-    {
-    sr = sqlGetResult(conn, query->string);
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	dbDb = dbDbLoad(row);
-	slAddHead(&dbDbList, dbDb);
-	}
-    sqlFreeResult(&sr);
-    }
-hDisconnectCentral(&conn);
-slFreeList(&dbNames);
-dyStringFree(&query);
-hashFree(&hash);
-
-slReverse(&dbDbList);
-return(dbDbList);
-}
-
-struct axtInfo *hGetAxtAlignments(char *db, char *otherDb)
-/* Get list of alignments where we have axt files listed in axtInfo .
- * Dispose of this with axtInfoFreeList. */
-{
-struct sqlConnection *conn = hAllocConn(db);
-struct sqlResult *sr = NULL;
-char **row;
-struct axtInfo *aiList = NULL, *ai;
-char query[256];
-
-sqlSafef(query, sizeof(query),
-      "select * from axtInfo where species = '%s' and chrom = '%s' "
-      "order by sort",
-      otherDb, hDefaultChrom(db));
-/* Scan through axtInfo table, loading into list */
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    ai = axtInfoLoad(row);
-    slAddHead(&aiList, ai);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-slReverse(&aiList);
-return aiList;
-}
-
-struct axtInfo *hGetAxtAlignmentsChrom(char *db, char *otherDb, char *chrom)
-/* Get list of alignments where we have axt files listed in axtInfo for a specified chromosome .
- * Dispose of this with axtInfoFreeList. */
-{
-struct sqlConnection *conn = hAllocConn(db);
-struct sqlResult *sr = NULL;
-char **row;
-struct axtInfo *aiList = NULL, *ai;
-char query[256];
-
-sqlSafef(query, sizeof(query),
-      "select * from axtInfo where species = '%s' and chrom = '%s'",
-      otherDb, chrom);
-/* Scan through axtInfo table, loading into list */
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    ai = axtInfoLoad(row);
-    slAddHead(&aiList, ai);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-slReverse(&aiList);
-return aiList;
-}
-#endif /* GBROWSE */
-
 struct dbDb *hGetBlatIndexedDatabases()
 /* Get list of databases for which there is a BLAT index.
  * Dispose of this with dbDbFreeList. */
@@ -4825,7 +4547,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 
 /* Scan through dbDb table, keeping ones that are indexed. */
-sr = sqlGetResult(conn, "NOSQLINJ select * from dbDb order by orderKey,name desc");
+char query[1024];
+safef(query,  sizeof query, "NOSQLINJ select * from %s order by orderKey,name desc", dbDbTable());
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     db = dbDbLoad(row);
@@ -4871,22 +4595,22 @@ char **row;
 char dbActualName[32];
 
 /* If necessary convert database description to name. */
-sqlSafef(query, sizeof(query), "select name from dbDb where name = '%s'", db);
+sqlSafef(query, sizeof(query), "select name from %s where name = '%s'", dbDbTable(), db);
 if (!sqlExists(conn, query))
     {
     sqlSafef(query, sizeof(query),
-	  "select name from dbDb where description = '%s'", db);
+	  "select name from %s where description = '%s'",dbDbTable(),  db);
     if (sqlQuickQuery(conn, query, dbActualName, sizeof(dbActualName)) != NULL)
         db = dbActualName;
     }
 
 /* Do a little join to get data to fit into the blatServerTable. */
 sqlSafef(query, sizeof(query),
-               "select dbDb.name,dbDb.description,blatServers.isTrans"
-               ",blatServers.host,blatServers.port,dbDb.nibPath "
-	       "from dbDb,blatServers where blatServers.isTrans = %d and "
-	       "dbDb.name = '%s' and dbDb.name = blatServers.db",
-	       isTrans, db);
+               "select d.name,d.description,blatServers.isTrans"
+               ",blatServers.host,blatServers.port,d.nibPath "
+	       "from %s d,blatServers where blatServers.isTrans = %d and "
+	       "d.name = '%s' and d.name = blatServers.db",
+	        dbDbTable(), isTrans, db);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     {

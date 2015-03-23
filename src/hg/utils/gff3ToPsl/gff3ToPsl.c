@@ -16,10 +16,11 @@ void usage()
 errAbort(
   "gff3ToPsl - convert a GFF3 CIGAR file to a PSL file\n"
   "usage:\n"
-  "   gff3ToPsl mapFile inGff3 out.psl\n"
+  "   gff3ToPsl queryChromSizes targetChomSizes inGff3 out.psl\n"
   "arguments:\n"
-  "   chrom.sizes    mapping of chroms to sizes.\n"
-  "               File formatted:  chromeName chromSize\n"
+  "   queryChromSizes file with query (main coordinates) chromosome sizes  .\n"
+  "               File formatted:  chromeName<tab>chromSize\n"
+  "   targetChromSizes file with target (Target attribute)  chromosome sizes .\n"
   "   inGff3     GFF3 formatted file with Gap attribute in match records\n"
   "   out.psl    PSL formatted output\n"
   "options:\n"
@@ -105,7 +106,7 @@ return hel->val;
 }
 
 static void processMatchLine(FILE *pslF, struct gff3Ann *node,
-    struct hash *chromHash)
+                             struct hash *queryChromSizes, struct hash *targetChromSizes)
 {
 struct gff3Attr *attr = gff3AnnFindAttr(node, "Gap");
 
@@ -113,8 +114,8 @@ char *cigar = NULL;
 if (!((attr == NULL) || (attr->vals == NULL) || (attr->vals->name == NULL)))
     cigar = attr->vals->name;
 
-struct nameAndSize *nsT = getNameAndSize(chromHash, node->targetId);
-struct nameAndSize *nsQ = getNameAndSize(chromHash, node->seqid);
+struct nameAndSize *nsT = getNameAndSize(targetChromSizes, node->targetId);
+struct nameAndSize *nsQ = getNameAndSize(queryChromSizes, node->seqid);
 
 struct psl *psl = pslFromGff3Cigar(node->seqid, nsQ->size,  node->start, node->end,
                                    nsT->name, nsT->size,  node->targetStart, node->targetEnd, 
@@ -124,7 +125,7 @@ pslFree(&psl);
 }
 
 static void processRoot(FILE *pslF, struct gff3Ann *node, 
-    struct hash *processed, struct hash *chromHash)
+                        struct hash *processed, struct hash *queryChromSizes, struct hash *targetChromSizes)
 /* process a root node in the tree */
 {
 recProcessed(processed, node);
@@ -132,7 +133,7 @@ recProcessed(processed, node);
 if (sameString(node->type, "source"))
     processSourceLine(pslF, node);
 else if (sameString(node->type, "match"))
-    processMatchLine(pslF, node, chromHash);
+    processMatchLine(pslF, node, queryChromSizes, targetChromSizes);
 else
     cnvError("no support for type %s\n", node->type);
 }
@@ -162,10 +163,11 @@ lineFileClose(&lf);
 return hash;
 }
 
-static void gff3ToPsl(char *mapFile, char *inGff3File, char *outPSL)
+static void gff3ToPsl(char *queryChromSizesFile, char *targetChromSizesFile, char *inGff3File, char *outPSL)
 /* gff3ToPsl - convert a GFF3 file to a genePred file. */
 {
-struct hash *chromHash = readSizes(mapFile);
+struct hash *queryChromSizes = readSizes(queryChromSizesFile);
+struct hash *targetChromSizes = readSizes(targetChromSizesFile);
 struct hash *processed = hashNew(12);
 struct gff3File *gff3File = loadGff3(inGff3File);
 FILE *pslF = mustOpen(outPSL, "w");
@@ -174,7 +176,7 @@ for (root = gff3File->roots; root != NULL; root = root->next)
     {
     if (!isProcessed(processed, root->ann))
         {
-        processRoot(pslF, root->ann, processed, chromHash);
+        processRoot(pslF, root->ann, processed, queryChromSizes, targetChromSizes);
         if (convertErrCnt >= maxConvertErrs)
             break;
         }
@@ -193,8 +195,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+if (argc != 5)
     usage();
-gff3ToPsl(argv[1], argv[2], argv[3]);
+gff3ToPsl(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }

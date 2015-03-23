@@ -8,3 +8,4 @@ spectrum on
 type bed 3 +
 maxWindowToDraw 10000000
 html joinedRmsk
+canPack off

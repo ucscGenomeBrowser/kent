@@ -23,6 +23,7 @@ errAbort(
   "   -unsplit - if set will merge together tables split by chromosome\n"
   "   -noNumberCommas - if set will leave out commas in big numbers\n"
   "   -justSchema - only schema parts, no contents\n"
+  "   -skipTable=tableName - if set skip a given table name\n"
   );
 }
 
@@ -30,6 +31,7 @@ static struct optionSpec options[] = {
    {"unsplit", OPTION_BOOLEAN},
    {"noNumberCommas", OPTION_BOOLEAN},
    {"justSchema", OPTION_BOOLEAN},
+   {"skipTable", OPTION_STRING},
    {"host", OPTION_STRING},
    {"user", OPTION_STRING},
    {"password", OPTION_STRING},
@@ -39,6 +41,7 @@ static struct optionSpec options[] = {
 boolean noNumberCommas = FALSE;
 boolean unsplit = FALSE;
 boolean justSchema = FALSE;
+char *skipTable = NULL;
 struct slName *chromList;	/* List of chromosomes in unsplit case. */
 
 struct fieldDescription
@@ -442,8 +445,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (row[3])
 	{
 	status = tableStatusLoad(row);
-	tableSummary(status, conn2, f, 
-	    fieldHash, &fiList, tableHash, &tiList, typeHash, &ttList);
+	if (skipTable == NULL || differentString(status->name, skipTable))
+	    tableSummary(status, conn2, f, 
+		fieldHash, &fiList, tableHash, &tiList, typeHash, &ttList);
 	}
     }
 sqlFreeResult(&sr);
@@ -570,6 +574,7 @@ if (argc != 3)
 noNumberCommas = optionExists("noNumberCommas");
 unsplit = optionExists("unsplit");
 justSchema = optionExists("justSchema");
+skipTable = optionVal("skipTable", skipTable);
 dbSnoop(argv[1], argv[2]);
 return 0;
 }

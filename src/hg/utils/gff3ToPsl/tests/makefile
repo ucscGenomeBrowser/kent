@@ -14,9 +14,9 @@ all::
 test:: patch1test 
 
 patch1test: mkout
-	${gff3ToPsl} input/chrom.sizes.gz input/haploMaps.gff.gz stdout | sort -k 14 >  output/$@.psl
+	${gff3ToPsl} input/chrom.sizes input/chrom.sizes input/haploMaps.gff stdout | sort -k 14 >  output/$@.psl
 	${pslCheck} -verbose=0 output/$@.psl
-	zcat expected/$@.psl.gz | diff /dev/stdin output/$@.psl
+	diff expected/$@.psl output/$@.psl
 #	some more extensive testing commented out
 #	${pslRecalcMatch} output/$@.psl /cluster/data/hg38/hg38.2bit /cluster/data/hg38/hg38.2bit output/$@.2.psl
 #	${pslCheck} -verbose=0 output/$@.2.psl

@@ -217,10 +217,10 @@ for (;;)
     else
         {
 	/* Save if we are in an open comment record. */
-	if (com != NULL)
+	if ((com != NULL) && (strlen(line) > 3))
 	    {
 	    dyStringAppendC(dy, ' ');
-	    dyStringAppend(dy, line+4);
+	    dyStringAppend(dy, line+3);
 	    }
 	}
 
@@ -265,9 +265,8 @@ while (line != NULL && line[0] != 0)
 	}
     *val++ = 0;
     e = strchr(val, ';');
-    if (e == NULL)
-        errAbort("Expecting ';' line %d of %s", lf->lineIx, lf->fileName);
-    *e++ = 0;
+    if (e != NULL)
+	*e++ = 0;
     lmAllocVar(lm, hel);
     hel->name = lmCloneString(lm, name);
     hel->val = lmCloneString(lm, val);

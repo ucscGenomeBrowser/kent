@@ -1469,7 +1469,10 @@ if (sameWord("HTTPHOST", domain))
     char *hostWithPort = hHttpHost();
     struct netParsedUrl npu;
     netParseUrl(hostWithPort, &npu);
-    domain = cloneString(npu.host);
+    if (strchr(npu.host, '.') != NULL)	// Domains without a . don't seem to be kept
+	domain = cloneString(npu.host);
+    else
+        domain = NULL;
     }
 
 char userIdKey[256];
@@ -1486,8 +1489,12 @@ if (sameString(userIdKey,"")) // make sure we do not write any blank cookies.
     }
 else
     {
-    printf("Set-Cookie: %s=%s; path=/; domain=%s; expires=%s\r\n",
-	    cookieName, userIdKey, domain, cookieDate());
+    if (!isEmpty(domain))
+	printf("Set-Cookie: %s=%s; path=/; domain=%s; expires=%s\r\n",
+		cookieName, userIdKey, domain, cookieDate());
+    else
+	printf("Set-Cookie: %s=%s; path=/; expires=%s\r\n",
+		cookieName, userIdKey, cookieDate());
     }
 if (geoMirrorEnabled())
     {

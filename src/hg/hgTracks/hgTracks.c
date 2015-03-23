@@ -5694,10 +5694,10 @@ if (! trackHubDatabase(database))
     {
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    puts("download as file");
+    puts("Download as file");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
-    printf("<A HREF=\"http://%s/goldenPath/%s/bigZips/%s.chrom.sizes\">%s.chrom.sizes</A>",
+    printf("<A HREF='http://%s/goldenPath/%s/bigZips/%s.chrom.sizes'>%s.chrom.sizes</A>",
            hDownloadsServer(), database, database, database);
     cgiTableFieldEnd();
     cgiTableRowEnd();

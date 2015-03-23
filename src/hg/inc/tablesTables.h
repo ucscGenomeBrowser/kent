@@ -9,7 +9,7 @@ struct fieldedTable *fieldedTableFromDbQuery(struct sqlConnection *conn, char *q
 /* Return fieldedTable from a database query */
 
 typedef void webTableOutputWrapperType(struct fieldedTable *table, struct fieldedRow *row,
-    char *field, char *val, void *context);
+    char *field, char *val, char *shortVal, void *context);
 /* If we want more than just text output we have to provide a function for a column
  * of this type.  This is responsible for rendering the tag as we want. */
 
@@ -31,7 +31,7 @@ void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table,
     char *returnUrl, char *varPrefix, int maxLenField, 
     struct hash *tagOutputWrappers, void *wrapperContext,
     boolean withFilters, char *itemPlural, 
-    int pageSize, struct fieldedTableSegment *largerContext);
+    int pageSize, struct fieldedTableSegment *largerContext, struct hash *suggestHash);
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
  * that includes a row of filter controls above the labels .
  * The maxLenField is maximum character length of field before truncation with ...
@@ -42,7 +42,7 @@ void webFilteredSqlTable(struct cart *cart, struct sqlConnection *conn,
     char *fields, char *from, char *initialWhere,  
     char *returnUrl, char *varPrefix, int maxFieldWidth, 
     struct hash *tagOutWrappers, void *wrapperContext,
-    boolean withFilters, char *itemPlural, int pageSize);
+    boolean withFilters, char *itemPlural, int pageSize, struct hash *suggestHash);
 /* Given a query to the database in conn that is basically a select query broken into
  * separate clauses, construct and display an HTML table around results. This HTML table has
  * column names that will sort the table, and optionally (if withFilters is set)

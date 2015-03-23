@@ -32,7 +32,6 @@ group compGeno
         speciesCodonDefault hg38
         speciesGroups Primates
         sGroup_Primates panTro4 panPan1 gorGor3 ponAbe2 nomLeu3 macFas5 rhiRox1 papAnu2 nasLar1 rheMac3 chlSab2 saiBol1 calJac3 micMur1 tarSyr2 otoGar3
-
         itemFirstCharCase noChange
         treeImage phylo/hg38_17way.png
         priority 100

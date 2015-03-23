@@ -2218,7 +2218,7 @@ url http://www.weizmann.ac.il/cgi-bin/USERcompphys/primers/human/extract_primer_
 urlLabel Click here for primer details:
 
 include trackDb.100way.ra
-include trackDb.cacTest100way.ra
+include trackDb.cacTest100way.ra alpha
 
 track ultraConserved
 shortLabel Ultra Conserved

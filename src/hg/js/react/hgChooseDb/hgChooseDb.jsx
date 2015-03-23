@@ -21,7 +21,7 @@ var AssemblySearch = React.createClass({
 	// words), so we keep a cache of the suggestions lists we've retreived.
 	var cache = {};
 
-        //#*** everything below is copied from hgAi -- libify!
+        //#*** everything below is copied from hgIntegrator -- libify!
 
 	return function (request, acCallback) {
 	    // This is a callback for jqueryui.autocomplete: when the user types
@@ -46,7 +46,7 @@ var AssemblySearch = React.createClass({
 
     autoCompleteMenuOpen: function() {
 
-        //#*** everything below is copied from hgAi -- libify!
+        //#*** everything below is copied from hgIntegrator -- libify!
 
 	// This is an 'open' event callback for autocomplete to let us know when the
 	// menu showing completions is opened.
