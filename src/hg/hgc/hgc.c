@@ -51,6 +51,9 @@
 #include "cpgIslandExt.h"
 #include "genePred.h"
 #include "genePredReader.h"
+#include "gtexGeneBed.h"
+#include "gtexTissue.h"
+#include "rainbow.h"
 #include "pepPred.h"
 #include "peptideAtlasPeptide.h"
 #include "wabAli.h"
@@ -4252,7 +4255,6 @@ return (sameString("cytoBand", track) ||
 	sameString("gap", track) ||
 	startsWith("mouseSyn", track));
 }
-
 
 struct customTrack *getCtList()
 /* initialize theCtList if necessary and return it */
@@ -24402,6 +24404,71 @@ genericHeader(tdb, itemName);
 doBedDetail(tdb, NULL, itemName);
 } /* end of doQPCRPrimers */
 
+void doGtexGeneExpr(struct trackDb *tdb, char *item)
+/* Details of GTEX gene expression item */
+{
+// Load item from table */
+
+// TODO:  Get full details from Data table 
+struct dyString *dy = dyStringNew(0);
+//char sampleTable[128];
+//safef(sampleTable, sizeof(able), "%sSampleData", tdb->table);
+
+struct sqlConnection *conn = hAllocConn(database);
+char **row;
+int expCount = 0;
+if (sqlTableExists(conn, tdb->table))
+    {
+    char query[512];
+    sqlSafef(query, sizeof(query), "select * from %s where name = '%s'", tdb->table, item);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+        {
+        struct gtexGeneBed *gtexGene = gtexGeneBedLoad(row);
+        //printf("<b>Gene name</b> %s<br>\n", gtexGene->name);
+        //printf("<b>Ensembl gene</b> %s<br>\n", gtexGene->geneId);
+        //printf("<b>Ensembl transcript</b> %s<br>\n", gtexGene->transcriptId);
+        expCount = gtexGene->expCount;
+        }
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+
+// Print out tissue table with color assignments
+conn = hAllocConn("hgFixed");
+char *tissueTable = "gtexTissue";
+if (sqlTableExists(conn, tissueTable))
+    {
+    dyStringPrintf(dy, "<table>");
+    dyStringPrintf(dy, "<tr><td>Color</td><td>Tissue</td></tr>\n");
+    int i;
+    double invExpCount = 1.0/expCount;
+    char query[512];
+    sqlSafef(query, sizeof(query), "select * from %s", tissueTable);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    for (i=0; i<expCount; i++)
+        {
+        row = sqlNextRow(sr);
+        if (row == NULL)
+            break;
+        struct gtexTissue *tissue = gtexTissueLoad(row);
+        double colPos = invExpCount * i;
+        struct rgbColor color = saturatedRainbowAtPos(colPos);
+        dyStringPrintf(dy, "<tr><td bgcolor='#%02X%02X%02X'></td><td>%s</td></tr>\n",
+                    color.r, color.g, color.b, tissue->description);
+        }
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+dyStringPrintf(dy, "</table>");
+
+//cartWebStart(cart, database, "List of items assayed in %s", clusterTdb->shortLabel);
+
+genericClickHandlerPlus(tdb, item, item, dy->string);
+dyStringFree(&dy);
+}
+
 void doSnakeClick(struct trackDb *tdb, char *itemName)
 /* Put up page for snakes. */
 {
@@ -25721,6 +25788,10 @@ else if (startsWith("peptideAtlas", table))
     {
     doPeptideAtlas(tdb, item);
     }
+else if (startsWith("gtexGene", table))
+    {
+    doGtexGeneExpr(tdb, item);
+    }
 else if (isHubTrack(table) && startsWith("snake", trackHubSkipHubName(table)))
     {
     doSnakeClick(tdb, item);
@@ -25780,3 +25851,5 @@ cartEmptyShell(cartDoMiddle, hUserCookie(), excludeVars, NULL);
 cgiExitTime("hgc", enteredMainTime);
 return 0;
 }
+
+

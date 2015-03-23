@@ -30570,3 +30570,40 @@ hgBbiDbLink hg19 spAnnot /gbdb/hg19/bbi/spAnnot.bb
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+##############################################################################
+# GTEX Genotype-Tissue Expression(2015-03-09 Kate)
+#
+# Data and sample info (metadata) loaded rom http://www.gtexportal.org to
+# tables in hgFixed.  Methods here:
+# kent/src/hg/makeDb/doc/gtex/2014.jan.txt
+
+# Load BED15ish table with tissue medians for each gene.  Coordinates are the
+# UCSC known genes canonical transcript for the ENSembl gene reported by GTEX.
+
+cd /hive/data/genomes/hg19/bed
+mkdir gtex; cd gtex
+
+# Map GENCODE to known genes for cannonical transcript selection
+hgMapToGene hg19 wgEncodeGencodeCompV19 knownGene knownToGencodeV19
+
+hgsql hg19 -Ne 'select count(*) from knownToGencodeV19'
+# 75623
+# compared to 80184 for hg38 V20 GENCODE
+
+hgGtexGeneBed hg19 -gencodeVersion=V19 gtexGene >&! log.txt
+
+wc -l log.txt 
+# 31823 errs - Can't find gene
+# Needs investigating. 
+
+hgsql hg19 -Ne 'select count(*) from gtexGene'
+# 24170
+# Compared to 23911 for hg38 GENCODE V20 (which also had errs IFIRC)
+
+
+
+
+
+
+

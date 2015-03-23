@@ -1242,6 +1242,7 @@ switch (vis)
             char *rootName;
             char *name = track->itemName(track, item);
             int itemHeight = track->itemHeight(track, item);
+            //warn("GTEX:     track %s, itemHeight %d\n", track->shortLabel, itemHeight);
             newy = y;
 
             if (track->itemLabelColor != NULL)
@@ -2350,6 +2351,7 @@ if (withLeftLabels && psOutput == NULL)
                 sliceHeight      = yEnd - yStart;
                 sliceOffsetY     = yStart - 1;
                 curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
+                //warn("GTEX 2: track %s, sliceHeight=%d\n", track->shortLabel, sliceHeight);
                 curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,NULL,NULL,
                                                        sliceWidth[stButton],sliceHeight,
                                                        sliceOffsetX[stButton],sliceOffsetY);
@@ -2399,6 +2401,7 @@ if (withLeftLabels)
             sliceHeight      = basePositionHeight + (rulerCds ? rulerTranslationHeight : 0) + 1;
             sliceOffsetY     = 0;
             curImgTrack = imgBoxTrackFind(theImgBox,NULL,RULER_TRACK_NAME);
+                //warn("GTEX 3: track %s, sliceHeight=%d\n", track->shortLabel, sliceHeight);
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,
                                                    sliceWidth[stSide],sliceHeight,
                                                    sliceOffsetX[stSide],sliceOffsetY);
@@ -2467,6 +2470,7 @@ if (withLeftLabels)
             sliceHeight      = trackPlusLabelHeight(track, fontHeight);
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
+                //warn("GTEX 4: track %s, sliceHeight=%d\n", track->shortLabel, sliceHeight);
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,
                                                    sliceWidth[stSide],sliceHeight,
                                                    sliceOffsetX[stSide],sliceOffsetY);
@@ -2538,6 +2542,7 @@ if (rulerMode != tvHide)
         sliceHeight      = basePositionHeight + (rulerCds ? rulerTranslationHeight : 0) + 1;
         sliceOffsetY     = 0;
         curImgTrack = imgBoxTrackFind(theImgBox,NULL,RULER_TRACK_NAME);
+                //warn("GTEX 5: track %s, sliceHeight=%d\n", track->shortLabel, sliceHeight);
         curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stData,theOneImg,rulerTtl,
                                                sliceWidth[stData],sliceHeight,
                                                sliceOffsetX[stData],sliceOffsetY);
@@ -2564,6 +2569,7 @@ if (withCenterLabels)
             sliceHeight      = fontHeight;
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
+                //warn("GTEX 6: track %s, sliceHeight=%d\n", track->shortLabel, sliceHeight);
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stCenter,theOneImg,NULL,
                                                    sliceWidth[stData],sliceHeight,
                                                    sliceOffsetX[stData],sliceOffsetY);
@@ -2603,6 +2609,7 @@ if (withCenterLabels)
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
             if (sliceHeight > 0)
                 {
+                //warn("GTEX 7: track %s, sliceHeight=%d\n", track->shortLabel, sliceHeight);
                 curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stData,theOneImg,NULL,
                                                        sliceWidth[stData],sliceHeight,
                                                        sliceOffsetX[stData],sliceOffsetY);
@@ -2641,6 +2648,7 @@ if (withLeftLabels)
             sliceHeight      = trackPlusLabelHeight(track, fontHeight);
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
+                //warn("WARN 8: track %s, sliceHeight=%d\n", track->shortLabel, sliceHeight);
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,
                                                    sliceWidth[stSide],sliceHeight,
                                                    sliceOffsetX[stSide],sliceOffsetY);
@@ -5694,10 +5702,10 @@ if (! trackHubDatabase(database))
     {
     cgiSimpleTableRowStart();
     cgiSimpleTableFieldStart();
-    puts("download as file");
+    puts("Download as file");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
-    printf("<A HREF=\"http://%s/goldenPath/%s/bigZips/%s.chrom.sizes\">%s.chrom.sizes</A>",
+    printf("<A target=_blank HREF='http://%s/goldenPath/%s/bigZips/%s.chrom.sizes'>%s.chrom.sizes</A>",
            hDownloadsServer(), database, database, database);
     cgiTableFieldEnd();
     cgiTableRowEnd();

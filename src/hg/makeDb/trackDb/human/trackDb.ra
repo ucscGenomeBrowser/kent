@@ -1,7 +1,8 @@
 track gtexGene
 type bed 6 +
 shortLabel GTEX
-longLabel GTEX Gene-Tissue Median Expression
+longLabel Gene Expression in 55 tissues from GTEX RNA-seq of 5402 samples (214 donors)
+html gtexGeneExpr
 group expression
 
 # ENCODE tracks

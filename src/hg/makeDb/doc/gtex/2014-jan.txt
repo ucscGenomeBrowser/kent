@@ -64,3 +64,9 @@ hgGtex -tab=output gtex \
     $dataDir/GTEx_Data_2014-01-17_Annotations_SampleAttributesDS.txt \
     $dataDir/GTEx_Data_2014-01-17_Annotations_SubjectPhenotypes_DS.txt \
     $dataDir/tissues.tab
+
+# EQTL's from Pilot data
+cd /hive/data/outside/GTEx/pilot
+mkdir eQtl; cd eQtl
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_pilot_data_2013_01_31/multi_tissue_eqtls/Multi_tissue_eQTL_GTEx_Pilot_Phase_datasets.tar
+
