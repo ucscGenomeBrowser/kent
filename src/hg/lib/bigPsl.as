@@ -21,14 +21,9 @@ table bigPsl
    uint    oChromSize; "Size of other chromosome."
    int[blockCount] oChromStarts; "Start positions relative to oChromStart"
 
-   uint  match;        "Number of bases matched."
-   uint matches;       "Number of matching bases that aren't repeats."
-   uint misMatches;    "Number of bases that don't match."
-   uint repMatches;    "Number of matching bases that are part of repeats."
-   uint nCount;        "Number of 'N' bases."
-   uint qNumInsert;    "Number of inserts in query."
-   uint qBaseInsert;   "Number of bases inserted into query."
-   uint tNumInsert;    "Number of inserts in target."
-   uint tBaseInsert;   "Number of bases inserted into target."
+   string  oSequence;  "Sequence on other chrom (or edit list, or empty)"
+   uint    oBlock;     "Block number on other sequence"
+
+   uint match;        "Number of bases matched."
    )
 
