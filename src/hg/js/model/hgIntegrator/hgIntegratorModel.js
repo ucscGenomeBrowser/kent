@@ -7,6 +7,7 @@ var HgIntegratorModel = ImModel.extend({
               PositionSearchMixin(['positionInfo']) ],
 
     maxDataSources: 5,
+    tdbFields: 'track,table,shortLabel,parent,subtracks',
 
     handleCartVar: function(mutState, cartVar, newValue) {
         // Some cart variables require special action (not simply being merged into top-level state)
@@ -604,7 +605,7 @@ var HgIntegratorModel = ImModel.extend({
                       getGeneSuggestTrack: {},
                       });
         this.cartDo({ cgiVar: { db: db },
-                      getGroupedTrackDb: { fields: 'track,table,shortLabel,parent,subtracks' } });
+                      getGroupedTrackDb: { fields: this.tdbFields } });
     },
 
     initialize: function() {
@@ -635,9 +636,7 @@ var HgIntegratorModel = ImModel.extend({
                         });
             // The groupedTrackDb structure is so large for hg19 and other well-annotated
             // genomes that the volume of compressed JSON takes a long time on the wire.
-            this.cartDo({ getGroupedTrackDb: {
-                            fields: 'track,table,shortLabel,parent,subtracks'
-                          }
+            this.cartDo({ getGroupedTrackDb: { fields: this.tdbFields }
                         });
             // This one shouldn't take long.
             this.cartDo({ getStaticHtml: {
