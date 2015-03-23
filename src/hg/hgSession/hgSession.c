@@ -416,17 +416,21 @@ if (isNotEmpty(userName))
 	{
 	struct dyString *js = dyStringNew(1024);
 	struct slName *sn;
-	dyStringAppend(js, "var si = document.getElementsByName('" hgsNewSessionName "'); ");
-	dyStringAppend(js, "if (si[0] && ( ");
+        // MySQL does case-insensitive comparison because our DEFAULT CHARSET=latin1;
+        // use case-insensitive comparison here to avoid clobbering (#15051).
+        dyStringAppend(js, "var su, si = document.getElementsByName('" hgsNewSessionName "'); ");
+        dyStringAppend(js, "if (si[0]) { su = si[0].value.toUpperCase(); if ( ");
 	for (sn = existingSessionNames;  sn != NULL;  sn = sn->next)
 	    {
-	    dyStringPrintf(js, "si[0].value == ");
-	    dyStringQuoteString(js, '\'', sn->name);
-	    dyStringPrintf(js, "%s", (sn->next ? " || " : " )) { "));
+            char nameUpper[PATH_LEN];
+            safecpy(nameUpper, sizeof(nameUpper), sn->name);
+            touppers(nameUpper);
+            dyStringPrintf(js, "su === ");
+            dyStringQuoteString(js, '\'', nameUpper);
+            dyStringPrintf(js, "%s", (sn->next ? " || " : " ) { "));
 	    }
 	dyStringAppend(js, "return confirm('This will overwrite the contents of the existing "
-		       "session ' + si[0].value + '.  Proceed?'); ");
-	dyStringAppend(js, "}");
+                       "session ' + si[0].value + '.  Proceed?'); } }");
 	cgiMakeOnClickSubmitButton(js->string, hgsDoNewSession, "submit");
 	dyStringFree(&js);
 	}
