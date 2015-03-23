@@ -1,0 +1,554 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the rhiRox1
+# Golden snub-nosed monkey - Rhinopithecus roxellana
+
+# Assembly Statistics Report
+# Assembly Name:  Rrox_v1
+# Organism name:  Rhinopithecus roxellana
+# Taxid:          61622
+# Submitter:      Novogene
+# Date:           2014-10-28
+# BioSample:      SAMN02427086
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# GenBank Assembly Accession: GCA_000769185.1 (latest)
+# RefSeq Assembly Accession: GCF_000769185.1 (species-representative latest)
+# RefSeq Assembly and GenBank Assemblies Identical: no
+# Reporting on GenBank assembly.
+#
+## Assembly-Units:
+## GenBank Unit Accession	RefSeq Unit Accession	Assembly-Unit name
+## GCA_000769195.1	GCF_000769195.1	Primary Assembly
+## GCA_000769205.1	GCF_000058055.1	non-nuclear
+
+# Note: chrMT is included in this release (as scaffolds, not complete)
+
+# separate chrMt sequence NC_008218.1 will be used instead
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2014-11-26 - Hiram)
+    # NCBI has redesigned their FTP download site, new type of address
+    #      and naming scheme
+    mkdir -p /hive/data/genomes/rhiRox1/genbank
+    cd /hive/data/genomes/rhiRox1/genbank
+
+    rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Rhinopithecus_roxellana/all_assembly_versions/GCA_000769185.1_Rrox_v1/ ./
+
+    # measure what we have here:
+    faSize GCA_000769185.1_Rrox_v1_genomic.fna.gz
+    # 2899551855 bases (43508254 N's 2856043601 real 1805484870 upper
+    #     1050558731 lower) in 135513 sequences in 1 files
+    # Total size: mean 21396.9 sd 206576.0 min 145 (JABR01061848.1)
+    #    max 9848887 (KN296311.1) median 384
+    # %36.23 masked total, %36.78 masked real
+
+    faSize GCA_000769185.1_Rrox_v1_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz \
+GCA_000769185.1_Rrox_v1_assembly_structure/non-nuclear/unlocalized_scaffolds/FASTA/chrMT.unlocalized.scaf.fna.gz
+    # 2899551855 bases (43508254 N's 2856043601 real 2856043601 upper
+    #    0 lower) in 135513 sequences in 2 files
+    # Total size: mean 21396.9 sd 206576.0 min 145 (JABR01061848.1)
+    #    max 9848887 (KN296311.1) median 384
+    # %0.00 masked total, %0.00 masked real
+
+    # note chrMT is already included in this assembly
+    # But according the the assembly record at:
+    # http://www.ncbi.nlm.nih.gov/assembly/GCA_000769185.1
+    # there is another chrM assembly which is complete
+    export mitoAcc=NC_008218.1
+
+    wget -O ${mitoAcc}.fa \
+ "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$mitoAcc"
+
+    echo ">chrM" > chrM.fa
+    grep -v "^>" ${mitoAcc}.fa >> chrM.fa
+
+    export mSize=`faCount chrM.fa | grep total | awk '{print $2}'`
+
+    /bin/echo -e "chrM\t1\t$mSize\t1\tF\t$mitoAcc\t1\t$mSize\t+" > chrM.agp
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2014-11-25 - Hiram)
+    mkdir /hive/data/genomes/rhiRox1/ucsc
+    cd /hive/data/genomes/rhiRox1/ucsc
+
+    # this usual procedure does not work very well because the AGP definition
+    # has no gaps.  Instead, a simple process is used below to construct the
+    # assembly with just its scaffold names.
+    time ./unplaced.pl ../genbank/GCA_000769185.1_Rrox_v1_assembly_structure/Primary_Assembly
+
+    # chrMT is not complete, only in contigs, add chrM_ prefix:
+    zcat ../genbank/GCA_000769185.1_Rrox_v1_assembly_structure/non-nuclear/unlocalized_scaffolds/FASTA/chrMT.unlocalized.scaf.fna.gz \
+      | sed -e 's/ Rhin.*//; s/\.1/v1/; s/^>/>chrM_/' > chrMT.fa
+
+    zcat ../genbank/GCA_000769185.1_Rrox_v1_assembly_structure/non-nuclear/unlocalized_scaffolds/AGP/chrMT.unlocalized.scaf.agp.gz \
+      | sed -e 's/\.1/v1/; s/^KN/chrM_KN/; s/^JABR/chrM_JABR/' > chrMT.agp
+
+    # verify nothing lost compared to genbank:
+    faSize *.fa
+    # 2899551855 bases (43508254 N's 2856043601 real 2856043601 upper
+    #    0 lower) in 135513 sequences in 2 files
+    # Total size: mean 21396.9 sd 206576.0 min 145 (chrUn_JABR01061848v1)
+    #    max 9848887 (chrUn_KN296311v1) median 384
+    # %0.00 masked total, %0.00 masked real
+
+    # same numbers as above.
+
+    # the resulting AGP definition is useless, it contains no gaps
+    # construct a fake AGP for the unplaced scaffolds:
+    zcat ../genbank/GCA_000769185.1_Rrox_v1_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz \
+     | sed -e 's/ Rhinopithecus.*//;' \
+       | hgFakeAgp -minContigGap=1 stdin stdout | sed -e 's/\.1/v1/; s/D/W/;' \
+           |  sed -e 's/JABR\([0-9][0-9]*\)\.1_1/JABR\1.1/;' \
+              | sort -k1,1 -k2,2n > chrUn.rhiRox1.fake.agp
+
+    # and corresponding fasta:
+    zcat ../genbank/GCA_000769185.1_Rrox_v1_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz \
+       | sed -e 's/.1 Rhinopithecus .*/v1/;' > chrUn.rhiRox1.fa
+
+#############################################################################
+#  Initial database build (DONE - 2015-02-15 - Hiram)
+
+    cd /hive/data/genomes/rhiRox1
+    cat << '_EOF_' > rhiRox1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db rhiRox1
+clade primate
+genomeCladePriority 15
+scientificName Rhinopithecus roxellana
+commonName Golden snub-nosed monkey
+assemblyDate Oct. 2014
+assemblyLabel Novogene
+assemblyShortLabel Rrox_v1
+orderKey 394
+# chrM bioproject: 17209
+# mitoAcc NC_008218.1 already included
+# NC_008218.1
+mitoAcc none
+fastaFiles /hive/data/genomes/rhiRox1/ucsc/*.fa
+agpFiles /hive/data/genomes/rhiRox1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir rhinopithecus
+photoCreditURL http://jackhynes.com
+photoCreditName Jack Hynes - Wikimedia Commons
+ncbiGenomeId 7996
+ncbiAssemblyId 218671
+ncbiAssemblyName Rrox_v1
+ncbiBioProject 266995
+genBankAccessionID GCA_000769185.1
+taxId 61622
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp rhiRox1.config.ra) > agp.log 2>&1
+    #  real    3m5.574s
+
+    # verify end of agp.log indicates:
+    # *** All done!  (through the 'agp' step)
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db rhiRox1.config.ra) > db.log 2>&1
+    # real    23m52.788s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##########################################################################
+# running repeat masker (DONE - 2015-02-18 - Hiram)
+    mkdir /hive/data/genomes/rhiRox1/bed/repeatMasker
+    cd /hive/data/genomes/rhiRox1/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku rhiRox1) > do.log 2>&1
+    # real    2968m6.257s
+    # one items caused extractNestedRepeats.pl to exit with an error,
+    # continuing:
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -continue=mask -smallClusterHub=ku rhiRox1) > mask.log 2>&1
+    # real    27m42.685s
+
+    cat faSize.rmsk.txt
+    # 2899552139 bases (43508003 N's 2856044136 real 1399291226 upper
+    # 1456752910 lower) in 135512 sequences in 1 files
+    # Total size: mean 21397.0 sd 206576.8 min 145 (JABR01061848v1)
+    #    max 9848887 (KN296311v1) median 384
+    # %50.24 masked total, %51.01 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;    
+
+    time featureBits -countGaps rhiRox1 rmsk
+    #  1457170203 bases of 2899552139 (50.255%) in intersection
+    # real    1m27.493s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2015-02-18 - Hiram)
+
+    mkdir /hive/data/genomes/rhiRox1/bed/simpleRepeat
+    cd /hive/data/genomes/rhiRox1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        rhiRox1) > do.log 2>&1
+    # real    124m30.486s
+
+    cat fb.simpleRepeat
+    # 88662812 bases of 2856044136 (3.104%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/rhiRox1
+    twoBitMask rhiRox1.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed rhiRox1.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa rhiRox1.2bit stdout | faSize stdin > faSize.rhiRox1.2bit.txt
+    cat faSize.rhiRox1.2bit.txt
+    # 2899552139 bases (43508003 N's 2856044136 real 1397489568 upper
+    # 1458554568 lower) in 135512 sequences in 1 files
+    # Total size: mean 21397.0 sd 206576.8 min 145 (JABR01061848v1)
+    #  max 9848887 (KN296311v1) median 384
+    # %50.30 masked total, %51.07 masked real
+
+    rm /gbdb/rhiRox1/rhiRox1.2bit
+    ln -s `pwd`/rhiRox1.2bit /gbdb/rhiRox1/rhiRox1.2bit
+
+##########################################################################
+## WINDOWMASKER (DONE - 2015-02-18 - Hiram)
+
+    mkdir /hive/data/genomes/rhiRox1/bed/windowMasker
+    cd /hive/data/genomes/rhiRox1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev rhiRox1) > do.log 2>&1
+    # real    272m57.847s
+
+    # Masking statistics
+    cat faSize.rhiRox1.cleanWMSdust.txt
+    # 3011966170 bases (614872980 N's 2397093190 real 1630676135 upper
+    #    766417055 lower) in 319549 sequences in 1 files
+    # Total size: mean 9425.7 sd 1088158.8 min 201 (chrUn_JMHX01238739v1)
+    #    max 215897965 (chr1) median 823
+    # %25.45 masked total, %31.97 masked real
+
+    time featureBits -countGaps rhiRox1 rmsk windowmaskerSdust \
+       > fb.rhiRox1.rmsk.windowmaskerSdust.txt 2>&1
+    #  real    3m50.464s
+
+    cat fb.rhiRox1.rmsk.windowmaskerSdust.txt
+    # 830163015 bases of 2899552139 (28.631%) in intersection
+
+    doWindowMasker.pl -continue=cleanup -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev rhiRox1
+
+##########################################################################
+# cpgIslands - (DONE - 2015-02-20 - Hiram)
+    mkdir /hive/data/genomes/rhiRox1/bed/cpgIslands
+    cd /hive/data/genomes/rhiRox1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku rhiRox1) > do.log 2>&1 &
+    # real    117m34.561s
+
+    cat fb.rhiRox1.cpgIslandExt.txt
+    # 18261889 bases of 2856044136 (0.639%) in intersection
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2015-02-18 - Hiram)
+    mkdir /hive/data/genomes/rhiRox1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/rhiRox1/bed/cpgIslandsUnmasked
+
+    time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/rhiRox1/rhiRox1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku rhiRox1 > do.log 2>&1
+    # real    477m51.846s
+
+    cat fb.rhiRox1.cpgIslandExtUnmasked.txt
+    # 33083948 bases of 2856044136 (1.158%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-02-18 - Hiram)
+    mkdir /hive/data/genomes/rhiRox1/bed/cytoBand
+    cd /hive/data/genomes/rhiRox1/bed/cytoBand
+    makeCytoBandIdeo.csh rhiRox1
+
+#########################################################################
+# genscan - (DONE - 2014-12-01,11 - Hiram)
+    mkdir /hive/data/genomes/rhiRox1/bed/genscan
+    cd /hive/data/genomes/rhiRox1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku rhiRox1) > do.log 2>&1
+    # real    138m29.019s
+
+    cat fb.rhiRox1.genscan.txt
+    #   52089531 bases of 2856044136 (1.824%) in intersection
+
+    cat fb.rhiRox1.genscanSubopt.txt
+    #   53279783 bases of 2856044136 (1.866%) in intersection
+
+########################################################################
+# Create kluster run files (DONE - 2015-02-20 - Hiram)
+
+    cd /hive/data/genomes/rhiRox1
+    # numerator is rhiRox1 gapless bases "real" as reported by:
+    head -1 faSize.rhiRox1.2bit.txt
+# 2899552139 bases (43508003 N's 2856044136 real 1397489568 upper 1458554568
+# lower) in 135512 sequences in 1 files
+
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2856044136 / 2861349177 \) \* 1024
+    # ( 2856044136 / 2861349177 ) * 1024 = 1022.101468
+
+    # ==> use -repMatch=1000 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/rhiRox1
+    time blat rhiRox1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/rhiRox1.11.ooc \
+        -repMatch=1000
+    # Wrote 30186 overused 11-mers to jkStuff/rhiRox1.11.ooc
+    #  real    0m49.404s
+
+    # there are no non-bridged gaps, do not need to do this
+    #   check non-bridged gaps to see what the typical size is:
+#     hgsql -N -e 'select * from gap where bridge="no" order by size;' rhiRox1 
+#       | ave -tableOut -col=7 stdin
+# # min Q1 median Q3 max mean N sum stddev
+# 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006
+
+    # note the minimum non-bridged gap size is 50,076
+
+#  gapToLift -verbose=2 -minGap=50000 rhiRox1 jkStuff/rhiRox1.nonBridged.lft \
+#         -bedFile=jkStuff/rhiRox1.nonBridged.bed
+
+#    hgsql -N \
+#        -e 'select * from gap where bridge="no" order by size;' rhiRox1 \
+#        | ave -col=7 stdin
+
+    # not needed:
+#    gapToLift -verbose=2 -minGap=100 bosTau7 jkStuff/nonBridged.lft \
+#        -bedFile=jkStuff/nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 135512, total size: 2899552139, one half size:
+#       1449776069
+# cumulative    N50 count       contig  contig size
+# 1448988959      532     KN299624v1      1553048
+# 1449776069 one half size
+# 1450538183      533     KN299419v1      1549224
+
+#############################################################################
+# GENBANK AUTO UPDATE (DONE - 2015-02-20 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Rhinopithecus roxellana	9	0	1
+
+    # edit etc/genbank.conf to add rhiRox1 just after rheMac3
+
+# rhiRox1 (Golden snub-nosed monkey)
+rhiRox1.serverGenome = /hive/data/genomes/rhiRox1/rhiRox1.2bit
+rhiRox1.clusterGenome = /hive/data/genomes/rhiRox1/rhiRox1.2bit
+rhiRox1.ooc = /hive/data/genomes/rhiRox1/rhiRox1.11.ooc
+rhiRox1.lift = no
+rhiRox1.perChromTables = no
+rhiRox1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+rhiRox1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+rhiRox1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+rhiRox1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+rhiRox1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+rhiRox1.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+rhiRox1.downloadDir = rhiRox1
+rhiRox1.refseq.mrna.native.load  = yes
+rhiRox1.refseq.mrna.xeno.load = yes
+rhiRox1.refseq.mrna.xeno.loadDesc  = yes
+rhiRox1.upstreamGeneTbl = refGene
+
+
+    git commit -m "Added rhiRox1; refs #14438" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "Added rhiRox Rhinopithecus roxellana refs #14438" \
+       src/lib/gbGenome.c
+    git push
+    make install-server
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial rhiRox1
+    # logFile: var/build/logs/2014.10.13-13:00:37.rhiRox1.initalign.log
+    # real    163m21.647s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.rhiRox1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad -verbose=10 rhiRox1 &
+    # logFile: var/dbload/hgwdev/logs/2015.02.21-19:06:41.rhiRox1.dbload.log
+    # real    10m59.824s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add rhiRox1 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added rhiRox1 - Golden snub-nosed monkey refs #14438" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+#  SWAP hg38 LASTZ (DONE - 2015-03-23 - Hiram)
+    #   original alignment done at hg38.txt
+    cd /hive/data/genomes/hg38/bed/lastzRhiRox1.2015-02-23
+
+    cat fb.hg38.chainRhiRox1Link.txt
+    # 2595256243 bases of 3049335806 (85.109%) in intersection
+
+    #   running the swap
+    mkdir /hive/data/genomes/rhiRox1/bed/blastz.hg38.swap
+    cd /hive/data/genomes/rhiRox1/bed/blastz.hg38.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg38/bed/lastzRhiRox1.2015-02-23/DEF \
+        -swap  -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #   real    174m27.934s
+    cat fb.rhiRox1.chainHg38Link.txt
+    #   2474156996 bases of 2856044136 (86.629%) in intersection
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2015-03-23 - Hiram)
+    mkdir /hive/data/genomes/rhiRox1/bed/ucscToINSDC
+    cd /hive/data/genomes/rhiRox1/bed/ucscToINSDC
+
+    grep chrM ../../rhiRox1.agp
+# chrM    1       16549   1       F       NC_008218.1     1       16549   +
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+       ../../genbank/GCA_*assembly_structure/Primary_Assembly NC_008218.1
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+#  135512 name.coordinate.tab
+#  135512 ucscToINSDC.bed
+#  135512 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab rhiRox1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords rhiRox1
+    # should cover %100 entirely:
+    featureBits -countGaps rhiRox1 ucscToINSDC
+    # 2899552139 bases of 2899552139 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2015-03-23 - Hiram)
+    hgsql -N -e "select frag from gold;" rhiRox1 | sort -u \
+        > /tmp/rhiRox1.frag.gold.txt
+
+
+    export maxLen=`awk '{print length($0)}' /tmp/rhiRox1.frag.gold.txt | sort -rn | head -1`
+    echo "scan to column: $maxLen"
+
+export C=1
+while [ $C -le $maxLen ];
+do
+echo -n " $C: "
+awk '{ print substr($0,'$C',1) }' /tmp/rhiRox1.frag.gold.txt | sort -u | xargs echo | sed -e 's/ //g'
+C=`echo $C | awk '{print $1+1}'`
+done
+ 1: JKN
+ 2: ACN
+ 3: 23B_
+ 4: 09R
+ 5: 0456789
+ 6: 0123456789
+ 7: 0123456789
+ 8: 0123456789
+ 9: .0123456789
+ 10: .0123456789
+ 11: 0123456789_
+ 12: 0123456789
+ 13: .0123456789
+ 14: 0123456789
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" rhiRox1 | wc -l
+    # 196797
+
+    hgsql -N -e "select frag from gold;" rhiRox1 \
+       | egrep -e '[JKN][ACN][B23_][R09][0-9]+(\.[0-9_])?' | wc -l
+    # 196797
+
+    hgsql -N -e "select frag from gold;" rhiRox1 \
+       | egrep -v -e '[JKN][ACN][B23_][R09][0-9]+(\.[0-9_])?' | wc -l
+    # 0
+
+    # hence, add to trackDb/rhinopithecus/rhiRox1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [JKN][ACN][B23_][R09][0-9]+(\.[0-9_])?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE 2015-03-23 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=rhiRox1 -keys all.joiner
+    joinerCheck -database=rhiRox1 -tableCoverage all.joiner
+    joinerCheck -database=rhiRox1 -times all.joiner
+
+    cd /hive/data/genomes/rhiRox1
+    time makeDownloads.pl rhiRox1 > downloads.log 2>&1
+    # real    18m36.348s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/rhiRox1/pushQ
+    cd /hive/data/genomes/rhiRox1/pushQ
+    makePushQSql.pl rhiRox1 > rhiRox1.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+# WARNING: hgwdev does not have /gbdb/rhiRox1/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/rhiRox1/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/rhiRox1/bbi/qualityBw/quality.bw
+# WARNING: rhiRox1 does not have seq
+# WARNING: rhiRox1 does not have extFile
+# WARNING: rhiRox1 does not have estOrientInfo
+# WARNING: rhiRox1 does not have mrnaOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p rhiRox1.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/rhiRox1.pushQ.sql"
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################
