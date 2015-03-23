@@ -170,7 +170,13 @@ struct dyString *requestName = getRequestName();
 struct dyString *requestURL = dyStringCreate("http://%s/%s", cgiServerNamePort(), path);
 struct dyString *greatRequest;
 
-greatRequest = dyStringCreate(
+// archive server for hg18
+if (sameWord("hg18", database))
+  greatRequest = dyStringCreate(
+    "<meta http-equiv='refresh' content='0;url=http://bejerano.stanford.edu/great/public-2.0.2/cgi-bin/greatStart.php?requestURL=%s&requestSpecies=%s&requestName=%s&requestSender=UCSC%20Table%20Browser'>",
+    dyStringContents(requestURL), database, dyStringContents(requestName));
+else
+  greatRequest = dyStringCreate(
     "<meta http-equiv='refresh' content='0;url=http://great.stanford.edu/public/cgi-bin/greatStart.php?requestURL=%s&requestSpecies=%s&requestName=%s&requestSender=UCSC%20Table%20Browser'>",
     dyStringContents(requestURL), database, dyStringContents(requestName));
 
