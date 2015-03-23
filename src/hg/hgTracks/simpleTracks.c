@@ -1,9 +1,6 @@
 /* infrastructure -- Code shared by all tracks.  Separating this out from
  * hgTracks.c allows a standalone main to make track images. */
 
-/* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
-
 /* NOTE: This code was imported from hgTracks.c 1.1469, May 19 2008,
  * so a lot of revision history has been obscured.  To see code history
  * from before this file was created, run this:
@@ -14,7 +11,6 @@
 #include "spaceSaver.h"
 #include "portable.h"
 #include "bed.h"
-#include "basicBed.h"
 #include "psl.h"
 #include "web.h"
 #include "hdb.h"
@@ -53,7 +49,6 @@
 #include "bactigPos.h"
 #include "genePred.h"
 #include "genePredReader.h"
-#include "gencodeTracks.h"
 #include "isochores.h"
 #include "spDb.h"
 #include "simpleRepeat.h"
@@ -103,6 +98,7 @@
 #include "variation.h"
 #include "estOrientInfo.h"
 #include "versionInfo.h"
+#include "gencodeIntron.h"
 #include "retroGene.h"
 #include "switchGear.h"
 #include "dless.h"
@@ -127,7 +123,6 @@
 #include "retroTracks.h"
 #include "pcrResult.h"
 #include "variome.h"
-#include "pubsTracks.h"
 #endif /* GBROWSE */
 
 #ifdef LOWELAB
@@ -170,27 +165,27 @@ boolean chromosomeColorsMade = FALSE;
 int z;
 int maxCount;
 int bestColor;
-int maxItemsInFullTrack = 1000;  /* Maximum number of items displayed in full */
+int maxItemsInFullTrack = 250;  /* Maximum number of items displayed in full */
 int maxItemsToUseOverflowDefault = 10000; /* # of items to allow overflow mode*/
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
 char *chromName;		/* Name of chromosome sequence . */
 char *database;			/* Name of database we're using. */
-char *organism;                 /* Name of organism we're working on. */
-int winStart;                   /* Start of window in sequence. */
-int winEnd;                     /* End of window in sequence. */
-char *position = NULL;          /* Name of position. */
+char *organism;			/* Name of organism we're working on. */
+int winStart;			/* Start of window in sequence. */
+int winEnd;			/* End of window in sequence. */
+char *position = NULL; 		/* Name of position. */
 
 int trackTabWidth = 11;
 int leftLabelWidthDefaultChars = 17;   /* default number of characters allowed for left label */
 int leftLabelWidthChars = 17;   /* number of characters allowed for left label */
 int insideX;			/* Start of area to draw track in in pixels. */
 int insideWidth;		/* Width of area to draw tracks in in pixels. */
-int leftLabelX;                 /* Start of area to draw left labels on. */
-int leftLabelWidth;             /* Width of area to draw left labels on. */
+int leftLabelX;			/* Start of area to draw left labels on. */
+int leftLabelWidth;		/* Width of area to draw left labels on. */
 float basesPerPixel = 0;       /* bases covered by a pixel; a measure of zoom */
-boolean zoomedToBaseLevel;      /* TRUE if zoomed so we can draw bases. */
+boolean zoomedToBaseLevel; 	/* TRUE if zoomed so we can draw bases. */
 boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codons text in genePreds*/
 boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we can color each codon*/
 
@@ -199,7 +194,6 @@ boolean withIndividualLabels = TRUE;    /* print labels on item-by-item basis (f
 boolean withCenterLabels = TRUE;	/* Display center labels? */
 boolean withGuidelines = TRUE;		/* Display guidelines? */
 boolean withNextExonArrows = FALSE;	/* Display next exon navigation buttons near center labels? */
-boolean withExonNumbers = FALSE;	/* Display exon and intron numbers in mouseOver instead of item name */
 boolean revCmplDisp = FALSE;          /* reverse-complement display */
 
 boolean measureTiming = FALSE;	/* DON'T EDIT THIS -- use CGI param "&measureTiming=." . */
@@ -310,20 +304,8 @@ rgbColor.b = (rgbColor.b+128)/2;
 return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
 }
 
-void checkIfWiggling(struct cart *cart, struct track *tg)
-/* Check to see if a linkedFeatures track should be drawing as a wiggle. */
-{
-boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
-if (doWiggle)
-    {
-    tg->drawLeftLabels = wigLeftLabels;
-    tg->colorShades = shadesOfGray;
-    tg->mapsSelf = TRUE;
-    }
-}
-
 int packCountRowsOverflow(struct track *tg, int maxCount,
-                          boolean withLabels, boolean allowOverflow)
+			  boolean withLabels, boolean allowOverflow)
 /* Return packed height. */
 {
 struct spaceSaver *ss;
@@ -344,7 +326,7 @@ for (item = tg->items; item != NULL; item = item->next)
 	    start = 0;
 	else
 	    start = round((double)(baseStart - winStart)*scale);
-	if (!tg->drawLabelInBox && !tg->drawName && withLabels)
+	if (!tg->drawName && withLabels)
 	    start -= mgFontStringWidth(font,
 				       tg->itemName(tg, item)) + extraWidth;
 	if (baseEnd >= winEnd)
@@ -419,22 +401,10 @@ return answer;
 }
 
 int tgFixedTotalHeightOptionalOverflow(struct track *tg, enum trackVisibility vis,
-                                       int lineHeight, int heightPer, boolean allowOverflow)
+			       int lineHeight, int heightPer, boolean allowOverflow)
 /* Most fixed height track groups will use this to figure out the height
  * they use. */
 {
-boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
-if (doWiggle)
-    {
-    struct wigCartOptions *wigCart = tg->wigCartData;
-    if (tg->wigCartData == NULL)
-	{
-	wigCart = wigCartOptionsNew(cart, tg->tdb, 0, NULL );
-	tg->wigCartData = (void *) wigCart;
-	}
-    return wigTotalHeight(tg, vis);
-    }
-
 int rows;
 double maxHeight = maximumTrackHeight(tg);
 int itemCount = slCount(tg->items);
@@ -530,8 +500,8 @@ struct dyString *uiStateUrlPart(struct track *toggleGroup)
 {
 struct dyString *dy = newDyString(512);
 
-dyStringPrintf(dy, "%s=%s", cartSessionVarName(), cartSessionId(cart));
-if (toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
+dyStringPrintf(dy, "%s=%u", cartSessionVarName(), cartSessionId(cart));
+if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
     {
     int vis = toggleGroup->visibility;
     struct trackDb *tdbParent = tdbGetComposite(toggleGroup->tdb);
@@ -541,14 +511,14 @@ if (toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
     char *encodedTableName = cgiEncode(parentName);
     char *view = NULL;
     boolean setView = subgroupFind(toggleGroup->tdb,"view",&view);
-    if (tgParent!=NULL&& tgParent->visibility != tvHide && tvCompare(tgParent->visibility,vis) > 0)
+    if(tgParent!=NULL&& tgParent->visibility != tvHide && tvCompare(tgParent->visibility,vis) > 0)
         {
         setView = FALSE; // Must open parent to see opened child
         vis = tgParent->visibility;
         }
     if (vis == tvDense)
         {
-        if (!toggleGroup->canPack || view != NULL)
+        if(!toggleGroup->canPack || view != NULL)
             vis = tvFull;
         else
             vis = tvPack;
@@ -556,9 +526,15 @@ if (toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
     else if (vis != tvHide)
         vis = tvDense;
 
-    if (setView)
+    if(setView)
         {
+    #ifdef SUBTRACK_CFG
         dyStringPrintf(dy, "&%s=%s", toggleGroup->tdb->parent->track, hStringFromTv(vis));
+    #else///ifndef SUBTRACK_CFG
+        char *encodeView = cgiEncode(view);
+        dyStringPrintf(dy, "&%s.%s.vis=%s", encodedTableName,encodeView, hStringFromTv(vis));
+        freeMem(encodeView);
+    #endif///ndef SUBTRACK_CFG
         }
     else
         {
@@ -575,8 +551,7 @@ else
         char *encodedMapName = cgiEncode(toggleGroup->track);
         if (vis == tvDense)
             {
-            if (!toggleGroup->canPack
-            || (tdbIsComposite(toggleGroup->tdb) && subgroupingExists(toggleGroup->tdb,"view")))
+            if(!toggleGroup->canPack || (tdbIsComposite(toggleGroup->tdb) && subgroupingExists(toggleGroup->tdb,"view")))
                 vis = tvFull;
             else
                 vis = tvPack;
@@ -595,7 +570,7 @@ boolean isWithCenterLabels(struct track *track)
  * If track->tdb has a centerLabelDense setting, go with it.
 // * If composite child then no center labels in dense mode. */
 {
-if (!withCenterLabels)
+if(!withCenterLabels)
     return FALSE;
 if (track != NULL)
     {
@@ -613,9 +588,7 @@ boolean isCenterLabelConditionallySeen(struct track *track)
 {
 if (isCenterLabelConditional(track))
     {
-    if (track->prevTrack
-    &&  track->parent == track->prevTrack->parent
-    &&  isCenterLabelConditional(track->prevTrack))
+    if (track->prevTrack && track->parent == track->prevTrack->parent && isCenterLabelConditional(track->prevTrack))
         return FALSE;
     }
 return isWithCenterLabels(track);
@@ -634,8 +607,8 @@ va_end(args);
 }
 
 void mapBoxReinvoke(struct hvGfx *hvg, int x, int y, int width, int height,
-                    struct track *track, boolean toggle, char *chrom,
-                    int start, int end, char *message, char *extra)
+		    struct track *track, boolean toggle, char *chrom,
+		    int start, int end, char *message, char *extra)
 /* Print out image map rectangle that would invoke this program again.
  * If track is non-NULL then put that track's id in the map item.
  * if toggle is true, then toggle track between full and dense.
@@ -659,43 +632,41 @@ if (chrom == NULL)
     start = winStart;
     end = winEnd;
     }
-if (theImgBox && curImgTrack)
+if(theImgBox && curImgTrack)
     {
     char link[512];
-    safef(link,sizeof(link),"%s?position=%s:%d-%d&%s",       // NOTE: position may need removing
-          hgTracksName(), chrom, start+1, end, ui->string);  //       due to portal
-    if (!revCmplDisp && x < insideX)  // Do not toggle on side label!
+    safef(link,sizeof(link),"%s?position=%s:%d-%d&%s",hgTracksName(), chrom, start+1, end, ui->string); // NOTE: position may need removing due to portal
+    if(!revCmplDisp && x < insideX)  // Do not toggle on side label!
         {
         width -= (insideX+1 - x);
-        if (width <= 1)
+        if(width <= 1)
             {
             freeDyString(&ui);
             return;
             }
         x = insideX+1;
         }
-    else if (revCmplDisp && (x+width) >= insideWidth)
+    else if(revCmplDisp && (x+width) >= insideWidth)
         {
         width -= (x+width) - insideWidth + 1;
-        if (width <= 1)
+        if(width <= 1)
             {
             freeDyString(&ui);
             return;
             }
         }
     //#ifdef IMAGEv2_SHORT_MAPITEMS
-    //  if (x < insideX && x+width > insideX)
-    //      warn("mapBoxReinvoke(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",
-    //           hStringFromTv(toggleGroup->visibility),x, y, x+width, y+height, link);
+    //    if(x < insideX && x+width > insideX)
+    //        warn("mapBoxReinvoke(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",hStringFromTv(toggleGroup->visibility),x, y, x+width, y+height, link);
     //#endif//def IMAGEv2_SHORT_MAPITEMS
-    imgTrackAddMapItem(curImgTrack,link,(char *)(message != NULL?message:NULL),x, y, x+width,
-                       y+height, track ? track->track : NULL);
+    imgTrackAddMapItem(curImgTrack,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height,
+                       track ? track->track : NULL);
     }
 else
     {
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
     hPrintf("HREF=\"%s?position=%s:%d-%d",
-            hgTracksName(), chrom, start+1, end);
+        hgTracksName(), chrom, start+1, end);
     hPrintf("&%s\"", ui->string);
     if (message != NULL)
         mapStatusMessage("%s", message);
@@ -706,17 +677,15 @@ freeDyString(&id);
 }
 
 void mapBoxToggleVis(struct hvGfx *hvg, int x, int y, int width, int height,
-                     struct track *curGroup)
+	struct track *curGroup)
 /* Print out image map rectangle that would invoke this program again.
  * program with the current track expanded. */
 {
 char buf[256];
-if (tdbIsCompositeChild(curGroup->tdb))
-    safef(buf, sizeof(buf),"Click to alter the display density of %s and similar subtracks",
-          curGroup->shortLabel);
-else if (tdbIsComposite(curGroup->tdb))
-    safef(buf, sizeof(buf),"Click to alter the maximum display mode density for all %s subtracks",
-          curGroup->shortLabel);
+if(tdbIsCompositeChild(curGroup->tdb))
+    safef(buf, sizeof(buf),"Click to alter the display density of %s and similar subtracks", curGroup->shortLabel);
+else if(tdbIsComposite(curGroup->tdb))
+    safef(buf, sizeof(buf),"Click to alter the maximum display mode density for all %s subtracks", curGroup->shortLabel);
 else
     safef(buf, sizeof(buf),"Click to alter the display density of %s", curGroup->shortLabel);
 
@@ -763,7 +732,8 @@ if (x < xEnd)
     {
     char *encodedItem = cgiEncode(item);
     char *encodedTrack = cgiEncode(track);
-    if (theImgBox && curImgTrack)
+
+    if(theImgBox && curImgTrack)
         {
         char link[512];
         if (directUrl)
@@ -779,15 +749,14 @@ if (x < xEnd)
             }
         if (extra != NULL)
             safef(link+strlen(link),sizeof(link)-strlen(link),"&%s", extra);
-        // Add map item to current map (TODO: pass in map)
+        // Add map item to currnent map (TODO: pass in map)
         #ifdef IMAGEv2_SHORT_MAPITEMS
-        if (!revCmplDisp && x < insideX && xEnd > insideX)
-            x = insideX;
-        else if (revCmplDisp && x < insideWidth && xEnd > insideWidth)
-            xEnd = insideWidth - 1;
+            if(!revCmplDisp && x < insideX && xEnd > insideX)  // Why does insideX=118 in reverse complement??
+                    x = insideX;
+            else if (revCmplDisp && x < insideWidth && xEnd > insideWidth)
+                    xEnd = insideWidth - 1;
         #endif//def IMAGEv2_SHORT_MAPITEMS
-        imgTrackAddMapItem(curImgTrack,link,(char *)(statusLine!=NULL?statusLine:NULL),
-                           x, y, xEnd, yEnd, track);
+        imgTrackAddMapItem(curImgTrack,link,(char *)(statusLine!=NULL?statusLine:NULL),x, y, xEnd, yEnd, track);
         }
     else
         {
@@ -803,8 +772,8 @@ if (x < xEnd)
             {
             hPrintf("HREF=\"%s&c=%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d",
                 hgcNameAndSettings(), chromName, start, end, encodedTrack, encodedItem,
-                    chromName, winStart, winEnd,
-                    database, tl.picWidth);
+                chromName, winStart, winEnd,
+                database, tl.picWidth);
             }
         if (extra != NULL)
             hPrintf("&%s", extra);
@@ -820,7 +789,7 @@ freeDyString(&id);
 }
 
 void mapBoxHc(struct hvGfx *hvg, int start, int end, int x, int y, int width, int height,
-              char *track, char *item, char *statusLine)
+	char *track, char *item, char *statusLine)
 /* Print out image map rectangle that would invoke the hgc (human genome click)
  * program. */
 {
@@ -840,7 +809,7 @@ int spreadStringCharWidth(int width, int count)
 }
 
 void spreadAlignString(struct hvGfx *hvg, int x, int y, int width, int height,
-                       Color color, MgFont *font, char *text,
+		       Color color, MgFont *font, char *text,
 		       char *match, int count, bool dots, bool isCodon)
 /* Draw evenly spaced letters in string.  For multiple alignments,
  * supply a non-NULL match string, and then matching letters will be colored
@@ -974,8 +943,8 @@ freez(&inMotif);
 }
 
 void spreadAlignStringProt(struct hvGfx *hvg, int x, int y, int width, int height,
-                           Color color, MgFont *font, char *text, char *match, int count,
-                           bool dots, bool isCodon, int seqStart, int offset)
+		       Color color, MgFont *font, char *text,
+		       char *match, int count, bool dots, bool isCodon, int seqStart, int offset)
 /* Draw evenly spaced letters in string for protein sequence.
  * For multiple alignments,
  * supply a non-NULL match string, and then matching letters will be colored
@@ -1113,28 +1082,29 @@ for (i=0; i<count; i++, text++, textPos++)
 	    {
 	    /* display AA at the center of a codon */
 	    if (((seqStart + textPos) % 3) == offset)
-                {
+	    	{
 		/* display alternate background color */
-                if (((seqStart + textPos)/3 %2) == 0)
+            	if (((seqStart + textPos)/3 %2) == 0)
                     {
                     hvGfxBox(hvg, xx1+x, y, xx2-xx1, height, color1);
                     }
-                else
+            	else
                     {
                     hvGfxBox(hvg, xx1+x, y, xx2-xx1, height, color2);
                     }
 
 		/* display AA */
-                hvGfxTextCentered(hvg, x1+x, y, x2-x1, height, clr, font, cBuf);
-                }
+	    	hvGfxTextCentered(hvg, x1+x, y, x2-x1, height, clr, font, cBuf);
+	    	}
 	    }
 	}
     }
 freez(&inMotif);
 }
 
-void spreadBasesString(struct hvGfx *hvg, int x, int y, int width, int height, Color color,
-                       MgFont *font, char *s, int count, bool isCodon)
+void spreadBasesString(struct hvGfx *hvg, int x, int y, int width,
+                        int height, Color color, MgFont *font,
+                        char *s, int count, bool isCodon)
 /* Draw evenly spaced letters in string. */
 {
 spreadAlignString(hvg, x, y, width, height, color, font, s,
@@ -1142,7 +1112,7 @@ spreadAlignString(hvg, x, y, width, height, color, font, s,
 }
 
 void drawScaledBox(struct hvGfx *hvg, int chromStart, int chromEnd,
-                   double scale, int xOff, int y, int height, Color color)
+	double scale, int xOff, int y, int height, Color color)
 /* Draw a box scaled from chromosome to window coordinates.
  * Get scale first with scaleForPixels. */
 {
@@ -1155,7 +1125,7 @@ hvGfxBox(hvg, x1, y, w, height, color);
 }
 
 void drawScaledBoxBlend(struct hvGfx *hvg, int chromStart, int chromEnd,
-                        double scale, int xOff, int y, int height, Color color)
+	double scale, int xOff, int y, int height, Color color)
 /* Draw a box scaled from chromosome to window coordinates.
  * Get scale first with scaleForPixels.
  * use colorBin to collect multiple colors for the same pixel, choose
@@ -1203,11 +1173,10 @@ if (w < 1)
 hvGfxBox(hvg, x1, y, w, height, maxColor);
 }
 
-void drawScaledBoxSampleLabel(struct hvGfx *hvg,
-     int chromStart, int chromEnd, double scale,
-     int xOff, int y, int height, Color color, MgFont *font,  char *label)
-/* Draw a box scaled from chromosome to window coordinates and draw a label onto it. 
- * Lots of code copied from drawScaledBoxSample */
+void drawScaledBoxSample(struct hvGfx *hvg,
+	int chromStart, int chromEnd, double scale,
+	int xOff, int y, int height, Color color, int score)
+/* Draw a box scaled from chromosome to window coordinates. */
 {
 //int i;
 int x1, x2, w;
@@ -1216,50 +1185,6 @@ x2 = round((double)(chromEnd-winStart)*scale) + xOff;
 
 if (x2 >= MAXPIXELS)
     x2 = MAXPIXELS - 1;
-
-if (x2 < xOff)
-    x2 = xOff;
-if (x2 > xOff+insideWidth)
-    x2 = xOff+insideWidth;
-if (x1 < xOff)
-    x1 = xOff;
-if (x1 > xOff+insideWidth)
-    x1 = xOff+insideWidth;
-w = x2-x1;
-if (w < 1)
-    w = 1;
-hvGfxBox(hvg, x1, y, w, height, color);
-
-char *shortLabel = cloneString(label);
-/* calculate how many characters we can squeeze into the box */
-int charsInBox = w / mgFontCharWidth(font, 'm');
-if (charsInBox > 4)
-    {
-    if (charsInBox < strlen(label))
-        strcpy(shortLabel+charsInBox-3, "...");
-    Color labelColor = hvGfxContrastingColor(hvg, color);
-    hvGfxTextCentered(hvg, x1, y, w, height, labelColor, font, shortLabel);
-    }
-}
-
-void drawScaledBoxSample(struct hvGfx *hvg,
-                         int chromStart, int chromEnd, double scale,
-                         int xOff, int y, int height, Color color, int score)
-/* Draw a box scaled from chromosome to window coordinates. */
-{
-//int i;
-int x1, x2, w;
-int ourStart = chromStart;
-if (ourStart < winStart) 
-    ourStart = winStart;
-int ourEnd = chromEnd;
-if (ourEnd > winEnd) 
-    ourEnd = winEnd;
-x1 = round((double)(ourStart-winStart)*scale) + xOff;
-x2 = round((double)(ourEnd-winStart)*scale) + xOff;
-
-if (x2 >= MAXPIXELS)
-    x2 = MAXPIXELS - 1;
 w = x2-x1;
 if (w < 1)
     w = 1;
@@ -1267,8 +1192,9 @@ hvGfxBox(hvg, x1, y, w, height, color);
 }
 
 
-void filterItems(struct track *tg, boolean (*filter)(struct track *tg, void *item), 
-                char *filterType)
+void filterItems(struct track *tg,
+    boolean (*filter)(struct track *tg, void *item),
+    char *filterType)
 /* Filter out items from track->itemList. */
 {
 struct slList *newList = NULL, *oldList = NULL, *el, *next;
@@ -1349,20 +1275,6 @@ char *linkedFeaturesName(struct track *tg, void *item)
 {
 struct linkedFeatures *lf = item;
 return lf->name;
-}
-
-char *linkedFeaturesNameField1(struct track *tg, void *item)
-/* return part before first space in item name */
-{
-struct linkedFeatures *lf = item;
-return cloneFirstWord(lf->name);
-}
-
-char *linkedFeaturesNameNotField1(struct track *tg, void *item)
-/* return part after first space in item name */
-{
-struct linkedFeatures *lf = item;
-return cloneNotFirstWord(lf->name);
 }
 
 void linkedFeaturesFreeList(struct linkedFeatures **pList)
@@ -1481,15 +1393,15 @@ boolean gvFilterDA(struct gv *el)
 int cnt = 0;
 struct gvAttr *attr = NULL;
 char query[256];
-char *id = NULL;
+char *escId = NULL;
 struct sqlConnection *conn = hAllocConn(database);
 
 if (el->id != NULL)
-    id = el->id;
+    escId = sqlEscapeString(el->id);
 else
-    id = el->name;
+    escId = sqlEscapeString(el->name);
 
-sqlSafef(query, sizeof(query), "select * from hgFixed.gvAttr where id = '%s' and attrType = 'disease'", id);
+safef(query, sizeof(query), "select * from hgFixed.gvAttr where id = '%s' and attrType = 'disease'", escId);
 attr = gvAttrLoadByQuery(conn, query);
 hFreeConn(&conn);
 if (attr == NULL)
@@ -1561,8 +1473,10 @@ for (el = tg->items; el != NULL; el = el->next)
         {
         char query[256];
         char *commonName = NULL;
-        sqlSafef(query, sizeof(query), "select attrVal from hgFixed.gvAttr where id = '%s' and attrType = 'commonName'", el->name);
+        char *escId = sqlEscapeString(el->name);
+        safef(query, sizeof(query), "select attrVal from hgFixed.gvAttr where id = '%s' and attrType = 'commonName'", escId);
         commonName = sqlQuickString(conn, query);
+        freeMem(escId);
         if (labelStarted) dyStringAppendC(name, '/');
         else labelStarted = TRUE;
         if (commonName != NULL)
@@ -1608,15 +1522,16 @@ else if (sameString("Disagree", cartString(cart, "gvDisclaimer")))
     return;
     }
 /* load as linked list once, outside of loop */
-srcList = gvSrcLoadByQuery(conn, "NOSQLINJ select * from hgFixed.gvSrc");
+srcList = gvSrcLoadByQuery(conn, "select * from hgFixed.gvSrc");
 /* load part need from gv table, outside of loop (load in hash?) */
 sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct gv *details = NULL;
-    char query[256];
+    char query[256], *escId;
     struct gvPos *el = gvPosLoad(row);
-    sqlSafef(query, sizeof(query), "select * from hgFixed.gv where id = '%s'", el->name);
+    escId = sqlEscapeString(el->name);
+    safef(query, sizeof(query), "select * from hgFixed.gv where id = '%s'", escId);
     details = gvLoadByQuery(conn2, query);
     /* searched items are always visible */
     if (hgFindMatches != NULL && hashIntValDefault(hgFindMatches, el->name, 0) == 1)
@@ -1687,7 +1602,7 @@ struct oregannoAttr *attr = NULL;
 char query[256];
 struct sqlConnection *conn = hAllocConn(database);
 
-sqlSafef(query, sizeof(query), "select * from oregannoAttr where id = '%s' and attribute = 'type'", el->id);
+safef(query, sizeof(query), "select * from oregannoAttr where id = '%s' and attribute = 'type'", el->id);
 attr = oregannoAttrLoadByQuery(conn, query);
 hFreeConn(&conn);
 if (attr == NULL)
@@ -1699,10 +1614,10 @@ if (attr == NULL)
     }
 for (cnt = 0; cnt < oregannoTypeSize; cnt++)
     {
-    if (!cartVarExists(cart, oregannoTypeString[cnt])
-    ||  (  cartString(cart, oregannoTypeString[cnt]) != NULL
-        && differentString(cartString(cart, oregannoTypeString[cnt]), "0")
-        && sameString(oregannoTypeDbValue[cnt], attr->attrVal)))
+    if (!cartVarExists(cart, oregannoTypeString[cnt]) ||
+        (cartString(cart, oregannoTypeString[cnt]) != NULL &&
+        differentString(cartString(cart, oregannoTypeString[cnt]), "0") &&
+        sameString(oregannoTypeDbValue[cnt], attr->attrVal)))
         {
         oregannoAttrFree(&attr);
         return TRUE; /* include this type */
@@ -1841,7 +1756,7 @@ int newWinStart, newWinEnd;
 int numExons = 0;
 int exonIx = 0;
 struct slRef *exonList = NULL, *ref;
-if (startsWith("chain", tg->tdb->type) || startsWith("lrg", tg->tdb->track))
+if (startsWith("chain", tg->tdb->type))
     {
     nextExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "nextExonText", "Next Block");
     prevExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "prevExonText", "Prev Block");
@@ -1873,7 +1788,7 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
     if ((exon->end - exon->start) > (newWinSize - (2 * bufferToEdge)))
 	bigExon = TRUE;
     if (next && (exon->end > winEnd))
-	/* right overhang (but left side of screen in reverse-strand-display) */
+	/* right overhang (but left side of screen in reserve-strand-display) */
 	{
 	if (exon->start < winEnd)
 	    {
@@ -1899,7 +1814,7 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
 	{
 	if (exon->end > winStart)
 	    {
-	    /* not an intron hanging over the edge. */
+	    /* not an inron hanging over the edge. */
 	    if ((lf->tallStart < winStart) && (lf->tallStart > exon->start) && (lf->tallStart < exon->end))
 		linkedFeaturesMoveWinStart(lf->tallStart, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	    else
@@ -1916,133 +1831,6 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
 	mapBoxJumpTo(hvg, x, y, w, h, tg, chromName, newWinStart, newWinEnd, mouseOverText);
 	break;
 	}
-    }
-slFreeList(&exonList);
-}
-
-void linkedFeaturesItemExonMaps(struct track *tg, struct hvGfx *hvg, void *item, double scale,
-    int y, int heightPer, int sItem, int eItem,
-    boolean lButton, boolean rButton, int buttonW)
-/* Draw mapBoxes over exons and introns labeled with exon/intron numbers */
-{
-struct linkedFeatures *lf = item;
-struct simpleFeature *exons = lf->components;
-struct simpleFeature *exon = exons;
-char *exonText, *intronText;
-int numExons = 0;
-int exonIx = 1;
-struct slRef *exonList = NULL, *ref;
-// TODO this exonText (and intronText) setting is just a made-up placeholder.
-// could add a real setting name. Maybe someday extend to exon names (LRG?) instead of just exon numbers
-if (startsWith("chain", tg->tdb->type) || startsWith("lrg", tg->tdb->track))
-    {
-    exonText   = trackDbSettingClosestToHomeOrDefault(tg->tdb, "exonText"  , "Block");
-    intronText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "intronText", "Gap"  ); // what really goes here for chain type?
-    }
-else
-    {
-    exonText   = trackDbSettingClosestToHomeOrDefault(tg->tdb, "exonText"  , "Exon"  );
-    intronText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "intronText", "Intron");
-    }
-while (exon != NULL)
-/* Make a stupid list of exons separate from what's given. */
-/* It seems like lf->components isn't necessarily sorted. */
-    {
-    refAdd(&exonList, exon);
-    exon = exon->next;
-    }
-/* Now sort it. */
-slSort(&exonList, exonSlRefCmp);
-numExons = slCount(exonList);
-boolean revStrand = (lf->orientation == -1);
-int eLast = -1;
-int s = -1;
-int e = -1;
-char mouseOverText[256];
-boolean isExon = TRUE;
-int picStart = insideX;
-int picEnd = picStart + insideWidth;
-if (lButton)
-    picStart += buttonW;
-if (rButton)
-    picEnd -= buttonW;
-for (ref = exonList; TRUE; )
-    {
-    exon = ref->val;
-    if (isExon)
-	{
-	s = exon->start;
-	e = exon->end;
-	}
-    else
-	{
-	s = eLast;
-	e = exon->start;
-	}
-    // skip exons and introns that are completely outside the window
-    if (!(s > winEnd) || (e < winStart))
-	{
-	int sClp = (s < winStart) ? winStart : s;
-	int eClp = (e > winEnd)   ? winEnd   : e;
-
-	int sx = round((sClp - winStart)*scale) + insideX;
-	int ex = round((eClp - winStart)*scale) + insideX;
-
-        // skip regions entirely outside available picture 
-        // (accounts for space taken by exon arrows buttons)
-	if (!(sx > picEnd) || (ex < picStart))
-	    {
-	    // clip it to avail pic 
-	    sx = (sx < picStart) ? picStart : sx;
-    	    ex = (ex > picEnd)   ? picEnd   : ex;
-
-	    int w = ex - sx;
-
-	    int exonIntronNumber;
-	    char *exonIntronText;
-	    int numExonIntrons = numExons;
-	    if (isExon)
-		{
-		exonIntronText = exonText;
-		}
-	    else
-		{
-		exonIntronText = intronText;
-		--numExonIntrons;  // introns are one fewer than exons
-		}
-
-	    if (!revStrand)
-		exonIntronNumber = exonIx;
-	    else
-		exonIntronNumber = numExonIntrons-exonIx+1;
-
-	    safef(mouseOverText, sizeof(mouseOverText), "%s (%d/%d)", exonIntronText, exonIntronNumber, numExonIntrons);
-
-	    if (w > 0) // draw exon or intron if width is greater than 0
-		{
-		tg->mapItem(tg, hvg, item, mouseOverText, tg->mapItemName(tg, item),
-		    sItem, eItem, sx, y, w, heightPer);
-		picStart = ex;  // prevent pileups. is this right? add 1? does it work?
-		}
-	    }
-	}
-
-    if (isExon)
-	{
-    	eLast = e;
-	ref = ref->next;
-	if (!ref)
-	    break;
-	}
-    else
-	{
-	exonIx++;
-	}
-    isExon = !isExon;
-
-    if (s > winEnd) // since the rest will also be outside the window
-	break;
-
     }
 slFreeList(&exonList);
 }
@@ -2132,7 +1920,7 @@ if (end > start)
 	    if (end > seqBaseCount)
 		end = seqBaseCount;
 	    }
-        else
+	else
 	    {
 	    end = start;
 	    start -= sizeWanted;
@@ -2185,7 +1973,7 @@ if (items)
 	    winStart = items->chromEnd - bufferToEdge;
 	    winEnd = winStart + sizeWanted;
 	    }
-        else
+	else
 	    {
 	    winEnd = items->chromEnd + bufferToEdge;
 	    winStart = winEnd - sizeWanted;
@@ -2211,11 +1999,9 @@ if (scoreColumn == NULL)
 
 struct dyString *extraWhere = newDyString(128);
 boolean and = FALSE;
-// gets trackDb 'filterBy' clause, which may filter by 'score', 'name', etc
-extraWhere = dyAddFilterByClause(cart,tdb,extraWhere,NULL,&and);
+extraWhere = dyAddFilterByClause(cart,tdb,extraWhere,NULL,&and); // gets trackDb 'filterBy' clause, which may filter by 'score', 'name', etc
 extraWhere = dyAddAllScoreFilters(cart,tdb,extraWhere,&and); // All *Filter style filters
-if (and == FALSE      // Cannot have both 'filterBy' score and 'scoreFilter'
-||  strstrNoCase(extraWhere->string,"score in ") == NULL)
+if (and == FALSE || strstrNoCase(extraWhere->string,"score in ") == NULL) // Cannot have both 'filterBy' score and 'scoreFilter'
     extraWhere = dyAddFilterAsInt(cart,tdb,extraWhere,SCORE_FILTER,"0:1000",scoreColumn,&and);
 if (sameString(extraWhere->string, ""))
     return NULL;
@@ -2224,9 +2010,8 @@ return dyStringCannibalize(&extraWhere);
 
 
 void loadLinkedFeaturesWithLoaders(struct track *tg, struct slList *(*itemLoader)(char **row),
-                                   struct linkedFeatures *(*lfFromWhatever)(struct slList *item),
-                                   char *scoreColumn, char *moreWhere,
-                                   boolean (*itemFilter)(struct slList *item))
+				   struct linkedFeatures *(*lfFromWhatever)(struct slList *item),
+				   char *scoreColumn, char *moreWhere, boolean (*itemFilter)(struct slList *item))
 /* Make a linkedFeatures loader by providing three functions: (1) a regular */
 /* item loader found in all autoSql modules, (2) a custom myStruct->linkedFeatures */
 /* translating function, and (3) a function to free the the thing loaded in (1). */
@@ -2242,12 +2027,12 @@ char extraWhere[256] ;
 if ((scoreColumn != NULL) && (cartVarExistsAnyLevel(cart, tg->tdb, FALSE, SCORE_FILTER)))
     {
     char *scoreFilterClause = getScoreFilterClause(cart, tg->tdb,scoreColumn);
-    if (scoreFilterClause != NULL)
+    if(scoreFilterClause != NULL)
         {
         if (moreWhere)
-            safef(extraWhere, sizeof(extraWhere), "%s and %s", scoreFilterClause, moreWhere);
+        safef(extraWhere, sizeof(extraWhere), "%s and %s", scoreFilterClause, moreWhere);
         else
-            safef(extraWhere, sizeof(extraWhere), "%s", scoreFilterClause);
+        safef(extraWhere, sizeof(extraWhere), "%s", scoreFilterClause);
         freeMem(scoreFilterClause);
         sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, extraWhere, &rowOffset);
         }
@@ -2503,7 +2288,7 @@ struct track *subtrack;
 for (subtrack = trackList; subtrack != NULL; subtrack = subtrack->next)
     {
     if (!isSubtrackVisible(subtrack))
-        continue;
+ 	continue;
     subtrack->ixColor = hvGfxFindRgb(hvg, &subtrack->color);
     subtrack->ixAltColor = hvGfxFindRgb(hvg, &subtrack->altColor);
     rFindSubtrackColors(hvg, subtrack->subtracks);
@@ -2567,8 +2352,9 @@ const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
 return a->start - b->start;
 }
 
-void clippedBarbs(struct hvGfx *hvg, int x, int y, int width,
-                  int barbHeight, int barbSpacing, int barbDir, Color color, boolean needDrawMiddle)
+void clippedBarbs(struct hvGfx *hvg, int x, int y,
+	int width, int barbHeight, int barbSpacing, int barbDir, Color color,
+	boolean needDrawMiddle)
 /* Draw barbed line.  Clip it to fit the window first though since
  * some barbed lines will span almost the whole chromosome, and the
  * clipping at the lower level is not efficient since we added
@@ -2635,7 +2421,7 @@ else if (tg->itemColor)
 else if (tg->colorShades)
     {
     boolean isXeno = (tg->subType == lfSubXeno)
-                                || (tg->subType == lfSubChain)
+				|| (tg->subType == lfSubChain)
                                 || startsWith("mrnaBla", tg->table);
     *retColor =  tg->colorShades[lf->grayIx+isXeno];
     *retBarbColor =  tg->colorShades[lf->grayIx];
@@ -2724,8 +2510,8 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	    /* Compensate for innerLine's lopping off of a pixel at each end: */
 	    x1 -= 1;
 	    w += 2;
-            /* If the gap in the target is more than gapFactor times the gap
-             * in the query we draw only one line, otherwise two. */
+	    /* If the gap in the target is more than gapFactor times the gap
+	     * in the query we draw only one line, otherwise two. */
 	    if (qGap == 0 || (gapFactor > 0 && tGap > gapFactor * qGap))
 		innerLine(hvg, x1, midY, w, color);
 	    else
@@ -2743,10 +2529,10 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	    }
 	if (intronGap && (qGap == 0) && (tGap >= intronGap))
 	    {
-            clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
+	    clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
 			 lf->orientation, bColor, FALSE);
 	    }
-        }
+	}
     }
 }
 
@@ -2755,8 +2541,8 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 #define CHAIN_GAP_FACTOR 5
 
 void linkedFeaturesDrawAt(struct track *tg, void *item,
-                          struct hvGfx *hvg, int xOff, int y, double scale,
-                          MgFont *font, Color color, enum trackVisibility vis)
+	struct hvGfx *hvg, int xOff, int y, double scale,
+	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single simple bed item at position. */
 {
 struct linkedFeatures *lf = item;
@@ -2831,7 +2617,7 @@ if (psl && baseColorNeedsCodons)
 else if (drawOpt > baseColorDrawOff)
     {
     struct genePred *gp = NULL;
-    if (startsWith("genePred", tg->tdb->type) || startsWith("bigGenePred", tg->tdb->type))
+    if (startsWith("genePred", tg->tdb->type))
 	gp = (struct genePred *)(lf->original);
     if (gp && gp->cdsStart != gp->cdsEnd)
         lf->codons = baseColorCodonsFromGenePred(lf, gp, (drawOpt != baseColorDrawDiffCodons), cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, CODON_NUMBERING_SUFFIX, FALSE));
@@ -2841,39 +2627,15 @@ if (psl && drawOpt == baseColorDrawCds && !zoomedToCdsColorLevel)
 
 tallStart = lf->tallStart;
 tallEnd = lf->tallEnd;
-if ((tallStart == 0 && tallEnd == 0) && lf->start != 0 && !sameWord(tg->table, "jaxQTL3"))
+if ((tallStart == 0 && tallEnd == 0) && !sameWord(tg->table, "jaxQTL3"))
     {
     // sometimes a bed <8 will get passed off as a bed 8, tsk tsk
     tallStart = lf->start;
     tallEnd   = lf->end;
     }
-int ourStart = lf->start;
-if (ourStart < winStart) 
-    ourStart = winStart;
-int ourEnd = lf->end;
-if (ourEnd > winEnd) 
-    ourEnd = winEnd;
-x1 = round((double)((int)ourStart-winStart)*scale) + xOff;
-x2 = round((double)((int)ourEnd-winStart)*scale) + xOff;
+x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
 w = x2-x1;
-if (lf->start==lf->end && w==0) // like a SNP insertion point of size=0
-    {
-    w = 1;
-    hvGfxBox(hvg, x1, y, w, heightPer, color);
-    return;
-    }
-
-// are we highlighting this feature with background highlighting
-if (lf->highlightColor && (lf->highlightMode == highlightBackground))
-    {
-    // draw the background
-    hvGfxBox(hvg, x1, y, w, heightPer, lf->highlightColor);
-
-    // draw the item slightly smaller
-    y++;
-    heightPer -=2;
-    }
-
 if (!hideLine)
     {
     innerLine(hvg, x1, midY, w, color);
@@ -2882,16 +2644,13 @@ if (!hideArrows)
     {
     if ((intronGap == 0) && (vis == tvFull || vis == tvPack))
 	{
-	if (lf->highlightColor && (lf->highlightMode == highlightOutline))
-	    clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
-                         lf->orientation, lf->highlightColor, FALSE);
-        else
-            clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
-                         lf->orientation, bColor, FALSE);
-        }
+	clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
+		 lf->orientation, bColor, FALSE);
+	}
     }
 
-components = (lf->codons && zoomedToCdsColorLevel) ? lf->codons : lf->components;
+components = (lf->codons && zoomedToCdsColorLevel) ?
+	      lf->codons : lf->components;
 for (sf = components; sf != NULL; sf = sf->next)
     {
     s = sf->start; e = sf->end;
@@ -2901,89 +2660,50 @@ for (sf = components; sf != NULL; sf = sf->next)
 	{
 	e2 = e;
 	if (e2 > tallStart) e2 = tallStart;
-	if (lf->highlightColor && (lf->highlightMode == highlightOutline))
-	    {
-	    drawScaledBoxSample(hvg, s, e2, scale, xOff, y+shortOff , shortHeight ,
-		lf->highlightColor, lf->score);
-	    drawScaledBoxSample(hvg, s, e2, scale, xOff + 1, y+shortOff + 1, shortHeight - 2,
-		color, lf->score);
-	    }
-	else
-	    {
-	    drawScaledBoxSample(hvg, s, e2, scale, xOff, y+shortOff, shortHeight,
-		color, lf->score);
-	    }
+	drawScaledBoxSample(hvg, s, e2, scale, xOff, y+shortOff, shortHeight,
+            color, lf->score);
 	s = e2;
 	}
     if (e > tallEnd)
 	{
 	s2 = s;
-        if (s2 < tallEnd) s2 = tallEnd;
-	if (lf->highlightColor && (lf->highlightMode == highlightOutline))
-	    {
-	    drawScaledBoxSample(hvg, s2, e, scale, xOff, y+shortOff, shortHeight,
-		lf->highlightColor, lf->score);
-	    drawScaledBoxSample(hvg, s2, e, scale, xOff+1, y+shortOff+1, shortHeight-2,
-		color, lf->score);
-	    }
-	else
-	    {
-	    drawScaledBoxSample(hvg, s2, e, scale, xOff, y+shortOff, shortHeight,
-		color, lf->score);
-	    }
+	if (s2 < tallEnd) s2 = tallEnd;
+	drawScaledBoxSample(hvg, s2, e, scale, xOff, y+shortOff, shortHeight,
+            color, lf->score);
 	e = s2;
 	}
     /* Draw "tall" portion of exon (or codon) */
     if (e > s)
 	{
-        if (drawOpt > baseColorDrawOff
-        &&  e + 6 >= winStart
-        &&  s - 6 <  winEnd
-        &&  (e-s <= 3 || !baseColorNeedsCodons))
-            baseColorDrawItem(tg, lf, sf->grayIx, hvg, xOff, y, scale, font, s, e, heightPer,
-                              zoomedToCodonLevel, mrnaSeq, sf, psl, drawOpt, MAXPIXELS, winStart,
-                              color);
+        if (drawOpt > baseColorDrawOff &&
+            e + 6 >= winStart && s - 6 < winEnd &&
+	    (e-s <= 3 || !baseColorNeedsCodons))
+                baseColorDrawItem(tg, lf, sf->grayIx, hvg, xOff, y,
+				  scale, font, s, e, heightPer,
+				  zoomedToCodonLevel, mrnaSeq, sf, psl,
+				  drawOpt,
+				  MAXPIXELS, winStart, color);
         else
             {
-	    if (lf->highlightColor && (lf->highlightMode == highlightOutline))
-		{
-		drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer,
-				    lf->highlightColor, lf->score );
-		drawScaledBoxSample(hvg, s, e, scale, xOff+1, y+1, heightPer-2,
-				    color, lf->score );
-		}
-	    else
-		{
-		if (tg->drawLabelInBox)
+            drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer,
+                                color, lf->score );
+
+            if (exonArrowsAlways || (exonArrows &&
+                /* Display barbs only if no intron is visible on the item.
+                   This occurs when the exon completely spans the window,
+                   or when it is the first or last intron in the feature and
+                   the following/preceding intron isn't visible */
+                (sf->start <= winStart || sf->start == lf->start) &&
+                (sf->end >= winEnd || sf->end == lf->end)))
                     {
-		    drawScaledBoxSampleLabel(hvg, s, e, scale, xOff, y, heightPer,
-                                color, font, lf->name );
-                    // exon arrows would overlap the text
-                    exonArrowsAlways = FALSE;
-                    exonArrows = FALSE;
+                    Color barbColor = hvGfxContrastingColor(hvg, color);
+                    x1 = round((double)((int)s-winStart)*scale) + xOff;
+                    x2 = round((double)((int)e-winStart)*scale) + xOff;
+                    w = x2-x1;
+                    clippedBarbs(hvg, x1+1, midY, x2-x1-2,
+		    		tl.barbHeight, tl.barbSpacing, lf->orientation,
+                                barbColor, TRUE);
                     }
-
-		else
-		    drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer,
-					color, lf->score);
-                }
-
-            /* Display barbs only if no intron is visible on the item.
-               This occurs when the exon completely spans the window,
-               or when it is the first or last intron in the feature and
-               the following/preceding intron isn't visible */
-            if (exonArrowsAlways
-            || (  exonArrows
-               && (sf->start <= winStart || sf->start == lf->start)
-               && (sf->end   >= winEnd   || sf->end   == lf->end)))
-                {
-                Color barbColor = hvGfxContrastingColor(hvg, color);
-                x1 = round((double)((int)s-winStart)*scale) + xOff;
-                x2 = round((double)((int)e-winStart)*scale) + xOff;
-                w = x2-x1;
-                clippedBarbs(hvg, x1+1, midY, x2-x1-2, tl.barbHeight, tl.barbSpacing,
-                             lf->orientation, barbColor, TRUE);
-                }
             }
 	}
     }
@@ -3007,8 +2727,8 @@ if (vis != tvDense)
 }
 
 static void lfSeriesDrawConnecter(struct linkedFeaturesSeries *lfs,
-                                  struct hvGfx *hvg, int start, int end, double scale, int xOff,
-                                  int midY, Color color, Color bColor, enum trackVisibility vis)
+	struct hvGfx *hvg, int start, int end, double scale, int xOff, int midY,
+	Color color, Color bColor, enum trackVisibility vis)
 /* Draw connection between two sets of linked features. */
 {
 if (start != -1 && !lfs->noLine)
@@ -3017,12 +2737,12 @@ if (start != -1 && !lfs->noLine)
     int x2 = round((double)((int)end-winStart)*scale) + xOff;
     int w = x2-x1;
     if (w > 0)
-        {
-        if (vis == tvFull || vis == tvPack)
-            clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
-                         lfs->orientation, bColor, TRUE);
-        hvGfxLine(hvg, x1, midY, x2, midY, color);
-        }
+	{
+	if (vis == tvFull || vis == tvPack)
+	    clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
+	  	lfs->orientation, bColor, TRUE);
+	hvGfxLine(hvg, x1, midY, x2, midY, color);
+	}
     }
 }
 
@@ -3056,10 +2776,10 @@ for (lf = lfs->features; lf != NULL; lf = lf->next)
         color, bColor, vis);
     prevEnd = lf->end;
     linkedFeaturesDrawAt(tg, lf, hvg, xOff, y, scale, font, color, vis);
-    if (tg->mapsSelf)
-        {
-        int x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
-        int x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
+    if(tg->mapsSelf)
+	{
+	int x1 = round((double)((int)lf->start-winStart)*scale) + xOff;
+	int x2 = round((double)((int)lf->end-winStart)*scale) + xOff;
 	int w = x2-x1;
 	tg->mapItem(tg, hvg, lf, lf->name, tg->mapItemName(tg, item), lf->start, lf->end, x1, y, w, tg->heightPer);
 	}
@@ -3118,14 +2838,6 @@ boolean nextItemCompatible(struct track *tg)
 return (withNextExonArrows && tg->nextExonButtonable && tg->nextPrevExon);
 }
 
-boolean exonNumberMapsCompatible(struct track *tg, enum trackVisibility vis)
-/* Check to see if we draw exon and intron maps labeling their number. */
-{
-boolean exonNumbers = sameString(trackDbSettingOrDefault(tg->tdb, "exonNumbers", "on"), "on");
-return (withExonNumbers && exonNumbers && (vis==tvFull || vis==tvPack) && (winEnd - winStart < 400000) 
- && (tg->nextPrevExon==linkedFeaturesNextPrevItem));
-}
-
 void genericMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 		    char *itemName, char *mapItemName, int start, int end,
 		    int x, int y, int width, int height)
@@ -3133,18 +2845,18 @@ void genericMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 /* case tg->mapItem isn't set to anything already. */
 {
 // Don't bother if we are imageV2 and a dense child.
-if (!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
+if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
     {
     char *directUrl = trackDbSetting(tg->tdb, "directUrl");
     boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
     mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->track,
-                      mapItemName, itemName, directUrl, withHgsid, NULL);
+                    mapItemName, itemName, directUrl, withHgsid, NULL);
     }
 }
 
-void genericDrawNextItemStuff(struct track *tg, struct hvGfx *hvg, enum trackVisibility vis,
-                              struct slList *item, double scale, int x2, int x1, int textX, int y, int heightPer,
-                              Color color, boolean doButtons)
+void genericDrawNextItemStuff(struct track *tg, struct hvGfx *hvg, enum trackVisibility vis, struct slList *item,
+                    int x2, int textX, int y, int heightPer,
+                    boolean snapLeft, Color color)
 /* After the item is drawn in genericDrawItems, draw next/prev item related */
 /* buttons and the corresponding mapboxes. */
 {
@@ -3154,87 +2866,93 @@ int e = tg->itemEnd(tg, item);
 boolean rButton = FALSE;
 boolean lButton = FALSE;
 /* Draw the actual triangles.  These are always at the edge of the window. */
-if (doButtons && (s < winStart))
+if (s < winStart)
     {
     lButton = TRUE;
     hvGfxNextItemButton(hvg, insideX + NEXT_ITEM_ARROW_BUFFER, y,
-                        heightPer-1, heightPer-1, color, MG_WHITE, FALSE);
+            heightPer-1, heightPer-1, color, MG_WHITE, FALSE);
     }
-if (doButtons && (e > winEnd))
+if (e > winEnd)
     {
     rButton = TRUE;
     hvGfxNextItemButton(hvg, insideX + insideWidth - NEXT_ITEM_ARROW_BUFFER - heightPer,
-                        y, heightPer-1, heightPer-1, color, MG_WHITE, TRUE);
+            y, heightPer-1, heightPer-1, color, MG_WHITE, TRUE);
     }
-
-if ((vis == tvFull) || (vis == tvPack))
-    {
-    /* Make the button mapboxes. */
-    if (lButton)
-        tg->nextPrevExon(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
-    if (rButton)
-        tg->nextPrevExon(tg, hvg, item, insideX + insideWidth - buttonW, y, buttonW, heightPer, TRUE);
-    }
-
-boolean compat = exonNumberMapsCompatible(tg, vis);
+/* If we're in pack, there's some crazy logic. */
 if (vis == tvPack)
     {
     int w = x2-textX;
     if (lButton)
-        { // if left-button, the label will be on far left, split out a map just for that label.
-	tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
-                    s, e, textX, y, insideX-textX, heightPer);
-	textX = insideX + buttonW; // continue on the right side of the left exon button
-	w = x2-textX;
-	}
-    if (rButton)
         {
-	w -= buttonW;
-        }
-
-    if (compat)
-	{  // draw labeled exon/intron maps with exon/intron numbers
-	linkedFeaturesItemExonMaps(tg, hvg, item, scale, y, heightPer, s, e, lButton, rButton, buttonW);
-	x2 = x1;
-	w = x2-textX;
-	}
-    // if not already mapped, pick up the label
-    if (!(lButton && compat))
-	{
         tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
-		s, e, textX, y, w, heightPer);
-	}
-    }
-
+                s, e, textX, y, insideX-textX, heightPer);
+        tg->nextPrevExon(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
+        if (rButton)
+            {
+            tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
+                s, e, insideX + buttonW, y, x2 - (insideX + 2*buttonW), heightPer);
+            tg->nextPrevExon(tg, hvg, item, x2-buttonW, y, buttonW, heightPer, TRUE);
+            }
+        else
+            tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
+                s, e, insideX + buttonW, y, x2 - (insideX + buttonW), heightPer);
+        }
+    else if (snapLeft && rButton)
+        /* This is a special case where there's a next-item button, NO */
+        /* prev-item button, AND the gene name is drawn left of the browser window. */
+        {
+        tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
+                s, e, textX, y, x2 - buttonW - textX, heightPer);
+        tg->nextPrevExon(tg, hvg, item, x2-buttonW, y, buttonW, heightPer, TRUE);
+        }
+    else if (rButton)
+        {
+        tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
+                s, e, textX, y, w - buttonW, heightPer);
+        tg->nextPrevExon(tg, hvg, item, x2-buttonW, y, buttonW, heightPer, TRUE);
+        }
+    else
+        tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
+                s, e, textX, y, w, heightPer);
+        }
+/* Full mode is a little easier to deal with. */
 else if (vis == tvFull)
     {
     int geneMapBoxX = insideX;
     int geneMapBoxW = insideWidth;
-    /* Draw the first gene label mapbox, in the left margin. */
+    /* Draw the first gene mapbox, in the left margin. */
 #ifndef IMAGEv2_NO_LEFTLABEL_ON_FULL
     int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
 #ifdef IMAGEv2_SHORT_MAPITEMS
     char *name = tg->itemName(tg, item);
     if (*name != '\0')
         tg->mapItem(tg, hvg, item, name, tg->mapItemName(tg, item),
-                    s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
+            s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
 #else///ndef IMAGEv2_SHORT_MAPITEMS
     tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
-                s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
+        s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
 #endif///ndef IMAGEv2_SHORT_MAPITEMS
 #endif///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
-    /* Depending on which button mapboxes we drew, draw the remaining mapbox. */
+    /* Make the button mapboxes. */
     if (lButton)
+        tg->nextPrevExon(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
+    if (rButton)
+        tg->nextPrevExon(tg, hvg, item, insideX + insideWidth - buttonW, y, buttonW, heightPer, TRUE);
+    /* Depending on which button mapboxes we drew, draw the remaining mapbox. */
+    if (lButton && rButton)
+        {
+        geneMapBoxX += buttonW;
+        geneMapBoxW -= 2 * buttonW;
+        }
+    else if (lButton)
         {
         geneMapBoxX += buttonW;
         geneMapBoxW -= buttonW;
         }
-    if (rButton)
-	{
+    else if (rButton)
         geneMapBoxW -= buttonW;
-	}
 #ifdef IMAGEv2_SHORT_MAPITEMS
-    if (x2 > 0)
+    if(x2 > 0)
         {
         geneMapBoxX = textX;
         geneMapBoxW = x2-geneMapBoxX;
@@ -3245,33 +2963,10 @@ else if (vis == tvFull)
             }
         }
 #endif//def IMAGEv2_SHORT_MAPITEMS
-    if (compat)
-	{  // draw labeled exon/intron maps with exon/intron numbers
-	linkedFeaturesItemExonMaps(tg, hvg, item, scale, y, heightPer, s, e, lButton, rButton, buttonW);
-	if (!lButton)
-	    {
-	    int w = x1 - geneMapBoxX;
-	    if (w > 0)
-		tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
-		    s, e, geneMapBoxX, y, w, heightPer);
-	    }
-	if (!rButton)
-	    {
-	    int w = geneMapBoxX + geneMapBoxW - x2;
-	    if (w > 0)
-		tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
-		    s, e, x2, y, w, heightPer);
-	    }
-	}
-    else
-	{
-	tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
-		    s, e, geneMapBoxX, y, geneMapBoxW, heightPer);
-	}
+    tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
+        s, e, geneMapBoxX, y, geneMapBoxW, heightPer);
     }
 }
-
-
 
 static void genericDrawOverflowItem(struct track *tg, struct spaceNode *sn,
                                     struct hvGfx *hvg, int xOff, int yOff, int width,
@@ -3326,6 +3021,7 @@ static void genericDrawItem(struct track *tg, struct spaceNode *sn,
 /* draw one non-overflow item */
 {
 struct slList *item = sn->val;
+boolean withLabels = (withLeftLabels && (vis == tvPack) && !tg->drawName);
 int s = tg->itemStart(tg, item);
 int e = tg->itemEnd(tg, item);
 int sClp = (s < winStart) ? winStart : s;
@@ -3333,11 +3029,9 @@ int eClp = (e > winEnd)   ? winEnd   : e;
 int x1 = round((sClp - winStart)*scale) + xOff;
 int x2 = round((eClp - winStart)*scale) + xOff;
 int textX = x1;
+char *name = tg->itemName(tg, item);
 
-if (tg->drawLabelInBox)
-    withLeftLabels = FALSE;
-
-if (tg->itemNameColor != NULL)
+if(tg->itemNameColor != NULL)
     {
     color = tg->itemNameColor(tg, item, hvg);
     labelColor = color;
@@ -3346,12 +3040,10 @@ if (tg->itemNameColor != NULL)
     }
 int y = yOff + tg->lineHeight * sn->row;
 tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
-
-/* pgSnpDrawAt may change withIndividualLabels between items */
-boolean withLabels = (withLeftLabels && withIndividualLabels && (vis == tvPack) && !tg->drawName);
+/* pgSnp tracks may change flags between items */
+withLabels = (withLeftLabels && withIndividualLabels && (vis == tvPack) && !tg->drawName);
 if (withLabels)
     {
-    char *name = tg->itemName(tg, item);
     int nameWidth = mgFontStringWidth(font, name);
     int dotWidth = tl.nWidth/2;
     boolean snapLeft = FALSE;
@@ -3402,9 +3094,8 @@ if (!tg->mapsSelf)
     if (w > 0)
         {
         if (nextItemCompatible(tg))
-            genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, textX, y, tg->heightPer, color, TRUE);
-        else if (exonNumberMapsCompatible(tg, vis))
-            genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, textX, y, tg->heightPer, color, FALSE);
+            genericDrawNextItemStuff(tg, hvg, vis, item, x2, textX, y, tg->heightPer, FALSE,
+                                     color);
         else
             {
             tg->mapItem(tg, hvg, item, tg->itemName(tg, item),
@@ -3415,165 +3106,10 @@ if (!tg->mapsSelf)
     withIndividualLabels = TRUE; /* reset in case done with pgSnp */
 }
 
-static int normalizeCount(struct preDrawElement *el, double countFactor, 
-    double minVal, double maxVal, double sumData, double sumSquares)
-/* Normalize statistics to be based on an integer number of valid bases. 
- * Integer value is the smallest integer not less than countFactor. */
-{
-bits32 validCount = ceil(countFactor);
-double normFactor = (double)validCount/countFactor;
-
-el->count = validCount;
-el->min = minVal;
-el->max = maxVal;
-el->sumData = sumData * normFactor;
-el->sumSquares = sumSquares * normFactor;
-
-return validCount;
-}
-
-static unsigned *countOverlaps(struct track *track)
-/* Count up overlap of linked features. */
-{
-struct slList *items = track->items;
-struct slList *item;
-unsigned size = winEnd - winStart;
-unsigned *counts = needHugeZeroedMem(size * sizeof(unsigned));
-
-for (item = items; item; item = item->next)
-    {
-    unsigned start = track->itemStart(track, item);
-    unsigned end = track->itemEnd(track, item);
-    if (positiveRangeIntersection(start, end, winStart, winEnd) <= 0)
-	continue;
-
-    int x1 = max((int)start - (int)winStart, 0); 
-    int x2 = min((int)end - (int)winStart, size);
-
-    for(; x1 < x2; x1++)
-	counts[x1]++;
-    }
-
-return counts;
-}
-
-static void countsToPixelsUp(unsigned *counts, struct preDrawContainer *pre)
-/* Up sample counts into pixels. */
-{
-int preDrawZero = pre->preDrawZero;
-unsigned size = winEnd - winStart;
-double countsPerPixel = size / (double) insideWidth;
-int pixel;
-
-for (pixel=0; pixel<insideWidth; ++pixel)
-    {
-    struct preDrawElement *pe = &pre->preDraw[pixel + preDrawZero];
-    unsigned index = pixel * countsPerPixel;
-    pe->count = 1;
-    pe->min = counts[index];
-    pe->max = counts[index];
-    pe->sumData = counts[index] ;
-    pe->sumSquares = counts[index] * counts[index];
-    }
-}
-
-static void countsToPixelsDown(unsigned *counts, struct preDrawContainer *pre)
-/* Down sample counts into pixels. */
-{
-int preDrawZero = pre->preDrawZero;
-unsigned size = winEnd - winStart;
-double countsPerPixel = size / (double) insideWidth;
-int pixel;
-
-for (pixel=0; pixel<insideWidth; ++pixel)
-    {
-    struct preDrawElement *pe = &pre->preDraw[pixel + preDrawZero];
-    double startReal = pixel * countsPerPixel;
-    double endReal = (pixel + 1) * countsPerPixel;
-    unsigned startUns = startReal;
-    unsigned endUns = endReal;
-    double realCount, realSum, realSumSquares, max, min;
-
-    realCount = realSum = realSumSquares = 0.0;
-    max = min = counts[startUns];
-
-    assert(startUns != endUns);
-    unsigned ceilUns = ceil(startReal);
-
-    if (ceilUns != startUns)
-	{
-	/* need a fraction of the first count */
-	double frac = (double)ceilUns - startReal;
-	realCount = frac;
-	realSum = frac * counts[startUns];
-	realSumSquares = realSum * realSum;
-	startUns++;
-	}
-
-    // add in all the counts that are totally in this pixel
-    for(; startUns < endUns; startUns++)
-	{
-	realCount += 1.0;
-	realSum += counts[startUns];
-	realSumSquares += counts[startUns] * counts[startUns];
-	if (max < counts[startUns])
-	    max = counts[startUns];
-	if (min > counts[startUns])
-	    min = counts[startUns];
-	}
-
-    // add any fraction of the count that's only partially in this pixel
-    double lastFrac = endReal - endUns;
-    double lastSum = lastFrac * counts[endUns];
-    if (lastFrac > 0.0)
-	{
-	if (max < counts[endUns])
-	    max = counts[endUns];
-	if (min > counts[endUns])
-	    min = counts[endUns];
-	realCount += lastFrac;
-	realSum += lastSum;
-	realSumSquares += lastSum * lastSum;
-	}
-
-    pe->count = normalizeCount(pe, realCount, min, max, realSum, realSumSquares);
-    }
-}
-
-static void countsToPixels(unsigned *counts, struct preDrawContainer *pre)
-/* Sample counts into pixels. */
-{
-unsigned size = winEnd - winStart;
-double countsPerPixel = size / (double) insideWidth;
-
-if (countsPerPixel <= 1.0)
-    countsToPixelsUp(counts, pre);
-else
-    countsToPixelsDown(counts, pre);
-}
-
-static void genericDrawItemsWiggle(struct track *tg, int seqStart, int seqEnd,
-                                       struct hvGfx *hvg, int xOff, int yOff, int width,
-                                       MgFont *font, Color color, enum trackVisibility vis)
-/* Draw a list of linked features into a wiggle. */
-{
-struct preDrawContainer *pre = tg->preDrawContainer = initPreDrawContainer(insideWidth);
-unsigned *counts = countOverlaps(tg);
-
-countsToPixels(counts, pre);
-freez(&counts);
-
-hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
-tg->mapsSelf = FALSE; // some magic to turn off the link out
-wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
-	       tg->preDrawContainer, tg->preDrawContainer->preDrawZero, tg->preDrawContainer->preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
-tg->mapsSelf = TRUE;
-hvGfxUnclip(hvg);
-}
-
-static void genericDrawItemsPackSquish(struct track *tg, int seqStart, int seqEnd,
-                                       struct hvGfx *hvg, int xOff, int yOff, int width,
-                                       MgFont *font, Color color, enum trackVisibility vis)
+static void genericDrawItemsPackSquish(struct track *tg,
+        int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
 /* genericDrawItems logic for pack and squish modes */
 {
 double scale = scaleForWindow(width, seqStart, seqEnd);
@@ -3603,9 +3139,10 @@ for (sn = tg->ss->nodeList; sn != NULL; sn = sn->next)
 hvGfxUnclip(hvg);
 }
 
-static void genericDrawItemsFullDense(struct track *tg, int seqStart, int seqEnd,
-                                      struct hvGfx *hvg, int xOff, int yOff, int width,
-                                      MgFont *font, Color color, enum trackVisibility vis)
+static void genericDrawItemsFullDense(struct track *tg,
+        int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
 /* genericDrawItems logic for full and dense modes */
 {
 double scale = scaleForWindow(width, seqStart, seqEnd);
@@ -3613,7 +3150,7 @@ struct slList *item;
 int y = yOff;
 for (item = tg->items; item != NULL; item = item->next)
     {
-    if (tg->itemColor != NULL)
+    if(tg->itemColor != NULL)
         color = tg->itemColor(tg, item, hvg);
     tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
     if (vis == tvFull)
@@ -3645,65 +3182,42 @@ for (item = tg->items; item != NULL; item = item->next)
                     }
                 }
         #endif ///def IMAGEv2_NO_LEFTLABEL_ON_FULL
-            genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, x1, y, tg->heightPer, color);
+            genericDrawNextItemStuff(tg, hvg, vis, item, x2, x1, y, tg->heightPer, FALSE,color);
             }
 #else//ifndef IMAGEv2_SHORT_MAPITEMS
-            {
-            // Convert start/end coordinates to pix
-            int s = tg->itemStart(tg, item);
-            int e = tg->itemEnd(tg, item);
-            int sClp = (s < winStart) ? winStart : s;
-            int eClp = (e > winEnd)   ? winEnd   : e;
-            int x1 = round((sClp - winStart)*scale) + xOff;
-            int x2 = round((eClp - winStart)*scale) + xOff;
-            genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, -1, y, tg->heightPer, color, TRUE); // was -1, -1, -1
-	    }
-        else if (exonNumberMapsCompatible(tg, vis))
-            {
-            // Convert start/end coordinates to pix
-            int s = tg->itemStart(tg, item);
-            int e = tg->itemEnd(tg, item);
-            int sClp = (s < winStart) ? winStart : s;
-            int eClp = (e > winEnd)   ? winEnd   : e;
-            int x1 = round((sClp - winStart)*scale) + xOff;
-            int x2 = round((eClp - winStart)*scale) + xOff;
-            genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, -1, y, tg->heightPer, color, FALSE); // was -1, -1, -1
-	    }
+            genericDrawNextItemStuff(tg, hvg, vis, item, -1, -1, y, tg->heightPer, FALSE,
+                                     color);
 #endif//ndef IMAGEv2_SHORT_MAPITEMS
         y += tg->lineHeight;
         }
     }
 }
 
-void genericDrawItems(struct track *tg, int seqStart, int seqEnd,
-                      struct hvGfx *hvg, int xOff, int yOff, int width,
-                      MgFont *font, Color color, enum trackVisibility vis)
+void genericDrawItems(struct track *tg,
+        int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
 /* Draw generic item list.  Features must be fixed height
  * and tg->drawItemAt has to be filled in. */
 {
 if (tg->mapItem == NULL)
     tg->mapItem = genericMapItem;
-if (vis != tvDense &&  baseColorCanDraw(tg))
+if (vis != tvDense && (! bedItemRgb(tg->tdb)) && baseColorCanDraw(tg))
     baseColorInitTrack(hvg, tg);
-boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
-if (doWiggle)
-    {
-    genericDrawItemsWiggle(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
-				   font, color, vis);
-    }
-else if (vis == tvPack || vis == tvSquish)
-    {
+if (vis == tvPack || vis == tvSquish)
+{
     genericDrawItemsPackSquish(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
                                font, color, vis);
-    }
+}
 else
     genericDrawItemsFullDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
                               font, color, vis);
 }
 
-void linkedFeaturesSeriesDraw(struct track *tg, int seqStart, int seqEnd,
-                              struct hvGfx *hvg, int xOff, int yOff, int width,
-                              MgFont *font, Color color, enum trackVisibility vis)
+void linkedFeaturesSeriesDraw(struct track *tg,
+	int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
 /* Draw linked features items. */
 {
 clearColorBin();
@@ -3714,12 +3228,11 @@ genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
 }
 
 void linkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
-                        struct hvGfx *hvg, int xOff, int yOff, int width,
-                        MgFont *font, Color color, enum trackVisibility vis)
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
 /* Draw linked features items. */
 {
 clearColorBin();
-
 if (tg->items == NULL && vis == tvDense && canDrawBigBedDense(tg))
     {
     bigBedDrawDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color);
@@ -3790,7 +3303,7 @@ static void countLinkedFeaturesBaseUse(struct linkedFeatures *lf, int width, int
 {
 /* Performence-sensitive code.  Most of the overhead is in the mapping of base
  * to pixel.  This was change from using roundingScale() to doing it all in
- * floating point, with the divide taken out of the loop. To avoid adding more
+ * floating point, with the divide take out of the loop. To avoid adding more
  * overhead when rendering gaps, the translation to pixel coordinates is done
  * here, and then we save the previous block coordinates for use in marking
  * the gap. */
@@ -3851,8 +3364,8 @@ if (gapUseCounts != NULL)
 }
 
 static void linkedFeaturesDrawAverage(struct track *tg, int seqStart, int seqEnd,
-                                      struct hvGfx *hvg, int xOff, int yOff, int width,
-                                      MgFont *font, Color color, enum trackVisibility vis)
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense items doing color averaging items. */
 {
 int baseWidth = seqEnd - seqStart;
@@ -3879,9 +3392,10 @@ if (gapUseCounts != NULL)
     }
 }
 
-void linkedFeaturesAverageDense(struct track *tg, int seqStart, int seqEnd,
-                                struct hvGfx *hvg, int xOff, int yOff, int width,
-                                MgFont *font, Color color, enum trackVisibility vis)
+void linkedFeaturesAverageDense(struct track *tg,
+	int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense linked features items. */
 {
 if (vis == tvDense)
@@ -3945,28 +3459,6 @@ struct linkedFeatures *lf = item;
 return lf->end;
 }
 
-
-static void linkedFeaturesMapItem(struct track *tg, struct hvGfx *hvg, void *item,
-				char *itemName, char *mapItemName, int start, int end,
-				int x, int y, int width, int height)
-/* Draw the mouseOver (aka statusLine) text from the mouseOver field of lf
- * Fallback to itemName if there is no mouseOver field.
- * (derived from genericMapItem) */
-{
-// Don't bother if we are imageV2 and a dense child.
-if (theImgBox && tg->limitedVis == tvDense && tdbIsCompositeChild(tg->tdb))
-    return;
-
-struct linkedFeatures *lf = item;
-char *newItemName   = (isEmpty(lf->mouseOver)) ? itemName: lf->mouseOver;
-
-// copied from genericMapItem
-char *directUrl = trackDbSetting(tg->tdb, "directUrl");
-boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
-mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->track,
-                  mapItemName, newItemName, directUrl, withHgsid, NULL);
-}
-
 void linkedFeaturesMethods(struct track *tg)
 /* Fill in track methods for linked features. */
 {
@@ -3975,7 +3467,6 @@ tg->drawItems = linkedFeaturesDraw;
 tg->drawItemAt = linkedFeaturesDrawAt;
 tg->itemName = linkedFeaturesName;
 tg->mapItemName = linkedFeaturesName;
-tg->mapItem = linkedFeaturesMapItem;
 tg->totalHeight = tgFixedTotalHeightNoOverflow;
 tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = linkedFeaturesItemStart;
@@ -3983,12 +3474,6 @@ tg->itemEnd = linkedFeaturesItemEnd;
 tg->itemNameColor = linkedFeaturesNameColor;
 tg->nextPrevExon = linkedFeaturesNextPrevItem;
 tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
-
-if (trackDbSettingClosestToHomeOn(tg->tdb, "linkIdInName"))
-    {
-    tg->mapItemName = linkedFeaturesNameField1;
-    tg->itemName = linkedFeaturesNameNotField1;
-    }
 }
 
 int linkedFeaturesSeriesItemStart(struct track *tg, void *item)
@@ -4019,7 +3504,8 @@ tg->itemStart = linkedFeaturesSeriesItemStart;
 tg->itemEnd = linkedFeaturesSeriesItemEnd;
 }
 
-struct linkedFeatures *lfFromBedExtra(struct bed *bed, int scoreMin, int scoreMax)
+struct linkedFeatures *lfFromBedExtra(struct bed *bed, int scoreMin,
+	int scoreMax)
 /* Return a linked feature from a (full) bed. */
 {
 struct linkedFeatures *lf;
@@ -4111,12 +3597,12 @@ struct linkedFeatures *lfFromBed(struct bed *bed)
 return lfFromBedExtra(bed, 0, 1000);
 }
 
-struct linkedFeaturesSeries *lfsFromBed(struct lfs *lfsbed, char *tdbPslTable)
+struct linkedFeaturesSeries *lfsFromBed(struct lfs *lfsbed)
 /* Create linked feature series object from database bed record */
 {
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
-char **row, rest[64];
+char **row, rest[32];
 int rowOffset, i;
 struct linkedFeaturesSeries *lfs;
 struct linkedFeatures *lfList = NULL, *lf;
@@ -4131,18 +3617,12 @@ lfs->orientation = orientFromChar(lfsbed->strand[0]);
 for (i = 0; i < lfsbed->lfCount; i++)
     {
     AllocVar(lf);
-    sqlSafefFrag(rest, sizeof rest, "qName = '%s'", lfsbed->lfNames[i]);
-    
-    // use psl table from trackDb, if specified there
-    char *pslTable = lfsbed->pslTable;
-    if (tdbPslTable != NULL)
-        pslTable = tdbPslTable;
-
-    sr = hRangeQuery(conn, pslTable, lfsbed->chrom, lfsbed->lfStarts[i],
-                     lfsbed->lfStarts[i] + lfsbed->lfSizes[i], rest, &rowOffset);
+    sprintf(rest, "qName = '%s'", lfsbed->lfNames[i]);
+    sr = hRangeQuery(conn, lfsbed->pslTable, lfsbed->chrom,
+    	lfsbed->lfStarts[i], lfsbed->lfStarts[i] + lfsbed->lfSizes[i], rest, &rowOffset);
     if ((row = sqlNextRow(sr)) != NULL)
-        {
-        struct psl *psl = pslLoad(row+rowOffset);
+	{
+	struct psl *psl = pslLoad(row+rowOffset);
 	lf = lfFromPsl(psl, FALSE);
 	slAddHead(&lfList, lf);
 	}
@@ -4155,11 +3635,9 @@ lfs->features = lfList;
 return lfs;
 }
 
-static struct linkedFeaturesSeries *lfsFromBedsInRange(struct track *tg, int start, int end,
-                                                       char *chromName)
+static struct linkedFeaturesSeries *lfsFromBedsInRange(char *table, int start, int end, char *chromName)
 /* Return linked features from range of table. */
 {
-char *table = tg->track;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row;
@@ -4167,10 +3645,8 @@ int rowOffset;
 struct linkedFeaturesSeries *lfsList = NULL, *lfs;
 
 char optionScoreStr[256]; /* Option -  score filter */
-// Special case where getScoreFilterClause is too much trouble
-safef(optionScoreStr, sizeof(optionScoreStr), "%s.%s", table,SCORE_FILTER);
-// Special case where CloserToHome not appropriate
-int optionScore = cartUsualInt(cart, optionScoreStr, 0);
+safef(optionScoreStr, sizeof(optionScoreStr), "%s.%s", table,SCORE_FILTER); // Special case where getScoreFilterClause is too much trouble
+int optionScore = cartUsualInt(cart, optionScoreStr, 0);   // Special case where CloserToHome not appropriate
 if (optionScore > 0)
     {
     char extraWhere[128];
@@ -4183,12 +3659,10 @@ else
     sr = hOrderedRangeQuery(conn, table, chromName, start, end,
 	NULL, &rowOffset);
     }
-
-char *pslTable = trackDbSetting(tg->tdb, "lfPslTable");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct lfs *lfsbed = lfsLoad(row+rowOffset);
-    lfs = lfsFromBed(lfsbed, pslTable);
+    lfs = lfsFromBed(lfsbed);
     slAddHead(&lfsList, lfs);
     lfsFree(&lfsbed);
     }
@@ -4202,7 +3676,7 @@ return lfsList;
 void loadBacEndPairs(struct track *tg)
 /* Load up bac end pairs from table into track items. */
 {
-tg->items = lfsFromBedsInRange(tg, winStart, winEnd, chromName);
+tg->items = lfsFromBedsInRange("bacEndPairs", winStart, winEnd, chromName);
 }
 
 static Color dbRIPColor(struct track *tg, void *item, struct hvGfx *hvg)
@@ -4249,7 +3723,7 @@ if (differentString(option,ETHNIC_GROUP_DEFAULT))
 
 if (needJoin)
     {
-    sqlDyStringPrintf(query, "select %s.* from %s,polyGenotype where ",
+    dyStringPrintf(query, "select %s.* from %s,polyGenotype where ",
 	tg->table, tg->table);
 
     if (differentString(option,ETHNIC_GROUP_DEFAULT))
@@ -4258,13 +3732,13 @@ if (needJoin)
 	    cartCgiUsualString(cart, ETHNIC_GROUP_EXCINC, ETHNIC_NOT_DEFAULT);
 	if (sameWord(optionNot,"include"))
 	    {
-	    sqlDyStringPrintf(query, "%s.name=polyGenotype.name and "
+	    dyStringPrintf(query, "%s.name=polyGenotype.name and "
 		"polyGenotype.ethnicGroup=\"%s\" and ",
 		    tg->table, option);
 	    }
 	    else
 	    {
-	    sqlDyStringPrintf(query, "%s.name=polyGenotype.name and "
+	    dyStringPrintf(query, "%s.name=polyGenotype.name and "
 		"polyGenotype.ethnicGroup!=\"%s\" and ",
 		    tg->table, option);
 	    }
@@ -4279,18 +3753,18 @@ if (needJoin)
     }
 else
     {
-    sqlDyStringPrintf(query, "select * from %s where ", tg->table);
+    dyStringPrintf(query, "select * from %s where ", tg->table);
     }
 
 hAddBinToQuery(winStart, winEnd, query);
-sqlDyStringPrintf(query,
+dyStringPrintf(query,
     "chrom=\"%s\" AND chromStart<%d AND chromEnd>%d ",
     chromName, winEnd, winStart);
 
 option = cartCgiUsualString(cart, GENO_REGION, GENO_REGION_DEFAULT);
 
 if (differentString(option,GENO_REGION_DEFAULT))
-    sqlDyStringPrintf(query, " and genoRegion=\"%s\"", option);
+    dyStringPrintf(query, " and genoRegion=\"%s\"", option);
 
 option = cartCgiUsualString(cart, POLY_SOURCE, POLY_SOURCE_DEFAULT);
 if (differentString(option,POLY_SOURCE_DEFAULT))
@@ -4302,12 +3776,12 @@ if (differentString(option,POLY_SOURCE_DEFAULT))
 	which = ucsc;
     else
 	which = other;
-    sqlDyStringPrintf(query, " and polySource=\"%s\"", which);
+    dyStringPrintf(query, " and polySource=\"%s\"", which);
     }
 
 option = cartCgiUsualString(cart, POLY_SUBFAMILY, POLY_SUBFAMILY_DEFAULT);
 if (differentString(option,POLY_SUBFAMILY_DEFAULT))
-    sqlDyStringPrintf(query, " and polySubfamily=\"%s\"", option);
+    dyStringPrintf(query, " and polySubfamily=\"%s\"", option);
 
 option = cartCgiUsualString(cart, dbRIP_DISEASE, DISEASE_DEFAULT);
 if (differentString(option,DISEASE_DEFAULT))
@@ -4318,7 +3792,7 @@ if (differentString(option,DISEASE_DEFAULT))
 	dyStringPrintf(query, " and disease!=\"NA\"");
     }
 
-sqlDyStringPrintf(query, " group by %s.name", tg->table);
+dyStringPrintf(query, " group by %s.name", tg->table);
 
 sr = sqlGetResult(conn, dyStringCannibalize(&query));
 rowOffset=1;
@@ -4335,8 +3809,8 @@ tg->items = itemList;
 }
 
 static void atomDrawSimpleAt(struct track *tg, void *item,
-                             struct hvGfx *hvg, int xOff, int y,
-                             double scale, MgFont *font, Color color, enum trackVisibility vis);
+	struct hvGfx *hvg, int xOff, int y,
+	double scale, MgFont *font, Color color, enum trackVisibility vis);
 
 int atomTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Most fixed height track groups will use this to figure out the height
@@ -4377,6 +3851,116 @@ linkedFeaturesSeriesMethods(tg);
 tg->loadItems = loadBacEndPairs;
 }
 
+
+void loadBacEndPairsBad(struct track *tg)
+/* Load up fosmid end pairs from table into track items. */
+{
+tg->items = lfsFromBedsInRange("bacEndPairsBad", winStart, winEnd, chromName);
+}
+
+
+void bacEndPairsBadMethods(struct track *tg)
+/* Fill in track methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadBacEndPairsBad;
+}
+
+void loadBacEndPairsLong(struct track *tg)
+/* Load up BAC end pairs from table into track items. */
+{
+tg->items = lfsFromBedsInRange("bacEndPairsLong", winStart, winEnd, chromName);
+}
+
+
+void bacEndPairsLongMethods(struct track *tg)
+/* Fill in track methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadBacEndPairsLong;
+}
+
+void loadBacEndSingles(struct track *tg)
+/* Load up BAC end pairs from table into track items. */
+{
+tg->items = lfsFromBedsInRange("bacEndSingles", winStart, winEnd, chromName);
+}
+
+void bacEndSinglesMethods(struct track *tg)
+/* Fill in track methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadBacEndSingles;
+}
+
+void loadFosEndPairs(struct track *tg)
+/* Load up fosmid end pairs from table into track items. */
+{
+tg->items = lfsFromBedsInRange("fosEndPairs", winStart, winEnd, chromName);
+}
+
+void fosEndPairsMethods(struct track *tg)
+/* Fill in track methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadFosEndPairs;
+}
+
+void loadFosEndPairsBad(struct track *tg)
+/* Load up fosmid end pairs from table into track items. */
+{
+tg->items = lfsFromBedsInRange("fosEndPairsBad", winStart, winEnd, chromName);
+}
+
+
+void fosEndPairsBadMethods(struct track *tg)
+/* Fill in track methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadFosEndPairsBad;
+}
+
+void loadFosEndPairsLong(struct track *tg)
+/* Load up fosmid end pairs from table into track items. */
+{
+tg->items = lfsFromBedsInRange("fosEndPairsLong", winStart, winEnd, chromName);
+}
+
+
+void fosEndPairsLongMethods(struct track *tg)
+/* Fill in track methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadFosEndPairsLong;
+}
+
+void loadEarlyRep(struct track *tg)
+/* Load up early replication cosmid  pairs from table into track items. */
+{
+tg->items = lfsFromBedsInRange("earlyRep", winStart, winEnd, chromName);
+}
+
+void earlyRepMethods(struct track *tg)
+/* Fill in track methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadEarlyRep;
+}
+
+
+void loadEarlyRepBad(struct track *tg)
+/* Load up bad early replication pairs from table into track items. */
+{
+tg->items = lfsFromBedsInRange("earlyRepBad", winStart, winEnd, chromName);
+}
+
+
+void earlyRepBadMethods(struct track *tg)
+/* Fill in track methods for linked features.series */
+{
+linkedFeaturesSeriesMethods(tg);
+tg->loadItems = loadEarlyRepBad;
+}
 #endif /* GBROWSE */
 
 
@@ -4520,49 +4104,16 @@ slReverse(&sfList);
 return sfList;
 }
 
-struct linkedFeatures *linkedFeaturesFromGenePred(struct track *tg, struct genePred *gp, boolean extra)
-/* construct a linkedFeatures object from a genePred */
-{
-int grayIx = maxShade;
-struct linkedFeatures *lf;
-AllocVar(lf);
-lf->grayIx = grayIx;
-lf->name = cloneString(gp->name);
-if (extra && gp->name2)
-    lf->extra = cloneString(gp->name2);
-lf->orientation = orientFromChar(gp->strand[0]);
-
-lf->components = sfFromGenePred(gp, grayIx);
-
-if (tg->itemAttrTbl != NULL)
-    lf->itemAttr = itemAttrTblGet(tg->itemAttrTbl, gp->name,
-                                  gp->chrom, gp->txStart, gp->txEnd);
-
-linkedFeaturesBoundsAndGrays(lf);
-
-if (gp->cdsStart >= gp->cdsEnd)
-    {
-    lf->tallStart = gp->txEnd;
-    lf->tallEnd = gp->txEnd;
-    }
-else
-    {
-    lf->tallStart = gp->cdsStart;
-    lf->tallEnd = gp->cdsEnd;
-    }
-// Don't free gp; it might be used in the drawing phase by baseColor code.
-lf->original = gp;
-return lf;
-}
 
 static struct linkedFeatures *connectedLfFromGenePredInRangeExtra(
-                                        struct track *tg, struct sqlConnection *conn, char *table,
-                                        char *chrom, int start, int end, boolean extra)
+        struct track *tg, struct sqlConnection *conn, char *table,
+	char *chrom, int start, int end, boolean extra)
 /* Return linked features from range of a gene prediction table after
  * we have already connected to database. Optinally Set lf extra to
  * gene pred name2, to display gene name instead of transcript ID.*/
 {
-struct linkedFeatures *lfList = NULL;
+struct linkedFeatures *lfList = NULL, *lf;
+int grayIx = maxShade;
 struct genePredReader *gpr = NULL;
 struct genePred *gp = NULL;
 boolean nmdTrackFilter = sameString(trackDbSettingOrDefault(tg->tdb, "nmdFilter", "off"), "on");
@@ -4585,14 +4136,39 @@ char *noncodingClause = (hideNoncoding ? "cdsStart != cdsEnd" : NULL);
 gpr = genePredReaderRangeQuery(conn, table, chrom, start, end, noncodingClause);
 while ((gp = genePredReaderNext(gpr)) != NULL)
     {
-    if (doNmd && genePredNmdTarget(gp))
+    if(doNmd && genePredNmdTarget(gp))
 	{
 	genePredFree(&gp);
+	continue;
 	}
+    AllocVar(lf);
+    lf->grayIx = grayIx;
+    lf->name = cloneString(gp->name);
+    if (extra && gp->name2)
+        lf->extra = cloneString(gp->name2);
+    lf->orientation = orientFromChar(gp->strand[0]);
+
+    lf->components = sfFromGenePred(gp, grayIx);
+
+    if (tg->itemAttrTbl != NULL)
+        lf->itemAttr = itemAttrTblGet(tg->itemAttrTbl, gp->name,
+                                      gp->chrom, gp->txStart, gp->txEnd);
+
+    linkedFeaturesBoundsAndGrays(lf);
+
+    if (gp->cdsStart >= gp->cdsEnd)
+        {
+        lf->tallStart = gp->txEnd;
+        lf->tallEnd = gp->txEnd;
+        }
     else
         {
-        slAddHead(&lfList, linkedFeaturesFromGenePred(tg, gp, extra));
+        lf->tallStart = gp->cdsStart;
+        lf->tallEnd = gp->cdsEnd;
         }
+    // Don't free gp; it might be used in the drawing phase by baseColor code.
+    lf->original = gp;
+    slAddHead(&lfList, lf);
     }
 slReverse(&lfList);
 genePredReaderFree(&gpr);
@@ -4603,8 +4179,9 @@ if (tg->visibility != tvDense)
 return lfList;
 }
 
-struct linkedFeatures *connectedLfFromGenePredInRange(struct track *tg, struct sqlConnection *conn,
-                                                      char *table, char *chrom, int start, int end)
+struct linkedFeatures *connectedLfFromGenePredInRange(
+        struct track *tg, struct sqlConnection *conn, char *table,
+	char *chrom, int start, int end)
 /* Return linked features from range of a gene prediction table after
  * we have already connected to database. */
 {
@@ -4613,7 +4190,7 @@ return connectedLfFromGenePredInRangeExtra(tg, conn, table, chrom,
 }
 
 struct linkedFeatures *lfFromGenePredInRange(struct track *tg, char *table,
-                                             char *chrom, int start, int end)
+	char *chrom, int start, int end)
 /* Return linked features from range of a gene prediction table. */
 {
 struct linkedFeatures *lfList = NULL;
@@ -4667,9 +4244,83 @@ if (clause == NULL)
 
 // don't care about a column value here, just if it exists, so get a constant
 char *nameCol = trackDbSettingOrDefault(tg->tdb, GENEPRED_CLASS_NAME_COLUMN, GENEPRED_CLASS_NAME_COLUMN_DEFAULT);
-struct dyString *dyQuery = sqlDyStringCreate("select 1 from %s where %s = \"%s\" and ", classTable, nameCol, lf->name);
+struct dyString *dyQuery = dyStringCreate("select 1 from %s where %s = \"%s\" and ", classTable, nameCol, lf->name);
 dyStringAppend(dyQuery, clause);
 freeMem(clause);
+return dyQuery;
+}
+
+static void gencodeFilterByMethodChoice(struct dyString *dyClause, char *choice)
+/* add compared for a choice for special case of GENCODE transcript method. */
+{
+if (sameString(choice, "manual"))
+    dyStringAppend(dyClause, "(transSrc.source like \"%havana%\")");
+else if (sameString(choice, "automatic"))
+    dyStringAppend(dyClause, "(transSrc.source like \"%ensembl%\")");
+else if (sameString(choice, "manual_only"))
+    dyStringAppend(dyClause, "(transSrc.source like \"%havana%\") and (transSrc.source not like \"%ensembl%\")");
+else if (sameString(choice, "automatic_only"))
+    dyStringAppend(dyClause, "(transSrc.source like \"%ensembl%\") and (transSrc.source not like \"%havana%\")");
+else
+    errAbort("BUG: filterByMethodChoice missing choice: \"%s\"", choice);
+}
+
+static char *gencodeFilterByMethod(filterBy_t *filterBy)
+{
+if ((filterBy->slChoices == NULL) || (slNameInList(filterBy->slChoices,"All")))
+    return NULL;
+
+struct dyString *clause = newDyString(256);
+struct slName *slChoice = NULL;
+dyStringAppend(clause, "(transSrc.transcriptId = attrs.transcriptId) and ");
+boolean first = TRUE;
+for(slChoice = filterBy->slChoices; slChoice != NULL; slChoice = slChoice->next)
+    {
+    if(!first)
+        dyStringPrintf(clause, " or ");
+    first = FALSE;
+    gencodeFilterByMethodChoice(clause, slChoice->name);
+    }
+return dyStringCannibalize(&clause);
+}
+
+static void gencodeFilterBy(filterBy_t *filterBy, struct dyString *where)
+/* handle adding on filterBy clause for gencode */
+{
+char *clause;
+if (sameString(filterBy->column, "transcriptMethod"))
+    clause = gencodeFilterByMethod(filterBy);
+else
+    clause = filterByClause(filterBy);
+if (clause != NULL)
+    {
+    dyStringPrintf(where, " and (%s)", clause);
+    freeMem(clause);
+    }
+}
+
+static struct dyString *gencodeFilterBySetQueryWhere(struct track *tg, filterBy_t *filterBySet)
+/* build where clause based on filters, or NULL if none */
+{
+struct dyString *where = dyStringNew(0);
+filterBy_t *filterBy;
+for (filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
+    gencodeFilterBy(filterBy, where);
+if (dyStringLen(where) == 0)
+    dyStringFree(&where);
+return where;
+}
+
+static struct dyString *gencodeFilterBySetQuery(struct track *tg, filterBy_t *filterBySet, struct linkedFeatures *lf)
+/* construct the query for GENCODE filterBySet */
+{
+struct dyString *where = gencodeFilterBySetQueryWhere(tg, filterBySet);
+if (where == NULL)
+    return NULL;
+char *attrsTbl = trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeAttrs");
+char *srcTbl = trackDbRequiredSetting(tg->tdb, "wgEncodeGencodeTranscriptSource");
+struct dyString *dyQuery = dyStringCreate("select 1 from %s attrs, %s transSrc where (attrs.transcriptId = \"%s\") %s", attrsTbl, srcTbl, lf->name, where->string);
+dyStringFree(&where);
 return dyQuery;
 }
 
@@ -4677,9 +4328,20 @@ static boolean genePredClassFilterBySet(struct track *tg, char *classTable,
                                         filterBy_t *filterBySet, struct linkedFeatures *lf)
 /* Check if an item passes a filterBySet filter  */
 {
-struct dyString *dyQuery = genePredClassFilterBySetQuery(tg, classTable, filterBySet, lf);
+struct dyString *dyQuery = NULL;
+if (trackDbSetting(tg->tdb, "wgEncodeGencodeVersion") != NULL)
+    {
+    if (startsWith("wgEncodeGencodeBasic", tg->tdb->track)
+        || startsWith("wgEncodeGencodeComp", tg->tdb->track)
+        || startsWith("wgEncodeGencode2wayConsPseudo", tg->tdb->track)
+        || startsWith("wgEncodeGencodePseudoGene", tg->tdb->track))
+        dyQuery = gencodeFilterBySetQuery(tg, filterBySet, lf);
+    }
+else
+    dyQuery = genePredClassFilterBySetQuery(tg, classTable, filterBySet, lf);
 if (dyQuery == NULL)
     return TRUE;
+
 struct sqlConnection *conn = hAllocConn(database);
 boolean passesThroughFilter = sqlQuickNum(conn, dyQuery->string);
 dyStringFree(&dyQuery);
@@ -4699,7 +4361,7 @@ if (ct == acemblyAll)
     return TRUE;
 struct sqlConnection *conn = hAllocConn(database);
 char query[1024];
-sqlSafef(query, sizeof(query),
+safef(query, sizeof(query),
       "select 1 from %s where (name = \"%s\") and (class = \"%s\")", classTable, lf->name, classType);
 boolean passesThroughFilter = sqlQuickNum(conn, query);
 hFreeConn(&conn);
@@ -4732,7 +4394,7 @@ return TRUE;
 
 void loadGenePredWithName2(struct track *tg)
 /* Convert gene pred in window to linked feature. Include alternate name
- * in "extra" field (usually gene name) */
+ * in "extra" field (usually gene name)*/
 {
 struct sqlConnection *conn = hAllocConn(database);
 tg->items = connectedLfFromGenePredInRangeExtra(tg, conn, tg->table,
@@ -4757,7 +4419,7 @@ if (hTableExists(database, "knownMore"))
 
     for (lf = lfList; lf != NULL; lf = lf->next)
 	{
-	sqlSafef(query, sizeof query, "select * from knownMore where transId = '%s'", lf->name);
+	sprintf(query, "select * from knownMore where transId = '%s'", lf->name);
 	sr = sqlGetResult(conn, query);
 	if ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -4775,7 +4437,7 @@ else if (hTableExists(database, "knownInfo"))
     {
     for (lf = lfList; lf != NULL; lf = lf->next)
 	{
-	sqlSafef(query, sizeof query, "select name from knownInfo where transId = '%s'", lf->name);
+	sprintf(query, "select name from knownInfo where transId = '%s'", lf->name);
 	sqlQuickQuery(conn, query, lf->name, sizeof(lf->name));
 	}
     }
@@ -4824,7 +4486,7 @@ static char cat[128];
 struct linkedFeatures *lf = item;
 if (lf->extra != NULL)
     {
-    safef(cat, sizeof cat, "%s",(char *)lf->extra);
+    sprintf(cat,"%s",(char *)lf->extra);
     return cat;
     }
 else
@@ -4868,35 +4530,35 @@ if (hTableExists(database, "kgXref"))
     for (lf = lfList; lf != NULL; lf = lf->next)
 	{
         struct dyString *name = dyStringNew(SMALLDYBUF);
-        if (useGeneSymbol)
+    	if (useGeneSymbol)
             {
-            sqlSafefFrag(cond_str, sizeof cond_str, "kgID='%s'", lf->name);
+            sprintf(cond_str, "kgID='%s'", lf->name);
             geneSymbol = sqlGetField("hg17", "kgXref", "geneSymbol", cond_str);
             if (geneSymbol != NULL)
-                {
-                dyStringAppend(name, geneSymbol);
-                if (useAll) dyStringAppendC(name, '/');
-                }
+            	{
+            	dyStringAppend(name, geneSymbol);
+            	if (useAll) dyStringAppendC(name, '/');
+            	}
             }
-        if (useKgId)
+    	if (useKgId)
             {
             dyStringAppend(name, lf->name);
             if (useAll) dyStringAppendC(name, '/');
 	    }
-        if (useProtDisplayId)
+    	if (useProtDisplayId)
             {
-	    sqlSafefFrag(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
+	    safef(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
             protDisplayId = sqlGetField("hg17", "kgXref", "spDisplayID", cond_str);
             dyStringAppend(name, protDisplayId);
 	    }
         if (useMimId && hTableExists(database, "refLink"))
             {
-            sqlSafef(cond_str, sizeof(cond_str), "select cast(refLink.omimId as char) from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0", lf->name);
+            safef(cond_str, sizeof(cond_str), "select cast(refLink.omimId as char) from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0", lf->name);
             mimId = sqlQuickString(conn, cond_str);
             if (mimId)
                 dyStringAppend(name, mimId);
             }
-        lf->extra = dyStringCannibalize(&name);
+    	lf->extra = dyStringCannibalize(&name);
 	}
     }
 hFreeConn(&conn);
@@ -4917,8 +4579,8 @@ limitVisibility(tg);
 void hg17KgMethods(struct track *tg)
 /* Make track of known genes. */
 {
-tg->loadItems   = loadHg17Kg;
-tg->itemName    = hg17KgName;
+tg->loadItems 	= loadHg17Kg;
+tg->itemName 	= hg17KgName;
 tg->mapItemName = hg17KgMapName;
 }
 
@@ -4926,17 +4588,17 @@ char *h1n1SeqName(struct track *tg, void *item)
 {
 struct linkedFeatures *lf = item;
 struct sqlConnection *conn = hAllocConn(database);
-char query[256], temp[256];
+char query[256];
 char *strain = NULL;
 char *chp;
 
-sqlSafef(query, sizeof(query), "select strain from h1n1SeqXref where seqId = '%s'", lf->name);
+safef(query, sizeof(query), "select strain from h1n1SeqXref where seqId = '%s'", lf->name);
 strain = sqlQuickString(conn, query);
 chp = strstr(strain, "/2009");
 if (chp != NULL) *chp = '\0';
 hFreeConn(&conn);
-safef(temp, sizeof(temp), "%s %s", strain+2, lf->name);
-return(strdup(temp));
+safef(query, sizeof(query), "%s %s", strain+2, lf->name);
+return(strdup(query));
 }
 
 char *knownGeneName(struct track *tg, void *item)
@@ -5019,23 +4681,23 @@ if (hTableExists(database, "kgXref"))
         struct knownGenesExtra *kgE;
         AllocVar(kgE);
         labelStarted = FALSE; /* reset between items */
-        if (useGeneSymbol)
+    	if (useGeneSymbol)
             {
-            sqlSafefFrag(cond_str, sizeof cond_str,"kgID='%s'", lf->name);
+            sprintf(cond_str, "kgID='%s'", lf->name);
             geneSymbol = sqlGetField(database, "kgXref", "geneSymbol", cond_str);
             if (geneSymbol != NULL)
-                {
-                dyStringAppend(name, geneSymbol);
-                }
+            	{
+            	dyStringAppend(name, geneSymbol);
+            	}
             labelStarted = TRUE;
             }
-        if (useKgId)
+    	if (useKgId)
             {
             if (labelStarted) dyStringAppendC(name, '/');
             else labelStarted = TRUE;
             dyStringAppend(name, lf->name);
 	    }
-        if (useProtDisplayId)
+    	if (useProtDisplayId)
             {
             if (labelStarted) dyStringAppendC(name, '/');
             else labelStarted = TRUE;
@@ -5045,7 +4707,7 @@ if (hTableExists(database, "kgXref"))
                 }
             else
                 {
-	        sqlSafefFrag(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
+	        safef(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
                 protDisplayId = sqlGetField(database, "kgXref", "spDisplayID", cond_str);
                 dyStringAppend(name, protDisplayId);
                 }
@@ -5054,7 +4716,7 @@ if (hTableExists(database, "kgXref"))
             {
             if (labelStarted) dyStringAppendC(name, '/');
             else labelStarted = TRUE;
-            sqlSafef(cond_str, sizeof(cond_str), "select cast(refLink.omimId as char) from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0", lf->name);
+            safef(cond_str, sizeof(cond_str), "select cast(refLink.omimId as char) from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0", lf->name);
             mimId = sqlQuickString(conn, cond_str);
             if (mimId)
                 dyStringAppend(name, mimId);
@@ -5115,14 +4777,14 @@ if (!showSpliceVariants)
         {
 	/* Create hash of items in canonical table in region. */
 	struct sqlConnection *conn = hAllocConn(database);
-        struct hash *hash = hashNew(0);
-        char query[512];
-        sqlSafef(query, sizeof(query),
-                "select transcript from %s where chromStart < %d && chromEnd > %d",
-                canonicalTable, winEnd, winStart);
-        struct sqlResult *sr = sqlGetResult(conn, query);
-        char **row;
-        while ((row = sqlNextRow(sr)) != NULL)
+	struct hash *hash = hashNew(0);
+	char query[512];
+	safef(query, sizeof(query),
+		"select transcript from %s where chromStart < %d && chromEnd > %d",
+		canonicalTable, winEnd, winStart);
+	struct sqlResult *sr = sqlGetResult(conn, query);
+	char **row;
+	while ((row = sqlNextRow(sr)) != NULL)
 	    hashAdd(hash, row[0], NULL);
 	sqlFreeResult(&sr);
 	hFreeConn(&conn);
@@ -5156,11 +4818,11 @@ char *refAcc = NULL;
 
 /* color scheme:
 
-        Black:          If the gene has a corresponding PDB entry
-        Dark blue:      If the gene has a corresponding SWISS-PROT entry
-                        or has a corresponding "Reviewed" or "Validated" RefSeq entry
-        Lighter blue:   If the gene has a corresponding RefSeq entry
-        Lightest blue:  Eveything else
+	Black: 		If the gene has a corresponding PDB entry
+	Dark blue: 	If the gene has a corresponding SWISS-PROT entry
+			or has a corresponding "Reviewed" or "Validated" RefSeq entry
+	Lighter blue:  	If the gene has a corresponding RefSeq entry
+	Lightest blue: 	Eveything else
 */
 
 lighter.r = (6*normal->r + 4*255) / 10;
@@ -5175,47 +4837,47 @@ lightest.b = (1*normal->b + 2*255) / 3;
 col = hvGfxFindColorIx(hvg, lightest.r, lightest.g, lightest.b);
 
 /* set color first according to RefSeq status (if there is a corresponding RefSeq) */
-sqlSafefFrag(cond_str, sizeof cond_str, "name='%s' ", lf->name);
+sprintf(cond_str, "name='%s' ", lf->name);
 refAcc = sqlGetField(database, "refGene", "name", cond_str);
 if (refAcc != NULL)
     {
     if (hTableExists(database, "refSeqStatus"))
-        {
-        sqlSafef(query, sizeof query, "select status from refSeqStatus where mrnaAcc = '%s'", refAcc);
-        sr = sqlGetResult(conn, query);
-        if ((row = sqlNextRow(sr)) != NULL)
+    	{
+    	sprintf(query, "select status from refSeqStatus where mrnaAcc = '%s'", refAcc);
+    	sr = sqlGetResult(conn, query);
+    	if ((row = sqlNextRow(sr)) != NULL)
             {
 	    if (startsWith("Reviewed", row[0]) || startsWith("Validated", row[0]))
-                {
-                /* Use the usual color */
-                col = tg->ixColor;
-                }
+	    	{
+	    	/* Use the usual color */
+	    	col = tg->ixColor;
+	    	}
 	    else
-                {
-                col = hvGfxFindColorIx(hvg, lighter.r, lighter.g, lighter.b);
-                }
+		{
+	    	col = hvGfxFindColorIx(hvg, lighter.r, lighter.g, lighter.b);
+		}
 	    }
 	sqlFreeResult(&sr);
 	}
     }
 
 /* set to dark blue if there is a corresponding Swiss-Prot protein */
-sqlSafefFrag(cond_str, sizeof cond_str, "name='%s'", lf->name);
+sprintf(cond_str, "name='%s'", (char *)(lf->name));
 proteinID= sqlGetField(database, "knownGene", "proteinID", cond_str);
 if (proteinID != NULL && protDbName != NULL)
     {
-    sqlSafefFrag(cond_str, sizeof cond_str, "displayID='%s' AND biodatabaseID=1 ", proteinID);
-    ans= sqlGetField(protDbName, "spXref3", "displayID", cond_str);
+    sprintf(cond_str, "displayID='%s' AND biodatabaseID=1 ", proteinID);
+    ans= sqlGetField(protDbName, "spXref2", "displayID", cond_str);
     if (ans != NULL)
-        {
-        col = tg->ixColor;
-        }
+    	{
+    	col = tg->ixColor;
+    	}
     }
 
 /* if a corresponding PDB entry exists, set it to black */
 if (protDbName != NULL)
     {
-    sqlSafefFrag(cond_str, sizeof cond_str, "sp='%s'", proteinID);
+    sprintf(cond_str, "sp='%s'", proteinID);
     pdbID= sqlGetField(protDbName, "pdbSP", "pdb", cond_str);
     }
 
@@ -5239,8 +4901,8 @@ if (hTableExists(database, "kgColor"))
     int colIx = MG_BLUE;
     struct sqlConnection *conn = hAllocConn(database);
     char query[512];
-    sqlSafef(query, sizeof(query), "select r,g,b from kgColor where kgID='%s'",
-          lf->name);
+    safef(query, sizeof(query), "select r,g,b from kgColor where kgID='%s'",
+    	lf->name);
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row = sqlNextRow(sr);
     if (row != NULL)
@@ -5258,16 +4920,16 @@ void knownGeneMethods(struct track *tg)
 {
 /* use loadGenePredWithName2 instead of loadKnownGene to pick up proteinID */
 tg->loadItems   = loadKnownGene;
-tg->itemName    = knownGeneName;
+tg->itemName 	= knownGeneName;
 tg->mapItemName = knownGeneMapName;
-tg->itemColor   = knownGeneColor;
+tg->itemColor 	= knownGeneColor;
 }
 
 void h1n1SeqMethods(struct track *tg)
 /* Make track of known genes. */
 {
 /* use loadGenePredWithName2 instead of loadKnownGene to pick up proteinID */
-tg->itemName    = h1n1SeqName;
+tg->itemName 	= h1n1SeqName;
 }
 
 char *superfamilyName(struct track *tg, void *item)
@@ -5281,7 +4943,7 @@ char conditionStr[256];
 struct bed *sw = item;
 
 // This is necessary because Ensembl kept changing their xref table definition
-sqlSafef(conditionStr, sizeof conditionStr, "transcript_name='%s'", sw->name);
+sprintf(conditionStr, "transcript_name='%s'", sw->name);
 if (hTableExists(database, "ensGeneXref"))
     {
     proteinName = sqlGetField(database, "ensGeneXref", "translation_name", conditionStr);
@@ -5293,25 +4955,25 @@ else if (hTableExists(database, "ensemblXref2"))
 else
     {
     if (hTableExists(database,  "ensemblXref"))
-        {
-        proteinName = sqlGetField(database, "ensemblXref", "translation_name", conditionStr);
-        }
+    	{
+    	proteinName = sqlGetField(database, "ensemblXref", "translation_name", conditionStr);
+    	}
     else
 	{
 	if (hTableExists(database,  "ensTranscript"))
 	    {
 	    proteinName = sqlGetField(database,"ensTranscript","translation_name",conditionStr);
 	    }
-        else
-            {
-            if (hTableExists(database,  "ensemblXref3"))
-                {
-                sqlSafef(conditionStr, sizeof conditionStr, "transcript='%s'", sw->name);
-                proteinName = sqlGetField(database, "ensemblXref3", "protein", conditionStr);
-                }
-            else
-                {
-                proteinName = cloneString("");
+	else
+	    {
+	    if (hTableExists(database,  "ensemblXref3"))
+    		{
+		sprintf(conditionStr, "transcript='%s'", sw->name);
+    		proteinName = sqlGetField(database, "ensemblXref3", "protein", conditionStr);
+    		}
+	    else
+	    	{
+	    	proteinName = cloneString("");
 		}
 	    }
 	}
@@ -5329,7 +4991,7 @@ static char *superfamilyNameLong(char *name)
    due to possibility of multiple domains. */
 {
 char query[256];
-sqlSafef(query, sizeof(query), "select description from sfDescription where name='%s';", name);
+safef(query, sizeof(query), "select description from sfDescription where name='%s';", name);
 return collapseRowsFromQuery(query, "; ", 100);
 }
 
@@ -5354,7 +5016,7 @@ static char *gadDiseaseClassList(char *name)
 /* Return list of diseases associated with a GAD entry */
 {
 char query[256];
-sqlSafef(query, sizeof(query),
+safef(query, sizeof(query),
       "select distinct diseaseClassCode from gadAll "
       "where geneSymbol='%s' and association = 'Y' order by diseaseClassCode",
       name);
@@ -5365,7 +5027,7 @@ static char *gadDiseaseList(char *name)
 /* Return list of diseases associated with a GAD entry */
 {
 char query[256];
-sqlSafef(query, sizeof(query),
+safef(query, sizeof(query),
       "select distinct broadPhen from gadAll where geneSymbol='%s' and association = 'Y' "
       "order by broadPhen", name);
 return collapseRowsFromQuery(query, "; ", 20);
@@ -5378,8 +5040,8 @@ bedPlusLabelLoad(tg, gadDiseaseList);
 }
 
 static void gadDrawAt(struct track *tg, void *item,
-                      struct hvGfx *hvg, int xOff, int y,
-                      double scale, MgFont *font, Color color, enum trackVisibility vis)
+	struct hvGfx *hvg, int xOff, int y,
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single GAD item at position with extra label in full mode.
  * This is almost identical to bedPlusLabelDrawAt, but uses yet another function
  * to derive extra text in full mode. */
@@ -5408,7 +5070,7 @@ static char *decipherPhenotypeList(char *name)
 /* Return list of diseases associated with a DECIPHER entry */
 {
 char query[256];
-sqlSafef(query, sizeof(query),
+safef(query, sizeof(query),
         "select distinct phenotype from decipherRaw where id='%s' order by phenotype", name);
 return collapseRowsFromQuery(query, "; ", 20);
 }
@@ -5435,40 +5097,40 @@ char *decipherId = NULL;
 	RED:	If the entry is a deletion (mean ratio < 0)
 	BLUE:	If the entry is a duplication (mean ratio > 0)
 */
-sqlSafefFrag(cond_str, sizeof(cond_str),"name='%s' ", bed->name);
+safef(cond_str, sizeof(cond_str),"name='%s' ", bed->name);
 decipherId = sqlGetField(database, "decipher", "name", cond_str);
 if (decipherId != NULL)
     {
     if (hTableExists(database, "decipherRaw"))
-        {
-        sqlSafef(query, sizeof(query),
-              "select mean_ratio > 0 from decipherRaw where id = '%s' and start=%d and end=%d",
+    	{
+    	safef(query, sizeof(query),
+	      "select mean_ratio > 0 from decipherRaw where id = '%s' and start=%d and end=%d",
 	      decipherId, bed->chromStart+1, bed->chromEnd);
 	sr = sqlGetResult(conn, query);
-        if ((row = sqlNextRow(sr)) != NULL)
+    	if ((row = sqlNextRow(sr)) != NULL)
             {
 	    if (sameWord(row[0], "1"))
-                {
-                col = MG_BLUE;
-                }
+	    	{
+	    	col = MG_BLUE;
+	    	}
 	    else
 		{
-                col = MG_RED;
+	    	col = MG_RED;
 		}
 	    }
 	sqlFreeResult(&sr);
-        /* add more logic here to check for mean_ratio = 0
-           (which is a problem to be fixed by DECIPHER */
+    	/* add more logic here to check for mean_ratio = 0
+	   (which is a problem to be fixed by DECIPHER */
 
-        sqlSafef(query, sizeof(query),
+	safef(query, sizeof(query),
 	       "select mean_ratio = 0 from decipherRaw where id = '%s'", decipherId);
-        sr = sqlGetResult(conn, query);
-        if ((row = sqlNextRow(sr)) != NULL)
+    	sr = sqlGetResult(conn, query);
+    	if ((row = sqlNextRow(sr)) != NULL)
             {
 	    if (sameWord(row[0], "1"))
-                {
-                col = MG_GRAY;
-                }
+	    	{
+	    	col = MG_GRAY;
+	    	}
 	    }
 	sqlFreeResult(&sr);
 	}
@@ -5504,14 +5166,14 @@ void gadMethods(struct track *tg)
 /* Methods for GAD track. */
 {
 tg->loadItems   = gadLoad;
-tg->drawItemAt  = gadDrawAt;
+tg->drawItemAt 	= gadDrawAt;
 tg->mapItem     = bedPlusLabelMapItem;
 tg->nextPrevExon = simpleBedNextPrevEdge;
 }
 
 void rgdQtlDrawAt(struct track *tg, void *item,
-                  struct hvGfx *hvg, int xOff, int y,
-                  double scale, MgFont *font, Color color, enum trackVisibility vis)
+	struct hvGfx *hvg, int xOff, int y,
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single rgdQtl item at position. */
 {
 struct bed *bed = item;
@@ -5544,7 +5206,7 @@ if (color)
 	char cond_str[256];
 	char linkTable[256];
 	safef(linkTable, sizeof(linkTable), "%sLink", tg->table);
-	sqlSafefFrag(cond_str, sizeof(cond_str), "name='%s'", tg->itemName(tg, bed));
+	safef(cond_str, sizeof(cond_str), "name='%s'", tg->itemName(tg, bed));
         char *s = sqlGetField(database, linkTable, "description", cond_str);
 	hFreeConn(&conn);
 	if (s == NULL)
@@ -5584,8 +5246,8 @@ else
 void rgdQtlMethods(struct track *tg)
 /* Fill in methods for rgdQtl track. */
 {
-tg->drawItemAt  = rgdQtlDrawAt;
-tg->drawName    = TRUE;
+tg->drawItemAt 	= rgdQtlDrawAt;
+tg->drawName 	= TRUE;
 }
 
 char *orgShortName(char *org)
@@ -5627,8 +5289,7 @@ struct hashEl *cacheEl = hashLookup(cache, acc);
 if (cacheEl == NULL)
     {
     char query[256];
-    sqlSafef(query, sizeof query, 
-	"select organism.name from gbCdnaInfo,organism where gbCdnaInfo.acc = '%s' and gbCdnaInfo.organism = organism.id", acc);
+    sprintf(query, "select organism.name from gbCdnaInfo,organism where gbCdnaInfo.acc = '%s' and gbCdnaInfo.organism = organism.id", acc);
     char *org = sqlQuickString(conn, query);
     if ((org != NULL) && (org[0] == '\0'))
         org = NULL;
@@ -5653,17 +5314,22 @@ static char nameBuf[256];
 char query[256], *name = NULL;
 if (hTableExists(database,  "refLink"))
     {
-    /* remove the version number if any */
-    static char accBuf[1024];
-    safecpy(accBuf, sizeof accBuf, acc);
-    chopSuffix(accBuf);
-
-    sqlSafef(query, sizeof query, "select name from refLink where mrnaAcc = '%s'", accBuf);
+    sprintf(query, "select name from refLink where mrnaAcc = '%s'", acc);
     name = sqlQuickQuery(conn, query, nameBuf, sizeof(nameBuf));
     if ((name != NULL) && (name[0] == '\0'))
         name = NULL;
     }
 return name;
+}
+
+char *gencodeGeneName(struct track *tg, void *item)
+/* Get name to use for Gencode gene item. */
+{
+struct linkedFeatures *lf = item;
+if (lf->extra != NULL)
+    return lf->extra;
+else
+    return lf->name;
 }
 
 char *getRgdGene2Symbol(struct sqlConnection *conn, char *acc)
@@ -5674,7 +5340,7 @@ static char symbolBuf[256];
 char query[256], *symbol = NULL;
 if (hTableExists(database,  "rgdGene2ToSymbol"))
     {
-    sqlSafef(query, sizeof query, "select geneSymbol from rgdGene2ToSymbol where rgdId = '%s'", acc);
+    sprintf(query, "select geneSymbol from rgdGene2ToSymbol where rgdId = '%s'", acc);
     symbol = sqlQuickQuery(conn, query, symbolBuf, sizeof(symbolBuf));
     if ((symbol != NULL) && (symbol[0] == '\0'))
         symbol = NULL;
@@ -5787,10 +5453,7 @@ char *refGeneMapName(struct track *tg, void *item)
 /* Return un-abbreviated gene name. */
 {
 struct linkedFeatures *lf = item;
-char buffer[1024];
-safecpy(buffer, sizeof buffer, lf->name);
-chopSuffix(buffer);
-return cloneString(buffer);
+return lf->name;
 }
 
 void lookupRefNames(struct track *tg)
@@ -5862,7 +5525,7 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
         {
         char *mimId;
         char query[256];
-        sqlSafef(query, sizeof(query), "select cast(omimId as char) from refLink where mrnaAcc = '%s'", lf->name);
+        safef(query, sizeof(query), "select cast(omimId as char) from refLink where mrnaAcc = '%s'", lf->name);
         mimId = sqlQuickString(conn, query);
         if (labelStarted) dyStringAppendC(name, '/');
         else labelStarted = TRUE;
@@ -5922,9 +5585,9 @@ if (blastRef != NULL)
 		if ((char *)NULL != (ptr = strchr(buffer, '.')))
 		    *ptr = 0;
 		if (!startsWith("blastDm", tg->tdb->track))
-		    sqlSafef(query, sizeof(query), "select geneId, refPos, extra1 from %s where acc = '%s'", blastRef, buffer);
+		    safef(query, sizeof(query), "select geneId, refPos, extra1 from %s where acc = '%s'", blastRef, buffer);
 		else
-		    sqlSafef(query, sizeof(query), "select geneId, refPos from %s where acc = '%s'", blastRef, buffer);
+		    safef(query, sizeof(query), "select geneId, refPos from %s where acc = '%s'", blastRef, buffer);
 		sr = sqlGetResult(conn, query);
 		if ((row = sqlNextRow(sr)) != NULL)
 		    {
@@ -6022,7 +5685,7 @@ switch(colorMode)
     case 1: /* human position */
 	acc = buffer = cloneString(lf->name);
 	blastRef = trackDbSettingOrDefault(tg->tdb, "blastRef", NULL);
-        if (blastRef != NULL)
+	if (blastRef != NULL)
 	    {
 	    char *thisDb = cloneString(blastRef);
 	    char *table;
@@ -6039,7 +5702,7 @@ switch(colorMode)
 
 		    if ((pos = strchr(acc, '.')) != NULL)
 			*pos = 0;
-		    sqlSafef(query, sizeof(query), "select refPos from %s where acc = '%s'", blastRef, buffer);
+		    safef(query, sizeof(query), "select refPos from %s where acc = '%s'", blastRef, buffer);
 		    sr = sqlGetResult(conn, query);
 		    if ((row = sqlNextRow(sr)) != NULL)
 			{
@@ -6090,7 +5753,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-sqlSafef(query, sizeof query, "select status from refSeqStatus where mrnaAcc = '%s'",
+sprintf(query, "select status from refSeqStatus where mrnaAcc = '%s'",
         name);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -6166,7 +5829,7 @@ int i = 0;
 struct sqlConnection *conn = hAllocConn(database);
 
 /* Find the biotype for this item */
-sqlSafef(condStr, sizeof condStr, "name='%s'", lf->name);
+sprintf(condStr, "name='%s'", lf->name);
 bioType = sqlGetField(database, "ensGeneNonCoding", "biotype", condStr);
 hFreeConn(&conn);
 
@@ -6214,7 +5877,7 @@ char *name;
 conn = hAllocConn(database);
 hColor = hvGfxFindColorIx(hvg, hAcaColor.r, hAcaColor.g, hAcaColor.b);
 name = tg->itemName(tg, item);
-sqlSafef(condStr, sizeof condStr, "name='%s'", name);
+sprintf(condStr, "name='%s'", name);
 bioType = sqlGetField(database, "ensGeneNonCoding", "biotype", condStr);
 
 if (sameWord(bioType, "miRNA"))    color = MG_RED;
@@ -6249,7 +5912,7 @@ int cDnaReadDirectionForMrna(struct sqlConnection *conn, char *acc)
 int direction = -1;
 char query[512];
 char buf[SMALLBUF], *s = NULL;
-sqlSafef(query, sizeof query, "select direction from gbCdnaInfo where acc='%s'", acc);
+sprintf(query, "select direction from gbCdnaInfo where acc='%s'", acc);
 if ((s = sqlQuickQuery(conn, query, buf, sizeof(buf))) != NULL)
     {
     direction = atoi(s);
@@ -6287,21 +5950,22 @@ if((lfList != NULL) && hTableExists(database,  "estOrientInfo"))
 
     /* Now lookup orientation of each est. */
     for(lf = lfList; lf != NULL; lf = lf->next)
-        {
-        estOrient = hashIntValDefault(orientHash, lf->name, 0);
-        if (estOrient < 0)
-            lf->orientation = -1 * lf->orientation;
-        else if (estOrient == 0)
+	{
+	estOrient = hashIntValDefault(orientHash, lf->name, 0);
+	if(estOrient < 0)
+	    lf->orientation = -1 * lf->orientation;
+	else if(estOrient == 0)
             lf->orientation = 0;  // not known, don't display chevrons
-        }
+	}
     hashFree(&orientHash);
     }
 hFreeConn(&conn);
 }
 
-void linkedFeaturesAverageDenseOrientEst(struct track *tg, int seqStart, int seqEnd,
-                                         struct hvGfx *hvg, int xOff, int yOff, int width,
-                                         MgFont *font, Color color, enum trackVisibility vis)
+void linkedFeaturesAverageDenseOrientEst(struct track *tg,
+	int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
 /* Draw dense linked features items. */
 {
 if(vis == tvSquish || vis == tvPack || vis == tvFull)
@@ -6398,7 +6062,7 @@ if (isNotEmpty(infoTable)  && fieldExists)
     {
     /* use the value for infoCol defined above */
     infoCol = dyStringCannibalize(&dy2);
-    sqlSafef(query, sizeof query, "select %s from %s where transcriptId = '%s'",
+    sprintf(query, "select %s from %s where transcriptId = '%s'",
 	     infoCol, infoTable, lf->name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
@@ -6412,7 +6076,7 @@ if (isNotEmpty(infoTable)  && fieldExists)
 	    /* Use the usual color (dark blue) */
 	    }
 	else if (sameWord("Putative", row[0]) ||
-                 sameWord("Ig_Segment", row[0]) ||
+		 sameWord("Ig_Segment", row[0]) ||
                  sameWord("PUTATIVE", row[0]))
 	    {
 	    lighter.r = (6*normal->r + 4*255) / 10;
@@ -6457,7 +6121,7 @@ if (hTableExists(database,  infoTable))
     char buf[SMALLBUF];
     if (ptr != NULL)
 	*ptr = 0;
-    sqlSafef(query, sizeof(query),
+    safef(query, sizeof(query),
 	  "select symbol from %s where bdgpName = '%s';", infoTable, name);
     symbol = sqlQuickQuery(conn, query, buf, sizeof(buf));
     hFreeConn(&conn);
@@ -6492,7 +6156,7 @@ if (isNotEmpty(infoTable) && hTableExists(database,  infoTable))
     char *symbol = NULL;
     char query[256];
     char buf[SMALLBUF];
-    sqlSafef(query, sizeof(query),
+    safef(query, sizeof(query),
 	  "select symbol from %s where name = '%s';", infoTable, name);
     symbol = sqlQuickQuery(conn, query, buf, sizeof(buf));
     hFreeConn(&conn);
@@ -6520,7 +6184,7 @@ char *name = lf->name;
 char *symbol = NULL;
 char query[256];
 char buf[SMALLBUF];
-sqlSafef(query, sizeof(query),
+safef(query, sizeof(query),
       "select value from sgdToName where name = '%s'", name);
 symbol = sqlQuickQuery(conn, query, buf, sizeof(buf));
 hFreeConn(&conn);
@@ -6563,15 +6227,15 @@ if (cartMinGrayLevel != scoreMinGrayLevel)
     float realScore = (float)(bed->score - scoreMin) / (scoreMax - scoreMin);
     bed->score = newScoreMin + (realScore * (scoreMax - newScoreMin)) + 0.5;
     }
-else if (scoreMin != 0 && scoreMax == 1000) // Changes gray level even when
-    {                                       // UI does not allow selecting it.
+else if(scoreMin != 0 && scoreMax == 1000) // Changes gray level even when UI does not allow selecting it.
+    {
     float realScore = (float)(bed->score) / 1000;
     bed->score = scoreMin + (realScore * (scoreMax - scoreMin)) + 0.5;
     }
 }
 
 void bedLoadItemByQuery(struct track *tg, char *table,
-                        char *query, ItemLoader loader)
+			char *query, ItemLoader loader)
 /* Generic tg->item loader. If query is NULL use generic
  hRangeQuery(). */
 {
@@ -6606,8 +6270,8 @@ bedLoadItemByQuery(tg, table, NULL, loader);
 
 
 void atomDrawSimpleAt(struct track *tg, void *item,
-                      struct hvGfx *hvg, int xOff, int y,
-                      double scale, MgFont *font, Color color, enum trackVisibility vis)
+	struct hvGfx *hvg, int xOff, int y,
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single simple bed item at position. */
 {
 struct bed *bed = item;
@@ -6671,8 +6335,8 @@ if (w < 1)
 
 #ifndef GBROWSE
 static void logoDrawSimple(struct track *tg, int seqStart, int seqEnd,
-                           struct hvGfx *hvg, int xOff, int yOff, int width,
-                           MgFont *font, Color color, enum trackVisibility vis)
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
 /* Draw sequence logo */
 {
 struct dnaMotif *motif;
@@ -6816,13 +6480,13 @@ char *isochoreName(struct track *tg, void *item)
 {
 struct isochores *iso = item;
 static char buf[SMALLBUF];
-safef(buf, sizeof buf, "%3.1f%% GC", 0.1*iso->gcPpt);
+sprintf(buf, "%3.1f%% GC", 0.1*iso->gcPpt);
 return buf;
 }
 
 static void isochoreDraw(struct track *tg, int seqStart, int seqEnd,
-                         struct hvGfx *hvg, int xOff, int yOff, int width,
-                         MgFont *font, Color color, enum trackVisibility vis)
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
 /* Draw isochore items. */
 {
 struct isochores *item;
@@ -7236,7 +6900,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct dyString *ds = newDyString(256);
 struct linkedFeatures *lf = item;
 
-sqlDyStringPrintf(ds, "select name from rgdGeneLink where refSeq = '%s'", lf->name);
+dyStringPrintf(ds, "select name from rgdGeneLink where refSeq = '%s'", lf->name);
 sqlQuickQuery(conn, ds->string, name, sizeof(name));
 freeDyString(&ds);
 hFreeConn(&conn);
@@ -7258,7 +6922,7 @@ char **row;
 struct gcPercent *itemList = NULL, *item;
 char query[256];
 
-sqlSafef(query, sizeof query, "select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u", tg->table,
+sprintf(query, "select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u", tg->table,
     chromName, winEnd, winStart);
 
 /* Get the frags and load into tg->items. */
@@ -7292,7 +6956,7 @@ char *gcPercentName(struct track *tg, void *item)
 struct gcPercent *gc = item;
 static char buf[32];
 
-safef(buf, sizeof buf, "%3.1f%% GC", 0.1*gc->gcPpt);
+sprintf(buf, "%3.1f%% GC", 0.1*gc->gcPpt);
 return buf;
 }
 
@@ -7394,16 +7058,16 @@ static char buf[32];
 switch (recombRateType)
     {
     case rroeDecodeAvg: case rroeMarshfieldAvg: case rroeGenethonAvg:
-	safef(buf, sizeof buf, "%3.1f cM/Mb (Avg)", rr->decodeAvg);
+	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->decodeAvg);
         break;
     case rroeDecodeFemale: case rroeMarshfieldFemale: case rroeGenethonFemale:
-	safef(buf, sizeof buf, "%3.1f cM/Mb (F)", rr->decodeAvg);
+	sprintf(buf, "%3.1f cM/Mb (F)", rr->decodeAvg);
         break;
     case rroeDecodeMale: case rroeMarshfieldMale: case rroeGenethonMale:
-	safef(buf, sizeof buf, "%3.1f cM/Mb (M)", rr->decodeAvg);
+	sprintf(buf, "%3.1f cM/Mb (M)", rr->decodeAvg);
         break;
     default:
-	safef(buf, sizeof buf, "%3.1f cM/Mb (Avg)", rr->decodeAvg);
+	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->decodeAvg);
         break;
     }
 return buf;
@@ -7480,10 +7144,10 @@ static char buf[32];
 switch (recombRateRatType)
     {
     case rrroeShrspAvg: case rrroeFhhAvg:
-	safef(buf, sizeof buf, "%3.1f cM/Mb (Avg)", rr->shrspAvg);
+	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->shrspAvg);
         break;
     default:
-	safef(buf, sizeof buf, "%3.1f cM/Mb (Avg)", rr->shrspAvg);
+	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->shrspAvg);
         break;
     }
 return buf;
@@ -7558,10 +7222,10 @@ static char buf[32];
 switch (recombRateMouseType)
     {
     case rrmoeWiAvg: case rrmoeMgdAvg:
-	safef(buf, sizeof buf, "%3.1f cM/Mb (Avg)", rr->wiAvg);
+	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->wiAvg);
         break;
     default:
-	safef(buf, sizeof buf, "%3.1f cM/Mb (Avg)", rr->wiAvg);
+	sprintf(buf, "%3.1f cM/Mb (Avg)", rr->wiAvg);
         break;
     }
 return buf;
@@ -7604,8 +7268,8 @@ chr18deletionsFreeList((struct chr18deletions**)&tg->items);
 }
 
 static void drawChr18deletions(struct track *tg, int seqStart, int seqEnd,
-                               struct hvGfx *hvg, int xOff, int yOff, int width,
-                               MgFont *font, Color color, enum trackVisibility vis)
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
 /* Draw chr18deletions items. */
 {
 struct chr18deletions *cds;
@@ -7630,8 +7294,8 @@ for (cds = tg->items; cds != NULL; cds = cds->next)
     int wTall, wShort, end, start, blocks;
 
     for (blocks = 0; blocks < cds->ssCount; blocks++)
-        {
-        tallStart = cds->largeStarts[blocks];
+	{
+    	tallStart = cds->largeStarts[blocks];
 	tallEnd = cds->largeEnds[blocks];
 	shortStart = cds->smallStarts[blocks];
 	shortEnd = cds->smallEnds[blocks];
@@ -7812,7 +7476,7 @@ struct bed *it = item;
 struct sqlConnection *conn;
 
 conn = hAllocConn(database);
-sqlSafef(condStr, sizeof condStr, "interProId='%s' limit 1", it->name);
+sprintf(condStr, "interProId='%s' limit 1", it->name);
 desc = sqlGetField("proteome", "interProXref", "description", condStr);
 hFreeConn(&conn);
 return(desc);
@@ -7911,11 +7575,11 @@ return colorNum;
 }
 
 char *chromPrefixes[] = { "chr", "Group",
-                          NULL };
+			  NULL };
 
 char *scaffoldPrefixes[] = { "scaffold_", "contig_", "SCAFFOLD", "Scaffold",
     "Contig", "SuperCont", "super_", "scaffold", "Zv7_", "Scfld02_",
-         NULL };
+	 NULL };
 
 char *maybeSkipPrefix(char *name, char *prefixes[])
 /* Return a pointer into name just past the first matching string from
@@ -8005,7 +7669,6 @@ for (lf = lfList; lf != NULL; lf = lf->next)
     hvGfxTextRight(hvg, xOff, y, width - 1,
 	itemHeight, color, font, tg->itemName(tg, lf));
     }
-    track->bigBedraLeftLabels = bigBedLeftLabels;
     */
 }
 
@@ -8123,7 +7786,7 @@ conn = hAllocConn(database);
 hColor = hvGfxFindColorIx(hvg, hAcaColor.r, hAcaColor.g, hAcaColor.b);
 
 name = tg->itemName(tg, item);
-sqlSafef(condStr, sizeof condStr, "name='%s'", name);
+sprintf(condStr, "name='%s'", name);
 rnaType = sqlGetField(database, "ncRna", "type", condStr);
 
 if (sameWord(rnaType, "miRNA"))    color = MG_RED;
@@ -8160,7 +7823,7 @@ conn = hAllocConn(database);
 hColor = hvGfxFindColorIx(hvg, hAcaColor.r, hAcaColor.g, hAcaColor.b);
 
 name = tg->itemName(tg, item);
-sqlSafefFrag(condStr, sizeof condStr, "name='%s'", name);
+sprintf(condStr, "name='%s'", name);
 rnaType = sqlGetField(database, "wgRna", "type", condStr);
 if (sameWord(rnaType, "miRna"))   color = MG_RED;
 if (sameWord(rnaType, "HAcaBox")) color = hColor;
@@ -8178,8 +7841,8 @@ tg->itemColor = wgRnaColor;
 }
 
 Color stsColor(struct hvGfx *hvg, int altColor,
-               char *genethonChrom, char *marshfieldChrom,
-               char *fishChrom, int ppt)
+	char *genethonChrom, char *marshfieldChrom,
+	char *fishChrom, int ppt)
 /* Return color given info about marker. */
 {
 if (genethonChrom[0] != '0' || marshfieldChrom[0] != '0')
@@ -8403,7 +8066,7 @@ if (stsMapMouseFilterItem(tg, item))
 		return (hvGfxFindColorIx(hvg, 240, 128, 128)); //Light red
 		break;
 	    case 3:
-                return (hvGfxFindColorIx(hvg, 154, 205, 154)); // light green
+		return (hvGfxFindColorIx(hvg, 154, 205, 154)); // light green
 		break;
 	    case 4:
 		return (hvGfxFindColorIx(hvg, 176, 226, 255)); // light blue
@@ -8532,43 +8195,43 @@ switch (fishClonesType)
     {
     case fcoeFHCRC:
         for (i = 0; i < el->placeCount; i++)
-            if (sameString(el->labs[i],"FHCRC"))
+	    if (sameString(el->labs[i],"FHCRC"))
 	        return TRUE;
         return FALSE;
         break;
     case fcoeNCI:
         for (i = 0; i < el->placeCount; i++)
-            if (sameString(el->labs[i],"NCI"))
+	    if (sameString(el->labs[i],"NCI"))
 	        return TRUE;
         return FALSE;
         break;
     case fcoeSC:
         for (i = 0; i < el->placeCount; i++)
-            if (sameString(el->labs[i],"SC"))
+	    if (sameString(el->labs[i],"SC"))
 	        return TRUE;
         return FALSE;
         break;
     case fcoeRPCI:
         for (i = 0; i < el->placeCount; i++)
-            if (sameString(el->labs[i],"RPCI"))
+	    if (sameString(el->labs[i],"RPCI"))
 	        return TRUE;
         return FALSE;
         break;
     case fcoeCSMC:
         for (i = 0; i < el->placeCount; i++)
-            if (sameString(el->labs[i],"CSMC"))
+	    if (sameString(el->labs[i],"CSMC"))
 	        return TRUE;
         return FALSE;
         break;
     case fcoeLANL:
         for (i = 0; i < el->placeCount; i++)
-            if (sameString(el->labs[i],"LANL"))
+	    if (sameString(el->labs[i],"LANL"))
 	        return TRUE;
         return FALSE;
         break;
     case fcoeUCSF:
         for (i = 0; i < el->placeCount; i++)
-            if (sameString(el->labs[i],"UCSF"))
+	    if (sameString(el->labs[i],"UCSF"))
 	        return TRUE;
         return FALSE;
         break;
@@ -8993,13 +8656,13 @@ char *gapName(struct track *tg, void *item)
 {
 static char buf[24];
 struct agpGap *gap = item;
-safef(buf, sizeof buf, "%s %s", gap->type, gap->bridge);
+sprintf(buf, "%s %s", gap->type, gap->bridge);
 return buf;
 }
 
 static void gapDrawAt(struct track *tg, void *item,
-                      struct hvGfx *hvg, int xOff, int y, double scale,
-                      MgFont *font, Color color, enum trackVisibility vis)
+	struct hvGfx *hvg, int xOff, int y, double scale,
+	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw gap items. */
 {
 struct agpGap *gap = item;
@@ -9199,25 +8862,25 @@ if(absVal > maxDeviation)
  *   * i.e. if val = 1.0 and max is 2.0 and number of shades is 16 then index would be
  * 1 * 15 /2.0 = 7.5 = 7
  */
-if (maxDeviation == 0)
+if(maxDeviation == 0)
     errAbort("ERROR: hgTracksExample::getExprDataColor() maxDeviation can't be zero\n");
 
 colorIndex = (int)(absVal * maxRGBShade/maxDeviation);
 
 /* Return the correct color depending on color scheme and shades */
-if (RG_COLOR_SCHEME)
+if(RG_COLOR_SCHEME)
     {
-    if (val > 0)
-        return shadesOfRed[colorIndex];
+    if(val > 0)
+	return shadesOfRed[colorIndex];
     else
-        return shadesOfGreen[colorIndex];
+	return shadesOfGreen[colorIndex];
     }
 else
     {
-    if (val > 0)
-        return shadesOfRed[colorIndex];
+    if(val > 0)
+	return shadesOfRed[colorIndex];
     else
-        return shadesOfBlue[colorIndex];
+	return shadesOfBlue[colorIndex];
     }
 }
 
@@ -9260,8 +8923,8 @@ tg->items = makeCghItems();
 }
 
 static void cghDraw(struct track *tg, int seqStart, int seqEnd,
-                    struct hvGfx *hvg, int xOff, int yOff, int width,
-                    MgFont *font, Color color, enum trackVisibility vis)
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
 {
 int baseWidth = seqEnd - seqStart;
 struct repeatItem *cghi;
@@ -9297,7 +8960,7 @@ if (isFull)
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	cghStaticLoad(row+rowOffset, &cghRecord);
-        cghi = hashFindVal(hash, cghRecord.tissue);
+	cghi = hashFindVal(hash, cghRecord.tissue);
 	/* cghi = hashFindVal(hash, cghRecord.name); */
 	if (cghi == NULL)
 	   cghi = otherCghItem;
@@ -9365,8 +9028,8 @@ tg->freeItems = freeMcnBreakpoints;
 
 
 static void drawTriangle(struct track *tg, int seqStart, int seqEnd,
-                         struct hvGfx *hvg, int xOff, int yOff, int width,
-                         MgFont *font, Color color, enum trackVisibility vis)
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
 /* Draw triangle items.   Relies mostly on bedDrawSimple, but does put
  * a horizontal box connecting items in full mode. */
 {
@@ -9381,7 +9044,7 @@ if (vis == tvDense)
 	int rowOffset;
 	double scale = scaleForPixels(width);
 	struct sqlConnection *conn = hAllocConn(database);
-        struct sqlResult *sr = hRangeQuery(conn, "rnaCluster", chromName,
+	struct sqlResult *sr = hRangeQuery(conn, "rnaCluster", chromName,
 		winStart - promoSize, winEnd + promoSize, NULL, &rowOffset);
 	char **row;
 	// hvGfxBox(hvg, xOff, yOff, width, heightPer, gold);
@@ -9415,8 +9078,8 @@ tg->drawItems = drawTriangle;
 }
 
 static void drawEranModule(struct track *tg, int seqStart, int seqEnd,
-                           struct hvGfx *hvg, int xOff, int yOff, int width,
-                           MgFont *font, Color color, enum trackVisibility vis)
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
 /* Draw triangle items.   Relies mostly on bedDrawSimple, but does put
  * a horizontal box connecting items in full mode. */
 {
@@ -9428,13 +9091,14 @@ if (vis == tvDense)
 	int heightPer = tg->heightPer;
 	Color gold = hvGfxFindColorIx(hvg, 250,190,60);
 	int rowOffset;
-        double scale = scaleForPixels(width);
-        struct sqlConnection *conn = hAllocConn(database);
-        struct sqlResult *sr = hRangeQuery(conn, "esRegUpstreamRegion",
-                                           chromName, winStart, winEnd, NULL, &rowOffset);
-        char **row;
-        while ((row = sqlNextRow(sr)) != NULL)
-            {
+	double scale = scaleForPixels(width);
+	struct sqlConnection *conn = hAllocConn(database);
+	struct sqlResult *sr = hRangeQuery(conn, "esRegUpstreamRegion",
+		chromName, winStart, winEnd,
+		NULL, &rowOffset);
+	char **row;
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
 	    int start, end;
 	    row += rowOffset;
 	    start = atoi(row[1]);
@@ -9509,7 +9173,7 @@ bool enabledInTdb = subtrackEnabledInTdb(subtrack);
 char option[SMALLBUF];
 safef(option, sizeof(option), "%s_sel", subtrack->track);
 boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
-if (overrideComposite)
+if(overrideComposite)
     enabled = TRUE;
 return enabled;
 }
@@ -9533,9 +9197,6 @@ enum trackVisibility limitVisibility(struct track *tg)
 if (!tg->limitedVisSet)
     {
     tg->limitedVisSet = TRUE;  // Prevents recursive loop!
-    
-    // optional setting to draw labels onto the feature boxes, not next to them
-    tg->drawLabelInBox = cartOrTdbBoolean(cart, tg->tdb, "labelOnFeature" , FALSE);
     if (trackShouldUseAjaxRetrieval(tg))
         {
         tg->limitedVis = tg->visibility;
@@ -9557,16 +9218,16 @@ if (!tg->limitedVisSet)
             {
             struct track *subtrack;
             int subCnt = subtrackCount(tg->subtracks);
-            maxHeight = maxHeight * max(subCnt,1);
+            maxHeight = maxHeight * max(subCnt,1);  // Without further restruction does this ever accomplish anything?
             //if (subCnt > 4)
             //    maxHeight *= 2; // NOTE: Large composites should suffer an additional restriction.
-            if (!tg->syncChildVisToSelf)
+	    if (!tg->syncChildVisToSelf)
 		{
 		for (subtrack = tg->subtracks;  subtrack != NULL; subtrack = subtrack->next)
-                    limitVisibility(subtrack);
-                }
+		    limitVisibility(subtrack);
+		}
             }
-        while ((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
+        while((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
             {
             if (vis == tvFull && tg->canPack)
                 vis = tvPack;
@@ -9574,6 +9235,9 @@ if (!tg->limitedVisSet)
                 vis = tvSquish;
             else
                 vis = tvDense;
+            //if (tg->visibility != vis)
+            //    warn("DEMOTION: %s -> %s %s  maxHeight:%d  totHeight:%d",
+            //         hStringFromTv(tg->visibility),hStringFromTv(vis),tg->track,maxHeight,tg->height);
             }
         tg->height = h;
         if (tg->limitedVis == tvHide)
@@ -9584,22 +9248,21 @@ if (!tg->limitedVisSet)
 
     if (tg->syncChildVisToSelf)
         {
-        struct track *subtrack;
+	struct track *subtrack;
 	for (subtrack = tg->subtracks;  subtrack != NULL; subtrack = subtrack->next)
 	    {
 	    subtrack->visibility = tg->visibility;
 	    subtrack->limitedVis = tg->limitedVis;
-            subtrack->limitedVisSet = tg->limitedVisSet;
-            }
-        }
-    else if (tdbIsComposite(tg->tdb)) // If a composite is restricted,
-        {                             // it's children should be atleast as restricted.
+	    subtrack->limitedVisSet = tg->limitedVisSet;
+	    }
+	}
+    else if (tdbIsComposite(tg->tdb)) // If a composite is restricted, it's children should be atleast as restricted.
+        {
         struct track *subtrack;
         for (subtrack = tg->subtracks;  subtrack != NULL; subtrack = subtrack->next)
             {
             subtrack->limitedVis = tvMin(subtrack->limitedVis, tg->limitedVis);
-            // But don't prevent subtracks from being further restricted!
-            //subtrack->limitedVisSet = tg->limitedVisSet;
+            //subtrack->limitedVisSet = tg->limitedVisSet; // But don't prevent subtracks from being further restricted!
             }
         }
 
@@ -9675,8 +9338,8 @@ tg->items = lfList;
 }
 
 void valAlDrawAt(struct track *tg, void *item,
-                 struct hvGfx *hvg, int xOff, int y, double scale,
-                 MgFont *font, Color color, enum trackVisibility vis)
+	struct hvGfx *hvg, int xOff, int y, double scale,
+	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw the operon at position. */
 {
 struct linkedFeatures *lf = item;
@@ -9696,7 +9359,7 @@ innerLine(hvg, x1, midY, w, color);
 if (vis == tvFull || vis == tvPack)
     {
     clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
-                 lf->orientation, color, FALSE);
+		 lf->orientation, color, FALSE);
     }
     */
 //for(count=1; count < 4; count++)
@@ -9825,13 +9488,13 @@ if (sameString(display, "freq"))
     {
     Color allC = MG_BLACK;
     if (startsWith("A", allele))
-        allC = MG_RED;
+       allC = MG_RED;
     else if (startsWith("C", allele))
-        allC = MG_BLUE;
+       allC = MG_BLUE;
     else if (startsWith("G", allele))
-        allC = darkGreenColor;
+       allC = darkGreenColor;
     else if (startsWith("T", allele))
-        allC = MG_MAGENTA;
+       allC = MG_MAGENTA;
     hvGfxTextRight(hvgWhich, textX, y, width, height, allC, font, allele);
     }
 else
@@ -9906,15 +9569,15 @@ if (sameString(display, "freq"))
             if (revCmplDisp)
                 reverseComplement(aCopy, strlen(aCopy));
             if (startsWith("A", aCopy))
-                allC = MG_RED;
+               allC = MG_RED;
             else if (startsWith("C", aCopy))
-                allC = MG_BLUE;
+               allC = MG_BLUE;
             else if (startsWith("G", aCopy))
-                allC = darkGreenColor;
+               allC = darkGreenColor;
             else if (startsWith("T", aCopy))
-                allC = MG_MAGENTA;
+               allC = MG_MAGENTA;
             else
-                allC = MG_BLACK;
+               allC = MG_BLACK;
             pgSnpDrawScaledBox(hvg, myItem->chromStart, myItem->chromEnd, scale,
                 xOff, yCopy, h, allC);
             yCopy += h;
@@ -10017,9 +9680,9 @@ else
     conn = hAllocConn(CUSTOM_TRASH);
     table = ct->dbTableName;
     }
-struct dyString *query = sqlDyStringCreate("select * from %s where ", table);
+struct dyString *query = dyStringCreate("select * from %s where ", table);
 hAddBinToQuery(winStart, winEnd, query);
-sqlDyStringPrintf(query, "chrom = '%s' and chromStart < %d and chromEnd > %d",
+dyStringPrintf(query, "chrom = '%s' and chromStart < %d and chromEnd > %d",
 	       chromName, winEnd, winStart);
 tg->items = pgSnpLoadByQuery(conn, query->string);
 /* base coloring/display decision on count of items */
@@ -10057,23 +9720,6 @@ mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->track,
 freeDyString(&ds);
 }
 
-void pgSnpLeftLabels(struct track *tg, int seqStart, int seqEnd,
-		     struct hvGfx *hvg, int xOff, int yOff, int width, int height,
-		     boolean withCenterLabels, MgFont *font, Color color,
-		     enum trackVisibility vis)
-/* pgSnp draws its own left labels when it draws the item in pack or full mode.
- * We don't want the default left labels when in full mode because they can overlap
- * with the item-drawing labels, but we do still need dense mode left labels. */
-{
-if (tg->visibility == tvDense)
-    {
-    if (isCenterLabelIncluded(tg))
-	yOff += mgFontLineHeight(font);
-    hvGfxTextRight(hvg, leftLabelX, yOff, leftLabelWidth-1, tg->lineHeight,
-		   color, font, tg->shortLabel);
-    }
-}
-
 void pgSnpMethods (struct track *tg)
 /* Personal Genome SNPs: show two alleles with stacked color bars for base alleles and
  * (if available) allele counts in mouseover. */
@@ -10087,7 +9733,6 @@ tg->drawItemAt = pgSnpDrawAt;
 tg->mapItem = pgSnpMapItem;
 tg->nextItemButtonable = TRUE;
 tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
-tg->drawLeftLabels = pgSnpLeftLabels;
 }
 
 void loadBlatz(struct track *tg)
@@ -10284,8 +9929,8 @@ gfxPolyFree(&poly);
 }
 
 static void triangleDrawAt(struct track *tg, void *item,
-                           struct hvGfx *hvg, int xOff, int y, double scale,
-                           MgFont *font, Color color, enum trackVisibility vis)
+	struct hvGfx *hvg, int xOff, int y, double scale,
+	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a right- or left-pointing triangle at position.
  * If item has width > 1 or block/cds structure, those will be ignored --
  * this only draws a triangle (direction depending on strand). */
@@ -10412,7 +10057,7 @@ static struct slName *filterPmIds = NULL;
 struct linkedFeatures *lf = item;
 struct sqlConnection *conn = hAllocConn(database);
 char query[512];
-sqlSafef(query, sizeof(query), "select pubmedId from %s where name = '%s'",
+safef(query, sizeof(query), "select pubmedId from %s where name = '%s'",
       tg->tdb->table, lf->name);
 char buf[32];
 char *pmId = sqlQuickQuery(conn, query, buf, sizeof(buf));
@@ -10452,87 +10097,19 @@ tg->items = lfFromGenePredInRange(tg, tg->table, chromName, winStart, winEnd);
 filterItems(tg, genePredClassFilter, "include");
 }
 
-static char *ensGeneName(struct track *tg, void *item)
+void loadGenePredWithConfiguredName(struct track *tg)
+/* Convert gene pred info in window to linked feature. Include name
+ * in "extra" field (gene name, accession, or both, depending on UI) */
 {
-static char cat[128];
-struct linkedFeatures *lf = item;
-if (lf->extra != NULL)
-    {
-    safef(cat, sizeof(cat), "%s", (char *)lf->extra);
-    return cat;
-    }
-else
-    return lf->name;
-}
-
-static void ensGeneAssignConfiguredName(struct track *tg)
-/* Set name on genePred in "extra" field to gene symbol, ENSG id, or ENST id,
- * depending, on UI on all items in track */
-{
-char *geneLabel = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, "label","accession");
-boolean otherGeneName =  sameString(geneLabel, "gene symbol");
-boolean useGeneName =  sameString(geneLabel, "ENSG* identifier");
-boolean useAcc = sameString(geneLabel, "ENST* identifier");
-struct sqlConnection *conn = NULL;
-if (otherGeneName)
-   conn = hAllocConn(database);
-
+char *geneLabel;
+boolean useGeneName, useAcc;
 struct linkedFeatures *lf;
-for (lf = tg->items; lf != NULL; lf = lf->next)
-    {
-    struct dyString *name = dyStringNew(SMALLDYBUF);
-    if (otherGeneName)
-        {
-        char buf[256];
-        char query[256];
-        sqlSafef(query, sizeof(query),
-          "select value from ensemblToGeneName where name = \"%s\"", lf->name);
-        char *ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
-        if (isNotEmpty(ret))
-            dyStringAppend(name, ret);
-        else
-            dyStringAppend(name, lf->name);
-        }
-    else if (useGeneName)
-        {
-        if (isNotEmpty((char*)lf->extra))
-            dyStringAppend(name, lf->extra);
-        else
-            dyStringAppend(name, lf->name);
-        }
-    else if (useAcc)
-        {
-        dyStringAppend(name, lf->name);
-        }
-    else
-        lf->extra = NULL;
-    if (dyStringLen(name))
-        lf->extra = dyStringCannibalize(&name);
-    dyStringFree(&name);
-    }
-if (otherGeneName)
-    hFreeConn(&conn);
-}
 
-static void loadGenePredEnsGene(struct track *tg)
-/* Convert gene pred in window to linked feature. */
-{
+geneLabel = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, "label","gene");
+useGeneName = sameString(geneLabel, "gene") || sameString(geneLabel, "name") || sameString(geneLabel, "both");
+useAcc = sameString(geneLabel, "accession") || sameString(geneLabel, "both");
+
 loadGenePredWithName2(tg);
-ensGeneAssignConfiguredName(tg);
-tg->itemName = ensGeneName;
-}
-
-void genePredAssignConfiguredName(struct track *tg)
-/* Set name on genePred in "extra" field to gene name, accession, or both,
- * depending, on UI on all items in track */
-{
-char *geneLabel = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, "label","gene");
-boolean useGeneName =  sameString(geneLabel, "gene")
-    || sameString(geneLabel, "name")
-    || sameString(geneLabel, "both");
-boolean useAcc = sameString(geneLabel, "accession") || sameString(geneLabel, "both");
-
-struct linkedFeatures *lf;
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
     struct dyString *name = dyStringNew(SMALLDYBUF);
@@ -10544,18 +10121,8 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
         }
     if (useAcc)
         dyStringAppend(name, lf->name);
-    if (dyStringLen(name))
-        lf->extra = dyStringCannibalize(&name);
-    dyStringFree(&name);
+    lf->extra = dyStringCannibalize(&name);
     }
-}
-
-void loadGenePredWithConfiguredName(struct track *tg)
-/* Convert gene pred info in window to linked feature. Include name
- * in "extra" field (gene name, accession, or both, depending on UI) */
-{
-loadGenePredWithName2(tg);
-genePredAssignConfiguredName(tg);
 }
 
 Color genePredItemAttrColor(struct track *tg, void *item, struct hvGfx *hvg)
@@ -10603,42 +10170,42 @@ if (geneClasses)
    classCt = chopLine(gClassesClone, classes);
    }
 if (hTableExists(database, classTable))
-    {
-    sqlSafef(query, sizeof(query),
-          "select %s from %s where %s = \"%s\"", classCol, classTable, nameCol, lf->name);
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) != NULL)
+   {
+   safef(query, sizeof(query),
+         "select %s from %s where %s = \"%s\"", classCol, classTable, nameCol, lf->name);
+   sr = sqlGetResult(conn, query);
+   if ((row = sqlNextRow(sr)) != NULL)
         {
         /* scan through groups to find a match */
         for (class = 0; class < classCt; class++)
-            {
-            if (sameString(classes[class], row[0]))
-                /* get color from trackDb settings hash */
-                {
-                found = TRUE;
-                safef(gClass, sizeof(gClass), "%s%s", GENEPRED_CLASS_PREFIX, classes[class]);
-                colorString = trackDbSetting(tg->tdb, gClass);
-                if (!colorString)
-                    found = FALSE;
-                break;
-                }
-            }
+           {
+           if (sameString(classes[class], row[0]))
+           /* get color from trackDb settings hash */
+              {
+              found = TRUE;
+              safef(gClass, sizeof(gClass), "%s%s", GENEPRED_CLASS_PREFIX, classes[class]);
+              colorString = trackDbSetting(tg->tdb, gClass);
+              if (!colorString)
+                  found = FALSE;
+              break;
+              }
+           }
         }
-    sqlFreeResult(&sr);
-    if (found)
-        {
-        /* need to convert color string to rgb */
-        // check how these are found for trackDb
-        colorClone = cloneString(colorString);
-        chopString(colorClone, sep, rgbVals, size);
-        gClassColor.r = (sqlUnsigned(rgbVals[0]));
-        gClassColor.g = (sqlUnsigned(rgbVals[1]));
-        gClassColor.b = (sqlUnsigned(rgbVals[2]));
+   sqlFreeResult(&sr);
+   if (found)
+      {
+      /* need to convert color string to rgb */
+      // check how these are found for trackDb
+      colorClone = cloneString(colorString);
+      chopString(colorClone, sep, rgbVals, size);
+      gClassColor.r = (sqlUnsigned(rgbVals[0]));
+      gClassColor.g = (sqlUnsigned(rgbVals[1]));
+      gClassColor.b = (sqlUnsigned(rgbVals[2]));
 
-        /* find index for color */
-        color = hvGfxFindRgb(hvg, &gClassColor);
-        }
-    }
+      /* find index for color */
+      color = hvGfxFindRgb(hvg, &gClassColor);
+      }
+   }
 hFreeConn(&conn);
 /* return index for color to draw item */
 return color;
@@ -10656,6 +10223,53 @@ else
     tg->itemColor = NULL;
 linkedFeaturesMethods(tg);
 tg->loadItems = loadGenePred;
+}
+
+Color gencodeIntronColorItem(struct track *tg, void *item, struct hvGfx *hvg)
+/* Return color of ENCODE gencode intron track item.
+ * Use recommended color palette pantone colors (level 4) for red, green, blue*/
+{
+struct gencodeIntron *intron = (struct gencodeIntron *)item;
+
+if (sameString(intron->status, "not_tested"))
+    return hvGfxFindColorIx(hvg, 214,214,216);       /* light grey */
+if (sameString(intron->status, "RT_negative"))
+    return hvGfxFindColorIx(hvg, 145,51,56);       /* red */
+if (sameString(intron->status, "RT_positive") ||
+        sameString(intron->status, "RACE_validated"))
+    return hvGfxFindColorIx(hvg, 61,142,51);       /* green */
+if (sameString(intron->status, "RT_wrong_junction"))
+    return getOrangeColor(hvg);                 /* orange */
+if (sameString(intron->status, "RT_submitted"))
+    return hvGfxFindColorIx(hvg, 102,109,112);       /* grey */
+return hvGfxFindColorIx(hvg, 214,214,216);       /* light grey */
+}
+
+static void gencodeIntronLoadItems(struct track *tg)
+/* Load up track items. */
+{
+bedLoadItem(tg, tg->table, (ItemLoader)gencodeIntronLoad);
+}
+
+static void gencodeIntronMethods(struct track *tg)
+/* Load up custom methods for ENCODE Gencode intron validation track */
+{
+tg->loadItems = gencodeIntronLoadItems;
+tg->itemColor = gencodeIntronColorItem;
+}
+
+static void gencodeGeneMethods(struct track *tg)
+/* Load up custom methods for ENCODE Gencode gene track */
+{
+tg->loadItems = loadGenePredWithConfiguredName;
+tg->itemName = gencodeGeneName;
+}
+
+static void gencodeRaceFragsMethods(struct track *tg)
+/* Load up custom methods for ENCODE Gencode RACEfrags track */
+{
+tg->loadItems = loadGenePred;
+tg->subType = lfNoIntronLines;
 }
 
 void loadDless(struct track *tg)
@@ -10774,17 +10388,19 @@ Color gvColorByCount(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct gvPos *el = item;
 struct sqlConnection *conn = hAllocConn(database);
-char *id = NULL;
+char *escId = NULL;
 char *multColor = NULL, *singleColor = NULL;
 int num = 0;
 char query[256];
 if (el->id != NULL)
-    id = el->id;
+    escId = sqlEscapeString(el->id);
 else
-    id = el->name;
-sqlSafef(query, sizeof(query), "select count(*) from gvPos where name = '%s'", id);
+    escId = sqlEscapeString(el->name);
+safef(query, sizeof(query), "select count(*) from gvPos where name = '%s'",
+    escId);
 num = sqlQuickNum(conn, query);
 hFreeConn(&conn);
+freeMem(escId);
 singleColor = cartUsualString(cart, "gvColorCountSingle", "blue");
 multColor = cartUsualString(cart, "gvColorCountMult", "green");
 if (num == 1)
@@ -10835,15 +10451,15 @@ Color gvColorByDisease(struct track *tg, void *item, struct hvGfx *hvg)
 struct gvPos *el = item;
 struct gvAttr *attr = NULL;
 struct sqlConnection *conn = hAllocConn(database);
-char *id = NULL;
+char *escId = NULL;
 char *useColor = NULL;
 int index = -1;
 char query[256];
 if (el->id != NULL)
-    id = el->id;
+    escId = sqlEscapeString(el->id);
 else
-    id = el->name;
-sqlSafef(query, sizeof(query), "select * from hgFixed.gvAttr where id = '%s' and attrType = 'disease'", id);
+    escId = sqlEscapeString(el->name);
+safef(query, sizeof(query), "select * from hgFixed.gvAttr where id = '%s' and attrType = 'disease'", escId);
 attr = gvAttrLoadByQuery(conn, query);
 if (attr == NULL)
     {
@@ -10861,6 +10477,7 @@ if (index < 0 || index >= gvColorDASize)
 useColor = cartUsualString(cart, gvColorDAStrings[index], gvColorDADefault[index]);
 gvAttrFreeList(&attr);
 hFreeConn(&conn);
+freeMem(escId);
 if (sameString(useColor, "red"))
     return hvGfxFindColorIx(hvg, 221, 0, 0); /* dark red */
 else if (sameString(useColor, "orange"))
@@ -10887,14 +10504,14 @@ struct gv *details = NULL;
 struct sqlConnection *conn = hAllocConn(database);
 char *typeColor = NULL;
 int index = 5;
-char *id = NULL;
+char *escId = NULL;
 char query[256];
 if (el->id != NULL)
-    id = el->id;
+    escId = sqlEscapeString(el->id);
 else
-    id = el->name;
+    escId = sqlEscapeString(el->name);
 
-sqlSafef(query, sizeof(query), "select * from hgFixed.gv where id = '%s'", id);
+safef(query, sizeof(query), "select * from hgFixed.gv where id = '%s'", escId);
 details = gvLoadByQuery(conn, query);
 index = stringArrayIx(details->baseChangeType, gvColorTypeBaseChangeType, gvColorTypeSize);
 if (index < 0 || index >= gvColorTypeSize)
@@ -10905,6 +10522,7 @@ if (index < 0 || index >= gvColorTypeSize)
 typeColor = cartUsualString(cart, gvColorTypeStrings[index], gvColorTypeDefault[index]);
 gvFreeList(&details);
 hFreeConn(&conn);
+freeMem(escId);
 if (sameString(typeColor, "purple"))
     return hvGfxFindColorIx(hvg, 204, 0, 255);
 else if (sameString(typeColor, "green"))
@@ -10944,15 +10562,15 @@ Color oregannoColor(struct track *tg, void *item, struct hvGfx *hvg)
 struct oreganno *el = item;
 struct oregannoAttr *details = NULL;
 struct sqlConnection *conn = hAllocConn(database);
-char *id = NULL;
+char *escId = NULL;
 char query[256];
 Color itemColor = MG_BLACK;
 if (el->id != NULL)
-    id = el->id;
+    escId = sqlEscapeString(el->id);
 else
-    id = el->name;
+    escId = sqlEscapeString(el->name);
 
-sqlSafef(query, sizeof(query), "select * from oregannoAttr where attribute = 'type' and id = '%s'", id);
+safef(query, sizeof(query), "select * from oregannoAttr where attribute = 'type' and id = '%s'", escId);
 details = oregannoAttrLoadByQuery(conn, query);
 /* ORegAnno colors 666600 (Dark Green), CCCC66 (Tan), CC0033 (Red),
                    CCFF99 (Background Green)                        */
@@ -10964,6 +10582,7 @@ else if (sameString(details->attrVal, "REGULATORY REGION"))
     itemColor = hvGfxFindColorIx(hvg, 102, 102, 0);  /* dark green */
 oregannoAttrFreeList(&details);
 hFreeConn(&conn);
+freeMem(escId);
 return itemColor;
 }
 
@@ -11259,14 +10878,14 @@ dyStringClear(dy);
 
 // get gene symbol(s) first
 conn = hAllocConn(database);
-sqlSafef(query,sizeof(query),
+safef(query,sizeof(query),
         "select geneSymbol from omimGeneMap where omimId =%s", name);
 char buf[256];
 char *ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
 if (isNotEmpty(ret))
     dyStringAppend(dy, ret);
 
-sqlSafef(query,sizeof(query),
+safef(query,sizeof(query),
         "select distinct description from omimPhenotype, omimGene2 where name='%s' and name=cast(omimId as char) order by description", name);
 char *disorders = collapseRowsFromQuery(query, "; ", 20);
 if (isNotEmpty(disorders))
@@ -11295,10 +10914,10 @@ boolean result;
 char answer[255];
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
-sqlSafef(query,sizeof(query),
+safef(query,sizeof(query),
       "select %s from omimPhenotype where omimId =%s and (%s=1 or %s=2 or %s=3 or %s=4)",
-      omimPhenotypeClassColName, omimId, omimPhenotypeClassColName, omimPhenotypeClassColName,
-      omimPhenotypeClassColName, omimPhenotypeClassColName);
+      omimPhenotypeClassColName, omimId, omimPhenotypeClassColName, omimPhenotypeClassColName, omimPhenotypeClassColName,
+      omimPhenotypeClassColName);
 char *ret = sqlQuickQuery(conn, query, answer, sizeof(answer));
 
 if (ret == NULL)
@@ -11320,7 +10939,7 @@ int result;
 char answer[255];
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
-sqlSafef(query,sizeof(query),
+safef(query,sizeof(query),
       "select %s from omimPhenotype where omimId =%s and %s=%d", omimPhenotypeClassColName,omimId,omimPhenotypeClassColName,targetClass);
 
 char *ret = sqlQuickQuery(conn, query, answer, sizeof(answer));
@@ -11328,12 +10947,12 @@ char *ret = sqlQuickQuery(conn, query, answer, sizeof(answer));
 if (ret == NULL)
     {
     if (targetClass == -1)
-        {
+    	{
 	result = -1;
 	}
     else
-        {
-        result = 0;
+    	{
+    	result = 0;
 	}
     }
 else
@@ -11451,15 +11070,15 @@ Color class1Clr, class2Clr, class3Clr, class4Clr, classOtherClr;
 /* color scheme:
 
     Lighter Green:
-        for Class 1 OMIM records
+    	for Class 1 OMIM records
     Light Green:
-        for Class 2 OMIM records
+    	for Class 2 OMIM records
     Dark Green:
-        for Class 3 OMIM records
+    	for Class 3 OMIM records
     Purple:
-        for Class 4 OMIM records
+    	for Class 4 OMIM records
     Light Gray:
-        for Others
+    	for Others
 */
 
 lighter.r = (6*normal->r + 4*255) / 10;
@@ -11477,9 +11096,9 @@ class1Clr = hvGfxFindColorIx(hvg, lightest.r, lightest.g, lightest.b);
 class2Clr = hvGfxFindColorIx(hvg, lighter.r, lighter.g, lighter.b);
 class3Clr = hvGfxFindColorIx(hvg, normal->r, normal->g, normal->b);
 class4Clr = hvGfxFindColorIx(hvg, 105,50,155);
-classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);   // light gray
+classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);	// light gray
 
-sqlSafef(query, sizeof(query),
+safef(query, sizeof(query),
       "select omimId, %s from omimPhenotype where omimId=%s order by %s desc",
       omimPhenotypeClassColName, el->name, omimPhenotypeClassColName);
 
@@ -11500,34 +11119,34 @@ else
     phenClass = row[1];
 
     if (sameWord(phenClass, "3"))
-        {
+    	{
 	// set to dark green, the same color as omimGene2 track
 	sqlFreeResult(&sr);
 	return class3Clr;
-        }
+    	}
     else if (sameWord(phenClass, "2"))
-        {
+    	{
 	// set to light green for class 2
 	sqlFreeResult(&sr);
 	return class2Clr;
-        }
+    	}
     else if (sameWord(phenClass, "1"))
-        {
+    	{
 	// set to lighter green for class 1
 	sqlFreeResult(&sr);
 	return class1Clr;
-        }
+    	}
     else if (sameWord(phenClass, "4"))
 	{
 	// set to the color for phenClass 4
         sqlFreeResult(&sr);
-        return class4Clr;
-        }
+	return class4Clr;
+	}
     else
 	{
 	// set to the color for Others
         sqlFreeResult(&sr);
-        return classOtherClr;
+	return classOtherClr;
 	}
     }
 }
@@ -11555,16 +11174,16 @@ if (omimGene2Labels == NULL)
 else
     {
     for (label = omimGene2Labels; label != NULL; label = label->next)
-        {
-        if (endsWith(label->name, "gene") && differentString(label->val, "0"))
+    	{
+    	if (endsWith(label->name, "gene") && differentString(label->val, "0"))
 	    {
 	    useGeneSymbol = TRUE;
 	    }
-        else if (endsWith(label->name, "omimId") && differentString(label->val, "0"))
-            {
+    	else if (endsWith(label->name, "omimId") && differentString(label->val, "0"))
+    	    {
             useOmimId = TRUE;
-            }
-        }
+	    }
+    	}
     }
 
 struct dyString *name = dyStringNew(SMALLDYBUF);
@@ -11583,24 +11202,24 @@ if (useOmimId)
 if (useGeneSymbol)
     {
     if (labelStarted)
-        dyStringAppendC(name, '/');
+    	dyStringAppendC(name, '/');
     else
-        labelStarted = TRUE;
+    	labelStarted = TRUE;
     // get appoved gene symbol from omim2gene table first, if not available then get it from omimGeneMap table.
     char query[256];
-    sqlSafef(query, sizeof(query), "select approvedGeneSymbol from omim2gene where omimId = %s", el->name);
+    safef(query, sizeof(query), "select approvedGeneSymbol from omim2gene where omimId = %s", el->name);
     geneSymbol = sqlQuickString(conn, query);
     if (geneSymbol && differentString(geneSymbol, "-"))
         dyStringAppend(name, geneSymbol);
     else
-        {
-        char *chp;
-        sqlSafef(query, sizeof(query), "select geneSymbol from omimGeneMap where omimId = %s", el->name);
-        geneSymbol = sqlQuickString(conn, query);
-        if (geneSymbol && differentString(geneSymbol, "0"))
+    	{
+	char *chp;
+    	safef(query, sizeof(query), "select geneSymbol from omimGeneMap where omimId = %s", el->name);
+    	geneSymbol = sqlQuickString(conn, query);
+	if (geneSymbol && differentString(geneSymbol, "0"))
             {
 	    // pick the first one, if multiple gene symbols exist
-            chp = strstr(geneSymbol, ",");
+    	    chp = strstr(geneSymbol, ",");
 	    if (chp != NULL) *chp = '\0';
 	    dyStringAppend(name, geneSymbol);
 	    }
@@ -11622,7 +11241,7 @@ if (dy == NULL)
 dyStringClear(dy);
 
 char query[256];
-sqlSafef(query,sizeof(query),
+safef(query,sizeof(query),
         "select concat(gene_name,' ',mut_syntax_aa) from cosmicRaw where cosmic_mutation_id ='%s'", name);
 char buf[256];
 char *ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
@@ -11630,7 +11249,7 @@ char *ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
 if (isNotEmpty(ret))
     dyStringAppend(dy, ret);
 
-sqlSafef(query, sizeof(query),
+safef(query, sizeof(query),
       "select sum(mutated_samples) from cosmicRaw where cosmic_mutation_id='%s'",
       name);
 ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
@@ -11640,7 +11259,7 @@ if (isNotEmpty(ret))
     dyStringAppend(dy, ret);
     }
 
-sqlSafef(query, sizeof(query),
+safef(query, sizeof(query),
       "select sum(examined_samples) from cosmicRaw where cosmic_mutation_id='%s'",
       name);
 ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
@@ -11649,7 +11268,7 @@ ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
     dyStringAppend(dy, ret);
     }
 
-sqlSafef(query, sizeof(query),
+safef(query, sizeof(query),
       "select sum(mutated_samples)*100/sum(examined_samples) from cosmicRaw where cosmic_mutation_id='%s'",
       name);
 ret = sqlQuickQuery(conn, query, buf, sizeof(buf));
@@ -11660,19 +11279,19 @@ if (isNotEmpty(ret))
     {
     // cut off digits after .xxx
     if ((chp != NULL) && (strlen(chp) > 3))
-        {
-        chp++;
-        chp++;
-        chp++;
-        chp++;
-        *chp = '\0';
-        }
+    	{
+    	chp++;
+    	chp++;
+    	chp++;
+    	chp++;
+    	*chp = '\0';
+    	}
     dyStringAppend(dy, " (");
     dyStringAppend(dy, ret);
     dyStringAppend(dy, "\%)");
     }
 
-sqlSafef(query,sizeof(query),
+safef(query,sizeof(query),
         "select tumour_site from cosmicRaw where cosmic_mutation_id ='%s' order by tumour_site", name);
 char *disorders = collapseRowsFromQuery(query, ",", 4);
 if (isNotEmpty(disorders))
@@ -11703,7 +11322,7 @@ void omimGene2Methods (struct track *tg)
 /* Methods for version 2 of OMIM Genes track. */
 {
 tg->loadItems	  = omimGene2Load;
-tg->itemColor     = omimGene2Color;
+tg->itemColor 	  = omimGene2Color;
 tg->itemName	  = omimGene2Name;
 tg->itemNameColor = omimGene2Color;
 tg->drawItemAt    = bedPlusLabelDrawAt;
@@ -11723,7 +11342,7 @@ char **row;
 omimAvSnpBuffer[0] = '\0';
 
 conn = hAllocConn(database);
-sqlSafef(query,sizeof(query),
+safef(query,sizeof(query),
         "select replStr, dbSnpId, description from omimAvRepl where avId='%s'", name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -11764,7 +11383,7 @@ char query[256];
 omimLocationBuffer[0] = '\0';
 
 conn = hAllocConn(database);
-sqlSafef(query,sizeof(query),
+safef(query,sizeof(query),
         "select concat(title1, ' ', title2) from omimGeneMap where omimId=%s", name);
 (void)sqlQuickQuery(conn, query, omimLocationBuffer, sizeof(omimLocationBuffer));
 hFreeConn(&conn);
@@ -11790,15 +11409,15 @@ Color class1Clr, class2Clr, class3Clr, class4Clr, classOtherClr;
 /* color scheme:
 
     Lighter Green:
-        for Class 1 OMIM records
+    	for Class 1 OMIM records
     Light Green:
-        for Class 2 OMIM records
+    	for Class 2 OMIM records
     Dark Green:
-        for Class 3 OMIM records
+    	for Class 3 OMIM records
     Purple:
-        for Class 4 OMIM records
+    	for Class 4 OMIM records
     Light Gray:
-        for Others
+    	for Others
 */
 
 lighter.r = (6*normal->r + 4*255) / 10;
@@ -11817,7 +11436,7 @@ classOtherClr = hvGfxFindColorIx(hvg, 190, 190, 190);   // light gray
 
 struct sqlConnection *conn = hAllocConn(database);
 
-sqlSafef(query, sizeof(query),
+safef(query, sizeof(query),
       "select omimId, %s from omimPhenotype where omimId=%s", omimPhenotypeClassColName, el->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -11836,41 +11455,41 @@ else
     phenClass = row[1];
 
     if (sameWord(phenClass, "3"))
-        {
+    	{
 	// set to dark green, the same color as omimGene2 track
 	sqlFreeResult(&sr);
 	return class3Clr;
-        }
+    	}
     else
-        {
-        if (sameWord(phenClass, "2"))
-            {
+    	{
+    	if (sameWord(phenClass, "2"))
+    	    {
 	    // set to light green for class 2
 	    sqlFreeResult(&sr);
-            return class2Clr;
-            }
+	    return class2Clr;
+    	    }
 	else
 	    {
-            if (sameWord(phenClass, "1"))
-                {
+    	    if (sameWord(phenClass, "1"))
+    	    	{
 		// set to lighter green for class 1
-                sqlFreeResult(&sr);
-                return class1Clr;
-                }
-            else if (sameWord(phenClass, "4"))
-                {
-                // set to the color for phenClass 4
-                sqlFreeResult(&sr);
-                return class4Clr;
-                }
-            else
-                {
-                // set to the color for Others
-                sqlFreeResult(&sr);
-                return classOtherClr;
-                }
-            }
-        }
+	    	sqlFreeResult(&sr);
+	    	return class1Clr;
+    	    	}
+    	    else if (sameWord(phenClass, "4"))
+		{
+		// set to the color for phenClass 4
+        	sqlFreeResult(&sr);
+		return class4Clr;
+		}
+    	    else
+		{
+		// set to the color for Others
+        	sqlFreeResult(&sr);
+		return classOtherClr;
+		}
+	    }
+	}
     }
 }
 
@@ -11909,18 +11528,16 @@ if (sameWord(omimGeneLabel, "OMIM ID"))
 else
     {
     if (sameWord(omimGeneLabel, "UCSC gene symbol"))
-        {
-        /* get the gene symbol of the exact KG that matches not only ID but also genomic position */
-        sqlSafef(query, sizeof(query),
-              "select x.geneSymbol from kgXref x, omimToKnownCanonical c, knownGene k, omimGene o"
-              " where c.omimId='%s' and c.kgId=x.kgId and k.name=x.kgId and o.name=c.omimId"
-              " and o.chrom=k.chrom and k.txStart=%d and k.txEnd=%d",
-              el->name, el->chromStart, el->chromEnd);
-        geneLabel = sqlQuickString(conn, query);
-        }
+	{
+	/* get the gene symbol of the exact KG that matches not only ID but also genomic position */
+	safef(query, sizeof(query),
+	"select x.geneSymbol from kgXref x, omimToKnownCanonical c, knownGene k, omimGene o where c.omimId='%s' and c.kgId=x.kgId and k.name=x.kgId and o.name=c.omimId and o.chrom=k.chrom and k.txStart=%d and k.txEnd=%d",
+	el->name, el->chromStart, el->chromEnd);
+	geneLabel = sqlQuickString(conn, query);
+	}
     else
-        {
-        sqlSafef(query, sizeof(query),
+    	{
+	safef(query, sizeof(query),
 	"select geneSymbol from omimGeneMap where omimId='%s'", el->name);
 	geneLabel = sqlQuickString(conn, query);
 	}
@@ -11943,7 +11560,7 @@ char query[256];
 struct sqlConnection *conn = hAllocConn(database);
 
 /* set the color to red if the entry is listed in morbidmap */
-sqlSafef(query, sizeof(query), "select geneSymbols from omimMorbidMap where omimId=%s", el->name);
+safef(query, sizeof(query), "select geneSymbols from omimMorbidMap where omimId=%s", el->name);
 geneSymbols = sqlQuickString(conn, query);
 hFreeConn(&conn);
 if (geneSymbols != NULL)
@@ -11965,7 +11582,7 @@ char query[256];
 struct sqlConnection *conn = hAllocConn(database);
 
 /* set the color to red if the entry is listed in morbidmap */
-sqlSafef(query, sizeof(query), "select geneSymbols from omimMorbidMap where omimId=%s", el->name);
+safef(query, sizeof(query), "select geneSymbols from omimMorbidMap where omimId=%s", el->name);
 geneSymbols = sqlQuickString(conn, query);
 hFreeConn(&conn);
 if (geneSymbols != NULL)
@@ -11982,7 +11599,7 @@ static char *omimGeneDiseaseList(char *name)
 /* Return list of diseases associated with a OMIM entry */
 {
 char query[256];
-sqlSafef(query,sizeof(query),
+safef(query,sizeof(query),
       "select distinct description from omimMorbidMap, omimGene "
       "where name='%s' and name=cast(omimId as char) order by description", name);
 return collapseRowsFromQuery(query, "; ", 20);
@@ -11998,7 +11615,7 @@ void omimGeneMethods (struct track *tg)
 /* Methods for original OMIM Genes track. */
 {
 tg->loadItems     = omimGeneLoad;
-tg->itemColor     = omimGeneColor;
+tg->itemColor 	  = omimGeneColor;
 tg->itemNameColor = omimGeneColor;
 tg->itemName      = omimGeneName;
 tg->drawItemAt    = bedPlusLabelDrawAt;
@@ -12023,7 +11640,7 @@ else
 
 void restMethods (struct track *tg)
 {
-tg->itemColor     = restColor;
+tg->itemColor 	  = restColor;
 tg->itemNameColor = restColor;
 }
 
@@ -12196,7 +11813,7 @@ struct linkedFeatures *lfList = NULL, *lf;
 int scoreMin = 0;
 int scoreMax = 99999;
 
-sqlSafefFrag(where, ArraySize(where), "db='%s'", database);
+safef(where, ArraySize(where), "db='%s'", database);
 
 sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, where, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -12304,8 +11921,8 @@ if (wikiTrackEnabled(database, NULL))
     tg->itemName = linkedFeaturesName;
     tg->mapItemName = variomeMapItemName;
     tg->mapItem = variomeMapItem;
-    tg->priority = WIKI_TRACK_PRIORITY;
-    tg->defaultPriority = WIKI_TRACK_PRIORITY;
+    tg->priority = 500.4;
+    tg->defaultPriority = 500.4;
     tg->groupName = cloneString("varRep");
     tg->defaultGroupName = cloneString("varRep");
     tg->exonArrows = FALSE;
@@ -12360,7 +11977,7 @@ if (!zoomedToBaseLevel)
 	return;
 
 conn = hAllocConn(database);
-sqlSafef(query, sizeof(query),
+safef(query, sizeof(query),
 	"select offset,fileName from %s where chrom = '%s'", tg->table,chromName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -12430,7 +12047,8 @@ else
 return tg->height;
 }
 
-void logoMethods(struct track *track, struct trackDb *tdb, int argc, char *argv[])
+void logoMethods(struct track *track, struct trackDb *tdb,
+	int argc, char *argv[])
 /* Load up logo type methods. */
 {
 track->loadItems = logoLoad;
@@ -12522,6 +12140,374 @@ track->nextPrevItem = NULL;
 track->nextPrevExon = NULL;
 }
 
+char* pubsArticleTable(struct track *tg)
+/* return the name of the pubs articleTable, either
+ * the value from the trackDb statement 'articleTable'
+ * or the default value: <trackName>Article */
+{
+char *articleTable = trackDbSettingClosestToHome(tg->tdb, "pubsArticleTable");
+if (isEmpty(articleTable))
+    {
+    char buf[256];
+    safef(buf, sizeof(buf), "%sArticle", tg->track);
+    articleTable = cloneString(buf);
+    }
+return articleTable;
+}
+
+static char *makeMysqlMatchStr(char *str)
+{
+// return a string with all words prefixed with a '+' to force a boolean AND query;
+// we also strip leading/trailing spaces.
+char *matchStr = needMem(strlen(str) * 2 + 1);
+int i = 0;
+for(;*str && isspace(*str);str++)
+    ; while(*str)
+    {
+    matchStr[i++] = '+';
+    for(; *str && !isspace(*str);str++)
+        matchStr[i++] = *str;
+    for(;*str && isspace(*str);str++)
+        ;
+    }
+matchStr[i++] = 0;
+return matchStr;
+}
+
+struct pubsExtra 
+/* additional info needed for publication blat linked features: author+year and title */
+{
+    char* label;
+    char* mouseOver;
+};
+
+static char* pubsFeatureLabel(char* author, char* year) 
+/* create label <author><year> given authors and year strings */
+{
+char* authorYear = NULL;
+
+if (isEmpty(author))
+    author = "NoAuthor";
+if (isEmpty(year))
+    year = "NoYear";
+authorYear  = catTwoStrings(author, year);
+
+return authorYear;
+}
+
+static struct pubsExtra *pubsMakeExtra(char* articleTable, struct sqlConnection* conn, 
+    struct linkedFeatures* lf)
+{
+char query[LARGEBUF];
+struct sqlResult *sr = NULL;
+char **row = NULL;
+struct pubsExtra *extra = NULL;
+
+safef(query, sizeof(query), "SELECT firstAuthor, year, title FROM %s WHERE articleId = '%s'", 
+    articleTable, lf->name);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+{
+    char* firstAuthor = row[0];
+    char* year    = row[1];
+    char* title   = row[2];
+
+    extra = needMem(sizeof(struct pubsExtra));
+    extra->label = pubsFeatureLabel(firstAuthor, year);
+    if (isEmpty(title))
+        extra->mouseOver = extra->label;
+    else
+        extra->mouseOver = cloneString(title);
+}
+
+sqlFreeResult(&sr);
+return extra;
+}
+
+static void pubsAddExtra(struct track* tg, struct linkedFeatures* lf)
+/* add authorYear and title to linkedFeatures->extra */
+{
+char *articleTable = trackDbSettingClosestToHome(tg->tdb, "pubsArticleTable");
+if(isEmpty(articleTable))
+    return;
+if (lf->extra != NULL)
+    return;
+
+struct sqlConnection *conn = hAllocConn(database);
+struct pubsExtra* extra = pubsMakeExtra(articleTable, conn, lf);
+lf->extra = extra;
+hFreeConn(&conn);
+}
+
+static void pubsLoadKeywordYearItems(struct track *tg)
+/* load items that fulfill keyword and year filter */
+{
+struct sqlConnection *conn = hAllocConn(database);
+char *keywords = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsKeywords");
+char *yearFilter = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "pubsYear");
+char *articleTable = pubsArticleTable(tg);
+
+if(yearFilter == NULL || sameWord(yearFilter, "anytime"))
+    yearFilter = NULL;
+
+if(isNotEmpty(keywords))
+    keywords = makeMysqlMatchStr(sqlEscapeString(keywords));
+
+if(isEmpty(yearFilter) && isEmpty(keywords))
+{
+    loadGappedBed(tg);
+}
+else
+    {
+    char* oldLabel = tg->longLabel;
+    tg->longLabel = catTwoStrings(oldLabel, " (filter activated)");
+    freeMem(oldLabel);
+
+    char extra[2048], yearWhere[256], keywordsWhere[1024], prefix[256];
+    char **row;
+    struct linkedFeatures *lfList = NULL;
+    struct trackDb *tdb = tg->tdb;
+    int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMin", "0"));
+    int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tdb, "scoreMax", "1000"));
+    boolean useItemRgb = bedItemRgb(tdb);
+
+    safef(prefix, sizeof(prefix),  "name IN (SELECT articleId FROM %s WHERE", articleTable);
+    if(isNotEmpty(keywords))
+        safef(keywordsWhere, sizeof(keywordsWhere), \
+        "MATCH (citation, title, authors, abstract) AGAINST ('%s' IN BOOLEAN MODE)", keywords);
+    if(isNotEmpty(yearFilter))
+        safef(yearWhere, sizeof(yearWhere), "year >= '%s'", sqlEscapeString(yearFilter));
+
+    if(isEmpty(keywords))
+        safef(extra, sizeof(extra), "%s %s)", prefix, yearWhere);
+    else if(isEmpty(yearFilter))
+        safef(extra, sizeof(extra), "%s %s)", prefix, keywordsWhere);
+    else
+        safef(extra, sizeof(extra), "%s %s AND %s)", prefix, yearWhere, keywordsWhere);
+
+    int rowOffset = 0;
+    struct sqlResult *sr = hExtendedRangeQuery(conn, tg->table, chromName, winStart, winEnd, extra,
+                                               FALSE, NULL, &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+        struct bed *bed = bedLoad12(row+rowOffset);
+        slAddHead(&lfList, bedMungToLinkedFeatures(&bed, tdb, 12, scoreMin, scoreMax, useItemRgb));
+        }
+    sqlFreeResult(&sr);
+    slReverse(&lfList);
+    slSort(&lfList, linkedFeaturesCmp);
+    tg->items = lfList;
+    }
+hFreeConn(&conn);
+}
+
+#define PUBSFILTERNAME "pubsFilterArticleId"
+
+static void activatePslTrackIfCgi(struct track *tg)
+/* the publications hgc creates links back to the browser with 
+ * the cgi param pubsFilterArticleId to show only a single type
+ * of feature for the pubsBlatPsl track. 
+ * If the parameter was supplied, we save this parameter here
+ * into the cart and activate the track.
+ */
+{
+char *articleId = cgiOptionalString(PUBSFILTERNAME);
+//if (articleId==NULL) 
+    //articleId = cartOptionalString(cart, PUBSFILTERNAME);
+
+if (articleId!=NULL) 
+{
+    cartSetString(cart, PUBSFILTERNAME, articleId);
+    tdbSetCartVisibility(tg->tdb, cart, hCarefulTrackOpenVis(database, tg->track));
+    tg->visibility=tvPack;
+}
+}
+
+char *pubsItemName(struct track *tg, void *item)
+/* get author/year from extra field */
+{
+struct linkedFeatures *lf = item;
+pubsAddExtra(tg, lf);
+
+struct pubsExtra* extra = lf->extra;
+if (extra!=NULL)
+    return extra->label;
+else
+    return lf->name;
+
+}
+
+static void pubsMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+				char *itemName, char *mapItemName, int start, int end,
+				int x, int y, int width, int height)
+/* create mouse over with title for pubs blat features. */
+{
+if (!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb)) 
+{
+    struct linkedFeatures *lf = item;
+    pubsAddExtra(tg, lf);
+    struct pubsExtra* extra = lf->extra;
+    char* mouseOver = NULL;
+    if (extra != NULL) 
+        mouseOver = extra->mouseOver;
+    else
+        mouseOver = itemName;
+
+    mapBoxHc(hvg, start, end, x, y, width, height, tg->track, mapItemName, mouseOver); 
+}
+}
+
+static void pubsLoadMarkerItem (struct track *tg)
+/* copy item names into extra field */
+{
+//loadSimpleBed(tg);
+loadSimpleBedAsLinkedFeaturesPerBase(tg);
+//tg->items = simpleBedListToLinkedFeatures(tg->items, tg->bedSize, TRUE, FALSE);
+//if (! (hashFindVal(tdb->settingsHash, "pubsMarkerTable")))
+enum trackVisibility vis = tg->visibility;
+if (vis == tvDense || vis == tvSquish) 
+    return;
+
+struct linkedFeatures *lf = NULL;
+for (lf = tg->items; lf != NULL; lf = lf->next)
+    lf->extra = lf->name;
+}
+
+char *pubsMarkerItemName(struct track *tg, void *item)
+/* retrieve article count from score field and return.*/
+{
+struct linkedFeatures *lf = item;
+char newName[64];
+safef(newName, sizeof(newName), "%d articles", (int) lf->score);
+return cloneString(newName);
+}
+
+static void pubsMarkerMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+				char *itemName, char *mapItemName, int start, int end,
+				int x, int y, int width, int height)
+{
+struct linkedFeatures *lf = item;
+genericMapItem(tg, hvg, item,
+		    lf->extra, lf->extra, start, end,
+		    x, y, width, height);
+}
+
+static struct hash* pubsLookupSequences(struct track *tg, struct sqlConnection* conn, char* articleId, bool getSnippet)
+/* create a hash with a mapping annotId -> snippet or annotId -> shortSeq for an articleId*/
+{
+    char query[LARGEBUF];
+    char *sequenceTable = trackDbRequiredSetting(tg->tdb, "pubsSequenceTable");
+    char *selectValSql = NULL;
+    if (getSnippet)
+        selectValSql = "replace(replace(snippet, \"<B>\", \"\\n>>> \"), \"</B>\", \" <<<\\n\")";
+    else
+        selectValSql = "concat(substr(sequence,1,4),\"...\",substr(sequence,-4))";
+
+    safef(query, sizeof(query), "SELECT annotId, %s  FROM %s WHERE articleId='%s' ", 
+        selectValSql, sequenceTable, articleId);
+    struct hash *seqIdHash = sqlQuickHash(conn, query);
+    //freeMem(sequenceTable); // XX Why does this crash??
+    return seqIdHash;
+}
+
+static char *pubsArticleDispId(struct track *tg, struct sqlConnection *conn, char* articleId)
+/* given an articleId, lookup author and year and create <author><year> label for it */
+{
+char* dispLabel = NULL;
+char *articleTable = pubsArticleTable(tg);
+char query[LARGEBUF];
+safef(query, sizeof(query), "SELECT firstAuthor, year FROM %s WHERE articleId = '%s'", 
+    articleTable, articleId);
+struct sqlResult *sr = sqlGetResult(conn, query);
+if (sr!=NULL)
+    {
+    char **row = NULL;
+    row = sqlNextRow(sr);
+    if (row != NULL)
+        dispLabel = pubsFeatureLabel(row[0], row[1]);
+    else
+        dispLabel = articleId;
+    }
+else
+    dispLabel = articleId;
+sqlFreeResult(&sr);
+return dispLabel;
+}
+
+static void pubsPslLoadItems(struct track *tg)
+/* load only psl items from a single article */
+{
+// get articleId to filter on
+char *articleId = cartOptionalString(cart, PUBSFILTERNAME);
+if (articleId==NULL)
+    return;
+
+struct sqlConnection *conn = hAllocConn(database);
+char* dispLabel = pubsArticleDispId(tg, conn, articleId);
+struct hash *idToSnip = pubsLookupSequences(tg, conn, articleId, TRUE);
+struct hash *idToSeq = pubsLookupSequences(tg, conn, articleId, FALSE);
+
+// change track label 
+char* oldLabel = tg->longLabel;
+tg->longLabel = catTwoStrings("Individual matches for article ", dispLabel);
+freeMem(oldLabel);
+
+// filter and load items for this articleId
+char where[256];
+safef(where, sizeof(where), " articleId=%s ", articleId);
+
+int rowOffset = 0;
+struct sqlResult *sr = NULL;
+sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, where, &rowOffset);
+
+struct linkedFeatures *lfList = NULL;
+char **row = NULL;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct psl *psl = pslLoad(row+rowOffset);
+    slAddHead(&lfList, lfFromPsl(psl, TRUE));
+    char* shortSeq  = hashFindVal(idToSeq,  lfList->name);
+    char* snip = hashFindVal(idToSnip, lfList->name);
+    struct pubsExtra *extra = needMem(sizeof(struct pubsExtra));
+    extra->mouseOver=snip;
+    extra->label=shortSeq;
+    lfList->extra = extra;
+    }
+sqlFreeResult(&sr);
+slReverse(&lfList);
+slSort(&lfList, linkedFeaturesCmp);
+tg->items = lfList;
+hFreeConn(&conn);
+}
+
+static void pubsBlatPslMethods(struct track *tg)
+/* a track that shows only the indiv matches for one single article */
+{
+activatePslTrackIfCgi(tg);
+tg->loadItems = pubsPslLoadItems;
+tg->itemName  = pubsItemName;
+tg->mapItem   = pubsMapItem;
+}
+
+static void pubsBlatMethods(struct track *tg)
+/* publication blat tracks are bed12+2 tracks of sequences in text, mapped with BLAT */
+{
+//bedMethods(tg);
+tg->loadItems = pubsLoadKeywordYearItems;
+tg->itemName  = pubsItemName;
+tg->mapItem   = pubsMapItem;
+}
+
+static void pubsMarkerMethods(struct track *tg)
+/* publication marker tracks are bed5 tracks of genome marker occurences like rsXXXX found in text*/
+{
+//bedMethods(tg);
+tg->bedSize   = 5;
+tg->loadItems = pubsLoadMarkerItem;
+tg->mapItem   = pubsMarkerMapItem;
+tg->itemName  = pubsMarkerItemName;
+}
+
 void fillInFromType(struct track *track, struct trackDb *tdb)
 /* Fill in various function pointers in track from type field of tdb. */
 {
@@ -12565,15 +12551,6 @@ else if (sameWord(type, "bigBed"))
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }
-else if (sameWord(type, "bigGenePred"))
-    {
-    tdb->canPack = TRUE;
-    wordCount++;
-    words[1] = "12";
-    bigBedMethods(track, tdb, wordCount, words);
-    if (trackShouldUseAjaxRetrieval(track))
-        track->loadItems = dontLoadItems;
-    }
 else if (sameWord(type, "bedGraph"))
     {
     bedGraphMethods(track, tdb, wordCount, words);
@@ -12602,10 +12579,7 @@ else if (sameWord(type, "sample"))
 else if (sameWord(type, "genePred"))
     {
     linkedFeaturesMethods(track);
-    if (startsWith("ensGene", track->track))
-        track->loadItems = loadGenePredEnsGene;
-    else
-        track->loadItems = loadGenePred;
+    track->loadItems = loadGenePred;
     track->colorShades = NULL;
     if (track->itemAttrTbl != NULL)
         track->itemColor = genePredItemAttrColor;
@@ -12627,12 +12601,10 @@ else if (sameWord(type, "psl"))
     if (startsWith("pubs", track->track))
         pubsBlatPslMethods(track);
     }
-#ifdef NOTNOW
 else if (sameWord(type, "snake"))
     {
     snakeMethods(track, tdb, wordCount, words);
     }
-#endif
 else if (sameWord(type, "chain"))
     {
     chainMethods(track, tdb, wordCount, words);
@@ -12651,23 +12623,9 @@ else if (sameWord(type, "bam"))
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }
-#ifdef USE_HAL
-else if (sameWord(type, "halSnake"))
-    {
-    halSnakeMethods(track, tdb, wordCount, words);
-    if (trackShouldUseAjaxRetrieval(track))
-        track->loadItems = dontLoadItems;
-    }
-#endif
 else if (sameWord(type, "vcfTabix"))
     {
     vcfTabixMethods(track);
-    if (trackShouldUseAjaxRetrieval(track))
-        track->loadItems = dontLoadItems;
-    }
-else if (sameWord(type, "vcf"))
-    {
-    vcfMethods(track);
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }
@@ -12760,9 +12718,6 @@ else if (sameWord(type, "gvf"))
     {
     gvfMethods(track);
     }
-/* add handlers for wildcard */
-if (startsWith("peptideAtlas", track->track))
-    peptideAtlasMethods(track);
 #endif /* GBROWSE */
 }
 
@@ -12781,7 +12736,6 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	    lastTime = clock1000();
 	    if (!subtrack->loadItems) // This could happen if track type has no handler (eg, for new types)
 		errAbort("Error: No loadItems() handler for subtrack (%s) of composite track (%s) (is this a new track 'type'?)\n", subtrack->track, track->track);
-	    checkIfWiggling(cart, subtrack);
 	    subtrack->loadItems(subtrack);
 	    if (measureTiming)
 		{
@@ -12807,15 +12761,15 @@ int height = 0;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     if (isSubtrackVisible(subtrack))
-        {
-        limitVisibility(subtrack);
-        enum trackVisibility minVis = vis;
-        if (subtrack->limitedVisSet)
-            minVis = tvMin(minVis, subtrack->limitedVis);
-        int h = subtrack->totalHeight(subtrack, minVis);
-        subtrack->height = h;
-        height += h;
-        }
+	   {
+	   limitVisibility(subtrack);
+	   enum trackVisibility minVis = vis;
+	   if (subtrack->limitedVisSet)
+	       minVis = tvMin(minVis, subtrack->limitedVis);
+	   int h = subtrack->totalHeight(subtrack, minVis);
+	   subtrack->height = h;
+	   height += h;
+	   }
     }
 track->height = height;
 return track->height;
@@ -12999,6 +12953,7 @@ track->isRemoteSql =  (track->remoteSqlHost != NULL && track->remoteSqlUser != N
 			&& track->remoteSqlDatabase != NULL && track->remoteSqlTable !=NULL);
 
 exonArrows = trackDbSetting(tdb, "exonArrows");
+nextItem = trackDbSetting(tdb, "nextItemButton");
 /* default exonArrows to on, except for tracks in regulation/expression group */
 if (exonArrows == NULL)
     {
@@ -13009,7 +12964,6 @@ if (exonArrows == NULL)
     }
 track->exonArrows = sameString(exonArrows, "on");
 track->nextExonButtonable = TRUE;
-nextItem = trackDbSetting(tdb, "nextItemButton");
 if (nextItem && sameString(nextItem, "off"))
     track->nextExonButtonable = FALSE;
 track->nextItemButtonable = track->nextExonButtonable;
@@ -13064,18 +13018,6 @@ for( ; (handler == NULL) && (tdb->parent != NULL);  )
     handler = lookupTrackHandler(tdb->table);
     }
 
-// if nothing found, try the "trackHandler" statement
-if (handler == NULL)
-    {
-    char *handlerName = trackDbSetting(tdb, "trackHandler");
-    if (handlerName != NULL)
-        {
-        handler = lookupTrackHandler(handlerName);
-        if (handler==NULL)
-            errAbort("track %s defined a trackHandler in trackDb which does not exist", tdb->track);
-        }
-    }
-
 return handler;
 }
 
@@ -13087,17 +13029,15 @@ registerTrackHandler("rgdGene", rgdGeneMethods);
 registerTrackHandler("cgapSage", cgapSageMethods);
 registerTrackHandler("cytoBand", cytoBandMethods);
 registerTrackHandler("cytoBandIdeo", cytoBandIdeoMethods);
-
 registerTrackHandler("bacEndPairs", bacEndPairsMethods);
-registerTrackHandler("bacEndPairsBad", bacEndPairsMethods);
-registerTrackHandler("bacEndPairsLong", bacEndPairsMethods);
-registerTrackHandler("bacEndSingles", bacEndPairsMethods);
-registerTrackHandler("fosEndPairs", bacEndPairsMethods);
-registerTrackHandler("fosEndPairsBad", bacEndPairsMethods);
-registerTrackHandler("fosEndPairsLong", bacEndPairsMethods);
-registerTrackHandler("earlyRep", bacEndPairsMethods);
-registerTrackHandler("earlyRepBad", bacEndPairsMethods);
-
+registerTrackHandler("bacEndPairsBad", bacEndPairsBadMethods);
+registerTrackHandler("bacEndPairsLong", bacEndPairsLongMethods);
+registerTrackHandler("bacEndSingles", bacEndSinglesMethods);
+registerTrackHandler("fosEndPairs", fosEndPairsMethods);
+registerTrackHandler("fosEndPairsBad", fosEndPairsBadMethods);
+registerTrackHandler("fosEndPairsLong", fosEndPairsLongMethods);
+registerTrackHandler("earlyRep", earlyRepMethods);
+registerTrackHandler("earlyRepBad", earlyRepBadMethods);
 registerTrackHandler("genMapDb", genMapDbMethods);
 registerTrackHandler("cgh", cghMethods);
 registerTrackHandler("mcnBreakpoints", mcnBreakpointsMethods);
@@ -13128,26 +13068,6 @@ registerTrackHandler("snp135", snp125Methods);
 registerTrackHandler("snp135Common", snp125Methods);
 registerTrackHandler("snp135Flagged", snp125Methods);
 registerTrackHandler("snp135Mult", snp125Methods);
-registerTrackHandler("snp137", snp125Methods);
-registerTrackHandler("snp137Common", snp125Methods);
-registerTrackHandler("snp137Flagged", snp125Methods);
-registerTrackHandler("snp137Mult", snp125Methods);
-registerTrackHandler("snp138", snp125Methods);
-registerTrackHandler("snp138Common", snp125Methods);
-registerTrackHandler("snp138Flagged", snp125Methods);
-registerTrackHandler("snp138Mult", snp125Methods);
-registerTrackHandler("snp139", snp125Methods);
-registerTrackHandler("snp139Common", snp125Methods);
-registerTrackHandler("snp139Flagged", snp125Methods);
-registerTrackHandler("snp139Mult", snp125Methods);
-registerTrackHandler("snp141", snp125Methods);
-registerTrackHandler("snp141Common", snp125Methods);
-registerTrackHandler("snp141Flagged", snp125Methods);
-registerTrackHandler("snp141Mult", snp125Methods);
-registerTrackHandler("snp142", snp125Methods);
-registerTrackHandler("snp142Common", snp125Methods);
-registerTrackHandler("snp142Flagged", snp125Methods);
-registerTrackHandler("snp142Mult", snp125Methods);
 registerTrackHandler("ld", ldMethods);
 registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("cnpSharp2", cnpSharp2Methods);
@@ -13270,7 +13190,6 @@ registerTrackHandler("tightMrna", mrnaMethods);
 registerTrackHandler("tightEst", mrnaMethods);
 registerTrackHandler("cpgIsland", cpgIslandMethods);
 registerTrackHandler("cpgIslandExt", cpgIslandMethods);
-registerTrackHandler("cpgIslandExtUnmasked", cpgIslandMethods);
 registerTrackHandler("cpgIslandGgfAndy", cpgIslandMethods);
 registerTrackHandler("cpgIslandGgfAndyMasked", cpgIslandMethods);
 registerTrackHandler("exoMouse", exoMouseMethods);
@@ -13292,9 +13211,6 @@ registerTrackHandler("ncRna", ncRnaMethods);
 registerTrackHandler("rmskLinSpec", repeatMethods);
 registerTrackHandler("rmsk", repeatMethods);
 registerTrackHandler("rmskNew", repeatMethods);
-registerTrackHandler("joinedRmsk", rmskJoinedMethods);
-registerTrackHandler("rmskJoinedBaseline", rmskJoinedMethods);
-registerTrackHandler("rmskJoinedCurrent", rmskJoinedMethods);
 registerTrackHandler("rmskCensor", repeatMethods);
 registerTrackHandler("simpleRepeat", simpleRepeatMethods);
 registerTrackHandler("chesSimpleRepeat", simpleRepeatMethods);
@@ -13310,6 +13226,7 @@ registerTrackHandler("encodeErgeMethProm",encodeErgeMethods);
 registerTrackHandler("encodeErgeStableTransf",encodeErgeMethods);
 registerTrackHandler("encodeErgeSummary",encodeErgeMethods);
 registerTrackHandler("encodeErgeTransTransf",encodeErgeMethods);
+registerTrackHandler("encodeGencodeGenePolyAMar07",bed9Methods);
 registerTrackHandlerOnFamily("encodeStanfordNRSF",encodeStanfordNRSFMethods);
 registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
@@ -13392,8 +13309,33 @@ registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
 registerTrackHandler("jaxAlleleLift", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotypeLift", jaxPhenotypeMethods);
 /* ENCODE related */
-gencodeRegisterTrackHandlers();
-registerTrackHandler("affyTxnPhase2b", affyTxnPhase2Methods);
+registerTrackHandlerOnFamily("wgEncodeGencode", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeSangerGencode", gencodeGeneMethods);
+// one per gencode version, after V7 when it was substantially changed
+// FIXME: this is hacky, need a way to register based on pattern
+registerTrackHandlerOnFamily("wgEncodeGencodeV3", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV4", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV7", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV8", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV9", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV10", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV11", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV12", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV13", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV14", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV15", gencodeGeneMethods);
+
+registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeManual20081001", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeAuto20081001", gencodeGeneMethods);
+registerTrackHandlerOnFamily("encodeGencodeGene", gencodeGeneMethods);
+registerTrackHandlerOnFamily("encodeGencodeGeneJun05", gencodeGeneMethods);
+registerTrackHandlerOnFamily("encodeGencodeGeneOct05", gencodeGeneMethods);
+registerTrackHandlerOnFamily("encodeGencodeGeneMar07", gencodeGeneMethods);
+registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
+registerTrackHandler("encodeGencodeIntronJun05", gencodeIntronMethods);
+registerTrackHandler("encodeGencodeIntronOct05", gencodeIntronMethods);
+registerTrackHandlerOnFamily("encodeGencodeRaceFrags", gencodeRaceFragsMethods);
+registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 registerTrackHandler("gvPos", gvMethods);
 registerTrackHandlerOnFamily("pgSnp", pgSnpMethods);
 registerTrackHandlerOnFamily("pgSnpHgwdev", pgSnpMethods);
@@ -13419,7 +13361,6 @@ registerTrackHandler("omimLocation", omimLocationMethods);
 registerTrackHandler("omimComposite", omimGene2Methods);
 registerTrackHandler("cosmic", cosmicMethods);
 registerTrackHandler("rest", restMethods);
-registerTrackHandler("lrg", lrgMethods);
 #endif /* GBROWSE */
 }
 
