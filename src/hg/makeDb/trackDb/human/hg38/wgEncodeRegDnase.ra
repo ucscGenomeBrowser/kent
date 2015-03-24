@@ -3,7 +3,6 @@
 track wgEncodeRegDnaseClustered
 superTrack wgEncodeReg dense
 shortLabel DNase Clusters
-pennantIcon encodeThumbnail.jpg ../ENCODE "ENCODE project at UCSC"
 longLabel DNase I Hypersensitivity Peak Clusters from ENCODE (95 cell types)
 inputTableFieldDisplay cellType treatment
 controlledVocabulary cellType=hgFixed.wgEncodeCell treatment=hgFixed.wgEncodeTreatment 
@@ -23,7 +22,6 @@ superTrack wgEncodeReg hide
 compositeTrack on
 shortLabel DNase HS
 longLabel DNase I Hypersensitivity in 95 cell types from ENCODE
-pennantIcon encodeThumbnail.jpg ../ENCODE "ENCODE project at UCSC"
 group regulation
 showSubtrackColorOnUi on
 subGroup1 view Views a_Peaks=Peaks b_Hot=Hotspots c_Signal=Signal
@@ -2268,7 +2266,6 @@ track wgEncodeRegDnaseWig
 superTrack wgEncodeReg hide
 shortLabel DNase Signal
 longLabel DNase I Hypersensitivity Signal Colored by Similarity from ENCODE
-pennantIcon encodeThumbnail.jpg ../ENCODE "ENCODE project at UCSC"
 visibility full
 type bigWig 0 10000
 maxHeightPixels 128:64:11
