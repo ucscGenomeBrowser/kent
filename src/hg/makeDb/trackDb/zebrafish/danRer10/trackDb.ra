@@ -6,6 +6,12 @@ html gold
 track gap override
 html gap
 
+track xenoRefGene override
+visibility pack
+
+track refGene override
+visibility pack
+
 searchTable gold
 shortCircuit 1
 termRegex [ABCFLN][ACKLOPQRTUX][B0-9_][Z0-9][0-9]+(\.[0-9]+)?

@@ -236,6 +236,8 @@ static int bedToGffLines(struct bed *bedList, struct slName *exonFramesList, str
  * Note that field count (perhaps reduced by bitwise intersection)
  * can in effect override hti. */
 {
+if (! bedList)
+    return 0;
 struct hash *nameHash = newHash(20);
 struct bed *bed;
 struct slName *exonFrames = exonFramesList;

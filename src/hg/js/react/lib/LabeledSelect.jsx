@@ -11,8 +11,9 @@ var LabeledSelect = React.createClass({
     propTypes: { label: pt.string.isRequired,  // label that appears above select input
                  // Optional:
                  selected: pt.string,          // initial selected value
-                 options: pt.object,           // Immutable.List [ .Map{value: x, label: y,
-                                               //                       disabled: false}, ... ]
+                 options: pt.object,           // select options; should be Immutable version of
+                                               // [ {value: ..., label: ..., disabled: bool}, ... ]
+                                               // (disabled member is optional)
                  className: pt.string          // class(es) to pass to wrapper div
                },
 

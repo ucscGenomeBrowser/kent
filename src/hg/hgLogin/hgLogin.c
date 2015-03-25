@@ -432,9 +432,19 @@ char *username = cgiUsualString("user","");
 hPrintf(
     "<div id=\"confirmationBoxPwd\" class=\"centeredContainer formBox\">"
     "<h2>%s</h2>", brwName);
+char *contactAddr = returnAddr;
+if (sameString(returnAddr, "NOEMAIL"))
+    contactAddr = "the administrator of this Genome Browser Mirror";
+
 hPrintf(
     "<p id=\"confirmationMsgPwd\" class=\"confirmationTxt\">An email containing password reset information has been sent to the registered email address of <B>%s</B>.<BR><BR>"
-    " If you do not receive an email, please contact genome-www@soe.ucsc.edu for help.</p>", username);
+    " If you do not receive an email, please contact %s for help.</p>", username, contactAddr);
+
+if (sameString(returnAddr, "NOEMAIL"))
+    hPrintf("<p>If you still have questions, you can contact the Genome Browser team at "
+    "genome-www@soe.ucsc.edu. As this is a mirror website not managed by UCSC, please "
+    "specify the address of the mirror in your email.</p>");
+
 hPrintf(
     "<p><a href=\"hgLogin?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>");
 cartRemove(cart, "hgLogin_helpWith");
