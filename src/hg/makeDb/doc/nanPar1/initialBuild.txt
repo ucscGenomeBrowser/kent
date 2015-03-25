@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # This file describes browser build for the nanPar1
-# Nanorana parkeri
+# Nanorana parkeri - Tibetan frog
 
 # http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=JYOU01
 
@@ -267,7 +267,6 @@ searchPriority 8
     cat fb.simpleRepeat
     # 112563839 bases of 1977771384 (5.691%) in intersection
 
-XXX
     # using the Window Masker result:
     cd /hive/data/genomes/nanPar1
     twoBitMask bed/windowMasker/nanPar1.cleanWMSdust.2bit \
@@ -275,44 +274,47 @@ XXX
     #   you can safely ignore the warning about fields >= 13
     twoBitToFa nanPar1.2bit stdout | faSize stdin > faSize.nanPar1.2bit.txt
     cat faSize.nanPar1.2bit.txt
-    # 1192725744 bases (12708611 N's 1180017133 real 956431179 upper
-    #    223585954 lower) in 1141 sequences in 1 files
-    # Total size: mean 1045333.7 sd 3203065.9 min 913 (JRUM01016734v1)
-    #    max 30727332 (KN265652v1) median 5587
-    # %18.75 masked total, %18.95 masked real
+    # 2053849526 bases (76078142 N's 1977771384 real 1208345365
+    #    upper 769426019 lower) in 25187 sequences in 1 files
+    # Total size: mean 81544.0 sd 330701.2 min 200 (JYOU01147511v1)
+    #    max 8606022 (KN905849v1) median 453
+    # %37.46 masked total, %38.90 masked real
 
     rm /gbdb/nanPar1/nanPar1.2bit
     ln -s `pwd`/nanPar1.2bit /gbdb/nanPar1/nanPar1.2bit
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2015-03-20 - Hiram)
+## WINDOWMASKER (DONE - 2015-03-20 - Hiram)
 
     mkdir /hive/data/genomes/nanPar1/bed/windowMasker
     cd /hive/data/genomes/nanPar1/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev nanPar1) > do.log 2>&1
-XXX - running - Fri Mar 20 08:50:02 PDT 2015
-    # real    688m38.613s
-    # most interesting very long run time for this small genome ?
+    # real    153m54.144s
 
     # Masking statistics
     cat faSize.nanPar1.cleanWMSdust.txt
-    # 1192725744 bases (12708611 N's 1180017133 real 956589777 upper
-    #    223427356 lower) in 1141 sequences in 1 files
-    # Total size: mean 1045333.7 sd 3203065.9 min 913 (JRUM01016734v1)
-    #    max 30727332 (KN265652v1) median 5587
-    # %18.73 masked total, %18.93 masked real
+    # 2053849526 bases (76078142 N's 1977771384 real 1208849805 upper
+    #     768921579 lower) in 25187 sequences in 1 files
+    # Total size: mean 81544.0 sd 330701.2 min 200 (JYOU01147511v1)
+    #    max 8606022 (KN905849v1) median 453
+    # %37.44 masked total, %38.88 masked real
 
     cat fb.nanPar1.rmsk.windowmaskerSdust.txt
-    # 37125217 bases of 1192725744 (3.113%) in intersection
+    # 23839116 bases of 2053849526 (1.161%) in intersection
 
 ##########################################################################
-# cpgIslands - (TBD - 2015-02-20 - Hiram)
+# cpgIslands - (DONE - 2015-03-20 - Hiram)
     mkdir /hive/data/genomes/nanPar1/bed/cpgIslands
     cd /hive/data/genomes/nanPar1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku nanPar1) > do.log 2>&1 &
     # real    117m34.561s
+    # failed during kluster hardMask operation, continuing:
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -continue=cpg -workhorse=hgwdev -smallClusterHub=ku nanPar1) \
+         > cpg.log 2>&1 &
+XXX - running - Tue Mar 24 11:35:00 PDT 2015
 
     cat fb.nanPar1.cpgIslandExt.txt
     # 18261889 bases of 2856044136 (0.639%) in intersection
@@ -323,25 +325,13 @@ XXX - running - Fri Mar 20 08:50:02 PDT 2015
     cd /hive/data/genomes/nanPar1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku nanPar1) > do.log 2>&1
-    # real    9m58.844s
-# Completed: 1140 of 1141 jobs
-# Crashed: 1 jobs
-# CPU time in finished jobs:      28452s     474.20m     7.90h    0.33d  0.001 y
-# IO & Wait Time:                  5894s      98.23m     1.64h    0.07d  0.000 y
-# Average job time:                  30s       0.50m     0.01h    0.00d
-# Longest finished job:             780s      13.00m     0.22h    0.01d
-# Submission to last job:           782s      13.03m     0.22h    0.01d
-
-    # one job failed, it passed with a window size of 2,000,000
-    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
-      -continue=makeBed -bigClusterHub=ku nanPar1) > makeBed.log 2>&1
-    # real    3m7.584s
+    # real    57m21.101s
 
     cat fb.nanPar1.genscan.txt
-    #   26595865 bases of 1180019022 (2.254%) in intersection
+    #   55630505 bases of 1977771384 (2.813%) in intersection
 
     cat fb.nanPar1.genscanSubopt.txt
-    #   30584112 bases of 1180019022 (2.592%) in intersection
+    #   58340692 bases of 1977771384 (2.950%) in intersection
 
 ########################################################################
 # Create kluster run files (TBD - 2015-03-06 - Hiram)
@@ -349,25 +339,25 @@ XXX - running - Fri Mar 20 08:50:02 PDT 2015
     cd /hive/data/genomes/nanPar1
     # numerator is nanPar1 gapless bases "real" as reported by:
     head -1 faSize.nanPar1.2bit.txt
-# 1192725744 bases (12708611 N's 1180017133 real 956431179 upper
-#    223585954 lower) in 1141 sequences in 1 files
+# 2053849526 bases (76078142 N's 1977771384 real 1208345365 upper
+#    76942601 lower) in 25187 sequences in 1 files
 
     # numerator is 'real' base count
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 1180017133 / 2861349177 \) \* 1024
-    # ( 1180017133 / 2861349177 ) * 1024 = 422.296431
+    calc \( 1977771384 / 2861349177 \) \* 1024
+    # ( 1977771384 / 2861349177 ) * 1024 = 707.791245
 
-    # ==> use -repMatch=400 according to size scaled down from 1024 for human.
+    # ==> use -repMatch=700 according to size scaled down from 1024 for human.
     #   and rounded down to nearest 50
     cd /hive/data/genomes/nanPar1
     time blat nanPar1.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/nanPar1.11.ooc \
-        -repMatch=400
-    # Wrote 15307 overused 11-mers to jkStuff/nanPar1.11.ooc
-    # real    0m56.863s
+        -repMatch=700
+    # Wrote 23756 overused 11-mers to jkStuff/nanPar1.11.ooc
+    #  real    0m32.961s
 
     # there are no non-bridged gaps, do not need to do this
     #   check non-bridged gaps to see what the typical size is:
@@ -392,24 +382,26 @@ XXX - running - Fri Mar 20 08:50:02 PDT 2015
     # survey sizes:
     n50.pl chrom.sizes
 #       reading: chrom.sizes
-#       contig count: 1141, total size: 1192725744, one half size: 596362872
+#       contig count: 25187, total size: 2053849526, one half size: 1026924763
 # cumulative    N50 count       contig  contig size
-# 588589064       39      KN265690v1      9497852
-# 596362872 one half size
-# 597819807       40      KN265691v1      9230743
+# 1026149130      545     KN906416v1      1073586
+# 1026924763 one half size
+# 1027218231      546     KN906384v1      1069101
 
 #############################################################################
-# GENBANK AUTO UPDATE (TBD - 2015-02-20 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2015-03-24 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
     # #organism       mrnaCnt estCnt  refSeqCnt
-    # Aquila chrysaetos canadensis - there are no entries at all
+    #  Nanorana parkeri	3	0	0
+    #  Nanorana pleskei	3	0	0
+    #  Nanorana yunnanensis	1	0	0
 
-    # edit etc/genbank.conf to add nanPar1 just after melGal1
+    # edit etc/genbank.conf to add nanPar1 just before xenTro7
 
-# nanPar1 (golden eagle)
+# nanPar1 (tibetan frog)
 nanPar1.serverGenome = /hive/data/genomes/nanPar1/nanPar1.2bit
 nanPar1.clusterGenome = /hive/data/genomes/nanPar1/nanPar1.2bit
 nanPar1.ooc = /hive/data/genomes/nanPar1/jkStuff/nanPar1.11.ooc
@@ -432,24 +424,21 @@ nanPar1.genbank.est.native.load = no
 nanPar1.genbank.est.native.loadDesc = no
 # nanPar1.upstreamGeneTbl = ensGene
 
-
-    git commit -m "Added nanPar1; refs #14560" etc/genbank.conf
-    git push
-    # update /cluster/data/genbank/:
-    make etc-update
-
-
     # Edit src/lib/gbGenome.c to add new species.
-    git commit -m "Added aquChr Aquila chrysaetos canadensis refs #14560" \
-       src/lib/gbGenome.c
+    git commit -m "Added nanPar Nanorana parkeri refs #15056" \
+         etc/genbank.conf src/lib/gbGenome.c
     git push
+    # update /cluster/data/genbank/etc/:
+    make etc-update
+    # update /cluster/data/genbank/bin/:
     make install-server
 
     screen      #  control this business with a screen since it takes a while
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial nanPar1
-    # logFile: var/build/logs/2015.03.06-14:45:22.nanPar1.initalign.log
+    # logFile: var/build/logs/2015.03.24-11:49:34.nanPar1.initalign.log
+XXX - running -
     # real    391m48.657s
 
     #   To re-do, rm the dir first:
