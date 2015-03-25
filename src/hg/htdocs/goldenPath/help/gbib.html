@@ -461,6 +461,25 @@ type:
     fetchChromSizes hg19 &gt; hg19.sizes
     bedToBigBed bedExample.txt hg19.sizes myBigBed.bb
     </pre></p>
+
+<p><b><em>Example: Loading a GEO File</em></b></p>
+<p>
+Some files at GEO are already binary indexed files that can be loaded in the browser, but since
+they are not hosted on a server that accepts byte-ranges, they are not available over the internet.
+With a GBiB you can place these files on your local shared folder and then browse them. In the following
+example the URL of the bigWig (.bw) file was obtained for the wget by right clicking the http link for
+this <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1186795">GSM1186795</a> example,
+that only displays data on chrM and chrX.
+    <pre>
+    ssh browser@localhost -p 1235  (to enter GBiB from your computer terminal, password: browser)
+    cd /folders
+    sudo wget "http://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM1186795&format=file&file=GSM1186795%5FDZ012%5FTRA1%5FN2L3%5Ftr27%5Fce10%5FBTm1x200n%2Ebw" -O GSM1186795.bw
+    </pre>
+The file can then be found in the GBiB's <a href="http://127.0.0.1:1234/folders/">http://127.0.0.1:1234/folders/</a>
+location, or loaded with a direct link to the files location: <a
+href="http://127.0.0.1:1234/cgi-bin/hgTracks?db=hg19&hgt.customText=http://127.0.0.1:1234/folders/GSM1186795.bw&position=chrM"
+target="_blank">http://127.0.0.1:1234/cgi-bin/hgTracks?db=hg19&hgt.customText=<b>http://127.0.0.1:1234/folders/GSM1186795.bw</b>&position=chrM</a>.
+</p>
 </div><!-- .sectionContent -->
 </div><!-- .section -->
 
