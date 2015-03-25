@@ -672,6 +672,22 @@ take several hours over a slow Internet connection. </p>
 <em>gbib-root.vdi</em>. Place this file in the same directory with the files extracted from
 your original GBiB installation. Do not extract and overwrite <em>gbib-data.vdi</em> -- it contains 
 your personal track and session settings and mirrored tracks. </p>
+<p>
+<b>Problem: </b>I need proxy support for my files to load.</p>
+<p>
+<em>Solution: </em>Proxy servers may be required by some installations to get through a
+firewall. One must add the setting <tt>httpProxy</tt> to hg.conf.local at
+/usr/local/apache/cgi-bin/hg.conf.local:</p>
+<p>
+<code>httpProxy=http://someProxyServer:443/</code></p>
+<p>
+If the proxy server requires BASIC authentication, then the line in hg.conf.local should look like:</p>
+<p>
+<code>httpProxy=http://user:password@someProxyServer:443/</code><p>
+<p>
+The file /usr/local/apache/cgi-bin/hg.conf should already include a line like
+<tt>include hg.conf.local</tt> to incorporate the changes in hg.conf.local.</p>
+<p>
 </div><!-- .sectionContent -->
 </div><!-- .section -->
 
