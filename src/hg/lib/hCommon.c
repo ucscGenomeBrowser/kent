@@ -262,6 +262,23 @@ switch (str[0])
     }
 return ret;
 }
+boolean hIsGisaidServer()
+/* Gisaid is not used anymore */
+{
+return FALSE;
+}
+
+boolean hIsGsidServer()
+/* Gsid is not use anymore */
+{
+return FALSE;
+}
+
+boolean validateGisaidUser()
+/* Gsid is not use anymore */
+{
+return FALSE;
+}
 
 boolean hIsCgbServer()
 /* Is this a cancer genome browser server? Change for config variable

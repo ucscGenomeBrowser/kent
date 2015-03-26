@@ -8,6 +8,7 @@
 
 #ifndef HGCOLORS_H
 #include "hgColors.h"
+#include "cart.h"
 #endif
 
 char *hgcName();
@@ -79,12 +80,11 @@ int chromToInt(char *s);
  *  X = 23 Y = 24 Un = 25 M = 26 random = chr + 26;*/
 
 boolean hIsGisaidServer();
-/* Is this the GISAID-customized server? Change for config variable
- * gisaid.server=yes */
-
+/* Gisaid and Gsid are not used anymore */
 boolean hIsGsidServer();
-/* Is this the GSID-customized server? Change for config variable
- * gsid.server=yes */
+/* Gisaid and Gsid are not used anymore */
+boolean validateGisaidUser();
+/* Gisaid and Gsid are not used anymore */
 
 boolean hIsCgbServer();
 /* Is this a cancer genome browser server? Change for config variable
@@ -102,13 +102,6 @@ void hTableEnd();
  * CONTROL_TABLE_WIDTH in hui.h */
 #define	hgDefaultLeftLabelWidth	120
 #define	hgDefaultGfxBorder	1
-
-/* gisaid selection file option variable names */
-#define gisaidSubjList "gisaidTable.gisaidSubjList"
-#define gisaidSeqList "gisaidTable.gisaidSeqList"
-#define gisaidAaSeqList "gisaidTable.gisaidAaSeqList"
-
-boolean validateGisaidUser();
 
 boolean hDumpStackEnabled(void);
 /* is browser.dumpStack enabled?  */
@@ -137,5 +130,9 @@ __attribute__((format(printf, 1, 2)))
 
 boolean hAllowAllTables(void);
 /* Return TRUE if hg.conf's hgta.disableAllTables doesn't forbid an 'all tables' menu. */
+
+void hCgiStartSetup(struct cart *cart);
+/* do the CGI setup operations: CGI apoptosis, UDC setup etc 
+ * usually called at the start of the doMiddle function */
 
 #endif /* HCOMMON_H */
