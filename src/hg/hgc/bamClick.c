@@ -177,10 +177,6 @@ else
    skipQualityScore = TRUE;
 // TODO: libify tdb settings table_pairEndsByName, stripPrefix and pairSearchRange
 
-knetUdcInstall();
-if (udcCacheTimeout() < 300)
-    udcSetCacheTimeout(300);
-
 if (sameString(item, "zoom in"))
     printf("Zoom in to a region with fewer items to enable 'detail page' links for individual items.<BR>");
 

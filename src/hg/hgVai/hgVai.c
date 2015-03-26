@@ -2290,11 +2290,6 @@ regionType = cartUsualString(cart, hgvaRegionType, hgvaRegionTypeGenome);
 if (isEmpty(cartOptionalString(cart, hgvaRange)))
     cartSetString(cart, hgvaRange, hDefaultPos(database));
 
-int timeout = cartUsualInt(cart, "udcTimeout", 300);
-if (udcCacheTimeout() < timeout)
-    udcSetCacheTimeout(timeout);
-knetUdcInstall();
-
 cartTrackDbInit(cart, &fullTrackList, &fullGroupList, TRUE);
 if (lookupPosition(cart, hgvaRange))
     {

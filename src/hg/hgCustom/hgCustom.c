@@ -1096,10 +1096,6 @@ getDbAndGenome(cart, &database, &organism, oldVars);
 
 customFactoryEnableExtraChecking(TRUE);
 
-knetUdcInstall();
-if (udcCacheTimeout() < 300)
-    udcSetCacheTimeout(300);
-
 if (sameString(initialDb, "0"))
     {
     /* when an organism is selected from the custom track management page,

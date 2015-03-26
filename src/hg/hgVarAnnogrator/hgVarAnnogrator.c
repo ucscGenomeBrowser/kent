@@ -1355,12 +1355,6 @@ if (isEmpty(position))
 cartSetString(cart, hgvaRange, position);
 position = cloneString(position);
 
-setUdcCacheDir();
-int timeout = cartUsualInt(cart, "udcTimeout", 300);
-if (udcCacheTimeout() < timeout)
-    udcSetCacheTimeout(timeout);
-knetUdcInstall();
-
 cartWebStart(cart, database, "Variant Annotation Integrator");
 jsInit();
 jsIncludeFile("jquery-ui.js", NULL);

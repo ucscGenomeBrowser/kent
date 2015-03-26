@@ -9,6 +9,11 @@
 #include "portable.h"
 #include "hgConfig.h"
 #include "errAbort.h"
+#include "cgiApoptosis.h"
+#include "udc.h"
+#include "knetUdc.h"
+#include "hui.h"
+#include "cart.h"
 
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
@@ -381,4 +386,28 @@ boolean hAllowAllTables(void)
 /* Return TRUE if hg.conf's hgta.disableAllTables doesn't forbid an 'all tables' menu. */
 {
 return !cfgOptionBooleanDefault("hgta.disableAllTables", FALSE);
+}
+
+void hCgiStartSetup(struct cart *cart)
+/* should be called at the start of the CGI */
+/* do the CGI setup operations: CGI apoptosis, UDC setup etc  */
+/* cart parameter can be NULL */
+/* is not in cart.c as it can be called from parts of the code that 
+ * do not need a cart */
+{
+static bool setupDone = FALSE;
+if (setupDone)
+    return;
+setupDone = TRUE;
+
+cgiApoptosisSetup();
+
+knetUdcInstall();
+setUdcCacheDir();
+
+if (cart==NULL)
+    udcSetCacheTimeout(300);
+else
+    setUdcTimeout(cart);
+
 }
