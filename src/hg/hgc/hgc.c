@@ -24478,11 +24478,6 @@ char *parentWigMaf = cartOptionalString(cart, "parentWigMaf");
 struct trackDb *tdb = NULL;
 
 
-if (hIsGisaidServer())
-    {
-    validateGisaidUser(cart);
-    }
-
 /*	database and organism are global variables used in many places	*/
 getDbAndGenome(cart, &database, &genome, NULL);
 organism = hOrganism(database);

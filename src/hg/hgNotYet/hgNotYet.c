@@ -45,27 +45,21 @@ if (! hDbIsActive(db))
     clade = hClade(organism);
     }
 scientificName = hScientificName(db);
-if (hIsGisaidServer())
-    cartWebStart(theCart, db, "GISAID %s Genome Browser \n", organism);
-else if (hIsGsidServer())
-    cartWebStart(theCart, db, "GSID %s Genome Browser \n", organism);
-else
-    {
-    char buffer[128];
 
-    /* tell html routines *not* to escape htmlOut strings*/
-    htmlNoEscape();
-    buffer[0] = 0;
-    if (*scientificName != 0)
-	{
-	if (sameString(clade,"ancestor"))
-	    safef(buffer, sizeof(buffer), "(<I>%s</I> Ancestor) ", scientificName);
-	else
-	    safef(buffer, sizeof(buffer), "(<I>%s</I>) ", scientificName);
-	}
-    cartWebStart(theCart, db, "%s %s%s\n", organism, buffer, hBrowserName());
-    htmlDoEscape();
+char buffer[128];
+
+/* tell html routines *not* to escape htmlOut strings*/
+htmlNoEscape();
+buffer[0] = 0;
+if (*scientificName != 0)
+    {
+    if (sameString(clade,"ancestor"))
+        safef(buffer, sizeof(buffer), "(<I>%s</I> Ancestor) ", scientificName);
+    else
+        safef(buffer, sizeof(buffer), "(<I>%s</I>) ", scientificName);
     }
+cartWebStart(theCart, db, "%s %s%s\n", organism, buffer, hBrowserName());
+htmlDoEscape();
 hgNotYet();
 cartWebEnd();
 }

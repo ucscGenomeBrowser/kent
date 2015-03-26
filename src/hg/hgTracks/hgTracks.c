@@ -5809,11 +5809,6 @@ if(sameString(debugTmp, "on"))
 else
     hgDebug = FALSE;
 
-if (hIsGisaidServer())
-    {
-    validateGisaidUser(cart);
-    }
-
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);

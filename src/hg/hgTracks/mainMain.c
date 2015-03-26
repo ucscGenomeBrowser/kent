@@ -34,11 +34,6 @@ setUdcCacheDir();
 browserName = hBrowserName();
 organization = "UCSC";
 
-/* change title if this is for GSID */
-browserName = (hIsGsidServer() ? "Sequence View" : browserName);
-organization = (hIsGsidServer() ? "GSID" : organization);
-organization = (hIsGisaidServer() ? "GISAID" : organization);
-
 /* Push very early error handling - this is just
  * for the benefit of the cgiVarExists, which
  * somehow can't be moved effectively into doMiddle. */

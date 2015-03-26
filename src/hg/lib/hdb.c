@@ -1,5 +1,8 @@
 /* hdb - human genome browser database. */
 
+/* Functions that get some data from the databases, independent of a particular MySql connection */
+/* The more low-level database access is in jksql.c */
+
 /* Copyright (C) 2014 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 #include "common.h"
