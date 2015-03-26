@@ -1,9 +1,6 @@
 # This robots.txt should not be pushed to the RR. For RR edit robots.rr.txt.
 User-agent: *
-Disallow: /goldenPath/
-Disallow: /cgi-bin/
-Disallow: /admin/
-Disallow: /qa/
+Disallow: /
 
 User-agent: Googlebot
 Disallow: /*
