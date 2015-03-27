@@ -5807,6 +5807,10 @@ if(sameString(debugTmp, "on"))
 else
     hgDebug = FALSE;
 
+int timeout = cartUsualInt(cart, "udcTimeout", 300);
+if (udcCacheTimeout() < timeout)
+    udcSetCacheTimeout(timeout);
+
 initTl();
 
 char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");

@@ -1751,6 +1751,8 @@ void hgTables()
 
 char *clade = NULL;
 
+setUdcCacheDir();
+
 oldVars = hashNew(10);
 
 /* Sometimes we output HTML and sometimes plain text; let each outputter
@@ -1761,6 +1763,11 @@ cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 allJoiner = joinerRead("all.joiner");
 getDbGenomeClade(cart, &database, &genome, &clade, oldVars);
 freezeName = hFreezeFromDb(database);
+
+int timeout = cartUsualInt(cart, "udcTimeout", 300);
+if (udcCacheTimeout() < timeout)
+    udcSetCacheTimeout(timeout);
+knetUdcInstall();
 
 char *backgroundStatus = cartUsualString(cart, "backgroundStatus", NULL);
 if (backgroundStatus)

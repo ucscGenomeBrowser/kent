@@ -330,7 +330,17 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     struct psl *psl = pslLoad(row+rowOffset);
     lf = lfFromPslx(psl, sizeMul, isXeno, nameGetsPos, tg);
-    slAddHead(&lfList, lf);
+#ifndef GBROWSE
+    /* if this is a GSID track, check if we need to check for inclusion of the item */
+    if (hIsGsidServer() && gsidCheckSelected(tg))
+	{
+    	if (isSelected(lf->name))
+	    slAddHead(&lfList, lf);
+	}
+
+    else
+#endif /* GBROWSE */
+    	slAddHead(&lfList, lf);
     // Don't free psl - may be used by baseColor code (and freeing is slow)
     }
 slReverse(&lfList);
