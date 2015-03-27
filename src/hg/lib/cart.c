@@ -1528,17 +1528,13 @@ struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude,
                                    struct hash *oldVars, boolean doContentType)
 /* Load cart from cookie and session cgi variable.  Write cookie
  * and optionally content-type part HTTP preamble to web page.  Don't
- * write any HTML though. 
- * Also does common cgi setup, like UDC config and cgi apoptosis */
+ * write any HTML though. */
 {
 if (doContentType)
     htmlPushEarlyHandlers();
 else
     pushWarnHandler(cartEarlyWarningHandler);
 struct cart *cart = cartForSession(cookieName, exclude, oldVars);
-
-hCgiStartSetup(cart);
-
 popWarnHandler();
 cartWriteCookie(cart, cookieName);
 if (doContentType)
@@ -1723,9 +1719,7 @@ void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart
  * preamble including head and title, call doMiddle with cart, and write end of web-page.
  * Exclude may be NULL.  If it exists it's a comma-separated list of
  * variables that you don't want to save in the cart between
- * invocations of the cgi-script. 
- * Also does common cgi setup, like UDC config and cgi apoptosis
- * */
+ * invocations of the cgi-script. */
 {
 struct cart *cart;
 char *db, *org, *pos, *clade=NULL;
@@ -1733,9 +1727,6 @@ char titlePlus[128];
 char extra[128];
 pushWarnHandler(cartEarlyWarningHandler);
 cart = cartAndCookie(cookieName, exclude, oldVars);
-
-hCgiStartSetup(cart);
-
 getDbAndGenome(cart, &db, &org, oldVars);
 clade = hClade(org);
 pos = cartOptionalString(cart, positionCgiName);

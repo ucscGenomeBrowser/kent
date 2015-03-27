@@ -28,6 +28,7 @@ UTILS_APPLIST = \
 	crTreeSearchBed \
 	gapToLift \
 	genePredFilter \
+	genePredToBigGenePred \
 	gff3ToGenePred \
 	gff3ToPsl \
 	gtfToGenePred \

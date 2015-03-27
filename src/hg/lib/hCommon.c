@@ -9,11 +9,6 @@
 #include "portable.h"
 #include "hgConfig.h"
 #include "errAbort.h"
-#include "cgiApoptosis.h"
-#include "udc.h"
-#include "knetUdc.h"
-#include "hui.h"
-#include "cart.h"
 
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
@@ -268,21 +263,33 @@ switch (str[0])
 return ret;
 }
 boolean hIsGisaidServer()
-/* Gisaid is not used anymore */
+/* Is this the GISAID-customized server? Change for config variable
+ * gisaid.server=yes */
 {
-return FALSE;
+static boolean gisaidHost = FALSE;
+static boolean haveChecked = FALSE;
+if (!haveChecked)
+    {
+    char *serverOpt = cfgOption("gisaid.server");
+    gisaidHost = (serverOpt != NULL) && sameString(serverOpt, "yes");
+    haveChecked = TRUE;
+    }
+return gisaidHost;
 }
 
 boolean hIsGsidServer()
-/* Gsid is not use anymore */
+/* Is this the GSID-customized server? Change for config variable
+ * gsid.server=yes */
 {
-return FALSE;
-}
-
-boolean validateGisaidUser()
-/* Gsid is not use anymore */
-{
-return FALSE;
+static boolean gsidHost = FALSE;
+static boolean haveChecked = FALSE;
+if (!haveChecked)
+    {
+    char *serverOpt = cfgOption("gsid.server");
+    gsidHost = (serverOpt != NULL) && sameString(serverOpt, "yes");
+    haveChecked = TRUE;
+    }
+return gsidHost;
 }
 
 boolean hIsCgbServer()
@@ -386,28 +393,4 @@ boolean hAllowAllTables(void)
 /* Return TRUE if hg.conf's hgta.disableAllTables doesn't forbid an 'all tables' menu. */
 {
 return !cfgOptionBooleanDefault("hgta.disableAllTables", FALSE);
-}
-
-void hCgiStartSetup(struct cart *cart)
-/* should be called at the start of the CGI */
-/* do the CGI setup operations: CGI apoptosis, UDC setup etc  */
-/* cart parameter can be NULL */
-/* is not in cart.c as it can be called from parts of the code that 
- * do not need a cart */
-{
-static bool setupDone = FALSE;
-if (setupDone)
-    return;
-setupDone = TRUE;
-
-cgiApoptosisSetup();
-
-knetUdcInstall();
-setUdcCacheDir();
-
-if (cart==NULL)
-    udcSetCacheTimeout(300);
-else
-    setUdcTimeout(cart);
-
 }

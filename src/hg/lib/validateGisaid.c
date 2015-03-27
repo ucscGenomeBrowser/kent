@@ -8,5 +8,14 @@
 
 boolean validateGisaidUser()
 {
-return TRUE;
+if (hIsGisaidServer())
+    {
+    /* The real implementation has confidential logic, which could not be exposed */
+    errAbort("The correct validateGisaidUser() implementation is not installed on this GISAID server.");
+    return FALSE;
+    }
+else
+    {
+    return TRUE;
+    }
 }
