@@ -25,8 +25,8 @@ One of the main parameters of the phastBias model is <i>B</i>, which represents 
 gBGC and the degree to which weak-to-strong and strong-to-weak substitution rates are skewed on
 the foreground branch. The tracks presented here were created with <i>B</i>=3, which was chosen
 for being sensitive while still having a low false positive rate. Simulation experiments suggest
-that phastBias has reasonable power to pick up tracts with length &gt; 1000 bp, and very good
-power for tracts &gt; 2000 bp. Nonetheless, other lines of evidence suggest that phastBias only
+that phastBias has reasonable power to pick up tracts with length &gt; 1000bp, and very good
+power for tracts &gt; 2000bp. Nonetheless, other lines of evidence suggest that phastBias only
 identifies approximately 25-50% of bases influenced by gBGC, so the tract predictions should not
 be considered exhaustive.
 </p>
@@ -52,7 +52,7 @@ are simply defined as all regions with posterior probability &gt; 0.5.
 <H2>Methods</H2>
 <p>
 The phastBias tracks were predicted using the phastBias program, available as part of the
-<a href=http://compgen.bscb.cornell.edu/phast/ target="_blank">PHAST</a> software package. 
+<a href="http://compgen.cshl.edu/phast/" target="_blank">PHAST</a> software package. 
 The phastBias tracks represent two separate result sets; one predicting gBGC on the branch
 leading from the human-chimp ancestor to human, and the other on the opposite branch leading
 to chimp. The software was run on human-referenced alignments of hg18, panTro2, ponAbe2, and
@@ -61,7 +61,7 @@ Capra <i>et al.</i>, 2013 (cited below). Briefly, the gBGC bias parameter <i>B</
 set to 3, the mean expected tract length was set to 1/1000, and the transition rate into gBGC
 states was estimated by expectation-maximization. Most other parameter settings were set to the
 same values used for UCSC's mammalian conservation tracts. Relative branch lengths came from this
-<a href=http://hgdownload.cse.ucsc.edu/goldenPath/hg19/phastCons46way/placentalMammals.mod>placental mammal tree model</a>,
+<a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/phastCons46way/placentalMammals.mod">placental mammal tree model</a>,
 the conservation scale factor was set to 0.31, expected length of conserved elements to 45, and
 expected coverage of conserved elements to 0.3. The alignment was split into 10 Mb chunks; for
 each chunk, a scaling factor for the neutral tree, the transition/transversion rate ratio, and
