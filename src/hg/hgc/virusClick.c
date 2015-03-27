@@ -604,7 +604,7 @@ safef(pdbUrl, sizeof(pdbUrl), "%s/%s/decoys/%s.try1-opt3.pdb.gz", getH1n1StructU
 char modelPdbUrl[PATH_LEN];
 if (getH1n1Model(gene, modelPdbUrl))
     {
-    char *selectFile = cartOptionalString(cart, "gisaidTable.gisaidAaSeqList");
+    char *selectFile = cartOptionalString(cart, gisaidAaSeqList);
     struct tempName imageFile, chimeraScript, chimerax;
     mkH1n1StructData(gene, selectFile, NULL, &imageFile, &chimeraScript);
     mkChimerax(gene, modelPdbUrl, chimeraScript.forCgi, &chimerax);
