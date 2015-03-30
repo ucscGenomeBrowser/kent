@@ -567,3 +567,32 @@ searchPriority 8
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+# LIFTOVER TO xenTro2 (DONE - 2015-03-20 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/xenTro7/bed/blat.xenTro2.2015-03-20
+    cd /hive/data/genomes/xenTro7/bed/blat.xenTro2.2015-03-20
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/xenTro7/jkStuff/xenTro7.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         xenTro7 xenTro2) > do.log 2>&1
+    # real    181m55.750s
+
+    # verify the convert link on the test browser is now active from xenTro7 to
+    # xenTro2
+
+#########################################################################
+# LIFTOVER TO xenTro3 (DONE - 2015-03-24 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/xenTro7/bed/blat.xenTro3.2015-03-24
+    cd /hive/data/genomes/xenTro7/bed/blat.xenTro3.2015-03-24
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/xenTro7/jkStuff/xenTro7.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         xenTro7 xenTro3) > do.log 2>&1
+XXX - running - Tue Mar 24 11:56:24 PDT 2015
+    # real    181m55.750s
+
+    # verify the convert link on the test browser is now active from xenTro7 to
+    # xenTro3
+
+#########################################################################

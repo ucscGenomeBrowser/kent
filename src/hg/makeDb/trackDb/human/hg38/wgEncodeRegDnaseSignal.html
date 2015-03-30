@@ -4,30 +4,30 @@ This track provides an integrated display of DNase hypersensitivity in multiple 
 using overlapping colored graphs of signal density. with graph colors assigned to cell types based
 on similarity of signal.
 The track is based on results of 
-experiments performed by the John Stamatoyannapoulos lab at the University of Washington for the 
-<a href="../ENCODE">ENCODE Project during the period September 2007 through January 2011</a>.
+experiments performed by the John Stamatoyannapoulos lab at the University of Washington 
+from September 2007 to January 2011 as part of the
+<a href="../ENCODE">ENCODE project first production phase</a>.
 The signal graphs displayed here are also included in the comprehensive
-<a target=_blank href="/cgi-bin/hgTrackUi?db=hg38&g=uwEnc2Dnase">UW DnaseI HS track</a>,
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg38&g=wgEncodeRegDnase">DnaseI HS</a> track,
 which also provides peak and region calls.
 </p>
 
 <h2>Methods</h2>
 <p>
-The raw sequence data files were processed according to the ENCODE DNase analysis pipeline
-defined in July 2014 (need ref).
-Briefly, sequence files were aligned to the hg38 (GRCh38) genome assembly augmented with 'sponge'
-sequence (ref).  Multi-mapped reads were removed, as were reads that aligned to 'sponge' or
-mitochondrial sequence.  Results from all replicates were pooled, and further processed by
-the Hotspot program.
-(Colors assigned by BigWigCluster).
+Raw sequence data files were processed by the UCSC ENCODE DNase analysis pipeline
+described in the 
+<A target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=wgEncodeRegDnase">DNaseI HS</a>
+track description.
 Signal graphs were normalized so the average value genome-wide is 1.
+Colors for the signal graphs were assigned by the UCSC BigWigCluster tool.
 </p>
 
 <h2>Credits</h2>
 <p>
-The processed data for this track were generated at UCSC using the ENCODE Analysis Pipeline for DNase.
-Credits for the primary data underlying this track are
-included in track description pages listed in the Description section above.  
+The processed data for this track were generated at UCSC.
+Credits for the primary data underlying this track are included in the
+<A target="_blank" href="/cgi-bin/hgTrackUi?db=hg38&g=wgEncodeRegDnase">DNaseI HS</a>
+track description.
 </p>
 
 <h2>References</h2>
@@ -39,7 +39,7 @@ The accessible chromatin landscape of the human genome</a>.
 <em>Nature</em>. 2012 Sep 6;489(7414):75-82.
 </p>
 <p>
-See also the references in the related
-<a target=_blank href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwDnase">ENCODE UW DnaseI HS</a>
+See also the references in the
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeRegDnase">DnaseI HS</a>
 track.
 </p>

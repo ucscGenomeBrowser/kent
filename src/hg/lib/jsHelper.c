@@ -233,6 +233,29 @@ if (link != NULL)
     }
 }
 
+void jsIncludeReactLibs()
+/* Prints out <script src="..."> tags for external libraries including ReactJS & ImmutableJS
+ * and our own model libs, React mixins and components. */
+{
+// We need a module system... webpack?
+puts("<script src=\"../js/es5-shim.4.0.3.min.js\"></script>");
+puts("<script src=\"../js/es5-sham.4.0.3.min.js\"></script>");
+puts("<script src=\"../js/lodash.3.3.1.compat.min.js\"></script>");
+puts("<script src=\"//code.jquery.com/jquery-1.9.1.min.js\"></script>");
+puts("<script src=\"//code.jquery.com/ui/1.10.3/jquery-ui.min.js\"></script>");
+puts("<script src=\"//fb.me/react-with-addons-0.12.2.min.js\"></script>");
+puts("<script src=\"../js/immutable.3.2.1.min.js\"></script>");
+puts("<script src=\"../js/BackboneExtend.js\"></script>");
+puts("<script src=\"../js/cart.js\"></script>");
+puts("<script src=\"../js/ImModel.js\"></script>");
+puts("<script src=\"../js/CladeOrgDbMixin.js\"></script>");
+puts("<script src=\"../js/PositionSearchMixin.js\"></script>");
+puts("<script src=\"../js/PathUpdate.js\"></script>");
+puts("<script src=\"../js/PathUpdateOptional.js\"></script>");
+puts("<script src=\"../js/ImmutableUpdate.js\"></script>");
+puts("<script src=\"../js/reactLibBundle.js\"></script>");
+}
+
 char *jsCheckAllOnClickHandler(char *idPrefix, boolean state)
 /* Returns javascript for use as an onclick attribute value to check all/uncheck all
  * all checkboxes with given idPrefix.

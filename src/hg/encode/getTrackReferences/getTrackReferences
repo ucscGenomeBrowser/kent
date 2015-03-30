@@ -118,7 +118,7 @@ def makeHtml(infoDict, plain, verbose):
         origComment = ""
         fetch = urllib2.urlopen(infoDict['url'])
         doc = fetch.read()
-        m = re.search('<div class="icons"><a href="(\S+)"', doc)
+        m = re.search('<div class="icons portlet".*Full text links</span></h3></div></div><a href="(\S+)"', doc)
         if m:
             if m.group(1):
                 # Rhetorical: how can m match without m.group(1) being defined for this regex? Anyway ....
