@@ -30485,17 +30485,19 @@ hgBbiDbLink hg19 spAnnot /gbdb/hg19/bbi/spAnnot.bb
 
 
 ##############################################################################
-# ExAC (Exome Aggregation Consortium) Variants (DONE 12/10/14 angie)
+# ExAC (Exome Aggregation Consortium) Variants & Calling Regions (DONE 3/30/15 angie)
 
-    set today = `date +%Y_%m_%d`
-    mkdir -p /hive/data/genomes/hg19/bed/ExAC/$today
-    cd /hive/data/genomes/hg19/bed/ExAC/$today
-    wget ftp://ftp.broadinstitute.org/pub/ExAC_release/release0.2/ExAC.r0.2.sites.vep.vcf.gz
-    wget ftp://ftp.broadinstitute.org/pub/ExAC_release/release0.2/README.\*
+    set release = 0.3
+    mkdir -p /hive/data/genomes/hg19/bed/ExAC/$release
+    cd /hive/data/genomes/hg19/bed/ExAC/$release
+    set sitesVcfGz = ExAC.r$release.sites.vep.vcf.gz
+    wget ftp://ftp.broadinstitute.org/pub/ExAC_release/release$release/$sitesVcfGz
+    wget ftp://ftp.broadinstitute.org/pub/ExAC_release/release$release/README.\*
+    wget ftp://ftp.broadinstitute.org/pub/ExAC_release/release$release/exome_calling_regions.v1.interval_list
 
     # The VCF includes not only regular chromosomes, but also some alts; translate their
     # sequence names into hg19's.
-    zcat ExAC.r0.2.sites.vep.vcf.gz | head -200 | grep ^##contig \
+    zcat $sitesVcfGz | head -200 | grep ^##contig \
     | perl -wpe 's/^.*ID=([\w.]+),length=(\d+).*/$2\t$1/ || die $_;' | sort > vcfSizeChrom
     tawk '{print $2, $1;}' ../../../chrom.sizes | sort > hg19SizeChrom
     join -o 1.2,2.2 vcfSizeChrom hg19SizeChrom > vcfToHg19
@@ -30506,7 +30508,9 @@ hgBbiDbLink hg19 spAnnot /gbdb/hg19/bbi/spAnnot.bb
     # Unfortunately, they used the rCRS mitochondrion and we didn't so no chrM.
     # NC_007605 is Epstein-Barr virus.
     # Swap in as many hg19 seq names as we can:
-    zcat ExAC.r0.2.sites.vep.vcf.gz \
+    set sitesVcfUcsc = ExAC.r$release.sites.vep.hg19.vcf
+    set sitesVcfGzUcsc = ExAC.r$release.sites.vep.hg19.vcf.gz
+    zcat $sitesVcfGz \
     | perl -we 'open($V2H, "vcfToHg19") || die; \
         while (<$V2H>) { chomp; ($v, $h) = split; $v2h{$v} = $h; } \
         close($V2H); \
@@ -30518,26 +30522,27 @@ hgBbiDbLink hg19 spAnnot /gbdb/hg19/bbi/spAnnot.bb
           } \
           print; \
         }' \
-      > /data/tmp/ExAC.r0.2.sites.vep.hg19.vcf
+      > /data/tmp/$sitesVcfUcsc
     # Re-compress with bgzip and build tabix index (.tbi)
     pushd /data/tmp
     set tabixBin = /hive/data/outside/tabix/tabix-0.2.5/tabix-0.2.5
-    $tabixBin/bgzip ExAC.r0.2.sites.vep.hg19.vcf
-    $tabixBin/tabix -p vcf ExAC.r0.2.sites.vep.hg19.vcf.gz
+    $tabixBin/bgzip $sitesVcfUcsc
+    $tabixBin/tabix -p vcf $sitesVcfGzUcsc
     popd
-    cp -p /data/tmp/ExAC.r0.2.sites.vep.hg19.vcf.gz* . \
-    && rm /data/tmp/ExAC.r0.2.sites.vep.hg19.vcf.gz*
+    cp -p /data/tmp/${sitesVcfGzUcsc}* . \
+    && rm /data/tmp/${sitesVcfGzUcsc}*
 
-    mkdir /gbdb/hg19/ExAC
+    mkdir -p /gbdb/hg19/ExAC
     ln -s `pwd`/*.vcf.gz* /gbdb/hg19/ExAC/
-    hgBbiDbLink hg19 exacVariants /gbdb/hg19/ExAC/ExAC.r0.2.sites.vep.hg19.vcf.gz
+    # skip this step: instead of making tiny sql table, use bigDataUrl in trackDb
+#    hgBbiDbLink hg19 exacVariants /gbdb/hg19/ExAC/$sitesVcfGzUcsc
 
     # Make a chromosomes line for trackDb:
     awk '{print $2}' vcfToHg19 | sort | xargs echo | sed -e 's/ /,/g'
 #chr1,chr10,chr11,chr11_gl000202_random,chr12,chr13,chr14,chr15,chr16,chr17,chr17_gl000203_random,chr17_gl000204_random,chr17_gl000205_random,chr17_gl000206_random,chr18,chr18_gl000207_random,chr19,chr19_gl000208_random,chr19_gl000209_random,chr1_gl000191_random,chr1_gl000192_random,chr2,chr20,chr21,chr21_gl000210_random,chr22,chr3,chr4,chr4_gl000193_random,chr4_gl000194_random,chr5,chr6,chr7,chr7_gl000195_random,chr8,chr8_gl000196_random,chr8_gl000197_random,chr9,chr9_gl000198_random,chr9_gl000199_random,chr9_gl000200_random,chr9_gl000201_random,chrUn_gl000211,chrUn_gl000212,chrUn_gl000213,chrUn_gl000214,chrUn_gl000215,chrUn_gl000216,chrUn_gl000217,chrUn_gl000218,chrUn_gl000219,chrUn_gl000220,chrUn_gl000221,chrUn_gl000222,chrUn_gl000223,chrUn_gl000224,chrUn_gl000225,chrUn_gl000226,chrUn_gl000227,chrUn_gl000228,chrUn_gl000229,chrUn_gl000230,chrUn_gl000231,chrUn_gl000232,chrUn_gl000233,chrUn_gl000234,chrUn_gl000235,chrUn_gl000236,chrUn_gl000237,chrUn_gl000238,chrUn_gl000239,chrUn_gl000240,chrUn_gl000241,chrUn_gl000242,chrUn_gl000243,chrUn_gl000244,chrUn_gl000245,chrUn_gl000246,chrUn_gl000247,chrUn_gl000248,chrUn_gl000249,chrX,chrY
 
     # How many SNVs & indels in the file?
-    zcat ExAC.r0.2.sites.vep.vcf.gz \
+    zcat $sitesVcfGz \
     | grep -v ^# \
     | perl -we 'while(<>) { \
                   @w = split; \
@@ -30562,8 +30567,30 @@ hgBbiDbLink hg19 spAnnot /gbdb/hg19/bbi/spAnnot.bb
                   } \
                 } \
                 print "\nsnvs: $snvs\nindels: $indels\n";'
-#snvs: 8831029
-#indels: 631712
+#snvs: 8754548
+#indels: 607770
+    # Actually a slight decrease from r0.2.
+
+    # Now make a bigBed6 track for the exome-calling regions.
+    # Looks like a Picard interval file, so 1-based:
+    # http://gatkforums.broadinstitute.org/discussion/1319/collected-faqs-about-interval-lists
+    cut -f 1 exome_calling_regions.v1.interval_list | uniq
+    # Header, regular chroms, MT which we'll have to strip.
+    perl -wne \
+      'next if (/^(@|MT)/); # skip header lines and chrM \
+       chomp; \
+       ($c, $start, $end, $strand, $name) = split("\t"); \
+       $start--; \
+       print join("\t", "chr$c", $start, $end, $name, 0, $strand) . "\n"; \
+      ' exome_calling_regions.v1.interval_list \
+      > exacCallingRegions.bed
+    bedToBigBed exacCallingRegions.bed /hive/data/genomes/hg19/chrom.sizes \
+      -type=bed6 -tab exacCallingRegions.bb
+    ln -s `pwd`/exacCallingRegions.bb /gbdb/hg19/ExAC/
+
+    # make a chromosomes line for trackDb:
+    cut -f 1 exacCallingRegions.bed | uniq | xargs echo | sed -e 's/ /,/g'
+#chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY
 
 
 ##############################################################################
