@@ -365,7 +365,11 @@ sub getTrackEntries {
 	    my $ODb = $1;
 	    my $over = "${db}To$ODb.over.chain.gz";
 	    foreach my $downloads
-	      ("$HgAutomate::goldenPath/$db/vs$ODb/*",
+	      ("$HgAutomate::goldenPath/$db/vs$ODb/*.txt",
+	       "$HgAutomate::goldenPath/$db/vs$ODb/*.gz",
+	       "$HgAutomate::goldenPath/$db/vs$ODb/reciprocalBest/*.gz",
+	       "$HgAutomate::goldenPath/$db/vs$ODb/reciprocalBest/*.txt",
+	      "$HgAutomate::goldenPath/$db/vs$ODb/reciprocalBest/axtRBestNet/*",
 	       "$HgAutomate::goldenPath/$db/liftOver/$over",
 	       "$HgAutomate::gbdb/$db/liftOver/$over") {
 	      if (&HgAutomate::machineHasFile($dbHost, $downloads)) {

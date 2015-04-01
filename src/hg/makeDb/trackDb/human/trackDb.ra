@@ -1278,6 +1278,7 @@ itemRgb on
 type bed 9 +
 noScoreFilter .
 exonArrows off
+exonNumbers off
 urlLabel DGV Browser and Report:
 url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
 coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
@@ -1294,6 +1295,7 @@ itemRgb on
 type bed 9 +
 noScoreFilter .
 exonArrows off
+exonNumbers off
 urlLabel DGV Browser and Report:
 url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
 coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
