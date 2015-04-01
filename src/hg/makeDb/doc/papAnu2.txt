@@ -687,6 +687,47 @@ nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; /MT/d; s/\.1//"
     # 45154927 bases of 2893250291 (1.561%) in intersection
 
 ############################################################################
+
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+#########################################################################
+# create ucscToEnsembl scaffold name mapping (DONE - 2015-03-31 - Hiram)
+    # this can be done when Ensembl releases genes for this organism
+    # this allows the "ensembl" blue bar button to appear
+    mkdir /hive/data/genomes/papAnu2/bed/ucscToEnsembl
+    cd /hive/data/genomes/papAnu2/bed/ucscToEnsembl
+    # survey the Ensembl names to see what we are dealing with:
+    zcat ../ensGene.79/download/Papio_anubis.PapAnu2.0.79.gtf.gz \
+       | grep -v "^#" | cut -f1 | sort | uniq -c > ens.name.list
+    # it looks like we remove our chr and add a .1 to the contigs
+    grep "^chr" ../../chrom.sizes | cut -f1 | sed -e 's/chr//;' \
+      | awk '{printf "chr%d\t%d\n", $1, $1}' > t.tab
+    grep -v "^chr" ../../chrom.sizes | cut -f1 \
+      | awk '{printf "%s\t%s.1\n", $1, $1}' >> t.tab
+    sort t.tab > ucscToEnsembl.tab
+    rm -f t.tab
+    # determine size of largest UCSC name:
+    awk '{print length($1)}' ucscToEnsembl.tab | sort -rn | head -1
+    # 12
+
+    # use this size 12 in the sql PRIMARY KEY:
+
+    cat << '_EOF_' > ucscToEnsembl.sql
+# UCSC to Ensembl chr name translation
+CREATE TABLE ucscToEnsembl (
+    ucsc varchar(255) not null,        # UCSC chromosome name
+    ensembl varchar(255) not null,     # Ensembl chromosome name
+              #Indices
+    PRIMARY KEY(ucsc(12))
+);
+'_EOF_'
+
+    hgsql papAnu2 < ucscToEnsembl.sql
+    hgsql papAnu2 \
+-e 'LOAD DATA LOCAL INFILE "ucscToEnsembl.tab" INTO TABLE ucscToEnsembl'
+
+    # verify the blue bar "ensembl" link is now available and works to there
+
+#########################################################################
