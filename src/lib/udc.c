@@ -832,6 +832,8 @@ return dyStringCannibalize(&dy);
 void udcPathAndFileNames(struct udcFile *file, char *cacheDir, char *protocol, char *afterProtocol)
 /* Initialize udcFile path and names */
 {
+if (cacheDir==NULL)
+    return;
 char *hashedAfterProtocol = longDirHash(afterProtocol);
 int len = strlen(cacheDir) + 1 + strlen(protocol) + 1 + strlen(hashedAfterProtocol) + 1;
 file->cacheDir = needMem(len);
@@ -860,7 +862,9 @@ return ret;
 
 struct udcFile *udcFileMayOpen(char *url, char *cacheDir)
 /* Open up a cached file. cacheDir may be null in which case udcDefaultDir() will be
- * used.  Return NULL if file doesn't exist. */
+ * used.  Return NULL if file doesn't exist. 
+ * Caching is inactive if defaultDir is NULL or the protocol is "transparent".
+ * */
 {
 if (cacheDir == NULL)
     cacheDir = udcDefaultDir();
@@ -886,7 +890,8 @@ struct udcRemoteFileInfo info;
 ZeroVar(&info);
 if (!isTransparent)
     {
-    useCacheInfo = (udcCacheAge(url, cacheDir) < udcCacheTimeout());
+    if (udcDefaultDir() != NULL)
+        useCacheInfo = (udcCacheAge(url, cacheDir) < udcCacheTimeout());
     if (!useCacheInfo)
 	{
 	if (!prot->fetchInfo(url, &info))
@@ -915,7 +920,7 @@ if (isTransparent)
     file->startData = 0;
     file->endData = file->size = status.st_size;
     }
-else
+else 
     {
     udcPathAndFileNames(file, cacheDir, protocol, afterProtocol);
     if (!useCacheInfo)
@@ -925,17 +930,20 @@ else
 	memcpy(&(file->connInfo), &(info.ci), sizeof(struct connInfo));
 	// update cache file mod times, so if we're caching we won't do this again
 	// until the timeout has expired again:
-	if (udcCacheTimeout() > 0 && fileExists(file->bitmapFileName))
+    	if (udcCacheTimeout() > 0 && (udcDefaultDir()!=NULL) && fileExists(file->bitmapFileName))
 	    (void)maybeTouchFile(file->bitmapFileName);
 	}
 
-    /* Make directory. */
-    makeDirsOnPath(file->cacheDir);
+    if (udcDefaultDir() != NULL)
+        {
+        /* Make directory. */
+        makeDirsOnPath(file->cacheDir);
 
-    /* Figure out a little bit about the extent of the good cached data if any. Open bits bitmap. */
-    setInitialCachedDataBounds(file, useCacheInfo);
+        /* Figure out a little bit about the extent of the good cached data if any. Open bits bitmap. */
+        setInitialCachedDataBounds(file, useCacheInfo);
 
-    file->fdSparse = mustOpenFd(file->sparseFileName, O_RDWR);
+        file->fdSparse = mustOpenFd(file->sparseFileName, O_RDWR);
+        }
 
     }
 freeMem(afterProtocol);
@@ -944,7 +952,7 @@ return file;
 
 struct udcFile *udcFileOpen(char *url, char *cacheDir)
 /* Open up a cached file.  cacheDir may be null in which case udcDefaultDir() will be
- * used.  Abort if if file doesn't exist. */
+ * used.  Abort if file doesn't exist. */
 {
 struct udcFile *udcFile = udcFileMayOpen(url, cacheDir);
 if (udcFile == NULL)
@@ -993,7 +1001,8 @@ if (file != NULL)
     freeMem(file->bitmapFileName);
     freeMem(file->sparseFileName);
     freeMem(file->sparseReadAheadBuf);
-    mustCloseFd(&(file->fdSparse));
+    if (file->fdSparse != 0)
+        mustCloseFd(&(file->fdSparse));
     udcBitmapClose(&file->bits);
     }
 freez(pFile);
@@ -1252,6 +1261,9 @@ static boolean udcCachePreload(struct udcFile *file, bits64 offset, bits64 size)
 /* Make sure that given data is in cache - fetching it remotely if need be. 
  * Return TRUE on success. */
 {
+if (udcDefaultDir() == NULL)
+    return TRUE;
+
 boolean ok = TRUE;
 /* We'll break this operation into blocks of a reasonable size to allow
  * other processes to get cache access, since we have to lock the cache files. */
@@ -1284,6 +1296,13 @@ return ok;
 bits64 udcRead(struct udcFile *file, void *buf, bits64 size)
 /* Read a block from file.  Return amount actually read. */
 {
+// if udcDefaultDir is NULL, don't do local caching, just fetch the data
+if (udcDefaultDir()==NULL && !sameString(file->protocol, "transparent"))
+    {
+    int actualSize = file->prot->fetchData(file->url, file->offset, size, buf, &(file->connInfo));
+    file->offset += actualSize;
+    return actualSize;
+    }
 
 /* Figure out region of file we're going to read, and clip it against file size. */
 bits64 start = file->offset;
@@ -1543,14 +1562,16 @@ void udcSeekCur(struct udcFile *file, bits64 offset)
 /* Seek to a particular position in file. */
 {
 file->offset += offset;
-mustLseek(file->fdSparse, offset, SEEK_CUR);
+if (udcDefaultDir())
+    mustLseek(file->fdSparse, offset, SEEK_CUR);
 }
 
 void udcSeek(struct udcFile *file, bits64 offset)
 /* Seek to a particular position in file. */
 {
 file->offset = offset;
-mustLseek(file->fdSparse, offset, SEEK_SET);
+if (udcDefaultDir())
+    mustLseek(file->fdSparse, offset, SEEK_SET);
 }
 
 bits64 udcTell(struct udcFile *file)
@@ -1648,7 +1669,8 @@ return defaultDir;
 }
 
 void udcSetDefaultDir(char *path)
-/* Set default directory for cache */
+/* Set default directory for cache. 
+ * Set to NULL to deactivate the local caching. */
 {
 defaultDir = cloneString(path);
 }
