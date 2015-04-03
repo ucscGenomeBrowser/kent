@@ -573,11 +573,6 @@ div#haplotypes .textAlert { color:#DC143C; } /* dark red */
 
 .hidden { display:none; } /* allows toggling visibility by addClass/removeClass */
 
-.withThinBorder {
-    border: black solid 1px;
-    border-collapse: collapse;
-}
-
 .readableWidth {
     /* For wrapping description text on pages that can get very wide */
     width: 50em;

@@ -237,7 +237,7 @@ for (i = 0;  i < rec->infoCount;  i++)
         {
         puts("<BR>");
         printf("<B>%s</B>: %s<BR>\n", el->key, def->description);
-        puts("<TABLE class='withThinBorder'>");
+        puts("<TABLE class='stdTbl'>");
         printTabularHeaderRow(def);
         printTabularData(el);
         puts("</TABLE>");
