@@ -34,11 +34,6 @@ setUdcCacheDir();
 browserName = hBrowserName();
 organization = "UCSC";
 
-/* change title if this is for GSID */
-browserName = (hIsGsidServer() ? "Sequence View" : browserName);
-organization = (hIsGsidServer() ? "GSID" : organization);
-organization = (hIsGisaidServer() ? "GISAID" : organization);
-
 /* Push very early error handling - this is just
  * for the benefit of the cgiVarExists, which
  * somehow can't be moved effectively into doMiddle. */
@@ -49,10 +44,7 @@ if (link)                                                                  // wr
     htmlSetStyle(link);
 
 oldVars = hashNew(10);
-if (hIsGsidServer())
-    cartHtmlShell("GSID Sequence View", doMiddle, hUserCookie(), excludeVars, oldVars);
-else
-    cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
+cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
 if (measureTiming)
     measureTime("Time to write and close cart");
 if (measureTiming)
