@@ -573,6 +573,11 @@ div#haplotypes .textAlert { color:#DC143C; } /* dark red */
 
 .hidden { display:none; } /* allows toggling visibility by addClass/removeClass */
 
+.readableWidth {
+    /* For wrapping description text on pages that can get very wide */
+    width: 50em;
+}
+
 /* Added for Angie's React UI stuff */
 .sectionBorder {
     border: 1px solid gray;

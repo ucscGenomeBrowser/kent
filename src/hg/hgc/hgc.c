@@ -3075,7 +3075,11 @@ if (html != NULL && html[0] != 0)
     // Add pennantIcon
     printPennantIconNote(tdb);
 
+    // Wrap description html in div with limited width, so when the page is very wide
+    // due to long details, the user doesn't have to scroll right to read the description.
+    puts("<div class='readableWidth'>");
     puts(html);
+    puts("</div>");
     }
 hPrintf("<BR>\n");
 }
