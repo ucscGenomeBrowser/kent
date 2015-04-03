@@ -2027,6 +2027,24 @@ rAddToTrackHash(trackHash, trackList);
 return trackHash;
 }
 
+void domAppendToMenu(char *menu, char *url, char *label) 
+/* Add an entry to a drop down menu, by changing the DOM with jquery  */
+{
+printf("$('#%s ul li').last().after('<li><a target=\"_BLANK\" href=\"%s\">%s</a></li>');\n", menu, url, label);
+}
+
+void menuBarAppendExtTools() 
+/* printf a little javascript that adds entries to a menu */
+{
+    char url[SMALLBUF];
+    safef(url,ArraySize(url),"hgTracks?%s=%s&hgt.redirectTool=crispor",cartSessionVarName(), cartSessionId(cart));
+    printf("<script>\n");
+    printf("$(document).ready( function() {\n");
+    domAppendToMenu("tools", url, "External: Tefor CRISPR sites");
+    printf("});\n");
+    printf("</script>\n");
+}
+
 
 void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
@@ -4358,30 +4376,6 @@ for (track = trackList; track != NULL; track = track->next)
 hPrintf("</span>\n");
 }
 
-
-void domAppendToMenu(char *menu, char *url, char *label) 
-/* Add an entry to a drop down menu, by changing the DOM with jquery  */
-{
-printf("$('#%s ul li').last().after('<li><a target=\"_BLANK\" href=\"%s\">%s</a></li>');\n", menu, url, label);
-}
-
-void appendExtTools() 
-{
-    char posStr[SMALLBUF];
-    safef(posStr,ArraySize(posStr),"%s:%d-%d",chromName, winStart, winEnd);
-
-    char *url = "http://www.tefor.net/crisporMax/crispor.cgi?org=$org&pos=$pos&pam=NGG";
-
-    url = replaceChars(url, "$org", database);
-    url = replaceChars(url, "$pos", posStr);
-
-    printf("<script>\n");
-    printf("$(document).ready( function() {\n");
-    domAppendToMenu("tools", url, "External: Tefor CRISPR sites");
-    printf("});\n");
-    printf("</script>\n");
-}
-
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -4605,9 +4599,6 @@ jsonObjectAdd(jsonForClient, "winStart", newJsonNumber(winStart));
 jsonObjectAdd(jsonForClient, "winEnd", newJsonNumber(winEnd));
 jsonObjectAdd(jsonForClient, "chromName", newJsonString(chromName));
 
-//printf("adding tools<p>");
-appendExtTools();
-
 if(trackImgOnly && !ideogramToo)
     {
     struct track *ideoTrack = chromIdeoTrack(trackList);
@@ -4627,6 +4618,7 @@ if (!hideControls)
      * narrow */
     hPrintf("<DIV STYLE=\"white-space:nowrap;\">\n");
     printMenuBar();
+    menuBarAppendExtTools();
 
     /* Show title . */
     freezeName = hFreezeFromDb(database);
