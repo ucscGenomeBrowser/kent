@@ -1255,10 +1255,13 @@ if (config->gpVarSource == NULL)
 else if (! asColumnNamesMatchFirstN(config->gpVarSource->asObj, genePredAsObj(), 10))
     errAbort("afVepSetConfig: gpVarSource %s doesn't look like genePred",
 	     config->gpVarSource->name);
+// refGene and augmented knownGene have extra name fields that have the HGNC gene symbol:
 struct asColumn *gpvAsColumns = config->gpVarSource->asObj->columnList;
-self->geneNameIx = asColumnFindIx(gpvAsColumns, "proteinID");
+self->geneNameIx = asColumnFindIx(gpvAsColumns, "geneSymbol");
 if (self->geneNameIx < 0)
     self->geneNameIx = asColumnFindIx(gpvAsColumns, "name2");
+if (self->geneNameIx < 0)
+    self->geneNameIx = asColumnFindIx(gpvAsColumns, "proteinID");
 if (config->snpSource != NULL)
     {
     struct asColumn *snpAsColumns = config->snpSource->asObj->columnList;
