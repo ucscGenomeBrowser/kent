@@ -170,10 +170,6 @@ char *chromTable(struct sqlConnection *conn, char *table);
 /* Get chr1_table if it exists, otherwise table.
  * You can freeMem this when done. */
 
-char *chrnTable(struct sqlConnection *conn, char *table);
-/* Return chrN_table if table is split, otherwise table.
- * You can freeMem this when done. */
-
 char *getDbTable(char *db, char *table);
 /* If table already contains its real database as a dot-prefix, then
  * return a clone of table; otherwise alloc and return db.table . */

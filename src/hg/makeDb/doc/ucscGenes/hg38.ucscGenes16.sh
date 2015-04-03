@@ -1,9 +1,13 @@
 
-export dir=/cluster/data/hg38/bed/ucsc.16.2
+export dir=/cluster/data/hg38/bed/ucsc.16.3
 export GENCODE_VERSION=V21
 export oldGeneDir=/cluster/data/hg38/bed/ucsc.15.1
 export oldGeneBed=$oldGeneDir/ucscGenes.bed
 export db=hg38
+export spDb=sp150225
+export taxon=9606
+export tempDb=braNey38
+export kent=$HOME/kent
 
 mkdir -p $dir
 cd $dir
@@ -13,8 +17,7 @@ hgsql -e "select * from wgEncodeGencodeComp$GENCODE_VERSION" --skip-column-names
 #TODO:  figure out better wayto deal with txLastId
 cp ~kent/src/hg/txGene/txGeneAccession/txLastId saveLastId
 
-txGeneAccession -test $oldGeneBed ~kent/src/hg/txGene/txGeneAccession/txLastId \
-	gencodeV21Comp.bed.gz txToAcc.tab oldToNew.tab
+txGeneAccession -test $oldGeneBed ~kent/src/hg/txGene/txGeneAccession/txLastId gencodeV21Comp.bed.gz txToAcc.tab oldToNew.tab
 
 tawk '{print $4}' oldToNew.tab | sort | uniq -c
 # 43307 compatible
@@ -31,6 +34,7 @@ awk '{print $2}' txToAcc.tab | sed 's/\..*//' | sort  | wc -l
 
 # this should be the current db instead of olDdb if not the first release
 echo "select * from knownGene" | hgsql $db | sort > $db.knownGene.gp
+echo "create table knownGeneOld8 select * from hg38.knownGene" | hgsql $tempDb
 grep lost oldToNew.tab | awk '{print $2}' | sort > lost.txt
 join lost.txt $db.knownGene.gp > $db.lost.gp
 
@@ -45,26 +49,74 @@ awk '{if ($7 != $6) print}' $db.lost.gp | wc -l
 
 cp ~kent/src/hg/txGene/txGeneAccession/txLastId saveLastId
 cd $dir
-txGeneAccession $oldGeneBed ~kent/src/hg/txGene/txGeneAccession/txLastId \
-	gencodeV21Comp.bed.gz txToAcc.tab oldToNew.tab
+txGeneAccession $oldGeneBed saveLastId gencodeV21Comp.bed.gz txToAcc.tab oldToNew.tab
 subColumn 4 gencodeV21Comp.bed.gz txToAcc.tab ucscGenes.bed
 
-makeKnownGene hg38 V21 txToAcc.tab
+#hgsql -N $spDb -e "select p.acc, p.val from protein p, accToTaxon x where x.taxon=$taxon and p.acc=x.acc" | awk '{print ">" $1;print $2}' >uniProt.fa
+#faSize uniProt.fa
+
+hgMapToGene -tempDb=$tempDb $db refGene knownGene knownToRefSeq
+hgMapToGene -all -tempDb=$tempDb $db all_mrna knownGene knownToMrna
+hgMapToGene -tempDb=$tempDb $db all_mrna knownGene knownToMrnaSingle
+
+hgsql $tempDb -e "select * from knownToMrna" | tail -n +2 | tawk '{if ($1 != last) {print last, count, buffer; count=1; buffer=$2} else {count++;buffer=$2","buffer} last=$1}' | tail -n +2 | sort > tmp1
+hgsql $tempDb  -e "select * from knownToMrnaSingle" | tail -n +2 | sort > tmp2
+join  tmp2 tmp1 > knownGene.ev
+
+# needs gbCDnaInfo
+txGeneAlias $tempDb $spDb kgXref.tab knownGene.ev oldToNew.tab foo.alias foo.protAlias
+sort foo.alias | uniq > ucscGenes.alias
+sort foo.protAlias | uniq > ucscGenes.protAlias
+rm foo.alias foo.protAlias
+hgLoadSqlTab -notOnServer $tempDb kgAlias $kent/src/hg/lib/kgAlias.sql ucscGenes.alias
+hgLoadSqlTab -notOnServer $tempDb kgProtAlias $kent/src/hg/lib/kgProtAlias.sql ucscGenes.protAlias
+
+
+makeKnownGene hg38 braNey38 V21 txToAcc.tab
+# genes in the PAR region aren't dealt with properly, GENCODE only has one id, ucsc genes has one for each chrom
+hgLoadSqlTab -notOnServer $tempDb knownGene $kent/src/hg/lib/knownGene.sql knownGene.gp
+
+hgLoadSqlTab -notOnServer $tempDb kgXref $kent/src/hg/lib/kgXref.sql kgXref.tab
+
+hgLoadSqlTab -notOnServer $tempDb knownCanonical $kent/src/hg/lib/knownCanonical.sql knownCanonical.tab
+
+hgKgGetText $tempDb knownGene.text 
+ixIxx knownGene.text knownGene.ix knownGene.ixx
+
+ln -s $dir/knownGene.ix  /gbdb/$tempDb/knownGene.ix
+ln -s $dir/knownGene.ixx /gbdb/$tempDb/knownGene.ixx  
+
+hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" $db > refToLl.txt
+hgMapToGene -tempDb=$tempDb $db refGene knownGene knownToLocusLink -lookup=refToLl.txt
+knownToVisiGene $tempDb -probesDb=$db
+
+
+
+# fake kgColor
+tawk '{print $1, 0, 0, 0}' knownGene.gp > knownGene.color
+hgLoadSqlTab -notOnServer $tempDb kgColor $kent/src/hg/lib/kgColor.sql knownGene.color
+
+
 
 sort  txToAcc.tab > tmp1
 zcat /cluster/data/hg38/bed/gencodeV21/data/release_21/gencode.v21.pc_translations.fa.gz | sed 's/.*ENST/>ENST/' | sed 's/|.*//' | awk '/>/ {name=$1} ! />/ {print name, $0}' | tr -d '>' |sort > tmp11
 join tmp11 tmp1 | awk '{printf ">%s\n%s\n",$3,$2}' > ucscGenes.faa
-zcat /cluster/data/hg38/bed/gencodeV21/data/release_21/gencode.v21.pc_transcripts.fa.gz | sed 's/.*ENST/>ENST/' | sed 's/|.*//' | awk '/>/ {name=$1} ! />/ {print name, $0}' | tr -d '>' |sort > tmp12
+hgPepPred $tempDb generic knownGenePep ucscGenes.faa
+
+ zcat /cluster/data/hg38/bed/gencodeV21/data/release_21/gencode.v21.pc_transcripts.fa.gz | sed 's/.*ENST/>ENST/' | sed 's/|.*//' | awk '/>/ {name=$1} ! />/ {print name, $0}' | tr -d '>' |sort > tmp12
 join tmp12 tmp1 | awk '{printf ">%s\n%s\n",$3,$2}' > ucscGenes.fa
+hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
 
 
 touch empty.ev
-/cluster/home/braney/bin/x86_64/txGeneAlias hg17 uniProt kgXref.tab empty.ev oldToNew.tab alias.tab proAlias.tab
+/cluster/home/braney/bin/x86_64/txGeneAlias hg19 uniProt kgXref.tab empty.ev oldToNew.tab alias.tab proAlias.tab
 sort alias.tab | uniq > kgAlias.tab
 sort proAlias.tab | uniq > kgProtAlias.tab
 
 tawk '{print $2,$1}' txToAcc.tab | sort > knownToEnsemble.tab
 tawk '{print $2,$1}' txToAcc.tab | sort > knownToGencode${GENCODE_VERSION}.tab
+
+#stopped here
 
 # Make up and load kgColor table. Takes about a minute.
 $txGeneColor $spDb ucscGenes.info ucscGenes.picks ucscGenes.color

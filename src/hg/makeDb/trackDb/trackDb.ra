@@ -930,6 +930,7 @@ group rna
 visibility hide
 color 200,0,50
 type bed 12 .
+exonNumbers off
 
 track genieBounds
 shortLabel Clone Bounds

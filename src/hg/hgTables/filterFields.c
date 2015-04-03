@@ -328,7 +328,6 @@ static void showTableFieldsDb(char *db, char *rootTable, boolean withGetButton)
 struct sqlConnection *conn = NULL;
 if (!trackHubDatabase(database))
     conn = hAllocConn(db);
-char *table = chromTable(conn, rootTable);
 struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable, ctLookupName);
 struct asObject *asObj = asForTable(conn, rootTable);
 boolean showItemRgb = FALSE;
@@ -336,18 +335,21 @@ boolean showItemRgb = FALSE;
 showItemRgb=bedItemRgb(tdb);	/* should we expect itemRgb instead of "reserved" */
 
 struct slName *fieldList;
-if (isBigBed(database, table, curTrack, ctLookupName))
-    fieldList = bigBedGetFields(table, conn);
-else if (isBamTable(table))
+if (isBigBed(database, rootTable, curTrack, ctLookupName))
+    fieldList = bigBedGetFields(rootTable, conn);
+else if (isBamTable(rootTable))
     fieldList = bamGetFields();
-else if (isVcfTable(table, NULL))
+else if (isVcfTable(rootTable, NULL))
     fieldList = vcfGetFields();
 else
+    {
+    char *table = chromTable(conn, rootTable);
     fieldList = sqlListFields(conn, table);
+    freez(&table);
+    }
 
 showTableFieldsOnList(db, rootTable, asObj, fieldList, showItemRgb, withGetButton);
 
-freez(&table);
 hFreeConn(&conn);
 }
 

@@ -1748,6 +1748,14 @@ safef(varName, sizeof(varName), "%s.show.spliceVariants", tdb->track);
 option = cartUsualBoolean(cart, varName, TRUE);
 cgiMakeCheckBox(varName, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", "splice variants");
+char *isGencode = trackDbSetting(tdb, "isGencode");
+if (isGencode != NULL)
+    {
+    safef(varName, sizeof(varName), "%s.show.composite", tdb->track);
+    option = cartUsualBoolean(cart, varName, FALSE);
+    cgiMakeCheckBox(varName, option);
+    printf(" %s&nbsp;&nbsp;&nbsp;", "show composite set");
+    }
 printf("<BR>\n");
 }
 

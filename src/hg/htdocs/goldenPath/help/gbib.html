@@ -466,7 +466,7 @@ type:
 <p>
 Some files at GEO are already binary indexed files that can be loaded in the browser, but since
 they are not hosted on a server that accepts byte-ranges, they are not available over the internet.
-With a GBiB you can place these files on your local shared folder and then browse them. In the following
+With GBiB you can download these files to a local shared folder and then browse them. In the following
 example the URL of the bigWig (.bw) file was obtained for the wget by right clicking the http link for
 this <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1186795">GSM1186795</a> example,
 that only displays data on chrM and chrX.
@@ -676,7 +676,7 @@ your personal track and session settings and mirrored tracks. </p>
 <b>Problem: </b>I need proxy support for my files to load.</p>
 <p>
 <em>Solution: </em>Proxy servers may be required by some installations to get through a
-firewall. One must add the setting <tt>httpProxy</tt> to hg.conf.local at
+firewall. You can add the setting <tt>httpProxy</tt> to hg.conf.local at
 /usr/local/apache/cgi-bin/hg.conf.local:</p>
 <p>
 <code>httpProxy=http://someProxyServer:443/</code></p>
