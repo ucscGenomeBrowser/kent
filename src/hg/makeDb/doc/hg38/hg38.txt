@@ -6144,3 +6144,51 @@ sort /cluster/data/hg38/chrom.sizes > tmpChrom
 grep -v '^#\|assembled' /hive/data/genomes/hg38/genbank/GCF_000001405.26.assembly.txt | awk 'BEGIN {OFS="\t"} {print "chr" $3 "_" $5 "_" $2, "chr" $3 "|"$7}' | sed 's/-scaffold//' | sed 's/unlocalized/random/' | sed 's/_unplaced//' | sed 's/chrna/chrUn/g' | sed 's/\./v/'  | sort | join /dev/stdin tmpChrom | awk 'BEGIN {OFS="\t"} {print 0, $2, $3, $1, $3}'  > dbVar.lift
 awk 'BEGIN {OFS="\t"} {print 0, $1, $2, $1, $2}' /cluster/data/hg38/chrom.sizes >> dbVar.lift
 rm tmpChrom
+
+#########################################################################
+2015-03-13: import of UCSC GENCODE group processing of GENCODE V21 (markd)
+    # download files
+    mkdir -p /hive/data/genomes/hg38/bed/gencodeV22
+    cd /hive/data/genomes/hg38/bed/gencodeV22
+
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set 
+    # release and transcript support versions
+
+
+    # download, build and load tables
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.
+        make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk cmpRelease >gencode-cmp.tsv
+
+    ## Copy and update trackDb files from previous release.
+    ## Change version and use lower priority so it sorts to top of
+    ## super track page.
+    ## Important to make sure filter attrs.transcriptType matches current set
+    ## figured out with
+    select distinct transcriptType from wgEncodeGencodeAttrsV22 order by transcriptType;
+    cd kent/src/hg/makeDb/trackDb
+    cp human/hg38/wgEncodeGencodeV18.ra human/hg38/wgEncodeGencodeV22.ra
+    cp human/hg38/wgEncodeGencodeV18.html human/hg38/wgEncodeGencodeV22.html
+
+    # edit these plus human/hg38/trackDb.wgEncode.ra
+    # - set priorities in wgEncodeGencodeV22.ra in reverse order with previous
+    #   tracks so newest shows up first
+    #     priority - set to previous version priority minus 0.001
+    #     searchPriority - set each to previous minus 0.001
+    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
+    #     superTrack wgEncodeGencodeSuper pack
+    # - Update wgEncodeGencodeSuper.html to describe new release and to
+    #   pick up other updates.
+
+    # update all.joiner and validate
+    # look for the last section `begin Gencode V??' in all.joiner
+    # and copy and update version
+    # repeat this until happy, editing minCheck as needed
+    # output in check/joiner.out
+    cd /hive/data/genomes/hg38/bed/gencodeV22
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+#########################################################################
+
+
