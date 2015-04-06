@@ -326,6 +326,8 @@ return TRUE;
 
 /********* Section for http protocol **********/
 
+static bool udcCacheEnabled(); // forward declaration
+
 int udcDataViaHttpOrFtp(char *url, bits64 offset, int size, void *buffer, struct connInfo *ci)
 /* Fetch a block of data of given size into buffer using url's protocol,
  * which must be http, https or ftp.  Returns number of bytes actually read.
@@ -890,7 +892,7 @@ struct udcRemoteFileInfo info;
 ZeroVar(&info);
 if (!isTransparent)
     {
-    if (udcDefaultDir() != NULL)
+    if (udcCacheEnabled())
         useCacheInfo = (udcCacheAge(url, cacheDir) < udcCacheTimeout());
     if (!useCacheInfo)
 	{
@@ -930,11 +932,11 @@ else
 	memcpy(&(file->connInfo), &(info.ci), sizeof(struct connInfo));
 	// update cache file mod times, so if we're caching we won't do this again
 	// until the timeout has expired again:
-    	if (udcCacheTimeout() > 0 && (udcDefaultDir()!=NULL) && fileExists(file->bitmapFileName))
+    	if (udcCacheTimeout() > 0 && udcCacheEnabled() && fileExists(file->bitmapFileName))
 	    (void)maybeTouchFile(file->bitmapFileName);
 	}
 
-    if (udcDefaultDir() != NULL)
+    if (udcCacheEnabled())
         {
         /* Make directory. */
         makeDirsOnPath(file->cacheDir);
@@ -1261,7 +1263,7 @@ static boolean udcCachePreload(struct udcFile *file, bits64 offset, bits64 size)
 /* Make sure that given data is in cache - fetching it remotely if need be. 
  * Return TRUE on success. */
 {
-if (udcDefaultDir() == NULL)
+if (!udcCacheEnabled())
     return TRUE;
 
 boolean ok = TRUE;
@@ -1296,8 +1298,8 @@ return ok;
 bits64 udcRead(struct udcFile *file, void *buf, bits64 size)
 /* Read a block from file.  Return amount actually read. */
 {
-// if udcDefaultDir is NULL, don't do local caching, just fetch the data
-if (udcDefaultDir()==NULL && !sameString(file->protocol, "transparent"))
+// if not caching, just fetch the data
+if (!udcCacheEnabled() && !sameString(file->protocol, "transparent"))
     {
     int actualSize = file->prot->fetchData(file->url, file->offset, size, buf, &(file->connInfo));
     file->offset += actualSize;
@@ -1562,7 +1564,7 @@ void udcSeekCur(struct udcFile *file, bits64 offset)
 /* Seek to a particular position in file. */
 {
 file->offset += offset;
-if (udcDefaultDir())
+if (udcCacheEnabled())
     mustLseek(file->fdSparse, offset, SEEK_CUR);
 }
 
@@ -1570,7 +1572,7 @@ void udcSeek(struct udcFile *file, bits64 offset)
 /* Seek to a particular position in file. */
 {
 file->offset = offset;
-if (udcDefaultDir())
+if (udcCacheEnabled())
     mustLseek(file->fdSparse, offset, SEEK_SET);
 }
 
@@ -1669,12 +1671,22 @@ return defaultDir;
 }
 
 void udcSetDefaultDir(char *path)
-/* Set default directory for cache. 
- * Set to NULL to deactivate the local caching. */
+/* Set default directory for cache.  */
 {
 defaultDir = cloneString(path);
 }
 
+void udcDisableCache()
+/* Switch off caching. Re-enable with udcSetDefaultDir */
+{
+defaultDir = NULL;
+}
+
+static bool udcCacheEnabled()
+/* TRUE if caching is activated */
+{
+return (defaultDir != NULL);
+}
 
 int udcCacheTimeout()
 /* Get cache timeout (if local cache files are newer than this many seconds,
