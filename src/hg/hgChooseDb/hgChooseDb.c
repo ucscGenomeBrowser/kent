@@ -16,6 +16,7 @@
 #include "hCommon.h"
 #include "hdb.h"
 #include "hui.h"
+#include "jsHelper.h"
 #include "jsonParse.h"
 #include "obscure.h"  // for readInGulp
 #include "trackHub.h"
@@ -176,21 +177,7 @@ puts("<div id=\"appContainer\">Loading...</div>");
 // Plain old "var ..." doesn't work (other scripts can't see it), it has to belong to window.
 printf("<script>window.%s='%s';</script>\n", cartSessionVarName(), cartSessionId(cart));
 
-// We need a package manager and require-handling system... bower and browserify?
-puts("<script src=\"../js/es5-shim.4.0.3.min.js\"></script>");
-puts("<script src=\"../js/es5-sham.4.0.3.min.js\"></script>");
-puts("<script src=\"../js/lodash.3.3.1.compat.min.js\"></script>");
-puts("<script src=\"//code.jquery.com/jquery-1.9.1.min.js\"></script>");
-puts("<script src=\"//code.jquery.com/ui/1.10.3/jquery-ui.min.js\"></script>");
-puts("<script src=\"//fb.me/react-with-addons-0.12.2.min.js\"></script>");
-puts("<script src=\"../js/immutable.3.2.1.min.js\"></script>");
-puts("<script src=\"../js/BackboneExtend.js\"></script>");
-puts("<script src=\"../js/cart.js\"></script>");
-puts("<script src=\"../js/ImModel.js\"></script>");
-puts("<script src=\"../js/PathUpdate.js\"></script>");
-puts("<script src=\"../js/PathUpdateOptional.js\"></script>");
-puts("<script src=\"../js/ImmutableUpdate.js\"></script>");
-puts("<script src=\"../js/reactLibBundle.js\"></script>");
+jsIncludeReactLibs();
 puts("<script src=\"../js/reactHgChooseDb.js\"></script>");
 puts("<script src=\"../js/hgChooseDbModel.js\"></script>");
 

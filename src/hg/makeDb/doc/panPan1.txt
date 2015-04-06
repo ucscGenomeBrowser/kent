@@ -620,29 +620,34 @@ panPan1.genbank.est.native.load = no
 	hgcentraltest
 
 ############################################################################
-# downloads and pushQ entry (working - 2012-07-27 - Chin)
+# downloads and pushQ entry (DONE - 2015-01-06 - Hiram)
     # after adding panPan1 to the all.joiner file and verifying that
     #   joinerCheck is clean, can construct the downloads:
+    joinerCheck -database=panPan1 -keys all.joiner
+    joinerCheck -database=panPan1 -tableCoverage all.joiner
+    joinerCheck -database=panPan1 -times all.joiner
+
     cd /hive/data/genomes/panPan1
     time makeDownloads.pl -workhorse=hgwdev panPan1
-    #   real    11m40.799s
+    #   real    27m3.056s
 
     mkdir /hive/data/genomes/panPan1/pushQ
     cd /hive/data/genomes/panPan1/pushQ
     # Mark says don't let the transMap track get there
     time makePushQSql.pl panPan1 2> stderr.txt | grep -v transMap > panPan1.sql
-    #   real    3m52.778s
+    #   real    4m55.248s
 
     # check the stderr.txt for bad stuff, these kinds of warnings are OK:
 # WARNING: hgwdev does not have /gbdb/panPan1/wib/gc5Base.wib
 # WARNING: hgwdev does not have /gbdb/panPan1/wib/quality.wib
-# WARNING: hgwdev does not have /gbdb/panPan1/bbi/quality.bw
+# WARNING: hgwdev does not have /gbdb/panPan1/bbi/qualityBw/quality.bw
 # WARNING: panPan1 does not have seq
 # WARNING: panPan1 does not have extFile
 # WARNING: panPan1 does not have estOrientInfo
 
-    scp -p panPan1.sql hgwbeta:/tmp
-    ssh hgwbeta "hgsql qapushq < /tmp/panPan1.sql"
+XXX - ready for this - Tue Jan  6 12:34:50 PST 2015
+    scp -p panPan1.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "hgsql qapushq < /tmp/panPan1.sql"
 
 ##########################################################################
 #  BLATSERVERS ENTRY (working - 2012-08-03 - Chin)
@@ -3062,7 +3067,28 @@ fi
 
     # verify the track link to INSDC functions
 
-##############################################################################
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2015-03-20 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+     ssh hgwdev
+
+     # verify doesn't exist yet:
+     hgsql -e 'select * from blatServers;' hgcentraltest | grep -i panpan
+     #  empty result
+
+     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("panPan1", "blat4d", "17858", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("panPan1", "blat4d", "17859", "0", "1");' \
+		hgcentraltest
+
+     # verify entry:
+     hgsql -e 'select * from blatServers;' hgcentraltest | grep -i panpan
+     #    panPan1 blat4d  17858   1       0
+     #    panPan1 blat4d  17859   0       1
+
+     #	test it with some sequence
+
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################

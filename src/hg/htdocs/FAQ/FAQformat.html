@@ -45,6 +45,7 @@
                         <LI><A HREF="#format6.1">bigWig format</A>
                         <LI><A HREF="../goldenPath/help/chain.html">Chain format</A>
                         <LI><A HREF="#format9">GenePred table format</A>
+                        <LI><A HREF="#format9.1">bigGenePred table format</A>
                         <LI><A HREF="#format3">GFF format</A>
                         <LI><A HREF="#format4">GTF format</A>
 			<LI><A HREF="#format20">HAL format</A>
@@ -1551,6 +1552,44 @@ this table.
     uint[exonCount] exonEnds;   "Exon end positions"
     )
 </PRE>
+			    </TD><TD WIDTH=15></TD></TR>
+	    		</TABLE><BR>
+		     </TD></TR>
+		</TABLE>
+     	     </TD></TR>
+    	</TABLE>
+	<BR>
+
+<!--Content Table-->
+<A NAME="format9.1"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="#fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="#D9E4F8" WIDTH="100%">
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; bigGenePred table format</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="#fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+<P>
+bigGenePred is a table format commonly used for gene prediction tracks in the
+Genome Browser. bigGenePred format is a superset of the <A HREF="FAQformat.html#format9">genePred </A> text-based format supported using the <A HREF="FAQformat.html#format1.5">bigBed</A> format, so it can be efficiently accessed over a network. 
+<P>Click <A HREF="../goldenPath/help/bigGenePred.html">here</A> for more information
+on the bigGenePred format.</P>
+<P>
+
+
 			    </TD><TD WIDTH=15></TD></TR>
 	    		</TABLE><BR>
 		     </TD></TR>

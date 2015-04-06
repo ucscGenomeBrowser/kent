@@ -135,7 +135,7 @@ Genome assemblies that UCSC does not support can be loaded and viewed with assoc
 <P>
 The data underlying the tracks and optional sequence in a hub reside on the remote 
 server of the data provider rather than at UCSC. 
-Genomic annotations are stored in compressed binary indexed files in bigBed, bigWig, BAM or VCF
+Genomic annotations are stored in compressed binary indexed files in bigBed, bigGenePred, bigWig, BAM or VCF
 format that contain the data at several resolutions.
 In the case of assemblies that UCSC does not support
 genomic sequence is stored in the efficient twoBit format.
@@ -330,7 +330,7 @@ To create your own hub you will need:</p>
 <UL>
 <LI>
 one or more data sets formatted in one of the compressed binary index formats
-supported by the Genome Browser: bigBed, bigWig, BAM or VCF
+supported by the Genome Browser: bigBed, bigGenePred, bigWig, BAM or VCF
 <LI>
 a set of text files that specify properties for the track hub and for each of
 the data tracks within it
@@ -368,6 +368,7 @@ myHub/ - directory containing track hub files
           dnase.html - description text for a DNase track 
           dnaseLiver.bigWig - wiggle plot of DNase in liver
           dnaseLiver.bigBed - regions of active DNase
+          liverGenes.bigGenePred - gene annotations of genes over-expressed in liver tissue
           dnaseLung.bigWig - wiggle plot of DNase in lung
           dnaseLung.bigWig - regions of active DNase
           ...
@@ -398,6 +399,7 @@ The data tracks provided by a hub must be formatted in one of the
 compressed binary index formats supported by the Genome Browser: 
 <A HREF="bigWig.html">bigWig</A>, 
 <A HREF="bigBed.html">bigBed</A>,
+<A HREF="bigGenePred.html">bigGenePred</A>,
 <A HREF="bam.html">BAM</A> or
 <A HREF="vcf.html">VCF</A>.</p>
 
@@ -416,6 +418,16 @@ For information on creating and configuring bigWig tracks, see the
 <P><em>bigBed</em> -
 BigBed files are binary indexed versions of Browser Extensible Data
 (<A HREF="../../FAQ/FAQformat.html#format1">BED</A>) files.  BED format is
+useful for associating a name and (optionally) a color and a score with one 
+or more related regions on the same chromosome, such as all the exons of a gene.
+See the <A HREF="bigBed.html">bigBed Track Format</A> help page for 
+information on creating and configuring bigBed tracks. 
+
+<P><em>bigGenePred</em> -
+BigGenePred files are binary indexed versions of Browser Extensible Data
+(<A HREF="../../FAQ/FAQformat.html#format1">BED</A>) files with an extra eight fields that 
+are useful for describing gene predicitons that are modeled after the fields in 
+<A HREF="../../FAQ/FAQformat.html#format9">genePred</A> files.  BigGenePred format is
 useful for associating a name and (optionally) a color and a score with one 
 or more related regions on the same chromosome, such as all the exons of a gene.
 See the <A HREF="bigBed.html">bigBed Track Format</A> help page for 
@@ -651,7 +663,7 @@ displayed in the configuration and track settings, and on the
 details pages. Suggested maximum length is 80 characters.</p>
  
 <P><em>type</em> - the format of the file specified by bigDataUrl. Must be either 
-<em>bigWig</em>, <em>bigBed</em>, <em>bam</em> or <em>vcfTabix</em>.  If the type
+<em>bigWig</em>, <em>bigBed</em>, <em>bigGenePred</em>, <em>bam</em> or <em>vcfTabix</em>.  If the type
 is <em>bigBed</em>, it may be followed by an optional number denoting the number
 of fields in the bigBed file (e.g., "type bigBed 12" for a file with 12 fields).
 If no number is given, a default value of 3 is assumed (a very limited display

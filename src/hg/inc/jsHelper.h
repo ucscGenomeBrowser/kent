@@ -96,6 +96,10 @@ void jsIncludeFile(char *fileName, char *noScriptMsg);
  * if noScriptMsg == NULL; noscript msg is suppressed if noScriptMsg == "" (this is useful
  * if you want to more carefully control where the message will appear on the page). */
 
+void jsIncludeReactLibs();
+/* Prints out <script src="..."> tags for external libraries including ReactJS & ImmutableJS
+ * and our own model libs, React mixins and components. */
+
 char *jsCheckAllOnClickHandler(char *idPrefix, boolean state);
 /* Returns javascript for use as an onclick attribute value to apply "check all"/"uncheck all"
  * to all checkboxes with given idPrefix.

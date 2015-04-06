@@ -4288,7 +4288,7 @@ char *query = "NOSQLINJ "
 char queryBuf[4096];
 safef(queryBuf, sizeof queryBuf, query, cladeTable(),  genomeCladeTable(), dbDbTable());
 struct sqlConnection *conn = hConnectCentral();
-struct slPair *nativeClades = sqlQuickPairList(conn, query);
+struct slPair *nativeClades = sqlQuickPairList(conn, queryBuf);
 hDisconnectCentral(&conn);
 
 struct slPair *trackHubClades = trackHubGetCladeLabels();

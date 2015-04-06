@@ -4730,6 +4730,36 @@ if (classTable != NULL && hTableExists(database, classTable))
 return TRUE;
 }
 
+boolean knownGencodeClassFilter(struct track *tg, void *item)
+{
+struct linkedFeatures *lf = item;
+char buffer[1024];
+
+safef(buffer, sizeof buffer, "kgID=\"%s\"", lf->name);
+char *class = sqlGetField(database, "kgXref", "tRnaName", buffer);
+
+if (sameString(class, "basic"))
+    return TRUE;
+return FALSE;
+}
+
+void loadKnownGencode(struct track *tg)
+/* Convert gene pred in window to linked feature. Include alternate name
+ * in "extra" field (usually gene name) */
+{
+char varName[SMALLBUF];
+safef(varName, sizeof(varName), "%s.show.composite", tg->tdb->track);
+boolean showComposite = cartUsualBoolean(cart, varName, FALSE);
+
+struct sqlConnection *conn = hAllocConn(database);
+tg->items = connectedLfFromGenePredInRangeExtra(tg, conn, tg->table,
+                                        chromName, winStart, winEnd, TRUE);
+hFreeConn(&conn);
+/* filter items on selected criteria if filter is available */
+if (!showComposite)
+    filterItems(tg, knownGencodeClassFilter, "include");
+}
+
 void loadGenePredWithName2(struct track *tg)
 /* Convert gene pred in window to linked feature. Include alternate name
  * in "extra" field (usually gene name) */
@@ -5100,7 +5130,13 @@ void loadKnownGene(struct track *tg)
 /* Load up known genes. */
 {
 struct trackDb *tdb = tg->tdb;
-loadGenePredWithName2(tg);
+char *isGencode = trackDbSetting(tdb, "isGencode");
+
+if (isGencode == NULL)
+    loadGenePredWithName2(tg);
+else
+    loadKnownGencode(tg);
+
 char varName[SMALLBUF];
 safef(varName, sizeof(varName), "%s.show.noncoding", tdb->track);
 boolean showNoncoding = cartUsualBoolean(cart, varName, TRUE);
@@ -5118,8 +5154,9 @@ if (!showSpliceVariants)
         struct hash *hash = hashNew(0);
         char query[512];
         sqlSafef(query, sizeof(query),
-                "select transcript from %s where chromStart < %d && chromEnd > %d",
-                canonicalTable, winEnd, winStart);
+                "select transcript from %s where chrom=\"%s\" and chromStart < %d && chromEnd > %d",
+                canonicalTable, chromName, winEnd, winStart);
+	printf("query %s\n", query);
         struct sqlResult *sr = sqlGetResult(conn, query);
         char **row;
         while ((row = sqlNextRow(sr)) != NULL)

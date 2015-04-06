@@ -2,4 +2,5 @@
 hg19
 hg18
 mm9
+mm10
 danRer7

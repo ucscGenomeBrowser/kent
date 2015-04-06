@@ -109,7 +109,10 @@ void linkToOtherBrowserTitle(char *otherDb, char *chrom, int start, int end, cha
 void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end);
 /* Make anchor tag to open another browser window. */
 
-void printEntrezPubMedUidUrl(FILE *f, int pmid);
+void printEntrezGeneUrl(FILE *f, int geneid);
+/* Print URL for Entrez browser on a gene details page. */
+
+    void printEntrezPubMedUidUrl(FILE *f, int pmid);
 /* Print URL for Entrez browser on a PubMed search. */
 
 void printSwissProtAccUrl(FILE *f, char *accession);

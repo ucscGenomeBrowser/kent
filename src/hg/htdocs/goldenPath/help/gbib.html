@@ -461,6 +461,25 @@ type:
     fetchChromSizes hg19 &gt; hg19.sizes
     bedToBigBed bedExample.txt hg19.sizes myBigBed.bb
     </pre></p>
+
+<p><b><em>Example: Loading a GEO File</em></b></p>
+<p>
+Some files at GEO are already binary indexed files that can be loaded in the browser, but since
+they are not hosted on a server that accepts byte-ranges, they are not available over the internet.
+With GBiB you can download these files to a local shared folder and then browse them. In the following
+example the URL of the bigWig (.bw) file was obtained for the wget by right clicking the http link for
+this <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1186795">GSM1186795</a> example,
+that only displays data on chrM and chrX.
+    <pre>
+    ssh browser@localhost -p 1235  (to enter GBiB from your computer terminal, password: browser)
+    cd /folders
+    sudo wget "http://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM1186795&format=file&file=GSM1186795%5FDZ012%5FTRA1%5FN2L3%5Ftr27%5Fce10%5FBTm1x200n%2Ebw" -O GSM1186795.bw
+    </pre>
+The file can then be found in the GBiB's <a href="http://127.0.0.1:1234/folders/">http://127.0.0.1:1234/folders/</a>
+location, or loaded with a direct link to the files location: <a
+href="http://127.0.0.1:1234/cgi-bin/hgTracks?db=hg19&hgt.customText=http://127.0.0.1:1234/folders/GSM1186795.bw&position=chrM"
+target="_blank">http://127.0.0.1:1234/cgi-bin/hgTracks?db=hg19&hgt.customText=<b>http://127.0.0.1:1234/folders/GSM1186795.bw</b>&position=chrM</a>.
+</p>
 </div><!-- .sectionContent -->
 </div><!-- .section -->
 
@@ -620,6 +639,29 @@ the command <tt>sudo ifup --force eth0</tt> to reset the network connection.</p>
 outgoing TCP data on port 3306/MySQL. In this case, contact your institution's IT support staff to 
 inquire about ways to open this port. </p>
 <p>
+<b>Problem: </b>Error when using BLAT.</p>
+<p>
+When you use BLAT on your GBiB machine, it attempts to open outgoing TCP connections to the BLAT 
+servers running at UCSC. Each assembly has two ports that need to be open from your GBiB machine
+to the UCSC BLAT servers. You will likely need to contact the system administrators at your 
+institution and ask them to open outgoing TCP connections to a list of UCSC hostnames and ports. 
+The commands below will allow you to find out the names of these hosts and ports.</p>
+
+<p>
+<em>Solution: </em>To find the hostname-port combination to open from your GBiB machine, 
+use the following Mysql query:<br>
+<pre>mysql hgcentral -e 'select * from blatServers where db="YOURDB"'</pre><br>
+For example, if you want to enable BLAT for hg19 and hg38, you can issue this command:<br>
+<pre>mysql hgcentral -e 'select * from blatServers where db="hg38" or db="hg19"'</pre>
+<pre>+------+---------------------+-------+---------+--------+
+| db   | host                | port  | isTrans | canPcr |
++------+---------------------+-------+---------+--------+
+| hg19 | blat4a.cse.ucsc.edu | 17779 |       0 |      1 |
+| hg19 | blat4a.cse.ucsc.edu | 17778 |       1 |      0 |
+| hg38 | blat4c.cse.ucsc.edu | 17781 |       0 |      1 |
+| hg38 | blat4c.cse.ucsc.edu | 17780 |       1 |      0 |
++------+---------------------+-------+---------+--------+</pre>
+<p>
 <b>Problem: </b>GBiB is functioning incorrectly or stops working.</p>
 <p>
 <em>Solution 1: </em>If you have previously turned off automatic updates, your software or data 
@@ -630,6 +672,22 @@ take several hours over a slow Internet connection. </p>
 <em>gbib-root.vdi</em>. Place this file in the same directory with the files extracted from
 your original GBiB installation. Do not extract and overwrite <em>gbib-data.vdi</em> -- it contains 
 your personal track and session settings and mirrored tracks. </p>
+<p>
+<b>Problem: </b>I need proxy support for my files to load.</p>
+<p>
+<em>Solution: </em>Proxy servers may be required by some installations to get through a
+firewall. You can add the setting <tt>httpProxy</tt> to hg.conf.local at
+/usr/local/apache/cgi-bin/hg.conf.local:</p>
+<p>
+<code>httpProxy=http://someProxyServer:443/</code></p>
+<p>
+If the proxy server requires BASIC authentication, then the line in hg.conf.local should look like:</p>
+<p>
+<code>httpProxy=http://user:password@someProxyServer:443/</code><p>
+<p>
+The file /usr/local/apache/cgi-bin/hg.conf should already include a line like
+<tt>include hg.conf.local</tt> to incorporate the changes in hg.conf.local.</p>
+<p>
 </div><!-- .sectionContent -->
 </div><!-- .section -->
 

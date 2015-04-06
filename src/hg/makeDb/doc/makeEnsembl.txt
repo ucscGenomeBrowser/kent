@@ -5,6 +5,54 @@
 #	Robert's experiments with an automated process.
 #
 ############################################################################
+# when all done, reset the dateReference:  (DONE - 2015-03-31 - Hiram)
+     hgsql -e \
+'update trackVersion set dateReference="dec2014" where name="ensGene" AND version="78";' hgFixed
+     hgsql -e \
+'update trackVersion set dateReference="current" where name="ensGene" AND version="79";' hgFixed
+     # next time, v79 will be 'mar2015'
+
+############################################################################
+# ensembl 79 update (DONE - 2015-03-17 - Hiram)
+    # to pick up the new file listings from Ensembl, in the source tree:
+    cd ~/kent/src/hg/utils/automation
+    ./findEnsFtpNames.sh 78
+    # constructs the files:
+# -rw-rw-r-- 1 4507 Mar 17 10:19 release.79.gtf.names
+# -rw-rw-r-- 1 2659 Mar 17 10:19 release.79.MySQL.names
+# -rw-rw-r-- 1 5046 Mar 17 10:19 release.79.fasta.names
+
+    # which are edited into: EnsGeneAutomate.pm, verify it is good:
+    ./ensVersions  79 | grep -v "NOT FOUND"
+    # when it is good and checked in, it is copied to /cluster/bin/scripts
+    # then, working in:
+    mkdir /hive/data/outside/ensembl/ensGene/v79
+    cd /hive/data/outside/ensembl/ensGene/v79
+    # construct db work list:
+    ../mkList.sh
+    # creates the file: ens.79.update.list
+    # the scripts work off of this list:
+    time ../runUpdate.sh > update.log.0 2>&1
+    # about 1.5 hours
+    # to verify done, and find the broken ones:
+    ../checkStatus.sh | grep -v "ALL DONE"
+    # there were a couple of fixups for: gadMor1 gasAcu1
+    # new assembly for chlSab1
+
+    cd /hive/data/genomes/gadMor1/bed/ensGene.79/process
+    cp -p ../../ensGene.78/process/extraLifting.sh .
+    ./extraLifting.sh
+    cd /hive/data/genomes/gadMor1
+    doEnsGeneUpdate.pl -continue=load  -ensVersion=79 \
+       gadMor1.ensGene.ra > ensGene.79.load.log 2>&1
+
+    cd /hive/data/genomes/gasAcu1/bed/ensGene.79/process
+    cp -p ../../ensGene.78/process/extraLift.sh .
+    ./extraLift.sh
+    doEnsGeneUpdate.pl -continue=load  -ensVersion=79 \
+       gasAcu1.ensGene.ra > ensGene.79.load.log 2>&1
+
+############################################################################
 # ensembl 78 update (DONE - 2014-12-03,11 - Hiram)
     # to pick up the new file listings from Ensembl, in the source tree:
     cd ~/kent/src/hg/utils/automation
@@ -22,13 +70,14 @@
     cd /hive/data/outside/ensembl/ensGene/v78
     # construct db work list:
     ../mkList.sh
+    # remove mm10 and hg38 from the list since those no longer go out
     # creates the file: ens.78.update.list
     # the scripts work off of this list:
     time ../runUpdate.sh > update.log.0 2>&1
     # about 1.5 hours
     # to verify done, and find the broken ones:
     ../checkStatus.sh | grep -v "ALL DONE"
-    # there were a couple of fixups for: gadMor1 gasAcu1 mm10 hg38
+    # there were a couple of fixups for: gadMor1 gasAcu1
 
     # the only new gene sets are on: papAnu2 poeFor1 rn5 mm10 hg38
     # and only papAnu2 rn5 and mm10 go to the RR

@@ -41,6 +41,31 @@ percentDiff=""
 
 ##### Functions #####
 
+# Usage message function
+showHelp() {
+cat << EOF
+Usage: $0 [-hbv] [-d DATABASE] [-t TABLENAME]
+
+	-h		Display this help and exit
+	-d DATABASE	UCSC database name, i.e. hg19 or hg38.
+	-t TABLENAME	Table name, i.e. gwasCatalog.
+	-b		BigBed mode. Used for tracks supported
+			bigBed files, i.e. grcIncidentDb.
+	-v		Verbose mode. Outputs test results to
+			standard out as well as file.
+
+Performs basic QA for auto-pushed tracks, which includes:
+- Checks when data for track was last updated
+- Coverage from featureBits -countGaps
+- Percentage difference in coverage between now and the last time the script was run
+
+Notes:
+	- For OMIM, ISCA, or ClinVar tracks use omim, isca, or clinvar as the table name.
+	- Can only be run once for each database/track pair per day.
+
+EOF
+}
+
 # Output function
 function outputCovDiff () {
 	# four positional arguments. $1 == prevLogFile. $2 == tblCov. $3 == tableName. $4 == tblDate.
@@ -80,31 +105,6 @@ function checkForIssues () {
 }
 
 ##### Parse command-line input #####
-
-# Define function for showing usage message
-showHelp() {
-cat << EOF
-Usage: $0 [-hbv] [-d DATABASE] [-t TABLENAME]
-
-	-h		Display this help and exit
-	-d DATABASE	UCSC database name, i.e. hg19 or hg38.
-	-t TABLENAME	Table name, i.e. gwasCatalog.
-	-b		BigBed mode. Used for tracks supported
-			bigBed files, i.e. grcIncidentDb.
-	-v		Verbose mode. Outputs test results to
-			standard out as well as file.
-
-Performs basic QA for auto-pushed tracks, which includes:
-- Checks when data for track was last updated
-- Coverage from featureBits -countGaps
-- Percentage difference in coverage between now and the last time the script was run
-
-Notes:
-	- For OMIM, ISCA, or ClinVar tracks use omim, isca, or clinvar as the table name.
-	- Can only be run once for each database/track pair per day.
-
-EOF
-}
 
 OPTIND=1 # Reset is necessary if getopts was used previously in the script.  It is a good idea to make this local in a function.
 while getopts "hd:t:bv" opt

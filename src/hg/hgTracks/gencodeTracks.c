@@ -539,12 +539,15 @@ tg->itemName = gencodeGeneName;
 static void registerProductionTrackHandlers()
 /* register track handlers for production GENCODE tracks */
 {
-// pre-versioning
-registerTrackHandler("wgEncodeGencode", gencodeGeneMethods);
+// ENCODE 1 legacy
 registerTrackHandler("wgEncodeSangerGencode", gencodeGeneMethods);
+
+// uses trackHandler attribute
+registerTrackHandler("wgEncodeGencode", gencodeGeneMethods);
 
 // one per gencode version. Add a bunch in the future so
 // this doesn't have to be changed on every release.
+// FIXME: delete these CGI and tracks are all user trackHandler
 registerTrackHandler("wgEncodeGencodeV3", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodeV4", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodeV7", gencodeGeneMethods);
@@ -562,13 +565,6 @@ registerTrackHandler("wgEncodeGencodeV18", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodeV19", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodeV20", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodeV21", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV22", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV23", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV24", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV25", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV26", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV27", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV28", gencodeGeneMethods);
 
 registerTrackHandler("wgEncodeGencodeVM2", gencodeGeneMethods);
 registerTrackHandler("wgEncodeGencodeVM3", gencodeGeneMethods);

@@ -1748,6 +1748,14 @@ safef(varName, sizeof(varName), "%s.show.spliceVariants", tdb->track);
 option = cartUsualBoolean(cart, varName, TRUE);
 cgiMakeCheckBox(varName, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", "splice variants");
+char *isGencode = trackDbSetting(tdb, "isGencode");
+if (isGencode != NULL)
+    {
+    safef(varName, sizeof(varName), "%s.show.composite", tdb->track);
+    option = cartUsualBoolean(cart, varName, FALSE);
+    cgiMakeCheckBox(varName, option);
+    printf(" %s&nbsp;&nbsp;&nbsp;", "show composite set");
+    }
 printf("<BR>\n");
 }
 
@@ -3268,7 +3276,7 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
         printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
         if (trackDbSetting(tdb, "wgEncode"))
             {
-            printf("<A TARGET=_BLANK HREF='../ENCODE/index.html' TITLE='ENCODE Portal'>ENCODE</A>");
+            printf("<A TARGET=_BLANK HREF='../ENCODE/index.html' TITLE='ENCODE Portal'>ENCODE at UCSC</A>");
             printf("&nbsp;&nbsp;");
             makeDownloadsLink(database, tdb);
             }
@@ -3280,7 +3288,7 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
                "page'>Subtracks%s</A>", downArrow);
         printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>"
                "Description%s</A>", downArrow);
-        if (trackDbSetting(tdb, "wgEncode"))
+        if (trackDbSetting(tdb, "wgEncode") && isEncode2(database))
             {
             printf("&nbsp;&nbsp;<A HREF='#TRACK_CREDITS' TITLE='Jump to ENCODE lab contacts for this data'>"
                "Contact%s</A>", downArrow);

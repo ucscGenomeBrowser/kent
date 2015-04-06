@@ -77,6 +77,12 @@
         printf(PM_BUTTON, (nameOrId),"false",(beg),(contains),(anc),"remove_sm.gif","-")
 #endif///ndef BUTTONS_BY_CSS
 
+boolean isEncode2(char *database)
+// Return true for ENCODE2 assemblies
+{
+return (sameString(database, "hg18") || sameString(database, "hg19") || sameString(database, "mm9"));
+}
+
 static char *htmlStringForDownloadsLink(char *database, struct trackDb *tdb,
                                         char *name,boolean nameIsFile)
 // Returns an HTML string for a downloads link
@@ -90,7 +96,7 @@ if (!nameIsFile && trackDbSetting(tdb, FILE_SORT_ORDER) != NULL)
           // Note the hgsid would be needed if downloads page ever saved fileSortOrder to cart.
     return link;
     }
-else if (trackDbSetting(tdb, "wgEncode") != NULL)  // Downloads directory if this is ENCODE
+else if (trackDbSetting(tdb, "wgEncode") != NULL && isEncode2(database))  // Downloads directory if this is ENCODE
     {
     const char *compositeDir = metadataFindValue(tdb, MDB_OBJ_TYPE_COMPOSITE);
     if (compositeDir == NULL && tdbIsComposite(tdb))
@@ -366,7 +372,10 @@ if (udcCacheTimeout() < timeout)
 void setUdcCacheDir()
 /* set the path to the udc cache dir */
 {
-udcSetDefaultDir(cfgOptionDefault("udc.cacheDir", udcDefaultDir()));
+if (cfgOptionBooleanDefault("udc.useLocalDiskCache", TRUE))
+    udcSetDefaultDir(cfgOptionDefault("udc.cacheDir", udcDefaultDir()));
+else
+    udcDisableCache();
 }
 
 

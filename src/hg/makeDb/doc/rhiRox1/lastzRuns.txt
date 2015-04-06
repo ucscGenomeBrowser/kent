@@ -1,0 +1,77 @@
+#########################################################################
+# LASTZ Golden snub-nosed monkey/rhiRox1 - Tarsier TarSyr2 (DONE - 2015-02-23 - Hiram)
+    mkdir /hive/data/genomes/rhiRox1/bed/lastzTarSyr2.2015-02-23
+    cd /hive/data/genomes/rhiRox1/bed/lastzTarSyr2.2015-02-23
+
+    cat << '_EOF_' > DEF
+# Golden snub-nosed monkey vs tarsier
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/rhiRox1.tarSyr2/rhiRox1.tarSyr2.tuning.top400.txt
+
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+
+BLASTZ_T=2
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=50
+BLASTZ_X=1000
+BLASTZ_Y=3400
+BLASTZ_Q=/hive/data/genomes/rhiRox1/bed/lastzTarSyr2.2015-02-23/rhiRox1.tarSyr2.tuning.Q.txt
+#       A     C     G     T
+# A   100  -173   -26  -121
+# C  -173    96  -172   -26
+# G   -26  -172    96  -173
+# T  -121   -26  -173   100
+
+# TARGET: Golden snub-nosed monkey rhiRox1
+SEQ1_DIR=/hive/data/genomes/rhiRox1/rhiRox1.2bit
+SEQ1_LEN=/hive/data/genomes/rhiRox1/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=500
+SEQ1_LAP=10000
+
+# QUERY: Tarsier tarSyr2
+SEQ2_DIR=/hive/data/genomes/tarSyr2/tarSyr2.2bit
+SEQ2_LEN=/hive/data/genomes/tarSyr2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=1000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/rhiRox1/bed/lastzTarSyr2.2015-02-23
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    #   real    235m57.597s
+
+    cat fb.rhiRox1.chainTarSyr2Link.txt 
+    # 1614951617 bases of 2856044136 (56.545%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` rhiRox1 tarSyr2) \
+       > rbest.log 2>&1 &
+    # real    72m29.259s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/tarSyr2/bed/blastz.rhiRox1.swap
+    cd /hive/data/genomes/tarSyr2/bed/blastz.rhiRox1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/rhiRox1/bed/lastzTarSyr2.2015-02-23/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    372m37.027s
+
+    cat fb.tarSyr2.chainRhiRox1Link.txt 
+    # 1755301727 bases of 3405755564 (51.539%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` tarSyr2 rhiRox1) \
+       > rbest.log 2>&1 &
+    # real    148m53.108s
+
+#########################################################################
+

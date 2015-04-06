@@ -7,6 +7,7 @@ var HgIntegratorModel = ImModel.extend({
               PositionSearchMixin(['positionInfo']) ],
 
     maxDataSources: 5,
+    tdbFields: 'track,table,shortLabel,parent,subtracks',
 
     handleCartVar: function(mutState, cartVar, newValue) {
         // Some cart variables require special action (not simply being merged into top-level state)
@@ -318,6 +319,10 @@ var HgIntegratorModel = ImModel.extend({
             // and groupedTrackDb.  If db matches current db, store the inner groupedTrackDb.
             currentDb = this.getDb(mutState);
             if (! currentDb || newValue.db === currentDb) {
+                // Remove track groups with no tracks
+                _.remove(newValue.groupedTrackDb, function(trackGroup) {
+                    return ! (trackGroup.tracks && trackGroup.tracks.length > 0);
+                });
                 mutState.set('groupedTrackDb', Immutable.fromJS(newValue.groupedTrackDb));
                 // If the cart includes a saved trackPath consistent with groupedTrackDb, use that:
                 addDsTrackPath = mutState.get('hgi_addDsTrackPath');
@@ -604,7 +609,7 @@ var HgIntegratorModel = ImModel.extend({
                       getGeneSuggestTrack: {},
                       });
         this.cartDo({ cgiVar: { db: db },
-                      getGroupedTrackDb: { fields: 'track,table,shortLabel,parent,subtracks' } });
+                      getGroupedTrackDb: { fields: this.tdbFields } });
     },
 
     initialize: function() {
@@ -635,9 +640,7 @@ var HgIntegratorModel = ImModel.extend({
                         });
             // The groupedTrackDb structure is so large for hg19 and other well-annotated
             // genomes that the volume of compressed JSON takes a long time on the wire.
-            this.cartDo({ getGroupedTrackDb: {
-                            fields: 'track,table,shortLabel,parent,subtracks'
-                          }
+            this.cartDo({ getGroupedTrackDb: { fields: this.tdbFields }
                         });
             // This one shouldn't take long.
             this.cartDo({ getStaticHtml: {

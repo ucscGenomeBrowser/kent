@@ -511,6 +511,23 @@ nasLar1.upstreamGeneTbl = refGene
     featureBits -countGaps nasLar1 ucscToINSDC
     # 3011982740 bases of 3011982740 (100.000%) in intersection
 
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2015-03-20 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+     ssh hgwdev
+
+     # verify doesn't exist yet:
+     hgsql -e 'select * from blatServers;' hgcentraltest | grep -i naslar
+     # empty result
+
+     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("nasLar1", "blat4b", "17858", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("nasLar1", "blat4b", "17859", "0", "1");' \
+		hgcentraltest
+     #	test it with some sequence
+
+############################################################################
 #########################################################################
 # all.joiner update, downloads and in pushQ - (DONE 2015-02-18 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
