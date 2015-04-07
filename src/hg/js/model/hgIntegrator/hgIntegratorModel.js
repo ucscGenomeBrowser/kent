@@ -319,6 +319,10 @@ var HgIntegratorModel = ImModel.extend({
             // and groupedTrackDb.  If db matches current db, store the inner groupedTrackDb.
             currentDb = this.getDb(mutState);
             if (! currentDb || newValue.db === currentDb) {
+                // Remove track groups with no tracks
+                _.remove(newValue.groupedTrackDb, function(trackGroup) {
+                    return ! (trackGroup.tracks && trackGroup.tracks.length > 0);
+                });
                 mutState.set('groupedTrackDb', Immutable.fromJS(newValue.groupedTrackDb));
                 // If the cart includes a saved trackPath consistent with groupedTrackDb, use that:
                 addDsTrackPath = mutState.get('hgi_addDsTrackPath');

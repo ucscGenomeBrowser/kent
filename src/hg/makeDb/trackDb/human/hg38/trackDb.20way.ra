@@ -1,0 +1,103 @@
+track cons20way
+compositeTrack on
+shortLabel Cons Primates
+longLabel Primates Multiz Alignment & Conservation (20 Species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility full
+priority 1
+type bed 4
+group compGeno
+
+    track cons20wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons20way
+
+        track multiz20way
+        subTrack cons20wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 17 primates plus three mammals
+        subGroups view=align
+        noInherit on
+        irows on
+        summary multiz20waySummary
+        frames multiz20wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault hg38
+        speciesGroups Primates
+        sGroup_Primates panTro4 panPan1 gorGor3 ponAbe2 nomLeu3 macFas5 rhiRox1 papAnu2 nasLar1 rheMac3 chlSab2 saiBol1 calJac3 micMur1 tarSyr2 otoGar3 tupBel1 mm10 canFam3
+        itemFirstCharCase noChange
+        treeImage phylo/hg38_20way.png
+        priority 100
+
+    # PhyloP conservation
+    track cons20wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons20way
+    viewLimits -3:0.5
+    viewLimitsMax -4.611:0.934
+
+        track phyloP20way
+        subTrack cons20wayViewphyloP off
+        subGroups view=phyloP
+        shortLabel 17 primates Cons
+        longLabel 17 primates plus three mammals Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -4.711 0.934
+        maxHeightPixels 100:50:11
+        viewLimits -3.107:0.934
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track cons20wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack cons20way
+
+        track phastCons20way
+        subTrack cons20wayViewphastcons off
+        subGroups view=phastcons
+        shortLabel 17 primates Cons
+        longLabel 17 primates plus three mammals conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons20wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons20way
+
+        track phastConsElements20way
+        subTrack cons20wayViewelements on
+        subGroups view=elements
+        shortLabel 17 primates El
+        longLabel 17 primates plus three mammals Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23

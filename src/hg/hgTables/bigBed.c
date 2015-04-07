@@ -362,7 +362,7 @@ struct asObject *as = bigBedAsOrDefault(bbi);
 
 hPrintf("<B>Database:</B> %s", database);
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Primary Table:</B> %s ", table);
-if (sqlTableExists(conn, table))
+if (hTableExists(database, table))
     {
     char *date = firstWordInLine(sqlTableUpdate(conn, table));
     if (date != NULL)

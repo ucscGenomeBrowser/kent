@@ -18,6 +18,7 @@
 #include "annoStreamBigWig.h"
 #include "annoStreamDb.h"
 #include "annoStreamDbFactorSource.h"
+#include "annoStreamDbKnownGene.h"
 #include "annoStreamTab.h"
 #include "annoStreamVcf.h"
 #include "annoStreamWig.h"
@@ -191,7 +192,14 @@ else if (sameString("factorSource", tdb->type))
     streamer = annoStreamDbFactorSourceNew(dataDb, tdb->track, sourceTable, inputsTable, assembly,
 					   maxOutRows);
     }
-else
+else if (sameString("knownGene", tdb->track))
+    {
+    struct sqlConnection *conn = hAllocConn(dataDb);
+    if (sqlTableExists(conn, "knownGene") && sqlTableExists(conn, "kgXref"))
+        streamer = annoStreamDbKnownGeneNew(dataDb, assembly, maxOutRows);
+    hFreeConn(&conn);
+    }
+if (streamer == NULL)
     {
     struct sqlConnection *conn = hAllocConn(dataDb);
     char maybeSplitTable[1024];
@@ -285,6 +293,11 @@ else if (startsWithWord("bed", tdb->type) && !strchr(tdb->type, '+'))
     if (wordCount > 1)
         bedFieldCount = atoi(words[1]);
     asObj = asParseText(bedAsDef(bedFieldCount, bedFieldCount));
+    }
+else if (sameString(tdb->track, "knownGene"))
+    {
+    if (hTableExists(db, "knownGene") && hTableExists(db, "kgXref"))
+        asObj = annoStreamDbKnownGeneAsObj();
     }
 return asObj;
 }

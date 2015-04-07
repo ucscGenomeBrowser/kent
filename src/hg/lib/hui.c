@@ -372,7 +372,10 @@ if (udcCacheTimeout() < timeout)
 void setUdcCacheDir()
 /* set the path to the udc cache dir */
 {
-udcSetDefaultDir(cfgOptionDefault("udc.cacheDir", udcDefaultDir()));
+if (cfgOptionBooleanDefault("udc.useLocalDiskCache", TRUE))
+    udcSetDefaultDir(cfgOptionDefault("udc.cacheDir", udcDefaultDir()));
+else
+    udcDisableCache();
 }
 
 

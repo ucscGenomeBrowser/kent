@@ -48,6 +48,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
 
     track wgEncodeGencodeManualV4
     subTrack wgEncodeGencodeV4
+    trackHandler wgEncodeGencode
     shortLabel GENCODE Manual
     longLabel ENCODE GENCODE V4 Manual Gene Annotations (level 1+2) (May 2010)
     type genePred
@@ -57,6 +58,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     idInUrlSql select ottTranscriptId from wgEncodeGencodeClassesV4 where name="%s"
 
     track wgEncodeGencodeAutoV4
+    trackHandler wgEncodeGencode
     subTrack wgEncodeGencodeV4
     shortLabel GENCODE Auto
     longLabel ENCODE GENCODE V4 Automated Gene Annotations (level 3) (May 2010)
@@ -68,6 +70,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
 
     track wgEncodeGencodePolyaV4
     subTrack wgEncodeGencodeV4 off
+    trackHandler wgEncodeGencode
     shortLabel GENCODE PolyA
     longLabel ENCODE GENCODE V4 PolyA Transcript Annotations (level 2) (May 2010)
     type genePred
@@ -75,6 +78,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
 
     track wgEncodeGencode2wayConsPseudoV4
     subTrack wgEncodeGencodeV4 off
+    trackHandler wgEncodeGencode
     shortLabel GENCODE Pseudo
     longLabel ENCODE GENCODE V4 2way Pseudogenes (level 3) (May 2010)
     type genePred
