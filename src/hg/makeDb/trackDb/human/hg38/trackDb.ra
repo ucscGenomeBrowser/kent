@@ -195,7 +195,8 @@ group x
     html altSequence
 
 include trackDb.7way.ra
-include trackDb.17way.ra
+include trackDb.17way.ra alpha
+include trackDb.20way.ra
 
 track ucscRetroAli8
 shortLabel Retroposed Genes 8.0
