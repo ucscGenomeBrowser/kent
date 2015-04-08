@@ -42,7 +42,7 @@ boolean cartDbHasSessionKey(struct sqlConnection *conn, char *table)
 {
 static boolean userDbHasSessionKey = FALSE;
 static boolean sessionDbHasSessionKey = FALSE;
-if (sameString(table, "userDb"))
+if (sameString(table, userDbTable()))
     {
     if (!userDbInitialized)
 	{
@@ -54,7 +54,7 @@ if (sameString(table, "userDb"))
 	}
     return userDbHasSessionKey;
     }
-else if (sameString(table, "sessionDb"))
+else if (sameString(table, sessionDbTable()))
     {
     if (!sessionDbInitialized)
 	{
@@ -210,23 +210,23 @@ if (!initialized)
 	{
 	useSessionKey = TRUE;
 	struct sqlConnection *conn = cartDefaultConnector();
-	boolean userDbHasSessionKey = cartDbHasSessionKey(conn, "userDb");
-	boolean sessionDbHasSessionKey = cartDbHasSessionKey(conn, "sessionDb");
+	boolean userDbHasSessionKey = cartDbHasSessionKey(conn, userDbTable());
+	boolean sessionDbHasSessionKey = cartDbHasSessionKey(conn, sessionDbTable());
 	if ( ! (userDbHasSessionKey && sessionDbHasSessionKey) )
 	    {
     	    //errAbort("brower.sessionKey=on but userDb and sessionDb are missing the sessionKey field.");
 	    // AUTO-UPGRADE tables to add missing sessionKey field here.
 	    if (!userDbHasSessionKey)
 		{
-		autoUpgradeTableAddSessionKey(conn, "userDb");
+		autoUpgradeTableAddSessionKey(conn, userDbTable());
 		userDbInitialized = FALSE;
-		userDbHasSessionKey = cartDbHasSessionKey(conn, "userDb");
+		userDbHasSessionKey = cartDbHasSessionKey(conn, userDbTable());
 		}
     	    if (!sessionDbHasSessionKey)
 		{
-		autoUpgradeTableAddSessionKey(conn, "sessionDb");
+		autoUpgradeTableAddSessionKey(conn, sessionDbTable());
 		sessionDbInitialized = FALSE;
-		sessionDbHasSessionKey = cartDbHasSessionKey(conn, "sessionDb");
+		sessionDbHasSessionKey = cartDbHasSessionKey(conn, sessionDbTable());
 		}
 	    if ( ! (userDbHasSessionKey && sessionDbHasSessionKey) )
 		useSessionKey = FALSE;
@@ -455,5 +455,25 @@ if (cartDbUseSessionKey())
     fprintf(f, "%s", el->sessionKey);
     }
 fputc(lastSep,f);
+}
+
+char *userDbTable()
+/* Return the name of the userDb table. */
+{
+static char *userDbTable = NULL;
+if (userDbTable == NULL)
+    userDbTable = cfgOptionEnvDefault("HGDB_USERDBTABLE",
+	    userDbTableConfVariable, defaultUserDbTableName);
+return userDbTable;
+}
+
+char *sessionDbTable()
+/* Return the name of the sessionDb table. */
+{
+static char *sessionDbTable = NULL;
+if (sessionDbTable == NULL)
+    sessionDbTable = cfgOptionEnvDefault("HGDB_SESSIONDBTABLE",
+	    sessionDbTableConfVariable, defaultSessionDbTableName);
+return sessionDbTable;
 }
 
