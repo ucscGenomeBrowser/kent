@@ -296,10 +296,8 @@ else if (startsWithWord("bed", tdb->type) && !strchr(tdb->type, '+'))
     }
 else if (sameString(tdb->track, "knownGene"))
     {
-    struct sqlConnection *conn = hAllocConn(db);
-    if (sqlTableExists(conn, "knownGene") && sqlTableExists(conn, "kgXref"))
+    if (hTableExists(db, "knownGene") && hTableExists(db, "kgXref"))
         asObj = annoStreamDbKnownGeneAsObj();
-    hFreeConn(&conn);
     }
 return asObj;
 }
