@@ -146,7 +146,7 @@ else
 char *orderKey = hashFindVal(hubGenome->settingsHash, "orderKey");
 if (orderKey != NULL)
     db->orderKey = sqlUnsigned(orderKey);
-
+db->defaultPos = cloneString(hubGenome->defaultPos);
 return db;
 }
 
