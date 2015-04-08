@@ -108,7 +108,7 @@ track->dbTrack = TRUE;
 hFreeConn(&ctConn);
 }
 
-static char *ctGenomeOrCurrent(struct customTrack *ct)
+char *ctGenomeOrCurrent(struct customTrack *ct)
 /* return database setting */
 {
 char *ctDb = ctGenome(ct);
@@ -229,7 +229,7 @@ return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
 	"/dev/null", track->dbStderrFile);
 }
 
-static void pipelineFailExit(struct customTrack *track)
+void pipelineFailExit(struct customTrack *track)
 /* show up to three lines of error message to stderr and errAbort */
 {
 struct dyString *errDy = newDyString(0);
@@ -2601,6 +2601,7 @@ static struct customFactory bigDataOopsFactory =
 /*** Framework for custom factories. ***/
 
 static struct customFactory *factoryList;
+extern struct customFactory adjacencyFactory;
 
 static void customFactoryInit()
 /* Initialize custom track factory system. */
@@ -2625,6 +2626,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &coloredExonFactory);
     slAddTail(&factoryList, &encodePeakFactory);
     slAddTail(&factoryList, &bedDetailFactory);
+    slAddTail(&factoryList, &adjacencyFactory);
 #ifdef USE_BAM
     slAddTail(&factoryList, &bamFactory);
 #endif//def USE_BAM

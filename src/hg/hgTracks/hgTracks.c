@@ -3392,6 +3392,15 @@ else if (sameString(type, "bedDetail"))
     bedDetailCtMethods(tg, ct);
     tg->mapItemName = ctMapItemName; /* must be here to see ctMapItemName */
     }
+    else if (sameString(type, "adjacency"))
+    {
+    extern void adjacencyMethods(struct track *track);
+
+    tg = trackFromTrackDb(tdb);
+    adjacencyMethods(tg);
+    //tg->mapItemName = ctMapItemName;
+    tg->customPt = ct;
+    }
 else if (sameString(type, "pgSnp"))
     {
     tg = trackFromTrackDb(tdb);
