@@ -674,7 +674,6 @@ done
 	| nice -n +19 genePredToMafFrames hg38 stdin stdout \
            `egrep -v "nasLar1|rhiRox1|tarSyr2|panPan1|nomLeu3|chlSab2|saiBol1" ../species.list.txt | xargs echo | sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g;"` \
 		| gzip > multiz20wayFrames.bed.gz)
-XXX - running - Fri Apr  3 13:42:58 PDT 2015
     #   real    19m52.191s
 
     # verify there are frames on everything, should be 15 species:
@@ -871,7 +870,7 @@ TREE: ((((((((((((hg38:0.00988335,panTro4:0.00346867):0.00188705,panPan1:0.00265
 #       mm10    0.498954        0.502391        -0.003437       -0.684128
 
 #########################################################################
-# phastCons 20-way (TBD - 2015-02-27 - Hiram)
+# phastCons 20-way (DONE - 2015-04-03 - Hiram)
     # split 20way mafs into 10M chunks and generate sufficient statistics
     # files for # phastCons
     ssh ku
@@ -881,22 +880,19 @@ TREE: ((((((((((((hg38:0.00988335,panTro4:0.00346867):0.00188705,panPan1:0.00265
 
     cat << '_EOF_' > mkSS.csh
 #!/bin/csh -ef
-set d = $1
-set c = $2
-set doneDir = done/$d
-set MAF = /hive/data/genomes/hg38/bed/multiz20way/anno/result/$d/$c.maf
-set WINDOWS = /hive/data/genomes/hg38/bed/multiz20way/cons/SS/result/$d/$c
+set c = $1
+set MAF = /hive/data/genomes/hg38/bed/multiz20way/anno/result/$c.maf
+set WINDOWS = /hive/data/genomes/hg38/bed/multiz20way/cons/SS/result/$c
 set WC = `cat $MAF | wc -l`
 set NL = `grep "^#" $MAF | wc -l`
-if ( -s $3 ) then
+if ( -s $2 ) then
     exit 0
 endif
-if ( -s $3.running ) then
+if ( -s $2.running ) then
     exit 0
 endif
 
-/bin/mkdir -p $doneDir
-/bin/date >> $3.running
+/bin/date >> $2.running
 
 /bin/rm -fr $WINDOWS
 /bin/mkdir -p $WINDOWS
@@ -906,31 +902,31 @@ if ( $WC != $NL ) then
     $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
 endif
 popd > /dev/null
-/bin/date >> $3
-/bin/rm -f $3.running
+/bin/date >> $2
+/bin/rm -f $2.running
 '_EOF_'
     # << happy emacs
     chmod +x mkSS.csh
 
     cat << '_EOF_' > template
 #LOOP
-mkSS.csh $(dir1) $(root1) {check out line+ done/$(dir1)/$(root1)}
+mkSS.csh $(root1) {check out line+ done/$(root1)}
 #ENDLOOP
 '_EOF_'
     # << happy emacs
 
-    find ../../anno/result -type f | sed -e "s#../../anno/result/##" > maf.list
+    ls ../../anno/result > maf.list
 
     gensub2 maf.list single template jobList
     # beware overloaded the cluster with these fast running high I/O jobs
     para create jobList
     para try ... check ... etc
 # Completed: 358 of 358 jobs
-# CPU time in finished jobs:       3320s      55.34m     0.92h    0.04d  0.000 y
-# IO & Wait Time:                  1269s      21.15m     0.35h    0.01d  0.000 y
-# Average job time:                  13s       0.21m     0.00h    0.00d
-# Longest finished job:             306s       5.10m     0.09h    0.00d
-# Submission to last job:           506s       8.43m     0.14h    0.01d
+# CPU time in finished jobs:       7910s     131.83m     2.20h    0.09d  0.000 y
+# IO & Wait Time:                  1267s      21.12m     0.35h    0.01d  0.000 y
+# Average job time:                  26s       0.43m     0.01h    0.00d
+# Longest finished job:             790s      13.17m     0.22h    0.01d
+# Submission to last job:           880s      14.67m     0.24h    0.01d
 
     find ./result -type f | wc -l
     #	 645
@@ -991,7 +987,6 @@ rm -f bed/$d/$c.bed
 mv $tmp/$c.pp pp/$d
 mv $tmp/$c.bed bed/$d
 rm -fr $tmp
-rmdir --ignore-fail-on-non-empty $cons/tmp/$d:h
 '_EOF_'
     # << happy emacs
     chmod +x doPhast.csh
@@ -1023,17 +1018,17 @@ rmdir --ignore-fail-on-non-empty $cons/tmp/$d:h
     para try ... check ...
     para push
 # Completed: 645 of 645 jobs
-# CPU time in finished jobs:       8797s     146.62m     2.44h    0.10d  0.000 y
-# IO & Wait Time:                  4077s      67.95m     1.13h    0.05d  0.000 y
-# Average job time:                  20s       0.33m     0.01h    0.00d
-# Longest finished job:              40s       0.67m     0.01h    0.00d
-# Submission to last job:           188s       3.13m     0.05h    0.00d
+# CPU time in finished jobs:      12884s     214.74m     3.58h    0.15d  0.000 y
+# IO & Wait Time:                  4372s      72.86m     1.21h    0.05d  0.000 y
+# Average job time:                  27s       0.45m     0.01h    0.00d
+# Longest finished job:              60s       1.00m     0.02h    0.00d
+# Submission to last job:           233s       3.88m     0.06h    0.00d
 
     # create Most Conserved track
     cd /hive/data/genomes/hg38/bed/multiz20way/cons/all
     cut -f1 ../../../../chrom.sizes | while read C
 do
-    ls -d bed/?/${C} 2> /dev/null | while read D
+    ls -d bed/${C} 2> /dev/null | while read D
     do
         echo ${D}/${C}*.bed 1>&2
         cat ${D}/${C}*.bed
@@ -1042,31 +1037,20 @@ do
 done > tmpMostConserved.bed
 
     /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
-    # with the correct rhiRox1 sequence:
-    # -rw-rw-r--  1 57450557 Feb 27 11:46 tmpMostConserved.bed
-    # -rw-rw-r--  1 59033634 Feb 27 11:47 mostConserved.bed
-    # when rhiRox1 was identical to nasLar1:
-    # -rw-rw-r--  1 57441315 Dec 23 14:07 tmpMostConserved.bed
-    # -rw-rw-r--  1 59023909 Dec 23 14:08 mostConserved.bed
+    # -rw-rw-r--   1 76906715 Apr  3 15:20 tmpMostConserved.bed
+    # -rw-rw-r--   1 78952993 Apr  3 15:20 mostConserved.bed
 
     wc -l *.bed
-    # with the correct rhiRox1 sequence:
-    #   1680395 mostConserved.bed
-    #   1680395 tmpMostConserved.bed
-    # when rhiRox1 was identical to nasLar1:
-    # 1680103 mostConserved.bed
-    # 1680103 tmpMostConserved.bed
+    #   2242733 mostConserved.bed
+    #   2242733 tmpMostConserved.bed
 
     # load into database
     ssh hgwdev
     cd /hive/data/genomes/hg38/bed/multiz20way/cons/all
     time hgLoadBed hg38 phastConsElements20way mostConserved.bed
     # with the correct rhiRox1 sequence:
-    # Read 1680395 elements of size 5 from mostConserved.bed
-    # real    0m15.113s
-    # when rhiRox1 was identical to nasLar1:
-    # Read 1680103 elements of size 5 from mostConserved.bed
-    # real    0m14.377s
+    # Read 2242733 elements of size 5 from mostConserved.bed
+    # real    0m19.352s
 
     # on human we often try for 5% overall cov, and 70% CDS cov
     # most bets are off here for that goal, these alignments are too few
@@ -1074,11 +1058,8 @@ done > tmpMostConserved.bed
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
     featureBits hg38 -enrichment knownGene:cds phastConsElements20way
     # with the correct rhiRox1 sequence:
-    # knownGene:cds 1.266%, phastConsElements20way 6.056%, both 0.836%,
-    # cover 66.02%, enrich 10.90x
-    # when rhiRox1 was identical to nasLar1:
-    # knownGene:cds 1.266%, phastConsElements20way 6.156%, both 0.838%,
-    # cover 66.20%, enrich 10.75x
+    # knownGene:cds 1.266%, phastConsElements20way 5.415%, both 0.874%,
+    # cover 69.05%, enrich 12.75x
 
     # Create merged posterier probability file and wiggle track data files
     cd /hive/data/genomes/hg38/bed/multiz20way/cons/all
@@ -1089,59 +1070,60 @@ done > tmpMostConserved.bed
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
 	| sed -e 's/\.[0-9][0-9]*-[0-9][0-9]* start/ start/' \
         | gzip -c > downloads/phastCons20way.wigFix.gz)
-    #   real    35m20.514s
+    #   real    33m14.844s
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/phastCons20way.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/hg38/chrom.sizes \
 	    phastCons20way.bw) > bigWig.log 2>&1
     egrep "real|VmPeak" bigWig.log
-    # pid=65232: VmPeak:    33796560 kB
-    # real    42m14.152s
+    # pid=29151: VmPeak:    33804456 kB
+    # real    50m36.766s
 
     bigWigInfo phastCons20way.bw | sed -e 's/^/# /;'
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 5,585,809,568
-# primaryIndexSize: 93,404,096
+# primaryDataSize: 5,129,467,644
+# primaryIndexSize: 93,405,064
 # zoomLevels: 10
 # chromCount: 357
-# basesCovered: 2,948,527,266
-# mean: 0.151997
+# basesCovered: 2,949,051,557
+# mean: 0.128420
 # min: 0.000000
 # max: 1.000000
-# std: 0.253685
+# std: 0.243109
 
     #	encode those files into wiggle data
     time (zcat downloads/phastCons20way.wigFix.gz \
 	| wigEncode stdin phastCons20way.wig phastCons20way.wib)
     #   Converted stdin, upper limit 1.00, lower limit 0.00
-    #   real    15m11.743s
+    #   real    15m3.766s
 
     du -hsc *.wi?
     # 2.8G    phastCons20way.wib
-    # 285M    phastCons20way.wig
+    #  284M    phastCons20way.wig
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phastCons20way.wib /gbdb/hg38/multiz20way/phastCons20way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/hg38/multiz20way \
 	hg38 phastCons20way phastCons20way.wig
-    #   real    0m32.992s
+    #   real    0m32.607s
 
     # use to set trackDb.ra entries for wiggle min and max
     # and verify table is loaded correctly
 
     wigTableStats.sh hg38 phastCons20way
 # db.table          min max mean       count sumData      stdDev  viewLimits
-hg38.phastCons20way 0 1 0.151997 2948527266 4.48166e+08 0.253685 viewLimits=0:1
+# hg38.phastCons20way 0 1 0.12842 2949051557 3.78716e+08 0.243109 viewLimits=0:1
 
     #  Create histogram to get an overview of all the data
     time hgWiggle -doHistogram -db=hg38 \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    phastCons20way > histogram.data 2>&1
-    #	real    3m43.955s
+    #	real    2m44.970s
 
+XXX - ready to do this Sat Apr  4 21:08:16 PDT 2015
     #	create plot of histogram:
 
     cat << '_EOF_' | gnuplot > histo.png
@@ -1167,14 +1149,12 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #########################################################################
-# phyloP for 20-way (TBD - 2015-02-27 - Hiram)
+# phyloP for 20-way (WORKING - 2015-04-03 - Hiram)
     # run phyloP with score=LRT
     ssh ku
-    mkdir /cluster/data/hg38/bed/multiz20way/consPhyloP
-    cd /cluster/data/hg38/bed/multiz20way/consPhyloP
+    mkdir -p /cluster/data/hg38/bed/multiz20way/consPhyloP/run.phyloP
+    cd /cluster/data/hg38/bed/multiz20way/consPhyloP/run.phyloP
 
-    mkdir run.phyloP
-    cd run.phyloP
     # Adjust model file base composition background and rate matrix to be
     # representative of the chromosomes in play
     grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
@@ -1210,7 +1190,6 @@ sleep 4
 /bin/touch $out:h
 /bin/mv $tmp/$file1.wigFix $out
 /bin/rm -fr $tmp
-/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$d
 /bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$d:h
 /bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp
 /bin/rmdir --ignore-fail-on-non-empty $cons/tmp
@@ -1243,15 +1222,17 @@ sleep 4
 
     gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
     # beware overloading the cluster with these quick and high I/O jobs
-    para create jobList
+    # -ram=32g will ensure they can all complete and will not run too many
+    #   at the same time
+    para -ram=32g create jobList
     para try ... check ... push ... etc ...
     para time > run.time
 # Completed: 645 of 645 jobs
-# CPU time in finished jobs:     113336s    1888.93m    31.48h    1.31d  0.004 y
-# IO & Wait Time:                  4326s      72.10m     1.20h    0.05d  0.000 y
-# Average job time:                 182s       3.04m     0.05h    0.00d
-# Longest finished job:             749s      12.48m     0.21h    0.01d
-# Submission to last job:           838s      13.97m     0.23h    0.01d
+# CPU time in finished jobs:     267530s    4458.83m    74.31h    3.10d  0.008 y
+# IO & Wait Time:                  4435s      73.92m     1.23h    0.05d  0.000 y
+# Average job time:                 422s       7.03m     0.12h    0.00d
+# Longest finished job:            1377s      22.95m     0.38h    0.02d
+# Submission to last job:          3202s      53.37m     0.89h    0.04d
 
     # back on dev
     cd /hive/data/genomes/hg38/bed/multiz20way/consPhyloP/all
@@ -1260,49 +1241,51 @@ sleep 4
     time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
 	| gzip -c > downloads/phyloP20way.wigFix.gz)
-    #   real    37m24.369s
+    #   real    43m56.266s
+    # -rw-rw-r-- 1 4565378304 Apr  4 21:22 phyloP20way.wigFix.gz
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/phyloP20way.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/hg38/chrom.sizes \
 	phyloP20way.bw) > bigWig.log 2>&1
     egrep "real|VmPeak" bigWig.log
-    # pid=80999: VmPeak:    33796564 kB
-    #  real    44m8.703s
+    # pid=44526: VmPeak:    33804456 kB
+    #  real    53m0.875s
 
     bigWigInfo phyloP20way.bw  | sed -e 's/^/# /;'
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 4,962,111,001
-# primaryIndexSize: 93,404,096
+# primaryDataSize: 5,800,563,778
+# primaryIndexSize: 93,405,064
 # zoomLevels: 10
 # chromCount: 357
-# basesCovered: 2,948,527,266
-# mean: 0.095098
-# min: -14.142000
-# max: 0.756000
-# std: 0.622340
+# basesCovered: 2,949,051,557
+# mean: 0.089748
+# min: -14.463000
+# max: 1.199000
+# std: 0.678396
 
     #	encode those files into wiggle data
     time (zcat downloads/phyloP20way.wigFix.gz \
 	| wigEncode stdin phyloP20way.wig phyloP20way.wib)
-    # Converted stdin, upper limit 0.76, lower limit -14.14
-    # real    16m23.549s
+    # Converted stdin, upper limit 1.20, lower limit -14.46
+    # real    16m25.926s
 
     du -hsc *.wi?
     # 2.8G    phyloP20way.wib
-    # 291M    phyloP20way.wig
+    # 290M    phyloP20way.wig
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phyloP20way.wib /gbdb/hg38/multiz20way/phyloP20way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/hg38/multiz20way hg38 \
 	phyloP20way phyloP20way.wig
-    # real    0m32.524s
+    # real    0m32.810s
 
     # use to set trackDb.ra entries for wiggle min and max
     # and verify table is loaded correctly
 
+XXX - ready to continue here - Sun Apr  5 20:34:03 PDT 2015
     wigTableStats.sh hg38 phyloP20way
 # db.table      min max mean count sumData
 # hg38.phyloP20way -14.142 0.756 0.0950985 2948527266 2.804e+08
@@ -1363,14 +1346,26 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     cd /hive/data/genomes/hg38/bed/multiz20way/downloads
     mkdir multiz20way phastCons20way phyloP20way
     cd multiz20way
-    time cp -p ../../anno/hg38.20way.maf .
-    #   real    1m53.295s
-    # -rw-rw-r-- 1 67644767226 Feb 26 22:15 hg38.20way.maf
+    # using the separate per-chrom maf files since the single one is too big
+    time rsync -a -P ../../anno/result/ ./maf/
+    # real    9m24.932s
 
-    time gzip *.maf
-    #   real    83m39.715s
+    du -hsc maf
+    #  91G     maf
 
-    # -rw-rw-r-- 1 8645613136 Dec 22 14:32 hg38.20way.maf.gz
+    time gzip maf/*.maf
+    #   real    104m22.789s
+    du -hsc maf
+    #  12G     maf
+
+    cd maf
+    time md5sum *.maf > md5sum.txt
+    # real    0m49.537s
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz20way/maf
+    ln -s `pwd`/* \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz20way/maf
+    cd ..
 
     grep TREE ../../4d/all.mod | sed -e 's/TREE: //' \
       | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
@@ -1378,16 +1373,12 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     ~/kent/src/hg/utils/phyloTrees/commonNames.sh hg38.20way.nh \
       | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
          > hg38.20way.commonNames.nh
-    time md5sum *.nh *.maf.gz > md5sum.txt
+    time md5sum *.nh > md5sum.txt
     #   real    1m55.320s
-    ln -s `pwd`/* \
+    ln -s `pwd`/*.nh `pwd`/*.txt \ 
         /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz20way
 
-    du -hsc *.maf.gz ../../anno/hg38.20way.maf
-    # 8.1G    hg38.20way.maf.gz
-    # 62G     ../../anno/hg38.20way.maf
-
-    # obtain the README.txt from hg38/multiz7way and update for this
+    # obtain the README.txt from hg38/multiz17way and update for this
     #   situation
 
     #####################################################################
@@ -1398,9 +1389,9 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     ln -s ../../cons/all/phastCons20way.bw ./hg38.phastCons20way.bw
     ln -s ../../cons/all/all.mod ./hg38.phastCons20way.mod
     time md5sum *.gz *.mod *.bw > md5sum.txt
-    #   real    0m37.453s
+    #   real    0m34.439s
 
-    # obtain the README.txt from hg38/phastCons7way and update for this
+    # obtain the README.txt from hg38/phastCons17way and update for this
     #   situation
     ln -s `pwd`/*.gz `pwd`/*.mod `pwd`/*.bw `pwd`/*.txt \
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/phastCons20way
@@ -1414,7 +1405,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     ln -s ../../consPhyloP/all/phyloP20way.bw hg38.phyloP20way.bw
 
     time md5sum *.mod *.bw *.gz > md5sum.txt
-    #   real    0m34.249s
+    #   real    0m40.489s
 
     # obtain the README.txt from hg38/phyloP7way and update for this
     #   situation
@@ -1438,11 +1429,11 @@ do
         | gzip -c > upstream${S}.${geneTbl}.maf.gz
     echo "done upstream${S}.${geneTbl}.maf.gz"
 done
-    #   real    71m41.626s
+    #   real    81m28.044s
 
     md5sum upstream*.gz >> md5sum.txt
 
-    # obtain the README.txt from hg38/multiz7way and update for this
+    # obtain the README.txt from hg38/multiz17way and update for this
     #   situation
     # information for table of species in the README files, need to
     # edit it in after adding it to the end of this file:
@@ -1454,35 +1445,39 @@ do
  echo "${info} ${netType}"
 done | tr '[\t]' '[ ]' >> README.txt
 
-Human - Homo sapiens              Dec. 2013 (GRCh38/hg38)            reference
-Chimp - Pan troglodytes           Feb. 2011 (CSAC 2.1.4/panTro4)      syntenic
+Human - Homo sapiens               Dec. 2013 (GRCh38/hg38)            reference
+
+Baboon - Papio anubis              Mar. 2012 (Baylor Panu_2.0/papAnu2)  syntenic
+Bushbaby - Otolemur garnettii      Mar. 2011 (Broad/otoGar3)     reciprocal best
 Bonobo - Pan paniscus             May. 2012 (Max-Planck/panPan1) reciprocal best
-Gorilla - Gorilla gorilla gorilla May 2011 (gorGor3.1/gorGor3)   reciprocal best
-Orangutan - Pongo pygmaeus abelii   July 2007 (WUGSC 2.0.2/ponAbe2)   syntenic
-Gibbon - Nomascus leucogenys      Oct. 2012 (GGSC Nleu3.0/nomLeu3)    syntenic
-Rhesus - Macaca mulatta           Oct. 2010 (BGI CR_1.0/rheMac3)      syntenic
-Crab-eating macaque - Macaca fascicularis 
+Chimp - Pan troglodytes            Feb. 2011 (CSAC 2.1.4/panTro4)      syntenic
+Crab-eating macaque - Macaca fascicularis
                           Jun 2013 (Macaca_fascicularis_5.0/macFas5)  syntenic
-Baboon - Papio anubis             Mar. 2012 (Baylor Panu_2.0/papAnu2) syntenic
-Green monkey - Chlorocebus sabaeus
-                          Mar. 2014 (Chlorocebus_sabeus 1.1/chlSab2)  syntenic
-Proboscis monkey - Nasalis larvatus
-                          Nov. 2014 (Charlie1.0/nasLar1)        reciprocal best
+Gibbon - Nomascus leucogenys       Oct. 2012 (GGSC Nleu3.0/nomLeu3)    syntenic
 Golden snub-nosed monkey - Rhinopithecus roxellana
                           Oct. 2014 (Rrox_v1/rhiRox1)           reciprocal best
-Marmoset - Callithrix jacchus       Mar. 2009 (WUGSC 3.2/calJac3)     syntenic
+Gorilla - Gorilla gorilla gorilla  May 2011 (gorGor3.1/gorGor3) reciprocal best
+Green monkey - Chlorocebus sabaeus
+                          Mar. 2014 (Chlorocebus_sabeus 1.1/chlSab2)  syntenic
+Marmoset - Callithrix jacchus      Mar. 2009 (WUGSC 3.2/calJac3)     syntenic
+Mouse lemur - Microcebus murinus   Jul. 2007 (Broad/micMur1) reciprocal best
+Orangutan - Pongo pygmaeus abelii  Jul. 2007 (WUGSC 2.0.2/ponAbe2)   syntenic
+Proboscis monkey - Nasalis larvatus
+                          Nov. 2014 (Charlie1.0/nasLar1)        reciprocal best
+Rhesus - Macaca mulatta            Oct. 2010 (BGI CR_1.0/rheMac3)      syntenic
 Squirrel monkey - Saimiri boliviensis Oct. 2011 (Broad/saiBol1) reciprocal best
-Tarsier - Tarsius syrichta         
+Tarsier - Tarsius syrichta
                    Sep. 2013 (Tarsius_syrichta-2.0.1/tarSyr2) reciprocal best
-Mouse lemur - Microcebus murinus    Jul. 2007 (Broad/micMur1) reciprocal best
-Bushbaby - Otolemur garnettii       Mar. 2011 (Broad/otoGar3) reciprocal best
+Tree shrew - Tupaia belangeri      Dec. 2006 (Broad/tupBel1) reciprocal best
+Mouse  -  Mus musculus             Dec. 2011 (GRCm38/mm10) syntenic
+Dog  -  Canis lupus familiaris     Sep. 2011 (Broad CanFam3.1/canFam3) syntenic
 
     # some other symlinks were already made above
     ln -s `pwd`/upstream*.gz README.txt \
         /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz20way
 
 #############################################################################
-# hgPal downloads (TBD - 2015-03-02 - Hiram)
+# hgPal downloads (DONE - 2015-04-06 - Hiram)
 #   FASTA from 20-way for knownGene, refGene and knownCanonical
 
     ssh hgwdev
@@ -1511,12 +1506,12 @@ Bushbaby - Otolemur garnettii       Mar. 2011 (Broad/otoGar3) reciprocal best
     echo "wait" >> $gp.jobs
 
     time sh -x ./$gp.jobs > $gp.jobs.log 2>&1
-    #   real    33m25.422s
+    #   real    43m58.408s
 
     time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
-    #   real    0m40.869s
+    #   real    0m48.603s
     time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    2m0.836s
+    #   real    2m39.782s
 
     export mz=multiz20way
     export gp=knownGene
@@ -1553,7 +1548,7 @@ Bushbaby - Otolemur garnettii       Mar. 2011 (Broad/otoGar3) reciprocal best
     echo "wait" >> $gp.jobs
 
     time sh -x $gp.jobs > $gp.jobs.log 2>&1
-    #   real    20m20.242s
+    #   real    30m29.371s
 
     export mz=multiz20way
     export gp=refGene
@@ -1561,13 +1556,13 @@ Bushbaby - Otolemur garnettii       Mar. 2011 (Broad/otoGar3) reciprocal best
     time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
     #   real    0m33.580s
     time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    1m26.819s
+    #   real    2m2.368s
 
     du -hsc exonAA exonNuc refGene*.fa.gz
-    # 126M    exonAA
-    # 189M    exonNuc
-    # 126M    refGene.multiz20way.exonAA.fa.gz
-    # 189M    refGene.multiz20way.exonNuc.fa.gz
+    # 156M    exonAA
+    # 242M    exonNuc
+    # 156M    refGene.multiz20way.exonAA.fa.gz
+    # 241M    refGene.multiz20way.exonNuc.fa.gz
 
     rm -rf exonAA exonNuc
 
@@ -1614,8 +1609,7 @@ Bushbaby - Otolemur garnettii       Mar. 2011 (Broad/otoGar3) reciprocal best
     done > $gp.$mz.jobs
 
     time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1
-    # real    92m43.125s
-
+    # real    109m10.690s
 
     rm *.known.bed
     export mz=multiz20way
@@ -1643,7 +1637,7 @@ Bushbaby - Otolemur garnettii       Mar. 2011 (Broad/otoGar3) reciprocal best
     mkdir /hive/users/hiram/bigWays/hg38.20way
     cd /hive/users/hiram/bigWays
     echo "hg38" > hg38.20way/ordered.list
-    awk '{print $1}' /hive/data/genomes/hg38/bed/multiz20way/20way.distances.txt \
+ awk '{print $1}' /hive/data/genomes/hg38/bed/multiz20way/20way.distances.txt \
        >> hg38.20way/ordered.list
 
     # sizeStats.sh catches up the cached measurements required for data
