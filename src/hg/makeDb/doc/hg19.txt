@@ -30597,3 +30597,65 @@ hgBbiDbLink hg19 spAnnot /gbdb/hg19/bbi/spAnnot.bb
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+
+#############################################################################
+# 1000 GENOMES PHASE 3 VARIANT CALLS (DONE 4/8/15 angie)
+    # It was kind of a pain to get the Aspera command line client ascp this time around --
+    # turns out it's included in their web browser plugin package, which I didn't think to
+    # obtain because I need a command-line tool not a web browser plugin.  Anyway,
+    # for VCF as opposed to BAM, ftp worked just fine.
+    screen -S phase3 -t phase3
+    mkdir -p /hive/data/genomes/hg19/bed/1000Genomes/phase3
+    cd /hive/data/genomes/hg19/bed/1000Genomes/phase3
+    set relDir = ftp://ftp-trace.ncbi.nlm.nih.gov/1000genomes/ftp/release/20130502
+    wget $relDir/README\*
+    # Integrated call panel files:
+    wget $relDir/inte\*
+    # File of related individuals who were removed just before release, leaving
+    # behind 31 alt-count=0 variant calls:
+    wget $relDir/2014\*
+    # Now the big compressed VCFs!
+    wget --timestamping $relDir/ALL.chr\*.phase3\*.genotypes.vcf.gz
+    # Recompute tabix index files instead of downloading
+    foreach f (ALL*.vcf.gz)
+      echo $f
+      tabix -p vcf $f
+    end
+
+    mkdir /gbdb/hg19/1000Genomes/phase3
+    ln -s `pwd`/*.vcf.gz* /gbdb/hg19/1000Genomes/phase3/
+    cp /dev/null tgpPhase3.txt
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)
+      set file = ALL.chr$c.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz
+      echo "/gbdb/hg19/1000Genomes/phase3/$file\tchr$c" >> tgpPhase3.txt
+    end
+    # hgBbiDbLink doesn't support the seq column so use hgLoadSqlTab:
+    hgLoadSqlTab hg19 tgpPhase3 ~/kent/src/hg/lib/bbiChroms.sql tgpPhase3.txt
+    # Make a chromosomes line for trackDb:
+    use hg19 -NBe 'select seqName from tgpPhase3' | xargs echo | sed -e 's/ /,/g'
+#chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
+
+
+############################################################################
+# 1000 GENOMES PHASE 3 PAIRED-END ACCESSIBLE REGIONS (DONE 4/7/15 angie)
+    screen -S acc -t acc
+    mkdir /hive/data/genomes/hg19/bed/1000Genomes/phase3Mapability
+    cd /hive/data/genomes/hg19/bed/1000Genomes/phase3Mapability
+    set relDir = ftp://ftp-trace.ncbi.nlm.nih.gov/1000genomes/ftp/release/20130502/supporting/accessible_genome_masks/
+    wget $relDir/20141020.pilot_mask.whole_genome.bed
+    wget $relDir/20141020.strict_mask.whole_genome.bed
+    # We don't use the 4th name column which has 'pilot' for every item in the pilot file
+    # and 'strict' for every item in the strict file.
+    foreach t (pilot strict)
+      cut -f 1-3 20141020.${t}_mask.whole_genome.bed > tmp.bed
+      bedToBigBed -type=bed3 tmp.bed \
+        /hive/data/genomes/hg19/chrom.sizes \
+        20141020.${t}_mask.whole_genome.bb
+    end
+    rm tmp.bed
+    ln -s `pwd`/2014*.bb /gbdb/hg19/1000Genomes/phase3/
+    # Use trackDb's bigDataUrl setting instead of hgBbiDbLink tiny table
+
+
+############################################################################
