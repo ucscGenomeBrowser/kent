@@ -260,7 +260,7 @@ if options.maxDiff:
             logging.info(cmd)
             diffFname =  abspath(join("archive", "lastDiff.txt"))
             cmd = "diff %s %s --speed-large-files > %s" % (fname, previousFname, diffFname)
-            assert(os.system(cmd)==0)
+            os.system(cmd) # ret code is not 0, as there are differences, so no need to check
             raise Exception("too many differences: %d out of %d lines. Look at the differences n the file %s. If you are OK with them, run '/hive/data/outside/otto/clinvar/doUpdate.sh -nocheck'" % (diffCount, todayCount, diffFname))
 
 # convert to bigBed without the date in the fname, like clinvarMain.hg19.bb
@@ -272,6 +272,7 @@ for fname in fnames:
         base, db, ext = parts
         
     outFname = "%s.%s.bb" % (base, db)
+    outFname = basename(outFname) # strip the archive/ part, put into current dir
     cmd = "bedToBigBed -tab -type=bed9+ -as=clinvar.as %s /hive/data/genomes/%s/chrom.sizes %s" % (fname, db, outFname)
     logging.debug(cmd)
     assert(os.system(cmd)==0)
