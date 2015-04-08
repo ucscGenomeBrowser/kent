@@ -85,14 +85,14 @@ if (conn != NULL)
     {
     /* Since the content string is chopped, query for the actual length. */
     struct dyString *query = dyStringNew(1024);
-    sqlDyStringPrintf(query, "select length(contents) from userDb"
-	  " where id = %d", u->id);
+    sqlDyStringPrintf(query, "select length(contents) from %s"
+	  " where id = %d", userDbTable(), u->id);
     if (cartDbUseSessionKey())
 	  sqlDyStringPrintf(query, " and sessionKey='%s'", u->sessionKey);
     uLen = sqlQuickNum(conn, query->string);
     dyStringClear(query);
-    sqlDyStringPrintf(query, "select length(contents) from sessionDb"
-	  " where id = %d", s->id);
+    sqlDyStringPrintf(query, "select length(contents) from %s"
+	  " where id = %d", sessionDbTable(),s->id);
     if (cartDbUseSessionKey())
 	  sqlDyStringPrintf(query, " and sessionKey='%s'", s->sessionKey);
     sLen = sqlQuickNum(conn, query->string);
@@ -131,16 +131,16 @@ boolean cartTablesOk(struct sqlConnection *conn)
 /* Return TRUE if cart tables are accessible (otherwise, the connection
  * doesn't do us any good). */
 {
-if (!sqlTableExists(conn, "userDb"))
+if (!sqlTableExists(conn, userDbTable()))
     {
-    fprintf(stderr, "ASH: cartTablesOk failed on %s.userDb!  pid=%ld\n",
-	    sqlGetDatabase(conn), (long)getpid());
+    fprintf(stderr, "ASH: cartTablesOk failed on %s.%s!  pid=%ld\n",
+	    sqlGetDatabase(conn), userDbTable(),  (long)getpid());
     return FALSE;
     }
-if (!sqlTableExists(conn, "sessionDb"))
+if (!sqlTableExists(conn, sessionDbTable()))
     {
-    fprintf(stderr, "ASH: cartTablesOk failed on %s.sessionDb!  pid=%ld\n",
-	    sqlGetDatabase(conn), (long)getpid());
+    fprintf(stderr, "ASH: cartTablesOk failed on %s.%s!  pid=%ld\n",
+	    sqlGetDatabase(conn), sessionDbTable(), (long)getpid());
     return FALSE;
     }
 return TRUE;
@@ -669,8 +669,8 @@ cart->hash = newHash(12);
 cart->exclude = newHash(7);
 cart->userId = userId;
 cart->sessionId = sessionId;
-cart->userInfo = loadDb(conn, "userDb", userId, &userIdFound);
-cart->sessionInfo = loadDb(conn, "sessionDb", sessionId, &sessionIdFound);
+cart->userInfo = loadDb(conn, userDbTable(), userId, &userIdFound);
+cart->sessionInfo = loadDb(conn, sessionDbTable(), sessionId, &sessionIdFound);
 if (sessionIdFound)
     cartParseOverHash(cart, cart->sessionInfo->contents);
 else if (userIdFound)
@@ -802,15 +802,15 @@ cartEncodeState(cart, encoded);
  * a great bunch of variables. */
 if (encoded->stringSize < 16*1024 || cart->userInfo->useCount > 0)
     {
-    updateOne(conn, "userDb", cart->userInfo, encoded->string, encoded->stringSize);
-    updateOne(conn, "sessionDb", cart->sessionInfo, encoded->string, encoded->stringSize);
+    updateOne(conn, userDbTable(), cart->userInfo, encoded->string, encoded->stringSize);
+    updateOne(conn, sessionDbTable(), cart->sessionInfo, encoded->string, encoded->stringSize);
     }
 else
     {
     fprintf(stderr, "Cart stuffing bot?  Not writing %d bytes to cart on first use of %d from IP=%s\n",
             encoded->stringSize, cart->userInfo->id, cgiRemoteAddr());
     /* Do increment the useCount so that cookie-users don't get stuck here: */
-    updateOne(conn, "userDb", cart->userInfo, "", 0);
+    updateOne(conn, userDbTable(), cart->userInfo, "", 0);
     }
 
 /* Cleanup */
@@ -1454,8 +1454,8 @@ void cartResetInDb(char *cookieName)
 char *hguid = getCookieId(cookieName);
 char *hgsid = getSessionId();
 struct sqlConnection *conn = cartDefaultConnector();
-clearDbContents(conn, "userDb", hguid);
-clearDbContents(conn, "sessionDb", hgsid);
+clearDbContents(conn, userDbTable(), hguid);
+clearDbContents(conn, sessionDbTable(), hgsid);
 cartDefaultDisconnector(&conn);
 }
 
