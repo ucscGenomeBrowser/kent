@@ -24,94 +24,109 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void rWriteJson(struct jsonWrite *jw, char *label, struct tagStanza *stanzaList)
+
+void removePunctuation(char *s)
+/* Remove all punctuation in a string */
 {
-jsonWriteListStart(jw, label);
-struct tagStanza *stanza;
-for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
-    {
-    jsonWriteObjectStart(jw, NULL);
-    struct slPair *pair;
-    for (pair = stanza->tagList; pair != NULL; pair = pair->next)
-        jsonWriteString(jw, pair->name, pair->val);
-    if (stanza->children != NULL)
-        rWriteJson(jw, "children", stanza->children);
-    jsonWriteObjectEnd(jw);
-    }
-jsonWriteListEnd(jw);
+stripString(s,"\"");
+stripString(s,"]");
+stripString(s,"}");
+stripString(s,"[");
+stripString(s,"{");
+stripString(s,",");
+stripString(s," ");
 }
 
-
-void readJsonStanza(char* line)
-// Gather all the information in the current stanza, a .json stanza is defined
-// here as any block of json code between either { and } or [ and ]
-{
-
-}
-
-struct slPair prepLine(char *line)
-/* singlye line json is ugly, and the code is worse.
- * A function to help with removing punctuation*/
-{
-char *choppedLine[1024];
-int size, i;
-size = countSeparatedItems(line, *",");
-chopString(line, ",",choppedLine,size);
-struct slPair *pair;
-AllocVar(pair);
-for (i=0 ; i <= size-1 ; ++i)
-    {
-    char *nameValPair[2]; 
-    chopString(choppedLine[i], ":", nameValPair, countSeparatedItems(choppedLine[i], *":"));
-    eraseNonAlphaNum(nameValPair[0]);
-    eraseNonAlphaNum(nameValPair[1]);
-    if (strcmp(nameValPair[0],"Children")) continue; 
-    slPairAdd(&pair, nameValPair[0], nameValPair[1]);
-    }
-return *pair;
-}
 
 void jsonToTagStorm(char *input, char *output)
 /* jsonToTagStorm - Some example json output stuff. */
 {
-//struct tagStorm *tags = tagStormNew(output);
+struct tagStorm *tags = tagStormNew(output);
 struct lineFile *lf = lineFileOpen(input, TRUE);
 char *line;
 if (!lineFileNext(lf, &line, NULL))
     errAbort("There doesn't seem to be any text in this .json file, %s", input);
-printf(" %s ", line);
 char *lineCopy = cloneString(line);
 char *choppedLine[1024]; 
 int size = countSeparatedItems(line, *"[");
-printf("The size is %i \n", size);
 chopString(lineCopy, "[", choppedLine, size);
 int i, index = 0;
-char *aBetterChoppedLine[1000]; 
+char *stanzas[1000]; 
 for (i = 0 ; i <= size-1; ++i)
     {
     char *newLine = cloneString(choppedLine[i]);
     int newSize = countSeparatedItems(newLine, *"{");
-    printf(" The first chop made this line %s  the size of the next for loop is %i \n", newLine, newSize);
     char *newChoppedLine[1024];
     chopString (newLine, "{", newChoppedLine, newSize);
     int j;
     for (j = 0 ; j <= newSize-1; ++j)
         {
-	printf(" The second chop made this line %s \n", newChoppedLine[j]);
-	aBetterChoppedLine[index] = cloneString(newChoppedLine[j]);
+	stanzas[index] = cloneString(newChoppedLine[j]);
 	++ index;
 	}
     }
-int j = ArraySize(aBetterChoppedLine);
-for (j = 0 ; j <= ArraySize(aBetterChoppedLine); ++j)
+int j;
+for (j = 0 ; j <= ArraySize(stanzas); ++j)
+    /* Each string that is processed in this loop corresponds to a complete
+     * tagStanza, this is helpful for keeping stanza's separate, but introduces
+     * an issue when going to a child stanza. This issue has not been addressed
+     * yet. This code seems to be working -Chris */
     {
-    if (aBetterChoppedLine[j] == NULL) continue;
-    printf("The current line woulb be %s \n", aBetterChoppedLine[j]);
+    if (lastNonwhitespaceChar(stanzas[j]) == NULL) continue;
+    // Each string in nextChop contains a name value pair in the form
+    // "name": "value". 
+    int depth = 0;
+    int nextSize = countSeparatedItems(stanzas[j], *",");
+    int stanzaDepth = countSeparatedItems(stanzas[j], *"]");
+    char *nextChop[nextSize]; 
+    //printf("The current chomped line is  %s endSize is %d \n", stanzas[j], stanzaDepth);
+    chopString(cloneString(stanzas[j]), ",", nextChop, nextSize);
+    /* Ideally break by comma's, creating a list of name value pairs.
+     * This code is not working*/
+    int k;
+    //continue;
+    struct slPair *tagNameValue = NULL;
+    for (k = 0; k <= nextSize ; ++k)
+    	{
+	if (lastNonwhitespaceChar(nextChop[k]) == NULL) continue;
+	//printf("This is the thing I am looking at %s \n", nextChop[k]);
+	//continue;
+	int lastSize = countSeparatedItems(nextChop[k], *":"); 
+	char *finalChop[lastSize];
+	chopString(cloneString(nextChop[k]), ":", finalChop, lastSize);
+	removePunctuation(finalChop[0]);
+	if (lastNonwhitespaceChar(finalChop[1]) == NULL)
+	    {
+	    ++depth;
+	    continue;
+	    }
+	removePunctuation(finalChop[1]);
+    	slPairAdd(&tagNameValue, finalChop[0], finalChop[1]);
+	//printf("A final name value pair is %s , %s \n", finalChop[0], finalChop[1]); 
+	/* This breaks the samples apart into name value pairs, with a bunch of uneccessary 
+	 * punctuation. Also the 'children' name may not have a value */
+	}
+    /* Create a new tagStorm stanza here, also be ready for some real
+     * dificulties with stanza depth, try using the stanzaDepth int up above -Chris */ 
+    struct tagStanza *stanza= NULL;
+    if (depth == 0)
+        {
+        stanza = tagStanzaNewAtEnd(tags, NULL);
+	}
+    else 
+        {
+    	stanza = tagStanzaNewAtEnd(tags, tags->forest);
+        }
+    struct slPair *superTemp = NULL;
+    for (superTemp = tagNameValue ; superTemp != NULL ; superTemp = superTemp->next)
+        {
+        tagStanzaAdd(tags, stanza, superTemp->name, superTemp->val); 
+        }
+    -- stanzaDepth;
     }
 
-printf(" What we got going on here..? %i \n", chopString(line, "{", NULL, size));
-
 FILE *f = mustOpen(output, "w");
+tagStormWrite(tags, output, 100);
 carefulClose(&f);
 }
 
