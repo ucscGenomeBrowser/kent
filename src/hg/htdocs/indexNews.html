@@ -38,6 +38,26 @@
     <!-- start news -->
 	<hr>
 	<p>
+	<font face="courier" size="3"><b>08 April 2015 -
+        bigGenePred Format Now Supported in the Genome Browser</b></font>
+        <p>
+	We are pleased to announce that the UCSC Genome Browser now supports data in 
+	bigGenePred format. bigGenePred format stores annotation items that are a linked collection 
+	of exons, much as BED files do, but bigGenePred has additional information 
+	about the coding frames and other gene specific information. bigGenePred files are created initially 
+	from BED-type files with some extra fields, using the program bedToBigBed with a special 
+	AutoSQL file that defines the fields of the bigGenePred. The resulting bigBed files are in an 
+	indexed binary format. The advantage of these bigBed files is that only portions of the files 
+	needed to display a particular region are transferred to UCSC. So for large data sets, 
+	bigBed is considerably faster than regular BED files.
+	<p>
+	This new format is available for use in custom tracks and data hubs. For more information 
+	about bigGenePred, please see our 
+	<a href="/goldenPath/help/bigGenePred.html">bigGenePred Track Format help page</a>.
+	</p>
+
+	<hr>
+	<p>
 	<font face="courier" size="3"><b>02 April 2015 -
 	New Tarsier (tarSyr2) Assembly Now Available in the Genome Browser</b></font>
 	<p>
@@ -92,23 +112,18 @@
         <a href="http://www.ncbi.nlm.nih.gov/news/10-08-2014-zebrafish-grcz10-annotated/"
          target="_blank">GRCz10 announcement</a>.
         </p>
-
-        <p>
-        The danRer10 sequence and annotation data can be downloaded from the UCSC Genome Browser
-        <a href="ftp://hgdownload.cse.ucsc.edu/goldenPath/danRer10/">FTP server</a> or
-        <a href="http://hgdownload.cse.ucsc.edu/downloads.html#zebrafish">downloads</a> page.
-        </p>
-
-        <p>
-        We'd like to thank the Genome Reference Consortium for providing this assembly. The UCSC
-        zebrafish Genome Browser was produced by Hiram Clawson, Brian Raney and Steve Heitner. See the
-        <a href="../goldenPath/credits.html#zebrafish_credits">credits</a> page for a detailed list
-        of the organizations and individuals who contributed to this release.
-
         <hr>
 
         <!-- start archives -->
 <!--
+	<font face="courier" size="3"><b>08 April 2015 -
+        bigGenePred Format Now Supported in the Genome Browser</b>: </font>
+        We are pleased to announce that the UCSC Genome Browser now supports data in
+        bigGenePred format.
+	<a href="goldenPath/newsarch.html#040815">Read more</a>.
+        </p>
+
+	<p>
 	<font face="courier" size="3"><b>02 April 2015 -
         New Tarsier (tarSyr2) Assembly Now Available in the Genome Browser</b>: </font>
         We are pleased to announce the release of a Genome Browser for the September 2013
@@ -118,23 +133,24 @@
 	</p>
 
         <p>
-        <font face="courier" size="3"><b><b>02 April 2015 - New Training Video!</b></font>
+        <font face="courier" size="3"><b>02 April 2015 - New Training Video!</b></font>
         View it now on our
         <a href="http://bit.ly/genomebrowserYoutube" target=_"blank">YouTube channel</a>.
-        <a href="goldenPath/newsarch.html#040215">Read more</a>.
         </p>
-
+-->
+	<p>
         <font face="courier" size="3"><b>01 April 2015 - New GRCz10 Zebrafish Assembly Now Available</b>: </font>
         The most recent zebrafish assembly -- GRCz10 (UCSC version danRer10, Sep. 2014) -- is now
         available in the UCSC Genome Browser.
         <a href="goldenPath/newsarch.html#040115">Read more</a>.
---> 
+	</p>
 
+	<p>
         <font face="courier" size="3"><b>20 March 2015 - New Visualization Option for RepeatMasker</b>: </font>
 	We are excited to announce the release of the new RepeatMasker Visualization track for the
 	hg38 and mm10 assemblies.
         <a href="goldenPath/newsarch.html#032015">Read more</a>.
-
+	</p>
             </TD><TD WIDTH=15>
          </TD></TR></TABLE>
     <BR></TD></TR></TABLE>
