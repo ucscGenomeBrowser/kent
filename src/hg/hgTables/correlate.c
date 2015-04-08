@@ -18,6 +18,7 @@
 #include "featureBits.h"
 #include "obscure.h"
 #include "wiggle.h"
+#include "trackDb.h"
 #include "customTrack.h"
 #include "jsHelper.h"
 #include "hgTables.h"
