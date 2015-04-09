@@ -98,6 +98,92 @@ else
     }
 }
 
+// Characters we expect to see in |-separated parts of an ##INFO description that specifies
+// tabular contents:
+#define COL_DESC_WORD_REGEX "[A-Za-z_0-9.-]+"
+// Series of |-separated words:
+#define COL_DESC_REGEX COL_DESC_WORD_REGEX"(\\|"COL_DESC_WORD_REGEX")+"
+
+// Minimum number of |-separated values for interpreting descriptions and values as tabular:
+#define MIN_COLUMN_COUNT 3
+
+static boolean looksTabular(const struct vcfInfoDef *def, struct vcfInfoElement *el)
+/* Return TRUE if def->description seems to contain a |-separated description of columns
+ * and el's first non-empty string value has the same number of |-separated parts. */
+{
+if (!def || def->type != vcfInfoString || isEmpty(def->description))
+    return FALSE;
+if (regexMatch(def->description, COL_DESC_REGEX))
+    {
+    int descColCount = countChars(def->description, '|') + 1;
+    if (descColCount >= MIN_COLUMN_COUNT)
+        {
+        int j;
+        for (j = 0;  j < el->count;  j++)
+            {
+            char *val = el->values[j].datString;
+            if (isEmpty(val))
+                continue;
+            int elColCount = countChars(val, '|') + 1;
+            if (elColCount == descColCount)
+                return TRUE;
+            }
+        }
+    }
+return FALSE;
+}
+
+static void printTabularHeaderRow(const struct vcfInfoDef *def)
+/* Parse the column header parts out of def->description and print as table header row;
+ * call this only when looksTabular returns TRUE. */
+{
+regmatch_t substrArr[PATH_LEN];
+if (regexMatchSubstr(def->description, COL_DESC_REGEX, substrArr, ArraySize(substrArr)))
+    {
+    puts("<TR>");
+    // Make a copy of the part of def->description that matches the regex,
+    // then chop by '|' and print out header column tags:
+    int matchSize = substrArr[0].rm_eo - substrArr[0].rm_so;
+    char copy[matchSize+1];
+    safencpy(copy, sizeof(copy), def->description + substrArr[0].rm_so, matchSize);
+    // Turn '_' into ' ' so description words can wrap inside headers, saving some space
+    subChar(copy, '_', ' ');
+    char *words[PATH_LEN];
+    int descColCount = chopByChar(copy, '|', words, ArraySize(words));
+    int i;
+    for (i = 0;  i < descColCount; i++)
+        printf("<TH class='withThinBorder'>%s</TH>", words[i]);
+    puts("</TR>");
+    }
+else
+    errAbort("printTabularHeaderRow: code bug, if looksTabular returns true then "
+             "regex should work here");
+}
+
+static void printTabularData(struct vcfInfoElement *el)
+/* Print a row for each value in el, separating columns by '|'. */
+{
+int j;
+for (j = 0;  j < el->count;  j++)
+    {
+    puts("<TR>");
+    char *val = el->values[j].datString;
+    if (!isEmpty(val))
+        {
+        int len = strlen(val);
+        char copy[len+1];
+        safencpy(copy, sizeof(copy), val, len);
+        char *words[PATH_LEN];
+        int colCount = chopByChar(copy, '|', words, ArraySize(words));
+        int k;
+        for (k = 0;  k < colCount;  k++)
+            printf("<TD class='withThinBorder'>%s</TD>", words[k]);
+        }
+    puts("</TR>");
+    }
+}
+
+
 static void vcfInfoDetails(struct vcfRecord *rec)
 /* Expand info keys to descriptions, then print out keys and values. */
 {
@@ -111,22 +197,30 @@ for (i = 0;  i < rec->infoCount;  i++)
     {
     struct vcfInfoElement *el = &(rec->infoElements[i]);
     const struct vcfInfoDef *def = vcfInfoDefForKey(vcff, el->key);
-    printf("<TR valign='top'><TD align=\"right\"><B>%s:</B></TD><TD style=width:15%%;'>",
+    printf("<TR valign='top'><TD align=\"right\"><B>%s:</B></TD><TD>",
            el->key);
     int j;
     enum vcfInfoType type = def ? def->type : vcfInfoString;
     if (type == vcfInfoFlag && el->count == 0)
 	printf("Yes"); // no values, so we can't call vcfPrintDatum...
     // However, if this is older VCF, type vcfInfoFlag might have a value.
-    for (j = 0;  j < el->count;  j++)
-	{
-	if (j > 0)
-	    printf(", ");
-	if (el->missingData[j])
-	    printf(".");
-	else
-	    vcfPrintDatum(stdout, el->values[j], type);
-	}
+    if (looksTabular(def, el))
+        {
+        // Make a special display below
+        printf("<em>see below</em>");
+        }
+    else
+        {
+        for (j = 0;  j < el->count;  j++)
+            {
+            if (j > 0)
+                printf(", ");
+            if (el->missingData[j])
+                printf(".");
+            else
+                vcfPrintDatum(stdout, el->values[j], type);
+            }
+        }
     if (def != NULL)
 	printf("&nbsp;&nbsp;</TD><TD>%s", def->description);
     else
@@ -134,6 +228,21 @@ for (i = 0;  i < rec->infoCount;  i++)
     printf("</TD></TR>\n");
     }
 puts("</TABLE>");
+// Now show the tabular fields, if any
+for (i = 0;  i < rec->infoCount;  i++)
+    {
+    struct vcfInfoElement *el = &(rec->infoElements[i]);
+    const struct vcfInfoDef *def = vcfInfoDefForKey(vcff, el->key);
+    if (looksTabular(def, el))
+        {
+        puts("<BR>");
+        printf("<B>%s</B>: %s<BR>\n", el->key, def->description);
+        puts("<TABLE class='stdTbl'>");
+        printTabularHeaderRow(def);
+        printTabularData(el);
+        puts("</TABLE>");
+        }
+    }
 }
 
 static void vcfGenotypeTable(struct vcfRecord *rec, char *track, char **displayAls)

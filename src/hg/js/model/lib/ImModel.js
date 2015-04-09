@@ -49,7 +49,7 @@ var ImModel = (function() {
         error: function() {
             // By default, log error on the console and alert user.
             console.error.apply(console, arguments);
-            alert(Array.prototype.slice.call(arguments, 0, 1));
+            alert(Array.prototype.slice.call(arguments, 0, 2).join(' '));
         },
 
         registerCartVarHandler: function(cartVars, handler) {
@@ -118,7 +118,7 @@ var ImModel = (function() {
                     }, this);
                 } else if (key === 'error') {
                     // Default, can be overridden of course
-                    this.error('error message from CGI:', newValue);
+                    this.error('error message from server:', newValue);
                 } else {
                     mutState.set(key, Immutable.fromJS(newValue));
                 }

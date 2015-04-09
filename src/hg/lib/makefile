@@ -2,11 +2,11 @@ include ../../inc/localEnvironment.mk
 include ../../inc/common.mk
 XINC = -I$(MYSQLINC)
 
-O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetails.o \
+O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetails.o \
     affyOffset.o affyPairs.o agp.o agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
     altGraphX.o ancientRref.o \
     annoFormatVep.o annoGratorGpVar.o annoGrateWigDb.o \
-    annoStreamDb.o annoStreamDbFactorSource.o annoStreamWig.o \
+    annoStreamDb.o annoStreamDbFactorSource.o annoStreamDbKnownGene.o annoStreamWig.o \
     api.o atomDb.o  axtInfo.o \
     axtLib.o bactigPos.o hgBam.o baseMaskCommon.o bdgpExprLink.o bdgpGeneInfo.o \
     bed.o bed5FloatScore.o bed5Pval.o bed6FloatScore.o  bed8Attrs.o bed12Source.o \
@@ -24,7 +24,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     cnpIafrate.o cnpIafrate2.o cnpLocke.o cnpRedon.o cnpSebat.o cnpSebat2.o \
     cnpSharp2.o cnpSharpCutoff.o cnpSharpSample.o cnpSharp.o \
     cpgIsland.o cpgIslandExt.o ctgPos.o ctgPos2.o \
-    bedDetail.o cgiApoptosis.o \
+    bedDetail.o cgiApoptosis.o customAdjacency.o \
     customFactory.o customPp.o customTrack.o cutter.o cv.o cytoBand.o \
     dbDb.o dbRIP.o dbSnpRs.o defaultDb.o delConrad2.o delHinds2.o \
     dgv.o dgvPlus.o dless.o dnaMotifSql.o dnaMarkovSql.o dnaProbe.o \

@@ -6,7 +6,7 @@
 ##
 track wgEncodeGencodeV21
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel GENCODE V21 (Ensembl 77)
 longLabel Gene Annotations from GENCODE Version 21 (Ensembl 77)
 group genes
@@ -74,6 +74,7 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
     
         track wgEncodeGencodeBasicV21
         subTrack wgEncodeGencodeV21ViewGenes on
+        trackHandler wgEncodeGencode
         shortLabel Basic
         subGroups view=aGenes name=Basic
         longLabel Basic Gene Annotation Set from GENCODE Version 21 (Ensembl 77)
@@ -83,6 +84,7 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
         track wgEncodeGencodeCompV21
         subTrack wgEncodeGencodeV21ViewGenes off
         subGroups view=aGenes name=Comprehensive
+        trackHandler wgEncodeGencode
         shortLabel Comprehensive
         longLabel Comprehensive Gene Annotation Set from GENCODE Version 21 (Ensembl 77)
         type genePred
@@ -91,6 +93,7 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
         track wgEncodeGencodePseudoGeneV21
         subTrack wgEncodeGencodeV21ViewGenes on
         subGroups view=aGenes name=Pseudogenes 
+        trackHandler wgEncodeGencode
         shortLabel Pseudogenes
         longLabel Pseudogene Annotation Set from GENCODE Version 21 (Ensembl 77)
         type genePred
@@ -108,6 +111,7 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
         track wgEncodeGencode2wayConsPseudoV21
         subTrack wgEncodeGencodeV21View2Way off
         subGroups view=b2-way name=yTwo-way
+        trackHandler wgEncodeGencode
         shortLabel 2-way Pseudogenes
         longLabel 2-way Pseudogene Annotation Set from GENCODE Version 21 (Ensembl 77)
         type genePred
@@ -125,6 +129,7 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
         track wgEncodeGencodePolyaV21
         subTrack wgEncodeGencodeV21ViewPolya off
         subGroups view=cPolya name=zPolyA
+        trackHandler wgEncodeGencode
         shortLabel PolyA
         longLabel PolyA Transcript Annotation Set from GENCODE Version 21 (Ensembl 77)
         type genePred

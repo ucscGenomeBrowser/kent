@@ -218,7 +218,9 @@ var HgIntegratorModel = ImModel.extend({
             mutState.setIn(['addDsInfo', 'schemaUrl'],
                            this.schemaUrlFromTrackPath(mutState, trackPath));
         } else {
-            this.error('updateAddDsSchemaUrl: can\'t find trackPath ' + trackPath.toString());
+            if (trackPath.size > 0 && trackPath.get(0)) {
+                this.error('updateAddDsSchemaUrl: can\'t find trackPath ' + trackPath.toString());
+            }
             mutState.setIn(['addDsInfo', 'schemaUrl'], null);
         }
     },
@@ -235,8 +237,12 @@ var HgIntegratorModel = ImModel.extend({
             var trackPath = ds.get('trackPath');
             return trackPath.equals(addDsTrackPath);
         });
-        mutState.setIn(['addDsInfo', 'disabled'],
-                       (dataSources.size >= this.maxDataSources || alreadyAddedTrack));
+        var groupMenuOptions = mutState.getIn(['addDsInfo', 'menus', 0, 'valLabels']);
+        var emptyMenus = !groupMenuOptions || groupMenuOptions.size < 1;
+        var disabled = (dataSources.size >= this.maxDataSources ||
+                        alreadyAddedTrack ||
+                        emptyMenus);
+        mutState.setIn(['addDsInfo', 'disabled'], disabled);
     },
 
     disableDataSourcesInAddDsMenus: function (mutState) {
@@ -300,10 +306,11 @@ var HgIntegratorModel = ImModel.extend({
                                                 'track group', 'name', this.groupLabel, 'tracks');
         // The second menu is for tracks or composites in the selected group; if there
         // are views and/or subtracks, recursively descend to those.
-        ix = 1;
-        trackObjList = selectedGroupObj.get('tracks');
-        this.rMakeSubtrackMenus(mutState, trackObjList, changedIx, trackPath, ix);
-
+        if (selectedGroupObj) {
+            ix = 1;
+            trackObjList = selectedGroupObj.get('tracks');
+            this.rMakeSubtrackMenus(mutState, trackObjList, changedIx, trackPath, ix);
+        }
         // Now update the things that depend on menus and other state:
         this.disableDataSourcesInAddDsMenus(mutState);
         this.updateAddDsDisable(mutState);
@@ -319,6 +326,10 @@ var HgIntegratorModel = ImModel.extend({
             // and groupedTrackDb.  If db matches current db, store the inner groupedTrackDb.
             currentDb = this.getDb(mutState);
             if (! currentDb || newValue.db === currentDb) {
+                // Remove track groups with no tracks
+                _.remove(newValue.groupedTrackDb, function(trackGroup) {
+                    return ! (trackGroup.tracks && trackGroup.tracks.length > 0);
+                });
                 mutState.set('groupedTrackDb', Immutable.fromJS(newValue.groupedTrackDb));
                 // If the cart includes a saved trackPath consistent with groupedTrackDb, use that:
                 addDsTrackPath = mutState.get('hgi_addDsTrackPath');
