@@ -1285,6 +1285,24 @@ coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
 dataVersion October 16, 2014
 release beta,public
 
+track dgvPlus
+compositeTrack on
+shortLabel DGV Struct Var
+longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
+group varRep
+visibility hide
+itemRgb on
+type bed 9 +
+noScoreFilter .
+exonArrows off
+exonNumbers off
+urlLabel DGV Browser and Report:
+url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
+coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
+dataVersion July 23, 2013
+release beta,public
+
+
     track dgvMerged
     parent dgvPlus
     shortLabel DGV Struct Var
