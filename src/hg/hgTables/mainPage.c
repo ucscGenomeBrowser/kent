@@ -21,18 +21,11 @@
 #include "grp.h"
 #include "hgTables.h"
 #include "joiner.h"
+#include "trackDb.h"
 #include "hubConnect.h"
 #include "trackHub.h"
 #include "hgConfig.h"
 
-
-int trackDbCmpShortLabel(const void *va, const void *vb)
-/* Sort track by shortLabel. */
-{
-const struct trackDb *a = *((struct trackDb **)va);
-const struct trackDb *b = *((struct trackDb **)vb);
-return strcmp(a->shortLabel, b->shortLabel);
-}
 
 static struct dyString *onChangeStart()
 /* Start up a javascript onChange command */

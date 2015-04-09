@@ -78,5 +78,16 @@ void cartDbOutput(struct cartDb *el, FILE *f, char sep, char lastSep);
 #define cartDbCommaOut(el,f) cartDbOutput(el,f,',',',');
 /* Print out cartDb as a comma separated list including final comma. */
 
+#define sessionDbTableConfVariable      "sessionDbName"
+#define defaultSessionDbTableName  "sessionDb"
+#define userDbTableConfVariable         "userDbName"
+#define defaultUserDbTableName     "userDb"
+
+char *sessionDbTable();
+/* Return the name of the sessionDb table. */
+
+char *userDbTable();
+/* Return the name of the userDb table. */
+
 #endif /* CARTDB_H */
 

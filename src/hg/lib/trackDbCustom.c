@@ -47,6 +47,14 @@ else
    return 1;
 }
 
+int trackDbCmpShortLabel(const void *va, const void *vb)
+/* Sort track by shortLabel. */
+{
+const struct trackDb *a = *((struct trackDb **)va);
+const struct trackDb *b = *((struct trackDb **)vb);
+return strcmp(a->shortLabel, b->shortLabel);
+}
+
 void parseColor(char *text, unsigned char *r, unsigned char *g, unsigned char *b)
 /* Turn comma-separated string of three numbers into three
  * color components. */

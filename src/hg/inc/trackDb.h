@@ -337,6 +337,9 @@ struct trackDb *trackDbNew();
 int trackDbCmp(const void *va, const void *vb);
 /* Sort track by priority. */
 
+int trackDbCmpShortLabel(const void *va, const void *vb);
+/* Sort track by shortLabel. */
+
 void trackDbOverridePriority(struct hash *tdHash, char *priorityRa);
 /* Override priority settings using a ra file. */
 
