@@ -42,8 +42,12 @@ for the chromosomal position you are currently viewing is locally cached as a
 &quot;sparse file&quot;.</P>
 
 <H4><A name=bigGenePred></A>Big Gene Predictions</H4>
-The following definition is used for bigGenePred gene prediction files. In 
-alternative-splicing situations, each transcript has a row in this table.
+The following AutoSQL definition is used for bigGenePred gene prediction files. 
+This is the <A HREF="examples/bigGenePred.as"><tt>bigGenePred.as</tt></A>
+file defined by the <tt>-as=</tt> option when using <tt>bedToBigBed</tt>.
+Click this <A HREF="examples/bigGenePred.txt"><tt>bed12+8</tt></A> file for
+an example of bigGenePred input. In alternative-splicing situations, each
+transcript has a row in this table.
 <PRE>
 
 table bigGenePred
@@ -88,7 +92,7 @@ uncompressed BED input file.</P>
 To create a bigGenePred track, follow these steps:<BR>
 
 <OL>
- <LI> Create a bigGenePred format file that has the first twelve fields described by a normal BED file as described
+ <LI> Create a <tt>bed12+8</tt> bigGenePred format file that has the first twelve fields described by a normal BED file as described
   <A HREF="../../FAQ/FAQformat.html#format9.1">here</A>.  
    <UL>
     <LI> Your bigGenePred file must have the extra eight fields described in the AutoSQL file above.
@@ -104,7 +108,10 @@ To create a bigGenePred track, follow these steps:<BR>
   to create a chrom.sizes file for the UCSC database you are working with 
   (e.g. hg19). Alternatively, you can download the chrom.sizes file for
 any assembly hosted at UCSC from our <a href="http://hgdownload.soe.ucsc.edu/downloads.html">
-downloads</a> page (click on "Full data set" for any assembly).
+downloads</a> page (click on "Full data set" for any assembly). For example, for the hg19
+database, the hg19.chrom.sizes are located at
+<a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.chrom.sizes"
+target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.chrom.sizes</a>.
  <LI> Create the bigBed file from your sorted bigGenePred input file using the <TT>bedToBigBed</TT>
   utility like so: 
   <TT><B>bedToBigBed</B> -as=bigGenePred.as bigGenePred.txt chrom.sizes myBigGenePred.bb</TT><BR>
@@ -158,11 +165,11 @@ listing to view the bigBed track in the Genome Browser.</P>
 bigGenePred input file.
 
 <UL>
- <LI> Save this <A HREF="examples/bigGenePred.txt">bigGenePred</A> input file
-  to your machine 
+ <LI> Save this <tt>bed12+8</tt> <A HREF="examples/bigGenePred.txt">bigGenePred.txt</A>
+  example input file to your machine 
   (this satisfies <EM>steps 1</EM> and <EM>2</EM> above).
- <LI> Save this <A HREF="examples/bigGenePred.as">text file</A> to your machine.
- <LI> Save this <A HREF="hg19.chrom.sizes">text file</A> to your machine.
+ <LI> Save this <tt>bigGenePred.as</tt> <A HREF="examples/bigGenePred.as"> text file</A> to your machine.
+ <LI> Save this <tt>hg19.chrom.sizes</tt> <A HREF="hg19.chrom.sizes">text file</A> to your machine.
   It contains the chrom.sizes for the human (hg19) assembly 
   (this satisfies <EM>step 4</EM> above).
  <LI> Download the <TT>bedToBigBed</TT> utility (see <EM>step 3</EM>).
