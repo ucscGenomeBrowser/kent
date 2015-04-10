@@ -211,14 +211,6 @@ return isSingle;
 //#*** ------------------ end verbatim ---------------
 
 //#*** ------------------ begin verbatim from hgTables/mainPage.c ---------------
-int trackDbCmpShortLabel(const void *va, const void *vb)
-/* Sort track by shortLabel. */
-{
-const struct trackDb *a = *((struct trackDb **)va);
-const struct trackDb *b = *((struct trackDb **)vb);
-return strcmp(a->shortLabel, b->shortLabel);
-}
-
 void nbSpaces(int count)
 /* Print some non-breaking spaces. */
 {

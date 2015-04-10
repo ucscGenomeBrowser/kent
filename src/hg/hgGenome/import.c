@@ -18,6 +18,7 @@
 #include "errCatch.h"
 #include "hPrint.h"
 #include "customTrack.h"
+#include "trackDb.h"
 #include "trashDir.h"
 #include "hgGenome.h"
 #include "genoLay.h"
@@ -559,14 +560,6 @@ if (!slNameInList(dbList, selDb))
     selDb = cloneString(dbList->name);
 slFreeList(&dbList);
 return selDb;
-}
-
-int trackDbCmpShortLabel(const void *va, const void *vb)
-/* Sort track by shortLabel. */
-{
-const struct trackDb *a = *((struct trackDb **)va);
-const struct trackDb *b = *((struct trackDb **)vb);
-return strcmp(a->shortLabel, b->shortLabel);
 }
 
 

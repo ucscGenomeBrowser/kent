@@ -49,7 +49,7 @@ var ImModel = (function() {
         error: function() {
             // By default, log error on the console and alert user.
             console.error.apply(console, arguments);
-            alert(Array.prototype.slice.call(arguments, 0, 1));
+            alert(Array.prototype.slice.call(arguments, 0, 2).join(' '));
         },
 
         registerCartVarHandler: function(cartVars, handler) {
@@ -107,7 +107,11 @@ var ImModel = (function() {
             node.handlers[lastIndex].push(handler);
         },
 
-        mergeServerResponse: function(mutState, jsonData) {
+        defaultServerErrorHandler: function(serverMessage) {
+            this.error("error message from server:", serverMessage);
+        },
+
+        mergeServerResponse: function(mutState, jsonData, errorHandler) {
             // For each object in jsonData, if it has special handler(s) associated with it,
             // invoke the handler(s); otherwise, just put it in the top level of mutState.
             _.forEach(jsonData, function(newValue, key) {
@@ -118,20 +122,21 @@ var ImModel = (function() {
                     }, this);
                 } else if (key === 'error') {
                     // Default, can be overridden of course
-                    this.error('error message from CGI:', newValue);
+                    errorHandler = errorHandler || this.defaultServerErrorHandler;
+                    errorHandler(newValue);
                 } else {
                     mutState.set(key, Immutable.fromJS(newValue));
                 }
             }, this);
         },
 
-        handleServerResponse: function(jsonData) {
+        handleServerResponseWithErrorHandler: function(errorHandler, jsonData) {
             // The server has sent some data; update state and call any registered handlers.
             console.log('from server:', jsonData);
             // No plan to support undo/redo for server updates, so just change this.state in place:
             this.state = this.state.withMutations(function(mutState) {
                 // Update state with data from server:
-                this.mergeServerResponse(mutState, jsonData);
+                this.mergeServerResponse(mutState, jsonData, errorHandler);
                 // Call validation/cleanup handler(s) if any:
                 _.forEach(this.cartValidateHandlers, function(handler) {
                     handler.call(this, mutState);
@@ -219,9 +224,20 @@ var ImModel = (function() {
             this.render();
         },
 
-        cartDo: function(commandObj) {
-            // Send a command to the server; this.handleServerResponse will process response.
-            cart.send(commandObj, this.handleServerResponse);
+        cartDo: function(commandObj, errorHandler) {
+            // Send a command to the server; bind this.handleServerResponseWithError to
+            // errorHandler if errorHandler is passed in, otherwise bind to null for default.
+            // errorHandler will be given the server's error message.
+            var handler = this.handleServerResponse;
+            if (errorHandler) {
+                handler = _.bind(this.handleServerResponseWithErrorHandler,
+                                 this, errorHandler);
+            } else if (!handler) {
+                this.handleServerResponse = _.bind(this.handleServerResponseWithErrorHandler,
+                                                   this, null);
+                handler = this.handleServerResponse;
+            }
+            cart.send(commandObj, handler);
         },
 
         cartSend: function(commandObj) {
