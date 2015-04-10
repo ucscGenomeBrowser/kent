@@ -1,15 +1,19 @@
 <h2>Description</h2>
 <p>
 This track shows clusters of DNaseI hypersensitivity derived from assays in 95 cell types
-by the John Stamatoyannapoulos lab at the University of Washington from September 2007 to
-January 2011, as part of the
-<a target=_blank href="../ENCODE">ENCODE project first production phase</a>.  
+by the
+<a href="http://www.gs.washington.edu/faculty/stamj.htm" target="_blank">John Stamatoyannapoulos lab</a>
+at the University of Washington from September 2007 to January 2011, as part of the
+<a target="_blank" href="../ENCODE">ENCODE project first production phase</a>.
 Regulatory regions in general, and promoters in particular, tend to be DNase-sensitive.  
 </p>
+
+<p>
 Additional views of this data sites are displayed from the
-<a target=_blank href=../cgi-bin/hgTrackUi?db=hg38&g=wgEncodeRegDnase>DNaseI HS</a> track.
+<a target="_blank" href=../cgi-bin/hgTrackUi?db=hg38&g=wgEncodeRegDnase>DNaseI HS</a> track.
 The peaks in that track are the basis for the clusters shown here,  
-which combine data from peaks from the different cell lines.</p>
+which combine data from peaks from the different cell lines.
+</p>
 
 <h2>Display Conventions and Configuration</h2>
 <p>
@@ -17,34 +21,42 @@ A gray box indicates the extent of the hypersensitive region.
 The darkness is proportional to the maximum signal strength observed in any cell line.  
 The number to the left of the box shows how many cell lines are hypersensitive in the region.  
 The track can be configured to restrict the display to elements above a specified score 
-in the range 1-1000 (where score is based on signal strength).</p>
+in the range 1-1000 (where score is based on signal strength).
+</p>
 
 <h2>Methods</h2>
 <p>
 Raw sequence data files were processed by the UCSC ENCODE DNase analysis pipeline (July 2014
 specification), diagrammed here:
+</p>
+
 <div align="center">
 <img style="margin:8px; border:1px solid; height:216; width;483;" src="../images/encodeDnasePipeline.png" alt="ENCODE DNase Pipeline">
 <font size=-1>Credit: Qian Alvin Qin, X. Liu lab</font>
 </div>
+
 <p>
 Briefly, sequence files were aligned to the hg38 (GRCh38) genome assembly augmented with 'sponge'
 sequence (ref).  Multi-mapped reads were removed, as were reads that aligned to 'sponge' or
 mitochondiral sequence.  Results from all replicates were pooled, and further processed by
-the Hotspot program to call peaks.</p>
+the Hotspot program to call peaks.
+</p>
+
 <p>
 Peaks of DNaseI hypersensitivity from the ENCODE DNase Analysis Pipeline at UCSC
 were assigned normalized scores (by UCSC regClusterMakeTableOfTables) in the range 0-1000 based
 on the 
-<a target=_blank href="../FAQ/FAQformat.html#format12">narrowPeak</a> 
+<a target="_blank" href="../FAQ/FAQformat.html#format12">narrowPeak</a>
 signalValue and then clustered on score (by UCSC regCluster) to generate singly-linked clusters.  
 Additional documentation on the methods used to identify hypersensitive sites are 
 available from the
-<a target=_blank href=../cgi-bin/hgTrackUi?db=hg38&g=wgEncodeRegDnase>DNaseI HS</a> track.</p>
+<a target="_blank" href=../cgi-bin/hgTrackUi?db=hg38&g=wgEncodeRegDnase>DNaseI HS</a> track.
+</p>
 
 <h2>Credits</h2>
 <p>
 This track is based on sequence data from the University of Washington ENCODE group, 
 with subsequent processing by UCSC.
 For additional credits and references, see the
-<a target=_blank href=../cgi-bin/hgTrackUi?db=hg38&g=wgEncodeRegDnase>DNaseI HS</a> track.</p>
+<a target="_blank" href=../cgi-bin/hgTrackUi?db=hg38&g=wgEncodeRegDnase>DNaseI HS</a> track.
+</p>
