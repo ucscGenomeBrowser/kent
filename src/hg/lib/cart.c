@@ -2668,3 +2668,103 @@ if (sameWord("yes", cfgOptionDefault("browser.cgiTime", "yes")) )
   fprintf(stderr, "CGI_TIME: %s: Overall total time: %ld millis\n",
         cgiName, clock1000() - enteredMainTime);
 }
+
+void cartCheckForCustomTracks(struct cart *cart, struct dyString *dyMessage)
+/* Scan cart for ctfile_<db> variables.  Tally up the databases that have
+ * live custom tracks and those that have expired custom tracks. */
+/* While we're at it, also look for saved blat results. */
+{
+struct hashEl *helList = cartFindPrefix(cart, CT_FILE_VAR_PREFIX);
+if (helList != NULL)
+    {
+    struct hashEl *hel;
+    boolean gotLiveCT = FALSE, gotExpiredCT = FALSE;
+    struct slName *liveDbList = NULL, *expiredDbList = NULL, *sln = NULL;
+    for (hel = helList;  hel != NULL;  hel = hel->next)
+	{
+	char *db = hel->name + strlen(CT_FILE_VAR_PREFIX);
+	boolean thisGotLiveCT = FALSE, thisGotExpiredCT = FALSE;
+	/* If the file doesn't exist, just remove the cart variable so it
+	 * doesn't get copied from session to session.  If it does exist,
+	 * leave it up to customFactoryTestExistence to parse the file for
+	 * possible customTrash table references, some of which may exist
+	 * and some not. */
+	if (!fileExists(hel->val))
+	    {
+	    cartRemove(cart, hel->name);
+	    thisGotExpiredCT = TRUE;
+	    }
+	else
+	    {
+	    customFactoryTestExistence(db, hel->val,
+				       &thisGotLiveCT, &thisGotExpiredCT);
+	    }
+	if (thisGotLiveCT)
+	    slNameAddHead(&liveDbList, db);
+	if (thisGotExpiredCT)
+	    slNameAddHead(&expiredDbList, db);
+	gotLiveCT |= thisGotLiveCT;
+	gotExpiredCT |= thisGotExpiredCT;
+	}
+    if (gotLiveCT)
+	{
+	slSort(&liveDbList, slNameCmp);
+	dyStringPrintf(dyMessage,
+		       "<P>Note: the session has at least one active custom "
+		       "track (in database ");
+	for (sln = liveDbList;  sln != NULL;  sln = sln->next)
+	    dyStringPrintf(dyMessage, "<A HREF=\"hgCustom?%s&db=%s\">%s</A>%s",
+			   cartSidUrlString(cart), sln->name,
+			   sln->name, (sln->next ? sln->next->next ? ", " : " and " : ""));
+	dyStringAppend(dyMessage, "; click on the database link "
+		       "to manage custom tracks).  ");
+
+	}
+    if (gotExpiredCT)
+	{
+	slSort(&expiredDbList, slNameCmp);
+	dyStringPrintf(dyMessage,
+		       "<P>Note: the session has at least one expired custom "
+		       "track (in database ");
+	for (sln = expiredDbList;  sln != NULL;  sln = sln->next)
+	    dyStringPrintf(dyMessage, "%s%s",
+			   sln->name, (sln->next ? sln->next->next ? ", " : " and " : ""));
+	dyStringPrintf(dyMessage,
+		       "), so it may not appear as originally intended.  ");
+	}
+    dyStringPrintf(dyMessage,
+		   "Custom tracks are subject to an expiration policy described in the "
+		   "<A HREF=\"../goldenPath/help/hgSessionHelp.html#CTs\" TARGET=_BLANK>"
+		   "Session documentation</A>.</P>");
+    slNameFreeList(&liveDbList);
+    slNameFreeList(&expiredDbList);
+    }
+/* Check for saved blat results (quasi custom track). */
+char *ss = cartOptionalString(cart, "ss");
+if (isNotEmpty(ss))
+    {
+    char buf[1024];
+    char *words[2];
+    int wordCount;
+    boolean exists = FALSE;
+    safecpy(buf, sizeof(buf), ss);
+    wordCount = chopLine(buf, words);
+    if (wordCount < 2)
+	exists = FALSE;
+    else
+	exists = fileExists(words[0]) && fileExists(words[1]);
+
+    if (exists)
+	dyStringPrintf(dyMessage,
+		       "<P>Note: the session contains BLAT results.  ");
+    else
+	dyStringPrintf(dyMessage,
+		"<P>Note: the session contains an expired reference to "
+		"previously saved BLAT results, so it may not appear as "
+		"originally intended.  ");
+    dyStringPrintf(dyMessage,
+		   "BLAT results are subject to an "
+		   "<A HREF=\"../goldenPath/help/hgSessionHelp.html#CTs\" TARGET=_BLANK>"
+		   "expiration policy</A>.");
+    }
+}

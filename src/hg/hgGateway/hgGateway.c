@@ -252,6 +252,8 @@ void doMiddle(struct cart *theCart)
 char *scientificName = NULL;
 cart = theCart;
 
+if(cgiIsOnWeb())
+    checkForGeoMirrorRedirect(cart);
 getDbGenomeClade(cart, &db, &organism, &clade, oldVars);
 if (! hDbIsActive(db))
     {
@@ -290,64 +292,6 @@ if (dyUpgradeError)
 cartWebEnd();
 }
 
-static void checkForGeoMirrorRedirect()
-{
-// Implement Geo/IP based redirection
-//
-// NOTE that we want to redirect people as quickly as possible, so for efficiency purposes, this code is designed to be
-// called from main BEFORE the cart is loaded (so we only use CGI parameters and/or cookies).
-
-char *thisNodeStr = geoMirrorNode();
-if (thisNodeStr)
-    {
-    char *redirectCookie = findCookieData("redirect");
-    char *redirect = cgiOptionalString("redirect");
-
-    //fprintf(stderr, "GALT redirectCookie=%s redirect=%s\n", 
-            //redirectCookie, redirect); fflush(stderr); // DEBUG REMOVE
-
-    if (redirect == NULL && redirectCookie == NULL)
-        {
-        int thisNode = sqlUnsigned(thisNodeStr);
-        struct sqlConnection *centralConn = hConnectCentral();
-        char *ipStr = cgiRemoteAddr();
-        int node = defaultNode(centralConn, ipStr);
-
-        // get location of redirect node
-        if (thisNode != node)
-            {
-	    char *geoSuffix = cfgOptionDefault("browser.geoSuffix","");
-            char query[1056];
-            sqlSafef(query, sizeof query, "select domain from gbNode%s where node = %d", geoSuffix, node);
-            char *newDomain = sqlQuickString(centralConn, query);
-            //fprintf(stderr, "GALT newDomain=%s\n", newDomain); fflush(stderr); // DEBUG REMOVE
-            char *oldDomain = cgiServerName();
-            char *port = cgiServerPort();
-            char *uri = cgiRequestUri();
-            char *sep = strchr(uri, '?') ? "&" : "?";
-            int newUriSize = strlen(uri) + 1024;
-            char *newUri = needMem(newUriSize);
-            safef(newUri, newUriSize, "http%s://%s:%s%s%sredirect=auto&source=%s", 
-		cgiServerHttpsIsOn() ? "s" : "", newDomain, port, uri, sep, oldDomain);
-            struct dyString *dy = dyStringNew(256);
-            dyStringPrintf(dy,
-                           "HTTP/1.1 302 found: \n"
-                           "Content-Type: text/html; charset=iso-8859-1\n"
-                           "Connection: close\n"
-                           "Location: %s\n"
-                           "\n"
-                           "<html><head><title>Redirecting to closer site</title></head>\n"
-                           "<body><a href=\"%s\">%s</a></body>\n"
-                           , newUri , newUri, newUri);
-            //fprintf(stderr, "GALT redirect response:\n%s", dy->string); fflush(stderr); // DEBUG REMOVE
-            puts(dyStringContents(dy));
-            exit(0);
-            }
-        hDisconnectCentral(&centralConn);
-        }
-    }
-}
-
 char *excludeVars[] = {NULL};
 
 int main(int argc, char *argv[])
@@ -359,8 +303,6 @@ cgiSpoof(&argc, argv);
 
 setUdcCacheDir();
 
-if(cgiIsOnWeb())
-    checkForGeoMirrorRedirect();
 
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 cgiExitTime("hgGateway", enteredMainTime);
