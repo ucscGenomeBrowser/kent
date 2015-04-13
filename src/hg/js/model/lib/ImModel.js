@@ -147,16 +147,19 @@ var ImModel = (function() {
 
         bumpUiState: function(updater) {
             // Reset our redo stack and push current state onto undo stack.
-            // Replace this.state with a new immutable state changed by updater (bound to this),
-            // which is a function that receives a mutable copy of this.state and may make
-            // changes to the mutable copy.
-            this.undoStack.push(this.state);
-            this.redoStack = [];
-            this.state = this.state.withMutations(function(mutState) {
-                mutState.set('canUndo', true);
-                mutState.set('canRedo', false);
-                updater.call(this, mutState);
-            }.bind(this));
+            // Replace this.state with a new immutable state changed by updater,
+            // which is a function bound to this that receives a mutable copy of
+            // this.state and may make changes to the mutable copy.
+            var startState = this.state;
+            this.state = this.state.withMutations(updater);
+            if (this.state !== startState) {
+                this.undoStack.push(startState);
+                this.redoStack = [];
+                this.state = this.state.withMutations(function(mutState) {
+                    mutState.set('canUndo', true);
+                    mutState.set('canRedo', false);
+                });
+            }
         },
 
         undo: function() {
@@ -220,7 +223,7 @@ var ImModel = (function() {
                 _.forEach(handlers, function(handler) {
                     handler.call(this, mutState, path, data);
                 }, this);
-            });
+            }.bind(this));
             this.render();
         },
 
