@@ -51,7 +51,8 @@ endif
 # If rebuilding on an existing assembly make tempDb some bogus name like tmpFoo2, otherwise 
 # make tempDb same as db.
 set tempPrefix = "tmp"
-set tmpSuffix = "Foo15"
+set tmpSuffix = "Foo55"
+# if you don't set this to tmpFoo*, then the blastp stuff fails
 set tempDb = ${tempPrefix}${tmpSuffix}
 set bioCycTempDb = tmpBioCyc${tmpSuffix}
 #set tempDb = mm10
@@ -589,8 +590,6 @@ foreach c (`cut -f1 $genomes/$db/chrom.sizes`)
     endif
 end
 
-#stopped here
-
 cd $dir
 
 # Create and populate directory with various CDS evidence
@@ -613,20 +612,21 @@ txCdsEvFromProtein uniProt.fa blat/protein/uniProt.psl txWalk.fa \
 
 
 txCdsEvFromBed ccds.bed ccds txWalk.bed ../../$db.2bit cdsEvidence/ccds.tce
-# Couldn't find unused transcript for CCDS40910.1, reusing chrX.201.1.NM_001168334.1
-# Couldn't find unused transcript for CCDS19863.1, reusing chr5.4063.1.NM_017396.3
-# Couldn't find unused transcript for CCDS51224.1, reusing chr4.1090.1.NM_001161609.1
-# Couldn't find unused transcript for CCDS38713.1, reusing chr4.2451.1.NM_009736.3
-# Couldn't find unused transcript for CCDS38554.2, reusing chr3.980.1.NM_178216.2
-# Couldn't find unused transcript for CCDS50756.1, reusing chr2.2729.1.NM_010407.4
-# Couldn't find unused transcript for CCDS16154.1, reusing chr2.4126.1.NM_030188.3
-# Couldn't find unused transcript for CCDS38027.1, reusing chr19.1683.4.CCDS38027.1
+# Couldn't find unused transcript for CCDS40910.1, reusing chrX.202.1.NM_001168334.1
+# Couldn't find unused transcript for CCDS19863.1, reusing chr5.4061.1.NM_017396.3
+# Couldn't find unused transcript for CCDS51224.1, reusing chr4.1092.1.NM_001161609.1
+# Couldn't find unused transcript for CCDS38713.1, reusing chr4.2453.1.NM_009736.3
+# # Couldn't find unused transcript for CCDS38554.2, reusing chr3.979.1.NM_054045.4
+# Couldn't find unused transcript for CCDS50756.1, reusing chr2.2769.1.NM_010407.4
+# Couldn't find unused transcript for CCDS16154.1, reusing chr2.4163.1.NM_030188.3
+# Couldn't find unused transcript for CCDS38027.1, reusing chr19.1687.7.CCDS38027.1
 # Couldn't find unused transcript for CCDS29187.1, reusing chr18.366.1.NM_053147.3
-# Couldn't find unused transcript for CCDS26352.1, reusing chr13.249.1.NM_178204.1
-# Couldn't find unused transcript for CCDS48921.1, reusing chr11.3452.1.NM_001099313.2
+# Couldn't find unused transcript for CCDS28817.2, reusing chr17.2943.3.NM_001287058.1
+# Couldn't find unused transcript for CCDS26352.1, reusing chr13.248.1.NM_178204.2
+# Couldn't find unused transcript for CCDS25617.1, reusing chr11.3745.1.NM_199201.1
+# Couldn't find unused transcript for CCDS48921.1, reusing chr11.3448.1.NM_001099313.2
 # Couldn't find unused transcript for CCDS24793.1, reusing chr11.671.5.CCDS48811.1
 # Couldn't find unused transcript for CCDS48682.1, reusing chr10.1981.2.NM_001166634.1
-
 cat cdsEvidence/*.tce | sort  > unweighted.tce
 
 
@@ -652,6 +652,9 @@ cat refToPep.tab refToCcds.tab | \
 	-exceptionsOut=abWalk.exceptions 
 txCdsToGene abWalk.bed abWalk.fa pick.tce pick.gtf pick.fa \
 	-bedOut=pick.bed -exceptions=abWalk.exceptions
+# Stop codons in CDS at position 442 for chr5.3078.1.NM_001039647.2, (source ccds CCDS57369.1)
+# Stop codons in CDS at position 70 for chr6.3860.1.NM_020008.2, (source ccds CCDS71845.1)
+
 # Create gene info table. Takes 8 seconds
 cat mrna/*.unusual refSeq/*.unusual | awk '$5=="flip" {print $6;}' > all.flip
 cat mrna/*.psl refSeq/*.psl trna.psl rfam.syntenic.psl \
@@ -671,7 +674,9 @@ txCdsToGene abWalk.bed abWalk.fa weededCds.tce weededCds.gtf weededCds.faa \
 	-bedOut=weededCds.bed -exceptions=abWalk.exceptions \
 	-tweaked=weededCds.tweaked
 
-# Stop codons in CDS at position 442 for chr5.3076.1.NM_001039647.2, (source ccds CCDS57369.1)
+#Stop codons in CDS at position 442 for chr5.3078.1.NM_001039647.2, (source ccds CCDS57369.1)
+#Stop codons in CDS at position 70 for chr6.3860.1.NM_020008.2, (source ccds CCDS71845.1)
+
 
 # After txCdsToGene, the transcripts in weededCds.bed might be
 # slightly different from those in abWalk.bed.  Make a new sequence
@@ -680,13 +685,11 @@ txCdsToGene abWalk.bed abWalk.fa weededCds.tce weededCds.gtf weededCds.faa \
 sequenceForBed -db=$db -bedIn=weededCds.bed -fastaOut=weeded.fa \
     -upCase -keepName
 
-
-
 # Separate out transcripts into coding and 4 uncoding categories.
 # Generate new gene set that weeds out the junkiest. Takes 9 seconds.
 txGeneSeparateNoncoding weededCds.bed weededCds.info \
 	coding.bed nearCoding.bed nearCodingJunk.bed antisense.bed uncoding.bed separated.info
-# coding 36480, codingJunk 8975, nearCoding 4021, junk 4123, antisense 1119, noncoding 11047
+# coding 36864, codingJunk 9063, nearCoding 4562, junk 4417, antisense 1196, noncoding 11559
 
 awk '$2 != "nearCodingJunk"' separated.info > weeded.info
 awk '$2 == "nearCodingJunk" {print $1}' separated.info > weeds.lst
@@ -711,33 +714,34 @@ txGeneCdsMap weeded.bed weeded.info pick.picks refTweaked.psl \
 	rnaToGenome.psl
 pslMap cdsToRna.psl rnaToGenome.psl cdsToGenome.psl
 
-# Missed 6 of 27860 refSeq protein mappings.  A small number of RefSeqs just map
+# Missed 6 of 29071 refSeq protein mappings.  A small number of RefSeqs just map
 # to genome in the UTR.
 
-set oldGeneBed = $genomes/mm10/bed/ucsc.13.1/ucscGenes.bed
+#set oldGeneBed = $genomes/mm10/bed/ucsc.13.1/ucscGenes.bed
 txGeneAccession -test $oldGeneBed ~kent/src/hg/txGene/txGeneAccession/txLastId \
 	weeded.bed txToAcc.tab oldToNew.tab
 
 tawk '{print $4}' oldToNew.tab | sort | uniq -c
-#    3866 compatible
-#    54714 exact
-#      541 lost
-#     3062 new
+# 2308 compatible
+# 59119 exact
+# 215 lost
+# 1817 new
 
 echo "select * from knownGene" | hgsql mm10 | sort > mm10.knownGene.gp
 grep lost oldToNew.tab | awk '{print $2}' | sort > lost.txt
 join lost.txt mm10.knownGene.gp > mm10.lost.gp
 
 awk '{if ($7 == $6) print}' mm10.lost.gp | wc -l
-# non-coding 148
+# non-coding 94
 awk '{if ($7 != $6) print}' mm10.lost.gp | wc -l
-# coding 393
+# coding 121
 
 # Assign permanent accessions to each transcript, and make up a number
 # of our files with this accession in place of the temporary IDs we've been
 # using.  Takes 4 seconds
 
 cd $dir
+cp ~kent/src/hg/txGene/txGeneAccession/txLastId startId
 txGeneAccession $oldGeneBed ~kent/src/hg/txGene/txGeneAccession/txLastId \
 	weeded.bed txToAcc.tab oldToNew.tab
 subColumn 4 weeded.bed txToAcc.tab ucscGenes.bed
@@ -794,16 +798,15 @@ ssh $cpuFarm "cd $dir/blat/uniprotVsUcsc; para make jobList"
 ssh $cpuFarm "cd $dir/blat/uniprotVsUcsc; para time > run.time"
 
 cat run.time
-# Completed: 97 of 97 jobs 
-# CPU time in finished jobs:       1256s      20.93m     0.35h    0.01d  0.000 y 
-# IO & Wait Time:                   323s       5.39m     0.09h    0.00d  0.000 y
-# Average job time:                  16s       0.27m     0.00h    0.00d
-# Longest finished job:              64s       1.07m     0.02h    0.00d
-# Submission to last job:            78s       1.30m     0.02h    0.00d
+#Completed: 97 of 97 jobs
+#CPU time in finished jobs:       1772s      29.53m     0.49h    0.02d  0.000 y
+#IO & Wait Time:                   290s       4.84m     0.08h    0.00d  0.000 y
+#Average job time:                  21s       0.35m     0.01h    0.00d
+#Longest finished job:              71s       1.18m     0.02h    0.00d
+#Submission to last job:            95s       1.58m     0.03h    0.00d
 
 pslCat raw/*.psl > ../../ucscVsUniprot.psl
 rm -r raw
-
 
 # Fixup UniProt links in picks file.  This is a little circuitious.  In the future may
 # avoid using the picks file for the protein link, and rely on protein/protein blat
@@ -812,8 +815,6 @@ rm -r raw
 # there was a different CDS selection process.
 cd $dir
 txCdsRedoUniprotPicks ucscBadUniprot.picks ucscVsUniprot.psl uniCurated.tab ucscGenes.picks
-
-
 
 # Cluster the coding and the uncoding sets, and make up canonical and
 # isoforms tables. Takes 3 seconds.
@@ -886,7 +887,7 @@ hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db refGene knownGene knownToLo
 
 # Make up kgXref table.  Takes about 3 minutes.
 time txGeneXref $db $tempDb $spDb ucscGenes.gp ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
-# 9.429u 5.392s 2:43.76 9.0%      0+0k 10104+0io 11pf+0w
+# 6.867u 3.985s 1:35.75 11.3%     0+0k 9952+0io 12pf+0w
 
 hgLoadSqlTab -notOnServer $tempDb kgXref $kent/src/hg/lib/kgXref.sql ucscGenes.xref
 
@@ -1028,25 +1029,24 @@ _EOF_
 rm -rf  $scratchDir/brHgNearBlastp
 doHgNearBlastp.pl -noLoad -clusterHub=ku -distrHost=hgwdev -dbHost=hgwdev -workhorse=hgwdev config.ra >&  do.log  &
 # *** All done!
-# *** -noLoad was specified -- you can run this script manually to load mm10 tables:
-#        run.mm10.mm10/loadPairwise.csh
+# *** -noLoad was specified -- you can run this script manually to load tmpFoo55 tables:
+#        run.tmpFoo55.tmpFoo55/loadPairwise.csh
 #
-# *** -noLoad was specified -- you can run these scripts manually to load mm10 tables:
-#        run.mm10.hg19/loadPairwise.csh
-#        run.mm10.rn5/loadPairwise.csh
-#        run.mm10.danRer7/loadPairwise.csh
-#        run.mm10.dm3/loadPairwise.csh
-#        run.mm10.ce10/loadPairwise.csh
-#        run.mm10.sacCer3/loadPairwise.csh
+# *** -noLoad was specified -- you can run these scripts manually to load tmpFoo55 tables:
+#        run.tmpFoo55.hg19/loadPairwise.csh
+#        run.tmpFoo55.rn4/loadPairwise.csh
+#        run.tmpFoo55.danRer7/loadPairwise.csh
+#        run.tmpFoo55.dm3/loadPairwise.csh
+#        run.tmpFoo55.ce6/loadPairwise.csh
+#        run.tmpFoo55.sacCer3/loadPairwise.csh
 #
-# *** -noLoad was specified -- you can run these scripts manually to load mmBlastTab in query databases:
-#        run.hg19.mm10/loadPairwise.csh
-#        run.rn5.mm10/loadPairwise.csh
-#        run.danRer7.mm10/loadPairwise.csh
-#        run.dm3.mm10/loadPairwise.csh
-#        run.ce10.mm10/loadPairwise.csh
-#        run.sacCer3.mm10/loadPairwise.csh
-
+# *** -noLoad was specified -- you can run these scripts manually to load tfBlastTab in query databases:
+#        run.hg19.tmpFoo55/loadPairwise.csh
+#        run.rn4.tmpFoo55/loadPairwise.csh
+#        run.danRer7.tmpFoo55/loadPairwise.csh
+#        run.dm3.tmpFoo55/loadPairwise.csh
+#        run.ce6.tmpFoo55/loadPairwise.csh
+#        run.sacCer3.tmpFoo55/loadPairwise.csh
 
 # Load self
 cd $dir/hgNearBlastp/run.$tempDb.$tempDb
@@ -1070,26 +1070,26 @@ ln -s $genomes/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
 # delete non-syntenic genes from rat and human blastp tables
 cd $dir/hgNearBlastp
 synBlastp.csh $tempDb $xdb
-# old number of unique query values: 44540
-# old number of unique target values 22710
-# new number of unique query values: 37983
-# new number of unique target values 20451
+# old number of unique query values: 44975
+# old number of unique target values 22780
+# new number of unique query values: 38369
+# new number of unique target values 20517
 
 hgsql -e "select  count(*) from hgBlastTab\G" $db | tail -n +2
-# count(*): 41558
+# count(*): 42143
 hgsql -e "select  count(*) from hgBlastTab\G" $tempDb | tail -n +2
-# count(*): 37983
+# count(*): 38369
 
 synBlastp.csh $tempDb $ratDb knownGene rgdGene2
-# old number of unique query values: 39404
-# old number of unique target values 10524
-# new number of unique query values: 18549
-# new number of unique target values 8087
+# old number of unique query values: 39778
+# old number of unique target values 10523
+# new number of unique query values: 18755
+# new number of unique target values 8084
 
 hgsql -e "select  count(*) from rnBlastTab\G" $db | tail -n +2
-# count(*): 17832
-hgsql -e "select  count(*) from rnBlastTab\G" $tempDb | tail -n +2
 # count(*): 18549
+hgsql -e "select  count(*) from rnBlastTab\G" $tempDb | tail -n +2
+# count(*): 18755
 
 # Make reciprocal best subset for the blastp pairs that are too
 # Far for synteny to help
@@ -1104,9 +1104,9 @@ blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.t
 hgLoadBlastTab $tempDb drBlastTab $aToB/recipBest.tab
 #hgLoadBlastTab $fishDb tfBlastTab $bToA/recipBest.tab
 hgsql -e "select  count(*) from drBlastTab\G" $db | tail -n +2
-# count(*): 12936
-hgsql -e "select  count(*) from drBlastTab\G" $tempDb | tail -n +2
 # count(*): 12896
+hgsql -e "select  count(*) from drBlastTab\G" $tempDb | tail -n +2
+# count(*): 12905
 
 # Us vs. fly
 cd $dir/hgNearBlastp
@@ -1118,9 +1118,9 @@ blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.t
 hgLoadBlastTab $tempDb dmBlastTab $aToB/recipBest.tab
 # hgLoadBlastTab $flyDb tfBlastTab $bToA/recipBest.tab
 hgsql -e "select  count(*) from dmBlastTab\G" $db | tail -n +2
-# count(*): 5951
+# count(*): 5950
 hgsql -e "select  count(*) from dmBlastTab\G" $tempDb | tail -n +2
-# count(*): 595
+# count(*): 5950
 
 # Us vs. worm
 cd $dir/hgNearBlastp
@@ -1133,9 +1133,9 @@ hgLoadBlastTab $tempDb ceBlastTab $aToB/recipBest.tab
 #hgLoadBlastTab $wormDb tfBlastTab $bToA/recipBest.tab
 
 hgsql -e "select  count(*) from ceBlastTab\G" $db | tail -n +2
-# count(*): 4957
-hgsql -e "select  count(*) from ceBlastTab\G" $tempDb | tail -n +2
 # count(*): 4962
+hgsql -e "select  count(*) from ceBlastTab\G" $tempDb | tail -n +2
+# count(*): 4964
 
 # Us vs. yeast
 cd $dir/hgNearBlastp
@@ -1148,7 +1148,7 @@ hgLoadBlastTab $tempDb scBlastTab $aToB/recipBest.tab
 #hgLoadBlastTab $yeastDb tfBlastTab $bToA/recipBest.tab
 
 hgsql -e "select  count(*) from scBlastTab\G" $db | tail -n +2
-# count(*): 2398
+# count(*): 2399
 hgsql -e "select  count(*) from scBlastTab\G" $tempDb | tail -n +2
 # count(*): 2399
 
@@ -1186,30 +1186,33 @@ cd ../utr5
 gensub2 in.lst single template jobList
 
 # Do cluster runs for UTRs
+cd $dir/rnaStruct
 ssh $cpuFarm "cd $dir/rnaStruct/utr3; para make jobList"
 ssh $cpuFarm "cd $dir/rnaStruct/utr3; para time"
-# Completed: 9771 of 9771 jobs
-# CPU time in finished jobs:     508837s    8480.61m   141.34h    5.89d  0.016 y
-# IO & Wait Time:                 27135s     452.25m     7.54h    0.31d  0.001 y
-# Average job time:                  55s       0.91m     0.02h    0.00d
-# Longest finished job:            2275s      37.92m     0.63h    0.03d
-# Submission to last job:          5222s      87.03m     1.45h    0.06d
+# Completed: 9773 of 9773 jobs  
+# CPU time in finished jobs:     552439s    9207.31m   153.46h    6.39d  0.018 y  
+# IO & Wait Time:                 31533s     525.56m     8.76h    0.36d  0.001 y  
+# Average job time:                  60s       1.00m     0.02h    0.00d  
+# Longest finished job:            2272s      37.87m     0.63h    0.03d  
+# Submission to last job:          3019s      50.32m     0.84h    0.03d  
+#
 
 ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make jobList"
 ssh $cpuFarm "cd $dir/rnaStruct/utr5; para time "
-#
-# Completed: 9295 of 9295 jobs
-# CPU time in finished jobs:      14039s     233.99m     3.90h    0.16d  0.000 y
-# IO & Wait Time:                 23613s     393.55m     6.56h    0.27d  0.001 y
-# Average job time:                   4s       0.07m     0.00h    0.00d
-# Longest finished job:              89s       1.48m     0.02h    0.00d
-# Submission to last job:           796s      13.27m     0.22h    0.01d
+
+# Completed: 9300 of 9300 jobs
+# CPU time in finished jobs:      11692s     194.86m     3.25h    0.14d  0.000 y
+# IO & Wait Time:                 57684s     961.41m    16.02h    0.67d  0.002 y
+# Average job time:                   7s       0.12m     0.00h    0.00d
+# Longest finished job:              67s       1.12m     0.02h    0.00d
+# Submission to last job:           145s       2.42m     0.04h    0.00d
 
 # Load database
     cd $dir/rnaStruct/utr5
     hgLoadRnaFold $tempDb foldUtr5 fold
     cd ../utr3
     hgLoadRnaFold -warnEmpty $tempDb foldUtr3 fold
+# uc012fxx.1 is empty, skipping
 
 # Clean up
     rm -r split fold err batch.bak
@@ -1244,12 +1247,12 @@ ssh $cpuFarm "cd $dir/pfam; para make jobList"
 ssh $cpuFarm "cd $dir/pfam; para time > run.time"
 cat run.time
 
-# Completed: 9671 of 9671 jobs
-# CPU time in finished jobs:    2692553s   44875.88m   747.93h   31.16d  0.085 y
-# IO & Wait Time:                585498s    9758.30m   162.64h    6.78d  0.019 y
-# Average job time:                 339s       5.65m     0.09h    0.00d
-# Longest finished job:             463s       7.72m     0.13h    0.01d
-# Submission to last job:         16549s     275.82m     4.60h    0.19d
+#Completed: 9670 of 9670 jobs
+#CPU time in finished jobs:    2260636s   37677.26m   627.95h   26.16d  0.072 y
+#IO & Wait Time:                562635s    9377.26m   156.29h    6.51d  0.018 y
+#Average job time:                 292s       4.87m     0.08h    0.00d
+#Longest finished job:            2001s      33.35m     0.56h    0.02d
+#Submission to last job:          3129s      52.15m     0.87h    0.04d
 
 # Make up pfamDesc.tab by converting pfam to a ra file first
 cat << '_EOF_' > makePfamRa.awk
@@ -1298,13 +1301,12 @@ ssh $cpuFarm "cd $dir/scop; para make jobList"
 ssh $cpuFarm "cd $dir/scop; para time > run.time"
 cat run.time
 
-# Completed: 9671 of 9671 jobs
-# CPU time in finished jobs:    2756072s   45934.54m   765.58h   31.90d  0.087 y
-# IO & Wait Time:                557096s    9284.93m   154.75h    6.45d  0.018 y
-# Average job time:                 343s       5.71m     0.10h    0.00d
-# Longest finished job:             519s       8.65m     0.14h    0.01d
-# Submission to last job:         16231s     270.52m     4.51h    0.19d
-#
+#Completed: 9670 of 9670 jobs
+#CPU time in finished jobs:    2227465s   37124.42m   618.74h   25.78d  0.071 y
+#IO & Wait Time:                565116s    9418.60m   156.98h    6.54d  0.018 y
+#Average job time:                 289s       4.81m     0.08h    0.00d
+#Longest finished job:             450s       7.50m     0.12h    0.01d
+#Submission to last job:          3065s      51.08m     0.85h    0.04d
 
 # Convert scop output to tab-separated files
 cd $dir
@@ -1430,35 +1432,33 @@ ln -s $dir/kgTargetSeq${curVer}.2bit /gbdb/$db/targetDb/
 cut -f 1-10 ucscGenes.gp | genePredToFakePsl $tempDb stdin kgTargetAli.psl /dev/null
 hgLoadPsl -clientLoad $tempDb kgTargetAli.psl
 
+# NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
+
+# Drop tempDb history table and chromInfo, we don't want to swap them in!
+cd $dir
+hgsql -e "drop table history" $tempDb
+hgsql -e "drop table chromInfo" $tempDb
+hgsql -e "drop table trackDb_$user" $tempDb
 echo "show tables" | hgsql $tempDb | tail -n +2 > tablesInKnownGene.lst
 
-#if 0 # didn't do this first time through
-# NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
-# You'll need superuser powers for this step.....
-
 # Save old known genes and kgXref tables
-sudo ~kent/bin/copyMysqlTable $db knownGene $tempDb knownGeneOld$lastVer
-sudo ~kent/bin/copyMysqlTable $db kgXref $tempDb kgXrefOld$lastVer
+echo "create table knownGeneOld$lastVer like  $db.knownGene" | hgsql $tempDb
+echo "insert into knownGeneOld$lastVer select * from   $db.knownGene" | hgsql $tempDb
+echo "create table kgXrefOld$lastVer like  $db.kgXref" | hgsql $tempDb
+echo "insert into kgXrefOld$lastVer select * from   $db.kgXref" | hgsql $tempDb
 
 # Create backup database
 hgsqladmin create ${db}Backup
 
-# Drop tempDb history table and chromInfo, we don't want to swap them in!
-hgsql -e "drop table history" $tempDb
-hgsql -e "drop table chromInfo" $tempDb
-hgsql -e "drop table tableList" $tempDb
-
 # Swap in new tables, moving old tables to backup database.
-sudo ~kent/bin/swapInMysqlTempDb $tempDb $db ${db}Backup
+foreach i (`cat tablesInKnownGene.lst`)
+echo "rename table $db.$i to ${db}Backup.$i;" | hgsql $db;
+end
+foreach i (`cat tablesInKnownGene.lst`)
+echo "rename table $tempDb.$i to ${db}.$i;"  | hgsql $db
+end
 
-# Update database links.
-sudo rm /var/lib/mysql/uniProt
-sudo ln -s /var/lib/mysql/$spDb /var/lib/mysql/uniProt
-sudo rm /var/lib/mysql/proteome
-sudo ln -s /var/lib/mysql/$pbDb /var/lib/mysql/proteome
 hgsqladmin flush-tables
-
-#endif
 
 # Make full text index.  Takes a minute or so.  After this the genome browser
 # tracks display will work including the position search.  The genes details

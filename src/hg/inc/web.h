@@ -323,4 +323,6 @@ char *menuBarAddUiVars(char *oldString, char *cgiPrefix, char *uiVars);
 char *menuBar(struct cart *cart, char *db);
 // return HTML for the menu bar (read from a configuration file).
 
+void checkForGeoMirrorRedirect(struct cart *cart);
+// Implement Geo/IP based redirection
 #endif /* WEB_H */

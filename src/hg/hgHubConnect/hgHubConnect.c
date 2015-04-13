@@ -611,6 +611,9 @@ void doMiddle(struct cart *theCart)
 {
 cart = theCart;
 
+if(cgiIsOnWeb())
+    checkForGeoMirrorRedirect(cart);
+
 if (cartVarExists(cart, hgHubDoClear))
     {
     doClearHub(cart);

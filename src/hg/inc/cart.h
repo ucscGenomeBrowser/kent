@@ -578,5 +578,9 @@ void cartHubWarn(char *format, va_list args);
 void cartFlushHubWarnings();
 /* flush the hub errors (if any) */
 
+void cartCheckForCustomTracks(struct cart *cart, struct dyString *dyMessage);
+/* Scan cart for ctfile_<db> variables.  Tally up the databases that have
+ * live custom tracks and those that have expired custom tracks. */
+/* While we're at it, also look for saved blat results. */
 #endif /* CART_H */
 
