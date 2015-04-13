@@ -160,10 +160,21 @@ Sequence&quot; links. Click the &quot;Go to ... track controls&quot; link.
 There change the &quot;Color track by codons:&quot; option from &quot;OFF&quot;
 too &quot;genomic codons&quot; and be sure &quot;Display mode:&quot is &quot;full&quot;
 then click &quot;Submit&quot;.  Then zoom to a region where amino acids display,
-such as <tt>chr9:133,255,595-133,255,750</tt> and see how bigGenePred allows
-the display of codons. Return to the track controls page and click the box next
-to &quot;Show codon numbering&quot;. Return to the browser and zoom even
-further in on individual codons to see amino acid numbering.
+such as <tt>chr9:133,255,650-133,255,700</tt> and see how bigGenePred allows
+the display of codons. Click back into the track controls page and click the box next
+to &quot;Show codon numbering&quot;. Return to the browser to see amino acid
+numbering.</p>
+<p>
+You can also add a parameter in the custom track line,
+<tt>baseColorDefault=genomicCodons</tt>, to set the display of codons:
+<p>
+<tt>browser position chr10:67,884,600-67,884,900<br>
+track type=bigGenePred baseColorDefault=genomicCodons name="bigGenePred Example Two" description="A bigGenePred file" visibility=pack bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.bb
+</tt>
+<p>
+Paste the above into the hg38 <A HREF="../../cgi-bin/hgCustom?db=hg38">custom track</A>
+page to see an example of bigGenePred amino acid display around the beginning of the gene SIRT1
+on chromosome 10.</p>
 </p>
 
 <H3>Example Two</H3>
