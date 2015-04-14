@@ -44,28 +44,7 @@ if (link)                                                                  // wr
     htmlSetStyle(link);
 
 oldVars = hashNew(10);
-
-if (cgiVarExists("hgt.redirectTool"))
-    {
-    printf("Content-type: text/html\n\n");
-
-    cart = cartForSession(hUserCookie(), NULL, NULL);
-    printf("<html><body>\n");
-    printf("<form id=\"redirForm\" method=\"POST\" action=\"http://tefor.net/crisporMax/crispor.cgi\">\n");
-    printf("<input type=\"hidden\" name=\"pos\" value=\"%s\">", cartString(cart, "position"));
-    printf("<input type=\"hidden\" name=\"org\" value=\"%s\">", cartString(cart, "db"));
-    printf("<input type=\"hidden\" name=\"pam\" value=\"NGG\">\n");
-    // a hidden submit button, see
-    // http://stackoverflow.com/questions/477691/submitting-a-form-by-pressing-enter-without-a-submit-button
-    printf("<input type=\"submit\" style=\"position: absolute; left: -9999px; width: 1px; height: 1px;\">\n");
-    printf("</form>\n");
-    // a little javascript that clicks the submit button
-    printf("<script>document.getElementById(\"redirForm\").submit();</script>\n");
-    printf("</body></html>\n");
-    }
-else
-    cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
-
+cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
 if (measureTiming)
     measureTime("Time to write and close cart");
 if (measureTiming)
