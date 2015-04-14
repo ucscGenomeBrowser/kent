@@ -326,7 +326,31 @@ return TRUE;
 
 /********* Section for http protocol **********/
 
-static bool udcCacheEnabled(); // forward declaration
+static char *defaultDir = "/tmp/udcCache";
+
+char *udcDefaultDir()
+/* Get default directory for cache */
+{
+return defaultDir;
+}
+
+void udcSetDefaultDir(char *path)
+/* Set default directory for cache.  */
+{
+defaultDir = cloneString(path);
+}
+
+void udcDisableCache()
+/* Switch off caching. Re-enable with udcSetDefaultDir */
+{
+defaultDir = NULL;
+}
+
+static bool udcCacheEnabled()
+/* TRUE if caching is activated */
+{
+return (defaultDir != NULL);
+}
 
 int udcDataViaHttpOrFtp(char *url, bits64 offset, int size, void *buffer, struct connInfo *ci)
 /* Fetch a block of data of given size into buffer using url's protocol,
@@ -1660,32 +1684,6 @@ time_t deleteTime = time(NULL) - maxSeconds;
 bits64 result = rCleanup(deleteTime, testOnly);
 setCurrentDir(curPath);
 return result;
-}
-
-static char *defaultDir = "/tmp/udcCache";
-
-char *udcDefaultDir()
-/* Get default directory for cache */
-{
-return defaultDir;
-}
-
-void udcSetDefaultDir(char *path)
-/* Set default directory for cache.  */
-{
-defaultDir = cloneString(path);
-}
-
-void udcDisableCache()
-/* Switch off caching. Re-enable with udcSetDefaultDir */
-{
-defaultDir = NULL;
-}
-
-static bool udcCacheEnabled()
-/* TRUE if caching is activated */
-{
-return (defaultDir != NULL);
 }
 
 int udcCacheTimeout()
