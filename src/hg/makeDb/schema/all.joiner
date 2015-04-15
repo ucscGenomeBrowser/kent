@@ -2716,11 +2716,17 @@ identifier knownGeneId dependency
     $kgDb.kg3ToKg4.newId minCheck=0.5 exclude=
     $kgDb,!hg19.kg4ToKg5.newId minCheck=0.5 exclude=
     $kgDb,!mm10.kg5ToKg6.newId exclude=
-    $kgDb.kg6ToKg7.newId exclude=
+    $kgDb,!mm10.kg6ToKg7.newId exclude=
     $kgDb.kg7ToKg8.newId exclude=
     $kgDb,!hg16.kgTargetAli.qName full
     hg19.knownGeneTxMrna.name
     hg19.knownGeneTxPep.name
+
+identifier knownGeneOld7Id dependency
+"Previous UCSC Gene build"
+    $kgDb.knownGeneOld7.name
+    $kgDb.kg7ToKg8.oldId full
+    $kgDb.kgXrefOld7.kgID full
 
 identifier knownGeneOld6Id dependency
 "Previous UCSC Gene build"
