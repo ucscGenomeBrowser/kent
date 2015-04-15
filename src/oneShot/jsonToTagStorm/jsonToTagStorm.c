@@ -1,4 +1,4 @@
-/* jsonToTagStorm - Some example json output stuff. */
+/* jsonWriteTest - Some example json output stuff. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -10,10 +10,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "jsonToTagStorm - Convert a .json file into a .tagStorm file. The .json file"
-  " must be in a very specific format...\n"
+  "jsonToTagStorm - Convert a .tagStorm file into a .json file. No information is lost. \n"
   "usage:\n"
-  "   jsonToTagStorm in.json out.tags\n"
+  "   jsonWriteTest in.tags out.json\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -23,7 +22,6 @@ errAbort(
 static struct optionSpec options[] = {
    {NULL, 0},
 };
-
 
 void removePunctuation(char *s)
 /* Remove all punctuation in a string */
@@ -38,96 +36,59 @@ stripString(s," ");
 }
 
 
-void jsonToTagStorm(char *input, char *output)
-/* jsonToTagStorm - Some example json output stuff. */
+
+void beUgly(char *line)
+/* The code was getting so ugly I decided to embrace it. This function is ugly. 
+ * The function uses four for loops, each embedded into the other to split apart a
+ * .json single line file into name/value pairs for a tagstorm file. */
 {
-struct tagStorm *tags = tagStormNew(output);
+char *lineCopy = cloneString(line);
+int arraySize = countSeparatedItems(line, *"[");
+char *chopByArray[arraySize]; 
+chopString(lineCopy, "[", chopByArray, arraySize);
+int i;
+//printf("Before Loops %s\n", line);
+for (i = 0 ; i <= arraySize-1; ++i)
+    {
+    char *arrayLine = cloneString(chopByArray[i]);
+    int childrenSize = countSeparatedItems(arrayLine, *"{");
+    printf("End loop 1 %s, %i\n", arrayLine, childrenSize);
+    char *chopByChildren[childrenSize];
+    chopString (arrayLine, "{", chopByChildren, childrenSize);
+    int j;
+    for (j = 0 ; j <= childrenSize-1; ++j)
+        {
+	char *childrenLine = cloneString(chopByChildren[j]);
+	int commaSize = countSeparatedItems(childrenLine, *",");
+	char *chopByComma[commaSize];
+	//printf("End loop 2, %s, %i , %i\n", childrenLine, commaSize, j);
+	chopString (childrenLine, ",", chopByComma, commaSize);
+	int k;
+	for (k = 0 ; k <= commaSize-1; ++k)
+	    {
+	    char *commaLine = cloneString(chopByComma[k]);
+	    //printf("End loop 3, %s\n", commaLine);
+	    int colonSize = countSeparatedItems(commaLine, *":");
+	    char *chopByColon[colonSize];
+	    chopString (commaLine, ":", chopByColon, colonSize);
+	    }
+	}
+    }
+}
+void testFunction(char *line)
+{
+}
+
+void jsonWriteTest(char *input, char *output)
+/* jsonWriteTest - Some example json output stuff. */
+{
 struct lineFile *lf = lineFileOpen(input, TRUE);
 char *line;
 if (!lineFileNext(lf, &line, NULL))
     errAbort("There doesn't seem to be any text in this .json file, %s", input);
 char *lineCopy = cloneString(line);
-char *choppedLine[1024]; 
-int size = countSeparatedItems(line, *"[");
-chopString(lineCopy, "[", choppedLine, size);
-int i, index = 0;
-char *stanzas[1000]; 
-for (i = 0 ; i <= size-1; ++i)
-    {
-    char *newLine = cloneString(choppedLine[i]);
-    int newSize = countSeparatedItems(newLine, *"{");
-    char *newChoppedLine[1024];
-    chopString (newLine, "{", newChoppedLine, newSize);
-    int j;
-    for (j = 0 ; j <= newSize-1; ++j)
-        {
-	stanzas[index] = cloneString(newChoppedLine[j]);
-	++ index;
-	}
-    }
-int j;
-for (j = 0 ; j <= ArraySize(stanzas); ++j)
-    /* Each string that is processed in this loop corresponds to a complete
-     * tagStanza, this is helpful for keeping stanza's separate, but introduces
-     * an issue when going to a child stanza. This issue has not been addressed
-     * yet. This code seems to be working -Chris */
-    {
-    if (lastNonwhitespaceChar(stanzas[j]) == NULL) continue;
-    // Each string in nextChop contains a name value pair in the form
-    // "name": "value". 
-    int depth = 0;
-    int nextSize = countSeparatedItems(stanzas[j], *",");
-    int stanzaDepth = countSeparatedItems(stanzas[j], *"]");
-    char *nextChop[nextSize]; 
-    //printf("The current chomped line is  %s endSize is %d \n", stanzas[j], stanzaDepth);
-    chopString(cloneString(stanzas[j]), ",", nextChop, nextSize);
-    /* Ideally break by comma's, creating a list of name value pairs.
-     * This code is not working*/
-    int k;
-    //continue;
-    struct slPair *tagNameValue = NULL;
-    for (k = 0; k <= nextSize ; ++k)
-    	{
-	if (lastNonwhitespaceChar(nextChop[k]) == NULL) continue;
-	//printf("This is the thing I am looking at %s \n", nextChop[k]);
-	//continue;
-	int lastSize = countSeparatedItems(nextChop[k], *":"); 
-	char *finalChop[lastSize];
-	chopString(cloneString(nextChop[k]), ":", finalChop, lastSize);
-	removePunctuation(finalChop[0]);
-	if (lastNonwhitespaceChar(finalChop[1]) == NULL)
-	    {
-	    ++depth;
-	    continue;
-	    }
-	removePunctuation(finalChop[1]);
-    	slPairAdd(&tagNameValue, finalChop[0], finalChop[1]);
-	//printf("A final name value pair is %s , %s \n", finalChop[0], finalChop[1]); 
-	/* This breaks the samples apart into name value pairs, with a bunch of uneccessary 
-	 * punctuation. Also the 'children' name may not have a value */
-	}
-    /* Create a new tagStorm stanza here, also be ready for some real
-     * dificulties with stanza depth, try using the stanzaDepth int up above -Chris */ 
-    struct tagStanza *stanza= NULL;
-    if (depth == 0)
-        {
-        stanza = tagStanzaNewAtEnd(tags, NULL);
-	}
-    else 
-        {
-    	stanza = tagStanzaNewAtEnd(tags, tags->forest);
-        }
-    struct slPair *superTemp = NULL;
-    for (superTemp = tagNameValue ; superTemp != NULL ; superTemp = superTemp->next)
-        {
-        tagStanzaAdd(tags, stanza, superTemp->name, superTemp->val); 
-        }
-    -- stanzaDepth;
-    }
-
-FILE *f = mustOpen(output, "w");
-tagStormWrite(tags, output, 100);
-carefulClose(&f);
+testFunction("Hello World");
+beUgly(lineCopy);
 }
 
 int main(int argc, char *argv[])
@@ -136,6 +97,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-jsonToTagStorm(argv[1], argv[2]);
+jsonWriteTest(argv[1], argv[2]);
 return 0;
 }
