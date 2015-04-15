@@ -17,6 +17,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 #include "trackHub.h"
+#include "hubConnect.h"
 
 
 
@@ -978,7 +979,7 @@ if (hasIdentifiers || hasRegions)
      * causes it to inserts a $db. in front of the table name while leaving the primaryDb as the assembly. 
      * In effect, the table field is sometimes overloaded to carry this extra database for all tables support. */
     char *sep = strchr(primaryTable, '.');
-    if (sep)
+    if (!isHubTrack(primaryTable) && sep)
 	{
 	safecpy(split, sizeof split, primaryTable);
 	sep = strchr(split, '.');
