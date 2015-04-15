@@ -6020,6 +6020,14 @@ else
 	lf->extra = cloneString(lf->name);
 }
 
+void loadNcbiGene(struct track *tg)
+/* Load up RefSeq known genes. */
+{
+enum trackVisibility vis = tg->visibility;
+loadGenePredWithName2(tg);
+vis = limitVisibility(tg);
+}
+
 void loadRefGene(struct track *tg)
 /* Load up RefSeq known genes. */
 {
@@ -6174,6 +6182,15 @@ if (hTableExists(database,  "refSeqStatus"))
     return refGeneColorByStatus(tg, lf->name, hvg);
 else
     return(tg->ixColor);
+}
+
+void ncbiGeneMethods(struct track *tg)
+/* Make NCBI Genes track */
+{
+tg->loadItems = loadNcbiGene;
+tg->itemName = refGeneName;
+tg->mapItemName = refGeneMapName;
+tg->itemColor = refGeneColor;
 }
 
 void refGeneMethods(struct track *tg)
@@ -13266,6 +13283,7 @@ registerTrackHandler("decipher", decipherMethods);
 registerTrackHandler("rgdQtl", rgdQtlMethods);
 registerTrackHandler("rgdRatQtl", rgdQtlMethods);
 registerTrackHandler("refGene", refGeneMethods);
+registerTrackHandler("ncbiGene", ncbiGeneMethods);
 registerTrackHandler("rgdGene2", rgdGene2Methods);
 registerTrackHandler("blastMm6", blastMethods);
 registerTrackHandler("blastDm1FB", blastMethods);
