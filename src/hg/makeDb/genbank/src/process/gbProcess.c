@@ -463,7 +463,8 @@ static void hackSynClone()
 /* Make edits to synthetic clone entries that appear to be mRNAs to have a mol type of
  * mRNA (normally marked as DNA)  */
 {
-if (kvtGet(kvt, "gen") != NULL)
+/* if it has a gene symbol, or is a MGC or ORFeome clone, assume it's an mRNA */
+if ((kvtGet(kvt, "gen") != NULL) || isMgcFullLengthKeyword(kvtLookup(kvt, "key")) || isOrfeomeKeyword(kvtLookup(kvt, "key")))
     {
     struct keyVal *kv = kvtGet(kvt, "mol");
     if (kv != NULL)

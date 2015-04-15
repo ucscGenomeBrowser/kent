@@ -9,6 +9,7 @@
 #include "gbUpdate.h"
 #include "gbGenome.h"
 #include "hash.h"
+#include <regex.h>
 
 
 /* Directories */
@@ -385,6 +386,68 @@ if ((molType < 0) || (molType >= ArraySize(molTypeMappings)))
     errAbort("invalid molecule type number: %d", molType);
 return  molTypeMappings[molType].sym;
 }
+
+static void reComp(regex_t *preg, char* pattern)
+/* compile the regular expression or abort */
+{
+int e = regcomp(preg, pattern, REG_EXTENDED|REG_ICASE|REG_NOSUB);
+if (e != 0)
+    {
+    char errbuf[256];
+    regerror(e, preg, errbuf, sizeof(errbuf));
+    errAbort("can't compile regular expression: \"%s\": %s",
+             pattern, errbuf);
+    }
+}
+
+static boolean reMatches(regex_t *preg, char* str)
+/* determine if string matches regular expression */
+{
+int e = regexec(preg, str, 0, NULL, 0);
+if (e == 0)
+    return TRUE;
+else if (e == REG_NOMATCH)
+    return FALSE;
+else
+    {
+    char errbuf[256];
+    regerror(e, preg, errbuf, sizeof(errbuf));
+    errAbort("error executing regular expresion:: %s", errbuf);
+    return FALSE;
+    }
+}
+
+boolean isMgcFullLengthKeyword(char *keyword)
+/* determine if a keyword indicates an entry is a MGC clone. Keyword
+ * maybe NULL. */
+{
+/* Check for keyword to identify MGC genes.  Keywords
+ * end in `.' and are seperated by "; "  */
+static boolean first = TRUE;
+static regex_t keyRe;
+if (first)
+    {
+    reComp(&keyRe, "(^|.* )MGC(\\.$|;.*)");
+    first = FALSE;
+    }
+return (keyword != NULL) && reMatches(&keyRe, keyword);
+}
+
+boolean isOrfeomeKeyword(char *keyword)
+/* Determine if a keyword instances an entry is for an ORFeome. Keyword maybe
+ * NULL. */
+{
+/* keyword containing "ORFeome collaboration" */
+static boolean first = TRUE;
+static regex_t keyRe;
+if (first)
+    {
+    reComp(&keyRe, "(^|.* )ORFeome collaboration(\\.$|;.*)");
+    first = FALSE;
+    }
+return (keyword != NULL) && reMatches(&keyRe, keyword);
+}
+
 
 /*
  * Local Variables:
