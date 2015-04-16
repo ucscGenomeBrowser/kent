@@ -64,13 +64,26 @@
             <TABLE BGCOLOR="#fffee8" WIDTH="100%" CELLPADDING=0><TH HEIGHT=10></TH>
                 <TR><TD WIDTH=10></TD><TD>
 		    <P>
+
+                    <!--#if expr='"$SERVER_NAME" != /.*.ucsc.edu/ && "$SERVER_NAME"
+                    != /.*.sdsc.edu/ && "$SERVER_NAME" != /browser/'-->
+                    <!-- 'browser' = GBiB -->
+                    <B>This website <EM><!--#echo var="HTTP_HOST" --></EM> is a "mirror" not run by UCSC.</B><BR>
+                    Please try to contact the person that manages this mirror with questions.</BR>
+                    <P>
+                    <B>If you mail the UCSC mailing list, please include this mirror's address
+                    <EM>http://<!--#echo var="HTTP_HOST" --></EM> with any questions.</B>
+                    </P>
+                    <!--#else -->
+                    <!--#endif -->
+
         	    Before posting a question, we strongly encourage you to search our mailing list 
 		    archives, our website, and our wiki for the answer. To expedite technical 
 		    support, questions and problem reports must adhere to our 
 		    <A HREF="FAQ/FAQmaillist.html">technical support guidelines</A>. 
 		    PLoS Computational Biology has published a good set of 
 		    <A HREF="http://www.ploscompbiol.org/article/info:doi%2F10.1371%2Fjournal.pcbi.1002202"
-		    TARGET=_blank">guidelines</A> for seeking online scientific help.
+		    TARGET="_blank">guidelines</A> for seeking online scientific help.
 		    In particular, when sending us a specific browser screenshot, we recommend 
 		    that you use our <a href="cgi-bin/hgSession">Session</a> tool to create 
 		    a link that fully captures the browser settings. Be sure to removed the
