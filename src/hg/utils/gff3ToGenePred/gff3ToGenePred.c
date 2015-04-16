@@ -19,6 +19,8 @@ errAbort(
   "usage:\n"
   "   gff3ToGenePred inGff3 outGp\n"
   "options:\n"
+  "  -warnAndContinue - on bad genePreds, put out warning but continue\n"
+  "  -useName - rather than using 'id' as names, use the 'name' tag\n"
   "  -maxParseErrors=50 - Maximum number of parsing errors before aborting. A negative\n"
   "   value will allow an unlimited number of errors.  Default is 50.\n"
   "  -maxConvertErrors=50 - Maximum number of conversion errors before aborting. A negative\n"
@@ -48,9 +50,13 @@ errAbort(
 static struct optionSpec options[] = {
     {"maxParseErrors", OPTION_INT},
     {"maxConvertErrors", OPTION_INT},
+    {"warnAndContinue", OPTION_BOOLEAN},
+    {"useName", OPTION_BOOLEAN},
     {"honorStartStopCodons", OPTION_BOOLEAN},
     {NULL, 0},
 };
+static boolean useName = FALSE;
+static boolean warnAndContinue = FALSE;
 static boolean honorStartStopCodons = FALSE;
 static int maxParseErrors = 50;  // maximum number of errors during parse
 static int maxConvertErrors = 50;  // maximum number of errors during conversion
@@ -160,10 +166,12 @@ if ((mrna->strand == NULL) || (mrna->strand[0] == '?'))
     return NULL;
     }
 
-struct genePred *gp = genePredNew(mrna->id, mrna->seqid, mrna->strand[0],
+char *name = (useName ? mrna->name : mrna->id);
+char *name2 = (useName ? gene->name : gene->id);
+struct genePred *gp = genePredNew(name, mrna->seqid, mrna->strand[0],
                                   txStart, txEnd, cdsStart, cdsEnd,
                                   genePredAllFlds, slCount(exons));
-gp->name2 = cloneString(gene->id);
+gp->name2 = cloneString(name2);
 
 // set start/end status based on codon features if requested
 if (honorStartStopCodons)
@@ -182,9 +190,20 @@ static void outputGenePredAndFree(FILE *gpFh, struct genePred *gp)
 /* validate and output a genePred and free it */
 {
 // output before checking so it can be examined
-genePredTabOut(gp, gpFh);
-if (genePredCheck("GFF3 convert to genePred", stderr, -1, gp) != 0)
-    cnvError("invalid genePred created for: %s", gp->name);
+int ret = genePredCheck("GFF3 convert to genePred", stderr, -1, gp);
+if (warnAndContinue)
+    {
+    if (ret == 0)
+	genePredTabOut(gp, gpFh);
+    else
+	warn("dropping genePred: %s", gp->name);
+    }
+else
+    {
+    genePredTabOut(gp, gpFh);
+    if (ret != 0)
+	cnvError("invalid genePred created for: %s", gp->name);
+    }
 genePredFree(&gp);
 }
 
@@ -223,7 +242,9 @@ for (blk = blks; blk != NULL; prevBlk = blk, blk = blk->next)
 static int findCdsExon(struct genePred *gp, struct gff3Ann *cds, int iExon)
 /* search for the exon containing the CDS, starting with iExon+1, return -1 on error */
 {
-for (iExon++; iExon < gp->exonCount; iExon++)
+// don't use cached iExon.  Will fail on ribosomal frame-shifted genes
+// see NM_015068.
+for (iExon=0; iExon < gp->exonCount; iExon++)
     {
     if ((gp->exonStarts[iExon] <= cds->start) && (cds->end <= gp->exonEnds[iExon]))
         return iExon;
@@ -352,6 +373,8 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 
+warnAndContinue = optionExists("warnAndContinue");
+useName = optionExists("useName");
 maxParseErrors = optionInt("maxParseErrors", maxParseErrors);
 if (maxParseErrors < 0)
     maxParseErrors = INT_MAX;

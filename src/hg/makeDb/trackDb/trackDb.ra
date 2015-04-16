@@ -2898,6 +2898,20 @@ compositeTrack on
         mouseOverField comments
         noScoreFilter on
 
+track ncbiGene
+shortLabel NCBI Genes
+longLabel NCBI Gene Annotations 
+group genes
+visibility pack
+priority 1
+color 12,12,120
+type genePred 
+baseColorUseCds given
+baseColorDefault genomicCodons
+#itemDetailsHtmlTable geneDesc
+#url http://mupit-ebola.icm.jhu.edu/ResidueFileUpload?residues=chr1%20%[
+#urlLabel muPIT protein structures
+
 #        track ucscGenePfam
 #        shortLabel Pfam in UCSC Gene
 #        longLabel Pfam Domains in UCSC Genes
@@ -2928,4 +2942,12 @@ searchType bed
 termRegex ^[a-zA-Z0-9]+([a-zA-Z0-9:/.-]+[a-zA-Z0-9:/.-_%]+)*
 searchMethod fuzzy
 searchPriority 50
+
+searchName ncbiGeneAcc
+searchTable ncbiGene
+searchMethod exact
+searchType genePred
+#semiShortCircuit 1
+termRegex (N|X)(M|R)_[0-9]{6}[0-9]*.[0-9]*
+searchPriority 9.5
 

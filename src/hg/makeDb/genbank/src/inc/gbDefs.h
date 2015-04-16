@@ -189,6 +189,15 @@ enum molType gbParseMolType(char* molTypeStr);
 char* gbMolTypeSym(enum molType molType);
 /* return symbolic molecule type */
 
+boolean isMgcFullLengthKeyword(char *keyword);
+/* determine if a keyword indicates an entry is a MGC clone. Keyword
+ * maybe NULL. */
+
+boolean isOrfeomeKeyword(char *keyword);
+/* Determine if a keyword instances an entry is for an ORFeome. Keyword maybe
+ * NULL. */
+
+
 #endif
 /*
  * Local Variables:
