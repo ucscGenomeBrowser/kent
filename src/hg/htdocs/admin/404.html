@@ -32,6 +32,18 @@
                 <TR><TD WIDTH=10>&nbsp;</TD><TD>
 		  <P>
  		  The page you requested was not found.
+
+                    <!--#if expr='"$SERVER_NAME" != /.*.ucsc.edu/ && "$SERVER_NAME"
+                    != /.*.sdsc.edu/ && "$SERVER_NAME" != /browser/'-->
+                    <!-- 'browser' = GBiB -->
+                    <B>This website <EM><!--#echo var="HTTP_HOST" --></EM> is a "mirror" not run by UCSC.</B><BR>
+                    Please try to contact the person that manages this mirror with questions.</BR>
+                    <P>
+                    <B>If you mail the UCSC mailing list, please include this mirror's address
+                    <EM>http://<!--#echo var="HTTP_HOST" --></EM> with any questions.</B>
+                    </P>
+                    <!--#else -->
+
 		  <P> 
  		  This error has been logged. We frequently check the logs for
 		  this type of error to pinpoint problems with our website. 
@@ -39,6 +51,7 @@
 		  what led to this error, please email us at 
 		  <A HREF="mailto:&#103;&#101;&#110;&#111;&#109;&#101;&#45;ww&#119;&#64;&#115;o&#101;.&#117;c&#115;&#99;.&#101;&#100;&#117;">&#103;&#101;&#110;&#111;&#109;&#101;&#45;ww&#119;&#64;&#115;o&#101;.&#117;c&#115;&#99;.&#101;&#100;&#117;</A>.
 		  <!-- above address is genome-www at soe.ucsc.edu -->
+                    <!--#endif -->
        	        </TD><TD WIDTH=15></TD></TR>
 	      </TABLE>
             <BR></TD></TR>
