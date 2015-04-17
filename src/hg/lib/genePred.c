@@ -1551,6 +1551,10 @@ int genePredCheck(char *desc, FILE* errFh, int chromSize, struct genePred* gp)
 {
 int iExon;
 int errorCnt = 0;
+
+if (gp->name == NULL)
+    gpError(errFh, &errorCnt, "%s: name is null", desc);
+
 if (!(sameString(gp->strand, "+") || sameString(gp->strand, "-")))
     gpError(errFh, &errorCnt, "%s: %s invalid strand: \"%s\"", desc, gp->name, gp->strand);
 

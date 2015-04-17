@@ -124,11 +124,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         {
 	slAddHead(&newList, tdb);
 	}
-    else if (hTableOrSplitExists(db, tdb->table))
-        {
-	slAddHead(&newList, tdb);
-	}
-    else if (tdbIsDownloadsOnly(tdb))
+    else if (trackDataAccessible(db, tdb) || tdbIsDownloadsOnly(tdb))
         {
         slAddHead(&newList, tdb);
         }

@@ -489,6 +489,12 @@ char *hBrowserName();
 boolean hTrackOnChrom(struct trackDb *tdb, char *chrom);
 /* Return TRUE if track exists on this chromosome. */
 
+boolean trackDataAccessible(char *database, struct trackDb *tdb);
+/* Return TRUE if underlying data are accessible - meaning the track has either
+ * a bigDataUrl with remote URL (http:// etc), a bigDataUrl with an existing local file,
+ * or a database table with the same name.
+ * Note: this returns FALSE for composite tracks; use this on subtracks or simple tracks. */
+
 struct trackDb *trackDbPolishAfterLinkup(struct trackDb *tdbList, char *db);
 /* Do various massaging that can only be done after parent/child
  * relationships are established. */
