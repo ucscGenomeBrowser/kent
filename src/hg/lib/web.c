@@ -1464,7 +1464,7 @@ if (thisNodeStr)   // if geo-mirroring is enabled
 	    "<ul style=\"margin:5px;\">",
 	    newDomain);
 	    
-	    printf("<li>User settings (sessions and custom tracks) will differ between sites."
+	    printf("<li>User settings (sessions and custom tracks) <B>will differ</B> between sites."
 		"<idiv style=\"float:right;\"><a href=\"../goldenPath/help/genomeEuro.html#sessions\">Read more.</a></idiv>");
 	    printf("<li>Take me to  <a href=\"%s\">%s</a> </li>",
 		newUri, newDomain);
