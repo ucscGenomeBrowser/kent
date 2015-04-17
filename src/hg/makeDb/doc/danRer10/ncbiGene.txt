@@ -1,0 +1,34 @@
+
+# download and load ncbiGene track
+
+db=danRer10
+mkdir  /cluster/data/genomes/$db/bed/ncbiGene
+cd  /cluster/data/genomes/$db/bed/ncbiGene
+
+ftpFile=ftp://ftp.ncbi.nlm.nih.gov/genomes/D_rerio/GFF/ref_GRCz10_top_level.gff3.gz
+gff3File=`basename $ftpFile`
+
+echo "select * from ucscToRefSeq" | hgsql $db | tail -n +2 | awk '{print 0, $4, $3, $1, $3}' > refSeqToUcsc.lft
+wget $ftpFile
+
+/cluster/home/braney/bin/x86_64/gff3ToGenePred -useName -warnAndContinue $gff3File stdout 2> convertErr.txt | liftUp -type=.gp -extGenePred lift.gp refSeqToUcsc.lft warn  stdin 2> liftErr.txt
+wc -l lift.gp
+# 54816 lift.gp
+
+egrep "^N(M|R)" lift.gp > curated.gp
+egrep "^X(M|R)" lift.gp > predicted.gp
+
+wc -l curated.gp predicted.gp
+#    15130 curated.gp
+#    39686 predicted.gp
+#    54816 total
+
+grep dropping convertErr.txt | wc -l
+#    387
+
+awk '/isn/ {print $1}' liftErr.txt | sort -u
+# nothing
+
+hgLoadGenePred -genePredExt $db ncbiRefCurated curated.gp
+hgLoadGenePred -genePredExt $db ncbiRefPredicted predicted.gp
+
