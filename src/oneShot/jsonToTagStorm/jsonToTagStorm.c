@@ -1,4 +1,5 @@
-/* jsonToTagStorm - Some example json output stuff. */
+/* jsonToTagStorm - Converts json format files into tagStorm format files.  Json array names are
+ * not represented in tagStorm format and will be lost. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -11,11 +12,9 @@ void usage()
 {
 errAbort(
   "jsonToTagStorm - Convert a .json file into a .tagStorm file. The .json file"
-  " must be in a very specific format...\n"
+  " must adhere to .json convention, multiple lines .json files are allowed. \n"
   "usage:\n"
   "   jsonToTagStorm in.json out.tags\n"
-  "options:\n"
-  "   -xxx=XXX\n"
   );
 }
 
@@ -26,7 +25,7 @@ static struct optionSpec options[] = {
 
 
 void removePunctuation(char *s)
-/* Remove all punctuation in a string */
+/* Remove all unwanted  punctuation in a string */
 {
 stripString(s,"\"");
 stripString(s,"]");
@@ -39,6 +38,7 @@ stripString(s," ");
 
 
 void prettyPrint(char *name, char *value, int depth, FILE *f)
+/* Print the name value tag to the corresponding depth */
 {
 int i;
 for (i = 0; i < depth; ++i)
@@ -49,12 +49,12 @@ fprintf(f,"%s %s\n", name, value);
 }
 
 
-void beLessUgly(char *line, FILE *f)
-/* The code was getting so ugly I decided to embrace it. This function is ugly. 
- * The function uses four for loops, each embedded into the other to split apart a
+void parseJson(char *line, FILE *f)
+ /* This function uses three embedded 'for' loops to split apart a
  * .json single line file into name/value pairs for a tagstorm file. */
 {
 int arraySize = chopString(line, "[", NULL, 0);
+// First break the string apart by arrays
 char *chopByArray[arraySize]; 
 chopString(line, "[", chopByArray, arraySize);
 int i;
@@ -63,18 +63,23 @@ for (i = 0 ; i < arraySize; ++i)
     {
     char *arrayLine = chopByArray[i];
     int childrenSize = chopString(arrayLine, "{", NULL, 0);
+    // Break the arrays apart into objects
     char *chopByChildren[childrenSize];
     chopString (arrayLine, "{", chopByChildren, childrenSize);
     int j;
     for (j = 1 ; j < childrenSize; ++j)
+	// Iterate over the objects, at this point each object 
+	// contains the information required for a single tagStorm stanza. 
         {
 	char *childrenLine = chopByChildren[j];
 	int commaSize = countSeparatedItems(childrenLine, ',');
+	// Break the list of name values apart 
 	char *chopByComma[commaSize];
 	int updateDepth = countSeparatedItems(childrenLine, ']') - 1;
 	chopString (childrenLine, ",", chopByComma, commaSize);
 	int k;
 	for (k = 0 ; k < commaSize; ++k)
+	    //Iterate over all the name value pairs in a given stanza 
 	    {
 	    char *commaLine = chopByComma[k];
 	    int colonSize = countSeparatedItems(commaLine, ':');
@@ -85,30 +90,40 @@ for (i = 0 ; i < arraySize; ++i)
 	    removePunctuation(chopByColon[0]);
 	    removePunctuation(chopByColon[1]);
 	    if (lastNonwhitespaceChar(chopByColon[1])==NULL)
+	        //Ignore array names, they are not represented in tagStorm format. However 
+		//opening an array signifies an increase in depth. 
 	        {
 		++depth; 
 		continue;
 		}
 	    prettyPrint(chopByColon[0], chopByColon[1], depth, f);
 	    }
-	depth -= updateDepth; 
+	depth -= updateDepth;
+	// Update the depth after each stanza is printed
 	fprintf(f,"\n");
+	// Print a newline after each stanza
 	}
     }
 }
 
 
-
-
 void jsonToTagStorm(char *input, char *output)
-/* jsonToTagStorm - Some example json output stuff. */
+/* jsonToTagStorm - Converts .json files into .tagStorm files */
 {
-struct lineFile *lf = lineFileOpen(input, TRUE);
+
+char cmd[1024];
+safef(cmd, 1024, "perl -wpe 's/\\n//' %s > true%s", input, input);
+mustSystem(cmd);
+char cleanup[512], trueFile[512];
+safef(cleanup, 512, "rm true%s", input);
+safef(trueFile, 512, "true%s", input);
+struct lineFile *lf = lineFileOpen(trueFile, TRUE);
 char *line;
 if (!lineFileNext(lf, &line, NULL))
     errAbort("There doesn't seem to be any text in this .json file, %s", input);
 FILE *f = mustOpen(output, "w");
-beLessUgly(line, f);
+mustSystem(cleanup);
+parseJson(line, f);
 }
 
 int main(int argc, char *argv[])
