@@ -27,9 +27,9 @@ static struct optionSpec options[] = {
 void removePunctuation(char *s)
 /* Remove the remaining unwanted punctuation in a string */
 {
-stripString(s,"\"");
-stripString(s,"]");
-stripString(s,"}");
+stripChar(s,"\"");
+stripChar(s,"]");
+stripChar(s,"}");
 }
 
 
