@@ -2899,8 +2899,8 @@ compositeTrack on
         noScoreFilter on
 
 track ncbiGene
-shortLabel NCBI Genes
-longLabel NCBI Gene Annotations 
+shortLabel NCBI RefSeq
+longLabel NCBI RefSeq Genes
 compositeTrack on
 group genes
 visibility hide
