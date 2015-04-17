@@ -1455,27 +1455,22 @@ if (thisNodeStr)   // if geo-mirroring is enabled
 		cgiServerHttpsIsOn() ? "s" : "", oldDomain, port, uri, sep, oldDomain);
             safef(newUri, newUriSize, "http%s://%s:%s%s%sredirect=manual&source=%s", 
 		cgiServerHttpsIsOn() ? "s" : "", newDomain, port, uri, sep, oldDomain);
-        struct dyString *dy = dyStringNew(256);
 
-	cartCheckForCustomTracks(cart, dy);
-	printf("<TR><TD COLSPAN=3 id='redirectTd' onclick=\"javascript:document.getElementById('redirectTd').innerHTML='';\">"
+	    printf("<TR><TD COLSPAN=3 id='redirectTd' onclick=\"javascript:document.getElementById('redirectTd').innerHTML='';\">"
 	    "<div style=\"margin: 10px 25%%; border-style:solid; border-width:thin; border-color:#97D897;\">"
 	    "<h3 style=\"background-color: #97D897; text-align: left; margin-top:0px; margin-bottom:0px;\">"
 	    "&nbsp;You might want to navigate to your nearest mirror - %s"
-	    "<idiv style=\"float:right;\">[x]</idiv>"
 	    "</h3> "
-	    "<ul style=\"margin:5px;\">"
-	    "<li>Take me to  <a href=\"%s\">%s</a>"
-	    "<idiv style=\"float:right;\"><a href=\"../goldenPath/help/genomeEuro.html\">What is this?</a></idiv>"
-	    "</li>",
-	    newDomain, newUri, newDomain);
+	    "<ul style=\"margin:5px;\">",
+	    newDomain);
 	    
-	printf("<li>Let me stay here   <a href=\"%s\">%s</a>"
-	    "</ul>"
-	    "</div>"
-	    "</TD></TR>\n",
-	    oldUri, oldDomain );
-	printf("%s\n", dy->string);
+	    printf("<li>User settings (sessions and custom tracks) will differ between sites."
+		"<idiv style=\"float:right;\"><a href=\"../goldenPath/help/genomeEuro.html#sessions\">Read more.</a></idiv>");
+	    printf("<li>Take me to  <a href=\"%s\">%s</a> </li>",
+		newUri, newDomain);
+	    printf("<li>Let me stay here   <a href=\"%s\">%s</a>",
+		oldUri, oldDomain );
+	    printf("</div></TD></TR>\n");
             exit(0);
             }
         hDisconnectCentral(&centralConn);
