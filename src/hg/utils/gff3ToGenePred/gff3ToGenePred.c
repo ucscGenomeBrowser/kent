@@ -28,9 +28,9 @@ errAbort(
   "  -honorStartStopCodons - only set CDS start/stop status to complete if there are\n"
   "   corresponding start_stop codon records\n"
   "This converts:\n"
-  "   - top-level gene records with mRNA records\n"
-  "   - top-level mRNA records\n"
-  "   - mRNA records that contain:\n"
+  "   - top-level gene records with RNA records\n"
+  "   - top-level RNA records\n"
+  "   - RNA records that contain:\n"
   "       - exon and CDS\n"
   "       - CDS, five_prime_UTR, three_prime_UTR\n"
   "       - only exon for non-coding\n"
@@ -38,6 +38,8 @@ errAbort(
   "   - top-level transcript records\n"
   "   - transcript records that contain:\n"
   "       - exon\n"
+  "where RNA can be mRNA, ncRNA, or rRNA, and transcript can be either\n"
+  "transcript or primary_transcript\n"
   "The first step is to parse GFF3 file, up to 50 errors are reported before\n"
   "aborting.  If the GFF3 files is successfully parse, it is converted to gene,\n"
   "annotation.  Up to 50 conversion errors are reported before aborting.\n"
@@ -302,6 +304,16 @@ slFreeList(&cdsUtrBlks);
 return gp;  // NULL if error above
 }
 
+static int shouldProcess( struct gff3Ann *node)
+/* decide if we should process this feature */
+{
+return sameString(node->type, gff3FeatMRna) 
+    || sameString(node->type, gff3FeatNCRna)
+    || sameString(node->type, gff3FeatRRna)
+    || sameString(node->type, gff3FeatTranscript)
+    || sameString(node->type, gff3FeatPrimaryTranscript);
+}
+
 static void processMRna(FILE *gpFh, struct gff3Ann *gene, struct gff3Ann *mrna, struct hash *processed)
 /* process a mRNA/transcript node in the tree; gene can be NULL. Error count increment on error and genePred discarded */
 {
@@ -320,7 +332,7 @@ recProcessed(processed, gene);
 struct gff3AnnRef *child;
 for (child = gene->children; child != NULL; child = child->next)
     {
-    if ((sameString(child->ann->type, gff3FeatMRna) || sameString(child->ann->type, gff3FeatTranscript))
+    if (shouldProcess(child->ann) 
         && !isProcessed(processed, child->ann))
         processMRna(gpFh, gene, child->ann, processed);
     if (convertErrCnt >= maxConvertErrors)
@@ -335,7 +347,7 @@ recProcessed(processed, node);
 
 if (sameString(node->type, gff3FeatGene))
     processGene(gpFh, node, processed);
-else if (sameString(node->type, gff3FeatMRna) || sameString(node->type, gff3FeatTranscript))
+else if (shouldProcess(node))
     processMRna(gpFh, NULL, node, processed);
 }
 
