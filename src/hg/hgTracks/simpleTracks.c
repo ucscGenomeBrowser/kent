@@ -5835,13 +5835,22 @@ void lookupRefNames(struct track *tg)
 {
 struct linkedFeatures *lf;
 struct sqlConnection *conn = hAllocConn(database);
-boolean isNative = sameString(tg->table, "refGene");
+boolean isNative = !sameString(tg->table, "xenoRefGene");
 boolean labelStarted = FALSE;
 boolean useGeneName = FALSE;
 boolean useAcc =  FALSE;
 boolean useMim =  FALSE;
+char trackLabel[1024];
+char *labelString = tg->table;
+boolean isRefGene = TRUE;
+if (sameString(labelString, "ncbiRefCurated") || sameString(labelString, "ncbiRefPredicted"))
+    {
+    labelString="ncbiGene";
+    isRefGene = FALSE;
+    }
+safef(trackLabel, sizeof trackLabel, "%s.label", labelString);
 
-struct hashEl *refGeneLabels = cartFindPrefix(cart, (isNative ? "refGene.label" : "xenoRefGene.label"));
+struct hashEl *refGeneLabels = cartFindPrefix(cart, trackLabel);
 struct hashEl *label;
 char omimLabel[48];
 safef(omimLabel, sizeof(omimLabel), "omim%s", cartString(cart, "db"));
@@ -5849,9 +5858,6 @@ safef(omimLabel, sizeof(omimLabel), "omim%s", cartString(cart, "db"));
 if (refGeneLabels == NULL)
     {
     useGeneName = TRUE; /* default to gene name */
-    /* set cart to match what doing */
-    if (isNative) cartSetBoolean(cart, "refGene.label.gene", TRUE);
-    else cartSetBoolean(cart, "xenoRefGene.label.gene", TRUE);
     }
 for (label = refGeneLabels; label != NULL; label = label->next)
     {
@@ -5866,7 +5872,6 @@ for (label = refGeneLabels; label != NULL; label = label->next)
              !endsWith(label->name, omimLabel) )
         {
         useGeneName = TRUE;
-        cartRemove(cart, label->name);
         }
     }
 
@@ -5882,7 +5887,11 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
         }
     if (useGeneName)
         {
-        char *gene = getGeneName(conn, lf->name);
+        char *gene;
+        if  (isRefGene)
+            gene = getGeneName(conn, lf->name);
+        else
+            gene = lf->extra;
         if (gene != NULL)
             {
             dyStringAppend(name, gene);
@@ -6025,6 +6034,8 @@ void loadNcbiGene(struct track *tg)
 {
 enum trackVisibility vis = tg->visibility;
 loadGenePredWithName2(tg);
+if (vis != tvDense)
+    lookupRefNames(tg);
 vis = limitVisibility(tg);
 }
 
