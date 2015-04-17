@@ -25,15 +25,11 @@ static struct optionSpec options[] = {
 
 
 void removePunctuation(char *s)
-/* Remove all unwanted  punctuation in a string */
+/* Remove the remaining unwanted punctuation in a string */
 {
 stripString(s,"\"");
 stripString(s,"]");
 stripString(s,"}");
-stripString(s,"[");
-stripString(s,"{");
-stripString(s,",");
-stripString(s," ");
 }
 
 
@@ -59,7 +55,7 @@ char *chopByArray[arraySize];
 chopString(line, "[", chopByArray, arraySize);
 int i;
 int depth = 0;
-for (i = 0 ; i < arraySize; ++i)
+for (i = 1 ; i < arraySize; ++i)
     {
     char *arrayLine = chopByArray[i];
     int childrenSize = chopString(arrayLine, "{", NULL, 0);
@@ -67,7 +63,7 @@ for (i = 0 ; i < arraySize; ++i)
     char *chopByChildren[childrenSize];
     chopString (arrayLine, "{", chopByChildren, childrenSize);
     int j;
-    for (j = 1 ; j < childrenSize; ++j)
+    for (j = 0 ; j < childrenSize; ++j)
 	// Iterate over the objects, at this point each object 
 	// contains the information required for a single tagStorm stanza. 
         {
@@ -78,6 +74,7 @@ for (i = 0 ; i < arraySize; ++i)
 	int updateDepth = countSeparatedItems(childrenLine, ']') - 1;
 	chopString (childrenLine, ",", chopByComma, commaSize);
 	int k;
+	bool newArray = FALSE; 
 	for (k = 0 ; k < commaSize; ++k)
 	    //Iterate over all the name value pairs in a given stanza 
 	    {
@@ -94,13 +91,14 @@ for (i = 0 ; i < arraySize; ++i)
 		//opening an array signifies an increase in depth. 
 	        {
 		++depth; 
+		newArray = TRUE; 
 		continue;
 		}
-	    prettyPrint(chopByColon[0], chopByColon[1], depth, f);
+	    prettyPrint(trimSpaces(chopByColon[0]), trimSpaces(chopByColon[1]), depth, f);
 	    }
 	depth -= updateDepth;
 	// Update the depth after each stanza is printed
-	fprintf(f,"\n");
+	if (!newArray) fprintf(f,"\n");
 	// Print a newline after each stanza
 	}
     }
@@ -110,7 +108,6 @@ for (i = 0 ; i < arraySize; ++i)
 void jsonToTagStorm(char *input, char *output)
 /* jsonToTagStorm - Converts .json files into .tagStorm files */
 {
-
 char cmd[1024];
 safef(cmd, 1024, "perl -wpe 's/\\n//' %s > true%s", input, input);
 mustSystem(cmd);
