@@ -1329,7 +1329,7 @@ sleep 4
 	    -db=tarSyr2 phyloP20way > histogram.data 2>&1
     # real    6m48.616s
 
-    # find out the Y range for the 2:5 graph
+    # find the Y range for the 2:5 graph
     grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin \
       | sed -e 's/^/# /;'
 # Q1 0.000000
@@ -1342,7 +1342,7 @@ sleep 4
 # total 0.999981
 # standard deviation 0.003201
 
-    # find out the X range for the 2:5 graph
+    # find the X range for the 2:5 graph
     grep "^[0-9]" histogram.data | ave -col=2 stdin \
       | sed -e 's/^/# /;'
 # Q1 -10.446000
@@ -1438,8 +1438,6 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     ln -s `pwd`/*.gz `pwd`/*.mod `pwd`/*.bw `pwd`/*.txt \
       /usr/local/apache/htdocs-hgdownload/goldenPath/tarSyr2/phastCons20way
 
-XXX - need to edit the README.txt - Tue Apr 14 21:49:18 PDT 2015
-
     #####################################################################
     cd /hive/data/genomes/tarSyr2/bed/multiz20way/downloads/phyloP20way
 
@@ -1455,8 +1453,6 @@ XXX - need to edit the README.txt - Tue Apr 14 21:49:18 PDT 2015
     #   situation
     ln -s `pwd`/* \
       /usr/local/apache/htdocs-hgdownload/goldenPath/tarSyr2/phyloP20way
-
-XXX - need to edit the README.txt - Tue Apr 14 21:49:18 PDT 2015
 
     ###########################################################################
     ## create upstream refGene maf files
@@ -1475,8 +1471,7 @@ do
         | gzip -c > upstream${S}.${geneTbl}.maf.gz
     echo "done upstream${S}.${geneTbl}.maf.gz"
 done
-    #   real    68m14.920s
-
+    #   real    82m21.917s
 
     md5sum upstream*.gz >> md5sum.txt
 
