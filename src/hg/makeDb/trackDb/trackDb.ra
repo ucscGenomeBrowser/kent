@@ -2898,6 +2898,17 @@ compositeTrack on
         mouseOverField comments
         noScoreFilter on
 
+track ncbiRefOverlap
+shortLabel NCBI Overlaps
+longLabel NCBI Gene Annotations with Exon Overlaps
+group genes
+visibility pack
+priority 1
+color 12,12,120
+type genePred 
+baseColorUseCds given
+baseColorDefault genomicCodons
+
 track ncbiGene
 shortLabel NCBI RefSeq
 longLabel NCBI RefSeq Genes
