@@ -1,60 +1,60 @@
-track cons17way
+track cons20way
 compositeTrack on
-shortLabel Cons Primates
-longLabel Primates Multiz Alignment & Conservation (17 Species)
+shortLabel Conservation
+longLabel Multiz Alignment & Conservation (20 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
-visibility hide
+visibility full
 priority 1
 type bed 4
 group compGeno
 
-    track cons17wayViewalign
+    track cons20wayViewalign
     shortLabel Multiz Alignments
     view align
     visibility pack
     viewUi on
-    subTrack cons17way
+    subTrack cons20way
 
-        track multiz17way
-        subTrack cons17wayViewalign on
+        track multiz20way
+        subTrack cons20wayViewalign on
         shortLabel Multiz Align
-        longLabel Multiz Alignments of 17 Primates
+        longLabel Multiz Alignments of 17 Primates plus three mammals
         subGroups view=align
         noInherit on
         irows on
-        summary multiz17waySummary
-        frames multiz17wayFrames
+        summary multiz20waySummary
+        frames multiz20wayFrames
         group compGeno
         color 0, 10, 100
         altColor 0,90,10
         type wigMaf 0.0 1.0
-        speciesCodonDefault hg38
+        speciesCodonDefault tarSyr2
         speciesGroups Primates
-        sGroup_Primates panTro4 panPan1 gorGor3 ponAbe2 nomLeu3 macFas5 rhiRox1 papAnu2 nasLar1 rheMac3 chlSab2 saiBol1 calJac3 micMur1 tarSyr2 otoGar3
+        sGroup_Primates panPan1 gorGor3 ponAbe2 nomLeu3 panTro4 macFas5 papAnu2 rheMac3 rhiRox1 chlSab2 nasLar1 hg38 saiBol1 micMur1 calJac3 otoGar3 tupBel1 canFam3 mm10
         itemFirstCharCase noChange
-        treeImage phylo/hg38_17way.png
+        treeImage phylo/tarSyr2_20way.png
         priority 100
 
     # PhyloP conservation
-    track cons17wayViewphyloP
+    track cons20wayViewphyloP
     shortLabel Basewise Conservation (phyloP)
     view phyloP
     visibility full
-    subTrack cons17way
-    viewLimits -3:0.5
-    viewLimitsMax -4.611:0.934
+    subTrack cons20way
+    viewLimits -16:0.9
+    viewLimitsMax -15.955:0.892
 
-        track phyloP17way
-        subTrack cons17wayViewphyloP off
+        track phyloP20way
+        subTrack cons20wayViewphyloP off
         subGroups view=phyloP
-        shortLabel 17 Primates Cons
-        longLabel 17 primates Basewise Conservation by PhyloP
+        shortLabel 20-way Cons
+        longLabel 17 primates plus three mammals Basewise Conservation by PhyloP
         noInherit on
         configurable on
-        type wig -4.711 0.934
+        type wig -15.955:0.892
         maxHeightPixels 100:50:11
-        viewLimits -3.107:0.934
+        viewLimits -3.75:0.9
         autoScale off
         spanList 1
         windowingFunction mean
@@ -63,17 +63,17 @@ group compGeno
         priority 4
 
     # phastCons conservation
-    track cons17wayViewphastcons
+    track cons20wayViewphastcons
     shortLabel Element Conservation (phastCons)
     view phastcons
     visibility full
-    subTrack cons17way
+    subTrack cons20way
 
-        track phastCons17way
-        subTrack cons17wayViewphastcons off
+        track phastCons20way
+        subTrack cons20wayViewphastcons off
         subGroups view=phastcons
-        shortLabel 17 Primates Cons
-        longLabel 17 primates conservation by PhastCons
+        shortLabel 20-way Cons
+        longLabel 17 primates plus three mammals conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -86,20 +86,18 @@ group compGeno
         priority 13
 
     # Conserved Elements (Most Conserved)
-    track cons17wayViewelements
+    track cons20wayViewelements
     shortLabel Conserved Elements
     view elements
     visibility dense
-    subTrack cons17way
+    subTrack cons20way
 
-        track phastConsElements17way
-        subTrack cons17wayViewelements on
+        track phastConsElements20way
+        subTrack cons20wayViewelements on
         subGroups view=elements
-        shortLabel 17 Primates El
-        longLabel 17 primates Conserved Elements
+        shortLabel 20-way El
+        longLabel 17 primates plus three mammals Conserved Elements
         noInherit on
         color 110,10,40
         type bed 5 .
         priority 23
-
-

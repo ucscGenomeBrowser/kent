@@ -6,7 +6,8 @@ html gold
 track gap override
 html gap
 
-include trackDb.17way.ra
+include trackDb.17way.ra alpha
+include trackDb.20way.ra
 include trackDb.chainNet.ra
 
 searchTable gold
