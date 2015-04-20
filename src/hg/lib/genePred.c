@@ -1493,9 +1493,9 @@ if (exonEnd > gp->txEnd)
 if (iExon > 0)
     {
     /* other than first exon */
-    unsigned prevExonEnd = gp->exonEnds[iExon-1];
-    if (exonStart < prevExonEnd)
-        gpError(errFh, errorCnt, "%s: %s exon %u overlaps previous exon", desc, gp->name, iExon);
+    if (exonStart < gp->exonEnds[iExon-1])
+        gpError(errFh, errorCnt, "%s: %s exon %u (%s:%d-%d) overlaps previous exon (%s:%d-%d)",
+                desc, gp->name, iExon, gp->chrom, exonStart, exonEnd, gp->chrom, gp->exonStarts[iExon-1], gp->exonEnds[iExon-1]);
     }
 
 if (gp->optFields & genePredExonFramesFld)

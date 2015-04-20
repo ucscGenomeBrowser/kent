@@ -188,23 +188,27 @@ else
 return gp;
 }
 
-static void outputGenePredAndFree(FILE *gpFh, struct genePred *gp)
+static void outputGenePredAndFree(struct gff3Ann *mrna, FILE *gpFh, struct genePred *gp)
 /* validate and output a genePred and free it */
 {
-// output before checking so it can be examined
-int ret = genePredCheck("GFF3 convert to genePred", stderr, -1, gp);
+char description[PATH_LEN];
+safef(description, sizeof(description), "genePred from GFF3: %s:%d",
+      ((mrna->file != NULL) ? mrna->file->fileName : "<unknown>"),
+      mrna->lineNum);
+int ret = genePredCheck(description, stderr, -1, gp);
 if (warnAndContinue)
     {
     if (ret == 0)
 	genePredTabOut(gp, gpFh);
     else
-	warn("dropping genePred: %s", gp->name);
+	warn("dropping invalid genePred: %s %s:%d-%d", gp->name, gp->chrom, gp->txStart, gp->txEnd);
     }
 else
     {
+    // output before checking so it can be examined
     genePredTabOut(gp, gpFh);
     if (ret != 0)
-	cnvError("invalid genePred created for: %s", gp->name);
+	cnvError("invalid genePred created: %s %s:%d-%d", gp->name, gp->chrom, gp->txStart, gp->txEnd);
     }
 genePredFree(&gp);
 }
@@ -321,7 +325,7 @@ recProcessed(processed, mrna);
 
 struct genePred *gp = mrnaToGenePred(gene, mrna);
 if (gp != NULL)
-    outputGenePredAndFree(gpFh, gp);
+    outputGenePredAndFree(mrna, gpFh, gp);
 }
 
 static void processGene(FILE *gpFh, struct gff3Ann *gene, struct hash *processed)
