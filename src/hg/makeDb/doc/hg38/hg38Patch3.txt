@@ -205,6 +205,87 @@ checkAgpAndFa hg38Patch3.agp hg38Patch3.2bit | tail -1
 # All AGP and FASTA entries agree - both files are valid
 
 #############################################################################
+# build hg38Patch3 database (DONE - 2014-04-21 - Hiram)
+    # need this database for netClass operations during the chain/net
+    # construction
+
+    mkdir /hive/data/genomes/hg38Patch3
+    cd /hive/data/genomes/hg38Patch3
+    mkdir /gbdb/hg38Patch3
+    ln -s /hive/data/genomes/hg38/bed/hg38Patch3/hg38Patch3.2bit ./
+    ln -s /hive/data/genomes/hg38/bed/hg38Patch3/hg38Patch3.agp ./
+
+    twoBitInfo hg38Patch3.2bit stdout | sort -k2nr > chrom.sizes
+    mkdir -p bed/chromInfo
+    awk '{printf "%s\t%d\t/gbdb/hg38Patch3/hg38Patch3.2bit\n", $1, $2}' \
+          chrom.sizes > bed/chromInfo/chromInfo.tab
+
+    hgsql -e 'create database hg38Patch3;' hg38
+
+    hgsql hg38Patch3 < $HOME/kent/src/hg/lib/grp.sql
+
+    hgLoadSqlTab hg38Patch3 chromInfo $HOME/kent/src/hg/lib/chromInfo.sql \
+             bed/chromInfo/chromInfo.tab
+    hgGoldGapGl -noGl hg38Patch3 hg38Patch3.agp
+    featureBits -or -countGaps hg38Patch3 gold gap
+    # 16723917 bases of 16723917 (100.000%) in intersection
+
+    hgsql hgcentraltest -e 'INSERT INTO dbDb (name, description, nibPath,
+organism, defaultPos, active, orderKey, genome, scientificName, htmlPath,
+hgNearOk, hgPbOk, sourceName, taxId)
+VALUES ("hg38Patch3", "Apr. 2015", "/gbdb/hg38Patch3", "GRCh38.p3",
+"chr1_KN538360v1_fix:1-460100", 1, 7755, "GRCh38.p3", "Homo sapiens",
+"/gbdb/hg38Patch3/html/description.html", 0, 0,
+"GRCh38 patch 2 Genome Reference Consortium Human Reference 38", 9606);
+INSERT INTO defaultDb (genome, name) VALUES ("GRCh38.p3", "hg38Patch3");
+INSERT INTO genomeClade (genome, clade, priority)
+VALUES ("GRCh38.p3", "haplotypes", 134);'
+
+    mkdir html
+    # copy description.html from hg38Patch2/html/description.html
+    # edit to update for Patch3
+
+    mkdir -p /hive/data/genomes/hg38Patch3/bed/gc5Base
+    hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 hg38Patch3 \
+                 hg38Patch3.2bit | wigEncode stdin bed/gc5Base/gc5Base.{wig,wib}
+    # Converted stdin, upper limit 100.00, lower limit 0.00
+    mkdir /gbdb/hg38Patch3/wib
+    ln -s `pwd`/bed/gc5Base/gc5Base.wib /gbdb/hg38Patch3/wib
+
+    hgLoadWiggle -pathPrefix=/gbdb/hg38Patch3/wib hg38Patch3 gc5Base \
+       bed/gc5Base/gc5Base.wig
+
+    mkdir /hive/data/genomes/hg38Patch3/bed/repeatMasker
+    cd /hive/data/genomes/hg38Patch3/bed/repeatMasker
+    time doRepeatMasker.pl -bigClusterHub=ku \
+       -workhorse=hgwdev -dbHost=hgwdev -buildDir=`pwd` hg38Patch3 > do.log 2>&1
+    # real    48m31.093s
+
+    mkdir /hive/data/genomes/hg38Patch3/bed/simpleRepeat
+    cd /hive/data/genomes/hg38Patch3/bed/simpleRepeat
+    time (doSimpleRepeat.pl -bigClusterHub=ku -workhorse=hgwdev \
+        -smallClusterHub=ku -buildDir=`pwd` hg38Patch3) > do.log 2>&1
+    # real    6m22.313s
+    # the simpleRepeat procedure fails in the cleanup step since there
+    # is no TrfPart directory
+
+    mkdir /hive/data/genomes/hg38Patch3/bed/windowMasker
+    cd /hive/data/genomes/hg38Patch3/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev hg38Patch3) > do.log 2>&1
+
+    cd /hive/data/genomes/hg38Patch3
+    twoBitMask hg38Patch3.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed hg38Patch3.2bit
+    twoBitToFa hg38Patch3.2bit stdout | faSize stdin
+
+    # 16723917 bases (1398144 N's 15325773 real 7003271 upper 8322502 lower)
+    #    in 39 sequences in 1 files
+    # Total size: mean 428818.4 sd 834635.9 min 14347 (chr10_KN538365v1_fix)
+    #    max 4998962 (chr15_KN538374v1_fix) median 211377
+    # %49.76 masked total, %54.30 masked real
+
+#############################################################################
 # lastz alignments to hg38 (DONE - 2015-04-14 - Hiram)
 #############################################################################
 
@@ -318,6 +399,7 @@ cd /hive/data/genomes/hg38/bed/hg38Patch3/lastzHg38.2015-04-09/axtChain
 
 chainMergeSort run/hg38Patch3.hg38.lifted.chain \
         | gzip -c > hg38Patch3.hg38.all.chain.gz
+
 chainSplit chain hg38Patch3.hg38.all.chain.gz
 # Make nets ("noClass", i.e. without rmsk/class stats which are added later):
 time chainPreNet  hg38Patch3.hg38.all.chain.gz \
@@ -460,6 +542,12 @@ cd /hive/data/genomes/hg38/bed/hg38Patch3/lastzHg38Patch3.2015-04-15/axtChain
 
 chainMergeSort run/hg38.hg38Patch3.lifted.chain \
         | gzip -c > hg38.hg38Patch3.all.chain.gz
+
+hgLoadChain -tIndex hg38 chainHg38Patch3 hg38.hg38Patch3.all.chain.gz
+# Loading 4034 chains into hg38.chainHg38Patch3
+featureBits hg38 chainHg38Patch3Link
+# 14831297 bases of 3049335806 (0.486%) in intersection
+
 chainSplit chain hg38.hg38Patch3.all.chain.gz
 # Make nets ("noClass", i.e. without rmsk/class stats which are added later):
 time chainPreNet hg38.hg38Patch3.all.chain.gz \
@@ -469,6 +557,8 @@ time chainPreNet hg38.hg38Patch3.all.chain.gz \
         ../../hg38Patch3.chrom.sizes stdout /dev/null \
     | netSyntenic stdin noClass.net
     #   real    0m0.435s
+
+netClass -verbose=0 -noAr noClass.net hg38 hg38Patch3 hg38.hg38Patch3.net
 
 # Make liftOver chains:
 netChainSubset -verbose=0 noClass.net hg38.hg38Patch3.all.chain.gz stdout \
