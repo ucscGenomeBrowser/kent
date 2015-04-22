@@ -4943,16 +4943,9 @@ if (!hideControls)
 
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
             hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
-        //#define BUTTONS_BY_CSS_NOT_HERE
-        #ifdef BUTTONS_BY_CSS_NOT_HERE
-            hPrintf("<span class='pmButton toggleButton' onclick=\"vis.toggleForGroup(this,'%s')\" "
-                    "id='%s_button' title='%s this group'>%s</span>&nbsp;&nbsp;",
-                    group->name, group->name, isOpen?"Collapse":"Expand", indicator);
-        #else///ifndef BUTTONS_BY_CSS_NOT_HERE
             hPrintf("<IMG class='toggleButton' onclick=\"return vis.toggleForGroup(this, '%s');\" "
                     "id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
                     group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
-        #endif///ndef BUTTONS_BY_CSS_NOT_HERE
             hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
             hPrintf("</td><td style='text-align:right;'>\n");
             hPrintf("<input type='submit' name='hgt.refresh' value='refresh' "
