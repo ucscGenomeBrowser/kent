@@ -1577,7 +1577,7 @@ identifier wgEncodeGencodePseudoGeneAttrsV22
 identifier wgEncodeGencodeExonSupportV22
 "Link together Gencode Exon Support table with Attributes table"
     hg38.wgEncodeGencodeExonSupportV22.transcriptId dupeOk
-    hg38.wgEncodeGencodeAttrsV22.transcriptId minCheck=0.98
+    hg38.wgEncodeGencodeAttrsV22.transcriptId minCheck=0.97
 
 identifier wgEncodeGencodeGeneSourceV22
 "Link together Gencode Gene Source table with Attributes table"
@@ -1592,7 +1592,7 @@ identifier wgEncodeGencodePdbV22
 identifier wgEncodeGencodePubMedV22
 "Link together Gencode Pubmed table with Attributes table"
     hg38.wgEncodeGencodePubMedV22.transcriptId dupeOk
-    hg38.wgEncodeGencodeAttrsV22.transcriptId  minCheck=0.635488
+    hg38.wgEncodeGencodeAttrsV22.transcriptId  minCheck=0.63
 
 identifier wgEncodeGencodeRefSeqV22
 "Link together Gencode RefSeq table with Attributes table"
@@ -1612,7 +1612,7 @@ identifier wgEncodeGencodeTranscriptSourceV22
 identifier wgEncodeGencodeTranscriptSupportV22
 "Link together Gencode Transcript Support table with Attributes table"
     hg38.wgEncodeGencodeTranscriptSupportV22.transcriptId dupeOk
-    hg38.wgEncodeGencodeAttrsV22.transcriptId minCheck=0.81
+    hg38.wgEncodeGencodeAttrsV22.transcriptId minCheck=0.22
 
 identifier wgEncodeGencodeTranscriptionSupportLevelV22
 "Link together Gencode Transcription Support Level table with Attributes table"
@@ -2716,11 +2716,17 @@ identifier knownGeneId dependency
     $kgDb.kg3ToKg4.newId minCheck=0.5 exclude=
     $kgDb,!hg19.kg4ToKg5.newId minCheck=0.5 exclude=
     $kgDb,!mm10.kg5ToKg6.newId exclude=
-    $kgDb.kg6ToKg7.newId exclude=
+    $kgDb,!mm10.kg6ToKg7.newId exclude=
     $kgDb.kg7ToKg8.newId exclude=
     $kgDb,!hg16.kgTargetAli.qName full
     hg19.knownGeneTxMrna.name
     hg19.knownGeneTxPep.name
+
+identifier knownGeneOld7Id dependency
+"Previous UCSC Gene build"
+    $kgDb.knownGeneOld7.name
+    $kgDb.kg7ToKg8.oldId full
+    $kgDb.kgXrefOld7.kgID full
 
 identifier knownGeneOld6Id dependency
 "Previous UCSC Gene build"

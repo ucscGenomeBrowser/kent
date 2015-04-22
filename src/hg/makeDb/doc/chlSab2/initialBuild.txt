@@ -1,0 +1,499 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the chlSab2
+# Chlorocebus sabaeus - Green monkey/Vervet
+
+# DATE:   25-Mar-2014
+# ORGANISM:       Chlorocebus sabaeus
+# TAXID:  60711
+# ASSEMBLY LONG NAME:     Chlorocebus_sabeus 1.1
+# ASSEMBLY SHORT NAME:    Chlorocebus_sabeus 1.1
+# ASSEMBLY SUBMITTER:     Vervet Genomics Consortium
+# ASSEMBLY TYPE:  Haploid
+# NUMBER OF ASSEMBLY-UNITS:       1
+# ASSEMBLY ACCESSION:     GCA_000409795.2
+# FTP-RELEASE DATE: 26-Mar-2014
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2014-04-08 - Hiram)
+    # NCBI has redesigned their FTP download site, new type of address
+    #      and naming scheme
+    mkdir -p /hive/data/genomes/chlSab2/genbank
+    cd /hive/data/genomes/chlSab2/genbank
+
+    rsync -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Chlorocebus_sabaeus/Chlorocebus_sabeus_1.1/ ./
+
+    # measure what we have here:
+    faSize Primary_Assembly/assembled_chromosomes/FASTA/*.fa.gz \
+Primary_Assembly/unlocalized_scaffolds/FASTA/*.unlocalized.scaf.fa.gz \
+Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+    # 2789639778 bases (37655314 N's 2751984464 real 2751984464 upper 0 lower)
+    #    in 2003 sequences in 61 files
+    # Total size: mean 1392730.8 sd 11811922.4
+    #    min 500 (gi|501607093|gb|AQIB01158973.1|)
+    #    max 139301422 (gi|597900174|gb|CM001948.2|) median 3062
+    # %0.00 masked total, %0.00 masked real
+
+    # fetch photo from wikimedia commons user Atamari   2015-03-24
+    #   http://commons.wikimedia.org/wiki/User:Atamari
+
+    mkdir /hive/data/genomes/chlSab2/photo
+    cd /hive/data/genomes/chlSab2/photo
+    wget --timestamping \
+http://upload.wikimedia.org/wikipedia/commons/0/08/Chlorocebus_sabaeus_0006.jpg
+    # crop a bit of the edges:
+    convert -quality 100 -crop 1600x1800+400+200 Chlorocebus_sabaeus_0006.jpg \
+       chlSab2.cropped.jpg
+    # and size for the gateway page
+    convert -quality 80 -geometry 300x300 chlSab2.cropped.jpg \
+       Chlorocebus_sabaeus.jpg
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2014-04-08 - Hiram)
+    mkdir /hive/data/genomes/chlSab2/ucsc
+    cd /hive/data/genomes/chlSab2/ucsc
+
+    ~/kent/src/hg/makeDb/doc/chlSab2/fetchChrM.sh
+    ~/kent/src/hg/makeDb/doc/chlSab2/ucscCompositeAgp.pl
+    ~/kent/src/hg/makeDb/doc/chlSab2/unplaced.pl
+    ~/kent/src/hg/makeDb/doc/chlSab2/unlocalized.pl
+
+    # verify the sequence is still here, add the chrM to the genbank sequences:
+    faSize ../genbank/Primary_Assembly/assembled_chromosomes/FASTA/*.fa.gz \
+../genbank/Primary_Assembly/unlocalized_scaffolds/FASTA/*.unlocalized.scaf.fa.gz \
+../genbank/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz \
+      chrM.fa
+# 2789656328 bases (37655329 N's 2752000999 real 2752000999 upper 0 lower)
+#     in 2004 sequences in 62 files
+# Total size: mean 1392044.1 sd 11809013.4
+#    min 500 (gi|501607093|gb|AQIB01158973.1|)
+#    max 139301422 (gi|597900174|gb|CM001948.2|) median 3069
+
+    # and everything here is the same count:
+    faSize chr*.fa
+# 2789656328 bases (37655329 N's 2752000999 real 2752000999 upper 0 lower)
+#    in 2004 sequences in 62 files
+# Total size: mean 1392044.1 sd 11809013.4 min 500 (chrUn_AQIB01158973v1)
+#    max 139301422 (chr8) median 3069
+
+#############################################################################
+#  Initial database build (DONE - 2014-04-10 - Hiram)
+
+    cd /hive/data/genomes/chlSab2
+    cat << '_EOF_' > chlSab2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db chlSab2
+clade primate
+genomeCladePriority 15
+scientificName Chlorocebus sabaeus
+commonName Green monkey
+assemblyDate Mar. 2014
+assemblyLabel Washington University School of Medicine
+assemblyShortLabel Vervet/1994-021
+orderKey 7779
+# chrM already included
+mitoAcc none
+fastaFiles /hive/data/genomes/chlSab2/ucsc/chr*.fa
+agpFiles /hive/data/genomes/chlSab2/ucsc/chr*.agp
+# qualFiles none
+dbDbSpeciesDir chlorocebus
+photoCreditURL http://commons.wikimedia.org/wiki/User:Atamari
+photoCreditName Wikimedia commons user Atamari
+ncbiGenomeId 13136
+ncbiAssemblyId 132581
+ncbiAssemblyName Vervet/1994-021
+ncbiBioProject 215854
+genBankAccessionID GCA_000409795.2
+taxId 60711
+'_EOF_'
+    # << happy emacs
+
+    # this assembly was done manually in 2014, these makeGenomeDb.pl
+    # procedures were run in debug mode 2015-03-23 just to get dbDb setup
+    # and trackDb
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -debug -stop=agp chlSab2.config.ra) > agp.log 2>&1
+    # *** All done!  (through the 'agp' step)
+    # real    1m35.746s
+
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -debug -continue=db -stop=dbDb chlSab2.config.ra) > db.log 2>&1
+
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -debug -continue=trackDb chlSab2.config.ra) > db.log 2>&1
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2014-04-15 - Hiram)
+    mkdir /hive/data/genomes/chlSab2/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/chlSab2/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/chlSab2/chlSab2.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku chlSab2) > do.log 2>&1
+    # real    16m17.756s
+
+    cat fb.chlSab2.cpgIslandExtUnmasked.txt
+    # 29045833 bases of 2752019208 (1.055%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-03-24 - Hiram)
+    mkdir /hive/data/genomes/chlSab2/bed/cytoBand
+    cd /hive/data/genomes/chlSab2/bed/cytoBand
+    makeCytoBandIdeo.csh chlSab2
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2015-03-24 - Hiram)
+    mkdir /hive/data/genomes/chlSab2/bed/ucscToINSDC
+    cd /hive/data/genomes/chlSab2/bed/ucscToINSDC
+
+    grep chrM ../../chlSab2.agp
+# chrM    1       16550   1       F       NC_008066       1       16550   +
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+       ../../genbank/Primary_Assembly NC_008066.1
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    # 2004 name.coordinate.tab
+    # 2004 ucscToINSDC.bed
+    # 2004 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 27
+    # use the 27 in this sed
+    sed -e "s/21/27/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab chlSab2 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords chlSab2
+    # should cover %100 entirely:
+    featureBits -countGaps chlSab2 ucscToINSDC
+    # 2789656328 bases of 2789656328 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2015-03-24 - Hiram)
+    cd ~/kent/src/hg/makeDb/trackDb/chlorocebus/chlSab2
+
+    hgsql -N -e "select frag from gold;" chlSab2 | sort -u \
+        > /tmp/chlSab2.frag.gold.txt
+
+
+    export maxLen=`awk '{print length($0)}' /tmp/chlSab2.frag.gold.txt | sort -rn | head -1`
+    echo "scan to column: $maxLen"
+# scan to column: 14
+
+export C=1
+while [ $C -le $maxLen ];
+do
+echo -n " $C: "
+awk '{ print substr($0,'$C',1) }' /tmp/chlSab2.frag.gold.txt | sort -u | xargs echo | sed -e 's/ //g'
+C=`echo $C | awk '{print $1+1}'`
+done
+
+#  1: AN
+#  2: CQ
+#  3: 2I_
+#  4: 034B
+#  5: 012489
+#  6: 0123456789
+#  7: 0123456789
+#  8: 0123456789
+#  9: .0123456789
+# 10: 0123456789
+# 11: 0123456789
+# 12: 0123456789
+# 13: .
+# 14: 1
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" chlSab2 | wc -l
+    # 163018
+
+    hgsql -N -e "select frag from gold;" chlSab2 \
+       | egrep -e '[AN][CQ][BI0234_]+[0-9]+(\.[0-9][0-9]*)?' | wc -l
+    # 163018
+
+    hgsql -N -e "select frag from gold;" chlSab2 \
+       | egrep -v -e '[AN][CQ][BI0234_]+[0-9]+(\.[0-9][0-9]*)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/tarsier/chlSab2/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [AN][CQ][BI0234_]+[0-9]+(\.[0-9][0-9]*)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+##########################################################################
+# running repeat masker (DONE - 2014-04-10 - Hiram)
+    mkdir /hive/data/genomes/chlSab2/bed/repeatMasker
+    cd /hive/data/genomes/chlSab2/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku chlSab2) > do.log 2>&1
+
+    cat faSize.rmsk.txt
+    # 2789656328 bases (37655329 N's 2752000999 real 1411482871 upper
+    #   1340518128 lower) in 2004 sequences in 1 files
+    # Total size: mean 1392044.1 sd 11809013.4 min 500 (chrUn_AQIB01158973v1)
+    #   max 139301422 (chr8) median 3069
+    # %48.05 masked total, %48.71 masked real
+
+    # most interesting, NCBI had %36.84 masked total, %38.26 masked real
+    # I wonder how they did that ?
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.3
+    #    June 20 2013 (open-4-0-3) version of RepeatMasker
+    # CC   RELEASE 20130422
+
+    time featureBits -countGaps chlSab2 rmsk
+    # 1340995312 bases of 2789656328 (48.070%) in intersection
+    # real    0m45.135s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2014-04-10 - Hiram)
+
+    mkdir /hive/data/genomes/chlSab2/bed/simpleRepeat
+    cd /hive/data/genomes/chlSab2/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        chlSab2) > do.log 2>&1
+    # real    20m20.609s
+
+    cat fb.simpleRepeat
+    # 72003821 bases of 2752019208 (2.616%) in intersection
+
+    # using the Window Masker result:
+    cd /hive/data/genomes/chlSab2
+    twoBitMask bed/windowMasker/chlSab2.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  chlSab2.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa chlSab2.2bit stdout | faSize stdin > faSize.chlSab2.2bit.txt
+    cat faSize.chlSab2.2bit.txt
+    # 2789656328 bases (37655329 N's 2752000999 real 1409876537 upper
+    #    1342124462 lower) in 2004 sequences in 1 files
+    # Total size: mean 1392044.1 sd 11809013.4 min 500 (chrUn_AQIB01158973v1)
+    #    max 139301422 (chr8) median 3069
+    # %48.11 masked total, %48.77 masked real
+
+    rm /gbdb/chlSab2/chlSab2.2bit
+    ln -s `pwd`/chlSab2.2bit /gbdb/chlSab2/chlSab2.2bit
+
+##########################################################################
+## WINDOWMASKER (DONE - 2014-04-10 - Hiram)
+
+    mkdir /hive/data/genomes/chlSab2/bed/windowMasker
+    cd /hive/data/genomes/chlSab2/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev chlSab2) > do.log 2>&1
+    # real    153m54.144s
+
+    # Masking statistics
+    cat faSize.chlSab2.cleanWMSdust.txt
+    # 2789656328 bases (37655329 N's 2752000999 real 1758265115 upper
+    #    993735884 lower) in 2004 sequences in 1 files
+    # Total size: mean 1392044.1 sd 11809013.4 min 500 (chrUn_AQIB01158973v1)
+    #    max 139301422 (chr8) median 3069
+    # %35.62 masked total, %36.11 masked real
+
+    cat fb.chlSab2.rmsk.windowmaskerSdust.txt
+    # 754772298 bases of 2789656328 (27.056%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2014-04-15 - Hiram)
+    mkdir /hive/data/genomes/chlSab2/bed/cpgIslands
+    cd /hive/data/genomes/chlSab2/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku chlSab2) > do.log 2>&1 &
+    # Elapsed time: 14m55s
+
+    cat fb.chlSab2.cpgIslandExt.txt
+    # 20748654 bases of 2752019208 (0.754%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2014-04-16 - Hiram)
+    mkdir /hive/data/genomes/chlSab2/bed/genscan
+    cd /hive/data/genomes/chlSab2/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku chlSab2) > do.log 2>&1
+    #  Elapsed time: 100m0s
+
+    cat fb.chlSab2.genscan.txt
+    #   51781072 bases of 2752019208 (1.882%) in intersection
+
+    cat fb.chlSab2.genscanSubopt.txt
+    #   50823478 bases of 2752019208 (1.847%) in intersection
+
+########################################################################
+# Create kluster run files (DONE - 2015-03-24 - Hiram)
+
+    cd /hive/data/genomes/chlSab2
+    # numerator is chlSab2 gapless bases "real" as reported by:
+    head -1 faSize.chlSab2.2bit.txt
+# 2789656328 bases (37655329 N's 2752000999 real 1409876537 upper
+#    1342124462 lower) in 2004 sequences in 1 files
+
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2752000999 / 2861349177 \) \* 1024
+    # ( 2752000999 / 2861349177 ) * 1024 = 984.867225
+
+    # ==> use -repMatch=900 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/chlSab2
+    time blat chlSab2.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/chlSab2.11.ooc \
+        -repMatch=900
+    # Wrote 32373 overused 11-mers to jkStuff/chlSab2.11.ooc
+    # real    0m48.344s
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N -e 'select * from gap where bridge="no" order by size;' chlSab2 \
+       | ave -tableOut -col=7 stdin
+# # min Q1 median Q3 max mean N sum stddev
+# 1e+06 1e+06 1e+06 1e+06 1e+06 1e+06 29 2.9e+07 0
+
+    # note they are all 1,000,000 centromere gaps
+
+    gapToLift -verbose=2 -minGap=1000000 chlSab2 \
+      jkStuff/chlSab2.nonBridged.lft -bedFile=jkStuff/chlSab2.nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 2004, total size: 2789656328, one half size: 1394828164
+# cumulative    N50 count       contig  contig size
+# 1388069355      11      chr14   107702431
+# 1394828164 one half size
+# 1489289239      12      chr22   101219884
+
+#############################################################################
+# GENBANK AUTO UPDATE (DONE - 2015-03-24 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    #  Chlorocebus aethiops    411     1       0
+    #  Chlorocebus aethiops vervet     1       0       0
+    #  Chlorocebus pygerythrus 5       0       0
+    #  Chlorocebus pygerythrus pygerythrus     1       0       0
+    #  Chlorocebus sabaeus     97      37787   13
+    #  Chlorocebus tantalus    13      0       0
+
+    # edit etc/genbank.conf to add chlSab2 just before rheRox1
+
+# chlSab2 (green monkey) (2,004 scaffolds N50 101219884)
+chlSab2.serverGenome = /hive/data/genomes/chlSab2/chlSab2.2bit
+chlSab2.clusterGenome = /hive/data/genomes/chlSab2/chlSab2.2bit
+chlSab2.ooc = /hive/data/genomes/chlSab2/jkStuff/chlSab2.11.ooc
+chlSab2.lift = /hive/data/genomes/chlSab2/jkStuff/chlSab2.nonBridged.lft
+chlSab2.perChromTables = no
+chlSab2.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+chlSab2.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+chlSab2.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+chlSab2.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+chlSab2.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+chlSab2.downloadDir = chlSab2
+chlSab2.refseq.mrna.native.load  = no
+chlSab2.refseq.mrna.xeno.load = yes
+chlSab2.refseq.mrna.xeno.loadDesc  = yes
+chlSab2.genbank.mrna.native.load = yes
+chlSab2.genbank.mrna.native.loadDesc = no
+chlSab2.genbank.mrna.xeno.load = yes
+chlSab2.genbank.mrna.xeno.loadDesc = yes
+chlSab2.genbank.est.native.load = yes
+chlSab2.genbank.est.native.loadDesc = yes
+# chlSab2.upstreamGeneTbl = ensGene
+
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "Added chlSab Chlorocebus sabaeus refs #11172" \
+         etc/genbank.conf src/lib/gbGenome.c
+    git push
+    # update /cluster/data/genbank/etc/:
+    make etc-update
+    # update /cluster/data/genbank/bin/:
+    make install-server
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial chlSab2
+    # var/build/logs/2015.03.24-15:52:59.chlSab2.initalign.log
+    # real    782m4.063s
+    # verify it is correctly complete
+    tail var/build/logs/2015.03.24-15:52:59.chlSab2.initalign.log
+# gbAlignInstall: refseq.69/chlSab2/daily.2015.0320/mrna: real=0.02
+# gbAlignInstall: complete: real=3.47
+# hgwdev 2015.03.25-04:39:10 chlSab2.initalign: Succeeded: chlSab2
+# hgwdev 2015.03.25-04:55:03 chlSab2.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.chlSab2
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad chlSab2
+    # logFile: var/dbload/hgwdev/logs/2015.03.25-10:54:02.chlSab2.dbload.log
+    # real    96m13.401s
+    # there was some kind of error in loading.  Brian fixed it.
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add chlSab2 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added chlSab Chlorocebus sabaeus refs #11173" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE - 2015-03-26 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=chlSab2 -keys all.joiner
+    joinerCheck -database=chlSab2 -tableCoverage all.joiner
+    joinerCheck -database=chlSab2 -times all.joiner
+
+    cd /hive/data/genomes/chlSab2
+    time makeDownloads.pl chlSab2 > downloads.log 2>&1
+    # real    18m25.230s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/chlSab2/pushQ
+    cd /hive/data/genomes/chlSab2/pushQ
+    # transMap goes on its own schedule
+    makePushQSql.pl chlSab2 2> stderr.out | grep -v transMap > chlSab2.pushQ.sql
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/chlSab2/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/chlSab2/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/chlSab2/bbi/qualityBw/quality.bw
+    # WARNING: chlSab2 does not have seq
+    # WARNING: chlSab2 does not have extFile
+
+    #   copy to hgwbeta and load
+    scp -p chlSab2.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/chlSab2.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

@@ -41,6 +41,7 @@
 #endif /* GBROWSE */
 #include "hui.h"
 #include "trackHub.h"
+#include "net.h"
 #include "udc.h"
 #include "paraFetch.h"
 #include "filePath.h"
@@ -3587,11 +3588,27 @@ trackDbAddTableField(tdbList);
 return tdbList;
 }
 
-static boolean trackDataAccessible(char *database, struct trackDb *tdb)
-/* Return TRUE if data accessible - meaning either it has a bigDataUrl, or the
- * table exists. */
+boolean trackDataAccessible(char *database, struct trackDb *tdb)
+/* Return TRUE if underlying data are accessible - meaning the track has either
+ * a bigDataUrl with remote URL (http:// etc), a bigDataUrl with an existing local file,
+ * or a database table with the same name.
+ * Note: this returns FALSE for composite tracks; use this on subtracks or simple tracks. */
 {
-return trackDbSetting(tdb, "bigDataUrl") != NULL || hTableForTrack(database, tdb->table) != NULL;
+char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+if (bigDataUrl != NULL)
+    {
+    if (hasProtocol(bigDataUrl))
+        return TRUE;
+    else
+        {
+        char *bigDataUrlLocal = hReplaceGbdb(bigDataUrl);
+        boolean exists = fileExists(bigDataUrlLocal);
+        freeMem(bigDataUrlLocal);
+        return exists;
+        }
+    }
+else
+    return (hTableForTrack(database, tdb->table) != NULL);
 }
 
 static void addTrackIfDataAccessible(char *database, struct trackDb *tdb,

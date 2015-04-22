@@ -42,8 +42,8 @@ group compGeno
     view phyloP
     visibility full
     subTrack cons20way
-    viewLimits -3:0.5
-    viewLimitsMax -4.611:0.934
+    viewLimits -3:1
+    viewLimitsMax -14.191:1.199
 
         track phyloP20way
         subTrack cons20wayViewphyloP off
@@ -52,9 +52,9 @@ group compGeno
         longLabel 17 primates plus three mammals Basewise Conservation by PhyloP
         noInherit on
         configurable on
-        type wig -4.711 0.934
+        type wig -14.191 1.199
         maxHeightPixels 100:50:11
-        viewLimits -3.107:0.934
+        viewLimits -3:1
         autoScale off
         spanList 1
         windowingFunction mean
@@ -72,7 +72,7 @@ group compGeno
         track phastCons20way
         subTrack cons20wayViewphastcons off
         subGroups view=phastcons
-        shortLabel 17 primates Cons
+        shortLabel 20-way Cons
         longLabel 17 primates plus three mammals conservation by PhastCons
         noInherit on
         configurable on
@@ -95,7 +95,7 @@ group compGeno
         track phastConsElements20way
         subTrack cons20wayViewelements on
         subGroups view=elements
-        shortLabel 17 primates El
+        shortLabel 20-way El
         longLabel 17 primates plus three mammals Conserved Elements
         noInherit on
         color 110,10,40

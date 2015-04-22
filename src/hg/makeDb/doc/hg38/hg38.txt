@@ -6146,7 +6146,7 @@ awk 'BEGIN {OFS="\t"} {print 0, $1, $2, $1, $2}' /cluster/data/hg38/chrom.sizes 
 rm tmpChrom
 
 #########################################################################
-2015-03-13: import of UCSC GENCODE group processing of GENCODE V21 (markd)
+2015-03-13: import of UCSC GENCODE group processing of GENCODE V22 (markd)
     # download files
     mkdir -p /hive/data/genomes/hg38/bed/gencodeV22
     cd /hive/data/genomes/hg38/bed/gencodeV22
@@ -6189,6 +6189,32 @@ rm tmpChrom
     # output in check/joiner.out
     cd /hive/data/genomes/hg38/bed/gencodeV22
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+#########################################################################
+# UCSC to RefSeq name correspondence (DONE - 2015-04-13 - Hiram)
+
+    mkdir /hive/data/genomes/hg38/bed/ucscToRefSeq
+    cd /hive/data/genomes/hg38/bed/ucscToRefSeq
+
+    # columns 5 and 7 are the INSDC and RefSeq names
+
+    grep -v "^#" ../../genbank/GCF_000001405.26.assembly.txt \
+      | awk -F'\t' '{printf "%s\t%s\n", $5,$7}'  | sort > insdc.refSeq.tab
+
+    hgsql -N -e 'select name,chrom,chromStart,chromEnd from ucscToINSDC;' hg38 \
+      | sort > insdc.ucsc.tab
+
+    join insdc.ucsc.tab insdc.refSeq.tab | tr '[ ]' '[\t]' \
+       | cut -f2- > ucsc.refSeq.tab
+
+
+    export chrSize=`cut -f1 ucsc.refSeq.tab | awk '{print length($0)}' | sort -n | tail -1`
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab hg38 ucscToRefSeq ./ucscToRefSeq.sql ucsc.refSeq.tab
+
+    checkTableCoords  hg38 -table=ucscToRefSeq
+
 #########################################################################
 
 

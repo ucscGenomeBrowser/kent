@@ -37,8 +37,6 @@
 #include "genbank.h"
 #include "gbSql.h"
 #include "gbMiscDiff.h"
-#include <regex.h>
-
 
 /* mol enum shared by gbCdnaInfo and refSeqStatus */
 #define molEnumDef \
@@ -608,76 +606,20 @@ static boolean keepDesc(struct gbStatus* status)
 return dbLoadOptionsGetAttr(gOptions, status->srcDb, status->type, status->orgCat)->loadDesc;
 }
 
-static void reComp(regex_t *preg, char* pattern)
-/* compile the regular expression or abort */
-{
-int e = regcomp(preg, pattern, REG_EXTENDED|REG_ICASE|REG_NOSUB);
-if (e != 0)
-    {
-    char errbuf[256];
-    regerror(e, preg, errbuf, sizeof(errbuf));
-    errAbort("can't compile regular expression: \"%s\": %s",
-             pattern, errbuf);
-    }
-}
-
-static boolean reMatches(regex_t *preg, char* str)
-/* determine if strange matches regular expression */
-{
-int e = regexec(preg, str, 0, NULL, 0);
-if (e == 0)
-    return TRUE;
-else if (e == REG_NOMATCH)
-    return FALSE;
-else
-    {
-    char errbuf[256];
-    regerror(e, preg, errbuf, sizeof(errbuf));
-    errAbort("error executing regular expresion:: %s", errbuf);
-    return FALSE;
-    }
-}
-
 static boolean isMgcFullLength()
 /* determine if the current RA entry is for an MGC */
 {
-/* Check for keyword and source /clone field to identify MGC genes.  Keywords
- * end in `.' and are seperated by "; ".  So look for .
- * Clone can be like: /clone="MGC:9349 IMAGE:3846611" */
-static boolean first = TRUE;
-static regex_t keyRe, cloRe;
-if (first)
-    {
-    reComp(&keyRe, "(^|.* )MGC(\\.$|;.*)");
-    reComp(&cloRe, "(^|.* )MGC:[0-9]+( .*|$)");
-    first = FALSE;
-    }
-char *key = raFieldCurVal("key");
-if (key == NULL)
-    return FALSE;
-if (!reMatches(&keyRe, key))
-    return FALSE;
-char *clo = raFieldCurVal("clo");
-if (clo == NULL)
-    return FALSE;
-if (!reMatches(&cloRe, clo))
-    return FALSE;
-return TRUE;
+/* n.b. this use to check for /clone= field, which was used when none full
+ * length MGCs were being processed.  This is no longer needed now that the
+ * MGC project is over and we only check the keyword. */
+
+return isMgcFullLengthKeyword(raFieldCurVal("key"));
 }
 
 static boolean isOrfeome()
 /* determine if the current RA entry is for an ORFeome */
 {
-/* keyword containing "ORFeome collaboration" */
-static boolean first = TRUE;
-static regex_t keyRe;
-if (first)
-    {
-    reComp(&keyRe, "(^|.* )ORFeome collaboration(\\.$|;.*)");
-    first = FALSE;
-    }
-char *key = raFieldCurVal("key");
-return (key != NULL) && reMatches(&keyRe, key);
+return isOrfeomeKeyword(raFieldCurVal("key"));
 }
 
 static void updateMetaData(struct sqlConnection *conn, struct gbStatus* status,

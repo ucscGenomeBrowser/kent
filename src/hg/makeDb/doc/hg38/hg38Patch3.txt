@@ -1,0 +1,648 @@
+# for emacs: -*- mode: sh; -*-
+
+##############################################################################
+# hg38 patch 3 build
+##############################################################################
+##  download sequence, prepare files (DONE - 2015-04-08 - Hiram)
+##############################################################################
+
+mkdir /hive/data/genomes/hg38/bed/hg38Patch3
+cd /hive/data/genomes/hg38/bed/hg38Patch3
+mkdir genbank
+cd genbank
+time rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Homo_sapiens/all_assembly_versions/GCA_000001405.18_GRCh38.p3/ ./
+real    3m21.710s
+
+# appears to be the entire assembly:
+faSize GCA_000001405.18_GRCh38.p3_genomic.fna.gz
+# 3226010022 bases (161368466 N's 3064641556 real 1900154811 upper
+#    1164486745 lower) in 494 sequences in 1 files
+# Total size: mean 6530384.7 sd 30328457.9 min 970 (KI270394.1)
+#    max 248956422 (CM000663.2) median 163458
+# %36.10 masked total, %38.00 masked real
+
+
+# so the question is, what is new here compared to what we have in hg38
+
+cd /hive/data/genomes/hg38/bed/hg38Patch3
+time faCount genbank/GCA_000001405.18_GRCh38.p3_genomic.fna.gz \
+   > faCount.GRCH38.p3.txt
+#  real    1m12.978s
+
+~/kent/src/hg/makeDb/doc/hg38/scanAssemblyReport.pl ../../chrom.sizes \
+  faCount.GRCH38.p3.txt genbank/GCA_000001405.18_GRCh38.p3_assembly_report.txt \
+   | grep new | sed -e 's/^/# /'
+
+# there are 39 new sequences:
+
+# chr1_KN196472v1_fix   186494  KN196472.1      new
+# chr1_KN196473v1_fix   166200  KN196473.1      new
+# chr1_KN196474v1_fix   122022  KN196474.1      new
+# chr1_KN538360v1_fix   460100  KN538360.1      new
+# chr1_KN538361v1_fix   305542  KN538361.1      new
+# chr1_KQ031383v1_fix   467143  KQ031383.1      new
+# chr2_KN538362v1_fix   208149  KN538362.1      new
+# chr2_KN538363v1_fix   365499  KN538363.1      new
+# chr2_KQ031384v1_fix   481245  KQ031384.1      new
+# chr3_KN196475v1_fix   451168  KN196475.1      new
+# chr3_KN196476v1_fix   305979  KN196476.1      new
+# chr3_KN538364v1_fix   415308  KN538364.1      new
+# chr3_KQ031385v1_fix   373699  KQ031385.1      new
+# chr3_KQ031386v1_fix   165718  KQ031386.1      new
+# chr5_KN196477v1_alt   139087  KN196477.1      new
+# chr6_KN196478v1_fix   268330  KN196478.1      new
+# chr6_KQ031387v1_fix   320750  KQ031387.1      new
+# chr7_KQ031388v1_fix   179932  KQ031388.1      new
+# chr9_KN196479v1_fix   330164  KN196479.1      new
+# chr10_KN196480v1_fix  277797  KN196480.1      new
+# chr10_KN538365v1_fix  14347   KN538365.1      new
+# chr10_KN538366v1_fix  85284   KN538366.1      new
+# chr10_KN538367v1_fix  420164  KN538367.1      new
+# chr11_KN538368v1_alt  203552  KN538368.1      new
+# chr11_KN196481v1_fix  108875  KN196481.1      new
+# chr12_KN196482v1_fix  211377  KN196482.1      new
+# chr12_KN538369v1_fix  541038  KN538369.1      new
+# chr12_KN538370v1_fix  86533   KN538370.1      new
+# chr13_KN196483v1_fix  35455   KN196483.1      new
+# chr13_KN538371v1_fix  206320  KN538371.1      new
+# chr13_KN538372v1_fix  356766  KN538372.1      new
+# chr13_KN538373v1_fix  148762  KN538373.1      new
+# chr15_KN538374v1_fix  4998962 KN538374.1      new
+# chr15_KQ031389v1_alt  2365364 KQ031389.1      new
+# chr16_KQ031390v1_alt  169136  KQ031390.1      new
+# chr19_KN196484v1_fix  370917  KN196484.1      new
+# chr22_KN196485v1_alt  156562  KN196485.1      new
+# chr22_KN196486v1_alt  153027  KN196486.1      new
+# chrY_KN196487v1_fix   101150  KN196487.1      new
+
+# how much sequence:
+~/kent/src/hg/makeDb/doc/hg38/scanAssemblyReport.pl ../../chrom.sizes \
+  faCount.GRCH38.p3.txt genbank/GCA_000001405.18_GRCh38.p3_assembly_report.txt \
+     | grep new | awk '{sum += $2; printf "%d\t%s\n", sum, $0}' | tail
+#  16723917        chrY_KN196487v1_fix     101150  KN196487.1      new
+
+~/kent/src/hg/makeDb/doc/hg38/scanAssemblyReport.pl ../../chrom.sizes \
+  faCount.GRCH38.p3.txt genbank/GCA_000001405.18_GRCh38.p3_assembly_report.txt \
+     | grep new > new.sequences.list
+
+cut -f3 new.sequences.list > extract.new.list
+awk '{printf "s/%s/%s/; ", $3,$1}' new.sequences.list > genbankToUCSC.sed
+
+~/kent/src/hg/makeDb/doc/hg38/scanAssemblyReport.pl ../../chrom.sizes \
+  faCount.GRCH38.p3.txt genbank/GCA_000001405.18_GRCh38.p3_assembly_report.txt \
+     | grep -v new > existing.sequences.list
+
+cut -f3 existing.sequences.list > extract.exist.list
+
+faSomeRecords genbank/GCA_000001405.18_GRCh38.p3_genomic.fna.gz \
+    extract.new.list stdout | sed -e 's/ .*//;' | \
+      sed -f genbankToUCSC.sed | gzip -c > hg38Patch3.fa.gz
+
+faSomeRecords genbank/GCA_000001405.18_GRCh38.p3_genomic.fna.gz \
+  extract.exist.list stdout | sed -e 's/ .*//;' | gzip -c > existing.fa.gz
+
+# verify same amount of sequence here as hg38:
+faSize existing.fa.gz
+# 3209286105 bases (159970322 N's 3049315783 real 1890811945 upper
+#    1158503838 lower) in 455 sequences in 1 files
+# Total size: mean 7053376.1 sd 31548372.6 min 970 (KI270394.1)
+#    max 248956422 (CM000663.2) median 161218
+# %36.10 masked total, %37.99 masked real
+
+# hg38 has different masking
+head -1 ../../faSize.hg38.2bit.txt 
+# 3209286105 bases (159970322 N's 3049315783 real 1460684798 upper 1588630985 lower) in 455 sequences in 1 files
+
+# verify correct amount of patch3 sequence here:
+faSize hg38Patch3.fa.gz
+# 16723917 bases (1398144 N's 15325773 real 9342866 upper 5982907 lower)
+#    in 39 sequences in 1 files
+# Total size: mean 428818.4 sd 834635.9 min 14347 (chr10_KN538365v1_fix)
+#    max 4998962 (chr15_KN538374v1_fix) median 211377
+# %35.77 masked total, %39.04 masked real
+
+# this is the same total obtained before:
+#  16723917        chrY_KN196487v1_fix     101150  KN196487.1      new
+
+# and both together should equal the original full patch3 sequence
+zcat existing.fa.gz hg38Patch3.fa.gz | faSize stdin
+# 3226010022 bases (161368466 N's 3064641556 real 1900154811 upper
+#    1164486745 lower) in 494 sequences in 1 files
+# same as was measured in GCA_000001405.18_GRCh38.p3_genomic.fna.gz:
+# 3226010022 bases (161368466 N's 3064641556 real 1900154811 upper
+#    1164486745 lower) in 494 sequences in 1 files
+
+# construct locations file:
+~/kent/src/hg/makeDb/doc/hg38/regionScan.pl extract.new.list \
+   genbank/GCA_000001405.18_GRCh38.p3_assembly_regions.txt \
+     > patchLocations.bed
+
+# separate haplotypes from fix patches for two tracks:
+grep -v fix patchLocations.bed | sed -e 's/_alt//;' \
+   | sed -e 's/\tchr.*_/\t/;' | sed -e 's/v/./;' > hg38Patch3Haplotypes.bed
+
+hgLoadBed -type=bed4 hg38 hg38Patch3Haplotypes hg38Patch3Haplotypes.bed 
+# Read 6 elements of size 4 from hg38Patch3Haplotypes.bed
+
+grep fix patchLocations.bed | sed -e 's/_fix//;' \
+   | sed -e 's/\tchr.*_/\t/;' | sed -e 's/v\([0-9]\)$/.\1/;' \
+     > hg38Patch3Patches.bed
+
+hgLoadBed -type=bed4 hg38 hg38Patch3Patches hg38Patch3Patches.bed 
+# Read 33 elements of size 4 from hg38Patch3Patches.bed
+
+# construct 2bit file:
+faToTwoBit hg38Patch3.fa.gz hg38Patch3.2bit
+twoBitInfo hg38Patch3.2bit stdout | sort -k2nr > hg38Patch3.chrom.sizes
+# take a look at that to verify it looks OK:
+cat hg38Patch3.chrom.sizes | sed -e 's/^/# /;'
+# chr15_KN538374v1_fix  4998962
+# chr15_KQ031389v1_alt  2365364
+# chr12_KN538369v1_fix  541038
+# chr2_KQ031384v1_fix   481245
+# chr1_KQ031383v1_fix   467143
+# chr1_KN538360v1_fix   460100
+# chr3_KN196475v1_fix   451168
+# chr10_KN538367v1_fix  420164
+# chr3_KN538364v1_fix   415308
+# chr3_KQ031385v1_fix   373699
+# chr19_KN196484v1_fix  370917
+# chr2_KN538363v1_fix   365499
+# chr13_KN538372v1_fix  356766
+# chr9_KN196479v1_fix   330164
+# chr6_KQ031387v1_fix   320750
+# chr3_KN196476v1_fix   305979
+# chr1_KN538361v1_fix   305542
+# chr10_KN196480v1_fix  277797
+# chr6_KN196478v1_fix   268330
+# chr12_KN196482v1_fix  211377
+# chr2_KN538362v1_fix   208149
+# chr13_KN538371v1_fix  206320
+# chr11_KN538368v1_alt  203552
+# chr1_KN196472v1_fix   186494
+# chr7_KQ031388v1_fix   179932
+# chr16_KQ031390v1_alt  169136
+# chr1_KN196473v1_fix   166200
+# chr3_KQ031386v1_fix   165718
+# chr22_KN196485v1_alt  156562
+# chr22_KN196486v1_alt  153027
+# chr13_KN538373v1_fix  148762
+# chr5_KN196477v1_alt   139087
+# chr1_KN196474v1_fix   122022
+# chr11_KN196481v1_fix  108875
+# chrY_KN196487v1_fix   101150
+# chr12_KN538370v1_fix  86533
+# chr10_KN538366v1_fix  85284
+# chr13_KN196483v1_fix  35455
+# chr10_KN538365v1_fix  14347
+
+zcat genbank/GCA_000001405.18_GRCh38.p3_assembly_structure/PATCHES/alt_scaffolds/AGP/alt.scaf.agp.gz \
+   | sed -f genbankToUCSC.sed > hg38Patch3.agp
+
+checkAgpAndFa hg38Patch3.agp hg38Patch3.2bit | tail -1
+
+# All AGP and FASTA entries agree - both files are valid
+
+#############################################################################
+# build hg38Patch3 database (DONE - 2014-04-21 - Hiram)
+    # need this database for netClass operations during the chain/net
+    # construction
+
+    mkdir /hive/data/genomes/hg38Patch3
+    cd /hive/data/genomes/hg38Patch3
+    mkdir /gbdb/hg38Patch3
+    ln -s /hive/data/genomes/hg38/bed/hg38Patch3/hg38Patch3.2bit ./
+    ln -s /hive/data/genomes/hg38/bed/hg38Patch3/hg38Patch3.agp ./
+
+    twoBitInfo hg38Patch3.2bit stdout | sort -k2nr > chrom.sizes
+    mkdir -p bed/chromInfo
+    awk '{printf "%s\t%d\t/gbdb/hg38Patch3/hg38Patch3.2bit\n", $1, $2}' \
+          chrom.sizes > bed/chromInfo/chromInfo.tab
+
+    hgsql -e 'create database hg38Patch3;' hg38
+
+    hgsql hg38Patch3 < $HOME/kent/src/hg/lib/grp.sql
+
+    hgLoadSqlTab hg38Patch3 chromInfo $HOME/kent/src/hg/lib/chromInfo.sql \
+             bed/chromInfo/chromInfo.tab
+    hgGoldGapGl -noGl hg38Patch3 hg38Patch3.agp
+    featureBits -or -countGaps hg38Patch3 gold gap
+    # 16723917 bases of 16723917 (100.000%) in intersection
+
+    hgsql hgcentraltest -e 'INSERT INTO dbDb (name, description, nibPath,
+organism, defaultPos, active, orderKey, genome, scientificName, htmlPath,
+hgNearOk, hgPbOk, sourceName, taxId)
+VALUES ("hg38Patch3", "Apr. 2015", "/gbdb/hg38Patch3", "GRCh38.p3",
+"chr1_KN538360v1_fix:1-460100", 1, 7755, "GRCh38.p3", "Homo sapiens",
+"/gbdb/hg38Patch3/html/description.html", 0, 0,
+"GRCh38 patch 2 Genome Reference Consortium Human Reference 38", 9606);
+INSERT INTO defaultDb (genome, name) VALUES ("GRCh38.p3", "hg38Patch3");
+INSERT INTO genomeClade (genome, clade, priority)
+VALUES ("GRCh38.p3", "haplotypes", 134);'
+
+    mkdir html
+    # copy description.html from hg38Patch2/html/description.html
+    # edit to update for Patch3
+
+    mkdir -p /hive/data/genomes/hg38Patch3/bed/gc5Base
+    hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 hg38Patch3 \
+                 hg38Patch3.2bit | wigEncode stdin bed/gc5Base/gc5Base.{wig,wib}
+    # Converted stdin, upper limit 100.00, lower limit 0.00
+    mkdir /gbdb/hg38Patch3/wib
+    ln -s `pwd`/bed/gc5Base/gc5Base.wib /gbdb/hg38Patch3/wib
+
+    hgLoadWiggle -pathPrefix=/gbdb/hg38Patch3/wib hg38Patch3 gc5Base \
+       bed/gc5Base/gc5Base.wig
+
+    mkdir /hive/data/genomes/hg38Patch3/bed/repeatMasker
+    cd /hive/data/genomes/hg38Patch3/bed/repeatMasker
+    time doRepeatMasker.pl -bigClusterHub=ku \
+       -workhorse=hgwdev -dbHost=hgwdev -buildDir=`pwd` hg38Patch3 > do.log 2>&1
+    # real    48m31.093s
+
+    mkdir /hive/data/genomes/hg38Patch3/bed/simpleRepeat
+    cd /hive/data/genomes/hg38Patch3/bed/simpleRepeat
+    time (doSimpleRepeat.pl -bigClusterHub=ku -workhorse=hgwdev \
+        -smallClusterHub=ku -buildDir=`pwd` hg38Patch3) > do.log 2>&1
+    # real    6m22.313s
+    # the simpleRepeat procedure fails in the cleanup step since there
+    # is no TrfPart directory
+
+    mkdir /hive/data/genomes/hg38Patch3/bed/windowMasker
+    cd /hive/data/genomes/hg38Patch3/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev hg38Patch3) > do.log 2>&1
+
+    cd /hive/data/genomes/hg38Patch3
+    twoBitMask hg38Patch3.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed hg38Patch3.2bit
+    twoBitToFa hg38Patch3.2bit stdout | faSize stdin
+
+    # 16723917 bases (1398144 N's 15325773 real 7003271 upper 8322502 lower)
+    #    in 39 sequences in 1 files
+    # Total size: mean 428818.4 sd 834635.9 min 14347 (chr10_KN538365v1_fix)
+    #    max 4998962 (chr15_KN538374v1_fix) median 211377
+    # %49.76 masked total, %54.30 masked real
+
+#############################################################################
+# lastz alignments to hg38 (DONE - 2015-04-14 - Hiram)
+#############################################################################
+
+mkdir /hive/data/genomes/hg38/bed/hg38Patch3/lastzHg38.2015-04-09
+cd /hive/data/genomes/hg38/bed/hg38Patch3/lastzHg38.2015-04-09
+
+cat << '_EOF_' > DEF
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+# human vs human
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+# lastz does not like the O= and E= lines in the matrix file
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from hg18 vs venter1 lastz on advice from Webb
+BLASTZ_K=10000
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg38Patch3
+SEQ1_DIR=/hive/data/genomes/hg38/bed/hg38Patch3/hg38Patch3.2bit
+SEQ1_LEN=/hive/data/genomes/hg38/bed/hg38Patch3/hg38Patch3.chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+SEQ1_LIMIT=1
+
+# QUERY: Human Hg38
+SEQ2_DIR=/scratch/data/hg38/hg38.2bit
+SEQ2_LEN=/scratch/data/hg38/chrom.sizes
+SEQ2_CTGDIR=/hive/data/genomes/hg38/bed/hg38Patch3/hg38Bits.2bit
+SEQ2_CTGLEN=/hive/data/genomes/hg38/bed/hg38Patch3/hg38Bits.chrom.sizes
+SEQ2_LIFT=/hive/data/genomes/hg38/bed/hg38Patch3/hg38Bits.lift
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+SEQ2_LIMIT=1
+
+BASE=/hive/data/genomes/hg38/bed/hg38Patch3/lastzHg38.2015-04-09
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+# prepare bits of hg38 sequence to lastz align to the patches,
+# this is selecting out the specific section of hg38 where the patch
+# is supposed to match, and setting up lastz parameters
+
+rm -fr hg38Bits run.blastz run.blastz/tParts run.blastz/qParts psl \
+   ../hg38Bits.lift
+mkdir -p hg38Bits run.blastz run.blastz/tParts run.blastz/qParts psl
+cut -f4 ../patchLocations.bed | while read FIX
+do
+  chr=`grep "${FIX}" ../patchLocations.bed | cut -f1`
+  start=`grep "${FIX}" ../patchLocations.bed | cut -f2`
+  end=`grep "${FIX}" ../patchLocations.bed | cut -f3`
+  bitSize=`echo ${end} ${start} | awk '{printf "%d", $1-$2}'`
+  chrSize=`grep -w "${chr}" ../../../chrom.sizes | cut -f2`
+  fixSize=`grep "${FIX}" ../hg38Patch3.chrom.sizes | cut -f2`
+  echo ${chr}:${start}-${end} vs. ${FIX}:0-${fixSize} 1>&2
+  twoBitToFa /gbdb/hg38/hg38.2bit:${chr}:${start}-${end} stdout \
+    | sed -e "s/${chr}:/${FIX}_/g" > hg38Bits/${FIX}.fa
+  fixName=`head -1 hg38Bits/${FIX}.fa | sed -e 's/>//;'`
+  echo -e "${start}\t${fixName}\t${fixSize}\t${chr}\t${chrSize}" 1>&2
+  echo -e "${start}\t${fixName}\t${fixSize}\t${chr}\t${chrSize}" >> ../hg38Bits.lift
+  echo -e "/hive/data/genomes/hg38/bed/hg38Patch3/hg38Bits.2bit:${fixName}:0-${bitSize}" 1>&2
+  echo -e "/hive/data/genomes/hg38/bed/hg38Patch3/hg38Bits.2bit:${fixName}:0-${bitSize}" > run.blastz/qParts/${fixName}.lst
+  echo -e "/hive/data/genomes/hg38/bed/hg38Patch3/hg38Patch3.2bit:${FIX}:0-${fixSize}" > run.blastz/tParts/${fixName}.lst
+  echo -e "/cluster/bin/scripts/blastz-run-ucsc -outFormat psl tParts/${fixName}.lst qParts/${fixName}.lst ../DEF {check out exists ../psl/${fixName}.psl}" 1>&2
+  echo -e "/cluster/bin/scripts/blastz-run-ucsc -outFormat psl tParts/${fixName}.lst qParts/${fixName}.lst ../DEF {check out exists ../psl/${fixName}.psl}"  >> run.blastz/jobList
+done
+
+faToTwoBit hg38Bits/*.fa ../hg38Bits.2bit
+twoBitInfo ../hg38Bits.2bit stdout | sort -k2n > ../hg38Bits.chrom.sizes
+
+ssh ku
+cd /hive/data/genomes/hg38/bed/hg38Patch3/lastzHg38.2015-04-09/run.blastz
+para create jobList
+para try ... check ... push ... etc
+para time > run.time
+# Completed: 39 of 39 jobs
+# CPU time in finished jobs:         58s       0.96m     0.02h    0.00d  0.000 y
+# IO & Wait Time:                   122s       2.04m     0.03h    0.00d  0.000 y
+# Average job time:                   5s       0.08m     0.00h    0.00d
+# Longest finished job:              23s       0.38m     0.01h    0.00d
+# Submission to last job:            42s       0.70m     0.01h    0.00d
+
+# put together the individual results
+mkdir pslParts
+cat psl/chr*.psl | gzip -c > pslParts/hg38Patch3.hg38.psl.gz
+
+#   constructing a chain from those results
+mkdir -p /hive/data/genomes/hg38/bed/hg38Patch3/lastzHg38.2015-04-09/axtChain/run
+cd /hive/data/genomes/hg38/bed/hg38Patch3/lastzHg38.2015-04-09/axtChain/run
+time zcat ../../pslParts/hg38Patch3.hg38.psl.gz \
+| axtChain -psl -verbose=0 -scoreScheme=/scratch/data/blastz/human_chimp.v2.q -minScore=2000 -linearGap=medium stdin \
+    /hive/data/genomes/hg38/bed/hg38Patch3/hg38Patch3.2bit \
+    /hive/data/genomes/hg38/bed/hg38Patch3/hg38Bits.2bit \
+    stdout \
+| chainAntiRepeat /hive/data/genomes/hg38/bed/hg38Patch3/hg38Patch3.2bit \
+    /hive/data/genomes/hg38/bed/hg38Patch3/hg38Bits.2bit  \
+    stdin hg38Patch3.hg38.preLift.chain
+    #   real    0m1.705s
+
+liftUp -chainQ hg38Patch3.hg38.lifted.chain \
+    ../../../hg38Bits.lift carry hg38Patch3.hg38.preLift.chain
+
+# constructing the net files:
+cd /hive/data/genomes/hg38/bed/hg38Patch3/lastzHg38.2015-04-09/axtChain
+
+chainMergeSort run/hg38Patch3.hg38.lifted.chain \
+        | gzip -c > hg38Patch3.hg38.all.chain.gz
+
+chainSplit chain hg38Patch3.hg38.all.chain.gz
+# Make nets ("noClass", i.e. without rmsk/class stats which are added later):
+time chainPreNet  hg38Patch3.hg38.all.chain.gz \
+    ../../hg38Patch3.chrom.sizes \
+    /hive/data/genomes/hg38/chrom.sizes stdout \
+    | chainNet  stdin -minSpace=1 ../../hg38Patch3.chrom.sizes \
+        /hive/data/genomes/hg38/chrom.sizes stdout /dev/null \
+    | netSyntenic stdin noClass.net
+    #   real    0m0.435s
+
+# Make liftOver chains:
+netChainSubset -verbose=0 noClass.net hg38Patch3.hg38.all.chain.gz stdout \
+    | chainStitchId stdin stdout | gzip -c > hg38Patch3.hg38.over.chain.gz
+
+# Make axtNet for download: one .axt per hg38Patch3 seq.
+netSplit noClass.net net
+cd ..
+mkdir -p axtNet
+# beware, tcsh scripting here:
+foreach f (axtChain/net/*.net)
+netToAxt $f axtChain/chain/$f:t:r.chain \
+  ../hg38Patch3.2bit \
+        /hive/data/genomes/hg38/hg38.2bit stdout \
+  | axtSort stdin stdout \
+  | gzip -c > axtNet/$f:t:r.hg38Patch3.hg38.net.axt.gz
+end
+
+# Make mafNet for multiz: one .maf per hg38Patch3 seq.
+mkdir -p mafNet
+# beware, tcsh scripting here:
+foreach f (axtNet/*.hg38Patch3.hg38.net.axt.gz)
+  axtToMaf -tPrefix=hg38Patch3. -qPrefix=hg38. $f \
+        ../hg38Patch3.chrom.sizes \
+        /hive/data/genomes/hg38/chrom.sizes \
+        stdout \
+  | gzip -c > mafNet/$f:t:r:r:r:r:r.maf.gz
+end
+
+#############################################################################
+# run this same business with hg38 as target, Patch3 sequence as query
+#  (DONE - 2015-04-15 - Hiram)
+mkdir /hive/data/genomes/hg38/bed/hg38Patch3/lastzHg38Patch3.2015-04-15
+cd /hive/data/genomes/hg38/bed/hg38Patch3/lastzHg38Patch3.2015-04-15
+
+cat << '_EOF_' > DEF
+# human vs human
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+# lastz does not like the O= and E= lines in the matrix file
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters from hg18 vs venter1 lastz on advice from Webb
+BLASTZ_K=10000
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg38
+SEQ1_DIR=/scratch/data/hg38/hg38.2bit
+SEQ1_LEN=/scratch/data/hg38/chrom.sizes
+SEQ1_CTGDIR=/hive/data/genomes/hg38/bed/hg38Patch3/hg38Bits.2bit
+SEQ1_CTGLEN=/hive/data/genomes/hg38/bed/hg38Patch3/hg38Bits.chrom.sizes
+SEQ1_LIFT=/hive/data/genomes/hg38/bed/hg38Patch3/hg38Bits.lift
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+SEQ1_LIMIT=1
+
+# QUERY: Human Hg38Patch3
+SEQ2_DIR=/hive/data/genomes/hg38/bed/hg38Patch3/hg38Patch3.2bit
+SEQ2_LEN=/hive/data/genomes/hg38/bed/hg38Patch3/hg38Patch3.chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+SEQ2_LIMIT=1
+
+BASE=/hive/data/genomes/hg38/bed/hg38Patch3/lastzHg38Patch3.2015-04-15
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+rm -f ../hg38Bits.lift
+rm -fr hg38Bits run.blastz psl
+mkdir -p hg38Bits run.blastz/tParts run.blastz/qParts psl
+cut -f4 ../patchLocations.bed | while read FIX
+do
+  chr=`grep "${FIX}" ../patchLocations.bed | cut -f1`
+  start=`grep "${FIX}" ../patchLocations.bed | cut -f2`
+  end=`grep "${FIX}" ../patchLocations.bed | cut -f3`
+  bitSize=`echo ${end} ${start} | awk '{printf "%d", $1-$2}'`
+  chrSize=`grep -w "${chr}" ../../../chrom.sizes | cut -f2`
+  fixSize=`grep "${FIX}" ../hg38Patch3.chrom.sizes | cut -f2`
+  echo ${chr}:${start}-${end} vs. ${FIX}:0-${fixSize} 1>&2
+  twoBitToFa /hive/data/genomes/hg38/hg38.2bit:${chr}:${start}-${end} stdout \
+    | sed -e "s/${chr}:/${FIX}_/g"  > hg38Bits/${FIX}.fa
+  fixName=`head -1 hg38Bits/${FIX}.fa | sed -e 's/>//;'`
+  echo -e "${start}\t${fixName}\t${fixSize}\t${chr}\t${chrSize}" >> ../hg38Bits.lift
+  echo -e "/hive/data/genomes/hg38/bed/hg38Patch3/hg38Bits.2bit:${fixName}:0-${bitSize}" > run.blastz/tParts/${FIX}.lst
+  echo -e "/hive/data/genomes/hg38/bed/hg38Patch3/hg38Patch3.2bit:${FIX}:0-${fixSize}" > run.blastz/qParts/${FIX}.lst
+  echo -e "/cluster/bin/scripts/blastz-run-ucsc -outFormat psl tParts/${FIX}.lst qParts/${FIX}.lst ../DEF {check out exists ../psl/${FIX}.psl}" >> run.blastz/jobList
+done
+
+ssh ku
+cd /hive/data/genomes/hg38/bed/hg38Patch3/lastzHg38Patch3.2015-04-15/run.blastz
+mkdir ../psl
+para create jobList
+para try ... check ... push ... etc
+para time
+# Completed: 39 of 39 jobs
+# CPU time in finished jobs:         45s       0.75m     0.01h    0.00d  0.000 y
+# IO & Wait Time:                   103s       1.71m     0.03h    0.00d  0.000 y
+# Average job time:                   4s       0.06m     0.00h    0.00d
+# Longest finished job:              18s       0.30m     0.01h    0.00d
+# Submission to last job:            57s       0.95m     0.02h    0.00d
+
+# put together the individual results
+cd /hive/data/genomes/hg38/bed/hg38Patch3/lastzHg38Patch3.2015-04-15
+mkdir pslParts
+cat psl/chr*.psl | gzip -c > pslParts/hg38.hg38Patch3.psl.gz
+
+#   constructing a chain from those results
+mkdir -p /hive/data/genomes/hg38/bed/hg38Patch3/lastzHg38Patch3.2015-04-15/axtChain/run
+cd /hive/data/genomes/hg38/bed/hg38Patch3/lastzHg38Patch3.2015-04-15/axtChain/run
+
+time zcat ../../pslParts/hg38.hg38Patch3.psl.gz \
+| axtChain -psl -verbose=0 -scoreScheme=/scratch/data/blastz/human_chimp.v2.q -minScore=2000 -linearGap=medium stdin \
+    /hive/data/genomes/hg38/bed/hg38Patch3/hg38Bits.2bit \
+    /hive/data/genomes/hg38/bed/hg38Patch3/hg38Patch3.2bit \
+    stdout \
+     | chainAntiRepeat /hive/data/genomes/hg38/bed/hg38Patch3/hg38Bits.2bit \
+     /hive/data/genomes/hg38/bed/hg38Patch3/hg38Patch3.2bit \
+    stdin hg38.hg38Patch3.preLift.chain
+    #   real    0m1.407s
+liftUp hg38.hg38Patch3.lifted.chain \
+    ../../../hg38Bits.lift carry hg38.hg38Patch3.preLift.chain
+
+# constructing the net files:
+cd /hive/data/genomes/hg38/bed/hg38Patch3/lastzHg38Patch3.2015-04-15/axtChain
+
+chainMergeSort run/hg38.hg38Patch3.lifted.chain \
+        | gzip -c > hg38.hg38Patch3.all.chain.gz
+
+hgLoadChain -tIndex hg38 chainHg38Patch3 hg38.hg38Patch3.all.chain.gz
+# Loading 4034 chains into hg38.chainHg38Patch3
+featureBits hg38 chainHg38Patch3Link
+# 14831297 bases of 3049335806 (0.486%) in intersection
+
+chainSplit chain hg38.hg38Patch3.all.chain.gz
+# Make nets ("noClass", i.e. without rmsk/class stats which are added later):
+time chainPreNet hg38.hg38Patch3.all.chain.gz \
+    /hive/data/genomes/hg38/chrom.sizes \
+    ../../hg38Patch3.chrom.sizes stdout \
+    | chainNet  stdin -minSpace=1 /hive/data/genomes/hg38/chrom.sizes \
+        ../../hg38Patch3.chrom.sizes stdout /dev/null \
+    | netSyntenic stdin noClass.net
+    #   real    0m0.435s
+
+netClass -verbose=0 -noAr noClass.net hg38 hg38Patch3 hg38.hg38Patch3.net
+
+# Make liftOver chains:
+netChainSubset -verbose=0 noClass.net hg38.hg38Patch3.all.chain.gz stdout \
+    | chainStitchId stdin stdout | gzip -c > hg38.hg38Patch3.over.chain.gz
+
+# Make axtNet for download: one .axt per hg38Patch3 seq.
+netSplit noClass.net net
+cd ..
+mkdir -p axtNet
+foreach f (axtChain/net/*.net)
+netToAxt $f axtChain/chain/$f:t:r.chain \
+  /hive/data/genomes/hg38/hg38.2bit \
+        ../hg38Patch3.2bit stdout \
+  | axtSort stdin stdout \
+  | gzip -c > axtNet/$f:t:r.hg38.hg38Patch3.net.axt.gz
+end
+
+# Make mafNet for multiz: one .maf per hg38Patch3 seq.
+mkdir -p mafNet
+foreach f (axtNet/*.hg38.hg38Patch3.net.axt.gz)
+  axtToMaf -tPrefix=hg38. -qPrefix=hg38Patch3. $f \
+        /hive/data/genomes/hg38/chrom.sizes \
+        ../hg38Patch3.chrom.sizes \
+        stdout \
+  | gzip -c > mafNet/$f:t:r:r:r:r:r.maf.gz
+end
+
+cd /hive/data/genomes/hg38/bed/hg38Patch3/lastzHg38Patch3.2015-04-15/axtChain
+mkdir -p queryChains
+chainSplit -q queryChains hg38.hg38Patch3.all.chain.gz
+
+# then run a 'lift over' chain/net on each single one
+mkdir -p singleLiftOver
+
+for F in queryChains/*.chain
+do
+    C=`basename ${F}`
+    B=`echo ${C} | sed -e "s/.chain//"`
+    chainPreNet -inclHap ${F} /hive/data/genomes/hg38/chrom.sizes \
+        ../../hg38Patch3.chrom.sizes stdout \
+    | chainNet -inclHap stdin -minSpace=1 /hive/data/genomes/hg38/chrom.sizes \
+        ../../hg38Patch3.chrom.sizes singleLiftOver/${B}.raw.net \
+        /dev/null
+    netSyntenic singleLiftOver/${B}.raw.net singleLiftOver/${B}.noClass.net
+    netFilter -chimpSyn singleLiftOver/${B}.noClass.net > singleLiftOver/${B}.chimpSyn.net
+    netChainSubset -verbose=0 singleLiftOver/${B}.noClass.net \
+        ${F} stdout \
+    | chainStitchId stdin stdout > singleLiftOver/${C}
+    echo "${F} -> singleLiftOver/${C}"
+done
+
+# put the chains together into one file
+chainMergeSort singleLiftOver/chr*.chain | gzip -c \
+        > hg38.hg38Patch3.single.over.chain.gz
+
+ # construct psl files from those chains
+chainToPsl hg38.hg38Patch3.single.over.chain.gz \
+   /hive/data/genomes/hg38/chrom.sizes \
+    ../../hg38Patch3.chrom.sizes \
+     /hive/data/genomes/hg38/hg38.2bit \
+       ../../hg38Patch3.2bit \
+        hg38.hg38Patch3.over.psl
+# chainToPsl appears to have a problem, note errors from pslCheck:
+pslCheck -db=hg38 hg38.hg38Patch3.over.psl
+# checked: 66 failed: 12 errors: 12
+
+pslRecalcMatch hg38.hg38Patch3.over.psl \
+  /hive/data/genomes/hg38/hg38.2bit \
+    ../..//hg38Patch3.2bit \
+      fixup.hg38.hg38Patch3.over.psl
+pslCheck -db=hg38 fixup.hg38.hg38Patch3.over.psl
+# checked: 66 failed: 0 errors: 0
+
+# load this PSL track
+#     this table name prefix altSeqLiftOverPsl is recognized in hgc clicks
+hgLoadPsl hg38 -table=altSeqLiftOverPslP3 fixup.hg38.hg38Patch3.over.psl
+
+mkdir /hive/data/genomes/hg38/bed/hg38Patch3/seqExt
+cd /hive/data/genomes/hg38/bed/hg38Patch3/seqExt
+twoBitToFa ../hg38Patch3.2bit hg38Patch3.fa
+mkdir -p /gbdb/hg38/hg38Patch3 hg38Patch3
+faSplit byname hg38Patch3.fa ./hg38Patch3/
+ln -s `pwd`/hg38Patch3/*.fa /gbdb/hg38/hg38Patch3
+hgLoadSeq -drop -seqTbl=seqHg38Patch3 -extFileTbl=extHg38Patch3 hg38 \
+        /gbdb/hg38/hg38Patch3/*.fa
+
+#############################################################################
