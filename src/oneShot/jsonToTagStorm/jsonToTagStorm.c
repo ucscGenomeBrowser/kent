@@ -12,7 +12,7 @@ void usage()
 {
 errAbort(
   "jsonToTagStorm - Convert a .json file into a .tagStorm file. The .json file"
-  " must adhere to .json convention, multiple lines .json files are allowed. \n"
+  " must adhere to .json convention (json.org), multiple lined .json files are allowed. \n"
   "usage:\n"
   "   jsonToTagStorm in.json out.tags\n"
   );
@@ -27,9 +27,9 @@ static struct optionSpec options[] = {
 void removePunctuation(char *s)
 /* Remove the remaining unwanted punctuation in a string */
 {
-stripChar(s,"\"");
-stripChar(s,"]");
-stripChar(s,"}");
+stripChar(s,'\\');
+stripChar(s,']');
+stripChar(s,'}');
 }
 
 
@@ -94,7 +94,7 @@ for (i = 1 ; i < arraySize; ++i)
 		newArray = TRUE; 
 		continue;
 		}
-	    prettyPrint(trimSpaces(chopByColon[0]), trimSpaces(chopByColon[1]), depth, f);
+	    prettyPrint(stripEnclosingChar(trimSpaces(chopByColon[0]), '"'), stripEnclosingChar(trimSpaces(chopByColon[1]), '"'), depth, f);
 	    }
 	depth -= updateDepth;
 	// Update the depth after each stanza is printed
