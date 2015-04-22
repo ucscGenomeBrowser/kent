@@ -6146,7 +6146,7 @@ awk 'BEGIN {OFS="\t"} {print 0, $1, $2, $1, $2}' /cluster/data/hg38/chrom.sizes 
 rm tmpChrom
 
 #########################################################################
-2015-03-13: import of UCSC GENCODE group processing of GENCODE V21 (markd)
+2015-03-13: import of UCSC GENCODE group processing of GENCODE V22 (markd)
     # download files
     mkdir -p /hive/data/genomes/hg38/bed/gencodeV22
     cd /hive/data/genomes/hg38/bed/gencodeV22
