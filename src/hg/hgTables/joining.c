@@ -1067,7 +1067,8 @@ bedSqlFieldsExceptForChrom(hti, &fieldCount, &fields);
 fieldCount = chopCommas(fields, words);
 for (i=fieldCount-1;  i >= 0;  i--)
     {
-    if (sameString(words[i], "0"))
+    // Skip placeholder field names:
+    if (sameString(words[i], "0") || sameString(words[i], "'.'"))
 	continue;
     safef(dtf, sizeof(dtf), "%s.%s.%s", db, table, words[i]);
     sn = slNameNew(dtf);
