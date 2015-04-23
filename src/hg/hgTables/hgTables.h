@@ -761,7 +761,7 @@ struct hTableInfo *bigBedToHti(char *table, struct sqlConnection *conn);
 struct slName *bigBedGetFields(char *table, struct sqlConnection *conn);
 /* Get fields of bigBed as simple name list. */
 
-struct sqlFieldType *bigBedListFieldsAndTypes(char *table, struct sqlConnection *conn);
+struct sqlFieldType *bigBedListFieldsAndTypes(struct trackDb *tdb, struct sqlConnection *conn);
 /* Get fields of bigBed as list of sqlFieldType. */
 
 struct bed *bigBedGetFilteredBedsOnRegions(struct sqlConnection *conn,
