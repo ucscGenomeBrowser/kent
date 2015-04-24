@@ -379,6 +379,9 @@ def parseTrackDb(db, tableSizes):
             # create a pseudo table, so we know we have to download something
             trackTables[track] = [track]
 
+        if track=="bacEndPairs":
+            trackTables[track].add("all_bacends")
+
     return trackLabels, trackTables, trackParents, groups, pseudos, \
         trackVis, superTracks, trackBigDataFiles
 
@@ -956,7 +959,6 @@ def linkTrackToGbdb(fnames, db, tableNames, bigDataFiles):
             continue
 
         # check fname for regex and assign to some manually defined track
-
         for regex, repl in regexRules:
             match = regex.search(fname)
             if match != None:
