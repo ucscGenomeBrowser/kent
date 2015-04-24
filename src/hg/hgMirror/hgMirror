@@ -984,6 +984,14 @@ def linkTrackToGbdb(fnames, db, tableNames, bigDataFiles):
         fname = bigDataFile.replace("/gbdb/%s/" % db, "")
         tableFiles[trackName].append(fname)
 
+        # also add indexes for vcf or bam files
+        tbiFname = fname+".tbi"
+        baiFname = fname+".bai"
+        if tbiFname in fnames:
+            tableFiles[trackName].append(tbiFname)
+        if baiFname in fnames:
+            tableFiles[trackName].append(baiFname)
+
     return tableFiles
 
 def getRsyncSizes(dataType, db):
