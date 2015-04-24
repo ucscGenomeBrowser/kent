@@ -798,3 +798,81 @@ searchPriority 8
 
     # test with sequence
 #############################################################################
+# UCSC to RefSeq name correspondence (DONE - 2015-04-15 - Hiram)
+
+    mkdir /hive/data/genomes/rn6/bed/ucscToRefSeq
+    cd /hive/data/genomes/rn6/bed/ucscToRefSeq
+
+    rsync -avPL \
+  rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Rattus_norvegicus/all_assembly_versions/GCA_000001895.4_Rnor_6.0/GCA_000001895.4_Rnor_6.0_assembly_report.txt ./
+
+    # this assembly_report has "UCSC-style-name" in column 10
+    # but it does not name everything
+
+    # duplicate contigs removed:
+      1 AABR07023006.1
+      1 AABR07022518.1
+
+    # columns 5 and 7 are the INSDC and RefSeq names
+    # eliminate the two duplicate contigs
+    grep -v "^#" GCA_000001895.4_Rnor_6.0_assembly_report.txt \
+      | egrep -v "AABR07023006.1|AABR07022518.1" \
+      | awk -F'\t' '{printf "%s\t%s\n", $5,$7}' | sort > insdc.refSeq.tab
+
+    hgsql -N -e 'select name,chrom,chromStart,chromEnd from ucscToINSDC;' \
+      rn6 | sort > insdc.ucsc.tab
+
+    join insdc.ucsc.tab insdc.refSeq.tab | tr '[ ]' '[\t]' \
+       | cut -f2- > ucsc.refSeq.tab
+
+    # when working perfectly, all these tab files have the same line count:
+    wc -l *.tab
+# 953 insdc.refSeq.tab
+# 953 insdc.ucsc.tab
+# 953 ucsc.refSeq.tab
+
+    export chrSize=`cut -f1 ucsc.refSeq.tab | awk '{print length($0)}' | sort -n | tail -1`
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab rn6 ucscToRefSeq ./ucscToRefSeq.sql ucsc.refSeq.tab
+
+    checkTableCoords  rn6 -table=ucscToRefSeq
+    # should cover %100 all bases:
+    featureBits -countGaps rn6 ucscToRefSeq
+    # 2870182909 bases of 2870182909 (100.000%) in intersection
+
+#########################################################################
+
+# download and load ncbiGene track
+
+db=rn6
+mkdir  /cluster/data/genomes/$db/bed/ncbiGene
+cd  /cluster/data/genomes/$db/bed/ncbiGene
+
+ftpFile=ftp://ftp.ncbi.nlm.nih.gov/genomes/R_norvegicus/GFF/ref_Rnor_6.0_top_level.gff3.gz
+gff3File=`basename $ftpFile`
+
+echo "select * from ucscToRefSeq" | hgsql $db | tail -n +2 | awk '{print 0, $4, $3, $1, $3}' > refSeqToUcsc.lft
+wget $ftpFile
+
+/cluster/home/braney/bin/x86_64/gff3ToGenePred -useName -warnAndContinue $gff3File stdout 2> convertErr.txt | liftUp -type=.gp -extGenePred lift.gp refSeqToUcsc.lft warn  stdin 2> liftErr.txt
+wc -l lift.gp
+# 61213 lift.gp
+
+egrep "^N(M|R)" lift.gp > curated.gp
+egrep "^X(M|R)" lift.gp > predicted.gp
+
+wc -l curated.gp predicted.gp
+# 17948 curated.gp
+# 43265 predicted.gp
+# 61213 total
+
+grep dropping convertErr.txt | wc -l
+#    744
+
+awk '/isn/ {print $1}' liftErr.txt | sort -u
+# nothing
+
+hgLoadGenePred -genePredExt $db ncbiRefCurated curated.gp
+hgLoadGenePred -genePredExt $db ncbiRefPredicted predicted.gp
+

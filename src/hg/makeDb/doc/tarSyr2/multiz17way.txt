@@ -1370,12 +1370,15 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #   real    66m50.134s
     # -rw-rw-r-- 1 7932395685 Feb 25 08:24 tarSyr2.17way.maf.gz
 
-    grep TREE ../../4d/all.mod | sed -e 's/TREE: //' \
+    grep TREE ../../4d/all.mod | awk '{print $NF}' \
       | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
          > tarSyr2.17way.nh
     ~/kent/src/hg/utils/phyloTrees/commonNames.sh tarSyr2.17way.nh \
       | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
          > tarSyr2.17way.commonNames.nh
+    ~/kent/src/hg/utils/phyloTrees/scientificNames.sh tarSyr2.17way.nh \
+	| $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+	    > tarSyr2.17way.scientificNames.nh
     time md5sum *.nh *.maf.gz > md5sum.txt
     #   real    0m28.593s
 

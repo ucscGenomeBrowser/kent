@@ -933,10 +933,12 @@ if (!trackHubDatabase(db))
 char *table = chromTable(conn, rootTable);
 struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable, ctLookupName);
 boolean isSmallWig = isWiggle(db, table);
-boolean isWig = isSmallWig || isBigWigTable(table);
-boolean isBedGr = isBedGraph(rootTable);
-boolean isBam = isBamTable(rootTable);
-boolean isVcf = isVcfTable(rootTable, NULL);
+boolean isBigWig = tdb ? tdbIsBigWig(tdb) : isBigWigTable(table);
+boolean isWig = isSmallWig || isBigWig;
+boolean isBedGr = tdb ? tdbIsBedGraph(tdb) : isBedGraph(rootTable);
+boolean isBb = tdb ? tdbIsBigBed(tdb) : isBigBed(database, table, curTrack, ctLookupName);
+boolean isBam = tdb ? tdbIsBam(tdb) : isBamTable(rootTable);
+boolean isVcf = tdb ? tdbIsVcf(tdb) : isVcfTable(rootTable, NULL);
 int bedGraphColumn = 5;		/*	default score column	*/
 
 if (isBedGr)
@@ -972,9 +974,9 @@ if (isWig)
 else
     {
     struct sqlFieldType *ftList;
-    if (isBigBed(database, table, curTrack, ctLookupName))
-        ftList = bigBedListFieldsAndTypes(table, conn);
-    else if (isBamTable(table))
+    if (isBb)
+        ftList = bigBedListFieldsAndTypes(tdb, conn);
+    else if (isBam)
 	ftList = bamListFieldsAndTypes();
     else if (isVcf)
 	ftList = vcfListFieldsAndTypes();
@@ -1056,7 +1058,7 @@ else if (ct->wiggle || isBigWigTable(table))
     }
 else if (isBigBed(db, table, curTrack, ctLookupName))
     {
-    struct sqlFieldType *ftList = bigBedListFieldsAndTypes(table, NULL);
+    struct sqlFieldType *ftList = bigBedListFieldsAndTypes(ct->tdb, NULL);
     printSqlFieldListAsControlTable(ftList, db, table, ct->tdb, FALSE);
     }
 else if (isBamTable(table))

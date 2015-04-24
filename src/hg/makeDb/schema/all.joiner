@@ -106,7 +106,7 @@ set vicPac vicPac1,vicPac2
 set xenTro xenTro1,xenTro2,xenTro3,xenTro7
 
 # Define all organism/assembly-specific databases.
-set gbd $ailMel,$allMis,$anoCar,$anoGam,$apiMel,$aplCal,$aquChr,$balAcu,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$canFam,$calJac,$calMil,$cavPor,$cb,$ce,$cerSim,$choHof,$chlSab,$chrPic,$ci,$cioSav,$criGri,$danRer,$dasNov,$dipOrd,$dm,$dp,$droMult,$droYak,$eboVir,$echTel,$equCab,$eriEur,$felCat,$fr,$gadMor,$galGal,$gasAcu,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$macEug,$macFas,$melGal,$melHap,$melInc,$melUnd,$micMur,$mm,$monDom,$musFur,$myoLuc,$nasLar,$nomLeu,$ochPri,$oreNil,$ornAna,$oryCun,$oryLat,$otoGar,$oviAri,$panPan,$panTro,$papAnu,$papHam,$petMar,$ponAbe,$priPac,$proCap,$pteVam,$rheMac,$rhiRox,$rn,$sacCer,$saiBol,$sarHar,$sorAra,$speTri,$strPur,$susScr,$taeGut,$tarSyr,$tetNig,$triMan,$tupBel,$turTru,$vicPac,$xenTro
+set gbd $ailMel,$allMis,$anoCar,$anoGam,$apiMel,$aplCal,$aquChr,$balAcu,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$canFam,$calJac,$calMil,$cavPor,$cb,$ce,$cerSim,$choHof,$chlSab,$chrPic,$ci,$cioSav,$criGri,$danRer,$dasNov,$dipOrd,$dm,$dp,$droMult,$droYak,$eboVir,$echTel,$equCab,$eriEur,$felCat,$fr,$gadMor,$galGal,$gasAcu,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$macEug,$macFas,$melGal,$melHap,$melInc,$melUnd,$micMur,$mm,$monDom,$musFur,$myoLuc,$nasLar,$nomLeu,$ochPri,$oreNil,$ornAna,$oryCun,$oryLat,$otoGar,$oviAri,$panPan,$panTro,$papAnu,$papHam,$petMar,$ponAbe,$priPac,$proCap,$pteVam,$rheMac,$rhiRox,$rn,$sacCer,$saiBol,$sarHar,$sorAra,$speTri,$strPur,$susScr,$taeGut,$tarSyr,$tetNig,$triMan,$tupBel,$turTru,$vicPac,$xenTro,braNey38
 
 # Define organism databases based on whole-genome shotgun projects
 # (Assembly based on WGS project contigs accessioned in Genbank)
@@ -164,7 +164,7 @@ databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralb
 set chainDest AilMel1,AnoCar1,AnoCar2,AnoGam1,ApiMel1,ApiMel2,ApiMel3,ApiMel4,AplCal1,BosTau1,BosTau2,BosTau3,BosTau4,BosTau6,BosTau7,BosTau8,BraFlo1,BraFlo2,BruMal1,CaeAng1,CaeJap1,CaeJap3,CaeJap4,CaePb1,CaePb2,CaePb3,CaeRem2,CaeRem3,CaeRem4,CaeSp111,CalJac1,CalJac3,CanFam1,CanFam2,CanFam3,CanFamPoodle1,CavPor3,Cb1,Cb3,Cb4,Ce2,Ce4,Ce6,Ce9,Ce10,ChlSab1,ChlSab2,ChoHof1,Ci1,Ci2,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,DanRer6,DanRer7,DanRer10,DasNov2,DasNov3,DipOrd1,Dm1,Dm2,Dm3,Dm6,Dp1,Dp2,Dp3,Dp4,DroAlb1,DroAna1,DroAna2,DroAna3,DroBia2,DroBip2,DroEle2,DroEre1,DroEre2,DroEug2,DroFic2,DroGri1,DroGri2,DroKik2,DroMir2,DroMoj1,DroMoj2,DroMoj3,DroPer1,DroPse3,DroRho2,DroSec1,DroSim1,DroSuz1,DroTak2,DroVir1,DroVir2,DroVir3,DroWil1,DroWil2,DroYak1,DroYak2,DroYak3,EchTel1,EquCab1,EquCab2,EriEur1,EriEur2,FelCat3,FelCat4,FelCat5,FelCat8,Fr1,Fr2,Fr3,GadMor1,GalGal2,GalGal3,GalGal4,GasAcu1,GeoFor1,GorGor1,GorGor2,GorGor3,HaeCon1,HetGla1,HetGla2,Hg16,Hg17,Hg18,Hg19,Hg19Patch2,Hg19Patch5,Hg19Patch9,Hg19Patch10,Hg38Patch2,Hg38,LatCha1,LoxAfr2,LoxAfr3,MacEug1,MacEug2,MacFas5,MarVir1,MelGal1,MelHap1,MelInc1,MelUnd1,MicMur1,Mm5,Mm6,Mm7,Mm8,Mm9,Mm10,Mm10Patch1,MonDom1,MonDom2,MonDom4,MonDom5,MusDom2,MyoLuc1,MyoLuc2,NasLar1,NomLeu1,NomLeu2,NomLeu3,OchPri2,OreNil1,OreNil2,OrnAna1,OryCun1,OryCun2,OryLat1,OryLat2,OtoGar1,OtoGar3,OviAri1,PanPan1,PanTro1,PanTro2,PanTro3,PanTro4,PapAnu2,PapHam1,PetMar1,PonAbe2,PriPac1,PriPac2,ProCap1,PteVam1,RheMac1,RheMac2,RheMac3,RhiRox1,Rn3,Rn4,Rn5,SaiBol1,SorAra1,SpeTri1,SpeTri2,StrPur1,StrPur2,SusScr1,SusScr2,SusScr3,TaeGut1,TarSyr1,TarSyr2,TetNig1,TetNig2,TriCas2,TriMan1,TupBel1,TurTle1,TurTru1,TurTru2,VicPac1,VicPac2,XenTro1,XenTro2,XenTro3
 
 # Define databases that support known genes
-set kgDb $hg,$mm,rn3
+set kgDb $hg,$mm,rn3,braNey38
 # Older format (KG 2)
 set kgDb2 hg16,hg17,mm7,mm8,rn3,rn4
 # Newer format (KG 3 aka UCSC Genes)
@@ -1577,7 +1577,7 @@ identifier wgEncodeGencodePseudoGeneAttrsV22
 identifier wgEncodeGencodeExonSupportV22
 "Link together Gencode Exon Support table with Attributes table"
     hg38.wgEncodeGencodeExonSupportV22.transcriptId dupeOk
-    hg38.wgEncodeGencodeAttrsV22.transcriptId minCheck=0.98
+    hg38.wgEncodeGencodeAttrsV22.transcriptId minCheck=0.97
 
 identifier wgEncodeGencodeGeneSourceV22
 "Link together Gencode Gene Source table with Attributes table"
@@ -1592,7 +1592,7 @@ identifier wgEncodeGencodePdbV22
 identifier wgEncodeGencodePubMedV22
 "Link together Gencode Pubmed table with Attributes table"
     hg38.wgEncodeGencodePubMedV22.transcriptId dupeOk
-    hg38.wgEncodeGencodeAttrsV22.transcriptId  minCheck=0.635488
+    hg38.wgEncodeGencodeAttrsV22.transcriptId  minCheck=0.63
 
 identifier wgEncodeGencodeRefSeqV22
 "Link together Gencode RefSeq table with Attributes table"
@@ -1612,7 +1612,7 @@ identifier wgEncodeGencodeTranscriptSourceV22
 identifier wgEncodeGencodeTranscriptSupportV22
 "Link together Gencode Transcript Support table with Attributes table"
     hg38.wgEncodeGencodeTranscriptSupportV22.transcriptId dupeOk
-    hg38.wgEncodeGencodeAttrsV22.transcriptId minCheck=0.81
+    hg38.wgEncodeGencodeAttrsV22.transcriptId minCheck=0.22
 
 identifier wgEncodeGencodeTranscriptionSupportLevelV22
 "Link together Gencode Transcription Support Level table with Attributes table"
@@ -2716,11 +2716,17 @@ identifier knownGeneId dependency
     $kgDb.kg3ToKg4.newId minCheck=0.5 exclude=
     $kgDb,!hg19.kg4ToKg5.newId minCheck=0.5 exclude=
     $kgDb,!mm10.kg5ToKg6.newId exclude=
-    $kgDb.kg6ToKg7.newId exclude=
+    $kgDb,!mm10.kg6ToKg7.newId exclude=
     $kgDb.kg7ToKg8.newId exclude=
     $kgDb,!hg16.kgTargetAli.qName full
     hg19.knownGeneTxMrna.name
     hg19.knownGeneTxPep.name
+
+identifier knownGeneOld7Id dependency
+"Previous UCSC Gene build"
+    $kgDb.knownGeneOld7.name
+    $kgDb.kg7ToKg8.oldId full
+    $kgDb.kgXrefOld7.kgID full
 
 identifier knownGeneOld6Id dependency
 "Previous UCSC Gene build"

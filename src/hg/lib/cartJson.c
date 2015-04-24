@@ -13,6 +13,7 @@
 #include "obscure.h"
 #include "regexHelper.h"
 #include "suggest.h"
+#include "trackDb.h"
 #include "trackHub.h"
 #include "web.h"
 
@@ -399,6 +400,43 @@ while ((hel = hashNext(&cookie)) != NULL)
 return hash;
 }
 
+int trackDbRefCmpShortLabel(const void *va, const void *vb)
+/* Do trackDbCmpShortLabel on list of references as opposed to actual trackDbs. */
+{
+const struct slRef *aRef = *((struct slRef **)va);
+const struct slRef *bRef = *((struct slRef **)vb);
+struct trackDb *a = aRef->val, *b = bRef->val;
+return trackDbCmpShortLabel(&a, &b);
+}
+
+static struct slRef *sortedAllTracks(struct trackDb *trackList)
+/* Return an slRef list containing all tdbs in track list, sorted by shortLabel. */
+{
+struct slRef *trackRefList = NULL;
+struct trackDb *tdb;
+for (tdb = trackList;  tdb != NULL;  tdb = tdb->next)
+    slAddHead(&trackRefList, slRefNew(tdb));
+slSort(&trackRefList, trackDbRefCmpShortLabel);
+return trackRefList;
+}
+
+static void writeGroupedTrack(struct jsonWrite *jw, char *name, char *label, struct hash *fieldHash,
+                              int maxDepth, struct slRef *tdbRefList)
+{
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "name", name);
+jsonWriteString(jw, "label", label);
+jsonWriteListStart(jw, "tracks");
+struct slRef *tdbRef;
+for (tdbRef = tdbRefList;  tdbRef != NULL;  tdbRef = tdbRef->next)
+    {
+    struct trackDb *tdb = tdbRef->val;
+    rWriteTdb(jw, tdb, fieldHash, 1, maxDepth);
+    }
+jsonWriteListEnd(jw);
+jsonWriteObjectEnd(jw);
+}
+
 void cartJsonGetGroupedTrackDb(struct cartJson *cj, struct hash *paramHash)
 /* Translate trackDb list (only a subset of the fields) into JSON array of track group objects;
  * each group contains an array of track objects that may have subtracks.  Send it in a wrapper
@@ -421,22 +459,22 @@ struct jsonWrite *jw = cj->jw;
 jsonWriteObjectStart(jw, "groupedTrackDb");
 jsonWriteString(jw, "db", cartString(cj->cart, "db"));
 jsonWriteListStart(jw, "groupedTrackDb");
+int nonEmptyGroupCount = 0;
 struct grp *grp;
 for (grp = fullGroupList;  grp != NULL;  grp = grp->next)
     {
-    jsonWriteObjectStart(jw, NULL);
-    jsonWriteString(jw, "name", grp->name);
-    jsonWriteString(jw, "label", grp->label);
-    jsonWriteListStart(jw, "tracks");
     struct slRef *tdbRefList = hashFindVal(groupedTrackRefList, grp->name);
-    struct slRef *tdbRef;
-    for (tdbRef = tdbRefList;  tdbRef != NULL;  tdbRef = tdbRef->next)
+    if (tdbRefList)
         {
-        struct trackDb *tdb = tdbRef->val;
-        rWriteTdb(jw, tdb, fieldHash, 1, maxDepth);
+        nonEmptyGroupCount++;
+        writeGroupedTrack(jw, grp->name, grp->label, fieldHash, maxDepth, tdbRefList);
         }
-    jsonWriteListEnd(jw);
-    jsonWriteObjectEnd(jw);
+    }
+if (nonEmptyGroupCount == 0)
+    {
+    // Catch-all for assembly hubs that don't declare groups for their tracks: add All Tracks
+    struct slRef *allTracks = sortedAllTracks(fullTrackList);
+    writeGroupedTrack(jw, "allTracks", "All Tracks", fieldHash, maxDepth, allTracks);
     }
 jsonWriteListEnd(jw);
 jsonWriteObjectEnd(jw);

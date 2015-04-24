@@ -565,7 +565,7 @@ struct hTableInfo *hti = NULL;
 if (tdb->subtracks == NULL)
     {
     if (startsWithWord("bigBed", tdb->type) || startsWithWord("bigGenePred", tdb->type))
-	hti = bigBedToHti(tdb->track, NULL);
+	hti = bigBedToHti(tdb->table, NULL);
     else if (startsWithWord("bam", tdb->type))
 	hti = bamToHti(tdb->table);
     else if (startsWithWord("vcfTabix", tdb->type))

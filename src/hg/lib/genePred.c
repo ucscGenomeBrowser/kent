@@ -1493,9 +1493,9 @@ if (exonEnd > gp->txEnd)
 if (iExon > 0)
     {
     /* other than first exon */
-    unsigned prevExonEnd = gp->exonEnds[iExon-1];
-    if (exonStart < prevExonEnd)
-        gpError(errFh, errorCnt, "%s: %s exon %u overlaps previous exon", desc, gp->name, iExon);
+    if (exonStart < gp->exonEnds[iExon-1])
+        gpError(errFh, errorCnt, "%s: %s exon %u (%s:%d-%d) overlaps previous exon (%s:%d-%d)",
+                desc, gp->name, iExon, gp->chrom, exonStart, exonEnd, gp->chrom, gp->exonStarts[iExon-1], gp->exonEnds[iExon-1]);
     }
 
 if (gp->optFields & genePredExonFramesFld)
@@ -1551,6 +1551,10 @@ int genePredCheck(char *desc, FILE* errFh, int chromSize, struct genePred* gp)
 {
 int iExon;
 int errorCnt = 0;
+
+if (gp->name == NULL)
+    gpError(errFh, &errorCnt, "%s: name is null", desc);
+
 if (!(sameString(gp->strand, "+") || sameString(gp->strand, "-")))
     gpError(errFh, &errorCnt, "%s: %s invalid strand: \"%s\"", desc, gp->name, gp->strand);
 

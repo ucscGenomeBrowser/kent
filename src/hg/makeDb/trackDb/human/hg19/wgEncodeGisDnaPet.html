@@ -29,21 +29,23 @@ you wish to hide.</P>
 <P>
 The query sequences in the SAM/BAM alignment representation 
 are normalized to the + strand of the reference genome
-(see the <A HREF="http://samtools.sourceforge.net/SAM1.pdf#page=4"
+(see the <A HREF="http://samtools.github.io/hts-specs/SAMv1.pdf"
 TARGET=_blank>SAM Format Specification</A>
 for more information on the SAM/BAM file format). If a query sequence was
 originally the reverse of what has been stored and aligned, it will have the
 following
-<A HREF="http://samtools.sourceforge.net/SAM1.pdf#page=5"
+<A HREF="http://samtools.github.io/hts-specs/SAMv1.pdf#page=4"
 TARGET=_blank>flag</A>:
 <PRE>
 (0x10) Read is on '-' strand.
 </PRE></P>
 <P>
-BAM/SAM alignment representations also have <A HREF="http://samtools.sourceforge.net/SAM1.pdf#page=7"
+BAM/SAM alignment representations also have <A HREF="http://samtools.github.io/hts-specs/SAMv1.pdf#page=6"
 TARGET=_blank>tags</A>. The following tags are associated with this track: RG, CQ, CS, and MD.</P>
 
-<P>Mapping quality is not available for this track and so, in accordance with the <a href="http://samtools.sourceforge.net/SAM1.pdf#page=5"> SAM Format Specification</a>, a score of 255 is used.</P>
+<P>Mapping quality is not available for this track and so, in accordance with the
+<a href="http://samtools.github.io/hts-specs/SAMv1.pdf"> SAM Format Specification</a>,
+a score of 255 is used.</P>
 
 <H2>Methods</H2>
 <P>
@@ -83,14 +85,14 @@ rearrangement sites.  Some of them have also been validated by FISH.
 
 <P>The GIS DNA PET libraries and sequence data for genome structural 
 variation analysis were produced at the 
-<A HREF="http://www.gis.a-star.edu.sg/internet/site" TARGET=_BLANK>Genome Institute of
+<A HREF="http://www.a-star.edu.sg/gis" TARGET=_BLANK>Genome Institute of
 Singapore</A>. 
 The data were mapped and analyzed by scientists Xiaoan Ruan, Atif Shahab, 
 Chialin Wei, and Yijun Ruan at the Genome Institute of Singapore.
 </P>
 Contact:
-<A HREF="http://www.gis.a-star.edu.sg/internet/site/investigators.php?f=cv&user_id=19"
-TARGET=_BLANK>Yijun Ruan</A>
+<A HREF="http://research.jax.org/faculty/yijun-ruan.html"
+TARGET=_BLANK>Yijun Ruan</A> (now at The Jackson Laboratory) 
 
 <H2> Data Release Policy </H2>
 

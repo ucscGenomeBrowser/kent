@@ -19,12 +19,22 @@ var PositionSearchMixin = function(myPath) {
     }
 
     // UI event handlers
+    function posErrorHandler(serverMessage) {
+        // If the error message from the server is only that the new position/search can't be found,
+        // then just display it to the user; otherwise treat it as a real error.
+        if (/^Sorry, /.test(serverMessage)) {
+            alert(serverMessage);
+        } else {
+            this.defaultServerErrorHandler(serverMessage);
+        }
+    }
+
     function lookupPosition(mutState, path, newValue) {
         // path is myPath + 'position'.
         // Tell the server to look up the new position/search term.  If there are multiple
         // matches, then the cart's position variable won't be updated unless the user
         // chooses one, and handleServerResponse will get positionMatches to show to the user.
-        this.cartDo({changePosition: {newValue: newValue}});
+        this.cartDo({changePosition: {newValue: newValue}}, _.bind(posErrorHandler, this));
         mutState.setIn(path, newValue);
         mutState.setIn(myPath.concat('loading'), true);
     }

@@ -43,7 +43,7 @@ visibility hide
 color 20,20,170
 type bed 12
 
-track knownGeneOld6
+track knownGeneOld7
 shortLabel Old UCSC Genes
 longLabel Previous Version of UCSC Genes
 group genes
@@ -51,12 +51,12 @@ visibility hide
 color 82,82,160
 type genePred
 hgsid on
-oldToNew kg6ToKg7
+oldToNew kg7ToKg8
 baseColorUseCds given
 baseColorDefault genomicCodons
 
-searchName knownGeneOld6
-searchTable knownGeneOld6
+searchName knownGeneOld7
+searchTable knownGeneOld7
 searchDescription Previous Version of UCSC Genes
 searchMethod fuzzy
 query select chrom, txStart,txEnd, name from %s where name like '%%%s%%'
@@ -310,6 +310,9 @@ pennantIcon 9.jpg ../goldenPath/help/liftOver.html "These data were converted vi
 track FaceBase24SampleTypesAvg override
 origAssembly mm9
 pennantIcon 9.jpg ../goldenPath/help/liftOver.html "These data were converted via liftOver from the July 2007 (NCBI37/mm9) version of the track"
+
+track rmskJoinedBaseline override
+group varRep
 
 # GENCODE
 track wgEncodeGencodeSuper

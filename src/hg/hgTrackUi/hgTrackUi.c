@@ -2873,6 +2873,7 @@ else if (sameString(track, "recombRateMouse"))
 else if (sameString(track, "cghNci60"))
     cghNci60Ui(tdb);
 else if (sameString(track, "xenoRefGene")
+     ||  sameString(track, "ncbiGene")
      ||  sameString(track, "refGene"))
     refGeneUI(tdb);
 else if (startsWith("transMapAln", track))

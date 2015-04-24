@@ -1151,8 +1151,6 @@ aggvFuncFilter.nonCodingExon = cartUsualBoolean(cart, "hgva_include_nonCodingExo
 annoGratorGpVarSetFuncFilter(gpVarGrator, &aggvFuncFilter);
 }
 
-#define NO_MAXROWS 0
-
 struct annoGrator *gratorForSnpBed4(struct hash *gratorsByName, char *suffix,
 				    struct annoAssembly *assembly, char *chrom,
 				    enum annoGratorOverlap overlapRule,
@@ -1180,9 +1178,9 @@ if (grator != NULL)
     }
 // If not in gratorsByName, then attempt to construct it here:
 if (fileName != NULL)
-    grator = hAnnoGratorFromBigFileUrl(fileName, assembly, NO_MAXROWS, overlapRule);
+    grator = hAnnoGratorFromBigFileUrl(fileName, assembly, ANNO_NO_LIMIT, overlapRule);
 else
-    grator = hAnnoGratorFromTrackDb(assembly, tdb->table, tdb, chrom, NO_MAXROWS,
+    grator = hAnnoGratorFromTrackDb(assembly, tdb->table, tdb, chrom, ANNO_NO_LIMIT,
                                     NULL, overlapRule);
 if (grator != NULL)
     hashAdd(gratorsByName, tdb->table, grator);
@@ -1303,7 +1301,7 @@ if (hashFindVal(gratorsByName, seqChangeTable) == NULL)
     if (fileName == NULL)
 	errAbort("'%s' requested, but I can't find fileName for %s",
 		 trackName, seqChangeTable);
-    struct annoGrator *grator = hAnnoGratorFromBigFileUrl(fileName, assembly, NO_MAXROWS,
+    struct annoGrator *grator = hAnnoGratorFromBigFileUrl(fileName, assembly, ANNO_NO_LIMIT,
                                                           agoNoConstraint);
     updateGratorList(grator, pGratorList);
     hashAdd(gratorsByName, seqChangeTable, grator);
@@ -1435,14 +1433,14 @@ for (trackVar = trackVars;  trackVar != NULL;  trackVar = trackVar->next)
 	addDbNsfpSeqChange(trackName, assembly, gratorsByName, pGratorList);
 	char *fileName = fileNameFromTable(trackName);
 	if (fileName != NULL)
-	    grator = hAnnoGratorFromBigFileUrl(fileName, assembly, NO_MAXROWS, agoNoConstraint);
+	    grator = hAnnoGratorFromBigFileUrl(fileName, assembly, ANNO_NO_LIMIT, agoNoConstraint);
 	}
     else
 	{
 	struct trackDb *tdb = tdbForTrack(database, trackName, &fullTrackList);
 	if (tdb != NULL)
 	    {
-	    grator = hAnnoGratorFromTrackDb(assembly, tdb->table, tdb, chrom, NO_MAXROWS, NULL,
+	    grator = hAnnoGratorFromTrackDb(assembly, tdb->table, tdb, chrom, ANNO_NO_LIMIT, NULL,
                                             agoNoConstraint);
 	    if (grator != NULL)
 		{
@@ -1491,7 +1489,7 @@ if (cartUsualBoolean(cart, "hgva_require_consEl", FALSE))
 	{
 	struct trackDb *tdb = tdbForTrack(database, consElTrack, &fullTrackList);
 	if (tdb != NULL)
-	    grator = hAnnoGratorFromTrackDb(assembly, tdb->table, tdb, chrom, NO_MAXROWS, NULL,
+	    grator = hAnnoGratorFromTrackDb(assembly, tdb->table, tdb, chrom, ANNO_NO_LIMIT, NULL,
                                             agoMustOverlap);
 	updateGratorList(grator, pGratorList);
 	}
@@ -1739,7 +1737,7 @@ boolean forceRebuild = cartUsualBoolean(cart, "hgva_rebuildSampleVariants", FALS
 if (! fileExists(sampleFile) || forceRebuild)
     {
     struct annoStreamer *geneStream = hAnnoStreamerFromTrackDb(assembly, geneTdb->table, geneTdb,
-                                                               NULL, NO_MAXROWS);
+                                                               NULL, ANNO_NO_LIMIT);
     boolean gotCoding = FALSE, gotNonCoding = FALSE;
     struct genePred *gpList = genesFromPosition(geneStream, &gotCoding, &gotNonCoding);
     FILE *f = mustOpen(sampleFile, "w");
@@ -2200,7 +2198,7 @@ else
 
 enum annoGratorOverlap geneOverlapRule = agoMustOverlap;
 struct annoGrator *gpVarGrator = hAnnoGratorFromTrackDb(assembly, geneTdb->table, geneTdb, chrom,
-						   NO_MAXROWS, primary->asObj, geneOverlapRule);
+						   ANNO_NO_LIMIT, primary->asObj, geneOverlapRule);
 setGpVarFuncFilter(gpVarGrator);
 
 // Some grators may be used as both filters and output values. To avoid making

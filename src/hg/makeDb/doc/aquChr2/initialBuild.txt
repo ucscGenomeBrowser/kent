@@ -1,0 +1,483 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the aquChr2
+# Golden eagle - Aquila chrysaetos canadensis
+
+# Assembly Name:  Aquila_chrysaetos-1.0.2
+# Organism name:  Aquila chrysaetos canadensis
+# Taxid:          216574
+# Submitter:      The Genome Institute - Washington University School of
+# Medicine
+# Date:           2014-10-14
+# BioSample:      SAMN03079786
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# GenBank Assembly Accession: GCA_000766835.1 (species-representative latest)
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000766845.1              Primary Assembly
+
+# there is no chrMt sequence in this release or in NCBI nucleotide
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2015-03-04 - Hiram)
+    # NCBI has redesigned their FTP download site, new type of address
+    #      and naming scheme
+    mkdir -p /hive/data/genomes/aquChr2/genbank
+    cd /hive/data/genomes/aquChr2/genbank
+
+    time rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_other/Aquila_chrysaetos/all_assembly_versions/GCA_000766835.1_Aquila_chrysaetos-1.0.2/ ./
+    # sent 280 bytes  received 737708839 bytes  13535947.14 bytes/sec
+    # total size is 737617040  speedup is 1.00
+    # real    0m53.748s
+
+    # measure what we have here:
+    faSize GCA_000766835.1_Aquila_chrysaetos-1.0.2_genomic.fna.gz
+    # 1192725744 bases (12708611 N's 1180017133 real 962614476 upper
+    # 217402657 lower) in 1141 sequences in 1 files
+    # Total size: mean 1045333.7 sd 3203065.9 min 913 (JRUM01016734.1)
+    #   max 30727332 (KN265652.1) median 5587
+    # %18.23 masked total, %18.42 masked real
+
+    # that top-level file is the same as the unplaced scaffold file:
+    faSize GCA_000766835.1_Aquila_chrysaetos-1.0.2_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz
+
+    # 1192725744 bases (12708611 N's 1180017133 real 1180017133 upper 0 lower)
+    # in 1141 sequences in 1 files
+    # Total size: mean 1045333.7 sd 3203065.9 min 913 (JRUM01016734.1)
+    #    max 30727332 (KN265652.1) median 5587
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2015-03-05 - Hiram)
+    mkdir /hive/data/genomes/aquChr2/ucsc
+    cd /hive/data/genomes/aquChr2/ucsc
+
+    # since this is a scaffold-only assembly, merely use the accession names
+    # and since there are all .1 versions, this sed statement will make them
+    # all v1 version names:
+    zcat ../genbank/GCA_000766835.1_Aquila_chrysaetos-1.0.2_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+       | grep -v "^#" | sed -e 's/\.1/v1/;' > chrUn.aquChr2.agp
+
+    zcat ../genbank/GCA_000766835.1_Aquila_chrysaetos-1.0.2_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz \
+       | sed -e 's/.1 Aquila .*/v1/;' > chrUn.aquChr2.fa
+
+    # verify these two files are compatible:
+    faToTwoBit chrUn.aquChr2.fa test.2bit
+    checkAgpAndFa chrUn.aquChr2.agp test.2bit 2>&1 | tail
+    # All AGP and FASTA entries agree - both files are valid
+
+#############################################################################
+#  Initial database build (DONE - 2015-03-05 - Hiram)
+
+    cd /hive/data/genomes/aquChr2
+    cat << '_EOF_' > aquChr2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db aquChr2
+clade vertebrate
+genomeCladePriority 50
+scientificName Aquila chrysaetos canadensis
+commonName Golden eagle
+assemblyDate Oct. 2014
+assemblyLabel WashU
+assemblyShortLabel aquChr-1.0.2
+orderKey 7664
+mitoAcc none
+fastaFiles /hive/data/genomes/aquChr2/ucsc/*.fa
+agpFiles /hive/data/genomes/aquChr2/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir birds
+photoCreditURL http://commons.wikimedia.org/wiki/User:Juan_lacruz
+photoCreditName Juan Lacruz - Wikimedia Commons
+ncbiGenomeId 32031
+ncbiAssemblyId 217061
+ncbiAssemblyName Aquila_chrysaetos-1.0.2
+ncbiBioProject 256103
+genBankAccessionID GCA_000766835.1
+taxId 216574
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp aquChr2.config.ra) > agp.log 2>&1
+    # *** All done!  (through the 'agp' step)
+    # real    11m27.166s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db aquChr2.config.ra) > db.log 2>&1
+    # real    105m22.277s
+
+    # missing .jpg image in htdocs/images, continuing:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=trackDb aquChr2.config.ra) \
+          > trackDb.log 2>&1
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##########################################################################
+# running repeat masker (DONE - 2015-03-05 - Hiram)
+    mkdir /hive/data/genomes/aquChr2/bed/repeatMasker
+    cd /hive/data/genomes/aquChr2/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku aquChr2) > do.log 2>&1
+    # real    60m12.037s
+
+    cat faSize.rmsk.txt
+    # 1192725744 bases (12708611 N's 1180017133 real 1116967561 upper
+    # 63049572 lower) in 1141 sequences in 1 files
+    # Total size: mean 1045333.7 sd 3203065.9 min 913 (JRUM01016734v1)
+    #   max 30727332 (KN265652v1) median 5587
+    #  %5.29 masked total, %5.34 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;    
+
+    time featureBits -countGaps aquChr2 rmsk
+    # 63129821 bases of 1192725744 (5.293%) in intersection
+    # real    0m6.633s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2015-03-05 - Hiram)
+
+    mkdir /hive/data/genomes/aquChr2/bed/simpleRepeat
+    cd /hive/data/genomes/aquChr2/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        aquChr2) > do.log 2>&1
+    # real    5m53.811s
+
+    cat fb.simpleRepeat
+    # 7586715 bases of 1180019022 (0.643%) in intersection
+
+    # using the Window Masker result:
+    cd /hive/data/genomes/aquChr2
+    twoBitMask bed/windowMasker/aquChr2.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  aquChr2.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa aquChr2.2bit stdout | faSize stdin > faSize.aquChr2.2bit.txt
+    cat faSize.aquChr2.2bit.txt
+    # 1192725744 bases (12708611 N's 1180017133 real 956431179 upper
+    #    223585954 lower) in 1141 sequences in 1 files
+    # Total size: mean 1045333.7 sd 3203065.9 min 913 (JRUM01016734v1)
+    #    max 30727332 (KN265652v1) median 5587
+    # %18.75 masked total, %18.95 masked real
+
+    rm /gbdb/aquChr2/aquChr2.2bit
+    ln -s `pwd`/aquChr2.2bit /gbdb/aquChr2/aquChr2.2bit
+
+##########################################################################
+## WINDOWMASKER (DONE - 2015-03-05 - Hiram)
+
+    mkdir /hive/data/genomes/aquChr2/bed/windowMasker
+    cd /hive/data/genomes/aquChr2/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev aquChr2) > do.log 2>&1
+    # real    688m38.613s
+    # most interesting very long run time for this small genome ?
+
+    # Masking statistics
+    cat faSize.aquChr2.cleanWMSdust.txt
+    # 1192725744 bases (12708611 N's 1180017133 real 956589777 upper
+    #    223427356 lower) in 1141 sequences in 1 files
+    # Total size: mean 1045333.7 sd 3203065.9 min 913 (JRUM01016734v1)
+    #    max 30727332 (KN265652v1) median 5587
+    # %18.73 masked total, %18.93 masked real
+
+    cat fb.aquChr2.rmsk.windowmaskerSdust.txt
+    # 37125217 bases of 1192725744 (3.113%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2015-03-06 - Hiram)
+    mkdir /hive/data/genomes/aquChr2/bed/cpgIslands
+    cd /hive/data/genomes/aquChr2/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku aquChr2) > do.log 2>&1 &
+    # real    2m11.511s
+
+    cat fb.aquChr2.cpgIslandExt.txt
+    # 23426181 bases of 1180019022 (1.985%) in intersection
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2015-03-05 - Hiram)
+    mkdir /hive/data/genomes/aquChr2/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/aquChr2/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/aquChr2/aquChr2.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku aquChr2) > do.log 2>&1
+    # real    4m9.741s
+
+    cat fb.aquChr2.cpgIslandExtUnmasked.txt
+    # 30797471 bases of 1180019022 (2.610%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-03-05 - Hiram)
+    mkdir /hive/data/genomes/aquChr2/bed/cytoBand
+    cd /hive/data/genomes/aquChr2/bed/cytoBand
+    makeCytoBandIdeo.csh aquChr2
+
+#########################################################################
+# genscan - (DONE - 2015-03-06 - Hiram)
+    mkdir /hive/data/genomes/aquChr2/bed/genscan
+    cd /hive/data/genomes/aquChr2/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku aquChr2) > do.log 2>&1
+    # real    9m58.844s
+# Completed: 1140 of 1141 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      28452s     474.20m     7.90h    0.33d  0.001 y
+# IO & Wait Time:                  5894s      98.23m     1.64h    0.07d  0.000 y
+# Average job time:                  30s       0.50m     0.01h    0.00d
+# Longest finished job:             780s      13.00m     0.22h    0.01d
+# Submission to last job:           782s      13.03m     0.22h    0.01d
+
+    # one job failed, it passed with a window size of 2,000,000
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku aquChr2) > makeBed.log 2>&1
+    # real    3m7.584s
+
+    cat fb.aquChr2.genscan.txt
+    #   26595865 bases of 1180019022 (2.254%) in intersection
+
+    cat fb.aquChr2.genscanSubopt.txt
+    #   30584112 bases of 1180019022 (2.592%) in intersection
+
+########################################################################
+# Create kluster run files (DONE - 2015-03-06 - Hiram)
+
+    cd /hive/data/genomes/aquChr2
+    # numerator is aquChr2 gapless bases "real" as reported by:
+    head -1 faSize.aquChr2.2bit.txt
+# 1192725744 bases (12708611 N's 1180017133 real 956431179 upper
+#    223585954 lower) in 1141 sequences in 1 files
+
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 1180017133 / 2861349177 \) \* 1024
+    # ( 1180017133 / 2861349177 ) * 1024 = 422.296431
+
+    # ==> use -repMatch=400 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/aquChr2
+    time blat aquChr2.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/aquChr2.11.ooc \
+        -repMatch=400
+    # Wrote 15307 overused 11-mers to jkStuff/aquChr2.11.ooc
+    # real    0m56.863s
+
+    # there are no non-bridged gaps, do not need to do this
+    #   check non-bridged gaps to see what the typical size is:
+#     hgsql -N -e 'select * from gap where bridge="no" order by size;' aquChr2 
+#       | ave -tableOut -col=7 stdin
+# # min Q1 median Q3 max mean N sum stddev
+# 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006
+
+    # note the minimum non-bridged gap size is 50,076
+
+#  gapToLift -verbose=2 -minGap=50000 aquChr2 jkStuff/aquChr2.nonBridged.lft \
+#         -bedFile=jkStuff/aquChr2.nonBridged.bed
+
+#    hgsql -N \
+#        -e 'select * from gap where bridge="no" order by size;' aquChr2 \
+#        | ave -col=7 stdin
+
+    # not needed:
+#    gapToLift -verbose=2 -minGap=100 bosTau7 jkStuff/nonBridged.lft \
+#        -bedFile=jkStuff/nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 1141, total size: 1192725744, one half size: 596362872
+# cumulative    N50 count       contig  contig size
+# 588589064       39      KN265690v1      9497852
+# 596362872 one half size
+# 597819807       40      KN265691v1      9230743
+
+#############################################################################
+# GENBANK AUTO UPDATE (DONE - 2015-02-20 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Aquila chrysaetos canadensis - there are no entries at all
+
+    # edit etc/genbank.conf to add aquChr2 just after melGal1
+
+# aquChr2 (golden eagle)
+aquChr2.serverGenome = /hive/data/genomes/aquChr2/aquChr2.2bit
+aquChr2.clusterGenome = /hive/data/genomes/aquChr2/aquChr2.2bit
+aquChr2.ooc = /hive/data/genomes/aquChr2/jkStuff/aquChr2.11.ooc
+aquChr2.lift = no
+aquChr2.perChromTables = no
+aquChr2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+aquChr2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+aquChr2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+aquChr2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+aquChr2.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+aquChr2.downloadDir = aquChr2
+aquChr2.refseq.mrna.native.load  = no
+aquChr2.refseq.mrna.xeno.load = yes
+aquChr2.refseq.mrna.xeno.loadDesc  = yes
+aquChr2.genbank.mrna.native.load = no
+aquChr2.genbank.mrna.native.loadDesc = no
+aquChr2.genbank.mrna.xeno.load = yes
+aquChr2.genbank.mrna.xeno.loadDesc = yes
+aquChr2.genbank.est.native.load = no
+aquChr2.genbank.est.native.loadDesc = no
+# aquChr2.upstreamGeneTbl = ensGene
+
+
+    git commit -m "Added aquChr2; refs #14560" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "Added aquChr Aquila chrysaetos canadensis refs #14560" \
+       src/lib/gbGenome.c
+    git push
+    make install-server
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial aquChr2
+    # logFile: var/build/logs/2015.03.06-14:45:22.aquChr2.initalign.log
+    # real    391m48.657s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.aquChr2
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad aquChr2
+    # logFile: var/dbload/hgwdev/logs/2015.03.06-21:54:48.aquChr2.dbload.log
+    # finished by brian after a loading problem:
+    cat var/dbload/hgwdev/logs/2015.04.06-11:17:31.aquChr2.dbload.log
+# hgwdev 2015.04.06-11:17:31 aquChr2.dbload: begin
+# hgwdev 2015.04.06-11:17:31 aquChr2.dbload: command: bin/gbDbLoadStep -initialLoad -drop aquChr2
+# gbLoadRna: selected genbank.206.0 aquChr2 xeno mrna: delete=0 seqChg=0 metaChg=0 extChg=0 new=21251711 orphan=0 derived=0 noChg=0
+# gbLoadRna: selected refseq.69 aquChr2 xeno mrna: delete=0 seqChg=0 metaChg=0 extChg=0 new=431136 orphan=0 derived=0 noChg=0
+# hgwdev 2015.04.06-13:07:41 aquChr2.dbload: finish
+
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add aquChr2 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added aquChr2 - Golden Eagle refs #15096" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2015-03-06 - Hiram)
+    mkdir /hive/data/genomes/aquChr2/bed/ucscToINSDC
+    cd /hive/data/genomes/aquChr2/bed/ucscToINSDC
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+       ../../genbank/GCA_*assembly_structure/Primary_Assembly
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    #  1141 name.coordinate.tab
+    #  1141 ucscToINSDC.bed
+    #  1141 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab aquChr2 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords aquChr2
+    # should cover %100 entirely:
+    featureBits -countGaps aquChr2 ucscToINSDC
+    # 1192725744 bases of 1192725744 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2015-03-06 - Hiram)
+    hgsql -N -e "select frag from gold;" aquChr2 | sort | head -1
+JRUM01000001.1
+
+    hgsql -N -e "select frag from gold;" aquChr2 | sort | tail -2
+JRUM01017030.1
+JRUM01017031.1
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" aquChr2 | wc -l
+    # 17031
+
+    hgsql -N -e "select frag from gold;" aquChr2 \
+       | egrep -e 'JRUM010[0-9]+(\.1)?' | wc -l
+    # 17031
+
+    hgsql -N -e "select frag from gold;" aquChr2 \
+       | egrep -v -e 'JRUM010[0-9]+(\.1)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/tarsier/aquChr2/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex JRUM010[0-9]+(\.1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE 2015-04-14 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=aquChr2 -tableCoverage all.joiner
+    joinerCheck -database=aquChr2 -times all.joiner
+    joinerCheck -database=aquChr2 -keys all.joiner
+
+
+    cd /hive/data/genomes/aquChr2
+    time makeDownloads.pl aquChr2 > downloads.log 2>&1
+    # real    9m21.198s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/aquChr2/pushQ
+    cd /hive/data/genomes/aquChr2/pushQ
+    makePushQSql.pl aquChr2 > aquChr2.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/aquChr2/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/aquChr2/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/aquChr2/bbi/qualityBw/quality.bw
+    # WARNING: aquChr2 does not have seq
+    # WARNING: aquChr2 does not have extFile
+    # WARNING: aquChr2 does not have estOrientInfo
+    # WARNING: aquChr2 does not have mrnaOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p aquChr2.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/aquChr2.pushQ.sql"
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

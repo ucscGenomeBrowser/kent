@@ -104,36 +104,33 @@ dyStringAppend(dy, "    )\n");
 return asParseText(dy->string);
 }
 
-static struct asObject *getAutoSqlForTable(char *dataDb, char *dbTable, struct trackDb *tdb,
+static struct asObject *getAutoSqlForTable(char *db, char *table, struct trackDb *tdb,
                                            boolean skipBin)
-/* Get autoSql for dataDb.dbTable from tdb and/or db.tableDescriptions;
- * if it doesn't match columns, make one up from dataDb.table sql fields.
+/* Get autoSql for db.dbTable from tdb and/or db.tableDescriptions;
+ * if it doesn't match columns, make one up from db.table sql fields.
  * Some subtleties are lost in translation from .as to .sql, that's why
  * we try tdb & db.tableDescriptions first.  But ultimately we need to return
  * an asObj whose columns match all fields of the table. */
 {
-struct sqlConnection *connDataDb = hAllocConn(dataDb);
-struct sqlFieldInfo *fieldList = sqlFieldInfoGet(connDataDb, dbTable);
-hFreeConn(&connDataDb);
+struct sqlConnection *conn = hAllocConn(db);
+struct sqlFieldInfo *fieldList = sqlFieldInfoGet(conn, table);
 struct asObject *asObj = NULL;
 if (tdb != NULL)
-    {
-    struct sqlConnection *connDb = hAllocConn(dataDb);
-    asObj = asForTdb(connDb, tdb);
-    hFreeConn(&connDb);
-    }
+    asObj = asForTdb(conn, tdb);
+hFreeConn(&conn);
 if (columnsMatch(asObj, fieldList))
     return asObj;
 else
-    return asObjectFromFields(dbTable, fieldList, skipBin);
+    return asObjectFromFields(table, fieldList, skipBin);
 }
 
 static char *getBigDataFileName(char *db, struct trackDb *tdb, char *selTable, char *chrom)
 /* Get fileName from bigBed/bigWig/BAM/VCF database table, or bigDataUrl from custom track. */
 {
-if (trackHubDatabase(db))
+char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+if (isNotEmpty(bigDataUrl))
     {
-    return trackDbSetting(tdb, "bigDataUrl");
+    return bigDataUrl;
     }
 else
     {
@@ -201,14 +198,9 @@ else if (sameString("knownGene", tdb->track))
     }
 if (streamer == NULL)
     {
-    struct sqlConnection *conn = hAllocConn(dataDb);
-    char maybeSplitTable[1024];
-    if (sqlTableExists(conn, dbTable))
-	safecpy(maybeSplitTable, sizeof(maybeSplitTable), dbTable);
-    else
-	safef(maybeSplitTable, sizeof(maybeSplitTable), "%s_%s", chrom, dbTable);
-    hFreeConn(&conn);
-    struct asObject *asObj = getAutoSqlForTable(dataDb, maybeSplitTable, tdb, TRUE);
+    char maybeSplitTable[HDB_MAX_TABLE_STRING];
+    (void)hFindSplitTable(db, chrom, selTable, maybeSplitTable, NULL);
+    struct asObject *asObj = getAutoSqlForTable(dataDb, selTable, tdb, TRUE);
     streamer = annoStreamDbNew(dataDb, maybeSplitTable, assembly, asObj, maxOutRows);
     }
 return streamer;
@@ -296,10 +288,8 @@ else if (startsWithWord("bed", tdb->type) && !strchr(tdb->type, '+'))
     }
 else if (sameString(tdb->track, "knownGene"))
     {
-    struct sqlConnection *conn = hAllocConn(db);
-    if (sqlTableExists(conn, "knownGene") && sqlTableExists(conn, "kgXref"))
+    if (hTableExists(db, "knownGene") && hTableExists(db, "kgXref"))
         asObj = annoStreamDbKnownGeneAsObj();
-    hFreeConn(&conn);
     }
 return asObj;
 }
@@ -321,13 +311,8 @@ if (!asObj && !isHubTrack(tdb->track))
         else
             return NULL;
         }
-    struct sqlConnection *conn = hAllocConn(dataDb);
-    char maybeSplitTable[1024];
-    if (sqlTableExists(conn, dbTable))
-	safecpy(maybeSplitTable, sizeof(maybeSplitTable), dbTable);
-    else
-	safef(maybeSplitTable, sizeof(maybeSplitTable), "%s_%s", chrom, dbTable);
-    hFreeConn(&conn);
+    char maybeSplitTable[HDB_MAX_TABLE_STRING];
+    (void)hFindSplitTable(db, chrom, dbTable, maybeSplitTable, NULL);
     asObj = getAutoSqlForTable(dataDb, maybeSplitTable, tdb, TRUE);
     }
 return asObj;

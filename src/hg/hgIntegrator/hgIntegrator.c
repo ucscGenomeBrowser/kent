@@ -33,9 +33,6 @@ struct cart *cart = NULL;             /* CGI and other variables */
 #define QUERY_SPEC "hgi_querySpec"
 #define DO_QUERY "hgi_doQuery"
 
-//#*** duplicated from hgVai... put in some anno*.h?
-#define NO_MAXROWS 0
-
 static void makeTrackLabel(struct trackDb *tdb, char *table, char *label, size_t labelSize)
 /* Write tdb->shortLabel into label if table is the same as tdb->track; otherwise, write shortLabel
  * followed by table name in parens. */
@@ -217,13 +214,13 @@ for (i = 0, dsRef = dataSources;  dsRef != NULL;  i++, dsRef = dsRef->next)
     char *table = tdb->table;
     if (i == 0)
         {
-        primary = hAnnoStreamerFromTrackDb(assembly, table, tdb, chrom, NO_MAXROWS);
+        primary = hAnnoStreamerFromTrackDb(assembly, table, tdb, chrom, ANNO_NO_LIMIT);
         annoStreamerSetName(primary, table);
         }
     else
         {
         struct annoGrator *grator = hAnnoGratorFromTrackDb(assembly, table, tdb, chrom,
-                                                           NO_MAXROWS, NULL, agoNoConstraint);
+                                                           ANNO_NO_LIMIT, NULL, agoNoConstraint);
         if (grator)
             {
             annoStreamerSetName((struct annoStreamer *)grator, table);
