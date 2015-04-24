@@ -4735,10 +4735,10 @@ boolean knownGencodeClassFilter(struct track *tg, void *item)
 struct linkedFeatures *lf = item;
 char buffer[1024];
 
-safef(buffer, sizeof buffer, "kgID=\"%s\"", lf->name);
-char *class = sqlGetField(database, "kgXref", "tRnaName", buffer);
+safef(buffer, sizeof buffer, "name=\"%s\" and value=\"basic\"", lf->name);
+char *class = sqlGetField(database, "knownToTag", "value", buffer);
 
-if (sameString(class, "basic"))
+if (class != NULL)
     return TRUE;
 return FALSE;
 }
