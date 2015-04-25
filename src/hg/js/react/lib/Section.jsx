@@ -9,7 +9,7 @@ var Section = React.createClass({
 
     render: function() {
         return (
-              <div className='sectionBorder'>
+              <div className='sectionBorder sectionPanel'>
                 <div className='sectionHeader'>
                   {this.props.title}
                 </div>
