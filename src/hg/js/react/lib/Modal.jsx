@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-/* global Icon, PathUpdate */
+/* global Icon, PathUpdate, Section */
 var pt = React.PropTypes;
 
 function getScrollHeight() {
@@ -24,18 +24,23 @@ var Modal = React.createClass({
     render: function() {
         var myTop = getScrollHeight() + 75; // px is default unit in React style
         var path = this.props.path || [];
+        var title = (
+            <div>
+              <span className='floatLeft'>
+                {this.props.title}
+              </span>
+              <Icon type="remove" className="removeButton floatRight"
+                    path={path.concat('remove')} update={this.props.update} />
+              <div className='clear' />
+            </div>
+        );
+
         return (
             <div style={{top: myTop}} className='absoluteModal'>
-              <div>
-                <span className='floatLeft'>
-                  {this.props.title}
-                </span>
-                <Icon type="remove" className="removeButton floatRight"
-                      path={path.concat('remove')} update={this.props.update} />
-                <div className='clear' />
-                </div>
+              <Section style={{margin: 0}} title={title}>
                 {this.props.children}
-              </div>
+              </Section>
+            </div>
         );
     }
 });

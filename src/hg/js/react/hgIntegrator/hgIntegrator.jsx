@@ -210,9 +210,9 @@ var FieldSelect = React.createClass({
 
     render: function() {
         if (this.props.fieldInfo) {
-            var title = <div className='boldText sectionRow'>Choose fields</div>;
             return (
-                <Modal title={title} path={this.props.path} update={this.props.update}>
+                <Modal title='Choose Fields'
+                       path={this.props.path} update={this.props.update}>
                   {this.makeTableSections()}
                   <br />
                   <input type='button' value='Done' onClick={this.onDone} />
