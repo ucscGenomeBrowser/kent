@@ -423,6 +423,6 @@ tarSyr1.perChromTables = no
     # 8 days of run time, the tarSyr2 to tarSyr1 is taking even longer
 
     # verify the convert link on the test browser is now active from tarSyr1 to
-    # tarSyr1
+    # tarSyr2
 
 #########################################################################
