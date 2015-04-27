@@ -143,7 +143,7 @@ var AddDataSource = React.createClass({
         var schemaLink = makeSchemaLink(addDsInfo.get('schemaUrl'));
         return (
             <div>
-              <div className='bigBoldText sectionRow'>
+              <div className='boldText sectionRow'>
                 Add Data Source
               </div>
               <LabeledSelectRow descriptors={addDsInfo.get('menus')}
@@ -210,9 +210,9 @@ var FieldSelect = React.createClass({
 
     render: function() {
         if (this.props.fieldInfo) {
-            var title = <div className='bigBoldText sectionRow'>Choose fields</div>;
             return (
-                <Modal title={title} path={this.props.path} update={this.props.update}>
+                <Modal title='Choose Fields'
+                       path={this.props.path} update={this.props.update}>
                   {this.makeTableSections()}
                   <br />
                   <input type='button' value='Done' onClick={this.onDone} />
@@ -331,7 +331,7 @@ var QueryBuilder = React.createClass({
                 <div className='sortHandle'>
                   <span className='floatLeft'>
                     <Icon type='upDown' className='sectionItem'/>
-                    <span className='bigBoldText sectionItem'>
+                    <span className='boldText sectionItem'>
                       {dataSource.get('label')}
                     </span>
                     <span className='sectionItem'>
@@ -464,12 +464,14 @@ var AppComponent = React.createClass({
         var path = this.props.path;
         var helpText = appState.get('helpText') || '';
         return (
-            <div className='sectionContents'>
-              <span className='bigBoldText sectionRow sectionItem'>Annotation Integrator</span>
-              <input type='button' value='Undo'
-                     onClick={this.props.undo} disabled={!appState.get('canUndo')} />
-              <input type='button' value='Redo'
-                     onClick={this.props.redo} disabled={!appState.get('canRedo')} />
+            <div className='cgiContents'>
+              <div className='cgiTitleBox'>
+                <span className='cgiTitle'>Annotation Integrator</span>
+                <input type='button' value='Undo'
+                       onClick={this.props.undo} disabled={!appState.get('canUndo')} />
+                <input type='button' value='Redo'
+                       onClick={this.props.redo} disabled={!appState.get('canRedo')} />
+              </div>
 
               <DbPosAndQueryBuilder cladeOrgDbInfo={appState.get('cladeOrgDb')}
                                     positionInfo={appState.get('positionInfo')}
