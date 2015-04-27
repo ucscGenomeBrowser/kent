@@ -1,6 +1,6 @@
 # set for preview 1:
-setenv REVIEWDAY 2015-04-08             # v315 preview
-setenv LASTREVIEWDAY 2015-03-16         # v314 preview
+setenv REVIEWDAY 2015-04-27             # v316 preview
+setenv LASTREVIEWDAY 2015-04-08         # v315 preview
 # set for preview 2:
 setenv REVIEW2DAY 2015-04-13        # v315 preview2
 setenv LASTREVIEW2DAY 2015-03-23    # v314 preview2
