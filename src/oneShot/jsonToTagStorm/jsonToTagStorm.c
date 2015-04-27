@@ -13,7 +13,7 @@ void usage()
 {
 errAbort(
   "jsonToTagStorm - Convert a .json file into a .tagStorm file. The .json file"
-  " must adhere to .json convention (json.org), multiple lined .json files are allowed. \n"
+  " must adhere to .json convention (please see json.org), multiple lined .json files are allowed. \n"
   "usage:\n"
   "   jsonToTagStorm in.json out.tags\n"
   );
@@ -24,7 +24,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-
 void parseJson(struct lineFile *lf, FILE *f)
 /* This function uses a tokenizer to tokenize a .json file, 
  * the tokens are iterated over once. Depth is updated as the depth character
@@ -34,15 +33,15 @@ void parseJson(struct lineFile *lf, FILE *f)
 int i;
 int depth = 0;
 struct tokenizer *tkz = tokenizerOnLineFile(lf);
-char *temp = tokenizerNext(tkz); 
+char *curToken = tokenizerNext(tkz); 
 char *name = NULL, *val = NULL; 
 bool beforeVal = TRUE, expVal = FALSE, firstLine = TRUE; 
 int count = 0, preventDoubleLineBreak = 0; 
-for (; temp != NULL; temp = tokenizerNext(tkz))
+for (; curToken != NULL; curToken = tokenizerNext(tkz))
     // Iterate over all the tokens in the input file 
     {
     ++count; 
-    if (!strcmp(temp, "["))
+    if (!strcmp(curToken, "["))
     	// Update depth and handle .json arrays 
         {
 	if (expVal)
@@ -59,13 +58,13 @@ for (; temp != NULL; temp = tokenizerNext(tkz))
 	fprintf(f,"\n"); 
 	continue; 
 	}
-    if (!strcmp(temp, "]"))
+    if (!strcmp(curToken, "]"))
     	// Update depth
         {
 	--depth; 
 	continue; 
 	}
-    if (!strcmp(temp, "}"))
+    if (!strcmp(curToken, "}"))
         {
 	if (preventDoubleLineBreak == count - 2)
 	    {
@@ -75,14 +74,14 @@ for (; temp != NULL; temp = tokenizerNext(tkz))
 	fprintf(f,"\n"); 
 	continue; 
 	}
-    if (!strcmp(temp, "{")) continue; 
-    if (!strcmp(temp, ":"))
+    if (!strcmp(curToken, "{")) continue; 
+    if (!strcmp(curToken, ":"))
     	// Get ready for a value
         {
 	expVal = TRUE;
 	continue;
 	} 
-    if (!strcmp(temp, ","))
+    if (!strcmp(curToken, ","))
     	// Reset name and value
         {
 	name=NULL; 
@@ -93,7 +92,7 @@ for (; temp != NULL; temp = tokenizerNext(tkz))
     if (beforeVal) 
     	// Get the name
         {
-	name = cloneString(temp);
+	name = cloneString(curToken);
 	beforeVal = FALSE; 
 	}
     else
@@ -103,9 +102,9 @@ for (; temp != NULL; temp = tokenizerNext(tkz))
 	    {
 	    fprintf(f,"    "); 
 	    }
-	fprintf(f,"%s ", name); 
-	val = temp; 
-	fprintf(f,"%s\n", val); 
+	fprintf(f,"%s ", replaceChars(name, "\\\"", "\"")); 
+	val = curToken; 
+	fprintf(f,"%s\n", replaceChars(val, "\\\"", "\"")); 
 	} 
     }
 }
