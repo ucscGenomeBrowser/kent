@@ -684,7 +684,6 @@ div#haplotypes .textAlert { color:#DC143C; } /* dark red */
   border-style: solid;
   border-width: 2px;
   border-color: black;
-  padding: 10px;
   overflow: auto;
 }
 

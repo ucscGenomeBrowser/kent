@@ -368,7 +368,8 @@ else
 	    // encounter its mate later, we can at least draw an arrow off the
 	    // edge of the window.
 	    struct linkedFeatures *stub;
-	    if (core->mpos < 0)
+	    // don't link to pair that's not on the same chrom
+	    if ((core->mpos < 0) || (core->tid != core->mtid))
 		{
 		int offscreen;
 		if (lf->orientation > 0)
