@@ -4743,6 +4743,39 @@ if (class != NULL)
 return FALSE;
 }
 
+static void loadFrames(struct sqlConnection *conn, struct linkedFeatures *lf)
+/* Load the CDS part of a genePredExt for codon display */
+{
+char query[4096];
+
+for(; lf; lf = lf->next)
+    {
+    struct genePred *gp = lf->original;
+    gp->optFields |= genePredExonFramesFld | genePredCdsStatFld | genePredCdsStatFld;
+    safef(query, sizeof query, "NOSQLINJ select * from knownCds where name=\"%s\"",
+	gp->name);
+
+    struct sqlResult *sr = sqlMustGetResult(conn, query);
+    char **row = NULL;
+    int sizeOne;
+
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	gp->cdsStartStat = parseCdsStat(row[1]);
+	gp->cdsEndStat = parseCdsStat(row[2]);
+	int exonCount = sqlUnsigned(row[3]);
+	if (exonCount != gp->exonCount)
+	    errAbort("loadFrames: %s number of exonFrames (%d) != number of exons (%d)",
+		     gp->name, exonCount, gp->exonCount);
+	sqlSignedDynamicArray(row[4], &gp->exonFrames, &sizeOne);
+	if (sizeOne != gp->exonCount)
+	    errAbort("loadFrames: %s number of exonFrames (%d) != number of exons (%d)",
+		     gp->name, sizeOne, gp->exonCount);
+	}
+    sqlFreeResult(&sr);
+    }
+}
+
 void loadKnownGencode(struct track *tg)
 /* Convert gene pred in window to linked feature. Include alternate name
  * in "extra" field (usually gene name) */
@@ -4754,10 +4787,16 @@ boolean showComposite = cartUsualBoolean(cart, varName, FALSE);
 struct sqlConnection *conn = hAllocConn(database);
 tg->items = connectedLfFromGenePredInRangeExtra(tg, conn, tg->table,
                                         chromName, winStart, winEnd, TRUE);
-hFreeConn(&conn);
+
 /* filter items on selected criteria if filter is available */
 if (!showComposite)
     filterItems(tg, knownGencodeClassFilter, "include");
+
+/* if we're close enough to see the codon frames, we better load them! */
+if (zoomedToCdsColorLevel)
+    loadFrames(conn, tg->items);
+
+hFreeConn(&conn);
 }
 
 void loadGenePredWithName2(struct track *tg)
