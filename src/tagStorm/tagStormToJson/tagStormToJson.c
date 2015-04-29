@@ -1,4 +1,5 @@
-/* jsonWriteTest - Some example json output stuff. */
+/* tagStormToJson - Takes in a tagStorm file and converts it to a .json file.
+ * Note that for name:value in a tagStorm file, there can be no whitepaces in name*/
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -23,9 +24,9 @@ static struct optionSpec options[] = {
 };
 
 void rWriteJson(struct jsonWrite *jw, char *label, struct tagStanza *stanzaList)
-// A recursive function which iterates through a tagStorm and converts each
-// stanza to a .json object. StanzaList is a linked list that contains all the
-// root/basic nodes in the tagStorm file. 
+/* A recursive function which iterates through a tagStorm and converts each
+ * stanza to a .json object. StanzaList is a linked list that contains all the
+ * root/basic nodes in the tagStorm file. */ 
 {
 jsonWriteListStart(jw, label); 
 struct tagStanza *stanza;
