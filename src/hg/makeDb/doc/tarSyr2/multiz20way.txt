@@ -889,6 +889,42 @@ endif
 #       canFam3 0.260220        0.333935        -0.073715       -22.074655
 #       mm10    0.367286        0.503897        -0.136611       -27.110898
 
+     # compare this tree with the one generated from the hg38 20-way
+    grep TREE all.mod | sed -e 's/TREE: //' \
+     | /cluster/bin/phast/all_dists /dev/stdin | grep hg38 \
+        | sed -e "s/hg38.//" | sort > tarSyr2.hg38.dists
+    grep TREE /hive/data/genomes/hg38/bed/multiz20way/4d/all.mod \
+       | sed -e 's/TREE: //' \
+       | /cluster/bin/phast/all_dists /dev/stdin | grep hg38 \
+          | sed -e "s/hg38.//;"  | sort > hg38.hg38.dists
+    # appears to be systematically shorter branch lengths with this tarSyr2
+    # reference, all by a similar percentage:
+    # table headings:
+#       species  tarSyr2         hg38         tarSyr2-hg38       percent
+#                dist est.     dist est.         difference      difference
+    join tarSyr2.hg38.dists hg38.hg38.dists | awk '{
+  printf "#\t%s\t%8.6f\t%8.6f\t%8.6f\t%8.6f\n", $1, $2, $3, $2-$3, 100*($2-$3)/$3 }' \
+      | sort -k3n
+#       panTro4 0.009797        0.013354        -0.003557       -26.636214
+#       panPan1 0.011566        0.014412        -0.002846       -19.747433
+#       gorGor3 0.020823        0.026014        -0.005191       -19.954640
+#       ponAbe2 0.034519        0.045236        -0.010717       -23.691308
+#       nomLeu3 0.039370        0.052852        -0.013482       -25.508968
+#       papAnu2 0.059717        0.081458        -0.021741       -26.689828
+#       macFas5 0.059736        0.080661        -0.020925       -25.941905
+#       rheMac3 0.059981        0.081710        -0.021729       -26.592828
+#       chlSab2 0.060483        0.081818        -0.021335       -26.076169
+#       rhiRox1 0.060601        0.081305        -0.020704       -25.464609
+#       nasLar1 0.062208        0.081742        -0.019534       -23.897140
+#       saiBol1 0.097714        0.133183        -0.035469       -26.631777
+#       calJac3 0.099057        0.135678        -0.036621       -26.991111
+#       micMur1 0.194010        0.263345        -0.069335       -26.328580
+#       tarSyr2 0.194364        0.266293        -0.071929       -27.011224
+#       otoGar3 0.218344        0.299131        -0.080787       -27.007231
+#       tupBel1 0.248313        0.337009        -0.088696       -26.318585
+#       canFam3 0.249066        0.343407        -0.094341       -27.472067
+#       mm10    0.356132        0.498858        -0.142726       -28.610546
+
 #########################################################################
 # phastCons 20-way (DONE - 2015-04-15 - Hiram)
     # split 20way mafs into 10M chunks and generate sufficient statistics

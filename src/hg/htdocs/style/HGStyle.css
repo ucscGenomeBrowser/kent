@@ -579,15 +579,37 @@ div#haplotypes .textAlert { color:#DC143C; } /* dark red */
 }
 
 /* Added for Angie's React UI stuff */
+.cgiTitleBox {
+    background-color: #D9E4F8;
+    padding: 5px;
+}
+
+.cgiTitle {
+  font-weight: bold;
+  font-size: larger;
+  color: #000000;
+  text-align: left;
+  white-space: nowrap;
+  display: inline-block;
+  padding-right: 5px;
+}
+
+.cgiContents {
+    margin: 5px;
+}
+
 .sectionBorder {
     border: 1px solid gray;
     margin-top: 5px;
 }
 
+.sectionPanel {
+    background-color: #FFFEE8;
+}
+
 .sectionHeader {
-    background-color: #D9E4F8;
+    background-color: #EEF3FB;
     font-weight: bold;
-    font-size: larger;
     color: #000000;
     text-align: left;
     vertical-align: bottom;
@@ -615,9 +637,8 @@ div#haplotypes .textAlert { color:#DC143C; } /* dark red */
   border: black solid 1px;
 }
 
-.bigBoldText {
+.boldText {
   font-weight: bold;
-  font-size: larger;
   color: #000000;
   text-align: left;
   white-space: nowrap;
@@ -663,7 +684,6 @@ div#haplotypes .textAlert { color:#DC143C; } /* dark red */
   border-style: solid;
   border-width: 2px;
   border-color: black;
-  padding: 10px;
   overflow: auto;
 }
 

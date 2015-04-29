@@ -1132,7 +1132,9 @@ txg->edgeCount = edgeTree->n;
 /* Get vertex list and number sequentially. Fill in vertex array */
 int i;
 struct slRef *vRef, *vRefList = rbTreeItems(vertexTree);
-struct txVertex *tv = AllocArray(txg->vertices, vertexTree->n);
+struct txVertex *tv = NULL;
+if (vertexTree->n)
+    tv = AllocArray(txg->vertices, vertexTree->n);
 int tStart = BIGNUM, tEnd = -BIGNUM;
 for (vRef = vRefList, i=0; vRef != NULL; vRef = vRef->next, i++)
     {

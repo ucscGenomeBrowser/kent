@@ -199,8 +199,10 @@ else if (sameString("knownGene", tdb->track))
 if (streamer == NULL)
     {
     char maybeSplitTable[HDB_MAX_TABLE_STRING];
-    (void)hFindSplitTable(db, chrom, selTable, maybeSplitTable, NULL);
-    struct asObject *asObj = getAutoSqlForTable(dataDb, selTable, tdb, TRUE);
+    if (!hFindSplitTable(dataDb, chrom, dbTable, maybeSplitTable, NULL))
+        errAbort("hAnnoStreamerFromTrackDb: can't find table (or split table) for '%s.%s'",
+                 dataDb, dbTable);
+    struct asObject *asObj = getAutoSqlForTable(dataDb, maybeSplitTable, tdb, TRUE);
     streamer = annoStreamDbNew(dataDb, maybeSplitTable, assembly, asObj, maxOutRows);
     }
 return streamer;
@@ -312,7 +314,9 @@ if (!asObj && !isHubTrack(tdb->track))
             return NULL;
         }
     char maybeSplitTable[HDB_MAX_TABLE_STRING];
-    (void)hFindSplitTable(db, chrom, dbTable, maybeSplitTable, NULL);
+    if (!hFindSplitTable(dataDb, chrom, dbTable, maybeSplitTable, NULL))
+        errAbort("hAnnoGetAutoSqlForTdb: can't find table (or split table) for '%s.%s'",
+                 dataDb, dbTable);
     asObj = getAutoSqlForTable(dataDb, maybeSplitTable, tdb, TRUE);
     }
 return asObj;

@@ -30,6 +30,7 @@ UTILS_APPLIST = \
 	bigWigAverageOverBed  \
 	bigWigCat \
 	bigWigCorrelate \
+	bigWigCluster \
 	bigWigInfo \
 	bigWigMerge \
 	bigWigSummary \

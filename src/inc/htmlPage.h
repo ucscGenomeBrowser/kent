@@ -47,7 +47,7 @@ struct htmlAttribute
     };
 
 struct htmlTag
-/* A html tag - includes attribute list and parent, but no text. */
+/* A html tag - includes attribute list and tag name parsed out, pointers to unparsed text. */
     {
     struct htmlTag *next;
     char *name;	/* Tag name. */
