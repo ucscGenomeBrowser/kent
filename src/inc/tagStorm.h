@@ -22,6 +22,12 @@
  *            file hg19/chipSeq/helaCTCF.broadPeak.bigBed
  *            format broadPeak
  *
+ * The file is broken into stanzas, that are separated from each other by blank lines.  The blank lines
+ * can include whitespace, which is ignored.  Multiple blank lines can separate stanzas with no difference
+ * in meaning from a single blank line.  Lines within a stanza start with a word which is the field label.
+ * A tab or a space (or multiple tabs or spaces) separate the label from the field contents.  The label
+ * can't contain spaces.
+ *
  * The file is interpreted so that lower level stanzas inherit tags from higher level ones.
  * This file might be used as so:
  *   struct tagStorm *tags = tagStormFromFile("metadata.txt");
