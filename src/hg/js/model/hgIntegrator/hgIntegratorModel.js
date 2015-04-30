@@ -39,12 +39,14 @@ var HgIntegratorModel = ImModel.extend({
             tfDefaults = _.mapValues(newValue, function(info, table) {
                 var currentFieldSettings = current[table] || {};
                 var newFieldSettings = Immutable.OrderedMap();
-                info.fields.forEach(function(field) {
+                info.fields.forEach(function(fieldAndDesc) {
+                    var field = fieldAndDesc.name;
                     var checked = currentFieldSettings[field];
                     if (checked === undefined) {
                         checked = (field !== 'bin');
                     }
-                    newFieldSettings = newFieldSettings.set(field, checked);
+                    var newSetting = Immutable.Map({checked: checked, desc: fieldAndDesc.desc});
+                    newFieldSettings = newFieldSettings.set(field, newSetting);
                 }, this);
                 return Immutable.Map({ fields: newFieldSettings, label: info.label});
             }, this);
@@ -547,19 +549,22 @@ var HgIntegratorModel = ImModel.extend({
             var table = path[2], field = path[3];
             if (field) {
                 // Update field's status in UI state and hgi_querySpec
-                mutState.setIn(['tableFields', table, 'fields', field], newValue);
+                mutState.setIn(['tableFields', table, 'fields', field, 'checked'], newValue);
                 mutState.setIn(['hgi_querySpec', 'outFileOptions', 'tableFields',
                                      table, field], newValue);
             } else {
                 // 'Set all' or 'Clear all' according to newValue
                 mutState.updateIn(['tableFields', table, 'fields'], function(fieldVals) {
-                    return fieldVals.map(function() { return newValue; });
+                    return fieldVals.map(function(checkedAndDesc) {
+                        return checkedAndDesc.set('checked', newValue);
+                    });
                 });
                 // hgi_querySpec might not yet contain any explicit choices for table's fields,
                 // so iterate over the complete set of fields in top-level tableFields:
-                mutState.getIn(['tableFields', table, 'fields']).forEach(function(val, field) {
+                mutState.getIn(['tableFields', table, 'fields']
+                               ).forEach(function(checkedAndDesc, field) {
                     mutState.setIn(['hgi_querySpec', 'outFileOptions', 'tableFields',
-                                         table, field], val);
+                                         table, field], checkedAndDesc.get('checked'));
                 });
             }
             this.cartSendQuerySpec(mutState);

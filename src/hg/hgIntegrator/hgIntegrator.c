@@ -74,7 +74,12 @@ for (table = tables;  table != NULL;  table = table->next)
             jsonWriteListStart(cj->jw, "fields");
             struct asColumn *col;
             for (col = asObj->columnList;  col != NULL;  col = col->next)
-                jsonWriteString(cj->jw, NULL, col->name);
+                {
+                jsonWriteObjectStart(cj->jw, NULL);
+                jsonWriteString(cj->jw, "name", col->name);
+                jsonWriteString(cj->jw, "desc", col->comment);
+                jsonWriteObjectEnd(cj->jw);
+                }
             jsonWriteListEnd(cj->jw);
             jsonWriteObjectEnd(cj->jw);
             }

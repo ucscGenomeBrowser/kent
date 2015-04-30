@@ -180,10 +180,12 @@ var FieldSelect = React.createClass({
 
     makeCheckboxGrid: function(table, fields) {
         // Make a checkbox for each field, labeled by field name.
-        return _.map(fields, function(checked, field) {
-            var path = this.props.path || [];
+        return _.map(fields, function(checkedAndDesc, field) {
+            var path = this.props.path;
             path = path.concat(table, field, 'checked');
-            return <CheckboxLabel key={table+'.'+field} checked={checked} label={field}
+            var checked = checkedAndDesc.checked;
+            var label = field + ' (' + checkedAndDesc.desc + ')';
+            return <CheckboxLabel key={table+'.'+field} checked={checked} label={label}
                                   path={path} update={this.props.update} />;
         }, this);
     },
