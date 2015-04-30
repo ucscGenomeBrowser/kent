@@ -7,7 +7,7 @@ dragAndDrop subTracks
 visibility hide
 priority 1
 type bed 4
-group compGeno
+group x
 
     track cons17wayViewalign
     shortLabel Multiz Alignments
@@ -25,7 +25,7 @@ group compGeno
         irows on
         summary multiz17waySummary
         frames multiz17wayFrames
-        group compGeno
+        group x
         color 0, 10, 100
         altColor 0,90,10
         type wigMaf 0.0 1.0
