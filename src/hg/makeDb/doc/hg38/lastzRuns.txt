@@ -1004,8 +1004,7 @@ TMPDIR=/dev/shm
     # 1256101876 bases of 3049335806 (41.193%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 oviAri3) > rbest.log 2>&1 &
-XXX - re-running - Mon Apr 27 12:36:37 PDT 2015
-    # real    34m41.161s
+    # real    68m34.171s
 
     # and for the swap:
     mkdir /hive/data/genomes/oviAri3/bed/blastz.hg38.swap
@@ -1016,15 +1015,15 @@ XXX - re-running - Mon Apr 27 12:36:37 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-XXX - re-running - Tue Apr 28 10:38:43 PDT 2015
-    #  real    82m10.166s
+    #  real    98m39.757s
 
     cat fb.oviAri3.chainHg38Link.txt
+    # 1312457473 bases of 2534335866 (51.787%) in intersection
     # replacing the previous tuned version:
     # 1193048482 bases of 2534335866 (47.075%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` oviAri3 hg38) > rbest.log 2>&1
-    # real    35m39.882s
+    # real    47m50.965s
 
 #########################################################################
 # LASTZ human/hg38 vs. medaka/oryLat2 - (DONE - 2015-02-06 - Hiram)
@@ -2193,14 +2192,15 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Tue Apr 28 11:23:39 PDT 2015
-    # real    700m5.411s
+    # real    1562m13.104s
 
     cat fb.hg38.chainVicPac2Link.txt
+    # 1491400921 bases of 3049335806 (48.909%) in intersection
+    # replacing the previous tuned version:
     # 1399262189 bases of 3049335806 (45.887%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 vicPac2) > rbest.log 2>&1 &
-    # real    56m47.132s
+    # real    39m21.890s
 
     # and for the swap:
     mkdir /hive/data/genomes/vicPac2/bed/blastz.hg38.swap
@@ -2211,12 +2211,16 @@ XXX - running - Tue Apr 28 11:23:39 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    174m42.441s
+    #  real    229m47.891s
 
     cat fb.vicPac2.chainHg38Link.txt
+    # 1429121865 bases of 2078582856 (68.755%) in intersection
+    # replacing the previous tuned version:
     # 1342041434 bases of 2078582856 (64.565%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` vicPac2 hg38) > rbest.log 2>&1
+XXX - running - Thu Apr 30 09:08:53 PDT 2015
+XXX - will need to be finished
     # real    187m5.966s
 
 #########################################################################
@@ -2263,15 +2267,15 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Tue Apr 28 11:04:46 PDT 2015
-    # real    685m28.161s
+    # real    1495m0.218s
 
     cat fb.hg38.chainTurTru2Link.txt
+    # 1516370469 bases of 3049335806 (49.728%) in intersection
     # replacing the previous tuned version:
     # 1404889155 bases of 3049335806 (46.072%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 turTru2) > rbest.log 2>&1 &
-    # real    61m54.109s
+    # real    40m22.097s
 
     # and for the swap:
     mkdir /hive/data/genomes/turTru2/bed/blastz.hg38.swap
@@ -2282,14 +2286,15 @@ XXX - running - Tue Apr 28 11:04:46 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    193m48.445s
+    #  real    253m58.332s
 
     cat fb.turTru2.chainHg38Link.txt
+    # 1431921957 bases of 2332402443 (61.393%) in intersection
     # replacing the previous tuned version:
     # 1329424627 bases of 2332402443 (56.998%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` turTru2 hg38) > rbest.log 2>&1
-    # real    105m8.034s
+    # real    119m47.159s
 
 #########################################################################
 # LASTZ human/hg38 vs. Killer whale/orcOrc1 - (DONE - 2015-04-28 - Hiram)
@@ -2335,15 +2340,15 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Tue Apr 28 11:17:13 PDT 2015
-    # real    787m1.476s
+    # real    1874m13.873s
 
     cat fb.hg38.chainOrcOrc1Link.txt
+    # 1546274677 bases of 3049335806 (50.709%) in intersection
     # replacing the previous tuned version:
     # 1441746760 bases of 3049335806 (47.281%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 orcOrc1) > rbest.log 2>&1 &
-    # real    97m6.901s
+    # real    43m21.901s
 
     # and for the swap:
     mkdir /hive/data/genomes/orcOrc1/bed/blastz.hg38.swap
@@ -2354,13 +2359,15 @@ XXX - running - Tue Apr 28 11:17:13 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    81m1.036s
+    #  real    100m56.186s
 
     cat fb.orcOrc1.chainHg38Link.txt
+    # 1447927506 bases of 2249582127 (64.364%) in intersection
     # replacing the previous tuned version:
     # 1354015119 bases of 2249582127 (60.190%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` orcOrc1 hg38) > rbest.log 2>&1
+XXX - running - Thu Apr 30 09:13:44 PDT 2015
     # real    115m52.999s
 
 #########################################################################
@@ -2407,15 +2414,15 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Tue Apr 28 11:02:14 PDT 2015
-    # real    327m49.502s
+    # real    1669m55.874s
 
     cat fb.hg38.chainSpeTri2Link.txt
+    # 1472314467 bases of 3049335806 (48.283%) in intersection
     # replacing the previous tuned version:
     # 1363949428 bases of 3049335806 (44.729%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 speTri2) > rbest.log 2>&1 &
-    # real    82m20.429s
+    # real    47m19.925s
 
     # and for the swap:
     mkdir /hive/data/genomes/speTri2/bed/blastz.hg38.swap
@@ -2426,13 +2433,15 @@ XXX - running - Tue Apr 28 11:02:14 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    96m56.082s
+    #  real    114m57.250s
 
     cat fb.speTri2.chainHg38Link.txt
+    # 1429491323 bases of 2311060300 (61.854%) in intersection
     # replacing the previous tuned version:
     # 1323562747 bases of 2311060300 (57.271%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` speTri2 hg38) > rbest.log 2>&1
+XXX - running - Thu Apr 30 09:14:56 PDT 2015
     # real    47m38.137s
 
 #########################################################################
@@ -2479,15 +2488,15 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Tue Apr 28 11:25:30 PDT 2015
-    # real    683m32.599s
+    # real    1615m3.913s
 
     cat fb.hg38.chainPteAle1Link.txt
+    # 1472264278 bases of 3049335806 (48.281%) in intersection
     # replacing the previous tuned version:
     # 1390855083 bases of 3049335806 (45.612%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 pteAle1) > rbest.log 2>&1 &
-    # real    58m48.721s
+    # real    102m6.597s
 
     # and for the swap:
     mkdir /hive/data/genomes/pteAle1/bed/blastz.hg38.swap
@@ -2498,14 +2507,15 @@ XXX - running - Tue Apr 28 11:25:30 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    91m49.943s
+    #  real    144m41.676s
 
     cat fb.pteAle1.chainHg38Link.txt
+    # 1383942731 bases of 1944625202 (71.168%) in intersection
     # replacing the previous tuned version:
     # 1310659904 bases of 1944625202 (67.399%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` pteAle1 hg38) > rbest.log 2>&1
-    # real    42m31.360s
+    # real    51m1.756s
 
 #########################################################################
 # LASTZ human/hg38 vs. pig/susScr3 - (DONE - 2015-04-28 - Hiram)
@@ -2551,15 +2561,15 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Tue Apr 28 10:59:47 PDT 2015
-    # real    734m2.013s
+    # real    1570m22.537s
 
     cat fb.hg38.chainSusScr3Link.txt
+    # 1362333591 bases of 3049335806 (44.676%) in intersection
     # replacing the previous tuned version:
     # 1260167798 bases of 3049335806 (41.326%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 susScr3) > rbest.log 2>&1 &
-    # real    51m29.337s
+    # real    49m20.123s
 
     # and for the swap:
     mkdir /hive/data/genomes/susScr3/bed/blastz.hg38.swap
@@ -2570,14 +2580,15 @@ XXX - running - Tue Apr 28 10:59:47 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    89m39.504s
+    #  real    112m33.386s
 
     cat fb.susScr3.chainHg38Link.txt
+    # 1446310692 bases of 2525294057 (57.273%) in intersection
     # replacing the previous tuned version:
     # 1338540526 bases of 2525294057 (53.005%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` susScr3 hg38) > rbest.log 2>&1
-    # real    52m22.361s
+    # real    47m22.984s
 
 #########################################################################
 # LASTZ human/hg38 vs. elephant/loxAfr3 - (DONE - 2015-04-28 - Hiram)
@@ -2623,15 +2634,16 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Tue Apr 28 10:56:28 PDT 2015
-    # real    936m45.234s
+    # real    1717m57.837s
+
 
     cat fb.hg38.chainLoxAfr3Link.txt
+    # 1378739469 bases of 3049335806 (45.214%) in intersection
     # replacing the previous tuned version:
     # 1277792660 bases of 3049335806 (41.904%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 loxAfr3) > rbest.log 2>&1 &
-    # real    39m21.869s
+    # real    140m31.966s
 
     # and for the swap:
     mkdir /hive/data/genomes/loxAfr3/bed/blastz.hg38.swap
@@ -2642,13 +2654,15 @@ XXX - running - Tue Apr 28 10:56:28 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    91m45.560s
+    #  real    121m44.548s
 
     cat fb.loxAfr3.chainHg38Link.txt
+    # 1319251552 bases of 3118565340 (42.303%) in intersection
     # replacing the previous tuned version:
     # 1220708619 bases of 3118565340 (39.143%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` loxAfr3 hg38) > rbest.log 2>&1
+XXX - running - Thu Apr 30 09:17:11 PDT 2015
     # real    55m13.647s
 
 #########################################################################
@@ -2695,15 +2709,15 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Tue Apr 28 10:43:26 PDT 2015
-    # real    282m37.374s
+    # real    1681m38.688s
 
     cat fb.hg38.chainHetGla2Link.txt
+    # 1410266478 bases of 3049335806 (46.248%) in intersection
     # replacing the previous tuned version:
     # 1290312728 bases of 3049335806 (42.315%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 hetGla2) > rbest.log 2>&1 &
-    # real    39m30.814s
+    # real    137m40.853s
 
     # and for the swap:
     mkdir /hive/data/genomes/hetGla2/bed/blastz.hg38.swap
@@ -2714,13 +2728,15 @@ XXX - running - Tue Apr 28 10:43:26 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    # real    93m5.682s
+    # real    114m42.322s
 
     cat fb.hetGla2.chainHg38Link.txt
+    # 1362365778 bases of 2314771103 (58.855%) in intersection
     # replacing the previous tuned version:
     # 1251393586 bases of 2314771103 (54.061%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hetGla2 hg38) > rbest.log 2>&1
+XXX - running - Thu Apr 30 09:18:20 PDT 2015
     # real    39m47.166s
 
 #########################################################################
@@ -2767,15 +2783,15 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Tue Apr 28 11:07:57 PDT 2015
-    # real    353m46.428s
+    # real    1499m5.523s
 
     cat fb.hg38.chainPteVam1Link.txt
+    # 1339387555 bases of 3049335806 (43.924%) in intersection
     # replacing the previous tuned version:
     # 1250608381 bases of 3049335806 (41.012%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 pteVam1) > rbest.log 2>&1 &
-    # real    31m54.193s
+    # real    33m53.542s
 
     # and for the swap:
     mkdir /hive/data/genomes/pteVam1/bed/blastz.hg38.swap
@@ -2786,14 +2802,15 @@ XXX - running - Tue Apr 28 11:07:57 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    111m37.288s
+    #  real    135m10.167s
 
     cat fb.pteVam1.chainHg38Link.txt
+    # 1279228346 bases of 1839436660 (69.545%) in intersection
     # replacing the previous tuned version:
     # 1198492243 bases of 1839436660 (65.155%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` pteVam1 hg38) > rbest.log 2>&1
-    # real    54m2.347s
+    # real    152m29.972s
 
 #########################################################################
 # LASTZ human/hg38 vs. cat/felCat8 - (DONE - 2015-04-28 - Hiram)
@@ -2839,14 +2856,15 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Tue Apr 28 11:19:21 PDT 2015
-    # real    1182m16.548s
+    # real    2218m28.035s
 
     cat fb.hg38.chainFelCat8Link.txt
+    # 1576029345 bases of 3049335806 (51.684%) in intersection
     # replacing the previous tuned version:
     # 1454517955 bases of 3049335806 (47.700%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 felCat8) > rbest.log 2>&1 &
+XXX - running - Thu Apr 30 09:19:49 PDT 2015
     # real    114m51.279s
 
     # and for the swap:
@@ -2858,6 +2876,7 @@ XXX - running - Tue Apr 28 11:19:21 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
+XXX - running - Thu Apr 30 09:19:49 PDT 2015
     #  real    246m0.738s
 
     cat fb.felCat8.chainHg38Link.txt
@@ -2950,18 +2969,16 @@ TMPDIR=/dev/shm
 
     cat << '_EOF_' > DEF
 # human vs ferret
-BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
 BLASTZ_O=400
 BLASTZ_E=30
-BLASTZ_X=740
-BLASTZ_Y=3400
-BLASTZ_M=50
-BLASTZ_Q=/hive/data/genomes/hg38/bed/lastzMusFur1.2015-04-28/hg38.musFur1.tuning.Q.txt
+BLASTZ_M=254
+# default BLASTZ_Q score matrix:
 #       A     C     G     T
-# A    73  -111   -20  -131
-# C  -111   100  -113   -20
-# G   -20  -113   100  -111
-# T  -131   -20  -111    73
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
 
 # TARGET: human hg38
 SEQ1_DIR=/hive/data/genomes/hg38/hg38.2bit
@@ -2989,15 +3006,15 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Tue Apr 28 10:53:13 PDT 2015
-    # real    752m20.664s
+    # real    405m30.959s
 
     cat fb.hg38.chainMusFur1Link.txt
+    # 1513410953 bases of 3049335806 (49.631%) in intersection
     # replacing the previous tuned version:
     # 1396051514 bases of 3049335806 (45.782%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 musFur1) > rbest.log 2>&1 &
-    # real    79m36.301s
+    # real    86m22.214s
 
     # and for the swap:
     mkdir /hive/data/genomes/musFur1/bed/blastz.hg38.swap
@@ -3008,13 +3025,15 @@ XXX - running - Tue Apr 28 10:53:13 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    82m21.578s
+    #  real    103m55.044s
 
     cat fb.musFur1.chainHg38Link.txt
+    # 1421314098 bases of 2277906570 (62.396%) in intersection
     # replacing the previous tuned version:
     # 1313363964 bases of 2277906570 (57.657%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` musFur1 hg38) > rbest.log 2>&1
+XXX - running - Thu Apr 30 09:21:52 PDT 2015
     # real    81m27.604s
 
 #########################################################################
@@ -3061,15 +3080,15 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - re-running - Mon Apr 27 11:04:43 PDT 2015
-    # real    384m17.412s
+    # real    1456m13.633s
 
     cat fb.hg38.chainCavPor3Link.txt
+    # 1292035815 bases of 3049335806 (42.371%) in intersection
     # replacing the previous tuned version:
     # 1155740911 bases of 3049335806 (37.901%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 cavPor3) > rbest.log 2>&1 &
-    # real    36m42.222s
+    # real    40m47.501s
 
     # and for the swap:
     mkdir /hive/data/genomes/cavPor3/bed/blastz.hg38.swap
@@ -3080,14 +3099,15 @@ XXX - re-running - Mon Apr 27 11:04:43 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    99m45.296s
+    #  real    147m52.206s
 
     cat fb.cavPor3.chainHg38Link.txt
+    # 1278427131 bases of 2663369733 (48.000%) in intersection
     # replacing the previous tuned version:
     # 1142636457 bases of 2663369733 (42.902%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` cavPor3 hg38) > rbest.log 2>&1
-    # real    94m42.887s
+    # real    132m10.182s
 
 #########################################################################
 # LASTZ human/hg38 vs. armadillo/dasNov3 - (DONE - 2015-04-28 - Hiram)
@@ -3133,15 +3153,15 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Tue Apr 28 11:15:18 PDT 2015
-    # real    435m29.350s
+    # real    1719m25.419s
 
     cat fb.hg38.chainDasNov3Link.txt
+    # 1382853067 bases of 3049335806 (45.349%) in intersection
     # replacing the previous tuned version:
     # 1287831558 bases of 3049335806 (42.233%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 dasNov3) > rbest.log 2>&1 &
-    # real    31m44.046s
+    # real    447m34.314s
 
     # and for the swap:
     mkdir /hive/data/genomes/dasNov3/bed/blastz.hg38.swap
@@ -3152,13 +3172,15 @@ XXX - running - Tue Apr 28 11:15:18 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    # real    101m45.821s
+    # real    139m24.821s
 
     cat fb.dasNov3.chainHg38Link.txt
+    # 1382479617 bases of 3299882059 (41.895%) in intersection
     # replacing the previous tuned version:
     # 1284164290 bases of 3299882059 (38.915%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` dasNov3 hg38) > rbest.log 2>&1
+XXX - running - Thu Apr 30 09:24:26 PDT 2015
     # real    45m5.745s
 
 #########################################################################
@@ -3213,8 +3235,7 @@ TMPDIR=/dev/shm
     # 1177978746 bases of 3049335806 (38.631%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 oryCun2) > rbest.log 2>&1 &
-XXX - running - Tue Apr 28 10:25:12 PDT 2015
-    # real    57m11.073s
+    # real    39m0.464s
 
     # and for the swap:
     mkdir /hive/data/genomes/oryCun2/bed/blastz.hg38.swap
@@ -3225,15 +3246,15 @@ XXX - running - Tue Apr 28 10:25:12 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-XXX - running - Tue Apr 28 10:25:12 PDT 2015
-    #  real    83m3.158s
+    #  real    107m40.781s
 
     cat fb.oryCun2.chainHg38Link.txt
+    # 1259317035 bases of 2604023284 (48.360%) in intersection
     # replacing the previous tuned version:
     # 1136478377 bases of 2604023284 (43.643%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` oryCun2 hg38) > rbest.log 2>&1
-    # real    36m38.011s
+    # real    74m17.119s
 
 #########################################################################
 # LASTZ human/hg38 vs. Tibetan antelope/panHod1 - (DONE - 2015-04-27 - Hiram)
@@ -3279,15 +3300,15 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Mon Apr 27 12:50:21 PDT 2015
-    # real    851m41.406s
+    # real    1194m17.831s
 
     cat fb.hg38.chainPanHod1Link.txt
+    # 1391091506 bases of 3049335806 (45.619%) in intersection
     # replacing the previous tuned version:
     # 1261119369 bases of 3049335806 (41.357%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 panHod1) > rbest.log 2>&1 &
-    # real    59m41.865s
+    # real    84m43.209s
 
     # and for the swap:
     mkdir /hive/data/genomes/panHod1/bed/blastz.hg38.swap
@@ -3298,13 +3319,16 @@ XXX - running - Mon Apr 27 12:50:21 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    82m12.028s
+    #  real    112m26.689s
 
     cat fb.panHod1.chainHg38Link.txt
+    # 1317338279 bases of 2507986438 (52.526%) in intersection
     # replacing the previous tuned version:
     # 1196606934 bases of 2507986438 (47.712%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` panHod1 hg38) > rbest.log 2>&1
+XXX - running - Thu Apr 30 09:25:52 PDT 2015
+XXX - will need to be finished
     # real    81m10.666s
 
 #########################################################################
@@ -3351,15 +3375,15 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Tue Apr 28 11:10:52 PDT 2015
-    # real    832m32.327s
+    # real    1527m39.249s
 
     cat fb.hg38.chainLepWed1Link.txt
+    # 1557394982 bases of 3049335806 (51.073%) in intersection
     # replacing the previous tuned version:
     # 1446510291 bases of 3049335806 (47.437%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 lepWed1) > rbest.log 2>&1 &
-    # real    53m24.279s
+    # real    70m0.849s
 
     # and for the swap:
     mkdir /hive/data/genomes/lepWed1/bed/blastz.hg38.swap
@@ -3370,14 +3394,15 @@ XXX - running - Tue Apr 28 11:10:52 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    89m14.446s
+    #  real    112m55.510s
 
     cat fb.lepWed1.chainHg38Link.txt
+    # 1459320253 bases of 2223164129 (65.642%) in intersection
     # replacing the previous tuned version:
     # 1358644851 bases of 2223164129 (61.113%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` lepWed1 hg38) > rbest.log 2>&1
-    # real    64m51.557s
+    # real    83m25.807s
 
 #########################################################################
 # LASTZ human/hg38 vs. Pacific walrus/odoRosDiv1 - (DONE - 2015-04-28 - Hiram)
@@ -3423,15 +3448,15 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -noDbNameCheck -syntenicNet) > do.log 2>&1
-XXX - running - Tue Apr 28 10:51:21 PDT 2015
-    # real    827m57.017s
+    # real    1559m56.509s
 
     cat fb.hg38.chainOdoRosDiv1Link.txt
+    # 1591525110 bases of 3049335806 (52.193%) in intersection
     # replacing the previous tuned version:
     # 1463226456 bases of 3049335806 (47.985%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 odoRosDiv1) > rbest.log 2>&1 &
-    # real    57m21.114s
+    # real    68m19.885s
 
     # and for the swap:
     mkdir /hive/data/genomes/odoRosDiv1/bed/blastz.hg38.swap
@@ -3442,14 +3467,15 @@ XXX - running - Tue Apr 28 10:51:21 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -noDbNameCheck -syntenicNet) > swap.log 2>&1
-    #  real    86m22.820s
+    #  real    116m42.765s
 
     cat fb.odoRosDiv1.chainHg38Link.txt
+    # 1492793949 bases of 2300235512 (64.897%) in intersection
     # replacing the previous tuned version:
     # 1376881973 bases of 2300235512 (59.858%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` odoRosDiv1 hg38) > rbest.log 2>&1
-    # real    92m47.617s
+    # real    129m15.182s
 
 #########################################################################
 # LASTZ human/hg38 vs. David's myotis bat/myoDav1 - (DONE - 2015-04-27 - Hiram)
@@ -3503,8 +3529,7 @@ TMPDIR=/dev/shm
     # 1063972348 bases of 3049335806 (34.892%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 myoDav1) > rbest.log 2>&1 &
-XXX - running - Tue Apr 28 10:27:13 PDT 2015
-    # real    83m34.440s
+    # real    38m14.019s
 
     # and for the swap:
     mkdir /hive/data/genomes/myoDav1/bed/blastz.hg38.swap
@@ -3515,15 +3540,15 @@ XXX - running - Tue Apr 28 10:27:13 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-XXX - running - Tue Apr 28 10:27:13 PDT 2015
-    #  real    87m38.005s
+    #  real    122m57.687s
 
     cat fb.myoDav1.chainHg38Link.txt
+    # 1132451816 bases of 1878461987 (60.286%) in intersection
     # replacing the previous tuned version:
     # 1025255929 bases of 1878461987 (54.580%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` myoDav1 hg38) > rbest.log 2>&1
-    # real    53m29.720s
+    # real    77m7.749s
 
 #########################################################################
 # LASTZ human/hg38 vs. goat/capHir1 - (DONE - 2015-04-27 - Hiram)
@@ -3569,15 +3594,15 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - re-running - Mon Apr 27 12:54:10 PDT 2015
-    # real    382m34.815s
+    # real    1473m2.628s
 
     cat fb.hg38.chainCapHir1Link.txt
+    # 1380028096 bases of 3049335806 (45.257%) in intersection
     # replacing the previous tuned version:
     # 1259921542 bases of 3049335806 (41.318%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 capHir1) > rbest.log 2>&1 &
-    # real    40m23.138s
+    # real    84m49.153s
 
     # and for the swap:
     mkdir /hive/data/genomes/capHir1/bed/blastz.hg38.swap
@@ -3588,13 +3613,16 @@ XXX - re-running - Mon Apr 27 12:54:10 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    92m53.757s
+    #  real    128m13.474s
 
     cat fb.capHir1.chainHg38Link.txt
+    # 1314558467 bases of 2495939845 (52.668%) in intersection
     # replacing the previous tuned version:
     # 1201106945 bases of 2495939845 (48.122%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` capHir1 hg38) > rbest.log 2>&1
+XXX - re-running - Thu Apr 30 09:28:23 PDT 2015
+XXX - will need to be finished
     # real    41m27.494s
 
 #########################################################################
@@ -3649,8 +3677,7 @@ TMPDIR=/dev/shm
     # 1071766600 bases of 3049335806 (35.148%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 myoLuc2) > rbest.log 2>&1 &
-XXX - running - Tue Apr 28 10:21:41 PDT 2015
-    # real    55m52.398s   (lost this rbest.log)
+    # real    31m49.720s
 
     # and for the swap:
     mkdir /hive/data/genomes/myoLuc2/bed/blastz.hg38.swap
@@ -3661,15 +3688,15 @@ XXX - running - Tue Apr 28 10:21:41 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-XXX - running - Tue Apr 28 10:21:41 PDT 2015
-    #  real    76m46.974s
+    #  real    101m34.047s
 
     cat fb.myoLuc2.chainHg38Link.txt
+    # 1174515059 bases of 1966419868 (59.729%) in intersection
     # replacing the previous tuned version:
     # 1075118724 bases of 1966419868 (54.674%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` myoLuc2 hg38) > rbest.log 2>&1
-    # real    31m22.849s
+    # real    103m44.974s
 
 #########################################################################
 # LASTZ human/hg38 vs. Cape elephant shrew/eleEdw1 - (DONE - 2015-02-17 - Hiram)
@@ -3778,15 +3805,15 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Tue Apr 28 10:46:10 PDT 2015
-    # real    556m2.050s
+    # real    1801m7.775s
 
     cat fb.hg38.chainTriMan1Link.txt
+    # 1382747603 bases of 3049335806 (45.346%) in intersection
     # replacing the previous tuned version:
     # 1263723305 bases of 3049335806 (41.443%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 triMan1) > rbest.log 2>&1 &
-    # real    31m57.028s
+    # real    73m5.269s
 
     # and for the swap:
     mkdir /hive/data/genomes/triMan1/bed/blastz.hg38.swap
@@ -3797,13 +3824,16 @@ XXX - running - Tue Apr 28 10:46:10 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    78m44.124s
+    #  real    103m30.816s
 
     cat fb.triMan1.chainHg38Link.txt
+    # 1299790980 bases of 2769099677 (46.939%) in intersection
     # replacing the previous tuned version:
     # 1188634635 bases of 2769099677 (42.925%) in intersection
 
-    time (doRecipBest.pl -buildDir=`pwd` triMan1 hg38) > rbest.log 2>&1
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triMan1 hg38) \
+       > rbest.log 2>&1
+XXX - running - Thu Apr 30 09:30:12 PDT 2015
     # real    33m55.371s
 
 #########################################################################
@@ -3922,8 +3952,7 @@ TMPDIR=/dev/shm
     # 1244377852 bases of 3049335806 (40.808%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 chiLan1) > rbest.log 2>&1 &
-XXX - running - Tue Apr 28 10:23:29 PDT 2015
-    # real    69m31.371s
+    # real    38m31.373s
 
     # and for the swap:
     mkdir /hive/data/genomes/chiLan1/bed/blastz.hg38.swap
@@ -3934,15 +3963,15 @@ XXX - running - Tue Apr 28 10:23:29 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-XXX - running - Tue Apr 28 10:23:29 PDT 2015
-    #  real    82m33.949s
+    #  real    107m42.158s
 
     cat fb.chiLan1.chainHg38Link.txt
+    # 1324935425 bases of 2284276400 (58.002%) in intersection
     # replacing the previous tuned version:
     # 1188638834 bases of 2284276400 (52.036%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` chiLan1 hg38) > rbest.log 2>&1
-    # real    93m31.960s
+    # real    62m47.881s
 
 #########################################################################
 # LASTZ human/hg38 vs. star nosed mole/conCri1 - (DONE - 2015-04-28 - Hiram)
@@ -3988,15 +4017,15 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Tue Apr 28 10:49:16 PDT 2015
-    # real    473m40.298s
+    # real    1423m17.538s
 
     cat fb.hg38.chainConCri1Link.txt
+    # 1095032620 bases of 3049335806 (35.911%) in intersection
     # replacing the previous tuned version:
     # 1007403174 bases of 3049335806 (33.037%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 conCri1) > rbest.log 2>&1 &
-    # real    48m37.526s
+    # real    99m34.655s
 
     # and for the swap:
     mkdir /hive/data/genomes/conCri1/bed/blastz.hg38.swap
@@ -4007,13 +4036,16 @@ XXX - running - Tue Apr 28 10:49:16 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    64m25.217s
+    #  real    81m47.687s
 
     cat fb.conCri1.chainHg38Link.txt
+    # 1026633109 bases of 1682542007 (61.017%) in intersection
     # replacing the previous tuned version:
     # 946409492 bases of 1682542007 (56.249%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` conCri1 hg38) > rbest.log 2>&1
+XXX - running - Thu Apr 30 09:34:30 PDT 2015
+XXX - will need to be finished
     # real    43m47.598s
 
 #########################################################################
@@ -4146,8 +4178,7 @@ TMPDIR=/dev/shm
     # 922764468 bases of 3049335806 (30.261%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 ochPri3) > rbest.log 2>&1 &
-XXX - running - Tue Apr 28 10:29:54 PDT 2015
-    # real    26m47.977s
+    # real    35m7.253s
 
     # and for the swap:
     mkdir /hive/data/genomes/ochPri3/bed/blastz.hg38.swap
@@ -4158,15 +4189,15 @@ XXX - running - Tue Apr 28 10:29:54 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-XXX - running - Tue Apr 28 10:29:54 PDT 2015
-    #  real    63m26.831s
+    #  real    80m33.697s
 
     cat fb.ochPri3.chainHg38Link.txt
+    # 968829838 bases of 1943987870 (49.837%) in intersection
     # replacing the previous tuned version:
     # 874404292 bases of 1943987870 (44.980%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` ochPri3 hg38) > rbest.log 2>&1
-    # real    29m20.092s
+    # real    46m26.106s
 
 #########################################################################
 # LASTZ human/hg38 vs. hedgehog/eriEur2 - (DONE - 2015-02-17 - Hiram)
@@ -4276,15 +4307,15 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Tue Apr 28 11:21:51 PDT 2015
-    # real    254m19.802s
+    # real    1689m14.948s
 
     cat fb.hg38.chainEchTel2Link.txt
+    # 893752189 bases of 3049335806 (29.310%) in intersection
     # replacing the previous tuned version:
     # 840080104 bases of 3049335806 (27.550%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` hg38 echTel2) > rbest.log 2>&1 &
-    # real    87m13.497s
+    # real    108m5.914s
 
     # and for the swap:
     mkdir /hive/data/genomes/echTel2/bed/blastz.hg38.swap
@@ -4295,13 +4326,16 @@ XXX - running - Tue Apr 28 11:21:51 PDT 2015
         -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    65m38.199s
+    #  real    87m14.342s
 
     cat fb.echTel2.chainHg38Link.txt
+    # 853272550 bases of 2605196361 (32.753%) in intersection
     # replacing the previous tuned version:
     # 802302160 bases of 2605196361 (30.796%) in intersection
 
-    time (doRecipBest.pl -buildDir=`pwd` echTel2 hg38) > rbest.log 2>&1
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` echTel2 hg38) \
+      > rbest.log 2>&1
+XXX - running - Thu Apr 30 09:36:03 PDT 2015
     # real    49m57.354s
 
 #########################################################################
