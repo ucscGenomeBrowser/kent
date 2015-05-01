@@ -21,6 +21,9 @@ var ImModel = (function() {
         this.undoStack = [];
         this.redoStack = [];
 
+        // cart is currently a global object but let's pretend it's not
+        this.cart = cart;
+
         // Handler functions for server and UI update paths
         // Cart is flat, so cartJsonHandlers is just an object that maps cart var names
         // to arrays of functions.
@@ -240,12 +243,12 @@ var ImModel = (function() {
                                                    this, null);
                 handler = this.handleServerResponse;
             }
-            cart.send(commandObj, handler);
+            this.cart.send(commandObj, handler);
         },
 
         cartSend: function(commandObj) {
             // Send a command to the server; no need to handle response.
-            cart.send(commandObj);
+            this.cart.send(commandObj);
         },
 
         cartSet: function(cartVar, newValue) {

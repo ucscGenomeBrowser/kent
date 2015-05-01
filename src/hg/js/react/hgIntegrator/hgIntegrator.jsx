@@ -1,14 +1,15 @@
 /** @jsx React.DOM */
 /* global ImmutableUpdate, PathUpdate, CheckboxLabel, CladeOrgDb, Icon, LabeledSelect */
 /* global LoadingImage, Modal, PositionSearch, Section, SetClearButtons, Sortable, TextInput */
+/* global UserRegions */
 
 var pt = React.PropTypes;
 
 // AnnoGrator interface.
 
-var RegionOrGenome = React.createClass({
-    // Let the user choose between position/search term or whole genome.
-    // Handle position input behavior: look up search terms on enter,
+var RegionSelect = React.createClass({
+    // Let the user choose between position/search term, whole genome, or user-defined regions.
+    // Modules PositionSearch and UserRegions handle the details.
 
     mixins: [PathUpdate, ImmutableUpdate],
     // update(path + 'position', newValue) called when user changes position
@@ -16,42 +17,71 @@ var RegionOrGenome = React.createClass({
     // update(path + 'positionMatch', matches): user clicks position link in popup
     //                                          (matches obj is from hgFind)
     // update(path + 'hgi_range') called when user changes genome/position select
+    // update(path + 'changeRegions') called when user clicks to change pasted/uploaded regions
+    // update(path + 'clearRegions') called when user clicks to reset pasted/uploaded regions
 
-    propTypes: { positionInfo: pt.object.isRequired,  // Immutable.Map {
-                 //   position: initial value of position input
-                 //   loading (bool): display spinner next to position input
-                 //   positionMatches (Immutable.Vector of Maps): multiple search results for popup
-                 //   geneSuggestTrack: optional track to use for autocomplete
+    propTypes: { regionSelect: pt.object.isRequired,  // expected to be Immutable {
+                 //   hgi_range: position | genome | userRegions
+                 //   loading (bool): display spinner (e.g. while uploading file)
+                 //   positionInfo: PositionSearch's expected Immutable state
+                 //   userRegions: UserRegions' expected Immutable state
                  // }
                  db: pt.string // must be given if positionInfo includes geneSuggestTrack
                },
 
     menuOptions: Immutable.fromJS([ { label: 'position or search term', value: 'position' },
-                                    { label: 'genome', value: 'genome'}
+                                    { label: 'genome', value: 'genome'},
+                                    { label: 'defined regions', value: 'userRegions'}
                                     ]),
+
+    changeRegions: function() {
+        // user clicked to edit pasted/uploaded regions
+        this.props.update(this.props.path.concat('changeRegions'));
+    },
+
+    clearRegions: function() {
+        // user clicked to reset pasted/uploaded regions
+        this.props.update(this.props.path.concat('clearRegions'));
+    },
 
     render: function() {
         var props = this.props;
-        var posInfo = props.positionInfo;
-        var positionInput = null;
-        if (posInfo.get('hgi_range') !== 'genome') {
-            positionInput = <PositionSearch positionInfo={posInfo}
-                                            className='sectionItem'
-                                            db={props.db}
-                                            path={props.path} update={props.update}
-                            />;
+        var regionSelect = props.regionSelect;
+        var userRegions = regionSelect.get('userRegions');
+        var selected = regionSelect.get('hgi_range');
+        var modeControls = null;
+        if (selected === 'userRegions') {
+            modeControls = [
+                <span className='smallText sectionItem'>{userRegions.get('summary')}</span>,
+                <input type='button' value='change regions' onClick={this.changeRegions} />,
+                <input type='button' value='clear' onClick={this.clearRegions} />
+                ];
+        } else if (selected !== 'genome') {
+            modeControls = <PositionSearch positionInfo={regionSelect.get('positionInfo')}
+                                           className='sectionItem'
+                                           db={props.db}
+                                           path={props.path.concat('positionInfo')}
+                                           update={props.update}
+                                           />;
+        }
+        var spinner = null;
+        if (regionSelect.get('loading')) {
+            spinner = <Icon type="spinner" className="floatRight" />;
         }
         return (
             <div className='sectionRow'>
               <LabeledSelect label='region to annotate'
                              className='sectionItem'
-                             selected={posInfo.get('hgi_range')} options={this.menuOptions}
+                             selected={selected} options={this.menuOptions}
                              update={props.update} path={props.path.concat('hgi_range')} />
-              {positionInput}
+              {spinner}
+              {modeControls}
+              <UserRegions settings={userRegions}
+                           update={props.update} path={props.path.concat('userRegions')} />
             </div>
         );
     }
-}); // RegionOrGenome
+}); // RegionSelect
 
 var LabeledSelectRow = React.createClass({
     // Build a row of LabeledSelect's from an Immutable.List of Immutable descriptor objects
@@ -425,11 +455,11 @@ var DbPosAndQueryBuilder = React.createClass({
     // Container for selecting a species, configuring position/genome, and building a query.
 
     mixins: [PathUpdate, ImmutableUpdate],
-    // update() calls: see CladeOrgDb, RegionOrGenome and QueryBuilder
+    // update() calls: see CladeOrgDb, RegionSelect and QueryBuilder
 
     propTypes: { // Optional:
                  cladeOrgDbInfo: pt.object, // See CladeOrgDb
-                 positionInfo: pt.object,   // See RegionOrGenome
+                 regionSelect: pt.object,   // See RegionSelect
                  querySpec: pt.object,      // Data sources and output options
                  addDsInfo: pt.object,      // Options for adding a data source
                  tableFields: pt.object,    // If present, show 'Choose fields' modal
@@ -448,9 +478,9 @@ var DbPosAndQueryBuilder = React.createClass({
                 <Section title='Select Genome Assembly and Region'>
                   <CladeOrgDb menuData={cladeOrgDbInfo}
                               path={path.concat('cladeOrgDb')} update={this.props.update}/>
-                  <RegionOrGenome positionInfo={this.props.positionInfo}
-                                  db={cladeOrgDbInfo.get('db')}
-                                  path={path.concat('positionInfo')} update={this.props.update}/>
+                  <RegionSelect regionSelect={this.props.regionSelect}
+                                db={cladeOrgDbInfo.get('db')}
+                                path={path.concat('regionSelect')} update={this.props.update}/>
                 </Section>
 
                 <QueryBuilder addDsInfo={this.props.addDsInfo}
@@ -492,7 +522,7 @@ var AppComponent = React.createClass({
               </div>
 
               <DbPosAndQueryBuilder cladeOrgDbInfo={appState.get('cladeOrgDb')}
-                                    positionInfo={appState.get('positionInfo')}
+                                    regionSelect={appState.get('regionSelect')}
                                     addDsInfo={appState.get('addDsInfo')}
                                     querySpec={appState.get('hgi_querySpec')}
                                     tableFields={appState.get('tableFields')}
