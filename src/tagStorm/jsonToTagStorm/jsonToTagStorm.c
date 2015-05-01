@@ -13,7 +13,7 @@ void usage()
 {
 errAbort(
   "jsonToTagStorm - Convert a .json file into a .tagStorm file. The .json file"
-  " must adhere to .json convention (please see json.org), multiple lined .json files are allowed. \n"
+  "  must adhere to .json convention (please see json.org), multiple lined .json files are allowed. \n"
   "usage:\n"
   "   jsonToTagStorm in.json out.tags\n"
   );
@@ -45,14 +45,17 @@ for (; curToken != NULL; curToken = tokenizerNext(tkz))
     	// Update depth and handle .json arrays 
         {
 	if (expVal)
+	// notices a new array
 	    {
+	    if (strcmp(name,"children")) warn("WARNING: A .json array was encountered with a name other than 'children', the array name '%s' will be lost upon conversion.", name); 
 	    expVal = FALSE;
 	    beforeVal = TRUE; 
 	    }
 	if (firstLine)
+	    // Dont update depth for first '[' and dont print a newline
 	    {
-	    firstLine = FALSE; 
-	    continue; 
+	    firstLine = FALSE;
+	    continue;
 	    }
 	++depth; 
 	fprintf(f,"\n"); 
@@ -74,7 +77,11 @@ for (; curToken != NULL; curToken = tokenizerNext(tkz))
 	fprintf(f,"\n"); 
 	continue; 
 	}
-    if (!strcmp(curToken, "{")) continue; 
+    if (!strcmp(curToken, "{"))
+        {
+	if (expVal & !beforeVal) errAbort("ERROR: The .json object named '%s' can not be converted to tagStorm format. Please remove this object, or reformat it, then try again. Aborting.", name);
+        continue;
+	}
     if (!strcmp(curToken, ":"))
     	// Get ready for a value
         {
@@ -98,10 +105,12 @@ for (; curToken != NULL; curToken = tokenizerNext(tkz))
     else
         // Get the value, print name and value to propper depth
         {
+	// consider using spaceOut(f, depth*4);
 	for (i = 0; i < depth; ++i)
 	    {
 	    fprintf(f,"    "); 
 	    }
+	if (skipToSpaces(name)!=NULL) errAbort("ERROR: There seems to be whitespace in a tag's name field, the name is '%s' . Please provide a different name with no white space, aborting.", name);
 	fprintf(f,"%s ", replaceChars(name, "\\\"", "\"")); 
 	val = curToken; 
 	fprintf(f,"%s\n", replaceChars(val, "\\\"", "\"")); 
