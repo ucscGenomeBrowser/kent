@@ -484,7 +484,7 @@ var AppComponent = React.createClass({
         return (
             <div className='cgiContents'>
               <div className='cgiTitleBox'>
-                <span className='cgiTitle'>Annotation Integrator</span>
+                <span className='cgiTitle'>Data Integrator</span>
                 <input type='button' value='Undo'
                        onClick={this.props.undo} disabled={!appState.get('canUndo')} />
                 <input type='button' value='Redo'
@@ -500,7 +500,7 @@ var AppComponent = React.createClass({
                                     path={path} update={this.props.update}
                                     />
 
-              <Section title='Using the Annotation Integrator'>
+              <Section title='Using the Data Integrator'>
                 <div dangerouslySetInnerHTML={{__html: helpText}} />
               </Section>
             </div>

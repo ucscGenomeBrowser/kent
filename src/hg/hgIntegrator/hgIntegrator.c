@@ -1,4 +1,4 @@
-/* hgIntegrator - bootstrapper / back end for the Annotation Integrator user interface
+/* hgIntegrator - bootstrapper / back end for the Data Integrator user interface
  * This CGI has three modes of operation:
  *  - HTML output for minimal main page with a <div> container to be filled in by javascript
  *    (default, in the absence of special CGI params)
@@ -257,7 +257,7 @@ void doMainPage()
 {
 char *db = cartUsualString(cart, "db", hDefaultDb());
 webStartWrapperDetailedNoArgs(cart, trackHubSkipHubName(db),
-                              "", "Annotation Integrator",
+                              "", "Data Integrator",
                               TRUE, FALSE, TRUE, TRUE);
 
 // Ideally these would go in the <HEAD>
