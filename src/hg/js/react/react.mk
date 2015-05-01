@@ -22,8 +22,9 @@ ifeq (${UGLIFYJS},)
     UGLIFYJS=true
 endif
 
+# Don't remove the bundle files when cleaning -- they're under git control!
 clean:
-	rm -f ${COMPILED_JS_DESTDIR}/* ${BUNDLE_DESTDIR}/${BUNDLE_FILE}
+	rm -f ${COMPILED_JS_DESTDIR}/*
 
 compile: jsx
 
