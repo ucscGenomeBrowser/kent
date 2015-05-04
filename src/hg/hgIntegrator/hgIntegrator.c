@@ -103,15 +103,23 @@ slFreeList(&tables);
 #define hgtaRegionTypeUserRegions "userRegions"
 
 
+boolean userRegionsExist()
+/* Return true if the trash file for regions exists.  It must be non-empty because
+ * if the region list is set to empty we clear region state. */
+{
+char *trashFileName = cartOptionalString(cart, hgtaUserRegionsFile);
+return (isNotEmpty(trashFileName) && fileExists(trashFileName));
+}
+
 struct bed4 *userRegionsGetBedList()
 /* Read parsed user-defined regions from local trash file and return as bed list. */
 // Not libifying at this point because the cart variable names may differ between
 // apps -- in that case, libify this but with some kind of param to give cart
 // var name prefix.
 {
-char *trashFileName = cartOptionalString(cart, hgtaUserRegionsFile);
-if (isEmpty(trashFileName) || !fileExists(trashFileName))
+if (! userRegionsExist())
     return NULL;
+char *trashFileName = cartOptionalString(cart, hgtaUserRegionsFile);
 // Note: I wanted to use basicBed's bedLoadNAll but it chops by whitespace not tabs,
 // so it aborts if the name field is empty (that causes it to see 3 words not 4).
 char *words[4];
@@ -164,9 +172,9 @@ if (isEmpty(resultName))
 struct jsonWrite *jw = cj->jw;
 char *db = cartString(cart, "db");
 char *regionsDb = cartOptionalString(cart, hgtaUserRegionsDb);
-char *userRegions = cartOptionalString(cart, hgtaEnteredUserRegions);
-if (sameOk(regionsDb, db) && isNotEmpty(userRegions))
+if (sameOk(regionsDb, db) && userRegionsExist())
     {
+    char *userRegions = cartUsualString(cart, hgtaEnteredUserRegions, "");
     //#*** TODO: move jsonStringEscape inside jsonWriteString
     char *encoded = jsonStringEscape(userRegions);
     jsonWriteString(jw, resultName, encoded);
