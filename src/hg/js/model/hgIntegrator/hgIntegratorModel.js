@@ -1,10 +1,11 @@
-/* global AppComponent, ImModel, CladeOrgDbMixin, PositionSearchMixin, cart */
+/* global AppComponent, ImModel, CladeOrgDbMixin, PositionSearchMixin, UserRegionsMixin */
 
 var HgIntegratorModel = ImModel.extend({
     // Handle hgIntegrator's UI state and events and interaction with the server/CGI/cart.
 
     mixins: [ CladeOrgDbMixin(['cladeOrgDb']),
-              PositionSearchMixin(['positionInfo']) ],
+              PositionSearchMixin(['regionSelect', 'positionInfo']),
+              UserRegionsMixin(['regionSelect', 'userRegions'])],
 
     maxDataSources: 5,
     tdbFields: 'track,table,shortLabel,parent,subtracks',
@@ -22,8 +23,14 @@ var HgIntegratorModel = ImModel.extend({
                 mutState.set(cartVar, Immutable.fromJS(newValue));
             }
         } else if (cartVar === 'hgi_range') {
-            // Bundle this with positionInfo for fast immutable-prop checking
-            mutState.setIn(['positionInfo', cartVar], newValue);
+            // perhaps regionSelect stuff should move to a plugin
+            mutState.setIn(['regionSelect', cartVar], newValue);
+            mutState.setIn(['regionSelect', 'loading'], false);
+        } else if (cartVar === 'userRegionsUpdate') {
+            if (newValue && newValue !== "") {
+                // User-defined regions updated -- change range to userRegions
+                mutState.setIn(['regionSelect', 'hgi_range'], 'userRegions');
+            }
         } else if (cartVar === 'tableFields') {
             // The server has sent an object mapping table names to lists of fields.
             // Construct an immutable map of table names to ordered maps of fields to
@@ -39,12 +46,14 @@ var HgIntegratorModel = ImModel.extend({
             tfDefaults = _.mapValues(newValue, function(info, table) {
                 var currentFieldSettings = current[table] || {};
                 var newFieldSettings = Immutable.OrderedMap();
-                info.fields.forEach(function(field) {
+                info.fields.forEach(function(fieldAndDesc) {
+                    var field = fieldAndDesc.name;
                     var checked = currentFieldSettings[field];
                     if (checked === undefined) {
                         checked = (field !== 'bin');
                     }
-                    newFieldSettings = newFieldSettings.set(field, checked);
+                    var newSetting = Immutable.Map({checked: checked, desc: fieldAndDesc.desc});
+                    newFieldSettings = newFieldSettings.set(field, newSetting);
                 }, this);
                 return Immutable.Map({ fields: newFieldSettings, label: info.label});
             }, this);
@@ -401,6 +410,33 @@ var HgIntegratorModel = ImModel.extend({
         }
     },
 
+    changeRange: function(mutState, uiPath, newValue) {
+        // User changed 'region to annotate' select; if they changed it to 'define regions'
+        // but have not yet defined any regions, open the UserRegions popup.
+        var existingRegions = mutState.getIn(['regionSelect', 'userRegions', 'regions']);
+        if (newValue === 'userRegions' && (!existingRegions || existingRegions === "")) {
+            this.openUserRegions(mutState);
+        } else {
+            this.changeCartString(mutState, uiPath, newValue);
+        }
+    },
+
+    clearUserRegions: function(mutState) {
+        // Clear user region state and reset hgi_range.
+        this.changeCartString(mutState, ['regionSelect', 'hgi_range'], 'position');
+        this.clearUserRegionState(mutState);
+    },
+
+    uploadedUserRegions: function(mutState) {
+        // Wait for results of parsing uploaded region file
+        mutState.setIn(['regionSelect', 'loading'], true);
+    },
+
+    pastedUserRegions: function(mutState) {
+        // Update hgi_range to select user regions
+        mutState.setIn(['regionSelect', 'hgi_range'], 'userRegions');
+    },
+
     cartSendQuerySpec: function(mutState) {
         // When some part of querySpec changes, update the cart variable.
         var state = mutState || this.state;
@@ -547,19 +583,22 @@ var HgIntegratorModel = ImModel.extend({
             var table = path[2], field = path[3];
             if (field) {
                 // Update field's status in UI state and hgi_querySpec
-                mutState.setIn(['tableFields', table, 'fields', field], newValue);
+                mutState.setIn(['tableFields', table, 'fields', field, 'checked'], newValue);
                 mutState.setIn(['hgi_querySpec', 'outFileOptions', 'tableFields',
                                      table, field], newValue);
             } else {
                 // 'Set all' or 'Clear all' according to newValue
                 mutState.updateIn(['tableFields', table, 'fields'], function(fieldVals) {
-                    return fieldVals.map(function() { return newValue; });
+                    return fieldVals.map(function(checkedAndDesc) {
+                        return checkedAndDesc.set('checked', newValue);
+                    });
                 });
                 // hgi_querySpec might not yet contain any explicit choices for table's fields,
                 // so iterate over the complete set of fields in top-level tableFields:
-                mutState.getIn(['tableFields', table, 'fields']).forEach(function(val, field) {
+                mutState.getIn(['tableFields', table, 'fields']
+                               ).forEach(function(checkedAndDesc, field) {
                     mutState.setIn(['hgi_querySpec', 'outFileOptions', 'tableFields',
-                                         table, field], val);
+                                         table, field], checkedAndDesc.get('checked'));
                 });
             }
             this.cartSendQuerySpec(mutState);
@@ -614,6 +653,7 @@ var HgIntegratorModel = ImModel.extend({
         this.cartDo({ cgiVar: { db: db, position: newPos },
                       get: { 'var': 'position,hgi_querySpec' },
                       getGeneSuggestTrack: {},
+                      getUserRegions: {}
                       });
         this.cartDo({ cgiVar: { db: db },
                       getGroupedTrackDb: { fields: this.tdbFields } });
@@ -621,19 +661,28 @@ var HgIntegratorModel = ImModel.extend({
 
     initialize: function() {
         // Register handlers for cart variables that need special treatment:
-        this.registerCartVarHandler(['hgi_querySpec', 'hgi_range', 'tableFields'],
+        this.registerCartVarHandler(['hgi_querySpec', 'hgi_range', 'tableFields',
+                                     'userRegionsUpdate'],
                                     this.handleCartVar);
         this.registerCartVarHandler('hgi_addDsTrackPath', this.handleJsonBlob);
         this.registerCartVarHandler('groupedTrackDb', this.handleGroupedTrackDb);
         this.registerCartValidateHandler(this.validateCart);
         // Register handlers for UI events:
-        this.registerUiHandler(['positionInfo', 'hgi_range'], this.changeCartString);
+        this.registerUiHandler(['regionSelect', 'hgi_range'], this.changeRange);
+        this.registerUiHandler(['regionSelect', 'changeRegions'], this.openUserRegions);
+        this.registerUiHandler(['regionSelect', 'clearRegions'], this.clearUserRegions);
+        this.registerUiHandler(['regionSelect', 'userRegions', 'uploaded'],
+                               this.uploadedUserRegions);
+        this.registerUiHandler(['regionSelect', 'userRegions', 'pasted'], this.pastedUserRegions);
         this.registerUiHandler(['addDsMenuSelect'], this.changeAddDsMenu);
         this.registerUiHandler(['addDataSource'], this.addDataSource);
         this.registerUiHandler(['trackHubs'], this.goToTrackHubs);
         this.registerUiHandler(['customTracks'], this.goToCustomTracks);
         this.registerUiHandler(['dataSources'], this.dataSourceClick);
         this.registerUiHandler(['outFileOptions'], this.outFileOptionsClick);
+
+        // Tell cart what CGI to send requests to
+        this.cart.setCgi('hgIntegrator');
 
         // Bootstrap initial state from page or by server request, then render:
         if (window.initialAppState) {
@@ -643,7 +692,8 @@ var HgIntegratorModel = ImModel.extend({
             // Fire off some requests in parallel -- some are much slower than others.
             // Get clade/org/db and important small cart variables.
             this.cartDo({ getCladeOrgDbPos: {},
-                          get: {'var': 'hgi_range,hgi_querySpec,hgi_addDsTrackPath'}
+                          get: {'var': 'hgi_range,hgi_querySpec,hgi_addDsTrackPath'},
+                          getUserRegions: {}
                         });
             // The groupedTrackDb structure is so large for hg19 and other well-annotated
             // genomes that the volume of compressed JSON takes a long time on the wire.
@@ -661,8 +711,6 @@ var HgIntegratorModel = ImModel.extend({
 
 }); // HgIntegratorModel
 
-cart.setCgi('hgIntegrator');
-
 var container = document.getElementById('appContainer');
 
 function render(state, update, undo, redo) {
@@ -674,4 +722,5 @@ function render(state, update, undo, redo) {
 }
 
 var hgIntegratorModel = new HgIntegratorModel(render);
+
 hgIntegratorModel.initialize();
