@@ -2,3 +2,6 @@
 
 track chainNetMm9 override
 priority 370.3
+
+track chainNetTarSyr2 override
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
