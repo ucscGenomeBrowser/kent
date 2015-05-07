@@ -1,11 +1,13 @@
 #############################################################################
-## 100-Way Multiz (WORKING - 2015-04-30 - Hiram)
+## 100-Way Multiz (DONE - 2015-04-30 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/hg38/bed/multiz100way
     cd /hive/data/genomes/hg38/bed/multiz100way
 
     # the hg38.100way.list was prepared by taking the hg19 100-way list and
-    #  updating to most recent assembly versions for a few
+    #  updating to most recent assembly versions for a few:
+    # papHam1 -> papAnu2, chlSab1 -> chlSab2, rn5 -> rn6, felCat5 -> felCat8
+    # bosTau7 -> bosTau8, chrPic1 -> chrPic2, danRer7 -> danRer10
     # from the 183-way in the source tree, select out the 100 used here:
     /cluster/bin/phast/tree_doctor \
         --prune-all-but `cat hg38.100way.list | xargs echo | tr '[ ]' '[,]'` \
@@ -654,142 +656,78 @@ mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/hg38/hg38.2bit {check out l
     para -ram=64g create jobList
     para try ... check ...
     para -maxJob=10 push
-XXX - running - Wed May  6 11:09:04 PDT 2015
-# Completed: 70 of 89 jobs
-# Crashed: 19 jobs
-# CPU time in finished jobs:       1027s      17.12m     0.29h    0.01d  0.000 y
-# IO & Wait Time:                  4532s      75.53m     1.26h    0.05d  0.000 y
-# Average job time:                  79s       1.32m     0.02h    0.00d
-# Longest finished job:             370s       6.17m     0.10h    0.00d
-# Submission to last job:           552s       9.20m     0.15h    0.01d
+# Completed: 348 of 358 jobs
+# Crashed: 10 jobs
+# CPU time in finished jobs:      21567s     359.46m     5.99h    0.25d  0.001 y
+# IO & Wait Time:                  1252s      20.86m     0.35h    0.01d  0.000 y
+# Average job time:                  66s       1.09m     0.02h    0.00d
+# Longest finished job:            2593s      43.22m     0.72h    0.03d
+# Submission to last job:          5232s      87.20m     1.45h    0.06d
 
-##############################################################################
-# GAP ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE - 2014-12-22 - Hiram)
-    # mafAddIRows has to be run on single chromosome maf files, it does not
-    #	function correctly when more than one reference sequence
-    #	are in a single file.  Need to split of the maf file into individual
-    #   maf files
-    mkdir -p /hive/data/genomes/hg38/bed/multiz100way/anno/mafSplit
-    cd /hive/data/genomes/hg38/bed/multiz100way/anno/mafSplit
-
-    time mafSplit -outDirDepth=1 -byTarget -useFullSequenceName \
-        /dev/null . ../../multiz100way.maf
-    #   real    15m16.739s
-
-    find . -type f | wc -l
-    #   358
-
-    # check for N.bed files everywhere:
+    # running the last 10 jobs on kolossus with 200 Gb memory limit:
+    ssh kolossus
     cd /hive/data/genomes/hg38/bed/multiz100way/anno
-    for DB in `cat ../species.list`
-do
-    if [ ! -s /hive/data/genomes/${DB}/${DB}.N.bed ]; then
-        echo "MISS: ${DB}"
-        cd /hive/data/genomes/${DB}
-        twoBitInfo -nBed ${DB}.2bit ${DB}.N.bed
-    else
-        echo "  OK: ${DB}"
-    fi
-done
+    cat << '_EOF_' > bigJobs.sh
+#!/bin/sh
 
-    cd /hive/data/genomes/hg38/bed/multiz100way/anno
-    for DB in `cat ../species.list`
-do
-    echo "${DB} "
-    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
-    echo ${DB}.bed  >> nBeds
-    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
-    echo ${DB}.len  >> sizes
-done
-    # make sure they all are successful symLinks:
-    ls -ogrtL
+# 200 Gb memory limits
 
-    screen -S hg38      # use a screen to control this longish job
-    ssh ku
-    cd /hive/data/genomes/hg38/bed/multiz100way/anno
-    mkdir result
-    for D in `ls mafSplit`
-do
-    echo mkdir result/${D}
-    mkdir result/${D}
-done
-    cat << '_EOF_' > template
-#LOOP
-mafAddIRows -nBeds=nBeds mafSplit/$(path1) /hive/data/genomes/hg38/hg38.2bit {check out exists+ result/$(path1)}
-#ENDLOOP
+export sizeG=200000000
+ulimit -d $sizeG
+ulimit -v $sizeG
+
+mafAddIRows -nBeds=nBeds ../maf/chr1.maf /hive/data/genomes/hg38/hg38.2bit result/chr1.maf &
+mafAddIRows -nBeds=nBeds ../maf/chr2.maf /hive/data/genomes/hg38/hg38.2bit result/chr2.maf &
+mafAddIRows -nBeds=nBeds ../maf/chr3.maf /hive/data/genomes/hg38/hg38.2bit result/chr3.maf
+wait
+mafAddIRows -nBeds=nBeds ../maf/chr4.maf /hive/data/genomes/hg38/hg38.2bit result/chr4.maf &
+mafAddIRows -nBeds=nBeds ../maf/chr5.maf /hive/data/genomes/hg38/hg38.2bit result/chr5.maf &
+mafAddIRows -nBeds=nBeds ../maf/chr6.maf /hive/data/genomes/hg38/hg38.2bit result/chr6.maf
+wait
+mafAddIRows -nBeds=nBeds ../maf/chr7.maf /hive/data/genomes/hg38/hg38.2bit result/chr7.maf &
+mafAddIRows -nBeds=nBeds ../maf/chr8.maf /hive/data/genomes/hg38/hg38.2bit result/chr8.maf &
+mafAddIRows -nBeds=nBeds ../maf/chr9.maf /hive/data/genomes/hg38/hg38.2bit result/chr9.maf
+wait
+mafAddIRows -nBeds=nBeds ../maf/chrX.maf /hive/data/genomes/hg38/hg38.2bit result/chrX.maf
 '_EOF_'
     # << happy emacs
+    chmod +x bigJobs.sh
+    time (./bigJobs.sh) > bigJobs.log 2>&1
+    # real    203m2.858s
 
-    find ./mafSplit -type f | sed -e 's#^./mafSplit/##' > maf.list
-    gensub2 maf.list single template jobList
-    # limit jobs on a node with the ram=32g requirement because they go fast
-    para create jobList
-    para try ... check ... push ...
-    # dont't run too many at once, these go very fast
-    para -maxJob=20 push
-# Completed: 353 of 353 jobs
-# CPU time in finished jobs:        530s       8.83m     0.15h    0.01d  0.000 y
-# IO & Wait Time:                  1057s      100.62m     0.29h    0.01d  0.000 y
-# Average job time:                   4s       0.07m     0.00h    0.00d
-# Longest finished job:              63s       1.05m     0.02h    0.00d
-# Submission to last job:           220s       3.67m     0.06h    0.00d
-
-    # verify all result files have some content, look for 0 size files:
-    find ./result -type f -size 0
-    # should see none
-    # or in this manner:
-    find ./result -type f | xargs ls -og | sort -k3nr | tail
-# -rw-rw-r-- 1       7236 Dec 22 14:11 ./result/1/chrUn_KI270528v1.maf
-# -rw-rw-r-- 1       7073 Dec 22 14:13 ./result/7/chrUn_KI270330v1.maf
-# -rw-rw-r-- 1       1268 Dec 22 14:12 ./result/6/chrUn_KI270583v1.maf
-
-    # combine into one file  (the 1>&2 redirect sends the echo to stderr)
-    head -q -n 1 result/0/chr8.maf > hg38.100way.maf
-    find ./result -type f | while read F
-do
-    echo "${F}" 1>&2
-    grep -h -v "^#" ${F}
-done >> hg38.100way.maf
-
-    #	these maf files do not have the end marker, this does nothing:
-    #	tail -q -n 1 result/0/chr8.maf >> hg38.100way.maf
-    # How about an official end marker:
-    echo "##eof maf" >> hg38.100way.maf
-    ls -og
-# -rw-rw-r-- 1 656491004703 Dec 22 14:32 hg38.100way.maf
-
-    du -hsc hg38.100way.maf
-    # 62G     hg38.100way.maf
-
-    # construct symlinks to get the individual maf files into gbdb:
-    rm /gbdb/hg38/multiz100way/multiz100way.maf   # remove previous results
-    ln -s `pwd`/hg38.100way.maf /gbdb/hg38/multiz100way/multiz100way.maf
+    du -hsc result
+    #  789G    result
 
     # Load into database
+    rm -f /gbdb/hg38/multiz100way/maf/*
+    cd /hive/data/genomes/hg38/bed/multiz100way/anno/result
+   
+    ln -s `pwd`/*.maf /gbdb/hg38/multiz100way/maf/
+
+    # this generates an immense multiz100way.tab file in the directory
+    #	where it is running.  Best to run this over in scratch.
+    #   This is going to take all day.
     cd /dev/shm
-    time hgLoadMaf -pathPrefix=/gbdb/hg38/multiz100way \
-        hg38 multiz100way
-    # Loaded 100870998 mafs in 1 files from /gbdb/hg38/multiz100way
-    # real    13m28.939s
+    time hgLoadMaf -pathPrefix=/gbdb/hg38/multiz100way/maf hg38 multiz100way
+    # Loaded 114670205 mafs in 358 files from /gbdb/hg38/multiz100way/maf
+    # real    193m17.801s
+    # -rw-rw-r-- 1 6239176446 May  6 19:14 multiz100way.tab
 
-    time hgLoadMafSummary -verbose=2 -minSize=30000 \
-	-mergeGap=1500 -maxSize=200000 hg38 multiz100waySummary \
-        /gbdb/hg38/multiz100way/multiz100way.maf
-# Created 2347550 summary blocks from 208312034 components and 100870998 mafs
-# from /gbdb/hg38/multiz100way/multiz100way.maf
-# real    23m100.086s
+    time (cat /gbdb/hg38/multiz100way/maf/*.maf \
+        | hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 hg38 multiz100waySummary stdin)
+XXX - running - Thu May  7 09:23:05 PDT 2015
+# Created 18099188 summary blocks from 4120456307 components and 114640349 mafs from stdin
+# real    173m32.469s
 
-# -rw-rw-r-- 1 919768167 Dec 22 14:45 multiz100way.tab
-# -rw-rw-r-- 1 115753412 Dec 22 15:29 multiz100waySummary.tab
-
-    wc -l multiz100way*
-    #  100870998 multiz100way.tab
-    #   2347550 multiz100waySummary.tab
+    wc -l multiz100way*.tab
+    #  114640349 multiz100way.tab
+    #   18099188 multiz100waySummary.tab
 
     rm multiz100way*.tab
 
-######################################################################
-# MULTIZ7WAY MAF FRAMES (DONE - 2014-12-22 - Hiram)
+##############################################################################
+# MULTIZ7WAY MAF FRAMES (DONE - 2015-05-05 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/hg38/bed/multiz100way/frames
     cd /hive/data/genomes/hg38/bed/multiz100way/frames
@@ -822,137 +760,225 @@ end
     # << happy emacs
     chmod +x ./showGenes.csh
     time ./showGenes.csh
-# hg38: ensGene: 208239, knownGene: 1041008, mgcGenes: 34081, refGene: 56836, xenoRefGene: 1006051, Mrnas: 10761621
-# panTro4: ensGene: 29160, refGene: 2677, xenoRefGene: 286931, Mrnas: 11215
-# panPan1: xenoRefGene: 374364, Mrnas: 564
-# gorGor3: ensGene: 35410, xenoRefGene: 343094, Mrnas: 1
-# ponAbe2: ensGene: 29447, refGene: 3565, xenoRefGene: 296013, Mrnas: 0
-# nomLeu3: xenoRefGene: 195334, Mrnas: 46
-# rheMac3: refGene: 6500, xenoRefGene: 281471, Mrnas: 443897
-# macFas5: Mrnas: 1007444
-# papAnu2: ensGene: 29028, refGene: 492, xenoRefGene: 301568, Mrnas: 146332
-# chlSab2: Mrnas: 37893
-# nasLar1: Mrnas: 4
-# rhiRox1: Mrnas: 10
-# calJac3: ensGene: 55116, refGene: 219, xenoRefGene: 310005, Mrnas: 294477
-# saiBol1: xenoRefGene: 439158, Mrnas: 84
-# tarSyr2: xenoRefGene: 313844, Mrnas: 8
-# micMur1: ensGene: 37458, xenoRefGene: 549416, Mrnas: 59
-# otoGar3: ensGene: 28565, xenoRefGene: 415285, Mrnas: 13
 
-    # from that summary, use these gene sets:
-    # transMap - tarSyr2 panPan1 nomLeu3 macFas5 chlSab2 saiBol1
-    # knownGene - hg38
-    # ensGene - panTro4 gorGor3 ponAbe2 papAnu2 calJac3 micMur1 otoGar3
-    # refGene - rheMac3
-    # no annotation: nasLar1 rhiRox1
+    #   rearrange that output to create four sections, and place these names
+    #           in .list files here:
+    #   1. knownGene: hg38 mm10
+    #   2. refGene: bosTau8 danRer10 macFas5 rheMac3 rn6 xenTro7
+    #   3. ensGene: ailMel1 anaPla1 anoCar2 astMex1 calJac3 canFam3 cavPor3
+    #      dasNov3 equCab2 fr3 gadMor1 galGal4 gasAcu1 gorGor3 latCha1 lepOcu1
+    #      loxAfr3 melGal1 monDom5 musFur1 myoLuc2 ornAna1 oryCun2 oryLat2
+    #      otoGar3 oviAri3 panTro4 papAnu2 pelSin1 petMar2 ponAbe2 pteVam1
+    #      sarHar1 speTri2 susScr3 taeGut2 tetNig2 xipMac1
+
+    #   4. no annotation:  criGri1 chiLan1 vicPac2 felCat8 allMis1 oreNil2
+    #      nomLeu3 chlSab2 saiBol1 hetGla2 ochPri3 turTru2 cerSim1 eriEur2 
+    #      sorAra2 triMan1 echTel2 macEug2 geoFor1 melUnd1 chrPic2 
+    #      tupChi1 odoRosDiv1 jacJac1 micOch1 mesAur1 octDeg1 camFer1 
+    #      orcOrc1 panHod1 capHir1 lepWed1 pteAle1 eptFus1 myoDav1 
+    #      conCri1 eleEdw1 chrAsi1 oryAfe1 colLiv1 falChe1 falPer1 
+    #      ficAlb2 zonAlb1 pseHum1 amaVit1 araMac1 cheMyd1 apaSpi1 
+    #      takFla1 neoBri1 hapBur1 mayZeb1 punNye1
 
     mkdir genes
-    #    1. transMap genes for tarSyr2 panPan1 nomLeu3 macFas5 chlSab2
-    hgsql -Ne 'select id,cds from transMapGeneUcscGenesV3' hgFixed \
-       > transMapGeneUcscGenesV3.cds
-    for D in tarSyr2 panPan1 nomLeu3 macFas5 chlSab2 saiBol1
-do
-    hgsql -Ne 'select * from transMapAlnUcscGenesV3 ' ${D} \
-         | cut -f 2- \
-      | mrnaToGene -ignoreUniqSuffix -quiet -insertMergeSize=0 \
-       -genePredExt -keepInvalid -cdsFile=transMapGeneUcscGenesV3.cds \
-        stdin stdout \
-          | genePredSingleCover stdin stdout \
-             | sort | gzip -2c > genes/${D}.gp.gz
-    echo -n "$D: "
-    genePredCheck -db=${D} genes/${D}.gp.gz
-done
-    # tarSyr2: checked: 18728 failed: 0
-    # panPan1: checked: 191100 failed: 0
-    # nomLeu3: checked: 19201 failed: 0
-    # macFas5: checked: 19337 failed: 0
-    # chlSab2: checked: 19056 failed: 0
-    # saiBol1: checked: 19162 failed: 0
+    #   1. knownGene: hg38 and mm10
+    for DB in hg38 mm10
+    do
+      hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+        | genePredSingleCover stdin stdout | gzip -2c \
+          > genes/${DB}.gp.gz
+      echo -n "#  ${DB}: "
+      genePredCheck -db=${DB} genes/${DB}.gp.gz
+    done
+#  hg38: checked: 21179 failed: 0
+#  mm10: checked: 21036 failed: 0
 
-    #   2. knownGene: hg38
-    for DB in hg38
-do
-    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
-      | genePredSingleCover stdin stdout | gzip -2c \
-        > genes/${DB}.gp.gz
-done
-    #   3. ensGene: panTro4 gorGor3 ponAbe2 papAnu2 calJac3 micMur1 otoGar3
-    for DB in panTro4 gorGor3 ponAbe2 papAnu2 calJac3 micMur1 otoGar3
-do
-hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
-      | genePredSingleCover stdin stdout | gzip -2c \
-        > /scratch/tmp/${DB}.tmp.gz
-    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
-    echo "${DB} done"
-done
-    #   4. refGene
-    for DB in rheMac3
+    #   2. refGene: bosTau8 danRer10 macFas5 rheMac3 rn6 xenTro7
+    #      want the full extended genePred:
+    for DB in `cat refGene.list`
 do
 hgsql -N -e "select * from refGene" ${DB} | cut -f2- \
       | genePredSingleCover stdin stdout | gzip -2c \
         > /scratch/tmp/${DB}.tmp.gz
     mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
-    echo "${DB} done"
+    echo -n "#  ${DB}: "
+    genePredCheck -db=${DB} genes/${DB}.gp.gz
 done
+#  bosTau8: checked: 13329 failed: 0
+#  danRer10: checked: 14201 failed: 0
+#  macFas5: checked: 2196 failed: 0
+#  rheMac3: checked: 5804 failed: 0
+#  rn6: checked: 17140 failed: 0
+#  xenTro7: checked: 8502 failed: 0
 
-    # verify counts for genes are reasonable:
-    for T in genes/*.gz
+    #   3. ensGene, want the full extended genePred:
+    for DB in `cat ensGene.list`
 do
-    echo -n "# $T: "
-    zcat $T | cut -f1 | sort | uniq -c | wc -l
+hgsql -N -e "select * from ensGene" ${DB} | cut -f2- \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo -n "#  ${DB}: "
+    genePredCheck -db=${DB} genes/${DB}.gp.gz
 done
-# genes/calJac3.gp.gz: 20827
-# genes/chlSab2.gp.gz: 19056
-# genes/gorGor3.gp.gz: 20758
-# genes/hg38.gp.gz: 21887
-# genes/macFas5.gp.gz: 19337
-# genes/micMur1.gp.gz: 16240
-# genes/nomLeu3.gp.gz: 19201
-# genes/otoGar3.gp.gz: 19472
-# genes/panPan1.gp.gz: 191100
-# genes/panTro4.gp.gz: 18657
-# genes/papAnu2.gp.gz: 18903
-# genes/ponAbe2.gp.gz: 20220
-# genes/rheMac3.gp.gz: 5625
-# genes/saiBol1.gp.gz: 19162
-# genes/tarSyr2.gp.gz: 18728
+#  ailMel1: checked: 19204 failed: 0
+#  anaPla1: checked: 15482 failed: 0
+#  anoCar2: checked: 18532 failed: 0
+#  astMex1: checked: 22979 failed: 0
+#  calJac3: checked: 20827 failed: 0
+#  canFam3: checked: 19507 failed: 0
+#  cavPor3: checked: 18631 failed: 0
+#  dasNov3: checked: 22586 failed: 0
+#  equCab2: checked: 20412 failed: 0
+#  fr3: checked: 18014 failed: 0
+#  gadMor1: checked: 76607 failed: 0
+#  galGal4: checked: 15391 failed: 0
+#  gasAcu1: checked: 20631 failed: 0
+#  gorGor3: checked: 20758 failed: 0
+#  latCha1: checked: 19539 failed: 0
+#  lepOcu1: checked: 18252 failed: 0
+#  loxAfr3: checked: 19986 failed: 0
+#  melGal1: checked: 14050 failed: 0
+#  monDom5: checked: 21033 failed: 0
+#  musFur1: checked: 19626 failed: 0
+#  myoLuc2: checked: 19685 failed: 0
+#  ornAna1: checked: 21311 failed: 0
+#  oryCun2: checked: 19165 failed: 0
+#  oryLat2: checked: 19586 failed: 0
+#  otoGar3: checked: 19472 failed: 0
+#  oviAri3: checked: 20793 failed: 0
+#  panTro4: checked: 18657 failed: 0
+#  papAnu2: checked: 18904 failed: 0
+#  pelSin1: checked: 18093 failed: 0
+#  petMar2: checked: 10381 failed: 0
+#  ponAbe2: checked: 20220 failed: 0
+#  pteVam1: checked: 23293 failed: 0
+#  sarHar1: checked: 18663 failed: 0
+#  speTri2: checked: 18796 failed: 0
+#  susScr3: checked: 21596 failed: 0
+#  taeGut2: checked: 17247 failed: 0
+#  tetNig2: checked: 19539 failed: 0
+#  xipMac1: checked: 20320 failed: 0
 
-    time (cat ../anno/hg38.100way.maf \
-	| nice -n +19 genePredToMafFrames hg38 stdin stdout \
-           `sed -e "s/nasLar1 rhiRox1 //;" ../species.list | sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g;"` \
-		| gzip > multiz100wayFrames.bed.gz)
-    #   real    13m20.845s
+    # kluster job to annotate each maf file
+    screen -S hg38      # manage long running procedure with screen
+    ssh ku
+    cd /hive/data/genomes/hg38/bed/multiz100way/frames
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
 
+set C = $1
+set G = $2
 
-    # verify there are frames on everything, should be 15 species:
-    zcat multiz100wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c
-zcat multiz100wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c | sed -e 's/^/# /;'
-#  245399 calJac3
-#  225181 chlSab2
-#  196578 gorGor3
-#  208946 hg38
-#  227912 macFas5
-#  199710 micMur1
-#  226601 nomLeu3
-#  209857 otoGar3
-#  191083 panPan1
-#  200256 panTro4
-#  219887 papAnu2
-#  222336 ponAbe2
-#   49912 rheMac3
-#  211858 saiBol1
-#  208085 tarSyr2
+cat ../maf/${C}.maf | genePredToMafFrames hg38 stdin stdout \
+        ${G} genes/${G}.gp.gz | gzip > parts/${C}.${G}.mafFrames.gz
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne
+
+    ls ../maf | sed -e "s/.maf//" > chr.list
+    ls genes | sed -e "s/.gp.gz//" > gene.list
+
+    cat << '_EOF_' > template
+#LOOP
+runOne $(root1) $(root2) {check out exists+ parts/$(root1).$(root2).mafFrames.gz}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    mkdir parts
+    gensub2 chr.list gene.list template jobList
+    para -ram=64g create jobList
+    para try ... check ... push
+# Completed: 16468 of 16468 jobs
+# CPU time in finished jobs:     202898s    3381.64m    56.36h    2.35d  0.006 y
+# IO & Wait Time:                129253s    2154.21m    35.90h    1.50d  0.004 y
+# Average job time:                  20s       0.34m     0.01h    0.00d
+# Longest finished job:            3278s      54.63m     0.91h    0.04d
+# Submission to last job:          4102s      68.37m     1.14h    0.05d
+
+    # collect all results into one file:
+    cd /hive/data/genomes/hg38/bed/multiz100way/frames
+    time find ./parts -type f | while read F
+do
+    echo "${F}" 1>&2
+    zcat ${F}
+done | sort -k1,1 -k2,2n > multiz100wayFrames.bed
+    # real    4m35.000s
+    # -rw-rw-r-- 1 1175092685 May  7 10:50 multiz100wayFrames.bed
+
+    gzip multiz100wayFrames.bed
+
+    # verify there are frames on everything, should be 46 species:
+    # (count from: ls genes | wc)
+    zcat multiz100wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c \
+        | sed -e 's/^/# /;' > species.check.list
+    wc -l species.check.list
+    # 46
+
+#  258752 ailMel1
+#  503273 anaPla1
+#  567017 anoCar2
+#  611070 astMex1
+#  164101 bosTau8
+#  246294 calJac3
+#  286818 canFam3
+#  245975 cavPor3
+#  381305 danRer10
+#  281610 dasNov3
+#  255526 equCab2
+#  556448 fr3
+#  471583 gadMor1
+#  681358 galGal4
+#  623263 gasAcu1
+#  196510 gorGor3
+#  207288 hg38
+#  437877 latCha1
+#  736191 lepOcu1
+#  257755 loxAfr3
+#   16693 macFas5
+#  562685 melGal1
+#  258209 mm10
+#  676384 monDom5
+#  278050 musFur1
+#  251293 myoLuc2
+#  663051 ornAna1
+#  250416 oryCun2
+#  546870 oryLat2
+#  244848 otoGar3
+#  298167 oviAri3
+#  200545 panTro4
+#  190478 papAnu2
+#  551703 pelSin1
+#  316423 petMar2
+#  222799 ponAbe2
+#  237710 pteVam1
+#   50409 rheMac3
+#  199469 rn6
+#  569235 sarHar1
+#  232093 speTri2
+#  206517 susScr3
+#  623969 taeGut2
+#  641809 tetNig2
+#  231941 xenTro7
+#  562318 xipMac1
 
     #   load the resulting file
     ssh hgwdev
     cd /hive/data/genomes/hg38/bed/multiz100way/frames
     time hgLoadMafFrames hg38 multiz100wayFrames multiz100wayFrames.bed.gz
-    #   real    0m38.351s
+    #   real    3m14.812s
+
+    hgsql -e 'select count(*) from multiz100wayFrames;' hg38
+    # +----------+
+    # | count(*) |
+    # +----------+
+    # | 17054098 |
+    # +----------+
 
     time featureBits -countGaps hg38 multiz100wayFrames
-    # 46335112 bases of 3209286105 (1.444%) in intersection
-    # real    0m34.394s
+    # 82169754 bases of 3209286105 (2.560%) in intersection
+    # real    1m56.332s
 
     #   enable the trackDb entries:
 # frames multiz100wayFrames
@@ -960,7 +986,141 @@ zcat multiz100wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c | sed -e 's/^
     #   appears to work OK
 
 #########################################################################
-# Phylogenetic tree from 100-way (DONE - 2014-12-21 - Hiram)
+# Phylogenetic tree from 100-way (DONE - 2013-09-13 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/multiz100way/4d
+    cd /hive/data/genomes/hg38/bed/multiz100way/4d
+
+    # the annotated maf's are in:
+    ../anno/result/*.maf
+
+    # using knownGene for hg38, only transcribed genes and nothing
+    #	from the randoms and other misc.
+    hgsql -Ne "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene where cdsEnd > cdsStart;" hg38 \
+      | egrep -E -v "chrM|chrUn|random|_alt" > knownGene.gp
+    wc -l *.gp
+    #  93567 knownGene.gp
+
+
+    # verify it is only on the chroms:
+    cut -f2 knownGene.gp | sort | uniq -c | sort -rn | sed -e 's/^/    # /;'
+    #    7789 chr1
+    #    7329 chr19
+    #    6461 chr17
+    #    6289 chr11
+    #    6136 chr2
+    #    5760 chr12
+    #    5585 chr3
+    #    4930 chr16
+    #    4277 chr7
+    #    4214 chr6
+    #    4024 chr5
+    #    3756 chr14
+    #    3546 chr4
+    #    3513 chr8
+    #    3286 chr15
+    #    2896 chrX
+    #    2864 chr9
+    #    2847 chr10
+    #    2102 chr22
+    #    2018 chr20
+    #    1651 chr18
+    #    1135 chr13
+    #     930 chr21
+    #     229 chrY
+
+    genePredSingleCover knownGene.gp stdout | sort > knownGeneNR.gp
+    wc -l knownGeneNR.gp
+    #	19175 knownGeneNR.gp
+
+    ssh ku
+    mkdir /hive/data/genomes/hg38/bed/multiz100way/4d/run
+    cd /hive/data/genomes/hg38/bed/multiz100way/4d/run
+    mkdir ../mfa
+
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+    cat << '_EOF_' > 4d.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set r = "/hive/data/genomes/hg38/bed/multiz100way"
+set c = $1
+set infile = $r/anno/result/$2
+set outfile = $3
+cd /dev/shm
+# 'clean' maf, removes all chrom names, leaves only the db name
+perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf
+awk -v C=$c '$2 == C {print}' $r/4d/knownGeneNR.gp | sed -e "s/\t$c\t/\thg38.$c\t/" > $c.gp
+set NL=`wc -l $c.gp| gawk '{print $1}'`
+if ("$NL" != "0") then
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $c.maf -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $r/4d/run/$outfile
+else
+    echo "" > $r/4d/run/$outfile
+endif
+rm -f $c.gp $c.maf $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4d.csh
+
+    ls -1S /hive/data/genomes/hg38/bed/multiz100way/anno/result/*.maf \
+	| sed -e "s#.*multiz100way/anno/result/##" \
+        | egrep -E -v "chrM|chrUn|random|_alt" > maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+4d.csh $(root1) $(path1) {check out line+ ../mfa/$(root1).mfa}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 maf.list single template jobList
+    para -ram=64g create jobList
+    para try ... check ... push ... etc...
+    para time
+# Completed: 24 of 24 jobs
+# CPU time in finished jobs:      34007s     566.79m     9.45h    0.39d  0.001 y
+# IO & Wait Time:                  6873s     114.54m     1.91h    0.08d  0.000 y
+# Average job time:                1703s      28.39m     0.47h    0.02d
+# Longest finished job:            3815s      63.58m     1.06h    0.04d
+# Submission to last job:          3830s      63.83m     1.06h    0.04d
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/hg38/bed/multiz100way/4d
+    # verify no tiny files:
+    ls -og mfa | sort -k3nr | tail -1
+    #  -rw-rw-r-- 1  283090 May  7 09:42 chrY.mfa
+
+    #want comma-less species.list
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ../species.list`" mfa/*.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # real    0m4.406s
+
+    # check they are all in there:
+    grep "^>" 4d.all.mfa | wc -l
+    #   100
+
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+        hg38.100way.nh
+
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	../hg38.100way.nh > tree-commas.nh
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree tree-commas.nh 4d.all.mfa
+XXX - running - Thu May  7 10:53:31 PDT 2015
+    #   real    223m18.088s
+    # second time 2014-02-09:
+    #	real    212m12.485s
+    mv phyloFit.mod all.mod
+
+    grep TREE all.mod
+
+#########################################################################
+# Phylogenetic tree from 100-way (TBD - 2014-12-21 - Hiram)
     mkdir /hive/data/genomes/hg38/bed/multiz100way/4d
     cd /hive/data/genomes/hg38/bed/multiz100way/4d
 
@@ -1119,7 +1279,7 @@ endif
 #       otoGar3 0.298160        0.268334        0.029826        11.115252
 
 #########################################################################
-# phastCons 100-way (DONE - 2014-12023 - Hiram)
+# phastCons 100-way (TBD - 2014-12023 - Hiram)
     # split 100way mafs into 10M chunks and generate sufficient statistics
     # files for # phastCons
     ssh ku
@@ -1399,7 +1559,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #########################################################################
-# phyloP for 100-way (DONE - 2014-06-04 - Hiram)
+# phyloP for 100-way (TBD - 2014-06-04 - Hiram)
     # run phyloP with score=LRT
     ssh ku
     mkdir /cluster/data/hg38/bed/multiz100way/consPhyloP
@@ -1584,7 +1744,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #############################################################################
-# construct download files for 100-way (DONE - 2014-06-05 - Hiram)
+# construct download files for 100-way (TBD - 2014-06-05 - Hiram)
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz100way
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/phastCons100way
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/phyloP100way
@@ -1706,7 +1866,7 @@ Bushbaby - Otolemur garnettii       Mar. 2011 (Broad/otoGar3) reciprocal best
         /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz100way
 
 #############################################################################
-# hgPal downloads (DONE - 2014-06-06 - Hiram)
+# hgPal downloads (TBD - 2014-06-06 - Hiram)
 #   FASTA from 100-way for knownGene, refGene and knownCanonical
 
     ssh hgwdev
@@ -1864,7 +2024,7 @@ Bushbaby - Otolemur garnettii       Mar. 2011 (Broad/otoGar3) reciprocal best
     md5sum *.exon*.fa.gz > md5sum.txt
 
 #############################################################################
-# wiki page for 100-way (DONE - 2014-06-04 - Hiram)
+# wiki page for 100-way (TBD - 2014-06-04 - Hiram)
     mkdir /hive/users/hiram/bigWays/hg38.100way
     cd /hive/users/hiram/bigWays
     echo "hg38" > hg38.100way/ordered.list
