@@ -1,0 +1,371 @@
+tool NCBI
+shortLabel NCBI MapViewer
+longLabel NCBI MapViewer Genome Browser
+url http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=$taxId&build=previous&CHR=$s&BEG=$[&END=$]
+# for which DBS?
+#dbs hg19
+
+tool ensembl
+shortLabel Ensembl
+longLabel Ensembl Genome Browser
+url http://www.ensembl.org/$n/contigview?chr=$s&start=$[&end=$]
+# for which DBs?
+#dbs hg19
+
+tool primer3Plus
+shortLabel Primer3Plus
+longLabel Updated version of the well-known primer designer
+url http://primer3plus.ut.ee/cgi-bin/primer3plus/primer3plus.cgi
+maxSize 8000
+param SEQUENCE_INTERNAL_EXCLUDED_REGION
+param PRIMER_SALT_DIVALENT 1.5
+param PRIMER_WT_SELF_ANY 0.0
+param PRIMER_FIRST_BASE_INDEX 1
+param PRIMER_INSIDE_PENALTY -1.0
+param PRIMER_MAX_SELF_ANY 8.00
+param PRIMER_WT_TM_GT 1.0
+param PRIMER_THERMODYNAMIC_OLIGO_ALIGNMENT 1
+param PRIMER_INTERNAL_WT_SELF_ANY_TH 0.0
+param PRIMER_WT_TM_LT 1.0
+param PRIMER_INTERNAL_WT_HAIRPIN_TH 0.0
+param PRIMER_MAX_SELF_END 3.00
+param PRIMER_PICK_ANYWAY 1
+param PRIMER_MAX_LIBRARY_MISPRIMING 12.00
+param PRIMER_TASK generic
+param PRIMER_PRODUCT_SIZE_RANGE 150-250 100-300 301-400 401-500 501-600 601-700 701-850 851-1000
+param PRIMER_PAIR_WT_COMPL_ANY_TH 0.0
+param PRIMER_MAX_POLY_X 4
+param PRIMER_MIN_LEFT_THREE_PRIME_DISTANCE 3
+param PRIMER_WT_NUM_NS 0.0
+param PRIMER_INTERNAL_MAX_LIBRARY_MISHYB 12.00
+param PRIMER_PAIR_WT_PRODUCT_TM_LT 0.0
+param PRIMER_MAX_TEMPLATE_MISPRIMING_TH 40.00
+param PRIMER_MAX_HAIRPIN_TH 24.00
+param PRIMER_SALT_CORRECTIONS 1
+param PRIMER_INTERNAL_MAX_SELF_ANY 12.00
+param PRIMER_WT_POS_PENALTY 0.0
+param PRIMER_INTERNAL_MIN_SIZE 18
+param PRIMER_OUTSIDE_PENALTY 0.0
+param PRIMER_SEQUENCING_LEAD 50
+param PRIMER_MIN_RIGHT_THREE_PRIME_DISTANCE 3
+param PRIMER_WT_GC_PERCENT_GT 0.0
+param PRIMER_LIBERAL_BASE 1
+param PRIMER_MIN_QUALITY 0
+param PRIMER_WT_TEMPLATE_MISPRIMING 0.0
+param PRIMER_INTERNAL_WT_TM_LT 1.0
+param PRIMER_WT_TEMPLATE_MISPRIMING_TH 0.0
+param PRIMER_TM_FORMULA 1
+param PRIMER_SEQUENCING_ACCURACY 20
+param SEQUENCE_START_CODON_POSITION 
+param PRIMER_OPT_SIZE 20
+param PRIMER_MIN_TM 57.0
+param SEQUENCE_PRIMER_REVCOMP 
+param PRIMER_PAIR_WT_IO_PENALTY 0.0
+param PRIMER_INTERNAL_DNTP_CONC 0.0
+param PRIMER_QUALITY_RANGE_MIN 0
+param PRIMER_MIN_5_PRIME_OVERLAP_OF_JUNCTION 7
+param SEQUENCE_QUALITY 
+param PRIMER_PAIR_WT_PRODUCT_SIZE_LT 0.0
+param SEQUENCE_FORCE_LEFT_END 
+param PRIMER_INTERNAL_WT_SIZE_LT 1.0
+param PRIMER_MUST_MATCH_FIVE_PRIME 
+param PRIMER_WT_SEQ_QUAL 0.0
+param PRIMER_INTERNAL_OPT_GC_PERCENT 50.0
+param PRIMER_PAIR_WT_COMPL_ANY 0.0
+param SEQUENCE_FORCE_LEFT_START 
+param PRIMER_PICK_LEFT_PRIMER 1
+param PRIMER_NUM_RETURN 5
+param PRIMER_PRODUCT_MAX_TM 1000000.0
+param PRIMER_MIN_END_QUALITY 0
+param PRIMER_DNTP_CONC 0.6
+param PRIMER_PRODUCT_MIN_TM -1000000.0
+param PRIMER_INTERNAL_MUST_MATCH_THREE_PRIME 
+param SEQUENCE_ID 
+param PRIMER_DNA_CONC 50.0
+param PRIMER_SALT_MONOVALENT 50.0
+param PRIMER_INTERNAL_MISHYB_LIBRARY NONE
+param PRIMER_INTERNAL_SALT_MONOVALENT 50.0
+param PRIMER_INTERNAL_MAX_SIZE 27
+param PRIMER_OPT_TM 59.0
+param PRIMER_INTERNAL_OPT_SIZE 20
+param PRIMER_WT_SELF_END 0.0
+param PRIMER_PAIR_WT_COMPL_END 0.0
+param PRIMER_MIN_SIZE 18
+param PRIMER_INTERNAL_MIN_GC 20.0
+param PRIMER_QUALITY_RANGE_MAX 100
+param PRIMER_INTERNAL_WT_SELF_END_TH 0.0
+param SEQUENCE_PRIMER_PAIR_OK_REGION_LIST 
+param PRIMER_PAIR_WT_TEMPLATE_MISPRIMING_TH 0.0
+param PRIMER_INTERNAL_MUST_MATCH_FIVE_PRIME 
+param PRIMER_MAX_TEMPLATE_MISPRIMING 12.00
+param PRIMER_INTERNAL_WT_SEQ_QUAL 0.0
+param SEQUENCE_TARGET $halfLen,1
+param PRIMER_INTERNAL_MIN_QUALITY 0
+param PRIMER_WT_END_STABILITY 0.0
+param PRIMER_INTERNAL_WT_END_QUAL 0.0
+param PRIMER_INTERNAL_MAX_HAIRPIN_TH 47.00
+param PRIMER_MIN_GC 30.0
+param PRIMER_INTERNAL_DNA_CONC 50.0
+param PRIMER_INTERNAL_WT_SELF_ANY 0.0
+param PRIMER_PAIR_MAX_LIBRARY_MISPRIMING 20.00
+param PRIMER_PAIR_MAX_TEMPLATE_MISPRIMING_TH 70.00
+param SCRIPT_PRODUCT_MAX_SIZE 
+param PRIMER_INTERNAL_MAX_POLY_X 5
+param PRIMER_OPT_GC_PERCENT 50.0
+param SCRIPT_PRODUCT_MIN_SIZE 
+param PRIMER_WT_SELF_ANY_TH 0.0
+param PRIMER_WT_SIZE_GT 1.0
+param PRIMER_PAIR_WT_DIFF_TM 0.0
+param PRIMER_PICK_RIGHT_PRIMER 1
+param PRIMER_PAIR_WT_PRODUCT_TM_GT 0.0
+param PRIMER_INTERNAL_WT_GC_PERCENT_GT 0.0
+param PRIMER_PAIR_MAX_COMPL_END 3.00
+param PRIMER_PAIR_MAX_DIFF_TM 5.0
+param PRIMER_INTERNAL_WT_LIBRARY_MISHYB 0.0
+param PRIMER_WT_SELF_END_TH 0.0
+param PRIMER_MAX_GC 80.0
+param PRIMER_PAIR_WT_TEMPLATE_MISPRIMING 0.0
+param PRIMER_MAX_NS_ACCEPTED 0
+param SCRIPT_RADIO_BUTTONS_FIX PRIMER_PICK_LEFT_PRIMER,PRIMER_PICK_INTERNAL_OLIGO,PRIMER_PICK_RIGHT_PRIMER,PRIMER_PICK_ANYWAY,PRIMER_LIBERAL_BASE,PRIMER_LOWERCASE_MASKING,PRIMER_LIB_AMBIGUITY_CODES_CONSENSUS,PRIMER_THERMODYNAMIC_OLIGO_ALIGNMENT,PRIMER_THERMODYNAMIC_TEMPLATE_ALIGNMENT,SCRIPT_DISPLAY_DEBUG_INFORMATION
+param PRIMER_INTERNAL_WT_TM_GT 1.0
+param P3P_PRIMER_NAME_ACRONYM_RIGHT R
+param PRIMER_PAIR_WT_PRODUCT_SIZE_GT 0.0
+param PRIMER_WT_LIBRARY_MISPRIMING 0.0
+param PRIMER_PAIR_WT_PR_PENALTY 1.0
+param PRIMER_SEQUENCING_INTERVAL 250
+param PRIMER_PRODUCT_OPT_SIZE 
+param PRIMER_WT_END_QUAL 0.0
+param P3P_PRIMER_NAME_ACRONYM_SPACER _
+param PRIMER_GC_CLAMP 0
+param PRIMER_MAX_END_STABILITY 9.0
+param PRIMER_MUST_MATCH_THREE_PRIME 
+param SEQUENCE_FORCE_RIGHT_START 
+param PRIMER_MAX_SELF_ANY_TH 45.00
+param PRIMER_MAX_SELF_END_TH 35.00
+param PRIMER_INTERNAL_MAX_GC 70.0
+param SEQUENCE_PRIMER 
+param PRIMER_INTERNAL_WT_GC_PERCENT_LT 0.0
+param SEQUENCE_EXCLUDED_REGION 
+param SCRIPT_SERVER_PARAMETER_FILE Default
+param PRIMER_INTERNAL_MAX_SELF_END 12.00
+param PRIMER_INTERNAL_MAX_NS_ACCEPTED 0
+param PRIMER_PAIR_MAX_COMPL_ANY 8.00
+param P3P_PRIMER_NAME_ACRONYM_LEFT F
+param PRIMER_MISPRIMING_LIBRARY NONE
+param PRIMER_MAX_SIZE 23
+param SCRIPT_SEQUENCE_FILE 
+param SEQUENCE_INCLUDED_REGION 
+param PRIMER_INTERNAL_OPT_TM 60.0
+param PRIMER_PAIR_MAX_COMPL_END_TH 35.00
+param PRIMER_INTERNAL_MAX_SELF_END_TH 47.00
+param SEQUENCE_FORCE_RIGHT_END 
+param PRIMER_PAIR_MAX_COMPL_ANY_TH 45.00
+param PRIMER_WT_GC_PERCENT_LT 0.0
+param SEQUENCE_TEMPLATE $seq
+param PRIMER_MAX_TM 62.0
+param PRIMER_INTERNAL_WT_NUM_NS 0.0
+param PRIMER_INTERNAL_MIN_TM 57.0
+param PRIMER_SEQUENCING_SPACING 500
+param P3P_PRIMER_NAME_ACRONYM_INTERNAL IN
+param PRIMER_PAIR_WT_LIBRARY_MISPRIMING 0.0
+param PRIMER_INTERNAL_WT_SELF_END 0.0
+param PRIMER_WT_SIZE_LT 1.0
+param PRIMER_INTERNAL_WT_SIZE_GT 1.0
+param PRIMER_MAX_END_GC 5
+param PRIMER_INTERNAL_MAX_SELF_ANY_TH 47.00
+param SEQUENCE_OVERLAP_JUNCTION_LIST 
+param Pick_Primers Pick Primers
+param PRIMER_PRODUCT_OPT_TM 0.0
+param PRIMER_MIN_3_PRIME_OVERLAP_OF_JUNCTION 4
+param PRIMER_INTERNAL_MAX_TM 63.0
+param SEQUENCE_INTERNAL_OLIGO 
+param SCRIPT_SETTINGS_FILE 
+param PRIMER_INTERNAL_SALT_DIVALENT 1.5
+param PRIMER_WT_HAIRPIN_TH 0.0
+param PRIMER_PAIR_WT_COMPL_END_TH 0.0
+param PRIMER_PAIR_MAX_TEMPLATE_MISPRIMING 24.00
+
+tool RnaFold
+shortLabel RnaFold
+longLabel RNA secondary structure prediction
+url http://rna.tbi.univie.ac.at/cgi-bin/RNAfold.cgi
+maxSize 5000
+param SHAPEFILE 
+param reliability on
+param shape_beta 0.8
+param FILE 
+param EMAIL your e-mail
+param SHAPEDATA 
+param mountain on
+param Temp 37
+param shape_conv_linearlog_s 1.6
+param CONSTRAINT 
+param shapemethod deigan
+param param rna2004
+param shape_slope 1.9
+param shape_conv_linearlog_i -2.29
+param method p
+param shape_conv_linear_i 0.2
+param deigan_conversion linearlog
+param dangling d2
+param SCREEN $seq
+param shape_conv_linear_s 0.68
+param proceed 
+param svg on
+param noLP on
+param shape_conv_cutoff 0.25
+param shape_intercept -0.7
+param PAGE 2
+
+tool rsatMeta
+shortLabel RSAT Metazoa
+longLabel Regulatory Sequence Analysis Tools for Metazoa
+url http://rsat.sb-roscoff.fr/convert-seq.cgi 
+maxSize 50000
+param short_size 30 
+param line_width 60 
+param sequence $seq
+param output_format fasta 
+param mask non-dna 
+param .cgifields addrcoutput 
+param .submit GO 
+param short_action no treatment 
+param sequence_format raw 
+param output display 
+param uploaded_file  
+param user_email  
+
+tool promoter2
+shortLabel Promoter2
+longLabel Vertebrate Transcription Start Site Prediction
+url http://www.cbs.dtu.dk/cgi-bin/webface2.fcgi
+maxSize 50000
+param configfile /usr/opt/www/pub/CBS/services/Promoter-2.0/Promoter.cf
+param SEQPASTE $seq
+param SEQSUB 
+
+tool uniprobe
+shortLabel Uniprobe
+longLabel Search for transcription factor binding sites
+url http://the_brain.bwh.harvard.edu/uniprobe/browse.php
+maxSize 200
+param MAX_FILE_SIZE 2097152
+param dnaSpeciesFormat all
+param dnaThreshold 0.45
+param dnaSpeciesTextArea             
+param dnaSpeciesSingle Acanthamoeba castellanii
+param dnaTextarea $seq
+param searchParam 
+param dnaSpeciesCategory Acanthamoeba castellanii,Allomyces macrogynus,Ashbya gossypii,Arabidopsis thaliana,Aspergillus nidulans,Caenorhabditis elegans,Cryptosporidium parvum,Drosophila melanogaster,Homo sapiens,Kluyveromyces lactis,Monosiga brevicollis,Mus musculus,Mycosphaerella graminicola,Nematostella vectensis,Patiria miniata,Plasmodium falciparum,Saccharomyces cerevisiae,Strongylocentrotus purpuratus,Trichoplax adhaerens,Tuber melanosporum
+param dnaFile 
+param dnaFormat textarea
+
+tool primerBlast
+shortLabel Primer-BLAST
+longLabel Primer3-based primer designer that checks matches via NCBI BLAST
+url http://www.ncbi.nlm.nih.gov/tools/primer-blast/primertool.cgi
+maxSize 50000
+param EXCLUDED_REGIONS 
+param PRIMER_INTERNAL_OLIGO_MAX_GC 80.0
+param LOW_COMPLEXITY_FILTER on
+param SELF_ANY 8.00
+param SALT_FORMULAR 1
+param PRIMER_INTERNAL_OLIGO_OPT_TM 60.0
+param PRIMER_INTERNAL_OLIGO_MIN_SIZE 18
+param PRIMER_NUM_RETURN 10
+param OVERLAP_3END 4
+param HITSIZE 50000
+param PRIMER_PAIR_MAX_COMPL_ANY_TH 45.0
+param PRIMER_INTERNAL_OLIGO_OPT_GC_PERCENT 50
+param PRIMER_MAX_HAIRPIN_TH 24.0
+param SEARCHMODE 0
+param TM_METHOD 1
+param SEARCH_SPECIFIC_PRIMER on
+param EVALUE 30000
+param SELF_END 3.00
+param TOTAL_MISMATCH_IGNORE 6
+param DIVA_CATIONS 1.5
+param PRIMER_SPECIFICITY_DATABASE refseq_mrna
+param MAX_TARGET_PER_TEMPLATE 100
+param PRIMER5_START 
+param MAX_TARGET_SIZE 4000
+param CMD request
+param PRIMER_OPT_SIZE 20
+param PRIMER_MIN_TM 57.0
+param MAX_INTRON_SIZE 1000000
+param UNGAPPED_BLAST on
+param MIN_INTRON_SIZE 1000
+param PRIMER_INTERNAL_OLIGO_MAX_SIZE 27
+param PRIMER_MAX_END_GC 5
+param PRIMER3_START 
+param ORG_DBS 
+param PRIMER5_END 
+param OVERLAP_5END 7
+param PRIMER_PRODUCT_MIN 70
+param SPLICE_SITE_OVERLAP_3END 4
+param SVIEWER_DATA_KEY 
+param INPUT_SEQUENCE $seq
+param NUM_TARGETS_WITH_PRIMERS 1000
+param PRIMER_PRODUCT_MAX 1000
+param PRIMER_3END_SPECIFICITY_MISMATCH 1
+param SHOW_SVIEWER onon
+param PRIMER_OPT_TM 60.0
+param PRIMER_MIN_SIZE 15
+param NUM_DIFFS 0
+param ORGANISM Homo%20sapiens
+param PRIMER_MAX_TEMPLATE_MISPRIMING 12.00
+param MONO_CATIONS 50.0
+param PRIMER_MIN_GC 20.0
+param PRODUCT_OPT_TM 
+param PRIMER_ON_SPLICE_SITE 0
+param MISMATCH_REGION_LENGTH 5
+param PRIMER_PAIR_MAX_TEMPLATE_MISPRIMING_TH 70.00
+param PRIMER_MAX_SELF_ANY_TH 45.0
+param PRIMER_INTERNAL_OLIGO_MAX_TM 63.0
+param slctOrg 
+param CON_ANEAL_OLIGO 50.0
+param PRIMER_PAIR_MAX_COMPL_END 3.00
+param ENTREZ_QUERY 
+param PRIMER_MAX_GC 80.0
+param SEQFILE 
+param SPLICE_SITE_OVERLAP_5END 7
+param OVERLAP 
+param PRIMER_MAX_END_STABILITY 9
+param WORD_SIZE 7
+param PRODUCT_MAX_TM 
+param PRIMER_INTERNAL_OLIGO_MIN_TM 57.0
+param TOTAL_PRIMER_SPECIFICITY_MISMATCH 1
+param CON_DNTPS 0.6
+param PRIMER_MAX_SELF_END_TH 35.0
+param NUM_TARGETS 20
+param CUSTOMSEQFILE 
+param PRIMER_PAIR_MAX_COMPL_ANY 8.00
+param PRIMER_MISPRIMING_LIBRARY AUTO
+param PRIMER_MAX_SIZE 25
+param PRIMER_RIGHT_INPUT 
+param PRIMER_PAIR_MAX_COMPL_END_TH 35.0
+param LINK_LOC 
+param PRIMER_INTERNAL_OLIGO_OPT_SIZE 20
+param PRIMER_LEFT_INPUT 
+param PRODUCT_MIN_TM 
+param PRIMER_MAX_TEMPLATE_MISPRIMING_TH 40.00
+param PRIMER_MAX_TM 63.0
+param PRIMER3_END 
+param POLYX 5
+param PRIMER_INTERNAL_OLIGO_MIN_GC 20.0
+param NUM_OPTS_DIFFS 0
+param GC_CLAMP 0
+param PRIMER_MAX_DIFF_TM 3
+param MAX_CANDIDATE_PRIMER 500
+param CUSTOM_DB 
+param PRIMER_PAIR_MAX_TEMPLATE_MISPRIMING 24.00
+
+tool crispor
+url http://tefor.net/crisporMax/crispor.cgi
+shortLabel CRISPOR
+longLabel CRISPR/Cas9 target selector and offtarget-predictor
+param org $db
+param pos $position
+param pam NGG
+maxSize 2000
+

@@ -24,6 +24,7 @@
 #include "net.h"
 #include "search.h"
 #include "imageV2.h"
+#include "extTools.h"
 
 
 int main(int argc, char *argv[])
@@ -33,11 +34,6 @@ measureTime(NULL);
 setUdcCacheDir();
 browserName = hBrowserName();
 organization = "UCSC";
-
-/* change title if this is for GSID */
-browserName = (hIsGsidServer() ? "Sequence View" : browserName);
-organization = (hIsGsidServer() ? "GSID" : organization);
-organization = (hIsGisaidServer() ? "GISAID" : organization);
 
 /* Push very early error handling - this is just
  * for the benefit of the cgiVarExists, which
@@ -49,10 +45,17 @@ if (link)                                                                  // wr
     htmlSetStyle(link);
 
 oldVars = hashNew(10);
-if (hIsGsidServer())
-    cartHtmlShell("GSID Sequence View", doMiddle, hUserCookie(), excludeVars, oldVars);
+
+if (cgiVarExists("hgt.redirectTool"))
+    {
+    printf("Content-type: text/html\n\n");
+    errAbortSetDoContentType(FALSE);
+    cart = cartForSession(hUserCookie(), NULL, NULL);
+    extToolRedirect(cart, cgiString("hgt.redirectTool"));
+    }
 else
     cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
+
 if (measureTiming)
     measureTime("Time to write and close cart");
 if (measureTiming)

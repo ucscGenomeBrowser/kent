@@ -2027,6 +2027,34 @@ rAddToTrackHash(trackHash, trackList);
 return trackHash;
 }
 
+//void domAddMenu(char *afterMenuId, char *newMenuId, char *label) 
+///* Append a new drop down menu after a given menu, by changing the DOM with jquery  */
+//{
+//printf("$('#%s').last().after('<li class=\"menuparent\" id=\"%s\"><span>%s</span>"
+//    "<ul style=\"display: none; visibility: hidden;\"></ul></li>');\n", 
+//    afterMenuId, newMenuId, label);
+//}
+//
+//void domAppendToMenu(char *menuId, char *url, char *label) 
+///* Add an entry to a drop down menu, by changing the DOM with jquery  */
+//{
+////printf("$('#%s ul').last().after('<li><a target=\"_BLANK\" href=\"%s\">%s</a></li>');\n", menuId, url, label);
+//printf("$('#%s ul').append('<li><a target=\"_BLANK\" href=\"%s\">%s</a></li>');\n", menuId, url, label);
+//}
+
+//void menuBarAppendExtTools() 
+///* printf a little javascript that adds entries to a menu */
+//{
+//    char url[SMALLBUF];
+//    safef(url,ArraySize(url),"hgTracks?%s=%s&hgt.redirectTool=crispor",cartSessionVarName(), cartSessionId(cart));
+//    printf("<script>\n");
+//    printf("jQuery(document).ready( function() {\n");
+//    domAddMenu("view", "sendto", "Send to");
+//    domAppendToMenu("sendto", url, "Tefor CRISPR sites");
+//    printf("});\n");
+//    printf("</script>\n");
+//}
+
 
 void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
@@ -2706,6 +2734,7 @@ if(sameString(type, "jsonp"))
     struct jsonElement *json = newJsonObject(newHash(8));
 
     printf("Content-Type: application/json\n\n");
+    errAbortSetDoContentType(FALSE);
     jsonObjectAdd(json, "track", newJsonString(cartString(cart, "hgt.trackNameFilter")));
     jsonObjectAdd(json, "height", newJsonNumber(pixHeight));
     jsonObjectAdd(json, "width", newJsonNumber(pixWidth));
@@ -4370,7 +4399,6 @@ for (track = trackList; track != NULL; track = track->next)
 hPrintf("</span>\n");
 }
 
-
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -4607,13 +4635,13 @@ if(trackImgOnly && !ideogramToo)
     return;  // bail out b/c we are done
     }
 
-
 if (!hideControls)
     {
     /* set white-space to nowrap to prevent buttons from wrapping when screen is
      * narrow */
     hPrintf("<DIV STYLE=\"white-space:nowrap;\">\n");
     printMenuBar();
+    //menuBarAppendExtTools();
 
     /* Show title . */
     freezeName = hFreezeFromDb(database);
@@ -5214,6 +5242,7 @@ trashDirFile(&psTn, "hgt", "hgt", ".eps");
 if(!trackImgOnly)
     {
     printMenuBar();
+
     printf("<div style=\"margin: 10px\">\n");
     printf("<H1>PDF Output</H1>\n");
     printf("PDF images can be printed with Acrobat Reader "
@@ -5883,11 +5912,6 @@ if(sameString(debugTmp, "on"))
     hgDebug = TRUE;
 else
     hgDebug = FALSE;
-
-if (hIsGisaidServer())
-    {
-    validateGisaidUser(cart);
-    }
 
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)

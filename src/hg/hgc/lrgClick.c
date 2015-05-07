@@ -11,6 +11,7 @@
 #include "hdb.h"
 #include "trackHub.h"
 #include "lrg.h"
+#include "hui.h"
 
 INLINE void printStartAndMaybeEnd(uint start, uint end)
 {
@@ -102,7 +103,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	{
 	char hgncIdStr[32];
 	safef(hgncIdStr, sizeof(hgncIdStr), "%d", lrg->hgncId);
-	char *idUrl = replaceInUrl(tdb, url, hgncIdStr, TRUE);
+        char *idUrl = replaceInUrl(url, hgncIdStr, cart, database, seqName, winStart, 
+                    winEnd, tdb->track, TRUE);
 	printf("<A HREF='%s' TARGET=_BLANK>%s</A><BR>\n", idUrl, lrg->hgncSymbol);
 	}
     else
@@ -113,7 +115,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     url = hashFindVal(columnUrls, "ncbiAcc");
     if (isNotEmpty(url))
 	{
-	char *idUrl = replaceInUrl(tdb, url, lrg->ncbiAcc, TRUE);
+        char *idUrl = replaceInUrl(url, lrg->ncbiAcc, cart, database, seqName, winStart, 
+                    winEnd, tdb->track, TRUE);
 	printf("<A HREF='%s' TARGET=_BLANK>%s</A><BR>\n", idUrl, lrg->ncbiAcc);
 	}
     else
@@ -221,7 +224,9 @@ if (isNotEmpty(url))
 	*p = '\0';
     char *urlLabel = trackDbSettingOrDefault(tdb, "urlLabel", "LRG Transcript link");
     printf("<B>%s</B> ", urlLabel);
-    char *lrgTUrl = replaceInUrl(tdb, url, lrgName, TRUE);
+    //char *lrgTUrl = replaceInUrl(tdb, url, lrgName, TRUE);
+    char *lrgTUrl = replaceInUrl(url, lrgName, cart, database, seqName, winStart, 
+                    winEnd, tdb->track, TRUE);
     printf("<A HREF='%s' TARGET=_BLANK>%s</A><BR>\n", lrgTUrl, item);
     }
 

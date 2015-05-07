@@ -6,14 +6,17 @@
 
 #include "common.h"
 #include "sqlNum.h"
+#include "errAbort.h"
 
 /* The sql<Type>InList functions allow for fast thread-safe processing of dynamic arrays in sqlList */
 
 
-unsigned sqlUnsigned(char *s)
+unsigned sqlUnsignedOrError(char *s, char *format, ...)
 /* Convert series of digits to unsigned integer about
  * twice as fast as atoi (by not having to skip white 
- * space or stop except at the null byte.) */
+ * space or stop except at the null byte.) 
+ * like sqlUnsigned, with an optional error message as a printf-style vararg
+ * */
 {
 unsigned res = 0;
 char *p = s;
@@ -27,8 +30,27 @@ while (((c = *(p++)) >= '0') && (c <= '9'))
 --p;
 /* test for invalid character or empty */
 if ((c != '\0') || (p == s))
-    errAbort("invalid unsigned integer: \"%s\"", s);
+    {
+    if (format==NULL)
+        errAbort("invalid unsigned integer: \"%s\"", s);
+    else
+        {
+        //errAbort("%s", errorMsg);
+        va_list args;
+        va_start(args, format);
+        vaErrAbort(format, args);
+        va_end(args);
+        }
+    }
 return res;
+}
+
+unsigned sqlUnsigned(char *s)
+/* Convert series of digits to unsigned integer about
+ * twice as fast as atoi (by not having to skip white 
+ * space or stop except at the null byte.) */
+{
+return sqlUnsignedOrError(s, NULL, NULL);
 }
 
 unsigned sqlUnsignedInList(char **pS)
