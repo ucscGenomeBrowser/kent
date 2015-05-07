@@ -414,6 +414,44 @@ hgsql hg38 -e "alter table uwEnc2DnaseSources rename to wgEncodeRegDnasedCluster
     # to verify links
     checkUrlsInTable hgFixed wgEncodeCell > errs.txt
 
+# Update table when cron of above reports errors
+
+cat > badUrls.txt << 'EOF'
+http://www.sciencellonline.com/site/productInformation.php?keyword=1830 302
+http://www.sciencellonline.com/site/productInformation.php?keyword=1820 302
+http://www.sciencellonline.com/site/productInformation.php?keyword=7110 302
+http://www.sciencellonline.com/site/productInformation.php?keyword=1810 302
+http://www.sciencellonline.com/site/productInformation.php?keyword=1000 302
+http://www.sciencellonline.com/site/productInformation.php?keyword=1100 302
+http://www.sciencellonline.com/site/productInformation.php?keyword=6300 302
+http://www.sciencellonline.com/site/productInformation.php?keyword=6320 302
+http://www.sciencellonline.com/site/productInformation.php?keyword=200  302
+http://www.sciencellonline.com/site/productInformation.php?keyword=1310 302
+http://www.sciencellonline.com/site/productInformation.php?keyword=6570 302
+http://www.sciencellonline.com/site/productInformation.php?keyword=2720 302
+http://www.sciencellonline.com/site/productInformation.php?keyword=2620 302
+http://www.sciencellonline.com/site/productInformation.php?keyword=6560 302
+http://www.sciencellonline.com/site/productInformation.php?keyword=7630 302
+http://www.sciencellonline.com/site/productInformation.php?keyword=6580 302
+http://www.sciencellonline.com/site/productInformation.php?keyword=3120 302
+http://www.sciencellonline.com/site/productInformation.php?keyword=3300 302
+http://www.sciencellonline.com/site/productInformation.php?keyword=4000 302
+http://www.sciencellonline.com/site/productInformation.php?keyword=6540 302
+http://www.sciencellonline.com/site/productInformation.php?keyword=7130 302
+'EOF'
+
+# NOTE: site query string has changed to:
+#       http://sciencellonline.com/catalogsearch/result/?q=1820
+    hgsql hgFixed -e 'select * from wgEncodeCell' > wgEncodeCell.2015-05-06.tab
+    sed -e 's^www.sciencellonline.com/site/productInformation.php^sciencellonline.com/catalogsearch/result/^' -e 's^keyword=^q=^' wgEncodeCell.2015-05-06.tab > wgEncodeCell.2015-05-07.tab
+    ln -s wgEncodeCell.2015-05-07.tab wgEncodeCell.latest.tab
+    # save old table for now
+    hgsql hgFixed -e "alter table wgEncodeCell rename to wgEncodeCell_old"
+    hgLoadSqlTab hgFixed wgEncodeCell ~/kent/src/hg/lib/encode/wgEncodeCell.sql wgEncodeCell.latest.tab
+    # check, then remove old table
+    hgsql hgFixed -e "drop table wgEncodeCell_old"
+    checkUrlsInTable hgFixed wgEncodeCell > errs.txt
+
 
 # Treatment table
 # TBD
