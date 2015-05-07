@@ -105,14 +105,15 @@ bbiFileClose(&bbi);
 return names;
 }
 
-struct sqlFieldType *bigBedListFieldsAndTypes(char *table, struct sqlConnection *conn)
+struct sqlFieldType *bigBedListFieldsAndTypes(struct trackDb *tdb, struct sqlConnection *conn)
 /* Get fields of bigBed as list of sqlFieldType. */
 {
-char *fileName = bigBedFileName(table, conn);
-struct bbiFile *bbi = bigBedFileOpen(fileName);
+char *fileOrUrl = bigFileNameFromCtOrHub(tdb->table, conn);
+if (fileOrUrl == NULL)
+    fileOrUrl = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
+struct bbiFile *bbi = bigBedFileOpen(fileOrUrl);
 struct asObject *as = bigBedAsOrDefault(bbi);
 struct sqlFieldType *list = sqlFieldTypesFromAs(as);
-freeMem(fileName);
 bbiFileClose(&bbi);
 return list;
 }

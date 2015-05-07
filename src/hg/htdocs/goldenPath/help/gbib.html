@@ -256,8 +256,8 @@ large for your machine, you can cancel the download at any point by clicking <em
 Now</em>. </p>
 <p>
 Depending on your network bandwidth, the download can 
-take several minutes or up to a few hours over a DSL line. During the download, the file 
-<em>gbib-data.vdi</em> will grow in size, and you will not be able to use GBiB. Once the download is
+take several minutes or up to a few hours over a DSL line. <b>During the download</b>, the file 
+<em>gbib-data.vdi</em> will grow in size, and <b>you will not be able to use GBiB</b>. Once the download is
 complete, the default tracks should load in less than three seconds for a typical genomic position.
 </p>
 
@@ -464,8 +464,11 @@ type:
 
 <p><b><em>Example: Loading a GEO File</em></b></p>
 <p>
-Some files at GEO are already binary indexed files that can be loaded in the browser, but since
-they are not hosted on a server that accepts byte-ranges, they are not available over the internet.
+Some files at external locations, like GEO, are already in binary indexed formats that can be loaded in
+the browser over the internet. However, if the server providing these files does not accept byte-range
+requests, they can not be transmitted over the internet to view in the browser. For GEO files try the
+ftp location first. If you find the files of interest are giving byte-range request errors, then
+one option is to download the files and locally load them from your own laptop. 
 With GBiB you can download these files to a local shared folder and then browse them. In the following
 example the URL of the bigWig (.bw) file was obtained for the wget by right clicking the http link for
 this <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM1186795">GSM1186795</a> example,
@@ -479,7 +482,7 @@ The file can then be found in the GBiB's <a href="http://127.0.0.1:1234/folders/
 location, or loaded with a direct link to the files location: <a
 href="http://127.0.0.1:1234/cgi-bin/hgTracks?db=hg19&hgt.customText=http://127.0.0.1:1234/folders/GSM1186795.bw&position=chrM"
 target="_blank">http://127.0.0.1:1234/cgi-bin/hgTracks?db=hg19&hgt.customText=<b>http://127.0.0.1:1234/folders/GSM1186795.bw</b>&position=chrM</a>.
-</p>
+(NOTE: In this above example, the <b>ftp location</b> now has byte-range requests supported so the <b>GEO ftp link</b> can be loaded on the browser).</p>
 </div><!-- .sectionContent -->
 </div><!-- .section -->
 
@@ -638,6 +641,15 @@ the command <tt>sudo ifup --force eth0</tt> to reset the network connection.</p>
 <em>Solution 2: </em>Alternatively, this error may be generated when the firewall does not allow 
 outgoing TCP data on port 3306/MySQL. In this case, contact your institution's IT support staff to 
 inquire about ways to open this port. </p>
+<p>
+<b>Genome Browser Error: </b> &quot;<em>Couldn't connect to database hgcentral on localhost as root.
+Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (13)</em>&quot;
+<p>
+<em>Solution: </em>This error can be caused when the virtual machine is downloading data such as
+when using the <a href="#GbibMirroring">mirror tool</a> to install local copies of tracks to increase
+speed and performance. Once the download finishes, the message will no longer appear. If one cancels
+a download in progress, the error can persist, in which case restart your virtual machine and the
+message should be removed.</p>
 <p>
 <b>Problem: </b>Error when using BLAT.</p>
 <p>

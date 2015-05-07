@@ -316,7 +316,22 @@ micMur1.perChromTables = no
     scp -p micMur1.sql hgwbeta:/tmp
     ssh hgwbeta "hgsql qapushq < /tmp/micMur1.sql"
 
-############################################################################
+##############################################################################
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
+##############################################################################
+##############################################################################
+# LIFTOVER TO micMur2 (DONE - 2015-05-05 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/micMur1/bed/blat.micMur2.2015-05-05
+    cd /hive/data/genomes/micMur1/bed/blat.micMur2.2015-05-05
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/micMur1/jkStuff/micMur1.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         micMur1 micMur2) > do.log 2>&1
+    # real    1443m2.941s
+
+    # verify the convert link on the test browser is now active from micMur1 to
+    # micMur2
+
 ##############################################################################

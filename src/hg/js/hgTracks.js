@@ -3678,7 +3678,7 @@ $(document).ready(function()
     // Convert map AREA gets to post the form, ensuring that cart variables are kept
     // up to date (but turn this off for search form).
     if ($("FORM").length > 0 && $('#trackSearch').length === 0) {
-        var allLinks = $('a');
+        var allLinks = $('a[class!=noPostLink]');
         $( allLinks ).unbind('click');
         $( allLinks ).click( posting.saveSettings );
     }

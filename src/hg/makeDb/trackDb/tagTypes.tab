@@ -199,6 +199,7 @@ inputTrackTable bed factorSource
 inputTableFieldDisplay bed factorSource
 intronGap psl genePred
 irows wigMaf
+isGencode genePred
 itemAttrTbl genePred
 itemBigImagePath bed
 itemClassTbl bed genePred

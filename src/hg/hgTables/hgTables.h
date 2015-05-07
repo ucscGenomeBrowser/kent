@@ -430,7 +430,6 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaDoSetUserRegions "hgta_doSetUserRegions"
 #define hgtaDoClearSetUserRegionsText "hgta_doClearSetUserRegionsText"
 #define hgtaUserRegionsFile "hgta_userRegionsFile"
-#define hgtaUserRegionsTable "hgta_userRegionsTable"
 #define hgtaUserRegionsDb "hgta_userRegionsDb"
 #define hgtaEnteredUserRegions "hgta_enteredUserRegions"
 #define hgtaEnteredUserRegionFile "hgta_enteredUserRegionFile"
@@ -761,7 +760,7 @@ struct hTableInfo *bigBedToHti(char *table, struct sqlConnection *conn);
 struct slName *bigBedGetFields(char *table, struct sqlConnection *conn);
 /* Get fields of bigBed as simple name list. */
 
-struct sqlFieldType *bigBedListFieldsAndTypes(char *table, struct sqlConnection *conn);
+struct sqlFieldType *bigBedListFieldsAndTypes(struct trackDb *tdb, struct sqlConnection *conn);
 /* Get fields of bigBed as list of sqlFieldType. */
 
 struct bed *bigBedGetFilteredBedsOnRegions(struct sqlConnection *conn,

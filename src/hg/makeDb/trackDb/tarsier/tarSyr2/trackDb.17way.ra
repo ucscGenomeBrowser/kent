@@ -1,13 +1,13 @@
 track cons17way
 compositeTrack on
-shortLabel Conservation
+shortLabel 17-way Primate
 longLabel Multiz Alignment & Conservation (17 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility hide
 priority 1
 type bed 4
-group compGeno
+group x
 
     track cons17wayViewalign
     shortLabel Multiz Alignments
@@ -25,7 +25,7 @@ group compGeno
         irows on
         summary multiz17waySummary
         frames multiz17wayFrames
-        group compGeno
+        group x
         color 0, 10, 100
         altColor 0,90,10
         type wigMaf 0.0 1.0

@@ -157,7 +157,13 @@ while (lineFileNext(lf, &line, NULL))
 	if (block->qEnd - block->qStart != block->tEnd - block->tStart)
 	    errAbort("Block size mismatch line %d of %s", lf->lineIx, lf->fileName);
 	block->percentId = lineFileNeedNum(lf, words, 5);
-	slAddHead(&blockList, block);
+        if ((block->qEnd == block->qStart) && (block->tEnd == block->tStart))
+            {
+            verbose(2, "# length zero block at line %d: t %d-%d q %d-%d\n", lf->lineIx, block->tEnd,block->tStart,block->qEnd,block->qStart);
+            freeMem(block);    // ignore zero length records
+            }
+        else
+	    slAddHead(&blockList, block);
 	}
     if ((ff!=NULL) && (words[0][0] == 's'))
        {
