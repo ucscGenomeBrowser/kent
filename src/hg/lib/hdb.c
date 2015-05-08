@@ -450,6 +450,8 @@ sqlSafef(query, sizeof(query),
       dbDbTable(), genomeCladeTable(), clade);
 genome = sqlQuickString(conn, query);
 hDisconnectCentral(&conn);
+if (genome == NULL)
+    errAbort("No default genome for clade: %s", clade);
 return genome;
 }
 

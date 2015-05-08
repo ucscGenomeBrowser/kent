@@ -1,4 +1,4 @@
-/* hgIntegrator - bootstrapper / back end for the Annotation Integrator user interface
+/* hgIntegrator - bootstrapper / back end for the Data Integrator user interface
  * This CGI has three modes of operation:
  *  - HTML output for minimal main page with a <div> container to be filled in by javascript
  *    (default, in the absence of special CGI params)
@@ -23,6 +23,7 @@
 #include "jsonParse.h"
 #include "textOut.h"
 #include "trackHub.h"
+#include "userRegions.h"
 #include "web.h"
 #include "annoFormatTab.h"
 #include "annoGratorQuery.h"
@@ -32,6 +33,9 @@ struct cart *cart = NULL;             /* CGI and other variables */
 
 #define QUERY_SPEC "hgi_querySpec"
 #define DO_QUERY "hgi_doQuery"
+
+#define hgiRegionType "hgi_range"
+#define hgiRegionTypeDefault "position"
 
 static void makeTrackLabel(struct trackDb *tdb, char *table, char *label, size_t labelSize)
 /* Write tdb->shortLabel into label if table is the same as tdb->track; otherwise, write shortLabel
@@ -74,7 +78,12 @@ for (table = tables;  table != NULL;  table = table->next)
             jsonWriteListStart(cj->jw, "fields");
             struct asColumn *col;
             for (col = asObj->columnList;  col != NULL;  col = col->next)
-                jsonWriteString(cj->jw, NULL, col->name);
+                {
+                jsonWriteObjectStart(cj->jw, NULL);
+                jsonWriteString(cj->jw, "name", col->name);
+                jsonWriteString(cj->jw, "desc", col->comment);
+                jsonWriteObjectEnd(cj->jw);
+                }
             jsonWriteListEnd(cj->jw);
             jsonWriteObjectEnd(cj->jw);
             }
@@ -86,6 +95,187 @@ jsonWriteObjectEnd(cj->jw);
 slFreeList(&tables);
 }
 
+// For now at least, use hgTables' CGI var names so regions are shared between hgI & hgTables
+//#*** TODO: get own CGI var names or libify these (dup'd from hgTables.h)
+#define hgtaEnteredUserRegions "hgta_enteredUserRegions"
+#define hgtaUserRegionsFile "hgta_userRegionsFile"
+#define hgtaUserRegionsDb "hgta_userRegionsDb"
+#define hgtaRegionTypeUserRegions "userRegions"
+
+
+boolean userRegionsExist()
+/* Return true if the trash file for regions exists.  It must be non-empty because
+ * if the region list is set to empty we clear region state. */
+{
+char *trashFileName = cartOptionalString(cart, hgtaUserRegionsFile);
+return (isNotEmpty(trashFileName) && fileExists(trashFileName));
+}
+
+struct bed4 *userRegionsGetBedList()
+/* Read parsed user-defined regions from local trash file and return as bed list. */
+// Not libifying at this point because the cart variable names may differ between
+// apps -- in that case, libify this but with some kind of param to give cart
+// var name prefix.
+{
+if (! userRegionsExist())
+    return NULL;
+char *trashFileName = cartOptionalString(cart, hgtaUserRegionsFile);
+// Note: I wanted to use basicBed's bedLoadNAll but it chops by whitespace not tabs,
+// so it aborts if the name field is empty (that causes it to see 3 words not 4).
+char *words[4];
+int wordCount;
+struct lineFile *lf = lineFileOpen(trashFileName, TRUE);
+struct bed4 *bedList = NULL;
+while ((wordCount = lineFileChopNext(lf, words, ArraySize(words))) > 0)
+    {
+    lineFileExpectAtLeast(lf, 3, wordCount);
+    char *name = words[3];
+    if (wordCount < 4)
+        name = "";
+    struct bed4 *bed = bed4New(words[0], atoi(words[1]), atoi(words[2]), name);
+    slAddHead(&bedList, bed);
+    }
+lineFileClose(&lf);
+slReverse(&bedList);
+return bedList;
+}
+
+static char *summarizeUserRegions()
+/* Return a short summary of user-defined regions. */
+// Not libifying at this point because the cart variable names may differ between
+// apps -- in that case, libify this but with some kind of param to give cart
+// var name prefix.
+{
+struct bed4 *bedList = userRegionsGetBedList();
+if (bedList == NULL)
+    return cloneString("no regions have been defined");
+struct dyString *dy = dyStringCreate("%s:%d-%d",
+                                     bedList->chrom, bedList->chromStart+1, bedList->chromEnd);
+if (isNotEmpty(bedList->name))
+    dyStringPrintf(dy, " (%s)", bedList->name);
+int count = slCount(bedList);
+if (count > 1)
+    dyStringPrintf(dy, " and %d other%s", count - 1, count > 2 ? "s" : "");
+return dyStringCannibalize(&dy);
+}
+
+static void getUserRegions(struct cartJson *cj, struct hash *paramHash)
+/* If the cart's unparsed user regions are for the current db, return them so we
+ * can show the user what they previously entered. */
+// Not libifying at this point because the cart variable names may differ between
+// apps -- in that case, libify this but with some kind of param to give cart
+// var name prefix.
+{
+char *resultName = cartJsonOptionalParam(paramHash, "resultName");
+if (isEmpty(resultName))
+    resultName = "userRegions";
+struct jsonWrite *jw = cj->jw;
+char *db = cartString(cart, "db");
+char *regionsDb = cartOptionalString(cart, hgtaUserRegionsDb);
+if (sameOk(regionsDb, db) && userRegionsExist())
+    {
+    char *userRegions = cartUsualString(cart, hgtaEnteredUserRegions, "");
+    //#*** TODO: move jsonStringEscape inside jsonWriteString
+    char *encoded = jsonStringEscape(userRegions);
+    jsonWriteString(jw, resultName, encoded);
+    //#*** TODO: move jsonStringEscape inside jsonWriteString
+    encoded = jsonStringEscape(summarizeUserRegions());
+    jsonWriteString(jw, "userRegionsSummary", encoded);
+    }
+else
+    {
+    jsonWriteString(jw, resultName, NULL);
+    jsonWriteString(jw, "userRegionsSummary", NULL);
+    }
+}
+
+static void clearUserRegions(struct cartJson *cj, struct hash *paramHash)
+/* Remove all user-defined region info from cart, and send JSON update. */
+// Not libifying at this point because the cart variable names may differ between
+// apps -- in that case, libify this but with some kind of param to give cart
+// var name prefix.
+{
+char *resultName = cartJsonOptionalParam(paramHash, "resultName");
+if (isEmpty(resultName))
+    resultName = "userRegions";
+struct jsonWrite *jw = cj->jw;
+cartRemove(cart, hgtaUserRegionsDb);
+char *trashFileName = cartOptionalString(cart, hgtaUserRegionsFile);
+if (trashFileName && fileExists(trashFileName))
+    unlink(trashFileName);
+cartRemove(cart, hgtaUserRegionsFile);
+cartRemove(cart, hgtaEnteredUserRegions);
+char *regionType = cartUsualString(cart, hgiRegionType, hgiRegionTypeDefault);
+if (regionType && sameString(regionType, hgtaRegionTypeUserRegions))
+    {
+    regionType = hgiRegionTypeDefault;
+    cartSetString(cart, hgiRegionType, regionType);
+    }
+jsonWriteString(jw, hgiRegionType, regionType);
+jsonWriteString(jw, resultName, NULL);
+jsonWriteString(jw, "userRegionsSummary", NULL);
+}
+
+static void setUserRegions(struct cartJson *cj, struct hash *paramHash)
+/* Instead of finding user regions in paramHash, look for them in separate CGI
+ * variables and remove them from the cart.  If user regions are small enough to
+ * enter in the paste box, send them to the UI model. */
+// Not libifying at this point because the cart variable names may differ between
+// apps -- in that case, libify this but with some kind of param to give cart
+// var name prefix.
+{
+char *regionText = cartJsonOptionalParam(paramHash, "regions");
+char *regionFileVar = cartJsonOptionalParam(paramHash, "regionFileVar");
+struct jsonWrite *jw = cj->jw;
+if (regionText == NULL && regionFileVar == NULL)
+    {
+    jsonWriteStringf(jw, "error", "setUserRegions: no param given "
+                     "(must give either \"regions\" or \"regionFileVar\"");
+    return;
+    }
+char *db = cartString(cart, "db");
+// File upload takes precedence over pasted text:
+if (regionFileVar != NULL)
+    regionText = cgiOptionalString(regionFileVar);
+if (isEmpty(regionText))
+    {
+    clearUserRegions(cj, paramHash);
+    }
+else
+    {
+    int regionCount = 0;
+    char *warnText = "";
+    char *trashFileName = userRegionsParse(db, regionText, 1000, 10, &regionCount, &warnText);
+    if (trashFileName && regionCount > 0)
+        {
+        cartSetString(cart, hgtaUserRegionsDb, db);
+        cartSetString(cart, hgtaUserRegionsFile, trashFileName);
+        cartSetString(cart, hgiRegionType, hgtaRegionTypeUserRegions);
+        if (strlen(regionText) > 64 * 1024)
+            // Unparsed regions are too big to save for editing
+            cartRemove(cart, hgtaEnteredUserRegions);
+        else
+            cartSetString(cart, hgtaEnteredUserRegions, cloneString(regionText));
+        char *userRegions = cartOptionalString(cart, hgtaEnteredUserRegions);
+        if (isNotEmpty(userRegions))
+            {
+            // Now that cart is updated, send JSON update
+            getUserRegions(cj, paramHash);
+            }
+        if (warnText != NULL)
+            {
+            //#*** TODO: move jsonStringEscape inside jsonWriteString
+            char *encoded = jsonStringEscape(warnText);
+            jsonWriteString(jw, "userRegionsWarn", encoded);
+            }
+        }
+    else
+        jsonWriteStringf(jw, "error", "Could not find any regions in input: %s", warnText);
+    }
+if (regionFileVar)
+    cartRemove(cart, regionFileVar);
+}
+
 void doCartJson()
 /* Perform UI commands to update the cart and/or retrieve cart vars & metadata. */
 {
@@ -95,6 +285,8 @@ if (! cartOptionalString(cart, "db"))
     cartSetString(cart, "db", hDefaultDb());
 struct cartJson *cj = cartJsonNew(cart);
 cartJsonRegisterHandler(cj, "getFields", getFields);
+cartJsonRegisterHandler(cj, "setUserRegions", setUserRegions);
+cartJsonRegisterHandler(cj, "getUserRegions", getUserRegions);
 cartJsonExecute(cj);
 }
 
@@ -159,37 +351,14 @@ return tabOut;
 }
 
 
-void doQuery()
-/* Execute a query that has been built up by the UI. */
+static void regionQuery(struct annoAssembly *assembly, struct bed4 *region,
+                        struct slRef *dataSources, struct trackDb *fullTrackList,
+                        struct annoFormatter *formatter)
+/* Get streamers, grators & do query for region.  Wasteful but necessary until
+ * streamers internally handle split tables/files (i.e. are chrom-agnostic when
+ * opening). */
 {
-// Make sure we have either genome-wide search or a valid position
-char *db = cartString(cart, "db");
-char *chrom = NULL;
-uint start = 0, end = 0;
-char *regionType = cartUsualString(cart, "hgi_range", "position");
-if (sameString(regionType, "position"))
-    {
-    char *position = cartUsualString(cart, "position", hDefaultPos(db));
-    if (! parsePosition(position, &chrom, &start, &end))
-        errAbort("doQuery: Expected position to be chrom:start-end but got '%s'", position);
-    }
-struct annoAssembly *assembly = hAnnoGetAssembly(db);
-// Decode and parse CGI-encoded querySpec.
-char *querySpec = cartString(cart, QUERY_SPEC);
-int len = strlen(querySpec);
-char querySpecDecoded[len+1];
-cgiDecodeFull(querySpec, querySpecDecoded, len);
-struct jsonElement *queryObj = jsonParse(querySpecDecoded);
-// Set up output.
-int savedStdout = -1;
-struct pipeline *textOutPipe = configTextOut(queryObj, &savedStdout);
-webStartText();
-// Build annoGrator query.
-struct slRef *dataSources = jsonListVal(jsonFindNamedField(queryObj, "queryObj", "dataSources"),
-                                        "dataSources");
-struct grp *fullGroupList = NULL;
-struct trackDb *fullTrackList = NULL;
-cartTrackDbInit(cart, &fullTrackList, &fullGroupList, TRUE);
+char *db = assembly->name;
 struct annoStreamer *primary = NULL;
 struct annoGrator *gratorList = NULL;
 struct slRef *dsRef;
@@ -214,12 +383,12 @@ for (i = 0, dsRef = dataSources;  dsRef != NULL;  i++, dsRef = dsRef->next)
     char *table = tdb->table;
     if (i == 0)
         {
-        primary = hAnnoStreamerFromTrackDb(assembly, table, tdb, chrom, ANNO_NO_LIMIT);
+        primary = hAnnoStreamerFromTrackDb(assembly, table, tdb, region->chrom, ANNO_NO_LIMIT);
         annoStreamerSetName(primary, table);
         }
     else
         {
-        struct annoGrator *grator = hAnnoGratorFromTrackDb(assembly, table, tdb, chrom,
+        struct annoGrator *grator = hAnnoGratorFromTrackDb(assembly, table, tdb, region->chrom,
                                                            ANNO_NO_LIMIT, NULL, agoNoConstraint);
         if (grator)
             {
@@ -232,16 +401,96 @@ for (i = 0, dsRef = dataSources;  dsRef != NULL;  i++, dsRef = dsRef->next)
     }
 slReverse(&gratorList);
 
+// Set up and execute query.
+struct annoGratorQuery *query = annoGratorQueryNew(assembly, primary, gratorList, formatter);
+if (region->chrom != NULL)
+    annoGratorQuerySetRegion(query, region->chrom, region->chromStart, region->chromEnd);
+annoGratorQueryExecute(query);
+
+//#*** SKIP THIS FOR NOW: annoGratorQueryFree(&query);
+//#*** annoGratorQueryFree closes streamers, grators and formatters. In this case we
+//#*** want the formatter to stay live.  Pushing handling of split tables/files down into
+//#*** annoStreamers will make this unnecessary -- this won't happen in a loop, there will
+//#*** be only one call to free after looping on regions.
+primary->close(&primary);
+struct annoStreamer *grator = (struct annoStreamer *)gratorList, *nextGrator;
+for (;  grator != NULL;  grator = nextGrator)
+    {
+    nextGrator = grator->next;
+    grator->close(&grator);
+    }
+}
+
+void doQuery()
+/* Execute a query that has been built up by the UI. */
+{
+// Make sure we have either genome-wide search or a valid position
+
+//#*** TODO: user-defined regions
+//#*** For starters, just loop the whole damn thing on regions just like the TB.
+//#*** It would be better for performance to push the details of per-chrom files
+//#*** or split tables down into streamers, which could then open a different
+//#*** file or db table when a new minChrom is passed in or when streamer->setRegion
+//#*** is called.
+
+char *db = cartString(cart, "db");
+char *regionType = cartUsualString(cart, hgiRegionType, hgiRegionTypeDefault);
+struct bed4 *regionList = NULL;
+if (sameString(regionType, "position"))
+    {
+    char *chrom = NULL;
+    uint start = 0, end = 0;
+    char *position = cartUsualString(cart, "position", hDefaultPos(db));
+    if (! parsePosition(position, &chrom, &start, &end))
+        errAbort("doQuery: Expected position to be chrom:start-end but got '%s'", position);
+    AllocVar(regionList);
+    regionList->chrom = cloneString(chrom);
+    regionList->chromStart = start;
+    regionList->chromEnd = end;
+    }
+else if (sameString(regionType, hgtaRegionTypeUserRegions))
+    {
+    regionList = userRegionsGetBedList();
+    slSort(&regionList, bedCmp);
+    }
+else
+    {
+    // genome-wide query: chrom=NULL, start=end=0
+    AllocVar(regionList);
+    }
+struct annoAssembly *assembly = hAnnoGetAssembly(db);
+// Decode and parse CGI-encoded querySpec.
+char *querySpec = cartString(cart, QUERY_SPEC);
+int len = strlen(querySpec);
+char querySpecDecoded[len+1];
+cgiDecodeFull(querySpec, querySpecDecoded, len);
+struct jsonElement *queryObj = jsonParse(querySpecDecoded);
+// Set up output.
+int savedStdout = -1;
+struct pipeline *textOutPipe = configTextOut(queryObj, &savedStdout);
+webStartText();
 // Make an annoFormatter to print output.
 // For now, tab-separated output is it.
 struct annoFormatter *formatter = makeTabFormatter(queryObj);
 
-// Set up and execute query.
-struct annoGratorQuery *query = annoGratorQueryNew(assembly, primary, gratorList, formatter);
-if (chrom != NULL)
-    annoGratorQuerySetRegion(query, chrom, start, end);
-annoGratorQueryExecute(query);
-annoGratorQueryFree(&query);
+// Unpack the query spec.
+struct slRef *dataSources = jsonListVal(jsonFindNamedField(queryObj, "queryObj", "dataSources"),
+                                        "dataSources");
+// Get trackDb.
+struct grp *fullGroupList = NULL;
+struct trackDb *fullTrackList = NULL;
+cartTrackDbInit(cart, &fullTrackList, &fullGroupList, TRUE);
+
+// For now, do a complete annoGrator query for each region, rebuilding each data source
+// since annoStreamers don't yet handle split tables/files internally.  For decent
+// performance, it will be necessary to push split-source handling inside the streamers,
+// and then all we'll need to do is make one set of streamers and then loop only on calls
+// to annoGratorQuerySetRegion and annoGratorQueryExecute.
+struct bed4 *region;
+for (region = regionList;  region != NULL;  region = region->next)
+    {
+    regionQuery(assembly, region, dataSources, fullTrackList, formatter);
+    }
 
 textOutClose(&textOutPipe, &savedStdout);
 }
@@ -252,7 +501,7 @@ void doMainPage()
 {
 char *db = cartUsualString(cart, "db", hDefaultDb());
 webStartWrapperDetailedNoArgs(cart, trackHubSkipHubName(db),
-                              "", "Annotation Integrator",
+                              "", "Data Integrator",
                               TRUE, FALSE, TRUE, TRUE);
 
 // Ideally these would go in the <HEAD>

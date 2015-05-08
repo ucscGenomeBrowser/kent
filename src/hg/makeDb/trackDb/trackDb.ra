@@ -2915,7 +2915,6 @@ longLabel NCBI RefSeq Genes
 compositeTrack on
 group genes
 visibility hide
-priority 10000
 type genePred 
 baseColorUseCds given
 noInherit on
@@ -2926,7 +2925,7 @@ subGroup1 view Views curated=Curated predicted=Predicted
     shortLabel Curated
     view curated
     visibility pack
-    color 204,136,153
+    color 16,93,235
     parent ncbiGene
 
 	track ncbiRefCurated
@@ -2941,7 +2940,7 @@ subGroup1 view Views curated=Curated predicted=Predicted
     view predicted
     visibility hide
     parent ncbiGene
-    color 153,255,0 
+    color 48,168,219
     spectrum on
 
 	track ncbiRefPredicted

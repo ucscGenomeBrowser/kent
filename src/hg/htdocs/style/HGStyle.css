@@ -644,6 +644,17 @@ div#haplotypes .textAlert { color:#DC143C; } /* dark red */
   white-space: nowrap;
 }
 
+a.reactLink {
+    /* React/JSX translates &nbsp; into its UTF-8 equivalent.  Trouble is, our CGI code
+     * always adds a 'CHARSET=iso-8859-1' to the header, possibly because we serve data
+     * from mysql tables with that encoding ("latin1"), so I'm reluctant to change something
+     * that CGIs have done since 2001 (622545af).
+     * Now, why the rant about &nbsp;? -- because React/JSX also smushes <A> together with
+     * its surrounding text, if there are newlines between them in the JSX.  Add some padding. */
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+}
+
 .disabledMessage {
   padding: 5px;
   color: gray;
@@ -676,8 +687,8 @@ div#haplotypes .textAlert { color:#DC143C; } /* dark red */
   position: absolute;
   display: inline-block;
   top: 75px;
-  left: 75px;
-  width: 80%;
+  left: 5%;
+  width: 90%;
   height: 80%;
   z-index: 100;
   background-color: #FFFEE8;

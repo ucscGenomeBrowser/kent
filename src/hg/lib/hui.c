@@ -6428,6 +6428,7 @@ boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
 char *defaultCodonSpecies = trackDbSetting(tdb, SPECIES_CODON_DEFAULT);
 char *framesTable = trackDbSetting(tdb, "frames");
+char *snpTable = trackDbSetting(tdb, "snpTable");
 char *firstCase = trackDbSetting(tdb, ITEM_FIRST_CHAR_CASE);
 if (firstCase != NULL)
     {
@@ -6491,6 +6492,14 @@ else
 	puts("Display unaligned amino acids with spanning chain as 'o's<BR>");
     else
         puts("Display unaligned bases with spanning chain as 'o's<BR>");
+    }
+
+safef(option, sizeof option, "%s.%s", name, MAF_SHOW_SNP);
+if (snpTable)
+    {
+    printf("<BR><B>Codon Changes:</B><BR>");
+    cgiMakeCheckBox(option, cartOrTdbBoolean(cart, tdb, MAF_SHOW_SNP,FALSE));
+    puts("Display synonymous and non-synonymous changes in coding exons.<BR>");
     }
 
 safef(option, sizeof option, "%s.%s", name, "codons");

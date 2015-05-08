@@ -1955,18 +1955,31 @@ This format is used to provide called regions of signal enrichment based on pool
         <li><b>strand</b> - +/- to denote strand or orientation (whenever 
         applicable). Use '.' if no orientation is assigned.
 	<li><b>thickStart</b> - The starting position at which the feature is drawn thickly.
+          Not used in gappedPeak type, set to 0.
 	<li><b>thickEnd</b> - The ending position at which the feature is drawn thickly.
+          Not used in gappedPeak type, set to 0.
 	<li><b>itemRgb</b> - An RGB value of the form R,G,B (e.g. 255,0,0).
+          Not used in gappedPeak type, set to 0. 
 	<li><b>blockCount</b> - The number of blocks (exons) in the BED line.
-	<li><b>blockSizes</b> - A comma-separated list of the block sizes.
-	<li><b>blockStarts</b> - A comma-separated list of block starts.
+	<li><b>blockSizes</b> - A comma-separated list of the block sizes. The number of items
+          in this list should correspond to <I>blockCount</I>.
+	<li><b>blockStarts</b> - A comma-separated list of block starts. The first value must be 0
+        and all of the <I>blockStart</I> positions should be calculated relative to
+        <I>chromStart</I>. The number of items in this list should correspond to <I>blockCount</I>.
 	<li><b>signalValue</b> - Measurement of overall (usually, average) 
         enrichment for the region.
         <li><b>pValue</b> - Measurement of statistical significance (-log10). 
         Use -1 if no pValue is assigned.
         <li><b>qValue</b> - Measurement of statistical significance using 
         false discovery rate (-log10). Use -1 if no qValue is assigned.
-</ol>        		     </td><td width=15></td></tr>
+</ol>
+<p>
+Here is an example of gappedPeak format:</p>
+<pre>
+track name=gappedPeakExample type=gappedPeak
+chr1 171000 171600 Anon_peak_1 55 . 0 0 0 2 400,100 0,500 4.04761 7.53255 5.52807
+</pre>
+                              </td><td width=15></td></tr>
 	    		</table><br>
 		     </td></tr>
 		</table>

@@ -31,6 +31,7 @@ group compGeno
         altColor 0,90,10
         mafDot on
 	snpTable mafSnp160way
+	mafShowSnp on
 #	snpMode on
         type wigMaf 0.0 1.0
         speciesCodonDefault eboVir3

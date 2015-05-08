@@ -32,6 +32,7 @@ html cons160way
         color 0, 10, 100
         altColor 0,90,10
         mafDot on
+	mafShowSnp on
 #	snpMode on
         type wigMaf 0.0 1.0
         speciesCodonDefault eboVir3

@@ -5,6 +5,10 @@
 
 #include "annoStreamer.h"
 
+struct asObject *annoStreamDbFactorSourceAsObj();
+/* Return an autoSql object that describs fields of a joining query on a factorSource table
+ * and its inputs. */
+
 struct annoStreamer *annoStreamDbFactorSourceNew(char *db, char *trackTable, char *sourceTable,
 						 char *inputsTable, struct annoAssembly *aa,
 						 int maxOutRows);
