@@ -377,7 +377,6 @@ done
         echo ln -s ${H}/lastz.$G/mafNet/*.maf.gz ./mafLinks/$G
         ln -s ${H}/lastz.$G/mafNet/*.maf.gz ./mafLinks/$G
     done
-XXX - ready to continue -- Thu Apr 30 15:11:11 PDT 2015
 
     #	verify the alignment type file is correct:
     grep -v hg38 species.list.txt | while read D
@@ -716,13 +715,18 @@ mafAddIRows -nBeds=nBeds ../maf/chrX.maf /hive/data/genomes/hg38/hg38.2bit resul
     time (cat /gbdb/hg38/multiz100way/maf/*.maf \
         | hgLoadMafSummary -verbose=2 -minSize=30000 \
 	-mergeGap=1500 -maxSize=200000 hg38 multiz100waySummary stdin)
-XXX - running - Thu May  7 09:23:05 PDT 2015
-# Created 18099188 summary blocks from 4120456307 components and 114640349 mafs from stdin
-# real    173m32.469s
+    # Created 18099188 summary blocks from 4120456307 components
+    #    and 114670205 mafs from stdin
+    # real    270m53.048s
+    # This process became very large:
+# PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND
+# 4328 hiram     20   0  165g 165g 1764 R 96.1 16.4 249:34.23 hgLoadMafSummary 
+    # even though the .tab file isn't gigantic:
+    #   -rw-rw-r-- 1  894587030 May  7 13:51 multiz100waySummary.tab
 
     wc -l multiz100way*.tab
-    #  114640349 multiz100way.tab
-    #   18099188 multiz100waySummary.tab
+    #   114670205 multiz100way.tab
+    #    18099188 multiz100waySummary.tab
 
     rm multiz100way*.tab
 
@@ -1111,238 +1115,108 @@ rm -f $c.gp $c.maf $c.ss
     time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
 	    --EM --precision MED --msa-format FASTA --subst-mod REV \
 		--tree tree-commas.nh 4d.all.mfa
-XXX - running - Thu May  7 10:53:31 PDT 2015
-    #   real    223m18.088s
-    # second time 2014-02-09:
-    #	real    212m12.485s
-    mv phyloFit.mod all.mod
-
-    grep TREE all.mod
-
-#########################################################################
-# Phylogenetic tree from 100-way (TBD - 2014-12-21 - Hiram)
-    mkdir /hive/data/genomes/hg38/bed/multiz100way/4d
-    cd /hive/data/genomes/hg38/bed/multiz100way/4d
-
-    # the annotated maf is:
-    ../anno/hg38.100way.maf
-
-    # using knownGene for hg38
-    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" hg38 > hg38.knownGene.gp
-
-    genePredSingleCover hg38.knownGene.gp stdout | sort > hg38.knownGeneNR.gp
-    wc -l *
-    # 1041008 hg38.knownGene.gp
-    # 21887 hg38.knownGeneNR.gp
-
-
-    mkdir annoSplit
-    cd annoSplit
-    time mafSplit -verbose=2 -outDirDepth=1 -byTarget -useFullSequenceName \
-        /dev/null . ../multiz100way.maf
-    # real    15m13.531s
-        /dev/null . ../../anno/hg38.100way.maf
-
-    find . -type f | wc -l
-    #   360
-    ssh ku
-    mkdir /hive/data/genomes/hg38/bed/multiz100way/4d/run
-    cd /hive/data/genomes/hg38/bed/multiz100way/4d/run
-    mkdir ../mfa
-
-    # newer versions of msa_view have a slightly different operation
-    # the sed of the gp file inserts the reference species in the chr name
-    cat << '_EOF_' > 4d.csh
-#!/bin/csh -fe
-set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
-set r = "/hive/data/genomes/hg38/bed/multiz100way"
-set c = $1:r
-set infile = $r/4d/annoSplit/$2
-set outDir = $r/4d/mfa/$3:h
-set outfile = $r/4d/mfa/$3
-/bin/mkdir -p $outDir
-cd /scratch/tmp
-/bin/awk -v C=$c '$2 == C {print}' $r/4d/hg38.knownGeneNR.gp | sed -e "s/\t$c\t/\thg38.$c\t/" > $c.gp
-set NL=`wc -l $c.gp| gawk '{print $1}'`
-echo $NL
-if ("$NL" != "0") then
-    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $infile -o SS > $c.ss
-    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $outfile
-else
-    echo "" > $outfile
-endif
-/bin/rm -f $c.gp $c.ss
-'_EOF_'
-    # << happy emacs
-    chmod +x 4d.csh
-
-    find ../annoSplit -type f | sed -e "s#../annoSplit/##" > maf.list
-
-    cat << '_EOF_' > template
-#LOOP
-4d.csh $(file1) $(path1) {check out line+ ../mfa/$(dir1)/$(root1).mfa}
-#ENDLOOP
-'_EOF_'
-    # << happy emacs
-
-    gensub2 maf.list single template jobList
-    para create jobList
-    para try ... check
-    para time
-# Completed: 358 of 358 jobs
-# CPU time in finished jobs:       2158s      35.97m     0.60h    0.02d  0.000 y
-# IO & Wait Time:                   966s      16.10m     0.27h    0.01d  0.000 y
-# Average job time:                   9s       0.15m     0.00h    0.00d
-# Longest finished job:             181s       3.02m     0.05h    0.00d
-# Submission to last job:           212s       3.53m     0.06h    0.00d
-
-    # Not all results have contents, that is OK
-
-    # combine mfa files
-    ssh hgwdev
-    cd /hive/data/genomes/hg38/bed/multiz100way/4d
-    # remove the broken empty files, size 0 and size 1:
-    find ./mfa -type f -size 0 | xargs rm -f
-    # most interesting, this did not identify files of size 1:
-#    find ./mfa -type f -size 1
-    find ./mfa -type f | xargs ls -og | awk '$3 == 1' | awk '{print $NF}' \
-        > empty.list
-    cat empty.list | xargs rm -f
-    #want comma-less species.list
-    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
-	--aggregate "`cat ../species.list`" mfa/*/*.mfa | sed s/"> "/">"/ \
-	    > 4d.all.mfa
-    # real    0m13.523s
-
-    # check they are all in there:
-    grep "^>" 4d.all.mfa | wc -l
-    # 100
-    grep "^>" 4d.all.mfa | sed -e 's/^/# /;'
-# >hg38
-# >panTro4
-# >panPan1
-# >gorGor3
-# >ponAbe2
-# >nomLeu3
-# >rheMac3
-# >macFas5
-# >papAnu2
-# >chlSab2
-# >nasLar1
-# >rhiRox1
-# >calJac3
-# >saiBol1
-# >tarSyr2
-# >micMur1
-# >otoGar3
-
-    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
-	../hg38.100way.nh | xargs echo | sed -e 's/ //g' > tree_commas.nh
-    # tree_commas.nh looks like:
-    #  (((((((((hg38,panTro4),panPan1),gorGor3),ponAbe2),nomLeu3),((((rheMac3,macFas5),papAn
-    # use phyloFit to create tree model (output is phyloFit.mod)
-    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
-	    --EM --precision MED --msa-format FASTA --subst-mod REV \
-		--tree tree_commas.nh 4d.all.mfa
-    #   real    1m5.892s
+    #   real    424m51.691s
 
     mv phyloFit.mod all.mod
 
     grep TREE all.mod
-# TREE: (((((((((hg38:0.00986511,panTro4:0.00362765):0.0018003,panPan1:0.002739100):0.00527279,gorGor3:0.00894443):0.00928198,ponAbe2:0.0190773):0.00342227,nomLeu3:0.0233089):0.0116584,((((rheMac3:0.00357475,macFas5:0.00247387):0.005411009,papAnu2:0.00864896):0.0040728,chlSab2:0.0131272):0.006142,(nasLar1:0.00152029,rhiRox1:0.00150816):0.0180636):0.0215198):0.0213244,(calJac3:0.035743,saiBol1:0.0330514):0.0381337):0.0627813,tarSyr2:0.143207):0.0206979,(micMur1:0.0926543,otoGar3:0.131358):0.0206979);
 
-    # compare these calculated lengths to the tree extracted from 183way:
-    grep TREE all.mod | sed -e 's/TREE: //' \
+    # compare these calculated lengths to what the hg19 process made:
+    grep TREE /hive/data/genomes/hg19/bed/multiz100way/4d/all.mod \
+       | sed -e 's/TREE: //; s/bosTau7/bosTau8/; s/chlSab1/chlSab2/;
+          s/chrPic1/chrPic2/; s/danRer7/danRer10/; s/felCat5/felCat8/;
+             s/papHam1/papAnu2/; s/rn5/rn6/; s/hg19/hg38/;' \
        | /cluster/bin/phast/all_dists /dev/stdin | grep hg38 \
-          | sed -e "s/hg38.//;"  | sort > new.dists
-    /cluster/bin/phast/all_dists ../hg38.100way.nh | grep hg38 \
-        | sed -e "s/hg38.//;" | sort > old.dists
-    # printing out the 'new', the 'old' the 'difference' and percent difference
-    join new.dists old.dists | awk '{
+          | sed -e "s/hg38.//;"  | sort > hg19.dists
+
+    grep TREE all.mod | sed -e 's/TREE: //;' \
+       | /cluster/bin/phast/all_dists /dev/stdin | grep hg38 \
+          | sed -e "s/hg38.//;"  | sort > hg38.dists
+
+    # printing out the 'hg19', the 'hg38' the 'difference' and
+    #    percent difference/delta
+    join hg19.dists hg38.dists | awk '{
   printf "#\t%s\t%8.6f\t%8.6f\t%8.6f\t%8.6f\n", $1, $2, $3, $2-$3, 100*($2-$3)/$3 }' \
-      | sort -k3n
-#       panTro4 0.013493        0.013390        0.000103        0.769231
-#       panPan1 0.014405        0.015610        -0.001205       -7.719411
-#       gorGor3 0.025883        0.0100734        0.008149        45.951280
-#       ponAbe2 0.045297        0.037403        0.007894        21.105259
-#       nomLeu3 0.052951        0.044204        0.008747        19.787802
-#       macFas5 0.080921        0.071575        0.009346        13.057632
-#       papAnu2 0.081684        0.071626        0.010058        14.042387
-#       rheMac3 0.082022        0.071575        0.010447        14.595878
-#       chlSab2 0.082090        0.070974        0.011116        15.662073
-#       rhiRox1 0.082392        0.068974        0.013418        19.453707
-#       nasLar1 0.082405        0.068974        0.013431        19.472555
-#       saiBol1 0.133810        0.085804        0.048006        55.948441
-#       calJac3 0.136502        0.125454        0.011048        8.806415
-#       micMur1 0.259457        0.234534        0.024923        10.626604
-#       tarSyr2 0.268614        0.219294        0.049320        22.490355
-#       otoGar3 0.298160        0.268334        0.029826        11.115252
+      | sort -k6n | head -6
+# top 6 percent changes:
+#        db       hg19             hg38         hg19-hg38        percent delta
+#       macEug2 0.778331        0.838209        -0.059878       -7.143564
+#       ornAna1 0.967705        1.007930        -0.040225       -3.990853
+#       araMac1 1.275902        1.309637        -0.033735       -2.575905
+#       amaVit1 1.259843        1.286088        -0.026245       -2.040685
+#       zonAlb1 1.375094        1.390649        -0.015555       -1.118542
+#       melUnd1 1.234923        1.246845        -0.011922       -0.956173
+
+# and the seven new assemblies:
+#   | egrep "bosTau|chlSab|chrPic|danRer|felCat|papAnu|rn6"
+#        db       hg19             hg38         hg19-hg38        percent delta
+#       bosTau8 0.433906        0.433893        0.000013        0.002996
+#       chlSab2 0.070327        0.070253        0.000074        0.105334
+#       chrPic2 1.004158        0.996918        0.007240        0.726238
+#      danRer10 2.211308        2.209038        0.002270        0.102760
+#       felCat8 0.347688        0.346784        0.000904        0.260681
+#       papAnu2 0.069896        0.069599        0.000297        0.426730
+#       rn6     0.520202        0.520167        0.000035        0.006729
 
 #########################################################################
-# phastCons 100-way (TBD - 2014-12023 - Hiram)
+# phastCons 100-way (DONE - 2015-05-07 - Hiram)
     # split 100way mafs into 10M chunks and generate sufficient statistics
     # files for # phastCons
     ssh ku
-    mkdir -p /hive/data/genomes/hg38/bed/multiz100way/cons/SS
-    cd /hive/data/genomes/hg38/bed/multiz100way/cons/SS
-    mkdir result done
+    mkdir -p /hive/data/genomes/hg38/bed/multiz100way/cons/ss
+    mkdir -p /hive/data/genomes/hg38/bed/multiz100way/cons/msa.split
+    cd /hive/data/genomes/hg38/bed/multiz100way/cons/msa.split
 
-    cat << '_EOF_' > mkSS.csh
+    cat << '_EOF_' > doSplit.csh
 #!/bin/csh -ef
-set d = $1
-set c = $2
-set doneDir = done/$d
-set MAF = /hive/data/genomes/hg38/bed/multiz100way/anno/result/$d/$c.maf
-set WINDOWS = /hive/data/genomes/hg38/bed/multiz100way/cons/SS/result/$d/$c
+set c = $1
+set MAF = /hive/data/genomes/hg38/bed/multiz100way/anno/result/$c.maf
+set WINDOWS = /hive/data/genomes/hg38/bed/multiz100way/cons/ss/$c
 set WC = `cat $MAF | wc -l`
 set NL = `grep "^#" $MAF | wc -l`
-if ( -s $3 ) then
+if ( -s $2 ) then
     exit 0
 endif
-if ( -s $3.running ) then
+if ( -s $2.running ) then
     exit 0
 endif
 
-/bin/mkdir -p $doneDir
-/bin/date >> $3.running
+date >> $2.running
 
-/bin/rm -fr $WINDOWS
-/bin/mkdir -p $WINDOWS
+rm -fr $WINDOWS
+mkdir $WINDOWS
 pushd $WINDOWS > /dev/null
 if ( $WC != $NL ) then
 /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
     $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
 endif
 popd > /dev/null
-/bin/date >> $3
-/bin/rm -f $3.running
+date >> $2
+rm -f $2.running
 '_EOF_'
     # << happy emacs
-    chmod +x mkSS.csh
+    chmod +x doSplit.csh
 
     cat << '_EOF_' > template
 #LOOP
-mkSS.csh $(dir1) $(root1) {check out line+ done/$(dir1)/$(root1)}
+doSplit.csh $(root1) {check out line+ $(root1).done}
 #ENDLOOP
 '_EOF_'
     # << happy emacs
 
     #	do the easy ones first to see some immediate results
-    find ../../anno/result -type f | sed -e "s#../../anno/result/##" > maf.list
-
+    ls -1S -r ../../anno/result | sed -e "s/.maf//;" > maf.list
+    # all can finish OK at a 64Gb memory limit
     gensub2 maf.list single template jobList
-    # beware overloaded the cluster with these fast running high I/O jobs
-    para create jobList
+    para -ram=64g create jobList
     para try ... check ... etc
+    para push
 # Completed: 358 of 358 jobs
-# CPU time in finished jobs:       3134s      52.24m     0.87h    0.04d  0.000 y
-# IO & Wait Time:                  2274s      37.90m     0.63h    0.03d  0.000 y
-# Average job time:                  15s       0.25m     0.00h    0.00d
-# Longest finished job:             334s       5.57m     0.09h    0.00d
-# Submission to last job:           407s       6.78m     0.11h    0.00d
-
-    find ./result -type f | wc -l
-    #	 645
+# CPU time in finished jobs:     125184s    2086.40m    34.77h    1.45d  0.004 y
+# IO & Wait Time:                  6665s     111.08m     1.85h    0.08d  0.000 y
+# Average job time:                 368s       6.14m     0.10h    0.00d
+# Longest finished job:           19073s     317.88m     5.30h    0.22d
+# Submission to last job:         19138s     318.97m     5.32h    0.22d
 
     # Run phastCons
     #	This job is I/O intensive in its output files, beware where this
@@ -1361,46 +1235,44 @@ mkSS.csh $(dir1) $(root1) {check out line+ done/$(dir1)/$(root1)}
 #!/bin/csh -fe
 set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
 set c = $1
-set d = $2
-set f = $3
-set len = $4
-set cov = $5
-set rho = $6
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
 set grp = $cwd:t
-set cons = /hive/data/genomes/hg38/bed/multiz100way/cons
-set tmp = $cons/tmp/${d}_${c}
+set cons = /hive/data/genomes/hg19/bed/multiz100way/cons
+set tmp = $cons/tmp/$f
 mkdir -p $tmp
-set ssSrc = $cons/SS/result
+set ssSrc = $cons/ss
 set useGrp = "$grp.mod"
 if (-s $cons/$grp/$grp.non-inf) then
   ln -s $cons/$grp/$grp.mod $tmp
   ln -s $cons/$grp/$grp.non-inf $tmp
-  ln -s $ssSrc/$d/$f $tmp
+  ln -s $ssSrc/$c/$f.ss $tmp
 else
-  ln -s $ssSrc/$d/$f $tmp
+  ln -s $ssSrc/$c/$f.ss $tmp
   ln -s $cons/$grp/$grp.mod $tmp
 endif
 pushd $tmp > /dev/null
 if (-s $grp.non-inf) then
-  $PHASTBIN/phastCons $f $useGrp \
+  $PHASTBIN/phastCons $f.ss $useGrp \
     --rho $rho --expected-length $len --target-coverage $cov --quiet \
     --not-informative `cat $grp.non-inf` \
-    --seqname $c --idpref $c --most-conserved $c.bed --score > $c.pp
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
 else
-  $PHASTBIN/phastCons $f $useGrp \
+  $PHASTBIN/phastCons $f.ss $useGrp \
     --rho $rho --expected-length $len --target-coverage $cov --quiet \
-    --seqname $c --idpref $c --most-conserved $c.bed --score > $c.pp
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
 endif
 popd > /dev/null
-mkdir -p pp/$d bed/$d
+mkdir -p pp/$c bed/$c
 sleep 4
-touch pp/$d bed/$d
-rm -f pp/$d/$c.pp
-rm -f bed/$d/$c.bed
-mv $tmp/$c.pp pp/$d
-mv $tmp/$c.bed bed/$d
+touch pp/$c bed/$c
+rm -f pp/$c/$f.pp
+rm -f bed/$c/$f.bed
+mv $tmp/$f.pp pp/$c
+mv $tmp/$f.bed bed/$c
 rm -fr $tmp
-rmdir --ignore-fail-on-non-empty $cons/tmp/$d:h
 '_EOF_'
     # << happy emacs
     chmod +x doPhast.csh
@@ -1409,14 +1281,14 @@ rmdir --ignore-fail-on-non-empty $cons/tmp/$d:h
     #	root1 == chrom name, file1 == ss file name without .ss suffix
     cat << '_EOF_' > template
 #LOOP
-../run.cons/doPhast.csh $(root1) $(dir1) $(file1) 45 0.3 0.3 {check out line+ pp/$(dir1)/$(root1).pp}
+../run.cons/doPhast.csh $(root1) $(file1) 45 0.3 0.3 {check out line+ pp/$(root1)/$(file1).pp}
 #ENDLOOP
 '_EOF_'
     # << happy emacs
 
-    find ../SS/result -type f | sed -e "s#../SS/result/##" > ss.list
+    ls -1S ../ss/chr*/chr* | sed -e "s/.ss$//" > ss.list
     wc -l ss.list
-    #	645 ss.list
+    #	644 ss.list
 
     # Create parasol batch and run it
     # run for all species
@@ -1428,112 +1300,137 @@ rmdir --ignore-fail-on-non-empty $cons/tmp/$d:h
 
     gensub2 ../run.cons/ss.list single ../run.cons/template jobList
     # beware overwhelming the cluster with these fast running high I/O jobs
-    para create jobList
+    para -ram=32g create jobList
     para try ... check ...
-    para push
-# Completed: 645 of 645 jobs
-# CPU time in finished jobs:       8465s     141.08m     2.35h    0.10d  0.000 y
-# IO & Wait Time:                  7734s     128.90m     2.15h    0.09d  0.000 y
-# Average job time:                  25s       0.42m     0.01h    0.00d
-# Longest finished job:              54s       0.90m     0.01h    0.00d
-# Submission to last job:           371s       6.18m     0.10h    0.00d
+    para -maxJob=16 push
+# Completed: 644 of 644 jobs
+# CPU time in finished jobs:     100849s    1680.82m    28.01h    1.17d  0.003 y
+# IO & Wait Time:                  4332s      72.19m     1.20h    0.05d  0.000 y
+# Average job time:                 163s       2.72m     0.05h    0.00d
+# Longest finished job:             399s       6.65m     0.11h    0.00d
+# Submission to last job:          4087s      68.12m     1.14h    0.05d
 
     # create Most Conserved track
     cd /hive/data/genomes/hg38/bed/multiz100way/cons/all
-    cut -f1 ../../../../chrom.sizes | while read C
+    time cut -f1 ../../../../chrom.sizes | while read C
 do
-    ls -d bed/?/${C} 2> /dev/null | while read D
+    echo $C 1>&2
+    ls -d bed/${C} 2> /dev/null | while read D
     do
-        echo ${D}/${C}*.bed 1>&2
         cat ${D}/${C}*.bed
     done | sort -k1,1 -k2,2n \
     | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "'${C}'", $2, $3, $5, $5;}'
 done > tmpMostConserved.bed
+    # real    1m23.557s
 
-    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
-    # -rw-rw-r--  1 57441315 Dec 23 14:07 tmpMostConserved.bed
-    # -rw-rw-r--  1 59023909 Dec 23 14:08 mostConserved.bed
+    # -rw-rw-r--  1 357720691 May  8 08:14 tmpMostConserved.bed
 
-    wc -l *.bed
-    # 1680103 mostConserved.bed
-    # 1680103 tmpMostConserved.bed
+    time /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed \
+        > mostConserved.bed
+    # real    1m33.908s
+
+    # -rw-rw-r--   1 366712427 May  8 08:24 mostConserved.bed
 
     # load into database
     ssh hgwdev
     cd /hive/data/genomes/hg38/bed/multiz100way/cons/all
     time hgLoadBed hg38 phastConsElements100way mostConserved.bed
-    # Read 1680103 elements of size 5 from mostConserved.bed
-    # real    0m14.377s
+    #  Read 10350729 elements of size 5 from mostConserved.bed
+    #  real    1m56.076s
 
-    # on human we often try for 5% overall cov, and 70% CDS cov
-    # most bets are off here for that goal, these alignments are too few
-    #	and too far between
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
-    featureBits hg38 -enrichment knownGene:cds phastConsElements100way
-    # knownGene:cds 1.266%, phastConsElements100way 6.156%, both 0.838%,
-    # cover 66.100%, enrich 10.75x
+    time featureBits hg38 -enrichment knownGene:cds phastConsElements100way
+# knownGene:cds 1.260%, phastConsElements100way 5.319%, both 0.826%, cover 65.55%, enrich 12.33x
+
+# real    1m12.540s
+
+    # Try for 5% overall cov, and 70% CDS cov
+    time featureBits hg38 -enrichment refGene:cds phastConsElements100way
+# refGene:cds 1.210%, phastConsElements100way 5.319%, both 0.817%, cover 67.50%, enrich 12.69x
+
+# real    1m10.541s
 
     # Create merged posterier probability file and wiggle track data files
     cd /hive/data/genomes/hg38/bed/multiz100way/cons/all
     mkdir downloads
 
-    # the third sed fixes the chrom names, removing the partition extensions
-    time (find ./pp -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+    time for D in `ls -d pp/chr* | sed -e 's#pp/##'`
+do
+    echo "working: $D" 1>&2
+    find ./pp/${D} -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
-	| sed -e 's/\.[0-9][0-9]*-[0-9][0-9]* start/ start/' \
-        | gzip -c > downloads/phastCons100way.wigFix.gz)
-    #   real    38m23.984s
-
-    # check integrity of data with wigToBigWig
-    time (zcat downloads/phastCons100way.wigFix.gz \
-	| wigToBigWig -verbose=2 stdin /hive/data/genomes/hg38/chrom.sizes \
-	    phastCons100way.bw) > bigWig.log 2>&1
-    egrep "real|VmPeak" bigWig.log
-    # pid=59642: VmPeak:    33786100 kB
-    # real    42m15.153s
-
-    bigWigInfo phastCons100way.bw | sed -e 's/^/# /;'
-# version: 4
-# isCompressed: yes
-# isSwapped: 0
-# primaryDataSize: 5,647,197,760
-# primaryIndexSize: 93,364,292
-# zoomLevels: 10
-# chromCount: 357
-# basesCovered: 2,947,870,831
-# mean: 0.156499
-# min: 0.000000
-# max: 1.000000
-# std: 0.255654
+        | gzip -c > downloads/${D}.phastCons100way.wigFix.gz
+done
+    # real    25m35.972s
 
     #	encode those files into wiggle data
-    time (zcat downloads/phastCons100way.wigFix.gz \
+    time (zcat downloads/*.wigFix.gz \
 	| wigEncode stdin phastCons100way.wig phastCons100way.wib)
     #   Converted stdin, upper limit 1.00, lower limit 0.00
-    #   real    15m29.410s
+    #   real    13m36.113s
 
     du -hsc *.wi?
     # 2.8G    phastCons100way.wib
-    # 285M    phastCons100way.wig
+    # 283M    phastCons100way.wig
+
+    #	encode into a bigWig file:
+    #	(warning wigToBigWig process may be too large for memory limits
+    #	in bash, to avoid the 32 Gb memory limit, set 180 Gb here:
+sizeG=188743680
+export sizeG
+ulimit -d $sizeG
+ulimit -v $sizeG
+    time (zcat downloads/*.wigFix.gz \
+        | wigToBigWig stdin ../../../../chrom.sizes phastCons100way.bw)
+    #   real    39m3.769s
+    # -rw-rw-r--   1 5886377734 May  8 09:57 phastCons100way.bw
+
+    bigWigInfo phastCons100way.bw
+version: 4
+isCompressed: yes
+isSwapped: 0
+primaryDataSize: 4,001,253,148
+primaryIndexSize: 93,019,356
+zoomLevels: 10
+chromCount: 356
+basesCovered: 2,944,992,024
+mean: 0.098095
+min: 0.000000
+max: 1.000000
+std: 0.233810
+
+    #	if you wanted to use the bigWig file, loading bigWig table:
+    #   but we don't use the bigWig file
+    mkdir /gbdb/hg38/bbi
+    ln -s `pwd`/phastCons100way.bw /gbdb/hg38/bbi
+    hgsql hg38 -e 'drop table if exists phastCons100way; \
+            create table phastCons100way (fileName varchar(255) not null); \
+            insert into phastCons100way values
+	("/gbdb/hg38/bbi/phastCons100way.bw");'
 
     # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /hive/data/genomes/hg38/bed/multiz100way/cons/all
     ln -s `pwd`/phastCons100way.wib /gbdb/hg38/multiz100way/phastCons100way.wib
-    time hgLoadWiggle -pathPrefix=/gbdb/hg38/multiz100way \
-	hg38 phastCons100way phastCons100way.wig
-    #   real    0m33.597s
+    time hgLoadWiggle -pathPrefix=/gbdb/hg38/multiz100way hg38 \
+	phastCons100way phastCons100way.wig
+    #   real    0m31.883s
 
-    # use to set trackDb.ra entries for wiggle min and max
-    # and verify table is loaded correctly
 
-    wigTableStats.sh hg38 phastCons100way
-# db.table          min max mean       count sumData      stdDev  viewLimits
-hg38.phastCons100way 0 1 0.156499 2947870831 4.6134e+08 0.255654 viewLimits=0:1
+    time wigTableStats.sh hg38 phastCons100way
+    # real    0m13.628s
+# db.table            min max   mean       count     sumData
+hg38.phastCons100way    0 1 0.0980951 2944992024 2.88889e+08
+#       stdDev viewLimits
+#      0.23381 viewLimits=0:1
 
     #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /hive/data/genomes/hg38/bed/multiz100way/cons/all
     time hgWiggle -doHistogram -db=hg38 \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    phastCons100way > histogram.data 2>&1
-    #	real    2m39.561s
+    #	real    2m38.952s
 
     #	create plot of histogram:
 
@@ -1543,7 +1440,7 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Human hg38 Histogram phastCons100way track"
+set title " Human Hg38 Histogram phastCons100way track"
 set xlabel " phastCons100way score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
@@ -1555,11 +1452,82 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
 '_EOF_'
     #	<< happy emacs
+    # complains about font, but makes the png image:
+# Could not find/open font when opening font "arial", using internal non-scalable font
 
     display histo.png &
 
 #########################################################################
-# phyloP for 100-way (TBD - 2014-06-04 - Hiram)
+# phyloP for 100-way (DONE - 2015-05-08 - Hiram)
+#
+# all vertebrates
+#
+    # split SS files into 1M chunks, this business needs smaller files
+    #   to complete
+
+    ssh ku
+    mkdir /hive/data/genomes/hg38/bed/multiz100way/consPhyloP
+    cd /hive/data/genomes/hg38/bed/multiz100way/consPhyloP
+    mkdir ss run.split
+    cd run.split
+
+    cat << '_EOF_' > doSplit.csh
+#!/bin/csh -ef
+set c = $1
+set MAF = /hive/data/genomes/hg38/bed/multiz100way/anno/result/$c.maf
+set WINDOWS = /hive/data/genomes/hg38/bed/multiz100way/consPhyloP/ss/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $2 ) then
+    exit 0
+endif
+if ( -s $2.running ) then
+    exit 0
+endif
+
+date >> $2.running
+
+rm -fr $WINDOWS
+mkdir -p $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 1000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+date >> $2
+rm -f $2.running
+'_EOF_'
+# << happy emacs
+    chmod +x doSplit.csh
+
+    #	do the easy ones first to see some immediate results
+    ls -1S -r ../../anno/result | sed -e "s/.maf//;" > maf.list
+
+    # this needs a {check out line+ $(root1.done)} test for verification:
+    cat << '_EOF_' > template
+#LOOP
+./doSplit.csh $(root1) $(root1).done
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    gensub2 maf.list single template jobList
+    # all can complete successfully at the 64Gb memory limit
+    para -ram=64g create jobList
+    para try ... check ... push ... etc...
+
+# largest one (chr2) becomes this large near its end:
+#   PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND 
+# 31927 hiram     20   0 55.3g  54g  788 R 99.5 21.7 317:45.12 msa_split          
+# Completed: 358 of 358 jobs
+# CPU time in finished jobs:     125744s    2095.74m    34.93h    1.46d  0.004 y
+# IO & Wait Time:                  6413s     106.88m     1.78h    0.07d  0.000 y
+# Average job time:                 369s       6.15m     0.10h    0.00d
+# Longest finished job:           20020s     333.67m     5.56h    0.23d
+# Submission to last job:         20147s     335.78m     5.60h    0.23d
+
+
     # run phyloP with score=LRT
     ssh ku
     mkdir /cluster/data/hg38/bed/multiz100way/consPhyloP
@@ -1569,49 +1537,48 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     cd run.phyloP
     # Adjust model file base composition background and rate matrix to be
     # representative of the chromosomes in play
-    grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
-    #	0.566
+    grep BACKGROUND ../../4d/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.508
     /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
-	../../cons/all/all.mod 0.566 > all.mod
+	../../4d/all.mod 0.508 > all.mod
     # verify, the BACKGROUND should now be paired up:
     grep BACK all.mod
-    #   BACKGROUND: 0.2100000 0.283000 0.283000 0.2100000 
+    #   BACKGROUND: 0.246000 0.254000 0.254000 0.246000 
 
     cat << '_EOF_' > doPhyloP.csh
 #!/bin/csh -fe
 set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
 set f = $1
-set d = $f:h
-set file1 = $f:t
+set ssFile = $1:t
 set out = $2
-set cName = $f:t:r
+set cName = $f:h
+set n = $f:r:e
 set grp = $cwd:t
 set cons = /hive/data/genomes/hg38/bed/multiz100way/consPhyloP
 set tmp = $cons/tmp/$grp/$f
 /bin/rm -fr $tmp
 /bin/mkdir -p $tmp
-set ssSrc = "/hive/data/genomes/hg38/bed/multiz100way/cons/SS/result/$f"
+set ssSrc = "$cons/ss/$cName/$ssFile"
 set useGrp = "$grp.mod"
 /bin/ln -s $cons/run.phyloP/$grp.mod $tmp
 pushd $tmp > /dev/null
+echo source: $ssSrc.ss
 $PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \
-    -i SS $useGrp $ssSrc.ss > $file1.wigFix
+    -i SS $useGrp $ssSrc.ss > $ssFile.wigFix
 popd > /dev/null
 /bin/mkdir -p $out:h
 sleep 4
 /bin/touch $out:h
-/bin/mv $tmp/$file1.wigFix $out
+/bin/mv $tmp/$ssFile.wigFix $out
 /bin/rm -fr $tmp
-/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$d
-/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$d:h
 /bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp
 /bin/rmdir --ignore-fail-on-non-empty $cons/tmp
 '_EOF_'
     # << happy emacs
+    chmod +x doPhyloP.csh
 
     # Create list of chunks
-    find ../../cons/SS/result -type f | grep ".ss$" \
-	| sed -e "s/.ss$//; s#^../../cons/SS/result/##" > ss.list
+    find ../ss -type f | sed -e "s/.ss$//; s#../ss/##;" > ss.list
     # make sure the list looks good
     wc -l ss.list
     #	645 ss.list
@@ -1634,95 +1601,102 @@ sleep 4
 
     gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
     # beware overloading the cluster with these quick and high I/O jobs
-    para create jobList
-    para try ... check ... push ... etc ...
+    para -ram=32g create jobList
+    para try ... check ...
+    para -maxJob=16 push
     para time > run.time
-# Completed: 645 of 645 jobs
-# CPU time in finished jobs:      97062s    16100.70m    26.96h    1.12d  0.003 y
-# IO & Wait Time:                  8577s     142.95m     2.38h    0.10d  0.000 y
-# Average job time:                 164s       2.73m     0.05h    0.00d
-# Longest finished job:             598s       9.97m     0.100h    0.01d
-# Submission to last job:           677s      11.28m     0.19h    0.01d
+# Completed: 3310 of 3310 jobs
+# CPU time in finished jobs:    4871081s   81184.68m  1353.08h   56.38d  0.154 y
+# IO & Wait Time:                 24135s     402.25m     6.70h    0.28d  0.001 y
+# Average job time:                1479s      24.65m     0.41h    0.02d
+# Longest finished job:            2691s      44.85m     0.75h    0.03d
+# Submission to last job:         50957s     849.28m    14.15h    0.59d
 
     mkdir downloads
-
-    time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+    time for D in `ls -d wigFix/chr* | sed -e 's#wigFix/##'`
+do
+    echo "working: $D" 1>&2
+    find ./wigFix/${D} -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
-	| gzip -c > downloads/phyloP100way.wigFix.gz)
-    #   real    38m46.991s
+        | gzip -c > downloads/${D}.phyloP100way.wigFix.gz
+done
+    #   real    55m10.637s
+    du -hsc downloads
+    #   5.3G    downloads
 
     # check integrity of data with wigToBigWig
-    time (zcat downloads/phyloP100way.wigFix.gz \
+    time (zcat downloads/*.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/hg38/chrom.sizes \
 	phyloP100way.bw) > bigWig.log 2>&1
     egrep "real|VmPeak" bigWig.log
-    # pid=63886: VmPeak:    33786100 kB
-    #  real    43m52.304s
+    # pid=66292: VmPeak:    33751268 kB
+    #  real    43m40.194s
 
 
     bigWigInfo phyloP100way.bw  | sed -e 's/^/# /;'
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 4,882,424,474
-# primaryIndexSize: 93,364,292
+# primaryDataSize: 7,631,142,234
+# primaryIndexSize: 93,060,056
 # zoomLevels: 10
-# chromCount: 357
-# basesCovered: 2,947,870,831
-# mean: 0.097597
-# min: -13.925000
-# max: 0.752000
-# std: 0.614072
+# chromCount: 356
+# basesCovered: 2,944,991,967
+# mean: 0.093059
+# min: -20.000000
+# max: 10.003000
+# std: 1.036944
 
     #	encode those files into wiggle data
-    time (zcat downloads/phyloP100way.wigFix.gz \
+    time (zcat downloads/*.wigFix.gz \
 	| wigEncode stdin phyloP100way.wig phyloP100way.wib)
+    # Converted stdin, upper limit 10.00, lower limit -20.00
+    # real    16m50.606s
 
     du -hsc *.wi?
-    # 2.8G    phyloP100way.wib
-    # 290M    phyloP100way.wig
-    # 3.1G    total
+    #  2.8G    phyloP100way.wib
+    #  293M    phyloP100way.wig
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phyloP100way.wib /gbdb/hg38/multiz100way/phyloP100way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/hg38/multiz100way hg38 \
 	phyloP100way phyloP100way.wig
-    # real    0m32.304s
-
+    # real    0m32.623s
 
     # use to set trackDb.ra entries for wiggle min and max
     # and verify table is loaded correctly
 
     wigTableStats.sh hg38 phyloP100way
 # db.table      min max mean count sumData
-# hg38.phyloP100way        -13.925 0.752 0.0975966 2947870831 2.87702e+08
+# hg38.phyloP100way -20 10.003 0.0930586 2944991967 2.74057e+08
 #       stdDev viewLimits
-#      0.614072 viewLimits=-2.97276:0.752
+#    1.03694 viewLimits=-5.09166:5.27778
 
-    #	that range is: 12.925+0.752 = 13.677 for hBinSize=0.013677
+    #	that range is: 20+10.003 = 30.003 for hBinSize=0.030003
 
     #  Create histogram to get an overview of all the data
     time hgWiggle -doHistogram \
-	-hBinSize=0.013677 -hBinCount=1000 -hMinVal=-13.925 -verbose=2 \
+	-hBinSize=0.030003 -hBinCount=1000 -hMinVal=-20 -verbose=2 \
 	    -db=hg38 phyloP100way > histogram.data 2>&1
-    #   real    2m13.673s
+    #   real    2m42.342s
 
     # find out the range for the 2:5 graph
     grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin \
       | sed -e 's/^/# /;'
 # Q1 0.000000
-# median 0.000004
-# Q3 0.000247
-# average 0.001219
+# median 0.000023
+# Q3 0.000186
+# average 0.001145
 # min 0.000000
-# max 0.034094
-# count 820
-# total 0.999982
-# standard deviation 0.003857
+# max 0.035821
+# count 873
+# total 0.999972
+# standard deviation 0.003928
 
     #	create plot of histogram:
     cat << '_EOF_' | gnuplot > histo.png
-set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff font \
+"/usr/share/fonts/default/Type1/n022004l.pfb"
 set size 1.4, 0.8
 set key left box
 set grid noxtics
@@ -1733,13 +1707,14 @@ set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
 set y2range [0:1]
 set y2tics
-set xrange [-4:1]
-set yrange [0:0.02]
+set xrange [-3:3]
+set yrange [0:0.04]
 
 plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
 '_EOF_'
     #	<< happy emacs
+set xrange [-4:1]
 
     display histo.png &
 
