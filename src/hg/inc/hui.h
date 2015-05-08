@@ -116,6 +116,7 @@ char *hCgiRoot();
 #define MAF_FRAMING_VAR   "mafFrame"
 #define MAF_DOT_VAR       "mafDot"
 #define MAF_CHAIN_VAR     "mafChain"
+#define MAF_SHOW_SNP      "mafShowSnp"
 
 /* display of bases for tracks that are type psl and have sequence e.g. ESTs */
 #define PSL_SEQUENCE_BASES	"pslSequenceBases"
