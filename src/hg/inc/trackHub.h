@@ -44,6 +44,8 @@ struct trackHub
 
     char *descriptionUrl;  /* URL to description file */
     char *email;           /* email address of contact person */
+    char *version;  /* version compliance of hub ("V1.0", etc.) */
+    char *level;    /* support level of hub ("core", "full") */
     };
 
 struct trackHubGenome
@@ -62,6 +64,29 @@ struct trackHubGenome
     struct trackHub *trackHub; /* associated track hub */
     unsigned orderKey;   /* the orderKey for changing the order from the order in the file */
     };
+
+struct trackHubCheckOptions
+/* How to check track hub */
+    {
+    char *version;              /* hub spec version to check */
+    boolean strict;             /* check hub is valid to 'core' level for version */
+    struct hash *extra;         /* additional trackDb settings to accept */
+    boolean checkFiles;         /* check remote files exist and are correct type */
+    };
+
+struct trackHubSetting
+/* Setting name and support level, from trackDbHub.html (the spec) */
+    {
+    struct trackHubSetting *next;
+    char *name;                 /* setting name */
+    char *level;                /* support level (core, full, new, deprecated) */
+    };
+
+struct trackHubSetting *trackHubSettingsForVersion(char *version, char *specUrl);
+/* Return list of settings with support level */
+
+char *trackHubVersionDefault();
+/* Return current hub version */
 
 void trackHubClose(struct trackHub **pHub);
 /* Close up and free resources from hub. */
@@ -103,8 +128,7 @@ void trackHubGenomeFree(struct trackHubGenome **pGenome);
 void trackHubGenomeFreeList(struct trackHub *hub);
 /* Free a list of dynamically allocated trackHubGenome's. */
 
-int trackHubCheck(char *hubUrl, struct dyString *errors, 
-    boolean checkTracks, FILE *searchFp);
+int trackHubCheck(char *hubUrl, struct trackHubCheckOptions *options, struct dyString *errors);
 /* trackHubCheck - Check a track data hub for integrity. Put errors in dyString.
  *      if checkTracks is TRUE, individual tracks are checked
  *      if searchFp is non-null, then put search terms in there
