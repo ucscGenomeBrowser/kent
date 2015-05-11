@@ -618,7 +618,6 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
     gp = genePredLoad(row + hasBin);
-    curAlignId = cloneString(row[11]);
     }
 sqlFreeResult(&sr);
 if (gp == NULL)
