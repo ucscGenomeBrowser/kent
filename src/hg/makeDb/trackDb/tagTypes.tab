@@ -222,6 +222,7 @@ macaqueDb bed
 mafDot wigMaf
 mafDotDefault wigMaf
 mafFile customTracks
+mafShowSnp wigMaf
 mafTrack bed
 mapDispatcher expRatio
 matrix netAlign bed chain psl
