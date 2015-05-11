@@ -26,8 +26,8 @@ priority 1
         subGroups view=align clade=vert
         noInherit on
         irows on
-#        summary multiz100waySummary
-#        frames multiz100wayFrames
+        summary multiz100waySummary
+        frames multiz100wayFrames
         group compGeno
         color 0, 10, 100
         altColor 0,90,10
@@ -56,7 +56,7 @@ priority 1
     viewLimits -20.0:9.869
     viewLimitsMax -20:0.869
 
-        track phyloP100wayAll
+        track phyloP100way
         subTrack cons100wayViewphyloP on
         subGroups view=phyloP clade=all
         shortLabel 100 Vert. Cons
