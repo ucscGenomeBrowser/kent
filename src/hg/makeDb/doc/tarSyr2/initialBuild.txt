@@ -439,3 +439,23 @@ searchPriority 8
     #   sizes will set properly
 
 #########################################################################
+# UCSC to RefSeq name correspondence (DONE - 2015-04-28 - braney)
+
+    mkdir /hive/data/genomes/tarSyr2/bed/ucscToRefSeq
+    cd /hive/data/genomes/tarSyr2/bed/ucscToRefSeq
+
+    # columns 5 and 7 are the INSDC and RefSeq names
+
+    grep -v "^#" ../../genbank/GCA_000164805.2_Tarsius_syrichta-2.0.1_assembly_report.txt | awk -F'\t' '{printf "%s\t%s\n", $5,$7}'  | sort > insdc.refSeq.tab
+
+    hgsql -N -e 'select name,chrom,chromStart,chromEnd from ucscToINSDC;' tarSyr2 | sort > insdc.ucsc.tab
+
+    join insdc.ucsc.tab insdc.refSeq.tab | tr '[ ]' '[\t]' | cut -f2- > ucsc.refSeq.tab
+
+
+    export chrSize=`cut -f1 ucsc.refSeq.tab | awk '{print length($0)}' | sort -n | tail -1`
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab tarSyr2 ucscToRefSeq ./ucscToRefSeq.sql ucsc.refSeq.tab
+
+    checkTableCoords  tarSyr2 -table=ucscToRefSeq
+
