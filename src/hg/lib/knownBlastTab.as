@@ -1,4 +1,4 @@
-table hgBlastTab
+table knownBlastTab
 "Blast alignments to other proteins from this species."
     (
     string query;	"Name of sequence in this assembly (query)"
