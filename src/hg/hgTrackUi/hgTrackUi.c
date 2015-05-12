@@ -47,6 +47,10 @@
 #include "microarray.h"
 #include "trackVersion.h"
 
+#ifdef USE_HAL
+#include "halBlockViz.h"
+#endif
+
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
 
@@ -1744,6 +1748,14 @@ safef(varName, sizeof(varName), "%s.show.spliceVariants", tdb->track);
 option = cartUsualBoolean(cart, varName, TRUE);
 cgiMakeCheckBox(varName, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", "splice variants");
+char *isGencode = trackDbSetting(tdb, "isGencode");
+if (isGencode != NULL)
+    {
+    safef(varName, sizeof(varName), "%s.show.composite", tdb->track);
+    option = cartUsualBoolean(cart, varName, FALSE);
+    cgiMakeCheckBox(varName, option);
+    printf(" %s&nbsp;&nbsp;&nbsp;", "show composite set");
+    }
 printf("<BR>\n");
 }
 
@@ -2689,16 +2701,10 @@ void superTrackUi(struct trackDb *superTdb, struct trackDb *tdbList)
 {
 #define SUPERS_WITH_CHECKBOXES
 #ifdef SUPERS_WITH_CHECKBOXES
-#ifdef BUTTONS_BY_CSS
-    #define BUTTON_SUPER   "<span class='pmButton' onclick='superT.plusMinus(%s)'>%c</span>"
-    #define BUTTON_PLUS_SUPER()  printf(BUTTON_SUPER,"true", '+')
-    #define BUTTON_MINUS_SUPER() printf(BUTTON_SUPER,"false",'-')
-#else///ifndef BUTTONS_BY_CSS
-    #define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"superT.plusMinus(%s);\" " \
-                             "id='btn_%s' src='../images/%s'>"
-    #define    BUTTON_PLUS_SUPER()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
-    #define    BUTTON_MINUS_SUPER() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
-#endif///ndef BUTTONS_BY_CSS
+#define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"superT.plusMinus(%s);\" " \
+                         "id='btn_%s' src='../images/%s'>"
+#define    BUTTON_PLUS_SUPER()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
+#define    BUTTON_MINUS_SUPER() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
 jsIncludeFile("hui.js",NULL);
 #endif///def SUPERS_WITH_CHECKBOXES
 printf("\n<P><TABLE CELLPADDING=2>");
@@ -2775,6 +2781,43 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
 printf("</TABLE>");
 }
 
+#ifdef USE_HAL
+static void cfgHalSnake(struct trackDb *tdb, char *name)
+{
+boolean parentLevel = isNameAtParentLevel(tdb, name);
+if (parentLevel)
+    return;
+char *fileName = trackDbSetting(tdb, "bigDataUrl");
+char *errString;
+int handle = halOpenLOD(fileName, &errString);
+struct hal_species_t *speciesList, *sp;
+char *otherSpecies = trackDbSetting(tdb, "otherSpecies");
+extern char *database;
+
+speciesList = halGetPossibleCoalescenceLimits(handle, otherSpecies, 
+    trackHubSkipHubName(database), &errString);
+
+int count = 0;
+for(sp=speciesList; sp; sp = sp->next)
+    count++;
+
+char codeVarName[1024];
+safef(codeVarName, sizeof codeVarName, "%s.coalescent", tdb->track);
+char **ancestors;
+AllocArray(ancestors, count);
+count = 0;
+for(sp=speciesList; sp; sp = sp->next)
+    {
+    ancestors[count] = sp->name;
+    count++;
+    }
+char *coalescent = cartOptionalString(cart, codeVarName);
+printf("<B>Set Coalescent Ancestor to:</B>");
+cgiMakeDropListFull(codeVarName, ancestors, ancestors,
+    count, coalescent, NULL);
+}
+#endif
+
 void specificUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack *ct, boolean ajax)
 /* Draw track specific parts of UI. */
 {
@@ -2824,6 +2867,7 @@ else if (sameString(track, "recombRateMouse"))
 else if (sameString(track, "cghNci60"))
     cghNci60Ui(tdb);
 else if (sameString(track, "xenoRefGene")
+     ||  sameString(track, "ncbiGene")
      ||  sameString(track, "refGene"))
     refGeneUI(tdb);
 else if (startsWith("transMapAln", track))
@@ -2941,6 +2985,10 @@ else if (tdb->type != NULL)
     if (cType != cfgNone)
         {
         cfgByCfgType(cType,database, cart, tdb,tdb->track, NULL, boxed);
+#ifdef USE_HAL
+	if (cType == cfgSnake)
+	    cfgHalSnake(tdb, tdb->track);
+#endif
         }
     // NOTE: these cases that fall through the cracks should probably get folded into cfgByCfgType()
     else if (startsWithWord("expRatio", tdb->type))
@@ -3223,7 +3271,7 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
         printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
         if (trackDbSetting(tdb, "wgEncode"))
             {
-            printf("<A TARGET=_BLANK HREF='../ENCODE/index.html' TITLE='ENCODE Portal'>ENCODE</A>");
+            printf("<A TARGET=_BLANK HREF='../ENCODE/index.html' TITLE='ENCODE Portal'>ENCODE at UCSC</A>");
             printf("&nbsp;&nbsp;");
             makeDownloadsLink(database, tdb);
             }
@@ -3235,7 +3283,7 @@ if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb) && !ajax)
                "page'>Subtracks%s</A>", downArrow);
         printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>"
                "Description%s</A>", downArrow);
-        if (trackDbSetting(tdb, "wgEncode"))
+        if (trackDbSetting(tdb, "wgEncode") && isEncode2(database))
             {
             printf("&nbsp;&nbsp;<A HREF='#TRACK_CREDITS' TITLE='Jump to ENCODE lab contacts for this data'>"
                "Contact%s</A>", downArrow);

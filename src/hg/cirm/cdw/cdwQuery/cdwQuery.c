@@ -10,7 +10,7 @@
 #include "intValTree.h"
 #include "tagStorm.h"
 
-char *clFormat = "ra";
+char *clOut = "ra";
 
 void usage()
 /* Explain usage and exit. */
@@ -20,13 +20,13 @@ errAbort(
   "usage:\n"
   "   cdwQuery 'sql-like query'\n"
   "options:\n"
-  "   -format=format where format is ra, tab, or tags\n"
+  "   -out=output format where format is ra, tab, or tags\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
-   {"format", OPTION_STRING},
+   {"out", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -56,9 +56,9 @@ int matchCount = 0;
 boolean doSelect = FALSE;
 
 void output(int depth, struct rqlStatement *rql, struct tagStorm *tags, struct tagStanza *stanza)
-/* Output stanza according to clFormat */
+/* Output stanza according to clOut */
 {
-char *format = clFormat;
+char *format = clOut;
 if (sameString(format, "ra"))
     {
     if (stanza->children == NULL)
@@ -133,8 +133,7 @@ void cdwQuery(char *rqlQuery)
 /* cdwQuery - Get list of tagged files.. */
 {
 /* Turn rqlQuery string into a parsed out rqlStatement. */
-struct lineFile *lf = lineFileOnString("query", TRUE, cloneString(rqlQuery));
-struct rqlStatement *rql = rqlStatementParse(lf);
+struct rqlStatement *rql = rqlStatementParseString(rqlQuery);
 
 /* Load tags from database */
 struct sqlConnection *conn = cdwConnect();
@@ -143,8 +142,21 @@ struct tagStorm *tags = cdwTagStorm(conn);
 /* Get list of all tag types in tree and use it to expand wildcards in the query
  * field list. */
 struct slName *allFieldList = tagStormFieldList(tags);
+slSort(&allFieldList, slNameCmp);
 rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
-slSort(&rql->fieldList, slNameCmp);
+
+/* Output header row in tab case */
+if (sameString(clOut, "tab"))
+    {
+    char before = '#';
+    struct slName *field;
+    for (field = rql->fieldList; field != NULL; field = field->next)
+        {
+	printf("%c%s", before, field->name);
+	before = '\t';
+	}
+    printf("\n");
+    }
 
 /* Traverse tag tree outputting when rql statement matches in select case, just
  * updateing count in count case. */
@@ -162,7 +174,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-clFormat = optionVal("format", clFormat);
+clOut = optionVal("out", clOut);
 if (argc != 2)
     usage();
 cdwQuery(argv[1]);

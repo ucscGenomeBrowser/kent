@@ -1,4 +1,32 @@
+track chainNetMacFas5 override
+matrix 16 100,-174,-42,-145,-174,93,-179,-42,-42,-179,93,-174,-145,-42,-174,100
+chainMinScore 5000
+chainLinearGap medium
+priority 205.30
+
+track chainNetPonAbe2 override
+chainMinScore 3000
+chainLinearGap medium
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+priority 220.3
+
+track chainNetGorGor3 override
+chainMinScore 3000
+chainLinearGap medium
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+priority 230.3
+
+track chainNetPanTro4 override
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+chainMinScore 5000
+chainLinearGap medium
+priority 240.3
+
 track chainNetHg38 override
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+chainMinScore 5000
+chainLinearGap medium
+priority 250.3
 visibility pack
 shortLabel $o_db Chain/Net
 
@@ -9,7 +37,11 @@ shortLabel $o_db Chain/Net
     shortLabel $o_db Net
 
 track chainNetHg19 override
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+chainMinScore 5000
+chainLinearGap medium
 visibility pack
+priority 250.3
 shortLabel $o_db Chain/Net
 
     track chainHg19 override
@@ -18,19 +50,47 @@ shortLabel $o_db Chain/Net
     track netHg19 override
     shortLabel $o_db Net
 
-track chainNetMm9 override
-shortLabel $o_db Chain/Net
+track chainNetCalJac3 override
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+chainMinScore 5000
+chainLinearGap medium
+priority 260.3
+
+track chainNetTarSyr2 override
+matrix 16 100,-172,-26,-122,-172,96,-172,-26,-26,-172,96,-172,-122,-26,-172,100
+chainMinScore 3000
+chainLinearGap medium
+priority 270.3
 
 track chainNetRn4 override
-shortLabel $o_db Chain/Net
-
-track chainNetGorGor3 override
-priority 230.3
-chainMinScore 3000
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-
-track chainNetMonDom5 override
-priority 540.3
 chainMinScore 3000
 chainLinearGap medium
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+shortLabel $o_db Chain/Net
+priority 340.3
+
+track chainNetRn5 override
+chainMinScore 3000
+chainLinearGap medium
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+priority 340.3
+
+track chainNetMm9 override
+chainMinScore 3000
+chainLinearGap medium
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+shortLabel $o_db Chain/Net
+priority 350.3
+
+track chainNetMm10 override
+visibility dense
+chainMinScore 3000
+chainLinearGap medium
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+priority 350.3
+
+track chainNetMonDom5 override
+chainMinScore 3000
+chainLinearGap medium
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+priority 540.3

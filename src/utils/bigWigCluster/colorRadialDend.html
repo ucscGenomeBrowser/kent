@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title> Radial Dendrogram</title>
+<style>
+
+.node circle {
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.node {
+  font: 10px sans-serif;
+}
+
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}
+
+.selectedLink{
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 3.0px;
+}
+
+.selected{
+  fill: red;
+}
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+var color = d3.scale.category20();
+
+var radius = 1080 / 2;
+
+var cluster = d3.layout.cluster()
+    .size([360, radius - 120])
+;
+
+var diagonal = d3.svg.diagonal.radial()
+    .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", radius * 2)
+    .attr("height", radius * 2)
+  .append("g")
+    .attr("transform", "translate(" + radius + "," + radius + ")");
+
+d3.json("humanOutput.json", function(error, root) {
+  var nodes = cluster.nodes(root);
+
+  var link = svg.selectAll("path.link")
+      .data(cluster.links(nodes))
+    .enter().append("path")
+      .attr("class", "link")
+      .on("click", function() {
+              d3.select(".selectedLink").classed("selectedLink", false);
+              d3.select(this).classed("selectedLink",true);
+      })
+      .attr("d", diagonal);
+  var node = svg.selectAll("g.node")
+      .data(nodes)
+      .enter().append("g")
+      .attr("class", "node")
+//      .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")";  })
+      .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; }) 
+      .on("click", function() {
+              d3.select(".selected").classed("selected", false);
+              d3.select(this).classed("selected",true);
+      })
+      .on("mouseover", function(d) {
+          var g = d3.select(this); // The node
+      // The class is used to remove the additional text later
+          var info = g.append('text')
+              .classed('info', true)
+             .attr('x', 20)
+             .attr('y', 10) 
+             .attr("transform", function(d) { return "rotate("+ (90 - d.x) +")";  })
+             .text(5* d.distance);
+      })
+      .on("mouseout", function() {
+      // Remove the info text on mouse out.
+           d3.select(this).select('text.info').remove();
+         });
+
+    node.append("circle")
+   .attr("r", function (d) { 
+      if (d.name != " ")
+      {
+        return 5;
+      }
+      })
+      .style("fill", function (d) { 
+        if (d.name != " ") {
+          return d3.rgb(d.colorGroup);
+        }
+        });
+  
+    node.append("circle")
+      .attr("r", function(d) { 
+          return d.distance;})
+       
+      .on("click", function() {
+              d3.select(".selected").classed("selected", false);
+              d3.select(this).classed("selected",true);
+      })
+      
+      .style("fill",  "white");// function (d) { return d3.rgb(d.colorGroup);});
+
+    node.append("text")
+      .attr("dy", ".55em")
+      .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
+      .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
+      .text(function(d) { return d.name; });
+});
+
+d3.select(self.frameElement).style("height", radius * 2 + "px");
+
+</script>
+

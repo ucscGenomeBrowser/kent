@@ -69,7 +69,7 @@ void webMain(struct liftOverChain *chain, boolean multiple, boolean keepSettings
 /* set up page for entering data */
 {
 struct dbDb *dbList;
-char *fromOrg = hArchiveOrganism(chain->fromDb), *toOrg = hArchiveOrganism(chain->toDb);
+char *fromOrg = hOrganism(chain->fromDb), *toOrg = hOrganism(chain->toDb);
 char *chainString = chainStringVal(chain);
 cgiParagraph(
     "This tool converts genome coordinates and genome annotation files "
@@ -379,7 +379,7 @@ struct liftOverChain *defaultChoices(struct liftOverChain *chainList,
 char *fromOrg, *fromDb, *toOrg, *toDb, *cartOrg;
 struct liftOverChain *choice = NULL;  
 struct hash *dbRank = hGetDatabaseRank();
-struct hash *dbDbHash = hDbDbAndArchiveHash();
+struct hash *dbDbHash = hDbDbHash();
 double bestScore = -1;
 struct liftOverChain *this = NULL;
 
@@ -388,7 +388,7 @@ fromOrg = cartCgiUsualString(cart, HGLFT_FROMORG_VAR, "0");
 fromDb = cartCgiUsualString(cart, HGLFT_FROMDB_VAR, "0");
 toOrg = cartCgiUsualString(cart, HGLFT_TOORG_VAR, "0");
 toDb = cartCgiUsualString(cart, HGLFT_TODB_VAR, "0");
-cartOrg = hArchiveOrganism(cartDb);
+cartOrg = hOrganism(cartDb);
 
 if (sameWord(fromOrg,"0"))
     fromOrg = NULL;

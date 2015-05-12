@@ -1,0 +1,12 @@
+/*
+ * jQuery Bifröst v1.0.1
+ * http://matiasgagliano.github.com/bifrost/
+ *
+ * Copyright 2014, Matías Gagliano.
+ * Dual licensed under the MIT or GPLv3 licenses.
+ * http://opensource.org/licenses/MIT
+ * http://opensource.org/licenses/GPL-3.0
+ *
+ */
+
+(function(){"use strict";var t,e,n,r;t=jQuery;n=window.console||{log:function(){}};r=0;e=function(){function e(t,e,n){this.options=t;this.originalOptions=e;this.jqXHR=n}e.prototype.send=function(e,i){var o,a,f,s,p,u,c,l,d,m,h,y,v,b,g,T,x,j,X,O,P;y=this.options;d={"X-Requested-With":"IFrame"};if(y.accepts!=null){d["X-HTTP-Accept"]=y.accepts}if((X=y.type)==="DELETE"||X==="PUT"||X==="PATCH"){d["_method"]=y.type;y.type="POST"}r++;l="iframe-transport-"+r;c=this.iframe=t("<iframe>").css("display","none");c.attr({name:l,src:"javascript:false;"});c.appendTo(document.body);c.one("load",function(){var e,r;try{r=c.contents()||t();i(200,"success",{iframe:r})}catch(o){e=o;n.log(e);i(403,"error",{iframe:""})}p.remove();c.detach();return c=null});p=this.form=t("<form>").css("display","none");p.prop({target:l,action:y.url,method:y.type});p.appendTo(document.body);f=this.originalOptions.data;if(t.isArray(f)){h={};for(g=0,x=f.length;g<x;g++){v=f[g];O=[v.name,v.value],m=O[0],b=O[1];if(h[m]===void 0){h[m]=b}else if(t.isArray(h[m])){h[m].push(b)}else{h[m]=[h[m],b]}}f=h}f=t.extend({},d,f);for(m in f){b=f[m];p.append(t("<input>").attr({type:"hidden",name:m,value:b}))}s=t(y.fileInputs);a=t();if(y.type==="POST"&&s.length){p.prop({enctype:"multipart/form-data",encoding:"multipart/form-data"});a=s.clone().prop("disabled",true);s.after(function(t){return a[t]});p.append(s)}p.submit();P=[];for(u=T=0,j=a.length;T<j;u=++T){o=a[u];P.push(t(o).replaceWith(s[u]))}return P};e.prototype.abort=function(){if(this.form){this.form.remove()}if(this.iframe){return this.iframe.off("load")}};return e}();t.ajaxTransport("iframe",function(t,n,r){if(t.async){return new e(t,n,r)}});t.ajaxSetup({converters:{"iframe text":function(t){return t.find("body").text()},"iframe json":function(e){return t.parseJSON(e.find("body").text())},"iframe html":function(t){return t.find("body").html()},"iframe script":function(e){return t.globalEval(e.find("body").text())},"iframe xml":function(e){var n,r;n=e[0];if(t.isXMLDoc(n)){return n}return t.parseXML(((r=n.XMLDocument)!=null?r.xml:void 0)||e.find("body").html())}}})}).call(this);

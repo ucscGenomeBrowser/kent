@@ -1278,6 +1278,7 @@ itemRgb on
 type bed 9 +
 noScoreFilter .
 exonArrows off
+exonNumbers off
 urlLabel DGV Browser and Report:
 url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
 coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
@@ -1294,11 +1295,13 @@ itemRgb on
 type bed 9 +
 noScoreFilter .
 exonArrows off
+exonNumbers off
 urlLabel DGV Browser and Report:
 url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
 coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
-dataVersion July 23, 2013
+dataVersion October 16, 2014
 release beta,public
+
 
     track dgvMerged
     parent dgvPlus
@@ -3933,8 +3936,8 @@ pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track iscaComposite
 compositeTrack on
-shortLabel ISCA
-longLabel International Standards for Cytogenomic Arrays Consortium
+shortLabel ClinGen
+longLabel Clinical Genome Reseearch
 group phenDis
 visibility hide
 subGroup1 view Views atot=Total cnv=CNVs
@@ -3957,15 +3960,15 @@ type bed 3
 
 	track iscaPathGainCum
 	parent iscaViewTotal
-	shortLabel ISCA Path Gain
-	longLabel ISCA CNVs: Pathogenic Gain Total
+	shortLabel ClinGen Path Gain
+	longLabel ClinGen CNVs: Pathogenic Gain Total
 	color 0,0,200
         subGroups view=atot phen=path level=det
 
 	track iscaPathLossCum
 	parent iscaViewTotal
-	shortLabel ISCA Path Loss
-	longLabel ISCA CNVs: Pathogenic Loss Total
+	shortLabel ClinGen Path Loss
+	longLabel ClinGen CNVs: Pathogenic Loss Total
 	color 200,0,0
         subGroups view=atot phen=path level=det
 
@@ -3977,48 +3980,48 @@ type bed 3
     type gvf
     noScoreFilter .
     url http://www.ncbi.nlm.nih.gov/dbvar/?term=$$
-    urlLabel ISCA details:
+    urlLabel ClinGen details:
 
 	track iscaCuratedPathogenic
 	parent iscaViewDetail off
-	shortLabel ISCA Curated Path
-	longLabel ISCA CNVs: Curated Pathogenic
+	shortLabel ClinGen Curated Path
+	longLabel ClinGen CNVs: Curated Pathogenic
         subGroups view=cnv phen=path level=cur
 
 	track iscaCuratedBenign
 	parent iscaViewDetail off
-	shortLabel ISCA Curated Ben
-	longLabel ISCA CNVs: Curated Benign
+	shortLabel ClinGen Curated Ben
+	longLabel ClinGen CNVs: Curated Benign
         subGroups view=cnv phen=ben level=cur
 
 	track iscaPathogenic
 	parent iscaViewDetail
-	shortLabel ISCA Pathogenic
-	longLabel ISCA CNVs: Pathogenic
+	shortLabel ClinGen Pathogenic
+	longLabel ClinGen CNVs: Pathogenic
         subGroups view=cnv phen=path level=det
 
 	track iscaLikelyPathogenic
 	parent iscaViewDetail off
-	shortLabel ISCA Uncert Path
-	longLabel ISCA CNVs: Uncertain: Likely Pathogenic
+	shortLabel ClinGen Uncert Path
+	longLabel ClinGen CNVs: Uncertain: Likely Pathogenic
         subGroups view=cnv phen=path level=lik
 
 	track iscaUncertain
 	parent iscaViewDetail off
-	shortLabel ISCA Uncertain
-	longLabel ISCA CNVs: Uncertain
+	shortLabel ClinGen Uncertain
+	longLabel ClinGen CNVs: Uncertain
         subGroups view=cnv phen=unk level=unc
 
 	track iscaLikelyBenign
 	parent iscaViewDetail off
-	shortLabel ISCA Uncert Ben
-	longLabel ISCA CNVs: Uncertain: Likely Benign
+	shortLabel ClinGen Uncert Ben
+	longLabel ClinGen CNVs: Uncertain: Likely Benign
         subGroups view=cnv phen=ben level=lik
 
 	track iscaBenign
 	parent iscaViewDetail off
-	shortLabel ISCA Benign
-	longLabel ISCA CNVs: Benign
+	shortLabel ClinGen Benign
+	longLabel ClinGen CNVs: Benign
         subGroups view=cnv phen=ben level=det
 
 

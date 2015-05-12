@@ -5078,7 +5078,7 @@ type bed 3
 sortOrder view=+
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
-otherDb MicMur1
+otherDb micMur1
 chainMinScore 3000
 chainLinearGap medium
 html chainNet
@@ -5095,7 +5095,7 @@ html chainNet
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain MicMur1
+        type chain micMur1
         html chainNet
 
     track chainNetMicMur1Viewnet
@@ -5109,7 +5109,7 @@ html chainNet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment net
-        type netAlign MicMur1 chainMicMur1
+        type netAlign micMur1 chainMicMur1
         html chainNet
 
 track chainNetTarSyr2

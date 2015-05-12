@@ -3075,7 +3075,11 @@ if (html != NULL && html[0] != 0)
     // Add pennantIcon
     printPennantIconNote(tdb);
 
+    // Wrap description html in div with limited width, so when the page is very wide
+    // due to long details, the user doesn't have to scroll right to read the description.
+    puts("<div class='readableWidth'>");
     puts(html);
+    puts("</div>");
     }
 hPrintf("<BR>\n");
 }
@@ -24496,8 +24500,8 @@ if (dbIsFound)
 else
     seqName = cartString(cart, "c");
 
-winStart = cartIntExp(cart, "l");
-winEnd = cartIntExp(cart, "r");
+winStart = cartUsualInt(cart, "l", 0);
+winEnd = cartUsualInt(cart, "r", 0);
 
 /* Allow faked-out c=0 l=0 r=0 (e.g. for unaligned mRNAs) but not just any
  * old bogus position: */
@@ -25334,7 +25338,7 @@ else if (sameWord(table, "transRegCodeProbe"))
     doTransRegCodeProbe(tdb, item, "transRegCode", "transRegCodeMotif",
                         "transRegCodeCondition", "growthCondition");
     }
-else if (startsWith("wgEncodeRegDnaseClustered", tdb->track))
+else if (tdb != NULL && startsWith("wgEncodeRegDnaseClustered", tdb->track))
     {
     doPeakClusters(tdb, item);
     }

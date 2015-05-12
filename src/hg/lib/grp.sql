@@ -5,6 +5,7 @@
 
 #This describes a group of annotation tracks.
 
+DROP TABLE IF EXISTS grp;
 CREATE TABLE grp (
     name varchar(255) not null,	# Group name.  Connects with trackDb.grp
     label varchar(255) not null,	# Label to display to user

@@ -354,7 +354,10 @@ if (cdsOnly)
                 (maxSize != -1 && cdsBuf->stringSize > maxSize) ? maxSize : 
                 cdsBuf->stringSize);
 else if (peptides)
-    outputPeptide(gp, nameBuf->string, cdsBuf, faFh);
+    {
+    if (gp->cdsStart < gp->cdsEnd)
+	outputPeptide(gp, nameBuf->string, cdsBuf, faFh);
+    }
 else
     faWriteNext(faFh, nameBuf->string, dnaBuf->string, 
                 (maxSize != -1 && dnaBuf->stringSize > maxSize) ? maxSize : 

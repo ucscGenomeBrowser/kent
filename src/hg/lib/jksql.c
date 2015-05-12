@@ -1842,6 +1842,32 @@ if(field == NULL)
 return field->name;
 }
 
+struct slName *sqlResultFieldList(struct sqlResult *sr)
+/* Return slName list of all fields in query.  Can just be done once per query. */
+{
+struct slName *list = NULL;
+char *field;
+while ((field = sqlFieldName(sr)) != NULL)
+    slNameAddHead(&list, field);
+slReverse(&list);
+return list;
+}
+
+int sqlResultFieldArray(struct sqlResult *sr, char ***retArray)
+/* Get the fields of sqlResult,  returning count, and the results
+ * themselves in *retArray. */
+{
+struct slName *el, *list = sqlResultFieldList(sr);
+int count = slCount(list);
+char **array;
+AllocArray(array, count);
+int i;
+for (el=list,i=0; el != NULL; el = el->next, ++i)
+    array[i] = cloneString(el->name);
+*retArray = array;
+return count;
+}
+
 int sqlFieldColumn(struct sqlResult *sr, char *colName)
 /* get the column number of the specified field in the result, or
  * -1 if the result doesn't contailed the field.*/
@@ -2958,6 +2984,32 @@ struct slName *sqlRandomSample(char *db, char *table, char *field, int count)
 return sqlRandomSampleWithSeed(db, table, field, count, -1);
 }
 
+
+bool sqlCanCreateTemp(struct sqlConnection *conn)
+/* Return True if it looks like we can write temp tables into the current database
+ * Can be used to check if sqlRandomSampleWithSeed-functions are safe to call.
+ * */
+{
+// assume we can write if the current connection has no failOver connection 
+if (conn->failoverConn==NULL)
+    {
+    return TRUE;
+    }
+
+char *err;
+unsigned int errNo;
+
+// try a create temp query
+char *query = "CREATE TEMPORARY TABLE testTemp (number INT); DROP TABLE testTemp;";
+struct sqlResult *sr = sqlGetResultExt(conn, query, &errNo, &err);
+if (sr==NULL)
+    {
+    return FALSE;
+    }
+
+sqlFreeResult(&sr);
+return TRUE;
+}
 
 static struct sqlFieldInfo *sqlFieldInfoParse(char **row)
 /* parse a row into a sqlFieldInfo object */

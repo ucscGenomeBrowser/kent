@@ -12,10 +12,10 @@
 # - parse hg.conf to find mysql server and hide a few tracks in its trackDb
 # - infer track/subtrack hierarchy by parsing trackDb
 # - generate HTML table with labels/sizes/tablecounts for all tracks and their child tracks
-# - when user clicks submit, start udr transfer and redirect to page that shows progress
+# - when user clicks submit, start rsync transfer and redirect to page that shows progress
 # - handles non-existing tables and some hgFixed tables
 
-# When run from the command line, this CGI hides some tracks and removes from tracks from
+# When run from the command line, this CGI hides some tracks and removes tracks from
 # track search on hg19. This is usually run from a cronjob after trackDb updates.
 
 # This script requires the following setup
@@ -45,8 +45,8 @@ from collections import defaultdict, namedtuple
 from os.path import *
 from distutils import spawn
 
-# this module has to be installed with one of these commands:
-# - many common linuxes: pip install mysqldb
+# the mysqldb module has to be installed with one of these commands:
+# - many common linuxes and OSX: pip install mysqldb
 # - debian: sudo apt-get install python-mysqldb
 # - fedora/centos/redhat: sudo yum install python-mysqldb
 # The script works without the mysqldb module but cannot auto-hide some tracks.
@@ -314,7 +314,7 @@ def getTrackVis(settings):
     return trackVis, isSuperTrack
 
 def parseTrackDb(db, tableSizes):
-    """ download and parse trackDb, returns 7 values
+    """ download and parse trackDb, returns 8 values
     1) trackLabels = dict trackName -> shortLabel
     2) trackTables = dict trackName -> tableName (usually the same as trackName, but not for encode and genbank)
     3) trackParents = dict trackName -> trackName of parent track
@@ -322,12 +322,14 @@ def parseTrackDb(db, tableSizes):
     5) pseudoTracks = set of names of tracks that have no tables ("views", "composites", "superTracks", "container multiWig")
     6) trackVis = dict trackName -> visibility
     7) superTracks = set of all superTrack names
+    8) bigDataFiles = dict trackName -> bigDataUrl value
     """
     sqlTrackTables = trackToTableNames(tableSizes)
     rows = downloadTable(db, "trackDb")
     trackLabels = dict()
     trackParents = dict()
     trackTables = dict()
+    trackBigDataFiles = dict()
     groups = defaultdict(list)
     pseudos = set()
     trackVis = dict()
@@ -372,7 +374,16 @@ def parseTrackDb(db, tableSizes):
         if not isPseudo:
             trackTables[track] = sqlTrackTables[track]
 
-    return trackLabels, trackTables, trackParents, groups, pseudos, trackVis, superTracks
+        if "bigDataUrl" in settings:
+            trackBigDataFiles[track] = settings["bigDataUrl"]
+            # create a pseudo table, so we know we have to download something
+            trackTables[track] = [track]
+
+        if track=="bacEndPairs":
+            trackTables[track].add("all_bacends")
+
+    return trackLabels, trackTables, trackParents, groups, pseudos, \
+        trackVis, superTracks, trackBigDataFiles
 
 def htmlHeader():
     " print start of page "
@@ -432,14 +443,19 @@ def getAllChildren(trackName, trackChildren):
         tracks.extend(grandkids)
     return tracks
 
-def getTableInfo(trackName, trackTables, trackChildren):
-    " return list of table names (including children) for a track "
+def getTrackTables(trackName, trackTables, trackChildren):
+    """ return list of all track or table names required for a track,
+    this includes:
+    - tables that are split or specified via the trackDb "table" statement
+    - track names that do not have a table associated with them
+    - the same for all sub tracks of the track
+    """
     subTracks = getAllChildren(trackName, trackChildren)
     subTracks.append(trackName)
 
     trackTableNames = set()
     if trackName in ["nonTrackTables", "allTables"]:
-        # just use the table names as they are, they might not be tracks for them
+        # just use the table names as they are, there might not be tracks for them
         trackTableNames = set(trackChildren[trackName])
         if "history" in trackTableNames:
             trackTableNames.remove("history")
@@ -487,7 +503,7 @@ def trackToFiles(trackName, trackTables, trackChildren, tableSizes, tableToGbdbF
     elif trackName=="nonTrackTables":
         return trackChildren.get("nonTrackTables", []), []
 
-    trackTableNames = getTableInfo(trackName, trackTables, trackChildren)
+    trackTableNames = getTrackTables(trackName, trackTables, trackChildren)
 
     # this predef track doesn't have any gbdb files
     if trackName=="allTables":
@@ -523,8 +539,9 @@ def makeTableFileList(jobId, db, trackNames, trackTables, trackChildren, tableTo
                 tableToGbdbFiles, noTableTracks, gbdbSizes)
 
         for table in tableNames:
-            for ext in [".MYD", ".MYI", ".frm"]:
-                mysqlListFh.write("%s%s\n" % (table,ext))
+            if table in tableSizes and tableSizes[table]!=0:
+                for ext in [".MYD", ".MYI", ".frm"]:
+                    mysqlListFh.write("%s%s\n" % (table,ext))
 
         for gbdbFname in gbdbFiles:
             gbdbListFh.write(gbdbFname+"\n")
@@ -559,8 +576,8 @@ def printTrackInfo(db, trackName, trackTables, trackLabels, localSizes, trackChi
     trackTableNames, gbdbFnames = trackToFiles(trackName, trackTables, trackChildren, tableSizes, \
         trackToGbdbFiles, noTableTracks, gbdbSizes)
 
-    tableSize = sum([tableSizes[n] for n in trackTableNames])
-    gbdbSize = sum([gbdbSizes[n] for n in gbdbFnames])
+    tableSize = sum([tableSizes.get(n, 0) for n in trackTableNames])
+    gbdbSize = sum([gbdbSizes.get(n, 0) for n in gbdbFnames])
 
     # add note for omim/decipher/etc
     label = trackLabels[trackName]
@@ -869,7 +886,7 @@ def downloadCache(url, cacheFname):
 
     return data.splitlines()
 
-def linkTrackToGbdb(fnames, db, tableNames):
+def linkTrackToGbdb(fnames, db, tableNames, bigDataFiles):
     """
     do some educated guessing on the gbdb files<->track links. returns a dict track -> list of files
     Needs a file bigFiles.tab.gz that assigns the bbi link table names to big files in them.
@@ -942,7 +959,6 @@ def linkTrackToGbdb(fnames, db, tableNames):
             continue
 
         # check fname for regex and assign to some manually defined track
-
         for regex, repl in regexRules:
             match = regex.search(fname)
             if match != None:
@@ -964,6 +980,20 @@ def linkTrackToGbdb(fnames, db, tableNames):
     for table in sorted(misassignedTables):
         debug("not existing table: "+table)
         debug("for files: "+",".join(tableFiles[table]))
+
+    # add the bigDataUrl files from trackDb
+    for trackName, bigDataFile in bigDataFiles.iteritems():
+        fname = bigDataFile.replace("/gbdb/%s/" % db, "")
+        tableFiles[trackName].append(fname)
+
+        # also add indexes for vcf or bam files
+        tbiFname = fname+".tbi"
+        baiFname = fname+".bai"
+        if tbiFname in fnames:
+            tableFiles[trackName].append(tbiFname)
+        if baiFname in fnames:
+            tableFiles[trackName].append(baiFname)
+
     return tableFiles
 
 def getRsyncSizes(dataType, db):
@@ -999,6 +1029,7 @@ def getRsyncSizes(dataType, db):
         if fields[0][0]=="d":
             continue
         fileName = fields[-1]
+        # newer rsync versions include commas in the size string
         tableSize = int(fields[1].replace(",",""))
 
         if dataType=="gbdb":
@@ -1006,7 +1037,7 @@ def getRsyncSizes(dataType, db):
         else:
             resName = fileName.split(".")[0]
         tableSizes[resName] += tableSize
-    return tableSizes
+    return dict(tableSizes)
 
 #def getTableRelations(db):
     # a start to parse all.joiner
@@ -1152,8 +1183,6 @@ def jobsAreDone():
 def printLog(jobId):
     " print rsync log for given jobId to stdout "
     jobFname = "/tmp/%d.log" % int(jobId)
-    #dbRe = re.compile("/data/gbdb/([a-zA-Z0-9]+)")
-    #db = None
 
     print "rsync download commands:<p>"
     print "<pre>"
@@ -1162,19 +1191,14 @@ def printLog(jobId):
         print '<a href="hgMirror">Start a new download</a>'
         sys.exit(0)
 
-    for line in open(jobFname):
-        print line,
-        #mo = dbRe.search(line)
-        #if mo!=None:
-            #db = mo.groups(0)[0]
+    lines = open(jobFname).read().splitlines()
+    for line in lines[-30:]:
+        print line
 
     print "</pre>"
     if jobsAreDone():
         print '<a href="hgTracks?hgt.reset=on">Back to Genome Browser</a><p>'
         print '<a href="hgMirror">Download more tracks</a>'
-        #assert(db!=None)
-        #localSizes = getLocalSizes(db)
-        #postRsyncChanges(db, localSizes)
     else:
         print '<i>Downloading files... Page will reload every 4 seconds until download is complete.</i>'
         print '<i><a href="hgMirror?stopAllJobs=1">Cancel download now</a></i>'
@@ -1285,8 +1309,8 @@ def checkGbdbMysqlAccess():
     """ check if we have write access to gbdb and mysql dir and can run the at command """
 
     msg = """<pre>        www-data     ALL = (mysql:mysql) NOPASSWD: /usr/local/bin/udr,/bin/ls,/usr/bin/rsync,/bin/rm
-        www-data     ALL = (root:root) NOPASSWD: /bin/mkdir /gbdb
-        www-data     ALL = (root:root) NOPASSWD: /bin/chown www-data.www-data /gbdb</pre>
+        www-data     ALL = (root:root) NOPASSWD: /bin/mkdir /data/gbdb
+        www-data     ALL = (root:root) NOPASSWD: /bin/chown www-data.www-data /data/gbdb</pre>
         """
 
     # check if we can write to gbdb
@@ -1566,9 +1590,11 @@ def htmlMiddle(args):
     orgInfo, clade, org, db = getCladeAssemblyDb(clade, org, db)
 
     if not "jobId" in args.keys():
+        # load all the trackDb info, track<->file relationships and file sizes
         cacheFname = "/tmp/%s.trackDataCache" % db
         marshalError = False
         if isfile(cacheFname):
+            # use cached results, if we have them
             try:
                 groupList, trackLabels, trackTables, trackParents, groupToTopTracks, noTableTracks,\
                     trackVis, superTracks, tableSizes, trackChildren, gbdbSizes, \
@@ -1584,11 +1610,16 @@ def htmlMiddle(args):
             sys.stdout.flush()
             groupList = loadGroups(db)
             tableSizes = getRsyncSizes("mysql", db)
-            trackLabels, trackTables, trackParents, groupToTopTracks, noTableTracks, trackVis, superTracks = parseTrackDb(db, tableSizes)
-            trackChildren = makeTrackHierarchy(trackParents)
             gbdbSizes = getRsyncSizes("gbdb", db)
-            tableToGbdbFiles = linkTrackToGbdb(gbdbSizes, db, tableSizes)
-            allData = groupList, trackLabels, trackTables, trackParents, groupToTopTracks, noTableTracks, trackVis, superTracks, tableSizes, trackChildren, gbdbSizes, tableToGbdbFiles
+
+            trackLabels, trackTables, trackParents, groupToTopTracks, \
+                noTableTracks, trackVis, superTracks, bigDataFiles = parseTrackDb(db, tableSizes)
+            trackChildren = makeTrackHierarchy(trackParents)
+
+            tableToGbdbFiles = linkTrackToGbdb(gbdbSizes, db, tableSizes, bigDataFiles)
+            allData = groupList, trackLabels, trackTables, trackParents, \
+                groupToTopTracks, noTableTracks, trackVis, superTracks, \
+                tableSizes, trackChildren, gbdbSizes, tableToGbdbFiles
             cPickle.dump(allData, open(cacheFname, "w"))
             reloadPage()
             sys.exit(0)
@@ -1634,6 +1665,8 @@ def htmlMiddle(args):
 
         print "<h4>MySQL tables linked to %s</h4>" % trackName
         for table in tables:
+            if table not in tableSizes:
+                continue
             size = tableSizes[table]
             sizeStr = humanReadable(size)
             totalSize += size
@@ -1718,7 +1751,8 @@ def main():
     parseHgConf()
     if hgConf==None or not hgConf.get("allowHgMirror", "0").lower() in ["1", "yes", "true"]:
         print("hgMirror is not activated on this machine<br>")
-        print("Set allowHgMirror=1 in your cgi-bin/hg.conf file<br>")
+        print("Set allowHgMirror=1 in your cgi-bin/hg.conf file.<br>")
+        print("In the Genome-Browser-in-a-box VM, use the command gbibMirrorTracksOn.")
         sys.exit(0)
         
     args = cgi.FieldStorage()

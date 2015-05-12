@@ -73,9 +73,6 @@ struct cdwUser *cdwUserFromEmail(struct sqlConnection *conn, char *email);
 struct cdwUser *cdwMustGetUserFromEmail(struct sqlConnection *conn, char *email);
 /* Return user associated with email or put up error message. */
 
-struct cdwUser *cdwUserFromEmail(struct sqlConnection *conn, char *email);
-/* Return user associated with that email or NULL if not found */
-
 struct cdwUser *cdwUserFromId(struct sqlConnection *conn, int id);
 /* Return user associated with that id or NULL if not found */
 
@@ -99,6 +96,52 @@ boolean cdwUserIsAdmin(struct sqlConnection *conn, char *userEmail);
 
 void cdwWarnUnregisteredUser(char *email);
 /* Put up warning message about unregistered user and tell them how to register. */
+
+struct cdwGroup *cdwGroupFromName(struct sqlConnection *conn, char *name);
+/* Return cdwGroup of given name or NULL if not found. */
+
+struct cdwGroup *cdwNeedGroupFromName(struct sqlConnection *conn, char *groupName);
+/* Get named group or die trying */
+
+boolean cdwFileInGroup(struct sqlConnection *conn, unsigned int fileId, unsigned int groupId);
+/* Return TRUE if file is in group */
+
+int cdwUserFileGroupsIntersect(struct sqlConnection *conn, long long fileId, int userId);
+/* Return the number of groups file and user have in common,  zero for no match */
+
+#define cdwAccessRead 1
+#define cdwAccessWrite 2
+
+boolean cdwCheckAccess(struct sqlConnection *conn, struct cdwFile *ef,
+    struct cdwUser *user, int accessType);
+/* See if user should be allowed this level of access.  The accessType is one of
+ * cdwAccessRead or cdwAccessWrite.  Write access implies read access too. 
+ * This can be called with user as NULL, in which case only access to shared-with-all
+ * files is granted. This function takes almost a millisecond.  If you are doing it
+ * to many files consider using cdwQuickCheckAccess instead. */
+
+boolean cdwQuickCheckAccess(struct rbTree *groupedFiles, struct cdwFile *ef,
+    struct cdwUser *user, int accessType);
+/* See if user should be allowed this level of access.  The groupedFiles is
+ * the result of a call to cdwFilesWithSharedGroup. The other parameters are as
+ * cdwCheckAccess.  If you are querying thousands of files, this function is hundreds
+ * of times faster though. */
+
+struct rbTree *cdwFilesWithSharedGroup(struct sqlConnection *conn, int userId);
+/* Make an intVal type tree where the keys are fileIds and the val is null 
+ * This contains all files that are associated with any group that user is part of. 
+ * Can be used to do quicker version of cdwCheckAccess. */
+
+long long cdwCountAccessible(struct sqlConnection *conn, struct cdwUser *user);
+/* Return total number of files associated user can access */
+
+struct cdwFile *cdwAccessibleFileList(struct sqlConnection *conn, struct cdwUser *user);
+/* Get list of all files user can access.  Null user means just publicly accessible.  */
+
+struct rbTree *cdwAccessTreeForUser(struct sqlConnection *conn, struct cdwUser *user, 
+    struct cdwFile *efList, struct rbTree *groupedFiles);
+/* Construct intVal tree of files from efList that we have access to.  The
+ * key is the fileId,  the value is the cdwFile object */
 
 int cdwGetHost(struct sqlConnection *conn, char *hostName);
 /* Look up host name in table and return associated ID.  If not found
@@ -144,6 +187,9 @@ struct cdwFile *cdwGetLocalFile(struct sqlConnection *conn, char *localAbsoluteP
 
 void cdwUpdateFileTags(struct sqlConnection *conn, long long fileId, struct dyString *tags);
 /* Update tags field in cdwFile with given value */
+
+struct cdwFile *cdwFileLoadAllValid(struct sqlConnection *conn);
+/* Get list of cdwFiles that have been validated with no error */
 
 struct cdwFile *cdwFileAllIntactBetween(struct sqlConnection *conn, int startId, int endId);
 /* Return list of all files that are intact (finished uploading and MD5 checked) 
@@ -319,6 +365,14 @@ struct cdwQaWigSpot *cdwQaWigSpotFor(struct sqlConnection *conn,
     long long wigFileId, long long spotFileId);
 /* Return wigSpot relationship if any we have in database for these two files. */
 
+struct cdwVcfFile * cdwMakeVcfStatsAndSample(struct sqlConnection *conn, long long fileId, 
+    char sampleBed[PATH_LEN]);
+/* Run cdwVcfStats and put results into cdwVcfFile table, and also a sample bed.
+ * The sampleBed will be filled in by this routine. */
+
+struct cdwVcfFile *cdwVcfFileFromFileId(struct sqlConnection *conn, long long fileId);
+/* Get cdwVcfFile with given fileId or NULL if none such */
+
 char *cdwOppositePairedEndString(char *end);
 /* Return "1" for "2" and vice versa */
 
@@ -385,6 +439,12 @@ struct tagStanza;
 struct tagStorm *cdwTagStorm(struct sqlConnection *conn);
 /* Load  cdwMetaTags.tags, cdwFile.tags, and select other fields into a tag
  * storm for searching */
+
+struct tagStorm *cdwUserTagStorm(struct sqlConnection *conn, struct cdwUser *user);
+/* Return tag storm just for files user has access to. */
+
+struct tagStorm *cdwUserTagStormFromList(struct sqlConnection *conn, 
+    struct cdwUser *user, struct cdwFile *validList ,struct rbTree *groupedFiles);
 
 char *cdwRqlLookupField(void *record, char *key);
 /* Lookup a field in a tagStanza. */

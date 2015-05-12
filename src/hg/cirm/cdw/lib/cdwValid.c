@@ -218,7 +218,7 @@ char *cdwAllowedTags[] = {
     "paired_end",
     "life_stage",
     "age",
-    "age_units",
+    "age_unit",
     "cell_line",
     "cell_pair",
     "cell_count",
@@ -239,6 +239,7 @@ char *cdwAllowedTags[] = {
     "pipeline",
     "output",
     "meta",
+    "chrom",
     };
 
 struct hash *cdwAllowedTagsHash()
@@ -288,19 +289,19 @@ if (list == NULL)
 	"bam Short read mapping format",
 	"bed Genome browser compatible format for genes and other discrete elements",
 	"bigBed	Compressed BED recommended for files with more than 100,000 elements",
-	"bigWig	Compressed base by base signal graphs.",
+	"bigWig	Compressed base by base signal graphs",
 	"cram	More highly compressed short read format, currently with less validations",
-	"fasta	Standard DNA format. Must be gzipped.",
-	"fastq	Illumina or sanger formatted short read format.  Must be gzipped.",
+	"fasta	Standard DNA format. Must be gzipped",
+	"fastq	Illumina or sanger formatted short read format.  Must be gzipped",
 	"gtf GFF family format for gene and transcript predictions",
-	"html	A file in web page format.",
+	"html	A file in web page format",
 	"idat	An Illumina IDAT file",
-	"jpg JPEG image format.",
-	"pdf Postscripts common document format.",
+	"jpg JPEG image format",
+	"pdf Postscripts common document format",
 	"rcc A Nanostring RCC file",
-	"text	Unicode 8-bit formatted text file.",
+	"text	Unicode 8-bit formatted text file",
 	"vcf Variant call format",
-	"unknown	File is in  format unknown to the data hub.  No validations are applied.",
+	"unknown	File is in  format unknown to the data hub.  No validations are applied",
 	};
     int i;
     for (i=0; i<ArraySize(array); ++i)

@@ -122,6 +122,8 @@ include chainNetFelCat5.ra
         type chain myoLuc1
         otherDb myoLuc1
 
+include chainNetBosTau7.ra beta,public
+
         track chainBosTau8
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=lCow clade=bLaura

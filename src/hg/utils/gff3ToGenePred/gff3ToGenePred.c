@@ -19,6 +19,8 @@ errAbort(
   "usage:\n"
   "   gff3ToGenePred inGff3 outGp\n"
   "options:\n"
+  "  -warnAndContinue - on bad genePreds, put out warning but continue\n"
+  "  -useName - rather than using 'id' as names, use the 'name' tag\n"
   "  -maxParseErrors=50 - Maximum number of parsing errors before aborting. A negative\n"
   "   value will allow an unlimited number of errors.  Default is 50.\n"
   "  -maxConvertErrors=50 - Maximum number of conversion errors before aborting. A negative\n"
@@ -26,9 +28,9 @@ errAbort(
   "  -honorStartStopCodons - only set CDS start/stop status to complete if there are\n"
   "   corresponding start_stop codon records\n"
   "This converts:\n"
-  "   - top-level gene records with mRNA records\n"
-  "   - top-level mRNA records\n"
-  "   - mRNA records that contain:\n"
+  "   - top-level gene records with RNA records\n"
+  "   - top-level RNA records\n"
+  "   - RNA records that contain:\n"
   "       - exon and CDS\n"
   "       - CDS, five_prime_UTR, three_prime_UTR\n"
   "       - only exon for non-coding\n"
@@ -36,6 +38,8 @@ errAbort(
   "   - top-level transcript records\n"
   "   - transcript records that contain:\n"
   "       - exon\n"
+  "where RNA can be mRNA, ncRNA, or rRNA, and transcript can be either\n"
+  "transcript or primary_transcript\n"
   "The first step is to parse GFF3 file, up to 50 errors are reported before\n"
   "aborting.  If the GFF3 files is successfully parse, it is converted to gene,\n"
   "annotation.  Up to 50 conversion errors are reported before aborting.\n"
@@ -48,9 +52,13 @@ errAbort(
 static struct optionSpec options[] = {
     {"maxParseErrors", OPTION_INT},
     {"maxConvertErrors", OPTION_INT},
+    {"warnAndContinue", OPTION_BOOLEAN},
+    {"useName", OPTION_BOOLEAN},
     {"honorStartStopCodons", OPTION_BOOLEAN},
     {NULL, 0},
 };
+static boolean useName = FALSE;
+static boolean warnAndContinue = FALSE;
 static boolean honorStartStopCodons = FALSE;
 static int maxParseErrors = 50;  // maximum number of errors during parse
 static int maxConvertErrors = 50;  // maximum number of errors during conversion
@@ -160,10 +168,12 @@ if ((mrna->strand == NULL) || (mrna->strand[0] == '?'))
     return NULL;
     }
 
-struct genePred *gp = genePredNew(mrna->id, mrna->seqid, mrna->strand[0],
+char *name = (useName ? mrna->name : mrna->id);
+char *name2 = (useName ? gene->name : gene->id);
+struct genePred *gp = genePredNew(name, mrna->seqid, mrna->strand[0],
                                   txStart, txEnd, cdsStart, cdsEnd,
                                   genePredAllFlds, slCount(exons));
-gp->name2 = cloneString(gene->id);
+gp->name2 = cloneString(name2);
 
 // set start/end status based on codon features if requested
 if (honorStartStopCodons)
@@ -178,13 +188,28 @@ else
 return gp;
 }
 
-static void outputGenePredAndFree(FILE *gpFh, struct genePred *gp)
+static void outputGenePredAndFree(struct gff3Ann *mrna, FILE *gpFh, struct genePred *gp)
 /* validate and output a genePred and free it */
 {
-// output before checking so it can be examined
-genePredTabOut(gp, gpFh);
-if (genePredCheck("GFF3 convert to genePred", stderr, -1, gp) != 0)
-    cnvError("invalid genePred created for: %s", gp->name);
+char description[PATH_LEN];
+safef(description, sizeof(description), "genePred from GFF3: %s:%d",
+      ((mrna->file != NULL) ? mrna->file->fileName : "<unknown>"),
+      mrna->lineNum);
+int ret = genePredCheck(description, stderr, -1, gp);
+if (warnAndContinue)
+    {
+    if (ret == 0)
+	genePredTabOut(gp, gpFh);
+    else
+	warn("dropping invalid genePred: %s %s:%d-%d", gp->name, gp->chrom, gp->txStart, gp->txEnd);
+    }
+else
+    {
+    // output before checking so it can be examined
+    genePredTabOut(gp, gpFh);
+    if (ret != 0)
+	cnvError("invalid genePred created: %s %s:%d-%d", gp->name, gp->chrom, gp->txStart, gp->txEnd);
+    }
 genePredFree(&gp);
 }
 
@@ -223,7 +248,9 @@ for (blk = blks; blk != NULL; prevBlk = blk, blk = blk->next)
 static int findCdsExon(struct genePred *gp, struct gff3Ann *cds, int iExon)
 /* search for the exon containing the CDS, starting with iExon+1, return -1 on error */
 {
-for (iExon++; iExon < gp->exonCount; iExon++)
+// don't use cached iExon.  Will fail on ribosomal frame-shifted genes
+// see NM_015068.
+for (iExon=0; iExon < gp->exonCount; iExon++)
     {
     if ((gp->exonStarts[iExon] <= cds->start) && (cds->end <= gp->exonEnds[iExon]))
         return iExon;
@@ -281,6 +308,16 @@ slFreeList(&cdsUtrBlks);
 return gp;  // NULL if error above
 }
 
+static int shouldProcess( struct gff3Ann *node)
+/* decide if we should process this feature */
+{
+return sameString(node->type, gff3FeatMRna) 
+    || sameString(node->type, gff3FeatNCRna)
+    || sameString(node->type, gff3FeatRRna)
+    || sameString(node->type, gff3FeatTranscript)
+    || sameString(node->type, gff3FeatPrimaryTranscript);
+}
+
 static void processMRna(FILE *gpFh, struct gff3Ann *gene, struct gff3Ann *mrna, struct hash *processed)
 /* process a mRNA/transcript node in the tree; gene can be NULL. Error count increment on error and genePred discarded */
 {
@@ -288,7 +325,7 @@ recProcessed(processed, mrna);
 
 struct genePred *gp = mrnaToGenePred(gene, mrna);
 if (gp != NULL)
-    outputGenePredAndFree(gpFh, gp);
+    outputGenePredAndFree(mrna, gpFh, gp);
 }
 
 static void processGene(FILE *gpFh, struct gff3Ann *gene, struct hash *processed)
@@ -299,7 +336,7 @@ recProcessed(processed, gene);
 struct gff3AnnRef *child;
 for (child = gene->children; child != NULL; child = child->next)
     {
-    if ((sameString(child->ann->type, gff3FeatMRna) || sameString(child->ann->type, gff3FeatTranscript))
+    if (shouldProcess(child->ann) 
         && !isProcessed(processed, child->ann))
         processMRna(gpFh, gene, child->ann, processed);
     if (convertErrCnt >= maxConvertErrors)
@@ -314,7 +351,7 @@ recProcessed(processed, node);
 
 if (sameString(node->type, gff3FeatGene))
     processGene(gpFh, node, processed);
-else if (sameString(node->type, gff3FeatMRna) || sameString(node->type, gff3FeatTranscript))
+else if (shouldProcess(node))
     processMRna(gpFh, NULL, node, processed);
 }
 
@@ -352,6 +389,8 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 
+warnAndContinue = optionExists("warnAndContinue");
+useName = optionExists("useName");
 maxParseErrors = optionInt("maxParseErrors", maxParseErrors);
 if (maxParseErrors < 0)
     maxParseErrors = INT_MAX;

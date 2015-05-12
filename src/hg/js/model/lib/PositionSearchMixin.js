@@ -12,18 +12,29 @@ var PositionSearchMixin = function(myPath) {
         // cart vars in myCartVars all live in state[myPath] for Immutable efficiency but can arrive
         // independently from server; when we get one, update just that piece of state[myPath].
         mutState.setIn(myPath.concat(cartVar), Immutable.fromJS(newValue));
+        // Turn off the loading spinner when we get result(s) from cart:
         if (cartVar === 'position' || cartVar === 'positionMatches') {
             mutState.setIn(myPath.concat('loading'), false);
         }
     }
 
     // UI event handlers
+    function posErrorHandler(serverMessage) {
+        // If the error message from the server is only that the new position/search can't be found,
+        // then just display it to the user; otherwise treat it as a real error.
+        if (/^Sorry, /.test(serverMessage)) {
+            alert(serverMessage);
+        } else {
+            this.defaultServerErrorHandler(serverMessage);
+        }
+    }
+
     function lookupPosition(mutState, path, newValue) {
         // path is myPath + 'position'.
         // Tell the server to look up the new position/search term.  If there are multiple
         // matches, then the cart's position variable won't be updated unless the user
         // chooses one, and handleServerResponse will get positionMatches to show to the user.
-        this.cartDo({changePosition: {newValue: newValue}});
+        this.cartDo({changePosition: {newValue: newValue}}, _.bind(posErrorHandler, this));
         mutState.setIn(path, newValue);
         mutState.setIn(myPath.concat('loading'), true);
     }
@@ -45,11 +56,18 @@ var PositionSearchMixin = function(myPath) {
         mutState.setIn(myPath.concat('positionMatches'), null);
     }
 
+    // Method for use outside this mixin, e.g. for when user just changed database
+    function setPosition(mutState, newPos) {
+        mutState.setIn(myPath.concat('position'), newPos);
+    }
+
     function initialize() {
         this.registerCartVarHandler(myCartVars, posMergeServerResponse);
         this.registerUiHandler(myPath.concat('position'), lookupPosition);
         this.registerUiHandler(myPath.concat('positionMatch'), positionMatchClick);
         this.registerUiHandler(myPath.concat('hidePosPopup'), hidePosPopup);
+        // Install convenience methods for use outside this mixin:
+        this.setPosition = setPosition;
     }
 
     // Mixin object with initialize

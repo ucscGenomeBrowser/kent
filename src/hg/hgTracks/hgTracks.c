@@ -3374,6 +3374,15 @@ else if (sameString(type, "bedDetail"))
     bedDetailCtMethods(tg, ct);
     tg->mapItemName = ctMapItemName; /* must be here to see ctMapItemName */
     }
+    else if (sameString(type, "adjacency"))
+    {
+    extern void adjacencyMethods(struct track *track);
+
+    tg = trackFromTrackDb(tdb);
+    adjacencyMethods(tg);
+    //tg->mapItemName = ctMapItemName;
+    tg->customPt = ct;
+    }
 else if (sameString(type, "pgSnp"))
     {
     tg = trackFromTrackDb(tdb);
@@ -4934,16 +4943,9 @@ if (!hideControls)
 
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
             hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
-        //#define BUTTONS_BY_CSS_NOT_HERE
-        #ifdef BUTTONS_BY_CSS_NOT_HERE
-            hPrintf("<span class='pmButton toggleButton' onclick=\"vis.toggleForGroup(this,'%s')\" "
-                    "id='%s_button' title='%s this group'>%s</span>&nbsp;&nbsp;",
-                    group->name, group->name, isOpen?"Collapse":"Expand", indicator);
-        #else///ifndef BUTTONS_BY_CSS_NOT_HERE
             hPrintf("<IMG class='toggleButton' onclick=\"return vis.toggleForGroup(this, '%s');\" "
                     "id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
                     group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
-        #endif///ndef BUTTONS_BY_CSS_NOT_HERE
             hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
             hPrintf("</td><td style='text-align:right;'>\n");
             hPrintf("<input type='submit' name='hgt.refresh' value='refresh' "
@@ -5687,6 +5689,23 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+static void chromSizesDownloadRow()
+/* Show link to chrom.sizes file at end of chromInfo table (unless this is a hub) */
+{
+if (! trackHubDatabase(database))
+    {
+    cgiSimpleTableRowStart();
+    cgiSimpleTableFieldStart();
+    puts("Download as file");
+    cgiTableFieldEnd();
+    cgiSimpleTableFieldStart();
+    printf("<A HREF='http://%s/goldenPath/%s/bigZips/%s.chrom.sizes'>%s.chrom.sizes</A>",
+           hDownloadsServer(), database, database, database);
+    cgiTableFieldEnd();
+    cgiTableRowEnd();
+    }
+}
+
 void chromInfoPage()
 /* Show list of chromosomes (or scaffolds, etc) on which this db is based. */
 {
@@ -5731,6 +5750,7 @@ else if ((startsWith("chr", defaultChrom) || startsWith("Group", defaultChrom)) 
     chromInfoRowsChrom();
 else
     chromInfoRowsNonChrom(1000);
+chromSizesDownloadRow();
 
 hTableEnd();
 cgiDown(0.9);

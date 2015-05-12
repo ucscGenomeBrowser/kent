@@ -51,7 +51,7 @@ cart.setCgi('hgChooseDb');
 
 var container = document.getElementById('appContainer');
 
-//#*** Copied from HgAiModel -- libify in ImModel??
+//#*** Copied from HgIntegratorModel -- libify in ImModel??
 function render(state, update, undo, redo) {
     // ImModel calls this function after making changes to state.
     // Pass the immutable state object and callbacks to our top-level react component:

@@ -136,7 +136,7 @@ if [ "$1" == "hgwdev" ] ; then
 
      # remove a lot of clutter that accumulated in hgwdev's alpha cgi-bin dir
     if [ "$dirExt" == "alpha" ] ; then
-      RSYNCAPACHE="$RSYNCAPACHE --exclude ENCODE/**.pdf --exclude *.gz --exclude *.bw --exclude *.bb --exclude *.bam --exclude goldenPath/**.pdf --exclude admin/** --exclude goldenPath/customTracks/** --exclude pubs/** --exclude ancestors/** --exclude training/** --exclude trash --exclude style-public/** --exclude js-public/** --exclude **/edw* --exclude images/mammalPsg/** --exclude **/encodeTestHub* --exclude favicon.ico --exclude folders --exclude ENCODE/** --exclude ENCODE/** --exclude Neandertal/** --exclude gbib/** --exclude generator/** --exclude js-*/** --exclude js/*/* --exclude .\* --exclude x86_64/* --exclude .xauth --exclude .hg.conf --exclude hgHeatmap* --exclude hg.conf --exclude 'hgt/**' --exclude admin/** --exclude images --exclude trash --exclude edw* --exclude visiGeneData/** --exclude crom_dir/ --exclude testp/ --exclude *.exe --exclude *.old --exclude *.tmp --exclude *.bak --exclude test* --exclude hg.conf* --exclude **/hgHeatmap* --exclude ~* --exclude Intronerator** --exclude hgText --exclude hgSubj --exclude gisaid* --exclude nt4.dir --exclude qaPush* --exclude docIdView --exclude ct/ --exclude *.bak --exclude hg.conf* --exclude gsid*/ --exclude *.private --exclude useCount --exclude ~* --exclude lssnp/"
+      RSYNCAPACHE="$RSYNCAPACHE --exclude ENCODE/**.pdf --exclude *.gz --exclude *.bw --exclude *.bb --exclude *.bam --exclude goldenPath/**.pdf --exclude admin/** --exclude goldenPath/customTracks/** --exclude pubs/** --exclude ancestors/** --exclude training/** --exclude trash --exclude style-public/** --exclude js-public/** --exclude **/edw* --exclude images/mammalPsg/** --exclude **/encodeTestHub* --exclude favicon.ico --exclude folders --exclude ENCODE/** --exclude ENCODE/** --exclude Neandertal/** --exclude gbib/** --exclude generator/** --exclude js-*/** --exclude js/*/* --exclude .\* --exclude x86_64/* --exclude .xauth --exclude .hg.conf --exclude hgHeatmap* --exclude hg.conf --exclude 'hgt/**' --exclude admin/** --exclude images --exclude trash --exclude edw* --exclude visiGeneData/** --exclude crom_dir/ --exclude testp/ --exclude *.exe --exclude *.old --exclude *.tmp --exclude *.bak --exclude test* --exclude hg.conf* --exclude **/hgHeatmap* --exclude ~* --exclude Intronerator** --exclude hgText --exclude hgSubj --exclude gisaid* --exclude nt4.dir --exclude qaPush* --exclude docIdView --exclude ct/ --exclude *.bak --exclude hg.conf* --exclude gsid*/ --exclude *.private --exclude useCount --exclude ~* --exclude lssnp/ --exclude hg.conf.local"
     fi
   
     # remove things that are on hgwdev beta directories but not necessary on the gbib
@@ -153,7 +153,7 @@ if [ "$1" == "hgwdev" ] ; then
 else
     # update CGIs
     echo updating CGIs...
-    rsync --delete $RSYNCOPTS $RSYNCSRC/$RSYNCCGIBIN /usr/local/apache/cgi-bin/ --exclude=hg.conf --exclude edw* --exclude *private --exclude hgNearData --exclude visiGeneData --exclude Neandertal 
+    rsync --delete $RSYNCOPTS $RSYNCSRC/$RSYNCCGIBIN /usr/local/apache/cgi-bin/ --exclude=hg.conf --exclude=hg.conf.local --exclude edw* --exclude *private --exclude hgNearData --exclude visiGeneData --exclude Neandertal 
 
     echo updating HTML files...
     rsync --delete $RSYNCOPTS $RSYNCSRC/$RSYNCHTDOCS/ /usr/local/apache/htdocs/ --include **/customTracks/*.html --exclude ENCODE/ --exclude *.bam --exclude *.bb --exclude */*.bw --exclude */*.gz --exclude favicon.ico --exclude folders --exclude ancestors --exclude admin --exclude goldenPath/customTracks --exclude images/mammalPsg --exclude style/gbib.css --exclude images/title.jpg --exclude images/homeIconSprite.png --exclude goldenPath/**.pdf --exclude training
@@ -172,7 +172,8 @@ if [ "$1" != "hgwdev" ] ; then
 fi
 
 echo pulling other files
-rsync $RSYNCOPTS $PUSHLOC /
+# make sure we never overwrite the hg.conf.local file
+rsync $RSYNCOPTS $PUSHLOC / --exclude=hg.conf.local
 
 if [ "$1" != "hgwdev" ] ; then
   echo updating MYSQL files - browser will not work during the MYSQL update
@@ -240,6 +241,13 @@ mysqlcheck --all-databases --auto-repair --quick --fast --silent
 #if [ "$LATENCY" -gt "90" ]; then
 #echo making low-latency changes
 /usr/local/apache/cgi-bin/hgMirror postRsyncUpdates
+
+# the local-only hg.conf settings file has to exist as it is included from hg.conf
+# In case it got deleted due to some error, recreate it
+if [ ! -f /usr/local/apache/cgi-bin/hg.conf.local ] ; then
+   echo Creating /usr/local/apache/cgi-bin/hg.conf.local
+   echo allowHgMirror=true > /usr/local/apache/cgi-bin/hg.conf.local
+fi
 
 touch /root/lastUpdateTime.flag
 echo update done.

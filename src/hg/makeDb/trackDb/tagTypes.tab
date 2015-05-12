@@ -31,7 +31,7 @@ baseColorUseSequence *
 baseQualRange bam
 bedFilter bed
 bedNameLabel bed
-bigDataUrl customTracks bigBed bigWig bam
+bigDataUrl customTracks bigBed bigWig bam vcfTabix
 blastRef psl
 boxedCfg *
 browserLines customTracks
@@ -199,6 +199,7 @@ inputTrackTable bed factorSource
 inputTableFieldDisplay bed factorSource
 intronGap psl genePred
 irows wigMaf
+isGencode genePred
 itemAttrTbl genePred
 itemBigImagePath bed
 itemClassTbl bed genePred
@@ -221,6 +222,7 @@ macaqueDb bed
 mafDot wigMaf
 mafDotDefault wigMaf
 mafFile customTracks
+mafShowSnp wigMaf
 mafTrack bed
 mapDispatcher expRatio
 matrix netAlign bed chain psl
@@ -435,6 +437,7 @@ wgEncodeGencodeUniProt genePred
 wgEncodeGencodePolyAFeature genePred
 wgEncodeGencodeAnnotationRemark genePred
 wgEncodeGencodeTranscriptionSupportLevel genePred
+wgEncodeGencodeEntrezGene genePred
 wibFile customTracks
 wigColorBy wig
 wigFile customTracks

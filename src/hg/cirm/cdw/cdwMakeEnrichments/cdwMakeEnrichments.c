@@ -442,7 +442,7 @@ struct cdwValidFile *vf = cdwValidFileFromFileId(conn, ef->id);
 if (vf == NULL)
     return;	/* We can only work if have validFile table entry */
 
-if (!isEmpty(vf->enrichedIn) && !sameWord(vf->ucscDb, "unknown") 
+if (!isEmpty(vf->enrichedIn) && !sameWord(vf->ucscDb, "unknown") && !isEmpty(vf->ucscDb)
     && !sameWord(vf->format, "unknown"))
     {
     /* Get our assembly */
@@ -488,14 +488,22 @@ if (!isEmpty(vf->enrichedIn) && !sameWord(vf->ucscDb, "unknown")
 	    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
 	else if (sameString(format, "bam"))
 	    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
+	else if (sameString(format, "vcf"))
+	    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
 	else if (sameString(format, "idat"))
 	    verbose(2, "Ignoring idat %s, in doEnrichments.", ef->cdwFileName);
 	else if (sameString(format, "customTrack"))
 	    verbose(2, "Ignoring customTrack %s, in doEnrichments.", ef->cdwFileName);
 	else if (sameString(format, "rcc"))
 	    verbose(2, "Ignoring rcc %s, in doEnrichments.", ef->cdwFileName);
+	else if (sameString(format, "bam.bai"))
+	    verbose(2, "Ignoring bam.bai %s, in doEnrichments - just and index file.", 
+		ef->cdwFileName);
+	else if (sameString(format, "vcf.gz.tbi"))
+	    verbose(2, "Ignoring vcf.gz.tbi %s, in doEnrichments - just and index file.", 
+		ef->cdwFileName);
 	else if (sameString(format, "unknown"))
-	    verbose(2, "Unknown format in doEnrichments(%s), that's chill.", ef->cdwFileName);
+	    verbose(2, "Unknown format in doEnrichments(%s), that's ok.", ef->cdwFileName);
 	else
 	    errAbort("Unrecognized format %s in doEnrichments(%s)", format, path);
 	}

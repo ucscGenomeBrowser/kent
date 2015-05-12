@@ -317,7 +317,7 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
 	    gi->frame, lastFrame,
 	    siTemp->curPosString->name);
 
-	if (doBlank || !allDashes(outSeq->dna))
+	if ((outSeq->size > 0) && (doBlank || !allDashes(outSeq->dna)))
 	    {
 	    if (doTable)
 		{

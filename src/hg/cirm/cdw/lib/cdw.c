@@ -164,7 +164,7 @@ fputc(lastSep,f);
 }
 
 
-char *cdwUserCommaSepFieldNames = "id,email,uuid,isAdmin";
+char *cdwUserCommaSepFieldNames = "id,email,uuid,isAdmin,primaryGroup";
 
 void cdwUserStaticLoad(char **row, struct cdwUser *ret)
 /* Load a row from cdwUser table into ret.  The contents of ret will
@@ -175,6 +175,7 @@ ret->id = sqlUnsigned(row[0]);
 ret->email = row[1];
 safecpy(ret->uuid, sizeof(ret->uuid), row[2]);
 ret->isAdmin = sqlSigned(row[3]);
+ret->primaryGroup = sqlUnsigned(row[4]);
 }
 
 struct cdwUser *cdwUserLoadByQuery(struct sqlConnection *conn, char *query)
@@ -207,8 +208,8 @@ void cdwUserSaveToDb(struct sqlConnection *conn, struct cdwUser *el, char *table
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s',%d)", 
-	tableName,  el->id,  el->email,  el->uuid,  el->isAdmin);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s',%d,%u)", 
+	tableName,  el->id,  el->email,  el->uuid,  el->isAdmin,  el->primaryGroup);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -224,6 +225,7 @@ ret->id = sqlUnsigned(row[0]);
 ret->email = cloneString(row[1]);
 safecpy(ret->uuid, sizeof(ret->uuid), row[2]);
 ret->isAdmin = sqlSigned(row[3]);
+ret->primaryGroup = sqlUnsigned(row[4]);
 return ret;
 }
 
@@ -233,7 +235,7 @@ struct cdwUser *cdwUserLoadAll(char *fileName)
 {
 struct cdwUser *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[5];
 
 while (lineFileRow(lf, row))
     {
@@ -251,7 +253,7 @@ struct cdwUser *cdwUserLoadAllByChar(char *fileName, char chopper)
 {
 struct cdwUser *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[5];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -276,6 +278,7 @@ ret->id = sqlUnsignedComma(&s);
 ret->email = sqlStringComma(&s);
 sqlFixedStringComma(&s, ret->uuid, sizeof(ret->uuid));
 ret->isAdmin = sqlSignedComma(&s);
+ret->primaryGroup = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -318,6 +321,448 @@ fprintf(f, "%s", el->uuid);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%d", el->isAdmin);
+fputc(sep,f);
+fprintf(f, "%u", el->primaryGroup);
+fputc(lastSep,f);
+}
+
+
+char *cdwGroupCommaSepFieldNames = "id,name,description";
+
+void cdwGroupStaticLoad(char **row, struct cdwGroup *ret)
+/* Load a row from cdwGroup table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+ret->name = row[1];
+ret->description = row[2];
+}
+
+struct cdwGroup *cdwGroupLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all cdwGroup from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with cdwGroupFreeList(). */
+{
+struct cdwGroup *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = cdwGroupLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void cdwGroupSaveToDb(struct sqlConnection *conn, struct cdwGroup *el, char *tableName, int updateSize)
+/* Save cdwGroup as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s')", 
+	tableName,  el->id,  el->name,  el->description);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+struct cdwGroup *cdwGroupLoad(char **row)
+/* Load a cdwGroup from row fetched with select * from cdwGroup
+ * from database.  Dispose of this with cdwGroupFree(). */
+{
+struct cdwGroup *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+ret->name = cloneString(row[1]);
+ret->description = cloneString(row[2]);
+return ret;
+}
+
+struct cdwGroup *cdwGroupLoadAll(char *fileName) 
+/* Load all cdwGroup from a whitespace-separated file.
+ * Dispose of this with cdwGroupFreeList(). */
+{
+struct cdwGroup *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileRow(lf, row))
+    {
+    el = cdwGroupLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct cdwGroup *cdwGroupLoadAllByChar(char *fileName, char chopper) 
+/* Load all cdwGroup from a chopper separated file.
+ * Dispose of this with cdwGroupFreeList(). */
+{
+struct cdwGroup *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = cdwGroupLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct cdwGroup *cdwGroupCommaIn(char **pS, struct cdwGroup *ret)
+/* Create a cdwGroup out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new cdwGroup */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->name = sqlStringComma(&s);
+ret->description = sqlStringComma(&s);
+*pS = s;
+return ret;
+}
+
+void cdwGroupFree(struct cdwGroup **pEl)
+/* Free a single dynamically allocated cdwGroup such as created
+ * with cdwGroupLoad(). */
+{
+struct cdwGroup *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->name);
+freeMem(el->description);
+freez(pEl);
+}
+
+void cdwGroupFreeList(struct cdwGroup **pList)
+/* Free a list of dynamically allocated cdwGroup's */
+{
+struct cdwGroup *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    cdwGroupFree(&el);
+    }
+*pList = NULL;
+}
+
+void cdwGroupOutput(struct cdwGroup *el, FILE *f, char sep, char lastSep) 
+/* Print out cdwGroup.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->description);
+if (sep == ',') fputc('"',f);
+fputc(lastSep,f);
+}
+
+
+char *cdwGroupFileCommaSepFieldNames = "fileId,groupId";
+
+void cdwGroupFileStaticLoad(char **row, struct cdwGroupFile *ret)
+/* Load a row from cdwGroupFile table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->fileId = sqlUnsigned(row[0]);
+ret->groupId = sqlUnsigned(row[1]);
+}
+
+struct cdwGroupFile *cdwGroupFileLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all cdwGroupFile from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with cdwGroupFileFreeList(). */
+{
+struct cdwGroupFile *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = cdwGroupFileLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void cdwGroupFileSaveToDb(struct sqlConnection *conn, struct cdwGroupFile *el, char *tableName, int updateSize)
+/* Save cdwGroupFile as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u)", 
+	tableName,  el->fileId,  el->groupId);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+struct cdwGroupFile *cdwGroupFileLoad(char **row)
+/* Load a cdwGroupFile from row fetched with select * from cdwGroupFile
+ * from database.  Dispose of this with cdwGroupFileFree(). */
+{
+struct cdwGroupFile *ret;
+
+AllocVar(ret);
+ret->fileId = sqlUnsigned(row[0]);
+ret->groupId = sqlUnsigned(row[1]);
+return ret;
+}
+
+struct cdwGroupFile *cdwGroupFileLoadAll(char *fileName) 
+/* Load all cdwGroupFile from a whitespace-separated file.
+ * Dispose of this with cdwGroupFileFreeList(). */
+{
+struct cdwGroupFile *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileRow(lf, row))
+    {
+    el = cdwGroupFileLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct cdwGroupFile *cdwGroupFileLoadAllByChar(char *fileName, char chopper) 
+/* Load all cdwGroupFile from a chopper separated file.
+ * Dispose of this with cdwGroupFileFreeList(). */
+{
+struct cdwGroupFile *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = cdwGroupFileLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct cdwGroupFile *cdwGroupFileCommaIn(char **pS, struct cdwGroupFile *ret)
+/* Create a cdwGroupFile out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new cdwGroupFile */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->fileId = sqlUnsignedComma(&s);
+ret->groupId = sqlUnsignedComma(&s);
+*pS = s;
+return ret;
+}
+
+void cdwGroupFileFree(struct cdwGroupFile **pEl)
+/* Free a single dynamically allocated cdwGroupFile such as created
+ * with cdwGroupFileLoad(). */
+{
+struct cdwGroupFile *el;
+
+if ((el = *pEl) == NULL) return;
+freez(pEl);
+}
+
+void cdwGroupFileFreeList(struct cdwGroupFile **pList)
+/* Free a list of dynamically allocated cdwGroupFile's */
+{
+struct cdwGroupFile *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    cdwGroupFileFree(&el);
+    }
+*pList = NULL;
+}
+
+void cdwGroupFileOutput(struct cdwGroupFile *el, FILE *f, char sep, char lastSep) 
+/* Print out cdwGroupFile.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->fileId);
+fputc(sep,f);
+fprintf(f, "%u", el->groupId);
+fputc(lastSep,f);
+}
+
+
+char *cdwGroupUserCommaSepFieldNames = "userId,groupId";
+
+void cdwGroupUserStaticLoad(char **row, struct cdwGroupUser *ret)
+/* Load a row from cdwGroupUser table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->userId = sqlUnsigned(row[0]);
+ret->groupId = sqlUnsigned(row[1]);
+}
+
+struct cdwGroupUser *cdwGroupUserLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all cdwGroupUser from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with cdwGroupUserFreeList(). */
+{
+struct cdwGroupUser *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = cdwGroupUserLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void cdwGroupUserSaveToDb(struct sqlConnection *conn, struct cdwGroupUser *el, char *tableName, int updateSize)
+/* Save cdwGroupUser as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u)", 
+	tableName,  el->userId,  el->groupId);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+struct cdwGroupUser *cdwGroupUserLoad(char **row)
+/* Load a cdwGroupUser from row fetched with select * from cdwGroupUser
+ * from database.  Dispose of this with cdwGroupUserFree(). */
+{
+struct cdwGroupUser *ret;
+
+AllocVar(ret);
+ret->userId = sqlUnsigned(row[0]);
+ret->groupId = sqlUnsigned(row[1]);
+return ret;
+}
+
+struct cdwGroupUser *cdwGroupUserLoadAll(char *fileName) 
+/* Load all cdwGroupUser from a whitespace-separated file.
+ * Dispose of this with cdwGroupUserFreeList(). */
+{
+struct cdwGroupUser *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileRow(lf, row))
+    {
+    el = cdwGroupUserLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct cdwGroupUser *cdwGroupUserLoadAllByChar(char *fileName, char chopper) 
+/* Load all cdwGroupUser from a chopper separated file.
+ * Dispose of this with cdwGroupUserFreeList(). */
+{
+struct cdwGroupUser *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = cdwGroupUserLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct cdwGroupUser *cdwGroupUserCommaIn(char **pS, struct cdwGroupUser *ret)
+/* Create a cdwGroupUser out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new cdwGroupUser */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->userId = sqlUnsignedComma(&s);
+ret->groupId = sqlUnsignedComma(&s);
+*pS = s;
+return ret;
+}
+
+void cdwGroupUserFree(struct cdwGroupUser **pEl)
+/* Free a single dynamically allocated cdwGroupUser such as created
+ * with cdwGroupUserLoad(). */
+{
+struct cdwGroupUser *el;
+
+if ((el = *pEl) == NULL) return;
+freez(pEl);
+}
+
+void cdwGroupUserFreeList(struct cdwGroupUser **pList)
+/* Free a list of dynamically allocated cdwGroupUser's */
+{
+struct cdwGroupUser *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    cdwGroupUserFree(&el);
+    }
+*pList = NULL;
+}
+
+void cdwGroupUserOutput(struct cdwGroupUser *el, FILE *f, char sep, char lastSep) 
+/* Print out cdwGroupUser.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->userId);
+fputc(sep,f);
+fprintf(f, "%u", el->groupId);
 fputc(lastSep,f);
 }
 
@@ -1195,7 +1640,7 @@ fputc(lastSep,f);
 }
 
 
-char *cdwFileCommaSepFieldNames = "id,submitId,submitDirId,userId,submitFileName,cdwFileName,startUploadTime,endUploadTime,updateTime,size,md5,tags,metaTagsId,errorMessage,deprecated,replacedBy";
+char *cdwFileCommaSepFieldNames = "id,submitId,submitDirId,userId,submitFileName,cdwFileName,startUploadTime,endUploadTime,updateTime,size,md5,tags,metaTagsId,errorMessage,deprecated,replacedBy,userAccess,groupAccess,allAccess";
 
 void cdwFileStaticLoad(char **row, struct cdwFile *ret)
 /* Load a row from cdwFile table into ret.  The contents of ret will
@@ -1218,6 +1663,9 @@ ret->metaTagsId = sqlUnsigned(row[12]);
 ret->errorMessage = row[13];
 ret->deprecated = row[14];
 ret->replacedBy = sqlUnsigned(row[15]);
+ret->userAccess = sqlSigned(row[16]);
+ret->groupAccess = sqlSigned(row[17]);
+ret->allAccess = sqlSigned(row[18]);
 }
 
 struct cdwFile *cdwFileLoadByQuery(struct sqlConnection *conn, char *query)
@@ -1250,8 +1698,8 @@ void cdwFileSaveToDb(struct sqlConnection *conn, struct cdwFile *el, char *table
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,%u,'%s','%s',%lld,%lld,%lld,%lld,'%s','%s',%u,'%s','%s',%u)", 
-	tableName,  el->id,  el->submitId,  el->submitDirId,  el->userId,  el->submitFileName,  el->cdwFileName,  el->startUploadTime,  el->endUploadTime,  el->updateTime,  el->size,  el->md5,  el->tags,  el->metaTagsId,  el->errorMessage,  el->deprecated,  el->replacedBy);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%u,%u,'%s','%s',%lld,%lld,%lld,%lld,'%s','%s',%u,'%s','%s',%u,%d,%d,%d)", 
+	tableName,  el->id,  el->submitId,  el->submitDirId,  el->userId,  el->submitFileName,  el->cdwFileName,  el->startUploadTime,  el->endUploadTime,  el->updateTime,  el->size,  el->md5,  el->tags,  el->metaTagsId,  el->errorMessage,  el->deprecated,  el->replacedBy,  el->userAccess,  el->groupAccess,  el->allAccess);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -1279,6 +1727,9 @@ ret->metaTagsId = sqlUnsigned(row[12]);
 ret->errorMessage = cloneString(row[13]);
 ret->deprecated = cloneString(row[14]);
 ret->replacedBy = sqlUnsigned(row[15]);
+ret->userAccess = sqlSigned(row[16]);
+ret->groupAccess = sqlSigned(row[17]);
+ret->allAccess = sqlSigned(row[18]);
 return ret;
 }
 
@@ -1288,7 +1739,7 @@ struct cdwFile *cdwFileLoadAll(char *fileName)
 {
 struct cdwFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[16];
+char *row[19];
 
 while (lineFileRow(lf, row))
     {
@@ -1306,7 +1757,7 @@ struct cdwFile *cdwFileLoadAllByChar(char *fileName, char chopper)
 {
 struct cdwFile *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[16];
+char *row[19];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -1343,6 +1794,9 @@ ret->metaTagsId = sqlUnsignedComma(&s);
 ret->errorMessage = sqlStringComma(&s);
 ret->deprecated = sqlStringComma(&s);
 ret->replacedBy = sqlUnsignedComma(&s);
+ret->userAccess = sqlSignedComma(&s);
+ret->groupAccess = sqlSignedComma(&s);
+ret->allAccess = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -1421,6 +1875,12 @@ fprintf(f, "%s", el->deprecated);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%u", el->replacedBy);
+fputc(sep,f);
+fprintf(f, "%d", el->userAccess);
+fputc(sep,f);
+fprintf(f, "%d", el->groupAccess);
+fputc(sep,f);
+fprintf(f, "%d", el->allAccess);
 fputc(lastSep,f);
 }
 
@@ -3262,6 +3722,264 @@ fputc(sep,f);
 fprintf(f, "%lld", el->targetBaseCount);
 fputc(sep,f);
 fprintf(f, "%u", el->targetSeqCount);
+fputc(lastSep,f);
+}
+
+
+char *cdwVcfFileCommaSepFieldNames = "id,fileId,vcfMajorVersion,vcfMinorVersion,genotypeCount,itemCount,chromsHit,passItemCount,passRatio,snpItemCount,snpRatio,sumOfSizes,basesCovered,xBasesCovered,yBasesCovered,mBasesCovered,haploidCount,haploidRatio,phasedCount,phasedRatio,gotDepth,depthMin,depthMean,depthMax,depthStd";
+
+void cdwVcfFileStaticLoad(char **row, struct cdwVcfFile *ret)
+/* Load a row from cdwVcfFile table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+ret->fileId = sqlUnsigned(row[1]);
+ret->vcfMajorVersion = sqlSigned(row[2]);
+ret->vcfMinorVersion = sqlSigned(row[3]);
+ret->genotypeCount = sqlSigned(row[4]);
+ret->itemCount = sqlLongLong(row[5]);
+ret->chromsHit = sqlSigned(row[6]);
+ret->passItemCount = sqlLongLong(row[7]);
+ret->passRatio = sqlDouble(row[8]);
+ret->snpItemCount = sqlLongLong(row[9]);
+ret->snpRatio = sqlDouble(row[10]);
+ret->sumOfSizes = sqlLongLong(row[11]);
+ret->basesCovered = sqlLongLong(row[12]);
+ret->xBasesCovered = sqlSigned(row[13]);
+ret->yBasesCovered = sqlSigned(row[14]);
+ret->mBasesCovered = sqlSigned(row[15]);
+ret->haploidCount = sqlLongLong(row[16]);
+ret->haploidRatio = sqlDouble(row[17]);
+ret->phasedCount = sqlLongLong(row[18]);
+ret->phasedRatio = sqlDouble(row[19]);
+ret->gotDepth = sqlSigned(row[20]);
+ret->depthMin = sqlDouble(row[21]);
+ret->depthMean = sqlDouble(row[22]);
+ret->depthMax = sqlDouble(row[23]);
+ret->depthStd = sqlDouble(row[24]);
+}
+
+struct cdwVcfFile *cdwVcfFileLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all cdwVcfFile from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with cdwVcfFileFreeList(). */
+{
+struct cdwVcfFile *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = cdwVcfFileLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void cdwVcfFileSaveToDb(struct sqlConnection *conn, struct cdwVcfFile *el, char *tableName, int updateSize)
+/* Save cdwVcfFile as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+sqlDyStringPrintf(update, "insert into %s values ( %u,%u,%d,%d,%d,%lld,%d,%lld,%g,%lld,%g,%lld,%lld,%d,%d,%d,%lld,%g,%lld,%g,%d,%g,%g,%g,%g)", 
+	tableName,  el->id,  el->fileId,  el->vcfMajorVersion,  el->vcfMinorVersion,  el->genotypeCount,  el->itemCount,  el->chromsHit,  el->passItemCount,  el->passRatio,  el->snpItemCount,  el->snpRatio,  el->sumOfSizes,  el->basesCovered,  el->xBasesCovered,  el->yBasesCovered,  el->mBasesCovered,  el->haploidCount,  el->haploidRatio,  el->phasedCount,  el->phasedRatio,  el->gotDepth,  el->depthMin,  el->depthMean,  el->depthMax,  el->depthStd);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+struct cdwVcfFile *cdwVcfFileLoad(char **row)
+/* Load a cdwVcfFile from row fetched with select * from cdwVcfFile
+ * from database.  Dispose of this with cdwVcfFileFree(). */
+{
+struct cdwVcfFile *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+ret->fileId = sqlUnsigned(row[1]);
+ret->vcfMajorVersion = sqlSigned(row[2]);
+ret->vcfMinorVersion = sqlSigned(row[3]);
+ret->genotypeCount = sqlSigned(row[4]);
+ret->itemCount = sqlLongLong(row[5]);
+ret->chromsHit = sqlSigned(row[6]);
+ret->passItemCount = sqlLongLong(row[7]);
+ret->passRatio = sqlDouble(row[8]);
+ret->snpItemCount = sqlLongLong(row[9]);
+ret->snpRatio = sqlDouble(row[10]);
+ret->sumOfSizes = sqlLongLong(row[11]);
+ret->basesCovered = sqlLongLong(row[12]);
+ret->xBasesCovered = sqlSigned(row[13]);
+ret->yBasesCovered = sqlSigned(row[14]);
+ret->mBasesCovered = sqlSigned(row[15]);
+ret->haploidCount = sqlLongLong(row[16]);
+ret->haploidRatio = sqlDouble(row[17]);
+ret->phasedCount = sqlLongLong(row[18]);
+ret->phasedRatio = sqlDouble(row[19]);
+ret->gotDepth = sqlSigned(row[20]);
+ret->depthMin = sqlDouble(row[21]);
+ret->depthMean = sqlDouble(row[22]);
+ret->depthMax = sqlDouble(row[23]);
+ret->depthStd = sqlDouble(row[24]);
+return ret;
+}
+
+struct cdwVcfFile *cdwVcfFileLoadAll(char *fileName) 
+/* Load all cdwVcfFile from a whitespace-separated file.
+ * Dispose of this with cdwVcfFileFreeList(). */
+{
+struct cdwVcfFile *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[25];
+
+while (lineFileRow(lf, row))
+    {
+    el = cdwVcfFileLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct cdwVcfFile *cdwVcfFileLoadAllByChar(char *fileName, char chopper) 
+/* Load all cdwVcfFile from a chopper separated file.
+ * Dispose of this with cdwVcfFileFreeList(). */
+{
+struct cdwVcfFile *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[25];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = cdwVcfFileLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct cdwVcfFile *cdwVcfFileCommaIn(char **pS, struct cdwVcfFile *ret)
+/* Create a cdwVcfFile out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new cdwVcfFile */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->fileId = sqlUnsignedComma(&s);
+ret->vcfMajorVersion = sqlSignedComma(&s);
+ret->vcfMinorVersion = sqlSignedComma(&s);
+ret->genotypeCount = sqlSignedComma(&s);
+ret->itemCount = sqlLongLongComma(&s);
+ret->chromsHit = sqlSignedComma(&s);
+ret->passItemCount = sqlLongLongComma(&s);
+ret->passRatio = sqlDoubleComma(&s);
+ret->snpItemCount = sqlLongLongComma(&s);
+ret->snpRatio = sqlDoubleComma(&s);
+ret->sumOfSizes = sqlLongLongComma(&s);
+ret->basesCovered = sqlLongLongComma(&s);
+ret->xBasesCovered = sqlSignedComma(&s);
+ret->yBasesCovered = sqlSignedComma(&s);
+ret->mBasesCovered = sqlSignedComma(&s);
+ret->haploidCount = sqlLongLongComma(&s);
+ret->haploidRatio = sqlDoubleComma(&s);
+ret->phasedCount = sqlLongLongComma(&s);
+ret->phasedRatio = sqlDoubleComma(&s);
+ret->gotDepth = sqlSignedComma(&s);
+ret->depthMin = sqlDoubleComma(&s);
+ret->depthMean = sqlDoubleComma(&s);
+ret->depthMax = sqlDoubleComma(&s);
+ret->depthStd = sqlDoubleComma(&s);
+*pS = s;
+return ret;
+}
+
+void cdwVcfFileFree(struct cdwVcfFile **pEl)
+/* Free a single dynamically allocated cdwVcfFile such as created
+ * with cdwVcfFileLoad(). */
+{
+struct cdwVcfFile *el;
+
+if ((el = *pEl) == NULL) return;
+freez(pEl);
+}
+
+void cdwVcfFileFreeList(struct cdwVcfFile **pList)
+/* Free a list of dynamically allocated cdwVcfFile's */
+{
+struct cdwVcfFile *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    cdwVcfFileFree(&el);
+    }
+*pList = NULL;
+}
+
+void cdwVcfFileOutput(struct cdwVcfFile *el, FILE *f, char sep, char lastSep) 
+/* Print out cdwVcfFile.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+fprintf(f, "%u", el->fileId);
+fputc(sep,f);
+fprintf(f, "%d", el->vcfMajorVersion);
+fputc(sep,f);
+fprintf(f, "%d", el->vcfMinorVersion);
+fputc(sep,f);
+fprintf(f, "%d", el->genotypeCount);
+fputc(sep,f);
+fprintf(f, "%lld", el->itemCount);
+fputc(sep,f);
+fprintf(f, "%d", el->chromsHit);
+fputc(sep,f);
+fprintf(f, "%lld", el->passItemCount);
+fputc(sep,f);
+fprintf(f, "%g", el->passRatio);
+fputc(sep,f);
+fprintf(f, "%lld", el->snpItemCount);
+fputc(sep,f);
+fprintf(f, "%g", el->snpRatio);
+fputc(sep,f);
+fprintf(f, "%lld", el->sumOfSizes);
+fputc(sep,f);
+fprintf(f, "%lld", el->basesCovered);
+fputc(sep,f);
+fprintf(f, "%d", el->xBasesCovered);
+fputc(sep,f);
+fprintf(f, "%d", el->yBasesCovered);
+fputc(sep,f);
+fprintf(f, "%d", el->mBasesCovered);
+fputc(sep,f);
+fprintf(f, "%lld", el->haploidCount);
+fputc(sep,f);
+fprintf(f, "%g", el->haploidRatio);
+fputc(sep,f);
+fprintf(f, "%lld", el->phasedCount);
+fputc(sep,f);
+fprintf(f, "%g", el->phasedRatio);
+fputc(sep,f);
+fprintf(f, "%d", el->gotDepth);
+fputc(sep,f);
+fprintf(f, "%g", el->depthMin);
+fputc(sep,f);
+fprintf(f, "%g", el->depthMean);
+fputc(sep,f);
+fprintf(f, "%g", el->depthMax);
+fputc(sep,f);
+fprintf(f, "%g", el->depthStd);
 fputc(lastSep,f);
 }
 

@@ -233,38 +233,6 @@ if(menuStr)
     puts(menuStr);
     }
 
-if (endsWith(scriptName, "hgGateway") && geoMirrorEnabled())
-    {
-    // Show an opt-out alert if user is on a host to which user has been automatically redirected (just once, right after they have been redirected)
-    char *source = cgiOptionalString("source");
-    char *redirect = cgiOptionalString("redirect");
-    if (source != NULL && redirect != NULL && sameString(redirect, "auto"))
-	{
-	char *domain = cgiServerName();
-	char *port = cgiServerPort();
-        // We don't bother maintaining stuff in request URI, because it may contain items like hgsid and other host specific values
-        int newUriSize = 2048;
-	char *newUri = needMem(newUriSize);
-	safef(newUri, newUriSize, "http%s://%s:%s/cgi-bin/hgGateway?redirect=manual&source=%s", 
-	    cgiServerHttpsIsOn() ? "s" : "", source, port, domain);
-
-	printf("<TR><TD COLSPAN=3 id='redirectTd' onclick=\"javascript:document.getElementById('redirectTd').innerHTML='';\">"
-	    "<div style=\"margin: 10px 25%%; border-style:solid; border-width:thin; border-color:#97D897;\">"
-	    "<h3 style=\"background-color: #97D897; text-align: left; margin-top:0px; margin-bottom:0px;\">"
-	    "&nbsp;You've been redirected to your nearest mirror - %s"
-	    "<idiv style=\"float:right;\">[x]</idiv>"
-	    "</h3> "
-	    "<ul style=\"margin:5px;\">"
-	    "<li>Take me back to <a href=\"%s\">%s</a>"
-	    "<idiv style=\"float:right;\"><a href=\"../goldenPath/help/genomeEuro.html\">What is this?</a></idiv>"
-	    "</li>"
-	    "</ul>"
-	    "</div>"
-	    "</TD></TR>\n"
-	    , domain, newUri, source );
-	}
-    }
-
 if(!skipSectionHeader)
 /* this HTML must be in calling code if skipSectionHeader is TRUE */
     {
@@ -523,7 +491,9 @@ int numClades = 0;
 
 struct sqlConnection *conn = hConnectCentral();  // after hClade since it access hgcentral too
 // get only the clades that have actual active genomes
-struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ SELECT DISTINCT(c.name), c.label FROM clade c, genomeClade g, dbDb d WHERE c.name=g.clade AND d.organism=g.genome AND d.active=1 ORDER BY c.priority");
+char query[4096];
+safef(query, sizeof query, "NOSQLINJ SELECT DISTINCT(c.name), c.label FROM %s c, %s g, %s d WHERE c.name=g.clade AND d.organism=g.genome AND d.active=1 ORDER BY c.priority", cladeTable(),genomeCladeTable(), dbDbTable());
+struct sqlResult *sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     clades[numClades] = cloneString(row[0]);
@@ -567,7 +537,7 @@ char *orgList[1024];
 int numGenomes = 0;
 struct dbDb *cur = NULL;
 struct hash *hash = hashNew(10); // 2^^10 entries = 1024
-char *selGenome = hGenomeOrArchive(db);
+char *selGenome = hGenome(db);
 char *values [1024];
 char *cgiName;
 
@@ -673,7 +643,7 @@ char *assemblyList[128];
 char *values[128];
 int numAssemblies = 0;
 struct dbDb *cur = NULL;
-char *genome = hGenomeOrArchive(db);
+char *genome = hGenome(db);
 char *selAssembly = NULL;
 
 if (genome == NULL)
@@ -763,42 +733,6 @@ If NULL, no default selection.
  */
 struct dbDb *dbList = hGetBlatIndexedDatabases();
 printSomeAssemblyListHtml(db, dbList, NULL);
-}
-
-void printOrgAssemblyListAxtInfo(char *dbCgi, char *javascript)
-/* Find all the organisms/assemblies that are referenced in axtInfo,
- * and print the dropdown list. */
-{
-struct dbDb *dbList = hGetAxtInfoDbs(dbCgi);
-char *assemblyList[128];
-char *values[128];
-int numAssemblies = 0;
-struct dbDb *cur = NULL;
-char *assembly = cgiOptionalString(dbCgi);
-char orgAssembly[256];
-
-for (cur = dbList; ((cur != NULL) && (numAssemblies < 128)); cur = cur->next)
-    {
-    safef(orgAssembly, sizeof(orgAssembly), "%s %s",
-	  cur->organism, cur->description);
-    assemblyList[numAssemblies] = cloneString(orgAssembly);
-    values[numAssemblies] = cur->name;
-    numAssemblies++;
-    }
-
-#ifdef OLD
-// Have to use the "menu" name, not the value, to mark selected:
-if (assembly != NULL)
-    {
-    char *selOrg    = hOrganism(assembly);
-    char *selFreeze = hFreezeFromDb(assembly);
-    safef(orgAssembly, sizeof(orgAssembly), "%s %s", selOrg, selFreeze);
-    assembly = cloneString(orgAssembly);
-    }
-#endif /* OLD */
-
-cgiMakeDropListFull(dbCgi, assemblyList, values, numAssemblies, assembly,
-		    javascript);
 }
 
 static char *getDbForGenome(char *genome, struct cart *cart)
@@ -1383,6 +1317,15 @@ if(scriptName)
         }
     }
 
+// Show Data Integrator link on non-public sites.
+if ((hIsPrivateHost() || hIsPreviewHost()) && fileExists("hgIntegrator"))
+    {
+    char hgIntegratorItem[1024];
+    safef(hgIntegratorItem, sizeof(hgIntegratorItem),
+          "<li><a href=\"../cgi-bin/hgIntegrator?%s\">Data Integrator</a></li>", uiVars);
+    menuStr = replaceChars(menuStr, "<!-- DATA_INTEGRATOR -->", hgIntegratorItem);
+    }
+
 if(!loginSystemEnabled())
     stripRegEx(menuStr, "<\\!-- LOGIN_START -->.*<\\!-- LOGIN_END -->", REG_ICASE);
 
@@ -1484,4 +1427,62 @@ if(contextSpecificHelpLink)
     menuStr = replaceChars(menuStr, "<!-- CONTEXT_SPECIFIC_HELP -->", buf);
     }
 return menuStr;
+}
+
+void checkForGeoMirrorRedirect(struct cart *cart)
+// Implement Geo/IP based redirection.
+{
+char *thisNodeStr = geoMirrorNode();
+if (thisNodeStr)   // if geo-mirroring is enabled
+    {
+    char *redirectCookie = findCookieData("redirect");
+    char *redirect = cgiOptionalString("redirect");
+
+    // if we're not already redirected
+    if (redirect == NULL && redirectCookie == NULL) 
+        {
+        int thisNode = sqlUnsigned(thisNodeStr);
+        struct sqlConnection *centralConn = hConnectCentral();
+        char *ipStr = cgiRemoteAddr();
+        int node = defaultNode(centralConn, ipStr);
+
+        // if our node is not the node that's closest.
+        if (thisNode != node)
+            {
+	    char *geoSuffix = cfgOptionDefault("browser.geoSuffix","");
+            char query[1056];
+            sqlSafef(query, sizeof query, "select domain from gbNode%s where node = %d", geoSuffix, node);
+            char *newDomain = sqlQuickString(centralConn, query);
+            char *oldDomain = cgiServerName();
+            char *port = cgiServerPort();
+            char *uri = cgiRequestUri();
+            char *sep = strchr(uri, '?') ? "&" : "?";
+            int newUriSize = strlen(uri) + 1024;
+            char *newUri = needMem(newUriSize);
+            char *oldUri = needMem(newUriSize);
+            safef(oldUri, newUriSize, "http%s://%s:%s%s%sredirect=manual&source=%s", 
+		cgiServerHttpsIsOn() ? "s" : "", oldDomain, port, uri, sep, oldDomain);
+            safef(newUri, newUriSize, "http%s://%s:%s%s%sredirect=manual&source=%s", 
+		cgiServerHttpsIsOn() ? "s" : "", newDomain, port, uri, sep, oldDomain);
+
+	    printf("<TR><TD COLSPAN=3 id='redirectTd' onclick=\"javascript:document.getElementById('redirectTd').innerHTML='';\">"
+	    "<div style=\"margin: 10px 25%%; border-style:solid; border-width:thin; border-color:#97D897;\">"
+	    "<h3 style=\"background-color: #97D897; text-align: left; margin-top:0px; margin-bottom:0px;\">"
+	    "&nbsp;You might want to navigate to your nearest mirror - %s"
+	    "</h3> "
+	    "<ul style=\"margin:5px;\">",
+	    newDomain);
+	    
+	    printf("<li>User settings (sessions and custom tracks) <B>will differ</B> between sites."
+		"<idiv style=\"float:right;\"><a href=\"../goldenPath/help/genomeEuro.html#sessions\">Read more.</a></idiv>");
+	    printf("<li>Take me to  <a href=\"%s\">%s</a> </li>",
+		newUri, newDomain);
+	    printf("<li>Let me stay here   <a href=\"%s\">%s</a>",
+		oldUri, oldDomain );
+	    printf("</div></TD></TR>\n");
+            exit(0);
+            }
+        hDisconnectCentral(&centralConn);
+        }
+    }
 }

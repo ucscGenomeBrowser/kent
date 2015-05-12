@@ -21,6 +21,7 @@
 #include "encode/wgEncodeGencodeTranscriptSupport.h"
 #include "encode/wgEncodeGencodeExonSupport.h"
 #include "encode/wgEncodeGencodeUniProt.h"
+#include "encode/wgEncodeGencodeEntrezGene.h"
 #include "encode/wgEncodeGencodeAnnotationRemark.h"
 #include "encode/wgEncodeGencodeTranscriptionSupportLevel.h"
 
@@ -59,6 +60,12 @@ char *dot = strchr(accBuf, '.');
 if (dot != NULL)
     *dot = '\0';
 return accBuf;
+}
+
+static bool haveGencodeTable(struct trackDb *tdb, char *tableBase)
+/* determine if table is in settings and thus in this gencode release */
+{
+return trackDbSetting(tdb, tableBase) != NULL;
 }
 
 static char *getGencodeTable(struct trackDb *tdb, char *tableBase)
@@ -443,6 +450,41 @@ while ((pubMed != NULL) || (rowCnt == 0))
 printf("</tbody></table>\n");
 }
 
+static void writeEntrezGeneEntry(struct wgEncodeGencodeEntrezGene *entrezGene)
+/* write HTML table entry for a entrezGene */
+{
+printf("<td width=\"33.33%%\"><a href=\"");
+printEntrezGeneUrl(stdout, entrezGene->entrezGeneId);
+printf("\" target=_blank>%d</a>", entrezGene->entrezGeneId);
+}
+
+static void writeEntrezGeneLinkHtml(struct wgEncodeGencodeEntrezGene *entrezGenes)
+/* write HTML links to EntrezGene */
+{
+printf("<table class=\"hgcCcds\"><thead>\n");
+printf("<tr><th colspan=\"3\">Entrez Gene</tr>\n");
+printf("</thead><tbody>\n");
+struct wgEncodeGencodeEntrezGene *entrezGene = entrezGenes;
+int i, rowCnt = 0;
+while ((entrezGene != NULL) || (rowCnt == 0))
+    {
+    printf("<tr>");
+    for (i = 0; i < 3; i++)
+        {
+        if (entrezGene != NULL)
+            {
+            writeEntrezGeneEntry(entrezGene);
+            entrezGene = entrezGene->next;
+            }
+        else
+            printf("<td width=\"33.33%%\">");
+        }
+    printf("</tr>\n");
+    rowCnt++;
+    }
+printf("</tbody></table>\n");
+}
+
 static void writeRefSeqEntry(struct wgEncodeGencodeRefSeq *refSeq)
 /* write HTML table entry for a RefSeq */
 {
@@ -681,17 +723,19 @@ struct wgEncodeGencodeAttrs *transAttrs = transAttrsLoad(tdb, conn, gencodeId);
 char *gencodeGeneId = transAttrs->geneId;
 struct wgEncodeGencodeGeneSource *geneSource = metaDataLoad(tdb, conn, gencodeGeneId, "wgEncodeGencodeGeneSource", "geneId", sqlQueryMust|sqlQuerySingle, (sqlLoadFunc)wgEncodeGencodeGeneSourceLoad);
 struct wgEncodeGencodeTranscriptSource *transcriptSource = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeTranscriptSource", "transcriptId", sqlQueryMust|sqlQuerySingle, (sqlLoadFunc)wgEncodeGencodeTranscriptSourceLoad);
-bool haveRemarks = (trackDbSetting(tdb, "wgEncodeGencodeAnnotationRemark") != NULL);
+bool haveRemarks = haveGencodeTable(tdb, "wgEncodeGencodeAnnotationRemark");
 struct wgEncodeGencodeAnnotationRemark *remarks = haveRemarks ? metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeAnnotationRemark", "transcriptId", 0, (sqlLoadFunc)wgEncodeGencodeAnnotationRemarkLoad) : NULL;
 struct wgEncodeGencodePdb *pdbs = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodePdb", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodePdbLoad);
 struct wgEncodeGencodePubMed *pubMeds = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodePubMed", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodePubMedLoad);
+bool haveEntrezGene = haveGencodeTable(tdb, "wgEncodeGencodeEntrezGene");
+struct wgEncodeGencodeEntrezGene *entrezGenes = haveEntrezGene ? metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeEntrezGene", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeEntrezGeneLoad) : NULL;
 struct wgEncodeGencodeRefSeq *refSeqs = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeRefSeq", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeRefSeqLoad);
 struct wgEncodeGencodeTag *tags = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeTag", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeTagLoad);
 struct wgEncodeGencodeTranscriptSupport *transcriptSupports = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeTranscriptSupport", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeTranscriptSupportLoad);
 struct wgEncodeGencodeExonSupport *exonSupports = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeExonSupport", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeExonSupportLoad);
 struct wgEncodeGencodeUniProt *uniProts = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeUniProt", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeUniProtLoad);
 slSort(&uniProts, uniProtDatasetCmp);
-bool haveTsl = (trackDbSetting(tdb, "wgEncodeGencodeTranscriptionSupportLevel") != NULL);
+bool haveTsl = haveGencodeTable(tdb, "wgEncodeGencodeTranscriptionSupportLevel");
 struct wgEncodeGencodeTranscriptionSupportLevel *tsl = haveTsl ? metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeTranscriptionSupportLevel", "transcriptId", 0, (sqlLoadFunc)wgEncodeGencodeTranscriptionSupportLevelLoad) : NULL;
 
 int geneChromStart, geneChromEnd;
@@ -715,6 +759,8 @@ if (haveRemarks)
 if (isProteinCodingTrans(transAttrs))
     writePdbLinkHtml(pdbs);
 writePubMedLinkHtml(pubMeds);
+if (haveEntrezGene)
+    writeEntrezGeneLinkHtml(entrezGenes);
 writeRefSeqLinkHtml(refSeqs);
 if (isProteinCodingTrans(transAttrs))
     writeUniProtLinkHtml(uniProts);
@@ -726,6 +772,7 @@ wgEncodeGencodeGeneSourceFreeList(&geneSource);
 wgEncodeGencodeTranscriptSourceFreeList(&transcriptSource);
 wgEncodeGencodePdbFreeList(&pdbs);
 wgEncodeGencodePubMedFreeList(&pubMeds);
+wgEncodeGencodeEntrezGeneFreeList(&entrezGenes);
 wgEncodeGencodeRefSeqFreeList(&refSeqs);
 wgEncodeGencodeTranscriptSupportFreeList(&transcriptSupports);
 wgEncodeGencodeExonSupportFreeList(&exonSupports);

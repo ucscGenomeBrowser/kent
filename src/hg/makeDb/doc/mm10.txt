@@ -10933,3 +10933,132 @@ retroFinder/branches/version2/src/pipeline/analyseExpress.sh
 # dataVersion Jan. 2015
 # Scripts copied ucscRetroAli6.psl, ucscRetroInfo6.bed and ucscRetroCds6.tab
 # to /hive/data/genomes/mm10/bed/retro/
+
+##############################################################################
+# LASTZ mouse/mm10 sheep/tarSyr2 - (DONE - 2015-03-27 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzTarSyr2.2015-03-27
+    cd /hive/data/genomes/mm10/bed/lastzTarSyr2.2015-03-27
+
+    cat << '_EOF_' > DEF
+# tarsier vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Tarsier TarSyr2
+SEQ2_DIR=/hive/data/genomes/tarSyr2/tarSyr2.2bit
+SEQ2_LEN=/hive/data/genomes/tarSyr2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=800
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzTarSyr2.2015-03-27
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+      -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > do.log 2>&1
+    # real    301m17.238s
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+      -chainMinScore=3000 -chainLinearGap=medium \
+        -continue=syntenicNet -syntenicNet -workhorse=hgwdev \
+          -smallClusterHub=ku -bigClusterHub=ku) > synNet.log 2>&1
+    # real    16m5.061s
+
+    cat fb.mm10.chainTarSyr2Link.txt
+    # 856877439 bases of 2652783500 (32.301%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` mm10 tarSyr2) > rbest.log 2>&1 &
+    #  real    27m4.048s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/tarSyr2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/tarSyr2/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzTarSyr2.2015-03-27/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    181m7.042s
+
+    cat fb.tarSyr2.chainMm10Link.txt
+    #  900229088 bases of 3405755564 (26.433%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` tarSyr2 mm10) > rbest.log 2>&1
+    #  real    77m29.742s
+
+#########################################################################
+# UCSC to RefSeq name correspondence (DONE - 2015-04-15 - Hiram)
+
+    mkdir /hive/data/genomes/mm10/bed/ucscToRefSeq
+    cd /hive/data/genomes/mm10/bed/ucscToRefSeq
+
+    rsync -avPL \
+  rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Mus_musculus/all_assembly_versions/GCA_000001635.5_GRCm38.p3/GCA_000001635.5_GRCm38.p3_assembly_report.txt ./
+
+    # this assembly_report has "UCSC-style-name" in column 10
+    # but it does not name everything
+
+    # columns 5 and 7 are the INSDC and RefSeq names
+    grep -v "^#" GCA_000001635.5_GRCm38.p3_assembly_report.txt \
+      | awk -F'\t' '{printf "%s\t%s\n", $5,$7}' | sort > insdc.refSeq.tab
+
+    # chrM/MT confusion fixed by sed
+    hgsql -N -e 'select name,chrom,chromStart,chromEnd from ucscToINSDC;' mm10 \
+      | sed -e 's/NC_005089.1/AY172335.1/;' | sort > insdc.ucsc.tab
+
+    join insdc.ucsc.tab insdc.refSeq.tab | tr '[ ]' '[\t]' \
+       | cut -f2- > ucsc.refSeq.tab
+
+    export chrSize=`cut -f1 ucsc.refSeq.tab | awk '{print length($0)}' | sort -n | tail -1`
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab mm10 ucscToRefSeq ./ucscToRefSeq.sql ucsc.refSeq.tab
+
+    checkTableCoords  mm10 -table=ucscToRefSeq
+    featureBits -countGaps mm10 ucscToRefSeq
+    # 2730871774 bases of 2730871774 (100.000%) in intersection
+
+#########################################################################
+
+# download and load ncbiGene track
+
+db=mm10
+mkdir  /cluster/data/genomes/$db/bed/ncbiGene
+cd  /cluster/data/genomes/$db/bed/ncbiGene
+
+ftpFile=ftp://ftp.ncbi.nlm.nih.gov/genomes/M_musculus/GFF/ref_GRCm38.p3_top_level.gff3.gz
+gff3File=`basename $ftpFile`
+
+echo "select * from ucscToRefSeq" | hgsql $db | tail -n +2 | awk '{print 0, $4, $3, $1, $3}' > refSeqToUcsc.lft
+wget $ftpFile
+
+/cluster/home/braney/bin/x86_64/gff3ToGenePred -useName -warnAndContinue $gff3File stdout 2> convertErr.txt | liftUp -type=.gp -extGenePred lift.gp refSeqToUcsc.lft warn  stdin 2> liftErr.txt
+wc -l lift.gp
+# 104119 lift.gp
+
+egrep "^N(M|R)" lift.gp > curated.gp
+egrep "^X(M|R)" lift.gp > predicted.gp
+
+wc -l curated.gp predicted.gp
+#  33532 curated.gp
+#  70587 predicted.gp
+# 104119 total
+
+grep dropping convertErr.txt | wc -l
+#    2416
+
+awk '/isn/ {print $1}' liftErr.txt | sort -u
+#    NT_166322.1
+#    NT_187001.1
+
+hgLoadGenePred -genePredExt $db ncbiRefCurated curated.gp
+hgLoadGenePred -genePredExt $db ncbiRefPredicted predicted.gp
+

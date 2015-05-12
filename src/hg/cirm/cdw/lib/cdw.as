@@ -13,6 +13,29 @@ table cdwUser
     string email unique;   "Email address - required"
     char[37] uuid index; "Help to synchronize us with Stanford."
     byte isAdmin;	"If true the use can modify other people's files too."
+    uint primaryGroup;	"If this is non-zero then we'll make files with this group association."
+    )
+
+table cdwGroup
+"A group in the access control sense"
+    (
+    uint id primary auto;   "Autoincremented user ID"
+    string name unique; "Symbolic name for group, should follow rules of a lowercase C symbol."
+    lstring description; "Description of group"
+    )
+
+table cdwGroupFile
+"Association table between cdwFile and cdwGroup"
+    (
+    uint fileId index;	"What is the file"
+    uint groupId;	"What is the group"
+    )
+
+table cdwGroupUser
+"Association table between cdwGroup and cdwUser"
+    (
+    uint userId index;	"What is the user"
+    uint groupId index;	"What is the group"
     )
 
 table cdwLab
@@ -93,6 +116,9 @@ table cdwFile
     lstring errorMessage; "If non-empty contains last error message from upload. If empty upload is ok"
     string deprecated; "If non-empty why you shouldn't use this file any more."
     uint replacedBy;   "If non-zero id of file that replaces this one."
+    byte userAccess;  "0 - no, 1 - read, 2 - read/write"
+    byte groupAccess;  "0 - no, 1 - read, 2 - read/write"
+    byte allAccess;  "0 - no, 1 - read, 2 - read/write"
     )
 
 table cdwSubmit
@@ -247,6 +273,36 @@ table cdwBamFile
     double u4mUniqueRatio; "u4mUniqPos/u4mReadCount - measures library diversity"
     bigInt targetBaseCount;  "Count of bases in mapping target"
     uint targetSeqCount; "Number of chromosomes or other distinct sequences in mapping target"
+    )
+
+table cdwVcfFile
+"Info on what is in a vcf file beyond whet's in cdwValidFile"
+    (
+    uint id primary auto;   "ID in this table"
+    uint fileId unique;	"ID in cdwFile table."
+    int vcfMajorVersion; "VCF file major version"
+    int vcfMinorVersion; "VCF file minor version"
+    int genotypeCount; "How many genotypes of data"
+    bigInt itemCount; "Number of records in VCF file"
+    int chromsHit;  "Number of chromosomes (or contigs) with data"
+    bigInt passItemCount; "Number of records that PASS listed filter"
+    double passRatio; "passItemCount/itemCount"
+    bigInt snpItemCount; "Number of records that are just single base substitution, no indels"
+    double snpRatio;  "snpItemCount/itemCount"
+    bigInt sumOfSizes; "The sum of sizes of all records"
+    bigInt basesCovered; "Bases with data. Equals sumOfSizes if no overlap of records."
+    int xBasesCovered; "Number of bases of chrX covered"
+    int yBasesCovered; "Number of bases of chrY covered"
+    int mBasesCovered; "Number of bases of chrM covered"
+    bigInt haploidCount; "Number of genotype calls that are haploid"
+    double haploidRatio;  "Ratio of hapload to total calls"
+    bigInt phasedCount;	"Number of genotype calls that are phased"
+    double phasedRatio;	"Ration of phased calls to total calls"
+    byte gotDepth; "If true then have DP value in file and in depth stats below"
+    double depthMin;  "Min DP reported depth"
+    double depthMean; "Mean DP value"
+    double depthMax;	"Max DP value"
+    double depthStd;	"Standard DP deviation"
     )
 
 table cdwQaFail

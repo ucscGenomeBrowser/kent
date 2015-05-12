@@ -1,0 +1,52 @@
+<pre>
+A Genomics Alliance Beacon at UCSC, see http://ga4gh.org/#/beacon
+
+In collaboration with the Leiden Open Variation Database and Biobase/HGMD.
+
+parameters:
+- chromosome: 1 - 22, X, Y or M
+- position: 0-based position on chromosome
+- dataset: either "lovd" or "hgmd". If not provided, queries both LOVD and HGMD.
+- reference: optional. if specified, has to be "GRCh37"
+- alternateBases: A,C,T or G. Ignored for HGMD (HGMD gives out only
+  positions, not the alleles, these are only on their website)
+- format: if "text",  does not return JSON, but just one of the words "true",
+      "false" or "overlap".  Easier to parse for simple shell scripts.
+
+For alleles with a "true" reply, you can get more details about a variant from
+the source databases:
+- dataset lovd: Use the LOVD API to get all info, see chapter 9 of the 
+  LOVD manual, http://www.lovd.nl/3.0/docs/LOVD_manual_3.0.pdf
+  Or search manually on http://www.lovd.nl/3.0/home
+- dataset hgmd: Create an account on http://www.hgmd.cf.ac.uk/ and search
+  manually for the variant.
+
+Note that only single-basepair substitutions are available from both databases.
+Insertions and deletions might be available with later versions of the Beacon
+API.
+
+Examples:
+http://%(host)s/cgi-bin/hgBeacon/query?dataset=lovd&chromosome=1&position=808921&alternateBases=T&format=text
+- returns "true"
+
+http://%(host)s/cgi-bin/hgBeacon/query?dataset=lovd&chromosome=1&position=808921&alternateBases=T
+- same as before, but as a JSON string
+
+http://%(host)s/cgi-bin/hgBeacon/query?dataset=hgmd&chromosome=1&position=985954&alternateBases=T&format=text
+- returns "true", for any allele, as HGMD does not share the alleles
+
+http://%(host)s/cgi-bin/hgBeacon?dataset=hgmd&chromosome=1&position=2160493&alternateBases=T&format=text
+- returns "false", no information at this position
+
+http://%(host)s/cgi-bin/hgBeacon?dataset=hgmd&chromosome=1&position=2160493&alternateBases=T
+- same as before, but as a JSON string
+
+IP-based throttling:
+For each incoming request from an IP address, 75 msecs are added after every
+request, and every 15 secs 75 seconds are removed. No delay is imposed when
+fewer than 10 seconds have accumulated. This means that about 150 queries
+can be sent before a delay of about 10 seconds is imposed for an IP
+address. If a delay of 20 seconds has accumulated (=the client is using
+multi-threaded requests) the client IP is blocked from further requests
+until the delay falls under 20 seconds.
+</pre>

@@ -56,9 +56,4 @@ type bed 6
 track nscanGene override
 informant Orangutan N-SCAN uses mouse (mm9) as the informant.
 
-track chainRheMac2 override
-priority 280.1
-
-track netRheMac2 override
-priority 280.2
-
+include trackDb.chainNet.ra

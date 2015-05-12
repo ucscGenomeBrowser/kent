@@ -211,6 +211,8 @@ extern char *gff3AttrOntologyTerm;
 /* commonly used features names */
 extern char *gff3FeatGene;
 extern char *gff3FeatMRna;
+extern char *gff3FeatNCRna;
+extern char *gff3FeatRRna;
 extern char *gff3FeatExon;
 extern char *gff3FeatCDS;
 extern char *gff3FeatThreePrimeUTR;
@@ -218,6 +220,7 @@ extern char *gff3FeatFivePrimeUTR;
 extern char *gff3FeatStartCodon;
 extern char *gff3FeatStopCodon;
 extern char *gff3FeatTranscript;
+extern char *gff3FeatPrimaryTranscript;
 
 struct gff3File *gff3FileOpen(char *fileName, int maxErr, FILE *errFh);
 /* Parse a GFF3 file into a gff3File object.  If maxErr not zero, then

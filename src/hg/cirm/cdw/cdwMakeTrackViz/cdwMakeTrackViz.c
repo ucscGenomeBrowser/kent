@@ -182,6 +182,9 @@ char submittedTabexPath[PATH_LEN];
 safef(submittedTabexPath, sizeof(submittedTabexPath), "%s.tbi", ef->submitFileName);
 long long tabixId = cdwFindInSameSubmitDir(conn, ef, submittedTabexPath);
 
+char bgzippedFile[PATH_LEN];
+safef(bgzippedFile, sizeof(bgzippedFile), "%s", ef->cdwFileName);
+
 if (tabixId == 0)
      {
      uglyf("tabixId=0\n");
@@ -194,9 +197,11 @@ if (tabixId == 0)
 	 safef(command, sizeof(command), "bgzip -c %s > %s.gz", bgzippedVcf, bgzippedVcf);
 	 mustSystem(command);
 	 strcat(bgzippedVcf, ".gz");
+	 strcat(bgzippedFile, ".gz");
 	 }
      /* Do tabixing */
      safef(command, sizeof(command), "tabix -p vcf %s", bgzippedVcf);
+     mustSystem(command);
      }
 else
      {
@@ -220,7 +225,7 @@ char update[3*PATH_LEN];
 sqlSafef(update, sizeof(update), 
     "insert cdwTrackViz (fileId,shortLabel,longLabel,type,bigDataFile) "
     "values (%d,\"%s\", \"%s\", \"%s\", \"%s\")"
-    , ef->id, vf->licensePlate, longLabel, "vcfTabix", ef->cdwFileName);
+    , ef->id, vf->licensePlate, longLabel, "vcfTabix", bgzippedFile);
 uglyf("update: %s\n", update);
 sqlUpdate(conn, update);
 
@@ -264,6 +269,14 @@ for (ef = efList; ef != NULL; ef = ef->next)
 	else if (sameString(format, "vcf"))
 	    {
 	    compressAndBuildTabix(conn, ef, vf);
+	    }
+	else if (sameString(format, "narrowPeak"))
+	    {
+	    cdwTrackBigViz(conn, ef, vf, format);
+	    }
+	else if (sameString(format, "broadPeak"))
+	    {
+	    cdwTrackBigViz(conn, ef, vf, format);
 	    }
 	else if (sameString(format, "bigWig"))
 	    {

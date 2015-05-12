@@ -176,21 +176,13 @@ else
     row[8] = row[9] = ""; // compatible with localmem usage
 }
 
-static char *vcfFileName(struct trackDb *tdb, struct sqlConnection *conn, char *table, char *chrom)
+static char *vcfFileName(struct sqlConnection *conn, char *table, char *chrom)
 // Look up the vcf or vcfTabix file name, using CUSTOM_TRASH if necessary.
 {
-boolean isCt = isCustomTrack(table);
-char *dbTable = table;
-struct sqlConnection *dbConn = conn;
-if (isCt)
-    {
-    dbConn = hAllocConn(CUSTOM_TRASH);
-    struct customTrack *ct = ctLookupName(table);
-    dbTable = ct->dbTableName;
-    }
-char *fileName = bbiNameFromSettingOrTableChrom(tdb, dbConn, dbTable, chrom);
-if (isCt)
-    hFreeConn(&dbConn);
+char *fileName = bigFileNameFromCtOrHub(table, conn);
+struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
+if (fileName == NULL)
+    fileName = bbiNameFromSettingOrTableChrom(tdb, conn, table, chrom);
 return fileName;
 }
 
@@ -251,7 +243,6 @@ if (anyFilter())
 /* Loop through outputting each region */
 struct region *region, *regionList = getRegions();
 int maxOut = bigFileMaxOutput();
-struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
 // Include the header, absolutely necessary for VCF parsing.
 boolean printedHeader = FALSE;
 // Temporary storage for row-ification:
@@ -262,7 +253,7 @@ struct dyString *dyGt = newDyString(1024);
 struct vcfRecord *rec;
 for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
     {
-    char *fileName = vcfFileName(tdb, conn, table, region->chrom);
+    char *fileName = vcfFileName(conn, table, region->chrom);
     struct vcfFile *vcff;
     if (isTabix)
 	vcff = vcfTabixFileMayOpen(fileName, region->chrom, region->start, region->end,
@@ -386,12 +377,11 @@ struct asFilter *filter = asFilterFromCart(cart, db, table, as);
 struct hash *idHash = identifierHash(db, table);
 
 /* Get beds a region at a time. */
-struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
 struct bed *bedList = NULL;
 struct region *region;
 for (region = regionList; region != NULL; region = region->next)
     {
-    char *fileName = vcfFileName(tdb, conn, table, region->chrom);
+    char *fileName = vcfFileName(conn, table, region->chrom);
     if (fileName == NULL)
 	continue;
     addFilteredBedsOnRegion(fileName, region, table, filter, lm, &bedList, idHash, &maxOut,
@@ -412,8 +402,7 @@ struct slName *randomVcfIds(char *table, struct sqlConnection *conn, int count, 
 /* Return some semi-random IDs from a VCF file. */
 {
 /* Read 10000 items from vcf file,  or if they ask for a big list, then 4x what they ask for. */
-struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
-char *fileName = vcfFileName(tdb, conn, table, hDefaultChrom(database));
+char *fileName = vcfFileName(conn, table, hDefaultChrom(database));
 struct lineFile *lf = isTabix ? lineFileTabixMayOpen(fileName, TRUE) :
 				lineFileMayOpen(fileName, TRUE);
 if (lf == NULL)
@@ -452,7 +441,7 @@ void showSchemaVcf(char *table, struct trackDb *tdb, boolean isTabix)
 /* Show schema on vcf. */
 {
 struct sqlConnection *conn = hAllocConn(database);
-char *fileName = vcfFileName(tdb, conn, table, hDefaultChrom(database));
+char *fileName = vcfFileName(conn, table, hDefaultChrom(database));
 
 struct asObject *as = vcfAsObj();
 hPrintf("<B>Database:</B> %s", database);

@@ -930,6 +930,7 @@ group rna
 visibility hide
 color 200,0,50
 type bed 12 .
+exonNumbers off
 
 track genieBounds
 shortLabel Clone Bounds
@@ -2897,6 +2898,61 @@ compositeTrack on
         mouseOverField comments
         noScoreFilter on
 
+track ncbiRefOverlap
+shortLabel NCBI Overlaps
+longLabel NCBI Gene Annotations with Exon Overlaps
+group genes
+visibility pack
+priority 1
+color 12,12,120
+type genePred 
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+track ncbiGene
+shortLabel NCBI RefSeq
+longLabel NCBI RefSeq Genes
+compositeTrack on
+group genes
+visibility hide
+type genePred 
+baseColorUseCds given
+noInherit on
+baseColorDefault genomicCodons
+subGroup1 view Views curated=Curated predicted=Predicted
+
+    track ncbiRefCuratedView
+    shortLabel Curated
+    view curated
+    visibility pack
+    color 16,93,235
+    parent ncbiGene
+
+	track ncbiRefCurated
+	shortLabel RefSeq Curated
+        subGroups view=curated
+	longLabel  RefSeq Curated (NM_* and NR_*)
+	visibility pack
+	parent ncbiRefCuratedView
+
+    track ncbiRefPredictedView
+    shortLabel Predicted
+    view predicted
+    visibility hide
+    parent ncbiGene
+    color 48,168,219
+    spectrum on
+
+	track ncbiRefPredicted
+	shortLabel RefSeq Predicted
+        subGroups view=predicted
+	longLabel  RefSeq Predicted (XM_* and XR_*)
+	parent ncbiRefPredictedView
+
+#itemDetailsHtmlTable geneDesc
+#url http://mupit-ebola.icm.jhu.edu/ResidueFileUpload?residues=chr1%20%[
+#urlLabel muPIT protein structures
+
 #        track ucscGenePfam
 #        shortLabel Pfam in UCSC Gene
 #        longLabel Pfam Domains in UCSC Genes
@@ -2927,4 +2983,20 @@ searchType bed
 termRegex ^[a-zA-Z0-9]+([a-zA-Z0-9:/.-]+[a-zA-Z0-9:/.-_%]+)*
 searchMethod fuzzy
 searchPriority 50
+
+searchName ncbiRefCurated
+searchTable ncbiRefCurated
+searchMethod exact
+searchType genePred
+#semiShortCircuit 1
+termRegex N(M|R)_[0-9]{6}[0-9]*.[0-9]*
+searchPriority 9.5
+
+searchName ncbiRefPredicted
+searchTable ncbiRefPredicted
+searchMethod exact
+searchType genePred
+#semiShortCircuit 1
+termRegex X(M|R)_[0-9]{6}[0-9]*.[0-9]*
+searchPriority 9.5
 

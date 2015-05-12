@@ -21,6 +21,9 @@ var ImModel = (function() {
         this.undoStack = [];
         this.redoStack = [];
 
+        // cart is currently a global object but let's pretend it's not
+        this.cart = cart;
+
         // Handler functions for server and UI update paths
         // Cart is flat, so cartJsonHandlers is just an object that maps cart var names
         // to arrays of functions.
@@ -49,7 +52,7 @@ var ImModel = (function() {
         error: function() {
             // By default, log error on the console and alert user.
             console.error.apply(console, arguments);
-            alert(Array.prototype.slice.call(arguments, 0, 1));
+            alert(Array.prototype.slice.call(arguments, 0, 2).join(' '));
         },
 
         registerCartVarHandler: function(cartVars, handler) {
@@ -70,6 +73,9 @@ var ImModel = (function() {
         registerCartValidateHandler: function(handler) {
             // After all of the registered cart var handlers have been called,
             // the registered validation / cleanup function will be called.
+            if (! handler || ! _.isFunction(handler)) {
+                this.error("registerUiHandler called without a valid handler", handler);
+            }
             this.cartValidateHandlers.push(handler);
         },
 
@@ -77,6 +83,9 @@ var ImModel = (function() {
             // Associate handler with partialPath so that when the UI sends an event whose
             // path begins with partialPath, handler will be invoked with this and
             // arguments mutState (mutable copy of state), path, and optional data.
+            if (! handler || ! _.isFunction(handler)) {
+                this.error("registerUiHandler called without a valid handler", handler);
+            }
             if (_.isString(partialPath) || _.isNumber(partialPath)) {
                 partialPath = [partialPath];
             } else {
@@ -101,7 +110,11 @@ var ImModel = (function() {
             node.handlers[lastIndex].push(handler);
         },
 
-        mergeServerResponse: function(mutState, jsonData) {
+        defaultServerErrorHandler: function(serverMessage) {
+            this.error("error message from server:", serverMessage);
+        },
+
+        mergeServerResponse: function(mutState, jsonData, errorHandler) {
             // For each object in jsonData, if it has special handler(s) associated with it,
             // invoke the handler(s); otherwise, just put it in the top level of mutState.
             _.forEach(jsonData, function(newValue, key) {
@@ -112,20 +125,21 @@ var ImModel = (function() {
                     }, this);
                 } else if (key === 'error') {
                     // Default, can be overridden of course
-                    this.error('error message from CGI:', newValue);
+                    errorHandler = errorHandler || this.defaultServerErrorHandler;
+                    errorHandler(newValue);
                 } else {
                     mutState.set(key, Immutable.fromJS(newValue));
                 }
             }, this);
         },
 
-        handleServerResponse: function(jsonData) {
+        handleServerResponseWithErrorHandler: function(errorHandler, jsonData) {
             // The server has sent some data; update state and call any registered handlers.
             console.log('from server:', jsonData);
             // No plan to support undo/redo for server updates, so just change this.state in place:
             this.state = this.state.withMutations(function(mutState) {
                 // Update state with data from server:
-                this.mergeServerResponse(mutState, jsonData);
+                this.mergeServerResponse(mutState, jsonData, errorHandler);
                 // Call validation/cleanup handler(s) if any:
                 _.forEach(this.cartValidateHandlers, function(handler) {
                     handler.call(this, mutState);
@@ -136,16 +150,19 @@ var ImModel = (function() {
 
         bumpUiState: function(updater) {
             // Reset our redo stack and push current state onto undo stack.
-            // Replace this.state with a new immutable state changed by updater (bound to this),
-            // which is a function that receives a mutable copy of this.state and may make
-            // changes to the mutable copy.
-            this.undoStack.push(this.state);
-            this.redoStack = [];
-            this.state = this.state.withMutations(function(mutState) {
-                mutState.set('canUndo', true);
-                mutState.set('canRedo', false);
-                updater.call(this, mutState);
-            }.bind(this));
+            // Replace this.state with a new immutable state changed by updater,
+            // which is a function bound to this that receives a mutable copy of
+            // this.state and may make changes to the mutable copy.
+            var startState = this.state;
+            this.state = this.state.withMutations(updater);
+            if (this.state !== startState) {
+                this.undoStack.push(startState);
+                this.redoStack = [];
+                this.state = this.state.withMutations(function(mutState) {
+                    mutState.set('canUndo', true);
+                    mutState.set('canRedo', false);
+                });
+            }
         },
 
         undo: function() {
@@ -209,18 +226,29 @@ var ImModel = (function() {
                 _.forEach(handlers, function(handler) {
                     handler.call(this, mutState, path, data);
                 }, this);
-            });
+            }.bind(this));
             this.render();
         },
 
-        cartDo: function(commandObj) {
-            // Send a command to the server; this.handleServerResponse will process response.
-            cart.send(commandObj, this.handleServerResponse);
+        cartDo: function(commandObj, errorHandler) {
+            // Send a command to the server; bind this.handleServerResponseWithError to
+            // errorHandler if errorHandler is passed in, otherwise bind to null for default.
+            // errorHandler will be given the server's error message.
+            var handler = this.handleServerResponse;
+            if (errorHandler) {
+                handler = _.bind(this.handleServerResponseWithErrorHandler,
+                                 this, errorHandler);
+            } else if (!handler) {
+                this.handleServerResponse = _.bind(this.handleServerResponseWithErrorHandler,
+                                                   this, null);
+                handler = this.handleServerResponse;
+            }
+            this.cart.send(commandObj, handler);
         },
 
         cartSend: function(commandObj) {
             // Send a command to the server; no need to handle response.
-            cart.send(commandObj);
+            this.cart.send(commandObj);
         },
 
         cartSet: function(cartVar, newValue) {
@@ -230,7 +258,7 @@ var ImModel = (function() {
             this.cartSend({cgiVar: setting});
         },
 
-        changeCartVar: function(mutState, path, newValue) {
+        changeCartString: function(mutState, path, newValue) {
             // Change state's [path][cartVar] to newValue (if they differ), tell the server about it,
             // and re-render.
             mutState.setIn(path, newValue);

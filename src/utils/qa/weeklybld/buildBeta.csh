@@ -5,11 +5,10 @@ set dir = "v"$BRANCHNN"_branch"
 
 cd $BUILDDIR/$dir
 
-cd kent
+cd kent/src
 pwd
 #
 echo "Make libs. [${0}: `date`]"
-cd src
 make -j 32 libs >& make.log
 sed -i -e "s/-DJK_WARN//g" make.log
 sed -i -e "s/-Werror//g" make.log
@@ -24,7 +23,6 @@ if ( "$wc" != "0" ) then
 endif
 #
 echo "Make beta. [${0}: `date`]"
-cd hg
 make beta >& make.beta.log
 # These flags and programs will trip the error detection
 sed -i -e "s/-DJK_WARN//g" make.beta.log

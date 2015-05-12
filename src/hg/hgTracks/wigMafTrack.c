@@ -500,7 +500,8 @@ struct track *wigTrack = track->subtracks;
 int scoreHeight = tl.fontHeight * 4;
 char *snpTable = trackDbSetting(track->tdb, "snpTable");
 boolean doSnpTable = FALSE;
-if ( (track->limitedVis == tvPack) && (snpTable != NULL))
+if ( (track->limitedVis == tvPack) && (snpTable != NULL) && 
+    cartOrTdbBoolean(cart, track->tdb, MAF_SHOW_SNP,FALSE))
     doSnpTable = TRUE;
 
 // the maf's only get loaded if we're not in summary or snpTable views
