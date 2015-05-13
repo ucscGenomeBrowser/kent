@@ -1285,6 +1285,7 @@ release alpha
     longLabel 1000 Genomes Project Phase 3 Paired-end Accessible Regions - Pilot Criteria
     bigDataUrl /gbdb/hg19/1000Genomes/phase3/20141020.pilot_mask.whole_genome.bb
     color 100,100,100
+    release alpha
 
     track tgpPhase3AccessibilityStrictCriteria
     subTrack tgpPhase3Accessibility
@@ -1292,6 +1293,7 @@ release alpha
     longLabel 1000 Genomes Project Phase 3 Paired-end Accessible Regions - Strict Criteria
     bigDataUrl /gbdb/hg19/1000Genomes/phase3/20141020.strict_mask.whole_genome.bb
     color 0,0,0
+    release alpha
 
 track evsEsp6500
 shortLabel EVS Variants
