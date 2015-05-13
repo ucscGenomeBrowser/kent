@@ -434,7 +434,7 @@ var tdbDoc = {
 
     documentLoad: function () {
         // Called at $(document).ready() to load a trackDb document page
-        $('#trackDbHub_version').text(trackDbHub_version);
+        $('#trackDbHub_version').text('(' + trackDbHub_version + ')');
         var divIntros = $("div.intro").each( function (ix) {
             tdbDoc.loadIntro(this);
         });
