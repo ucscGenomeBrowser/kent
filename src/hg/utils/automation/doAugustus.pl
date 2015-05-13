@@ -345,7 +345,7 @@ sub doCleanup {
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 export db="$db"
-find $buildDir/run.augustus/gtf -type f | grep ".gtf\$" \\
+find $buildDir/run.augustus/gtf -type f | grep ".gtf\$" || /bin/true \\
    | xargs --no-run-if-empty gzip
 rm -fr $buildDir/fasta
 rm -fr $buildDir/run.augustus/err/
