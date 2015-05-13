@@ -23,6 +23,7 @@ group compGeno
         subGroups view=align
         noInherit on
         irows on
+	snpTable mafSnp20way
         summary multiz20waySummary
         frames multiz20wayFrames
         group compGeno

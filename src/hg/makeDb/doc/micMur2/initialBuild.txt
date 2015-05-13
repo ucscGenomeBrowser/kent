@@ -1,0 +1,473 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the micMur2
+
+# Assembly Name:  Mmur_2.0
+# Organism name:  Microcebus murinus
+# Taxid:          30608
+# Submitter:      The Genome Sequencing Platform, The Genome Assembly Team
+# Date:           2015-5-1
+# BioSample:      SAMN03121888
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# GenBank Assembly Accession: GCA_000165445.2 (species-representative latest)
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2015-05-04 - Hiram)
+    # NCBI has redesigned their FTP download site, new type of address
+    #      and naming scheme
+    mkdir -p /hive/data/genomes/micMur2/genbank
+    cd /hive/data/genomes/micMur2/genbank
+
+    rsync -L -a -P rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Microcebus_murinus/all_assembly_versions/GCA_000165445.2_Mmur_2.0/ ./
+
+    # measure what we have here:
+    faSize GCA_000165445.2_Mmur_2.0_genomic.fna.gz
+
+# 2438804424 bases (61028711 N's 2377775713 real 1652977497 upper
+#    724798216 lower) in 10311 sequences in 1 files
+# Total size: mean 236524.5 sd 1059982.8 min 271 (ABDC02048825.1)
+#    max 23116325 (KQ053299.1) median 4628
+# %29.72 masked total, %30.48 masked real
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2015-05-04 - Hiram)
+    mkdir /hive/data/genomes/micMur2/ucsc
+    cd /hive/data/genomes/micMur2/ucsc
+
+    # this one is unusually simple because there is just one file of
+    # contigs, and one AGP file.  Even the contig names are already
+    # almost in UCSC format.  Just need to substitute v where . is in
+    # the accession suffix
+
+    zcat ../genbank/GCA_000165445.2_Mmur_2.0_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz \
+      | sed -e 's/ Microcebus murinus.*//;' \
+         | sed -e 's/\./v/;' | gzip -c > micMur2.fa.gz
+
+    zcat ../genbank/GCA_000165445.2_Mmur_2.0_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+      | sed -e 's/\./v/;' > micMur2.agp
+
+    # verify nothing lost compared to the genbank source:
+    faSize micMur2.fa.gz
+    # 2438804424 bases (61028711 N's 2377775713 real 2377775713 upper
+    #    0 lower) in 10311 sequences in 1 files
+    # Total size: mean 236524.5 sd 1059982.8 min 271 (ABDC02048825v1)
+    #    max 23116325 (KQ053299v1) median 4628
+
+    # same numbers as above.
+
+#############################################################################
+#  Initial database build (DONE - 2015-05-04 - Hiram)
+
+    cd /hive/data/genomes/micMur2
+    cat << '_EOF_' > micMur2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db micMur2
+clade mammal
+# genomeCladePriority 35
+scientificName Microcebus murinus
+commonName Mouse lemur
+assemblyDate May 2015
+assemblyLabel Broad Institute and Baylor College of Medicine Mmur_2.0
+assemblyShortLabel Mouse lemur
+orderKey 13679
+# no mito sequence found at genbank
+mitoAcc none
+fastaFiles /cluster/data/micMur2/ucsc/micMur2.fa.gz
+agpFiles /cluster/data/micMur2/ucsc/micMur2.agp
+# qualFiles none
+dbDbSpeciesDir mouseLemur
+photoCreditURL http://pin.primate.wisc.edu/factsheets/image/623
+photoCreditName Verena Behringer, Primate Info Net
+ncbiGenomeId 777
+ncbiAssemblyId 329621
+ncbiAssemblyName Mmur_2.0
+ncbiBioProject 19967
+genBankAccessionID GCA_000165445.2
+taxId 30608
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp micMur2.config.ra) > agp.log 2>&1
+    # real    2m20.732s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db micMur2.config.ra) > db.log 2>&1
+
+    # there was a problem with the last step trackDb, fixed makeGenomeDb.pl
+    # and completed:
+    time nice -n +19 makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+      -fileServer=hgwdev -continue=trackDb micMur2.config.ra > trackDb.log 2>&1
+    # real    19m47.412s
+
+##########################################################################
+# running repeat masker (DONE - 2015-05-04 - Hiram)
+    mkdir /hive/data/genomes/micMur2/bed/repeatMasker
+    cd /hive/data/genomes/micMur2/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku micMur2) > do.log 2>&1 &
+    # real    467m4.998s
+    # two bad records:
+RepeatMasker bug?: Undefined id, line 2869570 of input:
+  486  35.2  2.4  4.3  KQ057404v1 1319743 1320042 (2310255) C  L1MA8          LINE/L1             (6499) 1002    709       
+RepeatMasker bug?: Undefined id, line 2869572 of input:
+ 1383  18.3  0.0  0.8  KQ057404v1 1320464 1320700 (2309597) C  L1MA8          LINE/L1             (6789)  712    478   
+    # take them out:
+    egrep -v "KQ057404v1 1319743 1320042|KQ057404v1 1320464 1320700" \
+       micMur2.sorted.fa.out > cleaned.sorted.fa.out
+    mv micMur2.sorted.fa.out broken.sorted.fa.out
+    mv cleaned.sorted.fa.out micMur2.sorted.fa.out
+    /cluster/bin/scripts/extractNestedRepeats.pl micMur2.sorted.fa.out \
+       | sort -k1,1 -k2,2n > micMur2.nestedRepeats.bed
+
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -continue=mask -smallClusterHub=ku micMur2) > mask.log 2>&1
+    # real    22m7.705s
+
+    cat faSize.rmsk.txt
+    # 2438804424 bases (61028711 N's 2377775713 real 1399954637 upper
+    #    977821076 lower) in 10311 sequences in 1 files
+    # Total size: mean 236524.5 sd 1059982.8 min 271 (ABDC02048825v1)
+    #    max 23116325 (KQ053299v1) median 4628
+    # %40.09 masked total, %41.12 masked real
+
+
+    egrep -i "versi|relea" do.log
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    #  CC   RELEASE 20140131;
+
+    time featureBits -countGaps micMur2 rmsk
+    # 978209828 bases of 2438804424 (40.110%) in intersection
+    #  real    0m31.168s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE 2015-05-04 - Hiram)
+
+    mkdir /hive/data/genomes/micMur2/bed/simpleRepeat
+    cd /hive/data/genomes/micMur2/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        micMur2) > do.log 2>&1
+    # real    5m55.131s
+
+    cat fb.simpleRepeat
+    # 35966576 bases of 2377775715 (1.513%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/micMur2
+    twoBitMask micMur2.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed micMur2.2bit
+    #   you can safely ignore the warning about fields >= 13
+
+    twoBitToFa micMur2.2bit stdout | faSize stdin > faSize.micMur2.2bit.txt
+    cat faSize.micMur2.2bit.txt
+    # 2438804424 bases (61028711 N's 2377775713 real 1398397964 upper
+    #    979377749 lower) in 10311 sequences in 1 files
+    # Total size: mean 236524.5 sd 1059982.8 min 271 (ABDC02048825v1)
+    #    max 23116325 (KQ053299v1) median 4628
+    # %40.16 masked total, %41.19 masked real
+
+    rm /gbdb/micMur2/micMur2.2bit
+    ln -s `pwd`/micMur2.2bit /gbdb/micMur2/micMur2.2bit
+
+##########################################################################
+## WINDOWMASKER (DONE - 2015-05-04 - Hiram)
+
+    mkdir /hive/data/genomes/micMur2/bed/windowMasker
+    cd /hive/data/genomes/micMur2/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev micMur2) > do.log 2>&1
+    # real    161m47.327s
+
+    # got done before rmsk, finish up here:
+    time featureBits -countGaps micMur2 rmsk windowmaskerSdust \
+       > fb.micMur2.rmsk.windowmaskerSdust.txt 2>&1
+    # real    2m1.625s
+
+    # Masking statistics
+    cat faSize.micMur2.cleanWMSdust.txt
+    # 2438804424 bases (61028711 N's 2377775713 real 1636436909 upper
+    #   741338804 lower) in 10311 sequences in 1 files
+    # Total size: mean 236524.5 sd 1059982.8 min 271 (ABDC02048825v1)
+    #   max 23116325 (KQ053299v1) median 4628
+    # %30.40 masked total, %31.18 masked real
+
+    cat fb.micMur2.rmsk.windowmaskerSdust.txt
+    # 470271114 bases of 2438804424 (19.283%) in intersection
+
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -continue=cleanup -dbHost=hgwdev micMur2) > cleanup.log 2>&1
+    # real    1m41.675s
+
+##########################################################################
+# cpgIslands - (DONE - 2015-05-05 - Hiram)
+    mkdir /hive/data/genomes/micMur2/bed/cpgIslands
+    cd /hive/data/genomes/micMur2/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku micMur2) > do.log 2>&1 &
+XXX - running - Tue May  5 08:24:32 PDT 2015
+    #  real    2250m21.599s
+
+    cat fb.micMur2.cpgIslandExt.txt
+    # 23569257 bases of 3405755564 (0.692%) in intersection
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2015-05-04 - Hiram)
+    mkdir /hive/data/genomes/micMur2/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/micMur2/bed/cpgIslandsUnmasked
+
+    # run stepwise so the loading can be done in a different table
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/micMur2/micMur2.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku micMur2) > do.log 2>&1
+    # real    33m50.982s
+
+    cat fb.micMur2.cpgIslandExtUnmasked.txt
+    # 63436634 bases of 2377775715 (2.668%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-05-04 - Hiram)
+    mkdir /hive/data/genomes/micMur2/bed/cytoBand
+    cd /hive/data/genomes/micMur2/bed/cytoBand
+    makeCytoBandIdeo.csh micMur2
+
+#########################################################################
+# genscan - (DONE - 2015-05-05 - Hiram)
+    mkdir /hive/data/genomes/micMur2/bed/genscan
+    cd /hive/data/genomes/micMur2/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku micMur2) > do.log 2>&1 &
+XXX - running - Tue May  5 08:26:00 PDT 2015
+    # real    2786m14.622s
+
+    cat fb.micMur2.genscan.txt
+    # 63545533 bases of 3405755564 (1.866%) in intersection
+
+    cat fb.micMur2.genscanSubopt.txt
+    # 71743479 bases of 3405755564 (2.107%) in intersection
+
+########################################################################
+# Create kluster run files (DONE - 2015-05-05 - Hiram)
+
+    # numerator is micMur2 gapless bases "real" as reported by:
+    head -1 faSize.micMur2.2bit.txt 
+# 2438804424 bases (61028711 N's 2377775713 real 1398397964 upper
+#    979377749 lower) in 10311 sequences in 1 files
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2377775713 / 2861349177 \) \* 1024
+    # ( 2377775713 / 2861349177 ) * 1024 = 850.942048
+
+    # ==> use -repMatch=850 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/micMur2
+    time blat micMur2.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/micMur2.11.ooc \
+        -repMatch=850
+    # Wrote 23327 overused 11-mers to jkStuff/micMur2.11.ooc
+    # real    0m39.187s
+
+    #   there are no non-bridged gaps, don't need this
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N -e 'select * from gap where bridge="no" order by size;' \
+       micMur2 | ave -col=7 stdin
+    # this does nothing
+#     gapToLift -verbose=2 -minGap=100 bosTau7 jkStuff/nonBridged.lft \
+#         -bedFile=jkStuff/nonBridged.bed
+
+########################################################################
+# GENBANK AUTO UPDATE (DONE - 2014-12-11 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Microcebus murinus      59      1       0
+
+    # edit etc/genbank.conf to add micMur2 just before micMur1
+
+# micMur2 (Mouse lemur)
+micMur2.serverGenome = /hive/data/genomes/micMur2/micMur2.2bit
+micMur2.clusterGenome = /hive/data/genomes/micMur2/micMur2.2bit
+micMur2.ooc = /hive/data/genomes/micMur2/jkStuff/micMur2.11.ooc
+micMur2.lift = no
+micMur2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+micMur2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+micMur2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+micMur2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+micMur2.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+micMur2.refseq.mrna.native.load = no
+micMur2.refseq.mrna.xeno.load = yes
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+micMur2.genbank.mrna.xeno.load = no
+micMur2.genbank.est.native.load = no
+micMur2.downloadDir = micMur2
+micMur2.perChromTables = no
+
+    git commit -m "Added micMur2; refs #15292" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+# Edit src/lib/gbGenome.c to add new species.  Skipped
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial micMur2
+    # logFile: var/build/logs/2015.05.05-08:46:58.micMur2.initalign.log
+XXX - running - Tue May  5 08:47:19 PDT 2015
+    #   real    369m37.727s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.micMur2
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad -verbose=10 micMur2
+    # logFile: var/dbload/hgwdev/logs/2014.12.11-11:06:27.micMur2.dbload.log
+    # real    35m42.214s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add micMur2 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added micMur2 - Tarsier refs #14410" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2015-05-05 - Hiram)
+
+    mkdir /hive/data/genomes/micMur2/bed/ucscToINSDC
+    cd /hive/data/genomes/micMur2/bed/ucscToINSDC
+    # check for chrM in assembly:
+    grep chrM ../../micMur2.agp
+# (there is no chrM)
+
+    # use the accession name from there in this command (blank if none)
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+        ../../genbank/GCA_*assembly_structure/Primary_Assembly
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # should all be the same line count:
+    wc -l *
+    #  10311 name.coordinate.tab
+    #  10311 ucscToINSDC.bed
+    #  10311 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab micMur2 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords micMur2
+    # should cover %100 entirely:
+    featureBits -countGaps micMur2 ucscToINSDC
+    # 3453864774 bases of 3453864774 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2014-05-01 - Hiram)
+    hgsql -N -e "select frag from gold;" micMur2 | sort | head -1
+ABDC02000001.1
+
+    hgsql -N -e "select frag from gold;" micMur2 | sort | tail -2
+ABDC02056280.1
+ABDC02056281.1
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" micMur2 | wc -l
+    # 56281
+
+    hgsql -N -e "select frag from gold;" micMur2 \
+       | egrep -e 'ABDC020[0-9]+(\.1)?' | wc -l
+    # 56281
+
+    hgsql -N -e "select frag from gold;" micMur2 \
+       | egrep -v -e 'ABDC020[0-9]+(\.1)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/tarsier/micMur2/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex ABDC020[0-9]+(\.1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+#########################################################################
+# LIFTOVER TO micMur1 (DONE - 2015-05-05 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/micMur2/bed/blat.micMur1.2015-05-05
+    cd /hive/data/genomes/micMur2/bed/blat.micMur1.2015-05-05
+    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
+	-ooc=/hive/data/genomes/micMur2/jkStuff/micMur2.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         micMur2 micMur1) > do.log 2>&1
+XXX - running - Tue May  5 08:58:25 PDT 2015
+    # real    13948m39.233s
+    # this was a tough job, that long time was not necessarily due
+    # to cluster contention.  the blat run took over 9 days:
+# Completed: 361089 of 361089 jobs
+# CPU time in finished jobs:  229192746s 3819879.10m 63664.65h 2652.69d  7.268 y
+# IO & Wait Time:              11337726s  188962.10m  3149.37h  131.22d  0.360 y
+# Average job time:                 666s      11.10m     0.19h    0.01d
+# Longest finished job:            1492s      24.87m     0.41h    0.02d
+# Submission to last job:        811729s   13528.82m   225.48h    9.40d
+
+    # verify the convert link on the test browser is now active from micMur2 to
+    # micMur1
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE 2014-12-29 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=micMur2 -tableCoverage all.joiner
+    joinerCheck -database=micMur2 -times all.joiner
+    joinerCheck -database=micMur2 -keys all.joiner
+    # about 50 minutes
+
+    cd /hive/data/genomes/micMur2
+    time makeDownloads.pl micMur2 > downloads.log 2>&1
+    # real    22m17.544s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/micMur2/pushQ
+    cd /hive/data/genomes/micMur2/pushQ
+    time makePushQSql.pl micMur2 > micMur2.pushQ.sql 2> stderr.out
+    # real    5m47.086s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+# WARNING: hgwdev does not have /gbdb/micMur2/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/micMur2/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/micMur2/bbi/qualityBw/quality.bw
+# WARNING: micMur2 does not have seq
+# WARNING: micMur2 does not have estOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p micMur2.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/micMur2.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

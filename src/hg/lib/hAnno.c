@@ -293,6 +293,10 @@ else if (sameString(tdb->track, "knownGene"))
     if (hTableExists(db, "knownGene") && hTableExists(db, "kgXref"))
         asObj = annoStreamDbKnownGeneAsObj();
     }
+else if (sameString("factorSource", tdb->type))
+    {
+    asObj = annoStreamDbFactorSourceAsObj();
+    }
 return asObj;
 }
 

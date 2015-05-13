@@ -49,20 +49,6 @@
 #define CLEAR_BUTTON_LABEL      "clear"
 #define JBUFSIZE 2048
 
-#ifdef BUTTONS_BY_CSS
-#define BUTTON_PM  "<span class='pmButton' " \
-                   "onclick=\"setCheckBoxesThatContain('%s',%s,true,'%s','','%s')\">%c</span>"
-#define BUTTON_DEF "<span class='pmButton' " \
-                   "onclick=\"setCheckBoxesThatContain('%s',true,false,'%s','','%s'); " \
-                   "setCheckBoxesThatContain('%s',false,false,'%s','_defOff','%s');\" " \
-                   "style='width:56px;font-weight:normal; font-family:default;'>default</span>"
-#define DEFAULT_BUTTON(nameOrId,anc,beg,contains) \
-        printf(BUTTON_DEF,(nameOrId),        (beg),(contains),(nameOrId),(beg),(contains))
-#define PLUS_BUTTON(nameOrId,anc,beg,contains) \
-        printf(BUTTON_PM, (nameOrId),"true", (beg),(contains),'+')
-#define MINUS_BUTTON(nameOrId,anc,beg,contains) \
-        printf(BUTTON_PM, (nameOrId),"false",(beg),(contains),'-')
-#else///ifndef BUTTONS_BY_CSS
 #define PM_BUTTON  "<IMG height=18 width=18 onclick=\"setCheckBoxesThatContain(" \
                    "'%s',%s,true,'%s','','%s');\" id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\">\n"
 #define DEF_BUTTON "<IMG onclick=\"setCheckBoxesThatContain('%s',true,false,'%s','','%s'); " \
@@ -75,7 +61,6 @@
         printf(PM_BUTTON, (nameOrId),"true", (beg),(contains),(anc),"add_sm.gif",   "+")
 #define MINUS_BUTTON(nameOrId,anc,beg,contains) \
         printf(PM_BUTTON, (nameOrId),"false",(beg),(contains),(anc),"remove_sm.gif","-")
-#endif///ndef BUTTONS_BY_CSS
 
 boolean isEncode2(char *database)
 // Return true for ENCODE2 assemblies
@@ -6428,6 +6413,7 @@ boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
 char *defaultCodonSpecies = trackDbSetting(tdb, SPECIES_CODON_DEFAULT);
 char *framesTable = trackDbSetting(tdb, "frames");
+char *snpTable = trackDbSetting(tdb, "snpTable");
 char *firstCase = trackDbSetting(tdb, ITEM_FIRST_CHAR_CASE);
 if (firstCase != NULL)
     {
@@ -6491,6 +6477,14 @@ else
 	puts("Display unaligned amino acids with spanning chain as 'o's<BR>");
     else
         puts("Display unaligned bases with spanning chain as 'o's<BR>");
+    }
+
+safef(option, sizeof option, "%s.%s", name, MAF_SHOW_SNP);
+if (snpTable)
+    {
+    printf("<BR><B>Codon Changes:</B><BR>");
+    cgiMakeCheckBox(option, cartOrTdbBoolean(cart, tdb, MAF_SHOW_SNP,FALSE));
+    puts("Display synonymous and non-synonymous changes in coding exons.<BR>");
     }
 
 safef(option, sizeof option, "%s.%s", name, "codons");
@@ -6935,41 +6929,25 @@ freeMem(rootLabel);
 return cloneString(label);
 }
 
-#ifdef BUTTONS_BY_CSS
-#define BUTTON_MAT "<span class='pmButton' onclick=\"matSetMatrixCheckBoxes(%s%s%s%s)\">%c</span>"
-#else///ifndef BUTTONS_BY_CSS
 #define PM_BUTTON_UC "<IMG height=18 width=18 onclick=\"return " \
                      "(matSetMatrixCheckBoxes(%s%s%s%s%s%s) == false);\" id='btn_%s' " \
                      "src='../images/%s'>"
-#endif///def BUTTONS_BY_CSS
 
 #define MATRIX_RIGHT_BUTTONS_AFTER 8
 #define MATRIX_BOTTOM_BUTTONS_AFTER 20
 
 static void buttonsForAll()
 {
-#ifdef BUTTONS_BY_CSS
-printf(BUTTON_MAT,"true", "", "", "", '+');
-printf(BUTTON_MAT,"false","", "", "", '-');
-#else///ifndef BUTTONS_BY_CSS
 printf(PM_BUTTON_UC,"true", "", "", "", "", "",  "plus_all",    "add_sm.gif");
 printf(PM_BUTTON_UC,"false","", "", "", "", "", "minus_all", "remove_sm.gif");
-#endif///def BUTTONS_BY_CSS
 }
 
 static void buttonsForOne(char *name,char *class,boolean vertical)
 {
-#ifdef BUTTONS_BY_CSS
-printf(BUTTON_MAT, "true",  ",'", class, "'", '+');
-if (vertical)
-    puts("<BR>");
-printf(BUTTON_MAT, "false", ",'", class, "'", '-');
-#else///ifndef BUTTONS_BY_CSS
 printf(PM_BUTTON_UC, "true",  ",'", class, "'", "", "", name,    "add_sm.gif");
 if (vertical)
     puts("<BR>");
 printf(PM_BUTTON_UC, "false", ",'", class, "'", "", "", name, "remove_sm.gif");
-#endif///def BUTTONS_BY_CSS
 }
 
 #define MATRIX_SQUEEZE 10
@@ -7334,19 +7312,12 @@ printf("<TABLE><TR valign='top'>\n");
 if (membersForAll->members[dimX] == NULL && membersForAll->members[dimY] == NULL) // No matrix
     {
     printf("<TD align='left' width='50px'><B>All:</B><BR>");
-#ifdef BUTTONS_BY_CSS
     // TODO: Test when a real world case actually calls this.  Currently no trackDb.ra cases exist
-    #define BUTTON_FILTER_COMP "<span class='pmButton inOutButton' " \
-                               "onclick='waitOnFunction(filterCompositeSet,this,%s)'>%c</span>"
-    printf(BUTTON_FILTER_COMP,"true", '+');
-    printf(BUTTON_FILTER_COMP,"false",'-');
-#else///ifndef BUTTONS_BY_CSS
     #define PM_BUTTON_FILTER_COMP "<input type='button' class='inOutButton' " \
                                   "onclick=\"waitOnFunction(filterCompositeSet,this,%s); " \
                                   "return false;\" id='btn_%s' value='%c'>"
     printf(PM_BUTTON_FILTER_COMP,"true",  "plus_fc",'+');
     printf(PM_BUTTON_FILTER_COMP,"false","minus_fc",'-');
-#endif///ndef BUTTONS_BY_CSS
     printf("</TD>\n");
     }
 
@@ -7627,16 +7598,10 @@ if (trackDbCountDescendantLeaves(parentTdb) <= 1)
 if (dimensionsExist(parentTdb))
     return FALSE;
 
-#ifdef BUTTONS_BY_CSS
-#define BUTTON_ALL   "<span class='pmButton' onclick='matSubCBsCheck(%s)'>%c</span>"
-#define BUTTON_PLUS_ALL_GLOBAL()  printf(BUTTON_ALL,"true", '+')
-#define BUTTON_MINUS_ALL_GLOBAL() printf(BUTTON_ALL,"false",'-')
-#else///ifndef BUTTONS_BY_CSS
 #define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"matSubCBsCheck(%s);\" " \
                          "id='btn_%s' src='../images/%s'>"
 #define    BUTTON_PLUS_ALL_GLOBAL()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
 #define    BUTTON_MINUS_ALL_GLOBAL() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
-#endif///ndef BUTTONS_BY_CSS
 BUTTON_PLUS_ALL_GLOBAL();
 BUTTON_MINUS_ALL_GLOBAL();
 puts("&nbsp;<B>Select all subtracks</B><BR>");

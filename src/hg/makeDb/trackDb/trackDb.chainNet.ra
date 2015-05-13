@@ -5095,7 +5095,7 @@ html chainNet
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain MicMur1
+        type chain micMur1
         html chainNet
 
     track chainNetMicMur1Viewnet
@@ -5109,7 +5109,7 @@ html chainNet
         subGroups view=net
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment net
-        type netAlign MicMur1 chainMicMur1
+        type netAlign micMur1 chainMicMur1
         html chainNet
 
 track chainNetTarSyr2

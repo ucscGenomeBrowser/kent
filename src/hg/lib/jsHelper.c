@@ -245,11 +245,13 @@ puts("<script src=\"//code.jquery.com/jquery-1.9.1.min.js\"></script>");
 puts("<script src=\"//code.jquery.com/ui/1.10.3/jquery-ui.min.js\"></script>");
 puts("<script src=\"//fb.me/react-with-addons-0.12.2.min.js\"></script>");
 puts("<script src=\"../js/immutable.3.2.1.min.js\"></script>");
+puts("<script src=\"../js/jquery.bifrost.1.0.1.min.js\"></script>");
 puts("<script src=\"../js/BackboneExtend.js\"></script>");
 puts("<script src=\"../js/cart.js\"></script>");
 puts("<script src=\"../js/ImModel.js\"></script>");
 puts("<script src=\"../js/CladeOrgDbMixin.js\"></script>");
 puts("<script src=\"../js/PositionSearchMixin.js\"></script>");
+puts("<script src=\"../js/UserRegionsMixin.js\"></script>");
 puts("<script src=\"../js/PathUpdate.js\"></script>");
 puts("<script src=\"../js/PathUpdateOptional.js\"></script>");
 puts("<script src=\"../js/ImmutableUpdate.js\"></script>");
@@ -356,11 +358,6 @@ puts (">");
 printf("<TD colspan=2 style='text-align:left;'>\n");
 printf("<input type='hidden' name='%s' id='%s' value='%s'>\n",
        collapseGroupVar, collapseGroupVar, isOpen ? "0" : "1");
-#ifdef BUTTONS_BY_CSS
-hPrintf("<span class='pmButton bigBlue' onclick=\"setTableRowVisibility(this, '%s', "
-        "'%s.section', 'section', true)\" id='%s_button' title='%s this section'>%c</span>",
-        section, track, section, (isOpen ? "Collapse": "Expand"), (isOpen ? '-' : '+'));
-#else///ifndef BUTTONS_BY_CSS
 char *buttonImage = (isOpen ? "../images/remove_sm.gif" : "../images/add_sm.gif");
 printf("<IMG height='18' width='18' "
        "onclick=\"return setTableRowVisibility(this, '%s', '%s.section', 'section', true);\" "
@@ -368,7 +365,6 @@ printf("<IMG height='18' width='18' "
        " style='cursor:pointer;'>\n",
        section, track,
        section, buttonImage, (isOpen ? "-" : "+"), (isOpen ? "Collapse": "Expand"));
-#endif///ndef BUTTONS_BY_CSS
 if (oldStyle || fontSize == NULL)
     printf("&nbsp;%s</TD></TR>\n", sectionTitle);
 else
