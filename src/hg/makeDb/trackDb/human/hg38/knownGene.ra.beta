@@ -1,7 +1,7 @@
 
 track knownGene 
-shortLabel GENCODE Genes
-longLabel  GENCODE Genes
+shortLabel UCSC Genes
+longLabel UCSC Genes (RefSeq, GenBank, tRNAs & Comparative Genomics)
 group genes
 visibility pack
 priority 1
