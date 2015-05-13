@@ -234,8 +234,8 @@ rm -fr \$tmpDir
 _EOF_
   );
 
-  my $whatItDoes = "Run augustus on chunked fasta sequences.";
-  my $bossScript = newBash HgRemoteScript("$runDir/runAugustus.bash", $paraHub,
+  $whatItDoes = "Run augustus on chunked fasta sequences.";
+  $bossScript = newBash HgRemoteScript("$runDir/runAugustus.bash", $paraHub,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 (grep -v partBundles ../partition/part.list || /bin/true) | while read twoBit
