@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 2)
+if (argc != 2 && !optionExists("settings"))
     usage();
 
 struct trackHubCheckOptions *checkOptions = NULL;

@@ -121,7 +121,7 @@ var tdbDoc = {
             }
             var level = $(code).attr('class');
             if (level.length === 0) {
-                level = 'level-alpha';
+                level = 'level-new';
             }
             var start = $(blurb).find('p').first();
             if ($(start).attr('class') !== 'level') {
@@ -200,12 +200,12 @@ var tdbDoc = {
         },
 
         makePlainRow: function (aClass) {
-            var level = 'level-alpha';
+            var level = 'level-new';
             var div = tdbDoc.library.lookup(aClass,false);
             if (div.length === 1) {
                 level = $(div).find('code').attr('class');
                 if (level.length === 0) {
-                    level = 'level-alpha';
+                    level = 'level-new';
                 }
             }
             return aClass + '\t' + level.replace('level-','') + '\n';
@@ -217,11 +217,11 @@ var tdbDoc = {
             // Find types
             var types = "";
             var div = tdbDoc.library.lookup(aClass,false);
-            var level = 'level-alpha';
+            var level = 'level-new';
             if (div.length === 1) {
                 level = $(div).find('code').attr('class');
                 if (level.length === 0) {
-                    level = 'level-alpha';
+                    level = 'level-new';
                 }
                 var spanner = $(div).find('span.types');
                 if (spanner.length === 1) {

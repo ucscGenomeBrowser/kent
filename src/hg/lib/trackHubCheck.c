@@ -190,6 +190,28 @@ char *trackHubVersionDefault()
 }
 
 
+int trackHubSettingLevel(struct trackHubSetting *spec)
+/* Get integer for level  (core > full > new > deprecated) */
+{
+if (sameString(spec->level, "core"))
+    return 4;
+if (sameString(spec->level, "full"))
+    return 3;
+if (sameString(spec->level, "new"))
+    return 2;
+if (sameString(spec->level, "deprecated"))
+    return 1;
+return 0; // errAbort ?
+}
+
+
+boolean trackHubSettingLevelCmp(struct trackHubSetting *spec1, struct trackHubSetting *spec2)
+{
+/* Compare setting levels */
+return trackHubSettingLevel(spec1) - trackHubSettingLevel(spec2);
+}
+
+
 struct trackHubSetting *trackHubSettingsForVersion(char *version)
 /* Return list of settings with support level. Version can be version string or spec url */
 {
@@ -201,61 +223,85 @@ if (startsWith("http", version))
 else
     {
     char buf[256];
-    safef(buf, sizeof buf, "http://genome.ucsc.edu/goldenPath/help/trackDb/trackDbHub.%s.html", 
+    // TODO: local host
+    safef(buf, sizeof buf, "http://hgwdev-kate.cse.ucsc.edu/goldenPath/help/trackDb/trackDbHub.%s.html", 
         version);
     specUrl = buf;
     }
 struct htmlPage *page = htmlPageGet(specUrl);
 if (page == NULL)
     errAbort("Can't open trackDb settings spec %s\n", specUrl);
+// TODO: check return status -- this succeeds even for 404's ?
 verbose(3, "Opened URL %s\n", specUrl);
 
 /* Retrieve specs from file url. 
- * Settings are the first text word within a <code> element nested in * a <div> having 
+ * Settings are the first text word within any <code> element nested in * a <div> having 
  *  attribute class="format".  The support level ('level-*') is the class value of the * <code> tag.
  * E.g.  <div class="format"><code class="level-core">boxedConfig on</code></div> produces:
  *      setting=boxedConfig, class=core */
 
 struct htmlTag *tag, *codeTag;
 struct htmlAttribute *attr, *codeAttr;
-struct trackHubSetting *spec, *specs = NULL;
+struct trackHubSetting *spec, *savedSpec;
+struct hash *specHash = hashNew(0);
 verbose(3, "Found %d tags\n", slCount(page->tags));
 int divCount = 0;
 char buf[256];
 for (tag = page->tags; tag != NULL; tag = tag->next)
     {
-    if (differentWord(tag->name, "div"))
+    verbose(6, "    TAG: %s\n", tag->name);
+    if (differentWord(tag->name, "DIV"))
         continue;
     divCount++;
-    verbose(5, "<div>%s\n", tag->start);
-    for (attr = tag->attributes; attr != NULL; attr = attr->next)
+    attr = tag->attributes;
+    if (differentWord(attr->name, "class") || differentWord(attr->val, "format"))
+        continue;
+    verbose(7, "Found format: tag %s\n", tag->name);
+    // Look for one or more <code> tags in this format div
+    for (codeTag = tag->next; 
+            codeTag != NULL && differentWord(codeTag->name,"/DIV"); codeTag = codeTag->next)
         {
-        if (differentWord(attr->name, "class") || differentWord(attr->val, "format"))
-            continue;
-        // TODO:  Look on code tags (there may be multiple after "format"
-        codeTag = tag->next;
-        verbose(5, "Found format: tag %s\n", tag->name);
         if (differentWord(codeTag->name, "CODE"))
-            break;
-        verbose(4, "Found <code>\n");
-        for (codeAttr = codeTag->attributes; codeAttr != NULL; codeAttr = codeAttr->next)
+            continue;
+        verbose(7, "Found <code>\n");
+        codeAttr = codeTag->attributes;
+        //verbose(8, "attr: name=%s, val=%s\n", codeAttr->name, codeAttr->val);
+        if (codeAttr == NULL || differentString(codeAttr->name, "class") ||
+                !startsWith("level-", codeAttr->val))
+                        continue;
+        AllocVar(spec);
+        int len = min(codeTag->next->start - codeTag->end, sizeof buf - 1);
+        memcpy(buf, codeTag->end, len);
+        buf[len] = 0;
+        verbose(7, "Found spec: %s\n", buf);
+        spec->name = cloneString(firstWordInLine(buf));
+        spec->level = cloneString(chopPrefixAt(codeAttr->val, '-'));
+        verbose(6, "spec: name=%s, level=%s\n", spec->name, spec->level);
+
+        savedSpec = (struct trackHubSetting *)hashFindVal(specHash, spec->name);
+        if (savedSpec != NULL)
+            verbose(6, "found spec %s level %s in hash\n", savedSpec->name, savedSpec->level);
+        if (savedSpec == NULL)
             {
-            verbose(5, "attr: name=%s, val=%s\n", codeAttr->name, codeAttr->val);
-            if (differentWord(codeAttr->name, "class") || !startsWith("level-", codeAttr->val))
-                break;
-            AllocVar(spec);
-            int len = min(codeTag->next->start - codeTag->end, sizeof buf - 1);
-            memcpy(buf, codeTag->end, len);
-            buf[len] = 0;
-            spec->name = cloneString(firstWordInLine(buf));
-            spec->level = chopPrefixAt(cloneString(codeAttr->val), '-');
-            // TODO: hash to pickup dupes (retain one with level, warn if multiple differ)
-            slAddHead(&specs, spec);
-            verbose(4, "spec: name=%s, level=%s\n", spec->name, spec->level);
+            hashAdd(specHash, spec->name, spec);
+            verbose(6, "added spec %s at level %s\n", spec->name, spec->level);
+            }
+        else if (trackHubSettingLevelCmp(spec, savedSpec) > 0)
+            {
+            hashReplace(specHash, spec->name, spec);
+            verbose(6, "replaced spec %s at level %s, was %s\n", 
+                spec->name, spec->level, savedSpec->level);
             }
         }
     }
 verbose(5, "Found %d <div>'s\n", divCount);
+struct hashEl *el, *list = hashElListHash(specHash);
+verbose(5, "Found %d settings's\n", slCount(list));
+slSort(&list, hashElCmp);
+struct trackHubSetting *specs = NULL;
+for (el = list; el != NULL; el = el->next)
+    slAddHead(&specs, el->val);
+slReverse(&specs);
 return specs;
 }
 
