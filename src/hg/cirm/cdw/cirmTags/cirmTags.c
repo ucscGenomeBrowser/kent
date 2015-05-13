@@ -43,6 +43,7 @@ exit(0);
 */ //END OLD
 char *table[100][2];
 int rowCount = 0;
+struct hash *fullHash = newHash(4);
 while(lineFileNext(lf, &line,  NULL))
     /* Goes over each row */
     {
@@ -56,18 +57,16 @@ while(lineFileNext(lf, &line,  NULL))
 	table[rowCount][i] = choppedLine[i];
 	printf("The %ith element is %s \n",i,choppedLine[i]);
 	}
+    hashAdd(fullHash, choppedLine[0], choppedLine[1]);
     ++rowCount; 
     }
-int i = 0;
-for (; i<2; ++i)
-    {
-    int j = 0;
-    for(; j<100; ++j)
-	{
-	printf("%s\n", table[j][i]);
-	}
-    }
+struct hashEl *temp = hashLookup(fullHash,"html"); 
+
+printf("the html hashLookup hEl name is %s value is %s \n", temp->name, (char *)(temp->val));
 }
+
+
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
