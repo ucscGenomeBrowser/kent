@@ -54,7 +54,9 @@ if (argc != 2 && !optionExists("settings"))
 
 struct trackHubCheckOptions *checkOptions = NULL;
 AllocVar(checkOptions);
+
 checkOptions->checkFiles = !optionExists("noTracks");
+checkOptions->strict = optionExists("core");
 
 char *version = NULL;
 if (optionExists("version"))
@@ -62,17 +64,15 @@ if (optionExists("version"))
 checkOptions->version = version;
 
 char *extraFile = optionVal("extra", NULL);
-if (extraFile)
+if (extraFile != NULL)
     {
+    verbose(2, "Accepting extra settings in '%s'\n", extraFile);
     checkOptions->extraFile = extraFile;
     checkOptions->extra = hashNew(0);
     struct lineFile *lf = NULL;
     if (startsWith("http", extraFile))
         {
-        int sd = netUrlOpen(extraFile);
-        /* TODO: handle redirect */
-        struct dyString *ds = netSlurpFile(sd);
-        close(sd);
+        struct dyString *ds = netSlurpUrl(extraFile);
         char *s = dyStringCannibalize(&ds);
         lf = lineFileOnString(extraFile, TRUE, s);
         }
@@ -86,6 +86,7 @@ if (extraFile)
         hashAdd(checkOptions->extra, line, NULL);
         }
     lineFileClose(&lf);
+    verbose(3, "Found %d extra settings\n", hashNumEntries(checkOptions->extra));
     }
 
 cacheTime = optionInt("cacheTime", cacheTime);
@@ -104,14 +105,16 @@ if (optionExists("settings"))
         {
         printf("%s\t%s\n", setting->name, setting->level);
         }
-    // TODO: alpha sort
     return 0;
     }
 
 if (trackHubCheck(argv[1], checkOptions, errors))
     {
-    printf("Errors with hub at '%s'\n", argv[1]);
-    printf("%s\n", errors->string);
+    // uniquify and count errors
+    struct slName *errs = slNameListFromString(errors->string, '\n');
+    slUniqify(&errs, slNameCmp, slNameFree);
+    printf("%d errors:\n", slCount(errs));
+    printf("%s\n", slNameListToString(errs, '\n'));
     return 1;
     }
 return 0;

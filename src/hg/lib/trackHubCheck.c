@@ -17,35 +17,34 @@
 
 static int hubCheckTrackSetting(struct trackHub *hub, struct trackDb *tdb, char *setting, 
                                 struct trackHubCheckOptions *options, struct dyString *errors)
-/* Check trackDb setting is by spec (by version and level). Returns non-zero if error, msg in errors */
+/* Check trackDb setting to spec (by version and level). Returns non-zero if error, msg in errors */
 {
+verbose(4, "    Check setting '%s'\n", setting);
+
+/* skip internally added/used settings */
+if (sameString(setting, "polished") || sameString(setting, "group"))
+    return 0;
+
+/* check setting is in extra file of supported settings */
+if (options->extra && hashLookup(options->extra, setting))
+        return 0;
+
+/* check setting is supported in this version */
 struct trackHubSetting *hubSetting = hashFindVal(options->settings, setting);
-/* check setting exists in this version */
 if (hubSetting == NULL)
     {
-    if (options->extra == NULL)
-        {
-        dyStringPrintf(errors, "Unknown/unsupported trackDb setting '%s' in hub version '%s'", 
-                        setting, options->version);
-        return 1;
-        }
-    if (hashFindVal(options->extra, setting) == NULL)
-        {
-        dyStringPrintf(errors, 
-            "Unknown/unsupported trackDb setting '%s' in hub version '%s' with extras file/url '%s'", 
-                        setting, options->version, options->extraFile);
-        return 1;
-        }
+    dyStringPrintf(errors, "Setting '%s' is unknown/unsupported\n", setting);
+    return 1;
     }
-// check level
+
 if (!options->strict)
     return 0;
 
+// check level
 if (differentString(hubSetting->level, "core"))
     {
     dyStringPrintf(errors, 
-                "Setting '%s' is level '%s' in version '%s' (not 'core')", 
-                                setting, hubSetting->level, options->version);
+                "Setting '%s' is level '%s'\n", setting, hubSetting->level);
     return 1;
     }
 return 0;
@@ -122,13 +121,14 @@ int retVal = 0;
 
 if (options->settings)
     {
-    struct slPair *settings = slPairListFromString(tdb->settings, FALSE);
-    struct slPair *setting;
-    for (setting = settings; setting != NULL; setting = setting->next)
-        {
-        retVal |= hubCheckTrackSetting(hub, tdb, setting->name, options, errors);
-        }
-    /* NOTE: also need to check settings not in this list (other tdb fields) */
+    //verbose(3, "Found %d settings to check to spec\n", slCount(settings));
+    verbose(3, "Checking track: %s\n", tdb->shortLabel);
+    verbose(3, "Found %d settings to check to spec\n", hashNumEntries(tdb->settingsHash));
+    struct hashEl *hel;
+    struct hashCookie cookie = hashFirst(tdb->settingsHash);
+    while ((hel = hashNext(&cookie)) != NULL)
+        retVal |= hubCheckTrackSetting(hub, tdb, hel->name, options, errors);
+    /* TODO: ? also need to check settings not in this list (other tdb fields) */
     }
 
 if (!options->checkFiles)
@@ -171,12 +171,12 @@ if (errCatch->gotError)
     }
 errCatchFree(&errCatch);
 
+verbose(2, "%d tracks in %s\n", slCount(tdbList), genome->name);
 struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     retVal |= hubCheckTrack(hub, genome, tdb, options, errors);
     }
-verbose(2, "%d tracks in %s\n", slCount(tdbList), genome->name);
 
 return retVal;
 }
@@ -223,16 +223,26 @@ if (startsWith("http", version))
 else
     {
     char buf[256];
-    // TODO: local host
-    safef(buf, sizeof buf, "http://hgwdev-kate.cse.ucsc.edu/goldenPath/help/trackDb/trackDbHub.%s.html", 
+    safef(buf, sizeof buf, 
+        //"http://genome.ucsc.edu/goldenPath/help/trackDb/trackDbHub.%s.html", 
+        // TODO: switch to RR (and move to #define)
+        "http://hgwdev-kate.cse.ucsc.edu/goldenPath/help/trackDb/trackDbHub.%s.html",
         version);
     specUrl = buf;
     }
+verbose(2, "Validating to spec at %s\n", specUrl);
 struct htmlPage *page = htmlPageGet(specUrl);
 if (page == NULL)
     errAbort("Can't open trackDb settings spec %s\n", specUrl);
-// TODO: check return status -- this succeeds even for 404's ?
-verbose(3, "Opened URL %s\n", specUrl);
+
+//TODO: apply page validator
+//htmlPageValidateOrAbort(page);  // would like to use this, but current page doesn't validate
+// Would need to replace empty table (replaced by JS) with div, and assure htmlPageValidateOrAbort
+// is run on any page change.
+
+/* TODO: validate this is a trackDbHub spec */
+/* (scan tags for tag->name="span" tag->attribute="id", attr->"value=trackDbHub_version",
+ * might want to limit to first N tags) */
 
 /* Retrieve specs from file url. 
  * Settings are the first text word within any <code> element nested in * a <div> having 
@@ -244,7 +254,7 @@ struct htmlTag *tag, *codeTag;
 struct htmlAttribute *attr, *codeAttr;
 struct trackHubSetting *spec, *savedSpec;
 struct hash *specHash = hashNew(0);
-verbose(3, "Found %d tags\n", slCount(page->tags));
+verbose(5, "Found %d tags\n", slCount(page->tags));
 int divCount = 0;
 char buf[256];
 for (tag = page->tags; tag != NULL; tag = tag->next)
@@ -296,12 +306,20 @@ for (tag = page->tags; tag != NULL; tag = tag->next)
     }
 verbose(5, "Found %d <div>'s\n", divCount);
 struct hashEl *el, *list = hashElListHash(specHash);
+
 verbose(5, "Found %d settings's\n", slCount(list));
 slSort(&list, hashElCmp);
 struct trackHubSetting *specs = NULL;
+int coreCt = 0;
 for (el = list; el != NULL; el = el->next)
+    {
+    if (sameString(((struct trackHubSetting *)el->val)->level, "core"))
+        coreCt++;
     slAddHead(&specs, el->val);
+    }
 slReverse(&specs);
+verbose(3, "Found %d supported settings for this version (%d core)\n",
+                        slCount(specs), coreCt);
 return specs;
 }
 
@@ -331,31 +349,33 @@ errCatchFree(&errCatch);
 if (hub == NULL)
     return 1;
 
-verbose(2, "hub %s\nshortLabel %s\nlongLabel %s\n", hubUrl, hub->shortLabel, hub->longLabel);
-verbose(2, "%s has %d elements\n", hub->genomesFile, slCount(hub->genomeList));
 
 if (hub->version != NULL)
     options->version = hub->version;
 else if (options->version == NULL)
     options->version = trackHubVersionDefault();
 
-options->strict = FALSE;
-if (hub->level != NULL)
+if (options->strict == FALSE && hub->level != NULL)
     {
-    if (sameString(hub->level, "core") || sameString(hub->level, "strict"))
+    if (sameString(hub->level, "core"))
         options->strict = TRUE;
     else if (differentString(hub->level, "all"))
         {
         dyStringPrintf(errors, 
-            "Unknown hub support level: %s (expecting 'core' or 'all'). Defaulting to 'all'.", hub->level);
+            "Unknown hub support level: %s (expecting 'core' or 'all'). Defaulting to 'all'.\n", hub->level);
         retVal = 1;
         }
     }
-struct trackHubSetting *settings = NULL;
+verbose(2, "Checking hub '%s'%s\n", hub->longLabel, options->strict ? " for compliance to 'core' (use -settings to view)": "");
+
 errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    settings = trackHubSettingsForVersion(options->version);
+    /* make hash of settings for this version, saving in options */
+    struct trackHubSetting *setting, *settings = trackHubSettingsForVersion(options->version);
+    options->settings = newHash(0);
+    for (setting = settings; setting != NULL; setting = setting->next)
+        hashAdd(options->settings, setting->name, setting);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
