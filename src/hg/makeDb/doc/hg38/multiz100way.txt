@@ -1719,7 +1719,7 @@ set xrange [-4:1]
     display histo.png &
 
 #############################################################################
-# construct download files for 100-way (TBD - 2014-06-05 - Hiram)
+# construct download files for 100-way (DONE - 2015-05-12 - Hiram)
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz100way
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/phastCons100way
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/phyloP100way
@@ -1727,57 +1727,75 @@ set xrange [-4:1]
     cd /hive/data/genomes/hg38/bed/multiz100way/downloads
     mkdir multiz100way phastCons100way phyloP100way
     cd multiz100way
-    time cp -p ../../anno/hg38.100way.maf .
-    #   real    1m47.789s
-    # -rw-rw-r-- 1 656491004703 Dec 22 14:32 hg38.100way.maf
+    mkdir maf
+    rsync -a -P ../../anno/result/ ./maf/
+    du -hsc maf/
+    # 789G    maf
+    cd maf
+    time gzip *.maf &
+    # real    476m2.754s
+    du -hsc maf
+    #  72G     maf
+    cd maf
+    md5sum *.gz > md5sum.txt
 
-    time gzip *.maf
-    #   real    81m26.536s
-    # -rw-rw-r-- 1 8645613136 Dec 22 14:32 hg38.100way.maf.gz
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz100way/maf
+    ln -s `pwd`/* /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz100way/maf
 
-    ln -s ../../hg38.100way.nh .
     ln -s ../../hg38.100way.commonNames.nh .
-    time md5sum *.nh *.maf.gz > md5sum.txt
-    #   real    1m55.3100s
-    ln -s `pwd`/* \
-        /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz100way
-
-    du -hsc *.maf.gz ../../anno/hg38.100way.maf
-    # 8.1G    hg38.100way.maf.gz
-    # 62G     ../../anno/hg38.100way.maf
+    ln -s ../../hg38.100way.scientificNames.nh .
+    ~/kent/src/hg/utils/phyloTrees/asciiTree.pl ../../hg38.100way.nh \
+       > hg38.100way.nh
 
     # obtain the README.txt from hg38/multiz7way and update for this
     #   situation
 
+    time md5sum *.nh *.maf.gz > md5sum.txt
+    #   real    1m55.3100s
+    ln -s `pwd`/*.txt `pwd`/*.nh `pwd`/*.gz \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz100way
+
     #####################################################################
     cd /hive/data/genomes/hg38/bed/multiz100way/downloads/phastCons100way
 
-    ln -s ../../cons/all/downloads/phastCons100way.wigFix.gz \
-        ./hg38.phastCons100way.wigFix.gz
+    mkdir hg38.100way.phastCons
+    cd hg38.100way.phastCons
+    ln -s ../../../cons/all/downloads/*.wigFix.gz .
+    md5sum *.gz > md5sum.txt
+
+    cd ..
     ln -s ../../cons/all/phastCons100way.bw ./hg38.phastCons100way.bw
     ln -s ../../cons/all/all.mod ./hg38.phastCons100way.mod
-    time md5sum *.gz *.mod *.bw > md5sum.txt
-    #   real    0m37.453s
+    time md5sum *.mod *.bw > md5sum.txt
+    #   real    0m47.434s
 
-    # obtain the README.txt from hg38/phastCons7way and update for this
+    # obtain the README.txt from hg19/phastCons100way and update for this
     #   situation
-    ln -s `pwd`/*.gz `pwd`/*.mod `pwd`/*.bw `pwd`/*.txt \
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/phastCons100way/hg38.100way.phastCons
+    cd hg38.100way.phastCons
+    ln -s `pwd`/* /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/phastCons100way/hg38.100way.phastCons
+    cd ..
+    ln -s `pwd`/*.mod `pwd`/*.bw `pwd`/*.txt \
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/phastCons100way
 
     #####################################################################
     cd /hive/data/genomes/hg38/bed/multiz100way/downloads/phyloP100way
 
-    ln -s ../../consPhyloP/all/downloads/phyloP100way.wigFix.gz \
-        ./hg38.phyloP100way.wigFix.gz
+    mkdir hg38.100way.phyloP100way
+    cd hg38.100way.phyloP100way
+    ln -s ../../../consPhyloP/all/downloads/*.gz .
+    time md5sum *.gz > md5sum.txt
+    # real    0m25.736s
+
     ln -s ../../consPhyloP/run.phyloP/all.mod hg38.phyloP100way.mod
     ln -s ../../consPhyloP/all/phyloP100way.bw hg38.phyloP100way.bw
 
-    time md5sum *.mod *.bw *.gz > md5sum.txt
-    #   real    0m34.249s
-
     # obtain the README.txt from hg38/phyloP7way and update for this
     #   situation
-    ln -s `pwd`/* \
+    time md5sum *.mod *.bw *.txt > md5sum.txt
+    #   real    0m34.249s
+
+    ln -s `pwd`/*.bw `pwd`/*.mod `pwd`/*.txt \
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/phyloP100way
 
     ###########################################################################
@@ -1797,7 +1815,7 @@ do
         | gzip -c > upstream${S}.${geneTbl}.maf.gz
     echo "done upstream${S}.${geneTbl}.maf.gz"
 done
-    #   real    71m55.873s
+    #   real    384m21.270s
 
     md5sum upstream*.gz >> md5sum.txt
 
@@ -1812,29 +1830,6 @@ do
  info=`hgsql -N -e "select organism,\" - \",scientificName,description from dbDb where name=\"$D\";" hgcentraltest`
  echo "${info} ${netType}"
 done | tr '[\t]' '[ ]' >> README.txt
-
-Human - Homo sapiens              Dec. 2013 (GRCh38/hg38)            reference
-Chimp - Pan troglodytes           Feb. 2011 (CSAC 2.1.4/panTro4)      syntenic
-Bonobo - Pan paniscus             May. 2012 (Max-Planck/panPan1) reciprocal best
-Gorilla - Gorilla gorilla gorilla May 2011 (gorGor3.1/gorGor3)   reciprocal best
-Orangutan - Pongo pygmaeus abelii   July 2007 (WUGSC 2.0.2/ponAbe2)   syntenic
-Gibbon - Nomascus leucogenys      Oct. 2012 (GGSC Nleu3.0/nomLeu3)    syntenic
-Rhesus - Macaca mulatta           Oct. 2010 (BGI CR_1.0/rheMac3)      syntenic
-Crab-eating macaque - Macaca fascicularis 
-                          Jun 2013 (Macaca_fascicularis_5.0/macFas5)  syntenic
-Baboon - Papio anubis             Mar. 2012 (Baylor Panu_2.0/papAnu2) syntenic
-Green monkey - Chlorocebus sabaeus
-                          Mar. 2014 (Chlorocebus_sabeus 1.1/chlSab2)  syntenic
-Proboscis monkey - Nasalis larvatus
-                          Nov. 2014 (Charlie1.0/nasLar1)        reciprocal best
-Golden snub-nosed monkey - Rhinopithecus roxellana
-                          Oct. 2014 (Rrox_v1/rhiRox1)           reciprocal best
-Marmoset - Callithrix jacchus       Mar. 2009 (WUGSC 3.2/calJac3)     syntenic
-Squirrel monkey - Saimiri boliviensis Oct. 2011 (Broad/saiBol1) reciprocal best
-Tarsier - Tarsius syrichta         
-                   Sep. 2013 (Tarsius_syrichta-2.0.1/tarSyr2) reciprocal best
-Mouse lemur - Microcebus murinus    Jul. 2007 (Broad/micMur1) reciprocal best
-Bushbaby - Otolemur garnettii       Mar. 2011 (Broad/otoGar3) reciprocal best
 
     # some other symlinks were already made above
     ln -s `pwd`/upstream*.gz README.txt \
@@ -1870,12 +1865,12 @@ Bushbaby - Otolemur garnettii       Mar. 2011 (Broad/otoGar3) reciprocal best
     echo "wait" >> $gp.jobs
 
     time ./$gp.jobs > $gp.jobs.log 2>&1 &
-    #   real    31m19.385s
+    #   real    238m24.800s
 
     time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
-    #   real    0m40.234s
+    #   real    5m17.017s
     time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    2m8.1000s
+    #   real    20m57.158s
 
     export mz=multiz100way
     export gp=knownGene
@@ -1912,22 +1907,22 @@ Bushbaby - Otolemur garnettii       Mar. 2011 (Broad/otoGar3) reciprocal best
     echo "wait" >> $gp.jobs
 
     time sh -x $gp.jobs > $gp.jobs.log 2>&1
-    #   real    21m11.977s
+    # real    126m0.688s
 
     export mz=multiz100way
     export gp=refGene
     export db=hg38
     time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
-    #   real    0m33.580s
+    #   real    3m14.449s
     time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    1m30.018s
+    #   real    13m27.577s
 
-    du -hsc exonAA exonNuc refGene*.fa.gz
-    # 121M    exonAA
-    # 182M    exonNuc
-    # 121M    refGene.multiz100way.exonAA.fa.gz
-    # 182M    refGene.multiz100way.exonNuc.fa.gz
-    # 605M    total
+    du -hsc exonAA exonNuc $gp*.fa.gz
+    # 930M    exonAA
+    # 1.5G    exonNuc
+    # 930M    refGene.multiz100way.exonAA.fa.gz
+    # 1.5G    refGene.multiz100way.exonNuc.fa.gz
+    # 4.8G    total
 
     rm -rf exonAA exonNuc
 
@@ -1937,7 +1932,7 @@ Bushbaby - Otolemur garnettii       Mar. 2011 (Broad/otoGar3) reciprocal best
     export db=hg38
     export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
-    md5sum *.fa.gz > md5sum.txt
+    md5sum $gp.*.fa.gz >> md5sum.txt
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
     ln -s `pwd`/md5sum.txt $pd/
@@ -1949,11 +1944,12 @@ Bushbaby - Otolemur garnettii       Mar. 2011 (Broad/otoGar3) reciprocal best
     export db=hg38
     mkdir exonAA exonNuc ppredAA ppredNuc knownCanonical
 
-    cut -f1 ../../../chrom.sizes | while read C
+    time cut -f1 ../../../chrom.sizes | while read C
     do
-        echo $C
+        echo $C 1>&2
 	hgsql hg38 -N -e "select chrom, chromStart, chromEnd, transcript from knownCanonical where chrom='$C'" > knownCanonical/$C.known.bed
     done
+    #   real    0m15.897s
 
     ls knownCanonical/*.known.bed | while read F
     do
@@ -1974,8 +1970,7 @@ Bushbaby - Otolemur garnettii       Mar. 2011 (Broad/otoGar3) reciprocal best
     done > $gp.$mz.jobs
 
     time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1
-    # real    88m42.651s
-
+    # real    404m29.788s
 
     rm *.known.bed
     export mz=multiz100way
@@ -1985,6 +1980,7 @@ Bushbaby - Otolemur garnettii       Mar. 2011 (Broad/otoGar3) reciprocal best
     zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz &
     zcat ppredAA/c*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz &
     zcat ppredNuc/c*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+    # about 6 minutes
 
     rm -rf exonAA exonNuc ppredAA ppredNuc
 
@@ -1996,10 +1992,10 @@ Bushbaby - Otolemur garnettii       Mar. 2011 (Broad/otoGar3) reciprocal best
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
     cd  $pd
-    md5sum *.exon*.fa.gz > md5sum.txt
+    md5sum *.fa.gz > md5sum.txt
 
 #############################################################################
-# wiki page for 100-way (TBD - 2014-06-04 - Hiram)
+# wiki page for 100-way (DONE - 2015-05-14 - Hiram)
     mkdir /hive/users/hiram/bigWays/hg38.100way
     cd /hive/users/hiram/bigWays
     echo "hg38" > hg38.100way/ordered.list
@@ -2018,9 +2014,9 @@ Bushbaby - Otolemur garnettii       Mar. 2011 (Broad/otoGar3) reciprocal best
     ./defCheck.pl hg38 100way
 
     # this constructs the html pages in hg38.100way/:
-# -rw-rw-r-- 1 4153 Jun  5 11:03 Hg38_100-way_conservation_alignment.html
-# -rw-rw-r-- 1 5833 Jun  5 11:04 Hg38_100-way_Genome_size_statistics.html
-# -rw-rw-r-- 1 3854 Jun  5 11:04 Hg38_100-way_conservation_lastz_parameters.html
+# -rw-rw-r-- 1 53064 May 14 12:47 Hg38_100-way_conservation_alignment.html
+# -rw-rw-r-- 1 65315 May 14 12:49 Hg38_100-way_Genome_size_statistics.html
+# -rw-rw-r-- 1 31588 May 14 12:49 Hg38_100-way_conservation_lastz_parameters.html
 
     # add those pages to the genomewiki.  Their page names are the
     # names of the .html files without the .html:
