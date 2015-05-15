@@ -215,7 +215,7 @@ var tdbDoc = {
                     var classes = $(spanner).attr("class").split(" ");
                     classes = aryRemove(classes,['types']);
                     $(classes).each(function (ix) {
-                        types += " <A onclick='return jumpTo(this);' HREF='#'>"+this+"</a>";
+                        types += " <A onclick='return jumpTo(this);' HREF='#'>" + this + "</a>";
                     });
                 }
             }
@@ -233,7 +233,7 @@ var tdbDoc = {
             if (tbl != undefined && tbl.length === 1) {
                 var id = $(tbl[0]).attr('id');
                 if (id.length > 0) {
-                    best = "<A HREF='#"+id+"'>"+id.replace(/_/g," ")+"</a>"
+                    best = "<A HREF='#" + id + "'>" +id.replace(/_/g," ") + "</a>"
                     //if (td.length > 1)
                     //    best += " found "+td.length;
                 }
