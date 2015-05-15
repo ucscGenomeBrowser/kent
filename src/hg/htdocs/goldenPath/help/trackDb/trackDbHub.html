@@ -121,11 +121,11 @@ in the sections below.</I>
     <TR VALIGN=TOP><TD class="bigDataUrl"><A name="bigDataUrl"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-core">bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
-    <TR VALIGN=TOP><TD class="visibility"><A name="visibility"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">visibility</code></div>
-    </TD></TR>
     <TR VALIGN=TOP><TD class="html"><A name="html"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-core">html</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="visibility"><A name="visibility"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">visibility</code></div>
     </TD></TR>
 </TABLE>
 <BR>
@@ -211,6 +211,9 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
         <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
+    <TR VALIGN=TOP><TD class="itemRgb"><A name="itemRgb"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-core">itemRgb on</code></div>
+    </TD></TR>
     <TR VALIGN=TOP><TD class="colorByStrand"><A name="colorByStrand"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">colorByStrand &lt;red,green,blue&gt;
                                             &lt;red,green,blue&gt;</code></div>
@@ -234,9 +237,6 @@ are described below along with settings specific to their types.</P>
             <code class="level-full">scoreFilter &lt;low&gt;[:&lt;high&gt;]</code><BR>
             <code class="level-full">scoreFilterLimits &lt;low&gt;[:&lt;high&gt;]</code><BR>
             </div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="itemRgb"><A name="itemRgb"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-core">itemRgb on</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="maxItems"><A name="maxItems"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">maxItems &lt;integer&gt;</code></div>
@@ -317,13 +317,24 @@ are described below along with settings specific to their types.</P>
     </TH></TR>
     <TR VALIGN=TOP><TD class="bigWig"><IMG class='toggle detail'>
         <div class="format">
-            <code class="level-full">type bigWig &lt;#&gt; &lt;#&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="alwaysZero"><A name="alwaysZero"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">alwaysZero  &lt;off/on&gt;</code></div>
+            <code class="level-core">type bigWig &lt;#&gt; &lt;#&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="autoScale"><A name="autoScale"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-core">autoScale &lt;off/on&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="maxHeightPixels">
+        <A name="maxHeightPixels"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-core">maxHeightPixels &lt;max:default:min&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="viewLimits">
+            <A name="viewLimits"></A>
+            <A name="viewLimitsMax"></A><IMG class='toggle detail'>
+        <div class="format">
+            <code class="level-core">viewLimits &lt;lower:upper&gt;</code><BR>
+            <code class="level-full">viewLimitsMax &lt;lower:upper&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="alwaysZero"><A name="alwaysZero"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">alwaysZero  &lt;off/on&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
         <div class="format"><code class="level-full">bigDataUrl &lt;url/relativePath&gt;</code></div>
@@ -331,10 +342,6 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="graphTypeDefault">
         <A name="graphTypeDefault"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">graphTypeDefault points</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="maxHeightPixels">
-        <A name="maxHeightPixels"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-core">maxHeightPixels &lt;max:default:min&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="maxWindowToQuery">
         <A name="maxWindowToQuery"></A><IMG class='toggle detail'>
@@ -351,13 +358,6 @@ are described below along with settings specific to their types.</P>
     <TR VALIGN=TOP><TD class="transformFunc">
         <A name="transformFunc"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">transformFunc &lt;NONE/LOG&gt;</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="viewLimits">
-            <A name="viewLimits"></A>
-            <A name="viewLimitsMax"></A><IMG class='toggle detail'>
-        <div class="format">
-            <code class="level-core">viewLimits &lt;lower:upper&gt;</code><BR>
-            <code class="level-full">viewLimitsMax &lt;lower:upper&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="windowingFunction">
         <A name="windowingFunction"></A><IMG class='toggle detail'>
@@ -459,7 +459,7 @@ are described below along with settings specific to their types.</P>
         &nbsp;vcfTabix - Variant Call Format (indexed by tabix) track settings
     </TH></TR>
     <TR VALIGN=TOP><TD class="vcfTabix"><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">type vcfTabix</code></div>
+        <div class="format"><code class="level-core">type vcfTabix</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
         <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
@@ -676,7 +676,7 @@ hierarchical containers:
         &nbsp;Aggregate or Overlay track settings
     </TH></TR>
     <TR VALIGN=TOP><TD class="container"><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">container multiWig</code></div>
+        <div class="format"><code class="level-core">container multiWig</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="parent_container">
         <A name="parent_container"></A><IMG class='toggle detail'>
