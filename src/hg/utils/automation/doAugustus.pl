@@ -216,15 +216,19 @@ echo pushd \$tmpDir
 pushd \$tmpDir
 
 if ( \$start == \$end ) then
-augustus --species=chicken --softmasking=1 --UTR=off --protein=off \\
-   --AUGUSTUS_CONFIG_PATH=/hive/data/outside/augustus/augustus.3.1/config \\
-     \$fasta --outfile=\$gtfOutput:t --errfile=\$errFile:t
+augustus --species=$species --softmasking=1 --UTR=$utr --protein=off \\
+ --AUGUSTUS_CONFIG_PATH=/hive/data/outside/augustus/augustus.3.1/config \\
+  --alternatives-from-sampling=true --sample=100 --minexonintronprob=0.2 \\
+   --minmeanexonintronprob=0.5 --maxtracks=3 --temperature=2 \\
+    \$fasta --outfile=\$gtfOutput:t --errfile=\$errFile:t
 else
  @ start++
-augustus --species=chicken --softmasking=1 --UTR=off --protein=off \\
-   --AUGUSTUS_CONFIG_PATH=/hive/data/outside/augustus/augustus.3.1/config \\
-     --predictionStart=\$start --predictionEnd=\$end \$fasta \\
-       --outfile=\$gtfOutput:t --errfile=\$errFile:t
+augustus --species=$species --softmasking=1 --UTR=$utr --protein=off \\
+ --AUGUSTUS_CONFIG_PATH=/hive/data/outside/augustus/augustus.3.1/config \\
+  --alternatives-from-sampling=true --sample=100 --minexonintronprob=0.2 \\
+   --minmeanexonintronprob=0.5 --maxtracks=3 --temperature=2 \\
+     --predictionStart=\$start --predictionEnd=\$end \\
+      \$fasta --outfile=\$gtfOutput:t --errfile=\$errFile:t
 endif
 
 popd
@@ -310,7 +314,7 @@ sub doLoadAugustus {
   } elsif (-e "$runDir/fb.$db.$tableName.txt" ) {
     die "doLoadAugustus: looks like this was run successfully already\n" .
       "(fb.$db.$tableName.txt exists).  Either run with -continue cleanup\n" .
-	"or move aside/remove\n$runDir/fb.$db.augustus.txt and run again.\n";
+	"or move aside/remove\n$runDir/fb.$db.$tableName.txt and run again.\n";
   }
   my $whatItDoes = "Loads $db.augustus.gp.";
   my $bossScript = newBash HgRemoteScript("$runDir/loadAugustus.bash", $dbHost,
@@ -322,9 +326,11 @@ export table="$tableName"
 genePredCheck -db=\$db \$db.augustus.gp
 hgLoadGenePred \$db -genePredExt \$table \$db.augustus.gp
 genePredCheck -db=\$db \$table
-featureBits \$db \$table > fb.$db.\$table 2>&1
+featureBits \$db \$table > fb.\$db.\$table.txt 2>&1
 checkTableCoords -verboseBlocks -table=\$table \$db
-cat fb.$db.\$table
+cat fb.\$db.\$table.txt
+getRnaPred -genePredExt -genomeSeqs=$maskedSeq \$db \$table all \$db.augustusGene.rna.fa
+getRnaPred -genePredExt -peptides -genomeSeqs=$maskedSeq \$db \$table all \$db.augustusGene.faa
 _EOF_
   );
   $bossScript->execute();
@@ -353,6 +359,8 @@ rm -f $buildDir/run.augustus/batch.bak
 rm -fr $buildDir/run.augustus/augErr
 gzip $buildDir/\$db.augustus.gtf
 gzip $buildDir/\$db.augustus.gp
+gzip $buildDir/\$db.augustusGene.rna.fa
+gzip $buildDir/\$db.augustusGene.faa
 _EOF_
   );
   $bossScript->execute();
