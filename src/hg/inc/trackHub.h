@@ -70,11 +70,12 @@ struct trackHubCheckOptions
     {
     char *version;              /* hub spec version to check */
     boolean strict;             /* check hub is valid to 'core' level for version */
-    char *extraFile;            /* name of extra file/url with additional settings to accept */
     boolean checkFiles;         /* check remote files exist and are correct type */
+    char *extraFile;            /* name of extra file/url with additional settings to accept */
     /* intermediate data */
     struct hash *settings;      /* supported settings for this version */
     struct hash *extra;         /* additional trackDb settings to accept */
+    struct slName *suggest;     /* list of supported settings for suggesting */
     };
 
 struct trackHubSetting

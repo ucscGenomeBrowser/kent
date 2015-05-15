@@ -10,10 +10,90 @@
 #include "htmshell.h"
 #include "htmlPage.h"
 #include "trackHub.h"
+#include "axt.h"
 
 #ifdef USE_HAL
 #include "halBlockViz.h"
 #endif
+
+
+/* Mini English spell-check using axt sequence alignment code!  From JK
+ * Works in this context when thresholded high.  */
+
+static struct axtScoreScheme *scoreSchemeEnglish()
+/* Return something that will match just English words more or less. */
+{
+struct axtScoreScheme *ss;
+AllocVar(ss);
+ss->gapOpen = 4;
+ss->gapExtend = 2;
+
+/* Set up diagonal to match */
+int i;
+for (i=0; i<256; ++i)
+    ss->matrix[i][i] = 2;
+
+/* Set up upper and lower case to match mostly */
+int caseDiff = 'A' - 'a';
+for (i='a'; i<='z'; ++i)
+    {
+    ss->matrix[i][i+caseDiff] = 1;
+    ss->matrix[i+caseDiff][i] = 1;
+    }
+return ss;
+}
+
+
+static int scoreWordMatch(char *a, char *b, struct axtScoreScheme *ss)
+/* Return alignment score of two words */
+{
+struct dnaSeq aSeq = { .name = "a", .dna = a, .size = strlen(a)};
+struct dnaSeq bSeq = { .name = "b", .dna = b, .size = strlen(b)};
+struct axt *axt = axtAffine(&aSeq, &bSeq, ss);
+int result = 0;
+if (axt != NULL)
+    {
+    result = axt->score;
+    axtFree(&axt);
+    }
+return result;
+}
+
+
+static char *suggestSetting(char *setting, struct trackHubCheckOptions *options)
+/* Suggest a similar word from settings lists.  Suggest only if there is a single good match */
+{
+char *best;
+int bestScore = 0;
+int bestCount = 0;
+struct slName *suggest;
+
+struct axtScoreScheme *ss = scoreSchemeEnglish();
+for (suggest = options->suggest; suggest != NULL; suggest = suggest->next)
+    {
+    int score = scoreWordMatch(setting, suggest->name, ss);
+    if (score < bestScore)
+        continue;
+    if (score > bestScore)
+        {
+        best = suggest->name;
+        bestScore = score;
+        bestCount = 1;
+        }
+    else
+        {
+        // same score
+        bestCount++;
+        }
+    }
+if (bestCount == 1 && bestScore > 15)
+    {
+    verbose(3, "suggest %s score: %d\n", best, bestScore);
+    return best;
+    }
+return NULL;
+}
+
 
 static int hubCheckTrackSetting(struct trackHub *hub, struct trackDb *tdb, char *setting, 
                                 struct trackHubCheckOptions *options, struct dyString *errors)
@@ -33,7 +113,11 @@ if (options->extra && hashLookup(options->extra, setting))
 struct trackHubSetting *hubSetting = hashFindVal(options->settings, setting);
 if (hubSetting == NULL)
     {
-    dyStringPrintf(errors, "Setting '%s' is unknown/unsupported\n", setting);
+    dyStringPrintf(errors, "Setting '%s' is unknown/unsupported", setting);
+    char *suggest = suggestSetting(setting, options);
+    if (suggest != NULL)
+        dyStringPrintf(errors, " (did you mean '%s' ?) ", suggest);
+    dyStringPrintf(errors, "\n");
     return 1;
     }
 
@@ -374,8 +458,24 @@ if (errCatchStart(errCatch))
     /* make hash of settings for this version, saving in options */
     struct trackHubSetting *setting, *settings = trackHubSettingsForVersion(options->version);
     options->settings = newHash(0);
+    options->suggest = NULL;
     for (setting = settings; setting != NULL; setting = setting->next)
+        {
         hashAdd(options->settings, setting->name, setting);
+        slNameAddHead(&options->suggest, setting->name);
+        }
+    /* TODO: ? also need to check settings not in this list (other tdb fields) */
+
+    // TODO: move extra file handling here (out of hubCheck)
+    if (options->extra != NULL)
+        {
+        struct hashCookie cookie = hashFirst(options->extra);
+        struct hashEl *hel;
+        while ((hel = hashNext(&cookie)) != NULL)
+            slNameAddHead(&options->suggest, hel->name);
+        }
+    slNameSort(&options->suggest);
+    verbose(3, "Suggest list has %d settings\n", slCount(options->suggest));
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
