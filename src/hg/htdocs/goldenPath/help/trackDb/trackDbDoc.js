@@ -203,12 +203,12 @@ var tdbDoc = {
 
             // Find types
             var types = "";
-            var div = tdbDoc.library.lookup(aClass,false);
-            var level = 'level-new';
+            var div = tdbDoc.library.lookup(aClass, false);
+            var level = null;
             if (div.length === 1) {
                 level = $(div).find('code').attr('class');
                 if (level.length === 0) {
-                    level = 'level-new';
+                    level = null;
                 }
                 var spanner = $(div).find('span.types');
                 if (spanner.length === 1) {
@@ -219,11 +219,10 @@ var tdbDoc = {
                     });
                 }
             }
-
             // Where documented (what table)?
             // TODO: Should rewrite classes array to also carry the table.
             var best = '';
-            var td = $('td.'+aClass);
+            var td = $('td.' + aClass);
             var tbl;
             if (td.length > 0) // Always chooses first
                 tbl = $(td[0]).parents('table.settingsTable');
@@ -238,9 +237,16 @@ var tdbDoc = {
                     //    best += " found "+td.length;
                 }
             }
-            return "<tr><td><A onclick='return jumpTo(this);' HREF='#'>"+aClass+"</a></td>" +
-                        "<td class="+level+">"+level.replace('level-','')+"</span></td>" +
-                        "<td>"+types+"</td><td>"+ best+"</td></tr>";
+            var row = "<tr><td><A onclick='return jumpTo(this);' HREF='#'>" + aClass + "</a></td>";
+            if (tdbDoc.isHubDoc()) {
+                //include level in the table
+                if (level === null) {
+                    level = 'level-new';
+                }
+                row += "<td class=" + level + ">" +level.replace('level-','') + "</span></td>";
+            }
+            row += "<td>" + types + "</td><td>" + best + "</td></tr>";
+            return row;
 
         },
 
@@ -270,13 +276,19 @@ var tdbDoc = {
                 classes.sort( tdbDoc.sortNoCase );
 
                 // Should now have a full set of settings to add to TOC
-                if ($(tocTable).find('thead').length === 0)
-                    $(tocTable).prepend( "<THEAD><TR><TD colspan='4'>"+
+                var cols = tdbDoc.isHubDoc() ? 4 : 3;
+                if ($(tocTable).find('thead').length === 0) {
+                    $(tocTable).prepend( "<THEAD><TR><TD colspan='" + cols + "'>"+
                                "<H3>Table of Contents</H3></TD></TR></THEAD>" );
-                if ($(tocTable).find('th').length === 0)
-                    $(tocTable).append( "<TR VALIGN=TOP><TH WIDTH=100>Setting</TH>"+
-                                        "<TH>Level</TH>"+
-                                        "<TH WIDTH='25%'>For Types</TH><TH>Documented</TH></TR>" );
+                }
+                if ($(tocTable).find('th').length === 0) {
+                    var th = "<TR VALIGN=TOP><TH WIDTH=100>Setting</TH>";
+                    if (tdbDoc.isHubDoc()) {
+                        th += "<TH>Level</TH>";
+                    }
+                    th += "<TH WIDTH='25%'>For Types</TH><TH>Documented</TH></TR>";
+                    $(tocTable).append(th);
+                }
                 var lastClass = '';
                 $(classes).each(function (ix) {
                     if (lastClass !== String(this)) {// skip duplicates

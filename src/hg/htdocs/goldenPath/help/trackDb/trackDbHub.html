@@ -13,11 +13,10 @@
     <script type="text/javascript" src="trackDbDoc.js"></script>
 
     <script type="text/javascript">
-        var trackDbHub_version = "v1";
-    </script>
-
-    <script type="text/javascript">
         $(document).ready(function() {
+
+            tdbDoc.hubVersion = "v0";
+
             //tdbDoc.library.checkup(); // Run this test during development only
             // TOC Self assembly EXPERIMENTAL
             tdbDoc.tocAssemble( 0, ["bed_flavors","parent_supertrack",
