@@ -329,8 +329,8 @@ genePredCheck -db=\$db \$table
 featureBits \$db \$table > fb.\$db.\$table.txt 2>&1
 checkTableCoords -verboseBlocks -table=\$table \$db
 cat fb.\$db.\$table.txt
-getRnaPred -genePredExt -genomeSeqs=$maskedSeq \$db \$table all \$db.augustusGene.rna.fa
-getRnaPred -genePredExt -peptides -genomeSeqs=$maskedSeq \$db \$table all \$db.augustusGene.faa
+getRnaPred -genePredExt -keepMasking -genomeSeqs=$maskedSeq \$db \$db.augustus.gp all \$db.augustusGene.rna.fa
+getRnaPred -genePredExt -peptides -genomeSeqs=$maskedSeq \$db \$db.augustus.gp all \$db.augustusGene.faa
 _EOF_
   );
   $bossScript->execute();
