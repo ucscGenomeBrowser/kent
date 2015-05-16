@@ -9779,6 +9779,8 @@ char *gbCdnaGetDescription(struct sqlConnection *conn, char *acc)
 /* return mrna description, or NULL if not available. freeMem result */
 {
 char query[1024];
+if (!hTableExists(database, "gbCdnaInfo"))
+    return NULL;
 sqlSafef(query, sizeof(query),
       "select description.name from gbCdnaInfo,description where (acc = '%s') and (gbCdnaInfo.description = description.id)", acc);
 char *desc = sqlQuickString(conn, query);
@@ -10994,8 +10996,19 @@ if (access(textPath, R_OK) == 0)
 
 int gbCdnaGetVersion(struct sqlConnection *conn, char *acc)
 /* return mrna/est version, or 0 if not available */
+//  define hHasTable(db,table) hTableExists(db,table) // like hFieldExists
+
 {
 int ver = 0;
+if (!hTableExists(database, "gbCdnaInfo"))
+    {
+    warn("Genbank information not shown below, the table %s.gbCdnaInfo is not installed "
+        "on this server. ", database);
+    //"The information below is a shortened version of the one shown on the "
+    //"<a href=\"http://genome.ucsc.edu\">UCSC site</a>", database);
+    return 0;
+    }
+
 if (hHasField(database, "gbCdnaInfo", "version"))
     {
     char query[128];
@@ -11484,9 +11497,15 @@ htmlHorizontalLine();
 /* print alignments that track was based on */
 {
 char *aliTbl = (sameString(tdb->table, "refGene") ? "refSeqAli" : "xenoRefSeqAli");
-struct psl *pslList = getAlignments(conn, aliTbl, rl->mrnaAcc);
-printf("<H3>mRNA/Genomic Alignments</H3>");
-printAlignments(pslList, start, "htcCdnaAli", aliTbl, rl->mrnaAcc);
+if (hTableExists(database, aliTbl))
+    {
+    struct psl *pslList = getAlignments(conn, aliTbl, rl->mrnaAcc);
+    printf("<H3>mRNA/Genomic Alignments</H3>");
+    printAlignments(pslList, start, "htcCdnaAli", aliTbl, rl->mrnaAcc);
+    }
+else
+    warn("Sequence alignment links not shown below, the table %s.refSeqAli is not installed " 
+            "on this server", database);
 }
 
 htmlHorizontalLine();
