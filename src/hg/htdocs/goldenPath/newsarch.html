@@ -40,27 +40,57 @@
 <HR>
 <!-- ============= 2015 archived news ============= -->
 <a name="2015"></a>
-<a name="040815"></a> <!-- add <hr> to bottom of first entry when pushing down-->
+
+<a name="051515"></a> <!-- add <hr> to bottom of first entry when pushing down-->
+	<p>
+	<font color="#00666" size="4"><b>15 May 2015 -
+        Work for Us! New Job Openings on the UCSC Genome Browser Project</b></font>
+        <p>
+	The UCSC Genome Browser project team is looking for two talented people to join our
+	engineering staff based in Santa Cruz, CA.</p>
+	<p>
+	The Software Engineer will work with a small engineering team to support and extend
+	the UCSC Genome Browser database and software, while interfacing with Genome Browser
+	collaborators and users worldwide. Our engineering work requires solid experience
+	with C, UNIX and SQL. For application information and more details, see 
+	<a href="https://jobs.ucsc.edu/applicants/Central?quickFind=68100"
+	target="_blank">Job #150568</a> on the UCSC staff employment page. </p>
+	<p>
+  	The Quality and User Support Analyst will work with a small QA group that interacts closely 
+	with browser software developers and genomics researchers throughout the world. As
+	a member of the QA team, you will participate in all aspects of quality assurance for 
+	genomics projects staffed by our group and provide technical support for the affiliated 
+	user communities. For application information and more details about the position,
+	see <a href="https://jobs.ucsc.edu/applicants/Central?quickFind=68101"
+	target="_blank">Job #1505685</a> on the UCSC staff employment page. </p>
+     	<p>
+	If you'd like to apply for one of these positions, be sure to submit your
+	application materials by May 25, 2015, for maximum consideration.
+	</p>
+	<hr>
+
+<a name="040815"></a> 
         <font color="#00666" size="4"><b>08 April 2015 -
         bigGenePred Format Now Supported in the Genome Browser</b></font>
         <p>
         We are pleased to announce that the UCSC Genome Browser now supports data in
         bigGenePred format. bigGenePred format stores annotation items that are a linked collection
         of exons, much as BED files do, but bigGenePred has additional information
-        about the coding frames and other gene specific information. bigGenePred files are created initially
+        about the coding frames and other gene specific information. bigGenePred files are created 
+	initially
         from BED-type files with some extra fields, using the program bedToBigBed with a special
-        AutoSQL file that defines the fields of the bigGenePred. The resulting bigBed files are in an
-        indexed binary format. The advantage of these bigBed files is that only portions of the files
-        needed to display a particular region are transferred to UCSC. So for large data sets,
+        AutoSQL file that defines the fields of the bigGenePred. The resulting bigBed files are in 
+	an indexed binary format. The advantage of these bigBed files is that only portions of the 
+	files needed to display a particular region are transferred to UCSC. So for large data sets,
         bigBed is considerably faster than regular BED files.
         <p>
         This new format is available for use in custom tracks and data hubs. For more information
         about bigGenePred, please see our
-        <a href="genome.ucsc.edu/goldenPath/help/bigGenePred.html">bigGenePred Track Format help page</a>.
+        <a href="help/bigGenePred.html">bigGenePred Track Format help page</a>.
         </p>
 	<hr>
 
-<a name="040215_2"></a>
+<a name="040215b"></a>
 	<p>
 	<font color="#00666" size="4"><b>02 April 2015 -
 	New Tarsier (tarSyr2) Assembly Now Available in the Genome Browser</b></font>
@@ -87,26 +117,27 @@
 	</p>
 	<hr>
 
-<a name="040215"></a>
+<a name="040215a"></a>
         <p>
         <font color="#00666" size="4"><b>02 April 2015 - New Training Video!</b></font>
         <p>
-        Going crazy counting amino acids? Learn an easier way to find the codon number in our new training video. See our
+        Going crazy counting amino acids? Learn an easier way to find the codon number in our new 
+	training video. See our
         <a href="../training/index.html" target="_blank">training page</a>, and our
-        <a href="http://bit.ly/genomebrowserYoutube" target=_"blank">YouTube channel</a> for details.
+        <a href="http://bit.ly/genomebrowserYoutube" target=_"blank">YouTube channel</a> for 
+	details.
         <hr>
 
 <a name="040115"></a>
         <p>
         <font color="#00666" size="4"><b>01 April 2015 - New GRCz10 Zebrafish Assembly Now Available</b></font>
         <p>
-                The most recent zebrafish assembly -- GRCz10 (UCSC version danRer10, Sep. 2014) -- is now
+        The most recent zebrafish assembly -- GRCz10 (UCSC version danRer10, Sep. 2014) -- is now
         available in the UCSC Genome Browser. This is the first zebrafish release by the
         <a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/zebrafish/"
-         target="_blank">Genome Reference Consortium</a>, who took over the improvement and
+        target="_blank">Genome Reference Consortium</a>, who took over the improvement and
         maintenance of the zebrafish genome assembly.
         </p>
-
         <p>
         The GRCz10 assembly improves upon Zv9 by utilizing optical mapping and additional meiotic
         mapping to fill gaps with new clone sequence and improve the positioning of assembly
@@ -114,20 +145,19 @@
         WGS31. The result is an assembly with a sequence length of 1.3 Gb in 26 chromosomes and
         1,035 scaffolds.  For more details about the GRCz10 assembly, see the
         <a href="http://www.ncbi.nlm.nih.gov/assembly/210611"
-         target="_blank">GRCz10 assembly page</a> or the official
+        target="_blank">GRCz10 assembly page</a> or the official
         <a href="http://www.ncbi.nlm.nih.gov/news/10-08-2014-zebrafish-grcz10-annotated/"
-         target="_blank">GRCz10 announcement</a>.
+        target="_blank">GRCz10 announcement</a>.
         </p>
-
         <p>
         The danRer10 sequence and annotation data can be downloaded from the UCSC Genome Browser
         <a href="ftp://hgdownload.cse.ucsc.edu/goldenPath/danRer10/">FTP server</a> or
         <a href="http://hgdownload.cse.ucsc.edu/downloads.html#zebrafish">downloads</a> page.
         </p>
-
         <p>
         We'd like to thank the Genome Reference Consortium for providing this assembly. The UCSC
-        zebrafish Genome Browser was produced by Hiram Clawson, Brian Raney and Steve Heitner. See the
+        zebrafish Genome Browser was produced by Hiram Clawson, Brian Raney and Steve Heitner. See 
+	the
         <a href="../goldenPath/credits.html#zebrafish_credits">credits</a> page for a detailed list
         of the organizations and individuals who contributed to this release.
         </p>
@@ -167,7 +197,8 @@
         amounts of data to be downloaded efficiently over long distances.
         </p>
         <p>
-        Please note that we now have two identical download servers to better serve your needs. You can use either one:
+        Please note that we now have two identical download servers to better serve your needs. You 
+	can use either one:
         <p>
         <a href="http://hgdownload.cse.ucsc.edu" target="_blank">http://hgdownload.cse.ucsc.edu</a><br>
         <a href="http://hgdownload-sd.sdsc.edu" target="_blank">http://hgdownload-sd.sdsc.edu</a>
@@ -178,7 +209,8 @@
         away the download source is from you, the slower the speed becomes. Protocols like UDT/UDR
         allow for many UDP packets to be sent in batch, thus allowing for much higher transmit speeds
         over long distances. UDR will be especially useful for users who are downloading from places
-        that are far away from California. <em>The US East Coast and the international community will likely
+        that are far away from California. <em>The US East Coast and the international community 
+	will likely
         see much higher download speeds by using UDR rather than rsync, http or ftp.</em></p>
         <p>
         <h4>Getting UDR & Setting it up on your System:</h4>
@@ -196,21 +228,27 @@
         understand how UDR works. UDR is written in C++. UDR is Open Source and is released under the
         Apache 2.0 License. You must first have rsync installed on your system.</p>
         <p>
-        For your convenience, we are offering a binary distribution of UDR for Red Hat Enterprise Linux 6.x and 7.x
-        (or variants such as CentOS 6/7 or Scientific Linux 6/7).  You'll find the rpm packages here:</p>
+        For your convenience, we are offering a binary distribution of UDR for Red Hat Enterprise 
+	Linux 6.x and 7.x
+        (or variants such as CentOS 6/7 or Scientific Linux 6/7).  You'll find the rpm packages 
+	here:</p>
         <p>
-        <a href="http://hgdownload.cse.ucsc.edu/admin/udr" target="_blank">http://hgdownload.cse.ucsc.edu/admin/udr</a>
+        <a href="http://hgdownload.cse.ucsc.edu/admin/udr" 
+	target="_blank">http://hgdownload.cse.ucsc.edu/admin/udr</a>
         <p>
-        For RHEL 6 we have 32 bit and 64 bit packages, but for RHEL 7 we have dropped the 32 bit builds and only
-        offer a 64 bit package.  But if you need a 32 bit package for RHEL 7 you can still download the source and
-        compile it yourself, as is an option for any other Linux OS.</p>
+        For RHEL 6 we have 32 bit and 64 bit packages, but for RHEL 7 we have dropped the 32 bit 
+	builds and only
+        offer a 64 bit package.  But if you need a 32 bit package for RHEL 7 you can still download 
+	the source and compile it yourself, as is an option for any other Linux OS.</p>
         <p>
-        <h4>Example of Using UDR to Download ENCODE Data from the UCSC Genome Browser Download Server(s):</h4>
+        <h4>Example of Using UDR to Download ENCODE Data from the UCSC Genome Browser Download 
+	Server(s):</h4>
         <p>
         Once you have a working UDR binary, either by building from source or by installing the rpm
         (if you are using RHEL 6.x or other variant), you can download files from either of our our
         download servers in a very similar fashion to rsync. For example, using rsync, you may want
-        to download all of the ENCODE information for the mm9 database using the following command:</p>
+        to download all of the ENCODE information for the mm9 database using the following command:
+	</p>
         <p>
         <pre class="code">$ rsync -avP rsync://hgdownload.soe.ucsc.edu/goldenPath/mm9/encodeDCC/ /my/local/mm9/</pre>
         <p>
@@ -229,7 +267,8 @@
         TCP/9000 and UDP/9000-9100 from either of the two download machines.</p>
         <p>
         If you decide to install and use UDR, we hope that you experience greatly increased download
-        speeds. If you have difficulties installing UDR on your system, please contact the Laboratory
+        speeds. If you have difficulties installing UDR on your system, please contact the 
+	Laboratory
         for Advanced Computing through their gitHub page: <a href="https://github.com/LabAdvComp/UDR"
         target="_blank">https://github.com/LabAdvComp/UDR</a>.
         <hr>
@@ -242,7 +281,8 @@
         Find out how in our new training video. See our
         <a href="../training/index.html" target="_blank">training page</a>, our
         <a href="http://bit.ly/genomebrowserYoutube" target=_"blank">YouTube channel</a>, and our
-        <a href="http://genome.ucsc.edu/blog/introducing-the-genome-browser-youtube-channel/" target="_blank">blog</a> for details.
+        <a href="http://genome.ucsc.edu/blog/introducing-the-genome-browser-youtube-channel/" 
+	target="_blank">blog</a> for details.
         <hr>
 
 <a name="021215"></a>
@@ -265,6 +305,7 @@
         target="_blank">Quick Start Guide to Assembly Hubs</a>. 
         </p>
         <hr>
+
 <a name="021115"></a>
         <p>
         <font color="#00666" size="4"><b>11 February 2015 -
@@ -307,13 +348,15 @@
         and the associated masked FASTA files will continue to be available on our
         <a href="http://hgdownload.soe.ucsc.edu" target="_blank">download server</a>.
         </p>
-  <hr>
-<a name="020215"></a><!-- add <hr> to bottom of first entry when pushing down-->
+  	<hr>
+
+<a name="020215"></a>
 	<p>
         <font color="#00666" size="4"><b>2 February 2015 - Host a Genome Browser Workshop</b></font>
 	</p>
         <p>
-        New timeslots are now available to host a Genome Browser workshop at your institution. Thanks to the funding support of NHGRI,
+        New timeslots are now available to host a Genome Browser workshop at your institution. 
+	Thanks to the funding support of NHGRI,
         we offer hands-on Genome Browser training onsite at your institution, tailored to your
         audience's level of expertise.
         </p>
@@ -325,29 +368,27 @@
         <hr>
 
 <a name="012315"></a>
-
         <p>
         <font color="#00666" size="4"><b>23 January 2015 - Genome Browser YouTube Channel</b></font>
-
         <p>We are pleased to announce the release of the UCSC Genome Browser
         <a href="http://bit.ly/genomebrowserYoutube" target=_"blank">YouTube channel</a>.
         The channel contains short videos showing how to use the Genome Browser and associated
-        tools to solve selected problems.  The videos were produced by Robert Kuhn and Pauline Fujita,
-        with assistance from Luvina Guruvadoo, Jonathan Casper, Matt Speir and the rest of the Browser staff.
+        tools to solve selected problems.  The videos were produced by Robert Kuhn and Pauline 
+	Fujita,
+        with assistance from Luvina Guruvadoo, Jonathan Casper, Matt Speir and the rest of the 
+	Browser staff.
         </p>
-
-        <p>See also the other materials on our <a href="http://bit.ly/genomebrowserTraining">training page</a>.
+        <p>See also the other materials on our 
+	<a href="http://bit.ly/genomebrowserTraining">training page</a>.
         </p>
-
-        <p>If you have any comments or questions - including requests for future video topics - please
-        send them to our training group at:
+        <p>If you have any comments or questions - including requests for future video topics - 
+	please send them to our training group at:
         </p>
-
         <p>
-&#117;&#99;&#115;&#99;g&#98;&#116;&#114;&#97;&#105;n&#105;n&#103;&#64;&#115;&#111;&#101;.
-&#117;c&#115;c.
-&#101;&#100;&#117;
-<!-- above address is ucscgbtraining at soe.ucsc.edu -->
+	&#117;&#99;&#115;&#99;g&#98;&#116;&#114;&#97;&#105;n&#105;n&#103;&#64;&#115;&#111;&#101;.
+	&#117;c&#115;c.
+	&#101;&#100;&#117;
+	<!-- above address is ucscgbtraining at soe.ucsc.edu -->
 
        <hr>
         
@@ -358,30 +399,33 @@
         <p>
         We are pleased to announce the release of proteomics data for the
         human hg19 assembly. Data from the National Cancer Institute's (NCI)
-        <a href="http://proteomics.cancer.gov/programs/cptacnetwork" target="_blank">
-        Clinical Proteomic Tumor Analysis Consortium (CPTAC)</a> is now available
+        <a href="http://proteomics.cancer.gov/programs/cptacnetwork" 
+	target="_blank">Clinical Proteomic Tumor Analysis Consortium (CPTAC)</a> is now available
         in the UCSC Genome Browser as a public track hub. This track hub
         contains peptides that were identified by CPTAC in their deep mass
         spectrometry based characterization of the proteome content of
         breast, colorectal and ovarian cancer biospecimens that were initially
-        sequenced by <a href="http://cancergenome.nih.gov/" target="_blank">
-        The Cancer Genome Atlas</a>. This effort extends the
+        sequenced by <a href="http://cancergenome.nih.gov/" 
+	target="_blank">The Cancer Genome Atlas</a>. This effort extends the
         accessibility of CPTAC data to more researchers and provides an
         additional level of analysis to assist the cancer biology community.
         <p>
         To access and view this hub, navigate to the
-        <a href="http://genome.ucsc.edu/cgi-bin/hgHubConnect" target="_blank">
-        Track Hub gateway page</a> and select &quot;CPTAC Hub v1&quot; from the Public Hubs list.
-        Please direct any queries to the Fenyo Lab at <a href="mailto:info@fenyolab.org">info@fenyolab.org</a>.
+        <a href="http://genome.ucsc.edu/cgi-bin/hgHubConnect" 
+	target="_blank">Track Hub gateway page</a> and select &quot;CPTAC Hub v1&quot; from the 
+	Public Hubs list.
+        Please direct any queries to the Fenyo Lab at 
+	<a href="mailto:info@fenyolab.org">info@fenyolab.org</a>.
         <p>
-        In addition, we have also released a <a href="http://www.peptideatlas.org/" target="_blank">
-        PeptideAtlas</a> track which displays peptide identifications from the
-        <a href="https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/buildDetails?atlas_build_id=433" target="_blank">
-        PeptideAtlas August 2014 (Build 433) Human build</a>. This build, based on 971 samples containing more than 420
+        In addition, we have also released a <a href="http://www.peptideatlas.org/" 
+	target="_blank">PeptideAtlas</a> track which displays peptide identifications from the
+        <a href="https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/buildDetails?atlas_build_id=433" 
+	target="_blank">PeptideAtlas August 2014 (Build 433) Human build</a>. This build, based on 
+	971 samples containing more than 420
         million spectra, identified over a million distinct peptides covering
         more than 15,000 canonical proteins. To read more about this track,
-        please see the <a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=peptideAtlas" target="_blank">
-        track description page</a>. Many thanks to Eric Deutsch,
+        please see the <a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=peptideAtlas" 
+	target="_blank">track description page</a>. Many thanks to Eric Deutsch,
         Zhi Sun, and the PeptideAtlas team at the Institute for Systems Biology,
         Seattle for providing this data.
         </p>
@@ -396,8 +440,8 @@
         <font color="#00666" size="4"><b>19 December 2014 -
         New Cow (bosTau8) Assembly Now Available in the Genome Browser</b></font>
         <p> We are pleased to announce the release of a Genome Browser for the June 2014 assembly
-        of cow, <i>Bos taurus</i> (Bos_taurus_UMD 3.1.1, UCSC version bosTau8). This updated cow assembly was 
-	provided by the  <a href="http://www.cbcb.umd.edu/"
+        of cow, <i>Bos taurus</i> (Bos_taurus_UMD 3.1.1, UCSC version bosTau8). This updated cow 
+	assembly was provided by the  <a href="http://www.cbcb.umd.edu/"
         target="_blank">UMD Center for Bioinformatics and Computational Biology</a> (CBCB). This
 	assembly is an update to the previous UMD 3.1 (bosTau6) assembly.  UMD 3.1 contained 
 	138 unlocalized contigs that were found to be contaminants. 
@@ -415,9 +459,8 @@
         <a href="/goldenPath/credits.html#cow_credits">Credits</a> page for a detailed
         list of the organizations and individuals who contributed to this release.
         </p>
-       <hr>
-
-
+        <hr>
+ 
 <a name="121214">
         <p>
         <font color="#00666" size="4"><b>12 December 2014 -
@@ -471,9 +514,8 @@
         our secure online <a href="https://genome-store.ucsc.edu/">store</a>.
         <p>
         You can read more about GBiB on our 
-	<a href="http://genome.ucsc.edu/blog/genome-browser-in-a-box-gbib-origins/">
-        blog</a>, or in the <a href="help/gbib.html">
-        help doc</a>.
+	<a href="http://genome.ucsc.edu/blog/genome-browser-in-a-box-gbib-origins/">blog</a>, 
+	or in the <a href="help/gbib.html">help doc</a>.
         <p>
 
 	<hr>
@@ -612,9 +654,10 @@
         The website for up-to-date information about the ENCODE project is no
         longer hosted at <a href="../ENCODE/index.html">genome.ucsc.edu/ENCODE</a>.
         Those UCSC ENCODE pages now archive information and tools from the ENCODE
-        production and pilot phases (2003 to 2012) including live links to visualize and download data.
-        Please navigate to the new ENCODE portal for recent data releases. Along with the ability to use
-        faceted searching to explore all ENCODE data, the ENCODE portal provides visualization
+        production and pilot phases (2003 to 2012) including live links to visualize and download 
+	data.
+        Please navigate to the new ENCODE portal for recent data releases. Along with the ability to
+	use faceted searching to explore all ENCODE data, the ENCODE portal provides visualization
         in the UCSC Genome Browser via a "Visualize Data" link on assay pages when
         processed data files are available.
         </p>
@@ -625,7 +668,8 @@
         Data from the FaceBase Consortium Now Available in the Genome Browser</b>
         </font>
         <p>
-	We are pleased to announce that much of the data from the <a href="https://www.facebase.org/"
+	We are pleased to announce that much of the data from the 
+	<a href="https://www.facebase.org/"
         target="_blank">FaceBase Consortium</a> is now available in the UCSC Genome Browser as a
         public track hub. This track hub contains data from numerous experiments carried out by
         the Potter and Visel labs to study craniofacial development in mice and humans, with
@@ -792,8 +836,8 @@
         We would like to acknowledge Tim Dreszer and Matthew Speir for their hard work in creating 
 	this track.
         </p>
+	<hr>
 
-<hr>
 <a name="052714"></a><!-- add <hr> to bottom of first entry when pushing down-->
         <p>
         <font color="#006666" size="4"><b> 27 May 2014 -
@@ -870,8 +914,7 @@
 <a name="050914"></a>
         <p>
         <font color="#006666" size="4"><b> 09 May 2014 -
-        Three New Assemblies Now Available in the Genome Browser</b>
-        </font>
+        Three New Assemblies Now Available in the Genome Browser</b></font>
         <p>
         A Genome Browser is now available for the Chinese hamster (<em>Cricetulus griseus</em>)
         assembly released July 2013 by the <a href="http://www.genomics.cn/en/index"
@@ -1019,7 +1062,7 @@
         correct version and verified that the data sets for all other species
         were correct before rerunning the pipeline.
         </p>
-<hr>
+	<hr>
 
 <a name="041814"></a>
         <p>
@@ -1028,10 +1071,10 @@
         The Browser's default displayed Transcription Factor ChIP-seq track is updating to the
         <a class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeRegTfbsClusteredV3">latest data release</a>,
         which has been enhanced with the display of Factorbook motifs.  Within a cluster, a green
-        highlight indicates the highest scoring site of a Factorbook-identified canonical motif for the
-        corresponding factor. Upon clicking a transcription factor's cluster with a motif, the details page
-        now displays the motif's sequence logo, alignment and underlying Positional Weight Matrix. Also,
-        the track configuration page now enables the filtering of factors.
+        highlight indicates the highest scoring site of a Factorbook-identified canonical motif for 
+	the corresponding factor. Upon clicking a transcription factor's cluster with a motif, the 
+	details page now displays the motif's sequence logo, alignment and underlying Positional 
+	Weight Matrix. Also, the track configuration page now enables the filtering of factors.
         </p>
         <p>
         The newly added <a class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeAwgSegmentation">
@@ -1039,11 +1082,12 @@
         <a target=ucscVocab href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?term=GM12878,H1-hESC,K562,HeLa-S3,HepG2,HUVEC">six human cell types</a>
         (GM12878, K562, H1-hESC, HeLa-S3, HepG2, and HUVEC), integrating ChIP-seq data for
         <a target=ucscVocab href="http://genome.ucsc.edu/cgi-bin/hgEncodeVocab?term=CTCF,H3K4me1,H3K4me2,H3K4me3,H3K27ac,H3K9ac,H3K36me3,H4K20me1,H3K27me3,Pol2,Input">
-        eight chromatin marks, RNA Polymerase II, the CTCF transcription factor and input data</a>. In total,
-        twenty-five states were used to segment the genome, and these states were then grouped and colored to
+        eight chromatin marks, RNA Polymerase II, the CTCF transcription factor and input data</a>. 
+	In total, twenty-five states were used to segment the genome, and these states were then 
+	grouped and colored to
         highlight predicted functional elements. These Genome Segmentations are the same data as
-        found in the Analysis Working Group Hub, but are now hosted natively in the Browser with enhanced
-        filtering capability where desired segmented states can be selected using the
+        found in the Analysis Working Group Hub, but are now hosted natively in the Browser with 
+	enhanced filtering capability where desired segmented states can be selected using the
         'Filter by Segment Type' control on the track configuration page.
         </p>
 
@@ -1264,12 +1308,17 @@
         All the DNA on the internet now at your fingertips!</b></font>
         </p>
         <p>
-        We're pleased to announce the release of the Web Sequences track on the UCSC Genome Browser. This
-        track, produced in collaboration with Microsoft Research, contains the results of a 30-day scan for
-        DNA sequences from over 40 billion different webpages. The sequences were then mapped with Blat to
-        the human genome (hg19) and numerous other species including mouse (mm9), rat (rn4), and zebrafish
-        (danRer7). The data were extracted from a variety of sources including patents, online textbooks,
-        help forums, and any other webpages that contain DNA sequence. In essence, this track displays the
+        We're pleased to announce the release of the Web Sequences track on the UCSC Genome Browser.
+	This track, produced in collaboration with Microsoft Research, contains the results of a 
+	30-day scan for
+        DNA sequences from over 40 billion different webpages. The sequences were then mapped with 
+	Blat to
+        the human genome (hg19) and numerous other species including mouse (mm9), rat (rn4), and 
+	zebrafish
+        (danRer7). The data were extracted from a variety of sources including patents, online 
+	textbooks,
+        help forums, and any other webpages that contain DNA sequence. In essence, this track 
+	displays the
         Blat alignments of nearly every DNA sequence on the internet! The
         <A HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=pubsBingBlat">Web Sequences</A>
         track description page contains more details on how the track was generated.
@@ -1287,20 +1336,23 @@
         </p>
         <p>
         We're pleased to add two new assembly hubs produced by the UCSC
-        <A HREF="https://cbse.soe.ucsc.edu/hausslerlab" TARGET="_BLANK">David Haussler lab</A>
-        to our collection of publicly available hubs. The new hubs feature over 60 bacterial assemblies,
-        including more than 55 different E. coli strains. The assembly annotations include genes, pathogenic
-        genes, conservation, GC percent, repetitive elements and much more.
+        <A HREF="https://genomics.soe.ucsc.edu/haussler" TARGET="_BLANK">David Haussler lab</A>
+        to our collection of publicly available hubs. The new hubs feature over 60 bacterial 
+	assemblies,
+        including more than 55 different E. coli strains. The assembly annotations include genes, 
+	pathogenic genes, conservation, GC percent, repetitive elements and much more.
         </p>
         <p>
-        These hubs focus on comparative genomics and showcase the new "snake" track type. Snakes, which
-        visualize alignments from
+        These hubs focus on comparative genomics and showcase the new "snake" track type. Snakes, 
+	which visualize alignments from
         <A HREF="http://genome.ucsc.edu/FAQ/FAQformat.html#format20">Hierarchical Alignment</A>
-        (HAL) files, provide a way to view sets of pairwise gapless alignments that may overlap on both
-        the chosen genome (reference) and the query genome, and show various types of genomic variations
-        such as insertions, substitutions, and duplications. More details about the new snake track display
-        and its configuration options can be found on our Genome Browser
-        <a href="http://genome.ucsc.edu/goldenPath/help/hgTracksHelp.html" target="_blank">help</a> page.
+        (HAL) files, provide a way to view sets of pairwise gapless alignments that may overlap on 
+	both the chosen genome (reference) and the query genome, and show various types of genomic 
+	variations
+        such as insertions, substitutions, and duplications. More details about the new snake track 
+	display and its configuration options can be found on our Genome Browser
+        <a href="http://genome.ucsc.edu/goldenPath/help/hgTracksHelp.html" target="_blank">help</a> 
+	page.
         </p>
         <p>
         To access and view these hubs, navigate to the
@@ -1308,8 +1360,8 @@
         and select one of the two E. coli comparative assembly hubs from the Public Hubs list.
         </p>
         <p>
-        We would like to acknowledge Ngan Nguyen, Glenn Hickey, Brian Raney, Joel Armstrong, Benedict Paten,
-        Matt Speir, and Luvina Guruvadoo for their hard work in creating these hubs.
+        We would like to acknowledge Ngan Nguyen, Glenn Hickey, Brian Raney, Joel Armstrong, 
+	Benedict Paten, Matt Speir, and Luvina Guruvadoo for their hard work in creating these hubs.
         </p>
         <hr>
 
@@ -1323,20 +1375,22 @@
         100 Species Conservation Track now available on hg19</b></font>
         </p>
         <p>
-        After 15.4 years of CPU run-time in 9,905,594 individual 'jobs' and 99 cluster runs for lastz
-        pair-wise alignment...we are excited to announce the release of a 100 species alignment on the
-        hg19/GRCh37 human Genome Browser.
+        After 15.4 years of CPU run-time in 9,905,594 individual 'jobs' and 99 cluster runs for 
+	lastz
+        pair-wise alignment...we are excited to announce the release of a 100 species alignment on 
+	the hg19/GRCh37 human Genome Browser.
         </p>
         <p>
         This new Conservation track shows multiple alignments of 100 species and measurements of
         evolutionary conservation using two methods (phastCons and phyloP) from the PHAST package.
-        This adds 40 more species to the existing 60-way on the mm10 mouse browser. For more information
-        about the 100 species Conservation track, see its 
-        <a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=cons100way" target="_blank">description page</a>.
+        This adds 40 more species to the existing 60-way on the mm10 mouse browser. For more 
+	information about the 100 species Conservation track, see its 
+        <a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=cons100way" 
+	target="_blank">description page</a>.
         </p>
         <p>
-        We'd also like to acknowledge the hard work of the UCSC Genome Browser staff who pulled together
-        the information for this track: Hiram Clawson and Pauline Fujita.
+        We'd also like to acknowledge the hard work of the UCSC Genome Browser staff who pulled 
+	together the information for this track: Hiram Clawson and Pauline Fujita.
         </p>
         <hr>
 
@@ -2567,7 +2621,7 @@
 	for the July 2011 Naked mole-rat, <em>Heterocephalus glaber</em>
 	(BGI version HetGla1.0, UCSC version hetGla1). This draft assembly,  
 	produced by the 
-	<A HREF="http://en.genomics.cn/" 
+	<A HREF="http://www.genomics.cn/en/index"
 	TARGET=_blank>Beijing Genomics Institute</A>, has been sequenced using
 	Illumina reads with a sequencing depth of >20x. There are 
 	39,266 scaffolds with a total size of 2,643,961,837 bases. 
@@ -2598,13 +2652,11 @@
         <A HREF="http://www.openhelix.com" TARGET=_blank>OpenHelix</A> 
 	is conducting two free webinars on the UCSC Genome Browser:
         <UL>
-        <LI><A HREF="http://www.openhelix.com/cgi/webinarInfo.cgi?id=43"
-	TARGET=_blank>UCSC Genome Browser: An Introduction</A> 
+        <LI>UCSC Genome Browser: An Introduction
 	(Thursday, May 17, 1pm EDT) -- designed for new users
         of the UCSC Genome Browser and those who want to improve their 
         skills at basic navigation and display.
-        <LI><A HREF="http://www.openhelix.com/cgi/webinarInfo.cgi?id=44"
-	TARGET=_blank>UCSC Table Browser and Custom Tracks</A>
+        <LI>UCSC Table Browser and Custom Tracks
 	(Thursday, May 24, at 1pm EDT) -- advanced Genome Browser 
 	topics, including creating Custom Tracks and using the Table 
 	Browser.
@@ -2612,9 +2664,7 @@
         <P>
         The webinars will last approximately 1hr 15min.
         <P>
-        Seating is limited and                 
-	<A HREF="http://www.openhelix.com/cgi/webinar.cgi"
-        TARGET=_blank>registration is required</A>. Slides may be 
+        Seating is limited and registration is required. Slides may be 
         downloaded from the <A HREF="http://www.openhelix.com/ucsc"
         TARGET=_blank>OpenHelix website</A> prior to the webinar.
         <P>
@@ -2858,7 +2908,7 @@
 		a collaboration between the Baylor College of Medicine 
 		<a href="http://www.hgsc.bcm.tmc.edu/project-species-m-Wallaby.hgsc" 
 		target="_blank">Human Genome Sequencing Center</a> and the 
-		<a href="http://www.agrf.org.au/default.aspx" 
+		<a href="http://www.agrf.org.au/"
 		target="_blank">Australian Genome Research Facility</a>.
                 <P>
                 Bulk downloads of the sequence and annotation data are
@@ -2970,10 +3020,7 @@
                     see Zimin AV <em>et al</em>,
                     <A HREF="http://genomebiology.com/2009/10/4/R42"
                     TARGET=_blank>A whole-genome assembly of the domestic
-                    cow, <em>Bos taurus</em></A>, <em>Genome Biol.</em> 2009;10(4) and
-                    the UMD CBCB
-                    <A HREF="http://www.cbcb.umd.edu/research/bos_taurus_assembly.shtml"
-                    TARGET=_blank><em>Bos taurus</em> assembly</A> web page.</P>
+                    cow, <em>Bos taurus</em></A>, <em>Genome Biol.</em> 2009;10(4). </P>
                     <P>
                     Downloads of the UMD bovine data and annotations may be
                     obtained from the UCSC Genome Browser
@@ -4119,7 +4166,7 @@ track available for zebrafish (danRer6)</B></FONT>
                    We have released a Genome Browser for the giant
 		   panda, <em>Ailuropoda melanoleuca</em>. This assembly
 		   (UCSC version ailMel1, BGI AilMel1) was produced
-		   by the <A HREF="http://www.genomics.cn/en/index.php"
+		   by the <A HREF="http://www.genomics.cn/en/index"
 		   TARGET=_blank>Beijing Genomics Institute at Shenzhen</A>, Shenzhen, China. The
 		   panda is a member of Ursidae, despite earlier taxonomy that marked it as a relative
 		   of the raccoon. It has become the most recognized symbol
@@ -4130,9 +4177,8 @@ track available for zebrafish (danRer6)</B></FONT>
 		   approximately 2.3 Gb at 94% coverage. The assembly
 		   comprises 81,467 scaffolds and chrM (mitochondrial DNA).
 		   For more information on the assembly, see the
-		   BGI
-		   <A HREF="http://www.genomics.cn/en/research.php?type=show&id=128"
-		   TARGET=_blank>International Giant Panda Genome Project</A> page.
+		   BGI <A HREF="http://panda.genomics.org.cn/page/panda/index.jsp"
+		   TARGET=_blank>Giant Panda Database</A> page.
 		   </P>
 		   <P>
 		   Bulk downloads of the sequence and annotation data are
@@ -4643,8 +4689,8 @@ track available for zebrafish (danRer6)</B></FONT>
 		    We are pleased to announce the availability of a public 
 		    Genome Browser mirror for the Australasian research 
 		    community: 
-		    <A HREF="http://genome.qfab.org" 
-		    TARGET=_blank>http://genome.qfab.org</A>.
+		    <A HREF="https://ucsc.genome.edu.au/"
+		    TARGET=_blank>https://ucsc.genome.edu.au/</A>
 		    <P>
 		    The Queensland Facility for Advanced Bioinformatics (QFAB), 
 		    in conjunction with the University of Queensland, Australia,
@@ -4904,9 +4950,9 @@ track available for zebrafish (danRer6)</B></FONT>
 		    We have archived seven older assemblies of the human
 		    (hg15), mouse (mm5, mm6), rat (rn2), <em>C. elegans</em>
 		    (ce1), zebrafish (danRer2), and cow (bosTau1) genomes.
-	     	    You can continue to browse these assemblies on the
+	     	    You can continue to download these assemblies from the
 		    Genome Browser 
-        	    <A HREF ="http://genome-archive.cse.ucsc.edu">archive 
+        	    <A HREF ="http://hgdownload.soe.ucsc.edu/downloads.html">downloads 
 		    server</A>. At least two later assemblies for each of these organisms 
 		    remain available on the main Genome Browser site. </P>
 		    <P>
@@ -5269,8 +5315,8 @@ track available for zebrafish (danRer6)</B></FONT>
 		    <P>
 		    For information on accessing the GSID HIV Data Browser and
 		    background on the AIDSVAX clinical trials, visit 
-		    <A HREF="http://www.gsid.org/index02.html"
-		    TARGET=_blank>http://www.gsid.org/index02.html</A>.</P> 
+		    <A HREF="http://gsid.org/gsid_hiv_data_browser.html"
+		    TARGET=_blank>http://gsid.org/gsid_hiv_data_browser.html</A>.</P> 
 		    <P>
 		    <HR>
 
@@ -5466,7 +5512,7 @@ track available for zebrafish (danRer6)</B></FONT>
 		    </P>
 		    <P>
 		    To bring the seminar to your institution, apply on the
-		    OpenHelix <A HREF="http://www.openhelix.com/seminars"
+		    OpenHelix <A HREF="http://www.openhelix.com"
 		    TARGET=_blank>website</A>. Participating institutions are
 		    required only to:</P>
 		    <P>
@@ -6052,8 +6098,7 @@ track available for zebrafish (danRer6)</B></FONT>
 		    <P>
 		    The main portal for the ENCODE data is the UCSC ENCODE
 		    Genome Browser. The analysis effort has been coordinated
-		    from 
-		    <A HREF="http://wwww.ensembl.org/Homo_sapiens?encode.html" 
+		    by <A HREF="http://wwww.ensembl.org/" 
 		    TARGET=_blank>Ensembl</A>. Much of the primary data have 
 		    been deposited in the 
 		    <A HREF="http://www.ncbi.nlm.nih.gov/projects/geo/info/ENCODE.html"
@@ -6235,7 +6280,7 @@ track available for zebrafish (danRer6)</B></FONT>
 		    We're happy to announce the release of a Genome Browser and
 		    Blat server for the Medaka Version 1.0 draft assembly (Apr. 
 		    2006, UCSC version oryLat1). This assembly was produced in 
-		    Japan by the <A HREF="http://dolphin.lab.nig.ac.jp/"
+		    Japan by the <A HREF="http://www.nig.ac.jp/english/index.html"
 		    TARGET=_blank>National Institute of Genetics</A> (NIG) and 
 		    the <A HREF="http://medaka.utgenome.org/"
 		    TARGET=_blank>University of Tokyo</A>. It is
@@ -6631,7 +6676,7 @@ track available for zebrafish (danRer6)</B></FONT>
 		    Quick Reference Cards. </P>
 		    <P>
 		    For further information or to make a reservation, visit the 
-		    <A HREF="http://www.openhelix.com/seminars.shtml" 
+		    <A HREF="http://www.openhelix.com/"
 		    TARGET=_blank>OpenHelix</A> website or call 1-888-861-5051. 
 		    Register early; seating is limited. Academic and student 
 		    discounts are available.</P>
@@ -6735,12 +6780,10 @@ track available for zebrafish (danRer6)</B></FONT>
 <A NAME="090706"></A>
 <FONT SIZE=4 COLOR="#006666">7 September 2006 - Old Rhesus Assembly Archived</FONT><BR>
 		    <P>
-		    The Jan. 2005 rheMac1 draft assembly has been moved from
-		    the main Genome Browser website to our 
-		    <A HREF="http://genome-rheMac1.cse.ucsc.edu/cgi-bin/hgGateway">archive
-		    server</A>. The data remain available for browsing
-		    and downloading, although blat services are no longer 
-		    supported.
+		    The Jan. 2005 rheMac1 draft assembly has been archived.
+		    The data remain available on our 
+		    <a href="http://hgdownload.soe.ucsc.edu/goldenPath/rheMac1/">downloads 
+		    server</a>, but blat services are no longer supported.
 		    <P>
 		    <HR>
 
@@ -6824,18 +6867,16 @@ track available for zebrafish (danRer6)</B></FONT>
 		    content, and analysis of proximity to the constrictions of 
 		    the mitotic metaphase chromosomes. For more information on 
 		    the process used to create the chromosomal sequences and 
-		    assign centromere locations, see the WUSTL Gallus gallus 
-		    <A HREF="http://genome.wustl.edu/pub/organism/Other_Vertebrates/Gallus_gallus/assembly/draft/Gallus_gallus-2.1/ASSEMBLY"
-		    TARGET=_blank>assembly release notes</A>.</P>
+		    assign centromere locations, see the WUSTL 
+		    <A HREF="http://genome.wustl.edu/genomes/detail/gallus-gallus/"
+		    TARGET=_blank>Gallus gallus genome</A> page.</P>
 		    <P>
 		    Bulk downloads of the chicken sequence and annotations may 
 		    be obtained from the Genome Browser 
-		    <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/galGal3/">FTP 
-		    server</A> or 
+		    <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/galGal3/">FTP server</A> or 
 		    <A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#chicken">Downloads</A> 
 		    page. These data have
-		    <A HREF="credits.html#chicken_use">specific 
-		    conditions for use</A>.
+		    <A HREF="credits.html#chicken_use">specific conditions for use</A>.
 		    <P>
                     We'd like to thank WUSTL, who provided the sequence, 
 		    physical map, assembly, and assembly/map for this
@@ -6939,7 +6980,7 @@ track available for zebrafish (danRer6)</B></FONT>
 		    Browser for the v3.4 rat (<em>Rattus 
 		    norvegicus</em>) genome. This assembly--UCSC version rn4,
 		    November 2004--was produced by the Atlas group at 
-		    <A HREF="http://hgsc.bcm.tmc.edu/" TARGET=_blank>Baylor 
+		    <A HREF="http://www.hgsc.bcm.edu/" TARGET=_blank>Baylor 
 		    Human Genome Sequencing Center</A> (HGSC) as part of the 
 		    Rat Genome Sequencing Consortium.</P>
 		    <P>
@@ -7088,11 +7129,8 @@ track available for zebrafish (danRer6)</B></FONT>
 		    The Build 36 assembly includes approximately 2.6 Gb of
 		    sequence on chromosomes 1-19, X, Y, M (mitochondrial DNA) 
 		    and Un (unmapped clone contigs). 
-		    For in-depth
-		    information about the process used to assemble this version,
-		    see the 
-		    <A HREF="http://www.ncbi.nlm.nih.gov/genome/guide/mouse/contig/Build36.html"
-                    TARGET=_blank>NCBI website</A>.
+		    For in-depth information about the process used to assemble this version, see 
+		    the NCBI website.
 		    On chromosome Y in this assembly, only the short arm has 
 		    reliable mapping data; therefore, most of the contigs on 
 		    the Y chromosome are unplaced.
@@ -7584,18 +7622,17 @@ track available for zebrafish (danRer6)</B></FONT>
 		    image collections:
 		    <UL>
 		    <LI>Mouse <em>in situ</em> images from the 
-		    <A HREF="http://www.informatics.jax.org/menus/expression_menu.shtml"
-		    TARGET=_blank>Jackson Lab Gene Expression Database</A> 
+		    <A HREF="http://www.informatics.jax.org/expression.shtml"
+		    TARGET=_blank>Mouse Genome Informatics Gene Expression Database</A> 
 		    (GED) 
 		    <LI>Transcription factors in mouse embryos from the 
-		    <A HREF="http://mahoney.chip.org/mahoney/" 
-		    TARGET=_blank>Mahoney Center for Neuro-Oncology</A>
+		    Mahoney Center for Neuro-Oncology
 		    <LI>Mouse head and brain <em>in situ</em> images from NCBI's
 		    <A HREF="http://www.ncbi.nlm.nih.gov/projects/gensat/" 
 		    TARGET=_blank>Gene Expression Nervous System Atlas</A> 
 		    (GENSAT) database
 		    <LI><em>Xenopus laevis in situ</em> images from the 
-		    <A HREF="http://www.nibb.ac.jp/en/index.php" 
+		    <A HREF="http://www.nibb.ac.jp/en/"
 		    TARGET=_blank>National Institute for Basic Biology</A> 
 		    (NIBB) XDB project
 		    </UL></P>
@@ -8074,9 +8111,9 @@ track available for zebrafish (danRer6)</B></FONT>
 		    is now available in the UCSC Genome Browser. In 
 		    conjunction with this release, we have archived mouse
 		    assemblies mm3 and mm4. All archived assemblies are 
-		    accessible on our 
-		    <A HREF="http://genome-archive.cse.ucsc.edu/"
-		    TARGET=_blank>archive server</A>.</P>
+		    available for download via our 
+		    <A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#mouse"
+		    TARGET=_blank>downloads server</A>.</P>
 		    <P>
 		    The Build 34 assembly has an assembled length of 
 		    approximately 2.6 Gb, of which about 1.9 Gb is finished 
@@ -8132,8 +8169,8 @@ track available for zebrafish (danRer6)</B></FONT>
 		    <P>
 		    To make room for the NCBI Build 34 mouse assembly (mm6, 
 		    March 2005), we are archiving the mm3 and mm4 mouse 
-		    assemblies. These assemblies will remain available on our 
-		    <A HREF="http://genome-archive.cse.ucsc.edu/">archive
+		    assemblies. These assemblies will remain available for download on our 
+		    <A HREF="http://hgdownload.soe.ucsc.edu/downloads.html#mouse">downloads
 		    server</A>, although blat will no longer be supported. 
 		    We plan to release the mm6 assembly in the next day or so.
 		    </P>
@@ -8284,8 +8321,7 @@ track available for zebrafish (danRer6)</B></FONT>
 		    an introduction to the Gene Sorter. 
 		    <P>
 		    The St. Louis class will be held on 29 March, 2005 at 
-		    the <A HREF="http://www.ociweb.com/about/stl.html"
-		    TARGET=_blank>Object Computing, Inc.</A> training 
+		    the Object Computing, Inc. training 
 		    center. Two sessions will be offered: 9 a.m. - 12 p.m. 
 		    and 1 - 4 p.m. 
 		    <P>
@@ -8800,9 +8836,8 @@ track available for zebrafish (danRer6)</B></FONT>
 <A NAME="100804"></A>
 <FONT SIZE=4 COLOR="#006666">Posted on 8 Oct. 2004 - Updated Proteome Browser Released</FONT><BR>
 		    <P>
-		    UCSC has released v1.1 of the 
-		    <A HREF="../cgi-bin/pbGateway">UCSC 
-		    Proteome Browser</A>. This updated version includes the
+		    UCSC has released v1.1 of the UCSC 
+		    Proteome Browser. This updated version includes the
 		    following major enhancements:
 		    <UL>
  		    <LI>direct access to a Proteome Browser gateway via the 
@@ -8887,7 +8922,7 @@ track available for zebrafish (danRer6)</B></FONT>
 		    tables associated with a track, as well as all tables linked 
 		    to a selected table
 		    <LI> the ability to restrict queries to include only data from ENCODE regions
-		    <LI> the addition of a <A HREF="http://gala.cse.psu.edu">GALA</A> output option
+		    <LI> the addition of a GALA output option
 		    <LI> an option to save large output results sets directly to a 
 		    file rather than displaying them in the Table Browser
 		    </UL>
@@ -8907,7 +8942,7 @@ track available for zebrafish (danRer6)</B></FONT>
 		    <P>
 		    The older version of the Table Browser will remain available
 		    for a limited time at 
-		    <A HREF="../cgi-bin/hgText">http://genome.ucsc.edu/cgi-bin/hgText</A>. Please send feedback and questions to our
+		    http://genome.ucsc.edu/cgi-bin/hgText. Please send feedback and questions to our
 		    mailing list at
                     <A HREF="mailto:&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;">&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;</A>.
                     <!-- above address is genome at soe.ucsc.edu -->
@@ -9479,7 +9514,7 @@ track available for zebrafish (danRer6)</B></FONT>
 		    updated version of the <em>C. elegans</em> genome. The
 		    March 2004 assembly -- UCSC version ce2 -- is based on 
 		    sequence version WS120 deposited into 
-		    <A HREF="http://www.wormbase.org/about/about_Celegans.html" TARGET=_blank>WormBase</A> 
+		    <A HREF="http://www.wormbase.org/species/c_elegans" TARGET=_blank>WormBase</A> 
 		    as of 1 March 2004. This assembly has a finishing error rate 
 		    of 1:10,000.  
 		    <P>
@@ -9775,9 +9810,8 @@ track available for zebrafish (danRer6)</B></FONT>
 		    <P>
 		    The Genome Browser project now has a UCSC-supported mirror site 
 		    that may be used during power or network outages on the UCSC 
-		    campus. The mirror -- which can be found at 
-		    <A HREF="http://genome.hmgc.mcw.edu/" TARGET=_blank>http://genome.hmgc.mcw.edu/</A>
-		    -- is located at the Medical College of Wisconsin in Milwaukee. 
+		    campus. The mirror 
+		    is located at the Medical College of Wisconsin in Milwaukee. 
 		    The site will be updated regularly by UCSC with the latest data and 
 		    software to closely replicate the main Genome Browser site at 
 		    <A HREF="../index.html">http://genome.ucsc.edu</A>.  
@@ -9934,8 +9968,7 @@ track available for zebrafish (danRer6)</B></FONT>
 		    <P>
 		    The mm4 sequence and annotation data may be downloaded from 
 		    the UCSC Genome Browser 
-		    <A HREF="http://genome-archive.cse.ucsc.edu/downloads.html">downloads
-		    page</A>.
+		    <A HREF="http://hgdownload.soe.ucsc.edu/downloads.html#mouse">downloads server</A>.
 		    <P>
 		    We'd like to thank the Deanna Church, Richa Agrawala, and
 		    the Mouse Genome Sequencing Consortium
@@ -10373,7 +10406,7 @@ track available for zebrafish (danRer6)</B></FONT>
 	<A HREF="http://www.sanger.ac.uk/" TARGET=_blank>Sanger Institute</A> 
 	for their collaborative work in sequencing the C. elegans 
         and C.  briggsae genomes. Many thanks to the 
-	<A HREF="http://www.wormbase.org/about/people.html" TARGET=_blank>WormBase consortium</A> 
+	<A HREF="http://www.wormbase.org/about/staff" TARGET=_blank>WormBase consortium</A> 
 	for making the worm sequence publicly available.
 	We'd also like to acknowledge several UCSC people who 
         contributed to this release: Hiram Clawson (browser and 
@@ -10517,10 +10550,9 @@ track available for zebrafish (danRer6)</B></FONT>
 <FONT SIZE=4 COLOR="#006666">Posted on 2 Apr. 2003 - Human Assembly hg10 and Mouse Assembly mm1 Archived</FONT><BR>
  	<P>
 	The Dec. 2001 Human assembly (hg10) and the Nov. 2001 Mouse assembly
-	(mm1) have been moved to the archives. They are no longer accessible
-	from the main browser, but instead can be found by clicking the 
-	<A HREF="http://genome-archive.cse.ucsc.edu">Archives</A> link on this 
-	page.
+	(mm1) have been moved to the archives. They are no longer viewable in the main browser, but 
+	can still be downloaded from the 
+	<A HREF="http://hgdownload.soe.edu">downloads server</A>.
  	<P>
 
 <HR>
@@ -10707,9 +10739,10 @@ ully
         draft sequence against various types of information (STS maps, BAC end
         pairs, and clone overlaps). This information, as well as statistics for
         Build 31, is accessible from the
-        <A HREF="http://genome-archive.cse.ucsc.edu/goldenPath/chromReports/14Nov2002/" TARGET=_blank>
-        Chromosome Reports</A>,
-        <A HREF="http://genome-archive.cse.ucsc.edu/goldenPath/mapPlots/" TARGET=_blank> Genome Map Plots</A>, and
+        <A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/human/chromReports/14Nov2002/" 
+	TARGET=_blank>Chromosome Reports</A>,
+        <A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/human/mapPlots/" 
+	TARGET=_blank>Genome Map Plots</A>, and
         <A HREF="stats.html" TARGET=_blank> Summary Statistics</A>
         links in the "Technical Information about the Assembled Sequence"
         section below.
@@ -10731,11 +10764,11 @@ ully
         approximately 2.8 Gigabases in size.
         <P>
         Downloads of the rat data and annotations are available through our
-        ftp site at <A HREF="ftp://genome-archive.cse.ucsc.edu/goldenPath/rnNov2002" TARGET=_blank>ftp://genome-archive.cse.ucsc.edu/goldenPath/rnNov2002</A>
-        or via the <A HREF="http://genome-archive.cse.ucsc.edu/downloads.html">archived downloads</A>
-        link. This data contains
-        <A HREF="credits.html#rat_use">specific
-        conditions for use</A>. The sequence is also available from the
+        ftp site at <A HREF="ftp://hgdownload.soe.ucsc.edu/goldenPath/rn1" 
+	TARGET=_blank>downloads server</A>.
+        This data contains
+        <A HREF="credits.html#rat_use">specific conditions for use</A>. The sequence is also 
+	available from the
         <A HREF="http://www.hgsc.bcm.tmc.edu/projects/rat" TARGET=_blank> Rat
         Genome Project website</A> for the Human Genome Sequencing Center at
         Baylor College of Medicine or from GenBank.
@@ -10774,9 +10807,9 @@ ully
 	<P>
 	We've added several new directories of downloadable data to the 28 June 
 	2002 human genome assembly. These directories contain mouse/human 
-	alignments of the June 2002 human assembly vs. the Feb. 2002 mouse assembly. You can access these 
-	directories from our <A HREF="http://genome-archive.cse.ucsc.edu/downloads.html" TARGET=_blank>archived downloads</A> 
-	link or or via our ftp site at <A HREF="ftp://genome-archive.cse.ucsc.edu/goldenPath/28jun2002" TARGET=_blank>ftp://genome-archive.cse.ucsc.edu/goldenPath/28jun2002/vsMm2/</A>. 
+	alignments of the June 2002 human assembly vs. the Feb. 2002 mouse assembly. You can access 
+	these directories from our <A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/hg12/" 
+	TARGET=_blank>downloads server</A>.
 	<P>Within the main directory <I>vsMm2</I> are 3 subdirectories that contain all 
 	the alignments (<I>axtAll</I>), alignments filtered to provide only the best alignment 
 	for any given region of the human genome (<I>axtBest</I>), and a relatively stringent 
@@ -10874,11 +10907,9 @@ ully
 	lift files, or the annotations. Alignments made on the previous version
 	of chr3 are still good. Updated versions of the contigAgp.zip and
 	chromAgp.zip files were
-	uploaded to our site today. You can download the new versions via ftp at <A 
-	HREF="ftp://genome-archive.cse.ucsc.edu/goldenPath/28jun2002" TARGET=_blank>
-        ftp://genome-archive.cse.ucsc.edu/goldenPath/28jun2002</A> or via the 
-	<A HREF="http://genome-archive.cse.ucsc.edu/downloads.html">archived
-	downloads</A> link.
+	uploaded to our site today. You can download the new versions via ftp from our 
+	<A HREF="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg12" 
+	TARGET=_blank>downloads server</A>.
  	<P>
 <HR>
 
@@ -10913,11 +10944,9 @@ ully
 <FONT SIZE=4 COLOR="#006666">Posted on 26 Jul. 2002 - Bulk Data Downloads Now Available for Human Assembly hg12</FONT>
 	<P>
 	Bulk downloads of the June 2002 Build 30 human genome assembly (hg12) are now
-	available from
-	<A HREF="ftp://genome-archive.cse.ucsc.edu/goldenPath/28jun2002" TARGET=_blank>
-	ftp://genome-archive.cse.ucsc.edu/goldenPath/28jun2002</A>. You can also 
-	access the data via the <A HREF="http://genome-archive.cse.ucsc.edu/downloads.html">archived downloads</A> link. This initial
-	release of the annotation database download contains a limited set of
+	available from the <A HREF="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg12/" 
+	TARGET=_blank> downloads server</A>. 
+	This initial release of the annotation database download contains a limited set of
 	tables. Additional files will be available for download next week.
  	<P>
 <HR>
@@ -10935,8 +10964,7 @@ ully
 	produced at NCBI based on sequence information submitted into GenBank as of
 	June 28, 2002. Build 30 release notes and statistics will soon be
 	available from the <A
-	HREF="http://www.ncbi.nlm.nih.gov/genome/guide/human/" TARGET=_blank> NCBI web 
-	site</A>.  
+	HREF="http://www.ncbi.nlm.nih.gov/genome/guide/human/" TARGET=_blank> NCBI web site</A>.  
 	<P>
 	Build 30 is an excellent high-quality assembly. It contains nearly 87%
  	finished sequence, and 94%-97% coverage. The sequence coverage of this build
@@ -10947,11 +10975,11 @@ ully
 	<P>
 	UCSC has generated a set of high-level comparisons of the Build 30 draft
 	sequence against various types of information (STS maps, BAC end pairs, and
-	clone overlaps), accessible from the <A 
-	HREF="http://genome-archive.cse.ucsc.edu/goldenPath/chromReports/24Jun2002/"
-	TARGET=_blank>Chromosome Reports</A> and <A 
-	HREF="http://genome-archive.cse.ucsc.edu/goldenPath/mapPlots/" TARGET=_blank>Genome 
-	Map Plots</A> links in the "Technical Information about the Assembled 
+	clone overlaps), accessible from the 
+	<A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/human/chromReports/24Jun2002/"
+	TARGET=_blank>Chromosome Reports</A> and 
+	<A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/human/mapPlots/" 
+	TARGET=_blank>Genome Map Plots</A> links in the "Technical Information about the Assembled 
 	Sequence" section below.
 	<P>
 	A Blat server for Build 30 is not yet available, but should be
@@ -11011,11 +11039,8 @@ ully
 <FONT SIZE=4 COLOR="#006666">Posted on 24 May 2002 - Bulk Data Downloads for Human Assembly hg11 Now Available</FONT>
 	<P>
 	Bulk downloads of the April 2002 hg11 human genome assembly (NCBI Build 29) 
-	are now available from <A
-	HREF="ftp://genome-archive.cse.ucsc.edu/goldenPath/05apr2002"
-	TARGET=_blank>ftp://genome-archive.cse.ucsc.edu/goldenPath/05apr2002</A>. You
-	can also access the data from the Downloads link in the left sidebar.
-
+	are now available from the <A HREF="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg11/"
+	TARGET=_blank>downloads server"</A>. 
  	<P>
 <hr>
 <FONT SIZE=4 COLOR="#006666">Posted on 22 May 2002 - Human Draft Assembly Build 29 Released in Genome Browser</FONT>
@@ -11040,9 +11065,9 @@ ully
 	Larger scale problems include a rearrangement in the p-arm of Chr16 and
 	several discrepancies in Chr17.  Researchers - especially positional 
 	cloners - are strongly encouraged to use the tools provided 
-	(<A HREF="http://genome-archive.cse.ucsc.edu/goldenPath/mapPlots/"
+	(<A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/human/mapPlots/"
 	TARGET=_blank>comparison plots</A>, <A
-	HREF="http://genome-archive.cse.ucsc.edu/goldenPath/chromReports/"
+	HREF="http://hgdownload.soe.ucsc.edu/goldenPath/human/chromReports/"
 	TARGET=_blank>chromosome reports</A>) to evaluate the
 	accuracy of the assembly in specific regions of interest.
 
@@ -11054,9 +11079,9 @@ ully
 
 <FONT SIZE=4 COLOR="#006666">Posted on 24 Apr. 2002 - Bulk Data Downloads of Mouse Assembly Feb. 2002 Available</FONT>
 	<P>Bulk downloads of the February 2002 mouse genome assembly are now available 
-	from <A HREF="ftp://genome-archive.cse.ucsc.edu/goldenPath/mmFeb2002" 
-	TARGET=_blank>ftp://genome-archive.cse.ucsc.edu/goldenPath/mmFeb2002</A>.  You can 
-	also access the data from the <A HREF="http://genome-archive.cse.ucsc.edu/downloads.html">archived downloads</A> link.<br></P>
+	from the <A HREF="ftp://hgdownload.soe.ucsc.edu/goldenPath/mm2/"
+	TARGET=_blank>downloads server</A>.  
+	<br></P>
  	<P>
 <hr>
 
@@ -11078,9 +11103,9 @@ ully
 
 <FONT SIZE=4 COLOR="#006666">Posted on 9 Apr. 2002 - Bulk Data Downloads of Mouse Assembly Nov. 2001 Available</FONT>
         <P>Bulk downloads of the November 2001 mouse genome assembly are now available 
-	from <A HREF="ftp://genome-archive.cse.ucsc.edu/goldenPath/mmNov2001"
-        TARGET=_blank>ftp://genome-archive.cse.ucsc.edu/goldenPath/mmNov2001</A>.
-	You can also access the data from the <A HREF="http://genome-archive.cse.ucsc.edu/downloads.html">archived downloads</A> link.<br></P>
+	from the <A HREF="ftp://hgdownload.soe.ucsc.edu/goldenPath/mm1/"
+        TARGET=_blank>downloads server</A>.
+	<br></P>
 <hr>
 
 <FONT SIZE=4 COLOR="#006666">Posted on 2 Apr. 2002 - Release of New Genome Browser Version and Mouse/Human Annotations</FONT>
@@ -11331,7 +11356,7 @@ ully
 <hr>	
 <FONT SIZE=4 COLOR="#006666">Posted on 8 Oct. 2001 - Oct. 2000 Assembly Moved to Archives</FONT> 
 	<P>The October 2000 assembly has been moved to the 
-	<A HREF="http://genome-archive.cse.ucsc.edu">Archives</A>
+	<A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/hg5/">archives</A>
 	to make room for the August assembly.</P>
 	
  	<P>
@@ -11340,7 +11365,7 @@ ully
 	<P>A revised August 2001 freeze assembly is now up.  The problems
 	with flipped contigs of finished clones and high levels of
 	sequence duplication are fixed.   You can now download this
-	assembly <A HREF="ftp://genome-archive.cse.ucsc.edu/goldenPath/06aug2001/bigZips">in bulk</A> as 
+	assembly <A HREF="ftp://hgdownload.soe.ucsc.edu/goldenPath/hg8/">in bulk</A> as 
 	well as browse it.   Chromosome by chromosome and annotation
 	database files will be following over the next day or two.</P>
 
@@ -11447,12 +11472,12 @@ ully
 <hr>
 
 <FONT SIZE=4 COLOR="#006666">Posted on 23 Aug. 2001 - New Annotation Tracks on April 2001 Browser</FONT>	
-		<P>Tracks continue to be added to the 
-	<A HREF="http://genome-archive.cse.ucsc.edu/">April 2001 browser</A>.
+	<P>Tracks continue to be added to the 
+	<A HREF="http://hgdownload.soe.ucsc.edu/goldenPath/hg7/">April 2001 browser</A>.
 	Our old friend the Exofish track is back.  The blat mouse homology
 	track is now up as well, computed at somewhat more sensitive settings
 	than it was in the December 2000 browser.</P>
-		<P>We've recently received some significant funding from NHGRI to
+	<P>We've recently received some significant funding from NHGRI to
 	maintain and extend this site.  This has allowed us among other things
 	to hire an artist, Jenny Draper, who is responsible for the new look.</P>
 
@@ -11516,8 +11541,7 @@ where the initial field of the initial lines in these files was
 <P>
 
 <hr><FONT SIZE=4 COLOR="#006666">17 Jul. 2000 Freeze</FONT>
-<P>22 Sep. 2000: The zip-files chromFa.zip and chromAgp.zip under the
-<A HREF="http://genome-archive.cse.ucsc.edu/goldenPath/17july2000/bigZips/">July 17th full data set </A>
+<P>22 Sep. 2000: The zip-files chromFa.zip and chromAgp.zip under the July 17th full data set 
 were updated to fix some duplications of clone contigs that occurred in the chrN_random.agp and chrN_random.fa
 files contained within these zip-files. These "_random" files are files that contain clone contigs that were mapped to a particular chromosome, but
 could not be placed at a specific position within that chromosome. They correspond to the "RANDOM" sections of the WashU map. 
@@ -11527,9 +11551,7 @@ chromRandFa.zip, for users who would like to download only the data that has cha
 the updated chrN_random.agp and chrN_random.fa files, respectively.
 
 <P>4 Sep. 2000: The files chromFa.zip and contigFa.zip under the
-<A HREF="http://genome-archive.cse.ucsc.edu/goldenPath/17july2000/bigZips/">July 17th full data set </A> and the files under 
-<A HREF="http://genome-archive.cse.ucsc.edu/goldenPath/17july2000/pieces/">
-July 17th data by individual clone contig </A>
+July 17th full data set and the files under July 17th data by individual clone contig
 were updated to fix some incorrect (null(0))
 characters that needed to be replaced by 'n' characters in some
 Fasta files. The following contig Fasta files on chromosomes 1,8,11,12,16,
