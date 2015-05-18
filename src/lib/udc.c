@@ -150,13 +150,13 @@ if (ci != NULL && ci->socket > 0 && ci->offset != offset)
     bits64 skipSize = (offset - ci->offset);
     if (skipSize > 0 && skipSize <= MAX_SKIP_TO_SAVE_RECONNECT)
 	{
-	verbose(2, "!! skipping %lld bytes @%lld to avoid reconnect\n", skipSize, ci->offset);
+	verbose(4, "!! skipping %lld bytes @%lld to avoid reconnect\n", skipSize, ci->offset);
 	readAndIgnore(ci->socket, skipSize);
 	ci->offset = offset;
 	}
     else
 	{
-	verbose(2, "Offset mismatch (ci %lld != new %lld), reopening.\n", ci->offset, offset);
+	verbose(4, "Offset mismatch (ci %lld != new %lld), reopening.\n", ci->offset, offset);
 	mustCloseFd(&(ci->socket));
 	if (ci->ctrlSocket > 0)
 	    mustCloseFd(&(ci->ctrlSocket));
@@ -224,7 +224,7 @@ static int udcDataViaLocal(char *url, bits64 offset, int size, void *buffer, str
 * error.  Typically will be called with size in the 8k - 64k range. */
 {
 /* Need to check time stamp here. */
-verbose(2, "reading remote data - %d bytes at %lld - on %s\n", size, offset, url);
+verbose(4, "reading remote data - %d bytes at %lld - on %s\n", size, offset, url);
 url = assertLocalUrl(url);
 FILE *f = mustOpen(url, "rb");
 fseek(f, offset, SEEK_SET);
@@ -242,7 +242,7 @@ static boolean udcInfoViaLocal(char *url, struct udcRemoteFileInfo *retInfo)
 /* Fill in *retTime with last modified time for file specified in url.
  * Return FALSE if file does not even exist. */
 {
-verbose(2, "checking remote info on %s\n", url);
+verbose(4, "checking remote info on %s\n", url);
 url = assertLocalUrl(url);
 struct stat status;
 int ret = stat(url, &status);
@@ -280,7 +280,7 @@ static int udcDataViaSlow(char *url, bits64 offset, int size, void *buffer, stru
 * Returns number of bytes actually read.  Does an errAbort on
 * error.  Typically will be called with size in the 8k - 64k range. */
 {
-verbose(2, "slow reading remote data - %d bytes at %lld - on %s\n", size, offset, url);
+verbose(4, "slow reading remote data - %d bytes at %lld - on %s\n", size, offset, url);
 sleep1000(500);
 char *fileName = url + 5;  /* skip over 'slow:' */
 FILE *f = mustOpen(fileName, "rb");
@@ -295,7 +295,7 @@ for (i=0; i<size; i += step)
     if (readChunk > step)
         readChunk = step;
     int oneReadSize = fread(pt, 1, readChunk, f);
-    verbose(2, "slowly read %d bytes\n", oneReadSize);
+    verbose(4, "slowly read %d bytes\n", oneReadSize);
     if (ferror(f))
 	{
 	warn("udcDataViaSlow failed to fetch %d bytes at %lld", size, offset);
@@ -313,7 +313,7 @@ static boolean udcInfoViaSlow(char *url, struct udcRemoteFileInfo *retInfo)
  * Return FALSE if file does not even exist. */
 {
 char *fileName = url + 5;  /* skip over 'slow:' */
-verbose(2, "slow checking remote info on %s\n", url);
+verbose(4, "slow checking remote info on %s\n", url);
 sleep1000(500);
 struct stat status;
 int ret = stat(fileName, &status);
@@ -359,7 +359,7 @@ int udcDataViaHttpOrFtp(char *url, bits64 offset, int size, void *buffer, struct
  * Typically will be called with size in the 8k-64k range. */
 {
 if (startsWith("http://",url) || startsWith("https://",url) || startsWith("ftp://",url))
-    verbose(2, "reading http/https/ftp data - %d bytes at %lld - on %s\n", size, offset, url);
+    verbose(4, "reading http/https/ftp data - %d bytes at %lld - on %s\n", size, offset, url);
 else
     errAbort("Invalid protocol in url [%s] in udcDataViaFtp, only http, https, or ftp supported",
 	     url); 
@@ -387,7 +387,7 @@ boolean udcInfoViaHttp(char *url, struct udcRemoteFileInfo *retInfo)
 /* Gets size and last modified time of URL
  * and returns status of HEAD GET. */
 {
-verbose(2, "checking http remote info on %s\n", url);
+verbose(4, "checking http remote info on %s\n", url);
 struct hash *hash = newHash(0);
 int status = netUrlHead(url, hash);
 if (status != 200) // && status != 302 && status != 301)
@@ -450,7 +450,7 @@ return status;
 boolean udcInfoViaFtp(char *url, struct udcRemoteFileInfo *retInfo)
 /* Gets size and last modified time of FTP URL */
 {
-verbose(2, "checking ftp remote info on %s\n", url);
+verbose(4, "checking ftp remote info on %s\n", url);
 long long size = 0;
 time_t t, tUtc;
 struct tm *tm = NULL;
@@ -678,7 +678,7 @@ if (bits != NULL)
     if (bits->remoteUpdate != file->updateTime || bits->fileSize != file->size ||
 	!fileExists(file->sparseFileName))
 	{
-	verbose(2, "removing stale version (%lld! = %lld or %lld! = %lld or %s doesn't exist), "
+	verbose(4, "removing stale version (%lld! = %lld or %lld! = %lld or %s doesn't exist), "
 		"new version %d\n",
 		bits->remoteUpdate, (long long)file->updateTime, bits->fileSize, file->size,
 		file->sparseFileName, version);
@@ -689,7 +689,7 @@ if (bits != NULL)
 	}
     }
 else
-    verbose(2, "bitmap file %s does not already exist, creating.\n", file->bitmapFileName);
+    verbose(4, "bitmap file %s does not already exist, creating.\n", file->bitmapFileName);
 
 /* If no bitmap, then create one, and also an empty sparse data file. */
 if (bits == NULL)
@@ -894,7 +894,7 @@ struct udcFile *udcFileMayOpen(char *url, char *cacheDir)
 {
 if (cacheDir == NULL)
     cacheDir = udcDefaultDir();
-verbose(2, "udcfileOpen(%s, %s)\n", url, cacheDir);
+verbose(4, "udcfileOpen(%s, %s)\n", url, cacheDir);
 /* Parse out protocol.  Make it "transparent" if none specified. */
 char *protocol = NULL, *afterProtocol = NULL, *colon;
 boolean isTransparent = FALSE;
@@ -1309,7 +1309,7 @@ for (s = offset; s < endPos; s = e)
     else
 	{
 	ok = FALSE;
-	verbose(2, "udcCachePreload version check failed %d vs %d", 
+	verbose(4, "udcCachePreload version check failed %d vs %d", 
 		bits->version, file->bitmapVersion);
 	}
     if (!ok)
@@ -1393,7 +1393,7 @@ while(TRUE)
 
 	if (!udcCachePreload(file, start, size))
 	    {
-	    verbose(2, "udcCachePreload failed");
+	    verbose(4, "udcCachePreload failed");
 	    bytesRead = 0;
 	    break;
 	    }
@@ -1649,7 +1649,7 @@ for (file = fileList; file != NULL; file = file->next)
     else if (sameString(file->name, bitmapName))
         {
 	if (file->size > udcBitmapHeaderSize) /* prevent failure on bitmap files of size 0 or less than header size */
-	    verbose(2, "%ld (%ld) %s/%s\n", bitRealDataSize(file->name), (long)file->size, getCurrentDir(), file->name);
+	    verbose(4, "%ld (%ld) %s/%s\n", bitRealDataSize(file->name), (long)file->size, getCurrentDir(), file->name);
 	if (file->lastAccess < deleteTime)
 	    {
 	    /* Remove all files when get bitmap, so that can ensure they are deleted in 
