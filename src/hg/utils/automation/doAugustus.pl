@@ -291,7 +291,7 @@ sub doMakeGp {
 
   $bossScript->add(<<_EOF_
 export db=$db
-find ./run.augustus/gtf.gz -type f | grep ".gtf.gz\$" \\
+find ./run.augustus/gtf -type f | grep ".gtf.gz\$" \\
   | sed -e 's#/# _D_ #g; s#\\.# _dot_ #g;' \\
     | sort -k11,11 -k13,13n \\
      | sed -e 's# _dot_ #.#g; s# _D_ #/#g' | xargs zcat \\
