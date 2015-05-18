@@ -97,6 +97,25 @@ var tdbDoc = {
                     }
                 }
             }
+            // Fill in tag 'level' if any from calling HTML doc
+            var spec = $('div#specification').find('td.'+id);
+            if (spec.length === 0) {
+                return blurb;
+            }
+            var code = $(spec).find('code');
+            if (code.length === 0) {
+                return blurb;
+            }
+            var level = $(code).attr('class');
+            if (level.length === 0) {
+                level = 'level-new';
+            }
+            var start = $(blurb).find('p').first();
+            if ($(start).attr('class') !== 'level') {
+                $(start).before('<p class="level">Support level: ' + '<span class=' + level + '>' + 
+                                level.replace('level-','') + '</span></p>');
+            }
+            $(blurb).find('code').addClass(level);
             return blurb;
         }
     },
@@ -167,27 +186,43 @@ var tdbDoc = {
             return cleanClasses;
         },
 
+        makePlainRow: function (aClass) {
+            var level = 'level-new';
+            var div = tdbDoc.library.lookup(aClass,false);
+            if (div.length === 1) {
+                level = $(div).find('code').attr('class');
+                if (level.length === 0) {
+                    level = 'level-new';
+                }
+            }
+            return aClass + '\t' + level.replace('level-','') + '\n';
+        },
+
         makeRow: function (aClass) {
             // Puts together a single row into a self assembling table of contents
 
             // Find types
             var types = "";
-            var div = tdbDoc.library.lookup(aClass,false);
+            var div = tdbDoc.library.lookup(aClass, false);
+            var level = null;
             if (div.length === 1) {
+                level = $(div).find('code').attr('class');
+                if (level.length === 0) {
+                    level = null;
+                }
                 var spanner = $(div).find('span.types');
                 if (spanner.length === 1) {
                     var classes = $(spanner).attr("class").split(" ");
                     classes = aryRemove(classes,['types']);
                     $(classes).each(function (ix) {
-                        types += " <A onclick='return jumpTo(this);' HREF='#'>"+this+"</a>";
+                        types += " <A onclick='return jumpTo(this);' HREF='#'>" + this + "</a>";
                     });
                 }
             }
-
             // Where documented (what table)?
             // TODO: Should rewrite classes array to also carry the table.
             var best = '';
-            var td = $('td.'+aClass);
+            var td = $('td.' + aClass);
             var tbl;
             if (td.length > 0) // Always chooses first
                 tbl = $(td[0]).parents('table.settingsTable');
@@ -197,14 +232,22 @@ var tdbDoc = {
             if (tbl != undefined && tbl.length === 1) {
                 var id = $(tbl[0]).attr('id');
                 if (id.length > 0) {
-                    best = "<A HREF='#"+id+"'>"+id.replace(/_/g," ")+"</a>"
+                    best = "<A HREF='#" + id + "'>" +id.replace(/_/g," ") + "</a>"
                     //if (td.length > 1)
                     //    best += " found "+td.length;
                 }
             }
+            var row = "<tr><td><A onclick='return jumpTo(this);' HREF='#'>" + aClass + "</a></td>";
+            if (tdbDoc.isHubDoc()) {
+                //include level in the table
+                if (level === null) {
+                    level = 'level-new';
+                }
+                row += "<td class=" + level + ">" +level.replace('level-','') + "</span></td>";
+            }
+            row += "<td>" + types + "</td><td>" + best + "</td></tr>";
+            return row;
 
-            return "<tr><td><A onclick='return jumpTo(this);' HREF='#'>"+aClass+"</a></td><td>"+
-                        types+"</td><td>"+best+"</td></tr>";
         },
 
         excludeClasses: [],
@@ -212,6 +255,7 @@ var tdbDoc = {
         assemble: function () {
             // assembles (or extends) a table of contents if on is found (Launched by timer)
             var tocTable = $('table#toc');
+            var plainTable = $('#plainToc');
             if (tocTable.length === 1) {
                 var cells = tdbDoc.toc.blurbCells(); // Most documented settings are found here
                 var names = tdbDoc.toc.namesFromContainedAnchors(cells);// settings in others' cells
@@ -232,17 +276,25 @@ var tdbDoc = {
                 classes.sort( tdbDoc.sortNoCase );
 
                 // Should now have a full set of settings to add to TOC
-                if ($(tocTable).find('thead').length === 0)
-                    $(tocTable).prepend( "<THEAD><TR><TD colspan='3'>"+
+                var cols = tdbDoc.isHubDoc() ? 4 : 3;
+                if ($(tocTable).find('thead').length === 0) {
+                    $(tocTable).prepend( "<THEAD><TR><TD colspan='" + cols + "'>"+
                                "<H3>Table of Contents</H3></TD></TR></THEAD>" );
-                if ($(tocTable).find('th').length === 0)
-                    $(tocTable).append( "<TR VALIGN=TOP><TH WIDTH=100>Setting</TH>"+
-                                        "<TH WIDTH='25%'>For Types</TH><TH>Documented</TH></TR>" );
+                }
+                if ($(tocTable).find('th').length === 0) {
+                    var th = "<TR VALIGN=TOP><TH WIDTH=100>Setting</TH>";
+                    if (tdbDoc.isHubDoc()) {
+                        th += "<TH>Level</TH>";
+                    }
+                    th += "<TH WIDTH='25%'>For Types</TH><TH>Documented</TH></TR>";
+                    $(tocTable).append(th);
+                }
                 var lastClass = '';
                 $(classes).each(function (ix) {
                     if (lastClass !== String(this)) {// skip duplicates
                         lastClass = String(this);
-                        $(tocTable).append( tdbDoc.toc.makeRow(this) );
+                        $(tocTable).append(tdbDoc.toc.makeRow(this));
+                        $(plainTable).append(tdbDoc.toc.makePlainRow(this));
                     }
                 });
                 // TODO: Nice to do: allow for seeding toc with user defined rows.
@@ -379,8 +431,22 @@ var tdbDoc = {
         waitOnFunction( tdbDoc._toggleAll, obj, openUp);
     },
 
+
+    isHubDoc: function () {
+        return typeof tdbDoc.hubVersion !== 'undefined';
+
+    }, 
+
+    setHubVersion: function () {
+        $('#trackDbHub_version').text('(' + tdbDoc.hubVersion + ')');
+    },
+
     documentLoad: function () {
         // Called at $(document).ready() to load a trackDb document page
+
+        if (tdbDoc.isHubDoc())
+            tdbDoc.setHubVersion();
+
         var divIntros = $("div.intro").each( function (ix) {
             tdbDoc.loadIntro(this);
         });

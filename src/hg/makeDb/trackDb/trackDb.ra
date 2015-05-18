@@ -3000,3 +3000,12 @@ searchType genePred
 termRegex X(M|R)_[0-9]{6}[0-9]*.[0-9]*
 searchPriority 9.5
 
+track augustusGene
+shortLabel Augustus
+longLabel Augustus gene predictions v3.1
+group genes
+visibility hide
+color 12,120,12
+type genePred
+baseColorUseCds given
+baseColorDefault genomicCodons

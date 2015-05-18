@@ -165,7 +165,7 @@
 </DIV>
 
 <DIV class="trackDbHub_intro">
-<H1>Hub Track Database Definition</H1>
+<H1>Hub Track Database Definition <SPAN id="trackDbHub_version"></SPAN></H1>
 <H2>How to declare Dataset Display Settings in Genome Browser Hubs</H2>
     <P>This document describes how to declare dataset display characteristics
     in a Genome Browser Hub through trackDb settings (please note that hosting

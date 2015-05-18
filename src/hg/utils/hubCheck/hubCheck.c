@@ -9,7 +9,7 @@
 #include "hui.h"
 #include "trackHub.h"
 #include "udc.h"
-#include "htmlPage.h"
+#include "net.h"
 
 int cacheTime = 1;
 
@@ -21,106 +21,126 @@ errAbort(
   "usage:\n"
   "   hubCheck http://yourHost/yourDir/hub.txt\n"
   "options:\n"
+  "   -noTracks             - don't check remote files for tracks, just trackDb (faster)\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs.\n"
   "                           Will create this directory if not existing\n"
-  "   -verbose=2            - output verbosely\n"
-  "   -clear=browserMachine - clear hub status, no checking\n"
-  "   -searchFile=trixInput - output search terms into trixInput file\n"
   "   -cacheTime=N - set cache refresh time in seconds, default %d\n"
-  "   -noTracks             - don't check each track, just trackDb\n"
+  "   -verbose=2            - output verbosely\n"
   , cacheTime
   );
 }
 
+
+void help()
+/* Extended help -- these are implemented options that we are hiding to allow review time */
+{
+errAbort(
+  "hubCheck - Check a track data hub for integrity.\n"
+  "usage:\n"
+  "   hubCheck http://yourHost/yourDir/hub.txt\n"
+  "options:\n"
+  "   -settings             - just list settings with support level\n"
+  "   -checkSettings        - check trackDb settings to spec \n"
+  "   -version=[v?|url]     - version to validate settings against\n"
+  "                                     (defaults to version in hub.txt, or %s)\n"
+  "   -extra=[file|url]     - accept settings in this file (or url)\n"
+  "   -core                 - reject settings not in core set for this version\n"
+  "   -noTracks             - don't check remote files for tracks, just trackDb (faster)\n"
+  "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs.\n"
+  "                           Will create this directory if not existing\n"
+  "   -cacheTime=N - set cache refresh time in seconds, default %d\n"
+  "   -verbose=2            - output verbosely\n"
+  , trackHubVersionDefault(), cacheTime
+  );
+}
+
 static struct optionSpec options[] = {
-   {"udcDir", OPTION_STRING},
-   {"clear", OPTION_STRING},
-   {"searchFile", OPTION_STRING},
+   {"version", OPTION_STRING},
+   {"core", OPTION_BOOLEAN},
+   {"extra", OPTION_STRING},
    {"noTracks", OPTION_BOOLEAN},
+   {"settings", OPTION_BOOLEAN},
+   {"checkSettings", OPTION_BOOLEAN},
+   {"udcDir", OPTION_STRING},
    {"cacheTime", OPTION_INT},
+   {"help", OPTION_BOOLEAN},
    {NULL, 0},
 };
-
-static int clearHub(char *hubUrl, char *browserMachine)
-/* clear hub status */
-{
-char buffer[4096];
-
-safef(buffer, sizeof buffer, 
-    "http://%s/cgi-bin/hgHubConnect?hgHub_do_clear=on&hubUrl=%s\n",
-    browserMachine, hubUrl);
-
-struct htmlPage *page = htmlPageGet(buffer);
-
-if (page == NULL)  // libraries will have put out error message 
-    return 1;
-
-if (page->status->status != 200)
-    {
-    printf("can not reach %s\n", browserMachine);
-    return 1;
-    }
-
-// now we want to put out the string that hgHubConnect will
-// output if there was an error.  
-char *error = strstr(page->htmlText, "<!-- HGERROR-START -->");
-if (error != NULL)
-    {
-    char *end = strstr(page->htmlText, "<!-- HGERROR-END -->");
-    
-    if (end == NULL)
-	errAbort("found start error but not end error");
-
-    *end = 0;
-
-    char *start = strchr(error, '\n');
-    if (start == NULL)
-	errAbort("found HGERROR, but no following newline");
-    start++;
-
-    printf("%s\n", start);
-
-    return 1;
-    }
-
-return 0;
-}
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 2)
+if (optionExists("help"))
+    help();
+
+if (argc != 2 && !optionExists("settings"))
     usage();
+
+struct trackHubCheckOptions *checkOptions = NULL;
+AllocVar(checkOptions);
+
+checkOptions->checkFiles = !optionExists("noTracks");
+checkOptions->checkSettings = optionExists("checkSettings");
+checkOptions->strict = optionExists("core");
+
+char *version = NULL;
+if (optionExists("version"))
+    version = optionVal("version", NULL);
+checkOptions->version = version;
+
+char *extraFile = optionVal("extra", NULL);
+if (extraFile != NULL)
+    {
+    verbose(2, "Accepting extra settings in '%s'\n", extraFile);
+    checkOptions->extraFile = extraFile;
+    checkOptions->extra = hashNew(0);
+    struct lineFile *lf = NULL;
+    if (startsWith("http", extraFile))
+        {
+        struct dyString *ds = netSlurpUrl(extraFile);
+        char *s = dyStringCannibalize(&ds);
+        lf = lineFileOnString(extraFile, TRUE, s);
+        }
+    else
+        {
+        lf = lineFileOpen(extraFile, TRUE);
+        }
+    char *line;
+    while (lineFileNextReal(lf, &line))
+        {
+        hashAdd(checkOptions->extra, line, NULL);
+        }
+    lineFileClose(&lf);
+    verbose(3, "Found %d extra settings\n", hashNumEntries(checkOptions->extra));
+    }
 
 cacheTime = optionInt("cacheTime", cacheTime);
 udcSetCacheTimeout(cacheTime);
-char *browserMachine = NULL;
-browserMachine = optionVal("clear", browserMachine) ;
-if (browserMachine != NULL)
-    return clearHub(argv[1], browserMachine);
-
-boolean checkTracks = !optionExists("noTracks");
-
 // UDC cache dir: first check for hg.conf setting, then override with command line option if given.
 setUdcCacheDir();
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 
 struct dyString *errors = newDyString(1024);
 
-FILE *searchFp = NULL;
-char *searchFile = NULL;
-searchFile = optionVal("searchFile", searchFile) ;
-if (searchFile != NULL)
+if (optionExists("settings"))
     {
-    if ((searchFp = fopen(searchFile, "a")) == NULL)
-	errAbort("cannot open search file %s\n", searchFile);
+    struct trackHubSetting *settings = trackHubSettingsForVersion(version);
+    struct trackHubSetting *setting = NULL;
+    for (setting = settings; setting != NULL; setting = setting->next)
+        {
+        printf("%s\t%s\n", setting->name, setting->level);
+        }
+    return 0;
     }
 
-if ( trackHubCheck(argv[1], errors, checkTracks, searchFp))
+if (trackHubCheck(argv[1], checkOptions, errors))
     {
-    printf("Errors with hub at '%s'\n", argv[1]);
-    printf("%s\n",errors->string);
+    // uniquify and count errors
+    struct slName *errs = slNameListFromString(errors->string, '\n');
+    slUniqify(&errs, slNameCmp, slNameFree);
+    printf("%d errors:\n", slCount(errs));
+    printf("%s\n", slNameListToString(errs, '\n'));
     return 1;
     }
 return 0;

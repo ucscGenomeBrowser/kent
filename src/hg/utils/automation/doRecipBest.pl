@@ -244,6 +244,12 @@ sub makeRbestReadme {
   if ($opt_debug) {
     return;
   }
+  my $axtNet = $splitRef ?
+    "axtRBestNet/*.$tDb.$qDb.net.axt.gz reciprocal best alignments in
+   AXT format" :
+    "axtRBestNet/$tDb.$qDb.rbest.axt.gz reciprocal best alignments in
+   AXT format";
+
   my $fh = &HgAutomate::mustOpen(">$fname");
   print $fh <<_EOF_
 This directory contains reciprocal-best netted chains for $tDb-$qDb.
@@ -255,6 +261,15 @@ This directory contains reciprocal-best netted chains for $tDb-$qDb.
 
  - $qDb.$tDb.rbest.net.gz: $qDb-referenced recip.best net.
  - $qDb.$tDb.rbest.chain.gz: recip.best "liftOver" chains.
+
+ - $axtNet
+
+See also, description of AXT format::
+    http://genome.ucsc.edu/goldenPath/help/axt.html
+description of CHAIN format:
+    http://genome.ucsc.edu/goldenPath/help/chain.html
+description of NET format:
+    http://genome.ucsc.edu/goldenPath/help/net.html
 
 _EOF_
   ;

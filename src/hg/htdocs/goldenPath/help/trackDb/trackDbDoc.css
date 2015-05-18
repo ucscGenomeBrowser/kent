@@ -19,7 +19,11 @@ Alink { color:#0000CC; }
 A:visited { color:#330066; }
 A:active.topbar { color:#330066; }
 
-CODE { color:#000088; }  /* Blue to stand out */
+CODE { color: #000088; }
+.level-core  { color: #000088; }
+.level-full { color: black; }
+.level-new { color: gray; }
+
 PRE { color:#000088; }   /* Blue to stand out */
 I { color:#006600; }     /* Green until issues are dealt with */
 

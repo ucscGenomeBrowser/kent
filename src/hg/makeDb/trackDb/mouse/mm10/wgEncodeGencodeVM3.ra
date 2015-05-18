@@ -68,6 +68,7 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
                 attrs.transcriptType:Transcript_Biotype=3prime_overlapping_ncrna,antisense,IG_C_gene,IG_D_gene,IG_J_gene,IG_LV_gene,IG_V_gene,IG_V_pseudogene,lincRNA,miRNA,misc_RNA,Mt_rRNA,Mt_tRNA,nonsense_mediated_decay,non_stop_decay,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,retained_intron,rRNA,sense_intronic,sense_overlapping,snoRNA,snRNA,transcribed_processed_pseudogene,transcribed_unprocessed_pseudogene,translated_processed_pseudogene,translated_unprocessed_pseudogene,TR_V_gene,TR_V_pseudogene,unitary_pseudogene,unprocessed_pseudogene
     
         track wgEncodeGencodeBasicVM3
+        trackHandler wgEncodeGencode
         subTrack wgEncodeGencodeVM3ViewGenes on
         shortLabel Basic
         subGroups view=aGenes name=Basic
@@ -76,6 +77,7 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
         priority 1
     
         track wgEncodeGencodeCompVM3
+        trackHandler wgEncodeGencode
         subTrack wgEncodeGencodeVM3ViewGenes off
         subGroups view=aGenes name=Comprehensive
         shortLabel Comprehensive
@@ -84,6 +86,7 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
         priority 2
     
         track wgEncodeGencodePseudoGeneVM3
+        trackHandler wgEncodeGencode
         subTrack wgEncodeGencodeVM3ViewGenes on
         subGroups view=aGenes name=Pseudogenes 
         shortLabel Pseudogenes
@@ -101,6 +104,7 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
     configurable off
 
         track wgEncodeGencode2wayConsPseudoVM3
+        trackHandler wgEncodeGencode
         subTrack wgEncodeGencodeVM3View2Way off
         subGroups view=b2-way name=yTwo-way
         shortLabel 2-way Pseudogenes
@@ -118,6 +122,7 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
     configurable off
 
         track wgEncodeGencodePolyaVM3
+        trackHandler wgEncodeGencode
         subTrack wgEncodeGencodeVM3ViewPolya off
         subGroups view=cPolya name=zPolyA
         shortLabel PolyA

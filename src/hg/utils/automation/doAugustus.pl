@@ -26,7 +26,7 @@ use vars qw/
 my $stepper = new HgStepManager(
     [ { name => 'partition',   func => \&doPartition },
       { name => 'augustus', func => \&doAugustus },
-      { name => 'makeBed', func => \&doMakeBed },
+      { name => 'makeGp', func => \&doMakeGp },
       { name => 'load', func => \&doLoadAugustus },
       { name => 'cleanup', func => \&doCleanup },
     ]
@@ -71,7 +71,7 @@ _EOF_
 Automates UCSC's Augustus track construction for the database \$db.  Steps:
     partition:  Creates hard-masked fastas needed for the CpG Island program.
     augustus:   Run gsBig on the hard-masked fastas
-    makeBed:   Transform output from gsBig into augustus.gtf augustus.pep and
+    makeGp:   Transform output from gsBig into augustus.gtf augustus.pep and
     load:      Load augustus.gtf and into \$db.
     cleanup:   Removes hard-masked fastas and output from gsBig.
 All operations are performed in the build directory which is
@@ -128,16 +128,22 @@ sub doPartition {
   &HgAutomate::mustMkdir($runDir);
   my $whatItDoes="partition 2bit file into fasta chunks for augustus processing.";
   my $bossScript = newBash HgRemoteScript("$runDir/doPartition.bash", $workhorse,
-				      $runDir, $whatItDoes, undef);
+				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 export db="$db"
 mkdir -p partBundles
 mkdir -p ../fasta
 
 twoBitInfo $maskedSeq stdout | sort -k2,2nr > \$db.chrom.sizes
+# aim for 1000 bundles or less
+export partSize=`cat \$db.chrom.sizes | wc -l | awk '{printf "%d", 1+\$1/1000}'`
+if [ "\$partSize" -gt 1000 ]; then
+   partSize=1000
+fi
+
 /cluster/bin/scripts/partitionSequence.pl 11000000 1000000 \\
     $maskedSeq \\
-    \$db.chrom.sizes 1000 -rawDir=gtf \\
+    \$db.chrom.sizes \$partSize -rawDir=gtf \\
     -lstDir=partBundles > part.list
 
 (grep -v partBundles part.list || /bin/true) | sed -e 's/.*2bit://;' \\
@@ -149,11 +155,8 @@ if [ -d partBundles ]; then
   for F in partBundles/*.lst
   do
      B=`basename \$F | sed -e 's/.lst//;'`
-     cat \$F | sed -e 's/.*2bit://;' | awk -F':' '{print \$1}' \\
-        | sort -u | while read chr
-     do
-       twoBitToFa $maskedSeq:\${chr} stdout
-     done > ../fasta/\${B}.fa
+     sed -e 's#.*.2bit:##;' \$F \\
+      | twoBitToFa -seqList=stdin $maskedSeq stdout > ../fasta/\${B}.fa
   done
 fi
 _EOF_
@@ -176,7 +179,7 @@ sub doAugustus {
       "complete the previous step: -continue=-partition\n";
   } elsif (-e "$runDir/run.time") {
     die "doAugustus: looks like this step was run successfully already " .
-      "(run.time exists).\nEither run with -continue makeBed or some later " .
+      "(run.time exists).\nEither run with -continue makeGp or some later " .
 	"stage,\nor move aside/remove $runDir/ and run again.\n";
   } elsif ((-e "$runDir/jobList") && ! $opt_debug) {
     die "doAugustus: looks like we are not starting with a clean " .
@@ -196,19 +199,19 @@ sub doAugustus {
 #     start is 0 relative, will increment by 1 here for augustus
 #     error result will end up in augErr/directory/file.err
 
+set db = "$db"
 set start = \$1
 set end = \$2
 set fasta = \$3
 set chrName = \$fasta:r:t
 echo "chrName: \$chrName"
 
-set gtfOutput = \$4
-set errFile = "augErr/\$gtfOutput:h:t/\$gtfOutput:r:t.err"
-echo mkdir -p \$gtfOutput:h
-mkdir -p \$gtfOutput:h
-echo mkdir -p \$errFile:h
+set resultGz = \$4
+set gtfFile = \$resultGz:t:r
+set errFile = "augErr/\$resultGz:h:t/\$gtfFile:r:t.err"
+mkdir -p \$resultGz:h
 mkdir -p \$errFile:h
-set tmpDir = "/dev/shm/\$chrName.\$start.\$end"
+set tmpDir = "/dev/shm/\$db.\$chrName.\$start.\$end"
 
 echo mkdir -p \$tmpDir
 mkdir -p \$tmpDir
@@ -216,26 +219,31 @@ echo pushd \$tmpDir
 pushd \$tmpDir
 
 if ( \$start == \$end ) then
-augustus --species=chicken --softmasking=1 --UTR=off --protein=off \\
-   --AUGUSTUS_CONFIG_PATH=/hive/data/outside/augustus/augustus.3.1/config \\
-     \$fasta --outfile=\$gtfOutput:t --errfile=\$errFile:t
+augustus --species=$species --softmasking=1 --UTR=$utr --protein=off \\
+ --AUGUSTUS_CONFIG_PATH=/hive/data/outside/augustus/augustus.3.1/config \\
+  --alternatives-from-sampling=true --sample=100 --minexonintronprob=0.2 \\
+   --minmeanexonintronprob=0.5 --maxtracks=3 --temperature=2 \\
+    \$fasta --outfile=\$gtfFile --errfile=\$errFile:t
 else
  @ start++
-augustus --species=chicken --softmasking=1 --UTR=off --protein=off \\
-   --AUGUSTUS_CONFIG_PATH=/hive/data/outside/augustus/augustus.3.1/config \\
-     --predictionStart=\$start --predictionEnd=\$end \$fasta \\
-       --outfile=\$gtfOutput:t --errfile=\$errFile:t
+augustus --species=$species --softmasking=1 --UTR=$utr --protein=off \\
+ --AUGUSTUS_CONFIG_PATH=/hive/data/outside/augustus/augustus.3.1/config \\
+  --alternatives-from-sampling=true --sample=100 --minexonintronprob=0.2 \\
+   --minmeanexonintronprob=0.5 --maxtracks=3 --temperature=2 \\
+     --predictionStart=\$start --predictionEnd=\$end \\
+      \$fasta --outfile=\$gtfFile --errfile=\$errFile:t
 endif
 
+gzip \$gtfFile
 popd
-mv \$tmpDir/\$gtfOutput:t \$gtfOutput
+mv \$tmpDir/\$gtfFile.gz \$resultGz
 mv \$tmpDir/\$errFile:t \$errFile
 rm -fr \$tmpDir
 _EOF_
   );
 
-  my $whatItDoes = "Run augustus on chunked fasta sequences.";
-  my $bossScript = newBash HgRemoteScript("$runDir/doAugustus.bash", $paraHub,
+  $whatItDoes = "Run augustus on chunked fasta sequences.";
+  $bossScript = newBash HgRemoteScript("$runDir/runAugustus.bash", $paraHub,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 (grep -v partBundles ../partition/part.list || /bin/true) | while read twoBit
@@ -243,13 +251,13 @@ do
   chr=`echo \$twoBit |  sed -e 's/.*2bit://;' | awk -F':' '{print \$1}'`
   chrStart=`echo \$twoBit |  sed -e 's/.*2bit://;' | awk -F':' '{print \$2}' | sed -e 's/-.*//;'`
   chrEnd=`echo \$twoBit |  sed -e 's/.*2bit://;' | awk -F':' '{print \$2}' | sed -e 's/.*-//;'`
-  echo "runOne \$chrStart \$chrEnd {check in exists+ $buildDir/fasta/\${chr}.fa} {check out line+ gtf/\$chr/\$chr.\$chrStart.\$chrEnd.gtf}"
+  echo "runOne \$chrStart \$chrEnd {check in exists+ $buildDir/fasta/\${chr}.fa} {check out exists+ gtf/\$chr/\$chr.\$chrStart.\$chrEnd.gtf.gz}"
 done > jobList
 
 (grep partBundles ../partition/part.list || /bin/true) | while read bundleName
 do
   B=`basename \$bundleName | sed -e 's/.lst//;'`
-  echo "runOne 0 0 {check in exists+ $buildDir/fasta/\${B}.fa} {check out line+ gtf/\${B}/\${B}.0.0.gtf}"
+  echo "runOne 0 0 {check in exists+ $buildDir/fasta/\${B}.fa} {check out exists+ gtf/\${B}/\${B}.0.0.gtf.gz}"
 done >> jobList
 
 chmod +x runOne
@@ -261,70 +269,80 @@ _EOF_
 } # doAugustus
 
 #########################################################################
-# * step: make bed [workhorse]
-sub doMakeBed {
+# * step: make gp [workhorse]
+sub doMakeGp {
   my $runDir = $buildDir;
   &HgAutomate::mustMkdir($runDir);
 
   # First, make sure we're starting clean.
-  if (! -e "$runDir/run.time") {
-    die "doMakeBed: the previous step augustus did not complete \n" .
-      "successfully ($buildDir/run.time does not exist).\nPlease " .
-      "complete the previous step: -continue=-augustus\n";
-  } elsif (-e "$runDir/augustus.gtf" || -e "$runDir/augustus.gtf.gz" ) {
-    die "doMakeBed: looks like this was run successfully already\n" .
-      "(augustus.gtf exists).  Either run with -continue load or cleanup\n" .
-	"or move aside/remove $runDir/augustus.gtf\nand run again.\n";
+  if (! -e "$runDir/run.augustus/run.time") {
+    die "doMakeGp: the previous step augustus did not complete \n" .
+      "successfully ($buildDir/run.augustus/run.time does not exist).\nPlease " .
+      "complete the previous step: -continue=augustus\n";
+  } elsif (-e "$runDir/augustus.gp" || -e "$runDir/augustus.gp.gz" ) {
+    die "doMakeGp: looks like this was run successfully already\n" .
+      "(augustus.gp exists).  Either run with -continue load or cleanup\n" .
+	"or move aside/remove $runDir/augustus.gp\nand run again.\n";
   }
 
-  my $whatItDoes = "Makes gtf/pep/bed files from gsBig output.";
-  my $bossScript = newBash HgRemoteScript("$runDir/doMakeBed.bash", $workhorse,
+  my $whatItDoes = "Makes genePred file from augustus gff output.";
+  my $bossScript = newBash HgRemoteScript("$runDir/makeGp.bash", $workhorse,
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
 export db=$db
-catDir -r gtf > augustus.gtf
-catDir -r pep > augustus.pep
-gtfToGenePred augustus.gtf \$db.augustus.gp
-genePredToBed \$db.augustus.gp stdout | sort -k1,1 -k2,2n > \$db.augustus.bed
+find ./run.augustus/gtf -type f | grep ".gtf.gz\$" \\
+  | sed -e 's#/# _D_ #g; s#\\.# _dot_ #g;' \\
+    | sort -k11,11 -k13,13n \\
+     | sed -e 's# _dot_ #.#g; s# _D_ #/#g' | xargs zcat \\
+       | /hive/data/outside/augustus/augustus.3.1/scripts/join_aug_pred.pl \\
+          | grep -P "\\t(CDS|exon|stop_codon|start_codon|tts|tss)\\t" \\
+            > \$db.augustus.gtf
+gtfToGenePred -genePredExt -infoOut=\$db.info \$db.augustus.gtf \$db.augustus.gp
+genePredCheck -db=\$db \$db.augustus.gp
 _EOF_
   );
   $bossScript->execute();
-} # doMakeBed
+} # doMakeGp
 
 #########################################################################
 # * step: load [dbHost]
 sub doLoadAugustus {
   my $runDir = $buildDir;
   &HgAutomate::mustMkdir($runDir);
+  my $tableName = "augustusGene";
 
-  if (! -e "$runDir/augustus.gtf") {
-    die "doLoadAugustus: the previous step makeBed did not complete \n" .
-      "successfully (augustus.gtf does not exists).\nPlease " .
-      "complete the previous step: -continue=-makeBed\n";
-  } elsif (-e "$runDir/fb.$db.augustus.txt" ) {
+  if (! -e "$runDir/$db.augustus.gp") {
+    die "doLoadAugustus: the previous step makeGp did not complete \n" .
+      "successfully ($db.augustus.gp does not exists).\nPlease " .
+      "complete the previous step: -continue=-makeGp\n";
+  } elsif (-e "$runDir/fb.$db.$tableName.txt" ) {
     die "doLoadAugustus: looks like this was run successfully already\n" .
-      "(fb.$db.augustus.txt exists).  Either run with -continue cleanup\n" .
-	"or move aside/remove\n$runDir/fb.$db.augustus.txt and run again.\n";
+      "(fb.$db.$tableName.txt exists).  Either run with -continue cleanup\n" .
+	"or move aside/remove\n$runDir/fb.$db.$tableName.txt and run again.\n";
   }
-  my $whatItDoes = "Loads augustus.gtf.";
-  my $bossScript = new HgRemoteScript("$runDir/doLoadAugustus.csh", $dbHost,
+  my $whatItDoes = "Loads $db.augustus.gp.";
+  my $bossScript = newBash HgRemoteScript("$runDir/loadAugustus.bash", $dbHost,
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-bedToBigBed $db.augustus.bed ../../chrom.sizes $db.augustus.bb
-gtfToGenePred augustus.gtf augustus.gp
-genePredCheck -db=$db augustus.gp
-ldHgGene -gtf $db augustus augustus.gtf
-featureBits $db augustus >&fb.$db.augustus.txt
-checkTableCoords -verboseBlocks -table=augustus $db
+export db="$db"
+export table="$tableName"
+genePredCheck -db=\$db \$db.augustus.gp
+hgLoadGenePred \$db -genePredExt \$table \$db.augustus.gp
+genePredCheck -db=\$db \$table
+featureBits \$db \$table > fb.\$db.\$table.txt 2>&1
+checkTableCoords -verboseBlocks -table=\$table \$db
+cat fb.\$db.\$table.txt
+getRnaPred -genePredExt -keepMasking -genomeSeqs=$maskedSeq \$db \$db.augustus.gp all \$db.augustusGene.rna.fa
+getRnaPred -genePredExt -peptides -genomeSeqs=$maskedSeq \$db \$db.augustus.gp all \$db.augustusGene.faa
 _EOF_
   );
   $bossScript->execute();
 } # doLoad
 
 #########################################################################
-# * step: cleanup [fileServer]
+# * step: cleanup [workhorse]
 sub doCleanup {
   my $runDir = $buildDir;
 
@@ -334,13 +352,18 @@ sub doCleanup {
 	" $runDir/\n";
   }
   my $whatItDoes = "It cleans up or compresses intermediate files.";
-  my $fileServer = &HgAutomate::chooseFileServer($runDir);
-  my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
+  my $bossScript = newBash HgRemoteScript("$runDir/cleanup.bash", $workhorse,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-rm -rf hardMaskedFa/ err/ run.hardMask/err/
-rm -f batch.bak bed.tab run.hardMask/batch.bak $db.augustus.gp $db.augustus.bed
-gzip augustus.gtf augustus.gp augustus.pep
+export db="$db"
+rm -fr $buildDir/fasta
+rm -fr $buildDir/run.augustus/err/
+rm -f $buildDir/run.augustus/batch.bak
+rm -fr $buildDir/run.augustus/augErr
+gzip $buildDir/\$db.augustus.gtf
+gzip $buildDir/\$db.augustus.gp
+gzip $buildDir/\$db.augustusGene.rna.fa
+gzip $buildDir/\$db.augustusGene.faa
 _EOF_
   );
   $bossScript->execute();
