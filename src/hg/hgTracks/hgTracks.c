@@ -3922,9 +3922,12 @@ for (track = trackList; track != NULL; track = track->next)
     if (cgiOptionalString("hideTracks"))
 	{
 	s = cgiOptionalString(track->track);
-	if (s != NULL && (hTvFromString(s) != track->tdb->visibility))
+	if (s != NULL)
 	    {
-	    cartSetString(cart, track->track, s);
+	    if (hTvFromString(s) == track->tdb->visibility)
+		cartRemove(cart, track->track);
+	    else
+		cartSetString(cart, track->track, s);
 	    }
 	}
     if (s != NULL && !track->limitedVisSet)
