@@ -101,6 +101,7 @@ static int hubCheckTrackSetting(struct trackHub *hub, struct trackDb *tdb, char 
 {
 verbose(4, "    Check setting '%s'\n", setting);
 
+int retVal = 0;
 /* skip internally added/used settings */
 if (sameString(setting, "polished") || sameString(setting, "group"))
     return 0;
@@ -109,29 +110,33 @@ if (sameString(setting, "polished") || sameString(setting, "group"))
 if (options->extra && hashLookup(options->extra, setting))
         return 0;
 
-/* check setting is supported in this version */
-struct trackHubSetting *hubSetting = hashFindVal(options->settings, setting);
-if (hubSetting == NULL)
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
     {
-    dyStringPrintf(errors, "Setting '%s' is unknown/unsupported", setting);
-    char *suggest = suggestSetting(setting, options);
-    if (suggest != NULL)
-        dyStringPrintf(errors, " (did you mean '%s' ?) ", suggest);
-    dyStringPrintf(errors, "\n");
-    return 1;
+    /* check setting is supported in this version */
+    struct trackHubSetting *hubSetting = hashFindVal(options->settings, setting);
+    if (hubSetting == NULL)
+        {
+        struct dyString *ds = dyStringNew(0);
+        dyStringPrintf(ds, "Setting '%s' is unknown/unsupported", setting);
+        char *suggest = suggestSetting(setting, options);
+        if (suggest != NULL)
+            dyStringPrintf(ds, " (did you mean '%s' ?) ", suggest);
+        errAbort("%s\n", dyStringCannibalize(&ds));
+        }
+
+    // check level
+    if (options->strict && differentString(hubSetting->level, "core"))
+        errAbort( "Setting '%s' is level '%s'\n", setting, hubSetting->level);
     }
-
-if (!options->strict)
-    return 0;
-
-// check level
-if (differentString(hubSetting->level, "core"))
+errCatchEnd(errCatch);
+if (errCatch->gotError)
     {
-    dyStringPrintf(errors, 
-                "Setting '%s' is level '%s'\n", setting, hubSetting->level);
-    return 1;
+    dyStringPrintf(errors, "%s", errCatch->message->string);
+    retVal = 1;
     }
-return 0;
+errCatchFree(&errCatch);
+return retVal;
 }
 
 
@@ -203,7 +208,7 @@ static int hubCheckTrack(struct trackHub *hub, struct trackHubGenome *genome, st
 {
 int retVal = 0;
 
-if (options->settings)
+if (options->checkSettings && options->settings)
     {
     //verbose(3, "Found %d settings to check to spec\n", slCount(settings));
     verbose(3, "Checking track: %s\n", tdb->shortLabel);
@@ -223,6 +228,7 @@ if (errCatchStart(errCatch))
     {
     hubCheckTrackFile(hub, genome, tdb);
     }
+errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
     retVal = 1;
@@ -408,32 +414,9 @@ return specs;
 }
 
 
-int trackHubCheck(char *hubUrl, struct trackHubCheckOptions *options, struct dyString *errors)
-/* hubCheck - Check a track data hub for integrity. Put errors in dyString.
- *      return 0 if hub has no errors, 1 otherwise 
- *      if options->checkTracks is TRUE, check remote files of individual tracks
- */
+static int hubSettingsCheckInit(struct trackHub *hub,  struct trackHubCheckOptions *options, struct dyString *errors)
 {
-struct errCatch *errCatch = errCatchNew();
-struct trackHub *hub = NULL;
 int retVal = 0;
-
-if (errCatchStart(errCatch))
-    {
-    hub = trackHubOpen(hubUrl, "hub_0");
-    }
-errCatchEnd(errCatch);
-if (errCatch->gotError)
-    {
-    retVal = 1;
-    dyStringPrintf(errors, "%s", errCatch->message->string);
-    }
-errCatchFree(&errCatch);
-
-if (hub == NULL)
-    return 1;
-
-
 if (hub->version != NULL)
     options->version = hub->version;
 else if (options->version == NULL)
@@ -452,7 +435,7 @@ if (options->strict == FALSE && hub->level != NULL)
     }
 verbose(2, "Checking hub '%s'%s\n", hub->longLabel, options->strict ? " for compliance to 'core' (use -settings to view)": "");
 
-errCatch = errCatchNew();
+struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
     /* make hash of settings for this version, saving in options */
@@ -484,6 +467,37 @@ if (errCatch->gotError)
     dyStringPrintf(errors, "%s", errCatch->message->string);
     }
 errCatchFree(&errCatch);
+return retVal;
+}
+
+
+int trackHubCheck(char *hubUrl, struct trackHubCheckOptions *options, struct dyString *errors)
+/* hubCheck - Check a track data hub for integrity. Put errors in dyString.
+ *      return 0 if hub has no errors, 1 otherwise 
+ *      if options->checkTracks is TRUE, check remote files of individual tracks
+ */
+{
+struct errCatch *errCatch = errCatchNew();
+struct trackHub *hub = NULL;
+int retVal = 0;
+
+if (errCatchStart(errCatch))
+    {
+    hub = trackHubOpen(hubUrl, "hub_0");
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    retVal = 1;
+    dyStringPrintf(errors, "%s", errCatch->message->string);
+    }
+errCatchFree(&errCatch);
+
+if (hub == NULL)
+    return 1;
+
+if (options->checkSettings)
+    retVal |= hubSettingsCheckInit(hub, options, errors);
 
 struct trackHubGenome *genome;
 for (genome = hub->genomeList; genome != NULL; genome = genome->next)

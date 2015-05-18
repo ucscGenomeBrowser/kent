@@ -21,11 +21,31 @@ errAbort(
   "usage:\n"
   "   hubCheck http://yourHost/yourDir/hub.txt\n"
   "options:\n"
-  "   -version              - version to validate against (defaults to version in hub.txt, or %s)\n"
-  "   -core                 - reject settings not in core set for this version\n"
-  "   -extra                - accept settings in this file (or url)\n"
   "   -noTracks             - don't check remote files for tracks, just trackDb (faster)\n"
+  "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs.\n"
+  "                           Will create this directory if not existing\n"
+  "   -cacheTime=N - set cache refresh time in seconds, default %d\n"
+  "   -verbose=2            - output verbosely\n"
+  , cacheTime
+  );
+}
+
+
+void help()
+/* Extended help -- these are implemented options that we are hiding to allow review time */
+{
+errAbort(
+  "hubCheck - Check a track data hub for integrity.\n"
+  "usage:\n"
+  "   hubCheck http://yourHost/yourDir/hub.txt\n"
+  "options:\n"
   "   -settings             - just list settings with support level\n"
+  "   -checkSettings        - check trackDb settings to spec \n"
+  "   -version=[v?|url]     - version to validate settings against\n"
+  "                                     (defaults to version in hub.txt, or %s)\n"
+  "   -extra=[file|url]     - accept settings in this file (or url)\n"
+  "   -core                 - reject settings not in core set for this version\n"
+  "   -noTracks             - don't check remote files for tracks, just trackDb (faster)\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs.\n"
   "                           Will create this directory if not existing\n"
   "   -cacheTime=N - set cache refresh time in seconds, default %d\n"
@@ -40,8 +60,10 @@ static struct optionSpec options[] = {
    {"extra", OPTION_STRING},
    {"noTracks", OPTION_BOOLEAN},
    {"settings", OPTION_BOOLEAN},
+   {"checkSettings", OPTION_BOOLEAN},
    {"udcDir", OPTION_STRING},
    {"cacheTime", OPTION_INT},
+   {"help", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -49,6 +71,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+if (optionExists("help"))
+    help();
+
 if (argc != 2 && !optionExists("settings"))
     usage();
 
@@ -56,6 +81,7 @@ struct trackHubCheckOptions *checkOptions = NULL;
 AllocVar(checkOptions);
 
 checkOptions->checkFiles = !optionExists("noTracks");
+checkOptions->checkSettings = optionExists("checkSettings");
 checkOptions->strict = optionExists("core");
 
 char *version = NULL;

@@ -68,9 +68,10 @@ struct trackHubGenome
 struct trackHubCheckOptions
 /* How to check track hub */
     {
+    boolean checkFiles;         /* check remote files exist and are correct type */
+    boolean checkSettings;      /* check trackDb settings to spec */
     char *version;              /* hub spec version to check */
     boolean strict;             /* check hub is valid to 'core' level for version */
-    boolean checkFiles;         /* check remote files exist and are correct type */
     char *extraFile;            /* name of extra file/url with additional settings to accept */
     /* intermediate data */
     struct hash *settings;      /* supported settings for this version */
