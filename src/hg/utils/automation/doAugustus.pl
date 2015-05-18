@@ -135,9 +135,15 @@ mkdir -p partBundles
 mkdir -p ../fasta
 
 twoBitInfo $maskedSeq stdout | sort -k2,2nr > \$db.chrom.sizes
+# aim for 1000 bundles or less
+export partSize=`cat \$db.chrom.sizes | wc -l | awk '{printf "%d", 1+\$1/1000}'`
+if [ "\$partSize" -gt 1000 ]; then
+   partSize=1000
+fi
+
 /cluster/bin/scripts/partitionSequence.pl 11000000 1000000 \\
     $maskedSeq \\
-    \$db.chrom.sizes 1000 -rawDir=gtf \\
+    \$db.chrom.sizes \$partSize -rawDir=gtf \\
     -lstDir=partBundles > part.list
 
 (grep -v partBundles part.list || /bin/true) | sed -e 's/.*2bit://;' \\
@@ -149,11 +155,8 @@ if [ -d partBundles ]; then
   for F in partBundles/*.lst
   do
      B=`basename \$F | sed -e 's/.lst//;'`
-     cat \$F | sed -e 's/.*2bit://;' | awk -F':' '{print \$1}' \\
-        | sort -u | while read chr
-     do
-       twoBitToFa $maskedSeq:\${chr} stdout
-     done > ../fasta/\${B}.fa
+     sed -e 's#.*.2bit:##;' \$F \\
+      | twoBitToFa -seqList=stdin $maskedSeq stdout > ../fasta/\${B}.fa
   done
 fi
 _EOF_
@@ -196,19 +199,19 @@ sub doAugustus {
 #     start is 0 relative, will increment by 1 here for augustus
 #     error result will end up in augErr/directory/file.err
 
+set db = "$db"
 set start = \$1
 set end = \$2
 set fasta = \$3
 set chrName = \$fasta:r:t
 echo "chrName: \$chrName"
 
-set gtfOutput = \$4
-set errFile = "augErr/\$gtfOutput:h:t/\$gtfOutput:r:t.err"
-echo mkdir -p \$gtfOutput:h
-mkdir -p \$gtfOutput:h
-echo mkdir -p \$errFile:h
+set resultGz = \$4
+set gtfFile = \$resultGz:t:r
+set errFile = "augErr/\$resultGz:h:t/\$gtfFile:r:t.err"
+mkdir -p \$resultGz:h
 mkdir -p \$errFile:h
-set tmpDir = "/dev/shm/\$chrName.\$start.\$end"
+set tmpDir = "/dev/shm/\$db.\$chrName.\$start.\$end"
 
 echo mkdir -p \$tmpDir
 mkdir -p \$tmpDir
@@ -220,7 +223,7 @@ augustus --species=$species --softmasking=1 --UTR=$utr --protein=off \\
  --AUGUSTUS_CONFIG_PATH=/hive/data/outside/augustus/augustus.3.1/config \\
   --alternatives-from-sampling=true --sample=100 --minexonintronprob=0.2 \\
    --minmeanexonintronprob=0.5 --maxtracks=3 --temperature=2 \\
-    \$fasta --outfile=\$gtfOutput:t --errfile=\$errFile:t
+    \$fasta --outfile=\$gtfFile --errfile=\$errFile:t
 else
  @ start++
 augustus --species=$species --softmasking=1 --UTR=$utr --protein=off \\
@@ -228,11 +231,12 @@ augustus --species=$species --softmasking=1 --UTR=$utr --protein=off \\
   --alternatives-from-sampling=true --sample=100 --minexonintronprob=0.2 \\
    --minmeanexonintronprob=0.5 --maxtracks=3 --temperature=2 \\
      --predictionStart=\$start --predictionEnd=\$end \\
-      \$fasta --outfile=\$gtfOutput:t --errfile=\$errFile:t
+      \$fasta --outfile=\$gtfFile --errfile=\$errFile:t
 endif
 
+gzip \$gtfFile
 popd
-mv \$tmpDir/\$gtfOutput:t \$gtfOutput
+mv \$tmpDir/\$gtfFile.gz \$resultGz
 mv \$tmpDir/\$errFile:t \$errFile
 rm -fr \$tmpDir
 _EOF_
@@ -247,13 +251,13 @@ do
   chr=`echo \$twoBit |  sed -e 's/.*2bit://;' | awk -F':' '{print \$1}'`
   chrStart=`echo \$twoBit |  sed -e 's/.*2bit://;' | awk -F':' '{print \$2}' | sed -e 's/-.*//;'`
   chrEnd=`echo \$twoBit |  sed -e 's/.*2bit://;' | awk -F':' '{print \$2}' | sed -e 's/.*-//;'`
-  echo "runOne \$chrStart \$chrEnd {check in exists+ $buildDir/fasta/\${chr}.fa} {check out line+ gtf/\$chr/\$chr.\$chrStart.\$chrEnd.gtf}"
+  echo "runOne \$chrStart \$chrEnd {check in exists+ $buildDir/fasta/\${chr}.fa} {check out exists+ gtf/\$chr/\$chr.\$chrStart.\$chrEnd.gtf.gz}"
 done > jobList
 
 (grep partBundles ../partition/part.list || /bin/true) | while read bundleName
 do
   B=`basename \$bundleName | sed -e 's/.lst//;'`
-  echo "runOne 0 0 {check in exists+ $buildDir/fasta/\${B}.fa} {check out line+ gtf/\${B}/\${B}.0.0.gtf}"
+  echo "runOne 0 0 {check in exists+ $buildDir/fasta/\${B}.fa} {check out exists+ gtf/\${B}/\${B}.0.0.gtf.gz}"
 done >> jobList
 
 chmod +x runOne
@@ -287,9 +291,10 @@ sub doMakeGp {
 
   $bossScript->add(<<_EOF_
 export db=$db
-find ./run.augustus/gtf -type f | grep ".gtf\$" \\
-  | sed -e 's#/# _D_ #g; s#\\.# _dot_ #g;' | sort -k11,11 -k13,13n \\
-     | sed -e 's# _dot_ #.#g; s# _D_ #/#g' | xargs cat \\
+find ./run.augustus/gtf.gz -type f | grep ".gtf.gz\$" \\
+  | sed -e 's#/# _D_ #g; s#\\.# _dot_ #g;' \\
+    | sort -k11,11 -k13,13n \\
+     | sed -e 's# _dot_ #.#g; s# _D_ #/#g' | xargs zcat \\
        | /hive/data/outside/augustus/augustus.3.1/scripts/join_aug_pred.pl \\
           | grep -P "\\t(CDS|exon|stop_codon|start_codon|tts|tss)\\t" \\
             > \$db.augustus.gtf
@@ -351,8 +356,6 @@ sub doCleanup {
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
 export db="$db"
-find $buildDir/run.augustus/gtf -type f | grep ".gtf\$" || /bin/true \\
-   | xargs --no-run-if-empty gzip
 rm -fr $buildDir/fasta
 rm -fr $buildDir/run.augustus/err/
 rm -f $buildDir/run.augustus/batch.bak
