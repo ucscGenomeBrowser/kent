@@ -276,7 +276,7 @@ char *trackHubVersionDefault()
 /* Return current version of trackDb settings spec for hubs */
 {
 // TODO: get from goldenPath/help/trackDb/trackDbHub.current.html
-    return "v1";  // minor rev to v1a, etc.
+    return "v0";  // minor rev to v1a, etc.
 }
 
 
@@ -313,11 +313,9 @@ if (startsWith("http", version))
 else
     {
     char buf[256];
-    safef(buf, sizeof buf, 
-        //"http://genome.ucsc.edu/goldenPath/help/trackDb/trackDbHub.%s.html", 
-        // TODO: switch to RR (and move to #define)
-        "http://hgwdev-kate.cse.ucsc.edu/goldenPath/help/trackDb/trackDbHub.%s.html",
-        version);
+    char *specHost = "genome.ucsc.edu";
+    safef(buf, sizeof buf, "http://%s/goldenPath/help/trackDb/trackDbHub.%s.html", 
+                        specHost, version);
     specUrl = buf;
     }
 verbose(2, "Validating to spec at %s\n", specUrl);
@@ -397,7 +395,12 @@ for (tag = page->tags; tag != NULL; tag = tag->next)
 verbose(5, "Found %d <div>'s\n", divCount);
 struct hashEl *el, *list = hashElListHash(specHash);
 
+int settingsCt = slCount(list);
 verbose(5, "Found %d settings's\n", slCount(list));
+if (settingsCt == 0)
+    errAbort("Can't find trackDb settings support levels at %s."
+              " Use -v to indicate a different version number or url.\n", specUrl);
+
 slSort(&list, hashElCmp);
 struct trackHubSetting *specs = NULL;
 int coreCt = 0;
