@@ -726,14 +726,6 @@ visibility hide
 color 150,0,0
 type genePred ensPep
 
-track augGene
-shortLabel Augustus
-longLabel Augustus gene predictions
-group genes
-visibility hide
-color 150,0,0
-type genePred
-
 track ensEstGene
 shortLabel Ensembl EST Genes
 longLabel Ensembl EST Gene Predictions
@@ -3005,7 +2997,7 @@ shortLabel Augustus
 longLabel Augustus gene predictions v3.1
 group genes
 visibility hide
-color 12,120,12
+color 12,105,0
 type genePred
 baseColorUseCds given
 baseColorDefault genomicCodons
