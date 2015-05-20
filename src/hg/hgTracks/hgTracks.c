@@ -65,7 +65,7 @@
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
- * Because the browser is a central program, most of it's cart
+ * Because the browser is a central program, most of its cart
  * variables are not hgt. qualified.  It's a good idea if other
  * program's unique variables be qualified with a prefix though. */
 char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
@@ -3922,9 +3922,12 @@ for (track = trackList; track != NULL; track = track->next)
     if (cgiOptionalString("hideTracks"))
 	{
 	s = cgiOptionalString(track->track);
-	if (s != NULL && (hTvFromString(s) != track->tdb->visibility))
+	if (s != NULL)
 	    {
-	    cartSetString(cart, track->track, s);
+	    if (hTvFromString(s) == track->tdb->visibility)
+		cartRemove(cart, track->track);
+	    else
+		cartSetString(cart, track->track, s);
 	    }
 	}
     if (s != NULL && !track->limitedVisSet)

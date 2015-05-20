@@ -19,8 +19,11 @@ SCRIPT_FILES = \
 	blastz-make-joblist \
 	blastz-normalizeLav \
 	blastz-run-ucsc \
+	doAugustus.pl \
 	doBlastzChainNet.pl \
+	doCpgIslands.pl \
 	doEnsGeneUpdate.pl \
+	doGenscan.pl \
 	doHgNearBlastp.pl \
 	ensemblInfo.pl \
 	synBlastp.csh \

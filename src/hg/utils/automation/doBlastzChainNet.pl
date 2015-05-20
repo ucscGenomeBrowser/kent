@@ -1221,6 +1221,16 @@ sub dumpDownloadReadme {
   my ($tGenome, $tDate, $tSource) = &HgAutomate::getAssemblyInfo($dbHost, $tDb);
   my ($qGenome, $qDate, $qSource) = &HgAutomate::getAssemblyInfo($dbHost, $qDb);
   my $dir = $splitRef ? 'axtNet/*.' : '';
+  my $synNet = $splitRef ?
+  "mafSynNet/*.maf.gz - filtered net files for syntenic alignments
+               only, in MAF format, see also, description of MAF format:
+               http://genome.ucsc.edu/FAQ/FAQformat.html#format5" :
+  "$tDb.$qDb.synNet.maf.gz - filtered net file for syntenic alignments
+               only, in MAF format, see also, description of MAF format:
+               http://genome.ucsc.edu/FAQ/FAQformat.html#format5
+
+  - $tDb.$qDb.syn.net.gz - filtered net file for syntenic alignments only";
+
   my ($matrix, $o, $e, $k, $l, $h, $blastzOther) = &getBlastzParams();
   my $defaultMatrix = $defVars{'BLASTZ_Q'} ? '' : ' the default matrix';
   my $lap = &describeOverlapping();
@@ -1278,6 +1288,11 @@ Files included in this directory:
     i.e. the best chains in the $tGenome genome, with gaps in the best
     chains filled in by next-best chains where possible.  The axt format is
     described in http://genome.ucsc.edu/goldenPath/help/axt.html .
+
+  - $synNet
+
+  - reciprocalBest/ directory, contains reciprocal-best netted chains
+    for $tDb-$qDb
 
 ";
   }
