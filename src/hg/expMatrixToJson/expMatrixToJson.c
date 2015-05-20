@@ -368,16 +368,17 @@ const struct bioExpVector *kid1 = (const struct bioExpVector *)item1;
 const struct bioExpVector *kid2 = (const struct bioExpVector *)item2;
 int j;
 double diff = 0, sum = 0;
-float kid1Weight = 0.0, kid2Weight = 0.0; 
+//float kid1Weight = 0.0, kid2Weight = 0.0; 
+float kid1Weight = kid1->children / (float)(kid1->children + kid2->children);
+float kid2Weight = kid2->children / (float)(kid1->children + kid2->children);
+//printf("Kid1 weight is %f kid2 weight is %f \n", kid1Weight, kid2Weight);
 //uglyAbort("%f %f\n", kid1Weight, kid2Weight);
 for (j = 0; j < kid1->count; ++j)
     {
-    kid1Weight = kid1->children / (float)(kid1->children + kid2->children);
-    kid2Weight = kid2->children / (float)(kid1->children + kid2->children);
     diff = (kid1Weight*kid1->vector[j]) - (kid2Weight*kid2->vector[j]);
     sum += (diff * diff);
     }
-printf("%f\n",sqrt(sum));
+//printf("%f\n",sqrt(sum));
 return sqrt(sum);
 }
 
@@ -401,7 +402,7 @@ for (i = 0; i < el->count; ++i)
     {
     el->vector[i] = (kid1->vector[i] + kid2->vector[i])/2;
     }
-el->children += 2; 
+el->children = kid1->children + kid2->children; 
 return (struct slList *)(el);
 }
 
@@ -435,12 +436,9 @@ for (el = leafList; el != NULL; el = nextEl)
    double distance = slBioExpVectorDistance((struct slList *)bio1, (struct slList *)bio2, NULL);
    soFar += distance;
    double normalized = soFar/total;
-//   uglyAbort("Inside the for loop %f  Mazui! %f %f \n ", normalized, soFar, total);
    bio2->color = saturatedRainbowAtPos(normalized * purplePos);
-//   uglyAbort("At the end of the first pass in the for loop");
    }
 
-//uglyAbort("Two for loops, this is after the second" ); 
 /* Set first color to correspond to 0, since not set in above loop */
 struct bioExpVector *bio = leafList->val;
 bio->color = saturatedRainbowAtPos(0);
