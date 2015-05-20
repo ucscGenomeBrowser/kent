@@ -216,9 +216,10 @@ var FieldSelect = React.createClass({
             return (
                 <tr key={table+'.'+field+'.row'}>
                   <td key={table+'.'+field+'.cb'}>
-                    <CheckboxLabel checked={checked} label={field}
+                    <CheckboxLabel checked={checked}
                                    path={path} update={this.props.update} />
                   </td>
+                  <td key={table+'.'+field+'.label'}>{field}</td>
                   <td key={table+'.'+field+'.desc'} style={{paddingLeft: '0.5em'}}>
                     {checkedAndDesc.desc}
                   </td>
@@ -238,7 +239,7 @@ var FieldSelect = React.createClass({
         return _.map(fieldInfo, function(info, table) {
             return [
                 <tr key={table}>
-                  <td colSpan={2}>
+                  <td colSpan={3}>
                     <span className='boldText'>{info.label}</span>
                     <SetClearButtons path={this.props.path.concat(table)}
                                      update={this.props.update} />

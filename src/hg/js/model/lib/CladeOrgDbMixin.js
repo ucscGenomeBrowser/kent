@@ -152,12 +152,27 @@ var CladeOrgDbMixin = function(myPath) {
         return dbNode ? dbNode.get('defaultPos') : null;
     }
 
+    function getChangeDbCgiVars(mutState) {
+        // Return an object containing cgi variables that need to be included in
+        // any server request made immediately after a db change.  If they were
+        // not included by a server request that took longer than other simultaneous
+        // requests, the changes would be lost and the cart would be inconsistent
+        // with mutState.
+        var dbNode = getDbNode(mutState);
+        return { clade: myGetIn(mutState, 'clade'),
+                 org: myGetIn(mutState, 'org'),
+                 db: myGetIn(mutState, 'db'),
+                 position: dbNode.get('defaultPos')
+                 };
+    }
+
     function initialize() {
         this.registerCartVarHandler(myCartVars, codMergeServerResponse);
         this.registerUiHandler(myPath, changeCladeOrgDb);
         // Install convenience methods for use outside this mixin:
         this.getDb = getDb;
         this.getDefaultPos = getDefaultPos;
+        this.getChangeDbCgiVars = getChangeDbCgiVars;
     }
 
     // Mixin object with initialize
