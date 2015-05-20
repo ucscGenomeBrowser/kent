@@ -645,17 +645,16 @@ var HgIntegratorModel = ImModel.extend({
         // are left in place.  So, clear out db-specific state until the new data arrive.
         mutState.remove('groupedTrackDb');
         mutState.remove('addDsInfo');
-        var db = this.getDb(mutState);
         // Update PositionSearchMixin's position:
         var newPos = this.getDefaultPos(mutState);
         this.setPosition(mutState, newPos);
         // Parallel requests for little stuff that we need ASAP and potentially huge trackDb:
-        this.cartDo({ cgiVar: { db: db, position: newPos },
+        this.cartDo({ cgiVar: this.getChangeDbCgiVars(mutState),
                       get: { 'var': 'position,hgi_querySpec' },
                       getGeneSuggestTrack: {},
                       getUserRegions: {}
                       });
-        this.cartDo({ cgiVar: { db: db },
+        this.cartDo({ cgiVar: this.getChangeDbCgiVars(mutState),
                       getGroupedTrackDb: { fields: this.tdbFields } });
     },
 
