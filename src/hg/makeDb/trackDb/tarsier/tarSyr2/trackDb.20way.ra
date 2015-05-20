@@ -25,7 +25,7 @@ group compGeno
         irows on
         summary multiz20waySummary
         frames multiz20wayFrames
-	snpTable mafSnp20way
+	#snpTable mafSnp20way
         group compGeno
         color 0, 10, 100
         altColor 0,90,10

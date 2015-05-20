@@ -560,6 +560,9 @@ time chainPreNet hg38.hg38Patch3.all.chain.gz \
 
 netClass -verbose=0 -noAr noClass.net hg38 hg38Patch3 hg38.hg38Patch3.net
 
+netFilter -minGap=10 hg38.hg38Patch3.net \
+  | hgLoadNet -verbose=0 hg38 netHg38Patch3 stdin
+
 # Make liftOver chains:
 netChainSubset -verbose=0 noClass.net hg38.hg38Patch3.all.chain.gz stdout \
     | chainStitchId stdin stdout | gzip -c > hg38.hg38Patch3.over.chain.gz
