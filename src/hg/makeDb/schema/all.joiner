@@ -5083,6 +5083,7 @@ tablesIgnored $kgDb
 tablesIgnored hg38
     altLocations
     altSeqLiftOverPslP2
+    altSeqLiftOverPslP3
     centromeres
     hg38Patch3Haplotypes
     hg38Patch3Patches
