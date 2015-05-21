@@ -23,12 +23,22 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+bool first = TRUE; 
+
 void rWriteJson(struct jsonWrite *jw, char *label, struct tagStanza *stanzaList)
 /* A recursive function which iterates through a tagStorm and converts each
  * stanza to a .json object. StanzaList is a linked list that contains all the
  * root/basic nodes in the tagStorm file. */ 
 {
-jsonWriteListStart(jw, label); 
+if (first)
+    // Don't print "children" before the first list
+    {
+    jsonWriteListStart(jw, NULL);
+    first=FALSE;
+    }
+else{
+    jsonWriteListStart(jw, label); 
+    }
 struct tagStanza *stanza;
 // iterate over all the objects in the tagStorm
 for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
@@ -51,9 +61,9 @@ void jsonWriteTest(char *input, char *output)
 {
 struct tagStorm *tags = tagStormFromFile(input); //Parse input file into a tagStorm struct
 struct jsonWrite *jw = jsonWriteNew();	// The start of the .json output
-jsonWriteObjectStart(jw, NULL);              // Anonymous outer object
+//jsonWriteObjectStart(jw, NULL);              // Anonymous outer object
 rWriteJson(jw, "children", tags->forest); //Call a recursive function starting with the first child
-jsonWriteObjectEnd(jw);			// Finish the .json object then print it. 
+//jsonWriteObjectEnd(jw);			// Finish the .json object then print it. 
 FILE *f = mustOpen(output, "w");	
 fprintf(f, "%s\n", jw->dy->string);
 carefulClose(&f);
