@@ -21,8 +21,9 @@ set testingDir = $scratchDir/ucscGenes
 set db = mm10
 set Db = Mm10
 set oldDb = mm9
-set xdb = hg19
-set Xdb = Hg19
+# changed this from hg19 *after* the model build
+set xdb = hg38
+set Xdb = Hg38
 set ydb = canFam3
 set zdb = rn4
 set spDb = sp150225
@@ -71,7 +72,7 @@ set vgTextDbs = (mm9 hg19 $tempDb)
 
 # Proteins in various species
 set tempFa = $dir/ucscGenes.faa
-set xdbFa = $genomes/$xdb/bed/ucsc.13/ucscGenes.faa
+set xdbFa = $genomes/$xdb/bed/ucsc.15.1/ucscGenes.faa
 set ratFa = $genomes/$ratDb/bed/blastpRgdGene2/rgdGene2Pep.faa
 set fishFa = $genomes/$fishDb/bed/blastp/ensembl.faa
 set flyFa = $genomes/$flyDb/bed/hgNearBlastp/100806/$flyDb.flyBasePep.faa
@@ -1070,15 +1071,15 @@ ln -s $genomes/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
 # delete non-syntenic genes from rat and human blastp tables
 cd $dir/hgNearBlastp
 synBlastp.csh $tempDb $xdb
-# old number of unique query values: 44975
-# old number of unique target values 22780
-# new number of unique query values: 38369
-# new number of unique target values 20517
+#old number of unique query values: 44988
+#old number of unique target values 22900
+#new number of unique query values: 40386
+#new number of unique target values 21759
 
 hgsql -e "select  count(*) from hgBlastTab\G" $db | tail -n +2
 # count(*): 42143
 hgsql -e "select  count(*) from hgBlastTab\G" $tempDb | tail -n +2
-# count(*): 38369
+# count(*): 40386
 
 synBlastp.csh $tempDb $ratDb knownGene rgdGene2
 # old number of unique query values: 39778
@@ -1502,16 +1503,16 @@ hgLoadBlastTab $yeastDb $blastTab run.$yeastDb.$tempDb/recipBest.tab
 
 # Do synteny on mouse/human/rat
 synBlastp.csh $xdb $db
-# old number of unique query values: 60316
-# old number of unique target values 22327
-# new number of unique query values: 52599
-# new number of unique target values 20635
+# old number of unique query values: 65772
+# old number of unique target values 22509
+# new number of unique query values: 61097
+# new number of unique target values 22043
 
 synBlastp.csh $ratDb $db rgdGene2 knownGene
 # old number of unique query values: 11266
-# old number of unique target values 11106
-# new number of unique query values: 8400
-# new number of unique target values 8530
+# old number of unique target values 11108
+# new number of unique query values: 8396
+# new number of unique target values 8529
 
 # Clean up
 rm -r run.*/out
