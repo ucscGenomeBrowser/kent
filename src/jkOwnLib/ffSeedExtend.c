@@ -831,28 +831,6 @@ memcpy(hSeq+iPos, hpStart+iPos+iSize, modPeelSize - iPos);
 hSeq[modPeelSize] = 0;
 }
 
-#ifdef UNTESTED
-struct ffAli *removeFf(struct ffAli *ff, struct ffAli *ffList)
-/* Remove ffAli and free it.  Return resulting list. */
-{
-struct ffAli *right = ff->right;
-struct ffAli *left;
-if (ff == ffList)
-    {
-    if (right != NULL)
-	right->left = NULL;
-    freeMem(ff);
-    return right;
-    }
-left = ff->left;
-left->right = right;
-if (right != NULL)
-    right->left = left;
-freeMem(ff);
-return ffList;
-}
-#endif /* UNTESTED */
-
 static struct ffAli *hardRefineSplice(struct ffAli *left, struct ffAli *right,
 	struct dnaSeq *qSeq, struct dnaSeq *tSeq, struct ffAli *ffList, 
 	int orientation)
