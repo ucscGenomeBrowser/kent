@@ -122,12 +122,12 @@ if (errCatchStart(errCatch))
         char *suggest = suggestSetting(setting, options);
         if (suggest != NULL)
             dyStringPrintf(ds, " (did you mean '%s' ?) ", suggest);
-        errAbort("%s\n", dyStringCannibalize(&ds));
+        errAbort("%s", dyStringCannibalize(&ds));
         }
 
     // check level
     if (options->strict && differentString(hubSetting->level, "core"))
-        errAbort( "Setting '%s' is level '%s'\n", setting, hubSetting->level);
+        errAbort( "Setting '%s' is level '%s'", setting, hubSetting->level);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -165,7 +165,7 @@ if (relativeUrl != NULL)
             {
             unsigned numFields = sqlUnsigned(nextWord(&typeString));
             if (numFields > bbi->fieldCount)
-                errAbort("fewer fields in bigBed (%d) than in type statement (%d) for track %s with bigDataUrl %s\n", bbi->fieldCount, numFields, trackHubSkipHubName(tdb->track), bigDataUrl);
+                errAbort("fewer fields in bigBed (%d) than in type statement (%d) for track %s with bigDataUrl %s", bbi->fieldCount, numFields, trackHubSkipHubName(tdb->track), bigDataUrl);
             }
         bbiFileClose(&bbi);
         }
@@ -190,9 +190,9 @@ if (relativeUrl != NULL)
         char *errString;
         int handle = halOpenLOD(bigDataUrl, &errString);
         if (handle < 0)
-            errAbort("HAL open error: %s\n", errString);
+            errAbort("HAL open error: %s", errString);
         if (halClose(handle, &errString) < 0)
-            errAbort("HAL close error: %s\n", errString);
+            errAbort("HAL close error: %s", errString);
         }
 #endif
     else
@@ -321,7 +321,7 @@ else
 verbose(2, "Validating to spec at %s\n", specUrl);
 struct htmlPage *page = htmlPageGet(specUrl);
 if (page == NULL)
-    errAbort("Can't open trackDb settings spec %s\n", specUrl);
+    errAbort("Can't open hub settings spec %s", specUrl);
 
 //TODO: apply page validator
 //htmlPageValidateOrAbort(page);  // would like to use this, but current page doesn't validate
@@ -398,8 +398,8 @@ struct hashEl *el, *list = hashElListHash(specHash);
 int settingsCt = slCount(list);
 verbose(5, "Found %d settings's\n", slCount(list));
 if (settingsCt == 0)
-    errAbort("Can't find trackDb settings support levels at %s."
-              " Use -v to indicate a different version number or url.\n", specUrl);
+    errAbort("Can't find hub setting info at %s."
+              " Use -version to indicate a different version number or url.", specUrl);
 
 slSort(&list, hashElCmp);
 struct trackHubSetting *specs = NULL;
@@ -420,7 +420,7 @@ return specs;
 static int hubSettingsCheckInit(struct trackHub *hub,  struct trackHubCheckOptions *options, struct dyString *errors)
 {
 int retVal = 0;
-if (hub->version != NULL)
+if (hub->version != NULL && options->version == NULL)
     options->version = hub->version;
 else if (options->version == NULL)
     options->version = trackHubVersionDefault();
