@@ -174,8 +174,8 @@ in the sections below.</I>
             <A name="url"></A>
             <A name="urlLabel"></A><IMG class='toggle detail'>
         <div class="format">
-            <code class="level-full">url &lt;url&gt;</code><BR>
-            <code class="level-full">urlLabel &lt;label&gt;</code></div>
+            <span class="url"><code class="level-full">url &lt;url&gt;</code></span><BR>
+            <span class="urlLabel"><code class="level-full">urlLabel &lt;label&gt;</code></span></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="urls"><A name="urls"></A><IMG class='toggle detail'>
         <div class="format">
@@ -235,7 +235,7 @@ are described below along with settings specific to their types.</P>
             <A name="scoreFilterLimits"></A><IMG class='toggle detail'>
         <div class="format">
             <code class="level-full">scoreFilter &lt;low&gt;[:&lt;high&gt;]</code><BR>
-            <code class="level-full">scoreFilterLimits &lt;low&gt;[:&lt;high&gt;]</code><BR>
+            <span class="scoreFilterLimits"><code class="level-full">scoreFilterLimits &lt;low&gt;[:&lt;high&gt;]</code></span><BR>
             </div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="maxItems"><A name="maxItems"></A><IMG class='toggle detail'>
@@ -257,8 +257,8 @@ are described below along with settings specific to their types.</P>
             <A name="scoreMin"></A><IMG class='toggle detail'>
         <div class="format">
             <code class="level-full">spectrum on</code><BR>
-            <code class="level-full">scoreMax &lt;integer&gt;</code><BR>
-            <code class="level-full">scoreMin &lt;integer&gt;</code></div>
+            <span class="scoreMax"><code class="level-full">scoreMax &lt;integer&gt;</code></span><BR>
+            <span class="scoreMin"><code class="level-full">scoreMin &lt;integer&gt;</code></span></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="thickDrawItem"><A name="thickDrawItem"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">thickDrawItem &lt;off/on&gt;</code></div>
@@ -286,7 +286,7 @@ are described below along with settings specific to their types.</P>
             <A name="itemImagePath"></A>
             <A name="itemBigImagePath"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">itemImagePath &lt;path&gt; &lt;suffix&gt;</code><BR>
-            <code class="level-full">itemBigImagePath &lt;path&gt; &lt;suffix&gt;</code></div>
+            <span class="itemBigImagePath"><code class="level-full">itemBigImagePath &lt;path&gt; &lt;suffix&gt;</code></span></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="linkIdInName"><A name="linkIdInName"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">linkIdInName on</code></div>
@@ -296,7 +296,7 @@ are described below along with settings specific to their types.</P>
             <A name="prevExonText"></A><IMG class='toggle detail'>
         <div class="format">
             <code class="level-full">nextExonText &lt;str&gt;</code><BR>
-            <code class="level-full">prevExonText &lt;str&gt;</code></div>
+            <span class="prevExonText"><code class="level-full">prevExonText &lt;str&gt;</code></span></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="showTopScorers">
         <A name="showTopScorers"></A><IMG class='toggle detail'>
@@ -331,7 +331,7 @@ are described below along with settings specific to their types.</P>
             <A name="viewLimitsMax"></A><IMG class='toggle detail'>
         <div class="format">
             <code class="level-core">viewLimits &lt;lower:upper&gt;</code><BR>
-            <code class="level-full">viewLimitsMax &lt;lower:upper&gt;</code></div>
+            <span class="viewLimitsMax"><code class="level-full">viewLimitsMax &lt;lower:upper&gt;</code></span></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="alwaysZero"><A name="alwaysZero"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">alwaysZero  &lt;off/on&gt;</code></div>
@@ -369,9 +369,9 @@ are described below along with settings specific to their types.</P>
             <A name="yLineOnOff"></A>
             <A name="gridDefault"></A><IMG class='toggle detail'>
         <div class="format">
-            <code class="level-full">yLineMark &lt;#&gt;</code><BR>
-            <code class="level-full">yLineOnOff &lt;off/on&gt;</code><BR>
-            <code class="level-full">gridDefault   on</code></div>
+            <span class="yLineMark"><code class="level-full">yLineMark &lt;#&gt;</code></span><BR>
+            <span class="yLineOnOff"><code class="level-full">yLineOnOff &lt;off/on&gt;</code></span><BR>
+            <span class="gridDefault"><code class="level-full">gridDefault   on</code></span></div>
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="bigWig_example"><IMG class='toggle detail'>
         <div class="format"><B>Examples of signal graphing tracks</B></div>
@@ -401,8 +401,8 @@ are described below along with settings specific to their types.</P>
             <A name="baseQualRange"></A><IMG class='toggle detail setD'>
         <div class="format">
             <code class="level-full">bamGrayMode &lt;aliQual/baseQual/unpaired&gt;</code><BR>
-            <code class="level-full">aliQualRange &lt;min:max&gt;</code><BR>
-            <code class="level-full">baseQualRange &lt;min:max&gt;</code></div>
+          <span class="aliQualRange"><code class="level-full">aliQualRange &lt;min:max&gt;</code></span><BR>
+          <span class="baseQualRange"><code class="level-full">baseQualRange &lt;min:max&gt;</code><</span></div>
     </TD></TR>
     <TR class="related" VALIGN=TOP><TD class="bamColorTag">
         <A name="bamColorTag"></A><IMG class='toggle detail setD'>
@@ -421,9 +421,9 @@ are described below along with settings specific to their types.</P>
             <A name="indelQueryInsert"></A>
             <A name="indelPolyA"></A><IMG class='toggle detail'>
         <div class="format">
-            <code class="level-full">indelDoubleInsert &lt;off/on&gt;</code><BR>
-            <code class="level-full">indelQueryInsert &lt;off/on&gt;</code><BR>
-            <code class="level-full">indelPolyA &lt;off/on&gt;</code></div>
+            <span class="indelDoubleInsert">code class="level-full">indelDoubleInsert &lt;off/on&gt;</code></span><BR>
+            <span class="indelQueryInsert"><code class="level-full">indelQueryInsert &lt;off/on&gt;</code></span><BR>
+            <span class="indelPolyA"><code class="level-full">indelPolyA &lt;off/on&gt;</code></span></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="minAliQual"><A name="minAliQual"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">minAliQual &lt;#&gt;</code></div>
@@ -696,6 +696,32 @@ hierarchical containers:
 </TABLE>
 </div></div>
 
+<!-- Deprecated settings -->
+
+<div class="contentBorder">
+<div class="borderGuard">
+<A name="Deprecated"></A>
+<H3>Miscellaneous Deprecated Settings</H3>
+<TABLE class="settingsTable" id="Miscellaneous_Deprecated_Settings">
+    <TR VALIGN=TOP><TH WIDTH=100>Setting</TH><TH WIDTH=100>For Types</TH><TH>Notes</TH></TR>
+    <TR VALIGN=TOP>
+        <TD class="metadata"><A name="metadata"></A><code class="level-deprecated">metadata</code>
+        </TD>
+        <TD>all</TD><TD></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="noInherit"><A name="noInherit"></A><code class="level-deprecated">noInherit</code></TD><TD>all</TD><TD></TD>
+    </TR>
+    <TR VALIGN=TOP>
+        <TD class="useScore"><A name="useScore"></A>
+            <code class="level-deprecated">useScore</code></TD>
+        <TD>bed, factorSource, bed5FloatScore, broadPeak</TD>
+        <TD>Replaced with <A onclick="return jumpTo(this);" HREF="#">spectrum</A>.</TD>
+    </TR>
+</TABLE>
+</div>
+</div>
+
 <!-- End of specs -->
 
 </div>
@@ -707,9 +733,11 @@ hierarchical containers:
 </div></div>
 
 <!-- Plain text -->
+<!-- QA (BL) suggested removing this (leaving code in for now)
 <pre id="plainToc">
 </pre>
 </div>
+-->
 
 
 <!-- - - - - - - - Documentation Library gets filled here with setting DIVs - - - - - - - -->
