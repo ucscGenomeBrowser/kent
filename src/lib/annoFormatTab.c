@@ -59,21 +59,6 @@ static void printHeaderColumns(struct annoFormatTab *self, struct annoStreamer *
 {
 FILE *f = self->f;
 char *sourceName = source->name;
-char fullName[PATH_LEN];
-if (source->rowType == arWig)
-    {
-    // Fudge in the row's chrom, start, end as output columns even though they're not in autoSql
-    if (isFirst)
-	{
-        makeFullColumnName(fullName, sizeof(fullName), sourceName, "chrom");
-        fprintf(f, "#%s", fullName);
-	isFirst = FALSE;
-	}
-    makeFullColumnName(fullName, sizeof(fullName), sourceName, "start");
-    fprintf(f, "\t%s", fullName);
-    makeFullColumnName(fullName, sizeof(fullName), sourceName, "end");
-    fprintf(f, "\t%s", fullName);
-    }
 struct asColumn *col;
 int i;
 for (col = source->asObj->columnList, i = 0;  col != NULL;  col = col->next, i++)
@@ -87,6 +72,7 @@ for (col = source->asObj->columnList, i = 0;  col != NULL;  col = col->next, i++
             }
         else
             fputc('\t', f);
+        char fullName[PATH_LEN];
         makeFullColumnName(fullName, sizeof(fullName), sourceName, col->name);
         fputs(fullName, f);
         }
@@ -124,20 +110,32 @@ for (i = 0;  i < len;  i++)
 return sum / (double)len;
 }
 
-static char **wordsFromWigRowAvg(struct annoRow *row)
-/* Return an array of strings with a single string containing the average of values in row. */
+static char **bed4WordsFromAnnoRow(struct annoRow *row, char *fourth)
+/* Return an array of 4 words with row's chrom, chromStart, and chromEnd, and cloned fourth. */
 {
-double avg = wigRowAvg(row);
 char **words;
-AllocArray(words, 1);
-char avgStr[32];
-safef(avgStr, sizeof(avgStr), "%lf", avg);
-words[0] = cloneString(avgStr);
+AllocArray(words, 4);
+words[0] = cloneString(row->chrom);
+char buf[PATH_LEN];
+safef(buf, sizeof(buf), "%u", row->start);
+words[1] = cloneString(buf);
+safef(buf, sizeof(buf), "%u", row->end);
+words[2] = cloneString(buf);
+words[3] = cloneString(fourth);
 return words;
 }
 
+static char **wordsFromWigRowAvg(struct annoRow *row)
+/* Return chrom, chromStart, chromEnd and a string containing the average of values in row. */
+{
+double avg = wigRowAvg(row);
+char avgStr[32];
+safef(avgStr, sizeof(avgStr), "%lf", avg);
+return bed4WordsFromAnnoRow(row, avgStr);
+}
+
 static char **wordsFromWigRowVals(struct annoRow *row)
-/* Return an array of strings with a single string containing comma-sep per-base wiggle values. */
+/* Return chrom, chromStart, chromEnd and a string containing comma-sep per-base wiggle values. */
 {
 float *vector = row->data;
 int len = row->end - row->start;
@@ -145,9 +143,8 @@ struct dyString *dy = dyStringNew(10*len);
 int i;
 for (i = 0;  i < len;  i++)
     dyStringPrintf(dy, "%g,", vector[i]);
-char **words;
-AllocArray(words, 1);
-words[0] = dyStringCannibalize(&dy);
+char **words = bed4WordsFromAnnoRow(row, dy->string);
+dyStringFree(&dy);
 return words;
 }
 
@@ -187,20 +184,6 @@ FILE *f = self->f;
 char *sourceName = streamer->name;
 boolean freeWhenDone = FALSE;
 char **words = wordsFromRow(row, streamer, &freeWhenDone);
-if (streamer->rowType == arWig)
-    {
-    // Fudge in the row's chrom, start, end as output columns even though they're not in autoSql
-    if (isFirst)
-	{
-	if (row != NULL)
-	    fputs(row->chrom, f);
-	isFirst = FALSE;
-	}
-    if (row != NULL)
-	fprintf(f, "\t%u\t%u", row->start, row->end);
-    else
-	fputs("\t\t", f);
-    }
 struct asColumn *col;
 int i;
 for (col = streamer->asObj->columnList, i = 0;  col != NULL;  col = col->next, i++)
@@ -215,9 +198,11 @@ for (col = streamer->asObj->columnList, i = 0;  col != NULL;  col = col->next, i
             fputs((words[i] ? words[i] : ""), f);
         }
     }
+int wordCount = i;
 if (freeWhenDone)
     {
-    freeMem(words[0]);
+    for (i = 0;  i < wordCount;  i++)
+        freeMem(words[i]);
     freeMem(words);
     }
 }

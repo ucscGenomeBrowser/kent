@@ -10,7 +10,10 @@ char *annoRowBigWigAsText =
 "table annoRowBigWig\n"
 "\"autoSql description of a single annoRowBigWig value, for filtering\"\n"
 "    (\n"
-"    float value;  \"data value for this range\"\n"
+"    string chrom;     \"Reference sequence chromosome or scaffold\"\n"
+"    uint chromStart;  \"Start position in chromosome\"\n"
+"    uint chromEnd;    \"End position in chromosome\"\n"
+"    float value;      \"data value for this range\"\n"
 "    )\n"
     ;
 
