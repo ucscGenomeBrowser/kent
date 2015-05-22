@@ -5858,6 +5858,15 @@ else
     return lf->name;
 }
 
+char *ncbiRefGeneMapName(struct track *tg, void *item)
+/* Return un-abbreviated gene name. */
+{
+struct linkedFeatures *lf = item;
+char buffer[1024];
+safecpy(buffer, sizeof buffer, lf->name);
+return cloneString(buffer);
+}
+
 char *refGeneMapName(struct track *tg, void *item)
 /* Return un-abbreviated gene name. */
 {
@@ -6238,7 +6247,7 @@ void ncbiGeneMethods(struct track *tg)
 {
 tg->loadItems = loadNcbiGene;
 tg->itemName = refGeneName;
-tg->mapItemName = refGeneMapName;
+tg->mapItemName = ncbiRefGeneMapName;
 tg->itemColor = refGeneColor;
 }
 
