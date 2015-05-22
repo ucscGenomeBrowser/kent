@@ -108,7 +108,9 @@ var tdbDoc = {
             }
             var level = $(code).attr('class');
             if (level.length === 0) {
-                level = 'level-new';
+                level = 'level-';
+                // TODO: flag thse as errors ?
+                //level = 'level-new';
             }
             var start = $(blurb).find('p').first();
             if ($(start).attr('class') !== 'level') {
@@ -241,7 +243,15 @@ var tdbDoc = {
             if (tdbDoc.isHubDoc()) {
                 //include level in the table
                 if (level === null) {
-                    level = 'level-new';
+                    // settings w/o a 'blurb' can still have a level (e.g. deprecated settings)
+                    level = $(td[0]).find('code').attr('class');
+                    if (typeof level === 'undefined') {
+                        var span = $('span.' + aClass);
+                            level = $(span[0]).find('code').attr('class');
+                            if (typeof level === 'undefined') {
+                                level = 'level-';
+                        }
+                    }
                 }
                 row += "<td class=" + level + ">" +level.replace('level-','') + "</span></td>";
             }
