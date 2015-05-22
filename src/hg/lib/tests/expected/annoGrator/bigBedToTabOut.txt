@@ -1,4 +1,4 @@
-#chrom	chromStart	chromEnd
+#http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb.chrom	http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb.chromStart	http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb.chromEnd
 chr21	34716521	34717046
 chr21	34716557	34717751
 chr21	34716682	34716924
