@@ -65,34 +65,6 @@ struct trackHubGenome
     unsigned orderKey;   /* the orderKey for changing the order from the order in the file */
     };
 
-struct trackHubCheckOptions
-/* How to check track hub */
-    {
-    boolean checkFiles;         /* check remote files exist and are correct type */
-    boolean checkSettings;      /* check trackDb settings to spec */
-    char *version;              /* hub spec version to check */
-    boolean strict;             /* check hub is valid to 'core' level for version */
-    char *extraFile;            /* name of extra file/url with additional settings to accept */
-    /* intermediate data */
-    struct hash *settings;      /* supported settings for this version */
-    struct hash *extra;         /* additional trackDb settings to accept */
-    struct slName *suggest;     /* list of supported settings for suggesting */
-    };
-
-struct trackHubSetting
-/* Setting name and support level, from trackDbHub.html (the spec) */
-    {
-    struct trackHubSetting *next;
-    char *name;                 /* setting name */
-    char *level;                /* support level (core, full, new, deprecated) */
-    };
-
-struct trackHubSetting *trackHubSettingsForVersion(char *version);
-/* Return list of settings with support level */
-
-char *trackHubVersionDefault();
-/* Return current hub version */
-
 void trackHubClose(struct trackHub **pHub);
 /* Close up and free resources from hub. */
 
@@ -132,12 +104,6 @@ void trackHubGenomeFree(struct trackHubGenome **pGenome);
 
 void trackHubGenomeFreeList(struct trackHub *hub);
 /* Free a list of dynamically allocated trackHubGenome's. */
-
-int trackHubCheck(char *hubUrl, struct trackHubCheckOptions *options, struct dyString *errors);
-/* trackHubCheck - Check a track data hub for integrity. Put errors in dyString.
- *      if checkTracks is TRUE, individual tracks are checked
- *      if searchFp is non-null, then put search terms in there
- *      return 0 if hub has no errors, 1 otherwise */
 
 void trackHubPolishTrackNames(struct trackHub *hub, struct trackDb *tdbList);
 /* Remove all the special characters from trackHub track names. */
