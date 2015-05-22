@@ -329,15 +329,29 @@ if (tdb->settingsHash)
     }
 }
 
-static void rWriteTdb(struct jsonWrite *jw, struct trackDb *tdb, struct hash *fieldHash,
-                      int depth, int maxDepth)
-/* Recursively write JSON for tdb and its subtracks if any.  If fieldHash is non-NULL,
- * include only the field names indexed in fieldHash. */
+static struct jsonWrite *rTdbToJw(struct trackDb *tdb, struct hash *fieldHash,
+                                  struct hash *excludeTypesHash, int depth, int maxDepth)
+/* Recursively build and return a new jsonWrite object with JSON for tdb and its children,
+ * or NULL if tdb or all children have been filtered out by excludeTypesHash.
+ * If excludeTypesHash is non-NULL, omit any tracks/views/subtracks with type in excludeTypesHash.
+ * If fieldHash is non-NULL, include only the field names indexed in fieldHash. */
 {
 if (maxDepth >= 0 && depth > maxDepth)
-    return;
-jsonWriteObjectStart(jw, NULL);
-writeTdbSimple(jw, tdb, fieldHash);
+    return NULL;
+boolean doSubtracks = (tdb->subtracks && fieldOk("subtracks", fieldHash));
+// If excludeTypesHash is given and tdb is a leaf track/subtrack, look up the first word
+// of tdb->type in excludeTypesHash; if found, return NULL.
+if (excludeTypesHash && !doSubtracks)
+    {
+    char typeCopy[PATH_LEN];
+    safecpy(typeCopy, sizeof(typeCopy), tdb->type);
+    if (hashLookup(excludeTypesHash, firstWordInLine(typeCopy)))
+        return NULL;
+    }
+boolean gotSomething = !doSubtracks;
+struct jsonWrite *jwNew = jsonWriteNew();
+jsonWriteObjectStart(jwNew, NULL);
+writeTdbSimple(jwNew, tdb, fieldHash);
 if (tdb->parent && fieldOk("parent", fieldHash))
     {
     // We can't link to an object in JSON and better not recurse here or else infinite loop.
@@ -345,23 +359,35 @@ if (tdb->parent && fieldOk("parent", fieldHash))
         {
         // Supertracks have been omitted from fullTrackList, so add the supertrack object's
         // non-parent/child info here.
-        jsonWriteObjectStart(jw, "parent");
-        writeTdbSimple(jw, tdb->parent, fieldHash);
-        jsonWriteObjectEnd(jw);
+        jsonWriteObjectStart(jwNew, "parent");
+        writeTdbSimple(jwNew, tdb->parent, fieldHash);
+        jsonWriteObjectEnd(jwNew);
         }
     else
         // Just the name so we don't have infinite loops.
-        jsonWriteString(jw, "parent", tdb->parent->track);
+        jsonWriteString(jwNew, "parent", tdb->parent->track);
     }
-if (tdb->subtracks && fieldOk("subtracks", fieldHash))
+if (doSubtracks)
     {
-    jsonWriteListStart(jw, "subtracks");
+    jsonWriteListStart(jwNew, "subtracks");
     struct trackDb *subTdb;
     for (subTdb = tdb->subtracks;  subTdb != NULL;  subTdb = subTdb->next)
-        rWriteTdb(jw, subTdb, fieldHash, depth+1, maxDepth);
-    jsonWriteListEnd(jw);
+        {
+        struct jsonWrite *jwSub = rTdbToJw(subTdb, fieldHash, excludeTypesHash, depth+1, maxDepth);
+        if (jwSub)
+            {
+            gotSomething = TRUE;
+            jsonWriteAppend(jwNew, NULL, jwSub);
+            jsonWriteFree(&jwSub);
+            }
+        }
+    jsonWriteListEnd(jwNew);
     }
-jsonWriteObjectEnd(jw);
+jsonWriteObjectEnd(jwNew);
+if (! gotSomething)
+    // All children were excluded; clean up and null out jwNew.
+    jsonWriteFree(&jwNew);
+return jwNew;
 }
 
 static struct hash *hashFromCommaString(char *commaString)
@@ -420,21 +446,42 @@ slSort(&trackRefList, trackDbRefCmpShortLabel);
 return trackRefList;
 }
 
-static void writeGroupedTrack(struct jsonWrite *jw, char *name, char *label, struct hash *fieldHash,
-                              int maxDepth, struct slRef *tdbRefList)
+static boolean writeGroupedTrack(struct jsonWrite *jw, char *name, char *label,
+                                 struct hash *fieldHash, struct hash *excludeTypesHash,
+                                 int maxDepth, struct slRef *tdbRefList)
+/* If tdbRefList is empty after excluding tracks/views/subtracks whose types are
+ * in excludeTypesHash, then return FALSE and write nothing.  Otherwise write a group
+ * and its tracks/views/subtracks and return TRUE. */
 {
-jsonWriteObjectStart(jw, NULL);
-jsonWriteString(jw, "name", name);
-jsonWriteString(jw, "label", label);
-jsonWriteListStart(jw, "tracks");
+// Make a new jsonWrite object in case this group turns out to have no children after filtering.
+struct jsonWrite *jwNew = jsonWriteNew();
+jsonWriteObjectStart(jwNew, NULL);
+jsonWriteString(jwNew, "name", name);
+jsonWriteString(jwNew, "label", label);
+jsonWriteListStart(jwNew, "tracks");
+boolean gotSomething = FALSE;
 struct slRef *tdbRef;
 for (tdbRef = tdbRefList;  tdbRef != NULL;  tdbRef = tdbRef->next)
     {
     struct trackDb *tdb = tdbRef->val;
-    rWriteTdb(jw, tdb, fieldHash, 1, maxDepth);
+    // First see if there are any tracks to show for this group:
+    struct jsonWrite *jwTrack = rTdbToJw(tdb, fieldHash, excludeTypesHash, 1, maxDepth);
+    if (jwTrack)
+        {
+        gotSomething = TRUE;
+        jsonWriteAppend(jwNew, NULL, jwTrack);
+        jsonWriteFree(&jwTrack);
+        }
     }
-jsonWriteListEnd(jw);
-jsonWriteObjectEnd(jw);
+if (gotSomething)
+    {
+    // Group has at least one track, so append it to jw.
+    jsonWriteListEnd(jwNew);
+    jsonWriteObjectEnd(jwNew);
+    jsonWriteAppend(jw, NULL, jwNew);
+    }
+jsonWriteFree(&jwNew);
+return gotSomething;
 }
 
 void cartJsonGetGroupedTrackDb(struct cartJson *cj, struct hash *paramHash)
@@ -450,6 +497,8 @@ struct hash *groupedTrackRefList = hashTracksByGroup(fullTrackList);
 // If the optional param 'fields' is given, hash the field names that should be returned.
 char *fields = cartJsonOptionalParam(paramHash, "fields");
 struct hash *fieldHash = hashFromCommaString(fields);
+char *excludeTypes = cartJsonOptionalParam(paramHash, "excludeTypes");
+struct hash *excludeTypesHash = hashFromCommaString(excludeTypes);
 // Also check for optional parameter 'maxDepth':
 int maxDepth = -1;
 char *maxDepthStr = cartJsonOptionalParam(paramHash, "maxDepth");
@@ -464,17 +513,18 @@ struct grp *grp;
 for (grp = fullGroupList;  grp != NULL;  grp = grp->next)
     {
     struct slRef *tdbRefList = hashFindVal(groupedTrackRefList, grp->name);
-    if (tdbRefList)
+    if (writeGroupedTrack(jw, grp->name, grp->label, fieldHash, excludeTypesHash,
+                          maxDepth, tdbRefList))
         {
         nonEmptyGroupCount++;
-        writeGroupedTrack(jw, grp->name, grp->label, fieldHash, maxDepth, tdbRefList);
         }
     }
 if (nonEmptyGroupCount == 0)
     {
     // Catch-all for assembly hubs that don't declare groups for their tracks: add All Tracks
     struct slRef *allTracks = sortedAllTracks(fullTrackList);
-    writeGroupedTrack(jw, "allTracks", "All Tracks", fieldHash, maxDepth, allTracks);
+    (void)writeGroupedTrack(jw, "allTracks", "All Tracks", fieldHash, excludeTypesHash,
+                            maxDepth, allTracks);
     }
 jsonWriteListEnd(jw);
 jsonWriteObjectEnd(jw);

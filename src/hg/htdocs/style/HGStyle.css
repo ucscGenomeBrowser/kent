@@ -19,6 +19,10 @@ body.training {
 
 a:link {color: #121E9A;}
 
+td.hotkey {
+     font-family: courier;
+   }
+
 pre.code {
     font-family: Monaco,'andale mono','lucida console',monospace;
     font-size: 0.8em;

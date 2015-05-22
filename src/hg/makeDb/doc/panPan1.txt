@@ -591,16 +591,17 @@ panPan1.genbank.est.native.load = no
     ssh hgwdev                  # used to do this on "genbank" machine
     screen -S panPan1           # long running job managed in screen
     cd /cluster/data/genbank
-    time nice -n +19 ./bin/gbAlignStep -initial panPan1 &
-    #   logFile: var/build/logs/2013.03.15-10:56:31.panPan1.initalign.log
-    #   real    835m9.466s
+    time ./bin/gbAlignStep -initial panPan1 &
+    # rerunning with corrected panPan1.refseq.mrna.native.load = yes
+    # logFile: var/build/logs/2015.05.20-11:13:42.panPan1.initalign.log
+    # about 90 minutes
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
-    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad panPan1 &
-    #   logFile: var/dbload/hgwdev/logs/2013.03.18-13:10:19.dbload.log
-    #   real    74m22.846s
+    time ./bin/gbDbLoadStep -drop -initialLoad panPan1 &
+    #   var/dbload/hgwdev/logs/2015.05.20-16:06:23.panPan1.dbload.log
+    #   real    13m28.090s
 
     # enable daily alignment and update of hgwdev (DONE - 2012-02-09 -
     # Hiram)

@@ -50,15 +50,6 @@ html chainNet
         type chain micMur1
         otherDb micMur1
 
-        track chainTarSyr1
-        subTrack euarchontoglireChainNetViewchain off
-        subGroups view=chain species=cTarsier clade=dHaplo
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain tarSyr1
-        otherDb tarSyr1
-	release beta,public
-
         track chainTarSyr2
         subTrack euarchontoglireChainNetViewchain off
         subGroups view=chain species=cTarsier clade=dHaplo
@@ -66,7 +57,6 @@ html chainNet
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain tarSyr2
         otherDb tarSyr2
-	release alpha
 
         track chainCalJac3
         subTrack euarchontoglireChainNetViewchain off
@@ -165,15 +155,6 @@ include hg38ChainNet.ra
         type netAlign micMur1 chainMicMur1
         otherDb micMur1
 
-        track netTarSyr1
-        subTrack euarchontoglireChainNetViewnet on 
-        subGroups view=net species=cTarsier clade=dHaplo
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign tarSyr1 chainTarSyr1
-        otherDb tarSyr1
-	release beta,public
-
         track netTarSyr2
         subTrack euarchontoglireChainNetViewnet on
         subGroups view=net species=cTarsier clade=dHaplo
@@ -181,7 +162,6 @@ include hg38ChainNet.ra
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign tarSyr2 chainTarSyr2
         otherDb tarSyr2
-	release alpha
 
         track netCalJac3
         subTrack euarchontoglireChainNetViewnet off
