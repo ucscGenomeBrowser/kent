@@ -165,7 +165,7 @@ else if (source->rowType == arWig)
     {
     freeWhenDone = TRUE;
     //#*** config options: avg? more stats? list of values?
-    boolean doAvg = FALSE;
+    boolean doAvg = TRUE;
     if (doAvg)
 	words = wordsFromWigRowAvg(row);
     else
