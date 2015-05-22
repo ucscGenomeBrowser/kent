@@ -2412,6 +2412,18 @@ do
 	| faToNib -softMask stdin ${C}.nib
     echo "${C} done"
 done
+
+    # verify nothing lost
+    cat ../../chrom.sizes \
+     | awk '{printf "nibFrag -masked %s.nib 0 %d + stdout\n", $1, $2}' \
+        | sh | faSize stdin
+# 3209286105 bases (159970322 N's 3049315783 real 1460684798 upper
+#  1588630985 lower) in 455 sequences in 1 files
+# Total size: mean 7053376.1 sd 31548372.6
+#  min 970 (chrUn_KI270394v1.nib:0-970)
+#  max 248956422 (chr1.nib:0-248956422) median 161218
+# %49.50 masked total, %52.10 masked real
+
     mkdir /hive/data/staging/data/hg38/nib
     rsync -a --progress ./ /hive/data/staging/data/hg38/nib
 
@@ -6216,5 +6228,14 @@ rm tmpChrom
     checkTableCoords  hg38 -table=ucscToRefSeq
 
 #########################################################################
+#CREATE MICROSAT TRACK (DONE - 2015-05-22 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/hg38/bed/microsat
+    cd /cluster/data/hg38/bed/microsat
 
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
 
+    hgLoadBed hg38 microsat microsat.bed
+
+#############################################################################

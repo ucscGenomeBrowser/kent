@@ -365,3 +365,6 @@ include knownGene.ra.alpha alpha
 include knownGene.ra.beta beta,public
 
 include trackDb.100way.ra
+
+track microsat override
+group rep
