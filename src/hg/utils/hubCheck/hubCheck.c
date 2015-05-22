@@ -125,7 +125,7 @@ struct dyString *errors = newDyString(1024);
 
 if (optionExists("settings"))
     {
-    struct trackHubSetting *settings = trackHubSettingsForVersion(version);
+    struct trackHubSetting *settings = trackHubSettingsForVersion(checkOptions->version);
     struct trackHubSetting *setting = NULL;
     for (setting = settings; setting != NULL; setting = setting->next)
         {
@@ -139,7 +139,8 @@ if (trackHubCheck(argv[1], checkOptions, errors))
     // uniquify and count errors
     struct slName *errs = slNameListFromString(errors->string, '\n');
     slUniqify(&errs, slNameCmp, slNameFree);
-    printf("%d errors:\n", slCount(errs));
+    int errCount = slCount(errs);
+    printf("Found %d problem%s:\n", errCount, errCount == 1 ? "" : "s");
     printf("%s\n", slNameListToString(errs, '\n'));
     return 1;
     }

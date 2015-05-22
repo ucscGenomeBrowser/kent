@@ -122,12 +122,12 @@ if (errCatchStart(errCatch))
         char *suggest = suggestSetting(setting, options);
         if (suggest != NULL)
             dyStringPrintf(ds, " (did you mean '%s' ?) ", suggest);
-        errAbort("%s\n", dyStringCannibalize(&ds));
+        errAbort("%s", dyStringCannibalize(&ds));
         }
 
     // check level
     if (options->strict && differentString(hubSetting->level, "core"))
-        errAbort( "Setting '%s' is level '%s'\n", setting, hubSetting->level);
+        errAbort( "Setting '%s' is level '%s'", setting, hubSetting->level);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -165,7 +165,7 @@ if (relativeUrl != NULL)
             {
             unsigned numFields = sqlUnsigned(nextWord(&typeString));
             if (numFields > bbi->fieldCount)
-                errAbort("fewer fields in bigBed (%d) than in type statement (%d) for track %s with bigDataUrl %s\n", bbi->fieldCount, numFields, trackHubSkipHubName(tdb->track), bigDataUrl);
+                errAbort("fewer fields in bigBed (%d) than in type statement (%d) for track %s with bigDataUrl %s", bbi->fieldCount, numFields, trackHubSkipHubName(tdb->track), bigDataUrl);
             }
         bbiFileClose(&bbi);
         }
@@ -190,9 +190,9 @@ if (relativeUrl != NULL)
         char *errString;
         int handle = halOpenLOD(bigDataUrl, &errString);
         if (handle < 0)
-            errAbort("HAL open error: %s\n", errString);
+            errAbort("HAL open error: %s", errString);
         if (halClose(handle, &errString) < 0)
-            errAbort("HAL close error: %s\n", errString);
+            errAbort("HAL close error: %s", errString);
         }
 #endif
     else
@@ -321,7 +321,7 @@ else
 verbose(2, "Validating to spec at %s\n", specUrl);
 struct htmlPage *page = htmlPageGet(specUrl);
 if (page == NULL)
-    errAbort("Can't open trackDb settings spec %s\n", specUrl);
+    errAbort("Can't open hub settings spec %s", specUrl);
 
 //TODO: apply page validator
 //htmlPageValidateOrAbort(page);  // would like to use this, but current page doesn't validate
@@ -329,77 +329,59 @@ if (page == NULL)
 // is run on any page change.
 
 /* TODO: validate this is a trackDbHub spec */
-/* (scan tags for tag->name="span" tag->attribute="id", attr->"value=trackDbHub_version",
- * might want to limit to first N tags) */
+/* (e.g. scan tags for the hub version, perhaps limiting to first N tags) */
 
 /* Retrieve specs from file url. 
- * Settings are the first text word within any <code> element nested in * a <div> having 
- *  attribute class="format".  The support level ('level-*') is the class value of the * <code> tag.
- * E.g.  <div class="format"><code class="level-core">boxedConfig on</code></div> produces:
+ * Settings are the first text word within any <code> tag having class="level-" attribute.
+ * The level represents the level of support for the setting (e.g. core, full, deprecated)
+ * The support level ('level-*') is the class value of the * <code> tag.
+ * E.g.  <code class="level-core">boxedConfig on</code> produces:
  *      setting=boxedConfig, class=core */
 
-struct htmlTag *tag, *codeTag;
-struct htmlAttribute *attr, *codeAttr;
+struct htmlTag *tag;
+struct htmlAttribute *attr;
 struct trackHubSetting *spec, *savedSpec;
 struct hash *specHash = hashNew(0);
 verbose(5, "Found %d tags\n", slCount(page->tags));
-int divCount = 0;
 char buf[256];
 for (tag = page->tags; tag != NULL; tag = tag->next)
     {
     verbose(6, "    TAG: %s\n", tag->name);
-    if (differentWord(tag->name, "DIV"))
+    if (differentWord(tag->name, "code"))
         continue;
-    divCount++;
     attr = tag->attributes;
-    if (differentWord(attr->name, "class") || differentWord(attr->val, "format"))
-        continue;
-    verbose(7, "Found format: tag %s\n", tag->name);
-    // Look for one or more <code> tags in this format div
-    for (codeTag = tag->next; 
-            codeTag != NULL && differentWord(codeTag->name,"/DIV"); codeTag = codeTag->next)
-        {
-        if (differentWord(codeTag->name, "CODE"))
-            continue;
-        verbose(7, "Found <code>\n");
-        codeAttr = codeTag->attributes;
-        //verbose(8, "attr: name=%s, val=%s\n", codeAttr->name, codeAttr->val);
-        if (codeAttr == NULL || differentString(codeAttr->name, "class") ||
-                !startsWith("level-", codeAttr->val))
+    if (attr == NULL || differentString(attr->name, "class") || !startsWith("level-", attr->val))
                         continue;
-        AllocVar(spec);
-        int len = min(codeTag->next->start - codeTag->end, sizeof buf - 1);
-        memcpy(buf, codeTag->end, len);
-        buf[len] = 0;
-        verbose(7, "Found spec: %s\n", buf);
-        spec->name = cloneString(firstWordInLine(buf));
-        spec->level = cloneString(chopPrefixAt(codeAttr->val, '-'));
-        verbose(6, "spec: name=%s, level=%s\n", spec->name, spec->level);
-
-        savedSpec = (struct trackHubSetting *)hashFindVal(specHash, spec->name);
-        if (savedSpec != NULL)
-            verbose(6, "found spec %s level %s in hash\n", savedSpec->name, savedSpec->level);
-        if (savedSpec == NULL)
-            {
-            hashAdd(specHash, spec->name, spec);
-            verbose(6, "added spec %s at level %s\n", spec->name, spec->level);
-            }
-        else if (trackHubSettingLevelCmp(spec, savedSpec) > 0)
-            {
-            hashReplace(specHash, spec->name, spec);
-            verbose(6, "replaced spec %s at level %s, was %s\n", 
-                spec->name, spec->level, savedSpec->level);
-            }
+    AllocVar(spec);
+    int len = min(tag->next->start - tag->end, sizeof buf - 1);
+    memcpy(buf, tag->end, len);
+    buf[len] = 0;
+    verbose(7, "Found spec: %s\n", buf);
+    spec->name = cloneString(firstWordInLine(buf));
+    spec->level = cloneString(chopPrefixAt(attr->val, '-'));
+    verbose(6, "spec: name=%s, level=%s\n", spec->name, spec->level);
+    savedSpec = (struct trackHubSetting *)hashFindVal(specHash, spec->name);
+    if (savedSpec != NULL)
+        verbose(6, "found spec %s level %s in hash\n", savedSpec->name, savedSpec->level);
+    if (savedSpec == NULL)
+        {
+        hashAdd(specHash, spec->name, spec);
+        verbose(6, "added spec %s at level %s\n", spec->name, spec->level);
+        }
+    else if (trackHubSettingLevelCmp(spec, savedSpec) > 0)
+        {
+        hashReplace(specHash, spec->name, spec);
+        verbose(6, "replaced spec %s at level %s, was %s\n", 
+            spec->name, spec->level, savedSpec->level);
         }
     }
-verbose(5, "Found %d <div>'s\n", divCount);
 struct hashEl *el, *list = hashElListHash(specHash);
 
 int settingsCt = slCount(list);
 verbose(5, "Found %d settings's\n", slCount(list));
 if (settingsCt == 0)
-    errAbort("Can't find trackDb settings support levels at %s."
-              " Use -v to indicate a different version number or url.\n", specUrl);
+    errAbort("Can't find hub setting info at %s."
+              " Use -version to indicate a different version number or url.", specUrl);
 
 slSort(&list, hashElCmp);
 struct trackHubSetting *specs = NULL;
@@ -420,7 +402,7 @@ return specs;
 static int hubSettingsCheckInit(struct trackHub *hub,  struct trackHubCheckOptions *options, struct dyString *errors)
 {
 int retVal = 0;
-if (hub->version != NULL)
+if (hub->version != NULL && options->version == NULL)
     options->version = hub->version;
 else if (options->version == NULL)
     options->version = trackHubVersionDefault();
