@@ -237,7 +237,7 @@ while ((de = readdir(d)) != NULL)
 		if (ignoreStatFailures)
 		    statErrno = errno;
 		else
-    		    errAbort("stat failed in listDirX");
+    		    errnoAbort("stat failed in listDirX: %s", pathName);
 		}
 	    if (S_ISDIR(st.st_mode))
 		isDir = TRUE;
