@@ -9,6 +9,7 @@ var HgIntegratorModel = ImModel.extend({
 
     maxDataSources: 5,
     tdbFields: 'track,table,shortLabel,parent,subtracks',
+    excludeTypes: 'bam,wigMaf',
 
     handleCartVar: function(mutState, cartVar, newValue) {
         // Some cart variables require special action (not simply being merged into top-level state)
@@ -608,6 +609,10 @@ var HgIntegratorModel = ImModel.extend({
     doGetOutput: function(mutState) {
         // User clicked 'Get output' button; make a form and submit it.
         var querySpec = mutState.get('hgi_querySpec').toJS();
+        // Remove UI-only fields from dataSources:
+        querySpec.dataSources = _.map(querySpec.dataSources, function(ds) {
+            return _.omit(ds, ['schemaUrl', 'label']);
+        });
         var doFile = mutState.getIn(['hgi_querySpec', 'outFileOptions', 'doFile']);
         if (querySpec.dataSources.length < 1) {
             alert('Please add at least one data source.');
@@ -645,18 +650,18 @@ var HgIntegratorModel = ImModel.extend({
         // are left in place.  So, clear out db-specific state until the new data arrive.
         mutState.remove('groupedTrackDb');
         mutState.remove('addDsInfo');
-        var db = this.getDb(mutState);
         // Update PositionSearchMixin's position:
         var newPos = this.getDefaultPos(mutState);
         this.setPosition(mutState, newPos);
         // Parallel requests for little stuff that we need ASAP and potentially huge trackDb:
-        this.cartDo({ cgiVar: { db: db, position: newPos },
+        this.cartDo({ cgiVar: this.getChangeDbCgiVars(mutState),
                       get: { 'var': 'position,hgi_querySpec' },
                       getGeneSuggestTrack: {},
                       getUserRegions: {}
                       });
-        this.cartDo({ cgiVar: { db: db },
-                      getGroupedTrackDb: { fields: this.tdbFields } });
+        this.cartDo({ cgiVar: this.getChangeDbCgiVars(mutState),
+                      getGroupedTrackDb: { fields: this.tdbFields,
+                                           excludeTypes: this.excludeTypes } });
     },
 
     initialize: function() {
@@ -697,7 +702,8 @@ var HgIntegratorModel = ImModel.extend({
                         });
             // The groupedTrackDb structure is so large for hg19 and other well-annotated
             // genomes that the volume of compressed JSON takes a long time on the wire.
-            this.cartDo({ getGroupedTrackDb: { fields: this.tdbFields }
+            this.cartDo({ getGroupedTrackDb: { fields: this.tdbFields,
+                                               excludeTypes: this.excludeTypes }
                         });
             // This one shouldn't take long.
             this.cartDo({ getStaticHtml: {

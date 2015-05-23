@@ -244,6 +244,11 @@ if (bigDataUrl != NULL)
     grator = hAnnoGratorFromBigFileUrl(bigDataUrl, assembly, maxOutRows, overlapRule);
 else if (startsWithWord("wig", tdb->type))
     grator = annoGrateWigDbNew(assembly->name, selTable, assembly, maxOutRows);
+else if (startsWithWord("bigWig", tdb->type))
+    {
+    char *fileOrUrl = getBigDataFileName(assembly->name, tdb, tdb->table, chrom);
+    grator = annoGrateBigWigNew(fileOrUrl, assembly);
+    }
 else
     {
     struct annoStreamer *streamer = hAnnoStreamerFromTrackDb(assembly, selTable, tdb, chrom,

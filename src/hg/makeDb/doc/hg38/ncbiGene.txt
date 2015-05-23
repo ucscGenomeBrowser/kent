@@ -1,6 +1,7 @@
 
 # download and load ncbiGene track
 
+kent=$HOME/kent
 db=hg38
 mkdir  /cluster/data/genomes/$db/bed/ncbiGene
 cd  /cluster/data/genomes/$db/bed/ncbiGene
@@ -11,9 +12,22 @@ gff3File=`basename $ftpFile`
 echo "select * from ucscToRefSeq" | hgsql $db | tail -n +2 | awk '{print 0, $4, $3, $1, $3}' > refSeqToUcsc.lft
 wget $ftpFile
 
-/cluster/home/braney/bin/x86_64/gff3ToGenePred -useName -warnAndContinue $gff3File stdout 2> convertErr.txt | liftUp -type=.gp -extGenePred lift.gp refSeqToUcsc.lft warn  stdin 2> liftErr.txt
+/cluster/home/braney/bin/x86_64/gff3ToGenePred -useName -warnAndContinue -attrsOut=attrs $gff3File stdout 2> convertErr.txt | liftUp -type=.gp -extGenePred lift.gp refSeqToUcsc.lft warn  stdin 2> liftErr.txt
 wc -l lift.gp
 # 143789
+#
+
+tawk '{print $1}'  attrs | sort | uniq > meta
+wc -l meta
+# 139097 meta
+for i in product Dbxref gene gbkey
+do 
+    echo $i
+    tawk -v attr=$i '$2==attr {print $1,$3}' attrs | sort | uniq | join -t $'\t' /dev/stdin meta > out
+    mv out meta
+done  
+wc -l meta
+# 139097 meta
 
 egrep "^N(M|R)" lift.gp > curated.gp
 egrep "^X(M|R)" lift.gp > predicted.gp
@@ -32,4 +46,5 @@ awk '/isn/ {print $1}' liftErr.txt | sort -u
 
 hgLoadGenePred -genePredExt $db ncbiRefCurated curated.gp
 hgLoadGenePred -genePredExt $db ncbiRefPredicted predicted.gp
+hgLoadSqlTab $db ncbiRefLink $kent/src/hg/lib/ncbiRefLink.sql meta
 

@@ -659,6 +659,9 @@ struct cart *cartNew(char *userId, char *sessionId,
  * strings to not include */
 {
 cgiApoptosisSetup();
+if (cfgOptionBooleanDefault("showEarlyErrors", FALSE))
+    errAbortSetDoContentType(TRUE);
+
 struct cart *cart;
 struct sqlConnection *conn = cartDefaultConnector();
 char *ex;

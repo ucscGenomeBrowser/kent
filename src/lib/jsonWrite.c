@@ -217,3 +217,21 @@ for (sln = slnList;  sln != NULL;  sln = sln->next)
     jsonWriteString(jw, NULL, sln->name);
 jsonWriteListEnd(jw);
 }
+
+void jsonWriteAppend(struct jsonWrite *jwA, char *var, struct jsonWrite *jwB)
+/* Append jwB's contents to jwA's.  If jwB is non-NULL, it must be fully closed (no unclosed
+ * list or object).  If var is non-NULL, write it out as a tag before appending.
+ * If both var and jwB are NULL, leave jwA unchanged. */
+{
+if (jwB && jwB->stackIx)
+    errAbort("jsonWriteAppend: second argument must be fully closed but its stackIx is %d not 0",
+             jwB->stackIx);
+if (var)
+    jsonWriteTag(jwA, var);
+else
+    jsonWriteMaybeComma(jwA);
+if (jwB)
+    dyStringAppendN(jwA->dy, jwB->dy->string, jwB->dy->stringSize);
+else if (var)
+    dyStringAppend(jwA->dy, "null");
+}

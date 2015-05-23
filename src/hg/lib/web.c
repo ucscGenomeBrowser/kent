@@ -241,6 +241,7 @@ if(!skipSectionHeader)
 webPushErrHandlers();
 /* set the flag */
 webHeadAlreadyOutputed = TRUE;
+errAbortSetDoContentType(FALSE);
 }	/*	static void webStartWrapperDetailedInternal()	*/
 
 void webStartWrapperDetailedArgs(struct cart *theCart, char *db,
