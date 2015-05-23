@@ -609,6 +609,10 @@ var HgIntegratorModel = ImModel.extend({
     doGetOutput: function(mutState) {
         // User clicked 'Get output' button; make a form and submit it.
         var querySpec = mutState.get('hgi_querySpec').toJS();
+        // Remove UI-only fields from dataSources:
+        querySpec.dataSources = _.map(querySpec.dataSources, function(ds) {
+            return _.omit(ds, ['schemaUrl', 'label']);
+        });
         var doFile = mutState.getIn(['hgi_querySpec', 'outFileOptions', 'doFile']);
         if (querySpec.dataSources.length < 1) {
             alert('Please add at least one data source.');

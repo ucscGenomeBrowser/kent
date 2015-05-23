@@ -21,6 +21,7 @@ errAbort(
   "options:\n"
   "  -warnAndContinue - on bad genePreds, put out warning but continue\n"
   "  -useName - rather than using 'id' as names, use the 'name' tag\n"
+  "  -attrsOut=file - output attributes of mRNA to file\n"
   "  -maxParseErrors=50 - Maximum number of parsing errors before aborting. A negative\n"
   "   value will allow an unlimited number of errors.  Default is 50.\n"
   "  -maxConvertErrors=50 - Maximum number of conversion errors before aborting. A negative\n"
@@ -55,6 +56,7 @@ static struct optionSpec options[] = {
     {"warnAndContinue", OPTION_BOOLEAN},
     {"useName", OPTION_BOOLEAN},
     {"honorStartStopCodons", OPTION_BOOLEAN},
+    {"attrsOut", OPTION_STRING},
     {NULL, 0},
 };
 static boolean useName = FALSE;
@@ -188,6 +190,14 @@ else
 return gp;
 }
 
+FILE *outGeneMetaFp = NULL;
+static void doOutGeneMeta(FILE *outGeneMetaFp, struct genePred *gp, struct gff3Ann *parent)
+{
+struct gff3Attr *attr;
+for(attr=parent->attrs; attr; attr=attr->next)
+    fprintf(outGeneMetaFp, "%s\t%s\t%s\n",gp->name, attr->tag, attr->vals->name);
+}
+
 static void outputGenePredAndFree(struct gff3Ann *mrna, FILE *gpFh, struct genePred *gp)
 /* validate and output a genePred and free it */
 {
@@ -199,7 +209,11 @@ int ret = genePredCheck(description, stderr, -1, gp);
 if (warnAndContinue)
     {
     if (ret == 0)
+	{
 	genePredTabOut(gp, gpFh);
+	if (outGeneMetaFp)
+	    doOutGeneMeta(outGeneMetaFp, gp,  mrna);
+	}
     else
 	warn("dropping invalid genePred: %s %s:%d-%d", gp->name, gp->chrom, gp->txStart, gp->txEnd);
     }
@@ -207,6 +221,8 @@ else
     {
     // output before checking so it can be examined
     genePredTabOut(gp, gpFh);
+    if (outGeneMetaFp)
+	doOutGeneMeta(outGeneMetaFp, gp,  mrna);
     if (ret != 0)
 	cnvError("invalid genePred created: %s %s:%d-%d", gp->name, gp->chrom, gp->txStart, gp->txEnd);
     }
@@ -398,6 +414,9 @@ maxConvertErrors = optionInt("maxConvertErrors", maxConvertErrors);
 if (maxConvertErrors < 0)
     maxConvertErrors = INT_MAX;
 honorStartStopCodons = optionExists("honorStartStopCodons");
+char *attrsOut = optionVal("attrsOut", NULL);
+if (attrsOut != NULL)
+    outGeneMetaFp = mustOpen(attrsOut, "w");
 gff3ToGenePred(argv[1], argv[2]);
 return 0;
 }

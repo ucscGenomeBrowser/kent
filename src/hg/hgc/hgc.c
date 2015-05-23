@@ -98,6 +98,7 @@
 #include "softberryHom.h"
 #include "borkPseudoHom.h"
 #include "sanger22extra.h"
+#include "ncbiRefLink.h"
 #include "refLink.h"
 #include "hgConfig.h"
 #include "estPair.h"
@@ -294,6 +295,7 @@ struct palInfo
  * http://www.ncbi.nlm.nih.gov/entrez/query/static/linking.html */
 char *entrezFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=%s&term=%s&doptcmdl=%s&tool=genome.ucsc.edu";
 char *entrezPureSearchFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=PureSearch&db=%s&details_term=%s[%s] ";
+char *ncbiGeneFormat = "http://www.ncbi.nlm.nih.gov/gene/%s";
 char *entrezUidFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=%s&list_uids=%d&dopt=%s&tool=genome.ucsc.edu";
 /* db=unists is not mentioned in NCBI's doc... so stick with this usage: */
 char *unistsnameScript = "http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=unists";
@@ -324,6 +326,12 @@ char* getEntrezNucleotideUrl(char *accession)
 char url[512];
 safef(url, sizeof(url), entrezFormat, "Nucleotide", accession, "GenBank");
 return cloneString(url);
+}
+
+void printNcbiGeneUrl(FILE *f, char *gene)
+/* Print URL for Entrez browser on a nucleotide. */
+{
+fprintf(f, ncbiGeneFormat, gene);
 }
 
 void printEntrezNucleotideUrl(FILE *f, char *accession)
@@ -11020,6 +11028,39 @@ if ((xenoDb != NULL) && hDbIsActive(xenoDb) && hTableExists(xenoDb, "refSeqAli")
 freeMem(org);
 }
 
+void prNcbiRefGeneInfo(struct sqlConnection *conn, char *rnaName,
+                   char *sqlRnaName, struct ncbiRefLink *rl, boolean isPredicted)
+/* print basic details information and links for a NCBI RefGene */
+{
+
+printf("<td valign=top nowrap>\n");
+printf("<H2>NCBI RefSeq Gene %s</H2>\n", rl->id);
+printf("<B>RefSeq:</B> <A HREF=\"");
+printEntrezNucleotideUrl(stdout, rl->id);
+printf("\" TARGET=_blank>%s</A><BR>", rl->id);
+
+if (!isEmpty(rl->gene))
+    {
+    printf("<B>Gene name:</B> %s<BR>\n", rl->gene);
+    }
+if (!isEmpty(rl->gbKey))
+    {
+    printf("<B>Molecule type:</B> %s<BR>\n", rl->gbKey);
+    }
+if (!isEmpty(rl->dbXref) && startsWith("GeneID:", rl->dbXref))
+    {
+    char *geneId = strchr(rl->dbXref, ':');
+    geneId++;
+    printf("<B>NCBI Gene:</B> <A HREF=\"");
+    printNcbiGeneUrl(stdout, geneId);
+    printf("\" TARGET=_blank>%s</A><BR>", geneId);
+    }
+if (!isEmpty(rl->product))
+    {
+    printf("<B>Product:</B> %s<BR>\n", rl->product);
+    }
+}
+
 void prRefGeneInfo(struct sqlConnection *conn, char *rnaName,
                    char *sqlRnaName, struct refLink *rl, boolean isXeno)
 /* print basic details information and links for a RefGene */
@@ -11344,6 +11385,51 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
+void doNcbiRefGene(struct trackDb *tdb, char *rnaName)
+/* Process click on a NCBI RefSeq gene. */
+{
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *sqlRnaName = rnaName;
+struct ncbiRefLink *rl;
+boolean isPredicted = sameString(tdb->table, "ncbiRefPredicted");
+
+/* Make sure to escape single quotes for DB parseability */
+if (strchr(rnaName, '\''))
+    {
+    sqlRnaName = replaceChars(rnaName, "'", "''");
+    }
+/* get refLink entry */
+sqlSafef(query, sizeof(query), "select * from ncbiRefLink where id = '%s'", sqlRnaName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find %s in ncbiRefLink table.", rnaName);
+rl = ncbiRefLinkLoad(row);
+sqlFreeResult(&sr);
+
+/* print the first section with info  */
+if (isPredicted)
+    cartWebStart(cart, database, "NCBI Predicted RefSeq Gene");
+else
+    cartWebStart(cart, database, "NCBI Curated RefSeq Gene");
+printf("<table border=0>\n<tr>\n");
+prNcbiRefGeneInfo(conn, rnaName, sqlRnaName, rl, isPredicted);
+
+printf("</tr>\n</table>\n");
+
+htmlHorizontalLine();
+
+struct palInfo *palInfo = NULL;
+
+
+geneShowPosAndLinksPal(rl->id, NULL, tdb, NULL, "htcTranslatedProtein",
+		    "htcGeneMrna", "htcGeneInGenome", "mRNA Sequence",palInfo);
+
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
 void doRefGene(struct trackDb *tdb, char *rnaName)
 /* Process click on a known RefSeq gene. */
 {
@@ -24819,7 +24905,11 @@ else if (sameWord(table, "knownGene"))
     {
     doKnownGene(tdb, item);
     }
-else if (sameWord(table, "refGene"))
+else if (sameWord(table, "ncbiRefPredicted") || sameWord(table, "ncbiRefCurated") )
+    {
+    doNcbiRefGene(tdb, item);
+    }
+else if (sameWord(table, "refGene") )
     {
     doRefGene(tdb, item);
     }
