@@ -23,6 +23,10 @@ boolean isErrAbortInProgress();
  * Needed so that a warn handler can tell if it's really
  * being called because of a warning or an error. */
 
+void errAbortSetDoContentType(boolean value);
+/* change the setting of doContentType, ie. if errorAbort should print a 
+ * http Content type line. */
+
 void errAbort(char *format, ...)
 /* Abort function, with optional (printf formatted) error message. */
 #if defined(__GNUC__)

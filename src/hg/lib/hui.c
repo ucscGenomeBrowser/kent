@@ -8426,3 +8426,127 @@ for (col = as->columnList; col != NULL; col = col->next)
 slReverse(&list);
 return list;
 }
+
+static struct dyString *subMulti(char *orig, int subCount,
+                                 char *in[], char *out[])
+/* Perform multiple substitions on orig. */
+{
+int i;
+struct dyString *s = newDyString(256), *d = NULL;
+
+dyStringAppend(s, orig);
+for (i=0; i<subCount; ++i)
+    {
+    fflush(stdout);
+    if (out[i]==NULL)
+        continue;
+    d = dyStringSub(s->string, in[i], out[i]);
+    dyStringFree(&s);
+    s = d;
+    d = NULL;
+    }
+return s;
+}
+
+char *replaceInUrl(char* url, char *idInUrl, struct cart* cart, char *db, char* seqName, int winStart, \
+    int winEnd, char *track, boolean encode) 
+/* replace $$ in url with idInUrl. Supports many other wildchards 
+ * XX Do we have readable docs for these parameters somewhere? */
+{
+struct dyString *uUrl = NULL;
+struct dyString *eUrl = NULL;
+char startString[64], endString[64];
+char begItem[64], endItem[64];
+char *ins[13], *outs[13];
+char *eItem = (encode ? cgiEncode(idInUrl) : cloneString(idInUrl));
+
+char *scName = NULL;
+// try to avoid the mysql query it not necessary
+if (stringIn("$n", url))
+    {
+    char *tmp = hScientificName(db);
+    scName = replaceChars(tmp, " ", "_");
+    freeMem(tmp);
+    }
+
+char *taxId = NULL;
+// try to avoid the mysql query it not necessary
+if (stringIn("$taxId", url))
+    {
+    char query[256];
+    struct sqlConnection *centralConn = hConnectCentral();
+    sqlSafef(query, sizeof(query),
+        "select taxId from %s "
+	"where name='%s'", dbDbTable(), db);
+    taxId = sqlQuickString(centralConn, query);
+    hDisconnectCentral(&centralConn);
+    }
+
+safef(startString, sizeof startString, "%d", winStart);
+safef(endString, sizeof endString, "%d", winEnd);
+ins[0] = "$$";
+outs[0] = idInUrl;
+ins[1] = "$T";
+outs[1] = track;
+ins[2] = "$S";
+outs[2] = seqName;
+ins[3] = "$[";
+outs[3] = startString;
+ins[4] = "$]";
+outs[4] = endString;
+ins[5] = "$s";
+outs[5] = skipChr(seqName);
+ins[6] = "$D";
+outs[6] = db;
+ins[7] = "$P";  /* for an item name of the form:  prefix:suffix */
+ins[8] = "$p";	/* the P is the prefix, the p is the suffix */
+if (stringIn(":", idInUrl)) {
+    char *itemClone = cloneString(idInUrl);
+    char *suffix = stringIn(":", itemClone);
+    char *suffixClone = cloneString(suffix+1); /* +1 skip the : */
+    char *nextColon = stringIn(":", suffixClone+1);
+    if (nextColon)	/* terminate suffixClone suffix */
+        *nextColon = '\0';	/* when next colon is present */
+    *suffix = '\0';   /* terminate itemClone prefix */
+    outs[7] = itemClone;
+    outs[8] = suffixClone;
+    /* small memory leak here for these cloned strings */
+    /* not important for a one-time operation in a CGI that will exit */
+} else {
+    outs[7] = idInUrl;	/* otherwise, these are not expected */
+    outs[8] = idInUrl;	/* to be used */
+}
+
+// URL may now contain item boundaries
+ins[9] = "${";
+ins[10] = "$}";
+if (cartOptionalString(cart, "o") && cartOptionalString(cart, "t"))
+    {
+    int itemBeg = cartIntExp(cart, "o") + 1; // Should strip any unexpected commas
+    int itemEnd = cartIntExp(cart, "t");
+    safef(begItem, sizeof begItem, "%d", itemBeg);
+    safef(endItem, sizeof endItem, "%d", itemEnd);
+    outs[9] = begItem;
+    outs[10] = endItem;
+    }
+else // should never be but I am unwilling to bet the farm
+    {
+    outs[9] = startString;
+    outs[10] = endString;
+    }
+
+ins[11] = "$n";
+outs[11] = scName;
+
+ins[12] = "$taxId";
+outs[12] = taxId;
+
+uUrl = subMulti(url, ArraySize(ins), ins, outs);
+outs[0] = eItem;
+eUrl = subMulti(url, ArraySize(ins), ins, outs);
+freeDyString(&uUrl);
+freeMem(eItem);
+freeMem(scName);
+return eUrl->string;
+}
+

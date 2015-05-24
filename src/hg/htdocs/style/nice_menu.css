@@ -385,6 +385,26 @@ ul.nice-menu ul .noHighlight:hover, ul.nice-menu ul li.noHighlight a:hover {
     color:#121e9b !important;
     background-color: #fff !important;
 }
+
+/* class for inactive (greyed out) dropdown menu items */
+ul.nice-menu ul li.inactive span {
+    cursor: default !important;
+    color:#CCCCCC !important;
+    background-color: #fff !important;
+    display:block;
+    background:none;
+    text-align:left;
+    padding:8px !important;
+    padding-top:5px !important;
+    padding-bottom:5px !important;
+    padding-right:0px;
+    border:0px !important;
+    width:180px;
+    font-size:13px;
+    font-weight:bold;
+    text-transform:capitalize !important;
+    font-family:Arial, Helvetica, sans-serif;
+}
 /************************************/
 
 ul.nice-menu ul li a {

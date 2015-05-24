@@ -28,7 +28,10 @@
 #include "dystring.h"
 #include "errAbort.h"
 
-
+// errAbort can optionally print a Content-type line and copy errors to stdout, so 
+// error messages don't lead to a 500 error but are shown in the web browser
+// directly. 
+static boolean doContentType = FALSE;
 
 #define maxWarnHandlers 20
 #define maxAbortHandlers 12
@@ -51,6 +54,15 @@ static void defaultVaWarn(char *format, va_list args)
 /* Default error message handler. */
 {
 if (format != NULL) {
+    if (doContentType)
+        {
+        puts("Content-type: text/html\n");
+        puts("Error: ");
+        vfprintf(stdout, format, args);
+        fprintf(stdout, "\n");
+        fflush(stdout);
+        }
+
     fflush(stdout);
     vfprintf(stderr, format, args);
     fprintf(stderr, "\n");
@@ -198,6 +210,13 @@ struct perThreadAbortVars *ptav = getThreadVars();
 ptav->errAbortInProgress = TRUE;
 vaWarn(format, args);
 noWarnAbort();
+}
+
+void errAbortSetDoContentType(boolean value)
+/* change the setting of doContentType, ie. if errorAbort should print a 
+ * http Content type line. */
+{
+doContentType = value;
 }
 
 void errAbort(char *format, ...)
