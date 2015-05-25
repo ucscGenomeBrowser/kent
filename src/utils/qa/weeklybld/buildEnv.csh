@@ -1,12 +1,12 @@
-# set for preview 1:
-setenv REVIEWDAY 2015-05-18             # v317 preview
+# set for preview 1: move date and vNNN from REVIEWDAY to LASTREVIEWDAY
+setenv REVIEWDAY 2015-05-18             # v317 preview, increment vNNN and today
 setenv LASTREVIEWDAY 2015-04-27         # v316 preview
-# set for preview 2:
-setenv REVIEW2DAY 2015-05-04        # v316 preview2
-setenv LASTREVIEW2DAY 2015-04-13    # v315 preview2
-# set these three for final build:
-setenv BRANCHNN 316
-setenv TODAY 2015-05-11                # v316 final
+# set for preview 2: move date and vNNN from REVIEW2DAY to LASTREVIEW2DAY
+setenv REVIEW2DAY 2015-05-25        # v317 preview2, increment vNNN and today
+setenv LASTREVIEW2DAY 2015-05-04    # v316 preview2
+# set these three for final build:  move date and vNNN from TODAY to LASTWEEK
+setenv BRANCHNN 316                    # increment for new build
+setenv TODAY 2015-05-11                # v316 final, increment vNNN and today
 setenv LASTWEEK 2015-04-20             # v315 final
 
 setenv BUILDHOME /hive/groups/browser/newBuild
