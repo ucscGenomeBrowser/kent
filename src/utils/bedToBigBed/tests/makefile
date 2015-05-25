@@ -4,12 +4,12 @@ include ../../../inc/common.mk
 test: outputDir testRgb testNotSorted
 
 testRgb:
-	${A} -type=bed9 -as=input/itemRgb.as input/itemRgb.bed input/chrom.sizes output/itemRgb.bb 2> /dev/null
+	${BINDIR}/${A} -type=bed9 -as=input/itemRgb.as input/itemRgb.bed input/chrom.sizes output/itemRgb.bb 2> /dev/null
 	bigBedToBed output/itemRgb.bb output/test_itemRgb.bed
 	diff input/itemRgb.bed output/test_itemRgb.bed
 
 testNotSorted:
-	-${A} -type=bed12 input/notSorted.bed input/notSorted.chrom.sizes /dev/null 2> output/notSorted.err
+	-${BINDIR}/${A} -type=bed12 input/notSorted.bed input/notSorted.chrom.sizes /dev/null 2> output/notSorted.err
 	diff expected/notSorted.err output/notSorted.err
 
 clean::
