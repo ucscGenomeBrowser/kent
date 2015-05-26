@@ -443,19 +443,11 @@ var tdbDoc = {
 
 
     isHubDoc: function () {
-        return typeof tdbDoc.hubVersion !== 'undefined';
-
+       return $('#trackDbHub_version') == undefined;
     }, 
-
-    setHubVersion: function () {
-        $('#trackDbHub_version').text('(' + tdbDoc.hubVersion + ')');
-    },
 
     documentLoad: function () {
         // Called at $(document).ready() to load a trackDb document page
-
-        if (tdbDoc.isHubDoc())
-            tdbDoc.setHubVersion();
 
         var divIntros = $("div.intro").each( function (ix) {
             tdbDoc.loadIntro(this);
