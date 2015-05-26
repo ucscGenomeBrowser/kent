@@ -55,7 +55,53 @@
 <!-- Finally to the content -->
 <div class="borderGuard">
 
-<DIV ID="trackDbDoc_intro" class="intro"></DIV>
+<DIV class="trackDbDoc_intro">
+<H1>Track Database Definition</H1>
+<H2>How to declare Dataset Display Settings in the Genome Browser</H2>
+
+    <P><I>Hub contributors should use the <A HREF="trackDbHub.html">Hub Track</A>
+    specific version of this document.</I></P>
+
+    <P>This document describes how to declare dataset display characteristics
+    in the Genome Browser through trackDb settings.   Introducing new
+    datasets for display in the Browser requires declaring the location
+    and format of the data and defining initial display characteristics.
+    In many cases, you may need to choose how the displayed data (aka
+    "track") may be selected and configured.  These settings
+    are declared in a simple text file format and stored in a database
+    called the "track database",  or trackDb for short.</P>
+
+    <P>The text file format
+    for trackDb settings follow the simple "ra" rules which
+    establish a "record" as a set of related settings in a
+    "stanza" delimited by blank lines.  The first line of
+    each stanza typically establishes the "key".  Each line
+    in a stanza will contain a single word "setting" name and
+    one or more words or numbers that follow are the setting's
+    "value".   All trackDb stanzas are keyed by "track"
+    and most will have certain common settings followed by track specific
+    settings.  Here is an example:</P>
+
+    <pre>
+        track myFirstTrack
+        type bed 6
+        shortLabel Example Data
+        longLabel The data in this track is format "bed 6".    </pre>
+
+    <P>Every track should have
+    these four settings.  The key of this track (<code>myFirstTrack</code>)
+    is the name of the dataset.  If the data is loaded into a MySQL
+    table then the track name is almost always the table name.  If the
+    data is in one of the remote indexed file types (e.g. bigWig, bam,
+    etc.)  then the name is typically the root file name.  However, this
+    is a key to the track so it must be unique within the Genome Browser.
+        (Data hubs need only declare track names unique to their hub.)
+    After the "track" key, the most important setting for
+    defining a track is the "type".  This tells the Browser
+    which format the data is in, defines how to display it, and determines 
+    which options are available for fine control of that display.
+    </P>
+</DIV>
 
 <P>The remainder of this document is divided into the following sections and should be
 used as a ready reference.</P>

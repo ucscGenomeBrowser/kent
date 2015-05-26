@@ -43,9 +43,6 @@ errAbort(
   );
 }
 
-char *trackHubVersionDefault(char *specHost);
-/* Return current version of trackDb settings spec for hubs */
-
 void help()
 /* Extended help -- these are implemented options that we are hiding to allow review time */
 {
@@ -185,12 +182,59 @@ if (bestCount == 1 && bestScore > 15)
 return NULL;
 }
 
-
-char *trackHubVersionDefault(char *specHost)
-/* Return current version of trackDb settings spec for hubs */
+struct htmlPage *trackHubVersionSpecMustGet(char *specHost, char *version)
+/* Open the trackDbHub.html file and attach html reader. Use default version if NULL */
 {
-// TODO: get from goldenPath/help/trackDb/trackDbHub.html
-    return "v0";  // minor rev to v1a, etc.
+char *specUrl;
+char buf[256];
+if (version != NULL && startsWith("http", version))
+    specUrl = version;
+else
+    {
+    safef(buf, sizeof buf, "http://%s/goldenPath/help/trackDb/trackDbHub%s%s.html", 
+                        specHost, version ? "." : "", version ? version: "");
+    specUrl = buf;
+    }
+verbose(2, "Using spec at %s\n", specUrl);
+struct htmlPage *page = htmlPageGet(specUrl);
+if (page == NULL)
+    errAbort("Can't open hub settings spec %s", specUrl);
+
+//TODO: apply page validator
+//htmlPageValidateOrAbort(page);  // would like to use this, but current page doesn't validate
+// Would need to replace empty table (replaced by JS) with div, and assure htmlPageValidateOrAbort
+// is run on any page change.
+
+/* TODO: validate this is a trackDbHub spec */
+/* (e.g. scan tags for the hub version, perhaps limiting to first N tags) */
+return page;
+}
+
+
+char *trackHubVersionDefault(char *specHost, struct htmlPage **pageRet)
+/* Return default version of hub spec by parsing for version id in the page */
+{
+struct htmlPage *page = trackHubVersionSpecMustGet(specHost, NULL);
+struct htmlTag *tag;
+
+/* Find version tag (span id=) */
+char buf[256];
+verbose(6, "Found %d tags\n", slCount(page->tags));
+for (tag = page->tags; tag != NULL; tag = tag->next)
+    {
+    if (sameString(strLower(tag->name), "span") &&
+        tag->attributes != NULL &&
+        sameString(strLower(tag->attributes->name), "id") &&
+        sameString(tag->attributes->val, "trackDbHub_version"))
+            {
+            int len = min(tag->next->start - tag->end, sizeof buf - 1);
+            memcpy(buf, tag->end, len);
+            buf[len] = 0;
+            verbose(6, "Found version: %s\n", buf);
+            return cloneString(buf);
+            }
+    }
+return NULL;
 }
 
 
@@ -216,33 +260,16 @@ return trackHubSettingLevel(spec1) - trackHubSettingLevel(spec2);
 }
 
 
-struct trackHubSettingSpec *trackHubSettingsForVersion(char *version, char *specHost)
+struct trackHubSettingSpec *trackHubSettingsForVersion(char *specHost, char *version)
 /* Return list of settings with support level. Version can be version string or spec url */
 {
+struct htmlPage *page = NULL;
 if (version == NULL)
-    version = trackHubVersionDefault(specHost);
-char *specUrl;
-char buf[256];
-if (startsWith("http", version))
-    specUrl = version;
-else
     {
-    safef(buf, sizeof buf, "http://%s/goldenPath/help/trackDb/trackDbHub.%s.html", 
-                        specHost, version);
-    specUrl = buf;
+    version = trackHubVersionDefault(specHost, &page);
+    if (version == NULL)
+        errAbort("Can't get default spec from host %s", specHost);
     }
-verbose(2, "Using spec at %s\n", specUrl);
-struct htmlPage *page = htmlPageGet(specUrl);
-if (page == NULL)
-    errAbort("Can't open hub settings spec %s", specUrl);
-
-//TODO: apply page validator
-//htmlPageValidateOrAbort(page);  // would like to use this, but current page doesn't validate
-// Would need to replace empty table (replaced by JS) with div, and assure htmlPageValidateOrAbort
-// is run on any page change.
-
-/* TODO: validate this is a trackDbHub spec */
-/* (e.g. scan tags for the hub version, perhaps limiting to first N tags) */
 
 /* Retrieve specs from file url. 
  * Settings are the first text word within any <code> tag having class="level-" attribute.
@@ -251,11 +278,17 @@ if (page == NULL)
  * E.g.  <code class="level-core">boxedConfig on</code> produces:
  *      setting=boxedConfig, class=core */
 
-struct htmlTag *tag;
-struct htmlAttribute *attr;
+if (page == NULL)
+    page = trackHubVersionSpecMustGet(specHost, version);
+if (page == NULL)
+    errAbort("Can't get settings spec for version %s from host %s", version, specHost);
+verbose(5, "Found %d tags\n", slCount(page->tags));
+
 struct trackHubSettingSpec *spec, *savedSpec;
 struct hash *specHash = hashNew(0);
-verbose(5, "Found %d tags\n", slCount(page->tags));
+struct htmlTag *tag;
+struct htmlAttribute *attr;
+char buf[256];
 for (tag = page->tags; tag != NULL; tag = tag->next)
     {
     if (differentWord(tag->name, "code"))
@@ -291,8 +324,8 @@ struct hashEl *el, *list = hashElListHash(specHash);
 int settingsCt = slCount(list);
 verbose(5, "Found %d settings's\n", slCount(list));
 if (settingsCt == 0)
-    errAbort("Can't find hub setting info at %s."
-              " Use -version to indicate a different version number or url.", specUrl);
+    errAbort("Can't find hub setting info for version %s (host %s)."
+              " Use -version to indicate a different version number or url.", version, specHost);
 
 slSort(&list, hashElCmp);
 struct trackHubSettingSpec *specs = NULL;
@@ -316,8 +349,6 @@ int hubSettingsCheckInit(struct trackHub *hub,  struct trackHubCheckOptions *opt
 int retVal = 0;
 if (hub->version != NULL && options->version == NULL)
     options->version = hub->version;
-else if (options->version == NULL)
-    options->version = trackHubVersionDefault(options->specHost);
 
 if (options->strict == FALSE && hub->level != NULL)
     {
@@ -337,7 +368,7 @@ if (errCatchStart(errCatch))
     {
     /* make hash of settings for this version, saving in options */
     struct trackHubSettingSpec *setting, *settings = 
-        trackHubSettingsForVersion(options->version, options->specHost);
+                trackHubSettingsForVersion(options->specHost, options->version);
     options->settings = newHash(0);
     options->suggest = NULL;
     for (setting = settings; setting != NULL; setting = setting->next)
@@ -393,12 +424,13 @@ if (hubSetting == NULL)
     char *suggest = suggestSetting(setting, options);
     if (suggest != NULL)
         dyStringPrintf(errors, " (did you mean '%s' ?)", suggest);
+    dyStringPrintf(errors, "\n");
     }
 
 /*  check level */
 if (options->strict && differentString(hubSetting->level, "core"))
     {
-    dyStringPrintf(errors, "Setting '%s' is level '%s'", setting, hubSetting->level);
+    dyStringPrintf(errors, "Setting '%s' is level '%s'\n", setting, hubSetting->level);
     retVal = 1;
     }
 return retVal;
@@ -555,7 +587,7 @@ errCatchEnd(errCatch);
 if (errCatch->gotError)
     {
     retVal = 1;
-    dyStringPrintf(errors, "%s", errCatch->message->string);
+    dyStringPrintf(errors, "%s\n", errCatch->message->string);
     }
 errCatchFree(&errCatch);
 
@@ -606,10 +638,12 @@ static void showSettings(struct trackHubCheckOptions *checkOptions)
 /* Print settings and levels for the indicated version */
 {
 struct trackHubSettingSpec *settings = 
-            trackHubSettingsForVersion(checkOptions->version, checkOptions->specHost);
+            trackHubSettingsForVersion(checkOptions->specHost, checkOptions->version);
 struct trackHubSettingSpec *setting = NULL;
 for (setting = settings; setting != NULL; setting = setting->next)
     {
+    if (checkOptions->strict && differentString(setting->level, "core"))
+        continue;
     printf("%s\t%s\n", setting->name, setting->level);
     }
 }
