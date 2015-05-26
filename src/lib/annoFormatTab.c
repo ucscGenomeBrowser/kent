@@ -17,6 +17,9 @@ struct annoFormatTab
     boolean needHeader;			// TRUE if we should print out the header
     };
 
+//#*** config options: avg? more stats? list of values?
+static boolean doAvg = TRUE;
+
 static void makeFullColumnName(char *fullName, size_t size, char *sourceName, char *colName)
 /* If sourceName is non-empty, make fullName sourceName.colName, otherwise just colName. */
 {
@@ -53,12 +56,23 @@ if (self->columnVis)
 return TRUE;
 }
 
+static boolean isWiggle(struct asColumn *colList)
+/* Recognize wiggle/bigWig data by its column signature. */
+{
+return (slCount(colList) == 4 &&
+        sameString(colList->name, "chrom") &&
+        sameString(colList->next->name, "chromStart") &&
+        sameString(colList->next->next->name, "chromEnd") &&
+        sameString(colList->next->next->next->name, "value"));
+}
+
 static void printHeaderColumns(struct annoFormatTab *self, struct annoStreamer *source,
                                boolean isFirst)
 /* Print names of included columns from this source. */
 {
 FILE *f = self->f;
 char *sourceName = source->name;
+boolean isAvg = isWiggle(source->asObj->columnList) && doAvg;
 struct asColumn *col;
 int i;
 for (col = source->asObj->columnList, i = 0;  col != NULL;  col = col->next, i++)
@@ -74,6 +88,8 @@ for (col = source->asObj->columnList, i = 0;  col != NULL;  col = col->next, i++
             fputc('\t', f);
         char fullName[PATH_LEN];
         makeFullColumnName(fullName, sizeof(fullName), sourceName, col->name);
+        if (isAvg && sameString(col->name, "value"))
+            safecat(fullName, sizeof(fullName), "Average");
         fputs(fullName, f);
         }
     }
@@ -161,8 +177,6 @@ if (source->rowType == arWords)
 else if (source->rowType == arWig)
     {
     freeWhenDone = TRUE;
-    //#*** config options: avg? more stats? list of values?
-    boolean doAvg = TRUE;
     if (doAvg)
 	words = wordsFromWigRowAvg(row);
     else
