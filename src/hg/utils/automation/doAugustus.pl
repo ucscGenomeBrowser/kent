@@ -41,6 +41,7 @@ my $defaultWorkhorse = 'hgwdev';
 my $maskedSeq = "$HgAutomate::clusterData/\$db/\$db.2bit";
 my $utr = "off";
 my $species = "human";
+my $augustusConfig="/hive/data/outside/augustus/augustus.3.1/config";
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -60,7 +61,7 @@ options:
                           (necessary when continuing at a later date).
     -maskedSeq seq.2bit   Use seq.2bit as the masked input sequence instead
                           of default ($maskedSeq).
-    -utr                  Use augustus arg: --UTR=on, default is --UTR=off
+    -utr                  Obsolete, now is automatic (was: Use augustus arg: --UTR=on, default is --UTR=off)
     -species <name>       name from list: human chicken zebrafish, default: human
 _EOF_
   ;
@@ -151,7 +152,7 @@ fi
 do
    twoBitToFa $maskedSeq:\${chr} ../fasta/\${chr}.fa
 done
-if [ -d partBundles ]; then
+if [ -s partBundles/part000.lst ]; then
   for F in partBundles/*.lst
   do
      B=`basename \$F | sed -e 's/.lst//;'`
@@ -204,7 +205,6 @@ set start = \$1
 set end = \$2
 set fasta = \$3
 set chrName = \$fasta:r:t
-echo "chrName: \$chrName"
 
 set resultGz = \$4
 set gtfFile = \$resultGz:t:r
@@ -213,21 +213,19 @@ mkdir -p \$resultGz:h
 mkdir -p \$errFile:h
 set tmpDir = "/dev/shm/\$db.\$chrName.\$start.\$end"
 
-echo mkdir -p \$tmpDir
 mkdir -p \$tmpDir
-echo pushd \$tmpDir
 pushd \$tmpDir
 
 if ( \$start == \$end ) then
 augustus --species=$species --softmasking=1 --UTR=$utr --protein=off \\
- --AUGUSTUS_CONFIG_PATH=/hive/data/outside/augustus/augustus.3.1/config \\
+ --AUGUSTUS_CONFIG_PATH=$augustusConfig \\
   --alternatives-from-sampling=true --sample=100 --minexonintronprob=0.2 \\
    --minmeanexonintronprob=0.5 --maxtracks=3 --temperature=2 \\
     \$fasta --outfile=\$gtfFile --errfile=\$errFile:t
 else
  @ start++
 augustus --species=$species --softmasking=1 --UTR=$utr --protein=off \\
- --AUGUSTUS_CONFIG_PATH=/hive/data/outside/augustus/augustus.3.1/config \\
+ --AUGUSTUS_CONFIG_PATH=$augustusConfig \\
   --alternatives-from-sampling=true --sample=100 --minexonintronprob=0.2 \\
    --minmeanexonintronprob=0.5 --maxtracks=3 --temperature=2 \\
      --predictionStart=\$start --predictionEnd=\$end \\
@@ -391,8 +389,12 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
   "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/augustus";
 $maskedSeq = $opt_maskedSeq ? $opt_maskedSeq :
   "$HgAutomate::clusterData/$db/$db.2bit";
-$utr = $opt_utr ? "on" : $utr;
 $species = $opt_species ? $opt_species : $species;
+if ( -s "${augustusConfig}/species/$species/${species}_utr_probs.pbl" ) {
+  $utr = "on";
+} else {
+  $utr = "off";
+}
 
 # Do everything.
 $stepper->execute();
