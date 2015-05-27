@@ -620,8 +620,9 @@ if ((row = sqlNextRow(sr)) != NULL)
     {
     gp = genePredLoad(row + hasBin);
 
+#define  ALIGNIDFIELD      11  // Gencode Id
     if (hasAttrId)
-	curAlignId = cloneString(row[11]);
+	curAlignId = cloneString(row[ALIGNIDFIELD]);
     }
 sqlFreeResult(&sr);
 if (gp == NULL)
