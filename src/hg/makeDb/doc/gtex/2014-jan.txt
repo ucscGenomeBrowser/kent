@@ -70,3 +70,12 @@ cd /hive/data/outside/GTEx/pilot
 mkdir eQtl; cd eQtl
 wget http://www.gtexportal.org/static/datasets/gtex_analysis_pilot_data_2013_01_31/multi_tissue_eqtls/Multi_tissue_eQTL_GTEx_Pilot_Phase_datasets.tar
 
+
+# EQTL's from V4 (2014)
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/single_tissue_eqtl_data/README.eqtls
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/reference/GTEx_genot_imputed_variants_info4_maf05_CR95_CHR_POSb37_ID_REF_ALT.txt.zip'
+
+# Reference data
+# TODO:  Use these gene models for genome positions of gene track
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/reference/gencode.v18.genes.patched_contigs.gtf
+
