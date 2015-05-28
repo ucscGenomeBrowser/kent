@@ -3001,3 +3001,10 @@ color 12,105,0
 type genePred
 baseColorUseCds given
 baseColorDefault genomicCodons
+
+searchTable augustusGene
+searchType genePred
+shortCircuit 1
+searchMethod fuzzy
+termRegex g[0-9]+(\.t[0-9]+)?
+searchPriority 50
