@@ -22,7 +22,6 @@ var Modal = React.createClass({
                },
 
     render: function() {
-        var myTop = getScrollHeight() + 75; // px is default unit in React style
         var path = this.props.path || [];
         var title = (
             <div>
@@ -34,9 +33,15 @@ var Modal = React.createClass({
               <div className='clear' />
             </div>
         );
+        // Initialize Modal's position to be somewhat below the top of the current view.
+        // Keep track of that position so we can maintain it in subsequent renders,
+        // even if the user scrolled in the meantime.
+        if (!this.top) {
+            this.top = getScrollHeight() + 75; // px is default unit in React style
+        }
 
         return (
-            <div style={{top: myTop}} className='absoluteModal'>
+            <div style={{top: this.top}} className='absoluteModal'>
               <Section style={{margin: 0}} title={title}>
                 {this.props.children}
               </Section>
