@@ -443,7 +443,7 @@ var tdbDoc = {
 
 
     isHubDoc: function () {
-       return $('#trackDbHub_version') == undefined;
+       return $('#trackDbHub_version').length !== 0;
     }, 
 
     documentLoad: function () {
