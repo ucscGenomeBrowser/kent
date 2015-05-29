@@ -9,7 +9,7 @@ testRgb:
 	diff input/itemRgb.bed output/test_itemRgb.bed
 
 testNotSorted:
-	-${BINDIR}/${A} -type=bed12 input/notSorted.bed input/notSorted.chrom.sizes /dev/null 2> output/notSorted.err
+	-${BINDIR}/${A} -type=bed12 input/notSorted.bed input/notSorted.chrom.sizes /dev/null 2> output/notSorted.err || true
 	diff expected/notSorted.err output/notSorted.err
 
 clean::
