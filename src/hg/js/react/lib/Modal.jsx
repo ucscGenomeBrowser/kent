@@ -21,6 +21,10 @@ var Modal = React.createClass({
     propTypes: { title: pt.renderable.isRequired,  // title string or React.DOM object
                },
 
+    componentWillUnmount: function() {
+        window.scrollTo(0, this.origY);
+    },
+
     render: function() {
         var path = this.props.path || [];
         var title = (
@@ -37,7 +41,8 @@ var Modal = React.createClass({
         // Keep track of that position so we can maintain it in subsequent renders,
         // even if the user scrolled in the meantime.
         if (!this.top) {
-            this.top = getScrollHeight() + 75; // px is default unit in React style
+            this.origY = getScrollHeight();
+            this.top = this.origY + 75; // px is default unit in React style
         }
 
         return (
