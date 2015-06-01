@@ -217,7 +217,7 @@ struct annoGrator *hAnnoGratorFromBigFileUrl(char *fileOrUrl, struct annoAssembl
 struct annoStreamer *streamer = NULL;
 struct annoGrator *grator = NULL;
 char *type = customTrackTypeFromBigFile(fileOrUrl);
-if (sameString(type, "bigBed"))
+if (sameString(type, "bigBed") || sameString("bigGenePred", type))
     streamer = annoStreamBigBedNew(fileOrUrl, assembly, maxOutRows);
 else if (sameString(type, "vcfTabix"))
     streamer = annoStreamVcfNew(fileOrUrl, TRUE, assembly, maxOutRows);
@@ -274,7 +274,7 @@ if (startsWith("wig", tdb->type) || startsWith("bigWig", tdb->type))
     asObj = annoStreamBigWigAsObject();
 else if (startsWith("vcf", tdb->type))
     asObj = vcfAsObj();
-else if (startsWith("bigBed", tdb->type))
+else if (startsWith("bigBed", tdb->type) || sameString("bigGenePred", tdb->type))
     {
     char *fileOrUrl = getBigDataFileName(db, tdb, tdb->table, chrom);
     asObj = bigBedFileAsObjOrDefault(fileOrUrl);
