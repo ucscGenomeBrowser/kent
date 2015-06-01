@@ -945,9 +945,10 @@ for (i = 0; i < oregannoTypeSize; i++)
 void labelMakeCheckBox(struct trackDb *tdb, char *sym, char *desc, boolean dflt)
 /* add a checkbox use to choose labels to enable. */
 {
+/* some how the closest to home magic prepends the track name for cart  */
 char varName[64];
-safef(varName, sizeof(varName), "%s.label.%s", tdb->track, sym);
-boolean option = cartUsualBoolean(cart, varName, dflt);
+safef(varName, sizeof(varName), "label.%s", sym);
+boolean option = cartOrTdbBoolean(cart, tdb, varName, dflt);
 cgiMakeCheckBox(varName, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", desc);
 }
@@ -1885,11 +1886,11 @@ void transMapUI(struct trackDb *tdb)
 /* Put up transMap-specific controls */
 {
 printf("<B>Label:</B> ");
-labelMakeCheckBox(tdb, "orgCommon", "common name", FALSE);
-labelMakeCheckBox(tdb, "orgAbbrv", "organism abbreviation", FALSE);
-labelMakeCheckBox(tdb, "db", "assembly database", FALSE);
-labelMakeCheckBox(tdb, "gene", "gene", FALSE);
-labelMakeCheckBox(tdb, "acc", "accession", FALSE);
+labelMakeCheckBox(tdb, "orgCommon", "common name", transMapLabelDefaultOrgCommon);
+labelMakeCheckBox(tdb, "orgAbbrv", "organism abbreviation", transMapLabelDefaultOrgAbbrv);
+labelMakeCheckBox(tdb, "db", "assembly database", transMapLabelDefaultDb);
+labelMakeCheckBox(tdb, "gene", "gene", transMapLabelDefaultGene);
+labelMakeCheckBox(tdb, "acc", "accession", transMapLabelDefaultAcc);
 
 baseColorDrawOptDropDown(cart, tdb);
 indelShowOptions(cart, tdb);
