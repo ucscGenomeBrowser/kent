@@ -172,7 +172,7 @@ else if (sameString("bam", tdb->type))
     {
     warn("Sorry, BAM is not yet supported");
     }
-else if (startsWith("bigBed", tdb->type))
+else if (startsWith("bigBed", tdb->type) || sameString("bigGenePred", tdb->type))
     {
     char *fileOrUrl = getBigDataFileName(dataDb, tdb, selTable, chrom);
     streamer = annoStreamBigBedNew(fileOrUrl, assembly, maxOutRows);
@@ -196,6 +196,8 @@ else if (sameString("knownGene", tdb->track))
         streamer = annoStreamDbKnownGeneNew(dataDb, assembly, maxOutRows);
     hFreeConn(&conn);
     }
+else if (trackHubDatabase(db))
+    errAbort("Unrecognized type '%s' for hub track '%s'", tdb->type, tdb->track);
 if (streamer == NULL)
     {
     char maybeSplitTable[HDB_MAX_TABLE_STRING];
