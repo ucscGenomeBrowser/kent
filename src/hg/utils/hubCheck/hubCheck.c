@@ -419,16 +419,20 @@ if (options->extra && hashLookup(options->extra, setting))
 struct trackHubSettingSpec *hubSetting = hashFindVal(options->settings, setting);
 if (hubSetting == NULL)
     {
-    retVal = 1;
     dyStringPrintf(errors, "Setting '%s' is unknown/unsupported", setting);
     char *suggest = suggestSetting(setting, options);
     if (suggest != NULL)
         dyStringPrintf(errors, " (did you mean '%s' ?)", suggest);
     dyStringPrintf(errors, "\n");
+    retVal = 1;
     }
-
+else if (sameString(hubSetting->level, "deprecated"))
+    {
+    dyStringPrintf(errors, "Setting '%s' is deprecated\n", setting);
+    retVal = 1;
+    }
 /*  check level */
-if (options->strict && differentString(hubSetting->level, "core"))
+else if (options->strict && differentString(hubSetting->level, "core"))
     {
     dyStringPrintf(errors, "Setting '%s' is level '%s'\n", setting, hubSetting->level);
     retVal = 1;

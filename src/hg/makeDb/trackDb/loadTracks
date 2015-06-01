@@ -13,6 +13,7 @@ UNAME_N=`uname -n`
 UNAME_N=${UNAME_N/.cse.ucsc.edu/}
 release=''
 settings=''
+local=''
 strict=''
 raName=''
 grpSql=''
