@@ -66,14 +66,15 @@
     "track database",  or trackDb for short.</P>
 
     <P>While there are over 100 supported settings (providing a high level of flexibility
-    for track display), only 5 are required to define a track (as in example below). 
+    for track display), only 5 are required to define a track.
     To foster portability to other sites that display track hubs, a subset of settings 
-    are designated 'core' and this specification document is assigned a version number.
+    are designated 'base' and this specification document is assigned a version number.
     All settings in this document are assigned a 'support level', shown here in the 
     setting title color, the description, and the 
     <A HREF="#toc">Table of Contents</A>. The support levels are:
     <table style="margin-left: 50px;">
-        <tr><td class="level-core">core</td><td>common settings supported at other sites</td></tr>
+        <tr><td class="level-required">required</td><td>required settings</td></tr>
+        <tr><td class="level-base">base</td><td>common settings supported at other sites</td></tr>
         <tr><td class="level-deprecated">deprecated</td><td>settings that are being retired (replacement is listed in details section)</td></tr>
         <tr><td class="level-new">new</td><td>new settings not yet assigend a level (may be replaced)</td></tr>
         <tr><td class="level-full">full</td><td>other settings</td></tr>
@@ -155,25 +156,25 @@ in the sections below.</I>
 <THEAD><TR><TD><DIV ID="commonSettings_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection' />&nbsp;Common Settings</TH></TR>
     <TR VALIGN=TOP><TD class="track"><A name="track"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-core">track</code></div>
+        <div class="format"><code class="level-required">track</code></div>
     </TD></TR>
-    <TR VALIGN=TOP><TD class="type_for_hubs"><A name="type"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-core">type</code></div>
+    <TR VALIGN=TOP><TD class="type"><A name="type"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-required">type</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="shortLabel"><A name="shortLabel"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-core">shortLabel</code></div>
+        <div class="format"><code class="level-required">shortLabel</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="longLabel"><A name="longLabel"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-core">longLabel</code></div>
+        <div class="format"><code class="level-required">longLabel</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="bigDataUrl"><A name="bigDataUrl"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-core">bigDataUrl &lt;url/relativePath&gt;</code></div>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="html"><A name="html"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-core">html</code></div>
+        <div class="format"><code class="level-base">html</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="visibility"><A name="visibility"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">visibility</code></div>
+        <div class="format"><code class="level-base">visibility</code></div>
     </TD></TR>
 </TABLE>
 <BR>
@@ -184,14 +185,17 @@ in the sections below.</I>
     <TR VALIGN=TOP><TH>
             <IMG class='toggle oneSection' />&nbsp;Common Optional Settings
     </TH> </TR>
-    <TR VALIGN=TOP><TD class="boxedCfg"><A name="boxedCfg"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">boxedCfg &lt;on/off&gt;</code></div>
-    </TD></TR>
     <TR VALIGN=TOP><TD class="color"><A name="color"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">color &lt;red,green,blue&gt;</code></div>
+        <div class="format"><code class="level-base">color &lt;red,green,blue&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="priority"><A name="priority"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">priority &lt;float&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="altColor"><A name="altColor"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">altColor &lt;red,green,blue&gt;</code></div>
+    </TD></TR>
+    <TR VALIGN=TOP><TD class="boxedCfg"><A name="boxedCfg"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-full">boxedCfg &lt;on/off&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="chromosomes"><A name="chromosomes"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">chromosomes &lt;chr1,chr2,...&gt;</code></div>
@@ -214,9 +218,6 @@ in the sections below.</I>
     </TD></TR>
     <TR VALIGN=TOP><TD class="pennantIcon"><A name="pennantIcon"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">pennantIcon &lt;icon&gt; [html [tip]]</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="priority"><A name="priority"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">priority &lt;float&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="url_for_hubs">
             <A name="url"></A>
@@ -257,10 +258,10 @@ are described below along with settings specific to their types.</P>
             <code>type bigBed &lt;3-12&gt; [+/.]</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
-        <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="itemRgb"><A name="itemRgb"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-core">itemRgb on</code></div>
+        <div class="format"><code class="level-base">itemRgb on</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="colorByStrand"><A name="colorByStrand"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">colorByStrand &lt;red,green,blue&gt;
@@ -365,20 +366,20 @@ are described below along with settings specific to their types.</P>
     </TH></TR>
     <TR VALIGN=TOP><TD class="bigWig"><IMG class='toggle detail'>
         <div class="format">
-            <code class="level-core">type bigWig &lt;#&gt; &lt;#&gt;</code></div>
+            <code>type bigWig &lt;#&gt; &lt;#&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="autoScale"><A name="autoScale"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-core">autoScale &lt;off/on&gt;</code></div>
+        <div class="format"><code class="level-base">autoScale &lt;off/on&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="maxHeightPixels">
         <A name="maxHeightPixels"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-core">maxHeightPixels &lt;max:default:min&gt;</code></div>
+        <div class="format"><code class="level-base">maxHeightPixels &lt;max:default:min&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="viewLimits">
             <A name="viewLimits"></A>
             <A name="viewLimitsMax"></A><IMG class='toggle detail'>
         <div class="format">
-            <code class="level-core">viewLimits &lt;lower:upper&gt;</code><BR>
+            <code class="level-base">viewLimits &lt;lower:upper&gt;</code><BR>
             <span class="viewLimitsMax"><code class="level-full">viewLimitsMax &lt;lower:upper&gt;</code></span></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="alwaysZero"><A name="alwaysZero"></A><IMG class='toggle detail'>
@@ -436,7 +437,7 @@ are described below along with settings specific to their types.</P>
         <div class="format"><code>type bam</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
-        <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
     <TR class="related1st" VALIGN=TOP><TD class="bamColorMode">
         <A name="bamColorMode"></A><IMG class='toggle detail setD'>
@@ -507,10 +508,10 @@ are described below along with settings specific to their types.</P>
         &nbsp;vcfTabix - Variant Call Format (indexed by tabix) track settings
     </TH></TR>
     <TR VALIGN=TOP><TD class="vcfTabix"><IMG class='toggle detail'>
-        <div class="format"><code class="level-core">type vcfTabix</code></div>
+        <div class="format"><code>type vcfTabix</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="bigDataUrl"><IMG class='toggle detail'>
-        <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
+        <div class="format"><code class="level-required">bigDataUrl &lt;url/relativePath&gt;</code></div>
     </TD></TR>
 
     <TR class="related1st" VALIGN=TOP><TD class="hapClusterEnabled"><A NAME="hapClusterEnabled"><IMG class='toggle detail setF'>
@@ -595,11 +596,11 @@ hierarchical containers:
         &nbsp;Supertrack (Folders) settings
     </TH></TR>
     <TR VALIGN=TOP><TD class="superTrack"><IMG class='toggle detail'>
-        <div class="format"><code class="level-core">superTrack on</code></div>
+        <div class="format"><code class="level-base">superTrack on</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="parent_supertrack">
             <A name="parent_supertrack"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-core">parent &lt;superTrack&gt;</code></div>
+        <div class="format"><code class="level-base">parent &lt;superTrack&gt;</code></div>
     </TD></TR>
     <TR class="examples" VALIGN=TOP><TD class="superTrack_example">
         <IMG class='toggle detail'>
@@ -612,11 +613,11 @@ hierarchical containers:
 <TABLE class="settingsTable" id="Composite_Track_Settings">
 <THEAD><TR><TD><DIV ID="compositeTrack_hub_intro" class="intro"></DIV></TD></TR></THEAD>
     <TR VALIGN=TOP><TH><IMG class='toggle oneSection'>&nbsp;Composite track settings</TH></TR>
+    <TR VALIGN=TOP><TD class="parent"><A name="parent"></A><IMG class='toggle detail'>
+        <div class="format"><code class="level-base">parent &lt;composite&gt; [off/on]</code></div>
+    </TD></TR>
     <TR VALIGN=TOP><TD class="compositeTrack"><IMG class='toggle detail'>
         <div class="format"><code class="level-full">compositeTrack on</code></div>
-    </TD></TR>
-    <TR VALIGN=TOP><TD class="parent"><A name="parent"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-full">parent &lt;composite&gt; [off/on]</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="allButtonPair"><A name="allButtonPair"></A><IMG class='toggle detail'>
         <div class="format"><code class="level-full">allButtonPair on</code></div>
@@ -643,25 +644,25 @@ hierarchical containers:
     <TR VALIGN=TOP><TD class="subGroupN">
             <A name="subGroupN"></A><IMG class='toggle detail'>
         <div class="format">
-            <code class="level-core">subGroup1 &lt;gTag1&gt; &lt;gTitle1&gt; &lt;mTag1a=mTitle1a&gt;
+            <code class="level-base">subGroup1 &lt;gTag1&gt; &lt;gTitle1&gt; &lt;mTag1a=mTitle1a&gt;
                                                         [mTag1b=mTitle1b&hellip;]</code><BR>
-            <code class="level-core">subGroup2 &lt;gTag2&gt; &lt;gTitle2&gt; &lt;mTag2a=mTitle2a&gt;
+            <code class="level-base">subGroup2 &lt;gTag2&gt; &lt;gTitle2&gt; &lt;mTag2a=mTitle2a&gt;
                                                         [mTag2b=mTitle2b&hellip;]</code><BR>
-            <code class="level-core">subGroup3</code>
-            <code class="level-core">subGroup4</code>
-            <code class="level-core">subGroup5</code>
-            <code class="level-core">subGroup6</code>
-            <code class="level-core">subGroup7</code>
-            <code class="level-core">subGroup8</code>
-            <code class="level-core">subGroup9</code>
+            <code class="level-base">subGroup3</code>
+            <code class="level-base">subGroup4</code>
+            <code class="level-base">subGroup5</code>
+            <code class="level-base">subGroup6</code>
+            <code class="level-base">subGroup7</code>
+            <code class="level-base">subGroup8</code>
+            <code class="level-base">subGroup9</code>
             </div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="subGroups"><IMG class='toggle detail'>
         <div class="format">
-            <code class="level-core">subGroups &lt;gTag1=mTag1?&gt; [gTag2= mTag2?]</code></div>
+            <code class="level-base">subGroups &lt;gTag1=mTag1?&gt; [gTag2= mTag2?]</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="dimensions"><A name="dimensions"></A><IMG class='toggle detail'>
-        <div class="format"><code class="level-core">dimensions &lt;dimX=gTag#&gt;
+        <div class="format"><code class="level-base">dimensions &lt;dimX=gTag#&gt;
                                                     [dimY=gTag#] [dimA=gTag# ...]</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="filterComposite">
@@ -695,10 +696,10 @@ hierarchical containers:
     </TH></TR>
     <TR VALIGN=TOP><TD class="view"><IMG class='toggle detail'>
         <div class="format">
-            <code>subGroup1 view &lt;Views&gt; &lt;vTag1a=vTitle1a&gt;
+            <code class='level-base'>subGroup1 view &lt;Views&gt; &lt;vTag1a=vTitle1a&gt;
                                                 [vTag1b=vTitle1b&hellip;]</code><BR>
-            <code>track &lt;viewName&gt;</code><BR>
-            <code class="level-full">view &lt;viewTag&gt;</code></div>
+            <code class='level-required'>track &lt;viewName&gt;</code><BR>
+            <span class="view"><code class="level-full">view &lt;viewTag&gt;</code></span></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="parent_view"><A name="parent_view"></A><IMG class='toggle detail'>
         <div class="format">
@@ -724,14 +725,14 @@ hierarchical containers:
         &nbsp;Aggregate or Overlay track settings
     </TH></TR>
     <TR VALIGN=TOP><TD class="container"><IMG class='toggle detail'>
-        <div class="format"><code class="level-core">container multiWig</code></div>
+        <div class="format"><code class="level-base">container multiWig</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="parent_container">
         <A name="parent_container"></A><IMG class='toggle detail'>
         <div class="format"><code>parent &lt;containerTrack&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="aggregate"><IMG class='toggle detail'>
-        <div class="format"><code class="level-core">aggregate &lt;transparentOverlay/stacked/solidOverlay/none&gt;</code></div>
+        <div class="format"><code class="level-full">aggregate &lt;transparentOverlay/stacked/solidOverlay/none&gt;</code></div>
     </TD></TR>
     <TR VALIGN=TOP><TD class="showSubtrackColorOnUi">
         <A name="showSubtrackColorOnUi"></A><IMG class='toggle detail'>
