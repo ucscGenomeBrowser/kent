@@ -1318,8 +1318,8 @@ if(scriptName)
         }
     }
 
-// Show Data Integrator link on non-public sites.
-if ((hIsPrivateHost() || hIsPreviewHost()) && fileExists("hgIntegrator"))
+// Show Data Integrator link if hgIntegrator is present.
+if (fileExists("hgIntegrator"))
     {
     char hgIntegratorItem[1024];
     safef(hgIntegratorItem, sizeof(hgIntegratorItem),

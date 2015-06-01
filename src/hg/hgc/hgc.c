@@ -25745,7 +25745,7 @@ else if (startsWith("peptideAtlas", table))
     {
     doPeptideAtlas(tdb, item);
     }
-else if (isHubTrack(table) && startsWith("snake", trackHubSkipHubName(table)))
+else if (startsWith("snake", trackHubSkipHubName(table)))
     {
     doSnakeClick(tdb, item);
     }

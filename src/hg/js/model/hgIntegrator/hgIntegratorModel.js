@@ -705,11 +705,6 @@ var HgIntegratorModel = ImModel.extend({
             this.cartDo({ getGroupedTrackDb: { fields: this.tdbFields,
                                                excludeTypes: this.excludeTypes }
                         });
-            // This one shouldn't take long.
-            this.cartDo({ getStaticHtml: {
-                            tag: 'helpText', file: 'goldenPath/help/hgIntegratorHelp.html'
-                          }
-                        });
         }
         this.render();
     }

@@ -30,40 +30,34 @@ enum {useOrgCommon = 0x01,
       useGene      = 0x08,
       useAcc       = 0x10};
 
+static boolean isLabelTypeEnabled(struct track *tg, char *labelNameSuffix,
+                                  boolean defaultVal) 
+/* determine if a particular type of label is enabled for this track.
+ * check cart, settings, and then use default.
+ */
+{
+/* some how the closest to home magic prepends the track name for cart  */
+char settingName[64];
+safef(settingName, sizeof(settingName), "label.%s", labelNameSuffix);
+fprintf(stderr, "%s\n", tg->tdb->settings);
+return cartOrTdbBoolean(cart, tg->tdb, settingName, defaultVal);
+}
+
 static unsigned getLabelTypes(struct track *tg)
 /* get set of labels to use */
 {
 unsigned labelSet = 0;
 
-// label setting are on parent track
-char prefix[128];
-safef(prefix, sizeof(prefix), "%s.label", tg->tdb->track);
-struct hashEl *labels = cartFindPrefix(cart, prefix);
-
-if (labels == NULL)
-    {
-    // default to common name+accession and save this in cart so it makes sense in trackUi
-    labelSet = useOrgCommon|useAcc;
-    char setting[64];
-    safef(setting, sizeof(setting), "%s.label.acc", tg->tdb->track);
-    cartSetBoolean(cart, setting, TRUE);
-    safef(setting, sizeof(setting), "%s.label.orgCommon", tg->tdb->track);
-    cartSetBoolean(cart, setting, TRUE);
-    }
-struct hashEl *label;
-for (label = labels; label != NULL; label = label->next)
-    {
-    if (endsWith(label->name, ".orgCommon") && differentString(label->val, "0"))
-        labelSet |= useOrgCommon;
-    else if (endsWith(label->name, ".orgAbbrv") && differentString(label->val, "0"))
-        labelSet |= useOrgAbbrv;
-    else if (endsWith(label->name, ".db") && differentString(label->val, "0"))
-        labelSet |= useOrgDb;
-    else if (endsWith(label->name, ".gene") && differentString(label->val, "0"))
-        labelSet |= useGene;
-    else if (endsWith(label->name, ".acc") && differentString(label->val, "0"))
-        labelSet |= useAcc;
-    }
+if (isLabelTypeEnabled(tg, "orgCommon", transMapLabelDefaultOrgCommon))
+    labelSet |= useOrgCommon;
+if (isLabelTypeEnabled(tg, "orgAbbrv", transMapLabelDefaultOrgAbbrv))
+    labelSet |= useOrgAbbrv;
+if (isLabelTypeEnabled(tg, "db", transMapLabelDefaultDb))
+    labelSet |= useOrgDb;
+if (isLabelTypeEnabled(tg, "gene", transMapLabelDefaultGene))
+    labelSet |= useGene;
+if (isLabelTypeEnabled(tg, "acc", transMapLabelDefaultAcc))
+    labelSet |= useAcc;
 return labelSet;
 }
 

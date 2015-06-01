@@ -15,6 +15,16 @@ struct trackDb;
 #define transMapSrcTblSetting     "transMapSrc"
 #define transMapGeneTblSetting    "transMapGene"
 
+/*
+ * Default values for labeling of transMap items
+ */
+#define transMapLabelDefaultOrgCommon  TRUE
+#define transMapLabelDefaultOrgAbbrv   FALSE
+#define transMapLabelDefaultDb         FALSE
+#define transMapLabelDefaultGene       FALSE
+#define transMapLabelDefaultAcc        TRUE
+
+
 char* transMapSkipGenomeDbPrefix(char *id);
 /* Skip the source genome db prefix (e.g. hg19:) in a TransMap identifier.
  * Return the full id if no db prefix is found for compatibility with older
