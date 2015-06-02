@@ -1349,7 +1349,15 @@ void halSnakeDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, int height,
         boolean withCenterLabels, MgFont *font,
         Color color, enum trackVisibility vis)
+/* Draw left label (shortLabel) in pack and dense modes. */
 {
+if ((vis == tvDense) ||  (vis == tvPack))
+    {
+    hvGfxSetClip(hvgSide, leftLabelX, yOff + tg->lineHeight, insideWidth, tg->height);
+    hvGfxTextRight(hvgSide, leftLabelX, yOff + tg->lineHeight, leftLabelWidth-1, tg->lineHeight,
+                   color, font, tg->shortLabel);
+    hvGfxUnclip(hvgSide);
+    }
 }
 
 void halSnakeMethods(struct track *tg, struct trackDb *tdb, 

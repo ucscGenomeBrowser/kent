@@ -8,6 +8,7 @@
 #define BIGGENEPRED_NUM_COLS 20
 
 #include "genePred.h"
+#include "asParse.h"
 
 extern char *bigGenePredCommaSepFieldNames;
 
@@ -76,5 +77,7 @@ void bigGenePredOutput(struct bigGenePred *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-#endif /* BIGGENEPRED_H */
+struct asObject *bigGenePredAsObj();
+// Return asObject describing fields of bigGenePred
 
+#endif /* BIGGENEPRED_H */
