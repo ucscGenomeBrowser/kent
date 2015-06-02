@@ -326,6 +326,9 @@ int genePredBaseToCodingPos(struct genePred *gp, int basePos,
 // provided. In that case, returns last valid position and sets isCoding to FALSE.
 
 struct genePred  *genePredFromBigGenePred( char *chrom, struct bigBedInterval *bb);
-/* build a genePred from a bigGenePred */
+/* build a genePred from a bigGenePred interval */
+
+struct genePred  *genePredFromBigGenePredRow(char **row);
+/* build a genePred from a bigGenePred row */
 #endif /* GENEPRED_H */
 

@@ -3,6 +3,7 @@
 #include "common.h"
 #include "hAnno.h"
 #include "basicBed.h"
+#include "bigGenePred.h"
 #include "customTrack.h"
 #include "grp.h"
 #include "hdb.h"
@@ -241,9 +242,20 @@ struct annoGrator *hAnnoGratorFromTrackDb(struct annoAssembly *assembly, char *s
  * If not NULL, primaryAsObj is used to determine whether we can make an annoGratorGpVar. */
 {
 struct annoGrator *grator = NULL;
+boolean primaryIsVariants = (primaryAsObj != NULL &&
+                             (asObjectsMatch(primaryAsObj, pgSnpAsObj()) ||
+                              asObjectsMatch(primaryAsObj, vcfAsObj())));
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
 if (bigDataUrl != NULL)
-    grator = hAnnoGratorFromBigFileUrl(bigDataUrl, assembly, maxOutRows, overlapRule);
+    {
+    if (primaryIsVariants && sameString("bigGenePred", tdb->type))
+        {
+        struct annoStreamer *streamer = annoStreamBigBedNew(bigDataUrl, assembly, maxOutRows);
+        grator = annoGratorGpVarNew(streamer);
+        }
+    else
+        grator = hAnnoGratorFromBigFileUrl(bigDataUrl, assembly, maxOutRows, overlapRule);
+    }
 else if (startsWithWord("wig", tdb->type))
     grator = annoGrateWigDbNew(assembly->name, selTable, assembly, maxOutRows);
 else if (startsWithWord("bigWig", tdb->type))
@@ -255,9 +267,9 @@ else
     {
     struct annoStreamer *streamer = hAnnoStreamerFromTrackDb(assembly, selTable, tdb, chrom,
                                                              maxOutRows);
-    if (primaryAsObj != NULL &&
-	(asObjectsMatch(primaryAsObj, pgSnpAsObj()) || asObjectsMatch(primaryAsObj, vcfAsObj()))
-	&& asColumnNamesMatchFirstN(streamer->asObj, genePredAsObj(), 10))
+    if (primaryIsVariants &&
+        (asColumnNamesMatchFirstN(streamer->asObj, genePredAsObj(), 10) ||
+         asObjectsMatch(streamer->asObj, bigGenePredAsObj())))
 	grator = annoGratorGpVarNew(streamer);
     else
 	grator = annoGratorNew(streamer);
