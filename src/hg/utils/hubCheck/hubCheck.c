@@ -455,7 +455,7 @@ else
     struct trackHubSettingSpec *checkLevel = NULL;
     AllocVar(checkLevel);
     checkLevel->level = options->level;
-    if (trackHubSettingLevel(hubSetting) >= trackHubSettingLevel(checkLevel))
+    if (trackHubSettingLevel(hubSetting) < trackHubSettingLevel(checkLevel))
         {
         dyStringPrintf(errors, "Setting '%s' is level '%s'\n", setting, hubSetting->level);
         retVal = 1;
