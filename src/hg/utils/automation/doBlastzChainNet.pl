@@ -1585,6 +1585,7 @@ netToAxt $tDb.$qDb.syn.net.gz $tDb.$qDb.all.chain.gz \\
 md5sum $tDb.$qDb.syn.net.gz $tDb.$qDb.synNet.maf.gz > synNet.md5sum.txt
 mkdir -p $HgAutomate::goldenPath/$tDb/vs$QDb
 cd $HgAutomate::goldenPath/$tDb/vs$QDb
+ln -s $runDir/$tDb.$qDb.syn.net.gz .
 ln -s $runDir/$tDb.$qDb.synNet.maf.gz .
 cat $runDir/synNet.md5sum.txt >> md5sum.txt
 sort -u md5sum.txt > tmp.sum

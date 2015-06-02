@@ -9,6 +9,7 @@ var HgIntegratorModel = ImModel.extend({
 
     maxDataSources: 5,
     tdbFields: 'track,table,shortLabel,parent,subtracks',
+    excludeTypes: 'bam,wigMaf',
 
     handleCartVar: function(mutState, cartVar, newValue) {
         // Some cart variables require special action (not simply being merged into top-level state)
@@ -608,6 +609,10 @@ var HgIntegratorModel = ImModel.extend({
     doGetOutput: function(mutState) {
         // User clicked 'Get output' button; make a form and submit it.
         var querySpec = mutState.get('hgi_querySpec').toJS();
+        // Remove UI-only fields from dataSources:
+        querySpec.dataSources = _.map(querySpec.dataSources, function(ds) {
+            return _.omit(ds, ['schemaUrl', 'label']);
+        });
         var doFile = mutState.getIn(['hgi_querySpec', 'outFileOptions', 'doFile']);
         if (querySpec.dataSources.length < 1) {
             alert('Please add at least one data source.');
@@ -655,7 +660,8 @@ var HgIntegratorModel = ImModel.extend({
                       getUserRegions: {}
                       });
         this.cartDo({ cgiVar: this.getChangeDbCgiVars(mutState),
-                      getGroupedTrackDb: { fields: this.tdbFields } });
+                      getGroupedTrackDb: { fields: this.tdbFields,
+                                           excludeTypes: this.excludeTypes } });
     },
 
     initialize: function() {
@@ -696,12 +702,8 @@ var HgIntegratorModel = ImModel.extend({
                         });
             // The groupedTrackDb structure is so large for hg19 and other well-annotated
             // genomes that the volume of compressed JSON takes a long time on the wire.
-            this.cartDo({ getGroupedTrackDb: { fields: this.tdbFields }
-                        });
-            // This one shouldn't take long.
-            this.cartDo({ getStaticHtml: {
-                            tag: 'helpText', file: 'goldenPath/help/hgIntegratorHelp.html'
-                          }
+            this.cartDo({ getGroupedTrackDb: { fields: this.tdbFields,
+                                               excludeTypes: this.excludeTypes }
                         });
         }
         this.render();

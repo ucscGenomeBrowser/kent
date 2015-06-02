@@ -98,6 +98,7 @@
 #include "softberryHom.h"
 #include "borkPseudoHom.h"
 #include "sanger22extra.h"
+#include "ncbiRefLink.h"
 #include "refLink.h"
 #include "hgConfig.h"
 #include "estPair.h"
@@ -294,6 +295,7 @@ struct palInfo
  * http://www.ncbi.nlm.nih.gov/entrez/query/static/linking.html */
 char *entrezFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=%s&term=%s&doptcmdl=%s&tool=genome.ucsc.edu";
 char *entrezPureSearchFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=PureSearch&db=%s&details_term=%s[%s] ";
+char *ncbiGeneFormat = "http://www.ncbi.nlm.nih.gov/gene/%s";
 char *entrezUidFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=%s&list_uids=%d&dopt=%s&tool=genome.ucsc.edu";
 /* db=unists is not mentioned in NCBI's doc... so stick with this usage: */
 char *unistsnameScript = "http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=unists";
@@ -324,6 +326,12 @@ char* getEntrezNucleotideUrl(char *accession)
 char url[512];
 safef(url, sizeof(url), entrezFormat, "Nucleotide", accession, "GenBank");
 return cloneString(url);
+}
+
+void printNcbiGeneUrl(FILE *f, char *gene)
+/* Print URL for Entrez browser on a nucleotide. */
+{
+fprintf(f, ncbiGeneFormat, gene);
 }
 
 void printEntrezNucleotideUrl(FILE *f, char *accession)
@@ -883,24 +891,6 @@ else
     cartWebStart(cart, database, "%s", tdb->longLabel);
 }
 
-static struct dyString *subMulti(char *orig, int subCount,
-                                 char *in[], char *out[])
-/* Perform multiple substitions on orig. */
-{
-int i;
-struct dyString *s = newDyString(256), *d = NULL;
-
-dyStringAppend(s, orig);
-for (i=0; i<subCount; ++i)
-    {
-    d = dyStringSub(s->string, in[i], out[i]);
-    dyStringFree(&s);
-    s = d;
-    d = NULL;
-    }
-return s;
-}
-
 void printItemDetailsHtml(struct trackDb *tdb, char *itemName)
 /* if track has an itemDetailsHtml, retrieve and print the HTML */
 {
@@ -952,77 +942,6 @@ if (sql != NULL)
 return id;
 }
 
-char* replaceInUrl(struct trackDb *tdb, char *url, char *idInUrl, boolean encode) 
-/* replace $$ in url with idInUrl. Supports many other wildchards */
-{
-struct dyString *uUrl = NULL;
-struct dyString *eUrl = NULL;
-char startString[64], endString[64];
-char begItem[64], endItem[64];
-char *ins[11], *outs[11];
-char *eItem = (encode ? cgiEncode(idInUrl) : cloneString(idInUrl));
-
-safef(startString, sizeof startString, "%d", winStart);
-safef(endString, sizeof endString, "%d", winEnd);
-ins[0] = "$$";
-outs[0] = idInUrl;
-ins[1] = "$T";
-outs[1] = tdb->track;
-ins[2] = "$S";
-outs[2] = seqName;
-ins[3] = "$[";
-outs[3] = startString;
-ins[4] = "$]";
-outs[4] = endString;
-ins[5] = "$s";
-outs[5] = skipChr(seqName);
-ins[6] = "$D";
-outs[6] = database;
-ins[7] = "$P";  /* for an item name of the form:  prefix:suffix */
-ins[8] = "$p";	/* the P is the prefix, the p is the suffix */
-if (stringIn(":", idInUrl)) {
-    char *itemClone = cloneString(idInUrl);
-    char *suffix = stringIn(":", itemClone);
-    char *suffixClone = cloneString(suffix+1); /* +1 skip the : */
-    char *nextColon = stringIn(":", suffixClone+1);
-    if (nextColon)	/* terminate suffixClone suffix */
-        *nextColon = '\0';	/* when next colon is present */
-    *suffix = '\0';   /* terminate itemClone prefix */
-    outs[7] = itemClone;
-    outs[8] = suffixClone;
-    /* small memory leak here for these cloned strings */
-    /* not important for a one-time operation in a CGI that will exit */
-} else {
-    outs[7] = idInUrl;	/* otherwise, these are not expected */
-    outs[8] = idInUrl;	/* to be used */
-}
-
-// URL may now contain item boundaries
-ins[9] = "${";
-ins[10] = "$}";
-if (cartOptionalString(cart, "o") && cartOptionalString(cart, "t"))
-    {
-    int itemBeg = cartIntExp(cart, "o") + 1; // Should strip any unexpected commas
-    int itemEnd = cartIntExp(cart, "t");
-    safef(begItem, sizeof begItem, "%d", itemBeg);
-    safef(endItem, sizeof endItem, "%d", itemEnd);
-    outs[9] = begItem;
-    outs[10] = endItem;
-    }
-else // should never be but I am unwilling to bet the farm
-    {
-    outs[9] = startString;
-    outs[10] = endString;
-    }
-
-uUrl = subMulti(url, ArraySize(ins), ins, outs);
-outs[0] = eItem;
-eUrl = subMulti(url, ArraySize(ins), ins, outs);
-freeDyString(&uUrl);
-freeMem(eItem);
-return eUrl->string;
-}
-
 char* constructUrl(struct trackDb *tdb, char *urlSetting, char *idInUrl, boolean encode) 
 {
 /* construct the url by replacing $$, etc in the url given by urlSetting.
@@ -1038,7 +957,7 @@ else
 if (url == NULL || url[0] == 0)
     return NULL;
 
-char* eUrl = replaceInUrl(tdb, url, idInUrl, encode);
+char* eUrl = replaceInUrl(url, idInUrl, cart, database, seqName, winStart, winEnd, tdb->track, encode);
 return eUrl;
 }
 
@@ -1575,7 +1494,8 @@ for (itemId = slIds; itemId!=NULL; itemId = itemId->next)
         if (id < nameCount)
             itemName = idNames[sqlUnsigned(itemName)];
         }
-    char *idUrl = replaceInUrl(tdb, url, trimSpaces(itemName), TRUE);
+    char *idUrl = replaceInUrl(url, trimSpaces(itemName), cart, database, seqName, winStart, 
+                    winEnd, tdb->track, TRUE);
     printf("<a href=\"%s\" target=\"_blank\">%s</a>", idUrl, itemName);
     } 
 printf("</td></tr>\n");
@@ -9771,6 +9691,8 @@ char *gbCdnaGetDescription(struct sqlConnection *conn, char *acc)
 /* return mrna description, or NULL if not available. freeMem result */
 {
 char query[1024];
+if (!hTableExists(database, "gbCdnaInfo"))
+    return NULL;
 sqlSafef(query, sizeof(query),
       "select description.name from gbCdnaInfo,description where (acc = '%s') and (gbCdnaInfo.description = description.id)", acc);
 char *desc = sqlQuickString(conn, query);
@@ -10986,8 +10908,18 @@ if (access(textPath, R_OK) == 0)
 
 int gbCdnaGetVersion(struct sqlConnection *conn, char *acc)
 /* return mrna/est version, or 0 if not available */
+
 {
 int ver = 0;
+if (!hTableExists(database, "gbCdnaInfo"))
+    {
+    warn("Genbank information not shown below, the table %s.gbCdnaInfo is not installed "
+        "on this server. ", database);
+    //"The information below is a shortened version of the one shown on the "
+    //"<a href=\"http://genome.ucsc.edu\">UCSC site</a>", database);
+    return 0;
+    }
+
 if (hHasField(database, "gbCdnaInfo", "version"))
     {
     char query[128];
@@ -11018,6 +10950,39 @@ if ((xenoDb != NULL) && hDbIsActive(xenoDb) && hTableExists(xenoDb, "refSeqAli")
     printf("</A><BR>");
     }
 freeMem(org);
+}
+
+void prNcbiRefGeneInfo(struct sqlConnection *conn, char *rnaName,
+                   char *sqlRnaName, struct ncbiRefLink *rl, boolean isPredicted)
+/* print basic details information and links for a NCBI RefGene */
+{
+
+printf("<td valign=top nowrap>\n");
+printf("<H2>NCBI RefSeq Gene %s</H2>\n", rl->id);
+printf("<B>RefSeq:</B> <A HREF=\"");
+printEntrezNucleotideUrl(stdout, rl->id);
+printf("\" TARGET=_blank>%s</A><BR>", rl->id);
+
+if (!isEmpty(rl->gene))
+    {
+    printf("<B>Gene name:</B> %s<BR>\n", rl->gene);
+    }
+if (!isEmpty(rl->gbKey))
+    {
+    printf("<B>Molecule type:</B> %s<BR>\n", rl->gbKey);
+    }
+if (!isEmpty(rl->dbXref) && startsWith("GeneID:", rl->dbXref))
+    {
+    char *geneId = strchr(rl->dbXref, ':');
+    geneId++;
+    printf("<B>NCBI Gene:</B> <A HREF=\"");
+    printNcbiGeneUrl(stdout, geneId);
+    printf("\" TARGET=_blank>%s</A><BR>", geneId);
+    }
+if (!isEmpty(rl->product))
+    {
+    printf("<B>Product:</B> %s<BR>\n", rl->product);
+    }
 }
 
 void prRefGeneInfo(struct sqlConnection *conn, char *rnaName,
@@ -11344,6 +11309,51 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
+void doNcbiRefGene(struct trackDb *tdb, char *rnaName)
+/* Process click on a NCBI RefSeq gene. */
+{
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *sqlRnaName = rnaName;
+struct ncbiRefLink *rl;
+boolean isPredicted = sameString(tdb->table, "ncbiRefPredicted");
+
+/* Make sure to escape single quotes for DB parseability */
+if (strchr(rnaName, '\''))
+    {
+    sqlRnaName = replaceChars(rnaName, "'", "''");
+    }
+/* get refLink entry */
+sqlSafef(query, sizeof(query), "select * from ncbiRefLink where id = '%s'", sqlRnaName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find %s in ncbiRefLink table.", rnaName);
+rl = ncbiRefLinkLoad(row);
+sqlFreeResult(&sr);
+
+/* print the first section with info  */
+if (isPredicted)
+    cartWebStart(cart, database, "NCBI Predicted RefSeq Gene");
+else
+    cartWebStart(cart, database, "NCBI Curated RefSeq Gene");
+printf("<table border=0>\n<tr>\n");
+prNcbiRefGeneInfo(conn, rnaName, sqlRnaName, rl, isPredicted);
+
+printf("</tr>\n</table>\n");
+
+htmlHorizontalLine();
+
+struct palInfo *palInfo = NULL;
+
+
+geneShowPosAndLinksPal(rl->id, NULL, tdb, NULL, "htcTranslatedProtein",
+		    "htcGeneMrna", "htcGeneInGenome", "mRNA Sequence",palInfo);
+
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
 void doRefGene(struct trackDb *tdb, char *rnaName)
 /* Process click on a known RefSeq gene. */
 {
@@ -11398,9 +11408,15 @@ htmlHorizontalLine();
 /* print alignments that track was based on */
 {
 char *aliTbl = (sameString(tdb->table, "refGene") ? "refSeqAli" : "xenoRefSeqAli");
-struct psl *pslList = getAlignments(conn, aliTbl, rl->mrnaAcc);
-printf("<H3>mRNA/Genomic Alignments</H3>");
-printAlignments(pslList, start, "htcCdnaAli", aliTbl, rl->mrnaAcc);
+if (hTableExists(database, aliTbl))
+    {
+    struct psl *pslList = getAlignments(conn, aliTbl, rl->mrnaAcc);
+    printf("<H3>mRNA/Genomic Alignments</H3>");
+    printAlignments(pslList, start, "htcCdnaAli", aliTbl, rl->mrnaAcc);
+    }
+else
+    warn("Sequence alignment links not shown below, the table %s.refSeqAli is not installed " 
+            "on this server", database);
 }
 
 htmlHorizontalLine();
@@ -24819,7 +24835,11 @@ else if (sameWord(table, "knownGene"))
     {
     doKnownGene(tdb, item);
     }
-else if (sameWord(table, "refGene"))
+else if (sameWord(table, "ncbiRefPredicted") || sameWord(table, "ncbiRefCurated") )
+    {
+    doNcbiRefGene(tdb, item);
+    }
+else if (sameWord(table, "refGene") )
     {
     doRefGene(tdb, item);
     }
@@ -25725,7 +25745,7 @@ else if (startsWith("peptideAtlas", table))
     {
     doPeptideAtlas(tdb, item);
     }
-else if (isHubTrack(table) && startsWith("snake", trackHubSkipHubName(table)))
+else if (startsWith("snake", trackHubSkipHubName(table)))
     {
     doSnakeClick(tdb, item);
     }

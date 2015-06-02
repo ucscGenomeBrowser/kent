@@ -175,7 +175,6 @@ struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, struct hash 
 {
 int maxRowSize = (eim == NULL ? 3 : bbExIndexMakerMaxIndexField(eim) + 1);
 char *row[maxRowSize];
-struct hash *uniqHash = hashNew(0);
 struct bbiChromUsage *usage = NULL, *usageList = NULL;
 int lastStart = -1;
 bits32 id = 0;
@@ -204,12 +203,12 @@ for (;;)
     totalBases += (end - start);
     if (usage == NULL || differentString(usage->name, chrom))
         {
-	if (hashLookup(uniqHash, chrom))
+	/* make sure chrom names are sorted in ASCII order */
+	if ((usage != NULL) && strcmp(usage->name, chrom) > 0)
 	    {
-	    errAbort("%s is not sorted at line %d.  Please use \"sort -k1,1 -k2,2n\" or bedSort and try again.",
+	    errAbort("%s is not case-sensitive sorted at line %d.  Please use \"sort -k1,1 -k2,2n\" with LC_COLLATE=C,  or bedSort and try again.",
 	    	lf->fileName, lf->lineIx);
 	    }
-	hashAdd(uniqHash, chrom, NULL);
 	struct hashEl *chromHashEl = hashLookup(chromSizesHash, chrom);
 	if (chromHashEl == NULL)
 	    errAbort("%s is not found in chromosome sizes file", chrom);
@@ -244,7 +243,6 @@ if (bedCount > 0)
 *retMinDiff = minDiff;
 *retAveSize = aveSize;
 *retBedCount = bedCount;
-freeHash(&uniqHash);
 return usageList;
 }
 

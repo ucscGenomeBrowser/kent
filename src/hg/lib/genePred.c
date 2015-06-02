@@ -2109,3 +2109,48 @@ assert (numBlocks == gp->exonCount);
 
 return gp;
 }
+
+static void sqlUnsignedDynamicArrayNoClobber(char *s, unsigned **retArray, int *retSize)
+/* Make a copy of s on stack and chop that up so we don't mangle s. */
+{
+char copy[strlen(s)+1];
+safecpy(copy, sizeof(copy), s);
+sqlUnsignedDynamicArray(copy, retArray, retSize);
+}
+
+struct genePred  *genePredFromBigGenePredRow(char **row)
+/* build a genePred from a bigGenePred row */
+{
+struct genePred *gp;
+AllocVar(gp);
+gp->chrom = cloneString(row[0]);
+gp->txStart = sqlUnsigned(row[1]);
+gp->txEnd = sqlUnsigned(row[2]);
+gp->name = cloneString(row[3]);
+gp->strand[0] = row[5][0];
+gp->strand[1] = row[5][1];
+gp->cdsStart = sqlUnsigned(row[6]);
+gp->cdsEnd = sqlUnsigned(row[7]);
+gp->exonCount = sqlUnsigned(row[9]);
+int numBlocks;
+sqlUnsignedDynamicArrayNoClobber(row[11], &gp->exonStarts, &numBlocks);
+assert (numBlocks == gp->exonCount);
+// First put blockSizes in exonEnds:
+sqlUnsignedDynamicArrayNoClobber(row[10], &gp->exonEnds, &numBlocks);
+assert (numBlocks == gp->exonCount);
+// Then add in txStart to relative starts, and add starts to block sizes to get ends:
+int ii;
+for(ii=0; ii < numBlocks; ii++)
+    {
+    gp->exonStarts[ii] += gp->txStart;
+    gp->exonEnds[ii] += gp->exonStarts[ii];
+    }
+gp->name2 = cloneString(row[12]);
+gp->cdsStartStat = parseCdsStat(row[13]);
+gp->cdsEndStat = parseCdsStat(row[14]);
+gp->optFields |= genePredCdsStatFld;
+sqlSignedDynamicArray(row[15],  &gp->exonFrames, &numBlocks);
+assert (numBlocks == gp->exonCount);
+gp->optFields |= genePredExonFramesFld;
+return gp;
+}

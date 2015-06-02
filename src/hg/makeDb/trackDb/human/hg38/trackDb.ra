@@ -359,9 +359,11 @@ searchPriority 3.53
 
 include trackDb.cloneEnd.ra
 
-include hg38Patch2.ra beta,public
-include hg38Patch3.ra alpha
+include hg38Patch3.ra
 include knownGene.ra.alpha alpha
 include knownGene.ra.beta beta,public
 
 include trackDb.100way.ra
+
+track microsat override
+group rep

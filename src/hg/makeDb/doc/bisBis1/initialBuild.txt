@@ -1,0 +1,495 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the bisBis1
+# Bison - Bison bison bison
+
+# Assembly Name:  Bison_UMD1.0
+# Organism name:  Bison bison bison
+# Taxid:          43346
+# Submitter:      University of Maryland
+# Date:           2014-10-8
+# BioSample:      SAMN02947321
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# GenBank Assembly Accession: GCA_000754665.1 (latest)
+# RefSeq Assembly Accession: GCF_000754665.1 (species-representative latest)
+# RefSeq Assembly and GenBank Assemblies Identical: no
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000754675.1      GCF_000754675.1 Primary Assembly
+##      GCF_000079715.1 non-nuclear
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2015-03-04 - Hiram)
+    mkdir -p /hive/data/genomes/bisBis1/genbank
+    cd /hive/data/genomes/bisBis1/genbank
+
+    time rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Bison_bison/all_assembly_versions/GCA_000754665.1_Bison_UMD1.0/ ./
+    # sent 280 bytes  received 2071454458 bytes  16772912.86 bytes/sec
+    # total size is 2071199887  speedup is 1.00
+    # real    2m3.042s
+
+    # sent 280 bytes  received 737708839 bytes  13535947.14 bytes/sec
+    # total size is 737617040  speedup is 1.00
+    # real    0m53.748s
+
+    # measure what we have here:
+    faSize GCA_000754665.1_Bison_UMD1.0_genomic.fna.gz
+    # 2953606000 bases (195767988 N's 2757838012 real 1619197667 upper
+    #   1138640345 lower) in 450181 sequences in 1 files
+    # Total size: mean 6560.9 sd 233789.4 min 200 (JPYT01449433.1)
+    #    max 43721425 (KN265167.1) median 428
+    # %38.55 masked total, %41.29 masked real
+
+    # that top-level file is the same as the unplaced scaffold file:
+    faSize GCA_000754665.1_Bison_UMD1.0_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz
+
+    # 2953606000 bases (195767988 N's 2757838012 real 2757838012 upper
+    #    0 lower) in 450181 sequences in 1 files
+    # Total size: mean 6560.9 sd 233789.4 min 200 (JPYT01449433.1)
+    #    max 43721425 (KN265167.1) median 428
+    # %0.00 masked total, %0.00 masked real
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2015-03-05 - Hiram)
+    mkdir /hive/data/genomes/bisBis1/ucsc
+    cd /hive/data/genomes/bisBis1/ucsc
+
+    # since this is a scaffold-only assembly, merely use the accession names
+    # and since there are all .1 versions, this sed statement will make them
+    # all v1 version names:
+    zcat ../genbank/GCA_000754665.1_Bison_UMD1.0_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+       | grep -v "^#" | sed -e 's/\.1/v1/;' > chrUn.bisBis1.agp
+
+    zcat ../genbank/GCA_000754665.1_Bison_UMD1.0_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz \
+       | sed -e 's/.1 Bison .*/v1/;' > chrUn.bisBis1.fa
+
+    # verify these two files are compatible:
+    faToTwoBit chrUn.bisBis1.fa test.2bit
+    checkAgpAndFa chrUn.bisBis1.agp test.2bit 2>&1 | tail
+    # All AGP and FASTA entries agree - both files are valid
+
+#############################################################################
+#  Initial database build (DONE - 2015-03-05 - Hiram)
+
+    cd /hive/data/genomes/bisBis1
+    cat << '_EOF_' > bisBis1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db bisBis1
+clade mammal
+genomeCladePriority 31
+scientificName Bison bison bison
+commonName Bison
+assemblyDate Oct. 2014
+assemblyLabel U. Maryland
+assemblyShortLabel Bison_UMD1.0
+orderKey 2315
+# mitoAcc from the RefSeq assembly GCF_000754665.1
+mitoAcc NC_012346.1
+fastaFiles /hive/data/genomes/bisBis1/ucsc/*.fa
+agpFiles /hive/data/genomes/bisBis1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir bison
+photoCreditURL http://genetics.tamu.edu/faculty/lauren_dobson
+photoCreditName Lauren Dobson - Texas A and M University
+ncbiGenomeId 8907
+ncbiAssemblyId 237421
+ncbiAssemblyName Bison_UMD1.0
+ncbiBioProject 266339
+genBankAccessionID GCA_000754665.1
+taxId 43346
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and AGP are OK:
+    # temporary set sciName to just 'Bison bison' to get through the chrM
+    #  identification
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp bisBis1.config.ra) > agp.log 2>&1
+    # *** All done!  (through the 'agp' step)
+    # real    66m20.834s
+
+    # reset sciName to 'Bison bison bison'
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db bisBis1.config.ra) > db.log 2>&1
+    # real    35m25.469s
+
+    # check in the trackDb files created and add to trackDb/makefile
+    # and clean up:
+    rm -fr TemporaryTrackDbCheckout/
+
+##########################################################################
+# running repeat masker (DONE - 2015-03-07 - Hiram)
+    mkdir /hive/data/genomes/bisBis1/bed/repeatMasker
+    cd /hive/data/genomes/bisBis1/bed/repeatMasker
+    # RM did not recognize "Bison bison bison"
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -species="Bison bison" \
+        -smallClusterHub=ku bisBis1) > do.log 2>&1
+    # real    169m48.984s
+    # after cluster difficulties:
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -continue=cat -species="Bison bison" \
+        -smallClusterHub=ku bisBis1) > cat.log 2>&1
+    # real    47m40.940s
+
+    cat faSize.rmsk.txt
+    # 2953622319 bases (195767988 N's 2757854331 real 1454950144
+    #    upper 1302904187 lower) in 450182 sequences in 1 files
+    # Total size: mean 6561.0 sd 233789.2 min 200 (JPYT01449433v1)
+    #    max 43721425 (KN265167v1) median 428
+    #  %44.11 masked total, %47.24 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;    
+
+    time featureBits -countGaps bisBis1 rmsk
+    # 1313271477 bases of 2953622319 (44.463%) in intersection
+    #  real    4m15.819s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2015-03-07 - Hiram)
+
+    mkdir /hive/data/genomes/bisBis1/bed/simpleRepeat
+    cd /hive/data/genomes/bisBis1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        bisBis1) > do.log 2>&1
+    # real    346m50.550s
+
+    cat fb.simpleRepeat
+    # 32820797 bases of 2757854331 (1.190%) in intersection
+
+    # using the Window Masker result:
+    cd /hive/data/genomes/bisBis1
+    twoBitMask bed/repeatMasker/bisBis1.rmsk.2bit \
+      -add bed/simpleRepeat/trfMask.bed  bisBis1.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa bisBis1.2bit stdout | faSize stdin > faSize.bisBis1.2bit.txt
+    cat faSize.bisBis1.2bit.txt
+    # 2953622319 bases (195767988 N's 2757854331 real 1454240084
+    #    upper 1303614247 lower) in 450182 sequences in 1 files
+    # Total size: mean 6561.0 sd 233789.2 min 200 (JPYT01449433v1)
+    #    max 43721425 (KN265167v1) median 428
+    # %44.14 masked total, %47.27 masked real
+
+    rm /gbdb/bisBis1/bisBis1.2bit
+    ln -s `pwd`/bisBis1.2bit /gbdb/bisBis1/bisBis1.2bit
+
+##########################################################################
+## WINDOWMASKER (DONE - 2015-03-09 - Hiram)
+
+    mkdir /hive/data/genomes/bisBis1/bed/windowMasker
+    cd /hive/data/genomes/bisBis1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev bisBis1) > do.log 2>&1
+    # real    1553m26.596s
+
+    # Masking statistics
+    cat faSize.bisBis1.cleanWMSdust.txt
+    # 2953622319 bases (195767988 N's 2757854331 real 1605760353 upper
+    #    1152093978 lower) in 450182 sequences in 1 files
+    # Total size: mean 6561.0 sd 233789.2 min 200 (JPYT01449433v1)
+    #    max 43721425 (KN265167v1) median 428
+    # %39.01 masked total, %41.78 masked real
+
+    cat fb.bisBis1.rmsk.windowmaskerSdust.txt
+    # 885186161 bases of 2953622319 (29.970%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2015-03-09 - Hiram)
+    mkdir /hive/data/genomes/bisBis1/bed/cpgIslands
+    cd /hive/data/genomes/bisBis1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku bisBis1) > do.log 2>&1 &
+    # real    169m34.228s
+
+    cat fb.bisBis1.cpgIslandExt.txt
+    # 21291289 bases of 2757854331 (0.772%) in intersection
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2015-03-08 - Hiram)
+    mkdir /hive/data/genomes/bisBis1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/bisBis1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/bisBis1/bisBis1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku bisBis1) > do.log 2>&1
+    # real    201m35.328s
+
+    cat fb.bisBis1.cpgIslandExtUnmasked.txt
+    # 38121515 bases of 2757854331 (1.382%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-03-09 - Hiram)
+    mkdir /hive/data/genomes/bisBis1/bed/cytoBand
+    cd /hive/data/genomes/bisBis1/bed/cytoBand
+    makeCytoBandIdeo.csh bisBis1
+
+#########################################################################
+# genscan - (DONE - 2015-03-09 - Hiram)
+    mkdir /hive/data/genomes/bisBis1/bed/genscan
+    cd /hive/data/genomes/bisBis1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku bisBis1) > do.log 2>&1 &
+    # real    162m42.398s
+# Completed: 450181 of 450182 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      76248s    1270.81m    21.18h    0.88d  0.002 y
+# IO & Wait Time:               1792734s   29878.89m   497.98h   20.75d  0.057 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest finished job:            1047s      17.45m     0.29h    0.01d
+# Submission to last job:          5004s      83.40m     1.39h    0.06d
+
+    # one failed job completed manually window size 2,000,000, continuing:
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku bisBis1) > makeBed.log 2>&1 &
+    # real    31m34.043s
+
+    cat fb.bisBis1.genscan.txt
+    #   54795491 bases of 2757854331 (1.987%) in intersection
+
+    cat fb.bisBis1.genscanSubopt.txt
+    #   55924017 bases of 2757854331 (2.028%) in intersection
+
+########################################################################
+# Create kluster run files (DONE - 2015-03-09 - Hiram)
+
+    cd /hive/data/genomes/bisBis1
+    # numerator is bisBis1 gapless bases "real" as reported by:
+    head -1 faSize.bisBis1.2bit.txt
+# 2953622319 bases (195767988 N's 2757854331 real 1454240084 upper
+#    1303614247 lower) in 450182 sequences in 1 files
+
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2757854331 / 2861349177 \) \* 1024
+    # ( 2757854331 / 2861349177 ) * 1024 = 986.961975
+
+    # ==> use -repMatch=950 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/bisBis1
+    time blat bisBis1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/bisBis1.11.ooc \
+        -repMatch=950
+    # Wrote 34610 overused 11-mers to jkStuff/bisBis1.11.ooc
+    # real    1m32.452s
+
+    # there are no non-bridged gaps, do not need to do this
+    #   check non-bridged gaps to see what the typical size is:
+#     hgsql -N -e 'select * from gap where bridge="no" order by size;' bisBis1 
+#       | ave -tableOut -col=7 stdin
+# # min Q1 median Q3 max mean N sum stddev
+# 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006
+
+    # note the minimum non-bridged gap size is 50,076
+
+#  gapToLift -verbose=2 -minGap=50000 bisBis1 jkStuff/bisBis1.nonBridged.lft \
+#         -bedFile=jkStuff/bisBis1.nonBridged.bed
+
+#    hgsql -N \
+#        -e 'select * from gap where bridge="no" order by size;' bisBis1 \
+#        | ave -col=7 stdin
+
+    # not needed:
+#    gapToLift -verbose=2 -minGap=100 bosTau7 jkStuff/nonBridged.lft \
+#        -bedFile=jkStuff/nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 450182, total size: 2953622319, one half size:
+#       1476811159
+# cumulative    N50 count       contig  contig size
+# 1476498935      124     KN264768v1      6889849
+# 1476811159 one half size
+# 1483372189      125     KN264981v1      6873254
+
+#############################################################################
+# GENBANK AUTO UPDATE (DONE - 2015-02-20 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Bison bison     56      0       0
+    # Bison bonasus   17      0       0
+
+    # edit etc/genbank.conf to add bisBis1 just before bosTau2
+
+# bisBis1 (Bison)  450182 contigs
+bisBis1.serverGenome = /hive/data/genomes/bisBis1/bisBis1.2bit
+bisBis1.clusterGenome = /hive/data/genomes/bisBis1/bisBis1.2bit
+bisBis1.ooc = /hive/data/genomes/bisBis1/jkStuff/bisBis1.11.ooc
+bisBis1.lift = no
+bisBis1.perChromTables = no
+bisBis1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+bisBis1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+bisBis1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+bisBis1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+bisBis1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+bisBis1.downloadDir = bisBis1
+bisBis1.refseq.mrna.native.load  = yes
+bisBis1.refseq.mrna.xeno.load = yes
+bisBis1.refseq.mrna.xeno.loadDesc  = yes
+bisBis1.genbank.mrna.native.load = no
+bisBis1.genbank.mrna.native.loadDesc = no
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+bisBis1.genbank.mrna.xeno.load = no
+bisBis1.genbank.mrna.xeno.loadDesc = no
+bisBis1.genbank.est.native.load = no
+bisBis1.genbank.est.native.loadDesc = no
+# bisBis1.upstreamGeneTbl = ensGene
+
+    git commit -m "Added bisBis1; refs #15388" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "Added bisBis Bison bison bison refs #14560" \
+       src/lib/gbGenome.c
+    git push
+    make install-server
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial bisBis1
+    # logFile: var/build/logs/2015.05.21-15:39:00.bisBis1.initalign.log
+XXX - running - Thu May 21 15:39:18 PDT 2015
+    # real    974m58.747s
+
+    # recover from cluster problems, then continuing:
+    time ./bin/gbAlignStep -continue=run  -initial bisBis1
+    # real    188m52.441s
+    #    var/build/logs/2015.03.10-14:52:54.bisBis1.initalign.log
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.bisBis1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad bisBis1
+    # logFile: var/dbload/hgwdev/logs/2015.03.31-12:48:20.bisBis1.dbload.log
+XXX - running - Tue Mar 31 12:48:30 PDT 2015
+    # real    96m19.166s
+XXX - broken Thu May 21 15:31:08 PDT 2015
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add bisBis1 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added bisBis1 - Golden snub-nosed monkey refs #14438" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2015-03-10 - Hiram)
+    mkdir /hive/data/genomes/bisBis1/bed/ucscToINSDC
+    cd /hive/data/genomes/bisBis1/bed/ucscToINSDC
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+       ../../genbank/GCA_*assembly_structure/Primary_Assembly NC_012346.1
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    #   450182 name.coordinate.tab
+    #   450182 ucscToINSDC.bed
+    #   450182 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab bisBis1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords bisBis1
+    # should cover %100 entirely:
+    featureBits -countGaps bisBis1 ucscToINSDC
+    # 1192725744 bases of 1192725744 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2015-03-10 - Hiram)
+    hgsql -N -e "select frag from gold;" bisBis1 | sort | head -1
+JPYT01000001.1
+
+    hgsql -N -e "select frag from gold;" bisBis1 | sort | tail -2
+JPYT01792165.1
+NC_012346.1
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" bisBis1 | wc -l
+    # 792166
+
+    hgsql -N -e "select frag from gold;" bisBis1 \
+       | egrep -e '[JN][PC][Y_][T0][0-9]+(\.1)?' | wc -l
+    # 792166
+
+    hgsql -N -e "select frag from gold;" bisBis1 \
+       | egrep -v -e '[JN][PC][Y_][T0][0-9]+(\.1)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/tarsier/bisBis1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [JN][PC][Y_][T0][0-9]+(\.1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE 2014-10-21 - Steve)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=bisBis1 -keys all.joiner
+    joinerCheck -database=bisBis1 -tableCoverage all.joiner
+    joinerCheck -database=bisBis1 -times all.joiner
+
+    cd /hive/data/genomes/bisBis1
+    time makeDownloads.pl bisBis1 > downloads.log 2>&1
+    # real    18m53.781s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/bisBis1/pushQ
+    cd /hive/data/genomes/bisBis1/pushQ
+    makePushQSql.pl bisBis1 > bisBis1.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/bisBis1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/bisBis1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/bisBis1/bbi/quality.bw
+    # WARNING: bisBis1 does not have seq
+    # WARNING: bisBis1 does not have extFile
+
+    #   copy it to hgwbeta
+    scp -p bisBis1.pushQ.sql qateam@hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < bisBis1.pushQ.sql
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

@@ -1391,4 +1391,8 @@ boolean vocabSettingIsEncode(char *setting);
 boolean isEncode2(char *database);
 // Return true for ENCODE2 assemblies
 
+char *replaceInUrl(char* url, char *idInUrl, struct cart* cart, char *db, char* seqName, int winStart, \
+    int winEnd, char *track, boolean encode);
+/* replace $$ in url with idInUrl. Supports many other wildchards */
+
 #endif /* HUI_H */

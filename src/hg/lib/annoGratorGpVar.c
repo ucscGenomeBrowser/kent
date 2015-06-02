@@ -380,20 +380,25 @@ if (retRJFilterFailed && *retRJFilterFailed)
 
 struct annoRow *outRows = NULL;
 
+boolean isBig = (asColumnFindIx(gSelf->mySource->asObj->columnList, "chromStart") >= 0);
 int hasFrames = (asColumnFindIx(gSelf->mySource->asObj->columnList, "exonFrames") >= 0);
 
 for(; rows; rows = rows->next)
     {
-    char **inWords = rows->data;
-
-    // work around genePredLoad's trashing its input
-    char *saveExonStarts = lmCloneString(self->lm, inWords[8]);
-    char *saveExonEnds = lmCloneString(self->lm, inWords[9]);
-    struct genePred *gp = hasFrames ? genePredExtLoad(inWords, GENEPREDX_NUM_COLS) :
-				      genePredLoad(inWords);
-    inWords[8] = saveExonStarts;
-    inWords[9] = saveExonEnds;
-
+    struct genePred *gp;
+    if (isBig)
+        gp = genePredFromBigGenePredRow(rows->data);
+    else
+        {
+        // work around genePredLoad's trashing its input
+        char **inWords = rows->data;
+        char *saveExonStarts = lmCloneString(self->lm, inWords[8]);
+        char *saveExonEnds = lmCloneString(self->lm, inWords[9]);
+        gp = hasFrames ? genePredExtLoad(inWords, GENEPREDX_NUM_COLS) :
+                         genePredLoad(inWords);
+        inWords[8] = saveExonStarts;
+        inWords[9] = saveExonEnds;
+        }
     struct annoRow *outRow = aggvGenRows(self, variant, gp, rows, callerLm);
     if (outRow != NULL)
 	{

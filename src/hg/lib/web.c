@@ -241,6 +241,7 @@ if(!skipSectionHeader)
 webPushErrHandlers();
 /* set the flag */
 webHeadAlreadyOutputed = TRUE;
+errAbortSetDoContentType(FALSE);
 }	/*	static void webStartWrapperDetailedInternal()	*/
 
 void webStartWrapperDetailedArgs(struct cart *theCart, char *db,
@@ -1317,8 +1318,8 @@ if(scriptName)
         }
     }
 
-// Show Data Integrator link on non-public sites.
-if ((hIsPrivateHost() || hIsPreviewHost()) && fileExists("hgIntegrator"))
+// Show Data Integrator link if hgIntegrator is present.
+if (fileExists("hgIntegrator"))
     {
     char hgIntegratorItem[1024];
     safef(hgIntegratorItem, sizeof(hgIntegratorItem),

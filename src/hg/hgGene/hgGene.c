@@ -599,7 +599,7 @@ else
 sqlFreeResult(&sr);
 }
 
-struct genePred *getCurGenePred(struct sqlConnection *conn)
+static struct genePred *getCurGenePred(struct sqlConnection *conn)
 /* Return current gene in genePred. */
 {
 char *track = genomeSetting("knownGene");
@@ -610,6 +610,7 @@ struct sqlResult *sr;
 char **row;
 struct genePred *gp = NULL;
 hFindSplitTable(sqlGetDatabase(conn), curGeneChrom, track, table, &hasBin);
+bool hasAttrId = sqlColumnExists(conn, table, "alignId");
 sqlSafef(query, sizeof(query),
 	"select * from %s where name = '%s' "
 	"and chrom = '%s' and txStart=%d and txEnd=%d"
@@ -618,6 +619,10 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
     gp = genePredLoad(row + hasBin);
+
+#define  ALIGNIDFIELD      11  // Gencode Id
+    if (hasAttrId)
+	curAlignId = cloneString(row[ALIGNIDFIELD]);
     }
 sqlFreeResult(&sr);
 if (gp == NULL)

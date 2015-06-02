@@ -17,6 +17,7 @@
 #include "geoMirror.h"
 #include "hgTracks.h"
 #include "trackHub.h"
+#include "extTools.h"
 
 /* list of links to display in a menu */
 struct hotLink
@@ -25,6 +26,8 @@ struct hotLink
     char *name;
     char *url;
     char *id;
+    char *mouseOver;
+    boolean inactive; /* greyed out */
     boolean external;
     };
 
@@ -37,7 +40,16 @@ link->name = cloneString(name);
 link->url = cloneString(url);
 link->id = cloneString(id);
 link->external = external;
+link->inactive = FALSE;
 slAddTail(links, link);
+}
+
+static void appendLinkMaybeInactive(struct hotLink **links, char *url, char *name, char *id, 
+    boolean external, boolean inactive)
+{
+appendLink(links, url, name, id, external);
+struct hotLink *le = slLastEl(links);
+le->inactive=inactive;
 }
 
 static void printEnsemblAnchor(char *database, char* archive,
@@ -136,11 +148,84 @@ if (1 == itemCount)
 agpFragFree(&agpItem);  // the one we maybe used
 }
 
+void freeLinksAndConvert(struct hotLink *links, struct dyString *menuHtml)
+/* convert the links to html strings and append to the dyString "menu", destroying the links */
+{
+int len = slCount(links);
+int i = 0;
+struct hotLink *link = NULL;
+for(i = 0, link = links; link != NULL; i++, link = link->next)
+    {
+    char class[100];
+    if(i == 0)
+        safef(class, sizeof(class), "first");
+    else if (i + 1 == len)
+        safef(class, sizeof(class), "last");
+    else
+        class[0] = 0;
+    dyStringAppend(menuHtml, "<li");
+    char *encodedName = htmlEncode(link->name);
+    if(*class)
+        dyStringPrintf(menuHtml, " class='%s'", class);
+    dyStringPrintf(menuHtml, "><a href='%s' id='%s'%s>%s</a></li>\n", link->url, link->id,
+        link->external ? " TARGET='_blank'" : "", encodedName);
+    freez(&encodedName);
+
+    freez(&link->name);
+    freez(&link->url);
+    freez(&link->id);
+    }
+slFreeList(links);
+}
+
+static void addSendToMenuItems(struct dyString *viewMenu, char* uiVars)
+/* add the "send to" menu to the "viewMenu" dyString */
+{
+struct hotLink *viewLinks = NULL;
+
+char url[4096];
+char label[4096];
+
+struct extTool *extTools = readExtToolRa("extTools.ra");
+struct extTool *et;
+for(et = extTools; et != NULL; et = et->next)
+    {
+    if (et->dbs!=NULL)
+        {
+        if (!slNameInList(et->dbs, database))
+            continue;
+        }
+    if (et->params==NULL)
+        {
+        char *replUrl = replaceInUrl(et->url, "", cart, database, chromName, winStart, winEnd, NULL, TRUE);
+        safef(url, sizeof(url), "%s", replUrl);
+        //safef(url, sizeof(url), "%s %s", chromName, database);
+        }
+    else
+        safef(url, sizeof(url), "hgTracks?%s&hgt.redirectTool=%s", uiVars, et->tool);
+    boolean inactive = FALSE;
+    if (et->maxSize!=0)
+        {
+        inactive = TRUE;
+        if (et->maxSize>1000)
+            safef(label, sizeof(label), "%s (< %d kbp)", et->shortLabel, et->maxSize/1000);
+        else
+            safef(label, sizeof(label), "%s (< %d bp)", et->shortLabel, et->maxSize);
+        }
+    else
+        safef(label, sizeof(label), "%s", et->shortLabel);
+        
+    appendLinkMaybeInactive(&viewLinks, url, label, "extTool", TRUE, inactive);
+    }
+
+freeLinksAndConvert(viewLinks, viewMenu);
+
+}
+
 void printMenuBar()
 /* Put up the menu bar. */
 {
-struct hotLink *link, *links = NULL;
-int i, len;
+struct hotLink *links = NULL;
 struct sqlConnection *conn = NULL;
 if (!trackHubDatabase(database))
     conn = hAllocConn(database);
@@ -346,25 +431,16 @@ appendLink(&links, buf, "Default Track Order", "defaultTrackOrderMenuLink", FALS
 appendLink(&links, "../cgi-bin/cartReset", "Reset all user settings", "cartResetMenuLink", FALSE);
 
 struct dyString *viewMenu = dyStringCreate("<li class='menuparent' id='view'><span>View</span>\n<ul style='display: none; visibility: hidden;'>\n");
-len = slCount(links);
-for(i = 0, link = links; link != NULL; i++, link = link->next)
-    {
-    char class[100];
-    if(i == 0)
-        safef(class, sizeof(class), "first");
-    else if (i + 1 == len)
-        safef(class, sizeof(class), "last");
-    else
-        class[0] = 0;
-    char *encodedName = htmlEncode(link->name);
-    dyStringAppend(viewMenu, "<li");
-    if(*class)
-        dyStringPrintf(viewMenu, " class='%s'", class);
-    dyStringPrintf(viewMenu, "><a href='%s' id='%s'%s>%s</a></li>\n", link->url, link->id,
-                   link->external ? " TARGET='_blank'" : "", encodedName);
-    freez(&encodedName);
-    }
+freeLinksAndConvert(links, viewMenu);
 dyStringAppend(viewMenu, "</ul>\n</li>\n");
+
+// add the sendTo menu
+if (fileExists("extTools.ra"))
+    {
+    dyStringAppend(viewMenu, "<li class=\"menuparent\" id=\"sendTo\"><span>Send To</span><ul>");
+    addSendToMenuItems(viewMenu, uiVars);
+    dyStringAppend(viewMenu, "</ul>\n</li>\n");
+    }
 
 menuStr = replaceChars(menuStr, "<!-- OPTIONAL_VIEW_MENU -->", dyStringCannibalize(&viewMenu));
 hPuts(menuStr);

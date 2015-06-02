@@ -151,9 +151,6 @@ void printPosOnChrom(char *chrom, int start, int end, char *strand,
 void printTrackHtml(struct trackDb *tdb);
 /* If there's some html associated with track print it out. */
 
-char *replaceInUrl(struct trackDb *tdb, char *url, char *idInUrl, boolean encode);
-/* replace $$ in url with idInUrl. Supports many other wildchards */
-
 void abbr(char *s, char *fluff);
 /* Cut out fluff from s. */
 
