@@ -144,29 +144,3 @@ else
                "http://www.ensembl.org/%s/contigview?chr=%s&start=%d&end=%d", ensOrg, chrName, start, end);
 return dy;
 }
-
-void ensGeneTrackVersion(char *database, char *ensVersionString,
-    char *ensDateReference, int stringSize)
-/* check for trackVersion table and find Ensembl version */
-{
-/* see if hgFixed.trackVersion exists */
-boolean trackVersionExists = (sqlDatabaseExists("hgFixed") && hTableExists("hgFixed", "trackVersion"));
-ensVersionString[0] = 0;
-ensDateReference[0] = 0;
-if (trackVersionExists)
-    {
-    struct sqlConnection *conn = hAllocConn("hgFixed");
-    char query[256];
-    sqlSafef(query, sizeof(query), "select version,dateReference from hgFixed.trackVersion where db = '%s' and name = 'ensGene' order by updateTime DESC limit 1", database);
-    struct sqlResult *sr = sqlGetResult(conn, query);
-    char **row;
-
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	safef(ensVersionString, stringSize, "Ensembl %s", row[0]);
-	safef(ensDateReference, stringSize, "%s", row[1]);
-	}
-    sqlFreeResult(&sr);
-    hFreeConn(&conn);
-    }
-}
