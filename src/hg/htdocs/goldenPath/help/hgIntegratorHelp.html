@@ -3,6 +3,8 @@
 <html>
 <head>
 	<title>Data Integrator User's Guide - UCSC Genome Browser</title>
+        <meta name="description" content="UCSC Data Integrator">
+        <meta name="keywords" content="genome, genome data, data integrator, table browser, genome browser, genome assembly, UCSC, bioinformatics, gene prediction, SNP, EST, mRNA">
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
 	<link rel="stylesheet" href="/style/HGStyle.css">
 </head>
@@ -19,12 +21,39 @@
 <div class="content">
 <div class="section">
 	
-	<h1>Introduction</h1>
+	<h1>Data Integrator User's Guide</h1>
 	<div class="sectionContent">
 	<p>The Data Integrator is a fast and powerful graphical interface that can
-	combine and export data from multiple tracks simultaneously. Like the
-	Genome Browser and Table Browser, the it can combine
-	data from the browser database, user custom tracks and hub tracks. 
+          combine and export data from multiple tracks simultaneously.
+          Like the
+          <a href="hgTracksHelp.html">Genome Browser</a> and
+          <a href="hgTablesHelp.html">Table Browser</a>,
+          it can combine data from the browser database,
+          <a href="customTrack.html">user custom tracks</a> and
+          <a href="hgTrackHubHelp.html">hub tracks</a>.
+        </p>
+        <p>
+          Using the Data Integrator, you can retrieve tab-separated text for
+          the data underlying up to five tracks,
+          combining multiple tracks' data for items whose genomic positions
+          overlap the positions of items in the first selected track.
+          Depending on your needs, you may
+          <ul>
+            <li>include all columns of all data sources in your query,
+               or only the columns that you select.</li>
+            <li>query genome-wide (provided that the results are not so large
+              that the connection times out),
+              or only for your regions of interest.</li>
+            <li>view results in your web browser window,
+              or download to a local file, optionally compressed by gzip.</li>
+          </ul>
+        </p>
+        <p>
+          The Data Integrator does not yet have many of the features of the
+          <a href="hgTablesHelp.html">Table Browser</a> tool.
+          For example, if you want to retrieve DNA sequence or GTF format,
+          you will need to use the Table Browser.
+        </p>
 	</div><!-- .sectionContent --> 
 </div><!-- .section -->
 
