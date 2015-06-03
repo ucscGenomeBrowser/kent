@@ -18,6 +18,7 @@
 #include "hgTracks.h"
 #include "trackHub.h"
 #include "extTools.h"
+#include "trackVersion.h"
 
 /* list of links to display in a menu */
 struct hotLink
@@ -248,8 +249,7 @@ if (differentWord(database,"susScr2"))
     {
     /* Print Ensembl anchor for latest assembly of organisms we have
      * supported by Ensembl == if versionString from trackVersion exists */
-    char ensVersionString[256], ensDateReference[256];
-    ensGeneTrackVersion(database, ensVersionString, ensDateReference, sizeof(ensVersionString));
+    struct trackVersion *trackVersion = getTrackVersion(database, "ensGene");
 
     if ((conn != NULL) && sqlTableExists(conn, UCSC_TO_ENSEMBL))
         printEnsemblAnchor(database, NULL, chromName, winStart, winEnd, &links);
@@ -265,11 +265,11 @@ if (differentWord(database,"susScr2"))
         {
         printEnsemblAnchor(database, NULL, chromName, winStart, winEnd, &links);
         }
-    else if (ensVersionString[0])
+    else if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
         {
         char *archive = NULL;
-        if (ensDateReference[0] && differentWord("current", ensDateReference))
-            archive = cloneString(ensDateReference);
+        if (!isEmpty(trackVersion->dateReference) && differentWord("current", trackVersion->dateReference))
+            archive = cloneString(trackVersion->dateReference);
         /*  Can we perhaps map from a UCSC random chrom to an Ensembl contig ? */
         if (isUnknownChrom(database, chromName))
             {
