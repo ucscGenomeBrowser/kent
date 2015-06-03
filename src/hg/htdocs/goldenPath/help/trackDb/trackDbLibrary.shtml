@@ -125,7 +125,7 @@
 
 <DIV class="track"><span class="types all"></span>
     <div class="format all"><code>track</code></div>
-    <P>Required: <span class="red">Yes</span></P>
+    <P class="isRequired">Required: <span class="red">Yes</span></P>
     <P>This is the name of
     the dataset and must be unique within the Genome Browser or
     dataHub.  Typically this is the MySQL table name or remote data
@@ -138,7 +138,7 @@
 
 <DIV class="type"><span class="types all"></span>
     <div class="format"><code>type</code></div>
-    <P>Required: <span class="red">Yes</span></P>
+    <P class="isRequired">Required: <span class="red">Yes</span></P>
     <P>Declares the format of the data and is used to
     determine display methods and options.</P>
     <P>Valid settings:</P>
@@ -184,7 +184,7 @@
 
 <DIV class="type_for_hubs"><span class="types all"></span>
     <div class="format"><code>type</code></div>
-    <P>Required: <span class="red">Yes</span></P>
+    <P class="isRequired">Required: <span class="red">Yes</span></P>
     <P>Declares the format of the data and is used to
     determine display methods and options.</P>
     <P>Valid settings:</P>
@@ -205,7 +205,7 @@
 
 <DIV class="shortLabel"><span class="types all"></span>
 <div class="format"><code>shortLabel</code></div>
-    <P>Required: <span class="red">Yes</span></P>
+    <P class="isRequired">Required: <span class="red">Yes</span></P>
     <P>Specifies the track's "short label", which is used in a
     number of places in the Browser to identify the track.  For
     example, the short label is displayed alongside the track in the Browser image.
@@ -218,7 +218,7 @@
 
 <DIV class="longLabel"><span class="types all"></span>
 <div class="format"><code>longLabel</code></div>
-    <P>Required: <span class="red">Yes</span></P>
+    <P class="isRequired">Required: <span class="red">Yes</span></P>
     <P>Specifies the track's "long label", which is also used in
     numerous places in the Browser to identify a track.  For instance,
     the long label is displayed above the track's data in the Browser image.
@@ -231,7 +231,7 @@
 
 <DIV class="visibility"><span class="types all"></span>
 <div class="format"><code>visibility</code></div>
-    <P>Required: No</P>
+    <P class="isRequired">Required: No</P>
     <P>Visibility (i.e. "display mode") specifies which of 5 modes (including 'hide')
     should be used to display the track within the Browser image.  This setting is
     almost always dynamically customizable by each user.  The exact configuration of the
@@ -262,7 +262,7 @@
 
 <DIV class="html"><span class="types all"></span>
 <div class="format"><code>html</code></div>
-    <P>Required: No</P>
+    <P class="isRequired">Required: No</P>
     <P>Specifies a file that contains the
     complete description of a track in HTML format.  The path of this
     file name is relative to the path of the trackDb file.  The
@@ -316,7 +316,7 @@
 
 <DIV class="bigDataUrl"><span class="types bigBed bigWig bam vcfTabix"></span>
 <div class="format"><code>bigDataUrl &lt;url/relativePath&gt;</code></div>
-    <P>Required: <span class="red">For Hubs</span></P>
+    <P class="isRequired">Required: <span class="red">For Hubs</span></P>
     <P>The location of a remote data file containing the bulk of the data for the track.
     This setting is required for all data tracks in a track hub.  It is currently not
     supported for local tracks.</P>  
@@ -597,22 +597,6 @@
     </UL>
     <P><B>Example:</B></P>
     <pre>    pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"</pre>
-</DIV>
-
-<DIV class="priority"><span class="types all"></span>
-<div class="format"><code>priority &lt;float&gt;</code></div>
-    <P>The priority is used to define the order of a track within its track group or 
-    data hub, as well as its default order within the Browser image.  
-    The order within the image can be dynamically changed by the user and
-    will always depend upon which other tracks are currently visible.
-    Typically the priority is set only for tracks that are on by default in order to move them 
-    ahead of other tracks. 
-    Prioritized tracks within a group or data hub are displayed in ascending priority order, 
-    followed by unprioritized tracks sorted alphabetically by short label. Tracks of the same 
-    priority within a group or hub are sorted by short label.  
-    Priority is a floating point number. Default: 0.</P>
-    <P><B>Example:</B></P>
-    <pre>   priority 50</pre>
 </DIV>
 
 <DIV class="release"><span class="types all"></span>
