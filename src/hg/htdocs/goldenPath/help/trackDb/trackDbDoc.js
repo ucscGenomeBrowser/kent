@@ -241,6 +241,9 @@ var tdbDoc = {
             }
             var row = "<tr><td><A onclick='return jumpTo(this);' HREF='#'>" + aClass + "</a></td>";
             if (tdbDoc.isHubDoc()) {
+                // hide superfluous 'Required' paragraphs
+                $('p.isRequired').hide();
+
                 //include level in the table
                 if (level === null) {
                     // settings w/o a 'blurb' can still have a level (e.g. deprecated settings)
