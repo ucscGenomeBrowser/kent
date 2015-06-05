@@ -42,6 +42,7 @@
                         <LI><A HREF="#format1.7">BED detail format</A>
                         <LI><A HREF="#format1.8">bedGraph format</A>
                         <LI><A HREF="#format1.5">bigBed format</A>
+			<LI><A HREF="#format9.1">bigGenePred table format</A>
                         <LI><A HREF="#format6.1">bigWig format</A>
                         <LI><A HREF="../goldenPath/help/chain.html">Chain format</A>
                         <LI><A HREF="#format9">GenePred table format</A>
@@ -1560,6 +1561,47 @@ this table.
 	<BR>
 
 <!--Content Table-->
+<A NAME="format9.1"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="#fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="#D9E4F8" WIDTH="100%">
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; bigGenePred table format</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="#fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+<P>
+bigGenePred is a table format commonly used for gene prediction tracks in the
+Genome Browser. bigGenePred format is a superset of the 
+<A HREF="FAQformat.html#format9">genePred</A> text-based format supported using 
+the <A HREF="FAQformat.html#format1.5">bigBed</A> format, so it can be efficiently 
+accessed over a network. 
+<P>Click <A HREF="../goldenPath/help/bigGenePred.html">here</A> for more information
+on the bigGenePred format.</P>
+<P>
+
+
+			    </TD><TD WIDTH=15></TD></TR>
+	    		</TABLE><BR>
+		     </TD></TR>
+		</TABLE>
+     	     </TD></TR>
+    	</TABLE>
+	<BR>
+
+<!--Content Table-->
 <A NAME="format10"></A>
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
         <TR><TD>
@@ -1913,18 +1955,31 @@ This format is used to provide called regions of signal enrichment based on pool
         <li><b>strand</b> - +/- to denote strand or orientation (whenever 
         applicable). Use '.' if no orientation is assigned.
 	<li><b>thickStart</b> - The starting position at which the feature is drawn thickly.
+          Not used in gappedPeak type, set to 0.
 	<li><b>thickEnd</b> - The ending position at which the feature is drawn thickly.
+          Not used in gappedPeak type, set to 0.
 	<li><b>itemRgb</b> - An RGB value of the form R,G,B (e.g. 255,0,0).
+          Not used in gappedPeak type, set to 0. 
 	<li><b>blockCount</b> - The number of blocks (exons) in the BED line.
-	<li><b>blockSizes</b> - A comma-separated list of the block sizes.
-	<li><b>blockStarts</b> - A comma-separated list of block starts.
+	<li><b>blockSizes</b> - A comma-separated list of the block sizes. The number of items
+          in this list should correspond to <I>blockCount</I>.
+	<li><b>blockStarts</b> - A comma-separated list of block starts. The first value must be 0
+        and all of the <I>blockStart</I> positions should be calculated relative to
+        <I>chromStart</I>. The number of items in this list should correspond to <I>blockCount</I>.
 	<li><b>signalValue</b> - Measurement of overall (usually, average) 
         enrichment for the region.
         <li><b>pValue</b> - Measurement of statistical significance (-log10). 
         Use -1 if no pValue is assigned.
         <li><b>qValue</b> - Measurement of statistical significance using 
         false discovery rate (-log10). Use -1 if no qValue is assigned.
-</ol>        		     </td><td width=15></td></tr>
+</ol>
+<p>
+Here is an example of gappedPeak format:</p>
+<pre>
+track name=gappedPeakExample type=gappedPeak
+chr1 171000 171600 Anon_peak_1 55 . 0 0 0 2 400,100 0,500 4.04761 7.53255 5.52807
+</pre>
+                              </td><td width=15></td></tr>
 	    		</table><br>
 		     </td></tr>
 		</table>

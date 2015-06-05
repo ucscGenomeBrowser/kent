@@ -32,6 +32,7 @@ char *genome;		/* Name of genome - mouse, human, etc. */
 char *curGeneId;	/* Current Gene Id. */
 char *curGeneName;		/* Biological name of gene. */
 char *curGeneChrom;	/* Chromosome current gene is on. */
+char *curAlignId;
 struct genePred *curGenePred;	/* Current gene prediction structure. */
 int curGeneStart,curGeneEnd;	/* Position in chromosome. */
 struct sqlConnection *spConn;	/* Connection to SwissProt database. */
@@ -244,7 +245,7 @@ if (summaryTables != NULL)
 return dyStringCannibalize(&description);
 }
 
-static void printDescription(char *id, struct sqlConnection *conn)
+static void printDescription(char *id, struct sqlConnection *conn, struct trackDb *tdb)
 /* Print out description of gene given ID. */
 {
 char *description = descriptionString(id, conn);
@@ -257,7 +258,10 @@ freez(&description);
 /* print genome position and size */
 char buffer[1024];
 char *commaPos;
+char *isGencode = trackDbSetting(tdb, "isGencode");
    
+if (isGencode)
+    hPrintf("<B>Gencode Transcript:</B> %s<br>\n", curAlignId);
 exonCnt = curGenePred->exonCount;
 safef(buffer, sizeof buffer, "%s:%d-%d", curGeneChrom, curGeneStart+1, curGeneEnd);
 commaPos = addCommasToPos(database, buffer);
@@ -512,10 +516,10 @@ void webMain(struct sqlConnection *conn)
  * sections. */
 {
 struct section *sectionList = NULL;
-printDescription(curGeneId, conn);
+struct trackDb *tdb = hTrackDbForTrack(database, genomeSetting("knownGene"));
+printDescription(curGeneId, conn, tdb);
 sectionList = loadSectionList(conn);
 printIndex(sectionList);
-struct trackDb *tdb = hTrackDbForTrack(database, genomeSetting("knownGene"));
 printUpdateTime(database, tdb, NULL);
 printSections(sectionList, conn, curGeneId);
 }
@@ -595,7 +599,7 @@ else
 sqlFreeResult(&sr);
 }
 
-struct genePred *getCurGenePred(struct sqlConnection *conn)
+static struct genePred *getCurGenePred(struct sqlConnection *conn)
 /* Return current gene in genePred. */
 {
 char *track = genomeSetting("knownGene");
@@ -606,13 +610,20 @@ struct sqlResult *sr;
 char **row;
 struct genePred *gp = NULL;
 hFindSplitTable(sqlGetDatabase(conn), curGeneChrom, track, table, &hasBin);
+bool hasAttrId = sqlColumnExists(conn, table, "alignId");
 sqlSafef(query, sizeof(query),
 	"select * from %s where name = '%s' "
 	"and chrom = '%s' and txStart=%d and txEnd=%d"
 	, table, curGeneId, curGeneChrom, curGeneStart, curGeneEnd);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
+    {
     gp = genePredLoad(row + hasBin);
+
+#define  ALIGNIDFIELD      11  // Gencode Id
+    if (hasAttrId)
+	curAlignId = cloneString(row[ALIGNIDFIELD]);
+    }
 sqlFreeResult(&sr);
 if (gp == NULL)
     errAbort("getCurGenePred: Can't find %s", query);

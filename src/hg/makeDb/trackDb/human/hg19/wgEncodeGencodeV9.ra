@@ -72,6 +72,7 @@ wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV9
     
         track wgEncodeGencodeBasicV9
         subTrack wgEncodeGencodeV9ViewGenes on
+        trackHandler wgEncodeGencode
         shortLabel Basic
         subGroups view=aGenes name=Basic
         longLabel Basic Gene Annotation Set from ENCODE/GENCODE Version 9
@@ -81,6 +82,7 @@ wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV9
         track wgEncodeGencodeCompV9
         subTrack wgEncodeGencodeV9ViewGenes off
         subGroups view=aGenes name=Comprehensive
+        trackHandler wgEncodeGencode
         shortLabel Comprehensive
         longLabel Comprehensive Gene Annotation Set from ENCODE/GENCODE Version 9 
         type genePred
@@ -89,6 +91,7 @@ wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV9
         track wgEncodeGencodePseudoGeneV9
         subTrack wgEncodeGencodeV9ViewGenes off
         subGroups view=aGenes name=Pseudogenes 
+        trackHandler wgEncodeGencode
         shortLabel Pseudogenes
         longLabel Pseudogene Annotation Set from ENCODE/GENCODE Version 9
         type genePred
@@ -106,6 +109,7 @@ wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV9
         track wgEncodeGencode2wayConsPseudoV9
         subTrack wgEncodeGencodeV9View2Way off
         subGroups view=b2-way name=yTwo-way
+        trackHandler wgEncodeGencode
         shortLabel 2-way Pseudogenes
         longLabel 2-way Pseudogene Annotation Set from ENCODE/GENCODE Version 9
         type genePred
@@ -123,6 +127,7 @@ wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV9
         track wgEncodeGencodePolyaV9
         subTrack wgEncodeGencodeV9ViewPolya off
         subGroups view=cPolya name=zPolyA
+        trackHandler wgEncodeGencode
         shortLabel PolyA
         longLabel PolyA Transcript Annotation Set from ENCODE/GENCODE Version 9
         type genePred

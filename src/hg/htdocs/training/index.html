@@ -13,7 +13,26 @@
 
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../images/title.jpg" ALT="UCSC Genome Bioinformatics"></TH></TR>
 
-<TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../inc/FAQ.topbar.html"--></TD></TR>
+<TR><TD COLSPAN=2 HEIGHT=40><!-- This file generates the top menu bar on Genome Browser static pages-->
+  <TABLE BGCOLOR="#000000" CELLPADDING="1" CELLSPACING="1" WIDTH="100%">
+    <TR BGCOLOR="#2636D1"><TD VALIGN="middle">
+      <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 BGCOLOR="#2636D1" style="height:24px;" class="topbar">
+	<TR><TD VALIGN="middle"><FONT COLOR="#89A1DE">
+	  <A HREF="/index.html" class="topbar">Home</A>-
+	  <A HREF="/cgi-bin/hgGateway" class="topbar">Genomes</A>-
+ 	  <A HREF="/cgi-bin/hgBlat?command=start" class="topbar">Blat</A>-
+	  <A HREF="/cgi-bin/hgTables?command=start" class="topbar">Tables</A>-
+	  <A HREF="/cgi-bin/hgNear" class="topbar">Gene Sorter</A>-
+	  <A HREF="/cgi-bin/hgPcr?command=start" class="topbar">PCR</A>-
+	  <A HREF="/cgi-bin/hgVisiGene?command=start" class="topbar">VisiGene</A>-
+	  <A HREF="/cgi-bin/hgSession?hgS_doMainPage=1" class="topbar">Session</A>-
+	  <A HREF="/goldenPath/help/hgTracksHelp.html" class="topbar">Help</A>
+	</FONT></TD></TR>
+      </TABLE>
+    </TD></TR>
+  </TABLE>
+<!-- end topbar -->
+</TD></TR>
 <!--Content Tables------------------------------------------------------->
 <TR><TD COLSPAN=2 CELLPADDING=10>
 <!--outer table is for border purposes-->
@@ -28,9 +47,9 @@
          <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
          <TR><TD WIDTH=5>&nbsp;</TD><TD>
            <div class="warn-note" style="border: 2px solid #9e5900; padding: 5px 20px; background-color: #e8ebf7;">
-           <p><span style="font-weight: bold; color: #c70000;"> <b>Host a Genome Browser Workshop!</b> </span><br></p> 
+           <p><span style="font-weight: bold; color: #c70000;"> <b>Host a Genome Browser Workshop!</b> </span><br></p>
 
-           <p>	
+           <p>
            New timeslots are now available to host a Genome Browser workshop at your institution. Thanks to the funding support of NHGRI,
            we offer hands-on Genome Browser training onsite at your institution, tailored to your
            audience's level of expertise.
@@ -39,9 +58,71 @@
            For more information or to submit a request to host a workshop,
            please visit <a href="http://bit.ly/ucscTraining" target="_blank">our signup</a>.
            </p>
+           <p>
+           <p><span style="font-weight: bold; color: #c70000;"> <b>Can't host? </b> </span><br></p>
 
+           Catch one of our trainings in your area:
+           </p>
+           <p>
+           <TABLE CELLPADDING = 3 BORDER = 0 >
+
+            <tr><td width = 180 valign = top>May 19-20, 2015</td>
+	     <td> Sanford-Burnham Medical Research Institute, Orlando, FL. Contact:
+	     (<A HREF="mailto:&#117;&#99;s&#99;&#103;&#98;&#116;&#114;&#97;in&#105;&#110;&#103;&#64;&#115;&#111;&#101;.&#117;&#99;&#115;c.e&#100;&#117;">&#117;&#99;s&#99;&#103;&#98;&#116;&#114;&#97;in&#105;&#110;&#103;&#64;&#115;&#111;&#101;.&#117;&#99;&#115;c.e&#100;&#117;</A>)
+	     for availability. </td></tr>
+	     <!-- above address is ucscgbtraining at soe.ucsc.edu --> 
+
+            <TR><TD WIDTH = 180 VALIGN = TOP>May 31, 2015</TD>
+             <TD> University of Georgia, Athens</a>. Contact: Walt Lorenz
+             (<A HREF="mailto:&#119;l&#111;&#114;e&#110;&#122;&#64;&#117;&#103;&#97;.&#101;&#100;&#117;">&#119;l&#111;&#114;e&#110;&#122;&#64;&#117;&#103;&#97;.&#101;&#100;&#117;</A>)
+             <!-- above address is wlorenz at uga.edu -->
+             for availablility.</TD></TR>
+
+            <TR><TD VALIGN = TOP>June 2-3, 2015</TD>
+             <TD> <a href = "http://www.post-transcriptional.com/" TARGET = _BLANK>University
+             of Nevada, Reno</a>. Contact: Pedro Miura
+             (<A HREF="mailto:&#112;&#109;i&#117;&#114;a&#64;&#117;&#110;&#114;.&#101;d&#117;">&#112;&#109;i&#117;&#114;a&#64;&#117;&#110;&#114;.&#101;d&#117;</A>) for availability.
+	     <!-- above address is pmiura at unr.edu --></TD></TR>
+
+            <TR><TD VALIGN = TOP>June 8, 2015</TD>
+             <TD> <a href = "https://www.eshg.org/monday2015.0.html#W7"
+             TARGET = _BLANK>European Society of Human Genetics</A> annual
+             meeting. Glasgow, Scotland.</TD></TR>
+
+            <TR><TD VALIGN=TOP>June 9-10, 2015</TD>
+             <TD> <a href = "http://www.med.und.edu/epigenetics/" TARGET = _BLANK>
+             School of Medicine and Health Sciences</A>, University of North Dakota.
+             Contact: Archana Dhasarathy
+             (<A HREF="mailto:&#97;&#114;&#99;&#104;&#97;&#110;&#97;.d&#104;a&#115;&#97;&#114;&#97;&#116;&#104;&#121;&#64;&#109;e&#100;.&#117;&#110;d.&#101;&#100;&#117;">&#97;&#114;&#99;&#104;&#97;&#110;&#97;.d&#104;a&#115;&#97;&#114;&#97;&#116;&#104;&#121;&#64;&#109;e&#100;.&#117;&#110;d.&#101;&#100;&#117;</A>) for availability.
+	     <!-- above address is archana.dhasarathy at med.und.edu --></TD></TR>
+
+            <tr><td VALIGN = TOP>June 16-17, 2015</td>
+             <td> H. Lee Moffitt Cancer Center & Research Institute, Tampa, FL.
+             Contact: Melissa Quintana
+             (<A HREF="mailto:&#77;&#101;&#108;&#105;&#115;&#115;&#97;.q&#117;&#105;n&#116;a&#110;&#97;&#64;&#109;&#111;f&#102;&#105;&#116;&#116;.or&#103;">&#77;&#101;&#108;&#105;&#115;&#115;&#97;.q&#117;&#105;n&#116;a&#110;&#97;&#64;&#109;&#111;f&#102;&#105;&#116;&#116;.or&#103;</A>) for availability.
+             <!-- above address is Melissa.quintana at moffitt.org --></td></tr>
+
+            <tr><td VALIGN = TOP>June 29 - July 1, 2015</td>
+             <td> ENCODE Users Meeting <a href = "http://www.encode2015.org/"
+             target = _blank>www.encode2015.org</a>. Potomac, MD.  </td></tr>
+
+            <TR><TD VALIGN = TOP>July 23, 2015</TD>
+             <TD> At Jackson Lab course, <a href = "http://courses.jax.org/2015/56th-short-course.html"
+             TARGET = _BLANK>Experimental Mammalian Genetics</A>. Bar Harbor, ME.</TD></TR>
+
+            <tr><td valign = top>July 24, 2015</td>
+             <td>James Madison University, Harrisonburg, VA. Contact: Ray Enke 
+             (<a href="mailto:&#101;&#110;&#107;er&#97;&#64;&#106;m&#117;.&#101;&#100;&#117;">&#101;&#110;&#107;er&#97;&#64;&#106;m&#117;.&#101;&#100;&#117;</a>) 
+             for availability. <!-- above address is enkera at jmu.edu --></td></tr>
+
+            <TR><TD>October 7, 2015</TD>
+             <TD> <a href = "http://www.ashg.org/2015meeting/" TARGET = _BLANK>American Society
+             of Human Genetics</A> annual meeting. Baltimore.
+             </TD></TR>
+           </TABLE>
+           </P>
            </div>
-           <br><br>
+           <P>&nbsp;</P>
 
          <B>Online Training and Tutorials:</B>
          <BLOCKQUOTE>
@@ -54,10 +135,11 @@
 	   <li>Finding   <a href = "vids/index.html#vid03">SNPs in a gene</a>.
 	   <li>Finding   <a href = "vids/index.html#vid04">SNPs upstream</a> from a gene.
 	   <li>Find <a href = "vids/index.html#vid06">which tables belong to a data track</a>.</li>
+           <li>Identifying <a href="vids/index.html#vid07">codon numbers</a> in a gene.</li>
           </UL>
 
          <B>Produced at UCSC              </B>
-          <UL>
+          <ul>
 	   <li>Nature: <a href="http://www.nature.com/scitable/ebooks/guide-to-the-ucsc-genome-browser-16569863"
 	          target="_blank">Guide to the UCSC Genome Browser</a>
            <li><a href="ucscGeneFishing.pdf" target="_blank">Fishing for genes in the UCSC Browser (pdf)</a>
@@ -65,51 +147,58 @@
                   target = "_blank">The UCSC genome browser and associated tools</a>
 	   <li><a href="http://www.ncbi.nlm.nih.gov/pubmed/18514479"
                   target = "_blank">UCSC genome browser tutorial</a>
-	   <LI><A HREF="ashg2009" >Step-by-step tutorial presented at ASHG 2009 annual meeting</A> 
+	   <li><A HREF="ashg2009" >Step-by-step tutorial presented at ASHG 2009 annual meeting</A>
               - basic browser navigation and functionality in the context of interpreting clinical genetics
-              reports. 
-	   <LI><A HREF="http://genomewiki.ucsc.edu/index.php/ABRF2010_Tutorial" >Step-by-step tutorial 
-              presented at ABRF 2010 annual meeting</A> - how to convert files and display 
-              high-throughput sequencing results. 
-           <LI><A HREF="ashg2014">Step-by-step tutorial presented at ASHG 2014 annual meeting</A> -
+              reports.
+	   <li><A HREF="http://genomewiki.ucsc.edu/index.php/ABRF2010_Tutorial" >Step-by-step tutorial
+              presented at ABRF 2010 annual meeting</A> - how to convert files and display
+              high-throughput sequencing results.
+           <li><A HREF="ashg2014">Step-by-step tutorial presented at ASHG 2014 annual meeting</A> -
               includes Custom Tracks and Table Browser queries with and without filters.
 
-          </UL>
+          </ul>
 
          <B>External                      </B>
           <UL>
            <LI><A HREF="http://www.openhelix.com/ucsc" TARGET=_blank>Open Helix tutorial and training materials</A>
 
 	   <LI><A HREF="http://www.lifescied.org/cgi/content/full/9/2/98"
-	      TARGET=_blank>Teaching bioinformatics and neuroinformatics by 
-	      using free web-based tools</A> - student-level tutorial that 
+	      TARGET=_blank>Teaching bioinformatics and neuroinformatics by
+	      using free web-based tools</A> - student-level tutorial that
 	      demonstrates the combined use of several major bioinformatic tools
-	      (including the UCSC Genome Browser) in answering a series of 
+	      (including the UCSC Genome Browser) in answering a series of
 	      related research questions
           </UL>
          </BLOCKQUOTE>
 
          <B>User's Guides for Tools in the Genome Browser:</B>
-	  <UL>
-	   <LI><A HREF="../goldenPath/help/hgTracksHelp.html">Genome Browser</A>
-	   <LI><A HREF="../goldenPath/help/hgTablesHelp.html">Table Browser</A>
-	   <LI><A HREF="../goldenPath/help/hgTracksHelp.html#CustomTracks">Custom Tracks</A>
-	   <LI><a href="../goldenPath/help/hgTrackHubHelp.html">Track Hubs</A>
-	   <LI><A HREF="../goldenPath/help/hgGenomeHelp.html">Genome Graphs</A>
-	   <LI><A HREF="../goldenPath/help/hgSessionHelp.html">Sessions</A>
-	   <LI><A HREF="../goldenPath/help/hgNearHelp.html">Gene Sorter</A>
-          </UL>
+               <BR>&nbsp;
+          <TABLE>
+            <TR><TD>
+	      <UL>
+    	        <LI><A HREF="../goldenPath/help/hgTracksHelp.html#CustomTracks">Custom Tracks</A>
+    	        <LI><A HREF="../goldenPath/help/hgTracksHelp.html">Genome Browser</A>
+    	        <LI><A HREF="../goldenPath/help/hgGenomeHelp.html">Genome Graphs</A>
+    	        <LI><A HREF="../goldenPath/help/hgNearHelp.html">Gene Sorter</A>
+              </UL>
+            </TD><TD>
+            </TD><TD>
+               <BR>&nbsp;
+            </TD><TD>
+            </TD><TD>
+              <UL>
+    	        <LI><A HREF="../goldenPath/help/hgSessionHelp.html">Sessions</A>
+    	        <LI><A HREF="../goldenPath/help/hgTablesHelp.html">Table Browser</A>
+    	        <LI><a href="../goldenPath/help/hgTrackHubHelp.html">Track Hubs</A>
+                <BR>&nbsp;
+              </UL>
+            </TD></TR>
+           </TABLE>
          <B>Contacting Us and Mailing Lists:</B>
           <UL>
 	   <LI><A HREF="../contacts.html">Genome Browser contact information</A>
 	   <LI><A HREF="http://groups.google.com/a/soe.ucsc.edu/group/genome?hl=en">Genome Browser mailing list<A> (interactive discussion forum)
 	  </UL>
-         <B>Quick Links:</B>
-          <UL>
-	   <LI><A HREF="../index.html">Genome Browser home page</A>
-	   <LI><A HREF="../goldenPath/releaseLog.html">Log of released data</A> (including annotation tracks and complete assemblies)
-	   <LI><A HREF="../goldenPath/credits.html">Software and data credits</A>
-          </UL>
          <B>Mirror Sites and Source Code:</B>
           <UL>
 	   <LI><A HREF="../mirror.html">Genome Browser mirror sites</A>

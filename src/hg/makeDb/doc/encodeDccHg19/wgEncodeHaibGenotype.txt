@@ -1,0 +1,13 @@
+# Fixes to HAIB Genotype track downloads
+#  2015-03-23 kate
+
+# RM 14946
+# Add corrected BAF file
+cd /hive/groups/encode/dcc/analysis/ftp/pipeline/hg19/wgEncodeHaibGenotype/supplemental
+wget http://mendel.hudsonalpha.org/Public/fpauli/DCC/wgEncodeHaibGenotypeBalleleSnp2015-03-04.UPDATED.tsv
+mv wgEncodeHaibGenotypeBalleleSnp2015-03-04.UPDATED.tsv  wgEncodeHaibGenotypeBalleleSnp2015-03-04.tsv
+md5sum wgEncodeHaibGenotypeBalleleSnp2015-03-04.tsv >> README.txt 
+
+# edit README
+
+

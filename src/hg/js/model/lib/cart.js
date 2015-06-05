@@ -62,6 +62,10 @@ var cart = (function() {
             baseUrl = '../cgi-bin/' + cgi + '?hgsid=' + hgsid;
         },
 
+        getBaseUrl: function() {
+            return baseUrl;
+        },
+
         send: function(commandObj, successCallback, errorCallback) {
             var commandString = commandObjToString(commandObj);
             var url = makeUrl(commandString);

@@ -109,7 +109,10 @@ void linkToOtherBrowserTitle(char *otherDb, char *chrom, int start, int end, cha
 void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end);
 /* Make anchor tag to open another browser window. */
 
-void printEntrezPubMedUidUrl(FILE *f, int pmid);
+void printEntrezGeneUrl(FILE *f, int geneid);
+/* Print URL for Entrez browser on a gene details page. */
+
+    void printEntrezPubMedUidUrl(FILE *f, int pmid);
 /* Print URL for Entrez browser on a PubMed search. */
 
 void printSwissProtAccUrl(FILE *f, char *accession);
@@ -147,9 +150,6 @@ void printPosOnChrom(char *chrom, int start, int end, char *strand,
 
 void printTrackHtml(struct trackDb *tdb);
 /* If there's some html associated with track print it out. */
-
-char *replaceInUrl(struct trackDb *tdb, char *url, char *idInUrl, boolean encode);
-/* replace $$ in url with idInUrl. Supports many other wildchards */
 
 void abbr(char *s, char *fluff);
 /* Cut out fluff from s. */

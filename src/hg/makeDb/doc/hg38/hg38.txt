@@ -2412,6 +2412,18 @@ do
 	| faToNib -softMask stdin ${C}.nib
     echo "${C} done"
 done
+
+    # verify nothing lost
+    cat ../../chrom.sizes \
+     | awk '{printf "nibFrag -masked %s.nib 0 %d + stdout\n", $1, $2}' \
+        | sh | faSize stdin
+# 3209286105 bases (159970322 N's 3049315783 real 1460684798 upper
+#  1588630985 lower) in 455 sequences in 1 files
+# Total size: mean 7053376.1 sd 31548372.6
+#  min 970 (chrUn_KI270394v1.nib:0-970)
+#  max 248956422 (chr1.nib:0-248956422) median 161218
+# %49.50 masked total, %52.10 masked real
+
     mkdir /hive/data/staging/data/hg38/nib
     rsync -a --progress ./ /hive/data/staging/data/hg38/nib
 
@@ -6144,3 +6156,86 @@ sort /cluster/data/hg38/chrom.sizes > tmpChrom
 grep -v '^#\|assembled' /hive/data/genomes/hg38/genbank/GCF_000001405.26.assembly.txt | awk 'BEGIN {OFS="\t"} {print "chr" $3 "_" $5 "_" $2, "chr" $3 "|"$7}' | sed 's/-scaffold//' | sed 's/unlocalized/random/' | sed 's/_unplaced//' | sed 's/chrna/chrUn/g' | sed 's/\./v/'  | sort | join /dev/stdin tmpChrom | awk 'BEGIN {OFS="\t"} {print 0, $2, $3, $1, $3}'  > dbVar.lift
 awk 'BEGIN {OFS="\t"} {print 0, $1, $2, $1, $2}' /cluster/data/hg38/chrom.sizes >> dbVar.lift
 rm tmpChrom
+
+#########################################################################
+2015-03-13: import of UCSC GENCODE group processing of GENCODE V22 (markd)
+    # download files
+    mkdir -p /hive/data/genomes/hg38/bed/gencodeV22
+    cd /hive/data/genomes/hg38/bed/gencodeV22
+
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set 
+    # release and transcript support versions
+
+
+    # download, build and load tables
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.
+        make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk cmpRelease >gencode-cmp.tsv
+
+    ## Copy and update trackDb files from previous release.
+    ## Change version and use lower priority so it sorts to top of
+    ## super track page.
+    ## Important to make sure filter attrs.transcriptType matches current set
+    ## figured out with
+    select distinct transcriptType from wgEncodeGencodeAttrsV22 order by transcriptType;
+    cd kent/src/hg/makeDb/trackDb
+    cp human/hg38/wgEncodeGencodeV18.ra human/hg38/wgEncodeGencodeV22.ra
+    cp human/hg38/wgEncodeGencodeV18.html human/hg38/wgEncodeGencodeV22.html
+
+    # edit these plus human/hg38/trackDb.wgEncode.ra
+    # - set priorities in wgEncodeGencodeV22.ra in reverse order with previous
+    #   tracks so newest shows up first
+    #     priority - set to previous version priority minus 0.001
+    #     searchPriority - set each to previous minus 0.001
+    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
+    #     superTrack wgEncodeGencodeSuper pack
+    # - Update wgEncodeGencodeSuper.html to describe new release and to
+    #   pick up other updates.
+
+    # update all.joiner and validate
+    # look for the last section `begin Gencode V??' in all.joiner
+    # and copy and update version
+    # repeat this until happy, editing minCheck as needed
+    # output in check/joiner.out
+    cd /hive/data/genomes/hg38/bed/gencodeV22
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+#########################################################################
+# UCSC to RefSeq name correspondence (DONE - 2015-04-13 - Hiram)
+
+    mkdir /hive/data/genomes/hg38/bed/ucscToRefSeq
+    cd /hive/data/genomes/hg38/bed/ucscToRefSeq
+
+    # columns 5 and 7 are the INSDC and RefSeq names
+
+    grep -v "^#" ../../genbank/GCF_000001405.26.assembly.txt \
+      | awk -F'\t' '{printf "%s\t%s\n", $5,$7}'  | sort > insdc.refSeq.tab
+
+    hgsql -N -e 'select name,chrom,chromStart,chromEnd from ucscToINSDC;' hg38 \
+      | sort > insdc.ucsc.tab
+
+    join insdc.ucsc.tab insdc.refSeq.tab | tr '[ ]' '[\t]' \
+       | cut -f2- > ucsc.refSeq.tab
+
+
+    export chrSize=`cut -f1 ucsc.refSeq.tab | awk '{print length($0)}' | sort -n | tail -1`
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab hg38 ucscToRefSeq ./ucscToRefSeq.sql ucsc.refSeq.tab
+
+    checkTableCoords  hg38 -table=ucscToRefSeq
+
+#########################################################################
+#CREATE MICROSAT TRACK (DONE - 2015-05-22 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/hg38/bed/microsat
+    cd /cluster/data/hg38/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed hg38 microsat microsat.bed
+
+#############################################################################

@@ -7,7 +7,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 A = hgTracks
 RENDERA = hgRenderTracks
 
-COMMONO = pubsTracks.o altGraphXTrack.o bamTrack.o bedGraph.o bedTrack.o \
+COMMONO = adjacencyTrack.o pubsTracks.o altGraphXTrack.o bamTrack.o bedGraph.o bedTrack.o \
 	bigBedTrack.o bigWarn.o bigWigTrack.o \
 	chainTrack.o cgapSageTrack.o chromGraphTrack.o config.o container.o contigTrack.o \
 	coverageTrack.o cytoBandTrack.o cutterTrack.o \
@@ -20,7 +20,7 @@ COMMONO = pubsTracks.o altGraphXTrack.o bamTrack.o bedGraph.o bedTrack.o \
 	wabaTrack.o wigTrack.o cds.o \
 	wigMafTrack.o encode.o variation.o vcfTrack.o transcriptome.o\
 	rnaFoldTrack.o retroGene.o hapmapTrack.o rnaPLFoldTrack.o\
-	wiki.o wikiTrack.o imageV2.o
+	wiki.o wikiTrack.o imageV2.o extTools.o
 
 O = mainMain.o ${COMMONO} 
 

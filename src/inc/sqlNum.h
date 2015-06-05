@@ -22,6 +22,9 @@ unsigned sqlUnsigned(char *s);
  * twice as fast as atoi (by not having to skip white 
  * space or stop except at the null byte.) */
 
+unsigned sqlUnsignedOrError(char *s, char *format, ...);
+ /* like sqlUnsigned, with an optional error message as a printf-style vararg */
+
 unsigned sqlUnsignedInList(char **pS);
 /* Convert series of digits to unsigned integer about
  * twice as fast as atoi (by not having to skip white 

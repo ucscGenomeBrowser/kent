@@ -226,7 +226,7 @@ if (trackVersionExists)
     char query[256];
     struct sqlConnection *conn = hAllocConn(database);
 
-    sqlSafef(query, sizeof(query), "select * from hgFixed.trackVersion where db = '%s' AND name = '%s' order by ix DESC limit 1", database, track);
+    sqlSafef(query, sizeof(query), "select * from hgFixed.trackVersion where db = '%s' AND name = '%s' order by updateTime DESC limit 1", database, track);
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row;
     if ((row = sqlNextRow(sr)) != NULL)

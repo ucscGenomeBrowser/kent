@@ -24,6 +24,7 @@
 #include "hubConnect.h"
 #include "twoBit.h"
 #include "gpFx.h"
+#include "bigGenePred.h"
 #include "udc.h"
 #include "knetUdc.h"
 #include "md5.h"
@@ -481,7 +482,7 @@ puts("<BR>");
 boolean isGeneTrack(struct trackDb *tdb, void *filterData)
 /* This is a TdbFilterFunction to get genePred tracks. */
 {
-return (startsWith("genePred", tdb->type));
+return (startsWith("genePred", tdb->type) || sameString("bigGenePred", tdb->type));
 }
 
 boolean selectGenes()
@@ -1151,8 +1152,6 @@ aggvFuncFilter.nonCodingExon = cartUsualBoolean(cart, "hgva_include_nonCodingExo
 annoGratorGpVarSetFuncFilter(gpVarGrator, &aggvFuncFilter);
 }
 
-#define NO_MAXROWS 0
-
 struct annoGrator *gratorForSnpBed4(struct hash *gratorsByName, char *suffix,
 				    struct annoAssembly *assembly, char *chrom,
 				    enum annoGratorOverlap overlapRule,
@@ -1180,9 +1179,9 @@ if (grator != NULL)
     }
 // If not in gratorsByName, then attempt to construct it here:
 if (fileName != NULL)
-    grator = hAnnoGratorFromBigFileUrl(fileName, assembly, NO_MAXROWS, overlapRule);
+    grator = hAnnoGratorFromBigFileUrl(fileName, assembly, ANNO_NO_LIMIT, overlapRule);
 else
-    grator = hAnnoGratorFromTrackDb(assembly, tdb->table, tdb, chrom, NO_MAXROWS,
+    grator = hAnnoGratorFromTrackDb(assembly, tdb->table, tdb, chrom, ANNO_NO_LIMIT,
                                     NULL, overlapRule);
 if (grator != NULL)
     hashAdd(gratorsByName, tdb->table, grator);
@@ -1303,7 +1302,7 @@ if (hashFindVal(gratorsByName, seqChangeTable) == NULL)
     if (fileName == NULL)
 	errAbort("'%s' requested, but I can't find fileName for %s",
 		 trackName, seqChangeTable);
-    struct annoGrator *grator = hAnnoGratorFromBigFileUrl(fileName, assembly, NO_MAXROWS,
+    struct annoGrator *grator = hAnnoGratorFromBigFileUrl(fileName, assembly, ANNO_NO_LIMIT,
                                                           agoNoConstraint);
     updateGratorList(grator, pGratorList);
     hashAdd(gratorsByName, seqChangeTable, grator);
@@ -1435,14 +1434,14 @@ for (trackVar = trackVars;  trackVar != NULL;  trackVar = trackVar->next)
 	addDbNsfpSeqChange(trackName, assembly, gratorsByName, pGratorList);
 	char *fileName = fileNameFromTable(trackName);
 	if (fileName != NULL)
-	    grator = hAnnoGratorFromBigFileUrl(fileName, assembly, NO_MAXROWS, agoNoConstraint);
+	    grator = hAnnoGratorFromBigFileUrl(fileName, assembly, ANNO_NO_LIMIT, agoNoConstraint);
 	}
     else
 	{
 	struct trackDb *tdb = tdbForTrack(database, trackName, &fullTrackList);
 	if (tdb != NULL)
 	    {
-	    grator = hAnnoGratorFromTrackDb(assembly, tdb->table, tdb, chrom, NO_MAXROWS, NULL,
+	    grator = hAnnoGratorFromTrackDb(assembly, tdb->table, tdb, chrom, ANNO_NO_LIMIT, NULL,
                                             agoNoConstraint);
 	    if (grator != NULL)
 		{
@@ -1491,7 +1490,7 @@ if (cartUsualBoolean(cart, "hgva_require_consEl", FALSE))
 	{
 	struct trackDb *tdb = tdbForTrack(database, consElTrack, &fullTrackList);
 	if (tdb != NULL)
-	    grator = hAnnoGratorFromTrackDb(assembly, tdb->table, tdb, chrom, NO_MAXROWS, NULL,
+	    grator = hAnnoGratorFromTrackDb(assembly, tdb->table, tdb, chrom, ANNO_NO_LIMIT, NULL,
                                             agoMustOverlap);
 	updateGratorList(grator, pGratorList);
 	}
@@ -1604,11 +1603,11 @@ dnaSeqFree(&seq);
 }
 
 static void addGpFromRow(struct genePred **pGpList, struct annoRow *row,
-			 boolean *pNeedCoding, boolean *pNeedNonCoding)
+			 boolean *pNeedCoding, boolean *pNeedNonCoding, boolean isBig)
 /* If row is coding and we need a coding gp, add it to pGpList and update pNeedCoding;
  * likewise for noncoding. */
 {
-struct genePred *gp = genePredLoad(row->data);
+struct genePred *gp = isBig ? genePredFromBigGenePredRow(row->data) : genePredLoad(row->data);
 if (gp->cdsStart != gp->cdsEnd && *pNeedCoding)
     {
     slAddHead(pGpList, gp);
@@ -1623,7 +1622,7 @@ else if (gp->cdsStart == gp->cdsEnd && *pNeedNonCoding)
 
 static void addGpFromPos(struct annoStreamer *geneStream, char *chrom, uint start, uint end,
 			 struct genePred **pGpList, boolean *pNeedCoding, boolean *pNeedNonCoding,
-			 struct lm *lm)
+			 struct lm *lm, boolean isBig)
 /* Get up to 10 rows from position; if we find one coding and one non-coding gene,
  * add them to pGpList and update pNeed* accordingly. */
 {
@@ -1632,10 +1631,10 @@ int rowCount = 0;
 struct annoRow *row = NULL;
 while (rowCount < 10 && (*pNeedCoding || *pNeedNonCoding)
        && (row = geneStream->nextRow(geneStream, NULL, 0, lm)) != NULL)
-    addGpFromRow(pGpList, row, pNeedCoding, pNeedNonCoding);
+    addGpFromRow(pGpList, row, pNeedCoding, pNeedNonCoding, isBig);
 }
 
-static struct genePred *genesFromPosition(struct annoStreamer *geneStream,
+static struct genePred *genesFromPosition(struct annoStreamer *geneStream, boolean isBig,
 					  boolean *retGotCoding, boolean *retGotNonCoding)
 /* Try to get a coding and non-coding gene from geneStream at cart position.
  * If there are none, try whole chrom; if none there, first in assembly. */
@@ -1647,14 +1646,14 @@ uint start = 0, end = 0;
 getCartPosOrDie(&chrom, &start, &end);
 boolean needCoding = TRUE, needNonCoding = TRUE;
 // First, look for both coding and noncoding genes at cart position:
-addGpFromPos(geneStream, chrom, start, end, &gpList, &needCoding, &needNonCoding, lm);
+addGpFromPos(geneStream, chrom, start, end, &gpList, &needCoding, &needNonCoding, lm, isBig);
 // If that didn't do it, try querying whole chrom
 if (needCoding || needNonCoding)
-    addGpFromPos(geneStream, chrom, 0, 0, &gpList, &needCoding, &needNonCoding, lm);
+    addGpFromPos(geneStream, chrom, 0, 0, &gpList, &needCoding, &needNonCoding, lm, isBig);
 // If we still haven't found either coding or non-coding on the cart's current chrom,
 // try whole genome:
 if (needCoding && needNonCoding)
-    addGpFromPos(geneStream, NULL, 0, 0, &gpList, &needCoding, &needNonCoding, lm);
+    addGpFromPos(geneStream, NULL, 0, 0, &gpList, &needCoding, &needNonCoding, lm, isBig);
 slSort(&gpList, genePredCmp);
 lmCleanup(&lm);
 if (retGotCoding)
@@ -1739,9 +1738,10 @@ boolean forceRebuild = cartUsualBoolean(cart, "hgva_rebuildSampleVariants", FALS
 if (! fileExists(sampleFile) || forceRebuild)
     {
     struct annoStreamer *geneStream = hAnnoStreamerFromTrackDb(assembly, geneTdb->table, geneTdb,
-                                                               NULL, NO_MAXROWS);
+                                                               NULL, ANNO_NO_LIMIT);
+    boolean isBig = sameString(geneTdb->type, "bigGenePred");
     boolean gotCoding = FALSE, gotNonCoding = FALSE;
-    struct genePred *gpList = genesFromPosition(geneStream, &gotCoding, &gotNonCoding);
+    struct genePred *gpList = genesFromPosition(geneStream, isBig, &gotCoding, &gotNonCoding);
     FILE *f = mustOpen(sampleFile, "w");
     writeMinimalVcfHeader(f, assembly->name);
     if (gpList == NULL)
@@ -2200,7 +2200,7 @@ else
 
 enum annoGratorOverlap geneOverlapRule = agoMustOverlap;
 struct annoGrator *gpVarGrator = hAnnoGratorFromTrackDb(assembly, geneTdb->table, geneTdb, chrom,
-						   NO_MAXROWS, primary->asObj, geneOverlapRule);
+						   ANNO_NO_LIMIT, primary->asObj, geneOverlapRule);
 setGpVarFuncFilter(gpVarGrator);
 
 // Some grators may be used as both filters and output values. To avoid making

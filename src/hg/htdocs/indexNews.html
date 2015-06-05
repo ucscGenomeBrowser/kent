@@ -36,78 +36,103 @@
           </p>
 
     <!-- start news -->
-        <hr>
+	<hr>
         <p>
-        <font face="courier" size="3"><b>03 March 2015 - Use UDR for Quick Sizable Downloads</b></font>
+        <font face="courier" size="3"><b>28 May 2015 -
+        New UCSC Genes Track Released for GRCm38/mm10</b></font>
         <p>
-        The UCSC Genome Browser is pleased to share a download protocol to use when downloading
-        large sets of files from our download servers: <b>UDR (UDT Enabled Rsync)</b>. UDR utilizes rsync
-        as the transport mechanism, but sends the data over the UDT protocol, which enables huge
-        amounts of data to be downloaded efficiently over long distances.</p>
-        <p>
-        Protocols like http, ftp and rsync can have a problem in that the further
-        away the download source is from the user, the slower the speed becomes. Protocols like UDT/UDR
-        allow for many UDP packets to be sent in batch, thus allowing for much higher transmit speeds
-        over long distances. UDR will be especially useful for users who are downloading from places
-        that are far away from California. The US East Coast and the international community will likely
-        see much higher download speeds by using UDR rather than rsync, http or ftp.
-        <a href="goldenPath/newsarch.html#030315">Read more</a>.
-        <hr>
-        <p>
-        <font face="courier" size="3"><b>26 February 2015 - New Training Video!</b></font>
-        <p>
-	Ever wondered how to find the tables associated with your favorite Browser track?
-	Find out how in our new training video. See our
-        <a href="training/index.html" target="_blank">training page</a>, our
-        <a href="http://bit.ly/genomebrowserYoutube" target="_blank">YouTube channel</a>, and our
-        <a href="http://genome.ucsc.edu/blog/introducing-the-genome-browser-youtube-channel/" target="_blank">blog</a> for details.
+        We're happy to announce the release of an updated UCSC Genes track for the GRCm38/mm10
+        mouse Genome Browser. The new release has 63,244 total transcripts, compared with 61,642
+        in the previous version. The total number of canonical genes has increased from 32,408
+        to 32,958. Comparing the new gene set with the previous version:
+        <ul>
+          <li>59,119 transcripts did not change between versions.</li>
+          <li>55 transcripts were not carried forward to the new version.</li>
+          <li>2,308 transcripts are &quot;compatible&quot; with those in the previous set, meaning
+              that the two transcripts show consistent splicing.  In most cases, the old and new
+              transcripts differ in the lengths of their UTRs.</li>
+          <li>160 transcripts overlap with those in the previous set, but do not show consistent
+              splicing (i.e., they contain overlapping introns with differing splice sites).</li>
+        </ul>
         </p>
+        <p>
+        More details about the new UCSC Genes track can be found on the
+        <a href="/cgi-bin/hgTrackUi?db=mm10&g=knownGene">UCSC Genes track
+        description page</a>.
+        </p>
+
+        <p>
+        Many thanks to Brian Raney and Matthew Speir for their work on this track!
+        </p>
+
+	<hr>
+	<p>
+	<font face="courier" size="3"><b>15 May 2015 -
+        Work for Us! New Job Openings on the UCSC Genome Browser Project</b></font>
+        <p>
+	The UCSC Genome Browser project team is looking for two talented people to join our
+	engineering staff based in Santa Cruz, CA.</p>
+	<p>
+	The Software Engineer will work with a small engineering team to support and extend
+	the UCSC Genome Browser database and software, while interfacing with Genome Browser
+	collaborators and users worldwide. Our engineering work requires solid experience
+	with C, UNIX and SQL. For application information and more details, see 
+	<a href="https://jobs.ucsc.edu/applicants/Central?quickFind=68100"
+	target="_blank">Job #150568</a> on the UCSC staff employment page. </p>
+	<p>
+  	The Quality and User Support Analyst will work with a small QA group that interacts closely 
+	with browser software developers and genomics researchers throughout the world. As
+	a member of the QA team, you will participate in all aspects of quality assurance for 
+	genomics projects staffed by our group and provide technical support for the affiliated 
+	user communities. For application information and more details about the position,
+	see <a href="https://jobs.ucsc.edu/applicants/Central?quickFind=68101"
+	target="_blank">Job #1505685</a> on the UCSC staff employment page. </p>
+     	<p>
+	If you'd like to apply for one of these positions, be sure to submit your
+	application materials by May 25, 2015, for maximum consideration.
+	</p>
 
         <hr>
 
         <!-- start archives -->
 <!--
-        <font face="courier" size="3"><b>03 March 2015 - Use UDR for Quick Sizable Downloads</b>: </font>
-        <p>
-        The UCSC Genome Browser is pleased to share a download protocol to use when downloading
-        large sets of files from our download servers: <b>UDR (UDT Enabled Rsync)</b>. UDR utilizes rsync
-        as the transport mechanism, but sends the data over the UDT protocol, which enables huge
-        amounts of data to be downloaded efficiently over long distances.
-        <a href="goldenPath/newsarch.html#030315">Read more</a>.
+	<p>
+        <font face="courier" size="3"><b>28 May 2015 -
+        New UCSC Genes Track Released for GRCm38/mm10</b>: </font>
+        We're happy to announce the release of an updated UCSC Genes track for the GRCm38/mm10
+        mouse Genome Browser.
+	<a href="goldenPath/newsarch.html#052815">Read more</a>.
+	</p>
 
-
+	<p>
+	<font face="courier" size="3"><b>15 May 2015 -
+        Work for Us! New Job Openings on the UCSC Genome Browser Project: </b></font>
+	The UCSC Genome Browser project team is looking for two talented people to join our
+	engineering staff based in Santa Cruz, CA.
+	<a href="goldenPath/newsarch.html#051515">Read more</a>. 
+	</p>
+-->
+	<p>
+	<font face="courier" size="3"><b>08 April 2015 -
+        bigGenePred Format Now Supported in the Genome Browser</b>: </font>
+        We are pleased to announce that the UCSC Genome Browser now supports data in
+        bigGenePred format.
+	<a href="goldenPath/newsarch.html#040815">Read more</a>.
+        </p>
+	<p>
+	<font face="courier" size="3"><b>02 April 2015 -
+        New Tarsier (tarSyr2) Assembly Now Available in the Genome Browser</b>: </font>
+        We are pleased to announce the release of a Genome Browser for the September 2013
+        assembly of tarsier, <em>Tarsius syrichta</em> (WashU Tarsius_syrichta-2.0.1,
+        UCSC version tarSyr2).
+	<a href="goldenPath/newsarch.html#040215b">Read more</a>.
+	</p>
         <p>
-        <font face="courier" size="3"><b>26 February 2015 - New Training Video!</b>: </font>
-        <p>
+        <font face="courier" size="3"><b>02 April 2015 - New Training Video!</b></font>
         View it now on our
-        <a href="http://bit.ly/genomebrowserYoutube" target="_blank">YouTube channel</a>.
-        <a href="goldenPath/newsarch.html#022615">Read more</a>.
---> 
- <p>
-        <font face="courier" size="3"><b>12 February 2015 - Blat Your Assembly Hub</b>: </font>
-        Assembly data hubs, track hubs that allow researchers to annotate genomes that are
-        not in the UCSC Genome Browser, can now use blat to quickly find DNA and protein
-        sequences in their unique assemblies.
-        <a href="goldenPath/newsarch.html#021215">Read more</a>.
-
-  <p>
-        <font face="courier" size="3"><b>11 February 2015 - dbSNP 142 Available for hg19 and hg38</b>: </font>
-        We are pleased to announce the release of four tracks derived from NCBI
-        <a href="http://www.ncbi.nlm.nih.gov/SNP/" target="_blank">dbSNP</a> Build 142
-        data, available on the two most recent human assemblies GRCh37/hg19 and GRCh38/hg38.
-        The new tracks contain a substantial amount of additional annotation data not 
-        included in previous dbSNP tracks, with corresponding coloring and filtering options 
-        in the Genome Browser.
-        <a href="goldenPath/newsarch.html#021115">Read more</a>.
+        <a href="http://bit.ly/genomebrowserYoutube" target=_"blank">YouTube channel</a>.
+	<a href="goldenPath/newsarch.html#040215a">Read more</a>.
         </p>
-
-  <p>
-        <font face="courier" size="3"><b>2 February 2015 - Host a Genome Browser Workshop</b>: </font>
-        New timeslots are now available to host a Genome Browser workshop at your institution.
-        <a href="goldenPath/newsarch.html#020215">Read more</a>.
-        </p>
-
-
             </TD><TD WIDTH=15>
          </TD></TR></TABLE>
     <BR></TD></TR></TABLE>

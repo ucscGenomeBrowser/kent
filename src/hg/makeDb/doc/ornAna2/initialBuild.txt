@@ -1,0 +1,479 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the ornAna2
+# Platypus - Ornithorhynchus anatinus
+## "Glennie" 
+
+# Assembly Name:  ASM227v2
+# Organism name:  Ornithorhynchus anatinus
+# Taxid:          9258
+# Submitter:      Washington University (WashU)
+# Date:           2007-2-14
+# BioSample:      SAMN02953646
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Chromosome
+# Genome representation: full
+# GenBank Assembly Accession: GCA_000002275.2 (latest)
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000000135.2              Primary Assembly
+
+## chrMt is NC_000891.1 -> http://www.ncbi.nlm.nih.gov/bioproject/10802
+
+## http://www.ncbi.nlm.nih.gov/bioproject/PRJNA19039
+
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2015-03-04 - Hiram)
+    mkdir -p /hive/data/genomes/ornAna2/genbank
+    cd /hive/data/genomes/ornAna2/genbank
+
+    time rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Ornithorhynchus_anatinus/all_assembly_versions/GCA_000002275.2_ASM227v2/ ./
+
+    # sent 1102 bytes  received 1436188553 bytes  11353277.91 bytes/sec
+    # total size is 1436008781  speedup is 1.00
+    # real    2m6.484s
+
+    # measure what we have here:
+    faSize GCA_000002275.2_ASM227v2_genomic.fna.gz
+    # 1996809494 bases (154575690 N's 1842233804 real 997282221
+    #    upper 844951583 lower) in 201524 sequences in 1 files
+    # Total size: mean 9908.5 sd 331991.7 min 108 (AAPN01446708.1)
+    #    max 59581953 (CM000411.1) median 1069
+    # %42.32 masked total, %45.87 masked real
+
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2015-03-09 - Hiram)
+    mkdir /hive/data/genomes/ornAna2/ucsc
+    cd /hive/data/genomes/ornAna2/ucsc
+
+    time ~/kent/src/hg/makeDb/doc/ornAna2/ucscCompositeAgp.pl \
+       ../genbank/GCA_000002275.2_ASM227v2_assembly_structure/Primary_Assembly
+    # real    0m10.549s
+    time ~/kent/src/hg/makeDb/doc/ornAna2/unplaced.pl \
+       ../genbank/GCA_000002275.2_ASM227v2_assembly_structure/Primary_Assembly
+    # real    0m26.479s
+    time ~/kent/src/hg/makeDb/doc/ornAna2/unlocalized.pl \
+       ../genbank/GCA_000002275.2_ASM227v2_assembly_structure/Primary_Assembly
+
+    # verify nothing lost:
+    faSize chr*.fa
+    # 1996809494 bases (154575690 N's 1842233804 real 1842233804 upper
+    #    0 lower) in 201524 sequences in 21 files
+    # Total size: mean 9908.5 sd 331991.7 min 108 (chrUn_AAPN01446708v1)
+    #    max 59581953 (chr3) median 1069
+    # %0.00 masked total, %0.00 masked real
+
+    # verify the fa and AGP files are compatible:
+    faToTwoBit chr*.fa test.2bit
+    cat chr*.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail
+    # All AGP and FASTA entries agree - both files are valid
+    rm -f test.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2015-03-09 - Hiram)
+
+    cd /hive/data/genomes/ornAna2
+    cat << '_EOF_' > ornAna2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db ornAna2
+clade mammal
+genomeCladePriority 65
+commonName Platypus
+scientificName Ornithorhynchus anatinus
+assemblyDate Feb. 2007
+assemblyLabel WUGSC ASM227v2
+assemblyShortLabel ASM227v2
+orderKey 16409
+# chrMt: http://www.ncbi.nlm.nih.gov/bioproject/10802
+mitoAcc NC_000891.1
+fastaFiles /cluster/data/ornAna2/ucsc/chr*.fa
+agpFiles /cluster/data/ornAna2/ucsc/chr*.agp
+dbDbSpeciesDir platypus
+photoCreditURL http://commons.wikimedia.org/wiki/File:Platypus.jpg
+photoCreditName Stefan Kraft - Wikimedia Commons
+ncbiGenomeId 110
+ncbiAssemblyId 237598
+ncbiAssemblyName ASM227v2
+ncbiBioProject 19039 
+genBankAccessionID GCA_000002275.2
+taxId 9258
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and AGP are OK:
+    # temporary set sciName to just 'Bison bison' to get through the chrM
+    #  identification
+    time (makeGenomeDb.pl -workhorse=kolossus -dbHost=hgwdev \
+       -fileServer=hgwdev -stop=agp ornAna2.config.ra) > agp.log 2>&1
+    # *** All done!  (through the 'agp' step)
+    # real    9m59.789s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db ornAna2.config.ra) > db.log 2>&1
+    # real    21m53.472s
+
+    # check in the trackDb files created and add to trackDb/makefile
+    # and clean up:
+    rm -fr TemporaryTrackDbCheckout/
+
+##########################################################################
+# running repeat masker (DONE - 2015-03-10 - Hiram)
+    mkdir /hive/data/genomes/ornAna2/bed/repeatMasker
+    cd /hive/data/genomes/ornAna2/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku ornAna2) > do.log 2>&1
+    # real    253m47.814s
+
+    # three identifiers failed, clean the result:
+    mv ornAna2.sorted.fa.out ornAna2.sorted.fa.out.badIds
+egrep -v \
+  "chr1      28133788|chrUn_DS181657v1  719030|chrUn_DS213462v1     703" \
+   ornAna2.sorted.fa.out.badIds > ornAna2.sorted.fa.out
+
+    /cluster/bin/scripts/extractNestedRepeats.pl ornAna2.fa.out \
+       | sort -k1,1 -k2,2n > ornAna2.nestedRepeats.bed
+
+    # continuing:
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -continue=mask -smallClusterHub=ku ornAna2) > mask.log 2>&1
+    # real    19m51.592s
+
+    cat faSize.rmsk.txt
+    # 1996826513 bases (154575690 N's 1842250823 real 948454705 upper
+    #    893796118 lower) in 201525 sequences in 1 files
+    # Total size: mean 9908.6 sd 331990.9 min 108 (chrUn_AAPN01446708v1)
+    #    max 59581953 (chr3) median 1069
+    # %44.76 masked total, %48.52 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;    
+
+    time featureBits -countGaps ornAna2 rmsk
+    # 894749490 bases of 1996826513 (44.809%) in intersection
+    #   real    2m21.794s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2015-03-10 - Hiram)
+
+    mkdir /hive/data/genomes/ornAna2/bed/simpleRepeat
+    cd /hive/data/genomes/ornAna2/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        ornAna2) > do.log 2>&1
+    # real    95m30.651s
+
+    cat fb.simpleRepeat
+    # 52678700 bases of 1842252119 (2.859%) in intersection
+
+    # using the Window Masker result:
+    cd /hive/data/genomes/ornAna2
+    twoBitMask bed/repeatMasker/ornAna2.rmsk.2bit \
+      -add bed/simpleRepeat/trfMask.bed  ornAna2.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa ornAna2.2bit stdout | faSize stdin > faSize.ornAna2.2bit.txt
+    cat faSize.ornAna2.2bit.txt
+    # 1996826513 bases (154575690 N's 1842250823 real 947687014 upper
+    #    894563809 lower) in 201525 sequences in 1 files
+    # Total size: mean 9908.6 sd 331990.9 min 108 (chrUn_AAPN01446708v1)
+    #    max 59581953 (chr3) median 1069
+    # %44.80 masked total, %48.56 masked real
+
+    rm /gbdb/ornAna2/ornAna2.2bit
+    ln -s `pwd`/ornAna2.2bit /gbdb/ornAna2/ornAna2.2bit
+
+##########################################################################
+## WINDOWMASKER (DONE - 2015-03-10 - Hiram)
+
+    mkdir /hive/data/genomes/ornAna2/bed/windowMasker
+    cd /hive/data/genomes/ornAna2/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev ornAna2) > do.log 2>&1
+    # real    606m53.374s
+
+    # Masking statistics
+    cat faSize.ornAna2.cleanWMSdust.txt
+    # 1996826513 bases (154575690 N's 1842250823 real 985358741 upper
+    #    856892082 lower) in 201525 sequences in 1 files
+    # Total size: mean 9908.6 sd 331990.9 min 108 (chrUn_AAPN01446708v1)
+    #    max 59581953 (chr3) median 1069
+    # %42.91 masked total, %46.51 masked real
+
+    cat fb.ornAna2.rmsk.windowmaskerSdust.txt
+    # 715265328 bases of 1996826513 (35.820%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2015-03-31 - Hiram)
+    mkdir /hive/data/genomes/ornAna2/bed/cpgIslands
+    cd /hive/data/genomes/ornAna2/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku ornAna2) > do.log 2>&1 &
+    # real    75m14.279s
+
+    cat fb.ornAna2.cpgIslandExt.txt
+    # 43180726 bases of 1842252119 (2.344%) in intersection
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2015-03-10 - Hiram)
+    mkdir /hive/data/genomes/ornAna2/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/ornAna2/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/ornAna2/ornAna2.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku ornAna2) > do.log 2>&1
+    # real    124m18.319s
+
+    cat fb.ornAna2.cpgIslandExtUnmasked.txt
+    # 101211831 bases of 1842252119 (5.494%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-03-10 - Hiram)
+    mkdir /hive/data/genomes/ornAna2/bed/cytoBand
+    cd /hive/data/genomes/ornAna2/bed/cytoBand
+    makeCytoBandIdeo.csh ornAna2
+
+#########################################################################
+# augustus - (DONE - 2015-05-21 - Hiram)
+    # still deciding if this is to run with 'human' parameters or 'chicken'
+    mkdir /hive/data/genomes/ornAna2/bed/augustus
+    cd /hive/data/genomes/ornAna2/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+       -species=human -dbHost=hgwdev -workhorse=hgwdev ornAna2) > do.log 2>&1
+XXX - running - Thu May 21 15:55:21 PDT 2015
+
+#########################################################################
+# genscan - (DONE - 2015-03-31 - Hiram)
+    mkdir /hive/data/genomes/ornAna2/bed/genscan
+    cd /hive/data/genomes/ornAna2/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku ornAna2) > do.log 2>&1
+    # real    110m50.427s
+
+    cat fb.ornAna2.genscan.txt
+    #   44600621 bases of 1842252119 (2.421%) in intersection
+
+    cat fb.ornAna2.genscanSubopt.txt
+    #   42596907 bases of 1842252119 (2.312%) in intersection
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2015-03-10 - Hiram)
+    mkdir /hive/data/genomes/ornAna2/bed/ucscToINSDC
+    cd /hive/data/genomes/ornAna2/bed/ucscToINSDC
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+         ../../genbank/GCA_*assembly_structure/Primary_Assembly NC_000891.1
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    #  201525 name.coordinate.tab
+    #  201525 ucscToINSDC.bed
+    #  201525 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 27
+    # use the 27 in this sed
+    sed -e "s/21/27/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab ornAna2 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords ornAna2
+    # should cover %100 entirely:
+    featureBits -countGaps ornAna2 ucscToINSDC
+    # 1996826513 bases of 1996826513 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2015-03-10 - Hiram)
+    hgsql -N -e "select frag from gold;" ornAna2 | sort | head -1
+AAPN01000001.1
+
+    hgsql -N -e "select frag from gold;" ornAna2 | sort | tail -2
+AAPN01447149.1
+NC_000891.1
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" ornAna2 | wc -l
+    # 445349
+
+    hgsql -N -e "select frag from gold;" ornAna2 \
+       | egrep -e '[AN][AC][P_][N0]0[0-9]+(\.1)?' | wc -l
+    # 445349
+
+    hgsql -N -e "select frag from gold;" ornAna2 \
+       | egrep -v -e '[AN][AC][P_][N0]0[0-9]+(\.1)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/tarsier/ornAna2/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [AN][AC][P_][N0]0[0-9]+(\.1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+########################################################################
+# Create kluster run files (DONE - 2015-03-31 - Hiram)
+
+    cd /hive/data/genomes/ornAna2
+    # numerator is ornAna2 gapless bases "real" as reported by:
+    head -1 faSize.ornAna2.2bit.txt
+# 1996826513 bases (154575690 N's 1842250823 real 947687014 upper
+#    894563809 lower) in 201525 sequences in 1 files
+
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 1842250823 / 2861349177 \) \* 1024
+    # ( 1842250823 / 2861349177 ) * 1024 = 659.292077
+
+    # ==> use -repMatch=600 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/ornAna2
+    time blat ornAna2.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/ornAna2.11.ooc \
+        -repMatch=600
+    # Wrote 36683 overused 11-mers to jkStuff/ornAna2.11.ooc
+    # real    0m43.465s
+
+    # there are no non-bridged gaps, do not need to do this
+    #   check non-bridged gaps to see what the typical size is:
+#     hgsql -N -e 'select * from gap where bridge="no" order by size;' ornAna2 
+#       | ave -tableOut -col=7 stdin
+# # min Q1 median Q3 max mean N sum stddev
+# 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006
+
+    # note the minimum non-bridged gap size is 50,076
+
+#  gapToLift -verbose=2 -minGap=50000 ornAna2 jkStuff/ornAna2.nonBridged.lft \
+#         -bedFile=jkStuff/ornAna2.nonBridged.bed
+
+#    hgsql -N \
+#        -e 'select * from gap where bridge="no" order by size;' ornAna2 \
+#        | ave -col=7 stdin
+
+    # not needed:
+#    gapToLift -verbose=2 -minGap=100 bosTau7 jkStuff/nonBridged.lft \
+#        -bedFile=jkStuff/nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 201525, total size: 1996826513, one half size: 998413256
+# cumulative    N50 count       contig  contig size
+# 997684181       181     chrUn_DS181652v1        992865
+# 998413256 one half size
+# 998675786       182     chrUn_DS181001v1        991605
+
+#############################################################################
+# GENBANK AUTO UPDATE (DONE - 2015-03-31 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Ornithorhynchus anatinus        293     9699    343
+
+    # edit etc/genbank.conf to add ornAna2 just before ornAna1
+
+# ornAna2 (Platypus -- Ornithorhynchus anatinus)
+ornAna2.serverGenome = /hive/data/genomes/ornAna2/ornAna2.2bit
+ornAna2.clusterGenome = /scratch/data/ornAna2/ornAna2.2bit
+ornAna2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+ornAna2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+ornAna2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+ornAna2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+ornAna2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+ornAna2.ooc = /scratch/data/ornAna2/11.ooc
+ornAna2.lift = no
+ornAna2.refseq.mrna.xeno.load  = yes
+ornAna2.refseq.mrna.xeno.loadDesc = yes
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+ornAna2.genbank.mrna.xeno.load = no
+ornAna2.downloadDir = ornAna2
+ornAna2.perChromTables = no
+# ornAna2.upstreamGeneTbl = ensGene
+# ornAna2.upstreamMaf = multiz6way
+# /hive/data/genomes/ornAna1/bed/multiz6way.2007-04-24/species.lst
+
+
+    git commit -m "adding ornAna2 refs #15098" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial ornAna2
+    # logFile: var/build/logs/2015.04.27-21:25:57.ornAna2.initalign.log
+    # real    real    946m51.747s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.ornAna2
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad -verbose=10 ornAna2
+    # logFile: var/dbload/hgwdev/logs/2015.05.21-15:54:32.ornAna2.dbload.log
+XXX - running - Thu May 21 15:54:45 PDT 2015
+    # real    10m59.824s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add ornAna2 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added ornAna2 - Golden snub-nosed monkey refs #14438" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE 2014-10-21 - Steve)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=ornAna2 -tableCoverage all.joiner
+    joinerCheck -database=ornAna2 -keys all.joiner
+    joinerCheck -database=ornAna2 -times all.joiner
+
+    cd /hive/data/genomes/ornAna2
+    time makeDownloads.pl ornAna2 > downloads.log 2>&1
+    # real    18m53.781s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/ornAna2/pushQ
+    cd /hive/data/genomes/ornAna2/pushQ
+    makePushQSql.pl ornAna2 > ornAna2.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/ornAna2/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/ornAna2/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/ornAna2/bbi/quality.bw
+    # WARNING: ornAna2 does not have seq
+    # WARNING: ornAna2 does not have extFile
+
+    #   copy it to hgwbeta
+    scp -p ornAna2.pushQ.sql qateam@hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < ornAna2.pushQ.sql
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

@@ -108,7 +108,7 @@ track->dbTrack = TRUE;
 hFreeConn(&ctConn);
 }
 
-static char *ctGenomeOrCurrent(struct customTrack *ct)
+char *ctGenomeOrCurrent(struct customTrack *ct)
 /* return database setting */
 {
 char *ctDb = ctGenome(ct);
@@ -229,7 +229,7 @@ return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
 	"/dev/null", track->dbStderrFile);
 }
 
-static void pipelineFailExit(struct customTrack *track)
+void pipelineFailExit(struct customTrack *track)
 /* show up to three lines of error message to stderr and errAbort */
 {
 struct dyString *errDy = newDyString(0);
@@ -2009,13 +2009,21 @@ if (hashLookup(settings, "viewLimits") == NULL)
 
 static void checkAllowedBigDataUrlProtocols(char *url)
 /* Abort if url is not using one of the allowed bigDataUrl network protocols.
- * In particular, do not allow a local file reference. */
+ * In particular, do not allow a local file reference, unless explicitely allowed 
+ * by hg.conf. */
 {
-if (!(startsWith("http://", url)
-   || startsWith("https://", url)
-   || startsWith("ftp://", url)
-))
-    errAbort("only network protocols http, https, or ftp allowed in bigDataUrl: '%s'", url);
+    if (!(startsWith("http://", url)
+       || startsWith("https://", url)
+       || startsWith("ftp://", url)
+    ))
+        {
+        char *prefix = cfgOption("udc.localDir");
+        if (prefix == NULL)
+            errAbort("only network protocols http, https, or ftp allowed in bigDataUrl: '%s'", url);
+        else if (!startsWith(prefix, url))
+            errAbort("bigDataUrl '%s' on local file system has to start with '%s' (see udc.localDir directive in cgi-bin/hg.conf)", url, prefix);
+            
+        }
 }
 
 static char *bigDataDocPath(char *type)
@@ -2593,6 +2601,7 @@ static struct customFactory bigDataOopsFactory =
 /*** Framework for custom factories. ***/
 
 static struct customFactory *factoryList;
+extern struct customFactory adjacencyFactory;
 
 static void customFactoryInit()
 /* Initialize custom track factory system. */
@@ -2617,6 +2626,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &coloredExonFactory);
     slAddTail(&factoryList, &encodePeakFactory);
     slAddTail(&factoryList, &bedDetailFactory);
+    slAddTail(&factoryList, &adjacencyFactory);
 #ifdef USE_BAM
     slAddTail(&factoryList, &bamFactory);
 #endif//def USE_BAM

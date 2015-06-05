@@ -85,14 +85,14 @@ if (conn != NULL)
     {
     /* Since the content string is chopped, query for the actual length. */
     struct dyString *query = dyStringNew(1024);
-    sqlDyStringPrintf(query, "select length(contents) from userDb"
-	  " where id = %d", u->id);
+    sqlDyStringPrintf(query, "select length(contents) from %s"
+	  " where id = %d", userDbTable(), u->id);
     if (cartDbUseSessionKey())
 	  sqlDyStringPrintf(query, " and sessionKey='%s'", u->sessionKey);
     uLen = sqlQuickNum(conn, query->string);
     dyStringClear(query);
-    sqlDyStringPrintf(query, "select length(contents) from sessionDb"
-	  " where id = %d", s->id);
+    sqlDyStringPrintf(query, "select length(contents) from %s"
+	  " where id = %d", sessionDbTable(),s->id);
     if (cartDbUseSessionKey())
 	  sqlDyStringPrintf(query, " and sessionKey='%s'", s->sessionKey);
     sLen = sqlQuickNum(conn, query->string);
@@ -131,16 +131,16 @@ boolean cartTablesOk(struct sqlConnection *conn)
 /* Return TRUE if cart tables are accessible (otherwise, the connection
  * doesn't do us any good). */
 {
-if (!sqlTableExists(conn, "userDb"))
+if (!sqlTableExists(conn, userDbTable()))
     {
-    fprintf(stderr, "ASH: cartTablesOk failed on %s.userDb!  pid=%ld\n",
-	    sqlGetDatabase(conn), (long)getpid());
+    fprintf(stderr, "ASH: cartTablesOk failed on %s.%s!  pid=%ld\n",
+	    sqlGetDatabase(conn), userDbTable(),  (long)getpid());
     return FALSE;
     }
-if (!sqlTableExists(conn, "sessionDb"))
+if (!sqlTableExists(conn, sessionDbTable()))
     {
-    fprintf(stderr, "ASH: cartTablesOk failed on %s.sessionDb!  pid=%ld\n",
-	    sqlGetDatabase(conn), (long)getpid());
+    fprintf(stderr, "ASH: cartTablesOk failed on %s.%s!  pid=%ld\n",
+	    sqlGetDatabase(conn), sessionDbTable(), (long)getpid());
     return FALSE;
     }
 return TRUE;
@@ -659,6 +659,9 @@ struct cart *cartNew(char *userId, char *sessionId,
  * strings to not include */
 {
 cgiApoptosisSetup();
+if (cfgOptionBooleanDefault("showEarlyErrors", FALSE))
+    errAbortSetDoContentType(TRUE);
+
 struct cart *cart;
 struct sqlConnection *conn = cartDefaultConnector();
 char *ex;
@@ -669,8 +672,8 @@ cart->hash = newHash(12);
 cart->exclude = newHash(7);
 cart->userId = userId;
 cart->sessionId = sessionId;
-cart->userInfo = loadDb(conn, "userDb", userId, &userIdFound);
-cart->sessionInfo = loadDb(conn, "sessionDb", sessionId, &sessionIdFound);
+cart->userInfo = loadDb(conn, userDbTable(), userId, &userIdFound);
+cart->sessionInfo = loadDb(conn, sessionDbTable(), sessionId, &sessionIdFound);
 if (sessionIdFound)
     cartParseOverHash(cart, cart->sessionInfo->contents);
 else if (userIdFound)
@@ -802,15 +805,15 @@ cartEncodeState(cart, encoded);
  * a great bunch of variables. */
 if (encoded->stringSize < 16*1024 || cart->userInfo->useCount > 0)
     {
-    updateOne(conn, "userDb", cart->userInfo, encoded->string, encoded->stringSize);
-    updateOne(conn, "sessionDb", cart->sessionInfo, encoded->string, encoded->stringSize);
+    updateOne(conn, userDbTable(), cart->userInfo, encoded->string, encoded->stringSize);
+    updateOne(conn, sessionDbTable(), cart->sessionInfo, encoded->string, encoded->stringSize);
     }
 else
     {
     fprintf(stderr, "Cart stuffing bot?  Not writing %d bytes to cart on first use of %d from IP=%s\n",
             encoded->stringSize, cart->userInfo->id, cgiRemoteAddr());
     /* Do increment the useCount so that cookie-users don't get stuck here: */
-    updateOne(conn, "userDb", cart->userInfo, "", 0);
+    updateOne(conn, userDbTable(), cart->userInfo, "", 0);
     }
 
 /* Cleanup */
@@ -1454,8 +1457,8 @@ void cartResetInDb(char *cookieName)
 char *hguid = getCookieId(cookieName);
 char *hgsid = getSessionId();
 struct sqlConnection *conn = cartDefaultConnector();
-clearDbContents(conn, "userDb", hguid);
-clearDbContents(conn, "sessionDb", hgsid);
+clearDbContents(conn, userDbTable(), hguid);
+clearDbContents(conn, sessionDbTable(), hgsid);
 cartDefaultDisconnector(&conn);
 }
 
@@ -1469,7 +1472,10 @@ if (sameWord("HTTPHOST", domain))
     char *hostWithPort = hHttpHost();
     struct netParsedUrl npu;
     netParseUrl(hostWithPort, &npu);
-    domain = cloneString(npu.host);
+    if (strchr(npu.host, '.') != NULL)	// Domains without a . don't seem to be kept
+	domain = cloneString(npu.host);
+    else
+        domain = NULL;
     }
 
 char userIdKey[256];
@@ -1486,8 +1492,12 @@ if (sameString(userIdKey,"")) // make sure we do not write any blank cookies.
     }
 else
     {
-    printf("Set-Cookie: %s=%s; path=/; domain=%s; expires=%s\r\n",
-	    cookieName, userIdKey, domain, cookieDate());
+    if (!isEmpty(domain))
+	printf("Set-Cookie: %s=%s; path=/; domain=%s; expires=%s\r\n",
+		cookieName, userIdKey, domain, cookieDate());
+    else
+	printf("Set-Cookie: %s=%s; path=/; expires=%s\r\n",
+		cookieName, userIdKey, cookieDate());
     }
 if (geoMirrorEnabled())
     {
@@ -2660,4 +2670,104 @@ void cgiExitTime(char *cgiName, long enteredMainTime)
 if (sameWord("yes", cfgOptionDefault("browser.cgiTime", "yes")) )
   fprintf(stderr, "CGI_TIME: %s: Overall total time: %ld millis\n",
         cgiName, clock1000() - enteredMainTime);
+}
+
+void cartCheckForCustomTracks(struct cart *cart, struct dyString *dyMessage)
+/* Scan cart for ctfile_<db> variables.  Tally up the databases that have
+ * live custom tracks and those that have expired custom tracks. */
+/* While we're at it, also look for saved blat results. */
+{
+struct hashEl *helList = cartFindPrefix(cart, CT_FILE_VAR_PREFIX);
+if (helList != NULL)
+    {
+    struct hashEl *hel;
+    boolean gotLiveCT = FALSE, gotExpiredCT = FALSE;
+    struct slName *liveDbList = NULL, *expiredDbList = NULL, *sln = NULL;
+    for (hel = helList;  hel != NULL;  hel = hel->next)
+	{
+	char *db = hel->name + strlen(CT_FILE_VAR_PREFIX);
+	boolean thisGotLiveCT = FALSE, thisGotExpiredCT = FALSE;
+	/* If the file doesn't exist, just remove the cart variable so it
+	 * doesn't get copied from session to session.  If it does exist,
+	 * leave it up to customFactoryTestExistence to parse the file for
+	 * possible customTrash table references, some of which may exist
+	 * and some not. */
+	if (!fileExists(hel->val))
+	    {
+	    cartRemove(cart, hel->name);
+	    thisGotExpiredCT = TRUE;
+	    }
+	else
+	    {
+	    customFactoryTestExistence(db, hel->val,
+				       &thisGotLiveCT, &thisGotExpiredCT);
+	    }
+	if (thisGotLiveCT)
+	    slNameAddHead(&liveDbList, db);
+	if (thisGotExpiredCT)
+	    slNameAddHead(&expiredDbList, db);
+	gotLiveCT |= thisGotLiveCT;
+	gotExpiredCT |= thisGotExpiredCT;
+	}
+    if (gotLiveCT)
+	{
+	slSort(&liveDbList, slNameCmp);
+	dyStringPrintf(dyMessage,
+		       "<P>Note: the session has at least one active custom "
+		       "track (in database ");
+	for (sln = liveDbList;  sln != NULL;  sln = sln->next)
+	    dyStringPrintf(dyMessage, "<A HREF=\"hgCustom?%s&db=%s\">%s</A>%s",
+			   cartSidUrlString(cart), sln->name,
+			   sln->name, (sln->next ? sln->next->next ? ", " : " and " : ""));
+	dyStringAppend(dyMessage, "; click on the database link "
+		       "to manage custom tracks).  ");
+
+	}
+    if (gotExpiredCT)
+	{
+	slSort(&expiredDbList, slNameCmp);
+	dyStringPrintf(dyMessage,
+		       "<P>Note: the session has at least one expired custom "
+		       "track (in database ");
+	for (sln = expiredDbList;  sln != NULL;  sln = sln->next)
+	    dyStringPrintf(dyMessage, "%s%s",
+			   sln->name, (sln->next ? sln->next->next ? ", " : " and " : ""));
+	dyStringPrintf(dyMessage,
+		       "), so it may not appear as originally intended.  ");
+	}
+    dyStringPrintf(dyMessage,
+		   "Custom tracks are subject to an expiration policy described in the "
+		   "<A HREF=\"../goldenPath/help/hgSessionHelp.html#CTs\" TARGET=_BLANK>"
+		   "Session documentation</A>.</P>");
+    slNameFreeList(&liveDbList);
+    slNameFreeList(&expiredDbList);
+    }
+/* Check for saved blat results (quasi custom track). */
+char *ss = cartOptionalString(cart, "ss");
+if (isNotEmpty(ss))
+    {
+    char buf[1024];
+    char *words[2];
+    int wordCount;
+    boolean exists = FALSE;
+    safecpy(buf, sizeof(buf), ss);
+    wordCount = chopLine(buf, words);
+    if (wordCount < 2)
+	exists = FALSE;
+    else
+	exists = fileExists(words[0]) && fileExists(words[1]);
+
+    if (exists)
+	dyStringPrintf(dyMessage,
+		       "<P>Note: the session contains BLAT results.  ");
+    else
+	dyStringPrintf(dyMessage,
+		"<P>Note: the session contains an expired reference to "
+		"previously saved BLAT results, so it may not appear as "
+		"originally intended.  ");
+    dyStringPrintf(dyMessage,
+		   "BLAT results are subject to an "
+		   "<A HREF=\"../goldenPath/help/hgSessionHelp.html#CTs\" TARGET=_BLANK>"
+		   "expiration policy</A>.");
+    }
 }

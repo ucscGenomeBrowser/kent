@@ -97,9 +97,6 @@ struct trackDb *showTrackField(struct grp *selGroup,
 char *showTableField(struct trackDb *track, char *varName, boolean useJoiner);
 /* Show table control and label. */
 
-int trackDbCmpShortLabel(const void *va, const void *vb);
-/* Sort track by shortLabel. */
-
 struct slName *getDbListForGenome();
 /* Get list of selectable databases. */
 
@@ -168,10 +165,6 @@ char *connectingTableForTrack(char *rawTable);
 
 char *chromTable(struct sqlConnection *conn, char *table);
 /* Get chr1_table if it exists, otherwise table.
- * You can freeMem this when done. */
-
-char *chrnTable(struct sqlConnection *conn, char *table);
-/* Return chrN_table if table is split, otherwise table.
  * You can freeMem this when done. */
 
 char *getDbTable(char *db, char *table);
@@ -437,7 +430,6 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaDoSetUserRegions "hgta_doSetUserRegions"
 #define hgtaDoClearSetUserRegionsText "hgta_doClearSetUserRegionsText"
 #define hgtaUserRegionsFile "hgta_userRegionsFile"
-#define hgtaUserRegionsTable "hgta_userRegionsTable"
 #define hgtaUserRegionsDb "hgta_userRegionsDb"
 #define hgtaEnteredUserRegions "hgta_enteredUserRegions"
 #define hgtaEnteredUserRegionFile "hgta_enteredUserRegionFile"
@@ -768,7 +760,7 @@ struct hTableInfo *bigBedToHti(char *table, struct sqlConnection *conn);
 struct slName *bigBedGetFields(char *table, struct sqlConnection *conn);
 /* Get fields of bigBed as simple name list. */
 
-struct sqlFieldType *bigBedListFieldsAndTypes(char *table, struct sqlConnection *conn);
+struct sqlFieldType *bigBedListFieldsAndTypes(struct trackDb *tdb, struct sqlConnection *conn);
 /* Get fields of bigBed as list of sqlFieldType. */
 
 struct bed *bigBedGetFilteredBedsOnRegions(struct sqlConnection *conn,

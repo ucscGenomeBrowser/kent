@@ -448,6 +448,28 @@ macFas5.upstreamGeneTbl = refGene
     git push
     make etc-update
 
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2015-03-20 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+     ssh hgwdev
+
+     # verify doesn't exist yet:
+     hgsql -e 'select * from blatServers;' hgcentraltest | grep -i macfas
+     # empty result
+
+     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("macFas5", "blat4c", "17864", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("macFas5", "blat4c", "17865", "0", "1");' \
+		hgcentraltest
+
+     # verify entry:
+     hgsql -e 'select * from blatServers;' hgcentraltest | grep -i macfas
+     #    macFas5 blat4c  17864   1       0
+     #    macFas5 blat4c  17865   0       1
+
+     #	test it with some sequence
+
 #########################################################################
 # all.joiner update, downloads and in pushQ - (DONE - 2015-01-27 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema

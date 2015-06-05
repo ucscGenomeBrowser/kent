@@ -179,18 +179,20 @@ sqlExecProgProfile("localDb", prog, progArgs, userArgc, userArgv);
 void nukeOldCnfs(char *homeDir)
 /* Remove .hgsql.cnf-* files older than a month */
 {
-struct fileInfo *file, *fileList = listDirX(homeDir, ".hgsql.cnf-*", FALSE);
+// ignoreStatFailures must be TRUE due to race condition between two hgsql
+// commands might trying to purge the same file.
+struct fileInfo *file, *fileList = listDirXExt(homeDir, ".hgsql.cnf-*", FALSE, TRUE);
 time_t now = time(0);
 for (file = fileList; file != NULL; file = file->next)
     {
-    if (difftime(now, file->lastAccess) >  30 * 24 * 60 * 60)  // 30 days in seconds.
+    if ((file->statErrno == 0) && (difftime(now, file->lastAccess) >  30 * 24 * 60 * 60))  // 30 days in seconds.
 	{
 	char homePath[256];
 	safef(homePath, sizeof homePath, "%s/%s", homeDir, file->name);
 	remove(homePath);
 	}
     }
-
+slFreeList(&fileList);
 }
 
 void sqlExecProgProfile(char *profile, char *prog, char **progArgs, int userArgc, char *userArgv[])

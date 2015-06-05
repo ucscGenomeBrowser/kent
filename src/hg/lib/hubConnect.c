@@ -391,7 +391,7 @@ static void insertHubUrlInStatus(char *url)
 /* add a url to the hubStatus table */
 {
 struct sqlConnection *conn = hConnectCentral();
-char query[512];
+char query[4096];
 char *statusTable = getHubStatusTableName();
 
 if (sqlFieldIndex(conn, statusTable, "firstAdded") >= 0)
@@ -408,7 +408,7 @@ static unsigned getHubId(char *url, char **errorMessage)
 /* find id for url in hubStatus table */
 {
 struct sqlConnection *conn = hConnectCentral();
-char query[512];
+char query[4096];
 char **row;
 boolean foundOne = FALSE;
 int id = 0;

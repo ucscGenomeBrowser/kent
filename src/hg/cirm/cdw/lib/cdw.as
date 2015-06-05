@@ -13,6 +13,29 @@ table cdwUser
     string email unique;   "Email address - required"
     char[37] uuid index; "Help to synchronize us with Stanford."
     byte isAdmin;	"If true the use can modify other people's files too."
+    uint primaryGroup;	"If this is non-zero then we'll make files with this group association."
+    )
+
+table cdwGroup
+"A group in the access control sense"
+    (
+    uint id primary auto;   "Autoincremented user ID"
+    string name unique; "Symbolic name for group, should follow rules of a lowercase C symbol."
+    lstring description; "Description of group"
+    )
+
+table cdwGroupFile
+"Association table between cdwFile and cdwGroup"
+    (
+    uint fileId index;	"What is the file"
+    uint groupId;	"What is the group"
+    )
+
+table cdwGroupUser
+"Association table between cdwGroup and cdwUser"
+    (
+    uint userId index;	"What is the user"
+    uint groupId index;	"What is the group"
     )
 
 table cdwLab
@@ -93,6 +116,9 @@ table cdwFile
     lstring errorMessage; "If non-empty contains last error message from upload. If empty upload is ok"
     string deprecated; "If non-empty why you shouldn't use this file any more."
     uint replacedBy;   "If non-zero id of file that replaces this one."
+    byte userAccess;  "0 - no, 1 - read, 2 - read/write"
+    byte groupAccess;  "0 - no, 1 - read, 2 - read/write"
+    byte allAccess;  "0 - no, 1 - read, 2 - read/write"
     )
 
 table cdwSubmit

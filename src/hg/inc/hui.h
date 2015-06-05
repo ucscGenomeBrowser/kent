@@ -116,6 +116,7 @@ char *hCgiRoot();
 #define MAF_FRAMING_VAR   "mafFrame"
 #define MAF_DOT_VAR       "mafDot"
 #define MAF_CHAIN_VAR     "mafChain"
+#define MAF_SHOW_SNP      "mafShowSnp"
 
 /* display of bases for tracks that are type psl and have sequence e.g. ESTs */
 #define PSL_SEQUENCE_BASES	"pslSequenceBases"
@@ -1386,5 +1387,12 @@ boolean vocabSettingIsEncode(char *setting);
 /* Distinguish ENCODE controlled vocab settings (first arg is cv.ra filename) from non-ENCODE 
     (table-based vocabs)
 */
+
+boolean isEncode2(char *database);
+// Return true for ENCODE2 assemblies
+
+char *replaceInUrl(char* url, char *idInUrl, struct cart* cart, char *db, char* seqName, int winStart, \
+    int winEnd, char *track, boolean encode);
+/* replace $$ in url with idInUrl. Supports many other wildchards */
 
 #endif /* HUI_H */

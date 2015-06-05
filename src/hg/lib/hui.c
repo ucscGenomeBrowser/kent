@@ -49,20 +49,6 @@
 #define CLEAR_BUTTON_LABEL      "clear"
 #define JBUFSIZE 2048
 
-#ifdef BUTTONS_BY_CSS
-#define BUTTON_PM  "<span class='pmButton' " \
-                   "onclick=\"setCheckBoxesThatContain('%s',%s,true,'%s','','%s')\">%c</span>"
-#define BUTTON_DEF "<span class='pmButton' " \
-                   "onclick=\"setCheckBoxesThatContain('%s',true,false,'%s','','%s'); " \
-                   "setCheckBoxesThatContain('%s',false,false,'%s','_defOff','%s');\" " \
-                   "style='width:56px;font-weight:normal; font-family:default;'>default</span>"
-#define DEFAULT_BUTTON(nameOrId,anc,beg,contains) \
-        printf(BUTTON_DEF,(nameOrId),        (beg),(contains),(nameOrId),(beg),(contains))
-#define PLUS_BUTTON(nameOrId,anc,beg,contains) \
-        printf(BUTTON_PM, (nameOrId),"true", (beg),(contains),'+')
-#define MINUS_BUTTON(nameOrId,anc,beg,contains) \
-        printf(BUTTON_PM, (nameOrId),"false",(beg),(contains),'-')
-#else///ifndef BUTTONS_BY_CSS
 #define PM_BUTTON  "<IMG height=18 width=18 onclick=\"setCheckBoxesThatContain(" \
                    "'%s',%s,true,'%s','','%s');\" id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\">\n"
 #define DEF_BUTTON "<IMG onclick=\"setCheckBoxesThatContain('%s',true,false,'%s','','%s'); " \
@@ -75,7 +61,12 @@
         printf(PM_BUTTON, (nameOrId),"true", (beg),(contains),(anc),"add_sm.gif",   "+")
 #define MINUS_BUTTON(nameOrId,anc,beg,contains) \
         printf(PM_BUTTON, (nameOrId),"false",(beg),(contains),(anc),"remove_sm.gif","-")
-#endif///ndef BUTTONS_BY_CSS
+
+boolean isEncode2(char *database)
+// Return true for ENCODE2 assemblies
+{
+return (sameString(database, "hg18") || sameString(database, "hg19") || sameString(database, "mm9"));
+}
 
 static char *htmlStringForDownloadsLink(char *database, struct trackDb *tdb,
                                         char *name,boolean nameIsFile)
@@ -90,7 +81,7 @@ if (!nameIsFile && trackDbSetting(tdb, FILE_SORT_ORDER) != NULL)
           // Note the hgsid would be needed if downloads page ever saved fileSortOrder to cart.
     return link;
     }
-else if (trackDbSetting(tdb, "wgEncode") != NULL)  // Downloads directory if this is ENCODE
+else if (trackDbSetting(tdb, "wgEncode") != NULL && isEncode2(database))  // Downloads directory if this is ENCODE
     {
     const char *compositeDir = metadataFindValue(tdb, MDB_OBJ_TYPE_COMPOSITE);
     if (compositeDir == NULL && tdbIsComposite(tdb))
@@ -366,7 +357,10 @@ if (udcCacheTimeout() < timeout)
 void setUdcCacheDir()
 /* set the path to the udc cache dir */
 {
-udcSetDefaultDir(cfgOptionDefault("udc.cacheDir", udcDefaultDir()));
+if (cfgOptionBooleanDefault("udc.useLocalDiskCache", TRUE))
+    udcSetDefaultDir(cfgOptionDefault("udc.cacheDir", udcDefaultDir()));
+else
+    udcDisableCache();
 }
 
 
@@ -6419,6 +6413,7 @@ boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
 char *defaultCodonSpecies = trackDbSetting(tdb, SPECIES_CODON_DEFAULT);
 char *framesTable = trackDbSetting(tdb, "frames");
+char *snpTable = trackDbSetting(tdb, "snpTable");
 char *firstCase = trackDbSetting(tdb, ITEM_FIRST_CHAR_CASE);
 if (firstCase != NULL)
     {
@@ -6482,6 +6477,14 @@ else
 	puts("Display unaligned amino acids with spanning chain as 'o's<BR>");
     else
         puts("Display unaligned bases with spanning chain as 'o's<BR>");
+    }
+
+safef(option, sizeof option, "%s.%s", name, MAF_SHOW_SNP);
+if (snpTable)
+    {
+    printf("<BR><B>Codon Changes:</B><BR>");
+    cgiMakeCheckBox(option, cartOrTdbBoolean(cart, tdb, MAF_SHOW_SNP,FALSE));
+    puts("Display synonymous and non-synonymous changes in coding exons.<BR>");
     }
 
 safef(option, sizeof option, "%s.%s", name, "codons");
@@ -6926,41 +6929,25 @@ freeMem(rootLabel);
 return cloneString(label);
 }
 
-#ifdef BUTTONS_BY_CSS
-#define BUTTON_MAT "<span class='pmButton' onclick=\"matSetMatrixCheckBoxes(%s%s%s%s)\">%c</span>"
-#else///ifndef BUTTONS_BY_CSS
 #define PM_BUTTON_UC "<IMG height=18 width=18 onclick=\"return " \
                      "(matSetMatrixCheckBoxes(%s%s%s%s%s%s) == false);\" id='btn_%s' " \
                      "src='../images/%s'>"
-#endif///def BUTTONS_BY_CSS
 
 #define MATRIX_RIGHT_BUTTONS_AFTER 8
 #define MATRIX_BOTTOM_BUTTONS_AFTER 20
 
 static void buttonsForAll()
 {
-#ifdef BUTTONS_BY_CSS
-printf(BUTTON_MAT,"true", "", "", "", '+');
-printf(BUTTON_MAT,"false","", "", "", '-');
-#else///ifndef BUTTONS_BY_CSS
 printf(PM_BUTTON_UC,"true", "", "", "", "", "",  "plus_all",    "add_sm.gif");
 printf(PM_BUTTON_UC,"false","", "", "", "", "", "minus_all", "remove_sm.gif");
-#endif///def BUTTONS_BY_CSS
 }
 
 static void buttonsForOne(char *name,char *class,boolean vertical)
 {
-#ifdef BUTTONS_BY_CSS
-printf(BUTTON_MAT, "true",  ",'", class, "'", '+');
-if (vertical)
-    puts("<BR>");
-printf(BUTTON_MAT, "false", ",'", class, "'", '-');
-#else///ifndef BUTTONS_BY_CSS
 printf(PM_BUTTON_UC, "true",  ",'", class, "'", "", "", name,    "add_sm.gif");
 if (vertical)
     puts("<BR>");
 printf(PM_BUTTON_UC, "false", ",'", class, "'", "", "", name, "remove_sm.gif");
-#endif///def BUTTONS_BY_CSS
 }
 
 #define MATRIX_SQUEEZE 10
@@ -7325,19 +7312,12 @@ printf("<TABLE><TR valign='top'>\n");
 if (membersForAll->members[dimX] == NULL && membersForAll->members[dimY] == NULL) // No matrix
     {
     printf("<TD align='left' width='50px'><B>All:</B><BR>");
-#ifdef BUTTONS_BY_CSS
     // TODO: Test when a real world case actually calls this.  Currently no trackDb.ra cases exist
-    #define BUTTON_FILTER_COMP "<span class='pmButton inOutButton' " \
-                               "onclick='waitOnFunction(filterCompositeSet,this,%s)'>%c</span>"
-    printf(BUTTON_FILTER_COMP,"true", '+');
-    printf(BUTTON_FILTER_COMP,"false",'-');
-#else///ifndef BUTTONS_BY_CSS
     #define PM_BUTTON_FILTER_COMP "<input type='button' class='inOutButton' " \
                                   "onclick=\"waitOnFunction(filterCompositeSet,this,%s); " \
                                   "return false;\" id='btn_%s' value='%c'>"
     printf(PM_BUTTON_FILTER_COMP,"true",  "plus_fc",'+');
     printf(PM_BUTTON_FILTER_COMP,"false","minus_fc",'-');
-#endif///ndef BUTTONS_BY_CSS
     printf("</TD>\n");
     }
 
@@ -7618,16 +7598,10 @@ if (trackDbCountDescendantLeaves(parentTdb) <= 1)
 if (dimensionsExist(parentTdb))
     return FALSE;
 
-#ifdef BUTTONS_BY_CSS
-#define BUTTON_ALL   "<span class='pmButton' onclick='matSubCBsCheck(%s)'>%c</span>"
-#define BUTTON_PLUS_ALL_GLOBAL()  printf(BUTTON_ALL,"true", '+')
-#define BUTTON_MINUS_ALL_GLOBAL() printf(BUTTON_ALL,"false",'-')
-#else///ifndef BUTTONS_BY_CSS
 #define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"matSubCBsCheck(%s);\" " \
                          "id='btn_%s' src='../images/%s'>"
 #define    BUTTON_PLUS_ALL_GLOBAL()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
 #define    BUTTON_MINUS_ALL_GLOBAL() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
-#endif///ndef BUTTONS_BY_CSS
 BUTTON_PLUS_ALL_GLOBAL();
 BUTTON_MINUS_ALL_GLOBAL();
 puts("&nbsp;<B>Select all subtracks</B><BR>");
@@ -8452,3 +8426,127 @@ for (col = as->columnList; col != NULL; col = col->next)
 slReverse(&list);
 return list;
 }
+
+static struct dyString *subMulti(char *orig, int subCount,
+                                 char *in[], char *out[])
+/* Perform multiple substitions on orig. */
+{
+int i;
+struct dyString *s = newDyString(256), *d = NULL;
+
+dyStringAppend(s, orig);
+for (i=0; i<subCount; ++i)
+    {
+    fflush(stdout);
+    if (out[i]==NULL)
+        continue;
+    d = dyStringSub(s->string, in[i], out[i]);
+    dyStringFree(&s);
+    s = d;
+    d = NULL;
+    }
+return s;
+}
+
+char *replaceInUrl(char* url, char *idInUrl, struct cart* cart, char *db, char* seqName, int winStart, \
+    int winEnd, char *track, boolean encode) 
+/* replace $$ in url with idInUrl. Supports many other wildchards 
+ * XX Do we have readable docs for these parameters somewhere? */
+{
+struct dyString *uUrl = NULL;
+struct dyString *eUrl = NULL;
+char startString[64], endString[64];
+char begItem[64], endItem[64];
+char *ins[13], *outs[13];
+char *eItem = (encode ? cgiEncode(idInUrl) : cloneString(idInUrl));
+
+char *scName = NULL;
+// try to avoid the mysql query it not necessary
+if (stringIn("$n", url))
+    {
+    char *tmp = hScientificName(db);
+    scName = replaceChars(tmp, " ", "_");
+    freeMem(tmp);
+    }
+
+char *taxId = NULL;
+// try to avoid the mysql query it not necessary
+if (stringIn("$taxId", url))
+    {
+    char query[256];
+    struct sqlConnection *centralConn = hConnectCentral();
+    sqlSafef(query, sizeof(query),
+        "select taxId from %s "
+	"where name='%s'", dbDbTable(), db);
+    taxId = sqlQuickString(centralConn, query);
+    hDisconnectCentral(&centralConn);
+    }
+
+safef(startString, sizeof startString, "%d", winStart);
+safef(endString, sizeof endString, "%d", winEnd);
+ins[0] = "$$";
+outs[0] = idInUrl;
+ins[1] = "$T";
+outs[1] = track;
+ins[2] = "$S";
+outs[2] = seqName;
+ins[3] = "$[";
+outs[3] = startString;
+ins[4] = "$]";
+outs[4] = endString;
+ins[5] = "$s";
+outs[5] = skipChr(seqName);
+ins[6] = "$D";
+outs[6] = db;
+ins[7] = "$P";  /* for an item name of the form:  prefix:suffix */
+ins[8] = "$p";	/* the P is the prefix, the p is the suffix */
+if (stringIn(":", idInUrl)) {
+    char *itemClone = cloneString(idInUrl);
+    char *suffix = stringIn(":", itemClone);
+    char *suffixClone = cloneString(suffix+1); /* +1 skip the : */
+    char *nextColon = stringIn(":", suffixClone+1);
+    if (nextColon)	/* terminate suffixClone suffix */
+        *nextColon = '\0';	/* when next colon is present */
+    *suffix = '\0';   /* terminate itemClone prefix */
+    outs[7] = itemClone;
+    outs[8] = suffixClone;
+    /* small memory leak here for these cloned strings */
+    /* not important for a one-time operation in a CGI that will exit */
+} else {
+    outs[7] = idInUrl;	/* otherwise, these are not expected */
+    outs[8] = idInUrl;	/* to be used */
+}
+
+// URL may now contain item boundaries
+ins[9] = "${";
+ins[10] = "$}";
+if (cartOptionalString(cart, "o") && cartOptionalString(cart, "t"))
+    {
+    int itemBeg = cartIntExp(cart, "o") + 1; // Should strip any unexpected commas
+    int itemEnd = cartIntExp(cart, "t");
+    safef(begItem, sizeof begItem, "%d", itemBeg);
+    safef(endItem, sizeof endItem, "%d", itemEnd);
+    outs[9] = begItem;
+    outs[10] = endItem;
+    }
+else // should never be but I am unwilling to bet the farm
+    {
+    outs[9] = startString;
+    outs[10] = endString;
+    }
+
+ins[11] = "$n";
+outs[11] = scName;
+
+ins[12] = "$taxId";
+outs[12] = taxId;
+
+uUrl = subMulti(url, ArraySize(ins), ins, outs);
+outs[0] = eItem;
+eUrl = subMulti(url, ArraySize(ins), ins, outs);
+freeDyString(&uUrl);
+freeMem(eItem);
+freeMem(scName);
+return eUrl->string;
+}
+

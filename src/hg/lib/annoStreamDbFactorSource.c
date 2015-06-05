@@ -125,11 +125,11 @@ struct annoRow *fsRow;
 boolean rightJoinFail = FALSE;
 while ((fsRow = self->mySource->nextRow(self->mySource, minChrom, minEnd, lm)) != NULL)
     {
+    char **fsWords = fsRow->data;
+    factorSourceToFactorSourcePlus(self, fsWords, fspWords, lm);
     // If there are filters on experiment attributes, apply them, otherwise just return aRow.
     if (sSelf->filters)
 	{
-	char **fsWords = fsRow->data;
-	factorSourceToFactorSourcePlus(self, fsWords, fspWords, lm);
 	boolean fails = annoFilterRowFails(sSelf->filters, fspWords, FACTORSOURCEPLUS_NUM_COLS,
 					   &rightJoinFail);
 	// If this row passes the filter, or fails but is rightJoin, then we're done looking.

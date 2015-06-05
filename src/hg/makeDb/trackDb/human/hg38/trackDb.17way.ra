@@ -1,10 +1,10 @@
 track cons17way
 compositeTrack on
-shortLabel Cons Primates
+shortLabel 17 Primates
 longLabel Primates Multiz Alignment & Conservation (17 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
-visibility full
+visibility hide
 priority 1
 type bed 4
 group compGeno
@@ -31,7 +31,7 @@ group compGeno
         type wigMaf 0.0 1.0
         speciesCodonDefault hg38
         speciesGroups Primates
-        sGroup_Primates panTro4 panPan1 gorGor3 ponAbe2 nomLeu3 macFas5 papAnu2 rheMac3 chlSab2 rhiRox1 nasLar1 saiBol1 calJac3 tarSyr2 micMur1 otoGar3
+        sGroup_Primates panTro4 panPan1 gorGor3 ponAbe2 nomLeu3 macFas5 rhiRox1 papAnu2 nasLar1 rheMac3 chlSab2 saiBol1 calJac3 micMur1 tarSyr2 otoGar3
         itemFirstCharCase noChange
         treeImage phylo/hg38_17way.png
         priority 100

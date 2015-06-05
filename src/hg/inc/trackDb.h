@@ -337,6 +337,9 @@ struct trackDb *trackDbNew();
 int trackDbCmp(const void *va, const void *vb);
 /* Sort track by priority. */
 
+int trackDbCmpShortLabel(const void *va, const void *vb);
+/* Sort track by shortLabel. */
+
 void trackDbOverridePriority(struct hash *tdHash, char *priorityRa);
 /* Override priority settings using a ra file. */
 
@@ -622,6 +625,12 @@ INLINE boolean tdbIsVcf(struct trackDb *tdb)
 // Return TRUE if tdb corresponds to a VCF file.
 {
 return startsWithWord("vcfTabix", tdb->type) || startsWithWord("vcf", tdb->type);
+}
+
+INLINE boolean tdbIsBedGraph(struct trackDb *tdb)
+// Return TRUE if tdb corresponds to a bedGraph track.
+{
+return startsWithWord("bedGraph", tdb->type);
 }
 
 boolean trackDbSettingBlocksConfiguration(struct trackDb *tdb, boolean onlyAjax);

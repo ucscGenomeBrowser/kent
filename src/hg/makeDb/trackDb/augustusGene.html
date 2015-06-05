@@ -1,0 +1,52 @@
+<h2>Description</h2>
+
+<p>
+  This track shows <i>ab initio</i> predictions from the program
+  <a href="http://bioinf.uni-greifswald.de/augustus/" target="_blank">AUGUSTUS</a> (version 3.1).
+  The predictions are based on the genome sequence alone.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+Statistical signal models were built for splice site and branch-point
+patterns, the translation start site and in case of UTR predictions
+also for the poly-A signal. Further, sequence content models for
+protein-coding and non-coding regions and length distributions for
+different exons types and introns were built. The majority of models
+is as described in the 
+<a href="http://hdl.handle.net/11858/00-1735-0000-0006-B3F8-4" target="_blank">dissertation of Mario Stanke</a>.
+The track shows the most likely gene structure according to a
+Semi-Markov Conditional Random Field model.
+In case alternative transcripts are shown, these were obtained with
+  a sampling algorithm (<tt>--alternatives-from-sampling=true --sample=100 --minexonintronprob=0.2
+   --minmeanexonintronprob=0.5 --maxtracks=3 --temperature=2</tt>).
+
+The predictions on fish species were done with the <tt>zebrafish</tt> version,
+the predicions on bird species with the <tt>chicken</tt> version
+ and the predictions on all other vertebrate species with the <tt>human</tt>
+version of AUGUSTUS. In each case, the parameters of the model had been
+estimated before on 1000-2000 training gene structures.
+</p>
+
+<h2>Credits</h2>
+
+Thanks to the
+<a href="http://www.math-inf.uni-greifswald.de/index.php/arbeitsgruppen/bioinformatik-professur" target="_blank">Stanke lab</a>
+for providing the AUGUSTUS program.  The training for <tt>chicken</tt> was
+done by Stefanie K&ouml;nig, the training for
+<tt>human</tt> and <tt>zebrafish</tt> by Mario Stanke.
+
+<h2>References</h2>
+
+<p>
+Mario Stanke and Stephan Waack, 
+<a href="http://bioinformatics.oxfordjournals.org/content/19/suppl_2/ii215.abstract" target="_blank">Gene Prediction with a Hidden-Markov Model and a new Intron Submodel.</a> 
+<i>Bioinformatics</i>, 2003, Vol. 19, Suppl. 2, pages ii215-ii225
+</p>
+
+<p>
+Mario Stanke, Mark Diekhans, Robert Baertsch and David Haussler,
+<a href="http://bioinformatics.oxfordjournals.org/content/24/5/637.abstract" target="_blank">Using native and syntenically mapped cDNA alignments to improve de novo gene finding.</a>
+<i>Bioinformatics</i>, 2008, 24(5), pages 637-644
+</p>

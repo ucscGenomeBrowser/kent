@@ -990,7 +990,7 @@ if (e == NULL)
    notTriple(triple);
 dtf->database = cloneStringZ(s, e-s);
 s = e+1;
-e = strchr(s, '.');
+e = strrchr(s, '.');
 if (e == NULL)
    notTriple(triple);
 dtf->table = cloneStringZ(s, e-s);

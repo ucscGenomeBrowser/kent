@@ -558,31 +558,6 @@ else
     }
 }
 
-char *chrnTable(struct sqlConnection *conn, char *table)
-/* Return chrN_table if table is split, otherwise table.
- * You can freeMem this when done. */
-{
-char buf[256];
-char *splitTable = chromTable(conn, table);
-if (!sameString(splitTable, table))
-     {
-     safef(buf, sizeof(buf), "chrN_%s", table);
-     freez(&splitTable);
-     return cloneString(buf);
-     }
-else
-     return splitTable;
-}
-
-void checkTableExists(struct sqlConnection *conn, char *table)
-/* Check that table exists, or put up an error message. */
-{
-char *splitTable = chromTable(conn, table);
-if (!sqlTableExists(conn, table))
-    errAbort("Table %s doesn't exist", table);
-freeMem(splitTable);
-}
-
 struct hTableInfo *hubTrackTableInfo(struct trackDb *tdb)
 /* Given trackDb entry for a hub track, wrap table info around it. */
 {
@@ -590,7 +565,7 @@ struct hTableInfo *hti = NULL;
 if (tdb->subtracks == NULL)
     {
     if (startsWithWord("bigBed", tdb->type) || startsWithWord("bigGenePred", tdb->type))
-	hti = bigBedToHti(tdb->track, NULL);
+	hti = bigBedToHti(tdb->table, NULL);
     else if (startsWithWord("bam", tdb->type))
 	hti = bamToHti(tdb->table);
     else if (startsWithWord("vcfTabix", tdb->type))

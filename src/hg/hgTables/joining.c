@@ -17,6 +17,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 #include "trackHub.h"
+#include "hubConnect.h"
 
 
 
@@ -978,7 +979,7 @@ if (hasIdentifiers || hasRegions)
      * causes it to inserts a $db. in front of the table name while leaving the primaryDb as the assembly. 
      * In effect, the table field is sometimes overloaded to carry this extra database for all tables support. */
     char *sep = strchr(primaryTable, '.');
-    if (sep)
+    if (!isHubTrack(primaryTable) && sep)
 	{
 	safecpy(split, sizeof split, primaryTable);
 	sep = strchr(split, '.');
@@ -1066,7 +1067,8 @@ bedSqlFieldsExceptForChrom(hti, &fieldCount, &fields);
 fieldCount = chopCommas(fields, words);
 for (i=fieldCount-1;  i >= 0;  i--)
     {
-    if (sameString(words[i], "0"))
+    // Skip placeholder field names:
+    if (sameString(words[i], "0") || sameString(words[i], "'.'"))
 	continue;
     safef(dtf, sizeof(dtf), "%s.%s.%s", db, table, words[i]);
     sn = slNameNew(dtf);

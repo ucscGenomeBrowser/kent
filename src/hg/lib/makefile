@@ -2,11 +2,11 @@ include ../../inc/localEnvironment.mk
 include ../../inc/common.mk
 XINC = -I$(MYSQLINC)
 
-O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetails.o \
+O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetails.o \
     affyOffset.o affyPairs.o agp.o agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
     altGraphX.o ancientRref.o \
     annoFormatVep.o annoGratorGpVar.o annoGrateWigDb.o \
-    annoStreamDb.o annoStreamDbFactorSource.o annoStreamWig.o \
+    annoStreamDb.o annoStreamDbFactorSource.o annoStreamDbKnownGene.o annoStreamWig.o \
     api.o atomDb.o  axtInfo.o \
     axtLib.o bactigPos.o hgBam.o baseMaskCommon.o bdgpExprLink.o bdgpGeneInfo.o \
     bed.o bed5FloatScore.o bed5Pval.o bed6FloatScore.o  bed8Attrs.o bed12Source.o \
@@ -24,7 +24,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     cnpIafrate.o cnpIafrate2.o cnpLocke.o cnpRedon.o cnpSebat.o cnpSebat2.o \
     cnpSharp2.o cnpSharpCutoff.o cnpSharpSample.o cnpSharp.o \
     cpgIsland.o cpgIslandExt.o ctgPos.o ctgPos2.o \
-    bedDetail.o cgiApoptosis.o \
+    bedDetail.o cgiApoptosis.o customAdjacency.o \
     customFactory.o customPp.o customTrack.o cutter.o cv.o cytoBand.o \
     dbDb.o dbRIP.o dbSnpRs.o defaultDb.o delConrad2.o delHinds2.o \
     dgv.o dgvPlus.o dless.o dnaMotifSql.o dnaMarkovSql.o dnaProbe.o \
@@ -76,7 +76,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     makeItemsItem.o mammalPsg.o mapSts.o \
     mcnBreakpoints.o mdb.o metaChromGraph.o microarray.o \
     minChromSize.o minGeneInfo.o mrnaMisMatch.o \
-    mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o \
+    mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o ncbiRefLink.o \
     netAlign.o netCart.o nonCodingUi.o omimTitle.o ooUtils.o orthoAlleles.o \
     pal.o pbStamp.o pcrResult.o pepPred.o peptideAtlasPeptide.o plasEndPairs.o \
     polyGenotype.o protFeat.o pscreen.o \
@@ -102,7 +102,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     tableDescriptions.o tableStatus.o targetDb.o tfbsConsMap.o \
     taxonDivision.o taxonGeneticCode.o taxonName.o taxonNode.o taxonXref.o \
     tigrCmrGene.o tigrOperon.o tilingPath.o traceInfo.o trackDb.o \
-    trackDbCustom.o trackHub.o trackHubCheck.o trackLayout.o trackTable.o trackVersion.o trashDir.o \
+    trackDbCustom.o trackHub.o trackLayout.o trackTable.o trackVersion.o trashDir.o \
     transRegCode.o transRegCodeCondition.o \
     transRegCodeProbe.o txCluster.o txCommon.o txEdgeBed.o \
     txEdgeOrtho.o txGraph.o txInfo.o txRnaAccs.o ucscRetroInfo.o ucscRetroOrtho.o \
@@ -112,7 +112,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     zdobnovSynt.o oreganno.o \
     oregannoUi.o gvUi.o gv.o omicia.o protVar.o pgSnp.o \
     alignInfo.o cddInfo.o loweutils.o cddDesc.o arCOGs.o arcogdesc.o geneTree.o \
-    megablastInfo.o pgPhenoAssoc.o pgSiftPred.o pgPolyphenPred.o variome.o
+    megablastInfo.o pgPhenoAssoc.o pgSiftPred.o pgPolyphenPred.o userRegions.o variome.o
 
 ifeq (${GBROWSE}, 1)
   GBROWSE_D=-DGBROWSE

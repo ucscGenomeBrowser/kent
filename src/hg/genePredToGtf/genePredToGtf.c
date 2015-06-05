@@ -228,11 +228,14 @@ if (frame != 0)
 struct codonCoords codon = zeroCodonCoords;
 codon.start= codon.start1 = cdsStart;
 codon.end = codon.end1 = codon.start1 + min(cdsEnd-cdsStart, 3);
+codon.iExon1 = iExon;
 
 /* second part, if spliced */
 if ((codon.end1 - codon.start1) < 3)
     {
+    codon.iExon2 = iExon;
     iExon++;
+    codon.iExon1 = iExon;
     if ((iExon == gp->exonCount) || !genePredCdsExon(gp, iExon, &cdsStart, &cdsEnd))
         return zeroCodonCoords;  // no more
     int needed = 3 - (codon.end1 - codon.start1);
@@ -272,13 +275,16 @@ if (frame != 0)
 struct codonCoords codon = zeroCodonCoords;
 codon.start= codon.start1 = max(cdsStart, cdsEnd-3);
 codon.end = codon.end1 = cdsEnd;
+codon.iExon1 = iExon;
 
 /* first part, if spliced */
 if ((codon.end1 - codon.start1) < 3)
     {
     codon.start2 = codon.start1;
     codon.end = codon.end2 = codon.end1;
+    codon.iExon2 = iExon;
     iExon--;
+    codon.iExon1 = iExon;
     if ((iExon == -1) || !genePredCdsExon(gp, iExon, &cdsStart, &cdsEnd))
         return zeroCodonCoords;  // no more
     int needed = 3 - (codon.end2 - codon.start2);

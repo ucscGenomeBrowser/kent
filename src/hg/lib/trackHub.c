@@ -146,7 +146,7 @@ else
 char *orderKey = hashFindVal(hubGenome->settingsHash, "orderKey");
 if (orderKey != NULL)
     db->orderKey = sqlUnsigned(orderKey);
-
+db->defaultPos = cloneString(hubGenome->defaultPos);
 return db;
 }
 
@@ -603,6 +603,8 @@ hub->shortLabel = trackHubRequiredSetting(hub, "shortLabel");
 hub->longLabel = trackHubRequiredSetting(hub, "longLabel");
 hub->genomesFile = trackHubRequiredSetting(hub, "genomesFile");
 hub->email =  trackHubSetting(hub, "email");
+hub->version = trackHubSetting(hub, "version"); // default to current version
+hub->level = trackHubSetting(hub, "level");     // "core" or "all"
 char *descriptionUrl = trackHubSetting(hub, "descriptionUrl");
 if (descriptionUrl != NULL)
     hub->descriptionUrl = trackHubRelativeUrl(hub->url, descriptionUrl);

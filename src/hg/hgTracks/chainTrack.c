@@ -270,7 +270,7 @@ optionChrStr = cartUsualStringClosestToHome(cart, tg->tdb, FALSE,
 if (startsWith("chr",optionChrStr)) 
     {
     safef(extraWhere, sizeof(extraWhere), 
-            "qName = \"%s\" and normScore > %d",optionChrStr, 
+            "qName = \"%s\" and score > %d",optionChrStr, 
             chainCart->scoreFilter);
     sr = hRangeQuery(conn, table, chromName, winStart, winEnd, 
             extraWhere, &rowOffset);
@@ -280,7 +280,7 @@ else
     if (chainCart->scoreFilter > 0)
         {
         safef(extraWhere, sizeof(extraWhere), 
-                "normScore > \"%d\"",chainCart->scoreFilter);
+                "score > \"%d\"",chainCart->scoreFilter);
         sr = hRangeQuery(conn, table, chromName, winStart, winEnd, 
                 extraWhere, &rowOffset);
         }

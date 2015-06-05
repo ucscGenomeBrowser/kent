@@ -20,15 +20,15 @@ CREATE TABLE ucscRetroInfo (
     retroExonCount int not null,	# number of exons in retroGene col13
     axtScore int not null,	# blastz score, parent mrna aligned to pseudogene col14
     type varchar(255) not null,	# type of evidence col15
-    gChrom varchar(255) not null,	# Chromosome name col16
-    gStart int not null,	# gene alignment start position col17
-    gEnd int not null,	# gene alignment end position col18
-    gStrand char(2) not null,	# strand of gene col19
+    gChrom varchar(255) not null,	# chromosome name for parent gene col16
+    gStart int not null,	# parent gene alignment start position col17
+    gEnd int not null,	# parent gene alignment end position col18
+    gStrand char(2) not null,	# strand of parent gene col19
     parentSpliceCount int unsigned not null,	# # of splice sites in parent gene col20
     geneOverlap int unsigned not null,	# bases overlapping col21
     polyA int unsigned not null,	# count of As in polyA col22
     polyAstart int not null,	# start of polyA, relative to end of pseudogene col23
-    exonCover int not null,	# number of exons in Gene covered col24
+    exonCover int not null,	# number of exons in parent gene covered col24
     intronCount int unsigned not null,	# number of introns in pseudogene col25
     bestAliCount int unsigned not null,	# number of good mrnas aligning col26
     matches int unsigned not null,	# matches + repMatches col27
@@ -58,7 +58,5 @@ CREATE TABLE ucscRetroInfo (
     posConf float not null,	# pvalue for positive col51
     polyAlen int unsigned not null,	# length of polyA col52
               #Indices
-    PRIMARY KEY(name),
-    index(kgName(10)),
-    index(refSeq(10))
+    PRIMARY KEY(chrom)
 );

@@ -18,16 +18,20 @@ UTIL_DIRS = \
     cdwJob \
     cdwMakeContaminationQa \
     cdwMakeEnrichments \
+    cdwMakeFileTags \
     cdwMakePairedEndQa \
     cdwMakeRepeatQa \
     cdwMakeReplicateQa \
+    cdwMakeTrackViz \
     cdwMakeValidFile \
     cdwQaEvaluate \
     cdwReallyRemoveFiles \
     cdwRetryJob \
     cdwRunDaemon \
     cdwRunOnIds \
-    cdwSubmit
+    cdwSubmit \
+    cdwSwapInSymLink \
+    cdwUndeprecate
 
 CGI_DIRS = \
     cdwWebAuthLogin \

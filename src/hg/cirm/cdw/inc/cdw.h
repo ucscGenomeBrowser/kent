@@ -74,7 +74,7 @@ void cdwSettingsOutput(struct cdwSettings *el, FILE *f, char sep, char lastSep);
 #define cdwSettingsCommaOut(el,f) cdwSettingsOutput(el,f,',',',');
 /* Print out cdwSettings as a comma separated list including final comma. */
 
-#define CDWUSER_NUM_COLS 4
+#define CDWUSER_NUM_COLS 5
 
 extern char *cdwUserCommaSepFieldNames;
 
@@ -86,6 +86,7 @@ struct cdwUser
     char *email;	/* Email address - required */
     char uuid[38];	/* Help to synchronize us with Stanford. */
     signed char isAdmin;	/* If true the use can modify other people's files too. */
+    unsigned primaryGroup;	/* If this is non-zero then we'll make files with this group association. */
     };
 
 void cdwUserStaticLoad(char **row, struct cdwUser *ret);
@@ -142,6 +143,208 @@ void cdwUserOutput(struct cdwUser *el, FILE *f, char sep, char lastSep);
 
 #define cdwUserCommaOut(el,f) cdwUserOutput(el,f,',',',');
 /* Print out cdwUser as a comma separated list including final comma. */
+
+#define CDWGROUP_NUM_COLS 3
+
+extern char *cdwGroupCommaSepFieldNames;
+
+struct cdwGroup
+/* A group in the access control sense */
+    {
+    struct cdwGroup *next;  /* Next in singly linked list. */
+    unsigned id;	/* Autoincremented user ID */
+    char *name;	/* Symbolic name for group, should follow rules of a lowercase C symbol. */
+    char *description;	/* Description of group */
+    };
+
+void cdwGroupStaticLoad(char **row, struct cdwGroup *ret);
+/* Load a row from cdwGroup table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct cdwGroup *cdwGroupLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all cdwGroup from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with cdwGroupFreeList(). */
+
+void cdwGroupSaveToDb(struct sqlConnection *conn, struct cdwGroup *el, char *tableName, int updateSize);
+/* Save cdwGroup as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct cdwGroup *cdwGroupLoad(char **row);
+/* Load a cdwGroup from row fetched with select * from cdwGroup
+ * from database.  Dispose of this with cdwGroupFree(). */
+
+struct cdwGroup *cdwGroupLoadAll(char *fileName);
+/* Load all cdwGroup from whitespace-separated file.
+ * Dispose of this with cdwGroupFreeList(). */
+
+struct cdwGroup *cdwGroupLoadAllByChar(char *fileName, char chopper);
+/* Load all cdwGroup from chopper separated file.
+ * Dispose of this with cdwGroupFreeList(). */
+
+#define cdwGroupLoadAllByTab(a) cdwGroupLoadAllByChar(a, '\t');
+/* Load all cdwGroup from tab separated file.
+ * Dispose of this with cdwGroupFreeList(). */
+
+struct cdwGroup *cdwGroupCommaIn(char **pS, struct cdwGroup *ret);
+/* Create a cdwGroup out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new cdwGroup */
+
+void cdwGroupFree(struct cdwGroup **pEl);
+/* Free a single dynamically allocated cdwGroup such as created
+ * with cdwGroupLoad(). */
+
+void cdwGroupFreeList(struct cdwGroup **pList);
+/* Free a list of dynamically allocated cdwGroup's */
+
+void cdwGroupOutput(struct cdwGroup *el, FILE *f, char sep, char lastSep);
+/* Print out cdwGroup.  Separate fields with sep. Follow last field with lastSep. */
+
+#define cdwGroupTabOut(el,f) cdwGroupOutput(el,f,'\t','\n');
+/* Print out cdwGroup as a line in a tab-separated file. */
+
+#define cdwGroupCommaOut(el,f) cdwGroupOutput(el,f,',',',');
+/* Print out cdwGroup as a comma separated list including final comma. */
+
+#define CDWGROUPFILE_NUM_COLS 2
+
+extern char *cdwGroupFileCommaSepFieldNames;
+
+struct cdwGroupFile
+/* Association table between cdwFile and cdwGroup */
+    {
+    struct cdwGroupFile *next;  /* Next in singly linked list. */
+    unsigned fileId;	/* What is the file */
+    unsigned groupId;	/* What is the group */
+    };
+
+void cdwGroupFileStaticLoad(char **row, struct cdwGroupFile *ret);
+/* Load a row from cdwGroupFile table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct cdwGroupFile *cdwGroupFileLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all cdwGroupFile from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with cdwGroupFileFreeList(). */
+
+void cdwGroupFileSaveToDb(struct sqlConnection *conn, struct cdwGroupFile *el, char *tableName, int updateSize);
+/* Save cdwGroupFile as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct cdwGroupFile *cdwGroupFileLoad(char **row);
+/* Load a cdwGroupFile from row fetched with select * from cdwGroupFile
+ * from database.  Dispose of this with cdwGroupFileFree(). */
+
+struct cdwGroupFile *cdwGroupFileLoadAll(char *fileName);
+/* Load all cdwGroupFile from whitespace-separated file.
+ * Dispose of this with cdwGroupFileFreeList(). */
+
+struct cdwGroupFile *cdwGroupFileLoadAllByChar(char *fileName, char chopper);
+/* Load all cdwGroupFile from chopper separated file.
+ * Dispose of this with cdwGroupFileFreeList(). */
+
+#define cdwGroupFileLoadAllByTab(a) cdwGroupFileLoadAllByChar(a, '\t');
+/* Load all cdwGroupFile from tab separated file.
+ * Dispose of this with cdwGroupFileFreeList(). */
+
+struct cdwGroupFile *cdwGroupFileCommaIn(char **pS, struct cdwGroupFile *ret);
+/* Create a cdwGroupFile out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new cdwGroupFile */
+
+void cdwGroupFileFree(struct cdwGroupFile **pEl);
+/* Free a single dynamically allocated cdwGroupFile such as created
+ * with cdwGroupFileLoad(). */
+
+void cdwGroupFileFreeList(struct cdwGroupFile **pList);
+/* Free a list of dynamically allocated cdwGroupFile's */
+
+void cdwGroupFileOutput(struct cdwGroupFile *el, FILE *f, char sep, char lastSep);
+/* Print out cdwGroupFile.  Separate fields with sep. Follow last field with lastSep. */
+
+#define cdwGroupFileTabOut(el,f) cdwGroupFileOutput(el,f,'\t','\n');
+/* Print out cdwGroupFile as a line in a tab-separated file. */
+
+#define cdwGroupFileCommaOut(el,f) cdwGroupFileOutput(el,f,',',',');
+/* Print out cdwGroupFile as a comma separated list including final comma. */
+
+#define CDWGROUPUSER_NUM_COLS 2
+
+extern char *cdwGroupUserCommaSepFieldNames;
+
+struct cdwGroupUser
+/* Association table between cdwGroup and cdwUser */
+    {
+    struct cdwGroupUser *next;  /* Next in singly linked list. */
+    unsigned userId;	/* What is the user */
+    unsigned groupId;	/* What is the group */
+    };
+
+void cdwGroupUserStaticLoad(char **row, struct cdwGroupUser *ret);
+/* Load a row from cdwGroupUser table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct cdwGroupUser *cdwGroupUserLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all cdwGroupUser from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with cdwGroupUserFreeList(). */
+
+void cdwGroupUserSaveToDb(struct sqlConnection *conn, struct cdwGroupUser *el, char *tableName, int updateSize);
+/* Save cdwGroupUser as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct cdwGroupUser *cdwGroupUserLoad(char **row);
+/* Load a cdwGroupUser from row fetched with select * from cdwGroupUser
+ * from database.  Dispose of this with cdwGroupUserFree(). */
+
+struct cdwGroupUser *cdwGroupUserLoadAll(char *fileName);
+/* Load all cdwGroupUser from whitespace-separated file.
+ * Dispose of this with cdwGroupUserFreeList(). */
+
+struct cdwGroupUser *cdwGroupUserLoadAllByChar(char *fileName, char chopper);
+/* Load all cdwGroupUser from chopper separated file.
+ * Dispose of this with cdwGroupUserFreeList(). */
+
+#define cdwGroupUserLoadAllByTab(a) cdwGroupUserLoadAllByChar(a, '\t');
+/* Load all cdwGroupUser from tab separated file.
+ * Dispose of this with cdwGroupUserFreeList(). */
+
+struct cdwGroupUser *cdwGroupUserCommaIn(char **pS, struct cdwGroupUser *ret);
+/* Create a cdwGroupUser out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new cdwGroupUser */
+
+void cdwGroupUserFree(struct cdwGroupUser **pEl);
+/* Free a single dynamically allocated cdwGroupUser such as created
+ * with cdwGroupUserLoad(). */
+
+void cdwGroupUserFreeList(struct cdwGroupUser **pList);
+/* Free a list of dynamically allocated cdwGroupUser's */
+
+void cdwGroupUserOutput(struct cdwGroupUser *el, FILE *f, char sep, char lastSep);
+/* Print out cdwGroupUser.  Separate fields with sep. Follow last field with lastSep. */
+
+#define cdwGroupUserTabOut(el,f) cdwGroupUserOutput(el,f,'\t','\n');
+/* Print out cdwGroupUser as a line in a tab-separated file. */
+
+#define cdwGroupUserCommaOut(el,f) cdwGroupUserOutput(el,f,',',',');
+/* Print out cdwGroupUser as a comma separated list including final comma. */
 
 #define CDWLAB_NUM_COLS 5
 
@@ -502,7 +705,7 @@ void cdwMetaTagsOutput(struct cdwMetaTags *el, FILE *f, char sep, char lastSep);
 #define cdwMetaTagsCommaOut(el,f) cdwMetaTagsOutput(el,f,',',',');
 /* Print out cdwMetaTags as a comma separated list including final comma. */
 
-#define CDWFILE_NUM_COLS 16
+#define CDWFILE_NUM_COLS 19
 
 extern char *cdwFileCommaSepFieldNames;
 
@@ -526,6 +729,9 @@ struct cdwFile
     char *errorMessage;	/* If non-empty contains last error message from upload. If empty upload is ok */
     char *deprecated;	/* If non-empty why you shouldn't use this file any more. */
     unsigned replacedBy;	/* If non-zero id of file that replaces this one. */
+    signed char userAccess;	/* 0 - no, 1 - read, 2 - read/write */
+    signed char groupAccess;	/* 0 - no, 1 - read, 2 - read/write */
+    signed char allAccess;	/* 0 - no, 1 - read, 2 - read/write */
     };
 
 void cdwFileStaticLoad(char **row, struct cdwFile *ret);

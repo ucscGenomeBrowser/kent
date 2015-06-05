@@ -489,6 +489,12 @@ char *hBrowserName();
 boolean hTrackOnChrom(struct trackDb *tdb, char *chrom);
 /* Return TRUE if track exists on this chromosome. */
 
+boolean trackDataAccessible(char *database, struct trackDb *tdb);
+/* Return TRUE if underlying data are accessible - meaning the track has either
+ * a bigDataUrl with remote URL (http:// etc), a bigDataUrl with an existing local file,
+ * or a database table with the same name.
+ * Note: this returns FALSE for composite tracks; use this on subtracks or simple tracks. */
+
 struct trackDb *trackDbPolishAfterLinkup(struct trackDb *tdbList, char *db);
 /* Do various massaging that can only be done after parent/child
  * relationships are established. */
@@ -956,4 +962,24 @@ char *bbiNameFromSettingOrTableChrom(struct trackDb *tdb, struct sqlConnection *
 /* Return file name from bigDataUrl or little table that might have a seqName column.
  * If table does have a seqName column, return NULL if there is no file for seqName. */
 
+#define dbdDbTableConfVariable  "dbDbTableName"
+#define defaultDbdDbTableName  "dbDb"
+#define defaultDbTableConfVariable  "defaultDbTableName"
+#define defaultDefaultDbTableName  "defaultDb"
+#define genomeCladeTableConfVariable  "genomeCladeTableName"
+#define defaultGenomeCladeTableName  "genomeClade"
+#define cladeTableConfVariable  "cladeTableName"
+#define defaultCladeTableName  "clade"
+
+char *dbDbTable();
+/* Return the name of the dbDb table. */
+
+char *cladeTable();
+/* Return the name of the clade table. */
+
+char *defaultDbTable();
+/* Return the name of the defaultDb table. */
+
+char *genomeCladeTable();
+/* Return the name of the genomeClade table. */
 #endif /* HDB_H */

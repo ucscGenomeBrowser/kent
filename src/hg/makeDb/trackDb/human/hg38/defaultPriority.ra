@@ -12,8 +12,8 @@ priority 1
 
 # Genes and Gene Predictions
 
-track knownGene override
-priority 1
+#track knownGene override
+#priority 1
 
 track refGene override
 visibility pack

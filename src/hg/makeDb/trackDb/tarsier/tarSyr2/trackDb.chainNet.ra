@@ -105,3 +105,15 @@ priority 290.3
 matrix 16 83,-179,-74,-205,-179,100,-189,-74,-74,-189,100,-179,-205,-74,-179,83
 chainMinScore 3000
 chainLinearGap medium
+
+track chainNetMm10 override
+priority 340.3
+chainMinScore 3000
+chainLinearGap medium
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetCanFam3 override
+priority 410.3
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+chainMinScore 3000
+chainLinearGap medium

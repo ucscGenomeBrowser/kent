@@ -1,0 +1,17 @@
+        track chainBosTau7
+        subTrack placentalChainNetViewchain off
+        subGroups view=chain species=lCow clade=bLaura
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain bosTau7
+        otherDb bosTau7
+
+
+        track netBosTau7
+        subTrack placentalChainNetViewnet on
+        subGroups view=net species=lCow clade=bLaura
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign bosTau7 chainBosTau7
+        otherDb bosTau7
+

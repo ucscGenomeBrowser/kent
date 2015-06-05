@@ -3,6 +3,7 @@
 #include "common.h"
 #include "hAnno.h"
 #include "basicBed.h"
+#include "bigGenePred.h"
 #include "customTrack.h"
 #include "grp.h"
 #include "hdb.h"
@@ -10,6 +11,7 @@
 #include "hui.h"
 #include "jksql.h"
 #include "pgSnp.h"
+#include "trackHub.h"
 #include "vcf.h"
 #include "annoGratorQuery.h"
 #include "annoGratorGpVar.h"
@@ -17,6 +19,7 @@
 #include "annoStreamBigWig.h"
 #include "annoStreamDb.h"
 #include "annoStreamDbFactorSource.h"
+#include "annoStreamDbKnownGene.h"
 #include "annoStreamTab.h"
 #include "annoStreamVcf.h"
 #include "annoStreamWig.h"
@@ -31,14 +34,23 @@ struct annoAssembly *hAnnoGetAssembly(char *db)
 static struct annoAssembly *aa = NULL;
 if (aa == NULL)
     {
-    char *nibOrTwoBitDir = hDbDbNibPath(db);
-    if (nibOrTwoBitDir == NULL)
-        errAbort("Can't find .2bit for db '%s'", db);
-    char twoBitPath[HDB_MAX_PATH_STRING];
-    safef(twoBitPath, sizeof(twoBitPath), "%s/%s.2bit", nibOrTwoBitDir, db);
-    char *path = hReplaceGbdb(twoBitPath);
-    aa = annoAssemblyNew(db, path);
-    freeMem(path);
+    if (trackHubDatabase(db))
+        {
+        struct trackHubGenome *thg = trackHubGetGenome(db);
+        char *url = thg->twoBitPath;
+        aa = annoAssemblyNew(db, url);
+        }
+    else
+        {
+        char *nibOrTwoBitDir = hDbDbNibPath(db);
+        if (nibOrTwoBitDir == NULL)
+            errAbort("Can't find .2bit for db '%s'", db);
+        char twoBitPath[HDB_MAX_PATH_STRING];
+        safef(twoBitPath, sizeof(twoBitPath), "%s/%s.2bit", nibOrTwoBitDir, db);
+        char *path = hReplaceGbdb(twoBitPath);
+        aa = annoAssemblyNew(db, path);
+        freeMem(path);
+        }
     }
 return aa;
 }
@@ -93,37 +105,41 @@ dyStringAppend(dy, "    )\n");
 return asParseText(dy->string);
 }
 
-static struct asObject *getAutoSqlForTable(char *dataDb, char *dbTable, struct trackDb *tdb,
+static struct asObject *getAutoSqlForTable(char *db, char *table, struct trackDb *tdb,
                                            boolean skipBin)
-/* Get autoSql for dataDb.dbTable from tdb and/or db.tableDescriptions;
- * if it doesn't match columns, make one up from dataDb.table sql fields.
+/* Get autoSql for db.dbTable from tdb and/or db.tableDescriptions;
+ * if it doesn't match columns, make one up from db.table sql fields.
  * Some subtleties are lost in translation from .as to .sql, that's why
  * we try tdb & db.tableDescriptions first.  But ultimately we need to return
  * an asObj whose columns match all fields of the table. */
 {
-struct sqlConnection *connDataDb = hAllocConn(dataDb);
-struct sqlFieldInfo *fieldList = sqlFieldInfoGet(connDataDb, dbTable);
-hFreeConn(&connDataDb);
+struct sqlConnection *conn = hAllocConn(db);
+struct sqlFieldInfo *fieldList = sqlFieldInfoGet(conn, table);
 struct asObject *asObj = NULL;
 if (tdb != NULL)
-    {
-    struct sqlConnection *connDb = hAllocConn(dataDb);
-    asObj = asForTdb(connDb, tdb);
-    hFreeConn(&connDb);
-    }
+    asObj = asForTdb(conn, tdb);
+hFreeConn(&conn);
 if (columnsMatch(asObj, fieldList))
     return asObj;
 else
-    return asObjectFromFields(dbTable, fieldList, skipBin);
+    return asObjectFromFields(table, fieldList, skipBin);
 }
 
 static char *getBigDataFileName(char *db, struct trackDb *tdb, char *selTable, char *chrom)
 /* Get fileName from bigBed/bigWig/BAM/VCF database table, or bigDataUrl from custom track. */
 {
-struct sqlConnection *conn = hAllocConn(db);
-char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, selTable, chrom);
-hFreeConn(&conn);
-return fileOrUrl;
+char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
+if (isNotEmpty(bigDataUrl))
+    {
+    return bigDataUrl;
+    }
+else
+    {
+    struct sqlConnection *conn = hAllocConn(db);
+    char *fileOrUrl = bbiNameFromSettingOrTableChrom(tdb, conn, selTable, chrom);
+    hFreeConn(&conn);
+    return fileOrUrl;
+    }
 }
 
 struct annoStreamer *hAnnoStreamerFromTrackDb(struct annoAssembly *assembly, char *selTable,
@@ -157,7 +173,7 @@ else if (sameString("bam", tdb->type))
     {
     warn("Sorry, BAM is not yet supported");
     }
-else if (startsWith("bigBed", tdb->type))
+else if (startsWith("bigBed", tdb->type) || sameString("bigGenePred", tdb->type))
     {
     char *fileOrUrl = getBigDataFileName(dataDb, tdb, selTable, chrom);
     streamer = annoStreamBigBedNew(fileOrUrl, assembly, maxOutRows);
@@ -174,15 +190,21 @@ else if (sameString("factorSource", tdb->type))
     streamer = annoStreamDbFactorSourceNew(dataDb, tdb->track, sourceTable, inputsTable, assembly,
 					   maxOutRows);
     }
-else
+else if (sameString("knownGene", tdb->track))
     {
     struct sqlConnection *conn = hAllocConn(dataDb);
-    char maybeSplitTable[1024];
-    if (sqlTableExists(conn, dbTable))
-	safecpy(maybeSplitTable, sizeof(maybeSplitTable), dbTable);
-    else
-	safef(maybeSplitTable, sizeof(maybeSplitTable), "%s_%s", chrom, dbTable);
+    if (sqlTableExists(conn, "knownGene") && sqlTableExists(conn, "kgXref"))
+        streamer = annoStreamDbKnownGeneNew(dataDb, assembly, maxOutRows);
     hFreeConn(&conn);
+    }
+else if (trackHubDatabase(db))
+    errAbort("Unrecognized type '%s' for hub track '%s'", tdb->type, tdb->track);
+if (streamer == NULL)
+    {
+    char maybeSplitTable[HDB_MAX_TABLE_STRING];
+    if (!hFindSplitTable(dataDb, chrom, dbTable, maybeSplitTable, NULL))
+        errAbort("hAnnoStreamerFromTrackDb: can't find table (or split table) for '%s.%s'",
+                 dataDb, dbTable);
     struct asObject *asObj = getAutoSqlForTable(dataDb, maybeSplitTable, tdb, TRUE);
     streamer = annoStreamDbNew(dataDb, maybeSplitTable, assembly, asObj, maxOutRows);
     }
@@ -196,7 +218,7 @@ struct annoGrator *hAnnoGratorFromBigFileUrl(char *fileOrUrl, struct annoAssembl
 struct annoStreamer *streamer = NULL;
 struct annoGrator *grator = NULL;
 char *type = customTrackTypeFromBigFile(fileOrUrl);
-if (sameString(type, "bigBed"))
+if (sameString(type, "bigBed") || sameString("bigGenePred", type))
     streamer = annoStreamBigBedNew(fileOrUrl, assembly, maxOutRows);
 else if (sameString(type, "vcfTabix"))
     streamer = annoStreamVcfNew(fileOrUrl, TRUE, assembly, maxOutRows);
@@ -220,18 +242,34 @@ struct annoGrator *hAnnoGratorFromTrackDb(struct annoAssembly *assembly, char *s
  * If not NULL, primaryAsObj is used to determine whether we can make an annoGratorGpVar. */
 {
 struct annoGrator *grator = NULL;
+boolean primaryIsVariants = (primaryAsObj != NULL &&
+                             (asObjectsMatch(primaryAsObj, pgSnpAsObj()) ||
+                              asObjectsMatch(primaryAsObj, vcfAsObj())));
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
 if (bigDataUrl != NULL)
-    grator = hAnnoGratorFromBigFileUrl(bigDataUrl, assembly, maxOutRows, overlapRule);
+    {
+    if (primaryIsVariants && sameString("bigGenePred", tdb->type))
+        {
+        struct annoStreamer *streamer = annoStreamBigBedNew(bigDataUrl, assembly, maxOutRows);
+        grator = annoGratorGpVarNew(streamer);
+        }
+    else
+        grator = hAnnoGratorFromBigFileUrl(bigDataUrl, assembly, maxOutRows, overlapRule);
+    }
 else if (startsWithWord("wig", tdb->type))
     grator = annoGrateWigDbNew(assembly->name, selTable, assembly, maxOutRows);
+else if (startsWithWord("bigWig", tdb->type))
+    {
+    char *fileOrUrl = getBigDataFileName(assembly->name, tdb, tdb->table, chrom);
+    grator = annoGrateBigWigNew(fileOrUrl, assembly);
+    }
 else
     {
     struct annoStreamer *streamer = hAnnoStreamerFromTrackDb(assembly, selTable, tdb, chrom,
                                                              maxOutRows);
-    if (primaryAsObj != NULL &&
-	(asObjectsMatch(primaryAsObj, pgSnpAsObj()) || asObjectsMatch(primaryAsObj, vcfAsObj()))
-	&& asColumnNamesMatchFirstN(streamer->asObj, genePredAsObj(), 10))
+    if (primaryIsVariants &&
+        (asColumnNamesMatchFirstN(streamer->asObj, genePredAsObj(), 10) ||
+         asObjectsMatch(streamer->asObj, bigGenePredAsObj())))
 	grator = annoGratorGpVarNew(streamer);
     else
 	grator = annoGratorNew(streamer);
@@ -248,7 +286,7 @@ if (startsWith("wig", tdb->type) || startsWith("bigWig", tdb->type))
     asObj = annoStreamBigWigAsObject();
 else if (startsWith("vcf", tdb->type))
     asObj = vcfAsObj();
-else if (startsWith("bigBed", tdb->type))
+else if (startsWith("bigBed", tdb->type) || sameString("bigGenePred", tdb->type))
     {
     char *fileOrUrl = getBigDataFileName(db, tdb, tdb->table, chrom);
     asObj = bigBedFileAsObjOrDefault(fileOrUrl);
@@ -268,6 +306,15 @@ else if (startsWithWord("bed", tdb->type) && !strchr(tdb->type, '+'))
     if (wordCount > 1)
         bedFieldCount = atoi(words[1]);
     asObj = asParseText(bedAsDef(bedFieldCount, bedFieldCount));
+    }
+else if (sameString(tdb->track, "knownGene"))
+    {
+    if (hTableExists(db, "knownGene") && hTableExists(db, "kgXref"))
+        asObj = annoStreamDbKnownGeneAsObj();
+    }
+else if (sameString("factorSource", tdb->type))
+    {
+    asObj = annoStreamDbFactorSourceAsObj();
     }
 return asObj;
 }
@@ -289,13 +336,10 @@ if (!asObj && !isHubTrack(tdb->track))
         else
             return NULL;
         }
-    struct sqlConnection *conn = hAllocConn(dataDb);
-    char maybeSplitTable[1024];
-    if (sqlTableExists(conn, dbTable))
-	safecpy(maybeSplitTable, sizeof(maybeSplitTable), dbTable);
-    else
-	safef(maybeSplitTable, sizeof(maybeSplitTable), "%s_%s", chrom, dbTable);
-    hFreeConn(&conn);
+    char maybeSplitTable[HDB_MAX_TABLE_STRING];
+    if (!hFindSplitTable(dataDb, chrom, dbTable, maybeSplitTable, NULL))
+        errAbort("hAnnoGetAutoSqlForTdb: can't find table (or split table) for '%s.%s'",
+                 dataDb, dbTable);
     asObj = getAutoSqlForTable(dataDb, maybeSplitTable, tdb, TRUE);
     }
 return asObj;

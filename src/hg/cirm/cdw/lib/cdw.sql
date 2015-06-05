@@ -20,10 +20,38 @@ CREATE TABLE cdwUser (
     email varchar(255) default '',	# Email address - required
     uuid char(37) default '',	# Help to synchronize us with Stanford.
     isAdmin tinyint default 0,	# If true the use can modify other people's files too.
+    primaryGroup int unsigned default 0,	# If this is non-zero then we'll make files with this group association.
               #Indices
     PRIMARY KEY(id),
     UNIQUE(email),
     INDEX(uuid)
+);
+
+#A group in the access control sense
+CREATE TABLE cdwGroup (
+    id int unsigned auto_increment,	# Autoincremented user ID
+    name varchar(255) default '',	# Symbolic name for group, should follow rules of a lowercase C symbol.
+    description longblob,	# Description of group
+              #Indices
+    PRIMARY KEY(id),
+    UNIQUE(name)
+);
+
+#Association table between cdwFile and cdwGroup
+CREATE TABLE cdwGroupFile (
+    fileId int unsigned default 0,	# What is the file
+    groupId int unsigned default 0,	# What is the group
+              #Indices
+    INDEX(fileId)
+);
+
+#Association table between cdwGroup and cdwUser
+CREATE TABLE cdwGroupUser (
+    userId int unsigned default 0,	# What is the user
+    groupId int unsigned default 0,	# What is the group
+              #Indices
+    INDEX(userId),
+    INDEX(groupId)
 );
 
 #A contributing lab
@@ -115,6 +143,9 @@ CREATE TABLE cdwFile (
     errorMessage longblob,	# If non-empty contains last error message from upload. If empty upload is ok
     deprecated varchar(255) default '',	# If non-empty why you shouldn't use this file any more.
     replacedBy int unsigned default 0,	# If non-zero id of file that replaces this one.
+    userAccess tinyint default 0,	# 0 - no, 1 - read, 2 - read/write
+    groupAccess tinyint default 0,	# 0 - no, 1 - read, 2 - read/write
+    allAccess tinyint default 0,	# 0 - no, 1 - read, 2 - read/write
               #Indices
     PRIMARY KEY(id),
     INDEX(submitId),

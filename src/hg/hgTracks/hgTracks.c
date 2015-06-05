@@ -65,7 +65,7 @@
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
- * Because the browser is a central program, most of it's cart
+ * Because the browser is a central program, most of its cart
  * variables are not hgt. qualified.  It's a good idea if other
  * program's unique variables be qualified with a prefix though. */
 char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
@@ -2028,6 +2028,34 @@ rAddToTrackHash(trackHash, trackList);
 return trackHash;
 }
 
+//void domAddMenu(char *afterMenuId, char *newMenuId, char *label) 
+///* Append a new drop down menu after a given menu, by changing the DOM with jquery  */
+//{
+//printf("$('#%s').last().after('<li class=\"menuparent\" id=\"%s\"><span>%s</span>"
+//    "<ul style=\"display: none; visibility: hidden;\"></ul></li>');\n", 
+//    afterMenuId, newMenuId, label);
+//}
+//
+//void domAppendToMenu(char *menuId, char *url, char *label) 
+///* Add an entry to a drop down menu, by changing the DOM with jquery  */
+//{
+////printf("$('#%s ul').last().after('<li><a target=\"_BLANK\" href=\"%s\">%s</a></li>');\n", menuId, url, label);
+//printf("$('#%s ul').append('<li><a target=\"_BLANK\" href=\"%s\">%s</a></li>');\n", menuId, url, label);
+//}
+
+//void menuBarAppendExtTools() 
+///* printf a little javascript that adds entries to a menu */
+//{
+//    char url[SMALLBUF];
+//    safef(url,ArraySize(url),"hgTracks?%s=%s&hgt.redirectTool=crispor",cartSessionVarName(), cartSessionId(cart));
+//    printf("<script>\n");
+//    printf("jQuery(document).ready( function() {\n");
+//    domAddMenu("view", "sendto", "Send to");
+//    domAppendToMenu("sendto", url, "Tefor CRISPR sites");
+//    printf("});\n");
+//    printf("</script>\n");
+//}
+
 
 void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
@@ -2714,6 +2742,7 @@ if(sameString(type, "jsonp"))
     struct jsonElement *json = newJsonObject(newHash(8));
 
     printf("Content-Type: application/json\n\n");
+    errAbortSetDoContentType(FALSE);
     jsonObjectAdd(json, "track", newJsonString(cartString(cart, "hgt.trackNameFilter")));
     jsonObjectAdd(json, "height", newJsonNumber(pixHeight));
     jsonObjectAdd(json, "width", newJsonNumber(pixWidth));
@@ -3382,6 +3411,15 @@ else if (sameString(type, "bedDetail"))
     bedDetailCtMethods(tg, ct);
     tg->mapItemName = ctMapItemName; /* must be here to see ctMapItemName */
     }
+    else if (sameString(type, "adjacency"))
+    {
+    extern void adjacencyMethods(struct track *track);
+
+    tg = trackFromTrackDb(tdb);
+    adjacencyMethods(tg);
+    //tg->mapItemName = ctMapItemName;
+    tg->customPt = ct;
+    }
 else if (sameString(type, "pgSnp"))
     {
     tg = trackFromTrackDb(tdb);
@@ -3921,9 +3959,12 @@ for (track = trackList; track != NULL; track = track->next)
     if (cgiOptionalString("hideTracks"))
 	{
 	s = cgiOptionalString(track->track);
-	if (s != NULL && (hTvFromString(s) != track->tdb->visibility))
+	if (s != NULL)
 	    {
-	    cartSetString(cart, track->track, s);
+	    if (hTvFromString(s) == track->tdb->visibility)
+		cartRemove(cart, track->track);
+	    else
+		cartSetString(cart, track->track, s);
 	    }
 	}
     if (s != NULL && !track->limitedVisSet)
@@ -4176,6 +4217,7 @@ return (startsWithWord("bigWig"  , track->tdb->type)
      || startsWithWord("halSnake", track->tdb->type)
      || startsWithWord("vcfTabix", track->tdb->type))
      && (bdu && strstr(bdu,"://"))
+     && !(containsStringNoCase(bdu, "dl.dropboxusercontent.com"))
      && (track->subtracks == NULL);
 }
 
@@ -4366,7 +4408,6 @@ for (track = trackList; track != NULL; track = track->next)
 hPrintf("</span>\n");
 }
 
-
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -4510,6 +4551,7 @@ if (ptMax > 0)     // parallelFetch.threads=0 to disable parallel fetch
 	int pt;
 	for (pt = 0; pt < ptMax; ++pt)
 	    {
+            printf("debug: Starting parallel loading thread<br>");
 	    int rc = pthread_create(&threads[pt], NULL, remoteParallelLoad, &threads[pt]);
 	    if (rc)
 		{
@@ -4603,13 +4645,13 @@ if(trackImgOnly && !ideogramToo)
     return;  // bail out b/c we are done
     }
 
-
 if (!hideControls)
     {
     /* set white-space to nowrap to prevent buttons from wrapping when screen is
      * narrow */
     hPrintf("<DIV STYLE=\"white-space:nowrap;\">\n");
     printMenuBar();
+    //menuBarAppendExtTools();
 
     /* Show title . */
     freezeName = hFreezeFromDb(database);
@@ -4942,16 +4984,9 @@ if (!hideControls)
 
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
             hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
-        //#define BUTTONS_BY_CSS_NOT_HERE
-        #ifdef BUTTONS_BY_CSS_NOT_HERE
-            hPrintf("<span class='pmButton toggleButton' onclick=\"vis.toggleForGroup(this,'%s')\" "
-                    "id='%s_button' title='%s this group'>%s</span>&nbsp;&nbsp;",
-                    group->name, group->name, isOpen?"Collapse":"Expand", indicator);
-        #else///ifndef BUTTONS_BY_CSS_NOT_HERE
             hPrintf("<IMG class='toggleButton' onclick=\"return vis.toggleForGroup(this, '%s');\" "
                     "id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
                     group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
-        #endif///ndef BUTTONS_BY_CSS_NOT_HERE
             hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
             hPrintf("</td><td style='text-align:right;'>\n");
             hPrintf("<input type='submit' name='hgt.refresh' value='refresh' "
@@ -5217,6 +5252,7 @@ trashDirFile(&psTn, "hgt", "hgt", ".eps");
 if(!trackImgOnly)
     {
     printMenuBar();
+
     printf("<div style=\"margin: 10px\">\n");
     printf("<H1>PDF Output</H1>\n");
     printf("PDF images can be printed with Acrobat Reader "
@@ -5705,7 +5741,7 @@ if (! trackHubDatabase(database))
     puts("Download as file");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
-    printf("<A target=_blank HREF='http://%s/goldenPath/%s/bigZips/%s.chrom.sizes'>%s.chrom.sizes</A>",
+    printf("<A HREF='http://%s/goldenPath/%s/bigZips/%s.chrom.sizes'>%s.chrom.sizes</A>",
            hDownloadsServer(), database, database, database);
     cgiTableFieldEnd();
     cgiTableRowEnd();
@@ -5781,6 +5817,76 @@ cartCheckout(&oldCart);
 cgiVarExcludeExcept(except);
 }
 
+void setupHotkeys() 
+/* setup keyboard shortcuts and a help dialog for it */
+{
+// XX remove if statement after July 2015
+if (!cfgOptionDefault("hotkeys", FALSE))
+    return;
+// wire the keyboard hotkeys
+hPrintf("<script type='text/javascript'>\n");
+// left
+hPrintf("Mousetrap.bind('ctrl+j', function() { $('input[name=\"hgt.left1\"]').click() }); \n");
+hPrintf("Mousetrap.bind('j', function() { $('input[name=\"hgt.left2\"]').click() }); \n");
+hPrintf("Mousetrap.bind('J', function() { $('input[name=\"hgt.left3\"]').click() }); \n");
+
+// right
+hPrintf("Mousetrap.bind('ctrl+l', function() { $('input[name=\"hgt.right1\"]').click() }); \n");
+hPrintf("Mousetrap.bind('l', function() { $('input[name=\"hgt.right2\"]').click() }); \n");
+hPrintf("Mousetrap.bind('L', function() { $('input[name=\"hgt.right3\"]').click() }); \n");
+
+// zoom in
+hPrintf("Mousetrap.bind('ctrl+i', function() { $('input[name=\"hgt.in1\"]').click() }); \n");
+hPrintf("Mousetrap.bind('i', function() { $('input[name=\"hgt.in2\"]').click() }); \n");
+hPrintf("Mousetrap.bind('I', function() { $('input[name=\"hgt.in3\"]').click() }); \n");
+hPrintf("Mousetrap.bind('b', function() { $('input[name=\"hgt.inBase\"]').click() }); \n");
+
+// zoom out
+hPrintf("Mousetrap.bind('ctrl+k', function() { $('input[name=\"hgt.out1\"]').click() }); \n");
+hPrintf("Mousetrap.bind('k', function() { $('input[name=\"hgt.out2\"]').click() }); \n");
+hPrintf("Mousetrap.bind('K', function() { $('input[name=\"hgt.out3\"]').click() }); \n");
+hPrintf("Mousetrap.bind('0', function() { $('input[name=\"hgt.out4\"]').click() }); \n");
+
+// buttons
+hPrintf("Mousetrap.bind('c f', function() { $('input[name=\"hgTracksConfigPage\"]').click() }); \n");
+hPrintf("Mousetrap.bind('t s', function() { $('input[name=\"hgt_tSearch\"]').click() }); \n");
+hPrintf("Mousetrap.bind('h a', function() { $('input[name=\"hgt.hideAll\"]').click() }); \n");
+hPrintf("Mousetrap.bind('d t', function() { $('input[name=\"hgt.reset\"]').click() }); \n");
+hPrintf("Mousetrap.bind('d o', function() { $('input[name=\"hgt.defaultImgOrder\"]').click() }); \n");
+hPrintf("Mousetrap.bind('c t', function() { document.customTrackForm.submit();return false; }); \n");
+hPrintf("Mousetrap.bind('t h', function() { document.trackHubForm.submit();return false; }); \n");
+hPrintf("Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWidth\"]').click() }); \n");
+hPrintf("Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').click() }); \n");
+hPrintf("Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').click() }); \n");
+
+// focus
+hPrintf("Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]').focus() }, 'keyup'); \n");
+hPrintf("Mousetrap.bind('?', function() { $( \"#hotkeyHelp\" ).dialog({width:'600'});}); \n");
+
+hPrintf("</script>\n");
+
+// help dialog
+hPrintf("<div style=\"display:none\" id=\"hotkeyHelp\" title=\"Keyboard shortcuts\">\n");
+hPrintf("<table style=\"width:580px; border-color:#666666; border-collapse:collapse\">\n");
+hPrintf("<tr><td style=\"width:18ch\">left 10&#37;</td><td width=\"auto\" class=\"hotkey\">ctrl+j</td>  <td style=\"width:24ch\"> track search</td><td class=\"hotkey\">t then s</td>               </tr>\n"); // percent sign
+hPrintf("<tr><td> left 1/2 screen</td><td class=\"hotkey\">j</td>   <td> default tracks</td><td class=\"hotkey\">d then t</td>             </tr>\n");
+hPrintf("<tr><td> left one screen</td><td class=\"hotkey\">J</td>   <td> default order</td><td class=\"hotkey\">d then o</td>              </tr>\n");
+hPrintf("<tr><td> right 10&#37;</td><td class=\"hotkey\">ctrl+l</td><td> hide all</td><td class=\"hotkey\">h then a</td>                   </tr>\n"); // percent sign
+hPrintf("<tr><td> right 1/2 screen</td><td class=\"hotkey\">l</td>  <td> custom tracks</td><td class=\"hotkey\">c then t</td>              </tr>\n");
+hPrintf("<tr><td> right one screen</td><td class=\"hotkey\">L</td>  <td> track hubs</td><td class=\"hotkey\">t then h</td>                 </tr>\n");
+hPrintf("<tr><td> zoom in 1.5x</td><td class=\"hotkey\">ctrl+i</td> <td> configure</td><td class=\"hotkey\">c then f</td>                  </tr>\n"); 
+hPrintf("<tr><td> zoom in 3x</td><td class=\"hotkey\">i</td>        <td> reverse</td><td class=\"hotkey\">r then v</td>                    </tr>\n");
+hPrintf("<tr><td> zoom in 10x</td><td class=\"hotkey\">I</td>       <td> resize</td><td class=\"hotkey\">r then s</td>                     </tr>\n");
+hPrintf("<tr><td> zoom in base level</td><td class=\"hotkey\">b</td><td> refresh</td><td class=\"hotkey\">r then f</td>                    </tr>\n");
+hPrintf("<tr><td> zoom out 1.5x</td><td class=\"hotkey\">ctrl+k</td><td> jump to position box</td><td class=\"hotkey\">/</td>        </tr>\n"); 
+hPrintf("<tr><td> zoom out 3x</td><td class=\"hotkey\">k</td>               </tr>\n");
+hPrintf("<tr><td> zoom out 10x</td><td class=\"hotkey\">K</td>              </tr>\n");
+hPrintf("<tr><td> zoom out 100x</td><td class=\"hotkey\">0</td>             </tr>\n");
+hPrintf("</table>\n");
+hPrintf("<img style=\"margin:8px\" src=\"../images/shortcutHelp.png\">");
+hPrintf("</div>\n");
+}
+
 void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
@@ -5817,11 +5923,6 @@ if(sameString(debugTmp, "on"))
 else
     hgDebug = FALSE;
 
-if (hIsGisaidServer())
-    {
-    validateGisaidUser(cart);
-    }
-
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
@@ -5850,6 +5951,9 @@ if(!trackImgOnly)
     {
     // Write out includes for css and js files
     hWrites(commonCssStyles());
+    // XX remove if statement after July 2015
+    if (cfgOptionDefault("hotkeys", FALSE))
+        jsIncludeFile("mousetrap.min.js", NULL);
     jsIncludeFile("jquery.js", NULL);
     jsIncludeFile("jquery-ui.js", NULL);
     jsIncludeFile("utils.js", NULL);
@@ -5973,4 +6077,7 @@ if (cartOptionalString(cart, "udcTimeout"))
 	"performance.   To clear this variable, click "
 	"<A HREF=hgTracks?hgsid=%s&udcTimeout=[]>here</A>.",cartSessionId(cart));
     }
+
+setupHotkeys();
+
 }

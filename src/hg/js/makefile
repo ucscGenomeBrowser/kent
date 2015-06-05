@@ -5,7 +5,7 @@ SUBDIRS= external model react
 include subdirs.mk
 
 # UCSC js files must pass jshint
-UCSC_JS_FILES=ajax.js alleles.js autocomplete.js cdwPersona.js edwPersona.js \
+UCSC_JS_FILES=ajax.js alleles.js autocomplete.js edwPersona.js \
     hgCustom.js hgGateway.js hgHubConnect.js hgTracks.js \
     hgVarAnnogrator.js hui.js jsHelper.js utils.js ddcl.js subCfg.js \
     encodeProject.js encodeDataSummary.js encodeDataMatrix.js encodeChipMatrix.js encodeMatrix.js
@@ -15,9 +15,9 @@ STATIC_FILES=staticDoc.js
 
 # JQUERY files and other third pary files which have NOT BEEN TOUCHED by UCSC
 JQUERY_FILES_UNTOUCHED=jquery.js jquery.imgareaselect.js jquery-ui.js jquery.contextmenu.js \
-    jquery.cookie.js jquery.watermarkinput.js \
+    jquery.cookie.js jquery.watermark.js jquery.watermarkinput.js \
     jquery.floatheader.js jquery.rotateTableCellContent.js jquery.plugins.js \
-    jquery.validate.min.js jquery.history.js
+    jquery.validate.min.js jquery.history.js mousetrap.min.js
 
 # JQUERY or other third pary files which HAVE BEEN MODIFIED by UCSC
 JQUERY_FILES_MODIFIED=jquery.tablednd.js ui.dropdownchecklist.js

@@ -7,6 +7,10 @@
 #include "jksql.h"
 #include "trackDb.h"
 
+// Represent "unlimited" as limit==0.
+#define ANNO_NO_LIMIT 0
+
+
 struct annoAssembly *hAnnoGetAssembly(char *db);
 /* Make annoAssembly for db. */
 

@@ -366,6 +366,56 @@ danRer10.orfeome = yes
     make etc-update
 
 #########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2014-05-01 - Hiram)
+    hgsql -N -e "select frag from gold;" danRer10 | sort -u \
+        > /tmp/danRer10.frag.gold.txt
+
+
+    export maxLen=`awk '{print length($0)}' /tmp/danRer10.frag.gold.txt | sort -rn | head -1`
+    echo "scan to column: $maxLen"
+
+export C=1
+while [ $C -le $maxLen ];
+do
+echo -n " $C: "
+awk '{ print substr($0,'$C',1) }' /tmp/danRer10.frag.gold.txt | sort -u | xargs echo | sed -e 's/ //g'
+C=`echo $C | awk '{print $1+1}'`
+done
+ 1: ABCFLN
+ 2: ACKLOPQRTUX
+ 3: 0123456789B_
+ 4: 0123456789Z
+ 5: 0123456789
+ 6: 0123456789
+ 7: 0123456789
+ 8: 0123456789
+ 9: .0123456789
+ 10: .0123456789
+ 11: 0123456789
+ 12: 0123456789
+ 13: .
+ 14: 1
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" danRer10 | wc -l
+    # 34028
+
+    hgsql -N -e "select frag from gold;" danRer10 \
+       | egrep -e '[ABCFLN][ACKLOPQRTUX][B0-9_][Z0-9][0-9]+(\.[0-9]+)?' | wc -l
+    # 34028
+
+    hgsql -N -e "select frag from gold;" danRer10 \
+       | egrep -v -e '[ABCFLN][ACKLOPQRTUX][B0-9_][Z0-9][0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/zebrafish/danRer10/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [ABCFLN][ACKLOPQRTUX][B0-9_][Z0-9][0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+#########################################################################
 # ucscToINSDC table/track (DONE - 2015-01-22 - Hiram)
 
     mkdir /hive/data/genomes/danRer10/bed/ucscToINSDC
@@ -397,6 +447,20 @@ danRer10.orfeome = yes
     # should cover %100 entirely:
     featureBits -countGaps danRer10 ucscToINSDC
     # 1371719383 bases of 1371719383 (100.000%) in intersection
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2015-03-20 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+     ssh hgwdev
+
+     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("danRer10", "blat4c", "17862", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("danRer10", "blat4c", "17863", "0", "1");' \
+		hgcentraltest
+     #	test it with some sequence
+
+############################################################################
 
 #########################################################################
 # LIFTOVER TO danRer7 (DONE - 2015-01-29 - Hiram)
@@ -444,5 +508,45 @@ danRer10.orfeome = yes
 
     #   in that pushQ entry walk through each entry and see if the
     #   sizes will set properly
+
+#########################################################################
+# UCSC to RefSeq name correspondence (DONE - 2015-04-15 - Hiram)
+
+    mkdir /hive/data/genomes/danRer10/bed/ucscToRefSeq
+    cd /hive/data/genomes/danRer10/bed/ucscToRefSeq
+
+    rsync -avPL \
+  rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_other/Danio_rerio/all_assembly_versions/GCA_000002035.3_GRCz10/GCA_000002035.3_GRCz10_assembly_report.txt ./
+
+    # this assembly_report has "UCSC-style-name" in column 10
+    # but it does not name everything
+
+    # columns 5 and 7 are the INSDC and RefSeq names
+    # chrMT fixup in the sed
+    grep -v "^#" GCA_000002035.3_GRCz10_assembly_report.txt \
+      | awk -F'\t' '{printf "%s\t%s\n", $5,$7}' |
+        sed -e 's/^na/NC_002333.2/;' | sort > insdc.refSeq.tab
+
+    hgsql -N -e 'select name,chrom,chromStart,chromEnd from ucscToINSDC;' \
+      danRer10 | sort > insdc.ucsc.tab
+
+    join insdc.ucsc.tab insdc.refSeq.tab | tr '[ ]' '[\t]' \
+       | cut -f2- > ucsc.refSeq.tab
+
+    # when working perfectly, all these tab files have the same line count:
+    wc -l *.tab
+# 1061 insdc.refSeq.tab
+# 1061 insdc.ucsc.tab
+# 1061 ucsc.refSeq.tab
+
+    export chrSize=`cut -f1 ucsc.refSeq.tab | awk '{print length($0)}' | sort -n | tail -1`
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab danRer10 ucscToRefSeq ./ucscToRefSeq.sql ucsc.refSeq.tab
+
+    checkTableCoords  danRer10 -table=ucscToRefSeq
+    # should cover %100 all bases:
+    featureBits -countGaps danRer10 ucscToRefSeq
+    # 2730871774 bases of 2730871774 (100.000%) in intersection
 
 #########################################################################
