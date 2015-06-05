@@ -4209,6 +4209,7 @@ return (startsWithWord("bigWig"  , track->tdb->type)
      || startsWithWord("halSnake", track->tdb->type)
      || startsWithWord("vcfTabix", track->tdb->type))
      && (bdu && strstr(bdu,"://"))
+     && !(containsStringNoCase(bdu, "dl.dropboxusercontent.com"))
      && (track->subtracks == NULL);
 }
 
@@ -4542,6 +4543,7 @@ if (ptMax > 0)     // parallelFetch.threads=0 to disable parallel fetch
 	int pt;
 	for (pt = 0; pt < ptMax; ++pt)
 	    {
+            printf("debug: Starting parallel loading thread<br>");
 	    int rc = pthread_create(&threads[pt], NULL, remoteParallelLoad, &threads[pt]);
 	    if (rc)
 		{
