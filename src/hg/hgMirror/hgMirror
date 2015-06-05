@@ -849,10 +849,10 @@ def htmlTrackTable(db, trackLabels, trackTables, \
     print '<input type="submit" name="submit" value="Download"></input>'
 
     if showSubtracks:
-        print '<a href="%s">hide subtracks and show predefined groups</a><br>' % myUrl
+        print '<a href="%s?db=%s">hide subtracks and show predefined groups</a><br>' % (myUrl, db)
         del groupToTopTracks["special"]
     else:
-        print '<a href="%s?showSubtracks=1">show subtracks</a><br>' % myUrl
+        print '<a href="%s?db=%s&showSubtracks=1">show subtracks</a><br>' % (myUrl, db)
 
     print "<h4>Track groups</h4>"
     print "<ul>"
