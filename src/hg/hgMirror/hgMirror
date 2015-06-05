@@ -727,10 +727,15 @@ def getOrgInfo(validDbs):
 
     # dict of clade -> list (orgName, orgName)
     cladeToOrgs = defaultdict(list)
-    cur.execute('SELECT clade, genome FROM genomeClade ORDER BY priority')
+    cur.execute('SELECT clade, genome FROM genomeClade ORDER BY genome')
     for row in cur.fetchall():
             cladeToOrgs[row[0]].append((row[1], row[1]))
-            #orgList.append((row[0], row[0]))
+
+    # default genome per clade
+    cladeToBestOrg = dict()
+    cur.execute('SELECT clade, genome FROM genomeClade GROUP BY clade ORDER BY priority;')
+    for row in cur.fetchall():
+            cladeToBestOrg[row[0]]=row[1]
 
     # dict of orgName -> list of (db, description)
     # SELECT genome, name FROM dbDb order by orderKey;
@@ -749,6 +754,7 @@ def getOrgInfo(validDbs):
     for row in cur.fetchall():
         orgToBestDb[row[0]] = row[1]
 
+
     cur.close()
     conn.close()
 
@@ -758,6 +764,7 @@ def getOrgInfo(validDbs):
     orgInfo["cladeToOrgs"] = cladeToOrgs
     orgInfo["orgToDbs"] = orgToDbs
     orgInfo["orgToBestDb"] = orgToBestDb
+    orgInfo["cladeToBestOrg"] = cladeToBestOrg
     
     cPickle.dump(orgInfo, open(fname, "w"))
     return orgInfo
@@ -783,7 +790,7 @@ def getCladeAssemblyDb(clade, org, db):
     if clade is None or clade=="0":
         clade = "mammal"
     if org is None or org=="0" and clade not in [None, "0"]:
-        org = orgInfo["cladeToOrgs"][clade][0][0]
+        org = orgInfo["cladeToBestOrg"][clade]
 
     if (db==None or db=="0"):
         if org not in orgInfo["orgToBestDb"]:
