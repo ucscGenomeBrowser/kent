@@ -57,7 +57,7 @@ errAbort(
   "   -version=[v?|url]     - version to validate settings against\n"
   "                                     (defaults to version in hub.txt, or current standard)\n"
   "   -extra=[file|url]     - accept settings in this file (or url)\n"
-  "   -core                 - reject settings not in core set for this version\n"
+  "   -level=base|required  - reject settings below this support level\n"
   "   -noTracks             - don't check remote files for tracks, just trackDb (faster)\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs.\n"
   "                           Will create this directory if not existing\n"
@@ -69,7 +69,7 @@ errAbort(
 
 static struct optionSpec options[] = {
    {"version", OPTION_STRING},
-   {"core", OPTION_BOOLEAN},
+   {"level", OPTION_STRING},
    {"extra", OPTION_STRING},
    {"noTracks", OPTION_BOOLEAN},
    {"settings", OPTION_BOOLEAN},
@@ -88,7 +88,7 @@ struct trackHubCheckOptions
     boolean checkSettings;      /* check trackDb settings to spec */
     char *version;              /* hub spec version to check */
     char *specHost;             /* server hosting hub spec */
-    boolean strict;             /* check hub is valid to 'core' level for version */
+    char *level;                /* check hub is valid to this support level */
     char *extraFile;            /* name of extra file/url with additional settings to accept */
     /* intermediate data */
     struct hash *settings;      /* supported settings for this version */
@@ -101,7 +101,7 @@ struct trackHubSettingSpec
     {
     struct trackHubSettingSpec *next;
     char *name;                 /* setting name */
-    char *level;                /* support level (core, full, new, deprecated) */
+    char *level;                /* support level (required, base, full, new, deprecated) */
     };
 
 
@@ -239,9 +239,11 @@ return NULL;
 
 
 int trackHubSettingLevel(struct trackHubSettingSpec *spec)
-/* Get integer for level  (core > full > new > deprecated) */
+/* Get integer for level  (required > base > full > new > deprecated). -1 for unknown */
 {
-if (sameString(spec->level, "core"))
+if (sameString(spec->level, "required"))
+    return 5;
+if (sameString(spec->level, "base"))
     return 4;
 if (sameString(spec->level, "full"))
     return 3;
@@ -249,7 +251,9 @@ if (sameString(spec->level, "new"))
     return 2;
 if (sameString(spec->level, "deprecated"))
     return 1;
-return 0; // errAbort ?
+if (sameString(spec->level, "all"))     //used only as check option
+    return 0;
+return -1; // unknown
 }
 
 
@@ -273,10 +277,10 @@ if (version == NULL)
 
 /* Retrieve specs from file url. 
  * Settings are the first text word within any <code> tag having class="level-" attribute.
- * The level represents the level of support for the setting (e.g. core, full, deprecated)
+ * The level represents the level of support for the setting (e.g. base, full, deprecated)
  * The support level ('level-*') is the class value of the * <code> tag.
- * E.g.  <code class="level-core">boxedConfig on</code> produces:
- *      setting=boxedConfig, class=core */
+ * E.g.  <code class="level-full">boxedConfig on</code> produces:
+ *      setting=boxedConfig, class=full */
 
 if (page == NULL)
     page = trackHubVersionSpecMustGet(specHost, version);
@@ -329,16 +333,23 @@ if (settingsCt == 0)
 
 slSort(&list, hashElCmp);
 struct trackHubSettingSpec *specs = NULL;
-int coreCt = 0;
+int baseCt = 0;
+int requiredCt = 0;
+int deprecatedCt = 0;
 for (el = list; el != NULL; el = el->next)
     {
-    if (sameString(((struct trackHubSettingSpec *)el->val)->level, "core"))
-        coreCt++;
+    if (sameString(((struct trackHubSettingSpec *)el->val)->level, "base"))
+        baseCt++;
+    else if (sameString(((struct trackHubSettingSpec *)el->val)->level, "required"))
+        requiredCt++;
+    else if (sameString(((struct trackHubSettingSpec *)el->val)->level, "deprecated"))
+        deprecatedCt++;
     slAddHead(&specs, el->val);
     }
 slReverse(&specs);
-verbose(3, "Found %d supported settings for this version (%d core)\n",
-                        slCount(specs), coreCt);
+verbose(3, 
+        "Found %d supported settings for this version (%d required, %d base, %d deprecated)\n",
+                slCount(specs), requiredCt, baseCt, deprecatedCt);
 return specs;
 }
 
@@ -347,21 +358,28 @@ int hubSettingsCheckInit(struct trackHub *hub,  struct trackHubCheckOptions *opt
                         struct dyString *errors)
 {
 int retVal = 0;
+
 if (hub->version != NULL && options->version == NULL)
     options->version = hub->version;
 
-if (options->strict == FALSE && hub->level != NULL)
+struct trackHubSettingSpec *hubLevel = NULL;
+int level = 0;
+if (hub->version != NULL)
     {
-    if (sameString(hub->level, "core"))
-        options->strict = TRUE;
-    else if (differentString(hub->level, "all"))
+    AllocVar(hubLevel);
+    if ((level = trackHubSettingLevel(hubLevel)) < 0)
         {
-        dyStringPrintf(errors, 
-            "Unknown hub support level: %s (expecting 'core' or 'all'). Defaulting to 'all'.\n", hub->level);
+        dyStringPrintf(errors, "Unknown hub support level: %s. Defaulting to 'all'.\n",
+                                hub->level);
         retVal = 1;
         }
+    else
+        options->level = hub->level;
     }
-verbose(2, "Checking hub '%s'%s\n", hub->longLabel, options->strict ? " for compliance to 'core' (use -settings to view)": "");
+verbose(2, "Checking hub '%s'", hub->longLabel);
+if (options->level)
+    verbose(2, " for compliance to level '%s' (use -settings to view)", options->level);
+verbose(2, "\n");
 
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
@@ -431,11 +449,18 @@ else if (sameString(hubSetting->level, "deprecated"))
     dyStringPrintf(errors, "Setting '%s' is deprecated\n", setting);
     retVal = 1;
     }
-/*  check level */
-else if (options->strict && differentString(hubSetting->level, "core"))
+else
     {
-    dyStringPrintf(errors, "Setting '%s' is level '%s'\n", setting, hubSetting->level);
-    retVal = 1;
+    /*  check level */
+    struct trackHubSettingSpec *checkLevel = NULL;
+    AllocVar(checkLevel);
+    checkLevel->level = options->level;
+    if (trackHubSettingLevel(hubSetting) < trackHubSettingLevel(checkLevel))
+        {
+        dyStringPrintf(errors, "Setting '%s' is level '%s'\n", setting, hubSetting->level);
+        retVal = 1;
+        }
+    freez(&checkLevel);
     }
 return retVal;
 }
@@ -644,11 +669,15 @@ static void showSettings(struct trackHubCheckOptions *checkOptions)
 struct trackHubSettingSpec *settings = 
             trackHubSettingsForVersion(checkOptions->specHost, checkOptions->version);
 struct trackHubSettingSpec *setting = NULL;
+AllocVar(setting);
+setting->level = checkOptions->level;
+int checkLevel = trackHubSettingLevel(setting);
+verbose(3, "Showing level %d (%s) and higher\n", checkLevel, setting->level);
+freez(&setting);
 for (setting = settings; setting != NULL; setting = setting->next)
     {
-    if (checkOptions->strict && differentString(setting->level, "core"))
-        continue;
-    printf("%s\t%s\n", setting->name, setting->level);
+    if (trackHubSettingLevel(setting) >= checkLevel)
+        printf("%s\t%s\n", setting->name, setting->level);
     }
 }
 
@@ -669,7 +698,16 @@ AllocVar(checkOptions);
 checkOptions->specHost = (optionExists("test") ? "genome-test.cse.ucsc.edu" : "genome.ucsc.edu");
 checkOptions->checkFiles = !optionExists("noTracks");
 checkOptions->checkSettings = optionExists("checkSettings");
-checkOptions->strict = optionExists("core");
+
+struct trackHubSettingSpec *setting = NULL;
+AllocVar(setting);
+setting->level = optionVal("level", "all");
+if (trackHubSettingLevel(setting) < 0)
+    {
+    fprintf(stderr, "ERROR: Unrecognized support level %s\n\n", setting->level);
+    usage();
+    }
+checkOptions->level = setting->level;
 
 char *version = NULL;
 if (optionExists("version"))
@@ -691,6 +729,7 @@ if (optionExists("settings"))
     showSettings(checkOptions);
     return 0;
     }
+
 struct dyString *errors = newDyString(1024);
 if (trackHubCheck(argv[1], checkOptions, errors))
     {

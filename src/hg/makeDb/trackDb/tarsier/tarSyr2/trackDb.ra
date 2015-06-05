@@ -7,7 +7,7 @@ track gap override
 html gap
 
 track ncbiGene override
-visibility show
+visibility pack
 
 track ncbiRefPredictedView override
 visibility pack

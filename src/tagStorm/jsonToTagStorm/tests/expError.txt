@@ -1,0 +1,2 @@
+WARNING: A .json array was encountered with a name other than 'children', the array name 'parent' will be lost upon conversion.
+ERROR: There seems to be whitespace in a tag's name field, the name is 'white space' . Please provide a different name with no white space, aborting.

@@ -291,3 +291,36 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+static char *bigGenePredAutoSqlString =
+"table bigGenePred\n"
+"\"bigGenePred gene models\"\n"
+"   (\n"
+"   string chrom;       \"Reference sequence chromosome or scaffold\"\n"
+"   uint   chromStart;  \"Start position in chromosome\"\n"
+"   uint   chromEnd;    \"End position in chromosome\"\n"
+"   string name;        \"Name or ID of item, ideally both human readable and unique\"\n"
+"   uint score;         \"Score (0-1000)\"\n"
+"   char[1] strand;     \"+ or - for strand\"\n"
+"   uint thickStart;    \"Start of where display should be thick (start codon)\"\n"
+"   uint thickEnd;      \"End of where display should be thick (stop codon)\"\n"
+"   uint reserved;       \"RGB value (use R,G,B string in input file)\"\n"
+"   int blockCount;     \"Number of blocks\"\n"
+"   int[blockCount] blockSizes; \"Comma separated list of block sizes\"\n"
+"   int[blockCount] chromStarts; \"Start positions relative to chromStart\"\n"
+"   string name2;       \"Alternative/human readable name\"\n"
+"   string cdsStartStat; \"enum('none','unk','incmpl','cmpl')\"\n"
+"   string cdsEndStat;   \"enum('none','unk','incmpl','cmpl')\"\n"
+"   int[blockCount] exonFrames; \"Exon frame {0,1,2}, or -1 if no frame for exon\"\n"
+"   string type;        \"Transcript type\"\n"
+"   string geneName;    \"Primary identifier for gene\"\n"
+"   string geneName2;   \"Alternative/human readable gene name\"\n"
+"   string geneType;    \"Gene type\"\n"
+"   )\n"
+    ;
+
+struct asObject *bigGenePredAsObj()
+// Return asObject describing fields of bigGenePred
+{
+return asParseText(bigGenePredAutoSqlString);
+}
+

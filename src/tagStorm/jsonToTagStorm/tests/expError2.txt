@@ -1,0 +1,1 @@
+ERROR: The .json object named 'badTag' can not be converted to tagStorm format. Please remove this object, or reformat it, then try again. Aborting.
