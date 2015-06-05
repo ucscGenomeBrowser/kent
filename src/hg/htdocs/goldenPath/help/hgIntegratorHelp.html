@@ -19,9 +19,39 @@
 </div><!-- .nav -->
 
 <div class="content">
+
 <div class="section">
-	
-	<h1>Data Integrator User's Guide</h1>
+<h1> Data Integrator User's Guide</h1>
+<div class="sectionContent">
+<p><b>Table of Contents:</b>
+<td>
+  <ul><b>
+    <li><a class="toc" href="#Intro">Introduction</a>
+    <li><a class="toc" href="#GetStarted">Getting Started: Performing a Simple Query</a>
+    <li><a class="toc" href="#DataSources">Selecting Data Sources</a>
+    <li><a class="toc" href="#Overlap">Computing Item Overlap</a>
+    <li><a class="toc" href="#OutputConfig">Configuring Output</a>
+  </b></ul>
+</td>
+                <P>
+                <FORM name="googleForm1" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   site:genome.ucsc.edu/goldenPath/help';">          
+                Search the Genome Browser help pages: &nbsp;
+                <input type="hidden" name="q" value="">
+                <input type="hidden" name="num" value="10">
+                <input type="hidden" name="filter" value="0">
+                <INPUT TYPE=text name=qq size=30 maxlength=255 value="">
+                <input TYPE="submit" VALUE="Submit">
+                </FORM>
+                </p><p>
+                <A HREF="../../contacts.html">Questions and feedback are welcome</A>.
+
+</div><!-- .sectionContent -->
+</div><!-- .section -->
+
+
+<a name="Intro"></a>	
+<div class="section">
+	<h1>Introduction</h1>
 	<div class="sectionContent">
 	<p>The Data Integrator is a fast and powerful graphical interface that can
           combine and export data from multiple tracks simultaneously.
@@ -30,14 +60,14 @@
           <a href="hgTablesHelp.html">Table Browser</a>,
           it can combine data from the browser database,
           <a href="customTrack.html">user custom tracks</a> and
-          <a href="hgTrackHubHelp.html">hub tracks</a>.
+          <a href="hgTrackHubHelp.html">track hubs</a>.
         </p>
         <p>
           Using the Data Integrator, you can retrieve tab-separated text for
           the data underlying up to five tracks,
           combining multiple tracks' data for items whose genomic positions
           overlap the positions of items in the first selected track.
-          Depending on your needs, you may
+          Depending on your needs, you may:
           <ul>
             <li>include all columns of all data sources in your query,
                or only the columns that you select.</li>
@@ -57,41 +87,32 @@
 	</div><!-- .sectionContent --> 
 </div><!-- .section -->
 
+<a name="GetStarted"></a>
 <div class="section">
-	<h1>Getting Started</h1>
+	<h1>Getting Started: Performing a Simple Query</h1>
 	<div class="sectionContent">
-	<p>The Data Integrator allows for the intersection an output of data from
-	up to five tracks. Data is output based on its overlap with items in the 
-	first select track. These tracks can be those provided by UCSC or user
-	data that has been uploaded through custom tracks or track hubs. It allows
-	for the customization of the output columns where you can select columns
-	from each track to include in the output. The output can be view in the
-	web browser window or downloaded to a local file, optionally compressed
-	with gzip.
-	<p>
-	<b><i>Simple position-based query</i></b>
 	<p>Follow these instructions to perform a basic query that intersects two
 	or more tracks:
 	<p>
 	<b>Step 1. Pick a genome assembly</b><br>
 	Specify the genome assembly from which you'd like to retrieve the
-	data by choosing the appropriate organism in the <tt><b>genome</b></tt>
+	data by choosing the appropriate organism in the <b>genome</b>
 	list, then selecting the assembly version from the
-	<tt><b>assembly</b></tt> list. Note that the <tt><b>assembly</b></tt> list
+	<b>assembly</b> list. Note that the <b>assembly</b> list
 	refreshes each time a different option is selected in the
-	<tt><b>genome</b></tt> list. Assemblies are typically named after the first three
+	<b>genome</b> list. Assemblies are typically named after the first three
 	characters of an organism's genus and species names. Assemblies that are
 	uploaded as part of an <a href="hgTrackHubHelp.html#Assembly">assembly hub</a>
-	will be available under the hub's name in the <tt><b>group</b></tt> list.
+	will be available under the hub's name in the <b>group</b> list.
 	<p>
 	<b>Step 2. Pick a genomic region</b><br>
-	By default, the Data Integrator region is set to <tt><b>genome</b></tt>,
+	By default, the Data Integrator region is set to <b>genome</b>,
 	which will display all the data records in the selected table.
 		<ul>
 		<li>
 		To restrict the data to a specific position
-		range, select "position or search term" from the 
-		<tt><b>region to annoatate</b></tt> menu
+		range, select <button type="button">position or search term</button> from the 
+		<b>region to annotate</b> menu
 		and type the position into the box. Some
 		examples of specific positions include a chromosome name
 		(<em>chrX</em>), a coordinate range within a chromosome
@@ -100,59 +121,155 @@
 		To look up the position range of a genomic element -- such
 		as a gene name, an accession ID, an STS marker, etc. -- or
 		keywords from the GenBank description of an mRNA,
-		select "position or search term" from the 
-		<tt><b>region to annoatate</b></tt> menu and then type
+		select <button type="button">position or search term</button> from the 
+		<b>region to annotate</b> menu and then type
 		your search term into the box.
 		<li>
-		To select multiple genomic regions, select "define regions" from 
-		<tt><b>region to annoatate</b></tt> menu and then
+		To select multiple genomic regions, select
+		<button type="button">define regions</button> from 
+		<b>region to annotate</b> menu and then
 		entering up to 1,000 regions in a 3- or 4-field
 		<a href="../../FAQ/FAQformat.html#format1">BED</a>
 		file format.
 		</ul>
 	<p>
 	<b>Step 3. Configure your data sources</b><br>
-	The <tt><b>track group</b></tt> list shows all the annotation track groups
+	The <b>track group</b> list shows all the annotation track groups
 	available in the selected genome assembly. The names correspond
 	to the groupings displayed at the bottom of the Genome Browser
 	annotation tracks page. When a group is selected from the list,
-	the <tt><b>track</b></tt> list automatically updates to show all the
+	the <b>track</b> list automatically updates to show all the
 	annotation tracks available within that group.
 		<ul>
 		<li>
 		To examine all the tracks available within a certain group (e.g.
 		all gene prediction tracks), select the group name from the
-		<tt><b>track group</b></tt> list, then browse the entries in the
-		<tt><b>track</b></tt> list.
+		<b>track group</b> list, then browse the entries in the
+		<b>track</b> list.
 		<li>
 		Custom annotation tracks created during the current session
-		are listed under the <em>Custom Tracks</em> group.
+		are listed under the <b>Custom Tracks</b> group.
 		<li>
 		Each connected track hub will be listed as it's own group under the
-		<tt><b>track group</b></tt> list.
+		<b>track group</b> list.
 		</ul>
+	<p><img style="border: 1px solid black; display: block;"
+		src="../../images/hgIntegratorAddTrack.png">
+	
+	<p>After selecting your track from the drop-down menus, click
+	<button type="button">Add</button>. You may add up to five tracks.
+	See the <a href="#DataSources">Selecting Data Sources</a> section for more details.
 	<p>
 	<b>Step 4. Rearrange your data sources (Optional)</b><br>
-	You can rearrage you data sources by clicking on a track name
+	You can rearrange you data sources by clicking on a track name
 	and dragging it into the desired order. Items are output based on their overlap
 	with the first listed track. The order of the tracks will also determine
 	the order of the fields in the output. Fields from tracks higher in the list
 	will appear first in the output.
 	<p>
-	<b>Step 4. Choose output fields (Optional)</b><br>
-	Click <tt><b>Choose fields</b></tt> button to bring up a checklist of all
+	<b>Step 5. Choose output fields (Optional)</b><br>
+	Click <button type="button">Choose fields</button> to bring up a checklist of all
 	fields from all selected data sources. By default every field is selected.
-	You can quickly select or deselect all of the fields by clicking 
-	<tt><b>Set all</b></tt> or <tt><b>Clear all</b></tt> buttons below the track
-	name. You can choose the columns you want in your output by checking the box
-	next to that field.
+	You can choose the columns you want in your output by checking the box next to that
+	field. See the <a href="#OutputConfig">Configuring Output</a> for more details.
 	<p>
-	<b>Step 5. Display the output</b><br>
-	Click the <tt><b>Get Output</b></tt> button to display the
+	<b>Step 6. Display the output</b><br>
+	Click <button type="button">Get Output</button> to display the
 	results of the query in the web browser window. The results will be displayed
 	as tab-delimited text. Download results as a file by checking the box next to
-	<tt><b>Send output to file</b></tt> and entering a file name into the box.
+	<b>Send output to file</b> and entering a file name into the box.
 	The output file can also be compressed by gzip.
+    </div><!-- .sectionContent --> 
+</div><!-- .section -->
+
+<a name="DataSources"></a>	
+<div class="section">
+<h1>Selecting Data Sources</h1>
+	<div class="sectionContent">
+	<p>The Data Integrator allows you to select up to five data sources to intersect. These
+	data sources can be tracks provided by UCSC or your own data uploaded using 
+	<a href="../../../cgi-bin/hgCustom" target="_blank">custom tracks</a> or
+	<a href="../../../cgi-bin/hgHubConnect" target="_blank">track hubs</a>. Only positional
+	tables, such as BED, Wiggle, and genePred, are currently allowed in the output.
+	Other formats such as MAF or BAM are currently unavailable in the Data
+	Integrator.
+
+	<p>Items in your selected tracks are output based on their overlap with items in your
+	primary track. This primary track is the one that shows up first in the list of
+	your chosen data sources. In the following example, UCSC Genes would be the primary
+	track and items would be output based on their overlap with items in UCSC Genes:
+	<p>
+	<img style="border: 1px solid black; display: block;"
+	src="../../images/hgIntegratorDataSourceConfig.png">
+	</p>
+	<p>The order of your selected tracks also affects the order of fields in your output.
+	Fields from tracks that are higher up in the <b>Configure Data Sources</b> box will show
+	up before tracks that are lower in that box. Using the same order of tracks seen in the
+	previous example, this means that fields from the UCSC Genes track will appear first in
+	the output, then fields from Common SNPs (142) and lastly fields from Conservation -
+	100 El. However, your tracks aren't limited to the order in which you selected them,
+	and you can rearrange the order of your tracks at any time. To do so, just click and drag
+	a track to a new position in the list. A track can be removed by clicking the
+	"<b>X</b>" next to it.  
+
+	
+	</div><!-- .sectionContent --> 
+</div><!-- .section -->
+
+<a name="Overlap"></a>
+<div class="section">
+<h1>Computing Item Overlap</h1>
+	<div class="sectionContent">
+	<p>The current intersection mechanism the Data Integrator uses is fairly simple. For gene
+	transcripts, mRNAs, and any other tracks where the items have blocks or gaps, the overlap
+	for entire range of the item is computed. This means that introns and gaps in the item are
+	considered when computing overlap. For example, let's consider the following situation
+	using the UCSC Genes and SNP 142 (Common) tracks:
+	<p>
+	<img style="border: 1px solid black; display: block;"
+	src="../../images/hgIntegratorHgTracksExample.png">
+	<p>
+	If we were using the Data Integrator to find the SNPs that overlapped with the gene in the
+	UCSC Genes track, we get all of the visible SNPs in our output.
+
+	<p>Additionally, items are output regardless of the amount overlap. This means that if there
+	is even a single base of overlap between two items, they are included in the output.
+	
+	</div><!-- .sectionContent --> 
+</div><!-- .section -->
+
+<a name="OutputConfig"></a>
+<div class="section">
+<h1>Configuring Output</h1>
+	<div class="sectionContent">
+	<p>The Data Integrator allows you to customize your output in a few different ways. The
+	primary way being the option to choose which fields are included in your output. After
+	selecting and configuring your data sources as described in the <a href="#DataSources">
+	Selecting Data Sources</a> section, click <button type="button">Choose fields</button>
+	to begin configuring your output. After clicking the button, a pop-up with all the fields
+	from you selected tables will show up:
+	<p>
+	<img style="border: 1px solid black; display: block;"
+	src="../../images/hgIntegratorFieldsConfig.png">
+	<p>By default, all of the boxes for a track will be selected. You can quickly select or
+	deselect all of the fields by clicking <button type="button">Set all</button> or
+	<button type="button">Clear all</button> below the track name. Check the box next
+	to the field name to include it in the output. After you have finished selecting your
+	output fields, click <button type="button">Done</button> at the bottom of the dialog
+	box to finish configuring your output.
+	
+	<p>Note that for wiggle tracks, the "Value" field is averaged across the region of overlap.
+	In the future, we intend to allow you to output all of the data values in that region
+	of overlap.
+
+	<p>If you want to view your results in the web browser window, click
+	<button type="button">Get output</button>. Or, if you want to send your output to a file, 
+	check the box next to <b>Send output to file</b>. You can compress your output file using
+	gzip by checking the box next to <b>Compress with gzip (.gz)</b>.
+	</p>
+	
+	</div><!-- .sectionContent --> 
+</div><!-- .section -->
 
 </div><!-- .content -->
 </body>
