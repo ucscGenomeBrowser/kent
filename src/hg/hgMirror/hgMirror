@@ -727,9 +727,18 @@ def getOrgInfo(validDbs):
 
     # dict of clade -> list (orgName, orgName)
     cladeToOrgs = defaultdict(list)
-    cur.execute('SELECT clade, genome FROM genomeClade ORDER BY genome')
+    #cur.execute('SELECT clade, genome FROM genomeClade ORDER BY genome')
+    cur.execute('SELECT clade, genomeClade.genome, name FROM genomeClade, dbDb where dbDb.genome=genomeClade.genome ORDER BY genome;')
+    doneOrgs = set()
     for row in cur.fetchall():
+        if row[2] not in validDbs:
+            continue
+
+        if row[1] in doneOrgs:
+            continue
+        else:
             cladeToOrgs[row[0]].append((row[1], row[1]))
+            doneOrgs.add(row[1])
 
     # default genome per clade
     cladeToBestOrg = dict()
@@ -778,12 +787,13 @@ def getCladeAssemblyDb(clade, org, db):
         print("<small>info: MySQLDb not installed, cannot retrieve hgcentral.dbDb, using internal defaults</small>")
         orgInfo = {}
         orgInfo["clades"] = [("mammal", "Mammal")]
-        orgInfo["cladeToOrg"] = {"mammal":"Human"}
+        orgInfo["cladeToOrgs"] = {"mammal":[("Human", "Human")]}
+        orgInfo["cladeToBestOrg"] = {"mammal":"Human"}
         orgInfo["orgToDbs"] = {"Human":["hg19"]}
         orgInfo["dbs"] = [("hg19", "Human (GrCh37)"), ("mm9", "Mouse (NCBI37)")]
 
         return orgInfo, "mammal", "Human", "hg19"
-
+    
     validDbs = getHgDownloadDbs()
     orgInfo = getOrgInfo(validDbs)
 
