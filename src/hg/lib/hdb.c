@@ -3604,7 +3604,11 @@ if (bigDataUrl != NULL)
     else
         {
         char *bigDataUrlLocal = hReplaceGbdb(bigDataUrl);
-        boolean exists = fileExists(bigDataUrlLocal);
+        boolean exists;
+        if (hasProtocol(bigDataUrlLocal))
+            exists = udcExists(bigDataUrlLocal);
+        else
+            exists = fileExists(bigDataUrlLocal);
         freeMem(bigDataUrlLocal);
         return exists;
         }
