@@ -93,27 +93,31 @@
 	<div class="sectionContent">
 	<p>Follow these instructions to perform a basic query that intersects two
 	or more tracks:
+
 	<p>
 	<b>Step 1. Pick a genome assembly</b><br>
 	Specify the genome assembly from which you'd like to retrieve the
-	data by choosing the appropriate organism in the <b>genome</b>
-	list, then selecting the assembly version from the
-	<b>assembly</b> list. Note that the <b>assembly</b> list
-	refreshes each time a different option is selected in the
-	<b>genome</b> list. Assemblies are typically named after the first three
-	characters of an organism's genus and species names. Assemblies that are
+	data by choosing the appropriate organism using the <b>group</b> and <b>genome</b>
+	menus, then selecting the assembly version from the
+	<b>assembly</b> menu.
+        Note that changing the <b>group</b> menu causes the <b>genome</b> menu to refresh,
+        and changing the <b>genome</b> menu causes the <b>assembly</b> menu to refresh.
+        Assemblies that are
 	uploaded as part of an <a href="hgTrackHubHelp.html#Assembly">assembly hub</a>
-	will be available under the hub's name in the <b>group</b> list.
+	will be available under the hub's name in the <b>group</b> menu.
+
 	<p>
 	<b>Step 2. Pick a genomic region</b><br>
-	By default, the Data Integrator region is set to <b>genome</b>,
-	which will display all the data records in the selected table.
+	By default, the Data Integrator's <b>region to annotate</b> menu is set to
+        <select><option>genome</option></select>,
+	which will display all the data records in the selected track(s).
 		<ul>
 		<li>
 		To restrict the data to a specific position
-		range, select <button type="button">position or search term</button> from the 
+		range, select
+                <select><option>position or search term</option></select> from the
 		<b>region to annotate</b> menu
-		and type the position into the box. Some
+		and type or paste the position into the box. Some
 		examples of specific positions include a chromosome name
 		(<em>chrX</em>), a coordinate range within a chromosome
 		(<em>chrX:100000-400000</em>), or a scaffold name.
@@ -121,37 +125,44 @@
 		To look up the position range of a genomic element -- such
 		as a gene name, an accession ID, an STS marker, etc. -- or
 		keywords from the GenBank description of an mRNA,
-		select <button type="button">position or search term</button> from the 
+                select <select><option>position or search term</option></select> from the
 		<b>region to annotate</b> menu and then type
 		your search term into the box.
+                For assemblies that have gene annotations, autocompletions of gene symbols
+                are offered.
+                If your search term matches more than one track or item,
+                then a pop-up will appear with matching items and positions;
+                click an item to select its position.
 		<li>
-		To select multiple genomic regions, select
-		<button type="button">define regions</button> from 
+		To query multiple genomic regions, select
+                <select><option>define regions</option></select> from the
 		<b>region to annotate</b> menu and then
-		entering up to 1,000 regions in a 3- or 4-field
+		enter up to 1,000 regions in a 3- or 4-field
 		<a href="../../FAQ/FAQformat.html#format1">BED</a>
-		file format.
+		file format or as <em>chrom:start-end</em> position ranges.
 		</ul>
 	<p>
 	<b>Step 3. Configure your data sources</b><br>
-	The <b>track group</b> list shows all the annotation track groups
+	The <b>track group</b> menu shows all the annotation track groups
 	available in the selected genome assembly. The names correspond
 	to the groupings displayed at the bottom of the Genome Browser
-	annotation tracks page. When a group is selected from the list,
-	the <b>track</b> list automatically updates to show all the
+	annotation tracks page. When a group is selected from the menu,
+	the <b>track</b> menu automatically updates to show all the
 	annotation tracks available within that group.
 		<ul>
 		<li>
 		To examine all the tracks available within a certain group (e.g.
 		all gene prediction tracks), select the group name from the
-		<b>track group</b> list, then browse the entries in the
-		<b>track</b> list.
+		<b>track group</b> menu, then browse the entries in the
+		<b>track</b> menu.
 		<li>
 		Custom annotation tracks created during the current session
 		are listed under the <b>Custom Tracks</b> group.
 		<li>
-		Each connected track hub will be listed as it's own group under the
-		<b>track group</b> list.
+		Each connected track hub will be listed as its own group under the
+		<b>track group</b> menu.
+                <li>Clicking the "View table schema" link opens a new web browser tab with
+                the Table Browser's schema page which describes the data fields.
 		</ul>
 	<p><img style="border: 1px solid black; display: block;"
 		src="../../images/hgIntegratorAddTrack.png">
@@ -161,7 +172,7 @@
 	See the <a href="#DataSources">Selecting Data Sources</a> section for more details.
 	<p>
 	<b>Step 4. Rearrange your data sources (Optional)</b><br>
-	You can rearrange you data sources by clicking on a track name
+	You can rearrange your data sources by clicking on a track name
 	and dragging it into the desired order. Items are output based on their overlap
 	with the first listed track. The order of the tracks will also determine
 	the order of the fields in the output. Fields from tracks higher in the list
@@ -173,7 +184,7 @@
 	You can choose the columns you want in your output by checking the box next to that
 	field. See the <a href="#OutputConfig">Configuring Output</a> for more details.
 	<p>
-	<b>Step 6. Display the output</b><br>
+	<b>Step 6. Get output</b><br>
 	Click <button type="button">Get Output</button> to display the
 	results of the query in the web browser window. The results will be displayed
 	as tab-delimited text. Download results as a file by checking the box next to
@@ -206,8 +217,8 @@
 	Fields from tracks that are higher up in the <b>Configure Data Sources</b> box will show
 	up before tracks that are lower in that box. Using the same order of tracks seen in the
 	previous example, this means that fields from the UCSC Genes track will appear first in
-	the output, then fields from Common SNPs (142) and lastly fields from Conservation -
-	100 El. However, your tracks aren't limited to the order in which you selected them,
+	the output, then fields from DNase Clusters and lastly fields from Conservation -
+	100 Vert. El. However, your tracks aren't limited to the order in which you selected them,
 	and you can rearrange the order of your tracks at any time. To do so, just click and drag
 	a track to a new position in the list. A track can be removed by clicking the
 	"<b>X</b>" next to it.  
@@ -224,16 +235,16 @@
 	transcripts, mRNAs, and any other tracks where the items have blocks or gaps, the overlap
 	for entire range of the item is computed. This means that introns and gaps in the item are
 	considered when computing overlap. For example, let's consider the following situation
-	using the UCSC Genes and SNP 142 (Common) tracks:
+	using the UCSC Genes and DNase Clusters tracks:
 	<p>
 	<img style="border: 1px solid black; display: block;"
 	src="../../images/hgIntegratorHgTracksExample.png">
 	<p>
-	If we were using the Data Integrator to find the SNPs that overlapped with the gene in the
-	UCSC Genes track, we get all of the visible SNPs in our output.
+	If we were using the Data Integrator to find the DNase peaks that overlapped with the
+	gene in the UCSC Genes track, we would get all of the visible peaks in our output.
 
-	<p>Additionally, items are output regardless of the amount overlap. This means that if there
-	is even a single base of overlap between two items, they are included in the output.
+	<p>Additionally, items are output regardless of the amount of overlap. This means that if
+	there is even a single base of overlap between two items, they are included in the output.
 	
 	</div><!-- .sectionContent --> 
 </div><!-- .section -->
@@ -242,32 +253,66 @@
 <div class="section">
 <h1>Configuring Output</h1>
 	<div class="sectionContent">
-	<p>The Data Integrator allows you to customize your output in a few different ways. The
-	primary way being the option to choose which fields are included in your output. After
+        <p>By default, the Data Integrator outputs all fields of all data sources
+        except for the <tt>bin</tt> column of database tables (a numerical index added by UCSC
+        to speed up database queries).
+        You can customize the set of fields to output, for example in order to make your
+        output file less bulky if you need only some of the fields.  After
 	selecting and configuring your data sources as described in the <a href="#DataSources">
 	Selecting Data Sources</a> section, click <button type="button">Choose fields</button>
 	to begin configuring your output. After clicking the button, a pop-up with all the fields
-	from you selected tables will show up:
+	from your selected tables will appear:
 	<p>
 	<img style="border: 1px solid black; display: block;"
 	src="../../images/hgIntegratorFieldsConfig.png">
-	<p>By default, all of the boxes for a track will be selected. You can quickly select or
-	deselect all of the fields by clicking <button type="button">Set all</button> or
-	<button type="button">Clear all</button> below the track name. Check the box next
-	to the field name to include it in the output. After you have finished selecting your
+	<p>Uncheck the box next to the field name to exclude it from the output;
+        check the box if you change your mind and want to include it.
+        You can quickly select or deselect all of the fields by clicking
+        <button type="button">Set all</button> or
+        <button type="button">Clear all</button> below the track name.
+        After you have finished selecting your
 	output fields, click <button type="button">Done</button> at the bottom of the dialog
 	box to finish configuring your output.
 	
-	<p>Note that for wiggle tracks, the "Value" field is averaged across the region of overlap.
-	In the future, we intend to allow you to output all of the data values in that region
-	of overlap.
-
-	<p>If you want to view your results in the web browser window, click
+	<p>If you want to view your results in the web browser window, simply click
 	<button type="button">Get output</button>. Or, if you want to send your output to a file, 
 	check the box next to <b>Send output to file</b>. You can compress your output file using
-	gzip by checking the box next to <b>Compress with gzip (.gz)</b>.
+	gzip by checking the box next to <b>Compress with gzip (.gz)</b>.  Then click
+        <button type="button">Get output</button> to begin downloading your file.
 	</p>
 	
+	<p>Note that for wiggle tracks, the "Value" field is averaged across the region of overlap.
+	In the future, we intend to add an option to output all of the data values in that region
+	of overlap.
+
+	<p>
+        If a single item in the primary track has multiple matches in a secondary track,
+        then the Data Integrator outputs multiple rows.  Each row repeats the fields of
+        the primary track item, and then adds fields of the <em>nth</em> matching item
+        from each secondary track.
+        If there are multiple secondary tracks, then their items will appear together in
+        a row of output whether or not they overlap each other.  For example, note how items
+        overlap (or not) in the three tracks A, B and C in the image below:
+	<p><img style="border: 1px solid black; display: block;"
+	src="../../images/hgIntegratorHgTracksExample2.png">
+        <p>
+        Two items from track B (B1, B2) overlap the primary item (A).
+        Three items from track C (C1, C2, C3) overlap the primary item (A).
+        The Data Integrator prints 3 rows of output.  B1 and C1, although they
+        do not overlap, appear together in the first row of output.
+        B2 and C2 appear together in the second row of output.
+        The third row of output has empty fields for track B followed
+        by C3's fields.  This is the output (when A, B and C are 4-field
+	<a href="../../FAQ/FAQformat.html#format1">BED</a>
+        custom tracks; colors added for emphasis):
+        <p>
+          <pre class="code">
+#A.chrom	A.chromStart	A.chromEnd	A.name	<span style="color: #960000;">B.chrom	B.chromStart	B.chromEnd	B.name</span>	<span style="color: #000096;">C.chrom	C.chromStart	C.chromEnd	C.name</span>
+chr1	1200	1800	A	<span style="color: #960000;">chr1	1250	1350	B1</span>	<span style="color: #000096;">chr1	1425	1525	C1</span>
+chr1	1200	1800	A	<span style="color: #960000;">chr1	1550	1650	B2</span>	<span style="color: #000096;">chr1	1675	1775	C2</span>
+chr1	1200	1800	A					<span style="color: #000096;">chr1	1700	1800	C3</span>
+          </pre>
+
 	</div><!-- .sectionContent --> 
 </div><!-- .section -->
 
