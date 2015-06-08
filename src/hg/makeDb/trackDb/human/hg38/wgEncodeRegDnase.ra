@@ -686,7 +686,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwMonocytescd14ro01746Hotspot
 	parent wgEncodeRegDnaseHotspot off
-	shortLabel Monocytes-CD14+ Ht
+	shortLabel Monocyte-CD14+ Ht
 	longLabel Monocytes-CD14+_RO01746 monocyte, CD14+ DNaseI Hotspots from ENCODE
 	subGroups view=b_Hot cellType=Monocytes_CD14_RO01746 treatment=n_a tissue=blood cancer=normal
 	type bigBed 6 +
@@ -1050,7 +1050,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwBonemarrowmscPeak
 	parent wgEncodeRegDnasePeak off
-	shortLabel bone_marrow_MSC Pk
+	shortLabel bonemarrow_MSC Pk
 	longLabel bone_marrow_MSC bone marrow fibroblastoid DNaseI Peaks from ENCODE
 	subGroups view=a_Peaks cellType=bone_marrow_MSC treatment=n_a tissue=bone_marrow cancer=normal
 	color 228,255,85
@@ -1212,7 +1212,7 @@ priority 1.9
 	track wgEncodeRegDnaseUwHmvecdbladPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HMVEC-dBl-Ad Pk
-	longLabel HMVEC-dBl-Ad dermal microvascular endothelial cell, blood DNaseI Peaks from ENCODE
+	longLabel HMVEC-dBl-Ad dermal MV endothelial cell, blood DNaseI Peaks from ENCODE
 	subGroups view=a_Peaks cellType=HMVEC-dBl-Ad treatment=n_a tissue=blood_vessel cancer=normal
 	color 85,255,224
 
@@ -1953,7 +1953,7 @@ priority 1.9
 	track wgEncodeRegDnaseUwHmvecdlyneoSignal
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HMVEC-dLy-Neo Sg
-	longLabel HMVEC-dLy-Neo dermal MV endothelial cell, neonate lymph DNaseI Signal from ENCODE
+	longLabel HMVEC-dLy-Neo dermal MV end cell, neonate lymph DNaseI Signal from ENCODE
 	subGroups view=c_Signal cellType=HMVEC-dLy-Neo treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 9237.62
 	color 85,255,226
@@ -1961,7 +1961,7 @@ priority 1.9
 	track wgEncodeRegDnaseUwHmvecdblneoSignal
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HMVEC-dBl-Neo Sg
-	longLabel HMVEC-dBl-Neo dermal microvascular endothelial cell, neonate blood DNaseI Signal from ENCODE
+	longLabel HMVEC-dBl-Neo dermal MV endothelial cell, neonate blood DNaseI Signal from ENCODE
 	subGroups view=c_Signal cellType=HMVEC-dBl-Neo treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 6275.08
 	color 85,255,229
@@ -2136,7 +2136,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwMonocytescd14ro01746Signal
 	parent wgEncodeRegDnaseSignal off
-	shortLabel Monocyte-CD14+_RO01746 Sg
+	shortLabel Monocyte-CD14+ Sg
 	longLabel Monocytes-CD14+_RO01746 monocyte, CD14+ DNaseI Signal from ENCODE
 	subGroups view=c_Signal cellType=Monocytes_CD14_RO01746 treatment=n_a tissue=blood cancer=normal
 	type bigWig 0 853.111
