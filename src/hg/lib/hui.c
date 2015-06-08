@@ -8520,10 +8520,10 @@ if (stringIn(":", idInUrl)) {
 // URL may now contain item boundaries
 ins[9] = "${";
 ins[10] = "$}";
-if (cartOptionalString(cart, "o") && cartOptionalString(cart, "t"))
+if (cartOptionalString(cart, "l") && cartOptionalString(cart, "r"))
     {
-    int itemBeg = cartIntExp(cart, "o") + 1; // Should strip any unexpected commas
-    int itemEnd = cartIntExp(cart, "t");
+    int itemBeg = cartIntExp(cart, "l"); // Should strip any unexpected commas
+    int itemEnd = cartIntExp(cart, "r");
     safef(begItem, sizeof begItem, "%d", itemBeg);
     safef(endItem, sizeof endItem, "%d", itemEnd);
     outs[9] = begItem;
