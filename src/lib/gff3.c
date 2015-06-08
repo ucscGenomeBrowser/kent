@@ -47,6 +47,7 @@ char *gff3AttrIsCircular = "Is_circular";
 char *gff3FeatGene = "gene";
 char *gff3FeatNCRna ="ncRNA";
 char *gff3FeatRRna = "rRNA";
+char *gff3FeatTRna = "tRNA";
 char *gff3FeatMRna = "mRNA";
 char *gff3FeatExon = "exon";
 char *gff3FeatCDS = "CDS";
@@ -56,6 +57,7 @@ char *gff3FeatStartCodon = "start_codon";
 char *gff3FeatStopCodon = "stop_codon";
 char *gff3FeatTranscript = "transcript";
 char *gff3FeatPrimaryTranscript = "primary_transcript";
+char *gff3FeatVGeneSegment = "V_gene_segment";
 
 static bool gff3FileStopDueToErrors(struct gff3File *g3f)
 /* determine if we should stop due to the number of errors */
