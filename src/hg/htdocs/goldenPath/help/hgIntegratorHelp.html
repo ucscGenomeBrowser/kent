@@ -151,7 +151,7 @@
 	annotation tracks available within that group.
 		<ul>
 		<li>
-		To examine all the tracks available within a certain group (e.g.
+		To examine all the tracks available within a certain group (e.g.,
 		all gene prediction tracks), select the group name from the
 		<b>track group</b> menu, then browse the entries in the
 		<b>track</b> menu.
@@ -179,13 +179,13 @@
 	will appear first in the output.
 	<p>
 	<b>Step 5. Choose output fields (Optional)</b><br>
-	Click <button type="button">Choose fields</button> to bring up a checklist of all
-	fields from all selected data sources. By default every field is selected.
+	Click <button type="button">Choose fields...</button> to bring up a checklist of all
+	fields from all selected data sources. By default, every field is selected.
 	You can choose the columns you want in your output by checking the box next to that
-	field. See the <a href="#OutputConfig">Configuring Output</a> for more details.
+	field. See the <a href="#OutputConfig">Configuring Output</a> section for more details.
 	<p>
 	<b>Step 6. Get output</b><br>
-	Click <button type="button">Get Output</button> to display the
+	Click <button type="button">Get output</button> to display the
 	results of the query in the web browser window. The results will be displayed
 	as tab-delimited text. Download results as a file by checking the box next to
 	<b>Send output to file</b> and entering a file name into the box.
@@ -206,7 +206,7 @@
 	Integrator.
 
 	<p>Items in your selected tracks are output based on their overlap with items in your
-	primary track. This primary track is the one that shows up first in the list of
+	primary track. The primary track is the one that shows up first in the list of
 	your chosen data sources. In the following example, UCSC Genes would be the primary
 	track and items would be output based on their overlap with items in UCSC Genes:
 	<p>
@@ -233,8 +233,9 @@
 	<div class="sectionContent">
 	<p>The current intersection mechanism the Data Integrator uses is fairly simple. For gene
 	transcripts, mRNAs, and any other tracks where the items have blocks or gaps, the overlap
-	for entire range of the item is computed. This means that introns and gaps in the item are
-	considered when computing overlap. For example, let's consider the following situation
+	for the entire range of the item is computed. This means that introns and gaps in the item
+	are also considered when computing overlap. This is an improvement upon the Table Browser
+	which only computed overlap with exons. For example, let's consider the following situation
 	using the UCSC Genes and DNase Clusters tracks:
 	<p>
 	<img style="border: 1px solid black; display: block;"
@@ -256,10 +257,10 @@
         <p>By default, the Data Integrator outputs all fields of all data sources
         except for the <tt>bin</tt> column of database tables (a numerical index added by UCSC
         to speed up database queries).
-        You can customize the set of fields to output, for example in order to make your
-        output file less bulky if you need only some of the fields.  After
+	If you are only interested in the data from a limited number of fields, you can customize
+	the set of fields to include in the output. After
 	selecting and configuring your data sources as described in the <a href="#DataSources">
-	Selecting Data Sources</a> section, click <button type="button">Choose fields</button>
+	Selecting Data Sources</a> section, click <button type="button">Choose fields...</button>
 	to begin configuring your output. After clicking the button, a pop-up with all the fields
 	from your selected tables will appear:
 	<p>
