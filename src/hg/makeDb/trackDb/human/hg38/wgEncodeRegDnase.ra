@@ -5,8 +5,8 @@ superTrack wgEncodeReg dense
 shortLabel DNase Clusters
 longLabel DNase I Hypersensitivity Peak Clusters from ENCODE (95 cell types)
 inputTableFieldDisplay cellType treatment
-controlledVocabulary cellType=hgFixed.wgEncodeCell treatment=hgFixed.wgEncodeTreatment 
-#inputFieldMetaTables treatment=cellType=hgFixed.wgEncodeCell hgFixed.wgEncodeTreatment 
+controlledVocabulary cellType=wgEncodeCell treatment=wgEncodeTreatment 
+#inputFieldMetaTables treatment=cellType=wgEncodeCell wgEncodeTreatment 
 inputTrackTable wgEncodeRegDnaseClusteredInputs
 sourceTable wgEncodeRegDnaseClusteredSources
 type bed 5 .
@@ -30,8 +30,8 @@ subGroup3 treatment Treatment diffProtA_5d=diffProtA_5d diffProtA_14d=diffProtA_
 subGroup4 tissue Tissue kidney=kidney esophagus=esophagus cervix=cervix skin=skin lung=lung heart=heart colon=colon blood=blood prostate=prostate embryo=embryo pancreas=pancreas breast=breast bone_marrow=bone_marrow periodontum=periodontum muscle=muscle brain=brain blood_vessel=blood_vessel spinal_cord=spinal_cord placenta=placenta eye=eye liver=liver periodontium=periodontium testis=testis
 subGroup5 cancer Cancer cancer=cancer normal=normal unknown=unknown
 subGroup6 subtrackColor Similarity
-controlledVocabulary cellType=hgFixed.wgEncodeCell
-#subGroupMetaTables cellType=hgFixed.wgEncodeCell
+controlledVocabulary cellType=wgEncodeCell
+#subGroupMetaTables cellType=wgEncodeCell
 dimensions dimA=cellType dimB=tissue dimC=cancer
 filterComposite dimA dimB dimC
 sortOrder view=+ subtrackColor=+ cellType=+ tissue=+
@@ -2284,8 +2284,8 @@ subGroup2 treatment Treatment diffProtA_5d=diffProtA_5d diffProtA_14d=diffProtA_
 subGroup3 tissue Tissue kidney=kidney esophagus=esophagus cervix=cervix skin=skin lung=lung heart=heart colon=colon blood=blood prostate=prostate embryo=embryo pancreas=pancreas breast=breast bone_marrow=bone_marrow periodontum=periodontum muscle=muscle brain=brain blood_vessel=blood_vessel spinal_cord=spinal_cord placenta=placenta eye=eye liver=liver periodontium=periodontium testis=testis
 subGroup4 cancer Cancer cancer=cancer normal=normal unknown=unknown
 subGroup5 subtrackColor Similarity
-controlledVocabulary cellType=hgFixed.wgEncodeCell
-#subGroupMetaTables cellType=hgFixed.wgEncodeCell
+controlledVocabulary cellType=wgEncodeCell
+#subGroupMetaTables cellType=wgEncodeCell
 sortOrder subtrackColor=+ cellType=+ tissue=+
 
 	track wgEncodeRegDnaseUwK562Wig
