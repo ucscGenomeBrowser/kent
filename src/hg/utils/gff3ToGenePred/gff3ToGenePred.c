@@ -327,7 +327,11 @@ if (exons == NULL)
 struct gff3AnnRef *useExons = (exons != NULL) ? exons : cdsUtrBlks;
 
 if (useExons == NULL) // if we don't have any exons, just use the feature
-  useExons = gff3AnnRefNew(mrna);
+    {
+    useExons = gff3AnnRefNew(mrna);
+    if (sameString(mrna->type, gff3FeatCDS))
+	cdsBlks = useExons;
+    }
 
 struct genePred *gp = makeGenePred((gene != NULL) ? gene : mrna, mrna, useExons, cdsBlks);
 if (gp != NULL)
