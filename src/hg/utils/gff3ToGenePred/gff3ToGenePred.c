@@ -326,6 +326,9 @@ if (exons == NULL)
     cdsUtrBlks = getCdsUtrBlks(mrna);
 struct gff3AnnRef *useExons = (exons != NULL) ? exons : cdsUtrBlks;
 
+if (useExons == NULL) // if we don't have any exons, just use the feature
+  useExons = gff3AnnRefNew(mrna);
+
 struct genePred *gp = makeGenePred((gene != NULL) ? gene : mrna, mrna, useExons, cdsBlks);
 if (gp != NULL)
     {
@@ -344,6 +347,7 @@ static int shouldProcess( struct gff3Ann *node)
 {
 return sameString(node->type, gff3FeatMRna) 
     || sameString(node->type, gff3FeatNCRna)
+    || sameString(node->type, gff3FeatCDS)
     || sameString(node->type, gff3FeatRRna)
     || sameString(node->type, gff3FeatTRna)
     || sameString(node->type, gff3FeatVGeneSegment)
