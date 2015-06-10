@@ -23,7 +23,7 @@
     cd /hive/data/genomes/hg38/bed/hg19MassiveLift/nonCodingRNAs/snoMiRNA
     liftingScript wgRNA
 ##############################################################################
-# wgEncodeReg (Done Chris Eisenhart)
+# wgEncodeReg ENCODE Regulatory tracks (Done Chris Eisenhart)
     mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg
     mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/wgEncodeRegMarkH3k27ac
     mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/wgEncodeRegMarkH34me1
