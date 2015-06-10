@@ -123,7 +123,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
 	strPur1 strPur2 strPur4 \
 	nemVec1 \
 	aplCal1 \
-	ce2 ce3 ce4 ce5 ce6 ce7 ce8 ce9 ce10 \
+	ce2 ce3 ce4 ce5 ce6 ce7 ce8 ce9 ce10 ce11 \
 	cb1 cb2 cb3 cb4 \
 	caeRem1 caeRem2 caeRem3 caeRem4 \
 	caeAng1 \
