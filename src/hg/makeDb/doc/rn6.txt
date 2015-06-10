@@ -890,3 +890,29 @@ hgLoadGenePred -genePredExt $db ncbiRefCurated curated.gp
 hgLoadGenePred -genePredExt $db ncbiRefPredicted predicted.gp
 hgLoadSqlTab $db ncbiRefLink $kent/src/hg/lib/ncbiRefLink.sql meta
 
+############################################################################
+# SWAP LASTZ human/hg19 vs. rat/rn6 - (DONE - 2015-06-08 - Hiram)
+    # the original alignment
+    cd /hive/data/genomes/hg19/bed/lastzRn6.2015-06-08
+
+    cat fb.hg19.chainRn6Link.txt
+    # 924289029 bases of 2897316137 (31.902%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/rn6/bed/blastz.hg19.swap
+    cd /hive/data/genomes/rn6/bed/blastz.hg19.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg19/bed/lastzRn6.2015-06-08/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    77m36.480s
+
+    cat fb.rn6.chainHg19Link.txt
+    # 949880616 bases of 2729860805 (34.796%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` rn6 hg19) > rbest.log 2>&1
+    # real    32m19.569s
+
+#########################################################################

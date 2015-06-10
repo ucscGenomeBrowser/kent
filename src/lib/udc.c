@@ -390,8 +390,19 @@ boolean udcInfoViaHttp(char *url, struct udcRemoteFileInfo *retInfo)
 verbose(4, "checking http remote info on %s\n", url);
 struct hash *hash = newHash(0);
 int status = netUrlHead(url, hash);
+
+// dropbox always redirects once
+if (status == 302 && hashFindVal(hash, "LOCATION:"))
+    {
+    char *newUrl = cloneString((char *)hashFindVal(hash, "LOCATION:"));
+    freeHashAndVals(&hash);
+    hash = newHash(0);
+    status = netUrlHead(newUrl, hash);
+    }
+
 if (status != 200) // && status != 302 && status != 301)
     return FALSE;
+
 char *sizeString = hashFindValUpperCase(hash, "Content-Length:");
 if (sizeString == NULL)
     {
@@ -982,7 +993,7 @@ struct udcFile *udcFileOpen(char *url, char *cacheDir)
 {
 struct udcFile *udcFile = udcFileMayOpen(url, cacheDir);
 if (udcFile == NULL)
-    errAbort("Couldn't open %s", url);
+    errAbort("UDC Couldn't open %s", url);
 return udcFile;
 }
 

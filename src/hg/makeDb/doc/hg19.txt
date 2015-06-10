@@ -30696,3 +30696,62 @@ hgsql hg19 -Ne 'select count(*) from gtexGene'
 
 
 ############################################################################
+# LASTZ human/hg19 vs. rat/rn6 - (DONE - 2015-06-08 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzRn6.2015-06-08
+    cd /hive/data/genomes/hg19/bed/lastzRn6.2015-06-08
+
+    cat << '_EOF_' > DEF
+# human vs rat
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+
+# TARGET: human hg19
+SEQ1_DIR=/hive/data/genomes/hg19/hg19.2bit
+SEQ1_LEN=/hive/data/genomes/hg19/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=10
+SEQ1_LAP=10000
+
+# QUERY: rat rn6
+SEQ2_DIR=/hive/data/genomes/rn6/rn6.2bit
+SEQ2_LEN=/hive/data/genomes/rn6/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=10
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzRn6.2015-06-08
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    193m46.956s
+
+    cat fb.hg19.chainRn6Link.txt
+    # 924289029 bases of 2897316137 (31.902%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hg19 rn6) > rbest.log 2>&1 &
+    # real    32m6.635s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/rn6/bed/blastz.hg19.swap
+    cd /hive/data/genomes/rn6/bed/blastz.hg19.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg19/bed/lastzRn6.2015-06-08/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    77m36.480s
+
+    cat fb.rn6.chainHg19Link.txt
+    # 949880616 bases of 2729860805 (34.796%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` rn6 hg19) > rbest.log 2>&1
+    # real    32m19.569s
+
+#########################################################################
