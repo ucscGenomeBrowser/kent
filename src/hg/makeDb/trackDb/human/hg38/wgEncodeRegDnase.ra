@@ -1961,7 +1961,7 @@ priority 1.9
 	track wgEncodeRegDnaseUwHmvecdblneoSignal
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HMVEC-dBl-Neo Sg
-	longLabel HMVEC-dBl-Neo dermal MV endothelial cell, neonate blood DNaseI Signal from ENCODE
+	longLabel HMVEC-dBl-Neo dermal MV endo cell, neonate blood DNaseI Signal from ENCODE
 	subGroups view=c_Signal cellType=HMVEC-dBl-Neo treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 6275.08
 	color 85,255,229
@@ -2851,7 +2851,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	track wgEncodeRegDnaseUwHmvecdlyneoWig
 	parent wgEncodeRegDnaseWig off
 	shortLabel HMVEC-dLy-Neo Sg
-	longLabel HMVEC-dLy-Neo dermal MV endothelial cell, neonate lymph DNaseI Signal from ENCODE
+	longLabel HMVEC-dLy-Neo dermal MV endo cell, neonate lymph DNaseI Signal from ENCODE
 	subGroups cellType=HMVEC-dLy-Neo treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 9237.62
 	color 85,255,226
@@ -2861,7 +2861,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	track wgEncodeRegDnaseUwHmvecdblneoWig
 	parent wgEncodeRegDnaseWig off
 	shortLabel HMVEC-dBl-Neo Sg
-	longLabel HMVEC-dBl-Neo dermal MV endothelial cell, neonate blood DNaseI Signal from ENCODE
+        longLabel HMVEC-dBl-Neo dermal MV endo cell, neonate blood DNaseI Signal from ENCODE
 	subGroups cellType=HMVEC-dBl-Neo treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 6275.08
 	color 85,255,229
