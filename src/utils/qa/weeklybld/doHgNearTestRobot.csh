@@ -4,6 +4,7 @@ cd $WEEKLYBLD
 cd $BUILDDIR/v${BRANCHNN}_branch/kent/src/hg/near/hgNearTest
 make 
 cd $WEEKLYBLD
+setenv HGDB_CONF "$HOME/.hg.conf.beta"
 $HOME/bin/$MACHTYPE/hgNearTest hgwbeta.cse.ucsc.edu/cgi-bin/hgNear ./logs/hgNear-v${BRANCHNN}.log
 
 # creates branch.hgNear.log - look for unusual errors

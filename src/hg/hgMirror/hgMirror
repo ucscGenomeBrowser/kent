@@ -727,10 +727,24 @@ def getOrgInfo(validDbs):
 
     # dict of clade -> list (orgName, orgName)
     cladeToOrgs = defaultdict(list)
-    cur.execute('SELECT clade, genome FROM genomeClade ORDER BY priority')
+    #cur.execute('SELECT clade, genome FROM genomeClade ORDER BY genome')
+    cur.execute('SELECT clade, genomeClade.genome, name FROM genomeClade, dbDb where dbDb.genome=genomeClade.genome ORDER BY genome;')
+    doneOrgs = set()
     for row in cur.fetchall():
+        if row[2] not in validDbs:
+            continue
+
+        if row[1] in doneOrgs:
+            continue
+        else:
             cladeToOrgs[row[0]].append((row[1], row[1]))
-            #orgList.append((row[0], row[0]))
+            doneOrgs.add(row[1])
+
+    # default genome per clade
+    cladeToBestOrg = dict()
+    cur.execute('SELECT clade, genome FROM genomeClade GROUP BY clade ORDER BY priority;')
+    for row in cur.fetchall():
+            cladeToBestOrg[row[0]]=row[1]
 
     # dict of orgName -> list of (db, description)
     # SELECT genome, name FROM dbDb order by orderKey;
@@ -749,6 +763,7 @@ def getOrgInfo(validDbs):
     for row in cur.fetchall():
         orgToBestDb[row[0]] = row[1]
 
+
     cur.close()
     conn.close()
 
@@ -758,6 +773,7 @@ def getOrgInfo(validDbs):
     orgInfo["cladeToOrgs"] = cladeToOrgs
     orgInfo["orgToDbs"] = orgToDbs
     orgInfo["orgToBestDb"] = orgToBestDb
+    orgInfo["cladeToBestOrg"] = cladeToBestOrg
     
     cPickle.dump(orgInfo, open(fname, "w"))
     return orgInfo
@@ -771,19 +787,20 @@ def getCladeAssemblyDb(clade, org, db):
         print("<small>info: MySQLDb not installed, cannot retrieve hgcentral.dbDb, using internal defaults</small>")
         orgInfo = {}
         orgInfo["clades"] = [("mammal", "Mammal")]
-        orgInfo["cladeToOrg"] = {"mammal":"Human"}
+        orgInfo["cladeToOrgs"] = {"mammal":[("Human", "Human")]}
+        orgInfo["cladeToBestOrg"] = {"mammal":"Human"}
         orgInfo["orgToDbs"] = {"Human":["hg19"]}
         orgInfo["dbs"] = [("hg19", "Human (GrCh37)"), ("mm9", "Mouse (NCBI37)")]
 
         return orgInfo, "mammal", "Human", "hg19"
-
+    
     validDbs = getHgDownloadDbs()
     orgInfo = getOrgInfo(validDbs)
 
     if clade is None or clade=="0":
         clade = "mammal"
     if org is None or org=="0" and clade not in [None, "0"]:
-        org = orgInfo["cladeToOrgs"][clade][0][0]
+        org = orgInfo["cladeToBestOrg"][clade]
 
     if (db==None or db=="0"):
         if org not in orgInfo["orgToBestDb"]:
@@ -832,10 +849,10 @@ def htmlTrackTable(db, trackLabels, trackTables, \
     print '<input type="submit" name="submit" value="Download"></input>'
 
     if showSubtracks:
-        print '<a href="%s">hide subtracks and show predefined groups</a><br>' % myUrl
+        print '<a href="%s?db=%s">hide subtracks and show predefined groups</a><br>' % (myUrl, db)
         del groupToTopTracks["special"]
     else:
-        print '<a href="%s?showSubtracks=1">show subtracks</a><br>' % myUrl
+        print '<a href="%s?db=%s&showSubtracks=1">show subtracks</a><br>' % (myUrl, db)
 
     print "<h4>Track groups</h4>"
     print "<ul>"

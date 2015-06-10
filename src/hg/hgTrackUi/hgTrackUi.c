@@ -945,10 +945,9 @@ for (i = 0; i < oregannoTypeSize; i++)
 void labelMakeCheckBox(struct trackDb *tdb, char *sym, char *desc, boolean dflt)
 /* add a checkbox use to choose labels to enable. */
 {
-/* some how the closest to home magic prepends the track name for cart  */
 char varName[64];
-safef(varName, sizeof(varName), "label.%s", sym);
-boolean option = cartOrTdbBoolean(cart, tdb, varName, dflt);
+safef(varName, sizeof(varName), "%s.label.%s", tdb->track, sym);
+boolean option = cartUsualBoolean(cart, varName, dflt);
 cgiMakeCheckBox(varName, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", desc);
 }
@@ -1862,7 +1861,7 @@ if (sameString(tdb->track, "refGene"))
     }
 
 /* Put up label line  - boxes for gene, accession or maybe OMIM. */
-printf("<B>Label:</B> ");
+printf("<BR><B>Label:</B> ");
 labelMakeCheckBox(tdb, "gene", "gene", TRUE);
 labelMakeCheckBox(tdb, "acc", "accession", FALSE);
 if (omimAvail != 0)
@@ -1886,11 +1885,11 @@ void transMapUI(struct trackDb *tdb)
 /* Put up transMap-specific controls */
 {
 printf("<B>Label:</B> ");
-labelMakeCheckBox(tdb, "orgCommon", "common name", transMapLabelDefaultOrgCommon);
-labelMakeCheckBox(tdb, "orgAbbrv", "organism abbreviation", transMapLabelDefaultOrgAbbrv);
-labelMakeCheckBox(tdb, "db", "assembly database", transMapLabelDefaultDb);
-labelMakeCheckBox(tdb, "gene", "gene", transMapLabelDefaultGene);
-labelMakeCheckBox(tdb, "acc", "accession", transMapLabelDefaultAcc);
+labelMakeCheckBox(tdb, "orgCommon", "common name", FALSE);
+labelMakeCheckBox(tdb, "orgAbbrv", "organism abbreviation", FALSE);
+labelMakeCheckBox(tdb, "db", "assembly database", FALSE);
+labelMakeCheckBox(tdb, "gene", "gene", FALSE);
+labelMakeCheckBox(tdb, "acc", "accession", FALSE);
 
 baseColorDrawOptDropDown(cart, tdb);
 indelShowOptions(cart, tdb);
@@ -3118,21 +3117,30 @@ printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
 cartSaveSession(cart);
 if (sameWord(tdb->track,"ensGene"))
     {
-    char ensVersionString[256];
-    char ensDateReference[256];
     char longLabel[256];
-    ensGeneTrackVersion(database, ensVersionString, ensDateReference,
-        sizeof(ensVersionString));
-    if (ensVersionString[0])
+    struct trackVersion *trackVersion = getTrackVersion(database, tdb->track);
+    if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
         {
-        if (ensDateReference[0] && differentWord("current", ensDateReference))
-            safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - archive %s - %s", ensVersionString, ensDateReference);
+        if (!isEmpty(trackVersion->dateReference) && differentWord("current", trackVersion->dateReference))
+            safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - archive %s - %s", trackVersion->version, trackVersion->dateReference);
         else
-            safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - %s", ensVersionString);
+            safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - %s", trackVersion->version);
         }
     else
         safef(longLabel, sizeof(longLabel), "%s", tdb->longLabel);
 
+    printf("<B style='font-size:200%%;'>%s%s</B>\n", longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
+    }
+else if (sameWord(tdb->track, "ncbiGene"))
+    {
+    struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
+    char longLabel[1024];
+    if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+	{
+	safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, trackVersion->version);
+	}
+    else
+        safef(longLabel, sizeof(longLabel), "%s", tdb->longLabel);
     printf("<B style='font-size:200%%;'>%s%s</B>\n", longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
     }
 else

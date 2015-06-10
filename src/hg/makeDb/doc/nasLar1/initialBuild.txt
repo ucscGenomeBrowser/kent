@@ -462,7 +462,7 @@ nasLar1.upstreamGeneTbl = refGene
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
-    time ./bin/gbDbLoadStep -drop -initialLoad -verbose=10 nasLar1
+    time ./bin/gbDbLoadStep -drop -initialLoad nasLar1
     # logFile: var/dbload/hgwdev/logs/2015.01.06-13:41:18.nasLar1.dbload.log
     # real    6m52.226s
 

@@ -1,3 +1,5 @@
+/* global cart */
+
 var UserRegionsMixin = function(myPath) {
     // This is a model mixin that manages UI state and server interaction for UserRegions.jsx,
     // the popup in which user can paste or upload user regions.
@@ -52,15 +54,10 @@ var UserRegionsMixin = function(myPath) {
         if ($fileInput.length !== 1) {
             this.error('UserRegions: can\'t find file input with selector "' + selector + '"');
         }
-        $.ajax({
-            url: this.cart.getBaseUrl(),
-            type: 'POST',
-            // Using 'iframe ' here activates jquery.bifrost plugin:
-            dataType: 'iframe json',
-            data: { cjCmd: JSON.stringify(command) },
-            fileInputs: $fileInput
-        }).done(this.handleServerResponse)
-          .fail(this.error);
+        // Using 'iframe ' here activates jquery.bifrost plugin:
+        cart.send(command, this.handleServerResponse, this.error,
+                  { dataType: 'iframe json',
+                    fileInputs: $fileInput });
         closeUserRegions(mutState);
     }
 

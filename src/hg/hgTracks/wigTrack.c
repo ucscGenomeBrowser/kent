@@ -1304,6 +1304,7 @@ double pixelsPerBase = scaleForPixels(width);
 double basesPerPixel = 1.0;
 int itemCount = 0;
 char *currentFile = NULL;
+//char *currentFileRewrite = NULL;
 struct udcFile *wibFH = NULL;	/*	file handle to binary file */
 int i;				/* an integer loop counter	*/
 int x1 = 0;			/*	screen coordinates	*/
@@ -1354,16 +1355,16 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 		    udcFileClose(&wibFH);
 		    freeMem(currentFile);
 		    }
-                currentFile = hReplaceGbdb(wi->file);
-		wibFH = udcFileMayOpen(currentFile, NULL);
+                currentFile = wi->file;
+		wibFH = udcFileMayOpen(hReplaceGbdb(currentFile), NULL);
 		if (wibFH==NULL)
 		    errAbort("hgTracks/wigLoadPreDraw: failed to open wiggle %s", currentFile);
 		}
 	    }
 	else
 	    {
-            currentFile = hReplaceGbdb(wi->file);
-            wibFH = udcFileMayOpen(currentFile, NULL);
+            currentFile = wi->file;
+            wibFH = udcFileMayOpen(hReplaceGbdb(currentFile), NULL);
 	    if (wibFH==NULL)
 		errAbort("hgTracks/wigLoadPreDraw: failed to open wiggle %s", currentFile);
 	    }

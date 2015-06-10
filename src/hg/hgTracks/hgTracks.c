@@ -4209,6 +4209,7 @@ return (startsWithWord("bigWig"  , track->tdb->type)
      || startsWithWord("halSnake", track->tdb->type)
      || startsWithWord("vcfTabix", track->tdb->type))
      && (bdu && strstr(bdu,"://"))
+     && !(containsStringNoCase(bdu, "dl.dropboxusercontent.com"))
      && (track->subtracks == NULL);
 }
 

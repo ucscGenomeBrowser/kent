@@ -309,7 +309,7 @@ tarSyr2.perChromTables = no
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
-    time ./bin/gbDbLoadStep -drop -initialLoad -verbose=10 tarSyr2
+    time ./bin/gbDbLoadStep -drop -initialLoad tarSyr2
     # logFile: var/dbload/hgwdev/logs/2014.12.11-11:06:27.tarSyr2.dbload.log
     # real    35m42.214s
 

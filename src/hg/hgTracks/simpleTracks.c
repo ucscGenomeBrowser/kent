@@ -138,6 +138,8 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
+#include "trackVersion.h"
+
 #define CHROM_COLORS 26
 
 int colorBin[MAXPIXELS][256]; /* count of colors for each pixel for each color */
@@ -13053,17 +13055,26 @@ track->visibility = tdb->visibility;
 track->shortLabel = cloneString(tdb->shortLabel);
 if (sameWord(tdb->track, "ensGene"))
     {
-    char ensVersionString[256];
-    char ensDateReference[256];
-    ensGeneTrackVersion(database, ensVersionString, ensDateReference,
-	sizeof(ensVersionString));
-    if (ensVersionString[0])
+    struct trackVersion *trackVersion = getTrackVersion(database, "ensGene");
+    if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
 	{
 	char longLabel[256];
-	if (ensDateReference[0] && differentWord("current", ensDateReference))
-	    safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - archive %s - %s", ensVersionString, ensDateReference);
+        if (!isEmpty(trackVersion->dateReference) && differentWord("current", trackVersion->dateReference))
+	    safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - archive %s - %s", trackVersion->version, trackVersion->dateReference);
 	else
-	    safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - %s", ensVersionString);
+	    safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - %s", trackVersion->version);
+	track->longLabel = cloneString(longLabel);
+	}
+    else
+	track->longLabel = cloneString(tdb->longLabel);
+    }
+else if (sameWord(tdb->track, "ncbiRefCurated") || sameWord(tdb->track, "ncbiRefCurated"))
+    {
+    struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
+    if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+	{
+	char longLabel[1024];
+	safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, trackVersion->version);
 	track->longLabel = cloneString(longLabel);
 	}
     else
