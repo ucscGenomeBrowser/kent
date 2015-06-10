@@ -1355,7 +1355,7 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 		    udcFileClose(&wibFH);
 		    freeMem(currentFile);
 		    }
-                currentFile = wi->file;
+                currentFile = cloneString(wi->file);
 		wibFH = udcFileMayOpen(hReplaceGbdb(currentFile), NULL);
 		if (wibFH==NULL)
 		    errAbort("hgTracks/wigLoadPreDraw: failed to open wiggle %s", currentFile);
@@ -1363,7 +1363,7 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	    }
 	else
 	    {
-            currentFile = wi->file;
+            currentFile = cloneString(wi->file);
             wibFH = udcFileMayOpen(hReplaceGbdb(currentFile), NULL);
 	    if (wibFH==NULL)
 		errAbort("hgTracks/wigLoadPreDraw: failed to open wiggle %s", currentFile);
