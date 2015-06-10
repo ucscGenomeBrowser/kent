@@ -5,6 +5,7 @@
 #include "basicBed.h"
 #include "bigGenePred.h"
 #include "customTrack.h"
+#include "factorSource.h"
 #include "grp.h"
 #include "hdb.h"
 #include "hubConnect.h"
@@ -142,6 +143,20 @@ else
     }
 }
 
+static boolean dbTableMatchesAutoSql(char *db, char *table, struct asObject *asObj)
+/* Return true if table exists and its fields match the columns of asObj. */
+{
+boolean matches = FALSE;
+struct sqlConnection *conn = hAllocConn(db);
+if (sqlTableExists(conn, table))
+    {
+    struct sqlFieldInfo *fieldList = sqlFieldInfoGet(conn, table);
+    matches = columnsMatch(asObj, fieldList);
+    }
+hFreeConn(&conn);
+return matches;
+}
+
 struct annoStreamer *hAnnoStreamerFromTrackDb(struct annoAssembly *assembly, char *selTable,
                                               struct trackDb *tdb, char *chrom, int maxOutRows)
 /* Figure out the source and type of data and make an annoStreamer. */
@@ -183,7 +198,8 @@ else if (startsWith("bigWig", tdb->type))
     char *fileOrUrl = getBigDataFileName(dataDb, tdb, selTable, chrom);
     streamer = annoStreamBigWigNew(fileOrUrl, assembly); //#*** no maxOutRows support
     }
-else if (sameString("factorSource", tdb->type))
+else if (sameString("factorSource", tdb->type) &&
+         dbTableMatchesAutoSql(dataDb, tdb->table, factorSourceAsObj()))
     {
     char *sourceTable = trackDbSetting(tdb, "sourceTable");
     char *inputsTable = trackDbSetting(tdb, "inputTrackTable");
@@ -312,7 +328,8 @@ else if (sameString(tdb->track, "knownGene"))
     if (hTableExists(db, "knownGene") && hTableExists(db, "kgXref"))
         asObj = annoStreamDbKnownGeneAsObj();
     }
-else if (sameString("factorSource", tdb->type))
+else if (sameString("factorSource", tdb->type) &&
+         dbTableMatchesAutoSql(db, tdb->table, factorSourceAsObj()))
     {
     asObj = annoStreamDbFactorSourceAsObj();
     }
