@@ -5,8 +5,8 @@ superTrack wgEncodeReg dense
 shortLabel DNase Clusters
 longLabel DNase I Hypersensitivity Peak Clusters from ENCODE (95 cell types)
 inputTableFieldDisplay cellType treatment
-controlledVocabulary cellType=hgFixed.wgEncodeCell treatment=hgFixed.wgEncodeTreatment 
-#inputFieldMetaTables treatment=cellType=hgFixed.wgEncodeCell hgFixed.wgEncodeTreatment 
+controlledVocabulary cellType=wgEncodeCell treatment=wgEncodeTreatment 
+#inputFieldMetaTables treatment=cellType=wgEncodeCell wgEncodeTreatment 
 inputTrackTable wgEncodeRegDnaseClusteredInputs
 sourceTable wgEncodeRegDnaseClusteredSources
 type bed 5 .
@@ -25,13 +25,13 @@ longLabel DNase I Hypersensitivity in 95 cell types from ENCODE
 group regulation
 showSubtrackColorOnUi on
 subGroup1 view Views a_Peaks=Peaks b_Hot=Hotspots c_Signal=Signal
-subGroup2 cellType Cell_Type Monocytes_CD14_RO01746=Monocytes-CD14+_RO01746 NT2-D1=NT2-D1 LHCN-M2=LHCN-M2 HRCEpiC=HRCEpiC AoAF=AoAF Th2=Th2 Th1=Th1 HL-60=HL-60 HCFaa=HCFaa HMVEC-dLy-Ad=HMVEC-dLy-Ad HeLa-S3=HeLa-S3 Jurkat=Jurkat HAEpiC=HAEpiC HBVSMC=HBVSMC HFF-Myc=HFF-Myc GM06990=GM06990 HMVEC-LLy=HMVEC-LLy H7-hESC=H7-hESC HBMEC=HBMEC HMVEC-LBl=HMVEC-LBl MCF-7=MCF-7 HRPEpiC=HRPEpiC A549=A549 PANC-1=PANC-1 HPdLF=HPdLF T-47D=T-47D SK-N-SH_RA=SK-N-SH_RA HConF=HConF HVMF=HVMF NB4=NB4 HepG2=HepG2 GM12878=GM12878 GM12865=GM12865 PrEC=PrEC HSMM=HSMM NHDF-Ad=NHDF-Ad HRE=HRE HPF=HPF HMF=HMF HGF=HGF HFF=HFF HAc=HAc HCM=HCM HCF=HCF HPAF=HPAF HMVEC-dBl-Ad=HMVEC-dBl-Ad NHDF-neo=NHDF-neo K562=K562 RPMI-7951=RPMI-7951 HCPEpiC=HCPEpiC HMEC=HMEC HRGEC=HRGEC NHLF=NHLF NHEK=NHEK SKMC=SKMC NH-A=NH-A HMVEC-dNeo=HMVEC-dNeo RPTEC=RPTEC WI-38=WI-38 AG04449=AG04449 AG04450=AG04450 GM04504=GM04504 GM04503=GM04503 HUVEC=HUVEC AG10803=AG10803 HCT-116=HCT-116 bone_marrow_MSC=bone_marrow_MSC NHBE_RA=NHBE_RA HEEpiC=HEEpiC HMVEC-dAd=HMVEC-dAd WERI-Rb-1=WERI-Rb-1 AG09319=AG09319 AG09309=AG09309 SAEC=SAEC HA-h=HA-h BE2_C=BE2_C HNPCEpiC=HNPCEpiC SK-N-MC=SK-N-MC Caco-2=Caco-2 HMVEC-dBl-Neo=HMVEC-dBl-Neo LNCaP=LNCaP HMVEC-dLy-Neo=HMVEC-dLy-Neo HSMMtube=HSMMtube BJ=BJ CD20_RO01778=CD20+_RO01778 Th1_Wb54553204=Th1_Wb54553204 M059J=M059J HA-sp=HA-sp HIPEpiC=HIPEpiC
+subGroup2 cellType Cell_Type A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AoAF=AoAF bone_marrow_MSC=bone_marrow_MSC BE2_C=BE2_C BJ=BJ CD20_RO01778=CD20+_RO01778 Caco-2=Caco-2 GM04503=GM04503 GM04504=GM04504 GM06990=GM06990 GM12865=GM12865 GM12878=GM12878 H7-hESC=H7-hESC HA-h=HA-h HA-sp=HA-sp HAEpiC=HAEpiC HAc=HAc HBMEC=HBMEC HBVSMC=HBVSMC HCF=HCF HCFaa=HCFaa HCM=HCM HCPEpiC=HCPEpiC HCT-116=HCT-116 HConF=HConF HEEpiC=HEEpiC HFF-Myc=HFF-Myc HFF=HFF HGF=HGF HIPEpiC=HIPEpiC HL-60=HL-60 HMEC=HMEC HMF=HMF HMVEC-LBl=HMVEC-LBl HMVEC-LLy=HMVEC-LLy HMVEC-dAd=HMVEC-dAd HMVEC-dBl-Ad=HMVEC-dBl-Ad HMVEC-dBl-Neo=HMVEC-dBl-Neo HMVEC-dLy-Ad=HMVEC-dLy-Ad HMVEC-dLy-Neo=HMVEC-dLy-Neo HMVEC-dNeo=HMVEC-dNeo HNPCEpiC=HNPCEpiC HPAF=HPAF HPF=HPF HPdLF=HPdLF HRCEpiC=HRCEpiC HRE=HRE HRGEC=HRGEC HRPEpiC=HRPEpiC HSMM=HSMM HSMMtube=HSMMtube HUVEC=HUVEC HVMF=HVMF HeLa-S3=HeLa-S3 HepG2=HepG2 Jurkat=Jurkat K562=K562 LHCN-M2=LHCN-M2 LNCaP=LNCaP M059J=M059J MCF-7=MCF-7 Monocytes_CD14_RO01746=Monocytes-CD14+_RO01746 NB4=NB4 NH-A=NH-A NHBE_RA=NHBE_RA NHDF-Ad=NHDF-Ad NHDF-neo=NHDF-neo NHEK=NHEK NHLF=NHLF NT2-D1=NT2-D1 PANC-1=PANC-1 PrEC=PrEC RPMI-7951=RPMI-7951 RPTEC=RPTEC SAEC=SAEC SK-N-MC=SK-N-MC SK-N-SH_RA=SK-N-SH_RA SKMC=SKMC T-47D=T-47D Th1=Th1 Th1_Wb54553204=Th1_Wb54553204 Th2=Th2 WERI-Rb-1=WERI-Rb-1 WI-38=WI-38
 subGroup3 treatment Treatment diffProtA_5d=diffProtA_5d diffProtA_14d=diffProtA_14d DIFF_4d=DIFF_4d n_a=n/a OHTAM_20nM_72hr=4OHTAM_20nM_72hr Estradiol_ctrl_0hr=Estradiol_ctrl_0hr Estradiol_100nM_1hr=Estradiol_100nM_1hr
-subGroup4 tissue Tissue kidney=kidney esophagus=esophagus cervix=cervix skin=skin lung=lung heart=heart colon=colon blood=blood prostate=prostate embryo=embryo pancreas=pancreas breast=breast bone_marrow=bone_marrow periodontum=periodontum muscle=muscle brain=brain blood_vessel=blood_vessel spinal_cord=spinal_cord placenta=placenta eye=eye liver=liver periodontium=periodontium testis=testis
+subGroup4 tissue Tissue blood=blood blood_vessel=blood_vessel bone_marrow=bone_marrow brain=brain breast=breast cervix=cervix colon=colon embryo=embryo esophagus=esophagus eye=eye heart=heart kidney=kidney liver=liver lung=lung muscle=muscle pancreas=pancreas periodontium=periodontium periodontium=periodontium placenta=placenta prostate=prostate skin=skin spinal_cord=spinal_cord testis=testis
 subGroup5 cancer Cancer cancer=cancer normal=normal unknown=unknown
 subGroup6 subtrackColor Similarity
-controlledVocabulary cellType=hgFixed.wgEncodeCell
-#subGroupMetaTables cellType=hgFixed.wgEncodeCell
+controlledVocabulary cellType=wgEncodeCell
+#subGroupMetaTables cellType=wgEncodeCell
 dimensions dimA=cellType dimB=tissue dimC=cancer
 filterComposite dimA dimB dimC
 sortOrder view=+ subtrackColor=+ cellType=+ tissue=+
@@ -55,7 +55,7 @@ priority 1.9
 	track wgEncodeRegDnaseUwK562Hotspot
 	parent wgEncodeRegDnaseHotspot on
 	shortLabel K562 Ht
-	longLabel K562 lymphoblast chronic myeloid leukemia (CML) cell line DNaseI Hotspots from ENCODE
+	longLabel K562 lymphoblast chronic myeloid leukemia cell line DNaseI Hotspots from ENCODE
 	subGroups view=b_Hot cellType=K562 treatment=n_a tissue=bone_marrow cancer=cancer
 	type bigBed 6 +
 	color 255,85,85
@@ -310,7 +310,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwBonemarrowmscHotspot
 	parent wgEncodeRegDnaseHotspot off
-	shortLabel bone_marrow_MSC Ht
+	shortLabel bonemarrow_MSC Ht
 	longLabel bone_marrow_MSC bone marrow fibroblastoid DNaseI Hotspots from ENCODE
 	subGroups view=b_Hot cellType=bone_marrow_MSC treatment=n_a tissue=bone_marrow cancer=normal
 	type bigBed 6 +
@@ -336,7 +336,7 @@ priority 1.9
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HGF Ht
 	longLabel HGF gingival fibroblast DNaseI Hotspots from ENCODE
-	subGroups view=b_Hot cellType=HGF treatment=n_a tissue=periodontum cancer=normal
+	subGroups view=b_Hot cellType=HGF treatment=n_a tissue=periodontium cancer=normal
 	type bigBed 6 +
 	color 204,255,85
 
@@ -462,7 +462,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwLhcnm2Diff4dHotspot
 	parent wgEncodeRegDnaseHotspot off
-	shortLabel LHCN-M2 diff 4d Ht
+	shortLabel LHCN-M2 diff4d Ht
 	longLabel LHCN-M2 skeletal myoblast (diff 4d) DNaseI Hotspots from ENCODE
 	subGroups view=b_Hot cellType=LHCN-M2 treatment=DIFF_4d tissue=muscle cancer=unknown
 	type bigBed 6 +
@@ -495,7 +495,7 @@ priority 1.9
 	track wgEncodeRegDnaseUwHmvecdbladHotspot
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HMVEC-dBl-Ad Ht
-	longLabel HMVEC-dBl-Ad dermal microvascular endothelial cell, blood DNaseI Hotspots from ENCODE
+	longLabel HMVEC-dBl-Ad dermal MV endothelial cell, blood DNaseI Hotspots from ENCODE
 	subGroups view=b_Hot cellType=HMVEC-dBl-Ad treatment=n_a tissue=blood_vessel cancer=normal
 	type bigBed 6 +
 	color 85,255,224
@@ -503,7 +503,7 @@ priority 1.9
 	track wgEncodeRegDnaseUwHmvecdlyneoHotspot
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HMVEC-dLy-Neo Ht
-	longLabel HMVEC-dLy-Neo dermal microvascular endothelial cell, neonate lymph DNaseI Hotspots from ENCODE
+	longLabel HMVEC-dLy-Neo dermal MV endo cell, neonate lymph DNaseI Hotspots from ENCODE
 	subGroups view=b_Hot cellType=HMVEC-dLy-Neo treatment=n_a tissue=blood_vessel cancer=normal
 	type bigBed 6 +
 	color 85,255,226
@@ -511,7 +511,7 @@ priority 1.9
 	track wgEncodeRegDnaseUwHmvecdblneoHotspot
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HMVEC-dBl-Neo Ht
-	longLabel HMVEC-dBl-Neo dermal microvascular endothelial cell, neonate blood DNaseI Hotspots from ENCODE
+	longLabel HMVEC-dBl-Neo dermal MV endo cell, neonate blood DNaseI Hotspots from ENCODE
 	subGroups view=b_Hot cellType=HMVEC-dBl-Neo treatment=n_a tissue=blood_vessel cancer=normal
 	type bigBed 6 +
 	color 85,255,229
@@ -535,7 +535,7 @@ priority 1.9
 	track wgEncodeRegDnaseUwHmvecdneoHotspot
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HMVEC-dNeo Ht
-	longLabel HMVEC-dNeo dermal microvascular endothelial cell, neonate DNaseI Hotspots from ENCODE
+	longLabel HMVEC-dNeo dermal microvascular endo cell, neonate DNaseI Hotspots from ENCODE
 	subGroups view=b_Hot cellType=HMVEC-dNeo treatment=n_a tissue=blood_vessel cancer=normal
 	type bigBed 6 +
 	color 85,255,244
@@ -686,7 +686,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwMonocytescd14ro01746Hotspot
 	parent wgEncodeRegDnaseHotspot off
-	shortLabel Monocytes-CD14+_RO01746 Ht
+	shortLabel Monocyte-CD14+ Ht
 	longLabel Monocytes-CD14+_RO01746 monocyte, CD14+ DNaseI Hotspots from ENCODE
 	subGroups view=b_Hot cellType=Monocytes_CD14_RO01746 treatment=n_a tissue=blood cancer=normal
 	type bigBed 6 +
@@ -710,7 +710,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwH7hescHotspot
 	parent wgEncodeRegDnaseHotspot on
-	shortLabel H7-hESC Ht
+	shortLabel H7-ES Ht
 	longLabel H7-hESC embryonic stem cell DNaseI Hotspots from ENCODE
 	subGroups view=b_Hot cellType=H7-hESC treatment=n_a tissue=embryo cancer=unknown
 	type bigBed 6 +
@@ -718,7 +718,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwH7hescDiffprota5dHotspot
 	parent wgEncodeRegDnaseHotspot off
-	shortLabel H7-hESC diff 5d Ht
+	shortLabel H7-ES diff 5d Ht
 	longLabel H7-hESC embryonic stem cell (diff 5d) DNaseI Hotspots from ENCODE
 	subGroups view=b_Hot cellType=H7-hESC treatment=diffProtA_5d tissue=embryo cancer=unknown
 	type bigBed 6 +
@@ -726,7 +726,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwH7hescDiffprota14dHotspot
 	parent wgEncodeRegDnaseHotspot off
-	shortLabel H7-hESC diff 14d Ht
+	shortLabel H7-ES diff 14d Ht
 	longLabel H7-hESC embryonic stem cell (diff 14d) DNaseI Hotspots from ENCODE
 	subGroups view=b_Hot cellType=H7-hESC treatment=diffProtA_14d tissue=embryo cancer=unknown
 	type bigBed 6 +
@@ -751,7 +751,7 @@ priority 1.9
 	track wgEncodeRegDnaseUwHmvecdlyadHotspot
 	parent wgEncodeRegDnaseHotspot off
 	shortLabel HMVEC-dLy-Ad Ht
-	longLabel HMVEC-dLy-Ad dermal microvascular endothelial cell, lymph DNaseI Hotspots from ENCODE
+	longLabel HMVEC-dLy-Ad dermal MV endothelial cell, lymph DNaseI Hotspots from ENCODE
 	subGroups view=b_Hot cellType=HMVEC-dLy-Ad treatment=n_a tissue=blood_vessel cancer=normal
 	type bigBed 6 +
 	color 133,85,255
@@ -782,7 +782,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwMcf7Estradiol100nm1hrHotspot
 	parent wgEncodeRegDnaseHotspot off
-	shortLabel MCF-7 estradi 1h Ht
+	shortLabel MCF-7 estr 1h Ht
 	longLabel MCF-7 mammary adenocarcinoma cell line (estradi 1h) DNaseI Hotspots from ENCODE
 	subGroups view=b_Hot cellType=MCF-7 treatment=Estradiol_100nM_1hr tissue=breast cancer=cancer
 	type bigBed 6 +
@@ -790,7 +790,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwMcf7Estradiolctrl0hrHotspot
 	parent wgEncodeRegDnaseHotspot off
-	shortLabel MCF-7 estradi 0h Ht
+	shortLabel MCF-7 estr 0h Ht
 	longLabel MCF-7 mammary adenocarcinoma cell line (estradi 0h) DNaseI Hotspots from ENCODE
 	subGroups view=b_Hot cellType=MCF-7 treatment=Estradiol_ctrl_0hr tissue=breast cancer=cancer
 	type bigBed 6 +
@@ -827,7 +827,7 @@ priority 1.9
 	track wgEncodeRegDnaseUwK562Peak
 	parent wgEncodeRegDnasePeak on
 	shortLabel K562 Pk
-	longLabel K562 lymphoblast chronic myeloid leukemia (CML) cell line DNaseI Peaks from ENCODE
+	longLabel K562 lymphoblast chronic myeloid leukemia cell line DNaseI Peaks from ENCODE
 	subGroups view=a_Peaks cellType=K562 treatment=n_a tissue=bone_marrow cancer=cancer
 	color 255,85,85
 
@@ -1050,7 +1050,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwBonemarrowmscPeak
 	parent wgEncodeRegDnasePeak off
-	shortLabel bone_marrow_MSC Pk
+	shortLabel bonemarrow_MSC Pk
 	longLabel bone_marrow_MSC bone marrow fibroblastoid DNaseI Peaks from ENCODE
 	subGroups view=a_Peaks cellType=bone_marrow_MSC treatment=n_a tissue=bone_marrow cancer=normal
 	color 228,255,85
@@ -1073,7 +1073,7 @@ priority 1.9
 	parent wgEncodeRegDnasePeak off
 	shortLabel HGF Pk
 	longLabel HGF gingival fibroblast DNaseI Peaks from ENCODE
-	subGroups view=a_Peaks cellType=HGF treatment=n_a tissue=periodontum cancer=normal
+	subGroups view=a_Peaks cellType=HGF treatment=n_a tissue=periodontium cancer=normal
 	color 204,255,85
 
 	track wgEncodeRegDnaseUwNhdfneoPeak
@@ -1183,7 +1183,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwLhcnm2Diff4dPeak
 	parent wgEncodeRegDnasePeak off
-	shortLabel LHCN-M2 diff 4d Pk
+	shortLabel LHCN-M2 diff4d Pk
 	longLabel LHCN-M2 skeletal myoblast (diff 4d) DNaseI Peaks from ENCODE
 	subGroups view=a_Peaks cellType=LHCN-M2 treatment=DIFF_4d tissue=muscle cancer=unknown
 	color 85,255,198
@@ -1212,21 +1212,21 @@ priority 1.9
 	track wgEncodeRegDnaseUwHmvecdbladPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HMVEC-dBl-Ad Pk
-	longLabel HMVEC-dBl-Ad dermal microvascular endothelial cell, blood DNaseI Peaks from ENCODE
+	longLabel HMVEC-dBl-Ad dermal MV endothelial cell, blood DNaseI Peaks from ENCODE
 	subGroups view=a_Peaks cellType=HMVEC-dBl-Ad treatment=n_a tissue=blood_vessel cancer=normal
 	color 85,255,224
 
 	track wgEncodeRegDnaseUwHmvecdlyneoPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HMVEC-dLy-Neo Pk
-	longLabel HMVEC-dLy-Neo dermal microvascular endothelial cell, neonate lymph DNaseI Peaks from ENCODE
+	longLabel HMVEC-dLy-Neo dermal MV endothelial cell, neonate lymph DNaseI Peaks from ENCODE
 	subGroups view=a_Peaks cellType=HMVEC-dLy-Neo treatment=n_a tissue=blood_vessel cancer=normal
 	color 85,255,226
 
 	track wgEncodeRegDnaseUwHmvecdblneoPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HMVEC-dBl-Neo Pk
-	longLabel HMVEC-dBl-Neo dermal microvascular endothelial cell, neonate blood DNaseI Peaks from ENCODE
+	longLabel HMVEC-dBl-Neo dermal MV endothelial cell, neonate blood DNaseI Peaks from ENCODE
 	subGroups view=a_Peaks cellType=HMVEC-dBl-Neo treatment=n_a tissue=blood_vessel cancer=normal
 	color 85,255,229
 
@@ -1247,7 +1247,7 @@ priority 1.9
 	track wgEncodeRegDnaseUwHmvecdneoPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HMVEC-dNeo Pk
-	longLabel HMVEC-dNeo dermal microvascular endothelial cell, neonate DNaseI Peaks from ENCODE
+	longLabel HMVEC-dNeo dermal MV endothelial cell, neonate DNaseI Peaks from ENCODE
 	subGroups view=a_Peaks cellType=HMVEC-dNeo treatment=n_a tissue=blood_vessel cancer=normal
 	color 85,255,244
 
@@ -1379,7 +1379,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwMonocytescd14ro01746Peak
 	parent wgEncodeRegDnasePeak off
-	shortLabel Monocytes-CD14+_RO01746 Pk
+	shortLabel Monocyte-CD14+ Pk
 	longLabel Monocytes-CD14+_RO01746 monocyte, CD14+ DNaseI Peaks from ENCODE
 	subGroups view=a_Peaks cellType=Monocytes_CD14_RO01746 treatment=n_a tissue=blood cancer=normal
 	color 85,135,255
@@ -1400,21 +1400,21 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwH7hescPeak
 	parent wgEncodeRegDnasePeak on
-	shortLabel H7-hESC Pk
+	shortLabel H7-ES Pk
 	longLabel H7-hESC embryonic stem cell DNaseI Peaks from ENCODE
 	subGroups view=a_Peaks cellType=H7-hESC treatment=n_a tissue=embryo cancer=unknown
 	color 85,93,255
 
 	track wgEncodeRegDnaseUwH7hescDiffprota5dPeak
 	parent wgEncodeRegDnasePeak off
-	shortLabel H7-hESC diff 5d Pk
+	shortLabel H7-ES diff 5d Pk
 	longLabel H7-hESC embryonic stem cell (diff 5d) DNaseI Peaks from ENCODE
 	subGroups view=a_Peaks cellType=H7-hESC treatment=diffProtA_5d tissue=embryo cancer=unknown
 	color 85,88,255
 
 	track wgEncodeRegDnaseUwH7hescDiffprota14dPeak
 	parent wgEncodeRegDnasePeak off
-	shortLabel H7-hESC diff 14d Pk
+	shortLabel H7-ES diff 14d Pk
 	longLabel H7-hESC embryonic stem cell (diff 14d) DNaseI Peaks from ENCODE
 	subGroups view=a_Peaks cellType=H7-hESC treatment=diffProtA_14d tissue=embryo cancer=unknown
 	color 89,85,255
@@ -1436,7 +1436,7 @@ priority 1.9
 	track wgEncodeRegDnaseUwHmvecdlyadPeak
 	parent wgEncodeRegDnasePeak off
 	shortLabel HMVEC-dLy-Ad Pk
-	longLabel HMVEC-dLy-Ad dermal microvascular endothelial cell, lymph DNaseI Peaks from ENCODE
+	longLabel HMVEC-dLy-Ad dermal MV endothelial cell, lymph DNaseI Peaks from ENCODE
 	subGroups view=a_Peaks cellType=HMVEC-dLy-Ad treatment=n_a tissue=blood_vessel cancer=normal
 	color 133,85,255
 
@@ -1463,14 +1463,14 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwMcf7Estradiol100nm1hrPeak
 	parent wgEncodeRegDnasePeak off
-	shortLabel MCF-7 estradi 1h Pk
+	shortLabel MCF-7 estr 1h Pk
 	longLabel MCF-7 mammary adenocarcinoma cell line (estradi 1h) DNaseI Peaks from ENCODE
 	subGroups view=a_Peaks cellType=MCF-7 treatment=Estradiol_100nM_1hr tissue=breast cancer=cancer
 	color 192,85,255
 
 	track wgEncodeRegDnaseUwMcf7Estradiolctrl0hrPeak
 	parent wgEncodeRegDnasePeak off
-	shortLabel MCF-7 estradi 0h Pk
+	shortLabel MCF-7 estr 0h Pk
 	longLabel MCF-7 mammary adenocarcinoma cell line (estradi 0h) DNaseI Peaks from ENCODE
 	subGroups view=a_Peaks cellType=MCF-7 treatment=Estradiol_ctrl_0hr tissue=breast cancer=cancer
 	color 192,85,255
@@ -1505,7 +1505,7 @@ priority 1.9
 	track wgEncodeRegDnaseUwK562Signal
 	parent wgEncodeRegDnaseSignal on
 	shortLabel K562 Sg
-	longLabel K562 lymphoblast chronic myeloid leukemia (CML) cell line DNaseI Signal from ENCODE
+	longLabel K562 lymphoblast chronic myeloid leukemia  cell line DNaseI Signal from ENCODE
 	subGroups view=c_Signal cellType=K562 treatment=n_a tissue=bone_marrow cancer=cancer
 	type bigWig 0 38914.2
 	color 255,85,85
@@ -1760,7 +1760,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwBonemarrowmscSignal
 	parent wgEncodeRegDnaseSignal off
-	shortLabel bone_marrow_MSC Sg
+	shortLabel bonemarrow_MSC Sg
 	longLabel bone_marrow_MSC bone marrow fibroblastoid DNaseI Signal from ENCODE
 	subGroups view=c_Signal cellType=bone_marrow_MSC treatment=n_a tissue=bone_marrow cancer=normal
 	type bigWig 0 3047.47
@@ -1786,7 +1786,7 @@ priority 1.9
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HGF Sg
 	longLabel HGF gingival fibroblast DNaseI Signal from ENCODE
-	subGroups view=c_Signal cellType=HGF treatment=n_a tissue=periodontum cancer=normal
+	subGroups view=c_Signal cellType=HGF treatment=n_a tissue=periodontium cancer=normal
 	type bigWig 0 3410.39
 	color 204,255,85
 
@@ -1912,7 +1912,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwLhcnm2Diff4dSignal
 	parent wgEncodeRegDnaseSignal off
-	shortLabel LHCN-M2 diff 4d Sg
+	shortLabel LHCN-M2 diff4d Sg
 	longLabel LHCN-M2 skeletal myoblast (diff 4d) DNaseI Signal from ENCODE
 	subGroups view=c_Signal cellType=LHCN-M2 treatment=DIFF_4d tissue=muscle cancer=unknown
 	type bigWig 0 44051.9
@@ -1945,7 +1945,7 @@ priority 1.9
 	track wgEncodeRegDnaseUwHmvecdbladSignal
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HMVEC-dBl-Ad Sg
-	longLabel HMVEC-dBl-Ad dermal microvascular endothelial cell, blood DNaseI Signal from ENCODE
+	longLabel HMVEC-dBl-Ad dermal MV endothelial cell, blood DNaseI Signal from ENCODE
 	subGroups view=c_Signal cellType=HMVEC-dBl-Ad treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 6571.28
 	color 85,255,224
@@ -1953,7 +1953,7 @@ priority 1.9
 	track wgEncodeRegDnaseUwHmvecdlyneoSignal
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HMVEC-dLy-Neo Sg
-	longLabel HMVEC-dLy-Neo dermal microvascular endothelial cell, neonate lymph DNaseI Signal from ENCODE
+	longLabel HMVEC-dLy-Neo dermal MV end cell, neonate lymph DNaseI Signal from ENCODE
 	subGroups view=c_Signal cellType=HMVEC-dLy-Neo treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 9237.62
 	color 85,255,226
@@ -1961,7 +1961,7 @@ priority 1.9
 	track wgEncodeRegDnaseUwHmvecdblneoSignal
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HMVEC-dBl-Neo Sg
-	longLabel HMVEC-dBl-Neo dermal microvascular endothelial cell, neonate blood DNaseI Signal from ENCODE
+	longLabel HMVEC-dBl-Neo dermal MV endo cell, neonate blood DNaseI Signal from ENCODE
 	subGroups view=c_Signal cellType=HMVEC-dBl-Neo treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 6275.08
 	color 85,255,229
@@ -1985,7 +1985,7 @@ priority 1.9
 	track wgEncodeRegDnaseUwHmvecdneoSignal
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HMVEC-dNeo Sg
-	longLabel HMVEC-dNeo dermal microvascular endothelial cell, neonate DNaseI Signal from ENCODE
+	longLabel HMVEC-dNeo dermal MV endothelial cell, neonate DNaseI Signal from ENCODE
 	subGroups view=c_Signal cellType=HMVEC-dNeo treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 16586
 	color 85,255,244
@@ -2136,7 +2136,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwMonocytescd14ro01746Signal
 	parent wgEncodeRegDnaseSignal off
-	shortLabel Monocytes-CD14+_RO01746 Sg
+	shortLabel Monocyte-CD14+ Sg
 	longLabel Monocytes-CD14+_RO01746 monocyte, CD14+ DNaseI Signal from ENCODE
 	subGroups view=c_Signal cellType=Monocytes_CD14_RO01746 treatment=n_a tissue=blood cancer=normal
 	type bigWig 0 853.111
@@ -2160,7 +2160,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwH7hescSignal
 	parent wgEncodeRegDnaseSignal on
-	shortLabel H7-hESC Sg
+	shortLabel H7-ES Sg
 	longLabel H7-hESC embryonic stem cell DNaseI Signal from ENCODE
 	subGroups view=c_Signal cellType=H7-hESC treatment=n_a tissue=embryo cancer=unknown
 	type bigWig 0 13035.4
@@ -2168,7 +2168,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwH7hescDiffprota5dSignal
 	parent wgEncodeRegDnaseSignal off
-	shortLabel H7-hESC diff 5d Sg
+	shortLabel H7-ES diff 5d Sg
 	longLabel H7-hESC embryonic stem cell (diff 5d) DNaseI Signal from ENCODE
 	subGroups view=c_Signal cellType=H7-hESC treatment=diffProtA_5d tissue=embryo cancer=unknown
 	type bigWig 0 5836.88
@@ -2176,7 +2176,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwH7hescDiffprota14dSignal
 	parent wgEncodeRegDnaseSignal off
-	shortLabel H7-hESC diff 14d Sg
+	shortLabel H7-ES diff 14d Sg
 	longLabel H7-hESC embryonic stem cell (diff 14d) DNaseI Signal from ENCODE
 	subGroups view=c_Signal cellType=H7-hESC treatment=diffProtA_14d tissue=embryo cancer=unknown
 	type bigWig 0 21393.7
@@ -2201,7 +2201,7 @@ priority 1.9
 	track wgEncodeRegDnaseUwHmvecdlyadSignal
 	parent wgEncodeRegDnaseSignal off
 	shortLabel HMVEC-dLy-Ad Sg
-	longLabel HMVEC-dLy-Ad dermal microvascular endothelial cell, lymph DNaseI Signal from ENCODE
+	longLabel HMVEC-dLy-Ad dermal MV endothelial cell, lymph DNaseI Signal from ENCODE
 	subGroups view=c_Signal cellType=HMVEC-dLy-Ad treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 39771.9
 	color 133,85,255
@@ -2232,7 +2232,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwMcf7Estradiol100nm1hrSignal
 	parent wgEncodeRegDnaseSignal off
-	shortLabel MCF-7 estradi 1h Sg
+	shortLabel MCF-7 estr 1h Sg
 	longLabel MCF-7 mammary adenocarcinoma cell line (estradi 1h) DNaseI Signal from ENCODE
 	subGroups view=c_Signal cellType=MCF-7 treatment=Estradiol_100nM_1hr tissue=breast cancer=cancer
 	type bigWig 0 24234.6
@@ -2240,7 +2240,7 @@ priority 1.9
 
 	track wgEncodeRegDnaseUwMcf7Estradiolctrl0hrSignal
 	parent wgEncodeRegDnaseSignal off
-	shortLabel MCF-7 estradi 0h Sg
+	shortLabel MCF-7 estr 0h Sg
 	longLabel MCF-7 mammary adenocarcinoma cell line (estradi 0h) DNaseI Signal from ENCODE
 	subGroups view=c_Signal cellType=MCF-7 treatment=Estradiol_ctrl_0hr tissue=breast cancer=cancer
 	type bigWig 0 23308.2
@@ -2279,19 +2279,19 @@ html wgEncodeRegDnaseSignal
 dimensions dimA=tissue dimB=cancer
 filterComposite dimA dimB
 group regulation
-subGroup1 cellType Cell_Type Monocytes_CD14_RO01746=Monocytes-CD14+_RO01746 NT2-D1=NT2-D1 LHCN-M2=LHCN-M2 HRCEpiC=HRCEpiC AoAF=AoAF Th2=Th2 Th1=Th1 HL-60=HL-60 HCFaa=HCFaa HMVEC-dLy-Ad=HMVEC-dLy-Ad HeLa-S3=HeLa-S3 Jurkat=Jurkat HAEpiC=HAEpiC HBVSMC=HBVSMC HFF-Myc=HFF-Myc GM06990=GM06990 HMVEC-LLy=HMVEC-LLy H7-hESC=H7-hESC HBMEC=HBMEC HMVEC-LBl=HMVEC-LBl MCF-7=MCF-7 HRPEpiC=HRPEpiC A549=A549 PANC-1=PANC-1 HPdLF=HPdLF T-47D=T-47D SK-N-SH_RA=SK-N-SH_RA HConF=HConF HVMF=HVMF NB4=NB4 HepG2=HepG2 GM12878=GM12878 GM12865=GM12865 PrEC=PrEC HSMM=HSMM NHDF-Ad=NHDF-Ad HRE=HRE HPF=HPF HMF=HMF HGF=HGF HFF=HFF HAc=HAc HCM=HCM HCF=HCF HPAF=HPAF HMVEC-dBl-Ad=HMVEC-dBl-Ad NHDF-neo=NHDF-neo K562=K562 RPMI-7951=RPMI-7951 HCPEpiC=HCPEpiC HMEC=HMEC HRGEC=HRGEC NHLF=NHLF NHEK=NHEK SKMC=SKMC NH-A=NH-A HMVEC-dNeo=HMVEC-dNeo RPTEC=RPTEC WI-38=WI-38 AG04449=AG04449 AG04450=AG04450 GM04504=GM04504 GM04503=GM04503 HUVEC=HUVEC AG10803=AG10803 HCT-116=HCT-116 bone_marrow_MSC=bone_marrow_MSC NHBE_RA=NHBE_RA HEEpiC=HEEpiC HMVEC-dAd=HMVEC-dAd WERI-Rb-1=WERI-Rb-1 AG09319=AG09319 AG09309=AG09309 SAEC=SAEC HA-h=HA-h BE2_C=BE2_C HNPCEpiC=HNPCEpiC SK-N-MC=SK-N-MC Caco-2=Caco-2 HMVEC-dBl-Neo=HMVEC-dBl-Neo LNCaP=LNCaP HMVEC-dLy-Neo=HMVEC-dLy-Neo HSMMtube=HSMMtube BJ=BJ CD20_RO01778=CD20+_RO01778 Th1_Wb54553204=Th1_Wb54553204 M059J=M059J HA-sp=HA-sp HIPEpiC=HIPEpiC
+subGroup1 cellType Cell_Type A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AoAF=AoAF bone_marrow_MSC=bone_marrow_MSC BE2_C=BE2_C BJ=BJ CD20_RO01778=CD20+_RO01778 Caco-2=Caco-2 GM04503=GM04503 GM04504=GM04504 GM06990=GM06990 GM12865=GM12865 GM12878=GM12878 H7-hESC=H7-hESC HA-h=HA-h HA-sp=HA-sp HAEpiC=HAEpiC HAc=HAc HBMEC=HBMEC HBVSMC=HBVSMC HCF=HCF HCFaa=HCFaa HCM=HCM HCPEpiC=HCPEpiC HCT-116=HCT-116 HConF=HConF HEEpiC=HEEpiC HFF-Myc=HFF-Myc HFF=HFF HGF=HGF HIPEpiC=HIPEpiC HL-60=HL-60 HMEC=HMEC HMF=HMF HMVEC-LBl=HMVEC-LBl HMVEC-LLy=HMVEC-LLy HMVEC-dAd=HMVEC-dAd HMVEC-dBl-Ad=HMVEC-dBl-Ad HMVEC-dBl-Neo=HMVEC-dBl-Neo HMVEC-dLy-Ad=HMVEC-dLy-Ad HMVEC-dLy-Neo=HMVEC-dLy-Neo HMVEC-dNeo=HMVEC-dNeo HNPCEpiC=HNPCEpiC HPAF=HPAF HPF=HPF HPdLF=HPdLF HRCEpiC=HRCEpiC HRE=HRE HRGEC=HRGEC HRPEpiC=HRPEpiC HSMM=HSMM HSMMtube=HSMMtube HUVEC=HUVEC HVMF=HVMF HeLa-S3=HeLa-S3 HepG2=HepG2 Jurkat=Jurkat K562=K562 LHCN-M2=LHCN-M2 LNCaP=LNCaP M059J=M059J MCF-7=MCF-7 Monocytes_CD14_RO01746=Monocytes-CD14+_RO01746 NB4=NB4 NH-A=NH-A NHBE_RA=NHBE_RA NHDF-Ad=NHDF-Ad NHDF-neo=NHDF-neo NHEK=NHEK NHLF=NHLF NT2-D1=NT2-D1 PANC-1=PANC-1 PrEC=PrEC RPMI-7951=RPMI-7951 RPTEC=RPTEC SAEC=SAEC SK-N-MC=SK-N-MC SK-N-SH_RA=SK-N-SH_RA SKMC=SKMC T-47D=T-47D Th1=Th1 Th1_Wb54553204=Th1_Wb54553204 Th2=Th2 WERI-Rb-1=WERI-Rb-1 WI-38=WI-38
 subGroup2 treatment Treatment diffProtA_5d=diffProtA_5d diffProtA_14d=diffProtA_14d DIFF_4d=DIFF_4d n_a=n/a 4OHTAM_20nM_72hr=4OHTAM_20nM_72hr Estradiol_ctrl_0hr=Estradiol_ctrl_0hr Estradiol_100nM_1hr=Estradiol_100nM_1hr
-subGroup3 tissue Tissue kidney=kidney esophagus=esophagus cervix=cervix skin=skin lung=lung heart=heart colon=colon blood=blood prostate=prostate embryo=embryo pancreas=pancreas breast=breast bone_marrow=bone_marrow periodontum=periodontum muscle=muscle brain=brain blood_vessel=blood_vessel spinal_cord=spinal_cord placenta=placenta eye=eye liver=liver periodontium=periodontium testis=testis
+subGroup3 tissue Tissue blood=blood blood_vessel=blood_vessel bone_marrow=bone_marrow brain=brain breast=breast cervix=cervix colon=colon embryo=embryo esophagus=esophagus eye=eye heart=heart kidney=kidney liver=liver lung=lung muscle=muscle pancreas=pancreas periodontium=periodontium periodontium=periodontium placenta=placenta prostate=prostate skin=skin spinal_cord=spinal_cord testis=testis
 subGroup4 cancer Cancer cancer=cancer normal=normal unknown=unknown
 subGroup5 subtrackColor Similarity
-controlledVocabulary cellType=hgFixed.wgEncodeCell
-#subGroupMetaTables cellType=hgFixed.wgEncodeCell
+controlledVocabulary cellType=wgEncodeCell
+#subGroupMetaTables cellType=wgEncodeCell
 sortOrder subtrackColor=+ cellType=+ tissue=+
 
 	track wgEncodeRegDnaseUwK562Wig
 	parent wgEncodeRegDnaseWig on
 	shortLabel K562 Sg
-	longLabel K562 lymphoblast chronic myeloid leukemia (CML) cell line DNaseI Signal from ENCODE
+	longLabel K562 lymphoblast chronic myeloid leukemia cell line DNaseI Signal from ENCODE
 	subGroups cellType=K562 treatment=n_a tissue=bone_marrow cancer=cancer
 	type bigWig 0 38914.2
 	color 255,85,85
@@ -2610,7 +2610,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 
 	track wgEncodeRegDnaseUwBonemarrowmscWig
 	parent wgEncodeRegDnaseWig off
-	shortLabel bone_marrow_MSC Sg
+	shortLabel bonemarrow_MSC Sg
 	longLabel bone_marrow_MSC bone marrow fibroblastoid DNaseI Signal from ENCODE
 	subGroups cellType=bone_marrow_MSC treatment=n_a tissue=bone_marrow cancer=normal
 	type bigWig 0 3047.47
@@ -2642,7 +2642,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	parent wgEncodeRegDnaseWig off
 	shortLabel HGF Sg
 	longLabel HGF gingival fibroblast DNaseI Signal from ENCODE
-	subGroups cellType=HGF treatment=n_a tissue=periodontum cancer=normal
+	subGroups cellType=HGF treatment=n_a tissue=periodontium cancer=normal
 	type bigWig 0 3410.39
 	color 204,255,85
 	priority 1.29794
@@ -2800,7 +2800,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 
 	track wgEncodeRegDnaseUwLhcnm2Diff4dWig
 	parent wgEncodeRegDnaseWig off
-	shortLabel LHCN-M2 diff 4d Sg
+	shortLabel LHCN-M2 diff4d Sg
 	longLabel LHCN-M2 skeletal myoblast (diff 4d) DNaseI Signal from ENCODE
 	subGroups cellType=LHCN-M2 treatment=DIFF_4d tissue=muscle cancer=unknown
 	type bigWig 0 44051.9
@@ -2841,7 +2841,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	track wgEncodeRegDnaseUwHmvecdbladWig
 	parent wgEncodeRegDnaseWig off
 	shortLabel HMVEC-dBl-Ad Sg
-	longLabel HMVEC-dBl-Ad dermal microvascular endothelial cell, blood DNaseI Signal from ENCODE
+	longLabel HMVEC-dBl-Ad dermal MV endothelial cell, blood DNaseI Signal from ENCODE
 	subGroups cellType=HMVEC-dBl-Ad treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 6571.28
 	color 85,255,224
@@ -2851,7 +2851,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	track wgEncodeRegDnaseUwHmvecdlyneoWig
 	parent wgEncodeRegDnaseWig off
 	shortLabel HMVEC-dLy-Neo Sg
-	longLabel HMVEC-dLy-Neo dermal microvascular endothelial cell, neonate lymph DNaseI Signal from ENCODE
+	longLabel HMVEC-dLy-Neo dermal MV endo cell, neonate lymph DNaseI Signal from ENCODE
 	subGroups cellType=HMVEC-dLy-Neo treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 9237.62
 	color 85,255,226
@@ -2861,7 +2861,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	track wgEncodeRegDnaseUwHmvecdblneoWig
 	parent wgEncodeRegDnaseWig off
 	shortLabel HMVEC-dBl-Neo Sg
-	longLabel HMVEC-dBl-Neo dermal microvascular endothelial cell, neonate blood DNaseI Signal from ENCODE
+        longLabel HMVEC-dBl-Neo dermal MV endo cell, neonate blood DNaseI Signal from ENCODE
 	subGroups cellType=HMVEC-dBl-Neo treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 6275.08
 	color 85,255,229
@@ -2891,7 +2891,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	track wgEncodeRegDnaseUwHmvecdneoWig
 	parent wgEncodeRegDnaseWig off
 	shortLabel HMVEC-dNeo Sg
-	longLabel HMVEC-dNeo dermal microvascular endothelial cell, neonate DNaseI Signal from ENCODE
+	longLabel HMVEC-dNeo dermal MV endothelial cell, neonate DNaseI Signal from ENCODE
 	subGroups cellType=HMVEC-dNeo treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 16586
 	color 85,255,244
@@ -3080,7 +3080,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 
 	track wgEncodeRegDnaseUwMonocytescd14ro01746Wig
 	parent wgEncodeRegDnaseWig off
-	shortLabel Monocytes-CD14+_RO01746 Sg
+	shortLabel Monocyte-CD14+ Sg
 	longLabel Monocytes-CD14+_RO01746 monocyte, CD14+ DNaseI Signal from ENCODE
 	subGroups cellType=Monocytes_CD14_RO01746 treatment=n_a tissue=blood cancer=normal
 	type bigWig 0 853.111
@@ -3110,7 +3110,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 
 	track wgEncodeRegDnaseUwH7hescWig
 	parent wgEncodeRegDnaseWig on
-	shortLabel H7-hESC Sg
+	shortLabel H7-ES Sg
 	longLabel H7-hESC embryonic stem cell DNaseI Signal from ENCODE
 	subGroups cellType=H7-hESC treatment=n_a tissue=embryo cancer=unknown
 	type bigWig 0 13035.4
@@ -3120,7 +3120,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 
 	track wgEncodeRegDnaseUwH7hescDiffprota5dWig
 	parent wgEncodeRegDnaseWig off
-	shortLabel H7-hESC diff 5d Sg
+	shortLabel H7-ES diff 5d Sg
 	longLabel H7-hESC embryonic stem cell (diff 5d) DNaseI Signal from ENCODE
 	subGroups cellType=H7-hESC treatment=diffProtA_5d tissue=embryo cancer=unknown
 	type bigWig 0 5836.88
@@ -3130,7 +3130,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 
 	track wgEncodeRegDnaseUwH7hescDiffprota14dWig
 	parent wgEncodeRegDnaseWig off
-	shortLabel H7-hESC diff 14d Sg
+	shortLabel H7-ES diff 14d Sg
 	longLabel H7-hESC embryonic stem cell (diff 14d) DNaseI Signal from ENCODE
 	subGroups cellType=H7-hESC treatment=diffProtA_14d tissue=embryo cancer=unknown
 	type bigWig 0 21393.7
@@ -3161,7 +3161,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 	track wgEncodeRegDnaseUwHmvecdlyadWig
 	parent wgEncodeRegDnaseWig off
 	shortLabel HMVEC-dLy-Ad Sg
-	longLabel HMVEC-dLy-Ad dermal microvascular endothelial cell, lymph DNaseI Signal from ENCODE
+	longLabel HMVEC-dLy-Ad dermal MV endothelial cell, lymph DNaseI Signal from ENCODE
 	subGroups cellType=HMVEC-dLy-Ad treatment=n_a tissue=blood_vessel cancer=normal
 	type bigWig 0 39771.9
 	color 133,85,255
@@ -3200,7 +3200,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 
 	track wgEncodeRegDnaseUwMcf7Estradiol100nm1hrWig
 	parent wgEncodeRegDnaseWig off
-	shortLabel MCF-7 estradi 1h Sg
+	shortLabel MCF-7 estr 1h Sg
 	longLabel MCF-7 mammary adenocarcinoma cell line (estradi 1h) DNaseI Signal from ENCODE
 	subGroups cellType=MCF-7 treatment=Estradiol_100nM_1hr tissue=breast cancer=cancer
 	type bigWig 0 24234.6
@@ -3210,7 +3210,7 @@ sortOrder subtrackColor=+ cellType=+ tissue=+
 
 	track wgEncodeRegDnaseUwMcf7Estradiolctrl0hrWig
 	parent wgEncodeRegDnaseWig off
-	shortLabel MCF-7 estradi 0h Sg
+	shortLabel MCF-7 estr 0h Sg
 	longLabel MCF-7 mammary adenocarcinoma cell line (estradi 0h) DNaseI Signal from ENCODE
 	subGroups cellType=MCF-7 treatment=Estradiol_ctrl_0hr tissue=breast cancer=cancer
 	type bigWig 0 23308.2

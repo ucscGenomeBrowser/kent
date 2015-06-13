@@ -1495,11 +1495,11 @@ cd $dir
 
 # Load blastTabs
 cd $dir/hgNearBlastp
-hgLoadBlastTab $xdb $blastTab run.$xdb.$tempDb/out/*.tab
-hgLoadBlastTab $ratDb $blastTab run.$ratDb.$tempDb/out/*.tab 
-hgLoadBlastTab $flyDb $blastTab run.$flyDb.$tempDb/recipBest.tab
-hgLoadBlastTab $wormDb $blastTab run.$wormDb.$tempDb/recipBest.tab
-hgLoadBlastTab $yeastDb $blastTab run.$yeastDb.$tempDb/recipBest.tab
+hgLoadBlastTab -maxPer=1 $xdb $blastTab run.$xdb.$tempDb/out/*.tab
+hgLoadBlastTab -maxPer=1 $ratDb $blastTab run.$ratDb.$tempDb/out/*.tab 
+hgLoadBlastTab -maxPer=1 $flyDb $blastTab run.$flyDb.$tempDb/recipBest.tab
+hgLoadBlastTab -maxPer=1 $wormDb $blastTab run.$wormDb.$tempDb/recipBest.tab
+hgLoadBlastTab -maxPer=1 $yeastDb $blastTab run.$yeastDb.$tempDb/recipBest.tab
 
 # Do synteny on mouse/human/rat
 synBlastp.csh $xdb $db
@@ -1509,10 +1509,10 @@ synBlastp.csh $xdb $db
 # new number of unique target values 22043
 
 synBlastp.csh $ratDb $db rgdGene2 knownGene
-# old number of unique query values: 11266
-# old number of unique target values 11108
-# new number of unique query values: 8396
-# new number of unique target values 8529
+#old number of unique query values: 11266
+#old number of unique target values 10803
+#new number of unique query values: 8385
+#new number of unique target values 8294
 
 # Clean up
 rm -r run.*/out

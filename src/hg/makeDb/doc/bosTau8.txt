@@ -401,7 +401,7 @@ bosTau8.upstreamGeneTbl = refGene
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
-    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad -verbose=10 bosTau8
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad bosTau8
     # logFile: var/dbload/hgwdev/logs/2014.10.14-09:00:05.bosTau8.dbload.log
 
 

@@ -63,8 +63,11 @@ static char *limitText(char *text)
 /* read text string and limit to maxRegions actual data lines */
 {
 struct dyString *limitedText = dyStringNew(0);
-/* yes, opening with FALSE so as not to destroy the original string */
-struct lineFile *lf = lineFileOnString("limitText", FALSE, text);
+/* Even if using FALSE for zTerm, lineFile still does a memmove when it hits the end
+ * and thus clobbers the string, so call lineFileOnString on a copy: */
+char copy[strlen(text)+1];
+safecpy(copy, sizeof(copy), text);
+struct lineFile *lf = lineFileOnString("limitText", FALSE, copy);
 char *lineStart = NULL;
 int lineLength = 0;
 int legitimateLineCount = 0;
@@ -116,7 +119,6 @@ if (userRegionFile != NULL && userRegionFile[0] != 0)
 char *lineLimitText = limitText(idText);
 if ( (strlen(lineLimitText) > 0) && (strlen(lineLimitText) != strlen(idText)) )
     {
-    freeMem(idText);
     idText = lineLimitText;
     cartSetString(cart, hgtaEnteredUserRegions, lineLimitText);
     }

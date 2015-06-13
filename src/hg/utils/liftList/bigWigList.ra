@@ -1,0 +1,113 @@
+
+track wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigPooled
+type bigWig 0 65535
+
+track wgEncodeRegTxnCaltechRnaSeqH1hescR2x75Il200SigPooled
+type bigWig 0 65535
+
+track wgEncodeRegTxnCaltechRnaSeqHelas3R2x75Il200SigPooled
+type bigWig 0 65535
+
+track wgEncodeRegTxnCaltechRnaSeqHepg2R2x75Il200SigPooled
+type bigWig 0 65535
+
+track wgEncodeRegTxnCaltechRnaSeqHsmmR2x75Il200SigPooled
+type bigWig 0 65535
+
+track wgEncodeRegTxnCaltechRnaSeqHuvecR2x75Il200SigPooled
+type bigWig 0 65535
+
+track wgEncodeRegTxnCaltechRnaSeqK562R2x75Il200SigPooled
+type bigWig 0 65535
+
+track wgEncodeRegTxnCaltechRnaSeqNhekR2x75Il200SigPooled
+type bigWig 0 65535
+
+track wgEncodeRegTxnCaltechRnaSeqNhlfR2x75Il200SigPooled
+type bigWig 0 65535
+
+track wgEncodeRegMarkH3k4me1H1hesc
+table wgEncodeBroadHistoneH1hescH3k4me1StdSig
+type bigWig 0 8355
+
+track wgEncodeRegMarkH3k4me1Hsmm
+table wgEncodeBroadHistoneHsmmH3k4me1StdSig
+type bigWig 0 6265
+
+track wgEncodeRegMarkH3k4me1Huvec
+table wgEncodeBroadHistoneHuvecH3k4me1StdSig
+type bigWig 0 4666
+
+track wgEncodeRegMarkH3k4me1K562
+table wgEncodeBroadHistoneK562H3k4me1StdSig
+type bigWig 0 5716
+
+track wgEncodeRegMarkH3k4me1Nhek
+table wgEncodeBroadHistoneNhekH3k4me1StdSig
+type bigWig 0 2669
+
+track wgEncodeRegMarkH3k4me1Nhlf
+table wgEncodeBroadHistoneNhlfH3k4me1StdSig
+type bigWig 0 6866
+
+track wgEncodeRegMarkH3k4me3H1hesc
+table wgEncodeBroadHistoneH1hescH3k4me3StdSig
+type bigWig 0 6957
+
+track wgEncodeRegMarkH3k4me3Hsmm
+table wgEncodeBroadHistoneHsmmH3k4me3StdSig
+type bigWig 0 25995
+
+track wgEncodeRegMarkH3k4me3Huvec
+table wgEncodeBroadHistoneHuvecH3k4me3StdSig
+type bigWig 0 7852
+
+track wgEncodeRegMarkH3k4me3K562
+table wgEncodeBroadHistoneK562H3k4me3StdSig
+type bigWig 0 9918
+
+track wgEncodeRegMarkH3k4me3Nhek
+table wgEncodeBroadHistoneNhekH3k4me3StdSig
+type bigWig 0 8230
+
+track wgEncodeRegMarkH3k4me3Nhlf
+table wgEncodeBroadHistoneNhlfH3k4me3StdSig
+type bigWig 0 19229
+
+track wgEncodeRegMarkH3k27acGm12878
+table wgEncodeBroadHistoneGm12878H3k27acStdSig
+type bigWig 0 223899
+
+track wgEncodeRegMarkH3k27acH1hesc
+table wgEncodeBroadHistoneH1hescH3k27acStdSig
+type bigWig 0 14898
+
+track wgEncodeRegMarkH3k27acHsmm
+table wgEncodeBroadHistoneHsmmH3k27acStdSig
+type bigWig 0 5448
+
+track wgEncodeRegMarkH3k27acHuvec
+table wgEncodeBroadHistoneHuvecH3k27acStdSig
+type bigWig 0 3721
+
+track wgEncodeRegMarkH3k27acK562
+table wgEncodeBroadHistoneK562H3k27acStdSig
+type bigWig 0 6249
+
+track wgEncodeRegMarkH3k27acNhek
+table wgEncodeBroadHistoneNhekH3k27acStdSig
+type bigWig 0 23439
+
+track wgEncodeRegMarkH3k27acNhlf
+table wgEncodeBroadHistoneNhlfH3k27acStdSig
+
+#These tracks are not in the same folder
+track wgEncodeRegMarkH3k4me1
+type bigWig 0 10000
+
+track wgEncodeRegMarkH3k4me3
+type bigWig 0 10000
+
+track wgEncodeRegMarkH3k27ac
+type bigWig 0 10000
+

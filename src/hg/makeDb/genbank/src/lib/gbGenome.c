@@ -120,6 +120,7 @@ static char *eriEurNames[] = {"Erinaceus europaeus", NULL};
 static char *gadMorNames[] = {"Gadus morhua", NULL};
 static char *latChaNames[] = {"Latimeria chalumnae", NULL};
 static char *geoForNames[] = {"Geospiza fortis", NULL};
+static char *manPenNames[] = {"Manis javanica", NULL};
 static char *melUndNames[] = {"Melopsittacus undulatus", NULL};
 static char *micMurNames[] = {"Microcebus murinus", NULL};
 static char *musFurNames[] = {"Mustela putorius furo", "Mustela putorius", NULL};
@@ -235,6 +236,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"gadMor", gadMorNames},
     {"latCha", latChaNames},
     {"geoFor", geoForNames},
+    {"manPen", manPenNames},
     {"melUnd", melUndNames},
     {"micMur", micMurNames},
     {"musFur", musFurNames},
