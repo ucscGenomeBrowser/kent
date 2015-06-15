@@ -19,7 +19,7 @@
 	<li class="first"><a href="../cgi-bin/hgBlat?command=start">Blat</a></li>
 	<li><a href="../cgi-bin/hgTables">Table Browser</a></li>
 	<li><a href="../cgi-bin/hgVai">Variant Annotation Integrator</a></li>
-        <!-- DATA_INTEGRATOR -->
+	<li><a href="../cgi-bin/hgIntegrator">Data Integrator</a></li>
 	<li><a href="../cgi-bin/hgNear">Gene Sorter</a></li>
 	<li><a href="../cgi-bin/hgGenome">Genome Graphs</a></li>
 	<li><a href="../cgi-bin/hgPcr">In-Silico PCR</a></li>

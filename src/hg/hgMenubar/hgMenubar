@@ -1,0 +1,104 @@
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+# This CGI is called by static HTML pages via Apache #include directives to
+# create a menu bar.  The contents of the menubar are stored in
+# /inc/globalNavBar.inc on the webserver, but internal links need to be
+# adjusted for the location (directory depth) of the including static page.
+#
+# The script assumes certain things about the directory structure, and
+# makes use of the DOCUMENT_URI and SCRIPT_NAME CGI environment variables.
+# SCRIPT_NAME is presumed to end in cgi-bin/rewrite.cgi.  globalNavBar.inc
+# is presumed to exist at "../inc/globalNavBar.inc" relative to the
+# location of this script.
+
+sub min ($$)
+{
+  my $a = shift;
+  my $b = shift;
+  return $a > $b ? $b : $a;
+}
+
+# findRelPath ()
+# Find the relative path from one directory location to another.
+# Assumes these paths end in a / and are absolute URL locations
+# beginning from the root (e.g /goldenPath/help/trackDb/ - not help/trackDb/).
+sub findRelPath ($$)
+{
+  my $srcURI = shift;
+  my $destURI = shift;
+  my $pathString = "";
+  # find relative path from the location in $srcURI to the base directory
+  # in $destURI
+
+  # strip off the shared initial component (for mirrors installed below
+  # DOCUMENT_ROOT) - fail if it's not all shared
+  my ($i, $j);
+  my @destDirs = split /\//, $destURI;
+  my @srcDirs = split /\//, $srcURI;
+
+if (!defined $destDirs[0])
+  { $destDirs[0]  = ""; }
+if (!defined $srcDirs[0])
+  { $srcDirs[0] = ""; }
+
+  for ($i=0; $i < min(@destDirs,@srcDirs); $i++)
+  {
+    last if ($srcDirs[$i] ne $destDirs[$i]);
+  }
+
+  for ($j=$i; $j < @srcDirs; $j++)
+  {
+    $pathString .= "../"
+  }
+
+  if ($pathString eq "")
+    { $pathString = "./"; }
+
+  for ($j=$i; $j < @destDirs; $j++)
+  {
+    $pathString .= $destDirs[$j] . "/";
+  }
+
+  return $pathString;
+}
+
+
+
+# Start of main:
+#
+print "Content-type: text/html\n\n";
+
+my $docRoot = $ENV{"DOCUMENT_ROOT"};
+my $callingURL = $ENV{"DOCUMENT_URI"};
+my $rootDir = $ENV{"SCRIPT_NAME"};
+
+if ($callingURL eq "")
+{
+  # Being called directly instead of via an include
+  die "Error: bad invocation of hgMenubar\n";
+}
+
+# Strip out any URI chunks like "//+", which resolve to "/" anyway
+$callingURL =~ s/(\/\/+)/\//g;
+$rootDir =~ s/(\/\/+)/\//g;
+
+# Strip off invoking filenames to just leave the relevant directories
+$callingURL =~ s/[^\/]*$//;
+$rootDir =~ s/cgi-bin\/hgMenubar$//;
+
+my $relPath = findRelPath ($callingURL, $rootDir);
+
+open (MENUFILE, "${docRoot}${rootDir}inc/globalNavBar.inc") or
+ die "Cannot locate globalNavBar.inc at ${docRoot}${rootDir}inc/";
+
+while (<MENUFILE>)
+{
+  # Replace the default ../ relative paths (for CGIs) with
+  # paths appropriate for the source file.
+  s/href\s*=\s*"\.\.\//href="${relPath}/;
+  print;
+}
+close MENUFILE;

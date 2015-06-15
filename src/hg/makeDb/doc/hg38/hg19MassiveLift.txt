@@ -1,5 +1,5 @@
 ##########
-# lift tracks from hg19 to hg38  
+# lift ikmc tracks from hg19 to hg38  
 # ceisenhart (Chris Eisenhart) 
     cd /hive/data/genomes/hg38/bed/hg19MassiveLift/ikmcGenes/README.txt
     hgsql hg19 -e "select * from hgIkmc" > IkmcGenes.bed
@@ -22,4 +22,14 @@
     mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/nonCodingRNAs/snoMiRNA
     cd /hive/data/genomes/hg38/bed/hg19MassiveLift/nonCodingRNAs/snoMiRNA
     liftingScript wgRNA
+##############################################################################
+# wgEncodeReg ENCODE Regulatory tracks (Done Chris Eisenhart)
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/wgEncodeRegMarkH3k27ac
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/wgEncodeRegMarkH34me1
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/wgEncodeRegMarkH3k4me3
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/wgEncodeRegTfbsClusteredV3
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/wgEncodeRegTxn
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg
+    liftManyBigWigs /cluster/home/ceisenhart/kent/src/hg/utils/liftList/bigWigList.ra
 ##############################################################################

@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "obscure.h"
+#include "memalloc.h"
 #include "jksql.h"
 #include "expData.h"
 #include "sqlList.h"
@@ -16,27 +17,31 @@ int clCgConstant = 20;
 /* A normalizing constant for the distances, this corresponds to 
  * the size of the nodes in the standard output and the link distance in the forceLayout output*/
 int clThreads = 10; // The number of threads to run with the multiThreads option
-int clNormConstant = 20; 
+int clNormConstant = 99; 
 boolean clForceLayout = FALSE; // Prints the data in .json format for d3 force layout visualizations
 int target = 0;  // Used for the target value in rlinkJson.
 float longest = 0;  // Used to normalize link distances in rlinkJson.
 char* clHacTree = "fromItems";
+char* clDescFile = NULL; 
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "expData -  Takes in a relational database and outputs expression information.\n"
-  "Standard output is .json format intended for d3 hierarchical displays. \n"
-  "usage:\n"
-  "   expData matrix biosamples output\n"
-  "options:\n"
-  "   -forceLayout = bool Prints the output in .json format for d3 forceLayouts\n"
-  "   -normConstant = int Normalizing constant for d3, default is 20. For forceLayout 100 is reccomended \n"
-  "   -cgConstant = int Defines the number of possible colors for nodes, 1 - 20 \n"
-  "   -threads = int Sets the thread count for the multiThreads option, default is 10 \n"
-  "   -hacTree = Dictates how the tree is generated;  multiThreads or costlyMerges or fromItems. fromItems is default \n"
-  );
+    "expMatrixToJson -  Takes in an expression matrix and outputs a binary tree clustering the data in .json format.\n"
+    "usage:\n"
+    "   expMatrixToJson matrix output\n"
+    "options:\n"
+    "   -forceLayout = bool Prints the output in .json format for d3 forceLayouts\n"
+    "   -normConstant = int Normalizing constant for d3, default is 20. For forceLayout 100 is reccomended \n"
+    "   -cgConstant = int Defines the number of possible colors for nodes, 1 - 20 \n"
+    "   -threads = int Sets the thread count for the multiThreads option, default is 10 \n"
+    "   -hacTree = Dictates how the tree is generated;  multiThreads or costlyMerges or fromItems. fromItems is default \n"
+    "   -descFile = The user is providing a description file. The description file must provide a \n"
+    "		description for each cell line in the expression matrix. There should be one \n"
+    "		description per line, starting on the left side of the expression matrix. The \n"
+    "		description will appear over a leaf node when hovered over.\n"
+    );
 }
 
 /* Command line validation table. */
@@ -47,6 +52,7 @@ static struct optionSpec options[] = {
    {"structuredOutput", OPTION_BOOLEAN},
    {"forceLayout", OPTION_BOOLEAN},
    {"hacTree", OPTION_STRING},
+   {"descFile", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -72,6 +78,7 @@ struct bioExpVector
     {
     struct bioExpVector *next;
     char *name;	    // name of biosample.
+    char *desc;	    // description of biosample. 
     int count;	    // Number of genes we have data for.
     double *vector;   //  An array allocated dynamically.
     struct rgbColor color;  // Color for this one
@@ -101,7 +108,7 @@ while (lineFileNextReal(lf, &line))
     int i;
     for (i = 0; i < el->count; ++i)
 	el->vector[i] = sqlDouble(row[i]);
-	el->children = 1;
+    el->children = 1;
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -109,23 +116,42 @@ slReverse(&list);
 return list;
 }
 
-void fillInNames(struct bioExpVector *list, char *nameFile)
+
+int fillInNames(struct bioExpVector *list, char *nameFile)
 /* Fill in name field from file. */
 {
 struct lineFile *lf = lineFileOpen(nameFile, TRUE);
 char *line;
 struct bioExpVector *el = list;
+int maxSize = 0 ; 
+
 while (lineFileNextReal(lf, &line))
-     {
-     if (el == NULL)
-	 {
-         warn("More names than items in list");
-	 break;
-	 }
-     el->name = cloneString(line);
-     el = el->next;
-     }
+    {
+    if (el == NULL)
+	{
+	warn("More names than items in list");
+	break;
+	}
+    char *fields[2];
+    if (strlen(line) > maxSize) maxSize = strlen(line); 
+    int fieldCount = chopTabs(line, fields);
+    if (fieldCount >= 1)
+       {
+       el->name = cloneString(fields[0]);
+       if (fieldCount >= 2)
+           el->desc = cloneString(fields[1]);
+       else
+           el->desc = cloneString("n/a");
+       }
+
+    el = el->next;
+    }
+
+if (el != NULL)
+    errAbort("More items in matrix file than %s", nameFile);
+
 lineFileClose(&lf);
+return maxSize; 
 }
 
 void printJsonNodeLine(FILE *f, struct jsonNodeLine *node)
@@ -315,9 +341,9 @@ for (i = 0;  i < level;  i++)
 if (tree->left == NULL && tree->right == NULL)
     {
     // Prints out the leaf objects
- //   fprintf(f, "{\"name\": \"%s\",\"similarity\": %f,\"linkGroup\": \" \"", tissue, distance);
-    fprintf(f, "{\"%s\"%s \"%s\"%s\"%s\"%s %f %s\"%s\"%s \"rgb(%i,%i,%i)\"}", "name", ":", tissue, ", ",
-    		"similarity", ":", distance, "," , "colorGroup", ":", colors.r, colors.g, colors.b);
+    //fprintf(f, "{\"%s\"%s \"%s\"%s\"%s\"%s %f %s\"%s\"%s \"rgb(%i,%i,%i)\"}", "name", ":", tissue, ", ",
+    //		"similarity", ":", bio->desc , "," , "colorGroup", ":", colors.r, colors.g, colors.b);
+    fprintf(f, "{\"name\":\"%s\",\"distance\":\"%s\",\"colorGroup\":\"rgb(%i,%i,%i)\"}", tissue, bio->desc, colors.r, colors.g, colors.b); 
     return;
     }
 else if (tree->left == NULL || tree->right == NULL)
@@ -326,11 +352,12 @@ else if (tree->left == NULL || tree->right == NULL)
 // Prints out the node object and opens a new children block
 fprintf(f, "{\"%s\"%s \"%s\"%s", "name", ":", " ", ",");
 fprintf(f, "\"colorGroup\": \"rgb(%i,%i,%i)\",", colors.r, colors.g, colors.b );
-fprintf(f, "\"%s\"%s \"%f\"%s\n", "distance", ":", normConstant * (tree->childDistance/longest), ",");
+distance = tree->childDistance/longest; 
+if (distance != distance) distance = 0;
+fprintf(f, "\"%s\"%s \"%f\"%s\n", "distance", ":", (1 + normConstant * (distance)), ",");
 for (i = 0;  i < level + 1;  i++)
     fputc(' ', f);
 fprintf(f, "\"%s\"%s\n", "children", ": [");
-distance = tree->childDistance/longest; 
 rPrintHierarchicalJson(f, tree->left, level+1, distance, normConstant, cgConstant);
 fputs(",\n", f);
 rPrintHierarchicalJson(f, tree->right, level+1, distance, normConstant, cgConstant);
@@ -368,7 +395,7 @@ const struct bioExpVector *kid1 = (const struct bioExpVector *)item1;
 const struct bioExpVector *kid2 = (const struct bioExpVector *)item2;
 int j;
 double diff = 0, sum = 0;
-//float kid1Weight = 0.0, kid2Weight = 0.0; 
+//float kid1Weight = 0.0, kid2Weight = 0.0;
 float kid1Weight = kid1->children / (float)(kid1->children + kid2->children);
 float kid2Weight = kid2->children / (float)(kid1->children + kid2->children);
 //printf("Kid1 weight is %f kid2 weight is %f \n", kid1Weight, kid2Weight);
@@ -392,15 +419,19 @@ struct slList *slBioExpVectorMerge(const struct slList *item1, const struct slLi
 verbose(1,"Merging...\n");
 const struct bioExpVector *kid1 = (const struct bioExpVector *)item1;
 const struct bioExpVector *kid2 = (const struct bioExpVector *)item2;
+float kid1Weight = kid1->children / (float)(kid1->children + kid2->children);
+float kid2Weight = kid2->children / (float)(kid1->children + kid2->children);
+printf("Kid1weight %g kid2weight %g the sum is %g \n", kid1Weight, kid2Weight, kid1Weight + kid2Weight);
 struct bioExpVector *el;
 AllocVar(el);
 AllocArray(el->vector, kid1->count);
+assert(kid1->count == kid2->count);
 el->count = kid1->count; 
 el->name = catTwoStrings(kid1->name, kid2->name);
 int i;
 for (i = 0; i < el->count; ++i)
     {
-    el->vector[i] = (kid1->vector[i] + kid2->vector[i])/2;
+    el->vector[i] = (kid1Weight*kid1->vector[i] + kid2Weight*kid2->vector[i]);
     }
 el->children = kid1->children + kid2->children; 
 return (struct slList *)(el);
@@ -411,7 +442,7 @@ void colorLeaves(struct slRef *leafList)
 {
 /* Loop through list once to figure out total, since we need to
  * normalize */
-double total = 0;
+float total = 0.0;
 double purplePos = 0.80;
 struct slRef *el, *nextEl;
 for (el = leafList; el != NULL; el = nextEl)
@@ -422,8 +453,9 @@ for (el = leafList; el != NULL; el = nextEl)
    struct bioExpVector *bio1 = el->val;
    struct bioExpVector *bio2 = nextEl->val;
    double distance = slBioExpVectorDistance((struct slList *)bio1, (struct slList *)bio2, NULL);
+   if (distance != distance ) distance = 0;
    total += distance;
-   }
+    }
 /* Loop through list a second time to generate actual colors. */
 double soFar = 0;
 for (el = leafList; el != NULL; el = nextEl)
@@ -434,6 +466,7 @@ for (el = leafList; el != NULL; el = nextEl)
    struct bioExpVector *bio1 = el->val;
    struct bioExpVector *bio2 = nextEl->val;
    double distance = slBioExpVectorDistance((struct slList *)bio1, (struct slList *)bio2, NULL);
+   if (distance != distance ) distance = 0 ;
    soFar += distance;
    double normalized = soFar/total;
    bio2->color = saturatedRainbowAtPos(normalized * purplePos);
@@ -444,14 +477,56 @@ struct bioExpVector *bio = leafList->val;
 bio->color = saturatedRainbowAtPos(0);
 }
 
-void expData(char *matrixFile, char *nameFile, char *outFile, bool forceLayout, int normConstant, int cgConstant)
+void convertInput(char *expMatrix, char *descFile)
+/* Takes in a expression matrix and makes the inputs that this program will use. 
+ * Namely a transposed table with the first column removed.  Makes use of system calls
+ * to use cut, sed, kent utility rowsToCols, and paste (for descFile option). */
+{
+char cmd1[1024], cmd2[1024];
+safef(cmd1, 1024, "cat %s | sed '1d' | rowsToCols stdin %s.transposedMatrix", expMatrix, expMatrix); 
+printf("%s\n", cmd1);
+mustSystem(cmd1);
+if (descFile) 
+    {
+    char cmd3[1024]; 
+    safef(cmd2, 1024, "rowsToCols %s stdout | cut -f1 | sed \'1d\' > %s.cellNamesTemp", expMatrix, expMatrix); 
+    safef(cmd3, 1024, "paste %s.cellNamesTemp %s > %s.cellNames", expMatrix, descFile, expMatrix);
+    mustSystem(cmd2);
+    mustSystem(cmd3);
+    }
+else
+    {
+    safef(cmd2, 1024, "rowsToCols %s stdout | cut -f1 | sed \'1d\' > %s.cellNames", expMatrix, expMatrix);  
+    printf("%s\n", cmd2); 
+    mustSystem(cmd2);
+    }
+}
+
+void generateHtml(FILE *outputFile, int nameSize, char* jsonFile)
+// Generates a new .html file for the dendrogram. 
+{
+fprintf(outputFile, "<!DOCTYPE html> <meta charset=\"utf-8\"> <title> Radial Dendrogram</title> <style>  .node circle {   fill: #fff;   stroke: steelblue;   stroke-width: 1.5px; }  .node {   font: 10px sans-serif; }  .link {   fill: none;   stroke: #ccc;	stroke-width: 1.5px; }  .selectedLink{   fill: none;   stroke: #ccc;   stroke-width: 3.0px; }  .selected{   fill: red; }  </style> <body> <script src=\"http://d3js.org/d3.v3.min.js\"></script> <script> var color = d3.scale.category20();  var radius = 1080 / 2;  var cluster = d3.layout.cluster()     .size([360, radius - %i]) ;  var diagonal = d3.svg.diagonal.radial()     .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });  var svg = d3.select(\"body\").append(\"svg\")     .attr(\"width\", radius * 2)     .attr(\"height\", radius * 2)   .append(\"g\")     .attr(\"transform\", \"translate(\" + radius + \",\" + radius + \")\");  d3.json(\"%s\", function(error, root)", 10+nameSize*5, jsonFile);
+fprintf(outputFile, "{   var nodes = cluster.nodes(root);    var link = svg.selectAll(\"path.link\")       .data(cluster.links(nodes))     .enter().append(\"path\")       .attr(\"class\", \"link\")       .on(\"click\", function() {               d3.select(\".selectedLink\").classed(\"selectedLink\", false);               d3.select(this).classed(\"selectedLink\",true);       })       .attr(\"d\", diagonal);   var node = svg.selectAll(\"g.node\")       .data(nodes)       .enter().append(\"g\")       .attr(\"class\", \"node\")       .attr(\"transform\", function(d) { return \"rotate(\" + (d.x - 90) + \")translate(\" + d.y + \")\"; })        .on(\"click\", function() {               d3.select(\".selected\").classed(\"selected\", false);               d3.select(this).classed(\"selected\",true);       })       .on(\"mouseover\", function(d) {           var g = d3.select(this);           var info = g.append('text')               .classed('info', true)              .attr('x', 20)              .attr('y', 10)               .attr(\"transform\", function(d) { return \"rotate(\"+ (90 - d.x) +\")\";  })              .text(d.distance);       })       .on(\"mouseout\", function() {                   d3.select(this).select('text.info').remove();          });      node.append(\"circle\")    .attr(\"r\", function (d) {        if (d.name != \" \")       {         return 5;       }       })       .style(\"fill\", function (d) {          if (d.name != \" \") {           return d3.rgb(d.colorGroup);         }         });        node.append(\"circle\")       .attr(\"r\", function(d) {            return d.distance/5;})               .on(\"click\", function() {               d3.select(\".selected\").classed(\"selected\", false);               d3.select(this).classed(\"selected\",true);       })              .style(\"fill\",  \"white\");      node.append(\"text\")       .attr(\"dy\", \".55em\")       .attr(\"text-anchor\", function(d) { return d.x < 180 ? \"start\" : \"end\"; })       .attr(\"transform\", function(d) { return d.x < 180 ? \"translate(8)\" : \"rotate(180)translate(-8)\"; })       .text(function(d) { return d.name; }); });  d3.select(self.frameElement).style(\"height\", radius * 2 + \"px\");  </script>");  
+
+}
+
+
+
+void expData(char *matrixFile, char *outDir, char *descFile, bool forceLayout, int normConstant, int cgConstant)
+//void expData(char *matrixFile, char *nameFile, char *outFile, bool forceLayout, int normConstant, int cgConstant)
 /* Read matrix and names into a list of bioExpVectors, run hacTree to
  * associate them, and write output. */
 {
-struct bioExpVector *list = bioExpVectorListFromFile(matrixFile);
-FILE *f = mustOpen(outFile,"w");
+convertInput(matrixFile, descFile); 
+struct bioExpVector *list = bioExpVectorListFromFile(catTwoStrings(matrixFile,".transposedMatrix"));
+uglyf("%lld allocated after bioExpVectorListFromFile\n", (long long)carefulTotalAllocated());
+FILE *f = mustOpen(catTwoStrings(outDir,".json"),"w");
 struct lm *localMem = lmInit(0);
-fillInNames(list, nameFile);
+int size = fillInNames(list, catTwoStrings(matrixFile,".cellNames"));
+uglyf("The size here is %i\n", size);
+//char *catTwoStrings(char *a, char *b)
+/* Allocate new string that is a concatenation of two strings. */
+uglyf("%lld allocated after fillInNames\n", (long long)carefulTotalAllocated());
 struct hacTree *clusters = NULL;
 if (sameString(clHacTree, "multiThreads"))
     {
@@ -479,6 +554,9 @@ if (forceLayout)
     printForceLayoutJson(normConstant,f,clusters);
 if (!clForceLayout)
     printHierarchicalJson(f, clusters, normConstant, cgConstant);
+    FILE *htmlF = mustOpen(catTwoStrings(outDir,".html"),"w");
+    generateHtml(htmlF,size,catTwoStrings(outDir,".json")); 
+uglyf("%lld allocated at end\n", (long long)carefulTotalAllocated());
 }
 
 int main(int argc, char *argv[])
@@ -490,8 +568,10 @@ clNormConstant = optionInt("normConstant", clNormConstant);
 clCgConstant = optionInt("cgConstant", clCgConstant);
 clThreads = optionInt("threads", clThreads);
 clHacTree = optionVal("hacTree", clHacTree);
-if (argc != 4)
+clDescFile = optionVal("descFile", clDescFile);
+if (argc != 3)
     usage();
-expData(argv[1], argv[2], argv[3], clForceLayout, clNormConstant, clCgConstant);
+pushCarefulMemHandler(4L*1024*1024*1024);
+expData(argv[1], argv[2], clDescFile, clForceLayout, clNormConstant, clCgConstant);
 return 0;
 }

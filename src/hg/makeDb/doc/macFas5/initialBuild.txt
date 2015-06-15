@@ -432,7 +432,7 @@ macFas5.upstreamGeneTbl = refGene
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
-    time ./bin/gbDbLoadStep -drop -initialLoad -verbose=10 macFas5
+    time ./bin/gbDbLoadStep -drop -initialLoad macFas5
     # logFile: var/dbload/hgwdev/logs/2015.01.20-14:14:51.macFas5.dbload.log
     # real    41m8.893s
 

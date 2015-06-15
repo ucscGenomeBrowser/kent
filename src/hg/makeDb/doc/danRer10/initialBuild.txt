@@ -352,7 +352,7 @@ danRer10.orfeome = yes
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
-    time ./bin/gbDbLoadStep -drop -initialLoad -verbose=10 danRer10
+    time ./bin/gbDbLoadStep -drop -initialLoad danRer10
     # logFile: var/dbload/hgwdev/logs/2015.01.28-11:07:50.danRer10.dbload.log
     # real    97m40.551s
 
