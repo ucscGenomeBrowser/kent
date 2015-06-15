@@ -6239,8 +6239,6 @@ rm tmpChrom
     hgLoadBed hg38 microsat microsat.bed
 
 #############################################################################
-# Regulatory tracks  (Kate)
+# ENCODE Regulatory tracks  (Kate & Chris)
 
 # see reg.txt
-
-#############################################################################
