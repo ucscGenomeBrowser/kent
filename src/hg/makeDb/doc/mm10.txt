@@ -11038,11 +11038,24 @@ ftpFile=ftp://ftp.ncbi.nlm.nih.gov/genomes/M_musculus/GFF/ref_GRCm38.p3_top_leve
 gff3File=`basename $ftpFile`
 
 echo "select * from ucscToRefSeq" | hgsql $db | tail -n +2 | awk '{print 0, $4, $3, $1, $3}' > refSeqToUcsc.lft
+rm -f $ftpFile
 wget $ftpFile
 
-/cluster/home/braney/bin/x86_64/gff3ToGenePred -useName -warnAndContinue $gff3File stdout 2> convertErr.txt | liftUp -type=.gp -extGenePred lift.gp refSeqToUcsc.lft warn  stdin 2> liftErr.txt
+/cluster/home/braney/bin/x86_64/gff3ToGenePred -useName -warnAndContinue -attrsOut=attrs $gff3File stdout 2> convertErr.txt | liftUp -type=.gp -extGenePred lift.gp refSeqToUcsc.lft warn  stdin 2> liftErr.txt
 wc -l lift.gp
 # 104119 lift.gp
+
+tawk '{print $1}'  attrs | sort | uniq > meta
+wc -l meta
+# 106733 meta
+for i in product Dbxref gene gbkey
+do 
+    echo $i
+    tawk -v attr=$i '$2==attr {print $1,$3}' attrs | sort | uniq | join -t $'\t' /dev/stdin meta > out
+    mv out meta
+done  
+wc -l meta
+# 106733 meta
 
 egrep "^N(M|R)" lift.gp > curated.gp
 egrep "^X(M|R)" lift.gp > predicted.gp
@@ -11061,4 +11074,57 @@ awk '/isn/ {print $1}' liftErr.txt | sort -u
 
 hgLoadGenePred -genePredExt $db ncbiRefCurated curated.gp
 hgLoadGenePred -genePredExt $db ncbiRefPredicted predicted.gp
+hgLoadSqlTab $db ncbiRefLink $kent/src/hg/lib/ncbiRefLink.sql meta
 
+#
+#############################################################################
+# hgPal downloads (DONE braney 2015-06-02)
+#   CDS FASTA from 60-way for knownGene
+
+    ssh hgwdev
+    screen -S mm10HgPal
+    mkdir /hive/data/genomes/mm10/bed/multiz60way/pal
+    cd /hive/data/genomes/mm10/bed/multiz60way/pal
+    cat ../species.list | tr '[ ]' '[\n]' > order.lst
+
+    export mz=multiz60way
+    export gp=knownGene
+    export db=mm10
+    export I=0
+    mkdir exonAA exonNuc
+    for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
+    do
+        I=`echo $I | awk '{print $1+1}'`
+	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.lst stdout | gzip -c > exonNuc/$C.exonNuc.fa.gz &"
+	echo "mafGene -chrom=$C -exons $db $mz $gp order.lst stdout | gzip -c > exonAA/$C.exonAA.fa.gz &"
+        if [ $I -gt 6 ]; then
+            echo "date"
+            echo "wait"
+            I=0
+        fi
+    done > $gp.jobs
+    echo "date" >> $gp.jobs
+    echo "wait" >> $gp.jobs
+
+    time nice sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    #   real    80m36.763s
+
+    mz=multiz60way
+    gp=knownGene
+    db=mm10
+    time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    #   real    1m16.821s
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+
+    rm -rf exonAA exonNuc
+
+    # we're only distributing exons at the moment
+    mz=multiz60way
+    gp=knownGene
+    db=mm10
+    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    md5sum *.fa.gz > md5sum.txt
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/

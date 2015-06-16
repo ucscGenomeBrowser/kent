@@ -68,4 +68,9 @@ void jsonWriteValueLabelList(struct jsonWrite *jw, char *var, struct slPair *pai
 void jsonWriteSlNameList(struct jsonWrite *jw, char *var, struct slName *slnList);
 /* Print out a named list of strings from slnList. */
 
+void jsonWriteAppend(struct jsonWrite *jwA, char *var, struct jsonWrite *jwB);
+/* Append jwB's contents to jwA's.  If jwB is non-NULL, it must be fully closed (no unclosed
+ * list or object).  If var is non-NULL, write it out as a tag before appending.
+ * If both var and jwB are NULL, leave jwA unchanged. */
+
 #endif /* JSONWRITE_H */

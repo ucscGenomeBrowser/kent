@@ -76,7 +76,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     makeItemsItem.o mammalPsg.o mapSts.o \
     mcnBreakpoints.o mdb.o metaChromGraph.o microarray.o \
     minChromSize.o minGeneInfo.o mrnaMisMatch.o \
-    mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o \
+    mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o ncbiRefLink.o \
     netAlign.o netCart.o nonCodingUi.o omimTitle.o ooUtils.o orthoAlleles.o \
     pal.o pbStamp.o pcrResult.o pepPred.o peptideAtlasPeptide.o plasEndPairs.o \
     polyGenotype.o protFeat.o pscreen.o \
@@ -102,7 +102,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     tableDescriptions.o tableStatus.o targetDb.o tfbsConsMap.o \
     taxonDivision.o taxonGeneticCode.o taxonName.o taxonNode.o taxonXref.o \
     tigrCmrGene.o tigrOperon.o tilingPath.o traceInfo.o trackDb.o \
-    trackDbCustom.o trackHub.o trackHubCheck.o trackLayout.o trackTable.o trackVersion.o trashDir.o \
+    trackDbCustom.o trackHub.o trackLayout.o trackTable.o trackVersion.o trashDir.o \
     transRegCode.o transRegCodeCondition.o \
     transRegCodeProbe.o txCluster.o txCommon.o txEdgeBed.o \
     txEdgeOrtho.o txGraph.o txInfo.o txRnaAccs.o ucscRetroInfo.o ucscRetroOrtho.o \

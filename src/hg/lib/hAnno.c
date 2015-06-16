@@ -3,7 +3,9 @@
 #include "common.h"
 #include "hAnno.h"
 #include "basicBed.h"
+#include "bigGenePred.h"
 #include "customTrack.h"
+#include "factorSource.h"
 #include "grp.h"
 #include "hdb.h"
 #include "hubConnect.h"
@@ -141,6 +143,20 @@ else
     }
 }
 
+static boolean dbTableMatchesAutoSql(char *db, char *table, struct asObject *asObj)
+/* Return true if table exists and its fields match the columns of asObj. */
+{
+boolean matches = FALSE;
+struct sqlConnection *conn = hAllocConn(db);
+if (sqlTableExists(conn, table))
+    {
+    struct sqlFieldInfo *fieldList = sqlFieldInfoGet(conn, table);
+    matches = columnsMatch(asObj, fieldList);
+    }
+hFreeConn(&conn);
+return matches;
+}
+
 struct annoStreamer *hAnnoStreamerFromTrackDb(struct annoAssembly *assembly, char *selTable,
                                               struct trackDb *tdb, char *chrom, int maxOutRows)
 /* Figure out the source and type of data and make an annoStreamer. */
@@ -172,7 +188,7 @@ else if (sameString("bam", tdb->type))
     {
     warn("Sorry, BAM is not yet supported");
     }
-else if (startsWith("bigBed", tdb->type))
+else if (startsWith("bigBed", tdb->type) || sameString("bigGenePred", tdb->type))
     {
     char *fileOrUrl = getBigDataFileName(dataDb, tdb, selTable, chrom);
     streamer = annoStreamBigBedNew(fileOrUrl, assembly, maxOutRows);
@@ -182,7 +198,8 @@ else if (startsWith("bigWig", tdb->type))
     char *fileOrUrl = getBigDataFileName(dataDb, tdb, selTable, chrom);
     streamer = annoStreamBigWigNew(fileOrUrl, assembly); //#*** no maxOutRows support
     }
-else if (sameString("factorSource", tdb->type))
+else if (sameString("factorSource", tdb->type) &&
+         dbTableMatchesAutoSql(dataDb, tdb->table, factorSourceAsObj()))
     {
     char *sourceTable = trackDbSetting(tdb, "sourceTable");
     char *inputsTable = trackDbSetting(tdb, "inputTrackTable");
@@ -196,6 +213,8 @@ else if (sameString("knownGene", tdb->track))
         streamer = annoStreamDbKnownGeneNew(dataDb, assembly, maxOutRows);
     hFreeConn(&conn);
     }
+else if (trackHubDatabase(db))
+    errAbort("Unrecognized type '%s' for hub track '%s'", tdb->type, tdb->track);
 if (streamer == NULL)
     {
     char maybeSplitTable[HDB_MAX_TABLE_STRING];
@@ -215,7 +234,7 @@ struct annoGrator *hAnnoGratorFromBigFileUrl(char *fileOrUrl, struct annoAssembl
 struct annoStreamer *streamer = NULL;
 struct annoGrator *grator = NULL;
 char *type = customTrackTypeFromBigFile(fileOrUrl);
-if (sameString(type, "bigBed"))
+if (sameString(type, "bigBed") || sameString("bigGenePred", type))
     streamer = annoStreamBigBedNew(fileOrUrl, assembly, maxOutRows);
 else if (sameString(type, "vcfTabix"))
     streamer = annoStreamVcfNew(fileOrUrl, TRUE, assembly, maxOutRows);
@@ -239,18 +258,34 @@ struct annoGrator *hAnnoGratorFromTrackDb(struct annoAssembly *assembly, char *s
  * If not NULL, primaryAsObj is used to determine whether we can make an annoGratorGpVar. */
 {
 struct annoGrator *grator = NULL;
+boolean primaryIsVariants = (primaryAsObj != NULL &&
+                             (asObjectsMatch(primaryAsObj, pgSnpAsObj()) ||
+                              asObjectsMatch(primaryAsObj, vcfAsObj())));
 char *bigDataUrl = trackDbSetting(tdb, "bigDataUrl");
 if (bigDataUrl != NULL)
-    grator = hAnnoGratorFromBigFileUrl(bigDataUrl, assembly, maxOutRows, overlapRule);
+    {
+    if (primaryIsVariants && sameString("bigGenePred", tdb->type))
+        {
+        struct annoStreamer *streamer = annoStreamBigBedNew(bigDataUrl, assembly, maxOutRows);
+        grator = annoGratorGpVarNew(streamer);
+        }
+    else
+        grator = hAnnoGratorFromBigFileUrl(bigDataUrl, assembly, maxOutRows, overlapRule);
+    }
 else if (startsWithWord("wig", tdb->type))
     grator = annoGrateWigDbNew(assembly->name, selTable, assembly, maxOutRows);
+else if (startsWithWord("bigWig", tdb->type))
+    {
+    char *fileOrUrl = getBigDataFileName(assembly->name, tdb, tdb->table, chrom);
+    grator = annoGrateBigWigNew(fileOrUrl, assembly);
+    }
 else
     {
     struct annoStreamer *streamer = hAnnoStreamerFromTrackDb(assembly, selTable, tdb, chrom,
                                                              maxOutRows);
-    if (primaryAsObj != NULL &&
-	(asObjectsMatch(primaryAsObj, pgSnpAsObj()) || asObjectsMatch(primaryAsObj, vcfAsObj()))
-	&& asColumnNamesMatchFirstN(streamer->asObj, genePredAsObj(), 10))
+    if (primaryIsVariants &&
+        (asColumnNamesMatchFirstN(streamer->asObj, genePredAsObj(), 10) ||
+         asObjectsMatch(streamer->asObj, bigGenePredAsObj())))
 	grator = annoGratorGpVarNew(streamer);
     else
 	grator = annoGratorNew(streamer);
@@ -267,7 +302,7 @@ if (startsWith("wig", tdb->type) || startsWith("bigWig", tdb->type))
     asObj = annoStreamBigWigAsObject();
 else if (startsWith("vcf", tdb->type))
     asObj = vcfAsObj();
-else if (startsWith("bigBed", tdb->type))
+else if (startsWith("bigBed", tdb->type) || sameString("bigGenePred", tdb->type))
     {
     char *fileOrUrl = getBigDataFileName(db, tdb, tdb->table, chrom);
     asObj = bigBedFileAsObjOrDefault(fileOrUrl);
@@ -293,7 +328,8 @@ else if (sameString(tdb->track, "knownGene"))
     if (hTableExists(db, "knownGene") && hTableExists(db, "kgXref"))
         asObj = annoStreamDbKnownGeneAsObj();
     }
-else if (sameString("factorSource", tdb->type))
+else if (sameString("factorSource", tdb->type) &&
+         dbTableMatchesAutoSql(db, tdb->table, factorSourceAsObj()))
     {
     asObj = annoStreamDbFactorSourceAsObj();
     }

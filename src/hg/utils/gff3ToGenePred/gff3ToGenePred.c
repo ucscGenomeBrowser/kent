@@ -21,6 +21,8 @@ errAbort(
   "options:\n"
   "  -warnAndContinue - on bad genePreds, put out warning but continue\n"
   "  -useName - rather than using 'id' as names, use the 'name' tag\n"
+  "  -attrsOut=file - output attributes of mRNA to file\n"
+  "  -bad=file   - output genepreds that fail checks to file\n"
   "  -maxParseErrors=50 - Maximum number of parsing errors before aborting. A negative\n"
   "   value will allow an unlimited number of errors.  Default is 50.\n"
   "  -maxConvertErrors=50 - Maximum number of conversion errors before aborting. A negative\n"
@@ -55,6 +57,8 @@ static struct optionSpec options[] = {
     {"warnAndContinue", OPTION_BOOLEAN},
     {"useName", OPTION_BOOLEAN},
     {"honorStartStopCodons", OPTION_BOOLEAN},
+    {"attrsOut", OPTION_STRING},
+    {"bad", OPTION_STRING},
     {NULL, 0},
 };
 static boolean useName = FALSE;
@@ -64,6 +68,8 @@ static int maxParseErrors = 50;  // maximum number of errors during parse
 static int maxConvertErrors = 50;  // maximum number of errors during conversion
 static int convertErrCnt = 0;  // number of convert errors
 
+static FILE *outGeneMetaFp = NULL;
+static FILE *outBadFp = NULL;
 
 static void cnvError(char *format, ...)
 /* print a GFF3 to gene conversion error.  This will return.  Code must check
@@ -170,6 +176,10 @@ if ((mrna->strand == NULL) || (mrna->strand[0] == '?'))
 
 char *name = (useName ? mrna->name : mrna->id);
 char *name2 = (useName ? gene->name : gene->id);
+
+if (name == NULL)
+    name = mrna->id;
+
 struct genePred *gp = genePredNew(name, mrna->seqid, mrna->strand[0],
                                   txStart, txEnd, cdsStart, cdsEnd,
                                   genePredAllFlds, slCount(exons));
@@ -188,9 +198,20 @@ else
 return gp;
 }
 
+
+static void doOutGeneMeta(FILE *outGeneMetaFp, struct genePred *gp, struct gff3Ann *parent)
+{
+struct gff3Attr *attr;
+for(attr=parent->attrs; attr; attr=attr->next)
+    fprintf(outGeneMetaFp, "%s\t%s\t%s\n",gp->name, attr->tag, attr->vals->name);
+}
+
 static void outputGenePredAndFree(struct gff3Ann *mrna, FILE *gpFh, struct genePred *gp)
 /* validate and output a genePred and free it */
 {
+if (gp->name == NULL)
+    gp->name=cloneString("no_name");
+
 char description[PATH_LEN];
 safef(description, sizeof(description), "genePred from GFF3: %s:%d",
       ((mrna->file != NULL) ? mrna->file->fileName : "<unknown>"),
@@ -199,14 +220,24 @@ int ret = genePredCheck(description, stderr, -1, gp);
 if (warnAndContinue)
     {
     if (ret == 0)
+	{
 	genePredTabOut(gp, gpFh);
+	if (outGeneMetaFp)
+	    doOutGeneMeta(outGeneMetaFp, gp,  mrna);
+	}
     else
+	{
 	warn("dropping invalid genePred: %s %s:%d-%d", gp->name, gp->chrom, gp->txStart, gp->txEnd);
+	if (outBadFp)
+	    genePredTabOut(gp, outBadFp);
+	}
     }
 else
     {
     // output before checking so it can be examined
     genePredTabOut(gp, gpFh);
+    if (outGeneMetaFp)
+	doOutGeneMeta(outGeneMetaFp, gp,  mrna);
     if (ret != 0)
 	cnvError("invalid genePred created: %s %s:%d-%d", gp->name, gp->chrom, gp->txStart, gp->txEnd);
     }
@@ -295,6 +326,13 @@ if (exons == NULL)
     cdsUtrBlks = getCdsUtrBlks(mrna);
 struct gff3AnnRef *useExons = (exons != NULL) ? exons : cdsUtrBlks;
 
+if (useExons == NULL) // if we don't have any exons, just use the feature
+    {
+    useExons = gff3AnnRefNew(mrna);
+    if (sameString(mrna->type, gff3FeatCDS))
+	cdsBlks = useExons;
+    }
+
 struct genePred *gp = makeGenePred((gene != NULL) ? gene : mrna, mrna, useExons, cdsBlks);
 if (gp != NULL)
     {
@@ -313,7 +351,10 @@ static int shouldProcess( struct gff3Ann *node)
 {
 return sameString(node->type, gff3FeatMRna) 
     || sameString(node->type, gff3FeatNCRna)
+    || sameString(node->type, gff3FeatCDS)
     || sameString(node->type, gff3FeatRRna)
+    || sameString(node->type, gff3FeatTRna)
+    || sameString(node->type, gff3FeatVGeneSegment)
     || sameString(node->type, gff3FeatTranscript)
     || sameString(node->type, gff3FeatPrimaryTranscript);
 }
@@ -398,6 +439,12 @@ maxConvertErrors = optionInt("maxConvertErrors", maxConvertErrors);
 if (maxConvertErrors < 0)
     maxConvertErrors = INT_MAX;
 honorStartStopCodons = optionExists("honorStartStopCodons");
+char *bad = optionVal("bad", NULL);
+if (bad != NULL)
+    outBadFp = mustOpen(bad, "w");
+char *attrsOut = optionVal("attrsOut", NULL);
+if (attrsOut != NULL)
+    outGeneMetaFp = mustOpen(attrsOut, "w");
 gff3ToGenePred(argv[1], argv[2]);
 return 0;
 }

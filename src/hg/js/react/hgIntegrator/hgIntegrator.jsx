@@ -216,9 +216,10 @@ var FieldSelect = React.createClass({
             return (
                 <tr key={table+'.'+field+'.row'}>
                   <td key={table+'.'+field+'.cb'}>
-                    <CheckboxLabel checked={checked} label={field}
+                    <CheckboxLabel checked={checked}
                                    path={path} update={this.props.update} />
                   </td>
+                  <td key={table+'.'+field+'.label'}>{field}</td>
                   <td key={table+'.'+field+'.desc'} style={{paddingLeft: '0.5em'}}>
                     {checkedAndDesc.desc}
                   </td>
@@ -238,7 +239,7 @@ var FieldSelect = React.createClass({
         return _.map(fieldInfo, function(info, table) {
             return [
                 <tr key={table}>
-                  <td colSpan={2}>
+                  <td colSpan={3}>
                     <span className='boldText'>{info.label}</span>
                     <SetClearButtons path={this.props.path.concat(table)}
                                      update={this.props.update} />
@@ -496,6 +497,86 @@ var DbPosAndQueryBuilder = React.createClass({
 }); // dbPosAndQueryBuilder
 
 
+function helpSection() {
+    return (
+<Section title='Using the Data Integrator'>
+<p>
+The Data Integrator finds items in different tracks that overlap by position,
+and unlike the Table Browser's intersection function, the Data
+Integrator can output all fields from all selected tracks.  Up to 5
+different tracks may be queried at a time.
+</p>
+<p>
+This section contains a brief overview of Data Integrator controls.
+For more information on using the tools,
+see the <a href="../goldenPath/help/hgIntegratorHelp.html">Data
+Integrator User's Guide</a>.
+</p>
+
+<p><b>Select Genome Assembly and Region</b>
+<br />
+The controls in this section are for selecting a genome assembly and region to search.
+<ul>
+  <li><b>group</b>:
+      A species group: Mammal, Vertebrate, Insect etc.</li>
+  <li><b>genome</b>:
+      A single species such as Human or Mouse.</li>
+  <li><b>assembly</b>:
+      A version of the reference genome assembly such as GRCh37/hg19.</li>
+</ul>
+</p>
+
+<p><b>Configure Data Sources</b>
+<br />
+Currently selected data sources (tracks, custom tracks, hub tracks etc) are listed
+with <Icon type="upDown" /> icons
+for reordering the data sources.
+The first data source is special in that data from the remaining data sources appear
+only when they overlap with the first data source.
+Under &quot;<b>Add Data Source</b>&quot;, several menus display available data sources:
+<ul>
+  <li><b>track group</b>:
+      A category of data track, for example &quot;Genes and Gene Prediction&quot;
+      or &quot;Regulation&quot;.</li>
+  <li><b>track</b>:
+      One or more data tables containing results of an experiment
+      or a group of closely related experiments.</li>
+  <li><b>table</b>:
+      This appears only when the selected track has more than one data table.</li>
+</ul>
+These sections can be reordered by dragging on the section title or arrow icon on the left.
+To remove a section, click
+the <Icon type="x" /> icon
+to the right of the title.
+Click on the Add button to add a new data source.
+</p>
+
+<p><b>Output Options</b>
+<br />
+<ul>
+  <li><b>Send output to file</b>:
+      check this box to have output sent to a local file
+      instead of to the web browser window.
+      <br />
+      When this is checked, additional options appear:
+      <ul>
+        <li><b>name</b>:
+            the file name to which output will be saved</li>
+        <li><b>compress with gzip</b>:
+            check this box to have the output file compressed by gzip (.gz).
+            This saves disk space and may reduce network transfer time.</li>
+    </ul>
+  </li>
+  <li><b>Choose fields</b>:
+      click this button to pop up a dialog box with a checkbox
+      for each field of each data source.  If a checkbox is checked, that field will
+      appear in the output.</li>
+</ul>
+</p>
+</Section>
+);
+}
+
 var AppComponent = React.createClass({
     // AnnoGrator interface
 
@@ -510,7 +591,6 @@ var AppComponent = React.createClass({
         var appStateJS = appState.toJS();
         console.log('top-level render:', appStateJS);
         var path = this.props.path;
-        var helpText = appState.get('helpText') || '';
         return (
             <div className='cgiContents'>
               <div className='cgiTitleBox'>
@@ -530,9 +610,7 @@ var AppComponent = React.createClass({
                                     path={path} update={this.props.update}
                                     />
 
-              <Section title='Using the Data Integrator'>
-                <div dangerouslySetInnerHTML={{__html: helpText}} />
-              </Section>
+              {helpSection()}
             </div>
         );
     }

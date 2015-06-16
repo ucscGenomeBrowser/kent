@@ -520,7 +520,7 @@ puts("<script src=\"../js/hgIntegratorModel.js\"></script>");
 
 // Invisible form for submitting a query
 printf("\n<form action=\"%s\" method=%s id='queryForm'>\n",
-       hgIntegratorName(), cartUsualString(cart, "formMethod", "GET"));
+       hgIntegratorName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 cgiMakeHiddenVar(QUERY_SPEC, cartUsualString(cart, QUERY_SPEC, ""));
 cgiMakeHiddenVar(DO_QUERY, "go");

@@ -405,7 +405,7 @@ rhiRox1.upstreamGeneTbl = refGene
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
-    time ./bin/gbDbLoadStep -drop -initialLoad -verbose=10 rhiRox1 &
+    time ./bin/gbDbLoadStep -drop -initialLoad rhiRox1 &
     # logFile: var/dbload/hgwdev/logs/2015.02.21-19:06:41.rhiRox1.dbload.log
     # real    10m59.824s
 

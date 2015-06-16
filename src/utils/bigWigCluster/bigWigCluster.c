@@ -403,9 +403,9 @@ mustSystem(cmd);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+optionInit(&argc, argv, options);
 clThreads = optionInt("threads", clThreads);
 clHacTree = optionVal("hacTree", clHacTree);
-optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
 gThreadCount = optionInt("threads", gThreadCount);

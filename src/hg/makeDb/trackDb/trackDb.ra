@@ -726,14 +726,6 @@ visibility hide
 color 150,0,0
 type genePred ensPep
 
-track augGene
-shortLabel Augustus
-longLabel Augustus gene predictions
-group genes
-visibility hide
-color 150,0,0
-type genePred
-
 track ensEstGene
 shortLabel Ensembl EST Genes
 longLabel Ensembl EST Gene Predictions
@@ -3000,3 +2992,19 @@ searchType genePred
 termRegex X(M|R)_[0-9]{6}[0-9]*.[0-9]*
 searchPriority 9.5
 
+track augustusGene
+shortLabel Augustus
+longLabel Augustus gene predictions v3.1
+group genes
+visibility hide
+color 12,105,0
+type genePred
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+searchTable augustusGene
+searchType genePred
+shortCircuit 1
+searchMethod fuzzy
+termRegex g[0-9]+(\.t[0-9]+)?
+searchPriority 50

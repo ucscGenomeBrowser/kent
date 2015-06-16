@@ -9,6 +9,7 @@
 #include "annoGratorGpVar.h"
 #include "annoGratorQuery.h"
 #include "asParse.h"
+#include "bigGenePred.h"
 #include "dystring.h"
 #include "genePred.h"
 #include "gpFx.h"
@@ -70,7 +71,8 @@ struct annoFormatVep
     int lmRowCount;			// counter for periodic localmem cleanup
     int varNameIx;			// Index of name column from variant source, or -1 if N/A
     int varAllelesIx;			// Index of alleles column from variant source, or -1
-    int geneNameIx;			// Index of gene name (not transcript name) from genePred
+    int geneNameIx;			// Index of gene name (not tx name) from (big)genePred
+    int exonCountIx;			// Index of exonCount from (big)genePred
     int snpNameIx;			// Index of name column from dbSNP source, or -1
     boolean needHeader;			// TRUE if we should print out the header
     boolean primaryIsVcf;		// TRUE if primary rows are VCF
@@ -1059,9 +1061,6 @@ if (gpFx && (gpFx->soNumber == upstream_gene_variant || gpFx->soNumber == downst
     // I'll have to read the code someday.  Upstream deletions on + strand still not handled
     // quite right.
     int ensemblFudge = 0;
-    char strand = ((char **)(gpvRow->data))[5][0];
-    if (gpFx->soNumber == upstream_gene_variant && strand == '+')
-	ensemblFudge = 1;
     int distance = gpvRow->start - varRow->start + ensemblFudge;
     if (distance < 0)
 	{
@@ -1085,7 +1084,7 @@ if (includeExonNumber && gpFx)
     if (exonNum >= 0)
 	{
 	afVepNewExtra(self, pGotExtra);
-	int exonCount = atoi(((char **)(gpvRow->data))[7]);
+	int exonCount = atoi(((char **)(gpvRow->data))[self->exonCountIx]);
 	if (deType == intron)
 	    fprintf(self->f, "INTRON=%d/%d", exonNum+1, exonCount-1);
 	else
@@ -1252,7 +1251,8 @@ else
 	     config->variantSource->name);
 if (config->gpVarSource == NULL)
     errAbort("afVepSetConfig: config must have a gpVarSource");
-else if (! asColumnNamesMatchFirstN(config->gpVarSource->asObj, genePredAsObj(), 10))
+else if (! asColumnNamesMatchFirstN(config->gpVarSource->asObj, genePredAsObj(), 10) &&
+         ! asColumnNamesMatchFirstN(config->gpVarSource->asObj, bigGenePredAsObj(), 16))
     errAbort("afVepSetConfig: gpVarSource %s doesn't look like genePred",
 	     config->gpVarSource->name);
 // refGene and augmented knownGene have extra name fields that have the HGNC gene symbol:
@@ -1262,6 +1262,12 @@ if (self->geneNameIx < 0)
     self->geneNameIx = asColumnFindIx(gpvAsColumns, "name2");
 if (self->geneNameIx < 0)
     self->geneNameIx = asColumnFindIx(gpvAsColumns, "proteinID");
+self->exonCountIx = asColumnFindIx(gpvAsColumns, "exonCount");
+if (self->exonCountIx < 0)
+    self->exonCountIx = asColumnFindIx(gpvAsColumns, "blockCount");
+if (self->exonCountIx < 0)
+    errAbort("afVepSetConfig: can't find exonCount or blockCount column in gpVarSource %s",
+             config->gpVarSource->name);
 if (config->snpSource != NULL)
     {
     struct asColumn *snpAsColumns = config->snpSource->asObj->columnList;

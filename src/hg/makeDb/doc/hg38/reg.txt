@@ -254,7 +254,7 @@ uwDnaseTrackHub meta.tab run_pooled colors.tab hub
 
 # Use cell curation to make more informative long labels
     cd /hive/data/genomes/hg38/bed/uwDnase1
-    hgsql hgFixed -Ne 'select * from wgEncodeCell' > cells/cellInfo.tab
+    hgsql hg38 -Ne 'select * from wgEncodeCell' > cells/cellInfo.tab
     uwDnaseTrackHub -cellFile=cells/cellInfo.tab meta.tab run_pooled colors.tab kateHub4
 
 # Convert trackDb from hub to native
@@ -403,16 +403,16 @@ hgsql hg38 -e "alter table uwEnc2DnaseSources rename to wgEncodeRegDnasedCluster
     # extract useful columns to file and load
     tail -n +2 wgEncodeCell.tab | \
         nl -v 0 | \
-        hgLoadSqlTab hgFixed wgEncodeCell ~/kent/src/hg/lib/encode/wgEncodeCell.sql stdin
+        hgLoadSqlTab hg38 wgEncodeCell ~/kent/src/hg/lib/encode/wgEncodeCell.sql stdin
 
     # add order URL's
     #https://docs.google.com/spreadsheets/d/14HvZfqJdClt6mfcwf2w0xRPvdhk5o7bgV77LMc1qTcU/edit?usp=sharing
     tail -n +2 wgEncodeCellUrl.tsv | \
         nl -v 0 | \
-        hgLoadSqlTab hgFixed wgEncodeCell ~/kent/src/hg/lib/encode/wgEncodeCell.sql stdin
+        hgLoadSqlTab hg38 wgEncodeCell ~/kent/src/hg/lib/encode/wgEncodeCell.sql stdin
 
     # to verify links
-    checkUrlsInTable hgFixed wgEncodeCell > errs.txt
+    checkUrlsInTable hg38 wgEncodeCell > errs.txt
 
 # Update table when cron of above reports errors
 
@@ -442,15 +442,15 @@ http://www.sciencellonline.com/site/productInformation.php?keyword=7130 302
 
 # NOTE: site query string has changed to:
 #       http://sciencellonline.com/catalogsearch/result/?q=1820
-    hgsql hgFixed -e 'select * from wgEncodeCell' > wgEncodeCell.2015-05-06.tab
+    hgsql hg38 -e 'select * from wgEncodeCell' > wgEncodeCell.2015-05-06.tab
     sed -e 's^www.sciencellonline.com/site/productInformation.php^sciencellonline.com/catalogsearch/result/^' -e 's^keyword=^q=^' wgEncodeCell.2015-05-06.tab > wgEncodeCell.2015-05-07.tab
     ln -s wgEncodeCell.2015-05-07.tab wgEncodeCell.latest.tab
     # save old table for now
-    hgsql hgFixed -e "alter table wgEncodeCell rename to wgEncodeCell_old"
-    hgLoadSqlTab hgFixed wgEncodeCell ~/kent/src/hg/lib/encode/wgEncodeCell.sql wgEncodeCell.latest.tab
+    hgsql hg38 -e "alter table wgEncodeCell rename to wgEncodeCell_old"
+    hgLoadSqlTab hg38 wgEncodeCell ~/kent/src/hg/lib/encode/wgEncodeCell.sql wgEncodeCell.latest.tab
     # check, then remove old table
-    hgsql hgFixed -e "drop table wgEncodeCell_old"
-    checkUrlsInTable hgFixed wgEncodeCell > errs.txt
+    hgsql hg38 -e "drop table wgEncodeCell_old"
+    checkUrlsInTable hg38 wgEncodeCell > errs.txt
 
 
 # Treatment table
@@ -461,7 +461,7 @@ http://www.sciencellonline.com/site/productInformation.php?keyword=7130 302
     #cd cells
     #tail -n +2 treatments.tab | \
         #nl -v 0 | \
-        #hgLoadSqlTab hgFixed wgEncodeTreatment ~/kent/src/hg/lib/encode/wgEncodeTreatment.sql stdin
+        #hgLoadSqlTab hg38 wgEncodeTreatment ~/kent/src/hg/lib/encode/wgEncodeTreatment.sql stdin
 
 
 # Comparison to lifted track (Chris Eisenhart)
@@ -487,6 +487,14 @@ http://www.sciencellonline.com/site/productInformation.php?keyword=7130 302
 # (96 chroms in new track, 38 in old)
 
 
-
-
-
+##############################################################################
+# wgEncodeReg ENCODE Regulatory tracks (Done Chris Eisenhart)
+# Transcription, Layered H3K4Me1, Layered H3K4Me3, Layered H3K27Ac
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/wgEncodeRegMarkH3k27ac
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/wgEncodeRegMarkH34me1
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/wgEncodeRegMarkH3k4me3
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/wgEncodeRegTfbsClusteredV3
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/wgEncodeRegTxn
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg
+    liftManyBigWigs /cluster/home/ceisenhart/kent/src/hg/utils/liftList/bigWigList.ra

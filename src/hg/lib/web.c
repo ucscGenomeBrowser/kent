@@ -241,6 +241,7 @@ if(!skipSectionHeader)
 webPushErrHandlers();
 /* set the flag */
 webHeadAlreadyOutputed = TRUE;
+errAbortSetDoContentType(FALSE);
 }	/*	static void webStartWrapperDetailedInternal()	*/
 
 void webStartWrapperDetailedArgs(struct cart *theCart, char *db,
@@ -1315,15 +1316,6 @@ if(scriptName)
 	    trackDbFree(&tdb);
 	    }
         }
-    }
-
-// Show Data Integrator link on non-public sites.
-if ((hIsPrivateHost() || hIsPreviewHost()) && fileExists("hgIntegrator"))
-    {
-    char hgIntegratorItem[1024];
-    safef(hgIntegratorItem, sizeof(hgIntegratorItem),
-          "<li><a href=\"../cgi-bin/hgIntegrator?%s\">Data Integrator</a></li>", uiVars);
-    menuStr = replaceChars(menuStr, "<!-- DATA_INTEGRATOR -->", hgIntegratorItem);
     }
 
 if(!loginSystemEnabled())

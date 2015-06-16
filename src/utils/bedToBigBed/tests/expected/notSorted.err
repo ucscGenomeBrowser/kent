@@ -1,0 +1,1 @@
+input/notSorted.bed is not case-sensitive sorted at line 3.  Please use "sort -k1,1 -k2,2n" with LC_COLLATE=C,  or bedSort and try again.
