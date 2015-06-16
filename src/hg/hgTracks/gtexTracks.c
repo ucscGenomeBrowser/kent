@@ -9,10 +9,21 @@
 #include "rainbow.h"
 #include "gtexGeneBed.h"
 
-#define GRAPH_HEIGHT 100
-#define BAR_WIDTH 5
+#define WIN_MAX_GRAPH 20000
+#define MAX_GRAPH_HEIGHT 100
+#define MAX_BAR_WIDTH 5
+#define MAX_GRAPH_PADDING 2
+
+#define WIN_MED_GRAPH 500000
+#define MED_GRAPH_HEIGHT 60
+#define MED_BAR_WIDTH 3
+#define MED_GRAPH_PADDING 1
+
+#define MIN_GRAPH_HEIGHT 20
+#define MIN_BAR_WIDTH 1
+#define MIN_GRAPH_PADDING 0
+
 #define MARGIN_WIDTH 1
-#define PADDING 2
 
 //#define GENCODE_CODING_COLOR 0x0c0c78    // rgb(12,12,120)
 //#define GENCODE_NONCODING_COLOR 0x006400 // rgb(0,100,0)
@@ -48,6 +59,39 @@ statusColors.coding = findColorIx(hvg, GENCODE_CODING_COLOR);
 statusColors.nonCoding = findColorIx(hvg, GENCODE_NONCODING_COLOR);
 statusColors.problem = findColorIx(hvg, GENCODE_PROBLEM_COLOR);
 statusColors.unknown = findColorIx(hvg, UNKNOWN_COLOR);
+}
+
+static int gtexBarWidth()
+{
+int winSize = winEnd - winStart;
+if (winSize < WIN_MAX_GRAPH)
+    return MAX_BAR_WIDTH;
+else if (winSize < WIN_MED_GRAPH)
+    return MED_BAR_WIDTH;
+else
+    return MIN_BAR_WIDTH;
+}
+
+static int gtexGraphPadding()
+{
+int winSize = winEnd - winStart;
+if (winSize < WIN_MAX_GRAPH)
+    return MAX_GRAPH_PADDING;
+else if (winSize < WIN_MED_GRAPH)
+    return MED_GRAPH_PADDING;
+else
+    return MIN_GRAPH_PADDING;
+}
+
+static int gtexGraphHeight()
+{
+int winSize = winEnd - winStart;
+if (winSize < WIN_MAX_GRAPH)
+    return MAX_GRAPH_HEIGHT;
+else if (winSize < WIN_MED_GRAPH)
+    return MED_GRAPH_HEIGHT;
+else
+    return MIN_GRAPH_HEIGHT;
 }
 
 static int valToY(double val, double maxVal, int height)
@@ -107,6 +151,8 @@ int yBase = valToY(0, maxExp, heightPer) + y;
 //int yZero = yBase - 5;
 
 //int firstX = x1;
+int barWidth = gtexBarWidth();
+int graphPadding = gtexGraphPadding();
 for (i=0; i<expCount; i++)
     {
     double colPos = invExpCount * i;
@@ -114,9 +160,12 @@ for (i=0; i<expCount; i++)
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
     double expScore = geneBed->expScores[i];
     int yMedian = valToY(expScore, maxExp, heightPer) + y;
-    hvGfxOutlinedBox(hvg, x1, yMedian, BAR_WIDTH, yBase - yMedian, fillColorIx, lineColorIx);
+    if (graphPadding == 0)
+        hvGfxBox(hvg, x1, yMedian, barWidth, yBase - yMedian, fillColorIx);
+    else
+        hvGfxOutlinedBox(hvg, x1, yMedian, barWidth, yBase - yMedian, fillColorIx, lineColorIx);
     //warn("x1=%d, yMedian=%d, height=%d\n", x1, yMedian, yBase-yMedian);
-    x1 = x1 + BAR_WIDTH + PADDING;
+    x1 = x1 + barWidth + graphPadding;
     }
 // underline gene extent
 //hvGfxBox(hvg, firstX, yBase, round((geneEnd - start)*scale), 3, lineColorIx);
@@ -147,11 +196,12 @@ extras->maxExp = maxExp;
 track->extraUiData = extras;
 }
 
+
 static int gtexGeneItemHeight(struct track *track, void *item)
 {
 if ((item == NULL) || (track->visibility == tvSquish) || (track->visibility == tvDense))
     return 0;
-return GRAPH_HEIGHT;
+return gtexGraphHeight();
 }
 
 static int gtexTotalHeight(struct track *track, enum trackVisibility vis)
@@ -161,7 +211,7 @@ int height;
 if (track->visibility == tvSquish || track->visibility == tvDense)
     height = 10;
 else 
-    height = GRAPH_HEIGHT;
+    height = gtexGraphHeight();
 return tgFixedTotalHeightOptionalOverflow(track, vis, height, height, FALSE);
 }
 
