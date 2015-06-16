@@ -3124,3 +3124,14 @@ query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
 ########################################################################
+# augustus - (DONE - 2015-05-19 - Hiram)
+    mkdir /hive/data/genomes/panPan1/bed/augustus
+    cd /hive/data/genomes/panPan1/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+       -species=human -dbHost=hgwdev -workhorse=hgwdev panPan1) > do.log 2>&1
+    # real    144m20.809s
+
+    cat fb.panPan1.augustusGene.txt
+    # 30081384 bases of 2725905606 (1.104%) in intersection
+
+#########################################################################
