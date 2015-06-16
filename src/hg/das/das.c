@@ -844,6 +844,17 @@ static void dasOutBedSegment(struct sqlResult *sr, int rowOffset, char *table, s
 /* output BEDs and BED like tables resulting from query */
 {
 char **row;
+
+/* Get offset of standard bed fields.  For compatibility revert to standard positions if not 
+ * found */
+int chromIx = sqlFieldColumn(sr, "chrom");
+if (chromIx < 0) chromIx = rowOffset + 0;
+int chromStartIx = sqlFieldColumn(sr, "chromStart");
+if (chromStartIx < 0) chromStartIx = rowOffset + 1;
+int chromEndIx = sqlFieldColumn(sr, "chromEnd");
+if (chromEndIx < 0) chromEndIx = rowOffset + 2;
+
+
 int scoreIx = sqlFieldColumn(sr, "score");
 int strandIx = sqlFieldColumn(sr, "strand");
 int nameIx = sqlFieldColumn(sr, "name");
@@ -857,9 +868,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *strand = (strandIx >= 0 ? row[strandIx] : "0");
     char *score = (scoreIx >= 0 ? row[scoreIx] : "-");
     char *name = (nameIx >= 0 ? row[nameIx] : td->name);
-    dasOutBed(row[0+rowOffset], 
-              sqlUnsigned(row[1+rowOffset]), 
-              sqlUnsigned(row[2+rowOffset]), 
+    dasOutBed(row[chromIx], 
+              sqlUnsigned(row[chromStartIx]), 
+              sqlUnsigned(row[chromEndIx]), 
               name, strand, score, td, tt);
     }
 }
