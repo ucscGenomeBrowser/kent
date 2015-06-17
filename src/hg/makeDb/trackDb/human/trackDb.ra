@@ -4230,7 +4230,9 @@ shortLabel GWIPS-viz Riboseq
 longLabel Ribosome Profiling from GWIPS-viz
 group expression
 visibility hide
-autoScale on
+maxHeightPixels 100:32:8
+viewLimits 0:2000
+autoScale off
 html gwipsvizRiboseq
 
 searchTable numtSMitochondrionChrPlacement
