@@ -4783,15 +4783,15 @@ void loadKnownGencode(struct track *tg)
  * in "extra" field (usually gene name) */
 {
 char varName[SMALLBUF];
-safef(varName, sizeof(varName), "%s.show.composite", tg->tdb->track);
-boolean showComposite = cartUsualBoolean(cart, varName, FALSE);
+safef(varName, sizeof(varName), "%s.show.comprehensive", tg->tdb->track);
+boolean showComprehensive = cartUsualBoolean(cart, varName, FALSE);
 
 struct sqlConnection *conn = hAllocConn(database);
 tg->items = connectedLfFromGenePredInRangeExtra(tg, conn, tg->table,
                                         chromName, winStart, winEnd, TRUE);
 
 /* filter items on selected criteria if filter is available */
-if (!showComposite)
+if (!showComprehensive)
     filterItems(tg, knownGencodeClassFilter, "include");
 
 /* if we're close enough to see the codon frames, we better load them! */
