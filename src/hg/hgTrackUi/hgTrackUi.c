@@ -1720,9 +1720,12 @@ char *omimAvail = NULL;
 sqlSafef(query, sizeof(query), "select kgXref.kgID from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0 limit 1");
 omimAvail = sqlQuickString(conn, query);
 hFreeConn(&conn);
+char *isGencode = trackDbSetting(tdb, "isGencode");
 
 printf("<B>Label:</B> ");
 labelMakeCheckBox(tdb, "gene", "gene symbol", FALSE);
+if (isGencode)
+    labelMakeCheckBox(tdb, "gencodeId", "GENCODE Transcript ID", FALSE);
 labelMakeCheckBox(tdb, "kgId", "UCSC Known Gene ID", FALSE);
 labelMakeCheckBox(tdb, "prot", "UniProt Display ID", FALSE);
 
