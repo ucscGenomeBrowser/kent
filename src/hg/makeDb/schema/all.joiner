@@ -4651,8 +4651,9 @@ identifier dnaseMasterSourceId
 
 identifier dnaseClusterSourceId
 "Numeric index of cell type contributing to a DNAse cluster"
-    hg19.wgEncodeRegDnaseClusteredSources.id
+    $hg.wgEncodeRegDnaseClusteredSources.id
     hg19.wgEncodeRegDnaseClusteredV3.sourceIds comma full
+    hg38.wgEncodeRegDnaseClustered.sourceIds comma full
 
 identifier peptideAtlasAccession external=PeptideAtlas
 "Peptide accession from peptideatlas.org"
