@@ -384,7 +384,7 @@ hgLoadSqlTab hg38 wgEncodeRegDnaseClusteredInputs \
         ~/kent/src/hg/lib/clusterInputEapDnase.sql wgEncodeRegDnaseClusteredInputs.tab
 
 hgql hg38 -e "alter table uwEnc2DnaseClustered rename to wgEncodeRegDnaseClustered"
-hgsql hg38 -e "alter table uwEnc2DnaseSources rename to wgEncodeRegDnasedClusteredSource"
+hgsql hg38 -e "alter table uwEnc2DnaseSources rename to wgEncodeRegDnaseClusteredSources"
 
 
 #################
@@ -487,6 +487,14 @@ http://www.sciencellonline.com/site/productInformation.php?keyword=7130 302
 # (96 chroms in new track, 38 in old)
 
 
-
-
-
+##############################################################################
+# wgEncodeReg ENCODE Regulatory tracks (Done Chris Eisenhart)
+# Transcription, Layered H3K4Me1, Layered H3K4Me3, Layered H3K27Ac
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/wgEncodeRegMarkH3k27ac
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/wgEncodeRegMarkH34me1
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/wgEncodeRegMarkH3k4me3
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/wgEncodeRegTfbsClusteredV3
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/wgEncodeRegTxn
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg
+    liftManyBigWigs /cluster/home/ceisenhart/kent/src/hg/utils/liftList/bigWigList.ra
