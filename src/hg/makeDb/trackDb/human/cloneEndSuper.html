@@ -1,57 +1,42 @@
 <H2>Description</H2>
 <P>
+This track shows the NCBI clone end mappings from the
+<A HREF="http://www.ncbi.nlm.nih.gov/clone/library/genomic/?taxid=9606"
+TARGET=_blank>NCBI Clone DB</A> database.</P>
+<P>
 Bacterial artificial chromosomes (BACs) are a key part of many
 large-scale sequencing projects.  A BAC typically consists of 50 - 300 kb of
 DNA.  During the early phase of a sequencing project, it is common
 to sequence a single read (approximately 500 bases) off each end of
 a large number of BACs.  Later on in the project, these BAC end reads
-can be mapped to the genome sequence. </P>
+can be mapped to the genome sequence.</P>
 <P>
-This track shows these mappings
-in cases where both ends could be mapped.  These BAC end pairs can
-be useful for validating the assembly over relatively long ranges.  In some
-cases, the BACs are useful biological reagents.  This track can also be
-used for determining which BAC contains a given gene, useful information
-for certain wet lab experiments.</P>
-<P>
-A valid pair of BAC end sequences must be
-at least 50 kb but no more than 600 kb away from each other.
-The orientation of the first BAC end sequence must be &quot;+&quot; and
-the orientation of the second BAC end sequence must be &quot;-&quot;.</P>
+These BAC end pairs can be useful for validating the assembly over
+relatively long ranges.  In some cases, the BACs are useful biological
+reagents.  This track can also be used for determining which BAC
+contains a given gene, useful information for certain wet lab experiments.</P>
 <P>
 The scoring scheme used for this annotation assigns 1000 to an alignment
 when the BAC end pair aligns to only one location in the genome (after
 filtering).  When a BAC end pair or clone aligns to multiple locations, the
 score is calculated as 1500/(number of alignments).</P>
 
-<H2>Description</H2>
+<H2>Methods</H2>
 <P>
-This track shows the NCBI clone end predictions from the
-<A HREF="http://www.ncbi.nlm.nih.gov/clone/library/genomic/?taxid=9606"
-TARGET=_blank>NCBI Clone DB</A> database.
-</P><P>
-End information was extracted from the Clone DB FTP site
+The mapping of these BAC end sequences are taken directly from the
+NCBI Clone DB FTP site
 <A HREF="ftp://ftp.ncbi.nih.gov/repository/clone/reports/Homo_sapiens/"
 TARGET=_blank>ftp.ncbi.nih.gov/repository/clone/reports/Homo_sapiens/</A>
-*.GCF_000001405.26.106.*.gff files.
-</P><P>
+*.GCF_000001405.26.106.*.gff files.</P>
+<P>
+UCSC filtered the NCBI Clone DB mapped ends to drop ends that mapped to a
+region that was three times longer than the median size of the clones in
+the library.</P>
+<P>
 Click through on displayed items to the Clone DB database information,
 including
 <A HREF="http://www.ncbi.nlm.nih.gov/clone/content/distributors/"
-TARGET=_blank>Clone DB distributor</A> references.
-</P>
-
-<H2>Methods</H2>
-<P>
-BAC end sequences are placed on the assembled sequence using Jim Kent's
-<A HREF="http://genome.cshlp.org/content/12/4/656.abstract"
-TARGET=_blank>blat</A> program.</P>
-
-<P>
-UCSC filtered the NCBI Clone DB mapped ends to drop ends that mapped to a region
-that was three times longer than the median size of the clones in
-the library.</P>
-<P>
+TARGET=_blank>Clone DB distributor</A> references.</P>
 <TABLE BORDER=1>
 <TR><TH COLSPAN=7>clone information from NCBI Clone DB and UCSC mapping statistics</TH>
 <TR><TH>library<BR>name</TH>
