@@ -6,21 +6,22 @@ These tracks contain information relevant to the regulation of transcription fro
 <ul>
   <li>The <i>Transcription</i> track shows transcription
 levels assayed by sequencing of polyadenylated RNA from a variety of cell types.</li>
-  <li>The <i>Overlayed
-H3K4Me1</i> and <i>Overlayed H3K27Ac</i> tracks show where modification of histone proteins
+  <li>The <i>Layered H3K4Me1</i> and <i>Layered H3K27Ac</i> tracks show where modification of histone proteins
 is suggestive of enhancer and, to a lesser extent, other regulatory activity.  These histone 
 modifications, particularly H3K4Me1, are quite broad.  The actual enhancers are typically just a 
 small portion of the area marked by these histone modifications.</li>
-  <li>The <i>Overlay H3K4Me3</i> 
+  <li>The <i>Layered H3K4Me3</i> 
 track shows a histone mark associated with promoters.</li>
-  <li>The <i>DNase Clusters</i> track shows regions
-where the chromatin is hypersensitive to cutting by the DNase enzyme, which has 
+  <li>The <i>DNase I Hypersensitivity</i> tracks indicate
+where chromatin is hypersensitive to cutting by the DNase enzyme, which has 
 been assayed in a large number of cell types. Regulatory regions, in general, tend to be 
-DNase sensitive, and promoters are particularly DNase sensitive.</li>
+DNase-sensitive, and promoters are particularly DNase-sensitive.</li>
+<!--
   <li>The <i>Txn Factor ChIP</i>
 track shows DNA regions where transcription factors, proteins responsible for 
 modulating gene transcription, bind as assayed by chromatin immunoprecipitation with antibodies 
 specific to the transcription factor followed by sequencing of the precipitated DNA (ChIP-seq).</li>
+-->
 </ul>
 </p>
 
@@ -30,11 +31,13 @@ marks are informative at a high level, but they have a resolution of just ~200 b
 provide much in the way of functional detail.  The DNase hypersensitivity assay is higher in
 resolution at the DNA level and can be done on a large number of cell types since it's just 
 a single assay. At the functional level, DNase hypersensitivity suggests that a 
-region is very likely to be regulatory in nature, but provides little information beyond that.  The
-transcription factor ChIP assay has a high resolution at the DNA level and, due to the very
+region is very likely to be regulatory in nature, but provides little information beyond that.
+<!--
+The transcription factor ChIP assay has a high resolution at the DNA level and, due to the very
 specific nature of the transcription factors, is often informative with respect to functional
 detail.  However, since each transcription factor must be assayed separately, the information is
 only available for a limited number of transcription factors on a limited number of cell lines. 
+-->
 Though each assay has its strengths and weaknesses, the fact that all of these assays are 
 relatively independent of each other gives increased confidence when multiple tracks are 
 suggesting a regulatory function for a region.
@@ -57,7 +60,9 @@ Unfortunately, outside the ENCODE Regulation tracks, older cell line
 color conventions are used that don't match the cell line colors used in
 the ENCODE Regulation tracks. The older colors were not used in the
 ENCODE Regulation tracks because they were too dark for the transparent
-overlay. The DNase and Transcription Factor ChIP tracks contain information on so many cell lines
+overlay. The DNase 
+<!--  and Transcription Factor ChIP -->
+tracks contain information on so many cell lines
 that a color convention is inadequate.  Instead, these tracks show gray boxes where the darkness of
 the box is proportional to the maximum value seen in any cell line in that region. Clicking on
 the item takes you to a details page where the values for each cell line assayed are displayed.
