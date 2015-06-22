@@ -2,7 +2,7 @@
 
 # This file describes browser build for the ornAna2
 # Platypus - Ornithorhynchus anatinus
-## "Glennie" 
+## "Glennie"
 
 # Assembly Name:  ASM227v2
 # Organism name:  Ornithorhynchus anatinus
@@ -99,7 +99,7 @@ photoCreditName Stefan Kraft - Wikimedia Commons
 ncbiGenomeId 110
 ncbiAssemblyId 237598
 ncbiAssemblyName ASM227v2
-ncbiBioProject 19039 
+ncbiBioProject 19039
 genBankAccessionID GCA_000002275.2
 taxId 9258
 '_EOF_'
@@ -156,7 +156,7 @@ egrep -v \
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
     #    January 31 2015 (open-4-0-5) version of RepeatMasker
-    # CC   RELEASE 20140131;    
+    # CC   RELEASE 20140131;
 
     time featureBits -countGaps ornAna2 rmsk
     # 894749490 bases of 1996826513 (44.809%) in intersection
@@ -194,6 +194,16 @@ egrep -v \
 
     rm /gbdb/ornAna2/ornAna2.2bit
     ln -s `pwd`/ornAna2.2bit /gbdb/ornAna2/ornAna2.2bit
+
+##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-06-22 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/ornAna2/bed/microsat
+     cd /cluster/data/ornAna2/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed ornAna2 microsat microsat.bed
+    #	Loaded 13365 elements of size 4
 
 ##########################################################################
 ## WINDOWMASKER (DONE - 2015-03-10 - Hiram)
@@ -247,13 +257,15 @@ egrep -v \
     makeCytoBandIdeo.csh ornAna2
 
 #########################################################################
-# augustus - (DONE - 2015-05-21 - Hiram)
-    # still deciding if this is to run with 'human' parameters or 'chicken'
+# augustus - (DONE - 2015-06-19 - Hiram)
     mkdir /hive/data/genomes/ornAna2/bed/augustus
     cd /hive/data/genomes/ornAna2/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
-       -species=human -dbHost=hgwdev -workhorse=hgwdev ornAna2) > do.log 2>&1
-XXX - running - Thu May 21 15:55:21 PDT 2015
+    -species=chicken -dbHost=hgwdev -workhorse=hgwdev ornAna2) > do.log 2>&1
+    # real    80m33.289s
+
+    cat fb.ornAna2.augustusGene.txt
+    # 27859792 bases of 1842252119 (1.512%) in intersection
 
 #########################################################################
 # genscan - (DONE - 2015-03-31 - Hiram)
@@ -353,7 +365,7 @@ searchPriority 8
 
     # there are no non-bridged gaps, do not need to do this
     #   check non-bridged gaps to see what the typical size is:
-#     hgsql -N -e 'select * from gap where bridge="no" order by size;' ornAna2 
+#     hgsql -N -e 'select * from gap where bridge="no" order by size;' ornAna2
 #       | ave -tableOut -col=7 stdin
 # # min Q1 median Q3 max mean N sum stddev
 # 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006
@@ -380,8 +392,26 @@ searchPriority 8
 # 998413256 one half size
 # 998675786       182     chrUn_DS181001v1        991605
 
+##############################################################################
+# LIFTOVER TO ornAna1 (DONE - 2015-06-19 - Hiram )
+    mkdir /hive/data/genomes/ornAna2/bed/blat.ornAna1.2015-06-19
+    cd /hive/data/genomes/ornAna2/bed/blat.ornAna1.2015-06-19
+    # -debug run to create run dir, preview scripts...
+    #	verifies files can be found
+    doSameSpeciesLiftOver.pl -debug \
+         -ooc=/hive/data/genomes/ornAna2/jkStuff/ornAna2.11.ooc ornAna2 ornAna1
+    # Real run:
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         -ooc=/hive/data/genomes/ornAna2/jkStuff/ornAna2.11.ooc \
+	 ornAna2 ornAna1) > do.log 2>&1
+    #	real    335m19.206s
+
+    # verify the liftOver functions in the genome browser from ornAna2 to
+    # ornAna1
+
 #############################################################################
-# GENBANK AUTO UPDATE (DONE - 2015-03-31 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2015-06-09 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -421,8 +451,8 @@ ornAna2.perChromTables = no
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial ornAna2
-    # logFile: var/build/logs/2015.04.27-21:25:57.ornAna2.initalign.log
-    # real    real    946m51.747s
+    # logFile: var/build/logs/2015.05.22-11:39:57.ornAna2.initalign.log
+    # real    209m45.611s
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.ornAna2
@@ -430,49 +460,46 @@ ornAna2.perChromTables = no
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
-    time ./bin/gbDbLoadStep -drop -initialLoad -verbose=10 ornAna2
-    # logFile: var/dbload/hgwdev/logs/2015.05.21-15:54:32.ornAna2.dbload.log
-XXX - running - Thu May 21 15:54:45 PDT 2015
-    # real    10m59.824s
+    time ./bin/gbDbLoadStep -drop -initialLoad ornAna2
+    # logFile: var/dbload/hgwdev/logs/2015.06.09-13:58:35.ornAna2.dbload.log
+    # real    22m24.264s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add ornAna2 to:
     #   vi etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added ornAna2 - Golden snub-nosed monkey refs #14438" \
+    git commit -m "Added ornAna2 - platypus refs #15098" \
       etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (DONE 2014-10-21 - Steve)
+# all.joiner update, downloads and in pushQ - (DONE 2015-06-22 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=ornAna2 -tableCoverage all.joiner
-    joinerCheck -database=ornAna2 -keys all.joiner
     joinerCheck -database=ornAna2 -times all.joiner
+    joinerCheck -database=ornAna2 -keys all.joiner
 
     cd /hive/data/genomes/ornAna2
     time makeDownloads.pl ornAna2 > downloads.log 2>&1
-    # real    18m53.781s
+    # real    16m40.268s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/ornAna2/pushQ
     cd /hive/data/genomes/ornAna2/pushQ
     makePushQSql.pl ornAna2 > ornAna2.pushQ.sql 2> stderr.out
     #   check for errors in stderr.out, some are OK, e.g.:
-    # WARNING: hgwdev does not have /gbdb/ornAna2/wib/gc5Base.wib
-    # WARNING: hgwdev does not have /gbdb/ornAna2/wib/quality.wib
-    # WARNING: hgwdev does not have /gbdb/ornAna2/bbi/quality.bw
-    # WARNING: ornAna2 does not have seq
-    # WARNING: ornAna2 does not have extFile
+    #  WARNING: hgwdev does not have /gbdb/ornAna2/wib/gc5Base.wib
+    #  WARNING: hgwdev does not have /gbdb/ornAna2/wib/quality.wib
+    #  WARNING: hgwdev does not have /gbdb/ornAna2/bbi/qualityBw/quality.bw
+    #  WARNING: ornAna2 does not have seq
+    #  WARNING: ornAna2 does not have extFile
 
     #   copy it to hgwbeta
     scp -p ornAna2.pushQ.sql qateam@hgwbeta:/tmp
-    ssh hgwbeta
-    cd /tmp
-    hgsql qapushq < ornAna2.pushQ.sql
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/ornAna2.pushQ.sql"
     #   in that pushQ entry walk through each entry and see if the
     #   sizes will set properly
 

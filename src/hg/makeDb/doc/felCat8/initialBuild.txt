@@ -202,6 +202,16 @@ taxId 9685
     ln -s `pwd`/felCat8.2bit /gbdb/felCat8/felCat8.2bit
 
 ##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-06-22 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/felCat8/bed/microsat
+     cd /cluster/data/felCat8/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed felCat8 microsat microsat.bed
+    #	Read 126733 elements of size 4 from microsat.bed
+
+##########################################################################
 ## WINDOWMASKER (DONE - 2014-11-21 - Hiram)
 
     mkdir /hive/data/genomes/felCat8/bed/windowMasker

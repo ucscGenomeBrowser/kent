@@ -182,6 +182,16 @@ RepeatMasker bug?: Undefined id, line 2869572 of input:
     ln -s `pwd`/micMur2.2bit /gbdb/micMur2/micMur2.2bit
 
 ##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-06-22 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/micMur2/bed/microsat
+     cd /cluster/data/micMur2/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed micMur2 microsat microsat.bed
+    #	Read 27836 elements of size 4 from microsat.bed
+
+##########################################################################
 ## WINDOWMASKER (DONE - 2015-05-04 - Hiram)
 
     mkdir /hive/data/genomes/micMur2/bed/windowMasker

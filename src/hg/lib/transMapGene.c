@@ -2,15 +2,14 @@
  * generated transMapGene.h and transMapGene.sql.  This module links the database and
  * the RAM representation of objects. */
 
-/* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
-
 #include "common.h"
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
 #include "transMapGene.h"
 
+char *transMapGeneCommaSepFieldNames4 = "id,cds,db,geneName";   // previous version without geneId column
+char *transMapGeneCommaSepFieldNames = "id,cds,db,geneName,geneId";
 
 void transMapGeneStaticLoad(char **row, struct transMapGene *ret)
 /* Load a row from transMapGene table into ret.  The contents of ret will
@@ -21,6 +20,7 @@ ret->id = row[0];
 ret->cds = row[1];
 safecpy(ret->db, sizeof(ret->db), row[2]);
 ret->geneName = row[3];
+ret->geneId = row[4];
 }
 
 struct transMapGene *transMapGeneLoad(char **row)
@@ -34,6 +34,7 @@ ret->id = cloneString(row[0]);
 ret->cds = cloneString(row[1]);
 safecpy(ret->db, sizeof(ret->db), row[2]);
 ret->geneName = cloneString(row[3]);
+ret->geneId = cloneString(row[4]);
 return ret;
 }
 
@@ -43,7 +44,7 @@ struct transMapGene *transMapGeneLoadAll(char *fileName)
 {
 struct transMapGene *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[5];
 
 while (lineFileRow(lf, row))
     {
@@ -61,7 +62,7 @@ struct transMapGene *transMapGeneLoadAllByChar(char *fileName, char chopper)
 {
 struct transMapGene *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[5];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -86,6 +87,7 @@ ret->id = sqlStringComma(&s);
 ret->cds = sqlStringComma(&s);
 sqlFixedStringComma(&s, ret->db, sizeof(ret->db));
 ret->geneName = sqlStringComma(&s);
+ret->geneId = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -100,6 +102,7 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->id);
 freeMem(el->cds);
 freeMem(el->geneName);
+freeMem(el->geneId);
 freez(pEl);
 }
 
@@ -134,8 +137,14 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->geneName);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->geneId);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
+
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
@@ -144,8 +153,16 @@ struct transMapGene *transMapGeneQuery(struct sqlConnection *geneConn,
 /* load a single transMapSrc object for an srcDb and srcId from a table,
  * or return NULL if not found */
 {
-return sqlQueryObjs(geneConn, (sqlLoadFunc)transMapGeneLoad,
-                    sqlQuerySingle,
-                    "SELECT * FROM %s WHERE (db=\"%s\") and (id = \"%s\")",
-                    table, srcDb, srcId);
+/* geneId field was added after original table definition.  Return empty string
+ * in query for legacy tables. */
+if (sqlFieldIndex(geneConn, table, "geneId") >= 0)
+    return sqlQueryObjs(geneConn, (sqlLoadFunc)transMapGeneLoad,
+                        sqlQuerySingle,
+                        "SELECT %-s FROM %s WHERE (db=\"%s\") and (id = \"%s\")",
+                        transMapGeneCommaSepFieldNames, table, srcDb, srcId);
+else
+    return sqlQueryObjs(geneConn, (sqlLoadFunc)transMapGeneLoad,
+                        sqlQuerySingle,
+                        "SELECT %-s,\"\" FROM %s WHERE (db=\"%s\") and (id = \"%s\")",
+                        transMapGeneCommaSepFieldNames4, table, srcDb, srcId);
 }

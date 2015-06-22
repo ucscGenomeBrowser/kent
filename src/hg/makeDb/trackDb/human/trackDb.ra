@@ -4225,7 +4225,7 @@ compositeTrack on
     priority 2
 
 track gwipsvizRiboseq
-type bigWig
+type bigWig 0 3589344
 shortLabel GWIPS-viz Riboseq
 longLabel Ribosome Profiling from GWIPS-viz
 group expression
