@@ -10,6 +10,8 @@
 
 #define TRANSMAPINFO_NUM_COLS 5
 
+extern char *transMapInfoCommaSepFieldNames;
+
 enum transMapInfoChainSubset
     {
     transMapInfoUnknown = 0,
