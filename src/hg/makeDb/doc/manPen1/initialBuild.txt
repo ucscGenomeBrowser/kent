@@ -140,7 +140,7 @@ genomeCladePriority 31
 scientificName Manis pentadactyla
 commonName Chinese pangolin
 assemblyDate Aug. 2014
-assemblyLabel Washington University 
+assemblyLabel Washington University
 assemblyShortLabel M_pentadactyla-1.1.1
 orderKey 3355
 # mitoAcc included in source fasta prepared above
@@ -203,7 +203,7 @@ taxId 143292
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
     #    January 31 2015 (open-4-0-5) version of RepeatMasker
-    # CC   RELEASE 20140131;    
+    # CC   RELEASE 20140131;
 
     time featureBits -countGaps manPen1 rmsk
     # 655984124 bases of 2204741241 (29.753%) in intersection
@@ -241,6 +241,16 @@ taxId 143292
 
     rm /gbdb/manPen1/manPen1.2bit
     ln -s `pwd`/manPen1.2bit /gbdb/manPen1/manPen1.2bit
+
+##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-06-22 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/manPen1/bed/microsat
+     cd /cluster/data/manPen1/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed manPen1 microsat microsat.bed
+    #	Loaded 13365 elements of size 4
 
 ##########################################################################
 ## WINDOWMASKER (DONE - 2014-08-16 - Hiram)
@@ -320,7 +330,49 @@ doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
     cat fb.manPen1.genscanSubopt.txt
     #   62862446 bases of 1999066070 (3.145%) in intersection
 
-########################################################################
+#########################################################################
+# ucscToINSDC table/track (DONE - 2015-06-22 - Hiram)
+    mkdir /hive/data/genomes/manPen1/bed/ucscToINSDC
+    cd /hive/data/genomes/manPen1/bed/ucscToINSDC
+
+    # check for chrM accession:
+    grep chrM ../../manPen1.agp
+# chrM    1       16578   1       F       NC_016008       1       16578   +
+
+    # use that accession as an argument to this command
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+         ../../genbank/Primary_Assembly NC_016008
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    # do not need the v1 in this case:
+    sed -e 's/v1//' ucscToINSDC.txt \
+      | join name.coordinate.tab - | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    #    92770 name.coordinate.tab
+    #    92770 ucscToINSDC.bed
+    #    92773 ucscToINSDC.txt
+
+    # three missing ones are the dups that UCSC removed:
+     cat ../../ucsc/dup.list
+JPTV01168508
+JPTV01172399
+JPTV01172711
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 12
+    # use the 12 in this sed
+    sed -e "s/21/12/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab manPen1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords manPen1
+    # should cover %100 entirely:
+    featureBits -countGaps manPen1 ucscToINSDC
+    # 2204741241 bases of 2204741241 (100.000%) in intersection
+
+#########################################################################
 # Create kluster run files (DONE - 2015-06-10 - Hiram)
 
     cd /hive/data/genomes/manPen1
@@ -348,7 +400,7 @@ doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
 
     # there are no non-bridged gaps, do not need to do this
     #   check non-bridged gaps to see what the typical size is:
-#     hgsql -N -e 'select * from gap where bridge="no" order by size;' manPen1 
+#     hgsql -N -e 'select * from gap where bridge="no" order by size;' manPen1
 #       | ave -tableOut -col=7 stdin
 # # min Q1 median Q3 max mean N sum stddev
 # 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006
@@ -502,21 +554,21 @@ searchPriority 8
 # all.joiner update, downloads and in pushQ - (DONE 2014-10-21 - Steve)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
-    git commit -m "Added manPen1 - Bison bison bison refs #15388" \
+    git commit -m "Added manPen1 - Chinese Pangolin/Manis pentadactyl arefs #15515" \
        all.joiner
-    joinerCheck -database=manPen1 -keys all.joiner
     joinerCheck -database=manPen1 -tableCoverage all.joiner
     joinerCheck -database=manPen1 -times all.joiner
+    joinerCheck -database=manPen1 -keys all.joiner
 
     cd /hive/data/genomes/manPen1
     time makeDownloads.pl manPen1 > downloads.log 2>&1
-    # real    25m16.304s
+    # real    14m28.068s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/manPen1/pushQ
     cd /hive/data/genomes/manPen1/pushQ
     time makePushQSql.pl manPen1 > manPen1.pushQ.sql 2> stderr.out
-    # real    5m16.163s
+    # real    5m58.381s
 
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: hgwdev does not have /gbdb/manPen1/wib/gc5Base.wib
@@ -525,13 +577,11 @@ searchPriority 8
     # WARNING: manPen1 does not have seq
     # WARNING: manPen1 does not have extFile
     # WARNING: manPen1 does not have estOrientInfo
+    # WARNING: manPen1 does not have mrnaOrientInfo
 
     #   copy it to hgwbeta
     scp -p manPen1.pushQ.sql qateam@hgwbeta:/tmp
     ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/manPen1.pushQ.sql"
-    ssh hgwbeta
-    cd /tmp
-    hgsql qapushq < manPen1.pushQ.sql
     #   in that pushQ entry walk through each entry and see if the
     #   sizes will set properly
 
