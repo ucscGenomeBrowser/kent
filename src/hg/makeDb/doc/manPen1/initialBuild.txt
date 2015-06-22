@@ -1,0 +1,588 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the manPen1
+# Chinese Pangolin - Manis pentadactyla
+
+# DATE:   11-Aug-2014
+# ORGANISM:       Manis pentadactyla
+# TAXID:  143292
+# ASSEMBLY LONG NAME:     M_pentadactyla-1.1.1
+# ASSEMBLY SHORT NAME:    M_pentadactyla-1.1.1
+# ASSEMBLY SUBMITTER:     Washington University (WashU)
+# ASSEMBLY TYPE:  Haploid
+# NUMBER OF ASSEMBLY-UNITS:       1
+# ASSEMBLY ACCESSION:     GCA_000738955.1
+# FTP-RELEASE DATE: 13-Aug-2014
+
+# this build was run up with the older style genbank hierarchy
+
+# picked up chrM from NC_016008.1
+
+# Assembly Name:  M_pentadactyla-1.1.1
+# Organism name:  Manis pentadactyla
+# Taxid:          143292
+# Submitter:      Washington University (WashU)
+# Date:           2014-8-11
+# BioSample:      SAMN01943338
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# GenBank Assembly Accession: GCA_000738955.1 (species-representative latest)
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000738965.1              Primary Assembly
+
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2014-08-13 - Hiram)
+    mkdir -p /hive/data/genomes/manPen1/genbank
+    cd /hive/data/genomes/manPen1/genbank
+
+    rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Manis_pentadactyla/M_pentadactyla-1.1.1/ ./
+
+    # measure what we have here:
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+    # 2204732179 bases (205794440 N's 1998937739 real 1998937739 upper
+    #    0 lower) in 92772 sequences in 1 files
+    # Total size: mean 23765.1 sd 56958.1
+    #  min 200 (gi|671805652|gb|JPTV01206145.1|)
+    #  max 1317973 (gi|672349252|gb|KN005617.1|) median 598
+
+    # the newer hierarchy would have been from here:
+    mkdir /hive/data/genomes/manPen1/newGenbank
+    cd /hive/data/genomes/manPen1/newGenbank
+    time rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Manis_pentadactyla/all_assembly_versions/GCA_000738955.1_M_pentadactyla-1.1.1/ ./
+
+    # sent 318 bytes  received 1398411462 bytes  14054389.75 bytes/sec
+    # total size is 1398238878  speedup is 1.00
+    # real    1m39.586s
+
+    faSize *.fna.gz
+    # 2204732179 bases (205794440 N's 1998937739 real 1448708505 upper
+    #    550229234 lower) in 92772 sequences in 1 files
+    # Total size: mean 23765.1 sd 56958.1 min 200 (JPTV01206145.1)
+    #    max 1317973 (KN005617.1) median 598
+    #  %24.96 masked total, %27.53 masked real
+
+export mitoAcc=NC_016008.1
+
+wget -O ${mitoAcc}.fa \
+ "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$mitoAcc"
+
+echo ">chrM" > chrM.fa
+grep -v "^>" ${mitoAcc}.fa >> chrM.fa
+
+export mSize=`faCount chrM.fa | grep total | awk '{print $2}'`
+
+/bin/echo -e "chrM\t1\t$mSize\t1\tF\t$mitoAcc\t1\t$mSize\t+" > chrM.agp
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2014-08-13 - Hiram)
+    mkdir /hive/data/genomes/manPen1/ucsc
+    cd /hive/data/genomes/manPen1/ucsc
+
+    # three duplicate contigs were removed:
+# JPTV01168508
+# JPTV01172399
+# JPTV01172711
+
+    # older style name mangling, simply remove the .1 on all the names
+    # and the three duplicates
+
+zcat ../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+    | egrep -v "^#|JPTV01168508|JPTV01172399|JPTV01172711" \
+       | sed -e 's/\.1//;' > chrUn.agp
+
+zcat ../genbank/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz \
+    | sed -e 's/.1. Manis .*//; s/gi.[0-9][0-9]*.gb.//;' \
+       | faSomeRecords -exclude stdin dup.list stdout | gzip -c > chrUn.fa.gz
+
+    zcat chrUn.fa.gz chrM.fa.gz | grip -c > manPen1.ucsc.fa.gz
+    zcat chrM.agp chrM.agp > manPen1.ucsc.agp
+
+    # verify these two files are compatible:
+    zcat chrUn.fa.gz chrM.fa.gz | faToTwoBit stdin.manPen1.fa test.2bit
+    checkAgpAndFa manPen1.ucsc.agp test.2bit 2>&1 | tail
+    # All AGP and FASTA entries agree - both files are valid
+    rm -f test.2bit
+
+#############################################################################
+# photo (DONE - 2015-06-10 - Hiram)
+    mkdir /hive/data/genomes/manPen1/photo
+    cd /hive/data/genomes/manPen1/photo
+    # found photo at flickr without restrictions
+    # from user dotpolka: https://www.flickr.com/photos/dotpolka/
+    # aka: https://twitter.com/dotpolka Caroline Härdter
+    wget --timestamping \
+https://farm1.staticflickr.com/39/78362867_c7b9c42166_o_d.jpg
+
+    convert -quality 100 -crop 1268x2684+192+256 \
+        78362867_c7b9c42166_o_d.jpg pangolinCrop.jpg
+    convert -quality 80 -geometry 300x400 \
+        pangolinCrop.jpg Manis_pentadactyla.jpg
+
+    # check that Manis_pentadactyla.jpg file into source tree
+    # src/hg/htdocs/images/ and copy to /usr/local/apache/htdocs/images/
+
+#############################################################################
+#  Initial database build (DONE - 2014-08-14 - Hiram)
+
+    cd /hive/data/genomes/manPen1
+    cat << '_EOF_' > manPen1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db manPen1
+clade mammal
+genomeCladePriority 31
+scientificName Manis pentadactyla
+commonName Chinese pangolin
+assemblyDate Aug. 2014
+assemblyLabel Washington University
+assemblyShortLabel M_pentadactyla-1.1.1
+orderKey 3355
+# mitoAcc included in source fasta prepared above
+# mitoAcc NC_016008.1
+mitoAcc none
+fastaFiles /hive/data/genomes/manPen1/ucsc/manPen1.ucsc.fa.gz
+agpFiles /hive/data/genomes/manPen1/ucsc/manPen1.ucsc.agp
+# qualFiles none
+dbDbSpeciesDir pangolin
+photoCreditURL https://www.flickr.com/people/dotpolka/
+photoCreditName Caroline Härdter/flicker
+ncbiGenomeId 10694
+ncbiAssemblyId 203041
+ncbiAssemblyName M_pentadactyla-1.1.1
+ncbiBioProject 20331
+genBankAccessionID GCA_000738955.1
+taxId 143292
+'_EOF_'
+    # << happy emacs
+
+    # these steps were performed manually before the manPen1.config.ra file
+    # was constructed.
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp manPen1.config.ra) > agp.log 2>&1
+    # *** All done!  (through the 'agp' step)
+    # real    66m20.834s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db manPen1.config.ra) > db.log 2>&1
+    # real    35m25.469s
+
+    # did run this up with the new manPen1.config.ra file: 2015-06-10
+
+    makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileserver=hgwdev \
+       -continue=trackDb manPen1.config.ra > trackDb.debug.log 2>&1
+
+    # check in the trackDb files created and add to trackDb/makefile
+    # and clean up:
+    rm -fr TemporaryTrackDbCheckout/
+
+##########################################################################
+# running repeat masker (DONE - 2014-08-15 - Hiram)
+    mkdir /hive/data/genomes/manPen1/bed/repeatMasker
+    cd /hive/data/genomes/manPen1/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev -useRMBlastn \
+       -smallClusterHub=ku manPen1) > do.log 2>&1
+    # real    558m51.310s
+
+    cat faSize.rmsk.txt
+    # 2204741241 bases (205794437 N's 1998946804 real 1343043070 upper
+    #    655903734 lower) in 92770 sequences in 1 files
+    # Total size: mean 23765.7 sd 56958.6 min 200 (JPTV01206145)
+    #   max 1317973 (KN005617) median 598
+    # %29.75 masked total, %32.81 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps manPen1 rmsk
+    # 655984124 bases of 2204741241 (29.753%) in intersection
+    # real    1m0.941s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2014-08-14 - Hiram)
+
+    mkdir /hive/data/genomes/manPen1/bed/simpleRepeat
+    cd /hive/data/genomes/manPen1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        manPen1) > do.log 2>&1
+    # real    39m22.135s
+
+    cat fb.simpleRepeat
+    # 43106952 bases of 1999066070 (2.156%) in intersection
+
+    # using the Window Masker result:
+    cd /hive/data/genomes/manPen1
+    twoBitMask bed/repeatMasker/manPen1.rmsk.2bit \
+      -add bed/simpleRepeat/trfMask.bed  manPen1.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa manPen1.2bit stdout | faSize stdin > faSize.manPen1.2bit.txt
+    cat faSize.manPen1.2bit.txt
+    # 2204741241 bases (205794437 N's 1998946804 real 1342683024 upper
+    #    656263780 lower) in 92770 sequences in 1 files
+    # Total size: mean 23765.7 sd 56958.6 min 200 (JPTV01206145)
+    #    max 1317973 (KN005617) median 598
+    # %29.77 masked total, %32.83 masked real
+
+    rm /gbdb/manPen1/manPen1.2bit
+    ln -s `pwd`/manPen1.2bit /gbdb/manPen1/manPen1.2bit
+
+##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-06-22 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/manPen1/bed/microsat
+     cd /cluster/data/manPen1/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed manPen1 microsat microsat.bed
+    #	Loaded 13365 elements of size 4
+
+##########################################################################
+## WINDOWMASKER (DONE - 2014-08-16 - Hiram)
+
+    mkdir /hive/data/genomes/manPen1/bed/windowMasker
+    cd /hive/data/genomes/manPen1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev manPen1) > do.log 2>&1
+    # real    252m52.324s
+
+    # Masking statistics
+    cat faSize.manPen1.cleanWMSdust.txt
+    # 2204741241 bases (205794437 N's 1998946804 real 1438998713 upper
+    #    559948091 lower) in 92770 sequences in 1 files
+    # Total size: mean 23765.7 sd 56958.6 min 200 (JPTV01206145)
+    #    max 1317973 (KN005617) median 598
+    # %25.40 masked total, %28.01 masked real
+
+    cat fb.manPen1.rmsk.windowmaskerSdust.txt
+    # 276979736 bases of 2204741241 (12.563%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2014-08-19 - Hiram)
+    mkdir /hive/data/genomes/manPen1/bed/cpgIslands
+    cd /hive/data/genomes/manPen1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku manPen1) > do.log 2>&1 &
+    # real    169m34.228s
+
+    cat fb.manPen1.cpgIslandExt.txt
+    # 11640846 bases of 1999066070 (0.582%) in intersection
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2014-08-20 - Hiram)
+    mkdir /hive/data/genomes/manPen1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/manPen1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/manPen1/manPen1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku manPen1) > do.log 2>&1
+    # real    360m14.919s
+
+    cat fb.manPen1.cpgIslandExtUnmasked.txt
+    # 12785608 bases of 1999066070 (0.640%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-06-10 - Hiram)
+    mkdir /hive/data/genomes/manPen1/bed/cytoBand
+    cd /hive/data/genomes/manPen1/bed/cytoBand
+    makeCytoBandIdeo.csh manPen1
+
+#########################################################################
+# augustus - (DONE - 2015-05-28 - Hiram)
+    mkdir /hive/data/genomes/manPen1/bed/augustus
+    cd /hive/data/genomes/manPen1/bed/augustus
+
+export db="manPen1"
+export species="human"
+doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+  -species=$species -dbHost=hgwdev -utr -workhorse=hgwdev $db
+
+    cat fb.manPen1.augustusGene.txt
+    #  49832677 bases of 1999066070 (2.493%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2014-08-22 - Hiram)
+    mkdir /hive/data/genomes/manPen1/bed/genscan
+    cd /hive/data/genomes/manPen1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku manPen1) > do.log 2>&1 &
+    # real    122m8.890s
+
+    cat fb.manPen1.genscan.txt
+    #   55603181 bases of 1999066070 (2.781%) in intersection
+
+    cat fb.manPen1.genscanSubopt.txt
+    #   62862446 bases of 1999066070 (3.145%) in intersection
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2015-06-22 - Hiram)
+    mkdir /hive/data/genomes/manPen1/bed/ucscToINSDC
+    cd /hive/data/genomes/manPen1/bed/ucscToINSDC
+
+    # check for chrM accession:
+    grep chrM ../../manPen1.agp
+# chrM    1       16578   1       F       NC_016008       1       16578   +
+
+    # use that accession as an argument to this command
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+         ../../genbank/Primary_Assembly NC_016008
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    # do not need the v1 in this case:
+    sed -e 's/v1//' ucscToINSDC.txt \
+      | join name.coordinate.tab - | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    #    92770 name.coordinate.tab
+    #    92770 ucscToINSDC.bed
+    #    92773 ucscToINSDC.txt
+
+    # three missing ones are the dups that UCSC removed:
+     cat ../../ucsc/dup.list
+JPTV01168508
+JPTV01172399
+JPTV01172711
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 12
+    # use the 12 in this sed
+    sed -e "s/21/12/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab manPen1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords manPen1
+    # should cover %100 entirely:
+    featureBits -countGaps manPen1 ucscToINSDC
+    # 2204741241 bases of 2204741241 (100.000%) in intersection
+
+#########################################################################
+# Create kluster run files (DONE - 2015-06-10 - Hiram)
+
+    cd /hive/data/genomes/manPen1
+    # numerator is manPen1 gapless bases "real" as reported by:
+    head -1 faSize.manPen1.2bit.txt
+# 2204741241 bases (205794437 N's 1998946804 real 1342683024 upper
+#    656263780 lower) in 92770 sequences in 1 files
+
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 1998946804 / 2861349177 \) \* 1024
+    # ( 1998946804 / 2861349177 ) * 1024 = 715.369359
+
+    # ==> use -repMatch=700 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/manPen1
+    time blat manPen1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/manPen1.11.ooc \
+        -repMatch=700
+    # Wrote 25574 overused 11-mers to jkStuff/manPen1.11.ooc
+    #   real    0m33.809s
+
+    # there are no non-bridged gaps, do not need to do this
+    #   check non-bridged gaps to see what the typical size is:
+#     hgsql -N -e 'select * from gap where bridge="no" order by size;' manPen1
+#       | ave -tableOut -col=7 stdin
+# # min Q1 median Q3 max mean N sum stddev
+# 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006
+
+    # note the minimum non-bridged gap size is 50,076
+
+#  gapToLift -verbose=2 -minGap=50000 manPen1 jkStuff/manPen1.nonBridged.lft \
+#         -bedFile=jkStuff/manPen1.nonBridged.bed
+
+#    hgsql -N \
+#        -e 'select * from gap where bridge="no" order by size;' manPen1 \
+#        | ave -col=7 stdin
+
+    # not needed:
+#    gapToLift -verbose=2 -minGap=100 bosTau7 jkStuff/nonBridged.lft \
+#        -bedFile=jkStuff/nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 92770, total size: 2204741241, one half size: 1102370620
+# cumulative    N50 count       contig  contig size
+# 1102318455      5267    KN010628        117930
+# 1102370620 one half size
+# 1102436375      5268    KN010629        117920
+
+#############################################################################
+# GENBANK AUTO UPDATE (DONE - 2015-06-10 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows one mRNA:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Manis javanica  1       0       0
+
+    # edit etc/genbank.conf to add manPen1 just before bosTau2
+
+# manPen1 (Pangolin) 92770 contigs
+manPen1.serverGenome = /hive/data/genomes/manPen1/manPen1.2bit
+manPen1.clusterGenome = /hive/data/genomes/manPen1/manPen1.2bit
+manPen1.ooc = /hive/data/genomes/manPen1/jkStuff/manPen1.11.ooc
+manPen1.lift = no
+manPen1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+manPen1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+manPen1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+manPen1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+manPen1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+manPen1.downloadDir = manPen1
+manPen1.refseq.mrna.native.load  = no
+manPen1.refseq.mrna.xeno.load = yes
+manPen1.genbank.mrna.xeno.load = no
+manPen1.genbank.mrna.native.load = no
+manPen1.genbank.est.native.load = no
+manPen1.perChromTables = no
+
+    git commit -m "Added manPen1/Pangolin; refs #15515" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "Added manPen Pangolin/Manis pentadactyla (javanica) refs #15515" \
+       src/lib/gbGenome.c
+    git push
+    make install-server
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial manPen1
+    # logFile: var/build/logs/2015.06.10-14:04:03.manPen1.initalign.log
+    # real    34m30.608s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.manPen1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad manPen1
+    # logFile: var/dbload/hgwdev/logs/2015.06.15-09:40:01.manPen1.dbload.log
+    # real    6m45.556s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add manPen1 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added manPen1 - Pangolin/Manis pentadactyla (javanica)refs #15515" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2015-03-10 - Hiram)
+    mkdir /hive/data/genomes/manPen1/bed/ucscToINSDC
+    cd /hive/data/genomes/manPen1/bed/ucscToINSDC
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+       ../../genbank/GCA_*assembly_structure/Primary_Assembly NC_012346.1
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    #   450182 name.coordinate.tab
+    #   450182 ucscToINSDC.bed
+    #   450182 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab manPen1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords manPen1
+    # should cover %100 entirely:
+    featureBits -countGaps manPen1 ucscToINSDC
+    # 1192725744 bases of 1192725744 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2015-03-10 - Hiram)
+    hgsql -N -e "select frag from gold;" manPen1 | sort | head -1
+JPYT01000001.1
+
+    hgsql -N -e "select frag from gold;" manPen1 | sort | tail -2
+JPYT01792165.1
+NC_012346.1
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" manPen1 | wc -l
+    # 792166
+
+    hgsql -N -e "select frag from gold;" manPen1 \
+       | egrep -e '[JN][PC][Y_][T0][0-9]+(\.1)?' | wc -l
+    # 792166
+
+    hgsql -N -e "select frag from gold;" manPen1 \
+       | egrep -v -e '[JN][PC][Y_][T0][0-9]+(\.1)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/tarsier/manPen1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [JN][PC][Y_][T0][0-9]+(\.1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE 2014-10-21 - Steve)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    git commit -m "Added manPen1 - Chinese Pangolin/Manis pentadactyl arefs #15515" \
+       all.joiner
+    joinerCheck -database=manPen1 -tableCoverage all.joiner
+    joinerCheck -database=manPen1 -times all.joiner
+    joinerCheck -database=manPen1 -keys all.joiner
+
+    cd /hive/data/genomes/manPen1
+    time makeDownloads.pl manPen1 > downloads.log 2>&1
+    # real    14m28.068s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/manPen1/pushQ
+    cd /hive/data/genomes/manPen1/pushQ
+    time makePushQSql.pl manPen1 > manPen1.pushQ.sql 2> stderr.out
+    # real    5m58.381s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/manPen1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/manPen1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/manPen1/bbi/qualityBw/quality.bw
+    # WARNING: manPen1 does not have seq
+    # WARNING: manPen1 does not have extFile
+    # WARNING: manPen1 does not have estOrientInfo
+    # WARNING: manPen1 does not have mrnaOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p manPen1.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/manPen1.pushQ.sql"
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

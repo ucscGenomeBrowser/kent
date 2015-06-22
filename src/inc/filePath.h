@@ -28,4 +28,7 @@ void undosPath(char *path);
 /* Convert '\' to '/' in path. (DOS/Windows is typically ok with
  * this actually.) */
 
+char *makeRelativePath(char *from, char *to);
+/* Calculate relative path between two absolute ones */
+
 #endif /* FILEPATH_H */

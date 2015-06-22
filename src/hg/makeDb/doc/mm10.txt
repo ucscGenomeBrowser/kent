@@ -11041,13 +11041,15 @@ echo "select * from ucscToRefSeq" | hgsql $db | tail -n +2 | awk '{print 0, $4, 
 rm -f $ftpFile
 wget $ftpFile
 
-/cluster/home/braney/bin/x86_64/gff3ToGenePred -useName -warnAndContinue -attrsOut=attrs $gff3File stdout 2> convertErr.txt | liftUp -type=.gp -extGenePred lift.gp refSeqToUcsc.lft warn  stdin 2> liftErr.txt
+/cluster/home/braney/bin/x86_64/gff3ToGenePred -useName -warnAndContinue -attrsOut=attrs -bad=bad.gp $gff3File stdout 2> convertErr.txt | liftUp -type=.gp -extGenePred lift.gp refSeqToUcsc.lft warn  stdin 2> liftErr.txt
 wc -l lift.gp
-# 104119 lift.gp
+# 108567 lift.gp
+wc -l bad.gp
+# 189
 
 tawk '{print $1}'  attrs | sort | uniq > meta
 wc -l meta
-# 106733 meta
+# 110847 meta
 for i in product Dbxref gene gbkey
 do 
     echo $i
@@ -11055,18 +11057,23 @@ do
     mv out meta
 done  
 wc -l meta
-# 106733 meta
+# 109420 meta
 
-egrep "^N(M|R)" lift.gp > curated.gp
+egrep "^N(M|R|P)" lift.gp > curated.gp
 egrep "^X(M|R)" lift.gp > predicted.gp
 
 wc -l curated.gp predicted.gp
-#  33532 curated.gp
-#  70587 predicted.gp
-# 104119 total
+#33545 curated.gp
+#70587 predicted.gp
+#104132 total
+
+cat curated.gp predicted.gp | awk '{print $1}' | sort -u > tmp1
+cat meta | awk '{print $1}' | sort -u > tmp2
+join -v 1 tmp1 tmp2 | wc -l
+# 0
 
 grep dropping convertErr.txt | wc -l
-#    2416
+#    189
 
 awk '/isn/ {print $1}' liftErr.txt | sort -u
 #    NT_166322.1
@@ -11075,6 +11082,13 @@ awk '/isn/ {print $1}' liftErr.txt | sort -u
 hgLoadGenePred -genePredExt $db ncbiRefCurated curated.gp
 hgLoadGenePred -genePredExt $db ncbiRefPredicted predicted.gp
 hgLoadSqlTab $db ncbiRefLink $kent/src/hg/lib/ncbiRefLink.sql meta
+
+hgsql -e 'INSERT INTO trackVersion \
+    (db, name, who, version, updateTime, comment, source, dateReference) \
+    VALUES("mm10", "ncbiRefSeq", "braney", "105", now(), \
+    "http://www.ncbi.nlm.nih.gov/genome/annotation_euk/Mus_musculus/105/", \
+    "ftp://ftp.ncbi.nlm.nih.gov/genomes/M_musculus", \
+    "9 February 2015" );' hgFixed
 
 #
 #############################################################################

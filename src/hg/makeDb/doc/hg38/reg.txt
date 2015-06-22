@@ -266,7 +266,25 @@ uwDnaseTrackHub meta.tab run_pooled colors.tab hub
     cp trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg38/uwDnase.ra
 
 #################################
-# DNase clusters track
+# DNase clusters track (Kate Feb 2015)
+
+# NOTE: hotspot5 had a bug causing it to silently abort peak identification on some datasets 
+# before completing all chromosomes.  I fixed this issue, and created hotspot5.1 version, which
+# was used to remake the broad and narrow peaks.  The corrected bigBeds are dated Feb. 13-19.
+#
+# The hotspot tool is hosted on hive at:  /hive/groups/encode/encode3/tools/hotspot-distr
+# The version is v4 (though the tool prints hotspot5 as its name)
+# The fix is:
+#
+# diff  hotspot-deploy-made/src/InputDataReader.cpp  hotspot-deploy-fixed/src/InputDataReader.cpp
+# 74a75
+# >                         numLines++;
+# I ran this by Bob Thurman who currently maintains the package, and he thought it reasonable -- said
+# he would test but we've not heard back.  I will post it to gitHub as an issue sometime.
+
+# Scored files are:
+#       /hive/data/genomes/hg38/bed/wgEncodeRegDnase/run_pooled_hotspot5.1/scored/*broadPeak.bb
+#       /hive/data/genomes/hg38/bed/wgEncodeRegDnase/run_pooled_hotspot5.1/scored/out/*.narrowPeak
 
     cd /hive/data/genomes/hg38/bed/uwDnase1
     mkdir clusters
@@ -340,11 +358,14 @@ cat > makeInputs.csh << 'EOF'
 
 
 #################
-# Rename everything -- replace wgEncodeEH* with cell and treatment, to help users.  Change prefix
-# to match hg19
+# Load up data.  Clean up peaks & hotspots a little first (truncate signal, -log10 of pVal) 
+# and then rename all -- replacing wgEncodeEH* with cell and treatment, to help users.  
+# Change prefix to match hg19
+# (kate 2015-06-17)
 
     cd /hive/data/genomes/hg38/bed/uwDnase1
-    mkdir rename
+    mkdir load
+    cd load
 cat > expToFile.csh << 'EOF'
 #!/bin/csh -ef
     set exp = `echo $1 | sed 's/wgEncodeEH\([0-9]*\).*/\1/'`
@@ -375,6 +396,49 @@ end
 popd
 'EOF'
 
+cat > loadPeak.csh << 'EOF'
+#!/bin/csh -ef
+set path = (`pwd` $path)
+set wd = `pwd`
+set build = /hive/data/genomes/hg38/bed/wgEncodeRegDnase
+set data = run_pooled/scored/out
+pushd $build/$data
+foreach f (*.narrowPeak)
+    set exp = $f:r:r
+    set vars = `expToFile.csh $exp`
+    set t = wgEncodeRegDnaseUw${vars}Peak
+    echo "${f}   ${t}"
+    # truncate signal value to int and transform pValue to -log10
+    # -log10 pValue
+    awk 'BEGIN {OFS="\t"} {{if ($8==0) $8=4.94e-324; {$7=int($7); $8=-log($8)/log(10);print}}}' $f | \
+        hgLoadBed  -trimSqlTable -sqlTable=$HOME/kent/src/hg/lib/encode/narrowPeak.sql \
+        -renameSqlTable -as=$HOME/kent/src/hg/lib/encode/narrowPeak.as hg38 $t stdin
+end
+'EOF'
+
+cat > loadHot.csh << 'EOF'
+#!/bin/csh -ef
+set bbi = /gbdb/hg38/bbi/wgEncodeRegDnase
+mkdir -p $bbi
+set path = (`pwd` $path)
+set wd = `pwd`
+set build = /hive/data/genomes/hg38/bed/wgEncodeRegDnase
+set data = run_pooled/scored/out
+pushd $build/$data
+foreach f (*.broadPeak)
+    set exp = $f:r:r
+    set vars = `expToFile.csh $exp`
+    set t = wgEncodeRegDnaseUw${vars}Hotspot
+    echo "${f}   ${t}"
+    #echo "-e s/uwEnc2DnaseHot${exp}/$t/ \\" >> $wd/edit2.csh
+    awk 'BEGIN {OFS="\t"} {{if ($8==0) $8=4.94e-324; {$7=int($7); $8=-log($8)/log(10);print}}}' $f > bed.tmp
+    bedToBigBed -type=bed6+3 -as=${HOME}/kent/src/hg/lib/encode/broadPeak.as \ 
+                bed.tmp /hive/data/genomes/hg38/chrom.sizes ../$f.bb
+    #ln -s $build/$data/$f $bbi/$t.broadPeak.bb
+    #hgBbiDbLink hg38 $t $bbi/$t.broadPeak.bb
+end
+'EOF'
+
 # Manually tweak edit.csh and run to replace table and track names in trackDb.ra
 # Do same for broadPeak bigBeds, and narrowPeak tables
 
@@ -384,7 +448,7 @@ hgLoadSqlTab hg38 wgEncodeRegDnaseClusteredInputs \
         ~/kent/src/hg/lib/clusterInputEapDnase.sql wgEncodeRegDnaseClusteredInputs.tab
 
 hgql hg38 -e "alter table uwEnc2DnaseClustered rename to wgEncodeRegDnaseClustered"
-hgsql hg38 -e "alter table uwEnc2DnaseSources rename to wgEncodeRegDnasedClusteredSource"
+hgsql hg38 -e "alter table uwEnc2DnaseSources rename to wgEncodeRegDnaseClusteredSources"
 
 
 #################

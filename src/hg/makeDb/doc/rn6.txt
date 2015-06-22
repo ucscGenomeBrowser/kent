@@ -856,13 +856,15 @@ echo "select * from ucscToRefSeq" | hgsql $db | tail -n +2 | awk '{print 0, $4, 
 rm -f $gff3File
 wget $ftpFile
 
-/cluster/home/braney/bin/x86_64/gff3ToGenePred -useName -warnAndContinue -attrsOut=attrs $gff3File stdout 2> convertErr.txt | liftUp -type=.gp -extGenePred lift.gp refSeqToUcsc.lft warn  stdin 2> liftErr.txt
+/cluster/home/braney/bin/x86_64/gff3ToGenePred -useName -warnAndContinue -attrsOut=attrs -bad=bad.gp $gff3File stdout 2> convertErr.txt | liftUp -type=.gp -extGenePred lift.gp refSeqToUcsc.lft warn  stdin 2> liftErr.txt
 wc -l lift.gp
-# 61213 lift.gp
+# 64457 lift.gp
+wc -l bad.gp
+# 0
 
 tawk '{print $1}'  attrs | sort | uniq > meta
 wc -l meta
-# 61164 meta
+# 63278 meta
 for i in product Dbxref gene gbkey
 do 
     echo $i
@@ -870,18 +872,23 @@ do
     mv out meta
 done  
 wc -l meta
-# 61164 meta
+# 62775 meta
 
-egrep "^N(M|R)" lift.gp > curated.gp
+cat curated.gp predicted.gp | awk '{print $1}' | sort -u > tmp1
+cat meta | awk '{print $1}' | sort -u > tmp2
+join -v 1 tmp1 tmp2 | wc -l
+# 0
+
+egrep "^N(M|R)|^YP" lift.gp > curated.gp
 egrep "^X(M|R)" lift.gp > predicted.gp
 
 wc -l curated.gp predicted.gp
-# 17948 curated.gp
+#    17961 curated.gp
 # 43265 predicted.gp
-# 61213 total
+# 61226 total
 
 grep dropping convertErr.txt | wc -l
-#    744
+#    0
 
 awk '/isn/ {print $1}' liftErr.txt | sort -u
 # nothing
@@ -889,6 +896,13 @@ awk '/isn/ {print $1}' liftErr.txt | sort -u
 hgLoadGenePred -genePredExt $db ncbiRefCurated curated.gp
 hgLoadGenePred -genePredExt $db ncbiRefPredicted predicted.gp
 hgLoadSqlTab $db ncbiRefLink $kent/src/hg/lib/ncbiRefLink.sql meta
+
+hgsql -e 'INSERT INTO trackVersion \
+    (db, name, who, version, updateTime, comment, source, dateReference) 
+    VALUES("rn6", "ncbiRefSeq", "braney", "105", now(), 
+    "http://www.ncbi.nlm.nih.gov/genome/annotation_euk/Rattus_norvegicus/105/", 
+    "ftp://ftp.ncbi.nlm.nih.gov/genomes/R_norvegicus", 
+    "7 August 2014" );' hgFixed
 
 ############################################################################
 # SWAP LASTZ human/hg19 vs. rat/rn6 - (DONE - 2015-06-08 - Hiram)
