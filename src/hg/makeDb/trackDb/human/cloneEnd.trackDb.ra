@@ -1,15 +1,19 @@
 track cloneEndSuper
 compositeTrack on
-shortLabel NCBI Ends
-longLabel NCBI mapping of clone libraries end placements
+shortLabel Clone Ends
+longLabel Mapping of clone libraries end placements
 group map
 visibility hide
 type bed 3
 noInherit on
 dragAndDrop on
+subGroup1 source Source agencourt=Agencourt chori=Chori corielle=Coriell caltech=CalTech rpci=RPCI wibr=WIBR placements=Placements
+dimensions dimensionX=source
+sortOrder source=+
 
     track cloneEnd_ABC10
-    parent cloneEndSuper on
+    parent cloneEndSuper off
+    subGroups source=agencourt
     shortLabel ABC10
     longLabel Agencourt fosmid library 10
     colorByStrand 0,0,128 0,128,0
@@ -21,6 +25,7 @@ dragAndDrop on
 
     track cloneEnd_ABC11
     parent cloneEndSuper off
+    subGroups source=agencourt
     shortLabel ABC11
     longLabel Agencourt fosmid library 11
     colorByStrand 0,0,128 0,128,0
@@ -32,6 +37,7 @@ dragAndDrop on
 
     track cloneEnd_ABC12
     parent cloneEndSuper off
+    subGroups source=agencourt
     shortLabel ABC12
     longLabel Agencourt fosmid library 12
     colorByStrand 0,0,128 0,128,0
@@ -43,6 +49,7 @@ dragAndDrop on
 
     track cloneEnd_ABC13
     parent cloneEndSuper off
+    subGroups source=agencourt
     shortLabel ABC13
     longLabel Agencourt fosmid library 13
     colorByStrand 0,0,128 0,128,0
@@ -54,6 +61,7 @@ dragAndDrop on
 
     track cloneEnd_ABC14
     parent cloneEndSuper off
+    subGroups source=agencourt
     shortLabel ABC14
     longLabel Agencourt fosmid library 14
     colorByStrand 0,0,128 0,128,0
@@ -65,6 +73,7 @@ dragAndDrop on
 
     track cloneEnd_ABC16
     parent cloneEndSuper off
+    subGroups source=agencourt
     shortLabel ABC16
     longLabel Agencourt fosmid library 16
     colorByStrand 0,0,128 0,128,0
@@ -76,6 +85,7 @@ dragAndDrop on
 
     track cloneEnd_ABC18
     parent cloneEndSuper off
+    subGroups source=agencourt
     shortLabel ABC18
     longLabel Agencourt fosmid library 18
     colorByStrand 0,0,128 0,128,0
@@ -87,6 +97,7 @@ dragAndDrop on
 
     track cloneEnd_ABC20
     parent cloneEndSuper off
+    subGroups source=agencourt
     shortLabel ABC20
     longLabel Agencourt fosmid library 20
     colorByStrand 0,0,128 0,128,0
@@ -98,6 +109,7 @@ dragAndDrop on
 
     track cloneEnd_ABC21
     parent cloneEndSuper off
+    subGroups source=agencourt
     shortLabel ABC21
     longLabel Agencourt fosmid library 21
     colorByStrand 0,0,128 0,128,0
@@ -109,6 +121,7 @@ dragAndDrop on
 
     track cloneEnd_ABC22
     parent cloneEndSuper off
+    subGroups source=agencourt
     shortLabel ABC22
     longLabel Agencourt fosmid library 22
     colorByStrand 0,0,128 0,128,0
@@ -120,6 +133,7 @@ dragAndDrop on
 
     track cloneEnd_ABC23
     parent cloneEndSuper off
+    subGroups source=agencourt
     shortLabel ABC23
     longLabel Agencourt fosmid library 23
     colorByStrand 0,0,128 0,128,0
@@ -131,6 +145,7 @@ dragAndDrop on
 
     track cloneEnd_ABC24
     parent cloneEndSuper off
+    subGroups source=agencourt
     shortLabel ABC24
     longLabel Agencourt fosmid library 24
     colorByStrand 0,0,128 0,128,0
@@ -142,6 +157,7 @@ dragAndDrop on
 
     track cloneEnd_ABC27
     parent cloneEndSuper off
+    subGroups source=agencourt
     shortLabel ABC27
     longLabel Agencourt fosmid library 27
     colorByStrand 0,0,128 0,128,0
@@ -153,6 +169,7 @@ dragAndDrop on
 
     track cloneEnd_ABC7
     parent cloneEndSuper off
+    subGroups source=agencourt
     shortLabel ABC7
     longLabel Agencourt fosmid library 7
     colorByStrand 0,0,128 0,128,0
@@ -164,6 +181,7 @@ dragAndDrop on
 
     track cloneEnd_ABC8
     parent cloneEndSuper off
+    subGroups source=agencourt
     shortLabel ABC8
     longLabel Agencourt fosmid library 8
     colorByStrand 0,0,128 0,128,0
@@ -175,6 +193,7 @@ dragAndDrop on
 
     track cloneEnd_ABC9
     parent cloneEndSuper off
+    subGroups source=agencourt
     shortLabel ABC9
     longLabel Agencourt fosmid library 9
     colorByStrand 0,0,128 0,128,0
@@ -185,7 +204,8 @@ dragAndDrop on
     priority 16
 
     track cloneEnd_CH17
-    parent cloneEndSuper off
+    parent cloneEndSuper on
+    subGroups source=chori
     shortLabel CH17
     longLabel CHORI BAC hydatidiform mole
     colorByStrand 0,0,128 0,128,0
@@ -197,6 +217,7 @@ dragAndDrop on
 
     track cloneEnd_COR02
     parent cloneEndSuper off
+    subGroups source=corielle
     shortLabel COR02
     longLabel NHGRI-CORIELLE CORIELL-02-F-39-40KB
     colorByStrand 0,0,128 0,128,0
@@ -208,6 +229,7 @@ dragAndDrop on
 
     track cloneEnd_COR2A
     parent cloneEndSuper off
+    subGroups source=corielle
     shortLabel COR2A
     longLabel NHGRI-CORIELLE CORIELL-02A-F-39-40KB
     colorByStrand 0,0,128 0,128,0
@@ -218,7 +240,8 @@ dragAndDrop on
     priority 19
 
     track cloneEnd_CTD
-    parent cloneEndSuper off
+    parent cloneEndSuper on
+    subGroups source=caltech
     shortLabel CTD
     longLabel CalTech BAC library D
     colorByStrand 0,0,128 0,128,0
@@ -229,7 +252,8 @@ dragAndDrop on
     priority 20
 
     track cloneEnd_RP11
-    parent cloneEndSuper off
+    parent cloneEndSuper on
+    subGroups source=rpci
     shortLabel RP11
     longLabel RPCI BAC library 11
     colorByStrand 0,0,128 0,128,0
@@ -241,6 +265,7 @@ dragAndDrop on
 
     track cloneEnd_WI2
     parent cloneEndSuper off
+    subGroups source=wibr
     shortLabel WI2
     longLabel WIBR-2 Fosmid library
     colorByStrand 0,0,128 0,128,0
@@ -252,6 +277,7 @@ dragAndDrop on
 
     track cloneEnd_multipleMaps
     parent cloneEndSuper off
+    subGroups source=placements
     shortLabel Multiple mappings
     longLabel Clone end placements that map to multiple locations in the genome
     colorByStrand 0,0,128 0,128,0
@@ -263,6 +289,7 @@ dragAndDrop on
 
     track cloneEnd_badEnds
     parent cloneEndSuper off
+    subGroups source=placements
     shortLabel Bad end mappings
     longLabel Clone end placements dropped at UCSC, map distance 3X median library size
     colorByStrand 0,0,128 0,128,0
@@ -273,24 +300,28 @@ dragAndDrop on
     priority 24
 
     track cloneEnd_coverageForward
-    parent cloneEndSuper on
+    parent cloneEndSuper off
+    subGroups source=placements
     shortLabel Coverage forward strand
     longLabel Clone end placements overlap coverage on the forward strand
     type bigWig 0 5377
     visibility full
     autoScale on
     alwaysZero on
+    maxHeightPixels 128:16:16
     windowingFunction mean
     priority 25
 
     track cloneEnd_coverageReverse
-    parent cloneEndSuper on
+    parent cloneEndSuper off
+    subGroups source=placements
     shortLabel Coverage reverse strand
     longLabel Clone end placements overlap coverage on the reverse strand
     type bigWig 0 4112
     visibility full
     negateValues 1
     alwaysZero on
+    maxHeightPixels 128:16:16
     windowingFunction mean
     autoScale on
     priority 26
