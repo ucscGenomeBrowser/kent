@@ -291,7 +291,7 @@ searchPriority 8
      awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
 	../simpleRepeat/simpleRepeat.bed > microsat.bed
     hgLoadBed nanPar1 microsat microsat.bed
-    #	Loaded 13365 elements of size 4
+    #	Read 8213 elements of size 4 from microsat.bed
 
 ##########################################################################
 ## WINDOWMASKER (DONE - 2015-03-20 - Hiram)
