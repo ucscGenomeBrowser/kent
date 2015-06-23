@@ -10,6 +10,8 @@
 
 #define TRANSMAPSRC_NUM_COLS 8
 
+extern char *transMapSrcCommaSepFieldNames;
+
 struct transMapSrc
 /* shared about transMap source alignments */
     {

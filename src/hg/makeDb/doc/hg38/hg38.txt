@@ -5655,6 +5655,35 @@ done | sort -k4 > allEnds.bed
     hgBbiDbLink hg38 cloneEnd_coverageReverse \
         /gbdb/hg38/bbi/cloneEnd/cloneEnd_coverageReverse.bw
 
+    ### Fixup the scores to indicate how many multiple mappings as mentioned
+    ### in the hg19 bacEnds description page: one mapping: score = 1000
+    ### multiple mappings: score = 1500/count
+    ### the sort | uniq -c | awk does this score calculation with the name
+    ###   in column 1
+    ### The join puts the existing table together with those scores
+    ### DONE - 2015-06-18 - Hiram
+
+    mkdir /hive/data/genomes/hg38/bed/cloneEnds/addCounts
+    cd /hive/data/genomes/hg38/bed/cloneEnds/addCounts
+    mkdir score withScore noScore withScore
+    for table in cloneEnd_ABC10 cloneEnd_ABC11 cloneEnd_ABC12 cloneEnd_ABC13 \
+cloneEnd_ABC14 cloneEnd_ABC16 cloneEnd_ABC18 cloneEnd_ABC20 cloneEnd_ABC21 \
+cloneEnd_ABC22 cloneEnd_ABC23 cloneEnd_ABC24 cloneEnd_ABC27 cloneEnd_ABC7 \
+cloneEnd_ABC8 cloneEnd_ABC9 cloneEnd_CH17 cloneEnd_COR02 cloneEnd_COR2A \
+cloneEnd_CTD cloneEnd_RP11 cloneEnd_WI2 cloneEnd_badEnds cloneEnd_multipleMaps
+do
+  hgsql -N -e "select name from $table;" hg38 | sort | uniq -c |
+      awk '{ if (1 == $1) {printf "%s\t1000\n", $2} else {printf "%s\t%d\n", $2, 1500/$1} }' \
+         | sort > score.hg38.$table.score.tab
+  hgsql -N -e "select * from $table order by name;" hg38 \
+      > noScore/hg38.$table.tab
+  join -t'^I' -1 5 noScore/hg38.$table.tab score/hg38.$table.score.tab \
+  | awk '{printf "%d\t%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d\t%s\t%s\n", $2,$3,$4,$5,$1,$14,$7,$8,$9,$10,$11,$12,$13}' \
+    | sort -k2,2 -k3,3n > withScore/hg38.$table.withScore.tab
+  hgsql -e "delete from $table;" hg38
+  hgsql -e "load data local infile \"withScore/hg38.$table.withScore.tab\" into table $table;" hg38
+done
+
 ##############################################################################
 # SIB Transcriptome (DONE 2014-08-27 Steve)
 
@@ -6239,8 +6268,6 @@ rm tmpChrom
     hgLoadBed hg38 microsat microsat.bed
 
 #############################################################################
-# Regulatory tracks  (Kate)
+# ENCODE Regulatory tracks  (Kate & Chris)
 
 # see reg.txt
-
-#############################################################################

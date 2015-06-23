@@ -1,5 +1,8 @@
-#! /usr/local/bin/perl
-$RCS_ID = '$Id: uniqtbl,v 1.1 2006/09/08 19:05:53 hiram Exp $' ;
+#!/usr/bin/env perl
+
+# DO NOT EDIT the /cluster/bin/scripts copy of this file --
+# edit ~/kent/src/hg/stsMarkers/uniqtbl instead.
+
 $0 =~ s-.*/-- ;
 $HelpInfo = <<EOH ;
 
@@ -24,7 +27,6 @@ rdbtable. Note that repeated rows must be adjacent in order to be found.
 This RDB operator reads an rdbtable from STDIN and writes an rdbtable to
 STDOUT.  Options may be abbreviated.
 
-$RCS_ID
 EOH
 while ( ($_ = $ARGV[0]) =~ /^-/ ) {			# Get args
     if( /^-D.*/ ){ $DIG++ ; shift ; $remov = 0 ; next ; }

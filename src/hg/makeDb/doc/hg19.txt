@@ -30755,3 +30755,24 @@ TMPDIR=/dev/shm
     # real    32m19.569s
 
 #########################################################################
+# GWIPS-viz Ribo-seq - (DONE - 2014-12-16 - Steve)
+# contact Audrey Michel (audreymannion@gmail.com)
+# redmine #14066
+
+obtained bigWig file from shared Google drive
+https://drive.google.com/a/soe.ucsc.edu/folderview?id=0B_xvV_5tXzOGQ1h5NEh4bnhNTDg&usp=sharing_eid
+
+cp Riboseq_track.bw /gbdb/hg19/bbi/gwipsvizRiboseq.bw
+
+added entry to /trackDb/human/trackDb.ra:
+
+track gwipsvizRiboseq
+type bigWig
+shortLabel GWIPS-viz Riboseq
+longLabel Ribosome Profiling from GWIPS-viz
+group expression
+visibility hide
+maxHeightPixels 100:32:8
+viewLimits 0:2000
+autoScale off
+html gwipsvizRiboseq

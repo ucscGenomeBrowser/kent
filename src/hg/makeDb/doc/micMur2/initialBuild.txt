@@ -182,6 +182,16 @@ RepeatMasker bug?: Undefined id, line 2869572 of input:
     ln -s `pwd`/micMur2.2bit /gbdb/micMur2/micMur2.2bit
 
 ##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-06-22 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/micMur2/bed/microsat
+     cd /cluster/data/micMur2/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed micMur2 microsat microsat.bed
+    #	Read 27836 elements of size 4 from microsat.bed
+
+##########################################################################
 ## WINDOWMASKER (DONE - 2015-05-04 - Hiram)
 
     mkdir /hive/data/genomes/micMur2/bed/windowMasker
@@ -216,11 +226,10 @@ RepeatMasker bug?: Undefined id, line 2869572 of input:
     cd /hive/data/genomes/micMur2/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku micMur2) > do.log 2>&1 &
-XXX - running - Tue May  5 08:24:32 PDT 2015
-    #  real    2250m21.599s
+    #  real    7m51.794s
 
     cat fb.micMur2.cpgIslandExt.txt
-    # 23569257 bases of 3405755564 (0.692%) in intersection
+    # 52444688 bases of 2377775715 (2.206%) in intersection
 
 ##############################################################################
 # cpgIslands on UNMASKED sequence (DONE - 2015-05-04 - Hiram)
@@ -249,14 +258,18 @@ XXX - running - Tue May  5 08:24:32 PDT 2015
     cd /hive/data/genomes/micMur2/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku micMur2) > do.log 2>&1 &
-XXX - running - Tue May  5 08:26:00 PDT 2015
-    # real    2786m14.622s
+    # real    11m8.384s
+
+    # two broken jobs finished manually with 2,000,000 window, continuing:
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku micMur2) > makeBed.log 2>&1 &
+    # real    2m32.761s
 
     cat fb.micMur2.genscan.txt
-    # 63545533 bases of 3405755564 (1.866%) in intersection
+    # 61639735 bases of 2377775715 (2.592%) in intersection
 
     cat fb.micMur2.genscanSubopt.txt
-    # 71743479 bases of 3405755564 (2.107%) in intersection
+    # 59114180 bases of 2377775715 (2.486%) in intersection
 
 ########################################################################
 # Create kluster run files (DONE - 2015-05-05 - Hiram)
@@ -291,7 +304,7 @@ XXX - running - Tue May  5 08:26:00 PDT 2015
 #         -bedFile=jkStuff/nonBridged.bed
 
 ########################################################################
-# GENBANK AUTO UPDATE (DONE - 2014-12-11 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2015-05-28 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -331,8 +344,7 @@ micMur2.perChromTables = no
 
     time ./bin/gbAlignStep -initial micMur2
     # logFile: var/build/logs/2015.05.05-08:46:58.micMur2.initalign.log
-XXX - running - Tue May  5 08:47:19 PDT 2015
-    #   real    369m37.727s
+    #   real    1605m25.150s
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.micMur2
@@ -340,16 +352,16 @@ XXX - running - Tue May  5 08:47:19 PDT 2015
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
-    time ./bin/gbDbLoadStep -drop -initialLoad -verbose=10 micMur2
-    # logFile: var/dbload/hgwdev/logs/2014.12.11-11:06:27.micMur2.dbload.log
-    # real    35m42.214s
+    time ./bin/gbDbLoadStep -drop -initialLoad micMur2
+    # logFile: var/dbload/hgwdev/logs/2015.05.22-14:24:50.micMur2.dbload.log
+    # something failed in this, Brian got it loaded
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add micMur2 to:
     #   vi etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added micMur2 - Tarsier refs #14410" etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added micMur2 - Mouse lemur refs #15292" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
@@ -423,16 +435,7 @@ searchPriority 8
 	-ooc=/hive/data/genomes/micMur2/jkStuff/micMur2.11.ooc \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
          micMur2 micMur1) > do.log 2>&1
-XXX - running - Tue May  5 08:58:25 PDT 2015
-    # real    13948m39.233s
-    # this was a tough job, that long time was not necessarily due
-    # to cluster contention.  the blat run took over 9 days:
-# Completed: 361089 of 361089 jobs
-# CPU time in finished jobs:  229192746s 3819879.10m 63664.65h 2652.69d  7.268 y
-# IO & Wait Time:              11337726s  188962.10m  3149.37h  131.22d  0.360 y
-# Average job time:                 666s      11.10m     0.19h    0.01d
-# Longest finished job:            1492s      24.87m     0.41h    0.02d
-# Submission to last job:        811729s   13528.82m   225.48h    9.40d
+    # real    595m2.431s
 
     # verify the convert link on the test browser is now active from micMur2 to
     # micMur1
@@ -444,17 +447,18 @@ XXX - running - Tue May  5 08:58:25 PDT 2015
     joinerCheck -database=micMur2 -tableCoverage all.joiner
     joinerCheck -database=micMur2 -times all.joiner
     joinerCheck -database=micMur2 -keys all.joiner
-    # about 50 minutes
+    # about 2 minutes
 
     cd /hive/data/genomes/micMur2
     time makeDownloads.pl micMur2 > downloads.log 2>&1
-    # real    22m17.544s
+    # real    16m40.848s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/micMur2/pushQ
     cd /hive/data/genomes/micMur2/pushQ
-    time makePushQSql.pl micMur2 > micMur2.pushQ.sql 2> stderr.out
-    # real    5m47.086s
+    time (makePushQSql.pl micMur2 > micMur2.pushQ.sql) 2> stderr.out
+    # real    5m21.558s
+
 
     #   check for errors in stderr.out, some are OK, e.g.:
 # WARNING: hgwdev does not have /gbdb/micMur2/wib/gc5Base.wib
@@ -465,7 +469,7 @@ XXX - running - Tue May  5 08:58:25 PDT 2015
 
     #   copy it to hgwbeta
     scp -p micMur2.pushQ.sql qateam@hgwbeta:/tmp
-    ssh qateam@hgwbeta hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/micMur2.pushQ.sql"
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/micMur2.pushQ.sql"
 
     #   in that pushQ entry walk through each entry and see if the
     #   sizes will set properly

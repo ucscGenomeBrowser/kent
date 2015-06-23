@@ -480,7 +480,7 @@ hTableEnd();
 cgiDown(0.9);
 
 char *freeze = hFreezeFromDb(database);
-char buf[128];
+char buf[256];
 if (freeze == NULL)
     safef(buf, sizeof buf, "Configure Tracks on %s %s: %s",
 	  organization, browserName, trackHubSkipHubName(organism));

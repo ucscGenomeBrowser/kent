@@ -15,9 +15,10 @@ updating data.</p>
 <p><span style="font-weight: bold; color: #c70000;">DOWNLOADS:</span><br>
 LOVD databases are owned by their respective curators
 and are not available for download or mirroring 
-by any third party without their permission.  Please see the
+by any third party without their permission.  Batch queries on this track are only available via the
+UCSC Beacon API (see below). See also the
 <a href= "http://lovd.nl/2.0/index_list.php" target="_blank">LOVD web site</A>
-for a list of database installations and the respective curators.</p></div>
+for a list of database installations and the respective curators. </p></div>
 
 <p>
 This track shows the genomic positions of all <b>public</b> entries in public
@@ -36,7 +37,34 @@ where curators store and analyze data.  While the LOVD team and the biggest LOVD
 sites are run at the Leiden University Medical Center, LOVD installations and their
 curators are spread over the whole world.
 </p>
+<p>A few LOVD databases are entirely missing from this track. Reasons include configuration issues and 
+intentionally blocked data exports. During the last check in June 2015, the following databases did not export any variants:
+http://www.ucl.ac.uk/ldlr/Current/,
+http://brca.iarc.fr/LOVD/,
+http://bioinf4.fcm.unicamp.br/LOVD/,
+http://vitigene.igib.res.in,
+http://fishmap2.igib.res.in/mirlovd/,
+http://www.medgen.mcgill.ca/nndi/,
+http://sysbio.org.cn/,
+http://genome.igib.res.in/PGx/,
+http://www-huge.uni-regensburg.de/BEST1_database/,
+http://genome.igib.res.in/tblovd/,
+https://ab-openlab.csir.res.in/mitolsdb/,
+http://genome.igib.res.in/snolovd/,
+http://www.genomed.org/lovd2/,
+http://skingenetics.igib.res.in/,
+http://mitodyn.org/. Curators who want to share data in their database so it is present in this track can find more details in the <a href="http://www.lovd.nl/3.0/faq#FAQ18">LOVD FAQ</a></p>
 
+
+<h2>Batch queries</h2>
+<p>The LOVD data is not available for download or for batch queries in the Table Browser. 
+However, it is available for programmatic access via the <a href="http://ga4gh.org/#/beacon">Global
+Alliance Beacon API</a>, a web service that accepts queries in the form
+(genome, chromosome, position, allele) and returns "true" or "false" depending on whether there
+is information about this allele in the database. For more details see our 
+<a href="hgBeacon">Beacon Server</a>. </p>
+<p>To find all LOVD databases that contain variants of a given gene, you can get a list of databases by constructing a url in the format geneSymbol.lovd.nl, for example, <a href="http://tp53.lovd.nl">tp53.lovd.nl</a>. You can then use the LOVD API to retrieve more detailed information from a particular database. See the <a href="http://www.lovd.nl/3.0/faq#FAQ15">LOVD FAQ</a>. 
+</p>
 <h2>Display Conventions and Configuration</h2>
 
 <p>
@@ -62,7 +90,7 @@ The mappings displayed in this track were provided by LOVD.
 
 <p>
 Thanks to the LOVD team, Ivo Fokkema, Peter Taschner, Johan den Dunnen, and all LOVD curators for permission to 
-export their data.
+show their data.
 </p>
 
 <h2>References</h2>
