@@ -178,6 +178,16 @@ taxId 216574
     ln -s `pwd`/aquChr2.2bit /gbdb/aquChr2/aquChr2.2bit
 
 ##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-06-22 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/aquChr2/bed/microsat
+     cd /cluster/data/aquChr2/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed aquChr2 microsat microsat.bed
+    #	Read 1314 elements of size 4 from microsat.bed
+
+##########################################################################
 ## WINDOWMASKER (DONE - 2015-03-05 - Hiram)
 
     mkdir /hive/data/genomes/aquChr2/bed/windowMasker

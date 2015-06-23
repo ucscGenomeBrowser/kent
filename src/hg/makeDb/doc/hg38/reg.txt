@@ -265,9 +265,6 @@ uwDnaseTrackHub meta.tab run_pooled colors.tab hub
     sed -e 's/type bigBed/type bigBed 6 +/' -e '/bigDataUrl/d' trackDb.txt > trackDb.ra
     cp trackDb.ra ~/kent/src/hg/makeDb/trackDb/human/hg38/uwDnase.ra
 
-#################################
-# DNase clusters track (Kate Feb 2015)
-
 # NOTE: hotspot5 had a bug causing it to silently abort peak identification on some datasets 
 # before completing all chromosomes.  I fixed this issue, and created hotspot5.1 version, which
 # was used to remake the broad and narrow peaks.  The corrected bigBeds are dated Feb. 13-19.
@@ -285,6 +282,9 @@ uwDnaseTrackHub meta.tab run_pooled colors.tab hub
 # Scored files are:
 #       /hive/data/genomes/hg38/bed/wgEncodeRegDnase/run_pooled_hotspot5.1/scored/*broadPeak.bb
 #       /hive/data/genomes/hg38/bed/wgEncodeRegDnase/run_pooled_hotspot5.1/scored/out/*.narrowPeak
+
+#################################
+# DNase clusters track (Kate Feb 2015)
 
     cd /hive/data/genomes/hg38/bed/uwDnase1
     mkdir clusters
