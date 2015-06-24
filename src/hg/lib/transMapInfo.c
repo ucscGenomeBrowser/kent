@@ -11,6 +11,7 @@
 #include "jksql.h"
 #include "transMapInfo.h"
 
+char *transMapInfoCommaSepFieldNames = "mappedId,srcDb,srcId,mappingId,chainSubset";
 
 /* definitions for chainSubset column */
 static char *values_chainSubset[] = {"unknown", "all", "syn", "rbest", NULL};
@@ -157,6 +158,6 @@ struct transMapInfo *transMapInfoQuery(struct sqlConnection *conn,
 {
 return sqlQueryObjs(conn, (sqlLoadFunc)transMapInfoLoad,
                     sqlQueryMust|sqlQuerySingle,
-                    "SELECT * FROM %s WHERE mappedId = \"%s\"",
-                    table, mappedId);
+                    "SELECT %-s FROM %s WHERE mappedId = \"%s\"",
+                    transMapInfoCommaSepFieldNames, table, mappedId);
 }

@@ -183,6 +183,9 @@ printf("<TR CLASS=\"transMapLeft\"><TD>Aligned<TD>%0.1f%%</TR>\n",
 printf("<TR CLASS=\"transMapLeft\"><TD>Gene<TD>%s</TR>\n",
        (((bag->gene != NULL) && (strlen(bag->gene->geneName) > 0))
         ? bag->gene->geneName : "&nbsp;"));
+printf("<TR CLASS=\"transMapLeft\"><TD>Gene Id<TD>%s</TR>\n",
+       (((bag->gene != NULL) && (strlen(bag->gene->geneId) > 0))
+        ? bag->gene->geneId : "&nbsp;"));
 printf("<TR CLASS=\"transMapLeft\"><TD>CDS<TD>%s</TR>\n",
        (((bag->gene != NULL) && (strlen(bag->gene->cds) > 0))
         ? bag->gene->cds : "&nbsp;"));

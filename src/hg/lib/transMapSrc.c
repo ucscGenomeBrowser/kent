@@ -12,6 +12,8 @@
 #include "transMapSrc.h"
 
 
+char *transMapSrcCommaSepFieldNames = "db,id,chrom,chromStart,chromEnd,strand,ident,aligned";
+
 void transMapSrcStaticLoad(char **row, struct transMapSrc *ret)
 /* Load a row from transMapSrc table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
@@ -166,6 +168,6 @@ struct transMapSrc *transMapSrcQuery(struct sqlConnection *srcConn,
 {
 return sqlQueryObjs(srcConn, (sqlLoadFunc)transMapSrcLoad,
                     sqlQueryMust|sqlQuerySingle,
-                    "SELECT * FROM %s WHERE (db=\"%s\") and (id = \"%s\")",
-                    table, srcDb, srcId);
+                    "SELECT %-s FROM %s WHERE (db=\"%s\") and (id = \"%s\")",
+                    transMapSrcCommaSepFieldNames, table, srcDb, srcId);
 }
