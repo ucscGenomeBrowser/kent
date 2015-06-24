@@ -5,8 +5,8 @@
 track wgEncodeGencodeV22
 compositeTrack on
 superTrack wgEncodeGencodeSuper pack
-shortLabel All GENCODE v22
-longLabel All GENCODE transcripts include comprehensive set v22
+shortLabel GENCODE V22 (Ensembl 79)
+longLabel Gene Annotations from GENCODE Version 22 (Ensembl 79)
 group genes
 dragAndDrop subTracks
 priority 34.183
