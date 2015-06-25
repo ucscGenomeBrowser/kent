@@ -85,7 +85,7 @@ for (ll = group->lineList; ll != NULL; ll = ll->next)
     }
 
 /* add in version numbers if requested and available */
-char geneIdToUse[512], transcriptIdToUse[512], proteinIdToUse[512];
+char geneIdToUse[1024], transcriptIdToUse[1024], proteinIdToUse[1024];
 
 if (clIncludeVersion && (geneId != NULL) && (geneVersion != NULL))
     safef(geneIdToUse, sizeof(geneIdToUse), "%s.%s", geneId, geneVersion);
