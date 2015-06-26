@@ -45,7 +45,7 @@ rsync://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Xenopu
 #-rw-rw-r-- 1   5760083 Mar 25 23:36 xenTro7.ucsc.agp
 #-rw-rw-r-- 1 404452385 Mar 25 23:42 xenTro7.ucsc.fa.gz
 #-rw-rw-r-- 1       212 Mar 25 23:43 checkAgp.result.txt
-    # and not-needed here: 
+    # and not-needed here:
     cd /hive/data/genomes/xenTro7
 #-rw-rw-r-- 1 359984712 Mar 25 23:43 xenTro7.unmasked.2bit
     rm -f xenTro7.unmasked.2bit
@@ -142,7 +142,7 @@ sys     0m0.067s
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.3
     #    June 20 2013 (open-4-0-3) version of RepeatMasker
-    # CC   RELEASE 20130422;                                
+    # CC   RELEASE 20130422;
 
     time featureBits -countGaps xenTro7 rmsk
     # 464012349 bases of 1437530879 (32.278%) in intersection
@@ -184,6 +184,16 @@ sys     0m0.067s
 
     rm /gbdb/xenTro7/xenTro7.2bit
     ln -s `pwd`/xenTro7.2bit /gbdb/xenTro7/xenTro7.2bit
+
+##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-06-22 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/xenTro7/bed/microsat
+     cd /cluster/data/xenTro7/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed xenTro7 microsat microsat.bed
+    #	Read 13163 elements of size 4 from microsat.bed
 
 #########################################################################
 # Verify all gaps are marked, add any N's not in gap as type 'other'
@@ -277,7 +287,7 @@ sys     0m0.067s
 # genscan - (DONE - 2013-06-26 - Hiram)
     mkdir /hive/data/genomes/xenTro7/bed/genscan
     cd /hive/data/genomes/xenTro7/bed/genscan
-    time doGenscan.pl xenTro7 > do.log 2>&1 
+    time doGenscan.pl xenTro7 > do.log 2>&1
     #  real    105m56.579s
 
     cat fb.xenTro7.genscan.txt
@@ -589,10 +599,283 @@ searchPriority 8
 	-ooc=/hive/data/genomes/xenTro7/jkStuff/xenTro7.11.ooc \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
          xenTro7 xenTro3) > do.log 2>&1
-XXX - running - Tue Mar 24 11:56:24 PDT 2015
-    # real    181m55.750s
+    # real    108m40.174s
 
     # verify the convert link on the test browser is now active from xenTro7 to
     # xenTro3
+
+#########################################################################
+# Tibetan frog/nanPar1 Lastz run  (DONE - 2015-03-24 - Hiram)
+    screen -S nanPar1    # use screen to manage this long running job
+    mkdir -p /hive/data/genomes/xenTro7/bed/lastzPhyCat1.2014-03-24/tuning
+    cd  /hive/data/genomes/xenTro7/bed/lastzPhyCat1.2014-03-24/tuning
+
+    hgsql -N -e 'select * from genscan;' nanPar1 | cut -f2- \
+       | sort > nanPar1.genes.gp
+    hgsql -N -e 'select * from genscan;' xenTro7 | cut -f2- \
+       | sort > xenTro7.genes.gp
+
+    getRnaPred -peptides -genomeSeqs=/hive/data/genomes/xenTro7/xenTro7.2bit \
+       xenTro7 xenTro7.genes.gp all xenTro7.genes.pep
+    getRnaPred -peptides -genomeSeqs=/hive/data/genomes/nanPar1/nanPar1.2bit \
+       nanPar1 nanPar1.genes.gp all nanPar1.genes.pep
+
+    time (blat -prot -oneOff=1 xenTro7.genes.pep nanPar1.genes.pep \
+      -out=maf xenTro7.nanPar1.oneOff.maf) > blat.log 2>&1
+
+    cat << '_EOF_' > DEF
+# human vs sperm whale
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/xenTro7/xenTro7.2bit
+SEQ1_LEN=/scratch/data/xenTro7/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: sperm whale PhyCat1
+SEQ2_DIR=/hive/data/genomes/nanPar1/nanPar1.2bit
+SEQ2_LEN=/hive/data/genomes/nanPar1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/xenTro7/bed/lastzPhyCat1.2014-03-24
+TMPDIR=/dev/shm
+'_EOF_'
+    # << emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet > do.log 2>&1
+    # real    779m50.178s
+    # forgot to load up nanPar1 database for net repeat classification
+    # finish load step manually, then:
+
+    cat fb.xenTro7.chainPhyCat1Link.txt
+    #  1521042352 bases of 2897316137 (52.498%) in intersection
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -continue=download -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet > download.log 2>&1
+    # real    32m10.340s
+
+    # create symLink to indicate this is the version to use
+    cd /hive/data/genomes/xenTro7/bed
+    ln -s lastzPhyCat1.2014-03-24 lastz.nanPar1
+
+    cd /hive/data/genomes/xenTro7/bed/lastzPhyCat1.2014-03-24
+    # filter with doRecipBest.pl
+    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        xenTro7 nanPar1 > rbest.log 2>&1 &
+    #   real    59m7.123s
+
+    # running the swap
+    mkdir /hive/data/genomes/nanPar1/bed/blastz.xenTro7.swap
+    cd /hive/data/genomes/nanPar1/bed/blastz.xenTro7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/xenTro7/bed/lastzPhyCat1.2014-03-24/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet > swap.log 2>&1
+    #   real    102m56.234s
+
+    cat fb.nanPar1.chainHg19Link.txt
+    #    1455933862 bases of 2233689186 (65.181%) in intersection
+
+    cd /hive/data/genomes/nanPar1/bed
+    ln -s blastz.xenTro7.swap lastz.xenTro7
+
+
+#########################################################################
+# EXPERIMENT - does default lastz parameters perform as well as the tuned
+# Tibetan frog/nanPar1 Lastz run  (DONE - 2015-03-24 - Hiram)
+# the no-tuned parameters produced more coverage
+    screen -S nanPar1    # use screen to manage this long running job
+    mkdir -p /hive/data/genomes/xenTro7/bed/lastzPhyCat1.2014-03-24/tuning
+    cd  /hive/data/genomes/xenTro7/bed/lastzPhyCat1.2014-03-24/tuning
+
+    hgsql -N -e 'select * from genscan;' nanPar1 | cut -f2- \
+       | sort > nanPar1.genes.gp
+    hgsql -N -e 'select * from genscan;' xenTro7 | cut -f2- \
+       | sort > xenTro7.genes.gp
+
+    getRnaPred -peptides -genomeSeqs=/hive/data/genomes/xenTro7/xenTro7.2bit \
+       xenTro7 xenTro7.genes.gp all xenTro7.genes.pep
+    getRnaPred -peptides -genomeSeqs=/hive/data/genomes/nanPar1/nanPar1.2bit \
+       nanPar1 nanPar1.genes.gp all nanPar1.genes.pep
+
+    time (blat -prot -oneOff=1 xenTro7.genes.pep nanPar1.genes.pep \
+      -out=maf xenTro7.nanPar1.oneOff.maf) > blat.log 2>&1
+# Loaded 16075148 letters in 35298 sequences
+# Searched 17887635 bases in 47726 sequences
+# real    171m14.106s
+
+    ~/kent/src/hg/utils/automation/lastz_D/mafScoreSizeScan.pl \
+        xenTro7.nanPar1.oneOff.maf > mafScoreSizeScan.list
+    ave mafScoreSizeScan.list | grep "^Q3" | awk '{print $2}' \
+        | sed -e 's/.000000//' > mafScoreSizeScan.Q3
+    timm ~/kent/src/hg/utils/automation/lastz_D/topAll.sh xenTro7 nanPar1
+
+    # scan the four results to see if they are similar
+    ~/kent/src/hg/utils/automation/lastz_D/matrixSummary.pl | sed -e 's/^/# /;'
+#  read 4 .txt files    tuning
+#       A     C     G     T     averages        4 files tuning
+# A   100  -158   -84  -179
+# C  -158    72  -118   -84
+# G   -84  -118    72  -158
+# T  -179   -84  -158   100
+#       A     C     G     T     ranges  4 files tuning
+# A     0    14     2     6
+# C    14     1     2     2
+# G     2     2     1    14
+# T     6     2    14     0
+#       A     C     G     T     ranges percent  4 files tuning
+# A   0.0   8.8   2.4   3.3
+# C   8.8   1.4   1.7   2.4
+# G   2.4   1.7  -0.8   8.8
+# T   3.3   2.4   8.8   0.0
+
+    cat << '_EOF_' > DEF
+# X. tropicalis vs. Nanorana parkeri - Tibetan frog
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+
+# lastz defaults end up to be:
+# lastz.v1.03.54 H=2000 --format=axt+
+#
+# hsp_threshold      = 3000
+# gapped_threshold   = 3000
+# x_drop             = 910
+# y_drop             = 9400
+# gap_open_penalty   = 400
+# gap_extend_penalty = 30
+#        A    C    G    T
+#   A   91 -114  -31 -123
+#   C -114  100 -125  -31
+#   G  -31 -125  100 -114
+#   T -123  -31 -114   91
+# seed=1110100110010101111 w/transition
+# step=1
+##matrix=axtChain 16
+#91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+##gapPenalties=axtChain O=400 E=30
+
+# TARGET: X. tropicalis xenTro7
+SEQ1_DIR=/hive/data/genomes/xenTro7/xenTro7.2bit
+SEQ1_LEN=/hive/data/genomes/xenTro7/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Nanorana parkeri - Tibetan frog - nanPar1
+SEQ2_DIR=/hive/data/genomes/nanPar1/nanPar1.2bit
+SEQ2_LEN=/hive/data/genomes/nanPar1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/xenTro7/bed/lastzNanPar1.2015-03-24
+TMPDIR=/dev/shm
+'_EOF_'
+    # << emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -workhorse=hgwdev -smallClusterHub=ku \
+          -bigClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real    155m16.539s
+
+    cat fb.xenTro7.chainNanPar1Link.txt
+    #  112202241 bases of 1365936747 (8.214%) in intersection
+    #  replacing results done with tuning:
+    #  56705027 bases of 1365936747 (4.151%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` xenTro7 nanPar1) > rbest.log 2>&1 &
+
+    # running the swap
+    mkdir /hive/data/genomes/nanPar1/bed/blastz.xenTro7.swap
+    cd /hive/data/genomes/nanPar1/bed/blastz.xenTro7.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/xenTro7/bed/lastzNanPar1.2015-03-24/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+    #   real    102m56.234s
+
+    cat fb.nanPar1.chainXenTro7Link.txt
+    #    1455933862 bases of 2233689186 (65.181%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` nanPar1 xenTro7) > rbest.log 2>&1
+
+#########################################################################
+# Tibetan frog/nanPar1 Lastz run  (DONE - 2015-06-10 - Hiram)
+    mkdir /hive/data/genomes/xenTro7/bed/lastzNanPar1.2015-06-10
+    cd /hive/data/genomes/xenTro7/bed/lastzNanPar1.2015-06-10
+
+    cat << '_EOF_' > DEF
+# X. tropicalis vs. Nanorana parkeri - Tibetan frog
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# lastz defaults end up to be:
+# lastz.v1.03.54 H=2000 --format=axt+
+#
+# hsp_threshold      = 3000
+# gapped_threshold   = 3000
+# x_drop             = 910
+# y_drop             = 9400
+# gap_open_penalty   = 400
+# gap_extend_penalty = 30
+#        A    C    G    T
+#   A   91 -114  -31 -123
+#   C -114  100 -125  -31
+#   G  -31 -125  100 -114
+#   T -123  -31 -114   91
+# seed=1110100110010101111 w/transition
+# step=1
+##matrix=axtChain 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+##gapPenalties=axtChain O=400 E=30
+
+# TARGET: X. tropicalis xenTro7
+SEQ1_DIR=/hive/data/genomes/xenTro7/xenTro7.2bit
+SEQ1_LEN=/hive/data/genomes/xenTro7/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Nanorana parkeri - Tibetan frog - nanPar1
+SEQ2_DIR=/hive/data/genomes/nanPar1/nanPar1.2bit
+SEQ2_LEN=/hive/data/genomes/nanPar1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=200
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/xenTro7/bed/lastzNanPar1.2015-06-10
+TMPDIR=/dev/shm
+'_EOF_'
+    # << emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -workhorse=hgwdev -smallClusterHub=ku \
+          -bigClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real    116m13.134s
+
+    cat fb.xenTro7.chainNanPar1Link.txt
+    #  112202241 bases of 1365936747 (8.214%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` xenTro7 nanPar1) > rbest.log 2>&1 &
+    # real    4m57.676s
+
+
+    # running the swap
+    mkdir /hive/data/genomes/nanPar1/bed/blastz.xenTro7.swap
+    cd /hive/data/genomes/nanPar1/bed/blastz.xenTro7.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/xenTro7/bed/lastzNanPar1.2015-06-10/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+    #   real    22m50.311s
+
+    cat fb.nanPar1.chainXenTro7Link.txt
+    #    121183837 bases of 1977771384 (6.127%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` nanPar1 xenTro7) > rbest.log 2>&1
+    #  real    6m53.584s
 
 #########################################################################

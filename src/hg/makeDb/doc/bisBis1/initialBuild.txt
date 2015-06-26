@@ -191,6 +191,16 @@ taxId 43346
     ln -s `pwd`/bisBis1.2bit /gbdb/bisBis1/bisBis1.2bit
 
 ##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-06-22 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/bisBis1/bed/microsat
+     cd /cluster/data/bisBis1/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed bisBis1 microsat microsat.bed
+    #	Read 18532 elements of size 4 from microsat.bed
+
+##########################################################################
 ## WINDOWMASKER (DONE - 2015-03-09 - Hiram)
 
     mkdir /hive/data/genomes/bisBis1/bed/windowMasker
@@ -240,6 +250,19 @@ taxId 43346
     mkdir /hive/data/genomes/bisBis1/bed/cytoBand
     cd /hive/data/genomes/bisBis1/bed/cytoBand
     makeCytoBandIdeo.csh bisBis1
+
+#########################################################################
+# augustus - (DONE - 2015-05-28 - Hiram)
+    mkdir /hive/data/genomes/bisBis1/bed/augustus
+    cd /hive/data/genomes/bisBis1/bed/augustus
+
+export db="bisBis1"
+export species="human"
+doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+  -species=$species -dbHost=hgwdev -utr -workhorse=hgwdev $db
+
+    cat fb.bisBis1.augustusGene.txt
+    #  46677083 bases of 2757854331 (1.693%) in intersection
 
 #########################################################################
 # genscan - (DONE - 2015-03-09 - Hiram)
@@ -374,14 +397,8 @@ bisBis1.genbank.est.native.loadDesc = no
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial bisBis1
-    # logFile: var/build/logs/2015.05.21-15:39:00.bisBis1.initalign.log
-XXX - running - Thu May 21 15:39:18 PDT 2015
-    # real    974m58.747s
-
-    # recover from cluster problems, then continuing:
-    time ./bin/gbAlignStep -continue=run  -initial bisBis1
-    # real    188m52.441s
-    #    var/build/logs/2015.03.10-14:52:54.bisBis1.initalign.log
+    # logFile: var/build/logs/2015.05.27-15:26:55.bisBis1.initalign.log
+    # real    81m6.372s
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.bisBis1
@@ -390,17 +407,15 @@ XXX - running - Thu May 21 15:39:18 PDT 2015
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad bisBis1
-    # logFile: var/dbload/hgwdev/logs/2015.03.31-12:48:20.bisBis1.dbload.log
-XXX - running - Tue Mar 31 12:48:30 PDT 2015
-    # real    96m19.166s
-XXX - broken Thu May 21 15:31:08 PDT 2015
+    # logFile: var/dbload/hgwdev/logs/2015.05.28-14:52:25.bisBis1.dbload.log
+    # real    5m11.618s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add bisBis1 to:
     #   vi etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added bisBis1 - Golden snub-nosed monkey refs #14438" \
+    git commit -m "Added bisBis1 - Bison bison bison refs #15388" \
       etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
@@ -465,27 +480,33 @@ searchPriority 8
 # all.joiner update, downloads and in pushQ - (DONE 2014-10-21 - Steve)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
+    git commit -m "Added bisBis1 - Bison bison bison refs #15388" \
+       all.joiner
     joinerCheck -database=bisBis1 -keys all.joiner
     joinerCheck -database=bisBis1 -tableCoverage all.joiner
     joinerCheck -database=bisBis1 -times all.joiner
 
     cd /hive/data/genomes/bisBis1
     time makeDownloads.pl bisBis1 > downloads.log 2>&1
-    # real    18m53.781s
+    # real    25m16.304s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/bisBis1/pushQ
     cd /hive/data/genomes/bisBis1/pushQ
-    makePushQSql.pl bisBis1 > bisBis1.pushQ.sql 2> stderr.out
+    time makePushQSql.pl bisBis1 > bisBis1.pushQ.sql 2> stderr.out
+    # real    5m16.163s
+
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: hgwdev does not have /gbdb/bisBis1/wib/gc5Base.wib
     # WARNING: hgwdev does not have /gbdb/bisBis1/wib/quality.wib
-    # WARNING: hgwdev does not have /gbdb/bisBis1/bbi/quality.bw
+    # WARNING: hgwdev does not have /gbdb/bisBis1/bbi/qualityBw/quality.bw
     # WARNING: bisBis1 does not have seq
     # WARNING: bisBis1 does not have extFile
+    # WARNING: bisBis1 does not have estOrientInfo
 
     #   copy it to hgwbeta
     scp -p bisBis1.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/bisBis1.pushQ.sql"
     ssh hgwbeta
     cd /tmp
     hgsql qapushq < bisBis1.pushQ.sql

@@ -4783,15 +4783,15 @@ void loadKnownGencode(struct track *tg)
  * in "extra" field (usually gene name) */
 {
 char varName[SMALLBUF];
-safef(varName, sizeof(varName), "%s.show.composite", tg->tdb->track);
-boolean showComposite = cartUsualBoolean(cart, varName, FALSE);
+safef(varName, sizeof(varName), "%s.show.comprehensive", tg->tdb->track);
+boolean showComprehensive = cartUsualBoolean(cart, varName, FALSE);
 
 struct sqlConnection *conn = hAllocConn(database);
 tg->items = connectedLfFromGenePredInRangeExtra(tg, conn, tg->table,
                                         chromName, winStart, winEnd, TRUE);
 
 /* filter items on selected criteria if filter is available */
-if (!showComposite)
+if (!showComprehensive)
     filterItems(tg, knownGencodeClassFilter, "include");
 
 /* if we're close enough to see the codon frames, we better load them! */
@@ -5040,6 +5040,7 @@ struct linkedFeatures *lf;
 struct sqlConnection *conn = hAllocConn(database);
 char *geneSymbol;
 char *protDisplayId;
+char *gencodeId;
 char *mimId;
 char cond_str[256];
 
@@ -5047,6 +5048,7 @@ boolean useGeneSymbol= FALSE;
 boolean useKgId      = FALSE;
 boolean useProtDisplayId = FALSE;
 boolean useMimId = FALSE;
+boolean useGencodeId = FALSE;
 
 struct hashEl *knownGeneLabels = cartFindPrefix(cart, "knownGene.label");
 struct hashEl *label;
@@ -5070,11 +5072,14 @@ if (hTableExists(database, "kgXref"))
             useGeneSymbol = TRUE;
         else if (endsWith(label->name, "kgId") && differentString(label->val, "0"))
             useKgId = TRUE;
+        else if (endsWith(label->name, "gencodeId") && differentString(label->val, "0"))
+            useGencodeId = TRUE;
         else if (endsWith(label->name, "prot") && differentString(label->val, "0"))
             useProtDisplayId = TRUE;
         else if (endsWith(label->name, omimLabel) && differentString(label->val, "0"))
             useMimId = TRUE;
         else if (!endsWith(label->name, "gene") &&
+                 !endsWith(label->name, "gencodeId") &&
                  !endsWith(label->name, "kgId") &&
                  !endsWith(label->name, "prot") &&
                  !endsWith(label->name, omimLabel) )
@@ -5100,6 +5105,14 @@ if (hTableExists(database, "kgXref"))
                 }
             labelStarted = TRUE;
             }
+        if (useGencodeId)
+            {
+            if (labelStarted) dyStringAppendC(name, '/');
+            else labelStarted = TRUE;
+	    sqlSafefFrag(cond_str, sizeof(cond_str), "name='%s'", lf->name);
+	    gencodeId = sqlGetField(database, "knownGene", "alignID", cond_str);
+	    dyStringAppend(name, gencodeId);
+	    }
         if (useKgId)
             {
             if (labelStarted) dyStringAppendC(name, '/');

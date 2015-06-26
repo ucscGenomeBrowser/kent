@@ -498,9 +498,9 @@ if (vcff->majorVersion == 0)
     vcff->majorVersion = 4;
     vcff->minorVersion = 1;
     }
-if ((vcff->majorVersion != 4 || (vcff->minorVersion != 0 && vcff->minorVersion != 1)) &&
+if ((vcff->majorVersion != 4 || vcff->minorVersion < 0 || vcff->minorVersion > 2) &&
     (vcff->majorVersion != 3))
-    vcfFileErr(vcff, "VCFv%d.%d not supported -- only v3.*, v4.0 or v4.1",
+    vcfFileErr(vcff, "VCFv%d.%d not supported -- only v3.*, v4.0, v4.1 or v4.2",
 	       vcff->majorVersion, vcff->minorVersion);
 // Next, one header line beginning with single "#" that names the columns:
 if (line == NULL)

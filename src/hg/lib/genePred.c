@@ -854,9 +854,30 @@ else if (stopCodonStart >= 0)
         }
     }
 
+/* add in version numbers if requested and available */
+char geneIdToUse[1024], transcriptIdToUse[1024];
+geneIdToUse[0]= '\0';
+if (options & genePredGxfGeneNameAsName2)
+    {
+    if (group->lineList->geneName != NULL)
+        safecpy(geneIdToUse, sizeof(geneIdToUse), group->lineList->geneName);
+    }
+else if (group->lineList->geneId != NULL)
+    {
+    if (genePredGxfIncludeVersion && (group->lineList->geneVersion != NULL))
+        safef(geneIdToUse, sizeof(geneIdToUse), "%s.%s", group->lineList->geneId, group->lineList->geneVersion);
+    else
+        safecpy(geneIdToUse, sizeof(geneIdToUse), group->lineList->geneId);
+    }
+if (genePredGxfIncludeVersion && (group->lineList->transcriptVersion != NULL))
+    safef(transcriptIdToUse, sizeof(transcriptIdToUse), "%s.%s", name, group->lineList->transcriptVersion);
+else
+    safecpy(transcriptIdToUse, sizeof(transcriptIdToUse), name);
+
+
 /* Allocate genePred and fill in values. */
 AllocVar(gp);
-gp->name = cloneString(name);
+gp->name = cloneString(transcriptIdToUse);
 gp->chrom = cloneString(group->seq);
 gp->strand[0] = group->strand;
 gp->txStart = geneStart;
@@ -877,20 +898,7 @@ gp->exonEnds = AllocArray(eEnds, exonCount);
 gp->optFields = optFields;
 
 if (optFields & genePredName2Fld)
-    {
-    if (options & genePredGxfGeneNameAsName2)
-        {
-        if (group->lineList->geneName != NULL)
-            gp->name2 = cloneString(group->lineList->geneName);
-        }
-    else
-        {
-        if (group->lineList->geneId != NULL)
-            gp->name2 = cloneString(group->lineList->geneId);
-        }
-    if (gp->name2 == NULL)
-        gp->name2 = cloneString("");
-    }
+    gp->name2 = cloneString(geneIdToUse);
 if (optFields & genePredCdsStatFld)
     {
     if (cdsStart < cdsEnd)

@@ -2,22 +2,23 @@
  * generated transMapGene.c and transMapGene.sql.  This header links the database and
  * the RAM representation of objects. */
 
-/* Copyright (C) 2008 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
-
 #ifndef TRANSMAPGENE_H
 #define TRANSMAPGENE_H
 
-#define TRANSMAPGENE_NUM_COLS 4
+#define TRANSMAPGENE_NUM_COLS 5
+
+extern char *transMapGeneCommaSepFieldNames4;  // previous version without geneId column
+extern char *transMapGeneCommaSepFieldNames;
 
 struct transMapGene
-/* shared, gene-specific transMap information.  This is also a cdsSpec object */
+/* shared, gene-specific transMap information.  This is also a cds specification */
     {
     struct transMapGene *next;  /* Next in singly linked list. */
-    char *id;	/* unique sequence id */
+    char *id;	/* unique transcript id */
     char *cds;	/* CDS specification, in NCBI format. */
     char db[17];	/* source db */
     char *geneName;	/* gene name */
+    char *geneId;	/* database-specific gene id */
     };
 
 void transMapGeneStaticLoad(char **row, struct transMapGene *ret);

@@ -12,14 +12,48 @@ gff3File=`basename $ftpFile`
 echo "select * from ucscToRefSeq" | hgsql $db | tail -n +2 | awk '{print 0, $4, $3, $1, $3}' > refSeqToUcsc.lft
 wget $ftpFile
 
-/cluster/home/braney/bin/x86_64/gff3ToGenePred -useName -warnAndContinue -attrsOut=attrs $gff3File stdout 2> convertErr.txt | liftUp -type=.gp -extGenePred lift.gp refSeqToUcsc.lft warn  stdin 2> liftErr.txt
+/cluster/home/braney/bin/x86_64/gff3ToGenePred -useName -warnAndContinue -attrsOut=attrs -bad=bad.gp $gff3File stdout 2> convertErr.txt | liftUp -type=.gp -extGenePred lift.gp refSeqToUcsc.lft warn  stdin 2> liftErr.txt
 wc -l lift.gp
-# 143789
-#
+# 149502
+wc -l bad.gp
+# 124
 
+liftUp -type=.gp -extGenePred liftBad.gp refSeqToUcsc.lft warn  bad.gp 2> liftErr2.txt
+
+awk '{count=$8; split($9,starts,","); split($10, stops, ","); split($15, frames, ","); for(ii=2; ii <=count; ii++) { if (starts[ii] < stops[ii-1]) {print $2, starts[ii-1], stops[ii-1], $1, frames[ii-1]; print $2,starts[ii], stops[ii], $1, frames[ii];}}}' liftBad.gp > ~/public_html/overlaps.txt
+
+tawk -f fixGp.awk liftBad.gp > liftFix.gp
+genePredCheck liftFix.gp
+#Error: liftFix.gp:1: NM_001242356.2 no exonFrame on CDS exon 4
+#Error: liftFix.gp:2: NM_004829.6 no exonFrame on CDS exon 5
+#Error: liftFix.gp:3: NM_001242356.2 no exonFrame on CDS exon 4
+#Error: liftFix.gp:4: NM_004829.6 no exonFrame on CDS exon 5
+#Error: liftFix.gp:5: NM_001242356.2 no exonFrame on CDS exon 4
+#Error: liftFix.gp:6: NM_004829.6 no exonFrame on CDS exon 5
+#Error: liftFix.gp:7: NM_001242356.2 no exonFrame on CDS exon 4
+#Error: liftFix.gp:8: NM_004829.6 no exonFrame on CDS exon 5
+#Error: liftFix.gp:9: NM_001242356.2 no exonFrame on CDS exon 4
+#Error: liftFix.gp:10: NM_004829.6 no exonFrame on CDS exon 5
+#Error: liftFix.gp:11: NM_001242356.2 no exonFrame on CDS exon 4
+#Error: liftFix.gp:12: NM_004829.6 no exonFrame on CDS exon 5
+#Error: liftFix.gp:20: NM_025259.5 no exonFrame on CDS exon 4
+#Error: liftFix.gp:21: NM_172166.3 no exonFrame on CDS exon 4
+#Error: liftFix.gp:22: NM_172165.3 no exonFrame on CDS exon 4
+#Error: liftFix.gp:23: NM_002441.4 no exonFrame on CDS exon 4
+#Error: liftFix.gp:32: NM_006781.4 exon 0 start 3664574 >= end 3664574
+#Error: liftFix.gp:32: NM_006781.4 exonFrame on non-CDS exon 0
+#Error: liftFix.gp:44: NM_018406.6 no exonFrame on CDS exon 30
+#Error: liftFix.gp:81: NM_006781.4 exon 0 start 3655065 >= end 3655065
+#Error: liftFix.gp:81: NM_006781.4 exonFrame on non-CDS exon 0
+#Error: liftFix.gp:94: NM_007028.3 exon 3 start 1368529 >= end 1368529
+#checked: 122 failed: 22
+
+
+tawk '{print $1}'  lift.gp | sort | uniq | wc
+#142893
 tawk '{print $1}'  attrs | sort | uniq > meta
 wc -l meta
-# 139097 meta
+# 143746 meta
 for i in product Dbxref gene gbkey
 do 
     echo $i
@@ -27,18 +61,23 @@ do
     mv out meta
 done  
 wc -l meta
-# 139097 meta
+# 142767 meta
 
-egrep "^N(M|R)" lift.gp > curated.gp
+egrep "^N(M|R)|^YP" lift.gp > curated.gp
 egrep "^X(M|R)" lift.gp > predicted.gp
 
 wc -l curated.gp predicted.gp
-# 54758 curated.gp
-# 89031 predicted.gp
-# 143789 total
+#    54771 curated.gp
+#    89031 predicted.gp
+#   143802 total
+
+cat curated.gp predicted.gp | awk '{print $1}' | sort -u > tmp1
+cat meta | awk '{print $1}' | sort -u > tmp2
+join -v 1 tmp1 tmp2 | wc -l
+# 0
 
 grep dropping convertErr.txt | wc -l
-#    3133
+#    124
 
 awk '/isn/ {print $1}' liftErr.txt | sort -u
 # NW_009646208.1
@@ -47,4 +86,11 @@ awk '/isn/ {print $1}' liftErr.txt | sort -u
 hgLoadGenePred -genePredExt $db ncbiRefCurated curated.gp
 hgLoadGenePred -genePredExt $db ncbiRefPredicted predicted.gp
 hgLoadSqlTab $db ncbiRefLink $kent/src/hg/lib/ncbiRefLink.sql meta
+
+hgsql -e 'INSERT INTO trackVersion \
+    (db, name, who, version, updateTime, comment, source, dateReference) \
+    VALUES("hg38", "ncbiRefSeq", "braney", "107", now(), \
+    "http://www.ncbi.nlm.nih.gov/genome/annotation_euk/Homo_sapiens/107/", \
+    "ftp://ftp.ncbi.nlm.nih.gov/genomes/H_sapiens", \
+    "12 March 2015" );' hgFixed
 
