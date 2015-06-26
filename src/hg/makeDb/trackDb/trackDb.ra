@@ -1528,7 +1528,7 @@ shortLabel Segmental Dups
 longLabel Duplications of >1000 Bases of Non-RepeatMasked Sequence
 group varRep
 visibility hide
-type bed 6 .
+type bed 6 +
 noScoreFilter .
 
 track rmsk
