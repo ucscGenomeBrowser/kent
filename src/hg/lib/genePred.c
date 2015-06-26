@@ -855,7 +855,7 @@ else if (stopCodonStart >= 0)
     }
 
 /* add in version numbers if requested and available */
-char geneIdToUse[512], transcriptIdToUse[512];
+char geneIdToUse[1024], transcriptIdToUse[1024];
 geneIdToUse[0]= '\0';
 if (options & genePredGxfGeneNameAsName2)
     {
