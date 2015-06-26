@@ -42,6 +42,13 @@ var cart = (function() {
         return reqObj;
     }
     
+    function reqToString(reqObj) {
+        // Translate ajax request object into a CGI parameter string
+        return _.map(reqObj, function(value, key) {
+            return key + '=' + encodeURIComponent(value);
+        }).join('&');
+    }
+
     function defaultErrorCallback(jqXHR, textStatus) {
         console.log('Request failed: ', arguments);
         alert('Request failed: ' + textStatus);
@@ -61,12 +68,13 @@ var cart = (function() {
             // ajaxExtra is an optional object containing extra params for $.ajax.
             // Throws [message, badValue] if something is not as expected.
             var reqObj = wrapCommandObj(commandObj);
+            var paramString = reqToString(reqObj);
             var ajaxParams;
             errorCallback = errorCallback || defaultErrorCallback;
             if (! cgiUrl) {
                 throw(['cart.send: cart.setCgi must be called before cart.send']);
             }
-            console.log('cart.send: url =', cgiUrl, ', data =', reqObj);
+            console.log('cart.send: url =', cgiUrl, ', data =', reqObj, ', params =', paramString);
             ajaxParams = {
                 type: "POST",
                 url: cgiUrl,
