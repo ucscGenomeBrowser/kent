@@ -49,8 +49,10 @@ enum genePredFromGxfOpts
     genePredGxfDefaults = 0x00,            /* used if nothing special */
     genePredGxfImpliedStopAfterCds = 0x01, /* stop codon is implied outside of
                                             * the annotated CDS bounds  */
-    genePredGxfGeneNameAsName2 = 0x02      /* use gene_name instead of gene_id
+    genePredGxfGeneNameAsName2 = 0x02,     /* use gene_name instead of gene_id
                                             * for name2 */
+    genePredGxfIncludeVersion = 0x04       /* use include gene_version and transcript_version with
+                                            * ids if available */
 };
 
 enum genePredFields

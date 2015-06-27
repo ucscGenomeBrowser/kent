@@ -368,8 +368,8 @@ int tBaseInsert = 0;	/* Number of bases inserted in target */
 boolean eitherInsert = FALSE;	/* True if either in insert state. */
 int qOffset = 0;
 int tOffset = 0;
-boolean qIsNib = FALSE;
-static boolean tIsNib ;
+static boolean qIsNib = FALSE;
+static boolean tIsNib  = FALSE;
 int blockCount = 1, blockIx=0;
 int i,j;
 int qs,qe,ts,te;
@@ -381,7 +381,7 @@ int qbSize = 0, tbSize = 0; /* sum of block sizes */
  if ((qStart == qEnd) || (tStart == tEnd))
      return;
 
-if (qName == NULL || !sameString(qName, qNameParm))
+if (qIsNib || qName == NULL || !sameString(qName, qNameParm))
     {
     freeDnaSeq(&qSeq);
     freez(&qName);
@@ -436,14 +436,8 @@ for (b = chain->blockList; b != NULL; b = nextB)
                 {
                 char qq ;
                 char tt ;
-                if (j > tSeq->size || i > qSeq->size)
-                    {
-                    break;
-                    //printf("tStart %d b->tStart %d tEnd %d size %d block %d\n",tStart, b->tStart,  tEnd,tSeq->size, b->tEnd-b->tStart);
-                    //printf("qStart %d b->qStart %d qEnd %d size %d qend-qstart %d loop start %d loopend %d\n",qStart, b->qStart,  qEnd, qSeq->size, qEnd-qStart, (b->qStart)-qStart, b->qStart+(b->tEnd - b->tStart)-qStart);
-                    assert(j <= tSeq->size);
-                    assert(i <= qSeq->size);
-                    }
+                assert(j < tSeq->size);
+                assert(i < qSeq->size);
                 qq = qSeq->dna[i++];
                 tt = tSeq->dna[j++];
                 if (toupper(qq) == toupper(tt))

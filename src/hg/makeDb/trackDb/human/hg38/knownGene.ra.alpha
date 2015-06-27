@@ -1,7 +1,7 @@
 
 track knownGene 
-shortLabel GENCODE Genes
-longLabel  GENCODE Genes
+shortLabel GENCODE Basic
+longLabel  Basic transcript set from GENCODE v22, see also All GENCODE track
 group genes
 visibility pack
 priority 1
@@ -16,4 +16,4 @@ baseColorDefault genomicCodons
 defaultLinkedTables kgXref
 intronGap 12
 isGencode on
-
+html knownGene.alpha

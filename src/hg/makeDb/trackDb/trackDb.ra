@@ -369,7 +369,7 @@ noInherit on
     shortLabel Sequences
     longLabel Sequences in Articles: PubmedCentral and Elsevier
     parent pubs on
-    type bed 12 .
+    type bed 12 +
     visibility dense
     priority 2
     configurable off
@@ -414,7 +414,7 @@ track pubsBingBlat
 shortLabel Web Sequences
 longLabel DNA Sequences in Web Pages Indexed by Bing.com / Microsoft Research
 group pub
-type bed 12 .
+type bed 12 +
 visibility hide
 configurable off
 configureByPopup off
@@ -1528,7 +1528,7 @@ shortLabel Segmental Dups
 longLabel Duplications of >1000 Bases of Non-RepeatMasked Sequence
 group varRep
 visibility hide
-type bed 6 .
+type bed 6 +
 noScoreFilter .
 
 track rmsk
