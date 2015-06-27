@@ -3331,7 +3331,7 @@ sqlCheckAllowAlphaChars(allowed);
 sqlCheckAllowDigitChars(allowed);
 }
 
-/* Currently used 10 times in the code via define sqlChkIl. */
+/* Currently used 10 times in the code via define sqlCkIl. */
 char *sqlCheckIdentifiersList(char *identifiers)
 /* Check that only valid identifier characters are used in a comma-separated list
  * '.' is allowed also since some code uses it in place of an actual field name.
