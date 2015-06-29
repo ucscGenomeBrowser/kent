@@ -61,6 +61,13 @@ ele->val.jeList = list;
 return ele;
 }
 
+struct jsonElement *newJsonNull()
+{
+struct jsonElement *ele = newJsonElement(jsonNull);
+ele->val.jeNull = NULL;
+return ele;
+}
+
 void jsonObjectAdd(struct jsonElement *h, char *name, struct jsonElement *ele)
 // Add a new element to a jsonObject; existing values are replaced.
 {
@@ -211,24 +218,6 @@ static struct jsonElement *jsonParseString(char *str, int *posPtr)
 return newJsonString(getString(str, posPtr));
 }
 
-static struct jsonElement *jsonParseBoolean(char *str, int *posPtr)
-{
-struct jsonElement *ele = NULL;
-int i;
-for(i = 0; str[*posPtr + i] && isalpha(str[*posPtr + i]); i++)
-    ;
-char *val = cloneStringZ(str + *posPtr, i);
-if(sameString(val, "true"))
-    ele = newJsonBoolean(TRUE);
-else if(sameString(val, "false"))
-    ele =  newJsonBoolean(FALSE);
-else
-    errAbort("Invalid boolean value '%s'; pos: %d", val, *posPtr);
-*posPtr += i;
-freez(&val);
-return ele;
-}
-
 static struct jsonElement *jsonParseNumber(char *str, int *posPtr)
 {
 int i;
@@ -259,10 +248,48 @@ freez(&val);
 return retVal;
 }
 
+static boolean startsWithWordAlpha(const char *firstWord, const char *string)
+/* Return TRUE if string starts with firstWord and then either ends or continues with
+ * non-alpha characters. */
+{
+return startsWith(firstWord, string) && !isalpha(string[strlen(firstWord)]);
+}
+
+#define JSON_KEYWORD_TRUE "true"
+#define JSON_KEYWORD_FALSE "false"
+#define JSON_KEYWORD_NULL "null"
+
+static struct jsonElement *jsonParseKeyword(char *str, int *posPtr)
+/* If str+*posPtr starts with a keyword token (true, false, null), return a new
+ * jsonElement for it; otherwise return NULL. */
+{
+char *s = str + *posPtr;
+if (startsWithWordAlpha(JSON_KEYWORD_TRUE, s))
+    {
+    *posPtr += strlen(JSON_KEYWORD_TRUE);
+    return newJsonBoolean(TRUE);
+    }
+if (startsWithWordAlpha(JSON_KEYWORD_FALSE, s))
+    {
+    *posPtr += strlen(JSON_KEYWORD_FALSE);
+    return newJsonBoolean(FALSE);
+    }
+if (startsWithWordAlpha(JSON_KEYWORD_NULL, s))
+    {
+    *posPtr += strlen(JSON_KEYWORD_NULL);
+    return newJsonNull();
+    }
+return NULL;
+}
+
+// Maximum number of characters from the current position to display in error message:
+#define MAX_LEN_FOR_ERROR 100
+
 static struct jsonElement *jsonParseExpression(char *str, int *posPtr)
 {
 skipLeadingSpacesWithPos(str, posPtr);
 char c = str[*posPtr];
+struct jsonElement *ele = NULL;
 if(c == '{')
     return jsonParseObject(str, posPtr);
 else if (c == '[')
@@ -271,9 +298,18 @@ else if (c == '"')
     return jsonParseString(str, posPtr);
 else if (isdigit(c) || c == '-')
     return jsonParseNumber(str, posPtr);
+else if ((ele = jsonParseKeyword(str, posPtr)) != NULL)
+    return ele;
 else
-    return jsonParseBoolean(str, posPtr);
-// XXXX support null?
+    {
+    const char *s = str + *posPtr;
+    int len = strlen(s);
+    if (len > MAX_LEN_FOR_ERROR)
+        errAbort("Invalid JSON token: %.*s...", MAX_LEN_FOR_ERROR, s);
+    else
+        errAbort("Invalid JSON token: %s", s);
+    }
+return NULL;
 }
 
 struct jsonElement *jsonParse(char *str)
@@ -398,6 +434,7 @@ switch (ele->type)
     case jsonBoolean:
     case jsonNumber:
     case jsonDouble:
+    case jsonNull:
         {
         break;
         }
@@ -477,6 +514,7 @@ switch (ele->type)
     case jsonBoolean:
     case jsonNumber:
     case jsonDouble:
+    case jsonNull:
         {
         break;
         }
@@ -520,7 +558,7 @@ switch (ele->type)
 	}
     case jsonBoolean:
         {
-	char *val = (ele->val.jeBoolean ? "frue" : "false");
+	char *val = (ele->val.jeBoolean ? "true" : "false");
 	fprintf(f, "%s", val);
 	break;
 	}
@@ -532,6 +570,11 @@ switch (ele->type)
     case jsonDouble:
         {
 	fprintf(f, "%g", ele->val.jeDouble);
+        break;
+        }
+    case jsonNull:
+        {
+        fprintf(f, "null");
         break;
         }
     default:
@@ -563,6 +606,7 @@ switch (ele->type)
     case jsonBoolean:
     case jsonNumber:
     case jsonDouble:
+    case jsonNull:
         break;
     default:
         {
@@ -612,17 +656,21 @@ jsonElementRecurse(root, NULL, TRUE,
 /** Routines that check json type and return corresponding value. **/
 
 struct slRef *jsonListVal(struct jsonElement *ele, char *name)
-/* Enforce element is type jsonList.  Return list value */
+/* Enforce element is type jsonList or jsonNull.  Return list value, which may be NULL. */
 {
-if (ele->type != jsonList)
+if (ele->type == jsonNull)
+    return NULL;
+else if (ele->type != jsonList)
     errAbort("json element %s is not a list", name);
 return ele->val.jeList;
 }
 
 struct hash *jsonObjectVal(struct jsonElement *ele, char *name)
-/* Enforce object is type jsonObject.  Return object hash */
+/* Enforce object is type jsonObject or jsonNull.  Return object hash, which may be NULL. */
 {
-if (ele->type != jsonObject)
+if (ele->type == jsonNull)
+    return NULL;
+else if (ele->type != jsonObject)
     errAbort("json element %s is not an object", name);
 return ele->val.jeHash;
 }
@@ -652,9 +700,11 @@ return ele->val.jeBoolean;
 }
 
 char *jsonStringVal(struct jsonElement *ele, char *eleName)
-/* Enforce element is type jsonString and return value. */
+/* Enforce element is type jsonString or jsonNull.  Return value, which may be NULL. */
 {
-if (ele->type != jsonString)
+if (ele->type == jsonNull)
+    return NULL;
+else if (ele->type != jsonString)
     errAbort("json element %s is not a string", eleName);
 return ele->val.jeString;
 }
@@ -667,6 +717,8 @@ struct jsonElement *jsonFindNamedField(struct jsonElement *object,
  * is not actually an object. */
 {
 struct hash *hash = jsonObjectVal(object, objectName);
+if (hash == NULL)
+    return NULL;
 return hashFindVal(hash, field);
 }
 
