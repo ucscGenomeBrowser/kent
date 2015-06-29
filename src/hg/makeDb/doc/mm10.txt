@@ -11142,3 +11142,26 @@ hgsql -e 'INSERT INTO trackVersion \
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
     ln -s `pwd`/md5sum.txt $pd/
+
+###########################################################################
+# GENEID GENE PREDICTIONS (DONE - 2015-06-26 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/mm10/bed/geneid
+    cd /hive/data/genomes/mm10/bed/geneid
+    wget --timestamping \
+http://genome.crg.es/genepredictions/M.musculus/mm10/geneid_v1.4/mm10.geneid.prot
+    wget --timestamping \
+http://genome.crg.es/genepredictions/M.musculus/mm10/geneid_v1.4/mm10.geneid.gtf
+    ldHgGene -gtf -genePredExt mm10 geneid mm10.geneid.gtf
+
+    #  Read 36771 transcripts in 287332 lines in 1 files
+    #  36771 groups 66 seqs 1 sources 3 feature types
+    #  36771 gene predictions
+
+    featureBits -countGaps mm10 geneid
+# 42028722 bases of 2730871774 (1.539%) in intersection
+    featureBits -countGaps mm9 geneid
+# 41651898 bases of 2725765481 (1.528%) in intersection
+
+##########################################################################
+

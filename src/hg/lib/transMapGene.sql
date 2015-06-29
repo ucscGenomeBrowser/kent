@@ -3,13 +3,13 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#shared, gene-specific transMap information.  This is also a cdsSpec object
+#shared, gene-specific transMap information.  This is also a cds specification
 CREATE TABLE transMapGene (
-    id varchar(255) not null,	# unique sequence id
+    id varchar(255) not null,	# unique transcript id
     cds varchar(255) not null,	# CDS specification, in NCBI format.
     db char(16) not null,	# source db
     geneName varchar(255) not null,	# gene name
+    geneId varchar(255) not null,	# database-specific gene id
               #Indices
-    PRIMARY KEY(db,id),
-    INDEX(id)
+    PRIMARY KEY(id)
 );

@@ -9,6 +9,10 @@
  * The UI view top level is in ../js/react/hgIntegrator/hgIntegrator.jsx
  * The UI model top level is in ../js/model/hgIntegrator/hgIntegratorModel.js
  */
+
+/* Copyright (C) 2015 The Regents of the University of California
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "cart.h"
 #include "cartJson.h"

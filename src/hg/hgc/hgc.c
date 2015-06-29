@@ -24461,15 +24461,22 @@ void doSnakeClick(struct trackDb *tdb, char *itemName)
 genericHeader(tdb, itemName);
 char *otherSpecies = trackHubSkipHubName(tdb->table) + strlen("snake");
 char *hubName = cloneString(database);
-char *ptr = strchr(hubName + 4, '_');
-*ptr = 0;
 char otherDb[4096];
 char *qName = cartOptionalString(cart, "qName");
 int qs = atoi(cartOptionalString(cart, "qs"));
 int qe = atoi(cartOptionalString(cart, "qe"));
 int qWidth = atoi(cartOptionalString(cart, "qWidth"));
-safef(otherDb, sizeof otherDb, "%s_%s", hubName, otherSpecies);
 
+if(trackHubDatabase(database))
+    {
+    char *ptr = strchr(hubName + 4, '_');
+    *ptr = 0;
+    safef(otherDb, sizeof otherDb, "%s_%s", hubName, otherSpecies);
+    }
+else
+    {
+    safef(otherDb, sizeof otherDb, "%s", otherSpecies);
+    }
 
 printf("<A HREF=\"hgTracks?db=%s&position=%s:%d-%d&%s_snake%s=full\" TARGET=_BLANK><B>Link to block in other assembly</A><BR>\n", otherDb, qName, qs, qe,hubName,trackHubSkipHubName(database));
 

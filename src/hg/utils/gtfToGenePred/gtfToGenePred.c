@@ -30,7 +30,9 @@ errAbort(
   "     -impliedStopAfterCds - implied stop codon in after CDS\n"
   "     -simple    - just check column validity, not hierarchy, resulting genePred may be damaged\n"
   "     -geneNameAsName2 - if specified, use gene_name for the name2 field\n"
-  "      instead of gene_id.\n");
+  "      instead of gene_id.\n"
+  "     -includeVersion - it gene_version and/or transcript_version attributes exist, include the version\n"
+  "      in the corresponding identifiers.\n");
 }
 
 static struct optionSpec options[] = {
@@ -42,12 +44,14 @@ static struct optionSpec options[] = {
     {"sourcePrefix", OPTION_STRING|OPTION_MULTI},
     {"impliedStopAfterCds", OPTION_BOOLEAN},
     {"geneNameAsName2", OPTION_BOOLEAN},
+    {"includeVersion", OPTION_BOOLEAN},
     {NULL, 0},
 };
 boolean clGenePredExt = FALSE;  /* include frame and geneName */
 boolean clAllErrors = FALSE;    /* report as many errors as possible */
 boolean clIgnoreGroupsWithoutExons = FALSE;  /* ignore groups without exons */
 struct slName *clSourcePrefixes; /* list of source prefixes to match */
+boolean clIncludeVersion = FALSE; /* add version numbers to identifiers if available */
 unsigned clGxfOptions = 0;       /* options for converting GTF/GFF */
 boolean doSimple = FALSE;      /* only check column validity */
 
@@ -66,22 +70,40 @@ if ((*name == NULL) && (newName != NULL))
 static void writeInfo(FILE *infoFh, struct gffGroup *group)
 /* write a row for a GTF group from the info file */
 {
-
 // scan lineList for group and protein ids
 struct gffLine *ll;
-char *geneId = NULL, *proteinId = NULL, *geneName = NULL, *transcriptName = NULL;
+char *geneId = NULL, *proteinId = NULL, *geneName = NULL, *transcriptName = NULL, *geneVersion = NULL, *transcriptVersion = NULL, *proteinVersion = NULL;
 for (ll = group->lineList; ll != NULL; ll = ll->next)
     {
     saveName(&geneId, ll->geneId);
     saveName(&proteinId, ll->proteinId);
     saveName(&geneName, ll->geneName);
     saveName(&transcriptName, ll->transcriptName);
+    saveName(&geneVersion, ll->geneVersion);
+    saveName(&transcriptVersion, ll->transcriptVersion);
+    saveName(&proteinVersion, ll->proteinVersion);
     }
 
+/* add in version numbers if requested and available */
+char geneIdToUse[1024], transcriptIdToUse[1024], proteinIdToUse[1024];
+
+if (clIncludeVersion && (geneId != NULL) && (geneVersion != NULL))
+    safef(geneIdToUse, sizeof(geneIdToUse), "%s.%s", geneId, geneVersion);
+else
+    safecpy(geneIdToUse, sizeof(geneIdToUse), emptyForNull(geneId));
+if (clIncludeVersion && (transcriptVersion != NULL))
+    safef(transcriptIdToUse, sizeof(transcriptIdToUse), "%s.%s", group->name, transcriptVersion);
+else
+    safecpy(transcriptIdToUse, sizeof(transcriptIdToUse), group->name);
+if (clIncludeVersion && (proteinId != NULL) && (proteinVersion != NULL))
+    safef(proteinIdToUse, sizeof(proteinIdToUse), "%s.%s", proteinId, proteinVersion);
+else
+    safecpy(proteinIdToUse, sizeof(proteinIdToUse), emptyForNull(proteinId));
+
 fprintf(infoFh, "%s\t%s\t%s\t%s\t%d\t%d\t%c\t%s\t%s\t%s\n",
-        group->name, emptyForNull(geneId), group->source,
+        transcriptIdToUse, geneIdToUse, group->source,
         group->seq, group->start, group->end, group->strand,
-        emptyForNull(proteinId), emptyForNull(geneName),
+        proteinIdToUse, emptyForNull(geneName),
         emptyForNull(transcriptName));
 }
 
@@ -196,11 +218,15 @@ clGenePredExt = optionExists("genePredExt");
 doSimple = optionExists("simple");
 clIgnoreGroupsWithoutExons = optionExists("ignoreGroupsWithoutExons");
 clAllErrors = optionExists("allErrors");
+clIncludeVersion = optionExists("includeVersion");
 clSourcePrefixes = optionMultiVal("sourcePrefix", NULL);
 if (optionExists("impliedStopAfterCds"))
     clGxfOptions |= genePredGxfImpliedStopAfterCds;
 if (optionExists("geneNameAsName2"))
     clGxfOptions |= genePredGxfGeneNameAsName2;
+if (optionExists("includeVersion"))
+    clGxfOptions |= genePredGxfIncludeVersion;
+
 
 gtfToGenePred(argv[1], argv[2], optionVal("infoOut", NULL));
 if (badGroupCount > 0)

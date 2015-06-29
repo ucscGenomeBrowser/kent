@@ -439,13 +439,13 @@ type bed 6 +
 exonArrows off
 
 track genomicSuperDups
-#replaces record genomicSuperDups in parent dir missing/extra noScoreFilter
+# replace instead of override, to avoid inheriting noScoreFilter.
 shortLabel Segmental Dups
 longLabel Duplications of >1000 Bases of Non-RepeatMasked Sequence
 group varRep
 priority 146
 visibility hide
-type bed 6 .
+type bed 6 +
 
 searchTable vegaGene
 searchType genePred

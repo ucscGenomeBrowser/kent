@@ -284,6 +284,16 @@ searchPriority 8
     ln -s `pwd`/nanPar1.2bit /gbdb/nanPar1/nanPar1.2bit
 
 ##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-06-22 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/nanPar1/bed/microsat
+     cd /cluster/data/nanPar1/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed nanPar1 microsat microsat.bed
+    #	Read 8213 elements of size 4 from microsat.bed
+
+##########################################################################
 ## WINDOWMASKER (DONE - 2015-03-20 - Hiram)
 
     mkdir /hive/data/genomes/nanPar1/bed/windowMasker
@@ -314,13 +324,13 @@ searchPriority 8
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -continue=cpg -workhorse=hgwdev -smallClusterHub=ku nanPar1) \
          > cpg.log 2>&1 &
-XXX - running - Tue Mar 24 11:35:00 PDT 2015
+    # real    10m28.915s
 
     cat fb.nanPar1.cpgIslandExt.txt
-    # 18261889 bases of 2856044136 (0.639%) in intersection
+    # 13717904 bases of 1977771384 (0.694%) in intersection
 
 #########################################################################
-# genscan - (TBD - 2015-03-06 - Hiram)
+# genscan - (DONE - 2015-03-20 - Hiram)
     mkdir /hive/data/genomes/nanPar1/bed/genscan
     cd /hive/data/genomes/nanPar1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
@@ -334,7 +344,7 @@ XXX - running - Tue Mar 24 11:35:00 PDT 2015
     #   58340692 bases of 1977771384 (2.950%) in intersection
 
 ########################################################################
-# Create kluster run files (TBD - 2015-03-06 - Hiram)
+# Create kluster run files (DONE - 2015-03-24 - Hiram)
 
     cd /hive/data/genomes/nanPar1
     # numerator is nanPar1 gapless bases "real" as reported by:
@@ -389,7 +399,7 @@ XXX - running - Tue Mar 24 11:35:00 PDT 2015
 # 1027218231      546     KN906384v1      1069101
 
 #############################################################################
-# GENBANK AUTO UPDATE (DONE - 2015-03-24 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2015-06-09 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -437,9 +447,8 @@ nanPar1.genbank.est.native.loadDesc = no
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial nanPar1
-    # logFile: var/build/logs/2015.03.24-11:49:34.nanPar1.initalign.log
-XXX - running -
-    # real    391m48.657s
+    # logFile: var/build/logs/2015.05.27-15:45:35.nanPar1.initalign.log
+    # real    1651m57.350s
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.nanPar1
@@ -447,33 +456,31 @@ XXX - running -
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
-    time ./bin/gbDbLoadStep -drop -initialLoad -verbose=10 nanPar1
-    # logFile: var/dbload/hgwdev/logs/2015.03.06-21:54:48.nanPar1.dbload.log
-
-    # logFile: var/dbload/hgwdev/logs/2015.02.21-19:06:41.nanPar1.dbload.log
-    # real    10m59.824s
+    time ./bin/gbDbLoadStep -drop -initialLoad nanPar1
+    # logFile: var/dbload/hgwdev/logs/2015.06.09-14:34:12.nanPar1.dbload.log
+    # real    128m32.009s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add nanPar1 to:
     #   vi etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added nanPar1 - Golden snub-nosed monkey refs #14438" \
+    git commit -m "Added nanPar1 - Tibetan frog refs #15056" \
       etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD 2014-10-21 - Steve)
+# all.joiner update, downloads and in pushQ - (DONE - 2015-06-22 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
-    joinerCheck -database=nanPar1 -keys all.joiner
     joinerCheck -database=nanPar1 -tableCoverage all.joiner
     joinerCheck -database=nanPar1 -times all.joiner
+    joinerCheck -database=nanPar1 -keys all.joiner
 
     cd /hive/data/genomes/nanPar1
     time makeDownloads.pl nanPar1 > downloads.log 2>&1
-    # real    18m53.781s
+    # real    13m42.027s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/nanPar1/pushQ
@@ -482,15 +489,16 @@ XXX - running -
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: hgwdev does not have /gbdb/nanPar1/wib/gc5Base.wib
     # WARNING: hgwdev does not have /gbdb/nanPar1/wib/quality.wib
-    # WARNING: hgwdev does not have /gbdb/nanPar1/bbi/quality.bw
+    # WARNING: hgwdev does not have /gbdb/nanPar1/bbi/qualityBw/quality.bw
     # WARNING: nanPar1 does not have seq
     # WARNING: nanPar1 does not have extFile
+    # WARNING: nanPar1 does not have estOrientInfo
+    # WARNING: nanPar1 does not have mrnaOrientInfo
 
     #   copy it to hgwbeta
     scp -p nanPar1.pushQ.sql qateam@hgwbeta:/tmp
-    ssh hgwbeta
-    cd /tmp
-    hgsql qapushq < nanPar1.pushQ.sql
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/nanPar1.pushQ.sql"
+
     #   in that pushQ entry walk through each entry and see if the
     #   sizes will set properly
 

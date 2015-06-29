@@ -224,6 +224,18 @@ taxId 6239
     makeCytoBandIdeo.csh ce11
 
 #########################################################################
+# augustus - (DONE - 2015-06-19 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/augustus
+    cd /hive/data/genomes/ce11/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=caenorhabditis -dbHost=hgwdev \
+           -workhorse=hgwdev ce11) > do.log 2>&1
+    # real    69m43.943s
+
+    cat fb.ce11.augustusGene.txt
+    # 25248650 bases of 100286401 (25.177%) in intersection
+
+#########################################################################
 # genscan - (DONE - 2015-06-10 - Hiram)
     mkdir /hive/data/genomes/ce11/bed/genscan
     cd /hive/data/genomes/ce11/bed/genscan
@@ -366,8 +378,7 @@ ce11.downloadDir = ce11
 
     time ./bin/gbAlignStep -initial ce11
     # logFile: var/build/logs/2015.06.10-15:57:13.ce11.initalign.log
-XXX - running - Wed Jun 10 15:57:28 PDT 2015
-    # real    163m21.647s
+    # real    10m11.990s
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.ce11
@@ -376,21 +387,21 @@ XXX - running - Wed Jun 10 15:57:28 PDT 2015
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad ce11 &
-    # logFile: var/dbload/hgwdev/logs/2015.02.21-19:06:41.ce11.dbload.log
-    # real    10m59.824s
+    # logFile: var/dbload/hgwdev/logs/2015.06.19-09:37:47.ce11.dbload.log
+    # real    1m38.436s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add ce11 to:
     #   vi etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added ce11 - Golden snub-nosed monkey refs #14438" \
+    git commit -m "Added ce11 - C. elegans WS245 refs #15209" \
       etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
 #########################################################################
-# ucscToINSDC table/track (TBD - 2015-03-23 - Hiram)
+# ucscToINSDC table/track (DONE - 2015-06-10 - Hiram)
     mkdir /hive/data/genomes/ce11/bed/ucscToINSDC
     cd /hive/data/genomes/ce11/bed/ucscToINSDC
 
@@ -499,3 +510,43 @@ searchPriority 8
     #   sizes will set properly
 
 #########################################################################
+# LIFTOVER TO ce6 (DONE - 2011-05-24 - Hiram )
+    mkdir /hive/data/genomes/ce11/bed/blat.ce6.2015-06-23
+    cd /hive/data/genomes/ce11/bed/blat.ce6.2015-06-23
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/ce11/jkStuff/ce11.11.ooc -debug ce11 ce6
+    # Real run:
+    time (doSameSpeciesLiftOver.pl \
+     -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+       -ooc=/hive/data/genomes/ce11/jkStuff/ce11.11.ooc ce11 ce6) > do.log 2>&1
+    #  real    3m53.579s
+    # verify it works on genome-test
+
+#############################################################################
+# LIFTOVER TO ce10 (DONE - 2011-05-24 - Hiram )
+    mkdir /hive/data/genomes/ce11/bed/blat.ce10.2015-06-23
+    cd /hive/data/genomes/ce11/bed/blat.ce10.2015-06-23
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/ce11/jkStuff/ce11.11.ooc -debug ce11 ce10
+    # Real run:
+    time (doSameSpeciesLiftOver.pl \
+     -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+       -ooc=/hive/data/genomes/ce11/jkStuff/ce11.11.ooc ce11 ce10) > do.log 2>&1
+    #  real    3m53.579s
+    # verify it works on genome-test
+
+#############################################################################
+# reset default position, same as ce4/ce6/ce9/ce10 on the ZC101 / unc-52 locus
+#	(DONE - 2015-06-24 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chrII:14646376-14667875"
+	where name="ce11";' hgcentraltest
+############################################################################
