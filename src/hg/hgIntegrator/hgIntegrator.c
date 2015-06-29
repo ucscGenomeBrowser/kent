@@ -231,12 +231,6 @@ static void setUserRegions(struct cartJson *cj, struct hash *paramHash)
 char *regionText = cartJsonOptionalParam(paramHash, "regions");
 char *regionFileVar = cartJsonOptionalParam(paramHash, "regionFileVar");
 struct jsonWrite *jw = cj->jw;
-if (regionText == NULL && regionFileVar == NULL)
-    {
-    jsonWriteStringf(jw, "error", "setUserRegions: no param given "
-                     "(must give either \"regions\" or \"regionFileVar\"");
-    return;
-    }
 char *db = cartString(cart, "db");
 // File upload takes precedence over pasted text:
 if (regionFileVar != NULL)
