@@ -24469,6 +24469,7 @@ struct dyString *dy = dyStringNew(0);
 
 struct sqlConnection *conn = hAllocConn(database);
 char **row;
+struct gtexGeneBed *gtexGene = NULL;
 int expCount = 0;
 if (sqlTableExists(conn, tdb->table))
     {
@@ -24478,15 +24479,22 @@ if (sqlTableExists(conn, tdb->table))
     row = sqlNextRow(sr);
     if (row != NULL)
         {
-        struct gtexGeneBed *gtexGene = gtexGeneBedLoad(row);
-        //printf("<b>Gene name</b> %s<br>\n", gtexGene->name);
-        //printf("<b>Ensembl gene</b> %s<br>\n", gtexGene->geneId);
-        //printf("<b>Ensembl transcript</b> %s<br>\n", gtexGene->transcriptId);
+        gtexGene = gtexGeneBedLoad(row);
         expCount = gtexGene->expCount;
         }
     sqlFreeResult(&sr);
     }
 hFreeConn(&conn);
+
+genericHeader(tdb, item);
+
+if (gtexGene != NULL)
+    {
+    printf("<b>Gene name:</b> %s<br>\n", gtexGene->name);
+    printf("<b>Ensembl gene:</b> %s<br>\n", gtexGene->geneId);
+    printf("<b>Ensembl transcript:</b> %s<br>\n", gtexGene->transcriptId);
+    }
+printTrackHtml(tdb);
 
 // Print out tissue table with color assignments
 conn = hAllocConn("hgFixed");
@@ -24494,7 +24502,7 @@ char *tissueTable = "gtexTissue";
 if (sqlTableExists(conn, tissueTable))
     {
     dyStringPrintf(dy, "<table>");
-    dyStringPrintf(dy, "<tr><td>Color</td><td>Tissue</td></tr>\n");
+    dyStringPrintf(dy, "<tr><td><b>Color<b></td><td><b>Tissue<b></td></tr>\n");
     int i;
     double invExpCount = 1.0/expCount;
     char query[512];
@@ -24515,10 +24523,11 @@ if (sqlTableExists(conn, tissueTable))
     }
 hFreeConn(&conn);
 dyStringPrintf(dy, "</table>");
+puts(dy->string);
 
 //cartWebStart(cart, database, "List of items assayed in %s", clusterTdb->shortLabel);
 
-genericClickHandlerPlus(tdb, item, item, dy->string);
+//genericClickHandlerPlus(tdb, item, item, dy->string);
 dyStringFree(&dy);
 }
 
