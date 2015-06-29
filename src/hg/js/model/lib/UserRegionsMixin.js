@@ -1,5 +1,3 @@
-/* global cart */
-
 var UserRegionsMixin = function(myPath) {
     // This is a model mixin that manages UI state and server interaction for UserRegions.jsx,
     // the popup in which user can paste or upload user regions.
@@ -14,9 +12,6 @@ var UserRegionsMixin = function(myPath) {
     var warnCartVar = 'userRegionsWarn';
 
     var myCartVars = [userRegionsCartVar, userRegionsUpdateCartVar, summaryCartVar, warnCartVar];
-
-    // If the file input name changes in UserRegions.jsx, change it here too.
-    var fileInputName = 'regionFile';
 
     function userRegionsMergeServerResponse(mutState, cartVar, newValue) {
         // Handle server response from setUserRegions command.
@@ -44,20 +39,10 @@ var UserRegionsMixin = function(myPath) {
         mutState.setIn(myPath.concat('enabled'), false);
     }
 
-    function uploadedUserRegions(mutState) {
-        // Use JQuery plugin bifrost to upload the file using a hidden iframe as target,
-        // in order to support IE <10.
-        var command = { setUserRegions: { regionFileVar: fileInputName,
+    function uploadedUserRegions(mutState, uiPath, jqFileInput) {
+        var command = { setUserRegions: { regionFileVar: jqFileInput.attr('name'),
                                           resultName: userRegionsUpdateCartVar } };
-        var selector = 'input[type="file"][name="' + fileInputName + '"]';
-        var $fileInput = $(selector);
-        if ($fileInput.length !== 1) {
-            this.error('UserRegions: can\'t find file input with selector "' + selector + '"');
-        }
-        // Using 'iframe ' here activates jquery.bifrost plugin:
-        cart.send(command, this.handleServerResponse, this.error,
-                  { dataType: 'iframe json',
-                    fileInputs: $fileInput });
+        this.cartUploadFile(command, jqFileInput);
         closeUserRegions(mutState);
     }
 
