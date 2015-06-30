@@ -157,9 +157,20 @@ if (start != aliStart)
     slAddHead(&list, ali);
     }
 
-struct mafAli *last = list;
+struct mafAli *next, *last = list;
 for(; last->next; last = last->next)
-    ;
+    {
+    next=last->next;
+    int aliEnd = last->components->start + last->components->size;
+    int nextStart = next->components->start ;
+
+    if (aliEnd != nextStart)
+	{
+	struct mafAli *ali = getRefAli(database, chrom, aliEnd, nextStart);
+	ali->next = next;
+	last->next = ali;
+	}
+    }
 
 int aliEnd = last->components->start + last->components->size;
 if (end != aliEnd)
