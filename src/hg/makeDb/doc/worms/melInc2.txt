@@ -160,18 +160,14 @@ searchPriority 8
     time (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku melInc2) > do.log 2>&1
-XXX - running - Tue Jun 30 11:07:27 PDT 2015
-    # real    232m59.124s
+    # real    17m40.149s
 
     cat faSize.rmsk.txt
-    # 2053849526 bases (76078142 N's 1977771384 real 1950559334 upper
-    #    27212050 lower) in 25187 sequences in 1 files
-    # Total size: mean 81544.0 sd 330701.2 min 200 (JYOU01147511v1)
-    #    max 8606022 (KN905849v1) median 453
-    # %1.32 masked total, %1.38 masked real
-
-    # most interesting, NCBI had %36.84 masked total, %38.26 masked real
-    # I wonder how they did that ?
+    # 86079534 bases (3966853 N's 82112681 real 79375947 upper 2736734 lower)
+    # in 2996 sequences in 1 files
+    #  Total size: mean 28731.5 sd 40813.7 min 63 (MiV1ctg2994)
+    #     max 447151 (MiV1ctg0) median 13127
+    #  %3.18 masked total, %3.33 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
@@ -179,12 +175,8 @@ XXX - running - Tue Jun 30 11:07:27 PDT 2015
     # CC   RELEASE 20140131;    
 
     time featureBits -countGaps melInc2 rmsk
-    # 63129821 bases of 1192725744 (5.293%) in intersection
-    # real    0m6.633s
-
-    # why is it different than the faSize above ?
-    # because rmsk masks out some N's as well as bases, the count above
-    #   separates out the N's from the bases, it doesn't show lower case N's
+    # 2736734 bases of 86079534 (3.179%) in intersection
+    #  real    0m1.627s
 
 ##########################################################################
 # running simple repeat (DONE - 2015-06-30 - Hiram)
@@ -194,57 +186,61 @@ XXX - running - Tue Jun 30 11:07:27 PDT 2015
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         melInc2) > do.log 2>&1
-XXX - running - Tue Jun 30 11:08:11 PDT 2015
-    # real    14m27.057s
+    # real    13m6.294s
 
     cat fb.simpleRepeat
-    # 6116863 bases of 95237926 (6.423%) in intersection
+    # 4010927 bases of 82114761 (4.885%) in intersection
 
-    # using the Window Masker result:
-    cd /hive/data/genomes/melInc2
-    twoBitMask bed/windowMasker/melInc2.cleanWMSdust.2bit \
-       -add bed/simpleRepeat/trfMask.bed  melInc2.2bit
-    #   you can safely ignore the warning about fields >= 13
-    twoBitToFa melInc2.2bit stdout | faSize stdin > faSize.melInc2.2bit.txt
-    cat faSize.melInc2.2bit.txt
-    # 2053849526 bases (76078142 N's 1977771384 real 1208345365
-    #    upper 769426019 lower) in 25187 sequences in 1 files
-    # Total size: mean 81544.0 sd 330701.2 min 200 (JYOU01147511v1)
-    #    max 8606022 (KN905849v1) median 453
-    # %37.46 masked total, %38.90 masked real
-
-    rm /gbdb/melInc2/melInc2.2bit
-    ln -s `pwd`/melInc2.2bit /gbdb/melInc2/melInc2.2bit
+    # using the Window Masker result as indicated below
 
 ##########################################################################
-# CREATE MICROSAT TRACK (TBD - 2015-06-22 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2015-06-30 - Hiram)
      ssh hgwdev
      mkdir /cluster/data/melInc2/bed/microsat
      cd /cluster/data/melInc2/bed/microsat
      awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
 	../simpleRepeat/simpleRepeat.bed > microsat.bed
     hgLoadBed melInc2 microsat microsat.bed
-    #	Read 8213 elements of size 4 from microsat.bed
+    #	Read 7 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2015-03-20 - Hiram)
+## WINDOWMASKER (DONE - 2015-03-30 - Hiram)
 
     mkdir /hive/data/genomes/melInc2/bed/windowMasker
     cd /hive/data/genomes/melInc2/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev melInc2) > do.log 2>&1
-    # real    153m54.144s
+    # real    4m41.534s
 
     # Masking statistics
     cat faSize.melInc2.cleanWMSdust.txt
-    # 2053849526 bases (76078142 N's 1977771384 real 1208849805 upper
-    #     768921579 lower) in 25187 sequences in 1 files
-    # Total size: mean 81544.0 sd 330701.2 min 200 (JYOU01147511v1)
-    #    max 8606022 (KN905849v1) median 453
-    # %37.44 masked total, %38.88 masked real
+    # 86079534 bases (3966853 N's 82112681 real 46015364 upper 36097317 lower)
+    #    in 2996 sequences in 1 files
+    # Total size: mean 28731.5 sd 40813.7 min 63 (MiV1ctg2994)
+    #    max 447151 (MiV1ctg0) median 13127
+    # %41.93 masked total, %43.96 masked real
 
     cat fb.melInc2.rmsk.windowmaskerSdust.txt
-    # 23839116 bases of 2053849526 (1.161%) in intersection
+    # 2283505 bases of 86079534 (2.653%) in intersection
+
+    # using this Window Masker result for final masking::
+    cd /hive/data/genomes/melInc2
+    #   you can safely ignore the warning about fields >= 13
+    twoBitMask bed/windowMasker/melInc2.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  melInc2.2bit
+
+    # measure the final masking:
+    twoBitToFa melInc2.2bit stdout | faSize stdin > faSize.melInc2.2bit.txt
+    cat faSize.melInc2.2bit.txt
+    # 86079534 bases (3966853 N's 82112681 real 45992850 upper
+    #    36119831 lower) in 2996 sequences in 1 files
+    # Total size: mean 28731.5 sd 40813.7 min 63 (MiV1ctg2994)
+    #    max 447151 (MiV1ctg0) median 13127
+    # %41.96 masked total, %43.99 masked real
+
+    # and reset the symlink
+    rm /gbdb/melInc2/melInc2.2bit
+    ln -s /hive/data/genomes/melInc2/melInc2.2bit /gbdb/melInc2/melInc2.2bit
 
 ##########################################################################
 # cpgIslands - (TBD - 2015-03-20 - Hiram)
