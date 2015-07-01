@@ -89,7 +89,7 @@ static boolean isPrivate(struct sqlConnection *conn,
 {
 char *src, buf[16];
 char query[256];
-sqlSafef(query, sizeof(query), "select submissionSet from image where id=%s",
+sqlSafef(query, sizeof(query), "select submissionSet from image where id='%s'",
 	imageId);
 src = sqlQuickQuery(conn, query, buf, sizeof(buf));
 if (src != NULL && hashLookup(privateHash, src) != NULL)
