@@ -1523,7 +1523,7 @@ Dog  -  Canis lupus familiaris     Sep. 2011 (Broad CanFam3.1/canFam3) syntenic
         /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz20way
 
 #############################################################################
-# hgPal downloads (DONE - 2015-04-17 - Hiram)
+# hgPal downloads (DONE - 2015-06-30 - braney)
 #   FASTA from 20-way for knownGene, refGene and knownCanonical
 
     ssh hgwdev
