@@ -310,7 +310,6 @@ for (i=0; i<inCount; ++i)
     struct chainNet *net;
     while ((net = chainNetRead(lf)) != NULL)
 	{
-	printf("%s\n", net->name);
 	++netCount;
 	traverseNet(net, NULL, depthGather);
 	traverseNet(net, gapFile, gapGather);

@@ -653,7 +653,7 @@ for (geneId = geneIdList; geneId != NULL; geneId = geneId->next)
     boolean needsSlash = FALSE;
 
     /* Get gene name. */
-    sqlSafef(query, sizeof(query), "select name from gene where id=%s",
+    sqlSafef(query, sizeof(query), "select name from gene where id='%s'",
         geneId->name);
     geneName = sqlQuickString(conn, query);
     if (geneName == NULL)
