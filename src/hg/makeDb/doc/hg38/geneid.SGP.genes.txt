@@ -1,0 +1,29 @@
+###########################################################################
+# GENEID GENE PREDICTIONS (DONE - 2015-06-26 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/hg38/bed/geneid
+    cd /hive/data/genomes/hg38/bed/geneid
+    mkdir download
+    cd download
+    for C in `cut -f1 ../../../chrom.sizes`
+    do
+	echo $C
+ wget --timestamping \
+http://genome.crg.es/genepredictions/H.sapiens/hg38_x_mm10/SGP/${C}.gtf
+    wget --timestamping \
+http://genome.crg.es/genepredictions/H.sapiens/hg38_x_mm10/SGP/${C}.prot
+    done
+
+    cd ..
+    cat download/*.gtf | ldHgGene -gtf -genePredExt hg38 geneid stdin
+    # Read 36030 transcripts in 537030 lines in 1 files
+    #    36030 groups 350 seqs 1 sources 3 feature types
+    # 36030 gene predictions
+
+    featureBits -countGaps hg38 geneid
+# 39167679 bases of 3209286105 (1.220%) in intersection
+    featureBits -countGaps hg19 geneid
+# 39497457 bases of 3137161264 (1.259%) in intersection
+
+##########################################################################
+

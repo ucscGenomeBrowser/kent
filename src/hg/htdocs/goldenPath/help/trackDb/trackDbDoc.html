@@ -29,20 +29,11 @@
 <div class="pageWidth">
 <IMG SRC="/images/title.jpg">
 
-<!-- This file generates the top menu bar on Genome Browser static pages-->
-<div class='topBlueBar'>
-    <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 class="topbar"><TR><TD VALIGN="middle">
-        <A HREF="/index.html" class="topbar">Home</A>-
-        <A HREF="/cgi-bin/hgGateway" class="topbar">Genomes</A>-
-        <A HREF="/cgi-bin/hgBlat?command=start" class="topbar">Blat</A>-
-        <A HREF="/cgi-bin/hgTables?command=start" class="topbar">Tables</A>-
-        <A HREF="/cgi-bin/hgNear" class="topbar">Gene Sorter</A>-
-        <A HREF="/cgi-bin/hgPcr?command=start" class="topbar">PCR</A>-
-        <A HREF="/cgi-bin/hgVisiGene?command=start" class="topbar">VisiGene</A>-
-        <A HREF="/cgi-bin/hgSession?hgS_doMainPage=1" class="topbar">Session</A>-
-        <A HREF="/goldenPath/help/hgTracksHelp.html" class="topbar">Help</A>
-    </TD></TR></TABLE>
-</div>
+<noscript><div class='noscript'><div class='noscript-inner'><p><b>JavaScript is disabled in your web browser</b></p><p>You must have JavaScript enabled in your web browser to use the Genome Browser</p></div></div></noscript>
+<script type='text/javascript' SRC='../../../js/jquery.js'></script>
+<script type='text/javascript' SRC='../../../js/jquery.plugins.js'></script>
+<LINK rel='STYLESHEET' href='../../../style/nice_menu.css' TYPE='text/css' />
+<!--#include virtual="../../../cgi-bin/hgMenubar"-->
 
 <!--Content Tables-->
     <!--outer table is for border purposes-->
