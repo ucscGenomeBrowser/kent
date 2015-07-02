@@ -633,11 +633,16 @@ composite or super-tracks, the larger entities will have a stanza in the
 file as well.</p>
 
 <p>The <a href ="trackDb/trackDbHub.html">Track Database Definition Document</a>
-will help you understand how to create a trackDb.txt file. It goes into
-great detail about how to declare dataset display settings and values.
+will help you understand how to create a trackDb.txt file. This document 
+describes how to declare dataset display settings and values, and indicates
+the support level for each setting. While there are over 100 track settings supported at UCSC, 
+other sites that display hubs have more limited settings support.
+To further portability of hubs, we have used input from other sites to identify a
+'base' subset of the 'full' settings list, and the document has been assigned a version number.
+See the document introduction for a fuller explanation.
 </p>
 
-<P>At a minimum, each trackDb.txt file must contain at least five tags: </p>
+<P>At a minimum, each track in the trackDb.txt file must contain the 'required' settings: </p>
 
 <BLOCKQUOTE><TT>
 <A href="trackDb/trackDbHub.html#track"><B>track</B></A> <em>track_name</em><BR>
@@ -764,19 +769,32 @@ track in the composite.</p>
 your track hub when you first bring it online and whenever you make significant 
 changes. This utility checks that the files in the hub are correctly formatted.</p>
 <BLOCKQUOTE><PRE><TT>
-hubCheck - Check a track hub for integrity.
+hubCheck - Check a track data hub for integrity.
 usage:
    hubCheck http://yourHost/yourDir/hub.txt
 options:
+   -checkSettings        - check trackDb settings to spec
+   -version=[v?|url]     - version to validate settings against
+                                     (defaults to version in hub.txt, or current standard)
+   -extra=[file|url]     - accept settings in this file (or url)
+   -level=base|required  - reject settings below this support level
+   -settings             - just list settings with support level
+                           Will create this directory if not existing
+   -noTracks             - don't check remote files for tracks, just trackDb (faster)
    -udcDir=/dir/to/cache - place to put cache for remote bigBeds and bigWigs
-</TT></PRE></BLOCKQUOTE>
+</TT></PRE></BLOCKQUOTE></P>
 <P>
+Use the -checkSettings option to verify the trackDb.txt file settings are correct, and
+the -level and -extra options to customize the check (e.g. for best portability).
+To list all settings with support level, use the -settings option with no argument.
+The -noTracks option can be useful to speed up settings checks.
+</P>
 Note that you will have to use the udcDir if /tmp/udcCache is not writable
-on your machine.
+on your machine.</P>
 <P>
 The hubCheck program is available from the UCSC downloads
 server at 
-<A HREF="http://hgdownload.cse.ucsc.edu/admin/exe/">http://hgdownload.cse.ucsc.edu/admin/exe/</A>.
+<A HREF="http://hgdownload.cse.ucsc.edu/admin/exe/">http://hgdownload.cse.ucsc.edu/admin/exe/</A>.</P>
 <P>
 As part of the track hub mechanism, UCSC caches data from the hub on the
 local server.  The hub utility periodically checks the time stamps
