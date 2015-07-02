@@ -26,11 +26,10 @@ location (in thousands) of the match for each matching alignment.</P>
 
 <H3>Net Track</H3>
 <P>
-The net track shows the best human/other chain for 
-every part of the other genome. It is useful for
-finding orthologous regions and for studying genome
-rearrangement.  The human sequence used in this annotation is from
-the $date assembly.</P>
+The net track shows only the alignments from the highest-scoring chain
+for each region of the human genome assembly.  It is useful for finding
+orthologous regions and for studying genome rearrangement.  The human
+sequence used in this annotation is from the $date assembly.</P>
 
 <H2>Display Conventions and Configuration</H2>
 <H3>Chain Track</H3>
@@ -76,9 +75,10 @@ level above.
 <H2>Methods</H2>
 <H3>Chain track</H3>
 <P>
-Transposons that have been inserted since the human/other
-split were removed from the assemblies. The abbreviated genomes were
-aligned with lastz, and the transposons were added back in.
+The assemblies were examined for any transposons that had been inserted
+since the divergence of the two species.  Any such transposons were
+removed before running the alignment. The abbreviated genomes were
+aligned with lastz, and the removed transposons were then added back in.
 The resulting alignments were converted into axt format using the lavToAxt
 program. The axt alignments were fed into axtChain, which organizes all
 alignments between a single human chromosome and a single
@@ -93,14 +93,14 @@ for the $date assembly.  See the README.txt file within the relevant
 vsAssembly directory for details (e.g., parameters for the alignment with
 tarSyr2 can be found in the vsTarSyr2/ subdirectory).
 </p><p>
-For the alignments to: Chimp and Rhesus, chains scoring below a minimum
+For the alignments to Chimp and Rhesus, chains scoring below a minimum
 score of '$chainMinScore' were discarded; the remaining chains
 are displayed in this track.  The linear gap matrix used with axtChain:<BR>
 $chainLinearGap
 
-For the alignments to: Tarsier and Bonobo, chains scoring
+For the alignments to Tarsier and Bonobo, chains scoring
 below a minimum score of '3000' were discarded; the remaining chains
-are displayed in this track.  The same linear gap matrix show above
+are displayed in this track.  The same linear gap matrix shown above
 was used with axtChain.
 </P>
 <P>Chains for low-coverage assemblies for which no browser has been built 
