@@ -258,14 +258,13 @@ TMPDIR=/dev/shm
     time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
 	-workhorse=hgwdev -bigClusterHub=ku \
 	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
-XXX - running - Wed Jul  1 15:14:43 PDT 2015
-    #	real    5m19.519s
+    #	real    4m27.377s
 
     cat fb.ce11.chainPanRed1Link.txt
-    # 3526393 bases of 100286401 (3.516%) in intersection
+    # 6603624 bases of 100286401 (6.585%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` ce11 panRed1) > rbest.log 2>&1 &
-    # real    0m36.875s
+    # real    0m33.563s
 
     # and for the swap:
     mkdir /hive/data/genomes/panRed1/bed/blastz.ce11.swap
@@ -275,14 +274,14 @@ XXX - running - Wed Jul  1 15:14:43 PDT 2015
       /hive/data/genomes/ce11/bed/lastzPanRed1.2015-07-01/DEF \
         -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    2m2.321s
+    #  real    0m53.970s
 
     cat fb.panRed1.chainCe11Link.txt
-    # 4548339 bases of 82114761 (5.539%) in intersection
+    # 6446092 bases of 62228262 (10.359%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` panRed1 ce11) \
       > rbest.log 2>&1
-    # real    2m9.571s
+    # real    0m38.503s
 
 #########################################################################
 # LASTZ Pristionchus pacificus/priPac3 - (DONE - 2015-07-01 - Hiram)
@@ -316,14 +315,13 @@ TMPDIR=/dev/shm
     time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
 	-workhorse=hgwdev -bigClusterHub=ku \
 	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
-XXX - running - Wed Jul  1 15:33:18 PDT 2015
-    #	real    5m19.519s
+    #	real    16m34.215s
 
     cat fb.ce11.chainPriPac3Link.txt
-    # 3526393 bases of 100286401 (3.516%) in intersection
+    # 6326413 bases of 100286401 (6.308%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` ce11 priPac3) > rbest.log 2>&1 &
-    # real    0m36.875s
+    # real    0m37.219s
 
     # and for the swap:
     mkdir /hive/data/genomes/priPac3/bed/blastz.ce11.swap
@@ -333,14 +331,14 @@ XXX - running - Wed Jul  1 15:33:18 PDT 2015
       /hive/data/genomes/ce11/bed/lastzPriPac3.2015-07-01/DEF \
         -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    2m2.321s
+    #  real    1m13.447s
 
     cat fb.priPac3.chainCe11Link.txt
-    # 4548339 bases of 82114761 (5.539%) in intersection
+    # 6947156 bases of 153238914 (4.534%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` priPac3 ce11) \
       > rbest.log 2>&1
-    # real    2m9.571s
+    # real    0m48.989s
 
 #########################################################################
 # LASTZ Caenorhabditis briggsae/cb4 - (DONE - 2015-07-01 - Hiram)
@@ -374,14 +372,13 @@ TMPDIR=/dev/shm
     time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
 	-workhorse=hgwdev -bigClusterHub=ku \
 	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
-XXX - running - Wed Jul  1 15:45:29 PDT 2015
-    #	real    5m19.519s
+    #	real    11m45.085s
 
     cat fb.ce11.chainCb4Link.txt
-    # 3526393 bases of 100286401 (3.516%) in intersection
+    # 39496335 bases of 100286401 (39.384%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` ce11 cb4) > rbest.log 2>&1 &
-    # real    0m36.875s
+    # real    1m44.529s
 
     # and for the swap:
     mkdir /hive/data/genomes/cb4/bed/blastz.ce11.swap
@@ -391,14 +388,14 @@ XXX - running - Wed Jul  1 15:45:29 PDT 2015
       /hive/data/genomes/ce11/bed/lastzCb4.2015-07-01/DEF \
         -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    2m2.321s
+    #  real    3m3.364s
 
     cat fb.cb4.chainCe11Link.txt
-    # 4548339 bases of 82114761 (5.539%) in intersection
+    # 39234668 bases of 108371485 (36.204%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` cb4 ce11) \
       > rbest.log 2>&1
-    # real    2m9.571s
+    # real    1m58.707s
 
 #########################################################################
 # LASTZ Caenorhabditis brenneri/caePb3 - (DONE - 2015-07-01 - Hiram)
@@ -432,14 +429,13 @@ TMPDIR=/dev/shm
     time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
 	-workhorse=hgwdev -bigClusterHub=ku \
 	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
-XXX - running - Wed Jul  1 15:56:35 PDT 2015
-    #	real    5m19.519s
+    #	real    14m1.774s
 
     cat fb.ce11.chainCaePb3Link.txt
-    # 3526393 bases of 100286401 (3.516%) in intersection
+    # 40753915 bases of 100286401 (40.638%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` ce11 caePb3) > rbest.log 2>&1 &
-    # real    0m36.875s
+    # real    1m31.030s (lost log ...)
 
     # and for the swap:
     mkdir /hive/data/genomes/caePb3/bed/blastz.ce11.swap
@@ -449,13 +445,13 @@ XXX - running - Wed Jul  1 15:56:35 PDT 2015
       /hive/data/genomes/ce11/bed/lastzCaePb3.2015-07-01/DEF \
         -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    2m2.321s
+    #  real    3m54.518s
 
     cat fb.caePb3.chainCe11Link.txt
-    # 4548339 bases of 82114761 (5.539%) in intersection
+    # 54933712 bases of 170093652 (32.296%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` caePb3 ce11) \
       > rbest.log 2>&1
-    # real    2m9.571s
+    # real    2m14.946s
 
 #########################################################################
