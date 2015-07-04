@@ -32293,7 +32293,7 @@ make DBS="hg18 hg19"
 # Does anybody know of some ancient Ensembl mirrors that might have it?
 # Would anyone at NCBI know the old assembly haplotype placements for hg17 and hg18?
 
-cd /hive/data/genomes/hg18
+cd /hive/data/genomes/hg18/bed
 mkdir haplotypeLocationsEnsembl
 cd haplotypeLocationsEnsembl
 
