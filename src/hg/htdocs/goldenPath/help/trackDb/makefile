@@ -1,5 +1,7 @@
 include ../../../../../inc/common.mk
 
+CPFLAGS = -p --remove-destination
+
 # copies files to hgwdev or sandbox
 
 TDOC_DIR=goldenPath/help/trackDb/
@@ -32,10 +34,9 @@ install:
 
 doInstall:
 	echo ${CURRENT_HUB_SPEC}
-	cp trackDbLibrary.shtml ${DEST}
-	cp trackDbDoc.js ${DEST}
-	cp trackDbDoc.css ${DEST}
-	cp trackDbDoc.html ${DEST}
-	rm -f ${DEST}/trackDbHub.html
-	cp ${HUB_SPEC_FILES} ${DEST}
-	ln -s trackDbHub.${CURRENT_HUB_SPEC}.html ${DEST}/trackDbHub.html
+	cp ${CPFLAGS} trackDbLibrary.shtml ${DEST}
+	cp ${CPFLAGS} trackDbDoc.js ${DEST}
+	cp ${CPFLAGS} trackDbDoc.css ${DEST}
+	cp ${CPFLAGS} trackDbDoc.html ${DEST}
+	cp ${CPFLAGS} trackDbHub.html ${DEST}
+	cp ${CPFLAGS} ${HUB_SPEC_FILES} ${DEST}
