@@ -24889,7 +24889,7 @@ mkdir haplotypeLocations
 cd haplotypeLocations
 
 vi haplotypeLocations.bed
-# paste in bed4 haplotype locations from Ensembl browser ideogram
+# paste in bed4 haplotype locations from BLAT/SelfChain
 --------------------------------
 chr6 32511422 32667119 chr6_hla_hap1
 chr6 32589475 32668709 chr6_hla_hap2
