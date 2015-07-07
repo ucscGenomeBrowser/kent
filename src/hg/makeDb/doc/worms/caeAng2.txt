@@ -152,18 +152,14 @@ searchPriority 8
     time (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku caeAng2) > do.log 2>&1
-XXX - running - Tue Jun 30 10:05:28 PDT 2015
-    # real    232m59.124s
+    # real    218m26.151s
 
     cat faSize.rmsk.txt
-    # 2053849526 bases (76078142 N's 1977771384 real 1950559334 upper
-    #    27212050 lower) in 25187 sequences in 1 files
-    # Total size: mean 81544.0 sd 330701.2 min 200 (JYOU01147511v1)
-    #    max 8606022 (KN905849v1) median 453
-    # %1.32 masked total, %1.38 masked real
-
-    # most interesting, NCBI had %36.84 masked total, %38.26 masked real
-    # I wonder how they did that ?
+    # 105997628 bases (11442593 N's 94555035 real 92971538 upper
+    #    1583497 lower) in 34621 sequences in 1 files
+    #  Total size: mean 3061.7 sd 18325.0 min 200 (Cang_2012_03_13_34621)
+    #    max 867759 (Cang_2012_03_13_00001) median 356
+    #  %1.49 masked total, %1.67 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
@@ -171,8 +167,8 @@ XXX - running - Tue Jun 30 10:05:28 PDT 2015
     # CC   RELEASE 20140131;    
 
     time featureBits -countGaps caeAng2 rmsk
-    # 63129821 bases of 1192725744 (5.293%) in intersection
-    # real    0m6.633s
+    # 1583946 bases of 105997628 (1.494%) in intersection
+    #   real    0m8.082s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
@@ -186,87 +182,103 @@ XXX - running - Tue Jun 30 10:05:28 PDT 2015
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         caeAng2) > do.log 2>&1
-XXX - running - Tue Jun 30 10:06:49 PDT 2015
-    # real    14m27.057s
+    # real    20m27.388s
 
     cat fb.simpleRepeat
     # 6116863 bases of 95237926 (6.423%) in intersection
 
-    # using the Window Masker result:
-    cd /hive/data/genomes/caeAng2
-    twoBitMask bed/windowMasker/caeAng2.cleanWMSdust.2bit \
-       -add bed/simpleRepeat/trfMask.bed  caeAng2.2bit
-    #   you can safely ignore the warning about fields >= 13
-    twoBitToFa caeAng2.2bit stdout | faSize stdin > faSize.caeAng2.2bit.txt
-    cat faSize.caeAng2.2bit.txt
-    # 2053849526 bases (76078142 N's 1977771384 real 1208345365
-    #    upper 769426019 lower) in 25187 sequences in 1 files
-    # Total size: mean 81544.0 sd 330701.2 min 200 (JYOU01147511v1)
-    #    max 8606022 (KN905849v1) median 453
-    # %37.46 masked total, %38.90 masked real
-
-    rm /gbdb/caeAng2/caeAng2.2bit
-    ln -s `pwd`/caeAng2.2bit /gbdb/caeAng2/caeAng2.2bit
+    # using the Window Masker result as indicated below
 
 ##########################################################################
-# CREATE MICROSAT TRACK (TBD - 2015-06-22 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2015-06-30 - Hiram)
      ssh hgwdev
      mkdir /cluster/data/caeAng2/bed/microsat
      cd /cluster/data/caeAng2/bed/microsat
      awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
 	../simpleRepeat/simpleRepeat.bed > microsat.bed
     hgLoadBed caeAng2 microsat microsat.bed
-    #	Read 8213 elements of size 4 from microsat.bed
+    #	Read 30 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2015-03-20 - Hiram)
+## WINDOWMASKER (DONE - 2015-06-30 - Hiram)
 
     mkdir /hive/data/genomes/caeAng2/bed/windowMasker
     cd /hive/data/genomes/caeAng2/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev caeAng2) > do.log 2>&1
-    # real    153m54.144s
+    # real    16m56.872s
+
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -continue=cleanup -dbHost=hgwdev caeAng2) > cleanup.log 2>&1
+    # real    0m10.219s
 
     # Masking statistics
     cat faSize.caeAng2.cleanWMSdust.txt
-    # 2053849526 bases (76078142 N's 1977771384 real 1208849805 upper
-    #     768921579 lower) in 25187 sequences in 1 files
-    # Total size: mean 81544.0 sd 330701.2 min 200 (JYOU01147511v1)
-    #    max 8606022 (KN905849v1) median 453
-    # %37.44 masked total, %38.88 masked real
+    # 105997628 bases (11442593 N's 94555035 real 56870098 upper 37684937
+    #    lower) in 34621 sequences in 1 files
+    # Total size: mean 3061.7 sd 18325.0 min 200 (Cang_2012_03_13_34621)
+    #    max 867759 (Cang_2012_03_13_00001) median 356
+    # %35.55 masked total, %39.86 masked real
 
     cat fb.caeAng2.rmsk.windowmaskerSdust.txt
-    # 23839116 bases of 2053849526 (1.161%) in intersection
+    # 1213014 bases of 105997628 (1.144%) in intersection
+
+    # using this Window Masker result for final masking::
+    cd /hive/data/genomes/caeAng2
+    #   you can safely ignore the warning about fields >= 13
+    twoBitMask bed/windowMasker/caeAng2.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  caeAng2.2bit
+
+    # measure the final masking:
+    twoBitToFa caeAng2.2bit stdout | faSize stdin > faSize.caeAng2.2bit.txt
+    cat faSize.caeAng2.2bit.txt
+    # 105997628 bases (11442593 N's 94555035 real 56820897 upper
+    #   37734138 lower) in 34621 sequences in 1 files
+    # Total size: mean 3061.7 sd 18325.0 min 200 (Cang_2012_03_13_34621)
+    #   max 867759 (Cang_2012_03_13_00001) median 356
+    # %35.60 masked total, %39.91 masked real
+
+    # and reset the symlink
+    rm /gbdb/caeAng2/caeAng2.2bit
+    ln -s /hive/data/genomes/caeAng2/caeAng2.2bit /gbdb/caeAng2/caeAng2.2bit
 
 ##########################################################################
-# cpgIslands - (TBD - 2015-03-20 - Hiram)
+# cpgIslands - (DONE - 2015-06-30 - Hiram)
     mkdir /hive/data/genomes/caeAng2/bed/cpgIslands
     cd /hive/data/genomes/caeAng2/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku caeAng2) > do.log 2>&1 &
-    # real    117m34.561s
-    # failed during kluster hardMask operation, continuing:
-    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
-      -continue=cpg -workhorse=hgwdev -smallClusterHub=ku caeAng2) \
-         > cpg.log 2>&1 &
-    # real    10m28.915s
+    # real    19m6.982s
 
     cat fb.caeAng2.cpgIslandExt.txt
-    # 13717904 bases of 1977771384 (0.694%) in intersection
+    # 5267650 bases of 95237926 (5.531%) in intersection
 
 #########################################################################
-# genscan - (TBD - 2015-03-20 - Hiram)
+# augustus - (DONE - 2015-06-30 - Hiram)
+    mkdir /hive/data/genomes/caeAng2/bed/augustus
+    cd /hive/data/genomes/caeAng2/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+      -species=caenorhabditis -dbHost=hgwdev \
+         -workhorse=hgwdev caeAng2) > do.log 2>&1
+XXX - running - Tue Jun 30 14:19:12 PDT 2015
+    # real    80m33.289s
+
+    cat fb.caeAng2.augustusGene.txt
+    # 27859792 bases of 1842252119 (1.512%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2015-06-30 - Hiram)
     mkdir /hive/data/genomes/caeAng2/bed/genscan
     cd /hive/data/genomes/caeAng2/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku caeAng2) > do.log 2>&1
-    # real    57m21.101s
+    # real    25m47.870s
 
     cat fb.caeAng2.genscan.txt
-    #   55630505 bases of 1977771384 (2.813%) in intersection
+    #   7719994 bases of 95237926 (8.106%) in intersection
 
     cat fb.caeAng2.genscanSubopt.txt
-    #   58340692 bases of 1977771384 (2.950%) in intersection
+    #   5785394 bases of 95237926 (6.075%) in intersection
 
 ########################################################################
 # Create kluster run files (TBD - 2015-03-24 - Hiram)
@@ -274,25 +286,24 @@ XXX - running - Tue Jun 30 10:06:49 PDT 2015
     cd /hive/data/genomes/caeAng2
     # numerator is caeAng2 gapless bases "real" as reported by:
     head -1 faSize.caeAng2.2bit.txt
-# 2053849526 bases (76078142 N's 1977771384 real 1208345365 upper
-#    76942601 lower) in 25187 sequences in 1 files
+# 105997628 bases (11442593 N's 94555035 real 56820897 upper 37734138 lower)
+# in 34621 sequences in 1 files
 
     # numerator is 'real' base count
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 1977771384 / 2861349177 \) \* 1024
-    # ( 1977771384 / 2861349177 ) * 1024 = 707.791245
+    calc \( 94555035 / 2861349177 \) \* 1024
+    # ( 94555035 / 2861349177 ) * 1024 = 33.838707
 
-    # ==> use -repMatch=700 according to size scaled down from 1024 for human.
-    #   and rounded down to nearest 50
+    # ==> use -repMatch=100 because 30 or 50 masks too many
     cd /hive/data/genomes/caeAng2
     time blat caeAng2.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/caeAng2.11.ooc \
-        -repMatch=700
-    # Wrote 23756 overused 11-mers to jkStuff/caeAng2.11.ooc
-    #  real    0m32.961s
+        -repMatch=100
+    # Wrote 10073 overused 11-mers to jkStuff/caeAng2.11.ooc
+    # real    0m1.898s
 
     # there are no non-bridged gaps, do not need to do this
     #   check non-bridged gaps to see what the typical size is:
@@ -317,11 +328,11 @@ XXX - running - Tue Jun 30 10:06:49 PDT 2015
     # survey sizes:
     n50.pl chrom.sizes
 #       reading: chrom.sizes
-#       contig count: 25187, total size: 2053849526, one half size: 1026924763
+#       contig count: 34621, total size: 105997628, one half size: 52998814
 # cumulative    N50 count       contig  contig size
-# 1026149130      545     KN906416v1      1073586
-# 1026924763 one half size
-# 1027218231      546     KN906384v1      1069101
+# 52925057        353     Cang_2012_03_13_00353   80006
+# 52998814 one half size
+# 53004915        354     Cang_2012_03_13_00354   79858
 
 #############################################################################
 # GENBANK AUTO UPDATE (TBD - 2015-06-09 - Hiram)
@@ -428,3 +439,20 @@ caeAng2.genbank.est.native.loadDesc = no
     #   sizes will set properly
 
 #########################################################################
+# LIFTOVER TO caeAng1 (DONE - 2015-07-07 - Hiram )
+    mkdir /hive/data/genomes/caeAng2/bed/blat.caeAng1.2015-07-07
+    cd /hive/data/genomes/caeAng2/bed/blat.caeAng1.2015-07-07
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+  -ooc=/hive/data/genomes/caeAng2/jkStuff/caeAng2.11.ooc -debug caeAng2 caeAng1
+    # Real run:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+       -ooc=/hive/data/genomes/caeAng2/jkStuff/caeAng2.11.ooc caeAng2 caeAng1) \
+		> do.log 2>&1
+    #	real    4m19.992s
+    # verify it works on genome-test
+
+#############################################################################
