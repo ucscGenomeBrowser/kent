@@ -284,7 +284,7 @@ for (word = wordList, wordIx=0; word != NULL;  ++wordIx)
     if (strlen(word->name) >= 3) /* Logic could be expensive on small words */
 	{
 	dyStringClear(query);
-	sqlDyStringPrintf(query, "select %s from %s where %s like '%s'",
+	sqlDyStringPrintf(query, "select %s from %s where %s like '%s%%'",
 	    field, table, field, word->name);
 	nameList = sqlQuickList(conn, query->string);
 	if (nameList != NULL)
@@ -354,7 +354,7 @@ dyStringClear(dy);
 sqlDyStringPrintf(dy, 
    "select image.id from "
    "contributor,submissionContributor,imageFile,image "
-   "where contributor.name = \"%s\" "
+   "where contributor.name = '%s' "
    "and contributor.id = submissionContributor.contributor "
    "and submissionContributor.submissionSet = imageFile.submissionSet "
    "and imageFile.id = image.imageFile"
@@ -390,7 +390,7 @@ for (word = wordList, wordIx=0; word != NULL;  wordIx++)
     struct slName *nameList, *name;
     int maxWordsUsed = 0;
     dyStringClear(query);
-    sqlDyStringPrintf(query, "select name from contributor where name like '%s'", word->name);
+    sqlDyStringPrintf(query, "select name from contributor where name like '%s %%'", word->name);
     nameList = sqlQuickList(conn, query->string);
     if (nameList != NULL)
 	{
@@ -479,7 +479,7 @@ for (word = wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
     char query[512];
     sqlSafef(query, sizeof(query),
     	"select image.id from image,imageFile "
-	"where imageFile.submitId = \"%s\" "
+	"where imageFile.submitId = '%s' "
 	"and imageFile.id = image.imageFile", word->name);
     addImageListAndFree(searcher, sqlQuickNumList(conn, query),
 	wordIx, 1);
@@ -499,7 +499,7 @@ dyStringClear(dy);
 sqlDyStringPrintf(dy, 
    "select imageProbe.image from "
    "bodyPart,expressionLevel,imageProbe "
-   "where bodyPart.name = \"%s\" "
+   "where bodyPart.name = '%s' "
    "and bodyPart.id = expressionLevel.bodyPart "
    "and expressionLevel.imageProbe = imageProbe.id "
    "and expressionLevel.level > 0"
@@ -510,7 +510,7 @@ addImagesMatchingQuery(searcher, conn, dy->string, uniqHash, bodyPart,
 dyStringClear(dy);
 sqlDyStringPrintf(dy,
     "select image.id from bodyPart,specimen,image "
-    "where bodyPart.name = \"%s\" "
+    "where bodyPart.name = '%s' "
     "and bodyPart.id = specimen.bodyPart "
     "and specimen.id = image.specimen", bodyPart);
 
@@ -543,7 +543,7 @@ for (word = wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
     {
     dyStringClear(query);
     sqlDyStringAppend(query, "select image.id from sex,specimen,image ");
-    sqlDyStringPrintf(query, "where sex.name = \"%s\" ",  word->name);
+    sqlDyStringPrintf(query, "where sex.name = '%s' ",  word->name);
     dyStringAppend(query, "and sex.id = specimen.sex ");
     dyStringAppend(query, "and specimen.id = image.specimen");
     addImagesMatchingQuery(searcher, conn, query->string, NULL, NULL,
@@ -614,7 +614,7 @@ for (word = wordList, wordIx=0; word != NULL && word->next != NULL;
 	char *specificStage = word->next->name;
 	char *minAge;
 	dyStringClear(dy);
-	sqlDyStringPrintf(dy, "select age from lifeStage where name = \"%s\" ", 
+	sqlDyStringPrintf(dy, "select age from lifeStage where name = '%s' ", 
 		specificStage);
 	dyStringPrintf(dy, "and lifeStageScheme = %d\n", schemeId);
 	minAge = sqlQuickString(conn, dy->string);
@@ -701,7 +701,7 @@ dyStringClear(dy);
 sqlDyStringPrintf(dy, 
    "select distinct image.id from "
    "image,specimen,uniProt.taxon "
-   "where uniProt.taxon.binomial = \"%s\" "
+   "where uniProt.taxon.binomial = '%s' "
    "and specimen.taxon = uniProt.taxon.id "
    "and image.specimen = specimen.id"
    , binomial);
@@ -718,7 +718,7 @@ dyStringClear(dy);
 sqlDyStringPrintf(dy, 
    "select distinct image.id from "
    "image,specimen,uniProt.commonName "
-   "where uniProt.commonName.val = \"%s\" "
+   "where uniProt.commonName.val = '%s' "
    "and specimen.taxon = uniProt.commonName.taxon "
    "and image.specimen = specimen.id"
    , commonName);

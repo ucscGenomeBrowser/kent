@@ -13,7 +13,9 @@ errAbort(
   "usage:\n"
   "   pslScore <file.psl> [moreFiles.psl]\n"
   "options:\n"
-  "   none at this time"
+  "   none at this time\n\n"
+  "columns in output:\n\n"
+  "#tName\ttStart\ttEnd\tqName:qStart-qEnd\tscore\tpercentIdentity"
   );
 }
 

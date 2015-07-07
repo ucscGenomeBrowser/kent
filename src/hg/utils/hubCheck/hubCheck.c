@@ -35,32 +35,15 @@ errAbort(
   "   hubCheck http://yourHost/yourDir/hub.txt\n"
   "options:\n"
   "   -noTracks             - don't check remote files for tracks, just trackDb (faster)\n"
-  "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs.\n"
-  "                           Will create this directory if not existing\n"
-  "   -cacheTime=N - set cache refresh time in seconds, default %d\n"
-  "   -verbose=2            - output verbosely\n"
-  , cacheTime
-  );
-}
-
-void help()
-/* Extended help -- these are implemented options that we are hiding to allow review time */
-{
-errAbort(
-  "hubCheck - Check a track data hub for integrity.\n"
-  "usage:\n"
-  "   hubCheck http://yourHost/yourDir/hub.txt\n"
-  "options:\n"
-  "   -settings             - just list settings with support level\n"
   "   -checkSettings        - check trackDb settings to spec\n"
   "   -test                 - use spec on test server\n"
   "   -version=[v?|url]     - version to validate settings against\n"
   "                                     (defaults to version in hub.txt, or current standard)\n"
   "   -extra=[file|url]     - accept settings in this file (or url)\n"
   "   -level=base|required  - reject settings below this support level\n"
-  "   -noTracks             - don't check remote files for tracks, just trackDb (faster)\n"
-  "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs.\n"
+  "   -settings             - just list settings with support level\n"
   "                           Will create this directory if not existing\n"
+  "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs.\n"
   "   -cacheTime=N - set cache refresh time in seconds, default %d\n"
   "   -verbose=2            - output verbosely\n"
   , cacheTime
@@ -77,7 +60,6 @@ static struct optionSpec options[] = {
    {"test", OPTION_BOOLEAN},
    {"udcDir", OPTION_STRING},
    {"cacheTime", OPTION_INT},
-   {"help", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -686,8 +668,6 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (optionExists("help"))
-    help();
 
 if (argc != 2 && !optionExists("settings"))
     usage();

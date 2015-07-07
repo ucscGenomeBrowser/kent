@@ -59,9 +59,12 @@ for(ii=0; ii < detail->numSpecies; ii++)
 	}
     else
 	if ((firstChar != sb->buffer[cNum]) && (sb->buffer[cNum] != '-'))
+	    {
+	    char strand = position[strlen(position) - 1];
 	    fprintf(f, "%s %s 1\n", 
-		getPosString(position, '+', cNum, detail->startFrame, detail->endFrame),
+		getPosString(position, strand, cNum, detail->startFrame, detail->endFrame),
 		 sb->species);
+		 }
 	
 	
     }

@@ -930,3 +930,24 @@ hgsql -e 'INSERT INTO trackVersion \
     # real    32m19.569s
 
 #########################################################################
+# GENEID GENE PREDICTIONS (DONE - 2015-06-26 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/rn6/bed/geneid
+    cd /hive/data/genomes/rn6/bed/geneid
+    wget --timestamping \
+http://genome.crg.es/genepredictions/R.norvegicus/rn6/geneid_v1.4/rn6.geneid.prot
+    wget --timestamping \
+http://genome.crg.es/genepredictions/R.norvegicus/rn6/geneid_v1.4/rn6.geneid.gtf
+    ldHgGene -gtf -genePredExt rn6 geneid rn6.geneid.gtf
+
+    #  Read 41652 transcripts in 307250 lines in 1 files
+    #     41652 groups 883 seqs 1 sources 3 feature types
+    #  41652 gene predictions
+
+    featureBits -countGaps rn6 geneid
+# 42028722 bases of 2730871774 (1.539%) in intersection
+    featureBits -countGaps rn4 geneid
+# 40255245 bases of 2834127293 (1.420%) in intersection
+
+##########################################################################
+

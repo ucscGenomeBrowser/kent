@@ -404,7 +404,7 @@ include wgEncodeRegDnase.ra
     url http://www.factorbook.org/mediawiki/index.php/$$
     idInUrlSql select value from factorbookGeneAlias where name='%s'
     controlledVocabulary encode/cv.ra cellType=cell treatment=treatment lab=lab
-    visibility pack
+    visibility dense
     useScore 1
     priority 1.9
     maxWindowToDraw 10000000

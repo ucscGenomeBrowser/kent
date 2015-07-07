@@ -234,6 +234,12 @@ for (;;)
        gl->geneName = gffFileGetStr(gff, val);
    else if (sameString("transcript_name", type))
        gl->transcriptName = gffFileGetStr(gff, val);
+   else if (sameString("gene_version", type))
+       gl->geneVersion = gffFileGetStr(gff, val);
+   else if (sameString("transcript_version", type))
+       gl->transcriptVersion = gffFileGetStr(gff, val);
+   else if (sameString("protein_version", type))
+       gl->proteinVersion = gffFileGetStr(gff, val);
    }
 }
 
