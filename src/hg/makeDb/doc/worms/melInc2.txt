@@ -243,60 +243,55 @@ searchPriority 8
     ln -s /hive/data/genomes/melInc2/melInc2.2bit /gbdb/melInc2/melInc2.2bit
 
 ##########################################################################
-# cpgIslands - (TBD - 2015-03-20 - Hiram)
+# cpgIslands - (DONE - 2015-06-30 - Hiram)
     mkdir /hive/data/genomes/melInc2/bed/cpgIslands
     cd /hive/data/genomes/melInc2/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku melInc2) > do.log 2>&1 &
-    # real    117m34.561s
-    # failed during kluster hardMask operation, continuing:
-    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
-      -continue=cpg -workhorse=hgwdev -smallClusterHub=ku melInc2) \
-         > cpg.log 2>&1 &
-    # real    10m28.915s
+    # real    3m45.286s
 
     cat fb.melInc2.cpgIslandExt.txt
-    # 13717904 bases of 1977771384 (0.694%) in intersection
+    # 126917 bases of 82114761 (0.155%) in intersection
 
 #########################################################################
-# genscan - (TBD - 2015-03-20 - Hiram)
+# genscan - (DONE - 2015-06-30 - Hiram)
     mkdir /hive/data/genomes/melInc2/bed/genscan
     cd /hive/data/genomes/melInc2/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku melInc2) > do.log 2>&1
-    # real    57m21.101s
+    # real    4m43.594s
 
     cat fb.melInc2.genscan.txt
-    #   55630505 bases of 1977771384 (2.813%) in intersection
+    #   2352403 bases of 82114761 (2.865%) in intersection
 
     cat fb.melInc2.genscanSubopt.txt
-    #   58340692 bases of 1977771384 (2.950%) in intersection
+    #   2246058 bases of 82114761 (2.735%) in intersection
 
 ########################################################################
-# Create kluster run files (TBD - 2015-03-24 - Hiram)
+# Create kluster run files (DONE - 2015-06-30 - Hiram)
 
     cd /hive/data/genomes/melInc2
     # numerator is melInc2 gapless bases "real" as reported by:
     head -1 faSize.melInc2.2bit.txt
-# 2053849526 bases (76078142 N's 1977771384 real 1208345365 upper
-#    76942601 lower) in 25187 sequences in 1 files
+# 86079534 bases (3966853 N's 82112681 real 45992850 upper
+#    36119831 lower) in 2996 sequences in 1 files
 
     # numerator is 'real' base count
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 1977771384 / 2861349177 \) \* 1024
-    # ( 1977771384 / 2861349177 ) * 1024 = 707.791245
+    calc \( 82112681 / 2861349177 \) \* 1024
+    # ( 82112681 / 2861349177 ) * 1024 = 29.385923
 
-    # ==> use -repMatch=700 according to size scaled down from 1024 for human.
-    #   and rounded down to nearest 50
+    # ==> use -repMatch=50 according to size scaled down from 1024 for human.
+    #   and rounded to 50 because 30 masks too much
     cd /hive/data/genomes/melInc2
     time blat melInc2.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/melInc2.11.ooc \
-        -repMatch=700
-    # Wrote 23756 overused 11-mers to jkStuff/melInc2.11.ooc
-    #  real    0m32.961s
+        -repMatch=30
+    # Wrote 26372 overused 11-mers to jkStuff/melInc2.11.ooc
+    #  real    0m1.661s
 
     # there are no non-bridged gaps, do not need to do this
     #   check non-bridged gaps to see what the typical size is:
@@ -321,11 +316,11 @@ searchPriority 8
     # survey sizes:
     n50.pl chrom.sizes
 #       reading: chrom.sizes
-#       contig count: 25187, total size: 2053849526, one half size: 1026924763
+#       contig count: 2996, total size: 86079534, one half size: 43039767
 # cumulative    N50 count       contig  contig size
-# 1026149130      545     KN906416v1      1073586
-# 1026924763 one half size
-# 1027218231      546     KN906384v1      1069101
+# 42982648        369     MiV1ctg354      62745
+# 43039767 one half size
+# 43045164        370     MiV1ctg368      62516
 
 #############################################################################
 # GENBANK AUTO UPDATE (TBD - 2015-06-09 - Hiram)
@@ -432,3 +427,20 @@ melInc2.genbank.est.native.loadDesc = no
     #   sizes will set properly
 
 #########################################################################
+# LIFTOVER TO melInc1 (DONE - 2015-07-07 - Hiram )
+    mkdir /hive/data/genomes/melInc2/bed/blat.melInc1.2015-07-07
+    cd /hive/data/genomes/melInc2/bed/blat.melInc1.2015-07-07
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+  -ooc=/hive/data/genomes/melInc2/jkStuff/melInc2.11.ooc -debug melInc2 melInc1
+    # Real run:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+       -ooc=/hive/data/genomes/melInc2/jkStuff/melInc2.11.ooc melInc2 melInc1) \
+		> do.log 2>&1
+    #	real    2m23.422s
+    # verify it works on genome-test
+
+#############################################################################
