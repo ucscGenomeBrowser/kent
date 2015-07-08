@@ -79,3 +79,6 @@ wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/reference/GTEx_g
 # TODO:  Use these gene models for genome positions of gene track
 wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/reference/gencode.v18.genes.patched_contigs.gtf
 
+
+# V4 Normalized gene expression levels (June 2015)
+'http://www.gtexportal.org/static/datasets/gtex_analysis_v4/single_tissue_eqtl_data/GTEx_Analysis_V4_eQTLInputFiles_geneLevelNormalizedExpression.tar.gz

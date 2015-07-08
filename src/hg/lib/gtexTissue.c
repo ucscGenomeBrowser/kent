@@ -10,7 +10,7 @@
 
 
 
-char *gtexTissueCommaSepFieldNames = "id,name,description,organ";
+char *gtexTissueCommaSepFieldNames = "id,name,description,organ,color";
 
 void gtexTissueStaticLoad(char **row, struct gtexTissue *ret)
 /* Load a row from gtexTissue table into ret.  The contents of ret will
@@ -21,6 +21,7 @@ ret->id = sqlUnsigned(row[0]);
 ret->name = row[1];
 ret->description = row[2];
 ret->organ = row[3];
+ret->color = sqlUnsigned(row[4]);
 }
 
 struct gtexTissue *gtexTissueLoad(char **row)
@@ -34,6 +35,7 @@ ret->id = sqlUnsigned(row[0]);
 ret->name = cloneString(row[1]);
 ret->description = cloneString(row[2]);
 ret->organ = cloneString(row[3]);
+ret->color = sqlUnsigned(row[4]);
 return ret;
 }
 
@@ -43,7 +45,7 @@ struct gtexTissue *gtexTissueLoadAll(char *fileName)
 {
 struct gtexTissue *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[5];
 
 while (lineFileRow(lf, row))
     {
@@ -61,7 +63,7 @@ struct gtexTissue *gtexTissueLoadAllByChar(char *fileName, char chopper)
 {
 struct gtexTissue *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[5];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -86,6 +88,7 @@ ret->id = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->description = sqlStringComma(&s);
 ret->organ = sqlStringComma(&s);
+ret->color = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -132,24 +135,10 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->organ);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->color);
 fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-void gtexTissueCreateTable(struct sqlConnection *conn, char *table)
-/* Create expression record format table of given name. */
-{
-char query[1024];
-
-sqlSafef(query, sizeof(query),
-"CREATE TABLE %s (\n"
-"    id int unsigned not null,	# internal id\n"
-"    name varchar(255) not null,       # short UCSC identifier\n"
-"    description varchar(255) not null, # GTEx tissue type detail\n"
-"    organ varchar(255) not null,      # GTEx tissue collection area\n"
-"              #Indices\n"
-"    PRIMARY KEY(id)\n"
-")\n",   table);
-sqlRemakeTable(conn, table, query);
-}

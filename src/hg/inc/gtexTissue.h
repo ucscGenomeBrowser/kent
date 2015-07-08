@@ -5,7 +5,7 @@
 #ifndef GTEXTISSUE_H
 #define GTEXTISSUE_H
 
-#define GTEXTISSUE_NUM_COLS 4
+#define GTEXTISSUE_NUM_COLS 5
 
 extern char *gtexTissueCommaSepFieldNames;
 
@@ -17,6 +17,7 @@ struct gtexTissue
     char *name;	/* short UCSC identifier */
     char *description;	/* GTEX tissue type detail */
     char *organ;	/* GTEX tissue collection area */
+    unsigned color;	/* GTEX assigned color */
     };
 
 void gtexTissueStaticLoad(char **row, struct gtexTissue *ret);
@@ -61,9 +62,6 @@ void gtexTissueOutput(struct gtexTissue *el, FILE *f, char sep, char lastSep);
 /* Print out gtexTissue as a comma separated list including final comma. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
-
-void gtexTissueCreateTable(struct sqlConnection *conn, char *table);
-/* Create expression record format table of given name. */
 
 #endif /* GTEXTISSUE_H */
 
