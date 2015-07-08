@@ -1,4 +1,5 @@
 // Send requests to a CGI that returns JSON responses
+/* global FormData */
 
 var cart = (function() {
 
@@ -42,6 +43,13 @@ var cart = (function() {
         return reqObj;
     }
     
+    function reqToString(reqObj) {
+        // Translate ajax request object into a CGI parameter string
+        return _.map(reqObj, function(value, key) {
+            return key + '=' + encodeURIComponent(value);
+        }).join('&');
+    }
+
     function defaultErrorCallback(jqXHR, textStatus) {
         console.log('Request failed: ', arguments);
         alert('Request failed: ' + textStatus);
@@ -61,12 +69,13 @@ var cart = (function() {
             // ajaxExtra is an optional object containing extra params for $.ajax.
             // Throws [message, badValue] if something is not as expected.
             var reqObj = wrapCommandObj(commandObj);
+            var paramString = reqToString(reqObj);
             var ajaxParams;
             errorCallback = errorCallback || defaultErrorCallback;
             if (! cgiUrl) {
                 throw(['cart.send: cart.setCgi must be called before cart.send']);
             }
-            console.log('cart.send: url =', cgiUrl, ', data =', reqObj);
+            console.log('cart.send: url =', cgiUrl, ', data =', reqObj, ', params =', paramString);
             ajaxParams = {
                 type: "POST",
                 url: cgiUrl,
@@ -79,6 +88,45 @@ var cart = (function() {
             $.ajax(ajaxParams)
                    .done(successCallback)
                    .fail(errorCallback);
+        },
+
+        uploadFile: function(commandObj, jqFileInput, successCallback, errorCallback) {
+            var reqObj = wrapCommandObj(commandObj);
+            errorCallback = errorCallback || defaultErrorCallback;
+            if (window.FormData) {
+                // If running on a modern browser that supports FormData, use that to form
+                // the data for the AJAX request:
+                var formData = new FormData();
+                formData.append(jqFileInput.attr('name'), jqFileInput[0].files[0]);
+                _.forEach(reqObj, function(value, key) {
+                    formData.append(key, value);
+                });
+                $.ajax({
+                    type: 'POST',
+                    url: cgiUrl,
+                    data: formData,
+                    dataType: 'json',
+                    // These two are necessary for JQuery to not interfere with FormData:
+                    processData: false,
+                    contentType: false
+                })
+                  .done(successCallback)
+                  .fail(errorCallback);
+            } else {
+                // Use JQuery plugin bifrost to upload the file using a hidden iframe as target,
+                // in order to support IE <10.  It breaks on IE11 though, go figure.
+                // Using 'iframe json' here activates jquery.bifrost:
+                $.ajax({
+                    type: 'POST',
+                    url: cgiUrl,
+                    data: reqObj,
+                    dataType: 'iframe json',
+                    fileInputs: jqFileInput
+                })
+                   .done(successCallback)
+                   .fail(errorCallback);
+            }
+
         }
     };
 })();

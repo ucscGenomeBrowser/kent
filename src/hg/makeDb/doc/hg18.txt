@@ -32264,4 +32264,58 @@ make DBS="hg18 hg19"
 
     # verify the convert link on the browser is now active from hg18 to hg38
 
+
+#############################################################################
+# haplotype locations from Ensembl (DONE - 2015-07-02 - Galt )
+#
+# I want to have the placement positions of the haplotypes for viewing
+# with the new multi-window browser capability that I am developing.
+# Haplotypes provided in hg17 were 2, hg18, 4.
+# It seems these were provided by NCBI as sequence, but without placement information.
+#
+# haplotypePos is psl table made by Fan using BLAT and parasol. 
+# It once had a trackDb entry, but that is gone now.
+# It has several ambigous results for most of the haplotypes, 
+# although choosing the row with the highest number of matches for each haplotype would probably work.
+#
+# Hiram made haplotypeLocations table by taking the hg19 haplotypes and using liftOver.
+# It sort of works, but problems are that the hg18 chr22 haplo is not found in hg19 at all,
+# and the hap# changes from hg18 to hg19, so having that in the ID is not very helpful.
+# It also looks like the haplotypes in hg19 were made without subtracting 1 from the start for BED.
+# Finally, they do not match exactly the results in haplotypePos table.
+
+# So, knowing that Ensembl has good browser support for haplotypes, I went to their archive browser 
+# equivalent to hg18, and got their 4 haplotype positions by clicking on the label in the chromosome ideogram.
+# Since there are only 4, it is do-able manually.  
+# Did they figure out the positions for themselves, or did they get official placement positions from NCBI?
+
+# In any case, I cannot use the same method for hg17 because Ensembl does not keep any browsers that old in their archive.
+# Does anybody know of some ancient Ensembl mirrors that might have it?
+# Would anyone at NCBI know the old assembly haplotype placements for hg17 and hg18?
+
+cd /hive/data/genomes/hg18/bed
+mkdir haplotypeLocationsEnsembl
+cd haplotypeLocationsEnsembl
+
+vi haplotypeLocationsEnsembl.bed
+# paste in bed4 haplotype locations from Ensembl browser ideogram
+--------------------------------
+chr5  68965367 70760237 chr5_h2_hap1
+chr6  28885509 33451440 chr6_qbl_hap2
+chr6  28688543 33420241 chr6_cox_hap1
+chr22 40992945 41056606 chr22_h2_hap1
+
+hgLoadBed -type=bed4 hg18 haplotypeLocationsEnsembl haplotypeLocationsEnsembl.bed
+#Reading haplotypeLocationsEnsembl.bed
+#Read 4 elements of size 4 from haplotypeLocationsEnsembl.bed
+#Sorted
+#Creating table definition for haplotypeLocationsEnsembl
+#Saving bed.tab
+#Loading hg18
+
+vi README
+# I wrote some notes about the source and reasons for the data
+
+I have not made any trackDb entry for this table at this time.
+
 #############################################################################

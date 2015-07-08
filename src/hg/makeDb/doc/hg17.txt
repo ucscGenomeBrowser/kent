@@ -24832,3 +24832,79 @@ hgsql hg17 -e 'load data local infile "knownToKeggEntrez.tab" into table knownTo
     # verify the convert link on the browser is now active from hg17 to hg38
 
 #############################################################################
+# haplotype locations from BLAT/SelfChain (DONE - 2015-07-03 - Galt )
+#
+# I want to have the placement positions of the haplotypes for viewing
+# with the new multi-window browser capability that I am developing.
+# Haplotypes provided in hg17 were 2, hg18, 4.
+# It seems these were provided by NCBI as sequence, but without placement information.
+#
+# haplotypePos is psl table made by Fan using BLAT and parasol. 
+# It once had a trackDb entry, but that is gone now.
+# It has several ambigous results for most of the haplotypes, 
+# although choosing the row with the highest number of matches for each haplotype would probably work.
+#
+# Hiram made haplotypeLocations table by taking the hg19 haplotypes and using liftOver.
+# It sort of works, but problems are that the hg18 chr22 haplo is not found in hg19 at all,
+# and the hap# changes from hg18 to hg19, so having that in the ID is not very helpful.
+# It also looks like the haplotypes in hg19 were made without subtracting 1 from the start for BED.
+# Finally, they do not match exactly the results in haplotypePos table.
+#
+# hg18.haplotypeLocationsEnsembl
+# Known that Ensembl has good browser support for haplotypes, I went to their archive browser 
+# equivalent to hg18, and got their 4 haplotype positions by clicking on the label in the chromosome ideogram.
+# Since there are only 4, it is do-able manually.  
+# Did they figure out the positions for themselves, or did they get official placement positions from NCBI?
+#
+# In any case, I cannot use the same method for hg17 because Ensembl does not keep any browsers that old in their archive.
+# Does anybody know of some ancient Ensembl mirrors that might have it?
+# Would anyone at NCBI know the old assembly haplotype placements for hg17 and hg18?
+#
+#hg17 haplotypes
+#
+#only 2:
+#
+#DR52       DR52 haplotype for the MHC region on chromosome 6
+#DR53       DR53 haplotype for the MHC region on chromosome 6
+#
+#mysql> select * from chromInfo where chrom like '%hap%';
+#+---------------+--------+----------------------------------+
+#| chrom         | size   | fileName                         |
+#+---------------+--------+----------------------------------+
+#| chr6_hla_hap1 | 139182 | /gbdb/hg17/nib/chr6_hla_hap1.nib |
+#| chr6_hla_hap2 | 150447 | /gbdb/hg17/nib/chr6_hla_hap2.nib |
+#+---------------+--------+----------------------------------+
+#
+# I BLATed 200 bp from the left and right ends of chr6_hla_hap1 and chr6_hla_hap2
+#
+# The left side of hla_hap2 did not BLAT correctly because it is in a repeat-region.
+# Do not ask me why the people defining these regions did not pick unique sequence
+# for the left and right sides so that these could be easily placed.
+# Using the information from the hg17 self-repeat track, I was able to
+# narrow down the left-side location to within a few hundred bases by examining the chains.
+#
+
+cd /hive/data/genomes/hg17/bed
+mkdir haplotypeLocations
+cd haplotypeLocations
+
+vi haplotypeLocations.bed
+# paste in bed4 haplotype locations from BLAT/SelfChain
+--------------------------------
+chr6 32511422 32667119 chr6_hla_hap1
+chr6 32589475 32668709 chr6_hla_hap2
+
+hgLoadBed -type=bed4 hg17 haplotypeLocations haplotypeLocations.bed
+#Reading haplotypeLocations.bed
+#Read 2 elements of size 4 from haplotypeLocations.bed
+#Sorted
+#Creating table definition for haplotypeLocations
+#Saving bed.tab
+#Loading hg17
+
+vi README
+# I wrote some notes about the source and reasons for the data
+
+# I have not made any trackDb entry for this table at this time.
+
+#############################################################################

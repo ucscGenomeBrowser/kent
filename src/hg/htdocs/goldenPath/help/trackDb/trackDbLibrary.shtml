@@ -58,12 +58,22 @@
 
   II) Document HTML PAGES should include this trackDbLibrary.html with server side includes
   and wrapped in <DIV ID="library"> tags.
-  - Documents may differ, but using trackDbDoc.html as the quintisential example, the setting
+  - Documents may differ, but using trackDbDoc.html as the example, the setting
     documentation is organized into tables by trackDb "type", so that settings are documented in
     the context of their use.  The (usually) single cell rows contain the settings.
-    Settings table row example:
+    The settings specification includes a <DIV> with a class attribute of value "format", and the 
+    setting name embedded in <CODE> tags.  In the trackDbHub document, the <CODE> tag has
+    a class whose value defines the support level for the setting, as 'class="level-*"', where '*'
+    is one of the levels defined in the introduction of the trackDbHub document.
+    Note: New settings should always be added to the current (highest version) trackDbHub document
+    in this directory (e.g. trackDbHub.v2.html) and designated "level-new".
+    Settings table row example for trackDbDoc.html:
         <TR VALIGN=TOP><TD class="someSetting"><A name="someSetting"><IMG class='toggle detail'>
             <div class="format"><code>someSetting</code></div>
+        </TD></TR>
+    Settings table row example for trackDbHub.v?.html:
+        <TR VALIGN=TOP><TD class="someSetting"><A name="someSetting"><IMG class='toggle detail'>
+            <div class="format"><code class="level-new">someSetting</code></div>
         </TD></TR>
     - Any setting may be referenced multiple times.  To reference a setting blurb, place it in
       a table cell that contains class={setting} and a <IMG class='toggle detail'> tag.

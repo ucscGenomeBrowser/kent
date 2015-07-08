@@ -126,17 +126,18 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
 	ce2 ce3 ce4 ce5 ce6 ce7 ce8 ce9 ce10 ce11 \
 	cb1 cb2 cb3 cb4 \
 	caeRem1 caeRem2 caeRem3 caeRem4 \
-	caeAng1 \
+	caeAng1 caeAng2 \
 	caeSp71 \
 	caeSp91 \
 	caeSp111 \
 	caeJap1 caeJap2 caeJap3 caeJap4 \
-	priPac1 priPac2 \
+        panRed1 \
+	priPac1 priPac2 priPac3 \
 	caePb1 caePb2 caePb3 \
-	bruMal1 \
+	bruMal1 bruMal2 \
 	melHap1 \
-	melInc1 \
-	haeCon1 \
+	melInc1 melInc2 \
+	haeCon1 haeCon2 \
 	falciparum \
 	choHof1 \
 	sacCer1 sacCer2 sacCer3 \

@@ -1948,20 +1948,20 @@ struct dyString *dy = newDyString(1024);
 logTrackList(dy, trackList);
 
 // put out ~1024 bye blocks to error_log because otherwise
-// it'll chop up the lines
+// Apache will chop up the lines
 char *begin = dy->string;
 char *ptr = begin;
 int count = 0;
 for(ptr=begin; ((ptr = strchr(ptr, ',')) != NULL); ptr++)
     {
-    if (ptr - begin > 900)
+    if (ptr - begin > 800)
 	{
 	*ptr = 0;
-	fprintf(stderr, "trackLog %d %s %s\n", count++, hgsid, begin);
+	fprintf(stderr, "trackLog %d %s %s %s\n", count++, database, hgsid, begin);
 	begin = ptr+1;
 	}
     }
-fprintf(stderr, "trackLog %d %s %s\n", count++, hgsid, begin);
+fprintf(stderr, "trackLog %d %s %s %s\n", count++, database, hgsid, begin);
 
 dyStringFree(&dy);
 }

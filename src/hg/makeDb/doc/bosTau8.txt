@@ -772,3 +772,25 @@ TMPDIR=/dev/shm
     # real    44m43.976s
 
 #########################################################################
+# GENEID GENE PREDICTIONS (DONE - 2015-06-26 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/bosTau8/bed/geneid
+    cd /hive/data/genomes/bosTau8/bed/geneid
+    wget --timestamping \
+http://genome.crg.es/genepredictions/B.taurus/bosTau8/geneid_v1.4/bosTau8.geneid.prot
+    wget --timestamping \
+http://genome.crg.es/genepredictions/B.taurus/bosTau8/geneid_v1.4/bosTau8.geneid.gtf
+    ldHgGene -gtf -genePredExt bosTau8 geneid bosTau8.geneid.gtf
+
+    #  Read 33831 transcripts in 268467 lines in 1 files
+    #     33831 groups 1612 seqs 1 sources 3 feature types
+    #  33831 gene predictions
+
+    featureBits -countGaps bosTau8 geneid
+# 37012407 bases of 2670044500 (1.386%) in intersection
+
+    featureBits -countGaps bosTau3 geneid
+# 44623578 bases of 2902896901 (1.537%) in intersection
+
+##########################################################################
+

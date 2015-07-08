@@ -5,6 +5,7 @@
 #include "options.h"
 #include "jksql.h"
 #include "genePred.h"
+#include "memgfx.h"
 #include "encode/wgEncodeGencodeAttrs.h"
 #include "encode/wgEncodeGencodeRefSeq.h"
 #include "encode/wgEncodeGencodeTag.h"
@@ -30,9 +31,11 @@ struct hash *genToAttrs;
 struct hash *genToRefSeq;
 struct hash *genToMrna;
 struct hash *genToTags;
+struct hash *genToPdb;
 struct hash *refSeqToDescription;
 //struct hash *mrnaToDescription;
 struct hash *refSeqToPepName;
+struct hash *refSeqToStatus;
 struct hash *hgncDescriptionFromGeneName;
 //struct hash *displayIdFromUniProtId;
 //struct hash *descriptionFromUniProtId;
@@ -43,7 +46,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct hash *getMap(char *fileName)
+static struct hash *getMap(char *fileName)
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct hash *hash = newHash(6);
@@ -57,7 +60,7 @@ lineFileClose(&lf);
 return hash;
 }
 
-struct hash *getRefSeqTable(struct sqlConnection *conn,  char *version)
+static struct hash *getRefSeqTable(struct sqlConnection *conn,  char *version)
 {
 char versionQuery[4096];
 
@@ -78,7 +81,7 @@ sqlFreeResult(&sr);
 return hash;
 }
 
-struct hash *getAttrsTable(struct sqlConnection *conn,  char *version)
+static struct hash *getAttrsTable(struct sqlConnection *conn,  char *version)
 {
 char versionQuery[4096];
 
@@ -99,7 +102,7 @@ sqlFreeResult(&sr);
 return hash;
 }
 
-struct hash *getMapTable(struct sqlConnection *conn, char *query, char *version)
+static struct hash *getMapTable(struct sqlConnection *conn, char *query, char *version)
 {
 char versionQuery[4096];
 
@@ -122,7 +125,7 @@ sqlFreeResult(&sr);
 return hash;
 }
 
-struct genePred *loadGenePreds(struct sqlConnection *conn, char *query, char *version)
+static struct genePred *loadGenePreds(struct sqlConnection *conn, char *query, char *version)
 {
 struct genePred *gpList = NULL;
 char versionQuery[4096];
@@ -144,7 +147,7 @@ slReverse(&gpList);
 return gpList;
 }
 
-void writeOutOneKnownGene(FILE *f, struct genePred *gp, struct hashes *hashes)
+static void writeOutOneKnownGene(FILE *f, struct genePred *gp, struct hashes *hashes)
 {
 
 char buffer[1024];
@@ -172,7 +175,58 @@ else
 fprintf(f, "%s\n", gp->name);
 }
 
-void outputKnownGene( struct genePred *compGenePreds, struct hashes *hashes)
+static struct rgbColor black = {0,0,0};
+static struct rgbColor trueBlue = {12,12,120};
+static struct rgbColor mediumBlue = {80, 80, 160};
+static struct rgbColor lightBlue = {130, 130, 210};
+
+static void outputKnownGeneColor( struct genePred *compGenePreds, struct hashes *hashes)
+/* Output the kgColor table. */
+{
+struct genePred *gp;
+FILE *f = mustOpen("kgColor.tab", "w");
+struct rgbColor *color;
+
+for (gp = compGenePreds; gp; gp = gp->next)
+    {
+    char buffer[256];
+
+    color = &lightBlue;
+    safef(buffer, sizeof buffer, "%s.%s", gp->name, gp->chrom);
+    char *ucName = (char *)hashMustFindVal(hashes->genToUC, buffer);
+
+    char *pdb = (char *)hashFindVal(hashes->genToPdb, gp->name);
+    char *uniProtAcc = (char *)hashFindVal(hashes->genToUniProt, gp->name);
+
+    if (pdb != NULL)
+	color = &black;
+    else if (uniProtAcc != NULL)
+	color = &trueBlue;
+    else
+	{
+	struct wgEncodeGencodeRefSeq *wgr = (struct wgEncodeGencodeRefSeq *)hashFindVal(hashes->genToRefSeq, gp->name);
+	if (wgr != NULL)
+	    {
+	    char *acc = cloneString(wgr->rnaAcc);
+	    char *ptr = strchr(acc, '.');
+	    if (ptr)
+		*ptr = 0;
+	    char *status = (char *)hashFindVal(hashes->refSeqToStatus, acc);
+
+	    if ((status != NULL) && 
+		(sameString(status, "Validated") ||
+		sameString(status, "Reviewed")))
+		color = &trueBlue;
+	    else
+		color = &mediumBlue;
+	    }
+	}
+    fprintf(f, "%s\t%d\t%d\t%d\n",ucName, color->r,color->g,color->b);
+    }
+}
+
+static void outputKnownGene( struct genePred *compGenePreds, struct hashes *hashes)
+/* Output the knownGene table */
 {
 struct genePred *gp;
 FILE *f = mustOpen("knownGene.gp", "w");
@@ -184,7 +238,7 @@ for (gp = compGenePreds; gp; gp = gp->next)
 fclose(f);
 }
 
-char *descriptionFromAcc(struct sqlConnection *conn, char *acc)
+static char *descriptionFromAcc(struct sqlConnection *conn, char *acc)
 {
 char query[4096];
 
@@ -192,7 +246,7 @@ safef(query, sizeof query, "select d.name from all_mrna a, gbCdnaInfo c, descrip
 return sqlQuickString(conn, query);
 }
 
-char *uniProtDescriptionFromAcc(struct sqlConnection *conn, char *acc)
+static char *uniProtDescriptionFromAcc(struct sqlConnection *conn, char *acc)
 {
 char query[4096];
 
@@ -200,7 +254,7 @@ safef(query, sizeof query, "select v.val from commentVal v, comment c where c.ac
 return sqlQuickString(conn, query);
 }
 
-char *displayIdFromAcc(struct sqlConnection *conn, char *acc)
+static char *displayIdFromAcc(struct sqlConnection *conn, char *acc)
 {
 char query[4096];
 
@@ -208,19 +262,8 @@ safef(query, sizeof query, "select val from displayId where acc = '%s'", acc);
 return sqlQuickString(conn, query);
 }
 
-/*
-char *hgncDescriptionFromAcc(struct sqlConnection *conn, char *acc)
-{
-char query[4096];
 
-safef(query, sizeof query, "select geneFamilyDesc from hgnc where symbol = '%s'", acc);
-return sqlQuickString(conn, query);
-}
-*/
-
-
-
-void outputDescription(FILE *f, struct sqlConnection *conn,  struct sqlConnection *uconn,struct sqlConnection *pconn, struct genePred *gp, struct hashes *hashes)
+static void outputDescription(FILE *f, struct sqlConnection *conn,  struct sqlConnection *uconn,struct sqlConnection *pconn, struct genePred *gp, struct hashes *hashes)
 {
 char *description;
 // try refSeq
@@ -294,7 +337,8 @@ if (mrnaAcc)
 	return;
 	}
     }
-#ifdef NOTNOW
+
+#ifdef NOTNOW   // the annotation remark is not a very useful string
 // try Gencode description
 description = (char *)hashFindVal(hashes->genToAnnRemark, gp->name);
 
@@ -327,23 +371,23 @@ if (ptr)
 return buffer;
 }
 
-void writeOutOneKgXref(FILE *f, struct sqlConnection *conn,struct sqlConnection *uconn,struct sqlConnection *pconn, struct genePred *gp, struct hashes *hashes)
+static void writeOutOneKgXref(FILE *f, struct sqlConnection *conn,struct sqlConnection *uconn,struct sqlConnection *pconn, struct genePred *gp, struct hashes *hashes)
 {
 char buffer[1024];
 safef(buffer, sizeof buffer, "%s.%s", gp->name, gp->chrom);
-fprintf(f, "%s\t", (char *)hashMustFindVal(hashes->genToUC, buffer));
-//struct wgEncodeGencodeRefSeq *wgr = (struct wgEncodeGencodeRefSeq *)hashFindVal(hashes->genToRefSeq, gp->name);
-/*
+char *ucName = (char *)hashMustFindVal(hashes->genToUC, buffer);
+fprintf(f, "%s\t", ucName);
+struct wgEncodeGencodeRefSeq *wgr = (struct wgEncodeGencodeRefSeq *)hashFindVal(hashes->genToRefSeq, gp->name);
 if (wgr != NULL)
-    fprintf(f, "%s\t", wgr->rnaAcc);
-elsed
-    fprintf(f, "%s\t", ""); // mRNA
-    */
-char *mrnaAcc = (char *)hashFindVal(hashes->genToMrna, gp->name);
-if (mrnaAcc)
-    fprintf(f, "%s\t", mrnaAcc);
+    fprintf(f, "%s\t", noDot(wgr->rnaAcc));
 else
-    fputs("\t",f);
+    {
+    char *mrnaAcc = (char *)hashFindVal(hashes->genToMrna, ucName);
+    if (mrnaAcc)
+	fprintf(f, "%s\t", mrnaAcc);
+    else
+	fputs("\t",f);
+    }
 
 char *uniProtAcc = (char *)hashFindVal(hashes->genToUniProt, gp->name);
 if (uniProtAcc)
@@ -367,7 +411,7 @@ fprintf(f, "%s\t", wga->geneName);
 
 //char *refSeqName = (char *)hashFindVal(hashes->genToRefSeq, gp->name);
 //if (refSeqName != NULL)
-struct wgEncodeGencodeRefSeq *wgr = (struct wgEncodeGencodeRefSeq *)hashFindVal(hashes->genToRefSeq, gp->name);
+//struct wgEncodeGencodeRefSeq *wgr = (struct wgEncodeGencodeRefSeq *)hashFindVal(hashes->genToRefSeq, gp->name);
 if (wgr != NULL)
     {
     //char *refPepName = (char *)hashFindVal(hashes->refSeqToPepName, gp->name);
@@ -399,7 +443,7 @@ fprintf(f, "%s\n", set); // trnaName
 fputc('\n', f);
 }
 
-void outputKgXref( struct sqlConnection *conn, struct genePred *compGenePreds, struct hashes *hashes)
+static void outputKgXref( struct sqlConnection *conn, struct genePred *compGenePreds, struct hashes *hashes)
 {
 struct sqlConnection *uconn = sqlConnect("uniProt");
 struct sqlConnection *pconn = sqlConnect("proteome");
@@ -413,7 +457,40 @@ for (gp = compGenePreds; gp; gp = gp->next)
 fclose(f);
 }
 
-void outputKnownCanonical( struct genePred *compGenePreds, struct hashes *hashes)
+struct transInfo
+{
+struct transInfo *next;
+char *transcriptId;
+char *geneId;
+char *tag;
+unsigned length;
+unsigned tagVal;
+struct genePred *gp;
+unsigned clusterId;
+char *ucscId;
+};
+
+
+static int tiCmp(const void *va, const void *vb)
+/* Compare to sort based on start. */
+{
+const struct transInfo *a = *((struct transInfo **)va);
+const struct transInfo *b = *((struct transInfo **)vb);
+int cmp = strcmp(a->geneId, b->geneId);
+if (cmp != 0)
+    return cmp;
+//cmp = strcmp(a->transcriptId, b->transcriptId);
+//if (cmp != 0)
+ //   return cmp;
+cmp = b->tagVal - a->tagVal;
+if (cmp != 0)
+    return cmp;
+
+return b->length - a->length;
+
+}
+
+static void outputKnownCanonical( struct genePred *compGenePreds, struct hashes *hashes)
 {
 // walk throught the different genes in the Attrs table and choose a transcriptfor each one
 // TODO: right now we're choosing an arbitrary one, we should at least
@@ -422,41 +499,96 @@ void outputKnownCanonical( struct genePred *compGenePreds, struct hashes *hashes
 struct hashCookie cookie = hashFirst(hashes->genToAttrs);
 //while ((el = hashNext(&cookie)) != NULL)
 */
-struct hash *geneHash = newHash(10);
+//struct hash *geneHash = newHash(10);
 struct genePred *gp;
 FILE *canonF = mustOpen("knownCanonical.tab", "w");
 FILE *isoF = mustOpen("knownIsoforms.tab", "w");
 unsigned clusterId = 1;
 char buffer[1024];
 
+struct transInfo *tiList = NULL, *ti;
+
+for (gp = compGenePreds; gp; gp = gp->next)
+    {
+    safef(buffer, sizeof buffer, "%s.%s", gp->name, gp->chrom);
+    char *ucscId = (char *)hashMustFindVal(hashes->genToUC, buffer);
+    struct wgEncodeGencodeAttrs *wga = (struct wgEncodeGencodeAttrs *)hashMustFindVal(hashes->genToAttrs, gp->name);
+
+    struct hashEl *hel = hashLookup(hashes->genToTags, gp->name);
+    if (hel == NULL)
+	{
+	AllocVar(ti);
+	slAddHead(&tiList, ti);
+
+	ti->transcriptId = gp->name;
+	ti->geneId = wga->geneId;
+	ti->length = gp->txEnd - gp->txStart;
+	ti->tag = "none";
+	ti->tagVal = 0;
+	ti->gp = gp;
+	ti->ucscId = ucscId;
+	}
+    for(; hel; hel = hel->next)
+	{
+	char *tag = (char *)hel->val;
+
+	AllocVar(ti);
+	slAddHead(&tiList, ti);
+
+	ti->transcriptId = gp->name;
+	ti->geneId = wga->geneId;
+	ti->length = gp->txEnd - gp->txStart;
+
+	ti->tag = cloneString(tag);
+	ti->gp = gp;
+	ti->ucscId = ucscId;
+
+	if (startsWith("appris_principal", tag))
+	    ti->tagVal = 100;
+	else if (startsWith("appris_alternative", tag))
+	    ti->tagVal = 90;
+	else if (startsWith("basic", tag))
+	    ti->tagVal = 80;
+	else 
+	    ti->tagVal = 0;
+	}
+    }
+
+slSort(&tiList, tiCmp);
+
+struct hash *geneHash = newHash(10);
+for(ti=tiList; ti; ti = ti->next)
+    {
+    if (hashLookup(geneHash, ti->geneId) == NULL)
+	{
+	ti->clusterId = clusterId;
+	hashAdd(geneHash, ti->geneId, ti);
+	struct genePred *gp = ti->gp;
+	fprintf(canonF, "%s\t%d\t%d\t%d\t%s\t%s\n",gp->chrom, gp->txStart, gp->txEnd,
+	    clusterId, ti->ucscId, ti->geneId);
+
+	clusterId++;
+//	printf("%s %s %s %d\n", ti->geneId, ti->transcriptId, ti->tag, ti->length);
+	}
+    }
 for (gp = compGenePreds; gp; gp = gp->next)
     {
     struct wgEncodeGencodeAttrs *wga = (struct wgEncodeGencodeAttrs *)hashMustFindVal(hashes->genToAttrs, gp->name);
     safef(buffer, sizeof buffer, "%s.%s", gp->name, gp->chrom);
     char *ucscId = (char *)hashMustFindVal(hashes->genToUC, buffer);
-    struct hashEl *el;
-    unsigned isoClustId;
+    struct hashEl *hel;
+    if ((hel = hashLookup(geneHash, wga->geneId)) == NULL)
+	errAbort("gene not in geneHash");
 
-    if ((el = hashLookup(geneHash, wga->geneId)) == NULL)
-	{
-	fprintf(canonF, "%s\t%d\t%d\t%d\t%s\t%s\n",gp->chrom, gp->txStart, gp->txEnd,
-	    clusterId, ucscId, wga->geneId);
-	hashAddInt(geneHash, wga->geneId, clusterId );
-	isoClustId = clusterId;
-	clusterId++;
-	}
-    else
-	{
-	char *pt = NULL;
-	isoClustId = (char *)el->val - pt;
-	}
-    fprintf(isoF, "%d\t%s\n", isoClustId, ucscId);
+    struct transInfo *ti = (struct transInfo *)hel->val;
+    fprintf(isoF, "%d\t%s\n", ti->clusterId, ucscId);
     }
 fclose(canonF);
 fclose(isoF);
 }
 
-void outputKnownToRefSeq( struct genePred *compGenePreds, struct hashes *hashes)
+#ifdef NOTNOW // not currently used, use hgMapGene instead (at the moment ;-)
+static void outputKnownToRefSeq( struct genePred *compGenePreds, struct hashes *hashes)
 {
 FILE *f = mustOpen("knownToRefSeq.tab", "w");
 struct genePred *gp;
@@ -474,8 +606,9 @@ for (gp = compGenePreds; gp; gp = gp->next)
 	}
     }
 }
+#endif
 
-void makeGencodeKnownGene(char *database, char *tempDatabase, char *version, char *txToAccTab)
+static void makeGencodeKnownGene(char *database, char *tempDatabase, char *version, char *txToAccTab)
 /* makeGencodeKnownGene - make knownGene from Gencode tables. */
 {
 struct sqlConnection *conn = sqlConnect(database);
@@ -494,13 +627,18 @@ hashes.refSeqToPepName = getMapTable(conn, "select mrnaAcc,protAcc from refLink"
 //hashes.mrnaToDescription = getMapTable(conn, "select a.name,d.name from all_mrna a, gbCdnaInfo c, description d where a.qName=c.acc and c.description = d.id", NULL);
 hashes.refSeqToDescription = getMapTable(conn, "select g.name,d.name from refGene g, gbCdnaInfo c, description d where g.name=c.acc and c.description = d.id", NULL);
 hashes.hgncDescriptionFromGeneName = getMapTable(pconn, "select symbol, name from hgnc", NULL);
+hashes.refSeqToStatus = getMapTable(conn, "select mrnaAcc, status from refSeqStatus", NULL);
+hashes.genToPdb = getMapTable(conn, "select transcriptId, pdbId from wgEncodeGencodePdb", version);
 //hashes.displayIdFromUniProtId = getMapTable(uconn, "select acc, val from displayId", NULL);
 //printf("displayIdFromUniProtId %ld\n", time(NULL) - start);
 //hashes.descriptionFromUniProtId = getMapTable(uconn, "select c.acc, v.val from commentVal v, comment c where v.id=c.commentVal", NULL);
 //printf("descriptionFromUniProtId %ld\n", time(NULL) - start);
-outputKnownGene(compGenePreds, &hashes);
-hashes.genToMrna = getMapTable(tconn, "select name, value from knownToMrna", NULL);
 hashes.genToTags = getMapTable(conn, "select transcriptId, tag from wgEncodeGencodeTag", version);
+outputKnownCanonical(compGenePreds, &hashes);
+exit(1);
+outputKnownGene(compGenePreds, &hashes);
+outputKnownGeneColor(compGenePreds, &hashes);
+hashes.genToMrna = getMapTable(tconn, "select name, value from knownToMrnaSingle", NULL);
 outputKgXref(conn, compGenePreds, &hashes);
 outputKnownCanonical(compGenePreds, &hashes);
 //outputKnownToRefSeq(compGenePreds, &hashes);
