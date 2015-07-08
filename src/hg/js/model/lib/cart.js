@@ -51,6 +51,11 @@ var cart = (function() {
     }
 
     function defaultErrorCallback(jqXHR, textStatus) {
+        // Ignore incomplete requests, likely due to navigating away from the page
+        // http://stackoverflow.com/questions/9229005/how-to-handle-jquery-ajax-post-error-when-navigating-away-from-a-page
+        if (jqXHR.readyState < 4) {
+            return true;
+        }
         console.log('Request failed: ', arguments);
         alert('Request failed: ' + textStatus);
     }
