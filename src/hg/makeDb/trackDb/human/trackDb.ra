@@ -4199,7 +4199,7 @@ html numtSeq
     maxWindowToDraw 1000000
 
 track cnvDevDelay
-shortLabel CNV Dev. Delay
+shortLabel Development Delay
 longLabel Copy Number Variation Morbidity Map of Developmental Delay
 group phenDis
 visibility hide
