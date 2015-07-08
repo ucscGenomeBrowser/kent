@@ -8776,6 +8776,25 @@ CREATE TABLE ucscToEnsembl (
 ##############################################################################
 # Haplotype track (WORKING - 2012-10-01 - Hiram)
 
+# Warning: these are all actually alternate scaffolds from OTHER mouse strains
+# These haplotypes are NOT from mm10.  Probably the table should have been called NonMm10Haplotypes!
+
+# The directory after genbank/ identifies the strain, e.g. 129S2_SvPas
+#../../../mm10/genbank/129S2_SvPas/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/129P2_OlaHsd/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/NOD_ShiLtJ/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/A_J/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/CAST_Ei/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/129X1_SvJ/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/AKR_J/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/RIII/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/129S6_SvEvTac/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/129S7_SvEvBrd-Hprt-b-m2/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/BALB_c/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/129S1_SvImJ/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/NOD_MrkTac/alt_scaffolds/alt_scaffold_placement.txt
+
+
     cat << '_EOF_' > mkBedFile.pl
 #!/usr/bin/env perl
 
