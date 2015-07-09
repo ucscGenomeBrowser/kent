@@ -1,0 +1,432 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes how the browser for B. xylophilus WS245 version is built
+
+##############################################################################
+# download sequence, create UCSC sequence (DONE - 2015-06-24 - Hiram)
+    # both the genbank and the WormBase releases are identical
+    mkdir -p /hive/data/genomes/oncVol1/genbank
+    cd /hive/data/genomes/oncVol1/genbank
+
+    time rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/invertebrate/Onchocerca_volvulus/all_assembly_versions/GCA_000499405.1_OVOC001/ ./
+# sent 337 bytes  received 95823961 bytes  8332547.65 bytes/sec
+# total size is 95810309  speedup is 1.00
+# real    0m10.816s
+
+    mkdir -p /hive/data/genomes/oncVol1/ws245
+    cd /hive/data/genomes/oncVol1/ws245
+
+    wget --no-parent --timestamping -m -nH --cut-dirs=6 \
+ftp://ftp.sanger.ac.uk/pub/wormbase/releases/WS245/species/PRJEB513
+
+    mkdir /hive/data/genomes/oncVol1/ucsc
+    cd /hive/data/genomes/oncVol1/ucsc
+
+    zcat ../genbank/GCA_000499405.1_OVOC001_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz \
+        | sed -e 's/.1 Onchocerca.*/v1/;' | gzip -c > oncVol1.fa.gz
+
+    zcat ../genbank/GCA_000499405.1_OVOC001_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz | sed -e 's/\.1/v1/;' \
+        > oncVol1.agp
+
+#############################################################################
+#  Initial database build (DONE - 2015-07-09 - Hiram)
+
+    cd /hive/data/genomes/oncVol1
+    cat << '_EOF_' > oncVol1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db oncVol1
+clade worm
+genomeCladePriority 68
+scientificName Onchocerca volvulus
+commonName O. volvulus
+assemblyDate Nov. 2013
+assemblyLabel Wellcome Trust Sanger Institute O. volvulus genome project
+assemblyShortLabel WS241/O_volvulus_Cameroon_v3
+orderKey 15000
+mitoAcc AF015193.1
+fastaFiles /hive/data/genomes/oncVol1/ucsc/oncVol1.fa.gz
+agpFiles /hive/data/genomes/oncVol1/ucsc/oncVol1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://parasite.org.au/blog/the-pugh-parasitology-collection/
+photoCreditName R.E. Pugh parasitology collection
+ncbiGenomeId 2687
+ncbiAssemblyId 81741
+ncbiAssemblyName WS241/OVOC001
+ncbiBioProject 226660
+genBankAccessionID GCA_000499405.1
+taxId 6282
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp oncVol1.config.ra) > agp.log 2>&1
+    # *** All done!  (through the 'agp' step)
+    # real    0m56.844s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db oncVol1.config.ra) > db.log 2>&1
+    # real    2m14.033s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/oncVol1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/oncVol1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/oncVol1/oncVol1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku oncVol1) > do.log 2>&1
+    # real    2m25.273s
+
+    cat fb.oncVol1.cpgIslandExtUnmasked.txt
+    # 35946 bases of 93367159 (0.038%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/oncVol1/bed/cytoBand
+    cd /hive/data/genomes/oncVol1/bed/cytoBand
+    makeCytoBandIdeo.csh oncVol1
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/oncVol1/bed/ucscToINSDC
+    cd /hive/data/genomes/oncVol1/bed/ucscToINSDC
+
+    # find the chrM accession:
+    grep chrM ../../*.agp
+# chrM    1       13747   2       F       AF015193.1      1       13747   +
+
+    # use that as the second argument here:
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+       ../../genbank/GCA_*assembly_structure/Primary_Assembly AF015193.1
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    #   709 name.coordinate.tab
+    #   709 ucscToINSDC.bed
+    #   709 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 10
+    # use the 10 in this sed
+    sed -e "s/21/10/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab oncVol1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords oncVol1
+    # should cover %100 entirely:
+    featureBits -countGaps oncVol1 ucscToINSDC
+    # 96441526 bases of 96441526 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2015-07-09 - Hiram)
+    hgsql -N -e "select frag from gold;" oncVol1 | sort | head -3
+AF015193.1
+CBVM010000001.1
+CBVM010000002.1
+
+[AC][BF][V0][M1][0-9]*(\.1)?
+
+    hgsql -N -e "select frag from gold;" oncVol1 | sort | tail -2
+CBVM010001288.1
+CBVM010001289.1
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" oncVol1 | wc -l
+    # 1290
+
+    hgsql -N -e "select frag from gold;" oncVol1 \
+      | egrep -e '[AC][BF][V0][M1][0-9]*(\.1)?' \
+        | wc -l
+    # 1290
+
+  hgsql -N -e "select frag from gold;" oncVol1 \
+    | egrep -v -e '[AC][BF][V0][M1][0-9]*(\.1)?' \
+       | wc -l
+    # 0
+
+    # hence, add to trackDb/worm/oncVol1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [AC][BF][V0][M1][0-9]*(\.1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+##########################################################################
+# running repeat masker (DONE - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/oncVol1/bed/repeatMasker
+    cd /hive/data/genomes/oncVol1/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku oncVol1) > do.log 2>&1
+XXX - running - Thu Jul  9 14:06:13 PDT 2015
+    # real    53m37.447s
+
+    cat faSize.rmsk.txt
+    # 74576239 bases (1475733 N's 73100506 real 72631263 upper 469243 lower)
+    #    in 5528 sequences in 1 files
+    #  Total size: mean 13490.6 sd 127730.2 min 444 (contig15090)
+    #    max 3612001 (scaffold00713) median 1253
+    #  %0.63 masked total, %0.64 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;    
+
+    time featureBits -countGaps oncVol1 rmsk
+    # 469243 bases of 74576239 (0.629%) in intersection
+    #  real    0m1.897s
+
+##########################################################################
+# running simple repeat (TBD - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/oncVol1/bed/simpleRepeat
+    cd /hive/data/genomes/oncVol1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        oncVol1) > do.log 2>&1
+XXX - running - Thu Jul  9 14:06:40 PDT 2015
+    # real    8m14.637s
+
+    cat fb.simpleRepeat
+    # 1676598 bases of 73100506 (2.294%) in intersection
+
+    # using the Window Masker result as indicated below
+
+##########################################################################
+# CREATE MICROSAT TRACK (TBD - 2015-07-09 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/oncVol1/bed/microsat
+     cd /cluster/data/oncVol1/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed oncVol1 microsat microsat.bed
+    #	Read 17 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (TBD - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/oncVol1/bed/windowMasker
+    cd /hive/data/genomes/oncVol1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev oncVol1) > do.log 2>&1
+    # real    4m27.586s
+
+    # Masking statistics
+    cat faSize.oncVol1.cleanWMSdust.txt
+    #  74576239 bases (1475733 N's 73100506 real 51958319 upper
+    #    21142187 lower) in 5528 sequences in 1 files
+    #  Total size: mean 13490.6 sd 127730.2 min 444 (contig15090)
+    #    max 3612001 (scaffold00713) median 1253
+    #  %28.35 masked total, %28.92 masked real
+
+    cat fb.oncVol1.rmsk.windowmaskerSdust.txt
+    # 350035 bases of 74576239 (0.469%) in intersection
+
+    # using this Window Masker result for final masking::
+    cd /hive/data/genomes/oncVol1
+    #   you can safely ignore the warning about fields >= 13
+    twoBitMask bed/windowMasker/oncVol1.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  oncVol1.2bit
+
+    # measure the final masking:
+    twoBitToFa oncVol1.2bit stdout | faSize stdin > faSize.oncVol1.2bit.txt
+    cat faSize.oncVol1.2bit.txt
+    # 74576239 bases (1475733 N's 73100506 real 51950819 upper
+    #    21149687 lower) in 5528 sequences in 1 files
+    # Total size: mean 13490.6 sd 127730.2 min 444 (contig15090)
+    #    max 3612001 (scaffold00713) median 1253
+    # %28.36 masked total, %28.93 masked real
+
+    # and reset the symlink
+    rm /gbdb/oncVol1/oncVol1.2bit
+    ln -s /hive/data/genomes/oncVol1/oncVol1.2bit /gbdb/oncVol1/oncVol1.2bit
+
+##########################################################################
+# cpgIslands - (TBD - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/oncVol1/bed/cpgIslands
+    cd /hive/data/genomes/oncVol1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku oncVol1) > do.log 2>&1 &
+XXX - running - Thu Jul  9 12:28:37 PDT 2015
+    # real    8m10.474s
+
+    cat fb.oncVol1.cpgIslandExt.txt
+    # 29350 bases of 86344036 (0.034%) in intersection
+
+#########################################################################
+# augustus - (TBD - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/oncVol1/bed/augustus
+    cd /hive/data/genomes/oncVol1/bed/augustus
+    #  XXX this is not specifically correct, the species caenorhabditis
+    #      is not necessarily accurate here
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+      -species=caenorhabditis -dbHost=hgwdev \
+         -workhorse=hgwdev oncVol1) > do.log 2>&1
+XXX - running - Thu Jul  9 12:28:37 PDT 2015
+    # real    49m33.584s
+
+    cat fb.oncVol1.augustusGene.txt
+    # 5950506 bases of 86344036 (6.892%) in intersection
+
+#########################################################################
+# genscan - (TBD - 2015-07-08 - Hiram)
+    mkdir /hive/data/genomes/oncVol1/bed/genscan
+    cd /hive/data/genomes/oncVol1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku oncVol1) > do.log 2>&1
+    # real    9m51.838s
+
+    cat fb.oncVol1.genscan.txt
+    #   3196210 bases of 86344036 (3.702%) in intersection
+
+    cat fb.oncVol1.genscanSubopt.txt
+    #   2410491 bases of 86344036 (2.792%) in intersection
+
+########################################################################
+# Create kluster run files (TBD - 2015-07-08 - Hiram)
+
+    cd /hive/data/genomes/oncVol1
+    # numerator is oncVol1 gapless bases "real" as reported by:
+    head -1 faSize.oncVol1.2bit.txt
+# 94076581 bases (7759220 N's 86317361 real 53341517 upper 32975844 lower)
+#    in 9780 sequences in 1 files
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 86317361 / 2861349177 \) \* 1024
+    # ( 86317361 / 2861349177 ) * 1024 = 30.890665
+
+    # ==> use -repMatch=100 since 30 or 50 masks too much
+    cd /hive/data/genomes/oncVol1
+    time blat oncVol1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/oncVol1.11.ooc \
+        -repMatch=100
+    # Wrote 8527 overused 11-mers to jkStuff/oncVol1.11.ooc
+    #  real    0m1.846s
+
+    # there are a few non-bridged gaps
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N -e 'select * from gap where bridge="no" order by size;' oncVol1 \
+       | ave -tableOut -col=7 stdin
+# min Q1 median Q3 max mean N sum stddev
+# 78831 79056 79362 79503 79503 79162.5 4 316650 320.991
+
+    # note the minimum non-bridged gap size is 78,831
+    gapToLift -verbose=2 -minGap=50000 oncVol1 jkStuff/oncVol1.nonBridged.lft \
+         -bedFile=jkStuff/oncVol1.nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 9780, total size: 94076581, one half size: 47038290
+# cumulative    N50 count       contig  contig size
+# 46960459        61      Bmal_v3_scaffold61      194773
+# 47038290 one half size
+# 47151548        62      Bmal_v3_scaffold62      191089
+
+#############################################################################
+# GENBANK AUTO UPDATE (TBD - 2015-06-09 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism               mrnaCnt estCnt  refSeqCnt
+    #  Pristionchus pacificus  97      37470   0
+
+    # edit etc/genbank.conf to add oncVol1 just before priPac1
+
+# oncVol1 (P. pacificus)
+oncVol1.serverGenome = /hive/data/genomes/oncVol1/oncVol1.2bit
+oncVol1.clusterGenome = /hive/data/genomes/oncVol1/oncVol1.2bit
+oncVol1.ooc = /hive/data/genomes/oncVol1/jkStuff/oncVol1.11.ooc
+oncVol1.lift = /hive/data/genomes/oncVol1/jkStuff/oncVol1.nonBridged.lft
+oncVol1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+oncVol1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+oncVol1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+oncVol1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+oncVol1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+oncVol1.refseq.mrna.native.load = yes
+oncVol1.refseq.mrna.xeno.load  = yes
+oncVol1.refseq.mrna.xeno.loadDesc = yes
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+oncVol1.genbank.mrna.xeno.load = no
+oncVol1.genbank.est.native.load = yes
+oncVol1.genbank.est.native.loadDesc = no
+oncVol1.downloadDir = oncVol1
+oncVol1.perChromTables = no
+
+    git commit -m "Added oncVol1 - P. pacificus refs #15209" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/etc/:
+    make etc-update
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial oncVol1
+    # logFile: var/build/logs/2015.07.02-11:39:01.oncVol1.initalign.log
+    # real    91m20.362s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.oncVol1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad oncVol1
+    # logFile: var/dbload/hgwdev/logs/2015.07.06-09:51:31.oncVol1.dbload.log
+    # real    18m34.687s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add oncVol1 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added oncVol1 - Pristionchus pacificus refs #15209" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2015-06-22 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=oncVol1 -tableCoverage all.joiner
+    joinerCheck -database=oncVol1 -times all.joiner
+    joinerCheck -database=oncVol1 -keys all.joiner
+
+    cd /hive/data/genomes/oncVol1
+    time makeDownloads.pl oncVol1 > downloads.log 2>&1
+    # real    13m42.027s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/oncVol1/pushQ
+    cd /hive/data/genomes/oncVol1/pushQ
+    makePushQSql.pl oncVol1 > oncVol1.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/oncVol1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/oncVol1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/oncVol1/bbi/qualityBw/quality.bw
+    # WARNING: oncVol1 does not have seq
+    # WARNING: oncVol1 does not have extFile
+    # WARNING: oncVol1 does not have estOrientInfo
+    # WARNING: oncVol1 does not have mrnaOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p oncVol1.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/oncVol1.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#############################################################################
