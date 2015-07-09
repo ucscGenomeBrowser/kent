@@ -5,7 +5,7 @@ var CladeOrgDbMixin = function(myPath) {
     'use strict';
     /*jshint validthis: true */
 
-    var myCartVars = ['clade', 'org', 'db', 'cladeOrgDb'];
+    var myCartVar = 'cladeOrgDb';
 
     function findNodeByValue(nodeList, selValue) {
         // Return the member of nodeList whose value field matches selValue, if any.
@@ -48,7 +48,7 @@ var CladeOrgDbMixin = function(myPath) {
     }
 
     function generateMenuOptions(mutState) {
-        // Use the values of myCartVars to make clade, organism and db menu data structures.
+        // Use mutState[myPath] to make clade, organism and db menu data structures.
         // If clade/org/db are inconsistent with cladeOrgDb tree, reset them.
         var cladeOrgDb = myGetIn(mutState, 'cladeOrgDb');
         if (! cladeOrgDb) {
@@ -84,11 +84,16 @@ var CladeOrgDbMixin = function(myPath) {
 
     // Server event handler
     function codMergeServerResponse(mutState, cartVar, newValue) {
-        // cart vars in myCartVars all live in state[myPath] for Immutable efficiency but can arrive
-        // independently from server; when we get one, update just that piece of state[myPath]
-        // and update menus.
-        mySetIn(mutState, cartVar, Immutable.fromJS(newValue));
-        generateMenuOptions(mutState);
+        // Update internal state and regenerate menu options.
+        if (cartVar === myCartVar) {
+            _.forEach(newValue, function(value, key) {
+                mySetIn(mutState, key, Immutable.fromJS(value));
+            });
+            generateMenuOptions(mutState);
+        } else {
+            this.error('CladeOrgDbMixin: expected cart var "' + myCartVar + '" but got "' +
+                       cartVar + '"');
+        }
     }
 
     // UI event handler
@@ -167,7 +172,7 @@ var CladeOrgDbMixin = function(myPath) {
     }
 
     function initialize() {
-        this.registerCartVarHandler(myCartVars, codMergeServerResponse);
+        this.registerCartVarHandler(myCartVar, codMergeServerResponse);
         this.registerUiHandler(myPath, changeCladeOrgDb);
         // Install convenience methods for use outside this mixin:
         this.getDb = getDb;

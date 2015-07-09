@@ -98,9 +98,21 @@ var HgIntegratorModel = ImModel.extend({
         // Formulate a link to hgTables' table schema for trackPath's group/track/table.
         var group = trackPath.first();
         var track = trackPath.get(1);
-        var table = trackPath.last();
-        return 'hgTables?db=' + db + '&hgta_group=' + group + '&hgta_track=' + track +
-                        '&hgta_table=' + table + '&hgta_doSchema=1';
+        // table is almost always the same as leaf track -- but not always, for example
+        // track wgEncodeRegDnaseClustered, table wgEncodeRegDnaseClusteredV3.
+        var table = null;
+        var leafObj = this.findGroupedTrack(mutState, trackPath);
+        if (leafObj) {
+            table = leafObj.get('table');
+            return 'hgTables?db=' + db + '&hgta_group=' + group + '&hgta_track=' + track +
+                                '&hgta_table=' + table + '&hgta_doSchema=1';
+        } else {
+            if (trackPath.size > 0 && trackPath.get(0)) {
+                this.error('schemaUrlFromTrackPath: can\'t find trackDb for trackPath ' +
+                           trackPath.toString());
+            }
+            return null;
+        }
     },
 
     findObjByField: function(objList, field, value) {
@@ -221,17 +233,8 @@ var HgIntegratorModel = ImModel.extend({
     updateAddDsSchemaUrl: function(mutState, db) {
         // Read the selected path back out of addDsInfo.menus and update addDsInfo.schemaUrl.
         var trackPath = this.getAddDsTrackPath(mutState);
-        var leafObj = this.findGroupedTrack(mutState, trackPath);
-        if (leafObj) {
-            trackPath = trackPath.set(trackPath.size-1, leafObj.get('table'));
-            mutState.setIn(['addDsInfo', 'schemaUrl'],
-                           this.schemaUrlFromTrackPath(mutState, db, trackPath));
-        } else {
-            if (trackPath.size > 0 && trackPath.get(0)) {
-                this.error('updateAddDsSchemaUrl: can\'t find trackPath ' + trackPath.toString());
-            }
-            mutState.setIn(['addDsInfo', 'schemaUrl'], null);
-        }
+        mutState.setIn(['addDsInfo', 'schemaUrl'],
+                       this.schemaUrlFromTrackPath(mutState, db, trackPath));
     },
 
     updateAddDsDisable: function(mutState) {
