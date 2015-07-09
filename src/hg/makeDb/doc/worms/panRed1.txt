@@ -4,6 +4,12 @@
 
 ##############################################################################
 # download sequence, create UCSC sequence (DONE - 2015-06-24 - Hiram)
+    mkdir -p /hive/data/genomes/panRed1/genbank
+    cd /hive/data/genomes/panRed1/genbank
+
+    time rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/invertebrate/Panagrellus_redivivus/all_assembly_versions/GCA_000341325.1_Pred3/ ./
+
     mkdir -p /hive/data/genomes/panRed1/ws245
     cd /hive/data/genomes/panRed1/ws245
 
@@ -20,6 +26,9 @@ ftp://ftp.sanger.ac.uk/pub/wormbase/releases/WS245/species/PRJNA186477
 # >KB455536 1 783189
 #   ...
 
+    # the genbank and ws245 names are identical except the ws245 is
+    # missing the .1 on each name.  Using the ws245 names to be compatible
+    # with WormBase
     # no conversion of names to maintain equivalence with WormBase:
     zcat ../ws245/PRJNA186477/p_redivivus.PRJNA186477.WS245.genomic.fa.gz \
         | sed -e 's/ .*//;' | gzip -c > panRed1.fa.gz
@@ -80,11 +89,10 @@ taxId 6233
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/panRed1/panRed1.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku panRed1) > do.log 2>&1
-XXX - running - Wed Jul  1 12:58:09 PDT 2015
-    # real    16m17.756s
+    # real    1m26.718s
 
     cat fb.panRed1.cpgIslandExtUnmasked.txt
-    # 80597444 bases of 1977771384 (4.075%) in intersection
+    # 5218407 bases of 62228262 (8.386%) in intersection
 
 #############################################################################
 # cytoBandIdeo - (DONE - 2015-07-01 - Hiram)
@@ -93,32 +101,39 @@ XXX - running - Wed Jul  1 12:58:09 PDT 2015
     makeCytoBandIdeo.csh panRed1
 
 #########################################################################
-# ucscToINSDC table/track (TBD - 2015-03-20 - Hiram)
+# ucscToINSDC table/track (DONE - 2015-07-09 - Hiram)
     mkdir /hive/data/genomes/panRed1/bed/ucscToINSDC
     cd /hive/data/genomes/panRed1/bed/ucscToINSDC
 
+    # find accession name for chrM
+    grep chrM ../../*.agp
+# chrM    1       17089   2875    F       KM192364.1      1       17089   +
+
+    # use that as second argument here:
     ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
-       ../../genbank/GCA_*assembly_structure/Primary_Assembly
+       ../../genbank/GCA_*assembly_structure/Primary_Assembly KM192364.1
 
     awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
          | sort > name.coordinate.tab
-    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+    # eliminate the v1 from what would have been the UCSC names from genbank:
+    sed -e 's/v1//;' ucscToINSDC.txt \
+        | join name.coordinate.tab - | tr '[ ]' '[\t]' \
          > ucscToINSDC.bed
     # verify all names are coming through, should be same line count:
     wc -l *
-    # 25187 name.coordinate.tab
-    # 25187 ucscToINSDC.bed
-    # 25187 ucscToINSDC.txt
+    #   941 name.coordinate.tab
+    #   941 ucscToINSDC.bed
+    #   941 ucscToINSDC.txt
 
     cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
-    # 14
-    # use the 14 in this sed
-    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+    # 12
+    # use the 12 in this sed
+    sed -e "s/21/12/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
          | hgLoadSqlTab panRed1 ucscToINSDC stdin ucscToINSDC.bed
     checkTableCoords panRed1
     # should cover %100 entirely:
     featureBits -countGaps panRed1 ucscToINSDC
-    # 2053849526 bases of 2053849526 (100.000%) in intersection
+    # 65110236 bases of 65110236 (100.000%) in intersection
 
 #########################################################################
 # fixup search rule for assembly track/gold table (DONE - 2015-07-01 - Hiram)
@@ -203,22 +218,7 @@ searchPriority 8
     cat fb.simpleRepeat
     # 756466 bases of 62228262 (1.216%) in intersection
 
-XXX - ready after RM or WMSK decision - Tue Jun 30 11:10:17 PDT 2015
-    # using the Window Masker result:
-    cd /hive/data/genomes/panRed1
-    twoBitMask bed/windowMasker/panRed1.cleanWMSdust.2bit \
-       -add bed/simpleRepeat/trfMask.bed  panRed1.2bit
-    #   you can safely ignore the warning about fields >= 13
-    twoBitToFa panRed1.2bit stdout | faSize stdin > faSize.panRed1.2bit.txt
-    cat faSize.panRed1.2bit.txt
-    # 2053849526 bases (76078142 N's 1977771384 real 1208345365
-    #    upper 769426019 lower) in 25187 sequences in 1 files
-    # Total size: mean 81544.0 sd 330701.2 min 200 (JYOU01147511v1)
-    #    max 8606022 (KN905849v1) median 453
-    # %37.46 masked total, %38.90 masked real
-
-    rm /gbdb/panRed1/panRed1.2bit
-    ln -s `pwd`/panRed1.2bit /gbdb/panRed1/panRed1.2bit
+    # using the Window Masker result as indicated below
 
 ##########################################################################
 # CREATE MICROSAT TRACK (DONE - 2015-07-01 - Hiram)
@@ -232,25 +232,24 @@ XXX - ready after RM or WMSK decision - Tue Jun 30 11:10:17 PDT 2015
     # there are none
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2015-06-30 - Hiram)
+## WINDOWMASKER (DONE - 2015-07-01 - Hiram)
 
     mkdir /hive/data/genomes/panRed1/bed/windowMasker
     cd /hive/data/genomes/panRed1/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev panRed1) > do.log 2>&1
-XXX - running - Wed Jul  1 14:48:52 PDT 2015
-    # real    16m56.872s
+    # real    2m57.621s
 
     # Masking statistics
     cat faSize.panRed1.cleanWMSdust.txt
-    # 105997628 bases (11442593 N's 94555035 real 56870098 upper 37684937
-    #    lower) in 34621 sequences in 1 files
-    # Total size: mean 3061.7 sd 18325.0 min 200 (Cang_2012_03_13_34621)
-    #    max 867759 (Cang_2012_03_13_00001) median 356
-    # %35.55 masked total, %39.86 masked real
+    # 65110236 bases (3020128 N's 62090108 real 53046172 upper
+    #    9043936 lower) in 941 sequences in 1 files
+    # Total size: mean 69192.6 sd 150304.4 min 362 (AOMH01000403)
+    #    max 2280433 (KB455460) median 12743
+    # %13.89 masked total, %14.57 masked real
 
     cat fb.panRed1.rmsk.windowmaskerSdust.txt
-    # 1213014 bases of 105997628 (1.144%) in intersection
+    # 167894 bases of 65110236 (0.258%) in intersection
 
     # using this Window Masker result for final masking::
     cd /hive/data/genomes/panRed1
@@ -261,53 +260,54 @@ XXX - running - Wed Jul  1 14:48:52 PDT 2015
     # measure the final masking:
     twoBitToFa panRed1.2bit stdout | faSize stdin > faSize.panRed1.2bit.txt
     cat faSize.panRed1.2bit.txt
-    # 105997628 bases (11442593 N's 94555035 real 56820897 upper
-    #   37734138 lower) in 34621 sequences in 1 files
-    # Total size: mean 3061.7 sd 18325.0 min 200 (Cang_2012_03_13_34621)
-    #   max 867759 (Cang_2012_03_13_00001) median 356
-    # %35.60 masked total, %39.91 masked real
+    #  65110236 bases (3020128 N's 62090108 real 53041454 upper
+    #    9048654 lower)  in 941 sequences in 1 files
+    #  Total size: mean 69192.6 sd 150304.4 min 362 (AOMH01000403)
+    #    max 2280433 (KB455460) median 12743
+    #  %13.90 masked total, %14.57 masked real
 
     # and reset the symlink
     rm /gbdb/panRed1/panRed1.2bit
     ln -s /hive/data/genomes/panRed1/panRed1.2bit /gbdb/panRed1/panRed1.2bit
 
 ##########################################################################
-# cpgIslands - (TBD - 2015-06-30 - Hiram)
+# cpgIslands - (DONE - 2015-07-01 - Hiram)
     mkdir /hive/data/genomes/panRed1/bed/cpgIslands
     cd /hive/data/genomes/panRed1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku panRed1) > do.log 2>&1 &
-    # real    19m6.982s
+    # real    1m21.903s
 
     cat fb.panRed1.cpgIslandExt.txt
-    # 5267650 bases of 95237926 (5.531%) in intersection
+    # 3948577 bases of 62228262 (6.345%) in intersection
 
 #########################################################################
-# augustus - (TBD - 2015-06-30 - Hiram)
+# augustus - (DONE - 2015-07-09 - Hiram)
     mkdir /hive/data/genomes/panRed1/bed/augustus
     cd /hive/data/genomes/panRed1/bed/augustus
+    #  XXX this is not specifically correct, the species caenorhabditis
+    #      is not necessarily accurate here
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
       -species=caenorhabditis -dbHost=hgwdev \
          -workhorse=hgwdev panRed1) > do.log 2>&1
-XXX - running - Tue Jun 30 14:19:12 PDT 2015
-    # real    80m33.289s
+    # real    13m23.195s
 
     cat fb.panRed1.augustusGene.txt
-    # 27859792 bases of 1842252119 (1.512%) in intersection
+    # 24225124 bases of 62228262 (38.929%) in intersection
 
 #########################################################################
-# genscan - (TBD - 2015-06-30 - Hiram)
+# genscan - (DONE - 2015-07-01 - Hiram)
     mkdir /hive/data/genomes/panRed1/bed/genscan
     cd /hive/data/genomes/panRed1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku panRed1) > do.log 2>&1
-    # real    25m47.870s
+    # real    2m58.421s
 
     cat fb.panRed1.genscan.txt
-    #   7719994 bases of 95237926 (8.106%) in intersection
+    #   13419606 bases of 62228262 (21.565%) in intersection
 
     cat fb.panRed1.genscanSubopt.txt
-    #   5785394 bases of 95237926 (6.075%) in intersection
+    #  9038121 bases of 62228262 (14.524%) in intersection
 
 ########################################################################
 # Create kluster run files (TBD - 2015-03-24 - Hiram)
