@@ -132,7 +132,8 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
 	caeSp91 \
 	caeSp111 \
 	caeJap1 caeJap2 caeJap3 caeJap4 \
-        panRed1 \
+	dirImm1 \
+	panRed1 \
 	priPac1 priPac2 priPac3 \
 	caePb1 caePb2 caePb3 \
 	bruMal1 bruMal2 \
@@ -144,8 +145,8 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
 	sacCer1 sacCer2 sacCer3 \
 	sc1 \
 	h1n1 \
-        marVir1 \
-        eboVir3 eboVir2 eboVir1 bunEbo1 sudEbo1 resEbo1 taiEbo1 zaiEbo1 \
+	marVir1 \
+	eboVir3 eboVir2 eboVir1 bunEbo1 sudEbo1 resEbo1 taiEbo1 zaiEbo1 \
 	centromeres1 \
 	repeats2 \
 	plasFalc3D7V12
