@@ -143,6 +143,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
 	melInc1 melInc2 \
 	haeCon1 haeCon2 \
 	oncVol1 \
+	triSpi1 \
 	falciparum \
 	choHof1 \
 	sacCer1 sacCer2 sacCer3 \
