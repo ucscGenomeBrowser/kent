@@ -52,36 +52,17 @@
 <H1>Hub Track Database Definition (<SPAN id="trackDbHub_version">v1</SPAN>)</H1>
 <H2>How to declare Dataset Display Settings in Genome Browser Hubs</H2>
     <P>This document describes how to set dataset display characteristics
-    in a Genome Browser Hub using trackDb settings.  These settings are used to 
-    declare the location and format of a dataaset and to customize the display appearance.
-    They are defined in a simple text file format and loaded into the Browser's
-    "track database",  or trackDb for short.</P>
+    using "track database" or "trackDb" settings through key-value pair
+    associations used in a Track Hub's trackDb.txt file.
 
-    <P>While there are over 100 supported settings (providing a high level of flexibility
-    for track display), only 5 are required to define a track.
-    To foster portability to other sites that display track hubs, a subset of settings 
-    are designated 'base' and this specification document is assigned a version number.
-    All settings in this document are assigned a 'support level', shown here in the 
-    setting title color, the description, and the 
-    <A HREF="#toc">Table of Contents</A>. The support levels are:
-    <table style="margin-left: 50px;">
-        <tr><td class="level-required">required</td><td>required settings</td></tr>
-        <tr><td class="level-base">base</td><td>common settings supported at other sites</td></tr>
-        <tr><td class="level-deprecated">deprecated</td><td>settings that are being retired (replacement is listed in details section)</td></tr>
-        <tr><td class="level-new">new</td><td>new settings not yet assigned a level (may be replaced)</td></tr>
-        <tr><td class="level-full">full</td><td>other settings</td></tr>
-    </table>
-
-    <P>The text file format
-    for trackDb settings follow the simple "ra" rules which
-    establish a "record" as a set of related settings in a
-    "stanza" delimited by blank lines.  The first line of
-    each stanza typically establishes the "key".  Each line
-    in a stanza will contain a single word "setting" name and
-    one or more words or numbers that follow are the setting's
-    "value".   All trackDb stanzas are keyed by "track"
-    and most will have certain common settings followed by track specific
-    settings.  Here is an example:</P>
+    <P>The text file format for trackDb settings starts by creating a
+    text block, or "stanza", for each track dataset following
+    "ra" rules to establish a "record" of related settings. The first
+    line establishes the <code>track</code> "key", with additional lines
+    containing further "setting" keys, and one or more words or numbers
+    that follow, which are the "values" for each setting.  All trackDb
+    stanzas are keyed by <code>track</code> and delimited by blank lines.
+    Here is an example:</P>
 
     <pre>
         track myFirstTrack
@@ -90,14 +71,44 @@
         shortLabel Example Data
         longLabel The data in this track is format "bigBed 3".    </pre>
 
-    <P>Every hub track should have these five settings.  
-    The key of this track (<code>myFirstTrack</code>)
-    is the name of the dataset and is typically the root file name.  However, this
-    is a key to the track so it must be unique within your data hub.
-    After the "track" key, the most important setting for
-    defining a track is the "type".  This tells the Browser
-    which format the data is in, defines how to display it, and determines 
+    <P>A basic track stanza should have these five above settings
+    (<code>track type bigDataUrl shortLabel longLabel</code>).
+    The first line's <code>track</code> key value (<code>myFirstTrack</code>) is the
+    identifier for the dataset given to the browser and it must be
+    unique for each track within your data hub.  After the <code>track</code> key,
+    the most important setting is the <code>type</code> key. This value
+    (<code>bigBed 3</code>) tells the Browser the type of format the
+    data is in, defines how to display it, and determines
     which options are available for fine control of that display.
+    </P>
+
+    <P>While there are over 100 settings with &quot;<font class="level-full">full</font>&quot;
+    support (providing a high level of flexibility for track
+    display), only the above five are <font class="level-required">required</font>
+    to define a track. The most commonly used and broadly supported settings have
+    been designated as <font class="level-base">base</font> settings. The
+    <font class="level-base">base</font> settings essentially exist to foster
+    portability of track hubs by easing the task of coordinating hub developers
+    and the sites that display hubs. Each setting has
+    been assigned a level with a matching color, shown below and in each description
+    section as well as in the <A HREF="#toc">Table of Contents</A>.
+    The support levels are:
+    <table style="margin-left: 50px;">
+        <tr><td class="level-required">required</td><td>required settings</td></tr>
+        <tr><td class="level-base">base</td><td>common settings supported
+            at other sites</td></tr>
+        <tr><td class="level-deprecated">deprecated</td><td>settings that
+            are being retired (replacement is listed in details section)</td></tr>
+        <tr><td class="level-new">new</td><td>new settings not yet assigned
+            a level (may be replaced)</td></tr>
+        <tr><td class="level-full">full</td><td>other settings</td></tr>
+    </table>
+    </P>
+    <P>This documentation page has also been assigned a version number (<code>v1</code>)
+    so that when  <font class="level-new">new</font> settings are added, or
+    older settings are  <font class="level-deprecated">deprecated</font>
+    other browser sites and track hub builders can find the associated page
+    (i.e., <code>trackDbHub.v1.html</code>).
     </P>
 </DIV>
 
