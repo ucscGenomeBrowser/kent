@@ -55,7 +55,7 @@ while (lineFileNextReal(lf, &line))
     char copy[strlen(line)+1];
     safecpy(copy, sizeof(copy), line);
     char *words[5];
-    int wordCount = chopByWhite(copy, words, sizeof(words));
+    int wordCount = chopByWhite(copy, words, ArraySize(words));
     boolean badFormat = FALSE;
     boolean gotError = FALSE;
     /*	might be something of the form: chrom:start-end optionalRegionName */

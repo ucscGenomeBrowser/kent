@@ -328,3 +328,20 @@ caeAng1.perChromTables = no
 	goldenPath/bigZips/chromWMSdust.bed.gz
 
 ############################################################################
+# LIFTOVER TO caeAng2 (DONE - 2015-07-07 - Hiram )
+    mkdir /hive/data/genomes/caeAng1/bed/blat.caeAng2.2015-07-07
+    cd /hive/data/genomes/caeAng1/bed/blat.caeAng2.2015-07-07
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/caeAng1/jkStuff/caeAng1.11.ooc -debug caeAng1 caeAng2
+    # Real run:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+       -ooc=/hive/data/genomes/caeAng1/jkStuff/caeAng1.11.ooc caeAng1 caeAng2) \
+		> do.log 2>&1
+    #	real    5m25.093s
+    # verify it works on genome-test
+
+#############################################################################

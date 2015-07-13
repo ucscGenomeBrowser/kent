@@ -23,7 +23,7 @@ if options.debug:
 else:
     logging.basicConfig(level=logging.INFO)
 
-clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	ClinicalSignificance	RS# (dbSNP)	nsv (dbVar)	RCVaccession	TestedInGTR	PhenotypeIDs	Origin	Assembly	Chromosome	Start	Stop	Cytogenetic	ReviewStatus	HGVS(c.)	HGVS(p.)	NumberSubmitters	LastEvaluated	Guidelines	OtherIDs	VariantID\n"
+clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	ClinicalSignificance	RS# (dbSNP)	nsv (dbVar)	RCVaccession	TestedInGTR	PhenotypeIDs	Origin	Assembly	Chromosome	Start	Stop	Cytogenetic	ReviewStatus	HGVS(c.)	HGVS(p.)	NumberSubmitters	LastEvaluated	Guidelines	OtherIDs	VariantID	ReferenceAllele	AlternateAllele	SubmitterCategories\n"
 # ==== FUNCTIONs =====
 
 def shortenName(name):
@@ -116,7 +116,11 @@ ifh = gzip.open(filename)
 
 # check the header
 line1 = ifh.readline()
-assert(line1 == clinvarExpectHeaders) # test if clinvar has changed their header line again
+if (line1 != clinvarExpectHeaders): # test if clinvar has changed their header line again
+    logging.error("ClinVar has changed their header line again")
+    logging.error("current header line: %s" % line1)
+    logging.error("expected header line: %s" % clinvarExpectHeaders)
+    raise Exception("code needs fixing")
 
 # open out files
 hg19Bed = open("archive/clinvarMain.hg19.%sbed" % outSuffix, "w")
@@ -134,8 +138,8 @@ for line in ifh:
 
     alleleId, allType, name, geneId, geneSymbol, clinSign, snpAcc, dbVarAcc, \
       irvcAcc, inGtr, phenotypeIds, origin, assembly, chrom, start, end, cytogenetic, \
-      reviewStatus, hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds, varId \
-           = line.split("\t")
+      reviewStatus, hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds, varId, \
+      refAll, varAll, submCategories = line.split("\t")
 
     if chrom=="" or assembly=="" or assembly=="NCBI36":
         noAssCount += 1

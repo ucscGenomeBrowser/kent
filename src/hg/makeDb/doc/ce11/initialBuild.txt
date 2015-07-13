@@ -510,7 +510,7 @@ searchPriority 8
     #   sizes will set properly
 
 #########################################################################
-# LIFTOVER TO ce6 (DONE - 2011-05-24 - Hiram )
+# LIFTOVER TO ce6 (DONE - 2015-06-23 - Hiram )
     mkdir /hive/data/genomes/ce11/bed/blat.ce6.2015-06-23
     cd /hive/data/genomes/ce11/bed/blat.ce6.2015-06-23
     # -debug run to create run dir, preview scripts...
@@ -527,7 +527,7 @@ searchPriority 8
     # verify it works on genome-test
 
 #############################################################################
-# LIFTOVER TO ce10 (DONE - 2011-05-24 - Hiram )
+# LIFTOVER TO ce10 (DONE - 2015-06-23 - Hiram )
     mkdir /hive/data/genomes/ce11/bed/blat.ce10.2015-06-23
     cd /hive/data/genomes/ce11/bed/blat.ce10.2015-06-23
     # -debug run to create run dir, preview scripts...
@@ -540,7 +540,7 @@ searchPriority 8
      -buildDir=`pwd` \
       -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
        -ooc=/hive/data/genomes/ce11/jkStuff/ce11.11.ooc ce11 ce10) > do.log 2>&1
-    #  real    3m53.579s
+    #  real    3m23.330s
     # verify it works on genome-test
 
 #############################################################################

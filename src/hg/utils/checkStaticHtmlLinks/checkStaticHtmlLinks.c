@@ -1,4 +1,7 @@
-/* checkStaticHtmlLinks - strip out all but first record found */
+/* checkStaticHtmlLinks - checks htdocs and htdocsExtra static html files
+ *   
+ *   TODO - fix to process included files the same way that hgMenubar does.
+ */
 
 /* Copyright (C) 2011 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
@@ -15,7 +18,7 @@ boolean makeLinksRelative = FALSE;
 char *fixMsg = "WOULD FIX";
 
 static struct optionSpec options[] = {
-   {"-help", OPTION_BOOLEAN},
+   {"help", OPTION_BOOLEAN},
    {"makeLinksRelative", OPTION_BOOLEAN},
    {NULL, 0},
 };

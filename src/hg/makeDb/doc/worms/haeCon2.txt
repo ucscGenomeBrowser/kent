@@ -1,0 +1,445 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes how the browser for Haemonchus contortus
+# Haemonchus_contortus_MHco3-2.0
+# version is built
+
+##############################################################################
+# download sequence, create UCSC sequence (DONE - 2015-06-24 - Hiram)
+    mkdir -p /hive/data/genomes/haeCon2/ws245
+    cd /hive/data/genomes/haeCon2/ws245
+
+    wget --no-parent --timestamping -m -nH --cut-dirs=6 \
+ftp://ftp.sanger.ac.uk/pub/wormbase/releases/WS245/species/PRJEB506
+
+    mkdir /hive/data/genomes/haeCon2/ucsc
+    cd /hive/data/genomes/haeCon2/ucsc
+    # WormBase contig names are of the pattern:
+# >scaffold_1 1 947606
+# >scaffold_2 1 768212
+# >scaffold_3 1 735772
+# >scaffold_4 1 629041
+#   ...
+
+    # no conversion of names to maintain equivalence with WormBase:
+    zcat ../ws245/PRJEB506/h_contortus.PRJEB506.WS245.genomic.fa.gz \
+        | sed -e 's/ 1.*//;' | gzip -c > haeCon2.fa.gz
+
+    hgFakeAgp haeCon2.fa.gz haeCon2.agp
+
+#############################################################################
+#  Initial database build (DONE - 2015-07-02 - Hiram)
+
+    cd /hive/data/genomes/haeCon2
+    cat << '_EOF_' > haeCon2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db haeCon2
+clade worm
+# genomeCladePriority 86
+scientificName Haemonchus contortus
+commonName H. contortus
+assemblyDate Jul. 2013
+assemblyLabel Sanger Institute
+assemblyShortLabel WormBase WS239
+orderKey 8004
+mitoAcc EU346694.2
+fastaFiles /hive/data/genomes/haeCon2/ucsc/haeCon2.fa.gz
+agpFiles /hive/data/genomes/haeCon2/ucsc/haeCon2.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://www.wormbase.org/species/h_contortus#0--10
+photoCreditName Wellcome Trust Sanger Institute H. contortus genome project
+ncbiGenomeId 16936
+ncbiAssemblyId 64951
+ncbiAssemblyName Haemonchus_contortus_MHco3-2.0
+ncbiBioProject 194485
+genBankAccessionID GCA_000469685.1
+taxId 6289
+'_EOF_'
+    # << happy emacs
+
+    # had to remove duplicate sequences from the original
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp haeCon2.config.ra) > agp.log 2>&1
+    # *** All done!  (through the 'agp' step)
+    # real    0m46.403s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db haeCon2.config.ra) > db.log 2>&1
+    # real    3m34.049s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2015-07-02 - Hiram)
+    mkdir /hive/data/genomes/haeCon2/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/haeCon2/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/haeCon2/haeCon2.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku haeCon2) > do.log 2>&1
+    # real    15m12.545s
+
+    cat fb.haeCon2.cpgIslandExtUnmasked.txt
+    # 18622402 bases of 346001353 (5.382%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-07-02 - Hiram)
+    mkdir /hive/data/genomes/haeCon2/bed/cytoBand
+    cd /hive/data/genomes/haeCon2/bed/cytoBand
+    makeCytoBandIdeo.csh haeCon2
+
+#########################################################################
+# ucscToINSDC table/track (TBD - 2015-03-20 - Hiram)
+    mkdir /hive/data/genomes/haeCon2/bed/ucscToINSDC
+    cd /hive/data/genomes/haeCon2/bed/ucscToINSDC
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+       ../../genbank/GCA_*assembly_structure/Primary_Assembly
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    # 25187 name.coordinate.tab
+    # 25187 ucscToINSDC.bed
+    # 25187 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab haeCon2 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords haeCon2
+    # should cover %100 entirely:
+    featureBits -countGaps haeCon2 ucscToINSDC
+    # 2053849526 bases of 2053849526 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2015-07-02 - Hiram)
+    hgsql -N -e "select frag from gold;" haeCon2 | sort | head -3
+EU346694.2
+scaffold_10000_1
+scaffold_10001_1
+
+    hgsql -N -e "select frag from gold;" haeCon2 | sort | tail -2
+scaffold_9_8
+scaffold_9_9
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" haeCon2 | wc -l
+    # 54694
+
+    hgsql -N -e "select frag from gold;" haeCon2 \
+      | egrep -e '[Es][Uc][adflo0-9]*([_\.])?[0-9]*(\_[0-9]*)?' \
+        | wc -l
+    # 54694
+
+    hgsql -N -e "select frag from gold;" haeCon2 \
+      | egrep -v -e '[Es][Uc][adflo0-9]*([_\.])?[0-9]*(\_[0-9]*)?' \
+       | wc -l
+    # 0
+
+    # hence, add to trackDb/worm/haeCon2/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [Es][Uc][adflo0-9]*([_\.])?[0-9]*(\_[0-9]*)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+##########################################################################
+# running repeat masker (DONE - 2015-07-02 - Hiram)
+    mkdir /hive/data/genomes/haeCon2/bed/repeatMasker
+    cd /hive/data/genomes/haeCon2/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku haeCon2) > do.log 2>&1
+    # real    240m0.986s
+
+    cat faSize.rmsk.txt
+    # 369720058 bases (23804161 N's 345915897 real 342326326 upper
+    #    3589571 lower) in 23823 sequences in 1 files
+    # Total size: mean 15519.5 sd 41044.7 min 101 (scaffold_23862)
+    #    max 947606 (scaffold_1) median 1515
+    # %0.97 masked total, %1.04 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;    
+
+    time featureBits -countGaps haeCon2 rmsk
+    # 3590455 bases of 369720058 (0.971%) in intersection
+    # real    0m8.681s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2015-07-02 - Hiram)
+
+    mkdir /hive/data/genomes/haeCon2/bed/simpleRepeat
+    cd /hive/data/genomes/haeCon2/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        haeCon2) > do.log 2>&1
+    # real    9m29.002s
+
+    cat fb.simpleRepeat
+    # 5523864 bases of 346001353 (1.596%) in intersection
+
+    # using the Window Masker result as indicated below
+
+##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-07-02 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/haeCon2/bed/microsat
+     cd /cluster/data/haeCon2/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed haeCon2 microsat microsat.bed
+    #	Read 762 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2015-07-06 - Hiram)
+
+    mkdir /hive/data/genomes/haeCon2/bed/windowMasker
+    cd /hive/data/genomes/haeCon2/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev haeCon2) > do.log 2>&1
+    # real    26m4.925s
+
+    # Masking statistics
+    cat faSize.haeCon2.cleanWMSdust.txt
+    # 369720058 bases (23804161 N's 345915897 real 272772728 upper
+    #    73143169 lower) in 23823 sequences in 1 files
+    # Total size: mean 15519.5 sd 41044.7 min 101 (scaffold_23862)
+    #    max 947606 (scaffold_1) median 1515
+    # %19.78 masked total, %21.14 masked real
+
+    cat fb.haeCon2.rmsk.windowmaskerSdust.txt
+    # 2870130 bases of 369720058 (0.776%) in intersection
+
+    # using this Window Masker result for final masking::
+    cd /hive/data/genomes/haeCon2
+    #   you can safely ignore the warning about fields >= 13
+    twoBitMask bed/windowMasker/haeCon2.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  haeCon2.2bit
+
+    # measure the final masking:
+    twoBitToFa haeCon2.2bit stdout | faSize stdin > faSize.haeCon2.2bit.txt
+    cat faSize.haeCon2.2bit.txt
+    # 369720058 bases (23804161 N's 345915897 real 272735439 upper
+    #    73180458 lower) in 23823 sequences in 1 files
+    # Total size: mean 15519.5 sd 41044.7 min 101 (scaffold_23862)
+    #    max 947606 (scaffold_1) median 1515
+    # %19.79 masked total, %21.16 masked real
+
+    # and reset the symlink
+    rm /gbdb/haeCon2/haeCon2.2bit
+    ln -s /hive/data/genomes/haeCon2/haeCon2.2bit /gbdb/haeCon2/haeCon2.2bit
+
+##########################################################################
+# cpgIslands - (DONE - 2015-07-06 - Hiram)
+    mkdir /hive/data/genomes/haeCon2/bed/cpgIslands
+    cd /hive/data/genomes/haeCon2/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku haeCon2) > do.log 2>&1 &
+    # real    13m56.640s
+
+    cat fb.haeCon2.cpgIslandExt.txt
+    # 5472466 bases of 346001353 (1.582%) in intersection
+
+#########################################################################
+# augustus - (DONE - 2015-07-06 - Hiram)
+    # This is not necessarily correct, the caenorhabditis species setting
+    # is not ideal here:
+    mkdir /hive/data/genomes/haeCon2/bed/augustus
+    cd /hive/data/genomes/haeCon2/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+      -species=caenorhabditis -dbHost=hgwdev \
+         -workhorse=hgwdev haeCon2) > do.log 2>&1
+    # real    70m9.005s
+
+    cat fb.haeCon2.augustusGene.txt
+    # 36765684 bases of 346001353 (10.626%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2015-07-06 - Hiram)
+    mkdir /hive/data/genomes/haeCon2/bed/genscan
+    cd /hive/data/genomes/haeCon2/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku haeCon2) > do.log 2>&1
+    # real    24m20.289s
+
+    cat fb.haeCon2.genscan.txt
+    #   20302013 bases of 346001353 (5.868%) in intersection
+
+    cat fb.haeCon2.genscanSubopt.txt
+    #   21532138 bases of 346001353 (6.223%) in intersection
+
+########################################################################
+# Create kluster run files (DONE - 2015-07-07 - Hiram)
+
+    cd /hive/data/genomes/haeCon2
+    # numerator is haeCon2 gapless bases "real" as reported by:
+    head -1 faSize.haeCon2.2bit.txt
+# 369720058 bases (23804161 N's 345915897 real 272735439 upper 73180458 lower)
+# in 23823 sequences in 1 files
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 345915897 / 2861349177 \) \* 1024
+    # ( 345915897 / 2861349177 ) * 1024 = 123.794006
+
+    # ==> use -repMatch=100 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/haeCon2
+    time blat haeCon2.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/haeCon2.11.ooc \
+        -repMatch=100
+    # Wrote 15059 overused 11-mers to jkStuff/haeCon2.11.ooc
+    # real    0m6.125s
+
+    # there are a few non-bridged gaps
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N -e 'select * from gap where bridge="no" order by size;' haeCon2 \
+       | ave -tableOut -col=7 stdin
+# min Q1 median Q3 max mean N sum stddev
+# 50702 51980 52642 74987 83718 61113.4 17 1.03893e+06 11299.2
+
+    # note the minimum non-bridged gap size is 50,702
+
+    gapToLift -verbose=2 -minGap=50000 haeCon2 jkStuff/haeCon2.nonBridged.lft \
+         -bedFile=jkStuff/haeCon2.nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 23823, total size: 369720058, one half size: 184860029
+# cumulative    N50 count       contig  contig size
+# 184836276       1149    scaffold_1149   83305
+# 184860029 one half size
+# 184919575       1150    scaffold_1150   83299
+
+#############################################################################
+# GENBANK AUTO UPDATE (TBD - 2015-06-09 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism               mrnaCnt estCnt  refSeqCnt
+    #  Pristionchus pacificus  97      37470   0
+
+    # edit etc/genbank.conf to add haeCon2 just before priPac1
+
+# haeCon2 (P. pacificus)
+haeCon2.serverGenome = /hive/data/genomes/haeCon2/haeCon2.2bit
+haeCon2.clusterGenome = /hive/data/genomes/haeCon2/haeCon2.2bit
+haeCon2.ooc = /hive/data/genomes/haeCon2/jkStuff/haeCon2.11.ooc
+haeCon2.lift = /hive/data/genomes/haeCon2/jkStuff/haeCon2.nonBridged.lft
+haeCon2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+haeCon2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+haeCon2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+haeCon2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+haeCon2.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+haeCon2.refseq.mrna.native.load = yes
+haeCon2.refseq.mrna.xeno.load  = yes
+haeCon2.refseq.mrna.xeno.loadDesc = yes
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+haeCon2.genbank.mrna.xeno.load = no
+haeCon2.genbank.est.native.load = yes
+haeCon2.genbank.est.native.loadDesc = no
+haeCon2.downloadDir = haeCon2
+haeCon2.perChromTables = no
+
+    git commit -m "Added haeCon2 - P. pacificus refs #15209" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/etc/:
+    make etc-update
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial haeCon2
+    # logFile: var/build/logs/2015.07.02-11:39:01.haeCon2.initalign.log
+    # real    1651m57.350s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.haeCon2
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad haeCon2
+    # logFile: var/dbload/hgwdev/logs/2015.06.09-14:34:12.haeCon2.dbload.log
+    # real    128m32.009s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add haeCon2 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added haeCon2 - Tibetan frog refs #15056" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2015-06-22 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=haeCon2 -tableCoverage all.joiner
+    joinerCheck -database=haeCon2 -times all.joiner
+    joinerCheck -database=haeCon2 -keys all.joiner
+
+    cd /hive/data/genomes/haeCon2
+    time makeDownloads.pl haeCon2 > downloads.log 2>&1
+    # real    13m42.027s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/haeCon2/pushQ
+    cd /hive/data/genomes/haeCon2/pushQ
+    makePushQSql.pl haeCon2 > haeCon2.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/haeCon2/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/haeCon2/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/haeCon2/bbi/qualityBw/quality.bw
+    # WARNING: haeCon2 does not have seq
+    # WARNING: haeCon2 does not have extFile
+    # WARNING: haeCon2 does not have estOrientInfo
+    # WARNING: haeCon2 does not have mrnaOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p haeCon2.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/haeCon2.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################
+# LIFTOVER TO haeCon1 (DONE - 2015-07-07 - Hiram )
+    mkdir /hive/data/genomes/haeCon2/bed/blat.haeCon1.2015-07-07
+    cd /hive/data/genomes/haeCon2/bed/blat.haeCon1.2015-07-07
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+  -ooc=/hive/data/genomes/haeCon2/jkStuff/haeCon2.11.ooc -debug haeCon2 haeCon1
+    # Real run:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+       -ooc=/hive/data/genomes/haeCon2/jkStuff/haeCon2.11.ooc haeCon2 haeCon1) \
+		> do.log 2>&1
+    #	real    11m17.699s
+    # verify it works on genome-test
+
+#############################################################################

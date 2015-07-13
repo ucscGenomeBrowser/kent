@@ -463,3 +463,20 @@ cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin \
     hgsql qapushq < haeCon1.sql
 
 #######################################################################
+# LIFTOVER TO haeCon2 (DONE - 2015-07-07 - Hiram )
+    mkdir /hive/data/genomes/haeCon1/bed/blat.haeCon2.2015-07-07
+    cd /hive/data/genomes/haeCon1/bed/blat.haeCon2.2015-07-07
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/haeCon1/haeCon1.11.ooc -debug haeCon1 haeCon2
+    # Real run:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/haeCon1/haeCon1.11.ooc haeCon1 haeCon2) \
+		> do.log 2>&1
+    #	real    8m41.056s
+    # verify it works on genome-test
+
+#############################################################################

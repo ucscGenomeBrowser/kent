@@ -230,10 +230,10 @@ var ImModel = (function() {
             this.render();
         },
 
-        cartDo: function(commandObj, errorHandler) {
-            // Send a command to the server; bind this.handleServerResponseWithError to
-            // errorHandler if errorHandler is passed in, otherwise bind to null for default.
-            // errorHandler will be given the server's error message.
+        handlerForErrorHandler: function (errorHandler) {
+            // If a custom errorHandler is provided, then return
+            // this.handleServerResponseWithErrorHandler bound to errorHandler.
+            // Otherwise return it bound to null so it wil use this.defaultServerErrorHandler.
             var handler = this.handleServerResponse;
             if (errorHandler) {
                 handler = _.bind(this.handleServerResponseWithErrorHandler,
@@ -243,7 +243,19 @@ var ImModel = (function() {
                                                    this, null);
                 handler = this.handleServerResponse;
             }
+            return handler;
+        },
+
+        cartDo: function(commandObj, errorHandler) {
+            // Send a command to the server, expecting a response.
+            var handler = this.handlerForErrorHandler(errorHandler);
             this.cart.send(commandObj, handler);
+        },
+
+        cartUploadFile: function(commandObj, jqFileInput, errorHandler) {
+            // Send a command to the server, along with the file contents of jqFileInput.
+            var handler = this.handlerForErrorHandler(errorHandler);
+            this.cart.uploadFile(commandObj, jqFileInput, handler);
         },
 
         cartSend: function(commandObj) {

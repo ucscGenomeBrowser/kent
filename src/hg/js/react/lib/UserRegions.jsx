@@ -15,13 +15,14 @@ var UserRegions = React.createClass({
                  settings: pt.object   // expected: Immutable { enabled: bool, regions: string }
                },
 
+    fileInputName: 'regionFile',
+
     getInitialState: function() {
         // Keep regions as local state until user is done with this popup.
         // Keep track of whether user is sending file or pasted text.
         var settings = this.props.settings;
         var initialRegions = settings ? settings.get('regions') : "";
-        return { regions: initialRegions,
-                 sendingFile: false };
+        return { regions: initialRegions };
     },
 
     setRegions: function(newValue) {
@@ -34,16 +35,6 @@ var UserRegions = React.createClass({
         return this.state.regions;
     },
 
-    setSendingFile: function(newValue) {
-        // Update local state's notion of whether we're sending file or pasted data.
-        this.setState({ sendingFile: newValue });
-    },
-
-    getSendingFile: function() {
-        // Get local state's notion of whether we're sending file or pasted data.
-        return this.state.sendingFile;
-    },
-
     componentWillReceiveProps: function(nextProps) {
         // Update local state when a new value is handed down from above.
         // We can't do this during render because then the user's changes are ignored!
@@ -53,12 +44,11 @@ var UserRegions = React.createClass({
         }
     },
 
-    onChangeFile: function(ev) {
+    onChangeFile: function() {
         // User selected a file to upload; clear textarea regions because they will be ignored
         // if a file is uploaded.
-        console.log("onChangeFile", ev.target.files);
+        // This could access ev.target.files if necessary, ev being the first argument.
         this.setRegions('');
-        this.setSendingFile(true);
     },
 
     resetFileInput: function() {
@@ -74,9 +64,7 @@ var UserRegions = React.createClass({
     updateTextArea: function(path, newValue) {
         // User entered some regions in the TextArea; reflect their changes in local state.
         // Also reset the file input because user can send one or the other, not both.
-        console.log("updateTextArea", newValue);
         this.setRegions(newValue);
-        this.setSendingFile(false);
         this.resetFileInput();
     },
 
@@ -88,15 +76,34 @@ var UserRegions = React.createClass({
 
     onCancel: function() {
         // User clicked cancel; tell the model to close this
-        console.log("onCancel");
         this.props.update(this.props.path.concat('cancel'));
+    },
+
+    getFileElement: function() {
+        var selector = 'input[type="file"][name="' + this.fileInputName + '"]';
+        var jqFileInput = $(selector);
+        if (jqFileInput.length !== 1) {
+            this.error('UserRegions: can\'t find file input with selector "' + selector + '"');
+        }
+        return jqFileInput;
     },
 
     onSubmit: function() {
         // Now send the pasted or uploaded regions to the server, and tell model to close this.
-        console.log("onSubmit");
-        if (this.getSendingFile()) {
-            this.props.update(this.props.path.concat('uploaded'));
+        var jqFileInput = this.getFileElement();
+        var fileInputEl = jqFileInput[0];
+        var gotFile = false;
+        if (fileInputEl) {
+            if (fileInputEl.files) {
+                if (fileInputEl.files.length > 0) {
+                    gotFile = true;
+                }
+            } else if (jqFileInput.val()) {
+                gotFile = true;
+            }
+        }
+        if (gotFile) {
+            this.props.update(this.props.path.concat('uploaded'), jqFileInput);
         } else {
             this.props.update(this.props.path.concat('pasted'), this.getRegions());
         }
@@ -108,7 +115,7 @@ var UserRegions = React.createClass({
                 <Modal title='Paste/Upload Regions'
                        path={this.props.path} update={this.props.update}>
                   <br />
-                  Upload file: <input type='file' name='regionFile'
+                  Upload file: <input type='file' name={this.fileInputName}
                                       onChange={this.onChangeFile} />
                   <br />
                   Or paste regions: <span style={{width: '10em'}} />
