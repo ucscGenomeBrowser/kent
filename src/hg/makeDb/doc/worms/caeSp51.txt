@@ -77,11 +77,10 @@ taxId 1219476
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/caeSp51/caeSp51.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku caeSp51) > do.log 2>&1
-XXX - running - Wed Jul  8 10:26:37 PDT 2015
-    # real    16m17.756s
+    # real    11m21.377s
 
     cat fb.caeSp51.cpgIslandExtUnmasked.txt
-    # 80597444 bases of 1977771384 (4.075%) in intersection
+    # 3359804 bases of 130562982 (2.573%) in intersection
 
 #############################################################################
 # cytoBandIdeo - (DONE - 2015-07-08 - Hiram)
@@ -91,6 +90,7 @@ XXX - running - Wed Jul  8 10:26:37 PDT 2015
 
 #########################################################################
 # ucscToINSDC table/track (TBD - 2015-03-20 - Hiram)
+    # do this on assemblies from genbank, not WormBase
     mkdir /hive/data/genomes/caeSp51/bed/ucscToINSDC
     cd /hive/data/genomes/caeSp51/bed/ucscToINSDC
 
@@ -118,35 +118,36 @@ XXX - running - Wed Jul  8 10:26:37 PDT 2015
     # 2053849526 bases of 2053849526 (100.000%) in intersection
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2015-06-30 - Hiram)
+# fixup search rule for assembly track/gold table (DONE - 2015-07-09 - Hiram)
     hgsql -N -e "select frag from gold;" caeSp51 | sort | head -1
-Cang_2012_03_13_00001_1
+Csp5_scaffold_00001_1
+
 
     hgsql -N -e "select frag from gold;" caeSp51 | sort | tail -2
-Cang_2012_03_13_34620_1
-Cang_2012_03_13_34621_1
+Csp5_scaffold_15260_1
+Csp5_scaffold_15261_1
 
     # verify this rule will find them all or eliminate them all:
     hgsql -N -e "select frag from gold;" caeSp51 | wc -l
-    # 65510
+    # 26360
 
     hgsql -N -e "select frag from gold;" caeSp51 \
-       | egrep -e 'Cang_2012_03_13_[0-9]+(\_1)?' | wc -l
-    # 65510
+       | egrep -e 'Csp5_scaffold_[0-9]*(_[0-9]*)?' | wc -l
+    # 26360
 
     hgsql -N -e "select frag from gold;" caeSp51 \
-       | egrep -v -e 'Cang_2012_03_13_[0-9]+(\_1)?' | wc -l
+       | egrep -v -e 'Csp5_scaffold_[0-9]*(_[0-9]*)?' | wc -l
     # 0
 
     # hence, add to trackDb/worm/caeSp51/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex Cang_2012_03_13_[0-9]+(\_1)?
+termRegex Csp5_scaffold_[0-9]*(_[0-9]*)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
 ##########################################################################
-# running repeat masker (TBD - 2015-06-30 - Hiram)
+# running repeat masker (DONE - 2015-07-08 - Hiram)
     mkdir /hive/data/genomes/caeSp51/bed/repeatMasker
     cd /hive/data/genomes/caeSp51/bed/repeatMasker
     # RM can't recognize this non-standard species name, it does know this one:
@@ -156,15 +157,14 @@ searchPriority 8
         -species="caenorhabditis elegans" \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku caeSp51) > do.log 2>&1
-XXX - running - Wed Jul  8 10:54:43 PDT 2015
-    # real    218m26.151s
+    # real    223m36.259s
 
     cat faSize.rmsk.txt
-    # 105997628 bases (11442593 N's 94555035 real 92971538 upper
-    #    1583497 lower) in 34621 sequences in 1 files
-    #  Total size: mean 3061.7 sd 18325.0 min 200 (Cang_2012_03_13_34621)
-    #    max 867759 (Cang_2012_03_13_00001) median 356
-    #  %1.49 masked total, %1.67 masked real
+    # 131797386 bases (1406227 N's 130391159 real 128274686 upper
+    #    2116473 lower) in 15261 sequences in 1 files
+    # Total size: mean 8636.2 sd 17173.4 min 200 (Csp5_scaffold_15261)
+    #    max 383975 (Csp5_scaffold_00001) median 2600
+    # %1.61 masked total, %1.62 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
@@ -172,8 +172,8 @@ XXX - running - Wed Jul  8 10:54:43 PDT 2015
     # CC   RELEASE 20140131;    
 
     time featureBits -countGaps caeSp51 rmsk
-    # 1583946 bases of 105997628 (1.494%) in intersection
-    #   real    0m8.082s
+    # 2123601 bases of 131797386 (1.611%) in intersection
+    # real    0m5.909s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
@@ -205,28 +205,24 @@ XXX - running - Wed Jul  8 10:54:43 PDT 2015
     #	Read 36 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2015-06-30 - Hiram)
+## WINDOWMASKER (DONE - 2015-07-08 - Hiram)
 
     mkdir /hive/data/genomes/caeSp51/bed/windowMasker
     cd /hive/data/genomes/caeSp51/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev caeSp51) > do.log 2>&1
-    # real    16m56.872s
-
-    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
-        -continue=cleanup -dbHost=hgwdev caeSp51) > cleanup.log 2>&1
-    # real    0m10.219s
+    # real    7m45.735s
 
     # Masking statistics
     cat faSize.caeSp51.cleanWMSdust.txt
-    # 105997628 bases (11442593 N's 94555035 real 56870098 upper 37684937
-    #    lower) in 34621 sequences in 1 files
-    # Total size: mean 3061.7 sd 18325.0 min 200 (Cang_2012_03_13_34621)
-    #    max 867759 (Cang_2012_03_13_00001) median 356
-    # %35.55 masked total, %39.86 masked real
+    # 131797386 bases (1406227 N's 130391159 real 93741941 upper
+    #    36649218 lower) in 15261 sequences in 1 files
+    # Total size: mean 8636.2 sd 17173.4 min 200 (Csp5_scaffold_15261)
+    #    max 383975 (Csp5_scaffold_00001) median 2600
+    # %27.81 masked total, %28.11 masked real
 
     cat fb.caeSp51.rmsk.windowmaskerSdust.txt
-    # 1213014 bases of 105997628 (1.144%) in intersection
+    # 1310574 bases of 131797386 (0.994%) in intersection
 
     # using this Window Masker result for final masking::
     cd /hive/data/genomes/caeSp51
@@ -236,19 +232,19 @@ XXX - running - Wed Jul  8 10:54:43 PDT 2015
 
     # measure the final masking:
     twoBitToFa caeSp51.2bit stdout | faSize stdin > faSize.caeSp51.2bit.txt
-    cat faSize.caeSp51.2bit.txt
-    # 105997628 bases (11442593 N's 94555035 real 56820897 upper
-    #   37734138 lower) in 34621 sequences in 1 files
-    # Total size: mean 3061.7 sd 18325.0 min 200 (Cang_2012_03_13_34621)
-    #   max 867759 (Cang_2012_03_13_00001) median 356
-    # %35.60 masked total, %39.91 masked real
+    cat faSize.caeSp51.2bit.txt | sed -e 's/^/    # /;'
+    # 131797386 bases (1406227 N's 130391159 real 93674152 upper
+    #    36717007 lower) in 15261 sequences in 1 files
+    # Total size: mean 8636.2 sd 17173.4 min 200 (Csp5_scaffold_15261)
+    #    max 383975 (Csp5_scaffold_00001) median 2600
+    # %27.86 masked total, %28.16 masked real
 
     # and reset the symlink
     rm /gbdb/caeSp51/caeSp51.2bit
     ln -s /hive/data/genomes/caeSp51/caeSp51.2bit /gbdb/caeSp51/caeSp51.2bit
 
 ##########################################################################
-# cpgIslands - (TBD - 2015-06-30 - Hiram)
+# cpgIslands - (DONE - 2015-07-09 - Hiram)
     mkdir /hive/data/genomes/caeSp51/bed/cpgIslands
     cd /hive/data/genomes/caeSp51/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
@@ -259,31 +255,30 @@ XXX - running - Wed Jul  8 10:54:43 PDT 2015
     # 5267650 bases of 95237926 (5.531%) in intersection
 
 #########################################################################
-# augustus - (TBD - 2015-06-30 - Hiram)
+# augustus - (DONE - 2015-07-09 - Hiram)
     mkdir /hive/data/genomes/caeSp51/bed/augustus
     cd /hive/data/genomes/caeSp51/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
       -species=caenorhabditis -dbHost=hgwdev \
          -workhorse=hgwdev caeSp51) > do.log 2>&1
-XXX - running - Tue Jun 30 14:19:12 PDT 2015
-    # real    80m33.289s
+    # real    19m2.915s
 
     cat fb.caeSp51.augustusGene.txt
-    # 27859792 bases of 1842252119 (1.512%) in intersection
+    # 35056559 bases of 130562982 (26.850%) in intersection
 
 #########################################################################
-# genscan - (TBD - 2015-06-30 - Hiram)
+# genscan - (DONE - 2015-07-09 - Hiram)
     mkdir /hive/data/genomes/caeSp51/bed/genscan
     cd /hive/data/genomes/caeSp51/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku caeSp51) > do.log 2>&1
-    # real    25m47.870s
+    # real    17m46.765s
 
     cat fb.caeSp51.genscan.txt
-    #   7719994 bases of 95237926 (8.106%) in intersection
+    #   12235030 bases of 130562982 (9.371%) in intersection
 
     cat fb.caeSp51.genscanSubopt.txt
-    #   5785394 bases of 95237926 (6.075%) in intersection
+    #   9906961 bases of 130562982 (7.588%) in intersection
 
 ########################################################################
 # Create kluster run files (TBD - 2015-03-24 - Hiram)
@@ -444,20 +439,3 @@ caeSp51.genbank.est.native.loadDesc = no
     #   sizes will set properly
 
 #########################################################################
-# LIFTOVER TO caeAng1 (TBD - 2015-07-07 - Hiram )
-    mkdir /hive/data/genomes/caeSp51/bed/blat.caeAng1.2015-07-07
-    cd /hive/data/genomes/caeSp51/bed/blat.caeAng1.2015-07-07
-    # -debug run to create run dir, preview scripts...
-    doSameSpeciesLiftOver.pl \
-	-buildDir=`pwd` \
-	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-  -ooc=/hive/data/genomes/caeSp51/jkStuff/caeSp51.11.ooc -debug caeSp51 caeAng1
-    # Real run:
-    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` \
-      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-       -ooc=/hive/data/genomes/caeSp51/jkStuff/caeSp51.11.ooc caeSp51 caeAng1) \
-		> do.log 2>&1
-    #	real    4m19.992s
-    # verify it works on genome-test
-
-#############################################################################

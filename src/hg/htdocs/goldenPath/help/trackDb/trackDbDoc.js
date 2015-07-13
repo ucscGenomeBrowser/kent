@@ -107,17 +107,14 @@ var tdbDoc = {
                 return blurb;
             }
             var level = $(code).attr('class');
-            if (level.length === 0) {
-                level = 'level-';
-                // TODO: flag thse as errors ?
-                //level = 'level-new';
+            if (level.length !== 0) {
+                var start = $(blurb).find('p').first();
+                if ($(start).attr('class') !== 'level') {
+                    $(start).before('<p class="level">Support level: ' + '<span class=' + 
+                                    level + '>' + level.replace('level-','') + '</span></p>');
+                }
+                $(blurb).find('code').addClass(level);
             }
-            var start = $(blurb).find('p').first();
-            if ($(start).attr('class') !== 'level') {
-                $(start).before('<p class="level">Support level: ' + '<span class=' + level + '>' + 
-                                level.replace('level-','') + '</span></p>');
-            }
-            $(blurb).find('code').addClass(level);
             return blurb;
         }
     },
