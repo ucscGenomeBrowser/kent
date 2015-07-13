@@ -9,33 +9,36 @@
 <h2>Methods</h2>
 
 <p>
-Statistical signal models were built for splice site and branch-point
-patterns, the translation start site and in case of UTR predictions
-also for the poly-A signal. Further, sequence content models for
-protein-coding and non-coding regions and length distributions for
-different exons types and introns were built. The majority of models
-is as described in the 
-<a href="http://hdl.handle.net/11858/00-1735-0000-0006-B3F8-4" target="_blank">dissertation of Mario Stanke</a>.
+Statistical signal models were built for splice sites, branch-point
+patterns, translation start sites, and the poly-A signal.
+Furthermore, models were built for the sequence content of
+protein-coding and non-coding regions as well as for the length distributions
+of different exon and introns types. Detailed descriptions of most of these different models
+can be found in Mario Stanke's
+<a href="http://hdl.handle.net/11858/00-1735-0000-0006-B3F8-4" target="_blank">dissertation</a>.
 The track shows the most likely gene structure according to a
 Semi-Markov Conditional Random Field model.
-In case alternative transcripts are shown, these were obtained with
-  a sampling algorithm (<tt>--alternatives-from-sampling=true --sample=100 --minexonintronprob=0.2
-   --minmeanexonintronprob=0.5 --maxtracks=3 --temperature=2</tt>).
+Alternative splicing transcripts were obtained with
+a sampling algorithm (<tt>--alternatives-from-sampling=true --sample=100 --minexonintronprob=0.2
+--minmeanexonintronprob=0.5 --maxtracks=3 --temperature=2</tt>).
+</p>
 
-The predictions on fish species were done with the <tt>zebrafish</tt> version,
-the predicions on bird species with the <tt>chicken</tt> version
- and the predictions on all other vertebrate species with the <tt>human</tt>
-version of AUGUSTUS. In each case, the parameters of the model had been
-estimated before on 1000-2000 training gene structures.
+<p>
+Predictions for fish species were created with the <tt>zebrafish</tt> version of AUGUSTUS,
+predicions for bird species with the <tt>chicken</tt> version,
+and predictions on all other vertebrate species with the <tt>human</tt>
+version. In each case, the parameters of the models were
+estimated beforehand using 1000-2000 training gene structures.
 </p>
 
 <h2>Credits</h2>
 
 Thanks to the
-<a href="http://www.math-inf.uni-greifswald.de/index.php/arbeitsgruppen/bioinformatik-professur" target="_blank">Stanke lab</a>
-for providing the AUGUSTUS program.  The training for <tt>chicken</tt> was
-done by Stefanie K&ouml;nig, the training for
-<tt>human</tt> and <tt>zebrafish</tt> by Mario Stanke.
+<a href="http://www.math-inf.uni-greifswald.de/index.php?option=com_content&view=article&id=382%253Aprof-dr-mario-stanke&catid=135&Itemid=63"
+target="_blank">Stanke lab</a>
+for providing the AUGUSTUS program.  The training for the <tt>chicken</tt> version was
+done by Stefanie K&ouml;nig and the training for the
+<tt>human</tt> and <tt>zebrafish</tt> versions was done by Mario Stanke.
 
 <h2>References</h2>
 

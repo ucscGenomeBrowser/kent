@@ -36,7 +36,6 @@ errAbort(
   "options:\n"
   "   -noTracks             - don't check remote files for tracks, just trackDb (faster)\n"
   "   -checkSettings        - check trackDb settings to spec\n"
-  "   -test                 - use spec on test server\n"
   "   -version=[v?|url]     - version to validate settings against\n"
   "                                     (defaults to version in hub.txt, or current standard)\n"
   "   -extra=[file|url]     - accept settings in this file (or url)\n"

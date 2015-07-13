@@ -492,7 +492,7 @@ if (vocab != NULL)
     }
 printf("<B>Factor:</B> %s<BR>\n", factorLink);
 printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);
-printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, NULL);
+printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, item);
 
 
 /* Get list of tracks we'll look through for input. */

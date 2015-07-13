@@ -29120,35 +29120,48 @@ pubMap bing load
 
 
 ########################################################################
-# Cooper Developmental Delay track (DONE 2014-11-21 Steve)
+# CNV Developmental Delay track (DONE 2014-11-21 Steve)
 
-    mkdir /hive/data/genomes/hg19/bed/cooperDevDelay
-    cd /hive/data/genomes/hg19/bed/cooperDevDelay
+    mkdir /hive/data/genomes/hg19/bed/cnvDevDelay
+    cd /hive/data/genomes/hg19/bed/cnvDevDelay
 
+wget --timestamping 'ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd100_Coe_et_al_2014/gvf/nstd100_Coe_et_al_2014.GRCh37.remap.all.germline.ucsc.gvf.gz'
 wget --timestamping 'ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd54_Cooper_et_al_2011/gvf/nstd54_Cooper_et_al_2011.GRCh37.remap.all.germline.ucsc.gvf.gz'
 
 cp /kent/src/hg/utils/automation/gvfToBed8Attrs.pl .
-mv gvfToBed8Attrs.pl gvfToBed8AttrsControl.pl
-cp gvfToBed8AttrsControl.pl gvfToBed8AttrsCase.pl
+mv gvfToBed8Attrs.pl gvfToBed8AttrsCase.pl
+cp gvfToBed8AttrsCase.pl gvfToBed8AttrsControl100.pl
+cp gvfToBed8AttrsCase.pl gvfToBed8AttrsControl54.pl
 
-# made two local copies of Angie's gvf conversion script - one to
-# include only control individuals and one to include only case individuals
-# added line 33 to each file:
+# made three local copies of Angie's gvf conversion script - one to include
+# only case individuals from nstd100, one to include only control individuals
+# from nstd100 and one to include only control individuals from nstd54
 
-# next if ($phenotype ne "not_reported"); # keep only "control" individuals
-# next if ($phenotype eq "not_reported"); # keep only "case" individuals
+# had to add an additional elsif statement to the nstd100 scripts to filter
+# based on sample_name field:
 
-zcat nstd54_Cooper_et_al_2011.GRCh37.remap.all.germline.ucsc.gvf.gz | gvfToBed8AttrsControl.pl > cooperDevDelayAllControl.bed
-zcat nstd54_Cooper_et_al_2011.GRCh37.remap.all.germline.ucsc.gvf.gz | gvfToBed8AttrsCase.pl > cooperDevDelayAllCase.bed
+#  } elsif ($tag eq "sample_name") {
+#    $sample_name = $val;
+#  }
+
+# added line 33/35 to each file:
+
+# next if ($sample_name eq "Unknown"); # keep only "case" individuals from nstd100
+# next if ($sample_name ne "Unknown"); # keep only "control" individuals from nstd100
+# next if ($phenotype ne "not_reported"); # keep only "control" individuals from nstd54
+
+zcat nstd100_Coe_et_al_2014.GRCh37.remap.all.germline.ucsc.gvf.gz | gvfToBed8AttrsCase.pl > cnvDevDelayAllCase.bed
+zcat nstd100_Coe_et_al_2014.GRCh37.remap.all.germline.ucsc.gvf.gz | gvfToBed8AttrsControl100.pl > cnvDevDelayAllControl.bed
+zcat nstd54_Cooper_et_al_2011.GRCh37.remap.all.germline.ucsc.gvf.gz | gvfToBed8AttrsControl54.pl >> cnvDevDelayAllControl.bed
 
 hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
-        -allowStartEqualEnd hg19 cooperDevDelayControl cooperDevDelayAllControl.bed
+        -allowStartEqualEnd hg19 cnvDevDelayCase cnvDevDelayAllCase.bed
 
 hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
-        -allowStartEqualEnd hg19 cooperDevDelayCase cooperDevDelayAllCase.bed
+        -allowStartEqualEnd hg19 cnvDevDelayControl cnvDevDelayAllControl.bed
 
-    checkTableCoords hg19 cooperDevDelayControl
-    checkTableCoords hg19 cooperDevDelayCase
+    checkTableCoords hg19 cnvDevDelayCase
+    checkTableCoords hg19 cnvDevDelayControl
 
 
 #############################################################################

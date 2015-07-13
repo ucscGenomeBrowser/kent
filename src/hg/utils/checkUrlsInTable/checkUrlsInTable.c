@@ -10,67 +10,90 @@
 #include "htmlPage.h"
 #include "verbose.h"
 
-// Might want to parameterize this later
-#define urlColumn "url" 
+
+/* default column to check */
+char *col = "url";
+
+/* default url prefix  */
+char *prefix = "";
+
+/* error string to look for in returned HTML */
+char *errString = NULL;
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "checkUrlsInTable - verify links in a table (column name 'url')\n"
+  "checkUrlsInTable - verify links in a table\n"
   "usage:\n"
   "   checkUrlsInTable database table\n"
   "options:\n"
   "    -strict          - warn about 302 redirects, etc.\n"
-  );
+  "    -col=XX          - column to check (default '%s')\n"
+  "    -prefix=XX       - prefix to column value to generate url\n"
+  "    -errString=XX    - error string to detect in returned HTML\n"
+  , col);
 }
 
 static struct optionSpec options[] = {
    {"strict", OPTION_BOOLEAN},
+   {"col", OPTION_STRING},
+   {"prefix", OPTION_STRING},
+   {"errString", OPTION_STRING},
    {NULL, 0},
 };
 
-// Might want to parameterize this later
-#define urlColumn "url" 
 
 int checkUrlsInTable(char *database, char *table, boolean strict)
 /* Read url. Switch on command and dispatch to appropriate routine. */
 {
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
+char url[256];
 sqlSafef(query, sizeof(query),
                 "select %s from %s where %s is not null and %s <> ''", 
-                        urlColumn, table, urlColumn, urlColumn);
-struct slName *url, *urls;
-urls = sqlQuickList(conn, query);
+                        col, table, col, col);
+struct slName *item, *items;
+items = sqlQuickList(conn, query);
 int errs = 0;
 char *fullText;
 struct htmlStatus *status;
-for (url = urls; url != NULL; url = url->next)
+for (item = items; item != NULL; item = item->next)
     {
-    verbose(4, "%s\n", url->name);
-    fullText = htmlSlurpWithCookies(url->name, NULL);
+    safef(url, sizeof(url), "%s%s", prefix, item->name);
+    verbose(4, "%s\n", url);
+    usleep(100);
+    fullText = htmlSlurpWithCookies(url, NULL);
     status = htmlStatusParse(&fullText);
     if (status == NULL)
         {
-        printf("%s\tNULL\n", url->name);
+        printf("%s\tNULL\n", url);
         errs++;
         continue;
         }
     if (status->status == 200)
         {
-        verbose(3, "%s\t200\n", url->name);
+        /* OK */
+        verbose(3, "%s\t200\n", url);
+        if (errString != NULL)
+            {
+            if (strstr(fullText, errString))
+                {
+                printf("%s\t%s\n", url, errString);
+                errs++;
+                }
+            }
         continue;
         }
     if (!strict)
         {
         if (status->status == 302)  // "temporary" redirect
             {
-            verbose(2, "%s\t302\n", url->name);
+            verbose(2, "%s\t302\n", url);
             continue;
             }
         }
-    printf("%s\t%d\n", url->name, status->status);
+    printf("%s\t%d\n", url, status->status);
     errs++;
     }
 hFreeConn(&conn);
@@ -85,5 +108,8 @@ if (argc != 3)
     usage();
 char *database = argv[1];
 char *table = argv[2];
+col = optionVal("col", col);
+prefix = optionVal("prefix", prefix);
+errString = optionVal("errString", NULL);
 return checkUrlsInTable(database, table, optionExists("strict"));
 }

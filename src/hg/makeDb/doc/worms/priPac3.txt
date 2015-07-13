@@ -77,11 +77,10 @@ taxId 54126
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/priPac3/priPac3.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku priPac3) > do.log 2>&1
-XXX - running - Wed Jul  1 10:53:03 PDT 2015
-    # real    16m17.756s
+    # real    12m23.178s
 
     cat fb.priPac3.cpgIslandExtUnmasked.txt
-    # 80597444 bases of 1977771384 (4.075%) in intersection
+    # 9210988 bases of 153238914 (6.011%) in intersection
 
 #############################################################################
 # cytoBandIdeo - (DONE - 2015-07-01 - Hiram)
@@ -192,22 +191,7 @@ searchPriority 8
     cat fb.simpleRepeat
     # 3902648 bases of 153238914 (2.547%) in intersection
 
-XXX - ready after RM or WMSK decision - Tue Jun 30 11:10:17 PDT 2015
-    # using the Window Masker result:
-    cd /hive/data/genomes/priPac3
-    twoBitMask bed/windowMasker/priPac3.cleanWMSdust.2bit \
-       -add bed/simpleRepeat/trfMask.bed  priPac3.2bit
-    #   you can safely ignore the warning about fields >= 13
-    twoBitToFa priPac3.2bit stdout | faSize stdin > faSize.priPac3.2bit.txt
-    cat faSize.priPac3.2bit.txt
-    # 2053849526 bases (76078142 N's 1977771384 real 1208345365
-    #    upper 769426019 lower) in 25187 sequences in 1 files
-    # Total size: mean 81544.0 sd 330701.2 min 200 (JYOU01147511v1)
-    #    max 8606022 (KN905849v1) median 453
-    # %37.46 masked total, %38.90 masked real
-
-    rm /gbdb/priPac3/priPac3.2bit
-    ln -s `pwd`/priPac3.2bit /gbdb/priPac3/priPac3.2bit
+    # using the Window Masker result as indicated below
 
 ##########################################################################
 # CREATE MICROSAT TRACK (DONE - 2015-07-01 - Hiram)
@@ -226,23 +210,18 @@ XXX - ready after RM or WMSK decision - Tue Jun 30 11:10:17 PDT 2015
     cd /hive/data/genomes/priPac3/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev priPac3) > do.log 2>&1
-XXX - running - Wed Jul  1 14:59:44 PDT 2015
-    # real    16m56.872s
-
-    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
-        -continue=cleanup -dbHost=hgwdev priPac3) > cleanup.log 2>&1
-    # real    0m10.219s
+    # real    13m19.730s
 
     # Masking statistics
     cat faSize.priPac3.cleanWMSdust.txt
-    # 105997628 bases (11442593 N's 94555035 real 56870098 upper 37684937
-    #    lower) in 34621 sequences in 1 files
-    # Total size: mean 3061.7 sd 18325.0 min 200 (Cang_2012_03_13_34621)
-    #    max 867759 (Cang_2012_03_13_00001) median 356
-    # %35.55 masked total, %39.86 masked real
+    # 172510819 bases (19302620 N's 153208199 real 116592215 upper
+    #    36615984 lower) in 18084 sequences in 1 files
+    # Total size: mean 9539.4 sd 122670.4 min 47 (Ppa_Contig13657)
+    #    max 5268024 (Ppa_Contig0) median 685
+    # %21.23 masked total, %23.90 masked real
 
     cat fb.priPac3.rmsk.windowmaskerSdust.txt
-    # 1213014 bases of 105997628 (1.144%) in intersection
+    # 5980404 bases of 172510819 (3.467%) in intersection
 
     # using this Window Masker result for final masking::
     cd /hive/data/genomes/priPac3
@@ -253,53 +232,52 @@ XXX - running - Wed Jul  1 14:59:44 PDT 2015
     # measure the final masking:
     twoBitToFa priPac3.2bit stdout | faSize stdin > faSize.priPac3.2bit.txt
     cat faSize.priPac3.2bit.txt
-    # 105997628 bases (11442593 N's 94555035 real 56820897 upper
-    #   37734138 lower) in 34621 sequences in 1 files
-    # Total size: mean 3061.7 sd 18325.0 min 200 (Cang_2012_03_13_34621)
-    #   max 867759 (Cang_2012_03_13_00001) median 356
-    # %35.60 masked total, %39.91 masked real
+    # 172510819 bases (19302620 N's 153208199 real 116540993 upper
+    #    36667206 lower) in 18084 sequences in 1 files
+    # Total size: mean 9539.4 sd 122670.4 min 47 (Ppa_Contig13657)
+    #    max 5268024 (Ppa_Contig0) median 685
+    # %21.26 masked total, %23.93 masked real
 
     # and reset the symlink
     rm /gbdb/priPac3/priPac3.2bit
     ln -s /hive/data/genomes/priPac3/priPac3.2bit /gbdb/priPac3/priPac3.2bit
 
 ##########################################################################
-# cpgIslands - (TBD - 2015-06-30 - Hiram)
+# cpgIslands - (DONE - 2015-07-01 - Hiram)
     mkdir /hive/data/genomes/priPac3/bed/cpgIslands
     cd /hive/data/genomes/priPac3/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku priPac3) > do.log 2>&1 &
-    # real    19m6.982s
+    # real    21m15.732s
 
     cat fb.priPac3.cpgIslandExt.txt
-    # 5267650 bases of 95237926 (5.531%) in intersection
+    # 2971735 bases of 153238914 (1.939%) in intersection
 
 #########################################################################
-# augustus - (TBD - 2015-06-30 - Hiram)
+# augustus - (DONE - 2015-07-01 - Hiram)
     mkdir /hive/data/genomes/priPac3/bed/augustus
     cd /hive/data/genomes/priPac3/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
       -species=caenorhabditis -dbHost=hgwdev \
          -workhorse=hgwdev priPac3) > do.log 2>&1
-XXX - running - Tue Jun 30 14:19:12 PDT 2015
-    # real    80m33.289s
+    # real    91m20.674s
 
     cat fb.priPac3.augustusGene.txt
-    # 27859792 bases of 1842252119 (1.512%) in intersection
+    # 30647862 bases of 153238914 (20.000%) in intersection
 
 #########################################################################
-# genscan - (TBD - 2015-06-30 - Hiram)
+# genscan - (DONE - 2015-07-01 - Hiram)
     mkdir /hive/data/genomes/priPac3/bed/genscan
     cd /hive/data/genomes/priPac3/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku priPac3) > do.log 2>&1
-    # real    25m47.870s
+    # real    15m3.155s
 
     cat fb.priPac3.genscan.txt
-    #   7719994 bases of 95237926 (8.106%) in intersection
+    #   10119755 bases of 153238914 (6.604%) in intersection
 
     cat fb.priPac3.genscanSubopt.txt
-    #   5785394 bases of 95237926 (6.075%) in intersection
+    #   6198002 bases of 153238914 (4.045%) in intersection
 
 ########################################################################
 # Create kluster run files (TBD - 2015-03-24 - Hiram)
@@ -307,54 +285,45 @@ XXX - running - Tue Jun 30 14:19:12 PDT 2015
     cd /hive/data/genomes/priPac3
     # numerator is priPac3 gapless bases "real" as reported by:
     head -1 faSize.priPac3.2bit.txt
-# 2053849526 bases (76078142 N's 1977771384 real 1208345365 upper
-#    76942601 lower) in 25187 sequences in 1 files
-
+# 172510819 bases (19302620 N's 153208199 real 116540993 upper 36667206 lower)
+# in 18084 sequences in 1 files
     # numerator is 'real' base count
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 1977771384 / 2861349177 \) \* 1024
-    # ( 1977771384 / 2861349177 ) * 1024 = 707.791245
+    calc \( 153208199 / 2861349177 \) \* 1024
+    # ( 153208199 / 2861349177 ) * 1024 = 54.829098
 
-    # ==> use -repMatch=700 according to size scaled down from 1024 for human.
+    # ==> use -repMatch=50 according to size scaled down from 1024 for human.
     #   and rounded down to nearest 50
     cd /hive/data/genomes/priPac3
     time blat priPac3.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/priPac3.11.ooc \
-        -repMatch=700
-    # Wrote 23756 overused 11-mers to jkStuff/priPac3.11.ooc
-    #  real    0m32.961s
+        -repMatch=50
+    # Wrote 23520 overused 11-mers to jkStuff/priPac3.11.ooc
+    #  real    0m2.869s
 
-    # there are no non-bridged gaps, do not need to do this
+    # there are a few non-bridged gaps
     #   check non-bridged gaps to see what the typical size is:
-#     hgsql -N -e 'select * from gap where bridge="no" order by size;' priPac3 
-#       | ave -tableOut -col=7 stdin
-# # min Q1 median Q3 max mean N sum stddev
-# 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006
+    hgsql -N -e 'select * from gap where bridge="no" order by size;' priPac3 \
+       | ave -tableOut -col=7 stdin
+# min Q1 median Q3 max mean N sum stddev
+# 61704 80172.5 105503 114920 116040 93010.2 8 744082 22910.2
 
-    # note the minimum non-bridged gap size is 50,076
+    # note the minimum non-bridged gap size is 61,704
 
-#  gapToLift -verbose=2 -minGap=50000 priPac3 jkStuff/priPac3.nonBridged.lft \
-#         -bedFile=jkStuff/priPac3.nonBridged.bed
-
-#    hgsql -N \
-#        -e 'select * from gap where bridge="no" order by size;' priPac3 \
-#        | ave -col=7 stdin
-
-    # not needed:
-#    gapToLift -verbose=2 -minGap=100 bosTau7 jkStuff/nonBridged.lft \
-#        -bedFile=jkStuff/nonBridged.bed
+    gapToLift -verbose=2 -minGap=50000 priPac3 jkStuff/priPac3.nonBridged.lft \
+         -bedFile=jkStuff/priPac3.nonBridged.bed
 
     # survey sizes:
     n50.pl chrom.sizes
 #       reading: chrom.sizes
-#       contig count: 25187, total size: 2053849526, one half size: 1026924763
+#       contig count: 18084, total size: 172510819, one half size: 86255409
 # cumulative    N50 count       contig  contig size
-# 1026149130      545     KN906416v1      1073586
-# 1026924763 one half size
-# 1027218231      546     KN906384v1      1069101
+# 85581688        38      Ppa_Contig38    1290309
+# 86255409 one half size
+# 86826222        39      Ppa_Contig47    1244534
 
 #############################################################################
 # GENBANK AUTO UPDATE (TBD - 2015-06-09 - Hiram)
@@ -362,51 +331,42 @@ XXX - running - Tue Jun 30 14:19:12 PDT 2015
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
-    # #organism       mrnaCnt estCnt  refSeqCnt
-    #  Nanorana parkeri	3	0	0
-    #  Nanorana pleskei	3	0	0
-    #  Nanorana yunnanensis	1	0	0
+    # #organism               mrnaCnt estCnt  refSeqCnt
+    #  Pristionchus pacificus  97      37470   0
 
-    # edit etc/genbank.conf to add priPac3 just before xenTro7
+    # edit etc/genbank.conf to add priPac3 just before priPac1
 
-# priPac3 (tibetan frog)
+# priPac3 (P. pacificus)
 priPac3.serverGenome = /hive/data/genomes/priPac3/priPac3.2bit
 priPac3.clusterGenome = /hive/data/genomes/priPac3/priPac3.2bit
 priPac3.ooc = /hive/data/genomes/priPac3/jkStuff/priPac3.11.ooc
-priPac3.lift = no
-priPac3.perChromTables = no
-priPac3.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
-priPac3.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
-priPac3.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
-priPac3.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
-priPac3.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
-priPac3.downloadDir = priPac3
-priPac3.refseq.mrna.native.load  = no
-priPac3.refseq.mrna.xeno.load = yes
-priPac3.refseq.mrna.xeno.loadDesc  = yes
-priPac3.genbank.mrna.native.load = no
-priPac3.genbank.mrna.native.loadDesc = no
-priPac3.genbank.mrna.xeno.load = yes
-priPac3.genbank.mrna.xeno.loadDesc = yes
-priPac3.genbank.est.native.load = no
+priPac3.lift = /hive/data/genomes/priPac3/jkStuff/priPac3.nonBridged.lft
+priPac3.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+priPac3.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+priPac3.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+priPac3.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+priPac3.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+priPac3.refseq.mrna.native.load = yes
+priPac3.refseq.mrna.xeno.load  = yes
+priPac3.refseq.mrna.xeno.loadDesc = yes
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+priPac3.genbank.mrna.xeno.load = no
+priPac3.genbank.est.native.load = yes
 priPac3.genbank.est.native.loadDesc = no
-# priPac3.upstreamGeneTbl = ensGene
+priPac3.downloadDir = priPac3
+priPac3.perChromTables = no
 
-    # Edit src/lib/gbGenome.c to add new species.
-    git commit -m "Added nanPar Nanorana parkeri refs #15056" \
-         etc/genbank.conf src/lib/gbGenome.c
+    git commit -m "Added priPac3 - P. pacificus refs #15209" etc/genbank.conf
     git push
     # update /cluster/data/genbank/etc/:
     make etc-update
-    # update /cluster/data/genbank/bin/:
-    make install-server
 
     screen      #  control this business with a screen since it takes a while
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial priPac3
-    # logFile: var/build/logs/2015.05.27-15:45:35.priPac3.initalign.log
-    # real    1651m57.350s
+    # logFile: var/build/logs/2015.07.02-11:39:01.priPac3.initalign.log
+    # real    91m20.362s
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.priPac3
@@ -415,15 +375,15 @@ priPac3.genbank.est.native.loadDesc = no
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad priPac3
-    # logFile: var/dbload/hgwdev/logs/2015.06.09-14:34:12.priPac3.dbload.log
-    # real    128m32.009s
+    # logFile: var/dbload/hgwdev/logs/2015.07.06-09:51:31.priPac3.dbload.log
+    # real    18m34.687s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add priPac3 to:
     #   vi etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added priPac3 - Tibetan frog refs #15056" \
+    git commit -m "Added priPac3 - Pristionchus pacificus refs #15209" \
       etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
@@ -461,3 +421,37 @@ priPac3.genbank.est.native.loadDesc = no
     #   sizes will set properly
 
 #########################################################################
+# LIFTOVER TO priPac1 (DONE - 2015-07-07 - Hiram )
+    mkdir /hive/data/genomes/priPac3/bed/blat.priPac1.2015-07-07
+    cd /hive/data/genomes/priPac3/bed/blat.priPac1.2015-07-07
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+  -ooc=/hive/data/genomes/priPac3/jkStuff/priPac3.11.ooc -debug priPac3 priPac1
+    # Real run:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+       -ooc=/hive/data/genomes/priPac3/jkStuff/priPac3.11.ooc priPac3 priPac1) \
+		> do.log 2>&1
+    #	real    14m59.119s
+    # verify it works on genome-test
+
+#############################################################################
+# LIFTOVER TO priPac2 (DONE - 2015-07-07 - Hiram )
+    mkdir /hive/data/genomes/priPac3/bed/blat.priPac2.2015-07-07
+    cd /hive/data/genomes/priPac3/bed/blat.priPac2.2015-07-07
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+  -ooc=/hive/data/genomes/priPac3/jkStuff/priPac3.11.ooc -debug priPac3 priPac2
+    # Real run:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+       -ooc=/hive/data/genomes/priPac3/jkStuff/priPac3.11.ooc priPac3 priPac2) \
+		> do.log 2>&1
+    #	real    6m45.278s
+    # verify it works on genome-test
+
+#############################################################################

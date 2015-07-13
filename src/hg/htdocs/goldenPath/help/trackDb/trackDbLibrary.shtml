@@ -609,6 +609,22 @@
     <pre>    pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"</pre>
 </DIV>
 
+<DIV class="priority"><span class="types all"></span>
+<div class="format"><code>priority &lt;float&gt;</code></div>
+    <P>The priority is used to define the order of a track within its track group or 
+    data hub, as well as its default order within the Browser image.  
+    The order within the image can be dynamically changed by the user and
+    will always depend upon which other tracks are currently visible.
+    Typically the priority is set only for tracks that are on by default in order to move them 
+    ahead of other tracks. 
+    Prioritized tracks within a group or data hub are displayed in ascending priority order, 
+    followed by unprioritized tracks sorted alphabetically by short label. Tracks of the same 
+    priority within a group or hub are sorted by short label.  
+    Priority is a floating point number. Default: 0.</P>
+    <P><B>Example:</B></P>
+    <pre>   priority 50</pre>
+</DIV>
+
 <DIV class="release"><span class="types all"></span>
 <div class="format"><code>release &lt;alpha/beta/public&gt;[,beta/public]</code></div>
     <P><I>NOT FOR HUBS.</I></P>

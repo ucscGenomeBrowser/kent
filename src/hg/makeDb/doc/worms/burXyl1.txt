@@ -1,0 +1,418 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes how the browser for B. xylophilus WS245 version is built
+
+##############################################################################
+# download sequence, create UCSC sequence (DONE - 2015-06-24 - Hiram)
+    mkdir -p /hive/data/genomes/burXyl1/ws245
+    cd /hive/data/genomes/burXyl1/ws245
+
+    wget --no-parent --timestamping -m -nH --cut-dirs=6 \
+ftp://ftp.sanger.ac.uk/pub/wormbase/releases/WS245/species/PRJEA64437
+
+    mkdir /hive/data/genomes/burXyl1/ucsc
+    cd /hive/data/genomes/burXyl1/ucsc
+    # WormBase contig names are of the pattern:
+# >scaffold01652
+# >scaffold01653
+# >contig00008
+# >contig00013
+#   ...
+
+    # no conversion of names to maintain equivalence with WormBase:
+    zcat ../ws245/PRJEA64437/b_xylophilus.PRJEA64437.WS245.genomic.fa.gz \
+        | gzip -c > burXyl1.fa.gz
+
+    hgFakeAgp burXyl1.fa.gz burXyl1.agp
+
+#############################################################################
+#  Initial database build (DONE - 2015-07-09 - Hiram)
+
+    cd /hive/data/genomes/burXyl1
+    cat << '_EOF_' > burXyl1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db burXyl1
+clade worm
+genomeCladePriority 68
+scientificName Bursaphelenchus xylophilus
+commonName Pine wood nematode
+assemblyDate Nov. 2011
+assemblyLabel Wellcome Trust Sanger Institute B. xylophilus genome project
+assemblyShortLabel B. xylophilus Ka4C1
+orderKey 16350
+mitoAcc GQ332424.1
+fastaFiles /hive/data/genomes/strRat2/ucsc/burXyl1.fa.gz
+agpFiles /hive/data/genomes/strRat2/ucsc/burXyl1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL https://www.wormbase.org/species/b_xylophilus
+photoCreditName photo TBD
+ncbiGenomeId 11822
+ncbiAssemblyId 310678
+ncbiAssemblyName ASM23113v1
+ncbiBioProject 64437
+genBankAccessionID GCA_000231135.1
+taxId 6326
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp burXyl1.config.ra) > agp.log 2>&1
+    # *** All done!  (through the 'agp' step)
+    # real    0m58.936s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db burXyl1.config.ra) > db.log 2>&1
+    # real    1m1.272s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/burXyl1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/burXyl1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/burXyl1/burXyl1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku burXyl1) > do.log 2>&1
+    # real    5m21.014s
+
+    cat fb.burXyl1.cpgIslandExtUnmasked.txt
+    # 3488944 bases of 73100506 (4.773%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/burXyl1/bed/cytoBand
+    cd /hive/data/genomes/burXyl1/bed/cytoBand
+    makeCytoBandIdeo.csh burXyl1
+
+#########################################################################
+# ucscToINSDC table/track (TBD - 2015-03-20 - Hiram)
+    mkdir /hive/data/genomes/burXyl1/bed/ucscToINSDC
+    cd /hive/data/genomes/burXyl1/bed/ucscToINSDC
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+       ../../genbank/GCA_*assembly_structure/Primary_Assembly
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    # 25187 name.coordinate.tab
+    # 25187 ucscToINSDC.bed
+    # 25187 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab burXyl1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords burXyl1
+    # should cover %100 entirely:
+    featureBits -countGaps burXyl1 ucscToINSDC
+    # 2053849526 bases of 2053849526 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (TBD - 2015-06-01 - Hiram)
+    hgsql -N -e "select frag from gold;" burXyl1 | sort | head -3
+JF414117.1
+Ppa_Contig0_1
+Ppa_Contig0_10
+[JP][Fp][a4][1_][C4][o1][n1][t7][i\.](g[0-9]*)?(\_[0-9]*)?
+
+    hgsql -N -e "select frag from gold;" burXyl1 | sort | tail -2
+Ppa_Contig9_98
+Ppa_Contig9_99
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" burXyl1 | wc -l
+    # 28759
+
+    hgsql -N -e "select frag from gold;" burXyl1 \
+      | egrep -e '[JP][Fp][a4][1_][C4][o1][n1][t7][i\.](g[0-9]*)?(\_[0-9]*)?' \
+        | wc -l
+    # 28759
+
+  hgsql -N -e "select frag from gold;" burXyl1 \
+    | egrep -v -e '[JP][Fp][a4][1_][C4][o1][n1][t7][i\.](g[0-9]*)?(\_[0-9]*)?' \
+       | wc -l
+    # 0
+
+    # hence, add to trackDb/worm/burXyl1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [JP][Fp][a4][1_][C4][o1][n1][t7][i\.](g[0-9]*)?(\_[0-9]*)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+##########################################################################
+# running repeat masker (DONE - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/burXyl1/bed/repeatMasker
+    cd /hive/data/genomes/burXyl1/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku burXyl1) > do.log 2>&1
+    # real    53m37.447s
+
+    cat faSize.rmsk.txt
+    # 74576239 bases (1475733 N's 73100506 real 72631263 upper 469243 lower)
+    #    in 5528 sequences in 1 files
+    #  Total size: mean 13490.6 sd 127730.2 min 444 (contig15090)
+    #    max 3612001 (scaffold00713) median 1253
+    #  %0.63 masked total, %0.64 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;    
+
+    time featureBits -countGaps burXyl1 rmsk
+    # 469243 bases of 74576239 (0.629%) in intersection
+    #  real    0m1.897s
+
+##########################################################################
+# running simple repeat (DONE - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/burXyl1/bed/simpleRepeat
+    cd /hive/data/genomes/burXyl1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        burXyl1) > do.log 2>&1
+    # real    8m14.637s
+
+    cat fb.simpleRepeat
+    # 1676598 bases of 73100506 (2.294%) in intersection
+
+    # using the Window Masker result as indicated below
+
+##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-07-09 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/burXyl1/bed/microsat
+     cd /cluster/data/burXyl1/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed burXyl1 microsat microsat.bed
+    #	Read 17 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/burXyl1/bed/windowMasker
+    cd /hive/data/genomes/burXyl1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev burXyl1) > do.log 2>&1
+    # real    4m27.586s
+
+    # Masking statistics
+    cat faSize.burXyl1.cleanWMSdust.txt
+    #  74576239 bases (1475733 N's 73100506 real 51958319 upper
+    #    21142187 lower) in 5528 sequences in 1 files
+    #  Total size: mean 13490.6 sd 127730.2 min 444 (contig15090)
+    #    max 3612001 (scaffold00713) median 1253
+    #  %28.35 masked total, %28.92 masked real
+
+    cat fb.burXyl1.rmsk.windowmaskerSdust.txt
+    # 350035 bases of 74576239 (0.469%) in intersection
+
+    # using this Window Masker result for final masking::
+    cd /hive/data/genomes/burXyl1
+    #   you can safely ignore the warning about fields >= 13
+    twoBitMask bed/windowMasker/burXyl1.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  burXyl1.2bit
+
+    # measure the final masking:
+    twoBitToFa burXyl1.2bit stdout | faSize stdin > faSize.burXyl1.2bit.txt
+    cat faSize.burXyl1.2bit.txt
+    # 74576239 bases (1475733 N's 73100506 real 51950819 upper
+    #    21149687 lower) in 5528 sequences in 1 files
+    # Total size: mean 13490.6 sd 127730.2 min 444 (contig15090)
+    #    max 3612001 (scaffold00713) median 1253
+    # %28.36 masked total, %28.93 masked real
+
+    # and reset the symlink
+    rm /gbdb/burXyl1/burXyl1.2bit
+    ln -s /hive/data/genomes/burXyl1/burXyl1.2bit /gbdb/burXyl1/burXyl1.2bit
+
+##########################################################################
+# cpgIslands - (DONE - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/burXyl1/bed/cpgIslands
+    cd /hive/data/genomes/burXyl1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku burXyl1) > do.log 2>&1 &
+    # real    5m4.279s
+
+    cat fb.burXyl1.cpgIslandExt.txt
+    # 2808031 bases of 73100506 (3.841%) in intersection
+
+#########################################################################
+# augustus - (DONE - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/burXyl1/bed/augustus
+    cd /hive/data/genomes/burXyl1/bed/augustus
+    #  XXX this is not specifically correct, the species caenorhabditis
+    #      is not necessarily accurate here
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+      -species=caenorhabditis -dbHost=hgwdev \
+         -workhorse=hgwdev burXyl1) > do.log 2>&1
+    # real    50m13.577s
+
+    cat fb.burXyl1.augustusGene.txt
+    # 18007597 bases of 73100506 (24.634%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/burXyl1/bed/genscan
+    cd /hive/data/genomes/burXyl1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku burXyl1) > do.log 2>&1
+    # real    7m36.101s
+
+    cat fb.burXyl1.genscan.txt
+    #   9924749 bases of 73100506 (13.577%) in intersection
+
+    cat fb.burXyl1.genscanSubopt.txt
+    #   3654432 bases of 73100506 (4.999%) in intersection
+
+########################################################################
+# Create kluster run files (TBD - 2015-07-08 - Hiram)
+
+    cd /hive/data/genomes/burXyl1
+    # numerator is burXyl1 gapless bases "real" as reported by:
+    head -1 faSize.burXyl1.2bit.txt
+# 94076581 bases (7759220 N's 86317361 real 53341517 upper 32975844 lower)
+#    in 9780 sequences in 1 files
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 86317361 / 2861349177 \) \* 1024
+    # ( 86317361 / 2861349177 ) * 1024 = 30.890665
+
+    # ==> use -repMatch=100 since 30 or 50 masks too much
+    cd /hive/data/genomes/burXyl1
+    time blat burXyl1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/burXyl1.11.ooc \
+        -repMatch=100
+    # Wrote 8527 overused 11-mers to jkStuff/burXyl1.11.ooc
+    #  real    0m1.846s
+
+    # there are a few non-bridged gaps
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N -e 'select * from gap where bridge="no" order by size;' burXyl1 \
+       | ave -tableOut -col=7 stdin
+# min Q1 median Q3 max mean N sum stddev
+# 78831 79056 79362 79503 79503 79162.5 4 316650 320.991
+
+    # note the minimum non-bridged gap size is 78,831
+    gapToLift -verbose=2 -minGap=50000 burXyl1 jkStuff/burXyl1.nonBridged.lft \
+         -bedFile=jkStuff/burXyl1.nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 9780, total size: 94076581, one half size: 47038290
+# cumulative    N50 count       contig  contig size
+# 46960459        61      Bmal_v3_scaffold61      194773
+# 47038290 one half size
+# 47151548        62      Bmal_v3_scaffold62      191089
+
+#############################################################################
+# GENBANK AUTO UPDATE (TBD - 2015-06-09 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism               mrnaCnt estCnt  refSeqCnt
+    #  Pristionchus pacificus  97      37470   0
+
+    # edit etc/genbank.conf to add burXyl1 just before priPac1
+
+# burXyl1 (P. pacificus)
+burXyl1.serverGenome = /hive/data/genomes/burXyl1/burXyl1.2bit
+burXyl1.clusterGenome = /hive/data/genomes/burXyl1/burXyl1.2bit
+burXyl1.ooc = /hive/data/genomes/burXyl1/jkStuff/burXyl1.11.ooc
+burXyl1.lift = /hive/data/genomes/burXyl1/jkStuff/burXyl1.nonBridged.lft
+burXyl1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+burXyl1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+burXyl1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+burXyl1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+burXyl1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+burXyl1.refseq.mrna.native.load = yes
+burXyl1.refseq.mrna.xeno.load  = yes
+burXyl1.refseq.mrna.xeno.loadDesc = yes
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+burXyl1.genbank.mrna.xeno.load = no
+burXyl1.genbank.est.native.load = yes
+burXyl1.genbank.est.native.loadDesc = no
+burXyl1.downloadDir = burXyl1
+burXyl1.perChromTables = no
+
+    git commit -m "Added burXyl1 - P. pacificus refs #15209" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/etc/:
+    make etc-update
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial burXyl1
+    # logFile: var/build/logs/2015.07.02-11:39:01.burXyl1.initalign.log
+    # real    91m20.362s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.burXyl1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad burXyl1
+    # logFile: var/dbload/hgwdev/logs/2015.07.06-09:51:31.burXyl1.dbload.log
+    # real    18m34.687s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add burXyl1 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added burXyl1 - Pristionchus pacificus refs #15209" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2015-06-22 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=burXyl1 -tableCoverage all.joiner
+    joinerCheck -database=burXyl1 -times all.joiner
+    joinerCheck -database=burXyl1 -keys all.joiner
+
+    cd /hive/data/genomes/burXyl1
+    time makeDownloads.pl burXyl1 > downloads.log 2>&1
+    # real    13m42.027s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/burXyl1/pushQ
+    cd /hive/data/genomes/burXyl1/pushQ
+    makePushQSql.pl burXyl1 > burXyl1.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/burXyl1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/burXyl1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/burXyl1/bbi/qualityBw/quality.bw
+    # WARNING: burXyl1 does not have seq
+    # WARNING: burXyl1 does not have extFile
+    # WARNING: burXyl1 does not have estOrientInfo
+    # WARNING: burXyl1 does not have mrnaOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p burXyl1.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/burXyl1.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#############################################################################

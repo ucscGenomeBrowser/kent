@@ -521,3 +521,20 @@ priPac2.perChromTables = no
     hgsql qapushq < priPac2.sql
 
 #######################################################################
+# LIFTOVER TO priPac3 (DONE - 2015-07-07 - Hiram )
+    mkdir /hive/data/genomes/priPac2/bed/blat.priPac3.2015-07-07
+    cd /hive/data/genomes/priPac2/bed/blat.priPac3.2015-07-07
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/priPac2/priPac2.11.ooc -debug priPac2 priPac3
+    # Real run:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/priPac2/priPac2.11.ooc priPac2 priPac3) \
+		> do.log 2>&1
+    #	real    4m3.210s
+    # verify it works on genome-test
+
+#############################################################################
