@@ -1,4 +1,3 @@
-#!/cluster/software/bin/python
 #!/usr/bin/env python
 
 # A little CGI interface to download the tables for a set of tracks via udr 
@@ -1757,7 +1756,7 @@ def htmlMiddle(args):
 
 def getAllLocalDbs():
     " return list of locally present DBs "
-    conn = sqlConnect(hgConf.get("central.db", "hgcentral"), "local")
+    conn = sqlConnect(parseHgConf().get("central.db", "hgcentral"), "local")
     cur = conn.cursor()
     cur.execute("SHOW DATABASES")
     rows =  cur.fetchall()
@@ -1773,6 +1772,9 @@ def getAllLocalDbs():
 def main():
     # hide some tracks if any argument specified. makes this tool usable from command line, 
     # from cronjobs that only need to run this function
+    if not isdir(TMPDIR):
+        os.makedirs(TMPDIR)
+
     if len(sys.argv)>1:
         dbSet = getAllLocalDbs()
         for db in dbSet:
@@ -1782,9 +1784,6 @@ def main():
 
     print "Content-type: text/html"
     print
-
-    if not isdir(TMPDIR):
-        os.makedirs(TMPDIR)
 
     parseHgConf()
     if hgConf==None or not hgConf.get("allowHgMirror", "0").lower() in ["1", "yes", "true", "on"]:
