@@ -1,4 +1,3 @@
-#!/cluster/software/bin/python
 #!/usr/bin/env python
 
 # A little CGI interface to download the tables for a set of tracks via udr 
@@ -1757,7 +1756,7 @@ def htmlMiddle(args):
 
 def getAllLocalDbs():
     " return list of locally present DBs "
-    conn = sqlConnect(hgConf.get("central.db", "hgcentral"), "local")
+    conn = sqlConnect(parseHgConf().get("central.db", "hgcentral"), "local")
     cur = conn.cursor()
     cur.execute("SHOW DATABASES")
     rows =  cur.fetchall()
