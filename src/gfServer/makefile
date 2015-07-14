@@ -15,7 +15,9 @@ test::
 	cd tests && ./testTransNib output/testTransNib
 	cd tests && ./testTransTwoBit output/testTransTwoBit
 	cd tests && ./testPcr output/testPcr
-	diff -r -x CVS tests/expected tests/output
+	cd tests && ./testIndexFile output/testIndexFile
+	cd tests && ./testIndexFileTrans output/testIndexFileTrans
+	diff -r -x '*.blatidx' tests/expected tests/output
 	rm -r tests/output
 
 clean::

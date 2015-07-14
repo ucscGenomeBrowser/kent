@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <sys/mman.h>
 #include "portable.h"
 #include "net.h"
 #include "dnautil.h"
@@ -45,6 +46,8 @@ static struct optionSpec optionSpecs[] = {
     {"syslog", OPTION_BOOLEAN},
     {"perSeqMax", OPTION_STRING},
     {"noSimpRepMask", OPTION_BOOLEAN},
+    {"writeIndex", OPTION_BOOLEAN},
+    {"indexFile", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -66,6 +69,11 @@ boolean seqLog = FALSE;
 boolean ipLog = FALSE;
 boolean doMask = FALSE;
 boolean canStop = FALSE;
+boolean writeIndex = FALSE;
+char *indexFile = NULL;
+
+static char indexMagic[] = "genoFind";
+
 
 void usage()
 /* Explain usage and exit. */
@@ -126,6 +134,12 @@ errAbort(
   "                   have at most maxDnaHits/2 hits.\n"
   "                   Useful for assemblies with many alternate/patch sequences.\n"
   "   -canStop        If set, a quit message will actually take down the server.\n"
+  "   -writeIndex     Write the in-memory index to indexFile after building and exit.\n"
+  "   -indexFile      File for index.  If -writeIndex is specified, the file is created,\n"
+  "                   otherwise it is loaded from this file.  Saving index can speed up\n"
+  "                   gfServer startup by two orders of magnitude.  The parameters must\n"
+  "                   exactly match the parameters when the file is written or bad things\n"
+  "                   will happen.\n"
   ,	gfVersion, repMatch, maxDnaHits, maxTransHits, maxNtSize, maxAaSize
   );
 
@@ -555,12 +569,208 @@ while ((hel = hashNext(&cookie)) != NULL)
     hel->val = 0;
 }
 
+static void writeGenoFind(struct genoFind *gf, FILE *f)
+/* write one genoFind structure */
+{
+// write out the parameters
+mustWrite(f, &gf->maxPat, sizeof(gf->maxPat));
+mustWrite(f, &gf->minMatch, sizeof(gf->minMatch));
+mustWrite(f, &gf->maxGap, sizeof(gf->maxGap));
+mustWrite(f, &gf->tileSize, sizeof(gf->tileSize));
+mustWrite(f, &gf->stepSize, sizeof(gf->stepSize));
+mustWrite(f, &gf->tileSpaceSize, sizeof(gf->tileSpaceSize));
+mustWrite(f, &gf->tileMask, sizeof(gf->tileMask));
+mustWrite(f, &gf->sourceCount, sizeof(gf->sourceCount));
+mustWrite(f, &gf->isPep, sizeof(gf->isPep));
+mustWrite(f, &gf->allowOneMismatch, sizeof(gf->allowOneMismatch));
+mustWrite(f, &gf->segSize, sizeof(gf->segSize));
+mustWrite(f, &gf->totalSeqSize, sizeof(gf->totalSeqSize));
+// now write out the variable-size arrays. The ones we need to
+// keep are listSizes and allocated--endLists/lists are generated
+// at load time, and in fact *must* be as they are
+// pointer-to-pointers which cannot be mmapped properly.
+
+// sources: length = gf->sourceCount
+int i;
+for (i = 0; i < gf->sourceCount; i++)
+    {
+    struct gfSeqSource *ss = gf->sources + i;
+    size_t fileNameLen = ss->fileName ? strlen(ss->fileName) + 1 : 0;
+    mustWrite(f, &fileNameLen, sizeof(fileNameLen));
+    if (fileNameLen != 0)
+        mustWrite(f, ss->fileName, fileNameLen);
+    mustWrite(f, &ss->start, sizeof(bits32));
+    mustWrite(f, &ss->end, sizeof(bits32));
+    // no masking information written/read yet.
+    }
+// listSizes: length = gf->tileSpaceSize
+mustWrite(f, gf->listSizes, gf->tileSpaceSize * sizeof(gf->listSizes[0]));
+
+if (gf->segSize == 0)
+    {
+    // use lists
+    size_t count = 0;
+    for (i = 0; i < gf->tileSpaceSize; i++)
+        {
+        if (gf->listSizes[i] < gf->maxPat)
+            count += gf->listSizes[i];
+        }
+    mustWrite(f, gf->allocated, count*sizeof(bits32));
+    }
+else
+    {
+    // use endLists
+    size_t count = 0;
+    for (i = 0; i < gf->tileSpaceSize; i++)
+        count += gf->listSizes[i];
+    mustWrite(f, gf->allocated, 3*count*sizeof(bits16));
+    }
+}
+
+static void writeGenoFindIndex(struct genoFind *gf, struct genoFind *transGf[2][3], char *fileName)
+/* write index to file that can be mapped.  Only one of gf or transGf is used. */
+{
+// create in atomic matter so we don't end up with partial index
+char fileNameTmp[PATH_LEN];
+safef(fileNameTmp, sizeof(fileNameTmp), "%s.%s.%d.tmp", fileName, getHost(), getpid());
+unlink(fileNameTmp);
+
+FILE *f = mustOpen(fileNameTmp, "w");
+
+mustWrite(f, indexMagic, sizeof(indexMagic));
+mustWrite(f, &doTrans, sizeof(doTrans));
+
+if (doTrans)
+    {
+    int i, j;
+    for (i = 0; i < 2; i++)
+        for (j = 0; j < 3; j++)
+            writeGenoFind(transGf[i][j], f);
+    }
+else
+    {
+    writeGenoFind(gf, f);
+    }
+
+carefulClose(&f);
+mustRename(fileNameTmp, fileName);
+}
+
+static struct genoFind *loadGenoFind(FILE *f, void *memMapped)
+/* construct one genoFind, mapping file */
+{
+struct genoFind *gf;
+AllocVar(gf);
+
+// read the parameters
+mustRead(f, &gf->maxPat, sizeof(gf->maxPat));
+mustRead(f, &gf->minMatch, sizeof(gf->minMatch));
+mustRead(f, &gf->maxGap, sizeof(gf->maxGap));
+mustRead(f, &gf->tileSize, sizeof(gf->tileSize));
+mustRead(f, &gf->stepSize, sizeof(gf->stepSize));
+mustRead(f, &gf->tileSpaceSize, sizeof(gf->tileSpaceSize));
+mustRead(f, &gf->tileMask, sizeof(gf->tileMask));
+mustRead(f, &gf->sourceCount, sizeof(gf->sourceCount));
+mustRead(f, &gf->isPep, sizeof(gf->isPep));
+mustRead(f, &gf->allowOneMismatch, sizeof(gf->allowOneMismatch));
+mustRead(f, &gf->segSize, sizeof(gf->segSize));
+mustRead(f, &gf->totalSeqSize, sizeof(gf->totalSeqSize));
+
+// sources: length = gf->sourceCount
+gf->sources = needLargeMem(gf->sourceCount * sizeof(struct gfSeqSource));
+int i;
+for (i = 0; i < gf->sourceCount; i++)
+    {
+    struct gfSeqSource *ss = gf->sources + i;
+    size_t fileNameLen;
+    mustRead(f, &fileNameLen, sizeof(fileNameLen));
+    if (fileNameLen != 0)
+        {
+        ss->fileName = malloc(fileNameLen);
+        mustRead(f, ss->fileName, fileNameLen);
+        }
+    mustRead(f, &ss->start, sizeof(bits32));
+    mustRead(f, &ss->end, sizeof(bits32));
+    // no seq information written/read
+    // no masking information written/read
+    }
+
+// listSizes: length = (gf->tileSpaceSize)
+gf->listSizes = memMapped + ftell(f);
+mustSeek(f, (gf->tileSpaceSize * sizeof(gf->listSizes[0])), SEEK_CUR);
+gf->allocated = memMapped + ftell(f);
+if (gf->segSize == 0)
+    {
+    // use lists
+    gf->lists = needHugeZeroedMem(gf->tileSpaceSize * sizeof(gf->lists[0]));
+    bits32 *cur = gf->allocated;
+    size_t count = 0;
+    for (i = 0; i < gf->tileSpaceSize; i++)
+        {
+        if (gf->listSizes[i] < gf->maxPat)
+             {
+            gf->lists[i] = cur;
+            cur += gf->listSizes[i];
+            count += gf->listSizes[i];
+            }
+        }
+    mustSeek(f, count*sizeof(bits32), SEEK_CUR);
+    }
+else
+    {
+    // use endLists
+    gf->endLists = needHugeZeroedMem(gf->tileSpaceSize * sizeof(gf->endLists[0]));
+    bits16 *cur = gf->allocated;
+    size_t count = 0;
+    for (i = 0; i < gf->tileSpaceSize; i++)
+        {
+        gf->endLists[i] = cur;
+        cur += 3 * gf->listSizes[i];
+        count += gf->listSizes[i];
+        }
+    mustSeek(f, 3*count*sizeof(bits16), SEEK_CUR);
+    }
+return gf;
+}
+
+void loadGenoFindIndex(char *fileName, struct genoFind **gfRet, struct genoFind *transGf[2][3])
+/* load indexes from file.  Only one of gfRet or transGf is set. */
+{
+FILE *f = mustOpen(fileName, "r");
+char fileMagic[sizeof(indexMagic) + 1];
+mustRead(f, fileMagic, sizeof(indexMagic));
+fileMagic[sizeof(indexMagic)] = '\0';
+if (strcmp(fileMagic, indexMagic))
+    errAbort("wrong magic string for index file");
+boolean isTrans;
+mustRead(f, &isTrans, sizeof(isTrans));
+if (doTrans != isTrans)
+    errAbort("index file isTrans==%d and -trans==%d", isTrans, doTrans);
+void *memMapped = mmap(NULL, fileSize(fileName), PROT_READ, MAP_SHARED, fileno(f), 0);
+if (memMapped == MAP_FAILED)
+    errnoAbort("mmap of index file failed");
+
+
+if (doTrans)
+    {
+    int i, j;
+    for (i = 0; i < 2; i++)
+        for (j = 0; j < 3; j++)
+            transGf[i][j] = loadGenoFind(f, memMapped);
+    }
+else
+    {
+    *gfRet = loadGenoFind(f, memMapped);
+    }
+carefulClose(&f);
+}
+
 void startServer(char *hostName, char *portName, int fileCount, 
 	char *seqFiles[])
 /* Load up index and hang out in RAM. */
 {
 struct genoFind *gf = NULL;
-static struct genoFind *transGf[2][3];
+struct genoFind *transGf[2][3] = {{NULL, NULL, NULL}, {NULL, NULL, NULL}};
 char buf[256];
 char *line, *command;
 struct sockaddr_in6 fromAddr;
@@ -581,23 +791,39 @@ strftime (timestr, sizeof(timestr), "%Y-%m-%d %H:%M", loctime); /* formate datet
 logInfo("gfServer version %s on host %s, port %s  (%s)", gfVersion, 
 	hostName, portName, timestr);
 struct hash *perSeqMaxHash = maybePerSeqMax(fileCount, seqFiles);
-if (doTrans)
+
+time_t startIndexTime = clock1000();
+if (writeIndex || (!writeIndex && (indexFile == NULL)))
     {
-    uglyf("starting translated server...\n");
-    logInfo("setting up translated index");
-    gfIndexTransNibsAndTwoBits(transGf, fileCount, seqFiles, 
-    	minMatch, maxGap, tileSize, repMatch, NULL, allowOneMismatch, 
-	doMask, stepSize, noSimpRepMask);
+    if (doTrans)
+        {
+        uglyf("starting translated server...\n");
+        logInfo("setting up translated index");
+        gfIndexTransNibsAndTwoBits(transGf, fileCount, seqFiles,
+                                   minMatch, maxGap, tileSize, repMatch, NULL, allowOneMismatch, 
+                                   doMask, stepSize, noSimpRepMask);
+        }
+    else
+        {
+        uglyf("starting untranslated server...\n");
+        logInfo("setting up untranslated index");
+        gf = gfIndexNibsAndTwoBits(fileCount, seqFiles, minMatch,
+                                   maxGap, tileSize, repMatch, NULL, allowOneMismatch,
+                                   stepSize, noSimpRepMask);
+        }
+    logInfo("indexing building complete in  %4.3f seconds", 0.001 * (clock1000() - startIndexTime));
+    if (writeIndex)
+        {
+        writeGenoFindIndex(gf, transGf, indexFile);
+        logInfo("index file built, exiting: %s", indexFile);
+        exit(0);
+        }
     }
 else
     {
-    uglyf("starting untranslated server...\n");
-    logInfo("setting up untranslated index");
-    gf = gfIndexNibsAndTwoBits(fileCount, seqFiles, minMatch, 
-    	maxGap, tileSize, repMatch, NULL, allowOneMismatch, stepSize, noSimpRepMask);
+    loadGenoFindIndex(indexFile, &gf, transGf);
+    logInfo("indexing loading complete in  %4.3f seconds", 0.001 * (clock1000() - startIndexTime));
     }
-logInfo("indexing complete");
-
 /* Set up socket.  Get ready to listen to it. */
 socketHandle = netAcceptingSocket(port, 100);
 if (socketHandle < 0)
@@ -1022,6 +1248,10 @@ ipLog = optionExists("ipLog");
 doMask = optionExists("mask");
 canStop = optionExists("canStop");
 noSimpRepMask = optionExists("noSimpRepMask");
+writeIndex = optionExists("writeIndex");
+indexFile = optionVal("indexFile", NULL);
+if (writeIndex && (indexFile == NULL))
+    errAbort("-writeIndex options requires -indexFile");
 if (argc < 2)
     usage();
 if (optionExists("log"))
