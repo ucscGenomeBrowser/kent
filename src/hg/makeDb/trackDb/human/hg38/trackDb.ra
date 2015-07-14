@@ -360,8 +360,7 @@ searchPriority 3.53
 include trackDb.cloneEnd.ra
 
 include hg38Patch3.ra
-include knownGene.ra.alpha 
-#include knownGene.ra.beta public
+include knownGene.ra
 
 include trackDb.100way.ra
 
