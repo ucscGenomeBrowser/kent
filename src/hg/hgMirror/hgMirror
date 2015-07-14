@@ -1772,6 +1772,9 @@ def getAllLocalDbs():
 def main():
     # hide some tracks if any argument specified. makes this tool usable from command line, 
     # from cronjobs that only need to run this function
+    if not isdir(TMPDIR):
+        os.makedirs(TMPDIR)
+
     if len(sys.argv)>1:
         dbSet = getAllLocalDbs()
         for db in dbSet:
@@ -1781,9 +1784,6 @@ def main():
 
     print "Content-type: text/html"
     print
-
-    if not isdir(TMPDIR):
-        os.makedirs(TMPDIR)
 
     parseHgConf()
     if hgConf==None or not hgConf.get("allowHgMirror", "0").lower() in ["1", "yes", "true", "on"]:
