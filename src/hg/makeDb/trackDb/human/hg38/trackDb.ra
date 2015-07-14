@@ -346,7 +346,7 @@ visibility hide
 color 82,82,160
 type genePred
 hgsid on
-oldToNew kg7ToKg8
+oldToNew kg8ToKg9
 baseColorUseCds given
 baseColorDefault genomicCodons
 
