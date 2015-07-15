@@ -1801,6 +1801,7 @@ def main():
     if "reset" in args.keys():
         for fname in glob.glob(TMPDIR+"*"):
             os.remove(fname)
+        os.rmdir(TMPDIR)
 
     htmlHeader()
     htmlMiddle(args)
