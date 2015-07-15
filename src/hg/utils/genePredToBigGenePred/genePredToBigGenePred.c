@@ -12,7 +12,7 @@ void usage()
 errAbort(
   "genePredToBigGenePred - converts genePred or genePredExt to bigGenePred input (bed format with extra fields)\n"
   "usage:\n"
-  "   genePredToBigGenePred file.gp file.bgpInput\n"
+  "  genePredToBigGenePred file.gp stdout | sort -k1,1 -k2,2n > file.bgpInput\n"
   "NOTE: to build bigBed:\n"
   "   bedToBigBed -type=bed12+8 -tab -as=bigGenePred.as file.bgpInput chrom.sizes output.bb\n"
   );
@@ -75,7 +75,7 @@ void genePredToBigGenePred(char *genePredFile, char *bigGeneOutput)
 boolean hasFrames = TRUE;
 struct genePred *gp = hasFrames ? genePredExtLoadAll(genePredFile) : genePredLoadAll(genePredFile);
 
-FILE *fp = fopen(bigGeneOutput, "w");
+FILE *fp = mustOpen(bigGeneOutput, "w");
 
 for(; gp ; gp = gp->next)
     {
