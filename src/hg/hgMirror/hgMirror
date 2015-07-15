@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
 
 # A little CGI interface to download the tables for a set of tracks via udr 
 # to local machine. This is mostly useful when setting up a mirror or a VM
@@ -1801,6 +1801,9 @@ def main():
     if "reset" in args.keys():
         for fname in glob.glob(TMPDIR+"*"):
             os.remove(fname)
+        os.rmdir(TMPDIR)
+        print "temporary files deleted"
+        sys.exit(0)
 
     htmlHeader()
     htmlMiddle(args)
