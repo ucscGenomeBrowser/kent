@@ -8,6 +8,8 @@
 #include "hvGfx.h"
 #include "rainbow.h"
 #include "gtexGeneBed.h"
+#include "gtexTissue.h"
+#include "gtexUi.h"
 
 #define WIN_MAX_GRAPH 20000
 #define MAX_GRAPH_HEIGHT 100
@@ -107,6 +109,29 @@ struct gtexGeneExtras
     double maxExp;
     };
 
+struct rgbColor *getGtexTissueColors()
+/* Get RGB colors from tissue table */
+{
+char query[1024];
+struct sqlConnection *conn = sqlConnect("hgFixed");
+sqlSafef(query, sizeof(query), "select * from gtexTissue order by id");
+struct gtexTissue *tissues = gtexTissueLoadByQuery(conn, query);
+struct gtexTissue *tissue = NULL;
+int count = slCount(tissues);
+struct rgbColor *colors;
+AllocArray(colors, count);
+int i = 0;
+for (tissue = tissues; tissue != NULL; tissue = tissue->next)
+    {
+    // TODO: reconcile 
+    colors[i] = (struct rgbColor){.r=COLOR_32_BLUE(tissue->color), .g=COLOR_32_GREEN(tissue->color), .b=COLOR_32_RED(tissue->color)};
+    //colors[i] = mgColorIxToRgb(NULL, tissue->color);
+    i++;
+    }
+sqlDisconnect(&conn);
+return colors;
+}
+
 static void gtexGeneDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
                     double scale, MgFont *font, Color color, enum trackVisibility vis)
 {
@@ -132,7 +157,6 @@ if (vis != tvFull && vis != tvPack)
     }
 int i;
 int expCount = geneBed->expCount;
-double invExpCount = 1.0/expCount;
 double maxExp = ((struct gtexGeneExtras *)tg->extraUiData)->maxExp;
 struct rgbColor lineColor = {.r=0};
 int lineColorIx = hvGfxFindColorIx(hvg, lineColor.r, lineColor.g, lineColor.b);
@@ -153,14 +177,36 @@ int yBase = valToY(0, maxExp, heightPer) + y;
 //int firstX = x1;
 int barWidth = gtexBarWidth();
 int graphPadding = gtexGraphPadding();
+char *colorScheme = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_COLORS, 
+                        GTEX_COLORS_DEFAULT);
+struct rgbColor *colors;
+if (sameString(colorScheme, GTEX_COLORS_GTEX))
+    {
+    // retrieve from table
+    // TODO: cache this
+    colors = getGtexTissueColors();
+    }
+else
+    {
+    // currently the only other choice
+    // TODO: cache this
+    colors = getRainbow(&saturatedRainbowAtPos, expCount);
+    //colors = getRainbow(&lightRainbowAtPos, expCount);
+    }
 for (i=0; i<expCount; i++)
     {
-    double colPos = invExpCount * i;
-    struct rgbColor fillColor = saturatedRainbowAtPos(colPos);
+    struct rgbColor fillColor = colors[i];
+    if (barWidth == 1 && sameString(colorScheme, GTEX_COLORS_GTEX))
+        {
+        // brighten colors a bit so they'll be more visible at this scale
+        struct hslColor hsl = mgRgbToHsl(fillColor);
+        hsl.s = min(1000, hsl.s + 300);
+        fillColor = mgHslToRgb(hsl);
+        }
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
     double expScore = geneBed->expScores[i];
     int yMedian = valToY(expScore, maxExp, heightPer) + y;
-    if (graphPadding == 0)
+    if (graphPadding == 0 || sameString(colorScheme, GTEX_COLORS_GTEX))
         hvGfxBox(hvg, x1, yMedian, barWidth, yBase - yMedian, fillColorIx);
     else
         hvGfxOutlinedBox(hvg, x1, yMedian, barWidth, yBase - yMedian, fillColorIx, lineColorIx);

@@ -5,6 +5,7 @@
 #ifndef GTEXTISSUE_H
 #define GTEXTISSUE_H
 
+#include "jksql.h"
 #define GTEXTISSUE_NUM_COLS 5
 
 extern char *gtexTissueCommaSepFieldNames;
@@ -23,6 +24,20 @@ struct gtexTissue
 void gtexTissueStaticLoad(char **row, struct gtexTissue *ret);
 /* Load a row from gtexTissue table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
+
+struct gtexTissue *gtexTissueLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all gtexTissue from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with gtexTissueFreeList(). */
+
+void gtexTissueSaveToDb(struct sqlConnection *conn, struct gtexTissue *el, char *tableName, int updateSize);
+/* Save gtexTissue as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 
 struct gtexTissue *gtexTissueLoad(char **row);
 /* Load a gtexTissue from row fetched with select * from gtexTissue
