@@ -93,98 +93,25 @@ void pscmUnclip(struct pscmGfx *pscm)
 pscmSetClip(pscm, 0, 0, pscm->ps->userWidth, pscm->ps->userHeight);
 }
 
-#ifndef COLOR32
-static Color pscmClosestColor(struct pscmGfx *pscm, 
-	unsigned char r, unsigned char g, unsigned char b)
-/* Returns closest color in color map to r,g,b */
-{
-struct rgbColor *c = pscm->colorMap;
-int closestDist = 0x7fffffff;
-int closestIx = -1;
-int dist, dif;
-int i;
-
-for (i=0; i<pscm->colorsUsed; ++i)
-    {
-    dif = c->r - r;
-    dist = dif*dif;
-    dif = c->g - g;
-    dist += dif*dif;
-    dif = c->b - b;
-    dist += dif*dif;
-    if (dist < closestDist)
-        {
-        closestDist = dist;
-        closestIx = i;
-        }
-    ++c;
-    }
-return closestIx;
-}
-
-static Color pscmAddColor(struct pscmGfx *pscm, 
-	unsigned char r, unsigned char g, unsigned char b)
-/* Adds color to end of color map if there's room. */
-{
-int colIx = pscm->colorsUsed;
-struct rgbColor *c = pscm->colorMap + pscm->colorsUsed;
-c->r = r;
-c->g = g;
-c->b = b;
-pscm->colorsUsed += 1;
-colHashAdd(pscm->colorHash, r, g, b, colIx);;
-return (Color)colIx;
-}
-#endif
-
 int pscmFindColorIx(struct pscmGfx *pscm, int r, int g, int b)
 /* Returns closest color in color map to rgb values.  If it doesn't
  * already exist in color map and there's room, it will create
  * exact color in map. */
 {
-#ifdef COLOR32
 return MAKECOLOR_32(r,g,b);
-#else
-struct colHashEl *che;
-if (r>255||g>255||b>255) 
-    errAbort("RGB values out of range (0-255).  r:%d g:%d b:%d", r, g, b);
-if ((che = colHashLookup(pscm->colorHash, r, g, b)) != NULL)
-    return che->ix;
-if (pscm->colorsUsed < 256)
-    return pscmAddColor(pscm, r, g, b);
-return pscmClosestColor(pscm, r, g, b);
-#endif
 }
 
 
 struct rgbColor pscmColorIxToRgb(struct pscmGfx *pscm, int colorIx)
 /* Return rgb value at color index. */
 {
-#ifdef COLOR32
 static struct rgbColor rgb;
 rgb.r = (colorIx >> 0) & 0xff;
 rgb.g = (colorIx >> 8) & 0xff;
 rgb.b = (colorIx >> 16) & 0xff;
 
 return rgb;
-#else
-return pscm->colorMap[colorIx];
-#endif
 }
-
-#ifndef COLOR32
-static void pscmSetDefaultColorMap(struct pscmGfx *pscm)
-/* Set up default color map for a memGfx. */
-{
-/* Note dependency in order here and in MG_WHITE, MG_BLACK, etc. */
-int i;
-for (i=0; i<ArraySize(mgFixedColors); ++i)
-    {
-    struct rgbColor *c = &mgFixedColors[i];
-    pscmFindColorIx(pscm, c->r, c->g, c->b);
-    }
-}
-#endif
 
 void pscmSetWriteMode(struct pscmGfx *pscm, unsigned int writeMode)
 /* Set write mode */
@@ -200,10 +127,6 @@ struct pscmGfx *pscm;
 AllocVar(pscm);
 pscm->ps = psOpen(file, width, height, 72.0 * 7.5, 0, 0);
 psTranslate(pscm->ps,0.5,0.5);  /* translate all coordinates to pixel centers */
-#ifndef COLOR32
-pscm->colorHash = colHashNew();
-pscmSetDefaultColorMap(pscm);
-#endif
 pscm->clipMinX = pscm->clipMinY = 0;
 pscm->clipMaxX = width;     
 pscm->clipMaxY = height;
@@ -228,16 +151,12 @@ void pscmSetColor(struct pscmGfx *pscm, Color color)
 {
 struct rgbColor *col;
 
-#ifdef COLOR32
 struct rgbColor myCol;
 col = &myCol;
 
 col->r = (color >> 0) & 0xff;
 col->g = (color >> 8) & 0xff;
 col->b = (color >> 16) & 0xff;
-#else
-col = pscm->colorMap + color;
-#endif
 
 if (color != pscm->curColor)
     {
