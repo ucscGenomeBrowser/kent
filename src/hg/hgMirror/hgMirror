@@ -814,6 +814,21 @@ def getCladeAssemblyDb(clade, org, db):
     validDbs = getHgDownloadDbs()
     orgInfo = getOrgInfo(validDbs)
 
+    if db is not None and clade is None and org is None:
+        dbToClade = dict()
+        # search to the right org for this db
+        for o, dbList in orgInfo["orgToDbs"].items():
+            for orgDb, desc in dbList:
+                if orgDb==db:
+                    org = o
+                    break
+        # search to the right clade for this org
+        for c, orgList in orgInfo["cladeToOrgs"].items():
+            for o, _ in orgList:
+                if o==org:
+                    clade = c
+                    break
+
     if clade is None or clade=="0":
         clade = orgInfo["defaultClade"]
     if org is None or org=="0" and clade not in [None, "0"]:
