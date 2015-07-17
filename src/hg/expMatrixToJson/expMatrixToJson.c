@@ -141,7 +141,7 @@ while (lineFileNextReal(lf, &line))
        if (fieldCount >= 2)
            el->desc = cloneString(fields[1]);
        else
-           el->desc = cloneString("n/a");
+           el->desc = cloneString("0");
        }
 
     el = el->next;
