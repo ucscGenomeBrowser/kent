@@ -15,7 +15,6 @@
 #include "gfxPoly.h"
 #endif
 
-#ifdef COLOR32
 typedef unsigned int Color;
 
 // BIGENDIAN machines:
@@ -55,22 +54,6 @@ typedef unsigned int Color;
 #define COLOR_32_GREEN(c) (((c)>>8)&0xff)
 #define COLOR_32_BLUE(c) (((c)>>16)&0xff)
 #endif
-
-#else /* 8-bit color */
-typedef unsigned char Color;
-
-#define MG_WHITE 0
-#define MG_BLACK 1
-#define MG_RED 2
-#define MG_GREEN 3
-#define MG_BLUE 4
-#define MG_CYAN 5
-#define MG_MAGENTA 6
-#define MG_YELLOW 7
-#define MG_GRAY 8
-#define MG_FREE_COLORS_START 9
-
-#endif /* COLOR32 */
 
 #define MG_WRITE_MODE_NORMAL    0
 #define MG_WRITE_MODE_MULTIPLY  (1 << 0)

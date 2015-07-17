@@ -804,9 +804,6 @@ Color somewhatLighterColor32(Color color)
 /* Get a somewhat lighter shade of a color - 1/3 of the way towards white. 
  * Specialized here to bypass image parameter requirement.*/
 {
-#ifndef COLOR32
-#error COLOR32 must be defined these days, transparency depends on it.
-#endif /* COLOR32 */
 struct rgbColor rgbColor =  mgColorIxToRgb(NULL, color);
 rgbColor.r = (2*rgbColor.r+255)/3;
 rgbColor.g = (2*rgbColor.g+255)/3;
