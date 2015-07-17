@@ -42,6 +42,7 @@
 #include "pgSnp.h"
 #include "memgfx.h"
 #include "trackHub.h"
+#include "gtexUi.h"
 
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
@@ -6705,6 +6706,25 @@ indelShowOptionsWithNameExt(cart, tdb, name, "LRG transcript sequence", FALSE, F
 cfgEndBox(boxed);
 }
 
+void gtexGeneUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
+/* GTEx (Genotype Tissue Expression) per gene data */
+{
+boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
+printf("<TABLE%s><TR><TD>",boxed?" width='100%'":"");
+
+// Color scheme
+printf("<B>Tissue color scheme:</B>\n");
+char cartVarName[1024];
+safef(cartVarName, sizeof(cartVarName), "%s." GTEX_COLORS, name);
+char *selected = cartCgiUsualString(cart, cartVarName, GTEX_COLORS_DEFAULT); 
+boolean isGtexColors = sameString(selected, GTEX_COLORS_GTEX);
+cgiMakeRadioButton(cartVarName, GTEX_COLORS_GTEX, isGtexColors);
+printf("GTEx\n");
+cgiMakeRadioButton(cartVarName, GTEX_COLORS_RAINBOW, !isGtexColors);
+printf("rainbow\n");
+
+cfgEndBox(boxed);
+}
 
 struct trackDb *rFindView(struct trackDb *forest, char *view)
 // Return the trackDb on the list that matches the view tag. Prefers ancestors before decendents
