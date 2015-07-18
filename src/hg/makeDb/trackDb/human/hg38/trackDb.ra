@@ -323,10 +323,21 @@ snpSeqFile /gbdb/hg38/snp/snp142.fa
 
 track snp142Common override
 snpSeqFile /gbdb/hg38/snp/snp142.fa
-priority 1
 
 track snp142 override
 snpSeqFile /gbdb/hg38/snp/snp142.fa
+
+track snp144Mult override
+snpSeqFile /gbdb/hg38/snp/snp144.fa
+
+track snp144Flagged override
+snpSeqFile /gbdb/hg38/snp/snp144.fa
+
+track snp144Common override
+snpSeqFile /gbdb/hg38/snp/snp144.fa
+
+track snp144 override
+snpSeqFile /gbdb/hg38/snp/snp144.fa
 
 track genomicSuperDups override
 group rep
@@ -346,7 +357,7 @@ visibility hide
 color 82,82,160
 type genePred
 hgsid on
-oldToNew kg7ToKg8
+oldToNew kg8ToKg9
 baseColorUseCds given
 baseColorDefault genomicCodons
 
@@ -360,8 +371,7 @@ searchPriority 3.53
 include trackDb.cloneEnd.ra
 
 include hg38Patch3.ra
-include knownGene.ra.alpha 
-#include knownGene.ra.beta public
+include knownGene.ra
 
 include trackDb.100way.ra
 

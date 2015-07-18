@@ -10,6 +10,7 @@ use vars qw/
     $opt_help
     $opt_contigLoc
     $opt_deDupTGP
+    $opt_deDupTGP2
     /;
 
 sub usage {
@@ -27,6 +28,8 @@ options:
     -deDupTGP     When SNPAlleleFreq's info is identical to SNPAlleleFreq_TGP,
                   ignore SNPAlleleFreq_TGP data because it has been copied into
                   SNPAlleleFreq.  dbSNP started doing this in b138.
+    -deDupTGP2    In b142, dbSNP started neglecting to strand-correct TGP
+                  data copied into otherwise strand-corrected SNPAlleleFreq.
     -help         Print this message
 \n";
   exit $status;
@@ -239,29 +242,20 @@ sub combineSnps($$;$) {
   die if ($aSnp->{id} ne $bSnp->{id});
   my $strand = &getStrand($bSnp, $strandFh);
   if ($strand eq '-') {
+    # SNPAlleleFreq alleles are strand-corrected, but SNPAlleleFreq_TGP's are all + strand.
+    # Reverse complement SNPAlleleFreq_TGP's alleles for comparison.
+    if ($opt_deDupTGP2 && sameSnps($aSnp, $bSnp)) {
+      # In b142 dbSNP started forgetting to strand-correct the TGP data copied into
+      # SNPAlleleFreq.  Strand-correct it for them...
+      $aSnp = revCompSnp($aSnp);
+    }
     $bSnp = &revCompSnp($bSnp);
   }
-  # Warn if the different sources give us different sets of alleles:
-  my ($aStr, $bStr) = ("", "");
-  foreach my $alInfo (@{$aSnp->{als}}) {
-    $aStr .= "$alInfo->[0]/";
-  }
-  foreach my $alInfo (@{$bSnp->{als}}) {
-    $bStr .= "$alInfo->[0]/";
-  }
-  if ($aStr && $bStr && $aStr ne $bStr) {
-    $aStr =~ s#N/##;  $aStr =~ s#/$##;
-    $bStr =~ s#N/##;  $bStr =~ s#/$##;
-    if (index($aStr, $bStr) >= 0 || index($bStr, $aStr) >= 0) {
-      # Happens all the time (some of the "observed" alleles weren't actually observed
-      # in any submission that reported allele counts)
-      # print STDERR "id=$aSnp->{id}: allele subset relationship $aStr vs. $bStr\n";
-    } else {
-      # The InconsistentAlleles exception will flag these.
-      #	print STDERR "id=$aSnp->{id}: different allele sets $aStr vs. $bStr\n";
-      }
-  }
-  # This is where we could detect the AlleleFreqSumNot1 exception....
+
+  # Before July 2015 there was some commented-out code to warn about inconsistent
+  # alleles -- those are reported as exceptions anyway.  See git blame for history.
+  # We could also detect the AlleleFreqSumNot1 exception here.
+
   # Merge alleles and counts:
   if ($opt_deDupTGP && &sameSnps($aSnp, $bSnp)) {
     return $aSnp;
@@ -275,7 +269,7 @@ sub combineSnps($$;$) {
 #
 # -- main --
 
-my $ok = GetOptions("help", "contigLoc=s", "deDupTGP");
+my $ok = GetOptions("help", "contigLoc=s", "deDupTGP", "deDupTGP2");
 &usage(1) if (!$ok);
 &usage(0) if ($opt_help);
 &usage(1) if (scalar(@ARGV) != 1);

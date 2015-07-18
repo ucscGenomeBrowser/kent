@@ -419,7 +419,7 @@ sub translateSql {
 				   "sed -re 's/\r//g;' |");
   my $SQLOUT = HgAutomate::mustOpen("> $schemaDir/table.sql");
   my $sepBak = $/;
-  $/ = "\nGO\n\n";
+  $/ = "\ngo\n\n";
   my $tableCount = 0;
   while (<$SQLIN>) {
     next unless /^\n*CREATE TABLE \[($tables)\]/;
@@ -437,7 +437,7 @@ sub translateSql {
   $tables = join('|', @sharedTables);
   $SQLIN = HgAutomate::mustOpen("zcat $schemaDir/dbSNP_main_table.sql.gz |" .
 				   "sed -re 's/\r//g;' |");
-  $/ = "\nGO\n\n";
+  $/ = "\ngo\n\n";
   while (<$SQLIN>) {
     next unless /^CREATE TABLE \[$tables\]/;
     s/[\[\]]//g;  s/\nGO\n/;\n/i;  s/smalldatetime/datetime/g; s/IDENTITY\(1,1\) //g;
@@ -540,7 +540,7 @@ sub tryToMakeLiftUpFromContigInfo {
   my ($missingCount, $liftUpCount) = (0, 0);
   while (<$CI>) {
     chomp;  my @w = split("\t");
-    my ($contig, $chr, $chromStart, $chromEnd) = ($w[2], $w[5], $w[6], $w[7]);
+    my ($contig, $chr, $chromStart, $chromEnd, $groupTerm) = ($w[2], $w[5], $w[6], $w[7], $w[10]);
     if ($chromStart ne "") {
       $chr = "chrM" if ($chr eq "MT");
       if (! exists $chromSizes->{$chr}) {
@@ -557,12 +557,16 @@ sub tryToMakeLiftUpFromContigInfo {
       my $newSize = $chromSizes->{$chr};
       print $LU join("\t", $chromStart, $contig, $oldSize, $chr, $newSize) . "\n";
       $liftUpCount++;
+    } elsif ($groupTerm eq 'PATCHES') {
+      $chr = "no chr" if (! $chr);
+      push @missingInfo, [ 'patch contig', $contig, $chr ];
+      $missingCount++;
     } elsif ($db eq 'hg38') {
       # If no chromStart given, transform chr and GB acc info into our local sequence names
       my ($acc, $accVersion, $size) = ($w[15], $w[16], $w[27]);
       my $ucscSeqName;
       if ($chr ne "") {
-        my $suffix = ($w[10] =~ /^ALT_REF/) ? '_alt' : '_random';
+        my $suffix = ($groupTerm =~ /^ALT_REF/) ? '_alt' : '_random';
         $ucscSeqName = "chr$chr" . "_" . $acc . "v" . $accVersion . $suffix;
       } else {
         $ucscSeqName = "chrUn_" . $acc . "v" . $accVersion;
@@ -1092,8 +1096,9 @@ _EOF_
 		  );
   if ($needSNPAlleleFreq_TGP) {
     my $deDup = ($build >= 138) ? "-deDupTGP" : "";
+    my $deDup2 = ($build >= 142) ? "-deDupTGP2" : "";
     $bossScript->add(<<_EOF_
-    $Bin/snpAddTGPAlleleFreq.pl $tmpDb -contigLoc=$ContigLoc $deDup > ucscAlleleFreq.txt
+    $Bin/snpAddTGPAlleleFreq.pl $tmpDb -contigLoc=$ContigLoc $deDup $deDup2 > ucscAlleleFreq.txt
 _EOF_
 		    );
   }
@@ -1418,6 +1423,7 @@ sub filterTables {
           $db \$table -sqlTable=$snpBase.sql \$table.bed.gz
       endif
     end
+    rm bed.tab
 _EOF_
     );
   $bossScript->execute();
