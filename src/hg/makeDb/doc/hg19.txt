@@ -29146,8 +29146,8 @@ cp gvfToBed8AttrsCase.pl gvfToBed8AttrsControl54.pl
 
 # added line 33/35 to each file:
 
-# next if ($sample_name eq "Unens"); # keep only "case" individuals from nstd100
-# next if ($sample_name ne "Unens"); # keep only "control" individuals from nstd100
+# next if ($sample_name eq "Unknown"); # keep only "case" individuals from nstd100
+# next if ($sample_name ne "Unknown"); # keep only "control" individuals from nstd100
 # next if ($phenotype ne "not_reported"); # keep only "control" individuals from nstd54
 
 zcat nstd100_Coe_et_al_2014.GRCh37.remap.all.germline.ucsc.gvf.gz | gvfToBed8AttrsCase.pl > cnvDevDelayAllCase.bed
