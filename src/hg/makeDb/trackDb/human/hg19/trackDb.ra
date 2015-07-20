@@ -854,6 +854,18 @@ snpSeqFile /gbdb/hg19/snp/snp142.fa
 track snp142 override
 snpSeqFile /gbdb/hg19/snp/snp142.fa
 
+track snp144Mult override
+snpSeqFile /gbdb/hg19/snp/snp144.fa
+
+track snp144Flagged override
+snpSeqFile /gbdb/hg19/snp/snp144.fa
+
+track snp144Common override
+snpSeqFile /gbdb/hg19/snp/snp144.fa
+
+track snp144 override
+snpSeqFile /gbdb/hg19/snp/snp144.fa
+
 track snp137Common override
 snpSeqFile /gbdb/hg19/snp/snp137.fa
 chimpOrangMacOrthoTable snp137OrthoPt3Pa2Rm2
