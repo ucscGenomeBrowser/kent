@@ -130,3 +130,10 @@ tables knownToMalacards
 idSql select value from knownToMalacards where name = '%s';
 url http://malacards.org/search/results/%s
 priority 10
+
+name gtex
+shortLabel GTEx
+tables kgXref
+idSql select geneSymbol from kgXref where kgID = '%s'
+url http://www.gtexportal.org/home/gene/%s
+priority 10
