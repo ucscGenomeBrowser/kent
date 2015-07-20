@@ -2165,7 +2165,7 @@ foreach my $size (keys %ucscChrs) {
         printf "%s\t%s\t%d\n", $ucscChrs{$size}, $ensemblChrs{$size}, $size;
     } else {
         my $ucscName = $ucscChrs{$size};
-        my $ensemblName = "unknown";
+        my $ensemblName = "unens";
         if ($ucscName =~ m/^chr6/) {
             $ucscName =~ s/_hap.//;
             $ucscName =~ s/chr6_/chr6_mhc_/;
@@ -2176,7 +2176,7 @@ foreach my $size (keys %ucscChrs) {
         } elsif ($ucscName =~ m/^chrM/) {
             print "# no translation for chrM\n";
         } else {
-            die "unknown UCSC chr name: $ucscName";
+            die "unens UCSC chr name: $ucscName";
         }
         printf "# ucsc $ucscChrs{$size} -> $ensemblName\n";
         $ensemblTranslate{$ensemblName} = $size;
@@ -6187,8 +6187,8 @@ done > tmpMostConserved.bed
     #	refGene:cds 1.186%, phastConsElements46wayPrimates 4.031%,
     #	both 0.730%, cover 61.54%, enrich 15.27x
 
-    featureBits hg19 -enrichment knownGene:cds phastConsElements46wayPrimates
-    #	knownGene:cds 1.252%, phastConsElements46wayPrimates 4.031%,
+    featureBits hg19 -enrichment ensGene:cds phastConsElements46wayPrimates
+    #	ensGene:cds 1.252%, phastConsElements46wayPrimates 4.031%,
     #	both 0.743%, cover 59.31%, enrich 14.71x
 
     #	Create the downloads .pp files, from which the phastCons wiggle data
@@ -6336,8 +6336,8 @@ done > tmpMostConserved.bed
     featureBits hg19 -enrichment refGene:cds phastConsElements46wayPlacental
     #	refGene:cds 1.187%, phastConsElements46wayPlacental 4.080%,
     #	both 0.861%, cover 72.59%, enrich 17.79x
-    featureBits hg19 -enrichment knownGene:cds phastConsElements46wayPlacental
-    #	knownGene:cds 1.252%, phastConsElements46wayPlacental 4.080%,
+    featureBits hg19 -enrichment ensGene:cds phastConsElements46wayPlacental
+    #	ensGene:cds 1.252%, phastConsElements46wayPlacental 4.080%,
     #	both 0.879%, cover 70.22%, enrich 17.21x
 
     #	Create the downloads .pp files, from which the phastCons wiggle data
@@ -7777,8 +7777,8 @@ done
    ln -s /cluster/data/mm9/bed/allenBrain/allenBrainProbes.fa /gbdb/hg19/allenBrain/allenBrainProbes.fa
    hgLoadSeq hg19 /gbdb/hg19/allenBrain/allenBrainProbes.fa
 
-# Make mapping between known genes and allenBrain
-   hgMapToGene hg19 allenBrainAli -type=psl knownGene knownToAllenBrain
+# Make mapping between ens genes and allenBrain
+   hgMapToGene hg19 allenBrainAli -type=psl ensGene ensToAllenBrain
 
 #############################################################################
 # ADD ALLEN BRAIN CORTEXT LINK (DONE, 11/18/09 kent)
@@ -7812,7 +7812,7 @@ foreach db (`cat ../species.list`)
     set tables = `hgsql $db -N -e "show tables like '%Gene%'"`
     foreach table ($tables)
 	if ($table == "ensGene" || $table == "refGene" || $table == "mgcGenes" || \
-	    $table == "knownGene" || $table == "xenoRefGene" ) then
+	    $table == "ensGene" || $table == "xenoRefGene" ) then
 		set count = `hgsql $db -N -e "select count(*) from $table"`
 		echo -n "${table}: ${count}, "
 	endif
@@ -7832,15 +7832,15 @@ end
     # << happy emacs
     chmod +x ./showGenes.csh
     #	rearrange that output to create four sections:
-    #	1. knownGenes for hg19, mm9, rn4
+    #	1. ensGenes for hg19, mm9, rn4
     #	2. ensGene for almost everything else
     #	3. xenoRefGene for calJac1, petMar1, loxAfr3, papHam1, macEug1, oryCun2
 
     mkdir genes
-    # knownGene
+    # ensGene
     for DB in hg19 mm9 rn4
 do
-    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
         > /scratch/tmp/${DB}.tmp.gz
     mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
@@ -8102,13 +8102,13 @@ done
     hgLoadPsl hg19 affyU133.psl
     hgLoadSeq hg19 /gbdb/hgFixed/affyProbes/HG-U133AB_all.fa
 
-    # Added knownToU133 table
-    hgMapToGene hg19 affyU133 knownGene knownToU133
+    # Added ensToU133 table
+    hgMapToGene hg19 affyU133 ensGene ensToU133
     # trim unwanted chip-prefix to be backwards compatible with hg17 and hg18
-    hgsql hg19 -e 'update knownToU133 set value=substring(value,7)'
+    hgsql hg19 -e 'update ensToU133 set value=substring(value,7)'
 
     # remove the trailing ";" from the value field (redmine #1685)
-    hgsql hg19 -e 'update knownToU133 set value=trim(trailing ";" from value);'
+    hgsql hg19 -e 'update ensToU133 set value=trim(trailing ";" from value);'
 
 ##########################################################################
 # GNF ATLAS 2 (Done - 2009-09-30 - Jim)
@@ -8166,8 +8166,8 @@ done
     hgLoadBed hg19 gnfAtlas2 gnfAtlas2.bed
     # Loaded 36357 elements of size 15
 
-    # Added knownToGnf1h table
-    hgMapToGene hg19 affyGnf1h knownGene knownToGnf1h
+    # Added ensToGnf1h table
+    hgMapToGene hg19 affyGnf1h ensGene ensToGnf1h
 
 ##########################################################################
 # BUILD NIBB IMAGE PROBES (DONE 2009-10-12 JK)
@@ -8226,7 +8226,7 @@ blatz -rna -minScore=6000 -out=psl $(path1) $(path2) psl/$(root1)_$(root2).psl
 # Initial vgProbeTrack run for hg19 (galt 2009-10-15)
 # see visiGene.txt make doc
 # uses nibbImageProbes and vgProbeTrack utility
-# creates vgAllProbes and knownToVisiGene
+# creates vgAllProbes and ensToVisiGene
 #    25931
 # updates visiGene.vgPrbAliAll.
 # creates and runs hgLoadSeq on /gbdb/hg19/visiGene/*.fa
@@ -8284,18 +8284,18 @@ autoSql ~/src/hg/lib/omimMorbidMap.as x
 cat x.sql |sed -e 's/PRIMARY KEY(description)/KEY(omimId)/' >omimMorbidMap.sql
 hgLoadSqlTab -warn hg19 omimMorbidMap omimMorbidMap.sql mobidmap.tab
 
-# get all UCSC genes (from the knownGene table) that cross-reference to a RefSeq gene
+# get all UCSC genes (from the ensGene table) that cross-reference to a RefSeq gene
 # that has a non-empty OMIM ID according to the refLink table.  And use OMIM ID as
 # the gene name for this new table.  Please note the alignId field still holds the KG ID.
 
 hgsql hg19 -N -e \
-'select omimId, kg.* from knownGene kg, knownToRefSeq kr, refLink l where omimId != 0 and mrnaAcc=kr.value and kg.name=kr.name ' \
+'select omimId, kg.* from ensGene kg, ensToRefSeq kr, refLink l where omimId != 0 and mrnaAcc=kr.value and kg.name=kr.name ' \
 |cut -f 1,3-13 >o1.tab
 
 # collect more OMIM related genes via the MIM external DB links from UniProt
 
 hgsql hg19 -N -e \
-'select extAC, kg.* from knownGene kg, kgXref k, proteome.spXref2 p where spId=p.accession and extDB="MIM" and kg.name=kgId ' \
+'select extAC, kg.* from ensGene kg, kgXref k, proteome.spXref2 p where spId=p.accession and extDB="MIM" and kg.name=kgId ' \
 |cut -f 1,3-13 >o2.tab
 
 # concatenate the above two gene sets and remove duplications.
@@ -8303,14 +8303,14 @@ hgsql hg19 -N -e \
 cat o1.tab o2.tab |sort -u >o3.tab
 
 # load the result into a temp table, fanO3
-hgLoadSqlTab hg19 fanO3 ~/src/hg/lib/knownGene.sql o3.tab
+hgLoadSqlTab hg19 fanO3 ~/src/hg/lib/ensGene.sql o3.tab
 
-# while holding onto the OMIM ID, get the canonical gene (via the knownGene, knowIsoforms,
-# and knownCanonical tables) that represent a cluster which contains
+# while holding onto the OMIM ID, get the canonical gene (via the ensGene, knowIsoforms,
+# and ensCanonical tables) that represent a cluster which contains
 # initial OMIM gene in the fanO3 table
 
 hgsql hg19 -N -e \
-'select f3.name, kg.* from fanO3 f3, knownGene kg, knownCanonical c, knownIsoforms i where f3.alignId=i.transcript and kg.name=c.transcript and c.clusterId=i.clusterId'\
+'select f3.name, kg.* from fanO3 f3, ensGene kg, ensCanonical c, ensIsoforms i where f3.alignId=i.transcript and kg.name=c.transcript and c.clusterId=i.clusterId'\
 > o4.tab
 
 # first column is the OMIM ID
@@ -8321,7 +8321,7 @@ cut -f 3-13 o4.tab >j2.tmp
 
 # stitch them together and remove duplicates, load the result into fanO4 table
 paste j1.tmp j2.tmp |sort -u >fanO4.tab
-hgLoadSqlTab hg19 fanO4  ~/src/hg/lib/knownGene.sql fanO4.tab
+hgLoadSqlTab hg19 fanO4  ~/src/hg/lib/ensGene.sql fanO4.tab
 
 # finally sort the table and create bed 4 file and load it as the omimGene table
 
@@ -8384,18 +8384,18 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     hgsql hg19 <~/src/hg/lib/hprdToUniProt.sql
     hgsql hg19 -e 'load data local infile "hprdToUniProt.tab" into table hprdToUniProt'
 
-# build knownToHprd table
+# build ensToHprd table
 
     hgsql hg19 -N -e 'select kgId,hprdId from hprdToCdna, kgXref where cdnaId=refseq' >j.kg1
     hgsql hg19 -N -e 'select kgId,hprdId from hprdToUniProt, kgXref where uniProtId=spId' >j.kg2
 
-    cat j.kg1 j.kg2 | sed 's/_.//' | sort -u >knownToHprd.tab
-    wc knownToHprd.tab
+    cat j.kg1 j.kg2 | sed 's/_.//' | sort -u >ensToHprd.tab
+    wc ensToHprd.tab
 
-    hgsql hg19 <~/src/hg/lib/knownToHprd.sql
+    hgsql hg19 <~/src/hg/lib/ensToHprd.sql
 
-    hgsql hg19 -e 'load data local infile "knownToHprd.tab" into table knownToHprd'
-    hgsql hg19 -e 'select count(*) from knownToHprd'
+    hgsql hg19 -e 'load data local infile "ensToHprd.tab" into table ensToHprd'
+    hgsql hg19 -e 'select count(*) from ensToHprd'
 
 # 21,516 records created
 
@@ -8405,7 +8405,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 
 #########################################################################
 # hgPal downloads (DONE braney 2009-11-03)
-#   FASTA from 46way for refGene, knownGene, knownCanonical
+#   FASTA from 46way for refGene, ensGene, ensCanonical
 
     ssh hgwdev
     screen
@@ -8461,7 +8461,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
 
     mz=multiz46way
-    gp=knownGene
+    gp=ensGene
     db=hg19
     mkdir exonAA exonNuc ppredAA ppredNuc
     for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
@@ -8485,7 +8485,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 
 
     mz=multiz46way
-    gp=knownGene
+    gp=ensGene
     db=hg19
 
     zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
@@ -8496,7 +8496,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     rm -rf exonAA exonNuc ppredAA ppredNuc
 
     mz=multiz46way
-    gp=knownGene
+    gp=ensGene
     db=hg19
     pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
     mkdir -p $pd
@@ -8506,24 +8506,24 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # now do the canonical set
     cd /cluster/data/hg19/bed/multiz46way/pal
     mz=multiz46way
-    gp=knownCanonical
+    gp=ensCanonical
     db=hg19
     for j in `awk '{print $1}' /cluster/data/hg19/chrom.sizes`
     do
-	echo "select chrom, chromStart, chromEnd, transcript from knownCanonical where chrom='$j'" | hgsql $db | tail -n +2 > $j.known.bed
+	echo "select chrom, chromStart, chromEnd, transcript from ensCanonical where chrom='$j'" | hgsql $db | tail -n +2 > $j.ens.bed
     done
 
     mkdir exonAA exonNuc ppredAA ppredNuc
     for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
     do
 	echo "date"
-	echo "mafGene -geneBeds=$j.known.bed  $db $mz knownGene order.lst stdout | \
+	echo "mafGene -geneBeds=$j.ens.bed  $db $mz ensGene order.lst stdout | \
 	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
-	echo "mafGene -geneBeds=$j.known.bed -noTrans $db $mz knownGene order.lst stdout | \
+	echo "mafGene -geneBeds=$j.ens.bed -noTrans $db $mz ensGene order.lst stdout | \
 	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
-	echo "mafGene -geneBeds=$j.known.bed -exons -noTrans $db $mz knownGene order.lst stdout | \
+	echo "mafGene -geneBeds=$j.ens.bed -exons -noTrans $db $mz ensGene order.lst stdout | \
 	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
-	echo "mafGene -geneBeds=$j.known.bed -exons $db $mz knownGene order.lst stdout | \
+	echo "mafGene -geneBeds=$j.ens.bed -exons $db $mz ensGene order.lst stdout | \
 	    gzip -c > exonAA/$j.exonAA.fa.gz"
     done > $gp.$mz.jobs
 
@@ -8536,9 +8536,9 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 # sys     5m30.071s
 
 
-    rm *.known.bed
+    rm *.ens.bed
     mz=multiz46way
-    gp=knownCanonical
+    gp=ensCanonical
     db=hg19
     zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
     zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
@@ -8548,7 +8548,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     rm -rf exonAA exonNuc ppredAA ppredNuc
 
     mz=multiz46way
-    gp=knownCanonical
+    gp=ensCanonical
     db=hg19
     pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
     mkdir -p $pd
@@ -10008,7 +10008,7 @@ EOF
 
     # Tweaked 8/4/10 to correct missing-func (loophole fixed in perl that generates
     # ucscFunc.txt above).
-    hgsql hg19 -e "update snp131 set func = 'unknown' where name = 'rs75946332' and func = '';"
+    hgsql hg19 -e "update snp131 set func = 'unens' where name = 'rs75946332' and func = '';"
 
 
 
@@ -10043,7 +10043,7 @@ EOF
       hg19 snp131NonClinical -sqlTable=snp131.sql -renameSqlTable snp131NonClinical.bed
 #Loaded 26018146 elements of size 17
     # 9/1/10: Don't forget to fix the empty-func bug!
-    hgsql hg19 -e 'update snp131Clinical set func = "unknown" where func = "";'
+    hgsql hg19 -e 'update snp131Clinical set func = "unens" where func = "";'
 
 
 ############################################################################
@@ -10314,7 +10314,7 @@ EOF
     | sort -n | uniq -c
 # 168639 3   (coding-synon)
 # 443419 8   (cds-reference -- ignored)
-#      1 9   (coding-synonymy-unknown: rs80359842)
+#      1 9   (coding-synonymy-unens: rs80359842)
 #   9790 41  (nonsense)
 # 261982 42  (missense)
 #  65656 44  (frameshift)
@@ -10644,8 +10644,8 @@ EOF
     #     58592
 
 
-    # Added knownToU133Plus2 table
-    hgMapToGene hg19 affyU133Plus2 knownGene knownToU133Plus2
+    # Added ensToU133Plus2 table
+    hgMapToGene hg19 affyU133Plus2 ensGene ensToU133Plus2
 
 
 #############################################################################
@@ -10703,8 +10703,8 @@ EOF
     #   Updating seq table
     #   All done
 
-    # Added knownToU95 table
-    hgMapToGene hg19 affyU95 knownGene knownToU95
+    # Added ensToU95 table
+    hgMapToGene hg19 affyU95 ensGene ensToU95
 
 #############################################################################
 # UPDATE KEGG TABLES (DONE, Fan, 6/18/10)
@@ -10733,7 +10733,7 @@ hgsql hg19 < ~/kent/src/hg/lib/keggPathway.sql
 hgsql hg19 -e 'load data local infile "j.tmp" into table keggPathway'
 
 hgsql hg19 -N -e \
-'select name, locusID, mapID from keggPathway p, knownToLocusLink l where p.locusID=l.value' \
+'select name, locusID, mapID from keggPathway p, ensToLocusLink l where p.locusID=l.value' \
 >keggPathway.tab
 
 hgsql hg19 -e 'delete from keggPathway'
@@ -10746,13 +10746,13 @@ rm j.tmp
 
 mkdir -p /hive/data/genomes/hg19/bed/geneSorter
 cd /hive/data/genomes/hg19/bed/geneSorter
-hgsql hg19 -N -e 'select kgId, mapID, mapID, "+", locusID from keggPathway' |sort -u|sed -e 's/\t+\t/+/' > knownToKeggEntrez.tab
+hgsql hg19 -N -e 'select kgId, mapID, mapID, "+", locusID from keggPathway' |sort -u|sed -e 's/\t+\t/+/' > ensToKeggEntrez.tab
 
-hgsql hg19 -e 'drop table knownToKeggEntrez'
+hgsql hg19 -e 'drop table ensToKeggEntrez'
 
-hgsql hg19 < ~/kent/src/hg/lib/knownToKeggEntrez.sql
+hgsql hg19 < ~/kent/src/hg/lib/ensToKeggEntrez.sql
 
-hgsql hg19 -e 'load data local infile "knownToKeggEntrez.tab" into table knownToKeggEntrez'
+hgsql hg19 -e 'load data local infile "ensToKeggEntrez.tab" into table ensToKeggEntrez'
 
 #############################################################################
 # Haplotype locations (DONE - 2010-06-29 - Hiram)
@@ -10879,7 +10879,7 @@ s/HSCHR17_1_CTG5/chr17_ctg5_hap1/;" > haplotypeLocations.bed
     cat << '_EOF_' > ucscNames.txt
 gi|289436847|gb|GL339449.1 HSCHR5_1_CTG1 CM000667.1 chr5_ctg1_hap1
 gi|289436846|gb|GL339450.1 HG79_PATCH CM000671.1 chr9_gl339450
-chrM_NC_012920 unknown unknown chrM_NC_012920
+chrM_NC_012920 unens unens chrM_NC_012920
 '_EOF_'
     # << happy emacs
 
@@ -11128,9 +11128,9 @@ done
     mkdir 100806
     cd 100806
     # Get the proteins used by the other hgNear organisms:
-    pepPredToFa hg19 knownGenePep hg19.known.faa
-    pepPredToFa mm9 knownGenePep mm9.known.faa
-    pepPredToFa rn4 knownGenePep rn4.known.faa
+    pepPredToFa hg19 ensGenePep hg19.ens.faa
+    pepPredToFa mm9 ensGenePep mm9.ens.faa
+    pepPredToFa rn4 ensGenePep rn4.ens.faa
     pepPredToFa danRer6 ensPep danRer6.ensPep.faa
     pepPredToFa dm3 flyBasePep dm3.flyBasePep.faa
     pepPredToFa ce6 sangerPep ce6.sangerPep.faa
@@ -11140,13 +11140,13 @@ done
 # Latest human vs. other Gene Sorter orgs:
 # mouse, rat, zebrafish, worm, yeast, fly
 
-targetGenesetPrefix known
+targetGenesetPrefix ens
 targetDb hg19
 queryDbs mm9 rn4 danRer6 dm3 ce6 sacCer2
 
 hg19Fa /hive/data/genomes/hg19/bed/ucsc.12/ucscGenes.faa
 mm9Fa /hive/data/genomes/mm9/bed/ucsc.12/ucscGenes.faa
-rn4Fa /hive/data/genomes/rn4/bed/blastp/known.faa
+rn4Fa /hive/data/genomes/rn4/bed/blastp/ens.faa
 danRer6Fa /hive/data/genomes/danRer6/bed/blastp/danRer6.ensPep.faa
 dm3Fa /hive/data/genomes/dm3/bed/flybase5.3/flyBasePep.fa
 ce6Fa /hive/data/genomes/ce6/bed/blastp/wormPep190.faa
@@ -14606,7 +14606,7 @@ hgsql hg18 --skip-column-names -e "select * from HInvGeneMrna" | cut -f2- > hg18
 liftOver -pslT hg18.HInvGeneMrna.psl /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.HInvGeneMrna.{psl,unmapped}
 hgLoadPsl -table=HInvGeneMrna hg19 hg19.HInvGeneMrna.psl
 ## A couple non-positional tables too:
-hgsqldump hg18 knownToHInv | hgsql hg19
+hgsqldump hg18 ensToHInv | hgsql hg19
 hgsqldump hg18 HInv | hgsql hg19
 
 #############################################################################
@@ -16191,8 +16191,8 @@ db hg19
 #       Ensemble names to UCSC names.  With quotes just to make sure.
 # delete commands take out genes that are only in patch sequence
 nameTranslation 's/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; /^GL3.*/d; /^HSCHR[1-5]/d; /^HSCHR[7-9]/d; /^HG/d'
-# optionally update the knownToEnsembl table after ensGene updated
-knownToEnsembl yes
+# optionally update the ensToEnsembl table after ensGene updated
+ensToEnsembl yes
 # optional haplotype lift-down from Ensembl full chrom coordinates
 #       to UCSC simple haplotype coordinates
 haplotypeLift /hive/data/genomes/hg19/jkStuff/ensGene.haplotype.lift
@@ -16461,8 +16461,8 @@ hgsql hg19 -e "delete from omimLocation where name='${1}'"
     cut -f1,9 infoOut.txt | grep -v "^#" | sort > ensemblToGeneName.tab
     NL=`awk '{print length($1)}' ensemblToGeneName.tab | sort -rn | head -1`
     VL=`awk '{print length($2)}' ensemblToGeneName.tab | sort -rn | head -1`
-    sed -e "s/ knownTo / ensemblToGeneName /; s/known gene/ensGen/; s/INDEX(name(12)/PRIMARY KEY(name($NL)/; s/value(12)/value($VL)/" \
-	$HOME/kent/src/hg/lib/knownTo.sql > ensemblToGeneName.sql
+    sed -e "s/ ensTo / ensemblToGeneName /; s/ens gene/ensGen/; s/INDEX(name(12)/PRIMARY KEY(name($NL)/; s/value(12)/value($VL)/" \
+	$HOME/kent/src/hg/lib/ensTo.sql > ensemblToGeneName.sql
 
     hgLoadSqlTab hg19 ensemblToGeneName ensemblToGeneName.sql ensemblToGeneName.tab
 
@@ -16688,7 +16688,7 @@ EOF
     # Make several tracks that are filtered subsets of snp134:
     # First, filter out the multiply-aligned and/or weight >1 SNPs -> snp134Mult
     # Second, siphon off the common variants -> snp134Common
-    # Third, take the (uniquely mapped, not known to be common) variants
+    # Third, take the (uniquely mapped, not ens to be common) variants
     # w/dbSNP's "clinically-assoc" flag -> snp134Flagged
     cd /hive/data/outside/dbSNP/134/human
     zcat snp134.bed.gz \
@@ -17157,7 +17157,7 @@ CREATE TABLE geneReviewsGrshortTitleNBKid (
         echo ${G}
         hgsql hg19 -N -e \
           "SELECT e.chrom,e.txStart,e.txEnd,j.geneSymbol \
-          FROM knownGene e, kgXref j WHERE e.alignID = j.kgID AND \
+          FROM ensGene e, kgXref j WHERE e.alignID = j.kgID AND \
           j.geneSymbol ='${G}' ORDER BY e.chrom,e.txStart;" > temp.in
         bedRemoveOverlap temp.in temp.out
         cat temp.out >> geneReviews.tab
@@ -17208,8 +17208,8 @@ CREATE TABLE geneReviewsDetail (
 
 
 ##############################################################################
-# hgPal downloads redone for new knownGene (re-DONE 2012-01-06 braney)
-#   FASTA from 46way for  knownGene, knownCanonical
+# hgPal downloads redone for new ensGene (re-DONE 2012-01-06 braney)
+#   FASTA from 46way for  ensGene, ensCanonical
 
     ssh hgwdev
     screen
@@ -17220,7 +17220,7 @@ CREATE TABLE geneReviewsDetail (
     for i in `cat ../species.list`; do echo $i; done > order.lst
 
     mz=multiz46way
-    gp=knownGene
+    gp=ensGene
     db=hg19
     mkdir exonAA exonNuc ppredAA ppredNuc
     for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
@@ -17245,7 +17245,7 @@ CREATE TABLE geneReviewsDetail (
 # sys     6m12.046s
 
     mz=multiz46way
-    gp=knownGene
+    gp=ensGene
     db=hg19
 
     zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
@@ -17256,7 +17256,7 @@ CREATE TABLE geneReviewsDetail (
     rm -rf exonAA exonNuc ppredAA ppredNuc
 
     mz=multiz46way
-    gp=knownGene
+    gp=ensGene
     db=hg19
     pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
@@ -17266,24 +17266,24 @@ CREATE TABLE geneReviewsDetail (
     # now do the canonical set
     cd /cluster/data/hg19/bed/multiz46way/pal
     mz=multiz46way
-    gp=knownCanonical
+    gp=ensCanonical
     db=hg19
     for j in `awk '{print $1}' /cluster/data/hg19/chrom.sizes`
     do
-	echo "select chrom, chromStart, chromEnd, transcript from knownCanonical where chrom='$j'" | hgsql $db | tail -n +2 > $j.known.bed
+	echo "select chrom, chromStart, chromEnd, transcript from ensCanonical where chrom='$j'" | hgsql $db | tail -n +2 > $j.ens.bed
     done
 
     mkdir exonAA exonNuc ppredAA ppredNuc
     for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
     do
 	echo "date"
-	echo "mafGene -geneBeds=$j.known.bed  $db $mz knownGene order.lst stdout | \
+	echo "mafGene -geneBeds=$j.ens.bed  $db $mz ensGene order.lst stdout | \
 	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
-	echo "mafGene -geneBeds=$j.known.bed -noTrans $db $mz knownGene order.lst stdout | \
+	echo "mafGene -geneBeds=$j.ens.bed -noTrans $db $mz ensGene order.lst stdout | \
 	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
-	echo "mafGene -geneBeds=$j.known.bed -exons -noTrans $db $mz knownGene order.lst stdout | \
+	echo "mafGene -geneBeds=$j.ens.bed -exons -noTrans $db $mz ensGene order.lst stdout | \
 	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
-	echo "mafGene -geneBeds=$j.known.bed -exons $db $mz knownGene order.lst stdout | \
+	echo "mafGene -geneBeds=$j.ens.bed -exons $db $mz ensGene order.lst stdout | \
 	    gzip -c > exonAA/$j.exonAA.fa.gz"
     done > $gp.$mz.jobs
 
@@ -17295,9 +17295,9 @@ CREATE TABLE geneReviewsDetail (
 # user    13m35.246s
 # sys     2m50.683s
 
-    rm *.known.bed
+    rm *.ens.bed
     mz=multiz46way
-    gp=knownCanonical
+    gp=ensCanonical
     db=hg19
     zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
     zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
@@ -17307,7 +17307,7 @@ CREATE TABLE geneReviewsDetail (
     rm -rf exonAA exonNuc ppredAA ppredNuc
 
     mz=multiz46way
-    gp=knownCanonical
+    gp=ensCanonical
     db=hg19
     pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
@@ -17822,7 +17822,7 @@ EOF
     # Make several tracks that are filtered subsets of snp135:
     # First, filter out the multiply-aligned and/or weight >1 SNPs -> snp135Mult
     # Second, siphon off the common variants -> snp135Common
-    # Third, take the (uniquely mapped, not known to be common) variants
+    # Third, take the (uniquely mapped, not ens to be common) variants
     # w/dbSNP's "clinically-assoc" flag -> snp135Flagged
     cd /hive/data/outside/dbSNP/135/human
     zcat snp135.bed.gz \
@@ -19086,7 +19086,7 @@ EOF
     # Make several tracks that are filtered subsets of snp137:
     # First, filter out the multiply-aligned and/or weight >1 SNPs -> snp137Mult
     # Second, siphon off the common variants -> snp137Common
-    # Third, take the (uniquely mapped, not known to be common) variants
+    # Third, take the (uniquely mapped, not ens to be common) variants
     # w/dbSNP's "clinically-assoc" flag -> snp137Flagged
     cd /hive/data/outside/dbSNP/137/human
     zcat snp137.bed.gz \
@@ -20624,12 +20624,12 @@ TMPDIR=/scratch/tmp
 
     # Coords given in gadAll are a little wacky, so we ignore them.
     # Use Fan's program to associate geneSymbols with genomic coords from
-    # preferred sources (first knownCanonical, then refGene, then kgAlias;
+    # preferred sources (first ensCanonical, then refGene, then kgAlias;
     # *** NOTE FOR NEXT TIME: gadPos now also looks in a couple Gencode V14
     #     tables if they exist.  If they don't anymore, you should look for
     #     suitable replacements if there are a lot of unfound IDs. ***)
     gadPos hg19 stdout | sort -k1,1 -k2n,2n -k4,4 -u > gad.tab
-#Found in knownCanonical: 7758
+#Found in ensCanonical: 7758
 #Found in refGene: 10
 #Found in kgAlias: 193
 #Found in Gencode: 178
@@ -20994,7 +20994,7 @@ NET3=netRheMac3
 # these two nes determine which retros are classified as ancient, use two farthest nets
 ANCIENT1=netMm10
 ANCIENT2=netCanFam3
-GENE1=knownGene
+GENE1=ensGene
 GENE2=refGene
 GENE3=ensGene
 CLUSTER=swarm
@@ -21003,8 +21003,8 @@ ROOTDIR="~/public_html/retro/hg19Feb13"
 WEBROOT=$ROOTDIR/retro.$VERSION/
 WEBSERVER=http://hgwdev-hartera.cse.ucsc.edu
 EXPDIR=exp
-GENEPFAM=knownGene
-PFAM=knownToPfam
+GENEPFAM=ensGene
+PFAM=ensToPfam
 PFAMIDFIELD=name
 PFAMDOMAIN=value
 ALTSPLICE=sibTxGraph
@@ -21017,7 +21017,7 @@ ARRAYRATIO=hgFixed.gnfHumanAtlas2AllRatio
 ARRAYABS=hgFixed.gnfHumanAtlas2All
 ARRAYEXP=hgFixed.gnfHumanAtlas2MedianExps
 ARRAYEXPALL=hgFixed.gnfHumanAtlas2AllExps
-ARRAYLOOKUP=knownToGnfAtlas2
+ARRAYLOOKUP=ensToGnfAtlas2
 ARRAYPSLS="/hive/data/genomes/hg19/bed/geneAtlas2/affyU133A.psl /hive/data/genomes/hg19/bed/geneAtlas2/affyGnf1h.psl"
 '_EOF_'
     # << happy emacs
@@ -24340,7 +24340,7 @@ EOF
    # Make several tracks that are filtered subsets of snp138:
    # First, filter out the multiply-aligned and/or weight >1 SNPs -> snp138Mult
    # Second, siphon off the common variants -> snp138Common
-   # Third, take the (uniquely mapped, not known to be common) variants
+   # Third, take the (uniquely mapped, not ens to be common) variants
    # w/dbSNP's "clinically-assoc" flag -> snp138Flagged
    cd /hive/data/outside/dbSNP/138/human
    zcat snp138.bed.gz \
@@ -27327,7 +27327,7 @@ foreach db (`cat ../species.list`)
     set tables = `hgsql $db -N -e "show tables like '%Gene%'"`
     foreach table ($tables)
         if ($table == "ensGene" || $table == "refGene" || \
-           $table == "mgcGenes" || $table == "knownGene" || \
+           $table == "mgcGenes" || $table == "ensGene" || \
            $table == "xenoRefGene" ) then
            set count = `hgsql $db -N -e "select count(*) from $table"`
             echo -n "${table}: ${count}, "
@@ -27352,7 +27352,7 @@ end
 
     #   rearrange that output to create four sections, and place these names
     #           in .list files here:
-    #   1. knownGene: hg19
+    #   1. ensGene: hg19
     #   2. refGene: bosTau7 danRer7 galGal4 hg19 rheMac3 rn5 susScr3 xenTro3
     #   3. ensGene: ailMel1 anoCar2 calJac3 cavPor3 choHof1 dipOrd1 echTel1
     #               equCab2 eriEur1 fr3 gasAcu1 gorGor3 loxAfr3 melGal1
@@ -27365,10 +27365,10 @@ end
     #   5. genscan: gadMor1 melUnd1 oreNil2 speTri2 turTru2
 
     mkdir genes
-    #   1. knownGene: hg19 and mm10
+    #   1. ensGene: hg19 and mm10
     for DB in hg19 mm10
     do
-    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
         > genes/${DB}.gp.gz
     done
@@ -27534,15 +27534,15 @@ done | sort -k1,1 -k2,2n > multiz100wayFrames.bed
     # the annotated maf's are in:
     ../anno/result/*.maf
 
-    # using knownGene for hg19, only transcribed genes and nothing
+    # using ensGene for hg19, only transcribed genes and nothing
     #	from the randoms and other misc.
-    hgsql -Ne "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene where cdsEnd > cdsStart;" hg19 \
-      | egrep -E -v "chrM|chrUn|random|_hap" > knownGene.gp
+    hgsql -Ne "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene where cdsEnd > cdsStart;" hg19 \
+      | egrep -E -v "chrM|chrUn|random|_hap" > ensGene.gp
     wc -l *.gp
-    60396 knownGene.gp
+    60396 ensGene.gp
 
     # verify it is only on the chroms:
-    cut -f2 knownGene.gp | sort | uniq -c | sort -rn
+    cut -f2 ensGene.gp | sort | uniq -c | sort -rn
     # 6323 chr1
     # 3965 chr2
     # 3872 chr19
@@ -27577,9 +27577,9 @@ done | sort -k1,1 -k2,2n > multiz100wayFrames.bed
     # 954 chr21
     # 452 chrY
 
-    genePredSingleCover knownGene.gp stdout | sort > knownGeneNR.gp
-    wc -l knownGeneNR.gp
-    #	20031 knownGeneNR.gp
+    genePredSingleCover ensGene.gp stdout | sort > ensGeneNR.gp
+    wc -l ensGeneNR.gp
+    #	20031 ensGeneNR.gp
 
     ssh ku
     mkdir /hive/data/genomes/hg19/bed/multiz100way/4d/run
@@ -27598,7 +27598,7 @@ set outfile = $3
 cd /dev/shm
 # 'clean' maf, removes all chrom names, leaves only the db name
 perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf
-awk -v C=$c '$2 == C {print}' $r/4d/knownGeneNR.gp | sed -e "s/\t$c\t/\thg19.$c\t/" > $c.gp
+awk -v C=$c '$2 == C {print}' $r/4d/ensGeneNR.gp | sed -e "s/\t$c\t/\thg19.$c\t/" > $c.gp
 set NL=`wc -l $c.gp| gawk '{print $1}'`
 if ("$NL" != "0") then
     $PHASTBIN/msa_view --4d --features $c.gp -i MAF $c.maf -o SS > $c.ss
@@ -27904,8 +27904,8 @@ done > tmpMostConserved.bed
     #      cover 67.67%, enrich 12.08x
     #   real    1m15.636s
 
-    time featureBits hg19 -enrichment knownGene:cds phastConsElements100way
-    #   knownGene:cds 1.268%, phastConsElements100way 5.601%, both 0.864%,
+    time featureBits hg19 -enrichment ensGene:cds phastConsElements100way
+    #   ensGene:cds 1.268%, phastConsElements100way 5.601%, both 0.864%,
     #      cover 68.15%, enrich 12.17x
     #   real    1m8.520s
 
@@ -28402,7 +28402,7 @@ mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/phyloP100way/hg19.100w
 time for S in 1000 2000 5000
 do
     echo "making upstream${S}.maf"
-    featureBits hg19 knownGene:upstream:${S} -fa=/dev/null -bed=stdout \
+    featureBits hg19 ensGene:upstream:${S} -fa=/dev/null -bed=stdout \
         | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
         | /cluster/bin/$MACHTYPE/mafFrags hg19 multiz100way \
                 stdin stdout \
@@ -28423,7 +28423,7 @@ done
 
 #############################################################################
 # hgPal downloads (DONE - 2013-09-20 - Hiram)
-#   FASTA from 100-way for knownGene
+#   FASTA from 100-way for ensGene
 
     ssh hgwdev
     screen -S hg19HgPal
@@ -28432,7 +28432,7 @@ done
     cat ../species.list | tr '[ ]' '[\n]' > order.list
 
     export mz=multiz100way
-    export gp=knownGene
+    export gp=ensGene
     export db=hg19
     export I=0
     mkdir exonAA exonNuc
@@ -28454,7 +28454,7 @@ done
     #   real    301m26.885s
 
     export mz=multiz100way
-    export gp=knownGene
+    export gp=ensGene
     export db=hg19
     time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
     #   real     11m27.994s
@@ -28463,15 +28463,15 @@ done
     du -hsc exonAA exonNuc *.fa.gz
     # 1.3G    exonAA
     # 2.0G    exonNuc
-    # 1.3G    knownGene.multiz100way.exonAA.fa.gz
-    # 2.0G    knownGene.multiz100way.exonNuc.fa.gz
+    # 1.3G    ensGene.multiz100way.exonAA.fa.gz
+    # 2.0G    ensGene.multiz100way.exonNuc.fa.gz
     # 6.4G    total
 
     rm -rf exonAA exonNuc
 
     # we're only distributing exons at the moment
     export mz=multiz100way
-    export gp=knownGene
+    export gp=ensGene
     export db=hg19
     export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
@@ -28535,34 +28535,34 @@ done
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
     ln -s `pwd`/md5sum.txt $pd/
 
-    ### And knownCanonical
+    ### And ensCanonical
     cd /hive/data/genomes/hg19/bed/multiz100way/pal
     export mz=multiz100way
-    export gp=knownCanonical
+    export gp=ensCanonical
     export db=hg19
-    mkdir exonAA exonNuc ppredAA ppredNuc knownCanonical
+    mkdir exonAA exonNuc ppredAA ppredNuc ensCanonical
 
     cut -f1 ../../../chrom.sizes | while read C
     do
         echo $C
-	hgsql hg19 -N -e "select chrom, chromStart, chromEnd, transcript from knownCanonical where chrom='$C'" > knownCanonical/$C.known.bed
+	hgsql hg19 -N -e "select chrom, chromStart, chromEnd, transcript from ensCanonical where chrom='$C'" > ensCanonical/$C.ens.bed
     done
 
-    ls knownCanonical/*.known.bed | while read F
+    ls ensCanonical/*.ens.bed | while read F
     do
       if [ -s $F ]; then
-         echo $F | sed -e 's#knownCanonical/##; s/.known.bed//'
+         echo $F | sed -e 's#ensCanonical/##; s/.ens.bed//'
       fi
     done | while read C
     do
 	echo "date"
-	echo "mafGene -geneBeds=knownCanonical/$C.known.bed  $db $mz knownGene order.list stdout | \
+	echo "mafGene -geneBeds=ensCanonical/$C.ens.bed  $db $mz ensGene order.list stdout | \
 	    gzip -c > ppredAA/$C.ppredAA.fa.gz"
-	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -noTrans $db $mz knownGene order.list stdout | \
+	echo "mafGene -geneBeds=ensCanonical/$C.ens.bed -noTrans $db $mz ensGene order.list stdout | \
 	    gzip -c > ppredNuc/$C.ppredNuc.fa.gz"
-	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons -noTrans $db $mz knownGene order.list stdout | \
+	echo "mafGene -geneBeds=ensCanonical/$C.ens.bed -exons -noTrans $db $mz ensGene order.list stdout | \
 	    gzip -c > exonNuc/$C.exonNuc.fa.gz"
-	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons $db $mz knownGene order.list stdout | \
+	echo "mafGene -geneBeds=ensCanonical/$C.ens.bed -exons $db $mz ensGene order.list stdout | \
 	    gzip -c > exonAA/$C.exonAA.fa.gz"
     done > $gp.$mz.jobs
 
@@ -28570,9 +28570,9 @@ done
     # real    1033m6.639s
 XXXX
 
-    rm *.known.bed
+    rm *.ens.bed
     mz=multiz100way
-    gp=knownCanonical
+    gp=ensCanonical
     db=hg19
     zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz &
     zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz &
@@ -28582,7 +28582,7 @@ XXXX
     rm -rf exonAA exonNuc ppredAA ppredNuc
 
     mz=multiz100way
-    gp=knownCanonical
+    gp=ensCanonical
     db=hg19
     pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
@@ -29146,8 +29146,8 @@ cp gvfToBed8AttrsCase.pl gvfToBed8AttrsControl54.pl
 
 # added line 33/35 to each file:
 
-# next if ($sample_name eq "Unknown"); # keep only "case" individuals from nstd100
-# next if ($sample_name ne "Unknown"); # keep only "control" individuals from nstd100
+# next if ($sample_name eq "Unens"); # keep only "case" individuals from nstd100
+# next if ($sample_name ne "Unens"); # keep only "control" individuals from nstd100
 # next if ($phenotype ne "not_reported"); # keep only "control" individuals from nstd54
 
 zcat nstd100_Coe_et_al_2014.GRCh37.remap.all.germline.ucsc.gvf.gz | gvfToBed8AttrsCase.pl > cnvDevDelayAllCase.bed
@@ -29387,9 +29387,9 @@ EOF
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue addToDbSnp \
       >>& do.log & tail -f do.log
 
-    # b141 was released with some known issues, including incorrect strand for some items.
+    # b141 was released with some ens issues, including incorrect strand for some items.
     # Correct locally:
-    wget ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/misc/known_issues/b141/rs_with_changed_orientation.bcp
+    wget ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/misc/ens_issues/b141/rs_with_changed_orientation.bcp
     tail -n +2 rs_with_changed_orientation.bcp \
     | perl -wne 'my ($snpId, $old, undef, $new) = split("\t"); \
                  if ($old != $new) { \
@@ -29854,19 +29854,19 @@ wget http://www.peptideatlas.org/builds/human/201408/coordinate_mapping.txt -O p
 wc -l peptideAtlas.201408.tsv
 # 12858738
 
-grep -v UNKNOWN peptideAtlas.201408.tsv > known.txt
- wc -l known.txt
-# 5449240 known.txt
+grep -v UNKNOWN peptideAtlas.201408.tsv > ens.txt
+ wc -l ens.txt
+# 5449240 ens.txt
 
 # tripled from 2013!
-# 1396070 known.txt
+# 1396070 ens.txt
 
 # 42% mapped (compared to 30% prev) -- 5.4M total mapped
 
-perl toBed.pl < known.txt > known.bed
-grep -v chrH known.bed | grep -v chrG | sed 's/chrMT/chrM/'| sort | uniq > known.clean.bed
-wc -l known.clean.bed
-# 4868641 known.clean.bed
+perl toBed.pl < ens.txt > ens.bed
+grep -v chrH ens.bed | grep -v chrG | sed 's/chrMT/chrM/'| sort | uniq > ens.clean.bed
+wc -l ens.clean.bed
+# 4868641 ens.clean.bed
 
 # To preview, load just the regions
 
@@ -29883,8 +29883,8 @@ CREATE TABLE peptideAtlas2014 (
     INDEX(chrom, chromStart)
 );
 'EOF'
-sort -k1,1 -k2,2n known.clean.bed > known.sorted.bed
-hgLoadSqlTab hg19 peptideAtlasRegions2014 peptideAtlas.sql known.sorted.bed
+sort -k1,1 -k2,2n ens.clean.bed > ens.sorted.bed
+hgLoadSqlTab hg19 peptideAtlasRegions2014 peptideAtlas.sql ens.sorted.bed
 
 
 # To link up exons, we need the full database
@@ -30245,7 +30245,7 @@ EOF
     # 2/17/14: User reported missing validation info (#14836); Jonathan found that SNP.bcp.gz
     #          had been updated 1/30/15, argh.  Rebuilding parts that depend on the SNP table.
     # First get a baseline, so we know whether the updated file has fixed the problem:
-    hgsql hg19 -e 'select count(*) from snp142 where valid = "unknown"'
+    hgsql hg19 -e 'select count(*) from snp142 where valid = "unens"'
 #| 107373843 |
 
     cd /hive/data/outside/dbSNP/142/human_hg19/data
@@ -30268,7 +30268,7 @@ EOF
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=bigJoin -stop=filter \
       >>& do.log & tail -f do.log
     # Make sure the updated file has fixed the problem (i.e. has << 107373843 missing 'valid' vals):
-    hgsql hg19 -e 'select count(*) from snp142 where valid = "unknown"'
+    hgsql hg19 -e 'select count(*) from snp142 where valid = "unens"'
 #| 24180022 |
     # 24M out of 113M is significantly less than 107M/113M, but still -- that's a lot!!
     # By way of comparison, snp138 has -- wow, 20M out of 65M!  Never realized it was that bad.
@@ -30866,3 +30866,33 @@ EOF
 
 
 ##############################################################################
+# mafSnp view for 100 way
+#
+
+cd /cluster/data/hg19/bed/mafSnp
+cp /cluster/data/hg19/bed/multiz100way/species.list species.lst
+echo "select * from ensGene" | hgsql hg19 | tail -n +2 | cut -f 2-16 |   genePredSingleCover stdin stdout > ensSingle.gp
+hgLoadGenePred -genePredExt hg19 ensSingle ensSingle.gp     
+mkdir syn nonsyn
+sort -nk 2 /cluster/data/hg19/chrom.sizes | awk '{print $1}' | while read chrom
+do
+echo /cluster/home/braney/bin/x86_64/mafGene -exons -chrom=$chrom hg19 multiz100way ensSingle species.lst nonsyn/$chrom.nonsyn.faa
+echo /cluster/home/braney/bin/x86_64/mafGene -uniqAA -exons -chrom=$chrom hg19 multiz100way ensSingle species.lst syn/$chrom.syn.faa
+done > jobs
+
+sh -x jobs
+
+cat syn/*.faa | /cluster/home/braney/bin/x86_64/paSNP species.lst stdin stdout | sed 's/:/ /' | sed 's/-/ /' | awk '{print $1, $2-1, $3, $4, 1819, "+", $2-1, $3, "0,255,0", 1, $3 - ($2 - 1), 0}' > syn.bed
+cat nonsyn/*.faa | /cluster/home/braney/bin/x86_64/paSNP species.lst stdin stdout | sed 's/:/ /' | sed 's/-/ /' | awk '{print $1, $2-1, $3, $4, 1583, "+", $2-1, $3, "255,0,0", 1, $3-($2 - 1), 0}' > nonsyn.bed
+rm output.bed
+for i in `cat species.lst`
+do
+echo $i
+grep -wh "$i" nonsyn.bed syn.bed | sort -k 1 -T . | bedSmash stdin chrom.sizes stdout >>  output.bed
+done
+
+awk '{print $1,$2,$3,$4,$5}' output.bed > load.bed
+
+out=mafSnp100way
+hgLoadBed hg19 $out load.bed
+
