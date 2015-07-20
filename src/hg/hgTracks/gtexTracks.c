@@ -109,13 +109,27 @@ struct gtexGeneExtras
     double maxExp;
     };
 
+
+/* Cache tissue metadata */
+
+struct gtexTissue *getGtexTissues()
+/* Get tissue metadata from database */
+{
+static struct gtexTissue *gtexTissues = NULL;
+if (gtexTissues == NULL)
+    {
+    char query[1024];
+    struct sqlConnection *conn = sqlConnect("hgFixed");
+    sqlSafef(query, sizeof(query), "select * from gtexTissue order by id");
+    gtexTissues = gtexTissueLoadByQuery(conn, query);
+    }
+return gtexTissues;
+}
+
 struct rgbColor *getGtexTissueColors()
 /* Get RGB colors from tissue table */
 {
-char query[1024];
-struct sqlConnection *conn = sqlConnect("hgFixed");
-sqlSafef(query, sizeof(query), "select * from gtexTissue order by id");
-struct gtexTissue *tissues = gtexTissueLoadByQuery(conn, query);
+struct gtexTissue *tissues = getGtexTissues();
 struct gtexTissue *tissue = NULL;
 int count = slCount(tissues);
 struct rgbColor *colors;
@@ -128,8 +142,32 @@ for (tissue = tissues; tissue != NULL; tissue = tissue->next)
     //colors[i] = mgColorIxToRgb(NULL, tissue->color);
     i++;
     }
-sqlDisconnect(&conn);
 return colors;
+}
+
+static int gtexGraphWidth(struct gtexGeneBed *gtex)
+/* Width of GTEx graph in pixels */
+{
+int barWidth = gtexBarWidth();
+int padding = gtexGraphPadding();
+int count = gtex->expCount;
+return (barWidth * count) + (padding * (count-1));
+}
+
+static int gtexGraphX(struct gtexGeneBed *gtex)
+/* Locate graph on X, relative to viewport. Return -1 if it won't fit */
+{
+int start = max(gtex->chromStart, winStart);
+int end = min(gtex->chromEnd, winEnd);
+if (start > end)
+    return -1;
+double scale = scaleForWindow(insideWidth, winStart, winEnd);
+int x1 = round((start - winStart) * scale);
+int x2 = round((end - winStart) * scale);
+int width = gtexGraphWidth(gtex);
+if (x1 + width > x2)
+    return -1;
+return x1;
 }
 
 static void gtexGeneDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
@@ -162,13 +200,17 @@ struct rgbColor lineColor = {.r=0};
 int lineColorIx = hvGfxFindColorIx(hvg, lineColor.r, lineColor.g, lineColor.b);
 int heightPer = tg->heightPer;
 
-int start = max(geneBed->chromStart, winStart);
+////int start = max(geneBed->chromStart, winStart);
+
 //int geneEnd = min(geneBed->chromEnd, winEnd);
 //int width = expCount * (BAR_WIDTH + PADDING);
 //int end = min(expCount*(BAR_WIDTH + PADDING), winEnd);
 //if (start > end)
     //return;
-int x1 = round((start-winStart)*scale) + xOff;
+////int x1 = round((start-winStart)*scale) + xOff;
+int x1 = gtexGraphX(geneBed) + xOff;
+//warn("gtexGeneDrawAt: x1=%d, labelWidth=%d.  ",
+        //x1, mgFontStringWidth(font, geneBed->name));
 //int x2 = round((e-winStart)*scale) + xOff;
 
 int yBase = valToY(0, maxExp, heightPer) + y;
@@ -222,6 +264,46 @@ for (i=0; i<expCount; i++)
 //hFreeConn(&conn);
 }
 
+static void gtexGeneMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, 
+                        char *mapItemName, int start, int end, int x, int y, int width, int height)
+/* Create a map box for each tissue (bar in the graph) */
+{
+//uglyf("map item: itemName=%s, mapItemName=%s, start=%d, end=%d, x=%d, y=%d, width=%d, height=%d, insideX=%d",
+        //itemName, mapItemName, start, end, x, y, width, height, insideX);
+struct gtexTissue *tissues = getGtexTissues();
+struct gtexTissue *tissue = NULL;
+struct gtexGeneBed *gtex = item;
+int barWidth = gtexBarWidth();
+int padding = gtexGraphPadding();
+int heightPer = tg->heightPer;
+double maxExp = ((struct gtexGeneExtras *)tg->extraUiData)->maxExp;
+int i = 0;
+//int start1 = max(start, winStart);
+// TODO: support reverse display (hvg->rc)
+//double scale = scaleForWindow(width, start, end);
+//int x1 = round((start-winStart)*scale) + x;
+
+// skip over label.  TODO: check w/ different modes, and look for a better way
+// map box on label
+int labelWidth = mgFontStringWidth(tl.font, gtex->name) + 3;
+mapBoxHc(hvg, start, end, x, y, labelWidth, height, tg->track, mapItemName, mapItemName);
+int x1 = x + labelWidth;
+for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
+    {
+    //hvGfxBox(hvg, x1, yMedian, barWidth, yBase - yMedian, fillColorIx);
+    double expScore = gtex->expScores[i];
+    int yBase = valToY(0, maxExp, heightPer) + y;
+    int yMedian = valToY(expScore, maxExp, heightPer) + y;
+    int height = yBase - yMedian;
+    // TODO: call genericMapItem
+    //genericMapItem(tg, hvg, item, itemName, tissue->description, start, end, x1, y, barWidth, height);
+    mapBoxHc(hvg, start, end, x1, yMedian, barWidth, height, tg->track, mapItemName, tissue->description);
+    //uglyf("id=%d, mapItemName= %s, start=%d, end=%d, x1=%d, y=%d (expScore=%.2f, yMedian=%d, yBase=%d), height=%d.  ",
+                //i, mapItemName, start, end, x1, y1, expScore, yMedian, yBase, height);
+    x1 = x1 + barWidth + padding;
+    }
+}
+
 static struct gtexGeneBed *loadGtexGeneBed(char **row)
 {
 return gtexGeneBedLoad(row);
@@ -241,7 +323,6 @@ AllocVar(extras);
 extras->maxExp = maxExp;
 track->extraUiData = extras;
 }
-
 
 static int gtexGeneItemHeight(struct track *track, void *item)
 {
@@ -265,6 +346,7 @@ void gtexGeneMethods(struct track *track)
 {
 track->drawItemAt = gtexGeneDrawAt;
 track->loadItems = gtexGeneLoadItems;
+track->mapItem = gtexGeneMapItem;
 track->itemHeight = gtexGeneItemHeight;
 track->totalHeight = gtexTotalHeight;
 }
