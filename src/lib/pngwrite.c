@@ -59,29 +59,9 @@ if (setjmp(png_jmpbuf(png)))
 
 // Configure PNG output params:
 png_init_io(png, png_file);
-#ifdef COLOR32
 png_set_IHDR(png, info, mg->width, mg->height, 8, // 8=bit_depth
              PNG_COLOR_TYPE_RGBA, PNG_INTERLACE_NONE,
              PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
-#else
-png_set_IHDR(png, info, mg->width, mg->height, 8, // 8=bit_depth
-             PNG_COLOR_TYPE_PALETTE, PNG_INTERLACE_NONE,
-             PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
-png_set_PLTE(png, info,
-             (png_color *)(mg->colorMap), // png_color is same as struct rgbColor!
-             mg->colorsUsed);
-#endif
-#ifndef COLOR32
-if (useTransparency)
-    {
-    // First palette color is assumed to be background/transparent, so
-    // that's the only one we need in the parallel array opacities[].
-    png_byte opacities[] = {0};
-    int num_opacities = ArraySize(opacities);
-    png_color_16p nonPalette_opacities_values = NULL; // n/a for us, we're using palette
-    png_set_tRNS(png, info, opacities, num_opacities, nonPalette_opacities_values);
-    }
-#endif
 
 // Write header/params, write pixels, close and clean up.
 // PNG wants a 2D array of pointers to byte offsets into palette/colorMap.

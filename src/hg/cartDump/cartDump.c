@@ -26,9 +26,6 @@ char *vVal = "cartDump.newValue";
 char *wildcard;
 boolean asTable = cartVarExists(cart,CART_DUMP_AS_TABLE);
 
-// To discourage hacking, call bottleneck
-hgBotDelay();
-
 if (cgiVarExists("submit"))
     {
     char *varName = cgiOptionalString(vName);
@@ -47,6 +44,8 @@ if (cgiVarExists("submit"))
     }
 if (cgiVarExists("noDisplay"))
     {
+    // update cart vars for a track, called by hgTracks.js and ajax.js
+    //  not useful to hackers, so there is no need to call bottleneck.
     char *trackName = cgiOptionalString("g");
     if (trackName != NULL && hashNumEntries(oldVars) > 0)
         {
@@ -62,6 +61,10 @@ if (cgiVarExists("noDisplay"))
 
     return;
     }
+
+// To discourage hacking, call bottleneck
+hgBotDelay();
+
 if (asTable)
     {
     jsIncludeFile("utils.js",NULL);

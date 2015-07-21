@@ -217,11 +217,6 @@ endif
 L+=${PNGLIB}
 HG_INC+=${PNGINCL}
 
-# 32-bit color enabled by default
-ifneq (${COLOR32},0)
-    HG_DEFS+=-DCOLOR32
-endif
-
 # autodetect UCSC installation of samtabix:
 ifeq (${SAMTABIXDIR},)
     SAMTABIXDIR = /hive/data/outside/samtabix/${MACHTYPE}

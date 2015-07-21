@@ -1,5 +1,4 @@
-#!/cluster/software/bin/python
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
 
 # A little CGI interface to download the tables for a set of tracks via udr 
 # to local machine. This is mostly useful when setting up a mirror or a VM
@@ -814,6 +813,21 @@ def getCladeAssemblyDb(clade, org, db):
     
     validDbs = getHgDownloadDbs()
     orgInfo = getOrgInfo(validDbs)
+
+    if db is not None and clade is None and org is None:
+        dbToClade = dict()
+        # search to the right org for this db
+        for o, dbList in orgInfo["orgToDbs"].items():
+            for orgDb, desc in dbList:
+                if orgDb==db:
+                    org = o
+                    break
+        # search to the right clade for this org
+        for c, orgList in orgInfo["cladeToOrgs"].items():
+            for o, _ in orgList:
+                if o==org:
+                    clade = c
+                    break
 
     if clade is None or clade=="0":
         clade = orgInfo["defaultClade"]
@@ -1757,7 +1771,7 @@ def htmlMiddle(args):
 
 def getAllLocalDbs():
     " return list of locally present DBs "
-    conn = sqlConnect(hgConf.get("central.db", "hgcentral"), "local")
+    conn = sqlConnect(parseHgConf().get("central.db", "hgcentral"), "local")
     cur = conn.cursor()
     cur.execute("SHOW DATABASES")
     rows =  cur.fetchall()
@@ -1773,6 +1787,9 @@ def getAllLocalDbs():
 def main():
     # hide some tracks if any argument specified. makes this tool usable from command line, 
     # from cronjobs that only need to run this function
+    if not isdir(TMPDIR):
+        os.makedirs(TMPDIR)
+
     if len(sys.argv)>1:
         dbSet = getAllLocalDbs()
         for db in dbSet:
@@ -1782,9 +1799,6 @@ def main():
 
     print "Content-type: text/html"
     print
-
-    if not isdir(TMPDIR):
-        os.makedirs(TMPDIR)
 
     parseHgConf()
     if hgConf==None or not hgConf.get("allowHgMirror", "0").lower() in ["1", "yes", "true", "on"]:
@@ -1802,6 +1816,9 @@ def main():
     if "reset" in args.keys():
         for fname in glob.glob(TMPDIR+"*"):
             os.remove(fname)
+        os.rmdir(TMPDIR)
+        print "temporary files deleted"
+        sys.exit(0)
 
     htmlHeader()
     htmlMiddle(args)

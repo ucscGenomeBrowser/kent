@@ -14,6 +14,10 @@ endif
 my::
 	rm -f ${CGI_BIN_USER}/hgMirror
 	cp -p hgMirror ${CGI_BIN_USER}/
+	# currently need to patch for hgwdev
+	sed -i 's|/usr/bin/env python2.7|/cluster/software/bin/python2.7|' ${CGI_BIN_USER}/hgMirror 
+	# can only delete temp files as the apache user
+	curl -s "http://hgwdev-${USER}.soe.ucsc.edu/cgi-bin/hgMirror?reset=1"
 beta::
 	rm -f ${CGI_BIN_BETA}/hgMirror
 	cp -p hgMirror ${CGI_BIN_BETA}/

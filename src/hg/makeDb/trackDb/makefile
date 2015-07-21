@@ -122,8 +122,10 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
 	ci1 ci2 cioSav2 \
 	strPur1 strPur2 strPur4 \
 	strRat1 strRat2 \
+	ascSuu1 \
 	nemVec1 \
 	aplCal1 \
+	ancCey1 \
 	ce2 ce3 ce4 ce5 ce6 ce7 ce8 ce9 ce10 ce11 \
 	cb1 cb2 cb3 cb4 \
 	burXyl1 \
@@ -133,8 +135,11 @@ DBS = 	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Pa
 	caeSp91 \
 	caeSp111 \
 	caeJap1 caeJap2 caeJap3 caeJap4 \
+	hetBac1 \
 	dirImm1 \
+	necAme1 \
 	panRed1 \
+	priExs1 \
 	priPac1 priPac2 priPac3 \
 	caePb1 caePb2 caePb3 \
 	caeSp51 \
