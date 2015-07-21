@@ -60,7 +60,29 @@ hgsql hgFixed -N -e 'select tissue from gtexTissue' > bioSamples.txt
 # Reload tables for new schemas  8/14/14
 set dataDir = /hive/data/outside/GTEx/2014-01-17
 hgGtex -tab=output gtex \
-    $dataDir/GTEx_Analysis_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct \
-    $dataDir/GTEx_Data_2014-01-17_Annotations_SampleAttributesDS.txt \
-    $dataDir/GTEx_Data_2014-01-17_Annotations_SubjectPhenotypes_DS.txt \
+    $dataDir/geneCounts/GTEx_Analysis_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct \
+    $dataDir/metadata/GTEx_Data_2014-01-17_Annotations_SampleAttributesDS.txt \
+    $dataDir/metadata/GTEx_Data_2014-01-17_Annotations_SubjectPhenotypes_DS.txt \
     $dataDir/tissues.tab
+
+# Load gene table from portal file
+
+cd /hive/data/outside/GTEx/2014-01-17
+mkdir gencode
+cd gencode
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/reference/gencode.v18.genes.patched_contigs.txt
+cd /hive/data/outside/GTEx/2014-01-17
+awk '$1 !~ /^#/ {print "chr"$0}' gencode.v18.genes.patched_contigs.gtf | sed 's/chrMT/chrM/' | \ 
+        gtfToGenePred stdin gencodeV18.hg19.genePred
+hgLoadGenePred hg19 gtexGeneModel gencodeV18.hg19.genePred
+# make hg38 as well
+set chain = /hive/data/genomes/hg19/bed/liftOver/hg19ToHg38.over.chain.gz
+liftOver -genePred gencodeV18.hg19.genePred $chain gencodeV18.hg38.genePred unmapped
+wc -l unmapped
+# 930 unmapped
+hgLoadGenePred hg38 gtexGeneModel gencodeV18.hg38.genePred
+
+
+# Other reference files
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/reference/gencode.v18.genes.patched_contigs_exons.txt
+#wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/reference/gencode.v18.transcripts.patched_contigs.gtf

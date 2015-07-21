@@ -135,5 +135,6 @@ name gtex
 shortLabel GTEx
 tables kgXref
 idSql select geneSymbol from kgXref where kgID = '%s'
+#idSql select gtexGene.geneId from kgXref, knownToEnsembl, gtexGene where kgXref.kgId='%s' and knownToEnsembl.name=kgXref.kgId and gtexGene.transcriptId=knownToEnsembl.value;
 url http://www.gtexportal.org/home/gene/%s
 priority 10
