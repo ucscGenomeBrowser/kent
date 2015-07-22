@@ -76,12 +76,30 @@ wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/single_tissue_eq
 wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/reference/GTEx_genot_imputed_variants_info4_maf05_CR95_CHR_POSb37_ID_REF_ALT.txt.zip'
 
 # Reference data
-# TODO:  Use these gene models for genome positions of gene track
-wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/reference/gencode.v18.genes.patched_contigs.gtf
+# TODO:  Use these gene models for gene track
+
+cd /hive/data/outside/GTEx/2014-01-17
+mkdir gencode
+cd gencode
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/reference/gencode.v18.genes.patched_contigs.txt
+cd /hive/data/outside/GTEx/2014-01-17
+awk '$1 !~ /^#/ {print "chr"$0}' gencode.v18.genes.patched_contigs.gtf | sed 's/chrMT/chrM/' | \
+        gtfToGenePred stdin gencodeV18.hg19.genePred
+sed 's/\.[0-9][0-9]*//' gencodeV18.hg19.genePred | hgLoadGenePred hg19 gtexGeneModel stdin
+# make hg38 as well
+set chain = /hive/data/genomes/hg19/bed/liftOver/hg19ToHg38.over.chain.gz
+liftOver -genePred gencodeV18.hg19.genePred $chain gencodeV18.hg38.genePred unmapped
+wc -l unmapped
+# 930 unmapped
+sed 's/\.[0-9][0-9]*//' gencodeV18.hg38.genePred | hgLoadGenePred hg389 gtexGeneModel stdin
+
+# Other reference files
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/reference/gencode.v18.genes.patched_contigs_exons.txt
+#wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/reference/gencode.v18.transcripts.patched_contigs.gtf
 
 
 # V4 Normalized gene expression levels (June 2015)
-'http://www.gtexportal.org/static/datasets/gtex_analysis_v4/single_tissue_eqtl_data/GTEx_Analysis_V4_eQTLInputFiles_geneLevelNormalizedExpression.tar.gz
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/single_tissue_eqtl_data/GTEx_Analysis_V4_eQTLInputFiles_geneLevelNormalizedExpression.tar.gz
 
 
 # Load GTEX tissue colors 
