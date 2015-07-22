@@ -147,6 +147,7 @@ for (tissue = tissues; tissue != NULL; tissue = tissue->next)
 return colors;
 }
 
+#ifdef NEW
 static int gtexGraphWidth(struct gtexGeneBed *gtex)
 /* Width of GTEx graph in pixels */
 {
@@ -155,20 +156,21 @@ int padding = gtexGraphPadding();
 int count = gtex->expCount;
 return (barWidth * count) + (padding * (count-1));
 }
+#endif
 
 static int gtexGraphX(struct gtexGeneBed *gtex)
 /* Locate graph on X, relative to viewport. Return -1 if it won't fit */
 {
 int start = max(gtex->chromStart, winStart);
-int end = min(gtex->chromEnd, winEnd);
-if (start > end)
-    return -1;
+//int end = min(gtex->chromEnd, winEnd);
+//if (start > end)
+    //return -1;
 double scale = scaleForWindow(insideWidth, winStart, winEnd);
 int x1 = round((start - winStart) * scale);
-int x2 = round((end - winStart) * scale);
-int width = gtexGraphWidth(gtex);
-if (x1 + width > x2)
-    return -1;
+//int x2 = round((end - winStart) * scale);
+//int width = gtexGraphWidth(gtex);
+//if (x1 + width > x2)
+    //return -1;
 return x1;
 }
 
@@ -213,13 +215,16 @@ struct rgbColor lineColor = {.r=0};
 int lineColorIx = hvGfxFindColorIx(hvg, lineColor.r, lineColor.g, lineColor.b);
 int heightPer = tg->heightPer;
 
+int graphX = gtexGraphX(geneBed);
+if (graphX < 0)
+    return;
 // x1 is at left of graph
-int x1 = gtexGraphX(geneBed) + xOff;
+int x1 = xOff + graphX;
 
 // yZero is at bottom of graph
 int yZero = gtexGraphHeight() + y - 1;
 
-//uglyf("DRAW: xOff=%d, x1=%d, y=%d, yZero=%d<br>", xOff, x1, y, yZero);
+uglyf("DRAW: xOff=%d, x1=%d, y=%d, yZero=%d<br>", xOff, x1, y, yZero);
 
 int barWidth = gtexBarWidth();
 int graphPadding = gtexGraphPadding();
@@ -256,7 +261,7 @@ for (i=0; i<expCount; i++)
     int height = yZero - yMedian;
     // TODO: adjust yGene instead of yMedian+1 to get gene track distance as desired
     //if (i ==0) uglyf("DRAW: expScore=%.2f, maxExp=%.2f, graphHeight=%d, y=%d<br>", expScore, maxExp, gtexGraphHeight(), y);
-    //if (i ==0) uglyf("DRAW: yZero=%d, yMedian=%d, height=%d<br>", yZero, yMedian, height);
+    if (i ==0) uglyf("DRAW: yZero=%d, yMedian=%d, height=%d<br>", yZero, yMedian, height);
     if (graphPadding == 0 || sameString(colorScheme, GTEX_COLORS_GTEX))
         hvGfxBox(hvg, x1, yMedian+1, barWidth, height, fillColorIx);
     else
@@ -286,7 +291,7 @@ sqlSafef(query, sizeof query, "select * from gtexGeneModel where name='%s'", gen
 struct sqlConnection *conn = hAllocConn(database);
 if (conn == NULL)
     return;
-//uglyf("query: %s<br>", query);
+uglyf("query: %s<br>", query);
 struct sqlResult *sr = sqlGetResult(conn, query);
 struct genePred *geneModel = NULL;
 if (sr != NULL)
@@ -309,8 +314,8 @@ static void gtexGeneMapItem(struct track *tg, struct hvGfx *hvg, void *item, cha
                         char *mapItemName, int start, int end, int x, int y, int width, int height)
 /* Create a map box for each tissue (bar in the graph) */
 {
-//uglyf("map item: itemName=%s, mapItemName=%s, start=%d, end=%d, x=%d, y=%d, width=%d, height=%d, insideX=%d",
-        //itemName, mapItemName, start, end, x, y, width, height, insideX);
+uglyf("map item: itemName=%s, mapItemName=%s, start=%d, end=%d, x=%d, y=%d, width=%d, height=%d, insideX=%d<br>",
+        itemName, mapItemName, start, end, x, y, width, height, insideX);
 struct gtexTissue *tissues = getGtexTissues();
 struct gtexTissue *tissue = NULL;
 struct gtexGeneBed *gtex = item;
@@ -318,16 +323,11 @@ int barWidth = gtexBarWidth();
 int padding = gtexGraphPadding();
 double maxExp = ((struct gtexGeneExtras *)tg->extraUiData)->maxExp;
 
-//int start1 = max(start, winStart);
-// TODO: support reverse display (hvg->rc)
-//double scale = scaleForWindow(width, start, end);
-//int x1 = round((start-winStart)*scale) + x;
-
-// skip over label.  TODO: check w/ different modes, and look for a better way
-// map box on label
-int labelWidth = mgFontStringWidth(tl.font, gtex->name) + 3;
-//mapBoxHc(hvg, start, end, x, y, labelWidth, height, tg->track, mapItemName, mapItemName);
-int x1 = x + labelWidth;
+int graphX = gtexGraphX((struct gtexGeneBed *)item);
+if (graphX < 0)
+    return;
+// x1 is at left of graph
+int x1 = insideX + graphX;
 
 int i = 0;
 int yZero = gtexGraphHeight() + y - 1;
@@ -336,22 +336,12 @@ for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
     double expScore = gtex->expScores[i];
     int yMedian = valToY(expScore, maxExp, gtexGraphHeight()) + y;
     int height = yZero - yMedian;
-    //hvGfxBox(hvg, x1, yMedian, barWidth, yBase - yMedian, fillColorIx);
-    //int yBase = valToY(0, maxExp, heightPer) + y;
-    //int height = yBase - yMedian;
     // TODO: call genericMapItem
     //genericMapItem(tg, hvg, item, itemName, tissue->description, start, end, x1, y, barWidth, height);
-    //uglyf("id=%d, mapItemName= %s, start=%d, end=%d, x1=%d, y=%d (expScore=%.2f, yMedian=%d, yBase=%d), height=%d.  ",
-                //i, mapItemName, start, end, x1, y1, expScore, yMedian, yBase, height);
     mapBoxHc(hvg, start, end, x1, yMedian+1, barWidth, height, tg->track, mapItemName, tissue->description);
-    #ifdef DEBUG
-    if (i ==0)
-        {
-        uglyf("MAP: expScore=%.2f, maxExp=%.2f, graphHeight=%d, y=%d<br>", expScore, maxExp, gtexGraphHeight(), y);
-        uglyf("MAP: yZero=%d, yMedian=%d, height=%d<br>", yZero, yMedian, height); 
-        break;
-        }
-    #endif
+    if (i==0) uglyf("MAP: expScore=%.2f, maxExp=%.2f, graphHeight=%d, y=%d<br>", expScore, maxExp, gtexGraphHeight(), y);
+    if (i==0) uglyf("MAP: x=%d, x1=%d, y=%d, yZero=%d<br>", x, x1, y, yZero); 
+    if (i==0) uglyf("MAP: yZero=%d, yMedian=%d, height=%d<br>", yZero, yMedian, height); 
     x1 = x1 + barWidth + padding;
     }
 }
