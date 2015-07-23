@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-# This file describes how the browser for Trichuris suis WS245 version is built
+# This file describes the browser build for Loa loa/eye worm WS245 version
 
 ##############################################################################
 # download sequence, create UCSC sequence (DONE - 2015-06-24 - Hiram)
