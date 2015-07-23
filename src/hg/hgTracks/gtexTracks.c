@@ -96,6 +96,15 @@ else
     return MIN_GRAPH_HEIGHT;
 }
 
+static int gtexGraphWidth(struct gtexGeneBed *gtex)
+/* Width of GTEx graph in pixels */
+{
+int barWidth = gtexBarWidth();
+int padding = gtexGraphPadding();
+int count = gtex->expCount;
+return (barWidth * count) + (padding * (count-1));
+}
+
 static int valToY(double val, double maxVal, int height)
 /* Convert a value from 0 to maxVal to 0 to height-1 */
 {
@@ -146,17 +155,6 @@ for (tissue = tissues; tissue != NULL; tissue = tissue->next)
     }
 return colors;
 }
-
-#ifdef NEW
-static int gtexGraphWidth(struct gtexGeneBed *gtex)
-/* Width of GTEx graph in pixels */
-{
-int barWidth = gtexBarWidth();
-int padding = gtexGraphPadding();
-int count = gtex->expCount;
-return (barWidth * count) + (padding * (count-1));
-}
-#endif
 
 static int gtexGraphX(struct gtexGeneBed *gtex)
 /* Locate graph on X, relative to viewport. Return -1 if it won't fit */
@@ -224,7 +222,11 @@ int x1 = xOff + graphX;
 // yZero is at bottom of graph
 int yZero = gtexGraphHeight() + y - 1;
 
-uglyf("DRAW: xOff=%d, x1=%d, y=%d, yZero=%d<br>", xOff, x1, y, yZero);
+// draw faint line under graph to delineate extent when bars are missing (tissue w/ 0 expression)
+Color lightGray = MAKECOLOR_32(0xD1, 0xD1, 0xD1);
+hvGfxBox(hvg, x1, yZero+1, gtexGraphWidth(geneBed), 1, lightGray);
+
+//uglyf("DRAW: xOff=%d, x1=%d, y=%d, yZero=%d<br>", xOff, x1, y, yZero);
 
 int barWidth = gtexBarWidth();
 int graphPadding = gtexGraphPadding();
@@ -261,13 +263,14 @@ for (i=0; i<expCount; i++)
     int height = yZero - yMedian;
     // TODO: adjust yGene instead of yMedian+1 to get gene track distance as desired
     //if (i ==0) uglyf("DRAW: expScore=%.2f, maxExp=%.2f, graphHeight=%d, y=%d<br>", expScore, maxExp, gtexGraphHeight(), y);
-    if (i ==0) uglyf("DRAW: yZero=%d, yMedian=%d, height=%d<br>", yZero, yMedian, height);
+    //if (i ==0) uglyf("DRAW: yZero=%d, yMedian=%d, height=%d<br>", yZero, yMedian, height);
     if (graphPadding == 0 || sameString(colorScheme, GTEX_COLORS_GTEX))
         hvGfxBox(hvg, x1, yMedian+1, barWidth, height, fillColorIx);
     else
         hvGfxOutlinedBox(hvg, x1, yMedian+1, barWidth, height, fillColorIx, lineColorIx);
     x1 = x1 + barWidth + graphPadding;
     }
+
 // mark gene extent
 int yGene = yZero + gtexGeneMargin() - 1;
 
@@ -291,7 +294,7 @@ sqlSafef(query, sizeof query, "select * from gtexGeneModel where name='%s'", gen
 struct sqlConnection *conn = hAllocConn(database);
 if (conn == NULL)
     return;
-uglyf("query: %s<br>", query);
+//uglyf("query: %s<br>", query);
 struct sqlResult *sr = sqlGetResult(conn, query);
 struct genePred *geneModel = NULL;
 if (sr != NULL)
@@ -314,8 +317,8 @@ static void gtexGeneMapItem(struct track *tg, struct hvGfx *hvg, void *item, cha
                         char *mapItemName, int start, int end, int x, int y, int width, int height)
 /* Create a map box for each tissue (bar in the graph) */
 {
-uglyf("map item: itemName=%s, mapItemName=%s, start=%d, end=%d, x=%d, y=%d, width=%d, height=%d, insideX=%d<br>",
-        itemName, mapItemName, start, end, x, y, width, height, insideX);
+//uglyf("map item: itemName=%s, mapItemName=%s, start=%d, end=%d, x=%d, y=%d, width=%d, height=%d, insideX=%d<br>",
+        //itemName, mapItemName, start, end, x, y, width, height, insideX);
 struct gtexTissue *tissues = getGtexTissues();
 struct gtexTissue *tissue = NULL;
 struct gtexGeneBed *gtex = item;
@@ -339,9 +342,9 @@ for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
     // TODO: call genericMapItem
     //genericMapItem(tg, hvg, item, itemName, tissue->description, start, end, x1, y, barWidth, height);
     mapBoxHc(hvg, start, end, x1, yMedian+1, barWidth, height, tg->track, mapItemName, tissue->description);
-    if (i==0) uglyf("MAP: expScore=%.2f, maxExp=%.2f, graphHeight=%d, y=%d<br>", expScore, maxExp, gtexGraphHeight(), y);
-    if (i==0) uglyf("MAP: x=%d, x1=%d, y=%d, yZero=%d<br>", x, x1, y, yZero); 
-    if (i==0) uglyf("MAP: yZero=%d, yMedian=%d, height=%d<br>", yZero, yMedian, height); 
+    //if (i==0) uglyf("MAP: expScore=%.2f, maxExp=%.2f, graphHeight=%d, y=%d<br>", expScore, maxExp, gtexGraphHeight(), y);
+    //if (i==0) uglyf("MAP: x=%d, x1=%d, y=%d, yZero=%d<br>", x, x1, y, yZero); 
+    //if (i==0) uglyf("MAP: yZero=%d, yMedian=%d, height=%d<br>", yZero, yMedian, height); 
     x1 = x1 + barWidth + padding;
     }
 }
