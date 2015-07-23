@@ -174,68 +174,66 @@ searchPriority 8
     time (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku loaLoa1) > do.log 2>&1
-XXX - running - Fri Jul 10 14:02:40 PDT 2015
-    # real    35m20.023s
+    # real    83m49.429s
 
     cat faSize.rmsk.txt
-    # 96441526 bases (3074367 N's 93367159 real 89682362 upper
-    #    3684797 lower) in 709 sequences in 1 files
-    # Total size: mean 136024.7 sd 1674508.7 min 523 (HG738843v1)
-    #    max 28345163 (HG738137v1) median 2218
-    # %3.82 masked total, %3.95 masked real
+    # 91379422 bases (3847239 N's 87532183 real 83624537 upper 3907646 lower)
+    #    in 5765 sequences in 1 files
+    # Total size: mean 15850.7 sd 64640.7 min 265 (JH717805v1)
+    #    max 1325655 (JH712066v1) median 1186
+    # %4.28 masked total, %4.46 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
     #    January 31 2015 (open-4-0-5) version of RepeatMasker
-    # CC   RELEASE 20140131;    
+    # CC   RELEASE 20140131;
 
     time featureBits -countGaps loaLoa1 rmsk
-    # 469243 bases of 74576239 (0.629%) in intersection
-    #  real    0m1.897s
+    # 3908609 bases of 91379422 (4.277%) in intersection
+    # real    0m3.289s
 
 ##########################################################################
-# running simple repeat (TBD - 2015-07-10 - Hiram)
+# running simple repeat (DONE - 2015-07-10 - Hiram)
     mkdir /hive/data/genomes/loaLoa1/bed/simpleRepeat
     cd /hive/data/genomes/loaLoa1/bed/simpleRepeat
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         loaLoa1) > do.log 2>&1
-XXX - running - Fri Jul 10 14:03:16 PDT 2015
-    # real    14m27.670s
+    # real    10m57.576s
 
     cat fb.simpleRepeat
-    # 1741988 bases of 93367159 (1.866%) in intersection
+    # 2964793 bases of 87533141 (3.387%) in intersection
 
     # using the Window Masker result as indicated below
 
 ##########################################################################
-# CREATE MICROSAT TRACK (TBD - 2015-07-09 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2015-07-15 - Hiram)
      ssh hgwdev
      mkdir /cluster/data/loaLoa1/bed/microsat
      cd /cluster/data/loaLoa1/bed/microsat
      awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
 	../simpleRepeat/simpleRepeat.bed > microsat.bed
     hgLoadBed loaLoa1 microsat microsat.bed
-    #	Read 518 elements of size 4 from microsat.bed
+    #	Read 2111 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2015-07-09 - Hiram)
+## WINDOWMASKER (DONE - 2015-07-15 - Hiram)
     mkdir /hive/data/genomes/loaLoa1/bed/windowMasker
     cd /hive/data/genomes/loaLoa1/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev loaLoa1) > do.log 2>&1
-    # real    4m45.269s
+    # real    5m3.906s
 
     # Masking statistics
     cat faSize.loaLoa1.cleanWMSdust.txt
-    # 96441526 bases (3074367 N's 93367159 real 58706047 upper
-    #    34661112 lower) in 709 sequences in 1 files
-    # Total size: mean 136024.7 sd 1674508.7 min 523 (HG738843v1)
-    #    max 28345163 (HG738137v1) median 2218
-    # %35.94 masked total, %37.12 masked real
+    # 91379422 bases (3847239 N's 87532183 real 59418740 upper 28113443 lower)
+    #   in 5765 sequences in 1 files
+    # Total size: mean 15850.7 sd 64640.7 min 265 (JH717805v1)
+    #   max 1325655 (JH712066v1) median 1186
+    # %30.77 masked total, %32.12 masked real
 
     cat fb.loaLoa1.rmsk.windowmaskerSdust.txt
-    # 3204592 bases of 96441526 (3.323%) in intersection
+    # 3520248 bases of 91379422 (3.852%) in intersection
 
     # using this Window Masker result for final masking::
     cd /hive/data/genomes/loaLoa1
@@ -246,30 +244,29 @@ XXX - running - Fri Jul 10 14:03:16 PDT 2015
     # measure the final masking:
     twoBitToFa loaLoa1.2bit stdout | faSize stdin > faSize.loaLoa1.2bit.txt
     cat faSize.loaLoa1.2bit.txt
-    # 96441526 bases (3074367 N's 93367159 real 58693029 upper
-    #    34674130 lower) in 709 sequences in 1 files
-    # Total size: mean 136024.7 sd 1674508.7 min 523 (HG738843v1)
-    #    max 28345163 (HG738137v1) median 2218
-    # %35.95 masked total, %37.14 masked real
+    # 91379422 bases (3847239 N's 87532183 real 59394205 upper 28137978 lower)
+    #   in 5765 sequences in 1 files
+    # Total size: mean 15850.7 sd 64640.7 min 265 (JH717805v1)
+    #   max 1325655 (JH712066v1) median 1186
+    # %30.79 masked total, %32.15 masked real
 
     # and reset the symlink
     rm /gbdb/loaLoa1/loaLoa1.2bit
     ln -s /hive/data/genomes/loaLoa1/loaLoa1.2bit /gbdb/loaLoa1/loaLoa1.2bit
 
 ##########################################################################
-# cpgIslands - (TBD - 2015-07-09 - Hiram)
+# cpgIslands - (DONE - 2015-07-15 - Hiram)
     mkdir /hive/data/genomes/loaLoa1/bed/cpgIslands
     cd /hive/data/genomes/loaLoa1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku loaLoa1) > do.log 2>&1 &
-XXX - running - Thu Jul  9 15:38:48 PDT 2015
-    # real    8m10.474s
+    # real    56m0.652s
 
     cat fb.loaLoa1.cpgIslandExt.txt
-    # 29350 bases of 86344036 (0.034%) in intersection
+    # 40816 bases of 87533141 (0.047%) in intersection
 
 #########################################################################
-# augustus - (TBD - 2015-07-09 - Hiram)
+# augustus - (DONE - 2015-07-15 - Hiram)
     mkdir /hive/data/genomes/loaLoa1/bed/augustus
     cd /hive/data/genomes/loaLoa1/bed/augustus
     #  XXX this is not specifically correct, the species caenorhabditis
@@ -277,26 +274,24 @@ XXX - running - Thu Jul  9 15:38:48 PDT 2015
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
       -species=caenorhabditis -dbHost=hgwdev \
          -workhorse=hgwdev loaLoa1) > do.log 2>&1 &
-XXX - running - Thu Jul  9 15:39:22 PDT 2015
-    # real    49m33.584s
+    # real    35m34.472s
 
     cat fb.loaLoa1.augustusGene.txt
-    # 5950506 bases of 86344036 (6.892%) in intersection
+    # 6440572 bases of 87533141 (7.358%) in intersection
 
 #########################################################################
-# genscan - (TBD - 2015-07-09 - Hiram)
+# genscan - (DONE - 2015-07-15 - Hiram)
     mkdir /hive/data/genomes/loaLoa1/bed/genscan
     cd /hive/data/genomes/loaLoa1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku loaLoa1) > do.log 2>&1
-XXX - running - Thu Jul  9 15:39:51 PDT 2015
-    # real    9m51.838s
+    # real    7m2.652s
 
     cat fb.loaLoa1.genscan.txt
-    #   3196210 bases of 86344036 (3.702%) in intersection
+    #   3545367 bases of 87533141 (4.050%) in intersection
 
     cat fb.loaLoa1.genscanSubopt.txt
-    #   2410491 bases of 86344036 (2.792%) in intersection
+    #   3368899 bases of 87533141 (3.849%) in intersection
 
 ########################################################################
 # Create kluster run files (TBD - 2015-07-08 - Hiram)
