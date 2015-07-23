@@ -224,7 +224,8 @@ int yZero = gtexGraphHeight() + y - 1;
 
 // draw faint line under graph to delineate extent when bars are missing (tissue w/ 0 expression)
 Color lightGray = MAKECOLOR_32(0xD1, 0xD1, 0xD1);
-hvGfxBox(hvg, x1, yZero+1, gtexGraphWidth(geneBed), 1, lightGray);
+int graphWidth = gtexGraphWidth(geneBed);
+hvGfxBox(hvg, x1, yZero+1, graphWidth, 1, lightGray);
 
 //uglyf("DRAW: xOff=%d, x1=%d, y=%d, yZero=%d<br>", xOff, x1, y, yZero);
 
@@ -274,18 +275,6 @@ for (i=0; i<expCount; i++)
 // mark gene extent
 int yGene = yZero + gtexGeneMargin() - 1;
 
-#ifdef NO_GENE
-// underline
-int start = max(geneBed->chromStart, winStart);
-int end = min(geneBed->chromEnd, winEnd);
-if (start > end)
-    return;
-int xStart = round((start - winStart) * scale)+xOff;
-int width = round((end-start)*scale);
-hvGfxBox(hvg, xStart, yGene, width, gtexGeneHeight(), lineColorIx);
-//uglyf("DRAW: xStart=%d, yGene=%d, width=%d, height=%d<br> ", xStart, yGene, width, gtexGeneHeight());
-#endif
-
 // load & draw gene model
 
 char query[1024];
@@ -315,10 +304,16 @@ hFreeConn(&conn);
 
 static void gtexGeneMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, 
                         char *mapItemName, int start, int end, int x, int y, int width, int height)
-/* Create a map box for each tissue (bar in the graph) */
+/* Create a map box for each tissue (bar in the graph) or a single map for squish/dense modes */
 {
 //uglyf("map item: itemName=%s, mapItemName=%s, start=%d, end=%d, x=%d, y=%d, width=%d, height=%d, insideX=%d<br>",
         //itemName, mapItemName, start, end, x, y, width, height, insideX);
+
+if (tg->visibility == tvDense || tg->visibility == tvSquish)
+    {
+    genericMapItem(tg, hvg, item, itemName, itemName, start, end, x, y, width, height);
+    }
+
 struct gtexTissue *tissues = getGtexTissues();
 struct gtexTissue *tissue = NULL;
 struct gtexGeneBed *gtex = item;
@@ -367,6 +362,7 @@ struct gtexGeneExtras *extras;
 AllocVar(extras);
 extras->maxExp = maxExp;
 track->extraUiData = extras;
+
 }
 
 static int gtexGeneItemHeight(struct track *track, void *item)
@@ -387,12 +383,23 @@ else
 return tgFixedTotalHeightOptionalOverflow(track, vis, height, height, FALSE);
 }
 
+static int gtexGeneItemEnd(struct track *track, void *item)
+/* Return end chromosome coordinate of item, including graph */
+{
+struct gtexGeneBed *geneBed = (struct gtexGeneBed *)item;
+double scale = scaleForWindow(insideWidth, winStart, winEnd);
+int graphWidth = gtexGraphWidth(geneBed);
+return max(geneBed->chromEnd, max(winStart, geneBed->chromStart) + graphWidth/scale);
+}
+
+
 void gtexGeneMethods(struct track *track)
 {
 track->drawItemAt = gtexGeneDrawAt;
 track->loadItems = gtexGeneLoadItems;
 track->mapItem = gtexGeneMapItem;
 track->itemHeight = gtexGeneItemHeight;
+track->itemEnd = gtexGeneItemEnd;
 track->totalHeight = gtexTotalHeight;
 }
 
