@@ -1,6 +1,6 @@
 # for emacs: -*- mode: sh; -*-
 
-# This file describes how the browser for B. xylophilus WS245 version is built
+# This file describes the browser build for Onchocerca volvulus WS245 version
 
 ##############################################################################
 # download sequence, create UCSC sequence (DONE - 2015-06-24 - Hiram)
@@ -167,68 +167,66 @@ searchPriority 8
     time (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku oncVol1) > do.log 2>&1
-XXX - running - Thu Jul  9 14:06:13 PDT 2015
-    # real    53m37.447s
+    # real    35m20.023s
 
     cat faSize.rmsk.txt
-    # 74576239 bases (1475733 N's 73100506 real 72631263 upper 469243 lower)
-    #    in 5528 sequences in 1 files
-    #  Total size: mean 13490.6 sd 127730.2 min 444 (contig15090)
-    #    max 3612001 (scaffold00713) median 1253
-    #  %0.63 masked total, %0.64 masked real
+    # 96441526 bases (3074367 N's 93367159 real 89682362 upper
+    #    3684797 lower) in 709 sequences in 1 files
+    # Total size: mean 136024.7 sd 1674508.7 min 523 (HG738843v1)
+    #    max 28345163 (HG738137v1) median 2218
+    # %3.82 masked total, %3.95 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
     #    January 31 2015 (open-4-0-5) version of RepeatMasker
-    # CC   RELEASE 20140131;    
+    # CC   RELEASE 20140131;
 
     time featureBits -countGaps oncVol1 rmsk
     # 469243 bases of 74576239 (0.629%) in intersection
     #  real    0m1.897s
 
 ##########################################################################
-# running simple repeat (TBD - 2015-07-09 - Hiram)
+# running simple repeat (DONE - 2015-07-09 - Hiram)
     mkdir /hive/data/genomes/oncVol1/bed/simpleRepeat
     cd /hive/data/genomes/oncVol1/bed/simpleRepeat
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         oncVol1) > do.log 2>&1
-XXX - running - Thu Jul  9 14:06:40 PDT 2015
-    # real    8m14.637s
+    # real    14m27.670s
 
     cat fb.simpleRepeat
-    # 1676598 bases of 73100506 (2.294%) in intersection
+    # 1741988 bases of 93367159 (1.866%) in intersection
 
     # using the Window Masker result as indicated below
 
 ##########################################################################
-# CREATE MICROSAT TRACK (TBD - 2015-07-09 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2015-07-09 - Hiram)
      ssh hgwdev
      mkdir /cluster/data/oncVol1/bed/microsat
      cd /cluster/data/oncVol1/bed/microsat
      awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
 	../simpleRepeat/simpleRepeat.bed > microsat.bed
     hgLoadBed oncVol1 microsat microsat.bed
-    #	Read 17 elements of size 4 from microsat.bed
+    #	Read 518 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2015-07-09 - Hiram)
+## WINDOWMASKER (DONE - 2015-07-09 - Hiram)
     mkdir /hive/data/genomes/oncVol1/bed/windowMasker
     cd /hive/data/genomes/oncVol1/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev oncVol1) > do.log 2>&1
-    # real    4m27.586s
+    # real    4m45.269s
 
     # Masking statistics
     cat faSize.oncVol1.cleanWMSdust.txt
-    #  74576239 bases (1475733 N's 73100506 real 51958319 upper
-    #    21142187 lower) in 5528 sequences in 1 files
-    #  Total size: mean 13490.6 sd 127730.2 min 444 (contig15090)
-    #    max 3612001 (scaffold00713) median 1253
-    #  %28.35 masked total, %28.92 masked real
+    # 96441526 bases (3074367 N's 93367159 real 58706047 upper
+    #    34661112 lower) in 709 sequences in 1 files
+    # Total size: mean 136024.7 sd 1674508.7 min 523 (HG738843v1)
+    #    max 28345163 (HG738137v1) median 2218
+    # %35.94 masked total, %37.12 masked real
 
     cat fb.oncVol1.rmsk.windowmaskerSdust.txt
-    # 350035 bases of 74576239 (0.469%) in intersection
+    # 3204592 bases of 96441526 (3.323%) in intersection
 
     # using this Window Masker result for final masking::
     cd /hive/data/genomes/oncVol1
@@ -239,56 +237,54 @@ XXX - running - Thu Jul  9 14:06:40 PDT 2015
     # measure the final masking:
     twoBitToFa oncVol1.2bit stdout | faSize stdin > faSize.oncVol1.2bit.txt
     cat faSize.oncVol1.2bit.txt
-    # 74576239 bases (1475733 N's 73100506 real 51950819 upper
-    #    21149687 lower) in 5528 sequences in 1 files
-    # Total size: mean 13490.6 sd 127730.2 min 444 (contig15090)
-    #    max 3612001 (scaffold00713) median 1253
-    # %28.36 masked total, %28.93 masked real
+    # 96441526 bases (3074367 N's 93367159 real 58693029 upper
+    #    34674130 lower) in 709 sequences in 1 files
+    # Total size: mean 136024.7 sd 1674508.7 min 523 (HG738843v1)
+    #    max 28345163 (HG738137v1) median 2218
+    # %35.95 masked total, %37.14 masked real
 
     # and reset the symlink
     rm /gbdb/oncVol1/oncVol1.2bit
     ln -s /hive/data/genomes/oncVol1/oncVol1.2bit /gbdb/oncVol1/oncVol1.2bit
 
 ##########################################################################
-# cpgIslands - (TBD - 2015-07-09 - Hiram)
+# cpgIslands - (DONE - 2015-07-09 - Hiram)
     mkdir /hive/data/genomes/oncVol1/bed/cpgIslands
     cd /hive/data/genomes/oncVol1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku oncVol1) > do.log 2>&1 &
-XXX - running - Thu Jul  9 12:28:37 PDT 2015
-    # real    8m10.474s
+    # real    1m46.837s
 
     cat fb.oncVol1.cpgIslandExt.txt
-    # 29350 bases of 86344036 (0.034%) in intersection
+    # 28549 bases of 93367159 (0.031%) in intersection
 
 #########################################################################
-# augustus - (TBD - 2015-07-09 - Hiram)
+# augustus - (DONE - 2015-07-09 - Hiram)
     mkdir /hive/data/genomes/oncVol1/bed/augustus
     cd /hive/data/genomes/oncVol1/bed/augustus
     #  XXX this is not specifically correct, the species caenorhabditis
     #      is not necessarily accurate here
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
       -species=caenorhabditis -dbHost=hgwdev \
-         -workhorse=hgwdev oncVol1) > do.log 2>&1
-XXX - running - Thu Jul  9 12:28:37 PDT 2015
-    # real    49m33.584s
+         -workhorse=hgwdev oncVol1) > do.log 2>&1 &
+    # real    60m34.582s
 
     cat fb.oncVol1.augustusGene.txt
-    # 5950506 bases of 86344036 (6.892%) in intersection
+    # 5541603 bases of 93367159 (5.935%) in intersection
 
 #########################################################################
-# genscan - (TBD - 2015-07-08 - Hiram)
+# genscan - (DONE - 2015-07-09 - Hiram)
     mkdir /hive/data/genomes/oncVol1/bed/genscan
     cd /hive/data/genomes/oncVol1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku oncVol1) > do.log 2>&1
-    # real    9m51.838s
+    # real    15m26.022s
 
     cat fb.oncVol1.genscan.txt
-    #   3196210 bases of 86344036 (3.702%) in intersection
+    #   2739972 bases of 93367159 (2.935%) in intersection
 
     cat fb.oncVol1.genscanSubopt.txt
-    #   2410491 bases of 86344036 (2.792%) in intersection
+    #   2264046 bases of 93367159 (2.425%) in intersection
 
 ########################################################################
 # Create kluster run files (TBD - 2015-07-08 - Hiram)
