@@ -79,11 +79,10 @@ taxId 1195656
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/priExs1/priExs1.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku priExs1) > do.log 2>&1
-XXX - running - Tue Jul 14 15:12:18 PDT 2015
-    # real    12m23.178s
+    # real    48m47.434s
 
     cat fb.priExs1.cpgIslandExtUnmasked.txt
-    # 9210988 bases of 153238914 (6.011%) in intersection
+    # 8803700 bases of 166917800 (5.274%) in intersection
 
 #############################################################################
 # cytoBandIdeo - (DONE - 2015-07-14 - Hiram)
@@ -159,24 +158,22 @@ searchPriority 8
     time (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku priExs1) > do.log 2>&1
-XXX - running - Tue Jul 14 15:17:41 PDT 2015
-    # real    189m11.418s
+    # real    39m51.044s
 
     cat faSize.rmsk.txt
-    # 172510819 bases (19302620 N's 153208199 real 145490438 upper
-    #    7717761 lower) in 18084 sequences in 1 files
-    # Total size: mean 9539.4 sd 122670.4 min 47 (Ppa_Contig13657)
-    #    max 5268024 (Ppa_Contig0) median 685
-    # %4.47 masked total, %5.04 masked real
+    # 177536987 bases (10621485 N's 166915502 real 163462154 upper 3453348
+    # lower) in 4369 sequences in 1 files
+    # Total size: mean 40635.6 sd 79495.5 min 945 (scaffold4418) max 1285551 (scaffold1) median 9535
+    # %1.95 masked total, %2.07 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
     #    January 31 2015 (open-4-0-5) version of RepeatMasker
-    # CC   RELEASE 20140131;    
+    # CC   RELEASE 20140131;
 
     time featureBits -countGaps priExs1 rmsk
-    # 7720275 bases of 172510819 (4.475%) in intersection
-    #  real    0m6.103s
+    # 3453434 bases of 177536987 (1.945%) in intersection
+    # real    0m3.481s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
@@ -190,43 +187,41 @@ XXX - running - Tue Jul 14 15:17:41 PDT 2015
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         priExs1) > do.log 2>&1
-XXX - running - Tue Jul 14 15:18:09 PDT 2015
-    # real    10m16.188s
+    # real    12m10.380s
 
     cat fb.simpleRepeat
-    # 3902648 bases of 153238914 (2.547%) in intersection
+    # 5329576 bases of 166917800 (3.193%) in intersection
 
     # using the Window Masker result as indicated below
 
 ##########################################################################
-# CREATE MICROSAT TRACK (TBD - 2015-07-01 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2015-07-15 - Hiram)
      ssh hgwdev
      mkdir /cluster/data/priExs1/bed/microsat
      cd /cluster/data/priExs1/bed/microsat
      awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
 	../simpleRepeat/simpleRepeat.bed > microsat.bed
     hgLoadBed priExs1 microsat microsat.bed
-    #	Read 765 elements of size 4 from microsat.bed
+    #	Read 411 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2015-07-01 - Hiram)
-
+## WINDOWMASKER (DONE - 2015-07-15 - Hiram)
     mkdir /hive/data/genomes/priExs1/bed/windowMasker
     cd /hive/data/genomes/priExs1/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev priExs1) > do.log 2>&1
-    # real    13m19.730s
+    # real    9m16.195s
 
     # Masking statistics
     cat faSize.priExs1.cleanWMSdust.txt
-    # 172510819 bases (19302620 N's 153208199 real 116592215 upper
-    #    36615984 lower) in 18084 sequences in 1 files
-    # Total size: mean 9539.4 sd 122670.4 min 47 (Ppa_Contig13657)
-    #    max 5268024 (Ppa_Contig0) median 685
-    # %21.23 masked total, %23.90 masked real
+    # 177536987 bases (10621485 N's 166915502 real 128074383 upper
+    #    38841119 lower) in 4369 sequences in 1 files
+    # Total size: mean 40635.6 sd 79495.5 min 945 (scaffold4418)
+    #    max 1285551 (scaffold1) median 9535
+    # %21.88 masked total, %23.27 masked real
 
     cat fb.priExs1.rmsk.windowmaskerSdust.txt
-    # 5980404 bases of 172510819 (3.467%) in intersection
+    # 2940274 bases of 177536987 (1.656%) in intersection
 
     # using this Window Masker result for final masking::
     cd /hive/data/genomes/priExs1
@@ -237,52 +232,54 @@ XXX - running - Tue Jul 14 15:18:09 PDT 2015
     # measure the final masking:
     twoBitToFa priExs1.2bit stdout | faSize stdin > faSize.priExs1.2bit.txt
     cat faSize.priExs1.2bit.txt
-    # 172510819 bases (19302620 N's 153208199 real 116540993 upper
-    #    36667206 lower) in 18084 sequences in 1 files
-    # Total size: mean 9539.4 sd 122670.4 min 47 (Ppa_Contig13657)
-    #    max 5268024 (Ppa_Contig0) median 685
-    # %21.26 masked total, %23.93 masked real
+    # 177536987 bases (10621485 N's 166915502 real 128017169 upper
+    #    38898333 lower) in 4369 sequences in 1 files
+    # Total size: mean 40635.6 sd 79495.5 min 945 (scaffold4418)
+    #    max 1285551 (scaffold1) median 9535
+    # %21.91 masked total, %23.30 masked real
 
     # and reset the symlink
     rm /gbdb/priExs1/priExs1.2bit
     ln -s /hive/data/genomes/priExs1/priExs1.2bit /gbdb/priExs1/priExs1.2bit
 
 ##########################################################################
-# cpgIslands - (TBD - 2015-07-01 - Hiram)
+# cpgIslands - (DONE - 2015-07-15 - Hiram)
     mkdir /hive/data/genomes/priExs1/bed/cpgIslands
     cd /hive/data/genomes/priExs1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku priExs1) > do.log 2>&1 &
-    # real    21m15.732s
+    # real    26m4.376s
 
     cat fb.priExs1.cpgIslandExt.txt
-    # 2971735 bases of 153238914 (1.939%) in intersection
+    # 2848910 bases of 166917800 (1.707%) in intersection
 
 #########################################################################
-# augustus - (TBD - 2015-07-01 - Hiram)
+# augustus - (DONE - 2015-07-15 - Hiram)
     mkdir /hive/data/genomes/priExs1/bed/augustus
     cd /hive/data/genomes/priExs1/bed/augustus
+    #  XXX this is not specifically correct, the species caenorhabditis
+    #      is not necessarily accurate here
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
       -species=caenorhabditis -dbHost=hgwdev \
          -workhorse=hgwdev priExs1) > do.log 2>&1
-    # real    91m20.674s
+    # real    25m11.115s
 
     cat fb.priExs1.augustusGene.txt
-    # 30647862 bases of 153238914 (20.000%) in intersection
+    # 35136230 bases of 166917800 (21.050%) in intersection
 
 #########################################################################
-# genscan - (TBD - 2015-07-01 - Hiram)
+# genscan - (DONE - 2015-07-15 - Hiram)
     mkdir /hive/data/genomes/priExs1/bed/genscan
     cd /hive/data/genomes/priExs1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku priExs1) > do.log 2>&1
-    # real    15m3.155s
+    # real    39m26.736s
 
     cat fb.priExs1.genscan.txt
-    #   10119755 bases of 153238914 (6.604%) in intersection
+    #   10432088 bases of 166917800 (6.250%) in intersection
 
     cat fb.priExs1.genscanSubopt.txt
-    #   6198002 bases of 153238914 (4.045%) in intersection
+    #   9498870 bases of 166917800 (5.691%) in intersection
 
 ########################################################################
 # Create kluster run files (TBD - 2015-03-24 - Hiram)
@@ -424,39 +421,5 @@ priExs1.perChromTables = no
 
     #   in that pushQ entry walk through each entry and see if the
     #   sizes will set properly
-
-#########################################################################
-# LIFTOVER TO priPac1 (TBD - 2015-07-07 - Hiram )
-    mkdir /hive/data/genomes/priExs1/bed/blat.priPac1.2015-07-07
-    cd /hive/data/genomes/priExs1/bed/blat.priPac1.2015-07-07
-    # -debug run to create run dir, preview scripts...
-    doSameSpeciesLiftOver.pl \
-	-buildDir=`pwd` \
-	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-  -ooc=/hive/data/genomes/priExs1/jkStuff/priExs1.11.ooc -debug priExs1 priPac1
-    # Real run:
-    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` \
-      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-       -ooc=/hive/data/genomes/priExs1/jkStuff/priExs1.11.ooc priExs1 priPac1) \
-		> do.log 2>&1
-    #	real    14m59.119s
-    # verify it works on genome-test
-
-#############################################################################
-# LIFTOVER TO priPac2 (TBD - 2015-07-07 - Hiram )
-    mkdir /hive/data/genomes/priExs1/bed/blat.priPac2.2015-07-07
-    cd /hive/data/genomes/priExs1/bed/blat.priPac2.2015-07-07
-    # -debug run to create run dir, preview scripts...
-    doSameSpeciesLiftOver.pl \
-	-buildDir=`pwd` \
-	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-  -ooc=/hive/data/genomes/priExs1/jkStuff/priExs1.11.ooc -debug priExs1 priPac2
-    # Real run:
-    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` \
-      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-       -ooc=/hive/data/genomes/priExs1/jkStuff/priExs1.11.ooc priExs1 priPac2) \
-		> do.log 2>&1
-    #	real    6m45.278s
-    # verify it works on genome-test
 
 #############################################################################
