@@ -556,7 +556,10 @@ struct ccdsNotes *ccdsNotes;
 AllocVar(ccdsNotes);
 safecpy(ccdsNotes->ccds, sizeof(ccdsNotes->ccds), ccdsIdVer);
 safecpy(ccdsNotes->createDate, sizeof(ccdsNotes->createDate), row[2]);
-ccdsNotes->note = cloneString(row[3]);
+if (row[3] == NULL)
+    ccdsNotes->note = cloneString("");
+else
+    ccdsNotes->note = cloneString(row[3]);
 slAddHead(ccdsNotesList, ccdsNotes);
 return TRUE;
 }
