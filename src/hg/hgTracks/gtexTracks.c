@@ -105,21 +105,31 @@ int count = gtex->expCount;
 return (barWidth * count) + (padding * (count-1));
 }
 
-static int valToY(double val, double maxVal, int height)
+
+static int valToHeight(double val, double maxVal, int maxHeight)
+/* Convert a value from 0 to maxVal to 0 to maxHeight-1 */
+{
+double scaled = val/maxVal;
+return (scaled * (maxHeight-1));
+}
+
+static int valToY(double val, double maxVal, int maxHeight)
 /* Convert a value from 0 to maxVal to 0 to height-1 */
 {
 double scaled = val/maxVal;
-int y = scaled * (height);
-return (height-1) - y;
+int y = scaled * (maxHeight);
+return (maxHeight-1) - y;
+
 //int y = scaled * (height-1);
 //return (height - 1) - y;
 }
 
 struct gtexGeneExtras 
     {
-    double maxExp;
+    double maxExp; // TODO: remove this local normalization factor
+    char *graphType;
+    boolean isComparison;
     };
-
 
 /* Cache tissue metadata */
 
@@ -182,8 +192,32 @@ static int gtexGeneMargin()
     return 1;
 }
 
+static struct gtexGeneBed *loadComputedMedians(struct gtexGeneBed *geneBed, char *graphType)
+/* Compute medians based on graph type.  Returns a list of 2 for comparison graph types */
+/* TODO: add support for filter function */
+{
+/* FIXME: dummy load of two for display implementation */
+struct gtexGeneBed *medians = NULL, *medians2 = NULL;
+AllocVar(medians);
+/* TODO: move to lib */
+medians->expCount = geneBed->expCount;
+AllocArray(medians->expScores, medians->expCount);
+int i;
+for (i = 0; i < medians->expCount; ++i)
+    medians->expScores[i] = geneBed->expScores[i];
+
+AllocVar(medians2);
+medians2->expCount = geneBed->expCount;
+AllocArray(medians2->expScores, medians2->expCount);
+for (i = 0; i < medians2->expCount; ++i)
+    medians2->expScores[i] = geneBed->expScores[i];
+
+medians->next = medians2;
+return medians;
+}
+
 static void gtexGeneDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
-                    double scale, MgFont *font, Color color, enum trackVisibility vis)
+                double scale, MgFont *font, Color color, enum trackVisibility vis)
 {
 struct gtexGeneBed *geneBed = item;
 initGeneColors(hvg);
@@ -206,6 +240,17 @@ if (vis != tvFull && vis != tvPack)
     bedDrawSimpleAt(tg, item, hvg, xOff, y, scale, font, statusColor, vis);
     return;
     }
+struct gtexGeneBed *computedMedians = NULL;     // 1 or 2 (if comparison) 
+                                                // with medians computed for sample subsets
+
+struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
+if ((extras->isComparison) &&
+        (tg->visibility == tvFull || tg->visibility == tvPack) && 
+        gtexGraphHeight() != MIN_GRAPH_HEIGHT)
+    {
+    // compute medians based on configuration (comparisons, and later, filters)
+    computedMedians = loadComputedMedians(geneBed, extras->graphType);
+    }
 int i;
 int expCount = geneBed->expCount;
 double maxExp = ((struct gtexGeneExtras *)tg->extraUiData)->maxExp;
@@ -218,11 +263,13 @@ if (graphX < 0)
     return;
 // x1 is at left of graph
 int x1 = xOff + graphX;
+int startX = x1;
 
 // yZero is at bottom of graph
 int yZero = gtexGraphHeight() + y - 1;
 
 // draw faint line under graph to delineate extent when bars are missing (tissue w/ 0 expression)
+// TODO: skip missing bars -- then we can lose the gray line (at least for non-comparison mode)
 Color lightGray = MAKECOLOR_32(0xD1, 0xD1, 0xD1);
 int graphWidth = gtexGraphWidth(geneBed);
 hvGfxBox(hvg, x1, yZero+1, graphWidth, 1, lightGray);
@@ -260,7 +307,8 @@ for (i=0; i<expCount; i++)
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
     double expScore = geneBed->expScores[i];
     int yMedian = valToY(expScore, maxExp, gtexGraphHeight()) + y;
-    //int height = yZero - yMedian + 1;
+    //int foo = valToY(expScore, maxExp, gtexGraphHeight());
+    //int yMedian = yZero - height;
     int height = yZero - yMedian;
     // TODO: adjust yGene instead of yMedian+1 to get gene track distance as desired
     //if (i ==0) uglyf("DRAW: expScore=%.2f, maxExp=%.2f, graphHeight=%d, y=%d<br>", expScore, maxExp, gtexGraphHeight(), y);
@@ -291,15 +339,46 @@ if (sr != NULL)
     if ((row = sqlNextRow(sr)) != NULL)
         geneModel = genePredLoad(row);
     sqlFreeResult(&sr);
-    }
+}
 if (geneModel == NULL)
-    return;
+return;
 struct linkedFeatures *lf = linkedFeaturesFromGenePred(tg, geneModel, FALSE);
 tg->heightPer = gtexGeneHeight()+1;
 lf->filterColor = statusColor;
 linkedFeaturesDrawAt(tg, lf, hvg, xOff, yGene, scale, font, color, tvSquish);
 tg->heightPer = heightPer;
 hFreeConn(&conn);
+
+if (!extras->isComparison || slCount(computedMedians) != 2)
+    return;
+
+// draw comparison graph (upside down)
+
+x1 = startX;
+// yZero is at top of graph
+yZero = yGene + gtexGeneHeight();
+for (i=0; i<expCount; i++)
+    {
+    struct rgbColor fillColor = colors[i];
+    if (barWidth == 1 && sameString(colorScheme, GTEX_COLORS_GTEX))
+        {
+        // brighten colors a bit so they'll be more visible at this scale
+        struct hslColor hsl = mgRgbToHsl(fillColor);
+        hsl.s = min(1000, hsl.s + 300);
+        fillColor = mgHslToRgb(hsl);
+        }
+    int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
+    double expScore = geneBed->expScores[i];
+    int height = valToHeight(expScore, maxExp, gtexGraphHeight());
+    // TODO: adjust yGene instead of yMedian+1 to get gene track distance as desired
+    //if (i ==0) uglyf("DRAW2: expScore=%.2f, maxExp=%.2f, graphHeight=%d, y=%d<br>", expScore, maxExp, gtexGraphHeight(), y);
+    //if (i ==0) uglyf("DRAW2: yZero=%d, height=%d<br>", yZero, height);
+    if (graphPadding == 0 || sameString(colorScheme, GTEX_COLORS_GTEX))
+        hvGfxBox(hvg, x1, yZero, barWidth, height, fillColorIx);
+    else
+        hvGfxOutlinedBox(hvg, x1, yZero, barWidth, height, fillColorIx, lineColorIx);
+    x1 = x1 + barWidth + graphPadding;
+    }
 }
 
 static void gtexGeneMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, 
@@ -349,41 +428,58 @@ static struct gtexGeneBed *loadGtexGeneBed(char **row)
 return gtexGeneBedLoad(row);
 }
 
-static void gtexGeneLoadItems(struct track *track)
+static void gtexGeneLoadItems(struct track *tg)
 {
-bedLoadItem(track, track->table, (ItemLoader)loadGtexGeneBed);
+bedLoadItem(tg, tg->table, (ItemLoader)loadGtexGeneBed);
+
+struct gtexGeneExtras *extras;
+AllocVar(extras);
+tg->extraUiData = extras;
+
+// TODO: move test to lib
+char *graphType = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_GRAPH, 
+                                                GTEX_GRAPH_DEFAULT);
+extras->graphType = cloneString(graphType);
+if (sameString(graphType, GTEX_GRAPH_AGE) || sameString(graphType, GTEX_GRAPH_SEX))
+    extras->isComparison = TRUE;
+
 double maxExp = 0.0;
 int i;
 struct gtexGeneBed *geneBed;
-for (geneBed = track->items; geneBed != NULL; geneBed = geneBed->next)
+// TODO: Remove this fake (window-based) normalization
+for (geneBed = tg->items; geneBed != NULL; geneBed = geneBed->next)
     for (i=0; i<geneBed->expCount; i++)
         maxExp = (geneBed->expScores[i] > maxExp ? geneBed->expScores[i] : maxExp);
-struct gtexGeneExtras *extras;
-AllocVar(extras);
 extras->maxExp = maxExp;
-track->extraUiData = extras;
-
 }
 
-static int gtexGeneItemHeight(struct track *track, void *item)
+static int gtexGeneItemHeight(struct track *tg, void *item)
 {
-if ((item == NULL) || (track->visibility == tvSquish) || (track->visibility == tvDense))
+if ((item == NULL) || (tg->visibility == tvSquish) || (tg->visibility == tvDense))
     return 0;
-return gtexGraphHeight() + + gtexGeneMargin() + gtexGeneHeight();
+int extra = 0;
+if (((struct gtexGeneExtras *)tg->extraUiData)->isComparison)
+    extra = gtexGraphHeight() + 2;
+//uglyf("GTEX itemHeight extra = %d<br>", extra);
+return gtexGraphHeight() + gtexGeneMargin() + gtexGeneHeight() + extra;
 }
 
-static int gtexTotalHeight(struct track *track, enum trackVisibility vis)
+static int gtexTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Figure out total height of track */
 {
 int height;
-if (track->visibility == tvSquish || track->visibility == tvDense)
+int extra = 0;
+if (((struct gtexGeneExtras *)tg->extraUiData)->isComparison)
+    extra = gtexGraphHeight() + 2;
+if (tg->visibility == tvSquish || tg->visibility == tvDense)
     height = 10;
 else 
-    height = gtexGraphHeight() + gtexGeneMargin() + gtexGeneHeight();
-return tgFixedTotalHeightOptionalOverflow(track, vis, height, height, FALSE);
+    height = gtexGraphHeight() + gtexGeneMargin() + gtexGeneHeight() + extra;
+//uglyf("GTEX totalHeight = %d<br>", height);
+return tgFixedTotalHeightOptionalOverflow(tg, vis, height, height, FALSE);
 }
 
-static int gtexGeneItemEnd(struct track *track, void *item)
+static int gtexGeneItemEnd(struct track *tg, void *item)
 /* Return end chromosome coordinate of item, including graph */
 {
 struct gtexGeneBed *geneBed = (struct gtexGeneBed *)item;
@@ -393,14 +489,14 @@ return max(geneBed->chromEnd, max(winStart, geneBed->chromStart) + graphWidth/sc
 }
 
 
-void gtexGeneMethods(struct track *track)
+void gtexGeneMethods(struct track *tg)
 {
-track->drawItemAt = gtexGeneDrawAt;
-track->loadItems = gtexGeneLoadItems;
-track->mapItem = gtexGeneMapItem;
-track->itemHeight = gtexGeneItemHeight;
-track->itemEnd = gtexGeneItemEnd;
-track->totalHeight = gtexTotalHeight;
+tg->drawItemAt = gtexGeneDrawAt;
+tg->loadItems = gtexGeneLoadItems;
+tg->mapItem = gtexGeneMapItem;
+tg->itemHeight = gtexGeneItemHeight;
+tg->itemEnd = gtexGeneItemEnd;
+tg->totalHeight = gtexTotalHeight;
 }
 
 

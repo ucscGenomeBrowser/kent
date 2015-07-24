@@ -6712,9 +6712,10 @@ void gtexGeneUi(struct cart *cart, struct trackDb *tdb, char *name, char *title,
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 printf("<TABLE%s><TR><TD>",boxed?" width='100%'":"");
 
+char cartVarName[1024];
+
 // Color scheme
 printf("<B>Tissue color scheme:</B>\n");
-char cartVarName[1024];
 safef(cartVarName, sizeof(cartVarName), "%s." GTEX_COLORS, name);
 char *selected = cartCgiUsualString(cart, cartVarName, GTEX_COLORS_DEFAULT); 
 boolean isGtexColors = sameString(selected, GTEX_COLORS_GTEX);
@@ -6722,6 +6723,37 @@ cgiMakeRadioButton(cartVarName, GTEX_COLORS_GTEX, isGtexColors);
 printf("GTEx\n");
 cgiMakeRadioButton(cartVarName, GTEX_COLORS_RAINBOW, !isGtexColors);
 printf("rainbow\n");
+
+// Graph type
+printf("<p><b>Expression graph:</b><br>\n");
+safef(cartVarName, sizeof(cartVarName), "%s." GTEX_GRAPH, name);
+char *graphType = cartCgiUsualString(cart, cartVarName, GTEX_GRAPH_DEFAULT); 
+
+boolean isRaw = differentString(graphType, GTEX_GRAPH_NORMAL);
+printf("&nbsp;&nbsp;&nbsp;\n");
+cgiMakeRadioButton(cartVarName, GTEX_GRAPH_RAW, isRaw);
+printf("raw<br>\n");
+
+boolean isSex = sameString(graphType, GTEX_GRAPH_SEX);
+printf("&nbsp;&nbsp;&nbsp;\n");
+printf("&nbsp;&nbsp;&nbsp;\n");
+cgiMakeRadioButton(cartVarName, GTEX_GRAPH_SEX, isSex);
+printf("compare by sex<br>\n");
+
+boolean isAge = sameString(graphType, GTEX_GRAPH_AGE);
+printf("&nbsp;&nbsp;&nbsp;\n");
+printf("&nbsp;&nbsp;&nbsp;\n");
+cgiMakeRadioButton(cartVarName, GTEX_GRAPH_SEX, isAge);
+printf("compare by age\n");
+
+char cartVarAge[1024];
+safef(cartVarAge, sizeof(cartVarAge), "%s." GTEX_GRAPH_AGE_YEARS, name);
+cgiMakeIntVarInRange(cartVarAge, GTEX_GRAPH_AGE_DEFAULT, "age range is 20-70 years", 2, "20", "70");
+printf("years<br>\n");
+
+printf("&nbsp;&nbsp;&nbsp;\n");
+cgiMakeRadioButton(cartVarName, GTEX_GRAPH_NORMAL, !isRaw);
+printf("normalized\n");
 
 cfgEndBox(boxed);
 }
