@@ -326,3 +326,10 @@ caeSp111.perChromTables = no
 	goldenPath/bigZips/chromWMSdust.bed.gz
 
 ############################################################################
+# This sequence now has an official scientific name (DONE - 2015-07-24 - Hiram)
+
+    hgsql -e 'update dbDb set scientificName="Caenorhabditis tropicalis" where name="caeSp111";' hgcentraltest
+
+    hgsql -e 'update dbDb set organism="C. tropicalis" where name="caeSp111";' hgcentraltest
+
+############################################################################
