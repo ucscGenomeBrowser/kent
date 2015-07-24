@@ -330,4 +330,6 @@ caeSp111.perChromTables = no
 
     hgsql -e 'update dbDb set scientificName="Caenorhabditis tropicalis" where name="caeSp111";' hgcentraltest
 
+    hgsql -e 'update dbDb set organism="C. tropicalis" where name="caeSp111";' hgcentraltest
+
 ############################################################################
