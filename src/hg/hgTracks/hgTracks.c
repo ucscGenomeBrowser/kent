@@ -1242,7 +1242,7 @@ switch (vis)
             char *rootName;
             char *name = track->itemName(track, item);
             int itemHeight = track->itemHeight(track, item);
-            //warn("GTEX:     track %s, itemHeight %d\n", track->shortLabel, itemHeight);
+            //warn(" track %s, itemHeight %d\n", track->shortLabel, itemHeight);
             newy = y;
 
             if (track->itemLabelColor != NULL)
@@ -2653,9 +2653,9 @@ if (withCenterLabels)
             mapBoxToggleVis(hvg, 0, yStart,tl.picWidth, sliceHeight,track);
             // Strange mapBoxToggleLogic handles reverse complement itself so x=0,width=tl.picWidth
 
-        if (yEnd!=y)
-            warn("Slice height does not add up.  Expecting %d != %d actual",
-                 yEnd - yStart - 1,y-yStart);
+        if (yEnd != y)
+            warn("Slice height for track %s does not add up.  Expecting %d != %d actual",
+                 track->shortLabel, yEnd - yStart - 1, y - yStart);
         }
     y++;
     }
