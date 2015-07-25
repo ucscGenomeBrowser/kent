@@ -177,4 +177,22 @@ fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+void gtexTissueCreateTable(struct sqlConnection *conn, char *table)
+/* Create expression record format table of given name. */
+{
+char query[1024];
+
+sqlSafef(query, sizeof(query),
+"CREATE TABLE %s (\n"
+"    id int unsigned not null, # internal id\n"
+"    name varchar(255) not null,       # short UCSC identifier\n"
+"    description varchar(255) not null, # GTEx tissue type detail\n"
+"    organ varchar(255) not null,      # GTEx tissue collection area\n"
+"              #Indices\n"
+"    PRIMARY KEY(id)\n"
+")\n",   table);
+sqlRemakeTable(conn, table, query);
+}
+
+
 

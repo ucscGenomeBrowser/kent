@@ -78,5 +78,8 @@ void gtexTissueOutput(struct gtexTissue *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+void gtexTissueCreateTable(struct sqlConnection *conn, char *table);
+/* Create expression record format table of given name. */
+
 #endif /* GTEXTISSUE_H */
 
