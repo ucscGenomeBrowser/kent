@@ -7,6 +7,7 @@
 #include "hgTracks.h"
 #include "hvGfx.h"
 #include "rainbow.h"
+#include "gtexInfo.h"
 #include "gtexGeneBed.h"
 #include "gtexTissue.h"
 #include "gtexUi.h"
@@ -109,24 +110,34 @@ return (barWidth * count) + (padding * (count-1));
 static int valToHeight(double val, double maxVal, int maxHeight)
 /* Convert a value from 0 to maxVal to 0 to maxHeight-1 */
 {
-double scaled = val/maxVal;
+// FIXME:  This sort of works.  Seems to be dropping some tho. e.g. check MRAP lung
+if (val == 0.0)
+    return 0;
+// smallest counts are 1x10e-3, translate to counter negativity
+double scaled = (log10(val)+3.001)/(log10(maxVal)+3.001);
+if (scaled < 0)
+    warn("scaled=%f\n", scaled);
+//uglyf("%.2f -> %.2f height %d", val, scaled, (int)scaled * (maxHeight-1));
 return (scaled * (maxHeight-1));
 }
 
+// TODO: whack this
 static int valToY(double val, double maxVal, int maxHeight)
 /* Convert a value from 0 to maxVal to 0 to height-1 */
 {
-double scaled = val/maxVal;
+if (val == 0.0)
+    return 0;
+double scaled = (log10(val)+3.001)/(log10(maxVal)+3.001);
+if (scaled < 0)
+    warn("scaled=%f\n", scaled);
 int y = scaled * (maxHeight);
+//uglyf("%.2f -> %.2f height %d", val, scaled, (int)scaled * (maxHeight-1));
 return (maxHeight-1) - y;
-
-//int y = scaled * (height-1);
-//return (height - 1) - y;
 }
 
 struct gtexGeneExtras 
     {
-    double maxExp; // TODO: remove this local normalization factor
+    double maxMedian;
     char *graphType;
     boolean isComparison;
     };
@@ -253,7 +264,7 @@ if ((extras->isComparison) &&
     }
 int i;
 int expCount = geneBed->expCount;
-double maxExp = ((struct gtexGeneExtras *)tg->extraUiData)->maxExp;
+double maxMedian = ((struct gtexGeneExtras *)tg->extraUiData)->maxMedian;
 struct rgbColor lineColor = {.r=0};
 int lineColorIx = hvGfxFindColorIx(hvg, lineColor.r, lineColor.g, lineColor.b);
 int heightPer = tg->heightPer;
@@ -306,17 +317,14 @@ for (i=0; i<expCount; i++)
         }
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
     double expScore = geneBed->expScores[i];
-    int yMedian = valToY(expScore, maxExp, gtexGraphHeight()) + y;
-    //int foo = valToY(expScore, maxExp, gtexGraphHeight());
-    //int yMedian = yZero - height;
-    int height = yZero - yMedian;
-    // TODO: adjust yGene instead of yMedian+1 to get gene track distance as desired
-    //if (i ==0) uglyf("DRAW: expScore=%.2f, maxExp=%.2f, graphHeight=%d, y=%d<br>", expScore, maxExp, gtexGraphHeight(), y);
+    int height = valToHeight(expScore, maxMedian, gtexGraphHeight());
+    // TODO: adjust yGene to get gene track distance as desired
+    //if (i ==0) uglyf("DRAW: expScore=%.2f, maxMedian=%.2f, graphHeight=%d, y=%d<br>", expScore, maxMedian, gtexGraphHeight(), y);
     //if (i ==0) uglyf("DRAW: yZero=%d, yMedian=%d, height=%d<br>", yZero, yMedian, height);
     if (graphPadding == 0 || sameString(colorScheme, GTEX_COLORS_GTEX))
-        hvGfxBox(hvg, x1, yMedian+1, barWidth, height, fillColorIx);
+        hvGfxBox(hvg, x1, yZero-height, barWidth, height, fillColorIx);
     else
-        hvGfxOutlinedBox(hvg, x1, yMedian+1, barWidth, height, fillColorIx, lineColorIx);
+        hvGfxOutlinedBox(hvg, x1, yZero-height, barWidth, height, fillColorIx, lineColorIx);
     x1 = x1 + barWidth + graphPadding;
     }
 
@@ -369,9 +377,9 @@ for (i=0; i<expCount; i++)
         }
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
     double expScore = geneBed->expScores[i];
-    int height = valToHeight(expScore, maxExp, gtexGraphHeight());
+    int height = valToHeight(expScore, maxMedian, gtexGraphHeight());
     // TODO: adjust yGene instead of yMedian+1 to get gene track distance as desired
-    //if (i ==0) uglyf("DRAW2: expScore=%.2f, maxExp=%.2f, graphHeight=%d, y=%d<br>", expScore, maxExp, gtexGraphHeight(), y);
+    //if (i ==0) uglyf("DRAW2: expScore=%.2f, maxMedian=%.2f, graphHeight=%d, y=%d<br>", expScore, maxMedian, gtexGraphHeight(), y);
     //if (i ==0) uglyf("DRAW2: yZero=%d, height=%d<br>", yZero, height);
     if (graphPadding == 0 || sameString(colorScheme, GTEX_COLORS_GTEX))
         hvGfxBox(hvg, x1, yZero, barWidth, height, fillColorIx);
@@ -398,7 +406,7 @@ struct gtexTissue *tissue = NULL;
 struct gtexGeneBed *gtex = item;
 int barWidth = gtexBarWidth();
 int padding = gtexGraphPadding();
-double maxExp = ((struct gtexGeneExtras *)tg->extraUiData)->maxExp;
+double maxMedian = ((struct gtexGeneExtras *)tg->extraUiData)->maxMedian;
 
 int graphX = gtexGraphX((struct gtexGeneBed *)item);
 if (graphX < 0)
@@ -411,12 +419,13 @@ int yZero = gtexGraphHeight() + y - 1;
 for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
     {
     double expScore = gtex->expScores[i];
-    int yMedian = valToY(expScore, maxExp, gtexGraphHeight()) + y;
+    //TODO: use valToHeight
+    int yMedian = valToY(expScore, maxMedian, gtexGraphHeight()) + y;
     int height = yZero - yMedian;
     // TODO: call genericMapItem
     //genericMapItem(tg, hvg, item, itemName, tissue->description, start, end, x1, y, barWidth, height);
     mapBoxHc(hvg, start, end, x1, yMedian+1, barWidth, height, tg->track, mapItemName, tissue->description);
-    //if (i==0) uglyf("MAP: expScore=%.2f, maxExp=%.2f, graphHeight=%d, y=%d<br>", expScore, maxExp, gtexGraphHeight(), y);
+    //if (i==0) uglyf("MAP: expScore=%.2f, maxMedian=%.2f, graphHeight=%d, y=%d<br>", expScore, maxMedian, gtexGraphHeight(), y);
     //if (i==0) uglyf("MAP: x=%d, x1=%d, y=%d, yZero=%d<br>", x, x1, y, yZero); 
     //if (i==0) uglyf("MAP: yZero=%d, yMedian=%d, height=%d<br>", yZero, yMedian, height); 
     x1 = x1 + barWidth + padding;
@@ -443,14 +452,7 @@ extras->graphType = cloneString(graphType);
 if (sameString(graphType, GTEX_GRAPH_AGE) || sameString(graphType, GTEX_GRAPH_SEX))
     extras->isComparison = TRUE;
 
-double maxExp = 0.0;
-int i;
-struct gtexGeneBed *geneBed;
-// TODO: Remove this fake (window-based) normalization
-for (geneBed = tg->items; geneBed != NULL; geneBed = geneBed->next)
-    for (i=0; i<geneBed->expCount; i++)
-        maxExp = (geneBed->expScores[i] > maxExp ? geneBed->expScores[i] : maxExp);
-extras->maxExp = maxExp;
+extras->maxMedian = gtexMaxMedianScore(NULL);
 }
 
 static int gtexGeneItemHeight(struct track *tg, void *item)

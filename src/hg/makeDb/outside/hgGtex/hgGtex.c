@@ -9,6 +9,7 @@
 #include "options.h"
 #include "portable.h"
 #include "hgRelate.h"
+#include "gtexInfo.h"
 #include "gtexDonor.h"
 #include "gtexSample.h"
 #include "gtexTissue.h"
@@ -20,6 +21,7 @@ char *tabDir = ".";
 boolean doLoad = FALSE;
 boolean doRound = FALSE;
 boolean median = FALSE;
+char *releaseDate = NULL;
 int limit = 0;
 
 #define DATA_FILE_VERSION "#1.2"
@@ -32,7 +34,7 @@ errAbort(
   "usage:\n"
   "   hgGtex dataFile samplesFile outTissuesFile\n"
   "        or\n"
-  "   hgGtex [options] tableRoot dataFile samplesFile subjectsFile tissuesFile\n"
+  "   hgGtex [options] tableRoot version dataFile samplesFile subjectsFile tissuesFile\n"
   "\n"
   "The first syntax generates a tissues file, with ids and candidate short names,\n"
   "intended for manual editing for clarity and conciseness.\n"
@@ -42,6 +44,7 @@ errAbort(
   "  2. Median data: a row for each gene with a list of median RPKM expression levels by tissue\n"
   "  3. Samples: a row per sample, with full metadata from GTEX\n"
   "  4. Tissues: a row per tissue, with id key for median data table\n"
+  "  5. Info: version, release date, and max median score (merge this into existing file if any)\n"
   "\n"
   "options:\n"
   "    -database=XXX (default %s)\n"
@@ -49,6 +52,7 @@ errAbort(
   "    -noLoad  - If true don't load database and don't clean up tab files\n"
   "    -doRound - If true round data values\n"
   "    -limit=N - Only do limit rows of data table, for testing\n"
+  "    -releaseDate=YY-MM-DD - Set release date (o/w use 'now')\n"
   , database);
 }
 
@@ -266,17 +270,18 @@ struct slName *idList = slNameListFromStringArray(samples, sampleCount+3);
 return idList;
 }
 
-void dataRowsOut(char **row, 
+float dataRowsOut(char **row, 
                 FILE *allFile, int sampleCount,
                 FILE *medianFile, int tissueCount, 
                 struct hashEl *tissueOffsets)
-/* Output expression levels per sample and tissue for one gene */
+/* Output expression levels per sample and tissue for one gene. Return max median computed */
 {
 int i = 0;
 struct hashEl *el;
 struct sampleOffset *sampleOffset, *sampleOffsets;
 double *sampleVals;
 float medianVal;
+float maxMedianVal = 0;
 
 /* Print geneId and tissue count to median table file */
 char *gene = row[0];
@@ -308,7 +313,8 @@ for (el = tissueOffsets; el != NULL; el = el->next)
         }
     /* Compute median */
     medianVal = (float)doubleMedian(tissueSampleCount, sampleVals);
-    //verbose(2, "MEDIAN: %0.3f\n", medianVal);
+    maxMedianVal = max(medianVal, maxMedianVal);
+    verbose(3, "median %s %0.3f\n", tissue, medianVal);
 
     /* If no rounding, then print as float, otherwise round */
     if (doRound)
@@ -318,6 +324,7 @@ for (el = tissueOffsets; el != NULL; el = el->next)
     freez(&sampleVals);
     }
 fprintf(medianFile, "\n");
+return maxMedianVal;
 }
 
 /****************************/
@@ -473,13 +480,14 @@ verbose(3, "%d tissues\n", hashNumEntries(tissueSampleHash));
 tissuesOut(outFile, tissueSampleHash);
 }
 
-void hgGtex(char *tableRoot, char *dataFile, char *sampleFile, char *subjectFile, char *tissuesFile)
+void hgGtex(char *tableRoot, char *version, 
+                char *dataFile, char *sampleFile, char *subjectFile, char *tissuesFile)
 /* Main function to load tables*/
 {
 char *line;
 int wordCount;
 FILE *f = NULL;
-FILE *tissueDataFile = NULL, *sampleDataFile = NULL;
+FILE *tissueDataFile = NULL, *sampleDataFile = NULL, *infoFile = NULL;
 int dataCount = 0;
 struct lineFile *lf;
 int dataSampleCount = 0;
@@ -599,6 +607,7 @@ lf = lineFileOpen(dataFile, TRUE);
 parseDataFileHeader(lf, sampleCount, NULL);
 
 /* Parse expression values in data file. Each row is a gene */
+float maxMedian = 0;
 char **row;
 AllocArray(row, dataSampleCount+2);
 while (lineFileNext(lf, &line, NULL))
@@ -607,17 +616,35 @@ while (lineFileNext(lf, &line, NULL))
     if (wordCount-2 != dataSampleCount)
         errAbort("Expecting %d data points, got %d line %d of %s", 
 		dataSampleCount, wordCount-2, lf->lineIx, lf->fileName);
-    dataRowsOut(row, sampleDataFile, dataSampleCount, 
+    float rowMaxMedian = dataRowsOut(row, sampleDataFile, dataSampleCount, 
                         tissueDataFile, tissueCount, tissueOffsets);
+    maxMedian = max(rowMaxMedian, maxMedian);
     dataCount++;
     if (limit != 0 && dataCount >= limit)
         break;
     }
 lineFileClose(&lf);
 
+/* Create info file */
+char infoTable[64];
+safef(infoTable, sizeof(infoTable), "%sInfo", tableRoot);
+infoFile = hgCreateTabFile(tabDir,infoTable);
+struct gtexInfo *info;
+AllocVar(info);
+info->version = version;
+info->releaseDate = releaseDate;
+info->maxMedianScore = maxMedian;
+gtexInfoOutput(info, infoFile, '\t', '\n');
+
 if (doLoad)
     {
     struct sqlConnection *conn = sqlConnect(database);
+
+    // Load info table 
+    verbose(2, "Creating info table\n");
+    gtexInfoCreateTable(conn, infoTable);
+    hgLoadTabFile(conn, tabDir, infoTable, &infoFile);
+    hgRemoveTabFile(tabDir, infoTable);
 
     // Load tissue data (medians) table
     verbose(2, "Creating tissue data table\n");
@@ -648,6 +675,7 @@ optionInit(&argc, argv, options);
 database = optionVal("database", database);
 doLoad = !optionExists("noLoad");
 doRound = optionExists("doRound");
+releaseDate = optionVal("releaseDate", "0");
 if (optionExists("tab"))
     {
     tabDir = optionVal("tab", tabDir);
@@ -656,8 +684,8 @@ if (optionExists("tab"))
 limit = optionInt("limit", limit);
 if (argc == 4)
     hgGtexTissues(argv[1], argv[2], argv[3]);
-else if (argc == 6)
-    hgGtex(argv[1], argv[2], argv[3], argv[4], argv[5]);
+else if (argc == 7)
+    hgGtex(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
 else
     usage();
 return 0;

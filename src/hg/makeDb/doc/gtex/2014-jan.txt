@@ -33,6 +33,7 @@ wc -l samples.txt
 
 
 # Load tables (gtexData - median expression level across tissues, gtexTissues):
+# First, generate tissue table (suitable for manual curation)
 hgGtex gtex /hive/data/outside/GTEx/2014-01-17/GTEx_Analysis_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct /hive/data/outside/GTEx/2014-01-17/GTEx_Data_2014-01-17_Annotations_SampleAttributesDS.txt -median
 
 # Output format for Chris Eisenhart tissue clustering (hg/expData): 2 files
@@ -64,6 +65,17 @@ hgGtex -tab=output gtex \
     $dataDir/GTEx_Data_2014-01-17_Annotations_SampleAttributesDS.txt \
     $dataDir/GTEx_Data_2014-01-17_Annotations_SubjectPhenotypes_DS.txt \
     $dataDir/tissues.tab
+
+# run with new options, just to get info table
+hgGtex -tab=output2 gtex2 V4 \
+    $dataDir/GTEx_Analysis_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct \
+    $dataDir/GTEx_Data_2014-01-17_Annotations_SampleAttributesDS.txt \
+    $dataDir/GTEx_Data_2014-01-17_Annotations_SubjectPhenotypes_DS.txt \
+    $dataDir/portal/gtexColorTissue.dec.tab
+
+#edit output2/gtexInfo2.tab to add release date (YY-MM-DD)
+hgLoadSqlTab hgFixed gtexInfo ~/kent/src/hg/lib/gtexInfo.sql output2/gtexInfo.tab
+
 
 # EQTL's from Pilot data
 cd /hive/data/outside/GTEx/pilot
@@ -107,5 +119,5 @@ wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/single_tissue_eq
 
 cd portal
 # convert hex colors to decimal (mysql LOAD DATA won't convert)
-awk -F"\t"  --non-decimal-data '{printf("%d\t%s\t%s\t%s\t%d\n", $1, $2, $3, $4, $5)}' gtexColorTissue.tab | \
-    hgLoadSqlTab  hgFixed gtexColorTissue ~/kent/src/hg/lib/gtexTissue.sql stdin
+awk -F"\t"  --non-decimal-data '{printf("%d\t%s\t%s\t%s\t%d\n", $1, $2, $3, $4, $5)}' gtexColorTissue.tab > gtexColorTissue.dec.tab
+hgLoadSqlTab  hgFixed gtexColorTissue ~/kent/src/hg/lib/gtexTissue.sql gtexColorTissue.dec.tab
