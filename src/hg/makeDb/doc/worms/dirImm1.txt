@@ -3,7 +3,7 @@
 # This file describes how the browser for D. immitis WS245 version is built
 
 ##############################################################################
-# download sequence, create UCSC sequence (TBD - 2015-06-24 - Hiram)
+# download sequence, create UCSC sequence (DONE - 2015-06-24 - Hiram)
     mkdir -p /hive/data/genomes/dirImm1/ws245
     cd /hive/data/genomes/dirImm1/ws245
 
@@ -34,7 +34,7 @@ ftp://ftp.sanger.ac.uk/pub/wormbase/releases/WS245/species/PRJEB1797
       Dirofilaria_immitis.jpg
 
 #############################################################################
-#  Initial database build (TBD - 2015-07-09 - Hiram)
+#  Initial database build (DONE - 2015-07-09 - Hiram)
 
     cd /hive/data/genomes/dirImm1
     cat << '_EOF_' > dirImm1.config.ra
@@ -163,26 +163,25 @@ query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
 ##########################################################################
-# running repeat masker (TBD - 2015-07-07 - Hiram)
+# running repeat masker (DONE - 2015-07-09 - Hiram)
     mkdir /hive/data/genomes/dirImm1/bed/repeatMasker
     cd /hive/data/genomes/dirImm1/bed/repeatMasker
     time (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku dirImm1) > do.log 2>&1
-XXX - running - Thu Jul  9 12:02:39 PDT 2015
-    # real    189m11.418s
+    # real    193m42.028s
 
     cat faSize.rmsk.txt
-    # 172510819 bases (19302620 N's 153208199 real 145490438 upper
-    #    7717761 lower) in 18084 sequences in 1 files
-    # Total size: mean 9539.4 sd 122670.4 min 47 (Ppa_Contig13657)
-    #    max 5268024 (Ppa_Contig0) median 685
-    # %4.47 masked total, %5.04 masked real
+    # 88323343 bases (3430609 N's 84892734 real 81279691 upper
+    #    3613043 lower) in 16062 sequences in 1 files
+    # Total size: mean 5498.9 sd 31910.5 min 200 (nDi_2_2_scaf16061)
+    #    max 1085577 (nDi_2_2_scaf00001) median 754
+    # %4.09 masked total, %4.26 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
     #    January 31 2015 (open-4-0-5) version of RepeatMasker
-    # CC   RELEASE 20140131;    
+    # CC   RELEASE 20140131;
 
     time featureBits -countGaps dirImm1 rmsk
     # 7720275 bases of 172510819 (4.475%) in intersection
@@ -193,7 +192,7 @@ XXX - running - Thu Jul  9 12:02:39 PDT 2015
     #   separates out the N's from the bases, it doesn't show lower case N's
 
 ##########################################################################
-# running simple repeat (TBD - 2015-07-07 - Hiram)
+# running simple repeat (DONE - 2015-07-09 - Hiram)
     mkdir /hive/data/genomes/dirImm1/bed/simpleRepeat
     cd /hive/data/genomes/dirImm1/bed/simpleRepeat
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
@@ -207,33 +206,33 @@ XXX - running - Thu Jul  9 12:02:39 PDT 2015
     # using the Window Masker result as indicated below
 
 ##########################################################################
-# CREATE MICROSAT TRACK (TBD - 2015-07-08 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2015-07-09 - Hiram)
      ssh hgwdev
      mkdir /cluster/data/dirImm1/bed/microsat
      cd /cluster/data/dirImm1/bed/microsat
      awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
 	../simpleRepeat/simpleRepeat.bed > microsat.bed
     hgLoadBed dirImm1 microsat microsat.bed
-    #	Read 707 elements of size 4 from microsat.bed
+    #	Read 211 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2015-07-08 - Hiram)
+## WINDOWMASKER (DONE - 2015-07-09 - Hiram)
     mkdir /hive/data/genomes/dirImm1/bed/windowMasker
     cd /hive/data/genomes/dirImm1/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev dirImm1) > do.log 2>&1
-    # real    6m23.693s
+    # real    6m42.227s
 
     # Masking statistics
     cat faSize.dirImm1.cleanWMSdust.txt
-    # 94076581 bases (7759220 N's 86317361 real 53355373 upper
-    #    32961988 lower) in 9780 sequences in 1 files
-    # Total size: mean 9619.3 sd 94348.1 min 312 (Bmal_v3_scaffold9829)
-    #    max 5235760 (Bmal_v3_scaffold1) median 1340
-    # %35.04 masked total, %38.19 masked real
+    # 88323343 bases (3430609 N's 84892734 real 51697598 upper 33195136 lower)
+    #    in 16062 sequences in 1 files
+    # Total size: mean 5498.9 sd 31910.5 min 200 (nDi_2_2_scaf16061)
+    #    max 1085577 (nDi_2_2_scaf00001) median 754
+    # %37.58 masked total, %39.10 masked real
 
     cat fb.dirImm1.rmsk.windowmaskerSdust.txt
-    # 8054335 bases of 94076581 (8.561%) in intersection
+    # 3188537 bases of 88323343 (3.610%) in intersection
 
     # using this Window Masker result for final masking::
     cd /hive/data/genomes/dirImm1
@@ -244,29 +243,29 @@ XXX - running - Thu Jul  9 12:02:39 PDT 2015
     # measure the final masking:
     twoBitToFa dirImm1.2bit stdout | faSize stdin > faSize.dirImm1.2bit.txt
     cat faSize.dirImm1.2bit.txt
-    # 94076581 bases (7759220 N's 86317361 real 53341517 upper 32975844 lower)
-    #    in 9780 sequences in 1 files
-    # Total size: mean 9619.3 sd 94348.1 min 312 (Bmal_v3_scaffold9829)
-    #    max 5235760 (Bmal_v3_scaffold1) median 1340
-    # %35.05 masked total, %38.20 masked real
+    # 88323343 bases (3430609 N's 84892734 real 51686546 upper 33206188 lower)
+    #   in 16062 sequences in 1 files
+    # Total size: mean 5498.9 sd 31910.5 min 200 (nDi_2_2_scaf16061)
+    #   max 1085577 (nDi_2_2_scaf00001) median 754
+    # %37.60 masked total, %39.12 masked real
 
     # and reset the symlink
     rm /gbdb/dirImm1/dirImm1.2bit
     ln -s /hive/data/genomes/dirImm1/dirImm1.2bit /gbdb/dirImm1/dirImm1.2bit
 
 ##########################################################################
-# cpgIslands - (TBD - 2015-07-08 - Hiram)
+# cpgIslands - (DONE - 2015-07-15 - Hiram)
     mkdir /hive/data/genomes/dirImm1/bed/cpgIslands
     cd /hive/data/genomes/dirImm1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku dirImm1) > do.log 2>&1 &
-    # real    8m10.474s
+    # real    46m58.080s
 
     cat fb.dirImm1.cpgIslandExt.txt
-    # 29350 bases of 86344036 (0.034%) in intersection
+    # 23281 bases of 84923352 (0.027%) in intersection
 
 #########################################################################
-# augustus - (TBD - 2015-07-08 - Hiram)
+# augustus - (DONE - 2015-07-15 - Hiram)
     mkdir /hive/data/genomes/dirImm1/bed/augustus
     cd /hive/data/genomes/dirImm1/bed/augustus
     #  XXX this is not specifically correct, the species caenorhabditis
@@ -274,24 +273,24 @@ XXX - running - Thu Jul  9 12:02:39 PDT 2015
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
       -species=caenorhabditis -dbHost=hgwdev \
          -workhorse=hgwdev dirImm1) > do.log 2>&1
-    # real    49m33.584s
+    # real    49m9.685s
 
     cat fb.dirImm1.augustusGene.txt
-    # 5950506 bases of 86344036 (6.892%) in intersection
+    # 4613656 bases of 84923352 (5.433%) in intersection
 
 #########################################################################
-# genscan - (TBD - 2015-07-08 - Hiram)
+# genscan - (DONE - 2015-07-15 - Hiram)
     mkdir /hive/data/genomes/dirImm1/bed/genscan
     cd /hive/data/genomes/dirImm1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku dirImm1) > do.log 2>&1
-    # real    9m51.838s
+    # real    15m20.629s
 
     cat fb.dirImm1.genscan.txt
-    #   3196210 bases of 86344036 (3.702%) in intersection
+    #   2387414 bases of 84923352 (2.811%) in intersection
 
     cat fb.dirImm1.genscanSubopt.txt
-    #   2410491 bases of 86344036 (2.792%) in intersection
+    #   2284563 bases of 84923352 (2.690%) in intersection
 
 ########################################################################
 # Create kluster run files (TBD - 2015-07-08 - Hiram)

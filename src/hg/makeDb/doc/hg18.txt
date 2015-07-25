@@ -32293,6 +32293,12 @@ make DBS="hg18 hg19"
 # Does anybody know of some ancient Ensembl mirrors that might have it?
 # Would anyone at NCBI know the old assembly haplotype placements for hg17 and hg18?
 
+# Followup 2015-07-24 Valerie from NCBI responded to my question and confirmed that
+# the Ensembl locations match what their database has. Presumably Ensembl therefore
+# got the data from NCBI, perhaps by special request. Valeria is following up with Ensembl.
+# She is happy that UCSC is doing more with alt haplotypes,
+# and notes that consistency between browsers is a good thing.
+
 cd /hive/data/genomes/hg18/bed
 mkdir haplotypeLocationsEnsembl
 cd haplotypeLocationsEnsembl

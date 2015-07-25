@@ -316,7 +316,8 @@ for (region = regionList; region != NULL; region = region->next)
     }
 
 regionSize = basesInRegion(regionList, 0);
-gapTotal = gapsInRegion(conn, regionList, 0);
+if (conn != NULL)
+    gapTotal = gapsInRegion(conn, regionList, 0);
 realSize = regionSize - gapTotal;
 
 
