@@ -256,8 +256,8 @@ struct gtexGeneBed *computedMedians = NULL;     // 1 or 2 (if comparison)
 
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
 if ((extras->isComparison) &&
-        (tg->visibility == tvFull || tg->visibility == tvPack) && 
-        gtexGraphHeight() != MIN_GRAPH_HEIGHT)
+        (tg->visibility == tvFull || tg->visibility == tvPack))
+        //&& gtexGraphHeight() != MIN_GRAPH_HEIGHT)
     {
     // compute medians based on configuration (comparisons, and later, filters)
     computedMedians = loadComputedMedians(geneBed, extras->graphType);
