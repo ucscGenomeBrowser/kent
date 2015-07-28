@@ -100,7 +100,7 @@ wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV9
     
     track wgEncodeGencodeV9View2Way 
     shortLabel 2-Way
-    view 42-Way 
+    view b2-way
     visibility hide
     subTrack wgEncodeGencodeV9
     type genePred
