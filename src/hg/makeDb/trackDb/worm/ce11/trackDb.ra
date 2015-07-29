@@ -29,3 +29,5 @@ searchType genePred
 searchMethod fuzzy
 # shortCircuit 1
 searchPriority 18
+
+include trackDb.26way.ra
