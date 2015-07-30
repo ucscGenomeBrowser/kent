@@ -142,6 +142,13 @@ for (slp=et->params; slp!=NULL; slp=slp->next)
         val = db;
     if (sameWord(val, "$position"))
         val = pos;
+    if (sameWord(val, "$returnUrl"))
+        {
+        char* host = getenv("HTTP_HOST");
+        char* uri = getenv("REQUEST_URI");
+        val = catTwoStrings(host, uri);
+        }
+    // half the current window size
     if (stringIn("$halfLen", val))
         {
         char buf[64];

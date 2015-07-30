@@ -1,0 +1,106 @@
+track cons26way
+compositeTrack on
+shortLabel Conservation
+longLabel Nematode Multiz Alignment & Conservation (26 Species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility full
+priority 1
+type bed 4
+group compGeno
+
+    track cons26wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons26way
+
+        track multiz26way
+        subTrack cons26wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 26 nematode assemblies
+        subGroups view=align
+        noInherit on
+        irows on
+	#snpTable mafSnp26way
+        summary multiz26waySummary
+#        frames multiz26wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault ce11
+        speciesGroups Caenorhabditis Others
+        sGroup_Caenorhabditis caeSp111 cb4 caeRem4 caePb3 caeSp51 caeAng2 caeJap4
+        sGroup_Others hetBac1 panRed1 strRat2 ascSuu1 haeCon2 ancCey1 necAme1 priExs1 priPac3 burXyl1 bruMal2 melHap1 melInc2 oncVol1 triSpi1 triSui1 dirImm1 loaLoa1
+        itemFirstCharCase noChange
+        treeImage phylo/ce11_26way.png
+        priority 100
+
+    # PhyloP conservation
+    track cons26wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons26way
+    viewLimits -3:1
+    viewLimitsMax -14.191:1.199
+
+        track phyloP26way
+        subTrack cons26wayViewphyloP off
+        subGroups view=phyloP
+        shortLabel 20 mammals Cons
+        longLabel 20 mammals (17 primates) Basewise Conservation by PhyloP
+        noInherit on
+        configurable on
+        type wig -14.191 1.199
+        maxHeightPixels 100:50:11
+        viewLimits -3:1
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 60,60,140
+        altColor 140,60,60
+        priority 4
+
+    # phastCons conservation
+    track cons26wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack cons26way
+
+        track phastCons26way
+        subTrack cons26wayViewphastcons off
+        subGroups view=phastcons
+        shortLabel 20-way Cons
+        longLabel 20 mammals (17 primates) conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 70,130,70
+        altColor 130,70,70
+        priority 13
+
+    # Conserved Elements (Most Conserved)
+    track cons26wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons26way
+
+        track phastConsElements26way
+        subTrack cons26wayViewelements on
+        subGroups view=elements
+        shortLabel 20-way El
+        longLabel 20 mammals (17 primates) Conserved Elements
+        noInherit on
+        color 110,10,40
+        type bed 5 .
+        priority 23
+
