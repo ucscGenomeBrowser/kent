@@ -211,7 +211,8 @@ ps->fontHeight = size*0.8;
 }
 
 void psTextOutEscaped(struct psGfx *ps, char *text)
-/* Output espcaed text. */
+/* Output post-script-escaped text. 
+ * Notice that ps uses escaping similar to C itself.*/
 {
 char c;
 while ((c = *text++) != 0)
