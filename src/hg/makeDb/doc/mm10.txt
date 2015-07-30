@@ -11168,6 +11168,8 @@ hgsql -e 'INSERT INTO trackVersion \
     mkdir /hive/data/genomes/mm10/bed/geneid
     cd /hive/data/genomes/mm10/bed/geneid
     wget --timestamping \
+http://genome.crg.es/genepredictions/M.musculus/mm10/geneid_v1.4/00README
+    wget --timestamping \
 http://genome.crg.es/genepredictions/M.musculus/mm10/geneid_v1.4/mm10.geneid.prot
     wget --timestamping \
 http://genome.crg.es/genepredictions/M.musculus/mm10/geneid_v1.4/mm10.geneid.gtf
@@ -11177,10 +11179,36 @@ http://genome.crg.es/genepredictions/M.musculus/mm10/geneid_v1.4/mm10.geneid.gtf
     #  36771 groups 66 seqs 1 sources 3 feature types
     #  36771 gene predictions
 
+    featureBits -enrichment mm10 refGene:CDS geneid
+# refGene:CDS 1.292%, geneid 1.584%, both 1.028%, cover 79.51%, enrich 50.19x
+    featureBits -enrichment mm9 refGene:CDS geneid
+# refGene:CDS 1.305%, geneid 1.590%, both 1.040%, cover 79.65%, enrich 50.11x
+
     featureBits -countGaps mm10 geneid
 # 42028722 bases of 2730871774 (1.539%) in intersection
     featureBits -countGaps mm9 geneid
 # 41651898 bases of 2725765481 (1.528%) in intersection
 
 ##########################################################################
+# SGP GENES (DONE - 2015-07-30 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/sgpGene
+    cd /hive/data/genomes/mm10/bed/sgpGene
+    wget --timestamping \
+http://genome.crg.es/genepredictions/M.musculus/mm10/SGP2/hg38/00README
+    wget --timestamping \
+http://genome.crg.es/genepredictions/M.musculus/mm10/SGP2/hg38/mm10.sgp2.gtf
+    wget --timestamping \
+http://genome.crg.es/genepredictions/M.musculus/mm10/SGP2/hg38/mm10.sgp2.gff3
 
+    ldHgGene -gtf -genePredExt mm10 sgpGene mm10.sgp2.gtf
+    # Read 35235 transcripts in 287314 lines in 1 files
+    #   35235 groups 60 seqs 1 sources 3 feature types
+    # 35235 gene predictions
+
+    featureBits -enrichment mm10 refGene:CDS sgpGene
+# refGene:CDS 1.292%, sgpGene 1.430%, both 1.101%, cover 85.21%, enrich 59.59x
+
+    featureBits -enrichment mm9 refGene:CDS sgpGene
+# refGene:CDS 1.305%, sgpGene 1.439%, both 1.113%, cover 85.23%, enrich 59.23x
+
+###########################################################################
