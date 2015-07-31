@@ -418,3 +418,24 @@ see doc/builds.txt for specific details.
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+##############################################################################
+# GENEID GENE PREDICTIONS (DONE - 2015-07-31 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/loxAfr3/bed/geneid
+    cd /hive/data/genomes/loxAfr3/bed/geneid
+    wget --timestamping \
+http://genome.crg.es/genepredictions/L.africana/loxAfr3/geneid_v1.4/00README
+    wget --timestamping \
+http://genome.crg.es/genepredictions/L.africana/loxAfr3/geneid_v1.4/loxAfr3.geneid.gtf
+
+    ldHgGene -gtf -genePredExt loxAfr3 geneid loxAfr3.geneid.gtf
+    # Read 46786 transcripts in 318266 lines in 1 files
+    #  46786 groups 2351 seqs 1 sources 3 feature types
+    # 46786 gene predictions
+
+    featureBits -enrichment loxAfr3 augustusGene:CDS geneid
+# augustusGene:CDS 1.066%, geneid 1.385%, both 0.847%, cover 79.49%,
+#     enrich 57.38x
+
+##########################################################################
