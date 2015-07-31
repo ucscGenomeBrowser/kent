@@ -10,6 +10,7 @@
 #include "gtexInfo.h"
 #include "gtexGeneBed.h"
 #include "gtexTissue.h"
+#include "gtexTissueData.h"
 #include "gtexUi.h"
 
 #define WIN_MAX_GRAPH 20000
@@ -108,13 +109,13 @@ return (barWidth * count) + (padding * (count-1));
 
 
 static int valToHeight(double val, double maxVal, int maxHeight)
-/* Convert a value from 0 to maxVal to 0 to maxHeight-1 */
+/* Log-scale and Convert a value from 0 to maxVal to 0 to maxHeight-1 */
+// TODO: support linear or log scale
 {
-// FIXME:  This sort of works.  Seems to be dropping some tho. e.g. check MRAP lung
 if (val == 0.0)
     return 0;
 // smallest counts are 1x10e-3, translate to counter negativity
-double scaled = (log10(val)+3.001)/(log10(maxVal)+3.001);
+double scaled = (log10(val) + 3.001)/(log10(maxVal) + 3.001);
 if (scaled < 0)
     warn("scaled=%f\n", scaled);
 //uglyf("%.2f -> %.2f height %d", val, scaled, (int)scaled * (maxHeight-1));
@@ -209,13 +210,32 @@ static struct gtexGeneBed *loadComputedMedians(struct gtexGeneBed *geneBed, char
 {
 /* FIXME: dummy load of two for display implementation */
 struct gtexGeneBed *medians = NULL, *medians2 = NULL;
+
+struct sqlConnection *conn = hAllocConn("hgFixed");
+if (conn == NULL)
+    return NULL;
+char query[1024];
+
 AllocVar(medians);
-/* TODO: move to lib */
 medians->expCount = geneBed->expCount;
-AllocArray(medians->expScores, medians->expCount);
+// FIXME: experiment with query on sex
+sqlSafef(query, sizeof(query), "select gtexTissue.id, gtexSampleData.score from gtexTissue, gtexSampleData, gtexSample, gtexDonor where gtexSampleData.tissue=gtexTissue.name and gtexSampleData.geneId='%s' and gtexSampleData.sample=gtexSample.name and gtexSample.donor=gtexDonor.name and gtexDonor.gender='F'", geneBed->geneId);
+struct slDouble **scores = NULL, *score = NULL;
+AllocArray(scores, geneBed->expCount);
+struct slPair *tissueScore = NULL, *tissueScores = sqlQuickPairList(conn, query);
 int i;
-for (i = 0; i < medians->expCount; ++i)
-    medians->expScores[i] = geneBed->expScores[i];
+for (tissueScore = tissueScores; tissueScore != NULL; tissueScore = tissueScore->next)
+    {
+    AllocVar(score);
+    i = sqlUnsigned(tissueScore->name);
+    if (scores[i] == NULL)
+        scores[i] = score;
+    else
+        slAddHead(&scores[i], score);
+    }
+AllocArray(medians->expScores, medians->expCount);
+for (i=0; i<geneBed->expCount; i++)
+    medians->expScores[i] = slDoubleMedian(scores[i]);
 
 AllocVar(medians2);
 medians2->expCount = geneBed->expCount;
@@ -224,6 +244,8 @@ for (i = 0; i < medians2->expCount; ++i)
     medians2->expScores[i] = geneBed->expScores[i];
 
 medians->next = medians2;
+
+hFreeConn(&conn);
 return medians;
 }
 
@@ -434,7 +456,26 @@ for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
 
 static struct gtexGeneBed *loadGtexGeneBed(char **row)
 {
-return gtexGeneBedLoad(row);
+struct gtexGeneBed *geneBed = gtexGeneBedLoad(row);
+// TODO: rethink schemas
+// for now... replace expScores with medians from tissue data file
+
+#ifdef NEW
+struct gtexTissue *tissue = NULL, *tissues = getGtexTissues();
+int i=0;
+char query[1024];
+struct sqlConnection *conn = hAllocConn("hgFixed");
+for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
+    {
+    sqlSafef(query, sizeof(query), 
+            "select * from gtexTissueData where geneId='%s' and tissue='%s'", 
+                geneBed->geneId, tissue->name);
+    struct gtexTissueData *tissueData = gtexTissueDataLoadByQuery(conn, query);
+    geneBed->expScores[i] = tissueData->median;
+    }
+hFreeConn(&conn);
+#endif
+return geneBed;
 }
 
 static void gtexGeneLoadItems(struct track *tg)
@@ -451,6 +492,7 @@ char *graphType = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_GRAPH,
 extras->graphType = cloneString(graphType);
 if (sameString(graphType, GTEX_GRAPH_AGE) || sameString(graphType, GTEX_GRAPH_SEX))
     extras->isComparison = TRUE;
+
 
 extras->maxMedian = gtexMaxMedianScore(NULL);
 }

@@ -15,6 +15,7 @@
 #include "gtexTissue.h"
 #include "gtexSampleData.h"
 #include "gtexTissueData.h"
+#include "gtexTissueMedian.h"
 
 char *database = "hgFixed";
 char *tabDir = ".";
@@ -157,12 +158,14 @@ while (lineFileNext(lf, &line, NULL))
     if (!hashLookup(sampleNameHash, sampleId))
         continue;
 
-    /*  Donor is GTEX-XXXX-* */
-    chopByChar(cloneString(sampleId), '-', words, ArraySize(words));
-
     AllocVar(sample);
     sample->name = sampleId;
-    sample->donor = cloneString(words[1]);
+
+    /*  donor is first 2 components of sampleId: GTEX-XXXX */
+    char *donor = cloneString(sampleId);
+    *strchr(strchr(donor, '-')+1, '-') = 0;
+    sample->donor = donor;
+
     verbose(4, "parseSamples: lookup %s in tissueNameHash\n", words[SAMPLE_TISSUE_FIELD_INDEX]);
     sample->tissue = hashMustFindVal(tissueNameHash, words[SAMPLE_TISSUE_FIELD_INDEX]);
     verbose(4, "Adding sample: \'%s'\n", sampleId);
@@ -179,7 +182,7 @@ struct sampleOffset {
         unsigned int offset;
         };
 
-struct hashEl *groupSamples(struct hash *sampleHash, struct slName *sampleIds, 
+struct hash *groupSamplesByTissue(struct hash *sampleHash, struct slName *sampleIds, 
                                 int sampleCount)
 /* Group samples by tissue for median option */
 {
@@ -192,7 +195,7 @@ int i;
 struct slName *sampleId;
 for (i=0, sampleId = sampleIds; sampleId != NULL; sampleId = sampleId->next, i++)
     {
-    verbose(4, "groupSamples: lookup %s in sampleHash\n", sampleId->name);
+    verbose(4, "groupSamplesByTissue: lookup %s in sampleHash\n", sampleId->name);
     sample = hashMustFindVal(sampleHash, sampleId->name);
     AllocVar(offset);
     offset->offset = i;
@@ -203,9 +206,6 @@ for (i=0, sampleId = sampleIds; sampleId != NULL; sampleId = sampleId->next, i++
     else
         hashAdd(tissueOffsetHash, sample->tissue, offset);
     }
-
-struct hashEl *tissueOffsets = hashElListHash(tissueOffsetHash);
-slSort(&tissueOffsets, hashElCmp);
 
 //#define DEBUG 1
 #ifdef DEBUG
@@ -219,7 +219,7 @@ for (el = tissueOffsets; el != NULL; el = el->next)
     }
 #endif
 
-return tissueOffsets;
+return tissueOffsetHash;
 }
 
 /****************************/
@@ -270,34 +270,35 @@ struct slName *idList = slNameListFromStringArray(samples, sampleCount+3);
 return idList;
 }
 
-float dataRowsOut(char **row, 
+void dataRowsOut(char **row, 
                 FILE *allFile, int sampleCount,
-                FILE *medianFile, int tissueCount, 
-                struct hashEl *tissueOffsets)
-/* Output expression levels per sample and tissue for one gene. Return max median computed */
+                FILE *medianFile, FILE *tissueDataFile, int tissueCount,  char *tissueOrder[],
+                struct hash *tissueOffsets, double *maxScoreRet, double *maxMedianRet)
+/* Output expression levels per sample and tissue for one gene. Return max score, median computed */
 {
-int i = 0;
-struct hashEl *el;
+int i=0, j=0;
 struct sampleOffset *sampleOffset, *sampleOffsets;
 double *sampleVals;
-float medianVal;
-float maxMedianVal = 0;
+double maxMedian = 0;
+double maxScore = 0;
 
 /* Print geneId and tissue count to median table file */
 char *gene = row[0];
 fprintf(medianFile, "%s\t%d\t", gene, tissueCount);
-//verbose(2, "%s\n", gene);
-for (el = tissueOffsets; el != NULL; el = el->next)
+verbose(2, "%s\n", gene);
+
+for (i=0; i<tissueCount; i++)
     {
+    char *tissue = tissueOrder[i];
+    uglyf("tissue=%s\n", tissue);
     /* Get values for all samples for each tissue */
-    char *tissue = el->name;
-    sampleOffsets = (struct sampleOffset *)el->val;
+    sampleOffsets = (struct sampleOffset *)hashMustFindVal(tissueOffsets, tissue);
     int tissueSampleCount = slCount(sampleOffsets);
     verbose(3, "%s\t%s\t%d samples\t", gene, tissue, tissueSampleCount);
     verbose(3, "\n");
     AllocArray(sampleVals, tissueSampleCount);
-    for (i = 0, sampleOffset = sampleOffsets; i<tissueSampleCount;
-                sampleOffset = sampleOffset->next, i++)
+    for (j = 0, sampleOffset = sampleOffsets; j < tissueSampleCount;
+                sampleOffset = sampleOffset->next, j++)
         {
         // skip over Name and Description fields to find first score for this gene
         double val = sqlDouble(row[(sampleOffset->offset)+2]);
@@ -309,22 +310,34 @@ for (el = tissueOffsets; el != NULL; el = el->next)
         else 
             fprintf(allFile, "%0.3f", val);
         fprintf(allFile, "\n");
-        sampleVals[i] = val;
+        sampleVals[j] = val;
+        maxScore = max(val, maxScore);
         }
-    /* Compute median */
-    medianVal = (float)doubleMedian(tissueSampleCount, sampleVals);
-    maxMedianVal = max(medianVal, maxMedianVal);
-    verbose(3, "median %s %0.3f\n", tissue, medianVal);
+    /* Compute stats */
+    double min, q1, median, q3, max;
+    doubleBoxWhiskerCalc(tissueSampleCount, sampleVals, &min, &q1, &median, &q3, &max);
+    //medianVal = (float)doubleMedian(tissueSampleCount, sampleVals);
+    maxMedian = max(median, maxMedian);
+    verbose(2, "median %s %0.3f\n", tissue, median);
 
     /* If no rounding, then print as float, otherwise round */
     if (doRound)
-        fprintf(medianFile, "%d,", round(medianVal));
+        fprintf(medianFile, "%d,", round(median));
     else 
-        fprintf(medianFile, "%0.3f,", medianVal);
+        fprintf(medianFile, "%0.3f,", median);
+
+    // calculate other stats
+    // print row in tissue data file
+    fprintf(tissueDataFile, "%s\t%s\t%0.3f\t%0.3f\t%0.3f\t%0.3f\t%0.3f\n", 
+                                    gene, tissue, min, q1, median, q3, max);
     freez(&sampleVals);
     }
 fprintf(medianFile, "\n");
-return maxMedianVal;
+verbose(3, "max median: %0.3f\n", maxMedian);
+if (maxScoreRet)
+    *maxScoreRet = maxScore;
+if (maxMedianRet)
+    *maxMedianRet = maxMedian;
 }
 
 /****************************/
@@ -487,7 +500,7 @@ void hgGtex(char *tableRoot, char *version,
 char *line;
 int wordCount;
 FILE *f = NULL;
-FILE *tissueDataFile = NULL, *sampleDataFile = NULL, *infoFile = NULL;
+FILE *tissueDataFile = NULL, *tissueMedianFile = NULL, *sampleDataFile = NULL, *infoFile = NULL;
 int dataCount = 0;
 struct lineFile *lf;
 int dataSampleCount = 0;
@@ -497,10 +510,13 @@ struct hash  *sampleHash;
 struct gtexTissue *tissue, *tissues;
 tissues = gtexTissueLoadAllByChar(tissuesFile, '\t');
 struct hash *tissueNameHash = hashNew(0);
+char **tissueOrder = NULL;
+AllocArray(tissueOrder, slCount(tissues));
 for (tissue = tissues; tissue != NULL; tissue = tissue->next)
     {
-    verbose(4, "Adding to tissueNameHash: key=%s, val=%s, group=%s\n", tissue->description, tissue->name, tissue->organ);
+    verbose(4, "Adding to tissueNameHash: id=%d, key=%s, val=%s, group=%s\n", tissue->id, tissue->description, tissue->name, tissue->organ);
     hashAdd(tissueNameHash, tissue->description, tissue->name);
+    tissueOrder[tissue->id] = tissue->name;
     }
 verbose(3, "tissues in hash: %d\n", hashNumEntries(tissueNameHash));
 
@@ -525,8 +541,8 @@ sampleHash = parseSamples(lf, sampleIds, sampleCols, tissueNameHash);
 lineFileClose(&lf);
 
 /* Get offsets in data file for samples by tissue */
-struct hashEl *tissueOffsets = groupSamples(sampleHash, sampleIds, dataSampleCount);
-int tissueCount = slCount(tissueOffsets);
+struct hash *tissueOffsets = groupSamplesByTissue(sampleHash, sampleIds, dataSampleCount);
+int tissueCount = hashNumEntries(tissueOffsets);
 verbose(2, "tissue count: %d\n", tissueCount);
 
 /* Create sample table with samples ordered as in data file */
@@ -598,16 +614,21 @@ char sampleDataTable[64];
 safef(sampleDataTable, sizeof(sampleDataTable), "%sSampleData", tableRoot);
 sampleDataFile = hgCreateTabFile(tabDir,sampleDataTable);
 
+char tissueMedianTable[64];
+safef(tissueMedianTable, sizeof(tissueMedianTable), "%sTissueMedian", tableRoot);
+tissueMedianFile = hgCreateTabFile(tabDir,tissueMedianTable);
+
 char tissueDataTable[64];
 safef(tissueDataTable, sizeof(tissueDataTable), "%sTissueData", tableRoot);
 tissueDataFile = hgCreateTabFile(tabDir,tissueDataTable);
+
 
 /* Open GTEX expression data file, and read header lines.  Return list of sample IDs */
 lf = lineFileOpen(dataFile, TRUE);
 parseDataFileHeader(lf, sampleCount, NULL);
 
 /* Parse expression values in data file. Each row is a gene */
-float maxMedian = 0;
+double maxMedian = 0, maxScore = 0;
 char **row;
 AllocArray(row, dataSampleCount+2);
 while (lineFileNext(lf, &line, NULL))
@@ -616,9 +637,12 @@ while (lineFileNext(lf, &line, NULL))
     if (wordCount-2 != dataSampleCount)
         errAbort("Expecting %d data points, got %d line %d of %s", 
 		dataSampleCount, wordCount-2, lf->lineIx, lf->fileName);
-    float rowMaxMedian = dataRowsOut(row, sampleDataFile, dataSampleCount, 
-                        tissueDataFile, tissueCount, tissueOffsets);
+    double rowMaxMedian, rowMaxScore;
+    dataRowsOut(row, sampleDataFile, dataSampleCount, 
+                    tissueMedianFile, tissueDataFile, tissueCount, tissueOrder, tissueOffsets,
+                    &rowMaxMedian, &rowMaxScore);
     maxMedian = max(rowMaxMedian, maxMedian);
+    maxScore = max(rowMaxScore, maxScore);
     dataCount++;
     if (limit != 0 && dataCount >= limit)
         break;
@@ -646,11 +670,16 @@ if (doLoad)
     hgLoadTabFile(conn, tabDir, infoTable, &infoFile);
     hgRemoveTabFile(tabDir, infoTable);
 
-    // Load tissue data (medians) table
+    // Load tissue medians table
+    verbose(2, "Creating tissue medians table\n");
+    gtexTissueMedianCreateTable(conn, tissueMedianTable);
+    hgLoadTabFile(conn, tabDir, tissueMedianTable, &tissueMedianFile);
+    hgRemoveTabFile(tabDir, tissueMedianTable);
+
+    // Load tissue data table
     verbose(2, "Creating tissue data table\n");
-    gtexTissueDataCreateTable(conn, tissueDataTable);
+    gtexTissueMedianCreateTable(conn, tissueDataTable);
     hgLoadTabFile(conn, tabDir, tissueDataTable, &tissueDataFile);
-    hgRemoveTabFile(tabDir, tissueDataTable);
 
     // Load sample data table 
     verbose(2, "Creating sample data table\n");

@@ -7,6 +7,7 @@
 CREATE TABLE gtexInfo (
     version varchar(255) not null,	# GTEX data release (e.g. V4, V6)
     releaseDate varchar(255) not null,	# Release date
+    maxScore double not null,	# Maximum score observed (use to scale display)
     maxMedianScore double not null,	# Maximum score observed for a tissue median (use to scale display)
               #Indices
     PRIMARY KEY(version)

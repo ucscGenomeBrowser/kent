@@ -30631,7 +30631,11 @@ hgsql hg19 -Ne 'select count(*) from knownToGencodeV19'
 # 75623
 # compared to 80184 for hg38 V20 GENCODE
 
+
 hgGtexGeneBed hg19 -gencodeVersion=V19 gtexGene >&! log.txt
+
+# GTEX gene models are based on GENCODE V18.  Need a knownToGencodeV18 table to make this work
+#hgGtexGeneBed hg19 -gencodeVersion=V18 gtexGene >&! log.v18.txt
 
 wc -l log.txt 
 # 31823 errs - Can't find gene

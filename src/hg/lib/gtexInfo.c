@@ -6,12 +6,11 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
-#include "hdb.h"
 #include "gtexInfo.h"
 
 
 
-char *gtexInfoCommaSepFieldNames = "version,releaseDate,maxMedianScore";
+char *gtexInfoCommaSepFieldNames = "version,releaseDate,maxScore,maxMedianScore";
 
 void gtexInfoStaticLoad(char **row, struct gtexInfo *ret)
 /* Load a row from gtexInfo table into ret.  The contents of ret will
@@ -20,7 +19,44 @@ void gtexInfoStaticLoad(char **row, struct gtexInfo *ret)
 
 ret->version = row[0];
 ret->releaseDate = row[1];
-ret->maxMedianScore = sqlDouble(row[2]);
+ret->maxScore = sqlDouble(row[2]);
+ret->maxMedianScore = sqlDouble(row[3]);
+}
+
+struct gtexInfo *gtexInfoLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all gtexInfo from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with gtexInfoFreeList(). */
+{
+struct gtexInfo *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = gtexInfoLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void gtexInfoSaveToDb(struct sqlConnection *conn, struct gtexInfo *el, char *tableName, int updateSize)
+/* Save gtexInfo as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+sqlDyStringPrintf(update, "insert into %s values ( '%s','%s',%g,%g)", 
+	tableName,  el->version,  el->releaseDate,  el->maxScore,  el->maxMedianScore);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
 }
 
 struct gtexInfo *gtexInfoLoad(char **row)
@@ -32,7 +68,8 @@ struct gtexInfo *ret;
 AllocVar(ret);
 ret->version = cloneString(row[0]);
 ret->releaseDate = cloneString(row[1]);
-ret->maxMedianScore = sqlDouble(row[2]);
+ret->maxScore = sqlDouble(row[2]);
+ret->maxMedianScore = sqlDouble(row[3]);
 return ret;
 }
 
@@ -42,7 +79,7 @@ struct gtexInfo *gtexInfoLoadAll(char *fileName)
 {
 struct gtexInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
+char *row[4];
 
 while (lineFileRow(lf, row))
     {
@@ -60,7 +97,7 @@ struct gtexInfo *gtexInfoLoadAllByChar(char *fileName, char chopper)
 {
 struct gtexInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
+char *row[4];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -83,6 +120,7 @@ if (ret == NULL)
     AllocVar(ret);
 ret->version = sqlStringComma(&s);
 ret->releaseDate = sqlStringComma(&s);
+ret->maxScore = sqlDoubleComma(&s);
 ret->maxMedianScore = sqlDoubleComma(&s);
 *pS = s;
 return ret;
@@ -124,11 +162,14 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->releaseDate);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
+fprintf(f, "%g", el->maxScore);
+fputc(sep,f);
 fprintf(f, "%g", el->maxMedianScore);
 fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
 
 void gtexInfoCreateTable(struct sqlConnection *conn, char *table)
 /* Create GTEx info table */
@@ -139,6 +180,7 @@ sqlSafef(query, sizeof(query),
 "CREATE TABLE %s (\n"
 "    version varchar(255) not null,	# GTEX data release (e.g. V4, V6)\n"
 "    releaseDate varchar(255) not null,	# Release date\n"
+"    maxScore double not null,	# Maximum score observed (use to scale display)\n"
 "    maxMedianScore double not null,	# Maximum score observed for a tissue median (use to scale display)\n"
 "        #Indices\n"
 "    PRIMARY KEY(version)\n"

@@ -94,10 +94,10 @@ cd /hive/data/outside/GTEx/2014-01-17
 mkdir gencode
 cd gencode
 wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/reference/gencode.v18.genes.patched_contigs.txt
-cd /hive/data/outside/GTEx/2014-01-17
 awk '$1 !~ /^#/ {print "chr"$0}' gencode.v18.genes.patched_contigs.gtf | sed 's/chrMT/chrM/' | \
         gtfToGenePred stdin gencodeV18.hg19.genePred
-sed 's/\.[0-9][0-9]*//' gencodeV18.hg19.genePred | hgLoadGenePred hg19 gtexGeneModel stdin
+hgLoadGenePred hg19 gtexGeneModel  gencodeV18.hg19.genePred
+
 # make hg38 as well
 set chain = /hive/data/genomes/hg19/bed/liftOver/hg19ToHg38.over.chain.gz
 liftOver -genePred gencodeV18.hg19.genePred $chain gencodeV18.hg38.genePred unmapped

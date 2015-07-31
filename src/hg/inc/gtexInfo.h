@@ -5,7 +5,9 @@
 #ifndef GTEXINFO_H
 #define GTEXINFO_H
 
-#define GTEXINFO_NUM_COLS 3
+#include "jksql.h"
+#include "hdb.h"
+#define GTEXINFO_NUM_COLS 4
 
 extern char *gtexInfoCommaSepFieldNames;
 
@@ -15,12 +17,27 @@ struct gtexInfo
     struct gtexInfo *next;  /* Next in singly linked list. */
     char *version;	/* GTEX data release (e.g. V4, V6) */
     char *releaseDate;	/* Release date */
+    double maxScore;	/* Maximum score observed (use to scale display) */
     double maxMedianScore;	/* Maximum score observed for a tissue median (use to scale display) */
     };
 
 void gtexInfoStaticLoad(char **row, struct gtexInfo *ret);
 /* Load a row from gtexInfo table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
+
+struct gtexInfo *gtexInfoLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all gtexInfo from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with gtexInfoFreeList(). */
+
+void gtexInfoSaveToDb(struct sqlConnection *conn, struct gtexInfo *el, char *tableName, int updateSize);
+/* Save gtexInfo as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 
 struct gtexInfo *gtexInfoLoad(char **row);
 /* Load a gtexInfo from row fetched with select * from gtexInfo
@@ -61,11 +78,10 @@ void gtexInfoOutput(struct gtexInfo *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+#endif /* GTEXINFO_H */
+
 void gtexInfoCreateTable(struct sqlConnection *conn, char *table);
 /* Create GTEx info table */
 
 double gtexMaxMedianScore(char *version);
 /* Retrieve max median score for latest (or named) version */
-
-#endif /* GTEXINFO_H */
-
