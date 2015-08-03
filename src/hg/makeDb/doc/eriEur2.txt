@@ -376,7 +376,7 @@ eriEur2.perChromTables = no
     time ./doLoadCpg.csh > load.log 2>&1
     #   Read 28528 elements of size 10 from cpgIsland.bed
 
-    cat fb.eriEur2.cpgIslandExtUnmasked.txt 
+    cat fb.eriEur2.cpgIslandExtUnmasked.txt
     # 19393537 bases of 2333073535 (0.831%) in intersection
 
 
@@ -486,3 +486,45 @@ searchPriority 8
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+##############################################################################
+# GENEID GENE PREDICTIONS (DONE - 2015-06-26 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/eriEur2/bed/geneid
+    cd /hive/data/genomes/eriEur2/bed/geneid
+    wget --timestamping \
+http://genome.crg.es/genepredictions/E.europaeus/EriEur2/geneid_v1.4/00README
+
+    wget --timestamping \
+http://genome.crg.es/genepredictions/E.europaeus/EriEur2/geneid_v1.4/eriEur2.geneid.gtf
+
+    ldHgGene -gtf -genePredExt eriEur2 geneid eriEur2.geneid.gtf
+    #  Read 30632 transcripts in 236791 lines in 1 files
+    #    30632 groups 5649 seqs 1 sources 3 feature types
+    #  30632 gene predictions
+
+    featureBits -enrichment eriEur2 augustusGene:CDS geneid
+# augustusGene:CDS 1.289%, geneid 1.393%, both 1.044%, cover 81.03%,
+#    enrich 58.19x
+
+##########################################################################
+# SGP GENES (DONE - 2015-07-30 - Hiram)
+    mkdir /hive/data/genomes/eriEur2/bed/sgpGene
+    cd /hive/data/genomes/eriEur2/bed/sgpGene
+    wget --timestamping \
+http://genome.crg.es/genepredictions/E.europaeus/EriEur2/SGP2/hg38/00README
+    wget --timestamping \
+http://genome.crg.es/genepredictions/E.europaeus/EriEur2/SGP2/hg38/eriEur2.sgp2.gtf
+    wget --timestamping \
+http://genome.crg.es/genepredictions/E.europaeus/EriEur2/SGP2/hg38/eriEur2.sgp2.gff3
+
+    ldHgGene -gtf -genePredExt eriEur2 sgpGene eriEur2.sgp2.gtf
+    # Read 28927 transcripts in 249483 lines in 1 files
+    #   28927 groups 2366 seqs 1 sources 3 feature types
+    # 28927 gene predictions
+
+    featureBits -enrichment eriEur2 augustusGene:CDS sgpGene
+# augustusGene:CDS 1.289%, sgpGene 1.359%, both 1.082%, cover 83.95%,
+#   enrich 61.78x
+
+###########################################################################

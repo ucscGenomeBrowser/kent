@@ -1,0 +1,440 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes how browser build for
+#     Necator americanus/hookworm WS245 version
+
+##############################################################################
+# download sequence, create UCSC sequence (DONE - 2015-06-24 - Hiram)
+    mkdir -p /hive/data/genomes/necAme1/genbank
+    cd /hive/data/genomes/necAme1/genbank
+
+    rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/invertebrate/Ancylostoma_ceylanicum/all_assembly_versions/GCA_000688135.1_Acey_2013.11.30.genDNA/ ./
+
+    mkdir -p /hive/data/genomes/necAme1/ws245
+    cd /hive/data/genomes/necAme1/ws245
+
+    wget --no-parent --timestamping -m -nH --cut-dirs=6 \
+ftp://ftp.sanger.ac.uk/pub/wormbase/releases/WS245/species/PRJNA231479
+
+    # The genbank and WS245 sequences are identical
+    mkdir /hive/data/genomes/necAme1/ucsc
+    cd /hive/data/genomes/necAme1/ucsc
+
+    zcat ../genbank/GCA_000507365.1_N_americanus_v1_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz \
+       | sed -e 's/.1 Necator americanus .*/v1/;' | gzip -c > necAme1.fa.gz
+
+    zcat ../genbank/GCA_000507365.1_N_americanus_v1_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+      | sed -e 's/\.1/v1/;' > necAme1.agp
+
+       | sed -e 's/.1 Necator americanus .*/v1/;' | gzip -c > necAme1.fa.gz
+    zcat ../genbank/GCA_000688135.1_Acey_2013.11.30.genDNA_genomic.fna.gz \
+       | sed -e 's/.1 Ancylostoma ceylanicum .*/v1/;' | gzip -c > necAme1.fa.gz
+
+
+    # obtain photo, CDC public domain photo, reuse same photo from ancCey1
+    wget --timestamping \
+http://www.cdc.gov/dpdx/images/hookworm/Hookworm_filariform_A.jpg
+    # this image is slightly larger than 400x300, reduce to 400x300:
+    convert -geometry "400x300" Hookworm_filariform_A.jpg \
+         Ancylostoma_ceylanicum.jpg
+
+    # check into source tree
+    #   src/hg/htdocs/images/Ancylostoma_ceylanicum.jpg
+    # and copy to /usr/local/apache/htdocs/images/Ancylostoma_ceylanicum.jpg
+
+#############################################################################
+#  Initial database build (DONE - 2015-07-15 - Hiram)
+
+    cd /hive/data/genomes/necAme1
+    cat << '_EOF_' > necAme1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db necAme1
+clade worm
+genomeCladePriority 86
+scientificName Necator americanus
+commonName Hookworm
+assemblyDate Dec. 2013
+assemblyLabel The Genome Institute at Washington University
+assemblyShortLabel WS242/N_americanus_v1
+orderKey 8679
+mitoAcc AJ417719.2
+fastaFiles /hive/data/genomes/necAme1/ucsc/necAme1.fa.gz
+agpFiles /hive/data/genomes/necAme1/ucsc/necAme1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://www.cdc.gov/dpdx/hookworm/
+hotoCreditName Centers for Disease Control and Prevention
+ncbiGenomeId 770
+ncbiAssemblyId 88321
+ncbiAssemblyName WS242/N_americanus_v1
+ncbiBioProject 72135
+genBankAccessionID GCA_000507365.1
+taxId 51031
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp necAme1.config.ra) > agp.log 2>&1
+    # *** All done!  (through the 'agp' step)
+    # real    0m32.382s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db necAme1.config.ra) > db.log 2>&1
+    # real    2m16.737s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/necAme1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/necAme1/necAme1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku necAme1) > do.log 2>&1
+    # real    68m58.962s
+
+    cat fb.necAme1.cpgIslandExtUnmasked.txt
+    # 11575810 bases of 208187215 (5.560%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/cytoBand
+    cd /hive/data/genomes/necAme1/bed/cytoBand
+    makeCytoBandIdeo.csh necAme1
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/ucscToINSDC
+    cd /hive/data/genomes/necAme1/bed/ucscToINSDC
+
+    # find the chrM accession:
+    grep chrM ../../*.agp
+# chrM    1       13605   2       F       AJ417719.2      1       13605   +
+
+    # use that as the second argument here:
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+       ../../genbank/GCA_000507365.1_N_americanus_v1_assembly_structure/Primary_Assembly AJ417719.2
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    # 11865 name.coordinate.tab
+    # 11865 ucscToINSDC.bed
+    # 11865 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 10
+    # use the 10 in this sed
+    sed -e "s/21/10/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab necAme1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords necAme1
+    # should cover %100 entirely:
+    featureBits -countGaps necAme1 ucscToINSDC
+    # 244088665 bases of 244088665 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2015-07-15 - Hiram)
+    hgsql -N -e "select frag from gold;" necAme1 | sort | head -3
+AJ417719.2
+ANCG01000001.1
+ANCG01000002.1
+
+
+    hgsql -N -e "select frag from gold;" necAme1 | sort | tail -2
+ANCG01065212.1
+ANCG01065213.1
+
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" necAme1 | wc -l
+    # 65214
+
+    hgsql -N -e "select frag from gold;" necAme1 \
+      | egrep -e '(ANCG010|AJ417719)[0-9]*(\.[12])?' | wc -l
+    # 65214
+
+    hgsql -N -e "select frag from gold;" necAme1 \
+      | egrep -v -e '(ANCG010|AJ417719)[0-9]*(\.[12])?' | wc -l
+    # 0
+
+    # hence, add to trackDb/worm/necAme1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex (ANCG010|AJ417719)[0-9]*(\.[12])?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+##########################################################################
+# running repeat masker (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/repeatMasker
+    cd /hive/data/genomes/necAme1/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku necAme1) > do.log 2>&1
+    # real    44m44.824s
+
+    cat faSize.rmsk.txt
+    # 244088665 bases (35901450 N's 208187215 real 205566359 upper
+    #    2620856 lower) in 11865 sequences in 1 files
+    # Total size: mean 20572.2 sd 82630.6 min 201 (KI658258v1)
+    #    max 1890151 (KI657455v1) median 1315
+    # %1.07 masked total, %1.26 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps necAme1 rmsk
+    #  2620956 bases of 244088665 (1.074%) in intersection
+    #  real    0m4.884s
+
+##########################################################################
+# running simple repeat (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/simpleRepeat
+    cd /hive/data/genomes/necAme1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        necAme1) > do.log 2>&1
+    # real    9m24.231s
+
+    cat fb.simpleRepeat
+    # 1474019 bases of 208187215 (0.708%) in intersection
+
+    # using the Window Masker result as indicated below
+
+##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-07-15 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/necAme1/bed/microsat
+     cd /cluster/data/necAme1/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed necAme1 microsat microsat.bed
+    #	Read 409 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/windowMasker
+    cd /hive/data/genomes/necAme1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev necAme1) > do.log 2>&1
+    # real    19m24.750s
+
+    # Masking statistics
+    cat faSize.necAme1.cleanWMSdust.txt
+    # 244088665 bases (35901450 N's 208187215 real 154506078 upper
+    #   53681137 lower) in 11865 sequences in 1 files
+    # Total size: mean 20572.2 sd 82630.6 min 201 (KI658258v1)
+    #   max 1890151 (KI657455v1) median 1315
+    # %21.99 masked total, %25.79 masked real
+
+    cat fb.necAme1.rmsk.windowmaskerSdust.txt
+    # 2166063 bases of 244088665 (0.887%) in intersection
+
+    # using this Window Masker result for final masking::
+    cd /hive/data/genomes/necAme1
+    #   you can safely ignore the warning about fields >= 13
+    twoBitMask bed/windowMasker/necAme1.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  necAme1.2bit
+
+    # measure the final masking:
+    twoBitToFa necAme1.2bit stdout | faSize stdin > faSize.necAme1.2bit.txt
+    cat faSize.necAme1.2bit.txt
+    # 244088665 bases (35901450 N's 208187215 real 154468942 upper
+    #   53718273 lower) in 11865 sequences in 1 files
+    # Total size: mean 20572.2 sd 82630.6 min 201 (KI658258v1)
+    #   max 1890151 (KI657455v1) median 1315
+    # %22.01 masked total, %25.80 masked real
+
+    # and reset the symlink
+    rm /gbdb/necAme1/necAme1.2bit
+    ln -s /hive/data/genomes/necAme1/necAme1.2bit /gbdb/necAme1/necAme1.2bit
+
+##########################################################################
+# cpgIslands - (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/cpgIslands
+    cd /hive/data/genomes/necAme1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku necAme1) > do.log 2>&1 &
+    # real    48m2.637s
+
+    cat fb.necAme1.cpgIslandExt.txt
+    # 2764104 bases of 208187215 (1.328%) in intersection
+
+#########################################################################
+# augustus - (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/augustus
+    cd /hive/data/genomes/necAme1/bed/augustus
+    #  XXX this is not specifically correct, the species caenorhabditis
+    #      is not necessarily accurate here
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+      -species=caenorhabditis -dbHost=hgwdev \
+         -workhorse=hgwdev necAme1) > do.log 2>&1 &
+    # real    64m43.147s
+
+    cat fb.necAme1.augustusGene.txt
+    # 16924922 bases of 208187215 (8.130%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/genscan
+    cd /hive/data/genomes/necAme1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku necAme1) > do.log 2>&1
+    # real    33m54.384s
+
+    cat fb.necAme1.genscan.txt
+    #   11294976 bases of 208187215 (5.425%) in intersection
+
+    cat fb.necAme1.genscanSubopt.txt
+    #   11510060 bases of 208187215 (5.529%) in intersection
+
+########################################################################
+# Create kluster run files (TBD - 2015-07-08 - Hiram)
+
+    cd /hive/data/genomes/necAme1
+    # numerator is necAme1 gapless bases "real" as reported by:
+    head -1 faSize.necAme1.2bit.txt
+# 94076581 bases (7759220 N's 86317361 real 53341517 upper 32975844 lower)
+#    in 9780 sequences in 1 files
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 86317361 / 2861349177 \) \* 1024
+    # ( 86317361 / 2861349177 ) * 1024 = 30.890665
+
+    # ==> use -repMatch=100 since 30 or 50 masks too much
+    cd /hive/data/genomes/necAme1
+    time blat necAme1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/necAme1.11.ooc \
+        -repMatch=100
+    # Wrote 8527 overused 11-mers to jkStuff/necAme1.11.ooc
+    #  real    0m1.846s
+
+    # there are a few non-bridged gaps
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N -e 'select * from gap where bridge="no" order by size;' necAme1 \
+       | ave -tableOut -col=7 stdin
+# min Q1 median Q3 max mean N sum stddev
+# 78831 79056 79362 79503 79503 79162.5 4 316650 320.991
+
+    # note the minimum non-bridged gap size is 78,831
+    gapToLift -verbose=2 -minGap=50000 necAme1 jkStuff/necAme1.nonBridged.lft \
+         -bedFile=jkStuff/necAme1.nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 9780, total size: 94076581, one half size: 47038290
+# cumulative    N50 count       contig  contig size
+# 46960459        61      Bmal_v3_scaffold61      194773
+# 47038290 one half size
+# 47151548        62      Bmal_v3_scaffold62      191089
+
+#############################################################################
+# GENBANK AUTO UPDATE (TBD - 2015-06-09 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism               mrnaCnt estCnt  refSeqCnt
+    #  Pristionchus pacificus  97      37470   0
+
+    # edit etc/genbank.conf to add necAme1 just before priPac1
+
+# necAme1 (P. pacificus)
+necAme1.serverGenome = /hive/data/genomes/necAme1/necAme1.2bit
+necAme1.clusterGenome = /hive/data/genomes/necAme1/necAme1.2bit
+necAme1.ooc = /hive/data/genomes/necAme1/jkStuff/necAme1.11.ooc
+necAme1.lift = /hive/data/genomes/necAme1/jkStuff/necAme1.nonBridged.lft
+necAme1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+necAme1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+necAme1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+necAme1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+necAme1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+necAme1.refseq.mrna.native.load = yes
+necAme1.refseq.mrna.xeno.load  = yes
+necAme1.refseq.mrna.xeno.loadDesc = yes
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+necAme1.genbank.mrna.xeno.load = no
+necAme1.genbank.est.native.load = yes
+necAme1.genbank.est.native.loadDesc = no
+necAme1.downloadDir = necAme1
+necAme1.perChromTables = no
+
+    git commit -m "Added necAme1 - P. pacificus refs #15209" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/etc/:
+    make etc-update
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial necAme1
+    # logFile: var/build/logs/2015.07.02-11:39:01.necAme1.initalign.log
+    # real    91m20.362s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.necAme1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad necAme1
+    # logFile: var/dbload/hgwdev/logs/2015.07.06-09:51:31.necAme1.dbload.log
+    # real    18m34.687s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add necAme1 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added necAme1 - Pristionchus pacificus refs #15209" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2015-06-22 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=necAme1 -tableCoverage all.joiner
+    joinerCheck -database=necAme1 -times all.joiner
+    joinerCheck -database=necAme1 -keys all.joiner
+
+    cd /hive/data/genomes/necAme1
+    time makeDownloads.pl necAme1 > downloads.log 2>&1
+    # real    13m42.027s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/necAme1/pushQ
+    cd /hive/data/genomes/necAme1/pushQ
+    makePushQSql.pl necAme1 > necAme1.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/necAme1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/necAme1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/necAme1/bbi/qualityBw/quality.bw
+    # WARNING: necAme1 does not have seq
+    # WARNING: necAme1 does not have extFile
+    # WARNING: necAme1 does not have estOrientInfo
+    # WARNING: necAme1 does not have mrnaOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p necAme1.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/necAme1.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#############################################################################

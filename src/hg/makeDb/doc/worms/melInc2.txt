@@ -1,0 +1,446 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes how the browser for M. incognita WS245 version is built
+
+##############################################################################
+# download sequence, create UCSC sequence (DONE - 2015-06-26 - Hiram)
+    mkdir -p /hive/data/genomes/melInc2/ws245
+    cd /hive/data/genomes/melInc2/ws245
+
+    wget --no-parent --timestamping -m -nH --cut-dirs=6 \
+ftp://ftp.sanger.ac.uk/pub/wormbase/releases/WS245/species/PRJEA28837
+
+    mkdir /hive/data/genomes/melInc2/ucsc
+    cd /hive/data/genomes/melInc2/ucsc
+    # WormBase contig names are of the pattern:
+# >MiV1ctg0
+# >MiV1ctg2
+# >MiV1ctg1
+#   ...
+
+    # converting to a name without the underscore:
+    zcat ../ws245/PRJEA28837/m_incognita.PRJEA28837.WS245.genomic.fa.gz \
+      | sed -e 's/^>MiV1ctg/>ws245Contig/; s/ .*//;' \
+        | gzip -c > melInc2.fa.gz
+
+    hgFakeAgp melInc2.fa.gz melInc2.agp
+
+#############################################################################
+#  Initial database build (DONE - 2015-06-30 - Hiram)
+
+    cd /hive/data/genomes/melInc2
+    cat << '_EOF_' > melInc2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db melInc2
+clade worm
+# genomeCladePriority 84
+scientificName Meloidogyne incognita
+commonName M. incognita
+assemblyDate Feb. 2008
+assemblyLabel Sanger and Genoscope
+assemblyShortLabel M. incognita WS245/PRJEA28837
+orderKey 2904
+mitoAcc KJ476151.1
+fastaFiles /hive/data/genomes/melInc2/ucsc/melInc2.fa.gz
+agpFiles /hive/data/genomes/melInc2/ucsc/melInc2.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL https://www.wormbase.org/species/m_incognita#0--10
+photoCreditName reference to WormBase C. angaria
+ncbiGenomeId 281
+ncbiAssemblyId 228078
+ncbiAssemblyName PRJEA28837
+ncbiBioProject 28837
+genBankAccessionID GCA_000180415.1
+taxId 6306
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp melInc2.config.ra) > agp.log 2>&1
+    # *** All done!  (through the 'agp' step)
+    # real    0m19.277s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db melInc2.config.ra) > db.log 2>&1
+    # real    1m36.522s
+    # was missing image in htdocs/images/
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+      -fileServer=hgwdev -continue=trackDb melInc2.config.ra) > trackDb.log 2>&1
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2015-06-30 - Hiram)
+    mkdir /hive/data/genomes/melInc2/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/melInc2/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/melInc2/melInc2.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku melInc2) > do.log 2>&1
+XXX - running - Tue Jun 30 10:49:35 PDT 2015
+    # real    16m17.756s
+
+    cat fb.melInc2.cpgIslandExtUnmasked.txt
+    # 80597444 bases of 1977771384 (4.075%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-06-30 - Hiram)
+    mkdir /hive/data/genomes/melInc2/bed/cytoBand
+    cd /hive/data/genomes/melInc2/bed/cytoBand
+    makeCytoBandIdeo.csh melInc2
+
+#########################################################################
+# ucscToINSDC table/track (TBD - 2015-03-20 - Hiram)
+    mkdir /hive/data/genomes/melInc2/bed/ucscToINSDC
+    cd /hive/data/genomes/melInc2/bed/ucscToINSDC
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+       ../../genbank/GCA_*assembly_structure/Primary_Assembly
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    # 25187 name.coordinate.tab
+    # 25187 ucscToINSDC.bed
+    # 25187 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab melInc2 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords melInc2
+    # should cover %100 entirely:
+    featureBits -countGaps melInc2 ucscToINSDC
+    # 2053849526 bases of 2053849526 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2015-06-30 - Hiram)
+    hgsql -N -e "select frag from gold;" melInc2 | sort | head -3
+KJ476151.1
+MiV1ctg0_1
+MiV1ctg0_10
+[KM][Ji][V4][17][c6][t1][g5][0-9]+([_\.][0-9]+)?
+
+
+    hgsql -N -e "select frag from gold;" melInc2 | sort | tail -2
+MiV1ctg9_6
+MiV1ctg9_7
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" melInc2 | wc -l
+    # 9379
+
+    hgsql -N -e "select frag from gold;" melInc2 \
+       | egrep -e '[KM][Ji][V4][17][c6][t1][g5][0-9]+([_\.][0-9]+)?' | wc -l
+    # 9379
+
+    hgsql -N -e "select frag from gold;" melInc2 \
+       | egrep -v -e '[KM][Ji][V4][17][c6][t1][g5][0-9]+([_\.][0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/worm/melInc2/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [KM][Ji][V4][17][c6][t1][g5][0-9]+([_\.][0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+##########################################################################
+# running repeat masker (DONE - 2015-06-30 - Hiram)
+    mkdir /hive/data/genomes/melInc2/bed/repeatMasker
+    cd /hive/data/genomes/melInc2/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku melInc2) > do.log 2>&1
+    # real    17m40.149s
+
+    cat faSize.rmsk.txt
+    # 86079534 bases (3966853 N's 82112681 real 79375947 upper 2736734 lower)
+    # in 2996 sequences in 1 files
+    #  Total size: mean 28731.5 sd 40813.7 min 63 (MiV1ctg2994)
+    #     max 447151 (MiV1ctg0) median 13127
+    #  %3.18 masked total, %3.33 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;    
+
+    time featureBits -countGaps melInc2 rmsk
+    # 2736734 bases of 86079534 (3.179%) in intersection
+    #  real    0m1.627s
+
+##########################################################################
+# running simple repeat (DONE - 2015-06-30 - Hiram)
+
+    mkdir /hive/data/genomes/melInc2/bed/simpleRepeat
+    cd /hive/data/genomes/melInc2/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        melInc2) > do.log 2>&1
+    # real    13m6.294s
+
+    cat fb.simpleRepeat
+    # 4010927 bases of 82114761 (4.885%) in intersection
+
+    # using the Window Masker result as indicated below
+
+##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-06-30 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/melInc2/bed/microsat
+     cd /cluster/data/melInc2/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed melInc2 microsat microsat.bed
+    #	Read 7 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2015-03-30 - Hiram)
+
+    mkdir /hive/data/genomes/melInc2/bed/windowMasker
+    cd /hive/data/genomes/melInc2/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev melInc2) > do.log 2>&1
+    # real    4m41.534s
+
+    # Masking statistics
+    cat faSize.melInc2.cleanWMSdust.txt
+    # 86079534 bases (3966853 N's 82112681 real 46015364 upper 36097317 lower)
+    #    in 2996 sequences in 1 files
+    # Total size: mean 28731.5 sd 40813.7 min 63 (MiV1ctg2994)
+    #    max 447151 (MiV1ctg0) median 13127
+    # %41.93 masked total, %43.96 masked real
+
+    cat fb.melInc2.rmsk.windowmaskerSdust.txt
+    # 2283505 bases of 86079534 (2.653%) in intersection
+
+    # using this Window Masker result for final masking::
+    cd /hive/data/genomes/melInc2
+    #   you can safely ignore the warning about fields >= 13
+    twoBitMask bed/windowMasker/melInc2.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  melInc2.2bit
+
+    # measure the final masking:
+    twoBitToFa melInc2.2bit stdout | faSize stdin > faSize.melInc2.2bit.txt
+    cat faSize.melInc2.2bit.txt
+    # 86079534 bases (3966853 N's 82112681 real 45992850 upper
+    #    36119831 lower) in 2996 sequences in 1 files
+    # Total size: mean 28731.5 sd 40813.7 min 63 (MiV1ctg2994)
+    #    max 447151 (MiV1ctg0) median 13127
+    # %41.96 masked total, %43.99 masked real
+
+    # and reset the symlink
+    rm /gbdb/melInc2/melInc2.2bit
+    ln -s /hive/data/genomes/melInc2/melInc2.2bit /gbdb/melInc2/melInc2.2bit
+
+##########################################################################
+# cpgIslands - (DONE - 2015-06-30 - Hiram)
+    mkdir /hive/data/genomes/melInc2/bed/cpgIslands
+    cd /hive/data/genomes/melInc2/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku melInc2) > do.log 2>&1 &
+    # real    3m45.286s
+
+    cat fb.melInc2.cpgIslandExt.txt
+    # 126917 bases of 82114761 (0.155%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2015-06-30 - Hiram)
+    mkdir /hive/data/genomes/melInc2/bed/genscan
+    cd /hive/data/genomes/melInc2/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku melInc2) > do.log 2>&1
+    # real    4m43.594s
+
+    cat fb.melInc2.genscan.txt
+    #   2352403 bases of 82114761 (2.865%) in intersection
+
+    cat fb.melInc2.genscanSubopt.txt
+    #   2246058 bases of 82114761 (2.735%) in intersection
+
+########################################################################
+# Create kluster run files (DONE - 2015-06-30 - Hiram)
+
+    cd /hive/data/genomes/melInc2
+    # numerator is melInc2 gapless bases "real" as reported by:
+    head -1 faSize.melInc2.2bit.txt
+# 86079534 bases (3966853 N's 82112681 real 45992850 upper
+#    36119831 lower) in 2996 sequences in 1 files
+
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 82112681 / 2861349177 \) \* 1024
+    # ( 82112681 / 2861349177 ) * 1024 = 29.385923
+
+    # ==> use -repMatch=50 according to size scaled down from 1024 for human.
+    #   and rounded to 50 because 30 masks too much
+    cd /hive/data/genomes/melInc2
+    time blat melInc2.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/melInc2.11.ooc \
+        -repMatch=30
+    # Wrote 26372 overused 11-mers to jkStuff/melInc2.11.ooc
+    #  real    0m1.661s
+
+    # there are no non-bridged gaps, do not need to do this
+    #   check non-bridged gaps to see what the typical size is:
+#     hgsql -N -e 'select * from gap where bridge="no" order by size;' melInc2 
+#       | ave -tableOut -col=7 stdin
+# # min Q1 median Q3 max mean N sum stddev
+# 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006
+
+    # note the minimum non-bridged gap size is 50,076
+
+#  gapToLift -verbose=2 -minGap=50000 melInc2 jkStuff/melInc2.nonBridged.lft \
+#         -bedFile=jkStuff/melInc2.nonBridged.bed
+
+#    hgsql -N \
+#        -e 'select * from gap where bridge="no" order by size;' melInc2 \
+#        | ave -col=7 stdin
+
+    # not needed:
+#    gapToLift -verbose=2 -minGap=100 bosTau7 jkStuff/nonBridged.lft \
+#        -bedFile=jkStuff/nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 2996, total size: 86079534, one half size: 43039767
+# cumulative    N50 count       contig  contig size
+# 42982648        369     MiV1ctg354      62745
+# 43039767 one half size
+# 43045164        370     MiV1ctg368      62516
+
+#############################################################################
+# GENBANK AUTO UPDATE (TBD - 2015-06-09 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    #  Nanorana parkeri	3	0	0
+    #  Nanorana pleskei	3	0	0
+    #  Nanorana yunnanensis	1	0	0
+
+    # edit etc/genbank.conf to add melInc2 just before xenTro7
+
+# melInc2 (tibetan frog)
+melInc2.serverGenome = /hive/data/genomes/melInc2/melInc2.2bit
+melInc2.clusterGenome = /hive/data/genomes/melInc2/melInc2.2bit
+melInc2.ooc = /hive/data/genomes/melInc2/jkStuff/melInc2.11.ooc
+melInc2.lift = no
+melInc2.perChromTables = no
+melInc2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+melInc2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+melInc2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+melInc2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+melInc2.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+melInc2.downloadDir = melInc2
+melInc2.refseq.mrna.native.load  = no
+melInc2.refseq.mrna.xeno.load = yes
+melInc2.refseq.mrna.xeno.loadDesc  = yes
+melInc2.genbank.mrna.native.load = no
+melInc2.genbank.mrna.native.loadDesc = no
+melInc2.genbank.mrna.xeno.load = yes
+melInc2.genbank.mrna.xeno.loadDesc = yes
+melInc2.genbank.est.native.load = no
+melInc2.genbank.est.native.loadDesc = no
+# melInc2.upstreamGeneTbl = ensGene
+
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "Added nanPar Nanorana parkeri refs #15056" \
+         etc/genbank.conf src/lib/gbGenome.c
+    git push
+    # update /cluster/data/genbank/etc/:
+    make etc-update
+    # update /cluster/data/genbank/bin/:
+    make install-server
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial melInc2
+    # logFile: var/build/logs/2015.05.27-15:45:35.melInc2.initalign.log
+    # real    1651m57.350s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.melInc2
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad melInc2
+    # logFile: var/dbload/hgwdev/logs/2015.06.09-14:34:12.melInc2.dbload.log
+    # real    128m32.009s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add melInc2 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added melInc2 - Tibetan frog refs #15056" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2015-06-22 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=melInc2 -tableCoverage all.joiner
+    joinerCheck -database=melInc2 -times all.joiner
+    joinerCheck -database=melInc2 -keys all.joiner
+
+    cd /hive/data/genomes/melInc2
+    time makeDownloads.pl melInc2 > downloads.log 2>&1
+    # real    13m42.027s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/melInc2/pushQ
+    cd /hive/data/genomes/melInc2/pushQ
+    makePushQSql.pl melInc2 > melInc2.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/melInc2/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/melInc2/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/melInc2/bbi/qualityBw/quality.bw
+    # WARNING: melInc2 does not have seq
+    # WARNING: melInc2 does not have extFile
+    # WARNING: melInc2 does not have estOrientInfo
+    # WARNING: melInc2 does not have mrnaOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p melInc2.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/melInc2.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################
+# LIFTOVER TO melInc1 (DONE - 2015-07-07 - Hiram )
+    mkdir /hive/data/genomes/melInc2/bed/blat.melInc1.2015-07-07
+    cd /hive/data/genomes/melInc2/bed/blat.melInc1.2015-07-07
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+  -ooc=/hive/data/genomes/melInc2/jkStuff/melInc2.11.ooc -debug melInc2 melInc1
+    # Real run:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+       -ooc=/hive/data/genomes/melInc2/jkStuff/melInc2.11.ooc melInc2 melInc1) \
+		> do.log 2>&1
+    #	real    2m23.422s
+    # verify it works on genome-test
+
+#############################################################################

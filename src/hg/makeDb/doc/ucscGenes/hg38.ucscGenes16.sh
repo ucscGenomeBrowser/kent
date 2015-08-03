@@ -116,6 +116,8 @@ hgMapToGene -tempDb=$tempDb $db refGene knownGene knownToRefSeq
 hgMapToGene -tempDb=$tempDb $db all_mrna knownGene knownToMrnaSingle
 
 makeGencodeKnownGene $db $tempDb $GENCODE_VERSION txToAcc.tab
+
+hgLoadSqlTab -notOnServer $tempDb kgColor $kent/src/hg/lib/kgColor.sql kgColor.tab
  
 hgLoadSqlTab -notOnServer $tempDb knownIsoforms $kent/src/hg/lib/knownIsoforms.sql knownIsoforms.tab
 
@@ -150,8 +152,8 @@ hgLoadSqlTab -notOnServer $tempDb kg${lastVer}ToKg${curVer} $kent/src/hg/lib/kg1
 # add kg${lastVer}ToKg${curVer} to all.joiner !!!!
 
 # fake kgColor
-tawk '{print $1, 0, 0, 0}' knownGene.gp > knownGene.color
-hgLoadSqlTab -notOnServer $tempDb kgColor $kent/src/hg/lib/kgColor.sql knownGene.color
+#tawk '{print $1, 0, 0, 0}' knownGene.gp > knownGene.color
+#hgLoadSqlTab -notOnServer $tempDb kgColor $kent/src/hg/lib/kgColor.sql knownGene.color
 
 
 sort txToAcc.tab > tmp1
@@ -187,7 +189,7 @@ knownToVisiGene $tempDb -probesDb=$db
 #sort alias.tab | uniq > kgAlias.tab
 #sort proAlias.tab | uniq > kgProtAlias.tab
 
-tawk '{print $2,$1}' tmp1 | sort > knownToEnsemble.tab
+tawk '{print $2,$1}' tmp1 | sort > knownToEnsembl.tab
 tawk '{print $2,$1}' tmp1 | sort > knownToGencode${GENCODE_VERSION}.tab
 hgLoadSqlTab -notOnServer $tempDb  knownToEnsembl  $kent/src/hg/lib/knownTo.sql  knownToEnsembl.tab
 hgLoadSqlTab -notOnServer $tempDb  knownToGencode${GENCODE_VERSION}  $kent/src/hg/lib/knownTo.sql  knownToGencode${GENCODE_VERSION}.tab
@@ -271,8 +273,8 @@ cd $dir
 if ($db =~ hg*) then
 hgLoadNetDist $genomes/hg19/p2p/hprd/hprd.pathLengths $tempDb humanHprdP2P \
     -sqlRemap="select distinct value, name from knownToHprd"
-hgLoadNetDist $genomes/hg19/p2p/vidal/humanVidal.pathLengths $tempDb humanVidalP2P -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
-hgLoadNetDist $genomes/hg19/p2p/wanker/humanWanker.pathLengths $tempDb humanWankerP2P -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
+hgLoadNetDist $genomes/hg19/p2p/vidal/humanVidal.pathLengths $tempDb humanVidalP2P -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.refSeq"
+hgLoadNetDist $genomes/hg19/p2p/wanker/humanWanker.pathLengths $tempDb humanWankerP2P -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.refSeq"
 endif
 
 
@@ -306,7 +308,7 @@ _EOF_
 # exit tcsh
 
 rm -rf  $scratchDir/brHgNearBlastp
-doHgNearBlastp.pl -noLoad -clusterHub=ku -distrHost=hgwdev -dbHost=hgwdev -workhorse=hgwdev config.ra |& tee do.log 
+doHgNearBlastp.pl -noLoad -clusterHub=ku -distrHost=hgwdev -dbHost=hgwdev -workhorse=hgwdev config.ra >  do.log  2>&1 &
 
 # Load self
 cd $dir/hgNearBlastp/run.$tempDb.$tempDb
@@ -331,27 +333,27 @@ ln -s $genomes/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
 # delete non-syntenic genes from rat and mouse blastp tables
 cd $dir/hgNearBlastp
 synBlastp.csh $tempDb $xdb
-# old number of unique query values:  65755
-# old number of unique target values  22343
-# new number of unique query values:  60984
-# new number of unique target values  21844
-#
+#old number of unique query values: 87304
+#old number of unique target values 23890
+#new number of unique query values: 82325
+#new number of unique target values 23319
 
+export oldDb=hg19
 hgsql -e "select  count(*) from mmBlastTab\G" $oldDb | tail -n +2
-# count(*): 72823
+# count(*): 66798
 hgsql -e "select  count(*) from mmBlastTab\G" $tempDb | tail -n +2
-# count(*): 60984
+# count(*): 82325
 
 synBlastp.csh $tempDb $ratDb knownGene rgdGene2
-# old number of unique query values: 58734
-# old number of unique target values 10138
-# new number of unique query values: 31066
-# new number of unique target values 7689
+# old number of unique query values: 75074
+# old number of unique target values 10176
+# new number of unique query values: 40867
+# new number of unique target values 7693
 
 hgsql -e "select  count(*) from rnBlastTab\G" $oldDb | tail -n +2
 # count(*): 28372
 hgsql -e "select  count(*) from rnBlastTab\G" $tempDb | tail -n +2
-# count(*): 31066
+# count(*): 40867
 
 # Make reciprocal best subset for the blastp pairs that are too
 # Far for synteny to help
@@ -368,7 +370,7 @@ hgLoadBlastTab $tempDb drBlastTab $aToB/recipBest.tab
 hgsql -e "select  count(*) from drBlastTab\G" $oldDb | tail -n +2
 # count(*): 13111
 hgsql -e "select  count(*) from drBlastTab\G" $tempDb | tail -n +2
-# count(*): 13031
+# count(*): 13113
 
 # Us vs. fly
 cd $dir/hgNearBlastp
@@ -382,7 +384,7 @@ hgLoadBlastTab $tempDb dmBlastTab $aToB/recipBest.tab
 hgsql -e "select  count(*) from dmBlastTab\G" $oldDb | tail -n +2
 #  count(*): 5975
 hgsql -e "select  count(*) from dmBlastTab\G" $tempDb | tail -n +2
-# count(*): 5974
+# count(*): 5987
 
 # Us vs. worm
 cd $dir/hgNearBlastp
@@ -410,7 +412,7 @@ hgLoadBlastTab $tempDb scBlastTab $aToB/recipBest.tab
 hgsql -e "select  count(*) from scBlastTab\G" $oldDb | tail -n +2
 # count(*): 2365
 hgsql -e "select  count(*) from scBlastTab\G" $tempDb | tail -n +2
-# count(*): 2366
+# count(*): 2378
 
 # Clean up
 cd $dir/hgNearBlastp
@@ -713,12 +715,13 @@ hgsql $tempDb -N -e 'select kgId,geneSymbol from kgXref' \
     | perl -wpe 's/^(\S+)\t(\S+)/$1\t${1}__$2/ || die;' \
       > idSub.txt 
 # 2. Get a file of per-transcript fasta sequences that contain the sequences of each UCSC Genes transcript, with this new ID in the place of the UCSC Genes accession.   Convert that file to TwoBit format and soft-link it into /gbdb/hg38/targetDb/ 
-subColumn 4 ucscGenes.bed idSub.txt ucscGenesIdSubbed.bed sequenceForBed -keepName -db=$db -bedIn=ucscGenesIdSubbed.bed -fastaOut=stdout  | faToTwoBit stdin kgTargetSeq${curVer}.2bit 
+subColumn 4 ucscGenes.bed idSub.txt ucscGenesIdSubbed.bed 
+sequenceForBed -keepName -db=$db -bedIn=ucscGenesIdSubbed.bed -fastaOut=stdout  | faToTwoBit stdin kgTargetSeq${curVer}.2bit 
 mkdir -p /gbdb/$db/targetDb/ 
 rm -f /gbdb/$db/targetDb/kgTargetSeq${curVer}.2bit 
 ln -s $dir/kgTargetSeq${curVer}.2bit /gbdb/$db/targetDb/
 # Load the table kgTargetAli, which shows where in the genome these targets are.
-cut -f 1-10 ucscGenes.gp | genePredToFakePsl $tempDb stdin kgTargetAli.psl /dev/null
+cut -f 1-10 knownGene.gp | genePredToFakePsl $tempDb stdin kgTargetAli.psl /dev/null
 hgLoadPsl $tempDb kgTargetAli.psl
 
 #
@@ -828,12 +831,13 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 # 4. On hgwdev, insert new records into blatServers and targetDb, using the 
 # host (field 2) and port (field 3) specified by cluster-admin.  Identify the
 # blatServer by the keyword "$db"Kg with the version number appended
+  hg38KgSeq9 blat4c, port 17869.
 hgsql hgcentraltest -e \
-      'INSERT into blatServers values ("hg38Kgv15", "blat4b", 17787, 0, 1);'
+      'INSERT into blatServers values ("hg38KgSeq9", "blat4c", 17869, 0, 1);'
 hgsql hgcentraltest -e \                                                    
-      'INSERT into targetDb values("hg38Kgv15", "UCSC Genes", \
+      'INSERT into targetDb values("hg38KgSeq9", "UCSC Genes", \
          "hg38", "kgTargetAli", "", "", \
-         "/gbdb/hg38/targetDb/kgTargetSeq8.2bit", 1, now(), "");'
+         "/gbdb/hg38/targetDb/kgTargetSeq9.2bit", 1, now(), "");'
 
 #
 ##
@@ -853,19 +857,20 @@ hgLoadBlastTab $ratDb $blastTab run.$ratDb.$tempDb/out/*.tab
 hgLoadBlastTab $flyDb $blastTab run.$flyDb.$tempDb/recipBest.tab
 hgLoadBlastTab $wormDb $blastTab run.$wormDb.$tempDb/recipBest.tab
 hgLoadBlastTab $yeastDb $blastTab run.$yeastDb.$tempDb/recipBest.tab
+#hgLoadBlastTab $fishDb $blastTab run.$fishDb.$tempDb/recipBest.tab
 
 # Do synteny on mouse/human/rat
 synBlastp.csh $xdb $db
-# old number of unique query values: 43110
-# old number of unique target values 22769
-# new number of unique query values: 35140
-# new number of unique target values 20138
+# old number of unique query values: 44985
+# old number of unique target values 22854
+# new number of unique query values: 41649
+# new number of unique target values 22340
 
 synBlastp.csh $ratDb $db rgdGene2 knownGene
-#old number of unique query values: 11205
-#old number of unique target values 10791
-#new number of unique query values: 7854
-#new number of unique target values 7935
+#old number of unique query values: 11216
+#old number of unique target values 10819
+#new number of unique query values: 8112
+#new number of unique target values 8182
 
 # need to generate multiz downloads
 #/usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz46way/alignments/knownCanonical.exonAA.fa.gz

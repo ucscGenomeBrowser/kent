@@ -15,7 +15,7 @@
 	--no-remove-listing -np \
 "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Gorilla_gorilla/gorGor3.1/*"
 
-    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz 
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
 1511717716 bases (153400444 N's 1358317272 real 1358317272 upper 0 lower) in 19549 sequences in 1 files
 
     cat << '_EOF_' > mkUcsc.pl
@@ -73,7 +73,7 @@ close (FA);
     # << happy emacs
     chmod +x mkUcsc.pl
 
-    time ./mkUcsc.pl 
+    time ./mkUcsc.pl
     #	real    18m3.244s
 
     zcat Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz | \
@@ -159,7 +159,7 @@ taxId 9595
 	gorGor3 > filter.log 2>&1 &
     #	real    1m1.322s
 
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
     #	199433151 bases of 2822760080 (7.065%) in intersection
     #	This is quite a large intersection, highly unusual compared to
     #	most genomes
@@ -294,7 +294,7 @@ nameTranslation '/^cutchr/d; /^unplaced/d; s/^\([0-9X][0-9ab]*\)/chr\1/; s/^MT/c
 # scaffolds ctgPos2 track (DONE - 2011-10-13 - Hiram)
     mkdir /hive/data/genomes/gorGor3/bed/ctgPos2
     cd /hive/data/genomes/gorGor3/bed/ctgPos2
-    cat << '_EOF_' > scaffoldToCtgPos2.pl 
+    cat << '_EOF_' > scaffoldToCtgPos2.pl
 #!/usr/bin/env perl
 
 use strict;
@@ -328,7 +328,7 @@ while (my $line = <FH>) {
     $fragType{$frag} = $type;
     if (exists($chrType{$chrom})) {
 	if ($chrType{$chrom} ne $type) {
-	    printf STDERR "WARN: different types for chrom $chrom: $type NE $chrType{$chrom}\n"; 
+	    printf STDERR "WARN: different types for chrom $chrom: $type NE $chrType{$chrom}\n";
 	}
     }
     $chrType{$chrom} = $type;
@@ -417,7 +417,7 @@ close (FH);
     # to decide which "native" mrna or ests you want to specify in genbank.conf
     # this appears that gorGor3 has almost no native est's
 
-    ssh hgwdev  
+    ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # edit etc/genbank.conf to add gorGor3 before gorGor2 and commit to GIT
@@ -491,7 +491,7 @@ gorGor3.upstreamGeneTbl = xenoRefGene
 # lastz swap Human hg19 (DONE - 2011-10-21 - Hiram)
     # original alignment
     cd /hive/data/genomes/hg19/bed/lastzGorGor3.2011-10-17
-    cat fb.hg19.chainGorGor3Link.txt  
+    cat fb.hg19.chainGorGor3Link.txt
     #	2603997992 bases of 2897316137 (89.876%) in intersection
 
     #	running the swap
@@ -504,7 +504,7 @@ gorGor3.upstreamGeneTbl = xenoRefGene
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> swap.log 2>&1 &
     #	real    69m39.685s
-    cat fb.gorGor3.chainHg19Link.txt 
+    cat fb.gorGor3.chainHg19Link.txt
     #	2571797450 bases of 2822760080 (91.109%) in intersection
 
     cd /hive/data/genomes/gorGor3/bed
@@ -578,7 +578,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> swap.log 2>&1 &
     #	real    74m9.554s
-    cat fb.nomLeu1.chainGorGor3Link.txt 
+    cat fb.nomLeu1.chainGorGor3Link.txt
     #	2318822567 bases of 2756591777 (84.119%) in intersection
 
     cd /hive/data/genomes/nomLeu1/bed
@@ -636,7 +636,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> cat.log 2>&1 &
     #	real    205m20.060s
-    cat fb.gorGor3.chainPapHam1Link.txt 
+    cat fb.gorGor3.chainPapHam1Link.txt
     #	2242232481 bases of 2822760080 (79.434%) in intersection
 
     cd /hive/data/genomes/gorGor3/bed
@@ -652,7 +652,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> swap.log 2>&1 &
     #	real    499m31.793s
-    cat fb.papHam1.chainGorGor3Link.txt 
+    cat fb.papHam1.chainGorGor3Link.txt
     #	2217454777 bases of 2741867288 (80.874%) in intersection
 
     cd /hive/data/genomes/papHam1/bed
@@ -710,7 +710,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> cat.log 2>&1 &
     #	real    134m17.379s
-    cat fb.gorGor3.chainOtoGar1Link.txt  
+    cat fb.gorGor3.chainOtoGar1Link.txt
     #	339201275 bases of 2822760080 (12.017%) in intersection
 
     cd /hive/data/genomes/gorGor3/bed
@@ -726,7 +726,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> swap.log 2>&1 &
     #	real    60m56.773s
-    cat fb.otoGar1.chainGorGor3Link.txt 
+    cat fb.otoGar1.chainGorGor3Link.txt
     #	336379843 bases of 1969052059 (17.083%) in intersection
 
     cd /hive/data/genomes/otoGar1/bed
@@ -736,7 +736,7 @@ TMPDIR=/scratch/tmp
 # lastz swap Chimp rheMac2 (DONE - 2011-10-23 - Hiram)
     # original alignment
     cd /hive/data/genomes/rheMac2/bed/lastzGorGor3.2011-10-21
-    cat fb.rheMac2.chainGorGor3Link.txt  
+    cat fb.rheMac2.chainGorGor3Link.txt
     #	2175264883 bases of 2646704109 (82.188%) in intersection
 
     #	running the swap - DONE - 2011-09-21
@@ -759,7 +759,7 @@ TMPDIR=/scratch/tmp
 # lastz swap Orangutan ponAbe2 (DONE - 2011-10-23 - Hiram)
     # original alignment to Orangutan
     cd /hive/data/genomes/ponAbe2/bed/lastzGorGor3.2011-10-21
-    cat fb.ponAbe2.chainGorGor3Link.txt  
+    cat fb.ponAbe2.chainGorGor3Link.txt
     #	2584628377 bases of 3093572278 (83.548%) in intersection
 
     #	running the swap
@@ -772,7 +772,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> swap.log 2>&1 &
     #	real    86m19.901s
-    cat fb.gorGor3.chainPonAbe2Link.txt 
+    cat fb.gorGor3.chainPonAbe2Link.txt
     #	2437562544 bases of 2822760080 (86.354%) in intersection
 
     cd /hive/data/genomes/gorGor3/bed
@@ -796,7 +796,7 @@ TMPDIR=/scratch/tmp
 	> swap.log 2>&1 &
     #	real    86m1.559s
 
-    cat fb.gorGor3.chainCalJac3Link.txt 
+    cat fb.gorGor3.chainCalJac3Link.txt
     #	1933784568 bases of 2822760080 (68.507%) in intersection
 
     cd /hive/data/genomes/gorGor3/bed
@@ -806,7 +806,7 @@ TMPDIR=/scratch/tmp
 # lastz swap Chimp panTro3 (DONE - 2011-10-27 - Hiram)
     # original alignment
     cd /hive/data/genomes/panTro3/bed/lastzGorGor3.2011-10-21
-    cat fb.panTro3.chainGorGor3Link.txt  
+    cat fb.panTro3.chainGorGor3Link.txt
     #	2553716156 bases of 2900529764 (88.043%) in intersection
 
     #	running the swap
@@ -825,10 +825,10 @@ TMPDIR=/scratch/tmp
     #	I can't find any chr2 in any of these files ...
     #	This was due to a bogus simpleRepeat table in panTro3, mistakenly
     #	loaded 09 May 2011, backpushed from the RR 27 October 2011
-    cat fb.gorGor3.chainPanTro3Link.txt 
+    cat fb.gorGor3.chainPanTro3Link.txt
     #	2513463838 bases of 2822760080 (89.043%) in intersection
     # after replacing the simpleRepeat table, finish off the
-    # axtChain/loadUp.csh script and 
+    # axtChain/loadUp.csh script and
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/panTro3/bed/lastzGorGor3.2011-10-21/DEF \
 	-continue=download -swap -syntenicNet \
@@ -903,7 +903,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> swap.log 2>&1 &
     #	real    139m3.414s
-    cat fb.micMur1.chainGorGor3Link.txt 
+    cat fb.micMur1.chainGorGor3Link.txt
     #	640110238 bases of 1852394361 (34.556%) in intersection
 
     cd /hive/data/genomes/micMur1/bed
@@ -955,7 +955,7 @@ TMPDIR=/scratch/tmp
 	> do.log 2>&1 &
     #	real    5869m15.429s
 
-    cat fb.gorGor3.chainTarSyr1Link.txt 
+    cat fb.gorGor3.chainTarSyr1Link.txt
     #	549926460 bases of 2822760080 (19.482%) in intersection
 
     cd /hive/data/genomes/gorGor3/bed
@@ -973,7 +973,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=encodek \
 	> swap.log 2>&1 &
     #	real    599m8.506s
-    cat fb.tarSyr1.chainGorGor3Link.txt 
+    cat fb.tarSyr1.chainGorGor3Link.txt
     #	567036277 bases of 2768536343 (20.481%) in intersection
 
     cd /hive/data/genomes/tarSyr1/bed
@@ -1534,7 +1534,7 @@ grep -i -w $c $r/4d/ensGeneNR.gp | sed -e "s/\t$c\t/\tgorGor3.$c\t/i" > $c.gp
 set NL=`wc -l $c.gp| gawk '{print $1}'`
 if ("$NL" != "0") then
     # 'clean' maf
-    perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf    
+    perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf
     $PHASTBIN/msa_view --4d --features $c.gp -i MAF $c.maf -o SS > $c.ss
     $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $r/4d/run/$outfile
 else
@@ -1599,7 +1599,7 @@ rm -f $c.gp $c.maf $c.ss
     #	>otoGar1
 
     # verify tree-commas.nh:
-    cat ../tree-commas.nh 
+    cat ../tree-commas.nh
 # ((((((((hg19,panTro3),gorGor3),ponAbe2),nomLeu1),(rheMac2,papHam1)),calJac3),tarSyr1),(micMur1,otoGar1))
 
     # use phyloFit to create tree model (output is phyloFit.mod)
@@ -1616,7 +1616,7 @@ rm -f $c.gp $c.maf $c.ss
 #########################################################################
 # phastCons 11-way (DONE - 2011-12-06 - Hiram)
 
-    # split 11way mafs into 10M chunks and generate sufficient statistics 
+    # split 11way mafs into 10M chunks and generate sufficient statistics
     # files for # phastCons
     ssh encodek
     mkdir -p /hive/data/genomes/gorGor3/bed/multiz11way/cons/SS
@@ -1683,7 +1683,7 @@ mkSS.csh $(root1) {check out line+ done/$(root1)}
     #	there are going to be only one phastCons run using
     #	this same script.  It triggers off of the current working directory
     #	$cwd:t which is the "grp" in this script.  It is:
-    #	all 
+    #	all
 
     cat << '_EOF_' > doPhast.csh
 #!/bin/csh -fe
@@ -1763,7 +1763,7 @@ rm -fr $tmp
     #	Loaded 877501 elements of size 5
     #	real    0m5.516s
 
-    # on human we often try for 5% overall cov, and 70% CDS cov 
+    # on human we often try for 5% overall cov, and 70% CDS cov
     # most bets are off here for that goal, these alignments are too few
     #	and too far between
     featureBits gorGor3 -enrichment ensGene:cds phastConsElements11way
@@ -1856,7 +1856,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
 #############################################################################
 # phyloP for 11-way (DONE - 2011-12-07 - Hiram)
-    # run phyloP with score=LRT 
+    # run phyloP with score=LRT
     ssh encodek
     mkdir /cluster/data/gorGor3/bed/multiz11way/consPhyloP
     cd /cluster/data/gorGor3/bed/multiz11way/consPhyloP
@@ -1870,8 +1870,8 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
 	../../cons/all/all.mod 0.560 > all.mod
     # verify, the BACKGROUND should now be paired up:
-    grep BACK all.mod 
-    #	BACKGROUND: 0.220000 0.280000 0.280000 0.220000 
+    grep BACK all.mod
+    #	BACKGROUND: 0.220000 0.280000 0.280000 0.220000
 
     #	following the pattern from panTro3 with grp: "all" (no other grp)
     cat << '_EOF_' > doPhyloP.csh
@@ -1959,7 +1959,7 @@ rmdir --ignore-fail-on-non-empty $cons/tmp
     #	pid=18030: VmPeak:    29110248 kB
     #	real    34m13.586s
 
-    bigWigInfo phyloP11way.bw 
+    bigWigInfo phyloP11way.bw
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
@@ -2282,3 +2282,24 @@ runAll $* | sort > ucscToINSDC.txt
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+##############################################################################
+# GENEID GENE PREDICTIONS (DONE - 2015-07-31 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/gorGor3/bed/geneid
+    cd /hive/data/genomes/gorGor3/bed/geneid
+    wget --timestamping \
+http://genome.crg.es/genepredictions/G.gorilla/gorGor3/geneid_v1.4/00README
+    wget --timestamping \
+http://genome.crg.es/genepredictions/G.gorilla/gorGor3/geneid_v1.4/gorGor3.geneid.gtf
+
+    ldHgGene -gtf -genePredExt gorGor3 geneid gorGor3.geneid.gtf
+    # Read 70960 transcripts in 339968 lines in 1 files
+    #  70960 groups 40240 seqs 1 sources 3 feature types
+    # 70960 gene predictions
+
+    featureBits -enrichment gorGor3 augustusGene:CDS geneid
+# augustusGene:CDS 1.139%, geneid 1.357%, both 0.917%, cover 80.45%,
+#    enrich 59.28x
+
+##########################################################################

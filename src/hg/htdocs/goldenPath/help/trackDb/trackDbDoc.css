@@ -20,11 +20,11 @@ A:visited { color:#330066; }
 A:active.topbar { color:#330066; }
 
 CODE { color: #000088; }
-.level-required  { color: #006600; }    /* Green */
-.level-base  { color: #000088; }        /* Blue */
+.level-required  { color: #008000; }    /* Green */
+.level-base  { color: #0000A3; }        /* Blue */
 .level-full { color: black; }
 .level-new { color: gray; }
-.level-deprecated { color: #703000; }      /* Brown */
+.level-deprecated { color: #8A0009; }      /* Brown */
 
 PRE { color:#000088; }   /* Blue to stand out */
 I { color:#006600; }     /* Green until issues are dealt with */

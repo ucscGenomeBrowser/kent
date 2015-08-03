@@ -1,0 +1,444 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes how the browser for Heterorhabditis bacteriophora
+# Heterorhabditis_bacteriophora-7.0/GCA_000223415.1/WS229
+# version is built
+
+##############################################################################
+# download sequence, create UCSC sequence (DONE - 2015-06-24 - Hiram)
+    # the genbank and the WormBase releases are identical, although it appears
+    # the genbank version has been cleaned of contamination:
+    mkdir -p /hive/data/genomes/hetBac1/genbank
+    cd /hive/data/genomes/hetBac1/genbank
+
+    rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/invertebrate/Heterorhabditis_bacteriophora/all_assembly_versions/GCA_000223415.1_Heterorhabditis_bacteriophora-7.0/ ./
+
+    mkdir -p /hive/data/genomes/hetBac1/ws245
+    cd /hive/data/genomes/hetBac1/ws245
+
+    wget --no-parent --timestamping -m -nH --cut-dirs=6 \
+ftp://ftp.sanger.ac.uk/pub/wormbase/releases/WS245/species/PRJNA13977
+
+    mkdir /hive/data/genomes/hetBac1/ucsc
+    cd /hive/data/genomes/hetBac1/ucsc
+    # WormBase contig names are of the pattern:
+# >contig0000 [organism=Heterorhabditis bacteriophora] [strain=M31e]
+# >contig0001 [organism=Heterorhabditis bacteriophora] [strain=M31e]
+# >contig0002 [organism=Heterorhabditis bacteriophora] [strain=M31e]
+#   ...
+
+
+    zcat ../genbank/GCA_000223415.1_Heterorhabditis_bacteriophora-7.0_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz \
+        | sed -e 's/.1 Heterorhabditis bacteriophora .*/v1/;' \
+          | gzip -c > hetBac1.fa.gz
+
+    zcat ../genbank/GCA_000223415.1_Heterorhabditis_bacteriophora-7.0_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+      | sed -e 's/\.1/v1/;' > hetBac1.agp
+
+    mkdir /hive/data/genomes/hetBac1/photo
+    cd /hive/data/genomes/hetBac1/photo
+    wget --timestamping \
+http://bugwoodcloud.org/images/768x512/1316021.jpg
+
+#############################################################################
+#  Initial database build (DONE - 2015-07-14 - Hiram)
+
+    cd /hive/data/genomes/hetBac1
+    cat << '_EOF_' > hetBac1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db hetBac1
+clade worm
+genomeCladePriority 86
+scientificName Heterorhabditis bacteriophora
+commonName H. bacteriophora/M31e
+assemblyDate Aug. 2011
+assemblyLabel Washington University Genome Sequencing Center Heterorhabditis_bacteriophora-7.0
+assemblyShortLabel WS229/H. bacteriophora 7.0
+orderKey 8000
+mitoAcc EF043402.1
+fastaFiles /hive/data/genomes/hetBac1/ucsc/hetBac1.fa.gz
+agpFiles /hive/data/genomes/hetBac1/ucsc/hetBac1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://www.forestryimages.org/browse/detail.cfm?imgnum=1316021
+photoCreditName USDA/Peggy Greb
+ncbiGenomeId 481
+ncbiAssemblyId 300668
+ncbiAssemblyName WS229/Haemonchus_contortus_MHco3-2.0
+ncbiBioProject 13977
+genBankAccessionID GCA_000223415.1
+taxId 37862
+'_EOF_'
+    # << happy emacs
+
+    # had to remove duplicate sequences from the original
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp hetBac1.config.ra) > agp.log 2>&1
+    # *** All done!  (through the 'agp' step)
+    # real    0m17.506s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db hetBac1.config.ra) > db.log 2>&1
+    # real    0m53.493s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2015-07-14 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/hetBac1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/hetBac1/hetBac1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku hetBac1) > do.log 2>&1
+    # real    real    46m28.702s
+
+    cat fb.hetBac1.cpgIslandExtUnmasked.txt
+    # 437567 bases of 74374900 (0.588%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-07-14 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/cytoBand
+    cd /hive/data/genomes/hetBac1/bed/cytoBand
+    makeCytoBandIdeo.csh hetBac1
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2015-07-14 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/ucscToINSDC
+    cd /hive/data/genomes/hetBac1/bed/ucscToINSDC
+
+    # find accession name for chrM
+    grep chrM ../../hetBac1.agp
+# chrM    1       18128   2       F       EF043402.1      1       18128   +
+
+    # use that name as a second argument here:
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+       ../../genbank/GCA_*assembly_structure/Primary_Assembly EF043402.1
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    #  1241 name.coordinate.tab
+    #  1241 ucscToINSDC.bed
+    #  1241 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 10
+    # use the 10 in this sed
+    sed -e "s/21/10/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab hetBac1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords hetBac1
+    # should cover %100 entirely:
+    featureBits -countGaps hetBac1 ucscToINSDC
+    # 76992477 bases of 76992477 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2015-07-15 - Hiram)
+    hgsql -N -e "select frag from gold;" hetBac1 | sort | head -3
+ACKM01000001.1
+ACKM01000002.1
+ACKM01000003.1
+
+    hgsql -N -e "select frag from gold;" hetBac1 | sort | tail -2
+ACKM01001962.1
+EF043402.1
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" hetBac1 | wc -l
+    # 1963
+
+    hgsql -N -e "select frag from gold;" hetBac1 \
+      | egrep -e '(ACKM0100|EF043402)[0-9]*(\.1)?' | wc -l
+    # 1963
+
+    hgsql -N -e "select frag from gold;" hetBac1 \
+      | egrep -v -e '(ACKM0100|EF043402)[0-9]*(\.1)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/worm/hetBac1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex (ACKM0100|EF043402)[0-9]*(\.1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+##########################################################################
+# running repeat masker (DONE - 2015-07-14 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/repeatMasker
+    cd /hive/data/genomes/hetBac1/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku hetBac1) > do.log 2>&1
+    # real    20m33.971s
+
+    cat faSize.rmsk.txt
+    # 76992477 bases (2617577 N's 74374900 real 73406918 upper 967982 lower)
+    #    in 1241 sequences in 1 files
+    # Total size: mean 62040.7 sd 175431.9 min 327 (GL995631v1)
+    #    max 2228510 (GL996469v1) median 7944
+    # %1.26 masked total, %1.30 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps hetBac1 rmsk
+    # 968198 bases of 76992477 (1.258%) in intersection
+    # real    0m0.893s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2015-07-15 - Hiram)
+
+    mkdir /hive/data/genomes/hetBac1/bed/simpleRepeat
+    cd /hive/data/genomes/hetBac1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        hetBac1) > do.log 2>&1
+    # real    4m2.123s
+
+    cat fb.simpleRepeat
+    # 367764 bases of 74374900 (0.494%) in intersection
+
+    # using the Window Masker result as indicated below
+
+##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-07-15 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/hetBac1/bed/microsat
+     cd /cluster/data/hetBac1/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed hetBac1 microsat microsat.bed
+    #	Read 366 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/windowMasker
+    cd /hive/data/genomes/hetBac1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev hetBac1) > do.log 2>&1
+    # real    3m27.747s
+
+    # Masking statistics
+    cat faSize.hetBac1.cleanWMSdust.txt
+    # 76992477 bases (2617577 N's 74374900 real 56177148 upper 18197752 lower)
+    #   in 1241 sequences in 1 files
+    # Total size: mean 62040.7 sd 175431.9 min 327 (GL995631v1)
+    #   max 2228510 (GL996469v1) median 7944
+    # %23.64 masked total, %24.47 masked real
+
+    cat fb.hetBac1.rmsk.windowmaskerSdust.txt
+    # 562635 bases of 76992477 (0.731%) in intersection
+
+    # using this Window Masker result for final masking::
+    cd /hive/data/genomes/hetBac1
+    #   you can safely ignore the warning about fields >= 13
+    twoBitMask bed/windowMasker/hetBac1.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  hetBac1.2bit
+
+    # measure the final masking:
+    twoBitToFa hetBac1.2bit stdout | faSize stdin > faSize.hetBac1.2bit.txt
+    cat faSize.hetBac1.2bit.txt
+    # 76992477 bases (2617577 N's 74374900 real 56173117 upper 18201783 lower)
+    #   in 1241 sequences in 1 files
+    # Total size: mean 62040.7 sd 175431.9 min 327 (GL995631v1)
+    #   max 2228510 (GL996469v1) median 7944
+    # %23.64 masked total, %24.47 masked real
+
+    # and reset the symlink
+    rm /gbdb/hetBac1/hetBac1.2bit
+    ln -s /hive/data/genomes/hetBac1/hetBac1.2bit /gbdb/hetBac1/hetBac1.2bit
+
+##########################################################################
+# cpgIslands - (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/cpgIslands
+    cd /hive/data/genomes/hetBac1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku hetBac1) > do.log 2>&1 &
+    # real    23m32.080s
+
+    cat fb.hetBac1.cpgIslandExt.txt
+    # 300560 bases of 74374900 (0.404%) in intersection
+
+#########################################################################
+# augustus - (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/augustus
+    cd /hive/data/genomes/hetBac1/bed/augustus
+    #  XXX this is not specifically correct, the species caenorhabditis
+    #      is not necessarily accurate here
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+      -species=caenorhabditis -dbHost=hgwdev \
+         -workhorse=hgwdev hetBac1) > do.log 2>&1
+    # real    24m11.607s
+
+    cat fb.hetBac1.augustusGene.txt
+    # 9229634 bases of 74374900 (12.410%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/genscan
+    cd /hive/data/genomes/hetBac1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku hetBac1) > do.log 2>&1
+    # real    2m47.682s
+
+    cat fb.hetBac1.genscan.txt
+    #   3586544 bases of 74374900 (4.822%) in intersection
+
+    cat fb.hetBac1.genscanSubopt.txt
+    #   3554026 bases of 74374900 (4.779%) in intersection
+
+########################################################################
+# Create kluster run files (TBD - 2015-07-07 - Hiram)
+
+    cd /hive/data/genomes/hetBac1
+    # numerator is hetBac1 gapless bases "real" as reported by:
+    head -1 faSize.hetBac1.2bit.txt
+# 369720058 bases (23804161 N's 345915897 real 272735439 upper 73180458 lower)
+# in 23823 sequences in 1 files
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 345915897 / 2861349177 \) \* 1024
+    # ( 345915897 / 2861349177 ) * 1024 = 123.794006
+
+    # ==> use -repMatch=100 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/hetBac1
+    time blat hetBac1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/hetBac1.11.ooc \
+        -repMatch=100
+    # Wrote 15059 overused 11-mers to jkStuff/hetBac1.11.ooc
+    # real    0m6.125s
+
+    # there are a few non-bridged gaps
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N -e 'select * from gap where bridge="no" order by size;' hetBac1 \
+       | ave -tableOut -col=7 stdin
+# min Q1 median Q3 max mean N sum stddev
+# 50702 51980 52642 74987 83718 61113.4 17 1.03893e+06 11299.2
+
+    # note the minimum non-bridged gap size is 50,702
+
+    gapToLift -verbose=2 -minGap=50000 hetBac1 jkStuff/hetBac1.nonBridged.lft \
+         -bedFile=jkStuff/hetBac1.nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 23823, total size: 369720058, one half size: 184860029
+# cumulative    N50 count       contig  contig size
+# 184836276       1149    scaffold_1149   83305
+# 184860029 one half size
+# 184919575       1150    scaffold_1150   83299
+
+#############################################################################
+# GENBANK AUTO UPDATE (TBD - 2015-06-09 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism               mrnaCnt estCnt  refSeqCnt
+    #  Pristionchus pacificus  97      37470   0
+
+    # edit etc/genbank.conf to add hetBac1 just before priPac1
+
+# hetBac1 (P. pacificus)
+hetBac1.serverGenome = /hive/data/genomes/hetBac1/hetBac1.2bit
+hetBac1.clusterGenome = /hive/data/genomes/hetBac1/hetBac1.2bit
+hetBac1.ooc = /hive/data/genomes/hetBac1/jkStuff/hetBac1.11.ooc
+hetBac1.lift = /hive/data/genomes/hetBac1/jkStuff/hetBac1.nonBridged.lft
+hetBac1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+hetBac1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+hetBac1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+hetBac1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+hetBac1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+hetBac1.refseq.mrna.native.load = yes
+hetBac1.refseq.mrna.xeno.load  = yes
+hetBac1.refseq.mrna.xeno.loadDesc = yes
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+hetBac1.genbank.mrna.xeno.load = no
+hetBac1.genbank.est.native.load = yes
+hetBac1.genbank.est.native.loadDesc = no
+hetBac1.downloadDir = hetBac1
+hetBac1.perChromTables = no
+
+    git commit -m "Added hetBac1 - P. pacificus refs #15209" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/etc/:
+    make etc-update
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial hetBac1
+    # logFile: var/build/logs/2015.07.02-11:39:01.hetBac1.initalign.log
+    # real    1651m57.350s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.hetBac1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad hetBac1
+    # logFile: var/dbload/hgwdev/logs/2015.06.09-14:34:12.hetBac1.dbload.log
+    # real    128m32.009s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add hetBac1 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added hetBac1 - Tibetan frog refs #15056" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2015-06-22 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=hetBac1 -tableCoverage all.joiner
+    joinerCheck -database=hetBac1 -times all.joiner
+    joinerCheck -database=hetBac1 -keys all.joiner
+
+    cd /hive/data/genomes/hetBac1
+    time makeDownloads.pl hetBac1 > downloads.log 2>&1
+    # real    13m42.027s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/hetBac1/pushQ
+    cd /hive/data/genomes/hetBac1/pushQ
+    makePushQSql.pl hetBac1 > hetBac1.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/hetBac1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/hetBac1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/hetBac1/bbi/qualityBw/quality.bw
+    # WARNING: hetBac1 does not have seq
+    # WARNING: hetBac1 does not have extFile
+    # WARNING: hetBac1 does not have estOrientInfo
+    # WARNING: hetBac1 does not have mrnaOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p hetBac1.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/hetBac1.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

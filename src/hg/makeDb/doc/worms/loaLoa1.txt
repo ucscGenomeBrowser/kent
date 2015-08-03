@@ -1,0 +1,435 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes the browser build for Loa loa/eye worm WS245 version
+
+##############################################################################
+# download sequence, create UCSC sequence (DONE - 2015-06-24 - Hiram)
+    # both the genbank and the WormBase releases are identical
+    mkdir -p /hive/data/genomes/loaLoa1/genbank
+    cd /hive/data/genomes/loaLoa1/genbank
+
+    time rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/invertebrate/Loa_loa/all_assembly_versions/GCA_000183805.3_Loa_loa_V3.1/ ./
+# sent 394 bytes  received 112378513 bytes  6810842.85 bytes/sec
+# total size is 112362653  speedup is 1.00
+# real    0m15.630s
+
+    mkdir -p /hive/data/genomes/loaLoa1/ws245
+    cd /hive/data/genomes/loaLoa1/ws245
+
+    wget --no-parent --timestamping -m -nH --cut-dirs=6 \
+ftp://ftp.sanger.ac.uk/pub/wormbase/releases/WS245/species/PRJNA60051
+
+    mkdir /hive/data/genomes/loaLoa1/ucsc
+    cd /hive/data/genomes/loaLoa1/ucsc
+
+    zcat ../genbank/GCA_000183805.3_Loa_loa_V3.1_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz \
+        | sed -e 's/.1 Loa .*/v1/;' | gzip -c > loaLoa1.fa.gz
+
+    zcat ../genbank/GCA_000183805.3_Loa_loa_V3.1_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+      | sed -e 's/\.1/v1/;' > loaLoa1.agp
+
+    # obtain photo, CDC public domain photo
+    mkdir /hive/data/genomes/loaLoa1/photo
+    cd /hive/data/genomes/loaLoa1/photo
+    wget --timestamping \
+http://www.cdc.gov/dpdx/images/loiasis/L_loa_adult_GA1.jpg
+    # this image is already 381x300 so it can go as is
+
+    # check into source tree
+    #   src/hg/htdocs/images/Loa_loa.jpg
+    # and copy to /usr/local/apache/htdocs/images/Loa_loa.jpg
+
+#############################################################################
+#  Initial database build (DONE - 2015-07-10 - Hiram)
+
+    cd /hive/data/genomes/loaLoa1
+    cat << '_EOF_' > loaLoa1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db loaLoa1
+clade worm
+genomeCladePriority 68
+scientificName Loa loa
+commonName Eye worm
+assemblyDate Jul. 2012
+assemblyLabel Broad Institute L. loa genome project
+assemblyShortLabel WS235/L_loa_Cameroon_isolate
+orderKey 6000
+mitoAcc HQ186250.1
+fastaFiles /hive/data/genomes/loaLoa1/ucsc/loaLoa1.fa.gz
+agpFiles /hive/data/genomes/loaLoa1/ucsc/loaLoa1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://www.cdc.gov/parasites/loiasis/disease.html
+photoCreditName Centers for Disease Control and Prevention
+ncbiGenomeId 2686
+ncbiAssemblyId 195281
+ncbiAssemblyName WS235/Loa_loa_V3.1
+ncbiBioProject 60051
+genBankAccessionID GCA_000183805.3
+taxId 7209
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp loaLoa1.config.ra) > agp.log 2>&1
+    # *** All done!  (through the 'agp' step)
+    # real    0m21.029s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db loaLoa1.config.ra) > db.log 2>&1
+    # real    1m3.894s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2015-07-10 - Hiram)
+    mkdir /hive/data/genomes/loaLoa1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/loaLoa1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/loaLoa1/loaLoa1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku loaLoa1) > do.log 2>&1
+    # real    5m4.522s
+
+    cat fb.loaLoa1.cpgIslandExtUnmasked.txt
+    # 50875 bases of 87533141 (0.058%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-07-10 - Hiram)
+    mkdir /hive/data/genomes/loaLoa1/bed/cytoBand
+    cd /hive/data/genomes/loaLoa1/bed/cytoBand
+    makeCytoBandIdeo.csh loaLoa1
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2015-07-10 - Hiram)
+    mkdir /hive/data/genomes/loaLoa1/bed/ucscToINSDC
+    cd /hive/data/genomes/loaLoa1/bed/ucscToINSDC
+
+    # find the chrM accession:
+    grep chrM ../../*.agp
+# chrM    1       13590   2       F       HQ186250.1      1       13590   +
+
+    # use that as the second argument here:
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+       ../../genbank/GCA_*_assembly_structure/Primary_Assembly HQ186250.1
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    #   5765 name.coordinate.tab
+    #   5765 ucscToINSDC.bed
+    #   5765 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 10
+    # use the 10 in this sed
+    sed -e "s/21/10/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab loaLoa1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords loaLoa1
+    # should cover %100 entirely:
+    featureBits -countGaps loaLoa1 ucscToINSDC
+    # 91379422 bases of 91379422 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2015-07-10 - Hiram)
+    hgsql -N -e "select frag from gold;" loaLoa1 | sort | head -3
+ADBU02000001.1
+ADBU02000002.1
+ADBU02000003.1
+
+    hgsql -N -e "select frag from gold;" loaLoa1 | sort | tail -2
+ADBU02014333.1
+HQ186250.1
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" loaLoa1 | wc -l
+    # 14324
+
+    hgsql -N -e "select frag from gold;" loaLoa1 \
+      | egrep -e '(ADBU020|HQ186250)[0-9]*(\.1)?' | wc -l
+    # 14324
+
+    hgsql -N -e "select frag from gold;" loaLoa1 \
+      | egrep -v -e '(ADBU020|HQ186250)[0-9]*(\.1)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/worm/loaLoa1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex (ADBU020|HQ186250)[0-9]*(\.1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+##########################################################################
+# running repeat masker (DONE - 2015-07-10 - Hiram)
+    mkdir /hive/data/genomes/loaLoa1/bed/repeatMasker
+    cd /hive/data/genomes/loaLoa1/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku loaLoa1) > do.log 2>&1
+    # real    83m49.429s
+
+    cat faSize.rmsk.txt
+    # 91379422 bases (3847239 N's 87532183 real 83624537 upper 3907646 lower)
+    #    in 5765 sequences in 1 files
+    # Total size: mean 15850.7 sd 64640.7 min 265 (JH717805v1)
+    #    max 1325655 (JH712066v1) median 1186
+    # %4.28 masked total, %4.46 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps loaLoa1 rmsk
+    # 3908609 bases of 91379422 (4.277%) in intersection
+    # real    0m3.289s
+
+##########################################################################
+# running simple repeat (DONE - 2015-07-10 - Hiram)
+    mkdir /hive/data/genomes/loaLoa1/bed/simpleRepeat
+    cd /hive/data/genomes/loaLoa1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        loaLoa1) > do.log 2>&1
+    # real    10m57.576s
+
+    cat fb.simpleRepeat
+    # 2964793 bases of 87533141 (3.387%) in intersection
+
+    # using the Window Masker result as indicated below
+
+##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-07-15 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/loaLoa1/bed/microsat
+     cd /cluster/data/loaLoa1/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed loaLoa1 microsat microsat.bed
+    #	Read 2111 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/loaLoa1/bed/windowMasker
+    cd /hive/data/genomes/loaLoa1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev loaLoa1) > do.log 2>&1
+    # real    5m3.906s
+
+    # Masking statistics
+    cat faSize.loaLoa1.cleanWMSdust.txt
+    # 91379422 bases (3847239 N's 87532183 real 59418740 upper 28113443 lower)
+    #   in 5765 sequences in 1 files
+    # Total size: mean 15850.7 sd 64640.7 min 265 (JH717805v1)
+    #   max 1325655 (JH712066v1) median 1186
+    # %30.77 masked total, %32.12 masked real
+
+    cat fb.loaLoa1.rmsk.windowmaskerSdust.txt
+    # 3520248 bases of 91379422 (3.852%) in intersection
+
+    # using this Window Masker result for final masking::
+    cd /hive/data/genomes/loaLoa1
+    #   you can safely ignore the warning about fields >= 13
+    twoBitMask bed/windowMasker/loaLoa1.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  loaLoa1.2bit
+
+    # measure the final masking:
+    twoBitToFa loaLoa1.2bit stdout | faSize stdin > faSize.loaLoa1.2bit.txt
+    cat faSize.loaLoa1.2bit.txt
+    # 91379422 bases (3847239 N's 87532183 real 59394205 upper 28137978 lower)
+    #   in 5765 sequences in 1 files
+    # Total size: mean 15850.7 sd 64640.7 min 265 (JH717805v1)
+    #   max 1325655 (JH712066v1) median 1186
+    # %30.79 masked total, %32.15 masked real
+
+    # and reset the symlink
+    rm /gbdb/loaLoa1/loaLoa1.2bit
+    ln -s /hive/data/genomes/loaLoa1/loaLoa1.2bit /gbdb/loaLoa1/loaLoa1.2bit
+
+##########################################################################
+# cpgIslands - (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/loaLoa1/bed/cpgIslands
+    cd /hive/data/genomes/loaLoa1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku loaLoa1) > do.log 2>&1 &
+    # real    56m0.652s
+
+    cat fb.loaLoa1.cpgIslandExt.txt
+    # 40816 bases of 87533141 (0.047%) in intersection
+
+#########################################################################
+# augustus - (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/loaLoa1/bed/augustus
+    cd /hive/data/genomes/loaLoa1/bed/augustus
+    #  XXX this is not specifically correct, the species caenorhabditis
+    #      is not necessarily accurate here
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+      -species=caenorhabditis -dbHost=hgwdev \
+         -workhorse=hgwdev loaLoa1) > do.log 2>&1 &
+    # real    35m34.472s
+
+    cat fb.loaLoa1.augustusGene.txt
+    # 6440572 bases of 87533141 (7.358%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/loaLoa1/bed/genscan
+    cd /hive/data/genomes/loaLoa1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku loaLoa1) > do.log 2>&1
+    # real    7m2.652s
+
+    cat fb.loaLoa1.genscan.txt
+    #   3545367 bases of 87533141 (4.050%) in intersection
+
+    cat fb.loaLoa1.genscanSubopt.txt
+    #   3368899 bases of 87533141 (3.849%) in intersection
+
+########################################################################
+# Create kluster run files (TBD - 2015-07-08 - Hiram)
+
+    cd /hive/data/genomes/loaLoa1
+    # numerator is loaLoa1 gapless bases "real" as reported by:
+    head -1 faSize.loaLoa1.2bit.txt
+# 94076581 bases (7759220 N's 86317361 real 53341517 upper 32975844 lower)
+#    in 9780 sequences in 1 files
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 86317361 / 2861349177 \) \* 1024
+    # ( 86317361 / 2861349177 ) * 1024 = 30.890665
+
+    # ==> use -repMatch=100 since 30 or 50 masks too much
+    cd /hive/data/genomes/loaLoa1
+    time blat loaLoa1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/loaLoa1.11.ooc \
+        -repMatch=100
+    # Wrote 8527 overused 11-mers to jkStuff/loaLoa1.11.ooc
+    #  real    0m1.846s
+
+    # there are a few non-bridged gaps
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N -e 'select * from gap where bridge="no" order by size;' loaLoa1 \
+       | ave -tableOut -col=7 stdin
+# min Q1 median Q3 max mean N sum stddev
+# 78831 79056 79362 79503 79503 79162.5 4 316650 320.991
+
+    # note the minimum non-bridged gap size is 78,831
+    gapToLift -verbose=2 -minGap=50000 loaLoa1 jkStuff/loaLoa1.nonBridged.lft \
+         -bedFile=jkStuff/loaLoa1.nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 9780, total size: 94076581, one half size: 47038290
+# cumulative    N50 count       contig  contig size
+# 46960459        61      Bmal_v3_scaffold61      194773
+# 47038290 one half size
+# 47151548        62      Bmal_v3_scaffold62      191089
+
+#############################################################################
+# GENBANK AUTO UPDATE (TBD - 2015-06-09 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism               mrnaCnt estCnt  refSeqCnt
+    #  Pristionchus pacificus  97      37470   0
+
+    # edit etc/genbank.conf to add loaLoa1 just before priPac1
+
+# loaLoa1 (P. pacificus)
+loaLoa1.serverGenome = /hive/data/genomes/loaLoa1/loaLoa1.2bit
+loaLoa1.clusterGenome = /hive/data/genomes/loaLoa1/loaLoa1.2bit
+loaLoa1.ooc = /hive/data/genomes/loaLoa1/jkStuff/loaLoa1.11.ooc
+loaLoa1.lift = /hive/data/genomes/loaLoa1/jkStuff/loaLoa1.nonBridged.lft
+loaLoa1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+loaLoa1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+loaLoa1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+loaLoa1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+loaLoa1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+loaLoa1.refseq.mrna.native.load = yes
+loaLoa1.refseq.mrna.xeno.load  = yes
+loaLoa1.refseq.mrna.xeno.loadDesc = yes
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+loaLoa1.genbank.mrna.xeno.load = no
+loaLoa1.genbank.est.native.load = yes
+loaLoa1.genbank.est.native.loadDesc = no
+loaLoa1.downloadDir = loaLoa1
+loaLoa1.perChromTables = no
+
+    git commit -m "Added loaLoa1 - P. pacificus refs #15209" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/etc/:
+    make etc-update
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial loaLoa1
+    # logFile: var/build/logs/2015.07.02-11:39:01.loaLoa1.initalign.log
+    # real    91m20.362s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.loaLoa1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad loaLoa1
+    # logFile: var/dbload/hgwdev/logs/2015.07.06-09:51:31.loaLoa1.dbload.log
+    # real    18m34.687s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add loaLoa1 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added loaLoa1 - Pristionchus pacificus refs #15209" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2015-06-22 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=loaLoa1 -tableCoverage all.joiner
+    joinerCheck -database=loaLoa1 -times all.joiner
+    joinerCheck -database=loaLoa1 -keys all.joiner
+
+    cd /hive/data/genomes/loaLoa1
+    time makeDownloads.pl loaLoa1 > downloads.log 2>&1
+    # real    13m42.027s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/loaLoa1/pushQ
+    cd /hive/data/genomes/loaLoa1/pushQ
+    makePushQSql.pl loaLoa1 > loaLoa1.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/loaLoa1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/loaLoa1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/loaLoa1/bbi/qualityBw/quality.bw
+    # WARNING: loaLoa1 does not have seq
+    # WARNING: loaLoa1 does not have extFile
+    # WARNING: loaLoa1 does not have estOrientInfo
+    # WARNING: loaLoa1 does not have mrnaOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p loaLoa1.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/loaLoa1.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#############################################################################

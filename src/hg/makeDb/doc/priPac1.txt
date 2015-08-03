@@ -898,3 +898,20 @@ chainOne $(path1)
     #	real    4m16.827s
 
 #############################################################################
+# LIFTOVER TO priPac3 (DONE - 2015-07-07 - Hiram )
+    mkdir /hive/data/genomes/priPac1/bed/blat.priPac3.2015-07-07
+    cd /hive/data/genomes/priPac1/bed/blat.priPac3.2015-07-07
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/priPac1/jkStuff/11.ooc -debug priPac1 priPac3
+    # Real run:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/priPac1/jkStuff/11.ooc priPac1 priPac3) \
+		> do.log 2>&1
+    #	real    3m27.836s
+    # verify it works on genome-test
+
+#############################################################################

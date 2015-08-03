@@ -642,6 +642,39 @@ for (hel = hels; hel != NULL; hel = hel->next)
 return dbList;
 }
 
+static struct slPair *makeOtherCgiValsAndLabels()
+/* Return {value, label} pairs with other CGIs the user might wish to jump to. */
+{
+struct slPair *valsAndLabels = slPairNew(hgTracksName(), "Genome Browser");
+slAddHead(&valsAndLabels, slPairNew(hgTablesName(), "Table Browser"));
+slAddHead(&valsAndLabels, slPairNew(hgVaiName(), "Variant Annotation Integrator"));
+slAddHead(&valsAndLabels, slPairNew(hgIntegratorName(), "Data Integrator"));
+slReverse(&valsAndLabels);
+return valsAndLabels;
+}
+
+static void makeOtherCgiForm(char *pos)
+/* Make a form for navigating to other CGIs. */
+{
+struct slPair *valsAndLabels = makeOtherCgiValsAndLabels();
+// Default to the first CGI in the menu.
+char *defaultCgi = valsAndLabels->name;
+printf("<FORM STYLE=\"margin-bottom:0;\" METHOD=\"GET\" NAME=\"navForm\" ID=\"navForm\""
+       " ACTION=\"%s\">\n", defaultCgi);
+cartSaveSession(cart);
+if (pos)
+    cgiMakeHiddenVar("position", pos);
+printf("view in ");
+// Construct a menu of destination CGIs
+#define hgCtNavDest "hgct_navDest"
+char *selected = cartUsualString(cart, hgCtNavDest, defaultCgi);
+char *extraHtml = "id=\"navSelect\" "
+    "onChange=\"var newVal = $('#navSelect').val(); $('#navForm').attr('action', newVal);\"";
+puts(cgiMakeSingleSelectDropList(hgCtNavDest, valsAndLabels, selected, NULL, NULL, extraHtml));
+cgiMakeButton("submit", "go");
+puts("</FORM>");
+}
+
 static void manageCustomForm(char *warn)
 /* list custom tracks and display checkboxes so user can select for delete */
 {
@@ -726,17 +759,12 @@ else
     puts("<TD VALIGN=\"TOP\"><B><EM>No custom tracks for this genome:<B></EM>&nbsp;&nbsp;");
 puts("</TD>");
 
-/* navigation  buttons */
+/* end mainForm; navigation menu has its own form. */
+
+puts("</FORM>");
+
 puts("<TD VALIGN=\"TOP\">");
 puts("<TABLE BORDER=0>");
-
-/* button to add custom tracks */
-int buttonWidth = 18;
-puts("<TR><TD>");
-printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" STYLE=\"width:%dem\">",
-                hgCtDoAdd, "add custom tracks", buttonWidth);
-puts("</TD></TR>");
-puts("</FORM>");
 
 /* determine if there's a navigation position for this screen */
 char *pos = NULL;
@@ -747,36 +775,19 @@ if (ctList)
         pos = ctFirstItemPos(ctList);
     }
 
-/* button for GB navigation */
 puts("<TR><TD>");
-printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"tracksForm\">\n",
-           hgTracksName());
-cartSaveSession(cart);
-printf("<INPUT TYPE=SUBMIT NAME=\"Submit\" VALUE=\"%s\" STYLE=\"width:%dem\">",
-        "go to genome browser", buttonWidth);
-if (pos)
-    cgiMakeHiddenVar("position", pos);
-puts("</FORM>");
+makeOtherCgiForm(pos);
 puts("</TD></TR>");
 
-/* button for TB navigation */
+/* button to add custom tracks */
 puts("<TR><TD>");
-printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"tablesForm\">\n",
-           hgTablesName());
-cartSaveSession(cart);
-printf("<INPUT TYPE=SUBMIT NAME=\"Submit\" VALUE=\"%s\" STYLE=\"width:%dem\">",
-        "go to table browser", buttonWidth);
-puts("</FORM>");
-puts("</TD></TR>");
-
-/* button for VAI navigation */
-puts("<TR><TD>");
-printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"vaiForm\">\n",
-           hgVaiName());
-cartSaveSession(cart);
-printf("<INPUT TYPE=SUBMIT NAME=\"Submit\" VALUE=\"%s\" STYLE=\"width:%dem\">",
-        "go to variant annotation integrator", buttonWidth);
-puts("</FORM>");
+printf("<INPUT TYPE=SUBMIT NAME=\"addTracksButton\" ID=\"addTracksButton\" VALUE=\"%s\" "
+       "STYLE=\"margin-top: 5px\" "
+       // This submits mainForm with a hidden input that tells hgCustom to show add tracks page:
+       "onClick='var $form = $(form[name=\"mainForm\"]); "
+                "$form.append(\"<input name=\\\"%s\\\" type=\\\"hidden\\\">\"); "
+                "$form.submit();' >\n",
+       "add custom tracks", hgCtDoAdd);
 puts("</TD></TR>");
 
 puts("</TABLE>");
@@ -784,6 +795,20 @@ puts("</TD>");
 
 cgiTableRowEnd();
 cgiTableEnd();
+
+
+// This vertically aligns the 'add tracks' button with the other-CGI select
+puts("<SCRIPT>");
+puts("function fitUnder($el1, $el2) { "
+     "  var off1 = $el1.offset(); "
+     "  var off2 = $el2.offset(); "
+     "  off2.left = off1.left; "
+     "  $el2.offset(off2);"
+     "  $el2.width($el1.width()); "
+     "};");
+puts("$(document).ready(function () { fitUnder($('#navSelect'), $('#addTracksButton')); });");
+puts("</SCRIPT>");
+
 cartSetString(cart, "hgta_group", "user");
 }
 

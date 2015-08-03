@@ -119,11 +119,21 @@ static double wigRowAvg(struct annoRow *row)
 {
 float *vector = row->data;
 int len = row->end - row->start;
+int count = 0;
 double sum = 0.0;
 int i;
 for (i = 0;  i < len;  i++)
-    sum += vector[i];
-return sum / (double)len;
+    {
+    // skip NAN values so they don't convert sum to a NAN:
+    if (! isnan(vector[i]))
+        {
+        sum += vector[i];
+        count++;
+        }
+    }
+// I expected "double avg = sum / (double)count" to yield NAN if count is 0 --
+// but avg was negative NAN!  Avoid the fp exception and weird value by testing count:
+return (count > 0) ? sum / (double)count : NAN;
 }
 
 static char **bed4WordsFromAnnoRow(struct annoRow *row, char *fourth)
@@ -145,6 +155,8 @@ static char **wordsFromWigRowAvg(struct annoRow *row)
 /* Return chrom, chromStart, chromEnd and a string containing the average of values in row. */
 {
 double avg = wigRowAvg(row);
+if (isnan(avg))
+    return NULL;
 char avgStr[32];
 safef(avgStr, sizeof(avgStr), "%lf", avg);
 return bed4WordsFromAnnoRow(row, avgStr);
@@ -176,11 +188,12 @@ if (source->rowType == arWords)
     words = row->data;
 else if (source->rowType == arWig)
     {
-    freeWhenDone = TRUE;
     if (doAvg)
 	words = wordsFromWigRowAvg(row);
     else
 	words = wordsFromWigRowVals(row);
+    if (words != NULL)
+        freeWhenDone = TRUE;
     }
 else
     errAbort("annoFormatTab: unrecognized row type %d from source %s",

@@ -210,33 +210,49 @@ fprintf(f, "%f scalefont setfont\n", -size*ps->yScale*1.2);
 ps->fontHeight = size*0.8;
 }
 
+void psTextOutEscaped(struct psGfx *ps, char *text)
+/* Output post-script-escaped text. 
+ * Notice that ps uses escaping similar to C itself.*/
+{
+char c;
+while ((c = *text++) != 0)
+    {
+    if (c == '(')
+        fprintf(ps->f, "\\(");  // left-paren
+    else if (c == ')')
+        fprintf(ps->f, "\\)");  // right-paren
+    else if (c == '\\')
+        fprintf(ps->f, "\\\\"); // back-slash
+    else if (c == '\n')
+        fprintf(ps->f, "\\n");  // new-line
+    else if (c == '\r')
+        fprintf(ps->f, "\\r");  // carriage-return
+    else if (c == '\t')
+        fprintf(ps->f, "\\t");  // tab
+    else if (c == '\b')
+        fprintf(ps->f, "\\b");  // back-space
+    else if (c == '\f')
+        fprintf(ps->f, "\\f");  // form-feed
+    else
+	fprintf(ps->f, "%c", c);
+    }
+}
+
 void psTextBox(struct psGfx *ps, double x, double y, char *text)
 /* Output text in current font at given position. */
 {
-char c;
 psMoveTo(ps, x, y + ps->fontHeight);
 fprintf(ps->f, "(");
-while ((c = *text++) != 0)
-    {
-    if (c == ')' || c == '(')
-        fprintf(ps->f, "\\");
-    fprintf(ps->f, "%c", c);
-    }
+psTextOutEscaped(ps, text);
 fprintf(ps->f, ") fillTextBox\n");
 }
 
 void psTextAt(struct psGfx *ps, double x, double y, char *text)
 /* Output text in current font at given position. */
 {
-char c;
 psMoveTo(ps, x, y + ps->fontHeight);
 fprintf(ps->f, "(");
-while ((c = *text++) != 0)
-    {
-    if (c == ')' || c == '(')
-        fprintf(ps->f, "\\");
-    fprintf(ps->f, "%c", c);
-    }
+psTextOutEscaped(ps, text);
 fprintf(ps->f, ") show\n");
 }
 
@@ -247,7 +263,9 @@ void psTextRight(struct psGfx *ps, double x, double y,
 {
 y += (height - ps->fontHeight)/2;
 psMoveTo(ps, x+width, y + ps->fontHeight);
-fprintf(ps->f, "(%s) showBefore\n", text);
+fprintf(ps->f, "(");
+psTextOutEscaped(ps, text);
+fprintf(ps->f, ") showBefore\n");
 }
 
 void psTextCentered(struct psGfx *ps, double x, double y, 
@@ -255,16 +273,10 @@ void psTextCentered(struct psGfx *ps, double x, double y,
 	char *text)
 /* Draw a line of text centered in box defined by x/y/width/height */
 {
-char c;
 y += (height - ps->fontHeight)/2;
 psMoveTo(ps, x+width/2, y + ps->fontHeight);
 fprintf(ps->f, "(");
-while ((c = *text++) != 0)
-    {
-    if (c == ')' || c == '(')
-        fprintf(ps->f, "\\");
-    fprintf(ps->f, "%c", c);
-    }
+psTextOutEscaped(ps, text);
 fprintf(ps->f, ") showMiddle\n");
 }
 
@@ -274,7 +286,9 @@ void psTextDown(struct psGfx *ps, double x, double y, char *text)
 psMoveTo(ps, x, y);
 fprintf(ps->f, "gsave\n");
 fprintf(ps->f, "-90 rotate\n");
-fprintf(ps->f, "(%s) show\n", text);
+fprintf(ps->f, "(");
+psTextOutEscaped(ps, text);
+fprintf(ps->f, ") show\n");
 fprintf(ps->f, "grestore\n");
 }
 
