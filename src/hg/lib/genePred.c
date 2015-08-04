@@ -1202,8 +1202,8 @@ for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
     int tEnd = tStart + psl->blockSizes[iBlk];
     if (psl->strand[1] == '-')
         reverseIntRange(&tStart, &tEnd, psl->tSize);
-    if ((iExon == 0) || !shouldMergeBlocks(gene, tStart, prevTEnd, qStart, prevQEnd, options,
-                                           cdsMergeSize, utrMergeSize))
+    if ((iExon < 0) || !shouldMergeBlocks(gene, tStart, prevTEnd, qStart, prevQEnd, options,
+                                          cdsMergeSize, utrMergeSize))
         {
         /* new exon */
         iExon++;
@@ -1592,12 +1592,17 @@ if (gp->txStart >= gp->txEnd)
 if (gp->cdsStart != gp->cdsEnd)
     checkCdsBounds(errFh, &errorCnt, desc, gp);
 
+/* must be at least one exon */
+if (gp->exonCount == 0)
+    gpError(errFh, &errorCnt, "%s: %s contains no exons", desc, gp->name);
+else
+    {
 /* make sure first/last exons match tx range */
-if (gp->txStart != gp->exonStarts[0])
-    gpError(errFh, &errorCnt, "%s: %s first exon start %u doesn't match txStart %u", desc, gp->name, gp->exonStarts[0], gp->txStart);
-if (gp->txEnd != gp->exonEnds[gp->exonCount-1])
-    gpError(errFh, &errorCnt, "%s: %s last exon end %u doesn't match txEnd %u", desc, gp->name, gp->exonEnds[gp->exonCount-1], gp->txEnd);
-
+    if (gp->txStart != gp->exonStarts[0])
+        gpError(errFh, &errorCnt, "%s: %s first exon start %u doesn't match txStart %u", desc, gp->name, gp->exonStarts[0], gp->txStart);
+    if (gp->txEnd != gp->exonEnds[gp->exonCount-1])
+        gpError(errFh, &errorCnt, "%s: %s last exon end %u doesn't match txEnd %u", desc, gp->name, gp->exonEnds[gp->exonCount-1], gp->txEnd);
+    }
 
 /* check each exon */
 for (iExon = 0; iExon < gp->exonCount; iExon++)
