@@ -145,24 +145,19 @@ struct gtexGeneExtras
 
 /* Cache tissue metadata */
 
-struct gtexTissue *getGtexTissues()
+struct gtexTissue *getTissues()
 /* Get tissue metadata from database */
 {
 static struct gtexTissue *gtexTissues = NULL;
 if (gtexTissues == NULL)
-    {
-    char query[1024];
-    struct sqlConnection *conn = sqlConnect("hgFixed");
-    sqlSafef(query, sizeof(query), "select * from gtexTissue order by id");
-    gtexTissues = gtexTissueLoadByQuery(conn, query);
-    }
+    gtexTissues = gtexGetTissues();
 return gtexTissues;
 }
 
 struct rgbColor *getGtexTissueColors()
 /* Get RGB colors from tissue table */
 {
-struct gtexTissue *tissues = getGtexTissues();
+struct gtexTissue *tissues = getTissues();
 struct gtexTissue *tissue = NULL;
 int count = slCount(tissues);
 struct rgbColor *colors;
@@ -211,19 +206,22 @@ static struct gtexGeneBed *loadComputedMedians(struct gtexGeneBed *geneBed, char
 /* FIXME: dummy load of two for display implementation */
 struct gtexGeneBed *medians = NULL, *medians2 = NULL;
 
+AllocVar(medians);
+medians->expCount = geneBed->expCount;
+int i;
+
+#ifdef NEW
 struct sqlConnection *conn = hAllocConn("hgFixed");
 if (conn == NULL)
     return NULL;
 char query[1024];
 
-AllocVar(medians);
-medians->expCount = geneBed->expCount;
 // FIXME: experiment with query on sex
+
 sqlSafef(query, sizeof(query), "select gtexTissue.id, gtexSampleData.score from gtexTissue, gtexSampleData, gtexSample, gtexDonor where gtexSampleData.tissue=gtexTissue.name and gtexSampleData.geneId='%s' and gtexSampleData.sample=gtexSample.name and gtexSample.donor=gtexDonor.name and gtexDonor.gender='F'", geneBed->geneId);
 struct slDouble **scores = NULL, *score = NULL;
 AllocArray(scores, geneBed->expCount);
 struct slPair *tissueScore = NULL, *tissueScores = sqlQuickPairList(conn, query);
-int i;
 for (tissueScore = tissueScores; tissueScore != NULL; tissueScore = tissueScore->next)
     {
     AllocVar(score);
@@ -233,9 +231,13 @@ for (tissueScore = tissueScores; tissueScore != NULL; tissueScore = tissueScore-
     else
         slAddHead(&scores[i], score);
     }
+hFreeConn(&conn);
+#endif
+
 AllocArray(medians->expScores, medians->expCount);
 for (i=0; i<geneBed->expCount; i++)
-    medians->expScores[i] = slDoubleMedian(scores[i]);
+    //medians->expScores[i] = slDoubleMedian(scores[i]);
+    medians->expScores[i] = geneBed->expScores[i];
 
 AllocVar(medians2);
 medians2->expCount = geneBed->expCount;
@@ -245,7 +247,6 @@ for (i = 0; i < medians2->expCount; ++i)
 
 medians->next = medians2;
 
-hFreeConn(&conn);
 return medians;
 }
 
@@ -333,9 +334,7 @@ for (i=0; i<expCount; i++)
     if (barWidth == 1 && sameString(colorScheme, GTEX_COLORS_GTEX))
         {
         // brighten colors a bit so they'll be more visible at this scale
-        struct hslColor hsl = mgRgbToHsl(fillColor);
-        hsl.s = min(1000, hsl.s + 300);
-        fillColor = mgHslToRgb(hsl);
+        fillColor = gtexTissueBrightenColor(fillColor);
         }
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
     double expScore = geneBed->expScores[i];
@@ -357,27 +356,26 @@ int yGene = yZero + gtexGeneMargin() - 1;
 
 char query[1024];
 char **row;
-sqlSafef(query, sizeof query, "select * from gtexGeneModel where name='%s'", geneBed->geneId);
+// FIXME: move to load items (load all in range)
+char *modelTable = "gtexGeneModel";
+int hasBin = hOffsetPastBin(database, geneBed->chrom, modelTable);
+sqlSafef(query, sizeof query, "select * from %s where name='%s'", modelTable, geneBed->geneId);
 struct sqlConnection *conn = hAllocConn(database);
 if (conn == NULL)
     return;
-//uglyf("query: %s<br>", query);
-struct sqlResult *sr = sqlGetResult(conn, query);
 struct genePred *geneModel = NULL;
-if (sr != NULL)
-    {
-    if ((row = sqlNextRow(sr)) != NULL)
-        geneModel = genePredLoad(row);
-    sqlFreeResult(&sr);
-}
+struct sqlResult *sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    geneModel = genePredLoad(row + hasBin);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
 if (geneModel == NULL)
-return;
+    return;
 struct linkedFeatures *lf = linkedFeaturesFromGenePred(tg, geneModel, FALSE);
 tg->heightPer = gtexGeneHeight()+1;
 lf->filterColor = statusColor;
 linkedFeaturesDrawAt(tg, lf, hvg, xOff, yGene, scale, font, color, tvSquish);
 tg->heightPer = heightPer;
-hFreeConn(&conn);
 
 if (!extras->isComparison || slCount(computedMedians) != 2)
     return;
@@ -423,7 +421,7 @@ if (tg->visibility == tvDense || tg->visibility == tvSquish)
     genericMapItem(tg, hvg, item, itemName, itemName, start, end, x, y, width, height);
     }
 
-struct gtexTissue *tissues = getGtexTissues();
+struct gtexTissue *tissues = getTissues();
 struct gtexTissue *tissue = NULL;
 struct gtexGeneBed *gtex = item;
 int barWidth = gtexBarWidth();
@@ -461,7 +459,7 @@ struct gtexGeneBed *geneBed = gtexGeneBedLoad(row);
 // for now... replace expScores with medians from tissue data file
 
 #ifdef NEW
-struct gtexTissue *tissue = NULL, *tissues = getGtexTissues();
+struct gtexTissue *tissue = NULL, *tissues = getTissues();
 int i=0;
 char query[1024];
 struct sqlConnection *conn = hAllocConn("hgFixed");
@@ -492,7 +490,6 @@ char *graphType = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_GRAPH,
 extras->graphType = cloneString(graphType);
 if (sameString(graphType, GTEX_GRAPH_AGE) || sameString(graphType, GTEX_GRAPH_SEX))
     extras->isComparison = TRUE;
-
 
 extras->maxMedian = gtexMaxMedianScore(NULL);
 }

@@ -81,5 +81,12 @@ void gtexTissueOutput(struct gtexTissue *el, FILE *f, char sep, char lastSep);
 void gtexTissueCreateTable(struct sqlConnection *conn, char *table);
 /* Create expression record format table of given name. */
 
+struct gtexTissue *gtexGetTissues();
+/* Get tissue id, descriptions, colors, etc. */
+
+struct rgbColor gtexTissueBrightenColor(struct rgbColor rgb);
+/* Increase brightness for better visibility of small items */
+
+
 #endif /* GTEXTISSUE_H */
 

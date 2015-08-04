@@ -199,6 +199,8 @@ if (!conn)
 if (!version)
     version = "V4";
 sqlSafef(query, sizeof query, "select maxMedianScore from gtexInfo where version='%s'", version);
-return sqlQuickDouble(conn, query);
+double score = sqlQuickDouble(conn, query);
+hFreeConn(&conn);
+return score;
 }
 

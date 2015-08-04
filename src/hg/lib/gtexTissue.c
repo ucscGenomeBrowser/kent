@@ -6,6 +6,7 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "hdb.h"
 #include "gtexTissue.h"
 
 
@@ -188,11 +189,29 @@ sqlSafef(query, sizeof(query),
 "    name varchar(255) not null,       # short UCSC identifier\n"
 "    description varchar(255) not null, # GTEx tissue type detail\n"
 "    organ varchar(255) not null,      # GTEx tissue collection area\n"
+"    color int unsigned not null,      # GTEx assigned color\n"
 "              #Indices\n"
 "    PRIMARY KEY(id)\n"
 ")\n",   table);
 sqlRemakeTable(conn, table, query);
 }
 
+struct gtexTissue *gtexGetTissues()
+/* Get tissue id, descriptions, colors, etc. */
+{
+char query[1024];
+struct sqlConnection *conn = hAllocConn("hgFixed");
+sqlSafef(query, sizeof(query), "select * from gtexTissue order by id");
+struct gtexTissue *gtexTissues = gtexTissueLoadByQuery(conn, query);
+hFreeConn(&conn);
+return gtexTissues;
+}
 
+struct rgbColor gtexTissueBrightenColor(struct rgbColor rgb)
+/* Increase brightness for better visibility of small items */
+{
+struct hslColor hsl = mgRgbToHsl(rgb);
+hsl.s = min(1000, hsl.s + 300);
+return mgHslToRgb(hsl);
+}
 
