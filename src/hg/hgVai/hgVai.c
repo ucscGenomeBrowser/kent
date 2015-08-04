@@ -738,7 +738,7 @@ boolean isRegulatoryTrack(struct trackDb *tdb, void *filterData)
 /* For now, just look for a couple specific tracks by tableName. */
 {
 //#*** NEED METADATA
-return (sameString("wgEncodeRegDnaseClusteredV2", tdb->table) ||
+return (sameString("wgEncodeRegDnaseClusteredV3", tdb->table) ||
 	sameString("wgEncodeRegTfbsClusteredV3", tdb->table));
 }
 
