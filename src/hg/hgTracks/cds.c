@@ -658,7 +658,11 @@ else
      * genomic codons, this is letting the query sequence define the frame.
      */
     struct genbankCds cds;
-    getPslCds(psl, tg, &cds);
+    if (startsWith("bigPsl", tg->tdb->type))
+	genbankCdsParse(lf->cds, &cds);
+    else
+	getPslCds(psl, tg, &cds);
+
     int insertMergeSize = -1;
     unsigned opts = genePredCdsStatFld|genePredExonFramesFld;
     struct genePred *gp = genePredFromPsl2(psl, opts, &cds, insertMergeSize);
@@ -1830,6 +1834,7 @@ checkTrackInited(tg, "calling baseColorDrawSetup");
 
 /* If we are using item sequence, fetch alignment and sequence: */
 if ((drawOpt > baseColorDrawOff && (startsWith("psl", tg->tdb->type) ||
+				    sameString("bigPsl", tg->tdb->type) ||
 				    sameString("lrg", tg->tdb->track)))
     || indelShowQueryInsert || indelShowPolyA)
     {

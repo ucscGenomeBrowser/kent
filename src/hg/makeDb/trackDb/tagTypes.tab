@@ -26,26 +26,26 @@ bamGrayMode bam
 bamSkipPrintQualScore bam
 baseColorDefault *
 baseColorTickColor bed bigBed
-baseColorUseCds bed psl genePred
+baseColorUseCds bed psl genePred bigPsl
 baseColorUseSequence *
 baseQualRange bam
 bedFilter bed
 bedNameLabel bed
-bigDataUrl customTracks bigBed bigWig bam vcfTabix
-blastRef psl
+bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl
+blastRef psl bigPsl
 boxedCfg *
 browserLines customTracks
 canPack *
-cdnaTable psl
-cdsDrawDefault psl bed genePred
-cdsDrawOptions psl
+cdnaTable psl bigPsl
+cdsDrawDefault psl bed genePred bigPsl
+cdsDrawOptions psl bigPsl
 cdsEvidence genePred
-cdsTable psl
+cdsTable psl bigPsl
 cell bed bedGraph
 centerLabelsDense *
 chainColor chain
-chainLinearGap netAlign chain bed psl
-chainMinScore netAlign chain bed psl
+chainLinearGap netAlign chain bed psl bigPsl
+chainMinScore netAlign chain bed psl bigPsl
 chainNormScoreAvailable netAlign bed chain
 chimpDb bed
 chimpMacaqueOrthoTable bed
@@ -59,7 +59,7 @@ codingAnnoLabel_snp134CodingDbSnp bed
 codingAnnotations bed
 color *
 colorByStrand bigBed bed
-colorChromDefault psl
+colorChromDefault psl bigPsl
 compareGenomeLinks bed
 compositeTrack *
 configurable *
@@ -94,7 +94,7 @@ ensemblIdUrl genePred
 ensArchive genePred
 exonArrows genePred bed broadPeak
 exonArrowsDense bed
-exonNumbers genePred bed broadPeak psl
+exonNumbers genePred bed broadPeak psl bigPsl
 expDrawExons expRatio
 expProbeTable expRatio
 expScale bed expRatio
@@ -183,9 +183,9 @@ idInUrlSql altGraphX genePred chain factorSource bed
 idXref genePred
 iframeUrl *
 iframeOptions *
-indelDoubleInsert psl bam bigBed
-indelPolyA psl bam
-indelQueryInsert psl bam bigBed
+indelDoubleInsert psl bam bigBed bigPsl
+indelPolyA psl bam bigPsl
+indelQueryInsert psl bam bigBed bigPsl
 informant genePred
 initialPos customTracks
 inputFieldMetaTables *
@@ -197,7 +197,7 @@ interTableKind encodeFiveC
 inputTracksSubgroupDisplay bed factorSource
 inputTrackTable bed factorSource
 inputTableFieldDisplay bed factorSource
-intronGap psl genePred
+intronGap psl genePred bigPsl
 irows wigMaf
 isGencode genePred
 itemAttrTbl genePred
@@ -206,7 +206,7 @@ itemClassTbl bed genePred
 itemClassNameColumn genePred
 itemClassClassColumn genePred
 itemCount customTracks
-itemDetailsHtmlTable genePred psl bed
+itemDetailsHtmlTable genePred psl bed bigPsl
 itemFirstCharCase wigMafProt wigMaf
 itemImagePath bed
 itemRgb bedDetail bedGraph bed bedLogR bigBed
@@ -225,8 +225,8 @@ mafFile customTracks
 mafShowSnp wigMaf
 mafTrack bed
 mapDispatcher expRatio
-matrix netAlign bed chain psl
-matrixHeader netAlign bed chain psl
+matrix netAlign bed chain psl bigPsl
+matrixHeader netAlign bed chain psl bigPsl
 maxChromName customTracks
 maxHeightPixels *
 maxItems *
@@ -278,19 +278,19 @@ patDb expRatio
 patKey expRatio
 patTable expRatio
 pennantIcon *
-pepTable psl
+pepTable psl bigPsl
 pgDbLink bed pgSnp
 pgPolyphenPredTab bed pgSnp
 pgSiftPredTab bed pgSnp
-pred psl
+pred psl bigPsl
 prevExonText *
 priority *
 private bed
-pslSequence psl
-pslTable bed
+pslSequence psl bigPsl
+pslTable bed bigPsl
 refSeqAnnoVersion genePred
 release *
-ucscRetroInfo psl
+ucscRetroInfo psl bigPsl
 ucscRetroParentTables *
 sGroup_Birds wigMaf
 sGroup_Chimp wigMaf
@@ -341,12 +341,12 @@ scoreMax bed bedlogR interaction peptideMapping narrowPeak bigBed
 scoreMin broadPeak narrowPeak bed bedlogR interaction peptideMapping bigBed
 searchIndex bigBed
 searchTrix bigBed
-selectSubject psl
+selectSubject psl bigPsl
 seqTable bed
 settingsByView *
 shortLabel *
-showCdsAllScales psl
-showCdsMaxZoom psl
+showCdsAllScales psl bigPsl
+showCdsMaxZoom psl bigPsl
 showDiffBasesAllScales *
 showDiffBasesMaxZoom *
 showHardyWeinberg vcf vcfTabix
@@ -391,20 +391,20 @@ subgroups bed
 summary wigMaf
 superTrack *
 symbolTable bed genePred
-pubsArticleTable bed psl
-pubsSequenceTable bed psl
-pubsMarkerTable bed psl
-pubsPslTrack bed psl
+pubsArticleTable bed psl bigPsl
+pubsSequenceTable bed psl bigPsl
+pubsMarkerTable bed psl bigPsl
+pubsPslTrack bed psl bigPsl
 thickDrawItem bed
 table *
 tableBrowser *
 tdbType customTracks
 track *
 trackHandler *
-transMapGene psl
-transMapInfo psl
-transMapSrc psl
-transMapTypeDesc psl
+transMapGene psl bigPsl
+transMapInfo psl bigPsl
+transMapSrc psl bigPsl
+transMapTypeDesc psl bigPsl
 transformFunc bed bedGraph wig bigWig
 treeImage wigMaf
 txInfo genePred
@@ -413,7 +413,7 @@ url *
 url2 bed genePred
 url2Label bed genePred
 urlLabel *
-urlName genePred psl
+urlName genePred psl bigPsl
 urls bigBed bed
 useScore *
 view *

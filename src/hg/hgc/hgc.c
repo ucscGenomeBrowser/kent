@@ -247,6 +247,7 @@
 #include "numtsClick.h"
 #include "geneReviewsClick.h"
 #include "bigBed.h"
+#include "bigPsl.h"
 
 static char *rootDir = "hgcData";
 
@@ -2857,6 +2858,47 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 printf("</TT></PRE>\n");
 }
 
+void genericBigPslClick(struct sqlConnection *conn, struct trackDb *tdb,
+                     char *item, int start, int end)
+/* Handle click in big psl track. */
+{
+struct psl* pslList;
+char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct lm *lm = lmInit(0);
+int ivStart = start, ivEnd = end;
+if (start == end)
+    {  
+    // item is an insertion; expand the search range from 0 bases to 2 so we catch it:
+    ivStart = max(0, start-1);
+    ivEnd++;
+    }  
+
+struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, seqName, ivStart, ivEnd, 0, lm);
+pslList = pslFromBigPsl(seqName, bbList,  hChromSize(database, seqName), NULL);
+
+/* check if there is an alignment available for this sequence.  This checks
+ * both genbank sequences and other sequences in the seq table.  If so,
+ * set it up so they can click through to the alignment. */
+if ( 1) //hGenBankHaveSeq(database, item, NULL))
+    {
+    printf("<H3>%s/Genomic Alignments</H3>", item);
+    /*
+    if (sameString("protein", subType))
+        printAlignments(pslList, start, "htcProteinAli", tdb->table, item);
+    else
+    */
+        printAlignments(pslList, start, "htcCdnaAli", tdb->table, item);
+    }
+else
+    {
+    /* just dump the psls */
+    pslDumpHtml(pslList);
+    }
+pslFreeList(&pslList);
+printItemDetailsHtml(tdb, item);
+}
+
 void genericPslClick(struct sqlConnection *conn, struct trackDb *tdb,
                      char *item, int start, char *subType)
 /* Handle click in generic psl track. */
@@ -3921,6 +3963,10 @@ else if (wordCount > 0)
 	if ((wordCount > 2) && !sameString(words[2], "."))
 	    mrnaTable = words[2];
 	genericGenePredClick(conn, tdb, item, start, pepTable, mrnaTable);
+	}
+    else if ( sameString(type, "bigPsl"))
+        {
+	genericBigPslClick(conn, tdb, item, start, end);
 	}
     else if (sameString(type, "psl"))
         {

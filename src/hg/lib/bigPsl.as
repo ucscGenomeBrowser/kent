@@ -14,19 +14,19 @@ table bigPsl
     int[blockCount] blockSizes; "Comma separated list of block sizes"
     int[blockCount] chromStarts; "Start positions relative to chromStart"
 
-    string  oChrom;     "Other chromosome in the alignment"
     uint    oChromStart;"Start position in other chromosome"
     uint    oChromEnd;  "End position in other chromosome"
     char[1] oStrand;    "+ or - for other strand"
     uint    oChromSize; "Size of other chromosome."
     int[blockCount] oChromStarts; "Start positions relative to oChromStart"
 
-    string  oSequence;  "Sequence on other chrom (or edit list, or empty)"
+    lstring  oSequence;  "Sequence on other chrom (or edit list, or empty)"
+    string   oCDS;       "CDS in NCBI format"
     uint    oBlock;     "Block number on other sequence"
 
     uint match;        "Number of bases matched."
-    unsigned misMatch; " Number of bases that don't match "
-    unsigned repMatch; " Number of bases that match but are part of repeats "
-    unsigned nCount;   " Number of 'N' bases "
+    uint misMatch; " Number of bases that don't match "
+    uint repMatch; " Number of bases that match but are part of repeats "
+    uint nCount;   " Number of 'N' bases "
     )
 
