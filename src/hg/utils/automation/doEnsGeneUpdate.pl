@@ -285,7 +285,7 @@ hgLoadSqlTab $db ensemblToGeneName process/ensemblToGeneName.sql process/ensembl
 hgLoadSqlTab $db ensemblSource process/ensemblSource.sql process/ensemblSource.tab
 # verify names in ensGene is a superset of names in ensPep
 hgsql -N -e "select name from ensPep;" $db | sort > ensPep.name
-hgsql -N -e "select name from ensGene;" $db | sort > ensGene.name
+hgsql -N -e "select name from ensGene;" $db | sed -e 's/\\.[0-9][0-9]*\$//;' | sort > ensGene.name
 set geneCount = `cat ensGene.name | wc -l`
 set pepCount = `cat ensPep.name | wc -l`
 set commonCount = `comm -12 ensPep.name ensGene.name | wc -l`
@@ -397,7 +397,7 @@ _EOF_
 _EOF_
   );
   $bossScript->add(<<_EOF_
-gtfToGenePred -infoOut=infoOut.txt -genePredExt allGenes.gtf.gz stdout \\
+gtfToGenePred -includeVersion -infoOut=infoOut.txt -genePredExt allGenes.gtf.gz stdout \\
     | gzip > $db.allGenes.gp.gz
 $Bin/extractGtf.pl infoOut.txt > ensGtp.tab
 $Bin/ensemblInfo.pl infoOut.txt > ensemblToGeneName.tab
@@ -416,8 +416,8 @@ zcat allGenes.gtf.gz | grep -i pseudo \\
   | sed -e 's/gene_id/other_gene_id/; s/gene_name/gene_id/' > vegaPseudo.gtf
 zcat allGenes.gtf.gz | grep -v -i pseudo \\
   | sed -e 's/gene_id/other_gene_id/; s/gene_name/gene_id/' > not.vegaPseudo.gtf
-gtfToGenePred -genePredExt vegaPseudo.gtf vegaPseudo.gp
-gtfToGenePred -genePredExt not.vegaPseudo.gtf not.vegaPseudo.gp
+gtfToGenePred -includeVersion -genePredExt vegaPseudo.gtf vegaPseudo.gp
+gtfToGenePred -includeVersion -genePredExt not.vegaPseudo.gtf not.vegaPseudo.gp
 gzip vegaPseudo.gp not.vegaPseudo.gp
 _EOF_
   );
