@@ -2875,7 +2875,7 @@ if (start == end)
     }  
 
 struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, seqName, ivStart, ivEnd, 0, lm);
-pslList = pslFromBigPsl(seqName, bbList,  hChromSize(database, seqName), NULL);
+pslList = pslFromBigPsl(seqName, bbList,  hChromSize(database, seqName), NULL, NULL);
 
 /* check if there is an alignment available for this sequence.  This checks
  * both genbank sequences and other sequences in the seq table.  If so,
