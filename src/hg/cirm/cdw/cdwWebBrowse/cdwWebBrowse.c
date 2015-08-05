@@ -832,7 +832,8 @@ struct slRef *matchList = tagStanzasMatchingQuery(tags, rqlQuery->string);
 int matchCount = slCount(matchList);
 printf("Enter a SQL-like query below. ");
 printf("In the box after 'select' you can put in a list of tag names including wildcards. ");
-printf("In the box after 'where' you can put in filters based on boolean operations. <BR>");
+printf("In the box after 'where' you can put in filters based on boolean operations between ");
+printf("fields and constants. <BR>");
 /** Write out select [  ] from files whre [  ] limit [ ] <submit> **/
 printf("select ");
 cgiMakeTextVar(fieldsVar, fields, 40);
@@ -842,6 +843,8 @@ cgiMakeTextVar(whereVar, where, 40);
 printf(" limit ");
 cgiMakeIntVar(limitVar, limit, 7);
 cgiMakeSubmitButton();
+
+
 
 printf("<PRE><TT>");
 printLongWithCommas(stdout, matchCount);
@@ -978,7 +981,7 @@ void doHome(struct sqlConnection *conn)
 {
 struct tagStorm *tags = cdwTagStorm(conn);
 printf("<table><tr><td>");
-printf("<img src=\"../images/stem-cell-talk-57210.jpg\" width=%d height=%d>\n", 210, 260);
+printf("<img src=\"../images/freeStemCell.jpg\" width=%d height=%d>\n", 200, 275);
 printf("</td><td>");
 
 /* Print sentence with summary of bytes, files, and labs */
@@ -1012,7 +1015,7 @@ static char *pieTags[] =
    // {"data_set_id"};
     {"lab", "format", "assay", };
 int i;
-printf("<TABLE><TR>\n");
+printf("<TABLE style=\"display:inline\"><TR>\n");
 for (i=0; i<ArraySize(pieTags); ++i)
     {
     char *field = pieTags[i];
@@ -1022,6 +1025,7 @@ for (i=0; i<ArraySize(pieTags); ++i)
     pieOnTag(tags, field, pieDivId);
     }
 printf("</TR></TABLE>\n");
+printf("<CENTER><I>charts are based on proportion of files in each category</I></CENTER>\n");
 printf("</td></tr></table>\n");
 
 
@@ -1142,6 +1146,17 @@ printf("$(function () {\n");
 printf("  $('#watered').watermark(\"why hello there\");\n");
 printf("});\n");
 printf("</script>\n");
+
+char *colVar = "cdw_test_col";
+char *colVal = cartUsualString(cart, colVar, "xyz");
+printf("<input name=\"%s\" type=\"text\" id=\"%s\" value=\"%s\">", colVar, colVar, colVal);
+#ifdef SOON
+printf("<script>\n");
+printf("$(function () {\n");
+printf("  $('#%s').colorPicker();\n", colVar);
+printf("});\n");
+printf("</script>\n");
+#endif /* SOON */
 
 /* Make a pie chart */
     {
@@ -1301,10 +1316,12 @@ void localWebStartWrapper(char *titleString)
     webIncludeResourceFile("HGStyle.css");
     webIncludeResourceFile("jquery-ui.css");
     webIncludeResourceFile("nice_menu.css");
+    webIncludeResourceFile("jquery.ui.colorPicker.css");
     jsIncludeFile("jquery.js", NULL);
     jsIncludeFile("jquery.plugins.js", NULL);
     jsIncludeFile("jquery-ui.js", NULL);
     jsIncludeFile("jquery.watermark.js", NULL);
+    jsIncludeFile("jquery.ui.colorPicker.js", NULL);
     jsIncludeFile("ajax.js", NULL);
     jsIncludeFile("d3pie.min.js", NULL);
     printf("<script src=\"//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js\"></script>");
@@ -1323,7 +1340,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Browser V0.47");
+localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.48");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
