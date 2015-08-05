@@ -411,8 +411,13 @@ struct sqlConnection *dbConnect(char *database)
 char *host = optionVal("host", NULL);
 char *user = optionVal("user", NULL);
 char *password = optionVal("password", NULL);
+struct slPair *settings = NULL;
+slPairAdd(&settings, "host", host);
+slPairAdd(&settings, "user", user);
+slPairAdd(&settings, "password", password);
+// TODO could add support for other connection params like port, socket, ssl-params
 if (host != NULL || user != NULL || password != NULL)
-    return sqlConnectRemote(host, user, password, database);
+    return sqlConnectRemoteFull(settings, database);
 else
     return sqlConnect(database);
 }
@@ -438,7 +443,7 @@ int totalFields = 0;
 
 /* Collect info from database. */
 while ((row = sqlNextRow(sr)) != NULL)
-    {
+{
     struct tableStatus *status;
     if ((majorVersion > 4) || ((4 == majorVersion) && (minorVersion > 0)))
 	memcpy(row+2, row+3, (TABLESTATUS_NUM_COLS-2)*sizeof(char*));

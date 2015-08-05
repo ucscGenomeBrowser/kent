@@ -1253,7 +1253,7 @@ for (pair = list; pair != NULL; pair = pair->next, strPtr += strlen(strPtr))
         else
             {
             if (delimiter == ' ')  // if delimied by commas, this is entirely okay!
-                warn("slPairListToString() Unexpected white space in name delimied by space: "
+                warn("slPairListToString() Unexpected white space in name delimited by space: "
                      "[%s]\n", pair->name);
             sprintf(strPtr,"%s",pair->name); // warn but still make string
             }

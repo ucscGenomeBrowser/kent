@@ -8,6 +8,7 @@
 #include "hgConfig.h"
 #include "obscure.h"
 #include "portable.h"
+#include "jksql.h"
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <signal.h>
@@ -88,7 +89,6 @@ if (fileExists(path))
     }
 }
 
-
 int sqlMakeDefaultsFile(char* defaultFileName, char* profile, char* group)
 /* Create a temporary file in the supplied directory to be passed to
  * mysql with --defaults-file.  Writes a mysql options set for
@@ -102,8 +102,8 @@ int sqlMakeDefaultsFile(char* defaultFileName, char* profile, char* group)
 {
 int fileNo;
 char paddedGroup [256]; /* string with brackets around the group name */
-char fileData[256];  /* constructed variable=value data for the mysql config file */
-char field[256];  /* constructed profile.field name to pass to cfgVal */
+//char fileData[256];  /* constructed variable=value data for the mysql config file */
+//char field[256];  /* constructed profile.field name to pass to cfgVal */
 char path[1024];
 
 if ((fileNo=mkstemp(defaultFileName)) == -1)
@@ -135,20 +135,12 @@ safef(paddedGroup, sizeof(paddedGroup), "[%s]\n", group);
 if (write (fileNo, paddedGroup, strlen(paddedGroup)) == -1)
     errAbort("Writing group to temporary file %s failed with errno %d", defaultFileName, errno);
 
-safef(field, sizeof(field), "%s.host", profile);
-safef(fileData, sizeof(fileData), "host=%s\n", cfgVal(field));
-if (write (fileNo, fileData, strlen(fileData)) == -1)
-    errAbort("Writing host to temporary file %s failed with errno %d", defaultFileName, errno);
+char *settings = sqlProfileToMyCnf(profile);
+if (!settings)
+    errAbort("profile %s not found in sqlProfileToMyCnf() -- failed for file %s failed with errno %d", profile, defaultFileName, errno);
+if (write (fileNo, settings, strlen(settings)) == -1)
+    errAbort("Writing profile %s settings=[%s] as my.cnf format failed for file %s failed with errno %d", profile, settings, defaultFileName, errno);
 
-safef(field, sizeof(field), "%s.user", profile);
-safef(fileData, sizeof(fileData), "user=%s\n", cfgVal(field));
-if (write (fileNo, fileData, strlen(fileData)) == -1)
-    errAbort("Writing user to temporary file %s failed with errno %d", defaultFileName, errno);
-
-safef(field, sizeof(field), "%s.password", profile);
-safef(fileData, sizeof(fileData), "password=%s\n", cfgVal(field));
-if (write (fileNo, fileData, strlen(fileData)) == -1)
-    errAbort("Writing password to temporary file %s failed with errno %d", defaultFileName, errno);
 
 return fileNo;
 }

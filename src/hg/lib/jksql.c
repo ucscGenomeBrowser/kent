@@ -58,6 +58,14 @@ struct sqlProfile
     char *user;         // database server user name
     char *password;     // database server password
     struct slName *dbs; // database associated with profile, can be NULL.
+    // ssl
+    char *key;       // path to ssl client key.pem
+    char *cert;      // path to ssl client cert.pem
+    char *ca;        // path to ssl certificate authority ca.pem
+    char *caPath;    // path to directory containing ssl .pem certs
+    char *cipher;    // list of permissible ciphers to use
+    char *verifyServerCert;  // Client will check server cert Subject CN={host}.
+                             //  Boolean connection flag, if NON-NULL and != "0" then it is on.
     };
 
 struct sqlConnection
@@ -114,20 +122,85 @@ else
     return val;
 }
 
-static struct sqlProfile *sqlProfileNew(char *profileName, char *host, unsigned int port,
-					char *socket, char *user, char *password)
-/* create a new profile object */
+struct sqlProfile *sqlProfileNew(char *name, char *host, unsigned int port,
+					char *socket, char *user, char *password,
+	    		char *key, char *cert, char *ca, char *caPath, char *cipher, char *verifyServerCert)
+/* create a new profile object (does not include ->dbs) */
 {
 struct sqlProfile *sp;
 AllocVar(sp);
-sp->name = cloneString(profileName);
+sp->name = cloneString(name);
 sp->host = cloneString(host);
 sp->port = port;
 sp->socket = cloneString(socket);
 sp->user = cloneString(user);
 sp->password = cloneString(password);
+sp->key = cloneString(key);
+sp->cert = cloneString(cert);
+sp->ca = cloneString(ca);
+sp->caPath = cloneString(caPath);
+sp->cipher = cloneString(cipher);
+sp->verifyServerCert = cloneString(verifyServerCert);
 return sp;
 }
+
+static struct sqlProfile *sqlProfileClone(struct sqlProfile *o)
+/* clone profile object (does not include ->dbs) */
+{
+struct sqlProfile *sp;
+AllocVar(sp);
+sp->name = cloneString(o->name);
+sp->host = cloneString(o->host);
+sp->port = o->port;
+sp->socket = cloneString(o->socket);
+sp->user = cloneString(o->user);
+sp->password = cloneString(o->password);
+sp->key = cloneString(o->key);
+sp->cert = cloneString(o->cert);
+sp->ca = cloneString(o->ca);
+sp->caPath = cloneString(o->caPath);
+sp->cipher = cloneString(o->cipher);
+sp->verifyServerCert = cloneString(o->verifyServerCert);
+return sp;
+}
+
+struct sqlProfile *sqlProfileFromPairs(struct slPair *pairs)
+/* create a new profile object (does not include ->dbs) */
+{
+struct sqlProfile *sp;
+AllocVar(sp);
+struct slPair *p;
+for(p=pairs; p; p=p->next)
+    {
+    char *value = (char *)p->val;
+    if (sameString(p->name,"name"))
+	sp->name = cloneString(value);
+    if (sameString(p->name,"host"))
+	sp->host = cloneString(value);
+    if (sameString(p->name,"port"))
+	sp->port = atoi(value);
+    if (sameString(p->name,"socket"))
+	sp->socket = cloneString(value);
+    if (sameString(p->name,"user"))
+	sp->user = cloneString(value);
+    if (sameString(p->name,"password"))
+	sp->password = cloneString(value);
+    if (sameString(p->name,"key"))
+	sp->key = cloneString(value);
+    if (sameString(p->name,"cert"))
+	sp->cert = cloneString(value);
+    if (sameString(p->name,"ca"))
+	sp->ca = cloneString(value);
+    if (sameString(p->name,"caPath"))
+	sp->caPath = cloneString(value);
+    if (sameString(p->name,"cipher"))
+	sp->cipher = cloneString(value);
+    if (sameString(p->name,"verifyServerCert"))
+	sp->verifyServerCert = cloneString(value);
+    }
+return sp;
+}
+
 
 static void sqlProfileAssocDb(struct sqlProfile *sp, char *db)
 /* associate a db with a profile.  If it is already associated with this
@@ -144,11 +217,9 @@ if (sp2 == NULL)
     }
 }
 
-static void sqlProfileCreate(char *profileName, char *host, unsigned int port,
-			    char *socket, char *user, char *password)
+static void sqlProfileCreate(struct sqlProfile *sp)
 /* create a profile and add to global data structures */
 {
-struct sqlProfile *sp = sqlProfileNew(profileName, host, port, socket, user, password);
 hashAdd(profiles, sp->name, sp);
 if (sameString(sp->name, defaultProfileName))
     defaultProfile = sp;  // save default
@@ -163,6 +234,14 @@ char *portstr = cfgOption2(profileName, "port");
 char *socket = cfgOption2(profileName, "socket");
 char *user = cfgOption2(profileName, "user");
 char *password = cfgOption2(profileName, "password");
+// ssl
+char *key = cfgOption2(profileName, "key");
+char *cert = cfgOption2(profileName, "cert");
+char *ca = cfgOption2(profileName, "ca");
+char *caPath = cfgOption2(profileName, "caPath");
+char *cipher = cfgOption2(profileName, "cipher");
+char *verifyServerCert = cfgOption2(profileName, "verifyServerCert");
+
 unsigned int port = 0;
 
 if ((host != NULL) && (user != NULL) && (password != NULL) && (hashLookup(profiles, profileName) == NULL))
@@ -175,12 +254,20 @@ if ((host != NULL) && (user != NULL) && (password != NULL) && (hashLookup(profil
         socket = envOverride("HGDB_SOCKET", socket);
         user = envOverride("HGDB_USER", user);
         password = envOverride("HGDB_PASSWORD", password);
+	// ssl
+	key = envOverride("HGDB_KEY", key);
+	cert = envOverride("HGDB_CERT", cert);
+	ca = envOverride("HGDB_CA", ca);
+	caPath = envOverride("HGDB_CAPATH", caPath);
+	cipher = envOverride("HGDB_CIPHER", cipher);
+	verifyServerCert = envOverride("HGDB_CIPHER", verifyServerCert);
         }
 
     if (portstr != NULL)
 	port = atoi(portstr);
 
-    sqlProfileCreate(profileName, host, port, socket, user, password);
+    struct sqlProfile *sp = sqlProfileNew(profileName, host, port, socket, user, password, key, cert, ca, caPath, cipher, verifyServerCert);
+    sqlProfileCreate(sp);
     }
 }
 
@@ -341,30 +428,75 @@ freeMem(*str);
 *str = cloneString(val);
 }
 
-void sqlProfileConfig(char *profileName, char *host, unsigned int port,
-			char *socket, char *user, char *password)
+void sqlProfileConfig(struct slPair *pairs)
 /* Set configuration for the profile.  This overrides an existing profile in
  * hg.conf or defines a new one.  Results are unpredictable if a connect cache
  * has been established for this profile. */
 {
-struct sqlProfile* sp = sqlProfileGet(profileName, NULL);
+struct sqlProfile *spIn = sqlProfileFromPairs(pairs);
+struct sqlProfile *sp = sqlProfileGet(spIn->name, NULL);
 if (sp == NULL)
-    return  sqlProfileCreate(profileName, host, port, socket, user, password);
-replaceStr(&sp->host, host);
-replaceStr(&sp->socket, socket);
-sp->port = port;
-replaceStr(&sp->user, user);
-replaceStr(&sp->password, password);
+    return sqlProfileCreate(spIn);
+replaceStr(&sp->host, spIn->host);
+replaceStr(&sp->socket, spIn->socket);
+sp->port = spIn->port;
+replaceStr(&sp->user, spIn->user);
+replaceStr(&sp->password, spIn->password);
+replaceStr(&sp->key, spIn->key);
+replaceStr(&sp->cert, spIn->cert);
+replaceStr(&sp->ca, spIn->ca);
+replaceStr(&sp->caPath, spIn->caPath);
+replaceStr(&sp->cipher, spIn->cipher);
+replaceStr(&sp->verifyServerCert, spIn->verifyServerCert);
 }
 
-void sqlProfileConfigDefault(char *host, unsigned int port, char *socket,
-				char *user, char *password)
+void sqlProfileConfigDefault(struct slPair *pairs)
 /* Set configuration for the default profile.  This overrides an existing
  * profile in hg.conf or defines a new one.  Results are unpredictable if a
  * connect cache has been established for this profile. */
 {
-sqlProfileConfig(defaultProfileName, host, port, socket, user, password);
+struct slPair *found = slPairFind(pairs, "name");
+if (found)
+    found->val = defaultProfileName;
+else
+    slPairAdd(&pairs, "name", defaultProfileName);
+sqlProfileConfig(pairs);
 }
+
+char *sqlProfileToMyCnf(char *profileName)
+/* Read in profile named, 
+ * and create a multi-line setting string usable in my.cnf files.  
+ * Return Null if profile not found. */
+{
+struct sqlProfile *sp = sqlProfileGet(profileName, NULL);
+if (!sp)
+    return NULL;
+struct dyString *dy = dyStringNew(256);
+if (sp->host)
+    dyStringPrintf(dy, "host=%s\n", sp->host);
+if (sp->user)
+    dyStringPrintf(dy, "user=%s\n", sp->user);
+if (sp->password)
+    dyStringPrintf(dy, "password=%s\n", sp->password);
+if (sp->port)
+    dyStringPrintf(dy, "port=%d\n", sp->port);
+if (sp->socket)
+    dyStringPrintf(dy, "socket=%s\n", sp->socket);
+if (sp->key)
+    dyStringPrintf(dy, "ssl-key=%s\n", sp->key);
+if (sp->cert)
+    dyStringPrintf(dy, "ssl-cert=%s\n", sp->cert);
+if (sp->ca)
+    dyStringPrintf(dy, "ssl-ca=%s\n", sp->ca);
+if (sp->caPath)
+    dyStringPrintf(dy, "ssl-capath=%s\n", sp->caPath);
+if (sp->cipher)
+    dyStringPrintf(dy, "ssl-cipher=%s\n", sp->cipher);
+if (sp->verifyServerCert && !sameString(sp->verifyServerCert,"0"))
+    dyStringPrintf(dy, "ssl-verify-server-cert\n");
+return dyStringCannibalize(&dy);
+}
+
 
 static void monitorInit(void)
 /* initialize monitoring on the first call */
@@ -901,8 +1033,8 @@ if (sqlOpenConnections == NULL)
     }
 }
 
-static struct sqlConnection *sqlConnRemoteFillIn(struct sqlConnection *sc, char *host, unsigned int port, char *socket,
-					   char *user, char *password,
+static struct sqlConnection *sqlConnRemoteFillIn(struct sqlConnection *sc, 
+					   struct sqlProfile *sp,
                                            char *database, boolean abort, boolean addAsOpen)
 /* Fill the sqlConnection object: Connect to database somewhere as somebody.
  * Database maybe NULL to just connect to the server.  If abort is set display
@@ -928,25 +1060,38 @@ if ((sc->conn = conn = mysql_init(NULL)) == NULL)
     errAbort("Couldn't connect to mySQL.");
 // Fix problem where client LOCAL setting is disabled by default for security
 mysql_options(conn, MYSQL_OPT_LOCAL_INFILE, NULL);
+
+// Boolean option to tell client to verify that the host server certificate Subject CN equals the hostname.
+// If turned on this can defeat Man-In-The-Middle attacks.
+if (sp->verifyServerCert && !sameString(sp->verifyServerCert,"0"))
+    {
+    my_bool flag = TRUE;
+    mysql_options(conn, MYSQL_OPT_SSL_VERIFY_SERVER_CERT, &flag);
+    }
+
+// TODO GALT should be optional based on some mysql variable setting?
+if (sp->key || sp->cert || sp->ca || sp->caPath || sp->cipher)
+    mysql_ssl_set(conn, sp->key, sp->cert, sp->ca, sp->caPath, sp->cipher); 
+
 if (mysql_real_connect(
 	conn,
-	host, /* host */
-	user,	/* user name */
-	password,	/* password */
+	sp->host, /* host */
+	sp->user,	/* user name */
+	sp->password,	/* password */
 	database, /* database */
-	port,	/* port */
-	socket,	/* socket */
+	sp->port,	/* port */
+	sp->socket,	/* socket */
 	0)	/* flags */  == NULL)
     {
     monitorLeave();
     monitorEnterTime = oldTime;
     if (abort)
 	errAbort("Couldn't connect to database %s on %s as %s.\n%s",
-	    database, host, user, mysql_error(conn));
+	    database, sp->host, sp->user, mysql_error(conn));
     else if (sqlParanoid)
 	fprintf(stderr, "ASH: Couldn't connect to database %s on %s as %s.  "
 		"mysql: %s  pid=%ld\n",
-		database, host, user, mysql_error(conn), (long)getpid());
+		database, sp->host, sp->user, mysql_error(conn), (long)getpid());
     return NULL;
     }
 
@@ -959,7 +1104,7 @@ if (((conn->db != NULL) && !sameString(database, conn->db))
 
 sc->db=cloneString(database);
 if (monitorFlags & JKSQL_TRACE)
-    monitorPrint(sc, "SQL_CONNECT", "%s %s", host, user);
+    monitorPrint(sc, "SQL_CONNECT", "%s %s", sp->host, sp->user);
 
 deltaTime = monitorLeave();
 if (monitorFlags & JKSQL_TRACE)
@@ -975,33 +1120,63 @@ sc->hasTableCache=-1; // -1 => not determined
 return sc;
 }
 
-static struct sqlConnection *sqlConnRemote(char *host, unsigned int port, char *socket,
-					   char *user, char *password,
-                                           char *database, boolean abort)
+static struct sqlConnection *sqlConnRemote(struct sqlProfile* sp, char *database, boolean abort)
 /* Connect to database somewhere as somebody. Database maybe NULL to just
  * connect to the server.  If abort is set display error message and abort on
  * error. */
 {
 struct sqlConnection *sc;
 AllocVar(sc);
-return sqlConnRemoteFillIn(sc, host, port, socket, user, password, database, abort, TRUE);
+return sqlConnRemoteFillIn(sc, sp, database, abort, TRUE);
 }
 
 struct sqlConnection *sqlConnectRemote(char *host, char *user, char *password,
                                        char *database)
 /* Connect to database somewhere as somebody. Database maybe NULL to
- * just connect to the server. Abort on error. */
+ * just connect to the server. Abort on error. 
+ * This only takes limited connection parameters. Use Full version for access to all.*/
 {
-return sqlConnRemote(host, 0, NULL, user, password, database, TRUE);
+struct sqlProfile* sp = sqlProfileNew(
+    NULL,
+    host, 0, NULL, user, password, 
+    NULL, NULL, NULL, NULL, NULL, NULL	// ssl params
+    );
+return sqlConnRemote(sp, database, TRUE);
 }
+
 
 struct sqlConnection *sqlMayConnectRemote(char *host, char *user, char *password,
                                           char *database)
 /* Connect to database somewhere as somebody. Database maybe NULL to
- * just connect to the server.  Return NULL can't connect */
+ * just connect to the server.  Return NULL if can't connect. 
+ * This only takes limited connection parameters. Use Full version for access to all.*/
 {
-return sqlConnRemote(host, 0, NULL, user, password, database, FALSE);
+struct sqlProfile* sp = sqlProfileNew(
+    NULL,
+    host, 0, NULL, user, password, 
+    NULL, NULL, NULL, NULL, NULL, NULL  // ssl params
+    );
+return sqlConnRemote(sp, database, FALSE);
 }
+
+struct sqlConnection *sqlConnectRemoteFull(struct slPair *pairs, char *database)
+/* Connect to database somewhere as somebody. Database maybe NULL to
+ * just connect to the server. Abort on error. 
+ * Connection parameter pairs contains a list of name/values. */
+{
+struct sqlProfile *sp = sqlProfileFromPairs(pairs);
+return sqlConnRemote(sp, database, TRUE);
+}
+
+struct sqlConnection *sqlMayConnectRemoteFull(struct slPair *pairs, char *database)
+/* Connect to database somewhere as somebody. Database maybe NULL to
+ * just connect to the server.  
+ * Connection parameter pairs contains a list of name/values. Return NULL if can't connect.*/
+{
+struct sqlProfile *sp = sqlProfileFromPairs(pairs);
+return sqlConnRemote(sp, database, FALSE);
+}
+
 
 static struct sqlConnection *sqlUnconnectedConn(struct sqlProfile* profile, char* database)
 /* create a sqlConnection object that has all information to connect but is actually
@@ -1030,7 +1205,7 @@ if (failoverProf!=NULL)
     mainAbort = FALSE;
 
 // connect with the default profile
-sc = sqlConnRemote(sp->host, sp->port, sp->socket, sp->user, sp->password, database, mainAbort);
+sc = sqlConnRemote(sp, database, mainAbort);
 if (failoverProf==NULL)
     // the default case, without a failover connection: just return sc, can be NULL
     return sc;
@@ -1043,7 +1218,7 @@ if (sc==NULL)
     {
     if (monitorFlags & JKSQL_TRACE)
         fprintf(stderr, "SQL_CONNECT_MAIN_FAIL %s\n", database);
-    sc = sqlConnRemote(sp->host, sp->port, sp->socket, sp->user, sp->password, NULL, TRUE);
+    sc = sqlConnRemote(sp, NULL, TRUE);
     sc->db = cloneString(database);
     }
 
@@ -1070,7 +1245,7 @@ char *profName = NULL;
 if (sc->profile)
     profName = sc->profile->name;
 struct sqlProfile *sp = sqlProfileMustGet(profName, sc->db);
-sqlConnRemoteFillIn(sc, sp->host, sp->port, sp->socket, sp->user, sp->password, sc->db, abort, FALSE);
+sqlConnRemoteFillIn(sc, sp, sc->db, abort, FALSE);
 }
 
 struct sqlConnection *sqlConnect(char *database)
@@ -1089,7 +1264,7 @@ struct sqlConnection *sqlConnectProfile(char *profileName, char *database)
  */
 {
 struct sqlProfile* sp = sqlProfileMustGet(profileName, database);
-return sqlConnRemote(sp->host, sp->port, sp->socket, sp->user, sp->password, database, TRUE);
+return sqlConnRemote(sp, database, TRUE);
 }
 
 struct sqlConnection *sqlMayConnectProfile(char *profileName, char *database)
@@ -1103,7 +1278,7 @@ struct sqlConnection *sqlMayConnectProfile(char *profileName, char *database)
 struct sqlProfile* sp = sqlProfileGet(profileName, database);
 if (sp == NULL)
     return NULL;
-return sqlConnRemote(sp->host, sp->port, sp->socket, sp->user, sp->password, database, FALSE);
+return sqlConnRemote(sp, database, FALSE);
 }
 
 void sqlVaWarn(struct sqlConnection *sc, char *format, va_list args)
@@ -2410,8 +2585,15 @@ struct sqlConnection *conn;
 if (cache->entryCnt >= sqlConnCacheMax)
     errAbort("Too many open sqlConnections for cache");
 if (cache->host != NULL)
-    conn = sqlConnRemote(cache->host, 0, NULL, cache->user,
-                         cache->password, database, abort);
+    {
+    struct sqlProfile *clone = sqlProfileClone(profile);
+    clone->host = cache->host;
+    clone->port = 0;
+    clone->socket = NULL;
+    clone->user = cache->user;
+    clone->password = cache->password;
+    conn = sqlConnRemote(clone, database, abort);
+    }
 else
     {
     conn = sqlConnProfile(profile, database, abort);
