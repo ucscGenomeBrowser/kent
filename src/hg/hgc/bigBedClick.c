@@ -76,8 +76,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	continue;
     if (bedSize > 3)
 	{
-	char *name = cloneFirstWordByTab(bb->rest);
-	boolean match = sameString(name, item);
+	char *name = cloneFirstWordByDelimiterNoSkip(bb->rest, '\t');
+	boolean match = (isEmpty(name) && isEmpty(item)) || sameString(name, item);
 	freez(&name);
 	if (!match)
 	    continue;

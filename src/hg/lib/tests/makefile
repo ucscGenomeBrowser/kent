@@ -12,7 +12,7 @@ all: 	${BIN_DIR}/genePredTester \
 	${BIN_DIR}/customTrackTester \
 	${BIN_DIR}/sqlCheck 
 
-test: binTest spDbTest hdbTest genePredTest pslReaderTest customTrackTest
+test: binTest spDbTest hdbTest genePredTest pslReaderTest annoGratorTest customTrackTest
 	rm -r output
 	echo tested all
 

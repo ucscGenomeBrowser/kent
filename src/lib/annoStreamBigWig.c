@@ -122,10 +122,14 @@ static struct annoRow *asbwNextRow(struct annoStreamer *sSelf, char *minChrom, u
 /* Return a single annoRow, or NULL if there are no more items. */
 {
 struct annoStreamBigWig *self = (struct annoStreamBigWig *)sSelf;
-if (self->intervalList == NULL)
-    asbwDoQuery(self, minChrom, minEnd);
-if (self->nextInterval == NULL)
+if (self->eof)
     return NULL;
+else if (self->nextInterval == NULL)
+    {
+    asbwDoQuery(self, minChrom, minEnd);
+    if (self->eof)
+        return NULL;
+    }
 // Skip past any left-join failures until we get a right-join failure, a passing interval, or EOF.
 boolean rightFail = FALSE;
 struct bbiInterval *startIv = self->nextInterval;
@@ -141,11 +145,11 @@ char *chrom = sSelf->chrom ? sSelf->chrom : self->queryChrom->name;
 if (rightFail)
     return annoRowFromContigBbiIntervals(sSelf->name, chrom, startIv, startIv, rightFail,
 					 callerLm);
+// Collect up to maxCount contiguous intervals; then make annoRow with vector.
 struct bbiInterval *endIv = startIv, *iv;
 int maxCount = 16 * 1024, count;
 for (iv = startIv->next, count = 0;  iv != NULL && count < maxCount;  iv = iv->next, count++)
     {
-    // collect contiguous intervals; then make annoRow with vector.
     if (annoFilterWigValueFails(sSelf->filters, iv->val, &rightFail))
 	break;
     if (iv->start == endIv->end)
@@ -153,6 +157,9 @@ for (iv = startIv->next, count = 0;  iv != NULL && count < maxCount;  iv = iv->n
     else
 	break;
     }
+// If there's a query region and we have reached the end of its intervals, we're done.
+if (sSelf->chrom != NULL && endIv->next == NULL)
+    self->eof = TRUE;
 self->nextInterval = endIv->next;
 return annoRowFromContigBbiIntervals(sSelf->name, chrom, startIv, endIv, rightFail, callerLm);
 }
