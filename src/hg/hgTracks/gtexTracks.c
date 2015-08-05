@@ -216,6 +216,7 @@ struct gtexGeneExtras
     double maxMedian;
     char *graphType;
     boolean isComparison;
+    struct rgbColor *colors;
     };
 
 struct gtexGeneInfo
@@ -330,6 +331,22 @@ bedLoadItem(tg, tg->table, (ItemLoader)gtexGeneBedLoad);
 // Create geneInfo items with BED and geneModels attached
 struct gtexGeneInfo *geneInfo = NULL, *list = NULL;
 struct gtexGeneBed *geneBed = (struct gtexGeneBed *)tg->items;
+
+char *colorScheme = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_COLORS, 
+                        GTEX_COLORS_DEFAULT);
+if (sameString(colorScheme, GTEX_COLORS_GTEX))
+    {
+    // retrieve from table
+    extras->colors = getGtexTissueColors();
+    }
+else
+    {
+    // currently the only other choice
+    int expCount = geneBed->expCount;
+    extras->colors = getRainbow(&saturatedRainbowAtPos, expCount);
+    //colors = getRainbow(&lightRainbowAtPos, expCount);
+    }
+
 while (geneBed != NULL)
     {
     AllocVar(geneInfo);
@@ -394,25 +411,13 @@ hvGfxBox(hvg, x1, yZero+1, graphWidth, 1, lightGray);
 
 int barWidth = gtexBarWidth();
 int graphPadding = gtexGraphPadding();
+
+// Move to loader
 char *colorScheme = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_COLORS, 
                         GTEX_COLORS_DEFAULT);
-struct rgbColor *colors;
-if (sameString(colorScheme, GTEX_COLORS_GTEX))
-    {
-    // retrieve from table
-    // TODO: cache this
-    colors = getGtexTissueColors();
-    }
-else
-    {
-    // currently the only other choice
-    // TODO: cache this
-    colors = getRainbow(&saturatedRainbowAtPos, expCount);
-    //colors = getRainbow(&lightRainbowAtPos, expCount);
-    }
 for (i=0; i<expCount; i++)
     {
-    struct rgbColor fillColor = colors[i];
+    struct rgbColor fillColor = extras->colors[i];
     if (barWidth == 1 && sameString(colorScheme, GTEX_COLORS_GTEX))
         {
         // brighten colors a bit so they'll be more visible at this scale
@@ -452,7 +457,7 @@ x1 = startX;
 yZero = yGene + gtexGeneHeight();
 for (i=0; i<expCount; i++)
     {
-    struct rgbColor fillColor = colors[i];
+    struct rgbColor fillColor = extras->colors[i];
     if (barWidth == 1 && sameString(colorScheme, GTEX_COLORS_GTEX))
         {
         // brighten colors a bit so they'll be more visible at this scale
@@ -484,6 +489,7 @@ static void gtexGeneMapItem(struct track *tg, struct hvGfx *hvg, void *item, cha
 if (tg->visibility == tvDense || tg->visibility == tvSquish)
     {
     genericMapItem(tg, hvg, item, itemName, itemName, start, end, x, y, width, height);
+    return;
     }
 
 struct gtexTissue *tissues = getTissues();
