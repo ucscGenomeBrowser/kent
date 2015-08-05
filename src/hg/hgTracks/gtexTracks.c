@@ -65,6 +65,21 @@ statusColors.problem = findColorIx(hvg, GENCODE_PROBLEM_COLOR);
 statusColors.unknown = findColorIx(hvg, UNKNOWN_COLOR);
 }
 
+static Color getTranscriptStatusColor(struct hvGfx *hvg, struct gtexGeneBed *geneBed)
+/* Find GENCODE color for transcriptClass  of canonical transcript */
+{
+initGeneColors(hvg);
+if (geneBed->transcriptClass == NULL)
+    return statusColors.unknown;
+if (sameString(geneBed->transcriptClass, "coding"))
+    return statusColors.coding;
+if (sameString(geneBed->transcriptClass, "nonCoding"))
+    return statusColors.nonCoding;
+if (sameString(geneBed->transcriptClass, "problem"))
+    return statusColors.problem;
+return statusColors.unknown;
+}
+
 static int gtexBarWidth()
 {
 int winSize = winEnd - winStart;
@@ -136,12 +151,6 @@ int y = scaled * (maxHeight);
 return (maxHeight-1) - y;
 }
 
-struct gtexGeneExtras 
-    {
-    double maxMedian;
-    char *graphType;
-    boolean isComparison;
-    };
 
 /* Cache tissue metadata */
 
@@ -199,6 +208,27 @@ static int gtexGeneMargin()
     return 1;
 }
 
+/* Track info generated during load, used by draw */
+
+struct gtexGeneExtras 
+/* Track info */
+    {
+    double maxMedian;
+    char *graphType;
+    boolean isComparison;
+    };
+
+struct gtexGeneInfo
+/* GTEx gene model, names, and expression medians */
+    {
+    struct gtexGeneInfo *next;  /* Next in singly linked list */
+    struct gtexGeneBed *geneBed;/* Gene name, id, canonical transcript, exp count and medians 
+                                        from BED table */
+    struct genePred *geneModel; /* Gene structure from model table */
+    float *medians1;            /* Computed medians */
+    float *medians2;            /* Computed medians for comparison (inverse) graph */
+    };
+
 static struct gtexGeneBed *loadComputedMedians(struct gtexGeneBed *geneBed, char *graphType)
 /* Compute medians based on graph type.  Returns a list of 2 for comparison graph types */
 /* TODO: add support for filter function */
@@ -250,28 +280,80 @@ medians->next = medians2;
 return medians;
 }
 
+static struct hash *loadGeneModels(char *table)
+/* Load gene models from table */
+{
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+sr = hRangeQuery(conn, table, chromName, winStart, winEnd, NULL, &rowOffset);
+
+struct hash *modelHash = newHash(0);
+struct genePred *model = NULL;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    model = genePredLoad(row+rowOffset);
+    hashAdd(modelHash, model->name, model);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return modelHash;
+}
+
+static void gtexGeneLoadItems(struct track *tg)
+{
+// Get track UI info
+struct gtexGeneExtras *extras;
+AllocVar(extras);
+tg->extraUiData = extras;
+
+// TODO: move test to lib
+char *graphType = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_GRAPH, 
+                                                GTEX_GRAPH_DEFAULT);
+extras->graphType = cloneString(graphType);
+if (sameString(graphType, GTEX_GRAPH_AGE) || sameString(graphType, GTEX_GRAPH_SEX))
+    extras->isComparison = TRUE;
+
+extras->maxMedian = gtexMaxMedianScore(NULL);
+
+// Construct track items
+
+// Get geneModels in range
+//TODO: version the table name ?
+char *modelTable = "gtexGeneModel";
+struct hash *modelHash = loadGeneModels(modelTable);
+
+// Get geneBeds (names and all-sample tissue median scores) in range
+bedLoadItem(tg, tg->table, (ItemLoader)gtexGeneBedLoad);
+
+// Create geneInfo items with BED and geneModels attached
+struct gtexGeneInfo *geneInfo = NULL, *list = NULL;
+struct gtexGeneBed *geneBed = (struct gtexGeneBed *)tg->items;
+while (geneBed != NULL)
+    {
+    AllocVar(geneInfo);
+    geneInfo->geneBed = geneBed;
+    geneInfo->geneModel = hashFindVal(modelHash, geneBed->geneId);
+    slAddHead(&list, geneInfo);
+    geneBed = geneBed->next;
+    geneInfo->geneBed->next = NULL;
+    }
+slReverse(&list);
+tg->items = list;
+}
+
 static void gtexGeneDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
                 double scale, MgFont *font, Color color, enum trackVisibility vis)
 {
-struct gtexGeneBed *geneBed = item;
-initGeneColors(hvg);
-//warn("item: %s, xOff=%d\n", geneBed->name, xOff);
-// Color using transcriptClass
-Color statusColor;
-if (geneBed->transcriptClass == NULL)
-    statusColor = statusColors.unknown;
-else if (sameString(geneBed->transcriptClass, "coding"))
-    statusColor = statusColors.coding;
-else if (sameString(geneBed->transcriptClass, "nonCoding"))
-    statusColor = statusColors.nonCoding;
-else if (sameString(geneBed->transcriptClass, "problem"))
-    statusColor = statusColors.problem;
-else 
-    statusColor = statusColors.unknown;
+struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
+struct gtexGeneBed *geneBed = geneInfo->geneBed;
 
+// Color in dense mode using transcriptClass
+Color statusColor = getTranscriptStatusColor(hvg, geneBed);
 if (vis != tvFull && vis != tvPack)
     {
-    bedDrawSimpleAt(tg, item, hvg, xOff, y, scale, font, statusColor, vis);
+    bedDrawSimpleAt(tg, geneBed, hvg, xOff, y, scale, font, statusColor, vis);
     return;
     }
 struct gtexGeneBed *computedMedians = NULL;     // 1 or 2 (if comparison) 
@@ -352,27 +434,10 @@ for (i=0; i<expCount; i++)
 // mark gene extent
 int yGene = yZero + gtexGeneMargin() - 1;
 
-// load & draw gene model
 
-char query[1024];
-char **row;
-// FIXME: move to load items (load all in range)
-char *modelTable = "gtexGeneModel";
-int hasBin = hOffsetPastBin(database, geneBed->chrom, modelTable);
-sqlSafef(query, sizeof query, "select * from %s where name='%s'", modelTable, geneBed->geneId);
-struct sqlConnection *conn = hAllocConn(database);
-if (conn == NULL)
-    return;
-struct genePred *geneModel = NULL;
-struct sqlResult *sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    geneModel = genePredLoad(row + hasBin);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-if (geneModel == NULL)
-    return;
-struct linkedFeatures *lf = linkedFeaturesFromGenePred(tg, geneModel, FALSE);
+// draw gene model
 tg->heightPer = gtexGeneHeight()+1;
+struct linkedFeatures *lf = linkedFeaturesFromGenePred(tg, geneInfo->geneModel, FALSE);
 lf->filterColor = statusColor;
 linkedFeaturesDrawAt(tg, lf, hvg, xOff, yGene, scale, font, color, tvSquish);
 tg->heightPer = heightPer;
@@ -423,12 +488,13 @@ if (tg->visibility == tvDense || tg->visibility == tvSquish)
 
 struct gtexTissue *tissues = getTissues();
 struct gtexTissue *tissue = NULL;
-struct gtexGeneBed *gtex = item;
+struct gtexGeneInfo *geneInfo = item;
+struct gtexGeneBed *geneBed = geneInfo->geneBed;
 int barWidth = gtexBarWidth();
 int padding = gtexGraphPadding();
 double maxMedian = ((struct gtexGeneExtras *)tg->extraUiData)->maxMedian;
 
-int graphX = gtexGraphX((struct gtexGeneBed *)item);
+int graphX = gtexGraphX(geneBed);
 if (graphX < 0)
     return;
 // x1 is at left of graph
@@ -438,7 +504,7 @@ int i = 0;
 int yZero = gtexGraphHeight() + y - 1;
 for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
     {
-    double expScore = gtex->expScores[i];
+    double expScore = geneBed->expScores[i];
     //TODO: use valToHeight
     int yMedian = valToY(expScore, maxMedian, gtexGraphHeight()) + y;
     int height = yZero - yMedian;
@@ -452,13 +518,13 @@ for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
     }
 }
 
+#ifdef OLD
 static struct gtexGeneBed *loadGtexGeneBed(char **row)
 {
 struct gtexGeneBed *geneBed = gtexGeneBedLoad(row);
 // TODO: rethink schemas
 // for now... replace expScores with medians from tissue data file
 
-#ifdef NEW
 struct gtexTissue *tissue = NULL, *tissues = getTissues();
 int i=0;
 char query[1024];
@@ -472,26 +538,16 @@ for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
     geneBed->expScores[i] = tissueData->median;
     }
 hFreeConn(&conn);
-#endif
 return geneBed;
 }
+#endif
 
-static void gtexGeneLoadItems(struct track *tg)
+static char *gtexGeneItemName(struct track *tg, void *item)
+/* Return gene name */
 {
-bedLoadItem(tg, tg->table, (ItemLoader)loadGtexGeneBed);
-
-struct gtexGeneExtras *extras;
-AllocVar(extras);
-tg->extraUiData = extras;
-
-// TODO: move test to lib
-char *graphType = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_GRAPH, 
-                                                GTEX_GRAPH_DEFAULT);
-extras->graphType = cloneString(graphType);
-if (sameString(graphType, GTEX_GRAPH_AGE) || sameString(graphType, GTEX_GRAPH_SEX))
-    extras->isComparison = TRUE;
-
-extras->maxMedian = gtexMaxMedianScore(NULL);
+struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
+struct gtexGeneBed *geneBed = geneInfo->geneBed;
+return geneBed->name;
 }
 
 static int gtexGeneItemHeight(struct track *tg, void *item)
@@ -520,10 +576,19 @@ else
 return tgFixedTotalHeightOptionalOverflow(tg, vis, height, height, FALSE);
 }
 
+static int gtexGeneItemStart(struct track *tg, void *item)
+/* Return end chromosome coordinate of item, including graph */
+{
+struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
+struct gtexGeneBed *geneBed = geneInfo->geneBed;
+return geneBed->chromStart;
+}
+
 static int gtexGeneItemEnd(struct track *tg, void *item)
 /* Return end chromosome coordinate of item, including graph */
 {
-struct gtexGeneBed *geneBed = (struct gtexGeneBed *)item;
+struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
+struct gtexGeneBed *geneBed = geneInfo->geneBed;
 double scale = scaleForWindow(insideWidth, winStart, winEnd);
 int graphWidth = gtexGraphWidth(geneBed);
 return max(geneBed->chromEnd, max(winStart, geneBed->chromStart) + graphWidth/scale);
@@ -534,8 +599,12 @@ void gtexGeneMethods(struct track *tg)
 {
 tg->drawItemAt = gtexGeneDrawAt;
 tg->loadItems = gtexGeneLoadItems;
+//tg->freeItems = gtexGeneFreeItems;
 tg->mapItem = gtexGeneMapItem;
+tg->itemName = gtexGeneItemName;
+tg->mapItemName = gtexGeneItemName;
 tg->itemHeight = gtexGeneItemHeight;
+tg->itemStart = gtexGeneItemStart;
 tg->itemEnd = gtexGeneItemEnd;
 tg->totalHeight = gtexTotalHeight;
 }
