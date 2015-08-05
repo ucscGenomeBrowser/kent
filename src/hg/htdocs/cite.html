@@ -9,7 +9,11 @@
     <A NAME="TOP"></A>
     <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
       <TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="images/title.jpg"></TH></TR>
-      <TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="inc/topbar.html"--></TD></TR>
+      <noscript><div class='noscript'><div class='noscript-inner'><p><b>JavaScript is disabled in your web browser</b></p><p>You must have JavaScript enabled in your web browser to use the Genome Browser</p></div></div></noscript>
+      <script type='text/javascript' SRC='./js/jquery.js'></script>
+      <script type='text/javascript' SRC='./js/jquery.plugins.js'></script>
+      <LINK rel='STYLESHEET' href='./style/nice_menu.css' TYPE='text/css' />
+      <TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="./cgi-bin/hgMenubar"--></TD></TR>
 
 <!--Content Tables------------------------------------------------------->
       <TR><TD COLSPAN=2 CELLPADDING=10>	
@@ -113,13 +117,18 @@
 		    </P>
 		    <P>
 		    <B>Annotation data:</B>
-		    Karolchik D, Barber GP, Casper J, Clawson H, Cline MS, Diekhans M, Dreszer TR, 
-		    Fujita PA, Guruvadoo L, Haeussler M, Harte RA, Heitner S, Hinrichs AS, 
-		    Learned K, Lee BT, Li CH, Raney BJ, Rhead B, Rosenbloom KR, Sloan CA, Speir ML, 
-		    Zweig AS, Haussler D, Kuhn RM, Kent WJ.
-		    <A href="http://nar.oxfordjournals.org/content/42/D1/D764.long"
-		    target="_blank">The UCSC Genome Browser database: 2014 update</A>.  
-		    <em>Nucleic Acids Res</em>. 2014 Jan 1;42(1):D764-70. 
+        Rosenbloom KR, Armstrong J, Barber GP, Casper J, Clawson H, Diekhans M,
+        Dreszer TR, Fujita PA, Guruvadoo L, Haeussler M, Harte RA, Heitner S,
+        Hickey G, Hinrichs AS, Hubley R, Karolchik D, Learned K, Lee BT, Li CH,
+        Miga KH, Nguyen N, Paten B, Raney BJ, Smit AF, Speir ML, Zweig AS,
+        Haussler D, Kuhn RM, Kent WJ.
+        <a href="http://nar.oxfordjournals.org/content/43/D1/D670.long"
+        target="_blank"> The UCSC Genome Browser database: 2015 update</a>.
+        <em>Nucleic Acids Res</em>. 2015 Jan;43(Database issue):D670-81.
+        PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/25428374"
+        target="_blank">25428374</a>; PMC: <a
+        href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4383971/"
+        target="_blank">PMC4383971</a>
 		    <BR>
 		    <em>Cite this paper for annotation data extracted from the Genome 
 		    Browser database. Annotation tracks should also be 

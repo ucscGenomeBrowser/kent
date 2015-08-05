@@ -1919,8 +1919,11 @@ else
 	    }
 	}
     }
-assert(qNext == qBlkEnd);
-assert(tNext == tBlkEnd);
+
+if (qNext != qBlkEnd)
+    errAbort("CIGAR query length does not match specified query range %s:%d-%d", qName, qStart, qEnd);
+if (tNext != tBlkEnd)
+    errAbort("CIGAR target length does not match specified target range %s:%d-%d", tName, tStart, tEnd);
 psl->match = totalSize;
 return psl;
 }

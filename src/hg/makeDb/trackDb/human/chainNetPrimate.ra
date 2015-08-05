@@ -139,16 +139,17 @@ html primateChainNet
         type chain calJac3
         otherDb calJac3
 
-        track chainMicMur1
+include chainNetMicMur1.ra beta,public
+include chainNetMicMur2.ra alpha
+
+        track chainTarSyr2
         subTrack primateChainNetViewchain off
-        subGroups view=chain species=aoMouse_lemur clade=afStrepsirrhini
+        subGroups view=chain species=anTarsier clade=aeHaplorrhini
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain micMur1
-        otherDb micMur1
+        type chain tarSyr2
+        otherDb tarSyr2
 
-include chainNetTarSyr1.ra beta,public
-include chainNetTarSyr2.ra alpha
 include chainNetOtoGar1.ra alpha
 include chainNetOtoGar3.ra alpha
 include chainNetRBestOtoGar1.ra alpha
@@ -272,10 +273,10 @@ include chainNetRBestOtoGar3.ra alpha
         type netAlign calJac3 chainCalJac3
         otherDb calJac3
 
-        track netMicMur1
+        track netTarSyr2
         subTrack primateChainNetViewnet off
-        subGroups view=net species=aoMouse_lemur clade=afStrepsirrhini
+        subGroups view=net species=anTarsier clade=aeHaplorrhini
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign micMur1 chainMicMur1
-        otherDb micMur1
+        type netAlign tarSyr2 chainTarSyr2
+        otherDb tarSyr2

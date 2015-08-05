@@ -3331,7 +3331,7 @@ sqlCheckAllowAlphaChars(allowed);
 sqlCheckAllowDigitChars(allowed);
 }
 
-/* Currently used 10 times in the code via define sqlChkIl. */
+/* Currently used 10 times in the code via define sqlCkIl. */
 char *sqlCheckIdentifiersList(char *identifiers)
 /* Check that only valid identifier characters are used in a comma-separated list
  * '.' is allowed also since some code uses it in place of an actual field name.
@@ -3768,6 +3768,25 @@ int sz;
 va_list args;
 va_start(args, format);
 sz = vaSqlSafefFrag(buffer, bufSize, format, args);
+va_end(args);
+return sz;
+}
+
+int sqlSafefAppend(char* buffer, int bufSize, char *format, ...)
+/* Append formatted string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte.
+ * Scans unquoted string parameters for illegal literal sql chars.
+ * Escapes quoted string parameters. 
+ * NOSLQINJ tag is NOT added to beginning since it is assumed to be appended to
+ * a properly created sql string. */
+{
+int sz;
+va_list args;
+int len = strlen(buffer);
+if (len >= bufSize)
+    errAbort("sqlSafefAppend() called on string size %d with bufSize %d too small.", len, bufSize);
+va_start(args, format);
+sz = vaSqlSafefFrag(buffer+len, bufSize-len, format, args);
 va_end(args);
 return sz;
 }

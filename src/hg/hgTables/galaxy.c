@@ -23,6 +23,7 @@
 #include "htmlPage.h"
 #include "wiggle.h"
 #include "trashDir.h"
+#include "hgConfig.h"
 
 
 char *getGalaxyUrl()
@@ -33,8 +34,13 @@ char *url = NULL;
 /* use parameter if available */
 if (cartVarExists(cart, "GALAXY_URL"))
     url = cartString(cart, "GALAXY_URL");
-else
-    url = GALAXY_URL_APP;
+else 
+    {
+    if (cfgOption("galaxyUrl"))
+        url = cfgOption("galaxyUrl");
+    else
+        url = GALAXY_URL_APP;
+    }
 return url;
 }
 

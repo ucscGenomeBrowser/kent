@@ -1,0 +1,60 @@
+#########################################################################
+# SGP GENES (DONE - 2015-07-30 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/sgpGene
+    cd /hive/data/genomes/hg38/bed/sgpGene
+    mkdir genome.crg.es
+    cd genome.crg.es
+    wget --timestamping \
+      http://genome.crg.es/genepredictions/H.sapiens/hg38_x_mm10/SGP/00readme
+time for C in `cut -f1 ../../../chrom.sizes`
+do
+  echo $C
+  wget --timestamping \
+    http://genome.crg.es/genepredictions/H.sapiens/hg38_x_mm10/SGP/${C}.gtf
+  wget --timestamping \
+   http://genome.crg.es/genepredictions/H.sapiens/hg38_x_mm10/SGP/${C}.sgp2.gff3
+done
+    # real    16m38.232s
+
+    cd ..
+    cat genome.crg.es/*.gtf | ldHgGene -gtf -genePredExt hg38 sgpGene stdin
+    # Read 36030 transcripts in 537030 lines in 1 files
+    #   36030 groups 350 seqs 1 sources 3 feature types
+    # 36030 gene predictions
+
+    featureBits -enrichment hg38 refGene:CDS sgpGene
+# refGene:CDS 1.211%, sgpGene 1.284%, both 1.002%, cover 82.76%, enrich 64.43x
+    featureBits -enrichment hg19 refGene:CDS sgpGene
+# refGene:CDS 1.216%, sgpGene 1.295%, both 1.029%, cover 84.56%, enrich 65.28x
+
+###########################################################################
+# GENEID GENE PREDICTIONS (DONE - 2015-07-30 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/hg38/bed/geneid
+    cd /hive/data/genomes/hg38/bed/geneid
+    mkdir genome.crg.es
+    cd genome.crg.es
+    wget --timestamping \
+      http://genome.crg.es/genepredictions/H.sapiens/hg38/geneid_v1.4/00readme
+time for C in `cut -f1 ../../../chrom.sizes`
+do
+  echo $C
+  wget --timestamping \
+    http://genome.crg.es/genepredictions/H.sapiens/hg38/geneid_v1.4/${C}.gtf
+  wget --timestamping \
+    http://genome.crg.es/genepredictions/H.sapiens/hg38/geneid_v1.4/${C}.gff3
+done
+    # real    16m08.759s
+
+    cd ..
+    cat genome.crg.es/*.gtf | ldHgGene -gtf -genePredExt hg38 geneid stdin
+    #   Read 35910 transcripts in 290394 lines in 1 files
+    #     35910 groups 364 seqs 1 sources 3 feature types
+    #   35910 gene predictions
+
+    featureBits -enrichment hg38 refGene:CDS geneid
+  # refGene:CDS 1.211%, geneid 1.352%, both 0.942%, cover 77.80%, enrich 57.56x
+    featureBits -enrichment hg19 refGene:CDS geneid
+  # refGene:CDS 1.216%, geneid 1.363%, both 0.972%, cover 79.87%, enrich 58.59x
+
+##########################################################################

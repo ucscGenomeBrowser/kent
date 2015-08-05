@@ -21,6 +21,16 @@
 	width:100%;
 	min-width:1000px; /* NOTE: must cover all top menu options, else wrapping breaks menu */
 	height:32px;
+	background:#2636d1;
+	font-family: Arial,Helvetica,sans-serif;
+	line-height:19px;
+	font-size:13px;
+	margin:0 0 5px 0;
+}
+#hgTracks-main-menu-whole {
+	width:100%;
+	min-width:1000px; /* NOTE: must cover all top menu options, else wrapping breaks menu */
+	height:32px;
 	background:#00457c;
 	font-family: Arial,Helvetica,sans-serif;
 	line-height:19px;
@@ -363,10 +373,25 @@ span#home-link {
 	display: inline-block;
 	background-image: url("../images/homeIconSprite.png");
 	background-position: 0 -18px;
+	background-color: #2636d1;
+}
+span#hgTracks-home-link {
+	top: -2px;
+	position: relative;
+	text-indent: -9999px;
+	height: 18px;
+	width: 23px;
+	/* margin-right: 1px; */
+	display: inline-block;
+	background-image: url("../images/hgTracksHomeIconSprite.png");
+	background-position: 0 -18px;
 	background-color: #00457c;
 }
 
 span#home-link:hover {
+	background-position: 0 0;
+}
+span#hgTracks-home-link:hover {
 	background-position: 0 0;
 }
 
@@ -384,6 +409,26 @@ ul.nice-menu ul li:hover, ul.nice-menu ul li:active {
 ul.nice-menu ul .noHighlight:hover, ul.nice-menu ul li.noHighlight a:hover {
     color:#121e9b !important;
     background-color: #fff !important;
+}
+
+/* class for inactive (greyed out) dropdown menu items */
+ul.nice-menu ul li.inactive span {
+    cursor: default !important;
+    color:#CCCCCC !important;
+    background-color: #fff !important;
+    display:block;
+    background:none;
+    text-align:left;
+    padding:8px !important;
+    padding-top:5px !important;
+    padding-bottom:5px !important;
+    padding-right:0px;
+    border:0px !important;
+    width:180px;
+    font-size:13px;
+    font-weight:bold;
+    text-transform:capitalize !important;
+    font-family:Arial, Helvetica, sans-serif;
 }
 /************************************/
 
@@ -448,7 +493,7 @@ ul.nice-menu-down li ul li ul {
 
 /* over-riding HGStyle for demo */
 .blueToggleBar {
-    background-color: #00457C;
+    background-color: #00457c;
     color: #FFFFFF;
     font-weight: bold;
     height: 28px;

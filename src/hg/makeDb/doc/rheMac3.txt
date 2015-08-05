@@ -1222,3 +1222,22 @@ done
     # verify the track link to INSDC functions
 
 ##############################################################################
+# GENEID GENE PREDICTIONS (DONE - 2015-07-31 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/rheMac3/bed/geneid
+    cd /hive/data/genomes/rheMac3/bed/geneid
+    wget --timestamping \
+http://genome.crg.es/genepredictions/M.mulatta/rheMac3/geneid_v1.4/00README
+    wget --timestamping \
+http://genome.crg.es/genepredictions/M.mulatta/rheMac3/geneid_v1.4/rheMac3.geneid.gtf
+
+    ldHgGene -gtf -genePredExt rheMac3 geneid rheMac3.geneid.gtf
+    # Read 57842 transcripts in 303973 lines in 1 files
+    #  57842 groups 28416 seqs 1 sources 3 feature types
+    # 57842 gene predictions
+
+    featureBits -enrichment rheMac3 augustusGene:CDS geneid
+# augustusGene:CDS 1.177%, geneid 1.378%, both 0.962%, cover 81.74%,
+#    enrich 59.31x
+
+##########################################################################

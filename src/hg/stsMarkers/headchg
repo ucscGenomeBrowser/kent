@@ -1,5 +1,8 @@
-#! /usr/local/bin/perl
-$RCS_ID = '$Id: headchg,v 1.1 2006/09/08 19:05:53 hiram Exp $' ;
+#!/usr/bin/env perl
+
+# DO NOT EDIT the /cluster/bin/scripts copy of this file --
+# edit ~/kent/src/hg/stsMarkers/headchg instead.
+
 $0 =~ s-.*/-- ;
 $HelpInfo = <<EOH ;
 
@@ -42,7 +45,6 @@ This operator reads an rdbtable via STDIN (except in the case of the '-gen'
 option) and writes an rdbtable via STDOUT.  Options may be abbreviated.
 Uses the RDB operator: valid.
 
-$RCS_ID
 EOH
 $COMM++ ;	# default doc included
 while ( $ARGV[0] =~ /^-/ ) {				# Get args

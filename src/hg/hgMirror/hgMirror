@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
 
 # A little CGI interface to download the tables for a set of tracks via udr 
 # to local machine. This is mostly useful when setting up a mirror or a VM
@@ -39,7 +39,7 @@ import cgitb; cgitb.enable()
 
 # these are default python modules on python 2.7, no errors expected here
 import urllib, urllib2, zlib, collections, StringIO, gzip, string, sys, os, random, \
-    subprocess, re, types, socket, cPickle, copy
+    subprocess, re, types, socket, cPickle, copy, glob
 
 from collections import defaultdict, namedtuple
 from os.path import *
@@ -64,6 +64,9 @@ APACHEUSER = "www-data"
 
 # optional file with rows to add to tableList
 TABLELISTADD = "/root/tableListAdd.hg19.tab"
+
+# directory for temporary files, keep trailing slash
+TMPDIR = "/tmp/hgMirror/"
 
 #DEBUG=True
 DEBUG=False
@@ -107,8 +110,9 @@ def parseConf(fname):
             continue
         elif line.startswith("include "):
             inclFname = line.split()[1]
-            if isfile(inclFname):
-                inclDict = parseConf(inclFname)
+            inclPath = abspath(join(dirname(fname), inclFname))
+            if isfile(inclPath):
+                inclDict = parseConf(inclPath)
                 conf.update(inclDict)
         elif "=" in line: # string search for "="
             key, value = line.split("=")
@@ -200,7 +204,7 @@ def downloadTable(db, table):
 
     # read the tab-sep data
     # can use a cached copy from /tmp
-    tmpFname = "/tmp/"+db+"."+table+".txt.gz"
+    tmpFname = TMPDIR+db+"."+table+".txt.gz"
     if isfile(tmpFname):
         data = open(tmpFname)
     else:
@@ -528,9 +532,9 @@ def makeTableFileList(jobId, db, trackNames, trackTables, trackChildren, tableTo
 
     special handling for "defaultConsTables"
     """
-    outFname = "/tmp/%s_mysql_filesToDownload.txt" % jobId
+    outFname = TMPDIR+"%s_mysql_filesToDownload.txt" % jobId
     mysqlListFh = open(outFname, "w")
-    gbdbListFname = "/tmp/%d_gbdb_filesToDownload.txt" % jobId
+    gbdbListFname = TMPDIR+"%d_gbdb_filesToDownload.txt" % jobId
     gbdbListFh = open(gbdbListFname, "w")
 
     # write table and gbdb files names to two different files, one for mysql rsync, one for gbdb rsync
@@ -561,7 +565,7 @@ def makeTableFileList(jobId, db, trackNames, trackTables, trackChildren, tableTo
     gbdbListFh.close()
 
     # same thing for files in hgFixed
-    fixListFname = "/tmp/%d_hgFixed_filesToDownload.txt" % jobId
+    fixListFname = TMPDIR+"%d_hgFixed_filesToDownload.txt" % jobId
     ofh = open(fixListFname, "w")
     for table in FORCEFIXED:
         for ext in [".MYD", ".MYI", ".frm"]:
@@ -640,7 +644,7 @@ def printTrackInfo(db, trackName, trackTables, trackLabels, localSizes, trackChi
 def getRevokedTracks(db):
     " many encode tracks have been revoked or renamed. We ignore them. "
     
-    outFname = join("/tmp/%s.revokedTrackes" % db)
+    outFname = join(TMPDIR,"%s.revokedTrackes" % db)
     if isfile(outFname):
         tables = set(open(outFname).read().splitlines())
     else:
@@ -699,7 +703,7 @@ def printHiddenForm(clade, org, db):
 
 def getHgDownloadDbs():
    " get all dbs available from hgdownload "
-   fname = "/tmp/hgdownload.dbs.txt"
+   fname = TMPDIR+"hgdownload.dbs.txt"
    if not isfile(fname):
        proc = subprocess.Popen(['rsync','hgdownload.soe.ucsc.edu::mysql'],stdout=subprocess.PIPE)
        dbs = set()
@@ -713,11 +717,12 @@ def getHgDownloadDbs():
 
 def getOrgInfo(validDbs):
     " get db info, either from local db or cached version "
-    fname = "/tmp/orgInfo.cache"
+    fname = TMPDIR+"orgInfo.cache"
     if isfile(fname):
          return cPickle.load(open(fname))
 
-    conn = sqlConnect("hgcentral", "local")
+    defaultClade = "mammal"
+    conn = sqlConnect(hgConf.get("central.db", "hgcentral"), "local")
     cur = conn.cursor()
     # list of all clade descriptions ("mammal", "Mammal"), ...
     cladeList = []
@@ -727,10 +732,32 @@ def getOrgInfo(validDbs):
 
     # dict of clade -> list (orgName, orgName)
     cladeToOrgs = defaultdict(list)
-    cur.execute('SELECT clade, genome FROM genomeClade ORDER BY priority')
+    #cur.execute('SELECT clade, genome FROM genomeClade ORDER BY genome')
+    cur.execute('SELECT clade, genomeClade.genome, name FROM genomeClade, dbDb where dbDb.genome=genomeClade.genome ORDER BY orderKey;')
+    doneOrgs = set()
     for row in cur.fetchall():
+        clade, genome, name = row
+        if genome=="Human" and not clade=="model": # model is broken on hgwdev right now
+            defaultClade = clade
+        if row[2] not in validDbs:
+            continue
+
+        if row[1] in doneOrgs:
+            continue
+        else:
             cladeToOrgs[row[0]].append((row[1], row[1]))
-            #orgList.append((row[0], row[0]))
+            doneOrgs.add(row[1])
+
+    # default genome per clade = the one with the lowest priority
+    cladeToBestOrg = dict()
+    cur.execute('SELECT clade, genome, priority FROM genomeClade;')
+    cladePriorityMax = dict()
+    for row in cur.fetchall():
+            clade, genome, priority = row
+            if priority < cladePriorityMax.get(clade, 99999):
+                cladeToBestOrg[clade]=genome
+                cladePriorityMax[clade] = priority
+
 
     # dict of orgName -> list of (db, description)
     # SELECT genome, name FROM dbDb order by orderKey;
@@ -748,6 +775,10 @@ def getOrgInfo(validDbs):
     cur.execute('SELECT genome, name FROM defaultDb')
     for row in cur.fetchall():
         orgToBestDb[row[0]] = row[1]
+    # add every genome that has only one db
+    for org, dbs in orgToDbs.iteritems():
+        if len(dbs)==1 and org not in orgToBestDb:
+            orgToBestDb[org] = dbs[0][0]
 
     cur.close()
     conn.close()
@@ -758,6 +789,8 @@ def getOrgInfo(validDbs):
     orgInfo["cladeToOrgs"] = cladeToOrgs
     orgInfo["orgToDbs"] = orgToDbs
     orgInfo["orgToBestDb"] = orgToBestDb
+    orgInfo["cladeToBestOrg"] = cladeToBestOrg
+    orgInfo["defaultClade"] = defaultClade
     
     cPickle.dump(orgInfo, open(fname, "w"))
     return orgInfo
@@ -771,19 +804,35 @@ def getCladeAssemblyDb(clade, org, db):
         print("<small>info: MySQLDb not installed, cannot retrieve hgcentral.dbDb, using internal defaults</small>")
         orgInfo = {}
         orgInfo["clades"] = [("mammal", "Mammal")]
-        orgInfo["cladeToOrg"] = {"mammal":"Human"}
+        orgInfo["cladeToOrgs"] = {"mammal":[("Human", "Human")]}
+        orgInfo["cladeToBestOrg"] = {"mammal":"Human"}
         orgInfo["orgToDbs"] = {"Human":["hg19"]}
         orgInfo["dbs"] = [("hg19", "Human (GrCh37)"), ("mm9", "Mouse (NCBI37)")]
 
         return orgInfo, "mammal", "Human", "hg19"
-
+    
     validDbs = getHgDownloadDbs()
     orgInfo = getOrgInfo(validDbs)
 
+    if db is not None and clade is None and org is None:
+        dbToClade = dict()
+        # search to the right org for this db
+        for o, dbList in orgInfo["orgToDbs"].items():
+            for orgDb, desc in dbList:
+                if orgDb==db:
+                    org = o
+                    break
+        # search to the right clade for this org
+        for c, orgList in orgInfo["cladeToOrgs"].items():
+            for o, _ in orgList:
+                if o==org:
+                    clade = c
+                    break
+
     if clade is None or clade=="0":
-        clade = "mammal"
+        clade = orgInfo["defaultClade"]
     if org is None or org=="0" and clade not in [None, "0"]:
-        org = orgInfo["cladeToOrgs"][clade][0][0]
+        org = orgInfo["cladeToBestOrg"][clade]
 
     if (db==None or db=="0"):
         if org not in orgInfo["orgToBestDb"]:
@@ -832,10 +881,10 @@ def htmlTrackTable(db, trackLabels, trackTables, \
     print '<input type="submit" name="submit" value="Download"></input>'
 
     if showSubtracks:
-        print '<a href="%s">hide subtracks and show predefined groups</a><br>' % myUrl
+        print '<a href="%s?db=%s">hide subtracks and show predefined groups</a><br>' % (myUrl, db)
         del groupToTopTracks["special"]
     else:
-        print '<a href="%s?showSubtracks=1">show subtracks</a><br>' % myUrl
+        print '<a href="%s?db=%s&showSubtracks=1">show subtracks</a><br>' % (myUrl, db)
 
     print "<h4>Track groups</h4>"
     print "<ul>"
@@ -862,7 +911,7 @@ def htmlTrackTable(db, trackLabels, trackTables, \
 
 def downloadCache(url, cacheFname):
     " download file from url or open local cached copy. Return list of lines "
-    cachePath = "/tmp/"+cacheFname
+    cachePath = TMPDIR+cacheFname
     if isfile(cachePath):
         return open(cachePath).read().splitlines()
 
@@ -1003,7 +1052,7 @@ def getRsyncSizes(dataType, db):
     if dataType is "gbdb": return dict with filaname:size for given db
     """
     # run rsync command
-    tmpFname = "/tmp/%s_%s.rsync.txt" % (dataType, db)
+    tmpFname = TMPDIR+"%s_%s.rsync.txt" % (dataType, db)
     if not isfile(tmpFname):
         cmd = "rsync -nav rsync://hgdownload.cse.ucsc.edu/%s/%s/ > %s.new && mv %s.new %s" % (dataType, db, tmpFname, tmpFname, tmpFname)
         ret = runCmd(cmd, mustRun=False)
@@ -1083,7 +1132,7 @@ def udrIsUsable():
         return False
 
     # created by /etc/rc.local
-    if isfile("/tmp/useUdr"):
+    if isfile(TMPDIR+"useUdr"):
         return True
 
     return False
@@ -1105,13 +1154,13 @@ def runRsyncJobs(jobId, db, listFname, gbdbListFname, fixedFname):
     " run rsync, redirect stdout and return the ID of the stdout log file "
     localDbDir = join(MYSQLDIR, db)
     localFixedDir = join(MYSQLDIR, "hgFixed")
-    jobFname = "/tmp/%d.sh" % jobId
-    logFname = "/tmp/%d.log" % jobId
+    jobFname = TMPDIR+"%d.sh" % jobId
+    logFname = TMPDIR+"%d.log" % jobId
 
     # write job script
     cmdFh = open(jobFname, "w")
 
-    cmdFh.write("ps -o pgid= -p $$ > /tmp/lastJob.pid\n")
+    cmdFh.write("ps -o pgid= -p $$ > %slastJob.pid\n" % TMPDIR)
 
     cmd = "sudo service mysql stop\n"
     cmdFh.write(cmd)
@@ -1144,13 +1193,13 @@ def runRsyncJobs(jobId, db, listFname, gbdbListFname, fixedFname):
     cmd = "at now -M -f %s" % jobFname
 
     # write commands to log file
-    logFh = open("/tmp/%d.log" % jobId, "w")
+    logFh = open(TMPDIR+"%d.log" % jobId, "w")
     logFh.write(open(jobFname).read())
     logFh.write("\nrsync output:\n")
     logFh.close()
 
     # write jobId to status file
-    idFh = open("/tmp/lastJob.log", "w")
+    idFh = open(TMPDIR+"lastJob.log", "w")
     idFh.write(str(jobId))
     idFh.close()
 
@@ -1174,15 +1223,15 @@ def refreshPage(paramStr, delay=5, addNote=False):
 
 def jobsAreDone():
     " True if no jobs currently in the 'at' queue "
-    cmd = "at -l | wc -l > /tmp/atWc.txt"
+    cmd = "at -l | wc -l > %satWc.txt" % TMPDIR
     runCmd(cmd)
-    lineCount = int(open("/tmp/atWc.txt").read().strip())
-    os.remove("/tmp/atWc.txt")
+    lineCount = int(open(TMPDIR+"atWc.txt").read().strip())
+    os.remove(TMPDIR+"atWc.txt")
     return lineCount==0
 
 def printLog(jobId):
     " print rsync log for given jobId to stdout "
-    jobFname = "/tmp/%d.log" % int(jobId)
+    jobFname = TMPDIR+"%d.log" % int(jobId)
 
     print "rsync download commands:<p>"
     print "<pre>"
@@ -1265,7 +1314,7 @@ def getLocalSizes(db):
     if runningAtUcsc():
         return sizes
 
-    sqlFname = '/tmp/localMysqlDirList.txt'
+    sqlFname = TMPDIR+'localMysqlDirList.txt'
     cmd = 'sudo -u mysql /bin/ls -l %s > %s' % (path, sqlFname)
     ret = runCmd(cmd, mustRun=False)
     if ret!=0:
@@ -1287,7 +1336,7 @@ def getLocalSizes(db):
     gbdbDir = join(getGbdbDir(), db)
     if isdir(gbdbDir):
         # get the size of all gbdb files
-        gbdbFname = '/tmp/localGbdbDirList.txt'
+        gbdbFname = TMPDIR+'localGbdbDirList.txt'
         # trailing slash is important
         cmd = 'find %s/ -type f > %s ' % (gbdbDir, gbdbFname)
         runCmd(cmd)
@@ -1471,8 +1520,8 @@ def stopAllJobs():
     cmd = "atrm `at -l | cut -f1`"
     runCmd(cmd)
 
-    if isfile("/tmp/lastJob.pid"):
-        lastPid = open("/tmp/lastJob.pid").read().strip()
+    if isfile(TMPDIR+"lastJob.pid"):
+        lastPid = open(TMPDIR+"lastJob.pid").read().strip()
         cmd = "sudo kill -- -%s" % lastPid
         runCmd(cmd)
     
@@ -1481,7 +1530,7 @@ def assertEmptyQueue():
     if jobsAreDone():
         return
 
-    jobId = open("/tmp/lastJob.log").read()
+    jobId = open(TMPDIR+"lastJob.log").read()
     print "There is still a download job running<br>"
     print '<a href="hgMirror?jobId=%s">Show download job</a>' % jobId
     sys.exit(0)
@@ -1591,7 +1640,7 @@ def htmlMiddle(args):
 
     if not "jobId" in args.keys():
         # load all the trackDb info, track<->file relationships and file sizes
-        cacheFname = "/tmp/%s.trackDataCache" % db
+        cacheFname = TMPDIR+"%s.trackDataCache" % db
         marshalError = False
         if isfile(cacheFname):
             # use cached results, if we have them
@@ -1722,7 +1771,7 @@ def htmlMiddle(args):
 
 def getAllLocalDbs():
     " return list of locally present DBs "
-    conn = sqlConnect("hgcentral", "local")
+    conn = sqlConnect(parseHgConf().get("central.db", "hgcentral"), "local")
     cur = conn.cursor()
     cur.execute("SHOW DATABASES")
     rows =  cur.fetchall()
@@ -1738,6 +1787,9 @@ def getAllLocalDbs():
 def main():
     # hide some tracks if any argument specified. makes this tool usable from command line, 
     # from cronjobs that only need to run this function
+    if not isdir(TMPDIR):
+        os.makedirs(TMPDIR)
+
     if len(sys.argv)>1:
         dbSet = getAllLocalDbs()
         for db in dbSet:
@@ -1749,7 +1801,7 @@ def main():
     print
 
     parseHgConf()
-    if hgConf==None or not hgConf.get("allowHgMirror", "0").lower() in ["1", "yes", "true"]:
+    if hgConf==None or not hgConf.get("allowHgMirror", "0").lower() in ["1", "yes", "true", "on"]:
         print("hgMirror is not activated on this machine<br>")
         print("Set allowHgMirror=1 in your cgi-bin/hg.conf file.<br>")
         print("In the Genome-Browser-in-a-box VM, use the command gbibMirrorTracksOn.")
@@ -1760,6 +1812,13 @@ def main():
     if "debug" in args.keys():
         global DEBUG
         DEBUG = True
+
+    if "reset" in args.keys():
+        for fname in glob.glob(TMPDIR+"*"):
+            os.remove(fname)
+        os.rmdir(TMPDIR)
+        print "temporary files deleted"
+        sys.exit(0)
 
     htmlHeader()
     htmlMiddle(args)

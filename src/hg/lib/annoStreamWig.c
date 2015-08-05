@@ -12,7 +12,10 @@ char *annoRowWigAsText =
 "table annoRowWig\n"
 "\"autoSql description of a single annoRowWig value, for filtering\"\n"
 "    (\n"
-"    float  value;  \"data value for this range\"\n"
+"    string chrom;     \"Reference sequence chromosome or scaffold\"\n"
+"    uint chromStart;  \"Start position in chromosome\"\n"
+"    uint chromEnd;    \"End position in chromosome\"\n"
+"    float value;      \"data value for this range\"\n"
 "    )\n"
     ;
 
@@ -21,8 +24,8 @@ struct annoStreamWig
     struct annoStreamer streamer;	// Parent class members & methods / external interface
     // Private members
     struct annoStreamer *wigStr;	// Internal streamer for .wig as in wiggle db tables
-    FILE *wibF;				// wib file handle
-    char *wibFile;			// name of wib file on which wibF was opened
+    struct udcFile *wibFH;		// wib file udcFile handle
+    char *wibFile;			// name of wib file on which wibFH was opened
     };
 
 static void aswSetRegion(struct annoStreamer *vSelf, char *chrom, uint regionStart, uint regionEnd)
@@ -37,13 +40,17 @@ static void checkWibFile(struct annoStreamWig *self, char *wibFile)
 /* If self doesn't have a .wib file name and handle open, or if the new wibFile is
  * not the same as the old one, update self to use new wibFile. */
 {
-if (self->wibFile == NULL || !sameString(self->wibFile, wibFile))
+char *realWibFile = hReplaceGbdb(wibFile);
+if (self->wibFile == NULL || !sameString(self->wibFile, realWibFile))
     {
-    carefulClose(&(self->wibF));
+    udcFileClose(&self->wibFH);
     freeMem(self->wibFile);
-    self->wibFile = cloneString(wibFile);
-    self->wibF = mustOpen(self->wibFile, "r");
+    self->wibFile = cloneString(realWibFile);
+    self->wibFH = udcFileMayOpen(self->wibFile, NULL);
+    if (self->wibFH == NULL)
+        errAbort("annoStreamWig: udc can't open wibFile '%s'", self->wibFile);
     }
+freeMem(realWibFile);
 }
 
 static void paranoidCheckSize(struct annoStreamWig *self, struct wiggle *wiggle)
@@ -60,12 +67,13 @@ static void getFloatArray(struct annoStreamWig *self, struct wiggle *wiggle,
 			  boolean *retRightFail, int *retValidCount, float *vector)
 /* expand wiggle bytes & spans to per-bp floats; filter values here! */
 {
-fseek(self->wibF, wiggle->offset, SEEK_SET);
+udcSeek(self->wibFH, wiggle->offset);
 UBYTE wigBuf[wiggle->count];
-size_t bytesRead = fread(wigBuf, 1, wiggle->count, self->wibF);
-if (bytesRead != wiggle->count)
-    errnoAbort("annoStreamWig: failed to read %u bytes from %s (got %llu)\n",
-	       wiggle->count, wiggle->file, (unsigned long long)bytesRead);
+size_t expectedBytes = sizeof(wigBuf);
+size_t bytesRead = udcRead(self->wibFH, wigBuf, expectedBytes);
+if (bytesRead != expectedBytes)
+    errnoAbort("annoStreamWig: failed to udcRead %llu bytes from %s (got %llu)\n",
+	       (unsigned long long)expectedBytes, wiggle->file, (unsigned long long)bytesRead);
 paranoidCheckSize(self, wiggle);
 int i, j, validCount = 0;
 for (i = 0;  i < wiggle->count;  i++)
@@ -126,7 +134,7 @@ static void aswClose(struct annoStreamer **pVSelf)
 if (pVSelf == NULL)
     return;
 struct annoStreamWig *self = *(struct annoStreamWig **)pVSelf;
-carefulClose(&(self->wibF));
+udcFileClose(&(self->wibFH));
 freeMem(self->wibFile);
 annoStreamerFree(pVSelf);
 }

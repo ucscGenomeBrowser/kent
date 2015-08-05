@@ -5,8 +5,8 @@
 track wgEncodeGencodeV22
 compositeTrack on
 superTrack wgEncodeGencodeSuper pack
-shortLabel GENCODE V22 (Ensembl 79)
-longLabel Gene Annotations from GENCODE Version 22 (Ensembl 79)
+shortLabel All GENCODE v22
+longLabel All GENCODE transcripts including comprehensive set v22
 group genes
 dragAndDrop subTracks
 priority 34.183
@@ -101,7 +101,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV22
     
     track wgEncodeGencodeV22View2Way 
     shortLabel 2-Way
-    view 42-Way 
+    view b2-way
     visibility hide
     subTrack wgEncodeGencodeV22
     type genePred

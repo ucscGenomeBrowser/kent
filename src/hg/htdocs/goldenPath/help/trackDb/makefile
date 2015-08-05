@@ -1,8 +1,18 @@
 include ../../../../../inc/common.mk
 
+CPFLAGS = -p --remove-destination
+
 # copies files to hgwdev or sandbox
 
 TDOC_DIR=goldenPath/help/trackDb/
+
+# when hub spec is versioned, increment version (e.g. change v0 to v1 (or v0a)), 
+#   checkin new file (e.g. trackDbHub.v1.html), and add to file list
+
+CURRENT_HUB_SPEC=v1
+
+HUB_SPEC_FILES= trackDbHub.v0.html \
+		trackDbHub.v1.html
 
 user:
 	if test -d ${DOCUMENTROOT}-${USER}; then \
@@ -20,8 +30,13 @@ clean:
 install:
 	${MAKE} doInstall DEST=${DOCUMENTROOT}/${TDOC_DIR}
 
+
+
 doInstall:
-	cp trackDbLibrary.shtml ${DEST}
-	cp trackDbDoc.js ${DEST}
-	cp trackDbDoc.css ${DEST}
-	cp *.html ${DEST}
+	echo ${CURRENT_HUB_SPEC}
+	cp ${CPFLAGS} trackDbLibrary.shtml ${DEST}
+	cp ${CPFLAGS} trackDbDoc.js ${DEST}
+	cp ${CPFLAGS} trackDbDoc.css ${DEST}
+	cp ${CPFLAGS} trackDbDoc.html ${DEST}
+	cp ${CPFLAGS} trackDbHub.html ${DEST}
+	cp ${CPFLAGS} ${HUB_SPEC_FILES} ${DEST}

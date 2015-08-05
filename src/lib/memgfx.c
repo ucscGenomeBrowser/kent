@@ -13,10 +13,8 @@
 #include "colHash.h"
 
 
-
 Color multiply(Color src, Color new)
 {
-#ifdef COLOR32
 unsigned char rs = (src >> 0) & 0xff;
 unsigned char gs = (src >> 8) & 0xff;
 unsigned char bs = (src >> 16) & 0xff;
@@ -28,12 +26,7 @@ unsigned char ro = ((unsigned) rn * rs) / 255;
 unsigned char go = ((unsigned) gn * gs) / 255;
 unsigned char bo = ((unsigned) bn * bs) / 255;
 return MAKECOLOR_32(ro, go, bo);
-#else
-/* no multiply write mode in 8 bit */
-return new;
-#endif /* COLOR32 */
 }
-
 
 #ifndef min3
 #define min3(x,y,z) (min(x,min(y,z)))
@@ -55,20 +48,8 @@ Color *pt = _mgPixAdr(mg,x,y);
 static void mgSetDefaultColorMap(struct memGfx *mg)
 /* Set up default color map for a memGfx. */
 {
-#ifdef COLOR32
     return;
-#else
-
-/* Note dependency in order here and in MG_WHITE, MG_BLACK, etc. */
-int i;
-for (i=0; i<ArraySize(mgFixedColors); ++i)
-    {
-    struct rgbColor *c = &mgFixedColors[i];
-    mgAddColor(mg, c->r, c->g, c->b);
-    }
-#endif
 }
-
 
 
 void mgSetWriteMode(struct memGfx *mg, unsigned int writeMode)
@@ -112,9 +93,6 @@ mg = needMem(sizeof(*mg));
 mg->width = width;
 mg->height = height;
 mg->pixels = needLargeMem(width*height*sizeof(Color));
-#ifndef COLOR32
-mg->colorHash = colHashNew();
-#endif
 mgSetDefaultColorMap(mg);
 mgUnclip(mg);
 return mg;
@@ -123,17 +101,12 @@ return mg;
 void mgClearPixels(struct memGfx *mg)
 /* Set all pixels to background. */
 {
-#ifdef COLOR32
 memset((unsigned char *)mg->pixels, 0xff, mg->width*mg->height*sizeof(unsigned int));
-#else
-zeroBytes(mg->pixels, mg->width*mg->height);
-#endif
 }
 
 void mgClearPixelsTrans(struct memGfx *mg)
 /* Set all pixels to transparent. */
 {
-#ifdef COLOR32
 unsigned int *ptr = mg->pixels;
 unsigned int *lastPtr = &mg->pixels[mg->width * mg->height];
 for(; ptr < lastPtr; ptr++)
@@ -142,10 +115,6 @@ for(; ptr < lastPtr; ptr++)
 #else
     *ptr = 0x00ffffff;  // transparent white
 #endif
-
-#else
-zeroBytes(mg->pixels, mg->width*mg->height);
-#endif
 }
 
 Color mgFindColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
@@ -153,23 +122,13 @@ Color mgFindColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned 
  * already exist in color map and there's room, it will create
  * exact color in map. */
 {
-#ifdef COLOR32
 return MAKECOLOR_32(r,g,b);
-#else
-struct colHashEl *che;
-if ((che = colHashLookup(mg->colorHash, r, g, b)) != NULL)
-    return che->ix;
-if (mgColorsFree(mg))
-    return mgAddColor(mg, r, g, b);
-return mgClosestColor(mg, r, g, b);
-#endif
 }
 
 
 struct rgbColor mgColorIxToRgb(struct memGfx *mg, int colorIx)
 /* Return rgb value at color index. */
 {
-#ifdef COLOR32
 static struct rgbColor rgb;
 #ifdef MEMGFX_BIGENDIAN
 rgb.r = (colorIx >> 24) & 0xff;
@@ -180,72 +139,26 @@ rgb.r = (colorIx >> 0) & 0xff;
 rgb.g = (colorIx >> 8) & 0xff;
 rgb.b = (colorIx >> 16) & 0xff;
 #endif
-
 return rgb;
-#else
-return mg->colorMap[colorIx];
-#endif
 }
 
 Color mgClosestColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
 /* Returns closest color in color map to r,g,b */
 {
-#ifdef COLOR32
 return MAKECOLOR_32(r,g,b);
-#else
-struct rgbColor *c = mg->colorMap;
-int closestDist = 0x7fffffff;
-int closestIx = -1;
-int dist, dif;
-int i;
-for (i=0; i<mg->colorsUsed; ++i)
-    {
-    dif = c->r - r;
-    dist = dif*dif;
-    dif = c->g - g;
-    dist += dif*dif;
-    dif = c->b - b;
-    dist += dif*dif;
-    if (dist < closestDist)
-        {
-        closestDist = dist;
-        closestIx = i;
-        }
-    ++c;
-    }
-return closestIx;
-#endif
 }
 
 
 Color mgAddColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
 /* Adds color to end of color map if there's room. */
 {
-#ifdef COLOR32
 return MAKECOLOR_32(r,g,b);
-#else
-int colIx = mg->colorsUsed;
-if (colIx < 256)
-    {
-    struct rgbColor *c = mg->colorMap + mg->colorsUsed;
-    c->r = r;
-    c->g = g;
-    c->b = b;
-    mg->colorsUsed += 1;
-    colHashAdd(mg->colorHash, r, g, b, colIx);
-    }
-return (Color)colIx;
-#endif
 }
 
 int mgColorsFree(struct memGfx *mg)
 /* Returns # of unused colors in color map. */
 {
-#ifdef COLOR32
 return 1 << 23;
-#else
-return 256-mg->colorsUsed;
-#endif
 }
 
 void mgFree(struct memGfx **pmg)

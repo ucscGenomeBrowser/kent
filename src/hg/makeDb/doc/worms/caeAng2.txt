@@ -1,0 +1,458 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes how the browser for C. angaria WS245 version is built
+
+##############################################################################
+# download sequence, create UCSC sequence (DONE - 2015-06-24 - Hiram)
+    mkdir -p /hive/data/genomes/caeAng2/ws245
+    cd /hive/data/genomes/caeAng2/ws245
+
+    wget --no-parent --timestamping -m -nH --cut-dirs=6 \
+ftp://ftp.sanger.ac.uk/pub/wormbase/releases/WS245/species/PRJNA51225
+
+    mkdir /hive/data/genomes/caeAng2/ucsc
+    cd /hive/data/genomes/caeAng2/ucsc
+    # WormBase contig names are of the pattern:
+# >Cang_2012_03_13_00001  867,759 nt
+# >Cang_2012_03_13_00002  637,461 nt
+#   ...
+
+    # converting to a name without the underscore:
+    zcat ../ws245/PRJNA51225/c_angaria.PRJNA51225.WS245.genomic.fa.gz \
+      | sed -e 's/^>Cang_2012_03_13_/>ws245Scaffold/; s/ .*//;' \
+        | gzip -c > caeAng2.fa.gz
+
+    hgFakeAgp caeAng2.fa.gz caeAng2.agp
+
+#############################################################################
+#  Initial database build (DONE - 2015-06-26 - Hiram)
+
+    cd /hive/data/genomes/caeAng2
+    cat << '_EOF_' > caeAng2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db caeAng2
+clade worm
+# genomeCladePriority 70
+scientificName Caenorhabditis angaria
+commonName C. angaria
+assemblyDate Mar. 2012
+assemblyShortLabel WS245
+assemblyLabel Division of Biology, California Institute of Technology
+orderKey 3004
+mitoAcc none
+fastaFiles /hive/data/genomes/caeAng2/ucsc/caeAng2.fa.gz
+agpFiles /hive/data/genomes/caeAng2/ucsc/caeAng2.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL https://www.wormbase.org/species/c_angaria#0--10
+photoCreditName reference to WormBase C. angaria
+ncbiGenomeId 3127
+ncbiAssemblyId 200968
+ncbiAssemblyName Cang2012_03_13
+ncbiBioProject 51225
+genBankAccessionID GCA_000165025.1
+taxId 860376
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp caeAng2.config.ra) > agp.log 2>&1
+    # *** All done!  (through the 'agp' step)
+    # real    0m33.948s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db caeAng2.config.ra) > db.log 2>&1
+    # real    1m36.522s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2015-06-26 - Hiram)
+    mkdir /hive/data/genomes/caeAng2/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/caeAng2/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/caeAng2/caeAng2.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku caeAng2) > do.log 2>&1
+XXX - running - Tue Jun 30 09:54:51 PDT 2015
+    # real    16m17.756s
+
+    cat fb.caeAng2.cpgIslandExtUnmasked.txt
+    # 80597444 bases of 1977771384 (4.075%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-06-30 - Hiram)
+    mkdir /hive/data/genomes/caeAng2/bed/cytoBand
+    cd /hive/data/genomes/caeAng2/bed/cytoBand
+    makeCytoBandIdeo.csh caeAng2
+
+#########################################################################
+# ucscToINSDC table/track (TBD - 2015-03-20 - Hiram)
+    mkdir /hive/data/genomes/caeAng2/bed/ucscToINSDC
+    cd /hive/data/genomes/caeAng2/bed/ucscToINSDC
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+       ../../genbank/GCA_*assembly_structure/Primary_Assembly
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    # 25187 name.coordinate.tab
+    # 25187 ucscToINSDC.bed
+    # 25187 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab caeAng2 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords caeAng2
+    # should cover %100 entirely:
+    featureBits -countGaps caeAng2 ucscToINSDC
+    # 2053849526 bases of 2053849526 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2015-06-30 - Hiram)
+    hgsql -N -e "select frag from gold;" caeAng2 | sort | head -1
+Cang_2012_03_13_00001_1
+
+    hgsql -N -e "select frag from gold;" caeAng2 | sort | tail -2
+Cang_2012_03_13_34620_1
+Cang_2012_03_13_34621_1
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" caeAng2 | wc -l
+    # 65510
+
+    hgsql -N -e "select frag from gold;" caeAng2 \
+       | egrep -e 'Cang_2012_03_13_[0-9]+(\_1)?' | wc -l
+    # 65510
+
+    hgsql -N -e "select frag from gold;" caeAng2 \
+       | egrep -v -e 'Cang_2012_03_13_[0-9]+(\_1)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/worm/caeAng2/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex Cang_2012_03_13_[0-9]+(\_1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+##########################################################################
+# running repeat masker (DONE - 2015-06-30 - Hiram)
+    mkdir /hive/data/genomes/caeAng2/bed/repeatMasker
+    cd /hive/data/genomes/caeAng2/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku caeAng2) > do.log 2>&1
+    # real    218m26.151s
+
+    cat faSize.rmsk.txt
+    # 105997628 bases (11442593 N's 94555035 real 92971538 upper
+    #    1583497 lower) in 34621 sequences in 1 files
+    #  Total size: mean 3061.7 sd 18325.0 min 200 (Cang_2012_03_13_34621)
+    #    max 867759 (Cang_2012_03_13_00001) median 356
+    #  %1.49 masked total, %1.67 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;    
+
+    time featureBits -countGaps caeAng2 rmsk
+    # 1583946 bases of 105997628 (1.494%) in intersection
+    #   real    0m8.082s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2015-06-30 - Hiram)
+
+    mkdir /hive/data/genomes/caeAng2/bed/simpleRepeat
+    cd /hive/data/genomes/caeAng2/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        caeAng2) > do.log 2>&1
+    # real    20m27.388s
+
+    cat fb.simpleRepeat
+    # 6116863 bases of 95237926 (6.423%) in intersection
+
+    # using the Window Masker result as indicated below
+
+##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-06-30 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/caeAng2/bed/microsat
+     cd /cluster/data/caeAng2/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed caeAng2 microsat microsat.bed
+    #	Read 30 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2015-06-30 - Hiram)
+
+    mkdir /hive/data/genomes/caeAng2/bed/windowMasker
+    cd /hive/data/genomes/caeAng2/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev caeAng2) > do.log 2>&1
+    # real    16m56.872s
+
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -continue=cleanup -dbHost=hgwdev caeAng2) > cleanup.log 2>&1
+    # real    0m10.219s
+
+    # Masking statistics
+    cat faSize.caeAng2.cleanWMSdust.txt
+    # 105997628 bases (11442593 N's 94555035 real 56870098 upper 37684937
+    #    lower) in 34621 sequences in 1 files
+    # Total size: mean 3061.7 sd 18325.0 min 200 (Cang_2012_03_13_34621)
+    #    max 867759 (Cang_2012_03_13_00001) median 356
+    # %35.55 masked total, %39.86 masked real
+
+    cat fb.caeAng2.rmsk.windowmaskerSdust.txt
+    # 1213014 bases of 105997628 (1.144%) in intersection
+
+    # using this Window Masker result for final masking::
+    cd /hive/data/genomes/caeAng2
+    #   you can safely ignore the warning about fields >= 13
+    twoBitMask bed/windowMasker/caeAng2.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  caeAng2.2bit
+
+    # measure the final masking:
+    twoBitToFa caeAng2.2bit stdout | faSize stdin > faSize.caeAng2.2bit.txt
+    cat faSize.caeAng2.2bit.txt
+    # 105997628 bases (11442593 N's 94555035 real 56820897 upper
+    #   37734138 lower) in 34621 sequences in 1 files
+    # Total size: mean 3061.7 sd 18325.0 min 200 (Cang_2012_03_13_34621)
+    #   max 867759 (Cang_2012_03_13_00001) median 356
+    # %35.60 masked total, %39.91 masked real
+
+    # and reset the symlink
+    rm /gbdb/caeAng2/caeAng2.2bit
+    ln -s /hive/data/genomes/caeAng2/caeAng2.2bit /gbdb/caeAng2/caeAng2.2bit
+
+##########################################################################
+# cpgIslands - (DONE - 2015-06-30 - Hiram)
+    mkdir /hive/data/genomes/caeAng2/bed/cpgIslands
+    cd /hive/data/genomes/caeAng2/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku caeAng2) > do.log 2>&1 &
+    # real    19m6.982s
+
+    cat fb.caeAng2.cpgIslandExt.txt
+    # 5267650 bases of 95237926 (5.531%) in intersection
+
+#########################################################################
+# augustus - (DONE - 2015-06-30 - Hiram)
+    mkdir /hive/data/genomes/caeAng2/bed/augustus
+    cd /hive/data/genomes/caeAng2/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+      -species=caenorhabditis -dbHost=hgwdev \
+         -workhorse=hgwdev caeAng2) > do.log 2>&1
+XXX - running - Tue Jun 30 14:19:12 PDT 2015
+    # real    80m33.289s
+
+    cat fb.caeAng2.augustusGene.txt
+    # 27859792 bases of 1842252119 (1.512%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2015-06-30 - Hiram)
+    mkdir /hive/data/genomes/caeAng2/bed/genscan
+    cd /hive/data/genomes/caeAng2/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku caeAng2) > do.log 2>&1
+    # real    25m47.870s
+
+    cat fb.caeAng2.genscan.txt
+    #   7719994 bases of 95237926 (8.106%) in intersection
+
+    cat fb.caeAng2.genscanSubopt.txt
+    #   5785394 bases of 95237926 (6.075%) in intersection
+
+########################################################################
+# Create kluster run files (TBD - 2015-03-24 - Hiram)
+
+    cd /hive/data/genomes/caeAng2
+    # numerator is caeAng2 gapless bases "real" as reported by:
+    head -1 faSize.caeAng2.2bit.txt
+# 105997628 bases (11442593 N's 94555035 real 56820897 upper 37734138 lower)
+# in 34621 sequences in 1 files
+
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 94555035 / 2861349177 \) \* 1024
+    # ( 94555035 / 2861349177 ) * 1024 = 33.838707
+
+    # ==> use -repMatch=100 because 30 or 50 masks too many
+    cd /hive/data/genomes/caeAng2
+    time blat caeAng2.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/caeAng2.11.ooc \
+        -repMatch=100
+    # Wrote 10073 overused 11-mers to jkStuff/caeAng2.11.ooc
+    # real    0m1.898s
+
+    # there are no non-bridged gaps, do not need to do this
+    #   check non-bridged gaps to see what the typical size is:
+#     hgsql -N -e 'select * from gap where bridge="no" order by size;' caeAng2 
+#       | ave -tableOut -col=7 stdin
+# # min Q1 median Q3 max mean N sum stddev
+# 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006
+
+    # note the minimum non-bridged gap size is 50,076
+
+#  gapToLift -verbose=2 -minGap=50000 caeAng2 jkStuff/caeAng2.nonBridged.lft \
+#         -bedFile=jkStuff/caeAng2.nonBridged.bed
+
+#    hgsql -N \
+#        -e 'select * from gap where bridge="no" order by size;' caeAng2 \
+#        | ave -col=7 stdin
+
+    # not needed:
+#    gapToLift -verbose=2 -minGap=100 bosTau7 jkStuff/nonBridged.lft \
+#        -bedFile=jkStuff/nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 34621, total size: 105997628, one half size: 52998814
+# cumulative    N50 count       contig  contig size
+# 52925057        353     Cang_2012_03_13_00353   80006
+# 52998814 one half size
+# 53004915        354     Cang_2012_03_13_00354   79858
+
+#############################################################################
+# GENBANK AUTO UPDATE (TBD - 2015-06-09 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    #  Nanorana parkeri	3	0	0
+    #  Nanorana pleskei	3	0	0
+    #  Nanorana yunnanensis	1	0	0
+
+    # edit etc/genbank.conf to add caeAng2 just before xenTro7
+
+# caeAng2 (tibetan frog)
+caeAng2.serverGenome = /hive/data/genomes/caeAng2/caeAng2.2bit
+caeAng2.clusterGenome = /hive/data/genomes/caeAng2/caeAng2.2bit
+caeAng2.ooc = /hive/data/genomes/caeAng2/jkStuff/caeAng2.11.ooc
+caeAng2.lift = no
+caeAng2.perChromTables = no
+caeAng2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+caeAng2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+caeAng2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+caeAng2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+caeAng2.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+caeAng2.downloadDir = caeAng2
+caeAng2.refseq.mrna.native.load  = no
+caeAng2.refseq.mrna.xeno.load = yes
+caeAng2.refseq.mrna.xeno.loadDesc  = yes
+caeAng2.genbank.mrna.native.load = no
+caeAng2.genbank.mrna.native.loadDesc = no
+caeAng2.genbank.mrna.xeno.load = yes
+caeAng2.genbank.mrna.xeno.loadDesc = yes
+caeAng2.genbank.est.native.load = no
+caeAng2.genbank.est.native.loadDesc = no
+# caeAng2.upstreamGeneTbl = ensGene
+
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "Added nanPar Nanorana parkeri refs #15056" \
+         etc/genbank.conf src/lib/gbGenome.c
+    git push
+    # update /cluster/data/genbank/etc/:
+    make etc-update
+    # update /cluster/data/genbank/bin/:
+    make install-server
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial caeAng2
+    # logFile: var/build/logs/2015.05.27-15:45:35.caeAng2.initalign.log
+    # real    1651m57.350s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.caeAng2
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad caeAng2
+    # logFile: var/dbload/hgwdev/logs/2015.06.09-14:34:12.caeAng2.dbload.log
+    # real    128m32.009s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add caeAng2 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added caeAng2 - Tibetan frog refs #15056" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2015-06-22 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=caeAng2 -tableCoverage all.joiner
+    joinerCheck -database=caeAng2 -times all.joiner
+    joinerCheck -database=caeAng2 -keys all.joiner
+
+    cd /hive/data/genomes/caeAng2
+    time makeDownloads.pl caeAng2 > downloads.log 2>&1
+    # real    13m42.027s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/caeAng2/pushQ
+    cd /hive/data/genomes/caeAng2/pushQ
+    makePushQSql.pl caeAng2 > caeAng2.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/caeAng2/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/caeAng2/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/caeAng2/bbi/qualityBw/quality.bw
+    # WARNING: caeAng2 does not have seq
+    # WARNING: caeAng2 does not have extFile
+    # WARNING: caeAng2 does not have estOrientInfo
+    # WARNING: caeAng2 does not have mrnaOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p caeAng2.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/caeAng2.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################
+# LIFTOVER TO caeAng1 (DONE - 2015-07-07 - Hiram )
+    mkdir /hive/data/genomes/caeAng2/bed/blat.caeAng1.2015-07-07
+    cd /hive/data/genomes/caeAng2/bed/blat.caeAng1.2015-07-07
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+  -ooc=/hive/data/genomes/caeAng2/jkStuff/caeAng2.11.ooc -debug caeAng2 caeAng1
+    # Real run:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+       -ooc=/hive/data/genomes/caeAng2/jkStuff/caeAng2.11.ooc caeAng2 caeAng1) \
+		> do.log 2>&1
+    #	real    4m19.992s
+    # verify it works on genome-test
+
+#############################################################################

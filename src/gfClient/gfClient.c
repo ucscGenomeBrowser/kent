@@ -57,7 +57,7 @@ printf(
   "                   prot - protein sequence\n"
   "                   dnax - DNA sequence translated in six frames to protein\n"
   "                   rnax - DNA sequence translated in three frames to protein\n"
-  "   -prot         Synonymous with -d=prot -q=prot.\n"
+  "   -prot         Synonymous with -t=prot -q=prot.\n"
   "   -dots=N       Output a dot every N query sequences.\n"
   "   -nohead       Suppresses 5-line psl header.\n"
   "   -minScore=N   Sets minimum score.  This is twice the matches minus the \n"

@@ -643,6 +643,19 @@ __attribute__((format(printf, 3, 4)))
 ;
 
 
+int sqlSafefAppend(char* buffer, int bufSize, char *format, ...)
+/* Append formatted string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte.
+ * Scans unquoted string parameters for illegal literal sql chars.
+ * Escapes quoted string parameters. 
+ * NOSLQINJ tag is NOT added to beginning since it is assumed to be appended to
+ * a properly created sql string. */
+#ifdef __GNUC__
+__attribute__((format(printf, 3, 4)))
+#endif
+;
+
+
 void vaSqlDyStringPrintfExt(struct dyString *ds, boolean isFrag, char *format, va_list args);
 /* VarArgs Printf to end of dyString after scanning string parameters for illegal sql chars.
  * Strings inside quotes are automatically escaped.  

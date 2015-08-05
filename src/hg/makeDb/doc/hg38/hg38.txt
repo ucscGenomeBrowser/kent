@@ -2412,6 +2412,18 @@ do
 	| faToNib -softMask stdin ${C}.nib
     echo "${C} done"
 done
+
+    # verify nothing lost
+    cat ../../chrom.sizes \
+     | awk '{printf "nibFrag -masked %s.nib 0 %d + stdout\n", $1, $2}' \
+        | sh | faSize stdin
+# 3209286105 bases (159970322 N's 3049315783 real 1460684798 upper
+#  1588630985 lower) in 455 sequences in 1 files
+# Total size: mean 7053376.1 sd 31548372.6
+#  min 970 (chrUn_KI270394v1.nib:0-970)
+#  max 248956422 (chr1.nib:0-248956422) median 161218
+# %49.50 masked total, %52.10 masked real
+
     mkdir /hive/data/staging/data/hg38/nib
     rsync -a --progress ./ /hive/data/staging/data/hg38/nib
 
@@ -5643,6 +5655,35 @@ done | sort -k4 > allEnds.bed
     hgBbiDbLink hg38 cloneEnd_coverageReverse \
         /gbdb/hg38/bbi/cloneEnd/cloneEnd_coverageReverse.bw
 
+    ### Fixup the scores to indicate how many multiple mappings as mentioned
+    ### in the hg19 bacEnds description page: one mapping: score = 1000
+    ### multiple mappings: score = 1500/count
+    ### the sort | uniq -c | awk does this score calculation with the name
+    ###   in column 1
+    ### The join puts the existing table together with those scores
+    ### DONE - 2015-06-18 - Hiram
+
+    mkdir /hive/data/genomes/hg38/bed/cloneEnds/addCounts
+    cd /hive/data/genomes/hg38/bed/cloneEnds/addCounts
+    mkdir score withScore noScore withScore
+    for table in cloneEnd_ABC10 cloneEnd_ABC11 cloneEnd_ABC12 cloneEnd_ABC13 \
+cloneEnd_ABC14 cloneEnd_ABC16 cloneEnd_ABC18 cloneEnd_ABC20 cloneEnd_ABC21 \
+cloneEnd_ABC22 cloneEnd_ABC23 cloneEnd_ABC24 cloneEnd_ABC27 cloneEnd_ABC7 \
+cloneEnd_ABC8 cloneEnd_ABC9 cloneEnd_CH17 cloneEnd_COR02 cloneEnd_COR2A \
+cloneEnd_CTD cloneEnd_RP11 cloneEnd_WI2 cloneEnd_badEnds cloneEnd_multipleMaps
+do
+  hgsql -N -e "select name from $table;" hg38 | sort | uniq -c |
+      awk '{ if (1 == $1) {printf "%s\t1000\n", $2} else {printf "%s\t%d\n", $2, 1500/$1} }' \
+         | sort > score.hg38.$table.score.tab
+  hgsql -N -e "select * from $table order by name;" hg38 \
+      > noScore/hg38.$table.tab
+  join -t'^I' -1 5 noScore/hg38.$table.tab score/hg38.$table.score.tab \
+  | awk '{printf "%d\t%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d\t%s\t%s\n", $2,$3,$4,$5,$1,$14,$7,$8,$9,$10,$11,$12,$13}' \
+    | sort -k2,2 -k3,3n > withScore/hg38.$table.withScore.tab
+  hgsql -e "delete from $table;" hg38
+  hgsql -e "load data local infile \"withScore/hg38.$table.withScore.tab\" into table $table;" hg38
+done
+
 ##############################################################################
 # SIB Transcriptome (DONE 2014-08-27 Steve)
 
@@ -5911,26 +5952,39 @@ TMPDIR=/scratch/tmp
 #########################################################################
 
 ########################################################################
-# Cooper Developmental Delay track (2014-11-21 Steve)
+# CNV Developmental Delay track (2014-11-21 Steve)
 
-    mkdir /hive/data/genomes/hg38/bed/cooperDevDelay
-    cd /hive/data/genomes/hg38/bed/cooperDevDelay
+    mkdir /hive/data/genomes/hg38/bed/cnvDevDelay
+    cd /hive/data/genomes/hg38/bed/cnvDevDelay
 
+wget --timestamping 'ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd100_Coe_et_al_2014/gvf/nstd100_Coe_et_al_2014.GRCh38.remap.all.germline.ucsc.gvf.gz'
 wget --timestamping 'ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd54_Cooper_et_al_2011/gvf/nstd54_Cooper_et_al_2011.GRCh38.remap.all.germline.ucsc.gvf.gz'
 
 cp /kent/src/hg/utils/automation/gvfToBed8Attrs.pl .
-mv gvfToBed8Attrs.pl gvfToBed8AttrsControl.pl
-cp gvfToBed8AttrsControl.pl gvfToBed8AttrsCase.pl
+mv gvfToBed8Attrs.pl gvfToBed8AttrsCase.pl
+cp gvfToBed8AttrsCase.pl gvfToBed8AttrsControl100.pl
+cp gvfToBed8AttrsCase.pl gvfToBed8AttrsControl54.pl
 
-# made two local copies of Angie's gvf conversion script - one to
-# include only control individuals and one to include only case individuals
-# added line 33 to each file:
+# made three local copies of Angie's gvf conversion script - one to include
+# only case individuals from nstd100, one to include only control individuals
+# from nstd100 and one to include only control individuals from nstd54
 
-# next if ($phenotype ne "not_reported"); # keep only "control" individuals
-# next if ($phenotype eq "not_reported"); # keep only "case" individuals
+# had to add an additional elsif statement to the nstd100 scripts to filter
+# based on sample_name field:
 
-zcat nstd54_Cooper_et_al_2011.GRCh38.remap.all.germline.ucsc.gvf.gz | gvfToBed8AttrsControl.pl > cooperDevDelayAllControl.bed
-zcat nstd54_Cooper_et_al_2011.GRCh38.remap.all.germline.ucsc.gvf.gz | gvfToBed8AttrsCase.pl > cooperDevDelayAllCase.bed
+#  } elsif ($tag eq "sample_name") {
+#    $sample_name = $val;
+#  }
+
+# added line 33/35 to each file:
+
+# next if ($sample_name eq "Unknown"); # keep only "case" individuals from nstd100
+# next if ($sample_name ne "Unknown"); # keep only "control" individuals from nstd100
+# next if ($phenotype ne "not_reported"); # keep only "control" individuals from nstd54
+
+zcat nstd100_Coe_et_al_2014.GRCh38.remap.all.germline.ucsc.gvf.gz | gvfToBed8AttrsCase.pl > cnvDevDelayAllCase.bed
+zcat nstd100_Coe_et_al_2014.GRCh38.remap.all.germline.ucsc.gvf.gz | gvfToBed8AttrsControl100.pl > cnvDevDelayAllControl.bed
+zcat nstd54_Cooper_et_al_2011.GRCh38.remap.all.germline.ucsc.gvf.gz | gvfToBed8AttrsControl54.pl >> cnvDevDelayAllControl.bed
 
 # GRCh38 data from dbVar had different naming scheme for alternate chromosomes
 # (e.g., chr1|NT_187515.1 instead of chr1_KI270762v1_alt), so needed to write
@@ -5995,17 +6049,17 @@ cp /hive/data/genomes/hg38/genbank/GCF_000001405.26.assembly.txt .
 
 cat GCF_000001405.26.assembly.txt | grep -v '^#\|assembled\|unplaced' | awk '{print $2 "\t" $3 "\t" $5 "\t" $7}' > hg38.xref
 
-chromXref.pl cooperDevDelayAllControl.bed cooperDevDelayAllControlUcsc.bed
-chromXref.pl cooperDevDelayAllCase.bed cooperDevDelayAllCaseUcsc.bed
+chromXref.pl cnvDevDelayAllCase.bed cnvDevDelayAllCaseUcsc.bed
+chromXref.pl cnvDevDelayAllControl.bed cnvDevDelayAllControlUcsc.bed
 
 hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
-        -allowStartEqualEnd hg38 cooperDevDelayControl cooperDevDelayAllControlUcsc.bed
+        -allowStartEqualEnd hg38 cnvDevDelayCase cnvDevDelayAllCaseUcsc.bed
 
 hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
-        -allowStartEqualEnd hg38 cooperDevDelayCase cooperDevDelayAllCaseUcsc.bed
+        -allowStartEqualEnd hg38 cnvDevDelayControl cnvDevDelayAllControlUcsc.bed
 
-    checkTableCoords hg38 cooperDevDelayControl
-    checkTableCoords hg38 cooperDevDelayCase
+    checkTableCoords hg38 cnvDevDelayCase
+    checkTableCoords hg38 cnvDevDelayControl
 
 
 #########################################################################
@@ -6216,5 +6270,17 @@ rm tmpChrom
     checkTableCoords  hg38 -table=ucscToRefSeq
 
 #########################################################################
+#CREATE MICROSAT TRACK (DONE - 2015-05-22 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/hg38/bed/microsat
+    cd /cluster/data/hg38/bed/microsat
 
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
 
+    hgLoadBed hg38 microsat microsat.bed
+
+#############################################################################
+# ENCODE Regulatory tracks  (Kate & Chris)
+
+# see reg.txt

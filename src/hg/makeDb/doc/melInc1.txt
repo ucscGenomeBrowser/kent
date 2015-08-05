@@ -433,3 +433,20 @@ cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin \
     hgsql qapushq < melInc1.sql
 
 #######################################################################
+# LIFTOVER TO melInc2 (DONE - 2015-07-07 - Hiram )
+    mkdir /hive/data/genomes/melInc1/bed/blat.melInc2.2015-07-07
+    cd /hive/data/genomes/melInc1/bed/blat.melInc2.2015-07-07
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/melInc1/melInc1.11.ooc -debug melInc1 melInc2
+    # Real run:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/melInc1/melInc1.11.ooc melInc1 melInc2) \
+		> do.log 2>&1
+    #	real    5m40.388s
+    # verify it works on genome-test
+
+#############################################################################

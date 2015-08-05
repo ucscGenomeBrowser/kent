@@ -853,26 +853,119 @@ ftpFile=ftp://ftp.ncbi.nlm.nih.gov/genomes/R_norvegicus/GFF/ref_Rnor_6.0_top_lev
 gff3File=`basename $ftpFile`
 
 echo "select * from ucscToRefSeq" | hgsql $db | tail -n +2 | awk '{print 0, $4, $3, $1, $3}' > refSeqToUcsc.lft
+rm -f $gff3File
 wget $ftpFile
 
-/cluster/home/braney/bin/x86_64/gff3ToGenePred -useName -warnAndContinue $gff3File stdout 2> convertErr.txt | liftUp -type=.gp -extGenePred lift.gp refSeqToUcsc.lft warn  stdin 2> liftErr.txt
+/cluster/home/braney/bin/x86_64/gff3ToGenePred -useName -warnAndContinue -attrsOut=attrs -bad=bad.gp $gff3File stdout 2> convertErr.txt | liftUp -type=.gp -extGenePred lift.gp refSeqToUcsc.lft warn  stdin 2> liftErr.txt
 wc -l lift.gp
-# 61213 lift.gp
+# 64457 lift.gp
+wc -l bad.gp
+# 0
 
-egrep "^N(M|R)" lift.gp > curated.gp
+tawk '{print $1}'  attrs | sort | uniq > meta
+wc -l meta
+# 63278 meta
+for i in product Dbxref gene gbkey
+do
+    echo $i
+    tawk -v attr=$i '$2==attr {print $1,$3}' attrs | sort | uniq | join -t $'\t' /dev/stdin meta > out
+    mv out meta
+done
+wc -l meta
+# 62775 meta
+
+cat curated.gp predicted.gp | awk '{print $1}' | sort -u > tmp1
+cat meta | awk '{print $1}' | sort -u > tmp2
+join -v 1 tmp1 tmp2 | wc -l
+# 0
+
+egrep "^N(M|R)|^YP" lift.gp > curated.gp
 egrep "^X(M|R)" lift.gp > predicted.gp
 
 wc -l curated.gp predicted.gp
-# 17948 curated.gp
+#    17961 curated.gp
 # 43265 predicted.gp
-# 61213 total
+# 61226 total
 
 grep dropping convertErr.txt | wc -l
-#    744
+#    0
 
 awk '/isn/ {print $1}' liftErr.txt | sort -u
 # nothing
 
 hgLoadGenePred -genePredExt $db ncbiRefCurated curated.gp
 hgLoadGenePred -genePredExt $db ncbiRefPredicted predicted.gp
+hgLoadSqlTab $db ncbiRefLink $kent/src/hg/lib/ncbiRefLink.sql meta
 
+hgsql -e 'INSERT INTO trackVersion \
+    (db, name, who, version, updateTime, comment, source, dateReference)
+    VALUES("rn6", "ncbiRefSeq", "braney", "105", now(),
+    "http://www.ncbi.nlm.nih.gov/genome/annotation_euk/Rattus_norvegicus/105/",
+    "ftp://ftp.ncbi.nlm.nih.gov/genomes/R_norvegicus",
+    "7 August 2014" );' hgFixed
+
+############################################################################
+# SWAP LASTZ human/hg19 vs. rat/rn6 - (DONE - 2015-06-08 - Hiram)
+    # the original alignment
+    cd /hive/data/genomes/hg19/bed/lastzRn6.2015-06-08
+
+    cat fb.hg19.chainRn6Link.txt
+    # 924289029 bases of 2897316137 (31.902%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/rn6/bed/blastz.hg19.swap
+    cd /hive/data/genomes/rn6/bed/blastz.hg19.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg19/bed/lastzRn6.2015-06-08/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    77m36.480s
+
+    cat fb.rn6.chainHg19Link.txt
+    # 949880616 bases of 2729860805 (34.796%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` rn6 hg19) > rbest.log 2>&1
+    # real    32m19.569s
+
+#########################################################################
+# GENEID GENE PREDICTIONS (DONE - 2015-06-26 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/rn6/bed/geneid
+    cd /hive/data/genomes/rn6/bed/geneid
+    wget --timestamping \
+http://genome.crg.es/genepredictions/R.norvegicus/rn6/geneid_v1.4/rn6.geneid.prot
+    wget --timestamping \
+http://genome.crg.es/genepredictions/R.norvegicus/rn6/geneid_v1.4/rn6.geneid.gtf
+    ldHgGene -gtf -genePredExt rn6 geneid rn6.geneid.gtf
+
+    #  Read 41652 transcripts in 307250 lines in 1 files
+    #     41652 groups 883 seqs 1 sources 3 feature types
+    #  41652 gene predictions
+
+    featureBits -countGaps rn6 geneid
+# 42028722 bases of 2730871774 (1.539%) in intersection
+    featureBits -countGaps rn4 geneid
+# 40255245 bases of 2834127293 (1.420%) in intersection
+
+##########################################################################
+# SGP GENES (DONE - 2015-07-30 - Hiram)
+    mkdir /hive/data/genomes/rn6/bed/sgpGene
+    cd /hive/data/genomes/rn6/bed/sgpGene
+    wget --timestamping \
+http://genome.crg.es/genepredictions/R.norvegicus/rn6/SGP2/hg38/00README
+    wget --timestamping \
+http://genome.crg.es/genepredictions/R.norvegicus/rn6/SGP2/hg38/rn6.sgp2.gtf
+    wget --timestamping \
+http://genome.crg.es/genepredictions/R.norvegicus/rn6/SGP2/hg38/rn6.sgp2.gff3
+
+    ldHgGene -gtf -genePredExt rn6 sgpGene rn6.sgp2.gtf
+    # Read 37981 transcripts in 306550 lines in 1 files
+    #   37981 groups 468 seqs 1 sources 3 feature types
+    # 37981 gene predictions
+
+    featureBits -enrichment rn6 refGene:CDS sgpGene
+# refGene:CDS 0.963%, sgpGene 1.399%, both 0.821%, cover 85.27%, enrich 60.93x
+
+###########################################################################

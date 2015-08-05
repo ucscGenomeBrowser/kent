@@ -15,7 +15,11 @@
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
   <TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../../images/title.jpg"></TH></TR>
 
-<TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../../inc/topbar.html"--></TD></TR>
+<noscript><div class='noscript'><div class='noscript-inner'><p><b>JavaScript is disabled in your web browser</b></p><p>You must have JavaScript enabled in your web browser to use the Genome Browser</p></div></div></noscript>
+<script type='text/javascript' SRC='../../js/jquery.js'></script>
+<script type='text/javascript' SRC='../../js/jquery.plugins.js'></script>
+<LINK rel='STYLESHEET' href='../../style/nice_menu.css' TYPE='text/css' />
+<TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../../cgi-bin/hgMenubar"--></TD></TR>
 <!--Content Tables-->  
  <TR><TD CELLPADDING=10 ROWSPAN=2 VALIGN="top">
  <!--outer table is for border purposes-->
@@ -481,23 +485,30 @@ not be updated to reflect any edits.
  <B><FONT SIZE="3" COLOR="#0000FF">Sharing Your Session with Others</FONT></B>
  <P>There are four ways to let others know about your saved sessions:
   <UL>
-  <LI><B>Bookmark the session.</B> Each session entry in the <em>My 
-   Sessions</em> list 
-   has a <TT><B>Browser</B></TT> hyperlink. Click the <TT><B>Browser</B></TT> 
-   link to open the Genome Browser with that session loaded. Bookmark the 
-   URL of the Genome Browser page that is displayed, then share the bookmark 
-   with others. 
-  <LI><B>Email a session link.</B> Each session entry in the <em>My 
+
+  <LI><B>Save the session URL.</B> Immediately upon saving a new session,
+   the top of the page offers a <TT><B>Browser</B></TT> hyperlink.
+   Additionally, each session entry in the <em>My Sessions</em> list has
+   a <TT><B>Browser</B></TT> hyperlink.  Click either <TT><B>Browser</B></TT>
+   link to open the Genome Browser with the session loaded.
+   You can obtain the URL of the Genome Browser page by capturing the
+   <TT><B>Browser</B></TT> hyperlink via right-click before you proceed
+   to the Browser graphical view.  You can then store the URL, create a
+   bookmark or share the link with others.
+
+  <LI><B>Email a session link.</B> Each session entry in the <em>My
    Sessions</em> list
-   also has an <TT><B>Email</B></TT> link. Click this link to automatically 
-   invoke your email tool with a message containing the Genome Browser URL, 
+   also has an <TT><B>Email</B></TT> link. Click this link to automatically
+   invoke your email tool with a message containing the Genome Browser URL,
    which you can then send to others.</LI>
+
   <LI><B>Share a session settings file.</B> If you have saved your settings to a
    local file, you can give others access to the file, or email the file to them
-   as an attachment and instruct them to load it using the 
+   as an attachment and instruct them to load it using the
    Session tool.</LI>
-  <LI><B>Share a web URL.</B> If you have saved your settings to a file on a 
-   web server, you can provide a link like this to others: 
+
+  <LI><B>Share a web URL.</B> If you have saved your settings to a file on a
+   web server, you can provide a link like this to others:
    <BLOCKQUOTE>
    <TT>http://genome.ucsc.edu/cgi-bin/hgSession?hgS_doLoadUrl=submit&hgS_loadUrlName=<em>MyUrl</em></TT>
    </BLOCKQUOTE>

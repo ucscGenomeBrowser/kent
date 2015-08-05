@@ -21,6 +21,9 @@ var ImModel = (function() {
         this.undoStack = [];
         this.redoStack = [];
 
+        // cart is currently a global object but let's pretend it's not
+        this.cart = cart;
+
         // Handler functions for server and UI update paths
         // Cart is flat, so cartJsonHandlers is just an object that maps cart var names
         // to arrays of functions.
@@ -147,16 +150,19 @@ var ImModel = (function() {
 
         bumpUiState: function(updater) {
             // Reset our redo stack and push current state onto undo stack.
-            // Replace this.state with a new immutable state changed by updater (bound to this),
-            // which is a function that receives a mutable copy of this.state and may make
-            // changes to the mutable copy.
-            this.undoStack.push(this.state);
-            this.redoStack = [];
-            this.state = this.state.withMutations(function(mutState) {
-                mutState.set('canUndo', true);
-                mutState.set('canRedo', false);
-                updater.call(this, mutState);
-            }.bind(this));
+            // Replace this.state with a new immutable state changed by updater,
+            // which is a function bound to this that receives a mutable copy of
+            // this.state and may make changes to the mutable copy.
+            var startState = this.state;
+            this.state = this.state.withMutations(updater);
+            if (this.state !== startState) {
+                this.undoStack.push(startState);
+                this.redoStack = [];
+                this.state = this.state.withMutations(function(mutState) {
+                    mutState.set('canUndo', true);
+                    mutState.set('canRedo', false);
+                });
+            }
         },
 
         undo: function() {
@@ -220,14 +226,14 @@ var ImModel = (function() {
                 _.forEach(handlers, function(handler) {
                     handler.call(this, mutState, path, data);
                 }, this);
-            });
+            }.bind(this));
             this.render();
         },
 
-        cartDo: function(commandObj, errorHandler) {
-            // Send a command to the server; bind this.handleServerResponseWithError to
-            // errorHandler if errorHandler is passed in, otherwise bind to null for default.
-            // errorHandler will be given the server's error message.
+        handlerForErrorHandler: function (errorHandler) {
+            // If a custom errorHandler is provided, then return
+            // this.handleServerResponseWithErrorHandler bound to errorHandler.
+            // Otherwise return it bound to null so it wil use this.defaultServerErrorHandler.
             var handler = this.handleServerResponse;
             if (errorHandler) {
                 handler = _.bind(this.handleServerResponseWithErrorHandler,
@@ -237,12 +243,24 @@ var ImModel = (function() {
                                                    this, null);
                 handler = this.handleServerResponse;
             }
-            cart.send(commandObj, handler);
+            return handler;
+        },
+
+        cartDo: function(commandObj, errorHandler) {
+            // Send a command to the server, expecting a response.
+            var handler = this.handlerForErrorHandler(errorHandler);
+            this.cart.send(commandObj, handler);
+        },
+
+        cartUploadFile: function(commandObj, jqFileInput, errorHandler) {
+            // Send a command to the server, along with the file contents of jqFileInput.
+            var handler = this.handlerForErrorHandler(errorHandler);
+            this.cart.uploadFile(commandObj, jqFileInput, handler);
         },
 
         cartSend: function(commandObj) {
             // Send a command to the server; no need to handle response.
-            cart.send(commandObj);
+            this.cart.send(commandObj);
         },
 
         cartSet: function(cartVar, newValue) {

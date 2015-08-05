@@ -222,6 +222,16 @@ taxId 43780
     ln -s `pwd`/nasLar1.2bit /gbdb/nasLar1/nasLar1.2bit
 
 ##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-06-22 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/nasLar1/bed/microsat
+     cd /cluster/data/nasLar1/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed nasLar1 microsat microsat.bed
+    #	Read 22754 elements of size 4 from microsat.bed
+
+##########################################################################
 ## WINDOWMASKER (DONE - 2014-12-11 - Hiram)
 
     mkdir /hive/data/genomes/nasLar1/bed/windowMasker
@@ -462,7 +472,7 @@ nasLar1.upstreamGeneTbl = refGene
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
-    time ./bin/gbDbLoadStep -drop -initialLoad -verbose=10 nasLar1
+    time ./bin/gbDbLoadStep -drop -initialLoad nasLar1
     # logFile: var/dbload/hgwdev/logs/2015.01.06-13:41:18.nasLar1.dbload.log
     # real    6m52.226s
 

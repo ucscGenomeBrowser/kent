@@ -17,7 +17,8 @@ typedef enum _jsonElementType
     jsonNumber   = 2,
     jsonDouble   = 3,
     jsonBoolean  = 4,
-    jsonString   = 5
+    jsonString   = 5,
+    jsonNull     = 6
 } jsonElementType;
 
 union jsonElementVal
@@ -28,6 +29,7 @@ union jsonElementVal
     double jeDouble;
     boolean jeBoolean;
     char *jeString;
+    void *jeNull;
 };
 
 struct jsonElement
@@ -44,6 +46,7 @@ struct jsonElement *newJsonNumber(long val);
 struct jsonElement *newJsonDouble(double val);
 struct jsonElement *newJsonObject(struct hash *h);
 struct jsonElement *newJsonList(struct slRef *list);
+struct jsonElement *newJsonNull();
 
 void jsonObjectAdd(struct jsonElement *h, char *name, struct jsonElement *ele);
 // Add a new element to a jsonObject; existing values are replaced.
@@ -94,10 +97,10 @@ void jsonPrintToFile(struct jsonElement *root, char *name, FILE *f, int indentPe
 /** Routines that check json type and return corresponding value. **/
 
 struct slRef *jsonListVal(struct jsonElement *ele, char *name);
-/* Enforce element is type jsonList.  Return list value */
+/* Enforce element is type jsonList or jsonNull.  Return list value, which may be NULL. */
 
 struct hash *jsonObjectVal(struct jsonElement *ele, char *name);
-/* Enforce object is type jsonObject.  Return object hash */
+/* Enforce object is type jsonObject or jsonNull.  Return object hash, which may be NULL. */
 
 long jsonNumberVal(struct jsonElement *ele, char *name);
 /* Enforce element is type jsonNumber and return value. */
@@ -109,7 +112,7 @@ boolean jsonBooleanVal(struct jsonElement *ele, char *name);
 /* Enforce element is type jsonBoolean and return value. */
 
 char *jsonStringVal(struct jsonElement *ele, char *eleName);
-/* Enforce element is type jsonString and return value. */
+/* Enforce element is type jsonString or jsonNull.  Return value, which may be NULL. */
 
 /** Routines that help work with json objects (bracket enclosed key/val pairs **/
 

@@ -1,0 +1,451 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes how the browser for C. malayi WS245 version is built
+
+##############################################################################
+# download sequence, create UCSC sequence (DONE - 2015-07-08 - Hiram)
+    mkdir -p /hive/data/genomes/strRat1/ws245
+    cd /hive/data/genomes/strRat1/ws245
+
+    wget --no-parent --timestamping -m -nH --cut-dirs=6 \
+ftp://ftp.sanger.ac.uk/pub/wormbase/releases/WS245/species/PRJEA62033
+
+    mkdir /hive/data/genomes/strRat1/ucsc
+    cd /hive/data/genomes/strRat1/ucsc
+    # WormBase contig names are of the pattern:
+# >RATTI_contig_17 1 1087
+# >RATTI_contig_136 1 1168
+# >RATTI_contig_139 1 3870
+#   ...
+
+    # one duplicate contig removed:
+    #   RATTI_contig_75562 and RATTI_contig_75559 are identical
+
+    # remove the size information from the names:
+    zcat ../ws245/PRJEA62033/s_ratti.PRJEA62033.WS245.genomic.fa.gz \
+        | sed -e 's/ 1.*//;' | gzip -c > strRat1.fa.gz
+
+    hgFakeAgp strRat1.fa.gz strRat1.agp
+
+    # photo from Sanger:
+    mkdir /hive/data/genomes/strRat1/photo
+    cd /hive/data/genomes/strRat1/photo
+    wget --timestamping \
+http://www.sanger.ac.uk/resources/downloads/helminths/gfx/strongyloides_ratti.jpg
+    # From: Mark Viney/University of Bristol
+    #       http://www.bristol.ac.uk/biology/people/mark-e-viney/index.html
+
+#############################################################################
+#  Initial database build (DONE - 2015-07-08 - Hiram)
+
+    cd /hive/data/genomes/strRat1
+    cat << '_EOF_' > strRat1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db strRat1
+clade worm
+genomeCladePriority 68
+scientificName Strongyloides ratti
+commonName S. ratti ED321
+assemblyDate Apr. 2011
+assemblyLabel Wellcome Trust Sanger Institute S. ratti genome project
+assemblyShortLabel WS226/S. ratti ED321
+orderKey 19050
+mitoAcc none
+fastaFiles /hive/data/genomes/strRat1/ucsc/strRat1.fa.gz
+agpFiles /hive/data/genomes/strRat1/ucsc/strRat1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://www.bristol.ac.uk/biology/people/mark-e-viney/index.html
+photoCreditName Mark Viney/University of Bristol
+ncbiGenomeId 3496
+ncbiAssemblyId 356801
+ncbiAssemblyName WS226/S. ratti ED321
+ncbiBioProject 62033
+genBankAccessionID GCA_000208845.1
+taxId 34506
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp strRat1.config.ra) > agp.log 2>&1
+    # *** All done!  (through the 'agp' step)
+    # real    0m12.275s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db strRat1.config.ra) > db.log 2>&1
+    # real    0m42.744s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2015-07-08 - Hiram)
+    mkdir /hive/data/genomes/strRat1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/strRat1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/strRat1/strRat1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku strRat1) > do.log 2>&1
+    # real    23m58.455s
+
+    cat fb.strRat1.cpgIslandExtUnmasked.txt
+    # 3888494 bases of 52634366 (7.388%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-07-08 - Hiram)
+    mkdir /hive/data/genomes/strRat1/bed/cytoBand
+    cd /hive/data/genomes/strRat1/bed/cytoBand
+    makeCytoBandIdeo.csh strRat1
+
+#########################################################################
+# ucscToINSDC table/track (TBD - 2015-03-20 - Hiram)
+    mkdir /hive/data/genomes/strRat1/bed/ucscToINSDC
+    cd /hive/data/genomes/strRat1/bed/ucscToINSDC
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+       ../../genbank/GCA_*assembly_structure/Primary_Assembly
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    # 25187 name.coordinate.tab
+    # 25187 ucscToINSDC.bed
+    # 25187 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab strRat1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords strRat1
+    # should cover %100 entirely:
+    featureBits -countGaps strRat1 ucscToINSDC
+    # 2053849526 bases of 2053849526 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (TBD - 2015-06-01 - Hiram)
+    hgsql -N -e "select frag from gold;" strRat1 | sort | head -3
+JF414117.1
+Ppa_Contig0_1
+Ppa_Contig0_10
+[JP][Fp][a4][1_][C4][o1][n1][t7][i\.](g[0-9]*)?(\_[0-9]*)?
+
+    hgsql -N -e "select frag from gold;" strRat1 | sort | tail -2
+Ppa_Contig9_98
+Ppa_Contig9_99
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" strRat1 | wc -l
+    # 28759
+
+    hgsql -N -e "select frag from gold;" strRat1 \
+      | egrep -e '[JP][Fp][a4][1_][C4][o1][n1][t7][i\.](g[0-9]*)?(\_[0-9]*)?' \
+        | wc -l
+    # 28759
+
+  hgsql -N -e "select frag from gold;" strRat1 \
+    | egrep -v -e '[JP][Fp][a4][1_][C4][o1][n1][t7][i\.](g[0-9]*)?(\_[0-9]*)?' \
+       | wc -l
+    # 0
+
+    # hence, add to trackDb/worm/strRat1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [JP][Fp][a4][1_][C4][o1][n1][t7][i\.](g[0-9]*)?(\_[0-9]*)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+##########################################################################
+# running repeat masker (DONE - 2015-07-08 - Hiram)
+    mkdir /hive/data/genomes/strRat1/bed/repeatMasker
+    cd /hive/data/genomes/strRat1/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku strRat1) > do.log 2>&1
+    # real    31m2.201s
+
+    cat faSize.rmsk.txt
+    # 52634486 bases (11106 N's 52623380 real 50590889 upper 2032491 lower)
+    #    in 2183 sequences in 1 files
+    # Total size: mean 24111.1 sd 103231.2 min 1001 (RATTI_contig_11208)
+    #    max 1635242 (RATTI_contig_75321) median 1771
+    # %3.86 masked total, %3.86 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;    
+
+    time featureBits -countGaps strRat1 rmsk
+    # 2032717 bases of 52634486 (3.862%) in intersection
+    # real    0m1.036s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2015-07-08 - Hiram)
+    mkdir /hive/data/genomes/strRat1/bed/simpleRepeat
+    cd /hive/data/genomes/strRat1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        strRat1) > do.log 2>&1
+    # real    14m13.669s
+
+    cat fb.simpleRepeat
+    # 1545340 bases of 52634366 (2.936%) in intersection
+
+    # using the Window Masker result as indicated below
+
+##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-07-08 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/strRat1/bed/microsat
+     cd /cluster/data/strRat1/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed strRat1 microsat microsat.bed
+    #	Read 92 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2015-07-08 - Hiram)
+    mkdir /hive/data/genomes/strRat1/bed/windowMasker
+    cd /hive/data/genomes/strRat1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev strRat1) > do.log 2>&1
+    # real    2m16.183s
+
+    # Masking statistics
+    cat faSize.strRat1.cleanWMSdust.txt
+    # 52634486 bases (11106 N's 52623380 real 24256113 upper 28367267 lower)
+    #    in 2183 sequences in 1 files
+    # Total size: mean 24111.1 sd 103231.2 min 1001 (RATTI_contig_11208)
+    #    max 1635242 (RATTI_contig_75321) median 1771
+    # %53.89 masked total, %53.91 masked real
+
+    cat fb.strRat1.rmsk.windowmaskerSdust.txt
+    # 1879610 bases of 52634486 (3.571%) in intersection
+
+    # using this Window Masker result for final masking::
+    cd /hive/data/genomes/strRat1
+    #   you can safely ignore the warning about fields >= 13
+    twoBitMask bed/windowMasker/strRat1.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  strRat1.2bit
+
+    # measure the final masking:
+    twoBitToFa strRat1.2bit stdout | faSize stdin > faSize.strRat1.2bit.txt
+    cat faSize.strRat1.2bit.txt
+    # 52634486 bases (11106 N's 52623380 real 24250940 upper 28372440 lower)
+    #    in 2183 sequences in 1 files
+    # Total size: mean 24111.1 sd 103231.2 min 1001 (RATTI_contig_11208)
+    #    max 1635242 (RATTI_contig_75321) median 1771
+    # %53.90 masked total, %53.92 masked real
+
+    # and reset the symlink
+    rm /gbdb/strRat1/strRat1.2bit
+    ln -s /hive/data/genomes/strRat1/strRat1.2bit /gbdb/strRat1/strRat1.2bit
+
+##########################################################################
+# cpgIslands - (DONE - 2015-07-08 - Hiram)
+    mkdir /hive/data/genomes/strRat1/bed/cpgIslands
+    cd /hive/data/genomes/strRat1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku strRat1) > do.log 2>&1 &
+    # real    8m10.474s
+
+    cat fb.strRat1.cpgIslandExt.txt
+    # 29350 bases of 86344036 (0.034%) in intersection
+
+#########################################################################
+# augustus - (DONE - 2015-07-08 - Hiram)
+    mkdir /hive/data/genomes/strRat1/bed/augustus
+    cd /hive/data/genomes/strRat1/bed/augustus
+    #  XXX this is not specifically correct, the species caenorhabditis
+    #      is not necessarily accurate here
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+      -species=caenorhabditis -dbHost=hgwdev \
+         -workhorse=hgwdev strRat1) > do.log 2>&1
+    # real    17m59.242s
+
+    cat fb.strRat1.augustusGene.txt
+    # 5462392 bases of 52634366 (10.378%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2015-07-08 - Hiram)
+    mkdir /hive/data/genomes/strRat1/bed/genscan
+    cd /hive/data/genomes/strRat1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku strRat1) > do.log 2>&1
+    # real    3m59.992s
+
+    cat fb.strRat1.genscan.txt
+    #   4412238 bases of 52634366 (8.383%) in intersection
+
+    cat fb.strRat1.genscanSubopt.txt
+    #   2300611 bases of 52634366 (4.371%) in intersection
+
+########################################################################
+# Create kluster run files (DONE - 2015-07-08 - Hiram)
+
+    cd /hive/data/genomes/strRat1
+    # numerator is strRat1 gapless bases "real" as reported by:
+    head -1 faSize.strRat1.2bit.txt
+# 52634486 bases (11106 N's 52623380 real 24250940 upper 28372440 lower)
+#    in 2183 sequences in 1 files
+
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 52623380 / 2861349177 \) \* 1024
+    # ( 52623380 / 2861349177 ) * 1024 = 18.832494
+
+    # ==> use -repMatch=100 since 30 or 50 masks too much
+    cd /hive/data/genomes/strRat1
+    time blat strRat1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/strRat1.11.ooc \
+        -repMatch=100
+    # Wrote 7158 overused 11-mers to jkStuff/strRat1.11.ooc
+    #  real    0m1.846s
+
+    # there are no non-bridged gaps, do not need this
+    #   check non-bridged gaps to see what the typical size is:
+#     hgsql -N -e 'select * from gap where bridge="no" order by size;' strRat1 \
+#        | ave -tableOut -col=7 stdin
+# min Q1 median Q3 max mean N sum stddev
+# 78831 79056 79362 79503 79503 79162.5 4 316650 320.991
+
+    # note the minimum non-bridged gap size is 78,831
+    gapToLift -verbose=2 -minGap=50000 strRat1 jkStuff/strRat1.nonBridged.lft \
+         -bedFile=jkStuff/strRat1.nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 2183, total size: 52634486, one half size: 26317243
+# cumulative    N50 count       contig  contig size
+# 26053835        38      RATTI_contig_74994      376846
+# 26317243 one half size
+# 26412864        39      RATTI_contig_74989      359029
+
+#############################################################################
+# GENBANK AUTO UPDATE (TBD - 2015-06-09 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism               mrnaCnt estCnt  refSeqCnt
+    #  Pristionchus pacificus  97      37470   0
+
+    # edit etc/genbank.conf to add strRat1 just before priPac1
+
+# strRat1 (P. pacificus)
+strRat1.serverGenome = /hive/data/genomes/strRat1/strRat1.2bit
+strRat1.clusterGenome = /hive/data/genomes/strRat1/strRat1.2bit
+strRat1.ooc = /hive/data/genomes/strRat1/jkStuff/strRat1.11.ooc
+strRat1.lift = /hive/data/genomes/strRat1/jkStuff/strRat1.nonBridged.lft
+strRat1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+strRat1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+strRat1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+strRat1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+strRat1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+strRat1.refseq.mrna.native.load = yes
+strRat1.refseq.mrna.xeno.load  = yes
+strRat1.refseq.mrna.xeno.loadDesc = yes
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+strRat1.genbank.mrna.xeno.load = no
+strRat1.genbank.est.native.load = yes
+strRat1.genbank.est.native.loadDesc = no
+strRat1.downloadDir = strRat1
+strRat1.perChromTables = no
+
+    git commit -m "Added strRat1 - P. pacificus refs #15209" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/etc/:
+    make etc-update
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial strRat1
+    # logFile: var/build/logs/2015.07.02-11:39:01.strRat1.initalign.log
+    # real    91m20.362s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.strRat1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad strRat1
+    # logFile: var/dbload/hgwdev/logs/2015.07.06-09:51:31.strRat1.dbload.log
+    # real    18m34.687s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add strRat1 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added strRat1 - Pristionchus pacificus refs #15209" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2015-06-22 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=strRat1 -tableCoverage all.joiner
+    joinerCheck -database=strRat1 -times all.joiner
+    joinerCheck -database=strRat1 -keys all.joiner
+
+    cd /hive/data/genomes/strRat1
+    time makeDownloads.pl strRat1 > downloads.log 2>&1
+    # real    13m42.027s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/strRat1/pushQ
+    cd /hive/data/genomes/strRat1/pushQ
+    makePushQSql.pl strRat1 > strRat1.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/strRat1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/strRat1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/strRat1/bbi/qualityBw/quality.bw
+    # WARNING: strRat1 does not have seq
+    # WARNING: strRat1 does not have extFile
+    # WARNING: strRat1 does not have estOrientInfo
+    # WARNING: strRat1 does not have mrnaOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p strRat1.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/strRat1.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#############################################################################
+# LIFTOVER TO strRat2 (DONE - 2015-07-08 - Hiram )
+    mkdir /hive/data/genomes/strRat1/bed/blat.strRat2.2015-07-08
+    cd /hive/data/genomes/strRat1/bed/blat.strRat2.2015-07-08
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+  -ooc=/hive/data/genomes/strRat1/jkStuff/strRat1.11.ooc -debug strRat1 strRat2
+    # Real run:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+       -ooc=/hive/data/genomes/strRat1/jkStuff/strRat1.11.ooc strRat1 strRat2) \
+		> do.log 2>&1
+    #	real    3m45.644s
+
+    # verify it works on genome-test
+
+#############################################################################

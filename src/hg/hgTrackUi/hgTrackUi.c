@@ -1720,9 +1720,12 @@ char *omimAvail = NULL;
 sqlSafef(query, sizeof(query), "select kgXref.kgID from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0 limit 1");
 omimAvail = sqlQuickString(conn, query);
 hFreeConn(&conn);
+char *isGencode = trackDbSetting(tdb, "isGencode");
 
 printf("<B>Label:</B> ");
 labelMakeCheckBox(tdb, "gene", "gene symbol", FALSE);
+if (isGencode)
+    labelMakeCheckBox(tdb, "gencodeId", "GENCODE Transcript ID", FALSE);
 labelMakeCheckBox(tdb, "kgId", "UCSC Known Gene ID", FALSE);
 labelMakeCheckBox(tdb, "prot", "UniProt Display ID", FALSE);
 
@@ -1751,10 +1754,10 @@ printf(" %s&nbsp;&nbsp;&nbsp;", "splice variants");
 char *isGencode = trackDbSetting(tdb, "isGencode");
 if (isGencode != NULL)
     {
-    safef(varName, sizeof(varName), "%s.show.composite", tdb->track);
+    safef(varName, sizeof(varName), "%s.show.comprehensive", tdb->track);
     option = cartUsualBoolean(cart, varName, FALSE);
     cgiMakeCheckBox(varName, option);
-    printf(" %s&nbsp;&nbsp;&nbsp;", "show composite set");
+    printf(" %s&nbsp;&nbsp;&nbsp;", "show comprehensive set");
     }
 printf("<BR>\n");
 }
@@ -1861,7 +1864,7 @@ if (sameString(tdb->track, "refGene"))
     }
 
 /* Put up label line  - boxes for gene, accession or maybe OMIM. */
-printf("<B>Label:</B> ");
+printf("<BR><B>Label:</B> ");
 labelMakeCheckBox(tdb, "gene", "gene", TRUE);
 labelMakeCheckBox(tdb, "acc", "accession", FALSE);
 if (omimAvail != 0)
@@ -2701,16 +2704,10 @@ void superTrackUi(struct trackDb *superTdb, struct trackDb *tdbList)
 {
 #define SUPERS_WITH_CHECKBOXES
 #ifdef SUPERS_WITH_CHECKBOXES
-#ifdef BUTTONS_BY_CSS
-    #define BUTTON_SUPER   "<span class='pmButton' onclick='superT.plusMinus(%s)'>%c</span>"
-    #define BUTTON_PLUS_SUPER()  printf(BUTTON_SUPER,"true", '+')
-    #define BUTTON_MINUS_SUPER() printf(BUTTON_SUPER,"false",'-')
-#else///ifndef BUTTONS_BY_CSS
-    #define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"superT.plusMinus(%s);\" " \
-                             "id='btn_%s' src='../images/%s'>"
-    #define    BUTTON_PLUS_SUPER()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
-    #define    BUTTON_MINUS_SUPER() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
-#endif///ndef BUTTONS_BY_CSS
+#define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"superT.plusMinus(%s);\" " \
+                         "id='btn_%s' src='../images/%s'>"
+#define    BUTTON_PLUS_SUPER()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
+#define    BUTTON_MINUS_SUPER() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
 jsIncludeFile("hui.js",NULL);
 #endif///def SUPERS_WITH_CHECKBOXES
 printf("\n<P><TABLE CELLPADDING=2>");
@@ -3123,21 +3120,30 @@ printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
 cartSaveSession(cart);
 if (sameWord(tdb->track,"ensGene"))
     {
-    char ensVersionString[256];
-    char ensDateReference[256];
     char longLabel[256];
-    ensGeneTrackVersion(database, ensVersionString, ensDateReference,
-        sizeof(ensVersionString));
-    if (ensVersionString[0])
+    struct trackVersion *trackVersion = getTrackVersion(database, tdb->track);
+    if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
         {
-        if (ensDateReference[0] && differentWord("current", ensDateReference))
-            safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - archive %s - %s", ensVersionString, ensDateReference);
+        if (!isEmpty(trackVersion->dateReference) && differentWord("current", trackVersion->dateReference))
+            safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - archive %s - %s", trackVersion->version, trackVersion->dateReference);
         else
-            safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - %s", ensVersionString);
+            safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - %s", trackVersion->version);
         }
     else
         safef(longLabel, sizeof(longLabel), "%s", tdb->longLabel);
 
+    printf("<B style='font-size:200%%;'>%s%s</B>\n", longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
+    }
+else if (sameWord(tdb->track, "ncbiGene"))
+    {
+    struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
+    char longLabel[1024];
+    if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+	{
+	safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, trackVersion->version);
+	}
+    else
+        safef(longLabel, sizeof(longLabel), "%s", tdb->longLabel);
     printf("<B style='font-size:200%%;'>%s%s</B>\n", longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
     }
 else
@@ -3189,6 +3195,8 @@ else if (sameString(tdb->track, WIKI_TRACK_TABLE))
     // special case wikiTrack (there's no trackDb entry); fixes redmine 2395
     tdb->canPack = TRUE;
 else if (sameString(tdb->type, "halSnake"))
+    tdb->canPack = TRUE;
+else if (sameString(tdb->type, "bigPsl"))
     tdb->canPack = TRUE;
 
 // Don't bother with vis controls for downloadsOnly

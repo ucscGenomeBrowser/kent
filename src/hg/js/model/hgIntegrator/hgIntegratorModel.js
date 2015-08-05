@@ -1,13 +1,15 @@
-/* global AppComponent, ImModel, CladeOrgDbMixin, PositionSearchMixin, cart */
+/* global AppComponent, ImModel, CladeOrgDbMixin, PositionSearchMixin, UserRegionsMixin */
 
 var HgIntegratorModel = ImModel.extend({
     // Handle hgIntegrator's UI state and events and interaction with the server/CGI/cart.
 
     mixins: [ CladeOrgDbMixin(['cladeOrgDb']),
-              PositionSearchMixin(['positionInfo']) ],
+              PositionSearchMixin(['regionSelect', 'positionInfo']),
+              UserRegionsMixin(['regionSelect', 'userRegions'])],
 
     maxDataSources: 5,
     tdbFields: 'track,table,shortLabel,parent,subtracks',
+    excludeTypes: 'bam,wigMaf',
 
     handleCartVar: function(mutState, cartVar, newValue) {
         // Some cart variables require special action (not simply being merged into top-level state)
@@ -22,8 +24,14 @@ var HgIntegratorModel = ImModel.extend({
                 mutState.set(cartVar, Immutable.fromJS(newValue));
             }
         } else if (cartVar === 'hgi_range') {
-            // Bundle this with positionInfo for fast immutable-prop checking
-            mutState.setIn(['positionInfo', cartVar], newValue);
+            // perhaps regionSelect stuff should move to a plugin
+            mutState.setIn(['regionSelect', cartVar], newValue);
+            mutState.setIn(['regionSelect', 'loading'], false);
+        } else if (cartVar === 'userRegionsUpdate') {
+            if (newValue && newValue !== "") {
+                // User-defined regions updated -- change range to userRegions
+                mutState.setIn(['regionSelect', 'hgi_range'], 'userRegions');
+            }
         } else if (cartVar === 'tableFields') {
             // The server has sent an object mapping table names to lists of fields.
             // Construct an immutable map of table names to ordered maps of fields to
@@ -39,12 +47,14 @@ var HgIntegratorModel = ImModel.extend({
             tfDefaults = _.mapValues(newValue, function(info, table) {
                 var currentFieldSettings = current[table] || {};
                 var newFieldSettings = Immutable.OrderedMap();
-                info.fields.forEach(function(field) {
+                info.fields.forEach(function(fieldAndDesc) {
+                    var field = fieldAndDesc.name;
                     var checked = currentFieldSettings[field];
                     if (checked === undefined) {
                         checked = (field !== 'bin');
                     }
-                    newFieldSettings = newFieldSettings.set(field, checked);
+                    var newSetting = Immutable.Map({checked: checked, desc: fieldAndDesc.desc});
+                    newFieldSettings = newFieldSettings.set(field, newSetting);
                 }, this);
                 return Immutable.Map({ fields: newFieldSettings, label: info.label});
             }, this);
@@ -84,14 +94,25 @@ var HgIntegratorModel = ImModel.extend({
         return this.findGroupedTrack(mutState, trackPath) ? true : false;
     },
 
-    schemaUrlFromTrackPath: function(mutState, trackPath) {
+    schemaUrlFromTrackPath: function(mutState, db, trackPath) {
         // Formulate a link to hgTables' table schema for trackPath's group/track/table.
-        var db = mutState.getIn(['cladeOrgDb', 'db']);
         var group = trackPath.first();
         var track = trackPath.get(1);
-        var table = trackPath.last();
-        return 'hgTables?db=' + db + '&hgta_group=' + group + '&hgta_track=' + track +
-                        '&hgta_table=' + table + '&hgta_doSchema=1';
+        // table is almost always the same as leaf track -- but not always, for example
+        // track wgEncodeRegDnaseClustered, table wgEncodeRegDnaseClusteredV3.
+        var table = null;
+        var leafObj = this.findGroupedTrack(mutState, trackPath);
+        if (leafObj) {
+            table = leafObj.get('table');
+            return 'hgTables?db=' + db + '&hgta_group=' + group + '&hgta_track=' + track +
+                                '&hgta_table=' + table + '&hgta_doSchema=1';
+        } else {
+            if (trackPath.size > 0 && trackPath.get(0)) {
+                this.error('schemaUrlFromTrackPath: can\'t find trackDb for trackPath ' +
+                           trackPath.toString());
+            }
+            return null;
+        }
     },
 
     findObjByField: function(objList, field, value) {
@@ -209,20 +230,11 @@ var HgIntegratorModel = ImModel.extend({
         }
     },
 
-    updateAddDsSchemaUrl: function(mutState) {
+    updateAddDsSchemaUrl: function(mutState, db) {
         // Read the selected path back out of addDsInfo.menus and update addDsInfo.schemaUrl.
         var trackPath = this.getAddDsTrackPath(mutState);
-        var leafObj = this.findGroupedTrack(mutState, trackPath);
-        if (leafObj) {
-            trackPath = trackPath.set(trackPath.size-1, leafObj.get('table'));
-            mutState.setIn(['addDsInfo', 'schemaUrl'],
-                           this.schemaUrlFromTrackPath(mutState, trackPath));
-        } else {
-            if (trackPath.size > 0 && trackPath.get(0)) {
-                this.error('updateAddDsSchemaUrl: can\'t find trackPath ' + trackPath.toString());
-            }
-            mutState.setIn(['addDsInfo', 'schemaUrl'], null);
-        }
+        mutState.setIn(['addDsInfo', 'schemaUrl'],
+                       this.schemaUrlFromTrackPath(mutState, db, trackPath));
     },
 
     updateAddDsDisable: function(mutState) {
@@ -290,7 +302,7 @@ var HgIntegratorModel = ImModel.extend({
         });
     },
 
-    groupedTrackDbToMenus: function (mutState, trackPath, changedIx) {
+    groupedTrackDbToMenus: function (mutState, db, trackPath, changedIx) {
         // Build or update the list of menu descriptors for rendering group, track, and possibly
         // view and subtrack menus for choosing a data source.  Use trackPath as a record of
         // selected items, if it's consistent with groupedTrackDb.
@@ -314,7 +326,7 @@ var HgIntegratorModel = ImModel.extend({
         // Now update the things that depend on menus and other state:
         this.disableDataSourcesInAddDsMenus(mutState);
         this.updateAddDsDisable(mutState);
-        this.updateAddDsSchemaUrl(mutState);
+        this.updateAddDsSchemaUrl(mutState, db);
     },
 
     handleGroupedTrackDb: function(mutState, cartVar, newValue) {
@@ -337,7 +349,7 @@ var HgIntegratorModel = ImModel.extend({
                     ! this.isInGroupedTrackDb(mutState, addDsTrackPath)) {
                     addDsTrackPath = Immutable.List();
                 }
-                this.groupedTrackDbToMenus(mutState, addDsTrackPath, 0);
+                this.groupedTrackDbToMenus(mutState, newValue.db, addDsTrackPath, 0);
             }
         } else {
             this.error('handleGroupedTrackDb: expecting cartVar groupedTrackDb, got ',
@@ -383,6 +395,7 @@ var HgIntegratorModel = ImModel.extend({
         var dataSources = mutState.getIn(['hgi_querySpec', 'dataSources']) || Immutable.List();
         var addDsInfo = mutState.get('addDsInfo');
         if (dataSources && addDsInfo) {
+            var db = this.getDb(mutState);
             var newDataSources = dataSources.filter(function(ds) {
                 var trackPath = ds.get('trackPath');
                 return trackPath && this.isInGroupedTrackDb(mutState, trackPath);
@@ -390,7 +403,7 @@ var HgIntegratorModel = ImModel.extend({
                                                     ).map(function(ds) {
                 var trackPath = ds.get('trackPath');
                 ds = ds.set('label', this.labelFromTrackPath(mutState, trackPath));
-                ds = ds.set('schemaUrl', this.schemaUrlFromTrackPath(mutState, trackPath));
+                ds = ds.set('schemaUrl', this.schemaUrlFromTrackPath(mutState, db, trackPath));
                 return ds;
             }, this);
             if (! newDataSources.equals(dataSources)) {
@@ -399,6 +412,33 @@ var HgIntegratorModel = ImModel.extend({
             this.disableDataSourcesInAddDsMenus(mutState);
             this.updateAddDsDisable(mutState);
         }
+    },
+
+    changeRange: function(mutState, uiPath, newValue) {
+        // User changed 'region to annotate' select; if they changed it to 'define regions'
+        // but have not yet defined any regions, open the UserRegions popup.
+        var existingRegions = mutState.getIn(['regionSelect', 'userRegions', 'regions']);
+        if (newValue === 'userRegions' && (!existingRegions || existingRegions === "")) {
+            this.openUserRegions(mutState);
+        } else {
+            this.changeCartString(mutState, uiPath, newValue);
+        }
+    },
+
+    clearUserRegions: function(mutState) {
+        // Clear user region state and reset hgi_range.
+        this.changeCartString(mutState, ['regionSelect', 'hgi_range'], 'position');
+        this.clearUserRegionState(mutState);
+    },
+
+    uploadedUserRegions: function(mutState) {
+        // Wait for results of parsing uploaded region file
+        mutState.setIn(['regionSelect', 'loading'], true);
+    },
+
+    pastedUserRegions: function(mutState) {
+        // Update hgi_range to select user regions
+        mutState.setIn(['regionSelect', 'hgi_range'], 'userRegions');
     },
 
     cartSendQuerySpec: function(mutState) {
@@ -417,6 +457,7 @@ var HgIntegratorModel = ImModel.extend({
         // Changing group or track (or view) has side effects on lower-level menus.
         var ix = uiPath.pop();
         var trackPath = this.getAddDsTrackPath(mutState);
+        var db = this.getDb(mutState);
         if (trackPath.size === 0) {
             this.error('changeAddDsMenu: getAddDsTrackPath came up empty?! ix=' + ix);
             ix = 0;
@@ -431,7 +472,7 @@ var HgIntegratorModel = ImModel.extend({
             trackPath = trackPath.splice(ix, trackPath.size, newValue);
         }
         // Regenerate menus
-        this.groupedTrackDbToMenus(mutState, trackPath, ix);
+        this.groupedTrackDbToMenus(mutState, db, trackPath, ix);
         // Store updated trackPath in state and cart
         trackPath = this.getAddDsTrackPath(mutState);
         mutState.set('hgi_addDsTrackPath', trackPath);
@@ -460,7 +501,8 @@ var HgIntegratorModel = ImModel.extend({
             alert(label + ' has already been added above.');
             return;
         }
-        var schemaUrl = this.schemaUrlFromTrackPath(mutState, addDsTrackPath);
+        var db = this.getDb(mutState);
+        var schemaUrl = this.schemaUrlFromTrackPath(mutState, db, addDsTrackPath);
         var dataSource = Immutable.fromJS({ trackPath: addDsTrackPath,
                                             label: label,
                                             schemaUrl: schemaUrl});
@@ -547,19 +589,22 @@ var HgIntegratorModel = ImModel.extend({
             var table = path[2], field = path[3];
             if (field) {
                 // Update field's status in UI state and hgi_querySpec
-                mutState.setIn(['tableFields', table, 'fields', field], newValue);
+                mutState.setIn(['tableFields', table, 'fields', field, 'checked'], newValue);
                 mutState.setIn(['hgi_querySpec', 'outFileOptions', 'tableFields',
                                      table, field], newValue);
             } else {
                 // 'Set all' or 'Clear all' according to newValue
                 mutState.updateIn(['tableFields', table, 'fields'], function(fieldVals) {
-                    return fieldVals.map(function() { return newValue; });
+                    return fieldVals.map(function(checkedAndDesc) {
+                        return checkedAndDesc.set('checked', newValue);
+                    });
                 });
                 // hgi_querySpec might not yet contain any explicit choices for table's fields,
                 // so iterate over the complete set of fields in top-level tableFields:
-                mutState.getIn(['tableFields', table, 'fields']).forEach(function(val, field) {
+                mutState.getIn(['tableFields', table, 'fields']
+                               ).forEach(function(checkedAndDesc, field) {
                     mutState.setIn(['hgi_querySpec', 'outFileOptions', 'tableFields',
-                                         table, field], val);
+                                         table, field], checkedAndDesc.get('checked'));
                 });
             }
             this.cartSendQuerySpec(mutState);
@@ -569,6 +614,10 @@ var HgIntegratorModel = ImModel.extend({
     doGetOutput: function(mutState) {
         // User clicked 'Get output' button; make a form and submit it.
         var querySpec = mutState.get('hgi_querySpec').toJS();
+        // Remove UI-only fields from dataSources:
+        querySpec.dataSources = _.map(querySpec.dataSources, function(ds) {
+            return _.omit(ds, ['schemaUrl', 'label']);
+        });
         var doFile = mutState.getIn(['hgi_querySpec', 'outFileOptions', 'doFile']);
         if (querySpec.dataSources.length < 1) {
             alert('Please add at least one data source.');
@@ -606,34 +655,44 @@ var HgIntegratorModel = ImModel.extend({
         // are left in place.  So, clear out db-specific state until the new data arrive.
         mutState.remove('groupedTrackDb');
         mutState.remove('addDsInfo');
-        var db = this.getDb(mutState);
         // Update PositionSearchMixin's position:
         var newPos = this.getDefaultPos(mutState);
         this.setPosition(mutState, newPos);
         // Parallel requests for little stuff that we need ASAP and potentially huge trackDb:
-        this.cartDo({ cgiVar: { db: db, position: newPos },
+        this.cartDo({ cgiVar: this.getChangeDbCgiVars(mutState),
                       get: { 'var': 'position,hgi_querySpec' },
                       getGeneSuggestTrack: {},
+                      getUserRegions: {}
                       });
-        this.cartDo({ cgiVar: { db: db },
-                      getGroupedTrackDb: { fields: this.tdbFields } });
+        this.cartDo({ cgiVar: this.getChangeDbCgiVars(mutState),
+                      getGroupedTrackDb: { fields: this.tdbFields,
+                                           excludeTypes: this.excludeTypes } });
     },
 
     initialize: function() {
         // Register handlers for cart variables that need special treatment:
-        this.registerCartVarHandler(['hgi_querySpec', 'hgi_range', 'tableFields'],
+        this.registerCartVarHandler(['hgi_querySpec', 'hgi_range', 'tableFields',
+                                     'userRegionsUpdate'],
                                     this.handleCartVar);
         this.registerCartVarHandler('hgi_addDsTrackPath', this.handleJsonBlob);
         this.registerCartVarHandler('groupedTrackDb', this.handleGroupedTrackDb);
         this.registerCartValidateHandler(this.validateCart);
         // Register handlers for UI events:
-        this.registerUiHandler(['positionInfo', 'hgi_range'], this.changeCartString);
+        this.registerUiHandler(['regionSelect', 'hgi_range'], this.changeRange);
+        this.registerUiHandler(['regionSelect', 'changeRegions'], this.openUserRegions);
+        this.registerUiHandler(['regionSelect', 'clearRegions'], this.clearUserRegions);
+        this.registerUiHandler(['regionSelect', 'userRegions', 'uploaded'],
+                               this.uploadedUserRegions);
+        this.registerUiHandler(['regionSelect', 'userRegions', 'pasted'], this.pastedUserRegions);
         this.registerUiHandler(['addDsMenuSelect'], this.changeAddDsMenu);
         this.registerUiHandler(['addDataSource'], this.addDataSource);
         this.registerUiHandler(['trackHubs'], this.goToTrackHubs);
         this.registerUiHandler(['customTracks'], this.goToCustomTracks);
         this.registerUiHandler(['dataSources'], this.dataSourceClick);
         this.registerUiHandler(['outFileOptions'], this.outFileOptionsClick);
+
+        // Tell cart what CGI to send requests to
+        this.cart.setCgi('hgIntegrator');
 
         // Bootstrap initial state from page or by server request, then render:
         if (window.initialAppState) {
@@ -643,16 +702,13 @@ var HgIntegratorModel = ImModel.extend({
             // Fire off some requests in parallel -- some are much slower than others.
             // Get clade/org/db and important small cart variables.
             this.cartDo({ getCladeOrgDbPos: {},
-                          get: {'var': 'hgi_range,hgi_querySpec,hgi_addDsTrackPath'}
+                          get: {'var': 'hgi_range,hgi_querySpec,hgi_addDsTrackPath'},
+                          getUserRegions: {}
                         });
             // The groupedTrackDb structure is so large for hg19 and other well-annotated
             // genomes that the volume of compressed JSON takes a long time on the wire.
-            this.cartDo({ getGroupedTrackDb: { fields: this.tdbFields }
-                        });
-            // This one shouldn't take long.
-            this.cartDo({ getStaticHtml: {
-                            tag: 'helpText', file: 'goldenPath/help/hgIntegratorHelp.html'
-                          }
+            this.cartDo({ getGroupedTrackDb: { fields: this.tdbFields,
+                                               excludeTypes: this.excludeTypes }
                         });
         }
         this.render();
@@ -660,8 +716,6 @@ var HgIntegratorModel = ImModel.extend({
 
 
 }); // HgIntegratorModel
-
-cart.setCgi('hgIntegrator');
 
 var container = document.getElementById('appContainer');
 
@@ -674,4 +728,5 @@ function render(state, update, undo, redo) {
 }
 
 var hgIntegratorModel = new HgIntegratorModel(render);
+
 hgIntegratorModel.initialize();

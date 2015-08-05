@@ -132,3 +132,44 @@ if (dirLen > 0 && dir[dirLen-1] == '/')
      dir[dirLen-1] = 0;
 return expandRelativePath(dir, relPath);
 }
+
+char *makeRelativePath(char *from, char *to)
+/* Calculate a relative path from one absolute directory/file to another.
+ * Assumptions: both from and to are absolute paths beginning at "/", and
+ * may be as small as only "/".  Filenames are okay, but all directory
+ * names must end with a "/" to distinguish them from files.
+ * e.g., /test/dir/ is a directory, but /test/dir is a file.
+ */
+{
+int i, j, toCount, fromCount;
+char fromDir[PATH_LEN];
+char toDir[PATH_LEN], toFile[FILENAME_LEN], toExt[FILEEXT_LEN];
+char relPath [PATH_LEN] = "";
+char *fromDirList[PATH_LEN], *toDirList[PATH_LEN];
+
+splitPath(from, fromDir, NULL, NULL);
+splitPath(to, toDir, toFile, toExt);
+
+fromCount = chopByChar(fromDir, '/', fromDirList, ArraySize(fromDirList));
+toCount   = chopByChar(toDir,   '/', toDirList,   ArraySize(toDirList));
+
+for (i=1; i < min(fromCount, toCount); i++)
+    {
+    if (!sameString(fromDirList[i], toDirList[i]))
+        break;
+    }
+for (j=i; j < fromCount-1; j++)
+    {
+    safecat(relPath, sizeof relPath, "../");
+    }
+for (j=i; j < toCount-1; j++)
+    {
+    safecat(relPath, sizeof relPath, toDirList[j]);
+    safecat(relPath, sizeof relPath, "/");
+    }
+
+safecat(relPath, sizeof relPath, toFile);
+safecat(relPath, sizeof relPath, toExt);
+
+return cloneString(relPath);
+}

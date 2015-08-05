@@ -1,4 +1,4 @@
-#bin	chrom	chromStart	chromEnd	name	alleleCount	alleleFreq	alleleScores
+#hg19.pgNA12878.bin	hg19.pgNA12878.chrom	hg19.pgNA12878.chromStart	hg19.pgNA12878.chromEnd	hg19.pgNA12878.name	hg19.pgNA12878.alleleCount	hg19.pgNA12878.alleleFreq	hg19.pgNA12878.alleleScores
 590	chr1	705881	705882	A/G	2	0,0	100,100
 590	chr1	752565	752566	A	1	0	100
 590	chr1	752720	752721	G	1	0	100

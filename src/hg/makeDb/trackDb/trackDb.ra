@@ -369,7 +369,7 @@ noInherit on
     shortLabel Sequences
     longLabel Sequences in Articles: PubmedCentral and Elsevier
     parent pubs on
-    type bed 12 .
+    type bed 12 +
     visibility dense
     priority 2
     configurable off
@@ -414,7 +414,7 @@ track pubsBingBlat
 shortLabel Web Sequences
 longLabel DNA Sequences in Web Pages Indexed by Bing.com / Microsoft Research
 group pub
-type bed 12 .
+type bed 12 +
 visibility hide
 configurable off
 configureByPopup off
@@ -726,14 +726,6 @@ visibility hide
 color 150,0,0
 type genePred ensPep
 
-track augGene
-shortLabel Augustus
-longLabel Augustus gene predictions
-group genes
-visibility hide
-color 150,0,0
-type genePred
-
 track ensEstGene
 shortLabel Ensembl EST Genes
 longLabel Ensembl EST Gene Predictions
@@ -792,7 +784,7 @@ searchPriority 50
 
 track sgpGene
 shortLabel SGP Genes
-longLabel SGP Gene Predictions Using Mouse/Human Homology
+longLabel SGP Gene Predictions Using $Organism/Human Homology
 group genes
 visibility hide
 color 0,90,100
@@ -1536,7 +1528,7 @@ shortLabel Segmental Dups
 longLabel Duplications of >1000 Bases of Non-RepeatMasked Sequence
 group varRep
 visibility hide
-type bed 6 .
+type bed 6 +
 noScoreFilter .
 
 track rmsk
@@ -2915,7 +2907,6 @@ longLabel NCBI RefSeq Genes
 compositeTrack on
 group genes
 visibility hide
-priority 10000
 type genePred 
 baseColorUseCds given
 noInherit on
@@ -2926,7 +2917,7 @@ subGroup1 view Views curated=Curated predicted=Predicted
     shortLabel Curated
     view curated
     visibility pack
-    color 204,136,153
+    color 16,93,235
     parent ncbiGene
 
 	track ncbiRefCurated
@@ -2941,7 +2932,7 @@ subGroup1 view Views curated=Curated predicted=Predicted
     view predicted
     visibility hide
     parent ncbiGene
-    color 153,255,0 
+    color 48,168,219
     spectrum on
 
 	track ncbiRefPredicted
@@ -3001,3 +2992,19 @@ searchType genePred
 termRegex X(M|R)_[0-9]{6}[0-9]*.[0-9]*
 searchPriority 9.5
 
+track augustusGene
+shortLabel Augustus
+longLabel Augustus gene predictions v3.1
+group genes
+visibility hide
+color 12,105,0
+type genePred
+baseColorUseCds given
+baseColorDefault genomicCodons
+
+searchTable augustusGene
+searchType genePred
+shortCircuit 1
+searchMethod fuzzy
+termRegex g[0-9]+(\.t[0-9]+)?
+searchPriority 50

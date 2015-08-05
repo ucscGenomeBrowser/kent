@@ -13,26 +13,12 @@
 
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../images/title.jpg" ALT="UCSC Genome Bioinformatics"></TH></TR>
 
-<TR><TD COLSPAN=2 HEIGHT=40><!-- This file generates the top menu bar on Genome Browser static pages-->
-  <TABLE BGCOLOR="#000000" CELLPADDING="1" CELLSPACING="1" WIDTH="100%">
-    <TR BGCOLOR="#2636D1"><TD VALIGN="middle">
-      <TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 BGCOLOR="#2636D1" style="height:24px;" class="topbar">
-	<TR><TD VALIGN="middle"><FONT COLOR="#89A1DE">
-	  <A HREF="/index.html" class="topbar">Home</A>-
-	  <A HREF="/cgi-bin/hgGateway" class="topbar">Genomes</A>-
- 	  <A HREF="/cgi-bin/hgBlat?command=start" class="topbar">Blat</A>-
-	  <A HREF="/cgi-bin/hgTables?command=start" class="topbar">Tables</A>-
-	  <A HREF="/cgi-bin/hgNear" class="topbar">Gene Sorter</A>-
-	  <A HREF="/cgi-bin/hgPcr?command=start" class="topbar">PCR</A>-
-	  <A HREF="/cgi-bin/hgVisiGene?command=start" class="topbar">VisiGene</A>-
-	  <A HREF="/cgi-bin/hgSession?hgS_doMainPage=1" class="topbar">Session</A>-
-	  <A HREF="/goldenPath/help/hgTracksHelp.html" class="topbar">Help</A>
-	</FONT></TD></TR>
-      </TABLE>
-    </TD></TR>
-  </TABLE>
-<!-- end topbar -->
-</TD></TR>
+<noscript><div class='noscript'><div class='noscript-inner'><p><b>JavaScript is disabled in your web browser</b></p><p>You must have JavaScript enabled in your web browser to use the Genome Browser</p></div></div></noscript>
+<script type='text/javascript' SRC='../js/jquery.js'></script>
+<script type='text/javascript' SRC='../js/jquery.plugins.js'></script>
+<LINK rel='STYLESHEET' href='../style/nice_menu.css' TYPE='text/css' />
+<TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../cgi-bin/hgMenubar"--></TD></TR>
+
 <!--Content Tables------------------------------------------------------->
 <TR><TD COLSPAN=2 CELLPADDING=10>
 <!--outer table is for border purposes-->
@@ -47,83 +33,90 @@
          <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
          <TR><TD WIDTH=5>&nbsp;</TD><TD>
            <div class="warn-note" style="border: 2px solid #9e5900; padding: 5px 20px; background-color: #e8ebf7;">
-           <p><span style="font-weight: bold; color: #c70000;"> <b>Host a Genome Browser Workshop!</b> </span><br></p>
+           <p><span style="font-weight: bold; color: #c70000;"> <b>Host a Genome Browser Workshop!</b> 
+           &nbsp;           &nbsp;           &nbsp;           
+           <A HREF = "trainingMap.html">Map</A>
+           </span><br></p>
 
            <p>
-           New timeslots are now available to host a Genome Browser workshop at your institution. Thanks to the funding support of NHGRI,
-           we offer hands-on Genome Browser training onsite at your institution, tailored to your
-           audience's level of expertise.
+           Timeslots are available to host a Genome Browser workshop at your 
+           institution. Thanks to the funding support of NHGRI,
+           we offer hands-on Genome Browser training onsite at your institution, 
+           tailored to your audience's level of expertise.
            </p>
            <p>
            For more information or to submit a request to host a workshop,
            please visit <a href="http://bit.ly/ucscTraining" target="_blank">our signup</a>.
            </p>
            <p>
-           <p><span style="font-weight: bold; color: #c70000;"> <b>Can't host? </b> </span><br></p>
-
-           Catch one of our trainings in your area:
+           <p><span style="font-weight: bold; color: #c70000;"> <b>Can't host? </b> </span>
+           &nbsp;           &nbsp;           &nbsp;           Catch one of our trainings in your area:
            </p>
            <p>
            <TABLE CELLPADDING = 3 BORDER = 0 >
 
-            <tr><td width = 180 valign = top>May 19-20, 2015</td>
-	     <td> Sanford-Burnham Medical Research Institute, Orlando, FL. Contact:
-	     (<A HREF="mailto:&#117;&#99;s&#99;&#103;&#98;&#116;&#114;&#97;in&#105;&#110;&#103;&#64;&#115;&#111;&#101;.&#117;&#99;&#115;c.e&#100;&#117;">&#117;&#99;s&#99;&#103;&#98;&#116;&#114;&#97;in&#105;&#110;&#103;&#64;&#115;&#111;&#101;.&#117;&#99;&#115;c.e&#100;&#117;</A>)
-	     for availability. </td></tr>
-	     <!-- above address is ucscgbtraining at soe.ucsc.edu --> 
+            <TR><TD VALIGN = TOP WIDTH = 180>September 7-8, 2015</TD>
+             <TD> Max Planck Institute for Heart and Lung Research, Bad Nauheim, Germany.  Contact: Mario Looso
+             (<A HREF="mailto:&#77;&#97;&#114;&#105;o.&#76;&#111;o&#115;&#111;&#64;&#109;&#112;i&#45;b&#110;.m&#112;&#103;.&#100;&#101;">&#77;&#97;&#114;&#105;o.&#76;&#111;o&#115;&#111;&#64;&#109;&#112;i&#45;b&#110;.m&#112;&#103;.&#100;&#101;</A>).
+             <!-- above address is Mario.Looso at mpi-bn.mpg.de -->
+             </TD></TR>
 
-            <TR><TD WIDTH = 180 VALIGN = TOP>May 31, 2015</TD>
-             <TD> University of Georgia, Athens</a>. Contact: Walt Lorenz
-             (<A HREF="mailto:&#119;l&#111;&#114;e&#110;&#122;&#64;&#117;&#103;&#97;.&#101;&#100;&#117;">&#119;l&#111;&#114;e&#110;&#122;&#64;&#117;&#103;&#97;.&#101;&#100;&#117;</A>)
-             <!-- above address is wlorenz at uga.edu -->
-             for availablility.</TD></TR>
+            <TR><TD VALIGN = TOP WIDTH = 180>September 10-11, 2015</TD>
+             <TD> <A HREF = "http://www.dzd-ev.de/en" TARGET = _BLANK>German Center for Diabetes
+             Research</A> (<A HREF = "http://www.dzd-ev.de" TARGET = _BLANK>Deutsches Zentrum f&uuml;r
+             Diabetesforschung, DZD</A>), Helmholtz Center, Munich, Germany.  Contact: Brigitte
+             Maria Fr&ouml;hlich.
+             (<A HREF="mailto:&#102;&#114;o&#101;&#104;&#108;i&#99;&#104;&#64;&#100;&#122;&#100;-&#101;&#118;.d&#101;">&#102;&#114;o&#101;&#104;&#108;i&#99;&#104;&#64;&#100;&#122;&#100;-&#101;&#118;.d&#101;</A>).
+             <!-- above address is froehlich at dzd-ev.de -->
 
-            <TR><TD VALIGN = TOP>June 2-3, 2015</TD>
-             <TD> <a href = "http://www.post-transcriptional.com/" TARGET = _BLANK>University
-             of Nevada, Reno</a>. Contact: Pedro Miura
-             (<A HREF="mailto:&#112;&#109;i&#117;&#114;a&#64;&#117;&#110;&#114;.&#101;d&#117;">&#112;&#109;i&#117;&#114;a&#64;&#117;&#110;&#114;.&#101;d&#117;</A>) for availability.
-	     <!-- above address is pmiura at unr.edu --></TD></TR>
+             </TD></TR>
 
-            <TR><TD VALIGN = TOP>June 8, 2015</TD>
-             <TD> <a href = "https://www.eshg.org/monday2015.0.html#W7"
-             TARGET = _BLANK>European Society of Human Genetics</A> annual
-             meeting. Glasgow, Scotland.</TD></TR>
+            <TR><TD VALIGN = TOP WIDTH = 180>October 5, 2015</TD>
+             <TD> Johns Hopkins University, Baltimore.  Contact: Rob Wright
+             (<A HREF="mailto:&#114;w&#114;&#105;g&#104;&#51;&#50;&#64;&#106;&#104;&#109;&#105;.&#101;&#100;u">&#114;w&#114;&#105;g&#104;&#51;&#50;&#64;&#106;&#104;&#109;&#105;.&#101;&#100;u</A>).
+             <!-- above address is rwrigh32 at jhmi.edu -->
+             </TD></TR>
 
-            <TR><TD VALIGN=TOP>June 9-10, 2015</TD>
-             <TD> <a href = "http://www.med.und.edu/epigenetics/" TARGET = _BLANK>
-             School of Medicine and Health Sciences</A>, University of North Dakota.
-             Contact: Archana Dhasarathy
-             (<A HREF="mailto:&#97;&#114;&#99;&#104;&#97;&#110;&#97;.d&#104;a&#115;&#97;&#114;&#97;&#116;&#104;&#121;&#64;&#109;e&#100;.&#117;&#110;d.&#101;&#100;&#117;">&#97;&#114;&#99;&#104;&#97;&#110;&#97;.d&#104;a&#115;&#97;&#114;&#97;&#116;&#104;&#121;&#64;&#109;e&#100;.&#117;&#110;d.&#101;&#100;&#117;</A>) for availability.
-	     <!-- above address is archana.dhasarathy at med.und.edu --></TD></TR>
-
-            <tr><td VALIGN = TOP>June 16-17, 2015</td>
-             <td> H. Lee Moffitt Cancer Center & Research Institute, Tampa, FL.
-             Contact: Melissa Quintana
-             (<A HREF="mailto:&#77;&#101;&#108;&#105;&#115;&#115;&#97;.q&#117;&#105;n&#116;a&#110;&#97;&#64;&#109;&#111;f&#102;&#105;&#116;&#116;.or&#103;">&#77;&#101;&#108;&#105;&#115;&#115;&#97;.q&#117;&#105;n&#116;a&#110;&#97;&#64;&#109;&#111;f&#102;&#105;&#116;&#116;.or&#103;</A>) for availability.
-             <!-- above address is Melissa.quintana at moffitt.org --></td></tr>
-
-            <tr><td VALIGN = TOP>June 29 - July 1, 2015</td>
-             <td> ENCODE Users Meeting <a href = "http://www.encode2015.org/"
-             target = _blank>www.encode2015.org</a>. Potomac, MD.  </td></tr>
-
-            <TR><TD VALIGN = TOP>July 23, 2015</TD>
-             <TD> At Jackson Lab course, <a href = "http://courses.jax.org/2015/56th-short-course.html"
-             TARGET = _BLANK>Experimental Mammalian Genetics</A>. Bar Harbor, ME.</TD></TR>
-
-            <tr><td valign = top>July 24, 2015</td>
-             <td>James Madison University, Harrisonburg, VA. Contact: Ray Enke 
-             (<a href="mailto:&#101;&#110;&#107;er&#97;&#64;&#106;m&#117;.&#101;&#100;&#117;">&#101;&#110;&#107;er&#97;&#64;&#106;m&#117;.&#101;&#100;&#117;</a>) 
-             for availability. <!-- above address is enkera at jmu.edu --></td></tr>
-
-            <TR><TD>October 7, 2015</TD>
+            <TR><TD VALIGN = TOP WIDTH = 180>October 7, 2015</TD>
              <TD> <a href = "http://www.ashg.org/2015meeting/" TARGET = _BLANK>American Society
              of Human Genetics</A> annual meeting. Baltimore.
              </TD></TR>
+
+            <TR><TD VALIGN = TOP WIDTH = 180>November 3-6, 2015</TD>
+             <TD> <A HREF = "http://x-meeting.com/2015/" TARGET = _BLANK>X-Meeting 2015</A> - 11th International
+             Conference of the AB3C + Brazilian Symposium of Bioinformatics.
+             Sao Paulo, Brazil.
+             </TD></TR>
+
+            <TR><TD VALIGN = TOP WIDTH = 180>November 9-10, 2015</TD>
+             <TD> Universidade Federal de Minas Gerais (UFMG), Belo Horizonte, Brazil. Contact: Gl&oacute;ria Regina Franco
+             (<A HREF="mailto:&#103;&#102;r&#97;&#110;&#99;&#111;u&#102;&#109;&#103;&#64;&#103;m&#97;&#105;l.&#99;&#111;&#109;">&#103;&#102;r&#97;&#110;&#99;&#111;u&#102;&#109;&#103;&#64;&#103;m&#97;&#105;l.&#99;&#111;&#109;</A>).
+             <!-- above address is gfrancoufmg at gmail.com -->
+
+            <TR><TD VALIGN = TOP WIDTH = 180>December 7-8, 2015</TD>
+             <TD>UC Davis <A HREF= "http://training.bioinformatics.ucdavis.edu/" TARGET = _BLANK>Bioinformatics</a>.
+               Contact: <A HREF="mailto:&#98;&#105;&#111;&#105;&#110;&#102;&#111;r&#109;&#97;&#116;&#105;&#99;&#115;.&#99;o&#114;&#101;&#64;&#117;&#99;&#100;a&#118;&#105;s.&#101;d&#117;">&#98;&#105;&#111;&#105;&#110;&#102;&#111;r&#109;&#97;&#116;&#105;&#99;&#115;.&#99;o&#114;&#101;&#64;&#117;&#99;&#100;a&#118;&#105;s.&#101;d&#117;</A>
+               <!-- above address is bioinformatics.core at ucdavis.edu -->
+
+
+            <TR><TD VALIGN = TOP WIDTH = 180>January 19-20, 2016</TD>
+             <TD>Icahn School of Medicine, Mt. Sinai Hess Center for Science and Medicine, New York.  Contact: Andrew Sharp
+             (<A HREF="mailto:&#97;nd&#114;&#101;&#119;.&#115;&#104;&#97;&#114;p&#64;&#109;&#115;&#115;m.&#101;&#100;&#117;">&#97;nd&#114;&#101;&#119;.&#115;&#104;&#97;&#114;p&#64;&#109;&#115;&#115;m.&#101;&#100;&#117;</A>).
+             <!-- above address is andrew.sharp at mssm.edu -->
+
+ <!-- hold for later
+            <TR><TD VALIGN = TOP WIDTH = 180>May 22, 2016 </TD>
+             <TD> European Society for Human Genetics <A HREF = "https://www.eshg.org/94.0.html"
+             TARGET = _BLANK>annual meeting</A>, Barcelona, Spain.
+          -->
+
+             </TD></TR>
+
            </TABLE>
            </P>
            </div>
-           <P>&nbsp;</P>
 
+         <BR>
          <B>Online Training and Tutorials:</B>
          <BLOCKQUOTE>
 
@@ -138,7 +131,7 @@
            <li>Identifying <a href="vids/index.html#vid07">codon numbers</a> in a gene.</li>
           </UL>
 
-         <B>Produced at UCSC              </B>
+         <B>Other Content Produced at UCSC              </B>
           <ul>
 	   <li>Nature: <a href="http://www.nature.com/scitable/ebooks/guide-to-the-ucsc-genome-browser-16569863"
 	          target="_blank">Guide to the UCSC Genome Browser</a>

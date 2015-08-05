@@ -596,7 +596,7 @@ if (sqlTableExists(conn, "knownCanonical"))
     {
     char query[512];
     sqlSafef(query, sizeof(query), "select transcript from knownCanonical"
-	  " where '%s' = transcript;", geneName);
+	  " where transcript = '%s'", geneName);
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row;
     if ((row = sqlNextRow(sr)) != NULL)
@@ -1578,14 +1578,12 @@ for (i = 0;
          idEl = idEl->next)
         {
         /* don't check srcDb to exclude refseq for compat with older tables */
-        if (limitResults == EXHAUSTIVE_SEARCH_REQUIRED)
-            sqlSafef(query, sizeof(query),
-                  "select acc, organism from gbCdnaInfo where %s = %s "
-                  " and type = 'mRNA'", field, idEl->name);
-        else // limit results to avoid CGI timeouts (#11626).
-            sqlSafef(query, sizeof(query),
-                  "select acc, organism from gbCdnaInfo where %s = %s "
-                  " and type = 'mRNA' limit %d", field, idEl->name, limitResults);
+	sqlSafef(query, sizeof(query),
+	      "select acc, organism from gbCdnaInfo where %s = '%s' "
+	      " and type = 'mRNA'", field, idEl->name);
+        // limit results to avoid CGI timeouts (#11626).
+        if (limitResults != EXHAUSTIVE_SEARCH_REQUIRED)
+            sqlSafefAppend(query, sizeof(query), " limit %d", limitResults);
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -2129,11 +2127,11 @@ if (gotRefLink)
 	}
     else if (isUnsignedInt(specNoVersion))
         {
-	sqlDyStringPrintf(ds, "select * from refLink where locusLinkId = %s",
+	sqlDyStringPrintf(ds, "select * from refLink where locusLinkId = '%s'",
 		       specNoVersion);
 	addRefLinks(conn, ds, &rlList);
 	dyStringClear(ds);
-	sqlDyStringPrintf(ds, "select * from refLink where omimId = %s", specNoVersion);
+	sqlDyStringPrintf(ds, "select * from refLink where omimId = '%s'", specNoVersion);
 	addRefLinks(conn, ds, &rlList);
 	}
     else 

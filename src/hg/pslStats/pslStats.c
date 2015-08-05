@@ -138,7 +138,7 @@ return querySizesTbl;
 static unsigned calcAligned(struct psl *psl)
 /* compute the number of bases aligned */
 {
-return psl->match + psl->misMatch + psl->repMatch;
+return psl->match + psl->misMatch + psl->repMatch + psl->nCount;
 }
 
 static unsigned calcMatch(struct psl *psl)

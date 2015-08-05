@@ -1,0 +1,1485 @@
+#########################################################################
+# LASTZ C. japonica/caeJap4 - (DONE - 2015-06-25 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzCaeJap4.2015-06-25
+    cd /hive/data/genomes/ce11/bed/lastzCaeJap4.2015-06-25
+
+    cat << '_EOF_' > DEF
+# ce11 vs caeJap4
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. japonica caeJap4
+SEQ2_DIR=/scratch/data/caeJap4/caeJap4.2bit
+SEQ2_LEN=/scratch/data/caeJap4/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzCaeJap4.2015-06-25
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #	real    16m5.192s
+
+    cat fb.ce11.chainCaeJap4Link.txt
+    # 27788713 bases of 100286401 (27.709%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 caeJap4) > rbest.log 2>&1 &
+    # real    1m14.336s  (lost the rbest.log)
+
+    # and for the swap:
+    mkdir /hive/data/genomes/caeJap4/bed/blastz.ce11.swap
+    cd /hive/data/genomes/caeJap4/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzCaeJap4.2015-06-25/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    3m23.708s
+
+    cat fb.caeJap4.chainCe11Link.txt
+    # 30092433 bases of 154057934 (19.533%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` caeJap4 ce11) \
+      > rbest.log 2>&1
+    # real    2m9.571s
+
+#########################################################################
+# LASTZ M. hapla/melHap1 - (DONE - 2015-06-26 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzMelHap1.2015-06-26
+    cd /hive/data/genomes/ce11/bed/lastzMelHap1.2015-06-26
+
+    cat << '_EOF_' > DEF
+# ce11 vs melHap1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Meloidogyne hapla melHap1
+SEQ2_DIR=/scratch/data/melHap1/melHap1.2bit
+SEQ2_LEN=/scratch/data/melHap1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzMelHap1.2015-06-26
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #	real    4m26.505s
+
+    cat fb.ce11.chainMelHap1Link.txt
+    # 3927661 bases of 100286401 (3.916%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 melHap1) > rbest.log 2>&1 &
+    # real    0m26.480s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melHap1/bed/blastz.ce11.swap
+    cd /hive/data/genomes/melHap1/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzMelHap1.2015-06-26/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    0m50.085s
+
+    cat fb.melHap1.chainCe11Link.txt
+    # 3626430 bases of 53017507 (6.840%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melHap1 ce11) \
+      > rbest.log 2>&1
+    # real    0m28.275s
+
+#########################################################################
+# LASTZ C. angaria/caeAng2 - (DONE - 2015-06-30 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzCaeAng2.2015-06-30
+    cd /hive/data/genomes/ce11/bed/lastzCaeAng2.2015-06-30
+
+    cat << '_EOF_' > DEF
+# ce11 vs caeAng2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. angaria caeAng2
+SEQ2_DIR=/hive/data/genomes/caeAng2/caeAng2.2bit
+SEQ2_LEN=/hive/data/genomes/caeAng2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzCaeAng2.2015-06-30
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #	real    19m36.998s
+
+    cat fb.ce11.chainCaeAng2Link.txt
+    # 17733068 bases of 100286401 (17.682%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 caeAng2) > rbest.log 2>&1 &
+    # real    1m1.211s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/caeAng2/bed/blastz.ce11.swap
+    cd /hive/data/genomes/caeAng2/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzCaeAng2.2015-06-30/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    8m32.125s
+
+    cat fb.caeAng2.chainCe11Link.txt
+    # 19987227 bases of 95237926 (20.987%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` caeAng2 ce11) \
+      > rbest.log 2>&1
+    # real    4m36.188s
+
+#########################################################################
+# LASTZ M. incognita/melInc2 - (DONE - 2015-06-30 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzMelInc2.2015-06-30
+    cd /hive/data/genomes/ce11/bed/lastzMelInc2.2015-06-30
+
+    cat << '_EOF_' > DEF
+# ce11 vs melInc2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: M. incognita melInc2
+SEQ2_DIR=/hive/data/genomes/melInc2/melInc2.2bit
+SEQ2_LEN=/hive/data/genomes/melInc2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzMelInc2.2015-06-30
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #	real    5m19.519s
+
+    cat fb.ce11.chainMelInc2Link.txt
+    # 3526393 bases of 100286401 (3.516%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 melInc2) > rbest.log 2>&1 &
+    # real    0m36.875s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melInc2/bed/blastz.ce11.swap
+    cd /hive/data/genomes/melInc2/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzMelInc2.2015-06-30/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    2m2.321s
+
+    cat fb.melInc2.chainCe11Link.txt
+    # 4548339 bases of 82114761 (5.539%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melInc2 ce11) \
+      > rbest.log 2>&1
+    # real    0m30.384s
+
+#########################################################################
+# LASTZ Panagrellus redivivus/panRed1 - (DONE - 2015-07-01 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzPanRed1.2015-07-01
+    cd /hive/data/genomes/ce11/bed/lastzPanRed1.2015-07-01
+
+    cat << '_EOF_' > DEF
+# ce11 vs panRed1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Panagrellus redivivus panRed1
+SEQ2_DIR=/hive/data/genomes/panRed1/panRed1.2bit
+SEQ2_LEN=/hive/data/genomes/panRed1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzPanRed1.2015-07-01
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #	real    4m27.377s
+
+    cat fb.ce11.chainPanRed1Link.txt
+    # 6603624 bases of 100286401 (6.585%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 panRed1) > rbest.log 2>&1 &
+    # real    0m33.563s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/panRed1/bed/blastz.ce11.swap
+    cd /hive/data/genomes/panRed1/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzPanRed1.2015-07-01/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    0m53.970s
+
+    cat fb.panRed1.chainCe11Link.txt
+    # 6446092 bases of 62228262 (10.359%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` panRed1 ce11) \
+      > rbest.log 2>&1
+    # real    0m38.503s
+
+#########################################################################
+# LASTZ Pristionchus pacificus/priPac3 - (DONE - 2015-07-01 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzPriPac3.2015-07-01
+    cd /hive/data/genomes/ce11/bed/lastzPriPac3.2015-07-01
+
+    cat << '_EOF_' > DEF
+# ce11 vs priPac3
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Pristionchus pacificus priPac3
+SEQ2_DIR=/hive/data/genomes/priPac3/priPac3.2bit
+SEQ2_LEN=/hive/data/genomes/priPac3/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzPriPac3.2015-07-01
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #	real    16m34.215s
+
+    cat fb.ce11.chainPriPac3Link.txt
+    # 6326413 bases of 100286401 (6.308%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 priPac3) > rbest.log 2>&1 &
+    # real    0m37.219s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/priPac3/bed/blastz.ce11.swap
+    cd /hive/data/genomes/priPac3/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzPriPac3.2015-07-01/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    1m13.447s
+
+    cat fb.priPac3.chainCe11Link.txt
+    # 6947156 bases of 153238914 (4.534%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` priPac3 ce11) \
+      > rbest.log 2>&1
+    # real    0m48.989s
+
+#########################################################################
+# LASTZ Caenorhabditis briggsae/cb4 - (DONE - 2015-07-01 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzCb4.2015-07-01
+    cd /hive/data/genomes/ce11/bed/lastzCb4.2015-07-01
+
+    cat << '_EOF_' > DEF
+# ce11 vs cb4
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Caenorhabditis briggsae cb4
+SEQ2_DIR=/hive/data/genomes/cb4/cb4.2bit
+SEQ2_LEN=/hive/data/genomes/cb4/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzCb4.2015-07-01
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #	real    11m45.085s
+
+    cat fb.ce11.chainCb4Link.txt
+    # 39496335 bases of 100286401 (39.384%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 cb4) > rbest.log 2>&1 &
+    # real    1m44.529s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/cb4/bed/blastz.ce11.swap
+    cd /hive/data/genomes/cb4/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzCb4.2015-07-01/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    3m3.364s
+
+    cat fb.cb4.chainCe11Link.txt
+    # 39234668 bases of 108371485 (36.204%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` cb4 ce11) \
+      > rbest.log 2>&1
+    # real    1m58.707s
+
+#########################################################################
+# LASTZ Caenorhabditis brenneri/caePb3 - (DONE - 2015-07-01 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzCaePb3.2015-07-01
+    cd /hive/data/genomes/ce11/bed/lastzCaePb3.2015-07-01
+
+    cat << '_EOF_' > DEF
+# ce11 vs caePb3
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Caenorhabditis brenneri caePb3
+SEQ2_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ2_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzCaePb3.2015-07-01
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #	real    14m1.774s
+
+    cat fb.ce11.chainCaePb3Link.txt
+    # 40753915 bases of 100286401 (40.638%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 caePb3) > rbest.log 2>&1 &
+    # real    1m31.030s (lost log ...)
+
+    # and for the swap:
+    mkdir /hive/data/genomes/caePb3/bed/blastz.ce11.swap
+    cd /hive/data/genomes/caePb3/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzCaePb3.2015-07-01/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    3m54.518s
+
+    cat fb.caePb3.chainCe11Link.txt
+    # 54933712 bases of 170093652 (32.296%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` caePb3 ce11) \
+      > rbest.log 2>&1
+    # real    2m14.946s
+
+#########################################################################
+# LASTZ Caenorhabditis remanei/caeRem4 - (DONE - 2015-07-02 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzCaeRem4.2015-07-02
+    cd /hive/data/genomes/ce11/bed/lastzCaeRem4.2015-07-02
+
+    cat << '_EOF_' > DEF
+# ce11 vs caeRem4
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Caenorhabditis remanei caeRem4
+SEQ2_DIR=/hive/data/genomes/caeRem4/caeRem4.2bit
+SEQ2_LEN=/hive/data/genomes/caeRem4/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzCaeRem4.2015-07-02
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #	real    11m45.453s
+
+    cat fb.ce11.chainCaeRem4Link.txt
+    # 41834559 bases of 100286401 (41.715%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 caeRem4) > rbest.log 2>&1 &
+    # real    1m31.160s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/caeRem4/bed/blastz.ce11.swap
+    cd /hive/data/genomes/caeRem4/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzCaeRem4.2015-07-02/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    3m26.148s
+
+    cat fb.caeRem4.chainCe11Link.txt
+    # 46250303 bases of 138406203 (33.416%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` caeRem4 ce11) \
+      > rbest.log 2>&1
+    # real    2m5.240s
+
+#########################################################################
+# LASTZ Caenorhabditis remanei/haeCon2 - (DONE - 2015-07-07 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzHaeCon2.2015-07-07
+    cd /hive/data/genomes/ce11/bed/lastzHaeCon2.2015-07-07
+
+    cat << '_EOF_' > DEF
+# ce11 vs haeCon2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Caenorhabditis remanei haeCon2
+SEQ2_DIR=/hive/data/genomes/haeCon2/haeCon2.2bit
+SEQ2_LEN=/hive/data/genomes/haeCon2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzHaeCon2.2015-07-07
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #	real    20m35.223s
+
+    cat fb.ce11.chainHaeCon2Link.txt
+    # 8961368 bases of 100286401 (8.936%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 haeCon2) > rbest.log 2>&1 &
+    # real    0m45.145s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/haeCon2/bed/blastz.ce11.swap
+    cd /hive/data/genomes/haeCon2/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzHaeCon2.2015-07-07/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    2m2.810s
+
+    cat fb.haeCon2.chainCe11Link.txt
+    # 11782596 bases of 346001353 (3.405%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` haeCon2 ce11) \
+      > rbest.log 2>&1
+    # real    1m27.137s
+
+#########################################################################
+# LASTZ Caenorhabditis tropicalis/caeSp111 - (DONE - 2015-07-07 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzCaeSp111.2015-07-07
+    cd /hive/data/genomes/ce11/bed/lastzCaeSp111.2015-07-07
+
+    cat << '_EOF_' > DEF
+# ce11 vs caeSp111
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Caenorhabditis tropicalis caeSp111
+SEQ2_DIR=/hive/data/genomes/caeSp111/caeSp111.2bit
+SEQ2_LEN=/hive/data/genomes/caeSp111/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzCaeSp111.2015-07-07
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #	real    9m34.458s
+
+    cat fb.ce11.chainCaeSp111Link.txt
+    # 37978854 bases of 100286401 (37.870%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 caeSp111) > rbest.log 2>&1 &
+    # real    1m50.903s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/caeSp111/bed/blastz.ce11.swap
+    cd /hive/data/genomes/caeSp111/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzCaeSp111.2015-07-07/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    2m36.576s
+
+    cat fb.caeSp111.chainCe11Link.txt
+    # 36230284 bases of 76497192 (47.362%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` caeSp111 ce11) \
+      > rbest.log 2>&1
+    # real    1m52.882s
+
+#########################################################################
+# LASTZ Brugia malayi/bruMal2 - (DONE - 2015-07-08 - Hiram)
+    # incorrect date name on this directory, it is actually 07-08
+    mkdir /hive/data/genomes/ce11/bed/lastzBruMal2.2015-08-08
+    cd /hive/data/genomes/ce11/bed/lastzBruMal2.2015-08-08
+
+    cat << '_EOF_' > DEF
+# ce11 vs bruMal2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Brugia malayi bruMal2
+SEQ2_DIR=/hive/data/genomes/bruMal2/bruMal2.2bit
+SEQ2_LEN=/hive/data/genomes/bruMal2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzBruMal2.2015-08-08
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #	real    9m23.536s
+
+    cat fb.ce11.chainBruMal2Link.txt
+    # 5066866 bases of 100286401 (5.052%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 bruMal2) > rbest.log 2>&1 &
+    # real    0m32.750s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/bruMal2/bed/blastz.ce11.swap
+    cd /hive/data/genomes/bruMal2/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzBruMal2.2015-08-08/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    1m31.240s
+
+    cat fb.bruMal2.chainCe11Link.txt
+    # 4776506 bases of 86344036 (5.532%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` bruMal2 ce11) \
+      > rbest.log 2>&1
+    # real    0m35.349s
+
+#########################################################################
+# LASTZ Caenorhabditis sp5 ju800/caeSp51 - (DONE - 2015-07-08 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzCaeSp51.2015-07-08
+    cd /hive/data/genomes/ce11/bed/lastzCaeSp51.2015-07-08
+
+    cat << '_EOF_' > DEF
+# ce11 vs caeSp51
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Caenorhabditis sp5 ju800 caeSp51
+SEQ2_DIR=/hive/data/genomes/caeSp51/caeSp51.2bit
+SEQ2_LEN=/hive/data/genomes/caeSp51/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzCaeSp51.2015-07-08
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #	real    15m45.540s
+
+    cat fb.ce11.chainCaeSp51Link.txt
+    # 40447272 bases of 100286401 (40.332%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 caeSp51) > rbest.log 2>&1 &
+    # real    1m32.172s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/caeSp51/bed/blastz.ce11.swap
+    cd /hive/data/genomes/caeSp51/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzCaeSp51.2015-07-08/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    5m1.154s
+
+    cat fb.caeSp51.chainCe11Link.txt
+    # 41416178 bases of 130562982 (31.721%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` caeSp51 ce11) \
+      > rbest.log 2>&1
+    # real    2m24.577s
+
+#########################################################################
+# LASTZ Strongyloides ratti/strRat2 - (DONE - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzStrRat2.2015-07-09
+    cd /hive/data/genomes/ce11/bed/lastzStrRat2.2015-07-09
+
+    cat << '_EOF_' > DEF
+# ce11 vs strRat2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Strongyloides ratti strRat2
+SEQ2_DIR=/hive/data/genomes/strRat2/strRat2.2bit
+SEQ2_LEN=/hive/data/genomes/strRat2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzStrRat2.2015-07-09
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #	real    6m56.113s
+
+    cat fb.ce11.chainStrRat2Link.txt
+    # 5685737 bases of 100286401 (5.669%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 strRat2) > rbest.log 2>&1 &
+    # real    0m40.891s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/strRat2/bed/blastz.ce11.swap
+    cd /hive/data/genomes/strRat2/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzStrRat2.2015-07-09/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    3m33.814s
+
+    cat fb.strRat2.chainCe11Link.txt
+    # 5112630 bases of 43150242 (11.848%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` strRat2 ce11) \
+      > rbest.log 2>&1
+    # real    6m38.814s
+
+#########################################################################
+# LASTZ Strongyloides ratti/strRat1 - (DONE - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzStrRat1.2015-07-09
+    cd /hive/data/genomes/ce11/bed/lastzStrRat1.2015-07-09
+
+    cat << '_EOF_' > DEF
+# ce11 vs strRat1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Strongyloides ratti strRat1
+SEQ2_DIR=/hive/data/genomes/strRat1/strRat1.2bit
+SEQ2_LEN=/hive/data/genomes/strRat1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzStrRat1.2015-07-09
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #	real    7m12.063s
+
+    cat fb.ce11.chainStrRat1Link.txt
+    # 5240485 bases of 100286401 (5.226%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 strRat1) > rbest.log 2>&1 &
+    # real    0m33.050s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/strRat1/bed/blastz.ce11.swap
+    cd /hive/data/genomes/strRat1/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzStrRat1.2015-07-09/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    1m58.800s
+
+    cat fb.strRat1.chainCe11Link.txt
+    # 5068899 bases of 52634366 (9.630%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` strRat1 ce11) \
+      > rbest.log 2>&1
+    # real    4m42.820s
+
+#########################################################################
+# LASTZ Bursaphelenchus xylophilus/burXyl1 - (DONE - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzBurXyl1.2015-07-09
+    cd /hive/data/genomes/ce11/bed/lastzBurXyl1.2015-07-09
+
+    cat << '_EOF_' > DEF
+# ce11 vs burXyl1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Bursaphelenchus xylophilus burXyl1
+SEQ2_DIR=/hive/data/genomes/burXyl1/burXyl1.2bit
+SEQ2_LEN=/hive/data/genomes/burXyl1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzBurXyl1.2015-07-09
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #  real    10m8.319s
+
+    cat fb.ce11.chainBurXyl1Link.txt
+    # 6308717 bases of 100286401 (6.291%) in intersection
+
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 burXyl1) > rbest.log 2>&1 &
+    # real    0m35.024s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/burXyl1/bed/blastz.ce11.swap
+    cd /hive/data/genomes/burXyl1/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzBurXyl1.2015-07-09/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    0m57.394s
+
+    cat fb.burXyl1.chainCe11Link.txt
+    # 6062162 bases of 73100506 (8.293%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` burXyl1 ce11) \
+      > rbest.log 2>&1
+    # real    0m38.169s
+
+#########################################################################
+# LASTZ Onchocerca volvulus/oncVol1 - (DONE - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzOncVol1.2015-07-09
+    cd /hive/data/genomes/ce11/bed/lastzOncVol1.2015-07-09
+
+    cat << '_EOF_' > DEF
+# ce11 vs oncVol1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Onchocerca volvulus oncVol1
+SEQ2_DIR=/hive/data/genomes/oncVol1/oncVol1.2bit
+SEQ2_LEN=/hive/data/genomes/oncVol1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzOncVol1.2015-07-09
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #  real    6m7.463s
+
+    cat fb.ce11.chainOncVol1Link.txt
+    # 5196654 bases of 100286401 (5.182%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 oncVol1) > rbest.log 2>&1 &
+    # real    0m44.935s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oncVol1/bed/blastz.ce11.swap
+    cd /hive/data/genomes/oncVol1/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzOncVol1.2015-07-09/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    0m56.980s
+
+    cat fb.oncVol1.chainCe11Link.txt
+    # 4755362 bases of 93367159 (5.093%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` oncVol1 ce11) \
+      > rbest.log 2>&1
+    # real    0m53.872s
+
+#########################################################################
+# LASTZ Loa loa/loaLoa1/eye worm - (DONE - 2015-07-23 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzLoaLoa1.2015-07-23
+    cd /hive/data/genomes/ce11/bed/lastzLoaLoa1.2015-07-23
+
+    cat << '_EOF_' > DEF
+# ce11 vs loaLoa1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Loa loa/eye worm loaLoa1
+SEQ2_DIR=/hive/data/genomes/loaLoa1/loaLoa1.2bit
+SEQ2_LEN=/hive/data/genomes/loaLoa1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzLoaLoa1.2015-07-23
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #  real    36m9.828s
+
+    cat fb.ce11.chainLoaLoa1Link.txt
+    # 5070900 bases of 100286401 (5.056%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 loaLoa1) > rbest.log 2>&1 &
+    # real    0m53.872s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/loaLoa1/bed/blastz.ce11.swap
+    cd /hive/data/genomes/loaLoa1/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzLoaLoa1.2015-07-23/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    0m59.293s
+
+    cat fb.loaLoa1.chainCe11Link.txt
+    # 4616591 bases of 87533141 (5.274%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` loaLoa1 ce11) \
+      > rbest.log 2>&1
+    # real    0m39.512s
+
+#########################################################################
+# LASTZ Ancylostoma ceylanicum/ancCey1/hookworm - (DONE - 2015-07-23 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzAncCey1.2015-07-23
+    cd /hive/data/genomes/ce11/bed/lastzAncCey1.2015-07-23
+
+    cat << '_EOF_' > DEF
+# ce11 vs ancCey1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Ancylostoma ceylanicum/hookworm ancCey1
+SEQ2_DIR=/hive/data/genomes/ancCey1/ancCey1.2bit
+SEQ2_LEN=/hive/data/genomes/ancCey1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzAncCey1.2015-07-23
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #  real    30m30.162s
+
+    cat fb.ce11.chainAncCey1Link.txt
+    # 9764266 bases of 100286401 (9.736%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 ancCey1) > rbest.log 2>&1 &
+    # real    0m45.818s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/ancCey1/bed/blastz.ce11.swap
+    cd /hive/data/genomes/ancCey1/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzAncCey1.2015-07-23/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    1m22.649s
+
+    cat fb.ancCey1.chainCe11Link.txt
+    # 9740545 bases of 300914990 (3.237%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` ancCey1 ce11) \
+      > rbest.log 2>&1
+    # real    0m56.069s
+
+#########################################################################
+# LASTZ Trichuris suis/triSui1/whipworm - (DONE - 2015-07-23 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzTriSui1.2015-07-23
+    cd /hive/data/genomes/ce11/bed/lastzTriSui1.2015-07-23
+
+    cat << '_EOF_' > DEF
+# ce11 vs triSui1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Trichuris suis/whipworm triSui1
+SEQ2_DIR=/hive/data/genomes/triSui1/triSui1.2bit
+SEQ2_LEN=/hive/data/genomes/triSui1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzTriSui1.2015-07-23
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #  real    17m56.424s
+
+    cat fb.ce11.chainTriSui1Link.txt
+    # 2925422 bases of 100286401 (2.917%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 triSui1) > rbest.log 2>&1 &
+    # real    0m23.479s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSui1/bed/blastz.ce11.swap
+    cd /hive/data/genomes/triSui1/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzTriSui1.2015-07-23/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    0m46.282s
+
+    cat fb.triSui1.chainCe11Link.txt
+    # 2667549 bases of 71825323 (3.714%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSui1 ce11) \
+      > rbest.log 2>&1
+    # real    0m24.047s
+
+#########################################################################
+# LASTZ Trichinella spiralis/triSpi1 - (DONE - 2015-07-23 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzTriSpi1.2015-07-23
+    cd /hive/data/genomes/ce11/bed/lastzTriSpi1.2015-07-23
+
+    cat << '_EOF_' > DEF
+# ce11 vs triSpi1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Trichinella spiralis triSpi1
+SEQ2_DIR=/hive/data/genomes/triSpi1/triSpi1.2bit
+SEQ2_LEN=/hive/data/genomes/triSpi1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzTriSpi1.2015-07-23
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #  real    36m27.819s
+
+    cat fb.ce11.chainTriSpi1Link.txt
+    # 2856166 bases of 100286401 (2.848%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 triSpi1) > rbest.log 2>&1 &
+    # real    0m28.110s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSpi1/bed/blastz.ce11.swap
+    cd /hive/data/genomes/triSpi1/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzTriSpi1.2015-07-23/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    0m45.506s
+
+    cat fb.triSpi1.chainCe11Link.txt
+    # 2739585 bases of 58558192 (4.678%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSpi1 ce11) \
+      > rbest.log 2>&1
+    # real    0m25.677s
+
+#########################################################################
+# LASTZ Pristionchus exspectatus/priExs1 - (DONE - 2015-07-23 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzPriExs1.2015-07-23
+    cd /hive/data/genomes/ce11/bed/lastzPriExs1.2015-07-23
+
+    cat << '_EOF_' > DEF
+# ce11 vs priExs1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Pristionchus exspectatus priExs1
+SEQ2_DIR=/hive/data/genomes/priExs1/priExs1.2bit
+SEQ2_LEN=/hive/data/genomes/priExs1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzPriExs1.2015-07-23
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #  real    41m4.486s
+
+    cat fb.ce11.chainPriExs1Link.txt
+    # 6239735 bases of 100286401 (6.222%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 priExs1) > rbest.log 2>&1 &
+    # real    0m37.199s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/priExs1/bed/blastz.ce11.swap
+    cd /hive/data/genomes/priExs1/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzPriExs1.2015-07-23/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    1m6.611s
+
+    cat fb.priExs1.chainCe11Link.txt
+    # 7213135 bases of 166917800 (4.321%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` priExs1 ce11) \
+      > rbest.log 2>&1
+    # real    0m49.363s
+
+#########################################################################
+# LASTZ Dirofilaria immitis/dirImm1/dog heartworm - (DONE - 2015-07-23 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzDirImm1.2015-07-23
+    cd /hive/data/genomes/ce11/bed/lastzDirImm1.2015-07-23
+
+    cat << '_EOF_' > DEF
+# ce11 vs dirImm1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Dirofilaria immitis/dog heartworm dirImm1
+SEQ2_DIR=/hive/data/genomes/dirImm1/dirImm1.2bit
+SEQ2_LEN=/hive/data/genomes/dirImm1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzDirImm1.2015-07-23
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #  real    50m17.230s
+
+    cat fb.ce11.chainDirImm1Link.txt
+    # 5019106 bases of 100286401 (5.005%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 dirImm1) > rbest.log 2>&1 &
+    # real    0m30.527s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/dirImm1/bed/blastz.ce11.swap
+    cd /hive/data/genomes/dirImm1/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzDirImm1.2015-07-23/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    1m4.937s
+
+    cat fb.dirImm1.chainCe11Link.txt
+    # 4648391 bases of 84923352 (5.474%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` dirImm1 ce11) \
+      > rbest.log 2>&1
+    # real    0m40.636s
+
+#########################################################################
+# LASTZ Ascaris suum/ascSuu1/pig roundworm - (DONE - 2015-07-23 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzAscSuu1.2015-07-23
+    cd /hive/data/genomes/ce11/bed/lastzAscSuu1.2015-07-23
+
+    cat << '_EOF_' > DEF
+# ce11 vs ascSuu1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Ascaris suum/pig roundworm ascSuu1
+SEQ2_DIR=/hive/data/genomes/ascSuu1/ascSuu1.2bit
+SEQ2_LEN=/hive/data/genomes/ascSuu1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzAscSuu1.2015-07-23
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #  real    47m30.635s
+
+    cat fb.ce11.chainAscSuu1Link.txt
+    # 5737990 bases of 100286401 (5.722%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 ascSuu1) > rbest.log 2>&1 &
+    # real    0m35.701s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/ascSuu1/bed/blastz.ce11.swap
+    cd /hive/data/genomes/ascSuu1/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzAscSuu1.2015-07-23/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    1m5.353s
+
+    cat fb.ascSuu1.chainCe11Link.txt
+    # 5839616 bases of 262604320 (2.224%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` ascSuu1 ce11) \
+      > rbest.log 2>&1
+    # real    0m47.468s
+
+#########################################################################
+# LASTZ Heterorhabditis bacteriophora/hetBac1/ - (DONE - 2015-07-23 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzHetBac1.2015-07-23
+    cd /hive/data/genomes/ce11/bed/lastzHetBac1.2015-07-23
+
+    cat << '_EOF_' > DEF
+# ce11 vs hetBac1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Heterorhabditis bacteriophora hetBac1
+SEQ2_DIR=/hive/data/genomes/hetBac1/hetBac1.2bit
+SEQ2_LEN=/hive/data/genomes/hetBac1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzHetBac1.2015-07-23
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #  real    16m29.397s
+
+    cat fb.ce11.chainHetBac1Link.txt
+    # 10516501 bases of 100286401 (10.486%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 hetBac1) > rbest.log 2>&1 &
+    # real    0m41.981s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/hetBac1/bed/blastz.ce11.swap
+    cd /hive/data/genomes/hetBac1/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzHetBac1.2015-07-23/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    1m5.754s
+
+    cat fb.hetBac1.chainCe11Link.txt
+    # 10082123 bases of 74374900 (13.556%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hetBac1 ce11) \
+      > rbest.log 2>&1
+    # real    0m47.745s
+
+#########################################################################
+# LASTZ Necator americanus/necAme1/hookworm - (DONE - 2015-07-23 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/lastzNecAme1.2015-07-23
+    cd /hive/data/genomes/ce11/bed/lastzNecAme1.2015-07-23
+
+    cat << '_EOF_' > DEF
+# ce11 vs necAme1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans ce11
+SEQ1_DIR=/hive/data/genomes/ce11/ce11.2bit
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Necator americanus necAme1/hookworm
+SEQ2_DIR=/hive/data/genomes/necAme1/necAme1.2bit
+SEQ2_LEN=/hive/data/genomes/necAme1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce11/bed/lastzNecAme1.2015-07-23
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #  real    37m25.778s
+
+    cat fb.ce11.chainNecAme1Link.txt
+    # 8927298 bases of 100286401 (8.902%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ce11 necAme1) > rbest.log 2>&1 &
+    # real    0m40.993s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/necAme1/bed/blastz.ce11.swap
+    cd /hive/data/genomes/necAme1/bed/blastz.ce11.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ce11/bed/lastzNecAme1.2015-07-23/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    1m16.620s
+
+    cat fb.necAme1.chainCe11Link.txt
+    # 8566890 bases of 208187215 (4.115%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` necAme1 ce11) \
+      > rbest.log 2>&1
+    # real    0m58.661s
+
+#########################################################################

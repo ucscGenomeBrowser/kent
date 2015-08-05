@@ -1,0 +1,430 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes the browser build
+#    for Ancylostoma ceylanicum/hookworm WS245 version
+
+##############################################################################
+# download sequence, create UCSC sequence (DONE - 2015-06-24 - Hiram)
+    mkdir -p /hive/data/genomes/ancCey1/genbank
+    cd /hive/data/genomes/ancCey1/genbank
+
+    rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/invertebrate/Ancylostoma_ceylanicum/all_assembly_versions/GCA_000688135.1_Acey_2013.11.30.genDNA/ ./
+
+    mkdir -p /hive/data/genomes/ancCey1/ws245
+    cd /hive/data/genomes/ancCey1/ws245
+
+    wget --no-parent --timestamping -m -nH --cut-dirs=6 \
+ftp://ftp.sanger.ac.uk/pub/wormbase/releases/WS245/species/PRJNA231479
+
+    # The genbank and WS245 sequences are identical
+    mkdir /hive/data/genomes/ancCey1/ucsc
+    cd /hive/data/genomes/ancCey1/ucsc
+
+    zcat ../genbank/GCA_000688135.1_Acey_2013.11.30.genDNA_genomic.fna.gz \
+       | sed -e 's/.1 Ancylostoma ceylanicum .*/v1/;' | gzip -c > ancCey1.fa.gz
+
+    hgFakeAgp ancCey1.fa.gz ancCey1.agp
+
+    # obtain photo, CDC public domain photo
+    mkdir /hive/data/genomes/ancCey1/photo
+    cd /hive/data/genomes/ancCey1/photo
+    wget --timestamping \
+http://www.cdc.gov/dpdx/images/hookworm/Hookworm_filariform_A.jpg
+    # this image is slightly larger than 400x300, reduce to 400x300:
+    convert -geometry "400x300" Hookworm_filariform_A.jpg \
+         Ancylostoma_ceylanicum.jpg
+
+    # check into source tree
+    #   src/hg/htdocs/images/Ancylostoma_ceylanicum.jpg
+    # and copy to /usr/local/apache/htdocs/images/Ancylostoma_ceylanicum.jpg
+
+#############################################################################
+#  Initial database build (DONE - 2015-07-15 - Hiram)
+
+    cd /hive/data/genomes/ancCey1
+    cat << '_EOF_' > ancCey1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db ancCey1
+clade worm
+genomeCladePriority 86
+scientificName Ancylostoma ceylanicum
+commonName Hookworm
+assemblyDate Mar. 2014
+assemblyLabel Cornell University Ancylostoma ceylanicum genome project
+assemblyShortLabel WS243/Acey_2013.11.30.genDNA
+orderKey 8680
+mitoAcc none
+fastaFiles /hive/data/genomes/ancCey1/ucsc/ancCey1.fa.gz
+agpFiles /hive/data/genomes/ancCey1/ucsc/ancCey1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://www.cdc.gov/dpdx/hookworm/
+photoCreditName Centers for Disease Control and Prevention
+ncbiGenomeId 10936
+ncbiAssemblyId 177101
+ncbiAssemblyName WS243/Acey_2013.11.30.genDNA
+ncbiBioProject 231479
+genBankAccessionID GCA_000688135.1
+taxId 53326
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp ancCey1.config.ra) > agp.log 2>&1
+    # *** All done!  (through the 'agp' step)
+    # real    0m25.167s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db ancCey1.config.ra) > db.log 2>&1
+    # real    2m41.361s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/ancCey1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/ancCey1/ancCey1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku ancCey1) > do.log 2>&1
+    # real    47m11.464s
+
+    cat fb.ancCey1.cpgIslandExtUnmasked.txt
+    # 29181817 bases of 300914990 (9.698%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/cytoBand
+    cd /hive/data/genomes/ancCey1/bed/cytoBand
+    makeCytoBandIdeo.csh ancCey1
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/ucscToINSDC
+    cd /hive/data/genomes/ancCey1/bed/ucscToINSDC
+
+    zcat ../../genbank/GCA_000688135.1_Acey_2013.11.30.genDNA_genomic.fna.gz \
+       | grep "^>" | sed -e 's/.1 Ancylostoma ceylanicum .*//; s/^>//;' \
+         | awk '{printf "%sv1\t%s.1\n", $1,$1}' | sort > ucscToINSDC.txt
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    # 1736 name.coordinate.tab
+    # 1736 ucscToINSDC.bed
+    # 1736 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab ancCey1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords ancCey1
+    # should cover %100 entirely:
+    featureBits -countGaps ancCey1 ucscToINSDC
+    # 313092710 bases of 313092710 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2015-07-15 - Hiram)
+    hgsql -N -e "select frag from gold;" ancCey1 | sort | head -3
+JARK01000001v1_1
+JARK01000001v1_10
+JARK01000001v1_11
+
+    hgsql -N -e "select frag from gold;" ancCey1 | sort | tail -2
+JARK01001736v1_8
+JARK01001736v1_9
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" ancCey1 | wc -l
+    # 20876
+
+    hgsql -N -e "select frag from gold;" ancCey1 \
+      | egrep -e 'JARK0100[0-9]*(\_1)?' | wc -l
+    # 20876
+
+    hgsql -N -e "select frag from gold;" ancCey1 \
+      | egrep -v -e 'JARK0100[0-9]*(\_1)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/worm/ancCey1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex JARK0100[0-9]*(\_1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+##########################################################################
+# running repeat masker (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/repeatMasker
+    cd /hive/data/genomes/ancCey1/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku ancCey1) > do.log 2>&1
+    # real    40m21.202s
+
+    cat faSize.rmsk.txt
+    # 313092710 bases (12191100 N's 300901610 real 296911527 upper
+    #    3990083 lower) in 1736 sequences in 1 files
+    # Total size: mean 180352.9 sd 424774.6 min 509 (JARK01001336v1)
+    #    max 4802298 (JARK01001337v1) median 43364
+    # %1.27 masked total, %1.33 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;    
+
+    time featureBits -countGaps ancCey1 rmsk
+    #  3990156 bases of 313092710 (1.274%) in intersection
+    #  real    0m1.444s
+
+##########################################################################
+# running simple repeat (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/simpleRepeat
+    cd /hive/data/genomes/ancCey1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        ancCey1) > do.log 2>&1
+    # real    2m50.443s
+
+    cat fb.simpleRepeat
+    # 7847572 bases of 300914990 (2.608%) in intersection
+
+    # using the Window Masker result as indicated below
+
+##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-07-15 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/ancCey1/bed/microsat
+     cd /cluster/data/ancCey1/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed ancCey1 microsat microsat.bed
+    #	Read 2223 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/windowMasker
+    cd /hive/data/genomes/ancCey1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev ancCey1) > do.log 2>&1
+    # real    13m42.365s
+
+    # Masking statistics
+    cat faSize.ancCey1.cleanWMSdust.txt
+    # 313092710 bases (12191100 N's 300901610 real 234592544 upper
+    #    66309066 lower) in 1736 sequences in 1 files
+    # Total size: mean 180352.9 sd 424774.6 min 509 (JARK01001336v1)
+    #    max 4802298 (JARK01001337v1) median 43364
+    # %21.18 masked total, %22.04 masked real
+
+    cat fb.ancCey1.rmsk.windowmaskerSdust.txt
+    # 3401224 bases of 313092710 (1.086%) in intersection
+
+    # using this Window Masker result for final masking::
+    cd /hive/data/genomes/ancCey1
+    #   you can safely ignore the warning about fields >= 13
+    twoBitMask bed/windowMasker/ancCey1.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  ancCey1.2bit
+
+    # measure the final masking:
+    twoBitToFa ancCey1.2bit stdout | faSize stdin > faSize.ancCey1.2bit.txt
+    cat faSize.ancCey1.2bit.txt
+    # 313092710 bases (12191100 N's 300901610 real 234535031 upper
+    #   66366579 lower) in 1736 sequences in 1 files
+    # Total size: mean 180352.9 sd 424774.6 min 509 (JARK01001336v1)
+    #   max 4802298 (JARK01001337v1) median 43364
+    # %21.20 masked total, %22.06 masked real
+
+    # and reset the symlink
+    rm /gbdb/ancCey1/ancCey1.2bit
+    ln -s /hive/data/genomes/ancCey1/ancCey1.2bit /gbdb/ancCey1/ancCey1.2bit
+
+##########################################################################
+# cpgIslands - (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/cpgIslands
+    cd /hive/data/genomes/ancCey1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku ancCey1) > do.log 2>&1 &
+    # real    2m55.776s
+
+    cat fb.ancCey1.cpgIslandExt.txt
+    # 10027791 bases of 300914990 (3.332%) in intersection
+
+#########################################################################
+# augustus - (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/augustus
+    cd /hive/data/genomes/ancCey1/bed/augustus
+    #  XXX this is not specifically correct, the species caenorhabditis
+    #      is not necessarily accurate here
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+      -species=caenorhabditis -dbHost=hgwdev \
+         -workhorse=hgwdev ancCey1) > do.log 2>&1 &
+    # real    54m56.771s
+
+    cat fb.ancCey1.augustusGene.txt
+    # 33081827 bases of 300914990 (10.994%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/genscan
+    cd /hive/data/genomes/ancCey1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku ancCey1) > do.log 2>&1
+    # real    5m10.885s
+
+    cat fb.ancCey1.genscan.txt
+    #   18315189 bases of 300914990 (6.086%) in intersection
+
+    cat fb.ancCey1.genscanSubopt.txt
+    #   15435033 bases of 300914990 (5.129%) in intersection
+
+########################################################################
+# Create kluster run files (TBD - 2015-07-08 - Hiram)
+
+    cd /hive/data/genomes/ancCey1
+    # numerator is ancCey1 gapless bases "real" as reported by:
+    head -1 faSize.ancCey1.2bit.txt
+# 94076581 bases (7759220 N's 86317361 real 53341517 upper 32975844 lower)
+#    in 9780 sequences in 1 files
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 86317361 / 2861349177 \) \* 1024
+    # ( 86317361 / 2861349177 ) * 1024 = 30.890665
+
+    # ==> use -repMatch=100 since 30 or 50 masks too much
+    cd /hive/data/genomes/ancCey1
+    time blat ancCey1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/ancCey1.11.ooc \
+        -repMatch=100
+    # Wrote 8527 overused 11-mers to jkStuff/ancCey1.11.ooc
+    #  real    0m1.846s
+
+    # there are a few non-bridged gaps
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N -e 'select * from gap where bridge="no" order by size;' ancCey1 \
+       | ave -tableOut -col=7 stdin
+# min Q1 median Q3 max mean N sum stddev
+# 78831 79056 79362 79503 79503 79162.5 4 316650 320.991
+
+    # note the minimum non-bridged gap size is 78,831
+    gapToLift -verbose=2 -minGap=50000 ancCey1 jkStuff/ancCey1.nonBridged.lft \
+         -bedFile=jkStuff/ancCey1.nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 9780, total size: 94076581, one half size: 47038290
+# cumulative    N50 count       contig  contig size
+# 46960459        61      Bmal_v3_scaffold61      194773
+# 47038290 one half size
+# 47151548        62      Bmal_v3_scaffold62      191089
+
+#############################################################################
+# GENBANK AUTO UPDATE (TBD - 2015-06-09 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism               mrnaCnt estCnt  refSeqCnt
+    #  Pristionchus pacificus  97      37470   0
+
+    # edit etc/genbank.conf to add ancCey1 just before priPac1
+
+# ancCey1 (P. pacificus)
+ancCey1.serverGenome = /hive/data/genomes/ancCey1/ancCey1.2bit
+ancCey1.clusterGenome = /hive/data/genomes/ancCey1/ancCey1.2bit
+ancCey1.ooc = /hive/data/genomes/ancCey1/jkStuff/ancCey1.11.ooc
+ancCey1.lift = /hive/data/genomes/ancCey1/jkStuff/ancCey1.nonBridged.lft
+ancCey1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+ancCey1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+ancCey1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+ancCey1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+ancCey1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+ancCey1.refseq.mrna.native.load = yes
+ancCey1.refseq.mrna.xeno.load  = yes
+ancCey1.refseq.mrna.xeno.loadDesc = yes
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+ancCey1.genbank.mrna.xeno.load = no
+ancCey1.genbank.est.native.load = yes
+ancCey1.genbank.est.native.loadDesc = no
+ancCey1.downloadDir = ancCey1
+ancCey1.perChromTables = no
+
+    git commit -m "Added ancCey1 - P. pacificus refs #15209" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/etc/:
+    make etc-update
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial ancCey1
+    # logFile: var/build/logs/2015.07.02-11:39:01.ancCey1.initalign.log
+    # real    91m20.362s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.ancCey1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad ancCey1
+    # logFile: var/dbload/hgwdev/logs/2015.07.06-09:51:31.ancCey1.dbload.log
+    # real    18m34.687s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add ancCey1 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added ancCey1 - Pristionchus pacificus refs #15209" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2015-06-22 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=ancCey1 -tableCoverage all.joiner
+    joinerCheck -database=ancCey1 -times all.joiner
+    joinerCheck -database=ancCey1 -keys all.joiner
+
+    cd /hive/data/genomes/ancCey1
+    time makeDownloads.pl ancCey1 > downloads.log 2>&1
+    # real    13m42.027s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/ancCey1/pushQ
+    cd /hive/data/genomes/ancCey1/pushQ
+    makePushQSql.pl ancCey1 > ancCey1.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/ancCey1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/ancCey1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/ancCey1/bbi/qualityBw/quality.bw
+    # WARNING: ancCey1 does not have seq
+    # WARNING: ancCey1 does not have extFile
+    # WARNING: ancCey1 does not have estOrientInfo
+    # WARNING: ancCey1 does not have mrnaOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p ancCey1.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/ancCey1.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#############################################################################

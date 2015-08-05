@@ -11,7 +11,11 @@
 <img src="../../images/title.jpg" alt="UCSC Genome Bioinformatics">
 </div><!-- .header -->
 <div class="nav">
-<!--#include virtual="../../inc/topbar.html"-->
+<noscript><div class='noscript'><div class='noscript-inner'><p><b>JavaScript is disabled in your web browser</b></p><p>You must have JavaScript enabled in your web browser to use the Genome Browser</p></div></div></noscript>
+<script type='text/javascript' SRC='../../js/jquery.js'></script>
+<script type='text/javascript' SRC='../../js/jquery.plugins.js'></script>
+<LINK rel='STYLESHEET' href='../../style/nice_menu.css' TYPE='text/css' />
+<!--#include virtual="../../cgi-bin/hgMenubar"-->
 </div><!-- .nav -->
 
 <div class="content"> <!-- start of page content -->
@@ -176,6 +180,14 @@ target="_blank">blat documentation here</a>. Please note that because the <tt>-m
 in the above <tt>17777 -trans</tt> gfServer option will mask all lower-case sequence from
 being matched, you may not wish to include it. See the above blat links and
 gfServer usage statement for more information.
+</p>
+<p>
+If you are having trouble with your blat servers connecting to the browser  it may help to know
+that some institutions have firewalls that will prevent the browser from sending multiple inquiries,
+in which case you may need to request your admins add this IP range as exceptions that are not
+limited: <tt>128.114.119.*</tt> That will cover the U.S. genome.ucsc.edu site. In case you may
+wish the requests to work from our European Mirror genome-euro.ucsc.edu site, you would want to
+include <tt>129.70.40.120</tt> also to the exception list.
 </p>
 </div> <!--- sectionContent --->
 </div> <!--- section -->

@@ -1,5 +1,5 @@
 /** @jsx React.DOM */
-/* global Icon, PathUpdate */
+/* global Icon, PathUpdate, Section */
 var pt = React.PropTypes;
 
 function getScrollHeight() {
@@ -21,21 +21,36 @@ var Modal = React.createClass({
     propTypes: { title: pt.renderable.isRequired,  // title string or React.DOM object
                },
 
+    componentWillUnmount: function() {
+        window.scrollTo(0, this.origY);
+    },
+
     render: function() {
-        var myTop = getScrollHeight() + 75; // px is default unit in React style
         var path = this.props.path || [];
+        var title = (
+            <div>
+              <span className='floatLeft'>
+                {this.props.title}
+              </span>
+              <Icon type="remove" className="removeButton floatRight"
+                    path={path.concat('remove')} update={this.props.update} />
+              <div className='clear' />
+            </div>
+        );
+        // Initialize Modal's position to be somewhat below the top of the current view.
+        // Keep track of that position so we can maintain it in subsequent renders,
+        // even if the user scrolled in the meantime.
+        if (!this.top) {
+            this.origY = getScrollHeight();
+            this.top = this.origY + 75; // px is default unit in React style
+        }
+
         return (
-            <div style={{top: myTop}} className='absoluteModal'>
-              <div>
-                <span className='floatLeft'>
-                  {this.props.title}
-                </span>
-                <Icon type="remove" className="removeButton floatRight"
-                      path={path.concat('remove')} update={this.props.update} />
-                <div className='clear' />
-                </div>
+            <div style={{top: this.top}} className='absoluteModal'>
+              <Section style={{margin: 0}} title={title}>
                 {this.props.children}
-              </div>
+              </Section>
+            </div>
         );
     }
 });

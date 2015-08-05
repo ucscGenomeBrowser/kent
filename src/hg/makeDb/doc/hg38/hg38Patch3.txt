@@ -410,6 +410,15 @@ time chainPreNet  hg38Patch3.hg38.all.chain.gz \
     | netSyntenic stdin noClass.net
     #   real    0m0.435s
 
+hgLoadChain -tIndex hg38Patch3 chainHg38 hg38Patch3.hg38.all.chain.gz
+featureBits hg38Patch3 chainHg38Link
+# 14529153 bases of 15325873 (94.801%) in intersection
+
+netClass -verbose=0   -noAr noClass.net hg38Patch3 hg38 hg38Patch3.hg38.net
+
+netFilter -minGap=10 hg38Patch3.hg38.net \
+  | hgLoadNet -verbose=0 hg38Patch3 netHg38 stdin
+
 # Make liftOver chains:
 netChainSubset -verbose=0 noClass.net hg38Patch3.hg38.all.chain.gz stdout \
     | chainStitchId stdin stdout | gzip -c > hg38Patch3.hg38.over.chain.gz
@@ -559,6 +568,9 @@ time chainPreNet hg38.hg38Patch3.all.chain.gz \
     #   real    0m0.435s
 
 netClass -verbose=0 -noAr noClass.net hg38 hg38Patch3 hg38.hg38Patch3.net
+
+netFilter -minGap=10 hg38.hg38Patch3.net \
+  | hgLoadNet -verbose=0 hg38 netHg38Patch3 stdin
 
 # Make liftOver chains:
 netChainSubset -verbose=0 noClass.net hg38.hg38Patch3.all.chain.gz stdout \

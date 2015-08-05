@@ -1,0 +1,15 @@
+        track chainMicMur1
+        subTrack primateChainNetViewchain off
+        subGroups view=chain species=aoMouse_lemur clade=afStrepsirrhini
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain micMur1
+        otherDb micMur1
+
+        track netMicMur1
+        subTrack primateChainNetViewnet off
+        subGroups view=net species=aoMouse_lemur clade=afStrepsirrhini
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign micMur1 chainMicMur1
+        otherDb micMur1

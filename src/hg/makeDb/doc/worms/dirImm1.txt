@@ -1,0 +1,434 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes how the browser for D. immitis WS245 version is built
+
+##############################################################################
+# download sequence, create UCSC sequence (DONE - 2015-06-24 - Hiram)
+    mkdir -p /hive/data/genomes/dirImm1/ws245
+    cd /hive/data/genomes/dirImm1/ws245
+
+    wget --no-parent --timestamping -m -nH --cut-dirs=6 \
+ftp://ftp.sanger.ac.uk/pub/wormbase/releases/WS245/species/PRJEB1797
+
+    mkdir /hive/data/genomes/dirImm1/ucsc
+    cd /hive/data/genomes/dirImm1/ucsc
+    # WormBase contig names are of the pattern:
+# >nDi.2.2.scaf00001 1 1085577
+# >nDi.2.2.scaf00002 1 1069194
+# >nDi.2.2.scaf00003 1 995087
+#   ...
+
+    # can't have the dots in the names
+    zcat ../ws245/PRJEB1797/d_immitis.PRJEB1797.WS245.genomic.fa.gz \
+        | sed -e 's/ 1 .*//; s/\./_/g;' | gzip -c > dirImm1.fa.gz
+
+    hgFakeAgp dirImm1.fa.gz dirImm1.agp
+
+    # photograph
+    mkdir /hive/data/genomes/dirImm1/photo
+    cd /hive/data/genomes/dirImm1/photo
+    wget -O REPugh_Dirofilaria_immitis_1_04.jpg \
+   "http://parasite.org.au/pugh-collection/JpegsStamped/Dirofilaria immitis 1 04.jpg"
+
+    convert -geometry "400x300" REPugh_Dirofilaria_immitis_1_04.jpg \
+      Dirofilaria_immitis.jpg
+
+#############################################################################
+#  Initial database build (DONE - 2015-07-09 - Hiram)
+
+    cd /hive/data/genomes/dirImm1
+    cat << '_EOF_' > dirImm1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db dirImm1
+clade worm
+genomeCladePriority 68
+scientificName Dirofilaria immitis
+commonName Dog heartworm nematode
+assemblyDate Sep. 2013
+assemblyLabel Edinburgh University D. immitis genome project
+assemblyShortLabel WS240/D. immitis v2.2
+orderKey 4670
+mitoAcc AJ537512.1
+fastaFiles /hive/data/genomes/dirImm1/ucsc/dirImm1.fa.gz
+agpFiles /hive/data/genomes/dirImm1/ucsc/dirImm1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://parasite.org.au/blog/the-pugh-parasitology-collection/
+photoCreditName R.E. Pugh parasitology collection
+ncbiGenomeId 10757
+ncbiAssemblyId PRJEB1797
+ncbiAssemblyName WS240/D. immitis v2.2
+ncbiBioProject 208635
+genBankAccessionID PRJEB1797
+taxId 6287
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp dirImm1.config.ra) > agp.log 2>&1
+    # *** All done!  (through the 'agp' step)
+    # real    0m26.615s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db dirImm1.config.ra) > db.log 2>&1
+    # real    1m1.272s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/dirImm1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/dirImm1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/dirImm1/dirImm1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku dirImm1) > do.log 2>&1
+    # real    12m23.178s
+
+    cat fb.dirImm1.cpgIslandExtUnmasked.txt
+    # 27978 bases of 84923352 (0.033%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/dirImm1/bed/cytoBand
+    cd /hive/data/genomes/dirImm1/bed/cytoBand
+    makeCytoBandIdeo.csh dirImm1
+
+#########################################################################
+# ucscToINSDC table/track (TBD - 2015-03-20 - Hiram)
+    # this is done only on genbank assemblies
+    mkdir /hive/data/genomes/dirImm1/bed/ucscToINSDC
+    cd /hive/data/genomes/dirImm1/bed/ucscToINSDC
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+       ../../genbank/GCA_*assembly_structure/Primary_Assembly
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    # 25187 name.coordinate.tab
+    # 25187 ucscToINSDC.bed
+    # 25187 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab dirImm1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords dirImm1
+    # should cover %100 entirely:
+    featureBits -countGaps dirImm1 ucscToINSDC
+    # 2053849526 bases of 2053849526 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2015-07-09 - Hiram)
+    hgsql -N -e "select frag from gold;" dirImm1 | sort | head -3
+AJ537512.1
+nDi_2_2_scaf00001_1
+nDi_2_2_scaf00001_10
+
+(nDi_2_2_scaf|AJ537512)[0-9]*([\._][0-1]*)?
+
+[JP][Fp][a4][1_][C4][o1][n1][t7][i\.](g[0-9]*)?(\_[0-9]*)?
+
+    hgsql -N -e "select frag from gold;" dirImm1 | sort | tail -2
+nDi_2_2_scaf16060_1
+nDi_2_2_scaf16061_1
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" dirImm1 | wc -l
+    # 24243
+
+    hgsql -N -e "select frag from gold;" dirImm1 \
+      | egrep -e '(nDi_2_2_scaf|AJ537512)[0-9]*([\._][0-1]*)?' \
+        | wc -l
+    # 24243
+
+    hgsql -N -e "select frag from gold;" dirImm1 \
+      | egrep -v -e '(nDi_2_2_scaf|AJ537512)[0-9]*([\._][0-1]*)?' \
+       | wc -l
+    # 0
+
+    # hence, add to trackDb/worm/dirImm1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex (nDi_2_2_scaf|AJ537512)[0-9]*([\._][0-1]*)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+##########################################################################
+# running repeat masker (DONE - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/dirImm1/bed/repeatMasker
+    cd /hive/data/genomes/dirImm1/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku dirImm1) > do.log 2>&1
+    # real    193m42.028s
+
+    cat faSize.rmsk.txt
+    # 88323343 bases (3430609 N's 84892734 real 81279691 upper
+    #    3613043 lower) in 16062 sequences in 1 files
+    # Total size: mean 5498.9 sd 31910.5 min 200 (nDi_2_2_scaf16061)
+    #    max 1085577 (nDi_2_2_scaf00001) median 754
+    # %4.09 masked total, %4.26 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps dirImm1 rmsk
+    # 7720275 bases of 172510819 (4.475%) in intersection
+    #  real    0m6.103s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/dirImm1/bed/simpleRepeat
+    cd /hive/data/genomes/dirImm1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        dirImm1) > do.log 2>&1
+    # real    33m27.044s
+
+    cat fb.simpleRepeat
+    # 2032093 bases of 84923352 (2.393%) in intersection
+
+    # using the Window Masker result as indicated below
+
+##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-07-09 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/dirImm1/bed/microsat
+     cd /cluster/data/dirImm1/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed dirImm1 microsat microsat.bed
+    #	Read 211 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2015-07-09 - Hiram)
+    mkdir /hive/data/genomes/dirImm1/bed/windowMasker
+    cd /hive/data/genomes/dirImm1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev dirImm1) > do.log 2>&1
+    # real    6m42.227s
+
+    # Masking statistics
+    cat faSize.dirImm1.cleanWMSdust.txt
+    # 88323343 bases (3430609 N's 84892734 real 51697598 upper 33195136 lower)
+    #    in 16062 sequences in 1 files
+    # Total size: mean 5498.9 sd 31910.5 min 200 (nDi_2_2_scaf16061)
+    #    max 1085577 (nDi_2_2_scaf00001) median 754
+    # %37.58 masked total, %39.10 masked real
+
+    cat fb.dirImm1.rmsk.windowmaskerSdust.txt
+    # 3188537 bases of 88323343 (3.610%) in intersection
+
+    # using this Window Masker result for final masking::
+    cd /hive/data/genomes/dirImm1
+    #   you can safely ignore the warning about fields >= 13
+    twoBitMask bed/windowMasker/dirImm1.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  dirImm1.2bit
+
+    # measure the final masking:
+    twoBitToFa dirImm1.2bit stdout | faSize stdin > faSize.dirImm1.2bit.txt
+    cat faSize.dirImm1.2bit.txt
+    # 88323343 bases (3430609 N's 84892734 real 51686546 upper 33206188 lower)
+    #   in 16062 sequences in 1 files
+    # Total size: mean 5498.9 sd 31910.5 min 200 (nDi_2_2_scaf16061)
+    #   max 1085577 (nDi_2_2_scaf00001) median 754
+    # %37.60 masked total, %39.12 masked real
+
+    # and reset the symlink
+    rm /gbdb/dirImm1/dirImm1.2bit
+    ln -s /hive/data/genomes/dirImm1/dirImm1.2bit /gbdb/dirImm1/dirImm1.2bit
+
+##########################################################################
+# cpgIslands - (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/dirImm1/bed/cpgIslands
+    cd /hive/data/genomes/dirImm1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku dirImm1) > do.log 2>&1 &
+    # real    46m58.080s
+
+    cat fb.dirImm1.cpgIslandExt.txt
+    # 23281 bases of 84923352 (0.027%) in intersection
+
+#########################################################################
+# augustus - (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/dirImm1/bed/augustus
+    cd /hive/data/genomes/dirImm1/bed/augustus
+    #  XXX this is not specifically correct, the species caenorhabditis
+    #      is not necessarily accurate here
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+      -species=caenorhabditis -dbHost=hgwdev \
+         -workhorse=hgwdev dirImm1) > do.log 2>&1
+    # real    49m9.685s
+
+    cat fb.dirImm1.augustusGene.txt
+    # 4613656 bases of 84923352 (5.433%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2015-07-15 - Hiram)
+    mkdir /hive/data/genomes/dirImm1/bed/genscan
+    cd /hive/data/genomes/dirImm1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku dirImm1) > do.log 2>&1
+    # real    15m20.629s
+
+    cat fb.dirImm1.genscan.txt
+    #   2387414 bases of 84923352 (2.811%) in intersection
+
+    cat fb.dirImm1.genscanSubopt.txt
+    #   2284563 bases of 84923352 (2.690%) in intersection
+
+########################################################################
+# Create kluster run files (TBD - 2015-07-08 - Hiram)
+
+    cd /hive/data/genomes/dirImm1
+    # numerator is dirImm1 gapless bases "real" as reported by:
+    head -1 faSize.dirImm1.2bit.txt
+# 94076581 bases (7759220 N's 86317361 real 53341517 upper 32975844 lower)
+#    in 9780 sequences in 1 files
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 86317361 / 2861349177 \) \* 1024
+    # ( 86317361 / 2861349177 ) * 1024 = 30.890665
+
+    # ==> use -repMatch=100 since 30 or 50 masks too much
+    cd /hive/data/genomes/dirImm1
+    time blat dirImm1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/dirImm1.11.ooc \
+        -repMatch=100
+    # Wrote 8527 overused 11-mers to jkStuff/dirImm1.11.ooc
+    #  real    0m1.846s
+
+    # there are a few non-bridged gaps
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N -e 'select * from gap where bridge="no" order by size;' dirImm1 \
+       | ave -tableOut -col=7 stdin
+# min Q1 median Q3 max mean N sum stddev
+# 78831 79056 79362 79503 79503 79162.5 4 316650 320.991
+
+    # note the minimum non-bridged gap size is 78,831
+    gapToLift -verbose=2 -minGap=50000 dirImm1 jkStuff/dirImm1.nonBridged.lft \
+         -bedFile=jkStuff/dirImm1.nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 9780, total size: 94076581, one half size: 47038290
+# cumulative    N50 count       contig  contig size
+# 46960459        61      Bmal_v3_scaffold61      194773
+# 47038290 one half size
+# 47151548        62      Bmal_v3_scaffold62      191089
+
+#############################################################################
+# GENBANK AUTO UPDATE (TBD - 2015-06-09 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism               mrnaCnt estCnt  refSeqCnt
+    #  Pristionchus pacificus  97      37470   0
+
+    # edit etc/genbank.conf to add dirImm1 just before priPac1
+
+# dirImm1 (P. pacificus)
+dirImm1.serverGenome = /hive/data/genomes/dirImm1/dirImm1.2bit
+dirImm1.clusterGenome = /hive/data/genomes/dirImm1/dirImm1.2bit
+dirImm1.ooc = /hive/data/genomes/dirImm1/jkStuff/dirImm1.11.ooc
+dirImm1.lift = /hive/data/genomes/dirImm1/jkStuff/dirImm1.nonBridged.lft
+dirImm1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+dirImm1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+dirImm1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+dirImm1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+dirImm1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+dirImm1.refseq.mrna.native.load = yes
+dirImm1.refseq.mrna.xeno.load  = yes
+dirImm1.refseq.mrna.xeno.loadDesc = yes
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+dirImm1.genbank.mrna.xeno.load = no
+dirImm1.genbank.est.native.load = yes
+dirImm1.genbank.est.native.loadDesc = no
+dirImm1.downloadDir = dirImm1
+dirImm1.perChromTables = no
+
+    git commit -m "Added dirImm1 - P. pacificus refs #15209" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/etc/:
+    make etc-update
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial dirImm1
+    # logFile: var/build/logs/2015.07.02-11:39:01.dirImm1.initalign.log
+    # real    91m20.362s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.dirImm1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad dirImm1
+    # logFile: var/dbload/hgwdev/logs/2015.07.06-09:51:31.dirImm1.dbload.log
+    # real    18m34.687s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add dirImm1 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added dirImm1 - Pristionchus pacificus refs #15209" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2015-06-22 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=dirImm1 -tableCoverage all.joiner
+    joinerCheck -database=dirImm1 -times all.joiner
+    joinerCheck -database=dirImm1 -keys all.joiner
+
+    cd /hive/data/genomes/dirImm1
+    time makeDownloads.pl dirImm1 > downloads.log 2>&1
+    # real    13m42.027s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/dirImm1/pushQ
+    cd /hive/data/genomes/dirImm1/pushQ
+    makePushQSql.pl dirImm1 > dirImm1.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/dirImm1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/dirImm1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/dirImm1/bbi/qualityBw/quality.bw
+    # WARNING: dirImm1 does not have seq
+    # WARNING: dirImm1 does not have extFile
+    # WARNING: dirImm1 does not have estOrientInfo
+    # WARNING: dirImm1 does not have mrnaOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p dirImm1.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/dirImm1.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#############################################################################

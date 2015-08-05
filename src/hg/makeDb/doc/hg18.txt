@@ -21409,8 +21409,9 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
 # Old DGV format is obsolete; see the following section.
 _EOF_
 #######################################################################
-# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 11/07/14 angie)
-# previously done 9/13/13 #11200
+# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 7/27/15 angie)
+# Redmine #15767
+# previously done 9/13/13 #11200, 11/07/14 #14188
     # Beta last updated 2/11/13 #9401
     # 9/13/13: DGV is back out of beta, and has added some columns again for the 7/2013
     # public release.  They have also requested that we make a composite track
@@ -21418,20 +21419,20 @@ _EOF_
     set today = `date +%y%m%d`
     mkdir -p /hive/data/genomes/hg18/bed/dgv/$today
     cd /hive/data/genomes/hg18/bed/dgv/$today
-    set release = 2014-10-16
+    set release = 2015-07-23
     wget http://dgv.tcag.ca/dgv/docs/NCBI36_hg18_variants_$release.txt
     wget http://dgv.tcag.ca/dgv/docs/NCBI36_hg18_supportingvariants_$release.txt
     # These are the latest columns; if any changes, update translateDgvPlus.pl:
     head -1 NCBI36_hg18*.txt
-#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription  genes   samples
+#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription genes   samples
     # Eyeball the categories of variants:
     cut -f 5,6 NCBI36_hg18_supportingvariants_$release.txt  | sort | uniq -c | head -100
 # 175225 CNV     deletion
 # 153007 CNV     duplication
-# 298939 CNV     gain
-#   4222 CNV     gain+loss
+# 448298 CNV     gain
+#   8841 CNV     gain+loss
 #  73225 CNV     insertion
-# 786043 CNV     loss
+# 962405 CNV     loss
 #  48428 CNV     mobile element insertion
 #   9066 CNV     novel sequence insertion
 #   7825 CNV     tandem duplication
@@ -21439,13 +21440,14 @@ _EOF_
 #   2504 OTHER   inversion
 #   3709 OTHER   sequence alteration
 #      1 varianttype     variantsubtype
+
     cut -f 5,6 NCBI36_hg18_variants_$release.txt | sort | uniq -c | head -100
 #  29453 CNV     deletion
 #  19549 CNV     duplication
-#  26384 CNV     gain
-#   5779 CNV     gain+loss
+#  36159 CNV     gain
+#   6961 CNV     gain+loss
 #  25399 CNV     insertion
-#  69600 CNV     loss
+#  79382 CNV     loss
 #   4156 CNV     mobile element insertion
 #   8976 CNV     novel sequence insertion
 #    516 CNV     tandem duplication
@@ -21460,10 +21462,10 @@ _EOF_
       NCBI36_hg18_variants_$release.txt > dgvMerged.bed
     hgLoadBed hg18 dgvSupporting dgvSupporting.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 1562705 elements of size 22 from dgvSupporting.bed
+#Read 1893045 elements of size 22 from dgvSupporting.bed
     hgLoadBed hg18 dgvMerged dgvMerged.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 193623 elements of size 22 from dgvMerged.bed
+#Read 214362 elements of size 22 from dgvMerged.bed
 
 
 ############################################################################
@@ -32263,5 +32265,65 @@ make DBS="hg18 hg19"
     # about 2h 21m
 
     # verify the convert link on the browser is now active from hg18 to hg38
+
+
+#############################################################################
+# haplotype locations from Ensembl (DONE - 2015-07-02 - Galt )
+#
+# I want to have the placement positions of the haplotypes for viewing
+# with the new multi-window browser capability that I am developing.
+# Haplotypes provided in hg17 were 2, hg18, 4.
+# It seems these were provided by NCBI as sequence, but without placement information.
+#
+# haplotypePos is psl table made by Fan using BLAT and parasol. 
+# It once had a trackDb entry, but that is gone now.
+# It has several ambigous results for most of the haplotypes, 
+# although choosing the row with the highest number of matches for each haplotype would probably work.
+#
+# Hiram made haplotypeLocations table by taking the hg19 haplotypes and using liftOver.
+# It sort of works, but problems are that the hg18 chr22 haplo is not found in hg19 at all,
+# and the hap# changes from hg18 to hg19, so having that in the ID is not very helpful.
+# It also looks like the haplotypes in hg19 were made without subtracting 1 from the start for BED.
+# Finally, they do not match exactly the results in haplotypePos table.
+
+# So, knowing that Ensembl has good browser support for haplotypes, I went to their archive browser 
+# equivalent to hg18, and got their 4 haplotype positions by clicking on the label in the chromosome ideogram.
+# Since there are only 4, it is do-able manually.  
+# Did they figure out the positions for themselves, or did they get official placement positions from NCBI?
+
+# In any case, I cannot use the same method for hg17 because Ensembl does not keep any browsers that old in their archive.
+# Does anybody know of some ancient Ensembl mirrors that might have it?
+# Would anyone at NCBI know the old assembly haplotype placements for hg17 and hg18?
+
+# Followup 2015-07-24 Valerie from NCBI responded to my question and confirmed that
+# the Ensembl locations match what their database has. Presumably Ensembl therefore
+# got the data from NCBI, perhaps by special request. Valerie is following up with Ensembl.
+# She is happy that UCSC is doing more with alt haplotypes,
+# and notes that consistency between browsers is a good thing.
+
+cd /hive/data/genomes/hg18/bed
+mkdir haplotypeLocationsEnsembl
+cd haplotypeLocationsEnsembl
+
+vi haplotypeLocationsEnsembl.bed
+# paste in bed4 haplotype locations from Ensembl browser ideogram
+--------------------------------
+chr5  68965367 70760237 chr5_h2_hap1
+chr6  28885509 33451440 chr6_qbl_hap2
+chr6  28688543 33420241 chr6_cox_hap1
+chr22 40992945 41056606 chr22_h2_hap1
+
+hgLoadBed -type=bed4 hg18 haplotypeLocationsEnsembl haplotypeLocationsEnsembl.bed
+#Reading haplotypeLocationsEnsembl.bed
+#Read 4 elements of size 4 from haplotypeLocationsEnsembl.bed
+#Sorted
+#Creating table definition for haplotypeLocationsEnsembl
+#Saving bed.tab
+#Loading hg18
+
+vi README
+# I wrote some notes about the source and reasons for the data
+
+I have not made any trackDb entry for this table at this time.
 
 #############################################################################

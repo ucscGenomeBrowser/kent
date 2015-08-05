@@ -302,7 +302,7 @@ include wgEncodeRegDnase.ra
     type bigWig 0 10000
     superTrack wgEncodeReg full
     shortLabel Layered H3K27Ac
-    longLabel H3K27Ac Mark (Often Found Near Active Regulatory Elements) on 7 cell lines from ENCODE
+    longLabel H3K27Ac Mark (Often Found Near Regulatory Elements) on 7 cell lines from ENCODE
     visibility full
     viewLimits 0:100
     maxHeightPixels 100:30:11

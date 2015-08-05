@@ -49,8 +49,10 @@ enum genePredFromGxfOpts
     genePredGxfDefaults = 0x00,            /* used if nothing special */
     genePredGxfImpliedStopAfterCds = 0x01, /* stop codon is implied outside of
                                             * the annotated CDS bounds  */
-    genePredGxfGeneNameAsName2 = 0x02      /* use gene_name instead of gene_id
+    genePredGxfGeneNameAsName2 = 0x02,     /* use gene_name instead of gene_id
                                             * for name2 */
+    genePredGxfIncludeVersion = 0x04       /* use include gene_version and transcript_version with
+                                            * ids if available */
 };
 
 enum genePredFields
@@ -326,6 +328,9 @@ int genePredBaseToCodingPos(struct genePred *gp, int basePos,
 // provided. In that case, returns last valid position and sets isCoding to FALSE.
 
 struct genePred  *genePredFromBigGenePred( char *chrom, struct bigBedInterval *bb);
-/* build a genePred from a bigGenePred */
+/* build a genePred from a bigGenePred interval */
+
+struct genePred  *genePredFromBigGenePredRow(char **row);
+/* build a genePred from a bigGenePred row */
 #endif /* GENEPRED_H */
 

@@ -450,6 +450,8 @@ sqlSafef(query, sizeof(query),
       dbDbTable(), genomeCladeTable(), clade);
 genome = sqlQuickString(conn, query);
 hDisconnectCentral(&conn);
+if (genome == NULL)
+    errAbort("No default genome for clade: %s", clade);
 return genome;
 }
 
@@ -3602,7 +3604,11 @@ if (bigDataUrl != NULL)
     else
         {
         char *bigDataUrlLocal = hReplaceGbdb(bigDataUrl);
-        boolean exists = fileExists(bigDataUrlLocal);
+        boolean exists;
+        if (hasProtocol(bigDataUrlLocal))
+            exists = udcExists(bigDataUrlLocal);
+        else
+            exists = fileExists(bigDataUrlLocal);
         freeMem(bigDataUrlLocal);
         return exists;
         }

@@ -770,30 +770,15 @@ function multiSelectBlur(obj)
 }
 
 function filterCompositeSet(obj,all)
-{ // Will set all filter composites via [+] or [-] buttons
-
-    matSubCBsCheck(all);
-    var vars = [];
-    var vals = [];
+{ // Sets/Clears all subtrack checkboxes via [+] or [-] buttons
+  // Resets any filter composites so they work as expected after button press
     var filterComp = $("select.filterComp");
-    if (all) {
-        $(filterComp).each(function(i) {
-            $(this).trigger("checkAll");
-            $(this).val("All");
-            //vars.push($(this).attr('name'));  // Don't bother ajaxing this over
-            //vals.push($(this).val());
-        });
-    } else {
-        $(filterComp).each(function(i) {
-            $(this).trigger("uncheckAll");
-            $(this).val("");
-            vars.push($(this).attr('name'));
-            vals.push("[empty]");
-        });
-    }
-    if (vars.length > 0) {
-        setCartVars(vars,vals);// FIXME: setCartVar conflicts with "submit" button paradigm
-    }
+    $(filterComp).each(function(i) {
+        $(this).val("All");
+        $(this).dropdownchecklist("refresh");
+        ddcl.onComplete($(this));
+    });
+    matSubCBsCheck(all);
     matSubCBsSelected(); // Be sure to update the counts!
 }
 

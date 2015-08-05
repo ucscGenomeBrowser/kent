@@ -49,15 +49,15 @@ cd download
 wget ftp://macftp:analysis@ftp.macaquegenome.hgsc.bcm.tmc.edu/Assemblies/VI/FinalMergeSplit/v1-edit4.trimNoContam.agp.bz2
 wget ftp://macftp:analysis@ftp.macaquegenome.hgsc.bcm.tmc.edu/Assemblies/VI/FinalMergeSplit/v1_edit4.scf.fasta.bz2
 #   2) Mapped to chromosomes but unplaced Chr#_random, and unmapped contigs ChrU
-wget ftp://macftp:analysis@ftp.macaquegenome.hgsc.bcm.tmc.edu/Assemblies/VI/FinalMergeSplit/v1.edit4.random.ctgs.agp.bz2 
-wget ftp://macftp:analysis@ftp.macaquegenome.hgsc.bcm.tmc.edu/Assemblies/VI/FinalMergeSplit/v1.edit4.random.scfs.agp.bz2 
+wget ftp://macftp:analysis@ftp.macaquegenome.hgsc.bcm.tmc.edu/Assemblies/VI/FinalMergeSplit/v1.edit4.random.ctgs.agp.bz2
+wget ftp://macftp:analysis@ftp.macaquegenome.hgsc.bcm.tmc.edu/Assemblies/VI/FinalMergeSplit/v1.edit4.random.scfs.agp.bz2
 wget ftp://macftp:analysis@ftp.macaquegenome.hgsc.bcm.tmc.edu/Assemblies/VI/FinalMergeSplit/v1_edit4.random.chrm.fasta.bz2
 #   3) Late addition of 353 contigs to ChrU
-wget ftp://macftp:analysis@ftp.macaquegenome.hgsc.bcm.tmc.edu/Assemblies/VI/FinalMergeSplit/v1.edit4.ChrUr.chrm.fasta.bz2  
-wget ftp://macftp:analysis@ftp.macaquegenome.hgsc.bcm.tmc.edu/Assemblies/VI/FinalMergeSplit/v1.edit4.ChrUr.ctgs.agp.bz2     
-wget ftp://macftp:analysis@ftp.macaquegenome.hgsc.bcm.tmc.edu/Assemblies/VI/FinalMergeSplit/v1.edit4.ChrUr.scfs.agp.bz2 
+wget ftp://macftp:analysis@ftp.macaquegenome.hgsc.bcm.tmc.edu/Assemblies/VI/FinalMergeSplit/v1.edit4.ChrUr.chrm.fasta.bz2
+wget ftp://macftp:analysis@ftp.macaquegenome.hgsc.bcm.tmc.edu/Assemblies/VI/FinalMergeSplit/v1.edit4.ChrUr.ctgs.agp.bz2
+wget ftp://macftp:analysis@ftp.macaquegenome.hgsc.bcm.tmc.edu/Assemblies/VI/FinalMergeSplit/v1.edit4.ChrUr.scfs.agp.bz2
 
-# B.  The contigs fasta and quality files that go into these are in two sets, the bulk of the files (those in parts 1 and 2 of the assembly above) and the few that were added back at the last minute (part 3 above).  
+# B.  The contigs fasta and quality files that go into these are in two sets, the bulk of the files (those in parts 1 and 2 of the assembly above) and the few that were added back at the last minute (part 3 above).
 #    1)
 wget ftp://macftp:analysis@ftp.macaquegenome.hgsc.bcm.tmc.edu/Assemblies/VI/NewMergeSplit/v1.edit3.noContam.ctg.fasta.bz2
 #    2)
@@ -104,7 +104,7 @@ sed -e 's/Chr/chr/' v1.edit4.chrome.ctgs.agp.final > v1.edit4.chrome.ctgs.final.
 cat v1.edit4.chrome.scfs.agp.final |sed -e 's/Chr/chr/' > v1.edit4.final.fix2.agp
 hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.agp
 
-  /cluster/bin/i386/checkAgpAndFa v1.edit4.final.fix.agp rheMac2.fa > check.out   
+  /cluster/bin/i386/checkAgpAndFa v1.edit4.final.fix.agp rheMac2.fa > check.out
 
 # SPLIT UP chromosome and make 500k chunks for RM
 
@@ -113,12 +113,12 @@ hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.ag
   cd /cluster/data/rheMac2
 
   faSplit byname downloads/rheMac2.fa chrom
-  for i in `awk '{print $1}' chrom.sizes` ; do echo $i ; mkdir -p ${i##chr} ; mv $i.fa ${i##chr} ; pushd ${i##chr} ; faSplit -lift=$i.lft size $i.fa 500000 split ; popd; done 
+  for i in `awk '{print $1}' chrom.sizes` ; do echo $i ; mkdir -p ${i##chr} ; mv $i.fa ${i##chr} ; pushd ${i##chr} ; faSplit -lift=$i.lft size $i.fa 500000 split ; popd; done
   # generate list
   find scaffolds -print > scaffolds.list.0
   grep fa scaffolds.list.0 > scaffolds.list
 
-#### MAKE 2BIT NIB FILE 
+#### MAKE 2BIT NIB FILE
 
   ssh kkstore01
   nice /cluster/bin/i386/faToTwoBit rheMac2.fa rheMac2.2bit
@@ -126,8 +126,8 @@ hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.ag
   mv rheMac2.2bit ..
   # could also use cmp
   # note: size match
-  faSize -detailed=on rheMac2.fa >mac.len 
-  faSize -detailed=on check.fa >check.len 
+  faSize -detailed=on rheMac2.fa >mac.len
+  faSize -detailed=on check.fa >check.len
   diff mac.len check.len
   wc -l *.len
 
@@ -146,7 +146,7 @@ hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.ag
   # add rows to hgcentraltest on hgwbeta in dbDb and defaultDb
   # set orderKey past dog, before chimp
 
-# LOAD GAP & GOLD TABLES FROM AGP 
+# LOAD GAP & GOLD TABLES FROM AGP
     ssh hgwdev
     hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.chrome.scfs.final.fix.agp
 # CREATE GAP TABLE  from v1.edit4.chrome.ctgs.final.fix.agp to get gaps
@@ -157,7 +157,7 @@ hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.ag
   hgsql rheMac2 < gap2.sql
   cd /cluster/data/rheMac2/downloads
   grep fragment v1.edit4.chrome.ctgs.final.fix.agp > fragment.txt
-  grep clone v1.edit4.chrome.ctgs.final.fix.agp >> fragment.txt 
+  grep clone v1.edit4.chrome.ctgs.final.fix.agp >> fragment.txt
   hgsql rheMac2
   load data local infile 'fragment.txt' into table gap
   # create trackDb/monkey/rheMac2/gap.html
@@ -181,7 +181,7 @@ hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.ag
   #convert to half open and fix bug in agp file
   hgsql rheMac2 -e "update ctgPos set chromStart = chromStart -1 "
   hgsql rheMac2 -e "update ctgPos set size = size -1 "
-# CREATE CHROMINFO TABLE 
+# CREATE CHROMINFO TABLE
 # an improvement here would be to have getMaxCoord output the 2bit file name
   ssh hgwdev
   cd /cluster/data/rheMac2
@@ -202,7 +202,7 @@ hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.ag
 
 
 
-# REPEATMASKER 
+# REPEATMASKER
 # using the split scaffold fa files generated earlier
 
 #*** NOTE FOR NEXT TIME *** use doRepeatMasker.pl instead.
@@ -245,7 +245,7 @@ hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.ag
   grep "There were no repetitive sequences " repeats.final > repeats.notfound
   grep -v "There were no repetitive sequences " repeats.final > repeat.out
   ssh hgwdev
-  hgLoadOut rheMac2 repeat.out 2>errors 
+  hgLoadOut rheMac2 repeat.out 2>errors
   # Strange perc. fields:
 
 Processing repeats.out
@@ -316,7 +316,7 @@ note: 997 records dropped due to repStart > repEnd
   create index chrom_3 on simpleRepeat (chrom(16), chromEnd);
 
 
-# CREATE MASKED FA USING REPEATMASKER AND FILTERED TRF FILES 
+# CREATE MASKED FA USING REPEATMASKER AND FILTERED TRF FILES
 
   ssh kkstore02
   cd /cluster/data/rheMac2
@@ -476,7 +476,7 @@ WARNING: negative rEnd: -939 chrX:153527918-153528288 L1M4
   /cluster/bin/i386/faSplit about rheMac2.hardmask.fa 2000000 hardmask-split
 
 # DOWNLOAD FILES
-# REMAKE SOME BIGZIPS DOWNLOADS IN SAME FORMAT AS FOR OTHER ASSEMBLIES 
+# REMAKE SOME BIGZIPS DOWNLOADS IN SAME FORMAT AS FOR OTHER ASSEMBLIES
 # WITH ONE FILE PER CHROMOSOME (DONE, 2006-06-12, hartera)
 
 #*** NOTE FOR NEXT TIME *** use makeDownloads.pl instead.
@@ -491,7 +491,7 @@ WARNING: negative rEnd: -939 chrX:153527918-153528288 L1M4
   nice gzip rheMac2.softmask.fa
   nice gzip rheMac2.softmask2.fa
   nice gzip rheMac2.hardmask.fa
-  # Remake some of the bigZips downlods in the same format as for 
+  # Remake some of the bigZips downlods in the same format as for
   # other assemblies with one file per chrom (2006-06-12, hartera)
   ssh kkstore01
   cd /cluster/data/rheMac2
@@ -539,8 +539,8 @@ tar cvzf bigZips/chromFaMasked.tar.gz hardMask/chr*.fa.masked
   mv rheMac2.softmask.2bit rheMac2.2bit
   # note: size match
 
-# GENERATE 2bit for blastz 
-  mkdir -p /san/sanvol1/scratch/rheMac2/ 
+# GENERATE 2bit for blastz
+  mkdir -p /san/sanvol1/scratch/rheMac2/
   cd /cluster/data/rheMac2
   cp rheMac2.2bit /san/sanvol1/scratch/rheMac2/ -p
 
@@ -586,14 +586,14 @@ cd /cluster/data/hg17/bed/blastz.rheMac2
     cd /cluster/data/rheMac2/downloads/
     bunzip2 v1.edit4.chrm.qv.bz2 &
     bunzip2 v1.edit4.chrUr.bz2 &
-    nice fold --spaces v1.edit4.chrm.qv | sed -e 's/Chr/chr/' > rheMac2.chrm.qual.qv 
-    nice fold --spaces v1.edit4.chrUr.qv | sed -e 's/Chr/chr/' > rheMac2.chrUr.qv 
+    nice fold --spaces v1.edit4.chrm.qv | sed -e 's/Chr/chr/' > rheMac2.chrm.qual.qv
+    nice fold --spaces v1.edit4.chrUr.qv | sed -e 's/Chr/chr/' > rheMac2.chrUr.qv
     cat rheMac2.chrm.qual.qv rheMac2.chrUr.qv > rheMac2.qual.qv
-    qaToQac rheMac2.qual.qv temp.qac 
+    qaToQac rheMac2.qual.qv temp.qac
     gzip rheMac2.qual.qv
-    qacToWig -fixed temp.qac rheMac2.wig 
+    qacToWig -fixed temp.qac rheMac2.wig
     rm temp.qac
-    wigEncode rheMac2.wig rheMac2.qual.wig rheMac2.qual.wib 
+    wigEncode rheMac2.wig rheMac2.qual.wig rheMac2.qual.wib
     mv all.qv rheMac2.qual.qv
     qaToQac rheMac2.qual.qv temp.qac
     qacToWig -fixed temp.qac rheMac2.wig
@@ -696,8 +696,8 @@ for i in `cat $base/chrom.lst` ; do echo "netToAxt netSynSplit/$i.net chain/$i.c
 echo removing temporary files
 rm -rf axtChain/chain
 rm -rf axtChain/netSynSplit/
-# makes syntenic net from net 
-#   with $1 as reference and $2 as query 
+# makes syntenic net from net
+#   with $1 as reference and $2 as query
 #   uses blastz alignment in $3 then converts to maf written to $4
 # sample usage
 # makeSynMaf.sh rheMac2 canFam2 /cluster/data/rheMac2/bed/blastz.canFam2 /san/sanvol1/scratch/rheMac2/mafNetSyn
@@ -872,7 +872,7 @@ cat > downloads.csh << 'EOF'
 
 #trackDb entry
 #track multiz5waySyn
-#shortLabel Conservation 
+#shortLabel Conservation
 #longLabel Human/Mouse/Rat/Dog Multiz Alignment & Conservation using syntenic alignments
 #group compGeno
 #priority 104.1
@@ -889,9 +889,9 @@ cat > downloads.csh << 'EOF'
 #summary multiz5waySummary
 #frames multiz5wayFrames
 #irows on
-#speciesGroups mammal 
-#sGroup_mammal hg18 mm8 rn4 canFam2 
-#speciesDefaultOff 
+#speciesGroups mammal
+#sGroup_mammal hg18 mm8 rn4 canFam2
+#speciesDefaultOff
 
     # request push to hgwdev
 
@@ -906,7 +906,6 @@ cat > downloads.csh << 'EOF'
     ssh hgwdev
     cd /cluster/data/rheMac2/bed/multiz.syn.rheMac2Hg18Mm8Rn4CanFam2/frames
     hgLoadMafFrames rheMac2 multiz5wayFrames multiz5wayFrames.mafFrames.gz >&log
-    
 
 ###############################################################
 # PHASTCONS CONSERVATION (NOT DONE yet, 2006-05-06 Robert)
@@ -916,12 +915,12 @@ cat > downloads.csh << 'EOF'
 # --expected-length
 # --target-coverage
 # Also, instead of generating cons and noncons tree models,
-# we use a single, pre-existing tree model -- Elliot Margulies' model 
+# we use a single, pre-existing tree model -- Elliot Margulies' model
 # from the (37-way) ENCODE alignments.
 
     # NOTE: reusing cluster-friendly chrom fasta files created earlier
 
-    ssh kkstore01    
+    ssh kkstore01
     mkdir /cluster/bluearc/rheMac2/chrom
     cd /cluster/data/rheMac2
     foreach f (`cat chrom.lst`)
@@ -969,11 +968,11 @@ cat > downloads.csh << 'EOF'
     chmod +x doSplit.csh
 
 rm -f jobList
-foreach f (../../mafSyn/*.maf) 
+foreach f (../../mafSyn/*.maf)
 set c = $f:t:r
 echo "doSplit.csh $c {check out line+ $WINDOWS/$c.done}" >> jobList
 end
-    
+
     para create jobList
         # 49 jobs
     para try
@@ -992,7 +991,7 @@ end
            > maf_summary.txt
     awk '$1 == "[aggregate]" {printf "%0.3f\n", $3 + $4}' maf_summary.txt
     # 0.424
-   
+
     # Be sure to substitute in the right G+C content. Also, notice the
     # target coverage of 0.17.  We actually want 5% coverage here but
     # the final (posterior) coverage is only indirectly related to the
@@ -1092,7 +1091,7 @@ doPhast.csh $(root1) $(file1) 14 .008 .28
     ssh kolossus
     cd /san/sanvol1/scratch/rheMac2/multiz5waySyn/cons
     #	The sed's and the sort get the file names in chrom,start order
-    # (Hiram tricks -- split into columns on [.-/] with 
+    # (Hiram tricks -- split into columns on [.-/] with
     #    identifying x,y,z, to allow column sorting and
     #    restoring the filename.  Warning: the sort column
     # will depend on how deep you are in the dir
@@ -1133,7 +1132,7 @@ doPhast.csh $(root1) $(file1) 14 .008 .28
     #	pk is currently closer to the san than any other machine
     ssh pk
     cd /san/sanvol1/scratch/rheMac2/multiz5waySyn/cons/
-    # sort by chromName, chromStart so that items are in numerical order 
+    # sort by chromName, chromStart so that items are in numerical order
     #  for wigEncode
     find ./pp -name "chr*.pp" | \
         sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
@@ -1173,7 +1172,7 @@ cat > mafFrags.csh << 'EOF'
     date
 'EOF'
 
-    time csh mafFrags.csh > mafFrags.log 
+    time csh mafFrags.csh > mafFrags.log
     nice gzip up*.maf
 
     ssh kkstore02
@@ -1211,11 +1210,11 @@ cat > downloads.csh << 'EOF'
 # ENSEMBL (done  6/20/06 robert)
 wget http://www.sanger.ac.uk/Users/lec/macaque_data/gtf.tar.gz
 wget http://www.sanger.ac.uk/Users/lec/macaque_data/macaque_ensembl_cdnas.fa.gz
-wget -q http://www.sanger.ac.uk/Users/lec/macaque_data/macaque_ensembl_peptides.fa.gz 
+wget -q http://www.sanger.ac.uk/Users/lec/macaque_data/macaque_ensembl_peptides.fa.gz
 gunzip *.gz
 for i in `ls ensembl_macaque_gtf_data/` ; do echo ${i%%.gtf} ; awk '{print "chr"$0}' ensembl_macaque_gtf_data/$i > chr$i ; done
 rm -f chrscaffold.gtf
-cp ensembl_macaque_gtf_data/scaffold.gtf scaffold.gtf 
+cp ensembl_macaque_gtf_data/scaffold.gtf scaffold.gtf
 cat chr*.gtf > ensGene.gtf
 grep -v pseudo ensAll.gtf > ensGene.gtf
 ldHgGene rheMac2 ensGene ensGene.gtf -gtf -genePredExt
@@ -1290,10 +1289,10 @@ grep -v protein_coding ensAll.gtf |grep -v pseudo > ensRna.gtf
     make
     #	gcc readseq.c cpg_lh.c -o cpglh.exe
     mv cpglh.exe /cluster/data/rheMac2/bed/cpgIsland/
-    
-    # cpglh.exe requires hard-masked (N) .fa's.  
-    # There may be warnings about "bad character" for IUPAC ambiguous 
-    # characters like R, S, etc.  Ignore the warnings.  
+
+    # cpglh.exe requires hard-masked (N) .fa's.
+    # There may be warnings about "bad character" for IUPAC ambiguous
+    # characters like R, S, etc.  Ignore the warnings.
     ssh kkstore02
     cd /cluster/data/rheMac2/bed/cpgIsland
     foreach f (../../*/chr*.fa.masked)
@@ -1339,7 +1338,7 @@ cp /cluster/data/rheMac2/chrom.sizes /cluster/bluearc/rheMac2/.
 cat > rbest.csh << 'EOF'
     set swapChain = rheMac2ToHg18.swap.chain
     echo "merge and swap $swapChain"
-    zcat /cluster/data/rheMac2/bed/liftOver/rheMac2ToHg18.over.chain.gz \ 
+    zcat /cluster/data/rheMac2/bed/liftOver/rheMac2ToHg18.over.chain.gz \
          | chainSwap stdin stdout | chainMergeSort stdin > $swapChain
     echo "split chain"
     chainSplit swapChain/ $swapChain
@@ -1352,10 +1351,10 @@ cat > rbest.csh << 'EOF'
     echo "split net"
     netSplit rbest.noClass.net rBestNet
     echo "extract chains from net"
-    netChainSubset -verbose=0 rbest.noClass.net $swapChain stdout | \ 
+    netChainSubset -verbose=0 rbest.noClass.net $swapChain stdout | \
          chainMergeSort stdin | gzip -c > hg18.rheMac2.rbest.chain.gz
     echo "split extracted chain"
-    chainSplit rBestChain/ hg18.rheMac2.rbest.chain.gz 
+    chainSplit rBestChain/ hg18.rheMac2.rbest.chain.gz
     cd ..
     mkdir axtRBestNet
     echo "extract axts"
@@ -1660,7 +1659,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> do.log 2>&1 &
     #	real    248m5.651s
-    cat fb.rheMac2.chainCalJac3Link.txt 
+    cat fb.rheMac2.chainCalJac3Link.txt
     #	1871513554 bases of 2646704109 (70.711%) in intersection
 
     mkdir /hive/data/genomes/calJac3/bed/blastz.rheMac2.swap
@@ -1671,7 +1670,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    142m34.894s
-    cat fb.calJac3.chainHg19Link.txt 
+    cat fb.calJac3.chainHg19Link.txt
     #	1916431926 bases of 2752505800 (69.625%) in intersection
 
 ############################################################################
@@ -1706,18 +1705,18 @@ TMPDIR=/scratch/tmp
     #    - drop /start and /end entries
     #    - we don't have chromsome chrUn
     #    - mappings to weird chome names like: chrX|NW_001219121.1
-    tawk '$2~/\/start/ || $2~/\/end/ || $4 ~/chrUn/{next} {$4=gensub("[|].*", "", "g",$4); print $0}' ncbi.lft >ncbi.fix.lft 
+    tawk '$2~/\/start/ || $2~/\/end/ || $4 ~/chrUn/{next} {$4=gensub("[|].*", "", "g",$4); print $0}' ncbi.lft >ncbi.fix.lft
 
     # lift to chromosomes
     liftUp -type=.genepred -extGenePred refSeqAnno.gp ncbi.fix.lft warn refSeqAnno.contig.gp >&lift.probs
     # 635 drop due to not having chrUn
 
-    genePredCheck -db=rheMac2 refSeqAnno.gp 
-    hgLoadGenePred -genePredExt rheMac2 refSeqAnno refSeqAnno.gp 
+    genePredCheck -db=rheMac2 refSeqAnno.gp
+    hgLoadGenePred -genePredExt rheMac2 refSeqAnno refSeqAnno.gp
 
-    # add to 
+    # add to
       trackDb/rhesus/trackDb.ra
-      trackDb/rhesus/rheMac2/trackDb.ra 
+      trackDb/rhesus/rheMac2/trackDb.ra
     # create
       trackDb/rhesus/refSeqAnno.html
 
@@ -1766,7 +1765,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
     #	1729m35s
-    cat fb.rheMac2.chainGorGor3Link.txt  
+    cat fb.rheMac2.chainGorGor3Link.txt
     #	2175264883 bases of 2646704109 (82.188%) in intersection
 
     cd /hive/data/genomes/rheMac2/bed
@@ -1814,3 +1813,80 @@ TMPDIR=/scratch/tmp
     #	real    24m28.376s
 
 #############################################################################
+# LASTZ Rhesus/rheMac2 - Baboon PapAnu2 (DONE - 2014-12-11 - Hiram)
+    mkdir /hive/data/genomes/rheMac2/bed/lastzPapAnu2.2014-12-11
+    cd /hive/data/genomes/rheMac2/bed/lastzPapAnu2.2014-12-11
+
+    cp -p /hive/users/hiram/multiz/100way/rheMac2.papAnu2/rheMac2.papAnu2.tuning.top400.txt \
+      ./rheMac2.papAnu2.tuning.Q.txt
+
+    cat << '_EOF_' > DEF
+# rhesus vs baboon
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/rheMac2.papAnu2/rheMac2.papAnu2.tuning.top400.txt
+
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+
+BLASTZ_T=2
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=50
+BLASTZ_X=1000
+BLASTZ_Y=3400
+BLASTZ_Q=/hive/data/genomes/rheMac2/bed/lastzPapAnu2.2014-12-11/rheMac2.papAnu2.tuning.Q.txt
+
+#       A     C     G     T
+# A   100  -172   -44  -145
+# C  -172    92  -175   -44
+# G   -44  -175    92  -172
+# T  -145   -44  -172   100
+
+# TARGET: Rhesus rheMac2
+SEQ1_DIR=/hive/data/genomes/rheMac2/rheMac2.2bit
+SEQ1_LEN=/hive/data/genomes/rheMac2/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=40
+SEQ1_LAP=10000
+
+# QUERY: Baboon papAnu2
+SEQ2_DIR=/hive/data/genomes/papAnu2/papAnu2.2bit
+SEQ2_LEN=/hive/data/genomes/papAnu2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/rheMac2/bed/lastzPapAnu2.2014-12-11
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    415m23.860s
+
+    cat fb.rheMac2.chainPapAnu2Link.txt
+    # 2484461046 bases of 2646704109 (93.870%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` rheMac2 papAnu2) > rbest.log 2>&1 &
+    # real    47m55.946s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/papAnu2/bed/blastz.rheMac2.swap
+    cd /hive/data/genomes/papAnu2/bed/blastz.rheMac2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/rheMac2/bed/lastzPapAnu2.2014-12-11/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    101m46.788s
+
+    cat fb.papAnu2.chainRheMac2Link.txt
+    # 2528494450 bases of 2893250291 (87.393%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` papAnu2 rheMac2) > rbest.log 2>&1
+    # real    40m57.725s
+
+#########################################################################

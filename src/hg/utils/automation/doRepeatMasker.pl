@@ -462,12 +462,15 @@ if [ "\$fileCount" -gt 0 ]; then
      classBed/\$db.rmsk.RNA.bed ../../chrom.sizes \\
         classBbi/\$db.rmsk.RNA.bb
 fi
-echo "working: "`ls rmskClass/*.tab | egrep -v "/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab" | xargs echo`
-\$HOME/kent/src/hg/utils/automation/rmskBed6+10.pl `ls rmskClass/*.tab | egrep -v "/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab"` \\
+fileCount=`(ls rmskClass/*.tab | egrep -v "/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab" 2> /dev/null || true) | wc -l`
+if [ "\$fileCount" -gt 0 ]; then
+  echo "working: "`ls rmskClass/*.tab | egrep -v "/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab" | xargs echo`
+  \$HOME/kent/src/hg/utils/automation/rmskBed6+10.pl `ls rmskClass/*.tab | egrep -v "/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab"` \\
         | sort -k1,1 -k2,2n > classBed/\$db.rmsk.Other.bed
-bedToBigBed -tab -type=bed6+10 -as=\$HOME/kent/src/hg/lib/rmskBed6+10.as \\
-  classBed/\$db.rmsk.Other.bed ../../chrom.sizes \\
-    classBbi/\$db.rmsk.Other.bb
+  bedToBigBed -tab -type=bed6+10 -as=\$HOME/kent/src/hg/lib/rmskBed6+10.as \\
+    classBed/\$db.rmsk.Other.bed ../../chrom.sizes \\
+      classBbi/\$db.rmsk.Other.bb
+fi
 
 export bbiCount=`for F in classBbi/*.bb; do bigBedInfo \$F | grep itemCount; done | awk '{print \$NF}' | sed -e 's/,//g' | ave stdin | grep total | awk '{print \$2}' | sed -e 's/.000000//'`
 

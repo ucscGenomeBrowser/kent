@@ -217,11 +217,6 @@ endif
 L+=${PNGLIB}
 HG_INC+=${PNGINCL}
 
-# 32-bit color enabled by default
-ifneq (${COLOR32},0)
-    HG_DEFS+=-DCOLOR32
-endif
-
 # autodetect UCSC installation of samtabix:
 ifeq (${SAMTABIXDIR},)
     SAMTABIXDIR = /hive/data/outside/samtabix/${MACHTYPE}
@@ -405,7 +400,36 @@ ENCODEDCC_DIR = ${PIPELINE_PATH}/downloads/encodeDCC
 %.o: %.c
 	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${LOWELAB_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
 
-# jshint: off unless JSHINT is already in environment
+# autodetect UCSC installation of node.js:
+ifeq (${NODEBIN},)
+    NODEBIN = /cluster/software/src/node-v0.10.24-linux-x64/bin
+    ifeq ($(wildcard ${NODEBIN}),)
+	NODEBIN=
+    endif
+endif
+
+# node.js tools: jshint, jsx, jsxhint, uglifyjs, ...
 ifeq (${JSHINT},)
-    JSHINT=true
+    JSHINT=${NODEBIN}/jshint
+    ifeq ($(wildcard ${JSHINT}),)
+	    JSHINT=true
+    endif
+endif
+ifeq (${JSXHINT},)
+    JSXHINT=${NODEBIN}/jsxhint
+    ifeq ($(wildcard ${JSXHINT}),)
+        JSXHINT=true
+    endif
+endif
+ifeq (${JSX},)
+    JSX=${NODEBIN}/jsx
+    ifeq ($(wildcard ${JSX}),)
+        JSX=true
+    endif
+endif
+ifeq (${UGLIFYJS},)
+    UGLIFYJS=${NODEBIN}/uglifyjs
+    ifeq ($(wildcard ${UGLIFYJS}),)
+        UGLIFYJS=true
+    endif
 endif

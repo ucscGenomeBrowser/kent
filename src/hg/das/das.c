@@ -818,7 +818,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 }
 
 static void dasOutBed(char *chrom, int start, int end, 
-	char *name, char *strand, char *score, 
+	char *name, char *score,  char *strand,
 	struct tableDef *td, struct trackTable *tt)
 /* Write out a generic one. */
 {
@@ -840,38 +840,33 @@ printf(" </GROUP>\n");
 printf("</FEATURE>\n");
 }
 
-static void dasOutBedSegment(struct sqlResult *sr, int rowOffset, char *table, struct tableDef *td, struct trackTable *tt)
+static void dasOutBedSegment(struct sqlResult *sr, char *table, struct tableDef *td,
+                             struct trackTable *tt)
 /* output BEDs and BED like tables resulting from query */
 {
 char **row;
-
-/* Get offset of standard bed fields.  For compatibility revert to standard positions if not 
- * found */
 int chromIx = sqlFieldColumn(sr, "chrom");
-if (chromIx < 0) chromIx = rowOffset + 0;
 int chromStartIx = sqlFieldColumn(sr, "chromStart");
-if (chromStartIx < 0) chromStartIx = rowOffset + 1;
 int chromEndIx = sqlFieldColumn(sr, "chromEnd");
-if (chromEndIx < 0) chromEndIx = rowOffset + 2;
-
-
+int nameIx = sqlFieldColumn(sr, "name");
 int scoreIx = sqlFieldColumn(sr, "score");
 int strandIx = sqlFieldColumn(sr, "strand");
-int nameIx = sqlFieldColumn(sr, "name");
-    
+
+if (nameIx == -1)
+    nameIx = sqlFieldColumn(sr, "contig");
 if (scoreIx == -1)
     scoreIx = sqlFieldColumn(sr, "gcPpt");
 if (scoreIx == -1)
     scoreIx = sqlFieldColumn(sr, "dataValue");  // bedGraph
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    char *strand = (strandIx >= 0 ? row[strandIx] : "0");
-    char *score = (scoreIx >= 0 ? row[scoreIx] : "-");
+    char *chrom = (chromIx >= 0) ? row[chromIx] : "-";
+    char *chromStart = (chromStartIx >= 0) ? row[chromStartIx] : "0";
+    char *chromEnd = (chromEndIx >= 0) ? row[chromEndIx] : "0";
     char *name = (nameIx >= 0 ? row[nameIx] : td->name);
-    dasOutBed(row[chromIx], 
-              sqlUnsigned(row[chromStartIx]), 
-              sqlUnsigned(row[chromEndIx]), 
-              name, strand, score, td, tt);
+    char *score = (scoreIx >= 0 ? row[scoreIx] : "-");
+    char *strand = (strandIx >= 0 ? row[strandIx] : "0");
+    dasOutBed(chrom, sqlUnsigned(chromStart), sqlUnsigned(chromEnd), name, score, strand, td, tt);
     }
 }
 
@@ -908,7 +903,7 @@ else if (sameString(td->startField, "txStart"))
     }
 else if (sameString(td->startField, "chromStart"))
     {
-    dasOutBedSegment(sr, rowOffset, table, td, tt);
+    dasOutBedSegment(sr, table, td, tt);
     }
 sqlFreeResult(&sr);
 }

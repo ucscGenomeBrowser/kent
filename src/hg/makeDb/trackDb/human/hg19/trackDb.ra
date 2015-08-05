@@ -547,6 +547,8 @@ include ../chainNetLegacy.ra alpha
 
 include ../chainNetStray.ra alpha
 
+include ../chainNetMicMur1.ra alpha
+
 track hg18cytoBand
 shortLabel hg18 Chromosome Band
 longLabel Chromosome Bands (hg18)
@@ -851,6 +853,18 @@ snpSeqFile /gbdb/hg19/snp/snp142.fa
 
 track snp142 override
 snpSeqFile /gbdb/hg19/snp/snp142.fa
+
+track snp144Mult override
+snpSeqFile /gbdb/hg19/snp/snp144.fa
+
+track snp144Flagged override
+snpSeqFile /gbdb/hg19/snp/snp144.fa
+
+track snp144Common override
+snpSeqFile /gbdb/hg19/snp/snp144.fa
+
+track snp144 override
+snpSeqFile /gbdb/hg19/snp/snp144.fa
 
 track snp137Common override
 snpSeqFile /gbdb/hg19/snp/snp137.fa
@@ -1267,6 +1281,7 @@ visibility hide
 maxWindowToDraw 5000000
 showHardyWeinberg on
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
+release alpha
 
 track tgpPhase3Accessibility
 compositeTrack on
@@ -1276,6 +1291,7 @@ type bigBed 3
 visibility hide
 group varRep
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9
+release alpha
 
     track tgpPhase3AccessibilityPilotCriteria
     subTrack tgpPhase3Accessibility
@@ -1283,6 +1299,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr
     longLabel 1000 Genomes Project Phase 3 Paired-end Accessible Regions - Pilot Criteria
     bigDataUrl /gbdb/hg19/1000Genomes/phase3/20141020.pilot_mask.whole_genome.bb
     color 100,100,100
+    release alpha
 
     track tgpPhase3AccessibilityStrictCriteria
     subTrack tgpPhase3Accessibility
@@ -1290,6 +1307,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr
     longLabel 1000 Genomes Project Phase 3 Paired-end Accessible Regions - Strict Criteria
     bigDataUrl /gbdb/hg19/1000Genomes/phase3/20141020.strict_mask.whole_genome.bb
     color 0,0,0
+    release alpha
 
 track evsEsp6500
 shortLabel EVS Variants

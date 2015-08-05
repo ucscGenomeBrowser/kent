@@ -138,6 +138,8 @@
 #include "wiki.h"
 #endif /* LOWELAB_WIKI */
 
+#include "trackVersion.h"
+
 #define CHROM_COLORS 26
 
 int colorBin[MAXPIXELS][256]; /* count of colors for each pixel for each color */
@@ -4743,21 +4745,60 @@ if (class != NULL)
 return FALSE;
 }
 
+static void loadFrames(struct sqlConnection *conn, struct linkedFeatures *lf)
+/* Load the CDS part of a genePredExt for codon display */
+{
+char query[4096];
+
+for(; lf; lf = lf->next)
+    {
+    struct genePred *gp = lf->original;
+    gp->optFields |= genePredExonFramesFld | genePredCdsStatFld | genePredCdsStatFld;
+    safef(query, sizeof query, "NOSQLINJ select * from knownCds where name=\"%s\"",
+	gp->name);
+
+    struct sqlResult *sr = sqlMustGetResult(conn, query);
+    char **row = NULL;
+    int sizeOne;
+
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	gp->cdsStartStat = parseCdsStat(row[1]);
+	gp->cdsEndStat = parseCdsStat(row[2]);
+	int exonCount = sqlUnsigned(row[3]);
+	if (exonCount != gp->exonCount)
+	    errAbort("loadFrames: %s number of exonFrames (%d) != number of exons (%d)",
+		     gp->name, exonCount, gp->exonCount);
+	sqlSignedDynamicArray(row[4], &gp->exonFrames, &sizeOne);
+	if (sizeOne != gp->exonCount)
+	    errAbort("loadFrames: %s number of exonFrames (%d) != number of exons (%d)",
+		     gp->name, sizeOne, gp->exonCount);
+	}
+    sqlFreeResult(&sr);
+    }
+}
+
 void loadKnownGencode(struct track *tg)
 /* Convert gene pred in window to linked feature. Include alternate name
  * in "extra" field (usually gene name) */
 {
 char varName[SMALLBUF];
-safef(varName, sizeof(varName), "%s.show.composite", tg->tdb->track);
-boolean showComposite = cartUsualBoolean(cart, varName, FALSE);
+safef(varName, sizeof(varName), "%s.show.comprehensive", tg->tdb->track);
+boolean showComprehensive = cartUsualBoolean(cart, varName, FALSE);
 
 struct sqlConnection *conn = hAllocConn(database);
 tg->items = connectedLfFromGenePredInRangeExtra(tg, conn, tg->table,
                                         chromName, winStart, winEnd, TRUE);
-hFreeConn(&conn);
+
 /* filter items on selected criteria if filter is available */
-if (!showComposite)
+if (!showComprehensive)
     filterItems(tg, knownGencodeClassFilter, "include");
+
+/* if we're close enough to see the codon frames, we better load them! */
+if (zoomedToCdsColorLevel)
+    loadFrames(conn, tg->items);
+
+hFreeConn(&conn);
 }
 
 void loadGenePredWithName2(struct track *tg)
@@ -4999,6 +5040,7 @@ struct linkedFeatures *lf;
 struct sqlConnection *conn = hAllocConn(database);
 char *geneSymbol;
 char *protDisplayId;
+char *gencodeId;
 char *mimId;
 char cond_str[256];
 
@@ -5006,6 +5048,7 @@ boolean useGeneSymbol= FALSE;
 boolean useKgId      = FALSE;
 boolean useProtDisplayId = FALSE;
 boolean useMimId = FALSE;
+boolean useGencodeId = FALSE;
 
 struct hashEl *knownGeneLabels = cartFindPrefix(cart, "knownGene.label");
 struct hashEl *label;
@@ -5029,11 +5072,14 @@ if (hTableExists(database, "kgXref"))
             useGeneSymbol = TRUE;
         else if (endsWith(label->name, "kgId") && differentString(label->val, "0"))
             useKgId = TRUE;
+        else if (endsWith(label->name, "gencodeId") && differentString(label->val, "0"))
+            useGencodeId = TRUE;
         else if (endsWith(label->name, "prot") && differentString(label->val, "0"))
             useProtDisplayId = TRUE;
         else if (endsWith(label->name, omimLabel) && differentString(label->val, "0"))
             useMimId = TRUE;
         else if (!endsWith(label->name, "gene") &&
+                 !endsWith(label->name, "gencodeId") &&
                  !endsWith(label->name, "kgId") &&
                  !endsWith(label->name, "prot") &&
                  !endsWith(label->name, omimLabel) )
@@ -5059,6 +5105,14 @@ if (hTableExists(database, "kgXref"))
                 }
             labelStarted = TRUE;
             }
+        if (useGencodeId)
+            {
+            if (labelStarted) dyStringAppendC(name, '/');
+            else labelStarted = TRUE;
+	    sqlSafefFrag(cond_str, sizeof(cond_str), "name='%s'", lf->name);
+	    gencodeId = sqlGetField(database, "knownGene", "alignID", cond_str);
+	    dyStringAppend(name, gencodeId);
+	    }
         if (useKgId)
             {
             if (labelStarted) dyStringAppendC(name, '/');
@@ -5156,7 +5210,6 @@ if (!showSpliceVariants)
         sqlSafef(query, sizeof(query),
                 "select transcript from %s where chrom=\"%s\" and chromStart < %d && chromEnd > %d",
                 canonicalTable, chromName, winEnd, winStart);
-	printf("query %s\n", query);
         struct sqlResult *sr = sqlGetResult(conn, query);
         char **row;
         while ((row = sqlNextRow(sr)) != NULL)
@@ -5820,6 +5873,15 @@ else
     return lf->name;
 }
 
+char *ncbiRefGeneMapName(struct track *tg, void *item)
+/* Return un-abbreviated gene name. */
+{
+struct linkedFeatures *lf = item;
+char buffer[1024];
+safecpy(buffer, sizeof buffer, lf->name);
+return cloneString(buffer);
+}
+
 char *refGeneMapName(struct track *tg, void *item)
 /* Return un-abbreviated gene name. */
 {
@@ -6200,7 +6262,7 @@ void ncbiGeneMethods(struct track *tg)
 {
 tg->loadItems = loadNcbiGene;
 tg->itemName = refGeneName;
-tg->mapItemName = refGeneMapName;
+tg->mapItemName = ncbiRefGeneMapName;
 tg->itemColor = refGeneColor;
 }
 
@@ -12630,6 +12692,15 @@ else if (sameWord(type, "bigBed"))
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }
+else if (sameWord(type, "bigPsl"))
+    {
+    tdb->canPack = TRUE;
+    wordCount++;
+    words[1] = "12";
+    bigBedMethods(track, tdb, wordCount, words);
+    if (trackShouldUseAjaxRetrieval(track))
+        track->loadItems = dontLoadItems;
+    }
 else if (sameWord(type, "bigGenePred"))
     {
     tdb->canPack = TRUE;
@@ -13006,17 +13077,26 @@ track->visibility = tdb->visibility;
 track->shortLabel = cloneString(tdb->shortLabel);
 if (sameWord(tdb->track, "ensGene"))
     {
-    char ensVersionString[256];
-    char ensDateReference[256];
-    ensGeneTrackVersion(database, ensVersionString, ensDateReference,
-	sizeof(ensVersionString));
-    if (ensVersionString[0])
+    struct trackVersion *trackVersion = getTrackVersion(database, "ensGene");
+    if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
 	{
 	char longLabel[256];
-	if (ensDateReference[0] && differentWord("current", ensDateReference))
-	    safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - archive %s - %s", ensVersionString, ensDateReference);
+        if (!isEmpty(trackVersion->dateReference) && differentWord("current", trackVersion->dateReference))
+	    safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - archive %s - %s", trackVersion->version, trackVersion->dateReference);
 	else
-	    safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - %s", ensVersionString);
+	    safef(longLabel, sizeof(longLabel), "Ensembl Gene Predictions - %s", trackVersion->version);
+	track->longLabel = cloneString(longLabel);
+	}
+    else
+	track->longLabel = cloneString(tdb->longLabel);
+    }
+else if (sameWord(tdb->track, "ncbiRefCurated") || sameWord(tdb->track, "ncbiRefCurated"))
+    {
+    struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
+    if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+	{
+	char longLabel[1024];
+	safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, trackVersion->version);
 	track->longLabel = cloneString(longLabel);
 	}
     else

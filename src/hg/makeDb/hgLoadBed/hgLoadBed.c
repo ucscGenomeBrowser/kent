@@ -350,7 +350,7 @@ while (lineFileNextReal(lf, &line))
     bed->chromEnd = lineFileNeedNum(lf, words, 2);
     if (! noStrict)
 	{
-	if (bed->chromEnd < 1)
+	if ((bed->chromEnd < 1) && !allowStartEqualEnd)
 	    errAbort("ERROR: line %d:'%s'\nchromEnd is less than 1\n",
 		     lf->lineIx, dupe);
 	if (bed->chromStart == bed->chromEnd && !allowStartEqualEnd)
@@ -383,8 +383,12 @@ int i, wordCount;
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
     if (!noBin)
-        if (fprintf(f, "%u\t", hFindBin(bed->chromStart, bed->chromEnd)) <= 0)
+        {
+        // allow for zero-length at start of seq [bin code can't handle 0-0]
+        unsigned end = (bed->chromEnd > 0) ? bed->chromEnd : 1;
+        if (fprintf(f, "%u\t", hFindBin(bed->chromStart, end)) <= 0)
 	    writeFailed(fileName);
+        }
     if (strictTab)
 	wordCount = chopTabs(bed->line, words);
     else

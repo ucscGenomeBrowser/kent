@@ -866,7 +866,7 @@ while (s != NULL && s[0] != 0)
 	    }
 	if (sameString(row[1], "n/a"))
 	     gotNa = TRUE;
-	if (countChars(s, ',') >= 2)
+	if (countChars(row[1], ',') >= 2)
 	     gotCommas = TRUE;
 	}
     s = e;
@@ -876,7 +876,7 @@ if (!gotCommas)
            "Expected some rows in join to have comma separated lists.");
 if (!gotNa)
     qaStatusSoftError(tablesTestList->status, 
-           "Expected some rows in joint to have n/a.");
+           "Expected some rows in join to have n/a.");
 }
 
 

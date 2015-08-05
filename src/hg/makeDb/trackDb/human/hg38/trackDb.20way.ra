@@ -19,10 +19,11 @@ group compGeno
         track multiz20way
         subTrack cons20wayViewalign on
         shortLabel Multiz Align
-        longLabel Multiz Alignments of 17 primates plus three mammals
+        longLabel Multiz Alignments of 20 mammals (17 primates)
         subGroups view=align
         noInherit on
         irows on
+	#snpTable mafSnp20way
         summary multiz20waySummary
         frames multiz20wayFrames
         group compGeno
@@ -48,8 +49,8 @@ group compGeno
         track phyloP20way
         subTrack cons20wayViewphyloP off
         subGroups view=phyloP
-        shortLabel 17 primates Cons
-        longLabel 17 primates plus three mammals Basewise Conservation by PhyloP
+        shortLabel 20 mammals Cons
+        longLabel 20 mammals (17 primates) Basewise Conservation by PhyloP
         noInherit on
         configurable on
         type wig -14.191 1.199
@@ -73,7 +74,7 @@ group compGeno
         subTrack cons20wayViewphastcons off
         subGroups view=phastcons
         shortLabel 20-way Cons
-        longLabel 17 primates plus three mammals conservation by PhastCons
+        longLabel 20 mammals (17 primates) conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -96,7 +97,7 @@ group compGeno
         subTrack cons20wayViewelements on
         subGroups view=elements
         shortLabel 20-way El
-        longLabel 17 primates plus three mammals Conserved Elements
+        longLabel 20 mammals (17 primates) Conserved Elements
         noInherit on
         color 110,10,40
         type bed 5 .

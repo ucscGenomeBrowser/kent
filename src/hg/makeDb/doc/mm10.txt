@@ -8776,6 +8776,25 @@ CREATE TABLE ucscToEnsembl (
 ##############################################################################
 # Haplotype track (WORKING - 2012-10-01 - Hiram)
 
+# Warning: these are all actually alternate scaffolds from OTHER mouse strains
+# These haplotypes are NOT from mm10.  Probably the table should have been called NonMm10Haplotypes!
+
+# The directory after genbank/ identifies the strain, e.g. 129S2_SvPas
+#../../../mm10/genbank/129S2_SvPas/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/129P2_OlaHsd/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/NOD_ShiLtJ/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/A_J/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/CAST_Ei/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/129X1_SvJ/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/AKR_J/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/RIII/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/129S6_SvEvTac/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/129S7_SvEvBrd-Hprt-b-m2/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/BALB_c/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/129S1_SvImJ/alt_scaffolds/alt_scaffold_placement.txt
+#../../../mm10/genbank/NOD_MrkTac/alt_scaffolds/alt_scaffold_placement.txt
+
+
     cat << '_EOF_' > mkBedFile.pl
 #!/usr/bin/env perl
 
@@ -11038,22 +11057,42 @@ ftpFile=ftp://ftp.ncbi.nlm.nih.gov/genomes/M_musculus/GFF/ref_GRCm38.p3_top_leve
 gff3File=`basename $ftpFile`
 
 echo "select * from ucscToRefSeq" | hgsql $db | tail -n +2 | awk '{print 0, $4, $3, $1, $3}' > refSeqToUcsc.lft
+rm -f $ftpFile
 wget $ftpFile
 
-/cluster/home/braney/bin/x86_64/gff3ToGenePred -useName -warnAndContinue $gff3File stdout 2> convertErr.txt | liftUp -type=.gp -extGenePred lift.gp refSeqToUcsc.lft warn  stdin 2> liftErr.txt
+/cluster/home/braney/bin/x86_64/gff3ToGenePred -useName -warnAndContinue -attrsOut=attrs -bad=bad.gp $gff3File stdout 2> convertErr.txt | liftUp -type=.gp -extGenePred lift.gp refSeqToUcsc.lft warn  stdin 2> liftErr.txt
 wc -l lift.gp
-# 104119 lift.gp
+# 108567 lift.gp
+wc -l bad.gp
+# 189
 
-egrep "^N(M|R)" lift.gp > curated.gp
+tawk '{print $1}'  attrs | sort | uniq > meta
+wc -l meta
+# 110847 meta
+for i in product Dbxref gene gbkey
+do 
+    echo $i
+    tawk -v attr=$i '$2==attr {print $1,$3}' attrs | sort | uniq | join -t $'\t' /dev/stdin meta > out
+    mv out meta
+done  
+wc -l meta
+# 109420 meta
+
+egrep "^N(M|R|P)" lift.gp > curated.gp
 egrep "^X(M|R)" lift.gp > predicted.gp
 
 wc -l curated.gp predicted.gp
-#  33532 curated.gp
-#  70587 predicted.gp
-# 104119 total
+#33545 curated.gp
+#70587 predicted.gp
+#104132 total
+
+cat curated.gp predicted.gp | awk '{print $1}' | sort -u > tmp1
+cat meta | awk '{print $1}' | sort -u > tmp2
+join -v 1 tmp1 tmp2 | wc -l
+# 0
 
 grep dropping convertErr.txt | wc -l
-#    2416
+#    189
 
 awk '/isn/ {print $1}' liftErr.txt | sort -u
 #    NT_166322.1
@@ -11061,4 +11100,115 @@ awk '/isn/ {print $1}' liftErr.txt | sort -u
 
 hgLoadGenePred -genePredExt $db ncbiRefCurated curated.gp
 hgLoadGenePred -genePredExt $db ncbiRefPredicted predicted.gp
+hgLoadSqlTab $db ncbiRefLink $kent/src/hg/lib/ncbiRefLink.sql meta
 
+hgsql -e 'INSERT INTO trackVersion \
+    (db, name, who, version, updateTime, comment, source, dateReference) \
+    VALUES("mm10", "ncbiRefSeq", "braney", "105", now(), \
+    "http://www.ncbi.nlm.nih.gov/genome/annotation_euk/Mus_musculus/105/", \
+    "ftp://ftp.ncbi.nlm.nih.gov/genomes/M_musculus", \
+    "9 February 2015" );' hgFixed
+
+#
+#############################################################################
+# hgPal downloads (DONE braney 2015-06-02)
+#   CDS FASTA from 60-way for knownGene
+
+    ssh hgwdev
+    screen -S mm10HgPal
+    mkdir /hive/data/genomes/mm10/bed/multiz60way/pal
+    cd /hive/data/genomes/mm10/bed/multiz60way/pal
+    cat ../species.list | tr '[ ]' '[\n]' > order.lst
+
+    export mz=multiz60way
+    export gp=knownGene
+    export db=mm10
+    export I=0
+    mkdir exonAA exonNuc
+    for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
+    do
+        I=`echo $I | awk '{print $1+1}'`
+	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.lst stdout | gzip -c > exonNuc/$C.exonNuc.fa.gz &"
+	echo "mafGene -chrom=$C -exons $db $mz $gp order.lst stdout | gzip -c > exonAA/$C.exonAA.fa.gz &"
+        if [ $I -gt 6 ]; then
+            echo "date"
+            echo "wait"
+            I=0
+        fi
+    done > $gp.jobs
+    echo "date" >> $gp.jobs
+    echo "wait" >> $gp.jobs
+
+    time nice sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    #   real    80m36.763s
+
+    mz=multiz60way
+    gp=knownGene
+    db=mm10
+    time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    #   real    1m16.821s
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+
+    rm -rf exonAA exonNuc
+
+    # we're only distributing exons at the moment
+    mz=multiz60way
+    gp=knownGene
+    db=mm10
+    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    md5sum *.fa.gz > md5sum.txt
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/
+
+###########################################################################
+# GENEID GENE PREDICTIONS (DONE - 2015-06-26 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/mm10/bed/geneid
+    cd /hive/data/genomes/mm10/bed/geneid
+    wget --timestamping \
+http://genome.crg.es/genepredictions/M.musculus/mm10/geneid_v1.4/00README
+    wget --timestamping \
+http://genome.crg.es/genepredictions/M.musculus/mm10/geneid_v1.4/mm10.geneid.prot
+    wget --timestamping \
+http://genome.crg.es/genepredictions/M.musculus/mm10/geneid_v1.4/mm10.geneid.gtf
+    ldHgGene -gtf -genePredExt mm10 geneid mm10.geneid.gtf
+
+    #  Read 36771 transcripts in 287332 lines in 1 files
+    #  36771 groups 66 seqs 1 sources 3 feature types
+    #  36771 gene predictions
+
+    featureBits -enrichment mm10 refGene:CDS geneid
+# refGene:CDS 1.292%, geneid 1.584%, both 1.028%, cover 79.51%, enrich 50.19x
+    featureBits -enrichment mm9 refGene:CDS geneid
+# refGene:CDS 1.305%, geneid 1.590%, both 1.040%, cover 79.65%, enrich 50.11x
+
+    featureBits -countGaps mm10 geneid
+# 42028722 bases of 2730871774 (1.539%) in intersection
+    featureBits -countGaps mm9 geneid
+# 41651898 bases of 2725765481 (1.528%) in intersection
+
+##########################################################################
+# SGP GENES (DONE - 2015-07-30 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/sgpGene
+    cd /hive/data/genomes/mm10/bed/sgpGene
+    wget --timestamping \
+http://genome.crg.es/genepredictions/M.musculus/mm10/SGP2/hg38/00README
+    wget --timestamping \
+http://genome.crg.es/genepredictions/M.musculus/mm10/SGP2/hg38/mm10.sgp2.gtf
+    wget --timestamping \
+http://genome.crg.es/genepredictions/M.musculus/mm10/SGP2/hg38/mm10.sgp2.gff3
+
+    ldHgGene -gtf -genePredExt mm10 sgpGene mm10.sgp2.gtf
+    # Read 35235 transcripts in 287314 lines in 1 files
+    #   35235 groups 60 seqs 1 sources 3 feature types
+    # 35235 gene predictions
+
+    featureBits -enrichment mm10 refGene:CDS sgpGene
+# refGene:CDS 1.292%, sgpGene 1.430%, both 1.101%, cover 85.21%, enrich 59.59x
+
+    featureBits -enrichment mm9 refGene:CDS sgpGene
+# refGene:CDS 1.305%, sgpGene 1.439%, both 1.113%, cover 85.23%, enrich 59.23x
+
+###########################################################################

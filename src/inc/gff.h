@@ -29,6 +29,9 @@ struct gffLine
     char *proteinId;      /* protein_id in GTF, NULL in GFF. Not allocated here. */
     char *geneName;       /* gene_name or NULL in GTF, NULL in GFF. Not allocated here. */
     char *transcriptName; /* transcript_name or NULL in GTF, NULL in GFF. Not allocated here. */
+    char *geneVersion;  /* gene_version or NULL or NULL in GTF, NULL in GFF. Not allocated here. */
+    char *transcriptVersion;  /* transcript_version or NULL or NULL in GTF, NULL in GFF. Not allocated here. */
+    char *proteinVersion;  /* protein_version or NULL or NULL in GTF, NULL in GFF. Not allocated here. */
     };
 
 struct gffGroup

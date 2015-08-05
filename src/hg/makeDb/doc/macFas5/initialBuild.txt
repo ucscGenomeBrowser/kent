@@ -220,6 +220,16 @@ taxId 9541
     ln -s `pwd`/macFas5.2bit /gbdb/macFas5/macFas5.2bit
 
 ##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-06-22 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/macFas5/bed/microsat
+     cd /cluster/data/macFas5/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed macFas5 microsat microsat.bed
+    #	Read 34107 elements of size 4 from microsat.bed
+
+##########################################################################
 ## WINDOWMASKER (DONE - 2013-06-27 - Hiram)
 
     mkdir /hive/data/genomes/macFas5/bed/windowMasker
@@ -432,7 +442,7 @@ macFas5.upstreamGeneTbl = refGene
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
-    time ./bin/gbDbLoadStep -drop -initialLoad -verbose=10 macFas5
+    time ./bin/gbDbLoadStep -drop -initialLoad macFas5
     # logFile: var/dbload/hgwdev/logs/2015.01.20-14:14:51.macFas5.dbload.log
     # real    41m8.893s
 

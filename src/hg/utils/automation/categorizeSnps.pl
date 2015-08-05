@@ -38,7 +38,9 @@ open(my $common,  "| gzip -c > Common.bed.gz") || die;
 open(my $flagged, "| gzip -c > Flagged.bed.gz") || die;
 while (<>) {
   my @w = split("\t");
-  if ($w[16] > 1 || $w[17] =~ /MultipleAlignments/) {
+  # Use only our own MultipleAlignments accounting, not dbSNP's weight; dbSNP may assign
+  # a weight of 3 for a variant that maps uniquely to each MHC alt (e.g. b144 rs928).
+  if ($w[17] =~ /MultipleAlignments/) {
     print $mult $_;
     $multCount++;
   } else {

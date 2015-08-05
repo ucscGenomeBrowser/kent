@@ -1,0 +1,552 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the ce11
+# C. elegans equivalent to WS245 sequence
+
+# Assembly Name:  WBcel235
+# Organism name:  Caenorhabditis elegans
+# Taxid:          6239
+# Submitter:      C. elegans Sequencing Consortium
+# Date:           2013-2-7
+# BioSample:      SAMEA3138177
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Chromosome
+# Genome representation: full
+# GenBank Assembly Accession: GCA_000002985.3 (latest)
+# RefSeq Assembly Accession: GCF_000002985.6 (species-representative latest)
+# RefSeq Assembly and GenBank Assemblies Identical: no
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000001175.3      GCF_000001175.4 Primary Assembly
+##      GCF_000006485.1 non-nuclear
+
+# separate Genbank chrMt sequence X54252.1 will be added
+
+#############################################################################
+# fetch sequence (DONE - 2015-06-10 - Hiram)
+    mkdir -p /hive/data/genomes/ce11/genbank
+    cd /hive/data/genomes/ce11/genbank
+
+    rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/invertebrate/Caenorhabditis_elegans/all_assembly_versions/GCA_000002985.3_WBcel235/ ./
+
+    # measure what we have here:
+    faCount GCA_000002985.3_WBcel235_genomic.fna.gz
+#seq    len    A        C     G T     N cpg
+BX284601.5 15072434     4835939 2695890 2692155 4848450 0       503518
+BX284602.5 15279421     4878209 2769232 2762246 4869734 0       492142
+BX284603.4 13783801     4444681 2449158 2466344 4423618 0       459676
+BX284604.4 17493829     5711043 3034784 3017028 5730974 0       522372
+BX284605.5 20924180     6750403 3712075 3701405 6760297 0       638988
+BX284606.5 17718942     5747200 3119741 3117909 5734092 0       514719
+total 100272607   32367475  17780880   17757087 32367165 0      3131415
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2015-06-10 - Hiram)
+    mkdir /hive/data/genomes/ce11/ucsc
+    cd /hive/data/genomes/ce11/ucsc
+
+    ~/kent/src/hg/makeDb/doc/ce11/ucscCompositeAgp.pl \
+../genbank/GCA_000002985.3_WBcel235_assembly_structure/Primary_Assembly
+
+    # verify nothing lost compared to genbank:
+    faCount *.fa
+# #seq    len    A        C     G T     N cpg
+# chrI    15072434        4835939 2695890 2692155 4848450 0       503518
+# chrII   15279421        4878209 2769232 2762246 4869734 0       492142
+# chrIII  13783801        4444681 2449158 2466344 4423618 0       459676
+# chrIV   17493829        5711043 3034784 3017028 5730974 0       522372
+# chrV    20924180        6750403 3712075 3701405 6760297 0       638988
+# chrX    17718942        5747200 3119741 3117909 5734092 0       514719
+# total   100272607   32367475  17780880 17757087 32367165   0    3131415
+
+    # same numbers as above.
+
+#############################################################################
+#  Initial database build (DONE - 2015-02-15 - Hiram)
+
+    cd /hive/data/genomes/ce11
+    cat << '_EOF_' > ce11.config.ra
+# Config parameters for makeGenomeDb.pl:
+db ce11
+# clade worm
+# genomeCladePriority 10
+scientificName Caenorhabditis elegans
+commonName C. elegans
+assemblyDate Aug. 2014
+assemblyLabel Washington University School of Medicine GSC and Sanger Institute WBcel245
+assemblyShortLabel WBcel245
+orderKey 3024
+mitoAcc X54252.1
+fastaFiles /hive/data/genomes/ce11/ucsc/chr*.fa
+agpFiles   /hive/data/genomes/ce11/ucsc/chr*.agp
+# qualFiles /dev/null
+dbDbSpeciesDir worm
+photoCreditURL http://www.nematodes.org/
+photoCreditName Photo courtesy of Mark Blaxter
+ncbiGenomeId 41
+ncbiAssemblyId 554278
+ncbiAssemblyName WBcel245
+ncbiBioProject 13758
+genBankAccessionID GCA_000002985.3
+taxId 6239
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp ce11.config.ra) > agp.log 2>&1
+    #  real    0m16.707s
+
+    # verify end of agp.log indicates:
+    # *** All done!  (through the 'agp' step)
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db ce11.config.ra) > db.log 2>&1
+    # real    1m2.018s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##########################################################################
+# running repeat masker (DONE - 2015-06-10 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/repeatMasker
+    cd /hive/data/genomes/ce11/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku ce11) > do.log 2>&1
+    # real    23m54.865s
+
+    cat faSize.rmsk.txt
+# 100286401 bases (0 N's 100286401 real 87767736 upper 12518665 lower)
+#    in 7 sequences in 1 files
+# Total size: mean 14326628.7 sd 6729073.3 min 13794 (chrM)
+#    max 20924180 (chrV) median 15279421
+# %12.48 masked total, %12.48 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;    
+
+    time featureBits -countGaps ce11 rmsk
+    #  12518665 bases of 100286401 (12.483%) in intersection
+    # real    1m27.493s
+
+    # this one is actually not different as is the usual case, because
+    #   there are no N's in this sequence.
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2015-06-10 - Hiram)
+
+    mkdir /hive/data/genomes/ce11/bed/simpleRepeat
+    cd /hive/data/genomes/ce11/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        ce11) > do.log 2>&1
+    # XXX did not finish successfully, failed in the clean step
+    #  because there was no TrfPart hierarchy constructed
+    # real    14m28.299s
+
+    cat fb.simpleRepeat
+    # 4381783 bases of 100286401 (4.369%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/ce11
+    twoBitMask ce11.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed ce11.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa ce11.2bit stdout | faSize stdin > faSize.ce11.2bit.txt
+    cat faSize.ce11.2bit.txt
+    # 100286401 bases (0 N's 100286401 real 87628173 upper 12658228 lower)
+    #    in 7 sequences in 1 files
+    # Total size: mean 14326628.7 sd 6729073.3 min 13794 (chrM)
+    #    max 20924180 (chrV) median 15279421
+    # %12.62 masked total, %12.62 masked real
+
+    rm /gbdb/ce11/ce11.2bit
+    ln -s `pwd`/ce11.2bit /gbdb/ce11/ce11.2bit
+
+##########################################################################
+## WINDOWMASKER (DONE - 2015-06-10 - Hiram)
+
+    mkdir /hive/data/genomes/ce11/bed/windowMasker
+    cd /hive/data/genomes/ce11/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev ce11) > do.log 2>&1
+    # real    4m1.090s
+
+    # Masking statistics
+    cat faSize.ce11.cleanWMSdust.txt
+    # 100286401 bases (0 N's 100286401 real 63460102 upper 36826299 lower)
+    #    in 7 sequences in 1 files
+    # Total size: mean 14326628.7 sd 6729073.3 min 13794 (chrM)
+    #    max 20924180 (chrV) median 15279421
+    #  %36.72 masked total, %36.72 masked real
+
+    cat fb.ce11.rmsk.windowmaskerSdust.txt
+    # 8688859 bases of 100286401 (8.664%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2015-06-10 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/cpgIslands
+    cd /hive/data/genomes/ce11/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku ce11) > do.log 2>&1 &
+    # real    1m22.721s
+
+    cat fb.ce11.cpgIslandExt.txt
+    # 1092956 bases of 100286401 (1.090%) in intersection
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2015-06-10 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/ce11/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/ce11/ce11.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku ce11) > do.log 2>&1
+    # Elapsed time: 0m52s
+
+    cat fb.ce11.cpgIslandExtUnmasked.txt
+    # 1406254 bases of 100286401 (1.402%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-06-10 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/cytoBand
+    cd /hive/data/genomes/ce11/bed/cytoBand
+    makeCytoBandIdeo.csh ce11
+
+#########################################################################
+# augustus - (DONE - 2015-06-19 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/augustus
+    cd /hive/data/genomes/ce11/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=caenorhabditis -dbHost=hgwdev \
+           -workhorse=hgwdev ce11) > do.log 2>&1
+    # real    69m43.943s
+
+    cat fb.ce11.augustusGene.txt
+    # 25248650 bases of 100286401 (25.177%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2015-06-10 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/genscan
+    cd /hive/data/genomes/ce11/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku ce11) > do.log 2>&1
+    # real    10m10.946s
+
+    cat fb.ce11.genscan.txt
+    #   19205373 bases of 100286401 (19.151%) in intersection
+
+    cat fb.ce11.genscanSubopt.txt
+    #   118230 bases of 100286401 (0.118%) in intersection
+
+########################################################################
+# Create kluster run files (DONE - 2015-06-10 - Hiram)
+
+    cd /hive/data/genomes/ce11
+    # numerator is ce11 gapless bases "real" as reported by:
+    head -1 faSize.ce11.2bit.txt
+# 100286401 bases (0 N's 100286401 real 87628173 upper 12658228 lower)
+#    in 7 sequences in 1 files
+
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 100286401 / 2861349177 \) \* 1024
+    # ( 100286401 / 2861349177 ) * 1024 = 35.889809
+
+    # Use -repMatch=100 (based on size -- for human we use 1024, and 
+    # worm size is ~3.4% of human judging by gapless ce4 vs. hg18 genome 
+    # size from featureBits. So we would use 35, but that yields a very
+    # high number of tiles to ignore, especially for a small more compact 
+    # genome.  Bump that up a bit to be more conservative.
+
+    cd /hive/data/genomes/ce11
+    time blat ce11.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/ce11.11.ooc \
+        -repMatch=100
+    # Wrote 8487 overused 11-mers to jkStuff/ce11.11.ooc
+    #  real    0m1.897s
+
+    # there are no non-bridged gaps, do not need to do this
+    #   check non-bridged gaps to see what the typical size is:
+#     hgsql -N -e 'select * from gap where bridge="no" order by size;' ce11 
+#       | ave -tableOut -col=7 stdin
+# # min Q1 median Q3 max mean N sum stddev
+# 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006
+
+    # note the minimum non-bridged gap size is 50,076
+
+#  gapToLift -verbose=2 -minGap=50000 ce11 jkStuff/ce11.nonBridged.lft \
+#         -bedFile=jkStuff/ce11.nonBridged.bed
+
+#    hgsql -N \
+#        -e 'select * from gap where bridge="no" order by size;' ce11 \
+#        | ave -col=7 stdin
+
+    # not needed:
+#    gapToLift -verbose=2 -minGap=100 bosTau7 jkStuff/nonBridged.lft \
+#        -bedFile=jkStuff/nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 7, total size: 100286401, one half size: 50143200
+# cumulative   N50 count      contig  contig size
+# 38643122   2   chrX     17718942
+# 50143200 one half size
+# 56136951   3   chrIV    17493829
+
+#############################################################################
+# GENBANK AUTO UPDATE (DONE - 2015-06-10 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+# Caenorhabditis afra     6       6       0
+# Caenorhabditis angaria  7       0       0
+# Caenorhabditis brenneri 180     30074   0
+# Caenorhabditis briggsae 619     2424    0
+# Caenorhabditis castelli 5       5       0
+# Caenorhabditis doughertyi       6       6       0
+# Caenorhabditis drosophilae      2       1       0
+# Caenorhabditis elegans  9479    396692  27356
+# Caenorhabditis elegans/Monacrosporium haptotylum mixed EST library      0       3936    0
+# Caenorhabditis guadeloupensis   6       6       0
+# Caenorhabditis imperialis       6       6       0
+# Caenorhabditis japonica 9       33050   0
+# Caenorhabditis kamaaina 8       8       0
+# Caenorhabditis macrosperma      6       6       0
+# Caenorhabditis nigoni   7       7       0
+# Caenorhabditis nouraguensis     5       5       0
+# Caenorhabditis plicata  2       1       0
+# Caenorhabditis portoensis       6       6       0
+# Caenorhabditis remanei  585     20292   0
+# Caenorhabditis sp. 1 KK-2011    2       2       0
+# Caenorhabditis sp. 2 KK-2011    2       1       0
+# Caenorhabditis sp. 5 AC-2008    0       3868    0
+# Caenorhabditis sp. 5 KK-2011    3       2       0
+# Caenorhabditis sp. 8 KK-2011    4       2       0
+# Caenorhabditis tropicalis       1       1       0
+# Caenorhabditis virilis  5       5       0
+# Caenorhabditis wallacei 7       7       0
+# Caenorhabditis yunquensis       7       7       0
+
+    # edit etc/genbank.conf to add ce11 just before ce10
+
+# ce11 (C. elegans)
+ce11.serverGenome = /hive/data/genomes/ce11/ce11.2bit
+ce11.clusterGenome = /hive/data/genomes/ce11/ce11.2bit
+ce11.ooc = /hive/data/genomes/ce11/jkStuff/ce11.11.ooc
+ce11.perChromTables = no
+ce11.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+ce11.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+ce11.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+ce11.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+ce11.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+ce11.maxIntron = 100000
+ce11.lift = no
+ce11.refseq.mrna.native.load = yes
+ce11.refseq.mrna.xeno.load = no
+ce11.genbank.mrna.xeno.load = no
+ce11.genbank.mrna.native.load = no
+ce11.genbank.est.native.load = no
+ce11.downloadDir = ce11
+# ce11.upstreamGeneTbl = ensGene
+# ce11.upstreamMaf = multiz7way
+# /hive/data/genomes/ce11/bed/multiz7way/species.list
+
+    git commit -m "Added ce11; refs #15209" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial ce11
+    # logFile: var/build/logs/2015.06.10-15:57:13.ce11.initalign.log
+    # real    10m11.990s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.ce11
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad ce11 &
+    # logFile: var/dbload/hgwdev/logs/2015.06.19-09:37:47.ce11.dbload.log
+    # real    1m38.436s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add ce11 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added ce11 - C. elegans WS245 refs #15209" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2015-06-10 - Hiram)
+    mkdir /hive/data/genomes/ce11/bed/ucscToINSDC
+    cd /hive/data/genomes/ce11/bed/ucscToINSDC
+
+    grep chrM ../../ce11.agp
+# chrM    1       13794   650     F       X54252.1        1       13794   +
+
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+       ../../genbank/GCA_*assembly_structure/Primary_Assembly X54252.1
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+#   7 name.coordinate.tab
+#   7 ucscToINSDC.bed
+#   7 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 6
+    # use the 6 in this sed
+    sed -e "s/21/6/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab ce11 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords ce11
+    # should cover %100 entirely:
+    featureBits -countGaps ce11 ucscToINSDC
+    # 100286401 bases of 100286401 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2015-06-10 - Hiram)
+    hgsql -N -e "select frag from gold;" ce11 | sort -u \
+        > /tmp/ce11.frag.gold.txt
+
+
+    export maxLen=`awk '{print length($0)}' /tmp/ce11.frag.gold.txt | sort -rn | head -1`
+    echo "scan to column: $maxLen"
+
+export C=1
+while [ $C -le $maxLen ];
+do
+echo -n " $C: "
+awk '{ print substr($0,'$C',1) }' /tmp/ce11.frag.gold.txt | sort -u | xargs echo | sed -e 's/ //g'
+C=`echo $C | awk '{print $1+1}'`
+done
+ 1: ABCFXZ
+ 2: 123456789LOUX
+ 3: 0123456789
+ 4: 0123456789
+ 5: 0123456789
+ 6: 0123456789
+ 7: .0123456789
+ 8: 0123456789
+ 9: .
+ 10: 123456
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" ce11 | wc -l
+    # 3268
+
+    hgsql -N -e "select frag from gold;" ce11 \
+       | egrep -e '[ABCFXZ][123456789LOUX][0-9]+(\.[0-9]+)?' | wc -l
+    # 3268
+
+    hgsql -N -e "select frag from gold;" ce11 \
+       | egrep -v -e '[ABCFXZ][123456789LOUX][0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/worm/ce11/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [ABCFXZ][123456789LOUX][0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD 2015-03-23 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=ce11 -tableCoverage all.joiner
+    joinerCheck -database=ce11 -times all.joiner
+    joinerCheck -database=ce11 -keys all.joiner
+
+    cd /hive/data/genomes/ce11
+    time makeDownloads.pl ce11 > downloads.log 2>&1
+    # real    18m36.348s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/ce11/pushQ
+    cd /hive/data/genomes/ce11/pushQ
+    makePushQSql.pl ce11 > ce11.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+# WARNING: hgwdev does not have /gbdb/ce11/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/ce11/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/ce11/bbi/qualityBw/quality.bw
+# WARNING: ce11 does not have seq
+# WARNING: ce11 does not have extFile
+# WARNING: ce11 does not have estOrientInfo
+# WARNING: ce11 does not have mrnaOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p ce11.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/ce11.pushQ.sql"
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################
+# LIFTOVER TO ce6 (DONE - 2015-06-23 - Hiram )
+    mkdir /hive/data/genomes/ce11/bed/blat.ce6.2015-06-23
+    cd /hive/data/genomes/ce11/bed/blat.ce6.2015-06-23
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/ce11/jkStuff/ce11.11.ooc -debug ce11 ce6
+    # Real run:
+    time (doSameSpeciesLiftOver.pl \
+     -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+       -ooc=/hive/data/genomes/ce11/jkStuff/ce11.11.ooc ce11 ce6) > do.log 2>&1
+    #  real    3m53.579s
+    # verify it works on genome-test
+
+#############################################################################
+# LIFTOVER TO ce10 (DONE - 2015-06-23 - Hiram )
+    mkdir /hive/data/genomes/ce11/bed/blat.ce10.2015-06-23
+    cd /hive/data/genomes/ce11/bed/blat.ce10.2015-06-23
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/ce11/jkStuff/ce11.11.ooc -debug ce11 ce10
+    # Real run:
+    time (doSameSpeciesLiftOver.pl \
+     -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+       -ooc=/hive/data/genomes/ce11/jkStuff/ce11.11.ooc ce11 ce10) > do.log 2>&1
+    #  real    3m23.330s
+    # verify it works on genome-test
+
+#############################################################################
+# reset default position, same as ce4/ce6/ce9/ce10 on the ZC101 / unc-52 locus
+#	(DONE - 2015-06-24 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chrII:14646376-14667875"
+	where name="ce11";' hgcentraltest
+############################################################################
