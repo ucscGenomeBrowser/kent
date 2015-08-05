@@ -963,4 +963,23 @@ echo -e "chrM\tNC_001643.1"
     time (doRecipBest.pl -buildDir=`pwd` panTro4 calJac3) > rbest.log 2>&1 &
     # real    44m18.149s
 
-############################################################################
+##############################################################################
+# GENEID GENE PREDICTIONS (DONE - 2015-07-31 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/panTro4/bed/geneid
+    cd /hive/data/genomes/panTro4/bed/geneid
+    wget --timestamping \
+http://genome.crg.es/genepredictions/P.troglodytes/panTro4/geneid_v1.4/00README
+    wget --timestamping \
+http://genome.crg.es/genepredictions/P.troglodytes/panTro4/geneid_v1.4/panTro4.geneid.gtf
+
+    ldHgGene -gtf -genePredExt panTro4 geneid panTro4.geneid.gtf
+    # Read 52164 transcripts in 299208 lines in 1 files
+    #  52164 groups 20829 seqs 1 sources 3 feature types
+    # 52164 gene predictions
+
+    featureBits -enrichment panTro4 augustusGene:CDS geneid
+# augustusGene:CDS 1.122%, geneid 1.307%, both 0.916%, cover 81.67%,
+#    enrich 62.50x
+
+##########################################################################

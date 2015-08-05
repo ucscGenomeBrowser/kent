@@ -97,7 +97,7 @@ done
     cd /cluster/data/ponAbe2/bed/simpleRepeat/trf
 
     cat << '_EOF_' > runTrf
-#!/bin/csh -fe 
+#!/bin/csh -fe
 #
 set C = $1:r
 set SRC = /iscratch/i/ponAbe2/split/$C.fa
@@ -303,7 +303,7 @@ ponAbe2.refseq.mrna.xeno.loadDesc  = yes
     #	ssh to genbank machine, remove data/aligned/*/ponAbe2
     #	and start this build again.
     # This is a call to a script that will push our jobs out to the cluster
-    # since it's a big job.  
+    # since it's a big job.
     time nice -n +19 bin/gbAlignStep -initial ponAbe2 &
     # logFile: var/build/logs/2008.02.14-12:28:36.ponAbe2.initalign.log
     #	real    702m19.137s
@@ -409,7 +409,7 @@ done
     cd /cluster/data/ponAbe2/bed/genscan
     # Make 3 subdirectories for genscan to put their output files in
     mkdir gtf pep subopt
-    # Generate a list file, genome.list, of all the hard-masked contigs that 
+    # Generate a list file, genome.list, of all the hard-masked contigs that
     # *do not* consist of all-N's (which would cause genscan to blow up)
     #	Since we split on gaps, we have no chunks like that.  You can
     #	verify with faCount on the chunks.
@@ -436,7 +436,7 @@ rm -fr /scratch/tmp/$fileRoot
     chmod +x runGsBig
     cat << '_EOF_' > template
 #LOOP
-runGsBig /iscratch/i/ponAbe2/hardChunks $(file1) {check out line gtf/$(root1).gtf} {check out line pep/$(root1).pep} {check out line subopt/$(root1).bed} 
+runGsBig /iscratch/i/ponAbe2/hardChunks $(file1) {check out line gtf/$(root1).gtf} {check out line pep/$(root1).pep} {check out line subopt/$(root1).bed}
 #ENDLOOP
 '_EOF_'
     # << happy emacs
@@ -489,7 +489,7 @@ done
     mkdir gtf pep subopt
     cat << '_EOF_' > template
 #LOOP
-../runGsBig /iscratch/i/ponAbe2/genscanSplit $(file1) {check out line gtf/$(root1).gtf} {check out line pep/$(root1).pep} {check out line subopt/$(root1).bed} 
+../runGsBig /iscratch/i/ponAbe2/genscanSplit $(file1) {check out line gtf/$(root1).gtf} {check out line pep/$(root1).pep} {check out line subopt/$(root1).bed}
 #ENDLOOP
 '_EOF_'
     # << happy emacs
@@ -532,7 +532,7 @@ done
     ssh kkstore02
     cd /cluster/data/ponAbe2/bed/genscan
     sort -k1,1 -k4.4n gtf/c_*.gtf > genscan.gtf
-    sort -k1,1 -k2,2n subopt/c_*.bed > genscanSubopt.bed 
+    sort -k1,1 -k2,2n subopt/c_*.bed > genscanSubopt.bed
     cat pep/c_*.pep > genscan.pep
 
     # Load into the database as so:
@@ -804,7 +804,7 @@ end
 
     ssh kki
     cd /cluster/data/ponAbe2/bed/multiz8way/run.split
- 
+
     cat << '_EOF_' > doSplit.csh
 #!/bin/csh -ef
 set targDb = "ponAbe2"
@@ -1151,8 +1151,8 @@ done
 
 
     ##################################################
-    # redmine GB - Feature #480 -  missing self frames on multiz 
-    #   NwayFrames tables (DONE 2010-07-29) 
+    # redmine GB - Feature #480 -  missing self frames on multiz
+    #   NwayFrames tables (DONE 2010-07-29)
     #   re-run the genePredToMafFrames with ponAbe2 genes/ponAbe2
     #
     # fixed up steps:
@@ -1211,7 +1211,7 @@ done
 #############################################################################
 # phastCons 8-way (DONE - 2007-10-16 - Hiram)
 
-    # split 8way mafs into 10M chunks and generate sufficient statistics 
+    # split 8way mafs into 10M chunks and generate sufficient statistics
     # files for # phastCons
     ssh kki
     mkdir /cluster/data/ponAbe2/bed/multiz8way/msa.split
@@ -1284,7 +1284,7 @@ doSplit.csh $(root1) {check out line+ $(root1).done}
     cd /cluster/data/ponAbe2/bed/multiz8way/treeRun2
     mkdir tree log most
 
-    #	Tuning this loop should come back to here to recalculate 
+    #	Tuning this loop should come back to here to recalculate
     # Create script that calls phastCons with right arguments
     cat > makeTree.csh << '_EOF_'
 #!/bin/csh -fe
@@ -1399,7 +1399,7 @@ makeTree.csh $(path1) $(num1)
 
     #	create a single ss file from a whole chrom maf file
     /cluster/bin/phast/$MACHTYPE/msa_split chr1.maf -i MAF -M chr1.fa \
-	-o SS -r chr1 -w 300000000,0 -I 1000 -B 5000 
+	-o SS -r chr1 -w 300000000,0 -I 1000 -B 5000
 
     #	run a phyloFit on that large .ss file to find a starting-tree
     time nice -n +19 /cluster/bin/phast.2007-05-04/phyloFit -i SS \
@@ -1534,7 +1534,7 @@ rm -fr $tmp
     time nice -n +19 hgLoadBed ponAbe2 phastConsElements8way mostConserved.bed
     #	Loaded 1096981 elements of size 5
 
-    # Try for 5% overall cov, and 70% CDS cov 
+    # Try for 5% overall cov, and 70% CDS cov
     #	We don't have and gene tracks to compare CDS coverage
     #	--rho .31 --expected-length 45 --target-coverage .3
     featureBits ponAbe2 phastConsElements8way
@@ -1543,7 +1543,7 @@ rm -fr $tmp
     # Create merged posterier probability file and wiggle track data files
     # currently doesn't matter where this is performed, the san is the same
     # network distance from all machines.
-    # sort by chromName, chromStart so that items are in numerical order 
+    # sort by chromName, chromStart so that items are in numerical order
     #  for wigEncode
     cd /san/sanvol1/scratch/ponAbe2/multiz8way/cons/all
     cat << '_EOF_' > gzipAscii.sh
@@ -1692,7 +1692,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	is calculated
     # currently doesn't matter where this is performed, the san is the same
     # network distance from all machines.
-    # sort by chromName, chromStart so that items are in numerical order 
+    # sort by chromName, chromStart so that items are in numerical order
     #  for wigEncode
     cd /san/sanvol1/scratch/ponAbe2/multiz8way/cons/primates
     mkdir downloads
@@ -1825,8 +1825,7 @@ done
 /cluster/data/ponAbe2/bed/multiz8way/downloads/phastCons8way/8way.mod .
     ln -s \
 /cluster/data/ponAbe2/bed/multiz8way/downloads/phastCons8way/README.txt .
-    
-    
+
 ###########################################################################
 # BLASTZ SWAP Human Hg18 (DONE - 2007-10-05 - Hiram)
     ssh kkstore02
@@ -1996,7 +1995,7 @@ TMPDIR=/scratch/tmp
 	-chainLinearGap=loose -bigClusterHub=kk -verbose=2 > cat.log 2>&1 &
     #	failed when it came to the kolossus run because kkr1u00 was out
     #	which provides some filesystems to kolossus.  Got that fixed
-    #	and finished the netChains.csh script manually. 
+    #	and finished the netChains.csh script manually.
     #	real    6m2.271s
     #	Then, continuing:
     time nice -n +19 $HOME/kent/src/hg/utils/automation/doBlastzChainNet.pl \
@@ -2184,7 +2183,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> do.log 2>&1 &
     #	real    329m55.081s
-    cat fb.ponAbe2.chainCalJac3Link.txt 
+    cat fb.ponAbe2.chainCalJac3Link.txt
     #	2086557592 bases of 3093572278 (67.448%) in intersection
 
     mkdir /hive/data/genomes/calJac3/bed/blastz.ponAbe2.swap
@@ -2195,7 +2194,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    146m12.301s
-    cat fb.calJac3.chainHg19Link.txt 
+    cat fb.calJac3.chainHg19Link.txt
     #	1978857628 bases of 2752505800 (71.893%) in intersection
 
 ############################################################################
@@ -2243,7 +2242,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
     #	1441m58s
-    cat fb.ponAbe2.chainGorGor3Link.txt  
+    cat fb.ponAbe2.chainGorGor3Link.txt
     #	2584628377 bases of 3093572278 (83.548%) in intersection
 
     cd /hive/data/genomes/ponAbe2/bed
@@ -2259,7 +2258,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> swap.log 2>&1 &
     #	real    86m19.901s
-    cat fb.gorGor3.chainPonAbe2Link.txt 
+    cat fb.gorGor3.chainPonAbe2Link.txt
     #	2437562544 bases of 2822760080 (86.354%) in intersection
 
 ############################################################################
@@ -2309,7 +2308,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    72m38.550s
-    cat fb.mm10.chainPonAbe2Link.txt 
+    cat fb.mm10.chainPonAbe2Link.txt
     #	915093866 bases of 2652783500 (34.496%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/mm10/bed
@@ -2338,3 +2337,25 @@ TMPDIR=/scratch/tmp
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+##############################################################################
+# GENEID GENE PREDICTIONS (DONE - 2015-06-26 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/ponAbe2/bed/geneid
+    cd /hive/data/genomes/ponAbe2/bed/geneid
+    wget --timestamping \
+http://genome.crg.es/genepredictions/P.abelii/ponAbe2/geneid_v1.4/00README
+
+    wget --timestamping \
+http://genome.crg.es/genepredictions/P.abelii/ponAbe2/geneid_v1.4/ponAbe2.geneid.gtf
+
+    ldHgGene -gtf -genePredExt ponAbe2 geneid ponAbe2.geneid.gtf
+    # Read 34640 transcripts in 272450 lines in 1 files
+    #  34640 groups 55 seqs 1 sources 3 feature types
+    # 34640 gene predictions
+
+    featureBits -enrichment ponAbe2 augustusGene:CDS geneid
+# augustusGene:CDS 1.052%, geneid 1.203%, both 0.845%, cover 80.36%,
+#    enrich 66.79x
+
+##########################################################################

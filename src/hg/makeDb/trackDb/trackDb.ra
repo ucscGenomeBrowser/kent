@@ -784,7 +784,7 @@ searchPriority 50
 
 track sgpGene
 shortLabel SGP Genes
-longLabel SGP Gene Predictions Using Mouse/Human Homology
+longLabel SGP Gene Predictions Using $Organism/Human Homology
 group genes
 visibility hide
 color 0,90,100

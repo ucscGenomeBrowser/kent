@@ -125,7 +125,7 @@ while (my $line = <FH>) {
     if ($line =~ m/^#/) {
         print UC $line;
     } else {
-        $line =~ s/\.1//;    
+        $line =~ s/\.1//;
         printf UC "chrUn_%s", $line;
     }
 }
@@ -305,7 +305,7 @@ taxId 9685
 
     egrep -i "versi|relea" do.log
 #    April 26 2011 (open-3-3-0) version of RepeatMasker
-# CC   RELEASE 20110920; 
+# CC   RELEASE 20110920;
 # RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
 
     featureBits -countGaps felCat5 rmsk
@@ -323,7 +323,7 @@ taxId 9685
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
 	felCat5 > do.log 2>&1 &
     #   about 14 minutes
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
     #   39293231 bases of 2403678276 (1.635%) in intersection
 
     # add to rmsk after it is done:
@@ -556,7 +556,7 @@ do
     echo "echo waiting before $F" >> cmdList.sh
     echo wait >> cmdList.sh
   fi
-  echo "/cluster/bin/x86_64/gsBig split${C}/${F} gtf/${F}.gtf -trans=pep/${F}.pep -subopt=subopt/${F}.bed -exe=/scratch/data/genscan/genscan -par=/scratch/data/genscan/HumanIso.smat -tmp=/dev/shm -window=2400000 &" 
+  echo "/cluster/bin/x86_64/gsBig split${C}/${F} gtf/${F}.gtf -trans=pep/${F}.pep -subopt=subopt/${F}.bed -exe=/scratch/data/genscan/genscan -par=/scratch/data/genscan/HumanIso.smat -tmp=/dev/shm -window=2400000 &"
   done >> cmdList.sh
     echo "echo waiting at end" >> cmdList.sh
     echo "wait" >> cmdList.sh
@@ -657,7 +657,7 @@ done
 # Felis catus	1081	919	354
     # to decide which "native" mrna or ests you want to specify in genbank.conf
 
-    ssh hgwdev  
+    ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # edit etc/genbank.conf to add:
@@ -788,8 +788,8 @@ done > ensToUcsc.lift
         -chainMinScore=3000 -chainLinearGap=medium >& swap.log
 
     cat fb.felCat5.chainHg19Link.txt
-    # 1453639480 bases of 2364296207 (61.483%) in intersection 
- 
+    # 1453639480 bases of 2364296207 (61.483%) in intersection
+
 ############################################################################
 # construct liftOver to felCat8 (DONE - 2014-12-05 - Hiram)
     screen -S felCat8	# manage this longish running job in a screen
@@ -814,3 +814,24 @@ done > ensToUcsc.lift
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+##############################################################################
+# GENEID GENE PREDICTIONS (DONE - 2015-07-31 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/felCat5/bed/geneid
+    cd /hive/data/genomes/felCat5/bed/geneid
+    wget --timestamping \
+http://genome.crg.es/genepredictions/F.catus/felCat5/geneid_v1.4/00README
+    wget --timestamping \
+http://genome.crg.es/genepredictions/F.catus/felCat5/geneid_v1.4/felCat5.geneid.gtf
+
+    ldHgGene -gtf -genePredExt felCat5 geneid felCat5.geneid.gtf
+    # Read 35051 transcripts in 270716 lines in 1 files
+    #  35051 groups 3655 seqs 1 sources 3 feature types
+    # 35051 gene predictions
+
+    featureBits -enrichment felCat5 augustusGene:CDS geneid
+# augustusGene:CDS 1.323%, geneid 1.520%, both 1.038%, cover 78.41%,
+#     enrich 51.59x
+
+##########################################################################

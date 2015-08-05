@@ -4012,7 +4012,7 @@ pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 track iscaComposite
 compositeTrack on
 shortLabel ClinGen CNVs
-longLabel Clinical Genome Research (ClinGen) CNVs
+longLabel Clinical Genome Resource (ClinGen) CNVs
 group phenDis
 visibility hide
 subGroup1 view Views atot=Total cnv=CNVs
@@ -4494,3 +4494,6 @@ searchPriority 12.9864
 padding 250
 
 include cloneEnd.trackDb.ra
+
+track sgpGene override
+longLabel SGP Gene Predictions Using Mouse/$Organism Homology

@@ -23,6 +23,7 @@
 #include "errCatch.h"
 #include "trackHub.h"
 #include "net.h"
+#include "bigPsl.h"
 
 struct bbiFile *fetchBbiForTrack(struct track *track)
 /* Fetch bbiFile from track, opening it if it is not already open. */
@@ -176,6 +177,13 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     lf->mouseOver   = mouseOver; // leaks some memory, cloneString handles NULL ifself 
     if (sameString(track->tdb->type, "bigGenePred"))
 	lf->original = genePredFromBigGenePred(chromName, bb); 
+    else if (sameString(track->tdb->type, "bigPsl"))
+	{
+	char *seq, *cds;
+	lf->original = pslFromBigPsl(chromName, bb, seqBaseCount, &seq, &cds); 
+	lf->extra = seq;
+	lf->cds = cds;
+	}
     }
 lmCleanup(&lm);
 }

@@ -1126,30 +1126,31 @@ if (start < end)
 return frame;
 }
 
-static boolean shouldMergeBlocks(struct genePred *gene, int iExon,
-                                 unsigned tStart, unsigned options,
+static boolean shouldMergeBlocks(struct genePred *gene, 
+                                 unsigned tStart, unsigned prevTEnd,
+                                 unsigned qStart, unsigned prevQEnd,
+                                 unsigned options,
                                  int cdsMergeSize, int utrMergeSize)
 /* determine if a new block starting at tStart whould be merged with
- * the preceeding exon, indicated by iExon.
+ * the preceeding exon.
  */
 {
-/* nothing to check if no exons have been added */
-if (iExon >= 0)
+boolean inCds = (gene->cdsStart <= tStart) && (tStart < gene->cdsEnd);
+int tGapSize = (tStart - prevTEnd);
+int qGapSize = (qStart - prevQEnd);
+if (inCds)
     {
-    boolean inCds = (gene->cdsStart <= tStart) && (tStart < gene->cdsEnd);
-    int gapSize = (tStart - gene->exonEnds[iExon]);
-    if (inCds)
-        {
-        if ((options & genePredPslCdsMod3) && ((gapSize % 3) != 0))
-            return FALSE;  /* not a multiple of three */
-        if ((cdsMergeSize >= 0) && (gapSize <= cdsMergeSize))
-            return TRUE;
-        }
-    else 
-        {
-        if ((utrMergeSize >= 0) && (gapSize <= utrMergeSize))
-            return TRUE;
-        }
+    if ((options & genePredPslCdsMod3)
+        && (((tGapSize % 3) != 0) || ((qGapSize % 3) != 0)))
+        return FALSE;  /* not a multiple of three */
+    if ((cdsMergeSize >= 0) && ((tGapSize <= cdsMergeSize) && (qGapSize <= cdsMergeSize)))
+        return TRUE;
+    }
+else 
+    {
+    // qGapSize only matters for CDS where we are trying to keep frame sane
+    if ((utrMergeSize >= 0) && (tGapSize <= utrMergeSize))
+        return TRUE;
     }
 return FALSE; /* don't merge */
 }
@@ -1189,14 +1190,20 @@ else
     }
 
 iExon = -1;  /* indicate none have been added */
+unsigned prevQEnd = 0;
+unsigned prevTEnd = 0;
 for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
     {
+    int qStart = psl->qStarts[iBlk];
+    int qEnd = qStart + psl->blockSizes[iBlk];
+    if (psl->strand[0] == '-')
+        reverseIntRange(&qStart, &qEnd, psl->qSize);
     int tStart = psl->tStarts[iBlk];
     int tEnd = tStart + psl->blockSizes[iBlk];
     if (psl->strand[1] == '-')
         reverseIntRange(&tStart, &tEnd, psl->tSize);
-    if (!shouldMergeBlocks(gene, iExon, tStart, options,
-                           cdsMergeSize, utrMergeSize))
+    if ((iExon < 0) || !shouldMergeBlocks(gene, tStart, prevTEnd, qStart, prevQEnd, options,
+                                          cdsMergeSize, utrMergeSize))
         {
         /* new exon */
         iExon++;
@@ -1214,6 +1221,8 @@ for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
         if (fr >= 0)
 	    gene->exonFrames[iExon] = fr;
 	}
+    prevTEnd = tEnd;
+    prevQEnd = qEnd;
     }
 gene->exonCount = iExon+1;
 assert(gene->exonCount <= psl->blockCount);
@@ -1583,12 +1592,17 @@ if (gp->txStart >= gp->txEnd)
 if (gp->cdsStart != gp->cdsEnd)
     checkCdsBounds(errFh, &errorCnt, desc, gp);
 
+/* must be at least one exon */
+if (gp->exonCount == 0)
+    gpError(errFh, &errorCnt, "%s: %s contains no exons", desc, gp->name);
+else
+    {
 /* make sure first/last exons match tx range */
-if (gp->txStart != gp->exonStarts[0])
-    gpError(errFh, &errorCnt, "%s: %s first exon start %u doesn't match txStart %u", desc, gp->name, gp->exonStarts[0], gp->txStart);
-if (gp->txEnd != gp->exonEnds[gp->exonCount-1])
-    gpError(errFh, &errorCnt, "%s: %s last exon end %u doesn't match txEnd %u", desc, gp->name, gp->exonEnds[gp->exonCount-1], gp->txEnd);
-
+    if (gp->txStart != gp->exonStarts[0])
+        gpError(errFh, &errorCnt, "%s: %s first exon start %u doesn't match txStart %u", desc, gp->name, gp->exonStarts[0], gp->txStart);
+    if (gp->txEnd != gp->exonEnds[gp->exonCount-1])
+        gpError(errFh, &errorCnt, "%s: %s last exon end %u doesn't match txEnd %u", desc, gp->name, gp->exonEnds[gp->exonCount-1], gp->txEnd);
+    }
 
 /* check each exon */
 for (iExon = 0; iExon < gp->exonCount; iExon++)
