@@ -62,9 +62,11 @@ struct sqlProfile
     char *key;       // path to ssl client key.pem
     char *cert;      // path to ssl client cert.pem
     char *ca;        // path to ssl certificate authority ca.pem
-    char *caPath;    // path to directory containing ssl .pem certs
+    char *caPath;    // path to directory containing ssl .pem certs (only OpenSSL)
     char *cipher;    // list of permissible ciphers to use
-    char *verifyServerCert;  // Client will check server cert Subject CN={host}.
+    char *crl;       // path to file containing certificate revocation lists in PEM format
+    char *crlPath;   // path to directory containing crl files (only OpenSSL)
+    char *verifyServerCert;  // Client will check server cert Subject CN={host}
                              //  Boolean connection flag, if NON-NULL and != "0" then it is on.
     };
 
@@ -122,28 +124,6 @@ else
     return val;
 }
 
-struct sqlProfile *sqlProfileNew(char *name, char *host, unsigned int port,
-					char *socket, char *user, char *password,
-	    		char *key, char *cert, char *ca, char *caPath, char *cipher, char *verifyServerCert)
-/* create a new profile object (does not include ->dbs) */
-{
-struct sqlProfile *sp;
-AllocVar(sp);
-sp->name = cloneString(name);
-sp->host = cloneString(host);
-sp->port = port;
-sp->socket = cloneString(socket);
-sp->user = cloneString(user);
-sp->password = cloneString(password);
-sp->key = cloneString(key);
-sp->cert = cloneString(cert);
-sp->ca = cloneString(ca);
-sp->caPath = cloneString(caPath);
-sp->cipher = cloneString(cipher);
-sp->verifyServerCert = cloneString(verifyServerCert);
-return sp;
-}
-
 static struct sqlProfile *sqlProfileClone(struct sqlProfile *o)
 /* clone profile object (does not include ->dbs) */
 {
@@ -160,6 +140,8 @@ sp->cert = cloneString(o->cert);
 sp->ca = cloneString(o->ca);
 sp->caPath = cloneString(o->caPath);
 sp->cipher = cloneString(o->cipher);
+sp->crl = cloneString(o->crl);
+sp->crlPath = cloneString(o->crlPath);
 sp->verifyServerCert = cloneString(o->verifyServerCert);
 return sp;
 }
@@ -195,6 +177,10 @@ for(p=pairs; p; p=p->next)
 	sp->caPath = cloneString(value);
     if (sameString(p->name,"cipher"))
 	sp->cipher = cloneString(value);
+    if (sameString(p->name,"crl"))
+	sp->crl = cloneString(value);
+    if (sameString(p->name,"crlPath"))
+	sp->crlPath = cloneString(value);
     if (sameString(p->name,"verifyServerCert"))
 	sp->verifyServerCert = cloneString(value);
     }
@@ -240,6 +226,8 @@ char *cert = cfgOption2(profileName, "cert");
 char *ca = cfgOption2(profileName, "ca");
 char *caPath = cfgOption2(profileName, "caPath");
 char *cipher = cfgOption2(profileName, "cipher");
+char *crl = cfgOption2(profileName, "crl");
+char *crlPath = cfgOption2(profileName, "crlPath");
 char *verifyServerCert = cfgOption2(profileName, "verifyServerCert");
 
 unsigned int port = 0;
@@ -260,13 +248,30 @@ if ((host != NULL) && (user != NULL) && (password != NULL) && (hashLookup(profil
 	ca = envOverride("HGDB_CA", ca);
 	caPath = envOverride("HGDB_CAPATH", caPath);
 	cipher = envOverride("HGDB_CIPHER", cipher);
-	verifyServerCert = envOverride("HGDB_CIPHER", verifyServerCert);
+	crl = envOverride("HGDB_CRL", crl);
+	crlPath = envOverride("HGDB_CRLPATH", crlPath);
+	verifyServerCert = envOverride("HGDB_VERIFY_SERVER_CERT", verifyServerCert);
         }
 
     if (portstr != NULL)
 	port = atoi(portstr);
 
-    struct sqlProfile *sp = sqlProfileNew(profileName, host, port, socket, user, password, key, cert, ca, caPath, cipher, verifyServerCert);
+    struct sqlProfile *sp;
+    AllocVar(sp);
+    sp->name = cloneString(profileName);
+    sp->host = cloneString(host);
+    sp->port = port;
+    sp->socket = cloneString(socket);
+    sp->user = cloneString(user);
+    sp->password = cloneString(password);
+    sp->key = cloneString(key);
+    sp->cert = cloneString(cert);
+    sp->ca = cloneString(ca);
+    sp->caPath = cloneString(caPath);
+    sp->cipher = cloneString(cipher);
+    sp->crl = cloneString(crl);
+    sp->crlPath = cloneString(crlPath);
+    sp->verifyServerCert = cloneString(verifyServerCert);
     sqlProfileCreate(sp);
     }
 }
@@ -447,6 +452,8 @@ replaceStr(&sp->cert, spIn->cert);
 replaceStr(&sp->ca, spIn->ca);
 replaceStr(&sp->caPath, spIn->caPath);
 replaceStr(&sp->cipher, spIn->cipher);
+replaceStr(&sp->crl, spIn->crl);
+replaceStr(&sp->crlPath, spIn->crlPath);
 replaceStr(&sp->verifyServerCert, spIn->verifyServerCert);
 }
 
@@ -492,6 +499,13 @@ if (sp->caPath)
     dyStringPrintf(dy, "ssl-capath=%s\n", sp->caPath);
 if (sp->cipher)
     dyStringPrintf(dy, "ssl-cipher=%s\n", sp->cipher);
+if (mysql_get_client_version() >= 50603) // mysql version "5.6.3"
+    {
+    if (sp->crl)
+	dyStringPrintf(dy, "ssl-crl=%s\n", sp->crl);
+    if (sp->crlPath)
+	dyStringPrintf(dy, "ssl-crlpath=%s\n", sp->crlPath);
+    }
 if (sp->verifyServerCert && !sameString(sp->verifyServerCert,"0"))
     dyStringPrintf(dy, "ssl-verify-server-cert\n");
 return dyStringCannibalize(&dy);
@@ -1069,7 +1083,17 @@ if (sp->verifyServerCert && !sameString(sp->verifyServerCert,"0"))
     mysql_options(conn, MYSQL_OPT_SSL_VERIFY_SERVER_CERT, &flag);
     }
 
-// TODO GALT should be optional based on some mysql variable setting?
+if (mysql_get_client_version() >= 50603) // mysql version "5.6.3"
+    {
+    // If certificate revocation list file provided, set mysql option
+    if (sp->crl)
+	mysql_options(conn, MYSQL_OPT_SSL_CRL, &sp->crl);
+
+    // If path to directory with crl files provided, set mysql option
+    if (sp->crlPath)
+	mysql_options(conn, MYSQL_OPT_SSL_CRLPATH, &sp->crlPath);
+    }
+
 if (sp->key || sp->cert || sp->ca || sp->caPath || sp->cipher)
     mysql_ssl_set(conn, sp->key, sp->cert, sp->ca, sp->caPath, sp->cipher); 
 
@@ -1136,11 +1160,11 @@ struct sqlConnection *sqlConnectRemote(char *host, char *user, char *password,
  * just connect to the server. Abort on error. 
  * This only takes limited connection parameters. Use Full version for access to all.*/
 {
-struct sqlProfile* sp = sqlProfileNew(
-    NULL,
-    host, 0, NULL, user, password, 
-    NULL, NULL, NULL, NULL, NULL, NULL	// ssl params
-    );
+struct sqlProfile *sp;
+AllocVar(sp);
+sp->host = cloneString(host);
+sp->user = cloneString(user);
+sp->password = cloneString(password);
 return sqlConnRemote(sp, database, TRUE);
 }
 
@@ -1151,11 +1175,11 @@ struct sqlConnection *sqlMayConnectRemote(char *host, char *user, char *password
  * just connect to the server.  Return NULL if can't connect. 
  * This only takes limited connection parameters. Use Full version for access to all.*/
 {
-struct sqlProfile* sp = sqlProfileNew(
-    NULL,
-    host, 0, NULL, user, password, 
-    NULL, NULL, NULL, NULL, NULL, NULL  // ssl params
-    );
+struct sqlProfile *sp;
+AllocVar(sp);
+sp->host = cloneString(host);
+sp->user = cloneString(user);
+sp->password = cloneString(password);
 return sqlConnRemote(sp, database, FALSE);
 }
 
