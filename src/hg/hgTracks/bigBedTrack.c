@@ -167,23 +167,36 @@ int mouseOverIdx = bbExtraFieldIndex(tdb, mouseOverField);
 
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
-    char* mouseOver = restField(bb, mouseOverIdx);
     bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
-    struct bed *bed = bedLoadN(bedRow, fieldCount);
-    struct linkedFeatures *lf = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
-    	scoreMin, scoreMax, useItemRgb);
-    if (scoreFilter == NULL || lf->score >= minScore)
-	slAddHead(pLfList, lf);
-    lf->mouseOver   = mouseOver; // leaks some memory, cloneString handles NULL ifself 
-    if (sameString(track->tdb->type, "bigGenePred"))
-	lf->original = genePredFromBigGenePred(chromName, bb); 
-    else if (sameString(track->tdb->type, "bigPsl"))
+    struct linkedFeatures *lf;
+    if (sameString(track->tdb->type, "bigPsl"))
 	{
 	char *seq, *cds;
-	lf->original = pslFromBigPsl(chromName, bb, seqBaseCount, &seq, &cds); 
+	struct psl *psl = pslFromBigPsl(chromName, bb, seqBaseCount, &seq, &cds); 
+	int sizeMul = 1;  // we're assuming not protein at the moment
+	boolean isXeno = 0;  // just affects grayIx
+	boolean nameGetsPos = FALSE; // we want the name to stay the name
+
+	lf = lfFromPslx(psl, sizeMul, isXeno, nameGetsPos, track);
+	lf->original = psl;
 	lf->extra = seq;
 	lf->cds = cds;
 	}
+    else
+	{
+	struct bed *bed = bedLoadN(bedRow, fieldCount);
+	lf = bedMungToLinkedFeatures(&bed, tdb, fieldCount,
+	    scoreMin, scoreMax, useItemRgb);
+	}
+
+    if (sameString(track->tdb->type, "bigGenePred"))
+	lf->original = genePredFromBigGenePred(chromName, bb); 
+
+    char* mouseOver = restField(bb, mouseOverIdx);
+    lf->mouseOver   = mouseOver; // leaks some memory, cloneString handles NULL ifself 
+
+    if (scoreFilter == NULL || lf->score >= minScore)
+	slAddHead(pLfList, lf);
     }
 lmCleanup(&lm);
 }
