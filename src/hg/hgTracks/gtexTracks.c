@@ -130,7 +130,8 @@ static int valToHeight(double val, double maxVal, int maxHeight)
 if (val == 0.0)
     return 0;
 // smallest counts are 1x10e-3, translate to counter negativity
-double scaled = (log10(val) + 3.001)/(log10(maxVal) + 3.001);
+//double scaled = (log10(val) + 3.001)/(log10(maxVal) + 3.001);
+double scaled = log10(val+1.0) / log10(maxVal+1.0);
 if (scaled < 0)
     warn("scaled=%f\n", scaled);
 //uglyf("%.2f -> %.2f height %d", val, scaled, (int)scaled * (maxHeight-1));
@@ -143,7 +144,8 @@ static int valToY(double val, double maxVal, int maxHeight)
 {
 if (val == 0.0)
     return 0;
-double scaled = (log10(val)+3.001)/(log10(maxVal)+3.001);
+//double scaled = (log10(val)+3.001)/(log10(maxVal)+3.001);
+double scaled = log10(val+1.0) / log10(maxVal+1.0);
 if (scaled < 0)
     warn("scaled=%f\n", scaled);
 int y = scaled * (maxHeight);
@@ -155,12 +157,42 @@ return (maxHeight-1) - y;
 /* Cache tissue metadata */
 
 struct gtexTissue *getTissues()
-/* Get tissue metadata from database */
+/* Get and cache tissue metadata from database */
 {
 static struct gtexTissue *gtexTissues = NULL;
-if (gtexTissues == NULL)
+
+if (!gtexTissues)
     gtexTissues = gtexGetTissues();
 return gtexTissues;
+}
+
+int getTissueCount()
+/* Get and cache the number of tissues in GTEx tissue table */
+{
+static int tissueCount = 0;
+
+if (!tissueCount)
+    tissueCount = slCount(getTissues());
+return tissueCount;
+}
+
+char *getTissueName(int id)
+/* Get tissue name from id, cacheing */
+{
+static char **tissueNames = NULL;
+
+struct gtexTissue *tissue;
+int count = getTissueCount();
+if (!tissueNames)
+    {
+    struct gtexTissue *tissues = getTissues();
+    AllocArray(tissueNames, count);
+    for (tissue = tissues; tissue != NULL; tissue = tissue->next)
+        tissueNames[tissue->id] = cloneString(tissue->name);
+    }
+if (id >= count)
+    errAbort("GTEx tissue table problem: can't find id %d\n", id);
+return tissueNames[id];
 }
 
 struct rgbColor *getGtexTissueColors()
@@ -226,59 +258,65 @@ struct gtexGeneInfo
     struct gtexGeneBed *geneBed;/* Gene name, id, canonical transcript, exp count and medians 
                                         from BED table */
     struct genePred *geneModel; /* Gene structure from model table */
-    float *medians1;            /* Computed medians */
-    float *medians2;            /* Computed medians for comparison (inverse) graph */
+    double *medians1;            /* Computed medians */
+    double *medians2;            /* Computed medians for comparison (inverse) graph */
     };
 
-static struct gtexGeneBed *loadComputedMedians(struct gtexGeneBed *geneBed, char *graphType)
+
+static void loadComputedMedians(struct gtexGeneInfo *geneInfo, struct gtexGeneExtras *extras)
 /* Compute medians based on graph type.  Returns a list of 2 for comparison graph types */
 /* TODO: add support for filter function */
 {
-/* FIXME: dummy load of two for display implementation */
-struct gtexGeneBed *medians = NULL, *medians2 = NULL;
+struct gtexGeneBed *geneBed = geneInfo->geneBed;
+int expCount = geneBed->expCount;
+//char *graphType = extras->graphType;
 
-AllocVar(medians);
-medians->expCount = geneBed->expCount;
-int i;
-
-#ifdef NEW
-struct sqlConnection *conn = hAllocConn("hgFixed");
-if (conn == NULL)
-    return NULL;
-char query[1024];
-
-// FIXME: experiment with query on sex
-
-sqlSafef(query, sizeof(query), "select gtexTissue.id, gtexSampleData.score from gtexTissue, gtexSampleData, gtexSample, gtexDonor where gtexSampleData.tissue=gtexTissue.name and gtexSampleData.geneId='%s' and gtexSampleData.sample=gtexSample.name and gtexSample.donor=gtexDonor.name and gtexDonor.gender='F'", geneBed->geneId);
-struct slDouble **scores = NULL, *score = NULL;
-AllocArray(scores, geneBed->expCount);
-struct slPair *tissueScore = NULL, *tissueScores = sqlQuickPairList(conn, query);
-for (tissueScore = tissueScores; tissueScore != NULL; tissueScore = tissueScore->next)
+if (extras->isComparison)
     {
-    AllocVar(score);
-    i = sqlUnsigned(tissueScore->name);
-    if (scores[i] == NULL)
-        scores[i] = score;
-    else
-        slAddHead(&scores[i], score);
+    // create two score hashes, one for each sample subset
+    struct hash *scoreHash1 = hashNew(0), *scoreHash2 = hashNew(0);
+    struct sqlConnection *conn = hAllocConn("hgFixed");
+    char query[1024];
+    char **row;
+    sqlSafef(query, sizeof(query), "select gtexSampleData.sample, gtexDonor.gender, gtexSampleData.tissue, gtexSampleData.score from gtexSampleData, gtexSample, gtexDonor where gtexSampleData.geneId='%s' and gtexSampleData.sample=gtexSample.name and gtexSample.donor=gtexDonor.name", geneBed->geneId);
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        char gender = *row[1];
+        struct hash *scoreHash = ((gender == 'F') ? scoreHash1 : scoreHash2);
+        char *tissue = cloneString(row[2]);
+        struct slDouble *score = slDoubleNew(sqlDouble(row[3]));
+
+        // create hash of lists of scores, keyed by tissue name
+        double *tissueScores = hashFindVal(scoreHash, tissue);
+        if (tissueScores)
+            slAddHead(tissueScores, score);
+        else
+            hashAdd(scoreHash, tissue, score);
+        }
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+
+    // get tissue medians for each sample subset
+    double *medians1;
+    double *medians2;
+    AllocArray(medians1, expCount);
+    AllocArray(medians2, expCount);
+    int i;
+    for (i=0; i<geneBed->expCount; i++)
+        {
+        //medians1[i] = -1, medians2[i] = -1;       // mark missing tissues
+        struct slDouble *scores;
+        scores = hashFindVal(scoreHash1, getTissueName(i));
+        if (scores)
+            medians1[i] = slDoubleMedian(scores);
+        scores = hashFindVal(scoreHash2, getTissueName(i));
+        if (scores)
+            medians2[i] = slDoubleMedian(scores);
+        }
+    geneInfo->medians1 = medians1;
+    geneInfo->medians2 = medians2;
     }
-hFreeConn(&conn);
-#endif
-
-AllocArray(medians->expScores, medians->expCount);
-for (i=0; i<geneBed->expCount; i++)
-    //medians->expScores[i] = slDoubleMedian(scores[i]);
-    medians->expScores[i] = geneBed->expScores[i];
-
-AllocVar(medians2);
-medians2->expCount = geneBed->expCount;
-AllocArray(medians2->expScores, medians2->expCount);
-for (i = 0; i < medians2->expCount; ++i)
-    medians2->expScores[i] = geneBed->expScores[i];
-
-medians->next = medians2;
-
-return medians;
 }
 
 static struct hash *loadGeneModels(char *table)
@@ -373,8 +411,6 @@ if (vis != tvFull && vis != tvPack)
     bedDrawSimpleAt(tg, geneBed, hvg, xOff, y, scale, font, statusColor, vis);
     return;
     }
-struct gtexGeneBed *computedMedians = NULL;     // 1 or 2 (if comparison) 
-                                                // with medians computed for sample subsets
 
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
 if ((extras->isComparison) &&
@@ -382,7 +418,7 @@ if ((extras->isComparison) &&
         //&& gtexGraphHeight() != MIN_GRAPH_HEIGHT)
     {
     // compute medians based on configuration (comparisons, and later, filters)
-    computedMedians = loadComputedMedians(geneBed, extras->graphType);
+    loadComputedMedians(geneInfo, extras);
     }
 int i;
 int expCount = geneBed->expCount;
@@ -424,7 +460,13 @@ for (i=0; i<expCount; i++)
         fillColor = gtexTissueBrightenColor(fillColor);
         }
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
-    double expScore = geneBed->expScores[i];
+
+    double expScore = (geneInfo->medians1 ? geneInfo->medians1[i] : geneBed->expScores[i]);
+    //double expScore = geneBed->expScores[i];
+    /*
+    if (expScore < 1)
+        expScore = 0.0;
+        */
     int height = valToHeight(expScore, maxMedian, gtexGraphHeight());
     // TODO: adjust yGene to get gene track distance as desired
     //if (i ==0) uglyf("DRAW: expScore=%.2f, maxMedian=%.2f, graphHeight=%d, y=%d<br>", expScore, maxMedian, gtexGraphHeight(), y);
@@ -447,7 +489,7 @@ lf->filterColor = statusColor;
 linkedFeaturesDrawAt(tg, lf, hvg, xOff, yGene, scale, font, color, tvSquish);
 tg->heightPer = heightPer;
 
-if (!extras->isComparison || slCount(computedMedians) != 2)
+if (!geneInfo->medians2)
     return;
 
 // draw comparison graph (upside down)
@@ -466,7 +508,10 @@ for (i=0; i<expCount; i++)
         fillColor = mgHslToRgb(hsl);
         }
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
-    double expScore = geneBed->expScores[i];
+    //double expScore = geneBed->expScores[i];
+    double expScore = geneInfo->medians2[i];
+    //if (expScore < 1)
+        //expScore = 0.0;
     int height = valToHeight(expScore, maxMedian, gtexGraphHeight());
     // TODO: adjust yGene instead of yMedian+1 to get gene track distance as desired
     //if (i ==0) uglyf("DRAW2: expScore=%.2f, maxMedian=%.2f, graphHeight=%d, y=%d<br>", expScore, maxMedian, gtexGraphHeight(), y);
