@@ -57,6 +57,7 @@ struct sqlProfile
     char *socket;       // unix-domain socket path for database server
     char *user;         // database server user name
     char *password;     // database server password
+    char *db;           // database if specified in config
     struct slName *dbs; // database associated with profile, can be NULL.
     // ssl
     char *key;       // path to ssl client key.pem
@@ -129,19 +130,20 @@ static struct sqlProfile *sqlProfileClone(struct sqlProfile *o)
 {
 struct sqlProfile *sp;
 AllocVar(sp);
-sp->name = cloneString(o->name);
-sp->host = cloneString(o->host);
-sp->port = o->port;
-sp->socket = cloneString(o->socket);
-sp->user = cloneString(o->user);
+sp->name     = cloneString(o->name);
+sp->host     = cloneString(o->host);
+sp->port     = o->port;
+sp->socket   = cloneString(o->socket);
+sp->user     = cloneString(o->user);
 sp->password = cloneString(o->password);
-sp->key = cloneString(o->key);
-sp->cert = cloneString(o->cert);
-sp->ca = cloneString(o->ca);
-sp->caPath = cloneString(o->caPath);
-sp->cipher = cloneString(o->cipher);
-sp->crl = cloneString(o->crl);
-sp->crlPath = cloneString(o->crlPath);
+sp->db       = cloneString(o->db);
+sp->key      = cloneString(o->key);
+sp->cert     = cloneString(o->cert);
+sp->ca       = cloneString(o->ca);
+sp->caPath   = cloneString(o->caPath);
+sp->cipher   = cloneString(o->cipher);
+sp->crl      = cloneString(o->crl);
+sp->crlPath  = cloneString(o->crlPath);
 sp->verifyServerCert = cloneString(o->verifyServerCert);
 return sp;
 }
@@ -167,6 +169,8 @@ for(p=pairs; p; p=p->next)
 	sp->user = cloneString(value);
     if (sameString(p->name,"password"))
 	sp->password = cloneString(value);
+    if (sameString(p->name,"db"))
+	sp->db = cloneString(value);
     if (sameString(p->name,"key"))
 	sp->key = cloneString(value);
     if (sameString(p->name,"cert"))
@@ -220,6 +224,7 @@ char *portstr = cfgOption2(profileName, "port");
 char *socket = cfgOption2(profileName, "socket");
 char *user = cfgOption2(profileName, "user");
 char *password = cfgOption2(profileName, "password");
+char *db = cfgOption2(profileName, "db");
 // ssl
 char *key = cfgOption2(profileName, "key");
 char *cert = cfgOption2(profileName, "cert");
@@ -237,19 +242,20 @@ if ((host != NULL) && (user != NULL) && (password != NULL) && (hashLookup(profil
     /* for the default profile, allow environment variable override */
     if (sameString(profileName, defaultProfileName))
         {
-        host = envOverride("HGDB_HOST", host);
-        portstr = envOverride("HGDB_PORT", portstr);
-        socket = envOverride("HGDB_SOCKET", socket);
-        user = envOverride("HGDB_USER", user);
+        host     = envOverride("HGDB_HOST", host);
+        portstr  = envOverride("HGDB_PORT", portstr);
+        socket   = envOverride("HGDB_SOCKET", socket);
+        user     = envOverride("HGDB_USER", user);
         password = envOverride("HGDB_PASSWORD", password);
+        db       = envOverride("HGDB_DB", db);
 	// ssl
-	key = envOverride("HGDB_KEY", key);
-	cert = envOverride("HGDB_CERT", cert);
-	ca = envOverride("HGDB_CA", ca);
-	caPath = envOverride("HGDB_CAPATH", caPath);
-	cipher = envOverride("HGDB_CIPHER", cipher);
-	crl = envOverride("HGDB_CRL", crl);
-	crlPath = envOverride("HGDB_CRLPATH", crlPath);
+	key      = envOverride("HGDB_KEY", key);
+	cert     = envOverride("HGDB_CERT", cert);
+	ca       = envOverride("HGDB_CA", ca);
+	caPath   = envOverride("HGDB_CAPATH", caPath);
+	cipher   = envOverride("HGDB_CIPHER", cipher);
+	crl      = envOverride("HGDB_CRL", crl);
+	crlPath  = envOverride("HGDB_CRLPATH", crlPath);
 	verifyServerCert = envOverride("HGDB_VERIFY_SERVER_CERT", verifyServerCert);
         }
 
@@ -258,19 +264,20 @@ if ((host != NULL) && (user != NULL) && (password != NULL) && (hashLookup(profil
 
     struct sqlProfile *sp;
     AllocVar(sp);
-    sp->name = cloneString(profileName);
-    sp->host = cloneString(host);
-    sp->port = port;
-    sp->socket = cloneString(socket);
-    sp->user = cloneString(user);
+    sp->name     = cloneString(profileName);
+    sp->host     = cloneString(host);
+    sp->port     = port;
+    sp->socket   = cloneString(socket);
+    sp->user     = cloneString(user);
     sp->password = cloneString(password);
-    sp->key = cloneString(key);
-    sp->cert = cloneString(cert);
-    sp->ca = cloneString(ca);
-    sp->caPath = cloneString(caPath);
-    sp->cipher = cloneString(cipher);
-    sp->crl = cloneString(crl);
-    sp->crlPath = cloneString(crlPath);
+    sp->db       = cloneString(db);
+    sp->key      = cloneString(key);
+    sp->cert     = cloneString(cert);
+    sp->ca       = cloneString(ca);
+    sp->caPath   = cloneString(caPath);
+    sp->cipher   = cloneString(cipher);
+    sp->crl      = cloneString(crl);
+    sp->crlPath  = cloneString(crlPath);
     sp->verifyServerCert = cloneString(verifyServerCert);
     sqlProfileCreate(sp);
     }
@@ -442,18 +449,19 @@ struct sqlProfile *spIn = sqlProfileFromPairs(pairs);
 struct sqlProfile *sp = sqlProfileGet(spIn->name, NULL);
 if (sp == NULL)
     return sqlProfileCreate(spIn);
-replaceStr(&sp->host, spIn->host);
-replaceStr(&sp->socket, spIn->socket);
+replaceStr(&sp->host,     spIn->host);
+replaceStr(&sp->socket,   spIn->socket);
 sp->port = spIn->port;
-replaceStr(&sp->user, spIn->user);
+replaceStr(&sp->user,     spIn->user);
 replaceStr(&sp->password, spIn->password);
-replaceStr(&sp->key, spIn->key);
-replaceStr(&sp->cert, spIn->cert);
-replaceStr(&sp->ca, spIn->ca);
-replaceStr(&sp->caPath, spIn->caPath);
-replaceStr(&sp->cipher, spIn->cipher);
-replaceStr(&sp->crl, spIn->crl);
-replaceStr(&sp->crlPath, spIn->crlPath);
+replaceStr(&sp->db,       spIn->db);
+replaceStr(&sp->key,      spIn->key);
+replaceStr(&sp->cert,     spIn->cert);
+replaceStr(&sp->ca,       spIn->ca);
+replaceStr(&sp->caPath,   spIn->caPath);
+replaceStr(&sp->cipher,   spIn->cipher);
+replaceStr(&sp->crl,      spIn->crl);
+replaceStr(&sp->crlPath,  spIn->crlPath);
 replaceStr(&sp->verifyServerCert, spIn->verifyServerCert);
 }
 
@@ -485,6 +493,8 @@ if (sp->user)
     dyStringPrintf(dy, "user=%s\n", sp->user);
 if (sp->password)
     dyStringPrintf(dy, "password=%s\n", sp->password);
+if (sp->password)
+    dyStringPrintf(dy, "database=%s\n", sp->db);
 if (sp->port)
     dyStringPrintf(dy, "port=%d\n", sp->port);
 if (sp->socket)
