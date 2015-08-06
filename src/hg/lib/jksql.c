@@ -102,7 +102,7 @@ struct sqlResult
 static struct dlList *sqlOpenConnections = NULL;
 static unsigned sqlNumOpenConnections = 0;
 
-char *defaultProfileName = "db";                  // name of default profile for main connection
+
 char *failoverProfPrefix = "slow-";               // prefix for failover profile of main profile (="slow-db")
 static struct hash *profiles = NULL;              // profiles parsed from hg.conf, by name
 static struct sqlProfile *defaultProfile = NULL;  // default profile, also in profiles list
@@ -123,6 +123,15 @@ if (isEmpty(val))
     return defaultVal;
 else
     return val;
+}
+
+char *getDefaultProfileName()
+/* Return default profile name, handling initialization if needed */
+{
+static char *defaultProfileName = NULL;
+if (!defaultProfileName)
+    defaultProfileName = envOverride("HGDB_PROF", "db"); // name of default profile for main connection
+return defaultProfileName;
 }
 
 static struct sqlProfile *sqlProfileClone(struct sqlProfile *o)
@@ -211,7 +220,7 @@ static void sqlProfileCreate(struct sqlProfile *sp)
 /* create a profile and add to global data structures */
 {
 hashAdd(profiles, sp->name, sp);
-if (sameString(sp->name, defaultProfileName))
+if (sameString(sp->name, getDefaultProfileName()))
     defaultProfile = sp;  // save default
 }
 
@@ -240,7 +249,7 @@ unsigned int port = 0;
 if ((host != NULL) && (user != NULL) && (password != NULL) && (hashLookup(profiles, profileName) == NULL))
     {
     /* for the default profile, allow environment variable override */
-    if (sameString(profileName, defaultProfileName))
+    if (sameString(profileName, getDefaultProfileName()))
         {
         host     = envOverride("HGDB_HOST", host);
         portstr  = envOverride("HGDB_PORT", portstr);
@@ -472,9 +481,9 @@ void sqlProfileConfigDefault(struct slPair *pairs)
 {
 struct slPair *found = slPairFind(pairs, "name");
 if (found)
-    found->val = defaultProfileName;
+    found->val = cloneString(getDefaultProfileName());
 else
-    slPairAdd(&pairs, "name", defaultProfileName);
+    slPairAdd(&pairs, "name", cloneString(getDefaultProfileName()));
 sqlProfileConfig(pairs);
 }
 
@@ -2838,10 +2847,10 @@ if (profiles == NULL)
     sqlProfileLoad();
 struct hash *databases = newHash(8);
 // add databases found using default profile
-addProfileDatabases(defaultProfileName, databases);
+addProfileDatabases(getDefaultProfileName(), databases);
 
 // add databases found in failover profile
-char *failoverProfName = catTwoStrings(failoverProfPrefix, defaultProfileName);
+char *failoverProfName = catTwoStrings(failoverProfPrefix, getDefaultProfileName());
 addProfileDatabases(failoverProfName, databases);
 freez(&failoverProfName);
 

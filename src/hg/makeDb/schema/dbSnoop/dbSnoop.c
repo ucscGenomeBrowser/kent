@@ -577,7 +577,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-profile = optionVal("profile", defaultProfileName);
+profile = optionVal("profile", getDefaultProfileName());
 if (argc != 3)
     usage();
 noNumberCommas = optionExists("noNumberCommas");

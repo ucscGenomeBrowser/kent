@@ -26,9 +26,7 @@
 #include "dystring.h"
 
 
-extern char *defaultProfileName;  // name of default profile
-
-/* create a new profile object (does not include ->dbs) */
+char *getDefaultProfileName();  // name of default profile
 
 struct sqlConnection *sqlConnect(char *database);
 /* Connect to database on default host as default user. */
