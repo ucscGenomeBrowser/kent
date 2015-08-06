@@ -1,4 +1,4 @@
-file	format	output	meta	ucsc_db	paired_end
+#file	format	output	meta	ucsc_db	paired_end
 sraFiles/reads-ByExp-sra-SRX-SRX995-SRX995861-SRR1974543-/SRR1974543_1.fastq.gz	fastq	reads	GSM1657871	hg38	1
 sraFiles/reads-ByExp-sra-SRX-SRX995-SRX995861-SRR1974543-/SRR1974543_2.fastq.gz	fastq	reads	GSM1657871	hg38	2
 sraFiles/reads-ByExp-sra-SRX-SRX995-SRX995862-SRR1974544-/SRR1974544_1.fastq.gz	fastq	reads	GSM1657872	hg38	1
