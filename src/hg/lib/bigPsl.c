@@ -290,7 +290,7 @@ struct psl  *pslFromBigPsl( char *chrom, struct bigBedInterval *bb, unsigned chr
 /* build a psl from a bigPsl */
 {
 char *extra = cloneString(bb->rest);
-int numCols = 12 + 11 - 3;
+int numCols = 12 + 12 - 3;
 char *row[numCols];
 int wordCount = chopByChar(extra, '\t', row, numCols);
 assert(wordCount == numCols);
@@ -306,11 +306,11 @@ if ((cds != NULL) && row[15] != NULL)
     *cds = cloneString(row[15]);
 
 if ((seq != NULL) && row[14] != NULL)
-    {
     *seq = cloneString(row[14]);
-    if (*psl->strand == '-')
-	reverseComplement(*seq, strlen(*seq));
-    }
+psl->match = sqlUnsigned(row[17]);
+psl->misMatch = sqlUnsigned(row[18]);
+psl->repMatch = sqlUnsigned(row[19]);
+psl->nCount = sqlUnsigned(row[20]);
 psl->tName = chrom;
 psl->tStart = bb->start;
 psl->tEnd = bb->end;
@@ -323,6 +323,7 @@ assert(sizeOne == psl->blockCount);
 psl->qStart = sqlSigned(row[9]); 
 psl->qEnd = sqlSigned(row[10]); 
 psl->strand[1] = *row[11];
+psl->strand[1] = 0;
 psl->qSize = sqlSigned(row[12]); 
 sqlUnsignedDynamicArray(row[13], &psl->qStarts, &sizeOne);
 assert(sizeOne == psl->blockCount);

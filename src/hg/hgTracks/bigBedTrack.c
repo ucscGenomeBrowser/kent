@@ -179,6 +179,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 
 	lf = lfFromPslx(psl, sizeMul, isXeno, nameGetsPos, track);
 	lf->original = psl;
+	if (lf->orientation == -1)
+	    reverseComplement(seq, strlen(seq));
 	lf->extra = seq;
 	lf->cds = cds;
 	}
