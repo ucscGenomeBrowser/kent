@@ -152,7 +152,7 @@ void sqlExecProg(char *prog, char **progArgs, int userArgc, char *userArgv[])
  * which maybe NULL. userArgv are arguments passed in from the command line.
  * The program is execvp-ed, this function does not return. */
 {
-sqlExecProgProfile("db", prog, progArgs, userArgc, userArgv);
+sqlExecProgProfile(getDefaultProfileName(), prog, progArgs, userArgc, userArgv);
 }
 
 
