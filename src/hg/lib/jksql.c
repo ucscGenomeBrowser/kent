@@ -493,7 +493,7 @@ if (sp->user)
     dyStringPrintf(dy, "user=%s\n", sp->user);
 if (sp->password)
     dyStringPrintf(dy, "password=%s\n", sp->password);
-if (sp->password)
+if (sp->db)
     dyStringPrintf(dy, "database=%s\n", sp->db);
 if (sp->port)
     dyStringPrintf(dy, "port=%d\n", sp->port);
