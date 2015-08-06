@@ -47,6 +47,26 @@ static struct statusColors
     Color unknown;
     } statusColors = {0,0,0};
 
+struct gtexGeneExtras 
+/* Track info */
+    {
+    double maxMedian;
+    char *graphType;
+    boolean isComparison;
+    struct rgbColor *colors;
+    };
+
+struct gtexGeneInfo
+/* GTEx gene model, names, and expression medians */
+    {
+    struct gtexGeneInfo *next;  /* Next in singly linked list */
+    struct gtexGeneBed *geneBed;/* Gene name, id, canonical transcript, exp count and medians 
+                                        from BED table */
+    struct genePred *geneModel; /* Gene structure from model table */
+    double *medians1;            /* Computed medians */
+    double *medians2;            /* Computed medians for comparison (inverse) graph */
+    };
+
 static int findColorIx(struct hvGfx *hvg, char *rgb)
 {
 unsigned char red, green, blue;
@@ -113,13 +133,17 @@ else
     return MIN_GRAPH_HEIGHT;
 }
 
-static int gtexGraphWidth(struct gtexGeneBed *gtex)
+static int gtexGraphWidth(struct gtexGeneInfo *geneInfo)
 /* Width of GTEx graph in pixels */
 {
 int barWidth = gtexBarWidth();
 int padding = gtexGraphPadding();
-int count = gtex->expCount;
-return (barWidth * count) + (padding * (count-1));
+struct gtexGeneBed *geneBed = geneInfo->geneBed;
+int count = geneBed->expCount;
+// TODO: save labels in extras
+int labelWidth = geneInfo->medians2 ? 5 : 0;
+return (barWidth * count) + (padding * (count-1)) + labelWidth + 2;
+;
 }
 
 
@@ -241,26 +265,6 @@ static int gtexGeneMargin()
 }
 
 /* Track info generated during load, used by draw */
-
-struct gtexGeneExtras 
-/* Track info */
-    {
-    double maxMedian;
-    char *graphType;
-    boolean isComparison;
-    struct rgbColor *colors;
-    };
-
-struct gtexGeneInfo
-/* GTEx gene model, names, and expression medians */
-    {
-    struct gtexGeneInfo *next;  /* Next in singly linked list */
-    struct gtexGeneBed *geneBed;/* Gene name, id, canonical transcript, exp count and medians 
-                                        from BED table */
-    struct genePred *geneModel; /* Gene structure from model table */
-    double *medians1;            /* Computed medians */
-    double *medians2;            /* Computed medians for comparison (inverse) graph */
-    };
 
 
 static void loadComputedMedians(struct gtexGeneInfo *geneInfo, struct gtexGeneExtras *extras)
@@ -440,7 +444,7 @@ int yZero = gtexGraphHeight() + y - 1;
 // draw faint line under graph to delineate extent when bars are missing (tissue w/ 0 expression)
 // TODO: skip missing bars -- then we can lose the gray line (at least for non-comparison mode)
 Color lightGray = MAKECOLOR_32(0xD1, 0xD1, 0xD1);
-int graphWidth = gtexGraphWidth(geneBed);
+int graphWidth = gtexGraphWidth(geneInfo);
 hvGfxBox(hvg, x1, yZero+1, graphWidth, 1, lightGray);
 
 //uglyf("DRAW: xOff=%d, x1=%d, y=%d, yZero=%d<br>", xOff, x1, y, yZero);
@@ -448,9 +452,24 @@ hvGfxBox(hvg, x1, yZero+1, graphWidth, 1, lightGray);
 int barWidth = gtexBarWidth();
 int graphPadding = gtexGraphPadding();
 
-// Move to loader
 char *colorScheme = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_COLORS, 
                         GTEX_COLORS_DEFAULT);
+
+Color labelColor = MG_GRAY;
+
+// TOD: generalize
+if (geneInfo->medians2)
+    {
+    // add labels to comparison graphs
+    //FIXME: compute these
+    int charHeight = 5;
+    int labelWidth = 5;
+    hvGfxText(hvg, x1, yZero-charHeight, labelColor, font, "F");
+    hvGfxText(hvg, x1, yZero + gtexGeneHeight() + gtexGeneMargin(), labelColor, font, "M");
+    startX = startX + labelWidth + 2;
+    x1 = startX;
+    }
+
 for (i=0; i<expCount; i++)
     {
     struct rgbColor fillColor = extras->colors[i];
@@ -551,6 +570,14 @@ if (graphX < 0)
 // x1 is at left of graph
 int x1 = insideX + graphX;
 
+if (geneInfo->medians2)
+    {
+    // add labels to comparison graphs
+    //FIXME: compute these
+    int labelWidth = 5;
+    x1 = x1 + labelWidth + 2;
+    }
+
 int i = 0;
 int yZero = gtexGraphHeight() + y - 1;
 for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
@@ -641,7 +668,7 @@ static int gtexGeneItemEnd(struct track *tg, void *item)
 struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
 struct gtexGeneBed *geneBed = geneInfo->geneBed;
 double scale = scaleForWindow(insideWidth, winStart, winEnd);
-int graphWidth = gtexGraphWidth(geneBed);
+int graphWidth = gtexGraphWidth(geneInfo);
 return max(geneBed->chromEnd, max(winStart, geneBed->chromStart) + graphWidth/scale);
 }
 
