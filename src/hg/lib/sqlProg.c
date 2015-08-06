@@ -207,6 +207,10 @@ if ((homeDir = getenv("HOME")) == NULL)
     errAbort("sqlExecProgProfile: HOME is not defined in environment; cannot create temporary password file");
 
 nukeOldCnfs(homeDir);
+// look for special parameter -profile=name
+for (i = 0; i < userArgc; i++)
+    if (startsWith("-profile=", userArgv[i]))
+	profile=cloneString(userArgv[i]+strlen("-profile="));
 
 safef(defaultFileName, sizeof(defaultFileName), "%s/.hgsql.cnf-XXXXXX", homeDir);
 defaultFileNo=sqlMakeDefaultsFile(defaultFileName, profile, "client");
@@ -223,7 +227,8 @@ if (progArgs != NULL)
         nargv[j++] = progArgs[i];
     }
 for (i = 0; i < userArgc; i++)
-    nargv[j++] = userArgv[i];
+    if (!startsWith("-profile=", userArgv[i]))
+	nargv[j++] = userArgv[i];
 nargv[j++] = NULL;
 
 // flush before forking so we can't accidentally get two copies of the output
