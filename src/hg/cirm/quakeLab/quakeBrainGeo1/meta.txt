@@ -5,46 +5,27 @@ pmid 26060301
 submitter spyros
 species Homo sapiens
 organ brain
-bodyPart Single cell from healthy human cortex
-pipeline Short read trimming: Prinseq to remove short reads (-min_len 30) trim the first 10 bp on the 5’-end (-trim_left 10), trim reads with low quality on the 3’-end (-trim_qual_right 25) and filter low complexity reads (-lc_method entropy \-lc_threshold 65).  We used FASTQC to determine overrepresented sequences and removed those using cutadapt (-e 0.15 –m 30). We then used Prinseq to remove orphan pairs less than 30bp in length followed by removal of nextera adapters using Trim Galore  (--stringency 1).
+body_part Single cell from healthy human cortex
+pipeline quakeRnaPipeline2.txt
 submission_date Apr 14 2015
 update_date Jul 02 2015
-GEO_Sample_molecule_ch1 total RNA
-GEO_Sample_taxid_ch1 9606
-GEO_Sample_library_strategy RNA-Seq
-GEO_Sample_channel_count 1
 GEO_Sample_library_selection cDNA
 GEO_Sample_last_update_date Jul 02 2015
 GEO_Sample_series_id GSE67835
 GEO_Sample_organism_ch1 Homo sapiens
-GEO_Sample_contact_laboratory Taipale lab
 GEO_Sample_type SRA
 GEO_Sample_extract_protocol_ch1 C1 autoprep standard protocol
-GEO_Sample_contact_address Hälsovägen 7
-GEO_Sample_submission_date Apr 15 2015
-GEO_Sample_source_name_ch1 Brain
-GEO_Sample_contact_email martin.enge@ki.se
-GEO_Sample_contact_department Dep of Biosciences and Nutrition, Novum
-GEO_Sample_contact_institute Karolinska Institute
 GEO_Sample_library_source transcriptomic
 GEO_Sample_status Public on May 20 2015
-GEO_Sample_contact_zip/postal_code SE-14157
-GEO_Sample_molecule_ch1 total RNA
-GEO_Sample_taxid_ch1 9606
-GEO_Sample_contact_country Sweden
-GEO_Sample_data_row_count 0
-GEO_Sample_contact_city Stockholm
-GEO_Sample_contact_name Martin,,Enge
 GEO_Series_summary We used single cell RNA sequencing on 466 cells to capture the cellular complexity of the adult and fetal human brain at a whole transcriptome level. Healthy adult temporal lobe tissue was obtained from epileptic patients during temporal lobectomy for medically refractory seizures. We were able to classify individual cells into all of the major neuronal, glial, and vascular cell types in the brain.
 GEO_Platform_technology high-throughput sequencing
 GEO_Series_relation BioProject: http://www.ncbi.nlm.nih.gov/bioproject/PRJNA281204
 GEO_Series_type Expression profiling by high throughput sequencing
 GEO_Series_status Public on May 20 2015
-GEO_Series_sample_taxid 9606
 GEO_Series_supplementary_file ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByStudy/sra/SRP/SRP057/SRP057196
 GEO_Series_overall_design Examination of cell types in healthy human brain samples.
 GEO_Series_geo_accession GSE67835
-GEO_SERIES GSE67835
+
 
 	GEO_Sample_c1_chip_id 1772078217
 	GEO_Sample_age postnatal 54 years
