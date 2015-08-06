@@ -1,3 +1,11 @@
+track fishClones override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
+
+track fosEndPairs override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
+
 include trackDb.wgEncode.ra
 
 track par override
