@@ -67,7 +67,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657872
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995862
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type hybrid
 		cell_type hybrid
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486327
@@ -77,7 +76,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657873
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995863
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type oligodendrocytes
 		cell_type oligodendrocytes
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486328
@@ -87,7 +85,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657874
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995864
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type hybrid
 		cell_type hybrid
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486329
@@ -97,7 +94,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657875
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995865
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type hybrid
 		cell_type hybrid
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486330
@@ -107,7 +103,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657876
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995866
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type oligodendrocytes
 		cell_type oligodendrocytes
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486331
@@ -117,7 +112,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657877
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995867
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type oligodendrocytes
 		cell_type oligodendrocytes
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486332
@@ -127,7 +121,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657878
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995868
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type hybrid
 		cell_type hybrid
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486333
@@ -137,7 +130,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657879
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995869
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type hybrid
 		cell_type hybrid
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486334
@@ -147,7 +139,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657880
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995870
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type hybrid
 		cell_type hybrid
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486335
@@ -157,7 +148,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657881
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995871
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type oligodendrocytes
 		cell_type oligodendrocytes
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486336
@@ -167,7 +157,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657882
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995872
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type hybrid
 		cell_type hybrid
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486337
@@ -177,7 +166,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657883
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995873
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type hybrid
 		cell_type hybrid
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486338
@@ -187,7 +175,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657884
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995874
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type hybrid
 		cell_type hybrid
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486339
@@ -197,7 +184,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657885
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995875
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type astrocytes
 		cell_type astrocytes
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486340
@@ -207,7 +193,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657886
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995876
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type hybrid
 		cell_type hybrid
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486341
@@ -217,7 +202,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657887
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995877
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type hybrid
 		cell_type hybrid
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486342
@@ -227,7 +211,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657888
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995878
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type hybrid
 		cell_type hybrid
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486343
@@ -237,7 +220,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657889
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995879
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type oligodendrocytes
 		cell_type oligodendrocytes
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486344
@@ -247,7 +229,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657890
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995880
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type oligodendrocytes
 		cell_type oligodendrocytes
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486358
@@ -257,7 +238,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657891
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995881
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type oligodendrocytes
 		cell_type oligodendrocytes
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486355
@@ -267,7 +247,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657892
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995882
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type oligodendrocytes
 		cell_type oligodendrocytes
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486356
@@ -277,7 +256,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657893
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995883
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type OPC
 		cell_type OPC
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486357
@@ -287,7 +265,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657894
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995884
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type oligodendrocytes
 		cell_type oligodendrocytes
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486345
@@ -297,7 +274,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657895
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995885
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type hybrid
 		cell_type hybrid
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486346
@@ -307,7 +283,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657896
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995886
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type hybrid
 		cell_type hybrid
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486347
@@ -317,7 +292,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657897
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995887
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type hybrid
 		cell_type hybrid
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486348
@@ -327,7 +301,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657898
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995888
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type oligodendrocytes
 		cell_type oligodendrocytes
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486349
@@ -337,7 +310,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657899
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995889
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type oligodendrocytes
 		cell_type oligodendrocytes
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486350
@@ -347,7 +319,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657900
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995890
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type oligodendrocytes
 		cell_type oligodendrocytes
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486351
@@ -357,7 +328,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657901
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995891
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type oligodendrocytes
 		cell_type oligodendrocytes
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486352
@@ -367,7 +337,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657902
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995892
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type oligodendrocytes
 		cell_type oligodendrocytes
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486353
@@ -377,7 +346,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657903
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995893
-		GEO_Sample_c1_chip_id 1772078217
 		GEO_Sample_cell_type OPC
 		cell_type OPC
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486296
@@ -406,7 +374,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657905
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995895
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type hybrid
 		cell_type hybrid
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486298
@@ -416,7 +383,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657906
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995896
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type OPC
 		cell_type OPC
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486299
@@ -426,7 +392,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657907
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995897
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type OPC
 		cell_type OPC
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486300
@@ -436,7 +401,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657908
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995898
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type OPC
 		cell_type OPC
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486301
@@ -446,7 +410,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657909
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995899
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type OPC
 		cell_type OPC
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486302
@@ -456,7 +419,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657910
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995900
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type microglia
 		cell_type microglia
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486303
@@ -466,7 +428,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657911
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995901
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type OPC
 		cell_type OPC
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486304
@@ -476,7 +437,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657912
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995902
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type hybrid
 		cell_type hybrid
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486305
@@ -486,7 +446,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657913
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995903
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type OPC
 		cell_type OPC
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486306
@@ -496,7 +455,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657914
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995904
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type OPC
 		cell_type OPC
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486307
@@ -506,7 +464,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657915
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995905
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type OPC
 		cell_type OPC
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486308
@@ -516,7 +473,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657916
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995906
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type OPC
 		cell_type OPC
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486309
@@ -526,7 +482,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657917
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995907
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type OPC
 		cell_type OPC
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486310
@@ -536,7 +491,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657918
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995908
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type microglia
 		cell_type microglia
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486311
@@ -546,7 +500,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657919
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995909
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type microglia
 		cell_type microglia
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486312
@@ -556,7 +509,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657920
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995910
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type OPC
 		cell_type OPC
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486313
@@ -566,7 +518,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657921
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995911
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type OPC
 		cell_type OPC
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486314
@@ -576,7 +527,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657922
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995912
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type OPC
 		cell_type OPC
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486315
@@ -586,7 +536,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657923
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995913
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type microglia
 		cell_type microglia
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486316
@@ -596,7 +545,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657924
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995914
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type OPC
 		cell_type OPC
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486317
@@ -606,7 +554,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657925
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995915
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type microglia
 		cell_type microglia
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486318
@@ -616,7 +563,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657926
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995916
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type microglia
 		cell_type microglia
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486319
@@ -626,7 +572,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657927
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995917
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type microglia
 		cell_type microglia
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486320
@@ -636,7 +581,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657928
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995918
-		GEO_Sample_c1_chip_id 1772078218
 		GEO_Sample_cell_type OPC
 		cell_type OPC
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486321
@@ -665,7 +609,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657930
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995920
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486323
@@ -675,7 +618,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657931
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995921
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486324
@@ -685,7 +627,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657932
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995922
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type astrocytes
 		cell_type astrocytes
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486325
@@ -695,7 +636,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657933
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995923
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486359
@@ -705,7 +645,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657934
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995924
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type microglia
 		cell_type microglia
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486354
@@ -715,7 +654,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657935
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995925
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486266
@@ -725,7 +663,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657936
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995926
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type hybrid
 		cell_type hybrid
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486267
@@ -735,7 +672,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657937
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995927
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486268
@@ -745,7 +681,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657938
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995928
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type astrocytes
 		cell_type astrocytes
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486269
@@ -755,7 +690,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657939
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995929
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486270
@@ -765,7 +699,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657940
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995930
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486271
@@ -775,7 +708,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657941
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995931
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486272
@@ -785,7 +717,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657942
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995932
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486273
@@ -795,7 +726,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657943
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995933
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486274
@@ -805,7 +735,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657944
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995934
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type oligodendrocytes
 		cell_type oligodendrocytes
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486275
@@ -815,7 +744,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657945
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995935
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486276
@@ -825,7 +753,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657946
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995936
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486277
@@ -835,7 +762,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657947
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995937
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type hybrid
 		cell_type hybrid
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486278
@@ -845,7 +771,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657948
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995938
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486279
@@ -855,7 +780,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657949
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995939
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486280
@@ -865,7 +789,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657950
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995940
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486281
@@ -875,7 +798,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657951
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995941
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486282
@@ -885,7 +807,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657952
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995942
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486283
@@ -895,7 +816,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657953
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995943
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486284
@@ -905,7 +825,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657954
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995944
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486285
@@ -915,7 +834,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657955
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995945
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486286
@@ -925,7 +843,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657956
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995946
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486287
@@ -935,7 +852,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657957
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995947
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486288
@@ -945,7 +861,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657958
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995948
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486289
@@ -955,7 +870,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657959
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995949
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486290
@@ -965,7 +879,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657960
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995950
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486291
@@ -975,7 +888,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657961
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995951
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486292
@@ -985,7 +897,6 @@ GEO_SERIES GSE67835
 
 		meta GSM1657962
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995952
-		GEO_Sample_c1_chip_id 1772078236
 		GEO_Sample_cell_type neurons
 		cell_type neurons
 		GEO_Sample_relation BioSample: http://www.ncbi.nlm.nih.gov/biosample/SAMN03486293
