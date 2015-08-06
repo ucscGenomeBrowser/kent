@@ -24,12 +24,12 @@
 #   ASSEMBLY TYPE:  Haploid
 #   NUMBER OF ASSEMBLY-UNITS:   1
 #   ASSEMBLY ACCESSION: GCA_000264685.1
-#   
+#
 #   FTP-RELEASE DATE: 07-Jun-2012
 
 
 #   Eukaryota; Metazoa; Chordata; Craniata; Vertebrata; Euteleostomi; Mammalia;
-#   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini; 
+#   Eutheria; Euarchontoglires; Primates; Haplorrhini; Catarrhini;
 #   Cercopithecidae; Cercopithecinae; Papio; Papio anubis
 
 #############################################################################
@@ -46,8 +46,8 @@
         Primary_Assembly/unplaced_scaffolds/FASTA/*.fa.gz
     #  2948380710 bases (55130419 N's 2893250291 real 2893250291 upper 0 lower)
     #  in 63250 sequences in 22 files
-    #  Total size: mean 46614.7 sd 2497441.4 
-    #  min 200 (gi|388614875|gb|AHZZ01198925.1|) 
+    #  Total size: mean 46614.7 sd 2497441.4
+    #  min 200 (gi|388614875|gb|AHZZ01198925.1|)
     #  max 220367699 (gi|390124480|gb|CM001491.1|) median 1416
     #  %0.00 masked total, %0.00 masked real
 
@@ -112,7 +112,7 @@ foreach my $acc (keys %accToChr) {
     faSize chr*.fa.gz
     #  2724327674 bases (42062585 N's 2682265089 real 2682265089 upper 0 lower)
     #  in 21 sequences in 21 files
-    #  Total size: mean 129729889.2 sd 45381077.9 min 51301725 (chr19) 
+    #  Total size: mean 129729889.2 sd 45381077.9 min 51301725 (chr19)
     #  max 220367699 (chr1) median 128036923
     #  %0.00 masked total, %0.00 masked rea
 
@@ -141,7 +141,7 @@ while (my $line = <FH>) {
     if ($line =~ m/^#/) {
         print UC $line;
     } else {
-        $line =~ s/\.1//;    
+        $line =~ s/\.1//;
         printf UC "%s", $line;
     }
 }
@@ -177,9 +177,9 @@ close (UC);
     # verify nothing lost in the translation, should be the same as above
     #	except for the name translations
     faSize *.fa.gz
-    # 2948380710 bases (55130419 N's 2893250291 real 2893250291 upper 0 lower) 
+    # 2948380710 bases (55130419 N's 2893250291 real 2893250291 upper 0 lower)
     # in 63250 sequences in 22 files
-    # Total size: mean 46614.7 sd 2497441.4 min 200 (AHZZ01198925) 
+    # Total size: mean 46614.7 sd 2497441.4 min 200 (AHZZ01198925)
     # max 220367699 (chr1) median 1416
 
 #############################################################################
@@ -193,7 +193,7 @@ genomeCladePriority 16
 scientificName Papio anubis
 commonName Baboon
 assemblyDate Mar. 2012
-assemblyLabel Baylor College of Medicine 
+assemblyLabel Baylor College of Medicine
 assemblyShortLabel Baylor Panu_2.0
 orderKey 391
 mitoAcc none
@@ -251,19 +251,19 @@ taxId   9555
     #   real    1354m59.921s
 
     cat faSize.rmsk.txt
-    #   2948380710 bases (55130419 N's 2893250291 real 1378673208 upper 
+    #   2948380710 bases (55130419 N's 2893250291 real 1378673208 upper
     #   1514577083 lower) in 63250 sequences in 1 files
-    #   Total size: mean 46614.7 sd 2497441.4 min 200 (AHZZ01198925) 
+    #   Total size: mean 46614.7 sd 2497441.4 min 200 (AHZZ01198925)
     #   max 220367699 (chr1) median 1416
     #   %51.37 masked total, %52.35 masked real
 
     egrep -i "versi|relea" do.log
-    # RepeatMasker version development-$Id: RepeatMasker,v 1.26 
+    # RepeatMasker version development-$Id: RepeatMasker,v 1.26
     # 2011/09/26 16:19:44 angie Exp $
     # grep version of RepeatMasker$ /scratch/data/RepeatMasker/RepeatMasker
     #    April 26 2011 (open-3-3-0) version of RepeatMasker
     # grep RELEASE /scratch/data/RepeatMasker/Libraries/RepeatMaskerLib.embl
-    # CC   RELEASE 20110920;   
+    # CC   RELEASE 20110920;
 
     featureBits -countGaps papAnu2 rmsk
     #   1516030289 bases of 2948380710 (51.419%) in intersection
@@ -280,7 +280,7 @@ taxId   9555
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=encodek \
 	papAnu2 > do.log 2>&1 &
     #   real    58m51.627s
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
     #   162539257 bases of 2934388335 (5.539%) in intersection
 
     # add to rmsk after it is done:
@@ -291,7 +291,7 @@ taxId   9555
 
     twoBitToFa papAnu2.2bit stdout | faSize stdin > faSize.papAnu2.2bit.txt
     cat faSize.papAnu2.2bit.txt
-    #   2948380710 bases (55130419 N's 2893250291 real 1377491621 upper 
+    #   2948380710 bases (55130419 N's 2893250291 real 1377491621 upper
     #   1515758670 lower) in 63250 sequences in 1 files
     #   %51.41 masked total, %52.39 masked real
 
@@ -351,7 +351,7 @@ close (FH);
     #	result count:
     hgsql -e "select count(*) from gap;" papAnu2
     #    139639
-    # == 26003 + 113636 
+    # == 26003 + 113636
     # verify we aren't adding gaps where gaps already exist
     # this would output errors if that were true:
     gapToLift -minGap=1 papAnu2 nonBridged.lift -bedFile=nonBridged.bed
@@ -371,9 +371,9 @@ close (FH);
 
     # Masking statistics
     twoBitToFa papAnu2.wmsk.2bit stdout | faSize stdin
-    #  2948380710 bases (55130419 N's 2893250291 real 1783065601 upper 
+    #  2948380710 bases (55130419 N's 2893250291 real 1783065601 upper
     #  1110184690 lower) in 63250 sequences in 1 files
-    #  Total size: mean 46614.7 sd 2497441.4 min 200 (AHZZ01198925) 
+    #  Total size: mean 46614.7 sd 2497441.4 min 200 (AHZZ01198925)
     #  max 220367699 (chr1) median 1416
     #  %37.65 masked total, %38.37 masked real
 
@@ -405,9 +405,9 @@ close (FH);
     twoBitToFa papAnu2.cleanWMSdust.2bit stdout | faSize stdin \
         > papAnu2.cleanWMSdust.faSize.txt
     cat papAnu2.cleanWMSdust.faSize.txt
-    # 2948380710 bases (55130419 N's 2893250291 real 1766600759 upper 
+    # 2948380710 bases (55130419 N's 2893250291 real 1766600759 upper
     # 1126649532 lower) in 63250 sequences in 1 files
-    # Total size: mean 46614.7 sd 2497441.4 min 200 (AHZZ01198925) 
+    # Total size: mean 46614.7 sd 2497441.4 min 200 (AHZZ01198925)
     # max 220367699 (chr1) median 1416
     # %38.21 masked total, %38.94 masked real
 
@@ -425,9 +425,9 @@ close (FH);
     #	safe to ignore the warnings about BED file with >=13 fields
     twoBitToFa papAnu2.2bit stdout | faSize stdin > faSize.papAnu2.txt
     cat faSize.papAnu2.txt
-    #   2948380710 bases (55130419 N's 2893250291 real 1766238769 upper 
+    #   2948380710 bases (55130419 N's 2893250291 real 1766238769 upper
     #   1127011522 lower) in 63250 sequences in 1 files
-    #   Total size: mean 46614.7 sd 2497441.4 min 200 (AHZZ01198925) 
+    #   Total size: mean 46614.7 sd 2497441.4 min 200 (AHZZ01198925)
     #   max 220367699 (chr1) median 1416
     #   ma%38.22 masked total, %38.95 masked real
 
@@ -461,7 +461,7 @@ close (FH);
     # Checking finished jobs
     # Completed: 63249 of 63250 jobs
     # Crashed: 1 jobs
-    # Failed job: 
+    # Failed job:
     # ./runGsBig.csh chr19 000 gtf/000/chr19.gtf pep/000/chr19.pep subopt/000/chr19.bed
     # set -window=1200000 in runGsBig.csh and manually run again. Success.
 
@@ -516,7 +516,7 @@ close (FH);
     # Papio anubis    227     145582  462
 
     # to decide which "native" mrna or ests you want to specify in genbank.conf
-    ssh hgwdev  
+    ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # edit etc/genbank.conf to add papAnu2 just ibefore papHam1
@@ -565,7 +565,7 @@ papAnu2.genbank.est.native.load = yes
     #	logFile: var/dbload/hgwdev/logs/2012.10.26-10:34:02.dbload.log
     #   real    106m43.697s
 
-    # enable daily alignment and update of hgwdev 
+    # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add papAnu2 to:
@@ -580,7 +580,7 @@ papAnu2.genbank.est.native.load = yes
 # blat4c
 # port 17838 trans
 # port 17839 untrans
- 
+
     ssh hgwdev
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
         VALUES ("papAnu2", "blat4c", "17838", "1", "0"); \
@@ -623,7 +623,6 @@ papAnu2.genbank.est.native.load = yes
     # WARNING: hgwdev does not have /gbdb/papAnu2/bbi/quality.bw
     # WARNING: papAnu2 does not have seq
     # WARNING: papAnu2 does not have extFile
-    # 
 
     #   copy it to hgwbeta
     scp -p papAnu2.pushQ.sql hgwbeta:/tmp
@@ -730,4 +729,23 @@ CREATE TABLE ucscToEnsembl (
 
     # verify the blue bar "ensembl" link is now available and works to there
 
-#########################################################################
+##############################################################################
+# GENEID GENE PREDICTIONS (DONE - 2015-07-31 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/papAnu2/bed/geneid
+    cd /hive/data/genomes/papAnu2/bed/geneid
+    wget --timestamping \
+http://genome.crg.es/genepredictions/P.anubis/papAnu2/geneid_v1.4/00README
+    wget --timestamping \
+http://genome.crg.es/genepredictions/P.anubis/papAnu2/geneid_v1.4/papAnu2.geneid.gtf
+
+    ldHgGene -gtf -genePredExt papAnu2 geneid papAnu2.geneid.gtf
+    # Read 52364 transcripts in 241824 lines in 1 files
+    #   52364 groups 24207 seqs 1 sources 3 feature types
+    # 52364 gene predictions
+
+    featureBits -enrichment papAnu2 augustusGene:CDS geneid
+# augustusGene:CDS 1.001%, geneid 0.858%, both 0.538%, cover 53.72%,
+#    enrich 62.64x
+
+##########################################################################

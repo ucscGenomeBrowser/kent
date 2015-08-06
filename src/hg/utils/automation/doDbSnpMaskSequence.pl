@@ -7,6 +7,7 @@ use Getopt::Long;
 use LWP::UserAgent;
 use warnings;
 use strict;
+use File::Basename;
 use FindBin qw($Bin);
 use lib "$Bin";
 use HgAutomate;
@@ -34,15 +35,14 @@ use vars qw/
 # Option defaults:
 my $dbHost = $HgAutomate::defaultDbHost;
 
-my $base = $0;
-$base =~ s/^(.*\/)?//;
+my $basename = basename($0);
 
 sub usage {
   # Usage / help / self-documentation:
   my ($status, $detailed) = @_;
   # Basic help (for incorrect usage):
   print STDERR "
-usage: $base db dbSnpBuildNumber
+usage: $basename db dbSnpBuildNumber
 options:
 ";
   print STDERR $stepper->getOptionHelp();

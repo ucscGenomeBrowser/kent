@@ -1028,8 +1028,13 @@ char *cloneNotFirstWord(char *s);
 char *nextTabWord(char **pLine);
 /* Return next tab-separated word. */
 
+char *cloneFirstWordByDelimiterNoSkip(char *line,char delimit);
+/* Returns a cloned first word, not harming the memory passed in. 
+ * Does not skip leading white space.*/
+
 char *cloneFirstWordByDelimiter(char *line,char delimit);
 /* Returns a cloned first word, not harming the memory passed in
+   Skips leading white space.
    Delimiter of ' ' will delimit by isspace() */
 #define cloneFirstWordInLine(line) cloneFirstWordByDelimiter((line),' ')
 #define cloneFirstWordByTab(line)  cloneFirstWordByDelimiter((line),'\t')

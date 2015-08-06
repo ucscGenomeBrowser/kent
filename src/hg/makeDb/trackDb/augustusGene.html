@@ -16,7 +16,7 @@ protein-coding and non-coding regions as well as for the length distributions
 of different exon and intron types. Detailed descriptions of most of these different models
 can be found in Mario Stanke's
 <a href="http://hdl.handle.net/11858/00-1735-0000-0006-B3F8-4" target="_blank">dissertation</a>.
-The track shows the most likely gene structure according to a
+This track shows the most likely gene structure according to a
 Semi-Markov Conditional Random Field model.
 Alternative splicing transcripts were obtained with
 a sampling algorithm (<tt>--alternatives-from-sampling=true --sample=100 --minexonintronprob=0.2
@@ -24,11 +24,52 @@ a sampling algorithm (<tt>--alternatives-from-sampling=true --sample=100 --minex
 </p>
 
 <p>
-Predictions for fish species were created with the <tt>zebrafish</tt> version of AUGUSTUS.
-Predictions for bird species were created with the <tt>chicken</tt> version.
-Predictions for all other vertebrate species were created with the <tt>human</tt>
-version. In each case, the parameters of the models were
-estimated beforehand using 1000-2000 training gene structures.
+The different models used by Augustus were trained on a number of different species-specific
+gene sets, which included 1000-2000 training gene structures. The <tt>--species</tt> option allows
+one to choose the species used for training the models. Different training species were used
+for the <tt>--species</tt> option when generating these predictions for different groups of
+assemblies.
+<table border="1" cellpadding="2" cellspacing="0">
+	<tr>
+		<td align=center><b>Assembly Group</b></td>
+		<td align=center><b>Training Species</b></td>
+	</tr>
+	<tr>
+		<td align=center>Fish</td>
+		<td align=center><tt>zebrafish</tt></tr>
+	</tr>
+	<tr>
+		<td align=center>Birds</td>
+		<td align=center><tt>chicken</tt>
+	</tr>
+	<tr>
+		<td align=center>Human and all other vertebrates</td>
+		<td align=center><tt>human</tt>
+	</tr>
+	<tr>
+		<td align=center>Nematodes</td>
+		<td align=center><tt>caenorhabditis</tt></td>
+	</tr>
+	<tr>
+		<td align=center>Drosophila</td>
+		<td align=center><tt>fly</tt></td>
+	</tr>
+	<tr>
+		<td align=center>A. mellifera</td>
+		<td align=center><tt>honeybee1</tt></td>
+	</tr>
+	<tr>
+		<td align=center>A. gambiae</td>
+		<td align=center><tt>culex</tt></td>
+	</tr>
+	<tr>
+		<td align=center>S. cerevisiae</td>
+		<td align=center><tt>saccharomyces</tt></td>
+	</tr>
+</table>
+<p>
+This table describes which training species was used for a partiuclar group of assemblies.
+When available, the closest related training species was used.
 </p>
 
 <h2>Credits</h2>

@@ -702,7 +702,7 @@ else if (startsWith("bamWig", type))
     cType = cfgWig;
 else if (startsWith("bam", type))
     cType = cfgBam;
-else if (startsWith("psl", type))
+else if (startsWith("psl", type) || startsWith("bigPsl", type))
     cType = cfgPsl;
 else if (sameWord("vcfTabix",type) || sameWord("vcf", type))
     cType = cfgVcf;

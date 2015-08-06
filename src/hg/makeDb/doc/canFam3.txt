@@ -867,3 +867,24 @@ EOF
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+##############################################################################
+# GENEID GENE PREDICTIONS (DONE - 2015-07-31 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/canFam3/bed/geneid
+    cd /hive/data/genomes/canFam3/bed/geneid
+    wget --timestamping \
+http://genome.crg.es/genepredictions/C.familiaris/canFam3/geneid_v1.4/00README
+    wget --timestamping \
+http://genome.crg.es/genepredictions/C.familiaris/canFam3/geneid_v1.4/canFam3.geneid.gtf
+
+    ldHgGene -gtf -genePredExt canFam3 geneid canFam3.geneid.gtf
+    # Read 32342 transcripts in 261967 lines in 1 files
+    #  32342 groups 1737 seqs 1 sources 3 feature types
+    # 32342 gene predictions
+
+    featureBits -enrichment canFam3 augustusGene:CDS geneid
+# augustusGene:CDS 1.360%, geneid 1.501%, both 1.082%, cover 79.59%,
+#     enrich 53.04x
+
+##########################################################################

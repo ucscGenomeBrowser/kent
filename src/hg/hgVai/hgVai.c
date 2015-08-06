@@ -734,11 +734,19 @@ puts("<BR>");
 endCollapsibleSection();
 }
 
-boolean isRegulatoryTrack(struct trackDb *tdb, void *filterData)
+boolean isHg19RegulatoryTrack(struct trackDb *tdb, void *filterData)
 /* For now, just look for a couple specific tracks by tableName. */
 {
 //#*** NEED METADATA
-return (sameString("wgEncodeRegDnaseClusteredV2", tdb->table) ||
+return (sameString("wgEncodeRegDnaseClusteredV3", tdb->table) ||
+	sameString("wgEncodeRegTfbsClusteredV3", tdb->table));
+}
+
+boolean isHg38RegulatoryTrack(struct trackDb *tdb, void *filterData)
+/* For now, just look for a couple specific tracks by tableName. */
+{
+//#*** NEED METADATA
+return (sameString("wgEncodeRegDnaseClustered", tdb->table) ||
 	sameString("wgEncodeRegTfbsClusteredV3", tdb->table));
 }
 
@@ -746,8 +754,12 @@ struct slRef *findRegulatoryTracks()
 /* Look for the very limited set of Regulation tracks that hgVai offers. */
 {
 struct slRef *regTrackRefList = NULL;
-tdbFilterGroupTrack(fullTrackList, fullGroupList, isRegulatoryTrack,
-		    NULL, NULL, &regTrackRefList);
+if (sameString(database, "hg19"))
+    tdbFilterGroupTrack(fullTrackList, fullGroupList, isHg19RegulatoryTrack,
+                        NULL, NULL, &regTrackRefList);
+else if (sameString(database, "hg38"))
+    tdbFilterGroupTrack(fullTrackList, fullGroupList, isHg38RegulatoryTrack,
+                        NULL, NULL, &regTrackRefList);
 return regTrackRefList;
 }
 
@@ -1452,7 +1464,9 @@ for (trackVar = trackVars;  trackVar != NULL;  trackVar = trackVar->next)
 		addFiltersToGrator(grator, tdb);
 		}
 	    description = tdb->longLabel;
-	    isReg = includeReg && isRegulatoryTrack(tdb, NULL);
+	    isReg = (includeReg &&
+                     ((sameString(database, "hg19") && isHg19RegulatoryTrack(tdb, NULL)) ||
+                      (sameString(database, "hg38") && isHg38RegulatoryTrack(tdb, NULL))));
 	    }
 	}
     haveReg |= isReg;

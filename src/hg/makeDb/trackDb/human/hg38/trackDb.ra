@@ -172,6 +172,25 @@ group map
     baseColorDefault diffBases
     baseColorUseSequence extFile seqNcbiAltSequence extNcbiAltSequence
 
+track altSeqLiftOverBigPsl
+#superTrack altSequence pack
+visibility full
+shortLabel Big Alt Map
+longLabel Big GRCh38 Alignments to the Alternate Sequences/Haplotypes
+type bigPsl
+bigDataUrl http://hgwdev.cse.ucsc.edu/~braney/altSeqLiftOverPsl.bb
+html altSequence
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsMaxZoom 10000.0
+showCdsAllScales .
+baseColorDefault diffBases
+baseColorUseSequence lfExtra
+#baseColorUseSequence extFile seqNcbiAltSequence extNcbiAltSequence
+
+
 track altSequenceExp
 superTrack on
 shortLabel Exp Alt Map
@@ -224,6 +243,24 @@ xrefTable refLink, ucscRetroInfo8
 dontCheckXrefQueryFormat 1
 xrefQuery select ucscRetroInfo8.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
 searchPriority 3.52
+
+track mrnaBig
+bigDataUrl http://hgwdev.cse.ucsc.edu/~braney/bigMrna.bb
+shortLabel Big $Organism mRNAs
+longLabel Big $Organism mRNAs from GenBank 
+group x
+visibility pack
+type bigPsl
+baseColorUseCds given
+#baseColorUseSequence genbank
+baseColorUseSequence lfExtra
+baseColorDefault diffCodons
+#baseColorDefault diffBases
+showDiffBasesAllScales .
+indelDoubleInsert on
+indelQueryInsert on
+indelPolyA on
+
 
 searchName ucscRetroInfoMrna8
 searchTable ucscRetroAli8

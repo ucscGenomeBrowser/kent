@@ -224,7 +224,7 @@ freeLinksAndConvert(viewLinks, viewMenu);
 }
 
 void printMenuBar()
-/* Put up the menu bar. */
+/* Put up the special menu bar for hgTracks. */
 {
 struct hotLink *links = NULL;
 struct sqlConnection *conn = NULL;
@@ -443,6 +443,8 @@ if (fileExists("extTools.ra"))
     }
 
 menuStr = replaceChars(menuStr, "<!-- OPTIONAL_VIEW_MENU -->", dyStringCannibalize(&viewMenu));
+menuStr = replaceChars(menuStr, "id=\"main-menu-whole\"", "id=\"hgTracks-main-menu-whole\"");
+menuStr = replaceChars(menuStr, "id=\"home-link\"", "id=\"hgTracks-home-link\"");
 hPuts(menuStr);
 freez(&menuStr);
 }

@@ -9,10 +9,10 @@ CREATE TABLE [dbo].[Accessions] (
 	[accession_uid] [int] IDENTITY (1, 1) NOT FOR REPLICATION  NOT NULL ,
 	[nuc_acc] [varchar] (64) COLLATE Latin1_General_BIN NOT NULL ,
 	[nuc_version] [int] NULL ,
-	[nuc_gi] [int] NULL ,
+	[nuc_gi] [bigint] NULL ,
 	[prot_acc] [varchar] (64) COLLATE Latin1_General_BIN NOT NULL ,
 	[prot_version] [int] NULL ,
-	[prot_gi] [int] NULL ,
+	[prot_gi] [bigint] NULL ,
 	[organization_uid] [int] NOT NULL ,
 	[alive] [bit] NOT NULL 
 ) ON [PRIMARY]
