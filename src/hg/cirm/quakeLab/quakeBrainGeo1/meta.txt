@@ -1,18 +1,16 @@
 title A survey of human brain transcriptome diversity at the single cell level
 access all
 lab quake
+cell_count 1
 pmid 26060301
 submitter spyros
 species Homo sapiens
 organ brain
-body_part Single cell from healthy human cortex
 pipeline quakeRnaPipeline2.txt
 submission_date Apr 14 2015
 update_date Jul 02 2015
 GEO_Sample_library_selection cDNA
-GEO_Sample_last_update_date Jul 02 2015
 GEO_Sample_series_id GSE67835
-GEO_Sample_organism_ch1 Homo sapiens
 GEO_Sample_type SRA
 GEO_Sample_extract_protocol_ch1 C1 autoprep standard protocol
 GEO_Sample_library_source transcriptomic
@@ -34,7 +32,9 @@ GEO_Series_geo_accession GSE67835
 	life_stage postpartum
 	GEO_Sample_platform_id GPL18573
 	GEO_Sample_experiment_sample_name AB_S8
+	donor AB_S8
 	GEO_Sample_tissue cortex (temporal lobe)
+	body_part healthy temporal lobe cortex
 	sequencer Illumina NextSeq 500
 
 		meta GSM1657871
@@ -341,7 +341,9 @@ GEO_Series_geo_accession GSE67835
 	life_stage postpartum
 	GEO_Sample_platform_id GPL18573
 	GEO_Sample_experiment_sample_name AB_S8
+	donor AB_S8
 	GEO_Sample_tissue cortex (temporal lobe)
+	body_part healthy temporal lobe cortex
 	sequencer Illumina NextSeq 500
 
 		meta GSM1657904
@@ -576,7 +578,9 @@ GEO_Series_geo_accession GSE67835
 	life_stage postpartum
 	GEO_Sample_platform_id GPL18573
 	GEO_Sample_experiment_sample_name AB_S11
+	donor AB_S11
 	GEO_Sample_tissue cortex (temporal lobe)
+	body_part healthy temporal lobe cortex
 	sequencer Illumina NextSeq 500
 
 		meta GSM1657929
@@ -892,7 +896,9 @@ GEO_Series_geo_accession GSE67835
 	life_stage postpartum 
 	GEO_Sample_platform_id GPL18573
 	GEO_Sample_experiment_sample_name AB_S11
+	donor AB_S11
 	GEO_Sample_tissue cortex (temporal lobe)
+	body_part healthy temporal lobe cortex
 	sequencer Illumina NextSeq 500
 
 		meta GSM1657963
@@ -1163,7 +1169,9 @@ GEO_Series_geo_accession GSE67835
 	life_stage postpartum
 	GEO_Sample_platform_id GPL15520
 	GEO_Sample_experiment_sample_name AB_S1
+	donor AB_S1
 	GEO_Sample_tissue cortex (temporal lobe)
+	body_part healthy temporal lobe cortex
 	sequencer Illumina MiSeq
 
 		meta GSM1657992
@@ -1218,7 +1226,9 @@ GEO_Series_geo_accession GSE67835
 	life_stage postpartum
 	GEO_Sample_platform_id GPL15520
 	GEO_Sample_experiment_sample_name AB_S2
+	donor AB_S2
 	GEO_Sample_tissue cortex (temporal lobe)
+	body_part healthy temporal lobe cortex
 	sequencer Illumina MiSeq
 
 		meta GSM1657997
@@ -1273,7 +1283,9 @@ GEO_Series_geo_accession GSE67835
 	life_stage postpartum
 	GEO_Sample_platform_id GPL15520
 	GEO_Sample_experiment_sample_name AB_S3
+	donor AB_S3
 	GEO_Sample_tissue cortex (temporal lobe)
+	body_part healthy temporal lobe cortex
 	sequencer Illumina MiSeq
 
 		meta GSM1658002
@@ -1319,7 +1331,9 @@ GEO_Series_geo_accession GSE67835
 	life_stage postpartum
 	GEO_Sample_platform_id GPL18573
 	GEO_Sample_experiment_sample_name AB_S4
+	donor AB_S4
 	GEO_Sample_tissue cortex (temporal lobe)
+	body_part healthy temporal lobe cortex
 	sequencer Illumina NextSeq 500
 
 		meta GSM1658006
@@ -2022,7 +2036,9 @@ GEO_Series_geo_accession GSE67835
 	life_stage postpartum
 	GEO_Sample_platform_id GPL18573
 	GEO_Sample_experiment_sample_name AB_S5
+	donor AB_S5
 	GEO_Sample_tissue cortex (temporal lobe)
+	body_part healthy temporal lobe cortex
 	sequencer Illumina NextSeq 500
 
 		meta GSM1658083
@@ -2329,7 +2345,9 @@ GEO_Series_geo_accession GSE67835
 	life_stage postpartum
 	GEO_Sample_platform_id GPL18573
 	GEO_Sample_experiment_sample_name AB_S5
+	donor AB_S5
 	GEO_Sample_tissue cortex (temporal lobe)
+	body_part healthy temporal lobe cortex
 	sequencer Illumina NextSeq 500
 
 		meta GSM1658116
@@ -2438,7 +2456,9 @@ GEO_Series_geo_accession GSE67835
 	life_stage postpartum
 	GEO_Sample_platform_id GPL18573
 	GEO_Sample_experiment_sample_name AB_S7
+	donor AB_S7
 	GEO_Sample_tissue cortex (temporal lobe)
+	body_part healthy temporal lobe cortex
 	sequencer Illumina NextSeq 500
 
 		meta GSM1658127
@@ -2961,7 +2981,9 @@ GEO_Series_geo_accession GSE67835
 	life_stage postpartum
 	GEO_Sample_platform_id GPL15520
 	GEO_Sample_experiment_sample_name AB_S1
+	donor AB_S1
 	GEO_Sample_tissue cortex (temporal lobe)
+	body_part healthy temporal lobe cortex
 	sequencer Illumina MiSeq
 
 		meta GSM1658184
@@ -3142,7 +3164,9 @@ GEO_Series_geo_accession GSE67835
 	life_stage embryo
 	GEO_Sample_platform_id GPL15520
 	GEO_Sample_experiment_sample_name FB_S1
+	donor FB_S1
 	GEO_Sample_tissue cortex
+	body_part healthy brain cortex
 	sequencer Illumina MiSeq
 
 		meta GSM1658203
@@ -3386,7 +3410,9 @@ GEO_Series_geo_accession GSE67835
 	life_stage embryo
 	GEO_Sample_platform_id GPL15520
 	GEO_Sample_experiment_sample_name FB_S2
+	donor FB_S2
 	GEO_Sample_tissue cortex
+	body_part healthy brain cortex
 	sequencer Illumina MiSeq
 
 		meta GSM1658229
@@ -3810,7 +3836,9 @@ GEO_Series_geo_accession GSE67835
 	life_stage embryo
 	GEO_Sample_platform_id GPL15520
 	GEO_Sample_experiment_sample_name FB_S3
+	donor FB_S3
 	GEO_Sample_tissue cortex (temporal lobe)
+	body_part healthy temporal lobe cortex
 	GEO_Sample_cell_type nonreplicating fetal neuron
 	cell_type nonreplicating fetal neuron
 	sequencer Illumina MiSeq
@@ -4053,7 +4081,9 @@ GEO_Series_geo_accession GSE67835
 	life_stage embryo
 	GEO_Sample_platform_id GPL18573
 	GEO_Sample_experiment_sample_name FB_S6
+	donor FB_S6
 	GEO_Sample_tissue cortex (temporal lobe)
+	body_part healthy temporal lobe cortex
 	sequencer Illumina NextSeq 500
 
 		meta GSM1658338
