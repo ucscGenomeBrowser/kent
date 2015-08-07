@@ -2381,13 +2381,10 @@ else
 return s;
 }
 
-char *cloneFirstWordByDelimiter(char *line,char delimit)
-/* Returns a cloned first word, not harming the memory passed in */
+char *cloneFirstWordByDelimiterNoSkip(char *line,char delimit)
+/* Returns a cloned first word, not harming the memory passed in. Does not skip leading white space.*/
 {
 if (line == NULL || *line == 0)
-    return NULL;
-line = skipLeadingSpaces(line);
-if (*line == 0)
     return NULL;
 int size=0;
 char *e;
@@ -2404,6 +2401,15 @@ if (size == 0)
 char *new = needMem(size + 2); // Null terminated by 2
 memcpy(new, line, size);
 return new;
+}
+
+char *cloneFirstWordByDelimiter(char *line,char delimit)
+/* Returns a cloned first word, not harming the memory passed in. Skips over leading white space. */
+{
+if (line == NULL || *line == 0)
+    return NULL;
+line = skipLeadingSpaces(line);
+return cloneFirstWordByDelimiterNoSkip(line, delimit);
 }
 
 char *cloneNextWordByDelimiter(char **line,char delimit)

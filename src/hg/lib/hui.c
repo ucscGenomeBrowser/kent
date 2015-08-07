@@ -1151,7 +1151,7 @@ return alreadySet;
 static boolean indelAppropriate(struct trackDb *tdb)
 /* Return true if it makes sense to offer indel display options for tdb. */
 {
-return (tdb && (startsWith("psl", tdb->type) || sameString("bam", tdb->type) ||
+return (tdb && (startsWith("psl", tdb->type) ||startsWith("bigPsl", tdb->type) || sameString("bam", tdb->type) ||
 		sameString("lrg", tdb->track)) &&
         (cfgOptionDefault("browser.indelOptions", NULL) != NULL));
 }
