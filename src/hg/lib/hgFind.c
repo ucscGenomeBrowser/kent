@@ -489,7 +489,7 @@ static boolean findKnownGeneExact(char *db, char *spec, char *geneSymbol,
 {
 struct sqlConnection *conn;
 struct sqlResult *sr = NULL;
-struct dyString *query;
+char query[256];
 char **row;
 boolean ok = FALSE;
 struct hgPosTable *table = NULL;
@@ -502,11 +502,9 @@ if (!hTableExists(db, tableName))
     return FALSE;
 rowOffset = hOffsetPastBin(db, NULL, tableName);
 conn = hAllocConn(db);
-query = newDyString(256);
-sqlDyStringPrintf(query, 
-	       "SELECT chrom, txStart, txEnd, name FROM %s WHERE name='%s'", 
-		tableName, localName);
-sr = sqlGetResult(conn, query->string);
+sqlSafef(query, sizeof query, "SELECT chrom, txStart, txEnd, name FROM %s WHERE name='%s'", 
+				tableName, localName);
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     if (ok == FALSE)
@@ -531,7 +529,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 if (table != NULL) 
     slReverse(&table->posList);
-freeDyString(&query);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return ok;
@@ -1881,6 +1878,8 @@ while ((c = *s++) != 0)
     if (++size > 10 || !isdigit(c))
         return FALSE;
     }
+if (size==0)
+    return FALSE;
 return TRUE;
 }
 
@@ -2112,8 +2111,10 @@ struct refLink *rlList = NULL, *rl;
 boolean gotRefLink = hTableExists(db, "refLink");
 boolean found = FALSE;
 char *specNoVersion = cloneString(spec);
-(void) chopPrefix(specNoVersion);
-if (gotRefLink)
+// chop off the version number, e.g. "NM_000454.4 ", 
+//  but if spec starts with "." like ".stuff" then specNoVersion is entirely empty.
+(void) chopPrefix(specNoVersion);  
+if (gotRefLink && isNotEmpty(specNoVersion))
     {
     if (startsWith("NM_", specNoVersion) || startsWith("NR_", specNoVersion) || startsWith("XM_", specNoVersion))
 	{
