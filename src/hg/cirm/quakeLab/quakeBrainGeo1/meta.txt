@@ -28,7 +28,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_c1_chip_id 1772078217
 	GEO_Sample_age postnatal 54 years
 	age 54
-	age_units year
+	age_unit year
 	life_stage postpartum
 	GEO_Sample_platform_id GPL18573
 	GEO_Sample_experiment_sample_name AB_S8
@@ -304,7 +304,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_c1_chip_id 1772078218
 	GEO_Sample_age postnatal 54 years
 	age 54
-	age_units year
+	age_unit year
 	life_stage postpartum
 	GEO_Sample_platform_id GPL18573
 	GEO_Sample_experiment_sample_name AB_S8
@@ -516,7 +516,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_c1_chip_id 1772078236
 	GEO_Sample_age postnatal 37 years
 	age 37
-	age_units year
+	age_unit year
 	life_stage postpartum
 	GEO_Sample_platform_id GPL18573
 	GEO_Sample_experiment_sample_name AB_S11
@@ -800,7 +800,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_c1_chip_id 1772078237
 	GEO_Sample_age postnatal 37 years
 	age 37 
-	age_units year
+	age_unit year
 	life_stage postpartum 
 	GEO_Sample_platform_id GPL18573
 	GEO_Sample_experiment_sample_name AB_S11
@@ -1044,7 +1044,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_c1_chip_id nochipID12
 	GEO_Sample_age postnatal 47 years
 	age 47
-	age_units year
+	age_unit year
 	life_stage postpartum
 	GEO_Sample_platform_id GPL15520
 	GEO_Sample_experiment_sample_name AB_S1
@@ -1096,7 +1096,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_c1_chip_id nochipID14
 	GEO_Sample_age postnatal 63 years
 	age 63
-	age_units year
+	age_unit year
 	life_stage postpartum
 	GEO_Sample_platform_id GPL15520
 	GEO_Sample_experiment_sample_name AB_S2
@@ -1148,7 +1148,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_c1_chip_id nochipID15
 	GEO_Sample_age postnatal 22 years
 	age 22
-	age_units year
+	age_unit year
 	life_stage postpartum
 	GEO_Sample_platform_id GPL15520
 	GEO_Sample_experiment_sample_name AB_S3
@@ -1192,7 +1192,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_c1_chip_id nochipID2
 	GEO_Sample_age postnatal 50 years
 	age 50
-	age_units year
+	age_unit year
 	life_stage postpartum
 	GEO_Sample_platform_id GPL18573
 	GEO_Sample_experiment_sample_name AB_S4
@@ -1820,7 +1820,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_c1_chip_id nochipID3
 	GEO_Sample_age postnatal 63 years
 	age 63
-	age_units year
+	age_unit year
 	life_stage postpartum
 	GEO_Sample_platform_id GPL18573
 	GEO_Sample_experiment_sample_name AB_S5
@@ -2096,7 +2096,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_c1_chip_id nochipID5
 	GEO_Sample_age postnatal 63 years
 	age 63
-	age_units year
+	age_unit year
 	life_stage postpartum
 	GEO_Sample_platform_id GPL18573
 	GEO_Sample_experiment_sample_name AB_S5
@@ -2196,7 +2196,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_c1_chip_id nochipID8
 	GEO_Sample_age postnatal 21 years
 	age 21
-	age_units year
+	age_unit year
 	life_stage postpartum
 	GEO_Sample_platform_id GPL18573
 	GEO_Sample_experiment_sample_name AB_S7
@@ -2664,7 +2664,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_c1_chip_id nochipID9
 	GEO_Sample_age postnatal 47 years
 	age 47
-	age_units year
+	age_unit year
 	life_stage postpartum
 	GEO_Sample_platform_id GPL15520
 	GEO_Sample_experiment_sample_name AB_S1
@@ -2828,7 +2828,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_c1_chip_id nochipID10
 	GEO_Sample_age prenatal 16-18 W
 	age 17
-	age_units week
+	age_unit week
 	life_stage embryo
 	GEO_Sample_platform_id GPL15520
 	GEO_Sample_experiment_sample_name FB_S1
@@ -3048,7 +3048,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_c1_chip_id nochipID11
 	GEO_Sample_age prenatal 16-18 W
 	age 17
-	age_units week
+	age_unit week
 	life_stage embryo
 	GEO_Sample_platform_id GPL15520
 	GEO_Sample_experiment_sample_name FB_S2
@@ -3428,7 +3428,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_c1_chip_id nochipID13
 	GEO_Sample_age prenatal 16-18 W
 	age 17
-	age_units week
+	age_unit week
 	life_stage embryo
 	GEO_Sample_platform_id GPL15520
 	GEO_Sample_experiment_sample_name FB_S3
@@ -3672,7 +3672,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_c1_chip_id nochipID4
 	GEO_Sample_age prenatal 16-18 W
 	age 17
-	age_units week
+	age_unit week
 	life_stage embryo
 	GEO_Sample_platform_id GPL18573
 	GEO_Sample_experiment_sample_name FB_S6
