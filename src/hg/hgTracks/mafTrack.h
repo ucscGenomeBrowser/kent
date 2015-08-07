@@ -19,7 +19,15 @@ struct customTrack *ct;
 struct mafPriv *getMafPriv(struct track *track);
 
 /* zoom level where summary file is used */
-#define MAF_SUMMARY_VIEW 1000000
+static inline boolean inSummaryMode(struct cart *cart, struct trackDb *tdb, int winSize)
+{
+char *snpTable = trackDbSetting(tdb, "snpTable");
+
+boolean windowBigEnough =  (winSize > 1000000);
+boolean doSnpMode = (snpTable != NULL) && cartOrTdbBoolean(cart, tdb, MAF_SHOW_SNP,FALSE);
+return windowBigEnough && !doSnpMode;
+}
+
 
 /* zoom level that displays synteny breaks and nesting brackets */
 #define MAF_DETAIL_VIEW 30000

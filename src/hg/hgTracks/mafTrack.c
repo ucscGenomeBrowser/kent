@@ -238,7 +238,7 @@ if (zoomedToBaseLevel)
     }
 else
     {
-    if (tg->visibility == tvFull && winBaseCount < MAF_SUMMARY_VIEW)
+    if (tg->visibility == tvFull && !inSummaryMode(cart, tg->tdb,  winBaseCount))
         {
         /* currently implemented only for medium zoom out */
         miList = mafItems(tg, scoreHeight, FALSE, isAxt);
@@ -769,7 +769,7 @@ static void mafDrawGraphic(struct track *tg, int seqStart, int seqEnd,
 /* Draw wiggle or density plot, not base-by-base. */
 {
 int seqSize = seqEnd - seqStart;
-if (seqSize >= MAF_SUMMARY_VIEW)
+if (inSummaryMode(cart, tg->tdb, seqSize))
     {
     mafDrawOverview(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, 
             color, vis);
