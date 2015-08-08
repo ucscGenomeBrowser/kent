@@ -11,6 +11,7 @@
 #include "obscure.h"
 #include "tableStatus.h"
 
+char *profile = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -24,6 +25,7 @@ errAbort(
   "   -noNumberCommas - if set will leave out commas in big numbers\n"
   "   -justSchema - only schema parts, no contents\n"
   "   -skipTable=tableName - if set skip a given table name\n"
+  "   -profile=profileName - use profile for connection settings, default = '%s'\n", profile
   );
 }
 
@@ -32,6 +34,7 @@ static struct optionSpec options[] = {
    {"noNumberCommas", OPTION_BOOLEAN},
    {"justSchema", OPTION_BOOLEAN},
    {"skipTable", OPTION_STRING},
+   {"profile", OPTION_STRING},
    {"host", OPTION_STRING},
    {"user", OPTION_STRING},
    {"password", OPTION_STRING},
@@ -205,21 +208,21 @@ noteType(typeHash, fields->string, ti->name, pTtList);
 sqlFreeResult(&sr);
 } 
 
-void printLongNumber(FILE *f, long long val)
+char *toLongNumber(long long val)
 /* Print long number possibly with commas. */
 {
+char ascii[32];
 if (noNumberCommas)
-    fprintf(f, "%lld", val);
+    safef(ascii, sizeof ascii, "%lld", val);
 else
-    printLongWithCommas(f, val);
+    sprintLongWithCommas(ascii, val);
+return cloneString(ascii);
 }
 
 void printTaggedLong(FILE *f, char *tag, long long val)
 /* Print out tagged value, putting commas in number */
 {
-fprintf(f, "%s:\t", tag);
-printLongNumber(f, val);
-fprintf(f, "\n");
+fprintf(f, "%s:\t%s\n", tag, toLongNumber(val));
 }
 
 char *findPastChrom(char *table, struct slName *chromList)
@@ -411,10 +414,15 @@ struct sqlConnection *dbConnect(char *database)
 char *host = optionVal("host", NULL);
 char *user = optionVal("user", NULL);
 char *password = optionVal("password", NULL);
+struct slPair *settings = NULL;
+slPairAdd(&settings, "host", host);
+slPairAdd(&settings, "user", user);
+slPairAdd(&settings, "password", password);
+// TODO could add support for other connection params like port, socket, ssl-params
 if (host != NULL || user != NULL || password != NULL)
-    return sqlConnectRemote(host, user, password, database);
+    return sqlConnectRemoteFull(settings, database);
 else
-    return sqlConnect(database);
+    return sqlConnectProfile(profile, database);
 }
 
 void dbSnoop(char *database, char *output)
@@ -438,7 +446,7 @@ int totalFields = 0;
 
 /* Collect info from database. */
 while ((row = sqlNextRow(sr)) != NULL)
-    {
+{
     struct tableStatus *status;
     if ((majorVersion > 4) || ((4 == majorVersion) && (minorVersion > 0)))
 	memcpy(row+2, row+3, (TABLESTATUS_NUM_COLS-2)*sizeof(char*));
@@ -482,28 +490,28 @@ if (!justSchema)
     {
     slSort(&tiList, tableInfoCmpSize);
     fprintf(f, "TABLE SIZE SUMMARY:\n");
-    fprintf(f, "#bytes\tname\trows\tdata\tindex\n");
+    fprintf(f, "%s\t%s\t%s\t%s\t%s\n", "#bytes","name","rows","data","index");
     for (ti = tiList; ti != NULL; ti = ti->next)
 	{
-	printLongNumber(f, ti->status->dataLength + ti->status->indexLength);
-	fprintf(f, "\t");
-	fprintf(f, "%s\t", ti->name);
-	printLongNumber(f, ti->status->rows);
-	fprintf(f, "\t");
-	printLongNumber(f, ti->status->dataLength);
-	fprintf(f, "\t");
-	printLongNumber(f, ti->status->indexLength);
-	fprintf(f, "\n");
+	fprintf(f, "%s\t%s\t%s\t%s\t%s\n"
+	    , toLongNumber(ti->status->dataLength + ti->status->indexLength)
+	    , ti->name
+	    , toLongNumber(ti->status->rows)
+	    , toLongNumber(ti->status->dataLength)
+	    , toLongNumber(ti->status->indexLength)
+	);
+
+
 	}
     fprintf(f, "\n");
 
     /* Print summary of table sizes ordered by size. */
     slSort(&tiList, tableInfoCmpUpdateTime);
     fprintf(f, "TABLE UPDATE SUMMARY:\n");
-    fprintf(f, "#table\tupdate time\tcreate time\tcheckTime\t\n");
+    fprintf(f, "%s\t%s\t%s\t%s\n", "#table", "update time", "create time", "checkTime");
     for (ti = tiList; ti != NULL; ti = ti->next)
 	{
-	fprintf(f, "%s\t%s\t%s\t%s\n", ti->status->updateTime, ti->name,
+	fprintf(f, "%s\t%s\t%s\t%s\n", ti->name, naForNull(ti->status->updateTime), 
 	    ti->status->createTime, naForNull(ti->status->checkTime));
 	}
     fprintf(f, "\n");
@@ -512,7 +520,7 @@ if (!justSchema)
 /* Print summary of rows and fields in each table ordered alphabetically */
 slSort(&tiList, tableInfoCmpName);
 fprintf(f, "TABLE FIELDS SUMMARY:\n");
-fprintf(f, "#name\tfields\n");
+fprintf(f, "%s\t%s\n", "#name", "fields");
 for (ti = tiList; ti != NULL; ti = ti->next)
     {
     struct fieldDescription *field;
@@ -569,6 +577,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+profile = optionVal("profile", getDefaultProfileName());
 if (argc != 3)
     usage();
 noNumberCommas = optionExists("noNumberCommas");
