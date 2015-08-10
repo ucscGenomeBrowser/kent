@@ -145,6 +145,9 @@ for line in ifh:
         noAssCount += 1
         continue
 
+    if chrom=="Un" and assembly=="GRCh38":
+        print "wrong chrUn chrom on assembly hg38. Skipping %s" % irvcAcc
+        continue
     chrom = "chr"+chrom
     if chrom=="chrMT": # why does NCBI use chrMT but we use chrM ?
         chrom = "chrM"
@@ -249,11 +252,11 @@ if options.maxDiff:
         todayCount = sum(1 for line in open(fname))
         previousCount = sum(1 for line in open(previousFname))
         percDiff = (todayCount-previousCount)/float(todayCount)
-        if percDiff < 0:
-            raise Exception("line count change negative: %s %d, %s %d" % \
+        if percDiff < 0 and options.maxDiff:
+            raise Exception("line count change negative: %s %d, %s %d. Run without --maxDiff to ignore this error. Or run the cronjob script doUpdate.sh with -nocheck to ignore this error." % \
                 (previousFname, previousCount, fname, todayCount))
         if percDiff > options.maxDiff:
-            raise Exception("line count increased too much: yesterday %d , today %d. Check if the input file is OK. If yes, remove the --maxDiff option from the clinVarToBed, call it only with the --auto option." % (previousCount, todayCount))
+            raise Exception("line count increased too much: yesterday %d , today %d. Check if the input file is OK. If yes, remove the --maxDiff option from the clinVarToBed, call it only with the --auto option. Or run the cronjob script doUpdate.sh with -nocheck to ignore this error." % (previousCount, todayCount))
         # see RM 14350 do more than just linecount
         # see http://stackoverflow.com/questions/1566461/how-to-count-differences-between-two-files-on-linux
         cmd = "diff %s %s --speed-large-files | grep '^[\>\<]'  | wc -l" % (fname, previousFname)

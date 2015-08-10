@@ -18,6 +18,7 @@
 #include "extTools.h"
 #include "hgFind.h"
 #include "obscure.h"
+#include "net.h"
 
 static char *getRequiredRaSetting(struct hash *hash, char *name, struct lineFile *lf)
 /* Grab a group setting out of the ra hash.  errAbort if not found. */
@@ -145,8 +146,16 @@ for (slp=et->params; slp!=NULL; slp=slp->next)
     if (sameWord(val, "$returnUrl"))
         {
         char* host = getenv("HTTP_HOST");
-        char* uri = getenv("REQUEST_URI");
-        val = catTwoStrings(host, uri);
+        char* reqUrl = getenv("REQUEST_URI");
+
+        struct netParsedUrl npu;
+        netParseUrl(reqUrl, &npu);
+        safecpy(npu.protocol, sizeof(npu.protocol), "http");
+        safecpy(npu.host, sizeof(npu.host), host);
+        // remove everything after ? in URL
+        char *e = strchr(npu.file, '?');
+        if (e) *e = 0; 
+        val = urlFromNetParsedUrl(&npu);
         }
     // half the current window size
     if (stringIn("$halfLen", val))
