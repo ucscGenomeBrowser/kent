@@ -1,0 +1,50 @@
+##############################################################################
+# Done 07/17/2015 Chris Eisenhart (ceisenhart) 
+mkdir /hive/data/genomes/hg38/bed/hg18MassiveLift/fosEndPairs
+cd /hive/data/genomes/hg38/bed/hg18MassiveLift/fosEndPairs
+hgsql hg18 -e "select * from fosEndPairs" | tail -n +2 | cut -f2- > hg18.fosEndPairs.fep.bed
+hgsql hg18 -e "select * from all_fosends" | tail -n +2 | cut -f2- > hg18.all_fosends.psl
+awk -f toBed12.awk hg18.fosEndPairs.fep.bed > hg18.fosEndPairs.bed12
+liftOver -bedPlus=12 hg18.fosEndPairs.bed12 /gbdb/hg18/liftOver/hg18ToHg38.over.chain.gz hg38.fosEndPairs.{bed12,unmapped12}
+liftOver -pslT hg18.all_fosends.psl /gbdb/hg18/liftOver/hg18ToHg38.over.chain.gz hg38.all_fosends.{psl,unmapped} 
+cut -f14 hg38.fosEndPairs.bed12 | tr ',' '\n' | sort > hg38.fosEndPairs.names
+cut -f10 hg38.all_fosends.psl | sort > hg38.all_fosends.names
+grep -Fxv -f hg38.all_fosends.names hg38.fosEndPairs.names > bad.names
+grep -Fv -f bad.names hg38.fosEndPairs.bed12 > hg38.fosEndPairs.good.bed12
+wc -l hg38*.bed12
+#  383587 hg38.fosEndPairs.bed12
+#  #  382789 hg38.fosEndPairs.good.bed12
+#  #    798 bad ones removed. Could have caused join errors if left in. 
+#  # convert back to fosEndPairs bed6+
+  awk -f toFosEndPairs.awk hg38.fosEndPairs.good.bed12 >
+  hg38.fosEndPairs.fep.bed
+  cp ~/kent/src/hg/lib/fosEndPairs.sql .
+hgLoadBed -sqlTable=fosEndPairs.sql -notItemRgb hg38 fosEndPairs hg38.fosEndPairs.fep.bed
+hgLoadPsl -table=all_fosends hg38 hg38.all_fosends.psl
+#  386129 hg18.fosEndPairs.fep.bed
+#  382789 hg38.fosEndPairs.fep.bed
+#  99.135% lifted
+# Now we need the sequences from all_fosends to be loaded into the seq table in hg38
+mkdir /gbdb/hg19/fosends
+ln -s /gbdb/hg18/fosends/fosEnds.fa /gbdb/hg38/fosEnds.fromHg18.fa
+hgLoadSeq hg38 /gbdb/hg38/fosends/fosEnds.fromHg18.fa
+
+##############################################################################
+# Done fishClones Chris Eisenhart 07/20/2015
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir fishClones
+cd fishClones/
+hgsql hg18 -e "select * from fishClones" | tail -n +2 > hg18.bed5p
+liftOver -bedPlus=5 hg18.bed5p /gbdb/hg18/liftOver/hg18ToHg38.over.chain.gz hg38.bed5p hg38.unmapped
+wc -l *.bed5p
+#   9788 hg18.bed5p
+#   9731 hg38.bed5p
+grep -i split hg38.unmapped  | wc -l
+# 54
+grep -i partially  hg19.unmapped  | wc -l
+# 3
+cp ~/kent/src/hg/lib/fishClones.sql .
+hgLoadBed -noBin -tab -sqlTable=fishClones.sql -notItemRgb hg38 fishClones hg38.bed5p
+#Read 9731 elements of size 16 from hg38.bed5p
+############################################################################

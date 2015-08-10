@@ -131,7 +131,7 @@ static void processMatchLine(FILE *pslF, struct gff3Ann *node,
 struct gff3Attr *attr = gff3AnnFindAttr(node, "Gap");
 
 char *cigar = NULL;
-if (!((attr == NULL) || (attr->vals == NULL) || (attr->vals->name == NULL)))
+if (!((attr == NULL) || (attr->vals == NULL) || isEmpty(attr->vals->name)))
     cigar = attr->vals->name;
 
 struct nameAndSize *nsT = getNameAndSize(targetChromSizes, node->targetId);
@@ -142,6 +142,11 @@ struct psl *psl = pslFromGff3Cigar(node->seqid, nsQ->size,  node->start, node->e
                                    nsT->name, nsT->size,  node->targetStart, node->targetEnd, 
                                    node->targetStrand, cigar);
 pslOutput(psl, pslF, '\t' , '\n');
+// validate PSL, which can find a bad CIGAR
+int pslErrCnt = pslCheck("converted GFF3 CIGAR alignment", stderr, psl);
+if (pslErrCnt > 0)
+    cnvError("%d errors found in generated PSL, most likely CIGAR mismatch with query or target range: %s line %d\n", pslErrCnt, node->file->fileName, node->lineNum);
+
 pslFree(&psl);
 }
 

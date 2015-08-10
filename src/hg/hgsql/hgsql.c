@@ -1,4 +1,4 @@
-/* hgsql - Execute some sql code using passwords in .hg.conf. */
+/* hgsql - Execute some sql code using connection info .hg.conf. */
 
 /* Copyright (C) 2011 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
@@ -12,7 +12,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "hgsql - Execute some sql code using passwords in .hg.conf\n"
+  "hgsql - Execute some sql code using connection information in .hg.conf\n"
   "usage:\n"
   "   hgsql [mysqlOptions] [database]\n"
   "or:\n"

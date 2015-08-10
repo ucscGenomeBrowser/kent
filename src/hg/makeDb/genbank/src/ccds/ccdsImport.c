@@ -53,7 +53,7 @@ if (conn == NULL)
     char sql[256];
     verbose(1, "creating databases %s\n", db);
     sqlSafef(sql, sizeof(sql), "create database %s", db);
-    conn = sqlConnectProfile(defaultProfileName, NULL);
+    conn = sqlConnectProfile(getDefaultProfileName(), NULL);
     sqlUpdate(conn, sql);
     sqlDisconnect(&conn);
     conn = sqlConnect(db);
