@@ -518,13 +518,12 @@ if (sp->caPath)
     dyStringPrintf(dy, "ssl-capath=%s\n", sp->caPath);
 if (sp->cipher)
     dyStringPrintf(dy, "ssl-cipher=%s\n", sp->cipher);
-if (mysql_get_client_version() >= 50603) // mysql version "5.6.3"
-    {
+#if (MYSQL_VERSION_ID >= 50603) // mysql version "5.6.3"
     if (sp->crl)
 	dyStringPrintf(dy, "ssl-crl=%s\n", sp->crl);
     if (sp->crlPath)
 	dyStringPrintf(dy, "ssl-crlpath=%s\n", sp->crlPath);
-    }
+#endif
 if (sp->verifyServerCert && !sameString(sp->verifyServerCert,"0"))
     dyStringPrintf(dy, "ssl-verify-server-cert\n");
 return dyStringCannibalize(&dy);
@@ -1102,8 +1101,7 @@ if (sp->verifyServerCert && !sameString(sp->verifyServerCert,"0"))
     mysql_options(conn, MYSQL_OPT_SSL_VERIFY_SERVER_CERT, &flag);
     }
 
-if (mysql_get_client_version() >= 50603) // mysql version "5.6.3"
-    {
+#if (MYSQL_VERSION_ID >= 50603) // mysql version "5.6.3"
     // If certificate revocation list file provided, set mysql option
     if (sp->crl)
 	mysql_options(conn, MYSQL_OPT_SSL_CRL, &sp->crl);
@@ -1111,7 +1109,7 @@ if (mysql_get_client_version() >= 50603) // mysql version "5.6.3"
     // If path to directory with crl files provided, set mysql option
     if (sp->crlPath)
 	mysql_options(conn, MYSQL_OPT_SSL_CRLPATH, &sp->crlPath);
-    }
+#endif
 
 if (sp->key || sp->cert || sp->ca || sp->caPath || sp->cipher)
     mysql_ssl_set(conn, sp->key, sp->cert, sp->ca, sp->caPath, sp->cipher); 

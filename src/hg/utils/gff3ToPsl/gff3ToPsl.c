@@ -131,7 +131,7 @@ static void processMatchLine(FILE *pslF, struct gff3Ann *node,
 struct gff3Attr *attr = gff3AnnFindAttr(node, "Gap");
 
 char *cigar = NULL;
-if (!((attr == NULL) || (attr->vals == NULL) || (attr->vals->name == NULL)))
+if (!((attr == NULL) || (attr->vals == NULL) || isEmpty(attr->vals->name)))
     cigar = attr->vals->name;
 
 struct nameAndSize *nsT = getNameAndSize(targetChromSizes, node->targetId);
