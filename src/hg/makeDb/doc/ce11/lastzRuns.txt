@@ -628,8 +628,9 @@ TMPDIR=/dev/shm
 #########################################################################
 # LASTZ Brugia malayi/bruMal2 - (DONE - 2015-07-08 - Hiram)
     # incorrect date name on this directory, it is actually 07-08
-    mkdir /hive/data/genomes/ce11/bed/lastzBruMal2.2015-08-08
-    cd /hive/data/genomes/ce11/bed/lastzBruMal2.2015-08-08
+    # rerun with wolbachia in bruMal2 2015-08-11
+    mkdir /hive/data/genomes/ce11/bed/lastzBruMal2.2015-08-11
+    cd /hive/data/genomes/ce11/bed/lastzBruMal2.2015-08-11
 
     cat << '_EOF_' > DEF
 # ce11 vs bruMal2
@@ -650,7 +651,7 @@ SEQ2_CHUNK=1000000
 SEQ2_LIMIT=50
 SEQ2_LAP=0
 
-BASE=/hive/data/genomes/ce11/bed/lastzBruMal2.2015-08-08
+BASE=/hive/data/genomes/ce11/bed/lastzBruMal2.2015-08-11
 TMPDIR=/dev/shm
 '_EOF_'
     # << happy emacs
@@ -658,30 +659,30 @@ TMPDIR=/dev/shm
     time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
 	-workhorse=hgwdev -bigClusterHub=ku \
 	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
-    #	real    9m23.536s
+    #	real    16m9.123s
 
     cat fb.ce11.chainBruMal2Link.txt
-    # 5066866 bases of 100286401 (5.052%) in intersection
+    # 5079517 bases of 100286401 (5.065%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` ce11 bruMal2) > rbest.log 2>&1 &
-    # real    0m32.750s
+    # real    0m32.617s
 
     # and for the swap:
     mkdir /hive/data/genomes/bruMal2/bed/blastz.ce11.swap
     cd /hive/data/genomes/bruMal2/bed/blastz.ce11.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/ce11/bed/lastzBruMal2.2015-08-08/DEF \
+      /hive/data/genomes/ce11/bed/lastzBruMal2.2015-08-11/DEF \
         -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    1m31.240s
+    #  real    1m30.341s
 
     cat fb.bruMal2.chainCe11Link.txt
-    # 4776506 bases of 86344036 (5.532%) in intersection
+    # 4826613 bases of 87424120 (5.521%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` bruMal2 ce11) \
       > rbest.log 2>&1
-    # real    0m35.349s
+    # real    0m35.554s
 
 #########################################################################
 # LASTZ Caenorhabditis sp5 ju800/caeSp51 - (DONE - 2015-07-08 - Hiram)
@@ -913,9 +914,11 @@ TMPDIR=/dev/shm
     # real    0m38.169s
 
 #########################################################################
-# LASTZ Onchocerca volvulus/oncVol1 - (DONE - 2015-07-09 - Hiram)
-    mkdir /hive/data/genomes/ce11/bed/lastzOncVol1.2015-07-09
-    cd /hive/data/genomes/ce11/bed/lastzOncVol1.2015-07-09
+# LASTZ Onchocerca volvulus/oncVol1 - (DONE - 2015-08-10 - Hiram)
+    # run first time 2015-07-09 without wolbachia in oncVol1
+    # rerun with wolbachia in oncVol1 2015-08-10
+    mkdir /hive/data/genomes/ce11/bed/lastzOncVol1.2015-08-10
+    cd /hive/data/genomes/ce11/bed/lastzOncVol1.2015-08-10
 
     cat << '_EOF_' > DEF
 # ce11 vs oncVol1
@@ -936,7 +939,7 @@ SEQ2_CHUNK=1000000
 SEQ2_LIMIT=50
 SEQ2_LAP=0
 
-BASE=/hive/data/genomes/ce11/bed/lastzOncVol1.2015-07-09
+BASE=/hive/data/genomes/ce11/bed/lastzOncVol1.2015-08-10
 TMPDIR=/dev/shm
 '_EOF_'
     # << happy emacs
@@ -944,30 +947,30 @@ TMPDIR=/dev/shm
     time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
 	-workhorse=hgwdev -bigClusterHub=ku \
 	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
-    #  real    6m7.463s
+    #  real    6m19.199s
 
     cat fb.ce11.chainOncVol1Link.txt
-    # 5196654 bases of 100286401 (5.182%) in intersection
+    # 5207855 bases of 100286401 (5.193%) in intersection
 
     time (doRecipBest.pl -buildDir=`pwd` ce11 oncVol1) > rbest.log 2>&1 &
-    # real    0m44.935s
+    # real    0m47.202s
 
     # and for the swap:
     mkdir /hive/data/genomes/oncVol1/bed/blastz.ce11.swap
     cd /hive/data/genomes/oncVol1/bed/blastz.ce11.swap
 
     time (doBlastzChainNet.pl -verbose=2 \
-      /hive/data/genomes/ce11/bed/lastzOncVol1.2015-07-09/DEF \
+      /hive/data/genomes/ce11/bed/lastzOncVol1.2015-08-10/DEF \
         -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    0m56.980s
+    #  real    0m48.137s
 
     cat fb.oncVol1.chainCe11Link.txt
-    # 4755362 bases of 93367159 (5.093%) in intersection
+    # 4803154 bases of 94327777 (5.092%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` oncVol1 ce11) \
       > rbest.log 2>&1
-    # real    0m53.872s
+    # real    0m46.013s
 
 #########################################################################
 # LASTZ Loa loa/loaLoa1/eye worm - (DONE - 2015-07-23 - Hiram)
