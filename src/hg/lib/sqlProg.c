@@ -102,8 +102,6 @@ int sqlMakeDefaultsFile(char* defaultFileName, char* profile, char* group)
 {
 int fileNo;
 char paddedGroup [256]; /* string with brackets around the group name */
-//char fileData[256];  /* constructed variable=value data for the mysql config file */
-//char field[256];  /* constructed profile.field name to pass to cfgVal */
 char path[1024];
 
 if ((fileNo=mkstemp(defaultFileName)) == -1)
