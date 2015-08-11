@@ -97,7 +97,7 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
     
     track wgEncodeGencodeVM4View2Way 
     shortLabel 2-Way
-    view 42-Way 
+    view b2-way
     visibility hide
     subTrack wgEncodeGencodeVM4
     type genePred

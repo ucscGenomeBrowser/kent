@@ -752,6 +752,7 @@ else
           startsWithWord("halSnake", type) ||
 #endif
           startsWithWord("vcfTabix", type) ||
+          startsWithWord("bigPsl", type) ||
           startsWithWord("bigGenePred", type) ||
           startsWithWord("bam", type)))
 	{

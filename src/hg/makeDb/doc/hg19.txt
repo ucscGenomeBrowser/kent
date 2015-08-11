@@ -9252,9 +9252,9 @@ TMPDIR=/scratch/tmp
 # Old DGV format is obsolete; see the following section.
 _EOF_
 #######################################################################
-# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 11/7/14 angie)
-# Redmine #14188
-# previously done 9/13/13 #11200
+# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 7/27/15 angie)
+# Redmine #15767
+# previously done 9/13/13 #11200, 11/7/14 #14188
     # Beta last updated 2/11/13 #9401
     # 9/13/13: DGV is back out of beta, and has added some columns again for the 7/2013
     # public release.  They have also requested that we make a composite track
@@ -9262,52 +9262,53 @@ _EOF_
     set today = `date +%y%m%d`
     mkdir -p /hive/data/genomes/hg19/bed/dgv/$today
     cd /hive/data/genomes/hg19/bed/dgv/$today
-    set release = 2014-10-16
+    set release = 2015-07-23
     wget http://dgv.tcag.ca/dgv/docs/GRCh37_hg19_variants_$release.txt
     wget http://dgv.tcag.ca/dgv/docs/GRCh37_hg19_supportingvariants_$release.txt
     # These are the latest columns; if any changes, update translateDgvPlus.pl:
     head -1 GRCh37_hg19*.txt
-#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription  genes   samples
+#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription genes   samples
     # Eyeball the categories of variants:
     cut -f 5,6 GRCh37_hg19_supportingvariants_$release.txt  | sort | uniq -c | head -100
-#1866535 CNV     deletion
+#1879736 CNV     deletion
 # 153963 CNV     duplication
-# 297593 CNV     gain
-#   4197 CNV     gain+loss
-#  73418 CNV     insertion
-# 783541 CNV     loss
+# 879317 CNV     gain
+#   8657 CNV     gain+loss
+#  73442 CNV     insertion
+#3469925 CNV     loss
 #  48428 CNV     mobile element insertion
 #   9059 CNV     novel sequence insertion
 #   7827 CNV     tandem duplication
 #    510 OTHER   complex
-#   2461 OTHER   inversion
+#  29162 OTHER   inversion
 #   3707 OTHER   sequence alteration
 #      1 varianttype     variantsubtype
 
     cut -f 5,6 GRCh37_hg19_variants_$release.txt | sort | uniq -c | head -100
-#  89612 CNV     deletion
+# 101259 CNV     deletion
 #  21360 CNV     duplication
-#  26384 CNV     gain
-#   5759 CNV     gain+loss
-#  25596 CNV     insertion
-#  69524 CNV     loss
+#  46452 CNV     gain
+#   6902 CNV     gain+loss
+#  25610 CNV     insertion
+# 121527 CNV     loss
 #   4156 CNV     mobile element insertion
 #   8974 CNV     novel sequence insertion
 #    517 CNV     tandem duplication
 #    466 OTHER   complex
-#   1328 OTHER   inversion
+#   1428 OTHER   inversion
 #   2000 OTHER   sequence alteration
 #      1 varianttype     variantsubtype
+
     ~/kent/src/hg/utils/automation/translateDgvPlus.pl \
       GRCh37_hg19_supportingvariants_$release.txt > dgvSupporting.bed
     ~/kent/src/hg/utils/automation/translateDgvPlus.pl \
       GRCh37_hg19_variants_$release.txt > dgvMerged.bed
     hgLoadBed hg19 dgvSupporting dgvSupporting.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 3251239 elements of size 22 from dgvSupporting.bed
+#Read 6563733 elements of size 22 from dgvSupporting.bed
     hgLoadBed hg19 dgvMerged dgvMerged.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 255676 elements of size 22 from dgvMerged.bed
+#Read 340651 elements of size 22 from dgvMerged.bed
 
 
 #######################################################################

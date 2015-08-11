@@ -731,8 +731,8 @@ int maxDown, minSpan;
 
 if (fastMap)
     {
-    maxDown = 1;
-    minSpan = 50;
+    maxDown = 2;
+    minSpan = 20;
     }
 else
     {

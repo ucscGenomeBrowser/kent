@@ -42,12 +42,15 @@ static char *database = NULL;
 #define DAS_SERVER_ERROR           500
 #define DAS_UNIMPLEMENTED_FEATURE  501
 
-static void dasHead(int code)
+static void dasHead(int code, boolean justText)
 /* Write out very start of DAS header */
 {
 printf("X-DAS-Version: DAS/0.95\n");
 printf("X-DAS-Status: %d\n", code);
-printf("Content-Type:text/xml\n");
+if (justText)
+    printf("Content-Type:text\n");
+else
+    printf("Content-Type:text/xml\n");
 // these allow access from javascript, see http://www.w3.org/TR/cors/
 printf("Access-Control-Allow-Origin: *\n");
 printf("Access-Control-Expose-Headers: X-DAS-Version X-DAS-Status X-DAS-Capabilities\n");
@@ -57,7 +60,7 @@ printf("\n");
 static void dasHeader(int code)
 /* Write out DAS header */
 {
-dasHead(code);
+dasHead(code, FALSE);
 if (code != DAS_OK)
     exit(-1);
 printf("<?xml version=\"1.0\" standalone=\"no\"?>\n");
@@ -80,7 +83,7 @@ char *raddr = getenv("REMOTE_ADDR");
 if ((rhost != NULL && sameWord(rhost, hogHost)) ||
     (raddr != NULL && sameWord(raddr, hogAddr)))
     {
-    dasHead(DAS_OK);
+    dasHead(DAS_OK, TRUE);
     printf("Your host, %s, has been sending too many requests lately and is "
 	   "unfairly loading our site, impacting performance for other users. "
 	   "Please contact genome@cse.ucsc.edu to ask that your site "
@@ -94,7 +97,7 @@ if ((rhost != NULL && sameWord(rhost, hogHost)) ||
 static void dasHelp(char *s)
 /* Put up some hopefully helpful information. */
 {
-dasHead(DAS_OK);
+dasHead(DAS_OK, TRUE);
 puts(s);
 exit(0);
 }
@@ -102,7 +105,7 @@ exit(0);
 static void dasAbout()
 /* Print a little info when they just hit cgi-bin/das. */
 {
-dasHead(DAS_OK);
+dasHead(DAS_OK, TRUE);
 dasHelp("UCSC DAS Server.\n"
     "See http://www.biodas.org for more info on DAS.\n"
     "Try http://genome.ucsc.edu/cgi-bin/das/dsn for a list of databases.\n"

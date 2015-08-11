@@ -191,19 +191,21 @@ struct extTool *extTools = readExtToolRa("extTools.ra");
 struct extTool *et;
 for(et = extTools; et != NULL; et = et->next)
     {
+
     if (et->dbs!=NULL)
         {
         if (!slNameInList(et->dbs, database))
             continue;
         }
-    if (et->params==NULL)
+    if (et->notDbs!=NULL)
         {
-        char *replUrl = replaceInUrl(et->url, "", cart, database, chromName, winStart, winEnd, NULL, TRUE);
-        safef(url, sizeof(url), "%s", replUrl);
-        //safef(url, sizeof(url), "%s %s", chromName, database);
+        if (slNameInList(et->notDbs, database))
+            continue;
         }
-    else
-        safef(url, sizeof(url), "hgTracks?%s&hgt.redirectTool=%s", uiVars, et->tool);
+
+
+    safef(url, sizeof(url), "hgTracks?%s&hgt.redirectTool=%s", uiVars, et->tool);
+
     boolean inactive = FALSE;
     if (et->maxSize!=0)
         {

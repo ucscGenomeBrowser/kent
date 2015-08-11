@@ -16,6 +16,14 @@ return navPath;
 }
 
 
+void printIncludes(char* baseDir)
+{
+printf ("<noscript><div class='noscript'><div class='noscript-inner'><p><b>JavaScript is disabled in your web browser</b></p><p>You must have JavaScript enabled in your web browser to use the Genome Browser</p></div></div></noscript>\n");
+printf ("<script type='text/javascript' SRC='%sjs/jquery.js'></script>\n", baseDir);
+printf ("<script type='text/javascript' SRC='%sjs/jquery.plugins.js'></script>\n", baseDir);
+printf ("<LINK rel='STYLESHEET' href='%sstyle/nice_menu.css' TYPE='text/css' />\n", baseDir);
+}
+
 void printMenuBar(char *cgiPath, char *docRoot, char *pagePath)
 {
 struct dyString *navBarLoc = navBarFilePath(cgiPath, docRoot);
@@ -30,6 +38,8 @@ struct dyString *oldHref = dyStringCreate("href=\"../");
 struct dyString *newHref = dyStringCreate("href=\"%s", newPath);
 
 printf ("Content: text/html\r\n\r\n");
+
+printIncludes(newPath);
 
 while (lineFileNext(menuFile, &oldLine, &lineSize))
     {
@@ -47,7 +57,10 @@ void parseEnvOrDie (char **cgiPath, char** docRoot, char** pagePath)
 {
 *cgiPath = getenv("SCRIPT_NAME");
 *docRoot = getenv("DOCUMENT_ROOT");
-*pagePath = getenv("DOCUMENT_URI");
+*pagePath = getenv("REDIRECT_URL");
+if (*pagePath == NULL)
+    *pagePath = getenv("DOCUMENT_URI");
+
 if ( (*cgiPath == NULL) || (*docRoot == NULL) || (*pagePath == NULL) )
     {
     fprintf (stderr, "Error: bad invocation of menubar\n");

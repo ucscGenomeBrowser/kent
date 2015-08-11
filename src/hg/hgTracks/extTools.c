@@ -18,15 +18,21 @@
 #include "extTools.h"
 #include "hgFind.h"
 #include "obscure.h"
+#include "net.h"
 
-static char *getRequiredRaSetting(struct hash *hash, char *name, struct lineFile *lf)
-/* Grab a group setting out of the ra hash.  errAbort if not found. */
+static char *cloneRaSetting(struct hash *hash, char *name, struct lineFile *lf, bool mustExist)
+/* clone a setting out of the ra hash.  errAbort if mustExit and not found, otherwise NULL. */
 {
 char *str;
 if ((str = hashFindVal(hash, name)) == NULL) 
-    errAbort("missing required setting '%s' on line %d in file %s\n",
-	name, lf->lineIx, lf->fileName);
-return str;
+    {
+    if (mustExist)
+        errAbort("missing required setting '%s' on line %d in file %s\n",
+            name, lf->lineIx, lf->fileName);
+    else
+        return NULL;
+    }
+return cloneString(str);
 }
 
 struct extTool *readExtToolRa(char *raFileName) 
@@ -70,18 +76,29 @@ while ((raList = raNextStanzAsPairs(lf)) != NULL)
             hashAdd(raHash, raPair->name, cloneString(raPair->val));
         }
 
-    // pull out the normal fields from the hash
-    et->tool = cloneString(getRequiredRaSetting(raHash, "tool", lf));
-    et->shortLabel = cloneString(getRequiredRaSetting(raHash, "shortLabel", lf));
+    // pull out the required fields from the hash
+    et->tool = cloneRaSetting(raHash, "tool", lf, TRUE);
+    et->shortLabel = cloneRaSetting(raHash, "shortLabel", lf, TRUE);
+    et->longLabel = cloneRaSetting(raHash, "longLabel", lf, TRUE);
+    et->url = cloneRaSetting(raHash, "url", lf, TRUE);
+    et->dbs = NULL;
+
+    // optional fields
+    et->email = cloneRaSetting(raHash, "email", lf, FALSE);
+    if (hashFindVal(raHash, "onlyDbs"))
+        et->dbs = commaSepToSlNames(hashFindVal(raHash, "onlyDbs"));
+    if (hashFindVal(raHash, "notDbs"))
+        et->notDbs = commaSepToSlNames(hashFindVal(raHash, "notDbs"));
+
+    char *isHttpGet = hashFindVal(raHash, "isHttpGet");
+    if (isHttpGet && \
+     (sameString(isHttpGet, "yes") || sameString(isHttpGet, "on") || sameString(isHttpGet, "true")))
+            et->isHttpGet = TRUE;
+
     char *maxSize = hashFindVal(raHash, "maxSize");
     if (maxSize!=NULL)
         et->maxSize = sqlUnsignedOrError(maxSize, "Error: maxSize %s for tool %s is not a number", \
                 maxSize, et->tool);
-    et->longLabel = cloneString(getRequiredRaSetting(raHash, "longLabel", lf));
-    et->url = cloneString(getRequiredRaSetting(raHash, "url", lf));
-    et->dbs = NULL;
-    if (hashFindVal(raHash, "dbs"))
-        et->dbs = commaSepToSlNames(hashFindVal(raHash, "dbs"));
 
     slReverse(&paramList);
     et->params = paramList;
@@ -116,16 +133,26 @@ printf("<html><body>\n");
 if (debug)
     printf("Target URL: %s<p>", et->url);
 
-printf("<form id=\"redirForm\" method=\"POST\" action=\"%s\">\n", et->url);
-
-struct slPair *slp;
-char *db = cartString(cart, "db");
-char *pos = cartString(cart, "position");
-
 char *chromName;
 int winStart, winEnd;
-findGenomePos(db, pos, &chromName, &winStart, &winEnd, cart);
+char *db = cartString(cart, "db");
+char *pos = cartString(cart, "position");
 int len = winEnd-winStart;
+findGenomePos(db, pos, &chromName, &winStart, &winEnd, cart);
+
+char *url = replaceInUrl(et->url, "", cart, db, chromName, winStart, winEnd, NULL, TRUE);
+
+printf("You're being redirected from the UCSC Genome Browser to the site %s<br>\n", url);
+if (et->email)
+    printf("Please contact %s for questions on this tool.<br>\n", et->email);
+
+char *method = "POST";
+if (et->isHttpGet)
+    method = "GET";
+
+printf("<form id=\"redirForm\" method=\"%s\" action=\"%s\">\n", method, url);
+
+struct slPair *slp;
 
 if (et->maxSize!=0 && len > et->maxSize)
     {
@@ -142,6 +169,23 @@ for (slp=et->params; slp!=NULL; slp=slp->next)
         val = db;
     if (sameWord(val, "$position"))
         val = pos;
+    if (sameWord(val, "$returnUrl"))
+        {
+        // get the full URL of this hgTracks page, so external page can construct a custom track
+        // and link back to us
+        char* host = getenv("HTTP_HOST");
+        char* reqUrl = getenv("REQUEST_URI");
+
+        struct netParsedUrl npu;
+        netParseUrl(reqUrl, &npu);
+        safecpy(npu.protocol, sizeof(npu.protocol), "http");
+        safecpy(npu.host, sizeof(npu.host), host);
+        // remove everything after ? in URL
+        char *e = strchr(npu.file, '?');
+        if (e) *e = 0; 
+        val = urlFromNetParsedUrl(&npu);
+        }
+    // half the current window size
     if (stringIn("$halfLen", val))
         {
         char buf[64];
@@ -156,13 +200,15 @@ for (slp=et->params; slp!=NULL; slp=slp->next)
         }
     // any remaining $-expression might be one of the general ones
     if (stringIn("$", val))
+        {
         val = replaceInUrl(val, "", cart, db, chromName, winStart, winEnd, NULL, TRUE);
+        }
 
     // output
     if (debug)
         {
         printf("%s: ", slp->name);
-        printf("<input name=\"%s\" value=\"%s\"><p>", slp->name, val);
+        printf("<input name=\"%s\" value=\"%s\"><p>\n", slp->name, val);
         }
     else
         {
@@ -174,7 +220,7 @@ for (slp=et->params; slp!=NULL; slp=slp->next)
                 "width: 1px; height: 1px;\">\n", val);
             }
         else
-            printf("<input type=\"hidden\" name=\"%s\" value=\"%s\">", slp->name, val);
+            printf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", slp->name, val);
         }
     }
 

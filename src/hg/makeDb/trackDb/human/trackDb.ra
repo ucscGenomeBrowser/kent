@@ -4020,8 +4020,8 @@ pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track iscaComposite
 compositeTrack on
-shortLabel ClinGen
-longLabel Clinical Genome Reseearch
+shortLabel ClinGen CNVs
+longLabel Clinical Genome Resource (ClinGen) CNVs
 group phenDis
 visibility hide
 subGroup1 view Views atot=Total cnv=CNVs
@@ -4044,14 +4044,14 @@ type bed 3
 
 	track iscaPathGainCum
 	parent iscaViewTotal
-	shortLabel ClinGen Path Gain
+	shortLabel Path Gain
 	longLabel ClinGen CNVs: Pathogenic Gain Total
 	color 0,0,200
         subGroups view=atot phen=path level=det
 
 	track iscaPathLossCum
 	parent iscaViewTotal
-	shortLabel ClinGen Path Loss
+	shortLabel Path Loss
 	longLabel ClinGen CNVs: Pathogenic Loss Total
 	color 200,0,0
         subGroups view=atot phen=path level=det
@@ -4068,43 +4068,43 @@ type bed 3
 
 	track iscaCuratedPathogenic
 	parent iscaViewDetail off
-	shortLabel ClinGen Curated Path
+	shortLabel Curated Path
 	longLabel ClinGen CNVs: Curated Pathogenic
         subGroups view=cnv phen=path level=cur
 
 	track iscaCuratedBenign
 	parent iscaViewDetail off
-	shortLabel ClinGen Curated Ben
+	shortLabel Curated Ben
 	longLabel ClinGen CNVs: Curated Benign
         subGroups view=cnv phen=ben level=cur
 
 	track iscaPathogenic
 	parent iscaViewDetail
-	shortLabel ClinGen Pathogenic
+	shortLabel Pathogenic
 	longLabel ClinGen CNVs: Pathogenic
         subGroups view=cnv phen=path level=det
 
 	track iscaLikelyPathogenic
 	parent iscaViewDetail off
-	shortLabel ClinGen Uncert Path
+	shortLabel Uncert Path
 	longLabel ClinGen CNVs: Uncertain: Likely Pathogenic
         subGroups view=cnv phen=path level=lik
 
 	track iscaUncertain
 	parent iscaViewDetail off
-	shortLabel ClinGen Uncertain
+	shortLabel Uncertain
 	longLabel ClinGen CNVs: Uncertain
         subGroups view=cnv phen=unk level=unc
 
 	track iscaLikelyBenign
 	parent iscaViewDetail off
-	shortLabel ClinGen Uncert Ben
+	shortLabel Uncert Ben
 	longLabel ClinGen CNVs: Uncertain: Likely Benign
         subGroups view=cnv phen=ben level=lik
 
 	track iscaBenign
 	parent iscaViewDetail off
-	shortLabel ClinGen Benign
+	shortLabel Benign
 	longLabel ClinGen CNVs: Benign
         subGroups view=cnv phen=ben level=det
 
@@ -4503,3 +4503,6 @@ searchPriority 12.9864
 padding 250
 
 include cloneEnd.trackDb.ra
+
+track sgpGene override
+longLabel SGP Gene Predictions Using Mouse/$Organism Homology

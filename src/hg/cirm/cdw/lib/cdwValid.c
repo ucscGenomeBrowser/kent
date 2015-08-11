@@ -222,6 +222,7 @@ char *cdwAllowedTags[] = {
     "cell_line",
     "cell_pair",
     "cell_count",
+    "cell_type",
     "differentiation",
     "donor",
     "consent",
@@ -233,6 +234,8 @@ char *cdwAllowedTags[] = {
     "ips",
     "sex",
     "biosample_date",
+    "submission_date",
+    "update_date",
     "disease",
     "inputs",
     "ucsc_db",
@@ -259,7 +262,7 @@ return allowedHash;
 boolean cdwValidateTagName(char *tag)
 /* Make sure that tag is one of the allowed ones. */
 {
-if (startsWith("lab_", tag) || startsWith("user_", tag))
+if (startsWith("lab_", tag) || startsWith("user_", tag) || startsWith("GEO_", tag))
     {
     return TRUE;
     }

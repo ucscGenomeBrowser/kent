@@ -117,7 +117,7 @@ while ( $#list > 0 )
 	# email the revert
 	echo "emailing the revert"
 	set mailMsg = "Commit $c has been reverted on v${BRANCHNN} branch"
-	git show --stat $c | mail -s "$mailMsg" $USER ${BUILDMEISTER} galt browser-qa
+	git show --stat $c | mail -s "$mailMsg" $USER ${BUILDMEISTER} galt@soe.ucsc.edu browser-qa@soe.ucsc.edu
 
 	if (-d $BUILDDIR/v${BRANCHNN}_branch) then
 	    # do git pull in 64-bit build repo	

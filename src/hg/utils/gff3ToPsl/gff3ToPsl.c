@@ -105,22 +105,48 @@ if (hel == NULL)
 return hel->val;
 }
 
+static boolean checkTarget(struct gff3Ann *node,
+                           struct nameAndSize *nsT)
+/* check the Target attribute values, which were bogus in some NCBI genome
+ * alignments */
+{
+// we had a bogus target range
+if (node->targetStart >= node->targetEnd)
+    {
+    cnvError("zero or negative Target attribute range %s:%d-%d\n", node->targetId, node->targetStart, node->targetEnd);
+    return FALSE;
+    }
+if ((node->targetStart < 0) || (node->targetEnd > nsT->size))
+    {
+    cnvError("Target attribute range %s:%d-%d outside of sequence range %s:%d-%d \n", node->targetId, node->targetStart, node->targetEnd,
+             nsT->name, 0, nsT->size);
+    return FALSE;
+    }
+return TRUE;
+}
+
 static void processMatchLine(FILE *pslF, struct gff3Ann *node,
                              struct hash *queryChromSizes, struct hash *targetChromSizes)
 {
 struct gff3Attr *attr = gff3AnnFindAttr(node, "Gap");
 
 char *cigar = NULL;
-if (!((attr == NULL) || (attr->vals == NULL) || (attr->vals->name == NULL)))
+if (!((attr == NULL) || (attr->vals == NULL) || isEmpty(attr->vals->name)))
     cigar = attr->vals->name;
 
 struct nameAndSize *nsT = getNameAndSize(targetChromSizes, node->targetId);
 struct nameAndSize *nsQ = getNameAndSize(queryChromSizes, node->seqid);
-
+if (!checkTarget(node, nsT))
+    return; // invalid Target
 struct psl *psl = pslFromGff3Cigar(node->seqid, nsQ->size,  node->start, node->end,
                                    nsT->name, nsT->size,  node->targetStart, node->targetEnd, 
                                    node->targetStrand, cigar);
 pslOutput(psl, pslF, '\t' , '\n');
+// validate PSL, which can find a bad CIGAR
+int pslErrCnt = pslCheck("converted GFF3 CIGAR alignment", stderr, psl);
+if (pslErrCnt > 0)
+    cnvError("%d errors found in generated PSL, most likely CIGAR mismatch with query or target range: %s line %d\n", pslErrCnt, node->file->fileName, node->lineNum);
+
 pslFree(&psl);
 }
 

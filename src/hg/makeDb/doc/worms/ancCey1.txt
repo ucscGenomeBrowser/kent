@@ -1,6 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
-# This file describes how the browser for Ascaris suum WS245 version is built
+# This file describes the browser build
+#    for Ancylostoma ceylanicum/hookworm WS245 version
 
 ##############################################################################
 # download sequence, create UCSC sequence (DONE - 2015-06-24 - Hiram)
@@ -91,11 +92,10 @@ taxId 53326
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/ancCey1/ancCey1.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku ancCey1) > do.log 2>&1
-XXX - running - Wed Jul 15 11:46:46 PDT 2015
-    # real    5m4.522s
+    # real    47m11.464s
 
     cat fb.ancCey1.cpgIslandExtUnmasked.txt
-    # 50875 bases of 87533141 (0.058%) in intersection
+    # 29181817 bases of 300914990 (9.698%) in intersection
 
 #############################################################################
 # cytoBandIdeo - (DONE - 2015-07-15 - Hiram)
@@ -104,17 +104,13 @@ XXX - running - Wed Jul 15 11:46:46 PDT 2015
     makeCytoBandIdeo.csh ancCey1
 
 #########################################################################
-# ucscToINSDC table/track (TBD - 2015-07-13 - Hiram)
+# ucscToINSDC table/track (DONE - 2015-07-15 - Hiram)
     mkdir /hive/data/genomes/ancCey1/bed/ucscToINSDC
     cd /hive/data/genomes/ancCey1/bed/ucscToINSDC
 
-    # find the chrM accession:
-    grep chrM ../../*.agp
-# chrM    1       14284   4       F       X54253.1        1       14284   +
-
-    # use that as the second argument here:
-    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
-       ../../genbank/GCA_000298755.1_AscSuum_1.0_assembly_structure/Primary_Assembly X54253.1
+    zcat ../../genbank/GCA_000688135.1_Acey_2013.11.30.genDNA_genomic.fna.gz \
+       | grep "^>" | sed -e 's/.1 Ancylostoma ceylanicum .*//; s/^>//;' \
+         | awk '{printf "%sv1\t%s.1\n", $1,$1}' | sort > ucscToINSDC.txt
 
     awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
          | sort > name.coordinate.tab
@@ -122,9 +118,9 @@ XXX - running - Wed Jul 15 11:46:46 PDT 2015
          > ucscToINSDC.bed
     # verify all names are coming through, should be same line count:
     wc -l *
-    #   5765 name.coordinate.tab
-    #   5765 ucscToINSDC.bed
-    #   5765 ucscToINSDC.txt
+    # 1736 name.coordinate.tab
+    # 1736 ucscToINSDC.bed
+    # 1736 ucscToINSDC.txt
 
     cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
     # 14
@@ -134,35 +130,35 @@ XXX - running - Wed Jul 15 11:46:46 PDT 2015
     checkTableCoords ancCey1
     # should cover %100 entirely:
     featureBits -countGaps ancCey1 ucscToINSDC
-    # 269573965 bases of 269573965 (100.000%) in intersection
+    # 313092710 bases of 313092710 (100.000%) in intersection
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2015-07-13 - Hiram)
+# fixup search rule for assembly track/gold table (DONE - 2015-07-15 - Hiram)
     hgsql -N -e "select frag from gold;" ancCey1 | sort | head -3
-AMPH01000001.1
-AMPH01000002.1
-AMPH01000003.1
+JARK01000001v1_1
+JARK01000001v1_10
+JARK01000001v1_11
 
     hgsql -N -e "select frag from gold;" ancCey1 | sort | tail -2
-AMPH01030842.1
-X54253.1
+JARK01001736v1_8
+JARK01001736v1_9
 
     # verify this rule will find them all or eliminate them all:
     hgsql -N -e "select frag from gold;" ancCey1 | wc -l
-    # 30843
+    # 20876
 
     hgsql -N -e "select frag from gold;" ancCey1 \
-      | egrep -e '(AMPH010|X54253)[0-9]*(\.1)?' | wc -l
-    # 30843
+      | egrep -e 'JARK0100[0-9]*(\_1)?' | wc -l
+    # 20876
 
     hgsql -N -e "select frag from gold;" ancCey1 \
-      | egrep -v -e '(AMPH010|X54253)[0-9]*(\.1)?' | wc -l
+      | egrep -v -e 'JARK0100[0-9]*(\_1)?' | wc -l
     # 0
 
     # hence, add to trackDb/worm/ancCey1/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex (AMPH010|X54253)[0-9]*(\.1)?
+termRegex JARK0100[0-9]*(\_1)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
@@ -173,14 +169,14 @@ searchPriority 8
     time (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku ancCey1) > do.log 2>&1
-XXX - running - Wed Jul 15 11:48:49 PDT 2015
-    # real    259m36.195s
+    # real    40m21.202s
 
     cat faSize.rmsk.txt
-    # 269573965 bases (6969646 N's 262604319 real 258927735 upper 3676584
-    # lower) in 12989 sequences in 1 files
-    # Total size: mean 20754.0 sd 115105.2 min 189 (AMPH01005591v1) max 3795215 (JH878907v1) median 414
-    # %1.36 masked total, %1.40 masked real
+    # 313092710 bases (12191100 N's 300901610 real 296911527 upper
+    #    3990083 lower) in 1736 sequences in 1 files
+    # Total size: mean 180352.9 sd 424774.6 min 509 (JARK01001336v1)
+    #    max 4802298 (JARK01001337v1) median 43364
+    # %1.27 masked total, %1.33 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
@@ -188,8 +184,8 @@ XXX - running - Wed Jul 15 11:48:49 PDT 2015
     # CC   RELEASE 20140131;    
 
     time featureBits -countGaps ancCey1 rmsk
-    #  3678296 bases of 269573965 (1.364%) in intersection
-    #  real    0m4.609s
+    #  3990156 bases of 313092710 (1.274%) in intersection
+    #  real    0m1.444s
 
 ##########################################################################
 # running simple repeat (DONE - 2015-07-15 - Hiram)
@@ -198,42 +194,41 @@ XXX - running - Wed Jul 15 11:48:49 PDT 2015
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         ancCey1) > do.log 2>&1
-XXX - running - Wed Jul 15 11:49:16 PDT 2015
-    # real    7m23.268s
+    # real    2m50.443s
 
     cat fb.simpleRepeat
-    # 5752869 bases of 262604320 (2.191%) in intersection
+    # 7847572 bases of 300914990 (2.608%) in intersection
 
     # using the Window Masker result as indicated below
 
 ##########################################################################
-# CREATE MICROSAT TRACK (TBD - 2015-07-09 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2015-07-15 - Hiram)
      ssh hgwdev
      mkdir /cluster/data/ancCey1/bed/microsat
      cd /cluster/data/ancCey1/bed/microsat
      awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
 	../simpleRepeat/simpleRepeat.bed > microsat.bed
     hgLoadBed ancCey1 microsat microsat.bed
-    #	Read 518 elements of size 4 from microsat.bed
+    #	Read 2223 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2015-07-09 - Hiram)
+## WINDOWMASKER (DONE - 2015-07-15 - Hiram)
     mkdir /hive/data/genomes/ancCey1/bed/windowMasker
     cd /hive/data/genomes/ancCey1/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev ancCey1) > do.log 2>&1
-    # real    4m45.269s
+    # real    13m42.365s
 
     # Masking statistics
     cat faSize.ancCey1.cleanWMSdust.txt
-    # 96441526 bases (3074367 N's 93367159 real 58706047 upper
-    #    34661112 lower) in 709 sequences in 1 files
-    # Total size: mean 136024.7 sd 1674508.7 min 523 (HG738843v1)
-    #    max 28345163 (HG738137v1) median 2218
-    # %35.94 masked total, %37.12 masked real
+    # 313092710 bases (12191100 N's 300901610 real 234592544 upper
+    #    66309066 lower) in 1736 sequences in 1 files
+    # Total size: mean 180352.9 sd 424774.6 min 509 (JARK01001336v1)
+    #    max 4802298 (JARK01001337v1) median 43364
+    # %21.18 masked total, %22.04 masked real
 
     cat fb.ancCey1.rmsk.windowmaskerSdust.txt
-    # 3204592 bases of 96441526 (3.323%) in intersection
+    # 3401224 bases of 313092710 (1.086%) in intersection
 
     # using this Window Masker result for final masking::
     cd /hive/data/genomes/ancCey1
@@ -244,30 +239,29 @@ XXX - running - Wed Jul 15 11:49:16 PDT 2015
     # measure the final masking:
     twoBitToFa ancCey1.2bit stdout | faSize stdin > faSize.ancCey1.2bit.txt
     cat faSize.ancCey1.2bit.txt
-    # 96441526 bases (3074367 N's 93367159 real 58693029 upper
-    #    34674130 lower) in 709 sequences in 1 files
-    # Total size: mean 136024.7 sd 1674508.7 min 523 (HG738843v1)
-    #    max 28345163 (HG738137v1) median 2218
-    # %35.95 masked total, %37.14 masked real
+    # 313092710 bases (12191100 N's 300901610 real 234535031 upper
+    #   66366579 lower) in 1736 sequences in 1 files
+    # Total size: mean 180352.9 sd 424774.6 min 509 (JARK01001336v1)
+    #   max 4802298 (JARK01001337v1) median 43364
+    # %21.20 masked total, %22.06 masked real
 
     # and reset the symlink
     rm /gbdb/ancCey1/ancCey1.2bit
     ln -s /hive/data/genomes/ancCey1/ancCey1.2bit /gbdb/ancCey1/ancCey1.2bit
 
 ##########################################################################
-# cpgIslands - (TBD - 2015-07-09 - Hiram)
+# cpgIslands - (DONE - 2015-07-15 - Hiram)
     mkdir /hive/data/genomes/ancCey1/bed/cpgIslands
     cd /hive/data/genomes/ancCey1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku ancCey1) > do.log 2>&1 &
-XXX - running - Thu Jul  9 15:38:48 PDT 2015
-    # real    8m10.474s
+    # real    2m55.776s
 
     cat fb.ancCey1.cpgIslandExt.txt
-    # 29350 bases of 86344036 (0.034%) in intersection
+    # 10027791 bases of 300914990 (3.332%) in intersection
 
 #########################################################################
-# augustus - (TBD - 2015-07-09 - Hiram)
+# augustus - (DONE - 2015-07-15 - Hiram)
     mkdir /hive/data/genomes/ancCey1/bed/augustus
     cd /hive/data/genomes/ancCey1/bed/augustus
     #  XXX this is not specifically correct, the species caenorhabditis
@@ -275,26 +269,24 @@ XXX - running - Thu Jul  9 15:38:48 PDT 2015
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
       -species=caenorhabditis -dbHost=hgwdev \
          -workhorse=hgwdev ancCey1) > do.log 2>&1 &
-XXX - running - Thu Jul  9 15:39:22 PDT 2015
-    # real    49m33.584s
+    # real    54m56.771s
 
     cat fb.ancCey1.augustusGene.txt
-    # 5950506 bases of 86344036 (6.892%) in intersection
+    # 33081827 bases of 300914990 (10.994%) in intersection
 
 #########################################################################
-# genscan - (TBD - 2015-07-09 - Hiram)
+# genscan - (DONE - 2015-07-15 - Hiram)
     mkdir /hive/data/genomes/ancCey1/bed/genscan
     cd /hive/data/genomes/ancCey1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku ancCey1) > do.log 2>&1
-XXX - running - Thu Jul  9 15:39:51 PDT 2015
-    # real    9m51.838s
+    # real    5m10.885s
 
     cat fb.ancCey1.genscan.txt
-    #   3196210 bases of 86344036 (3.702%) in intersection
+    #   18315189 bases of 300914990 (6.086%) in intersection
 
     cat fb.ancCey1.genscanSubopt.txt
-    #   2410491 bases of 86344036 (2.792%) in intersection
+    #   15435033 bases of 300914990 (5.129%) in intersection
 
 ########################################################################
 # Create kluster run files (TBD - 2015-07-08 - Hiram)

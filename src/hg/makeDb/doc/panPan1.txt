@@ -16,14 +16,14 @@
 #    ##The Primary Assembly unit is listed first.
 #    GCA_000258665.1 Primary Assembly
 #    GCA_000258675.1 non-nuclear
-#    
+#
 #    FTP-RELEASE DATE: 28-May-2012
 http://a-z-animals.com/media/animals/images/original/bonobo3.jpg
 Kabir Bakie
 
 #       photoCreditURL http://a-z-animals.com/media/animals/images/original/bonobo3.jpg
 #       photoCreditName Kabir Bakie
- 
+
 #       ncbiGenomeId 10729
 #       ncbiAssemblyId 382348
 #       ncbiAssemblyName Max-Planck LatCha1
@@ -56,10 +56,10 @@ http://www.ncbi.nlm.nih.gov/genome/10729
 
     # measure sequence to be used here
     faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
-    #   2869173508 bases (143284465 N's 2725889043 real 2725889043 upper 0 
+    #   2869173508 bases (143284465 N's 2725889043 real 2725889043 upper 0
     #   lower) in 10866 sequences in 1 files
-    #   Total size: mean 264050.6 sd 2063222.8 
-    #   min 217 (gi|382949851|gb|AJFE01120895.1|) 
+    #   Total size: mean 264050.6 sd 2063222.8
+    #   min 217 (gi|382949851|gb|AJFE01120895.1|)
     #   max 101998900 (gi|385247281|gb|JH650633.1|) median 1258
 
 #############################################################################
@@ -90,7 +90,7 @@ while (my $line = <FH>) {
     if ($line =~ m/^#/) {
         print UC $line;
     } else {
-        $line =~ s/\.1//;    
+        $line =~ s/\.1//;
         printf UC "%s", $line;
     }
 }
@@ -126,15 +126,15 @@ close (UC);
     # verify nothing lost in the translation, should be the same as above
     #	except for the name translations
     faSize *.fa.gz
-# 2869173508 bases (143284465 N's 2725889043 real 2725889043 upper 0 lower) in 
+# 2869173508 bases (143284465 N's 2725889043 real 2725889043 upper 0 lower) in
 # 10866 sequences in 1 files
-# Total size: mean 264050.6 sd 2063222.8 min 217 (AJFE01120895) 
+# Total size: mean 264050.6 sd 2063222.8 min 217 (AJFE01120895)
 #       max 101998900 (JH650633) median 1258
 
     # Note: chrM sequence in /hive/data/genomes/panPan1/genbank/non-nuclear
-    # is slightly different from mitoAcc NC_001644.1. Do noy include it 
-    # here. 
-    
+    # is slightly different from mitoAcc NC_001644.1. Do noy include it
+    # here.
+
     mv unplaced.agp.gz ucsc.agp.gz
     mv unplaced.fa.gz ucsc.fa.gz
     checkAgpAndFa  ucsc.agp.gz ucsc.fa.gz 2>&1 | tail -2
@@ -144,7 +144,7 @@ close (UC);
     # N50
     cd /hive/data/genomes/panPan1/ucsc
     mkdir N50
-    zcat ucsc.fa.gz | faCount stdin | awk ' /^(JH|AJFE)/ {print $1, $2}' > N50/chrom.sizes 
+    zcat ucsc.fa.gz | faCount stdin | awk ' /^(JH|AJFE)/ {print $1, $2}' > N50/chrom.sizes
     n50.pl N50/chrom.sizes
 #       reading: N50/chrom.sizes
 #       contig count: 10866, total size: 2869173508, one half size: 1434586754
@@ -180,7 +180,7 @@ assemblyDate May. 2012
 assemblyLabel Max-Planck Institute panpan1 (GCA_000258665.1)
 assemblyShortLabel panpan1
 orderKey 242
-mitoAcc NC_001644.1 
+mitoAcc NC_001644.1
 fastaFiles /hive/data/genomes/panPan1/ucsc/ucsc.fa.gz
 agpFiles /hive/data/genomes/panPan1/ucsc/ucsc.agp.gz
 dbDbSpeciesDir bonobo
@@ -196,13 +196,13 @@ taxId 9597
     # << happy emacs
 
 
-    time makeGenomeDb.pl -stop=agp panPan1.config.ra > agp.log 2>&1 
+    time makeGenomeDb.pl -stop=agp panPan1.config.ra > agp.log 2>&1
     #	real    3m59.377s
     # check the end of agp.log to verify it is OK
     tail -1 agp.log
     #  *** All done!  (through the 'agp' step)
     time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev \
-	-continue=db panPan1.config.ra > db.log 2>&1 
+	-continue=db panPan1.config.ra > db.log 2>&1
     #	real    39m18.720s
 
    tail  db.log
@@ -232,9 +232,9 @@ taxId 9597
     # real    652m25.160s
 
     cat faSize.rmsk.txt
-    # 2869190071 bases (143284465 N's 2725905606 real 1359856043 upper 
+    # 2869190071 bases (143284465 N's 2725905606 real 1359856043 upper
     # 1366049563 lower) in 10867 sequences in 1 files
-    # Total size: mean 264027.8 sd 2063129.2 min 217 (AJFE01120895) 
+    # Total size: mean 264027.8 sd 2063129.2 min 217 (AJFE01120895)
     # max 101998900 (JH650633) median 1258
     # %47.61 masked total, %50.11 masked real
 
@@ -284,8 +284,8 @@ taxId 9597
     time featureBits panPan1 allGaps.bed notGap.bed -bed=new.gaps.bed
     # 47397 bases of 2725953003 (0.002%) in intersection
     # real    7m37.214s
-    # Some new gaps, what next?a Do as panTro3 did. 
- 
+    # Some new gaps, what next?a Do as panTro3 did.
+
 
     # check if any non-bridged gaps here:
     hgsql -N -e "select bridge from gap;" panPan1 | sort | uniq -c
@@ -343,16 +343,16 @@ close (FH);
 
     # Masking statistics
     twoBitToFa panPan1.wmsk.2bit stdout | faSize stdin
-    # 2869190071 bases (143284465 N's 2725905606 real 1745977560 upper 
+    # 2869190071 bases (143284465 N's 2725905606 real 1745977560 upper
     # 979928046 lower) in 10867 sequences in 1 files
-    # Total size: mean 264027.8 sd 2063129.2 
+    # Total size: mean 264027.8 sd 2063129.2
     # min 217 (AJFE01120895) max 101998900 (JH650633) median 1258
     # %34.15 masked total, %35.95 masked real
 
     twoBitToFa panPan1.wmsk.sdust.2bit stdout | faSize stdin
-    # 2869190071 bases (143284465 N's 2725905606 real 1730577119 upper 
+    # 2869190071 bases (143284465 N's 2725905606 real 1730577119 upper
     # 995328487 lower) in 10867 sequences in 1 files
-    # Total size: mean 264027.8 sd 2063129.2 
+    # Total size: mean 264027.8 sd 2063129.2
     # min 217 (AJFE01120895) max 101998900 (JH650633) median 1258
     # %34.69 masked total, %36.51 masked real
 
@@ -382,9 +382,9 @@ close (FH);
             -type=.bed panPan1.cleanWMSdust.2bit
     twoBitToFa panPan1.cleanWMSdust.2bit stdout | faSize stdin \
         > panPan1.cleanWMSdust.faSize.txt
-    #   2869190071 bases (143284465 N's 2725905606 real 1730577119 upper 
+    #   2869190071 bases (143284465 N's 2725905606 real 1730577119 upper
     #   995328487 lower) in 10867 sequences in 1 files
-    #   Total size: mean 264027.8 sd 2063129.2 
+    #   Total size: mean 264027.8 sd 2063129.2
     #   min 217 (AJFE01120895) max 101998900 (JH650633) median 1258
     #   %34.69 masked total, %36.51 masked real
 
@@ -404,9 +404,9 @@ close (FH);
 
     twoBitToFa panPan1.2bit stdout | faSize stdin > faSize.panPan1.2bit.txt
     cat faSize.panPan1.2bit.txt
-    #   2869190071 bases (143284465 N's 2725905606 real 1730225460 upper 
+    #   2869190071 bases (143284465 N's 2725905606 real 1730225460 upper
     #   995680146 lower) in 10867 sequences in 1 files
-    #   Total size: mean 264027.8 sd 2063129.2 min 217 (AJFE01120895) 
+    #   Total size: mean 264027.8 sd 2063129.2 min 217 (AJFE01120895)
     #         max 101998900 (JH650633) median 1258
     #   %34.70 masked total, %36.53 masked real
 
@@ -534,7 +534,7 @@ done >> cmdList.sh
 # MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2013-03-08 - Chin)
     # Use -repMatch=400, based on size -- for human we use 1024
     # use the "real" number (2725889043) from the faSize measurement
-    # reported above as numerator. 
+    # reported above as numerator.
     # hg19 is 2897316137, calculate the ratio factor for 1024:
     calc \( 2725889043 / 2897316137 \) \* 1024
     #   ( 2725889043 / 2897316137 ) * 1024 = 963.412430
@@ -557,7 +557,7 @@ done >> cmdList.sh
 #########################################################################
 # AUTO UPDATE GENBANK (DONE - 2013-03-18 - Chin)
     # examine the file:
-    /cluster/data/genbank/data/organism.lst 
+    /cluster/data/genbank/data/organism.lst
     # for your species to see what counts it has for:
 # organism       mrnaCnt estCnt  refSeqCnt
 # Pan paniscus    425     0       0
@@ -618,7 +618,7 @@ panPan1.genbank.est.native.load = no
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add panPan1 to:
-    vi etc/align.dbs 
+    vi etc/align.dbs
     vi etc/hgwdev.dbs
     git commit -m "Added panPan1." etc/align.dbs etc/hgwdev.dbs
     git push
@@ -3008,7 +3008,7 @@ cytogenetic mapping (most do not).  makeCytoBandIdeo.csh  If you have
 
 thanks,
 
-            --b0b 
+            --b0b
 Good Evening Bob:
 
 Thanks for the script, you will want to add -ef to your scripts:
@@ -3018,7 +3018,7 @@ so they will exit on errors and not use garbage
 from user's .tcshrc scripts.  Otherwise they can run
 wild and destroy stuff.
 
---Hiram 
+--Hiram
 
 #############################################################################
 # create ucscToINSDC name mapping (DONE - 2013-08-15 - Hiram)
@@ -3144,4 +3144,23 @@ searchPriority 8
     cat fb.panPan1.augustusGene.txt
     # 30081384 bases of 2725905606 (1.104%) in intersection
 
-#########################################################################
+##############################################################################
+# GENEID GENE PREDICTIONS (DONE - 2015-07-31 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/panPan1/bed/geneid
+    cd /hive/data/genomes/panPan1/bed/geneid
+    wget --timestamping \
+http://genome.crg.es/genepredictions/P.paniscus/panPan1/geneid_v1.4/00README
+    wget --timestamping \
+http://genome.crg.es/genepredictions/P.paniscus/panPan1/geneid_v1.4/panPan1.geneid.gtf
+
+    ldHgGene -gtf -genePredExt panPan1 geneid panPan1.geneid.gtf
+    # Read 34781 transcripts in 201979 lines in 1 files
+    #   34781 groups 8288 seqs 1 sources 3 feature types
+    # 34781 gene predictions
+
+    featureBits -enrichment panPan1 augustusGene:CDS geneid
+# augustusGene:CDS 1.104%, geneid 0.839%, both 0.586%, cover 53.10%,
+#    enrich 63.28x
+
+##########################################################################

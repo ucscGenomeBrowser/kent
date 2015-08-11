@@ -250,6 +250,7 @@
 #include "numtsClick.h"
 #include "geneReviewsClick.h"
 #include "bigBed.h"
+#include "bigPsl.h"
 
 static char *rootDir = "hgcData";
 
@@ -2860,6 +2861,31 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 printf("</TT></PRE>\n");
 }
 
+void genericBigPslClick(struct sqlConnection *conn, struct trackDb *tdb,
+                     char *item, int start, int end)
+/* Handle click in big psl track. */
+{
+struct psl* pslList;
+char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct lm *lm = lmInit(0);
+int ivStart = start, ivEnd = end;
+if (start == end)
+    {  
+    // item is an insertion; expand the search range from 0 bases to 2 so we catch it:
+    ivStart = max(0, start-1);
+    ivEnd++;
+    }  
+
+struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, seqName, ivStart, ivEnd, 0, lm);
+pslList = pslFromBigPsl(seqName, bbList,  hChromSize(database, seqName), NULL, NULL);
+
+printf("<H3>%s/Genomic Alignments</H3>", item);
+printAlignments(pslList, start, "htcBigPslAli", tdb->table, item);
+pslFreeList(&pslList);
+printItemDetailsHtml(tdb, item);
+}
+
 void genericPslClick(struct sqlConnection *conn, struct trackDb *tdb,
                      char *item, int start, char *subType)
 /* Handle click in generic psl track. */
@@ -3924,6 +3950,10 @@ else if (wordCount > 0)
 	if ((wordCount > 2) && !sameString(words[2], "."))
 	    mrnaTable = words[2];
 	genericGenePredClick(conn, tdb, item, start, pepTable, mrnaTable);
+	}
+    else if ( sameString(type, "bigPsl"))
+        {
+	genericBigPslClick(conn, tdb, item, start, end);
 	}
     else if (sameString(type, "psl"))
         {
@@ -6948,6 +6978,52 @@ else
 	    genbankParseCds(cdsString, retCdsStart, retCdsEnd);
 	}
     }
+}
+
+void htcBigPslAli(char *acc)
+/* Show alignment for accession in bigPsl file. */
+{
+struct psl *psl;
+char *aliTable;
+int start;
+unsigned int cdsStart = 0, cdsEnd = 0;
+
+
+/* Print start of HTML. */
+writeFramesetType();
+puts("<HTML>");
+aliTable = cartString(cart, "aliTable");
+tdb = hashFindVal(trackHash, aliTable);
+printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n", acc, aliTable);
+
+/* Get some environment vars. */
+start = cartInt(cart, "l");
+int end = cartInt(cart, "r");
+char *chrom = cartString(cart, "c");
+
+char *seq, *cdsString = NULL;
+struct lm *lm = lmInit(0);
+char *fileName = bbiNameFromSettingOrTable(tdb, NULL, tdb->table);
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+char *bedRow[32];
+char startBuf[16], endBuf[16];
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    struct bed *bed = bedLoadN(bedRow, 12);
+    if (sameString(bed->name, acc))
+	{
+	bb->next = NULL;
+	break;
+	}
+    }
+psl = pslFromBigPsl(seqName, bb,  hChromSize(database, seqName), &seq, &cdsString);
+genbankParseCds(cdsString,  &cdsStart, &cdsEnd);
+
+
+struct dnaSeq *rnaSeq = newDnaSeq(seq, strlen(seq), acc);
+showSomeAlignment(psl, rnaSeq, gftRna, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
 }
 
 void htcCdnaAli(char *acc)
@@ -24660,9 +24736,15 @@ if ((!isCustomTrack(track) && dbIsFound)
 ||  ((ct!= NULL) && (ct->dbTrackType != NULL) && sameString(ct->dbTrackType, "maf")))
     {
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
-    if (isHubTrack(track))
+    if (sameString("htcBigPslAli", track) )
 	{
-	hubConnectAddHubForTrackAndFindTdb( database, track, NULL, trackHash);
+	char *aliTable = cartString(cart, "aliTable");
+	if (isHubTrack(aliTable))	
+	    tdb = hubConnectAddHubForTrackAndFindTdb( database, aliTable, NULL, trackHash);
+	}
+    else if (isHubTrack(track))
+	{
+	tdb = hubConnectAddHubForTrackAndFindTdb( database, track, NULL, trackHash);
 	}
     if (parentWigMaf)
         {
@@ -25345,6 +25427,10 @@ else if (sameWord(table, "htcChainAli"))
 else if (sameWord(table, "htcChainTransAli"))
     {
     htcChainTransAli(item);
+    }
+else if (sameWord(table, "htcBigPslAli"))
+    {
+    htcBigPslAli(item);
     }
 else if (sameWord(table, "htcCdnaAli"))
     {

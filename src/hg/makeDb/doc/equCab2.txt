@@ -2760,4 +2760,23 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -buildDir=`pwd` oviAri3 equCab2) > rbest.log 2>&1
     # real    40m15.262s
 
-#########################################################################
+##############################################################################
+# GENEID GENE PREDICTIONS (DONE - 2015-07-31 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/equCab2/bed/geneid
+    cd /hive/data/genomes/equCab2/bed/geneid
+    wget --timestamping \
+http://genome.crg.es/genepredictions/E.caballus/equCab2/geneid_v1.4/00README
+    wget --timestamping \
+http://genome.crg.es/genepredictions/E.caballus/equCab2/geneid_v1.4/equCab2.geneid.gtf
+
+    ldHgGene -gtf -genePredExt equCab2 geneid equCab2.geneid.gtf
+    # Read 36065 transcripts in 288460 lines in 1 files
+    #  36065 groups 34 seqs 1 sources 3 feature types
+    # 36065 gene predictions
+
+    featureBits -enrichment equCab2 augustusGene:CDS geneid
+# augustusGene:CDS 1.357%, geneid 1.620%, both 1.076%, cover 79.28%,
+#     enrich 48.94x
+
+##########################################################################

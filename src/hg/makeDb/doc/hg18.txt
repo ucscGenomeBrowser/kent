@@ -21409,8 +21409,9 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
 # Old DGV format is obsolete; see the following section.
 _EOF_
 #######################################################################
-# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 11/07/14 angie)
-# previously done 9/13/13 #11200
+# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 7/27/15 angie)
+# Redmine #15767
+# previously done 9/13/13 #11200, 11/07/14 #14188
     # Beta last updated 2/11/13 #9401
     # 9/13/13: DGV is back out of beta, and has added some columns again for the 7/2013
     # public release.  They have also requested that we make a composite track
@@ -21418,20 +21419,20 @@ _EOF_
     set today = `date +%y%m%d`
     mkdir -p /hive/data/genomes/hg18/bed/dgv/$today
     cd /hive/data/genomes/hg18/bed/dgv/$today
-    set release = 2014-10-16
+    set release = 2015-07-23
     wget http://dgv.tcag.ca/dgv/docs/NCBI36_hg18_variants_$release.txt
     wget http://dgv.tcag.ca/dgv/docs/NCBI36_hg18_supportingvariants_$release.txt
     # These are the latest columns; if any changes, update translateDgvPlus.pl:
     head -1 NCBI36_hg18*.txt
-#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription  genes   samples
+#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription genes   samples
     # Eyeball the categories of variants:
     cut -f 5,6 NCBI36_hg18_supportingvariants_$release.txt  | sort | uniq -c | head -100
 # 175225 CNV     deletion
 # 153007 CNV     duplication
-# 298939 CNV     gain
-#   4222 CNV     gain+loss
+# 448298 CNV     gain
+#   8841 CNV     gain+loss
 #  73225 CNV     insertion
-# 786043 CNV     loss
+# 962405 CNV     loss
 #  48428 CNV     mobile element insertion
 #   9066 CNV     novel sequence insertion
 #   7825 CNV     tandem duplication
@@ -21439,13 +21440,14 @@ _EOF_
 #   2504 OTHER   inversion
 #   3709 OTHER   sequence alteration
 #      1 varianttype     variantsubtype
+
     cut -f 5,6 NCBI36_hg18_variants_$release.txt | sort | uniq -c | head -100
 #  29453 CNV     deletion
 #  19549 CNV     duplication
-#  26384 CNV     gain
-#   5779 CNV     gain+loss
+#  36159 CNV     gain
+#   6961 CNV     gain+loss
 #  25399 CNV     insertion
-#  69600 CNV     loss
+#  79382 CNV     loss
 #   4156 CNV     mobile element insertion
 #   8976 CNV     novel sequence insertion
 #    516 CNV     tandem duplication
@@ -21460,10 +21462,10 @@ _EOF_
       NCBI36_hg18_variants_$release.txt > dgvMerged.bed
     hgLoadBed hg18 dgvSupporting dgvSupporting.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 1562705 elements of size 22 from dgvSupporting.bed
+#Read 1893045 elements of size 22 from dgvSupporting.bed
     hgLoadBed hg18 dgvMerged dgvMerged.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 193623 elements of size 22 from dgvMerged.bed
+#Read 214362 elements of size 22 from dgvMerged.bed
 
 
 ############################################################################
@@ -32292,6 +32294,12 @@ make DBS="hg18 hg19"
 # In any case, I cannot use the same method for hg17 because Ensembl does not keep any browsers that old in their archive.
 # Does anybody know of some ancient Ensembl mirrors that might have it?
 # Would anyone at NCBI know the old assembly haplotype placements for hg17 and hg18?
+
+# Followup 2015-07-24 Valerie from NCBI responded to my question and confirmed that
+# the Ensembl locations match what their database has. Presumably Ensembl therefore
+# got the data from NCBI, perhaps by special request. Valerie is following up with Ensembl.
+# She is happy that UCSC is doing more with alt haplotypes,
+# and notes that consistency between browsers is a good thing.
 
 cd /hive/data/genomes/hg18/bed
 mkdir haplotypeLocationsEnsembl

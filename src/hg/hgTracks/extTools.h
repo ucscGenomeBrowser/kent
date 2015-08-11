@@ -14,9 +14,12 @@ struct extTool
     char *shortLabel;  	  /* shown in the drop down menu */
     char *longLabel;      /* label for mouse over */
     char *url;            /* target URL of the tool CGI */
+    char *email;          /* email address of external tool */
+    bool isHttpGet;      /* default is a POST request. Set to 1/on/true to make it a http GET request */
     int maxSize;          /* maximum size in bp that can be handled by tool or 0 for any */
     struct slPair *params;	          /* CGI vars we have to send to the tool */
     struct slName *dbs;	          /* if not null: list of DBS to show the entry */
+    struct slName *notDbs;	          /* if not null: list of DBS where entry should NOT be shown */
 };
 
 struct extTool *readExtToolRa(char *raFileName);

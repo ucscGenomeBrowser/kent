@@ -948,3 +948,24 @@ done
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+##############################################################################
+# GENEID GENE PREDICTIONS (DONE - 2015-07-31 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/oryCun2/bed/geneid
+    cd /hive/data/genomes/oryCun2/bed/geneid
+    wget --timestamping \
+http://genome.crg.es/genepredictions/O.cuniculus/oryCun2/geneid_v1.4/00README
+    wget --timestamping \
+http://genome.crg.es/genepredictions/O.cuniculus/oryCun2/geneid_v1.4/oryCun2.geneid.gtf
+
+    ldHgGene -gtf -genePredExt oryCun2 geneid oryCun2.geneid.gtf
+    # Read 41107 transcripts in 293112 lines in 1 files
+    #  41107 groups 3038 seqs 1 sources 3 feature types
+    # 41107 gene predictions
+
+    featureBits -enrichment oryCun2 augustusGene:CDS geneid
+# augustusGene:CDS 1.267%, geneid 1.539%, both 1.010%, cover 79.71%,
+#     enrich 51.80x
+
+##########################################################################

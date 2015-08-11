@@ -1,6 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
-# This file describes how the browser for Trichuris suis WS245 version is built
+# This file describes the browser build for
+#     Trichuris suis/whipworm WS245 version
 
 ##############################################################################
 # download sequence, create UCSC sequence (DONE - 2015-06-24 - Hiram)
@@ -95,11 +96,10 @@ taxId 68888
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/triSui1/triSui1.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku triSui1) > do.log 2>&1
-XXX - running - Fri Jul 10 11:37:18 PDT 2015
-    # real    2m25.273s
+    # real    4m37.436s
 
     cat fb.triSui1.cpgIslandExtUnmasked.txt
-    # 35946 bases of 93367159 (0.038%) in intersection
+    # 4053516 bases of 71825323 (5.644%) in intersection
 
 #############################################################################
 # cytoBandIdeo - (DONE - 2015-07-10 - Hiram)
@@ -177,15 +177,14 @@ searchPriority 8
     time (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku triSui1) > do.log 2>&1
-XXX - running - Fri Jul 10 11:48:19 PDT 2015
-    # real    35m20.023s
+    # real    153m32.056s
 
     cat faSize.rmsk.txt
-    # 96441526 bases (3074367 N's 93367159 real 89682362 upper
-    #    3684797 lower) in 709 sequences in 1 files
-    # Total size: mean 136024.7 sd 1674508.7 min 523 (HG738843v1)
-    #    max 28345163 (HG738137v1) median 2218
-    # %3.82 masked total, %3.95 masked real
+    # 74248995 bases (2423806 N's 71825189 real 71306874 upper 518315 lower)
+    #    in 4293 sequences in 1 files
+    # Total size: mean 17295.4 sd 100439.5 min 201 (KL367473v1)
+    #    max 1594463 (KL363182v1) median 314
+    # %0.70 masked total, %0.72 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
@@ -193,8 +192,8 @@ XXX - running - Fri Jul 10 11:48:19 PDT 2015
     # CC   RELEASE 20140131;    
 
     time featureBits -countGaps triSui1 rmsk
-    # 469243 bases of 74576239 (0.629%) in intersection
-    #  real    0m1.897s
+    # 518334 bases of 74248995 (0.698%) in intersection
+    # real    0m1.256s
 
 ##########################################################################
 # running simple repeat (DONE - 2015-07-10 - Hiram)
@@ -203,42 +202,41 @@ XXX - running - Fri Jul 10 11:48:19 PDT 2015
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         triSui1) > do.log 2>&1
-XXX - running - Fri Jul 10 10:52:38 PDT 2015
-    # real    14m27.670s
+    # real    3m56.113s
 
     cat fb.simpleRepeat
-    # 1741988 bases of 93367159 (1.866%) in intersection
+    # 1984238 bases of 71825323 (2.763%) in intersection
 
     # using the Window Masker result as indicated below
 
 ##########################################################################
-# CREATE MICROSAT TRACK (TBD - 2015-07-09 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2015-07-15 - Hiram)
      ssh hgwdev
      mkdir /cluster/data/triSui1/bed/microsat
      cd /cluster/data/triSui1/bed/microsat
      awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
 	../simpleRepeat/simpleRepeat.bed > microsat.bed
     hgLoadBed triSui1 microsat microsat.bed
-    #	Read 518 elements of size 4 from microsat.bed
+    #	Read 310 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2015-07-09 - Hiram)
+## WINDOWMASKER (DONE - 2015-07-15 - Hiram)
     mkdir /hive/data/genomes/triSui1/bed/windowMasker
     cd /hive/data/genomes/triSui1/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev triSui1) > do.log 2>&1
-    # real    4m45.269s
+    # real    3m14.998s
 
     # Masking statistics
     cat faSize.triSui1.cleanWMSdust.txt
-    # 96441526 bases (3074367 N's 93367159 real 58706047 upper
-    #    34661112 lower) in 709 sequences in 1 files
-    # Total size: mean 136024.7 sd 1674508.7 min 523 (HG738843v1)
-    #    max 28345163 (HG738137v1) median 2218
-    # %35.94 masked total, %37.12 masked real
+    # 74248995 bases (2423806 N's 71825189 real 62955556 upper 8869633 lower)
+    #    in 4293 sequences in 1 files
+    # Total size: mean 17295.4 sd 100439.5 min 201 (KL367473v1)
+    #    max 1594463 (KL363182v1) median 314
+    # %11.95 masked total, %12.35 masked real
 
     cat fb.triSui1.rmsk.windowmaskerSdust.txt
-    # 3204592 bases of 96441526 (3.323%) in intersection
+    # 410663 bases of 74248995 (0.553%) in intersection
 
     # using this Window Masker result for final masking::
     cd /hive/data/genomes/triSui1
@@ -249,30 +247,29 @@ XXX - running - Fri Jul 10 10:52:38 PDT 2015
     # measure the final masking:
     twoBitToFa triSui1.2bit stdout | faSize stdin > faSize.triSui1.2bit.txt
     cat faSize.triSui1.2bit.txt
-    # 96441526 bases (3074367 N's 93367159 real 58693029 upper
-    #    34674130 lower) in 709 sequences in 1 files
-    # Total size: mean 136024.7 sd 1674508.7 min 523 (HG738843v1)
-    #    max 28345163 (HG738137v1) median 2218
-    # %35.95 masked total, %37.14 masked real
+    # 74248995 bases (2423806 N's 71825189 real 62949616 upper 8875573 lower)
+    #    in 4293 sequences in 1 files
+    # Total size: mean 17295.4 sd 100439.5 min 201 (KL367473v1)
+    #    max 1594463 (KL363182v1) median 314
+    # %11.95 masked total, %12.36 masked real
 
     # and reset the symlink
     rm /gbdb/triSui1/triSui1.2bit
     ln -s /hive/data/genomes/triSui1/triSui1.2bit /gbdb/triSui1/triSui1.2bit
 
 ##########################################################################
-# cpgIslands - (TBD - 2015-07-09 - Hiram)
+# cpgIslands - (DONE - 2015-07-15 - Hiram)
     mkdir /hive/data/genomes/triSui1/bed/cpgIslands
     cd /hive/data/genomes/triSui1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku triSui1) > do.log 2>&1 &
-XXX - running - Thu Jul  9 15:38:48 PDT 2015
-    # real    8m10.474s
+    # real    55m19.060s
 
     cat fb.triSui1.cpgIslandExt.txt
-    # 29350 bases of 86344036 (0.034%) in intersection
+    # 3089138 bases of 71825323 (4.301%) in intersection
 
 #########################################################################
-# augustus - (TBD - 2015-07-09 - Hiram)
+# augustus - (DONE - 2015-07-15 - Hiram)
     mkdir /hive/data/genomes/triSui1/bed/augustus
     cd /hive/data/genomes/triSui1/bed/augustus
     #  XXX this is not specifically correct, the species caenorhabditis
@@ -280,26 +277,24 @@ XXX - running - Thu Jul  9 15:38:48 PDT 2015
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
       -species=caenorhabditis -dbHost=hgwdev \
          -workhorse=hgwdev triSui1) > do.log 2>&1 &
-XXX - running - Thu Jul  9 15:39:22 PDT 2015
-    # real    49m33.584s
+    # real    39m50.787s
 
     cat fb.triSui1.augustusGene.txt
-    # 5950506 bases of 86344036 (6.892%) in intersection
+    # 15594049 bases of 71825323 (21.711%) in intersection
 
 #########################################################################
-# genscan - (TBD - 2015-07-09 - Hiram)
+# genscan - (DONE - 2015-07-15 - Hiram)
     mkdir /hive/data/genomes/triSui1/bed/genscan
     cd /hive/data/genomes/triSui1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku triSui1) > do.log 2>&1
-XXX - running - Thu Jul  9 15:39:51 PDT 2015
-    # real    9m51.838s
+    # real    45m29.041s
 
     cat fb.triSui1.genscan.txt
-    #   3196210 bases of 86344036 (3.702%) in intersection
+    #   9305968 bases of 71825323 (12.956%) in intersection
 
     cat fb.triSui1.genscanSubopt.txt
-    #   2410491 bases of 86344036 (2.792%) in intersection
+    #   7502974 bases of 71825323 (10.446%) in intersection
 
 ########################################################################
 # Create kluster run files (TBD - 2015-07-08 - Hiram)

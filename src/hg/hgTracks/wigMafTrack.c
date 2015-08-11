@@ -296,7 +296,7 @@ struct sqlConnection *conn;
 struct sqlConnection *conn2;
 struct mafPriv *mp = getMafPriv(track);
 
-if (winBaseCount > MAF_SUMMARY_VIEW)
+if (inSummaryMode(cart, track->tdb, winBaseCount))
     return;
 
 int begin = winStart - 2;
@@ -466,7 +466,7 @@ return cloneString(table);
 static boolean displayPairwise(struct track *track)
 /* determine if tables are present for pairwise display */
 {
-return winBaseCount < MAF_SUMMARY_VIEW || isCustomTrack(track->table) ||
+return !inSummaryMode(cart, track->tdb, winBaseCount) || isCustomTrack(track->table) ||
 	pairwiseSuffix(track) || summarySetting(track);
 }
 
@@ -505,7 +505,7 @@ if ( (track->limitedVis == tvPack) && (snpTable != NULL) &&
     doSnpTable = TRUE;
 
 // the maf's only get loaded if we're not in summary or snpTable views
-if (!doSnpTable && (winBaseCount < MAF_SUMMARY_VIEW))
+if (!doSnpTable && !inSummaryMode(cart, track->tdb, winBaseCount))
     {
     /* "close in" display uses actual alignments from file */
     struct mafPriv *mp = getMafPriv(track);
@@ -573,7 +573,7 @@ mp->list = (char *)-1;   /* no maf's loaded or attempted to load */
 /* if we're out in summary view and rendering a custom
  * track we force dense mode since we don't have
  * a summary table (yet). */
-if ((winBaseCount >= MAF_SUMMARY_VIEW) && isCustomTrack(track->table))
+if (inSummaryMode(cart, track->tdb, winBaseCount) && isCustomTrack(track->table))
     track->limitedVis = tvDense;
 
 /* Load up mafs and store in track so drawer doesn't have
@@ -596,7 +596,7 @@ else if (track->limitedVis == tvSquish)
     if (!wigTrack)
         {
         scoreHeight = tl.fontHeight * 4;
-        if (winBaseCount < MAF_SUMMARY_VIEW)
+        if (!inSummaryMode(cart, track->tdb, winBaseCount))
             loadMafsToTrack(track);
         /* not a real meausre of conservation, so don't label it so */
         miList = scoreItem(scoreHeight, "");
@@ -616,7 +616,7 @@ else
     if (!wigTrack)
         {
         /* no wiggle -- use mafs if close in */
-        if (winBaseCount < MAF_SUMMARY_VIEW)
+        if (!inSummaryMode(cart, track->tdb, winBaseCount))
 #ifndef NOTYET
            loadMafsToTrack(track);
 	AllocVar(miList);
@@ -1085,6 +1085,12 @@ for (mi = miList; mi != NULL; mi = mi->next)
 	    int color = MG_BLACK;
 	    switch(bed->score)
 		{
+		case 222:  // place holder for heterozygous nonsynonymous
+		    color = 0xff000000;
+		    break;
+		case 111:  // place holder for heterozygous synonymous
+		    color = 0xffd0e040;
+		    break;
 		case 0:
 		    color = yellow;
 		    break;
@@ -1462,7 +1468,7 @@ static boolean wigMafDrawPairwise(struct track *track, int seqStart, int seqEnd,
     if (isCustomTrack(track->table) || pairwiseSuffix(track))
         return drawPairsFromPairwiseMafScores(track, seqStart, seqEnd, hvg,
                                         xOff, yOff, width, font, color, vis);
-    if ((winBaseCount >= MAF_SUMMARY_VIEW) && summarySetting(track))
+    if (inSummaryMode(cart, track->tdb, winBaseCount) && summarySetting(track))
         return drawPairsFromSummary(track, seqStart, seqEnd, hvg,
                                         xOff, yOff, width, font, color, vis);
     char *snpTable = trackDbSetting(track->tdb, "snpTable");

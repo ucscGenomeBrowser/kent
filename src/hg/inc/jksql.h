@@ -25,7 +25,8 @@
 #include "hash.h"
 #include "dystring.h"
 
-extern char *defaultProfileName;  // name of default profile
+
+char *getDefaultProfileName();  // name of default profile
 
 struct sqlConnection *sqlConnect(char *database);
 /* Connect to database on default host as default user. */
@@ -53,24 +54,39 @@ struct sqlConnection *sqlMayConnectProfile(char *profileName, char *database);
 struct sqlConnection *sqlConnectRemote(char *host, char *user, char *password,
                                        char *database);
 /* Connect to database somewhere as somebody. Database maybe NULL to
- * just connect to the server. Abort on error. */
+ * just connect to the server. Abort on error. 
+ * This only takes limited connection parameters. Use Full version for access to all.*/
 
 struct sqlConnection *sqlMayConnectRemote(char *host, char *user, char *password,
                                           char *database);
 /* Connect to database somewhere as somebody. Database maybe NULL to
- * just connect to the server.  Return NULL can't connect */
+ * just connect to the server.  Return NULL if can't connect. 
+ * This only takes limited connection parameters. Use Full version for access to all.*/
 
-void sqlProfileConfig(char *profileName, char *host, unsigned int port, char *socket,
-				char *user, char *password);
+struct sqlConnection *sqlConnectRemoteFull(struct slPair *pairs, char *database);
+/* Connect to database somewhere as somebody. Database maybe NULL to
+ * just connect to the server. Abort on error. 
+ * Connection parameter pairs contains a list of name/values. */
+
+struct sqlConnection *sqlMayConnectRemoteFull(struct slPair *pairs, char *database);
+/* Connect to database somewhere as somebody. Database maybe NULL to
+ * just connect to the server.  
+ * Connection parameter pairs contains a list of name/values. Return NULL if can't connect.*/
+
+void sqlProfileConfig(struct slPair *pairs);
 /* Set configuration for the profile.  This overrides an existing profile in
  * hg.conf or defines a new one.  Results are unpredictable if a connect cache
  * has been established for this profile. */
 
-void sqlProfileConfigDefault(char *host, unsigned int port, char *socket, char *user,
-				char *password);
+void sqlProfileConfigDefault(struct slPair *pairs);
 /* Set configuration for the default profile.  This overrides an existing
  * profile in hg.conf or defines a new one.  Results are unpredictable if a
  * connect cache has been established for this profile. */
+
+char *sqlProfileToMyCnf(char *profileName);
+/* Read in profile named, 
+ * and create a multi-line setting string usable in my.cnf files.  
+ * Return Null if profile not found. */
 
 void sqlProfileAddDb(char *profileName, char *db);
 /* add a mapping of db to profile.  If database is already associated with
@@ -637,6 +653,19 @@ int sqlSafefFrag(char* buffer, int bufSize, char *format, ...)
  * Escapes quoted string parameters. 
  * NOSLQINJ tag is NOT added to beginning since it is assumed to be just a fragment of
  * the entire sql string. */
+#ifdef __GNUC__
+__attribute__((format(printf, 3, 4)))
+#endif
+;
+
+
+int sqlSafefAppend(char* buffer, int bufSize, char *format, ...)
+/* Append formatted string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte.
+ * Scans unquoted string parameters for illegal literal sql chars.
+ * Escapes quoted string parameters. 
+ * NOSLQINJ tag is NOT added to beginning since it is assumed to be appended to
+ * a properly created sql string. */
 #ifdef __GNUC__
 __attribute__((format(printf, 3, 4)))
 #endif

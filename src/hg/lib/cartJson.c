@@ -329,6 +329,25 @@ if (tdb->settingsHash)
     }
 }
 
+static int trackDbViewCmp(const void *va, const void *vb)
+/* *** I couldn't find anything like this in hgTracks or hui, but clearly views end up
+ * *** being ordered alphabetically somehow.  Anyway...
+ * Compare two trackDbs, first by view if both have a view setting, then the usual way
+ * (by priority, then by shortLabel). */
+{
+const struct trackDb *a = *((struct trackDb **)va);
+const struct trackDb *b = *((struct trackDb **)vb);
+// The casts are necessary here unless one adds const to trackDbSetting decl
+char *viewA = trackDbSetting((struct trackDb *)a, "view");
+char *viewB = trackDbSetting((struct trackDb *)b, "view");
+int diff = 0;
+if (isNotEmpty(viewA) && isNotEmpty(viewB))
+    diff = strcmp(viewA, viewB);
+if (diff != 0)
+    return diff;
+return trackDbCmp(va, vb);
+}
+
 static struct jsonWrite *rTdbToJw(struct trackDb *tdb, struct hash *fieldHash,
                                   struct hash *excludeTypesHash, int depth, int maxDepth)
 /* Recursively build and return a new jsonWrite object with JSON for tdb and its children,
@@ -370,6 +389,7 @@ if (tdb->parent && fieldOk("parent", fieldHash))
 if (doSubtracks)
     {
     jsonWriteListStart(jwNew, "subtracks");
+    slSort(&tdb->subtracks, trackDbViewCmp);
     struct trackDb *subTdb;
     for (subTdb = tdb->subtracks;  subTdb != NULL;  subTdb = subTdb->next)
         {

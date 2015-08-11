@@ -489,7 +489,7 @@ static boolean findKnownGeneExact(char *db, char *spec, char *geneSymbol,
 {
 struct sqlConnection *conn;
 struct sqlResult *sr = NULL;
-struct dyString *query;
+char query[256];
 char **row;
 boolean ok = FALSE;
 struct hgPosTable *table = NULL;
@@ -502,11 +502,9 @@ if (!hTableExists(db, tableName))
     return FALSE;
 rowOffset = hOffsetPastBin(db, NULL, tableName);
 conn = hAllocConn(db);
-query = newDyString(256);
-sqlDyStringPrintf(query, 
-	       "SELECT chrom, txStart, txEnd, name FROM %s WHERE name='%s'", 
-		tableName, localName);
-sr = sqlGetResult(conn, query->string);
+sqlSafef(query, sizeof query, "SELECT chrom, txStart, txEnd, name FROM %s WHERE name='%s'", 
+				tableName, localName);
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     if (ok == FALSE)
@@ -531,7 +529,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 if (table != NULL) 
     slReverse(&table->posList);
-freeDyString(&query);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 return ok;
@@ -596,7 +593,7 @@ if (sqlTableExists(conn, "knownCanonical"))
     {
     char query[512];
     sqlSafef(query, sizeof(query), "select transcript from knownCanonical"
-	  " where '%s' = transcript;", geneName);
+	  " where transcript = '%s'", geneName);
     struct sqlResult *sr = sqlGetResult(conn, query);
     char **row;
     if ((row = sqlNextRow(sr)) != NULL)
@@ -1578,14 +1575,12 @@ for (i = 0;
          idEl = idEl->next)
         {
         /* don't check srcDb to exclude refseq for compat with older tables */
-        if (limitResults == EXHAUSTIVE_SEARCH_REQUIRED)
-            sqlSafef(query, sizeof(query),
-                  "select acc, organism from gbCdnaInfo where %s = %s "
-                  " and type = 'mRNA'", field, idEl->name);
-        else // limit results to avoid CGI timeouts (#11626).
-            sqlSafef(query, sizeof(query),
-                  "select acc, organism from gbCdnaInfo where %s = %s "
-                  " and type = 'mRNA' limit %d", field, idEl->name, limitResults);
+	sqlSafef(query, sizeof(query),
+	      "select acc, organism from gbCdnaInfo where %s = '%s' "
+	      " and type = 'mRNA'", field, idEl->name);
+        // limit results to avoid CGI timeouts (#11626).
+        if (limitResults != EXHAUSTIVE_SEARCH_REQUIRED)
+            sqlSafefAppend(query, sizeof(query), " limit %d", limitResults);
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -1883,6 +1878,8 @@ while ((c = *s++) != 0)
     if (++size > 10 || !isdigit(c))
         return FALSE;
     }
+if (size==0)
+    return FALSE;
 return TRUE;
 }
 
@@ -2114,8 +2111,10 @@ struct refLink *rlList = NULL, *rl;
 boolean gotRefLink = hTableExists(db, "refLink");
 boolean found = FALSE;
 char *specNoVersion = cloneString(spec);
-(void) chopPrefix(specNoVersion);
-if (gotRefLink)
+// chop off the version number, e.g. "NM_000454.4 ", 
+//  but if spec starts with "." like ".stuff" then specNoVersion is entirely empty.
+(void) chopPrefix(specNoVersion);  
+if (gotRefLink && isNotEmpty(specNoVersion))
     {
     if (startsWith("NM_", specNoVersion) || startsWith("NR_", specNoVersion) || startsWith("XM_", specNoVersion))
 	{
@@ -2129,11 +2128,11 @@ if (gotRefLink)
 	}
     else if (isUnsignedInt(specNoVersion))
         {
-	sqlDyStringPrintf(ds, "select * from refLink where locusLinkId = %s",
+	sqlDyStringPrintf(ds, "select * from refLink where locusLinkId = '%s'",
 		       specNoVersion);
 	addRefLinks(conn, ds, &rlList);
 	dyStringClear(ds);
-	sqlDyStringPrintf(ds, "select * from refLink where omimId = %s", specNoVersion);
+	sqlDyStringPrintf(ds, "select * from refLink where omimId = '%s'", specNoVersion);
 	addRefLinks(conn, ds, &rlList);
 	}
     else 
