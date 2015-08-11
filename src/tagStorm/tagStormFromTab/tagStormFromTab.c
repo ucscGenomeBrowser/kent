@@ -8,6 +8,8 @@
 #include "fieldedTable.h"
 #include "tagStorm.h"
 
+struct slName *divFieldList = NULL;  // Filled in from div command line option.
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -17,12 +19,14 @@ errAbort(
   "usage:\n"
   "   tagStormFromTab in.tab out.tags\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -div=fields,to,divide,on - comma separated list of fields, from highest to lowest level\n"
+  "                              to partition data on. Otherwise will be calculated.\n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"div", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -62,6 +66,19 @@ for (el = *pList; el != NULL; el = next)
     fieldInfoFree(&el);
     }
 *pList = NULL;
+}
+
+
+struct fieldInfo *fieldInfoFind(struct fieldInfo *list, char *name)
+/* Find element of given name in list. */
+{
+struct fieldInfo *fi;
+for (fi = list; fi != NULL; fi = fi->next)
+    {
+    if (sameString(name, fi->name))
+        return fi;
+    }
+return NULL;
 }
 
 boolean fieldsAreLocked(struct fieldedTable *table, struct fieldInfo *a, struct fieldInfo *b)
@@ -133,15 +150,16 @@ return fieldList;
 }
 
 struct slRef *findLockedFields(struct fieldedTable *table, struct fieldInfo *fieldList,
-    struct fieldInfo *primaryField)
+    struct fieldInfo *primaryField, struct slName *exceptList)
 /* Return list of fields from fieldList that move in lock-step with primary field */
 {
 struct slRef *list = NULL;
 struct fieldInfo *field;
 for (field = fieldList; field != NULL; field = field->next)
     {
-    if (field->captured == FALSE && fieldsAreLocked(table, primaryField, field))
-        refAdd(&list, field);
+    if (slNameFind(exceptList, field->name) == NULL)
+	if (field->captured == FALSE && fieldsAreLocked(table, primaryField, field))
+	    refAdd(&list, field);
     }
 slReverse(&list);
 return list;
@@ -178,7 +196,7 @@ for (field = allFields; field != NULL; field = field->next)
     if (field->valHash->elCount == smallestValCount && !field->captured)
         {
 	/* Get list of fields locked to this one, list includes self */
-	struct slRef *lockedFields = findLockedFields(table, field, field);
+	struct slRef *lockedFields = findLockedFields(table, field, field, NULL);
 
 	/* Mark these fields as captured */
 	struct slRef *ref;
@@ -219,6 +237,33 @@ slReverse(&retList);
 return TRUE;
 }
 
+struct slRef *partOnField(struct fieldedTable *table, struct fieldInfo *allFields,
+    char *keyName, struct slName *except)
+/* Return list of all fields that covary with keyField */
+{
+struct fieldInfo *keyField = fieldInfoFind(allFields, keyName);
+if (keyField == NULL)
+    errAbort("%s not found in fields", keyName);
+return findLockedFields(table, allFields, keyField, except);
+}
+
+
+boolean doParting(struct fieldedTable *table, struct fieldInfo *allFields,
+    boolean doPrepart, struct slName *preparting, struct slRef **retFields)
+/* Partition table factoring out all fields that move in lockstep at this level
+ * or all remaining fields if down to lowest level. */
+{
+if (doPrepart)
+    {
+    if (preparting == NULL || preparting->next == NULL)
+        return FALSE;
+    *retFields = partOnField(table, allFields, preparting->name, preparting->next);
+    return TRUE;
+    }
+else
+    return findBestParting(table, allFields, retFields);
+}
+
 static boolean inFieldRefList(struct slRef *fieldRefList, char *name)
 /* Look for named field in fieldRefList */
 {
@@ -257,12 +302,23 @@ struct fieldedTable *subtable = fieldedTableNew("subtable", subFields, subFieldC
 *retSubtable = subtable;
 }
 
-void rPartition(struct fieldedTable *table, struct tagStorm *tagStorm, struct tagStanza *parent)
+void rPartition(struct fieldedTable *table, struct tagStorm *tagStorm, struct tagStanza *parent,
+    boolean doPrepart, struct slName *prepartField)
 /* Recursively partition table and add to tagStorm. */
 {
 struct fieldInfo *allFields = makeFieldInfo(table);
 struct slRef *partingFields = NULL;
-if (!findBestParting(table, allFields, &partingFields))
+struct slName *nextPrepart = NULL;
+if (doPrepart)
+    {
+    if (prepartField != NULL)
+	nextPrepart = prepartField->next;
+    }
+else
+    {
+    prepartField = NULL;
+    }
+if (!doParting(table, allFields, doPrepart, prepartField, &partingFields))
     {
     // Here is where we should output whole table... 
     struct fieldedRow *row;
@@ -328,7 +384,9 @@ for (partVal = partingField->valList; partVal != NULL; partVal = partVal->next)
 	    fieldedTableAdd(subtable, subrow, subcount, row->id);
 	    }
 	}
-    rPartition(subtable, tagStorm, stanza);
+
+
+    rPartition(subtable, tagStorm, stanza, doPrepart, nextPrepart);
     }
 slFreeList(&partingFields);
 fieldInfoFreeList(&allFields);
@@ -339,9 +397,8 @@ void tagStormFromTab(char *input, char *output)
  * first line, that starts with a #. */
 {
 struct fieldedTable *table = fieldedTableFromTabFile(input, input, NULL, 0);
-uglyf("Got %d fields in %s\n", table->fieldCount, input);
 struct tagStorm *tagStorm = tagStormNew(input);
-rPartition(table, tagStorm, NULL);
+rPartition(table, tagStorm, NULL, divFieldList != NULL, divFieldList);
 tagStormReverseAll(tagStorm);
 tagStormWrite(tagStorm, output, 0);
 }
@@ -352,6 +409,12 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+
+// Process command line option to drive the partitioning manually.
+char *div = optionVal("div", NULL);
+if (div != NULL)
+    divFieldList = slNameListFromComma(div);
+
 tagStormFromTab(argv[1], argv[2]);
 return 0;
 }
