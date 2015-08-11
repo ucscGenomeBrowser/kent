@@ -1349,6 +1349,7 @@ src/hg/makeDb/trackDb/trackDb.chainNet.birds.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.sarcopterygii.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.fish.ra \\
 src/hg/makeDb/trackDb/trackDb.chainNet.insects.ra \\
+src/hg/makeDb/trackDb/trackDb.chainNet.nematode.ra \\
 src/hg/makeDb/trackDb/chainNetPetMar1.ra \\
 src/hg/makeDb/trackDb/chainNetPetMar2.ra \\
 src/hg/makeDb/trackDb/trackDb.nt.ra \\

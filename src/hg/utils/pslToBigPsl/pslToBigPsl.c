@@ -22,7 +22,7 @@ errAbort(
   "  -fa=file.fasta\n"
   "  -snakes\n"
   "NOTE: to build bigBed:\n"
-  "   bedToBigBed -type=bed12+11 -tab -as=bigPsl.as file.bigPslInput chrom.sizes output.bb\n"
+  "   bedToBigBed -type=bed12+12 -tab -as=bigPsl.as file.bigPslInput chrom.sizes output.bb\n"
   );
 }
 
@@ -51,6 +51,10 @@ if (psl->blockCount > MAX_BLOCKS)
 
 bigPsl.chrom = psl->tName;
 // what about tSize?
+bigPsl.match = psl->match;
+bigPsl.misMatch = psl->misMatch;
+bigPsl.repMatch = psl->repMatch;
+bigPsl.nCount = psl->nCount;
 bigPsl.oChromStart = psl->qStart;
 bigPsl.oChromEnd = psl->qEnd;
 bigPsl.oChromSize = psl->qSize;

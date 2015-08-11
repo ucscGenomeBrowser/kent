@@ -154,7 +154,7 @@ char *wikiLinkUserLogoutUrl(char *hgsid)
 /* Return the URL for the wiki user logout page that returns to hgSessions. */
 {
 char *retEnc = encodedHgSessionReturnUrl(hgsid);
-char *result = wikiLinkUserLoginUrlReturning(hgsid, retEnc);
+char *result = wikiLinkUserLogoutUrlReturning(hgsid, retEnc);
 freez(&retEnc);
 return result;
 }

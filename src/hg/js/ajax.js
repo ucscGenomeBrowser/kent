@@ -340,9 +340,9 @@ function removeHgsid(href)
 {
 // remove session id from url parameters
     if (href.indexOf("?hgsid=") === -1) {
-        href = href.replace(/\&hgsid=\d+/, "");
+        href = href.replace(/\&hgsid=\w+/, "");
     } else {
-        href = href.replace(/\?hgsid=\d+\&/, "?");
+        href = href.replace(/\?hgsid=\w+\&/, "?");
     }
     return href;
 }
