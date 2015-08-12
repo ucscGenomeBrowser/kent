@@ -18,7 +18,6 @@ errAbort(
   "hgsqlTableDate - touch file with date from table\n"
   "usage:\n"
   "   hgsqlTableDate database table file\n"
-  "options:\n"
   );
 }
 
@@ -37,7 +36,6 @@ buf.actime = tableTime;
 buf.modtime = tableTime;
 
 if (utime(file, &buf) < 0)
-
     errAbort("utime failed. %s:%s\n",file, strerror(errno));
 }
 

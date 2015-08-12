@@ -4,10 +4,6 @@
 #       make EXTRA="-strict -settings" update
 # Make it for genome-test with
 #	make alpha
-# Make your private trackDb on local host (if defined as localDB.XXX=XXX in .hg.conf) with
-#	make updateLocal  
-# Make non-private trackDb on local host (if defined as localDB.XXX=XXX in .hg.conf) with
-#	make alphaLocal  
 # Make for ENCODE reporting (includes release alpha and release beta)
 #	make encodeReport
 

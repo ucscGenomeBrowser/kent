@@ -155,9 +155,7 @@ UTIL_DIRS = \
 	hgGetAnn \
 	hgKnownGeneList \
 	hgSelect \
-	hgsqlLocal \
 	hgsqladmin \
-	hgsqldumpLocal \
 	hgsqlimport \
         hgsqlSwapTables \
         hgsqlTableDate \

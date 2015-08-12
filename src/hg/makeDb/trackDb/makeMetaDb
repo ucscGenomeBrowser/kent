@@ -16,11 +16,7 @@ files="$@"
 # check if a database exists, print note and return non-zero if it doesn't
 dbExists() {
     local db="$1"
-    if [ -n "$local" ] ; then
-	local dbChk=$(hgsqlLocal -Ne 'show databases like "'$db'"')
-    else 
-	local dbChk=$(hgsql -Ne 'show databases like "'$db'"')
-    fi
+    local dbChk=$(hgsql -Ne 'show databases like "'$db'"')
     if [ -z "$dbChk" ] ; then
         echo "Note: database $db does not exist, skipping"
         return 1
