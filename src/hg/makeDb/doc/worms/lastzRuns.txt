@@ -1,0 +1,58 @@
+#########################################################################
+# LASTZ oncVol1 vs Brugia malayi/bruMal2 - (DONE - 2015-08-11 - Hiram)
+    mkdir /hive/data/genomes/oncVol1/bed/lastzBruMal2.2015-08-11
+    cd /hive/data/genomes/oncVol1/bed/lastzBruMal2.2015-08-11
+
+    cat << '_EOF_' > DEF
+# oncVol1 vs bruMal2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: Onchocerca volvulus oncVol1
+SEQ1_DIR=/hive/data/genomes/oncVol1/oncVol1.2bit
+SEQ1_LEN=/hive/data/genomes/oncVol1/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Brugia malayi bruMal2
+SEQ2_DIR=/hive/data/genomes/bruMal2/bruMal2.2bit
+SEQ2_LEN=/hive/data/genomes/bruMal2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/oncVol1/bed/lastzBruMal2.2015-08-11
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku \
+	-smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    #	real    26m35.083s
+
+    cat fb.oncVol1.chainBruMal2Link.txt
+    # 59687716 bases of 94327777 (63.277%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` oncVol1 bruMal2) > rbest.log 2>&1 &
+    # real    1m55.440s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/bruMal2/bed/blastz.oncVol1.swap
+    cd /hive/data/genomes/bruMal2/bed/blastz.oncVol1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/oncVol1/bed/lastzBruMal2.2015-08-11/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    6m42.542s
+
+    cat fb.bruMal2.chainOncVol1Link.txt
+    # 61774714 bases of 87424120 (70.661%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` bruMal2 oncVol1) \
+      > rbest.log 2>&1
+    # real    2m57.085s
+
+#########################################################################

@@ -669,11 +669,11 @@ for (clade = cladeOptions;  clade != NULL;  clade = clade->next)
                 }
             }
         jsonWriteListEnd(jw);   // children (dbs)
-        jsonWriteString(jw, "default", hDefaultDbForGenome(org->name));
+        jsonWriteString(jw, "default", trimSpaces(hDefaultDbForGenome(org->name)));
         jsonWriteObjectEnd(jw); // org
         }
     jsonWriteListEnd(jw);   // children (orgs)
-    jsonWriteString(jw, "default", hDefaultGenomeForClade(clade->name));
+    jsonWriteString(jw, "default", trimSpaces(hDefaultGenomeForClade(clade->name)));
     jsonWriteObjectEnd(jw); // clade
     }
 jsonWriteListEnd(jw);
