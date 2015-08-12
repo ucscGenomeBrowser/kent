@@ -28,13 +28,13 @@ float *vector = rowIn->data;
 while (end > start)
     {
     uint offset = start - rowIn->start;
-    if (vector[offset] == NAN)
+    if (isnan(vector[offset]))
 	start++;
     else
 	{
 	// If there is a NAN before end, that's the end of this row:
 	uint thisEnd = start;
-	while (thisEnd < end && vector[thisEnd - rowIn->start] != NAN)
+	while (thisEnd < end && ! isnan(vector[thisEnd - rowIn->start]))
 	    thisEnd++;
 	struct annoRow *headRow = *pOutList;
 	if (headRow == NULL || rowIn->start > headRow->end)
@@ -47,7 +47,9 @@ while (end > start)
 	else
 	    {
 	    // glom new data onto headRow
-	    assert(thisEnd > headRow->end);
+	    if (thisEnd < headRow->end)
+                errAbort("Expected thisEnd (%u) to be greater than or equal to headRow->end (%u)",
+                         thisEnd, headRow->end);
 	    uint oldEnd = headRow->end;
 	    uint oldLen = oldEnd - headRow->start;
 	    uint newLen = thisEnd - headRow->start;
