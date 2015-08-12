@@ -208,9 +208,12 @@ ssl-key=/somepath/server-key.pem
 ssl-cert=/somepath/server-cert.pem
 ssl-ca=/somepath/ca.pem
 ssl-capath=/somepath/
+ssl-cipher=DHE-RSA-AES256-SHA:AES128-SHA
+# mysql 5.6.3 or later
 ssl-crl=/someCrlPath/some-crl.pem
 ssl-crlpath=/someCrlPath/
-ssl-cipher=DHE-RSA-AES256-SHA:AES128-SHA
+# mysql5.7 or later require all connections to be encrypted
+require_secure_transport server 
 
 After making changes to my.cnf, be sure to restart your mysqld service.
 
