@@ -1381,13 +1381,13 @@ release beta,public
     track dgvMerged
     parent dgvPlus
     shortLabel DGV Struct Var
-    longLabel Database of Genomic Variants: Structural Variant Regions (CNV, Inversion, In/del)
+    longLabel Database of Genomic Variants: Structural Var Regions (CNV, Inversion, In/del)
     priority 1
 
     track dgvSupporting
     parent dgvPlus
     shortLabel DGV Supp Var
-    longLabel Database of Genomic Variants: Supporting Structural Variants (CNV, Inversion, In/del)
+    longLabel Database of Genomic Variants: Supporting Structural Var (CNV, Inversion, In/del)
     priority 2
 
 
