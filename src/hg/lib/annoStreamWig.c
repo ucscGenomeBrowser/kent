@@ -120,8 +120,8 @@ while (!done)
     getFloatArray(self, &wiggle, &rightFail, &validCount, vector);
     if (rightFail || validCount > 0)
 	{
-	rowOut = annoRowWigNew(wigRow->chrom, wigRow->start, wigRow->end, rightFail, vector,
-			       callerLm);
+	rowOut = annoRowWigVecNew(wigRow->chrom, wigRow->start, wigRow->end, rightFail, vector,
+                                  callerLm);
 	done = TRUE;
 	}
     }
@@ -148,7 +148,7 @@ AllocVar(self);
 self->wigStr = annoStreamDbNew(db, table, aa, asParseText(wiggleAsText), maxOutput);
 struct annoStreamer *streamer = &(self->streamer);
 annoStreamerInit(streamer, aa, asParseText(annoRowWigAsText), self->wigStr->name);
-streamer->rowType = arWig;
+streamer->rowType = arWigVec;
 streamer->setRegion = aswSetRegion;
 streamer->nextRow = aswNextRow;
 streamer->close = aswClose;

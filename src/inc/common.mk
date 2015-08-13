@@ -17,7 +17,7 @@ ifneq (,$(findstring -,$(MACHTYPE)))
 endif
 
 HG_DEFS=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -DMACHTYPE_${MACHTYPE}
-HG_INC=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../inc
+HG_INC+=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../inc
 
 # to check for Mac OSX Darwin specifics:
 UNAME_S := $(shell uname -s)
