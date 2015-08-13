@@ -114,7 +114,7 @@ for (iv = startIv;  iv != endIv->next;  iv = iv->next)
 	errAbort("annoStreamBigWig %s: overflowed baseCount (%s:%d-%d)",
 		 name, chrom, startIv->start, endIv->end);
     }
-return annoRowWigNew(chrom, startIv->start, endIv->end, rightJoinFail, vals, callerLm);
+return annoRowWigVecNew(chrom, startIv->start, endIv->end, rightJoinFail, vals, callerLm);
 }
 
 static struct annoRow *asbwNextRow(struct annoStreamer *sSelf, char *minChrom, uint minEnd,
@@ -191,7 +191,9 @@ struct annoStreamBigWig *self = NULL;
 AllocVar(self);
 struct annoStreamer *streamer = &(self->streamer);
 annoStreamerInit(streamer, aa, asObj, fileOrUrl);
-streamer->rowType = arWig;
+//#*** Would be more memory-efficient to do arWigSingle for bedGraphs.
+//#*** annoGrateWig would need to be updated to handle incoming arWigSingle.
+streamer->rowType = arWigVec;
 streamer->setRegion = asbwSetRegion;
 streamer->nextRow = asbwNextRow;
 streamer->close = asbwClose;

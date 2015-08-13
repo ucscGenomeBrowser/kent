@@ -7,9 +7,11 @@
 #include "annoStreamWig.h"
 #include "wiggle.h"
 
-struct annoGrator *annoGrateWigDbNew(char *db, char *table, struct annoAssembly *aa, int maxOutput)
-/* Create an annoGrator subclass for wiggle data from db.table (and the file it points to). */
+struct annoGrator *annoGrateWigDbNew(char *db, char *table, struct annoAssembly *aa,
+                                     enum annoGrateWigMode mode, int maxOutput)
+/* Create an annoGrator subclass for wiggle data from db.table (and the file it points to).
+ * See src/inc/annoGrateWig.h for a description of mode. */
 {
 struct annoStreamer *wigSource = annoStreamWigDbNew(db, table, aa, maxOutput);
-return annoGrateWigNew(wigSource);
+return annoGrateWigNew(wigSource, mode);
 }
