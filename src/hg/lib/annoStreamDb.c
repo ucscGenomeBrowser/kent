@@ -412,8 +412,9 @@ if (rowBuf->ix == rowBuf->size)
 	if (lastBin >= self->minFinestBin)
 	    self->gotFinestBin = TRUE;
 	}
-    self->needQuery = TRUE;
-    // Bounce back out -- asdNextRow will need to do another query.
+    if (self->bigItemQueue == NULL && self->smallItemQueue == NULL)
+        self->needQuery = TRUE;
+    // Bounce back out -- asdNextRow or nextRowMergeBins will need to do another query.
     return NULL;
     }
 if (rowBuf->size == 0)

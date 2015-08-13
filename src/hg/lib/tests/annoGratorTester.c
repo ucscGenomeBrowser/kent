@@ -96,14 +96,14 @@ struct streamerInfo
     char *sqlDb;		// If non-NULL, then we are using this SQL database
     char *tableFileUrl;		// If db is non-NULL, table name; else file or URL
     enum annoRowType type;	// Data type (wig or words?)
-    struct asObject *asObj;	// not used if type is arWig
+    struct asObject *asObj;	// not used if type is arWig*
     };
 
 struct annoStreamer *streamerFromInfo(struct streamerInfo *info)
 /* Figure out which constructor to call, call it and return the results. */
 {
 struct annoStreamer *streamer = NULL;
-if (info->type == arWig)
+if (info->type == arWigVec)
     streamer = annoStreamWigDbNew(info->sqlDb, info->tableFileUrl, info->assembly, BIGNUM);
 else if (info->sqlDb != NULL)
     streamer = annoStreamDbNew(info->sqlDb, info->tableFileUrl, info->assembly, info->asObj,
@@ -138,13 +138,13 @@ struct streamerInfo *grInfo;
 for (grInfo = gratorInfoList;  grInfo != NULL;  grInfo = grInfo->next)
     {
     struct annoGrator *grator = NULL;
-    if (grInfo->type == arWig)
+    if (grInfo->type == arWigVec || grInfo->type == arWigSingle)
 	{
 	if (grInfo->sqlDb == NULL)
-	    grator = annoGrateBigWigNew(grInfo->tableFileUrl, grInfo->assembly);
+	    grator = annoGrateBigWigNew(grInfo->tableFileUrl, grInfo->assembly, agwmAverage);
 	else
 	    grator = annoGrateWigDbNew(grInfo->sqlDb, grInfo->tableFileUrl, grInfo->assembly,
-				       BIGNUM);
+				       agwmAverage, BIGNUM);
 	}
     else
 	{
@@ -244,7 +244,8 @@ if (doAllTests || sameString(test, snpConsDbToTabOutShort) ||
     {
     struct streamerInfo snp135Info = { NULL, assembly, db, "snp135", arWords,
 				       asParseFile("../snp132Ext.as") };
-    struct streamerInfo phyloPInfo = { NULL, assembly, db, "phyloP46wayPlacental", arWig, NULL };
+    struct streamerInfo phyloPInfo = { NULL, assembly, db, "phyloP46wayPlacental", arWigSingle,
+                                       NULL };
     snp135Info.next = &phyloPInfo;
     if (sameString(test, snpConsDbToTabOutShort))
 	dbToTabOut(&snp135Info, "stdout", "chr1", 737224, 738475, FALSE);
@@ -300,7 +301,7 @@ if (doAllTests || sameString(test, snpBigWigToTabOut))
 				       asParseFile("../snp132Ext.as") };
     struct streamerInfo bigWigInfo = { NULL, assembly, NULL,
 			   "http://genome.ucsc.edu/goldenPath/help/examples/bigWigExample.bw",
-				       arWig, NULL };
+				       arWigSingle, NULL };
     snp135Info.next = &bigWigInfo;
     dbToTabOut(&snp135Info, "stdout", "chr21", 34716800, 34733700, FALSE);
     }

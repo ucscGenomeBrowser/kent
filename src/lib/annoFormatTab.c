@@ -17,9 +17,6 @@ struct annoFormatTab
     boolean needHeader;			// TRUE if we should print out the header
     };
 
-//#*** config options: avg? more stats? list of values?
-static boolean doAvg = TRUE;
-
 static void makeFullColumnName(char *fullName, size_t size, char *sourceName, char *colName)
 /* If sourceName is non-empty, make fullName sourceName.colName, otherwise just colName. */
 {
@@ -56,26 +53,14 @@ if (self->columnVis)
 return TRUE;
 }
 
-static boolean isWiggle(struct asColumn *colList)
-/* Recognize wiggle/bigWig data by its column signature. */
-{
-return (slCount(colList) == 4 &&
-        sameString(colList->name, "chrom") &&
-        sameString(colList->next->name, "chromStart") &&
-        sameString(colList->next->next->name, "chromEnd") &&
-        sameString(colList->next->next->next->name, "value"));
-}
-
 static void printHeaderColumns(struct annoFormatTab *self, struct annoStreamer *source,
                                boolean isFirst)
 /* Print names of included columns from this source. */
 {
 FILE *f = self->f;
 char *sourceName = source->name;
-boolean isAvg = isWiggle(source->asObj->columnList) && doAvg;
 struct asColumn *col;
-int i;
-for (col = source->asObj->columnList, i = 0;  col != NULL;  col = col->next, i++)
+for (col = source->asObj->columnList;  col != NULL;  col = col->next)
     {
     if (columnIsIncluded(self, sourceName, col->name))
         {
@@ -88,8 +73,6 @@ for (col = source->asObj->columnList, i = 0;  col != NULL;  col = col->next, i++
             fputc('\t', f);
         char fullName[PATH_LEN];
         makeFullColumnName(fullName, sizeof(fullName), sourceName, col->name);
-        if (isAvg && sameString(col->name, "value"))
-            safecat(fullName, sizeof(fullName), "Average");
         fputs(fullName, f);
         }
     }
@@ -114,28 +97,6 @@ if (self->needHeader)
     }
 }
 
-static double wigRowAvg(struct annoRow *row)
-/* Return the average value of floats in row->data. */
-{
-float *vector = row->data;
-int len = row->end - row->start;
-int count = 0;
-double sum = 0.0;
-int i;
-for (i = 0;  i < len;  i++)
-    {
-    // skip NAN values so they don't convert sum to a NAN:
-    if (! isnan(vector[i]))
-        {
-        sum += vector[i];
-        count++;
-        }
-    }
-// I expected "double avg = sum / (double)count" to yield NAN if count is 0 --
-// but avg was negative NAN!  Avoid the fp exception and weird value by testing count:
-return (count > 0) ? sum / (double)count : NAN;
-}
-
 static char **bed4WordsFromAnnoRow(struct annoRow *row, char *fourth)
 /* Return an array of 4 words with row's chrom, chromStart, and chromEnd, and cloned fourth. */
 {
@@ -151,26 +112,31 @@ words[3] = cloneString(fourth);
 return words;
 }
 
-static char **wordsFromWigRowAvg(struct annoRow *row)
-/* Return chrom, chromStart, chromEnd and a string containing the average of values in row. */
+static char **wordsFromWigRow(struct annoRow *row, enum annoRowType rowType)
+/* Return chrom, chromStart, chromEnd and a string containing comma-sep per-base wiggle values
+ * if rowType is arWigVec, or one value if rowType is arWigSingle. */
 {
-double avg = wigRowAvg(row);
-if (isnan(avg))
-    return NULL;
-char avgStr[32];
-safef(avgStr, sizeof(avgStr), "%lf", avg);
-return bed4WordsFromAnnoRow(row, avgStr);
-}
-
-static char **wordsFromWigRowVals(struct annoRow *row)
-/* Return chrom, chromStart, chromEnd and a string containing comma-sep per-base wiggle values. */
-{
-float *vector = row->data;
-int len = row->end - row->start;
-struct dyString *dy = dyStringNew(10*len);
-int i;
-for (i = 0;  i < len;  i++)
-    dyStringPrintf(dy, "%g,", vector[i]);
+struct dyString *dy = NULL;
+if (rowType == arWigVec)
+    {
+    float *vector = row->data;
+    int len = row->end - row->start;
+    dy = dyStringNew(10*len);
+    int i;
+    for (i = 0;  i < len;  i++)
+        {
+        if (i > 0)
+            dyStringAppendC(dy, ',');
+        dyStringPrintf(dy, "%g", vector[i]);
+        }
+    }
+else if (rowType == arWigSingle)
+    {
+    double *pValue = row->data;
+    dy = dyStringCreate("%lf", *pValue);
+    }
+else
+    errAbort("wordsFromWigRow: invalid rowType %d", rowType);
 char **words = bed4WordsFromAnnoRow(row, dy->string);
 dyStringFree(&dy);
 return words;
@@ -186,12 +152,9 @@ boolean freeWhenDone = FALSE;
 char **words = NULL;
 if (source->rowType == arWords)
     words = row->data;
-else if (source->rowType == arWig)
+else if (source->rowType == arWigVec || source->rowType == arWigSingle)
     {
-    if (doAvg)
-	words = wordsFromWigRowAvg(row);
-    else
-	words = wordsFromWigRowVals(row);
+    words = wordsFromWigRow(row, source->rowType);
     if (words != NULL)
         freeWhenDone = TRUE;
     }
