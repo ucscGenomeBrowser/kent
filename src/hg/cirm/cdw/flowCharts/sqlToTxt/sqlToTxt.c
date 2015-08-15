@@ -4,6 +4,8 @@
 #include "hash.h"
 #include "options.h"
 #include "jksql.h"
+#include "cdw.h"
+#include "cdwStep.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -11,20 +13,26 @@ void usage()
 errAbort(
   "sqlToTxt - A program that runs through SQL tables and generates history flow chart information\n"
   "usage:\n"
-  "   sqlToTxt XXX\n"
+  "   sqlToTxt fileId output\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -forceLayout = The output is a D3 forcelayout .json. \n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"forceLayout", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
+bool clForceLayout = FALSE; // Prints the data in .json format for d3 force layout visualizations
+int totalNodes = 0;
+int gStart = 0; 
 int gKey = 0;
 int gX = 200; 
 int gY = 200; 
+struct jsonNode *nodeList = NULL;
+struct jsonLink *linkList = NULL;
 
 struct jsonLink
     {
@@ -43,6 +51,7 @@ struct jsonNode
     int xloc; 
     int yloc; 
     };
+
     
 struct jsonNode *newJsonNode(char *text, int key, bool diamond, int xloc, int yloc)
 {
@@ -164,17 +173,98 @@ sqlDisconnect(&conn);
 return licensePlate; 
 }
 
+void normalizeNodeList(struct jsonNode *nodeList)
+{
+struct jsonNode *iterN; 
+bool first = true; 
+int curLev = 0; 
+int t1 = 0 , t2 = 0;//, t3 =0; 
+for (iterN=nodeList; iterN->next !=NULL; iterN=iterN->next)
+    {
+    if (first)
+	{
+	first = false; 
+	curLev = iterN->yloc/200; 
+	}
+    if (iterN->yloc/200 >= curLev)
+	{
+	t1 += iterN->yloc; 
+	++t2;
+	}
+    if (iterN->yloc/200 < curLev)
+	iterN->xloc = t1/t2; 
+    }
+}
 
 
-void printToJson(FILE *f, struct jsonNode *nodeList, struct jsonLink *linkList)
+
+void printToForceLayoutJson(FILE *f, struct jsonNode *nodeList, struct jsonLink *linkList)
+{
+// Print to D3 forceLayout format. 
+int normalizeX = 200;
+int currentLevel = 0;
+bool firstLine = true; 
+struct jsonNode *iterN;
+slReverse(&nodeList);
+fprintf(f,"{\n\t\"nodes\":[\n"); 
+for (iterN = nodeList; iterN -> next!=NULL; iterN = iterN->next)
+    {
+    if (firstLine)
+	{
+	currentLevel = iterN->yloc/200; 
+	firstLine = false; 
+	}
+    int updatedXloc = iterN->xloc;
+    if (iterN->xloc > normalizeX) normalizeX=iterN->xloc; 
+    if (iterN->yloc/200 != currentLevel) 
+	updatedXloc = normalizeX/2; 
+	currentLevel = iterN->yloc/200; 
+    fprintf(f,"\t{\"name\":\"%s\",\"group\":%i}", iterN->text, currentLevel);     
+    if (iterN->next->next !=NULL) fprintf(f,",");
+    fprintf(f,"\n"); 
+    }
+fprintf(f,"],\n\t\"links\":[\n"); 
+struct jsonLink *iterL; 
+for (iterL = linkList; iterL->next !=NULL; iterL = iterL->next)
+    {
+    fprintf(f,"\t{\"source\":%i,\"target\":%i,\"value\":%i}", iterL->start, iterL->end, 1);//iterL->text); 
+    if (iterL->next->next != NULL) fprintf(f,",");
+    fprintf(f,"\n"); 
+    }
+fprintf(f,"]}\n"); 
+}
+
+
+void printToGoJson(FILE *f, struct jsonNode *nodeList, struct jsonLink *linkList)
 {
 /* Print a list of jsonNodes and jsonLinks to go.js format. Will likely get things working here then jump ship to a more
  * free option */ 
+int normalizeX = 200;
+int currentLevel = 0;
+bool firstLine = true; 
+int t1=0, t2=0;
 struct jsonNode *iterN;
+normalizeNodeList(nodeList);
 fprintf(f,"{ \"class\":\"go.GraphLinksModel\",\"linkFromPortIdProperty\":\"fromPort\",\"linkToPortIdProperty\": \"toPort\",\"nodeDataArray\":[\n");
 for (iterN = nodeList; iterN->next !=NULL; iterN = iterN->next)
     {
-    fprintf(f,"{\"text\":\"%s\",\"key\":\"%i\",\"loc\":\"%i %i\"}",iterN->text, iterN->key, iterN->xloc, iterN->yloc);
+    if (firstLine)
+	{
+	currentLevel = iterN->yloc/200; 
+	firstLine = false; 
+	}
+    int updatedXloc = iterN->xloc;
+
+    t1 += iterN->yloc; 
+    ++t2; 
+    if (iterN->xloc > normalizeX) normalizeX=iterN->xloc; 
+    if (iterN->yloc/200 != currentLevel) 
+	updatedXloc = t1/t2;
+	t2 =0;
+	t1 = 0; 
+	currentLevel = iterN->yloc/200; 
+    
+    fprintf(f,"{\"text\":\"%s\",\"key\":\"%i\",\"loc\":\"%i %i\"}",iterN->text, iterN->key, updatedXloc, iterN->yloc);
     if (iterN->next->next !=NULL) fprintf(f,",");
     fprintf(f,"\n"); 
     }
@@ -190,82 +280,141 @@ fprintf(f,"]}\n");
 }
 
 
-void rLookForNodes(char *startQuery, FILE *outputFile, struct jsonNode *nodeList, struct jsonLink *linkList)
+void rLookForNodesOld(char *startQuery, FILE *outputFile, struct jsonNode *nodeList, struct jsonLink *linkList, int currentNode)
 {
-char **vQ = cdwValidQuery(startQuery);
-//Check the cdwStepIn table, grab the stepRunId and name. 
-struct jsonNode *startNode = newJsonNode("in depth testing", gKey, false, gX, gY);// vQ[2]
+
+// graph the fileId to a licensePlate for the first node
+char **vQ = cdwValidQuery(startQuery); // vQ[0]=id , vQ[1]=fileId , vQ[2]=licensePlate 
+struct jsonNode *startNode = newJsonNode(vQ[2], gKey, false, gX, gY);// vQ[2]
 slAddHead(&nodeList, startNode);
 ++gKey;
+totalNodes ++; 
+gY+=200; 
 
-char **cI = checkIn(vQ[1]);
-struct jsonLink *firstLink = newJsonLink(cI[1], gKey-1, gKey);
+// check the cdwStepIn table for the fileId
+char **cI = checkIn(vQ[1]); // cI[0]=stepRunId , cI[1]=name 
+struct jsonLink *firstLink = newJsonLink(cI[1], currentNode, gKey);
 slAddHead(&linkList, firstLink);
 
-//From cdwStepIn we take the stepRunId and map it to cdwStepRun. We take stepDef and stepVersion.  
-char **cR = checkRun(cI[0]); 
+/* New meta!!
+struct sqlConnection *connIn = sqlConnect("cdw"); 
+char cdwInQuery[1024]; 
+safef(cdwInQuery, 1024, "select stepRunId, name from cdwStepIn where fileId = '%i';", 3085);
+struct cdwStepIn *cdwIn = cdwStepInLoadByQuery(connIn, cdwInQuery); 
+struct jsonLink *firstLink = newJsonLink(cdwIn->name, gStart, gKey);
+sqlDisconnect(&connIn);
+*/
+
+// check the cdwStepRun table for the stepRunId
+char **cR = checkRun(cI[0]); // cR[0]=stepDef, cR[1]=stepVersion
 
 // StepDef from cdwStepRun maps to cdwStepDef.  Grab name and description from cdwStepDef. 
 char **cD = checkDef(cR[0]);
-struct jsonNode *middleNode = newJsonNode(cD[2], gKey, false, gX, gY);
+struct jsonNode *middleNode = newJsonNode(cD[0], gKey, false, gX, gY);
 slAddHead(&nodeList, middleNode);
+++gStart;
 ++gKey;
+gY+=200; 
 // There are often multiple output files, hence the embedded code rather than a function. 
+struct sqlConnection *conn = sqlConnect("cdw");
+char query[1024], **row;
+// check the cdwStepOut table for the stepDef 
+sqlSafef(query, 1024, "select name,fileId from cdwStepOut where stepRunId=\'%s\'", cR[0]);
+struct sqlResult *result = sqlGetResult(conn,query); 
+printf("The start key is %i the currentNode is %i, the gKey is %i here we go! \n", gStart, currentNode, gKey);
+while ((row = sqlNextRow(result)) != NULL)
+    {
+    // map the fileId to the cdwValidFile table to get a license plate which is used for the node label
+    char **lastQuery = cdwValidQuery(row[1]); // [0]=id , [1]=fileId , [2]=licensePlate 
+    struct jsonLink *secondLink = newJsonLink(row[0], gStart, gKey);
+    slAddHead(&linkList, secondLink);
+    struct jsonNode *endNode = newJsonNode(lastQuery[2], gKey, false, gX, gY);
+    slAddHead(&nodeList, endNode);
+    ++gKey;
+    gX+=150; 
+    char **possibleNext = checkIn(row[1]);
+    // Recurse if the output is in the set of possible inputs
+    if (possibleNext!=NULL)
+	{
+	rLookForNodesOld(row[1], outputFile, nodeList, linkList, currentNode+1);  	
+	}
+    }
+//printToForceLayoutJson(outputFile, nodeList, linkList);
+}
+
+void rLookForNodes(char *fileId, int currentNode, int yPos)
+{
+// Assumes the first node has been created, now we are looking in the cdwStepIn file. If we find something
+// then the function continues. 
+// check the cdwStepIn table for the fileId
+char **cI = checkIn(fileId); // cI[0]=stepRunId , cI[1]=name 
+if (cI[0] == NULL) return;  
+gY+=200; 
+// The name becomes the link label
+struct jsonLink *firstLink = newJsonLink(cI[1], currentNode-1, currentNode);
+slAddHead(&linkList, firstLink);
+
+// check the cdwStepRun table for the stepRunId
+char **cR = checkRun(cI[0]); // cR[0]=stepDef, cR[1]=stepVersion
+
+// StepDef from cdwStepRun maps to cdwStepDef.  Grab name and description from cdwStepDef. 
+char **cD = checkDef(cR[0]);// cD[0]=name, cD[1]=description
+// The name becomes a node label 
+struct jsonNode *middleNode = newJsonNode(cD[0], totalNodes, false, gX, yPos+200);
+uglyf("the name here is %s\n", cD[0]);
+slAddHead(&nodeList, middleNode);
+++totalNodes;
+gY+=200; 
+
+// check the cdwStepOut table for the stepDef 
 struct sqlConnection *conn = sqlConnect("cdw");
 char query[1024], **row;
 sqlSafef(query, 1024, "select name,fileId from cdwStepOut where stepRunId=\'%s\'", cI[0]);
 struct sqlResult *result = sqlGetResult(conn,query); 
+uglyf ("the currentNode is %i, the globalNode is %i\n", currentNode, totalNodes);
 while ((row = sqlNextRow(result)) != NULL)
     {
-    //char **round2 = cdwValidQuery(row[1]);
-    struct jsonLink *secondLink = newJsonLink("testing", gKey-1, gKey);
+    // map the fileId to the cdwValidFile table to get a license plate which is used for the node label
+    char **lastQuery = cdwValidQuery(row[1]); // [0]=id , [1]=fileId , [2]=licensePlate 
+    // The name in cdwStepOut becomes the link label
+    struct jsonLink *secondLink = newJsonLink(row[0], currentNode, totalNodes);
     slAddHead(&linkList, secondLink);
-    struct jsonNode *endNode = newJsonNode("testing", gKey, false, gX, gY);
+    // The licensePlate of the new file becomes the final node name. 
+    struct jsonNode *endNode = newJsonNode(lastQuery[2], totalNodes, false, gX, yPos+400);
     slAddHead(&nodeList, endNode);
-    ++gKey;
-    char **possibleNext = checkIn(row[1]); 
+    ++totalNodes;
+    gX+=150; 
+    uglyf("the name here is %s\n", lastQuery[2]);
+    char **possibleNext = checkIn(row[1]);
     // Recurse if the output is in the set of possible inputs
-    if (possibleNext==NULL) rLookForNodes(row[1], outputFile, nodeList, linkList);  
+    if (possibleNext!=NULL)
+	{
+	rLookForNodes(row[1], totalNodes, yPos+400);  	
+	}
     }
-printToJson(outputFile, nodeList, linkList);
 }
+
 
 void sqlToTxt(char *startQuery, char *outputFile)
 /* sqlToTxt - A program that runs through SQL tables and generates history flow chart information. */
 {
-/*
-struct jsonNode *nodeList; 
-struct jsonLink *linkList; 
-char *newFileId=NULL;
-int nodeKey = 0, yloc = 0; 
-char *id=NULL, *fileId=NULL, *licensePlateQuery=startQuery;
-FILE *f = mustOpen(outputFile,"w"); 
-*/
-/* I see two options, recursion and a while loop. The while loop could be some thing along the lines of 
- *	    while (checkValid(someglobal)!NULL)
- *		update some global
- * The recurssion is less easily explained. 
-*/
-// Old comments below
-struct jsonNode *nodeList = NULL; 
-AllocVar(nodeList);
-struct jsonLink *linkList = NULL;  
-AllocVar(linkList);
-//int nodeKey = 0, yLoc = 0, xLoc = 0; 
-FILE *f = mustOpen(outputFile,"w"); 
-rLookForNodes(startQuery, f, nodeList, linkList); 
-
-// New gameplan. Recursion.  A recursive function that traverses the loop (generating 3 nodes and 2 links
-// minimum) one time. Right before recursion check if the new output/input files (depending on direction) 
-// are in the validFiles table. If they are recurse, otherwise stop. 
-
-
+FILE *f = mustOpen(outputFile,"w");
+// graph the fileId to a licensePlate for the first node
+char **vQ = cdwValidQuery(startQuery); // vQ[0]=id , vQ[1]=fileId , vQ[2]=licensePlate 
+struct jsonNode *startNode = newJsonNode(vQ[2], totalNodes, false, gX, gY);// vQ[2]
+slAddHead(&nodeList, startNode);
+++totalNodes;
+rLookForNodes(startQuery, totalNodes, 0); 
+uglyf("the nodeList is this long... %i\n", slCount(nodeList));
+if (clForceLayout) printToForceLayoutJson(f, nodeList, linkList);
+else printToGoJson(f, nodeList, linkList); 
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+clForceLayout = optionExists("forceLayout");
 if (argc != 3)
     usage();
 sqlToTxt(argv[1], argv[2]);
