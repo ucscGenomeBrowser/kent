@@ -1986,9 +1986,9 @@ for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     pslCp->blockSizes[iBlk] = psl->blockSizes[iBlk];
     pslCp->qStarts[iBlk] = psl->qStarts[iBlk];
     pslCp->tStarts[iBlk] = psl->tStarts[iBlk];
-    if (psl->qSequence == NULL)
+    if (psl->qSequence != NULL)
         pslCp->qSequence[iBlk] = cloneString(psl->qSequence[iBlk]);
-    if (psl->tSequence == NULL)
+    if (psl->tSequence != NULL)
         pslCp->tSequence[iBlk] = cloneString(psl->tSequence[iBlk]);
     }
 return pslCp;
