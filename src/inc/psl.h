@@ -197,10 +197,18 @@ struct psl *pslFromFakeFfAli(struct ffAli *ff,
 int pslOrientation(struct psl *psl);
 /* Translate psl strand + or - to orientation +1 or -1 */
 
-/* marcos to get query and target strand.  Target returns implied + when
+INLINE char pslQStrand(struct psl *psl)
+/* Get query strand. */
+{
+return psl->strand[0];
+}
+
+INLINE char pslTStrand(struct psl *psl)
+/* Get the target strand., Returns implied + when
  * it's not specific  */
-#define pslQStrand(p) ((p)->strand[0])
-#define pslTStrand(p) (((p)->strand[1] != '-') ? '+' : '-')
+{
+return (psl->strand[1] != '-') ? '+' : '-';
+}
 
 int pslWeightedIntronOrientation(struct psl *psl, struct dnaSeq *genoSeq, int offset);
 /* Return >0 if introns make it look like alignment is on + strand,
