@@ -1,5 +1,5 @@
-##########
-# lift ikmc tracks from hg19 to hg38  
+##############################################################################
+# lift ikmc tracks from hg19 to hg38 (8/11/2015) 
 # ceisenhart (Chris Eisenhart) 
     cd /hive/data/genomes/hg38/bed/hg19MassiveLift/ikmcGenes/README.txt
     hgsql hg19 -e "select * from hgIkmc" > IkmcGenes.bed
@@ -8,12 +8,12 @@
     liftOver hg19IkmcGenesTrue.bed /hive/data/genomes/hg19/bed/liftOver/hg19ToHg38.over.chain.gz hg38IkmcGenes.bed unmapped.null
     hgLoadBed hg38 hgIkmc hg38IkmcGenes.bed 
 ##############################################################################
-# lincRNASeqReads (Done 3//2015) 
+# lincRNASeqReads (In progress Chris Eisenhart) 
     mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/nonCodingRNAs/lincRNASeqReads
     cd /hive/data/genomes/hg38/bed/hg19MassiveLift/nonCodingRNAs/lincRNASeqReads
     liftAlotAtOnce < hg19lincRNATracksToBeLifted
 ##############################################################################
-# lincRNATranscripts (Done 3//2015 Chris Eisenhart) 
+# lincRNATranscripts (In progress Chris Eisenhart) 
     mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/nonCodingRNAs/lincRNATranscripts
     cd /hive/data/genomes/hg38/bed/hg19MassiveLift/nonCodingRNAs/lincRNATranscripts
     liftingScript lincRNAsTranscripts 

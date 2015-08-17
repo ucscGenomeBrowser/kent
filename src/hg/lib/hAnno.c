@@ -239,7 +239,7 @@ if (sameString(type, "bigBed") || sameString("bigGenePred", type))
 else if (sameString(type, "vcfTabix"))
     streamer = annoStreamVcfNew(fileOrUrl, TRUE, assembly, maxOutRows);
 else if (sameString(type, "bigWig"))
-    grator = annoGrateBigWigNew(fileOrUrl, assembly);
+    grator = annoGrateBigWigNew(fileOrUrl, assembly, agwmAverage);
 else if (sameString(type, "bam"))
     errAbort("Sorry, BAM is not yet supported");
 else
@@ -273,11 +273,11 @@ if (bigDataUrl != NULL)
         grator = hAnnoGratorFromBigFileUrl(bigDataUrl, assembly, maxOutRows, overlapRule);
     }
 else if (startsWithWord("wig", tdb->type))
-    grator = annoGrateWigDbNew(assembly->name, selTable, assembly, maxOutRows);
+    grator = annoGrateWigDbNew(assembly->name, selTable, assembly, agwmAverage, maxOutRows);
 else if (startsWithWord("bigWig", tdb->type))
     {
     char *fileOrUrl = getBigDataFileName(assembly->name, tdb, tdb->table, chrom);
-    grator = annoGrateBigWigNew(fileOrUrl, assembly);
+    grator = annoGrateBigWigNew(fileOrUrl, assembly, agwmAverage);
     }
 else
     {

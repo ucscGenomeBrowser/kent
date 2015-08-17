@@ -4,7 +4,6 @@ usage='loadTracks [options] trackDb hgFindSpec db0 ...
 options:
    -release=release
    -strict
-   -local
    -raName=trackDb.ra  - base name of ra file
    -grpSql=grp.sql - create a grp table using this sql file
    -sqlDir=../../lib - directory containg trackDb.sql and hgFindSpec.sql'
@@ -26,8 +25,6 @@ while [[ $1 == -* ]] ; do
             strict=yes;;
         -settings)
             settings="yes";;
-        -local)
-            local=yes;;
         -raName=*)
             raName=$(echo $1 | sed 's/-raName=//') ;;
         -grpSql=*)
@@ -53,11 +50,7 @@ dbs="$@"
 # check if a database exists, print note and return non-zero if it doesn't
 dbExists() {
     local db="$1"
-    if [ -n "$local" ] ; then
-	local dbChk=$(hgsqlLocal -Ne 'show databases like "'$db'"')
-    else 
-	local dbChk=$(hgsql -Ne 'show databases like "'$db'"')
-    fi
+    local dbChk=$(hgsql -Ne 'show databases like "'$db'"')
     if [ -z "$dbChk" ] ; then
         echo "Note: database $db does not exist, skipping"
         return 1
@@ -94,10 +87,6 @@ loadDbTracks() {
     fi
     if [ -n "$settings" ] ; then
         topts="$topts -settings"
-    fi
-    if [ -n "$local" ] ; then
-        topts="$topts -local"
-        fopts="$fopts -local"
     fi
     if [ -n "$raName" ] ; then
         topts="$topts -raName=$raName"

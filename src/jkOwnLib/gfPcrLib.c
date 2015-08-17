@@ -306,7 +306,9 @@ void gfPcrOutputWriteList(struct gfPcrOutput *outList, char *outType,
 outFunction output = gfPcrOutputFunction(outType);
 struct gfPcrOutput *out;
 for (out = outList; out != NULL; out = out->next)
+    {
     output(out, f, url);
+    }
 }
 
 void gfPcrOutputWriteOne(struct gfPcrOutput *out, char *outType, 
@@ -329,7 +331,6 @@ FILE *f = mustOpen(fileName, "w");
 gfPcrOutputWriteList(outList, outType, url, f);
 carefulClose(&f);
 }
-
 
 static void pcrLocalStrand(char *pcrName, 
 	struct dnaSeq *seq,  int seqOffset, char *seqName, int seqSize,
@@ -388,43 +389,42 @@ for (;;)
 
 	matchSize = rPos - fPos;
 
-	int fGoodSize = fGoodPos - fPos;
+	int fGoodSize = fpMatch - (seq->dna + fGoodPos);
 	int rGoodSize = rPos - rGoodPos;
-	fGoodSize = min(fGoodSize, goodSize);
-	rGoodSize = min(rGoodSize, goodSize);
-
-        if (rPos >= 0 && fPos >= 0 && fPos < seq->size && matchSize <= maxSize)
+	if (rGoodSize >= goodSize && fGoodSize >= goodSize)
 	    {
-	    /* If matches well enough create output record. */
-	    if (goodMatch(seq->dna + fGoodPos, fpPerfect - fGoodSize, fGoodSize) &&
-	        goodMatch(seq->dna + rGoodPos, rpPerfect + minPerfect, rGoodSize))
+	    if (rPos >= 0 && fPos >= 0 && fPos < seq->size && matchSize <= maxSize)
 		{
-
-		/* Truncate the copy of the primers going into the out-> record using rTrim and fTrim if needed. */
-		AllocVar(out);
-		out->name  = cloneString(pcrName);
-		out->fPrimer = cloneString(fPrimer + fTrim);
-		out->rPrimer = cloneStringZ(rPrimer, rPrimerSize - rTrim);
-		reverseComplement(out->rPrimer, rPrimerSize - rTrim);
-		out->seqName = cloneString(seqName);
-		out->seqSize = seqSize;
-		out->fPos = fPos + seqOffset;
-		out->rPos = rPos + seqOffset;
-		out->strand = strand;
-		out->dna = cloneStringZ(seq->dna + fPos, matchSize);
-		
-
-		/* Dealing with the strand of darkness....  Here we just have to swap
-		 * forward and reverse primers to flip strands, and reverse complement
-		 * the amplified area.. */
-		if (strand == '-')
+		/* If matches well enough create output record. */
+		if (goodMatch(seq->dna + fGoodPos, fpPerfect - fGoodSize, fGoodSize) &&
+		    goodMatch(seq->dna + rGoodPos, rpPerfect + minPerfect, rGoodSize))
 		    {
-		    char *temp = out->rPrimer;
-		    out->rPrimer = out->fPrimer;
-		    out->fPrimer = temp;
-		    reverseComplement(out->dna, matchSize);
+		    /* Truncate the copy of the primers going into the out-> record using rTrim and fTrim if needed. */
+		    AllocVar(out);
+		    out->name  = cloneString(pcrName);
+		    out->fPrimer = cloneString(fPrimer + fTrim);
+		    out->rPrimer = cloneStringZ(rPrimer, rPrimerSize - rTrim);
+		    reverseComplement(out->rPrimer, rPrimerSize - rTrim);
+		    out->seqName = cloneString(seqName);
+		    out->seqSize = seqSize;
+		    out->fPos = fPos + seqOffset;
+		    out->rPos = rPos + seqOffset;
+		    out->strand = strand;
+		    out->dna = cloneStringZ(seq->dna + fPos, matchSize);
+		    
+
+		    /* Dealing with the strand of darkness....  Here we just have to swap
+		     * forward and reverse primers to flip strands, and reverse complement
+		     * the amplified area.. */
+		    if (strand == '-')
+			{
+			char *temp = out->rPrimer;
+			out->rPrimer = out->fPrimer;
+			out->fPrimer = temp;
+			reverseComplement(out->dna, matchSize);
+			}
+		    slAddHead(pOutList, out);
 		    }
-		slAddHead(pOutList, out);
 		}
 	    }
 	rDna = rpMatch+1;

@@ -1,7 +1,7 @@
 
 track knownGene 
-shortLabel GENCODE 
-longLabel  Comprehensive transcript set from GENCODE v22, see also All GENCODE track
+shortLabel GENCODE v22
+longLabel  GENCODE v22 Comprehensive Transcript Set (only Basic displayed by default)
 group genes
 visibility pack
 priority 1

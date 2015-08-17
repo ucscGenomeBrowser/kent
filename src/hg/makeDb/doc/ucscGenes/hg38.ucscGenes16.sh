@@ -424,7 +424,10 @@ gzip run.*/all.tab
 mkdir -p $dir/malacards
 cd $dir/malacards
 # grab files that b0b came up with somehow
-cp /hive/users/kuhn/tracks/malacards/malacardsUcscGenesExport.csv .
+# please check before running this is there isn't a newer version of the malacards dump in the genecards directory.
+# we drop them into this directory when we receive them by mail and tag them by date
+#cp /hive/users/kuhn/tracks/malacards/malacardsUcscGenesExport.csv .
+cp /hive/data/outside/genecards/2015-july-12/UCSC_genes_export_db102_v108_12Jul15.csv ./malacardExists.txt
 awk 'BEGIN {FS=","} {print $1}' malacardsUcscGenesExport.csv | sort -u > malacardExists.txt
 hgsql -e "select geneSymbol,kgId from kgXref" --skip-column-names hg38 | awk '{if (NF == 2) print}' | sort > geneSymbolToKgId.txt
 join malacardExists.txt geneSymbolToKgId.txt | awk 'BEGIN {OFS="\t"} {print $2,$1}' | sort > knownToMalacards.tab

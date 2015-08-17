@@ -1,4 +1,15 @@
-/* jsonWrite - Helper routines for writing out JSON. */
+/* jsonWrite - Helper routines for writing out JSON.  The idea of this is you build up a string inside
+ * of the jsonWrite object using various jsonWrite methods, and then output the string where you want.
+ *
+ * struct jsonWrite *jw = jsonWriteNew();
+ * jsonWriteObjectStart(jw, NULL);		// Anonymous outer object 
+ * jsonWriteStringf(jw, "user", "%s %s", user->firstName, user->lastName);
+ * jsonWriteNumber(jw, "year", 2015);
+ * jsonWriteObjectEnd(jw);
+ * printf("%s\n", jw->dy->string);
+ * jsonWriteFree(&jw);
+ */
+
 
 #ifndef JSONWRITE_H
 #define JSONWRITE_H

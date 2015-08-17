@@ -1,3 +1,3 @@
-kentSrc = ../..
-A = hgsqlLocal
+kentSrc = ../../..
+A = hubCrawl
 include $(kentSrc)/inc/userApp.mk
