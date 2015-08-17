@@ -201,7 +201,7 @@ showCdsAllScales .
 baseColorDefault diffBases
 baseColorUseSequence lfExtra
 #baseColorUseSequence extFile seqNcbiAltSequence extNcbiAltSequence
-
+release alpha
 
 track altSequenceExp
 superTrack on
@@ -272,6 +272,7 @@ showDiffBasesAllScales .
 indelDoubleInsert on
 indelQueryInsert on
 indelPolyA on
+release alpha
 
 
 searchName ucscRetroInfoMrna8

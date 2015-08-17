@@ -1,5 +1,5 @@
 #############################################################################
-## 26-Way Multiz (DONE - 2015-07-28 - Hiram)
+## 26-Way Multiz (DONE - 2015-08-13 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/ce11/bed/multiz26way
     cd /hive/data/genomes/ce11/bed/multiz26way
@@ -226,15 +226,15 @@ close (FH);
 # 10  0.9000 (% 05.669) (% 11.848) - Threadworm strRat2
 # 11  1.0000 (% 05.722) (% 02.224) - Pig roundworm ascSuu1
 # 12  1.0000 (% 08.936) (% 03.405) - Barber pole worm haeCon2
-# 13  1.1000 (% 09.736) (% 03.237) - Hookworm ancCey1
-# 14  1.1000 (% 08.902) (% 04.115) - Hookworm necAme1
+# 13  1.1000 (% 09.736) (% 03.237) - A. ceylanicum ancCey1
+# 14  1.1000 (% 08.902) (% 04.115) - N. americanus necAme1
 # 15  1.2000 (% 06.222) (% 04.321) - P. exspectatus priExs1
 # 16  1.2000 (% 06.308) (% 04.534) - P. pacificus priPac3
 # 17  1.3000 (% 06.291) (% 08.293) - Pine wood nematode burXyl1
-# 18  1.4000 (% 05.052) (% 05.532) - Filarial worm bruMal2
-# 19  1.4000 (% 03.916) (% 06.840) - Root knot melHap1
-# 20  1.4000 (% 03.516) (% 05.539) - Root knot melInc2
-# 21  1.5000 (% 05.182) (% 05.093) - O. volvulus oncVol1
+# 18  1.4000 (% 05.065) (% 05.521) - Filarial worm bruMal2
+# 19  1.4000 (% 03.916) (% 06.840) - M. hapla melHap1
+# 20  1.4000 (% 03.516) (% 05.539) - M. incognita melInc2
+# 21  1.5000 (% 05.193) (% 05.092) - O. volvulus oncVol1
 # 22  1.5000 (% 02.848) (% 04.678) - Trichinella triSpi1
 # 23  1.5000 (% 02.917) (% 03.714) - Whipworm triSui1
 # 24  1.6000 (% 05.005) (% 05.474) - Dog heartworm dirImm1
@@ -259,7 +259,7 @@ do
 done | sort -k4,4nr
 
 # db    contigCount     N50     totalSize       perCentAtN50
-# oncVol1       709     25485961        96441526        % 26.426335
+# oncVol1       710     25485961        97402144        % 26.165708
 # caeSp111      665     20921866        79321433        % 26.376057
 # ce11  7       17493829        100286401       % 17.443870
 # cb4   13      17485439        108434085       % 16.125408
@@ -275,7 +275,7 @@ done | sort -k4,4nr
 # hetBac1       1241    312328  76992477        % 0.405660
 # panRed1       941     262414  65110236        % 0.403030
 # necAme1       11865   211861  244088665       % 0.086797
-# bruMal2       9780    191089  94076581        % 0.203121
+# bruMal2       9781    200860  95156665        % 0.211083
 # loaLoa1       5765    174388  91379422        % 0.190839
 # priExs1       4369    142245  177536987       % 0.080121
 # caeJap4       18817   94149   166256191       % 0.056629
@@ -344,60 +344,22 @@ done | sort -k4,4nr
     # looks like it is caeSp111 that has no chrM alignment
     # found same pattern on ce10, curious.
 
-    mkdir /hive/data/genomes/ce11/bed/multiz26way/mafSplit
-    cd /hive/data/genomes/ce11/bed/multiz26way/mafSplit
+    # even though there are 26 of these, they can still be done as
+    # full chromosomes without the splitting procedure
 
-    #	mafSplitPos splits on gaps or repeat areas that will not have
-    #	any chains, approx 5 Mbp intervals, gaps at least 10,000
-    mafSplitPos -minGap=10000 ce11 5 stdout | sort -u \
-	| sort -k1,1 -k2,2n > mafSplit.bed
-    featureBits -countGaps ce11 mafSplit.bed
-    #  326 bases of 3209286105 (0.000%) in intersection
-
-    #	The splitRegions.pl script creates a custom track from this
-    #	mafSplit.bed. Take a look at that in the browser and see if it looks OK,
-    #	check the number of sections on each chrom to verify none are
-    #	too large.  Despite the claim above, it does appear that some
-    #	areas are split where actual chains exist.
-    ~/kent/src/hg/makeDb/doc/hg38/splitRegions.pl mafSplit.bed > splitRegions.ct
-
-    # to see the sizes of the regions:
-    grep "^chr" splitRegions.ct | awk '{print $3-$2,$0}' | sort -rn | less
-
-    # split the maf files based on the mafSplit.bed definitions
-    mkdir /hive/data/genomes/ce11/bed/multiz26way/mafSplit
-    cd /hive/data/genomes/ce11/bed/multiz26way/mafSplit
-    time for D in `sed -e "s/ce11 //" ../species.list`
-do
-    echo "${D}"
-    mkdir $D
-    cd $D
-    echo "mafSplit ../mafSplit.bed ce11_ ../../mafLinks/${D}/*.maf.gz"
-    mafSplit ../mafSplit.bed ce11_ ../../mafLinks/${D}/*.maf.gz
-    cd ..
-done
-    # real    0m20.884s
-
-    # construct a list of all possible maf file names.
-    # they do not all exist in each of the species directories, and
-    # they do not all possibly exist
-    find . -type f | wc -l
-    # 501
-    find . -type f | grep ".maf$" | xargs -L 1 basename | sort -u > maf.list
-    wc -l maf.list
-    # 20 maf.list
-    # possible universe of names:
-    grep "^c" *.ct | awk '{print $NF}' | sort -u | wc -l
-    #  20
-
-    mkdir /hive/data/genomes/ce11/bed/multiz26way/splitRun
-    cd /hive/data/genomes/ce11/bed/multiz26way/splitRun
+    mkdir /hive/data/genomes/ce11/bed/multiz26way/fullChromRun
+    cd /hive/data/genomes/ce11/bed/multiz26way/fullChromRun
     mkdir maf run
     cd run
     mkdir penn
     cp -p /cluster/bin/penn/multiz.2009-01-21_patched/multiz penn
     cp -p /cluster/bin/penn/multiz.2009-01-21_patched/maf_project penn
     cp -p /cluster/bin/penn/multiz.2009-01-21_patched/autoMZ penn
+
+    find ../../mafLinks -type l | grep ".maf.gz$" | xargs -L 1 basename \
+       | sed -e 's/.gz//;' | sort -u > maf.list
+
+    wc -l maf.list
 
     #	set the db and pairs directories here
     cat > autoMultiz.csh << '_EOF_'
@@ -407,7 +369,7 @@ set c = $1
 set result = $2
 set run = `/bin/pwd`
 set tmp = /dev/shm/$db/multiz.$c
-set pairs = /hive/data/genomes/ce11/bed/multiz26way/mafSplit
+set pairs = /hive/data/genomes/ce11/bed/multiz26way/mafLinks
 /bin/rm -fr $tmp
 /bin/mkdir -p $tmp
 /bin/cp -p ../../tree.nh ../../species.list $tmp
@@ -439,39 +401,21 @@ popd > /dev/null
 
     cat  << '_EOF_' > template
 #LOOP
-./autoMultiz.csh $(file1) {check out line+ /hive/data/genomes/ce11/bed/multiz26way/splitRun/maf/$(root1).maf}
+./autoMultiz.csh $(file1) {check out line+ /hive/data/genomes/ce11/bed/multiz26way/fullChromRun/maf/$(root1).maf}
 #ENDLOOP
 '_EOF_'
 # << happy emacs
 
-    ln -s ../../mafSplit/maf.list maf.list
     ssh ku
-    cd /hive/data/genomes/ce11/bed/multiz26way/splitRun/run
+    cd /hive/data/genomes/ce11/bed/multiz26way/fulChromRun/run
     gensub2 maf.list single template jobList
     para -ram=32g create jobList
-# Completed: 20 of 20 jobs
-# CPU time in finished jobs:      11959s     199.32m     3.32h    0.14d  0.000 y
-# IO & Wait Time:                    75s       1.25m     0.02h    0.00d  0.000 y
-# Average job time:                 602s      10.03m     0.17h    0.01d
-# Longest finished job:            1171s      19.52m     0.33h    0.01d
-# Submission to last job:          1242s      20.70m     0.34h    0.01d
-
-    # combine into one file per chrom (see hg19.txt for example with ku run)
-    cd /hive/data/genomes/ce11/bed/multiz26way/splitRun
-    mkdir ../maf
-    #	no need to save the comments since they are lost with mafAddIRows
-
-    time cut -f1 ../../../chrom.sizes | while read C
-do
-  rm -f ../maf/${C}.maf.gz
-  echo "${C}" 1>&2
-  if [ -s maf/ce11_${C}.00.maf ]; then
-    head -q -n 1 maf/ce11_${C}.00.maf | sort -u > ../maf/${C}.maf
-   grep -h -v "^#" `ls maf/ce11_${C}.*.maf | sort -t. -k2,2n` >> ../maf/${C}.maf
-    tail -q -n 1 maf/ce11_${C}.00.maf | sort -u >> ../maf/${C}.maf
-  fi
-done
-    # real    0m6.244s
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:      11928s     198.80m     3.31h    0.14d  0.000 y
+# IO & Wait Time:                    29s       0.48m     0.01h    0.00d  0.000 y
+# Average job time:                1708s      28.47m     0.47h    0.02d
+# Longest finished job:            2176s      36.27m     0.60h    0.03d
+# Submission to last job:          2189s      36.48m     0.61h    0.03d
 
 
     cd /hive/data/genomes/ce11/bed/multiz26way
@@ -480,33 +424,32 @@ done
 
     # Load into database
     ssh hgwdev
-    cd /hive/data/genomes/ce11/bed/multiz26way/maf
+    cd /hive/data/genomes/ce11/bed/multiz26way/fullChromRun/maf
     mkdir /gbdb/ce11/multiz26way
     ln -s `pwd`/*.maf /gbdb/ce11/multiz26way
     cd /dev/shm
     time hgLoadMaf ce11 multiz26way
-    # Loaded 1469287 mafs in 7 files from /gbdb/ce11/multiz26way
-    # real    0m26.453s
+    # Loaded 1469313 mafs in 7 files from /gbdb/ce11/multiz26way
+    # real    0m28.115s
 
     time cat /gbdb/ce11/multiz26way/*.maf \
 	| hgLoadMafSummary ce11 -minSize=10000 -verbose=2 \
 		-mergeGap=500 -maxSize=50000  multiz26waySummary stdin
-    # Created 397959 summary blocks from 12242728 components
-    #    and 1469287 mafs from stdin
-    # real    0m37.159s
+    # Created 397940 summary blocks from 12243969 components and 1469313 mafs
+    # from stdin
+    # real    0m38.197s
 
-
-# -rw-rw-r-- 1 68693325 Jul 28 15:53 multiz26way.tab
-# -rw-rw-r-- 1 17851962 Jul 28 15:56 multiz26waySummary.tab
+# -rw-rw-r-- 1 70164926 Aug 13 14:34 multiz26way.tab
+# -rw-rw-r-- 1 17851130 Aug 13 14:35 multiz26waySummary.tab
 
     wc -l multiz26way*
-    # 1469287 multiz26way.tab
-    #  397959 multiz26waySummary.tab
+    # 1469313 multiz26way.tab
+    #  397940 multiz26waySummary.tab
 
     rm multiz26way*.tab
 
 ##############################################################################
-# GAP ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE - 2015-07-28 - Hiram)
+# GAP ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE - 2015-08-13 - Hiram)
     # mafAddIRows has to be run on single chromosome maf files, it does not
     #	function correctly when more than one reference sequence
     #	are in a single file.  If there is a single maf file, need to split
@@ -521,8 +464,8 @@ done
 #        /dev/null . ../../multiz26way.maf
 
     # already per-chrom files here:
-    find ../maf -type f | wc -l
-    #   358
+    find ../fullChromRun/maf -type f | wc -l
+    #   7
 
     # check for N.bed files everywhere:
     cd /hive/data/genomes/ce11/bed/multiz26way/anno
@@ -570,7 +513,7 @@ done
 
     cat << '_EOF_' > template
 #LOOP
-mafAddIRows -nBeds=nBeds ../maf/$(path1) /hive/data/genomes/ce11/ce11.2bit {check out exists+ result/$(path1)}
+mafAddIRows -nBeds=nBeds ../fullChromRun/maf/$(path1) /hive/data/genomes/ce11/ce11.2bit {check out exists+ result/$(path1)}
 #ENDLOOP
 '_EOF_'
     # << happy emacs
@@ -584,18 +527,18 @@ mafAddIRows -nBeds=nBeds ../maf/$(path1) /hive/data/genomes/ce11/ce11.2bit {chec
     # don't run too many at once, these go very fast
     para -maxJob=64 push
 # Completed: 7 of 7 jobs
-# CPU time in finished jobs:         90s       1.50m     0.02h    0.00d  0.000 y
-# IO & Wait Time:                    20s       0.34m     0.01h    0.00d  0.000 y
-# Average job time:                  16s       0.26m     0.00h    0.00d
-# Longest finished job:              23s       0.38m     0.01h    0.00d
-# Submission to last job:            30s       0.50m     0.01h    0.00d
+# CPU time in finished jobs:         89s       1.48m     0.02h    0.00d  0.000 y
+# IO & Wait Time:                    18s       0.30m     0.01h    0.00d  0.000 y
+# Average job time:                  15s       0.25m     0.00h    0.00d
+# Longest finished job:              21s       0.35m     0.01h    0.00d
+# Submission to last job:            25s       0.42m     0.01h    0.00d
 
     # verify all result files have some content, look for 0 size files:
     find ./result -type f -size 0
     # should see none
     # or in this manner:
     find ./result -type f | xargs ls -og | sort -k3nr | tail
-# -rw-rw-r-- 1    785220 Jul 28 16:03 ./result/chrM.maf
+# -rw-rw-r-- 1    785220 Aug 13 14:41 ./result/chrM.maf
 
     du -hsc result
     # 2.4G    result
@@ -609,21 +552,23 @@ mafAddIRows -nBeds=nBeds ../maf/$(path1) /hive/data/genomes/ce11/ce11.2bit {chec
     cd /dev/shm
     time hgLoadMaf -pathPrefix=/gbdb/ce11/multiz26way \
         ce11 multiz26way
-    # Loaded 1512789 mafs in 7 files from /gbdb/ce11/multiz26way
-    # real    0m41.625s
+    # Loaded 1512814 mafs in 7 files from /gbdb/ce11/multiz26way
+    # real    0m42.327s
 
     time cat /gbdb/ce11/multiz26way/*.maf \
 	| hgLoadMafSummary ce11 -minSize=10000 -verbose=2 \
 		-mergeGap=500 -maxSize=50000  multiz26waySummary stdin
-    # Created 397959 summary blocks from 12242728 components and 1512789 mafs
-    # from stdin
-    # real    0m50.660s
-# -rw-rw-r-- 1 72088121 Jul 28 16:06 multiz26way.tab
-# -rw-rw-r-- 1 18647880 Jul 28 16:07 multiz26waySummary.tab
+    # Indexing and tabulating stdin
+    # Created 397940 summary blocks from 12243969 components and
+    #    1512814 mafs from stdin
+    # real    0m51.963s
+
+# -rw-rw-r-- 1 72568758 Aug 13 14:44 multiz26way.tab
+# -rw-rw-r-- 1 18647010 Aug 13 14:45 multiz26waySummary.tab
 
     wc -l multiz26way*
-    #   1512789 multiz26way.tab
-    #    397959 multiz26waySummary.tab
+    #   1512814 multiz26way.tab
+    #    397940 multiz26waySummary.tab
 
     rm multiz26way*.tab
 
