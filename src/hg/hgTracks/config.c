@@ -516,6 +516,9 @@ dyStringFree(&title);
 freez(&groupTarget);
 webEndSectionTables();
 hPrintf("</FORM>");
+
+// force the browser to save the default trackDb visibilities in the cart
+cartRemove(cart, CART_HAS_DEFAULT_VISIBILITY);
 }
 
 void configPage()
