@@ -7,7 +7,7 @@ visibility hide
 type bed 3
 noInherit on
 
-    track cloneEnd_B6Ng01
+    track cloneEndB6Ng01
     parent cloneEndSuper on
     shortLabel B6Ng01
     longLabel C57BL/6N mouse BAC clone set
@@ -18,7 +18,7 @@ noInherit on
     urlLabel NCBI CloneDB:
     priority 1
 
-    track cloneEnd_bMQ
+    track cloneEndbMQ
     parent cloneEndSuper off
     shortLabel bMQ
     longLabel B94_mq1 129S7/SvEv ES cell BAC library
@@ -29,7 +29,7 @@ noInherit on
     urlLabel NCBI CloneDB:
     priority 2
 
-    track cloneEnd_C3H
+    track cloneEndC3H
     parent cloneEndSuper off
     shortLabel C3H
     longLabel C3H iBAC library
@@ -40,7 +40,7 @@ noInherit on
     urlLabel NCBI CloneDB:
     priority 3
 
-    track cloneEnd_CH29
+    track cloneEndCH29
     parent cloneEndSuper off
     shortLabel CH29
     longLabel CHORI-29 NOD/LtJ BAC library
@@ -51,7 +51,7 @@ noInherit on
     urlLabel NCBI CloneDB:
     priority 4
 
-    track cloneEnd_DN
+    track cloneEndDN
     parent cloneEndSuper off
     shortLabel DN
     longLabel DIL (Diabetes and Inflammation Laboratory) NOD BAC library
@@ -62,7 +62,7 @@ noInherit on
     urlLabel NCBI CloneDB:
     priority 5
 
-    track cloneEnd_MHPN
+    track cloneEndMHPN
     parent cloneEndSuper off
     shortLabel MHPN
     longLabel MICER 5'Hprt library
@@ -73,7 +73,7 @@ noInherit on
     urlLabel NCBI CloneDB:
     priority 6
 
-    track cloneEnd_MHPP
+    track cloneEndMHPP
     parent cloneEndSuper off
     shortLabel MHPP
     longLabel MICER 3'Hprt library
@@ -84,7 +84,7 @@ noInherit on
     urlLabel NCBI CloneDB:
     priority 7
 
-    track cloneEnd_MSMg01
+    track cloneEndMSMg01
     parent cloneEndSuper off
     shortLabel MSMg01
     longLabel Mus musculus molossinus male BAC library 1
@@ -95,7 +95,7 @@ noInherit on
     urlLabel NCBI CloneDB:
     priority 8
 
-    track cloneEnd_RP23
+    track cloneEndRP23
     parent cloneEndSuper off
     shortLabel RP23
     longLabel RPCI-23 C57BL/6J female BAC library
@@ -106,7 +106,7 @@ noInherit on
     urlLabel NCBI CloneDB:
     priority 9
 
-    track cloneEnd_RP24
+    track cloneEndRP24
     parent cloneEndSuper off
     shortLabel RP24
     longLabel RPCI-24 C57BL/6J male BAC library
@@ -117,7 +117,7 @@ noInherit on
     urlLabel NCBI CloneDB:
     priority 10
 
-    track cloneEnd_WI1
+    track cloneEndWI1
     parent cloneEndSuper off
     shortLabel WI1
     longLabel WIBR-1 fosmid library
@@ -128,7 +128,7 @@ noInherit on
     urlLabel NCBI CloneDB:
     priority 11
 
-    track cloneEnd_multipleMaps
+    track cloneEndmultipleMaps
     parent cloneEndSuper off
     shortLabel Multiple mappings
     longLabel Clone end placements that map to multiple locations in the genome
@@ -139,7 +139,7 @@ noInherit on
     urlLabel NCBI CloneDB:
     priority 12
 
-    track cloneEnd_badEnds
+    track cloneEndbadEnds
     parent cloneEndSuper off
     shortLabel Bad end mappings
     longLabel Clone end placements that map too far apart (3X median library size)
@@ -150,7 +150,7 @@ noInherit on
     urlLabel NCBI CloneDB:
     priority 13
 
-    track cloneEnd_coverageForward
+    track cloneEndcoverageForward
     parent cloneEndSuper on
     shortLabel Coverage forward strand
     longLabel Clone end placements overlap coverage on the forward strand
@@ -161,7 +161,7 @@ noInherit on
     windowingFunction mean
     priority 14
 
-    track cloneEnd_coverageReverse
+    track cloneEndcoverageReverse
     parent cloneEndSuper on
     shortLabel Coverage reverse strand
     longLabel Clone end placements overlap coverage on the reverse strand
@@ -173,79 +173,79 @@ noInherit on
     autoScale on
     priority 15
 
-searchTable cloneEnd_B6Ng01
+searchTable cloneEndB6Ng01
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex B6Ng01-([0-9A-Z])+
 
-searchTable cloneEnd_bMQ
+searchTable cloneEndbMQ
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex [Bb]MQ-([0-9A-Z])+
 
-searchTable cloneEnd_C3H
+searchTable cloneEndC3H
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex C3H-([0-9A-Z])+
 
-searchTable cloneEnd_CH29
+searchTable cloneEndCH29
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex CH29-([0-9A-Z])+
 
-searchTable cloneEnd_DN
+searchTable cloneEndDN
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex DN-([0-9A-Z])+
 
-searchTable cloneEnd_MHPN
+searchTable cloneEndMHPN
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex MHPN-([0-9A-Z])+
 
-searchTable cloneEnd_MHPP
+searchTable cloneEndMHPP
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex MHPP-([0-9A-Z])+
 
-searchTable cloneEnd_MSMg01
+searchTable cloneEndMSMg01
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex MSMg01-([0-9A-Z])+
 
-searchTable cloneEnd_RP23
+searchTable cloneEndRP23
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex RP23-([0-9A-Z])+
 
-searchTable cloneEnd_RP24
+searchTable cloneEndRP24
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex RP24-([0-9A-Z])+
 
-searchTable cloneEnd_WI1
+searchTable cloneEndWI1
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex [Ww][Ii]1-([0-9A-Z])+
 
-searchTable cloneEnd_multipleMaps
+searchTable cloneEndmultipleMaps
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex [BCDMRW][HIMNPS36]([-0-9A-Zg])+
 
-searchTable cloneEnd_badEnds
+searchTable cloneEndbadEnds
 searchType bed
 searchMethod prefix
 searchPriority 50

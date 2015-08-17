@@ -7,7 +7,7 @@
 
 struct annoRow *annoRowFromStringArray(char *chrom, uint start, uint end, boolean rightJoinFail,
 				       char **wordsIn, int numCols, struct lm *lm)
-/* Allocate & return an annoRow with words cloned from wordsIn. */
+/* Allocate & return an annoRow (type arWords) with data cloned from wordsIn. */
 {
 struct annoRow *aRow;
 lmAllocVar(lm, aRow);
@@ -24,9 +24,10 @@ aRow->data = words;
 return aRow;
 }
 
-struct annoRow *annoRowWigNew(char *chrom, uint start, uint end, boolean rightJoinFail,
-			      float *values, struct lm *lm)
-/* Allocate & return an annoRowWig, with clone of values; length of values is (end-start). */
+struct annoRow *annoRowWigVecNew(char *chrom, uint start, uint end, boolean rightJoinFail,
+                                 float *values, struct lm *lm)
+/* Allocate & return an annoRow (type arWigVec), with cloned per-base values;
+ * length of values is (end-start). */
 {
 struct annoRow *row;
 lmAllocVar(lm, row);
@@ -38,19 +39,37 @@ row->rightJoinFail = rightJoinFail;
 return row;
 }
 
+struct annoRow *annoRowWigSingleNew(char *chrom, uint start, uint end, boolean rightJoinFail,
+                                 double value, struct lm *lm)
+/* Allocate & return an annoRow (type arWigSingle), which contains a single value for
+ * all bases from start to end. */
+{
+struct annoRow *row;
+lmAllocVar(lm, row);
+row->chrom = lmCloneString(lm, chrom);
+row->start = start;
+row->end = end;
+row->data = lmCloneMem(lm, &value, sizeof(value));
+row->rightJoinFail = rightJoinFail;
+return row;
+}
+
 struct annoRow *annoRowClone(struct annoRow *rowIn, enum annoRowType rowType, int numCols,
 			     struct lm *lm)
 /* Allocate & return a single annoRow cloned from rowIn.  If rowIn is NULL, return NULL.
- * If type is arWig, numCols is ignored. */
+ * If type is arWig*, numCols is ignored. */
 {
 if (rowIn == NULL)
     return NULL;
 if (rowType == arWords)
     return annoRowFromStringArray(rowIn->chrom, rowIn->start, rowIn->end, rowIn->rightJoinFail,
 				  rowIn->data, numCols, lm);
-else if (rowType == arWig)
-    return annoRowWigNew(rowIn->chrom, rowIn->start, rowIn->end, rowIn->rightJoinFail,
+else if (rowType == arWigVec)
+    return annoRowWigVecNew(rowIn->chrom, rowIn->start, rowIn->end, rowIn->rightJoinFail,
 			 (float *)rowIn->data, lm);
+else if (rowType == arWigSingle)
+    return annoRowWigSingleNew(rowIn->chrom, rowIn->start, rowIn->end, rowIn->rightJoinFail,
+                               ((double *)rowIn->data)[0], lm);
 else
     errAbort("annoRowClone: unrecognized type %d", rowType);
 return NULL;

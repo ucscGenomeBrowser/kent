@@ -9,7 +9,7 @@ var HgIntegratorModel = ImModel.extend({
 
     maxDataSources: 5,
     tdbFields: 'track,table,shortLabel,parent,subtracks',
-    excludeTypes: 'bam,wigMaf',
+    excludeTypes: 'bam,wigMaf,maf',
 
     handleCartVar: function(mutState, cartVar, newValue) {
         // Some cart variables require special action (not simply being merged into top-level state)

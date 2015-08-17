@@ -1,0 +1,19 @@
+# for emacs: -*- mode: sh; -*-
+
+# typical construction procedure for a 'microsat' track
+
+##########################################################################
+# CREATE MICROSAT TRACK
+     # assuming simple repeats has already been done (perhaps it would
+     #     be useful to fold this procedure into the simpleRepeats script ...)
+     ssh hgwdev
+     mkdir /cluster/data/<db>/bed/microsat
+     cd /cluster/data/<db>/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed <db> microsat microsat.bed
+
+    #	Read <some N> elements of size 4 from microsat.bed
+
+#########################################################################
+
