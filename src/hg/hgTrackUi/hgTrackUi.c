@@ -2235,7 +2235,16 @@ void oligoMatchUi(struct trackDb *tdb)
 {
 char *oligo = cartUsualString(cart, oligoMatchVar, oligoMatchDefault);
 puts("<P><B>Short (2-30 base) sequence:</B>");
-cgiMakeTextVar(oligoMatchVar, oligo, 45);
+puts("<script>\
+    function packTrack () \
+    { \
+    var box = jQuery('select[name$=oligoMatch]'); \
+    if (box.val()=='hide') \
+        box.val('pack'); \
+    } \
+    </script>");
+printf("<input name=\"%s\" size=\"%d\" value=\"%s\" oninput=\"packTrack();\" type=\"TEXT\">", \
+    oligoMatchVar, 45, oligo);
 }
 
 void cutterUi(struct trackDb *tdb)
