@@ -312,5 +312,8 @@ INLINE unsigned pslTEnd(struct psl *psl, int blkIdx)
 return psl->tStarts[blkIdx] + psl->blockSizes[blkIdx];
 }
 
+struct psl* pslClone(struct psl *psl);
+/* clone a psl */
+
 #endif /* PSL_H */
 
