@@ -294,7 +294,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'someuser'@'%'
 
 
 You can tell mysql to use SSL for a user's account and to
-further require the client to user their key and x509 certificate to connect by saying:
+further require the client to use their key and x509 certificate to connect by saying:
 
 GRANT ALL PRIVILEGES ON *.* TO 'someuser'@'%'
   REQUIRE x509;
