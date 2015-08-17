@@ -1990,6 +1990,7 @@ for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
         pslCp->qSequence[iBlk] = cloneString(psl->qSequence[iBlk]);
     if (psl->tSequence != NULL)
         pslCp->tSequence[iBlk] = cloneString(psl->tSequence[iBlk]);
+    pslCp->blockCount++;
     }
 return pslCp;
 }
