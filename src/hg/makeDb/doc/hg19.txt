@@ -9252,7 +9252,7 @@ TMPDIR=/scratch/tmp
 # Old DGV format is obsolete; see the following section.
 _EOF_
 #######################################################################
-# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 7/27/15 angie)
+# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 8/18/15 angie)
 # Redmine #15767
 # previously done 9/13/13 #11200, 11/7/14 #14188
     # Beta last updated 2/11/13 #9401
@@ -9267,10 +9267,10 @@ _EOF_
     wget http://dgv.tcag.ca/dgv/docs/GRCh37_hg19_supportingvariants_$release.txt
     # These are the latest columns; if any changes, update translateDgvPlus.pl:
     head -1 GRCh37_hg19*.txt
-#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription genes   samples
+#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription       genes   samples
     # Eyeball the categories of variants:
     cut -f 5,6 GRCh37_hg19_supportingvariants_$release.txt  | sort | uniq -c | head -100
-#1879736 CNV     deletion
+#1879738 CNV     deletion
 # 153963 CNV     duplication
 # 879317 CNV     gain
 #   8657 CNV     gain+loss
@@ -9285,7 +9285,7 @@ _EOF_
 #      1 varianttype     variantsubtype
 
     cut -f 5,6 GRCh37_hg19_variants_$release.txt | sort | uniq -c | head -100
-# 101259 CNV     deletion
+# 101257 CNV     deletion
 #  21360 CNV     duplication
 #  46452 CNV     gain
 #   6902 CNV     gain+loss
@@ -9305,10 +9305,11 @@ _EOF_
       GRCh37_hg19_variants_$release.txt > dgvMerged.bed
     hgLoadBed hg19 dgvSupporting dgvSupporting.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 6563733 elements of size 22 from dgvSupporting.bed
+#Read 6563735 elements of size 22 from dgvSupporting.bed
     hgLoadBed hg19 dgvMerged dgvMerged.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 340651 elements of size 22 from dgvMerged.bed
+#Read 340649 elements of size 22 from dgvMerged.bed
+    rm bed.tab && gzip *.{txt,bed} &
 
 
 #######################################################################
