@@ -91,7 +91,7 @@ if (a->valHash->elCount < b->valHash->elCount)
 
 /* Ok, have to do hard work of checking values move in step.  Do this with aid of
  * hash keyed by a with values from b. */
-boolean areLocked = TRUE;
+boolean arePredictable = TRUE;
 struct hash *hash = hashNew(0);
 int aIx = a->ix, bIx = b->ix;
 struct fieldedRow *row;
@@ -104,7 +104,7 @@ for (row = table->rowList; row != NULL; row = row->next)
 	{
 	if (!sameString(bVal, bOldVal))
 	    {
-	    areLocked = FALSE;
+	    arePredictable = FALSE;
 	    break;
 	    }
 	}
@@ -114,7 +114,7 @@ for (row = table->rowList; row != NULL; row = row->next)
 	}
     }
 hashFree(&hash);
-return areLocked;
+return arePredictable;
 }
 
 struct fieldInfo *makeFieldInfo(struct fieldedTable *table)
@@ -145,7 +145,7 @@ slReverse(&fieldList);
 return fieldList;
 }
 
-struct slRef *findLockedFields(struct fieldedTable *table, struct fieldInfo *fieldList,
+struct slRef *findPredictableFields(struct fieldedTable *table, struct fieldInfo *fieldList,
     struct fieldInfo *primaryField, struct slName *exceptList)
 /* Return list of fields from fieldList that move in lock-step with primary field */
 {
@@ -181,7 +181,10 @@ struct fieldInfo *field;
 for (field = allFields; field != NULL; field = field->next)
     {
     /* Get list of fields locked to this one, list includes self */
-    struct slRef *lockedFields = findLockedFields(table, allFields, field, NULL);
+    struct slRef *lockedFields = findPredictableFields(table, allFields, field, NULL);
+
+    /* We do some weighting to reduce the value of fields which are predictable but move slower 
+     * than we do. Indirectly this lets these form a higher level structure on top of us. */
     double fieldValCount = field->valHash->elCount;
     double q = 1.0/fieldValCount; 
     double lockWeight = 0;
@@ -230,7 +233,7 @@ struct fieldInfo *keyField = fieldInfoFind(allFields, keyName);
 if (keyField == NULL)
     errAbort("%s not found in fields", keyName);
 *retKeyField = keyField;
-return findLockedFields(table, allFields, keyField, except);
+return findPredictableFields(table, allFields, keyField, except);
 }
 
 
