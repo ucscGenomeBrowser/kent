@@ -172,7 +172,7 @@ struct slRef *partingList = NULL;
 struct fieldInfo *partingField = NULL;
 int tableRows = slCount(table->rowList);
 int oldLineCount = tableRows * (table->fieldCount + 1);
-uglyf("Find best parting on table with %d rows and %d fields\n", tableRows, table->fieldCount);
+verbose(2, "Find best parting on table with %d rows and %d fields\n", tableRows, table->fieldCount);
 
 /* Of the ones that have the smallest number of values, find the set with the
  * most fields locked together */
@@ -200,7 +200,8 @@ for (field = allFields; field != NULL; field = field->next)
     double varyCount = table->fieldCount - lockWeight;
     double newLineCount = field->valHash->elCount * (1 + lockWeight) + tableRows * (1 + varyCount);
     double linesSaved = oldLineCount - newLineCount;
-    uglyf("field %s, %d vals, %g locked, %g lines saved\n", field->name, field->valHash->elCount, lockWeight, linesSaved);
+    verbose(2, "field %s, %d vals, %g locked, %g lines saved\n", field->name, 
+	field->valHash->elCount, lockWeight, linesSaved);
     if (linesSaved > bestLinesSaved)
 	{
 	bestLinesSaved = linesSaved;
@@ -375,7 +376,7 @@ for (fieldedRow = table->rowList; fieldedRow != NULL; fieldedRow = fieldedRow->n
 	    partValList = partValList->next;
 
 	    /* Make subtable with nonconstant bits starting with header. */
-	    uglyf("ok 2.2 %s=%s\n", partingField->name, partVal);
+	    verbose(2, "parting on %s=%s\n", partingField->name, partVal);
 	    int ixTranslator[table->fieldCount];
 	    struct fieldedTable *subtable = NULL;
 	    makeSubtableExcluding(table, partingFieldIx, partVal,
