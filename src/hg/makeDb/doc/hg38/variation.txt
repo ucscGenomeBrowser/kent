@@ -967,7 +967,7 @@ EOF
 
 
 ##############################################################################
-# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 7/27/15 angie)
+# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 8/18/15 angie)
 # Redmine #15767
 # previously done 11/07/14 #14188
     set today = `date +%y%m%d`
@@ -978,10 +978,10 @@ EOF
     wget http://dgv.tcag.ca/dgv/docs/GRCh38_hg38_supportingvariants_$release.txt
     # These are the latest columns; if any changes, update translateDgvPlus.pl:
     head -1 GRCh38_hg38*.txt
-#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription genes   samples
+#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription       genes   samples
     # Eyeball the categories of variants:
     cut -f 5,6 GRCh38_hg38_supportingvariants_$release.txt  | sort | uniq -c | head -100
-#1860754 CNV     deletion
+#1860756 CNV     deletion
 # 151324 CNV     duplication
 # 854502 CNV     gain
 #   8269 CNV     gain+loss
@@ -996,7 +996,7 @@ EOF
 #      1 varianttype     variantsubtype
 
     cut -f 5,6 GRCh38_hg38_variants_$release.txt | sort | uniq -c | head -100
-#  99690 CNV     deletion
+#  99688 CNV     deletion
 #  21081 CNV     duplication
 #  46052 CNV     gain
 #   6709 CNV     gain+loss
@@ -1016,10 +1016,11 @@ EOF
       GRCh38_hg38_variants_$release.txt > dgvMerged.bed
     hgLoadBed hg38 dgvSupporting dgvSupporting.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 6480479 elements of size 22 from dgvSupporting.bed
+#Read 6480481 elements of size 22 from dgvSupporting.bed
     hgLoadBed hg38 dgvMerged dgvMerged.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 337633 elements of size 22 from dgvMerged.bed
+#Read 337631 elements of size 22 from dgvMerged.bed
+    rm bed.tab && gzip *.{txt,bed} &
 
 
 ##############################################################################

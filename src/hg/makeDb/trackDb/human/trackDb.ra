@@ -377,7 +377,7 @@ type bed 12 .
 
 track omim
 shortLabel OMIM
-longLabel NIH's Online Mendelian Inheritance in Man
+longLabel Online Mendelian Inheritance in Man
 url http://www.ncbi.nlm.nih.gov/omim/$$
 group varRep
 visibility hide

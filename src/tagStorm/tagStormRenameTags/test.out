@@ -1,0 +1,5011 @@
+Assay_Type_s RNA-Seq
+AssemblyName_s <not provided>
+BioProject_s PRJNA236018
+BioSampleModel_s Human
+Center_Name_s FLUIDIGM INC
+Consent_s public
+InsertSize_l 0
+LibraryLayout_s PAIRED
+Organism_s Homo sapiens
+Platform_s ILLUMINA
+ReleaseDate_s Aug 02, 2014
+SRA_Study_s SRP041736
+g1k_analysis_group_s <not provided>
+g1k_pop_code_s <not provided>
+isolate N/A
+empty_tag 
+source <not provided>
+
+        # Tissue here is just the source of tumor.  What is sequenced is not really breast but cancer.
+	tissue mammary gland; breast/duct
+	sex female
+	disease_stage_s IIA, grade 3
+	horrible_dissease_state TNM stage IIA, grade 3, ductal carcinoma
+	cell_line_s HCC1954 (ATCC® CRL-2338?)
+	biomaterial_provider_s ATCC
+	age 61
+	LoadDate_s May 08, 2014
+
+		cryptic_id 2338_1
+		SRA_Sample_s SRS603194
+		Sample_Name_s 2338_1
+		population_s 2338 single cell of 1
+		BioSample_s SAMN02731786
+
+			Run_s SRR1274192
+			MBytes_l 1094
+			MBases_l 1566
+
+			Run_s SRR1274193
+			MBytes_l 1
+			MBases_l 2
+
+		cryptic_id 2338_10
+		SRA_Sample_s SRS603195
+		Sample_Name_s 2338_10
+		population_s 2338 single cell of 10
+		BioSample_s SAMN02731795
+
+			Run_s SRR1274194
+			MBytes_l 892
+			MBases_l 1273
+
+			Run_s SRR1274195
+			MBytes_l 1
+			MBases_l 1
+
+		cryptic_id 2338_11
+		SRA_Sample_s SRS603196
+		Sample_Name_s 2338_11
+		population_s 2338 single cell of 11
+		BioSample_s SAMN02731796
+
+			Run_s SRR1274196
+			MBytes_l 1114
+			MBases_l 1591
+
+			Run_s SRR1274197
+			MBytes_l 1
+			MBases_l 2
+
+		cryptic_id 2338_12
+		SRA_Sample_s SRS603197
+		Sample_Name_s 2338_12
+		population_s 2338 single cell of 12
+		BioSample_s SAMN02731797
+
+			Run_s SRR1274198
+			MBytes_l 1067
+			MBases_l 1519
+
+			Run_s SRR1274199
+			MBytes_l 1
+			MBases_l 2
+
+		cryptic_id 2338_13
+		SRA_Sample_s SRS603198
+		Sample_Name_s 2338_13
+		population_s 2338 single cell of 13
+		BioSample_s SAMN02731798
+
+			Run_s SRR1274200
+			MBytes_l 1015
+			MBases_l 1442
+
+			Run_s SRR1274201
+			MBytes_l 1
+			MBases_l 2
+
+		cryptic_id 2338_14
+		SRA_Sample_s SRS603199
+		Sample_Name_s 2338_14
+		population_s 2338 single cell of 14
+		BioSample_s SAMN02731799
+
+			Run_s SRR1274202
+			MBytes_l 722
+			MBases_l 1032
+
+			Run_s SRR1274203
+			MBytes_l 0
+			MBases_l 1
+
+		cryptic_id 2338_15
+		SRA_Sample_s SRS603200
+		Sample_Name_s 2338_15
+		population_s 2338 single cell of 15
+		BioSample_s SAMN02731800
+
+			Run_s SRR1274204
+			MBytes_l 1160
+			MBases_l 1655
+
+			Run_s SRR1274205
+			MBytes_l 1
+			MBases_l 2
+
+		cryptic_id 2338_16
+		SRA_Sample_s SRS603201
+		Sample_Name_s 2338_16
+		population_s 2338 single cell of 16
+		BioSample_s SAMN02731801
+
+			Run_s SRR1274206
+			MBytes_l 1016
+			MBases_l 1453
+
+			Run_s SRR1274207
+			MBytes_l 1
+			MBases_l 2
+
+		cryptic_id 2338_17
+		SRA_Sample_s SRS603202
+		Sample_Name_s 2338_17
+		population_s 2338 single cell of 17
+		BioSample_s SAMN02731802
+
+			Run_s SRR1274208
+			MBytes_l 639
+			MBases_l 918
+
+			Run_s SRR1274209
+			MBytes_l 0
+			MBases_l 1
+
+		cryptic_id 2338_18
+		SRA_Sample_s SRS603203
+		Sample_Name_s 2338_18
+		population_s 2338 single cell of 18
+		BioSample_s SAMN02731803
+
+			Run_s SRR1274210
+			MBytes_l 1424
+			MBases_l 2031
+
+			Run_s SRR1274211
+			MBytes_l 1
+			MBases_l 2
+
+		cryptic_id 2338_19
+		SRA_Sample_s SRS603204
+		Sample_Name_s 2338_19
+		population_s 2338 single cell of 19
+		BioSample_s SAMN02731804
+
+			Run_s SRR1274212
+			MBytes_l 661
+			MBases_l 940
+
+			Run_s SRR1274213
+			MBytes_l 0
+			MBases_l 1
+
+		cryptic_id 2338_2
+		SRA_Sample_s SRS603205
+		Sample_Name_s 2338_2
+		population_s 2338 single cell of 2
+		BioSample_s SAMN02731787
+
+			Run_s SRR1274214
+			MBytes_l 1200
+			MBases_l 1717
+
+			Run_s SRR1274215
+			MBytes_l 1
+			MBases_l 2
+
+		cryptic_id 2338_20
+		SRA_Sample_s SRS603206
+		Sample_Name_s 2338_20
+		population_s 2338 single cell of 20
+		BioSample_s SAMN02731805
+
+			Run_s SRR1274216
+			MBytes_l 642
+			MBases_l 909
+
+			Run_s SRR1274217
+			MBytes_l 0
+			MBases_l 1
+
+		cryptic_id 2338_21
+		SRA_Sample_s SRS603207
+		Sample_Name_s 2338_21
+		population_s 2338 single cell of 21
+		BioSample_s SAMN02731806
+
+			Run_s SRR1274218
+			MBytes_l 1239
+			MBases_l 1766
+
+			Run_s SRR1274219
+			MBytes_l 1
+			MBases_l 2
+
+		cryptic_id 2338_22
+		SRA_Sample_s SRS603208
+		Sample_Name_s 2338_22
+		population_s 2338 single cell of 22
+		BioSample_s SAMN02731807
+
+			Run_s SRR1274220
+			MBytes_l 1203
+			MBases_l 1719
+
+			Run_s SRR1274221
+			MBytes_l 1
+			MBases_l 2
+
+		cryptic_id 2338_3
+		SRA_Sample_s SRS603209
+		Sample_Name_s 2338_3
+		population_s 2338 single cell of 3
+		BioSample_s SAMN02731788
+
+			Run_s SRR1274222
+			MBytes_l 1092
+			MBases_l 1565
+
+			Run_s SRR1274223
+			MBytes_l 1
+			MBases_l 2
+
+		cryptic_id 2338_4
+		SRA_Sample_s SRS603210
+		Sample_Name_s 2338_4
+		population_s 2338 single cell of 4
+		BioSample_s SAMN02731789
+
+			Run_s SRR1274224
+			MBytes_l 614
+			MBases_l 878
+
+			Run_s SRR1274225
+			MBytes_l 0
+			MBases_l 1
+
+		cryptic_id 2338_5
+		SRA_Sample_s SRS603211
+		Sample_Name_s 2338_5
+		population_s 2338 single cell of 5
+		BioSample_s SAMN02731790
+
+			Run_s SRR1274226
+			MBytes_l 1315
+			MBases_l 1890
+
+			Run_s SRR1274227
+			MBytes_l 1
+			MBases_l 2
+
+		cryptic_id 2338_6
+		SRA_Sample_s SRS603212
+		Sample_Name_s 2338_6
+		population_s 2338 single cell of 6
+		BioSample_s SAMN02731791
+
+			Run_s SRR1274228
+			MBytes_l 734
+			MBases_l 1052
+
+			Run_s SRR1274229
+			MBytes_l 0
+			MBases_l 1
+
+		cryptic_id 2338_7
+		SRA_Sample_s SRS603213
+		Sample_Name_s 2338_7
+		population_s 2338 single cell of 7
+		BioSample_s SAMN02731792
+
+			Run_s SRR1274230
+			MBytes_l 999
+			MBases_l 1436
+
+			Run_s SRR1274231
+			MBytes_l 1
+			MBases_l 2
+
+		cryptic_id 2338_8
+		SRA_Sample_s SRS603214
+		Sample_Name_s 2338_8
+		population_s 2338 single cell of 8
+		BioSample_s SAMN02731793
+
+			Run_s SRR1274232
+			MBytes_l 1029
+			MBases_l 1477
+
+			Run_s SRR1274233
+			MBytes_l 0
+			MBases_l 1
+
+		cryptic_id 2338_9
+		SRA_Sample_s SRS603215
+		Sample_Name_s 2338_9
+		population_s 2338 single cell of 9
+		BioSample_s SAMN02731794
+
+			Run_s SRR1274234
+			MBytes_l 1190
+			MBases_l 1693
+
+			Run_s SRR1274235
+			MBytes_l 1
+			MBases_l 2
+
+	tissue peripheral blood
+	LoadDate_s May 08, 2014
+	biomaterial_provider_s ATCC
+	disease_stage_s <not provided>
+	sex female
+
+		age 61
+		cell_line_s HCC1954 BL (ATCC® CRL-2339?)
+		horrible_dissease_state normal blood
+
+			cryptic_id 2339_1
+			SRA_Sample_s SRS603216
+			Sample_Name_s 2339_1
+			population_s 2339 single cell of 1
+			BioSample_s SAMN02731808
+
+				Run_s SRR1274236
+				MBytes_l 1232
+				MBases_l 1752
+
+				Run_s SRR1274237
+				MBytes_l 1
+				MBases_l 2
+
+			cryptic_id 2339_10
+			SRA_Sample_s SRS603217
+			Sample_Name_s 2339_10
+			population_s 2339 single cell of 10
+			BioSample_s SAMN02731817
+
+				Run_s SRR1274238
+				MBytes_l 960
+				MBases_l 1371
+
+				Run_s SRR1274239
+				MBytes_l 1
+				MBases_l 1
+
+			cryptic_id 2339_11
+			SRA_Sample_s SRS603218
+			Sample_Name_s 2339_11
+			population_s 2339 single cell of 11
+			BioSample_s SAMN02731818
+
+				Run_s SRR1274240
+				MBytes_l 1361
+				MBases_l 1939
+
+				Run_s SRR1274241
+				MBytes_l 1
+				MBases_l 2
+
+			cryptic_id 2339_12
+			SRA_Sample_s SRS603219
+			Sample_Name_s 2339_12
+			population_s 2339 single cell of 12
+			BioSample_s SAMN02731819
+
+				Run_s SRR1274242
+				MBytes_l 1473
+				MBases_l 2075
+
+				Run_s SRR1274243
+				MBytes_l 1
+				MBases_l 2
+
+			cryptic_id 2339_13
+			SRA_Sample_s SRS603220
+			Sample_Name_s 2339_13
+			population_s 2339 single cell of 13
+			BioSample_s SAMN02731820
+
+				Run_s SRR1274244
+				MBytes_l 1462
+				MBases_l 2085
+
+				Run_s SRR1274245
+				MBytes_l 1
+				MBases_l 2
+
+			cryptic_id 2339_14
+			SRA_Sample_s SRS603221
+			Sample_Name_s 2339_14
+			population_s 2339 single cell of 14
+			BioSample_s SAMN02731821
+
+				Run_s SRR1274246
+				MBytes_l 910
+				MBases_l 1302
+
+				Run_s SRR1274247
+				MBytes_l 1
+				MBases_l 1
+
+			cryptic_id 2339_15
+			SRA_Sample_s SRS603222
+			Sample_Name_s 2339_15
+			population_s 2339 single cell of 15
+			BioSample_s SAMN02731822
+
+				Run_s SRR1274248
+				MBytes_l 960
+				MBases_l 1376
+
+				Run_s SRR1274249
+				MBytes_l 1
+				MBases_l 1
+
+			cryptic_id 2339_16
+			SRA_Sample_s SRS603223
+			Sample_Name_s 2339_16
+			population_s 2339 single cell of 16
+			BioSample_s SAMN02731823
+
+				Run_s SRR1274250
+				MBytes_l 1154
+				MBases_l 1653
+
+				Run_s SRR1274251
+				MBytes_l 1
+				MBases_l 2
+
+			cryptic_id 2339_17
+			SRA_Sample_s SRS603224
+			Sample_Name_s 2339_17
+			population_s 2339 single cell of 17
+			BioSample_s SAMN02731824
+
+				Run_s SRR1274252
+				MBytes_l 931
+				MBases_l 1326
+
+				Run_s SRR1274253
+				MBytes_l 1
+				MBases_l 1
+
+			cryptic_id 2339_2
+			SRA_Sample_s SRS603225
+			Sample_Name_s 2339_2
+			population_s 2339 single cell of 2
+			BioSample_s SAMN02731809
+
+				Run_s SRR1274254
+				MBytes_l 1388
+				MBases_l 1958
+
+				Run_s SRR1274255
+				MBytes_l 1
+				MBases_l 2
+
+			cryptic_id 2339_3
+			SRA_Sample_s SRS603226
+			Sample_Name_s 2339_3
+			population_s 2339 single cell of 3
+			BioSample_s SAMN02731810
+
+				Run_s SRR1274256
+				MBytes_l 1137
+				MBases_l 1604
+
+				Run_s SRR1274257
+				MBytes_l 1
+				MBases_l 2
+
+			cryptic_id 2339_4
+			SRA_Sample_s SRS603227
+			Sample_Name_s 2339_4
+			population_s 2339 single cell of 4
+			BioSample_s SAMN02731811
+
+				Run_s SRR1274258
+				MBytes_l 1136
+				MBases_l 1602
+
+				Run_s SRR1274259
+				MBytes_l 1
+				MBases_l 1
+
+			cryptic_id 2339_5
+			SRA_Sample_s SRS603228
+			Sample_Name_s 2339_5
+			population_s 2339 single cell of 5
+			BioSample_s SAMN02731812
+
+				Run_s SRR1274260
+				MBytes_l 1339
+				MBases_l 1883
+
+				Run_s SRR1274261
+				MBytes_l 1
+				MBases_l 2
+
+			cryptic_id 2339_6
+			SRA_Sample_s SRS603229
+			Sample_Name_s 2339_6
+			population_s 2339 single cell of 6
+			BioSample_s SAMN02731813
+
+				Run_s SRR1274262
+				MBytes_l 733
+				MBases_l 1042
+
+				Run_s SRR1274263
+				MBytes_l 0
+				MBases_l 1
+
+			cryptic_id 2339_7
+			SRA_Sample_s SRS603230
+			Sample_Name_s 2339_7
+			population_s 2339 single cell of 7
+			BioSample_s SAMN02731814
+
+				Run_s SRR1274264
+				MBytes_l 1206
+				MBases_l 1720
+
+				Run_s SRR1274265
+				MBytes_l 1
+				MBases_l 2
+
+			cryptic_id 2339_8
+			SRA_Sample_s SRS603231
+			Sample_Name_s 2339_8
+			population_s 2339 single cell of 8
+			BioSample_s SAMN02731815
+
+				Run_s SRR1274266
+				MBytes_l 520
+				MBases_l 732
+
+				Run_s SRR1274267
+				MBytes_l 0
+				MBases_l 1
+
+			cryptic_id 2339_9
+			SRA_Sample_s SRS603232
+			Sample_Name_s 2339_9
+			population_s 2339 single cell of 9
+			BioSample_s SAMN02731816
+
+				Run_s SRR1274268
+				MBytes_l 1066
+				MBases_l 1532
+
+				Run_s SRR1274269
+				MBytes_l 1
+				MBases_l 2
+
+		age 36
+		cell_line_s HL-60 (ATCC® CCL-240?)
+		horrible_dissease_state acute promyelocytic leukemia
+
+			cryptic_id HL60_47
+			SRA_Sample_s SRS603407
+			Sample_Name_s HL60_47
+			population_s HL60 single cell of 47
+			BioSample_s SAMN02731950
+
+				Run_s SRR1275136
+				MBytes_l 509
+				MBases_l 706
+
+				Run_s SRR1275137
+				MBytes_l 9
+				MBases_l 15
+
+			cryptic_id HL60_48
+			SRA_Sample_s SRS603408
+			Sample_Name_s HL60_48
+			population_s HL60 single cell of 48
+			BioSample_s SAMN02731951
+
+				Run_s SRR1275138
+				MBytes_l 703
+				MBases_l 971
+
+				Run_s SRR1275139
+				MBytes_l 14
+				MBases_l 24
+
+			cryptic_id HL60_49
+			SRA_Sample_s SRS603409
+			Sample_Name_s HL60_49
+			population_s HL60 single cell of 49
+			BioSample_s SAMN02731952
+
+				Run_s SRR1275140
+				MBytes_l 539
+				MBases_l 745
+
+				Run_s SRR1275141
+				MBytes_l 9
+				MBases_l 15
+
+			cryptic_id HL60_5
+			SRA_Sample_s SRS603410
+			Sample_Name_s HL60_5
+			population_s HL60 single cell of 5
+			BioSample_s SAMN02731908
+
+				Run_s SRR1275142
+				MBytes_l 309
+				MBases_l 455
+
+				Run_s SRR1275143
+				MBytes_l 4
+				MBases_l 6
+
+			cryptic_id HL60_50
+			SRA_Sample_s SRS603411
+			Sample_Name_s HL60_50
+			population_s HL60 single cell of 50
+			BioSample_s SAMN02731953
+
+				Run_s SRR1275144
+				MBytes_l 715
+				MBases_l 985
+
+				Run_s SRR1275145
+				MBytes_l 14
+				MBases_l 24
+
+			cryptic_id HL60_51
+			SRA_Sample_s SRS603412
+			Sample_Name_s HL60_51
+			population_s HL60 single cell of 51
+			BioSample_s SAMN02731954
+
+				Run_s SRR1275146
+				MBytes_l 809
+				MBases_l 1105
+
+				Run_s SRR1275147
+				MBytes_l 16
+				MBases_l 27
+
+			cryptic_id HL60_52
+			SRA_Sample_s SRS603413
+			Sample_Name_s HL60_52
+			population_s HL60 single cell of 52
+			BioSample_s SAMN02731955
+
+				Run_s SRR1275148
+				MBytes_l 613
+				MBases_l 858
+
+				Run_s SRR1275149
+				MBytes_l 13
+				MBases_l 23
+
+			cryptic_id HL60_53
+			SRA_Sample_s SRS603414
+			Sample_Name_s HL60_53
+			population_s HL60 single cell of 53
+			BioSample_s SAMN02731956
+
+				Run_s SRR1275150
+				MBytes_l 586
+				MBases_l 806
+
+				Run_s SRR1275151
+				MBytes_l 12
+				MBases_l 20
+
+			cryptic_id HL60_54
+			SRA_Sample_s SRS603415
+			Sample_Name_s HL60_54
+			population_s HL60 single cell of 54
+			BioSample_s SAMN02731957
+
+				Run_s SRR1275152
+				MBytes_l 686
+				MBases_l 942
+
+				Run_s SRR1275153
+				MBytes_l 12
+				MBases_l 20
+
+			cryptic_id HL60_6
+			SRA_Sample_s SRS603416
+			Sample_Name_s HL60_6
+			population_s HL60 single cell of 6
+			BioSample_s SAMN02731909
+
+				Run_s SRR1275154
+				MBytes_l 177
+				MBases_l 267
+
+				Run_s SRR1275155
+				MBytes_l 2
+				MBases_l 3
+
+			cryptic_id HL60_7
+			SRA_Sample_s SRS603417
+			Sample_Name_s HL60_7
+			population_s HL60 single cell of 7
+			BioSample_s SAMN02731910
+
+				Run_s SRR1275156
+				MBytes_l 373
+				MBases_l 567
+
+				Run_s SRR1275157
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id HL60_8
+			SRA_Sample_s SRS603418
+			Sample_Name_s HL60_8
+			population_s HL60 single cell of 8
+			BioSample_s SAMN02731911
+
+				Run_s SRR1275158
+				MBytes_l 328
+				MBases_l 496
+
+				Run_s SRR1275159
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id HL60_9
+			SRA_Sample_s SRS603419
+			Sample_Name_s HL60_9
+			population_s HL60 single cell of 9
+			BioSample_s SAMN02731912
+
+				Run_s SRR1275160
+				MBytes_l 305
+				MBases_l 470
+
+				Run_s SRR1275161
+				MBytes_l 3
+				MBases_l 4
+
+			cryptic_id HL60_19
+			SRA_Sample_s SRS603376
+			Sample_Name_s HL60_19
+			population_s HL60 single cell of 19
+			BioSample_s SAMN02731922
+
+				Run_s SRR1275179
+				MBytes_l 325
+				MBases_l 489
+
+				Run_s SRR1275180
+				MBytes_l 3
+				MBases_l 4
+
+			cryptic_id HL60_2
+			SRA_Sample_s SRS603377
+			Sample_Name_s HL60_2
+			population_s HL60 single cell of 2
+			BioSample_s SAMN02731905
+
+				Run_s SRR1275181
+				MBytes_l 354
+				MBases_l 524
+
+				Run_s SRR1275182
+				MBytes_l 4
+				MBases_l 6
+
+			cryptic_id HL60_20
+			SRA_Sample_s SRS603378
+			Sample_Name_s HL60_20
+			population_s HL60 single cell of 20
+			BioSample_s SAMN02731923
+
+				Run_s SRR1275183
+				MBytes_l 238
+				MBases_l 363
+
+				Run_s SRR1275184
+				MBytes_l 2
+				MBases_l 3
+
+			cryptic_id HL60_21
+			SRA_Sample_s SRS603379
+			Sample_Name_s HL60_21
+			population_s HL60 single cell of 21
+			BioSample_s SAMN02731924
+
+				Run_s SRR1275185
+				MBytes_l 283
+				MBases_l 430
+
+				Run_s SRR1275186
+				MBytes_l 2
+				MBases_l 3
+
+			cryptic_id HL60_22
+			SRA_Sample_s SRS603380
+			Sample_Name_s HL60_22
+			population_s HL60 single cell of 22
+			BioSample_s SAMN02731925
+
+				Run_s SRR1275187
+				MBytes_l 276
+				MBases_l 419
+
+				Run_s SRR1275188
+				MBytes_l 2
+				MBases_l 3
+
+			cryptic_id HL60_23
+			SRA_Sample_s SRS603381
+			Sample_Name_s HL60_23
+			population_s HL60 single cell of 23
+			BioSample_s SAMN02731926
+
+				Run_s SRR1275189
+				MBytes_l 314
+				MBases_l 475
+
+				Run_s SRR1275190
+				MBytes_l 3
+				MBases_l 4
+
+			cryptic_id HL60_24
+			SRA_Sample_s SRS603382
+			Sample_Name_s HL60_24
+			population_s HL60 single cell of 24
+			BioSample_s SAMN02731927
+
+				Run_s SRR1275191
+				MBytes_l 315
+				MBases_l 474
+
+				Run_s SRR1275192
+				MBytes_l 2
+				MBases_l 4
+
+			cryptic_id HL60_25
+			SRA_Sample_s SRS603383
+			Sample_Name_s HL60_25
+			population_s HL60 single cell of 25
+			BioSample_s SAMN02731928
+
+				Run_s SRR1275193
+				MBytes_l 418
+				MBases_l 634
+
+				Run_s SRR1275194
+				MBytes_l 4
+				MBases_l 6
+
+			cryptic_id HL60_26
+			SRA_Sample_s SRS603384
+			Sample_Name_s HL60_26
+			population_s HL60 single cell of 26
+			BioSample_s SAMN02731929
+
+				Run_s SRR1275195
+				MBytes_l 254
+				MBases_l 384
+
+				Run_s SRR1275196
+				MBytes_l 2
+				MBases_l 3
+
+			cryptic_id HL60_27
+			SRA_Sample_s SRS603385
+			Sample_Name_s HL60_27
+			population_s HL60 single cell of 27
+			BioSample_s SAMN02731930
+
+				Run_s SRR1275197
+				MBytes_l 290
+				MBases_l 444
+
+				Run_s SRR1275198
+				MBytes_l 2
+				MBases_l 4
+
+			cryptic_id HL60_28
+			SRA_Sample_s SRS603386
+			Sample_Name_s HL60_28
+			population_s HL60 single cell of 28
+			BioSample_s SAMN02731931
+
+				Run_s SRR1275199
+				MBytes_l 225
+				MBases_l 330
+
+				Run_s SRR1275200
+				MBytes_l 2
+				MBases_l 3
+
+			cryptic_id HL60_29
+			SRA_Sample_s SRS603390
+			Sample_Name_s HL60_29
+			population_s HL60 single cell of 29
+			BioSample_s SAMN02731932
+
+				Run_s SRR1275201
+				MBytes_l 272
+				MBases_l 409
+
+				Run_s SRR1275202
+				MBytes_l 2
+				MBases_l 4
+
+			cryptic_id HL60_3
+			SRA_Sample_s SRS603387
+			Sample_Name_s HL60_3
+			population_s HL60 single cell of 3
+			BioSample_s SAMN02731906
+
+				Run_s SRR1275203
+				MBytes_l 304
+				MBases_l 461
+
+				Run_s SRR1275204
+				MBytes_l 3
+				MBases_l 4
+
+			cryptic_id HL60_30
+			SRA_Sample_s SRS603388
+			Sample_Name_s HL60_30
+			population_s HL60 single cell of 30
+			BioSample_s SAMN02731933
+
+				Run_s SRR1275205
+				MBytes_l 286
+				MBases_l 438
+
+				Run_s SRR1275206
+				MBytes_l 2
+				MBases_l 4
+
+			cryptic_id HL60_31
+			SRA_Sample_s SRS603389
+			Sample_Name_s HL60_31
+			population_s HL60 single cell of 31
+			BioSample_s SAMN02731934
+
+				Run_s SRR1275207
+				MBytes_l 318
+				MBases_l 482
+
+				Run_s SRR1275208
+				MBytes_l 3
+				MBases_l 4
+
+			cryptic_id HL60_32
+			SRA_Sample_s SRS603391
+			Sample_Name_s HL60_32
+			population_s HL60 single cell of 32
+			BioSample_s SAMN02731935
+
+				Run_s SRR1275209
+				MBytes_l 230
+				MBases_l 350
+
+				Run_s SRR1275210
+				MBytes_l 2
+				MBases_l 3
+
+			cryptic_id HL60_33
+			SRA_Sample_s SRS603392
+			Sample_Name_s HL60_33
+			population_s HL60 single cell of 33
+			BioSample_s SAMN02731936
+
+				Run_s SRR1275211
+				MBytes_l 156
+				MBases_l 237
+
+				Run_s SRR1275212
+				MBytes_l 1
+				MBases_l 2
+
+			cryptic_id HL60_34
+			SRA_Sample_s SRS603393
+			Sample_Name_s HL60_34
+			population_s HL60 single cell of 34
+			BioSample_s SAMN02731937
+
+				Run_s SRR1275213
+				MBytes_l 55
+				MBases_l 83
+
+				Run_s SRR1275214
+				MBytes_l 0
+				MBases_l 0
+
+			cryptic_id HL60_35
+			SRA_Sample_s SRS603395
+			Sample_Name_s HL60_35
+			population_s HL60 single cell of 35
+			BioSample_s SAMN02731938
+
+				Run_s SRR1275215
+				MBytes_l 333
+				MBases_l 504
+
+				Run_s SRR1275216
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id HL60_36
+			SRA_Sample_s SRS603394
+			Sample_Name_s HL60_36
+			population_s HL60 single cell of 36
+			BioSample_s SAMN02731939
+
+				Run_s SRR1275217
+				MBytes_l 294
+				MBases_l 449
+
+				Run_s SRR1275218
+				MBytes_l 3
+				MBases_l 4
+
+			cryptic_id HL60_37
+			SRA_Sample_s SRS603396
+			Sample_Name_s HL60_37
+			population_s HL60 single cell of 37
+			BioSample_s SAMN02731940
+
+				Run_s SRR1275219
+				MBytes_l 253
+				MBases_l 388
+
+				Run_s SRR1275220
+				MBytes_l 2
+				MBases_l 3
+
+			cryptic_id HL60_38
+			SRA_Sample_s SRS603397
+			Sample_Name_s HL60_38
+			population_s HL60 single cell of 38
+			BioSample_s SAMN02731941
+
+				Run_s SRR1275221
+				MBytes_l 293
+				MBases_l 449
+
+				Run_s SRR1275222
+				MBytes_l 3
+				MBases_l 4
+
+			cryptic_id HL60_39
+			SRA_Sample_s SRS603398
+			Sample_Name_s HL60_39
+			population_s HL60 single cell of 39
+			BioSample_s SAMN02731942
+
+				Run_s SRR1275223
+				MBytes_l 370
+				MBases_l 564
+
+				Run_s SRR1275224
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id HL60_4
+			SRA_Sample_s SRS603399
+			Sample_Name_s HL60_4
+			population_s HL60 single cell of 4
+			BioSample_s SAMN02731907
+
+				Run_s SRR1275225
+				MBytes_l 93
+				MBases_l 138
+
+				Run_s SRR1275226
+				MBytes_l 2
+				MBases_l 3
+
+			cryptic_id HL60_40
+			SRA_Sample_s SRS603400
+			Sample_Name_s HL60_40
+			population_s HL60 single cell of 40
+			BioSample_s SAMN02731943
+
+				Run_s SRR1275227
+				MBytes_l 270
+				MBases_l 396
+
+				Run_s SRR1275228
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id HL60_41
+			SRA_Sample_s SRS603401
+			Sample_Name_s HL60_41
+			population_s HL60 single cell of 41
+			BioSample_s SAMN02731944
+
+				Run_s SRR1275229
+				MBytes_l 353
+				MBases_l 533
+
+				Run_s SRR1275230
+				MBytes_l 4
+				MBases_l 6
+
+			cryptic_id HL60_42
+			SRA_Sample_s SRS603402
+			Sample_Name_s HL60_42
+			population_s HL60 single cell of 42
+			BioSample_s SAMN02731945
+
+				Run_s SRR1275231
+				MBytes_l 411
+				MBases_l 625
+
+				Run_s SRR1275232
+				MBytes_l 4
+				MBases_l 6
+
+			cryptic_id HL60_43
+			SRA_Sample_s SRS603403
+			Sample_Name_s HL60_43
+			population_s HL60 single cell of 43
+			BioSample_s SAMN02731946
+
+				Run_s SRR1275233
+				MBytes_l 165
+				MBases_l 250
+
+				Run_s SRR1275234
+				MBytes_l 1
+				MBases_l 2
+
+			cryptic_id HL60_44
+			SRA_Sample_s SRS603404
+			Sample_Name_s HL60_44
+			population_s HL60 single cell of 44
+			BioSample_s SAMN02731947
+
+				Run_s SRR1275235
+				MBytes_l 386
+				MBases_l 588
+
+				Run_s SRR1275236
+				MBytes_l 4
+				MBases_l 6
+
+			cryptic_id HL60_45
+			SRA_Sample_s SRS603405
+			Sample_Name_s HL60_45
+			population_s HL60 single cell of 45
+			BioSample_s SAMN02731948
+
+				Run_s SRR1275237
+				MBytes_l 438
+				MBases_l 656
+
+				Run_s SRR1275238
+				MBytes_l 5
+				MBases_l 7
+
+			cryptic_id HL60_46
+			SRA_Sample_s SRS603406
+			Sample_Name_s HL60_46
+			population_s HL60 single cell of 46
+			BioSample_s SAMN02731949
+
+				Run_s SRR1275239
+				MBytes_l 469
+				MBases_l 650
+
+				Run_s SRR1275240
+				MBytes_l 11
+				MBases_l 19
+
+			cryptic_id HL60_1
+			SRA_Sample_s SRS603366
+			Sample_Name_s HL60_1
+			population_s HL60 single cell of 1
+			BioSample_s SAMN02731904
+
+				Run_s SRR1275303
+				MBytes_l 134
+				MBases_l 198
+
+				Run_s SRR1275304
+				MBytes_l 2
+				MBases_l 3
+
+			cryptic_id HL60_10
+			SRA_Sample_s SRS603367
+			Sample_Name_s HL60_10
+			population_s HL60 single cell of 10
+			BioSample_s SAMN02731913
+
+				Run_s SRR1275305
+				MBytes_l 213
+				MBases_l 326
+
+				Run_s SRR1275306
+				MBytes_l 2
+				MBases_l 3
+
+			cryptic_id HL60_11
+			SRA_Sample_s SRS603368
+			Sample_Name_s HL60_11
+			population_s HL60 single cell of 11
+			BioSample_s SAMN02731914
+
+				Run_s SRR1275307
+				MBytes_l 360
+				MBases_l 550
+
+				Run_s SRR1275308
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id HL60_12
+			SRA_Sample_s SRS603370
+			Sample_Name_s HL60_12
+			population_s HL60 single cell of 12
+			BioSample_s SAMN02731915
+
+				Run_s SRR1275309
+				MBytes_l 357
+				MBases_l 547
+
+				Run_s SRR1275310
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id HL60_13
+			SRA_Sample_s SRS603369
+			Sample_Name_s HL60_13
+			population_s HL60 single cell of 13
+			BioSample_s SAMN02731916
+
+				Run_s SRR1275311
+				MBytes_l 497
+				MBases_l 753
+
+				Run_s SRR1275312
+				MBytes_l 5
+				MBases_l 7
+
+			cryptic_id HL60_14
+			SRA_Sample_s SRS603371
+			Sample_Name_s HL60_14
+			population_s HL60 single cell of 14
+			BioSample_s SAMN02731917
+
+				Run_s SRR1275313
+				MBytes_l 346
+				MBases_l 526
+
+				Run_s SRR1275314
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id HL60_15
+			SRA_Sample_s SRS603372
+			Sample_Name_s HL60_15
+			population_s HL60 single cell of 15
+			BioSample_s SAMN02731918
+
+				Run_s SRR1275315
+				MBytes_l 322
+				MBases_l 493
+
+				Run_s SRR1275316
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id HL60_16
+			SRA_Sample_s SRS603373
+			Sample_Name_s HL60_16
+			population_s HL60 single cell of 16
+			BioSample_s SAMN02731919
+
+				Run_s SRR1275317
+				MBytes_l 192
+				MBases_l 295
+
+				Run_s SRR1275318
+				MBytes_l 2
+				MBases_l 2
+
+			cryptic_id HL60_17
+			SRA_Sample_s SRS603374
+			Sample_Name_s HL60_17
+			population_s HL60 single cell of 17
+			BioSample_s SAMN02731920
+
+				Run_s SRR1275319
+				MBytes_l 303
+				MBases_l 461
+
+				Run_s SRR1275320
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id HL60_18
+			SRA_Sample_s SRS603375
+			Sample_Name_s HL60_18
+			population_s HL60 single cell of 18
+			BioSample_s SAMN02731921
+
+				Run_s SRR1275321
+				MBytes_l 412
+				MBases_l 628
+
+				Run_s SRR1275322
+				MBytes_l 4
+				MBases_l 6
+
+	tissue foreskin
+	disease_stage_s <not provided>
+
+		age N/A
+		biomaterial_provider_s Stemgent
+		cell_line_s Stemgent® BJ Human Fibroblasts (early passage, p6)
+		horrible_dissease_state <not provided>
+		sex N/A
+		LoadDate_s May 08, 2014
+
+			cryptic_id BJ_1
+			SRA_Sample_s SRS603233
+			Sample_Name_s BJ_1
+			population_s BJ single cell of 1
+			BioSample_s SAMN02731836
+
+				Run_s SRR1274270
+				MBytes_l 34
+				MBases_l 52
+
+				Run_s SRR1274271
+				MBytes_l 0
+				MBases_l 1
+
+			cryptic_id BJ_10
+			SRA_Sample_s SRS603234
+			Sample_Name_s BJ_10
+			population_s BJ single cell of 10
+			BioSample_s SAMN02731845
+
+				Run_s SRR1274272
+				MBytes_l 31
+				MBases_l 49
+
+				Run_s SRR1274273
+				MBytes_l 0
+				MBases_l 0
+
+			cryptic_id BJ_11
+			SRA_Sample_s SRS603235
+			Sample_Name_s BJ_11
+			population_s BJ single cell of 11
+			BioSample_s SAMN02731846
+
+				Run_s SRR1274274
+				MBytes_l 80
+				MBases_l 127
+
+				Run_s SRR1274275
+				MBytes_l 1
+				MBases_l 1
+
+			cryptic_id BJ_12
+			SRA_Sample_s SRS603236
+			Sample_Name_s BJ_12
+			population_s BJ single cell of 12
+			BioSample_s SAMN02731847
+
+				Run_s SRR1274276
+				MBytes_l 171
+				MBases_l 269
+
+				Run_s SRR1274277
+				MBytes_l 2
+				MBases_l 3
+
+			cryptic_id BJ_13
+			SRA_Sample_s SRS603237
+			Sample_Name_s BJ_13
+			population_s BJ single cell of 13
+			BioSample_s SAMN02731848
+
+				Run_s SRR1274278
+				MBytes_l 192
+				MBases_l 303
+
+				Run_s SRR1274279
+				MBytes_l 2
+				MBases_l 4
+
+			cryptic_id BJ_14
+			SRA_Sample_s SRS603238
+			Sample_Name_s BJ_14
+			population_s BJ single cell of 14
+			BioSample_s SAMN02731849
+
+				Run_s SRR1274280
+				MBytes_l 309
+				MBases_l 486
+
+				Run_s SRR1274281
+				MBytes_l 4
+				MBases_l 6
+
+			cryptic_id BJ_15
+			SRA_Sample_s SRS603239
+			Sample_Name_s BJ_15
+			population_s BJ single cell of 15
+			BioSample_s SAMN02731850
+
+				Run_s SRR1274282
+				MBytes_l 372
+				MBases_l 592
+
+				Run_s SRR1274283
+				MBytes_l 5
+				MBases_l 8
+
+			cryptic_id BJ_16
+			SRA_Sample_s SRS603240
+			Sample_Name_s BJ_16
+			population_s BJ single cell of 16
+			BioSample_s SAMN02731851
+
+				Run_s SRR1274284
+				MBytes_l 188
+				MBases_l 295
+
+				Run_s SRR1274285
+				MBytes_l 2
+				MBases_l 3
+
+			cryptic_id BJ_17
+			SRA_Sample_s SRS603241
+			Sample_Name_s BJ_17
+			population_s BJ single cell of 17
+			BioSample_s SAMN02731852
+
+				Run_s SRR1274286
+				MBytes_l 194
+				MBases_l 304
+
+				Run_s SRR1274287
+				MBytes_l 2
+				MBases_l 3
+
+			cryptic_id BJ_18
+			SRA_Sample_s SRS603242
+			Sample_Name_s BJ_18
+			population_s BJ single cell of 18
+			BioSample_s SAMN02731853
+
+				Run_s SRR1274288
+				MBytes_l 129
+				MBases_l 203
+
+				Run_s SRR1274289
+				MBytes_l 1
+				MBases_l 2
+
+			cryptic_id BJ_19
+			SRA_Sample_s SRS603243
+			Sample_Name_s BJ_19
+			population_s BJ single cell of 19
+			BioSample_s SAMN02731854
+
+				Run_s SRR1274290
+				MBytes_l 265
+				MBases_l 411
+
+				Run_s SRR1274291
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id BJ_2
+			SRA_Sample_s SRS603244
+			Sample_Name_s BJ_2
+			population_s BJ single cell of 2
+			BioSample_s SAMN02731837
+
+				Run_s SRR1274292
+				MBytes_l 169
+				MBases_l 253
+
+				Run_s SRR1274293
+				MBytes_l 2
+				MBases_l 3
+
+			cryptic_id BJ_20
+			SRA_Sample_s SRS603245
+			Sample_Name_s BJ_20
+			population_s BJ single cell of 20
+			BioSample_s SAMN02731855
+
+				Run_s SRR1274294
+				MBytes_l 281
+				MBases_l 427
+
+				Run_s SRR1274295
+				MBytes_l 4
+				MBases_l 6
+
+			cryptic_id BJ_21
+			SRA_Sample_s SRS603246
+			Sample_Name_s BJ_21
+			population_s BJ single cell of 21
+			BioSample_s SAMN02731856
+
+				Run_s SRR1274296
+				MBytes_l 70
+				MBases_l 112
+
+				Run_s SRR1274297
+				MBytes_l 1
+				MBases_l 1
+
+			cryptic_id BJ_22
+			SRA_Sample_s SRS603247
+			Sample_Name_s BJ_22
+			population_s BJ single cell of 22
+			BioSample_s SAMN02731857
+
+				Run_s SRR1274298
+				MBytes_l 331
+				MBases_l 522
+
+				Run_s SRR1274299
+				MBytes_l 4
+				MBases_l 7
+
+			cryptic_id BJ_23
+			SRA_Sample_s SRS603248
+			Sample_Name_s BJ_23
+			population_s BJ single cell of 23
+			BioSample_s SAMN02731858
+
+				Run_s SRR1274300
+				MBytes_l 428
+				MBases_l 674
+
+				Run_s SRR1274301
+				MBytes_l 6
+				MBases_l 9
+
+			cryptic_id BJ_24
+			SRA_Sample_s SRS603249
+			Sample_Name_s BJ_24
+			population_s BJ single cell of 24
+			BioSample_s SAMN02731859
+
+				Run_s SRR1274302
+				MBytes_l 192
+				MBases_l 305
+
+				Run_s SRR1274303
+				MBytes_l 2
+				MBases_l 4
+
+			cryptic_id BJ_25
+			SRA_Sample_s SRS603250
+			Sample_Name_s BJ_25
+			population_s BJ single cell of 25
+			BioSample_s SAMN02731860
+
+				Run_s SRR1274304
+				MBytes_l 192
+				MBases_l 305
+
+				Run_s SRR1274305
+				MBytes_l 2
+				MBases_l 4
+
+			cryptic_id BJ_26
+			SRA_Sample_s SRS603251
+			Sample_Name_s BJ_26
+			population_s BJ single cell of 26
+			BioSample_s SAMN02731861
+
+				Run_s SRR1274306
+				MBytes_l 57
+				MBases_l 92
+
+				Run_s SRR1274307
+				MBytes_l 0
+				MBases_l 1
+
+			cryptic_id BJ_27
+			SRA_Sample_s SRS603254
+			Sample_Name_s BJ_27
+			population_s BJ single cell of 27
+			BioSample_s SAMN02731862
+
+				Run_s SRR1274308
+				MBytes_l 72
+				MBases_l 115
+
+				Run_s SRR1274309
+				MBytes_l 1
+				MBases_l 1
+
+			cryptic_id BJ_28
+			SRA_Sample_s SRS603252
+			Sample_Name_s BJ_28
+			population_s BJ single cell of 28
+			BioSample_s SAMN02731863
+
+				Run_s SRR1274310
+				MBytes_l 400
+				MBases_l 635
+
+				Run_s SRR1274311
+				MBytes_l 5
+				MBases_l 8
+
+			cryptic_id BJ_29
+			SRA_Sample_s SRS603253
+			Sample_Name_s BJ_29
+			population_s BJ single cell of 29
+			BioSample_s SAMN02731864
+
+				Run_s SRR1274312
+				MBytes_l 498
+				MBases_l 786
+
+				Run_s SRR1274313
+				MBytes_l 7
+				MBases_l 11
+
+			cryptic_id BJ_3
+			SRA_Sample_s SRS603255
+			Sample_Name_s BJ_3
+			population_s BJ single cell of 3
+			BioSample_s SAMN02731838
+
+				Run_s SRR1274314
+				MBytes_l 205
+				MBases_l 310
+
+				Run_s SRR1274315
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id BJ_30
+			SRA_Sample_s SRS603256
+			Sample_Name_s BJ_30
+			population_s BJ single cell of 30
+			BioSample_s SAMN02731865
+
+				Run_s SRR1274316
+				MBytes_l 64
+				MBases_l 99
+
+				Run_s SRR1274317
+				MBytes_l 1
+				MBases_l 2
+
+			cryptic_id BJ_31
+			SRA_Sample_s SRS603258
+			Sample_Name_s BJ_31
+			population_s BJ single cell of 31
+			BioSample_s SAMN02731866
+
+				Run_s SRR1274318
+				MBytes_l 26
+				MBases_l 41
+
+				Run_s SRR1274319
+				MBytes_l 0
+				MBases_l 0
+
+			cryptic_id BJ_32
+			SRA_Sample_s SRS603257
+			Sample_Name_s BJ_32
+			population_s BJ single cell of 32
+			BioSample_s SAMN02731867
+
+				Run_s SRR1274320
+				MBytes_l 346
+				MBases_l 547
+
+				Run_s SRR1274321
+				MBytes_l 5
+				MBases_l 7
+
+			cryptic_id BJ_33
+			SRA_Sample_s SRS603259
+			Sample_Name_s BJ_33
+			population_s BJ single cell of 33
+			BioSample_s SAMN02731868
+
+				Run_s SRR1274322
+				MBytes_l 292
+				MBases_l 466
+
+				Run_s SRR1274323
+				MBytes_l 4
+				MBases_l 6
+
+			cryptic_id BJ_34
+			SRA_Sample_s SRS603260
+			Sample_Name_s BJ_34
+			population_s BJ single cell of 34
+			BioSample_s SAMN02731869
+
+				Run_s SRR1274324
+				MBytes_l 57
+				MBases_l 88
+
+				Run_s SRR1274325
+				MBytes_l 0
+				MBases_l 1
+
+			cryptic_id BJ_35
+			SRA_Sample_s SRS603261
+			Sample_Name_s BJ_35
+			population_s BJ single cell of 35
+			BioSample_s SAMN02731870
+
+				Run_s SRR1274326
+				MBytes_l 343
+				MBases_l 531
+
+				Run_s SRR1274327
+				MBytes_l 4
+				MBases_l 7
+
+			cryptic_id BJ_36
+			SRA_Sample_s SRS603262
+			Sample_Name_s BJ_36
+			population_s BJ single cell of 36
+			BioSample_s SAMN02731871
+
+				Run_s SRR1274328
+				MBytes_l 283
+				MBases_l 442
+
+				Run_s SRR1274329
+				MBytes_l 4
+				MBases_l 6
+
+			cryptic_id BJ_37
+			SRA_Sample_s SRS603263
+			Sample_Name_s BJ_37
+			population_s BJ single cell of 37
+			BioSample_s SAMN02731872
+
+				Run_s SRR1274330
+				MBytes_l 296
+				MBases_l 465
+
+				Run_s SRR1274331
+				MBytes_l 4
+				MBases_l 7
+
+			cryptic_id BJ_4
+			SRA_Sample_s SRS603264
+			Sample_Name_s BJ_4
+			population_s BJ single cell of 4
+			BioSample_s SAMN02731839
+
+				Run_s SRR1274332
+				MBytes_l 328
+				MBases_l 519
+
+				Run_s SRR1274333
+				MBytes_l 4
+				MBases_l 7
+
+			cryptic_id BJ_5
+			SRA_Sample_s SRS603265
+			Sample_Name_s BJ_5
+			population_s BJ single cell of 5
+			BioSample_s SAMN02731840
+
+				Run_s SRR1274334
+				MBytes_l 149
+				MBases_l 235
+
+				Run_s SRR1274335
+				MBytes_l 2
+				MBases_l 3
+
+			cryptic_id BJ_6
+			SRA_Sample_s SRS603266
+			Sample_Name_s BJ_6
+			population_s BJ single cell of 6
+			BioSample_s SAMN02731841
+
+				Run_s SRR1274336
+				MBytes_l 161
+				MBases_l 256
+
+				Run_s SRR1274337
+				MBytes_l 2
+				MBases_l 3
+
+			cryptic_id BJ_7
+			SRA_Sample_s SRS603267
+			Sample_Name_s BJ_7
+			population_s BJ single cell of 7
+			BioSample_s SAMN02731842
+
+				Run_s SRR1274338
+				MBytes_l 182
+				MBases_l 290
+
+				Run_s SRR1274339
+				MBytes_l 2
+				MBases_l 4
+
+			cryptic_id BJ_8
+			SRA_Sample_s SRS603268
+			Sample_Name_s BJ_8
+			population_s BJ single cell of 8
+			BioSample_s SAMN02731843
+
+				Run_s SRR1274340
+				MBytes_l 354
+				MBases_l 568
+
+				Run_s SRR1274341
+				MBytes_l 5
+				MBases_l 8
+
+			cryptic_id BJ_9
+			SRA_Sample_s SRS603269
+			Sample_Name_s BJ_9
+			population_s BJ single cell of 9
+			BioSample_s SAMN02731844
+
+				Run_s SRR1274342
+				MBytes_l 203
+				MBases_l 313
+
+				Run_s SRR1274343
+				MBytes_l 3
+				MBases_l 4
+
+		age neonatal
+		biomaterial_provider_s ATCC
+		cell_line_s primary epidermal keratinocytes (ATCC® PCS-200-010?)
+		horrible_dissease_state normal
+		sex male
+
+			cryptic_id Kera_18
+			SRA_Sample_s SRS603495
+			Sample_Name_s Kera_18
+			population_s Kera single cell of 18
+			BioSample_s SAMN02731999
+
+				Run_s SRR1274146
+				MBytes_l 0
+				MBases_l 0
+				LoadDate_s May 08, 2014
+
+				Run_s SRR1274412
+				MBytes_l 22
+				MBases_l 33
+				LoadDate_s May 07, 2014
+
+			cryptic_id Kera_19
+			SRA_Sample_s SRS603496
+			Sample_Name_s Kera_19
+			population_s Kera single cell of 19
+			BioSample_s SAMN02732000
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274147
+				MBytes_l 368
+				MBases_l 565
+
+				Run_s SRR1274148
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id Kera_2
+			SRA_Sample_s SRS603497
+			Sample_Name_s Kera_2
+			population_s Kera single cell of 2
+			BioSample_s SAMN02731983
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274149
+				MBytes_l 322
+				MBases_l 496
+
+				Run_s SRR1274150
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id Kera_20
+			SRA_Sample_s SRS603498
+			Sample_Name_s Kera_20
+			population_s Kera single cell of 20
+			BioSample_s SAMN02732001
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274151
+				MBytes_l 535
+				MBases_l 833
+
+				Run_s SRR1274152
+				MBytes_l 6
+				MBases_l 10
+
+			cryptic_id Kera_21
+			SRA_Sample_s SRS603499
+			Sample_Name_s Kera_21
+			population_s Kera single cell of 21
+			BioSample_s SAMN02732002
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274153
+				MBytes_l 493
+				MBases_l 768
+
+				Run_s SRR1274154
+				MBytes_l 6
+				MBases_l 9
+
+			cryptic_id Kera_22
+			SRA_Sample_s SRS603500
+			Sample_Name_s Kera_22
+			population_s Kera single cell of 22
+			BioSample_s SAMN02732003
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274155
+				MBytes_l 394
+				MBases_l 617
+
+				Run_s SRR1274156
+				MBytes_l 4
+				MBases_l 7
+
+			cryptic_id Kera_23
+			SRA_Sample_s SRS603501
+			Sample_Name_s Kera_23
+			population_s Kera single cell of 23
+			BioSample_s SAMN02732004
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274157
+				MBytes_l 267
+				MBases_l 410
+
+				Run_s SRR1274158
+				MBytes_l 2
+				MBases_l 4
+
+			cryptic_id Kera_24
+			SRA_Sample_s SRS603502
+			Sample_Name_s Kera_24
+			population_s Kera single cell of 24
+			BioSample_s SAMN02732005
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274159
+				MBytes_l 310
+				MBases_l 477
+
+				Run_s SRR1274160
+				MBytes_l 3
+				MBases_l 4
+
+			cryptic_id Kera_25
+			SRA_Sample_s SRS603503
+			Sample_Name_s Kera_25
+			population_s Kera single cell of 25
+			BioSample_s SAMN02732006
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274161
+				MBytes_l 333
+				MBases_l 515
+
+				Run_s SRR1274162
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id Kera_26
+			SRA_Sample_s SRS603504
+			Sample_Name_s Kera_26
+			population_s Kera single cell of 26
+			BioSample_s SAMN02732007
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274163
+				MBytes_l 327
+				MBases_l 503
+
+				Run_s SRR1274164
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id Kera_27
+			SRA_Sample_s SRS603505
+			Sample_Name_s Kera_27
+			population_s Kera single cell of 27
+			BioSample_s SAMN02732008
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274165
+				MBytes_l 334
+				MBases_l 513
+
+				Run_s SRR1274166
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id Kera_28
+			SRA_Sample_s SRS603506
+			Sample_Name_s Kera_28
+			population_s Kera single cell of 28
+			BioSample_s SAMN02732009
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274167
+				MBytes_l 484
+				MBases_l 751
+
+				Run_s SRR1274168
+				MBytes_l 5
+				MBases_l 7
+
+			cryptic_id Kera_29
+			SRA_Sample_s SRS603507
+			Sample_Name_s Kera_29
+			population_s Kera single cell of 29
+			BioSample_s SAMN02732010
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274169
+				MBytes_l 562
+				MBases_l 885
+
+				Run_s SRR1274170
+				MBytes_l 7
+				MBases_l 12
+
+			cryptic_id Kera_3
+			SRA_Sample_s SRS603508
+			Sample_Name_s Kera_3
+			population_s Kera single cell of 3
+			BioSample_s SAMN02731984
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274171
+				MBytes_l 251
+				MBases_l 373
+
+				Run_s SRR1274172
+				MBytes_l 4
+				MBases_l 6
+
+			cryptic_id Kera_30
+			SRA_Sample_s SRS603509
+			Sample_Name_s Kera_30
+			population_s Kera single cell of 30
+			BioSample_s SAMN02732011
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274173
+				MBytes_l 279
+				MBases_l 442
+
+				Run_s SRR1274174
+				MBytes_l 4
+				MBases_l 6
+
+			cryptic_id Kera_31
+			SRA_Sample_s SRS603510
+			Sample_Name_s Kera_31
+			population_s Kera single cell of 31
+			BioSample_s SAMN02732012
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274175
+				MBytes_l 372
+				MBases_l 572
+
+				Run_s SRR1274176
+				MBytes_l 4
+				MBases_l 6
+
+			cryptic_id Kera_32
+			SRA_Sample_s SRS603511
+			Sample_Name_s Kera_32
+			population_s Kera single cell of 32
+			BioSample_s SAMN02732013
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274177
+				MBytes_l 295
+				MBases_l 455
+
+				Run_s SRR1274178
+				MBytes_l 3
+				MBases_l 4
+
+			cryptic_id Kera_33
+			SRA_Sample_s SRS603512
+			Sample_Name_s Kera_33
+			population_s Kera single cell of 33
+			BioSample_s SAMN02732014
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274179
+				MBytes_l 174
+				MBases_l 271
+
+				Run_s SRR1274180
+				MBytes_l 1
+				MBases_l 2
+
+			cryptic_id Kera_34
+			SRA_Sample_s SRS603513
+			Sample_Name_s Kera_34
+			population_s Kera single cell of 34
+			BioSample_s SAMN02732015
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274181
+				MBytes_l 399
+				MBases_l 628
+
+				Run_s SRR1274182
+				MBytes_l 5
+				MBases_l 8
+
+			cryptic_id Kera_35
+			SRA_Sample_s SRS603514
+			Sample_Name_s Kera_35
+			population_s Kera single cell of 35
+			BioSample_s SAMN02732016
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274183
+				MBytes_l 306
+				MBases_l 487
+
+				Run_s SRR1274184
+				MBytes_l 4
+				MBases_l 6
+
+			cryptic_id Kera_36
+			SRA_Sample_s SRS603515
+			Sample_Name_s Kera_36
+			population_s Kera single cell of 36
+			BioSample_s SAMN02732017
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274185
+				MBytes_l 94
+				MBases_l 144
+
+				Run_s SRR1274186
+				MBytes_l 1
+				MBases_l 1
+
+			cryptic_id Kera_37
+			SRA_Sample_s SRS603516
+			Sample_Name_s Kera_37
+			population_s Kera single cell of 37
+			BioSample_s SAMN02732018
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274187
+				MBytes_l 309
+				MBases_l 470
+
+				Run_s SRR1274092
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id Kera_17
+			SRA_Sample_s SRS603494
+			Sample_Name_s Kera_17
+			population_s Kera single cell of 17
+			BioSample_s SAMN02731998
+
+				Run_s SRR1274410
+				MBytes_l 319
+				MBases_l 497
+				LoadDate_s May 07, 2014
+
+				Run_s SRR1274411
+				MBytes_l 4
+				MBases_l 7
+				LoadDate_s May 08, 2014
+
+			cryptic_id Kera_1
+			SRA_Sample_s SRS603486
+			Sample_Name_s Kera_1
+			population_s Kera single cell of 1
+			BioSample_s SAMN02731982
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1275028
+				MBytes_l 242
+				MBases_l 362
+
+				Run_s SRR1275029
+				MBytes_l 2
+				MBases_l 4
+
+			cryptic_id Kera_10
+			SRA_Sample_s SRS603487
+			Sample_Name_s Kera_10
+			population_s Kera single cell of 10
+			BioSample_s SAMN02731991
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1275030
+				MBytes_l 350
+				MBases_l 541
+
+				Run_s SRR1275031
+				MBytes_l 4
+				MBases_l 7
+
+			cryptic_id Kera_11
+			SRA_Sample_s SRS603488
+			Sample_Name_s Kera_11
+			population_s Kera single cell of 11
+			BioSample_s SAMN02731992
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1275032
+				MBytes_l 240
+				MBases_l 373
+
+				Run_s SRR1275033
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id Kera_12
+			SRA_Sample_s SRS603489
+			Sample_Name_s Kera_12
+			population_s Kera single cell of 12
+			BioSample_s SAMN02731993
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1275034
+				MBytes_l 416
+				MBases_l 629
+
+				Run_s SRR1275035
+				MBytes_l 4
+				MBases_l 6
+
+			cryptic_id Kera_13
+			SRA_Sample_s SRS603490
+			Sample_Name_s Kera_13
+			population_s Kera single cell of 13
+			BioSample_s SAMN02731994
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1275036
+				MBytes_l 232
+				MBases_l 351
+
+				Run_s SRR1275037
+				MBytes_l 2
+				MBases_l 3
+
+			cryptic_id Kera_14
+			SRA_Sample_s SRS603491
+			Sample_Name_s Kera_14
+			population_s Kera single cell of 14
+			BioSample_s SAMN02731995
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1275038
+				MBytes_l 321
+				MBases_l 490
+
+				Run_s SRR1275039
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id Kera_15
+			SRA_Sample_s SRS603492
+			Sample_Name_s Kera_15
+			population_s Kera single cell of 15
+			BioSample_s SAMN02731996
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1275040
+				MBytes_l 393
+				MBases_l 607
+
+				Run_s SRR1275041
+				MBytes_l 5
+				MBases_l 8
+
+			cryptic_id Kera_16
+			SRA_Sample_s SRS603493
+			Sample_Name_s Kera_16
+			population_s Kera single cell of 16
+			BioSample_s SAMN02731997
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1275042
+				MBytes_l 435
+				MBases_l 672
+
+				Run_s SRR1275043
+				MBytes_l 6
+				MBases_l 9
+
+			cryptic_id Kera_38
+			SRA_Sample_s SRS603517
+			Sample_Name_s Kera_38
+			population_s Kera single cell of 38
+			BioSample_s SAMN02732019
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274093
+				MBytes_l 490
+				MBases_l 754
+
+				Run_s SRR1274094
+				MBytes_l 5
+				MBases_l 8
+
+			cryptic_id Kera_39
+			SRA_Sample_s SRS603518
+			Sample_Name_s Kera_39
+			population_s Kera single cell of 39
+			BioSample_s SAMN02732020
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274095
+				MBytes_l 321
+				MBases_l 485
+
+				Run_s SRR1274096
+				MBytes_l 5
+				MBases_l 7
+
+			cryptic_id Kera_4
+			SRA_Sample_s SRS603519
+			Sample_Name_s Kera_4
+			population_s Kera single cell of 4
+			BioSample_s SAMN02731985
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274097
+				MBytes_l 376
+				MBases_l 570
+
+				Run_s SRR1274098
+				MBytes_l 5
+				MBases_l 8
+
+			cryptic_id Kera_40
+			SRA_Sample_s SRS603520
+			Sample_Name_s Kera_40
+			population_s Kera single cell of 40
+			BioSample_s SAMN02732021
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274099
+				MBytes_l 497
+				MBases_l 776
+
+				Run_s SRR1274100
+				MBytes_l 7
+				MBases_l 11
+
+			cryptic_id Kera_5
+			SRA_Sample_s SRS603521
+			Sample_Name_s Kera_5
+			population_s Kera single cell of 5
+			BioSample_s SAMN02731986
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274101
+				MBytes_l 309
+				MBases_l 478
+
+				Run_s SRR1274102
+				MBytes_l 4
+				MBases_l 6
+
+			cryptic_id Kera_6
+			SRA_Sample_s SRS603522
+			Sample_Name_s Kera_6
+			population_s Kera single cell of 6
+			BioSample_s SAMN02731987
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274103
+				MBytes_l 336
+				MBases_l 517
+
+				Run_s SRR1274104
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id Kera_7
+			SRA_Sample_s SRS603523
+			Sample_Name_s Kera_7
+			population_s Kera single cell of 7
+			BioSample_s SAMN02731988
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274105
+				MBytes_l 228
+				MBases_l 341
+
+				Run_s SRR1274106
+				MBytes_l 2
+				MBases_l 4
+
+			cryptic_id Kera_8
+			SRA_Sample_s SRS603524
+			Sample_Name_s Kera_8
+			population_s Kera single cell of 8
+			BioSample_s SAMN02731989
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274107
+				MBytes_l 292
+				MBases_l 454
+
+				Run_s SRR1274108
+				MBytes_l 3
+				MBases_l 4
+
+			cryptic_id Kera_9
+			SRA_Sample_s SRS603525
+			Sample_Name_s Kera_9
+			population_s Kera single cell of 9
+			BioSample_s SAMN02731990
+			LoadDate_s May 08, 2014
+
+				Run_s SRR1274109
+				MBytes_l 418
+				MBases_l 657
+
+				Run_s SRR1274110
+				MBytes_l 5
+				MBases_l 9
+
+	tissue pleural effusion
+	sex female
+	disease_stage_s terminal blast crisis
+	horrible_dissease_state chronic myelogenous leukemia (CML)
+	cell_line_s K-562 (ATCC® CCL-243?)
+	biomaterial_provider_s ATCC
+	age 53
+	LoadDate_s May 08, 2014
+
+		cryptic_id chip_1g_C01
+		SRA_Sample_s SRS603270
+		Sample_Name_s chip_1g_C01
+		population_s chip single cell  of C01
+		BioSample_s SAMN02732087
+
+			Run_s SRR1274344
+			MBytes_l 343
+			MBases_l 497
+
+			Run_s SRR1274345
+			MBytes_l 9
+			MBases_l 15
+
+		cryptic_id chip_1g_C02
+		SRA_Sample_s SRS603271
+		Sample_Name_s chip_1g_C02
+		population_s chip single cell  of C02
+		BioSample_s SAMN02732088
+
+			Run_s SRR1274346
+			MBytes_l 398
+			MBases_l 574
+
+			Run_s SRR1274347
+			MBytes_l 9
+			MBases_l 14
+
+		cryptic_id chip_1g_C03
+		SRA_Sample_s SRS603272
+		Sample_Name_s chip_1g_C03
+		population_s chip single cell  of C03
+		BioSample_s SAMN02732089
+
+			Run_s SRR1274348
+			MBytes_l 237
+			MBases_l 343
+
+			Run_s SRR1274349
+			MBytes_l 5
+			MBases_l 8
+
+		cryptic_id chip_1g_C07
+		SRA_Sample_s SRS603273
+		Sample_Name_s chip_1g_C07
+		population_s chip single cell  of C07
+		BioSample_s SAMN02732090
+
+			Run_s SRR1274350
+			MBytes_l 249
+			MBases_l 360
+
+			Run_s SRR1274351
+			MBytes_l 7
+			MBases_l 11
+
+		cryptic_id chip_1g_C08
+		SRA_Sample_s SRS603274
+		Sample_Name_s chip_1g_C08
+		population_s chip single cell  of C08
+		BioSample_s SAMN02732091
+
+			Run_s SRR1274352
+			MBytes_l 236
+			MBases_l 341
+
+			Run_s SRR1274353
+			MBytes_l 6
+			MBases_l 10
+
+		cryptic_id chip_1g_C09
+		SRA_Sample_s SRS603276
+		Sample_Name_s chip_1g_C09
+		population_s chip single cell  of C09
+		BioSample_s SAMN02732092
+
+			Run_s SRR1274354
+			MBytes_l 344
+			MBases_l 497
+
+			Run_s SRR1274355
+			MBytes_l 9
+			MBases_l 16
+
+		cryptic_id chip_1g_C14
+		SRA_Sample_s SRS603275
+		Sample_Name_s chip_1g_C14
+		population_s chip single cell  of C14
+		BioSample_s SAMN02732093
+
+			Run_s SRR1274356
+			MBytes_l 357
+			MBases_l 515
+
+			Run_s SRR1274357
+			MBytes_l 9
+			MBases_l 15
+
+		cryptic_id chip_1g_C15
+		SRA_Sample_s SRS603277
+		Sample_Name_s chip_1g_C15
+		population_s chip single cell  of C15
+		BioSample_s SAMN02732094
+
+			Run_s SRR1274358
+			MBytes_l 375
+			MBases_l 541
+
+			Run_s SRR1274359
+			MBytes_l 12
+			MBases_l 20
+
+		cryptic_id chip_1g_C19
+		SRA_Sample_s SRS603278
+		Sample_Name_s chip_1g_C19
+		population_s chip single cell  of C19
+		BioSample_s SAMN02732095
+
+			Run_s SRR1274360
+			MBytes_l 275
+			MBases_l 401
+
+			Run_s SRR1274361
+			MBytes_l 8
+			MBases_l 13
+
+		cryptic_id chip_1g_C20
+		SRA_Sample_s SRS603279
+		Sample_Name_s chip_1g_C20
+		population_s chip single cell  of C20
+		BioSample_s SAMN02732096
+
+			Run_s SRR1274362
+			MBytes_l 402
+			MBases_l 583
+
+			Run_s SRR1274363
+			MBytes_l 12
+			MBases_l 20
+
+		cryptic_id chip_1g_C21
+		SRA_Sample_s SRS603280
+		Sample_Name_s chip_1g_C21
+		population_s chip single cell  of C21
+		BioSample_s SAMN02732097
+
+			Run_s SRR1274364
+			MBytes_l 235
+			MBases_l 343
+
+			Run_s SRR1274365
+			MBytes_l 6
+			MBases_l 10
+
+		cryptic_id chip_1g_C25
+		SRA_Sample_s SRS603281
+		Sample_Name_s chip_1g_C25
+		population_s chip single cell  of C25
+		BioSample_s SAMN02732098
+
+			Run_s SRR1274366
+			MBytes_l 246
+			MBases_l 355
+
+			Run_s SRR1274367
+			MBytes_l 10
+			MBases_l 17
+
+		cryptic_id chip_1g_C26
+		SRA_Sample_s SRS603282
+		Sample_Name_s chip_1g_C26
+		population_s chip single cell  of C26
+		BioSample_s SAMN02732099
+
+			Run_s SRR1274368
+			MBytes_l 394
+			MBases_l 566
+
+			Run_s SRR1274369
+			MBytes_l 11
+			MBases_l 19
+
+		cryptic_id chip_1g_C27
+		SRA_Sample_s SRS603283
+		Sample_Name_s chip_1g_C27
+		population_s chip single cell  of C27
+		BioSample_s SAMN02732100
+
+			Run_s SRR1274370
+			MBytes_l 280
+			MBases_l 402
+
+			Run_s SRR1274371
+			MBytes_l 11
+			MBases_l 19
+
+		cryptic_id chip_1g_C31
+		SRA_Sample_s SRS603284
+		Sample_Name_s chip_1g_C31
+		population_s chip single cell  of C31
+		BioSample_s SAMN02732101
+
+			Run_s SRR1274372
+			MBytes_l 201
+			MBases_l 291
+
+			Run_s SRR1274373
+			MBytes_l 6
+			MBases_l 11
+
+		cryptic_id chip_1g_C32
+		SRA_Sample_s SRS603285
+		Sample_Name_s chip_1g_C32
+		population_s chip single cell  of C32
+		BioSample_s SAMN02732102
+
+			Run_s SRR1274374
+			MBytes_l 200
+			MBases_l 290
+
+			Run_s SRR1274375
+			MBytes_l 5
+			MBases_l 9
+
+		cryptic_id chip_1g_C33
+		SRA_Sample_s SRS603286
+		Sample_Name_s chip_1g_C33
+		population_s chip single cell  of C33
+		BioSample_s SAMN02732103
+
+			Run_s SRR1274376
+			MBytes_l 301
+			MBases_l 435
+
+			Run_s SRR1274377
+			MBytes_l 10
+			MBases_l 17
+
+		cryptic_id chip_1g_C37
+		SRA_Sample_s SRS603287
+		Sample_Name_s chip_1g_C37
+		population_s chip single cell  of C37
+		BioSample_s SAMN02732104
+
+			Run_s SRR1274378
+			MBytes_l 192
+			MBases_l 279
+
+			Run_s SRR1274379
+			MBytes_l 7
+			MBases_l 12
+
+		cryptic_id chip_1g_C38
+		SRA_Sample_s SRS603288
+		Sample_Name_s chip_1g_C38
+		population_s chip single cell  of C38
+		BioSample_s SAMN02732105
+
+			Run_s SRR1274380
+			MBytes_l 365
+			MBases_l 528
+
+			Run_s SRR1274381
+			MBytes_l 10
+			MBases_l 17
+
+		cryptic_id chip_1g_C39
+		SRA_Sample_s SRS603290
+		Sample_Name_s chip_1g_C39
+		population_s chip single cell  of C39
+		BioSample_s SAMN02732106
+
+			Run_s SRR1274382
+			MBytes_l 341
+			MBases_l 493
+
+			Run_s SRR1274383
+			MBytes_l 14
+			MBases_l 23
+
+		cryptic_id chip_1g_C43
+		SRA_Sample_s SRS603289
+		Sample_Name_s chip_1g_C43
+		population_s chip single cell  of C43
+		BioSample_s SAMN02732107
+
+			Run_s SRR1274384
+			MBytes_l 222
+			MBases_l 321
+
+			Run_s SRR1274385
+			MBytes_l 5
+			MBases_l 9
+
+		cryptic_id chip_1g_C44
+		SRA_Sample_s SRS603291
+		Sample_Name_s chip_1g_C44
+		population_s chip single cell  of C44
+		BioSample_s SAMN02732108
+
+			Run_s SRR1274386
+			MBytes_l 291
+			MBases_l 421
+
+			Run_s SRR1274387
+			MBytes_l 7
+			MBases_l 12
+
+		cryptic_id chip_1g_C45
+		SRA_Sample_s SRS603292
+		Sample_Name_s chip_1g_C45
+		population_s chip single cell  of C45
+		BioSample_s SAMN02732109
+
+			Run_s SRR1274388
+			MBytes_l 270
+			MBases_l 391
+
+			Run_s SRR1274389
+			MBytes_l 8
+			MBases_l 13
+
+		cryptic_id chip_1g_C49
+		SRA_Sample_s SRS603293
+		Sample_Name_s chip_1g_C49
+		population_s chip single cell  of C49
+		BioSample_s SAMN02732110
+
+			Run_s SRR1274390
+			MBytes_l 394
+			MBases_l 568
+
+			Run_s SRR1274391
+			MBytes_l 7
+			MBases_l 12
+
+		cryptic_id chip_1g_C50
+		SRA_Sample_s SRS603294
+		Sample_Name_s chip_1g_C50
+		population_s chip single cell  of C50
+		BioSample_s SAMN02732111
+
+			Run_s SRR1274392
+			MBytes_l 326
+			MBases_l 472
+
+			Run_s SRR1274393
+			MBytes_l 9
+			MBases_l 14
+
+		cryptic_id chip_1g_C54
+		SRA_Sample_s SRS603295
+		Sample_Name_s chip_1g_C54
+		population_s chip single cell  of C54
+		BioSample_s SAMN02732112
+
+			Run_s SRR1274394
+			MBytes_l 186
+			MBases_l 270
+
+			Run_s SRR1274395
+			MBytes_l 4
+			MBases_l 6
+
+		cryptic_id chip_1g_C55
+		SRA_Sample_s SRS603296
+		Sample_Name_s chip_1g_C55
+		population_s chip single cell  of C55
+		BioSample_s SAMN02732113
+
+			Run_s SRR1274396
+			MBytes_l 207
+			MBases_l 301
+
+			Run_s SRR1274397
+			MBytes_l 7
+			MBases_l 12
+
+		cryptic_id chip_1g_C56
+		SRA_Sample_s SRS603297
+		Sample_Name_s chip_1g_C56
+		population_s chip single cell  of C56
+		BioSample_s SAMN02732114
+
+			Run_s SRR1274398
+			MBytes_l 261
+			MBases_l 378
+
+			Run_s SRR1274399
+			MBytes_l 9
+			MBases_l 15
+
+		cryptic_id chip_1g_C60
+		SRA_Sample_s SRS603298
+		Sample_Name_s chip_1g_C60
+		population_s chip single cell  of C60
+		BioSample_s SAMN02732115
+
+			Run_s SRR1274400
+			MBytes_l 238
+			MBases_l 345
+
+			Run_s SRR1274401
+			MBytes_l 6
+			MBases_l 10
+
+		cryptic_id chip_1g_C61
+		SRA_Sample_s SRS603299
+		Sample_Name_s chip_1g_C61
+		population_s chip single cell  of C61
+		BioSample_s SAMN02732116
+
+			Run_s SRR1274402
+			MBytes_l 208
+			MBases_l 301
+
+			Run_s SRR1274403
+			MBytes_l 6
+			MBases_l 11
+
+		cryptic_id chip_1g_C62
+		SRA_Sample_s SRS603300
+		Sample_Name_s chip_1g_C62
+		population_s chip single cell  of C62
+		BioSample_s SAMN02732117
+
+			Run_s SRR1274404
+			MBytes_l 289
+			MBases_l 418
+
+			Run_s SRR1274405
+			MBytes_l 9
+			MBases_l 15
+
+		cryptic_id chip_1g_C66
+		SRA_Sample_s SRS603301
+		Sample_Name_s chip_1g_C66
+		population_s chip single cell  of C66
+		BioSample_s SAMN02732118
+
+			Run_s SRR1274406
+			MBytes_l 399
+			MBases_l 576
+
+			Run_s SRR1274407
+			MBytes_l 10
+			MBases_l 18
+
+		cryptic_id chip_1g_C67
+		SRA_Sample_s SRS603302
+		Sample_Name_s chip_1g_C67
+		population_s chip single cell  of C67
+		BioSample_s SAMN02732119
+
+			Run_s SRR1274408
+			MBytes_l 231
+			MBases_l 337
+
+			Run_s SRR1274409
+			MBytes_l 7
+			MBases_l 11
+
+		cryptic_id chip_1g_C87
+		SRA_Sample_s SRS603311
+		Sample_Name_s chip_1g_C87
+		population_s chip single cell  of C87
+		BioSample_s SAMN02732128
+
+			Run_s SRR1275324
+			MBytes_l 361
+			MBases_l 521
+
+			Run_s SRR1275325
+			MBytes_l 9
+			MBases_l 14
+
+		cryptic_id chip_1g_C88
+		SRA_Sample_s SRS603312
+		Sample_Name_s chip_1g_C88
+		population_s chip single cell  of C88
+		BioSample_s SAMN02732129
+
+			Run_s SRR1275326
+			MBytes_l 480
+			MBases_l 692
+
+			Run_s SRR1275327
+			MBytes_l 14
+			MBases_l 24
+
+		cryptic_id chip_1g_C92
+		SRA_Sample_s SRS603313
+		Sample_Name_s chip_1g_C92
+		population_s chip single cell  of C92
+		BioSample_s SAMN02732130
+
+			Run_s SRR1275328
+			MBytes_l 408
+			MBases_l 590
+
+			Run_s SRR1275329
+			MBytes_l 15
+			MBases_l 26
+
+		cryptic_id chip_1g_C93
+		SRA_Sample_s SRS603314
+		Sample_Name_s chip_1g_C93
+		population_s chip single cell  of C93
+		BioSample_s SAMN02732131
+
+			Run_s SRR1275330
+			MBytes_l 331
+			MBases_l 480
+
+			Run_s SRR1275331
+			MBytes_l 12
+			MBases_l 19
+
+		cryptic_id chip_1g_C94
+		SRA_Sample_s SRS603315
+		Sample_Name_s chip_1g_C94
+		population_s chip single cell  of C94
+		BioSample_s SAMN02732132
+
+			Run_s SRR1275332
+			MBytes_l 301
+			MBases_l 435
+
+			Run_s SRR1275333
+			MBytes_l 8
+			MBases_l 13
+
+		cryptic_id chip_1g_C68
+		SRA_Sample_s SRS603303
+		Sample_Name_s chip_1g_C68
+		population_s chip single cell  of C68
+		BioSample_s SAMN02732120
+
+			Run_s SRR1275372
+			MBytes_l 348
+			MBases_l 506
+
+			Run_s SRR1275373
+			MBytes_l 10
+			MBases_l 17
+
+		cryptic_id chip_1g_C72
+		SRA_Sample_s SRS603304
+		Sample_Name_s chip_1g_C72
+		population_s chip single cell  of C72
+		BioSample_s SAMN02732121
+
+			Run_s SRR1275374
+			MBytes_l 271
+			MBases_l 393
+
+			Run_s SRR1275375
+			MBytes_l 8
+			MBases_l 13
+
+		cryptic_id chip_1g_C74
+		SRA_Sample_s SRS603305
+		Sample_Name_s chip_1g_C74
+		population_s chip single cell  of C74
+		BioSample_s SAMN02732122
+
+			Run_s SRR1275376
+			MBytes_l 333
+			MBases_l 478
+
+			Run_s SRR1275377
+			MBytes_l 13
+			MBases_l 22
+
+		cryptic_id chip_1g_C75
+		SRA_Sample_s SRS603306
+		Sample_Name_s chip_1g_C75
+		population_s chip single cell  of C75
+		BioSample_s SAMN02732123
+
+			Run_s SRR1275378
+			MBytes_l 223
+			MBases_l 322
+
+			Run_s SRR1275379
+			MBytes_l 7
+			MBases_l 11
+
+		cryptic_id chip_1g_C76
+		SRA_Sample_s SRS603307
+		Sample_Name_s chip_1g_C76
+		population_s chip single cell  of C76
+		BioSample_s SAMN02732124
+
+			Run_s SRR1275380
+			MBytes_l 304
+			MBases_l 438
+
+			Run_s SRR1275381
+			MBytes_l 10
+			MBases_l 17
+
+		cryptic_id chip_1g_C80
+		SRA_Sample_s SRS603308
+		Sample_Name_s chip_1g_C80
+		population_s chip single cell  of C80
+		BioSample_s SAMN02732125
+
+			Run_s SRR1275382
+			MBytes_l 510
+			MBases_l 737
+
+			Run_s SRR1275383
+			MBytes_l 18
+			MBases_l 32
+
+		cryptic_id chip_1g_C81
+		SRA_Sample_s SRS603310
+		Sample_Name_s chip_1g_C81
+		population_s chip single cell  of C81
+		BioSample_s SAMN02732126
+
+			Run_s SRR1275384
+			MBytes_l 475
+			MBases_l 685
+
+			Run_s SRR1275385
+			MBytes_l 17
+			MBases_l 29
+
+		cryptic_id chip_1g_C86
+		SRA_Sample_s SRS603309
+		Sample_Name_s chip_1g_C86
+		population_s chip single cell  of C86
+		BioSample_s SAMN02732127
+
+			Run_s SRR1275386
+			MBytes_l 272
+			MBases_l 393
+
+			Run_s SRR1275387
+			MBytes_l 11
+			MBases_l 18
+
+		cryptic_id K562_36
+		SRA_Sample_s SRS603473
+		Sample_Name_s K562_36
+		population_s K562 single cell of 36
+		BioSample_s SAMN02731897
+
+			Run_s SRR1275003
+			MBytes_l 33
+			MBases_l 48
+
+			Run_s SRR1275086
+			MBytes_l 208
+			MBases_l 309
+
+		cryptic_id K562_37
+		SRA_Sample_s SRS603474
+		Sample_Name_s K562_37
+		population_s K562 single cell of 37
+		BioSample_s SAMN02731898
+
+			Run_s SRR1275004
+			MBytes_l 220
+			MBases_l 324
+
+			Run_s SRR1275005
+			MBytes_l 35
+			MBases_l 51
+
+		cryptic_id K562_38
+		SRA_Sample_s SRS603475
+		Sample_Name_s K562_38
+		population_s K562 single cell of 38
+		BioSample_s SAMN02731899
+
+			Run_s SRR1275006
+			MBytes_l 224
+			MBases_l 334
+
+			Run_s SRR1275007
+			MBytes_l 34
+			MBases_l 51
+
+		cryptic_id K562_39
+		SRA_Sample_s SRS603476
+		Sample_Name_s K562_39
+		population_s K562 single cell of 39
+		BioSample_s SAMN02731900
+
+			Run_s SRR1275008
+			MBytes_l 229
+			MBases_l 321
+
+			Run_s SRR1275009
+			MBytes_l 33
+			MBases_l 47
+
+		cryptic_id K562_4
+		SRA_Sample_s SRS603477
+		Sample_Name_s K562_4
+		population_s K562 single cell of 4
+		BioSample_s SAMN02731828
+
+			Run_s SRR1275010
+			MBytes_l 235
+			MBases_l 351
+
+			Run_s SRR1275011
+			MBytes_l 35
+			MBases_l 52
+
+		cryptic_id K562_40
+		SRA_Sample_s SRS603478
+		Sample_Name_s K562_40
+		population_s K562 single cell of 40
+		BioSample_s SAMN02731901
+
+			Run_s SRR1275012
+			MBytes_l 225
+			MBases_l 336
+
+			Run_s SRR1275013
+			MBytes_l 33
+			MBases_l 47
+
+		cryptic_id K562_41
+		SRA_Sample_s SRS603479
+		Sample_Name_s K562_41
+		population_s K562 single cell of 41
+		BioSample_s SAMN02731902
+
+			Run_s SRR1275014
+			MBytes_l 217
+			MBases_l 323
+
+			Run_s SRR1275015
+			MBytes_l 34
+			MBases_l 50
+
+		cryptic_id K562_42
+		SRA_Sample_s SRS603481
+		Sample_Name_s K562_42
+		population_s K562 single cell of 42
+		BioSample_s SAMN02731903
+
+			Run_s SRR1275016
+			MBytes_l 205
+			MBases_l 306
+
+			Run_s SRR1275017
+			MBytes_l 31
+			MBases_l 44
+
+		cryptic_id K562_5
+		SRA_Sample_s SRS603480
+		Sample_Name_s K562_5
+		population_s K562 single cell of 5
+		BioSample_s SAMN02731829
+
+			Run_s SRR1275018
+			MBytes_l 238
+			MBases_l 354
+
+			Run_s SRR1275019
+			MBytes_l 37
+			MBases_l 53
+
+		cryptic_id K562_6
+		SRA_Sample_s SRS603482
+		Sample_Name_s K562_6
+		population_s K562 single cell of 6
+		BioSample_s SAMN02731830
+
+			Run_s SRR1275020
+			MBytes_l 218
+			MBases_l 323
+
+			Run_s SRR1275021
+			MBytes_l 34
+			MBases_l 50
+
+		cryptic_id K562_7
+		SRA_Sample_s SRS603483
+		Sample_Name_s K562_7
+		population_s K562 single cell of 7
+		BioSample_s SAMN02731831
+
+			Run_s SRR1275022
+			MBytes_l 202
+			MBases_l 303
+
+			Run_s SRR1275023
+			MBytes_l 31
+			MBases_l 46
+
+		cryptic_id K562_8
+		SRA_Sample_s SRS603484
+		Sample_Name_s K562_8
+		population_s K562 single cell of 8
+		BioSample_s SAMN02731832
+
+			Run_s SRR1275024
+			MBytes_l 200
+			MBases_l 299
+
+			Run_s SRR1275025
+			MBytes_l 31
+			MBases_l 46
+
+		cryptic_id K562_9
+		SRA_Sample_s SRS603485
+		Sample_Name_s K562_9
+		population_s K562 single cell of 9
+		BioSample_s SAMN02731833
+
+			Run_s SRR1275026
+			MBytes_l 242
+			MBases_l 347
+
+			Run_s SRR1275027
+			MBytes_l 36
+			MBases_l 51
+
+		cryptic_id K562_17
+		SRA_Sample_s SRS603452
+		Sample_Name_s K562_17
+		population_s K562 single cell of 17
+		BioSample_s SAMN02731878
+
+			Run_s SRR1275044
+			MBytes_l 249
+			MBases_l 386
+
+			Run_s SRR1275045
+			MBytes_l 41
+			MBases_l 60
+
+		cryptic_id K562_18
+		SRA_Sample_s SRS603453
+		Sample_Name_s K562_18
+		population_s K562 single cell of 18
+		BioSample_s SAMN02731879
+
+			Run_s SRR1275046
+			MBytes_l 158
+			MBases_l 213
+
+			Run_s SRR1275047
+			MBytes_l 27
+			MBases_l 36
+
+		cryptic_id K562_19
+		SRA_Sample_s SRS603454
+		Sample_Name_s K562_19
+		population_s K562 single cell of 19
+		BioSample_s SAMN02731880
+
+			Run_s SRR1275048
+			MBytes_l 204
+			MBases_l 293
+
+			Run_s SRR1275049
+			MBytes_l 31
+			MBases_l 44
+
+		cryptic_id K562_2
+		SRA_Sample_s SRS603455
+		Sample_Name_s K562_2
+		population_s K562 single cell of 2
+		BioSample_s SAMN02731826
+
+			Run_s SRR1275050
+			MBytes_l 303
+			MBases_l 453
+
+			Run_s SRR1275051
+			MBytes_l 49
+			MBases_l 72
+
+		cryptic_id K562_20
+		SRA_Sample_s SRS603456
+		Sample_Name_s K562_20
+		population_s K562 single cell of 20
+		BioSample_s SAMN02731881
+
+			Run_s SRR1275052
+			MBytes_l 189
+			MBases_l 281
+
+			Run_s SRR1275053
+			MBytes_l 29
+			MBases_l 43
+
+		cryptic_id K562_21
+		SRA_Sample_s SRS603457
+		Sample_Name_s K562_21
+		population_s K562 single cell of 21
+		BioSample_s SAMN02731882
+
+			Run_s SRR1275054
+			MBytes_l 171
+			MBases_l 254
+
+			Run_s SRR1275055
+			MBytes_l 26
+			MBases_l 38
+
+		cryptic_id K562_22
+		SRA_Sample_s SRS603458
+		Sample_Name_s K562_22
+		population_s K562 single cell of 22
+		BioSample_s SAMN02731883
+
+			Run_s SRR1275056
+			MBytes_l 182
+			MBases_l 273
+
+			Run_s SRR1275057
+			MBytes_l 27
+			MBases_l 38
+
+		cryptic_id K562_23
+		SRA_Sample_s SRS603459
+		Sample_Name_s K562_23
+		population_s K562 single cell of 23
+		BioSample_s SAMN02731884
+
+			Run_s SRR1275058
+			MBytes_l 178
+			MBases_l 263
+
+			Run_s SRR1275059
+			MBytes_l 28
+			MBases_l 41
+
+		cryptic_id K562_24
+		SRA_Sample_s SRS603460
+		Sample_Name_s K562_24
+		population_s K562 single cell of 24
+		BioSample_s SAMN02731885
+
+			Run_s SRR1275060
+			MBytes_l 210
+			MBases_l 278
+
+			Run_s SRR1275061
+			MBytes_l 29
+			MBases_l 42
+
+		cryptic_id K562_25
+		SRA_Sample_s SRS603461
+		Sample_Name_s K562_25
+		population_s K562 single cell of 25
+		BioSample_s SAMN02731886
+
+			Run_s SRR1275062
+			MBytes_l 198
+			MBases_l 294
+
+			Run_s SRR1275063
+			MBytes_l 31
+			MBases_l 44
+
+		cryptic_id K562_26
+		SRA_Sample_s SRS603462
+		Sample_Name_s K562_26
+		population_s K562 single cell of 26
+		BioSample_s SAMN02731887
+
+			Run_s SRR1275064
+			MBytes_l 63
+			MBases_l 93
+
+			Run_s SRR1275065
+			MBytes_l 10
+			MBases_l 14
+
+		cryptic_id K562_27
+		SRA_Sample_s SRS603463
+		Sample_Name_s K562_27
+		population_s K562 single cell of 27
+		BioSample_s SAMN02731888
+
+			Run_s SRR1275066
+			MBytes_l 200
+			MBases_l 299
+
+			Run_s SRR1275067
+			MBytes_l 32
+			MBases_l 47
+
+		cryptic_id K562_28
+		SRA_Sample_s SRS603464
+		Sample_Name_s K562_28
+		population_s K562 single cell of 28
+		BioSample_s SAMN02731889
+
+			Run_s SRR1275068
+			MBytes_l 245
+			MBases_l 365
+
+			Run_s SRR1275069
+			MBytes_l 39
+			MBases_l 57
+
+		cryptic_id K562_29
+		SRA_Sample_s SRS603465
+		Sample_Name_s K562_29
+		population_s K562 single cell of 29
+		BioSample_s SAMN02731890
+
+			Run_s SRR1275070
+			MBytes_l 207
+			MBases_l 307
+
+			Run_s SRR1275071
+			MBytes_l 32
+			MBases_l 46
+
+		cryptic_id K562_3
+		SRA_Sample_s SRS603466
+		Sample_Name_s K562_3
+		population_s K562 single cell of 3
+		BioSample_s SAMN02731827
+
+			Run_s SRR1275072
+			MBytes_l 222
+			MBases_l 332
+
+			Run_s SRR1275073
+			MBytes_l 35
+			MBases_l 52
+
+		cryptic_id K562_30
+		SRA_Sample_s SRS603467
+		Sample_Name_s K562_30
+		population_s K562 single cell of 30
+		BioSample_s SAMN02731891
+
+			Run_s SRR1275074
+			MBytes_l 197
+			MBases_l 268
+
+			Run_s SRR1275075
+			MBytes_l 29
+			MBases_l 41
+
+		cryptic_id K562_31
+		SRA_Sample_s SRS603468
+		Sample_Name_s K562_31
+		population_s K562 single cell of 31
+		BioSample_s SAMN02731892
+
+			Run_s SRR1275076
+			MBytes_l 273
+			MBases_l 406
+
+			Run_s SRR1275077
+			MBytes_l 44
+			MBases_l 65
+
+		cryptic_id K562_32
+		SRA_Sample_s SRS603469
+		Sample_Name_s K562_32
+		population_s K562 single cell of 32
+		BioSample_s SAMN02731893
+
+			Run_s SRR1275078
+			MBytes_l 171
+			MBases_l 255
+
+			Run_s SRR1275079
+			MBytes_l 27
+			MBases_l 39
+
+		cryptic_id K562_33
+		SRA_Sample_s SRS603470
+		Sample_Name_s K562_33
+		population_s K562 single cell of 33
+		BioSample_s SAMN02731894
+
+			Run_s SRR1275080
+			MBytes_l 201
+			MBases_l 297
+
+			Run_s SRR1275081
+			MBytes_l 32
+			MBases_l 47
+
+		cryptic_id K562_34
+		SRA_Sample_s SRS603471
+		Sample_Name_s K562_34
+		population_s K562 single cell of 34
+		BioSample_s SAMN02731895
+
+			Run_s SRR1275082
+			MBytes_l 296
+			MBases_l 442
+
+			Run_s SRR1275083
+			MBytes_l 50
+			MBases_l 74
+
+		cryptic_id K562_35
+		SRA_Sample_s SRS603472
+		Sample_Name_s K562_35
+		population_s K562 single cell of 35
+		BioSample_s SAMN02731896
+
+			Run_s SRR1275084
+			MBytes_l 221
+			MBases_l 327
+
+			Run_s SRR1275085
+			MBytes_l 34
+			MBases_l 50
+
+		cryptic_id K562_1
+		SRA_Sample_s SRS603444
+		Sample_Name_s K562_1
+		population_s K562 single cell of 1
+		BioSample_s SAMN02731825
+
+			Run_s SRR1275120
+			MBytes_l 223
+			MBases_l 334
+
+			Run_s SRR1275121
+			MBytes_l 34
+			MBases_l 48
+
+		cryptic_id K562_10
+		SRA_Sample_s SRS603445
+		Sample_Name_s K562_10
+		population_s K562 single cell of 10
+		BioSample_s SAMN02731834
+
+			Run_s SRR1275122
+			MBytes_l 286
+			MBases_l 425
+
+			Run_s SRR1275123
+			MBytes_l 44
+			MBases_l 65
+
+		cryptic_id K562_11
+		SRA_Sample_s SRS603446
+		Sample_Name_s K562_11
+		population_s K562 single cell of 11
+		BioSample_s SAMN02731835
+
+			Run_s SRR1275124
+			MBytes_l 203
+			MBases_l 297
+
+			Run_s SRR1275125
+			MBytes_l 31
+			MBases_l 45
+
+		cryptic_id K562_12
+		SRA_Sample_s SRS603448
+		Sample_Name_s K562_12
+		population_s K562 single cell of 12
+		BioSample_s SAMN02731873
+
+			Run_s SRR1275126
+			MBytes_l 248
+			MBases_l 368
+
+			Run_s SRR1275127
+			MBytes_l 40
+			MBases_l 59
+
+		cryptic_id K562_13
+		SRA_Sample_s SRS603447
+		Sample_Name_s K562_13
+		population_s K562 single cell of 13
+		BioSample_s SAMN02731874
+
+			Run_s SRR1275128
+			MBytes_l 222
+			MBases_l 329
+
+			Run_s SRR1275129
+			MBytes_l 33
+			MBases_l 47
+
+		cryptic_id K562_14
+		SRA_Sample_s SRS603450
+		Sample_Name_s K562_14
+		population_s K562 single cell of 14
+		BioSample_s SAMN02731875
+
+			Run_s SRR1275130
+			MBytes_l 225
+			MBases_l 334
+
+			Run_s SRR1275131
+			MBytes_l 37
+			MBases_l 55
+
+		cryptic_id K562_15
+		SRA_Sample_s SRS603449
+		Sample_Name_s K562_15
+		population_s K562 single cell of 15
+		BioSample_s SAMN02731876
+
+			Run_s SRR1275132
+			MBytes_l 191
+			MBases_l 294
+
+			Run_s SRR1275133
+			MBytes_l 30
+			MBases_l 44
+
+		cryptic_id K562_16
+		SRA_Sample_s SRS603451
+		Sample_Name_s K562_16
+		population_s K562 single cell of 16
+		BioSample_s SAMN02731877
+
+			Run_s SRR1275134
+			MBytes_l 145
+			MBases_l 223
+
+			Run_s SRR1275135
+			MBytes_l 23
+			MBases_l 34
+
+		cryptic_id plate_A7_100cell
+		SRA_Sample_s SRS603541
+		Sample_Name_s plate_A7_100cell
+		population_s plate single cell pool of 100 single cells
+		BioSample_s SAMN02732133
+
+			Run_s SRR1274083
+			MBytes_l 2
+			MBases_l 4
+
+			Run_s SRR1274091
+			MBytes_l 157
+			MBases_l 228
+
+	tissue brain
+	LoadDate_s May 08, 2014
+	biomaterial_provider_s ScienCell
+	horrible_dissease_state <not provided>
+	disease_stage_s <not provided>
+	sex N/A
+
+		age gestational Week 16
+		cell_line_s <not provided>
+
+			cryptic_id GW16_1
+			SRA_Sample_s SRS603316
+			Sample_Name_s GW16_1
+			population_s GW16 single cell of 1
+			BioSample_s SAMN02732061
+
+				Run_s SRR1275334
+				MBytes_l 1473
+				MBases_l 1999
+
+				Run_s SRR1275335
+				MBytes_l 40
+				MBases_l 72
+
+			cryptic_id GW16_10
+			SRA_Sample_s SRS603317
+			Sample_Name_s GW16_10
+			population_s GW16 single cell of 10
+			BioSample_s SAMN02732070
+
+				Run_s SRR1275336
+				MBytes_l 1242
+				MBases_l 1685
+
+				Run_s SRR1275337
+				MBytes_l 35
+				MBases_l 62
+
+			cryptic_id GW16_11
+			SRA_Sample_s SRS603318
+			Sample_Name_s GW16_11
+			population_s GW16 single cell of 11
+			BioSample_s SAMN02732071
+
+				Run_s SRR1275338
+				MBytes_l 1134
+				MBases_l 1542
+
+				Run_s SRR1275339
+				MBytes_l 31
+				MBases_l 54
+
+			cryptic_id GW16_12
+			SRA_Sample_s SRS603319
+			Sample_Name_s GW16_12
+			population_s GW16 single cell of 12
+			BioSample_s SAMN02732072
+
+				Run_s SRR1275340
+				MBytes_l 817
+				MBases_l 1170
+
+				Run_s SRR1275341
+				MBytes_l 22
+				MBases_l 39
+
+			cryptic_id GW16_13
+			SRA_Sample_s SRS603320
+			Sample_Name_s GW16_13
+			population_s GW16 single cell of 13
+			BioSample_s SAMN02732073
+
+				Run_s SRR1275342
+				MBytes_l 1035
+				MBases_l 1477
+
+				Run_s SRR1275343
+				MBytes_l 25
+				MBases_l 44
+
+			cryptic_id GW16_14
+			SRA_Sample_s SRS603321
+			Sample_Name_s GW16_14
+			population_s GW16 single cell of 14
+			BioSample_s SAMN02732074
+
+				Run_s SRR1275344
+				MBytes_l 1193
+				MBases_l 1690
+
+				Run_s SRR1275345
+				MBytes_l 28
+				MBases_l 50
+
+			cryptic_id GW16_15
+			SRA_Sample_s SRS603322
+			Sample_Name_s GW16_15
+			population_s GW16 single cell of 15
+			BioSample_s SAMN02732075
+
+				Run_s SRR1275346
+				MBytes_l 1235
+				MBases_l 1739
+
+				Run_s SRR1275347
+				MBytes_l 25
+				MBases_l 45
+
+			cryptic_id GW16_16
+			SRA_Sample_s SRS603323
+			Sample_Name_s GW16_16
+			population_s GW16 single cell of 16
+			BioSample_s SAMN02732076
+
+				Run_s SRR1275348
+				MBytes_l 1078
+				MBases_l 1519
+
+				Run_s SRR1275349
+				MBytes_l 21
+				MBases_l 36
+
+			cryptic_id GW16_17
+			SRA_Sample_s SRS603324
+			Sample_Name_s GW16_17
+			population_s GW16 single cell of 17
+			BioSample_s SAMN02732077
+
+				Run_s SRR1275350
+				MBytes_l 1222
+				MBases_l 1726
+
+				Run_s SRR1275351
+				MBytes_l 24
+				MBases_l 43
+
+			cryptic_id GW16_18
+			SRA_Sample_s SRS603325
+			Sample_Name_s GW16_18
+			population_s GW16 single cell of 18
+			BioSample_s SAMN02732078
+
+				Run_s SRR1275352
+				MBytes_l 1061
+				MBases_l 1449
+
+				Run_s SRR1275353
+				MBytes_l 21
+				MBases_l 37
+
+			cryptic_id GW16_19
+			SRA_Sample_s SRS603326
+			Sample_Name_s GW16_19
+			population_s GW16 single cell of 19
+			BioSample_s SAMN02732079
+
+				Run_s SRR1275354
+				MBytes_l 1358
+				MBases_l 1858
+
+				Run_s SRR1275355
+				MBytes_l 28
+				MBases_l 50
+
+			cryptic_id GW16_2
+			SRA_Sample_s SRS603327
+			Sample_Name_s GW16_2
+			population_s GW16 single cell of 2
+			BioSample_s SAMN02732062
+
+				Run_s SRR1275356
+				MBytes_l 1436
+				MBases_l 1891
+
+				Run_s SRR1275357
+				MBytes_l 35
+				MBases_l 63
+
+			cryptic_id GW16_20
+			SRA_Sample_s SRS603328
+			Sample_Name_s GW16_20
+			population_s GW16 single cell of 20
+			BioSample_s SAMN02732080
+
+				Run_s SRR1275358
+				MBytes_l 1194
+				MBases_l 1627
+
+				Run_s SRR1275359
+				MBytes_l 20
+				MBases_l 36
+
+			cryptic_id GW16_21
+			SRA_Sample_s SRS603329
+			Sample_Name_s GW16_21
+			population_s GW16 single cell of 21
+			BioSample_s SAMN02732081
+
+				Run_s SRR1275360
+				MBytes_l 1385
+				MBases_l 1884
+
+				Run_s SRR1275361
+				MBytes_l 24
+				MBases_l 43
+
+			cryptic_id GW16_22
+			SRA_Sample_s SRS603330
+			Sample_Name_s GW16_22
+			population_s GW16 single cell of 22
+			BioSample_s SAMN02732082
+
+				Run_s SRR1275362
+				MBytes_l 1155
+				MBases_l 1576
+
+				Run_s SRR1275363
+				MBytes_l 23
+				MBases_l 42
+
+			cryptic_id GW16_23
+			SRA_Sample_s SRS603331
+			Sample_Name_s GW16_23
+			population_s GW16 single cell of 23
+			BioSample_s SAMN02732083
+
+				Run_s SRR1275364
+				MBytes_l 689
+				MBases_l 947
+
+				Run_s SRR1275365
+				MBytes_l 19
+				MBases_l 33
+
+			cryptic_id GW16_24
+			SRA_Sample_s SRS603332
+			Sample_Name_s GW16_24
+			population_s GW16 single cell of 24
+			BioSample_s SAMN02732084
+
+				Run_s SRR1275366
+				MBytes_l 1002
+				MBases_l 1378
+
+				Run_s SRR1275367
+				MBytes_l 24
+				MBases_l 40
+
+			cryptic_id GW16_26
+			SRA_Sample_s SRS603333
+			Sample_Name_s GW16_26
+			population_s GW16 single cell of 26
+			BioSample_s SAMN02732086
+
+				Run_s SRR1275370
+				MBytes_l 1472
+				MBases_l 2008
+
+				Run_s SRR1275371
+				MBytes_l 30
+				MBases_l 54
+
+			cryptic_id GW16_3
+			SRA_Sample_s SRS603335
+			Sample_Name_s GW16_3
+			population_s GW16 single cell of 3
+			BioSample_s SAMN02732063
+
+				Run_s SRR1275241
+				MBytes_l 1482
+				MBases_l 1958
+
+				Run_s SRR1275242
+				MBytes_l 44
+				MBases_l 78
+
+			cryptic_id GW16_4
+			SRA_Sample_s SRS603336
+			Sample_Name_s GW16_4
+			population_s GW16 single cell of 4
+			BioSample_s SAMN02732064
+
+				Run_s SRR1275243
+				MBytes_l 1245
+				MBases_l 1640
+
+				Run_s SRR1275244
+				MBytes_l 34
+				MBases_l 60
+
+			cryptic_id GW16_5
+			SRA_Sample_s SRS603337
+			Sample_Name_s GW16_5
+			population_s GW16 single cell of 5
+			BioSample_s SAMN02732065
+
+				Run_s SRR1275245
+				MBytes_l 1515
+				MBases_l 1995
+
+				Run_s SRR1275246
+				MBytes_l 39
+				MBases_l 70
+
+			cryptic_id GW16_6
+			SRA_Sample_s SRS603338
+			Sample_Name_s GW16_6
+			population_s GW16 single cell of 6
+			BioSample_s SAMN02732066
+
+				Run_s SRR1275247
+				MBytes_l 902
+				MBases_l 1192
+
+				Run_s SRR1275248
+				MBytes_l 21
+				MBases_l 37
+
+			cryptic_id GW16_7
+			SRA_Sample_s SRS603339
+			Sample_Name_s GW16_7
+			population_s GW16 single cell of 7
+			BioSample_s SAMN02732067
+
+				Run_s SRR1275249
+				MBytes_l 1066
+				MBases_l 1413
+
+				Run_s SRR1275250
+				MBytes_l 28
+				MBases_l 50
+
+			cryptic_id GW16_8
+			SRA_Sample_s SRS603340
+			Sample_Name_s GW16_8
+			population_s GW16 single cell of 8
+			BioSample_s SAMN02732068
+
+				Run_s SRR1275251
+				MBytes_l 1150
+				MBases_l 1528
+
+				Run_s SRR1275252
+				MBytes_l 31
+				MBases_l 55
+
+			cryptic_id GW16_9
+			SRA_Sample_s SRS603341
+			Sample_Name_s GW16_9
+			population_s GW16 single cell of 9
+			BioSample_s SAMN02732069
+
+				Run_s SRR1275253
+				MBytes_l 1399
+				MBases_l 1842
+
+				Run_s SRR1275254
+				MBytes_l 34
+				MBases_l 62
+
+			cryptic_id GW16_25
+			SRA_Sample_s SRS603334
+			Sample_Name_s GW16_25
+			population_s GW16 single cell of 25
+			BioSample_s SAMN02732085
+
+				Run_s SRR1275368
+				MBytes_l 620
+				MBases_l 875
+
+				Run_s SRR1275369
+				MBytes_l 25
+				MBases_l 43
+
+		age gestational Week 21
+		cell_line_s Primary human neurons (ScienCell? Cat No. 1520, lot No. 9298)
+
+			cryptic_id GW21_1
+			SRA_Sample_s SRS603342
+			Sample_Name_s GW21_1
+			population_s GW21 single cell of 1
+			BioSample_s SAMN02732038
+
+				Run_s SRR1275255
+				MBytes_l 1937
+				MBases_l 2554
+
+				Run_s SRR1275256
+				MBytes_l 45
+				MBases_l 80
+
+			cryptic_id GW21_2
+			SRA_Sample_s SRS603343
+			Sample_Name_s GW21_2
+			population_s GW21 single cell of 2
+			BioSample_s SAMN02732039
+
+				Run_s SRR1275257
+				MBytes_l 1451
+				MBases_l 1909
+
+				Run_s SRR1275258
+				MBytes_l 39
+				MBases_l 65
+
+			cryptic_id GW21_3
+			SRA_Sample_s SRS603344
+			Sample_Name_s GW21_3
+			population_s GW21 single cell of 3
+			BioSample_s SAMN02732040
+
+				Run_s SRR1275259
+				MBytes_l 812
+				MBases_l 1065
+
+				Run_s SRR1275260
+				MBytes_l 31
+				MBases_l 55
+
+			cryptic_id GW21_4
+			SRA_Sample_s SRS603345
+			Sample_Name_s GW21_4
+			population_s GW21 single cell of 4
+			BioSample_s SAMN02732041
+
+				Run_s SRR1275261
+				MBytes_l 1772
+				MBases_l 2339
+
+				Run_s SRR1275262
+				MBytes_l 48
+				MBases_l 86
+
+			cryptic_id GW21_5
+			SRA_Sample_s SRS603347
+			Sample_Name_s GW21_5
+			population_s GW21 single cell of 5
+			BioSample_s SAMN02732042
+
+				Run_s SRR1275263
+				MBytes_l 1598
+				MBases_l 2105
+
+				Run_s SRR1275264
+				MBytes_l 42
+				MBases_l 73
+
+			cryptic_id GW21_6
+			SRA_Sample_s SRS603346
+			Sample_Name_s GW21_6
+			population_s GW21 single cell of 6
+			BioSample_s SAMN02732043
+
+				Run_s SRR1275265
+				MBytes_l 171
+				MBases_l 224
+
+				Run_s SRR1275266
+				MBytes_l 19
+				MBases_l 29
+
+			cryptic_id GW21_7
+			SRA_Sample_s SRS603348
+			Sample_Name_s GW21_7
+			population_s GW21 single cell of 7
+			BioSample_s SAMN02732044
+
+				Run_s SRR1275267
+				MBytes_l 1630
+				MBases_l 2149
+
+				Run_s SRR1275268
+				MBytes_l 42
+				MBases_l 76
+
+			cryptic_id GW21_8
+			SRA_Sample_s SRS603349
+			Sample_Name_s GW21_8
+			population_s GW21 single cell of 8
+			BioSample_s SAMN02732045
+
+				Run_s SRR1275269
+				MBytes_l 1445
+				MBases_l 1920
+
+				Run_s SRR1275270
+				MBytes_l 35
+				MBases_l 62
+
+		age gestational Week 21, cultured for 2 weeks
+		cell_line_s Cultured primary human neurons (ScienCell? Cat> No. 1520, lot No. 9298)
+
+			cryptic_id GW21+3_1
+			SRA_Sample_s SRS603350
+			Sample_Name_s GW21+3_1
+			population_s GW21+3 single cell of 1
+			BioSample_s SAMN02732022
+
+				Run_s SRR1275271
+				MBytes_l 803
+				MBases_l 1093
+
+				Run_s SRR1275272
+				MBytes_l 14
+				MBases_l 24
+
+			cryptic_id GW21+3_10
+			SRA_Sample_s SRS603351
+			Sample_Name_s GW21+3_10
+			population_s GW21+3 single cell of 10
+			BioSample_s SAMN02732031
+
+				Run_s SRR1275273
+				MBytes_l 1035
+				MBases_l 1414
+
+				Run_s SRR1275274
+				MBytes_l 20
+				MBases_l 35
+
+			cryptic_id GW21+3_11
+			SRA_Sample_s SRS603352
+			Sample_Name_s GW21+3_11
+			population_s GW21+3 single cell of 11
+			BioSample_s SAMN02732032
+
+				Run_s SRR1275275
+				MBytes_l 648
+				MBases_l 883
+
+				Run_s SRR1275276
+				MBytes_l 10
+				MBases_l 18
+
+			cryptic_id GW21+3_12
+			SRA_Sample_s SRS603353
+			Sample_Name_s GW21+3_12
+			population_s GW21+3 single cell of 12
+			BioSample_s SAMN02732033
+
+				Run_s SRR1275277
+				MBytes_l 737
+				MBases_l 1008
+
+				Run_s SRR1275278
+				MBytes_l 13
+				MBases_l 23
+
+			cryptic_id GW21+3_13
+			SRA_Sample_s SRS603354
+			Sample_Name_s GW21+3_13
+			population_s GW21+3 single cell of 13
+			BioSample_s SAMN02732034
+
+				Run_s SRR1275279
+				MBytes_l 1111
+				MBases_l 1516
+
+				Run_s SRR1275280
+				MBytes_l 18
+				MBases_l 32
+
+			cryptic_id GW21+3_14
+			SRA_Sample_s SRS603355
+			Sample_Name_s GW21+3_14
+			population_s GW21+3 single cell of 14
+			BioSample_s SAMN02732035
+
+				Run_s SRR1275281
+				MBytes_l 619
+				MBases_l 839
+
+				Run_s SRR1275282
+				MBytes_l 10
+				MBases_l 17
+
+			cryptic_id GW21+3_15
+			SRA_Sample_s SRS603356
+			Sample_Name_s GW21+3_15
+			population_s GW21+3 single cell of 15
+			BioSample_s SAMN02732036
+
+				Run_s SRR1275283
+				MBytes_l 788
+				MBases_l 1077
+
+				Run_s SRR1275284
+				MBytes_l 12
+				MBases_l 21
+
+			cryptic_id GW21+3_16
+			SRA_Sample_s SRS603357
+			Sample_Name_s GW21+3_16
+			population_s GW21+3 single cell of 16
+			BioSample_s SAMN02732037
+
+				Run_s SRR1275285
+				MBytes_l 692
+				MBases_l 936
+
+				Run_s SRR1275286
+				MBytes_l 12
+				MBases_l 21
+
+			cryptic_id GW21+3_2
+			SRA_Sample_s SRS603358
+			Sample_Name_s GW21+3_2
+			population_s GW21+3 single cell of 2
+			BioSample_s SAMN02732023
+
+				Run_s SRR1275287
+				MBytes_l 924
+				MBases_l 1258
+
+				Run_s SRR1275288
+				MBytes_l 17
+				MBases_l 29
+
+			cryptic_id GW21+3_3
+			SRA_Sample_s SRS603359
+			Sample_Name_s GW21+3_3
+			population_s GW21+3 single cell of 3
+			BioSample_s SAMN02732024
+
+				Run_s SRR1275289
+				MBytes_l 878
+				MBases_l 1200
+
+				Run_s SRR1275290
+				MBytes_l 18
+				MBases_l 31
+
+			cryptic_id GW21+3_4
+			SRA_Sample_s SRS603360
+			Sample_Name_s GW21+3_4
+			population_s GW21+3 single cell of 4
+			BioSample_s SAMN02732025
+
+				Run_s SRR1275291
+				MBytes_l 806
+				MBases_l 1100
+
+				Run_s SRR1275292
+				MBytes_l 13
+				MBases_l 24
+
+			cryptic_id GW21+3_5
+			SRA_Sample_s SRS603361
+			Sample_Name_s GW21+3_5
+			population_s GW21+3 single cell of 5
+			BioSample_s SAMN02732026
+
+				Run_s SRR1275293
+				MBytes_l 1223
+				MBases_l 1674
+
+				Run_s SRR1275294
+				MBytes_l 19
+				MBases_l 32
+
+			cryptic_id GW21+3_6
+			SRA_Sample_s SRS603362
+			Sample_Name_s GW21+3_6
+			population_s GW21+3 single cell of 6
+			BioSample_s SAMN02732027
+
+				Run_s SRR1275295
+				MBytes_l 1125
+				MBases_l 1537
+
+				Run_s SRR1275296
+				MBytes_l 19
+				MBases_l 33
+
+			cryptic_id GW21+3_7
+			SRA_Sample_s SRS603363
+			Sample_Name_s GW21+3_7
+			population_s GW21+3 single cell of 7
+			BioSample_s SAMN02732028
+
+				Run_s SRR1275297
+				MBytes_l 1064
+				MBases_l 1465
+
+				Run_s SRR1275298
+				MBytes_l 22
+				MBases_l 39
+
+			cryptic_id GW21+3_8
+			SRA_Sample_s SRS603364
+			Sample_Name_s GW21+3_8
+			population_s GW21+3 single cell of 8
+			BioSample_s SAMN02732029
+
+				Run_s SRR1275299
+				MBytes_l 1010
+				MBases_l 1385
+
+				Run_s SRR1275300
+				MBytes_l 20
+				MBases_l 34
+
+			cryptic_id GW21+3_9
+			SRA_Sample_s SRS603365
+			Sample_Name_s GW21+3_9
+			population_s GW21+3 single cell of 9
+			BioSample_s SAMN02732030
+
+				Run_s SRR1275301
+				MBytes_l 1179
+				MBases_l 1612
+
+				Run_s SRR1275302
+				MBytes_l 22
+				MBases_l 39
+
+	tissue N/A
+	LoadDate_s May 08, 2014
+	biomaterial_provider_s Dr. Guangwen, Dept. genetics, Stanford University
+	horrible_dissease_state normal
+	disease_stage_s <not provided>
+
+		age neonatal,reprogrammed
+		cell_line_s iPS line derived by Dr. Guangwen, Dept. genetics, Stanford University
+		sex male
+
+			cryptic_id iPS_1
+			SRA_Sample_s SRS603420
+			Sample_Name_s iPS_1
+			population_s iPS single cell of 1
+			BioSample_s SAMN02731958
+
+				Run_s SRR1275162
+				MBytes_l 727
+				MBases_l 997
+
+				Run_s SRR1275163
+				MBytes_l 2
+				MBases_l 4
+
+			cryptic_id iPS_10
+			SRA_Sample_s SRS603421
+			Sample_Name_s iPS_10
+			population_s iPS single cell of 10
+			BioSample_s SAMN02731967
+
+				Run_s SRR1275164
+				MBytes_l 664
+				MBases_l 917
+
+				Run_s SRR1275165
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id iPS_11
+			SRA_Sample_s SRS603422
+			Sample_Name_s iPS_11
+			population_s iPS single cell of 11
+			BioSample_s SAMN02731968
+
+				Run_s SRR1275166
+				MBytes_l 913
+				MBases_l 1254
+
+				Run_s SRR1275167
+				MBytes_l 4
+				MBases_l 7
+
+			cryptic_id iPS_12
+			SRA_Sample_s SRS603423
+			Sample_Name_s iPS_12
+			population_s iPS single cell of 12
+			BioSample_s SAMN02731969
+
+				Run_s SRR1275168
+				MBytes_l 1099
+				MBases_l 1515
+
+				Run_s SRR1275169
+				MBytes_l 5
+				MBases_l 9
+
+			cryptic_id iPS_13
+			SRA_Sample_s SRS603424
+			Sample_Name_s iPS_13
+			population_s iPS single cell of 13
+			BioSample_s SAMN02731970
+
+				Run_s SRR1275170
+				MBytes_l 293
+				MBases_l 399
+
+				Run_s SRR1275171
+				MBytes_l 1
+				MBases_l 2
+
+			cryptic_id iPS_17
+			SRA_Sample_s SRS603428
+			Sample_Name_s iPS_17
+			population_s iPS single cell of 17
+			BioSample_s SAMN02731974
+
+				Run_s SRR1275088
+				MBytes_l 938
+				MBases_l 1296
+
+				Run_s SRR1275089
+				MBytes_l 4
+				MBases_l 7
+
+			cryptic_id iPS_18
+			SRA_Sample_s SRS603429
+			Sample_Name_s iPS_18
+			population_s iPS single cell of 18
+			BioSample_s SAMN02731975
+
+				Run_s SRR1275090
+				MBytes_l 629
+				MBases_l 869
+
+				Run_s SRR1275091
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id iPS_19
+			SRA_Sample_s SRS603431
+			Sample_Name_s iPS_19
+			population_s iPS single cell of 19
+			BioSample_s SAMN02731976
+
+				Run_s SRR1275092
+				MBytes_l 1246
+				MBases_l 1719
+
+				Run_s SRR1275093
+				MBytes_l 6
+				MBases_l 10
+
+			cryptic_id iPS_2
+			SRA_Sample_s SRS603430
+			Sample_Name_s iPS_2
+			population_s iPS single cell of 2
+			BioSample_s SAMN02731959
+
+				Run_s SRR1275094
+				MBytes_l 808
+				MBases_l 1118
+
+				Run_s SRR1275095
+				MBytes_l 4
+				MBases_l 6
+
+			cryptic_id iPS_20
+			SRA_Sample_s SRS603433
+			Sample_Name_s iPS_20
+			population_s iPS single cell of 20
+			BioSample_s SAMN02731977
+
+				Run_s SRR1275096
+				MBytes_l 973
+				MBases_l 1346
+
+				Run_s SRR1275097
+				MBytes_l 4
+				MBases_l 7
+
+			cryptic_id iPS_21
+			SRA_Sample_s SRS603432
+			Sample_Name_s iPS_21
+			population_s iPS single cell of 21
+			BioSample_s SAMN02731978
+
+				Run_s SRR1275098
+				MBytes_l 1094
+				MBases_l 1510
+
+				Run_s SRR1275099
+				MBytes_l 5
+				MBases_l 8
+
+			cryptic_id iPS_22
+			SRA_Sample_s SRS603434
+			Sample_Name_s iPS_22
+			population_s iPS single cell of 22
+			BioSample_s SAMN02731979
+
+				Run_s SRR1275100
+				MBytes_l 792
+				MBases_l 1095
+
+				Run_s SRR1275101
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id iPS_23
+			SRA_Sample_s SRS603435
+			Sample_Name_s iPS_23
+			population_s iPS single cell of 23
+			BioSample_s SAMN02731980
+
+				Run_s SRR1275102
+				MBytes_l 921
+				MBases_l 1269
+
+				Run_s SRR1275103
+				MBytes_l 4
+				MBases_l 8
+
+			cryptic_id iPS_24
+			SRA_Sample_s SRS603436
+			Sample_Name_s iPS_24
+			population_s iPS single cell of 24
+			BioSample_s SAMN02731981
+
+				Run_s SRR1275104
+				MBytes_l 939
+				MBases_l 1295
+
+				Run_s SRR1275105
+				MBytes_l 4
+				MBases_l 6
+
+			cryptic_id iPS_3
+			SRA_Sample_s SRS603437
+			Sample_Name_s iPS_3
+			population_s iPS single cell of 3
+			BioSample_s SAMN02731960
+
+				Run_s SRR1275106
+				MBytes_l 1323
+				MBases_l 1832
+
+				Run_s SRR1275107
+				MBytes_l 5
+				MBases_l 9
+
+			cryptic_id iPS_4
+			SRA_Sample_s SRS603438
+			Sample_Name_s iPS_4
+			population_s iPS single cell of 4
+			BioSample_s SAMN02731961
+
+				Run_s SRR1275108
+				MBytes_l 813
+				MBases_l 1119
+
+				Run_s SRR1275109
+				MBytes_l 4
+				MBases_l 6
+
+			cryptic_id iPS_5
+			SRA_Sample_s SRS603439
+			Sample_Name_s iPS_5
+			population_s iPS single cell of 5
+			BioSample_s SAMN02731962
+
+				Run_s SRR1275110
+				MBytes_l 940
+				MBases_l 1300
+
+				Run_s SRR1275111
+				MBytes_l 4
+				MBases_l 7
+
+			cryptic_id iPS_6
+			SRA_Sample_s SRS603440
+			Sample_Name_s iPS_6
+			population_s iPS single cell of 6
+			BioSample_s SAMN02731963
+
+				Run_s SRR1275112
+				MBytes_l 1117
+				MBases_l 1543
+
+				Run_s SRR1275113
+				MBytes_l 5
+				MBases_l 8
+
+			cryptic_id iPS_7
+			SRA_Sample_s SRS603441
+			Sample_Name_s iPS_7
+			population_s iPS single cell of 7
+			BioSample_s SAMN02731964
+
+				Run_s SRR1275114
+				MBytes_l 1043
+				MBases_l 1442
+
+				Run_s SRR1275115
+				MBytes_l 4
+				MBases_l 7
+
+			cryptic_id iPS_8
+			SRA_Sample_s SRS603442
+			Sample_Name_s iPS_8
+			population_s iPS single cell of 8
+			BioSample_s SAMN02731965
+
+				Run_s SRR1275116
+				MBytes_l 1148
+				MBases_l 1585
+
+				Run_s SRR1275117
+				MBytes_l 5
+				MBases_l 8
+
+			cryptic_id iPS_9
+			SRA_Sample_s SRS603443
+			Sample_Name_s iPS_9
+			population_s iPS single cell of 9
+			BioSample_s SAMN02731966
+
+				Run_s SRR1275118
+				MBytes_l 1196
+				MBases_l 1654
+
+				Run_s SRR1275119
+				MBytes_l 5
+				MBases_l 8
+
+			cryptic_id iPS_14
+			SRA_Sample_s SRS603425
+			Sample_Name_s iPS_14
+			population_s iPS single cell of 14
+			BioSample_s SAMN02731971
+
+				Run_s SRR1275172
+				MBytes_l 1133
+				MBases_l 1567
+
+				Run_s SRR1275173
+				MBytes_l 4
+				MBases_l 8
+
+			cryptic_id iPS_15
+			SRA_Sample_s SRS603426
+			Sample_Name_s iPS_15
+			population_s iPS single cell of 15
+			BioSample_s SAMN02731972
+
+				Run_s SRR1275174
+				MBytes_l 880
+				MBases_l 1212
+
+				Run_s SRR1275175
+				MBytes_l 3
+				MBases_l 6
+
+			cryptic_id iPS_16
+			SRA_Sample_s SRS603427
+			Sample_Name_s iPS_16
+			population_s iPS single cell of 16
+			BioSample_s SAMN02731973
+
+				Run_s SRR1275176
+				MBytes_l 918
+				MBases_l 1266
+
+				Run_s SRR1275177
+				MBytes_l 3
+				MBases_l 6
+
+		age neonatal, reprogrammed, and differentiated
+		cell_line_s Neural progenitor cells obtained by differentiation of iPS line derived by Dr. Guangwen, Dept. genetics, Stanford University.
+		sex N/A
+
+			cryptic_id NPC_6
+			SRA_Sample_s SRS603537
+			Sample_Name_s NPC_6
+			population_s NPC single cell of 6
+			BioSample_s SAMN02732051
+
+				Run_s SRR1274084
+				MBytes_l 2
+				MBases_l 4
+
+				Run_s SRR1274133
+				MBytes_l 616
+				MBases_l 880
+
+			cryptic_id NPC_7
+			SRA_Sample_s SRS603538
+			Sample_Name_s NPC_7
+			population_s NPC single cell of 7
+			BioSample_s SAMN02732052
+
+				Run_s SRR1274085
+				MBytes_l 848
+				MBases_l 1217
+
+				Run_s SRR1274086
+				MBytes_l 3
+				MBases_l 6
+
+			cryptic_id NPC_8
+			SRA_Sample_s SRS603539
+			Sample_Name_s NPC_8
+			population_s NPC single cell of 8
+			BioSample_s SAMN02732053
+
+				Run_s SRR1274087
+				MBytes_l 806
+				MBases_l 1149
+
+				Run_s SRR1274088
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id NPC_9
+			SRA_Sample_s SRS603540
+			Sample_Name_s NPC_9
+			population_s NPC single cell of 9
+			BioSample_s SAMN02732054
+
+				Run_s SRR1274089
+				MBytes_l 809
+				MBases_l 1157
+
+				Run_s SRR1274090
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id NPC_1
+			SRA_Sample_s SRS603526
+			Sample_Name_s NPC_1
+			population_s NPC single cell of 1
+			BioSample_s SAMN02732046
+
+				Run_s SRR1274111
+				MBytes_l 958
+				MBases_l 1376
+
+				Run_s SRR1274112
+				MBytes_l 4
+				MBases_l 7
+
+			cryptic_id NPC_10
+			SRA_Sample_s SRS603527
+			Sample_Name_s NPC_10
+			population_s NPC single cell of 10
+			BioSample_s SAMN02732055
+
+				Run_s SRR1274113
+				MBytes_l 854
+				MBases_l 1221
+
+				Run_s SRR1274114
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id NPC_11
+			SRA_Sample_s SRS603528
+			Sample_Name_s NPC_11
+			population_s NPC single cell of 11
+			BioSample_s SAMN02732056
+
+				Run_s SRR1274115
+				MBytes_l 836
+				MBases_l 1200
+
+				Run_s SRR1274116
+				MBytes_l 3
+				MBases_l 6
+
+			cryptic_id NPC_12
+			SRA_Sample_s SRS603529
+			Sample_Name_s NPC_12
+			population_s NPC single cell of 12
+			BioSample_s SAMN02732057
+
+				Run_s SRR1274117
+				MBytes_l 633
+				MBases_l 909
+
+				Run_s SRR1274118
+				MBytes_l 2
+				MBases_l 4
+
+			cryptic_id NPC_13
+			SRA_Sample_s SRS603530
+			Sample_Name_s NPC_13
+			population_s NPC single cell of 13
+			BioSample_s SAMN02732058
+
+				Run_s SRR1274119
+				MBytes_l 805
+				MBases_l 1157
+
+				Run_s SRR1274120
+				MBytes_l 3
+				MBases_l 6
+
+			cryptic_id NPC_14
+			SRA_Sample_s SRS603531
+			Sample_Name_s NPC_14
+			population_s NPC single cell of 14
+			BioSample_s SAMN02732059
+
+				Run_s SRR1274121
+				MBytes_l 693
+				MBases_l 995
+
+				Run_s SRR1274122
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id NPC_15
+			SRA_Sample_s SRS603532
+			Sample_Name_s NPC_15
+			population_s NPC single cell of 15
+			BioSample_s SAMN02732060
+
+				Run_s SRR1274123
+				MBytes_l 870
+				MBases_l 1245
+
+				Run_s SRR1274124
+				MBytes_l 3
+				MBases_l 6
+
+			cryptic_id NPC_2
+			SRA_Sample_s SRS603533
+			Sample_Name_s NPC_2
+			population_s NPC single cell of 2
+			BioSample_s SAMN02732047
+
+				Run_s SRR1274125
+				MBytes_l 897
+				MBases_l 1290
+
+				Run_s SRR1274126
+				MBytes_l 3
+				MBases_l 6
+
+			cryptic_id NPC_3
+			SRA_Sample_s SRS603534
+			Sample_Name_s NPC_3
+			population_s NPC single cell of 3
+			BioSample_s SAMN02732048
+
+				Run_s SRR1274127
+				MBytes_l 997
+				MBases_l 1428
+
+				Run_s SRR1274128
+				MBytes_l 3
+				MBases_l 6
+
+			cryptic_id NPC_4
+			SRA_Sample_s SRS603535
+			Sample_Name_s NPC_4
+			population_s NPC single cell of 4
+			BioSample_s SAMN02732049
+
+				Run_s SRR1274129
+				MBytes_l 839
+				MBases_l 1199
+
+				Run_s SRR1274130
+				MBytes_l 3
+				MBases_l 5
+
+			cryptic_id NPC_5
+			SRA_Sample_s SRS603536
+			Sample_Name_s NPC_5
+			population_s NPC single cell of 5
+			BioSample_s SAMN02732050
+
+				Run_s SRR1274131
+				MBytes_l 508
+				MBases_l 724
+
+				Run_s SRR1274132
+				MBytes_l 1
+				MBases_l 2
+

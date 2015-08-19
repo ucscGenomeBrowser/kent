@@ -3974,16 +3974,20 @@ else
 for (track = trackList; track != NULL; track = track->next)
     {
     // if the defaults aren't set in the cart and this track isn't hidden, set its visibility in the cart
-    if (!defaultsSet && (track->tdb->visibility != tvHide))
+    char *s = cartOptionalString(cart, track->track);
+    if (!defaultsSet && (track->tdb->visibility != tvHide) && (s == NULL))
         {
 	struct trackDb *parent = track->tdb->parent;
         if (parent) 
-            cartSetString(cart, parent->track, !parent->isShow ?  "hide" : "show");
+            {
+            char *super = cartOptionalString(cart, parent->track);
+            if (super == NULL)
+                cartSetString(cart, parent->track, !parent->isShow ?  "hide" : "show");
+            }
 	if (!parent || parent->isShow)
             cartSetString(cart, track->track, hStringFromTv(track->tdb->visibility));
         }
 
-    char *s = cartOptionalString(cart, track->track);
     if (cgiOptionalString("hideTracks"))
 	{
 	s = cgiOptionalString(track->track);
@@ -4506,7 +4510,7 @@ if (measureTiming)
 
 
 /* Honor hideAll variable */
-if (hideAll)
+if (hideAll || defaultTracks)
     {
     int vis = (hideAll ? tvHide : -1);
     changeTrackVis(groupList, NULL, vis);

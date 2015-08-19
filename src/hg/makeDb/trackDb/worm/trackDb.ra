@@ -485,3 +485,21 @@ searchType genePred
 searchMethod fuzzy
 # shortCircuit 1
 searchPriority 18
+
+track ncbiGenes
+shortLabel NCBI Genes
+longLabel Genes predictions from NCBI annotwriter
+group genes
+priority 32
+visibility pack
+color 0,0,200
+type genePred
+url http://www.ncbi.nlm.nih.gov/protein/?term=$$
+urlLabel NCBI:
+
+searchName ncbiGenes
+searchTable ncbiGenes
+searchType genePred
+searchMethod fuzzy
+# shortCircuit 1
+searchPriority 18
