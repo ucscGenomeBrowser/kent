@@ -192,7 +192,7 @@ group map
 
 track altSeqLiftOverBigPsl
 #superTrack altSequence pack
-visibility full
+visibility hide
 shortLabel Big Alt Map
 longLabel Big GRCh38 Alignments to the Alternate Sequences/Haplotypes
 type bigPsl
@@ -267,7 +267,7 @@ bigDataUrl http://hgwdev.cse.ucsc.edu/~braney/bigMrna.bb
 shortLabel Big $Organism mRNAs
 longLabel Big $Organism mRNAs from GenBank 
 group x
-visibility pack
+visibility hide
 type bigPsl
 baseColorUseCds given
 #baseColorUseSequence genbank
