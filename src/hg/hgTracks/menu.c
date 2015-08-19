@@ -46,11 +46,12 @@ slAddTail(links, link);
 }
 
 static void appendLinkMaybeInactive(struct hotLink **links, char *url, char *name, char *id, 
-    boolean external, boolean inactive)
+    char *mouseOver, boolean external, boolean inactive)
 {
 appendLink(links, url, name, id, external);
 struct hotLink *le = slLastEl(links);
 le->inactive=inactive;
+le->mouseOver=mouseOver;
 }
 
 static void printEnsemblAnchor(char *database, char* archive,
@@ -168,7 +169,10 @@ for(i = 0, link = links; link != NULL; i++, link = link->next)
     char *encodedName = htmlEncode(link->name);
     if(*class)
         dyStringPrintf(menuHtml, " class='%s'", class);
-    dyStringPrintf(menuHtml, "><a href='%s' id='%s'%s>%s</a></li>\n", link->url, link->id,
+    dyStringPrintf(menuHtml, "><a href='%s' ", link->url);
+    if (link->mouseOver)
+        dyStringPrintf(menuHtml, "title='%s' ", link->mouseOver); 
+    dyStringPrintf(menuHtml, "id='%s'%s>%s</a></li>\n", link->id, 
         link->external ? " TARGET='_blank'" : "", encodedName);
     freez(&encodedName);
 
@@ -218,7 +222,7 @@ for(et = extTools; et != NULL; et = et->next)
     else
         safef(label, sizeof(label), "%s", et->shortLabel);
         
-    appendLinkMaybeInactive(&viewLinks, url, label, "extTool", TRUE, inactive);
+    appendLinkMaybeInactive(&viewLinks, url, label, "extTool", et->longLabel, TRUE, inactive);
     }
 
 freeLinksAndConvert(viewLinks, viewMenu);
