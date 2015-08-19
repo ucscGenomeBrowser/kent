@@ -168,8 +168,8 @@ for(i = 0, link = links; link != NULL; i++, link = link->next)
     char *encodedName = htmlEncode(link->name);
     if(*class)
         dyStringPrintf(menuHtml, " class='%s'", class);
-    dyStringPrintf(menuHtml, "><a href='%s' id='%s'%s>%s</a></li>\n", link->url, link->id,
-        link->external ? " TARGET='_blank'" : "", encodedName);
+    dyStringPrintf(menuHtml, "><a href='%s' title='%s' id='%s'%s>%s</a></li>\n", link->url, 
+        link->id, link->mouseOver, link->external ? " TARGET='_blank'" : "", encodedName);
     freez(&encodedName);
 
     freez(&link->name);
@@ -218,7 +218,7 @@ for(et = extTools; et != NULL; et = et->next)
     else
         safef(label, sizeof(label), "%s", et->shortLabel);
         
-    appendLinkMaybeInactive(&viewLinks, url, label, "extTool", TRUE, inactive);
+    appendLinkMaybeInactive(&viewLinks, url, label, et->longLabel, TRUE, inactive);
     }
 
 freeLinksAndConvert(viewLinks, viewMenu);
