@@ -98,23 +98,36 @@ if (!$agp) {
   $index = -1;
   my %filesRead;
   foreach my $chr (@chroms) {
+    printf STDERR "# processing chr $chr from chroms[]\n";
     my $chrNum = $chr;
     $chrNum =~ s/_.*//;
     my $chrRandom = $chr;
     $chrRandom =~ s/_gl[0-9]+_random//;
     print STDERR "Loading chr$chr agp info ($chrRandom)\n";
+# Loading chr16_KI270728v1_random agp info (16_KI270728v1_random)
+# reading agpFile /hive/data/genomes/hg38/bed/stsMap/agp/16/chr16_KI270728v1_random.agp
+# Loading chr15_KI270905v1_alt agp info (15_KI270905v1_alt)
+# reading agpFile /hive/data/genomes/hg38/bed/stsMap/agp/15/chr15_KI270905v1_alt.agp
     for (my $ord = 0; $ord <=1; $ord++) {
       if ($ord == 0 && $chr =~ m/random/) {
-	$file = "chr${chrRandom}_random.agp";
+	$file = "chr${chrRandom}.agp";
+      } elsif ($ord == 0 && $chr =~ m/_alt/) {
+	$file = "chr${chrRandom}.agp";
       } else {
 	$file = "chr$chr.agp";
       }
       my $agpFile = "$info/$chrNum/$file";
-      if ($chr =~ m/_hap/) {
+      if ($chr =~ m/_random/) {
+          $chrRandom =~ s/_random//;
+	  $agpFile = "$info/$chrRandom/$file";
+      } elsif ($chr =~ m/_alt/) {
+	  $agpFile = "$info/$chrRandom/$file";
+      } elsif ($chr =~ m/_hap/) {
 	  $agpFile = "$info/$chrRandom/$file";
       } elsif ($chr =~ m/Un/) {
 	  $agpFile = "$info/$chr/$file";
       }
+      printf STDERR "# reading agpFile $agpFile\n";
       next if (! -e $agpFile);
       next if (exists($filesRead{$agpFile}));
       print STDERR "reading agp file $agpFile\n";
