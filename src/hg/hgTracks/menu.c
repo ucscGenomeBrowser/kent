@@ -248,7 +248,7 @@ safef(buf, sizeof(buf), "%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s",
       hgcNameAndSettings(), winStart, chromName, winStart, winEnd, database, uiVars);
 appendLink(&links, buf, "DNA", "dnaLink", FALSE);
 safef(buf, sizeof(buf), "../cgi-bin/hgConvert?hgsid=%s&db=%s", cartSessionId(cart), database);
-appendLink(&links, buf, "in other Genomes (Convert)", "convertMenuLink", FALSE);
+appendLink(&links, buf, "In Other Genomes (Convert)", "convertMenuLink", FALSE);
 
 // Add link-outs to other dbs as appropriate for this assembly
 if (differentWord(database,"susScr2"))
@@ -434,7 +434,7 @@ safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.reset=on", uiVars);
 appendLink(&links, buf, "Default Tracks", "defaultTracksMenuLink", FALSE);
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.defaultImgOrder=on", uiVars);
 appendLink(&links, buf, "Default Track Order", "defaultTrackOrderMenuLink", FALSE);
-appendLink(&links, "../cgi-bin/cartReset", "Reset all user settings", "cartResetMenuLink", FALSE);
+appendLink(&links, "../cgi-bin/cartReset", "Reset All User Settings", "cartResetMenuLink", FALSE);
 
 struct dyString *viewMenu = dyStringCreate("<li class='menuparent' id='view'><span>View</span>\n<ul style='display: none; visibility: hidden;'>\n");
 freeLinksAndConvert(links, viewMenu);
