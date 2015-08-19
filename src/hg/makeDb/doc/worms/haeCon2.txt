@@ -27,6 +27,18 @@ ftp://ftp.sanger.ac.uk/pub/wormbase/releases/WS245/species/PRJEB506
 
     hgFakeAgp haeCon2.fa.gz haeCon2.agp
 
+    # correct image from CSIRO:
+    mkdir /hive/data/genomes/haeCon2/photo
+    cd /hive/data/genomes/haeCon2/photo
+    wget --timestamping \
+http://www.scienceimage.csiro.au/images/cache/detail/976_0_GA11439.jpg
+    convert -quality 80 -geometry 350x350 976_0_GA11439.jpg  Haemonchus_contortus.jpg
+    identify Haemonchus_contortus.jpg
+    #  Haemonchus_contortus.jpg JPEG 350x279 350x279+0+0
+
+    # reference
+    #  http://www.scienceimage.csiro.au/image/10819
+
 #############################################################################
 #  Initial database build (DONE - 2015-07-02 - Hiram)
 
@@ -171,7 +183,7 @@ searchPriority 8
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
     #    January 31 2015 (open-4-0-5) version of RepeatMasker
-    # CC   RELEASE 20140131;    
+    # CC   RELEASE 20140131;
 
     time featureBits -countGaps haeCon2 rmsk
     # 3590455 bases of 369720058 (0.971%) in intersection
@@ -441,5 +453,10 @@ haeCon2.perChromTables = no
 		> do.log 2>&1
     #	real    11m17.699s
     # verify it works on genome-test
+
+#############################################################################
+# improve common name (DONE - 2015-07-24 - Hiram)
+
+    hgsql -e 'update dbDb set organism="Barber pole worm" where name="haeCon2";' hgcentraltest
 
 #############################################################################
