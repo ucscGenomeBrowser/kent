@@ -173,7 +173,6 @@ struct fieldInfo *partingField = NULL;
 int tableRows = slCount(table->rowList);
 int oldLineCount = tableRows * (table->fieldCount + 1);
 uglyf("Find best parting on table with %d rows and %d fields\n", tableRows, table->fieldCount);
-uglyf("oldLineCount = %d\n", oldLineCount);
 
 /* Of the ones that have the smallest number of values, find the set with the
  * most fields locked together */
@@ -193,6 +192,8 @@ for (field = allFields; field != NULL; field = field->next)
         {
         struct fieldInfo *fi = ref->val;
 	double ratio = fi->valHash->elCount * q;
+	if (ratio > 1)
+	    ratio = 1;
 	lockWeight += ratio;
 	}
 
@@ -200,15 +201,6 @@ for (field = allFields; field != NULL; field = field->next)
     double newLineCount = field->valHash->elCount * (1 + lockWeight) + tableRows * (1 + varyCount);
     double linesSaved = oldLineCount - newLineCount;
     uglyf("field %s, %d vals, %g locked, %g lines saved\n", field->name, field->valHash->elCount, lockWeight, linesSaved);
-         {
-	 struct slRef *ref;
-	 for (ref = lockedFields; ref != NULL; ref = ref->next)
-	      {
-	      struct fieldInfo *fi = ref->val;
-	      uglyf("  %s", fi->name);
-	      }
-	 uglyf("\n");
-	 }
     if (linesSaved > bestLinesSaved)
 	{
 	bestLinesSaved = linesSaved;
@@ -240,7 +232,7 @@ return findPredictableFields(table, allFields, keyField, except);
 boolean doParting(struct fieldedTable *table, struct fieldInfo *allFields,
     boolean doPrepart, struct slName *preparting, struct slRef **retFields,
     struct fieldInfo **retField)
-/* Partition table factoring out all fields that move in lockstep at this level.
+/* Partition table factoring out fields that move together.  
  * Return TRUE  and leave a list of references to fieldInfo's in *retField if can find
  * a useful partitioning, otherwise return FALSE. 
  *    The retFields returns a list of references to all fields to factor out in the partitioning.
@@ -337,7 +329,6 @@ struct slRef *partingFields = NULL;
 struct fieldInfo *partingField = NULL;
 if (!doParting(table, allFields, doPrepart, prepartField, &partingFields, &partingField))
     {
-    uglyf("Failed parting, outputting %d leaf stanzas\n", slCount(table->rowList));
     // Here is where we should output whole table... 
     struct fieldedRow *row;
     for (row = table->rowList; row != NULL; row = row->next)
@@ -350,9 +341,6 @@ if (!doParting(table, allFields, doPrepart, prepartField, &partingFields, &parti
     return;
     }
 
-uglyf("ok1\n");
-
-uglyf("ok 2 %s\n", partingField->name);
 int partingFieldIx = partingField->ix;
 
 
@@ -360,7 +348,6 @@ int partingFieldIx = partingField->ix;
 struct hash *uniq = hashNew(0);
 struct slRef *partValList = partingField->valList;
 char *partVal = NULL;
-uglyf("ok 2.1\n");
 struct fieldedRow *fieldedRow;
 for (fieldedRow = table->rowList; fieldedRow != NULL; fieldedRow = fieldedRow->next)
     {
@@ -394,16 +381,13 @@ for (fieldedRow = table->rowList; fieldedRow != NULL; fieldedRow = fieldedRow->n
 	    makeSubtableExcluding(table, partingFieldIx, partVal,
 		partingFields, &subtable, ixTranslator);
 
-	    uglyf("ok 2.3\n");
 	    rPartition(subtable, tagStorm, stanza, doPrepart, nextPrepart);
-	    uglyf("ok 2.4\n");
 	    }
 	}
 
     }
 hashFree(&uniq);
 
-uglyf("ok3\n");
 slFreeList(&partingFields);
 fieldInfoFreeList(&allFields);
 }
