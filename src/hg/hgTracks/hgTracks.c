@@ -3967,6 +3967,8 @@ else
     // we're going to set all the trackDb default visibilities on in the cart
     void pruneRedundantCartVis(struct track *trackList);
     pruneRedundantCartVis(trackList);
+    if (vis == -1)  // we're restoring to defaults
+        changeTrackVis(groupList, NULL, vis);
     cartSetString(cart, CART_HAS_DEFAULT_VISIBILITY, "on");
     }
 
@@ -3981,11 +3983,10 @@ for (track = trackList; track != NULL; track = track->next)
         if (parent) 
             {
             char *super = cartOptionalString(cart, parent->track);
-            if (super == NULL)
-                cartSetString(cart, parent->track, !parent->isShow ?  "hide" : "show");
+            if ((super == NULL) && parent->isShow)
+                cartSetString(cart, parent->track, "show");
             }
-	if (!parent || parent->isShow)
-            cartSetString(cart, track->track, hStringFromTv(track->tdb->visibility));
+        cartSetString(cart, track->track, hStringFromTv(track->tdb->visibility));
         }
 
     if (cgiOptionalString("hideTracks"))
@@ -4510,11 +4511,8 @@ if (measureTiming)
 
 
 /* Honor hideAll variable */
-if (hideAll || defaultTracks)
-    {
-    int vis = (hideAll ? tvHide : -1);
-    changeTrackVis(groupList, NULL, vis);
-    }
+if (hideAll)
+    changeTrackVis(groupList, NULL, tvHide);
 
 /* Before loading items, deal with the next/prev item arrow buttons if pressed. */
 if (cgiVarExists("hgt.nextItem"))
