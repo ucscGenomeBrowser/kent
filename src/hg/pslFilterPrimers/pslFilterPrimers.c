@@ -156,6 +156,7 @@ stsHash = newHash(16);
 
 while (lineFileChopCharNext(sf, '\t', words, 5))
     {
+      verbose(2, "# line %d words1-4: '%s' '%s' '%s' '%s'\n", sf->lineIx, words[1], words[2], words[3], words[4]);
       if (words[1] && words[2] && words[3] && words[4])
 	{
 	  AllocVar(sts);
@@ -166,7 +167,7 @@ while (lineFileChopCharNext(sf, '\t', words, 5))
 	  sts->ucscId = cloneString(words[4]);
 	  sts->found = FALSE;
 	  dist1 = cloneString(words[3]);
-	  if (sts->leftPrimer && dist1)
+	  if (sts->leftPrimer && dist1 && differentWord("-", dist1))
 	    {
 	      wordCount = chopByChar(dist1, '-', dist, ArraySize(dist));
 	      sts->minSize = sqlUnsigned(dist[0]);
@@ -394,14 +395,14 @@ int main(int argc, char *argv[])
 {
   struct lineFile *pf, *ef, *apf;
   FILE *of, *nf, *enf=NULL;
-  char *efName=NULL, filename[256];
+  char *efName=NULL, filename[256], notFound[256];
   int verb = 0;
 
 verboseSetLevel(0);
 optionInit(&argc, argv, optionSpecs);
 if (argc < 3)
     {
-      fprintf(stderr, "USAGE: pslAnal [-epcr=<file> -verbose=<level>] <isPCR psl file> <all.primers> <outfile>\n");
+      verbose(0, "usage: pslFilterPrimers [-epcr=<file> -verbose=<level>] <isPCR psl file> <all.primers> <outfile>\n");
     return 1;
     }
 verb = optionInt("verbose", 0);
@@ -412,31 +413,31 @@ verboseSetLevel(verb);
  apf = lineFileOpen(argv[2], TRUE);
 
  of = mustOpen(argv[3], "w");
- sprintf(filename, "%s.notfound.primers", argv[3]);
- nf = mustOpen(filename, "w");
+ safef(notFound, sizeof(filename), "%s.notfound.primers", argv[3]);
+ nf = mustOpen(notFound, "w");
 
- verbose(1, "Reading all.primers file\n");
+ verbose(1, "Reading all primers file: '%s'\n", argv[2]);
  readPrimerInfo(apf);
 
  if (efName)
    {
      ef = lineFileOpen(efName, TRUE);
-     verbose(1, "Reading epcr file\n");
+     verbose(1, "Reading epcr file: '%s'\n", efName);
      readEpcr(ef);
    }
 
- verbose(1, "Reading and processing isPCR file\n");
+ verbose(1, "Reading isPCR file: '%s' processing output to: '%s'\n", argv[1], argv[3]);
  processPrimers(pf, of);
 
  if (efName)
    {
-     verbose(1, "Writing epcr.not.found file\n");
-     sprintf(filename, "epcr.not.found");
+     safef(filename, sizeof(filename), "epcr.not.found");
+     verbose(1, "Writing %s file\n", filename);
      enf = mustOpen(filename, "w");
      writeEpcrNotFound(enf);
    }
 
- verbose(1, "Writing out primers not found\n");
+ verbose(1, "Writing primers not found to file: '%s'\n", notFound);
  writePrimersNotFound(nf);
 
  if (efName)

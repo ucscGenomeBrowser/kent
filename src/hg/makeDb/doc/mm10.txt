@@ -11210,5 +11210,49 @@ http://genome.crg.es/genepredictions/M.musculus/mm10/SGP2/hg38/mm10.sgp2.gff3
 
     featureBits -enrichment mm9 refGene:CDS sgpGene
 # refGene:CDS 1.305%, sgpGene 1.439%, both 1.113%, cover 85.23%, enrich 59.23x
+#########################################################################
+2015-06-29-13: import of UCSC GENCODE group processing of GENCODE VM5 (markd)
+    # download files
+    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM5
+    cd /hive/data/genomes/mm10/bed/gencodeVM5
 
-###########################################################################
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set 
+    # release and transcript support versions
+
+
+    # download, build and load tables
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.
+        make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk cmpRelease >gencode-cmp.tsv
+
+    ## Copy and update trackDb files from previous release.
+    ## Change version and use lower priority so it sorts to top of
+    ## super track page.
+    ## Important to make sure filter attrs.transcriptType matches current set
+    ## figured out with
+    select distinct transcriptType from wgEncodeGencodeAttrsVM5 order by transcriptType;
+    cd kent/src/hg/makeDb/trackDb
+    cp human/mm10/wgEncodeGencodeV18.ra human/mm10/wgEncodeGencodeVM5.ra
+    cp human/mm10/wgEncodeGencodeV18.html human/mm10/wgEncodeGencodeVM5.html
+
+    # edit these plus human/mm10/trackDb.wgEncode.ra
+    # - set priorities in wgEncodeGencodeVM5.ra in reverse order with previous
+    #   tracks so newest shows up first
+    #     priority - set to previous version priority minus 0.001
+    #     searchPriority - set each to previous minus 0.001
+    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
+    #     superTrack wgEncodeGencodeSuper pack
+    # - Update wgEncodeGencodeSuper.html to describe new release and to
+    #   pick up other updates.
+
+    # update all.joiner and validate
+    # look for the last section `begin Gencode V??' in all.joiner
+    # and copy and update version
+    # repeat this until happy, editing minCheck as needed
+    # output in check/joiner.out
+    cd /hive/data/genomes/mm10/bed/gencodeVM5
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+#########################################################################
