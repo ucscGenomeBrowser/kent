@@ -1,0 +1,1368 @@
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+# (DONE - 2015-08-12 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzAncCey1.2015-08-12
+    cd /hive/data/genomes/caePb3/bed/lastzAncCey1.2015-08-12
+
+    cat << '_EOF_' > DEF
+# caePb3 vs ancCey1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+SEQ2_DIR=/hive/data/genomes/ancCey1/ancCey1.2bit
+SEQ2_LEN=/hive/data/genomes/ancCey1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzAncCey1.2015-08-12
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 44m21.941s
+    cat fb.caePb3.chainAncCey1Link.txt
+    # 13381622 bases of 170093652 (7.867%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 ancCey1) > rbest.log 2>&1 &
+    # real 0m45.799s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/ancCey1/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/ancCey1/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzAncCey1.2015-08-12/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m17.842s
+    cat fb.ancCey1.chainCaePb3Link.txt
+    # 11070211 bases of 300914990 (3.679%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` ancCey1 caePb3) \
+      > rbest.log 2>&1
+    # real 0m56.082s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Ascaris suum/Pig roundworm - ascSuu1
+# (DONE - 2015-08-13 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzAscSuu1.2015-08-13
+    cd /hive/data/genomes/caePb3/bed/lastzAscSuu1.2015-08-13
+
+    cat << '_EOF_' > DEF
+# caePb3 vs ascSuu1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Ascaris suum/Pig roundworm - ascSuu1
+SEQ2_DIR=/hive/data/genomes/ascSuu1/ascSuu1.2bit
+SEQ2_LEN=/hive/data/genomes/ascSuu1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzAscSuu1.2015-08-13
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 30m11.226s
+    cat fb.caePb3.chainAscSuu1Link.txt
+    # 7274833 bases of 170093652 (4.277%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 ascSuu1) > rbest.log 2>&1 &
+    # real 0m33.315s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/ascSuu1/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/ascSuu1/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzAscSuu1.2015-08-13/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m3.879s
+    cat fb.ascSuu1.chainCaePb3Link.txt
+    # 5423131 bases of 262604320 (2.065%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` ascSuu1 caePb3) \
+      > rbest.log 2>&1
+    # real 0m43.103s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Brugia malayi/Filarial worm - bruMal2
+# (DONE - 2015-08-13 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzBruMal2.2015-08-13
+    cd /hive/data/genomes/caePb3/bed/lastzBruMal2.2015-08-13
+
+    cat << '_EOF_' > DEF
+# caePb3 vs bruMal2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Brugia malayi/Filarial worm - bruMal2
+SEQ2_DIR=/hive/data/genomes/bruMal2/bruMal2.2bit
+SEQ2_LEN=/hive/data/genomes/bruMal2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzBruMal2.2015-08-13
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 17m55.426s
+    cat fb.caePb3.chainBruMal2Link.txt
+    # 6256015 bases of 170093652 (3.678%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 bruMal2) > rbest.log 2>&1 &
+    # real 0m29.358s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/bruMal2/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/bruMal2/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzBruMal2.2015-08-13/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m31.299s
+    cat fb.bruMal2.chainCaePb3Link.txt
+    # 4466120 bases of 87424120 (5.109%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` bruMal2 caePb3) \
+      > rbest.log 2>&1
+    # real 0m33.609s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+# (DONE - 2015-08-13 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzBurXyl1.2015-08-13
+    cd /hive/data/genomes/caePb3/bed/lastzBurXyl1.2015-08-13
+
+    cat << '_EOF_' > DEF
+# caePb3 vs burXyl1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+SEQ2_DIR=/hive/data/genomes/burXyl1/burXyl1.2bit
+SEQ2_LEN=/hive/data/genomes/burXyl1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzBurXyl1.2015-08-13
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 14m48.781s
+    cat fb.caePb3.chainBurXyl1Link.txt
+    # 8684636 bases of 170093652 (5.106%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 burXyl1) > rbest.log 2>&1 &
+    # real 0m32.903s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/burXyl1/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/burXyl1/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzBurXyl1.2015-08-13/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m56.452s
+    cat fb.burXyl1.chainCaePb3Link.txt
+    # 5980335 bases of 73100506 (8.181%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` burXyl1 caePb3) \
+      > rbest.log 2>&1
+    # real 0m37.396s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Caenorhabditis angaria/C. angaria - caeAng2
+# (DONE - 2015-08-12 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzCaeAng2.2015-08-12
+    cd /hive/data/genomes/caePb3/bed/lastzCaeAng2.2015-08-12
+
+    cat << '_EOF_' > DEF
+# caePb3 vs caeAng2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Caenorhabditis angaria/C. angaria - caeAng2
+SEQ2_DIR=/hive/data/genomes/caeAng2/caeAng2.2bit
+SEQ2_LEN=/hive/data/genomes/caeAng2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzCaeAng2.2015-08-12
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 79m19.811s
+    cat fb.caePb3.chainCaeAng2Link.txt
+    # 22893888 bases of 170093652 (13.460%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 caeAng2) > rbest.log 2>&1 &
+    # real 0m58.355s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/caeAng2/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/caeAng2/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzCaeAng2.2015-08-12/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 7m30.540s
+    cat fb.caeAng2.chainCaePb3Link.txt
+    # 18954896 bases of 95237926 (19.903%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` caeAng2 caePb3) \
+      > rbest.log 2>&1
+    # real 2m29.549s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Caenorhabditis japonica/C. japonica - caeJap4
+# (DONE - 2015-08-12 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzCaeJap4.2015-08-12
+    cd /hive/data/genomes/caePb3/bed/lastzCaeJap4.2015-08-12
+
+    cat << '_EOF_' > DEF
+# caePb3 vs caeJap4
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Caenorhabditis japonica/C. japonica - caeJap4
+SEQ2_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ2_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzCaeJap4.2015-08-12
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 55m12.208s
+    cat fb.caePb3.chainCaeJap4Link.txt
+    # 37631407 bases of 170093652 (22.124%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 caeJap4) > rbest.log 2>&1 &
+    # real 1m12.668s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/caeJap4/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/caeJap4/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzCaeJap4.2015-08-12/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 3m37.897s
+    cat fb.caeJap4.chainCaePb3Link.txt
+    # 32646648 bases of 154057934 (21.191%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` caeJap4 caePb3) \
+      > rbest.log 2>&1
+    # real 2m10.283s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Caenorhabditis remanei/C. remanei - caeRem4
+# (DONE - 2015-08-12 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzCaeRem4.2015-08-12
+    cd /hive/data/genomes/caePb3/bed/lastzCaeRem4.2015-08-12
+
+    cat << '_EOF_' > DEF
+# caePb3 vs caeRem4
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Caenorhabditis remanei/C. remanei - caeRem4
+SEQ2_DIR=/hive/data/genomes/caeRem4/caeRem4.2bit
+SEQ2_LEN=/hive/data/genomes/caeRem4/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzCaeRem4.2015-08-12
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 1m49.144s
+    cat fb.caePb3.chainCaeRem4Link.txt
+    # 64539672 bases of 170093652 (37.944%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 caeRem4) > rbest.log 2>&1 &
+    # real 1m49.144s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/caeRem4/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/caeRem4/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzCaeRem4.2015-08-12/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 4m3.295s
+    cat fb.caeRem4.chainCaePb3Link.txt
+    # 53491817 bases of 138406203 (38.648%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` caeRem4 caePb3) \
+      > rbest.log 2>&1
+    # real 2m23.270s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Caenorhabditis tropicalis/C. tropicalis - caeSp111
+# (DONE - 2015-08-12 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzCaeSp111.2015-08-12
+    cd /hive/data/genomes/caePb3/bed/lastzCaeSp111.2015-08-12
+
+    cat << '_EOF_' > DEF
+# caePb3 vs caeSp111
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Caenorhabditis tropicalis/C. tropicalis - caeSp111
+SEQ2_DIR=/hive/data/genomes/caeSp111/caeSp111.2bit
+SEQ2_LEN=/hive/data/genomes/caeSp111/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzCaeSp111.2015-08-12
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 18m35.999s
+    cat fb.caePb3.chainCaeSp111Link.txt
+    # 61825019 bases of 170093652 (36.348%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 caeSp111) > rbest.log 2>&1 &
+    # real 2m23.658s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/caeSp111/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/caeSp111/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzCaeSp111.2015-08-12/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 3m0.781s
+    cat fb.caeSp111.chainCaePb3Link.txt
+    # 42859449 bases of 76497192 (56.027%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` caeSp111 caePb3) \
+      > rbest.log 2>&1
+    # real 2m6.540s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Caenorhabditis sp5 ju800/C. sp. 5 ju800 - caeSp51
+# (DONE - 2015-08-12 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzCaeSp51.2015-08-12
+    cd /hive/data/genomes/caePb3/bed/lastzCaeSp51.2015-08-12
+
+    cat << '_EOF_' > DEF
+# caePb3 vs caeSp51
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Caenorhabditis sp5 ju800/C. sp. 5 ju800 - caeSp51
+SEQ2_DIR=/hive/data/genomes/caeSp51/caeSp51.2bit
+SEQ2_LEN=/hive/data/genomes/caeSp51/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzCaeSp51.2015-08-12
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 175m15.731s
+    cat fb.caePb3.chainCaeSp51Link.txt
+    # 63218040 bases of 170093652 (37.167%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 caeSp51) > rbest.log 2>&1 &
+    # real 1m51.118s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/caeSp51/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/caeSp51/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzCaeSp51.2015-08-12/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 5m57.584s
+    cat fb.caeSp51.chainCaePb3Link.txt
+    # 48146941 bases of 130562982 (36.876%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` caeSp51 caePb3) \
+      > rbest.log 2>&1
+    # real 2m50.773s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Caenorhabditis briggsae/C. briggsae - cb4
+# (DONE - 2015-08-12 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzCb4.2015-08-12
+    cd /hive/data/genomes/caePb3/bed/lastzCb4.2015-08-12
+
+    cat << '_EOF_' > DEF
+# caePb3 vs cb4
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Caenorhabditis briggsae/C. briggsae - cb4
+SEQ2_DIR=/hive/data/genomes/cb4/cb4.2bit
+SEQ2_LEN=/hive/data/genomes/cb4/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzCb4.2015-08-12
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 22m29.295s
+    cat fb.caePb3.chainCb4Link.txt
+    # 57952216 bases of 170093652 (34.071%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 cb4) > rbest.log 2>&1 &
+    # real 1m59.207s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/cb4/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/cb4/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzCb4.2015-08-12/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 3m20.911s
+    cat fb.cb4.chainCaePb3Link.txt
+    # 43051462 bases of 108371485 (39.726%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` cb4 caePb3) \
+      > rbest.log 2>&1
+    # real 2m8.020s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Dirofilaria immitis/Dog heartworm - dirImm1
+# (DONE - 2015-08-13 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzDirImm1.2015-08-13
+    cd /hive/data/genomes/caePb3/bed/lastzDirImm1.2015-08-13
+
+    cat << '_EOF_' > DEF
+# caePb3 vs dirImm1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Dirofilaria immitis/Dog heartworm - dirImm1
+SEQ2_DIR=/hive/data/genomes/dirImm1/dirImm1.2bit
+SEQ2_LEN=/hive/data/genomes/dirImm1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzDirImm1.2015-08-13
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 25m26.934s
+    cat fb.caePb3.chainDirImm1Link.txt
+    # 6144240 bases of 170093652 (3.612%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 dirImm1) > rbest.log 2>&1 &
+    # real 0m30.105s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/dirImm1/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/dirImm1/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzDirImm1.2015-08-13/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m2.450s
+    cat fb.dirImm1.chainCaePb3Link.txt
+    # 4177136 bases of 84923352 (4.919%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` dirImm1 caePb3) \
+      > rbest.log 2>&1
+    # real 0m36.863s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Haemonchus contortus/Barber pole worm - haeCon2
+# (DONE - 2015-08-13 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzHaeCon2.2015-08-13
+    cd /hive/data/genomes/caePb3/bed/lastzHaeCon2.2015-08-13
+
+    cat << '_EOF_' > DEF
+# caePb3 vs haeCon2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Haemonchus contortus/Barber pole worm - haeCon2
+SEQ2_DIR=/hive/data/genomes/haeCon2/haeCon2.2bit
+SEQ2_LEN=/hive/data/genomes/haeCon2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzHaeCon2.2015-08-13
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 37m2.150s
+    cat fb.caePb3.chainHaeCon2Link.txt
+    # 12096084 bases of 170093652 (7.111%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 haeCon2) > rbest.log 2>&1 &
+    # real 0m45.017s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/haeCon2/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/haeCon2/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzHaeCon2.2015-08-13/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 2m17.027s
+    cat fb.haeCon2.chainCaePb3Link.txt
+    # 13254144 bases of 346001353 (3.831%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` haeCon2 caePb3) \
+      > rbest.log 2>&1
+    # real 1m35.907s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1
+# (DONE - 2015-08-12 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzHetBac1.2015-08-12
+    cd /hive/data/genomes/caePb3/bed/lastzHetBac1.2015-08-12
+
+    cat << '_EOF_' > DEF
+# caePb3 vs hetBac1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1
+SEQ2_DIR=/hive/data/genomes/hetBac1/hetBac1.2bit
+SEQ2_LEN=/hive/data/genomes/hetBac1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzHetBac1.2015-08-12
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 14m57.664s
+    cat fb.caePb3.chainHetBac1Link.txt
+    # 13800453 bases of 170093652 (8.113%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 hetBac1) > rbest.log 2>&1 &
+    # real 0m41.582s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/hetBac1/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/hetBac1/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzHetBac1.2015-08-12/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m6.963s
+    cat fb.hetBac1.chainCaePb3Link.txt
+    # 9905337 bases of 74374900 (13.318%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hetBac1 caePb3) \
+      > rbest.log 2>&1
+    # real 0m44.997s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Loa loa/Eye worm - loaLoa1
+# (DONE - 2015-08-13 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzLoaLoa1.2015-08-13
+    cd /hive/data/genomes/caePb3/bed/lastzLoaLoa1.2015-08-13
+
+    cat << '_EOF_' > DEF
+# caePb3 vs loaLoa1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Loa loa/Eye worm - loaLoa1
+SEQ2_DIR=/hive/data/genomes/loaLoa1/loaLoa1.2bit
+SEQ2_LEN=/hive/data/genomes/loaLoa1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzLoaLoa1.2015-08-13
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 21m22.499s
+    cat fb.caePb3.chainLoaLoa1Link.txt
+    # 6314243 bases of 170093652 (3.712%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 loaLoa1) > rbest.log 2>&1 &
+    # real 0m28.987s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/loaLoa1/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/loaLoa1/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzLoaLoa1.2015-08-13/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m52.219s
+    cat fb.loaLoa1.chainCaePb3Link.txt
+    # 4222408 bases of 87533141 (4.824%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` loaLoa1 caePb3) \
+      > rbest.log 2>&1
+    # real 0m30.189s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Meloidogyne hapla/M. hapla - melHap1
+# (DONE - 2015-08-13 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzMelHap1.2015-08-13
+    cd /hive/data/genomes/caePb3/bed/lastzMelHap1.2015-08-13
+
+    cat << '_EOF_' > DEF
+# caePb3 vs melHap1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Meloidogyne hapla/M. hapla - melHap1
+SEQ2_DIR=/hive/data/genomes/melHap1/melHap1.2bit
+SEQ2_LEN=/hive/data/genomes/melHap1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzMelHap1.2015-08-13
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 9m1.215s
+    cat fb.caePb3.chainMelHap1Link.txt
+    # 5140705 bases of 170093652 (3.022%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 melHap1) > rbest.log 2>&1 &
+    # real 0m24.821s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melHap1/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/melHap1/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzMelHap1.2015-08-13/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m50.008s
+    cat fb.melHap1.chainCaePb3Link.txt
+    # 3515086 bases of 53017507 (6.630%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melHap1 caePb3) \
+      > rbest.log 2>&1
+    # real 0m26.348s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Meloidogyne incognita/M. incognita - melInc2
+# (DONE - 2015-08-13 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzMelInc2.2015-08-13
+    cd /hive/data/genomes/caePb3/bed/lastzMelInc2.2015-08-13
+
+    cat << '_EOF_' > DEF
+# caePb3 vs melInc2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Meloidogyne incognita/M. incognita - melInc2
+SEQ2_DIR=/hive/data/genomes/melInc2/melInc2.2bit
+SEQ2_LEN=/hive/data/genomes/melInc2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzMelInc2.2015-08-13
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 10m19.865s
+    cat fb.caePb3.chainMelInc2Link.txt
+    # 4669628 bases of 170093652 (2.745%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 melInc2) > rbest.log 2>&1 &
+    # real 0m24.498s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melInc2/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/melInc2/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzMelInc2.2015-08-13/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m54.556s
+    cat fb.melInc2.chainCaePb3Link.txt
+    # 4486686 bases of 82114761 (5.464%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melInc2 caePb3) \
+      > rbest.log 2>&1
+    # real 0m31.983s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Necator americanus/N. americanus - necAme1
+# (DONE - 2015-08-12 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzNecAme1.2015-08-12
+    cd /hive/data/genomes/caePb3/bed/lastzNecAme1.2015-08-12
+
+    cat << '_EOF_' > DEF
+# caePb3 vs necAme1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Necator americanus/N. americanus - necAme1
+SEQ2_DIR=/hive/data/genomes/necAme1/necAme1.2bit
+SEQ2_LEN=/hive/data/genomes/necAme1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzNecAme1.2015-08-12
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 580m1.452s
+    cat fb.caePb3.chainNecAme1Link.txt
+    # 11986248 bases of 170093652 (7.047%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 necAme1) > rbest.log 2>&1 &
+    # real 0m41.341s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/necAme1/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/necAme1/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzNecAme1.2015-08-12/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m24.402s
+    cat fb.necAme1.chainCaePb3Link.txt
+    # 9042391 bases of 208187215 (4.343%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` necAme1 caePb3) \
+      > rbest.log 2>&1
+    # real 0m55.825s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Onchocerca volvulus/O. volvulus - oncVol1
+# (DONE - 2015-08-13 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzOncVol1.2015-08-13
+    cd /hive/data/genomes/caePb3/bed/lastzOncVol1.2015-08-13
+
+    cat << '_EOF_' > DEF
+# caePb3 vs oncVol1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Onchocerca volvulus/O. volvulus - oncVol1
+SEQ2_DIR=/hive/data/genomes/oncVol1/oncVol1.2bit
+SEQ2_LEN=/hive/data/genomes/oncVol1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzOncVol1.2015-08-13
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 11m30.343s
+    cat fb.caePb3.chainOncVol1Link.txt
+    # 6405651 bases of 170093652 (3.766%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 oncVol1) > rbest.log 2>&1 &
+    # real 0m49.874s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oncVol1/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/oncVol1/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzOncVol1.2015-08-13/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m47.358s
+    cat fb.oncVol1.chainCaePb3Link.txt
+    # 4393254 bases of 94327777 (4.657%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` oncVol1 caePb3) \
+      > rbest.log 2>&1
+    # real 0m42.073s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Panagrellus redivivus/Microworm - panRed1
+# (DONE - 2015-08-12 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzPanRed1.2015-08-12
+    cd /hive/data/genomes/caePb3/bed/lastzPanRed1.2015-08-12
+
+    cat << '_EOF_' > DEF
+# caePb3 vs panRed1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Panagrellus redivivus/Microworm - panRed1
+SEQ2_DIR=/hive/data/genomes/panRed1/panRed1.2bit
+SEQ2_LEN=/hive/data/genomes/panRed1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzPanRed1.2015-08-12
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 13m30.404s
+    cat fb.caePb3.chainPanRed1Link.txt
+    # 9183950 bases of 170093652 (5.399%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 panRed1) > rbest.log 2>&1 &
+    # real 0m33.726s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/panRed1/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/panRed1/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzPanRed1.2015-08-12/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m54.460s
+    cat fb.panRed1.chainCaePb3Link.txt
+    # 6442961 bases of 62228262 (10.354%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` panRed1 caePb3) \
+      > rbest.log 2>&1
+    # real 0m35.967s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Pristionchus exspectatus/P. exspectatus - priExs1
+# (DONE - 2015-08-13 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzPriExs1.2015-08-13
+    cd /hive/data/genomes/caePb3/bed/lastzPriExs1.2015-08-13
+
+    cat << '_EOF_' > DEF
+# caePb3 vs priExs1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Pristionchus exspectatus/P. exspectatus - priExs1
+SEQ2_DIR=/hive/data/genomes/priExs1/priExs1.2bit
+SEQ2_LEN=/hive/data/genomes/priExs1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzPriExs1.2015-08-13
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 18m33.553s
+    cat fb.caePb3.chainPriExs1Link.txt
+    # 8523673 bases of 170093652 (5.011%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 priExs1) > rbest.log 2>&1 &
+    # real 0m37.596s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/priExs1/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/priExs1/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzPriExs1.2015-08-13/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m7.603s
+    cat fb.priExs1.chainCaePb3Link.txt
+    # 7255345 bases of 166917800 (4.347%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` priExs1 caePb3) \
+      > rbest.log 2>&1
+    # real 0m47.054s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Pristionchus pacificus/P. pacificus - priPac3
+# (DONE - 2015-08-13 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzPriPac3.2015-08-13
+    cd /hive/data/genomes/caePb3/bed/lastzPriPac3.2015-08-13
+
+    cat << '_EOF_' > DEF
+# caePb3 vs priPac3
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Pristionchus pacificus/P. pacificus - priPac3
+SEQ2_DIR=/hive/data/genomes/priPac3/priPac3.2bit
+SEQ2_LEN=/hive/data/genomes/priPac3/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzPriPac3.2015-08-13
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 30m37.305s
+    cat fb.caePb3.chainPriPac3Link.txt
+    # 8536706 bases of 170093652 (5.019%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 priPac3) > rbest.log 2>&1 &
+    # real 0m37.019s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/priPac3/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/priPac3/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzPriPac3.2015-08-13/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m14.914s
+    cat fb.priPac3.chainCaePb3Link.txt
+    # 7174027 bases of 153238914 (4.682%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` priPac3 caePb3) \
+      > rbest.log 2>&1
+    # real 0m49.188s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Strongyloides ratti/Threadworm - strRat2
+# (DONE - 2015-08-12 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzStrRat2.2015-08-12
+    cd /hive/data/genomes/caePb3/bed/lastzStrRat2.2015-08-12
+
+    cat << '_EOF_' > DEF
+# caePb3 vs strRat2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Strongyloides ratti/Threadworm - strRat2
+SEQ2_DIR=/hive/data/genomes/strRat2/strRat2.2bit
+SEQ2_LEN=/hive/data/genomes/strRat2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzStrRat2.2015-08-12
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 9m36.963s
+    cat fb.caePb3.chainStrRat2Link.txt
+    # 7299259 bases of 170093652 (4.291%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 strRat2) > rbest.log 2>&1 &
+    # real 0m34.847s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/strRat2/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/strRat2/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzStrRat2.2015-08-12/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m47.339s
+    cat fb.strRat2.chainCaePb3Link.txt
+    # 4799771 bases of 43150242 (11.123%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` strRat2 caePb3) \
+      > rbest.log 2>&1
+    # real 0m31.842s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Trichinella spiralis/Trichinella - triSpi1
+# (DONE - 2015-08-13 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzTriSpi1.2015-08-13
+    cd /hive/data/genomes/caePb3/bed/lastzTriSpi1.2015-08-13
+
+    cat << '_EOF_' > DEF
+# caePb3 vs triSpi1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Trichinella spiralis/Trichinella - triSpi1
+SEQ2_DIR=/hive/data/genomes/triSpi1/triSpi1.2bit
+SEQ2_LEN=/hive/data/genomes/triSpi1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzTriSpi1.2015-08-13
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 14m23.861s
+    cat fb.caePb3.chainTriSpi1Link.txt
+    # 3846604 bases of 170093652 (2.261%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 triSpi1) > rbest.log 2>&1 &
+    # real 0m28.030s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSpi1/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/triSpi1/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzTriSpi1.2015-08-13/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m47.405s
+    cat fb.triSpi1.chainCaePb3Link.txt
+    # 2823451 bases of 58558192 (4.822%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSpi1 caePb3) \
+      > rbest.log 2>&1
+    # real 0m23.458s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis brenneri/C. brenneri - caePb3 vs.
+#       Trichuris suis/Whipworm - triSui1
+# (DONE - 2015-08-13 - Hiram)
+    mkdir /hive/data/genomes/caePb3/bed/lastzTriSui1.2015-08-13
+    cd /hive/data/genomes/caePb3/bed/lastzTriSui1.2015-08-13
+
+    cat << '_EOF_' > DEF
+# caePb3 vs triSui1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis brenneri/C. brenneri - caePb3
+SEQ1_DIR=/hive/data/genomes/caePb3/caePb3.2bit
+SEQ1_LEN=/hive/data/genomes/caePb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Trichuris suis/Whipworm - triSui1
+SEQ2_DIR=/hive/data/genomes/triSui1/triSui1.2bit
+SEQ2_LEN=/hive/data/genomes/triSui1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caePb3/bed/lastzTriSui1.2015-08-13
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 64m37.217s
+    cat fb.caePb3.chainTriSui1Link.txt
+    # 4102830 bases of 170093652 (2.412%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caePb3 triSui1) > rbest.log 2>&1 &
+    # real 0m23.461s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSui1/bed/blastz.caePb3.swap
+    cd /hive/data/genomes/triSui1/bed/blastz.caePb3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caePb3/bed/lastzTriSui1.2015-08-13/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m46.690s
+    cat fb.triSui1.chainCaePb3Link.txt
+    # 2943303 bases of 71825323 (4.098%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSui1 caePb3) \
+      > rbest.log 2>&1
+    # real 0m23.536s
+
+########################################################################

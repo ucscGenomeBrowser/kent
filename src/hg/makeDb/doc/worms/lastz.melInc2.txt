@@ -1,0 +1,406 @@
+########################################################################
+# LASTZ Meloidogyne incognita/M. incognita - melInc2 vs.
+#       Brugia malayi/Filarial worm - bruMal2
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/melInc2/bed/lastzBruMal2.2015-08-17
+    cd /hive/data/genomes/melInc2/bed/lastzBruMal2.2015-08-17
+
+    cat << '_EOF_' > DEF
+# melInc2 vs bruMal2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Meloidogyne incognita/M. incognita - melInc2
+SEQ1_DIR=/hive/data/genomes/melInc2/melInc2.2bit
+SEQ1_LEN=/hive/data/genomes/melInc2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Brugia malayi/Filarial worm - bruMal2
+SEQ2_DIR=/hive/data/genomes/bruMal2/bruMal2.2bit
+SEQ2_LEN=/hive/data/genomes/bruMal2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/melInc2/bed/lastzBruMal2.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m27.516s
+    cat fb.melInc2.chainBruMal2Link.txt
+    # 4994915 bases of 82114761 (6.083%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` melInc2 bruMal2) > rbest.log 2>&1 &
+    # real 2m24.748s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/bruMal2/bed/blastz.melInc2.swap
+    cd /hive/data/genomes/bruMal2/bed/blastz.melInc2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/melInc2/bed/lastzBruMal2.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m19.399s
+    cat fb.bruMal2.chainMelInc2Link.txt
+    # 3880673 bases of 87424120 (4.439%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` bruMal2 melInc2) \
+      > rbest.log 2>&1
+    # real 0m26.762s
+
+########################################################################
+########################################################################
+# LASTZ Meloidogyne incognita/M. incognita - melInc2 vs.
+#       Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/melInc2/bed/lastzBurXyl1.2015-08-17
+    cd /hive/data/genomes/melInc2/bed/lastzBurXyl1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# melInc2 vs burXyl1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Meloidogyne incognita/M. incognita - melInc2
+SEQ1_DIR=/hive/data/genomes/melInc2/melInc2.2bit
+SEQ1_LEN=/hive/data/genomes/melInc2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+SEQ2_DIR=/hive/data/genomes/burXyl1/burXyl1.2bit
+SEQ2_LEN=/hive/data/genomes/burXyl1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/melInc2/bed/lastzBurXyl1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m20.509s
+    cat fb.melInc2.chainBurXyl1Link.txt
+    # 5517514 bases of 82114761 (6.719%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` melInc2 burXyl1) > rbest.log 2>&1 &
+    # real 0m31.924s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/burXyl1/bed/blastz.melInc2.swap
+    cd /hive/data/genomes/burXyl1/bed/blastz.melInc2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/melInc2/bed/lastzBurXyl1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m46.238s
+    cat fb.burXyl1.chainMelInc2Link.txt
+    # 3825759 bases of 73100506 (5.234%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` burXyl1 melInc2) \
+      > rbest.log 2>&1
+    # real 0m25.939s
+
+########################################################################
+########################################################################
+# LASTZ Meloidogyne incognita/M. incognita - melInc2 vs.
+#       Dirofilaria immitis/Dog heartworm - dirImm1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/melInc2/bed/lastzDirImm1.2015-08-17
+    cd /hive/data/genomes/melInc2/bed/lastzDirImm1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# melInc2 vs dirImm1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Meloidogyne incognita/M. incognita - melInc2
+SEQ1_DIR=/hive/data/genomes/melInc2/melInc2.2bit
+SEQ1_LEN=/hive/data/genomes/melInc2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Dirofilaria immitis/Dog heartworm - dirImm1
+SEQ2_DIR=/hive/data/genomes/dirImm1/dirImm1.2bit
+SEQ2_LEN=/hive/data/genomes/dirImm1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/melInc2/bed/lastzDirImm1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m26.513s
+    cat fb.melInc2.chainDirImm1Link.txt
+    # 4915473 bases of 82114761 (5.986%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` melInc2 dirImm1) > rbest.log 2>&1 &
+    # real 2m32.223s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/dirImm1/bed/blastz.melInc2.swap
+    cd /hive/data/genomes/dirImm1/bed/blastz.melInc2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/melInc2/bed/lastzDirImm1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m58.626s
+    cat fb.dirImm1.chainMelInc2Link.txt
+    # 3538919 bases of 84923352 (4.167%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` dirImm1 melInc2) \
+      > rbest.log 2>&1
+    # real 0m30.773s
+
+########################################################################
+########################################################################
+# LASTZ Meloidogyne incognita/M. incognita - melInc2 vs.
+#       Loa loa/Eye worm - loaLoa1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/melInc2/bed/lastzLoaLoa1.2015-08-17
+    cd /hive/data/genomes/melInc2/bed/lastzLoaLoa1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# melInc2 vs loaLoa1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Meloidogyne incognita/M. incognita - melInc2
+SEQ1_DIR=/hive/data/genomes/melInc2/melInc2.2bit
+SEQ1_LEN=/hive/data/genomes/melInc2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Loa loa/Eye worm - loaLoa1
+SEQ2_DIR=/hive/data/genomes/loaLoa1/loaLoa1.2bit
+SEQ2_LEN=/hive/data/genomes/loaLoa1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/melInc2/bed/lastzLoaLoa1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m18.964s
+    cat fb.melInc2.chainLoaLoa1Link.txt
+    # 4806271 bases of 82114761 (5.853%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` melInc2 loaLoa1) > rbest.log 2>&1 &
+    # real 2m22.988s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/loaLoa1/bed/blastz.melInc2.swap
+    cd /hive/data/genomes/loaLoa1/bed/blastz.melInc2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/melInc2/bed/lastzLoaLoa1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m48.651s
+    cat fb.loaLoa1.chainMelInc2Link.txt
+    # 3429279 bases of 87533141 (3.918%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` loaLoa1 melInc2) \
+      > rbest.log 2>&1
+    # real 0m25.774s
+
+########################################################################
+########################################################################
+# LASTZ Meloidogyne incognita/M. incognita - melInc2 vs.
+#       Onchocerca volvulus/O. volvulus - oncVol1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/melInc2/bed/lastzOncVol1.2015-08-17
+    cd /hive/data/genomes/melInc2/bed/lastzOncVol1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# melInc2 vs oncVol1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Meloidogyne incognita/M. incognita - melInc2
+SEQ1_DIR=/hive/data/genomes/melInc2/melInc2.2bit
+SEQ1_LEN=/hive/data/genomes/melInc2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Onchocerca volvulus/O. volvulus - oncVol1
+SEQ2_DIR=/hive/data/genomes/oncVol1/oncVol1.2bit
+SEQ2_LEN=/hive/data/genomes/oncVol1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/melInc2/bed/lastzOncVol1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m28.649s
+    cat fb.melInc2.chainOncVol1Link.txt
+    # 5152612 bases of 82114761 (6.275%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` melInc2 oncVol1) > rbest.log 2>&1 &
+    # real 0m50.924s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oncVol1/bed/blastz.melInc2.swap
+    cd /hive/data/genomes/oncVol1/bed/blastz.melInc2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/melInc2/bed/lastzOncVol1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m45.895s
+    cat fb.oncVol1.chainMelInc2Link.txt
+    # 3810539 bases of 94327777 (4.040%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` oncVol1 melInc2) \
+      > rbest.log 2>&1
+    # real 0m38.770s
+
+########################################################################
+########################################################################
+# LASTZ Meloidogyne incognita/M. incognita - melInc2 vs.
+#       Trichinella spiralis/Trichinella - triSpi1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/melInc2/bed/lastzTriSpi1.2015-08-17
+    cd /hive/data/genomes/melInc2/bed/lastzTriSpi1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# melInc2 vs triSpi1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Meloidogyne incognita/M. incognita - melInc2
+SEQ1_DIR=/hive/data/genomes/melInc2/melInc2.2bit
+SEQ1_LEN=/hive/data/genomes/melInc2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichinella spiralis/Trichinella - triSpi1
+SEQ2_DIR=/hive/data/genomes/triSpi1/triSpi1.2bit
+SEQ2_LEN=/hive/data/genomes/triSpi1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/melInc2/bed/lastzTriSpi1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m14.769s
+    cat fb.melInc2.chainTriSpi1Link.txt
+    # 2558922 bases of 82114761 (3.116%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` melInc2 triSpi1) > rbest.log 2>&1 &
+    # real 8m30.225s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSpi1/bed/blastz.melInc2.swap
+    cd /hive/data/genomes/triSpi1/bed/blastz.melInc2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/melInc2/bed/lastzTriSpi1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m44.874s
+    cat fb.triSpi1.chainMelInc2Link.txt
+    # 1995827 bases of 58558192 (3.408%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSpi1 melInc2) \
+      > rbest.log 2>&1
+    # real 0m19.910s
+
+########################################################################
+########################################################################
+# LASTZ Meloidogyne incognita/M. incognita - melInc2 vs.
+#       Trichuris suis/Whipworm - triSui1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/melInc2/bed/lastzTriSui1.2015-08-17
+    cd /hive/data/genomes/melInc2/bed/lastzTriSui1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# melInc2 vs triSui1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Meloidogyne incognita/M. incognita - melInc2
+SEQ1_DIR=/hive/data/genomes/melInc2/melInc2.2bit
+SEQ1_LEN=/hive/data/genomes/melInc2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichuris suis/Whipworm - triSui1
+SEQ2_DIR=/hive/data/genomes/triSui1/triSui1.2bit
+SEQ2_LEN=/hive/data/genomes/triSui1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/melInc2/bed/lastzTriSui1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m10.677s
+    cat fb.melInc2.chainTriSui1Link.txt
+    # 2333724 bases of 82114761 (2.842%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` melInc2 triSui1) > rbest.log 2>&1 &
+    # real 6m19.252s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSui1/bed/blastz.melInc2.swap
+    cd /hive/data/genomes/triSui1/bed/blastz.melInc2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/melInc2/bed/lastzTriSui1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m40.836s
+    cat fb.triSui1.chainMelInc2Link.txt
+    # 1767603 bases of 71825323 (2.461%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSui1 melInc2) \
+      > rbest.log 2>&1
+    # real 0m18.249s
+
+########################################################################

@@ -1,0 +1,812 @@
+########################################################################
+# LASTZ Ancylostoma ceylanicum/A. ceylanicum - ancCey1 vs.
+#       Ascaris suum/Pig roundworm - ascSuu1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/lastzAscSuu1.2015-08-16
+    cd /hive/data/genomes/ancCey1/bed/lastzAscSuu1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# ancCey1 vs ascSuu1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+SEQ1_DIR=/hive/data/genomes/ancCey1/ancCey1.2bit
+SEQ1_LEN=/hive/data/genomes/ancCey1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Ascaris suum/Pig roundworm - ascSuu1
+SEQ2_DIR=/hive/data/genomes/ascSuu1/ascSuu1.2bit
+SEQ2_LEN=/hive/data/genomes/ascSuu1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ancCey1/bed/lastzAscSuu1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 9m4.972s
+    cat fb.ancCey1.chainAscSuu1Link.txt
+    # 7800109 bases of 300914990 (2.592%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ancCey1 ascSuu1) > rbest.log 2>&1 &
+    # real 0m37.574s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/ascSuu1/bed/blastz.ancCey1.swap
+    cd /hive/data/genomes/ascSuu1/bed/blastz.ancCey1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ancCey1/bed/lastzAscSuu1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 2m6.163s
+    cat fb.ascSuu1.chainAncCey1Link.txt
+    # 7059281 bases of 262604320 (2.688%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` ascSuu1 ancCey1) \
+      > rbest.log 2>&1
+    # real 2m35.144s
+
+########################################################################
+########################################################################
+# LASTZ Ancylostoma ceylanicum/A. ceylanicum - ancCey1 vs.
+#       Brugia malayi/Filarial worm - bruMal2
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/lastzBruMal2.2015-08-16
+    cd /hive/data/genomes/ancCey1/bed/lastzBruMal2.2015-08-16
+
+    cat << '_EOF_' > DEF
+# ancCey1 vs bruMal2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+SEQ1_DIR=/hive/data/genomes/ancCey1/ancCey1.2bit
+SEQ1_LEN=/hive/data/genomes/ancCey1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Brugia malayi/Filarial worm - bruMal2
+SEQ2_DIR=/hive/data/genomes/bruMal2/bruMal2.2bit
+SEQ2_LEN=/hive/data/genomes/bruMal2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ancCey1/bed/lastzBruMal2.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m52.887s
+    cat fb.ancCey1.chainBruMal2Link.txt
+    # 5564334 bases of 300914990 (1.849%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ancCey1 bruMal2) > rbest.log 2>&1 &
+    # real 0m29.179s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/bruMal2/bed/blastz.ancCey1.swap
+    cd /hive/data/genomes/bruMal2/bed/blastz.ancCey1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ancCey1/bed/lastzBruMal2.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m37.299s
+    cat fb.bruMal2.chainAncCey1Link.txt
+    # 5524529 bases of 87424120 (6.319%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` bruMal2 ancCey1) \
+      > rbest.log 2>&1
+    # real 0m39.436s
+
+########################################################################
+########################################################################
+# LASTZ Ancylostoma ceylanicum/A. ceylanicum - ancCey1 vs.
+#       Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/lastzBurXyl1.2015-08-16
+    cd /hive/data/genomes/ancCey1/bed/lastzBurXyl1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# ancCey1 vs burXyl1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+SEQ1_DIR=/hive/data/genomes/ancCey1/ancCey1.2bit
+SEQ1_LEN=/hive/data/genomes/ancCey1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+SEQ2_DIR=/hive/data/genomes/burXyl1/burXyl1.2bit
+SEQ2_LEN=/hive/data/genomes/burXyl1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ancCey1/bed/lastzBurXyl1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 6m35.287s
+    cat fb.ancCey1.chainBurXyl1Link.txt
+    # 5944382 bases of 300914990 (1.975%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ancCey1 burXyl1) > rbest.log 2>&1 &
+    # real 0m31.539s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/burXyl1/bed/blastz.ancCey1.swap
+    cd /hive/data/genomes/burXyl1/bed/blastz.ancCey1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ancCey1/bed/lastzBurXyl1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m54.158s
+    cat fb.burXyl1.chainAncCey1Link.txt
+    # 5208033 bases of 73100506 (7.124%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` burXyl1 ancCey1) \
+      > rbest.log 2>&1
+    # real 0m38.923s
+
+########################################################################
+########################################################################
+# LASTZ Ancylostoma ceylanicum/A. ceylanicum - ancCey1 vs.
+#       Dirofilaria immitis/Dog heartworm - dirImm1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/lastzDirImm1.2015-08-16
+    cd /hive/data/genomes/ancCey1/bed/lastzDirImm1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# ancCey1 vs dirImm1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+SEQ1_DIR=/hive/data/genomes/ancCey1/ancCey1.2bit
+SEQ1_LEN=/hive/data/genomes/ancCey1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Dirofilaria immitis/Dog heartworm - dirImm1
+SEQ2_DIR=/hive/data/genomes/dirImm1/dirImm1.2bit
+SEQ2_LEN=/hive/data/genomes/dirImm1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ancCey1/bed/lastzDirImm1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 6m35.273s
+    cat fb.ancCey1.chainDirImm1Link.txt
+    # 5338947 bases of 300914990 (1.774%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ancCey1 dirImm1) > rbest.log 2>&1 &
+    # real 0m31.708s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/dirImm1/bed/blastz.ancCey1.swap
+    cd /hive/data/genomes/dirImm1/bed/blastz.ancCey1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ancCey1/bed/lastzDirImm1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 4m18.258s
+    cat fb.dirImm1.chainAncCey1Link.txt
+    # 5080528 bases of 84923352 (5.982%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` dirImm1 ancCey1) \
+      > rbest.log 2>&1
+    # real 4m17.249s
+
+########################################################################
+########################################################################
+# LASTZ Ancylostoma ceylanicum/A. ceylanicum - ancCey1 vs.
+#       Haemonchus contortus/Barber pole worm - haeCon2
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/lastzHaeCon2.2015-08-16
+    cd /hive/data/genomes/ancCey1/bed/lastzHaeCon2.2015-08-16
+
+    cat << '_EOF_' > DEF
+# ancCey1 vs haeCon2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+SEQ1_DIR=/hive/data/genomes/ancCey1/ancCey1.2bit
+SEQ1_LEN=/hive/data/genomes/ancCey1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Haemonchus contortus/Barber pole worm - haeCon2
+SEQ2_DIR=/hive/data/genomes/haeCon2/haeCon2.2bit
+SEQ2_LEN=/hive/data/genomes/haeCon2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ancCey1/bed/lastzHaeCon2.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 17m13.642s
+    cat fb.ancCey1.chainHaeCon2Link.txt
+    # 39375688 bases of 300914990 (13.085%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ancCey1 haeCon2) > rbest.log 2>&1 &
+    # real 1m27.111s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/haeCon2/bed/blastz.ancCey1.swap
+    cd /hive/data/genomes/haeCon2/bed/blastz.ancCey1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ancCey1/bed/lastzHaeCon2.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 8m23.788s
+    cat fb.haeCon2.chainAncCey1Link.txt
+    # 52829603 bases of 346001353 (15.269%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` haeCon2 ancCey1) \
+      > rbest.log 2>&1
+    # real 7m34.691s
+
+########################################################################
+########################################################################
+# LASTZ Ancylostoma ceylanicum/A. ceylanicum - ancCey1 vs.
+#       Loa loa/Eye worm - loaLoa1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/lastzLoaLoa1.2015-08-16
+    cd /hive/data/genomes/ancCey1/bed/lastzLoaLoa1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# ancCey1 vs loaLoa1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+SEQ1_DIR=/hive/data/genomes/ancCey1/ancCey1.2bit
+SEQ1_LEN=/hive/data/genomes/ancCey1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Loa loa/Eye worm - loaLoa1
+SEQ2_DIR=/hive/data/genomes/loaLoa1/loaLoa1.2bit
+SEQ2_LEN=/hive/data/genomes/loaLoa1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ancCey1/bed/lastzLoaLoa1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 9m13.009s
+    cat fb.ancCey1.chainLoaLoa1Link.txt
+    # 6526806 bases of 300914990 (2.169%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ancCey1 loaLoa1) > rbest.log 2>&1 &
+    # real 0m32.850s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/loaLoa1/bed/blastz.ancCey1.swap
+    cd /hive/data/genomes/loaLoa1/bed/blastz.ancCey1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ancCey1/bed/lastzLoaLoa1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 4m0.809s
+    cat fb.loaLoa1.chainAncCey1Link.txt
+    # 5318673 bases of 87533141 (6.076%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` loaLoa1 ancCey1) \
+      > rbest.log 2>&1
+    # real 6m1.404s
+
+########################################################################
+########################################################################
+# LASTZ Ancylostoma ceylanicum/A. ceylanicum - ancCey1 vs.
+#       Meloidogyne hapla/M. hapla - melHap1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/lastzMelHap1.2015-08-16
+    cd /hive/data/genomes/ancCey1/bed/lastzMelHap1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# ancCey1 vs melHap1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+SEQ1_DIR=/hive/data/genomes/ancCey1/ancCey1.2bit
+SEQ1_LEN=/hive/data/genomes/ancCey1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Meloidogyne hapla/M. hapla - melHap1
+SEQ2_DIR=/hive/data/genomes/melHap1/melHap1.2bit
+SEQ2_LEN=/hive/data/genomes/melHap1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ancCey1/bed/lastzMelHap1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m30.955s
+    cat fb.ancCey1.chainMelHap1Link.txt
+    # 3367513 bases of 300914990 (1.119%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ancCey1 melHap1) > rbest.log 2>&1 &
+    # real 0m22.170s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melHap1/bed/blastz.ancCey1.swap
+    cd /hive/data/genomes/melHap1/bed/blastz.ancCey1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ancCey1/bed/lastzMelHap1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m7.314s
+    cat fb.melHap1.chainAncCey1Link.txt
+    # 2968383 bases of 53017507 (5.599%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melHap1 ancCey1) \
+      > rbest.log 2>&1
+    # real 0m26.282s
+
+########################################################################
+########################################################################
+# LASTZ Ancylostoma ceylanicum/A. ceylanicum - ancCey1 vs.
+#       Meloidogyne incognita/M. incognita - melInc2
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/lastzMelInc2.2015-08-16
+    cd /hive/data/genomes/ancCey1/bed/lastzMelInc2.2015-08-16
+
+    cat << '_EOF_' > DEF
+# ancCey1 vs melInc2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+SEQ1_DIR=/hive/data/genomes/ancCey1/ancCey1.2bit
+SEQ1_LEN=/hive/data/genomes/ancCey1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Meloidogyne incognita/M. incognita - melInc2
+SEQ2_DIR=/hive/data/genomes/melInc2/melInc2.2bit
+SEQ2_LEN=/hive/data/genomes/melInc2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ancCey1/bed/lastzMelInc2.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m25.502s
+    cat fb.ancCey1.chainMelInc2Link.txt
+    # 3544279 bases of 300914990 (1.178%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ancCey1 melInc2) > rbest.log 2>&1 &
+    # real 0m21.913s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melInc2/bed/blastz.ancCey1.swap
+    cd /hive/data/genomes/melInc2/bed/blastz.ancCey1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ancCey1/bed/lastzMelInc2.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m53.633s
+    cat fb.melInc2.chainAncCey1Link.txt
+    # 4100632 bases of 82114761 (4.994%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melInc2 ancCey1) \
+      > rbest.log 2>&1
+    # real 0m30.016s
+
+########################################################################
+########################################################################
+# LASTZ Ancylostoma ceylanicum/A. ceylanicum - ancCey1 vs.
+#       Necator americanus/N. americanus - necAme1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/lastzNecAme1.2015-08-16
+    cd /hive/data/genomes/ancCey1/bed/lastzNecAme1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# ancCey1 vs necAme1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+SEQ1_DIR=/hive/data/genomes/ancCey1/ancCey1.2bit
+SEQ1_LEN=/hive/data/genomes/ancCey1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Necator americanus/N. americanus - necAme1
+SEQ2_DIR=/hive/data/genomes/necAme1/necAme1.2bit
+SEQ2_LEN=/hive/data/genomes/necAme1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ancCey1/bed/lastzNecAme1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 11m41.240s
+    cat fb.ancCey1.chainNecAme1Link.txt
+    # 49659080 bases of 300914990 (16.503%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ancCey1 necAme1) > rbest.log 2>&1 &
+    # real 1m42.225s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/necAme1/bed/blastz.ancCey1.swap
+    cd /hive/data/genomes/necAme1/bed/blastz.ancCey1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ancCey1/bed/lastzNecAme1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 6m34.465s
+    cat fb.necAme1.chainAncCey1Link.txt
+    # 49184225 bases of 208187215 (23.625%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` necAme1 ancCey1) \
+      > rbest.log 2>&1
+    # real 8m48.467s
+
+########################################################################
+########################################################################
+# LASTZ Ancylostoma ceylanicum/A. ceylanicum - ancCey1 vs.
+#       Onchocerca volvulus/O. volvulus - oncVol1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/lastzOncVol1.2015-08-16
+    cd /hive/data/genomes/ancCey1/bed/lastzOncVol1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# ancCey1 vs oncVol1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+SEQ1_DIR=/hive/data/genomes/ancCey1/ancCey1.2bit
+SEQ1_LEN=/hive/data/genomes/ancCey1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Onchocerca volvulus/O. volvulus - oncVol1
+SEQ2_DIR=/hive/data/genomes/oncVol1/oncVol1.2bit
+SEQ2_LEN=/hive/data/genomes/oncVol1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ancCey1/bed/lastzOncVol1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m48.677s
+    cat fb.ancCey1.chainOncVol1Link.txt
+    # 5720552 bases of 300914990 (1.901%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ancCey1 oncVol1) > rbest.log 2>&1 &
+    # real 0m44.731s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oncVol1/bed/blastz.ancCey1.swap
+    cd /hive/data/genomes/oncVol1/bed/blastz.ancCey1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ancCey1/bed/lastzOncVol1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m52.645s
+    cat fb.oncVol1.chainAncCey1Link.txt
+    # 5805676 bases of 94327777 (6.155%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` oncVol1 ancCey1) \
+      > rbest.log 2>&1
+    # real 0m46.983s
+
+########################################################################
+########################################################################
+# LASTZ Ancylostoma ceylanicum/A. ceylanicum - ancCey1 vs.
+#       Pristionchus exspectatus/P. exspectatus - priExs1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/lastzPriExs1.2015-08-16
+    cd /hive/data/genomes/ancCey1/bed/lastzPriExs1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# ancCey1 vs priExs1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+SEQ1_DIR=/hive/data/genomes/ancCey1/ancCey1.2bit
+SEQ1_LEN=/hive/data/genomes/ancCey1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Pristionchus exspectatus/P. exspectatus - priExs1
+SEQ2_DIR=/hive/data/genomes/priExs1/priExs1.2bit
+SEQ2_LEN=/hive/data/genomes/priExs1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ancCey1/bed/lastzPriExs1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 6m12.211s
+    cat fb.ancCey1.chainPriExs1Link.txt
+    # 9246350 bases of 300914990 (3.073%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ancCey1 priExs1) > rbest.log 2>&1 &
+    # real 0m36.283s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/priExs1/bed/blastz.ancCey1.swap
+    cd /hive/data/genomes/priExs1/bed/blastz.ancCey1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ancCey1/bed/lastzPriExs1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m13.947s
+    cat fb.priExs1.chainAncCey1Link.txt
+    # 8834189 bases of 166917800 (5.293%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` priExs1 ancCey1) \
+      > rbest.log 2>&1
+    # real 0m53.294s
+
+########################################################################
+########################################################################
+# LASTZ Ancylostoma ceylanicum/A. ceylanicum - ancCey1 vs.
+#       Pristionchus pacificus/P. pacificus - priPac3
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/lastzPriPac3.2015-08-16
+    cd /hive/data/genomes/ancCey1/bed/lastzPriPac3.2015-08-16
+
+    cat << '_EOF_' > DEF
+# ancCey1 vs priPac3
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+SEQ1_DIR=/hive/data/genomes/ancCey1/ancCey1.2bit
+SEQ1_LEN=/hive/data/genomes/ancCey1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Pristionchus pacificus/P. pacificus - priPac3
+SEQ2_DIR=/hive/data/genomes/priPac3/priPac3.2bit
+SEQ2_LEN=/hive/data/genomes/priPac3/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ancCey1/bed/lastzPriPac3.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 6m37.640s
+    cat fb.ancCey1.chainPriPac3Link.txt
+    # 9588166 bases of 300914990 (3.186%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ancCey1 priPac3) > rbest.log 2>&1 &
+    # real 0m37.886s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/priPac3/bed/blastz.ancCey1.swap
+    cd /hive/data/genomes/priPac3/bed/blastz.ancCey1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ancCey1/bed/lastzPriPac3.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m56.145s
+    cat fb.priPac3.chainAncCey1Link.txt
+    # 8549334 bases of 153238914 (5.579%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` priPac3 ancCey1) \
+      > rbest.log 2>&1
+    # real 1m26.742s
+
+########################################################################
+########################################################################
+# LASTZ Ancylostoma ceylanicum/A. ceylanicum - ancCey1 vs.
+#       Trichinella spiralis/Trichinella - triSpi1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/lastzTriSpi1.2015-08-16
+    cd /hive/data/genomes/ancCey1/bed/lastzTriSpi1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# ancCey1 vs triSpi1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+SEQ1_DIR=/hive/data/genomes/ancCey1/ancCey1.2bit
+SEQ1_LEN=/hive/data/genomes/ancCey1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichinella spiralis/Trichinella - triSpi1
+SEQ2_DIR=/hive/data/genomes/triSpi1/triSpi1.2bit
+SEQ2_LEN=/hive/data/genomes/triSpi1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ancCey1/bed/lastzTriSpi1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m33.827s
+    cat fb.ancCey1.chainTriSpi1Link.txt
+    # 2721325 bases of 300914990 (0.904%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ancCey1 triSpi1) > rbest.log 2>&1 &
+    # real 0m23.728s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSpi1/bed/blastz.ancCey1.swap
+    cd /hive/data/genomes/triSpi1/bed/blastz.ancCey1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ancCey1/bed/lastzTriSpi1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m47.051s
+    cat fb.triSpi1.chainAncCey1Link.txt
+    # 2639193 bases of 58558192 (4.507%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSpi1 ancCey1) \
+      > rbest.log 2>&1
+    # real 0m25.810s
+
+########################################################################
+########################################################################
+# LASTZ Ancylostoma ceylanicum/A. ceylanicum - ancCey1 vs.
+#       Trichuris suis/Whipworm - triSui1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/ancCey1/bed/lastzTriSui1.2015-08-16
+    cd /hive/data/genomes/ancCey1/bed/lastzTriSui1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# ancCey1 vs triSui1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+SEQ1_DIR=/hive/data/genomes/ancCey1/ancCey1.2bit
+SEQ1_LEN=/hive/data/genomes/ancCey1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichuris suis/Whipworm - triSui1
+SEQ2_DIR=/hive/data/genomes/triSui1/triSui1.2bit
+SEQ2_LEN=/hive/data/genomes/triSui1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ancCey1/bed/lastzTriSui1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m35.060s
+    cat fb.ancCey1.chainTriSui1Link.txt
+    # 4077433 bases of 300914990 (1.355%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ancCey1 triSui1) > rbest.log 2>&1 &
+    # real 0m23.368s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSui1/bed/blastz.ancCey1.swap
+    cd /hive/data/genomes/triSui1/bed/blastz.ancCey1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ancCey1/bed/lastzTriSui1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m52.839s
+    cat fb.triSui1.chainAncCey1Link.txt
+    # 3407441 bases of 71825323 (4.744%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSui1 ancCey1) \
+      > rbest.log 2>&1
+    # real 0m26.499s
+
+########################################################################

@@ -1,0 +1,522 @@
+########################################################################
+# LASTZ Pristionchus pacificus/P. pacificus - priPac3 vs.
+#       Brugia malayi/Filarial worm - bruMal2
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/priPac3/bed/lastzBruMal2.2015-08-17
+    cd /hive/data/genomes/priPac3/bed/lastzBruMal2.2015-08-17
+
+    cat << '_EOF_' > DEF
+# priPac3 vs bruMal2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Pristionchus pacificus/P. pacificus - priPac3
+SEQ1_DIR=/hive/data/genomes/priPac3/priPac3.2bit
+SEQ1_LEN=/hive/data/genomes/priPac3/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Brugia malayi/Filarial worm - bruMal2
+SEQ2_DIR=/hive/data/genomes/bruMal2/bruMal2.2bit
+SEQ2_LEN=/hive/data/genomes/bruMal2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/priPac3/bed/lastzBruMal2.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 6m34.638s
+    cat fb.priPac3.chainBruMal2Link.txt
+    # 3788368 bases of 153238914 (2.472%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` priPac3 bruMal2) > rbest.log 2>&1 &
+    # real 0m27.196s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/bruMal2/bed/blastz.priPac3.swap
+    cd /hive/data/genomes/bruMal2/bed/blastz.priPac3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/priPac3/bed/lastzBruMal2.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m23.625s
+    cat fb.bruMal2.chainPriPac3Link.txt
+    # 3472437 bases of 87424120 (3.972%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` bruMal2 priPac3) \
+      > rbest.log 2>&1
+    # real 0m31.795s
+
+########################################################################
+########################################################################
+# LASTZ Pristionchus pacificus/P. pacificus - priPac3 vs.
+#       Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/priPac3/bed/lastzBurXyl1.2015-08-17
+    cd /hive/data/genomes/priPac3/bed/lastzBurXyl1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# priPac3 vs burXyl1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Pristionchus pacificus/P. pacificus - priPac3
+SEQ1_DIR=/hive/data/genomes/priPac3/priPac3.2bit
+SEQ1_LEN=/hive/data/genomes/priPac3/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+SEQ2_DIR=/hive/data/genomes/burXyl1/burXyl1.2bit
+SEQ2_LEN=/hive/data/genomes/burXyl1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/priPac3/bed/lastzBurXyl1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 5m41.741s
+    cat fb.priPac3.chainBurXyl1Link.txt
+    # 4761004 bases of 153238914 (3.107%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` priPac3 burXyl1) > rbest.log 2>&1 &
+    # real 0m30.809s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/burXyl1/bed/blastz.priPac3.swap
+    cd /hive/data/genomes/burXyl1/bed/blastz.priPac3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/priPac3/bed/lastzBurXyl1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m49.828s
+    cat fb.burXyl1.chainPriPac3Link.txt
+    # 4067198 bases of 73100506 (5.564%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` burXyl1 priPac3) \
+      > rbest.log 2>&1
+    # real 0m34.665s
+
+########################################################################
+########################################################################
+# LASTZ Pristionchus pacificus/P. pacificus - priPac3 vs.
+#       Dirofilaria immitis/Dog heartworm - dirImm1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/priPac3/bed/lastzDirImm1.2015-08-17
+    cd /hive/data/genomes/priPac3/bed/lastzDirImm1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# priPac3 vs dirImm1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Pristionchus pacificus/P. pacificus - priPac3
+SEQ1_DIR=/hive/data/genomes/priPac3/priPac3.2bit
+SEQ1_LEN=/hive/data/genomes/priPac3/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Dirofilaria immitis/Dog heartworm - dirImm1
+SEQ2_DIR=/hive/data/genomes/dirImm1/dirImm1.2bit
+SEQ2_LEN=/hive/data/genomes/dirImm1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/priPac3/bed/lastzDirImm1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 6m26.621s
+    cat fb.priPac3.chainDirImm1Link.txt
+    # 3686014 bases of 153238914 (2.405%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` priPac3 dirImm1) > rbest.log 2>&1 &
+    # real 0m25.041s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/dirImm1/bed/blastz.priPac3.swap
+    cd /hive/data/genomes/dirImm1/bed/blastz.priPac3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/priPac3/bed/lastzDirImm1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m58.539s
+    cat fb.dirImm1.chainPriPac3Link.txt
+    # 3173030 bases of 84923352 (3.736%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` dirImm1 priPac3) \
+      > rbest.log 2>&1
+    # real 0m33.228s
+
+########################################################################
+########################################################################
+# LASTZ Pristionchus pacificus/P. pacificus - priPac3 vs.
+#       Loa loa/Eye worm - loaLoa1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/priPac3/bed/lastzLoaLoa1.2015-08-17
+    cd /hive/data/genomes/priPac3/bed/lastzLoaLoa1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# priPac3 vs loaLoa1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Pristionchus pacificus/P. pacificus - priPac3
+SEQ1_DIR=/hive/data/genomes/priPac3/priPac3.2bit
+SEQ1_LEN=/hive/data/genomes/priPac3/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Loa loa/Eye worm - loaLoa1
+SEQ2_DIR=/hive/data/genomes/loaLoa1/loaLoa1.2bit
+SEQ2_LEN=/hive/data/genomes/loaLoa1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/priPac3/bed/lastzLoaLoa1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 5m11.181s
+    cat fb.priPac3.chainLoaLoa1Link.txt
+    # 3783416 bases of 153238914 (2.469%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` priPac3 loaLoa1) > rbest.log 2>&1 &
+    # real 0m26.247s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/loaLoa1/bed/blastz.priPac3.swap
+    cd /hive/data/genomes/loaLoa1/bed/blastz.priPac3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/priPac3/bed/lastzLoaLoa1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m49.051s
+    cat fb.loaLoa1.chainPriPac3Link.txt
+    # 3291148 bases of 87533141 (3.760%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` loaLoa1 priPac3) \
+      > rbest.log 2>&1
+    # real 0m29.877s
+
+########################################################################
+########################################################################
+# LASTZ Pristionchus pacificus/P. pacificus - priPac3 vs.
+#       Meloidogyne hapla/M. hapla - melHap1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/priPac3/bed/lastzMelHap1.2015-08-17
+    cd /hive/data/genomes/priPac3/bed/lastzMelHap1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# priPac3 vs melHap1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Pristionchus pacificus/P. pacificus - priPac3
+SEQ1_DIR=/hive/data/genomes/priPac3/priPac3.2bit
+SEQ1_LEN=/hive/data/genomes/priPac3/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Meloidogyne hapla/M. hapla - melHap1
+SEQ2_DIR=/hive/data/genomes/melHap1/melHap1.2bit
+SEQ2_LEN=/hive/data/genomes/melHap1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/priPac3/bed/lastzMelHap1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m50.466s
+    cat fb.priPac3.chainMelHap1Link.txt
+    # 2306201 bases of 153238914 (1.505%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` priPac3 melHap1) > rbest.log 2>&1 &
+    # real 0m20.010s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melHap1/bed/blastz.priPac3.swap
+    cd /hive/data/genomes/melHap1/bed/blastz.priPac3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/priPac3/bed/lastzMelHap1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m44.262s
+    cat fb.melHap1.chainPriPac3Link.txt
+    # 1987955 bases of 53017507 (3.750%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melHap1 priPac3) \
+      > rbest.log 2>&1
+    # real 0m21.628s
+
+########################################################################
+########################################################################
+# LASTZ Pristionchus pacificus/P. pacificus - priPac3 vs.
+#       Meloidogyne incognita/M. incognita - melInc2
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/priPac3/bed/lastzMelInc2.2015-08-17
+    cd /hive/data/genomes/priPac3/bed/lastzMelInc2.2015-08-17
+
+    cat << '_EOF_' > DEF
+# priPac3 vs melInc2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Pristionchus pacificus/P. pacificus - priPac3
+SEQ1_DIR=/hive/data/genomes/priPac3/priPac3.2bit
+SEQ1_LEN=/hive/data/genomes/priPac3/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Meloidogyne incognita/M. incognita - melInc2
+SEQ2_DIR=/hive/data/genomes/melInc2/melInc2.2bit
+SEQ2_LEN=/hive/data/genomes/melInc2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/priPac3/bed/lastzMelInc2.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 5m6.378s
+    cat fb.priPac3.chainMelInc2Link.txt
+    # 2167485 bases of 153238914 (1.414%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` priPac3 melInc2) > rbest.log 2>&1 &
+    # real 0m20.599s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melInc2/bed/blastz.priPac3.swap
+    cd /hive/data/genomes/melInc2/bed/blastz.priPac3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/priPac3/bed/lastzMelInc2.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m48.136s
+    cat fb.melInc2.chainPriPac3Link.txt
+    # 2556276 bases of 82114761 (3.113%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melInc2 priPac3) \
+      > rbest.log 2>&1
+    # real 0m23.801s
+
+########################################################################
+########################################################################
+# LASTZ Pristionchus pacificus/P. pacificus - priPac3 vs.
+#       Onchocerca volvulus/O. volvulus - oncVol1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/priPac3/bed/lastzOncVol1.2015-08-17
+    cd /hive/data/genomes/priPac3/bed/lastzOncVol1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# priPac3 vs oncVol1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Pristionchus pacificus/P. pacificus - priPac3
+SEQ1_DIR=/hive/data/genomes/priPac3/priPac3.2bit
+SEQ1_LEN=/hive/data/genomes/priPac3/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Onchocerca volvulus/O. volvulus - oncVol1
+SEQ2_DIR=/hive/data/genomes/oncVol1/oncVol1.2bit
+SEQ2_LEN=/hive/data/genomes/oncVol1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/priPac3/bed/lastzOncVol1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 5m28.373s
+    cat fb.priPac3.chainOncVol1Link.txt
+    # 3737814 bases of 153238914 (2.439%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` priPac3 oncVol1) > rbest.log 2>&1 &
+    # real 0m38.452s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oncVol1/bed/blastz.priPac3.swap
+    cd /hive/data/genomes/oncVol1/bed/blastz.priPac3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/priPac3/bed/lastzOncVol1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m44.465s
+    cat fb.oncVol1.chainPriPac3Link.txt
+    # 3326842 bases of 94327777 (3.527%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` oncVol1 priPac3) \
+      > rbest.log 2>&1
+    # real 0m36.430s
+
+########################################################################
+########################################################################
+# LASTZ Pristionchus pacificus/P. pacificus - priPac3 vs.
+#       Trichinella spiralis/Trichinella - triSpi1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/priPac3/bed/lastzTriSpi1.2015-08-17
+    cd /hive/data/genomes/priPac3/bed/lastzTriSpi1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# priPac3 vs triSpi1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Pristionchus pacificus/P. pacificus - priPac3
+SEQ1_DIR=/hive/data/genomes/priPac3/priPac3.2bit
+SEQ1_LEN=/hive/data/genomes/priPac3/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichinella spiralis/Trichinella - triSpi1
+SEQ2_DIR=/hive/data/genomes/triSpi1/triSpi1.2bit
+SEQ2_LEN=/hive/data/genomes/triSpi1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/priPac3/bed/lastzTriSpi1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m57.713s
+    cat fb.priPac3.chainTriSpi1Link.txt
+    # 1830749 bases of 153238914 (1.195%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` priPac3 triSpi1) > rbest.log 2>&1 &
+    # real 0m22.344s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSpi1/bed/blastz.priPac3.swap
+    cd /hive/data/genomes/triSpi1/bed/blastz.priPac3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/priPac3/bed/lastzTriSpi1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m42.248s
+    cat fb.triSpi1.chainPriPac3Link.txt
+    # 1654475 bases of 58558192 (2.825%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSpi1 priPac3) \
+      > rbest.log 2>&1
+    # real 0m21.606s
+
+########################################################################
+########################################################################
+# LASTZ Pristionchus pacificus/P. pacificus - priPac3 vs.
+#       Trichuris suis/Whipworm - triSui1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/priPac3/bed/lastzTriSui1.2015-08-17
+    cd /hive/data/genomes/priPac3/bed/lastzTriSui1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# priPac3 vs triSui1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Pristionchus pacificus/P. pacificus - priPac3
+SEQ1_DIR=/hive/data/genomes/priPac3/priPac3.2bit
+SEQ1_LEN=/hive/data/genomes/priPac3/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichuris suis/Whipworm - triSui1
+SEQ2_DIR=/hive/data/genomes/triSui1/triSui1.2bit
+SEQ2_LEN=/hive/data/genomes/triSui1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/priPac3/bed/lastzTriSui1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 5m18.864s
+    cat fb.priPac3.chainTriSui1Link.txt
+    # 2174880 bases of 153238914 (1.419%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` priPac3 triSui1) > rbest.log 2>&1 &
+    # real 0m20.019s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSui1/bed/blastz.priPac3.swap
+    cd /hive/data/genomes/triSui1/bed/blastz.priPac3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/priPac3/bed/lastzTriSui1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m43.450s
+    cat fb.triSui1.chainPriPac3Link.txt
+    # 2074796 bases of 71825323 (2.889%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSui1 priPac3) \
+      > rbest.log 2>&1
+    # real 0m22.030s
+
+########################################################################

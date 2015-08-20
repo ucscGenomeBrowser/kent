@@ -1,0 +1,638 @@
+########################################################################
+# LASTZ Ascaris suum/Pig roundworm - ascSuu1 vs.
+#       Brugia malayi/Filarial worm - bruMal2
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/ascSuu1/bed/lastzBruMal2.2015-08-17
+    cd /hive/data/genomes/ascSuu1/bed/lastzBruMal2.2015-08-17
+
+    cat << '_EOF_' > DEF
+# ascSuu1 vs bruMal2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ascaris suum/Pig roundworm - ascSuu1
+SEQ1_DIR=/hive/data/genomes/ascSuu1/ascSuu1.2bit
+SEQ1_LEN=/hive/data/genomes/ascSuu1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Brugia malayi/Filarial worm - bruMal2
+SEQ2_DIR=/hive/data/genomes/bruMal2/bruMal2.2bit
+SEQ2_LEN=/hive/data/genomes/bruMal2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ascSuu1/bed/lastzBruMal2.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 10m9.851s
+    cat fb.ascSuu1.chainBruMal2Link.txt
+    # 11575168 bases of 262604320 (4.408%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ascSuu1 bruMal2) > rbest.log 2>&1 &
+    # real 0m44.029s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/bruMal2/bed/blastz.ascSuu1.swap
+    cd /hive/data/genomes/bruMal2/bed/blastz.ascSuu1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ascSuu1/bed/lastzBruMal2.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 2m20.695s
+    cat fb.bruMal2.chainAscSuu1Link.txt
+    # 11564837 bases of 87424120 (13.228%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` bruMal2 ascSuu1) \
+      > rbest.log 2>&1
+    # real 0m53.594s
+
+########################################################################
+########################################################################
+# LASTZ Ascaris suum/Pig roundworm - ascSuu1 vs.
+#       Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/ascSuu1/bed/lastzBurXyl1.2015-08-17
+    cd /hive/data/genomes/ascSuu1/bed/lastzBurXyl1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# ascSuu1 vs burXyl1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ascaris suum/Pig roundworm - ascSuu1
+SEQ1_DIR=/hive/data/genomes/ascSuu1/ascSuu1.2bit
+SEQ1_LEN=/hive/data/genomes/ascSuu1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+SEQ2_DIR=/hive/data/genomes/burXyl1/burXyl1.2bit
+SEQ2_LEN=/hive/data/genomes/burXyl1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ascSuu1/bed/lastzBurXyl1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m55.347s
+    cat fb.ascSuu1.chainBurXyl1Link.txt
+    # 5228412 bases of 262604320 (1.991%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ascSuu1 burXyl1) > rbest.log 2>&1 &
+    # real 0m31.434s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/burXyl1/bed/blastz.ascSuu1.swap
+    cd /hive/data/genomes/burXyl1/bed/blastz.ascSuu1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ascSuu1/bed/lastzBurXyl1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m50.831s
+    cat fb.burXyl1.chainAscSuu1Link.txt
+    # 4937099 bases of 73100506 (6.754%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` burXyl1 ascSuu1) \
+      > rbest.log 2>&1
+    # real 0m33.545s
+
+########################################################################
+########################################################################
+# LASTZ Ascaris suum/Pig roundworm - ascSuu1 vs.
+#       Dirofilaria immitis/Dog heartworm - dirImm1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/ascSuu1/bed/lastzDirImm1.2015-08-17
+    cd /hive/data/genomes/ascSuu1/bed/lastzDirImm1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# ascSuu1 vs dirImm1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ascaris suum/Pig roundworm - ascSuu1
+SEQ1_DIR=/hive/data/genomes/ascSuu1/ascSuu1.2bit
+SEQ1_LEN=/hive/data/genomes/ascSuu1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Dirofilaria immitis/Dog heartworm - dirImm1
+SEQ2_DIR=/hive/data/genomes/dirImm1/dirImm1.2bit
+SEQ2_LEN=/hive/data/genomes/dirImm1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ascSuu1/bed/lastzDirImm1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 6m28.830s
+    cat fb.ascSuu1.chainDirImm1Link.txt
+    # 11594008 bases of 262604320 (4.415%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ascSuu1 dirImm1) > rbest.log 2>&1 &
+    # real 0m44.067s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/dirImm1/bed/blastz.ascSuu1.swap
+    cd /hive/data/genomes/dirImm1/bed/blastz.ascSuu1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ascSuu1/bed/lastzDirImm1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m47.551s
+    cat fb.dirImm1.chainAscSuu1Link.txt
+    # 10969212 bases of 84923352 (12.917%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` dirImm1 ascSuu1) \
+      > rbest.log 2>&1
+    # real 6m38.005s
+
+########################################################################
+########################################################################
+# LASTZ Ascaris suum/Pig roundworm - ascSuu1 vs.
+#       Loa loa/Eye worm - loaLoa1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/ascSuu1/bed/lastzLoaLoa1.2015-08-17
+    cd /hive/data/genomes/ascSuu1/bed/lastzLoaLoa1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# ascSuu1 vs loaLoa1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ascaris suum/Pig roundworm - ascSuu1
+SEQ1_DIR=/hive/data/genomes/ascSuu1/ascSuu1.2bit
+SEQ1_LEN=/hive/data/genomes/ascSuu1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Loa loa/Eye worm - loaLoa1
+SEQ2_DIR=/hive/data/genomes/loaLoa1/loaLoa1.2bit
+SEQ2_LEN=/hive/data/genomes/loaLoa1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ascSuu1/bed/lastzLoaLoa1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 9m22.605s
+    cat fb.ascSuu1.chainLoaLoa1Link.txt
+    # 11891288 bases of 262604320 (4.528%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ascSuu1 loaLoa1) > rbest.log 2>&1 &
+    # real 0m45.899s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/loaLoa1/bed/blastz.ascSuu1.swap
+    cd /hive/data/genomes/loaLoa1/bed/blastz.ascSuu1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ascSuu1/bed/lastzLoaLoa1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 8m0.972s
+    cat fb.loaLoa1.chainAscSuu1Link.txt
+    # 11206215 bases of 87533141 (12.802%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` loaLoa1 ascSuu1) \
+      > rbest.log 2>&1
+    # real 4m15.590s
+
+########################################################################
+########################################################################
+# LASTZ Ascaris suum/Pig roundworm - ascSuu1 vs.
+#       Meloidogyne hapla/M. hapla - melHap1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/ascSuu1/bed/lastzMelHap1.2015-08-17
+    cd /hive/data/genomes/ascSuu1/bed/lastzMelHap1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# ascSuu1 vs melHap1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ascaris suum/Pig roundworm - ascSuu1
+SEQ1_DIR=/hive/data/genomes/ascSuu1/ascSuu1.2bit
+SEQ1_LEN=/hive/data/genomes/ascSuu1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Meloidogyne hapla/M. hapla - melHap1
+SEQ2_DIR=/hive/data/genomes/melHap1/melHap1.2bit
+SEQ2_LEN=/hive/data/genomes/melHap1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ascSuu1/bed/lastzMelHap1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m58.369s
+    cat fb.ascSuu1.chainMelHap1Link.txt
+    # 3012195 bases of 262604320 (1.147%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ascSuu1 melHap1) > rbest.log 2>&1 &
+    # real 0m23.086s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melHap1/bed/blastz.ascSuu1.swap
+    cd /hive/data/genomes/melHap1/bed/blastz.ascSuu1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ascSuu1/bed/lastzMelHap1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m47.011s
+    cat fb.melHap1.chainAscSuu1Link.txt
+    # 2817207 bases of 53017507 (5.314%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melHap1 ascSuu1) \
+      > rbest.log 2>&1
+    # real 0m26.019s
+
+########################################################################
+########################################################################
+# LASTZ Ascaris suum/Pig roundworm - ascSuu1 vs.
+#       Meloidogyne incognita/M. incognita - melInc2
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/ascSuu1/bed/lastzMelInc2.2015-08-17
+    cd /hive/data/genomes/ascSuu1/bed/lastzMelInc2.2015-08-17
+
+    cat << '_EOF_' > DEF
+# ascSuu1 vs melInc2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ascaris suum/Pig roundworm - ascSuu1
+SEQ1_DIR=/hive/data/genomes/ascSuu1/ascSuu1.2bit
+SEQ1_LEN=/hive/data/genomes/ascSuu1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Meloidogyne incognita/M. incognita - melInc2
+SEQ2_DIR=/hive/data/genomes/melInc2/melInc2.2bit
+SEQ2_LEN=/hive/data/genomes/melInc2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ascSuu1/bed/lastzMelInc2.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m58.265s
+    cat fb.ascSuu1.chainMelInc2Link.txt
+    # 2927245 bases of 262604320 (1.115%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ascSuu1 melInc2) > rbest.log 2>&1 &
+    # real 0m24.102s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melInc2/bed/blastz.ascSuu1.swap
+    cd /hive/data/genomes/melInc2/bed/blastz.ascSuu1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ascSuu1/bed/lastzMelInc2.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m51.406s
+    cat fb.melInc2.chainAscSuu1Link.txt
+    # 3937732 bases of 82114761 (4.795%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melInc2 ascSuu1) \
+      > rbest.log 2>&1
+    # real 0m28.204s
+
+########################################################################
+########################################################################
+# LASTZ Ascaris suum/Pig roundworm - ascSuu1 vs.
+#       Onchocerca volvulus/O. volvulus - oncVol1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/ascSuu1/bed/lastzOncVol1.2015-08-17
+    cd /hive/data/genomes/ascSuu1/bed/lastzOncVol1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# ascSuu1 vs oncVol1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ascaris suum/Pig roundworm - ascSuu1
+SEQ1_DIR=/hive/data/genomes/ascSuu1/ascSuu1.2bit
+SEQ1_LEN=/hive/data/genomes/ascSuu1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Onchocerca volvulus/O. volvulus - oncVol1
+SEQ2_DIR=/hive/data/genomes/oncVol1/oncVol1.2bit
+SEQ2_LEN=/hive/data/genomes/oncVol1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ascSuu1/bed/lastzOncVol1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 9m17.351s
+    cat fb.ascSuu1.chainOncVol1Link.txt
+    # 12211021 bases of 262604320 (4.650%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ascSuu1 oncVol1) > rbest.log 2>&1 &
+    # real 1m5.528s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oncVol1/bed/blastz.ascSuu1.swap
+    cd /hive/data/genomes/oncVol1/bed/blastz.ascSuu1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ascSuu1/bed/lastzOncVol1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 9m44.222s
+    cat fb.oncVol1.chainAscSuu1Link.txt
+    # 11611047 bases of 94327777 (12.309%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` oncVol1 ascSuu1) \
+      > rbest.log 2>&1
+    # real 2m17.060s
+
+########################################################################
+########################################################################
+# LASTZ Ascaris suum/Pig roundworm - ascSuu1 vs.
+#       Pristionchus exspectatus/P. exspectatus - priExs1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/ascSuu1/bed/lastzPriExs1.2015-08-17
+    cd /hive/data/genomes/ascSuu1/bed/lastzPriExs1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# ascSuu1 vs priExs1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ascaris suum/Pig roundworm - ascSuu1
+SEQ1_DIR=/hive/data/genomes/ascSuu1/ascSuu1.2bit
+SEQ1_LEN=/hive/data/genomes/ascSuu1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Pristionchus exspectatus/P. exspectatus - priExs1
+SEQ2_DIR=/hive/data/genomes/priExs1/priExs1.2bit
+SEQ2_LEN=/hive/data/genomes/priExs1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ascSuu1/bed/lastzPriExs1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 12m21.782s
+    cat fb.ascSuu1.chainPriExs1Link.txt
+    # 4490517 bases of 262604320 (1.710%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ascSuu1 priExs1) > rbest.log 2>&1 &
+    # real 0m42.270s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/priExs1/bed/blastz.ascSuu1.swap
+    cd /hive/data/genomes/priExs1/bed/blastz.ascSuu1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ascSuu1/bed/lastzPriExs1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 4m44.447s
+    cat fb.priExs1.chainAscSuu1Link.txt
+    # 5058398 bases of 166917800 (3.030%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` priExs1 ascSuu1) \
+      > rbest.log 2>&1
+    # real 6m22.662s
+
+########################################################################
+########################################################################
+# LASTZ Ascaris suum/Pig roundworm - ascSuu1 vs.
+#       Pristionchus pacificus/P. pacificus - priPac3
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/ascSuu1/bed/lastzPriPac3.2015-08-17
+    cd /hive/data/genomes/ascSuu1/bed/lastzPriPac3.2015-08-17
+
+    cat << '_EOF_' > DEF
+# ascSuu1 vs priPac3
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ascaris suum/Pig roundworm - ascSuu1
+SEQ1_DIR=/hive/data/genomes/ascSuu1/ascSuu1.2bit
+SEQ1_LEN=/hive/data/genomes/ascSuu1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Pristionchus pacificus/P. pacificus - priPac3
+SEQ2_DIR=/hive/data/genomes/priPac3/priPac3.2bit
+SEQ2_LEN=/hive/data/genomes/priPac3/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ascSuu1/bed/lastzPriPac3.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 8m9.210s
+    cat fb.ascSuu1.chainPriPac3Link.txt
+    # 4567904 bases of 262604320 (1.739%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ascSuu1 priPac3) > rbest.log 2>&1 &
+    # real 0m31.017s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/priPac3/bed/blastz.ascSuu1.swap
+    cd /hive/data/genomes/priPac3/bed/blastz.ascSuu1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ascSuu1/bed/lastzPriPac3.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m3.778s
+    cat fb.priPac3.chainAscSuu1Link.txt
+    # 5000878 bases of 153238914 (3.263%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` priPac3 ascSuu1) \
+      > rbest.log 2>&1
+    # real 0m39.244s
+
+########################################################################
+########################################################################
+# LASTZ Ascaris suum/Pig roundworm - ascSuu1 vs.
+#       Trichinella spiralis/Trichinella - triSpi1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/ascSuu1/bed/lastzTriSpi1.2015-08-17
+    cd /hive/data/genomes/ascSuu1/bed/lastzTriSpi1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# ascSuu1 vs triSpi1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ascaris suum/Pig roundworm - ascSuu1
+SEQ1_DIR=/hive/data/genomes/ascSuu1/ascSuu1.2bit
+SEQ1_LEN=/hive/data/genomes/ascSuu1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichinella spiralis/Trichinella - triSpi1
+SEQ2_DIR=/hive/data/genomes/triSpi1/triSpi1.2bit
+SEQ2_LEN=/hive/data/genomes/triSpi1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ascSuu1/bed/lastzTriSpi1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m44.666s
+    cat fb.ascSuu1.chainTriSpi1Link.txt
+    # 2505975 bases of 262604320 (0.954%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ascSuu1 triSpi1) > rbest.log 2>&1 &
+    # real 0m25.569s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSpi1/bed/blastz.ascSuu1.swap
+    cd /hive/data/genomes/triSpi1/bed/blastz.ascSuu1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ascSuu1/bed/lastzTriSpi1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m52.451s
+    cat fb.triSpi1.chainAscSuu1Link.txt
+    # 2498819 bases of 58558192 (4.267%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSpi1 ascSuu1) \
+      > rbest.log 2>&1
+    # real 3m0.214s
+
+########################################################################
+########################################################################
+# LASTZ Ascaris suum/Pig roundworm - ascSuu1 vs.
+#       Trichuris suis/Whipworm - triSui1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/ascSuu1/bed/lastzTriSui1.2015-08-17
+    cd /hive/data/genomes/ascSuu1/bed/lastzTriSui1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# ascSuu1 vs triSui1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Ascaris suum/Pig roundworm - ascSuu1
+SEQ1_DIR=/hive/data/genomes/ascSuu1/ascSuu1.2bit
+SEQ1_LEN=/hive/data/genomes/ascSuu1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichuris suis/Whipworm - triSui1
+SEQ2_DIR=/hive/data/genomes/triSui1/triSui1.2bit
+SEQ2_LEN=/hive/data/genomes/triSui1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ascSuu1/bed/lastzTriSui1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m37.350s
+    cat fb.ascSuu1.chainTriSui1Link.txt
+    # 2756270 bases of 262604320 (1.050%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` ascSuu1 triSui1) > rbest.log 2>&1 &
+    # real 0m23.455s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSui1/bed/blastz.ascSuu1.swap
+    cd /hive/data/genomes/triSui1/bed/blastz.ascSuu1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/ascSuu1/bed/lastzTriSui1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m43.750s
+    cat fb.triSui1.chainAscSuu1Link.txt
+    # 2674075 bases of 71825323 (3.723%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSui1 ascSuu1) \
+      > rbest.log 2>&1
+    # real 0m26.525s
+
+########################################################################

@@ -1,0 +1,290 @@
+########################################################################
+# LASTZ Dirofilaria immitis/Dog heartworm - dirImm1 vs.
+#       Brugia malayi/Filarial worm - bruMal2
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/dirImm1/bed/lastzBruMal2.2015-08-17
+    cd /hive/data/genomes/dirImm1/bed/lastzBruMal2.2015-08-17
+
+    cat << '_EOF_' > DEF
+# dirImm1 vs bruMal2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Dirofilaria immitis/Dog heartworm - dirImm1
+SEQ1_DIR=/hive/data/genomes/dirImm1/dirImm1.2bit
+SEQ1_LEN=/hive/data/genomes/dirImm1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Brugia malayi/Filarial worm - bruMal2
+SEQ2_DIR=/hive/data/genomes/bruMal2/bruMal2.2bit
+SEQ2_LEN=/hive/data/genomes/bruMal2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/dirImm1/bed/lastzBruMal2.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 8m34.892s
+    cat fb.dirImm1.chainBruMal2Link.txt
+    # 52062904 bases of 84923352 (61.306%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` dirImm1 bruMal2) > rbest.log 2>&1 &
+    # real 1m53.341s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/bruMal2/bed/blastz.dirImm1.swap
+    cd /hive/data/genomes/bruMal2/bed/blastz.dirImm1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/dirImm1/bed/lastzBruMal2.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 5m39.813s
+    cat fb.bruMal2.chainDirImm1Link.txt
+    # 54553847 bases of 87424120 (62.401%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` bruMal2 dirImm1) \
+      > rbest.log 2>&1
+    # real 2m27.411s
+
+########################################################################
+########################################################################
+# LASTZ Dirofilaria immitis/Dog heartworm - dirImm1 vs.
+#       Loa loa/Eye worm - loaLoa1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/dirImm1/bed/lastzLoaLoa1.2015-08-17
+    cd /hive/data/genomes/dirImm1/bed/lastzLoaLoa1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# dirImm1 vs loaLoa1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Dirofilaria immitis/Dog heartworm - dirImm1
+SEQ1_DIR=/hive/data/genomes/dirImm1/dirImm1.2bit
+SEQ1_LEN=/hive/data/genomes/dirImm1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Loa loa/Eye worm - loaLoa1
+SEQ2_DIR=/hive/data/genomes/loaLoa1/loaLoa1.2bit
+SEQ2_LEN=/hive/data/genomes/loaLoa1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/dirImm1/bed/lastzLoaLoa1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 8m27.843s
+    cat fb.dirImm1.chainLoaLoa1Link.txt
+    # 57910879 bases of 84923352 (68.192%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` dirImm1 loaLoa1) > rbest.log 2>&1 &
+    # real 9m56.032s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/loaLoa1/bed/blastz.dirImm1.swap
+    cd /hive/data/genomes/loaLoa1/bed/blastz.dirImm1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/dirImm1/bed/lastzLoaLoa1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 3m56.954s
+    cat fb.loaLoa1.chainDirImm1Link.txt
+    # 57351893 bases of 87533141 (65.520%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` loaLoa1 dirImm1) \
+      > rbest.log 2>&1
+    # real 2m25.452s
+
+########################################################################
+########################################################################
+# LASTZ Dirofilaria immitis/Dog heartworm - dirImm1 vs.
+#       Onchocerca volvulus/O. volvulus - oncVol1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/dirImm1/bed/lastzOncVol1.2015-08-17
+    cd /hive/data/genomes/dirImm1/bed/lastzOncVol1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# dirImm1 vs oncVol1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Dirofilaria immitis/Dog heartworm - dirImm1
+SEQ1_DIR=/hive/data/genomes/dirImm1/dirImm1.2bit
+SEQ1_LEN=/hive/data/genomes/dirImm1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Onchocerca volvulus/O. volvulus - oncVol1
+SEQ2_DIR=/hive/data/genomes/oncVol1/oncVol1.2bit
+SEQ2_LEN=/hive/data/genomes/oncVol1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/dirImm1/bed/lastzOncVol1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 8m35.470s
+    cat fb.dirImm1.chainOncVol1Link.txt
+    # 65488529 bases of 84923352 (77.115%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` dirImm1 oncVol1) > rbest.log 2>&1 &
+    # real 2m23.783s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oncVol1/bed/blastz.dirImm1.swap
+    cd /hive/data/genomes/oncVol1/bed/blastz.dirImm1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/dirImm1/bed/lastzOncVol1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 4m8.923s
+    cat fb.oncVol1.chainDirImm1Link.txt
+    # 66237166 bases of 94327777 (70.220%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` oncVol1 dirImm1) \
+      > rbest.log 2>&1
+    # real 2m44.746s
+
+########################################################################
+########################################################################
+# LASTZ Dirofilaria immitis/Dog heartworm - dirImm1 vs.
+#       Trichinella spiralis/Trichinella - triSpi1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/dirImm1/bed/lastzTriSpi1.2015-08-17
+    cd /hive/data/genomes/dirImm1/bed/lastzTriSpi1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# dirImm1 vs triSpi1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Dirofilaria immitis/Dog heartworm - dirImm1
+SEQ1_DIR=/hive/data/genomes/dirImm1/dirImm1.2bit
+SEQ1_LEN=/hive/data/genomes/dirImm1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichinella spiralis/Trichinella - triSpi1
+SEQ2_DIR=/hive/data/genomes/triSpi1/triSpi1.2bit
+SEQ2_LEN=/hive/data/genomes/triSpi1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/dirImm1/bed/lastzTriSpi1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m15.938s
+    cat fb.dirImm1.chainTriSpi1Link.txt
+    # 2710536 bases of 84923352 (3.192%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` dirImm1 triSpi1) > rbest.log 2>&1 &
+    # real 0m25.726s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSpi1/bed/blastz.dirImm1.swap
+    cd /hive/data/genomes/triSpi1/bed/blastz.dirImm1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/dirImm1/bed/lastzTriSpi1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m46.203s
+    cat fb.triSpi1.chainDirImm1Link.txt
+    # 2958673 bases of 58558192 (5.053%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSpi1 dirImm1) \
+      > rbest.log 2>&1
+    # real 0m24.870s
+
+########################################################################
+########################################################################
+# LASTZ Dirofilaria immitis/Dog heartworm - dirImm1 vs.
+#       Trichuris suis/Whipworm - triSui1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/dirImm1/bed/lastzTriSui1.2015-08-17
+    cd /hive/data/genomes/dirImm1/bed/lastzTriSui1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# dirImm1 vs triSui1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Dirofilaria immitis/Dog heartworm - dirImm1
+SEQ1_DIR=/hive/data/genomes/dirImm1/dirImm1.2bit
+SEQ1_LEN=/hive/data/genomes/dirImm1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichuris suis/Whipworm - triSui1
+SEQ2_DIR=/hive/data/genomes/triSui1/triSui1.2bit
+SEQ2_LEN=/hive/data/genomes/triSui1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/dirImm1/bed/lastzTriSui1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m51.646s
+    cat fb.dirImm1.chainTriSui1Link.txt
+    # 2223232 bases of 84923352 (2.618%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` dirImm1 triSui1) > rbest.log 2>&1 &
+    # real 0m21.450s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSui1/bed/blastz.dirImm1.swap
+    cd /hive/data/genomes/triSui1/bed/blastz.dirImm1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/dirImm1/bed/lastzTriSui1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m41.397s
+    cat fb.triSui1.chainDirImm1Link.txt
+    # 2223506 bases of 71825323 (3.096%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSui1 dirImm1) \
+      > rbest.log 2>&1
+    # real 0m20.240s
+
+########################################################################

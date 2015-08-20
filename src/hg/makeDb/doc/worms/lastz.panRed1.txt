@@ -1,0 +1,870 @@
+########################################################################
+# LASTZ Panagrellus redivivus/Microworm - panRed1 vs.
+#       Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/panRed1/bed/lastzAncCey1.2015-08-16
+    cd /hive/data/genomes/panRed1/bed/lastzAncCey1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# panRed1 vs ancCey1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Panagrellus redivivus/Microworm - panRed1
+SEQ1_DIR=/hive/data/genomes/panRed1/panRed1.2bit
+SEQ1_LEN=/hive/data/genomes/panRed1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+SEQ2_DIR=/hive/data/genomes/ancCey1/ancCey1.2bit
+SEQ2_LEN=/hive/data/genomes/ancCey1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panRed1/bed/lastzAncCey1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m54.627s
+    cat fb.panRed1.chainAncCey1Link.txt
+    # 5391719 bases of 62228262 (8.664%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` panRed1 ancCey1) > rbest.log 2>&1 &
+    # real 0m29.421s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/ancCey1/bed/blastz.panRed1.swap
+    cd /hive/data/genomes/ancCey1/bed/blastz.panRed1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panRed1/bed/lastzAncCey1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m54.831s
+    cat fb.ancCey1.chainPanRed1Link.txt
+    # 6124054 bases of 300914990 (2.035%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` ancCey1 panRed1) \
+      > rbest.log 2>&1
+    # real 0m36.198s
+
+########################################################################
+########################################################################
+# LASTZ Panagrellus redivivus/Microworm - panRed1 vs.
+#       Ascaris suum/Pig roundworm - ascSuu1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/panRed1/bed/lastzAscSuu1.2015-08-16
+    cd /hive/data/genomes/panRed1/bed/lastzAscSuu1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# panRed1 vs ascSuu1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Panagrellus redivivus/Microworm - panRed1
+SEQ1_DIR=/hive/data/genomes/panRed1/panRed1.2bit
+SEQ1_LEN=/hive/data/genomes/panRed1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Ascaris suum/Pig roundworm - ascSuu1
+SEQ2_DIR=/hive/data/genomes/ascSuu1/ascSuu1.2bit
+SEQ2_LEN=/hive/data/genomes/ascSuu1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panRed1/bed/lastzAscSuu1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m47.891s
+    cat fb.panRed1.chainAscSuu1Link.txt
+    # 5186670 bases of 62228262 (8.335%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` panRed1 ascSuu1) > rbest.log 2>&1 &
+    # real 0m29.309s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/ascSuu1/bed/blastz.panRed1.swap
+    cd /hive/data/genomes/ascSuu1/bed/blastz.panRed1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panRed1/bed/lastzAscSuu1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m52.695s
+    cat fb.ascSuu1.chainPanRed1Link.txt
+    # 5417626 bases of 262604320 (2.063%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` ascSuu1 panRed1) \
+      > rbest.log 2>&1
+    # real 2m22.973s
+
+########################################################################
+########################################################################
+# LASTZ Panagrellus redivivus/Microworm - panRed1 vs.
+#       Brugia malayi/Filarial worm - bruMal2
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/panRed1/bed/lastzBruMal2.2015-08-16
+    cd /hive/data/genomes/panRed1/bed/lastzBruMal2.2015-08-16
+
+    cat << '_EOF_' > DEF
+# panRed1 vs bruMal2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Panagrellus redivivus/Microworm - panRed1
+SEQ1_DIR=/hive/data/genomes/panRed1/panRed1.2bit
+SEQ1_LEN=/hive/data/genomes/panRed1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Brugia malayi/Filarial worm - bruMal2
+SEQ2_DIR=/hive/data/genomes/bruMal2/bruMal2.2bit
+SEQ2_LEN=/hive/data/genomes/bruMal2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panRed1/bed/lastzBruMal2.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 5m39.461s
+    cat fb.panRed1.chainBruMal2Link.txt
+    # 4076481 bases of 62228262 (6.551%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` panRed1 bruMal2) > rbest.log 2>&1 &
+    # real 0m27.496s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/bruMal2/bed/blastz.panRed1.swap
+    cd /hive/data/genomes/bruMal2/bed/blastz.panRed1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panRed1/bed/lastzBruMal2.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 4m1.607s
+    cat fb.bruMal2.chainPanRed1Link.txt
+    # 4031921 bases of 87424120 (4.612%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` bruMal2 panRed1) \
+      > rbest.log 2>&1
+    # real 4m46.316s
+
+########################################################################
+########################################################################
+# LASTZ Panagrellus redivivus/Microworm - panRed1 vs.
+#       Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/panRed1/bed/lastzBurXyl1.2015-08-16
+    cd /hive/data/genomes/panRed1/bed/lastzBurXyl1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# panRed1 vs burXyl1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Panagrellus redivivus/Microworm - panRed1
+SEQ1_DIR=/hive/data/genomes/panRed1/panRed1.2bit
+SEQ1_LEN=/hive/data/genomes/panRed1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+SEQ2_DIR=/hive/data/genomes/burXyl1/burXyl1.2bit
+SEQ2_LEN=/hive/data/genomes/burXyl1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panRed1/bed/lastzBurXyl1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 2m47.162s
+    cat fb.panRed1.chainBurXyl1Link.txt
+    # 7863834 bases of 62228262 (12.637%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` panRed1 burXyl1) > rbest.log 2>&1 &
+    # real 0m32.734s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/burXyl1/bed/blastz.panRed1.swap
+    cd /hive/data/genomes/burXyl1/bed/blastz.panRed1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panRed1/bed/lastzBurXyl1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m55.828s
+    cat fb.burXyl1.chainPanRed1Link.txt
+    # 7765061 bases of 73100506 (10.622%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` burXyl1 panRed1) \
+      > rbest.log 2>&1
+    # real 0m37.396s
+
+########################################################################
+########################################################################
+# LASTZ Panagrellus redivivus/Microworm - panRed1 vs.
+#       Dirofilaria immitis/Dog heartworm - dirImm1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/panRed1/bed/lastzDirImm1.2015-08-16
+    cd /hive/data/genomes/panRed1/bed/lastzDirImm1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# panRed1 vs dirImm1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Panagrellus redivivus/Microworm - panRed1
+SEQ1_DIR=/hive/data/genomes/panRed1/panRed1.2bit
+SEQ1_LEN=/hive/data/genomes/panRed1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Dirofilaria immitis/Dog heartworm - dirImm1
+SEQ2_DIR=/hive/data/genomes/dirImm1/dirImm1.2bit
+SEQ2_LEN=/hive/data/genomes/dirImm1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panRed1/bed/lastzDirImm1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m12.240s
+    cat fb.panRed1.chainDirImm1Link.txt
+    # 3925418 bases of 62228262 (6.308%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` panRed1 dirImm1) > rbest.log 2>&1 &
+    # real 0m23.418s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/dirImm1/bed/blastz.panRed1.swap
+    cd /hive/data/genomes/dirImm1/bed/blastz.panRed1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panRed1/bed/lastzDirImm1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m57.429s
+    cat fb.dirImm1.chainPanRed1Link.txt
+    # 3764987 bases of 84923352 (4.433%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` dirImm1 panRed1) \
+      > rbest.log 2>&1
+    # real 0m31.829s
+
+########################################################################
+########################################################################
+# LASTZ Panagrellus redivivus/Microworm - panRed1 vs.
+#       Haemonchus contortus/Barber pole worm - haeCon2
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/panRed1/bed/lastzHaeCon2.2015-08-16
+    cd /hive/data/genomes/panRed1/bed/lastzHaeCon2.2015-08-16
+
+    cat << '_EOF_' > DEF
+# panRed1 vs haeCon2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Panagrellus redivivus/Microworm - panRed1
+SEQ1_DIR=/hive/data/genomes/panRed1/panRed1.2bit
+SEQ1_LEN=/hive/data/genomes/panRed1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Haemonchus contortus/Barber pole worm - haeCon2
+SEQ2_DIR=/hive/data/genomes/haeCon2/haeCon2.2bit
+SEQ2_LEN=/hive/data/genomes/haeCon2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panRed1/bed/lastzHaeCon2.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m31.926s
+    cat fb.panRed1.chainHaeCon2Link.txt
+    # 4849276 bases of 62228262 (7.793%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` panRed1 haeCon2) > rbest.log 2>&1 &
+    # real 0m26.790s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/haeCon2/bed/blastz.panRed1.swap
+    cd /hive/data/genomes/haeCon2/bed/blastz.panRed1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panRed1/bed/lastzHaeCon2.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m37.136s
+    cat fb.haeCon2.chainPanRed1Link.txt
+    # 7180519 bases of 346001353 (2.075%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` haeCon2 panRed1) \
+      > rbest.log 2>&1
+    # real 0m59.533s
+
+########################################################################
+########################################################################
+# LASTZ Panagrellus redivivus/Microworm - panRed1 vs.
+#       Loa loa/Eye worm - loaLoa1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/panRed1/bed/lastzLoaLoa1.2015-08-16
+    cd /hive/data/genomes/panRed1/bed/lastzLoaLoa1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# panRed1 vs loaLoa1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Panagrellus redivivus/Microworm - panRed1
+SEQ1_DIR=/hive/data/genomes/panRed1/panRed1.2bit
+SEQ1_LEN=/hive/data/genomes/panRed1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Loa loa/Eye worm - loaLoa1
+SEQ2_DIR=/hive/data/genomes/loaLoa1/loaLoa1.2bit
+SEQ2_LEN=/hive/data/genomes/loaLoa1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panRed1/bed/lastzLoaLoa1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m5.794s
+    cat fb.panRed1.chainLoaLoa1Link.txt
+    # 4157817 bases of 62228262 (6.682%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` panRed1 loaLoa1) > rbest.log 2>&1 &
+    # real 0m24.303s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/loaLoa1/bed/blastz.panRed1.swap
+    cd /hive/data/genomes/loaLoa1/bed/blastz.panRed1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panRed1/bed/lastzLoaLoa1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m47.899s
+    cat fb.loaLoa1.chainPanRed1Link.txt
+    # 3893379 bases of 87533141 (4.448%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` loaLoa1 panRed1) \
+      > rbest.log 2>&1
+    # real 0m27.500s
+
+########################################################################
+########################################################################
+# LASTZ Panagrellus redivivus/Microworm - panRed1 vs.
+#       Meloidogyne hapla/M. hapla - melHap1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/panRed1/bed/lastzMelHap1.2015-08-16
+    cd /hive/data/genomes/panRed1/bed/lastzMelHap1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# panRed1 vs melHap1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Panagrellus redivivus/Microworm - panRed1
+SEQ1_DIR=/hive/data/genomes/panRed1/panRed1.2bit
+SEQ1_LEN=/hive/data/genomes/panRed1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Meloidogyne hapla/M. hapla - melHap1
+SEQ2_DIR=/hive/data/genomes/melHap1/melHap1.2bit
+SEQ2_LEN=/hive/data/genomes/melHap1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panRed1/bed/lastzMelHap1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m48.537s
+    cat fb.panRed1.chainMelHap1Link.txt
+    # 3785224 bases of 62228262 (6.083%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` panRed1 melHap1) > rbest.log 2>&1 &
+    # real 0m21.294s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melHap1/bed/blastz.panRed1.swap
+    cd /hive/data/genomes/melHap1/bed/blastz.panRed1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panRed1/bed/lastzMelHap1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m46.778s
+    cat fb.melHap1.chainPanRed1Link.txt
+    # 3709757 bases of 53017507 (6.997%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melHap1 panRed1) \
+      > rbest.log 2>&1
+    # real 0m24.628s
+
+########################################################################
+########################################################################
+# LASTZ Panagrellus redivivus/Microworm - panRed1 vs.
+#       Meloidogyne incognita/M. incognita - melInc2
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/panRed1/bed/lastzMelInc2.2015-08-16
+    cd /hive/data/genomes/panRed1/bed/lastzMelInc2.2015-08-16
+
+    cat << '_EOF_' > DEF
+# panRed1 vs melInc2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Panagrellus redivivus/Microworm - panRed1
+SEQ1_DIR=/hive/data/genomes/panRed1/panRed1.2bit
+SEQ1_LEN=/hive/data/genomes/panRed1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Meloidogyne incognita/M. incognita - melInc2
+SEQ2_DIR=/hive/data/genomes/melInc2/melInc2.2bit
+SEQ2_LEN=/hive/data/genomes/melInc2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panRed1/bed/lastzMelInc2.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 2m32.578s
+    cat fb.panRed1.chainMelInc2Link.txt
+    # 3300508 bases of 62228262 (5.304%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` panRed1 melInc2) > rbest.log 2>&1 &
+    # real 0m20.628s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melInc2/bed/blastz.panRed1.swap
+    cd /hive/data/genomes/melInc2/bed/blastz.panRed1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panRed1/bed/lastzMelInc2.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m50.296s
+    cat fb.melInc2.chainPanRed1Link.txt
+    # 4722261 bases of 82114761 (5.751%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melInc2 panRed1) \
+      > rbest.log 2>&1
+    # real 0m25.914s
+
+########################################################################
+########################################################################
+# LASTZ Panagrellus redivivus/Microworm - panRed1 vs.
+#       Necator americanus/N. americanus - necAme1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/panRed1/bed/lastzNecAme1.2015-08-16
+    cd /hive/data/genomes/panRed1/bed/lastzNecAme1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# panRed1 vs necAme1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Panagrellus redivivus/Microworm - panRed1
+SEQ1_DIR=/hive/data/genomes/panRed1/panRed1.2bit
+SEQ1_LEN=/hive/data/genomes/panRed1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Necator americanus/N. americanus - necAme1
+SEQ2_DIR=/hive/data/genomes/necAme1/necAme1.2bit
+SEQ2_LEN=/hive/data/genomes/necAme1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panRed1/bed/lastzNecAme1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m29.801s
+    cat fb.panRed1.chainNecAme1Link.txt
+    # 4673821 bases of 62228262 (7.511%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` panRed1 necAme1) > rbest.log 2>&1 &
+    # real 0m25.323s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/necAme1/bed/blastz.panRed1.swap
+    cd /hive/data/genomes/necAme1/bed/blastz.panRed1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panRed1/bed/lastzNecAme1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m0.651s
+    cat fb.necAme1.chainPanRed1Link.txt
+    # 4809668 bases of 208187215 (2.310%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` necAme1 panRed1) \
+      > rbest.log 2>&1
+    # real 0m36.610s
+
+########################################################################
+########################################################################
+# LASTZ Panagrellus redivivus/Microworm - panRed1 vs.
+#       Onchocerca volvulus/O. volvulus - oncVol1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/panRed1/bed/lastzOncVol1.2015-08-16
+    cd /hive/data/genomes/panRed1/bed/lastzOncVol1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# panRed1 vs oncVol1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Panagrellus redivivus/Microworm - panRed1
+SEQ1_DIR=/hive/data/genomes/panRed1/panRed1.2bit
+SEQ1_LEN=/hive/data/genomes/panRed1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Onchocerca volvulus/O. volvulus - oncVol1
+SEQ2_DIR=/hive/data/genomes/oncVol1/oncVol1.2bit
+SEQ2_LEN=/hive/data/genomes/oncVol1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panRed1/bed/lastzOncVol1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m37.782s
+    cat fb.panRed1.chainOncVol1Link.txt
+    # 4117717 bases of 62228262 (6.617%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` panRed1 oncVol1) > rbest.log 2>&1 &
+    # real 0m37.596s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oncVol1/bed/blastz.panRed1.swap
+    cd /hive/data/genomes/oncVol1/bed/blastz.panRed1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panRed1/bed/lastzOncVol1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m43.313s
+    cat fb.oncVol1.chainPanRed1Link.txt
+    # 3952538 bases of 94327777 (4.190%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` oncVol1 panRed1) \
+      > rbest.log 2>&1
+    # real 0m35.765s
+
+########################################################################
+########################################################################
+# LASTZ Panagrellus redivivus/Microworm - panRed1 vs.
+#       Pristionchus exspectatus/P. exspectatus - priExs1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/panRed1/bed/lastzPriExs1.2015-08-16
+    cd /hive/data/genomes/panRed1/bed/lastzPriExs1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# panRed1 vs priExs1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Panagrellus redivivus/Microworm - panRed1
+SEQ1_DIR=/hive/data/genomes/panRed1/panRed1.2bit
+SEQ1_LEN=/hive/data/genomes/panRed1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Pristionchus exspectatus/P. exspectatus - priExs1
+SEQ2_DIR=/hive/data/genomes/priExs1/priExs1.2bit
+SEQ2_LEN=/hive/data/genomes/priExs1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panRed1/bed/lastzPriExs1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 2m46.291s
+    cat fb.panRed1.chainPriExs1Link.txt
+    # 4233643 bases of 62228262 (6.803%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` panRed1 priExs1) > rbest.log 2>&1 &
+    # real 0m26.547s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/priExs1/bed/blastz.panRed1.swap
+    cd /hive/data/genomes/priExs1/bed/blastz.panRed1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panRed1/bed/lastzPriExs1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m55.237s
+    cat fb.priExs1.chainPanRed1Link.txt
+    # 5165560 bases of 166917800 (3.095%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` priExs1 panRed1) \
+      > rbest.log 2>&1
+    # real 0m32.496s
+
+########################################################################
+########################################################################
+# LASTZ Panagrellus redivivus/Microworm - panRed1 vs.
+#       Pristionchus pacificus/P. pacificus - priPac3
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/panRed1/bed/lastzPriPac3.2015-08-16
+    cd /hive/data/genomes/panRed1/bed/lastzPriPac3.2015-08-16
+
+    cat << '_EOF_' > DEF
+# panRed1 vs priPac3
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Panagrellus redivivus/Microworm - panRed1
+SEQ1_DIR=/hive/data/genomes/panRed1/panRed1.2bit
+SEQ1_LEN=/hive/data/genomes/panRed1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Pristionchus pacificus/P. pacificus - priPac3
+SEQ2_DIR=/hive/data/genomes/priPac3/priPac3.2bit
+SEQ2_LEN=/hive/data/genomes/priPac3/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panRed1/bed/lastzPriPac3.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m42.527s
+    cat fb.panRed1.chainPriPac3Link.txt
+    # 4242282 bases of 62228262 (6.817%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` panRed1 priPac3) > rbest.log 2>&1 &
+    # real 0m29.802s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/priPac3/bed/blastz.panRed1.swap
+    cd /hive/data/genomes/priPac3/bed/blastz.panRed1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panRed1/bed/lastzPriPac3.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m31.195s
+    cat fb.priPac3.chainPanRed1Link.txt
+    # 4992757 bases of 153238914 (3.258%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` priPac3 panRed1) \
+      > rbest.log 2>&1
+    # real 2m30.726s
+
+########################################################################
+########################################################################
+# LASTZ Panagrellus redivivus/Microworm - panRed1 vs.
+#       Trichinella spiralis/Trichinella - triSpi1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/panRed1/bed/lastzTriSpi1.2015-08-16
+    cd /hive/data/genomes/panRed1/bed/lastzTriSpi1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# panRed1 vs triSpi1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Panagrellus redivivus/Microworm - panRed1
+SEQ1_DIR=/hive/data/genomes/panRed1/panRed1.2bit
+SEQ1_LEN=/hive/data/genomes/panRed1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichinella spiralis/Trichinella - triSpi1
+SEQ2_DIR=/hive/data/genomes/triSpi1/triSpi1.2bit
+SEQ2_LEN=/hive/data/genomes/triSpi1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panRed1/bed/lastzTriSpi1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m3.808s
+    cat fb.panRed1.chainTriSpi1Link.txt
+    # 2693261 bases of 62228262 (4.328%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` panRed1 triSpi1) > rbest.log 2>&1 &
+    # real 0m22.352s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSpi1/bed/blastz.panRed1.swap
+    cd /hive/data/genomes/triSpi1/bed/blastz.panRed1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panRed1/bed/lastzTriSpi1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m55.107s
+    cat fb.triSpi1.chainPanRed1Link.txt
+    # 2798228 bases of 58558192 (4.779%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSpi1 panRed1) \
+      > rbest.log 2>&1
+    # real 1m30.662s
+
+########################################################################
+########################################################################
+# LASTZ Panagrellus redivivus/Microworm - panRed1 vs.
+#       Trichuris suis/Whipworm - triSui1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/panRed1/bed/lastzTriSui1.2015-08-16
+    cd /hive/data/genomes/panRed1/bed/lastzTriSui1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# panRed1 vs triSui1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Panagrellus redivivus/Microworm - panRed1
+SEQ1_DIR=/hive/data/genomes/panRed1/panRed1.2bit
+SEQ1_LEN=/hive/data/genomes/panRed1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichuris suis/Whipworm - triSui1
+SEQ2_DIR=/hive/data/genomes/triSui1/triSui1.2bit
+SEQ2_LEN=/hive/data/genomes/triSui1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panRed1/bed/lastzTriSui1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m58.602s
+    cat fb.panRed1.chainTriSui1Link.txt
+    # 3005100 bases of 62228262 (4.829%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` panRed1 triSui1) > rbest.log 2>&1 &
+    # real 0m25.394s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSui1/bed/blastz.panRed1.swap
+    cd /hive/data/genomes/triSui1/bed/blastz.panRed1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panRed1/bed/lastzTriSui1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 4m31.756s
+    cat fb.triSui1.chainPanRed1Link.txt
+    # 3077479 bases of 71825323 (4.285%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSui1 panRed1) \
+      > rbest.log 2>&1
+    # real 0m43.276s
+
+########################################################################

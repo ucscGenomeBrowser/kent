@@ -1,0 +1,986 @@
+########################################################################
+# LASTZ Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1 vs.
+#       Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/lastzAncCey1.2015-08-16
+    cd /hive/data/genomes/hetBac1/bed/lastzAncCey1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# hetBac1 vs ancCey1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1
+SEQ1_DIR=/hive/data/genomes/hetBac1/hetBac1.2bit
+SEQ1_LEN=/hive/data/genomes/hetBac1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+SEQ2_DIR=/hive/data/genomes/ancCey1/ancCey1.2bit
+SEQ2_LEN=/hive/data/genomes/ancCey1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hetBac1/bed/lastzAncCey1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 5m15.102s
+    cat fb.hetBac1.chainAncCey1Link.txt
+    # 17478863 bases of 74374900 (23.501%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hetBac1 ancCey1) > rbest.log 2>&1 &
+    # real 0m52.365s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/ancCey1/bed/blastz.hetBac1.swap
+    cd /hive/data/genomes/ancCey1/bed/blastz.hetBac1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hetBac1/bed/lastzAncCey1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 4m54.136s
+    cat fb.ancCey1.chainHetBac1Link.txt
+    # 18606453 bases of 300914990 (6.183%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` ancCey1 hetBac1) \
+      > rbest.log 2>&1
+    # real 2m25.085s
+
+########################################################################
+########################################################################
+# LASTZ Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1 vs.
+#       Ascaris suum/Pig roundworm - ascSuu1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/lastzAscSuu1.2015-08-16
+    cd /hive/data/genomes/hetBac1/bed/lastzAscSuu1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# hetBac1 vs ascSuu1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1
+SEQ1_DIR=/hive/data/genomes/hetBac1/hetBac1.2bit
+SEQ1_LEN=/hive/data/genomes/hetBac1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Ascaris suum/Pig roundworm - ascSuu1
+SEQ2_DIR=/hive/data/genomes/ascSuu1/ascSuu1.2bit
+SEQ2_LEN=/hive/data/genomes/ascSuu1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hetBac1/bed/lastzAscSuu1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 5m4.260s
+    cat fb.hetBac1.chainAscSuu1Link.txt
+    # 6541366 bases of 74374900 (8.795%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hetBac1 ascSuu1) > rbest.log 2>&1 &
+    # real 0m30.047s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/ascSuu1/bed/blastz.hetBac1.swap
+    cd /hive/data/genomes/ascSuu1/bed/blastz.hetBac1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hetBac1/bed/lastzAscSuu1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m4.840s
+    cat fb.ascSuu1.chainHetBac1Link.txt
+    # 6742130 bases of 262604320 (2.567%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` ascSuu1 hetBac1) \
+      > rbest.log 2>&1
+    # real 0m42.597s
+
+########################################################################
+########################################################################
+# LASTZ Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1 vs.
+#       Brugia malayi/Filarial worm - bruMal2
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/lastzBruMal2.2015-08-16
+    cd /hive/data/genomes/hetBac1/bed/lastzBruMal2.2015-08-16
+
+    cat << '_EOF_' > DEF
+# hetBac1 vs bruMal2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1
+SEQ1_DIR=/hive/data/genomes/hetBac1/hetBac1.2bit
+SEQ1_LEN=/hive/data/genomes/hetBac1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Brugia malayi/Filarial worm - bruMal2
+SEQ2_DIR=/hive/data/genomes/bruMal2/bruMal2.2bit
+SEQ2_LEN=/hive/data/genomes/bruMal2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hetBac1/bed/lastzBruMal2.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m23.348s
+    cat fb.hetBac1.chainBruMal2Link.txt
+    # 7027176 bases of 74374900 (9.448%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hetBac1 bruMal2) > rbest.log 2>&1 &
+    # real 0m30.399s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/bruMal2/bed/blastz.hetBac1.swap
+    cd /hive/data/genomes/bruMal2/bed/blastz.hetBac1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hetBac1/bed/lastzBruMal2.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m41.374s
+    cat fb.bruMal2.chainHetBac1Link.txt
+    # 7231658 bases of 87424120 (8.272%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` bruMal2 hetBac1) \
+      > rbest.log 2>&1
+    # real 0m37.614s
+
+########################################################################
+########################################################################
+# LASTZ Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1 vs.
+#       Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/lastzBurXyl1.2015-08-16
+    cd /hive/data/genomes/hetBac1/bed/lastzBurXyl1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# hetBac1 vs burXyl1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1
+SEQ1_DIR=/hive/data/genomes/hetBac1/hetBac1.2bit
+SEQ1_LEN=/hive/data/genomes/hetBac1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+SEQ2_DIR=/hive/data/genomes/burXyl1/burXyl1.2bit
+SEQ2_LEN=/hive/data/genomes/burXyl1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hetBac1/bed/lastzBurXyl1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m16.402s
+    cat fb.hetBac1.chainBurXyl1Link.txt
+    # 5460333 bases of 74374900 (7.342%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hetBac1 burXyl1) > rbest.log 2>&1 &
+    # real 0m27.211s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/burXyl1/bed/blastz.hetBac1.swap
+    cd /hive/data/genomes/burXyl1/bed/blastz.hetBac1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hetBac1/bed/lastzBurXyl1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m50.462s
+    cat fb.burXyl1.chainHetBac1Link.txt
+    # 5176771 bases of 73100506 (7.082%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` burXyl1 hetBac1) \
+      > rbest.log 2>&1
+    # real 0m31.927s
+
+########################################################################
+########################################################################
+# LASTZ Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1 vs.
+#       Dirofilaria immitis/Dog heartworm - dirImm1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/lastzDirImm1.2015-08-16
+    cd /hive/data/genomes/hetBac1/bed/lastzDirImm1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# hetBac1 vs dirImm1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1
+SEQ1_DIR=/hive/data/genomes/hetBac1/hetBac1.2bit
+SEQ1_LEN=/hive/data/genomes/hetBac1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Dirofilaria immitis/Dog heartworm - dirImm1
+SEQ2_DIR=/hive/data/genomes/dirImm1/dirImm1.2bit
+SEQ2_LEN=/hive/data/genomes/dirImm1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hetBac1/bed/lastzDirImm1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m36.689s
+    cat fb.hetBac1.chainDirImm1Link.txt
+    # 6873603 bases of 74374900 (9.242%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hetBac1 dirImm1) > rbest.log 2>&1 &
+    # real 0m29.743s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/dirImm1/bed/blastz.hetBac1.swap
+    cd /hive/data/genomes/dirImm1/bed/blastz.hetBac1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hetBac1/bed/lastzDirImm1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m18.594s
+    cat fb.dirImm1.chainHetBac1Link.txt
+    # 6778403 bases of 84923352 (7.982%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` dirImm1 hetBac1) \
+      > rbest.log 2>&1
+    # real 1m24.556s
+
+########################################################################
+########################################################################
+# LASTZ Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1 vs.
+#       Haemonchus contortus/Barber pole worm - haeCon2
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/lastzHaeCon2.2015-08-16
+    cd /hive/data/genomes/hetBac1/bed/lastzHaeCon2.2015-08-16
+
+    cat << '_EOF_' > DEF
+# hetBac1 vs haeCon2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1
+SEQ1_DIR=/hive/data/genomes/hetBac1/hetBac1.2bit
+SEQ1_LEN=/hive/data/genomes/hetBac1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Haemonchus contortus/Barber pole worm - haeCon2
+SEQ2_DIR=/hive/data/genomes/haeCon2/haeCon2.2bit
+SEQ2_LEN=/hive/data/genomes/haeCon2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hetBac1/bed/lastzHaeCon2.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m48.288s
+    cat fb.hetBac1.chainHaeCon2Link.txt
+    # 15974959 bases of 74374900 (21.479%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hetBac1 haeCon2) > rbest.log 2>&1 &
+    # real 0m45.750s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/haeCon2/bed/blastz.hetBac1.swap
+    cd /hive/data/genomes/haeCon2/bed/blastz.hetBac1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hetBac1/bed/lastzHaeCon2.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 2m51.026s
+    cat fb.haeCon2.chainHetBac1Link.txt
+    # 23844390 bases of 346001353 (6.891%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` haeCon2 hetBac1) \
+      > rbest.log 2>&1
+    # real 1m49.908s
+
+########################################################################
+########################################################################
+# LASTZ Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1 vs.
+#       Loa loa/Eye worm - loaLoa1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/lastzLoaLoa1.2015-08-16
+    cd /hive/data/genomes/hetBac1/bed/lastzLoaLoa1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# hetBac1 vs loaLoa1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1
+SEQ1_DIR=/hive/data/genomes/hetBac1/hetBac1.2bit
+SEQ1_LEN=/hive/data/genomes/hetBac1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Loa loa/Eye worm - loaLoa1
+SEQ2_DIR=/hive/data/genomes/loaLoa1/loaLoa1.2bit
+SEQ2_LEN=/hive/data/genomes/loaLoa1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hetBac1/bed/lastzLoaLoa1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 5m54.875s
+    cat fb.hetBac1.chainLoaLoa1Link.txt
+    # 6929677 bases of 74374900 (9.317%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hetBac1 loaLoa1) > rbest.log 2>&1 &
+    # real 0m29.961s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/loaLoa1/bed/blastz.hetBac1.swap
+    cd /hive/data/genomes/loaLoa1/bed/blastz.hetBac1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hetBac1/bed/lastzLoaLoa1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m59.405s
+    cat fb.loaLoa1.chainHetBac1Link.txt
+    # 6671489 bases of 87533141 (7.622%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` loaLoa1 hetBac1) \
+      > rbest.log 2>&1
+    # real 0m50.173s
+
+########################################################################
+########################################################################
+# LASTZ Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1 vs.
+#       Meloidogyne hapla/M. hapla - melHap1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/lastzMelHap1.2015-08-16
+    cd /hive/data/genomes/hetBac1/bed/lastzMelHap1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# hetBac1 vs melHap1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1
+SEQ1_DIR=/hive/data/genomes/hetBac1/hetBac1.2bit
+SEQ1_LEN=/hive/data/genomes/hetBac1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Meloidogyne hapla/M. hapla - melHap1
+SEQ2_DIR=/hive/data/genomes/melHap1/melHap1.2bit
+SEQ2_LEN=/hive/data/genomes/melHap1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hetBac1/bed/lastzMelHap1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m51.586s
+    cat fb.hetBac1.chainMelHap1Link.txt
+    # 4212717 bases of 74374900 (5.664%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hetBac1 melHap1) > rbest.log 2>&1 &
+    # real 0m25.598s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melHap1/bed/blastz.hetBac1.swap
+    cd /hive/data/genomes/melHap1/bed/blastz.hetBac1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hetBac1/bed/lastzMelHap1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 3m46.478s
+    cat fb.melHap1.chainHetBac1Link.txt
+    # 4084151 bases of 53017507 (7.703%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melHap1 hetBac1) \
+      > rbest.log 2>&1
+    # real 2m36.248s
+
+########################################################################
+########################################################################
+# LASTZ Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1 vs.
+#       Meloidogyne incognita/M. incognita - melInc2
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/lastzMelInc2.2015-08-16
+    cd /hive/data/genomes/hetBac1/bed/lastzMelInc2.2015-08-16
+
+    cat << '_EOF_' > DEF
+# hetBac1 vs melInc2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1
+SEQ1_DIR=/hive/data/genomes/hetBac1/hetBac1.2bit
+SEQ1_LEN=/hive/data/genomes/hetBac1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Meloidogyne incognita/M. incognita - melInc2
+SEQ2_DIR=/hive/data/genomes/melInc2/melInc2.2bit
+SEQ2_LEN=/hive/data/genomes/melInc2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hetBac1/bed/lastzMelInc2.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 5m0.415s
+    cat fb.hetBac1.chainMelInc2Link.txt
+    # 4109401 bases of 74374900 (5.525%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hetBac1 melInc2) > rbest.log 2>&1 &
+    # real 0m22.017s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melInc2/bed/blastz.hetBac1.swap
+    cd /hive/data/genomes/melInc2/bed/blastz.hetBac1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hetBac1/bed/lastzMelInc2.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 3m0.496s
+    cat fb.melInc2.chainHetBac1Link.txt
+    # 5212407 bases of 82114761 (6.348%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melInc2 hetBac1) \
+      > rbest.log 2>&1
+    # real 5m13.010s
+
+########################################################################
+########################################################################
+# LASTZ Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1 vs.
+#       Necator americanus/N. americanus - necAme1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/lastzNecAme1.2015-08-16
+    cd /hive/data/genomes/hetBac1/bed/lastzNecAme1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# hetBac1 vs necAme1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1
+SEQ1_DIR=/hive/data/genomes/hetBac1/hetBac1.2bit
+SEQ1_LEN=/hive/data/genomes/hetBac1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Necator americanus/N. americanus - necAme1
+SEQ2_DIR=/hive/data/genomes/necAme1/necAme1.2bit
+SEQ2_LEN=/hive/data/genomes/necAme1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hetBac1/bed/lastzNecAme1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 5m1.104s
+    cat fb.hetBac1.chainNecAme1Link.txt
+    # 16151454 bases of 74374900 (21.716%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hetBac1 necAme1) > rbest.log 2>&1 &
+    # real 0m45.472s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/necAme1/bed/blastz.hetBac1.swap
+    cd /hive/data/genomes/necAme1/bed/blastz.hetBac1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hetBac1/bed/lastzNecAme1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m53.584s
+    cat fb.necAme1.chainHetBac1Link.txt
+    # 17422961 bases of 208187215 (8.369%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` necAme1 hetBac1) \
+      > rbest.log 2>&1
+    # real 1m10.904s
+
+########################################################################
+########################################################################
+# LASTZ Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1 vs.
+#       Onchocerca volvulus/O. volvulus - oncVol1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/lastzOncVol1.2015-08-16
+    cd /hive/data/genomes/hetBac1/bed/lastzOncVol1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# hetBac1 vs oncVol1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1
+SEQ1_DIR=/hive/data/genomes/hetBac1/hetBac1.2bit
+SEQ1_LEN=/hive/data/genomes/hetBac1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Onchocerca volvulus/O. volvulus - oncVol1
+SEQ2_DIR=/hive/data/genomes/oncVol1/oncVol1.2bit
+SEQ2_LEN=/hive/data/genomes/oncVol1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hetBac1/bed/lastzOncVol1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 5m11.638s
+    cat fb.hetBac1.chainOncVol1Link.txt
+    # 7115147 bases of 74374900 (9.567%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hetBac1 oncVol1) > rbest.log 2>&1 &
+    # real 0m45.665s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oncVol1/bed/blastz.hetBac1.swap
+    cd /hive/data/genomes/oncVol1/bed/blastz.hetBac1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hetBac1/bed/lastzOncVol1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 2m9.060s
+    cat fb.oncVol1.chainHetBac1Link.txt
+    # 6991116 bases of 94327777 (7.412%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` oncVol1 hetBac1) \
+      > rbest.log 2>&1
+    # real 0m46.878s
+
+########################################################################
+########################################################################
+# LASTZ Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1 vs.
+#       Panagrellus redivivus/Microworm - panRed1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/lastzPanRed1.2015-08-16
+    cd /hive/data/genomes/hetBac1/bed/lastzPanRed1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# hetBac1 vs panRed1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1
+SEQ1_DIR=/hive/data/genomes/hetBac1/hetBac1.2bit
+SEQ1_LEN=/hive/data/genomes/hetBac1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Panagrellus redivivus/Microworm - panRed1
+SEQ2_DIR=/hive/data/genomes/panRed1/panRed1.2bit
+SEQ2_LEN=/hive/data/genomes/panRed1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hetBac1/bed/lastzPanRed1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 5m0.022s
+    cat fb.hetBac1.chainPanRed1Link.txt
+    # 5112778 bases of 74374900 (6.874%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hetBac1 panRed1) > rbest.log 2>&1 &
+    # real 0m28.445s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/panRed1/bed/blastz.hetBac1.swap
+    cd /hive/data/genomes/panRed1/bed/blastz.hetBac1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hetBac1/bed/lastzPanRed1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 2m23.070s
+    cat fb.panRed1.chainHetBac1Link.txt
+    # 5028757 bases of 62228262 (8.081%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` panRed1 hetBac1) \
+      > rbest.log 2>&1
+    # real 0m30.348s
+
+########################################################################
+########################################################################
+# LASTZ Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1 vs.
+#       Pristionchus exspectatus/P. exspectatus - priExs1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/lastzPriExs1.2015-08-16
+    cd /hive/data/genomes/hetBac1/bed/lastzPriExs1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# hetBac1 vs priExs1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1
+SEQ1_DIR=/hive/data/genomes/hetBac1/hetBac1.2bit
+SEQ1_LEN=/hive/data/genomes/hetBac1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Pristionchus exspectatus/P. exspectatus - priExs1
+SEQ2_DIR=/hive/data/genomes/priExs1/priExs1.2bit
+SEQ2_LEN=/hive/data/genomes/priExs1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hetBac1/bed/lastzPriExs1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 2m58.560s
+    cat fb.hetBac1.chainPriExs1Link.txt
+    # 7322130 bases of 74374900 (9.845%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hetBac1 priExs1) > rbest.log 2>&1 &
+    # real 0m31.308s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/priExs1/bed/blastz.hetBac1.swap
+    cd /hive/data/genomes/priExs1/bed/blastz.hetBac1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hetBac1/bed/lastzPriExs1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m4.689s
+    cat fb.priExs1.chainHetBac1Link.txt
+    # 8542074 bases of 166917800 (5.118%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` priExs1 hetBac1) \
+      > rbest.log 2>&1
+    # real 0m44.400s
+
+########################################################################
+########################################################################
+# LASTZ Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1 vs.
+#       Pristionchus pacificus/P. pacificus - priPac3
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/lastzPriPac3.2015-08-16
+    cd /hive/data/genomes/hetBac1/bed/lastzPriPac3.2015-08-16
+
+    cat << '_EOF_' > DEF
+# hetBac1 vs priPac3
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1
+SEQ1_DIR=/hive/data/genomes/hetBac1/hetBac1.2bit
+SEQ1_LEN=/hive/data/genomes/hetBac1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Pristionchus pacificus/P. pacificus - priPac3
+SEQ2_DIR=/hive/data/genomes/priPac3/priPac3.2bit
+SEQ2_LEN=/hive/data/genomes/priPac3/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hetBac1/bed/lastzPriPac3.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 7m39.614s
+    cat fb.hetBac1.chainPriPac3Link.txt
+    # 7339834 bases of 74374900 (9.869%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hetBac1 priPac3) > rbest.log 2>&1 &
+    # real 0m32.418s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/priPac3/bed/blastz.hetBac1.swap
+    cd /hive/data/genomes/priPac3/bed/blastz.hetBac1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hetBac1/bed/lastzPriPac3.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 3m57.921s
+    cat fb.priPac3.chainHetBac1Link.txt
+    # 8129549 bases of 153238914 (5.305%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` priPac3 hetBac1) \
+      > rbest.log 2>&1
+    # real 4m47.411s
+
+########################################################################
+########################################################################
+# LASTZ Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1 vs.
+#       Strongyloides ratti/Threadworm - strRat2
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/lastzStrRat2.2015-08-16
+    cd /hive/data/genomes/hetBac1/bed/lastzStrRat2.2015-08-16
+
+    cat << '_EOF_' > DEF
+# hetBac1 vs strRat2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1
+SEQ1_DIR=/hive/data/genomes/hetBac1/hetBac1.2bit
+SEQ1_LEN=/hive/data/genomes/hetBac1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Strongyloides ratti/Threadworm - strRat2
+SEQ2_DIR=/hive/data/genomes/strRat2/strRat2.2bit
+SEQ2_LEN=/hive/data/genomes/strRat2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hetBac1/bed/lastzStrRat2.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m4.705s
+    cat fb.hetBac1.chainStrRat2Link.txt
+    # 4425357 bases of 74374900 (5.950%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hetBac1 strRat2) > rbest.log 2>&1 &
+    # real 0m27.645s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/strRat2/bed/blastz.hetBac1.swap
+    cd /hive/data/genomes/strRat2/bed/blastz.hetBac1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hetBac1/bed/lastzStrRat2.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m43.843s
+    cat fb.strRat2.chainHetBac1Link.txt
+    # 4082188 bases of 43150242 (9.460%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` strRat2 hetBac1) \
+      > rbest.log 2>&1
+    # real 0m28.525s
+
+########################################################################
+########################################################################
+# LASTZ Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1 vs.
+#       Trichinella spiralis/Trichinella - triSpi1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/lastzTriSpi1.2015-08-16
+    cd /hive/data/genomes/hetBac1/bed/lastzTriSpi1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# hetBac1 vs triSpi1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1
+SEQ1_DIR=/hive/data/genomes/hetBac1/hetBac1.2bit
+SEQ1_LEN=/hive/data/genomes/hetBac1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichinella spiralis/Trichinella - triSpi1
+SEQ2_DIR=/hive/data/genomes/triSpi1/triSpi1.2bit
+SEQ2_LEN=/hive/data/genomes/triSpi1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hetBac1/bed/lastzTriSpi1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 5m52.846s
+    cat fb.hetBac1.chainTriSpi1Link.txt
+    # 2805607 bases of 74374900 (3.772%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hetBac1 triSpi1) > rbest.log 2>&1 &
+    # real 0m26.112s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSpi1/bed/blastz.hetBac1.swap
+    cd /hive/data/genomes/triSpi1/bed/blastz.hetBac1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hetBac1/bed/lastzTriSpi1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 3m31.683s
+    cat fb.triSpi1.chainHetBac1Link.txt
+    # 2907272 bases of 58558192 (4.965%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSpi1 hetBac1) \
+      > rbest.log 2>&1
+    # real 0m57.143s
+
+########################################################################
+########################################################################
+# LASTZ Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1 vs.
+#       Trichuris suis/Whipworm - triSui1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/hetBac1/bed/lastzTriSui1.2015-08-16
+    cd /hive/data/genomes/hetBac1/bed/lastzTriSui1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# hetBac1 vs triSui1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1
+SEQ1_DIR=/hive/data/genomes/hetBac1/hetBac1.2bit
+SEQ1_LEN=/hive/data/genomes/hetBac1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichuris suis/Whipworm - triSui1
+SEQ2_DIR=/hive/data/genomes/triSui1/triSui1.2bit
+SEQ2_LEN=/hive/data/genomes/triSui1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/hetBac1/bed/lastzTriSui1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 2m40.437s
+    cat fb.hetBac1.chainTriSui1Link.txt
+    # 2857377 bases of 74374900 (3.842%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hetBac1 triSui1) > rbest.log 2>&1 &
+    # real 0m19.512s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSui1/bed/blastz.hetBac1.swap
+    cd /hive/data/genomes/triSui1/bed/blastz.hetBac1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hetBac1/bed/lastzTriSui1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m44.817s
+    cat fb.triSui1.chainHetBac1Link.txt
+    # 2871809 bases of 71825323 (3.998%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSui1 hetBac1) \
+      > rbest.log 2>&1
+    # real 0m21.962s
+
+########################################################################
