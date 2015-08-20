@@ -102,6 +102,7 @@ static char *susScrNames[] = {"Sus scrofa", "Sus scrofa coreanus", "Sus scrofa d
 static char *ornAnaNames[] = {"Ornithorhynchus anatinus", NULL};
 static char *petMarNames[] = {"Petromyzon marinus", NULL};
 static char *braFloNames[] = {"Branchiostoma floridae", "Branchiostoma belcheri", "Branchiostoma belcheri tsingtauense", "Branchiostoma californiense", "Branchiostoma japonicum", "Branchiostoma lanceolatum", NULL};
+static char *priExsNames[] = {"Pristionchus exspectatus", NULL};
 static char *priPacNames[] = {"Pristionchus pacificus", NULL};
 static char *aplCalNames[] = {"Aplysia californica", NULL};
 /* hypothetical ancestor, will never match native */
@@ -218,6 +219,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"ornAna", ornAnaNames},
     {"petMar", petMarNames},
     {"braFlo", braFloNames},
+    {"priExs", priExsNames},
     {"priPac", priPacNames},
     {"canHg",  canHgNames},
     {"strPur", strPurNames},
