@@ -3947,48 +3947,10 @@ setSearchedTrackToPackOrFull(trackList);
 if (cgiOptionalString( "hideTracks"))
     changeTrackVis(groupList, NULL, tvHide);
 
-char *s = cartOptionalString(cart, CART_HAS_DEFAULT_VISIBILITY);
-boolean defaultsSet = FALSE;
-// if CART_HAS_DEFAULT_VISIBILITY is "on" in the cart, ignore visibilities from trackDb and load them from cart
-if ((s != NULL) && sameString(s, "on") )
-    {
-    defaultsSet = TRUE;
-    struct group *group;
-    struct trackRef *tr;
-    for (group = groupList; group != NULL; group = group->next)
-        for (tr = group->trackList; tr != NULL; tr = tr->next)
-            {
-            struct track *track = tr->track;
-            track->visibility = tvHide;
-            }
-    }
-else
-    {
-    // we're going to set all the trackDb default visibilities on in the cart
-    void pruneRedundantCartVis(struct track *trackList);
-    pruneRedundantCartVis(trackList);
-    if (vis == -1)  // we're restoring to defaults
-        changeTrackVis(groupList, NULL, vis);
-    cartSetString(cart, CART_HAS_DEFAULT_VISIBILITY, "on");
-    }
-
 /* Get visibility values if any from ui. */
 for (track = trackList; track != NULL; track = track->next)
     {
-    // if the defaults aren't set in the cart and this track isn't hidden, set its visibility in the cart
     char *s = cartOptionalString(cart, track->track);
-    if (!defaultsSet && (track->tdb->visibility != tvHide) && (s == NULL))
-        {
-	struct trackDb *parent = track->tdb->parent;
-        if (parent) 
-            {
-            char *super = cartOptionalString(cart, parent->track);
-            if ((super == NULL) && parent->isShow)
-                cartSetString(cart, parent->track, "show");
-            }
-        cartSetString(cart, track->track, hStringFromTv(track->tdb->visibility));
-        }
-
     if (cgiOptionalString("hideTracks"))
 	{
 	s = cgiOptionalString(track->track);
@@ -4094,7 +4056,7 @@ else
     printf("<td>");
 }
 
-void pruneRedundantCartVis(struct track *trackList)
+static void pruneRedundantCartVis(struct track *trackList)
 /* When the config page or track form has been submitted, there usually
  * are many track visibility cart variables that have not been changed
  * from the default.  To keep down cart bloat, prune those out before we
@@ -4510,9 +4472,12 @@ if (measureTiming)
     measureTime("parentChildCartCleanup");
 
 
-/* Honor hideAll variable */
-if (hideAll)
-    changeTrackVis(groupList, NULL, tvHide);
+/* Honor hideAll and visAll variables */
+if (hideAll || defaultTracks)
+    {
+    int vis = (hideAll ? tvHide : -1);
+    changeTrackVis(groupList, NULL, vis);
+    }
 
 /* Before loading items, deal with the next/prev item arrow buttons if pressed. */
 if (cgiVarExists("hgt.nextItem"))
@@ -5145,6 +5110,7 @@ hPrintf("<FORM ACTION='%s' NAME='trackHubForm'>", hgHubConnectName());
 cartSaveSession(cart);
 hPrintf("</FORM>\n");
 
+pruneRedundantCartVis(trackList);
 if (measureTiming)
     measureTime("Done with trackForm");
 }

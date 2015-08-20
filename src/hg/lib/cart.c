@@ -746,11 +746,6 @@ if (exclude != NULL)
 	cartExclude(cart, ex);
     }
 
-// if user has clicked "default tracks" or changed assembly, reset visibilities from trackDb
-boolean defaultTracks = cgiVarExists("hgt.reset");
-if (defaultTracks || (oldVars != NULL && cartValueHasChanged(cart,  oldVars, "db" , FALSE, FALSE)))
-    cartRemove(cart, CART_HAS_DEFAULT_VISIBILITY);
-
 cartDefaultDisconnector(&conn);
 return cart;
 }
