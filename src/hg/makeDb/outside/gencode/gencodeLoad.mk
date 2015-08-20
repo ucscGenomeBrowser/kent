@@ -38,12 +38,12 @@ db = hg38
 ifeq (${db},mm10)
     prevDb = mm10
     grcRefAssembly = GRCm38
-    ver = M4
-    prevVer = M3
+    ver = M5
+    prevVer = M5
     gencodeOrg = Gencode_mouse
-    ensemblVer = 77_38
+    ensemblVer = 80_38
     ensemblCDnaDb = mus_musculus_cdna_${ensemblVer}
-    transSupBuild = 2014-12-03
+    transSupBuild = 2015-06-01
     transSupDir = ${HOME}/compbio/ccds/branches/transSupV${ver}
     patchSeqs = KB469740.1 KB469738.2 JH792833.1 KB469741.1 JH792826.1 KK082443.1 KB469739.1 JH792832.1 KK082442.1 JH792831.1 KB469742.1 JH792834.1 JH792827.1 KK082441.1 JH792830.1 JH792828.1
 else

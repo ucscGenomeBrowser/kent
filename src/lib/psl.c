@@ -1980,6 +1980,14 @@ struct psl* pslCp = pslNew(psl->qName, psl->qSize, psl->qStart, psl->qEnd,
                            psl->tName, psl->tSize, psl->tStart, psl->tEnd,
                            psl->strand, psl->blockCount,
                            ((psl->tSequence != NULL) ? PSL_XA_FORMAT : 0));
+pslCp->match = psl->match;
+pslCp->misMatch = psl->misMatch;
+pslCp->repMatch = psl->repMatch;
+pslCp->nCount = psl->nCount;
+pslCp->qNumInsert = psl->qNumInsert;
+pslCp->qBaseInsert = psl->qBaseInsert;
+pslCp->tNumInsert = psl->tNumInsert;
+pslCp->tBaseInsert = psl->tBaseInsert;
 int iBlk;
 for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     {
