@@ -647,6 +647,12 @@ return (sameString(table, "refGene") || sameString(table, "refFlat") ||
 	sameString(table, "refSeqAli") || sameString(table, "xenoRefSeqAli"));
 }
 
+static boolean isPubsTable(char *table)
+// Not absolutely every pubs* table is unsorted, but most of them are.
+{
+return startsWith("pubs", table);
+}
+
 struct annoStreamer *annoStreamDbNew(char *db, char *table, struct annoAssembly *aa,
 				     struct asObject *asObj, int maxOutRows)
 /* Create an annoStreamer (subclass) object from a database table described by asObj. */
@@ -684,8 +690,9 @@ self->makeBaselineQuery = asdMakeBaselineQuery;
 self->endFieldIndexName = sqlTableIndexOnField(self->conn, self->table, self->endField);
 self->notSorted = FALSE;
 // Special case: genbank-updated tables are not sorted because new mappings are
-// tacked on at the end.
-if (isIncrementallyUpdated(table))
+// tacked on at the end.  Max didn't sort the pubs* tables but I hope he will
+// sort the tables for any future tracks.  :)
+if (isIncrementallyUpdated(table) || isPubsTable(table))
     self->notSorted = TRUE;
 self->mergeBins = FALSE;
 self->maxOutRows = maxOutRows;
