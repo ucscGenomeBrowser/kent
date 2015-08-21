@@ -113,6 +113,14 @@ for (iterL = linkList; iterL->next !=NULL; iterL = iterL->next)
 fprintf(f,"]}\n"); 
 }
 
+void generateHtml(FILE *f, char *fileName)
+/* Generate a .html file for the D3 visualizations.  */
+{
+
+fprintf(f,"<!DOCTYPE html><meta charset=\"utf-8\"><title> %s force layout</title><style>.node{stroke: #fff; stroke-width: 1.5px;}.link{stroke: #999; stroke-opacity: .6;}</style><body><script src=\"https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js\"></script><script>var width=960, height=500;var color=d3.scale.category20();var force=d3.layout.force() .charge(-120) .linkDistance(30) .size([width, height]);var svg=d3.select(\"body\").append(\"svg\") .attr(\"width\", width) .attr(\"height\", height);d3.json(\"%s.json\", function(error, graph){if (error) throw error; force .nodes(graph.nodes) .links(graph.links) .start(); var link=svg.selectAll(\".link\") .data(graph.links) .enter().append(\"line\") .attr(\"class\", \"link\") .style(\"stroke-width\", function(d){return Math.sqrt(d.value);}); var node=svg.selectAll(\".node\") .data(graph.nodes) .enter().append(\"circle\") .attr(\"class\", \"node\") .attr(\"r\", 5) .style(\"fill\", function(d){return color(d.group);}) .call(force.drag); node.append(\"title\")", fileName, fileName); 
+fprintf(f,".text(function(d){return d.name;}); force.on(\"tick\", function(){link.attr(\"x1\", function(d){return d.source.x;}) .attr(\"y1\", function(d){return d.source.y;}) .attr(\"x2\", function(d){return d.target.x;}) .attr(\"y2\", function(d){return d.target.y;}); node.attr(\"cx\", function(d){return d.x;}) .attr(\"cy\", function(d){return d.y;});});});// Color leaf nodes orange, and packages white or blue.function color(d){return d._children ? \"#3182bd\" : d.children ? \"#c6dbef\" : \"#fd8d3c\";}// Toggle children on click.function click(d){if (!d3.event.defaultPrevented){if (d.children){d._children=d.children; d.children=null;}else{d.children=d._children; d._children=null;}update();}}// Returns a list of all nodes under the root.function flatten(root){var nodes=[], i=0; function recurse(node){if (node.children) node.children.forEach(recurse); if (!node.id) node.id=++i; nodes.push(node);}recurse(root); return nodes;}</script>"); 
+}
+
 
 void printToGoJson(FILE *f)
 {
@@ -213,7 +221,6 @@ for (; iter != NULL; iter = iter->next)
     struct cdwStepIn *out3 = cdwStepInLoadByQuery(conn3, query3); 
     if (out3 !=NULL)
 	{
-	uglyf("recursing...\n"); 
 	rLookForNodes(out5->fileId, totalNodes, yPos+400);  	
 	}
     }
@@ -252,7 +259,6 @@ void sqlToTxt(char *startQuery, char *outputFile)
 {
 AllocVar(nodeList); 
 AllocVar(linkList); 
-FILE *f = mustOpen(outputFile,"w");
 // graph the fileId to a licensePlate for the first node
 struct sqlConnection *conn = sqlConnect("cdw"); 
 char query[1024]; 
@@ -262,9 +268,19 @@ struct jsonNode *startNode = newJsonNode(out->licensePlate, totalNodes, false, 2
 slAddHead(&nodeList, startNode);
 ++totalNodes;
 rLookForNodes(atoi(startQuery), totalNodes, 200); 
+
 normalizeXCoords(); 
-if (clForceLayout) printToForceLayoutJson(f);
-else printToGoJson(f); 
+if (clForceLayout)
+    {
+    generateHtml(mustOpen(catTwoStrings(outputFile,".html"),"w"), outputFile);  
+    printToForceLayoutJson(mustOpen(catTwoStrings(outputFile,".json"),"w")); 
+    verbose(0, "The output was printed to %s.html and %s.json.\n", outputFile, outputFile); 
+    }
+else 
+    {
+    printToGoJson(mustOpen(catTwoStrings(outputFile,".json"),"w")); 
+    verbose(0, "The output was printed to %s.json.\n", outputFile); 
+    }
 }
 
 int main(int argc, char *argv[])
