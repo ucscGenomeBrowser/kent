@@ -54,21 +54,19 @@ return TRUE;
 }
 
 static void printHeaderColumns(struct annoFormatTab *self, struct annoStreamer *source,
-                               boolean isFirst)
+                               boolean *pIsFirst)
 /* Print names of included columns from this source. */
 {
 FILE *f = self->f;
 char *sourceName = source->name;
+boolean isFirst = (pIsFirst && *pIsFirst);
 struct asColumn *col;
 for (col = source->asObj->columnList;  col != NULL;  col = col->next)
     {
     if (columnIsIncluded(self, sourceName, col->name))
         {
         if (isFirst)
-            {
-            fputc('#', f);
             isFirst = FALSE;
-            }
         else
             fputc('\t', f);
         char fullName[PATH_LEN];
@@ -76,6 +74,8 @@ for (col = source->asObj->columnList;  col != NULL;  col = col->next)
         fputs(fullName, f);
         }
     }
+if (pIsFirst != NULL)
+    *pIsFirst = isFirst;
 }
 
 static void aftInitialize(struct annoFormatter *vSelf, struct annoStreamer *primary,
@@ -86,12 +86,14 @@ struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
 if (self->needHeader)
     {
     char *primaryHeader = primary->getHeader(primary);
+    boolean isFirst = TRUE;
     if (isNotEmpty(primaryHeader))
 	fprintf(self->f, "# Header from primary input:\n%s", primaryHeader);
-    printHeaderColumns(self, primary, TRUE);
+    fputc('#', self->f);
+    printHeaderColumns(self, primary, &isFirst);
     struct annoStreamer *grator;
     for (grator = integrators;  grator != NULL;  grator = grator->next)
-	printHeaderColumns(self, grator, FALSE);
+	printHeaderColumns(self, grator, &isFirst);
     fputc('\n', self->f);
     self->needHeader = FALSE;
     }
