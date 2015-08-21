@@ -300,6 +300,7 @@ maxSize 2000
 onlyDbs anoGam1,ce10,dm3,hg19,hg38,danRer7,galGal4,gasAcu1,mm10,musFur1,rn6,oryLat2,sacCer3,xenTro3
 param organism $db
 param pasteSeq $seq
+param position $position
 param method CRISPR
 param target CODING
 param subsetExon 
