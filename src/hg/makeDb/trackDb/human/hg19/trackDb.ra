@@ -589,7 +589,7 @@ noInherit on
     shortLabel Sequences
     longLabel DNA/Prot Sequences in Publications Beta
     parent pubsDev on
-    type bed 12 .
+    type bed 12 +
     visibility pack
     priority 2
     release alpha
