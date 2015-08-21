@@ -175,15 +175,14 @@ for (slp=et->params; slp!=NULL; slp=slp->next)
         // and link back to us
         char* host = getenv("HTTP_HOST");
         char* reqUrl = getenv("REQUEST_URI");
-
-        struct netParsedUrl npu;
-        netParseUrl(reqUrl, &npu);
-        safecpy(npu.protocol, sizeof(npu.protocol), "http");
-        safecpy(npu.host, sizeof(npu.host), host);
         // remove everything after ? in URL
-        char *e = strchr(npu.file, '?');
+        char *e = strchr(reqUrl, '?');
         if (e) *e = 0; 
-        val = urlFromNetParsedUrl(&npu);
+
+        char url[4000];
+        // cannot find a way to find out if the request came in via http or https
+        safef(url, sizeof(url), "http://%s%s", host, reqUrl);
+        val = url;
         }
     // half the current window size
     if (stringIn("$halfLen", val))
@@ -192,11 +191,17 @@ for (slp=et->params; slp!=NULL; slp=slp->next)
         safef(buf, sizeof(buf), "%d", len/2);
         val = replaceChars(val, "$halfLen", buf);
         }
-    if (sameWord(val, "$seq"))
+    if (sameWord(val, "$seq") || sameWord(val, "$faSeq"))
         {
         static struct dnaSeq *seq = NULL;
         seq = hDnaFromSeq(db, chromName, winStart, winEnd, dnaLower);
-        val = seq->dna;
+        if (sameWord(val, "$seq"))
+            val = seq->dna;
+        else
+            {
+            val = catTwoStrings(">sequence\n",seq->dna);
+            freez(&seq);
+            }
         }
     // any remaining $-expression might be one of the general ones
     if (stringIn("$", val))
