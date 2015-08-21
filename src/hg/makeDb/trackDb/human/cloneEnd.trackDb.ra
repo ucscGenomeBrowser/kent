@@ -308,7 +308,7 @@ sortOrder source=+
     visibility full
     autoScale on
     alwaysZero on
-    maxHeightPixels 128:16:16
+    maxHeightPixels 128:35:16
     windowingFunction mean
     priority 25
 
@@ -321,7 +321,7 @@ sortOrder source=+
     visibility full
     negateValues 1
     alwaysZero on
-    maxHeightPixels 128:16:16
+    maxHeightPixels 128:35:16
     windowingFunction mean
     autoScale on
     priority 26
