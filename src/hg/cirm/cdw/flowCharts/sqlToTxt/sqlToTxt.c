@@ -85,7 +85,6 @@ int normalizeX = 200;
 int currentLevel = 0;
 bool firstLine = true; 
 struct jsonNode *iterN;
-slReverse(&nodeList);
 fprintf(f,"{\n\t\"nodes\":[\n"); 
 for (iterN = nodeList; iterN -> next!=NULL; iterN = iterN->next)
     {
@@ -107,7 +106,7 @@ fprintf(f,"],\n\t\"links\":[\n");
 struct jsonLink *iterL; 
 for (iterL = linkList; iterL->next !=NULL; iterL = iterL->next)
     {
-    fprintf(f,"\t{\"source\":%i,\"target\":%i,\"value\":%i}", iterL->start, iterL->end, 1);//iterL->text); 
+    fprintf(f,"\t{\"source\":%i,\"target\":%i,\"value\":%i}", slCount(nodeList) - 2 - iterL->start,slCount(nodeList) - 2 - iterL->end, 1);//iterL->text); 
     if (iterL->next->next != NULL) fprintf(f,",");
     fprintf(f,"\n"); 
     }
@@ -119,33 +118,10 @@ void printToGoJson(FILE *f)
 {
 /* Print a list of jsonNodes and jsonLinks to go.js format. Will likely get things working here then jump ship to a more
  * free option */ 
-/*
-int normalizeX = 200;
-int currentLevel = 0;
-bool firstLine = true; 
-int t1=0, t2=0;
-*/
 struct jsonNode *iterN;
 fprintf(f,"{ \"class\":\"go.GraphLinksModel\",\"linkFromPortIdProperty\":\"fromPort\",\"linkToPortIdProperty\": \"toPort\",\"nodeDataArray\":[\n");
 for (iterN = nodeList; iterN->next !=NULL; iterN = iterN->next)
     {
-    /*
-    if (firstLine)
-	{
-	currentLevel = iterN->yloc/200; 
-	firstLine = false; 
-	}
-    int updatedXloc = iterN->xloc;
-
-    t1 += iterN->yloc; 
-    ++t2; 
-    if (iterN->xloc > normalizeX) normalizeX=iterN->xloc; 
-    if (iterN->yloc/200 != currentLevel) 
-	updatedXloc = t1/t2;
-	t2 =0;
-	t1 = 0; 
-	currentLevel = iterN->yloc/200; 
-    */
     fprintf(f,"{\"text\":\"%s\",\"key\":\"%i\",\"loc\":\"%i %i\"}",iterN->text, iterN->key, iterN->xloc, iterN->yloc);
     if (iterN->next->next !=NULL) fprintf(f,",");
     fprintf(f,"\n"); 
@@ -249,7 +225,6 @@ void normalizeXCoords ()
  * printing convention, so it is very finicky.  */
 {
 int cLev = nodeList->yloc, xTot = 0, stCnt = 0 ; 
-uglyf ("the cLev is %i \n", cLev); 
 while (cLev > 0)
     {
     struct jsonNode *iterN;  
@@ -259,14 +234,11 @@ while (cLev > 0)
 	    {
 	    xTot += iterN->xloc; 
 	    ++stCnt;
-	    //uglyf ("the xTot is %i,  the stCnt is %i \n ", xTot, stCnt); 
 	    
 	    }
 	if (iterN->yloc == cLev-200)
 	    {
-	    uglyf ("the xTot is %i,  the stCnt is %i, the updated Xloc should be  %i\n ", xTot, stCnt, xTot/stCnt); 
 	    iterN->xloc = xTot/stCnt; 
-	    uglyf ("The iterN->xloc is %i\n", iterN->xloc); 
 	    stCnt = 0; 
 	    xTot = 0; 
 	    }
@@ -290,7 +262,6 @@ struct jsonNode *startNode = newJsonNode(out->licensePlate, totalNodes, false, 2
 slAddHead(&nodeList, startNode);
 ++totalNodes;
 rLookForNodes(atoi(startQuery), totalNodes, 200); 
-//slReverse(&nodeList);
 normalizeXCoords(); 
 if (clForceLayout) printToForceLayoutJson(f);
 else printToGoJson(f); 
