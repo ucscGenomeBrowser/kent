@@ -78,7 +78,7 @@ return newLink;
 
 
 
-void printToForceLayoutJson(FILE *f, struct jsonNode *nodeList, struct jsonLink *linkList)
+void printToForceLayoutJson(FILE *f)
 {
 // Print to D3 forceLayout format. 
 int normalizeX = 200;
@@ -115,18 +115,21 @@ fprintf(f,"]}\n");
 }
 
 
-void printToGoJson(FILE *f, struct jsonNode *nodeList, struct jsonLink *linkList)
+void printToGoJson(FILE *f)
 {
 /* Print a list of jsonNodes and jsonLinks to go.js format. Will likely get things working here then jump ship to a more
  * free option */ 
+/*
 int normalizeX = 200;
 int currentLevel = 0;
 bool firstLine = true; 
 int t1=0, t2=0;
+*/
 struct jsonNode *iterN;
 fprintf(f,"{ \"class\":\"go.GraphLinksModel\",\"linkFromPortIdProperty\":\"fromPort\",\"linkToPortIdProperty\": \"toPort\",\"nodeDataArray\":[\n");
 for (iterN = nodeList; iterN->next !=NULL; iterN = iterN->next)
     {
+    /*
     if (firstLine)
 	{
 	currentLevel = iterN->yloc/200; 
@@ -142,8 +145,8 @@ for (iterN = nodeList; iterN->next !=NULL; iterN = iterN->next)
 	t2 =0;
 	t1 = 0; 
 	currentLevel = iterN->yloc/200; 
-    
-    fprintf(f,"{\"text\":\"%s\",\"key\":\"%i\",\"loc\":\"%i %i\"}",iterN->text, iterN->key, updatedXloc, iterN->yloc);
+    */
+    fprintf(f,"{\"text\":\"%s\",\"key\":\"%i\",\"loc\":\"%i %i\"}",iterN->text, iterN->key, iterN->xloc, iterN->yloc);
     if (iterN->next->next !=NULL) fprintf(f,",");
     fprintf(f,"\n"); 
     }
@@ -194,10 +197,11 @@ struct sqlConnection *conn6 = sqlConnect("cdw");
 char query6[1024]; 
 sqlSafef(query6, 1024, "select * from cdwValidFile where fileId=\'%i\'",fileId);
 struct cdwValidFile *out6 = cdwValidFileLoadByQuery(conn6, query6);
-sqlDisconnect(&conn6); 
+sqlDisconnect(&conn6);
 struct jsonNode *endNode = newJsonNode(out6->licensePlate, totalNodes, false, gX, yPos+400);
 slAddHead(&nodeList, endNode);
 ++totalNodes;
+gX += 200; 
 }
 
 void rLookForNodes(int fileId, int currentNode, int yPos)
@@ -240,6 +244,37 @@ for (; iter != NULL; iter = iter->next)
 sqlDisconnect(&conn5); 
 }
 
+void normalizeXCoords ()
+/* Some tricky code I am playing with... It takes advantage of the output 
+ * printing convention, so it is very finicky.  */
+{
+int cLev = nodeList->yloc, xTot = 0, stCnt = 0 ; 
+uglyf ("the cLev is %i \n", cLev); 
+while (cLev > 0)
+    {
+    struct jsonNode *iterN;  
+    for (iterN=nodeList; iterN!=NULL; iterN = iterN->next) 
+	{
+	if (iterN->yloc == cLev)
+	    {
+	    xTot += iterN->xloc; 
+	    ++stCnt;
+	    //uglyf ("the xTot is %i,  the stCnt is %i \n ", xTot, stCnt); 
+	    
+	    }
+	if (iterN->yloc == cLev-200)
+	    {
+	    uglyf ("the xTot is %i,  the stCnt is %i, the updated Xloc should be  %i\n ", xTot, stCnt, xTot/stCnt); 
+	    iterN->xloc = xTot/stCnt; 
+	    uglyf ("The iterN->xloc is %i\n", iterN->xloc); 
+	    stCnt = 0; 
+	    xTot = 0; 
+	    }
+	}
+    --cLev; 
+    }
+}
+
 void sqlToTxt(char *startQuery, char *outputFile)
 /* sqlToTxt - A program that runs through SQL tables and generates history flow chart information. */
 {
@@ -255,9 +290,10 @@ struct jsonNode *startNode = newJsonNode(out->licensePlate, totalNodes, false, 2
 slAddHead(&nodeList, startNode);
 ++totalNodes;
 rLookForNodes(atoi(startQuery), totalNodes, 200); 
-//slReverse(&nodeList); 
-if (clForceLayout) printToForceLayoutJson(f, nodeList, linkList);
-else printToGoJson(f, nodeList, linkList); 
+//slReverse(&nodeList);
+normalizeXCoords(); 
+if (clForceLayout) printToForceLayoutJson(f);
+else printToGoJson(f); 
 }
 
 int main(int argc, char *argv[])
