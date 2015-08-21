@@ -137,14 +137,10 @@ char *chromName;
 int winStart, winEnd;
 char *db = cartString(cart, "db");
 char *pos = cartString(cart, "position");
-int len = winEnd-winStart;
 findGenomePos(db, pos, &chromName, &winStart, &winEnd, cart);
+int len = winEnd-winStart;
 
 char *url = replaceInUrl(et->url, "", cart, db, chromName, winStart, winEnd, NULL, TRUE);
-
-printf("You're being redirected from the UCSC Genome Browser to the site %s<br>\n", url);
-if (et->email)
-    printf("Please contact %s for questions on this tool.<br>\n", et->email);
 
 char *method = "POST";
 if (et->isHttpGet)
@@ -157,9 +153,13 @@ struct slPair *slp;
 if (et->maxSize!=0 && len > et->maxSize)
     {
     printf("Sorry, this tool accepts only a sequence with less than %d base pairs<p>\n"
-      "Try to zoom in some more.<p>\n", et->maxSize);
+      "Please zoom in some more.<p>\n", et->maxSize);
     return;
     }
+
+printf("You're being redirected from the UCSC Genome Browser to the site %s<br>\n", url);
+if (et->email)
+    printf("Please contact %s for questions on this tool.<br>\n", et->email);
 
 boolean submitDone = FALSE;
 for (slp=et->params; slp!=NULL; slp=slp->next)

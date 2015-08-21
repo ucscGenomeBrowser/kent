@@ -77,6 +77,29 @@ param GENBRO_DB $db
 param GENBRO_POSITION $position
 param SEQUENCE_TEMPLATE $seq
 
+tool nebcutter
+shortLabel NEBCutter
+longLabel New England Biolabs Restriction Enzyme Site Predictor (Note: the Browser also has a track with restriction sites.)
+#email NEEDTOFILLOUT
+maxSize 300000
+url http://nc2.neb.com/NEBcutter2/enzcut.php
+param no_dam 0
+param add_type13 0
+param add_nick 0
+param sequence $seq
+param no_ecobi 0
+param seqisfrag 0
+param no_ecoki 0
+param no_dcm 0
+param no_cpg 0
+param cut_to 0
+param gcode 11
+param min_orf 100
+param cut_from 0
+param circular 0
+param add_homing 0
+param enz_suppl 1
+
 tool RnaFold
 shortLabel RNAfold
 longLabel RNA secondary structure prediction
@@ -139,22 +162,23 @@ param configfile /usr/opt/www/pub/CBS/services/Promoter-2.0/Promoter.cf
 param SEQPASTE $seq
 param SEQSUB 
 
-tool uniprobe
-shortLabel Uniprobe
-longLabel Search for transcription factor binding sites
-url http://the_brain.bwh.harvard.edu/uniprobe/browse.php
-email uniprobe@genetics.med.harvard.edu
-maxSize 80
-param MAX_FILE_SIZE 2097152
-param dnaSpeciesFormat all
-param dnaThreshold 0.45
-param dnaSpeciesTextArea             
-param dnaSpeciesSingle Acanthamoeba castellanii
-param dnaTextarea $seq
-param searchParam 
-param dnaSpeciesCategory Acanthamoeba castellanii,Allomyces macrogynus,Ashbya gossypii,Arabidopsis thaliana,Aspergillus nidulans,Caenorhabditis elegans,Cryptosporidium parvum,Drosophila melanogaster,Homo sapiens,Kluyveromyces lactis,Monosiga brevicollis,Mus musculus,Mycosphaerella graminicola,Nematostella vectensis,Patiria miniata,Plasmodium falciparum,Saccharomyces cerevisiae,Strongylocentrotus purpuratus,Trichoplax adhaerens,Tuber melanosporum
-param dnaFile 
-param dnaFormat textarea
+## removed after request from Martha Bulyk. They plan to make their matrix search faster
+#tool uniprobe
+#shortLabel Uniprobe
+#longLabel Search for transcription factor binding sites
+#url http://the_brain.bwh.harvard.edu/uniprobe/browse.php
+#email uniprobe@genetics.med.harvard.edu
+#maxSize 80
+#param MAX_FILE_SIZE 2097152
+#param dnaSpeciesFormat all
+#param dnaThreshold 0.45
+#param dnaSpeciesTextArea             
+#param dnaSpeciesSingle Acanthamoeba castellanii
+#param dnaTextarea $seq
+#param searchParam 
+#param dnaSpeciesCategory Acanthamoeba castellanii,Allomyces macrogynus,Ashbya gossypii,Arabidopsis thaliana,Aspergillus nidulans,Caenorhabditis elegans,Cryptosporidium parvum,Drosophila melanogaster,Homo sapiens,Kluyveromyces lactis,Monosiga brevicollis,Mus musculus,Mycosphaerella graminicola,Nematostella vectensis,Patiria miniata,Plasmodium falciparum,Saccharomyces cerevisiae,Strongylocentrotus purpuratus,Trichoplax adhaerens,Tuber melanosporum
+#param dnaFile 
+#param dnaFormat textarea
 
 tool primerBlast
 shortLabel Primer-BLAST
@@ -267,3 +291,34 @@ param pos $position
 param pam NGG
 maxSize 1000
 
+tool chopchop
+url https://chopchop.rc.fas.harvard.edu/search.php
+email tessa.montague@gmail.com
+shortLabel CHOPCHOP
+longLabel CRISPR/Cas9 target selector and offtarget-predictor
+maxSize 2000
+onlyDbs anoGam1,ce10,dm3,hg19,hg38,danRer7,galGal4,gasAcu1,mm10,musFur1,rn6,oryLat2,sacCer3,xenTro3
+param organism $db
+param pasteSeq $seq
+param method CRISPR
+param target CODING
+param subsetExon 
+param padding 
+param enzyme N
+param minResSite 4
+param searchMethod hsu
+param 5prime GN,NG
+param PAM NGG
+param TALEdist 
+param TALEsize 
+param mismatches 2
+param gRVD NN
+param PRODUCT_SIZE_MIN 150
+param PRODUCT_SIZE_MAX 290
+param PRIMER_MIN_SIZE 18
+param PRIMER_MAX_SIZE 25
+param PRIMER_OPT_SIZE 22
+param PRIMER_MIN_TM 57
+param PRIMER_MAX_TM 63
+param PRIMER_OPT_TM 60
+param sitePadding 20
