@@ -135,7 +135,7 @@ param PAGE 2
 
 tool rsatMeta
 shortLabel RSAT Metazoa
-longLabel Regulatory Sequence Analysis Tools for Metazoa
+longLabel Regulatory Sequence Analysis Tools for Metazoa. Can search for Transcription Factor binding sites and over-represented words.
 url http://rsat.sb-roscoff.fr/convert-seq.cgi 
 email Jacques.van-Helden@univ-amu.fr
 maxSize 50000
@@ -323,3 +323,49 @@ param PRIMER_MIN_TM 57
 param PRIMER_MAX_TM 63
 param PRIMER_OPT_TM 60
 param sitePadding 20
+
+tool regrna2
+shortLabel RegRNA 2
+longLabel Predicts pre-mRNA motifs, polyadenylation sites, splicing motifs, Ribosome binding sites, UTR motifs, RNA editing sites, Riboswitches, RNA regulatory elements and miRNA and ncRNA target sites
+email kevinchang1025@gmail.com
+url http://regrna2.mbc.nctu.edu.tw/detection_output.php
+onlyDbs hg17,hg18,hg19,hg38
+maxSize 2000
+param GeneSplicer_species Human
+param position_line_interval_len 100
+param S1 $faSeq
+param UTRsite ON
+param ncRNA_FE -20
+param SplicingMotif ON
+param Rfam ON
+param RBSfinder ON
+param ERPIN ON
+param ncRNA ON
+param fRNAdb ON
+param StartCodon 1
+param draw_dotline ON
+param score 170
+param matchscore 1
+param SplicingSite ON
+param GCratio_window_size 100
+param RadioGroup1 matrix
+param unpair_size 6
+param uploadfile 
+param SplicingMotif_species Homo sapiens
+param miRNA ON
+param ncRNA_length 20
+param Polya ON
+param miRNA_species Homo sapiens
+param tfbs_species human, Homo sapiens
+param RNAediting ON
+param miRNA_FE -25
+param ncRNA_species Homo_sapiens
+param LongStem ON
+param fRNAdb_match_len 30
+param fRNAdb_similarity 0.9
+param B1 Submit
+param AUrich ON
+param accessibility_window_size 100
+param LongStem_len 40
+param RiboSW ON
+param Size 950
