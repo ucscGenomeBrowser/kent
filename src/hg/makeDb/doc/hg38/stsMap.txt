@@ -24,8 +24,13 @@
     #	40,000,000 chunck sizes, 20,000 overlap
     partitionSequence.pl 40000000 20000 /hive/data/genomes/hg38/hg38.2bit \
 	/hive/data/genomes/hg38/chrom.sizes 100 -lstDir tParts \
-	| egrep -v "tParts|random|_hap|chrUn" \
+	| egrep -v "tParts|random|_alt|chrUn" \
 	| sed -e "s/.*2bit://;" > hg38.list
+    # verify only chroms are left:
+    sed -e 's/:.*//;' hg38.list | sort -u | xargs echo | fold -s
+# chr1 chr10 chr11 chr12 chr13 chr14 chr15 chr16 chr17 chr18 chr19 chr2 chr20
+# chr21 chr22 chr3 chr4 chr5 chr6 chr7 chr8 chr9 chrX chrY
+
     ls -1S ../split > sts.list
 
     cat > template << '_EOF_'
@@ -65,286 +70,345 @@ rm -f $tmpFile.lift $tmpFile.psl
     para -maxJob=400 create jobList
 # 8460 jobs in batch
     para try ... check ... push ... etc
-XXX - running - Mon Jun 15 13:38:56 PDT 2015
-# Completed: 8366 of 8366 jobs
-# CPU time in finished jobs:      89744s    1495.74m    24.93h    1.04d  0.003 y
-# IO & Wait Time:                 25467s     424.44m     7.07h    0.29d  0.001 y
-# Average job time:                  14s       0.23m     0.00h    0.00d
-# Longest finished job:              53s       0.88m     0.01h    0.00d
-# Submission to last job:          1592s      26.53m     0.44h    0.02d
+# Completed: 8460 of 8460 jobs
+# CPU time in finished jobs:      63833s    1063.88m    17.73h    0.74d  0.002 y
+# IO & Wait Time:                 21847s     364.12m     6.07h    0.25d  0.001 y
+# Average job time:                  10s       0.17m     0.00h    0.00d
+# Longest finished job:              80s       1.33m     0.02h    0.00d
+# Submission to last job:           207s       3.45m     0.06h    0.00d
 
     #	and, run the randoms as a separate run:
-    mkdir /hive/data/genomes/hg38/bed/stsMap/run.randoms
-    cd /hive/data/genomes/hg38/bed/sts/run.randoms
+    ssh ku
+    mkdir /hive/data/genomes/hg38/bed/stsMap/runRandom
+    cd /hive/data/genomes/hg38/bed/stsMap/runRandom
     partitionSequence.pl 40000000 20000 /scratch/data/hg38/hg38.2bit \
 	/scratch/data/hg38/chrom.sizes 100 -lstDir tParts \
-	| egrep "tParts|random|_hap|chrUn"
+	| egrep "tParts|random|_alt|chrUn"
     cat tParts/* | sed -e "s/.*2bit://;" > hg38.list
+    # verify all contigs are counted here or in the chrom run:
+    sed -e 's/:.*//;' hg38.list ../run/hg38.list | sort -u | wc -l
+#  455
+    wc -l ../../../chrom.sizes
+#  455 ../../../chrom.sizes
+
     ls -1S ../split > sts.list
     cat > template << '_EOF_'
 #LOOP
-runOne.csh $(file1) $(root2) {check out line+ psl/$(file1)/$(root2).psl}
+runOne $(file1) $(root2) {check out line+ psl/$(file1)/$(root2).psl}
 #ENDLOOP
 '_EOF_'
     # << happy emacs
 
-    cat > runOne.csh << '_EOF_'
+    cat > runOne << '_EOF_'
 #!/bin/csh -fe
 
 set partSpec = $1
 set query = $2.fa
 set result = $3
-set tmpFile = "/scratch/tmp/$1.$2"
+set tmpFile = "/dev/shm/$1.$2"
 /bin/mkdir -p psl/$partSpec
 /bin/rm -f $tmpFile
-/cluster/bin/x86_64/blat -ooc=/scratch/data/hg38/11.ooc \
-    /scratch/data/hg38/hg38.2bit:$partSpec \
+/cluster/bin/x86_64/blat -ooc=/hive/data/genomes/hg38/jkStuff/hg38.11.ooc \
+    /hive/data/genomes/hg38/hg38.2bit:$partSpec \
 	../split/${query} -stepSize=5 $tmpFile.psl
 /bin/rm -f $result
 mv $tmpFile.psl $result
 /bin/rm -f $tmpFile.psl
 '_EOF_'
     # << happy emacs
-    chmod +x runOne.csh
+    chmod +x runOne
 
     gensub2 hg38.list sts.list template jobList
     #	these jobs run quickly, allow only 100 at a time
-    para -maxJob=100 create jobList
-# 6486 jobs in batch
+    para -maxJob=400 create jobList
+# 40514 jobs in batch
     para try ... check ... push ... etc
-# Completed: 6486 of 6486 jobs
-# CPU time in finished jobs:       2206s      36.77m     0.61h    0.03d  0.000 y
-# IO & Wait Time:                 16505s     275.08m     4.58h    0.19d  0.001 y
+# Completed: 40514 of 40514 jobs
+# CPU time in finished jobs:       6578s     109.64m     1.83h    0.08d  0.000 y
+# IO & Wait Time:                103179s    1719.65m    28.66h    1.19d  0.003 y
 # Average job time:                   3s       0.05m     0.00h    0.00d
-# Longest finished job:              21s       0.35m     0.01h    0.00d
-# Submission to last job:           601s      10.02m     0.17h    0.01d
+# Longest finished job:              11s       0.18m     0.00h    0.00d
+# Submission to last job:           180s       3.00m     0.05h    0.00d
 
     # Compile sts sequence results
     ssh hgwdev
-    cd /hive/data/genomes/hg38/bed/sts/run
+    cd /hive/data/genomes/hg38/bed/stsMap/run
     time pslSort dirs raw.psl temp psl/chr*
-    #	8366 files in 89 dirs
-    #	Got 8366 files 91 files per mid file
-    #	real    8m50.714s
-    #	-rw-rw-r--  1 810438277 May  1 11:45 raw.psl
-    cd /hive/data/genomes/hg38/bed/sts/run.randoms
-    time pslSort dirs raw.psl temp psl/chr*
-    #	6486 files in 69 dirs
-    #	Got 6486 files 81 files per mid file
-    #	real    1m42.120s
-    #	-rw-rw-r--  1 18378188 May  1 11:52 raw.psl
+    # 8460 files in 90 dirs
+    #  Got 8460 files 92 files per mid file
+    #	real    4m23.646s
+
+    #  -rw-rw-r--  1 793116044 Aug 19 10:44 raw.psl
 
     rmdir temp
-    cd /hive/data/genomes/hg38/bed/sts
-    cat run*/raw.psl | egrep -v "^$|^psLayout|^match|^ |^-" \
+
+    cd /hive/data/genomes/hg38/bed/stsMap/runRandom
+    time pslSort dirs raw.psl temp psl/chr*
+    #  40514 files in 431 dirs
+    #  Got 40514 files 201 files per mid file
+
+    #	real    9m41.405s
+    #   -rw-rw-r--   1 54980918 Aug 19 10:55 raw.psl
+
+    rmdir temp
+    cd /hive/data/genomes/hg38/bed/stsMap
+    time cat run*/raw.psl | egrep -v "^$|^psLayout|^match|^ |^-" \
 	| pslReps -nearTop=0.0001 -minCover=0.6 -minAli=0.8 -noIntrons stdin \
 	stsMarkers.psl /dev/null
-    #	Processed 7412166 alignments
-    #	-rw-rw-r-- 1 12031760 May  1 11:57 stsMarkers.psl
+    #	Processed 7563037 alignments
+    #   real    0m22.459s
 
-    $HOME/kent/src/hg/stsMarkers/extractPslInfo -h stsMarkers.psl
+    #   -rw-rw-r--   1 12403947 Aug 19 11:01 stsMarkers.psl
+
+    time $HOME/kent/src/hg/stsMarkers/extractPslInfo -h stsMarkers.psl
+    # real    0m2.917s
     # creates stsMarkers.psl.initial
-    #	-rw-rw-r-- 1  4485053 May  1 12:06 stsMarkers.psl.initial
-    wc -l stsMarkers.psl.initial
-    #	101338  stsMarkers.psl.initial
-    #	this command needs a chrom_names file to work correctly with this
-    #	new style of layout for hg38:
-    cd /hive/data/genomes/hg38
-    cut -f1 chrom.sizes | sed -e "s/chr//" > chrom_names
-    cd /hive/data/genomes/hg38/bed/sts
 
-    $HOME/kent/src/hg/stsMarkers/findAccession.pl -agp stsMarkers.psl.initial \
-	/cluster/data/hg38
-    wc -l stsMarkers.psl.initial.acc
-    #	101338  stsMarkers.psl.initial.acc
+    # -rw-rw-r--   1  4652174 Aug 19 11:03 stsMarkers.psl.initial
+
+    wc -l stsMarkers.psl.initial
+    #	104212  stsMarkers.psl.initial
+    #	this command needs a chrom_names file and individual AGP files:
+    mkdir /hive/data/genomes/hg38/bed/stsMap/agp
+    cd /hive/data/genomes/hg38/bed/stsMap/agp
+    cut -f1 ../../../chrom.sizes | sed -e "s/chr//" > chrom_names
+    splitFileByColumn -chromDirs ../../../hg38.agp .
+
+    cd /hive/data/genomes/hg38/bed/stsMap
+    time $HOME/kent/src/hg/stsMarkers/findAccession.pl \
+       -agp stsMarkers.psl.initial /hive/data/genomes/hg38/bed/stsMap/agp
+    # real    0m8.260s
+
+    # count should be the same as was in stsMarkers.psl.initial
+     wc -l stsMarkers.psl.initial.acc stsMarkers.psl.initial
+    #   104212 stsMarkers.psl.initial.acc
+    #   104212 stsMarkers.psl.initial
 
     sort -k4,4n stsMarkers.psl.initial.acc > stsMarkers.final
 
     # determine found markers (4th field in file)
     cut -f 4 stsMarkers.final | sort -n -u > stsMarkers.found
     wc -l stsMarkers.found
-    #	96472 stsMarkers.found
+    #	96531 stsMarkers.found
     #	out of 100520 total sequences from:
     wc -l /hive/data/outside/ncbi/sts.2009-04/all.STS.id
+    # 100520 /hive/data/outside/ncbi/sts.2009-04/all.STS.id
+
     #	There are lots of duplicates:
     wc -l stsMarkers.final
-    #	101338 stsMarkers.final
+    #	104212 stsMarkers.final
     #	And a lot of them are just completely haywire:
     awk '$3-$2 < 1001' stsMarkers.final | wc -l
-    #	98382
+    #	101073
     #	filter out markers that are too long
     awk '$3-$2 < 1001' stsMarkers.final > stsMarkers.1K.size.filtered
 
-    #  alignment of primers
-    ssh swarm
-    cd /hive/data/outside/ncbi/sts.2009-04
-    awk '$0 !~ /[^ACGT0-9\-\t]/ && (length($2) > 10) && (length($3) > 10) {printf "dbSTS_%s\t%s\t%s\n", $1,$2,$3}' \
-	    all.primers > all.primers.ispcr
-    mkdir primerAlign
-    cd primerAlign
-    mkdir split
-    cd split
-    split -l 5000 ../../all.primers.ispcr primer_
-    ls > ../primer.list
+    #  alignment of primers, this business in sts.2009-04 was done before,
+    #  no need to repeat this
+    ssh ku
+#    cd /hive/data/outside/ncbi/sts.2009-04
+#    awk '$0 !~ /[^ACGT0-9\-\t]/ && (length($2) > 10) && (length($3) > 10) {printf "dbSTS_%s\t%s\t%s\n", $1,$2,$3}' \
+#	    all.primers > all.primers.ispcr
+#    mkdir primerAlign
+#    cd primerAlign
+#    mkdir split
+#    cd split
+#    split -l 5000 ../../all.primers.ispcr primer_
+#    ls > ../primer.list
 
-    cd ..
+#    cd ..
     #	we need a 10.ooc file for this business
-    time blat /scratch/data/hg38/hg38.2bit \
-	/dev/null /dev/null -tileSize=10 -makeOoc=10.ooc -repMatch=1024
+#    time blat /scratch/data/hg38/hg38.2bit \
+#	/dev/null /dev/null -tileSize=10 -makeOoc=10.ooc -repMatch=1024
 # Wrote 146902 overused 10-mers to 10.ooc
 # real    19m16.758s
 
+    # re-use the split primers from the hg19 procedures:
+    mkdir -p /hive/data/genomes/hg38/bed/stsMap/primers/split
+    cd /hive/data/genomes/hg38/bed/stsMap/primers/split
+    ln -s /hive/data/outside/ncbi/sts.2009-04/primerAlign/split/* .
+    ls > ../primer.list
+
+    #	we need a hg38.10.ooc file for this business
+    cd /hive/data/genomes/hg38/bed/stsMap/primers
+    time blat /hive/data/genomes/hg38/hg38.2bit \
+	/dev/null /dev/null -tileSize=10 -makeOoc=hg38.10.ooc -repMatch=1024
+    #  Wrote 160397 overused 10-mers to hg38.10.ooc
+    #  real    0m56.075s
+
     # separate runs for whole genome vs. randoms
-    mkdir run
-    cd run
-    partitionSequence.pl 40000000 20000 /scratch/data/hg38/hg38.2bit \
-	/scratch/data/hg38/chrom.sizes 100 -lstDir tParts \
-	| egrep -v "tParts|random|_hap|chrUn" \
+    mkdir /hive/data/genomes/hg38/bed/stsMap/primers/run
+    cd /hive/data/genomes/hg38/bed/stsMap/primers/run
+    partitionSequence.pl 40000000 20000 /hive/data/genomes/hg38/hg38.2bit \
+	/hive/data/genomes/hg38/chrom.sizes 100 -lstDir tParts \
+	| egrep -v "tParts|random|_alt|chrUn" \
 	| sed -e "s/.*2bit://;" > hg38.list
-    cat > runOne.csh << '_EOF_'
+    # verify only the normal chrom names are in the list:
+    sed -e 's/:.*//;' hg38.list | sort -u | xargs echo
+# chr1 chr10 chr11 chr12 chr13 chr14 chr15 chr16 chr17 chr18 chr19 chr2
+# chr20 chr21 chr22 chr3 chr4 chr5 chr6 chr7 chr8 chr9 chrX chrY
+
+    cat > runOne << '_EOF_'
 #!/bin/csh -fe
 
 set partSpec = $1
 set primer = ../split/$2
 set result = $3
-set tmpFile = "/scratch/tmp/$1.$2"
+set tmpFile = "/dev/shm/$1.$2"
 set start = `echo $partSpec | sed -e "s/.*://; s/-/ /" | awk '{print $1}'`
 set end = `echo $partSpec | sed -e "s/.*://; s/-/ /" | awk '{print $2}'`
 set range = `echo $start $end | awk '{print $2-$1}'`
 set chr = `echo $partSpec | sed -e "s/:.*//"`
-set chrSize = `grep -P "^$chr\t" /scratch/data/hg38/chrom.sizes | cut -f2`
+set chrSize = `grep -P "^$chr\t" /hive/data/genomes/hg38/chrom.sizes | cut -f2`
 /bin/echo -e "$start\t$partSpec\t$range\t$chr\t$chrSize" > $tmpFile.lift
 /bin/mkdir -p psl/$partSpec
 /bin/rm -f $tmpFile.psl
 /cluster/bin/x86_64/isPcr -out=psl -minPerfect=2 -maxSize=5000 -tileSize=10 \
-    -ooc=/hive/data/outside/ncbi/sts.2009-04/primerAlign/10.ooc -stepSize=5 \
-	/scratch/data/hg38/hg38.2bit:$partSpec $primer $tmpFile.psl
+    -ooc=/hive/data/genomes/hg38/bed/stsMap/primers/hg38.10.ooc -stepSize=5 \
+	/hive/data/genomes/hg38/hg38.2bit:$partSpec $primer $tmpFile.psl
 /bin/rm -f $result
 /cluster/bin/x86_64/liftUp -type=.psl $result $tmpFile.lift error $tmpFile.psl
-rm -f $tmpFile.lift $tmpFile.psl
+/bin/rm -f $tmpFile.lift $tmpFile.psl
 '_EOF_'
     # << happy emacs
-    chmod +x runOne.csh
+    chmod +x runOne
 
     cat > template << '_EOF_'
 #LOOP
-runOne.csh $(file1) $(root2) {check out line+ psl/$(file1)/$(root2).psl}
+runOne $(file1) $(root2) {check out line+ psl/$(file1)/$(root2).psl}
 #ENDLOOP
 '_EOF_'
     # << happy emacs
 
     gensub2 hg38.list ../primer.list template jobList
     para create jobList
-# 5696 jobs in batch
+# 5760 jobs written to /hive/data/genomes/hg38/bed/stsMap/primers/run/batch
     para try ... check ... push ... etc
-# Completed: 5696 of 5696 jobs
-# CPU time in finished jobs:     203899s    3398.32m    56.64h    2.36d  0.006 y
-# IO & Wait Time:                 22049s     367.48m     6.12h    0.26d  0.001 y
-# Average job time:                  40s       0.66m     0.01h    0.00d
-# Longest finished job:            5314s      88.57m     1.48h    0.06d
-# Submission to last job:          5418s      90.30m     1.50h    0.06d
-# Estimated complete:                 0s       0.00m     0.00h    0.00d
+# Completed: 5760 of 5760 jobs
+# CPU time in finished jobs:     117786s    1963.11m    32.72h    1.36d  0.004 y
+# IO & Wait Time:                 15087s     251.44m     4.19h    0.17d  0.000 y
+# Average job time:                  23s       0.38m     0.01h    0.00d
+# Longest finished job:            3081s      51.35m     0.86h    0.04d
+# Submission to last job:          3192s      53.20m     0.89h    0.04d
 
     #	sort and filter the results
-    cd psl
-    pslSort dirs raw.psl temp chr*
-    #	5696 files in 89 dirs
-    #	Got 5696 files 75 files per mid file
-    #	-rw-rw-r-- 1 456802973 May  4 13:32 raw.psl
+    ssh hgwdev
+    cd /hive/data/genomes/hg38/bed/stsMap/primers/run/psl
+    time pslSort dirs raw.psl temp chr*
+    #   5760 files in 90 dirs
+    #   Got 5760 files 76 files per mid file
+    # real    real    1m34.065s
+    #   -rw-rw-r-- 1 193562562 Aug 19 12:18 raw.psl
+
     cd ..
     mkdir filter
-    pslQuickFilter -minMatch=26 -maxMismatch=5 \
+    time pslQuickFilter -minMatch=26 -maxMismatch=5 \
         -maxTinsert=5000 -verbose psl/ filter/
-    #	-rw-rw-r-- 1 50302564 May  4 13:35 raw.psl
+    # real    0m3.606s
+    #   -rw-rw-r-- 1 59390296 Aug 19 12:19 raw.psl
 
     #	And, for the randoms
-    mkdir /hive/data/outside/ncbi/sts.2009-04/primerAlign/runRandoms
-    cd /hive/data/outside/ncbi/sts.2009-04/primerAlign/runRandoms
+    mkdir /hive/data/genomes/hg38/bed/stsMap/primers/runRandom
+    cd /hive/data/genomes/hg38/bed/stsMap/primers/runRandom
 
-    partitionSequence.pl 40000000 20000 /scratch/data/hg38/hg38.2bit \
-	/scratch/data/hg38/chrom.sizes 100 -lstDir tParts \
-	| egrep "tParts|random|_hap|chrUn" \
+    partitionSequence.pl 40000000 20000 /hive/data/genomes/hg38/hg38.2bit \
+	/hive/data/genomes/hg38/chrom.sizes 100 -lstDir tParts \
+	| egrep "tParts|random|_alt|chrUn" \
 	| sed -e "s/.*2bit://;" > hg38.list
     cat tParts/* | sed -e "s/.*2bit://;" > hg38.list
-    cat tParts/* > hg38.list
+    # verify all contigs are counted here or in the chrom run:
+    sed -e 's/:.*//;' hg38.list ../run/hg38.list | sort -u | wc -l
+#  455
+    wc -l ../../../../chrom.sizes
+#  455 ../../../../chrom.sizes
 
-    cat > runOne.csh << '_EOF_'
+    cat > runOne << '_EOF_'
 #!/bin/csh -fe
 
 set partSpec = $1
 set primer = ../split/$2
 set result = $3
-set tmpFile = "/scratch/tmp/$1.$2"
+set tmpFile = "/dev/shm/$1.$2"
 /bin/mkdir -p psl/$partSpec
 /bin/rm -f $tmpFile.psl
 /cluster/bin/x86_64/isPcr -out=psl -minPerfect=2 -maxSize=5000 -tileSize=10 \
-    -ooc=/hive/data/outside/ncbi/sts.2009-04/primerAlign/10.ooc -stepSize=5 \
-	/scratch/data/hg38/hg38.2bit:$partSpec $primer $tmpFile.psl
+    -ooc=/hive/data/genomes/hg38/bed/stsMap/primers/hg38.10.ooc -stepSize=5 \
+	/hive/data/genomes/hg38/hg38.2bit:$partSpec $primer $tmpFile.psl
 /bin/rm -f $result
 mv $tmpFile.psl $result
 '_EOF_'
     # << happy emacs
-    chmod +x runOne.csh
+    chmod +x runOne
 
     #	can not use line+ check here, many of them are empty
     cat > template << '_EOF_'
 #LOOP
-runOne.csh $(file1) $(root2) {check out line psl/$(file1)/$(root2).psl}
+runOne $(file1) $(root2) {check out exists psl/$(file1)/$(root2).psl}
 #ENDLOOP
 '_EOF_'
     # << happy emacs
 
     gensub2 hg38.list ../primer.list template jobList
     #	they run quickly, limit to 100
-    para -maxJob=100 create jobList
+    para -maxJob=400 create jobList
+    # 27584 jobs in batch
     para try ... check ... push ... etc
-# Completed: 4416 of 4416 jobs
-# CPU time in finished jobs:       1746s      29.09m     0.48h    0.02d  0.000 y
-# IO & Wait Time:                 11407s     190.12m     3.17h    0.13d  0.000 y
+# Completed: 27584 of 27584 jobs
+# CPU time in finished jobs:       6588s     109.79m     1.83h    0.08d  0.000 y
+# IO & Wait Time:                 70470s    1174.51m    19.58h    0.82d  0.002 y
 # Average job time:                   3s       0.05m     0.00h    0.00d
-# Longest finished job:               8s       0.13m     0.00h    0.00d
-# Submission to last job:           147s       2.45m     0.04h    0.00d
+# Longest finished job:              25s       0.42m     0.01h    0.00d
+# Submission to last job:           145s       2.42m     0.04h    0.00d
 
     #	sort and filter the results
+    ssh hgwdev
+    cd /hive/data/genomes/hg38/bed/stsMap/primers/runRandom/psl
     cd psl
     pslSort dirs raw.psl temp chr*
-    #	4416 files in 69 dirs
-    #	Got 4416 files 66 files per mid file
+    # 27584 files in 431 dirs
+    #   Got 27584 files 166 files per mid file
     rmdir temp
-    #	-rw-rw-r-- 1 9066053 May  4 13:31 raw.psl
+    #   -rw-rw-r-- 1 134646598 Aug 19 12:32 raw.psl
+    cd ..
+    time pslQuickFilter -minMatch=26 -maxMismatch=5 \
+         -maxTinsert=5000 -verbose psl/ filter/
+    # real    0m1.878s
+    #   -rw-rw-r-- 1 10030723 Aug 19 12:36 raw.psl
 
     #	putting the two runs together
-    mkdir /hive/data/outside/ncbi/sts.2009-04/primerAlign/psl
-    cd /hive/data/outside/ncbi/sts.2009-04/primerAlign/psl
-    ln -s ../run/filter/raw.psl run.psl
-    ln -s ../runRandoms/filter/raw.psl runRandoms.psl
-    #	-rw-rw-r-- 1 50302564 May  4 13:35 run.psl
-    #	-rw-rw-r-- 1   825973 May  4 13:35 runRandoms.psl
-    cd ..
-    pslSort dirs primers.psl temp psl
-    #	2 files in 1 dirs
-    #	Got 2 files 1 files per mid file
-    #	-rw-rw-r-- 1 51128110 May  4 13:39 primers.psl
-    wc -l primers.psl
-    #	448107 primers.psl
+    cd /hive/data/genomes/hg38/bed/stsMap/primers
+    time pslSort dirs primers.psl temp run/psl/raw.psl runRandom/psl/raw.psl
+    # real    9m40.210s
+
+    # -rw-rw-r-- 1  328208733 Aug 19 12:37 primers.psl
+
     rmdir temp
-    pslFilterPrimers primers.psl ../all.primers primers.filter.psl
-    # creates primers.filter.unlifted.psl.notfound.primers
-    wc -l primers*
-    #	237962 primers.filter.psl
-    #	97191 primers.filter.psl.notfound.primers
+    ln -s /hive/data/outside/ncbi/sts.2009-04/all.primers .
+     time pslFilterPrimers -verbose=1 primers.psl all.primers primers.filter.psl
+# Reading all primers file: 'all.primers'
+# Reading isPCR file: 'primers.psl' processing output to: 'primers.filter.psl'
+# Writing primers not found to file: 'primers.filter.psl.notfound.primers'
+# real    0m5.332s
+
+# -rw-rw-r-- 1   30233721 Aug 20 09:57 primers.filter.psl
+# -rw-rw-r-- 1    6877339 Aug 20 09:57 primers.filter.psl.notfound.primers
+    wc -l primers.filter.psl primers.filter.psl.notfound.primers
+    # 262188 primers.filter.psl
+    # 109663 primers.filter.psl.notfound.primers
 
     #	see if ePCR can find some of these notfound
-    ssh swarm
-    mkdir /hive/data/outside/ncbi/sts.2009-04/primerAlign/epcr
-    cd /hive/data/outside/ncbi/sts.2009-04/primerAlign/epcr
+    ssh ku
+    mkdir /hive/data/genomes/hg38/bed/stsMap/primers/epcr
+    cd /hive/data/genomes/hg38/bed/stsMap/primers/epcr
+#     cd /hive/data/outside/ncbi/sts.2009-04/primerAlign/epcr
 
     mkdir split
     cd split
     split -l 5000 ../../primers.filter.psl.notfound.primers  primers_
     cd ..
     ls -1S split > primers.lst
-    partitionSequence.pl 40000000 20000 /scratch/data/hg38/hg38.2bit \
+    ~/kent/src/hg/utils/automation/partitionSequence.pl 40000000 20000 \
+        /scratch/data/hg38/hg38.2bit \
 	/scratch/data/hg38/chrom.sizes 100 -lstDir tParts \
 	| grep -v tParts | sed -e "s/.*2bit://;" > hg38.list
     cat tParts/* | sed -e "s/.*2bit://;" >> hg38.list
@@ -355,7 +419,7 @@ runOne.csh $(file1) $(root2) {check out line psl/$(file1)/$(root2).psl}
 set partSpec = $1
 set primer = split/$2
 set result = $3
-set tmpFile = "/scratch/tmp/$1.$2"
+set tmpFile = "/dev/shm/$1.$2"
 set start = `echo $partSpec | sed -e "s/.*://; s/-/ /" | awk '{print $1}'`
 set end = `echo $partSpec | sed -e "s/.*://; s/-/ /" | awk '{print $2}'`
 set range = `echo $start $end | awk '{print $2-$1}'`
@@ -384,17 +448,16 @@ runOne.csh $(file1) $(root2) {check out line epcr/$(file1)/$(root2).epcr}
     para create jobList
 	# 3160 jobs
     para try ... check ... push ... etc ...
-# Completed: 3160 of 3160 jobs
-# CPU time in finished jobs:      86253s    1437.54m    23.96h    1.00d  0.003 y
-# IO & Wait Time:                 11196s     186.61m     3.11h    0.13d  0.000 y
-# Average job time:                  31s       0.51m     0.01h    0.00d
-# Longest finished job:              89s       1.48m     0.02h    0.00d
-# Submission to last job:           237s       3.95m     0.07h    0.00d
+# Completed: 11462 of 11462 jobs
+# CPU time in finished jobs:     122087s    2034.78m    33.91h    1.41d  0.004 y
+# IO & Wait Time:                 32148s     535.80m     8.93h    0.37d  0.001 y
+# Average job time:                  13s       0.22m     0.00h    0.00d
+# Longest finished job:             127s       2.12m     0.04h    0.00d
+# Submission to last job:           958s      15.97m     0.27h    0.01d
 
     find ./epcr -type f | xargs cat > all.epcr
     wc -l all.epcr
-    #	797286 all.epcr
-    # convert the coordinates from the partitionSequence.pl to a lift file
+    #	848232 all.epcr
     awk '{print $1}' all.epcr | sort -u > hg38.partSpec.txt
     $HOME/kent/src/hg/stsMarkers/liftFromSpec.pl hg38 hg38.partSpec.txt \
 	> all.epcr.lift
@@ -406,75 +469,101 @@ printf "%s %d..%d %d %d\n", $1, $2, $3, $4, $5
 }
 ' > all.epcr.lifted
 
-    pslFilterPrimers -epcr=all.epcr.lifted -verbose=1 ../primers.psl \
-    /cluster/home/hiram/bin/x86_64/pslFilterPrimers -epcr=all.epcr.lifted \
-	-verbose=1 ../primers.psl ../../all.primers epcr.primers.psl
-    #	this took a long time, many hours
-# -rw-rw-r--   1  2785254 May  5 17:28 epcr.not.found
-# -rw-rw-r--   1 27343510 May  5 17:28 epcr.primers.psl
+    time ~/kent/src/hg/pslFilterPrimers/pslFilterPrimers \
+        -epcr=all.epcr.lifted \
+	-verbose=2 ../primers.psl ../all.primers epcr.primers.psl
+# Reading all primers file: '../all.primers'
+# Reading epcr file: 'all.epcr.lifted'
+# Reading isPCR file: '../primers.psl' processing output to: 'epcr.primers.psl'
+# Writing epcr.not.found file
+# Writing primers not found to file: 'epcr.primers.psl.notfound.primers'
+
+# real    25m27.329s
+
+# -rw-rw-r--   1  3106400 Aug 20 14:40 epcr.not.found
+# -rw-rw-r--   1 30233721 Aug 20 14:40 epcr.primers.psl
+# -rw-rw-r--   1  1966514 Aug 20 14:40 epcr.primers.psl.notfound.primers
 # -rw-rw-r--   1  1616885 May  5 17:28 epcr.primers.psl.notfound.primers
 
     time ./epcrToHgPsl.pl epcr.not.found ../../all.primers \
     time $HOME/kent/src/hg/stsMarkers/epcrToPsl epcr.not.found \
-	../../all.primers /hive/data/genomes/hg38
+	../all.primers /hive/data/genomes/hg38
+# Reading chrom sizes /hive/data/genomes/hg38/chrom.sizes
+# Reading primer info from ../all.primers
+# Creating psl file epcr.not.found.psl and epcr.not.found.nomatch
+# 500 of 80740 complete == % 0.62
+# 1000 of 80740 complete == % 1.24
+# 1500 of 80740 complete == % 1.86
+# ...
+# 79500 of 80740 complete == % 98.46
+# 80000 of 80740 complete == % 99.08
+# 80500 of 80740 complete == % 99.70
+# real    13m54.272s
+
     #	real    69m38.444s
-    #	-rw-rw-r--   1        0 May  6 14:18 epcr.not.found.nomatch
-    #	-rw-rw-r--   1  8369138 May  6 15:26 epcr.not.found.psl
+    #   -rw-rw-r--   1        0 Aug 20 16:38 epcr.not.found.nomatch
+    #   -rw-rw-r--   1  9293194 Aug 20 16:52 epcr.not.found.psl
 
     #	combining everything together now
-    cd /hive/data/outside/ncbi/sts.2009-04/primerAlign
+    cd /hive/data/genomes/hg38/bed/stsMap/primers
 
     sort -u primers.filter.psl epcr/epcr.primers.psl epcr/epcr.not.found.psl \
                 | sort -k15,15 -k17,17n > primers.final.psl
     wc -l primers.final.psl
-    #	310705 primers.final.psl
+    #	342834 primers.final.psl
 
     time $HOME/kent/src/hg/stsMarkers/fixPrimersQueryGaps.pl \
-        ../all.primers primers.final.psl > primers.final.fix.psl
-    #	real    0m19.580s
+        all.primers primers.final.psl > primers.final.fix.psl
+    #	real    0m13.182s
     wc -l primers.final.fix.psl
-    #	310705 primers.final.fix.psl
+    #	342834 primers.final.fix.psl
 
     # Extract relevant info, make alignments unique, and create final file to
     #	be merged with full sequence alignments
     $HOME/kent/src/hg/stsMarkers/extractPslInfo -h primers.final.fix.psl
     #	real    0m15.303s
-    #	-rw-rw-r-- 1 15660447 May  6 15:44 primers.final.fix.psl.initial
+    #	-rw-rw-r-- 1   17594603 Aug 21 12:31 primers.final.fix.psl.initial
     wc -l primers.final.fix.psl.initial
-    #	308210 primers.final.fix.psl.initial
-    $HOME/kent/src/hg/stsMarkers/findAccession.pl -agp \
-	primers.final.fix.psl.initial /hive/data/genomes/hg38
-    wc -l primers.final.fix.psl.initial.acc
-    #	308210 primers.final.fix.psl.initial.acc
+    #	338460 primers.final.fix.psl.initial
 
-    $HOME/kent/src/hg/stsMarkers/getStsId ../stsInfo2.bed \
+    $HOME/kent/src/hg/stsMarkers/findAccession.pl -agp \
+	primers.final.fix.psl.initial /hive/data/genomes/hg38/bed/stsMap/agp
+    # -rw-rw-r-- 1   21363234 Aug 21 12:36 primers.final.fix.psl.initial.acc
+
+    wc -l primers.final.fix.psl.initial.acc
+    #	338460 primers.final.fix.psl.initial.acc
+
+    ln -s /hive/data/outside/ncbi/sts.11/stsInfo2.bed .
+    time $HOME/kent/src/hg/stsMarkers/getStsId stsInfo2.bed \
 	primers.final.fix.psl.initial.acc | sort -k 4n > primers.final
+    # real    0m9.363s
+
     wc -l primers.final
-    # 308210 primers.final
+    # 338460 primers.final
+
     #	There doesn't appear to be any use for this primers.ids list
     #	except for curiosity.  Check the head and tail of this list to
     #	verify no garbage is in here.  There should just be numbers.
     awk '{print $4}' primers.final | sort -n | uniq > primers.ids
     wc -l primers.ids
-    #	290961 primers.ids
+    #	285101 primers.ids
 
     # Merge primer and sequence files to create final bed file
     # Merge (combineSeqPrimerPos) takes about an hour to run
-    cd /hive/data/genomes/hg38/bed/sts
+    cd /hive/data/genomes/hg38/bed/stsMap
     time $HOME/kent/src/hg/stsMarkers/combineSeqPrimerPos stsMarkers.final \
 	/hive/data/outside/ncbi/sts.2009-04/primerAlign/primers.final
-    #	real    0m12.310s
-    #	-rw-rw-r-- 1 15222346 May  6 15:55 stsMarkers_pos.rdb
+    #	real    0m10.914s
+    #	-rw-rw-r--   1 15443101 Aug 21 12:41 stsMarkers_pos.rdb
     wc -l stsMarkers_pos.rdb
-    #	315308 stsMarkers_pos.rdb
+    #	318114 stsMarkers_pos.rdb
 
-    time /cluster/bin/scripts/createSTSbed \
-	/hive/data/outside/ncbi/sts.2009-04/stsInfo2.bed  \
+    time /cluster/bin/scripts/createSTSbed primers/stsInfo2.bed \
 	stsMarkers_pos.rdb > stsMap.bed
-    #	real    0m31.886s
-    #	-rw-rw-r-- 1 38244880 May  6 16:25 stsMap.bed
+    #	real    0m10.287s
+    #	-rw-rw-r--   1 38523868 Aug 21 12:43 stsMap.bed
     wc -l stsMap.bed
-    #	305914 stsMap.bed
+    #	307758 stsMap.bed
 
     # Set up sequence files
     ssh hgwdev
@@ -485,22 +574,19 @@ printf "%s %d..%d %d %d\n", $1, $2, $3, $4, $5
         /gbdb/hg38/sts.11/all.primers.fa
 
     # Load all files
-    cd /hive/data/genomes/hg38/bed/sts
+    cd /hive/data/genomes/hg38/bed/stsMap
     hgLoadSeq hg38 /gbdb/hg38/sts.11/all.STS.fa /gbdb/hg38/sts.11/all.primers.fa
-    #	Creating seq.tab file
-    #	Adding /gbdb/hg38/sts.11/all.STS.fa
-    #	100520 sequences
-    #	Adding /gbdb/hg38/sts.11/all.primers.fa
-    #	317592 sequences
-    #	Updating seq table
-    #	Advisory lock has been released
-    #	All done
-
+    # Creating seq.tab file
+    # Adding /gbdb/hg38/sts.11/all.STS.fa
+    # 100520 sequences
+    # Adding /gbdb/hg38/sts.11/all.primers.fa
+    # 317592 sequences
+    # Updating seq table
 
     hgsql hg38 < $HOME/kent/src/hg/lib/stsInfo2.sql
     hgsql hg38 < $HOME/kent/src/hg/lib/stsAlias.sql
-    #	these files already exist here from previous operations
-    # cp -p /hive/data/outside/ncbi/sts.11/{stsInfo2.bed,stsAlias.bed} .
+    #	these files already exist from previous operations, reusing them here:
+    ln -s  /hive/data/outside/ncbi/sts.11/{stsInfo2.bed,stsAlias.bed} .
     hgsql hg38 -e 'load data local infile "stsInfo2.bed" into table stsInfo2'
     hgsql hg38 -e 'load data local infile "stsAlias.bed" into table stsAlias'
     #	a couple minutes for each load above
@@ -512,13 +598,16 @@ printf "%s %d..%d %d %d\n", $1, $2, $3, $4, $5
     hgLoadBed -notItemRgb -noBin -tab \
 	-sqlTable=$HOME/kent/src/hg/lib/stsMap.sql hg38 stsMap \
 	    stsMap.filtered.5000.bed
-    #	Loaded 305064 elements of size 28
+    #	Read 306855 elements of size 28 from stsMap.filtered.5000.bed
 
-    ln -s \
-/hive/data/outside/ncbi/sts.2009-04/primerAlign/primers.final.fix.psl \
-	primers.psl
+    # four rows had illegal tBaseInsert values in column 8, filter those out:
+# Warning 1264 Out of range value for column 'tBaseInsert' at row 15925
+# Warning 1264 Out of range value for column 'tBaseInsert' at row 21564
+# Warning 1264 Out of range value for column 'tBaseInsert' at row 70740
+# Warning 1264 Out of range value for column 'tBaseInsert' at row 112040
+    awk -F'\t' '$8 > -1' primers/primers.final.fix.psl \
+      | hgLoadPsl -nobin -table=all_sts_primer hg38 stdin
 
-    hgLoadPsl -nobin -table=all_sts_primer hg38 primers.psl
     hgLoadPsl -nobin -table=all_sts_seq hg38 stsMarkers.psl
 
 ##############################################################################
