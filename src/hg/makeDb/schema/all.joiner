@@ -5030,6 +5030,7 @@ tablesIgnored $gbd
     bam%
     blatFr1
     chromInfo
+    cloneEnds%
     contamination
     cpgIsland%
     ctgPos
