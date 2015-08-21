@@ -41,8 +41,8 @@ errAbort(
   "   -extra=[file|url]     - accept settings in this file (or url)\n"
   "   -level=base|required  - reject settings below this support level\n"
   "   -settings             - just list settings with support level\n"
-  "                           Will create this directory if not existing\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs.\n"
+  "                           Will create this directory if not existing\n"
   "   -cacheTime=N - set cache refresh time in seconds, default %d\n"
   "   -verbose=2            - output verbosely\n"
   , cacheTime
