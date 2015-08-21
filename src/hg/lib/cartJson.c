@@ -3,6 +3,7 @@
 #include "cartJson.h"
 #include "cartTrackDb.h"
 #include "cheapcgi.h"
+#include "errCatch.h"
 #include "grp.h"
 #include "hdb.h"
 #include "hgFind.h"
@@ -510,9 +511,26 @@ void cartJsonGetGroupedTrackDb(struct cartJson *cj, struct hash *paramHash)
  * object that includes the database from which it was taken; it's possible that by the time
  * this reaches the client, the user might have switched to a new db. */
 {
+struct jsonWrite *jw = cj->jw;
 struct trackDb *fullTrackList = NULL;
 struct grp *fullGroupList = NULL;
-cartTrackDbInit(cj->cart, &fullTrackList, &fullGroupList, /* useAccessControl=*/TRUE);
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
+    {
+    cartTrackDbInit(cj->cart, &fullTrackList, &fullGroupList, /* useAccessControl=*/TRUE);
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    warn("%s", errCatch->message->string);
+    jsonWriteObjectStart(jw, "groupedTrackDb");
+    jsonWriteString(jw, "db", cartString(cj->cart, "db"));
+    jsonWriteListStart(jw, "groupedTrackDb");
+    jsonWriteListEnd(jw);
+    jsonWriteObjectEnd(jw);
+    return;
+    }
+errCatchFree(&errCatch);
 struct hash *groupedTrackRefList = hashTracksByGroup(fullTrackList);
 // If the optional param 'fields' is given, hash the field names that should be returned.
 char *fields = cartJsonOptionalParam(paramHash, "fields");
@@ -524,7 +542,6 @@ int maxDepth = -1;
 char *maxDepthStr = cartJsonOptionalParam(paramHash, "maxDepth");
 if (isNotEmpty(maxDepthStr))
     maxDepth = atoi(maxDepthStr);
-struct jsonWrite *jw = cj->jw;
 jsonWriteObjectStart(jw, "groupedTrackDb");
 jsonWriteString(jw, "db", cartString(cj->cart, "db"));
 jsonWriteListStart(jw, "groupedTrackDb");

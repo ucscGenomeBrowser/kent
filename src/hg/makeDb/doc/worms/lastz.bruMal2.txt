@@ -1,0 +1,116 @@
+########################################################################
+# LASTZ Brugia malayi/Filarial worm - bruMal2 vs.
+#       Trichinella spiralis/Trichinella - triSpi1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/bruMal2/bed/lastzTriSpi1.2015-08-17
+    cd /hive/data/genomes/bruMal2/bed/lastzTriSpi1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# bruMal2 vs triSpi1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Brugia malayi/Filarial worm - bruMal2
+SEQ1_DIR=/hive/data/genomes/bruMal2/bruMal2.2bit
+SEQ1_LEN=/hive/data/genomes/bruMal2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichinella spiralis/Trichinella - triSpi1
+SEQ2_DIR=/hive/data/genomes/triSpi1/triSpi1.2bit
+SEQ2_LEN=/hive/data/genomes/triSpi1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/bruMal2/bed/lastzTriSpi1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m42.746s
+    cat fb.bruMal2.chainTriSpi1Link.txt
+    # 2897180 bases of 87424120 (3.314%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` bruMal2 triSpi1) > rbest.log 2>&1 &
+    # real 0m24.703s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSpi1/bed/blastz.bruMal2.swap
+    cd /hive/data/genomes/triSpi1/bed/blastz.bruMal2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/bruMal2/bed/lastzTriSpi1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m47.155s
+    cat fb.triSpi1.chainBruMal2Link.txt
+    # 3015360 bases of 58558192 (5.149%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSpi1 bruMal2) \
+      > rbest.log 2>&1
+    # real 0m24.485s
+
+########################################################################
+########################################################################
+# LASTZ Brugia malayi/Filarial worm - bruMal2 vs.
+#       Trichuris suis/Whipworm - triSui1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/bruMal2/bed/lastzTriSui1.2015-08-17
+    cd /hive/data/genomes/bruMal2/bed/lastzTriSui1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# bruMal2 vs triSui1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Brugia malayi/Filarial worm - bruMal2
+SEQ1_DIR=/hive/data/genomes/bruMal2/bruMal2.2bit
+SEQ1_LEN=/hive/data/genomes/bruMal2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichuris suis/Whipworm - triSui1
+SEQ2_DIR=/hive/data/genomes/triSui1/triSui1.2bit
+SEQ2_LEN=/hive/data/genomes/triSui1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/bruMal2/bed/lastzTriSui1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m48.258s
+    cat fb.bruMal2.chainTriSui1Link.txt
+    # 2399958 bases of 87424120 (2.745%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` bruMal2 triSui1) > rbest.log 2>&1 &
+    # real 0m21.478s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSui1/bed/blastz.bruMal2.swap
+    cd /hive/data/genomes/triSui1/bed/blastz.bruMal2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/bruMal2/bed/lastzTriSui1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m42.179s
+    cat fb.triSui1.chainBruMal2Link.txt
+    # 2314529 bases of 71825323 (3.222%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSui1 bruMal2) \
+      > rbest.log 2>&1
+    # real 0m21.462s
+
+########################################################################

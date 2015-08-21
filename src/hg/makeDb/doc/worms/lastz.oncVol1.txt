@@ -1,0 +1,116 @@
+########################################################################
+# LASTZ Onchocerca volvulus/O. volvulus - oncVol1 vs.
+#       Trichinella spiralis/Trichinella - triSpi1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/oncVol1/bed/lastzTriSpi1.2015-08-17
+    cd /hive/data/genomes/oncVol1/bed/lastzTriSpi1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# oncVol1 vs triSpi1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Onchocerca volvulus/O. volvulus - oncVol1
+SEQ1_DIR=/hive/data/genomes/oncVol1/oncVol1.2bit
+SEQ1_LEN=/hive/data/genomes/oncVol1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichinella spiralis/Trichinella - triSpi1
+SEQ2_DIR=/hive/data/genomes/triSpi1/triSpi1.2bit
+SEQ2_LEN=/hive/data/genomes/triSpi1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/oncVol1/bed/lastzTriSpi1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m34.588s
+    cat fb.oncVol1.chainTriSpi1Link.txt
+    # 2792653 bases of 94327777 (2.961%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` oncVol1 triSpi1) > rbest.log 2>&1 &
+    # real 0m26.374s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSpi1/bed/blastz.oncVol1.swap
+    cd /hive/data/genomes/triSpi1/bed/blastz.oncVol1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/oncVol1/bed/lastzTriSpi1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m54.871s
+    cat fb.triSpi1.chainOncVol1Link.txt
+    # 3017278 bases of 58558192 (5.153%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSpi1 oncVol1) \
+      > rbest.log 2>&1
+    # real 0m38.150s
+
+########################################################################
+########################################################################
+# LASTZ Onchocerca volvulus/O. volvulus - oncVol1 vs.
+#       Trichuris suis/Whipworm - triSui1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/oncVol1/bed/lastzTriSui1.2015-08-17
+    cd /hive/data/genomes/oncVol1/bed/lastzTriSui1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# oncVol1 vs triSui1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Onchocerca volvulus/O. volvulus - oncVol1
+SEQ1_DIR=/hive/data/genomes/oncVol1/oncVol1.2bit
+SEQ1_LEN=/hive/data/genomes/oncVol1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichuris suis/Whipworm - triSui1
+SEQ2_DIR=/hive/data/genomes/triSui1/triSui1.2bit
+SEQ2_LEN=/hive/data/genomes/triSui1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/oncVol1/bed/lastzTriSui1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 2m59.561s
+    cat fb.oncVol1.chainTriSui1Link.txt
+    # 2337281 bases of 94327777 (2.478%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` oncVol1 triSui1) > rbest.log 2>&1 &
+    # real 0m23.120s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSui1/bed/blastz.oncVol1.swap
+    cd /hive/data/genomes/triSui1/bed/blastz.oncVol1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/oncVol1/bed/lastzTriSui1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m48.156s
+    cat fb.triSui1.chainOncVol1Link.txt
+    # 2332740 bases of 71825323 (3.248%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSui1 oncVol1) \
+      > rbest.log 2>&1
+    # real 0m33.650s
+
+########################################################################

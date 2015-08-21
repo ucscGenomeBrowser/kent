@@ -1,0 +1,696 @@
+########################################################################
+# LASTZ Haemonchus contortus/Barber pole worm - haeCon2 vs.
+#       Ascaris suum/Pig roundworm - ascSuu1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/haeCon2/bed/lastzAscSuu1.2015-08-17
+    cd /hive/data/genomes/haeCon2/bed/lastzAscSuu1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# haeCon2 vs ascSuu1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Haemonchus contortus/Barber pole worm - haeCon2
+SEQ1_DIR=/hive/data/genomes/haeCon2/haeCon2.2bit
+SEQ1_LEN=/hive/data/genomes/haeCon2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Ascaris suum/Pig roundworm - ascSuu1
+SEQ2_DIR=/hive/data/genomes/ascSuu1/ascSuu1.2bit
+SEQ2_LEN=/hive/data/genomes/ascSuu1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/haeCon2/bed/lastzAscSuu1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 13m4.773s
+    cat fb.haeCon2.chainAscSuu1Link.txt
+    # 9271571 bases of 346001353 (2.680%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` haeCon2 ascSuu1) > rbest.log 2>&1 &
+    # real 0m57.452s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/ascSuu1/bed/blastz.haeCon2.swap
+    cd /hive/data/genomes/ascSuu1/bed/blastz.haeCon2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/haeCon2/bed/lastzAscSuu1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m11.450s
+    cat fb.ascSuu1.chainHaeCon2Link.txt
+    # 6618939 bases of 262604320 (2.520%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` ascSuu1 haeCon2) \
+      > rbest.log 2>&1
+    # real 0m50.406s
+
+########################################################################
+########################################################################
+# LASTZ Haemonchus contortus/Barber pole worm - haeCon2 vs.
+#       Brugia malayi/Filarial worm - bruMal2
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/haeCon2/bed/lastzBruMal2.2015-08-17
+    cd /hive/data/genomes/haeCon2/bed/lastzBruMal2.2015-08-17
+
+    cat << '_EOF_' > DEF
+# haeCon2 vs bruMal2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Haemonchus contortus/Barber pole worm - haeCon2
+SEQ1_DIR=/hive/data/genomes/haeCon2/haeCon2.2bit
+SEQ1_LEN=/hive/data/genomes/haeCon2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Brugia malayi/Filarial worm - bruMal2
+SEQ2_DIR=/hive/data/genomes/bruMal2/bruMal2.2bit
+SEQ2_LEN=/hive/data/genomes/bruMal2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/haeCon2/bed/lastzBruMal2.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 7m57.249s
+    cat fb.haeCon2.chainBruMal2Link.txt
+    # 7436838 bases of 346001353 (2.149%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` haeCon2 bruMal2) > rbest.log 2>&1 &
+    # real 0m49.488s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/bruMal2/bed/blastz.haeCon2.swap
+    cd /hive/data/genomes/bruMal2/bed/blastz.haeCon2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/haeCon2/bed/lastzBruMal2.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m43.629s
+    cat fb.bruMal2.chainHaeCon2Link.txt
+    # 5609507 bases of 87424120 (6.416%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` bruMal2 haeCon2) \
+      > rbest.log 2>&1
+    # real 0m41.908s
+
+########################################################################
+########################################################################
+# LASTZ Haemonchus contortus/Barber pole worm - haeCon2 vs.
+#       Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/haeCon2/bed/lastzBurXyl1.2015-08-17
+    cd /hive/data/genomes/haeCon2/bed/lastzBurXyl1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# haeCon2 vs burXyl1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Haemonchus contortus/Barber pole worm - haeCon2
+SEQ1_DIR=/hive/data/genomes/haeCon2/haeCon2.2bit
+SEQ1_LEN=/hive/data/genomes/haeCon2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+SEQ2_DIR=/hive/data/genomes/burXyl1/burXyl1.2bit
+SEQ2_LEN=/hive/data/genomes/burXyl1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/haeCon2/bed/lastzBurXyl1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 6m47.932s
+    cat fb.haeCon2.chainBurXyl1Link.txt
+    # 7012653 bases of 346001353 (2.027%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` haeCon2 burXyl1) > rbest.log 2>&1 &
+    # real 0m47.227s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/burXyl1/bed/blastz.haeCon2.swap
+    cd /hive/data/genomes/burXyl1/bed/blastz.haeCon2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/haeCon2/bed/lastzBurXyl1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m53.144s
+    cat fb.burXyl1.chainHaeCon2Link.txt
+    # 4775560 bases of 73100506 (6.533%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` burXyl1 haeCon2) \
+      > rbest.log 2>&1
+    # real 0m35.289s
+
+########################################################################
+########################################################################
+# LASTZ Haemonchus contortus/Barber pole worm - haeCon2 vs.
+#       Dirofilaria immitis/Dog heartworm - dirImm1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/haeCon2/bed/lastzDirImm1.2015-08-17
+    cd /hive/data/genomes/haeCon2/bed/lastzDirImm1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# haeCon2 vs dirImm1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Haemonchus contortus/Barber pole worm - haeCon2
+SEQ1_DIR=/hive/data/genomes/haeCon2/haeCon2.2bit
+SEQ1_LEN=/hive/data/genomes/haeCon2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Dirofilaria immitis/Dog heartworm - dirImm1
+SEQ2_DIR=/hive/data/genomes/dirImm1/dirImm1.2bit
+SEQ2_LEN=/hive/data/genomes/dirImm1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/haeCon2/bed/lastzDirImm1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 8m17.625s
+    cat fb.haeCon2.chainDirImm1Link.txt
+    # 7117359 bases of 346001353 (2.057%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` haeCon2 dirImm1) > rbest.log 2>&1 &
+    # real 0m46.928s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/dirImm1/bed/blastz.haeCon2.swap
+    cd /hive/data/genomes/dirImm1/bed/blastz.haeCon2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/haeCon2/bed/lastzDirImm1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m6.414s
+    cat fb.dirImm1.chainHaeCon2Link.txt
+    # 5078629 bases of 84923352 (5.980%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` dirImm1 haeCon2) \
+      > rbest.log 2>&1
+    # real 0m41.903s
+
+########################################################################
+########################################################################
+# LASTZ Haemonchus contortus/Barber pole worm - haeCon2 vs.
+#       Loa loa/Eye worm - loaLoa1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/haeCon2/bed/lastzLoaLoa1.2015-08-17
+    cd /hive/data/genomes/haeCon2/bed/lastzLoaLoa1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# haeCon2 vs loaLoa1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Haemonchus contortus/Barber pole worm - haeCon2
+SEQ1_DIR=/hive/data/genomes/haeCon2/haeCon2.2bit
+SEQ1_LEN=/hive/data/genomes/haeCon2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Loa loa/Eye worm - loaLoa1
+SEQ2_DIR=/hive/data/genomes/loaLoa1/loaLoa1.2bit
+SEQ2_LEN=/hive/data/genomes/loaLoa1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/haeCon2/bed/lastzLoaLoa1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 6m17.661s
+    cat fb.haeCon2.chainLoaLoa1Link.txt
+    # 7553477 bases of 346001353 (2.183%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` haeCon2 loaLoa1) > rbest.log 2>&1 &
+    # real 0m49.209s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/loaLoa1/bed/blastz.haeCon2.swap
+    cd /hive/data/genomes/loaLoa1/bed/blastz.haeCon2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/haeCon2/bed/lastzLoaLoa1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m56.467s
+    cat fb.loaLoa1.chainHaeCon2Link.txt
+    # 5297325 bases of 87533141 (6.052%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` loaLoa1 haeCon2) \
+      > rbest.log 2>&1
+    # real 0m36.583s
+
+########################################################################
+########################################################################
+# LASTZ Haemonchus contortus/Barber pole worm - haeCon2 vs.
+#       Meloidogyne hapla/M. hapla - melHap1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/haeCon2/bed/lastzMelHap1.2015-08-17
+    cd /hive/data/genomes/haeCon2/bed/lastzMelHap1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# haeCon2 vs melHap1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Haemonchus contortus/Barber pole worm - haeCon2
+SEQ1_DIR=/hive/data/genomes/haeCon2/haeCon2.2bit
+SEQ1_LEN=/hive/data/genomes/haeCon2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Meloidogyne hapla/M. hapla - melHap1
+SEQ2_DIR=/hive/data/genomes/melHap1/melHap1.2bit
+SEQ2_LEN=/hive/data/genomes/melHap1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/haeCon2/bed/lastzMelHap1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 5m32.141s
+    cat fb.haeCon2.chainMelHap1Link.txt
+    # 4343263 bases of 346001353 (1.255%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` haeCon2 melHap1) > rbest.log 2>&1 &
+    # real 0m32.825s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melHap1/bed/blastz.haeCon2.swap
+    cd /hive/data/genomes/melHap1/bed/blastz.haeCon2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/haeCon2/bed/lastzMelHap1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m48.930s
+    cat fb.melHap1.chainHaeCon2Link.txt
+    # 2921394 bases of 53017507 (5.510%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melHap1 haeCon2) \
+      > rbest.log 2>&1
+    # real 0m25.148s
+
+########################################################################
+########################################################################
+# LASTZ Haemonchus contortus/Barber pole worm - haeCon2 vs.
+#       Meloidogyne incognita/M. incognita - melInc2
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/haeCon2/bed/lastzMelInc2.2015-08-17
+    cd /hive/data/genomes/haeCon2/bed/lastzMelInc2.2015-08-17
+
+    cat << '_EOF_' > DEF
+# haeCon2 vs melInc2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Haemonchus contortus/Barber pole worm - haeCon2
+SEQ1_DIR=/hive/data/genomes/haeCon2/haeCon2.2bit
+SEQ1_LEN=/hive/data/genomes/haeCon2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Meloidogyne incognita/M. incognita - melInc2
+SEQ2_DIR=/hive/data/genomes/melInc2/melInc2.2bit
+SEQ2_LEN=/hive/data/genomes/melInc2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/haeCon2/bed/lastzMelInc2.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 6m2.230s
+    cat fb.haeCon2.chainMelInc2Link.txt
+    # 4585745 bases of 346001353 (1.325%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` haeCon2 melInc2) > rbest.log 2>&1 &
+    # real 0m35.545s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melInc2/bed/blastz.haeCon2.swap
+    cd /hive/data/genomes/melInc2/bed/blastz.haeCon2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/haeCon2/bed/lastzMelInc2.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m53.912s
+    cat fb.melInc2.chainHaeCon2Link.txt
+    # 4048533 bases of 82114761 (4.930%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melInc2 haeCon2) \
+      > rbest.log 2>&1
+    # real 0m28.820s
+
+########################################################################
+########################################################################
+# LASTZ Haemonchus contortus/Barber pole worm - haeCon2 vs.
+#       Onchocerca volvulus/O. volvulus - oncVol1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/haeCon2/bed/lastzOncVol1.2015-08-17
+    cd /hive/data/genomes/haeCon2/bed/lastzOncVol1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# haeCon2 vs oncVol1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Haemonchus contortus/Barber pole worm - haeCon2
+SEQ1_DIR=/hive/data/genomes/haeCon2/haeCon2.2bit
+SEQ1_LEN=/hive/data/genomes/haeCon2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Onchocerca volvulus/O. volvulus - oncVol1
+SEQ2_DIR=/hive/data/genomes/oncVol1/oncVol1.2bit
+SEQ2_LEN=/hive/data/genomes/oncVol1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/haeCon2/bed/lastzOncVol1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 7m41.595s
+    cat fb.haeCon2.chainOncVol1Link.txt
+    # 7577293 bases of 346001353 (2.190%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` haeCon2 oncVol1) > rbest.log 2>&1 &
+    # real 1m7.944s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oncVol1/bed/blastz.haeCon2.swap
+    cd /hive/data/genomes/oncVol1/bed/blastz.haeCon2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/haeCon2/bed/lastzOncVol1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m52.193s
+    cat fb.oncVol1.chainHaeCon2Link.txt
+    # 5418157 bases of 94327777 (5.744%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` oncVol1 haeCon2) \
+      > rbest.log 2>&1
+    # real 0m48.474s
+
+########################################################################
+########################################################################
+# LASTZ Haemonchus contortus/Barber pole worm - haeCon2 vs.
+#       Pristionchus exspectatus/P. exspectatus - priExs1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/haeCon2/bed/lastzPriExs1.2015-08-17
+    cd /hive/data/genomes/haeCon2/bed/lastzPriExs1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# haeCon2 vs priExs1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Haemonchus contortus/Barber pole worm - haeCon2
+SEQ1_DIR=/hive/data/genomes/haeCon2/haeCon2.2bit
+SEQ1_LEN=/hive/data/genomes/haeCon2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Pristionchus exspectatus/P. exspectatus - priExs1
+SEQ2_DIR=/hive/data/genomes/priExs1/priExs1.2bit
+SEQ2_LEN=/hive/data/genomes/priExs1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/haeCon2/bed/lastzPriExs1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 9m27.597s
+    cat fb.haeCon2.chainPriExs1Link.txt
+    # 9709423 bases of 346001353 (2.806%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` haeCon2 priExs1) > rbest.log 2>&1 &
+    # real 0m57.215s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/priExs1/bed/blastz.haeCon2.swap
+    cd /hive/data/genomes/priExs1/bed/blastz.haeCon2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/haeCon2/bed/lastzPriExs1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m10.139s
+    cat fb.priExs1.chainHaeCon2Link.txt
+    # 7738612 bases of 166917800 (4.636%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` priExs1 haeCon2) \
+      > rbest.log 2>&1
+    # real 0m49.063s
+
+########################################################################
+########################################################################
+# LASTZ Haemonchus contortus/Barber pole worm - haeCon2 vs.
+#       Pristionchus pacificus/P. pacificus - priPac3
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/haeCon2/bed/lastzPriPac3.2015-08-17
+    cd /hive/data/genomes/haeCon2/bed/lastzPriPac3.2015-08-17
+
+    cat << '_EOF_' > DEF
+# haeCon2 vs priPac3
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Haemonchus contortus/Barber pole worm - haeCon2
+SEQ1_DIR=/hive/data/genomes/haeCon2/haeCon2.2bit
+SEQ1_LEN=/hive/data/genomes/haeCon2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Pristionchus pacificus/P. pacificus - priPac3
+SEQ2_DIR=/hive/data/genomes/priPac3/priPac3.2bit
+SEQ2_LEN=/hive/data/genomes/priPac3/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/haeCon2/bed/lastzPriPac3.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 11m19.547s
+    cat fb.haeCon2.chainPriPac3Link.txt
+    # 9845456 bases of 346001353 (2.845%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` haeCon2 priPac3) > rbest.log 2>&1 &
+    # real 0m58.661s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/priPac3/bed/blastz.haeCon2.swap
+    cd /hive/data/genomes/priPac3/bed/blastz.haeCon2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/haeCon2/bed/lastzPriPac3.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m18.815s
+    cat fb.priPac3.chainHaeCon2Link.txt
+    # 7584928 bases of 153238914 (4.950%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` priPac3 haeCon2) \
+      > rbest.log 2>&1
+    # real 0m49.836s
+
+########################################################################
+########################################################################
+# LASTZ Haemonchus contortus/Barber pole worm - haeCon2 vs.
+#       Trichinella spiralis/Trichinella - triSpi1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/haeCon2/bed/lastzTriSpi1.2015-08-17
+    cd /hive/data/genomes/haeCon2/bed/lastzTriSpi1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# haeCon2 vs triSpi1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Haemonchus contortus/Barber pole worm - haeCon2
+SEQ1_DIR=/hive/data/genomes/haeCon2/haeCon2.2bit
+SEQ1_LEN=/hive/data/genomes/haeCon2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichinella spiralis/Trichinella - triSpi1
+SEQ2_DIR=/hive/data/genomes/triSpi1/triSpi1.2bit
+SEQ2_LEN=/hive/data/genomes/triSpi1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/haeCon2/bed/lastzTriSpi1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 6m23.356s
+    cat fb.haeCon2.chainTriSpi1Link.txt
+    # 3521590 bases of 346001353 (1.018%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` haeCon2 triSpi1) > rbest.log 2>&1 &
+    # real 0m35.108s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSpi1/bed/blastz.haeCon2.swap
+    cd /hive/data/genomes/triSpi1/bed/blastz.haeCon2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/haeCon2/bed/lastzTriSpi1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m47.288s
+    cat fb.triSpi1.chainHaeCon2Link.txt
+    # 2583045 bases of 58558192 (4.411%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSpi1 haeCon2) \
+      > rbest.log 2>&1
+    # real 0m24.742s
+
+########################################################################
+########################################################################
+# LASTZ Haemonchus contortus/Barber pole worm - haeCon2 vs.
+#       Trichuris suis/Whipworm - triSui1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/haeCon2/bed/lastzTriSui1.2015-08-17
+    cd /hive/data/genomes/haeCon2/bed/lastzTriSui1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# haeCon2 vs triSui1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Haemonchus contortus/Barber pole worm - haeCon2
+SEQ1_DIR=/hive/data/genomes/haeCon2/haeCon2.2bit
+SEQ1_LEN=/hive/data/genomes/haeCon2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichuris suis/Whipworm - triSui1
+SEQ2_DIR=/hive/data/genomes/triSui1/triSui1.2bit
+SEQ2_LEN=/hive/data/genomes/triSui1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/haeCon2/bed/lastzTriSui1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 10m50.341s
+    cat fb.haeCon2.chainTriSui1Link.txt
+    # 4007129 bases of 346001353 (1.158%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` haeCon2 triSui1) > rbest.log 2>&1 &
+    # real 0m41.532s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSui1/bed/blastz.haeCon2.swap
+    cd /hive/data/genomes/triSui1/bed/blastz.haeCon2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/haeCon2/bed/lastzTriSui1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 2m9.786s
+    cat fb.triSui1.chainHaeCon2Link.txt
+    # 2979584 bases of 71825323 (4.148%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSui1 haeCon2) \
+      > rbest.log 2>&1
+    # real 0m23.298s
+
+########################################################################

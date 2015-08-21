@@ -27,6 +27,17 @@ ftp://ftp.sanger.ac.uk/pub/wormbase/releases/WS245/species/PRJEB6009
 
     hgFakeAgp priExs1.fa.gz priExs1.agp
 
+    # adding a 'Pristionchus' photo:
+    mkdir /hive/data/genomes/priExs1/photo
+    cd /hive/data/genomes/priExs1/photo
+    wget --timestamping \
+http://www.pristionchus-sp.de/sites/default/files/styles/large/public/pristionchus.jpg?itok=si96btaL
+
+    convert -quality 80 -geometry 400x300 "pristionchus.jpg?itok=si96btaL" \
+        Pristionchus_exspectatus.jpg
+    identify Pristionchus_exspectatus.jpg
+    #  Pristionchus_exspectatus.jpg JPEG 400x278 400x278+0+0
+
 #############################################################################
 #  Initial database build (DONE - 2015-07-14 - Hiram)
 

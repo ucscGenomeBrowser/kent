@@ -428,7 +428,6 @@ void cartSetDbDisconnector(DbDisconnect disconnector);
 /* Set the connector that will be used by the cart to disconnect from the
  * database. Default disconnector is hDisconnectCart */
 
-#define CART_HAS_DEFAULT_VISIBILITY "defaultsSet"
 
 /* Libified constants and code that originally belonged only to hgSession
  * (now hgTracks uses them too): */
