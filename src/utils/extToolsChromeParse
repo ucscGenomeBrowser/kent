@@ -1,0 +1,77 @@
+#!/usr/bin/env python
+import cgi, sys, StringIO
+import logging, sys, optparse
+
+# === command line interface, options and help ===
+parser = optparse.OptionParser("""usage: %prog [options] filename - parse a Chrome HTTP trace into the format required for extTools.ra
+
+To get an HTTP trace with Chrome:
+- go to the website, fill out the form, enter a sequence, click all buttons, etc
+- right click anywhere, click "inspect"
+- in the window that opens, click "network"
+- click "preserve log"
+- make sure the red button "recording" is on, it usually is
+- click the submit or OK button on the website
+- click the "record" button the stop the recording
+- in the list of the requests at the bottom of the screen, select a HTTP POST or GET request
+- click onto it
+- click "Headers", click on "view source" next to "Response headers" and also "view source"
+  next to "Request headers"
+- select the text on this page, including the line "Request URL:" and save to a file.
+
+Now run this script onto this file. Replace the sequence with $seq or any position with $position.
+
+""")
+
+parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages") 
+#parser.add_option("-f", "--file", dest="file", action="store", help="run on file") 
+#parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
+(options, args) = parser.parse_args()
+
+if options.debug:
+    logging.basicConfig(level=logging.DEBUG)
+else:
+    logging.basicConfig(level=logging.INFO)
+
+# ==== functions =====
+
+def parseFname(inFname):
+    lines = []
+    isInside = False
+    url = None
+    for line in open(inFname):
+        if "boundary=" in line:
+            boundary = line.rstrip("\n").split("=")[1]
+        if "Request URL:" in line:
+            # Request URL:http://primer3plus.ut.ee/cgi-bin/primer3plus/primer3plus.cgi
+            url = line.rstrip('\n').split("URL:")[-1]
+        if line.startswith("POST") or isInside or line.startswith("Accept:"):
+            lines.append(line)
+            isInside = True
+        
+    if url is None:
+        print "No Request URL line was found. Make sure your file includes one"
+        assert(False)
+
+    out = "".join(lines)
+    inFh = StringIO.StringIO(out)
+    pdict = {'boundary':boundary}
+    params  = cgi.parse_multipart(inFh, pdict)
+
+    inBase = inFname.split('.')[0]
+    print "tool", inBase
+    print "shortLabel", inBase
+    print "longLabel", inBase
+    print "#email NEEDTOFILLOUT"
+    print "url", url
+    for name, val in params.iteritems():
+        if val!=['']:
+            print "param", name, "".join(val).replace("\n", "")
+    
+# ----------- main --------------
+if args==[]:
+    parser.print_help()
+    exit(1)
+
+filename = args[0]
+parseFname(filename)

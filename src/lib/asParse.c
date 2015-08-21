@@ -105,6 +105,8 @@ int arraySize = 0;
 static char buf[1024];
 if (startsWith("varchar", sqlType))
     safecpy(buf, sizeof(buf), "varchar(255)");
+else if (sameString("blob", sqlType))
+    safecpy(buf, sizeof(buf), "longblob");
 else
     {
     safecpy(buf, sizeof(buf), sqlType);

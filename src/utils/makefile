@@ -150,7 +150,8 @@ SCRIPT_FILES = \
 	mkMafFrames.pl \
 	uniprotLift \
 	bedFixBlockOverlaps \
-	apacheLogParse
+	apacheLogParse \
+	extToolsChromeParse
 
 # List of all directories to build
 
