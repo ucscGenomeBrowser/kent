@@ -552,18 +552,19 @@ printf "%s %d..%d %d %d\n", $1, $2, $3, $4, $5
     # Merge (combineSeqPrimerPos) takes about an hour to run
     cd /hive/data/genomes/hg38/bed/stsMap
     time $HOME/kent/src/hg/stsMarkers/combineSeqPrimerPos stsMarkers.final \
-	/hive/data/outside/ncbi/sts.2009-04/primerAlign/primers.final
+	primers/primers.final
     #	real    0m10.914s
-    #	-rw-rw-r--   1 15443101 Aug 21 12:41 stsMarkers_pos.rdb
+    #	-rw-rw-r--   1 21482704 Aug 22 22:50 stsMarkers_pos.rdb
+
     wc -l stsMarkers_pos.rdb
-    #	318114 stsMarkers_pos.rdb
+    #	344391 stsMarkers_pos.rdb
 
     time /cluster/bin/scripts/createSTSbed primers/stsInfo2.bed \
 	stsMarkers_pos.rdb > stsMap.bed
     #	real    0m10.287s
-    #	-rw-rw-r--   1 38523868 Aug 21 12:43 stsMap.bed
+    #	-rw-rw-r--   1 38176467 Aug 22 22:51 stsMap.bed
     wc -l stsMap.bed
-    #	307758 stsMap.bed
+    #	304339 stsMap.bed
 
     # Set up sequence files
     ssh hgwdev
