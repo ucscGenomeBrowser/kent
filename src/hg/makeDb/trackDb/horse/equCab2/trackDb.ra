@@ -92,3 +92,9 @@ termRegex ECA_NumtS_.*
 track animalQtl override
 url http://www.animalgenome.org/cgi-bin/QTLdb/EC/qdetails?QTL_ID=$p
 urlLabel Animal Genome QTL db:
+
+searchTable geneid
+searchType genePred
+searchMethod prefix
+termRegex chr[0-9MUXn]+[0-9_]+(\.[0-9]+)?
+searchPriority 50
