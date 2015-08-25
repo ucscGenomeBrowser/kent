@@ -327,3 +327,14 @@ include wgEncodeGencodeVM3.ra
 include wgEncodeGencodeVM4.ra
 
 include defaultPriority.ra
+
+searchTable sgpGene
+searchType genePred
+termRegex chr[0-9MUXYn]+[GHJLv0-9_]+(alt_|random_)?[0-9]+(\.[0-9]+)?
+searchPriority 50
+
+searchTable geneid
+searchType genePred
+searchMethod prefix
+termRegex chr[0-9MUXYn]+[GHJLv0-9_]+(alt_|random_)?[0-9]+(\.[0-9]+)?
+searchPriority 50

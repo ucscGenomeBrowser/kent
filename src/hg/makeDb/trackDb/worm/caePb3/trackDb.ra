@@ -38,3 +38,4 @@ indelDoubleInsert on
 indelQueryInsert on
 maxItems 300
 
+include trackDb.chainNet.ra

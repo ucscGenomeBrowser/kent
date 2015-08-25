@@ -31,3 +31,4 @@ searchMethod fuzzy
 searchPriority 18
 
 include trackDb.26way.ra
+include trackDb.chainNet.ra
