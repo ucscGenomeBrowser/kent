@@ -1,0 +1,357 @@
+Node 0:
+	parent = -1
+	lchild = 1
+	rchild = 48
+	name = ''
+	dparent = 0.000000
+
+Node 1:
+	parent = 0
+	lchild = 2
+	rchild = 41
+	name = ''
+	dparent = 0.137915
+
+Node 2:
+	parent = 1
+	lchild = 3
+	rchild = 36
+	name = ''
+	dparent = 0.334957
+
+Node 3:
+	parent = 2
+	lchild = 4
+	rchild = 33
+	name = ''
+	dparent = 0.063389
+
+Node 4:
+	parent = 3
+	lchild = 5
+	rchild = 32
+	name = ''
+	dparent = 0.043353
+
+Node 5:
+	parent = 4
+	lchild = 6
+	rchild = 27
+	name = ''
+	dparent = 0.042645
+
+Node 6:
+	parent = 5
+	lchild = 7
+	rchild = 24
+	name = ''
+	dparent = 0.042557
+
+Node 7:
+	parent = 6
+	lchild = 8
+	rchild = 23
+	name = ''
+	dparent = 0.094631
+
+Node 8:
+	parent = 7
+	lchild = 9
+	rchild = 22
+	name = ''
+	dparent = 0.385011
+
+Node 9:
+	parent = 8
+	lchild = 10
+	rchild = 21
+	name = ''
+	dparent = 0.026638
+
+Node 10:
+	parent = 9
+	lchild = 11
+	rchild = 20
+	name = ''
+	dparent = 0.007745
+
+Node 11:
+	parent = 10
+	lchild = 12
+	rchild = 19
+	name = ''
+	dparent = 0.002133
+
+Node 12:
+	parent = 11
+	lchild = 13
+	rchild = 14
+	name = ''
+	dparent = 0.005996
+
+Node 13:
+	parent = 12
+	lchild = -1
+	rchild = -1
+	name = 'ce11'
+	dparent = 0.641433
+
+Node 14:
+	parent = 12
+	lchild = 15
+	rchild = 16
+	name = ''
+	dparent = 0.016565
+
+Node 15:
+	parent = 14
+	lchild = -1
+	rchild = -1
+	name = 'caePb3'
+	dparent = 0.487648
+
+Node 16:
+	parent = 14
+	lchild = 17
+	rchild = 18
+	name = ''
+	dparent = 0.046415
+
+Node 17:
+	parent = 16
+	lchild = -1
+	rchild = -1
+	name = 'caeRem4'
+	dparent = 0.443246
+
+Node 18:
+	parent = 16
+	lchild = -1
+	rchild = -1
+	name = 'cb4'
+	dparent = 0.445294
+
+Node 19:
+	parent = 11
+	lchild = -1
+	rchild = -1
+	name = 'caeJap4'
+	dparent = 0.828929
+
+Node 20:
+	parent = 10
+	lchild = -1
+	rchild = -1
+	name = 'caeSp111'
+	dparent = 0.526296
+
+Node 21:
+	parent = 9
+	lchild = -1
+	rchild = -1
+	name = 'caeAng2'
+	dparent = 0.983829
+
+Node 22:
+	parent = 8
+	lchild = -1
+	rchild = -1
+	name = 'caeSp51'
+	dparent = 0.415189
+
+Node 23:
+	parent = 7
+	lchild = -1
+	rchild = -1
+	name = 'hetBac1'
+	dparent = 1.357340
+
+Node 24:
+	parent = 6
+	lchild = 25
+	rchild = 26
+	name = ''
+	dparent = 0.139767
+
+Node 25:
+	parent = 24
+	lchild = -1
+	rchild = -1
+	name = 'strRat2'
+	dparent = 1.372550
+
+Node 26:
+	parent = 24
+	lchild = -1
+	rchild = -1
+	name = 'panRed1'
+	dparent = 1.106990
+
+Node 27:
+	parent = 5
+	lchild = 28
+	rchild = 31
+	name = ''
+	dparent = 0.318650
+
+Node 28:
+	parent = 27
+	lchild = 29
+	rchild = 30
+	name = ''
+	dparent = 0.308076
+
+Node 29:
+	parent = 28
+	lchild = -1
+	rchild = -1
+	name = 'ancCey1'
+	dparent = 0.387375
+
+Node 30:
+	parent = 28
+	lchild = -1
+	rchild = -1
+	name = 'necAme1'
+	dparent = 0.494722
+
+Node 31:
+	parent = 27
+	lchild = -1
+	rchild = -1
+	name = 'haeCon2'
+	dparent = 0.755625
+
+Node 32:
+	parent = 4
+	lchild = -1
+	rchild = -1
+	name = 'ascSuu1'
+	dparent = 1.326140
+
+Node 33:
+	parent = 3
+	lchild = 34
+	rchild = 35
+	name = ''
+	dparent = 0.752898
+
+Node 34:
+	parent = 33
+	lchild = -1
+	rchild = -1
+	name = 'priExs1'
+	dparent = 0.112444
+
+Node 35:
+	parent = 33
+	lchild = -1
+	rchild = -1
+	name = 'priPac3'
+	dparent = 0.099903
+
+Node 36:
+	parent = 2
+	lchild = 37
+	rchild = 40
+	name = ''
+	dparent = 0.156962
+
+Node 37:
+	parent = 36
+	lchild = 38
+	rchild = 39
+	name = ''
+	dparent = 1.146990
+
+Node 38:
+	parent = 37
+	lchild = -1
+	rchild = -1
+	name = 'melHap1'
+	dparent = 0.237743
+
+Node 39:
+	parent = 37
+	lchild = -1
+	rchild = -1
+	name = 'melInc2'
+	dparent = 0.205426
+
+Node 40:
+	parent = 36
+	lchild = -1
+	rchild = -1
+	name = 'burXyl1'
+	dparent = 0.685906
+
+Node 41:
+	parent = 1
+	lchild = 42
+	rchild = 47
+	name = ''
+	dparent = 1.083700
+
+Node 42:
+	parent = 41
+	lchild = 43
+	rchild = 46
+	name = ''
+	dparent = 0.072741
+
+Node 43:
+	parent = 42
+	lchild = 44
+	rchild = 45
+	name = ''
+	dparent = 0.002227
+
+Node 44:
+	parent = 43
+	lchild = -1
+	rchild = -1
+	name = 'dirImm1'
+	dparent = 0.213158
+
+Node 45:
+	parent = 43
+	lchild = -1
+	rchild = -1
+	name = 'loaLoa1'
+	dparent = 0.198781
+
+Node 46:
+	parent = 42
+	lchild = -1
+	rchild = -1
+	name = 'oncVol1'
+	dparent = 0.168990
+
+Node 47:
+	parent = 41
+	lchild = -1
+	rchild = -1
+	name = 'bruMal2'
+	dparent = 0.174965
+
+Node 48:
+	parent = 0
+	lchild = 49
+	rchild = 50
+	name = ''
+	dparent = 0.137915
+
+Node 49:
+	parent = 48
+	lchild = -1
+	rchild = -1
+	name = 'triSpi1'
+	dparent = 0.820134
+
+Node 50:
+	parent = 48
+	lchild = -1
+	rchild = -1
+	name = 'triSui1'
+	dparent = 0.850407
+
