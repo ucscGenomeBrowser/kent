@@ -80,11 +80,12 @@ boolean branchLengths = FALSE;  /* branch lengths */
 boolean lengthLegend = FALSE;   /* length ruler*/
 boolean branchLabels = FALSE;   /* labelled branch lengths */
 boolean htmlPageWrapper = FALSE;  /* wrap output in an html page */
-boolean preserveUnderscores = FALSE;   /* preserve underscores in input as spaces in output */
+boolean stripUnderscoreSuff = FALSE;   /* strip underscore suffixes from labels in input */
+boolean dashToSpace = FALSE;    /* convert dash to space */
+boolean underToSpace = FALSE;   /* convert underscore to space */
 boolean monospace = FALSE;      /* use monospace font */
 int branchDecimals = 2;         /* show branch label length to two decimals by default */
-int branchMultiplier = 1;         /* multiply branch length by factor */
-char *escapePattern = NULL;      /* use to escape dash '-' char in input */
+int branchMultiplier = 1;       /* multiply branch length by factor */
 char layoutErrMsg[1024] = "";
 
 /* Null terminated list of CGI Variables we don't want to save
@@ -220,13 +221,24 @@ else if (phyloTree->numEdges == 0)  /* leaf */
 	return;
 	}
 
-    /* de-escape name if needed */
-    if(stringIn(escapePattern,phyloTree->ident->name))
+    if(dashToSpace)
 	{
 	char *temp = phyloTree->ident->name;
-	phyloTree->ident->name = replaceChars(temp,escapePattern," ");
+	phyloTree->ident->name = replaceChars(temp,"-"," ");
 	freez(&temp);
 	}	
+
+    if(underToSpace)
+	{
+	char *temp = phyloTree->ident->name;
+	phyloTree->ident->name = replaceChars(temp,"_"," ");
+	freez(&temp);
+	}	
+
+    /* strip underscore suffixes option */
+    if (stripUnderscoreSuff)
+	stripUnderscoreSuffixes(phyloTree->ident->name);
+
     w=mgFontStringWidth(font,phyloTree->ident->name);
     if (w > *pMaxLabelWidth)
 	*pMaxLabelWidth = w;
@@ -390,7 +402,9 @@ if (useCart)
     branchLabels = cartVarExists(cart,"phyloGif_branchLabels");
     branchDecimals = cartUsualInt(cart,"phyloGif_branchDecimals", branchDecimals);
     branchMultiplier = cartUsualInt(cart,"phyloGif_branchMultiplier", branchMultiplier);
-    preserveUnderscores = cartVarExists(cart,"phyloGif_underscores");
+    stripUnderscoreSuff = cartVarExists(cart,"phyloGif_undersuff_strip");
+    dashToSpace = cartVarExists(cart,"phyloGif_dash_to_space");
+    underToSpace = cartVarExists(cart,"phyloGif_under_to_space");
     monospace = cartVarExists(cart, "phyloGif_monospace");
     }
 else
@@ -403,7 +417,9 @@ else
     branchLabels = cgiVarExists("phyloGif_branchLabels");
     branchDecimals = cgiUsualInt("phyloGif_branchDecimals", branchDecimals);
     branchMultiplier = cgiUsualInt("phyloGif_branchMultiplier", branchMultiplier);
-    preserveUnderscores = cgiVarExists("phyloGif_underscores");
+    stripUnderscoreSuff = cgiVarExists("phyloGif_undersuff_strip");
+    dashToSpace = cgiVarExists("phyloGif_dash_to_space");
+    underToSpace = cgiVarExists("phyloGif_under_to_space");
     monospace = cgiVarExists("phyloGif_monospace");
     }
     
@@ -429,7 +445,9 @@ if (useCart)
 	puts("<tr><td>&nbsp; Show length values?</td><td>"); cartMakeCheckBox(cart, "phyloGif_branchLabels", branchLabels); puts("</td></tr>");
 	puts("<tr><td>&nbsp; How many decimal places?</td><td>"); cartMakeIntVar(cart, "phyloGif_branchDecimals", branchDecimals,1); puts("</td></tr>");
 	puts("<tr><td>&nbsp; Multiply branch length by factor?</td><td>"); cartMakeIntVar(cart, "phyloGif_branchMultiplier", branchMultiplier,5); puts("</td></tr>");
-	puts("<tr><td>Preserve Underscores?</td><td>"); cartMakeCheckBox(cart, "phyloGif_underscores", preserveUnderscores); puts("</td></tr>");
+	puts("<tr><td>Strip underscore-suffixes?</td><td>"); cartMakeCheckBox(cart, "phyloGif_undersuff_strip", stripUnderscoreSuff); puts("</td></tr>");
+	puts("<tr><td>Change dash to space?</td><td>"); cartMakeCheckBox(cart, "phyloGif_dash_to_space", dashToSpace); puts("</td></tr>");
+	puts("<tr><td>Change underscore to space?</td><td>"); cartMakeCheckBox(cart, "phyloGif_under_to_space", underToSpace); puts("</td></tr>");
 	puts("<tr><td>Wrap in html page?</td><td>"); cartMakeCheckBox(cart, "phyloGif_htmlPage", htmlPageWrapper); puts("</td></tr>");
 	puts("<tr><td>Monospace font?</td><td>"); cartMakeCheckBox(cart, "phyloGif_monospace", monospace); puts("</td></tr>");
 
@@ -471,14 +489,14 @@ if (useCart)
 "\n"
 "1. Length-ruler and length-values cannot be shown unless use-branch-lengths is also checked.<br>\n"
 "<br>\n"
-"2. Underscores and anything following them are automatically stripped from node labels\n"
-"unless the preserve-underscores checkbox is checked, in which case they are converted to spaces.<br>\n"
+"2. If \"Strip underscore-suffixes?\" is checked, underscores and anything following them are stripped from node labels.<br>\n"
 "<br>\n"
-"3. If a space is required in a node label, enter it as a dash.<br>\n"
+"3. For backwards compatibility, options exist to convert a dash or underscore to a space in a node label.<br>\n"
 "<br>\n"
 "4. The tree is in the phastCons or .nh format name:length.  Parentheses create a parent.\n"
 "Parents must have two children. Length is not required if use-branch-lengths is not checked.\n"
 "The length of the root branch is usually not specified.<br>\n"
+"<br>\n"
 "Examples:<br>\n"
 "<table cellpadding=10>\n"
 "<tr><td><PRE>\n"
@@ -504,6 +522,18 @@ if (useCart)
 "    (tetraodon,zebrafish));\n"
 "</PRE></td><td>\n"
 "<IMG SRC=\"?phyloGif_width=200&phyloGif_height=200&phyloGif_tree=(((((((mouse,rat),human),(dog,cow)),opossum),chicken),xenopus),(tetraodon,zebrafish));\">\n"
+"</td></tr>\n"
+"<tr><td>\n"
+"We have extended the Newick format to allow spaces <br>\n"
+"and other non-alphanumeric characters in node labels.<br>\n"
+"If you need a backslash, comma, semi-colon, colon, or parenthesis,<br>\n"
+"it must be escaped with a back-slash character. <br>\n"
+"<PRE>\n"
+"((Brandt's myotis \\(bat\\):0.1,\n"
+"  White-tailed eagle:0.1):0.2,\n"
+" S. purpuratus:0.15);\n"
+"</PRE></td><td>\n"
+"<IMG SRC=\"?phyloGif_width=200&phyloGif_height=120&phyloGif_branchLengths=1&phyloGif_tree=((Brandt's myotis \\(bat\\):0.1,White-tailed eagle:0.1):0.2,S. purpuratus:0.15);\">\n"
 "</td></tr>\n"
 "</table>\n"
 "5. PhastCons branch lengths are expected substitutions per site, allowing for\n"
@@ -545,8 +575,12 @@ if (htmlPageWrapper)
 	printf("&phyloGif_branchLabels=1");
     printf("&phyloGif_branchDecimals=%d",branchDecimals);
     printf("&phyloGif_branchMultipliers=%d",branchMultiplier);
-    if (preserveUnderscores)
+    if (stripUnderscoreSuff)
 	printf("&phyloGif_underscores=1");
+    if (dashToSpace)
+	printf("&phyloGif_dash_to_space=1");
+    if (underToSpace)
+	printf("&phyloGif_under_to_space=1");
     if (monospace)
 	printf("&phyloGif_monospace=1");
     puts("\"></body></html>");
@@ -568,32 +602,13 @@ if (!onWeb && phyloData[0] != '(')
     phyloData = dyStringCannibalize(&dy);
     }
 
-/* preserve underscores option */
-if (preserveUnderscores)
+/* remove carriage returns which are a side-effect of html forms */
+if (strchr(phyloData,'\r'))
     {
     char *temp = phyloData;
-    phyloData = replaceChars(temp,"_","-");
-    freez(&temp);
-    }
-
-/* get rid of underscore suffixes */
-stripUnderscoreSuffixes(phyloData);
-
-/* escape dash chars with some XXX pattern */
-escapePattern = cloneString("");
-do
-    {
-    char *temp = escapePattern;
-    escapePattern=addSuffix(temp,"X");
-    freez(&temp);
-    } while (stringIn(escapePattern,phyloData));
-if (strchr(phyloData,'-'))
-    {
-    char *temp = phyloData;
-    phyloData = replaceChars(temp,"-",escapePattern);
+    phyloData = replaceChars(temp,"\r","");
     freez(&temp);
     }	
-
 
 /* add trailing semi-colon if it got stripped off */
 if (!strchr(phyloData,';'))
@@ -602,7 +617,6 @@ if (!strchr(phyloData,';'))
     phyloData = addSuffix(phyloData,";");
     freez(&temp);
     }
-
 
 /* parse phyloTree, but catch errAborts if any */
 
