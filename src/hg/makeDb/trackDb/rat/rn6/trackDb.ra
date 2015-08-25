@@ -12,3 +12,13 @@ termRegex A[ACY][B012][R0-9][0-9]+(\.[0-9]+)*
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
+searchTable sgpGene
+searchType genePred
+termRegex chr[0-9MUXYn]+[ABKLRv0-9_]+(alt_|random_)?[0-9]+(\.[0-9]+)?
+searchPriority 50
+
+searchTable geneid
+searchType genePred
+searchMethod prefix
+termRegex chr[0-9MUXYn]+[ABKLRv0-9_]+(alt_|random_)?[0-9]+(\.[0-9]+)?
+searchPriority 50

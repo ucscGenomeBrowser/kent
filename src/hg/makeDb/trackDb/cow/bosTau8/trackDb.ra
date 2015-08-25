@@ -6,3 +6,14 @@ html gold
 track gap override
 html gap
 
+searchTable sgpGene
+searchType genePred
+termRegex chr[0-9MUXn]+_[GJv0-9_]+(\.[0-9]+)?
+searchPriority 50
+
+searchTable geneid
+searchType genePred
+searchMethod prefix
+termRegex chr[0-9MUXn]+_[GJv0-9_]+(\.[0-9]+)?
+searchPriority 50
+
