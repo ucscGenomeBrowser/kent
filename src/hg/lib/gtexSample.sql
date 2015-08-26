@@ -5,9 +5,17 @@
 
 #GTEx sample description
 CREATE TABLE gtexSample (
-    name varchar(255) not null,	# GTEX sample identifier
-    tissue varchar(255) not null,	# Tissue name
-    donor varchar(255) not null,	# GTEX subject identifier
+    sampleId varchar(255) not null,	# GTEx sample identifier
+    tissue varchar(255) not null,	# Tissue name. Links to tissue table
+    donor varchar(255) not null,	# GTEx subject identifier. Links to donor table
+    autolysisScore int not null default '-1',	# Level of tissue self-digestion (0-3; none,mild,moderate,severe, -1 if unknown)
+    ischemicTime varchar(255) not null default 'unknown',	# Time from tissue removal to preservation, in 4hr intervals
+    rin float not null default '0.0',	# RNA Integrity Number
+    collectionSites varchar(255) not null,	# GTEx Biospecimen Source Site list
+    batchId varchar(255) not null,	# Nucleic acid isolation batch ID
+    isolationType varchar(255) not null,	# Type of nucleic acid isolation
+    isolationDate varchar(255) not null,	# Date of nucleic acid isolation
+    pathNotes varchar(1024) not null default '',	# Pathology report notes
               #Indices
-    PRIMARY KEY(name)
+    PRIMARY KEY(sampleId)
 );

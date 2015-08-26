@@ -60,13 +60,6 @@ hgsql hgFixed -N -e 'select tissue from gtexTissue' > bioSamples.txt
 
 # Reload tables for new schemas  8/14/14
 set dataDir = /hive/data/outside/GTEx/2014-01-17
-hgGtex -tab=output gtex \
-    $dataDir/geneCounts/GTEx_Analysis_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct \
-    $dataDir/metadata/GTEx_Data_2014-01-17_Annotations_SampleAttributesDS.txt \
-    $dataDir/metadata/GTEx_Data_2014-01-17_Annotations_SubjectPhenotypes_DS.txt \
-    $dataDir/tissues.tab
-
-<<<<<<< HEAD
 # run with new options, just to get info table
 hgGtex -tab=output2 gtex2 V4 \
     $dataDir/GTEx_Analysis_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct \
@@ -125,4 +118,16 @@ cd portal
 # convert hex colors to decimal (mysql LOAD DATA won't convert)
 awk -F"\t"  --non-decimal-data '{printf("%d\t%s\t%s\t%s\t%d\n", $1, $2, $3, $4, $5)}' gtexColorTissue.tab > gtexColorTissue.dec.tab
 hgLoadSqlTab  hgFixed gtexTissue ~/kent/src/hg/lib/gtexTissue.sql gtexColorTissue.dec.tab
+
+# Bulk up sample table with new schema
+set dataDir = /hive/data/outside/GTEx/2014-01-17
+~kate/kent/src/hg/makeDb/outside/hgGtex/hgGtex -noLoad -noData -tab=fullSample gtex2 V4 \
+    $dataDir/GTEx_Analysis_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct \
+    $dataDir/GTEx_Data_2014-01-17_Annotations_SampleAttributesDS.txt \
+    $dataDir/GTEx_Data_2014-01-17_Annotations_SubjectPhenotypes_DS.txt \
+    $dataDir/portal/gtexColorTissue.dec.tab
+
+cd fullSample
+hgLoadSqlTab hgFixed gtexSampleFull ~kate/kent/src/hg/lib/gtexSample.sql gtex2Sample.tab
+
 

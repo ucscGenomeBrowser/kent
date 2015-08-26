@@ -20,6 +20,7 @@
 char *database = "hgFixed";
 char *tabDir = ".";
 boolean doLoad = FALSE;
+boolean doData = FALSE;
 boolean doRound = FALSE;
 boolean median = FALSE;
 boolean exon = FALSE;
@@ -55,6 +56,7 @@ errAbort(
   "    -database=XXX (default %s)\n"
   "    -tab=dir - Output tab-separated files to directory.\n"
   "    -noLoad  - If true don't load database and don't clean up tab files\n"
+  "    -noData  - If true, don't create data files/tables (just metadata)\n"
   "    -doRound - If true round data values\n"
   "    -limit=N - Only do limit rows of data table, for testing\n"
   "    -exon -    Create exon tables instead of gene tables\n" 
@@ -69,6 +71,7 @@ static struct optionSpec options[] = {
    {"database", OPTION_STRING},
    {"tab", OPTION_STRING},
    {"noLoad", OPTION_BOOLEAN},
+   {"noData", OPTION_BOOLEAN},
    {"doRound", OPTION_BOOLEAN},
    {"exon", OPTION_BOOLEAN},
    {"limit", OPTION_INT},
@@ -79,10 +82,22 @@ static struct optionSpec options[] = {
 /* Process sample file */
 
 #define SAMPLE_FIRST_FIELD_LABEL "SAMPID"
-#define SAMPLE_ORGAN_FIELD_INDEX 5
 #define SAMPLE_TISSUE_FIELD_LABEL "SMTSD"
-#define SAMPLE_TISSUE_FIELD_INDEX 6
+
+// NOTE: more robust to include map of GTEX field names (do this if we include RNA-seqC metrics)
+
 #define SAMPLE_NAME_FIELD_INDEX 0
+#define SAMPLE_AUTOLYSIS_FIELD_INDEX 1
+#define SAMPLE_CENTERS_FIELD_INDEX 2
+#define SAMPLE_PATHOLOGY_FIELD_INDEX 3
+#define SAMPLE_RIN_FIELD_INDEX 4
+#define SAMPLE_ORGAN_FIELD_INDEX 5
+#define SAMPLE_TISSUE_FIELD_INDEX 6
+#define SAMPLE_ISCHEMIC_FIELD_INDEX 7
+#define SAMPLE_BATCH_FIELD_INDEX 8
+#define SAMPLE_ISOLATION_FIELD_INDEX 9
+#define SAMPLE_DATE_FIELD_INDEX 10
+
 
 int parseSampleFileHeader(struct lineFile *lf)
 /* Parse GTEX sample file header. Return number of columns */
@@ -168,7 +183,7 @@ while (lineFileNext(lf, &line, NULL))
         continue;
 
     AllocVar(sample);
-    sample->name = sampleId;
+    sample->sampleId = sampleId;
 
     /*  donor is first 2 components of sampleId: GTEX-XXXX */
     char *donor = cloneString(sampleId);
@@ -177,6 +192,44 @@ while (lineFileNext(lf, &line, NULL))
 
     verbose(4, "parseSamples: lookup %s in tissueNameHash\n", words[SAMPLE_TISSUE_FIELD_INDEX]);
     sample->tissue = hashMustFindVal(tissueNameHash, words[SAMPLE_TISSUE_FIELD_INDEX]);
+
+    verbose(4, "autolysis=%s, ischemic=%s, rin=%s, pathNotes=%s, sites=%s, batch=%s, isolation=%s, date=%s\n", 
+        words[SAMPLE_AUTOLYSIS_FIELD_INDEX],
+        words[SAMPLE_ISCHEMIC_FIELD_INDEX],
+        words[SAMPLE_RIN_FIELD_INDEX],
+        words[SAMPLE_PATHOLOGY_FIELD_INDEX],
+        words[SAMPLE_CENTERS_FIELD_INDEX],
+        words[SAMPLE_BATCH_FIELD_INDEX],
+        words[SAMPLE_ISOLATION_FIELD_INDEX],
+        words[SAMPLE_DATE_FIELD_INDEX]);
+
+    char *word = words[SAMPLE_AUTOLYSIS_FIELD_INDEX];
+    sample->autolysisScore = (isNotEmpty(word) ? sqlSigned(word) : -1);
+
+    //word = words[SAMPLE_ISCHEMIC_FIELD_INDEX];
+    //sample->ischemicTime = (word ? cloneString(word) : "unknown");
+    sample->ischemicTime = cloneString(words[SAMPLE_ISCHEMIC_FIELD_INDEX]);
+
+    word = words[SAMPLE_RIN_FIELD_INDEX];
+    sample->rin = (isNotEmpty(word) ? sqlFloat(word) : 0);
+
+    //word = words[SAMPLE_PATHOLOGY_FIELD_INDEX];
+    sample->pathNotes = cloneString(words[SAMPLE_PATHOLOGY_FIELD_INDEX]);
+
+    // Sites may be comma-sep list with embedded spaces.  Strip the spaces
+    word = cloneString(words[SAMPLE_CENTERS_FIELD_INDEX]);
+    stripChar(word, ' ');
+    sample->collectionSites = word;
+
+    // These are always populated
+    sample->batchId = cloneString(words[SAMPLE_BATCH_FIELD_INDEX]);
+
+    // Another field with embedded spaces -- strip them out
+    word = cloneString(words[SAMPLE_ISOLATION_FIELD_INDEX]);
+    subChar(word, ' ', '_');
+    sample->isolationType = word;
+
+    sample->isolationDate = cloneString(words[SAMPLE_DATE_FIELD_INDEX]);
     verbose(4, "Adding sample: \'%s'\n", sampleId);
     hashAdd(hash, sampleId, sample);
     }
@@ -643,6 +696,8 @@ if (!exon)
         carefulClose(&donorFile);
         }
     }
+if (!doData)
+    return;
 
 /* Ready to process data items */
 
@@ -746,6 +801,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 database = optionVal("database", database);
 doLoad = !optionExists("noLoad");
+doData = !optionExists("noData");
 doRound = optionExists("doRound");
 releaseDate = optionVal("releaseDate", "0");
 exon = optionExists("exon");
