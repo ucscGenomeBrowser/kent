@@ -1,4 +1,4 @@
-A = ${DESTBINDIR}/bigWigMerge
+A = bigWigMerge
 include ../../../inc/common.mk
 
 TESTOUT = output
