@@ -8,8 +8,7 @@ TESTEXPECTED = expected
 test: test1
 
 outputDir:
-	@${MKDIR} -p output
-	@${MKDIR} -p tmp
+	@${MKDIR} -p ${TESTOUT}
 
 test1: outputDir 
 	bedGraphToBigWig ${TESTIN}/t2.bed ${TESTIN}/hg19.chrom.sizes ${TESTOUT}/t2.bw
@@ -22,4 +21,7 @@ test1: outputDir
 	diff ${TESTOUT}/12merge.max.bedGraph ${TESTEXPECTED}/12merge.max.bedGraph 
 	${A} -max ${TESTOUT}/t2.bw ${TESTOUT}/t1.bw ${TESTOUT}/21merge.max.bedGraph
 	diff ${TESTOUT}/21merge.max.bedGraph ${TESTEXPECTED}/21merge.max.bedGraph 
+	rm -rf ${TESTOUT}
+
+clean:
 	rm -rf ${TESTOUT}
