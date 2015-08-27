@@ -28,6 +28,7 @@ errAbort(
   "   -adjust=0.N - add adjustment to each value\n"
   "   -clip=NNN.N - values higher than this are clipped to this value\n"
   "   -inList - input file are lists of file names of bigWigs\n"
+  "   -max - merged value is maximum from input files rather than sum\n"
   );
 }
 
@@ -35,12 +36,14 @@ double clThreshold = 0.0;
 double clAdjust = 0.0;
 double clClip = BIGDOUBLE;
 boolean clInList = FALSE;
+boolean clMax = FALSE;
 
 static struct optionSpec options[] = {
    {"threshold", OPTION_DOUBLE},
    {"adjust", OPTION_DOUBLE},
    {"clip", OPTION_DOUBLE},
    {"inList", OPTION_BOOLEAN},
+   {"max", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -187,7 +190,15 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
 	        val = clClip;
 	    int end = iv->end;
 	    for (i=iv->start; i < end; ++i)
-	         mergeBuf[i] += val;
+                {
+                if (clMax)
+                    {
+                    if (mergeBuf[i] < val) 
+                        mergeBuf[i] = val;
+                    }
+                else
+                    mergeBuf[i] += val;
+                }
 	    }
 	}
 
@@ -217,6 +228,7 @@ clThreshold = optionDouble("threshold", clThreshold);
 clAdjust = optionDouble("adjust", clAdjust);
 clClip = optionDouble("clip", clClip);
 clInList = optionExists("inList");
+clMax = optionExists("max");
 int minArgs = 4;
 if (clInList)
     minArgs -= 1;

@@ -141,7 +141,7 @@ utils: libs destBin
 	cd utils && ${MAKE}
 	cd hg && ${MAKE} utils
 
-utils-alpha: libs
+utils-alpha: libs destBin
 	${MKDIR} ${SCRIPTS}
 	cd parasol && ${MAKE}
 	@for D in ${DIRS} x; do \
@@ -150,6 +150,7 @@ utils-alpha: libs
                 x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
             fi ;\
 	done
+	cd utils && ${MAKE}
 	cd hg && ${MAKE} utils
 
 DIRS = ameme blat index dnaDust protDust weblet aladdin primeMate fuse meta tagStorm

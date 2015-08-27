@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 ############################################################################
-# STS MARKERS (WORKING - 2015-06-15 - Hiram)
+# STS MARKERS (DONE - 2015-06-22 - Hiram)
     # do NOT need to start over with downloads from NCBI, the data files
     # remain the same from hg19, simply start using the files prepared during
     # the hg19 build to run the blat alignments

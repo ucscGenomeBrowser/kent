@@ -57,7 +57,7 @@ var cart = (function() {
     function checkCommandObjType(commandObj) {
         // Make sure commandObj has the correct structure: an object of objects.
         // Throw [message, badValue] otherwise.
-        if (! $.isPlainObject(commandObj)) {
+        if (! _.isPlainObject(commandObj)) {
 	    throw(['cart: commandObj is not an object', commandObj]);
         }
         // Make sure that commandObj children are objects.

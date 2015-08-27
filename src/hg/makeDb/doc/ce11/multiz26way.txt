@@ -300,8 +300,8 @@ done | sort -k4,4nr
     wc -w species.list
     #  26 species.list
 
-    # ce11 caePb3 caeRem4 cb4 caeJap4 caeSp111 caeAng2 caeSp51 hetBac1 
-    # strRat2 panRed1 ancCey1 necAme1 haeCon2 ascSuu1 priExs1 priPac3 melHap1 
+    # ce11 caePb3 caeRem4 cb4 caeJap4 caeSp111 caeAng2 caeSp51 hetBac1
+    # strRat2 panRed1 ancCey1 necAme1 haeCon2 ascSuu1 priExs1 priPac3 melHap1
     # melInc2 burXyl1 dirImm1 loaLoa1 oncVol1 bruMal2 triSpi1 triSui1
 
     #	bash shell syntax here ...
@@ -331,14 +331,14 @@ done | sort -k4,4nr
     ls -lR | grep chrM | awk '{print $NF}' \
       | sed -e 's#.*lastz.##; s#/mafNet.*##;' | sort \
         | xargs echo | fold -w72 -s
-# ancCey1 ascSuu1 bruMal2 burXyl1 caeAng2 caeJap4 caePb3 caeRem4 caeSp51 
-# cb4 dirImm1 haeCon2 hetBac1 loaLoa1 melHap1 melInc2 necAme1 oncVol1 
+# ancCey1 ascSuu1 bruMal2 burXyl1 caeAng2 caeJap4 caePb3 caeRem4 caeSp51
+# cb4 dirImm1 haeCon2 hetBac1 loaLoa1 melHap1 melInc2 necAme1 oncVol1
 # panRed1 priExs1 priPac3 strRat2 triSpi1 triSui1
 
     # compared to all of them:
     sort species.list.txt |  xargs echo | fold -w 72 -s
-# ancCey1 ascSuu1 bruMal2 burXyl1 caeAng2 caeJap4 caePb3 caeRem4 caeSp111 
-# caeSp51 cb4 ce11 dirImm1 haeCon2 hetBac1 loaLoa1 melHap1 melInc2 
+# ancCey1 ascSuu1 bruMal2 burXyl1 caeAng2 caeJap4 caePb3 caeRem4 caeSp111
+# caeSp51 cb4 ce11 dirImm1 haeCon2 hetBac1 loaLoa1 melHap1 melInc2
 # necAme1 oncVol1 panRed1 priExs1 priPac3 strRat2 triSpi1 triSui1
 
     # looks like it is caeSp111 that has no chrM alignment
@@ -586,6 +586,7 @@ foreach db (`cat ../species.list`)
     foreach table ($tables)
         if ($table == "ensGene" || $table == "refGene" || \
            $table == "mgcGenes" || $table == "knownGene" || \
+           $table == "ws245Genes" || $table == "ncbiGenes" || \
            $table == "xenoRefGene" ) then
            set count = `hgsql $db -N -e "select count(*) from $table"`
             echo -n "${table}: ${count}, "
@@ -606,35 +607,41 @@ end
     # << happy emacs
     chmod +x ./showGenes.csh
     time ./showGenes.csh
-# ce11: ensGene: 208239, knownGene: 104178, mgcGenes: 34081, refGene: 57705, xenoRefGene: 177750, Mrnas: 10985845
-# panTro4: ensGene: 29160, refGene: 2685, xenoRefGene: 290502, Mrnas: 11222
-# panPan1: xenoRefGene: 397121, Mrnas: 566
-# gorGor3: ensGene: 35410, xenoRefGene: 351498, Mrnas: 1
-# ponAbe2: ensGene: 29447, refGene: 3567, xenoRefGene: 299469, Mrnas: 0
-# nomLeu3: xenoRefGene: 197874, Mrnas: 49
-# rheMac3: refGene: 6533, xenoRefGene: 285039, Mrnas: 443918
-# macFas5: refGene: 2270, xenoRefGene: 285672, Mrnas: 177462
-# papAnu2: ensGene: 29030, refGene: 493, xenoRefGene: 306224, Mrnas: 146334
-# chlSab2: xenoRefGene: 220979, Mrnas: 37897
-# nasLar1: xenoRefGene: 325020, Mrnas: 4
-# rhiRox1: xenoRefGene: 331330, Mrnas: 11
-# calJac3: ensGene: 55116, refGene: 220, xenoRefGene: 313854, Mrnas: 294478
-# saiBol1: xenoRefGene: 444216, Mrnas: 85
-# tarSyr2: xenoRefGene: 317437, Mrnas: 8
-# micMur1: ensGene: 37458, xenoRefGene: 554904, Mrnas: 59
-# otoGar3: ensGene: 28565, xenoRefGene: 419687, Mrnas: 13
-# tupBel1: ensGene: 34727, xenoRefGene: 663087, Mrnas: 2506
-# mm10: ensGene: 103734, knownGene: 61642, mgcGenes: 26768, refGene: 34889, xenoRefGene: 166792, Mrnas: 5226306
-# canFam3: ensGene: 29884, refGene: 2160, xenoRefGene: 256498, Mrnas: 387764
-
-# real    5m45.745s
+# ce11: ensGene: 57834, refGene: 52558, ws245Genes: 57528, Mrnas: 51806
+# caePb3: ws245Genes: 33210, xenoRefGene: 189584,
+# caeRem4: ws245Genes: 32899, xenoRefGene: 155137,
+# cb4: ws245Genes: 23050, xenoRefGene: 130721,
+# caeJap4: ws245Genes: 38144, xenoRefGene: 158453,
+# caeSp111: ws245Genes: 27721,
+# caeAng2: ws245Genes: 33934,
+# caeSp51: ws245Genes: 46280,
+# hetBac1: ws245Genes: 20928,
+# strRat2: ncbiGenes: 12459,
+# panRed1: ws245Genes: 26372,
+# ancCey1: ws245Genes: 65583,
+# necAme1: ws245Genes: 19643,
+# haeCon2: ws245Genes: 26359,
+# ascSuu1: ws245Genes: 3082,
+# priExs1: ws245Genes: 24642,
+# priPac3: ws245Genes: 24243, xenoRefGene: 89467,
+# melHap1: ws245Genes: 14420, xenoRefGene: 88300,
+# melInc2: ws245Genes: 20365,
+# burXyl1: ws245Genes: 18074,
+# dirImm1: ws245Genes: 12857,
+# loaLoa1: ws245Genes: 15577,
+# oncVol1: ws245Genes: 12385,
+# bruMal2: ws245Genes: 18709,
+# triSpi1: ws245Genes: 16380,
+# triSui1: ws245Genes: 14435,
 
     # from that summary, use these gene sets:
-    # knownGene - ce11 mm10
-    # ensGene - canFam3 panTro4 gorGor3 ponAbe2 papAnu2 calJac3 micMur1
-    #     otoGar3 tupBel1
-    # refGene - macFas5 rheMac3
-    # no annotation: nasLar1 rhiRox1 tarSyr2 panPan1 nomLeu3 chlSab2 saiBol1
+    # ensGene - ce11
+    # ws245Genes - caePb3 caeRem45 cb4 caeJap4 caeSp111 caeAng2 caeSp51
+    #              hetBac1 panRed1 ancCey1 necAme1 necAme1 haeCon2 priPac3
+    #              melHap1 melInc2 burXyl1 dirImm1 loaLoa1 oncVol1 bruMal2
+    #              triSpi1 triSui1
+    # to be done: ascSuu1
+XXX - waiting for ascSuu1 - Tue Aug 18 15:10:42 PDT 2015
 
     mkdir genes
 
@@ -750,13 +757,13 @@ done
     # the annotated mafs are in
     ../anno/result/*.maf
 
-    # using knownGene for ce11
-    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ce11 > ce11.knownGene.gp
+    # using ensGene for ce11
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ce11 > ce11.ensGene.gp
 
-    genePredSingleCover ce11.knownGene.gp stdout | sort > ce11.knownGeneNR.gp
+    genePredSingleCover ce11.ensGene.gp stdout | sort > ce11.ensGeneNR.gp
     wc -l *
-    #   104178 ce11.knownGene.gp
-    #    21887 ce11.knownGeneNR.gp
+    #    57834 ce11.ensGene.gp
+    #    20412 ce11.ensGeneNR.gp
 
     ssh ku
     mkdir /hive/data/genomes/ce11/bed/multiz26way/4d/run
@@ -775,7 +782,7 @@ set outDir = $r/4d/mfa/$3:h
 set outfile = $r/4d/mfa/$3
 /bin/mkdir -p $outDir
 cd /scratch/tmp
-/bin/awk -v C=$c '$2 == C {print}' $r/4d/ce11.knownGeneNR.gp | sed -e "s/\t$c\t/\tce11.$c\t/" > $c.gp
+/bin/awk -v C=$c '$2 == C {print}' $r/4d/ce11.ensGeneNR.gp | sed -e "s/\t$c\t/\tce11.$c\t/" > $c.gp
 set NL=`wc -l $c.gp| gawk '{print $1}'`
 echo $NL
 if ("$NL" != "0") then
@@ -802,25 +809,30 @@ endif
     gensub2 maf.list single template jobList
     # -ram=32g to make sure they don't fail out of memory and don't run too fast
     para -ram=32g create jobList
-    para try ... check
-    para -maxJob=32 push
+    para try ... check   # the try runs all 7 jobs
     para time
-# Completed: 358 of 358 jobs
-# CPU time in finished jobs:       2508s      41.80m     0.70h    0.03d  0.000 y
-# IO & Wait Time:                   940s      15.67m     0.26h    0.01d  0.000 y
-# Average job time:                  10s       0.16m     0.00h    0.00d
-# Longest finished job:             220s       3.67m     0.06h    0.00d
-# Submission to last job:           252s       4.20m     0.07h    0.00d
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:         95s       1.59m     0.03h    0.00d  0.000 y
+# IO & Wait Time:                    21s       0.35m     0.01h    0.00d  0.000 y
+# Average job time:                  17s       0.28m     0.00h    0.00d
+# Longest finished job:              21s       0.35m     0.01h    0.00d
+# Submission to last job:            25s       0.42m     0.01h    0.00d
 
     # Not all results have contents, that is OK
 
     # combine mfa files
     ssh hgwdev
     cd /hive/data/genomes/ce11/bed/multiz26way/4d
-    # remove the broken empty files, size 0 and size 1:
-    find ./mfa -type f | xargs ls -og | awk '$3 < 2' | awk '{print $NF}' \
-        > empty.list
-    cat empty.list | xargs rm -f
+    # none of these results are empty:
+    ls -ogrt mfa
+# -rw-rw-r-- 1    1417 Aug 18 15:14 chrM.mfa
+# -rw-rw-r-- 1 5577097 Aug 18 15:14 chrII.mfa
+# -rw-rw-r-- 1 4732903 Aug 18 15:14 chrIV.mfa
+# -rw-rw-r-- 1 4185213 Aug 18 15:14 chrIII.mfa
+# -rw-rw-r-- 1 4402105 Aug 18 15:14 chrX.mfa
+# -rw-rw-r-- 1 6934921 Aug 18 15:14 chrV.mfa
+# -rw-rw-r-- 1 4628253 Aug 18 15:14 chrI.mfa
+
     #want comma-less species.list
     time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
 	--aggregate "`cat ../species.list`" mfa/*.mfa | sed s/"> "/">"/ \
@@ -829,55 +841,66 @@ endif
 
     # check they are all in there:
     grep "^>" 4d.all.mfa | wc -l
-    # 20
+    # 26
     grep "^>" 4d.all.mfa | sed -e 's/^/# /;'
 # >ce11
-# >panTro4
-# >panPan1
-# >gorGor3
-# >ponAbe2
-# >nomLeu3
-# >rheMac3
-# >macFas5
-# >papAnu2
-# >chlSab2
-# >nasLar1
-# >rhiRox1
-# >calJac3
-# >saiBol1
-# >tarSyr2
-# >micMur1
-# >otoGar3
-# >tupBel1
-# >mm10
-# >canFam3
+# >caePb3
+# >caeRem4
+# >cb4
+# >caeJap4
+# >caeSp111
+# >caeAng2
+# >caeSp51
+# >hetBac1
+# >strRat2
+# >panRed1
+# >ancCey1
+# >necAme1
+# >haeCon2
+# >ascSuu1
+# >priExs1
+# >priPac3
+# >melHap1
+# >melInc2
+# >burXyl1
+# >dirImm1
+# >loaLoa1
+# >oncVol1
+# >bruMal2
+# >triSpi1
+# >triSui1
 
     sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
 	../ce11.26way.nh | xargs echo | sed -e 's/ //g' > tree_commas.nh
     # tree_commas.nh looks like:
-    # ((((((((((((ce11,panTro4),panPan1),gorGor3),ponAbe2),nomLeu3),
-    #   ((((rheMac3,macFas5),papAnu2),chlSab2),(nasLar1,rhiRox1))),
-    #     (calJac3,saiBol1)),tarSyr2),(micMur1,otoGar3)),tupBel1),mm10),canFam3)
+    # (((((((((((((ce11,(caePb3,(caeRem4,cb4))),caeJap4),caeSp111),caeAng2),
+    #   caeSp51),hetBac1),(strRat2,panRed1)),((ancCey1,necAme1),haeCon2)),
+    #      ascSuu1),(priExs1,priPac3)),((melHap1,melInc2),burXyl1)),
+    #          (((dirImm1,loaLoa1),oncVol1),bruMal2)),(triSpi1,triSui1))
 
     # use phyloFit to create tree model (output is phyloFit.mod)
     time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
 	    --EM --precision MED --msa-format FASTA --subst-mod REV \
 		--tree tree_commas.nh 4d.all.mfa
-    #   real    4m21.836s
+    #   real    102m23.619s
 
     mv phyloFit.mod all.mod
 
     grep TREE all.mod
-# TREE: ((((((((((((ce11:0.00988692,panTro4:0.00346722):0.00188147,
-#  panPan1:0.00264326):0.00531373,gorGor3:0.00893149):0.00925601,
-#  ponAbe2:0.0188981):0.0034213,nomLeu3:0.0230926):0.011557,
-#  ((((rheMac3:0.00340845,macFas5:0.00235962):0.00535291,
-#  papAnu2:0.00850951):0.0040808,chlSab2:0.0129507):0.00594416,
-#  (nasLar1:0.00691583,rhiRox1:0.00647931):0.0119022):0.0216071):0.0217539,
-#  (calJac3:0.0352577,saiBol1:0.0327629):0.0373501):0.0612174,
-#  tarSyr2:0.142005):0.0118853,(micMur1:0.092909,
-#  otoGar3:0.128695):0.0342627):0.0166216,tupBel1:0.184214):0.0152928,
-#  mm10:0.330771):0.0876596,canFam3:0.0876596);
+# TREE: (((((((((((((ce11:0.641433,(caePb3:0.487648,
+# (caeRem4:0.443246,cb4:0.445294):0.0464154):0.0165647):0.00599635,
+# caeJap4:0.828929):0.00213273,caeSp111:0.526296):0.00774532,
+# caeAng2:0.983829):0.0266384,caeSp51:0.415189):0.385011,
+# hetBac1:1.35734):0.0946305,(strRat2:1.37255,
+# panRed1:1.10699):0.139767):0.0425575,
+# ((ancCey1:0.387375,necAme1:0.494722):0.308076,
+# haeCon2:0.755625):0.31865):0.0426445,ascSuu1:1.32614):0.0433534,
+# (priExs1:0.112444,priPac3:0.0999032):0.752898):0.0633886,
+# ((melHap1:0.237743,melInc2:0.205426):1.14699,
+# burXyl1:0.685906):0.156962):0.334957,(((dirImm1:0.213158,
+# loaLoa1:0.198781):0.00222742,oncVol1:0.16899):0.0727414,
+# bruMal2:0.174965):1.0837):0.137915,(triSpi1:0.820134,
+# triSui1:0.850407):0.137915);
 
     # compare these calculated lengths to the tree extracted from 183way:
     grep TREE all.mod | sed -e 's/TREE: //' \
@@ -1208,7 +1231,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 	../../cons/all/all.mod 0.567 > all.mod
     # verify, the BACKGROUND should now be paired up:
     grep BACK all.mod
-    #   BACKGROUND: 0.216500 0.283500 0.283500 0.216500 
+    #   BACKGROUND: 0.216500 0.283500 0.283500 0.216500
 
     cat << '_EOF_' > doPhyloP.csh
 #!/bin/csh -fe
@@ -1440,7 +1463,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 	    > ce11.26way.scientificNames.nh
     time md5sum *.nh > md5sum.txt
     #   real    1m55.320s
-    ln -s `pwd`/*.nh `pwd`/*.txt \ 
+    ln -s `pwd`/*.nh `pwd`/*.txt \
         /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/multiz26way
 
     # obtain the README.txt from ce11/multiz17way and update for this
