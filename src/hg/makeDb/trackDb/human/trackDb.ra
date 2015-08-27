@@ -251,9 +251,9 @@ type bed 12
 noScoreFilter .
 itemRgb on
 urlLabel KOMP Data Coordination Center:
-url http://www.knockoutmouse.org/search?criteria=$$
+url http://www.mousephenotype.org/data/genes/$$
 mgiUrlLabel MGI Report:
-mgiUrl http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
+mgiUrl http://www.informatics.jax.org/marker/$$
 exonNumbers off
 
 track acembly
