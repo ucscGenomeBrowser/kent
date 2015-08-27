@@ -254,6 +254,7 @@ urlLabel KOMP Data Coordination Center:
 url http://www.knockoutmouse.org/search?criteria=$$
 mgiUrlLabel MGI Report:
 mgiUrl http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
+exonNumbers off
 
 track acembly
 shortLabel AceView Genes
