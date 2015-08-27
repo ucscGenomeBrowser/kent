@@ -17,10 +17,10 @@ struct annoGrateWig
 };
 
 static struct annoRow *normalizeRows(const struct annoRow *rowsIn,
-                                     uint primaryStart, uint primaryEnd, struct lm *callerLm)
+                                     uint regionStart, uint regionEnd, struct lm *callerLm)
 /* This takes a series of wiggle chunks coming from .wig/database rows and makes it into
  * zero or more tidy little NAN-less annoRows.  Trim rowIn to the bounds of
- * primary, trim NANs from beginning and break into multiple rows where there
+ * region, trim NANs from beginning and break into multiple rows where there
  * are NANs in the middle.  If the rowIn is contiguous with the row at the
  * head of outList, expand that row to include rowIn's data. */
 {
@@ -28,8 +28,8 @@ struct annoRow *rowOutList = NULL;
 const struct annoRow *rowIn;
 for (rowIn = rowsIn;  rowIn != NULL;  rowIn = rowIn->next)
     {
-    uint start = max(rowIn->start, primaryStart);
-    uint end = min(rowIn->end, primaryEnd);
+    uint start = max(rowIn->start, regionStart);
+    uint end = min(rowIn->end, regionEnd);
     float *vector = rowIn->data;
     while (end > start)
         {
@@ -76,23 +76,23 @@ slReverse(&rowOutList);
 return rowOutList;
 }
 
-static struct annoRow *averageRows(struct annoRow *rowList, uint primaryStart, uint primaryEnd,
+static struct annoRow *averageRows(struct annoRow *rowList, uint regionStart, uint regionEnd,
                                    struct lm *callerLm)
-/* Return an annoRow with the average value of floats across all row->data (within primary item's
- * region), ignoring missing data and NANs.  Return NULL if rowList is NULL or if all bases
- * overlapping the primary item are NAN (unlikely, but could happen). */
+/* Return an annoRow with the average value of floats across all row->data (within region),
+ * ignoring missing data and NANs.  Return NULL if rowList is NULL or if all bases overlapping
+ * the region are NAN (unlikely, but could happen). */
 {
 if (rowList == NULL)
     return NULL;
 int count = 0;
 double sum = 0.0;
-uint start = max(rowList->start, primaryStart);
+uint start = max(rowList->start, regionStart);
 uint end = start;
 struct annoRow *row;
 for (row = rowList;  row != NULL;  row = row->next)
     {
-    uint rowStart = max(row->start, primaryStart);
-    uint rowEnd = min(row->end, primaryEnd);
+    uint rowStart = max(row->start, regionStart);
+    uint rowEnd = min(row->end, regionEnd);
     if (rowEnd > rowStart)
         {
         float *vector = row->data;
@@ -138,10 +138,22 @@ self->lmRowCount += slCount(rowsIn);
 if (retRJFilterFailed && *retRJFilterFailed)
     return NULL;
 struct annoRow *primaryRow = primaryData->rowList;
+struct annoStreamer *sSelf = (struct annoStreamer *)gSelf;
+uint regionStart, regionEnd;
+if (isNotEmpty(sSelf->chrom))
+    {
+    regionStart = max(primaryRow->start, sSelf->regionStart);
+    regionEnd = min(primaryRow->end, sSelf->regionEnd);
+    }
+else
+    {
+    regionStart = primaryRow->start;
+    regionEnd = primaryRow->end;
+    }
 if (self->mode == agwmAverage)
-    return averageRows(rowsIn, primaryRow->start, primaryRow->end, callerLm);
+    return averageRows(rowsIn, regionStart, regionEnd, callerLm);
 else if (self->mode == agwmPerBase)
-    return normalizeRows(rowsIn, primaryRow->start, primaryRow->end, callerLm);
+    return normalizeRows(rowsIn, regionStart, regionEnd, callerLm);
 else
     errAbort("agwIntegrate: invalid self->mode %d", self->mode);
 return NULL;
