@@ -104,6 +104,14 @@ self->needQuery = TRUE;
 resetRowBuf(&self->rowBuf);
 }
 
+static void startMerging(struct annoStreamDb *self)
+/* Set self->mergeBins flag and create self->qLm if necessary. */
+{
+self->mergeBins = TRUE;
+if (self->qLm == NULL)
+    self->qLm = lmInit(0);
+}
+
 static void asdSetRegion(struct annoStreamer *vSelf, char *chrom, uint regionStart, uint regionEnd)
 /* Set region -- and free current sqlResult if there is one. */
 {
@@ -149,8 +157,7 @@ if (!streamer->positionIsGenome)
 	// accumulating initial coarse-bin items and merge-sorting them with
 	// subsequent finest-bin items which will be in chromStart order.
 	resetMergeState(self);
-	self->mergeBins = TRUE;
-	self->qLm = lmInit(0);
+        startMerging(self);
 	}
     if (self->endFieldIndexName != NULL)
 	// Don't let mysql use a (chrom, chromEnd) index because that messes up
@@ -285,9 +292,7 @@ if (self->hasBin)
     if (self->doNextChunk && self->mergeBins && !self->gotFinestBin)
 	errAbort("annoStreamDb %s: can't continue merge in chunking query; "
 		 "increase ASD_CHUNK_SIZE", sSelf->name);
-    self->mergeBins = TRUE;
-    if (self->qLm == NULL)
-	self->qLm = lmInit(0);
+    startMerging(self);
     }
 if (self->endFieldIndexName != NULL)
     // Don't let mysql use a (chrom, chromEnd) index because that messes up
@@ -334,7 +339,11 @@ else
     else if (!self->doNextChunk)
 	{
 	self->queryChrom = self->queryChrom->next;
-	resetMergeState(self);
+        if (self->hasBin)
+            {
+            resetMergeState(self);
+            startMerging(self);
+            }
 	}
     if (minChrom != NULL)
 	{
@@ -343,14 +352,12 @@ else
 	    {
 	    self->queryChrom = self->queryChrom->next;
 	    self->doNextChunk = FALSE;
-	    resetMergeState(self);
 	    }
 	if (self->hasBin)
-	    {
-	    self->mergeBins = TRUE;
-	    if (self->qLm == NULL)
-		self->qLm = lmInit(0);
-	    }
+            {
+	    resetMergeState(self);
+            startMerging(self);
+            }
 	}
     if (self->queryChrom == NULL)
 	self->eof = TRUE;
@@ -474,8 +481,11 @@ static char **getFinestBinItem(struct annoStreamDb *self, char **row, boolean *p
 int bin = atoi(row[0]);
 while (bin < self->minFinestBin)
     {
-    // big item -- store aside in queue for merging later, move on to next item
-    slAddHead(&(self->bigItemQueue), rowToAnnoRow(self, row, *pRightFail, self->qLm));
+    // big item -- store aside in queue for merging later (unless it falls off the end of
+    // the current chunk), move on to next item
+    struct annoRow *aRow = rowToAnnoRow(self, row, *pRightFail, self->qLm);
+    if (! (self->doNextChunk && self->nextChunkStart <= aRow->start))
+        slAddHead(&(self->bigItemQueue), aRow);
     *pRightFail = FALSE;
     row = nextRowFiltered(self, pRightFail, minChrom, minEnd);
     if (row == NULL)
@@ -495,20 +505,23 @@ static struct annoRow *mergeRow(struct annoStreamDb *self, struct annoRow *aRow,
  * lower chromStart and save the other for later.  */
 {
 struct annoRow *outRow = aRow;
-if (self->bigItemQueue == NULL)
-    {
-    // No coarse-bin items to merge-sort, just stream finest-bin items from here on out.
-    resetMergeState(self);
-    }
-else if (annoRowCmp(&(self->bigItemQueue), &aRow) < 0)
+if (self->bigItemQueue != NULL && annoRowCmp(&(self->bigItemQueue), &aRow) < 0)
     {
     // Big item gets to go now, so save aside small item for next time.
     outRow = slPopHead(&(self->bigItemQueue));
     slAddHead(&(self->smallItemQueue), aRow);
     }
+// Clone outRow using callerLm
 enum annoRowType rowType = self->streamer.rowType;
 int numCols = self->streamer.numCols;
-return annoRowClone(outRow, rowType, numCols, callerLm);
+outRow = annoRowClone(outRow, rowType, numCols, callerLm);
+if (self->bigItemQueue == NULL && self->smallItemQueue == NULL)
+    {
+    // No coarse-bin items to merge-sort, just stream finest-bin items from here on out.
+    // This needs to be done after cloning outRow because it was allocated in self->qLm.
+    resetMergeState(self);
+    }
+return outRow;
 }
 
 static struct annoRow *nextQueuedRow(struct annoStreamDb *self, struct lm *callerLm)
