@@ -35,13 +35,15 @@ ifdef LOWELAB
     SYMLINKED_FILES += lowetooltip.js loweautocomplete.js
 endif
 
-jshint:
+jshintTop:
 	${JSHINT} ${UCSC_JS_FILES} ${STATIC_FILES}
 
-doInstall: jshint ${SUBDIRS:%=%.doInstall}
+doInstallTop: jshintTop
 	@mkdir -p ${DEST}/
 	../utils/cpAndLinkToResourceFiles.pl ${extra} -exclude='makefile' \
 			-versionFile=../inc/versionInfo.h -destDir=${DEST} ${SYMLINKED_FILES}
 	for file in ${STATIC_FILES}; do \
 	    rsync -a $$file ${DEST}/; \
 	done
+
+doInstall: doInstallTop ${SUBDIRS:%=%.doInstall}
