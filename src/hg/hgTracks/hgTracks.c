@@ -62,6 +62,7 @@
 #include "iupac.h"
 #include "botDelay.h"
 #include "chromInfo.h"
+#include "extTools.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
@@ -5855,8 +5856,11 @@ hPrintf("Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').cli
 hPrintf("Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').click() }); \n");
 
 // focus
-hPrintf("Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]').focus() }, 'keyup'); \n");
+hPrintf("Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]').focus(); return false; }, 'keydown'); \n");
 hPrintf("Mousetrap.bind('?', function() { $( \"#hotkeyHelp\" ).dialog({width:'600'});}); \n");
+
+// menu
+hPrintf("Mousetrap.bind('s t', showExtToolDialog); \n");
 
 hPrintf("</script>\n");
 
@@ -5874,7 +5878,7 @@ hPrintf("<tr><td> zoom in 3x</td><td class=\"hotkey\">i</td>        <td> reverse
 hPrintf("<tr><td> zoom in 10x</td><td class=\"hotkey\">I</td>       <td> resize</td><td class=\"hotkey\">r then s</td>                     </tr>\n");
 hPrintf("<tr><td> zoom in base level</td><td class=\"hotkey\">b</td><td> refresh</td><td class=\"hotkey\">r then f</td>                    </tr>\n");
 hPrintf("<tr><td> zoom out 1.5x</td><td class=\"hotkey\">ctrl+k</td><td> jump to position box</td><td class=\"hotkey\">/</td>        </tr>\n"); 
-hPrintf("<tr><td> zoom out 3x</td><td class=\"hotkey\">k</td>               </tr>\n");
+hPrintf("<tr><td> zoom out 3x</td><td class=\"hotkey\">k</td><td>Sent to external tool</td><td class=\"hotkey\">s then t</td>               </tr>\n");
 hPrintf("<tr><td> zoom out 10x</td><td class=\"hotkey\">K</td>              </tr>\n");
 hPrintf("<tr><td> zoom out 100x</td><td class=\"hotkey\">0</td>             </tr>\n");
 hPrintf("</table>\n");
@@ -6074,5 +6078,6 @@ if (cartOptionalString(cart, "udcTimeout"))
     }
 
 setupHotkeys();
+printExtMenuData();
 
 }

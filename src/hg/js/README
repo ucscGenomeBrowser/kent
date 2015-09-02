@@ -7,6 +7,9 @@ CGI or the library that uses them:
    hui.js       included by hui.c library code.
    utils.js     common utilities included by multiple CGIs.
 
+The "make top" target does a quick lint + copying of the main .js files. It's a lot faster
+than "make" alone. Use this for small modifications.
+
 The "make alpha", "make beta", and "make install" commands will place all files in
 JS_FILES and STATIC_FILES in apache/htdocs/js/.  "make user" will place both sets in
 apache/htdocs-{user}/js if it exists, and otherwise will place both sets in
