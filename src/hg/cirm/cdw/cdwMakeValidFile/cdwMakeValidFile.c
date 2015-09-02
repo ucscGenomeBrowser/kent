@@ -412,6 +412,41 @@ while (lineFileNext(lf, &line, &lineSize))
 lineFileClose(&lf);
 }
 
+void makeValidTabSepFile(struct sqlConnection *conn, char *path, struct cdwFile *ef, 
+    struct cdwValidFile *vf, char **labels, int fieldCount)
+/* Make sure a file looks like it's tab separated with a consistent number of columns and
+ * optionally first row matching labels. */
+{
+struct lineFile *lf = lineFileOpen(path, TRUE);
+char *row[fieldCount];
+boolean firstTime = TRUE;
+while (lineFileRowTab(lf, row))
+    {
+    if (firstTime && labels != NULL)
+        {
+	int i;
+	for (i=0; i<fieldCount; ++i)
+	    {
+	    if (differentString(labels[i], row[i]))
+	       errAbort("label mismatch field %d.  '%s' vs. '%s'", i, labels[i], row[i]);
+	    }
+	firstTime = FALSE;
+	}
+    else
+	vf->itemCount += 1;
+    }
+
+lineFileClose(&lf);
+}
+
+void makeValidKallistoAbundance( struct sqlConnection *conn, char *path, struct cdwFile *ef, 
+    struct cdwValidFile *vf)
+/* Make sure a kallisto abundance file looks all good */
+{
+char *labels[] = { "target_id",       "length",  "eff_length",      "est_counts",      "tpm", };
+makeValidTabSepFile(conn, path, ef, vf, labels, ArraySize(labels));
+}
+
 void makeValidHtml(struct sqlConnection *conn, char *path, struct cdwFile *ef, 
     struct cdwValidFile *vf)
 /* Fill in info about html file */
@@ -695,6 +730,10 @@ if (vf->format)	// We only can validate if we have something for format
     else if (sameString(format, "text"))
         {
 	makeValidText(conn, path, ef, vf);
+	}
+    else if (sameString(format, "kallisto_abundance"))
+	{
+        makeValidKallistoAbundance(conn, path, ef, vf);
 	}
     else if (sameString(format, "html"))
         {
