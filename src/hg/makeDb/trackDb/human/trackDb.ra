@@ -1022,6 +1022,7 @@ snpExceptionDesc snp144ExceptionDesc
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
+trackHandler snp125
 chimpOrangMacOrthoTable snp144OrthoPt4Pa2Rm3
 chimpDb panTro3
 orangDb ponAbe2
@@ -1041,6 +1042,7 @@ snpSeq snp144Seq
 snpExceptionDesc snp144ExceptionDesc
 defaultGeneTracks knownGene
 type bed 6 +
+trackHandler snp125
 chimpOrangMacOrthoTable snp144OrthoPt4Pa2Rm3
 chimpDb panTro3
 orangDb ponAbe2
@@ -1061,6 +1063,7 @@ defaultGeneTracks knownGene
 defaultMaxWeight 3
 maxWindowToDraw 10000000
 type bed 6 +
+trackHandler snp125
 chimpOrangMacOrthoTable snp144OrthoPt4Pa2Rm3
 chimpDb panTro3
 orangDb ponAbe2
@@ -1078,6 +1081,7 @@ urlLabel dbSNP:
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
+trackHandler snp125
 chimpOrangMacOrthoTable snp144OrthoPt4Pa2Rm3
 chimpDb panTro3
 orangDb ponAbe2
