@@ -13188,39 +13188,39 @@ else
 // If parents and children put in different handlers, there's no way to know which one
 // the child will get.
 
-static TrackHandler lookupTrackHandler(char *name)
+static TrackHandler lookupTrackHandler(struct trackDb *tdb)
 /* Lookup handler for track of give name.  Return NULL if none. */
 {
 if (handlerHash == NULL)
     return NULL;
-return hashFindVal(handlerHash, name);
-}
-
-TrackHandler lookupTrackHandlerClosestToHome(struct trackDb *tdb)
-/* Lookup handler for track of give name.  Try parents if
- * subtrack has a NULL handler.  Return NULL if none. */
-{
-TrackHandler handler = lookupTrackHandler(tdb->table);
-
-// while handler is NULL and we have a parent, use the parent's handler
-for( ; (handler == NULL) && (tdb->parent != NULL);  )
-    {
-    tdb = tdb->parent;
-    handler = lookupTrackHandler(tdb->table);
-    }
-
+TrackHandler handler = hashFindVal(handlerHash, tdb->table);
 // if nothing found, try the "trackHandler" statement
 if (handler == NULL)
     {
     char *handlerName = trackDbSetting(tdb, "trackHandler");
     if (handlerName != NULL)
         {
-        handler = lookupTrackHandler(handlerName);
+        handler = hashFindVal(handlerHash, handlerName);
         if (handler==NULL)
-            errAbort("track %s defined a trackHandler in trackDb which does not exist", tdb->track);
+            errAbort("track %s defined a trackHandler '%s' in trackDb which does not exist",
+                     tdb->track, handlerName);
         }
     }
+return handler;
+}
 
+TrackHandler lookupTrackHandlerClosestToHome(struct trackDb *tdb)
+/* Lookup handler for track of give name.  Try parents if
+ * subtrack has a NULL handler.  Return NULL if none. */
+{
+TrackHandler handler = lookupTrackHandler(tdb);
+
+// while handler is NULL and we have a parent, use the parent's handler
+for( ; (handler == NULL) && (tdb->parent != NULL);  )
+    {
+    tdb = tdb->parent;
+    handler = lookupTrackHandler(tdb);
+    }
 return handler;
 }
 
