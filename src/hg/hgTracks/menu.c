@@ -436,8 +436,20 @@ safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.defaultImgOrder=on", uiVars)
 appendLink(&links, buf, "Default Track Order", "defaultTrackOrderMenuLink", FALSE);
 appendLink(&links, "../cgi-bin/cartReset", "Reset All User Settings", "cartResetMenuLink", FALSE);
 
-struct dyString *viewMenu = dyStringCreate("<li class='menuparent' id='view'><span>View</span>\n<ul style='display: none; visibility: hidden;'>\n");
+// add the sendTo menu
+if (fileExists("extTools.ra"))
+    {
+    appendLinkWithOnclick(&links, "#", "In external tool", "Show current region on a third-party website", "extToolLink", "showExtToolDialog()", FALSE, FALSE);
+    }
+
+struct dyString *viewMenu = dyStringCreate("<li class='menuparent' id='view'><span>View</span>\n<ul>\n");
 freeLinksAndConvert(links, viewMenu);
+if (fileExists("extTools.ra"))
+    {
+    dyStringAppend(viewMenu, "<li class=\"menuparent\" id=\"sendTo\"><span>In external tool</span><ul>");
+    addSendToMenuItems(viewMenu, uiVars);
+    dyStringAppend(viewMenu, "</ul>\n</li>\n");
+    }
 dyStringAppend(viewMenu, "</ul>\n</li>\n");
 
 // add the sendTo menu
