@@ -20,6 +20,38 @@
 #include "obscure.h"
 #include "net.h"
 
+void printExtMenuData() 
+/* print the external tools aka "send to" menu entries as a javascript list to stdout */
+{
+struct extTool *extTools = readExtToolRa("extTools.ra");
+struct extTool *et;
+hPuts("<script>\n");
+hPuts("extTools = [\n");
+for(et = extTools; et != NULL; et = et->next)
+    {
+    if (et->dbs!=NULL)
+        {
+        if (!slNameInList(et->dbs, database))
+            continue;
+        }
+    if (et->notDbs!=NULL)
+        {
+        if (slNameInList(et->notDbs, database))
+            continue;
+        }
+    char* tool = jsonStringEscape(et->tool);
+    char* shortLabel = jsonStringEscape(et->shortLabel);
+    char* longLabel = jsonStringEscape(et->longLabel);
+    hPrintf("    ['%s', '%s', '%s', %d]", tool, shortLabel, longLabel, et->maxSize);
+    if (et->next)
+        hPuts(",");
+    hPuts("\n");
+    }
+hPuts("];\n");
+hPuts("</script>\n");
+
+}
+
 static char *cloneRaSetting(struct hash *hash, char *name, struct lineFile *lf, bool mustExist)
 /* clone a setting out of the ra hash.  errAbort if mustExit and not found, otherwise NULL. */
 {
