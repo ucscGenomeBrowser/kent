@@ -21,6 +21,7 @@
 #include "trackVersion.h"
 
 /* list of links to display in a menu */
+/* a link with an empty name is displayed as a horizontal separator line */
 struct hotLink
     {
     struct hotLink *next;
@@ -172,19 +173,27 @@ for(i = 0, link = links; link != NULL; i++, link = link->next)
         safef(class, sizeof(class), "first");
     else if (i + 1 == len)
         safef(class, sizeof(class), "last");
+    else if (isEmpty(link->name))
+        safef(class, sizeof(class), "horizSep");
     else
         class[0] = 0;
     dyStringAppend(menuHtml, "<li");
     char *encodedName = htmlEncode(link->name);
     if(*class)
         dyStringPrintf(menuHtml, " class='%s'", class);
-    dyStringPrintf(menuHtml, "><a href='%s' ", link->url);
-    if (link->mouseOver)
-        dyStringPrintf(menuHtml, "title='%s' ", link->mouseOver); 
-    if (link->onClick)
-        dyStringPrintf(menuHtml, "onclick=\"%s\" ", link->onClick); 
-    dyStringPrintf(menuHtml, "id='%s'%s>%s</a></li>\n", link->id, 
-        link->external ? " TARGET='_blank'" : "", encodedName);
+    dyStringPrintf(menuHtml, ">\n");
+
+    if (!isEmpty(link->name))
+        {
+        dyStringPrintf(menuHtml, "<a href='%s' ", link->url);
+        if (link->mouseOver)
+            dyStringPrintf(menuHtml, "title='%s' ", link->mouseOver); 
+        if (link->onClick)
+            dyStringPrintf(menuHtml, "onclick=\"%s\" ", link->onClick); 
+        dyStringPrintf(menuHtml, "id='%s'%s>%s</a>\n", link->id, 
+            link->external ? " TARGET='_blank'" : "", encodedName);
+        }
+    dyStringPrintf(menuHtml, "</li>\n");
     freez(&encodedName);
 
     freez(&link->name);
@@ -214,6 +223,13 @@ safef(buf, sizeof(buf), "%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s",
 appendLink(&links, buf, "DNA", "dnaLink", FALSE);
 safef(buf, sizeof(buf), "../cgi-bin/hgConvert?hgsid=%s&db=%s", cartSessionId(cart), database);
 appendLink(&links, buf, "In Other Genomes (Convert)", "convertMenuLink", FALSE);
+
+// add the sendTo menu
+if (fileExists("extTools.ra"))
+    {
+    appendLinkWithOnclick(&links, "#", "In External tool", "Show current region on a third-party website", "extToolLink", "showExtToolDialog(); return false;", FALSE, FALSE);
+    }
+
 
 // Add link-outs to other dbs as appropriate for this assembly
 if (differentWord(database,"susScr2"))
@@ -393,6 +409,7 @@ else if (sameString(database, "ce2"))
     }
 
 // finish View menu
+appendLink(&links, "", "", "", FALSE); // separator line
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgTracksConfigPage=configure", uiVars);
 appendLink(&links, buf, "Configure Browser", "configureMenuLink", FALSE);
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.reset=on", uiVars);
@@ -400,12 +417,6 @@ appendLink(&links, buf, "Default Tracks", "defaultTracksMenuLink", FALSE);
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.defaultImgOrder=on", uiVars);
 appendLink(&links, buf, "Default Track Order", "defaultTrackOrderMenuLink", FALSE);
 appendLink(&links, "../cgi-bin/cartReset", "Reset All User Settings", "cartResetMenuLink", FALSE);
-
-// add the sendTo menu
-if (fileExists("extTools.ra"))
-    {
-    appendLinkWithOnclick(&links, "#", "In external tool", "Show current region on a third-party website", "extToolLink", "showExtToolDialog()", FALSE, FALSE);
-    }
 
 struct dyString *viewMenu = dyStringCreate("<li class='menuparent' id='view'><span>View</span>\n<ul>\n");
 freeLinksAndConvert(links, viewMenu);

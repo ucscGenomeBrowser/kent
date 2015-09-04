@@ -5813,7 +5813,7 @@ cartCheckout(&oldCart);
 cgiVarExcludeExcept(except);
 }
 
-void setupHotkeys() 
+void setupHotkeys(boolean gotExtTools)
 /* setup keyboard shortcuts and a help dialog for it */
 {
 // XX remove if statement after July 2015
@@ -5860,7 +5860,8 @@ hPrintf("Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]')
 hPrintf("Mousetrap.bind('?', function() { $( \"#hotkeyHelp\" ).dialog({width:'600'});}); \n");
 
 // menu
-hPrintf("Mousetrap.bind('s t', showExtToolDialog); \n");
+if (gotExtTools)
+    hPrintf("Mousetrap.bind('s t', showExtToolDialog); \n");
 
 hPrintf("</script>\n");
 
@@ -5878,7 +5879,10 @@ hPrintf("<tr><td> zoom in 3x</td><td class=\"hotkey\">i</td>        <td> reverse
 hPrintf("<tr><td> zoom in 10x</td><td class=\"hotkey\">I</td>       <td> resize</td><td class=\"hotkey\">r then s</td>                     </tr>\n");
 hPrintf("<tr><td> zoom in base level</td><td class=\"hotkey\">b</td><td> refresh</td><td class=\"hotkey\">r then f</td>                    </tr>\n");
 hPrintf("<tr><td> zoom out 1.5x</td><td class=\"hotkey\">ctrl+k</td><td> jump to position box</td><td class=\"hotkey\">/</td>        </tr>\n"); 
-hPrintf("<tr><td> zoom out 3x</td><td class=\"hotkey\">k</td><td>Sent to external tool</td><td class=\"hotkey\">s then t</td>               </tr>\n");
+hPrintf("<tr><td> zoom out 3x</td><td class=\"hotkey\">k</td>");
+if (gotExtTools)
+    hPrintf("<td>Sent to external tool</td><td class=\"hotkey\">s then t</td>");
+hPrintf("               </tr>\n");
 hPrintf("<tr><td> zoom out 10x</td><td class=\"hotkey\">K</td>              </tr>\n");
 hPrintf("<tr><td> zoom out 100x</td><td class=\"hotkey\">0</td>             </tr>\n");
 hPrintf("</table>\n");
@@ -6077,7 +6081,9 @@ if (cartOptionalString(cart, "udcTimeout"))
 	"<A HREF=hgTracks?hgsid=%s&udcTimeout=[]>here</A>.",cartSessionId(cart));
     }
 
-setupHotkeys();
-printExtMenuData();
+boolean gotExtTools = extToolsEnabled();
+setupHotkeys(gotExtTools);
+if (gotExtTools)
+    printExtMenuData();
 
 }

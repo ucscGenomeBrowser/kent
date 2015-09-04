@@ -20,9 +20,17 @@
 #include "obscure.h"
 #include "net.h"
 
+boolean extToolsEnabled()
+/* Return TRUE if we can display the external tools menu. */
+{
+return fileExists("extTools.ra");
+}
+
 void printExtMenuData() 
 /* print the external tools aka "send to" menu entries as a javascript list to stdout */
 {
+if (!extToolsEnabled())
+    return;
 struct extTool *extTools = readExtToolRa("extTools.ra");
 struct extTool *et;
 hPuts("<script>\n");

@@ -488,6 +488,16 @@ ul.nice-menu-down li ul li ul {
 	top:0px;
 }
 
+ul.nice-menu li.horizSep {
+    height: 2px;
+    background-color: #DDD;
+}
+
+ul.nice-menu li.horizSep:hover {
+    height: 2px;
+    background-color: #DDD !important;
+}
+
 /* over-riding HGStyle for demo */
 .blueToggleBar {
     background-color: #00457c;
