@@ -665,7 +665,7 @@ void cartHideDefaultTracks(struct cart *cart)
  * that are something other than hide.  Do this only if the
  * variable CART_HAS_DEFAULT_VISIBILITY is set in the cart.  */
 {
-char *defaultString = cartString(cart, CART_HAS_DEFAULT_VISIBILITY);
+char *defaultString = cartOptionalString(cart, CART_HAS_DEFAULT_VISIBILITY);
 boolean cartHasDefaults = (defaultString != NULL) && sameString(defaultString, "on");
 
 if (!cartHasDefaults)
