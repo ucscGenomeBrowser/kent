@@ -573,7 +573,7 @@ mafAddIRows -nBeds=nBeds ../fullChromRun/maf/$(path1) /hive/data/genomes/ce11/ce
     rm multiz26way*.tab
 
 ######################################################################
-# MULTIZ7WAY MAF FRAMES (TBD - 2015-04-03 - Hiram)
+# MULTIZ7WAY MAF FRAMES (DONE - 2015-09-08 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/ce11/bed/multiz26way/frames
     cd /hive/data/genomes/ce11/bed/multiz26way/frames
@@ -607,7 +607,7 @@ end
     # << happy emacs
     chmod +x ./showGenes.csh
     time ./showGenes.csh
-# ce11: ensGene: 57834, refGene: 52558, ws245Genes: 57528, Mrnas: 51806
+# ce11: ensGene: 57834, refGene: 53470, ws245Genes: 57528, Mrnas: 52714
 # caePb3: ws245Genes: 33210, xenoRefGene: 189584,
 # caeRem4: ws245Genes: 32899, xenoRefGene: 155137,
 # cb4: ws245Genes: 23050, xenoRefGene: 130721,
@@ -621,9 +621,9 @@ end
 # ancCey1: ws245Genes: 65583,
 # necAme1: ws245Genes: 19643,
 # haeCon2: ws245Genes: 26359,
-# ascSuu1: ws245Genes: 3082,
-# priExs1: ws245Genes: 24642,
-# priPac3: ws245Genes: 24243, xenoRefGene: 89467,
+# ascSuu1: ws245Genes: 3082, xenoRefGene: 134962,
+# priExs1: ws245Genes: 24642, xenoRefGene: 0,
+# priPac3: ws245Genes: 24243, xenoRefGene: 89943,
 # melHap1: ws245Genes: 14420, xenoRefGene: 88300,
 # melInc2: ws245Genes: 20365,
 # burXyl1: ws245Genes: 18074,
@@ -635,60 +635,62 @@ end
 # triSui1: ws245Genes: 14435,
 
     # from that summary, use these gene sets:
-    # ensGene - ce11
-    # ws245Genes - caePb3 caeRem45 cb4 caeJap4 caeSp111 caeAng2 caeSp51
-    #              hetBac1 panRed1 ancCey1 necAme1 necAme1 haeCon2 priPac3
-    #              melHap1 melInc2 burXyl1 dirImm1 loaLoa1 oncVol1 bruMal2
-    #              triSpi1 triSui1
-    # to be done: ascSuu1
-XXX - waiting for ascSuu1 - Tue Aug 18 15:10:42 PDT 2015
+    # ws245Genes - ce11 caePb3 caeRem4 cb4 caeJap4 caeSp111 caeAng2 caeSp51
+    #              hetBac1 panRed1 ancCey1 necAme1 haeCon2
+    #              priExs1 priPac3 melHap1 melInc2 burXyl1 dirImm1 loaLoa1
+    #              oncVol1 bruMal2 triSpi1 triSui1
+    # ncbiGenes - strRat2
+    # ascSuu1 - assembly confusion, can not determine genes
 
     mkdir genes
 
-    #   1. knownGene: ce11
-    for DB in ce11 mm10
-do
-    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
-      | genePredSingleCover stdin stdout | gzip -2c \
-        > genes/${DB}.gp.gz
-    echo -n "$DB: "
-    genePredCheck -db=${DB} genes/${DB}.gp.gz
-done
-# ce11: checked: 21887 failed: 0
-# mm10: checked: 21013 failed: 0
-
-    #   2. ensGene: canFam3 panTro4 gorGor3 ponAbe2 papAnu2 calJac3 micMur1
+    #   1. ws245Genes: canFam3 panTro4 gorGor3 ponAbe2 papAnu2 calJac3 micMur1
     #               otoGar3 tupBel1
-    for DB in canFam3 panTro4 gorGor3 ponAbe2 papAnu2 calJac3 micMur1 otoGar3 tupBel1
+    for DB in ce11 caePb3 caeRem4 cb4 caeJap4 caeSp111 caeAng2 caeSp51 hetBac1 panRed1 ancCey1 necAme1 haeCon2 priExs1 priPac3 melHap1 melInc2 burXyl1 dirImm1 loaLoa1 oncVol1 bruMal2 triSpi1 triSui1
 do
-hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ws245Genes" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
         > /scratch/tmp/${DB}.tmp.gz
     mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
     echo -n "$DB: "
     genePredCheck -db=${DB} genes/${DB}.gp.gz
 done
-# canFam3: checked: 19507 failed: 0
-# panTro4: checked: 18657 failed: 0
-# gorGor3: checked: 20758 failed: 0
-# ponAbe2: checked: 20220 failed: 0
-# papAnu2: checked: 18904 failed: 0
-# calJac3: checked: 20827 failed: 0
-# micMur1: checked: 28641 failed: 0
-# otoGar3: checked: 19472 failed: 0
-# tupBel1: checked: 29256 failed: 0
+ce11: checked: 20412 failed: 0
+caePb3: checked: 30626 failed: 0
+caeRem4: checked: 31433 failed: 0
+cb4: checked: 21737 failed: 0
+caeJap4: checked: 29913 failed: 0
+caeSp111: checked: 22306 failed: 0
+caeAng2: checked: 27919 failed: 0
+caeSp51: checked: 34679 failed: 0
+hetBac1: checked: 20928 failed: 0
+panRed1: checked: 24071 failed: 0
+ancCey1: checked: 35775 failed: 0
+necAme1: checked: 18984 failed: 0
+haeCon2: checked: 21837 failed: 0
+priExs1: checked: 23767 failed: 0
+priPac3: checked: 22872 failed: 0
+melHap1: checked: 14103 failed: 0
+melInc2: checked: 19189 failed: 0
+burXyl1: checked: 18074 failed: 0
+dirImm1: checked: 12857 failed: 0
+loaLoa1: checked: 14903 failed: 0
+oncVol1: checked: 12133 failed: 0
+bruMal2: checked: 13471 failed: 0
+triSpi1: checked: 16370 failed: 0
+triSui1: checked: 13600 failed: 0
 
-    #   3. refGene
-    for DB in macFas5 rheMac3
+    #   1. ncbiGenes: strRat2
+    for DB in strRat2
 do
-hgsql -N -e "select * from refGene" ${DB} | cut -f2- \
+hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ncbiGenes" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
         > /scratch/tmp/${DB}.tmp.gz
     mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo -n "$DB: "
     genePredCheck -db=${DB} genes/${DB}.gp.gz
 done
-# checked: 2196 failed: 0
-# checked: 5801 failed: 0
+    # strRat2: checked: 12439 failed: 0
 
     # verify counts for genes are reasonable:
     for T in genes/*.gz
@@ -696,53 +698,76 @@ do
     echo -n "# $T: "
     zcat $T | cut -f1 | sort | uniq -c | wc -l
 done
-# genes/calJac3.gp.gz: 20827
-# genes/canFam3.gp.gz: 19507
-# genes/gorGor3.gp.gz: 20758
-# genes/ce11.gp.gz: 21887
-# genes/macFas5.gp.gz: 2120
-# genes/micMur1.gp.gz: 16240
-# genes/mm10.gp.gz: 21013
-# genes/otoGar3.gp.gz: 19472
-# genes/panTro4.gp.gz: 18657
-# genes/papAnu2.gp.gz: 18904
-# genes/ponAbe2.gp.gz: 20220
-# genes/rheMac3.gp.gz: 5626
-# genes/tupBel1.gp.gz: 15407
+# genes/ancCey1.gp.gz: 35775
+# genes/bruMal2.gp.gz: 13471
+# genes/burXyl1.gp.gz: 18074
+# genes/caeAng2.gp.gz: 27919
+# genes/caeJap4.gp.gz: 29913
+# genes/caePb3.gp.gz: 30626
+# genes/caeRem4.gp.gz: 31433
+# genes/caeSp111.gp.gz: 22306
+# genes/caeSp51.gp.gz: 34679
+# genes/cb4.gp.gz: 21737
+# genes/ce11.gp.gz: 20412
+# genes/dirImm1.gp.gz: 12857
+# genes/haeCon2.gp.gz: 21837
+# genes/hetBac1.gp.gz: 20928
+# genes/loaLoa1.gp.gz: 14903
+# genes/melHap1.gp.gz: 14103
+# genes/melInc2.gp.gz: 19189
+# genes/necAme1.gp.gz: 18984
+# genes/oncVol1.gp.gz: 12133
+# genes/panRed1.gp.gz: 24071
+# genes/priExs1.gp.gz: 23767
+# genes/priPac3.gp.gz: 22872
+# genes/strRat2.gp.gz: 12439
+# genes/triSpi1.gp.gz: 16370
+# genes/triSui1.gp.gz: 13600
 
     time (cat ../anno/result/*.maf \
-	| nice -n +19 genePredToMafFrames ce11 stdin stdout \
-           `egrep -v "nasLar1|rhiRox1|tarSyr2|panPan1|nomLeu3|chlSab2|saiBol1" ../species.list.txt | xargs echo | sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g;"` \
+	| genePredToMafFrames ce11 stdin stdout \
+           `egrep -v "ascSuu1" ../species.list.txt | xargs echo | sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g;"` \
 		| gzip > multiz26wayFrames.bed.gz)
-    #   real    19m52.191s
+    #   real    1m40.091s
 
     # verify there are frames on everything, should be 15 species:
     zcat multiz26wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c \
        | sed -e 's/^/# /;'
-#  245500 calJac3
-#  268521 canFam3
-#  196578 gorGor3
-#  208946 ce11
-#   16650 macFas5
-#  199799 micMur1
-#  256139 mm10
-#  212698 otoGar3
-#  200276 panTro4
-#  219978 papAnu2
-#  222360 ponAbe2
-#   49920 rheMac3
-#  194743 tupBel1
+#  102228 ancCey1
+#   62865 bruMal2
+#   93717 burXyl1
+#  129846 caeAng2
+#  162169 caeJap4
+#  183626 caePb3
+#  219355 caeRem4
+#  190425 caeSp111
+#  214566 caeSp51
+#  204669 cb4
+#  123221 ce11
+#   62882 dirImm1
+#   89757 haeCon2
+#   75007 hetBac1
+#   62443 loaLoa1
+#   53145 melHap1
+#   46477 melInc2
+#   83965 necAme1
+#   65069 oncVol1
+#   75620 panRed1
+#   59341 priExs1
+#   61095 priPac3
+#   75605 strRat2
+#   43472 triSpi1
+#   41941 triSui1
 
     #   load the resulting file
     ssh hgwdev
     cd /hive/data/genomes/ce11/bed/multiz26way/frames
     time hgLoadMafFrames ce11 multiz26wayFrames multiz26wayFrames.bed.gz
-    #   real    0m26.951s
-
+    #   real    0m29.914s
 
     time featureBits -countGaps ce11 multiz26wayFrames
-    # 47513754 bases of 3209286105 (1.481%) in intersection
-    #  real    0m16.409s
+    # 29102814 bases of 100286401 (29.020%) in intersection
+    #  real    0m16.783s
 
     #   enable the trackDb entries:
 # frames multiz26wayFrames
@@ -750,7 +775,7 @@ done
     #   appears to work OK
 
 #########################################################################
-# Phylogenetic tree from 20-way (TBD - 2015-04-03 - Hiram)
+# Phylogenetic tree from 20-way (DONE - 2015-08-18 - Hiram)
     mkdir /hive/data/genomes/ce11/bed/multiz26way/4d
     cd /hive/data/genomes/ce11/bed/multiz26way/4d
 
@@ -901,36 +926,6 @@ endif
 # loaLoa1:0.198781):0.00222742,oncVol1:0.16899):0.0727414,
 # bruMal2:0.174965):1.0837):0.137915,(triSpi1:0.820134,
 # triSui1:0.850407):0.137915);
-
-    # compare these calculated lengths to the tree extracted from 183way:
-    grep TREE all.mod | sed -e 's/TREE: //' \
-       | /cluster/bin/phast/all_dists /dev/stdin | grep ce11 \
-          | sed -e "s/ce11.//;"  | sort > new.dists
-    /cluster/bin/phast/all_dists ../ce11.26way.nh | grep ce11 \
-        | sed -e "s/ce11.//;" | sort > old.dists
-    # printing out the 'new', the 'old' the 'difference' and percent difference
-    join new.dists old.dists | awk '{
-  printf "#\t%s\t%8.6f\t%8.6f\t%8.6f\t%8.6f\n", $1, $2, $3, $2-$3, 100*($2-$3)/$3 }' \
-      | sort -k3n
-#       panTro4 0.013354        0.013390        -0.000036       -0.268857
-#       panPan1 0.014412        0.015610        -0.001198       -7.674568
-#       gorGor3 0.026014        0.019734        0.006280        31.823249
-#       ponAbe2 0.045236        0.039403        0.005833        14.803441
-#       nomLeu3 0.052852        0.046204        0.006648        14.388365
-#       macFas5 0.080661        0.079575        0.001086        1.364750
-#       rhiRox1 0.081305        0.075474        0.005831        7.725839
-#       papAnu2 0.081458        0.079626        0.001832        2.300756
-#       rheMac3 0.081710        0.079575        0.002135        2.683003
-#       nasLar1 0.081742        0.075474        0.006268        8.304847
-#       chlSab2 0.081818        0.087974        -0.006156       -6.997522
-#       saiBol1 0.133183        0.087804        0.045379        51.682156
-#       calJac3 0.135678        0.107454        0.028224        26.266123
-#       micMur1 0.263345        0.236534        0.026811        11.334946
-#       tarSyr2 0.266293        0.221294        0.044999        20.334487
-#       otoGar3 0.299131        0.270334        0.028797        10.652378
-#       tupBel1 0.337009        0.335048        0.001961        0.585289
-#       canFam3 0.343407        0.332429        0.010978        3.302359
-#       mm10    0.498858        0.502391        -0.003533       -0.703237
 
 #########################################################################
 # phastCons 20-way (TBD - 2015-04-03 - Hiram)
