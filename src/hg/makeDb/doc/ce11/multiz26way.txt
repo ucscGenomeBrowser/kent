@@ -928,7 +928,7 @@ endif
 # triSui1:0.850407):0.137915);
 
 #########################################################################
-# phastCons 20-way (TBD - 2015-04-03 - Hiram)
+# phastCons 20-way (DONE - 2015-09-08 - Hiram)
     # split 26way mafs into 10M chunks and generate sufficient statistics
     # files for # phastCons
     ssh ku
@@ -977,18 +977,19 @@ mkSS.csh $(root1) {check out line+ done/$(root1)}
 
     gensub2 maf.list single template jobList
     # beware overloaded the cluster with these fast running high I/O jobs
-    para -ram=16g create jobList
-    para try ... check ... etc
-    para -maxJob=32 push
-# Completed: 358 of 358 jobs
-# CPU time in finished jobs:       8154s     135.91m     2.27h    0.09d  0.000 y
-# IO & Wait Time:                  1413s      23.54m     0.39h    0.02d  0.000 y
-# Average job time:                  27s       0.45m     0.01h    0.00d
-# Longest finished job:             798s      13.30m     0.22h    0.01d
-# Submission to last job:           835s      13.92m     0.23h    0.01d
+    # however, in this case, there are only 7
+    para -ram=32g create jobList
+    para try   # this runs all 7
+    para time > run.time
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:        161s       2.68m     0.04h    0.00d  0.000 y
+# IO & Wait Time:                    15s       0.25m     0.00h    0.00d  0.000 y
+# Average job time:                  25s       0.42m     0.01h    0.00d
+# Longest finished job:              34s       0.57m     0.01h    0.00d
+# Submission to last job:            45s       0.75m     0.01h    0.00d
 
     find ./result -type f | wc -l
-    #	 645
+    #	 14
 
     # Run phastCons
     #	This job is I/O intensive in its output files, beware where this
@@ -1061,27 +1062,26 @@ rm -fr $tmp
 
     find ../SS/result -type f | sed -e "s#../SS/result/##" > ss.list
     wc -l ss.list
-    #	645 ss.list
+    #	14 ss.list
 
     # Create parasol batch and run it
     # run for all species
-    cd /hive/data/genomes/ce11/bed/multiz26way/cons
-    mkdir -p all
-    cd all
+    mkdir /hive/data/genomes/ce11/bed/multiz26way/cons/all
+    cd /hive/data/genomes/ce11/bed/multiz26way/cons/all
     #	Using the .mod tree
     cp -p ../../4d/all.mod ./all.mod
 
     gensub2 ../run.cons/ss.list single ../run.cons/template jobList
     # beware overwhelming the cluster with these fast running high I/O jobs
-    para -ram=16g create jobList
+    # however, in this case, there are only 14 jobs
+    para -ram=32g create jobList
     para try ... check ...
-    para -maxJob=32 push
-# Completed: 645 of 645 jobs
-# CPU time in finished jobs:      11994s     199.90m     3.33h    0.14d  0.000 y
-# IO & Wait Time:                  4296s      71.60m     1.19h    0.05d  0.000 y
-# Average job time:                  25s       0.42m     0.01h    0.00d
-# Longest finished job:              55s       0.92m     0.02h    0.00d
-# Submission to last job:           562s       9.37m     0.16h    0.01d
+# Completed: 14 of 14 jobs
+# CPU time in finished jobs:        412s       6.87m     0.11h    0.00d  0.000 y
+# IO & Wait Time:                    81s       1.35m     0.02h    0.00d  0.000 y
+# Average job time:                  35s       0.59m     0.01h    0.00d
+# Longest finished job:              51s       0.85m     0.01h    0.00d
+# Submission to last job:           108s       1.80m     0.03h    0.00d
 
     # create Most Conserved track
     cd /hive/data/genomes/ce11/bed/multiz26way/cons/all
@@ -1098,28 +1098,27 @@ done > tmpMostConserved.bed
 
 
     /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
-    # -rw-rw-r--   1 76951148 Apr 15 16:21 tmpMostConserved.bed
-    # -rw-rw-r--   1 78998479 Apr 15 20:28 mostConserved.bed
+    # -rw-rw-r-- 1 13454157 Sep  8 11:44 tmpMostConserved.bed
+    # -rw-rw-r-- 1 13671554 Sep  8 11:45 mostConserved.bed
 
     wc -l *.bed
-    #   2244053 mostConserved.bed
-    #   2244053 tmpMostConserved.bed
+    # 406479 mostConserved.bed
+    # 406479 tmpMostConserved.bed
 
     # load into database
     ssh hgwdev
     cd /hive/data/genomes/ce11/bed/multiz26way/cons/all
     time hgLoadBed ce11 phastConsElements26way mostConserved.bed
-    # with the correct rhiRox1 sequence:
-    # Read 2244053 elements of size 5 from mostConserved.bed
-    #  real    0m19.301s
+    # Read 406479 elements of size 5 from mostConserved.bed
+    # real    0m3.735s
 
     # on human we often try for 5% overall cov, and 70% CDS cov
     # most bets are off here for that goal, these alignments are too few
     #	and too far between
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
-    featureBits ce11 -enrichment knownGene:cds phastConsElements26way
-    # knownGene:cds 1.266%, phastConsElements26way 5.412%, both 0.874%,
-    # cover 69.05%, enrich 12.76x
+    featureBits ce11 -enrichment ensGene:cds phastConsElements26way
+    # ensGene:cds 25.321%, phastConsElements26way 41.217%, both 19.293%,
+    # cover 76.20%, enrich 1.85x
 
     # Create merged posterier probability file and wiggle track data files
     cd /hive/data/genomes/ce11/bed/multiz26way/cons/all
@@ -1130,62 +1129,63 @@ done > tmpMostConserved.bed
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
 	| sed -e 's/\.[0-9][0-9]*-[0-9][0-9]* start/ start/' \
         | gzip -c > downloads/phastCons26way.wigFix.gz)
-    #   real    32m28.899s
+    #   real    0m43.836s
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/phastCons26way.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/ce11/chrom.sizes \
 	    phastCons26way.bw) > bigWig.log 2>&1
     egrep "real|VmPeak" bigWig.log
-    # pid=48046: VmPeak:    33804452 kB
-    # real    50m28.896s
+    # pid=22748: VmPeak:      676500 kB
+    # real    0m49.827s
 
     bigWigInfo phastCons26way.bw | sed -e 's/^/# /;'
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 5,127,773,887
-# primaryIndexSize: 93,405,104
+# primaryDataSize: 118,518,400
+# primaryIndexSize: 2,746,816
 # zoomLevels: 10
-# chromCount: 357
-# basesCovered: 2,949,052,222
-# mean: 0.128327
+# chromCount: 7
+# basesCovered: 58,852,043
+# mean: 0.686605
 # min: 0.000000
 # max: 1.000000
-# std: 0.243053
+# std: 0.385078
 
     #	encode those files into wiggle data
     time (zcat downloads/phastCons26way.wigFix.gz \
 	| wigEncode stdin phastCons26way.wig phastCons26way.wib)
     #   Converted stdin, upper limit 1.00, lower limit 0.00
-    #   real    15m6.015s
+    #   real    0m17.307s
+
 
     du -hsc *.wi?
-    # 2.8G    phastCons26way.wib
-    # 284M    phastCons26way.wig
-# -rw-rw-r--   1 2949052222 Apr 17 10:18 phastCons26way.wib
-# -rw-rw-r--   1  297183953 Apr 17 10:18 phastCons26way.wig
+    # 57M     phastCons26way.wib
+    # 7.8M    phastCons26way.wig
+# -rw-rw-r-- 1  58852043 Sep  8 11:49 phastCons26way.wib
+# -rw-rw-r-- 1   8107673 Sep  8 11:49 phastCons26way.wig
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phastCons26way.wib /gbdb/ce11/multiz26way/phastCons26way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/ce11/multiz26way \
 	ce11 phastCons26way phastCons26way.wig
-    #   real    0m33.285s
+    #   real    0m1.059s
 
     # use to set trackDb.ra entries for wiggle min and max
     # and verify table is loaded correctly
 
     wigTableStats.sh ce11 phastCons26way
-# db.table          min max mean       count sumData
-# ce11.phastCons26way 0 1 0.128327 2949052222 3.78443e+08
-#        stdDev  viewLimits
-#      0.243053 viewLimits=0:1
+# db.table           min max mean       count sumData
+# ce11.phastCons26way 0 1 0.686605 58852043 4.04081e+07
+#    stdDev  viewLimits
+#   0.385078 viewLimits=0:1
 
     #  Create histogram to get an overview of all the data
     time hgWiggle -doHistogram -db=ce11 \
-	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+        -hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    phastCons26way > histogram.data 2>&1
-    #	real    2m47.080s
+    #	real    0m3.288s
 
     #	create plot of histogram:
 
@@ -1196,7 +1196,7 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Human ce11 Histogram phastCons26way track"
+set title " C. elegans - ce11 Histogram phastCons26way track"
 set xlabel " phastCons26way score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
@@ -1212,7 +1212,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display ce11.26way.phastCons.histo.png &
 
 #########################################################################
-# phyloP for 20-way (WORKING - 2015-04-03 - Hiram)
+# phyloP for 26-way (DONE - 2015-09-08 - Hiram)
     # run phyloP with score=LRT
     ssh ku
     mkdir -p /cluster/data/ce11/bed/multiz26way/consPhyloP/run.phyloP
@@ -1226,7 +1226,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 	../../cons/all/all.mod 0.567 > all.mod
     # verify, the BACKGROUND should now be paired up:
     grep BACK all.mod
-    #   BACKGROUND: 0.216500 0.283500 0.283500 0.216500
+    #   BACKGROUND: 0.216500 0.283500 0.283500 0.216500 
 
     cat << '_EOF_' > doPhyloP.csh
 #!/bin/csh -fe
@@ -1265,7 +1265,7 @@ sleep 4
 	| sed -e "s/.ss$//; s#^../../cons/SS/result/##" > ss.list
     # make sure the list looks good
     wc -l ss.list
-    #	645 ss.list
+    #	14 ss.list
 
     # Create template file
     #	file1 == $chr/$chunk/file name without .ss suffix
@@ -1286,17 +1286,16 @@ sleep 4
     gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
     # beware overloading the cluster with these quick and high I/O jobs
     # -ram=32g will ensure they can all complete and will not run too many
-    #   at the same time
+    #   at the same time, there are only 14 here anyway
     para -ram=32g create jobList
     para try ... check ... push ... etc ...
-    para -maxJob=32 push
     para time > run.time
-# Completed: 645 of 645 jobs
-# CPU time in finished jobs:     270641s    4510.68m    75.18h    3.13d  0.009 y
-# IO & Wait Time:                  4545s      75.76m     1.26h    0.05d  0.000 y
-# Average job time:                 427s       7.11m     0.12h    0.00d
-# Longest finished job:            1414s      23.57m     0.39h    0.02d
-# Submission to last job:         11305s     188.42m     3.14h    0.13d
+# Completed: 14 of 14 jobs
+# CPU time in finished jobs:      10816s     180.26m     3.00h    0.13d  0.000 y
+# IO & Wait Time:                    88s       1.47m     0.02h    0.00d  0.000 y
+# Average job time:                 779s      12.98m     0.22h    0.01d
+# Longest finished job:            1283s      21.38m     0.36h    0.01d
+# Submission to last job:          1294s      21.57m     0.36h    0.01d
 
     # back on dev
     cd /hive/data/genomes/ce11/bed/multiz26way/consPhyloP/all
@@ -1305,91 +1304,90 @@ sleep 4
     time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
 	| gzip -c > downloads/phyloP26way.wigFix.gz)
-    #   real    44m21.578s
+    #   real    0m54.344s
 
-    # -rw-rw-r-- 1 4572468017 Apr 17 09:08 phyloP26way.wigFix.gz
+    # -rw-rw-r-- 1 102990761 Sep  8 12:40 phyloP26way.wigFix.gz
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/phyloP26way.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/ce11/chrom.sizes \
 	phyloP26way.bw) > bigWig.log 2>&1
     egrep "real|VmPeak" bigWig.log
-    # # pid=68805: VmPeak:    33804456 kB
-    #  real    53m14.250s
+    # pid=39486: VmPeak:      676500 kB
+    # real    0m54.488s
 
     bigWigInfo phyloP26way.bw  | sed -e 's/^/# /;'
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 5,808,265,679
-# primaryIndexSize: 93,405,104
+# primaryDataSize: 136,567,148
+# primaryIndexSize: 2,746,816
 # zoomLevels: 10
-# chromCount: 357
-# basesCovered: 2,949,052,222
-# mean: 0.089688
-# min: -14.191000
-# max: 1.199000
-# std: 0.678542
+# chromCount: 7
+# basesCovered: 58,852,043
+# mean: 0.970667
+# min: -3.992000
+# max: 9.159000
+# std: 1.577332
 
     #	encode those files into wiggle data
     time (zcat downloads/phyloP26way.wigFix.gz \
 	| wigEncode stdin phyloP26way.wig phyloP26way.wib)
-    # Converted stdin, upper limit 1.20, lower limit -14.19
-    #  real    16m51.456s
+    # Converted stdin, upper limit 9.16, lower limit -3.99
+    # real    0m19.281s
 
     du -hsc *.wi?
-    # 2.8G    phyloP26way.wib
-    # 290M    phyloP26way.wig
-# -rw-rw-r--   1 2949052222 Apr 17 11:22 phyloP26way.wib
-# -rw-rw-r--   1  304040712 Apr 17 11:22 phyloP26way.wig
+    # 57M     phyloP26way.wib
+    # 8.0M    phyloP26way.wig
+# -rw-rw-r-- 1  58852043 Sep  8 12:46 phyloP26way.wib
+# -rw-rw-r-- 1   8322927 Sep  8 12:46 phyloP26way.wig
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phyloP26way.wib /gbdb/ce11/multiz26way/phyloP26way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/ce11/multiz26way ce11 \
 	phyloP26way phyloP26way.wig
-    # real    0m31.992s
+    # real    0m0.842s
 
     # use to set trackDb.ra entries for wiggle min and max
     # and verify table is loaded correctly
 
     wigTableStats.sh ce11 phyloP26way
 # db.table      min max mean count sumData
-# ce11.phyloP26way -14.191 1.199 0.0896878 2949052222 2.64494e+08
+# ce11.phyloP26way -3.992 9.159 0.970667 58852043 5.71257e+07
 #       stdDev viewLimits
-#     0.678542 viewLimits=-3.30302:1.199
+#      1.57733 viewLimits=-3.992:8.85733
 
-    #	that range is: 14.191+1.199 = 15.390 for hBinSize=0.01539
+    #	that range is: 9.159+3.992 = 13.151 for hBinSize=0.013151
 
     #  Create histogram to get an overview of all the data
     time hgWiggle -doHistogram \
-	-hBinSize=0.01539 -hBinCount=1000 -hMinVal=-14.191 -verbose=2 \
+	-hBinSize=0.013151 -hBinCount=1000 -hMinVal=-3.992 -verbose=2 \
 	    -db=ce11 phyloP26way > histogram.data 2>&1
-    #   real    2m43.403s
+    #   real    0m3.666s
 
     # find the Y range for the 2:5 graph
     grep "^[0-9]" histogram.data | ave -col=5 stdin | sed -e 's/^/# /;'
-# Q1 0.000000
-# median 0.000002
-# Q3 0.000283
-# average 0.001149
+# Q1 0.000065
+# median 0.000179
+# Q3 0.000924
+# average 0.001026
 # min 0.000000
-# max 0.018142
-# count 870
-# total 0.999982
-# standard deviation 0.002856
+# max 0.030633
+# count 975
+# total 0.999992
+# standard deviation 0.002321
 
     # find the X range for the 2:5 graph
     grep "^[0-9]" histogram.data | ave -col=2 stdin | sed -e 's/^/# /;'
-# Q1 -8.823738
-# median -5.480260
-# Q3 -2.121392
-# average -5.516735
-# min -14.191000
-# max 1.199000
-# count 870
-# total -4799.559716
-# standard deviation 3.919439
-
+# Q1 -0.533287
+# median 2.662410
+# Q3 5.884400
+# average 2.660747
+# min -3.992000
+# max 9.159000
+# count 975
+# total 2594.228452
+# standard deviation 3.707122
 
     #	create plot of histogram:
     cat << '_EOF_' | gnuplot > ce11.26way.phyloP.histo.png
@@ -1399,14 +1397,14 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Human ce11 Histogram phyloP26way track"
+set title " C. elegans ce11 Histogram phyloP26way track"
 set xlabel " phyloP26way score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
 set y2range [0:1]
 set y2tics
-set xrange [-4:1.5]
-set yrange [0:0.02]
+set xrange [-2:4]
+set yrange [0:0.015]
 
 plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
