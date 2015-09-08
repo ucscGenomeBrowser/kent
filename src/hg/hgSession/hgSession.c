@@ -511,11 +511,15 @@ if (userName != NULL)
     {
     printf("<LI>Each previously saved named session appears with "
 	   "Browser and Email links.  "
-	   "The Browser link takes you to the Genome Browser "
-	   "with that session loaded.  The resulting Genome Browser page "
-	   "can be bookmarked in your web browser and/or shared with others.  "
-	   "The Email link invokes your email tool with a message "
-	   "containing the Genome Browser link.</LI>\n");
+           "The Email link invokes your email tool with a message "
+           "containing the Genome Browser link. The Email link can "
+           "be bookmarked in your web browser and/or shared with "
+           "others. If you right-click and copy the Browser link, "
+           "it will be the same as the Email link. However, if you "
+           "click the Browser link it will take you to the Genome "
+           "Browser and become a uniquely identified URL once the "
+           "session loads, so that resulting link is not advised "
+           "for sharing.</LI>\n");
     }
 else if (wikiLinkEnabled())
     {
