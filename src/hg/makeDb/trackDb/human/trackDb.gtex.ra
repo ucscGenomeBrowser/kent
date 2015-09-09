@@ -1,3 +1,18 @@
+track gtexSnp
+type bed 4
+shortLabel GTEx Variant
+longLabel Genetic variants imputed from genotyping of GTEx samples (209 donors)
+group expression
+html getxEqtlSnp
+priority 10.15
+
+track gtexEqtlSnp
+type bed 4
+shortLabel GTEx eQTL
+longLabel Genetic variants identified by GTEx as significantly affecting gene expression
+group expression
+priority 10.16
+
 track gtexGene
 type bed 6 +
 shortLabel GTEx Gene
@@ -15,6 +30,7 @@ group expression
 priority 10.2
 type bed 6
 exonArrows off
+minGrayLevel 2
 subGroup1 tissue Tissue \
 		adiposeSubcut=adiposeSubcut \
 		adiposeVisceral=adiposeVisceral \

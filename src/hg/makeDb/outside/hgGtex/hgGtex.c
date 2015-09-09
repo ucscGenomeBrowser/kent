@@ -24,6 +24,7 @@ boolean doData = FALSE;
 boolean doRound = FALSE;
 boolean median = FALSE;
 boolean exon = FALSE;
+boolean dropZeros = FALSE;
 char *releaseDate = NULL;
 int limit = 0;
 
@@ -55,9 +56,10 @@ errAbort(
   "options:\n"
   "    -database=XXX (default %s)\n"
   "    -tab=dir - Output tab-separated files to directory.\n"
-  "    -noLoad  - If true don't load database and don't clean up tab files\n"
-  "    -noData  - If true, don't create data files/tables (just metadata)\n"
-  "    -doRound - If true round data values\n"
+  "    -noLoad  - Don't load database and don't clean up tab files\n"
+  "    -noData  - Don't create data files/tables (just metadata)\n"
+  "    -doRound - Round data values\n"
+  "    -dropZeros - Ignore zero-valued data rows\n"
   "    -limit=N - Only do limit rows of data table, for testing\n"
   "    -exon -    Create exon tables instead of gene tables\n" 
   "                    1. All data (rootSampleExonData)\n"
@@ -73,6 +75,7 @@ static struct optionSpec options[] = {
    {"noLoad", OPTION_BOOLEAN},
    {"noData", OPTION_BOOLEAN},
    {"doRound", OPTION_BOOLEAN},
+   {"dropZeros", OPTION_BOOLEAN},
    {"exon", OPTION_BOOLEAN},
    {"limit", OPTION_INT},
    {NULL, 0},
@@ -384,6 +387,8 @@ for (i=0; i<tissueCount; i++)
         // WARNING: row parsing should be handled in parse routines
         int skip = (exon ? 1 : 2);
         double val = sqlDouble(row[(sampleOffset->offset) + skip]);
+        if (dropZeros && val == 0.0)
+            continue;
         // TODO: use gtexSampleDataOut
         verbose(3, "    %s\t%s\t%s\t%0.3f\n", gene, sampleOffset->sample, tissue, val);
         fprintf(allFile, "%s\t%s\t%s\t", gene, sampleOffset->sample, tissue);
@@ -727,6 +732,7 @@ else
 double maxMedian = 0, maxScore = 0;
 char **row;
 AllocArray(row, dataSampleCount+2);
+double rowMaxMedian, rowMaxScore;
 while (lineFileNext(lf, &line, NULL))
     {
     // WARNING: header parsing should be managed in one place
@@ -735,10 +741,9 @@ while (lineFileNext(lf, &line, NULL))
     if (expected != dataSampleCount)
         errAbort("Expecting %d data points, got %d line %d of %s", 
 		dataSampleCount, wordCount-2, lf->lineIx, lf->fileName);
-    double rowMaxMedian, rowMaxScore;
     dataRowsOut(row, sampleDataFile, dataSampleCount, 
-                    tissueMedianFile, tissueDataFile, tissueCount, tissueOrder, tissueOffsets,
-                    &rowMaxMedian, &rowMaxScore);
+                tissueMedianFile, tissueDataFile, tissueCount, tissueOrder, tissueOffsets,
+                &rowMaxMedian, &rowMaxScore);
     maxMedian = max(rowMaxMedian, maxMedian);
     maxScore = max(rowMaxScore, maxScore);
     dataCount++;
@@ -803,6 +808,7 @@ database = optionVal("database", database);
 doLoad = !optionExists("noLoad");
 doData = !optionExists("noData");
 doRound = optionExists("doRound");
+dropZeros = optionExists("dropZeros");
 releaseDate = optionVal("releaseDate", "0");
 exon = optionExists("exon");
 if (exon)
