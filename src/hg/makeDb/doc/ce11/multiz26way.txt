@@ -573,7 +573,7 @@ mafAddIRows -nBeds=nBeds ../fullChromRun/maf/$(path1) /hive/data/genomes/ce11/ce
     rm multiz26way*.tab
 
 ######################################################################
-# MULTIZ7WAY MAF FRAMES (TBD - 2015-04-03 - Hiram)
+# MULTIZ7WAY MAF FRAMES (DONE - 2015-09-08 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/ce11/bed/multiz26way/frames
     cd /hive/data/genomes/ce11/bed/multiz26way/frames
@@ -607,7 +607,7 @@ end
     # << happy emacs
     chmod +x ./showGenes.csh
     time ./showGenes.csh
-# ce11: ensGene: 57834, refGene: 52558, ws245Genes: 57528, Mrnas: 51806
+# ce11: ensGene: 57834, refGene: 53470, ws245Genes: 57528, Mrnas: 52714
 # caePb3: ws245Genes: 33210, xenoRefGene: 189584,
 # caeRem4: ws245Genes: 32899, xenoRefGene: 155137,
 # cb4: ws245Genes: 23050, xenoRefGene: 130721,
@@ -621,9 +621,9 @@ end
 # ancCey1: ws245Genes: 65583,
 # necAme1: ws245Genes: 19643,
 # haeCon2: ws245Genes: 26359,
-# ascSuu1: ws245Genes: 3082,
-# priExs1: ws245Genes: 24642,
-# priPac3: ws245Genes: 24243, xenoRefGene: 89467,
+# ascSuu1: ws245Genes: 3082, xenoRefGene: 134962,
+# priExs1: ws245Genes: 24642, xenoRefGene: 0,
+# priPac3: ws245Genes: 24243, xenoRefGene: 89943,
 # melHap1: ws245Genes: 14420, xenoRefGene: 88300,
 # melInc2: ws245Genes: 20365,
 # burXyl1: ws245Genes: 18074,
@@ -635,60 +635,62 @@ end
 # triSui1: ws245Genes: 14435,
 
     # from that summary, use these gene sets:
-    # ensGene - ce11
-    # ws245Genes - caePb3 caeRem45 cb4 caeJap4 caeSp111 caeAng2 caeSp51
-    #              hetBac1 panRed1 ancCey1 necAme1 necAme1 haeCon2 priPac3
-    #              melHap1 melInc2 burXyl1 dirImm1 loaLoa1 oncVol1 bruMal2
-    #              triSpi1 triSui1
-    # to be done: ascSuu1
-XXX - waiting for ascSuu1 - Tue Aug 18 15:10:42 PDT 2015
+    # ws245Genes - ce11 caePb3 caeRem4 cb4 caeJap4 caeSp111 caeAng2 caeSp51
+    #              hetBac1 panRed1 ancCey1 necAme1 haeCon2
+    #              priExs1 priPac3 melHap1 melInc2 burXyl1 dirImm1 loaLoa1
+    #              oncVol1 bruMal2 triSpi1 triSui1
+    # ncbiGenes - strRat2
+    # ascSuu1 - assembly confusion, can not determine genes
 
     mkdir genes
 
-    #   1. knownGene: ce11
-    for DB in ce11 mm10
-do
-    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
-      | genePredSingleCover stdin stdout | gzip -2c \
-        > genes/${DB}.gp.gz
-    echo -n "$DB: "
-    genePredCheck -db=${DB} genes/${DB}.gp.gz
-done
-# ce11: checked: 21887 failed: 0
-# mm10: checked: 21013 failed: 0
-
-    #   2. ensGene: canFam3 panTro4 gorGor3 ponAbe2 papAnu2 calJac3 micMur1
+    #   1. ws245Genes: canFam3 panTro4 gorGor3 ponAbe2 papAnu2 calJac3 micMur1
     #               otoGar3 tupBel1
-    for DB in canFam3 panTro4 gorGor3 ponAbe2 papAnu2 calJac3 micMur1 otoGar3 tupBel1
+    for DB in ce11 caePb3 caeRem4 cb4 caeJap4 caeSp111 caeAng2 caeSp51 hetBac1 panRed1 ancCey1 necAme1 haeCon2 priExs1 priPac3 melHap1 melInc2 burXyl1 dirImm1 loaLoa1 oncVol1 bruMal2 triSpi1 triSui1
 do
-hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ws245Genes" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
         > /scratch/tmp/${DB}.tmp.gz
     mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
     echo -n "$DB: "
     genePredCheck -db=${DB} genes/${DB}.gp.gz
 done
-# canFam3: checked: 19507 failed: 0
-# panTro4: checked: 18657 failed: 0
-# gorGor3: checked: 20758 failed: 0
-# ponAbe2: checked: 20220 failed: 0
-# papAnu2: checked: 18904 failed: 0
-# calJac3: checked: 20827 failed: 0
-# micMur1: checked: 28641 failed: 0
-# otoGar3: checked: 19472 failed: 0
-# tupBel1: checked: 29256 failed: 0
+ce11: checked: 20412 failed: 0
+caePb3: checked: 30626 failed: 0
+caeRem4: checked: 31433 failed: 0
+cb4: checked: 21737 failed: 0
+caeJap4: checked: 29913 failed: 0
+caeSp111: checked: 22306 failed: 0
+caeAng2: checked: 27919 failed: 0
+caeSp51: checked: 34679 failed: 0
+hetBac1: checked: 20928 failed: 0
+panRed1: checked: 24071 failed: 0
+ancCey1: checked: 35775 failed: 0
+necAme1: checked: 18984 failed: 0
+haeCon2: checked: 21837 failed: 0
+priExs1: checked: 23767 failed: 0
+priPac3: checked: 22872 failed: 0
+melHap1: checked: 14103 failed: 0
+melInc2: checked: 19189 failed: 0
+burXyl1: checked: 18074 failed: 0
+dirImm1: checked: 12857 failed: 0
+loaLoa1: checked: 14903 failed: 0
+oncVol1: checked: 12133 failed: 0
+bruMal2: checked: 13471 failed: 0
+triSpi1: checked: 16370 failed: 0
+triSui1: checked: 13600 failed: 0
 
-    #   3. refGene
-    for DB in macFas5 rheMac3
+    #   1. ncbiGenes: strRat2
+    for DB in strRat2
 do
-hgsql -N -e "select * from refGene" ${DB} | cut -f2- \
+hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ncbiGenes" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
         > /scratch/tmp/${DB}.tmp.gz
     mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo -n "$DB: "
     genePredCheck -db=${DB} genes/${DB}.gp.gz
 done
-# checked: 2196 failed: 0
-# checked: 5801 failed: 0
+    # strRat2: checked: 12439 failed: 0
 
     # verify counts for genes are reasonable:
     for T in genes/*.gz
@@ -696,53 +698,76 @@ do
     echo -n "# $T: "
     zcat $T | cut -f1 | sort | uniq -c | wc -l
 done
-# genes/calJac3.gp.gz: 20827
-# genes/canFam3.gp.gz: 19507
-# genes/gorGor3.gp.gz: 20758
-# genes/ce11.gp.gz: 21887
-# genes/macFas5.gp.gz: 2120
-# genes/micMur1.gp.gz: 16240
-# genes/mm10.gp.gz: 21013
-# genes/otoGar3.gp.gz: 19472
-# genes/panTro4.gp.gz: 18657
-# genes/papAnu2.gp.gz: 18904
-# genes/ponAbe2.gp.gz: 20220
-# genes/rheMac3.gp.gz: 5626
-# genes/tupBel1.gp.gz: 15407
+# genes/ancCey1.gp.gz: 35775
+# genes/bruMal2.gp.gz: 13471
+# genes/burXyl1.gp.gz: 18074
+# genes/caeAng2.gp.gz: 27919
+# genes/caeJap4.gp.gz: 29913
+# genes/caePb3.gp.gz: 30626
+# genes/caeRem4.gp.gz: 31433
+# genes/caeSp111.gp.gz: 22306
+# genes/caeSp51.gp.gz: 34679
+# genes/cb4.gp.gz: 21737
+# genes/ce11.gp.gz: 20412
+# genes/dirImm1.gp.gz: 12857
+# genes/haeCon2.gp.gz: 21837
+# genes/hetBac1.gp.gz: 20928
+# genes/loaLoa1.gp.gz: 14903
+# genes/melHap1.gp.gz: 14103
+# genes/melInc2.gp.gz: 19189
+# genes/necAme1.gp.gz: 18984
+# genes/oncVol1.gp.gz: 12133
+# genes/panRed1.gp.gz: 24071
+# genes/priExs1.gp.gz: 23767
+# genes/priPac3.gp.gz: 22872
+# genes/strRat2.gp.gz: 12439
+# genes/triSpi1.gp.gz: 16370
+# genes/triSui1.gp.gz: 13600
 
     time (cat ../anno/result/*.maf \
-	| nice -n +19 genePredToMafFrames ce11 stdin stdout \
-           `egrep -v "nasLar1|rhiRox1|tarSyr2|panPan1|nomLeu3|chlSab2|saiBol1" ../species.list.txt | xargs echo | sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g;"` \
+	| genePredToMafFrames ce11 stdin stdout \
+           `egrep -v "ascSuu1" ../species.list.txt | xargs echo | sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g;"` \
 		| gzip > multiz26wayFrames.bed.gz)
-    #   real    19m52.191s
+    #   real    1m40.091s
 
     # verify there are frames on everything, should be 15 species:
     zcat multiz26wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c \
        | sed -e 's/^/# /;'
-#  245500 calJac3
-#  268521 canFam3
-#  196578 gorGor3
-#  208946 ce11
-#   16650 macFas5
-#  199799 micMur1
-#  256139 mm10
-#  212698 otoGar3
-#  200276 panTro4
-#  219978 papAnu2
-#  222360 ponAbe2
-#   49920 rheMac3
-#  194743 tupBel1
+#  102228 ancCey1
+#   62865 bruMal2
+#   93717 burXyl1
+#  129846 caeAng2
+#  162169 caeJap4
+#  183626 caePb3
+#  219355 caeRem4
+#  190425 caeSp111
+#  214566 caeSp51
+#  204669 cb4
+#  123221 ce11
+#   62882 dirImm1
+#   89757 haeCon2
+#   75007 hetBac1
+#   62443 loaLoa1
+#   53145 melHap1
+#   46477 melInc2
+#   83965 necAme1
+#   65069 oncVol1
+#   75620 panRed1
+#   59341 priExs1
+#   61095 priPac3
+#   75605 strRat2
+#   43472 triSpi1
+#   41941 triSui1
 
     #   load the resulting file
     ssh hgwdev
     cd /hive/data/genomes/ce11/bed/multiz26way/frames
     time hgLoadMafFrames ce11 multiz26wayFrames multiz26wayFrames.bed.gz
-    #   real    0m26.951s
-
+    #   real    0m29.914s
 
     time featureBits -countGaps ce11 multiz26wayFrames
-    # 47513754 bases of 3209286105 (1.481%) in intersection
-    #  real    0m16.409s
+    # 29102814 bases of 100286401 (29.020%) in intersection
+    #  real    0m16.783s
 
     #   enable the trackDb entries:
 # frames multiz26wayFrames
@@ -750,7 +775,7 @@ done
     #   appears to work OK
 
 #########################################################################
-# Phylogenetic tree from 20-way (TBD - 2015-04-03 - Hiram)
+# Phylogenetic tree from 20-way (DONE - 2015-08-18 - Hiram)
     mkdir /hive/data/genomes/ce11/bed/multiz26way/4d
     cd /hive/data/genomes/ce11/bed/multiz26way/4d
 
@@ -902,38 +927,8 @@ endif
 # bruMal2:0.174965):1.0837):0.137915,(triSpi1:0.820134,
 # triSui1:0.850407):0.137915);
 
-    # compare these calculated lengths to the tree extracted from 183way:
-    grep TREE all.mod | sed -e 's/TREE: //' \
-       | /cluster/bin/phast/all_dists /dev/stdin | grep ce11 \
-          | sed -e "s/ce11.//;"  | sort > new.dists
-    /cluster/bin/phast/all_dists ../ce11.26way.nh | grep ce11 \
-        | sed -e "s/ce11.//;" | sort > old.dists
-    # printing out the 'new', the 'old' the 'difference' and percent difference
-    join new.dists old.dists | awk '{
-  printf "#\t%s\t%8.6f\t%8.6f\t%8.6f\t%8.6f\n", $1, $2, $3, $2-$3, 100*($2-$3)/$3 }' \
-      | sort -k3n
-#       panTro4 0.013354        0.013390        -0.000036       -0.268857
-#       panPan1 0.014412        0.015610        -0.001198       -7.674568
-#       gorGor3 0.026014        0.019734        0.006280        31.823249
-#       ponAbe2 0.045236        0.039403        0.005833        14.803441
-#       nomLeu3 0.052852        0.046204        0.006648        14.388365
-#       macFas5 0.080661        0.079575        0.001086        1.364750
-#       rhiRox1 0.081305        0.075474        0.005831        7.725839
-#       papAnu2 0.081458        0.079626        0.001832        2.300756
-#       rheMac3 0.081710        0.079575        0.002135        2.683003
-#       nasLar1 0.081742        0.075474        0.006268        8.304847
-#       chlSab2 0.081818        0.087974        -0.006156       -6.997522
-#       saiBol1 0.133183        0.087804        0.045379        51.682156
-#       calJac3 0.135678        0.107454        0.028224        26.266123
-#       micMur1 0.263345        0.236534        0.026811        11.334946
-#       tarSyr2 0.266293        0.221294        0.044999        20.334487
-#       otoGar3 0.299131        0.270334        0.028797        10.652378
-#       tupBel1 0.337009        0.335048        0.001961        0.585289
-#       canFam3 0.343407        0.332429        0.010978        3.302359
-#       mm10    0.498858        0.502391        -0.003533       -0.703237
-
 #########################################################################
-# phastCons 20-way (TBD - 2015-04-03 - Hiram)
+# phastCons 20-way (DONE - 2015-09-08 - Hiram)
     # split 26way mafs into 10M chunks and generate sufficient statistics
     # files for # phastCons
     ssh ku
@@ -982,18 +977,19 @@ mkSS.csh $(root1) {check out line+ done/$(root1)}
 
     gensub2 maf.list single template jobList
     # beware overloaded the cluster with these fast running high I/O jobs
-    para -ram=16g create jobList
-    para try ... check ... etc
-    para -maxJob=32 push
-# Completed: 358 of 358 jobs
-# CPU time in finished jobs:       8154s     135.91m     2.27h    0.09d  0.000 y
-# IO & Wait Time:                  1413s      23.54m     0.39h    0.02d  0.000 y
-# Average job time:                  27s       0.45m     0.01h    0.00d
-# Longest finished job:             798s      13.30m     0.22h    0.01d
-# Submission to last job:           835s      13.92m     0.23h    0.01d
+    # however, in this case, there are only 7
+    para -ram=32g create jobList
+    para try   # this runs all 7
+    para time > run.time
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:        161s       2.68m     0.04h    0.00d  0.000 y
+# IO & Wait Time:                    15s       0.25m     0.00h    0.00d  0.000 y
+# Average job time:                  25s       0.42m     0.01h    0.00d
+# Longest finished job:              34s       0.57m     0.01h    0.00d
+# Submission to last job:            45s       0.75m     0.01h    0.00d
 
     find ./result -type f | wc -l
-    #	 645
+    #	 14
 
     # Run phastCons
     #	This job is I/O intensive in its output files, beware where this
@@ -1066,27 +1062,26 @@ rm -fr $tmp
 
     find ../SS/result -type f | sed -e "s#../SS/result/##" > ss.list
     wc -l ss.list
-    #	645 ss.list
+    #	14 ss.list
 
     # Create parasol batch and run it
     # run for all species
-    cd /hive/data/genomes/ce11/bed/multiz26way/cons
-    mkdir -p all
-    cd all
+    mkdir /hive/data/genomes/ce11/bed/multiz26way/cons/all
+    cd /hive/data/genomes/ce11/bed/multiz26way/cons/all
     #	Using the .mod tree
     cp -p ../../4d/all.mod ./all.mod
 
     gensub2 ../run.cons/ss.list single ../run.cons/template jobList
     # beware overwhelming the cluster with these fast running high I/O jobs
-    para -ram=16g create jobList
+    # however, in this case, there are only 14 jobs
+    para -ram=32g create jobList
     para try ... check ...
-    para -maxJob=32 push
-# Completed: 645 of 645 jobs
-# CPU time in finished jobs:      11994s     199.90m     3.33h    0.14d  0.000 y
-# IO & Wait Time:                  4296s      71.60m     1.19h    0.05d  0.000 y
-# Average job time:                  25s       0.42m     0.01h    0.00d
-# Longest finished job:              55s       0.92m     0.02h    0.00d
-# Submission to last job:           562s       9.37m     0.16h    0.01d
+# Completed: 14 of 14 jobs
+# CPU time in finished jobs:        412s       6.87m     0.11h    0.00d  0.000 y
+# IO & Wait Time:                    81s       1.35m     0.02h    0.00d  0.000 y
+# Average job time:                  35s       0.59m     0.01h    0.00d
+# Longest finished job:              51s       0.85m     0.01h    0.00d
+# Submission to last job:           108s       1.80m     0.03h    0.00d
 
     # create Most Conserved track
     cd /hive/data/genomes/ce11/bed/multiz26way/cons/all
@@ -1103,28 +1098,27 @@ done > tmpMostConserved.bed
 
 
     /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
-    # -rw-rw-r--   1 76951148 Apr 15 16:21 tmpMostConserved.bed
-    # -rw-rw-r--   1 78998479 Apr 15 20:28 mostConserved.bed
+    # -rw-rw-r-- 1 13454157 Sep  8 11:44 tmpMostConserved.bed
+    # -rw-rw-r-- 1 13671554 Sep  8 11:45 mostConserved.bed
 
     wc -l *.bed
-    #   2244053 mostConserved.bed
-    #   2244053 tmpMostConserved.bed
+    # 406479 mostConserved.bed
+    # 406479 tmpMostConserved.bed
 
     # load into database
     ssh hgwdev
     cd /hive/data/genomes/ce11/bed/multiz26way/cons/all
     time hgLoadBed ce11 phastConsElements26way mostConserved.bed
-    # with the correct rhiRox1 sequence:
-    # Read 2244053 elements of size 5 from mostConserved.bed
-    #  real    0m19.301s
+    # Read 406479 elements of size 5 from mostConserved.bed
+    # real    0m3.735s
 
     # on human we often try for 5% overall cov, and 70% CDS cov
     # most bets are off here for that goal, these alignments are too few
     #	and too far between
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
-    featureBits ce11 -enrichment knownGene:cds phastConsElements26way
-    # knownGene:cds 1.266%, phastConsElements26way 5.412%, both 0.874%,
-    # cover 69.05%, enrich 12.76x
+    featureBits ce11 -enrichment ensGene:cds phastConsElements26way
+    # ensGene:cds 25.321%, phastConsElements26way 41.217%, both 19.293%,
+    # cover 76.20%, enrich 1.85x
 
     # Create merged posterier probability file and wiggle track data files
     cd /hive/data/genomes/ce11/bed/multiz26way/cons/all
@@ -1135,62 +1129,63 @@ done > tmpMostConserved.bed
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
 	| sed -e 's/\.[0-9][0-9]*-[0-9][0-9]* start/ start/' \
         | gzip -c > downloads/phastCons26way.wigFix.gz)
-    #   real    32m28.899s
+    #   real    0m43.836s
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/phastCons26way.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/ce11/chrom.sizes \
 	    phastCons26way.bw) > bigWig.log 2>&1
     egrep "real|VmPeak" bigWig.log
-    # pid=48046: VmPeak:    33804452 kB
-    # real    50m28.896s
+    # pid=22748: VmPeak:      676500 kB
+    # real    0m49.827s
 
     bigWigInfo phastCons26way.bw | sed -e 's/^/# /;'
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 5,127,773,887
-# primaryIndexSize: 93,405,104
+# primaryDataSize: 118,518,400
+# primaryIndexSize: 2,746,816
 # zoomLevels: 10
-# chromCount: 357
-# basesCovered: 2,949,052,222
-# mean: 0.128327
+# chromCount: 7
+# basesCovered: 58,852,043
+# mean: 0.686605
 # min: 0.000000
 # max: 1.000000
-# std: 0.243053
+# std: 0.385078
 
     #	encode those files into wiggle data
     time (zcat downloads/phastCons26way.wigFix.gz \
 	| wigEncode stdin phastCons26way.wig phastCons26way.wib)
     #   Converted stdin, upper limit 1.00, lower limit 0.00
-    #   real    15m6.015s
+    #   real    0m17.307s
+
 
     du -hsc *.wi?
-    # 2.8G    phastCons26way.wib
-    # 284M    phastCons26way.wig
-# -rw-rw-r--   1 2949052222 Apr 17 10:18 phastCons26way.wib
-# -rw-rw-r--   1  297183953 Apr 17 10:18 phastCons26way.wig
+    # 57M     phastCons26way.wib
+    # 7.8M    phastCons26way.wig
+# -rw-rw-r-- 1  58852043 Sep  8 11:49 phastCons26way.wib
+# -rw-rw-r-- 1   8107673 Sep  8 11:49 phastCons26way.wig
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phastCons26way.wib /gbdb/ce11/multiz26way/phastCons26way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/ce11/multiz26way \
 	ce11 phastCons26way phastCons26way.wig
-    #   real    0m33.285s
+    #   real    0m1.059s
 
     # use to set trackDb.ra entries for wiggle min and max
     # and verify table is loaded correctly
 
     wigTableStats.sh ce11 phastCons26way
-# db.table          min max mean       count sumData
-# ce11.phastCons26way 0 1 0.128327 2949052222 3.78443e+08
-#        stdDev  viewLimits
-#      0.243053 viewLimits=0:1
+# db.table           min max mean       count sumData
+# ce11.phastCons26way 0 1 0.686605 58852043 4.04081e+07
+#    stdDev  viewLimits
+#   0.385078 viewLimits=0:1
 
     #  Create histogram to get an overview of all the data
     time hgWiggle -doHistogram -db=ce11 \
-	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+        -hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    phastCons26way > histogram.data 2>&1
-    #	real    2m47.080s
+    #	real    0m3.288s
 
     #	create plot of histogram:
 
@@ -1201,7 +1196,7 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Human ce11 Histogram phastCons26way track"
+set title " C. elegans - ce11 Histogram phastCons26way track"
 set xlabel " phastCons26way score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
@@ -1217,7 +1212,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display ce11.26way.phastCons.histo.png &
 
 #########################################################################
-# phyloP for 20-way (WORKING - 2015-04-03 - Hiram)
+# phyloP for 26-way (DONE - 2015-09-08 - Hiram)
     # run phyloP with score=LRT
     ssh ku
     mkdir -p /cluster/data/ce11/bed/multiz26way/consPhyloP/run.phyloP
@@ -1231,7 +1226,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 	../../cons/all/all.mod 0.567 > all.mod
     # verify, the BACKGROUND should now be paired up:
     grep BACK all.mod
-    #   BACKGROUND: 0.216500 0.283500 0.283500 0.216500
+    #   BACKGROUND: 0.216500 0.283500 0.283500 0.216500 
 
     cat << '_EOF_' > doPhyloP.csh
 #!/bin/csh -fe
@@ -1270,7 +1265,7 @@ sleep 4
 	| sed -e "s/.ss$//; s#^../../cons/SS/result/##" > ss.list
     # make sure the list looks good
     wc -l ss.list
-    #	645 ss.list
+    #	14 ss.list
 
     # Create template file
     #	file1 == $chr/$chunk/file name without .ss suffix
@@ -1291,17 +1286,16 @@ sleep 4
     gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
     # beware overloading the cluster with these quick and high I/O jobs
     # -ram=32g will ensure they can all complete and will not run too many
-    #   at the same time
+    #   at the same time, there are only 14 here anyway
     para -ram=32g create jobList
     para try ... check ... push ... etc ...
-    para -maxJob=32 push
     para time > run.time
-# Completed: 645 of 645 jobs
-# CPU time in finished jobs:     270641s    4510.68m    75.18h    3.13d  0.009 y
-# IO & Wait Time:                  4545s      75.76m     1.26h    0.05d  0.000 y
-# Average job time:                 427s       7.11m     0.12h    0.00d
-# Longest finished job:            1414s      23.57m     0.39h    0.02d
-# Submission to last job:         11305s     188.42m     3.14h    0.13d
+# Completed: 14 of 14 jobs
+# CPU time in finished jobs:      10816s     180.26m     3.00h    0.13d  0.000 y
+# IO & Wait Time:                    88s       1.47m     0.02h    0.00d  0.000 y
+# Average job time:                 779s      12.98m     0.22h    0.01d
+# Longest finished job:            1283s      21.38m     0.36h    0.01d
+# Submission to last job:          1294s      21.57m     0.36h    0.01d
 
     # back on dev
     cd /hive/data/genomes/ce11/bed/multiz26way/consPhyloP/all
@@ -1310,91 +1304,90 @@ sleep 4
     time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
 	| gzip -c > downloads/phyloP26way.wigFix.gz)
-    #   real    44m21.578s
+    #   real    0m54.344s
 
-    # -rw-rw-r-- 1 4572468017 Apr 17 09:08 phyloP26way.wigFix.gz
+    # -rw-rw-r-- 1 102990761 Sep  8 12:40 phyloP26way.wigFix.gz
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/phyloP26way.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/ce11/chrom.sizes \
 	phyloP26way.bw) > bigWig.log 2>&1
     egrep "real|VmPeak" bigWig.log
-    # # pid=68805: VmPeak:    33804456 kB
-    #  real    53m14.250s
+    # pid=39486: VmPeak:      676500 kB
+    # real    0m54.488s
 
     bigWigInfo phyloP26way.bw  | sed -e 's/^/# /;'
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 5,808,265,679
-# primaryIndexSize: 93,405,104
+# primaryDataSize: 136,567,148
+# primaryIndexSize: 2,746,816
 # zoomLevels: 10
-# chromCount: 357
-# basesCovered: 2,949,052,222
-# mean: 0.089688
-# min: -14.191000
-# max: 1.199000
-# std: 0.678542
+# chromCount: 7
+# basesCovered: 58,852,043
+# mean: 0.970667
+# min: -3.992000
+# max: 9.159000
+# std: 1.577332
 
     #	encode those files into wiggle data
     time (zcat downloads/phyloP26way.wigFix.gz \
 	| wigEncode stdin phyloP26way.wig phyloP26way.wib)
-    # Converted stdin, upper limit 1.20, lower limit -14.19
-    #  real    16m51.456s
+    # Converted stdin, upper limit 9.16, lower limit -3.99
+    # real    0m19.281s
 
     du -hsc *.wi?
-    # 2.8G    phyloP26way.wib
-    # 290M    phyloP26way.wig
-# -rw-rw-r--   1 2949052222 Apr 17 11:22 phyloP26way.wib
-# -rw-rw-r--   1  304040712 Apr 17 11:22 phyloP26way.wig
+    # 57M     phyloP26way.wib
+    # 8.0M    phyloP26way.wig
+# -rw-rw-r-- 1  58852043 Sep  8 12:46 phyloP26way.wib
+# -rw-rw-r-- 1   8322927 Sep  8 12:46 phyloP26way.wig
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phyloP26way.wib /gbdb/ce11/multiz26way/phyloP26way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/ce11/multiz26way ce11 \
 	phyloP26way phyloP26way.wig
-    # real    0m31.992s
+    # real    0m0.842s
 
     # use to set trackDb.ra entries for wiggle min and max
     # and verify table is loaded correctly
 
     wigTableStats.sh ce11 phyloP26way
 # db.table      min max mean count sumData
-# ce11.phyloP26way -14.191 1.199 0.0896878 2949052222 2.64494e+08
+# ce11.phyloP26way -3.992 9.159 0.970667 58852043 5.71257e+07
 #       stdDev viewLimits
-#     0.678542 viewLimits=-3.30302:1.199
+#      1.57733 viewLimits=-3.992:8.85733
 
-    #	that range is: 14.191+1.199 = 15.390 for hBinSize=0.01539
+    #	that range is: 9.159+3.992 = 13.151 for hBinSize=0.013151
 
     #  Create histogram to get an overview of all the data
     time hgWiggle -doHistogram \
-	-hBinSize=0.01539 -hBinCount=1000 -hMinVal=-14.191 -verbose=2 \
+	-hBinSize=0.013151 -hBinCount=1000 -hMinVal=-3.992 -verbose=2 \
 	    -db=ce11 phyloP26way > histogram.data 2>&1
-    #   real    2m43.403s
+    #   real    0m3.666s
 
     # find the Y range for the 2:5 graph
     grep "^[0-9]" histogram.data | ave -col=5 stdin | sed -e 's/^/# /;'
-# Q1 0.000000
-# median 0.000002
-# Q3 0.000283
-# average 0.001149
+# Q1 0.000065
+# median 0.000179
+# Q3 0.000924
+# average 0.001026
 # min 0.000000
-# max 0.018142
-# count 870
-# total 0.999982
-# standard deviation 0.002856
+# max 0.030633
+# count 975
+# total 0.999992
+# standard deviation 0.002321
 
     # find the X range for the 2:5 graph
     grep "^[0-9]" histogram.data | ave -col=2 stdin | sed -e 's/^/# /;'
-# Q1 -8.823738
-# median -5.480260
-# Q3 -2.121392
-# average -5.516735
-# min -14.191000
-# max 1.199000
-# count 870
-# total -4799.559716
-# standard deviation 3.919439
-
+# Q1 -0.533287
+# median 2.662410
+# Q3 5.884400
+# average 2.660747
+# min -3.992000
+# max 9.159000
+# count 975
+# total 2594.228452
+# standard deviation 3.707122
 
     #	create plot of histogram:
     cat << '_EOF_' | gnuplot > ce11.26way.phyloP.histo.png
@@ -1404,14 +1397,14 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Human ce11 Histogram phyloP26way track"
+set title " C. elegans ce11 Histogram phyloP26way track"
 set xlabel " phyloP26way score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
 set y2range [0:1]
 set y2tics
-set xrange [-4:1.5]
-set yrange [0:0.02]
+set xrange [-2:4]
+set yrange [0:0.015]
 
 plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         "histogram.data" using 2:7 axes x1y2 title " CRF" with lines

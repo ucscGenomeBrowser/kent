@@ -27,6 +27,7 @@ UTILS_APPLIST = \
 	chainSwap \
 	chainToAxt \
 	chainToPsl \
+	chainToPslBasic \
 	lavToAxt \
 	lavToPsl \
 	mafCoverage \

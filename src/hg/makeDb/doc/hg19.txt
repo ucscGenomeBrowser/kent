@@ -29969,8 +29969,18 @@ cat > README.txt << 'EOF'
 This directory contains peptide sequences from the August 2014 Human Build of PeptideAtlas (peptideatlas.org).
 'EOF'
 
-tail -n +2 peptides.tab | \
-    hgLoadSqlTab hgFixed peptideAtlas2014Peptides ~/kent/src/hg/lib/peptideAtlasPeptide.sql stdin
+#tail -n +2 peptides.tab | \
+    #hgLoadSqlTab hgFixed peptideAtlas2014Peptides ~/kent/src/hg/lib/peptideAtlasPeptide.sql stdin
+
+
+# BUG FIX: RM #15998
+# Reload peptideAtlas2014Peptides table with columns in the right order
+# 2015-09-08 (kate)
+tail -n +2 peptides.tab | awk '{OFS="\t"}{ print $1, $2, $5, $3, $4}' | \
+    hgLoadSqlTab hgFixed peptideAtlas2014PeptidesFixed ~/kent/src/hg/lib/peptideAtlasPeptide.sql stdin
+hgsql hgFixed -e 'alter table peptideAtlas2014Peptides rename to peptideAtlas2014Peptides_old'
+hgsql hgFixed -e 'alter table peptideAtlas2014PeptidesFixed rename to peptideAtlas2014Peptides'
+
 
 # extract mappings with some metadata (biosequence matched (protein and gene)))
 # use number of samples where the peptide was observed as the score (to be scaled)

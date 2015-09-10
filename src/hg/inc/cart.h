@@ -582,5 +582,12 @@ void cartCheckForCustomTracks(struct cart *cart, struct dyString *dyMessage);
 /* Scan cart for ctfile_<db> variables.  Tally up the databases that have
  * live custom tracks and those that have expired custom tracks. */
 /* While we're at it, also look for saved blat results. */
+
+#define CART_HAS_DEFAULT_VISIBILITY "defaultsSet"
+
+extern void cartHideDefaultTracks(struct cart *cart);
+/* Hide all the tracks who have default visibilities in trackDb
+ * that are something other than hide.  Do this only if the
+ * variable CART_HAS_DEFAULT_VISIBILITY is set in the cart.  */
 #endif /* CART_H */
 

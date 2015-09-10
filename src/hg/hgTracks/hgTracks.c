@@ -5881,7 +5881,7 @@ hPrintf("<tr><td> zoom in base level</td><td class=\"hotkey\">b</td><td> refresh
 hPrintf("<tr><td> zoom out 1.5x</td><td class=\"hotkey\">ctrl+k</td><td> jump to position box</td><td class=\"hotkey\">/</td>        </tr>\n"); 
 hPrintf("<tr><td> zoom out 3x</td><td class=\"hotkey\">k</td>");
 if (gotExtTools)
-    hPrintf("<td>Sent to external tool</td><td class=\"hotkey\">s then t</td>");
+    hPrintf("<td>Send to external tool</td><td class=\"hotkey\">s then t</td>");
 hPrintf("               </tr>\n");
 hPrintf("<tr><td> zoom out 10x</td><td class=\"hotkey\">K</td>              </tr>\n");
 hPrintf("<tr><td> zoom out 100x</td><td class=\"hotkey\">0</td>             </tr>\n");
