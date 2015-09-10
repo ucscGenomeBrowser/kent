@@ -9,6 +9,8 @@ include ${kentSrc}/inc/common.mk
 UTILS_APPLIST = \
 	hgFindSpec \
 	hgLoadBed \
+	hgLoadChain \
+	hgLoadNet \
 	hgLoadOut \
 	hgLoadOutJoined \
 	hgGcPercent \
@@ -37,13 +39,11 @@ DIRS = \
 	hgKnownMore \
 	hgKnownMore.oo21 \
 	hgLoadBlastTab \
-	hgLoadChain \
 	hgLoadChromGraph \
 	hgLoadGenePred \
 	hgLoadItemAttr \
 	hgLoadMaf \
 	hgLoadMafFrames \
-	hgLoadNet \
 	hgLoadPsl \
 	hgLoadSeq \
 	hgLoadSample \
