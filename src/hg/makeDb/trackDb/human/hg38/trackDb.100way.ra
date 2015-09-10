@@ -1,4 +1,5 @@
 track cons100way
+release alpha,beta
 compositeTrack on
 shortLabel 100-way 
 longLabel Vertebrate Multiz Alignment & Conservation (100 Species)
@@ -13,6 +14,7 @@ group compGeno
 priority 1
 
     track cons100wayViewalign
+    release alpha,beta
     shortLabel Multiz Alignments
     view align
     visibility pack
@@ -20,6 +22,7 @@ priority 1
     subTrack cons100way
 
         track multiz100way
+        release alpha,beta
         subTrack cons100wayViewalign on
         shortLabel Multiz Align
         longLabel Multiz Alignments of 100 Vertebrates
@@ -49,6 +52,7 @@ priority 1
 
     # PhyloP conservation
     track cons100wayViewphyloP
+    release alpha,beta
     shortLabel Basewise Conservation (phyloP)
     view phyloP
     visibility full
@@ -57,6 +61,7 @@ priority 1
     viewLimitsMax -20:0.869
 
         track phyloP100way
+        release alpha,beta
         subTrack cons100wayViewphyloP on
         subGroups view=phyloP clade=all
         shortLabel 100 Vert. Cons
@@ -75,12 +80,14 @@ priority 1
 
     # phastCons conservation
     track cons100wayViewphastcons
+    release alpha,beta
     shortLabel Element Conservation (phastCons)
     view phastcons
     visibility hide
     subTrack cons100way
 
         track phastCons100way
+        release alpha,beta
         subTrack cons100wayViewphastcons off
         subGroups view=phastcons clade=all
         shortLabel 100 Vert. Cons
@@ -98,12 +105,14 @@ priority 1
 
     # Conserved Elements (Most Conserved)
     track cons100wayViewelements
+    release alpha,beta
     shortLabel Conserved Elements
     view elements
     visibility hide
     subTrack cons100way
 
         track phastConsElements100way
+        release alpha,beta
         subTrack cons100wayViewelements off
         subGroups view=elements clade=all
         shortLabel 100 Vert. El
