@@ -1,0 +1,63 @@
+#!/usr/bin/env python2.7
+# makeFastqManifest
+# Chris Eisenhart 09/10/2015 
+# ceisenha@ucsc.edu/ceisenhart@soe.ucsc.edu
+"""
+Make a manifest.txt file from a list of file names (kalList) and a tagstorm file (meta.txt).
+This was used for the first Quake submission. 
+"""
+
+from __future__ import print_function  
+import  sys, operator, fileinput, collections, string, os.path
+import  re, argparse, subprocess
+
+def parseArgs(args): 
+    """
+    Parse the arguments into an opened file for reading (inputFile), and 
+    an open file for writing (outputFile). 
+    """
+    parser = argparse.ArgumentParser(description = __doc__)
+    parser.add_argument ("inputFile",
+    help = " The list of file names, kalList file.",
+    type = argparse.FileType('r'))
+    parser.add_argument ("inputFile2",
+    help = " Tagstorm file, meta.txt",
+    type = argparse.FileType('r'))
+    parser.add_argument ("outputFile",
+    help = " The output manifest file, manifestFastq.txt.",
+    type = argparse.FileType('w'))
+    options = parser.parse_args() #Options is a structure that holds the command line arguments information
+    return options
+
+
+def main(args):
+    """
+    Link kallisto file list and meta data information to generate a manifest file for fastq files. 
+    """
+    location = "sraFiles/" 
+    options = parseArgs(args)
+    kalFile = options.inputFile
+    metaFile = options.inputFile2
+    outputFile = options.outputFile
+    validFileLinks = dict() # Hold the valid files 
+    srrNum = 1974543
+    for line in kalFile:
+        validFileLinks.setdefault("ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/" + line[:-1], srrNum)
+        srrNum += 1
+    stanza = dict() # hold the tagStorm stanza as key values
+    result = [] # The result is a list of tuples
+    outputFile.write("file\tformat\toutput\tmeta\tucsc_db\tpaired_end\n") 
+    for line in metaFile:
+        splitLine = line.split()
+        if len(splitLine) > 1: 
+            stanza.setdefault(splitLine[0], splitLine[1])
+            if splitLine[0] ==  "GEO_Sample_supplementary_file_2": 
+                if splitLine[1] in validFileLinks:
+                    fileName = location + splitLine[1].replace("/","-").split("sra-instant")[1][1:] + "-" + "SRR"+str(validFileLinks.get(splitLine[1])) + "-/" + "SRR"+str(validFileLinks.get(splitLine[1]))   
+                    outputFile.write("%s_1.fastq.gz\tfastq\treads\t%s\thg38\t1\n" %(fileName, stanza.get("meta")))
+                    outputFile.write("%s_2.fastq.gz\tfastq\treads\t%s\thg38\t2\n" %(fileName, stanza.get("meta")))
+                stanza = dict()
+                
+if __name__ == "__main__" :
+    sys.exit(main(sys.argv))
+
