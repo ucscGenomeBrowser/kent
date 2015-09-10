@@ -1,17 +1,4 @@
 track cons20way
-release public
-compositeTrack on
-shortLabel Cons Primates
-longLabel Primates Multiz Alignment & Conservation (20 Species)
-subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
-dragAndDrop subTracks
-visibility full
-priority 1
-type bed 4
-group compGeno
-
-track cons20way
-release alpha, beta
 compositeTrack on
 shortLabel Cons Primates
 longLabel Primates Multiz Alignment & Conservation (20 Species)
