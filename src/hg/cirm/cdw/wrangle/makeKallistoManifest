@@ -1,0 +1,61 @@
+#!/usr/bin/env python2.7
+# makeKallistoManifest
+# Chris Eisenhart 09/10/2015 
+# ceisenha@ucsc.edu/ceisenhart@soe.ucsc.edu
+"""
+Make a manifestKallisto.txt file from the manifestFastq.txt file. 
+This was used for the first Quake submission.
+"""
+
+from __future__ import print_function  
+import  sys, operator, fileinput, collections, string, os.path
+import  re, argparse, subprocess
+
+def parseArgs(args): 
+    """
+    Parse the arguments into an opened file for reading (inputFile), and 
+    an open file for writing (outputFile). 
+    """
+    parser = argparse.ArgumentParser(description = __doc__)
+    parser.add_argument ("inputFile",
+    help = " The manifestFastq.txt file. ",
+    type = argparse.FileType('r'))
+    parser.add_argument ("outputFile",
+    help = " The manifestKallisto.txt file. ",
+    type = argparse.FileType('w'))
+    options = parser.parse_args() #Options is a structure that holds the command line arguments information
+    return options
+
+
+def main(args):
+    """
+    Transform the manifestFastq.txt file into the manifestKallisto.txt file. 
+    """
+    options = parseArgs(args)
+    inputFile = options.inputFile
+    outputFile = options.outputFile
+    skip = True
+    for line in inputFile:
+        if skip:
+            skip = False
+            outputFile.write(line)
+            # This is keeping a value that should not be there, remove it
+            continue
+        splitLine = line.split()
+        if (splitLine[5] == "2"): continue
+        secondSplit = splitLine[0].split("-")
+        first = True
+        splitLine[1] = "kallisto_abundance"
+        splitLine[2] = "levels" 
+        for value in splitLine[:-1]: 
+            if first:
+                first = False
+                outputFile.write("kallistoOut/" + secondSplit[6] + "/abundance.txt")
+                continue 
+            outputFile.write("\t" + value) 
+        outputFile.write("\n") 
+
+
+if __name__ == "__main__" :
+    sys.exit(main(sys.argv))
+
