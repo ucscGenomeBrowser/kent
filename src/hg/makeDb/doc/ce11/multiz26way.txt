@@ -644,8 +644,7 @@ end
 
     mkdir genes
 
-    #   1. ws245Genes: canFam3 panTro4 gorGor3 ponAbe2 papAnu2 calJac3 micMur1
-    #               otoGar3 tupBel1
+    #   1. ws245Genes
     for DB in ce11 caePb3 caeRem4 cb4 caeJap4 caeSp111 caeAng2 caeSp51 hetBac1 panRed1 ancCey1 necAme1 haeCon2 priExs1 priPac3 melHap1 melInc2 burXyl1 dirImm1 loaLoa1 oncVol1 bruMal2 triSpi1 triSui1
 do
 hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ws245Genes" ${DB} \
@@ -775,7 +774,7 @@ done
     #   appears to work OK
 
 #########################################################################
-# Phylogenetic tree from 20-way (DONE - 2015-08-18 - Hiram)
+# Phylogenetic tree from 26-way (DONE - 2015-08-18 - Hiram)
     mkdir /hive/data/genomes/ce11/bed/multiz26way/4d
     cd /hive/data/genomes/ce11/bed/multiz26way/4d
 
@@ -927,8 +926,38 @@ endif
 # bruMal2:0.174965):1.0837):0.137915,(triSpi1:0.820134,
 # triSui1:0.850407):0.137915);
 
+    # resulting distance table:
+    /cluster/bin/phast/all_dists ce11.26way.nh | grep ce11 \
+        | sed -e "s/ce11.//" | sort -k2n | sed -e 's/^/#    /;'
+#    caeSp51    1.099135
+#    caePb3     1.145646
+#    caeRem4    1.147659
+#    cb4        1.149707
+#    caeSp111   1.175858
+#    caeJap4    1.476358
+#    caeAng2    1.641136
+#    priPac3    2.144944
+#    priExs1    2.157485
+#    burXyl1    2.198399
+#    ancCey1    2.220246
+#    haeCon2    2.280420
+#    necAme1    2.327593
+#    panRed1    2.410344
+#    hetBac1    2.426297
+#    ascSuu1    2.574929
+#    strRat2    2.675904
+#    triSpi1    2.786452
+#    triSui1    2.816725
+#    melInc2    2.864909
+#    melHap1    2.897226
+#    bruMal2    2.949153
+#    oncVol1    3.015920
+#    loaLoa1    3.047938
+#    dirImm1    3.062315
+
+
 #########################################################################
-# phastCons 20-way (DONE - 2015-09-08 - Hiram)
+# phastCons 26-way (DONE - 2015-09-08 - Hiram)
     # split 26way mafs into 10M chunks and generate sufficient statistics
     # files for # phastCons
     ssh ku
@@ -1414,7 +1443,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display ce11.26way.phyloP.histo.png
 
 #############################################################################
-# construct download files for 20-way (TBD - 2015-04-17 - Hiram)
+# construct download files for 26-way (DONE - 2015-09-09 - Hiram)
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/multiz26way
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/phastCons26way
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/phyloP26way
@@ -1422,44 +1451,37 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     cd /hive/data/genomes/ce11/bed/multiz26way/downloads
     mkdir multiz26way phastCons26way phyloP26way
     cd multiz26way
-    # using the separate per-chrom maf files since the single one is too big
-    time rsync -a -P ../../anno/result/ ./maf/
-    # sent 97136730559 bytes  received 6817 bytes  163392325.28 bytes/sec
-    #  total size is 97124849325  speedup is 1.00
-    #  real    9m53.112s
+    # using the separate per-chrom maf files as more
+    #    convenient than the single one
+    time rsync -a -P ../../anno/result/ .
+    # sent 2499852297 bytes  received 148 bytes  161280802.90 bytes/sec
+    # total size is 2499546722  speedup is 1.00
+    # real    0m15.117s
 
-    du -hsc maf
-    #  91G     maf
+    du -hsc *.maf
+    #  2.4G    maf
 
-    time gzip maf/*.maf
-    #   real    104m48.114s
-    du -hsc maf
-    #  12G     maf
+    time gzip *.maf
+    #   real    2m32.825s
 
-    cd maf
-    time md5sum *.maf.gz > md5sum.txt
-    # real    0m48.237s
-
-    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/multiz26way/maf
-    ln -s `pwd`/* \
-        /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/multiz26way/maf
-    cd ..
+    du -hsc maf.gz
+    #  333M    maf
 
     grep TREE ../../4d/all.mod | sed -e 's/TREE: //' \
       | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
          > ce11.26way.nh
     ~/kent/src/hg/utils/phyloTrees/commonNames.sh ce11.26way.nh \
       | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
-         > ce11.26way.commonNames.nh
+         | sed -e 's/__/_/;' > ce11.26way.commonNames.nh
     ~/kent/src/hg/utils/phyloTrees/scientificNames.sh ce11.26way.nh \
 	| $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
 	    > ce11.26way.scientificNames.nh
     time md5sum *.nh > md5sum.txt
     #   real    1m55.320s
-    ln -s `pwd`/*.nh `pwd`/*.txt \
+    ln -s `pwd`/*.nh `pwd`/*.txt `pwd`/*.gz \
         /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/multiz26way
 
-    # obtain the README.txt from ce11/multiz17way and update for this
+    # obtain the README.txt from ce10/multiz9way and update for this
     #   situation
 
     #####################################################################
@@ -1472,7 +1494,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     time md5sum *.gz *.mod *.bw > md5sum.txt
     #   real    0m33.880s
 
-    # obtain the README.txt from ce11/phastCons17way and update for this
+    # obtain the README.txt from ce10/phastCons9way and update for this
     #   situation
     ln -s `pwd`/*.gz `pwd`/*.mod `pwd`/*.bw `pwd`/*.txt \
       /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/phastCons26way
@@ -1488,7 +1510,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     time md5sum *.mod *.bw *.gz > md5sum.txt
     #   real    0m40.489s
 
-    # obtain the README.txt from ce11/phyloP7way and update for this
+    # obtain the README.txt from ce10/phyloP9way and update for this
     #   situation
     ln -s `pwd`/* \
       /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/phyloP26way
@@ -1496,9 +1518,11 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     ###########################################################################
     ## create upstream refGene maf files
     cd /hive/data/genomes/ce11/bed/multiz26way/downloads/multiz26way
+    # going to construct upstream for ws245Genes, refGene and ensGene
+
     # bash script
 #!/bin/sh
-export geneTbl="knownGene"
+export geneTbl="ws245Genes"
 for S in 1000 2000 5000
 do
     echo "making upstream${S}.maf"
@@ -1510,11 +1534,41 @@ do
         | gzip -c > upstream${S}.${geneTbl}.maf.gz
     echo "done upstream${S}.${geneTbl}.maf.gz"
 done
-    #   real    95m7.303s
+    #   real    13m46.813s
 
-    md5sum upstream*.gz >> md5sum.txt
+    # and run up the refGene upstreams
+#!/bin/sh
+export geneTbl="refGene"
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits ce11 ${geneTbl}:upstreamAll:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags ce11 multiz26way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/ce11/bed/multiz26way/species.list \
+        | gzip -c > upstream${S}.${geneTbl}.maf.gz
+    echo "done upstream${S}.${geneTbl}.maf.gz"
+done
+    # real    63m58.714s
 
-    # obtain the README.txt from ce11/multiz17way and update for this
+    # and run up the ensGene upstreams
+#!/bin/sh
+export geneTbl="ensGene"
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits ce11 ${geneTbl}:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags ce11 multiz26way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/ce11/bed/multiz26way/species.list \
+        | gzip -c > upstream${S}.${geneTbl}.maf.gz
+    echo "done upstream${S}.${geneTbl}.maf.gz"
+done
+    # real    14m4.262s
+
+    # obtain the README.txt from ce9/multiz10way and update for this
     #   situation
     # information for table of species in the README files, need to
     # edit it in after adding it to the end of this file:
@@ -1526,40 +1580,57 @@ do
  echo "${info} ${netType}"
 done | tr '[\t]' '[ ]' >> README.txt
 
-Human - Homo sapiens               Dec. 2013 (GRCh38/ce11)            reference
+C. elegans         Caenorhabditis elegans   Aug. 2014 (WBcel245/ce11) reference
 
-Baboon - Papio anubis              Mar. 2012 (Baylor Panu_2.0/papAnu2)  syntenic
-Bushbaby - Otolemur garnettii      Mar. 2011 (Broad/otoGar3)     reciprocal best
-Bonobo - Pan paniscus             May. 2012 (Max-Planck/panPan1) reciprocal best
-Chimp - Pan troglodytes            Feb. 2011 (CSAC 2.1.4/panTro4)      syntenic
-Crab-eating macaque - Macaca fascicularis
-                          Jun 2013 (Macaca_fascicularis_5.0/macFas5)  syntenic
-Gibbon - Nomascus leucogenys       Oct. 2012 (GGSC Nleu3.0/nomLeu3)    syntenic
-Golden snub-nosed monkey - Rhinopithecus roxellana
-                          Oct. 2014 (Rrox_v1/rhiRox1)           reciprocal best
-Gorilla - Gorilla gorilla gorilla  May 2011 (gorGor3.1/gorGor3) reciprocal best
-Green monkey - Chlorocebus sabaeus
-                          Mar. 2014 (Chlorocebus_sabeus 1.1/chlSab2)  syntenic
-Marmoset - Callithrix jacchus      Mar. 2009 (WUGSC 3.2/calJac3)     syntenic
-Mouse lemur - Microcebus murinus   Jul. 2007 (Broad/micMur1) reciprocal best
-Orangutan - Pongo pygmaeus abelii  Jul. 2007 (WUGSC 2.0.2/ponAbe2)   syntenic
-Proboscis monkey - Nasalis larvatus
-                          Nov. 2014 (Charlie1.0/nasLar1)        reciprocal best
-Rhesus - Macaca mulatta            Oct. 2010 (BGI CR_1.0/rheMac3)      syntenic
-Squirrel monkey - Saimiri boliviensis Oct. 2011 (Broad/saiBol1) reciprocal best
-Tarsier - Tarsius syrichta
-                   Sep. 2013 (Tarsius_syrichta-2.0.1/tarSyr2) reciprocal best
-Tree shrew - Tupaia belangeri      Dec. 2006 (Broad/tupBel1) reciprocal best
-Mouse  -  Mus musculus             Dec. 2011 (GRCm38/mm10) syntenic
-Dog  -  Canis lupus familiaris     Sep. 2011 (Broad CanFam3.1/canFam3) syntenic
+A. ceylanicum      Ancylostoma ceylanicum   Mar. 2014
+                                         (WS243/Acey_2013.11.30.genDNA/ancCey1)
+Barber pole worm   Haemonchus contortus     Jul. 2013  (WormBase WS239/haeCon2)
+C. angaria         Caenorhabditis angaria   Mar. 2012           (WS245/caeAng2)
+C. brenneri        Caenorhabditis brenneri  Nov. 2010
+                                                    (C. brenneri 6.0.1b/caePb3)
+C. briggsae        Caenorhabditis briggsae  Apr. 2011               (WS225/cb4)
+C. japonica        Caenorhabditis japonica  Aug. 2010     (WUSTL 7.0.1/caeJap4)
+C. remanei         Caenorhabditis remanei   Jul. 2007           (WS220/caeRem4)
+C. sp. 5 ju800     Caenorhabditis sp5 ju800 Jan. 2012
+                                  (WS230/Caenorhabditis_sp_5-JU800-1.0/caeSp51)
+C. tropicalis      Caenorhabditis tropicalis Nov. 2010   (WUSTL 3.0.1/caeSp111)
+Dog heartworm      Dirofilaria immitis      Sep. 2013
+                                                (WS240/D. immitis v2.2/dirImm1)
+Eye worm           Loa loa                  Jul. 2012
+                                         (WS235/L_loa_Cameroon_isolate/loaLoa1)
+Filarial worm      Brugia malayi            May. 2014
+                                                   (WS244/B_malayi-3.1/bruMal2)
+H. bacteriophora/m31e Heterorhabditis bacteriophora Aug. 2011
+                                           (WS229/H. bacteriophora 7.0/hetBac1)
+M. hapla           Meloidogyne hapla        Sep. 2008
+                                                   (M. hapla VW9 WS210/melHap1)
+M. incognita       Meloidogyne incognita    Feb. 2008
+                                        (M. incognita WS245/PRJEA28837/melInc2)
+Microworm          Panagrellus redivivus    Feb. 2013           (Pred3/panRed1)
+N. americanus      Necator americanus       Dec. 2013
+                                                (WS242/N_americanus_v1/necAme1)
+O. volvulus        Onchocerca volvulus      Nov. 2013
+                                         (WS241/O_volvulus_Cameroon_v3/oncVol1)
+P. exspectatus     Pristionchus exspectatus Mar. 2014
+                                               (WS243/P_exspectatus_v1/priExs1)
+P. pacificus       Pristionchus pacificus   Aug. 2014  (P_pacificus-v2/priPac3)
+Pig roundworm      Ascaris suum             Sep. 2012
+                                                    (WS229/AscSuum_1.0/ascSuu1)
+Pine wood nematode Bursaphelenchus xylophilus Nov. 2011
+                                            (WS229/B. xylophilus Ka4C1/burXyl1)
+Threadworm         Strongyloides ratti      Sep. 2014  (S. ratti ED321/strRat2)
+Trichinella        Trichinella spiralis     Jan. 2011
+                                     (WS225/Trichinella_spiralis-3.7.1/triSpi1)
+Whipworm           Trichuris suis           Jul. 2014 (WS243/T. suis
+                                                       DCEP-RM93M male/triSui1)
 
     # some other symlinks were already made above
     ln -s `pwd`/upstream*.gz README.txt \
         /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/multiz26way
 
 #############################################################################
-# hgPal downloads (TBD - 2015-06-30 - braney)
-#   FASTA from 20-way for knownGene, refGene and knownCanonical
+# hgPal downloads (DONE - 2015-09-09 - Hiram)
+#   FASTA from 26-way for ws245Genes, refGene and ensGene
 
     ssh hgwdev
     screen -S ce11HgPal
@@ -1568,7 +1639,7 @@ Dog  -  Canis lupus familiaris     Sep. 2011 (Broad CanFam3.1/canFam3) syntenic
     cat ../species.list | tr '[ ]' '[\n]' > order.list
 
     export mz=multiz26way
-    export gp=knownGene
+    export gp=ws245Genes
     export db=ce11
     export I=0
     mkdir exonAA exonNuc
@@ -1587,16 +1658,16 @@ Dog  -  Canis lupus familiaris     Sep. 2011 (Broad CanFam3.1/canFam3) syntenic
     echo "wait" >> $gp.jobs
 
     time sh -x ./$gp.jobs > $gp.jobs.log 2>&1
-    #   real    45m15.954s
+    #   real    23m34.032s
 
     time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
-    #   real    0m51.327s
+    #   real    0m18.841s
 
     time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    2m45.157s
+    #   real    2m8.738s
 
     export mz=multiz26way
-    export gp=knownGene
+    export gp=ws245Genes
     export db=ce11
     export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
@@ -1630,21 +1701,21 @@ Dog  -  Canis lupus familiaris     Sep. 2011 (Broad CanFam3.1/canFam3) syntenic
     echo "wait" >> $gp.jobs
 
     time sh -x $gp.jobs > $gp.jobs.log 2>&1
-    #   real    30m2.224s
+    #   real    22m52.785s
 
     export mz=multiz26way
     export gp=refGene
     export db=ce11
     time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
-    #   real    0m38.634s
+    #   real    0m17.738s
     time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    2m3.774s
+    #   real    1m55.287s
 
     du -hsc exonAA exonNuc $gp.*fa.gz
-    # 156M    exonAA
-    # 242M    exonNuc
-    # 156M    refGene.multiz26way.exonAA.fa.gz
-    # 242M    refGene.multiz26way.exonNuc.fa.gz
+    # 88M     exonAA
+    # 172M    exonNuc
+    # 88M     refGene.multiz26way.exonAA.fa.gz
+    # 172M    refGene.multiz26way.exonNuc.fa.gz
 
     rm -rf exonAA exonNuc
 
@@ -1658,60 +1729,56 @@ Dog  -  Canis lupus familiaris     Sep. 2011 (Broad CanFam3.1/canFam3) syntenic
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
     ln -s `pwd`/md5sum.txt $pd/
 
-    ### And knownCanonical
+    # running up ensGene
     cd /hive/data/genomes/ce11/bed/multiz26way/pal
     export mz=multiz26way
-    export gp=knownCanonical
+    export gp=ensGene
     export db=ce11
-    mkdir exonAA exonNuc ppredAA ppredNuc knownCanonical
-
-    cut -f1 ../../../chrom.sizes | while read C
+    export I=0
+    mkdir exonAA exonNuc
+    for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
     do
-        echo $C 1>&2
-	hgsql ce11 -N -e "select chrom, chromStart, chromEnd, transcript from knownCanonical where chrom='$C'" > knownCanonical/$C.known.bed
-    done
+        I=`echo $I | awk '{print $1+1}'`
+	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc/$C.exonNuc.fa.gz &"
+	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA/$C.exonAA.fa.gz &"
+        if [ $I -gt 6 ]; then
+            echo "date"
+            echo "wait"
+            I=0
+        fi
+    done > $gp.jobs
+    echo "date" >> $gp.jobs
+    echo "wait" >> $gp.jobs
 
-    ls knownCanonical/*.known.bed | while read F
-    do
-      if [ -s $F ]; then
-         echo $F | sed -e 's#knownCanonical/##; s/.known.bed//'
-      fi
-    done | while read C
-    do
-	echo "date"
-	echo "mafGene -geneBeds=knownCanonical/$C.known.bed  $db $mz knownGene order.list stdout | \
-	    gzip -c > ppredAA/$C.ppredAA.fa.gz"
-	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -noTrans $db $mz knownGene order.list stdout | \
-	    gzip -c > ppredNuc/$C.ppredNuc.fa.gz"
-	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons -noTrans $db $mz knownGene order.list stdout | \
-	    gzip -c > exonNuc/$C.exonNuc.fa.gz"
-	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons $db $mz knownGene order.list stdout | \
-	    gzip -c > exonAA/$C.exonAA.fa.gz"
-    done > $gp.$mz.jobs
-
-    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1
-    # real    122m37.023s
-
-    rm *.known.bed
-    export mz=multiz26way
-    export gp=knownCanonical
-    export db=ce11
-    zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz &
-    zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz &
-    zcat ppredAA/c*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz &
-    zcat ppredNuc/c*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
-
-    rm -rf exonAA exonNuc ppredAA ppredNuc
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1
+XXX - running - Wed Sep  9 10:57:22 PDT 2015
+    #   real    24m14.022s
 
     export mz=multiz26way
-    export gp=knownCanonical
+    export gp=ensGene
+    export db=ce11
+    time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    #   real    0m19.157s
+    time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    #   real    2m4.686s
+
+    du -hsc exonAA exonNuc $gp.*fa.gz
+    # 88M     exonAA
+    # 187M    exonNuc
+    # 88M     ensGene.multiz26way.exonAA.fa.gz
+    # 187M    ensGene.multiz26way.exonNuc.fa.gz
+
+    rm -rf exonAA exonNuc
+
+    # we're only distributing exons at the moment
+    export mz=multiz26way
+    export gp=ensGene
     export db=ce11
     export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
-    cd  $pd
-    md5sum *.exon*.fa.gz > md5sum.txt
+    ln -s `pwd`/md5sum.txt $pd/
 
 #############################################################################
 # wiki page for 26-way (DONE - 2015-07-28 - Hiram)
@@ -1724,24 +1791,24 @@ Dog  -  Canis lupus familiaris     Sep. 2011 (Broad CanFam3.1/canFam3) syntenic
     # sizeStats.sh catches up the cached measurements required for data
     # in the tables.  They may already be done.
     ./sizeStats.sh ce11.26way/ordered.list
-    # dbDb.sh constructs ce11.26way/Ce11_20-way_conservation_alignment.html
+    # dbDb.sh constructs ce11.26way/Ce11_26-way_conservation_alignment.html
     ./dbDb.sh ce11 26way
-    # sizeStats.pl constructs ce11.26way/Ce11_20-way_Genome_size_statistics.html
+    # sizeStats.pl constructs ce11.26way/Ce11_26-way_Genome_size_statistics.html
     ./sizeStats.pl ce11 26way
 
-    # defCheck.pl constructs Ce11_20-way_conservation_lastz_parameters.html
+    # defCheck.pl constructs Ce11_26-way_conservation_lastz_parameters.html
     ./defCheck.pl ce11 26way
 
     # this constructs the html pages in ce11.26way/:
-# -rw-rw-r-- 1 4153 Jun  5 11:03 Ce11_20-way_conservation_alignment.html
-# -rw-rw-r-- 1 5833 Jun  5 11:04 Ce11_20-way_Genome_size_statistics.html
-# -rw-rw-r-- 1 3854 Jun  5 11:04 Ce11_20-way_conservation_lastz_parameters.html
+# -rw-rw-r-- 1 4153 Jun  5 11:03 Ce11_26-way_conservation_alignment.html
+# -rw-rw-r-- 1 5833 Jun  5 11:04 Ce11_26-way_Genome_size_statistics.html
+# -rw-rw-r-- 1 3854 Jun  5 11:04 Ce11_26-way_conservation_lastz_parameters.html
 
     # add those pages to the genomewiki.  Their page names are the
     # names of the .html files without the .html:
-#  Ce11_20-way_conservation_alignment
-#  Ce11_20-way_Genome_size_statistics
-#  Ce11_20-way_conservation_lastz_parameters
+#  Ce11_26-way_conservation_alignment
+#  Ce11_26-way_Genome_size_statistics
+#  Ce11_26-way_conservation_lastz_parameters
 
     # when you view the first one you enter, it will have links to the
     # missing two.
