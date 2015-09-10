@@ -5,12 +5,78 @@
 #	Robert's experiments with an automated process.
 #
 ############################################################################
-# when all done, reset the dateReference:  (DONE - 2015-03-31 - Hiram)
+# when all done, reset the dateReference:  (DONE - 2015-08-04 - Hiram)
+     # next time, this first one will be v81 at 'jul2015'
      hgsql -e \
-'update trackVersion set dateReference="dec2014" where name="ensGene" AND version="78";' hgFixed
+'update trackVersion set dateReference="mar2015" where name="ensGene" AND version="79";' hgFixed
      hgsql -e \
-'update trackVersion set dateReference="current" where name="ensGene" AND version="79";' hgFixed
-     # next time, v79 will be 'mar2015'
+'update trackVersion set dateReference="current" where name="ensGene" AND version="81";' hgFixed
+
+############################################################################
+# ensembl 81 update (DONE - 2015-07-04 - Hiram)
+    ### XXX ### NOTE ### this updated *ALL* assemblies because
+    # of the new feature in gtfToGenePred which included version suffixes
+    # on all gene, protein, and transcript names.  All tables will be updated.
+
+    # First time for: rn6 danRer10
+
+    # to pick up the new file listings from Ensembl, in the source tree:
+    cd ~/kent/src/hg/utils/automation
+    ./findEnsFtpNames.sh 81
+    # constructs the files:
+# -rw-rw-r-- 1 2660 Jul 31 14:44 release.81.MySQL.names
+# -rw-rw-r-- 1 5062 Jul 31 14:52 release.81.fasta.names
+# -rw-rw-r-- 1 4900 Jul 31 15:23 release.81.gtf.names
+
+    # which are edited into: EnsGeneAutomate.pm, verify it is good:
+    ./ensVersions 81 2> /dev/null | grep -v "NOT FOUND" | wc -l
+    #  67
+    # when it is good and checked in, it is copied to /cluster/bin/scripts
+    # then, working in:
+    mkdir /hive/data/outside/ensembl/ensGene/v81
+    cd /hive/data/outside/ensembl/ensGene/v81
+    # construct db work list:
+    ../mkList.sh
+    # creates the file: ens.81.update.list
+    # the scripts work off of this list:
+    time ../runUpdate.sh > update.log.0 2>&1
+    # about 1.5 hours
+    # there was an issue with this update since gtfToGenePred was now adding
+    # version numbers.  All the checks of names lists between gene names and
+    # corresponding protein names failed.  This was fixed up manually after
+    # all was done.
+    # to verify done, and find the broken ones:
+    ../checkStatus.sh | grep -v "ALL DONE"
+    # there were a couple of fixups for: gadMor1 gasAcu1
+    # new assembly for chlSab1
+
+    cd /hive/data/genomes/gadMor1/bed/ensGene.81/process
+    cp -p ../../ensGene.79/process/extraLifting.sh .
+    ./extraLifting.sh
+# Got 554869 lifts in ../../ucscToEnsembl/componentsToCAEA01.lift
+# Lifting gadMor1.all.needLifting.gp
+# Got 554870 lifts in ../../ucscToEnsembl/contigScaffold.lift
+# Lifting gadMor1.all.contigs.gp
+# Got 554869 lifts in ../../ucscToEnsembl/componentsToCAEA01.lift
+# Lifting ensemblGeneScaffolds.gadMor1.needLifting.bed
+# Got 554870 lifts in ../../ucscToEnsembl/contigScaffold.lift
+# Lifting ensemblGeneScaffolds.gadMor1.lifting.bed
+    cd /hive/data/genomes/gadMor1
+    doEnsGeneUpdate.pl -continue=load  -ensVersion=81 \
+       gadMor1.ensGene.ra > ensGene.81.load.log 2>&1
+
+    cd /hive/data/genomes/gasAcu1/bed/ensGene.81/process
+    cp -p ../../ensGene.79/process/extraLift.sh .
+    ./extraLift.sh
+# Got 1935 lifts in ../../../jkStuff/UCSC.chromToScaffoldSansGaps.lft
+# Lifting gasAcu1.allGenes.gp.needLifting.gz
+# checked: 29245 failed: 0
+# pass1 - making usageList (23 chroms): 20 millis
+# pass2 - checking and writing primary data (29245 records, 12 fields): 623 millis
+# Sorting and writing extra index 0: 16 millis
+    cd /hive/data/genomes/gasAcu1
+    doEnsGeneUpdate.pl -continue=load  -ensVersion=81 \
+       gasAcu1.ensGene.ra > ensGene.81.load.log 2>&1
 
 ############################################################################
 # ensembl 79 update (DONE - 2015-03-17 - Hiram)
