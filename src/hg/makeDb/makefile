@@ -10,6 +10,7 @@ UTILS_APPLIST = \
 	hgFindSpec \
 	hgLoadBed \
 	hgLoadChain \
+	hgLoadMaf \
 	hgLoadNet \
 	hgLoadOut \
 	hgLoadOutJoined \
@@ -42,7 +43,6 @@ DIRS = \
 	hgLoadChromGraph \
 	hgLoadGenePred \
 	hgLoadItemAttr \
-	hgLoadMaf \
 	hgLoadMafFrames \
 	hgLoadPsl \
 	hgLoadSeq \
