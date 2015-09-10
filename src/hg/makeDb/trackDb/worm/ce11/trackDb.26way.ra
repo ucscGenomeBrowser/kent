@@ -25,15 +25,15 @@ group compGeno
         irows on
 	#snpTable mafSnp26way
         summary multiz26waySummary
-#        frames multiz26wayFrames
+        frames multiz26wayFrames
         group compGeno
         color 0, 10, 100
         altColor 0,90,10
         type wigMaf 0.0 1.0
         speciesCodonDefault ce11
         speciesGroups Caenorhabditis Others
-        sGroup_Caenorhabditis caeSp111 cb4 caeRem4 caePb3 caeSp51 caeAng2 caeJap4
-        sGroup_Others hetBac1 panRed1 strRat2 ascSuu1 haeCon2 ancCey1 necAme1 priExs1 priPac3 burXyl1 bruMal2 melHap1 melInc2 oncVol1 triSpi1 triSui1 dirImm1 loaLoa1
+        sGroup_Caenorhabditis caeSp51 caePb3 caeRem4 cb4 caeSp111 caeJap4 caeAng2 
+        sGroup_Others priExs1 priPac3 burXyl1 ancCey1 haeCon2 necAme1 panRed1 hetBac1 ascSuu1 strRat2 triSpi1 triSui1 melInc2 melHap1 bruMal2 oncVol1 loaLoa1 dirImm1
         itemFirstCharCase noChange
         treeImage phylo/ce11_26way.png
         priority 100
@@ -44,19 +44,19 @@ group compGeno
     view phyloP
     visibility full
     subTrack cons26way
-    viewLimits -3:1
-    viewLimitsMax -14.191:1.199
+    viewLimits -1:4
+    viewLimitsMax -3.992:9.159
 
         track phyloP26way
-        subTrack cons26wayViewphyloP off
+        subTrack cons26wayViewphyloP on
         subGroups view=phyloP
-        shortLabel 20 mammals Cons
-        longLabel 20 mammals (17 primates) Basewise Conservation by PhyloP
+        shortLabel 26 mammals Cons
+        longLabel 26 mammals (17 primates) Basewise Conservation by PhyloP
         noInherit on
         configurable on
-        type wig -14.191 1.199
+        type wig -3.992 9.159
         maxHeightPixels 100:50:11
-        viewLimits -3:1
+        viewLimits -1:4
         autoScale off
         spanList 1
         windowingFunction mean
@@ -74,8 +74,8 @@ group compGeno
         track phastCons26way
         subTrack cons26wayViewphastcons off
         subGroups view=phastcons
-        shortLabel 20-way Cons
-        longLabel 20 mammals (17 primates) conservation by PhastCons
+        shortLabel 26-way Cons
+        longLabel 26 mammals (17 primates) conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -95,10 +95,10 @@ group compGeno
     subTrack cons26way
 
         track phastConsElements26way
-        subTrack cons26wayViewelements on
+        subTrack cons26wayViewelements off
         subGroups view=elements
-        shortLabel 20-way El
-        longLabel 20 mammals (17 primates) Conserved Elements
+        shortLabel 26-way El
+        longLabel 26 mammals (17 primates) Conserved Elements
         noInherit on
         color 110,10,40
         type bed 5 .
