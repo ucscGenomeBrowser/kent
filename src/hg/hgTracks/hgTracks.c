@@ -5816,29 +5816,26 @@ cgiVarExcludeExcept(except);
 void setupHotkeys(boolean gotExtTools)
 /* setup keyboard shortcuts and a help dialog for it */
 {
-// XX remove if statement after July 2015
-if (!cfgOptionDefault("hotkeys", FALSE))
-    return;
 // wire the keyboard hotkeys
 hPrintf("<script type='text/javascript'>\n");
 // left
-hPrintf("Mousetrap.bind('ctrl+j', function() { $('input[name=\"hgt.left1\"]').click() }); \n");
+hPrintf("Mousetrap.bind('ctrl+j', function() { $('input[name=\"hgt.left1\"]').click(); return false; }); \n");
 hPrintf("Mousetrap.bind('j', function() { $('input[name=\"hgt.left2\"]').click() }); \n");
 hPrintf("Mousetrap.bind('J', function() { $('input[name=\"hgt.left3\"]').click() }); \n");
 
 // right
-hPrintf("Mousetrap.bind('ctrl+l', function() { $('input[name=\"hgt.right1\"]').click() }); \n");
+hPrintf("Mousetrap.bind('ctrl+l', function() { $('input[name=\"hgt.right1\"]').click(); return false; }); \n");
 hPrintf("Mousetrap.bind('l', function() { $('input[name=\"hgt.right2\"]').click() }); \n");
 hPrintf("Mousetrap.bind('L', function() { $('input[name=\"hgt.right3\"]').click() }); \n");
 
 // zoom in
-hPrintf("Mousetrap.bind('ctrl+i', function() { $('input[name=\"hgt.in1\"]').click() }); \n");
+hPrintf("Mousetrap.bind('ctrl+i', function() { $('input[name=\"hgt.in1\"]').click(); return false; }); \n");
 hPrintf("Mousetrap.bind('i', function() { $('input[name=\"hgt.in2\"]').click() }); \n");
 hPrintf("Mousetrap.bind('I', function() { $('input[name=\"hgt.in3\"]').click() }); \n");
 hPrintf("Mousetrap.bind('b', function() { $('input[name=\"hgt.inBase\"]').click() }); \n");
 
 // zoom out
-hPrintf("Mousetrap.bind('ctrl+k', function() { $('input[name=\"hgt.out1\"]').click() }); \n");
+hPrintf("Mousetrap.bind('ctrl+k', function() { $('input[name=\"hgt.out1\"]').click(); return false; }); \n");
 hPrintf("Mousetrap.bind('k', function() { $('input[name=\"hgt.out2\"]').click() }); \n");
 hPrintf("Mousetrap.bind('K', function() { $('input[name=\"hgt.out3\"]').click() }); \n");
 hPrintf("Mousetrap.bind('0', function() { $('input[name=\"hgt.out4\"]').click() }); \n");
@@ -5954,9 +5951,7 @@ if(!trackImgOnly)
     {
     // Write out includes for css and js files
     hWrites(commonCssStyles());
-    // XX remove if statement after July 2015
-    if (cfgOptionDefault("hotkeys", FALSE))
-        jsIncludeFile("mousetrap.min.js", NULL);
+    jsIncludeFile("mousetrap.min.js", NULL);
     jsIncludeFile("jquery.js", NULL);
     jsIncludeFile("jquery-ui.js", NULL);
     jsIncludeFile("utils.js", NULL);
