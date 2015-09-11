@@ -30767,7 +30767,9 @@ html gwipsvizRiboseq
 
 _EOF_
 ##############################################################################
-# DBSNP B144 / SNP144 (DONE 7/16/15)
+# DBSNP B144 / SNP144 (DONE 9/9/15)
+    # Originally done 7/16/15
+    # Updated 9/3/15 with additional alt mappings from dbSNP, see below
     # Redmine #15493
     mkdir -p /hive/data/outside/dbSNP/144/human_hg19
     cd /hive/data/outside/dbSNP/144/human_hg19
@@ -30852,26 +30854,111 @@ EOF
     # This time it was still in the loadDbSnp step, so no need to kill it.
 # *** All done!
 
+    # 9/3/2015: Sarah Hunt at EBI alerted dbSNP that there seemed to be a lot
+    # fewer mappings to alt sequences than in 142; dbSNP made new download files
+    # that seem to be an updated b144_SNPContigLoc trimmed to contain only the
+    # rows on alt sequences.
+    cd /hive/data/outside/dbSNP/144/human_hg19/data
+    wget ftp://ftp.ncbi.nih.gov/snp/temp/EBI/b144_alt/b144_SNPContigLoc_alt_only_105.bcp.gz
+    gunzip b144_SNPContigLoc_alt_only_105.bcp.gz
+    gunzip b144_SNPContigLoc_105.bcp.gz
+    # Check sorting so we can merge-sort (quicker):
+    sort -c -k 2n,2n -k3n,3n -k4n,4n -k5n,5n b144_SNPContigLoc_105.bcp
+    # No output, good.
+    sort -c -k 2n,2n -k3n,3n -k4n,4n -k5n,5n b144_SNPContigLoc_alt_only_105.bcp
+#sort: b144_SNPContigLoc_alt_only_105.bcp:201: disorder: rs      1707    224515579       1098938 1098938                 1098937 1098939 2               144     2015-04-14 09:01:00.0   128     0       T               1.0
+    # Sort the new file, fortunately much smaller than the old file:
+    sort -k 2n,2n -k3n,3n -k4n,4n -k5n,5n b144_SNPContigLoc_alt_only_105.bcp \
+      > b144_SNPContigLoc_alt_only_105_sorted.bcp
+    # Merge-sort the files, discarding lines with the same values in columns 2-5:
+    sort -m -u -k 2n,2n -k3n,3n -k4n,4n -k5n,5n b144_SNPContigLoc_105.bcp \
+      b144_SNPContigLoc_alt_only_105_sorted.bcp \
+      > b144_SNPContigLoc_105_merged.bcp
+    wc -l b144_SNPContigLoc_105.bcp b144_SNPContigLoc_alt_only_105_sorted.bcp \
+      b144_SNPContigLoc_105_merged.bcp
+#  153282211 b144_SNPContigLoc_105.bcp
+#    1831401 b144_SNPContigLoc_alt_only_105_sorted.bcp
+#  153654053 b144_SNPContigLoc_105_merged.bcp
+    # How many of the 1831401 alt mappings were already in b144_SNPContigLoc_105.bcp?
+    expr 153282211 + 1831401 - 153654053
+#1459559
+    # How many new mappings were added?
+    expr 153654053 - 153282211
+#371842
+    # Make sure they're really unique in columns 2-5:
+    cut -f 2-5 b144_SNPContigLoc_105_merged.bcp | sort -k1n,1n -k2n,2n -k3n,3n -k4n,4n > 1
+    uniq 1 > 2
+    cmp 1 2
+    rm 1 2
+    # Install the merged file in place of the original b144_SNPContigLoc_105.bcp.gz
+    gzip b144_SNPContigLoc_105_merged.bcp &
+    mv b144_SNPContigLoc_105{,_orig}.bcp
+    gzip b144_SNPContigLoc_105_orig.bcp &
+    ln -s b144_SNPContigLoc_105_merged.bcp.gz b144_SNPContigLoc_105.bcp.gz
+    rm b144_SNPContigLoc_alt_only_105_sorted.bcp
+    # Run the pipeline again when the gzip of b144_SNPContigLoc_105_merged.bcp is complete.
+    cd /hive/data/outside/dbSNP/144/human_hg19
+    hgsql hg19 -NBe 'select chrom, count(*) from snp144 group by chrom order by chrom' \
+      > chromCounts.orig
+    mkdir origFiles
+    mv snp144*.{bed,tab}*.gz do.log origFiles/
+    hgsql '' -e 'drop database hg19snp144'
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=loadDbSnp >>& do.log &
+    tail -f do.log
+    # While that's reloading the database, see if we need to fetch more fasta:
+    zcat data/b144_SNPContigLoc_105.bcp.gz \
+    | awk '{print "rs" $2;}' \
+    | sort -u > contigLocIds.txt
+    comm -13 rsFastaIds.txt contigLocIds.txt > missingFromRsFasta.txt
+    wc -l missingFromRsFasta.txt
+#34 missingFromRsFasta.txt
+    # It was only 7 before, so let's get sequence from dbSNP again.
+    #   http://www.ncbi.nlm.nih.gov/projects/SNP/dbSNP.cgi?list=rsfile
+    # Enter your email address, select FASTA as output format, and upload missingFromRsFasta.txt
+    # Wait for email with link to results -- don't close that tab!
+    # Excerpt from email:
+#dbSNP BATCH QUERY REPORT: FASTA
+#============================================================
+#Total number of Submitted ID:           34
+#============================================================
+#Total number of ID processed:           34
+#============================================================
+#These rs have been merged (submitted_rs -> new_rs)
+#________________________________________________
+    # Download the gzipped fasta file and move/rename it to rs_chBatchQuery.fas.gz.
+    faSize rs_chBatchQuery.fas.gz
+#4134 bases (34 N's 4100 real 4100 upper 0 lower) in 34 sequences in 1 files
+    # Good -- unlike hg38, they all came through -- even the 7 that were deleted before.
+    # There was no pre-existing rs_chBatchQuery.fas.gz so move this one into rs_fasta/.
+    mv rs_chBatchQuery.fas.gz rs_fasta/
+    tail -f do.log
+    hgsql hg19 -NBe 'select chrom, count(*) from snp144 group by chrom order by chrom' \
+      > chromCounts.merged
+    sdiff chromCounts.{orig,merged} | less
+    # The _hap* sequences have more mappings now, good.
+
 
 ##############################################################################
-# SNP144 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 7/16/15 angie)
+# SNP144 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 9/9/15 angie)
+    # Originally done 7/16/15
     # Redmine #15493
     screen -S ortho -t ortho
     ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 144 -debug
-# *** Steps were performed in /hive/data/genomes/hg19/bed/snp144Ortho.2015-07-16
-    cd /hive/data/genomes/hg19/bed/snp144Ortho.2015-07-16
+# *** Steps were performed in /hive/data/genomes/hg19/bed/snp144Ortho.2015-09-09
+    cd /hive/data/genomes/hg19/bed/snp144Ortho.2015-09-09
     ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 144 \
       >>& do.log & tail -f do.log
 # *** All done!
 
 
 ##############################################################################
-# SNPMASKED SEQUENCE FOR SNP144 (DONE 7/16/15 angie)
+# SNPMASKED SEQUENCE FOR SNP144 (DONE 9/9/15 angie)
+    # Originally done 7/16/15
     # Redmine #15493
     screen -S mask -t mask
     ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 144 -debug
-# *** Steps were performed in /hive/data/genomes/hg19/snp144Mask.2015-07-16
-    cd /hive/data/genomes/hg19/snp144Mask.2015-07-16
+# *** Steps were performed in /hive/data/genomes/hg19/snp144Mask.2015-09-09
+    cd /hive/data/genomes/hg19/snp144Mask.2015-09-09
     ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 144 \
       >>& do.log & tail -f do.log
 # *** All done!

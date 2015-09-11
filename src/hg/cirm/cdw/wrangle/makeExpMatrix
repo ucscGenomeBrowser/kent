@@ -1,0 +1,141 @@
+#!/usr/bin/env python2.7
+# 
+# Chris Eisenhart 09/08/2015 
+# ceisenha@ucsc.edu/ceisenhart@soe.ucsc.edu
+"""
+This program does the whole deal, it makes an expression matrix from kallisto output files.
+To run simply provide the kallisto output directory and a matrix name.  
+"""
+
+from __future__ import print_function  
+import  sys, operator, fileinput, collections, string, os.path
+import  re, argparse, subprocess, time, subprocess
+
+
+startTime = time.time()
+
+def parseArgs(args): 
+    """
+    """
+    parser = argparse.ArgumentParser(description = __doc__)
+    parser.add_argument ("kallistoPath",
+    help = " The kallisto output directory.",
+    action = "store")
+    parser.add_argument ("outputFile",
+    help = " The output matrix name.",
+    action = "store")
+    parser.add_argument ("--pNan",
+    help = " The value that will overwrite 'nan' values in the matrix, default is 0",
+    action = "store")
+    parser.add_argument ("--nNan",
+    help = " The value that will overwrite '-nan' values in the matrix, default is 0",
+    action = "store")
+    parser.add_argument ("--dirtyMatrix",
+    help = " Do not clean the matrix of 'nan' and '-nan' values. ", 
+    action = "store_true") 
+    parser.set_defaults(pNan = "0")
+    parser.set_defaults(nNan = "0")
+    parser.set_defaults(dirtyMatrix = False)
+    options = parser.parse_args()
+    return options
+
+def cleanup():
+    os.system("rm .startFile")
+    os.system("rm .intermediateFile")
+    os.system("rm .columnFile")
+    os.system("rm .kalDirList")
+    os.system("rm .finalFile") 
+    os.system("rm .abundanceFiles") 
+
+def matrixCleanup(matrixFile, pNan, nNan):
+    """
+    Checks the matrix for invalid values
+    """
+    os.system("cat %s | tr \"-\" \"*\" > .dirtyMatrix "%(matrixFile))
+    negProcess = subprocess.Popen(["grep", "/*nan", "-c", ".dirtyMatrix"], stdout = subprocess.PIPE)
+    negOut, negErr = negProcess.communicate()
+    if int(negOut) > 0: 
+        print ("An invalid value of '-nan' was found, it was replaced with %s."%(nNan))
+        os.system("sed -i 's/*nan/%s/g' .dirtyMatrix"  %(nNan))
+    posProcess = subprocess.Popen(["grep", "nan", "-c", ".dirtyMatrix"], stdout = subprocess.PIPE)
+    posOut, posErr = posProcess.communicate()
+    if int(posOut) > 0: 
+        print ("An invalid value of 'nan' was found, it was replaced with %s."%(pNan))
+        os.system("sed -i 's/nan/%s/g' .dirtyMatrix"  %(pNan))
+    os.system("cat .dirtyMatrix | tr \"*\" \"-\" > %s "%(matrixFile))
+
+def getAbundanceFileList(location):
+    """
+    Gets a list of valid kal out dirs, and generates a column row for the matrix.
+    Makes use of some shiesty tactitcs to ensure that the list only contains valid 
+    kallisto file names. This is important since it will be used in the matrix, 
+    any stray names will ruin the entire program. 
+    """ 
+    if not location.endswith("/"): location += "/" 
+    os.system("ls -d %s*/abundance.txt > .abundanceFiles"%(location))
+    # Read all the items into a list. 
+    abundanceFileList = []
+    kalDirListFile = open(".kalDirList", "w")
+    kalDirListFile.write("transripts\n")
+    for line in open(".abundanceFiles", "r"):    
+        abundanceFileList.append(line[:-1])
+        dirName = line.split("/")[-2]
+        kalDirListFile.write(dirName+ "\n")
+    kalDirListFile.close()
+    return abundanceFileList
+
+
+def main(args):
+    """
+    Make an expression matrix using a number of in house programs and unix commands.
+    Makes use of hidden files, which could potentially overwrite existing ones 
+    (hopefully the names are obscure enough that this wont happen).
+    """
+    options = parseArgs(args)
+    location = options.kallistoPath
+    
+    # Before the matrix can be make we first need to generate a list of kallisto output names.  
+    abundanceFileList = getAbundanceFileList(location)
+    
+    # Snag a starting column from an abundance file (these are the transcript names) 
+    os.system("cut -f 1 %s | sed '1d'  > .startFile"%(abundanceFileList[0])) 
+    # Get the values for the matrix, this is the most time consumptive step. 
+    print ("Generating the raw matrix...")
+    count = 0
+    p25 = True
+    p50 = True
+    p75 = True
+    for file in abundanceFileList:
+        count += 1
+        if ((count/float(len(abundanceFileList))) > .25):
+            if p25: print ("25% complete... ")
+            p25 = False
+        if ((count/float(len(abundanceFileList))) > .50):
+            if p50: print ("50% complete...")
+            p50 = False
+        if ((count/float(len(abundanceFileList))) > .75):
+            if p75: print ("75% complete...")
+            p75 = False  
+        os.system("cut -f 4 %s | sed '1d' > .columnFile"%(file))
+        os.system("cat .startFile > .intermediateFile")
+        os.system("paste .intermediateFile .columnFile > .startFile")
+    print ("Raw matrix complete! Adding in the column names...")
+    # Transpose the matrix, then pase in the column names 
+    os.system("rowsToCols .startFile .middleFile")
+    os.system("paste .kalDirList .middleFile > .finalFile ")
+    print ("Transposing matrix into its final form...")
+
+    # Transpose it back to it's original glory 
+    call = ("rowsToCols .finalFile %s"%(options.outputFile)) 
+    os.system(call)
+    # Do some matrix cleanup...
+    if not options.dirtyMatrix: 
+        print ("Verifying the matrix values...")
+        matrixCleanup(options.outputFile, options.pNan, options.nNan)
+    # File cleanup!
+    cleanup()
+    print ("Completed! The program took %s seconds to complete. The output was"
+            " written to %s." %(time.time()-startTime,options.outputFile))
+
+if __name__ == "__main__" :
+    sys.exit(main(sys.argv))
