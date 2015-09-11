@@ -1,5 +1,13 @@
-include alpha.7way.ra alpha
-include betaPublic.7way.ra beta,public
+track cons7way
+shortLabel 7-way Cons
+compositeTrack on
+longLabel Multiz Alignment & Conservation (7 Species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+dragAndDrop subTracks
+visibility hide
+type bed 4
+priority 2
+group compGeno
 
     track cons7wayViewalign
     shortLabel Multiz Alignments
