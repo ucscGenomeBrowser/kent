@@ -393,30 +393,51 @@ boolean udcInfoViaHttp(char *url, struct udcRemoteFileInfo *retInfo)
  * and returns status of HEAD GET. */
 {
 verbose(4, "checking http remote info on %s\n", url);
-struct hash *hash = newHash(0);
-int status = netUrlHead(url, hash);
-if (status != 200  && status != 301 && status != 302)  
-    return FALSE;
-if (status == 301 && status == 302)
+int redirectCount = 0;
+struct hash *hash;
+int status;
+while (TRUE)
     {
-    int sd = netUrlOpen(url);
-    if (sd < 0)
-	return FALSE;
-    int newSd = 0;
-    char *newUrl = NULL;
-    if (!netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))
-	return FALSE;
-    if (newUrl != NULL)
-	{
-	sd = newSd;
-	url = newUrl;
-	retInfo->ci.redirUrl = newUrl; 
-	}
-    close(sd);
-    // reread from the new redirected url
     hash = newHash(0);
     status = netUrlHead(url, hash);
+    if (status == 200)
+	break;
+    if (status != 301 && status != 302)  
+	return FALSE;
+    ++redirectCount;
+    if (redirectCount > 5)
+	{
+	warn("code %d redirects: exceeded limit of 5 redirects, %s", status, url);
+	return  FALSE;
+	}
+    char *newUrl = cloneString(hashFindValUpperCase(hash, "Location:"));
+    struct netParsedUrl npu, newNpu;
+    /* Parse the old URL to make parts available for graft onto the redirected url. */
+    /* This makes redirection work with byterange urls and user:password@ */
+    netParseUrl(url, &npu);
+    netParseUrl(newUrl, &newNpu);
+    boolean updated = FALSE;
+    if (npu.byteRangeStart != -1)
+	{
+	newNpu.byteRangeStart = npu.byteRangeStart;
+	newNpu.byteRangeEnd = npu.byteRangeEnd;
+	updated = TRUE;
+	}
+    if ((npu.user[0] != 0) && (newNpu.user[0] == 0))
+	{
+	safecpy(newNpu.user,     sizeof newNpu.user,     npu.user);
+	safecpy(newNpu.password, sizeof newNpu.password, npu.password);
+	updated = TRUE;
+	}
+    if (updated)
+	{
+	newUrl = urlFromNetParsedUrl(&newNpu);
+	}
+    url = newUrl;
+    retInfo->ci.redirUrl = url;
+    hashFree(&hash);
     }
+
 char *sizeString = hashFindValUpperCase(hash, "Content-Length:");
 if (sizeString == NULL)
     {
