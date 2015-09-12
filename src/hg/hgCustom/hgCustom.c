@@ -656,16 +656,16 @@ static void makeOtherCgiForm(char *pos)
 {
 struct slPair *valsAndLabels = makeOtherCgiValsAndLabels();
 // Default to the first CGI in the menu.
+#define hgCtNavDest "hgct_navDest"
 char *defaultCgi = valsAndLabels->name;
+char *selected = cartUsualString(cart, hgCtNavDest, defaultCgi);
 printf("<FORM STYLE=\"margin-bottom:0;\" METHOD=\"GET\" NAME=\"navForm\" ID=\"navForm\""
-       " ACTION=\"%s\">\n", defaultCgi);
+       " ACTION=\"%s\">\n", selected);
 cartSaveSession(cart);
 if (pos)
     cgiMakeHiddenVar("position", pos);
 printf("view in ");
 // Construct a menu of destination CGIs
-#define hgCtNavDest "hgct_navDest"
-char *selected = cartUsualString(cart, hgCtNavDest, defaultCgi);
 char *extraHtml = "id=\"navSelect\" "
     "onChange=\"var newVal = $('#navSelect').val(); $('#navForm').attr('action', newVal);\"";
 puts(cgiMakeSingleSelectDropList(hgCtNavDest, valsAndLabels, selected, NULL, NULL, extraHtml));

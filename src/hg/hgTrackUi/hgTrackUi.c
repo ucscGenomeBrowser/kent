@@ -2813,6 +2813,8 @@ int count = 0;
 for(sp=speciesList; sp; sp = sp->next)
     count++;
 
+if (count == 0)
+    return;
 char codeVarName[1024];
 safef(codeVarName, sizeof codeVarName, "%s.coalescent", tdb->track);
 char **ancestors;

@@ -5,7 +5,7 @@ longLabel Primates Multiz Alignment & Conservation (17 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
 visibility hide
-priority 1
+priority 2
 type bed 4
 group compGeno
 

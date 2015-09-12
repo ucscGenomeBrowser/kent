@@ -210,7 +210,7 @@ if (hash->size)
 	    extra = (STARTSLOP < maxOverLeft) ? STARTSLOP:maxOverLeft;
 	    start = seqStart - extra; 
 	    while((extra < MAXLOOK) && (lf->start < seqStart) && 
-		(lf->components->start > seqStart))
+		(lf->components != NULL) && (lf->components->start > seqStart))
 		{
 		extra *= MULTIPLIER;
 		end = start;
@@ -220,7 +220,7 @@ if (hash->size)
 		doQuery(conn, fullName, lm,  hash, start, end, lf->extra, isSplit);
 		slSort(&lf->components, linkedFeaturesCmpStart);
 		}
-	    if ((lf->components->start > seqStart) && (lf->start < lf->components->start))
+	    if ((lf->components != NULL) && (lf->components->start > seqStart) && (lf->start < lf->components->start))
 		{
 		lmAllocVar(lm, sf);
 		sf->start = 0;

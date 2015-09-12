@@ -653,6 +653,40 @@ cartRemove(cart, "hubId");
 cartRemove(cart, hgHubDoDisconnect);
 }
 
+static void hideIfNotInCart(struct cart *cart, char *track)
+/* If this track is not mentioned in the cart, set it to hide */
+{
+if (cartOptionalString(cart, track) == NULL)
+    cartSetString(cart, track, "hide");
+}
+
+void cartHideDefaultTracks(struct cart *cart)
+/* Hide all the tracks who have default visibilities in trackDb
+ * that are something other than hide.  Do this only if the
+ * variable CART_HAS_DEFAULT_VISIBILITY is set in the cart.  */
+{
+char *defaultString = cartOptionalString(cart, CART_HAS_DEFAULT_VISIBILITY);
+boolean cartHasDefaults = (defaultString != NULL) && sameString(defaultString, "on");
+
+if (!cartHasDefaults)
+    return;
+
+char *db = cartString(cart, "db");
+struct trackDb *tdb = hTrackDb(db);
+for(; tdb; tdb = tdb->next)
+    {
+    struct trackDb *parent = tdb->parent;
+    if (parent && parent->isShow)
+        hideIfNotInCart(cart, parent->track);
+    if (tdb->visibility != tvHide)
+        hideIfNotInCart(cart, tdb->track);
+    }
+
+// Don't do this again until someone sets this variable, 
+// presumably on session load.
+cartRemove(cart, CART_HAS_DEFAULT_VISIBILITY);
+}
+
 struct cart *cartNew(char *userId, char *sessionId,
                      char **exclude, struct hash *oldVars)
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
@@ -747,6 +781,9 @@ if (exclude != NULL)
     }
 
 cartDefaultDisconnector(&conn);
+
+if (didSessionLoad)
+    cartHideDefaultTracks(cart);
 return cart;
 }
 

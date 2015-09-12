@@ -300,8 +300,8 @@ done | sort -k4,4nr
     wc -w species.list
     #  26 species.list
 
-    # ce11 caePb3 caeRem4 cb4 caeJap4 caeSp111 caeAng2 caeSp51 hetBac1 
-    # strRat2 panRed1 ancCey1 necAme1 haeCon2 ascSuu1 priExs1 priPac3 melHap1 
+    # ce11 caePb3 caeRem4 cb4 caeJap4 caeSp111 caeAng2 caeSp51 hetBac1
+    # strRat2 panRed1 ancCey1 necAme1 haeCon2 ascSuu1 priExs1 priPac3 melHap1
     # melInc2 burXyl1 dirImm1 loaLoa1 oncVol1 bruMal2 triSpi1 triSui1
 
     #	bash shell syntax here ...
@@ -331,14 +331,14 @@ done | sort -k4,4nr
     ls -lR | grep chrM | awk '{print $NF}' \
       | sed -e 's#.*lastz.##; s#/mafNet.*##;' | sort \
         | xargs echo | fold -w72 -s
-# ancCey1 ascSuu1 bruMal2 burXyl1 caeAng2 caeJap4 caePb3 caeRem4 caeSp51 
-# cb4 dirImm1 haeCon2 hetBac1 loaLoa1 melHap1 melInc2 necAme1 oncVol1 
+# ancCey1 ascSuu1 bruMal2 burXyl1 caeAng2 caeJap4 caePb3 caeRem4 caeSp51
+# cb4 dirImm1 haeCon2 hetBac1 loaLoa1 melHap1 melInc2 necAme1 oncVol1
 # panRed1 priExs1 priPac3 strRat2 triSpi1 triSui1
 
     # compared to all of them:
     sort species.list.txt |  xargs echo | fold -w 72 -s
-# ancCey1 ascSuu1 bruMal2 burXyl1 caeAng2 caeJap4 caePb3 caeRem4 caeSp111 
-# caeSp51 cb4 ce11 dirImm1 haeCon2 hetBac1 loaLoa1 melHap1 melInc2 
+# ancCey1 ascSuu1 bruMal2 burXyl1 caeAng2 caeJap4 caePb3 caeRem4 caeSp111
+# caeSp51 cb4 ce11 dirImm1 haeCon2 hetBac1 loaLoa1 melHap1 melInc2
 # necAme1 oncVol1 panRed1 priExs1 priPac3 strRat2 triSpi1 triSui1
 
     # looks like it is caeSp111 that has no chrM alignment
@@ -573,7 +573,7 @@ mafAddIRows -nBeds=nBeds ../fullChromRun/maf/$(path1) /hive/data/genomes/ce11/ce
     rm multiz26way*.tab
 
 ######################################################################
-# MULTIZ7WAY MAF FRAMES (TBD - 2015-04-03 - Hiram)
+# MULTIZ7WAY MAF FRAMES (DONE - 2015-09-08 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/ce11/bed/multiz26way/frames
     cd /hive/data/genomes/ce11/bed/multiz26way/frames
@@ -586,6 +586,7 @@ foreach db (`cat ../species.list`)
     foreach table ($tables)
         if ($table == "ensGene" || $table == "refGene" || \
            $table == "mgcGenes" || $table == "knownGene" || \
+           $table == "ws245Genes" || $table == "ncbiGenes" || \
            $table == "xenoRefGene" ) then
            set count = `hgsql $db -N -e "select count(*) from $table"`
             echo -n "${table}: ${count}, "
@@ -606,82 +607,89 @@ end
     # << happy emacs
     chmod +x ./showGenes.csh
     time ./showGenes.csh
-# ce11: ensGene: 208239, knownGene: 104178, mgcGenes: 34081, refGene: 57705, xenoRefGene: 177750, Mrnas: 10985845
-# panTro4: ensGene: 29160, refGene: 2685, xenoRefGene: 290502, Mrnas: 11222
-# panPan1: xenoRefGene: 397121, Mrnas: 566
-# gorGor3: ensGene: 35410, xenoRefGene: 351498, Mrnas: 1
-# ponAbe2: ensGene: 29447, refGene: 3567, xenoRefGene: 299469, Mrnas: 0
-# nomLeu3: xenoRefGene: 197874, Mrnas: 49
-# rheMac3: refGene: 6533, xenoRefGene: 285039, Mrnas: 443918
-# macFas5: refGene: 2270, xenoRefGene: 285672, Mrnas: 177462
-# papAnu2: ensGene: 29030, refGene: 493, xenoRefGene: 306224, Mrnas: 146334
-# chlSab2: xenoRefGene: 220979, Mrnas: 37897
-# nasLar1: xenoRefGene: 325020, Mrnas: 4
-# rhiRox1: xenoRefGene: 331330, Mrnas: 11
-# calJac3: ensGene: 55116, refGene: 220, xenoRefGene: 313854, Mrnas: 294478
-# saiBol1: xenoRefGene: 444216, Mrnas: 85
-# tarSyr2: xenoRefGene: 317437, Mrnas: 8
-# micMur1: ensGene: 37458, xenoRefGene: 554904, Mrnas: 59
-# otoGar3: ensGene: 28565, xenoRefGene: 419687, Mrnas: 13
-# tupBel1: ensGene: 34727, xenoRefGene: 663087, Mrnas: 2506
-# mm10: ensGene: 103734, knownGene: 61642, mgcGenes: 26768, refGene: 34889, xenoRefGene: 166792, Mrnas: 5226306
-# canFam3: ensGene: 29884, refGene: 2160, xenoRefGene: 256498, Mrnas: 387764
-
-# real    5m45.745s
+# ce11: ensGene: 57834, refGene: 53470, ws245Genes: 57528, Mrnas: 52714
+# caePb3: ws245Genes: 33210, xenoRefGene: 189584,
+# caeRem4: ws245Genes: 32899, xenoRefGene: 155137,
+# cb4: ws245Genes: 23050, xenoRefGene: 130721,
+# caeJap4: ws245Genes: 38144, xenoRefGene: 158453,
+# caeSp111: ws245Genes: 27721,
+# caeAng2: ws245Genes: 33934,
+# caeSp51: ws245Genes: 46280,
+# hetBac1: ws245Genes: 20928,
+# strRat2: ncbiGenes: 12459,
+# panRed1: ws245Genes: 26372,
+# ancCey1: ws245Genes: 65583,
+# necAme1: ws245Genes: 19643,
+# haeCon2: ws245Genes: 26359,
+# ascSuu1: ws245Genes: 3082, xenoRefGene: 134962,
+# priExs1: ws245Genes: 24642, xenoRefGene: 0,
+# priPac3: ws245Genes: 24243, xenoRefGene: 89943,
+# melHap1: ws245Genes: 14420, xenoRefGene: 88300,
+# melInc2: ws245Genes: 20365,
+# burXyl1: ws245Genes: 18074,
+# dirImm1: ws245Genes: 12857,
+# loaLoa1: ws245Genes: 15577,
+# oncVol1: ws245Genes: 12385,
+# bruMal2: ws245Genes: 18709,
+# triSpi1: ws245Genes: 16380,
+# triSui1: ws245Genes: 14435,
 
     # from that summary, use these gene sets:
-    # knownGene - ce11 mm10
-    # ensGene - canFam3 panTro4 gorGor3 ponAbe2 papAnu2 calJac3 micMur1
-    #     otoGar3 tupBel1
-    # refGene - macFas5 rheMac3
-    # no annotation: nasLar1 rhiRox1 tarSyr2 panPan1 nomLeu3 chlSab2 saiBol1
+    # ws245Genes - ce11 caePb3 caeRem4 cb4 caeJap4 caeSp111 caeAng2 caeSp51
+    #              hetBac1 panRed1 ancCey1 necAme1 haeCon2
+    #              priExs1 priPac3 melHap1 melInc2 burXyl1 dirImm1 loaLoa1
+    #              oncVol1 bruMal2 triSpi1 triSui1
+    # ncbiGenes - strRat2
+    # ascSuu1 - assembly confusion, can not determine genes
 
     mkdir genes
 
-    #   1. knownGene: ce11
-    for DB in ce11 mm10
+    #   1. ws245Genes
+    for DB in ce11 caePb3 caeRem4 cb4 caeJap4 caeSp111 caeAng2 caeSp51 hetBac1 panRed1 ancCey1 necAme1 haeCon2 priExs1 priPac3 melHap1 melInc2 burXyl1 dirImm1 loaLoa1 oncVol1 bruMal2 triSpi1 triSui1
 do
-    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
-      | genePredSingleCover stdin stdout | gzip -2c \
-        > genes/${DB}.gp.gz
-    echo -n "$DB: "
-    genePredCheck -db=${DB} genes/${DB}.gp.gz
-done
-# ce11: checked: 21887 failed: 0
-# mm10: checked: 21013 failed: 0
-
-    #   2. ensGene: canFam3 panTro4 gorGor3 ponAbe2 papAnu2 calJac3 micMur1
-    #               otoGar3 tupBel1
-    for DB in canFam3 panTro4 gorGor3 ponAbe2 papAnu2 calJac3 micMur1 otoGar3 tupBel1
-do
-hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ws245Genes" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
         > /scratch/tmp/${DB}.tmp.gz
     mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
     echo -n "$DB: "
     genePredCheck -db=${DB} genes/${DB}.gp.gz
 done
-# canFam3: checked: 19507 failed: 0
-# panTro4: checked: 18657 failed: 0
-# gorGor3: checked: 20758 failed: 0
-# ponAbe2: checked: 20220 failed: 0
-# papAnu2: checked: 18904 failed: 0
-# calJac3: checked: 20827 failed: 0
-# micMur1: checked: 28641 failed: 0
-# otoGar3: checked: 19472 failed: 0
-# tupBel1: checked: 29256 failed: 0
+ce11: checked: 20412 failed: 0
+caePb3: checked: 30626 failed: 0
+caeRem4: checked: 31433 failed: 0
+cb4: checked: 21737 failed: 0
+caeJap4: checked: 29913 failed: 0
+caeSp111: checked: 22306 failed: 0
+caeAng2: checked: 27919 failed: 0
+caeSp51: checked: 34679 failed: 0
+hetBac1: checked: 20928 failed: 0
+panRed1: checked: 24071 failed: 0
+ancCey1: checked: 35775 failed: 0
+necAme1: checked: 18984 failed: 0
+haeCon2: checked: 21837 failed: 0
+priExs1: checked: 23767 failed: 0
+priPac3: checked: 22872 failed: 0
+melHap1: checked: 14103 failed: 0
+melInc2: checked: 19189 failed: 0
+burXyl1: checked: 18074 failed: 0
+dirImm1: checked: 12857 failed: 0
+loaLoa1: checked: 14903 failed: 0
+oncVol1: checked: 12133 failed: 0
+bruMal2: checked: 13471 failed: 0
+triSpi1: checked: 16370 failed: 0
+triSui1: checked: 13600 failed: 0
 
-    #   3. refGene
-    for DB in macFas5 rheMac3
+    #   1. ncbiGenes: strRat2
+    for DB in strRat2
 do
-hgsql -N -e "select * from refGene" ${DB} | cut -f2- \
+hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ncbiGenes" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
         > /scratch/tmp/${DB}.tmp.gz
     mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo -n "$DB: "
     genePredCheck -db=${DB} genes/${DB}.gp.gz
 done
-# checked: 2196 failed: 0
-# checked: 5801 failed: 0
+    # strRat2: checked: 12439 failed: 0
 
     # verify counts for genes are reasonable:
     for T in genes/*.gz
@@ -689,53 +697,76 @@ do
     echo -n "# $T: "
     zcat $T | cut -f1 | sort | uniq -c | wc -l
 done
-# genes/calJac3.gp.gz: 20827
-# genes/canFam3.gp.gz: 19507
-# genes/gorGor3.gp.gz: 20758
-# genes/ce11.gp.gz: 21887
-# genes/macFas5.gp.gz: 2120
-# genes/micMur1.gp.gz: 16240
-# genes/mm10.gp.gz: 21013
-# genes/otoGar3.gp.gz: 19472
-# genes/panTro4.gp.gz: 18657
-# genes/papAnu2.gp.gz: 18904
-# genes/ponAbe2.gp.gz: 20220
-# genes/rheMac3.gp.gz: 5626
-# genes/tupBel1.gp.gz: 15407
+# genes/ancCey1.gp.gz: 35775
+# genes/bruMal2.gp.gz: 13471
+# genes/burXyl1.gp.gz: 18074
+# genes/caeAng2.gp.gz: 27919
+# genes/caeJap4.gp.gz: 29913
+# genes/caePb3.gp.gz: 30626
+# genes/caeRem4.gp.gz: 31433
+# genes/caeSp111.gp.gz: 22306
+# genes/caeSp51.gp.gz: 34679
+# genes/cb4.gp.gz: 21737
+# genes/ce11.gp.gz: 20412
+# genes/dirImm1.gp.gz: 12857
+# genes/haeCon2.gp.gz: 21837
+# genes/hetBac1.gp.gz: 20928
+# genes/loaLoa1.gp.gz: 14903
+# genes/melHap1.gp.gz: 14103
+# genes/melInc2.gp.gz: 19189
+# genes/necAme1.gp.gz: 18984
+# genes/oncVol1.gp.gz: 12133
+# genes/panRed1.gp.gz: 24071
+# genes/priExs1.gp.gz: 23767
+# genes/priPac3.gp.gz: 22872
+# genes/strRat2.gp.gz: 12439
+# genes/triSpi1.gp.gz: 16370
+# genes/triSui1.gp.gz: 13600
 
     time (cat ../anno/result/*.maf \
-	| nice -n +19 genePredToMafFrames ce11 stdin stdout \
-           `egrep -v "nasLar1|rhiRox1|tarSyr2|panPan1|nomLeu3|chlSab2|saiBol1" ../species.list.txt | xargs echo | sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g;"` \
+	| genePredToMafFrames ce11 stdin stdout \
+           `egrep -v "ascSuu1" ../species.list.txt | xargs echo | sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g;"` \
 		| gzip > multiz26wayFrames.bed.gz)
-    #   real    19m52.191s
+    #   real    1m40.091s
 
     # verify there are frames on everything, should be 15 species:
     zcat multiz26wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c \
        | sed -e 's/^/# /;'
-#  245500 calJac3
-#  268521 canFam3
-#  196578 gorGor3
-#  208946 ce11
-#   16650 macFas5
-#  199799 micMur1
-#  256139 mm10
-#  212698 otoGar3
-#  200276 panTro4
-#  219978 papAnu2
-#  222360 ponAbe2
-#   49920 rheMac3
-#  194743 tupBel1
+#  102228 ancCey1
+#   62865 bruMal2
+#   93717 burXyl1
+#  129846 caeAng2
+#  162169 caeJap4
+#  183626 caePb3
+#  219355 caeRem4
+#  190425 caeSp111
+#  214566 caeSp51
+#  204669 cb4
+#  123221 ce11
+#   62882 dirImm1
+#   89757 haeCon2
+#   75007 hetBac1
+#   62443 loaLoa1
+#   53145 melHap1
+#   46477 melInc2
+#   83965 necAme1
+#   65069 oncVol1
+#   75620 panRed1
+#   59341 priExs1
+#   61095 priPac3
+#   75605 strRat2
+#   43472 triSpi1
+#   41941 triSui1
 
     #   load the resulting file
     ssh hgwdev
     cd /hive/data/genomes/ce11/bed/multiz26way/frames
     time hgLoadMafFrames ce11 multiz26wayFrames multiz26wayFrames.bed.gz
-    #   real    0m26.951s
-
+    #   real    0m29.914s
 
     time featureBits -countGaps ce11 multiz26wayFrames
-    # 47513754 bases of 3209286105 (1.481%) in intersection
-    #  real    0m16.409s
+    # 29102814 bases of 100286401 (29.020%) in intersection
+    #  real    0m16.783s
 
     #   enable the trackDb entries:
 # frames multiz26wayFrames
@@ -743,20 +774,20 @@ done
     #   appears to work OK
 
 #########################################################################
-# Phylogenetic tree from 20-way (TBD - 2015-04-03 - Hiram)
+# Phylogenetic tree from 26-way (DONE - 2015-08-18 - Hiram)
     mkdir /hive/data/genomes/ce11/bed/multiz26way/4d
     cd /hive/data/genomes/ce11/bed/multiz26way/4d
 
     # the annotated mafs are in
     ../anno/result/*.maf
 
-    # using knownGene for ce11
-    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ce11 > ce11.knownGene.gp
+    # using ensGene for ce11
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ce11 > ce11.ensGene.gp
 
-    genePredSingleCover ce11.knownGene.gp stdout | sort > ce11.knownGeneNR.gp
+    genePredSingleCover ce11.ensGene.gp stdout | sort > ce11.ensGeneNR.gp
     wc -l *
-    #   104178 ce11.knownGene.gp
-    #    21887 ce11.knownGeneNR.gp
+    #    57834 ce11.ensGene.gp
+    #    20412 ce11.ensGeneNR.gp
 
     ssh ku
     mkdir /hive/data/genomes/ce11/bed/multiz26way/4d/run
@@ -775,7 +806,7 @@ set outDir = $r/4d/mfa/$3:h
 set outfile = $r/4d/mfa/$3
 /bin/mkdir -p $outDir
 cd /scratch/tmp
-/bin/awk -v C=$c '$2 == C {print}' $r/4d/ce11.knownGeneNR.gp | sed -e "s/\t$c\t/\tce11.$c\t/" > $c.gp
+/bin/awk -v C=$c '$2 == C {print}' $r/4d/ce11.ensGeneNR.gp | sed -e "s/\t$c\t/\tce11.$c\t/" > $c.gp
 set NL=`wc -l $c.gp| gawk '{print $1}'`
 echo $NL
 if ("$NL" != "0") then
@@ -802,25 +833,30 @@ endif
     gensub2 maf.list single template jobList
     # -ram=32g to make sure they don't fail out of memory and don't run too fast
     para -ram=32g create jobList
-    para try ... check
-    para -maxJob=32 push
+    para try ... check   # the try runs all 7 jobs
     para time
-# Completed: 358 of 358 jobs
-# CPU time in finished jobs:       2508s      41.80m     0.70h    0.03d  0.000 y
-# IO & Wait Time:                   940s      15.67m     0.26h    0.01d  0.000 y
-# Average job time:                  10s       0.16m     0.00h    0.00d
-# Longest finished job:             220s       3.67m     0.06h    0.00d
-# Submission to last job:           252s       4.20m     0.07h    0.00d
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:         95s       1.59m     0.03h    0.00d  0.000 y
+# IO & Wait Time:                    21s       0.35m     0.01h    0.00d  0.000 y
+# Average job time:                  17s       0.28m     0.00h    0.00d
+# Longest finished job:              21s       0.35m     0.01h    0.00d
+# Submission to last job:            25s       0.42m     0.01h    0.00d
 
     # Not all results have contents, that is OK
 
     # combine mfa files
     ssh hgwdev
     cd /hive/data/genomes/ce11/bed/multiz26way/4d
-    # remove the broken empty files, size 0 and size 1:
-    find ./mfa -type f | xargs ls -og | awk '$3 < 2' | awk '{print $NF}' \
-        > empty.list
-    cat empty.list | xargs rm -f
+    # none of these results are empty:
+    ls -ogrt mfa
+# -rw-rw-r-- 1    1417 Aug 18 15:14 chrM.mfa
+# -rw-rw-r-- 1 5577097 Aug 18 15:14 chrII.mfa
+# -rw-rw-r-- 1 4732903 Aug 18 15:14 chrIV.mfa
+# -rw-rw-r-- 1 4185213 Aug 18 15:14 chrIII.mfa
+# -rw-rw-r-- 1 4402105 Aug 18 15:14 chrX.mfa
+# -rw-rw-r-- 1 6934921 Aug 18 15:14 chrV.mfa
+# -rw-rw-r-- 1 4628253 Aug 18 15:14 chrI.mfa
+
     #want comma-less species.list
     time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
 	--aggregate "`cat ../species.list`" mfa/*.mfa | sed s/"> "/">"/ \
@@ -829,88 +865,99 @@ endif
 
     # check they are all in there:
     grep "^>" 4d.all.mfa | wc -l
-    # 20
+    # 26
     grep "^>" 4d.all.mfa | sed -e 's/^/# /;'
 # >ce11
-# >panTro4
-# >panPan1
-# >gorGor3
-# >ponAbe2
-# >nomLeu3
-# >rheMac3
-# >macFas5
-# >papAnu2
-# >chlSab2
-# >nasLar1
-# >rhiRox1
-# >calJac3
-# >saiBol1
-# >tarSyr2
-# >micMur1
-# >otoGar3
-# >tupBel1
-# >mm10
-# >canFam3
+# >caePb3
+# >caeRem4
+# >cb4
+# >caeJap4
+# >caeSp111
+# >caeAng2
+# >caeSp51
+# >hetBac1
+# >strRat2
+# >panRed1
+# >ancCey1
+# >necAme1
+# >haeCon2
+# >ascSuu1
+# >priExs1
+# >priPac3
+# >melHap1
+# >melInc2
+# >burXyl1
+# >dirImm1
+# >loaLoa1
+# >oncVol1
+# >bruMal2
+# >triSpi1
+# >triSui1
 
     sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
 	../ce11.26way.nh | xargs echo | sed -e 's/ //g' > tree_commas.nh
     # tree_commas.nh looks like:
-    # ((((((((((((ce11,panTro4),panPan1),gorGor3),ponAbe2),nomLeu3),
-    #   ((((rheMac3,macFas5),papAnu2),chlSab2),(nasLar1,rhiRox1))),
-    #     (calJac3,saiBol1)),tarSyr2),(micMur1,otoGar3)),tupBel1),mm10),canFam3)
+    # (((((((((((((ce11,(caePb3,(caeRem4,cb4))),caeJap4),caeSp111),caeAng2),
+    #   caeSp51),hetBac1),(strRat2,panRed1)),((ancCey1,necAme1),haeCon2)),
+    #      ascSuu1),(priExs1,priPac3)),((melHap1,melInc2),burXyl1)),
+    #          (((dirImm1,loaLoa1),oncVol1),bruMal2)),(triSpi1,triSui1))
 
     # use phyloFit to create tree model (output is phyloFit.mod)
     time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
 	    --EM --precision MED --msa-format FASTA --subst-mod REV \
 		--tree tree_commas.nh 4d.all.mfa
-    #   real    4m21.836s
+    #   real    102m23.619s
 
     mv phyloFit.mod all.mod
 
     grep TREE all.mod
-# TREE: ((((((((((((ce11:0.00988692,panTro4:0.00346722):0.00188147,
-#  panPan1:0.00264326):0.00531373,gorGor3:0.00893149):0.00925601,
-#  ponAbe2:0.0188981):0.0034213,nomLeu3:0.0230926):0.011557,
-#  ((((rheMac3:0.00340845,macFas5:0.00235962):0.00535291,
-#  papAnu2:0.00850951):0.0040808,chlSab2:0.0129507):0.00594416,
-#  (nasLar1:0.00691583,rhiRox1:0.00647931):0.0119022):0.0216071):0.0217539,
-#  (calJac3:0.0352577,saiBol1:0.0327629):0.0373501):0.0612174,
-#  tarSyr2:0.142005):0.0118853,(micMur1:0.092909,
-#  otoGar3:0.128695):0.0342627):0.0166216,tupBel1:0.184214):0.0152928,
-#  mm10:0.330771):0.0876596,canFam3:0.0876596);
+# TREE: (((((((((((((ce11:0.641433,(caePb3:0.487648,
+# (caeRem4:0.443246,cb4:0.445294):0.0464154):0.0165647):0.00599635,
+# caeJap4:0.828929):0.00213273,caeSp111:0.526296):0.00774532,
+# caeAng2:0.983829):0.0266384,caeSp51:0.415189):0.385011,
+# hetBac1:1.35734):0.0946305,(strRat2:1.37255,
+# panRed1:1.10699):0.139767):0.0425575,
+# ((ancCey1:0.387375,necAme1:0.494722):0.308076,
+# haeCon2:0.755625):0.31865):0.0426445,ascSuu1:1.32614):0.0433534,
+# (priExs1:0.112444,priPac3:0.0999032):0.752898):0.0633886,
+# ((melHap1:0.237743,melInc2:0.205426):1.14699,
+# burXyl1:0.685906):0.156962):0.334957,(((dirImm1:0.213158,
+# loaLoa1:0.198781):0.00222742,oncVol1:0.16899):0.0727414,
+# bruMal2:0.174965):1.0837):0.137915,(triSpi1:0.820134,
+# triSui1:0.850407):0.137915);
 
-    # compare these calculated lengths to the tree extracted from 183way:
-    grep TREE all.mod | sed -e 's/TREE: //' \
-       | /cluster/bin/phast/all_dists /dev/stdin | grep ce11 \
-          | sed -e "s/ce11.//;"  | sort > new.dists
-    /cluster/bin/phast/all_dists ../ce11.26way.nh | grep ce11 \
-        | sed -e "s/ce11.//;" | sort > old.dists
-    # printing out the 'new', the 'old' the 'difference' and percent difference
-    join new.dists old.dists | awk '{
-  printf "#\t%s\t%8.6f\t%8.6f\t%8.6f\t%8.6f\n", $1, $2, $3, $2-$3, 100*($2-$3)/$3 }' \
-      | sort -k3n
-#       panTro4 0.013354        0.013390        -0.000036       -0.268857
-#       panPan1 0.014412        0.015610        -0.001198       -7.674568
-#       gorGor3 0.026014        0.019734        0.006280        31.823249
-#       ponAbe2 0.045236        0.039403        0.005833        14.803441
-#       nomLeu3 0.052852        0.046204        0.006648        14.388365
-#       macFas5 0.080661        0.079575        0.001086        1.364750
-#       rhiRox1 0.081305        0.075474        0.005831        7.725839
-#       papAnu2 0.081458        0.079626        0.001832        2.300756
-#       rheMac3 0.081710        0.079575        0.002135        2.683003
-#       nasLar1 0.081742        0.075474        0.006268        8.304847
-#       chlSab2 0.081818        0.087974        -0.006156       -6.997522
-#       saiBol1 0.133183        0.087804        0.045379        51.682156
-#       calJac3 0.135678        0.107454        0.028224        26.266123
-#       micMur1 0.263345        0.236534        0.026811        11.334946
-#       tarSyr2 0.266293        0.221294        0.044999        20.334487
-#       otoGar3 0.299131        0.270334        0.028797        10.652378
-#       tupBel1 0.337009        0.335048        0.001961        0.585289
-#       canFam3 0.343407        0.332429        0.010978        3.302359
-#       mm10    0.498858        0.502391        -0.003533       -0.703237
+    # resulting distance table:
+    /cluster/bin/phast/all_dists ce11.26way.nh | grep ce11 \
+        | sed -e "s/ce11.//" | sort -k2n | sed -e 's/^/#    /;'
+#    caeSp51    1.099135
+#    caePb3     1.145646
+#    caeRem4    1.147659
+#    cb4        1.149707
+#    caeSp111   1.175858
+#    caeJap4    1.476358
+#    caeAng2    1.641136
+#    priPac3    2.144944
+#    priExs1    2.157485
+#    burXyl1    2.198399
+#    ancCey1    2.220246
+#    haeCon2    2.280420
+#    necAme1    2.327593
+#    panRed1    2.410344
+#    hetBac1    2.426297
+#    ascSuu1    2.574929
+#    strRat2    2.675904
+#    triSpi1    2.786452
+#    triSui1    2.816725
+#    melInc2    2.864909
+#    melHap1    2.897226
+#    bruMal2    2.949153
+#    oncVol1    3.015920
+#    loaLoa1    3.047938
+#    dirImm1    3.062315
+
 
 #########################################################################
-# phastCons 20-way (TBD - 2015-04-03 - Hiram)
+# phastCons 26-way (DONE - 2015-09-08 - Hiram)
     # split 26way mafs into 10M chunks and generate sufficient statistics
     # files for # phastCons
     ssh ku
@@ -959,18 +1006,19 @@ mkSS.csh $(root1) {check out line+ done/$(root1)}
 
     gensub2 maf.list single template jobList
     # beware overloaded the cluster with these fast running high I/O jobs
-    para -ram=16g create jobList
-    para try ... check ... etc
-    para -maxJob=32 push
-# Completed: 358 of 358 jobs
-# CPU time in finished jobs:       8154s     135.91m     2.27h    0.09d  0.000 y
-# IO & Wait Time:                  1413s      23.54m     0.39h    0.02d  0.000 y
-# Average job time:                  27s       0.45m     0.01h    0.00d
-# Longest finished job:             798s      13.30m     0.22h    0.01d
-# Submission to last job:           835s      13.92m     0.23h    0.01d
+    # however, in this case, there are only 7
+    para -ram=32g create jobList
+    para try   # this runs all 7
+    para time > run.time
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:        161s       2.68m     0.04h    0.00d  0.000 y
+# IO & Wait Time:                    15s       0.25m     0.00h    0.00d  0.000 y
+# Average job time:                  25s       0.42m     0.01h    0.00d
+# Longest finished job:              34s       0.57m     0.01h    0.00d
+# Submission to last job:            45s       0.75m     0.01h    0.00d
 
     find ./result -type f | wc -l
-    #	 645
+    #	 14
 
     # Run phastCons
     #	This job is I/O intensive in its output files, beware where this
@@ -1043,27 +1091,26 @@ rm -fr $tmp
 
     find ../SS/result -type f | sed -e "s#../SS/result/##" > ss.list
     wc -l ss.list
-    #	645 ss.list
+    #	14 ss.list
 
     # Create parasol batch and run it
     # run for all species
-    cd /hive/data/genomes/ce11/bed/multiz26way/cons
-    mkdir -p all
-    cd all
+    mkdir /hive/data/genomes/ce11/bed/multiz26way/cons/all
+    cd /hive/data/genomes/ce11/bed/multiz26way/cons/all
     #	Using the .mod tree
     cp -p ../../4d/all.mod ./all.mod
 
     gensub2 ../run.cons/ss.list single ../run.cons/template jobList
     # beware overwhelming the cluster with these fast running high I/O jobs
-    para -ram=16g create jobList
+    # however, in this case, there are only 14 jobs
+    para -ram=32g create jobList
     para try ... check ...
-    para -maxJob=32 push
-# Completed: 645 of 645 jobs
-# CPU time in finished jobs:      11994s     199.90m     3.33h    0.14d  0.000 y
-# IO & Wait Time:                  4296s      71.60m     1.19h    0.05d  0.000 y
-# Average job time:                  25s       0.42m     0.01h    0.00d
-# Longest finished job:              55s       0.92m     0.02h    0.00d
-# Submission to last job:           562s       9.37m     0.16h    0.01d
+# Completed: 14 of 14 jobs
+# CPU time in finished jobs:        412s       6.87m     0.11h    0.00d  0.000 y
+# IO & Wait Time:                    81s       1.35m     0.02h    0.00d  0.000 y
+# Average job time:                  35s       0.59m     0.01h    0.00d
+# Longest finished job:              51s       0.85m     0.01h    0.00d
+# Submission to last job:           108s       1.80m     0.03h    0.00d
 
     # create Most Conserved track
     cd /hive/data/genomes/ce11/bed/multiz26way/cons/all
@@ -1080,28 +1127,27 @@ done > tmpMostConserved.bed
 
 
     /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
-    # -rw-rw-r--   1 76951148 Apr 15 16:21 tmpMostConserved.bed
-    # -rw-rw-r--   1 78998479 Apr 15 20:28 mostConserved.bed
+    # -rw-rw-r-- 1 13454157 Sep  8 11:44 tmpMostConserved.bed
+    # -rw-rw-r-- 1 13671554 Sep  8 11:45 mostConserved.bed
 
     wc -l *.bed
-    #   2244053 mostConserved.bed
-    #   2244053 tmpMostConserved.bed
+    # 406479 mostConserved.bed
+    # 406479 tmpMostConserved.bed
 
     # load into database
     ssh hgwdev
     cd /hive/data/genomes/ce11/bed/multiz26way/cons/all
     time hgLoadBed ce11 phastConsElements26way mostConserved.bed
-    # with the correct rhiRox1 sequence:
-    # Read 2244053 elements of size 5 from mostConserved.bed
-    #  real    0m19.301s
+    # Read 406479 elements of size 5 from mostConserved.bed
+    # real    0m3.735s
 
     # on human we often try for 5% overall cov, and 70% CDS cov
     # most bets are off here for that goal, these alignments are too few
     #	and too far between
     #	--rho 0.3 --expected-length 45 --target-coverage 0.3
-    featureBits ce11 -enrichment knownGene:cds phastConsElements26way
-    # knownGene:cds 1.266%, phastConsElements26way 5.412%, both 0.874%,
-    # cover 69.05%, enrich 12.76x
+    featureBits ce11 -enrichment ensGene:cds phastConsElements26way
+    # ensGene:cds 25.321%, phastConsElements26way 41.217%, both 19.293%,
+    # cover 76.20%, enrich 1.85x
 
     # Create merged posterier probability file and wiggle track data files
     cd /hive/data/genomes/ce11/bed/multiz26way/cons/all
@@ -1112,62 +1158,63 @@ done > tmpMostConserved.bed
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
 	| sed -e 's/\.[0-9][0-9]*-[0-9][0-9]* start/ start/' \
         | gzip -c > downloads/phastCons26way.wigFix.gz)
-    #   real    32m28.899s
+    #   real    0m43.836s
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/phastCons26way.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/ce11/chrom.sizes \
 	    phastCons26way.bw) > bigWig.log 2>&1
     egrep "real|VmPeak" bigWig.log
-    # pid=48046: VmPeak:    33804452 kB
-    # real    50m28.896s
+    # pid=22748: VmPeak:      676500 kB
+    # real    0m49.827s
 
     bigWigInfo phastCons26way.bw | sed -e 's/^/# /;'
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 5,127,773,887
-# primaryIndexSize: 93,405,104
+# primaryDataSize: 118,518,400
+# primaryIndexSize: 2,746,816
 # zoomLevels: 10
-# chromCount: 357
-# basesCovered: 2,949,052,222
-# mean: 0.128327
+# chromCount: 7
+# basesCovered: 58,852,043
+# mean: 0.686605
 # min: 0.000000
 # max: 1.000000
-# std: 0.243053
+# std: 0.385078
 
     #	encode those files into wiggle data
     time (zcat downloads/phastCons26way.wigFix.gz \
 	| wigEncode stdin phastCons26way.wig phastCons26way.wib)
     #   Converted stdin, upper limit 1.00, lower limit 0.00
-    #   real    15m6.015s
+    #   real    0m17.307s
+
 
     du -hsc *.wi?
-    # 2.8G    phastCons26way.wib
-    # 284M    phastCons26way.wig
-# -rw-rw-r--   1 2949052222 Apr 17 10:18 phastCons26way.wib
-# -rw-rw-r--   1  297183953 Apr 17 10:18 phastCons26way.wig
+    # 57M     phastCons26way.wib
+    # 7.8M    phastCons26way.wig
+# -rw-rw-r-- 1  58852043 Sep  8 11:49 phastCons26way.wib
+# -rw-rw-r-- 1   8107673 Sep  8 11:49 phastCons26way.wig
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phastCons26way.wib /gbdb/ce11/multiz26way/phastCons26way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/ce11/multiz26way \
 	ce11 phastCons26way phastCons26way.wig
-    #   real    0m33.285s
+    #   real    0m1.059s
 
     # use to set trackDb.ra entries for wiggle min and max
     # and verify table is loaded correctly
 
     wigTableStats.sh ce11 phastCons26way
-# db.table          min max mean       count sumData
-# ce11.phastCons26way 0 1 0.128327 2949052222 3.78443e+08
-#        stdDev  viewLimits
-#      0.243053 viewLimits=0:1
+# db.table           min max mean       count sumData
+# ce11.phastCons26way 0 1 0.686605 58852043 4.04081e+07
+#    stdDev  viewLimits
+#   0.385078 viewLimits=0:1
 
     #  Create histogram to get an overview of all the data
     time hgWiggle -doHistogram -db=ce11 \
-	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+        -hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    phastCons26way > histogram.data 2>&1
-    #	real    2m47.080s
+    #	real    0m3.288s
 
     #	create plot of histogram:
 
@@ -1178,7 +1225,7 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Human ce11 Histogram phastCons26way track"
+set title " C. elegans - ce11 Histogram phastCons26way track"
 set xlabel " phastCons26way score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
@@ -1194,7 +1241,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display ce11.26way.phastCons.histo.png &
 
 #########################################################################
-# phyloP for 20-way (WORKING - 2015-04-03 - Hiram)
+# phyloP for 26-way (DONE - 2015-09-08 - Hiram)
     # run phyloP with score=LRT
     ssh ku
     mkdir -p /cluster/data/ce11/bed/multiz26way/consPhyloP/run.phyloP
@@ -1247,7 +1294,7 @@ sleep 4
 	| sed -e "s/.ss$//; s#^../../cons/SS/result/##" > ss.list
     # make sure the list looks good
     wc -l ss.list
-    #	645 ss.list
+    #	14 ss.list
 
     # Create template file
     #	file1 == $chr/$chunk/file name without .ss suffix
@@ -1268,17 +1315,16 @@ sleep 4
     gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
     # beware overloading the cluster with these quick and high I/O jobs
     # -ram=32g will ensure they can all complete and will not run too many
-    #   at the same time
+    #   at the same time, there are only 14 here anyway
     para -ram=32g create jobList
     para try ... check ... push ... etc ...
-    para -maxJob=32 push
     para time > run.time
-# Completed: 645 of 645 jobs
-# CPU time in finished jobs:     270641s    4510.68m    75.18h    3.13d  0.009 y
-# IO & Wait Time:                  4545s      75.76m     1.26h    0.05d  0.000 y
-# Average job time:                 427s       7.11m     0.12h    0.00d
-# Longest finished job:            1414s      23.57m     0.39h    0.02d
-# Submission to last job:         11305s     188.42m     3.14h    0.13d
+# Completed: 14 of 14 jobs
+# CPU time in finished jobs:      10816s     180.26m     3.00h    0.13d  0.000 y
+# IO & Wait Time:                    88s       1.47m     0.02h    0.00d  0.000 y
+# Average job time:                 779s      12.98m     0.22h    0.01d
+# Longest finished job:            1283s      21.38m     0.36h    0.01d
+# Submission to last job:          1294s      21.57m     0.36h    0.01d
 
     # back on dev
     cd /hive/data/genomes/ce11/bed/multiz26way/consPhyloP/all
@@ -1287,91 +1333,90 @@ sleep 4
     time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
 	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
 	| gzip -c > downloads/phyloP26way.wigFix.gz)
-    #   real    44m21.578s
+    #   real    0m54.344s
 
-    # -rw-rw-r-- 1 4572468017 Apr 17 09:08 phyloP26way.wigFix.gz
+    # -rw-rw-r-- 1 102990761 Sep  8 12:40 phyloP26way.wigFix.gz
 
     # check integrity of data with wigToBigWig
     time (zcat downloads/phyloP26way.wigFix.gz \
 	| wigToBigWig -verbose=2 stdin /hive/data/genomes/ce11/chrom.sizes \
 	phyloP26way.bw) > bigWig.log 2>&1
     egrep "real|VmPeak" bigWig.log
-    # # pid=68805: VmPeak:    33804456 kB
-    #  real    53m14.250s
+    # pid=39486: VmPeak:      676500 kB
+    # real    0m54.488s
 
     bigWigInfo phyloP26way.bw  | sed -e 's/^/# /;'
 # version: 4
 # isCompressed: yes
 # isSwapped: 0
-# primaryDataSize: 5,808,265,679
-# primaryIndexSize: 93,405,104
+# primaryDataSize: 136,567,148
+# primaryIndexSize: 2,746,816
 # zoomLevels: 10
-# chromCount: 357
-# basesCovered: 2,949,052,222
-# mean: 0.089688
-# min: -14.191000
-# max: 1.199000
-# std: 0.678542
+# chromCount: 7
+# basesCovered: 58,852,043
+# mean: 0.970667
+# min: -3.992000
+# max: 9.159000
+# std: 1.577332
 
     #	encode those files into wiggle data
     time (zcat downloads/phyloP26way.wigFix.gz \
 	| wigEncode stdin phyloP26way.wig phyloP26way.wib)
-    # Converted stdin, upper limit 1.20, lower limit -14.19
-    #  real    16m51.456s
+    # Converted stdin, upper limit 9.16, lower limit -3.99
+    # real    0m19.281s
 
     du -hsc *.wi?
-    # 2.8G    phyloP26way.wib
-    # 290M    phyloP26way.wig
-# -rw-rw-r--   1 2949052222 Apr 17 11:22 phyloP26way.wib
-# -rw-rw-r--   1  304040712 Apr 17 11:22 phyloP26way.wig
+    # 57M     phyloP26way.wib
+    # 8.0M    phyloP26way.wig
+# -rw-rw-r-- 1  58852043 Sep  8 12:46 phyloP26way.wib
+# -rw-rw-r-- 1   8322927 Sep  8 12:46 phyloP26way.wig
 
     # Load gbdb and database with wiggle.
     ln -s `pwd`/phyloP26way.wib /gbdb/ce11/multiz26way/phyloP26way.wib
     time hgLoadWiggle -pathPrefix=/gbdb/ce11/multiz26way ce11 \
 	phyloP26way phyloP26way.wig
-    # real    0m31.992s
+    # real    0m0.842s
 
     # use to set trackDb.ra entries for wiggle min and max
     # and verify table is loaded correctly
 
     wigTableStats.sh ce11 phyloP26way
 # db.table      min max mean count sumData
-# ce11.phyloP26way -14.191 1.199 0.0896878 2949052222 2.64494e+08
+# ce11.phyloP26way -3.992 9.159 0.970667 58852043 5.71257e+07
 #       stdDev viewLimits
-#     0.678542 viewLimits=-3.30302:1.199
+#      1.57733 viewLimits=-3.992:8.85733
 
-    #	that range is: 14.191+1.199 = 15.390 for hBinSize=0.01539
+    #	that range is: 9.159+3.992 = 13.151 for hBinSize=0.013151
 
     #  Create histogram to get an overview of all the data
     time hgWiggle -doHistogram \
-	-hBinSize=0.01539 -hBinCount=1000 -hMinVal=-14.191 -verbose=2 \
+	-hBinSize=0.013151 -hBinCount=1000 -hMinVal=-3.992 -verbose=2 \
 	    -db=ce11 phyloP26way > histogram.data 2>&1
-    #   real    2m43.403s
+    #   real    0m3.666s
 
     # find the Y range for the 2:5 graph
     grep "^[0-9]" histogram.data | ave -col=5 stdin | sed -e 's/^/# /;'
-# Q1 0.000000
-# median 0.000002
-# Q3 0.000283
-# average 0.001149
+# Q1 0.000065
+# median 0.000179
+# Q3 0.000924
+# average 0.001026
 # min 0.000000
-# max 0.018142
-# count 870
-# total 0.999982
-# standard deviation 0.002856
+# max 0.030633
+# count 975
+# total 0.999992
+# standard deviation 0.002321
 
     # find the X range for the 2:5 graph
     grep "^[0-9]" histogram.data | ave -col=2 stdin | sed -e 's/^/# /;'
-# Q1 -8.823738
-# median -5.480260
-# Q3 -2.121392
-# average -5.516735
-# min -14.191000
-# max 1.199000
-# count 870
-# total -4799.559716
-# standard deviation 3.919439
-
+# Q1 -0.533287
+# median 2.662410
+# Q3 5.884400
+# average 2.660747
+# min -3.992000
+# max 9.159000
+# count 975
+# total 2594.228452
+# standard deviation 3.707122
 
     #	create plot of histogram:
     cat << '_EOF_' | gnuplot > ce11.26way.phyloP.histo.png
@@ -1381,14 +1426,14 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Human ce11 Histogram phyloP26way track"
+set title " C. elegans ce11 Histogram phyloP26way track"
 set xlabel " phyloP26way score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
 set y2range [0:1]
 set y2tics
-set xrange [-4:1.5]
-set yrange [0:0.02]
+set xrange [-2:4]
+set yrange [0:0.015]
 
 plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
@@ -1398,7 +1443,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display ce11.26way.phyloP.histo.png
 
 #############################################################################
-# construct download files for 20-way (TBD - 2015-04-17 - Hiram)
+# construct download files for 26-way (DONE - 2015-09-09 - Hiram)
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/multiz26way
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/phastCons26way
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/phyloP26way
@@ -1406,44 +1451,37 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     cd /hive/data/genomes/ce11/bed/multiz26way/downloads
     mkdir multiz26way phastCons26way phyloP26way
     cd multiz26way
-    # using the separate per-chrom maf files since the single one is too big
-    time rsync -a -P ../../anno/result/ ./maf/
-    # sent 97136730559 bytes  received 6817 bytes  163392325.28 bytes/sec
-    #  total size is 97124849325  speedup is 1.00
-    #  real    9m53.112s
+    # using the separate per-chrom maf files as more
+    #    convenient than the single one
+    time rsync -a -P ../../anno/result/ .
+    # sent 2499852297 bytes  received 148 bytes  161280802.90 bytes/sec
+    # total size is 2499546722  speedup is 1.00
+    # real    0m15.117s
 
-    du -hsc maf
-    #  91G     maf
+    du -hsc *.maf
+    #  2.4G    maf
 
-    time gzip maf/*.maf
-    #   real    104m48.114s
-    du -hsc maf
-    #  12G     maf
+    time gzip *.maf
+    #   real    2m32.825s
 
-    cd maf
-    time md5sum *.maf.gz > md5sum.txt
-    # real    0m48.237s
-
-    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/multiz26way/maf
-    ln -s `pwd`/* \
-        /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/multiz26way/maf
-    cd ..
+    du -hsc maf.gz
+    #  333M    maf
 
     grep TREE ../../4d/all.mod | sed -e 's/TREE: //' \
       | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
          > ce11.26way.nh
     ~/kent/src/hg/utils/phyloTrees/commonNames.sh ce11.26way.nh \
       | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
-         > ce11.26way.commonNames.nh
+         | sed -e 's/__/_/;' > ce11.26way.commonNames.nh
     ~/kent/src/hg/utils/phyloTrees/scientificNames.sh ce11.26way.nh \
 	| $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
 	    > ce11.26way.scientificNames.nh
     time md5sum *.nh > md5sum.txt
     #   real    1m55.320s
-    ln -s `pwd`/*.nh `pwd`/*.txt \ 
+    ln -s `pwd`/*.nh `pwd`/*.txt `pwd`/*.gz \
         /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/multiz26way
 
-    # obtain the README.txt from ce11/multiz17way and update for this
+    # obtain the README.txt from ce10/multiz9way and update for this
     #   situation
 
     #####################################################################
@@ -1456,7 +1494,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     time md5sum *.gz *.mod *.bw > md5sum.txt
     #   real    0m33.880s
 
-    # obtain the README.txt from ce11/phastCons17way and update for this
+    # obtain the README.txt from ce10/phastCons9way and update for this
     #   situation
     ln -s `pwd`/*.gz `pwd`/*.mod `pwd`/*.bw `pwd`/*.txt \
       /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/phastCons26way
@@ -1472,7 +1510,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     time md5sum *.mod *.bw *.gz > md5sum.txt
     #   real    0m40.489s
 
-    # obtain the README.txt from ce11/phyloP7way and update for this
+    # obtain the README.txt from ce10/phyloP9way and update for this
     #   situation
     ln -s `pwd`/* \
       /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/phyloP26way
@@ -1480,9 +1518,11 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     ###########################################################################
     ## create upstream refGene maf files
     cd /hive/data/genomes/ce11/bed/multiz26way/downloads/multiz26way
+    # going to construct upstream for ws245Genes, refGene and ensGene
+
     # bash script
 #!/bin/sh
-export geneTbl="knownGene"
+export geneTbl="ws245Genes"
 for S in 1000 2000 5000
 do
     echo "making upstream${S}.maf"
@@ -1494,11 +1534,41 @@ do
         | gzip -c > upstream${S}.${geneTbl}.maf.gz
     echo "done upstream${S}.${geneTbl}.maf.gz"
 done
-    #   real    95m7.303s
+    #   real    13m46.813s
 
-    md5sum upstream*.gz >> md5sum.txt
+    # and run up the refGene upstreams
+#!/bin/sh
+export geneTbl="refGene"
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits ce11 ${geneTbl}:upstreamAll:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags ce11 multiz26way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/ce11/bed/multiz26way/species.list \
+        | gzip -c > upstream${S}.${geneTbl}.maf.gz
+    echo "done upstream${S}.${geneTbl}.maf.gz"
+done
+    # real    63m58.714s
 
-    # obtain the README.txt from ce11/multiz17way and update for this
+    # and run up the ensGene upstreams
+#!/bin/sh
+export geneTbl="ensGene"
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits ce11 ${geneTbl}:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags ce11 multiz26way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/ce11/bed/multiz26way/species.list \
+        | gzip -c > upstream${S}.${geneTbl}.maf.gz
+    echo "done upstream${S}.${geneTbl}.maf.gz"
+done
+    # real    14m4.262s
+
+    # obtain the README.txt from ce9/multiz10way and update for this
     #   situation
     # information for table of species in the README files, need to
     # edit it in after adding it to the end of this file:
@@ -1510,40 +1580,57 @@ do
  echo "${info} ${netType}"
 done | tr '[\t]' '[ ]' >> README.txt
 
-Human - Homo sapiens               Dec. 2013 (GRCh38/ce11)            reference
+C. elegans         Caenorhabditis elegans   Aug. 2014 (WBcel245/ce11) reference
 
-Baboon - Papio anubis              Mar. 2012 (Baylor Panu_2.0/papAnu2)  syntenic
-Bushbaby - Otolemur garnettii      Mar. 2011 (Broad/otoGar3)     reciprocal best
-Bonobo - Pan paniscus             May. 2012 (Max-Planck/panPan1) reciprocal best
-Chimp - Pan troglodytes            Feb. 2011 (CSAC 2.1.4/panTro4)      syntenic
-Crab-eating macaque - Macaca fascicularis
-                          Jun 2013 (Macaca_fascicularis_5.0/macFas5)  syntenic
-Gibbon - Nomascus leucogenys       Oct. 2012 (GGSC Nleu3.0/nomLeu3)    syntenic
-Golden snub-nosed monkey - Rhinopithecus roxellana
-                          Oct. 2014 (Rrox_v1/rhiRox1)           reciprocal best
-Gorilla - Gorilla gorilla gorilla  May 2011 (gorGor3.1/gorGor3) reciprocal best
-Green monkey - Chlorocebus sabaeus
-                          Mar. 2014 (Chlorocebus_sabeus 1.1/chlSab2)  syntenic
-Marmoset - Callithrix jacchus      Mar. 2009 (WUGSC 3.2/calJac3)     syntenic
-Mouse lemur - Microcebus murinus   Jul. 2007 (Broad/micMur1) reciprocal best
-Orangutan - Pongo pygmaeus abelii  Jul. 2007 (WUGSC 2.0.2/ponAbe2)   syntenic
-Proboscis monkey - Nasalis larvatus
-                          Nov. 2014 (Charlie1.0/nasLar1)        reciprocal best
-Rhesus - Macaca mulatta            Oct. 2010 (BGI CR_1.0/rheMac3)      syntenic
-Squirrel monkey - Saimiri boliviensis Oct. 2011 (Broad/saiBol1) reciprocal best
-Tarsier - Tarsius syrichta
-                   Sep. 2013 (Tarsius_syrichta-2.0.1/tarSyr2) reciprocal best
-Tree shrew - Tupaia belangeri      Dec. 2006 (Broad/tupBel1) reciprocal best
-Mouse  -  Mus musculus             Dec. 2011 (GRCm38/mm10) syntenic
-Dog  -  Canis lupus familiaris     Sep. 2011 (Broad CanFam3.1/canFam3) syntenic
+A. ceylanicum      Ancylostoma ceylanicum   Mar. 2014
+                                         (WS243/Acey_2013.11.30.genDNA/ancCey1)
+Barber pole worm   Haemonchus contortus     Jul. 2013  (WormBase WS239/haeCon2)
+C. angaria         Caenorhabditis angaria   Mar. 2012           (WS245/caeAng2)
+C. brenneri        Caenorhabditis brenneri  Nov. 2010
+                                                    (C. brenneri 6.0.1b/caePb3)
+C. briggsae        Caenorhabditis briggsae  Apr. 2011               (WS225/cb4)
+C. japonica        Caenorhabditis japonica  Aug. 2010     (WUSTL 7.0.1/caeJap4)
+C. remanei         Caenorhabditis remanei   Jul. 2007           (WS220/caeRem4)
+C. sp. 5 ju800     Caenorhabditis sp5 ju800 Jan. 2012
+                                  (WS230/Caenorhabditis_sp_5-JU800-1.0/caeSp51)
+C. tropicalis      Caenorhabditis tropicalis Nov. 2010   (WUSTL 3.0.1/caeSp111)
+Dog heartworm      Dirofilaria immitis      Sep. 2013
+                                                (WS240/D. immitis v2.2/dirImm1)
+Eye worm           Loa loa                  Jul. 2012
+                                         (WS235/L_loa_Cameroon_isolate/loaLoa1)
+Filarial worm      Brugia malayi            May. 2014
+                                                   (WS244/B_malayi-3.1/bruMal2)
+H. bacteriophora/m31e Heterorhabditis bacteriophora Aug. 2011
+                                           (WS229/H. bacteriophora 7.0/hetBac1)
+M. hapla           Meloidogyne hapla        Sep. 2008
+                                                   (M. hapla VW9 WS210/melHap1)
+M. incognita       Meloidogyne incognita    Feb. 2008
+                                        (M. incognita WS245/PRJEA28837/melInc2)
+Microworm          Panagrellus redivivus    Feb. 2013           (Pred3/panRed1)
+N. americanus      Necator americanus       Dec. 2013
+                                                (WS242/N_americanus_v1/necAme1)
+O. volvulus        Onchocerca volvulus      Nov. 2013
+                                         (WS241/O_volvulus_Cameroon_v3/oncVol1)
+P. exspectatus     Pristionchus exspectatus Mar. 2014
+                                               (WS243/P_exspectatus_v1/priExs1)
+P. pacificus       Pristionchus pacificus   Aug. 2014  (P_pacificus-v2/priPac3)
+Pig roundworm      Ascaris suum             Sep. 2012
+                                                    (WS229/AscSuum_1.0/ascSuu1)
+Pine wood nematode Bursaphelenchus xylophilus Nov. 2011
+                                            (WS229/B. xylophilus Ka4C1/burXyl1)
+Threadworm         Strongyloides ratti      Sep. 2014  (S. ratti ED321/strRat2)
+Trichinella        Trichinella spiralis     Jan. 2011
+                                     (WS225/Trichinella_spiralis-3.7.1/triSpi1)
+Whipworm           Trichuris suis           Jul. 2014 (WS243/T. suis
+                                                       DCEP-RM93M male/triSui1)
 
     # some other symlinks were already made above
     ln -s `pwd`/upstream*.gz README.txt \
         /usr/local/apache/htdocs-hgdownload/goldenPath/ce11/multiz26way
 
 #############################################################################
-# hgPal downloads (TBD - 2015-06-30 - braney)
-#   FASTA from 20-way for knownGene, refGene and knownCanonical
+# hgPal downloads (DONE - 2015-09-09 - Hiram)
+#   FASTA from 26-way for ws245Genes, refGene and ensGene
 
     ssh hgwdev
     screen -S ce11HgPal
@@ -1552,7 +1639,7 @@ Dog  -  Canis lupus familiaris     Sep. 2011 (Broad CanFam3.1/canFam3) syntenic
     cat ../species.list | tr '[ ]' '[\n]' > order.list
 
     export mz=multiz26way
-    export gp=knownGene
+    export gp=ws245Genes
     export db=ce11
     export I=0
     mkdir exonAA exonNuc
@@ -1571,16 +1658,16 @@ Dog  -  Canis lupus familiaris     Sep. 2011 (Broad CanFam3.1/canFam3) syntenic
     echo "wait" >> $gp.jobs
 
     time sh -x ./$gp.jobs > $gp.jobs.log 2>&1
-    #   real    45m15.954s
+    #   real    23m34.032s
 
     time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
-    #   real    0m51.327s
+    #   real    0m18.841s
 
     time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    2m45.157s
+    #   real    2m8.738s
 
     export mz=multiz26way
-    export gp=knownGene
+    export gp=ws245Genes
     export db=ce11
     export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
@@ -1614,21 +1701,21 @@ Dog  -  Canis lupus familiaris     Sep. 2011 (Broad CanFam3.1/canFam3) syntenic
     echo "wait" >> $gp.jobs
 
     time sh -x $gp.jobs > $gp.jobs.log 2>&1
-    #   real    30m2.224s
+    #   real    22m52.785s
 
     export mz=multiz26way
     export gp=refGene
     export db=ce11
     time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
-    #   real    0m38.634s
+    #   real    0m17.738s
     time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    2m3.774s
+    #   real    1m55.287s
 
     du -hsc exonAA exonNuc $gp.*fa.gz
-    # 156M    exonAA
-    # 242M    exonNuc
-    # 156M    refGene.multiz26way.exonAA.fa.gz
-    # 242M    refGene.multiz26way.exonNuc.fa.gz
+    # 88M     exonAA
+    # 172M    exonNuc
+    # 88M     refGene.multiz26way.exonAA.fa.gz
+    # 172M    refGene.multiz26way.exonNuc.fa.gz
 
     rm -rf exonAA exonNuc
 
@@ -1642,60 +1729,56 @@ Dog  -  Canis lupus familiaris     Sep. 2011 (Broad CanFam3.1/canFam3) syntenic
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
     ln -s `pwd`/md5sum.txt $pd/
 
-    ### And knownCanonical
+    # running up ensGene
     cd /hive/data/genomes/ce11/bed/multiz26way/pal
     export mz=multiz26way
-    export gp=knownCanonical
+    export gp=ensGene
     export db=ce11
-    mkdir exonAA exonNuc ppredAA ppredNuc knownCanonical
-
-    cut -f1 ../../../chrom.sizes | while read C
+    export I=0
+    mkdir exonAA exonNuc
+    for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
     do
-        echo $C 1>&2
-	hgsql ce11 -N -e "select chrom, chromStart, chromEnd, transcript from knownCanonical where chrom='$C'" > knownCanonical/$C.known.bed
-    done
+        I=`echo $I | awk '{print $1+1}'`
+	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc/$C.exonNuc.fa.gz &"
+	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA/$C.exonAA.fa.gz &"
+        if [ $I -gt 6 ]; then
+            echo "date"
+            echo "wait"
+            I=0
+        fi
+    done > $gp.jobs
+    echo "date" >> $gp.jobs
+    echo "wait" >> $gp.jobs
 
-    ls knownCanonical/*.known.bed | while read F
-    do
-      if [ -s $F ]; then
-         echo $F | sed -e 's#knownCanonical/##; s/.known.bed//'
-      fi
-    done | while read C
-    do
-	echo "date"
-	echo "mafGene -geneBeds=knownCanonical/$C.known.bed  $db $mz knownGene order.list stdout | \
-	    gzip -c > ppredAA/$C.ppredAA.fa.gz"
-	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -noTrans $db $mz knownGene order.list stdout | \
-	    gzip -c > ppredNuc/$C.ppredNuc.fa.gz"
-	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons -noTrans $db $mz knownGene order.list stdout | \
-	    gzip -c > exonNuc/$C.exonNuc.fa.gz"
-	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons $db $mz knownGene order.list stdout | \
-	    gzip -c > exonAA/$C.exonAA.fa.gz"
-    done > $gp.$mz.jobs
-
-    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1
-    # real    122m37.023s
-
-    rm *.known.bed
-    export mz=multiz26way
-    export gp=knownCanonical
-    export db=ce11
-    zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz &
-    zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz &
-    zcat ppredAA/c*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz &
-    zcat ppredNuc/c*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
-
-    rm -rf exonAA exonNuc ppredAA ppredNuc
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1
+XXX - running - Wed Sep  9 10:57:22 PDT 2015
+    #   real    24m14.022s
 
     export mz=multiz26way
-    export gp=knownCanonical
+    export gp=ensGene
+    export db=ce11
+    time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    #   real    0m19.157s
+    time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    #   real    2m4.686s
+
+    du -hsc exonAA exonNuc $gp.*fa.gz
+    # 88M     exonAA
+    # 187M    exonNuc
+    # 88M     ensGene.multiz26way.exonAA.fa.gz
+    # 187M    ensGene.multiz26way.exonNuc.fa.gz
+
+    rm -rf exonAA exonNuc
+
+    # we're only distributing exons at the moment
+    export mz=multiz26way
+    export gp=ensGene
     export db=ce11
     export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
-    cd  $pd
-    md5sum *.exon*.fa.gz > md5sum.txt
+    ln -s `pwd`/md5sum.txt $pd/
 
 #############################################################################
 # wiki page for 26-way (DONE - 2015-07-28 - Hiram)
@@ -1708,24 +1791,24 @@ Dog  -  Canis lupus familiaris     Sep. 2011 (Broad CanFam3.1/canFam3) syntenic
     # sizeStats.sh catches up the cached measurements required for data
     # in the tables.  They may already be done.
     ./sizeStats.sh ce11.26way/ordered.list
-    # dbDb.sh constructs ce11.26way/Ce11_20-way_conservation_alignment.html
+    # dbDb.sh constructs ce11.26way/Ce11_26-way_conservation_alignment.html
     ./dbDb.sh ce11 26way
-    # sizeStats.pl constructs ce11.26way/Ce11_20-way_Genome_size_statistics.html
+    # sizeStats.pl constructs ce11.26way/Ce11_26-way_Genome_size_statistics.html
     ./sizeStats.pl ce11 26way
 
-    # defCheck.pl constructs Ce11_20-way_conservation_lastz_parameters.html
+    # defCheck.pl constructs Ce11_26-way_conservation_lastz_parameters.html
     ./defCheck.pl ce11 26way
 
     # this constructs the html pages in ce11.26way/:
-# -rw-rw-r-- 1 4153 Jun  5 11:03 Ce11_20-way_conservation_alignment.html
-# -rw-rw-r-- 1 5833 Jun  5 11:04 Ce11_20-way_Genome_size_statistics.html
-# -rw-rw-r-- 1 3854 Jun  5 11:04 Ce11_20-way_conservation_lastz_parameters.html
+# -rw-rw-r-- 1 4153 Jun  5 11:03 Ce11_26-way_conservation_alignment.html
+# -rw-rw-r-- 1 5833 Jun  5 11:04 Ce11_26-way_Genome_size_statistics.html
+# -rw-rw-r-- 1 3854 Jun  5 11:04 Ce11_26-way_conservation_lastz_parameters.html
 
     # add those pages to the genomewiki.  Their page names are the
     # names of the .html files without the .html:
-#  Ce11_20-way_conservation_alignment
-#  Ce11_20-way_Genome_size_statistics
-#  Ce11_20-way_conservation_lastz_parameters
+#  Ce11_26-way_conservation_alignment
+#  Ce11_26-way_Genome_size_statistics
+#  Ce11_26-way_conservation_lastz_parameters
 
     # when you view the first one you enter, it will have links to the
     # missing two.

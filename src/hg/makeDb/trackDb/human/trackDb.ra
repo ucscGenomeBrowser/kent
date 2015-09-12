@@ -251,9 +251,10 @@ type bed 12
 noScoreFilter .
 itemRgb on
 urlLabel KOMP Data Coordination Center:
-url http://www.knockoutmouse.org/search?criteria=$$
+url http://www.mousephenotype.org/data/genes/$$
 mgiUrlLabel MGI Report:
-mgiUrl http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
+mgiUrl http://www.informatics.jax.org/marker/$$
+exonNumbers off
 
 track acembly
 shortLabel AceView Genes
@@ -1021,6 +1022,7 @@ snpExceptionDesc snp144ExceptionDesc
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
+trackHandler snp125
 chimpOrangMacOrthoTable snp144OrthoPt4Pa2Rm3
 chimpDb panTro3
 orangDb ponAbe2
@@ -1040,6 +1042,7 @@ snpSeq snp144Seq
 snpExceptionDesc snp144ExceptionDesc
 defaultGeneTracks knownGene
 type bed 6 +
+trackHandler snp125
 chimpOrangMacOrthoTable snp144OrthoPt4Pa2Rm3
 chimpDb panTro3
 orangDb ponAbe2
@@ -1060,6 +1063,7 @@ defaultGeneTracks knownGene
 defaultMaxWeight 3
 maxWindowToDraw 10000000
 type bed 6 +
+trackHandler snp125
 chimpOrangMacOrthoTable snp144OrthoPt4Pa2Rm3
 chimpDb panTro3
 orangDb ponAbe2
@@ -1077,6 +1081,7 @@ urlLabel dbSNP:
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
+trackHandler snp125
 chimpOrangMacOrthoTable snp144OrthoPt4Pa2Rm3
 chimpDb panTro3
 orangDb ponAbe2

@@ -23,7 +23,7 @@ if options.debug:
 else:
     logging.basicConfig(level=logging.INFO)
 
-clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	ClinicalSignificance	RS# (dbSNP)	nsv (dbVar)	RCVaccession	TestedInGTR	PhenotypeIDs	Origin	Assembly	Chromosome	Start	Stop	Cytogenetic	ReviewStatus	HGVS(c.)	HGVS(p.)	NumberSubmitters	LastEvaluated	Guidelines	OtherIDs	VariantID	ReferenceAllele	AlternateAllele	SubmitterCategories\n"
+clinvarExpectHeaders = "#AlleleID	Type	Name	GeneID	GeneSymbol	ClinicalSignificance	RS# (dbSNP)	nsv (dbVar)	RCVaccession	TestedInGTR	PhenotypeIDs	Origin	Assembly	Chromosome	Start	Stop	Cytogenetic	ReviewStatus	HGVS(c.)	HGVS(p.)	NumberSubmitters	LastEvaluated	Guidelines	OtherIDs	VariantID	ReferenceAllele	AlternateAllele	SubmitterCategories	ChromosomeAccession\n"
 # ==== FUNCTIONs =====
 
 def shortenName(name):
@@ -139,7 +139,7 @@ for line in ifh:
     alleleId, allType, name, geneId, geneSymbol, clinSign, snpAcc, dbVarAcc, \
       irvcAcc, inGtr, phenotypeIds, origin, assembly, chrom, start, end, cytogenetic, \
       reviewStatus, hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds, varId, \
-      refAll, varAll, submCategories = line.split("\t")
+      refAll, varAll, submCategories, chromAcc = line.split("\t")
 
     if chrom=="" or assembly=="" or assembly=="NCBI36":
         noAssCount += 1
