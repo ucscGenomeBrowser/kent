@@ -51,6 +51,7 @@ struct connInfo
     int socket;                 /* Socket descriptor for data connection (or 0). */
     bits64 offset;		/* Current file offset of socket. */
     int ctrlSocket;             /* (FTP only) Control socket descriptor or 0. */
+    char *redirUrl;             /* (HTTP(S) only) use redirected url */
     };
 
 typedef int (*UdcDataCallback)(char *url, bits64 offset, int size, void *buffer,
@@ -89,6 +90,7 @@ struct udcFile
     char *cacheDir;		/* Directory for cached file parts. */
     char *bitmapFileName;	/* Name of bitmap file. */
     char *sparseFileName;	/* Name of sparse data file. */
+    char *redirFileName;	/* Name of redir file. */
     int fdSparse;		/* File descriptor for sparse data file. */
     boolean sparseReadAhead;    /* Read-ahead has something in the buffer */
     char *sparseReadAheadBuf;   /* Read-ahead buffer, if any */
@@ -115,6 +117,7 @@ struct udcBitmap
     };
 static char *bitmapName = "bitmap";
 static char *sparseDataName = "sparseData";
+static char *redirName = "redir";
 #define udcBitmapHeaderSize (64)
 static int cacheTimeout = 0;
 
@@ -166,6 +169,8 @@ if (ci != NULL && ci->socket > 0 && ci->offset != offset)
 int sd;
 if (ci == NULL || ci->socket <= 0)
     {
+    if (ci->redirUrl)
+	url = ci->redirUrl;
     char rangeUrl[2048];
     if (ci == NULL)
 	{
@@ -390,8 +395,28 @@ boolean udcInfoViaHttp(char *url, struct udcRemoteFileInfo *retInfo)
 verbose(4, "checking http remote info on %s\n", url);
 struct hash *hash = newHash(0);
 int status = netUrlHead(url, hash);
-if (status != 200) // && status != 302 && status != 301)
+if (status != 200  && status != 301 && status != 302)  
     return FALSE;
+if (status == 301 && status == 302)
+    {
+    int sd = netUrlOpen(url);
+    if (sd < 0)
+	return FALSE;
+    int newSd = 0;
+    char *newUrl = NULL;
+    if (!netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))
+	return FALSE;
+    if (newUrl != NULL)
+	{
+	sd = newSd;
+	url = newUrl;
+	retInfo->ci.redirUrl = newUrl; 
+	}
+    close(sd);
+    // reread from the new redirected url
+    hash = newHash(0);
+    status = netUrlHead(url, hash);
+    }
 char *sizeString = hashFindValUpperCase(hash, "Content-Length:");
 if (sizeString == NULL)
     {
@@ -685,6 +710,8 @@ if (bits != NULL)
         udcBitmapClose(&bits);
 	remove(file->bitmapFileName);
 	remove(file->sparseFileName);
+	if (fileExists(file->redirFileName))
+	    remove(file->redirFileName);
 	++version;
 	}
     }
@@ -868,6 +895,7 @@ safef(file->cacheDir, len, "%s/%s/%s", cacheDir, protocol, hashedAfterProtocol);
 /* Create file names for bitmap and data portions. */
 file->bitmapFileName = fileNameInCacheDir(file, bitmapName);
 file->sparseFileName = fileNameInCacheDir(file, sparseDataName);
+file->redirFileName = fileNameInCacheDir(file, redirName);
 }
 
 static long long int udcSizeAndModTimeFromBitmap(char *bitmapFileName, time_t *retTime)
@@ -958,6 +986,7 @@ else
 	// until the timeout has expired again:
     	if (udcCacheTimeout() > 0 && udcCacheEnabled() && fileExists(file->bitmapFileName))
 	    (void)maybeTouchFile(file->bitmapFileName);
+
 	}
 
     if (udcCacheEnabled())
@@ -969,6 +998,37 @@ else
         setInitialCachedDataBounds(file, useCacheInfo);
 
         file->fdSparse = mustOpenFd(file->sparseFileName, O_RDWR);
+
+	// update redir with latest redirect status	
+	if (startsWith("http", protocol))
+	    {
+	    if (useCacheInfo)
+		{
+		// read redir from cache
+		if (fileExists(file->redirFileName))
+		    {
+		    readInGulp(file->redirFileName, &file->connInfo.redirUrl, NULL);
+		    }
+		}
+	    else
+		{
+		if (info.ci.redirUrl)
+		    {
+		    // write redir to cache
+		    char *temp = addSuffix(file->redirFileName, ".temp");
+		    writeGulp(temp, file->connInfo.redirUrl, strlen(file->connInfo.redirUrl));
+		    rename(temp, file->redirFileName);
+		    freeMem(temp);
+		    }
+		else
+		    {
+		    // delete redir from cache (if it exists)
+		    if (fileExists(file->redirFileName))
+			remove(file->redirFileName);
+		    }
+		}
+	    }
+	
         }
 
     }
@@ -1659,6 +1719,8 @@ for (file = fileList; file != NULL; file = file->next)
 		{
 		remove(bitmapName);
 		remove(sparseDataName);
+		if (fileExists(redirName))
+		    remove(redirName);
 		}
 	    }
 	}
