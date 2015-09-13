@@ -170,7 +170,9 @@ int sd;
 if (ci == NULL || ci->socket <= 0)
     {
     if (ci->redirUrl)
-	url = ci->redirUrl;
+	{
+	url = transferParamsToRedirectedUrl(url, ci->redirUrl);
+	}
     char rangeUrl[2048];
     if (ci == NULL)
 	{
@@ -410,31 +412,9 @@ while (TRUE)
 	warn("code %d redirects: exceeded limit of 5 redirects, %s", status, url);
 	return  FALSE;
 	}
-    char *newUrl = cloneString(hashFindValUpperCase(hash, "Location:"));
-    struct netParsedUrl npu, newNpu;
-    /* Parse the old URL to make parts available for graft onto the redirected url. */
-    /* This makes redirection work with byterange urls and user:password@ */
-    netParseUrl(url, &npu);
-    netParseUrl(newUrl, &newNpu);
-    boolean updated = FALSE;
-    if (npu.byteRangeStart != -1)
-	{
-	newNpu.byteRangeStart = npu.byteRangeStart;
-	newNpu.byteRangeEnd = npu.byteRangeEnd;
-	updated = TRUE;
-	}
-    if ((npu.user[0] != 0) && (newNpu.user[0] == 0))
-	{
-	safecpy(newNpu.user,     sizeof newNpu.user,     npu.user);
-	safecpy(newNpu.password, sizeof newNpu.password, npu.password);
-	updated = TRUE;
-	}
-    if (updated)
-	{
-	newUrl = urlFromNetParsedUrl(&newNpu);
-	}
-    url = newUrl;
-    retInfo->ci.redirUrl = url;
+    char *newUrl = hashFindValUpperCase(hash, "Location:");
+    retInfo->ci.redirUrl = cloneString(newUrl);
+    url = transferParamsToRedirectedUrl(url, newUrl);		
     hashFree(&hash);
     }
 
