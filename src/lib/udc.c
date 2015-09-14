@@ -915,6 +915,45 @@ udcBitmapClose(&bits);
 return ret;
 }
 
+static void udcTestAndSetRedirect(struct udcFile *file, char *protocol, boolean useCacheInfo)
+/* update redirect info */
+{
+if (startsWith("http", protocol))
+    {
+    char *newUrl = NULL;
+    // read redir from cache if it exists
+    if (fileExists(file->redirFileName))
+	{
+	readInGulp(file->redirFileName, &newUrl, NULL);
+	}
+    if (useCacheInfo)
+	{
+	file->connInfo.redirUrl = cloneString(newUrl);
+	}
+    else
+	{
+	if (file->connInfo.redirUrl)
+	    {
+	    if (!sameOk(file->connInfo.redirUrl, newUrl))
+		{
+		// write redir to cache
+		char *temp = addSuffix(file->redirFileName, ".temp");
+		writeGulp(temp, file->connInfo.redirUrl, strlen(file->connInfo.redirUrl));
+		rename(temp, file->redirFileName);
+		freeMem(temp);
+		}
+	    }
+	else
+	    {
+	    // delete redir from cache (if it exists)
+	    if (newUrl)
+		remove(file->redirFileName);
+	    }
+	}
+    freeMem(newUrl);
+    }
+}
+
 struct udcFile *udcFileMayOpen(char *url, char *cacheDir)
 /* Open up a cached file. cacheDir may be null in which case udcDefaultDir() will be
  * used.  Return NULL if file doesn't exist. 
@@ -1001,34 +1040,7 @@ else
         file->fdSparse = mustOpenFd(file->sparseFileName, O_RDWR);
 
 	// update redir with latest redirect status	
-	if (startsWith("http", protocol))
-	    {
-	    if (useCacheInfo)
-		{
-		// read redir from cache
-		if (fileExists(file->redirFileName))
-		    {
-		    readInGulp(file->redirFileName, &file->connInfo.redirUrl, NULL);
-		    }
-		}
-	    else
-		{
-		if (info.ci.redirUrl)
-		    {
-		    // write redir to cache
-		    char *temp = addSuffix(file->redirFileName, ".temp");
-		    writeGulp(temp, file->connInfo.redirUrl, strlen(file->connInfo.redirUrl));
-		    rename(temp, file->redirFileName);
-		    freeMem(temp);
-		    }
-		else
-		    {
-		    // delete redir from cache (if it exists)
-		    if (fileExists(file->redirFileName))
-			remove(file->redirFileName);
-		    }
-		}
-	    }
+	udcTestAndSetRedirect(file, protocol, useCacheInfo);
 	
         }
 
