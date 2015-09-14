@@ -1,4 +1,4 @@
-#!/bin/sh -ex
+#!/bin/sh -e
 
 db=$1
 tooMuch=0.1000   # how much change (either gain or loss) is too much
