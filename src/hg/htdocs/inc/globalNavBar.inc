@@ -11,8 +11,23 @@
 
 <li class="first even" id="home"><a href="../index.html" ><span id="home-link">Home</span></a></li> 
 
-<li id="genomes"><a href="../cgi-bin/hgGateway">Genomes</a></li>
-<li id="genomeBrowser"><a href="../cgi-bin/hgTracks">Genome Browser</a></li>
+<li class="menuparent" id="tools"><a href="../cgi-bin/hgGateway">Genomes</a>
+	<ul style="display: none; visibility: hidden;">
+	<li class="first"><a href="../cgi-bin/hgTracks?db=hg19&position=lastDbPos">Human GRCh37/hg19</a></li>
+	<li><a href="../cgi-bin/hgTracks?db=hg38&position=lastDbPos">Human GRCh38/hg38</a></li>
+	<li><a href="../cgi-bin/hgTracks?db=mm10&position=lastDbPos">Mouse NCBI37/mm10</a></li>
+	<li><a href="../cgi-bin/hgTracks?db=mm9&position=lastDbPos">Mouse GRCh38/mm9</a></li>
+	<li class="last"><a href="../cgi-bin/hgGateway">Other</a></li>
+        </ul>
+</li>
+
+<li class="menuparent" id="tools"><a href="../cgi-bin/hgTracks">Genome Browser</a>
+	<ul style="display: none; visibility: hidden;">
+	<li class="first"><a href="../cgi-bin/hgTracks?hgTracksConfigPage=configure">Configure</a></li>
+	<li><a href="../cgi-bin/cartReset">Reset All User Settings</a></li>
+        </ul>
+</li>
+
 
 <li class="menuparent" id="tools"><span>Tools</span>
 	<ul style="display: none; visibility: hidden;">

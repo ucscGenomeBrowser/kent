@@ -1386,6 +1386,11 @@ if(scriptName)
         link = "../goldenPath/help/hgTablesHelp.html";
         label = "Help on Table Browser";
         }
+    else if (endsWith(scriptName, "hgIntegrator"))
+        {
+        link = "../goldenPath/help/hgIntegratorHelp.html";
+        label = "Help on Data Integrator";
+        }
     else if (endsWith(scriptName, "hgGenome"))
         {
         link = "../goldenPath/help/hgGenomeHelp.html";

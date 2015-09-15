@@ -1024,7 +1024,9 @@ EOF
 
 
 ##############################################################################
-# DBSNP B144 / SNP144 (DONE 7/15/15)
+# DBSNP B144 / SNP144 (IN PROGRESS 9/3/15)
+    # Originally done 7/15/15
+    # Updated 9/3/15 with additional alt mappings from dbSNP, see below
     # Redmine #15493
     mkdir -p /hive/data/outside/dbSNP/144/human_hg38
     cd /hive/data/outside/dbSNP/144/human_hg38
@@ -1102,26 +1104,142 @@ EOF
     # This time it was still in the loadDbSnp step, so no need to kill it.
 # *** All done!
 
+    # 9/3/2015: Sarah Hunt at EBI alerted dbSNP that there seemed to be a lot
+    # fewer mappings to alt sequences than in 142; dbSNP made new download files
+    # that seem to be an updated b144_SNPContigLoc trimmed to contain only the
+    # rows on alt sequences.
+    cd /hive/data/outside/dbSNP/144/human_hg38/data
+    wget ftp://ftp.ncbi.nih.gov/snp/temp/EBI/b144_alt/b144_SNPContigLoc_alt_only_107.bcp.gz
+    gunzip b144_SNPContigLoc_alt_only_107.bcp.gz
+    gunzip b144_SNPContigLoc_107.bcp.gz
+    # Check sorting so we can merge-sort (quicker):
+    sort -c -k 2n,2n -k3n,3n -k4n,4n -k5n,5n b144_SNPContigLoc_107.bcp
+    sort -c -k 2n,2n -k3n,3n -k4n,4n -k5n,5n b144_SNPContigLoc_alt_only_107.bcp
+    # No output, good.
+    # Merge-sort the files, discarding lines with the same values in columns 2-5:
+    sort -m -u -k 2n,2n -k3n,3n -k4n,4n -k5n,5n b144_SNPContigLoc_107.bcp \
+      b144_SNPContigLoc_alt_only_107.bcp \
+      > b144_SNPContigLoc_107_merged.bcp
+    wc -l b144_SNPContigLoc_107.bcp b144_SNPContigLoc_alt_only_107.bcp \
+      b144_SNPContigLoc_107_merged.bcp
+#  151235228 b144_SNPContigLoc_107.bcp
+#    5735312 b144_SNPContigLoc_alt_only_107.bcp
+#  152546474 b144_SNPContigLoc_107_merged.bcp
+    # How many of the 1831401 alt mappings were already in b144_SNPContigLoc_107.bcp?
+    expr 151235228 + 5735312 - 152546474
+#4424066
+    # How many new mappings were added?
+    expr 152546474 - 151235228
+#1311246
+    # Install the merged file in place of the original b144_SNPContigLoc_107.bcp.gz
+    gzip b144_SNPContigLoc_107_merged.bcp &
+    mv b144_SNPContigLoc_107{,_orig}.bcp
+    gzip b144_SNPContigLoc_107_orig.bcp &
+    ln -s b144_SNPContigLoc_107_merged.bcp.gz b144_SNPContigLoc_107.bcp.gz
+    # Run the pipeline again when the gzip of b144_SNPContigLoc_107_merged.bcp is complete.
+    cd /hive/data/outside/dbSNP/144/human_hg38
+    hgsql hg38 -NBe 'select chrom, count(*) from snp144 group by chrom order by chrom' \
+      > chromCounts.orig
+    mkdir origFiles
+    mv snp144*.{bed,tab}*.gz do.log origFiles/
+    hgsql '' -e 'drop database hg38snp144'
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=loadDbSnp >>& do.log &
+    tail -f do.log
+    # While that's reloading the database, see if we need to fetch more fasta:
+    zcat data/b144_SNPContigLoc_107.bcp.gz \
+    | awk '{print "rs" $2;}' \
+    | sort -u > contigLocIds.txt
+    comm -13 rsFastaIds.txt contigLocIds.txt > missingFromRsFasta.txt
+    wc -l missingFromRsFasta.txt
+#432 missingFromRsFasta.txt
+    # It was 227 before, so let's get sequence from dbSNP again.
+    #   http://www.ncbi.nlm.nih.gov/projects/SNP/dbSNP.cgi?list=rsfile
+    # Enter your email address, select FASTA as output format, and upload missingFromRsFasta.txt
+    # Wait for email with link to results -- don't close that tab!
+    # Excerpt from email:
+#dbSNP BATCH QUERY REPORT: FASTA
+#============================================================
+#Total number of Submitted ID:           432
+#============================================================
+#Total number of ID processed:           432
+#============================================================
+#These rs have been merged (submitted_rs -> new_rs)
+#________________________________________________
+#============================================================
+    # Download the gzipped fasta file and move/rename it to rs_chBatchQuery.fas.gz.
+    # Strangely, there are only 86 sequences...
+    faSize rs_chBatchQuery.fas.gz
+ #9386 bases (86 N's 9300 real 9300 upper 0 lower) in 86 sequences in 1 files
+    # Compare that to the rs_fasta/rs_chBatchQuery.fas.gz that we got the first time around...
+    faSize rs_fasta/rs_chBatchQuery.fas.gz
+#22220 bases (220 N's 22000 real 22000 upper 0 lower) in 220 sequences in 1 files
+    # Better not overwrite that!  Turns out they have 60 sequences in common, so it's
+    # not as simple as concatenating them either.
+    # I'm going to resubmit in case of glitch... same results.  And one of the rsIDs
+    # in the fasta file isn't even in missingFromRsFasta.txt... sheesh.
+    # Well, just concatenate, 60 sequences will be duplicated, big deal.
+    gunzip rs_chBatchQuery.fas.gz rs_fasta/rs_chBatchQuery.fas.gz
+    cat rs_chBatchQuery.fas >> rs_fasta/rs_chBatchQuery.fas
+    gzip rs_fasta/rs_chBatchQuery.fas
+    # Actually, doing another query for only the IDs that weren't returned by the first
+    # query does give us more sequences:
+    faSize -detailed rs_chBatchQuery.fas | perl -wpe 's/.*(rs\d+).*/$1/' > idsFromBatch
+    grep -Fvwf idsFromBatch missingFromRsFasta.txt > stillMissingFromRsFasta.txt
+    # Repeat the fasta-fetching... now we have a new file with 163 sequences!
+    # Save as rs_chBatchQuery_2.fas and repeat...
+    faSize -detailed rs_chBatchQuery_2.fas | perl -wpe 's/.*(rs\d+).*/$1/' >> idsFromBatch
+    grep -Fvwf idsFromBatch missingFromRsFasta.txt > stillMissingFromRsFasta.txt
+    # Got 185 more in rs_chBatchQuery_3.fas... that might do it...
+    faSize -detailed rs_chBatchQuery_3.fas | perl -wpe 's/.*(rs\d+).*/$1/' >> idsFromBatch
+    grep -Fvwf idsFromBatch missingFromRsFasta.txt > stillMissingFromRsFasta.txt
+    wc -l stillMissingFromRsFasta.txt
+#1 stillMissingFromRsFasta.txt
+    # I bet that one kept causing batches to crash.
+    cat stillMissingFromRsFasta.txt
+#rs281874781
+    # http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=rs281874781 says merged into rs9274426
+    gunzip rs_fasta/rs_chBatchQuery.fas.gz
+    cat rs_chBatchQuery_2.fas rs_chBatchQuery_3.fas >> rs_fasta/rs_chBatchQuery.fas
+    faSize -detailed rs_fasta/rs_chBatchQuery.fas \
+    | perl -wpe 's/.*(rs\d+).*/$1/' \
+    | sort > allIdsFromBatches
+    uniq allIdsFromBatches > allIdsFromBatchesU
+    wc -l allIdsFromBatches*
+#  654 allIdsFromBatches
+#  432 allIdsFromBatchesU
+    # Well, 222 dupes... not too horrible on the scale of dbSNP size.
+    # I briefly experimented with faSplit byName for uniquifying, but that lost the
+    # extra header stuff from which we scrape observed alleles... so never mind.
+    gzip rs_fasta/rs_chBatchQuery.fas
+    tail -f do.log
+# *** All done!
+    hgsql hg38 -NBe 'select chrom, count(*) from snp144 group by chrom order by chrom' \
+      > chromCounts.merged
+    sdiff chromCounts.{orig,merged}
+    # Most _alt sequences have more mappings now, good.
+
 
 ##############################################################################
-# SNP144 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 7/15/15 angie)
+# SNP144 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 9/9/15 angie)
+    # Originally done 7/15/15
     # Redmine #15493
     screen -S ortho -t ortho
     ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg38 144 -debug
-# *** Steps were performed in /hive/data/genomes/hg38/bed/snp144Ortho.2015-07-15
-    cd /hive/data/genomes/hg38/bed/snp144Ortho.2015-07-15
+# *** Steps were performed in /hive/data/genomes/hg38/bed/snp144Ortho.2015-09-09
+    cd /hive/data/genomes/hg38/bed/snp144Ortho.2015-09-09
     ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg38 144 \
       >>& do.log & tail -f do.log
 # *** All done!
 
 
 ##############################################################################
-# SNPMASKED SEQUENCE FOR SNP144 (DONE 7/16/15 angie)
+# SNPMASKED SEQUENCE FOR SNP144 (DONE 9/9/15  angie)
+    # Originally done 7/16/15
     # Redmine #15493
     screen -S mask -t mask
     ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg38 144 -debug
-# *** Steps were performed in /hive/data/genomes/hg38/snp144Mask.2015-07-16
-    cd /hive/data/genomes/hg38/snp144Mask.2015-07-16
+# *** Steps were performed in /hive/data/genomes/hg38/snp144Mask.2015-09-09
+    cd /hive/data/genomes/hg38/snp144Mask.2015-09-09
     ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg38 144 \
       >>& do.log & tail -f do.log
 # *** All done!

@@ -1423,7 +1423,7 @@ sub filterTables {
           $db \$table -sqlTable=$snpBase.sql \$table.bed.gz
       endif
     end
-    rm bed.tab
+    rm -f bed.tab
 _EOF_
     );
   $bossScript->execute();
