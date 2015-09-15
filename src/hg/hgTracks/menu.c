@@ -227,7 +227,7 @@ appendLink(&links, buf, "In Other Genomes (Convert)", "convertMenuLink", FALSE);
 // add the sendTo menu
 if (fileExists("extTools.ra"))
     {
-    appendLinkWithOnclick(&links, "#", "In External tools", "Show current chrosomal region on a third-party website", "extToolLink", "showExtToolDialog(); return false;", FALSE, FALSE);
+    appendLinkWithOnclick(&links, "#", "In External tools", "extToolLink", "Show current sequence on a third-party website", "showExtToolDialog(); return false;", FALSE, FALSE);
     }
 
 

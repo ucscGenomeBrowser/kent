@@ -1,4 +1,4 @@
-#!/bin/sh -ex
+#!/bin/sh -e
 # get raw data file from DECIPHER
 
 #cp $1  decipherRawNew.txt -p

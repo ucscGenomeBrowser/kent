@@ -8,6 +8,21 @@ ifeq (${CGI_BIN_BETA},)
     CGI_BIN_BETA=${CGI_BIN}-beta
 endif
 
+# these rules set CGI-BIN_DEST to the right cgi-bin directory depending 
+# on the main goal (my (default), alpha or beta)
+# this won't work if you supply multiple goals "(make my alpha beta")
+# but we do not seem to do that
+CGI-BIN_DEST=${CGI_BIN}
+ifeq ($(MAKECMDGOALS),my)
+    CGI-BIN_DEST=${CGI_BIN}-${USER}
+endif
+ifeq ($(MAKECMDGOALS),)
+    CGI-BIN_DEST=${CGI_BIN}-${USER}
+endif
+ifeq ($(MAKECMDGOALS),beta) 
+    CGI-BIN_DEST=${CGI_BIN}-beta
+endif
+
 my:: compile
 	chmod a+rx $A${EXE}
 	rm -f ${CGI_BIN_USER}/$A

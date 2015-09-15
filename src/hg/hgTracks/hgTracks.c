@@ -5350,6 +5350,16 @@ char newPos[256];
 char *defaultPosition = hDefaultPos(database);
 char titleVar[256];
 position = getPositionFromCustomTracks();
+
+// position=lastDbPos in URL? -> go back to the last browsed position for this db
+char dbPosKey[256];
+safef(dbPosKey, sizeof(dbPosKey), "position.%s", database);
+if (sameOk(cgiOptionalString("position"), "lastDbPos"))
+    {
+    char *position = cartUsualString(cart, dbPosKey, defaultPosition);
+    cartSetString(cart, "position", position);
+    }
+    
 if (NULL == position)
     {
     position = cloneString(cartUsualString(cart, "position", NULL));
@@ -5396,6 +5406,9 @@ if (NULL == chromName)
     cartSetString(cart, "position", lastPosition);
     return;
     }
+
+// save the current position to the cart var position.<db>
+cartSetString(cart, dbPosKey, position);
 
 seqBaseCount = hChromSize(database, chromName);
 winBaseCount = winEnd - winStart;

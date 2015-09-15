@@ -14,6 +14,7 @@
 #include "linefile.h"
 #include "net.h"
 #include "customPp.h"
+#include "hgConfig.h"
 #include "customTrack.h"
 #ifdef PROGRESS_METER
 #include "udc.h"
@@ -104,7 +105,7 @@ while ((lf = cpp->fileStack) != NULL)
     char *line;
     if (lineFileNext(lf, &line, NULL))
         {
-	if (startsWith("http://", line) || startsWith("https://", line) || startsWith("ftp://", line))
+	if (startsWith("http://", line) || startsWith("https://", line) || startsWith("ftp://", line) || (cfgOption("udc.localDir")!=NULL && startsWith(cfgOption("udc.localDir"), line)) )
 	    {
             if (customTrackIsBigData(line))
                 line = bigUrlToTrackLine(line);
