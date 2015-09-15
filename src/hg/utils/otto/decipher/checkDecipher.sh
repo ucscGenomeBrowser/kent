@@ -1,4 +1,4 @@
-#!/bin/sh -ex
+#!/bin/sh -e
 
 #	Do not modify this script, modify the source tree copy:
 #	src/utils/decipher/checkDecipher.sh
@@ -23,7 +23,7 @@ cd "${WORKDIR}"
 #ftppass=`cat ftp.pwd`
 gpgpass=`cat gpg.pwd`
 
-perl login.perl
+perl login.perl > /dev/null 2>&1
 
 if test decipher-* -nt lastUpdate
 then
