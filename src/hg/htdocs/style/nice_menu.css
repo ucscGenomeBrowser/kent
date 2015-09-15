@@ -541,19 +541,19 @@ end up deleting any I don't need */
 	min-width:		1px; /* trigger IE7 hasLayout so spans position accurately */
 }
 .sf-sub-indicator {
-	position:		absolute;
+	/*position:		absolute;
 	display:		block;
 	right:			.75em;
-	top:			1.05em; /* IE6 only */
+	top:			1.05em;  // IE6 only 
 	width:			10px;
 	height:			10px;
 	text-indent: 	-999em;
-	overflow:		hidden;
-	background:		url('../images/arrows-ffffff.png') no-repeat -10px -100px; /* 8-bit indexed alpha png. IE6 gets solid image only */
+	overflow:		hidden; */
+	/* background:		url('../images/arrows-ffffff.png') no-repeat -10px -100px; 8-bit indexed alpha png. IE6 gets solid image only */
 }
 
 a > .sf-sub-indicator {  /* give all except IE6 the correct values */
-	top:			.8em;
-	background-position: 0 -100px; /* use translucent arrow for modern browsers*/
+	/*top:			.8em; */
+	/* background-position: 0 -100px; /* use translucent arrow for modern browsers */
 }
 
