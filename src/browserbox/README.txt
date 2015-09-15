@@ -4,7 +4,7 @@ a Ubuntu 14 installation into a Genome Browser in a box by copying all these
 files into the root directory as sudo. (Redmine #11957)
 
 See also the main gbib doc page:
-http://genomewiki.ucsc.edu/index.php/Genome_Browser_in_a_box_config
+http://genomewiki.ucsc.edu/genecats/index.php/Genome_Browser_in_a_Box_config
 
 The following symlinks are not in git and have to be set manually :
 usr/local/apache/htdocs/folders -> /media
