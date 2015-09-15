@@ -38,6 +38,9 @@ group rep
 track rmskJoinedBaseline override
 visibility hide
 
+track stsMap override
+visibility hide
+
 searchName assemblyAcc
 searchTable gold
 searchMethod prefix
