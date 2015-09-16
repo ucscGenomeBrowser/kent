@@ -769,9 +769,11 @@ if (didSessionLoad)
 
 if (newDatabase != NULL)
     {
-    cartSetString(cart,"db", newDatabase);
     // this is some magic to use the defaultPosition */
-    cartSetString(cart,"position", "genome");
+    char *oldDb = cartOptionalString(cart, "db");
+    if (oldDb != NULL)
+        hashAdd(oldVars, "db", oldDb);
+    cartSetString(cart,"db", newDatabase);
     }
 
 if (exclude != NULL)
