@@ -3311,7 +3311,7 @@ if (strstrNoCase(organism, "zoo"))
     webNewSection("About the NISC Comparative Sequencing Program Browser");
 else
     webNewSection("%s Genome Browser &ndash; %s assembly"
-		  "  <A HREF=\"%s?%s=%d&chromInfoPage=\">(sequences)</A>",
+		  "  <A HREF=\"%s?%s=%s&chromInfoPage=\">(sequences)</A>",
 		  trackHubSkipHubName(organism), 
 		  trackHubSkipHubName(database),
 		  hgTracksName(), cartSessionVarName(), cartSessionId(cart));
