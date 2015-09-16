@@ -1,4 +1,4 @@
-#!/bin/sh -ex
+#!/bin/sh -e
 
 #	Do not modify this script, modify the source tree copy:
 #	src/hg/utils/omim/checkOmim.sh
@@ -113,7 +113,7 @@ ln -s ../mimAV.txt ./mimAV.txt
 ln -s ../mim2gene.txt ./mim2gene.txt
 ln -s ../../parseGeneMap.pl ./parseGeneMap.pl
 
-csh -x ../../buildOmimTracks.csh hg18
+csh  ../../buildOmimTracks.csh hg18
 ../../validateOmim.sh hg18
 cd ..
 
@@ -127,8 +127,22 @@ ln -s ../mimAV.txt ./mimAV.txt
 ln -s ../mim2gene.txt ./mim2gene.txt
 ln -s ../../parseGeneMap.pl ./parseGeneMap.pl
 
-csh -x ../../buildOmimTracks.csh hg19
+csh  ../../buildOmimTracks.csh hg19
 ../../validateOmim.sh hg19
+cd ..
+
+# build the new OMIM track tables for hg38
+rm -rf hg38
+mkdir -p hg38
+cd hg38
+
+ln -s ../genemap ./genemap
+ln -s ../mimAV.txt ./mimAV.txt
+ln -s ../mim2gene.txt ./mim2gene.txt
+ln -s ../../parseGeneMap.pl ./parseGeneMap.pl
+
+csh  ../../buildOmimTracks.csh hg38
+../../validateOmim.sh hg38
 cd ..
 
 # now install for both hg18 and hg19
@@ -138,6 +152,7 @@ do
     o=$i"Old"
     hgsqlSwapTables hg18 $n $i $o -dropTable3
     hgsqlSwapTables hg19 $n $i $o -dropTable3
+    hgsqlSwapTables hg38 $n $i $o -dropTable3
 done
 
 echo "Omim Installed `date`" 

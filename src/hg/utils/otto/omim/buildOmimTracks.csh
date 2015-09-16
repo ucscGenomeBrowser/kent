@@ -110,8 +110,10 @@ rm j1.2  j1 j2 j3  j4  j4-2  j4.1  j4.2  j5
 
 if ($db == "hg18") then
    hgsql $db -N -e 'select chrom, chromStart, chromEnd, avId from omimAvReplNew r, snp130 s where s.name = dbSnpId order by avId' |sort -u > omimAvSnp.tab
-else
-   hgsql $db -N -e 'select chrom, chromStart, chromEnd, avId from omimAvReplNew r, snp137 s where s.name = dbSnpId order by avId' |sort -u > omimAvSnp.tab
+else if ($db == "hg19") then
+   hgsql $db -N -e 'select chrom, chromStart, chromEnd, avId from omimAvReplNew r, snp141 s where s.name = dbSnpId order by avId' |sort -u > omimAvSnp.tab
+else if ($db == "hg38") then
+   hgsql $db -N -e 'select chrom, chromStart, chromEnd, avId from omimAvReplNew r, snp141 s where s.name = dbSnpId order by avId' |sort -u > omimAvSnp.tab
 endif
 
 hgLoadBed -verbose=0 -allowStartEqualEnd  $db omimAvSnpNew omimAvSnp.tab 
