@@ -1486,3 +1486,78 @@ TMPDIR=/dev/shm
     # real    0m58.661s
 
 #########################################################################
+# LASTZ self ce11 vs. ce11 - (DONE - 2015-09-14 - Hiram)
+    # need nib files to run this with lineage specific repeats
+    mkdir -p /hive/data/genomes/ce11/bed/lastzSelf.2015-09-14/nibs
+    cd /hive/data/genomes/ce11/bed/lastzSelf.2015-09-14/nibs
+    cut -f1 ../../../chrom.sizes | while read C
+do
+   twoBitToFa -seq=${C} ../../../ce11.2bit stdout \
+     | faToNib -softMask stdin ${C}.nib
+   echo ${C} 1>&2
+done
+
+    # verify all sequence is here
+    faSize *.fa
+# 100286401 bases (0 N's 100286401 real 87628173 upper 12658228 lower) in 7 sequences in 7 files
+    head -1 ../../../faSize.ce11.2bit.txt
+# 100286401 bases (0 N's 100286401 real 87628173 upper 12658228 lower) in 7 sequences in 1 files
+
+    # construct 'lineage specific repeats' which for this self business
+    # happens to be all the repeats found in ce11.  They will be excluded
+    # during the alignment.
+   mkdir /hive/data/genomes/ce11/bed/lastzSelf.2015-09-14/lineageSpecificRepeats
+    cd /hive/data/genomes/ce11/bed/lastzSelf.2015-09-14/lineageSpecificRepeats
+
+    cut -f1 ../../../chrom.sizes | while read C
+do
+    head -3 ../../repeatMasker/ce11.sorted.fa.out > ${C}.out.spec
+    perl -ne '/ '${C}' / && print' ../../repeatMasker/ce11.sorted.fa.out \
+      >> ${C}.out.spec
+    echo ${C} 1>&2
+done
+
+    # verify we have everything here correctly:
+    sort -u ../../repeatMasker/ce11.sorted.fa.out | sum
+    #  01618 10225
+    sort -u *.out.spec | sum
+    #  01618 10225
+
+    cd /hive/data/genomes/ce11/bed/lastzSelf.2015-09-14
+    cat << '_EOF_' > DEF
+# ce11 vs ce11
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=254
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: elegans ce11 - 20,000,000 chunk will accomodate entire single chroms
+SEQ1_DIR=/hive/data/genomes/ce11/bed/lastzSelf.2015-09-14/nibs
+SEQ1_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ1_SMSK=/hive/data/genomes/ce11/bed/lastzSelf.2015-09-14/lineageSpecificRepeats
+SEQ1_CHUNK=2000000
+SEQ1_LAP=10000
+
+# QUERY: elegans ce11
+SEQ2_DIR=/hive/data/genomes/ce11/bed/lastzSelf.2015-09-14/nibs
+SEQ2_LEN=/hive/data/genomes/ce11/chrom.sizes
+SEQ2_SMSK=/hive/data/genomes/ce11/bed/lastzSelf.2015-09-14/lineageSpecificRepeats
+SEQ2_CHUNK=2000000
+SEQ2_LAP=10000
+
+BASE=/hive/data/genomes/ce11/bed/lastzSelf.2015-09-14
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-workhorse=hgwdev -bigClusterHub=ku -smallClusterHub=ku \
+        -chainMinScore=10000 -chainLinearGap=medium)  > do.out 2>&1
+    # real    170m43.852s
+
+
+    featureBits ce11 chainSelfLink > fb.ce11.chainSelfLink.txt 2>&1
+    # 25553508 bases of 100286401 (25.481%) in intersection
+
+#########################################################################
