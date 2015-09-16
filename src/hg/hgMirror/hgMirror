@@ -1412,18 +1412,21 @@ def trackToTableNames(tableNames):
     suffixCounts = defaultdict(int)
     for t in tableNames:
         if "_" in t and not t.startswith("uniGene"):
-            dummy, track = string.split(t, "_", maxsplit=1)
+            prefix, track = string.split(t, "_", maxsplit=1)
             suffixCounts[track] += 1
 
     suffixDict = defaultdict(set)
     for t in tableNames:
         if "_" in t and not t.startswith("uniGene"):
-            dummy, track = string.split(t, "_", maxsplit=1)
+            prefix, track = string.split(t, "_", maxsplit=1)
             # assume that any table a_b is not a split table
             # if there are less than 5 tables with the suffix b
             # the code in hgTracks is different, but we do not have a 
             # list of chromosomes in here
-            if suffixCounts[track] < 5:
+            if suffixCounts[track] < 5 and prefix!="all":
+                # the tracks all_mrna and all_est should be treated like
+                # split tables, as their track names are indeed mrna
+                # and est. sigh.
                 track = t
         else:
             track = t
