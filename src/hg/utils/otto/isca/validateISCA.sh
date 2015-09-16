@@ -1,9 +1,18 @@
-#!/bin/sh -ex
+#!/bin/sh -e
+
 
 db=$1
+cd $db
 tooMuch=0.1000   # how much change (either gain or loss) is too much
 
-for i in `cat ../isca.tables`
+for i in `cat ../../isca.tables`
+do 
+    checkTableCoords $db -table=$i"New" || exit 1
+    #/cluster/home/braney/bin/x86_64/checkTableCoords $db -table=$i"New" || exit 1
+    positionalTblCheck $db $i"New" || exit 1
+done 
+
+for i in `cat ../../isca.tables`
 do 
     if test $i == "iscaPathGainCum" -o $i == "iscaPathLossCum"
     then
@@ -20,7 +29,7 @@ do
     onlyOld=`join -t '\001' -v 1 $i.out $f.out | wc -l`
     onlyNew=`join -t '\001' -v 2 $i.out $f.out | wc -l`
     echo $i $newCount "-" $onlyNew "=" $common "=" $oldCount "-" $onlyOld  
-    rm $i.out $f.out
+#    rm $i.out $f.out
 done > newISCA.stats
 
 cat newISCA.stats | awk -v db=$db -v tooMuch=$tooMuch ' 
