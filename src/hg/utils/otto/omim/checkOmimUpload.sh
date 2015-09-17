@@ -1,5 +1,5 @@
 
-#!/bin/sh -ex
+#!/bin/sh -e
 
 #	Do not modify this script, modify the source tree copy:
 #	src/hg/utils/omim/checkOmimUpload.sh
