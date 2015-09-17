@@ -150,6 +150,7 @@ DBS = \
 	susScr1 susScr2 susScr3 \
 	taeGut1 taeGut2 \
 	tetNig1 tetNig2 \
+	thaSir1 \
 	triCas2 \
 	triMan1 \
 	triSpi1 \
