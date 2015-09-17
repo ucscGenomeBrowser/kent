@@ -1507,7 +1507,7 @@ if (mustUseProxy ||  mustUseProxyAuth)
 	proxyLocation ? proxyLocation : "not given");
     return FALSE;
     }
-if (byteRangeUsed && !foundContentRange
+if (byteRangeUsed && !foundContentRange && !redirect
 	    /* hack for Apache bug 2.2.20 and 2.2.21 2011-10-21 should be OK to remove after one year. */
 		&& !(byteRangeStart == 0 && byteRangeEnd == -1))  
     {
