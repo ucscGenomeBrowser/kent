@@ -51,6 +51,7 @@ struct connInfo
     int socket;                 /* Socket descriptor for data connection (or 0). */
     bits64 offset;		/* Current file offset of socket. */
     int ctrlSocket;             /* (FTP only) Control socket descriptor or 0. */
+    char *redirUrl;             /* (HTTP(S) only) use redirected url */
     };
 
 typedef int (*UdcDataCallback)(char *url, bits64 offset, int size, void *buffer,
@@ -89,6 +90,7 @@ struct udcFile
     char *cacheDir;		/* Directory for cached file parts. */
     char *bitmapFileName;	/* Name of bitmap file. */
     char *sparseFileName;	/* Name of sparse data file. */
+    char *redirFileName;	/* Name of redir file. */
     int fdSparse;		/* File descriptor for sparse data file. */
     boolean sparseReadAhead;    /* Read-ahead has something in the buffer */
     char *sparseReadAheadBuf;   /* Read-ahead buffer, if any */
@@ -115,6 +117,7 @@ struct udcBitmap
     };
 static char *bitmapName = "bitmap";
 static char *sparseDataName = "sparseData";
+static char *redirName = "redir";
 #define udcBitmapHeaderSize (64)
 static int cacheTimeout = 0;
 
@@ -166,6 +169,10 @@ if (ci != NULL && ci->socket > 0 && ci->offset != offset)
 int sd;
 if (ci == NULL || ci->socket <= 0)
     {
+    if (ci->redirUrl)
+	{
+	url = transferParamsToRedirectedUrl(url, ci->redirUrl);
+	}
     char rangeUrl[2048];
     if (ci == NULL)
 	{
@@ -388,10 +395,29 @@ boolean udcInfoViaHttp(char *url, struct udcRemoteFileInfo *retInfo)
  * and returns status of HEAD GET. */
 {
 verbose(4, "checking http remote info on %s\n", url);
-struct hash *hash = newHash(0);
-int status = netUrlHead(url, hash);
-if (status != 200) // && status != 302 && status != 301)
-    return FALSE;
+int redirectCount = 0;
+struct hash *hash;
+int status;
+while (TRUE)
+    {
+    hash = newHash(0);
+    status = netUrlHead(url, hash);
+    if (status == 200)
+	break;
+    if (status != 301 && status != 302)  
+	return FALSE;
+    ++redirectCount;
+    if (redirectCount > 5)
+	{
+	warn("code %d redirects: exceeded limit of 5 redirects, %s", status, url);
+	return  FALSE;
+	}
+    char *newUrl = hashFindValUpperCase(hash, "Location:");
+    retInfo->ci.redirUrl = cloneString(newUrl);
+    url = transferParamsToRedirectedUrl(url, newUrl);		
+    hashFree(&hash);
+    }
+
 char *sizeString = hashFindValUpperCase(hash, "Content-Length:");
 if (sizeString == NULL)
     {
@@ -685,6 +711,8 @@ if (bits != NULL)
         udcBitmapClose(&bits);
 	remove(file->bitmapFileName);
 	remove(file->sparseFileName);
+	if (fileExists(file->redirFileName))
+	    remove(file->redirFileName);
 	++version;
 	}
     }
@@ -868,6 +896,7 @@ safef(file->cacheDir, len, "%s/%s/%s", cacheDir, protocol, hashedAfterProtocol);
 /* Create file names for bitmap and data portions. */
 file->bitmapFileName = fileNameInCacheDir(file, bitmapName);
 file->sparseFileName = fileNameInCacheDir(file, sparseDataName);
+file->redirFileName = fileNameInCacheDir(file, redirName);
 }
 
 static long long int udcSizeAndModTimeFromBitmap(char *bitmapFileName, time_t *retTime)
@@ -884,6 +913,45 @@ if (bits != NULL)
     }
 udcBitmapClose(&bits);
 return ret;
+}
+
+static void udcTestAndSetRedirect(struct udcFile *file, char *protocol, boolean useCacheInfo)
+/* update redirect info */
+{
+if (startsWith("http", protocol))
+    {
+    char *newUrl = NULL;
+    // read redir from cache if it exists
+    if (fileExists(file->redirFileName))
+	{
+	readInGulp(file->redirFileName, &newUrl, NULL);
+	}
+    if (useCacheInfo)
+	{
+	file->connInfo.redirUrl = cloneString(newUrl);
+	}
+    else
+	{
+	if (file->connInfo.redirUrl)
+	    {
+	    if (!sameOk(file->connInfo.redirUrl, newUrl))
+		{
+		// write redir to cache
+		char *temp = addSuffix(file->redirFileName, ".temp");
+		writeGulp(temp, file->connInfo.redirUrl, strlen(file->connInfo.redirUrl));
+		rename(temp, file->redirFileName);
+		freeMem(temp);
+		}
+	    }
+	else
+	    {
+	    // delete redir from cache (if it exists)
+	    if (newUrl)
+		remove(file->redirFileName);
+	    }
+	}
+    freeMem(newUrl);
+    }
 }
 
 struct udcFile *udcFileMayOpen(char *url, char *cacheDir)
@@ -940,6 +1008,8 @@ if (isTransparent)
     {
     /* If transparent dummy up things so that the "sparse" file pointer is actually
      * the file itself, which appears to be completely loaded in cache. */
+    if (!fileExists(url))
+	return NULL;
     int fd = file->fdSparse = mustOpenFd(url, O_RDONLY);
     struct stat status;
     fstat(fd, &status);
@@ -958,6 +1028,7 @@ else
 	// until the timeout has expired again:
     	if (udcCacheTimeout() > 0 && udcCacheEnabled() && fileExists(file->bitmapFileName))
 	    (void)maybeTouchFile(file->bitmapFileName);
+
 	}
 
     if (udcCacheEnabled())
@@ -969,6 +1040,10 @@ else
         setInitialCachedDataBounds(file, useCacheInfo);
 
         file->fdSparse = mustOpenFd(file->sparseFileName, O_RDWR);
+
+	// update redir with latest redirect status	
+	udcTestAndSetRedirect(file, protocol, useCacheInfo);
+	
         }
 
     }
@@ -1659,6 +1734,8 @@ for (file = fileList; file != NULL; file = file->next)
 		{
 		remove(bitmapName);
 		remove(sparseDataName);
+		if (fileExists(redirName))
+		    remove(redirName);
 		}
 	    }
 	}
