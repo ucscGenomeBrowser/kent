@@ -61,6 +61,9 @@ if (sSelf->chrom != NULL)
 	}
     self->intervalList = bigWigIntervalQuery(self->bbi, sSelf->chrom, start, sSelf->regionEnd,
 					     self->intervalQueryLm);
+    // If there are no intervals in the query region, we're done.
+    if (self->intervalList == NULL)
+        self->eof = TRUE;
     }
 else
     {
