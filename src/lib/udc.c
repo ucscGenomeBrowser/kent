@@ -1008,6 +1008,8 @@ if (isTransparent)
     {
     /* If transparent dummy up things so that the "sparse" file pointer is actually
      * the file itself, which appears to be completely loaded in cache. */
+    if (!fileExists(url))
+	return NULL;
     int fd = file->fdSparse = mustOpenFd(url, O_RDONLY);
     struct stat status;
     fstat(fd, &status);
