@@ -273,7 +273,18 @@ if (bigDataUrl != NULL)
         grator = hAnnoGratorFromBigFileUrl(bigDataUrl, assembly, maxOutRows, overlapRule);
     }
 else if (startsWithWord("wig", tdb->type))
-    grator = annoGrateWigDbNew(assembly->name, selTable, assembly, agwmAverage, maxOutRows);
+    {
+    char *dataDb = assembly->name;
+    char *dbTable = selTable;
+    if (isCustomTrack(selTable))
+        {
+        dbTable = trackDbSetting(tdb, "dbTableName");
+        if (dbTable != NULL)
+            // This is really a database table, not a bigDataUrl CT.
+            dataDb = CUSTOM_TRASH;
+        }
+    grator = annoGrateWigDbNew(dataDb, dbTable, assembly, agwmAverage, maxOutRows);
+    }
 else if (startsWithWord("bigWig", tdb->type))
     {
     char *fileOrUrl = getBigDataFileName(assembly->name, tdb, tdb->table, chrom);

@@ -230,6 +230,9 @@ int netHttpGetMultiple(char *url, struct slName *queries, void *userData,
  * until we can't connect or until all requests have been served. 
  * For each HTTP response, do a callback. */
 
+char *transferParamsToRedirectedUrl(char *url, char *newUrl);
+/* Transfer password, byteRange, and any other parameters from url to newUrl and return result.
+ * freeMem result. */
 
 boolean netSkipHttpHeaderLinesWithRedirect(int sd, char *url, char **redirectedUrl);
 /* Skip http header lines. Return FALSE if there's a problem.
