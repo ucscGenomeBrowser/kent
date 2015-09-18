@@ -6,7 +6,7 @@ all: ${SUBDIRS:%=%.suball}
 	${MAKE} -C $* all
 
 install: check-prefix installSub
-	cp gvfToBed8Attrs.pl isca.tables buildISCA.csh validateISCA.sh checkISCA.sh iscaWrapper.sh ${PREFIX}
+	cp buildGeneReviews.sh checkGeneReviews.sh geneReviews.tables geneReviewsWrapper.sh validateGeneReviews.sh ${PREFIX}
 
 installSub: ${SUBDIRS:%=%.install}
 

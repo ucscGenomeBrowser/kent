@@ -1,4 +1,5 @@
 #!/bin/sh 
+set -e
 # processing raw data file from GENEREVIEWS
 
 #function to create geneReviews table
@@ -25,7 +26,7 @@ cat grRefGene.lst | while read G
     do
     hgsql $1 -N -e \
         "SELECT e.chrom,e.txStart,e.txEnd,j.geneSymbol \
-        FROM knownGene e, kgXref j WHERE e.alignID = j.kgID AND \
+        FROM knownGene e, kgXref j WHERE e.name = j.kgID AND \
         j.geneSymbol ='${G}' ORDER BY e.chrom,e.txStart;" > temp.in
         bedRemoveOverlap temp.in temp.out
         cat temp.out >> geneReviews.tab

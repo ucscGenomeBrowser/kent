@@ -1507,7 +1507,7 @@ if (mustUseProxy ||  mustUseProxyAuth)
 	proxyLocation ? proxyLocation : "not given");
     return FALSE;
     }
-if (byteRangeUsed && !foundContentRange
+if (byteRangeUsed && !foundContentRange && !redirect
 	    /* hack for Apache bug 2.2.20 and 2.2.21 2011-10-21 should be OK to remove after one year. */
 		&& !(byteRangeStart == 0 && byteRangeEnd == -1))  
     {
@@ -1522,6 +1522,27 @@ if (byteRangeUsed && !foundContentRange
 return TRUE;
 }
 
+char *transferParamsToRedirectedUrl(char *url, char *newUrl)
+/* Transfer password, byteRange, and any other parameters from url to newUrl and return result.
+ * freeMem result. */
+{
+struct netParsedUrl npu, newNpu;
+/* Parse the old URL to make parts available for graft onto the redirected url. */
+/* This makes redirection work with byterange urls and user:password@ */
+netParseUrl(url, &npu);
+netParseUrl(newUrl, &newNpu);
+if (npu.byteRangeStart != -1)
+    {
+    newNpu.byteRangeStart = npu.byteRangeStart;
+    newNpu.byteRangeEnd = npu.byteRangeEnd;
+    }
+if ((npu.user[0] != 0) && (newNpu.user[0] == 0))
+    {
+    safecpy(newNpu.user,     sizeof newNpu.user,     npu.user);
+    safecpy(newNpu.password, sizeof newNpu.password, npu.password);
+    }
+return urlFromNetParsedUrl(&newNpu);
+}
 
 boolean netSkipHttpHeaderLinesHandlingRedirect(int sd, char *url, int *redirectedSd, char **redirectedUrl)
 /* Skip http headers lines, returning FALSE if there is a problem.  Generally called as
@@ -1581,29 +1602,7 @@ while (TRUE)
 	    }
 	else 
 	    {
-	    struct netParsedUrl npu, newNpu;
-	    /* Parse the old URL to make parts available for graft onto the redirected url. */
-	    /* This makes redirection work with byterange urls and user:password@ */
-	    netParseUrl(url, &npu);
-	    netParseUrl(newUrl, &newNpu);
-	    boolean updated = FALSE;
-	    if (npu.byteRangeStart != -1)
-		{
-		newNpu.byteRangeStart = npu.byteRangeStart;
-		newNpu.byteRangeEnd = npu.byteRangeEnd;
-		updated = TRUE;
-		}
-	    if ((npu.user[0] != 0) && (newNpu.user[0] == 0))
-		{
-		safecpy(newNpu.user,     sizeof newNpu.user,     npu.user);
-		safecpy(newNpu.password, sizeof newNpu.password, npu.password);
-		updated = TRUE;
-		}
-	    if (updated)
-		{
-		freeMem(newUrl);
-		newUrl = urlFromNetParsedUrl(&newNpu);
-		}
+	    newUrl = transferParamsToRedirectedUrl(url, newUrl);		
 	    sd = netUrlOpen(newUrl);
 	    if (sd < 0)
 		{

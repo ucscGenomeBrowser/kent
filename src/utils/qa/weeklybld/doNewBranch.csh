@@ -164,7 +164,7 @@ if ( -e GitReports.ok ) then
 		git log --author=${victim} v${LASTNN}_base..v${BRANCHNN}_base --pretty=oneline > /dev/null
 		if ($? == 0) then
 		       rm -f /dev/shm/build.email.${victim}.txt
-                       echo "To: ${victim}.soe.ucsc.edu" > /dev/shm/build.email.${victim}.txt
+                       echo "To: ${victim}@soe.ucsc.edu" > /dev/shm/build.email.${victim}.txt
                        echo "From: ann@soe.ucsc.edu" >> /dev/shm/build.email.${victim}.txt
                        echo "Subject: Code summaries are due for ${victim}" >> /dev/shm/build.email.${victim}.txt
                        echo "Cc: ann@soe.ucsc.edu" >> /dev/shm/build.email.${victim}.txt

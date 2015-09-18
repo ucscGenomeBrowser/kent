@@ -4483,3 +4483,15 @@ include cloneEnd.trackDb.ra
 
 track sgpGene override
 longLabel SGP Gene Predictions Using Mouse/$Organism Homology
+
+searchTable cnvDevDelayCase
+semiShortCircuit 1
+termRegex nssv[0-9]+
+searchType bed
+searchPriority 50
+
+searchTable cnvDevDelayControl
+semiShortCircuit 1
+termRegex nssv[0-9]+
+searchType bed
+searchPriority 50

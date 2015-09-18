@@ -5,7 +5,9 @@ tooMuch=0.1000   # how much change (either gain or loss) is too much
 
 for i in gwasCatalog
 do 
-    fields=' chrom, chromStart, chromEnd, name, pubMedID, author, pubDate, journal, title, trait, initSample, replSample, region, genes, riskAllele, riskAlFreq, pValue, pValueDesc, orOrBeta, ci95, platform, cnv'
+#    fields=' chrom, chromStart, chromEnd, name, pubMedID, author, pubDate, journal, title, trait, initSample, replSample, region, genes, riskAllele, riskAlFreq, pValue, pValueDesc, orOrBeta, ci95, platform, cnv'
+   # fields=' chrom, chromStart, chromEnd, name, pubMedID, author, pubDate, journal, title, trait, initSample, replSample,  genes, riskAllele, riskAlFreq, pValue, pValueDesc, orOrBeta, ci95, platform, cnv'
+    fields=' chrom, chromStart, chromEnd, name, pubMedID, author, pubDate, journal, title, trait, initSample,   genes, riskAllele, riskAlFreq, pValue, pValueDesc, orOrBeta, ci95, platform, cnv'
     echo "select $fields from $i" |  hgsql $db | tail -n +2 | sort > $i.out
     f=$i"New"
     echo "select $fields from $f" |hgsql $db | tail -n +2 | sort > $f.out

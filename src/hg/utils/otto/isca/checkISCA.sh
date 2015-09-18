@@ -1,7 +1,7 @@
-#!/bin/sh -ex
+#!/bin/sh -e
 
 #	Do not modify this script, modify the source tree copy:
-#	src/hg/utils/isca/checkISCA.sh
+#	src/utils/isca/checkISCA.sh
 #	This script is used via a cron job and kept in $HOME/bin/scripts/
 
 #	cron jobs need to ensure this is true
@@ -9,10 +9,8 @@ umask 002
 
 WORKDIR="/hive/data/outside/otto/isca"
 export WORKDIR
-
-#	this is where we are going to work
-if [ ! -d "${WORKDIR}" ]; then
-    echo "ERROR in ISCA release watch, Can not find the directory:
+#	this is where we are going to work 
+if [ ! -d "${WORKDIR}" ]; then echo "ERROR in ISCA release watch, Can not find the directory:
     ${WORKDIR}" 
     exit 255
 fi
@@ -21,7 +19,11 @@ cd "${WORKDIR}"
 
 rm -f ftp.isca.rsp
 echo "user anonymous otto@soe.ucsc.edu
-cd pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA
+cd pub/dbVar/data/Homo_sapiens/by_study/nstd45_ClinGen_Curated_Dosage_Sensitivity_Map
+ls
+cd pub/dbVar/data/Homo_sapiens/by_study/nstd101_ClinGen_Kaminsky_et_al_2011
+ls
+cd pub/dbVar/data/Homo_sapiens/by_study/nstd37_ClinGen_Laboratory-Submitted
 ls
 bye" > ftp.isca.rsp
 
@@ -56,15 +58,22 @@ if [ "${WC}" -gt 1 ]; then
     today=`date +%F`
     mkdir -p $today
     cd $today
-    ../buildISCA.csh
+    mkdir hg18 hg19 hg38
+#    csh -x ../buildISCA.csh hg18
+    csh -x ../buildISCA.csh hg19
+    csh -x ../buildISCA.csh hg38
+#    ../validateISCA.sh hg18
     ../validateISCA.sh hg19
+    ../validateISCA.sh hg38
 
     # now install
     for i in `cat ../isca.tables`
     do 
 	n=$i"New"
 	o=$i"Old"
+#	hgsqlSwapTables hg18 $n $i $o -dropTable3
 	hgsqlSwapTables hg19 $n $i $o -dropTable3
+	hgsqlSwapTables hg38 $n $i $o -dropTable3
     done
 
     echo "ISCA Installed `date`" 

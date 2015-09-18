@@ -331,7 +331,7 @@ tool crispor
 url http://tefor.net/crisporMax/crispor.cgi
 email services@tefor.net
 shortLabel CRISPOR
-longLabel CRISPR/Cas9 target selector and offtarget-predictor
+longLabel CRISPR/Cas9 target selector: off-target and activity predictions, primer design 
 param org $db
 param pos $position
 param pam NGG
@@ -341,7 +341,7 @@ tool chopchop
 url https://chopchop.rc.fas.harvard.edu/search.php
 email tessa.montague@gmail.com
 shortLabel CHOPCHOP
-longLabel CRISPR/Cas9 target selector and offtarget-predictor
+longLabel CRISPR/Cas9 off-target predictions
 maxSize 2000
 onlyDbs anoGam1,ce10,dm3,hg19,hg38,danRer7,galGal4,gasAcu1,mm10,musFur1,rn6,oryLat2,sacCer3,xenTro3
 param organism $db

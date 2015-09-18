@@ -1,5 +1,5 @@
 
-#!/bin/sh -ex
+#!/bin/sh -e
 
 #	Do not modify this script, modify the source tree copy:
 #	src/hg/utils/omim/checkOmimUpload.sh
@@ -26,7 +26,6 @@ if [ ! -d "${WORKDIR}" ]; then
 fi
 
 cd "${WORKDIR}"/upload
-ftppass=`cat ftpUpload.pwd`
 
 rm omimGene2.date
 touch omimGene2.date
@@ -42,7 +41,7 @@ echo doing upload
 hgsql -h mysqlbeta -N -e "SHOW TABLES LIKE 'omim%' " hg19 > omimTables
 rm -f pushList
 
-for db in hg18 hg19
+for db in hg18 hg19 hg38
 do
     for table in `cat omimTables`
     do
@@ -51,24 +50,14 @@ do
     done
 done
 
-#	create ftp response script for the ftp connection session
-rm -f ftp.omim.rsp
-echo "user omimftp2 ${ftppass}
-cd OMIM" > ftp.omim.rsp
+# create script to scp the files
+rm -f scp.script
 for i in `cat pushList`
 do
-    echo "mput $i"
-done >> ftp.omim.rsp
-echo "ls
-bye" >> ftp.omim.rsp
+    echo scp -q -i omim.ftp.key  $i  omimftp@ftp.omim.org:/home/omimftp1/OMIM/$i
+done >> scp.script
 
-#	connect and put files
-ftp -n -v -i ftp.omim.org  < ftp.omim.rsp > upload.check
-
-grep "^221" upload.check
-
-# need better check here for success
-if grep -m1 "18 files" upload.check > /dev/null
+if sh -e scp.script
 then
     mv omimGene2.date upload.omim2.date
     echo "Process successful"

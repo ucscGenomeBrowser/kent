@@ -5489,6 +5489,7 @@ tablesIgnored $hg
     cnpSharpSampleCount
     cnpSharpSamples
     cnpTuzun
+    cnvDevDelay%
     darned
     decodeFemale
     decodeFemaleCarrier

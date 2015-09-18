@@ -35,6 +35,12 @@ group rep
 track simpleRepeat override
 group rep
 
+track rmskJoinedBaseline override
+visibility hide
+
+track stsMap override
+visibility hide
+
 searchName assemblyAcc
 searchTable gold
 searchMethod prefix
@@ -92,7 +98,7 @@ chromosomes chr14,chr19,chr21,chr22,chr5,chrY
 track hg38ContigDiff
 shortLabel Hg19 Diff
 longLabel Contigs New to GRCh38/(hg38), Not Carried Forward from GRCh37/(hg19)
-visibility pack
+visibility hide
 priority 2
 group map
 type bed 9 .
@@ -316,7 +322,7 @@ group genes
 type psl
 priority 37.14
 color 20,0,250
-visibility pack
+visibility hide
 ucscRetroInfo ucscRetroInfo9
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds9
