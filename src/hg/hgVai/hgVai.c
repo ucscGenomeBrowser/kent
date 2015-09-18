@@ -2152,6 +2152,31 @@ else
 return varTdb;
 }
 
+static struct jsonElement *configForStreamer(char *db, struct trackDb *tdb)
+/* Add VAI-specific config options, if applicable. */
+{
+struct jsonElement *config = NULL;
+char *track = tdb->track;
+// If track is sql-based knownGene and we have kgXref, then add kgXref.geneSymbol after
+// the columns of knownGene.
+if (sameString(track, "knownGene") && !isCustomTrack(track) && !isHubTrack(track) &&
+    !trackDbSetting(tdb, "bigDataUrl"))
+    {
+    struct sqlConnection *conn = hAllocConn(db);
+    if (sqlTableExists(conn, "kgXref"))
+        {
+        char jsonStr[PATH_LEN];
+        safef(jsonStr, sizeof(jsonStr),
+              "{ \"relatedTables\":"
+              "    [ { \"table\": \"%s.kgXref\", \"fields\": [\"geneSymbol\"] } ] }",
+              db);
+        config = jsonParse(jsonStr);
+        }
+    hFreeConn(&conn);
+    }
+return config;
+}
+
 static void adjustGpVarOverlapRule(struct annoGrator *gpVarGrator, boolean haveRegulatory)
 /* If we're able to detect regulatory elements, and want to keep those annotations, loosen up
  * gpVarGrator's overlap rule from the default (must overlap). */
@@ -2213,9 +2238,10 @@ else
     }
 
 enum annoGratorOverlap geneOverlapRule = agoMustOverlap;
+struct jsonElement *gpConfig = configForStreamer(database, geneTdb);
 struct annoGrator *gpVarGrator = hAnnoGratorFromTrackDb(assembly, geneTdb->table, geneTdb, chrom,
                                                         ANNO_NO_LIMIT, primary->asObj,
-                                                        geneOverlapRule, NULL);
+                                                        geneOverlapRule, gpConfig);
 setGpVarFuncFilter(gpVarGrator);
 
 // Some grators may be used as both filters and output values. To avoid making
