@@ -5390,9 +5390,12 @@ if (NULL == chromName)
     return;
     }
 
+<<<<<<< HEAD
 // save the current position to the cart var position.<db>
 cartSetDbPosition(cart, database, position);
 
+=======
+>>>>>>> parent of 385f6d8... adding menu entries under genomes and genome browser, refs #16022
 seqBaseCount = hChromSize(database, chromName);
 winBaseCount = winEnd - winStart;
 
