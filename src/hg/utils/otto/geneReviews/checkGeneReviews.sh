@@ -1,4 +1,4 @@
-#!/bin/sh -ex
+#!/bin/sh -e
 
 #	Do not modify this script, modify the source tree copy:
 #	src/utils/geneReviews/checkGeneReviews.sh
@@ -50,6 +50,7 @@ then
     installGeneReviewTables "hg19"    
     installGeneReviewTables "hg18"
 
+    rm -f ../lastUpdate
     cp -p NBKid_shortname_genesymbol.txt ../lastUpdate
 
 fi
