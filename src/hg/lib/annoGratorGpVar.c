@@ -49,7 +49,7 @@ static char *aggvAutoSqlStringEnd =
 struct asObject *annoGpVarAsObj(struct asObject *sourceAsObj)
 // Return asObject describing fields of internal source plus the fields we add here.
 {
-struct dyString *gpPlusGpFx = dyStringCreate(aggvAutoSqlStringStart);
+struct dyString *gpPlusGpFx = dyStringCreate("%s", aggvAutoSqlStringStart);
 // Translate each column back into autoSql text for combining with new output fields:
 struct asColumn *col;
 for (col = sourceAsObj->columnList;  col != NULL;  col = col->next)

@@ -24,9 +24,13 @@ int dyOutOpen(int initialBufSize);
 // Allocate dynamic string and puts at top of stack
 // returns token to be used for later stack accounting asserts
 
-int dyOutPrintf(char *format, ...);
+int dyOutPrintf(char *format, ...)
 // Prints into end of the top ds buffer, and return resulting string length
 // If there is no current buffer, this acts like a simple printf and returns -1
+#if defined(__GNUC__)
+__attribute__((format(printf, 1, 2)))
+#endif
+;
 #define dyOutPuts(str) dyOutPrintf("%s\n",str)
 #define dyOutPutc(chr) dyOutPrintf("%c",chr)
 #define SWAP_PRINTF

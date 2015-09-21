@@ -48,9 +48,14 @@ char *tokenizerNext(struct tokenizer *tkz);
  * NULL at EOF. This string will be overwritten with the next call
  * to tokenizerNext, so cloneString if you need to save it. */
 
-void tokenizerErrAbort(struct tokenizer *tkz, char *format, ...);
+void tokenizerErrAbort(struct tokenizer *tkz, char *format, ...)
 /* Print error message followed by file and line number and
  * abort. */
+#if defined(__GNUC__)
+__attribute__((format(printf, 2, 3)))
+#endif
+;
+
 
 void tokenizerNotEnd(struct tokenizer *tkz);
 /* Squawk if at end. */

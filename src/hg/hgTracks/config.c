@@ -490,7 +490,7 @@ else if (stringIn(database, freeze))
 else
     safef(buf, sizeof buf, "Configure Tracks on %s %s: %s %s (%s)",
 	  organization, browserName, trackHubSkipHubName(organism), freeze, trackHubSkipHubName(database));
-webNewSection(buf);
+webNewSection("%s",buf);
 hPrintf("Tracks: ");
 if (isSearchTracksSupported(database,cart))
     {

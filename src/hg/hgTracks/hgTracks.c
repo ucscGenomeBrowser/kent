@@ -5900,7 +5900,7 @@ char *debugTmp = NULL;
 /* struct dyString *state = NULL; */
 /* Initialize layout and database. */
 if (measureTiming)
-    measureTime("Get cart of %d for user:%u session:%u", theCart->hash->elCount,
+    measureTime("Get cart of %d for user:%s session:%s", theCart->hash->elCount,
 	    theCart->userId, theCart->sessionId);
 /* #if 1 this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track

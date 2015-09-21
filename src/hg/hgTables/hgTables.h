@@ -56,8 +56,12 @@ void writeHtmlCell(char *text);
 /* Write out a cell in an HTML table, making text not too big,
  * and stripping html tags and breaking spaces.... */
 
-void htmlOpen(char *format, ...);
+void htmlOpen(char *format, ...)
 /* Start up a page that will be in html format. */
+#if defined(__GNUC__)
+__attribute__((format(printf, 1, 2)))
+#endif
+;
 
 void htmlClose();
 /* Close down html format page. */

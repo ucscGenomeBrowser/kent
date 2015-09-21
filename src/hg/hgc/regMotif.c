@@ -170,7 +170,7 @@ if (motif != NULL)
         return;
         }
     }
-webNewSection(title);
+webNewSection("%s",title);
 motifLogoAndMatrix(seqs, count, motif);
 }
 
@@ -270,7 +270,7 @@ dyStringFree(&query);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 if (motif != NULL)
-    webNewSection(tdb->longLabel);
+    webNewSection("%s",tdb->longLabel);
 printTrackHtml(tdb);
 }
 
