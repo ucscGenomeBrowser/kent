@@ -94,6 +94,7 @@ clean:
 	touch non-empty-rm.o
 	- find . -name \*.o -print | xargs rm
 	rm -f tags TAGS
+	rm -f cscope.out cscope.files cscope.po.out
 
 testDirs = lib utils blat gfServer hg
 test:: $(testDirs:%=%.test)
@@ -108,10 +109,10 @@ LIB_TAGS_IN = lib/*.[hc] */lib/*.[hc] */*/lib/*.[hc] */*/*/lib/*.[hc] jkOwnLib/*
 tags:
 	ctags ${LIB_TAGS_IN}
 
-cscope: 
+cscope.out:
 	find `pwd` -name '*.c' -o -name '*.h' > cscope.files
 	cscope -qRb `cat cscope.files`
-search:
+search: cscope.out
 	cscope -d
 
 # build emacs tags for libraries
