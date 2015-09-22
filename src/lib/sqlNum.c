@@ -50,7 +50,7 @@ unsigned sqlUnsigned(char *s)
  * twice as fast as atoi (by not having to skip white 
  * space or stop except at the null byte.) */
 {
-return sqlUnsignedOrError(s, NULL, NULL);
+return sqlUnsignedOrError(s, NULL);
 }
 
 unsigned sqlUnsignedInList(char **pS)

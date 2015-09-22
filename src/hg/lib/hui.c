@@ -2675,7 +2675,7 @@ for (mIx=0;mIx<members->count;mIx++)
     if (members->selected[mIx])
         {
         if (currentlyCheckedTags == NULL)
-            currentlyCheckedTags = dyStringCreate(members->tags[mIx]);
+            currentlyCheckedTags = dyStringCreate("%s",members->tags[mIx]);
         else
             dyStringPrintf(currentlyCheckedTags,",%s",members->tags[mIx]);
         }

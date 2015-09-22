@@ -44,8 +44,13 @@ HGID hgRealIdQuery(struct sqlConnection *conn, char *query);
 struct sqlConnection *hgStartUpdate();
 /* Get a connection for an update.  (Starts allocating id's) */
 
-void hgEndUpdate(struct sqlConnection **pConn, char *comment, ...);
+void hgEndUpdate(struct sqlConnection **pConn, char *comment, ...)
 /* Finish up connection with a printf format comment. */
+#if defined(__GNUC__)
+__attribute__((format(printf, 2, 3)))
+#endif
+;
+
 
 HGID hgNextId();
 /* Get next unique id.  (Should only be called after hgStartUpdate). */

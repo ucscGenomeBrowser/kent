@@ -67,8 +67,13 @@ void jsonWriteObjectStart(struct jsonWrite *jw, char *var);
 void jsonWriteObjectEnd(struct jsonWrite *jw);
 /* End object in JSON */
 
-void jsonWriteStringf(struct jsonWrite *jw, char *var, char *format, ...);
+void jsonWriteStringf(struct jsonWrite *jw, char *var, char *format, ...)
 /* Write "var": "val" where val is jsonStringEscape'd formatted string. */
+#if defined(__GNUC__)
+__attribute__((format(printf, 3, 4)))
+#endif
+;
+
 
 void jsonWriteBoolean(struct jsonWrite *jw, char *var, boolean val);
 /* Write out "var": true or "var": false depending on val (no quotes around true/false). */
