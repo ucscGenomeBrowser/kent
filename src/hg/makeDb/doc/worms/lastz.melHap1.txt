@@ -1,0 +1,464 @@
+########################################################################
+# LASTZ Meloidogyne hapla/M. hapla - melHap1 vs.
+#       Brugia malayi/Filarial worm - bruMal2
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/melHap1/bed/lastzBruMal2.2015-08-17
+    cd /hive/data/genomes/melHap1/bed/lastzBruMal2.2015-08-17
+
+    cat << '_EOF_' > DEF
+# melHap1 vs bruMal2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Meloidogyne hapla/M. hapla - melHap1
+SEQ1_DIR=/hive/data/genomes/melHap1/melHap1.2bit
+SEQ1_LEN=/hive/data/genomes/melHap1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Brugia malayi/Filarial worm - bruMal2
+SEQ2_DIR=/hive/data/genomes/bruMal2/bruMal2.2bit
+SEQ2_LEN=/hive/data/genomes/bruMal2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/melHap1/bed/lastzBruMal2.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m24.527s
+    cat fb.melHap1.chainBruMal2Link.txt
+    # 3900049 bases of 53017507 (7.356%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` melHap1 bruMal2) > rbest.log 2>&1 &
+    # real 0m20.867s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/bruMal2/bed/blastz.melHap1.swap
+    cd /hive/data/genomes/bruMal2/bed/blastz.melHap1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/melHap1/bed/lastzBruMal2.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m19.481s
+    cat fb.bruMal2.chainMelHap1Link.txt
+    # 4113522 bases of 87424120 (4.705%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` bruMal2 melHap1) \
+      > rbest.log 2>&1
+    # real 0m27.588s
+
+########################################################################
+########################################################################
+# LASTZ Meloidogyne hapla/M. hapla - melHap1 vs.
+#       Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/melHap1/bed/lastzBurXyl1.2015-08-17
+    cd /hive/data/genomes/melHap1/bed/lastzBurXyl1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# melHap1 vs burXyl1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Meloidogyne hapla/M. hapla - melHap1
+SEQ1_DIR=/hive/data/genomes/melHap1/melHap1.2bit
+SEQ1_LEN=/hive/data/genomes/melHap1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+SEQ2_DIR=/hive/data/genomes/burXyl1/burXyl1.2bit
+SEQ2_LEN=/hive/data/genomes/burXyl1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/melHap1/bed/lastzBurXyl1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m18.565s
+    cat fb.melHap1.chainBurXyl1Link.txt
+    # 4297958 bases of 53017507 (8.107%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` melHap1 burXyl1) > rbest.log 2>&1 &
+    # real 0m24.877s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/burXyl1/bed/blastz.melHap1.swap
+    cd /hive/data/genomes/burXyl1/bed/blastz.melHap1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/melHap1/bed/lastzBurXyl1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m46.678s
+    cat fb.burXyl1.chainMelHap1Link.txt
+    # 4292114 bases of 73100506 (5.872%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` burXyl1 melHap1) \
+      > rbest.log 2>&1
+    # real 0m25.689s
+
+########################################################################
+########################################################################
+# LASTZ Meloidogyne hapla/M. hapla - melHap1 vs.
+#       Dirofilaria immitis/Dog heartworm - dirImm1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/melHap1/bed/lastzDirImm1.2015-08-17
+    cd /hive/data/genomes/melHap1/bed/lastzDirImm1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# melHap1 vs dirImm1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Meloidogyne hapla/M. hapla - melHap1
+SEQ1_DIR=/hive/data/genomes/melHap1/melHap1.2bit
+SEQ1_LEN=/hive/data/genomes/melHap1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Dirofilaria immitis/Dog heartworm - dirImm1
+SEQ2_DIR=/hive/data/genomes/dirImm1/dirImm1.2bit
+SEQ2_LEN=/hive/data/genomes/dirImm1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/melHap1/bed/lastzDirImm1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m31.399s
+    cat fb.melHap1.chainDirImm1Link.txt
+    # 3840076 bases of 53017507 (7.243%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` melHap1 dirImm1) > rbest.log 2>&1 &
+    # real 0m23.270s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/dirImm1/bed/blastz.melHap1.swap
+    cd /hive/data/genomes/dirImm1/bed/blastz.melHap1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/melHap1/bed/lastzDirImm1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m57.829s
+    cat fb.dirImm1.chainMelHap1Link.txt
+    # 3864092 bases of 84923352 (4.550%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` dirImm1 melHap1) \
+      > rbest.log 2>&1
+    # real 0m29.466s
+
+########################################################################
+########################################################################
+# LASTZ Meloidogyne hapla/M. hapla - melHap1 vs.
+#       Loa loa/Eye worm - loaLoa1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/melHap1/bed/lastzLoaLoa1.2015-08-17
+    cd /hive/data/genomes/melHap1/bed/lastzLoaLoa1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# melHap1 vs loaLoa1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Meloidogyne hapla/M. hapla - melHap1
+SEQ1_DIR=/hive/data/genomes/melHap1/melHap1.2bit
+SEQ1_LEN=/hive/data/genomes/melHap1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Loa loa/Eye worm - loaLoa1
+SEQ2_DIR=/hive/data/genomes/loaLoa1/loaLoa1.2bit
+SEQ2_LEN=/hive/data/genomes/loaLoa1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/melHap1/bed/lastzLoaLoa1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m17.360s
+    cat fb.melHap1.chainLoaLoa1Link.txt
+    # 3625770 bases of 53017507 (6.839%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` melHap1 loaLoa1) > rbest.log 2>&1 &
+    # real 0m22.785s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/loaLoa1/bed/blastz.melHap1.swap
+    cd /hive/data/genomes/loaLoa1/bed/blastz.melHap1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/melHap1/bed/lastzLoaLoa1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m48.249s
+    cat fb.loaLoa1.chainMelHap1Link.txt
+    # 3628034 bases of 87533141 (4.145%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` loaLoa1 melHap1) \
+      > rbest.log 2>&1
+    # real 0m24.879s
+
+########################################################################
+########################################################################
+# LASTZ Meloidogyne hapla/M. hapla - melHap1 vs.
+#       Meloidogyne incognita/M. incognita - melInc2
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/melHap1/bed/lastzMelInc2.2015-08-17
+    cd /hive/data/genomes/melHap1/bed/lastzMelInc2.2015-08-17
+
+    cat << '_EOF_' > DEF
+# melHap1 vs melInc2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Meloidogyne hapla/M. hapla - melHap1
+SEQ1_DIR=/hive/data/genomes/melHap1/melHap1.2bit
+SEQ1_LEN=/hive/data/genomes/melHap1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Meloidogyne incognita/M. incognita - melInc2
+SEQ2_DIR=/hive/data/genomes/melInc2/melInc2.2bit
+SEQ2_LEN=/hive/data/genomes/melInc2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/melHap1/bed/lastzMelInc2.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 5m0.178s
+    cat fb.melHap1.chainMelInc2Link.txt
+    # 29779257 bases of 53017507 (56.169%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` melHap1 melInc2) > rbest.log 2>&1 &
+    # real 1m6.702s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melInc2/bed/blastz.melHap1.swap
+    cd /hive/data/genomes/melInc2/bed/blastz.melHap1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/melHap1/bed/lastzMelInc2.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 3m18.507s
+    cat fb.melInc2.chainMelHap1Link.txt
+    # 45218946 bases of 82114761 (55.068%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melInc2 melHap1) \
+      > rbest.log 2>&1
+    # real 1m36.037s
+
+########################################################################
+########################################################################
+# LASTZ Meloidogyne hapla/M. hapla - melHap1 vs.
+#       Onchocerca volvulus/O. volvulus - oncVol1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/melHap1/bed/lastzOncVol1.2015-08-17
+    cd /hive/data/genomes/melHap1/bed/lastzOncVol1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# melHap1 vs oncVol1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Meloidogyne hapla/M. hapla - melHap1
+SEQ1_DIR=/hive/data/genomes/melHap1/melHap1.2bit
+SEQ1_LEN=/hive/data/genomes/melHap1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Onchocerca volvulus/O. volvulus - oncVol1
+SEQ2_DIR=/hive/data/genomes/oncVol1/oncVol1.2bit
+SEQ2_LEN=/hive/data/genomes/oncVol1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/melHap1/bed/lastzOncVol1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 2m41.446s
+    cat fb.melHap1.chainOncVol1Link.txt
+    # 3943793 bases of 53017507 (7.439%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` melHap1 oncVol1) > rbest.log 2>&1 &
+    # real 0m35.191s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oncVol1/bed/blastz.melHap1.swap
+    cd /hive/data/genomes/oncVol1/bed/blastz.melHap1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/melHap1/bed/lastzOncVol1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m46.172s
+    cat fb.oncVol1.chainMelHap1Link.txt
+    # 4053038 bases of 94327777 (4.297%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` oncVol1 melHap1) \
+      > rbest.log 2>&1
+    # real 0m33.245s
+
+########################################################################
+########################################################################
+# LASTZ Meloidogyne hapla/M. hapla - melHap1 vs.
+#       Trichinella spiralis/Trichinella - triSpi1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/melHap1/bed/lastzTriSpi1.2015-08-17
+    cd /hive/data/genomes/melHap1/bed/lastzTriSpi1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# melHap1 vs triSpi1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Meloidogyne hapla/M. hapla - melHap1
+SEQ1_DIR=/hive/data/genomes/melHap1/melHap1.2bit
+SEQ1_LEN=/hive/data/genomes/melHap1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichinella spiralis/Trichinella - triSpi1
+SEQ2_DIR=/hive/data/genomes/triSpi1/triSpi1.2bit
+SEQ2_LEN=/hive/data/genomes/triSpi1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/melHap1/bed/lastzTriSpi1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 2m41.012s
+    cat fb.melHap1.chainTriSpi1Link.txt
+    # 1975831 bases of 53017507 (3.727%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` melHap1 triSpi1) > rbest.log 2>&1 &
+    # real 0m22.845s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSpi1/bed/blastz.melHap1.swap
+    cd /hive/data/genomes/triSpi1/bed/blastz.melHap1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/melHap1/bed/lastzTriSpi1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m43.779s
+    cat fb.triSpi1.chainMelHap1Link.txt
+    # 2150540 bases of 58558192 (3.672%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSpi1 melHap1) \
+      > rbest.log 2>&1
+    # real 0m19.363s
+
+########################################################################
+########################################################################
+# LASTZ Meloidogyne hapla/M. hapla - melHap1 vs.
+#       Trichuris suis/Whipworm - triSui1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/melHap1/bed/lastzTriSui1.2015-08-17
+    cd /hive/data/genomes/melHap1/bed/lastzTriSui1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# melHap1 vs triSui1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Meloidogyne hapla/M. hapla - melHap1
+SEQ1_DIR=/hive/data/genomes/melHap1/melHap1.2bit
+SEQ1_LEN=/hive/data/genomes/melHap1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichuris suis/Whipworm - triSui1
+SEQ2_DIR=/hive/data/genomes/triSui1/triSui1.2bit
+SEQ2_LEN=/hive/data/genomes/triSui1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/melHap1/bed/lastzTriSui1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m3.627s
+    cat fb.melHap1.chainTriSui1Link.txt
+    # 1718675 bases of 53017507 (3.242%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` melHap1 triSui1) > rbest.log 2>&1 &
+    # real 2m19.455s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSui1/bed/blastz.melHap1.swap
+    cd /hive/data/genomes/triSui1/bed/blastz.melHap1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/melHap1/bed/lastzTriSui1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m39.921s
+    cat fb.triSui1.chainMelHap1Link.txt
+    # 1786809 bases of 71825323 (2.488%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSui1 melHap1) \
+      > rbest.log 2>&1
+    # real 0m17.006s
+
+########################################################################

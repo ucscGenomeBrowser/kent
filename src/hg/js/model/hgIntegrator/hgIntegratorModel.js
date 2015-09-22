@@ -9,7 +9,7 @@ var HgIntegratorModel = ImModel.extend({
 
     maxDataSources: 5,
     tdbFields: 'track,table,shortLabel,parent,subtracks',
-    excludeTypes: 'bam,wigMaf',
+    excludeTypes: 'bam,wigMaf,maf',
 
     handleCartVar: function(mutState, cartVar, newValue) {
         // Some cart variables require special action (not simply being merged into top-level state)
@@ -659,13 +659,11 @@ var HgIntegratorModel = ImModel.extend({
         var newPos = this.getDefaultPos(mutState);
         this.setPosition(mutState, newPos);
         // Parallel requests for little stuff that we need ASAP and potentially huge trackDb:
-        this.cartDo({ cgiVar: this.getChangeDbCgiVars(mutState),
-                      get: { 'var': 'position,hgi_querySpec' },
+        this.cartDo({ get: { 'var': 'position,hgi_querySpec' },
                       getGeneSuggestTrack: {},
                       getUserRegions: {}
                       });
-        this.cartDo({ cgiVar: this.getChangeDbCgiVars(mutState),
-                      getGroupedTrackDb: { fields: this.tdbFields,
+        this.cartDo({ getGroupedTrackDb: { fields: this.tdbFields,
                                            excludeTypes: this.excludeTypes } });
     },
 
@@ -711,6 +709,7 @@ var HgIntegratorModel = ImModel.extend({
                                                excludeTypes: this.excludeTypes }
                         });
         }
+        this.cart.flush();
         this.render();
     }
 

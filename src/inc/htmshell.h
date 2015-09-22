@@ -17,14 +17,22 @@
 void htmlSetCookie(char* name, char* value, char* expires, char* path, char* domain, boolean isSecure);
 /* create a cookie with the given stats */
 
-void htmlParagraph(char *line, ...);
+void htmlParagraph(char *line, ...)
 /* Print a line in it's own paragraph. */
+#if defined(__GNUC__)
+__attribute__((format(printf, 1, 2)))
+#endif
+;
 
 void htmlVaParagraph(char *line, va_list args);
 /* Print a line in it's own paragraph. */
 
-void htmlCenterParagraph(char *line, ...);
+void htmlCenterParagraph(char *line, ...)
 /* Center a line in it's own paragraph. */
+#if defined(__GNUC__)
+__attribute__((format(printf, 1, 2)))
+#endif
+;
 
 void htmlHorizontalLine();
 /* Print a horizontal line. */

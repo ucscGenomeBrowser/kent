@@ -6,22 +6,29 @@
     cut -f 2,3,4,5,6,7,8,9,10,11,12,13 IkmcGenes.bed > hg19IkmcGenes.almostBed
     sed '1d' hg19IkmcGenes.almostbed > hg19IkmcGenesTrue.bed
     liftOver hg19IkmcGenesTrue.bed /hive/data/genomes/hg19/bed/liftOver/hg19ToHg38.over.chain.gz hg38IkmcGenes.bed unmapped.null
-    hgLoadBed hg38 hgIkmc hg38IkmcGenes.bed 
+    hgLoadBed hg38 hgIkmc hg38IkmcGenes.bed
+    hgsql hg19 -e "select * from hgIkmcExtra" > hgIkmcExtra.tab
+    hgLoadSqlTab hg38 hgIkmcExtra $HOME/kent/src/hg/lib/genericAlias.sql hgIkmcExtra.tab
 ##############################################################################
-# lincRNASeqReads (In progress Chris Eisenhart) 
-    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/nonCodingRNAs/lincRNASeqReads
-    cd /hive/data/genomes/hg38/bed/hg19MassiveLift/nonCodingRNAs/lincRNASeqReads
-    liftAlotAtOnce < hg19lincRNATracksToBeLifted
-##############################################################################
-# lincRNATranscripts (In progress Chris Eisenhart) 
-    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/nonCodingRNAs/lincRNATranscripts
-    cd /hive/data/genomes/hg38/bed/hg19MassiveLift/nonCodingRNAs/lincRNATranscripts
-    liftingScript lincRNAsTranscripts 
-##############################################################################
-# wgRNA (DONE 04/13/2015 Chris Eisenhart) 
-    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/nonCodingRNAs/snoMiRNA
-    cd /hive/data/genomes/hg38/bed/hg19MassiveLift/nonCodingRNAs/snoMiRNA
-    liftingScript wgRNA
+# non-codingRNAs supertrack (DONE 08/19/2015 Chris Eisenhart) 
+    # lincRNASeqReads (DONE 08/15/2015 Chris Eisenhart) 
+	mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/nonCodingRNAs/lincRNASeqReads
+	cd /hive/data/genomes/hg38/bed/hg19MassiveLift/nonCodingRNAs/lincRNASeqReads
+	hgsql hg19 -e "show tables like 'lincRNA%' " > hg19lincRNATracksToBeLifted
+	# Needs the shell script liftingScript and python liftAlotAtOnce 
+	liftAlotAtOnce < hg19lincRNATracksToBeLifted
+    ##############################################################################
+    # lincRNATranscripts (DONE 08/15/2015 Chris Eisenhart) 
+	mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/nonCodingRNAs/lincRNATranscripts
+	cd /hive/data/genomes/hg38/bed/hg19MassiveLift/nonCodingRNAs/lincRNATranscripts
+	# Needs the shell script liftingScript
+	liftingScript lincRNAsTranscripts 
+    ##############################################################################
+    # wgRNA (DONE 04/13/2015 Chris Eisenhart) 
+	mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/nonCodingRNAs/snoMiRNA
+	cd /hive/data/genomes/hg38/bed/hg19MassiveLift/nonCodingRNAs/snoMiRNA
+	# Needs the shell script liftingScript
+	liftingScript wgRNA
 ##############################################################################
 # wgEncodeReg ENCODE Regulatory tracks (Done Chris Eisenhart)
     mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg
@@ -32,4 +39,11 @@
     mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg/wgEncodeRegTxn
     mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/wgEncodeReg
     liftManyBigWigs /cluster/home/ceisenhart/kent/src/hg/utils/liftList/bigWigList.ra
+##############################################################################
+# coriellDelDup (DONE 08/24/2015 Chris Eisenhart) 
+    mkdir /hive/data/genomes/hg38/bed/hg19MassiveLift/coriellDelDup
+    cd /hive/data/genomes/hg38/bed/hg19MassiveLift/coriellDelDup
+    hgsql hg19 -e "select * from coriellDelDup" | sed '1d' > coriellDelDup19.bed
+    liftOver coriellDelDup19.bed /hive/data/genomes/hg19/bed/liftOver/hg19ToHg38.over.chain.gz coriellDelDup38.bed unmapped38.null -bedPlus=9 -tab
+    hgLoadBed -tab -type=bed9+ -sqlTable=$HOME/kent/src/hg/lib/coriellDelDup.sql -as=$HOME/kent/src/hg/lib/coriellDelDup.as -bedDetail hg38 coriellDelDup coriellDelDup38.bed
 ##############################################################################

@@ -420,13 +420,21 @@ unsigned int sqlLastAutoId(struct sqlConnection *conn);
 void sqlVaWarn(struct sqlConnection *sc, char *format, va_list args);
 /* Error message handler. */
 
-void sqlWarn(struct sqlConnection *sc, char *format, ...);
+void sqlWarn(struct sqlConnection *sc, char *format, ...)
 /* Printf formatted error message that adds on sql
  * error message. */
+#if defined(__GNUC__)
+__attribute__((format(printf, 2, 3)))
+#endif
+;
 
-void sqlAbort(struct sqlConnection  *sc, char *format, ...);
+void sqlAbort(struct sqlConnection  *sc, char *format, ...)
 /* Printf formatted error message that adds on sql
  * error message and abort. */
+#if defined(__GNUC__)
+__attribute__((format(printf, 2, 3)))
+#endif
+;
 
 void sqlCleanupAll(void);
 /* Cleanup all open connections and resources. */

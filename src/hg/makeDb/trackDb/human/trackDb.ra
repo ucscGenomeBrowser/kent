@@ -260,9 +260,10 @@ type bed 12
 noScoreFilter .
 itemRgb on
 urlLabel KOMP Data Coordination Center:
-url http://www.knockoutmouse.org/search?criteria=$$
+url http://www.mousephenotype.org/data/genes/$$
 mgiUrlLabel MGI Report:
-mgiUrl http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
+mgiUrl http://www.informatics.jax.org/marker/$$
+exonNumbers off
 
 track acembly
 shortLabel AceView Genes
@@ -386,7 +387,7 @@ type bed 12 .
 
 track omim
 shortLabel OMIM
-longLabel NIH's Online Mendelian Inheritance in Man
+longLabel Online Mendelian Inheritance in Man
 url http://www.ncbi.nlm.nih.gov/omim/$$
 group varRep
 visibility hide
@@ -1030,6 +1031,7 @@ snpExceptionDesc snp144ExceptionDesc
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
+trackHandler snp125
 chimpOrangMacOrthoTable snp144OrthoPt4Pa2Rm3
 chimpDb panTro3
 orangDb ponAbe2
@@ -1049,6 +1051,7 @@ snpSeq snp144Seq
 snpExceptionDesc snp144ExceptionDesc
 defaultGeneTracks knownGene
 type bed 6 +
+trackHandler snp125
 chimpOrangMacOrthoTable snp144OrthoPt4Pa2Rm3
 chimpDb panTro3
 orangDb ponAbe2
@@ -1069,6 +1072,7 @@ defaultGeneTracks knownGene
 defaultMaxWeight 3
 maxWindowToDraw 10000000
 type bed 6 +
+trackHandler snp125
 chimpOrangMacOrthoTable snp144OrthoPt4Pa2Rm3
 chimpDb panTro3
 orangDb ponAbe2
@@ -1086,6 +1090,7 @@ urlLabel dbSNP:
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
+trackHandler snp125
 chimpOrangMacOrthoTable snp144OrthoPt4Pa2Rm3
 chimpDb panTro3
 orangDb ponAbe2
@@ -1366,37 +1371,18 @@ exonNumbers off
 urlLabel DGV Browser and Report:
 url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
 coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
-dataVersion October 16, 2014
-release alpha
-
-track dgvPlus
-compositeTrack on
-shortLabel DGV Struct Var
-longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
-group varRep
-visibility hide
-itemRgb on
-type bed 9 +
-noScoreFilter .
-exonArrows off
-exonNumbers off
-urlLabel DGV Browser and Report:
-url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
-coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
-dataVersion October 16, 2014
-release beta,public
-
+dataVersion July 23, 2015
 
     track dgvMerged
     parent dgvPlus
     shortLabel DGV Struct Var
-    longLabel Database of Genomic Variants: Structural Variant Regions (CNV, Inversion, In/del)
+    longLabel Database of Genomic Variants: Structural Var Regions (CNV, Inversion, In/del)
     priority 1
 
     track dgvSupporting
     parent dgvPlus
     shortLabel DGV Supp Var
-    longLabel Database of Genomic Variants: Supporting Structural Variants (CNV, Inversion, In/del)
+    longLabel Database of Genomic Variants: Supporting Structural Var (CNV, Inversion, In/del)
     priority 2
 
 
@@ -4506,3 +4492,15 @@ include cloneEnd.trackDb.ra
 
 track sgpGene override
 longLabel SGP Gene Predictions Using Mouse/$Organism Homology
+
+searchTable cnvDevDelayCase
+semiShortCircuit 1
+termRegex nssv[0-9]+
+searchType bed
+searchPriority 50
+
+searchTable cnvDevDelayControl
+semiShortCircuit 1
+termRegex nssv[0-9]+
+searchType bed
+searchPriority 50

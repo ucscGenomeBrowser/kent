@@ -62,6 +62,7 @@
 #include "iupac.h"
 #include "botDelay.h"
 #include "chromInfo.h"
+#include "extTools.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
@@ -5357,17 +5358,10 @@ char newPos[256];
 char *defaultPosition = hDefaultPos(database);
 char titleVar[256];
 position = getPositionFromCustomTracks();
-if (NULL == position)
-    {
-    position = cloneString(cartUsualString(cart, "position", NULL));
-    }
 
-/* default if not set at all, as would happen if it came from a URL with no
- * position. Otherwise tell them to go back to the gateway. Also recognize
- * "default" as specifying the default position. */
-if (((position == NULL) || sameString(position, "default"))
-    && (defaultPosition != NULL))
-    position = cloneString(defaultPosition);
+if (position == NULL)
+    position = cartGetPosition(cart, database);
+
 if (sameString(position, ""))
     {
     hUserAbort("Please go back and enter a coordinate range or a search term in the \"search term\" field.<br>For example: chr22:20100000-20200000.\n");
@@ -5403,6 +5397,9 @@ if (NULL == chromName)
     cartSetString(cart, "position", lastPosition);
     return;
     }
+
+// save the current position to the cart var position.<db>
+cartSetDbPosition(cart, database, position);
 
 seqBaseCount = hChromSize(database, chromName);
 winBaseCount = winEnd - winStart;
@@ -5820,32 +5817,29 @@ cartCheckout(&oldCart);
 cgiVarExcludeExcept(except);
 }
 
-void setupHotkeys() 
+void setupHotkeys(boolean gotExtTools)
 /* setup keyboard shortcuts and a help dialog for it */
 {
-// XX remove if statement after July 2015
-if (!cfgOptionDefault("hotkeys", FALSE))
-    return;
 // wire the keyboard hotkeys
 hPrintf("<script type='text/javascript'>\n");
 // left
-hPrintf("Mousetrap.bind('ctrl+j', function() { $('input[name=\"hgt.left1\"]').click() }); \n");
+hPrintf("Mousetrap.bind('ctrl+j', function() { $('input[name=\"hgt.left1\"]').click(); return false; }); \n");
 hPrintf("Mousetrap.bind('j', function() { $('input[name=\"hgt.left2\"]').click() }); \n");
 hPrintf("Mousetrap.bind('J', function() { $('input[name=\"hgt.left3\"]').click() }); \n");
 
 // right
-hPrintf("Mousetrap.bind('ctrl+l', function() { $('input[name=\"hgt.right1\"]').click() }); \n");
+hPrintf("Mousetrap.bind('ctrl+l', function() { $('input[name=\"hgt.right1\"]').click(); return false; }); \n");
 hPrintf("Mousetrap.bind('l', function() { $('input[name=\"hgt.right2\"]').click() }); \n");
 hPrintf("Mousetrap.bind('L', function() { $('input[name=\"hgt.right3\"]').click() }); \n");
 
 // zoom in
-hPrintf("Mousetrap.bind('ctrl+i', function() { $('input[name=\"hgt.in1\"]').click() }); \n");
+hPrintf("Mousetrap.bind('ctrl+i', function() { $('input[name=\"hgt.in1\"]').click(); return false; }); \n");
 hPrintf("Mousetrap.bind('i', function() { $('input[name=\"hgt.in2\"]').click() }); \n");
 hPrintf("Mousetrap.bind('I', function() { $('input[name=\"hgt.in3\"]').click() }); \n");
 hPrintf("Mousetrap.bind('b', function() { $('input[name=\"hgt.inBase\"]').click() }); \n");
 
 // zoom out
-hPrintf("Mousetrap.bind('ctrl+k', function() { $('input[name=\"hgt.out1\"]').click() }); \n");
+hPrintf("Mousetrap.bind('ctrl+k', function() { $('input[name=\"hgt.out1\"]').click(); return false; }); \n");
 hPrintf("Mousetrap.bind('k', function() { $('input[name=\"hgt.out2\"]').click() }); \n");
 hPrintf("Mousetrap.bind('K', function() { $('input[name=\"hgt.out3\"]').click() }); \n");
 hPrintf("Mousetrap.bind('0', function() { $('input[name=\"hgt.out4\"]').click() }); \n");
@@ -5863,8 +5857,12 @@ hPrintf("Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').cli
 hPrintf("Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').click() }); \n");
 
 // focus
-hPrintf("Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]').focus() }, 'keyup'); \n");
+hPrintf("Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]').focus(); return false; }, 'keydown'); \n");
 hPrintf("Mousetrap.bind('?', function() { $( \"#hotkeyHelp\" ).dialog({width:'600'});}); \n");
+
+// menu
+if (gotExtTools)
+    hPrintf("Mousetrap.bind('s t', showExtToolDialog); \n");
 
 hPrintf("</script>\n");
 
@@ -5882,7 +5880,10 @@ hPrintf("<tr><td> zoom in 3x</td><td class=\"hotkey\">i</td>        <td> reverse
 hPrintf("<tr><td> zoom in 10x</td><td class=\"hotkey\">I</td>       <td> resize</td><td class=\"hotkey\">r then s</td>                     </tr>\n");
 hPrintf("<tr><td> zoom in base level</td><td class=\"hotkey\">b</td><td> refresh</td><td class=\"hotkey\">r then f</td>                    </tr>\n");
 hPrintf("<tr><td> zoom out 1.5x</td><td class=\"hotkey\">ctrl+k</td><td> jump to position box</td><td class=\"hotkey\">/</td>        </tr>\n"); 
-hPrintf("<tr><td> zoom out 3x</td><td class=\"hotkey\">k</td>               </tr>\n");
+hPrintf("<tr><td> zoom out 3x</td><td class=\"hotkey\">k</td>");
+if (gotExtTools)
+    hPrintf("<td>Send to external tool</td><td class=\"hotkey\">s then t</td>");
+hPrintf("               </tr>\n");
 hPrintf("<tr><td> zoom out 10x</td><td class=\"hotkey\">K</td>              </tr>\n");
 hPrintf("<tr><td> zoom out 100x</td><td class=\"hotkey\">0</td>             </tr>\n");
 hPrintf("</table>\n");
@@ -5907,7 +5908,7 @@ char *debugTmp = NULL;
 /* struct dyString *state = NULL; */
 /* Initialize layout and database. */
 if (measureTiming)
-    measureTime("Get cart of %d for user:%u session:%u", theCart->hash->elCount,
+    measureTime("Get cart of %d for user:%s session:%s", theCart->hash->elCount,
 	    theCart->userId, theCart->sessionId);
 /* #if 1 this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
@@ -5954,9 +5955,7 @@ if(!trackImgOnly)
     {
     // Write out includes for css and js files
     hWrites(commonCssStyles());
-    // XX remove if statement after July 2015
-    if (cfgOptionDefault("hotkeys", FALSE))
-        jsIncludeFile("mousetrap.min.js", NULL);
+    jsIncludeFile("mousetrap.min.js", NULL);
     jsIncludeFile("jquery.js", NULL);
     jsIncludeFile("jquery-ui.js", NULL);
     jsIncludeFile("utils.js", NULL);
@@ -6081,6 +6080,9 @@ if (cartOptionalString(cart, "udcTimeout"))
 	"<A HREF=hgTracks?hgsid=%s&udcTimeout=[]>here</A>.",cartSessionId(cart));
     }
 
-setupHotkeys();
+boolean gotExtTools = extToolsEnabled();
+setupHotkeys(gotExtTools);
+if (gotExtTools)
+    printExtMenuData();
 
 }

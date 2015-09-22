@@ -227,6 +227,7 @@ var ImModel = (function() {
                     handler.call(this, mutState, path, data);
                 }, this);
             }.bind(this));
+            this.cart.flush();
             this.render();
         },
 

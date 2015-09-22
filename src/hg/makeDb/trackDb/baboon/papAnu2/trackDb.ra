@@ -5,3 +5,9 @@ track gold override
 html gold
 
 include trackDb.chainNet.ra
+
+searchTable geneid
+searchType genePred
+searchMethod prefix
+termRegex ^(AHZZ|JH|chr)[0-9X]+[0-9_]+(\.[0-9]+)?
+searchPriority 50

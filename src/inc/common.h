@@ -1398,9 +1398,13 @@ char *nullIfAllSpace(char *s);
 char *trueFalseString(boolean b);
 /* Return "true" or "false" */
 
-void uglyTime(char *label, ...);
+void uglyTime(char *label, ...)
 /* Print label and how long it's been since last call.  Call with
  * a NULL label to initialize. */
+#if defined(__GNUC__)
+__attribute__((format(printf, 1, 2)))
+#endif
+;
 
 /*	In case the development environment does not supply INFINITY	*/
 #if !defined(INFINITY)

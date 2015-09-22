@@ -20,9 +20,9 @@ exit 255
 export chainNear="-minScore=5000 -linearGap=medium"
 export chainMedium="-minScore=3000 -linearGap=medium"
 export chainFar="-minScore=5000 -linearGap=loose"
-export lastzNear="B=0 C=0 E=150 H=0 K=4500 L=3000 M=254 O=600 Q=/scratch/data/blastz/human_chimp.v2.q T=2 Y=15000"
-export lastzMedium="B=0 C=0 E=30 H=0 K=3000 L=3000 M=50 O=400 T=1 Y=9400"
-export lastzFar="B=0 C=0 E=30 H=2000 K=2200 L=6000 M=50 O=400 Q=/scratch/data/blastz/HoxD55.q T=2 Y=3400"
+export lastzNear="C=0 E=150 H=0 K=4500 L=3000 M=254 O=600 Q=/scratch/data/blastz/human_chimp.v2.q T=2 Y=15000"
+export lastzMedium="C=0 E=30 H=0 K=3000 L=3000 M=50 O=400 T=1 Y=9400"
+export lastzFar="C=0 E=30 H=2000 K=2200 L=6000 M=50 O=400 Q=/scratch/data/blastz/HoxD55.q T=2 Y=3400"
 
 # select one of three different parameter sets
 # Near == genomes close to each other

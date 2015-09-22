@@ -35,6 +35,20 @@ ftp://ftp.sanger.ac.uk/pub/wormbase/releases/WS245/species/PRJNA186477
 
     hgFakeAgp panRed1.fa.gz panRed1.agp
 
+    # correct photo from WikiMedia Commons:
+    mkdir /hive/data/genomes/panRed1/photo
+    cd /hive/data/genomes/panRed1/photo
+    wget --timestamping \
+https://upload.wikimedia.org/wikipedia/en/c/cf/Panagrellus_redivivus_Otago_University_Cold_Stage.jpg
+    convert -quality 80 -geometry 400x300 Panagrellus_redivivus_Otago_University_Cold_Stage.jpg \
+      Panagrellus_redivivus.jpg
+    identify Panagrellus_redivivus.jpg
+    # Panagrellus_redivivus.jpg JPEG 400x300 400x300+0+0
+
+    # reference: http://www.otago.ac.nz/zoology/staff/otago008939.html
+    # WikiMedia Commons David Wharton, University of Otago
+    # https://en.wikipedia.org/wiki/File:Panagrellus_redivivus_Otago_University_Cold_Stage.jpg
+
 #############################################################################
 #  Initial database build (DONE - 2015-07-01 - Hiram)
 
@@ -192,7 +206,7 @@ searchPriority 8
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
     #    January 31 2015 (open-4-0-5) version of RepeatMasker
-    # CC   RELEASE 20140131;    
+    # CC   RELEASE 20140131;
 
     time featureBits -countGaps panRed1 rmsk
     # 302575 bases of 65110236 (0.465%) in intersection
@@ -337,7 +351,7 @@ searchPriority 8
 
     # there are no non-bridged gaps, do not need to do this
     #   check non-bridged gaps to see what the typical size is:
-#     hgsql -N -e 'select * from gap where bridge="no" order by size;' panRed1 
+#     hgsql -N -e 'select * from gap where bridge="no" order by size;' panRed1
 #       | ave -tableOut -col=7 stdin
 # # min Q1 median Q3 max mean N sum stddev
 # 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006
@@ -469,3 +483,8 @@ panRed1.genbank.est.native.loadDesc = no
     #   sizes will set properly
 
 #########################################################################
+# improve common name (DONE - 2015-07-24 - Hiram)
+
+    hgsql -e 'update dbDb set organism="Microworm" where name="panRed1";' hgcentraltest
+
+#############################################################################

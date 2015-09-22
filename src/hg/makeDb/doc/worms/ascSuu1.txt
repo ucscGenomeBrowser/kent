@@ -305,108 +305,110 @@ searchPriority 8
     #   12237266 bases of 262604320 (4.660%) in intersection
 
 ########################################################################
-# Create kluster run files (TBD - 2015-07-08 - Hiram)
+# Create kluster run files (DONE - 2015-08-18 - Hiram)
 
     cd /hive/data/genomes/ascSuu1
     # numerator is ascSuu1 gapless bases "real" as reported by:
     head -1 faSize.ascSuu1.2bit.txt
-# 94076581 bases (7759220 N's 86317361 real 53341517 upper 32975844 lower)
-#    in 9780 sequences in 1 files
+# 269573965 bases (6969646 N's 262604319 real 206195917 upper 56408402 lower)
+#    in 12989 sequences in 1 files
+
     # numerator is 'real' base count
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 86317361 / 2861349177 \) \* 1024
-    # ( 86317361 / 2861349177 ) * 1024 = 30.890665
+    calc \( 262604319 / 2861349177 \) \* 1024
+    # ( 262604319 / 2861349177 ) * 1024 = 93.979031
 
-    # ==> use -repMatch=100 since 30 or 50 masks too much
+    # ==> use -repMatch=100
     cd /hive/data/genomes/ascSuu1
     time blat ascSuu1.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/ascSuu1.11.ooc \
         -repMatch=100
-    # Wrote 8527 overused 11-mers to jkStuff/ascSuu1.11.ooc
-    #  real    0m1.846s
+    # Wrote 19578 overused 11-mers to jkStuff/ascSuu1.11.ooc
+    #  real    0m4.766s
 
-    # there are a few non-bridged gaps
+    # there are NO non-bridged gaps
     #   check non-bridged gaps to see what the typical size is:
-    hgsql -N -e 'select * from gap where bridge="no" order by size;' ascSuu1 \
-       | ave -tableOut -col=7 stdin
+#     hgsql -N -e 'select * from gap where bridge="no" order by size;' ascSuu1 \
+#        | ave -tableOut -col=7 stdin
 # min Q1 median Q3 max mean N sum stddev
 # 78831 79056 79362 79503 79503 79162.5 4 316650 320.991
 
     # note the minimum non-bridged gap size is 78,831
-    gapToLift -verbose=2 -minGap=50000 ascSuu1 jkStuff/ascSuu1.nonBridged.lft \
-         -bedFile=jkStuff/ascSuu1.nonBridged.bed
+#     gapToLift -verbose=2 -minGap=50000 ascSuu1 jkStuff/ascSuu1.nonBridged.lft \
+#          -bedFile=jkStuff/ascSuu1.nonBridged.bed
 
     # survey sizes:
     n50.pl chrom.sizes
 #       reading: chrom.sizes
-#       contig count: 9780, total size: 94076581, one half size: 47038290
+#       contig count: 12989, total size: 269573965, one half size: 134786982
 # cumulative    N50 count       contig  contig size
-# 46960459        61      Bmal_v3_scaffold61      194773
-# 47038290 one half size
-# 47151548        62      Bmal_v3_scaffold62      191089
+# 134535441       174     JH879080v1      414787
+# 134786982 one half size
+# 134948503       175     JH879081v1      413062
 
 #############################################################################
-# GENBANK AUTO UPDATE (TBD - 2015-06-09 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2015-08-19 - Hiram/Brian)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
-    # #organism               mrnaCnt estCnt  refSeqCnt
-    #  Pristionchus pacificus  97      37470   0
+    # organism         mrnaCnt estCnt  refSeqCnt
+    #  Ascaris suum    74205   56617   0
 
-    # edit etc/genbank.conf to add ascSuu1 just before priPac1
+    # edit etc/genbank.conf to add ascSuu1 just before priPac3
 
-# ascSuu1 (P. pacificus)
+# ascSuu1 (Pig roundworm/Ascaris suum)
 ascSuu1.serverGenome = /hive/data/genomes/ascSuu1/ascSuu1.2bit
 ascSuu1.clusterGenome = /hive/data/genomes/ascSuu1/ascSuu1.2bit
 ascSuu1.ooc = /hive/data/genomes/ascSuu1/jkStuff/ascSuu1.11.ooc
-ascSuu1.lift = /hive/data/genomes/ascSuu1/jkStuff/ascSuu1.nonBridged.lft
-ascSuu1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
-ascSuu1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
-ascSuu1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
-ascSuu1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
-ascSuu1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
-ascSuu1.refseq.mrna.native.load = yes
-ascSuu1.refseq.mrna.xeno.load  = yes
-ascSuu1.refseq.mrna.xeno.loadDesc = yes
-# DO NOT NEED genbank.mrna.xeno except for human, mouse
-ascSuu1.genbank.mrna.xeno.load = no
-ascSuu1.genbank.est.native.load = yes
-ascSuu1.genbank.est.native.loadDesc = no
-ascSuu1.downloadDir = ascSuu1
+ascSuu1.lift = no
+# the nematodes have small introns
+ascSuu1.maxIntron = 100000
 ascSuu1.perChromTables = no
+ascSuu1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+ascSuu1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+ascSuu1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+ascSuu1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+ascSuu1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+# refseq.mrna native and xeno are default yes
+# genbank.mrna and genbank.est native are default yes, the xeno is default no
+ascSuu1.downloadDir = ascSuu1
 
-    git commit -m "Added ascSuu1 - P. pacificus refs #15209" etc/genbank.conf
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "Added ascSuu1 - Pig roundworm/Ascaris suum refs #15209" etc/genbank.conf src/lib/gbGenome.c
     git push
     # update /cluster/data/genbank/etc/:
     make etc-update
 
+    make install-server
+
     screen      #  control this business with a screen since it takes a while
     cd /cluster/data/genbank
-
+    # had assistance from Brian on this as there were difficulties
     time ./bin/gbAlignStep -initial ascSuu1
-    # logFile: var/build/logs/2015.07.02-11:39:01.ascSuu1.initalign.log
-    # real    91m20.362s
+    # logFile: var/build/logs/2015.08.19-13:09:42.ascSuu1.initalign.log
+    # about 142 minutes == 2h 22m
 
-    #   To re-do, rm the dir first:
+    #   To re-do, rm these two sets first:
     #     /cluster/data/genbank/work/initial.ascSuu1
+    #     /cluster/data/genbank/data/aligned/*/ascSuu1
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad ascSuu1
-    # logFile: var/dbload/hgwdev/logs/2015.07.06-09:51:31.ascSuu1.dbload.log
-    # real    18m34.687s
+    # logFile: var/dbload/hgwdev/logs/2015.08.19-18:03:13.ascSuu1.dbload.log
+    # about 42 minutes
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add ascSuu1 to:
     #   vi etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added ascSuu1 - Pristionchus pacificus refs #15209" \
+    git commit -m "Added ascSuu1 - Ascaris suum/Pig roundworm refs #15209" \
       etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update

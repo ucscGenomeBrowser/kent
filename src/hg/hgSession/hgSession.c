@@ -511,11 +511,15 @@ if (userName != NULL)
     {
     printf("<LI>Each previously saved named session appears with "
 	   "Browser and Email links.  "
-	   "The Browser link takes you to the Genome Browser "
-	   "with that session loaded.  The resulting Genome Browser page "
-	   "can be bookmarked in your web browser and/or shared with others.  "
-	   "The Email link invokes your email tool with a message "
-	   "containing the Genome Browser link.</LI>\n");
+           "The Email link invokes your email tool with a message "
+           "containing the Genome Browser link. The Email link can "
+           "be bookmarked in your web browser and/or shared with "
+           "others. If you right-click and copy the Browser link, "
+           "it will be the same as the Email link. However, if you "
+           "click the Browser link it will take you to the Genome "
+           "Browser and become a uniquely identified URL once the "
+           "session loads, so that resulting link is not advised "
+           "for sharing.</LI>\n");
     }
 else if (wikiLinkEnabled())
     {
@@ -600,6 +604,51 @@ cartRemove(cart, hgsOldSessionName);
 cartRemove(cart, hgsCancel);
 }
 
+static void outIfNotPresent(struct cart *cart, struct dyString *dy, char *track, int tdbVis)
+/* Output default trackDb visibility if it's not mentioned in the cart. */
+{
+char *cartVis = cartOptionalString(cart, track);
+if (cartVis == NULL)
+    {
+    if (dy)
+        dyStringPrintf(dy,"&%s=%s", track, hStringFromTv(tdbVis));
+    else
+        printf("%s %s\n", track, hStringFromTv(tdbVis));
+    }
+}
+
+static void outDefaultTracks(struct cart *cart, struct dyString *dy)
+/* Output the default trackDb visibility for all tracks
+ * in trackDb if the track is not mentioned in the cart. */
+{
+char *database = cartString(cart, "db");
+struct trackDb *tdb = hTrackDb(database);
+struct hash *parentHash = newHash(5);
+
+for(; tdb; tdb = tdb->next)
+    {
+    struct trackDb *parent = tdb->parent;
+    if (parent) 
+        {
+        if (hashLookup(parentHash, parent->track) == NULL)
+            {
+            hashStore(parentHash, parent->track);
+            if (parent->isShow)
+                outIfNotPresent(cart, dy, parent->track, tvShow);
+            }
+        }
+    if (tdb->visibility != tvHide)
+        outIfNotPresent(cart, dy, tdb->track, tdb->visibility);
+    }
+
+// Put a variable in the cart that says we put the default 
+// visibilities in it.
+if (dy)
+    dyStringPrintf(dy,"&%s=on", CART_HAS_DEFAULT_VISIBILITY);
+else
+    printf("%s on", CART_HAS_DEFAULT_VISIBILITY);
+}
+
 #define INITIAL_USE_COUNT 0
 char *doNewSession()
 /* Save current settings in a new named session.
@@ -651,6 +700,10 @@ if (sqlTableExists(conn, namedSessionTable))
     cleanHgSessionFromCart(cart);
     struct dyString *encoded = newDyString(4096);
     cartEncodeState(cart, encoded);
+
+    // Now add all the default visibilities to output.
+    outDefaultTracks(cart, encoded);
+
     sqlDyAppendEscaped(dy, encoded->string);
     dyStringFree(&encoded);
     dyStringAppend(dy, "', ");
@@ -752,6 +805,7 @@ if (hel != NULL)
 		   getSessionLink(encUserName, encSessionName),
 		   getSessionEmailLink(encUserName, encSessionName));
     cartLoadUserSession(conn, userName, sessionName, cart, NULL, wildStr);
+    cartHideDefaultTracks(cart);
     hubConnectLoadHubs(cart);
     cartCopyCustomTracks(cart);
     cartCheckForCustomTracks(cart, dyMessage);
@@ -800,6 +854,7 @@ dyStringPrintf(dyMessage,
 	       getSessionLink(otherUser, encSessionName),
 	       getSessionEmailLink(encOtherUser, encSessionName));
 cartLoadUserSession(conn, otherUser, sessionName, cart, NULL, actionVar);
+cartHideDefaultTracks(cart);
 hubConnectLoadHubs(cart);
 cartCopyCustomTracks(cart);
 cartCheckForCustomTracks(cart, dyMessage);
@@ -817,6 +872,9 @@ struct pipeline *compressPipe = textOutInit(fileName, compressType, NULL);
 
 cleanHgSessionFromCart(cart);
 cartDump(cart);
+
+// Now add all the default visibilities to output.
+outDefaultTracks(cart, NULL);
 
 textOutClose(&compressPipe, NULL);
 }
@@ -899,6 +957,7 @@ else
 if (lf != NULL)
     {
     cartLoadSettings(lf, cart, NULL, actionVar);
+    cartHideDefaultTracks(cart);
     hubConnectLoadHubs(cart);
     cartCopyCustomTracks(cart);
     cartCheckForCustomTracks(cart, dyMessage);

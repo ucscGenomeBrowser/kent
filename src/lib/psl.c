@@ -1973,3 +1973,32 @@ float aligned = psl->match + psl->misMatch + psl->repMatch;
 return aligned/(float)psl->qSize;
 }
 
+struct psl* pslClone(struct psl *psl)
+/* clone a psl */
+{
+struct psl* pslCp = pslNew(psl->qName, psl->qSize, psl->qStart, psl->qEnd,
+                           psl->tName, psl->tSize, psl->tStart, psl->tEnd,
+                           psl->strand, psl->blockCount,
+                           ((psl->tSequence != NULL) ? PSL_XA_FORMAT : 0));
+pslCp->match = psl->match;
+pslCp->misMatch = psl->misMatch;
+pslCp->repMatch = psl->repMatch;
+pslCp->nCount = psl->nCount;
+pslCp->qNumInsert = psl->qNumInsert;
+pslCp->qBaseInsert = psl->qBaseInsert;
+pslCp->tNumInsert = psl->tNumInsert;
+pslCp->tBaseInsert = psl->tBaseInsert;
+int iBlk;
+for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
+    {
+    pslCp->blockSizes[iBlk] = psl->blockSizes[iBlk];
+    pslCp->qStarts[iBlk] = psl->qStarts[iBlk];
+    pslCp->tStarts[iBlk] = psl->tStarts[iBlk];
+    if (psl->qSequence != NULL)
+        pslCp->qSequence[iBlk] = cloneString(psl->qSequence[iBlk]);
+    if (psl->tSequence != NULL)
+        pslCp->tSequence[iBlk] = cloneString(psl->tSequence[iBlk]);
+    pslCp->blockCount++;
+    }
+return pslCp;
+}

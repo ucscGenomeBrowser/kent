@@ -2679,6 +2679,72 @@ var rightClick = {
 };
 
   //////////////////////////////////
+ //// external tools           ////
+//////////////////////////////////
+
+function showExtToolDialog() {
+        /* show the 'send to external tool' dialog */
+        // information about external tools is stored in the extTools global list
+        // defined by a <script> at the end of the body
+
+        // remove an existing dialog box
+        var extToolDialog = $("#extToolDialog").remove();
+
+        // construct the contents
+        var htmlLines = ["<ul class='indent'>"];
+        var winSize = hgTracks.winEnd - hgTracks.winStart;
+        for (i = 0; i < extTools.length; i++) {
+            var tool = extTools[i];
+            var toolId = tool[0];
+            var shortLabel = tool[1];
+            var longLabel = tool[2];
+            var maxSize = tool[3];
+            if ((maxSize===0) || (winSize < maxSize))
+                {
+                var url = "hgTracks?hgsid="+getHgsid()+"&hgt.redirectTool="+toolId;
+                var onclick = "$('#extToolDialog').dialog('close');";
+                htmlLines.push("<li><a onclick="+'"'+onclick+'"'+"id='extToolLink' target='_BLANK' href='"+url+"'>"+shortLabel+"</a>: <small>"+longLabel+"</small></li>");
+                }
+            else
+                {
+                note = "<br><b>Needs zoom to &lt; "+maxSize/1000+" kbp.</b></small></span></li>";
+                htmlLines.push('<li><span style="color:grey">'+shortLabel+": <small>"+longLabel+note);
+                }
+        }
+        htmlLines.push("</ul>");
+        content = htmlLines.join("");
+            
+        var title = hgTracks.chromName + ":" + hgTracks.winStart + "-" + hgTracks.winEnd + " on another website";
+        $("body").append("<div id='extToolDialog' title='"+title+"'><p>" + content + "</p>");
+
+        // copied from the hgTrackUi function below
+        var popMaxHeight = ($(window).height() - 40);
+        var popMaxWidth  = ($(window).width() - 40);
+        var popWidth     = 600;
+        if (popWidth > popMaxWidth)
+            popWidth = popMaxWidth;
+
+        // also copied from the hgTrackUi code below
+        $('#extToolDialog').dialog({
+            resizable: true,               // Let description scroll vertically
+            height: popMaxHeight,
+            width: popWidth,
+            minHeight: 200,
+            minWidth: 600,
+            maxHeight: popMaxHeight,
+            maxWidth: popMaxWidth,
+            modal: true,
+            closeOnEscape: true,
+            autoOpen: false,
+            buttons: { "Close": function() {
+                    $(this).dialog("close");
+            }},
+        });
+        
+        $('#extToolDialog').dialog('open');
+}
+
+  //////////////////////////////////
  //// popup (aka modal dialog) ////
 //////////////////////////////////
 var popUp = {

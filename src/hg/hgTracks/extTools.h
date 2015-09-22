@@ -27,4 +27,10 @@ struct extTool *readExtToolRa(char *raFileName);
 
 void extToolRedirect(struct cart *cart, char *tool);
 /* redirect to an external tool, sending the data specified in the ext tools config file */
+
+boolean extToolsEnabled();
+/* Return TRUE if we can display the external tools menu. */
+
+void printExtMenuData();
+/* print the external tools aka "send to" menu entries as JSON to stdout */
 #endif

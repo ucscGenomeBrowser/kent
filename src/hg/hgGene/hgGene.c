@@ -498,7 +498,7 @@ for (section = sectionList; section != NULL; section = section->next)
     dyStringPrintf(header, "<A HREF=\"%s?%s&%s=%s#%s\" class=\"bigBlue\"><IMG src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
     	geneCgi, cartSidUrlString(cart), closeVarName, otherState, section->name, indicatorImg, indicator);
     dyStringAppend(header, section->longLabel);
-    webNewSection(header->string);
+    webNewSection("%s",header->string);
     if (isOpen)
 	{
 	section->print(section, conn, geneId);

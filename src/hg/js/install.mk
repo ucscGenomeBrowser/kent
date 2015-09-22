@@ -7,6 +7,13 @@ user:
 	    ${MAKE} doInstall DEST=${DOCUMENTROOT}/js/${USER}; \
 	fi
 
+top:
+	@if test -d ${DOCUMENTROOT}-${USER}; then \
+	    ${MAKE} doInstallTop DEST=${DOCUMENTROOT}-${USER}/js; \
+	else \
+	    ${MAKE} doInstallTop DEST=${DOCUMENTROOT}/js/${USER}; \
+	fi
+
 alpha:
 	${GITUP}
 	${MAKE} doInstall DEST=${DOCUMENTROOT}/js

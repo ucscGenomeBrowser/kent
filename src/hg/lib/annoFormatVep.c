@@ -975,13 +975,10 @@ for (extraSrc = extras;  extraSrc != NULL;  extraSrc = extraSrc->next)
     }
 }
 
-static void afVepPrintExtraWig(struct annoFormatVep *self,
-			       struct annoFormatVepExtraItem *extraItem,
-			       struct annoRow *extraRows, boolean *pGotExtra)
-/* Print values from a wig source */
-//#*** Probably what we really want here is the average..... ??
-//#*** just listing them doesn't show where gaps are. overlap is possible too.
-//#*** Look into what VEP does for numerics.
+static void afVepPrintExtraWigVec(struct annoFormatVep *self,
+                                  struct annoFormatVepExtraItem *extraItem,
+                                  struct annoRow *extraRows, boolean *pGotExtra)
+/* Print values from a wig source with type arWigVec (per-base floats) */
 {
 int i;
 struct annoRow *row;
@@ -1001,6 +998,26 @@ for (i = 0, row = extraRows;  row != NULL;  i++, row = row->next)
 	    fputc(',', self->f);
 	fprintf(self->f, "%g", vector[j]);
 	}
+    }
+}
+
+static void afVepPrintExtraWigSingle(struct annoFormatVep *self,
+                                     struct annoFormatVepExtraItem *extraItem,
+                                     struct annoRow *extraRows, boolean *pGotExtra)
+/* Print values from a wig source with type arWigSingle (one double per row, e.g. an average) */
+{
+struct annoRow *row;
+for (row = extraRows;  row != NULL;  row = row->next)
+    {
+    double *pValue = row->data;
+    if (row == extraRows)
+        {
+        afVepNewExtra(self, pGotExtra);
+        fprintf(self->f, "%s=", extraItem->tag);
+        }
+    else
+        fputc(',', self->f);
+    fprintf(self->f, "%g", *pValue);
     }
 }
 
@@ -1348,8 +1365,10 @@ if (src == NULL)
     {
     AllocVar(src);
     src->source = extraSource;
-    if (extraSource->rowType == arWig)
-	src->printExtra = afVepPrintExtraWig;
+    if (extraSource->rowType == arWigVec)
+	src->printExtra = afVepPrintExtraWigVec;
+    else if (extraSource->rowType == arWigSingle)
+	src->printExtra = afVepPrintExtraWigSingle;
     else
 	src->printExtra = afVepPrintExtraWords;
     slAddTail(&(self->config->extraSources), src);

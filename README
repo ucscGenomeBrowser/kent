@@ -11,6 +11,13 @@ modules.  Commercial users interested in the UCSC Genome Browser in particular
 please see
     http://genome.ucsc.edu/license/.
 
+If you want to run a local installation of the UCSC Genome Browser
+(we call this a mirror, even when it includes only a small 
+part of the data), you do not need the whole source tree. We provide
+statically compiled binary CGI-bin executables, the apache htdocs folder, 
+binary MySQL databases and ancillary large data files in /gbdb via an Rsync
+download server. For install details see http://genome.ucsc.edu/admin/mirror.html
+
 Most source code users will only be interested in the src/inc and 
 src/lib directories, which contain the interfaces and implementations
 to the library routines,  and in a few specific applications.

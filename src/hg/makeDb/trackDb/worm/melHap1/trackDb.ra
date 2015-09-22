@@ -33,10 +33,6 @@ track ws210Gene override
 shortLabel WS210 Genes
 longLabel Genes predictions from WormBase priPac1/WS210 release lifted to priPac2
 
-track chainNetCe9 override
-otherDb ce9
-visibility dense
-
 searchTable all_est
 searchType psl
 searchPriority 50
@@ -46,3 +42,5 @@ searchTable xenoMrna
 searchType psl
 searchPriority 50
 searchDescription Other mRNAs
+
+include trackDb.chainNet.ra

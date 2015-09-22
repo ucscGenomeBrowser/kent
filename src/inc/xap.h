@@ -47,8 +47,13 @@ void xapFree(struct xap **pXp);
 void xapParseFile(struct xap *xap, char *fileName);
 /* Open up file and parse it all. */
 
-void xapError(struct xap *xap, char *format, ...);
+void xapError(struct xap *xap, char *format, ...)
 /* Issue an error message and abort*/
+#if defined(__GNUC__)
+__attribute__((format(printf, 2, 3)))
+#endif
+;
+
 
 void xapIndent(int count, FILE *f);
 /* Write out some spaces. */

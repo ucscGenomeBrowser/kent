@@ -400,7 +400,6 @@ html chainNet
         html chainNet
 
 track chainNetCe11
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -423,7 +422,6 @@ spectrum on
 html chainNet
 
     track chainNetCe11Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -431,7 +429,6 @@ html chainNet
     spectrum on
 
         track chainCe11
-	release alpha
         parent chainNetCe11Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -440,14 +437,12 @@ html chainNet
         html chainNet
 
     track chainNetCe11Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetCe11
 
         track netCe11
-	release alpha
         parent chainNetCe11Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
@@ -458,7 +453,7 @@ html chainNet
 track chainNetCe9
 release alpha
 compositeTrack on
-shortLabel $o_Organism Chain/Net
+shortLabel $o_db Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
@@ -490,7 +485,7 @@ html chainNet
 	release alpha
         parent chainNetCe9Viewchain
         subGroups view=chain
-        shortLabel $o_Organism Chain
+        shortLabel $o_db Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain ce9
         html chainNet
@@ -506,7 +501,7 @@ html chainNet
 	release alpha
         parent chainNetCe9Viewnet
         subGroups view=net
-        shortLabel $o_Organism Net
+        shortLabel $o_db Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign ce9 chainCe9
         html chainNet
@@ -567,26 +562,6 @@ html chainNet
         type netAlign ce6 chainCe6
         html chainNet
 
-# 41.715) caeRem4
-# 40.638) caePb3
-# 40.332) caeSp51
-# 39.384) cb4
-# 37.870) caeSp111
-# 27.709) caeJap4
-# 17.682) caeAng2
-# 10.486) hetBac1
-# 09.736) ancCey1
-# 08.936) haeCon2
-# 08.902) necAme1
-# 06.585) panRed1
-# 06.308) priPac3
-# 06.291) burXyl1
-# 06.222) priExs1
-# 05.722) ascSuu1
-# 05.669) strRat2
-# 05.182) oncVol1
-# 05.056) loaLoa1
-
 track chainNetBruMal1
 release alpha
 compositeTrack on
@@ -644,7 +619,6 @@ html chainNet
         html chainNet
 
 track chainNetBruMal2
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -667,7 +641,6 @@ spectrum on
 html chainNet
 
     track chainNetBruMal2Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -675,7 +648,6 @@ html chainNet
     spectrum on
 
         track chainBruMal2
-	release alpha
         parent chainNetBruMal2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -684,14 +656,12 @@ html chainNet
         html chainNet
 
     track chainNetBruMal2Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetBruMal2
 
         track netBruMal2
-	release alpha
         parent chainNetBruMal2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
@@ -700,7 +670,6 @@ html chainNet
         html chainNet
 
 track chainNetDirImm1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -723,7 +692,6 @@ spectrum on
 html chainNet
 
     track chainNetDirImm1Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -731,7 +699,6 @@ html chainNet
     spectrum on
 
         track chainDirImm1
-	release alpha
         parent chainNetDirImm1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -740,14 +707,12 @@ html chainNet
         html chainNet
 
     track chainNetDirImm1Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetDirImm1
 
         track netDirImm1
-	release alpha
         parent chainNetDirImm1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
@@ -757,7 +722,6 @@ html chainNet
 
 
 track chainNetMelHap1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -780,7 +744,6 @@ spectrum on
 html chainNet
 
     track chainNetMelHap1Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -788,7 +751,6 @@ html chainNet
     spectrum on
 
         track chainMelHap1
-	release alpha
         parent chainNetMelHap1Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -797,14 +759,12 @@ html chainNet
         html chainNet
 
     track chainNetMelHap1Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetMelHap1
 
         track netMelHap1
-	release alpha
         parent chainNetMelHap1Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
@@ -869,7 +829,6 @@ html chainNet
         html chainNet
 
 track chainNetMelInc2
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -892,7 +851,6 @@ spectrum on
 html chainNet
 
     track chainNetMelInc2Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -900,7 +858,6 @@ html chainNet
     spectrum on
 
         track chainMelInc2
-	release alpha
         parent chainNetMelInc2Viewchain
         subGroups view=chain
         shortLabel $o_Organism Chain
@@ -909,14 +866,12 @@ html chainNet
         html chainNet
 
     track chainNetMelInc2Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetMelInc2
 
         track netMelInc2
-	release alpha
         parent chainNetMelInc2Viewnet
         subGroups view=net
         shortLabel $o_Organism Net
@@ -925,9 +880,8 @@ html chainNet
         html chainNet
 
 track chainNetTriSpi1
-release alpha
 compositeTrack on
-shortLabel $o_db Chain/Net
+shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
@@ -948,7 +902,6 @@ spectrum on
 html chainNet
 
     track chainNetTriSpi1Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -956,34 +909,30 @@ html chainNet
     spectrum on
 
         track chainTriSpi1
-	release alpha
         parent chainNetTriSpi1Viewchain
         subGroups view=chain
-        shortLabel $o_db Chain
+        shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain triSpi1
         html chainNet
 
     track chainNetTriSpi1Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetTriSpi1
 
         track netTriSpi1
-	release alpha
         parent chainNetTriSpi1Viewnet
         subGroups view=net
-        shortLabel $o_db Net
+        shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign triSpi1 chainTriSpi1
         html chainNet
 
 track chainNetTriSui1
-release alpha
 compositeTrack on
-shortLabel $o_db Chain/Net
+shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
 subGroup1 view Views chain=Chain net=Net
 dragAndDrop subTracks
@@ -1004,7 +953,6 @@ spectrum on
 html chainNet
 
     track chainNetTriSui1Viewchain
-    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -1012,26 +960,23 @@ html chainNet
     spectrum on
 
         track chainTriSui1
-	release alpha
         parent chainNetTriSui1Viewchain
         subGroups view=chain
-        shortLabel $o_db Chain
+        shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain triSui1
         html chainNet
 
     track chainNetTriSui1Viewnet
-    release alpha
     shortLabel Net
     view net
     visibility dense
     parent chainNetTriSui1
 
         track netTriSui1
-	release alpha
         parent chainNetTriSui1Viewnet
         subGroups view=net
-        shortLabel $o_db Net
+        shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign triSui1 chainTriSui1
         html chainNet

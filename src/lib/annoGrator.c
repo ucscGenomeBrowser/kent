@@ -238,6 +238,7 @@ self->haveRJIncludeFilter = filtersHaveRJInclude(vSelf->filters);
 void annoGratorSetRegion(struct annoStreamer *vSelf, char *chrom, uint rStart, uint rEnd)
 /* Set genomic region for query, and reset internal state. */
 {
+annoStreamerSetRegion(vSelf, chrom, rStart, rEnd);
 struct annoGrator *self = (struct annoGrator *)vSelf;
 self->mySource->setRegion((struct annoStreamer *)(self->mySource), chrom, rStart, rEnd);
 agReset(self);

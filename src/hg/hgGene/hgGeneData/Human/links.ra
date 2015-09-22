@@ -134,7 +134,9 @@ priority 10
 name gtex
 shortLabel GTEx
 tables kgXref
-idSql select geneSymbol from kgXref where kgID = '%s'
+# Replace idSql with below (or similar) once gtex track tables are pushed
+# The query on new tables will suppress some links with no referents
 #idSql select gtexGene.geneId from kgXref, knownToEnsembl, gtexGene where kgXref.kgId='%s' and knownToEnsembl.name=kgXref.kgId and gtexGene.transcriptId=knownToEnsembl.value;
+idSql select geneSymbol from kgXref where kgID = '%s'
 url http://www.gtexportal.org/home/gene/%s
 priority 10

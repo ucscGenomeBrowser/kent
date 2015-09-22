@@ -912,7 +912,7 @@ char *getIdField(char *db, struct trackDb *track, char *table,
 char *idField = NULL;
 if (hti != NULL && hti->nameField[0] != 0)
     idField = cloneString(hti->nameField);
-else if (track != NULL)
+else if (track != NULL && !tdbIsComposite(track))
     {
     struct hTableInfo *trackHti = maybeGetHtiOnDb(db, track->table);
     if (trackHti != NULL && isCustomTrack(table))

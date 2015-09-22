@@ -4,8 +4,8 @@ shortLabel Cons Primates
 longLabel Primates Multiz Alignment & Conservation (20 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
-visibility full
-priority 1
+visibility hide
+priority 2
 type bed 4
 group compGeno
 
@@ -32,7 +32,7 @@ group compGeno
         type wigMaf 0.0 1.0
         speciesCodonDefault hg38
         speciesGroups Primates
-        sGroup_Primates panTro4 panPan1 gorGor3 ponAbe2 nomLeu3 macFas5 rhiRox1 papAnu2 nasLar1 rheMac3 chlSab2 saiBol1 calJac3 micMur1 tarSyr2 otoGar3 tupBel1 mm10 canFam3
+        sGroup_Primates panTro4 panPan1 gorGor3 ponAbe2 nomLeu3 rheMac3 macFas5 papAnu2 chlSab2 nasLar1 rhiRox1 calJac3 saiBol1 tarSyr2 micMur1 otoGar3 tupBel1 mm10 canFam3
         itemFirstCharCase noChange
         treeImage phylo/hg38_20way.png
         priority 100

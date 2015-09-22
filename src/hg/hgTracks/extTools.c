@@ -20,6 +20,46 @@
 #include "obscure.h"
 #include "net.h"
 
+boolean extToolsEnabled()
+/* Return TRUE if we can display the external tools menu. */
+{
+return fileExists("extTools.ra");
+}
+
+void printExtMenuData() 
+/* print the external tools aka "send to" menu entries as a javascript list to stdout */
+{
+if (!extToolsEnabled())
+    return;
+struct extTool *extTools = readExtToolRa("extTools.ra");
+struct extTool *et;
+hPuts("<script>\n");
+hPuts("extTools = [\n");
+for(et = extTools; et != NULL; et = et->next)
+    {
+    if (et->dbs!=NULL)
+        {
+        if (!slNameInList(et->dbs, database))
+            continue;
+        }
+    if (et->notDbs!=NULL)
+        {
+        if (slNameInList(et->notDbs, database))
+            continue;
+        }
+    char* tool = jsonStringEscape(et->tool);
+    char* shortLabel = jsonStringEscape(et->shortLabel);
+    char* longLabel = jsonStringEscape(et->longLabel);
+    hPrintf("    ['%s', '%s', '%s', %d]", tool, shortLabel, longLabel, et->maxSize);
+    if (et->next)
+        hPuts(",");
+    hPuts("\n");
+    }
+hPuts("];\n");
+hPuts("</script>\n");
+
+}
+
 static char *cloneRaSetting(struct hash *hash, char *name, struct lineFile *lf, bool mustExist)
 /* clone a setting out of the ra hash.  errAbort if mustExit and not found, otherwise NULL. */
 {
@@ -137,14 +177,10 @@ char *chromName;
 int winStart, winEnd;
 char *db = cartString(cart, "db");
 char *pos = cartString(cart, "position");
-int len = winEnd-winStart;
 findGenomePos(db, pos, &chromName, &winStart, &winEnd, cart);
+int len = winEnd-winStart;
 
 char *url = replaceInUrl(et->url, "", cart, db, chromName, winStart, winEnd, NULL, TRUE);
-
-printf("You're being redirected from the UCSC Genome Browser to the site %s<br>\n", url);
-if (et->email)
-    printf("Please contact %s for questions on this tool.<br>\n", et->email);
 
 char *method = "POST";
 if (et->isHttpGet)
@@ -157,9 +193,13 @@ struct slPair *slp;
 if (et->maxSize!=0 && len > et->maxSize)
     {
     printf("Sorry, this tool accepts only a sequence with less than %d base pairs<p>\n"
-      "Try to zoom in some more.<p>\n", et->maxSize);
+      "Please zoom in some more.<p>\n", et->maxSize);
     return;
     }
+
+printf("You're being redirected from the UCSC Genome Browser to the site %s<br>\n", url);
+if (et->email)
+    printf("Please contact %s for questions on this tool.<br>\n", et->email);
 
 boolean submitDone = FALSE;
 for (slp=et->params; slp!=NULL; slp=slp->next)
@@ -175,15 +215,14 @@ for (slp=et->params; slp!=NULL; slp=slp->next)
         // and link back to us
         char* host = getenv("HTTP_HOST");
         char* reqUrl = getenv("REQUEST_URI");
-
-        struct netParsedUrl npu;
-        netParseUrl(reqUrl, &npu);
-        safecpy(npu.protocol, sizeof(npu.protocol), "http");
-        safecpy(npu.host, sizeof(npu.host), host);
         // remove everything after ? in URL
-        char *e = strchr(npu.file, '?');
+        char *e = strchr(reqUrl, '?');
         if (e) *e = 0; 
-        val = urlFromNetParsedUrl(&npu);
+
+        char url[4000];
+        // cannot find a way to find out if the request came in via http or https
+        safef(url, sizeof(url), "http://%s%s", host, reqUrl);
+        val = url;
         }
     // half the current window size
     if (stringIn("$halfLen", val))
@@ -192,11 +231,17 @@ for (slp=et->params; slp!=NULL; slp=slp->next)
         safef(buf, sizeof(buf), "%d", len/2);
         val = replaceChars(val, "$halfLen", buf);
         }
-    if (sameWord(val, "$seq"))
+    if (sameWord(val, "$seq") || sameWord(val, "$faSeq"))
         {
         static struct dnaSeq *seq = NULL;
         seq = hDnaFromSeq(db, chromName, winStart, winEnd, dnaLower);
-        val = seq->dna;
+        if (sameWord(val, "$seq"))
+            val = seq->dna;
+        else
+            {
+            val = catTwoStrings(">sequence\n",seq->dna);
+            freez(&seq);
+            }
         }
     // any remaining $-expression might be one of the general ones
     if (stringIn("$", val))

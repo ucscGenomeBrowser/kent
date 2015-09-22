@@ -116,7 +116,7 @@ if (tbf == NULL)
 return tbf;
 }
 
-void loadIfNewSeq(char *seqPath, boolean isTwoBit, char *newName, char strand, 
+void loadIfNewSeq(char *seqPath, boolean isTwoBit, char *newName, char strand,
 	char **pName, struct dnaSeq **pSeq, char *pStrand)
 /* Load sequence unless it is already loaded.  Reverse complement
  * if necessary. */
@@ -154,8 +154,8 @@ else
     }
 }
 
-void loadFaSeq(struct hash *faHash, char *newName, char strand, 
-	char **pName, struct dnaSeq **pSeq, char *pStrand)
+static void loadFaSeq(struct hash *faHash, char *newName, char strand,
+	char **pName, struct dnaSeq **pSeq, char *pStrand, char *fastaFileName)
 /* retrieve sequence from hash.  Reverse complement
  * if necessary. */
 {
@@ -173,6 +173,8 @@ else
     {
     *pName = newName;
     *pSeq = seq = hashFindVal(faHash, newName);
+    if (NULL == seq)
+        errAbort("ERROR: can not find sequence name '%s' from fasta file '%s'\n", newName, fastaFileName);
     *pStrand = strand;
     if (strand == '-')
         reverseComplement(seq->dna, seq->size);
@@ -289,9 +291,9 @@ for (b = sp->blockList; b != NULL; b = b->next)
 
 /* Get chain list and clean it up a little. */
 startTime = clock1000();
-chainList = chainBlocks(sp->qName, qSeq->size, sp->qStrand, 
-	sp->tName, tSeq->size, &sp->blockList, 
-	(ConnectCost)chainConnectCost, (GapCost)chainConnectGapCost, 
+chainList = chainBlocks(sp->qName, qSeq->size, sp->qStrand,
+	sp->tName, tSeq->size, &sp->blockList,
+	(ConnectCost)chainConnectCost, (GapCost)chainConnectGapCost,
 	&cc, details);
 dt = clock1000() - startTime;
 verbose(1, "Main chaining step done in %ld milliseconds\n", dt);
@@ -311,7 +313,7 @@ for (chain = chainList; chain != NULL; chain = next)
         {
 	slAddHead(pChainList, chain);
 	}
-    else 
+    else
         {
 	chainFree(&chain);
 	}
@@ -397,8 +399,8 @@ struct dnaSeq *qSeq = NULL, *tSeq = NULL;
 char qStrand = 0, tStrand = 0;
 struct chain *chainList = NULL, *chain;
 FILE *details = NULL;
-struct dnaSeq *seq, *seqList = NULL;
-struct hash *faHash = newHash(0);
+struct dnaSeq *seq = NULL;
+struct hash *qFaHash = newHash(0);
 struct hash *tFaHash = newHash(0);
 FILE *faF;
 boolean qIsTwoBit = twoBitIsFile(qNibDir);
@@ -417,21 +419,17 @@ else
 if (optionExists("faQ"))
     {
     faF = mustOpen(qNibDir, "r");
+    verbose(1, "reading query fasta sequence from '%s'\n", qNibDir);
     while ( faReadMixedNext(faF, TRUE, NULL, TRUE, NULL, &seq))
-        {
-        hashAdd(faHash, seq->name, seq);
-        slAddHead(&seqList, seq);
-        }
+        hashAdd(qFaHash, seq->name, seq);
     fclose(faF);
     }
 if (optionExists("faT"))
     {
     faF = mustOpen(tNibDir, "r");
+    verbose(1, "reading target fasta sequence from '%s'\n", tNibDir);
     while ( faReadMixedNext(faF, TRUE, NULL, TRUE, NULL, &seq))
-        {
         hashAdd(tFaHash, seq->name, seq);
-        slAddHead(&seqList, seq);
-        }
     fclose(faF);
     }
 for (sp = spList; sp != NULL; sp = sp->next)
@@ -441,22 +439,22 @@ for (sp = spList; sp != NULL; sp = sp->next)
     verbose(1, "%d blocks after duplicate removal\n", slCount(sp->blockList));
     if (optionExists("faQ"))
         {
-        assert (faHash != NULL);
-        loadFaSeq(faHash, sp->qName, sp->qStrand, &qName, &qSeq, &qStrand);
+        assert (qFaHash != NULL);
+        loadFaSeq(qFaHash, sp->qName, sp->qStrand, &qName, &qSeq, &qStrand, qNibDir);
         }
     else
 	{
-        loadIfNewSeq(qNibDir, qIsTwoBit, sp->qName, sp->qStrand, 
+        loadIfNewSeq(qNibDir, qIsTwoBit, sp->qName, sp->qStrand,
 		&qName, &qSeq, &qStrand);
         }
     if (optionExists("faT"))
         {
         assert (tFaHash != NULL);
-        loadFaSeq(tFaHash, sp->tName, '+', &tName, &tSeq, &tStrand);
+        loadFaSeq(tFaHash, sp->tName, '+', &tName, &tSeq, &tStrand, tNibDir);
         }
-    else 
+    else
 	{
-        loadIfNewSeq(tNibDir, tIsTwoBit, sp->tName, '+', 
+        loadIfNewSeq(tNibDir, tIsTwoBit, sp->tName, '+',
 		&tName, &tSeq, &tStrand);
 	}
     chainPair(sp, qSeq, tSeq, &chainList, details);
@@ -464,7 +462,7 @@ for (sp = spList; sp != NULL; sp = sp->next)
 slSort(&chainList, chainCmpScore);
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
-    assert(chain->qStart == chain->blockList->qStart 
+    assert(chain->qStart == chain->blockList->qStart
 	&& chain->tStart == chain->blockList->tStart);
     chainWrite(chain, f);
     }

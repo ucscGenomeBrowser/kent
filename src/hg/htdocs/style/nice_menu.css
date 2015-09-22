@@ -427,7 +427,6 @@ ul.nice-menu ul li.inactive span {
     width:180px;
     font-size:13px;
     font-weight:bold;
-    text-transform:capitalize !important;
     font-family:Arial, Helvetica, sans-serif;
 }
 /************************************/
@@ -447,11 +446,9 @@ ul.nice-menu ul li a {
 	width:180px;
 	font-size:13px;
 	font-weight:bold;
-	text-transform:capitalize !important;
 	font-family:Arial, Helvetica, sans-serif;
 }
 ul.nice-menu ul li span {
-	text-transform:capitalize !important;
 }
 ul.nice-menu ul li a:hover, ul.nice-menu ul li a.active {
 	color:#fff !important;
@@ -489,6 +486,16 @@ ul.nice-menu-down li li.menuparent.active {
 ul.nice-menu-down li ul li ul {
 	left:141px;
 	top:0px;
+}
+
+ul.nice-menu li.horizSep {
+    height: 2px;
+    background-color: #DDD;
+}
+
+ul.nice-menu li.horizSep:hover {
+    height: 2px;
+    background-color: #DDD !important;
 }
 
 /* over-riding HGStyle for demo */

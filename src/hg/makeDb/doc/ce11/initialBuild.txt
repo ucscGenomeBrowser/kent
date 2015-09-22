@@ -129,7 +129,7 @@ taxId 6239
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
     #    January 31 2015 (open-4-0-5) version of RepeatMasker
-    # CC   RELEASE 20140131;    
+    # CC   RELEASE 20140131;
 
     time featureBits -countGaps ce11 rmsk
     #  12518665 bases of 100286401 (12.483%) in intersection
@@ -266,10 +266,10 @@ taxId 6239
     calc \( 100286401 / 2861349177 \) \* 1024
     # ( 100286401 / 2861349177 ) * 1024 = 35.889809
 
-    # Use -repMatch=100 (based on size -- for human we use 1024, and 
-    # worm size is ~3.4% of human judging by gapless ce4 vs. hg18 genome 
+    # Use -repMatch=100 (based on size -- for human we use 1024, and
+    # worm size is ~3.4% of human judging by gapless ce4 vs. hg18 genome
     # size from featureBits. So we would use 35, but that yields a very
-    # high number of tiles to ignore, especially for a small more compact 
+    # high number of tiles to ignore, especially for a small more compact
     # genome.  Bump that up a bit to be more conservative.
 
     cd /hive/data/genomes/ce11
@@ -281,7 +281,7 @@ taxId 6239
 
     # there are no non-bridged gaps, do not need to do this
     #   check non-bridged gaps to see what the typical size is:
-#     hgsql -N -e 'select * from gap where bridge="no" order by size;' ce11 
+#     hgsql -N -e 'select * from gap where bridge="no" order by size;' ce11
 #       | ave -tableOut -col=7 stdin
 # # min Q1 median Q3 max mean N sum stddev
 # 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006
@@ -503,11 +503,16 @@ searchPriority 8
 # WARNING: ce11 does not have estOrientInfo
 # WARNING: ce11 does not have mrnaOrientInfo
 
+    # can not push the chain/nets
+    egrep -v "Chain and Net|Chain/Net" ce11.pushQ.sql \
+      > ce11.noChainNet.pushQ.sql
+
     #   copy it to hgwbeta
-    scp -p ce11.pushQ.sql qateam@hgwbeta:/tmp
+    scp -p ce11.noChainNet.pushQ.sql qateam@hgwbeta:/tmp/ce11.pushQ.sql
     ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/ce11.pushQ.sql"
     #   in that pushQ entry walk through each entry and see if the
     #   sizes will set properly
+    #   pushQ ID: 007625
 
 #########################################################################
 # LIFTOVER TO ce6 (DONE - 2015-06-23 - Hiram )

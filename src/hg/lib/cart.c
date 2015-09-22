@@ -653,6 +653,40 @@ cartRemove(cart, "hubId");
 cartRemove(cart, hgHubDoDisconnect);
 }
 
+static void hideIfNotInCart(struct cart *cart, char *track)
+/* If this track is not mentioned in the cart, set it to hide */
+{
+if (cartOptionalString(cart, track) == NULL)
+    cartSetString(cart, track, "hide");
+}
+
+void cartHideDefaultTracks(struct cart *cart)
+/* Hide all the tracks who have default visibilities in trackDb
+ * that are something other than hide.  Do this only if the
+ * variable CART_HAS_DEFAULT_VISIBILITY is set in the cart.  */
+{
+char *defaultString = cartOptionalString(cart, CART_HAS_DEFAULT_VISIBILITY);
+boolean cartHasDefaults = (defaultString != NULL) && sameString(defaultString, "on");
+
+if (!cartHasDefaults)
+    return;
+
+char *db = cartString(cart, "db");
+struct trackDb *tdb = hTrackDb(db);
+for(; tdb; tdb = tdb->next)
+    {
+    struct trackDb *parent = tdb->parent;
+    if (parent && parent->isShow)
+        hideIfNotInCart(cart, parent->track);
+    if (tdb->visibility != tvHide)
+        hideIfNotInCart(cart, tdb->track);
+    }
+
+// Don't do this again until someone sets this variable, 
+// presumably on session load.
+cartRemove(cart, CART_HAS_DEFAULT_VISIBILITY);
+}
+
 struct cart *cartNew(char *userId, char *sessionId,
                      char **exclude, struct hash *oldVars)
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
@@ -735,9 +769,11 @@ if (didSessionLoad)
 
 if (newDatabase != NULL)
     {
-    cartSetString(cart,"db", newDatabase);
     // this is some magic to use the defaultPosition */
-    cartSetString(cart,"position", "genome");
+    char *oldDb = cartOptionalString(cart, "db");
+    if (oldDb != NULL)
+        hashAdd(oldVars, "db", oldDb);
+    cartSetString(cart,"db", newDatabase);
     }
 
 if (exclude != NULL)
@@ -747,6 +783,9 @@ if (exclude != NULL)
     }
 
 cartDefaultDisconnector(&conn);
+
+if (didSessionLoad)
+    cartHideDefaultTracks(cart);
 return cart;
 }
 
@@ -1732,7 +1771,7 @@ pushWarnHandler(cartEarlyWarningHandler);
 cart = cartAndCookie(cookieName, exclude, oldVars);
 getDbAndGenome(cart, &db, &org, oldVars);
 clade = hClade(org);
-pos = cartOptionalString(cart, positionCgiName);
+pos = cartGetPosition(cart, db);
 pos = addCommasToPos(db, stripCommas(pos));
 if(pos != NULL && oldVars != NULL)
     {
@@ -2770,4 +2809,46 @@ if (isNotEmpty(ss))
 		   "<A HREF=\"../goldenPath/help/hgSessionHelp.html#CTs\" TARGET=_BLANK>"
 		   "expiration policy</A>.");
     }
+}
+
+char *cartGetPosition(struct cart *cart, char *database)
+/* get the current position in cart as a string chr:start-end.
+ * This can handle the special CGI params 'default' and 'lastDbPos'
+ * Returned value has to be freed. Returns 
+ * default position of assembly is no position set in cart nor as CGI var.
+ * Returns NULL if no position set anywhere and no default position.
+*/
+{
+// position=lastDbPos in URL? -> go back to the last browsed position for this db
+char *position = NULL;
+char dbPosKey[256];
+char *defaultPosition = hDefaultPos(database);
+safef(dbPosKey, sizeof(dbPosKey), "position.%s", database);
+if (sameOk(cgiOptionalString("position"), "lastDbPos"))
+    {
+    position = cartUsualString(cart, dbPosKey, defaultPosition);
+    cartSetString(cart, "position", position);
+    }
+    
+if (position == NULL)
+    {
+    position = cloneString(cartUsualString(cart, "position", NULL));
+    }
+
+/* default if not set at all, as would happen if it came from a URL with no
+ * position. Otherwise tell them to go back to the gateway. Also recognize
+ * "default" as specifying the default position. */
+if (((position == NULL) || sameString(position, "default"))
+    && (defaultPosition != NULL))
+    position = cloneString(defaultPosition);
+
+return position;
+}
+
+void cartSetDbPosition(struct cart *cart, char *database, char *position)
+/* set the 'position.db' variable in the cart */
+{
+char dbPosKey[256];
+safef(dbPosKey, sizeof(dbPosKey), "position.%s", database);
+cartSetString(cart, dbPosKey, cloneString(position)); // XX need to clone here?
 }

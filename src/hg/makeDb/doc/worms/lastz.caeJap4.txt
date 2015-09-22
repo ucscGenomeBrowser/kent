@@ -1,0 +1,1197 @@
+########################################################################
+# LASTZ Caenorhabditis japonica/C. japonica - caeJap4 vs.
+#       Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+# (DONE - 2015-08-14 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/lastzAncCey1.2015-08-14
+    cd /hive/data/genomes/caeJap4/bed/lastzAncCey1.2015-08-14
+
+    cat << '_EOF_' > DEF
+# caeJap4 vs ancCey1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis japonica/C. japonica - caeJap4
+SEQ1_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ1_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+SEQ2_DIR=/hive/data/genomes/ancCey1/ancCey1.2bit
+SEQ2_LEN=/hive/data/genomes/ancCey1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caeJap4/bed/lastzAncCey1.2015-08-14
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 91m52.879s
+    cat fb.caeJap4.chainAncCey1Link.txt
+    # 11990529 bases of 154057934 (7.783%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caeJap4 ancCey1) > rbest.log 2>&1 &
+    # real 0m56.413s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/ancCey1/bed/blastz.caeJap4.swap
+    cd /hive/data/genomes/ancCey1/bed/blastz.caeJap4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caeJap4/bed/lastzAncCey1.2015-08-14/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m26.501s
+    cat fb.ancCey1.chainCaeJap4Link.txt
+    # 11111248 bases of 300914990 (3.692%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` ancCey1 caeJap4) \
+      > rbest.log 2>&1
+    # real 0m58.859s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis japonica/C. japonica - caeJap4 vs.
+#       Ascaris suum/Pig roundworm - ascSuu1
+# (DONE - 2015-08-14 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/lastzAscSuu1.2015-08-14
+    cd /hive/data/genomes/caeJap4/bed/lastzAscSuu1.2015-08-14
+
+    cat << '_EOF_' > DEF
+# caeJap4 vs ascSuu1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis japonica/C. japonica - caeJap4
+SEQ1_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ1_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Ascaris suum/Pig roundworm - ascSuu1
+SEQ2_DIR=/hive/data/genomes/ascSuu1/ascSuu1.2bit
+SEQ2_LEN=/hive/data/genomes/ascSuu1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caeJap4/bed/lastzAscSuu1.2015-08-14
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 84m3.547s
+    cat fb.caeJap4.chainAscSuu1Link.txt
+    # 6220355 bases of 154057934 (4.038%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caeJap4 ascSuu1) > rbest.log 2>&1 &
+    # real 0m40.966s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/ascSuu1/bed/blastz.caeJap4.swap
+    cd /hive/data/genomes/ascSuu1/bed/blastz.caeJap4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caeJap4/bed/lastzAscSuu1.2015-08-14/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m5.721s
+    cat fb.ascSuu1.chainCaeJap4Link.txt
+    # 5347458 bases of 262604320 (2.036%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` ascSuu1 caeJap4) \
+      > rbest.log 2>&1
+    # real 0m43.208s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis japonica/C. japonica - caeJap4 vs.
+#       Brugia malayi/Filarial worm - bruMal2
+# (DONE - 2015-08-15 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/lastzBruMal2.2015-08-15
+    cd /hive/data/genomes/caeJap4/bed/lastzBruMal2.2015-08-15
+
+    cat << '_EOF_' > DEF
+# caeJap4 vs bruMal2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis japonica/C. japonica - caeJap4
+SEQ1_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ1_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Brugia malayi/Filarial worm - bruMal2
+SEQ2_DIR=/hive/data/genomes/bruMal2/bruMal2.2bit
+SEQ2_LEN=/hive/data/genomes/bruMal2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caeJap4/bed/lastzBruMal2.2015-08-15
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 55m13.404s
+    cat fb.caeJap4.chainBruMal2Link.txt
+    # 4855874 bases of 154057934 (3.152%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caeJap4 bruMal2) > rbest.log 2>&1 &
+    # real 0m36.972s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/bruMal2/bed/blastz.caeJap4.swap
+    cd /hive/data/genomes/bruMal2/bed/blastz.caeJap4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caeJap4/bed/lastzBruMal2.2015-08-15/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 2m46.121s
+    cat fb.bruMal2.chainCaeJap4Link.txt
+    # 3995859 bases of 87424120 (4.571%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` bruMal2 caeJap4) \
+      > rbest.log 2>&1
+    # real 0m35.534s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis japonica/C. japonica - caeJap4 vs.
+#       Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+# (DONE - 2015-08-14 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/lastzBurXyl1.2015-08-14
+    cd /hive/data/genomes/caeJap4/bed/lastzBurXyl1.2015-08-14
+
+    cat << '_EOF_' > DEF
+# caeJap4 vs burXyl1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis japonica/C. japonica - caeJap4
+SEQ1_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ1_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+SEQ2_DIR=/hive/data/genomes/burXyl1/burXyl1.2bit
+SEQ2_LEN=/hive/data/genomes/burXyl1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caeJap4/bed/lastzBurXyl1.2015-08-14
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 66m52.379s
+    cat fb.caeJap4.chainBurXyl1Link.txt
+    # 6793145 bases of 154057934 (4.409%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caeJap4 burXyl1) > rbest.log 2>&1 &
+    # real 0m40.106s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/burXyl1/bed/blastz.caeJap4.swap
+    cd /hive/data/genomes/burXyl1/bed/blastz.caeJap4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caeJap4/bed/lastzBurXyl1.2015-08-14/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m55.243s
+    cat fb.burXyl1.chainCaeJap4Link.txt
+    # 5592528 bases of 73100506 (7.650%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` burXyl1 caeJap4) \
+      > rbest.log 2>&1
+    # real 0m37.704s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis japonica/C. japonica - caeJap4 vs.
+#       Caenorhabditis angaria/C. angaria - caeAng2
+# (DONE - 2015-08-14 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/lastzCaeAng2.2015-08-14
+    cd /hive/data/genomes/caeJap4/bed/lastzCaeAng2.2015-08-14
+
+    cat << '_EOF_' > DEF
+# caeJap4 vs caeAng2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis japonica/C. japonica - caeJap4
+SEQ1_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ1_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Caenorhabditis angaria/C. angaria - caeAng2
+SEQ2_DIR=/hive/data/genomes/caeAng2/caeAng2.2bit
+SEQ2_LEN=/hive/data/genomes/caeAng2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caeJap4/bed/lastzCaeAng2.2015-08-14
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 62m44.267s
+    cat fb.caeJap4.chainCaeAng2Link.txt
+    # 17111529 bases of 154057934 (11.107%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caeJap4 caeAng2) > rbest.log 2>&1 &
+    # real 1m11.847s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/caeAng2/bed/blastz.caeJap4.swap
+    cd /hive/data/genomes/caeAng2/bed/blastz.caeJap4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caeJap4/bed/lastzCaeAng2.2015-08-14/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 7m23.695s
+    cat fb.caeAng2.chainCaeJap4Link.txt
+    # 17428329 bases of 95237926 (18.300%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` caeAng2 caeJap4) \
+      > rbest.log 2>&1
+    # real 2m17.892s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis japonica/C. japonica - caeJap4 vs.
+#       Caenorhabditis tropicalis/C. tropicalis - caeSp111
+# (DONE - 2015-08-14 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/lastzCaeSp111.2015-08-14
+    cd /hive/data/genomes/caeJap4/bed/lastzCaeSp111.2015-08-14
+
+    cat << '_EOF_' > DEF
+# caeJap4 vs caeSp111
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis japonica/C. japonica - caeJap4
+SEQ1_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ1_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Caenorhabditis tropicalis/C. tropicalis - caeSp111
+SEQ2_DIR=/hive/data/genomes/caeSp111/caeSp111.2bit
+SEQ2_LEN=/hive/data/genomes/caeSp111/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caeJap4/bed/lastzCaeSp111.2015-08-14
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 27m16.181s
+    cat fb.caeJap4.chainCaeSp111Link.txt
+    # 30430295 bases of 154057934 (19.753%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caeJap4 caeSp111) > rbest.log 2>&1 &
+    # real 2m1.873s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/caeSp111/bed/blastz.caeJap4.swap
+    cd /hive/data/genomes/caeSp111/bed/blastz.caeJap4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caeJap4/bed/lastzCaeSp111.2015-08-14/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m53.387s
+    cat fb.caeSp111.chainCaeJap4Link.txt
+    # 25484444 bases of 76497192 (33.314%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` caeSp111 caeJap4) \
+      > rbest.log 2>&1
+    # real 1m33.881s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis japonica/C. japonica - caeJap4 vs.
+#       Caenorhabditis sp5 ju800/C. sp. 5 ju800 - caeSp51
+# (DONE - 2015-08-14 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/lastzCaeSp51.2015-08-14
+    cd /hive/data/genomes/caeJap4/bed/lastzCaeSp51.2015-08-14
+
+    cat << '_EOF_' > DEF
+# caeJap4 vs caeSp51
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis japonica/C. japonica - caeJap4
+SEQ1_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ1_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Caenorhabditis sp5 ju800/C. sp. 5 ju800 - caeSp51
+SEQ2_DIR=/hive/data/genomes/caeSp51/caeSp51.2bit
+SEQ2_LEN=/hive/data/genomes/caeSp51/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caeJap4/bed/lastzCaeSp51.2015-08-14
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 121m39.977s
+    cat fb.caeJap4.chainCaeSp51Link.txt
+    # 31896624 bases of 154057934 (20.704%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caeJap4 caeSp51) > rbest.log 2>&1 &
+    # real 1m28.949s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/caeSp51/bed/blastz.caeJap4.swap
+    cd /hive/data/genomes/caeSp51/bed/blastz.caeJap4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caeJap4/bed/lastzCaeSp51.2015-08-14/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 3m57.007s
+    cat fb.caeSp51.chainCaeJap4Link.txt
+    # 27513622 bases of 130562982 (21.073%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` caeSp51 caeJap4) \
+      > rbest.log 2>&1
+    # real 1m54.777s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis japonica/C. japonica - caeJap4 vs.
+#       Dirofilaria immitis/Dog heartworm - dirImm1
+# (DONE - 2015-08-14 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/lastzDirImm1.2015-08-14
+    cd /hive/data/genomes/caeJap4/bed/lastzDirImm1.2015-08-14
+
+    cat << '_EOF_' > DEF
+# caeJap4 vs dirImm1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis japonica/C. japonica - caeJap4
+SEQ1_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ1_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Dirofilaria immitis/Dog heartworm - dirImm1
+SEQ2_DIR=/hive/data/genomes/dirImm1/dirImm1.2bit
+SEQ2_LEN=/hive/data/genomes/dirImm1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caeJap4/bed/lastzDirImm1.2015-08-14
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 74m38.788s
+    cat fb.caeJap4.chainDirImm1Link.txt
+    # 4687625 bases of 154057934 (3.043%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caeJap4 dirImm1) > rbest.log 2>&1 &
+    # real 0m33.443s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/dirImm1/bed/blastz.caeJap4.swap
+    cd /hive/data/genomes/dirImm1/bed/blastz.caeJap4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caeJap4/bed/lastzDirImm1.2015-08-14/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m1.998s
+    cat fb.dirImm1.chainCaeJap4Link.txt
+    # 3743293 bases of 84923352 (4.408%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` dirImm1 caeJap4) \
+      > rbest.log 2>&1
+    # real 0m35.999s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis japonica/C. japonica - caeJap4 vs.
+#       Haemonchus contortus/Barber pole worm - haeCon2
+# (DONE - 2015-08-14 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/lastzHaeCon2.2015-08-14
+    cd /hive/data/genomes/caeJap4/bed/lastzHaeCon2.2015-08-14
+
+    cat << '_EOF_' > DEF
+# caeJap4 vs haeCon2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis japonica/C. japonica - caeJap4
+SEQ1_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ1_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Haemonchus contortus/Barber pole worm - haeCon2
+SEQ2_DIR=/hive/data/genomes/haeCon2/haeCon2.2bit
+SEQ2_LEN=/hive/data/genomes/haeCon2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caeJap4/bed/lastzHaeCon2.2015-08-14
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 86m16.120s
+    cat fb.caeJap4.chainHaeCon2Link.txt
+    # 11003424 bases of 154057934 (7.142%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caeJap4 haeCon2) > rbest.log 2>&1 &
+    # real 0m56.700s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/haeCon2/bed/blastz.caeJap4.swap
+    cd /hive/data/genomes/haeCon2/bed/blastz.caeJap4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caeJap4/bed/lastzHaeCon2.2015-08-14/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 2m21.877s
+    cat fb.haeCon2.chainCaeJap4Link.txt
+    # 13290124 bases of 346001353 (3.841%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` haeCon2 caeJap4) \
+      > rbest.log 2>&1
+    # real 1m32.789s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis japonica/C. japonica - caeJap4 vs.
+#       Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1
+# (DONE - 2015-08-14 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/lastzHetBac1.2015-08-14
+    cd /hive/data/genomes/caeJap4/bed/lastzHetBac1.2015-08-14
+
+    cat << '_EOF_' > DEF
+# caeJap4 vs hetBac1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis japonica/C. japonica - caeJap4
+SEQ1_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ1_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Heterorhabditis bacteriophora/H. bacteriophora/m31e - hetBac1
+SEQ2_DIR=/hive/data/genomes/hetBac1/hetBac1.2bit
+SEQ2_LEN=/hive/data/genomes/hetBac1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caeJap4/bed/lastzHetBac1.2015-08-14
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 25m30.367s
+    cat fb.caeJap4.chainHetBac1Link.txt
+    # 10745727 bases of 154057934 (6.975%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caeJap4 hetBac1) > rbest.log 2>&1 &
+    # real 0m49.725s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/hetBac1/bed/blastz.caeJap4.swap
+    cd /hive/data/genomes/hetBac1/bed/blastz.caeJap4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caeJap4/bed/lastzHetBac1.2015-08-14/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m6.177s
+    cat fb.hetBac1.chainCaeJap4Link.txt
+    # 9145167 bases of 74374900 (12.296%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hetBac1 caeJap4) \
+      > rbest.log 2>&1
+    # real 0m44.041s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis japonica/C. japonica - caeJap4 vs.
+#       Loa loa/Eye worm - loaLoa1
+# (DONE - 2015-08-15 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/lastzLoaLoa1.2015-08-15
+    cd /hive/data/genomes/caeJap4/bed/lastzLoaLoa1.2015-08-15
+
+    cat << '_EOF_' > DEF
+# caeJap4 vs loaLoa1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis japonica/C. japonica - caeJap4
+SEQ1_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ1_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Loa loa/Eye worm - loaLoa1
+SEQ2_DIR=/hive/data/genomes/loaLoa1/loaLoa1.2bit
+SEQ2_LEN=/hive/data/genomes/loaLoa1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caeJap4/bed/lastzLoaLoa1.2015-08-15
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 60m45.351s
+    cat fb.caeJap4.chainLoaLoa1Link.txt
+    # 4991693 bases of 154057934 (3.240%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caeJap4 loaLoa1) > rbest.log 2>&1 &
+    # real 0m34.798s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/loaLoa1/bed/blastz.caeJap4.swap
+    cd /hive/data/genomes/loaLoa1/bed/blastz.caeJap4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caeJap4/bed/lastzLoaLoa1.2015-08-15/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m52.180s
+    cat fb.loaLoa1.chainCaeJap4Link.txt
+    # 3847043 bases of 87533141 (4.395%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` loaLoa1 caeJap4) \
+      > rbest.log 2>&1
+    # real 0m31.859s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis japonica/C. japonica - caeJap4 vs.
+#       Meloidogyne hapla/M. hapla - melHap1
+# (DONE - 2015-08-14 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/lastzMelHap1.2015-08-14
+    cd /hive/data/genomes/caeJap4/bed/lastzMelHap1.2015-08-14
+
+    cat << '_EOF_' > DEF
+# caeJap4 vs melHap1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis japonica/C. japonica - caeJap4
+SEQ1_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ1_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Meloidogyne hapla/M. hapla - melHap1
+SEQ2_DIR=/hive/data/genomes/melHap1/melHap1.2bit
+SEQ2_LEN=/hive/data/genomes/melHap1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caeJap4/bed/lastzMelHap1.2015-08-14
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 16m47.165s
+    cat fb.caeJap4.chainMelHap1Link.txt
+    # 3913762 bases of 154057934 (2.540%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caeJap4 melHap1) > rbest.log 2>&1 &
+    # real 0m27.681s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melHap1/bed/blastz.caeJap4.swap
+    cd /hive/data/genomes/melHap1/bed/blastz.caeJap4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caeJap4/bed/lastzMelHap1.2015-08-14/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m49.418s
+    cat fb.melHap1.chainCaeJap4Link.txt
+    # 2948570 bases of 53017507 (5.562%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melHap1 caeJap4) \
+      > rbest.log 2>&1
+    # real 0m24.410s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis japonica/C. japonica - caeJap4 vs.
+#       Meloidogyne incognita/M. incognita - melInc2
+# (DONE - 2015-08-14 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/lastzMelInc2.2015-08-14
+    cd /hive/data/genomes/caeJap4/bed/lastzMelInc2.2015-08-14
+
+    cat << '_EOF_' > DEF
+# caeJap4 vs melInc2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis japonica/C. japonica - caeJap4
+SEQ1_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ1_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Meloidogyne incognita/M. incognita - melInc2
+SEQ2_DIR=/hive/data/genomes/melInc2/melInc2.2bit
+SEQ2_LEN=/hive/data/genomes/melInc2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caeJap4/bed/lastzMelInc2.2015-08-14
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 19m26.307s
+    cat fb.caeJap4.chainMelInc2Link.txt
+    # 3897277 bases of 154057934 (2.530%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caeJap4 melInc2) > rbest.log 2>&1 &
+    # real 0m28.911s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melInc2/bed/blastz.caeJap4.swap
+    cd /hive/data/genomes/melInc2/bed/blastz.caeJap4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caeJap4/bed/lastzMelInc2.2015-08-14/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m55.593s
+    cat fb.melInc2.chainCaeJap4Link.txt
+    # 3953172 bases of 82114761 (4.814%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melInc2 caeJap4) \
+      > rbest.log 2>&1
+    # real 0m27.108s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis japonica/C. japonica - caeJap4 vs.
+#       Necator americanus/N. americanus - necAme1
+# (DONE - 2015-08-14 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/lastzNecAme1.2015-08-14
+    cd /hive/data/genomes/caeJap4/bed/lastzNecAme1.2015-08-14
+
+    cat << '_EOF_' > DEF
+# caeJap4 vs necAme1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis japonica/C. japonica - caeJap4
+SEQ1_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ1_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Necator americanus/N. americanus - necAme1
+SEQ2_DIR=/hive/data/genomes/necAme1/necAme1.2bit
+SEQ2_LEN=/hive/data/genomes/necAme1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caeJap4/bed/lastzNecAme1.2015-08-14
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 62m4.252s
+    cat fb.caeJap4.chainNecAme1Link.txt
+    # 10108355 bases of 154057934 (6.561%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caeJap4 necAme1) > rbest.log 2>&1 &
+    # real 0m50.078s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/necAme1/bed/blastz.caeJap4.swap
+    cd /hive/data/genomes/necAme1/bed/blastz.caeJap4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caeJap4/bed/lastzNecAme1.2015-08-14/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m23.919s
+    cat fb.necAme1.chainCaeJap4Link.txt
+    # 8723688 bases of 208187215 (4.190%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` necAme1 caeJap4) \
+      > rbest.log 2>&1
+    # real 0m58.249s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis japonica/C. japonica - caeJap4 vs.
+#       Onchocerca volvulus/O. volvulus - oncVol1
+# (DONE - 2015-08-15 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/lastzOncVol1.2015-08-15
+    cd /hive/data/genomes/caeJap4/bed/lastzOncVol1.2015-08-15
+
+    cat << '_EOF_' > DEF
+# caeJap4 vs oncVol1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis japonica/C. japonica - caeJap4
+SEQ1_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ1_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Onchocerca volvulus/O. volvulus - oncVol1
+SEQ2_DIR=/hive/data/genomes/oncVol1/oncVol1.2bit
+SEQ2_LEN=/hive/data/genomes/oncVol1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caeJap4/bed/lastzOncVol1.2015-08-15
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 40m22.683s
+    cat fb.caeJap4.chainOncVol1Link.txt
+    # 5011117 bases of 154057934 (3.253%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caeJap4 oncVol1) > rbest.log 2>&1 &
+    # real 0m51.461s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oncVol1/bed/blastz.caeJap4.swap
+    cd /hive/data/genomes/oncVol1/bed/blastz.caeJap4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caeJap4/bed/lastzOncVol1.2015-08-15/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m26.731s
+    cat fb.oncVol1.chainCaeJap4Link.txt
+    # 3975264 bases of 94327777 (4.214%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` oncVol1 caeJap4) \
+      > rbest.log 2>&1
+    # real 1m53.711s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis japonica/C. japonica - caeJap4 vs.
+#       Panagrellus redivivus/Microworm - panRed1
+# (DONE - 2015-08-14 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/lastzPanRed1.2015-08-14
+    cd /hive/data/genomes/caeJap4/bed/lastzPanRed1.2015-08-14
+
+    cat << '_EOF_' > DEF
+# caeJap4 vs panRed1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis japonica/C. japonica - caeJap4
+SEQ1_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ1_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Panagrellus redivivus/Microworm - panRed1
+SEQ2_DIR=/hive/data/genomes/panRed1/panRed1.2bit
+SEQ2_LEN=/hive/data/genomes/panRed1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caeJap4/bed/lastzPanRed1.2015-08-14
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 23m12.940s
+    cat fb.caeJap4.chainPanRed1Link.txt
+    # 7255591 bases of 154057934 (4.710%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caeJap4 panRed1) > rbest.log 2>&1 &
+    # real 0m39.067s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/panRed1/bed/blastz.caeJap4.swap
+    cd /hive/data/genomes/panRed1/bed/blastz.caeJap4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caeJap4/bed/lastzPanRed1.2015-08-14/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m53.333s
+    cat fb.panRed1.chainCaeJap4Link.txt
+    # 6094928 bases of 62228262 (9.794%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` panRed1 caeJap4) \
+      > rbest.log 2>&1
+    # real 0m32.693s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis japonica/C. japonica - caeJap4 vs.
+#       Pristionchus exspectatus/P. exspectatus - priExs1
+# (DONE - 2015-08-14 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/lastzPriExs1.2015-08-14
+    cd /hive/data/genomes/caeJap4/bed/lastzPriExs1.2015-08-14
+
+    cat << '_EOF_' > DEF
+# caeJap4 vs priExs1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis japonica/C. japonica - caeJap4
+SEQ1_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ1_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Pristionchus exspectatus/P. exspectatus - priExs1
+SEQ2_DIR=/hive/data/genomes/priExs1/priExs1.2bit
+SEQ2_LEN=/hive/data/genomes/priExs1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caeJap4/bed/lastzPriExs1.2015-08-14
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 35m32.366s
+    cat fb.caeJap4.chainPriExs1Link.txt
+    # 6885578 bases of 154057934 (4.469%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caeJap4 priExs1) > rbest.log 2>&1 &
+    # real 0m43.825s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/priExs1/bed/blastz.caeJap4.swap
+    cd /hive/data/genomes/priExs1/bed/blastz.caeJap4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caeJap4/bed/lastzPriExs1.2015-08-14/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m7.433s
+    cat fb.priExs1.chainCaeJap4Link.txt
+    # 6883233 bases of 166917800 (4.124%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` priExs1 caeJap4) \
+      > rbest.log 2>&1
+    # real 0m44.217s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis japonica/C. japonica - caeJap4 vs.
+#       Pristionchus pacificus/P. pacificus - priPac3
+# (DONE - 2015-08-14 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/lastzPriPac3.2015-08-14
+    cd /hive/data/genomes/caeJap4/bed/lastzPriPac3.2015-08-14
+
+    cat << '_EOF_' > DEF
+# caeJap4 vs priPac3
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis japonica/C. japonica - caeJap4
+SEQ1_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ1_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Pristionchus pacificus/P. pacificus - priPac3
+SEQ2_DIR=/hive/data/genomes/priPac3/priPac3.2bit
+SEQ2_LEN=/hive/data/genomes/priPac3/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caeJap4/bed/lastzPriPac3.2015-08-14
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 59m33.077s
+    cat fb.caeJap4.chainPriPac3Link.txt
+    # 7180781 bases of 154057934 (4.661%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caeJap4 priPac3) > rbest.log 2>&1 &
+    # real 0m44.585s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/priPac3/bed/blastz.caeJap4.swap
+    cd /hive/data/genomes/priPac3/bed/blastz.caeJap4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caeJap4/bed/lastzPriPac3.2015-08-14/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m14.036s
+    cat fb.priPac3.chainCaeJap4Link.txt
+    # 6737467 bases of 153238914 (4.397%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` priPac3 caeJap4) \
+      > rbest.log 2>&1
+    # real 0m43.897s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis japonica/C. japonica - caeJap4 vs.
+#       Strongyloides ratti/Threadworm - strRat2
+# (DONE - 2015-08-14 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/lastzStrRat2.2015-08-14
+    cd /hive/data/genomes/caeJap4/bed/lastzStrRat2.2015-08-14
+
+    cat << '_EOF_' > DEF
+# caeJap4 vs strRat2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis japonica/C. japonica - caeJap4
+SEQ1_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ1_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Strongyloides ratti/Threadworm - strRat2
+SEQ2_DIR=/hive/data/genomes/strRat2/strRat2.2bit
+SEQ2_LEN=/hive/data/genomes/strRat2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caeJap4/bed/lastzStrRat2.2015-08-14
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 16m3.973s
+    cat fb.caeJap4.chainStrRat2Link.txt
+    # 4987377 bases of 154057934 (3.237%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caeJap4 strRat2) > rbest.log 2>&1 &
+    # real 0m36.660s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/strRat2/bed/blastz.caeJap4.swap
+    cd /hive/data/genomes/strRat2/bed/blastz.caeJap4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caeJap4/bed/lastzStrRat2.2015-08-14/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m44.750s
+    cat fb.strRat2.chainCaeJap4Link.txt
+    # 3963788 bases of 43150242 (9.186%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` strRat2 caeJap4) \
+      > rbest.log 2>&1
+    # real 0m28.687s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis japonica/C. japonica - caeJap4 vs.
+#       Trichinella spiralis/Trichinella - triSpi1
+# (DONE - 2015-08-15 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/lastzTriSpi1.2015-08-15
+    cd /hive/data/genomes/caeJap4/bed/lastzTriSpi1.2015-08-15
+
+    cat << '_EOF_' > DEF
+# caeJap4 vs triSpi1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis japonica/C. japonica - caeJap4
+SEQ1_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ1_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Trichinella spiralis/Trichinella - triSpi1
+SEQ2_DIR=/hive/data/genomes/triSpi1/triSpi1.2bit
+SEQ2_LEN=/hive/data/genomes/triSpi1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caeJap4/bed/lastzTriSpi1.2015-08-15
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 59m18.900s
+    cat fb.caeJap4.chainTriSpi1Link.txt
+    # 3219535 bases of 154057934 (2.090%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caeJap4 triSpi1) > rbest.log 2>&1 &
+    # real 0m31.846s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSpi1/bed/blastz.caeJap4.swap
+    cd /hive/data/genomes/triSpi1/bed/blastz.caeJap4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caeJap4/bed/lastzTriSpi1.2015-08-15/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 2m53.421s
+    cat fb.triSpi1.chainCaeJap4Link.txt
+    # 2674142 bases of 58558192 (4.567%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSpi1 caeJap4) \
+      > rbest.log 2>&1
+    # real 1m58.387s
+
+########################################################################
+########################################################################
+# LASTZ Caenorhabditis japonica/C. japonica - caeJap4 vs.
+#       Trichuris suis/Whipworm - triSui1
+# (DONE - 2015-08-15 - Hiram)
+    mkdir /hive/data/genomes/caeJap4/bed/lastzTriSui1.2015-08-15
+    cd /hive/data/genomes/caeJap4/bed/lastzTriSui1.2015-08-15
+
+    cat << '_EOF_' > DEF
+# caeJap4 vs triSui1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Caenorhabditis japonica/C. japonica - caeJap4
+SEQ1_DIR=/hive/data/genomes/caeJap4/caeJap4.2bit
+SEQ1_LEN=/hive/data/genomes/caeJap4/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: Trichuris suis/Whipworm - triSui1
+SEQ2_DIR=/hive/data/genomes/triSui1/triSui1.2bit
+SEQ2_LEN=/hive/data/genomes/triSui1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/caeJap4/bed/lastzTriSui1.2015-08-15
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 48m55.077s
+    cat fb.caeJap4.chainTriSui1Link.txt
+    # 3550388 bases of 154057934 (2.305%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` caeJap4 triSui1) > rbest.log 2>&1 &
+    # real 0m29.669s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSui1/bed/blastz.caeJap4.swap
+    cd /hive/data/genomes/triSui1/bed/blastz.caeJap4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/caeJap4/bed/lastzTriSui1.2015-08-15/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m11.391s
+    cat fb.triSui1.chainCaeJap4Link.txt
+    # 2908166 bases of 71825323 (4.049%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSui1 caeJap4) \
+      > rbest.log 2>&1
+    # real 0m48.089s
+
+########################################################################

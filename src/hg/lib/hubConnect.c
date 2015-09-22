@@ -568,8 +568,22 @@ char *wantFirstDb = cartOptionalString(cart, hgHubDoFirstDb);
 char *newDatabase = NULL;
 if ((wantFirstDb != NULL) && (hub->trackHub != NULL))
     newDatabase = hub->trackHub->defaultDb;
+else 
+    {
+    // Check to see if the user specified an assembly within
+    // an assembly hub.
+    char *assemblyDb = cartOptionalString(cart, hgHubGenome);
+    if (assemblyDb != NULL)
+        {
+        char buffer[512];
+
+        safef(buffer, sizeof buffer, "hub_%d_%s",  hub->id, assemblyDb);
+        newDatabase = cloneString(buffer);
+        }
+    }
 
 cartRemove(cart, hgHubDoFirstDb);
+cartRemove(cart, hgHubGenome);
 return newDatabase;
 }
 

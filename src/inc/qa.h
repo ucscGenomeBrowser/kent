@@ -39,11 +39,19 @@ struct qaStatus *qaPageFromForm(struct htmlPage *origPage, struct htmlForm *form
 	char *buttonName, char *buttonVal, struct htmlPage **retPage);
 /* Get update to form based on pressing a button. */
 
-void qaStatusSoftError(struct qaStatus *qs, char *format, ...);
+void qaStatusSoftError(struct qaStatus *qs, char *format, ...)
 /* Add error message for something less than a crash. */
+#if defined(__GNUC__)
+__attribute__((format(printf, 2, 3)))
+#endif
+;
 
-void qaStatusReportOne(FILE *f, struct qaStatus *qs, char *format, ...);
+void qaStatusReportOne(FILE *f, struct qaStatus *qs, char *format, ...)
 /* Report status */
+#if defined(__GNUC__)
+__attribute__((format(printf, 3, 4)))
+#endif
+;
 
 struct qaStatistics
 /* Stats on one set of tests. */

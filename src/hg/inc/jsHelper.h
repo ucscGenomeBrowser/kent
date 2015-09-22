@@ -155,9 +155,12 @@ void jsonPrint(struct jsonElement *json, char *name, int indentLevel);
 // print out a jsonElement and children using hPrintf, and for indentLevel >=0
 // bracketing with comments.  See also jsonPrintToFile.
 
-void jsonErrPrintf(struct dyString *ds, char *format, ...);
+void jsonErrPrintf(struct dyString *ds, char *format, ...)
 //  Printf a json error to a dyString for communicating with ajax code; format is:
 //  {"error": error message here}
-
+#if defined(__GNUC__)
+__attribute__((format(printf, 2, 3)))
+#endif
+;
 
 #endif /* JSHELPER_H */

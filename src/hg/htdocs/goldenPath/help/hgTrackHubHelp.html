@@ -12,10 +12,6 @@
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
     <TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../../images/title.jpg" alt="title"></TH></TR>
 
-<noscript><div class='noscript'><div class='noscript-inner'><p><b>JavaScript is disabled in your web browser</b></p><p>You must have JavaScript enabled in your web browser to use the Genome Browser</p></div></div></noscript>
-<script type='text/javascript' SRC='../../js/jquery.js'></script>
-<script type='text/javascript' SRC='../../js/jquery.plugins.js'></script>
-<LINK rel='STYLESHEET' href='../../style/nice_menu.css' TYPE='text/css' />
 <TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../../cgi-bin/hgMenubar"--></TD></TR>
 <!-- ========== Content Tables ================================ -->  
 <!--
@@ -139,9 +135,9 @@ Genome assemblies that UCSC does not support can be loaded and viewed with assoc
 <P>
 The data underlying the tracks and optional sequence in a hub reside on the remote 
 server of the data provider rather than at UCSC. 
-Genomic annotations are stored in compressed binary indexed files in bigBed, bigGenePred, bigWig, BAM or VCF
+Genomic annotations are stored in compressed binary indexed files in bigBed, bigGenePred, bigWig, BAM, HAL or VCF
 format that contain the data at several resolutions.
-In the case of assemblies that UCSC does not support
+In the case of assemblies that UCSC does not support,
 genomic sequence is stored in the efficient twoBit format.
 When a hub track is displayed in the Genome Browser, only the
 relevant data needed to support the view of the current genomic region are 
@@ -334,7 +330,7 @@ To create your own hub you will need:</p>
 <UL>
 <LI>
 one or more data sets formatted in one of the compressed binary index formats
-supported by the Genome Browser: bigBed, bigGenePred, bigWig, BAM or VCF
+supported by the Genome Browser: bigBed, bigGenePred, bigWig, BAM, HAL or VCF
 <LI>
 a set of text files that specify properties for the track hub and for each of
 the data tracks within it
@@ -404,7 +400,7 @@ compressed binary index formats supported by the Genome Browser:
 <A HREF="bigWig.html">bigWig</A>, 
 <A HREF="bigBed.html">bigBed</A>,
 <A HREF="bigGenePred.html">bigGenePred</A>,
-<A HREF="bam.html">BAM</A> or
+<A HREF="bam.html">BAM</A>, HAL or
 <A HREF="vcf.html">VCF</A>.</p>
 
 <P><em>bigWig</em> - 
@@ -448,6 +444,17 @@ expects to be in the same directory with the same root name as the BAM file
 with the addition of a <em>.bai</em> suffix.  
 See the <A HREF="bam.html">BAM Track Format</A> help page for 
 more information.</p>
+
+<P><em>HAL</em> -
+HAL (Hierarchical Alignment Format) is a graph-based structure to efficiently 
+store and index multiple genome alignments and ancestral reconstructions. 
+<A HREF="https://github.com/glennhickey/hal/blob/master/README.md" TARGET=BLANK>HAL</A> 
+files are represented in <A HREF="http://www.hdfgroup.org/HDF5/" TARGET=BLANK>HDF5</A>
+format, an open standard for storing and indexing large, compressed scientific 
+data sets. HAL is the native output format of the Progressive Cactus alignment pipeline, 
+and is included in the 
+<A HREF="https://github.com/glennhickey/progressiveCactus" TARGET=BLANK>Progressive Cactus</A> 
+installation package. 
 
 <P><em>VCF</em> -
 VCF (Variant Call Format) files can contain annotations of single nucleotide
@@ -672,7 +679,7 @@ displayed in the configuration and track settings, and on the
 details pages. Suggested maximum length is 80 characters.</p>
  
 <P><em>type</em> - the format of the file specified by bigDataUrl. Must be either 
-<em>bigWig</em>, <em>bigBed</em>, <em>bigGenePred</em>, <em>bam</em> or <em>vcfTabix</em>.  If the type
+<em>bigWig</em>, <em>bigBed</em>, <em>bigGenePred</em>, <em>bam</em>, <em>halSnake</em> or <em>vcfTabix</em>.  If the type
 is <em>bigBed</em>, it may be followed by an optional number denoting the number
 of fields in the bigBed file (e.g., "type bigBed 12" for a file with 12 fields).
 If no number is given, a default value of 3 is assumed (a very limited display
