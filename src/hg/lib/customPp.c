@@ -107,8 +107,9 @@ while ((lf = cpp->fileStack) != NULL)
         {
         // if user pastes just a URL, create a track line automatically
         // also allow a filename from a local directory if it has been allowed via udc.localDir in hg.conf
+        bool isLocalFile = cfgOption("udc.localDir")!=NULL && startsWith(cfgOption("udc.localDir"), line);
 	if (startsWith("http://", line) || startsWith("https://", line) || startsWith("ftp://", line) ||
-            (cfgOption("udc.localDir")!=NULL && startsWith(cfgOption("udc.localDir"), line)) )
+            isLocalFile)
 	    {
             if (customTrackIsBigData(line))
                 line = bigUrlToTrackLine(line);
