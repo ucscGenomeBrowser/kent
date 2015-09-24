@@ -21,7 +21,7 @@ char *destination = cgiUsualString("destination", defaultDestination);
 
 cartResetInDb(hUserCookie());
 printf("Your settings are now reset to defaults.<BR>");
-printf("You will be automatically redirected to the gateway page in 2 seconds,\n"
+printf("You will be automatically redirected to the gateway page in 1 second,\n"
 " or you can <BR> <A href=\"%s\">click here to continue</A>.\n",
        destination);
 }
@@ -34,7 +34,7 @@ struct dyString *headText = newDyString(512);
 char *destination = cgiUsualString("destination", defaultDestination);
 
 dyStringPrintf(headText,
-	       "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"2;URL=%s\">"
+	       "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"1;URL=%s\">"
 	       "<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">"
 	       "<META HTTP-EQUIV=\"Expires\" CONTENT=\"-1\">"
 	       ,destination);
