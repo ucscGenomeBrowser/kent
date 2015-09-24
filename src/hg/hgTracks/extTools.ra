@@ -69,7 +69,7 @@ param end $]
 tool primer3Plus
 shortLabel Primer3Plus
 longLabel Updated interface of the popular primer designer. Primers flank the nucleotide in the center of the screen.
-url http://primer3plus.com/cgi-bin/geneBro/primer3plus.cgi
+url http://primer3plus.com/cgi-bin/dev/primer3plus.cgi
 email server@untergasser.de
 maxSize 10000
 param GENBRO_RETURN_PATH $returnUrl
