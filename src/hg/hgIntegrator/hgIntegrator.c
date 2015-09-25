@@ -382,7 +382,7 @@ for (i = 0, dsRef = dataSources;  dsRef != NULL;  i++, dsRef = dsRef->next)
     if (i == 0)
         {
         primary = hAnnoStreamerFromTrackDb(assembly, table, tdb, region->chrom, ANNO_NO_LIMIT);
-        annoStreamerSetName(primary, table);
+        annoStreamerSetName(primary, track);
         }
     else
         {
