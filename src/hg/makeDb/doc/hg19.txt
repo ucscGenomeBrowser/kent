@@ -30971,7 +30971,7 @@ EOF
 cd /cluster/data/hg19/bed/mafSnp
 cp /cluster/data/hg19/bed/multiz100way/species.list species.lst
 echo "select * from ensGene" | hgsql hg19 | tail -n +2 | cut -f 2-16 |   genePredSingleCover stdin stdout > ensSingle.gp
-hgLoadGenePred -genePredExt hg19 ensSingle ensSingle.gp     
+hgLoadGenePred -genePredExt hg19 ensSingle ensSingle.gp
 mkdir syn nonsyn
 sort -nk 2 /cluster/data/hg19/chrom.sizes | awk '{print $1}' | while read chrom
 do
@@ -30995,3 +30995,73 @@ awk '{print $1,$2,$3,$4,$5}' output.bed > load.bed
 out=mafSnp100way
 hgLoadBed hg19 $out load.bed
 
+##############################################################################
+# LASTZ Zebrafish DanRer10 (DONE - 2010-12-17 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzDanRer10.2015-09-18
+    cd /hive/data/genomes/hg19/bed/lastzDanRer10.2015-09-18
+
+    printf "%s\n" \
+'# human vs zebrafish
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=80
+
+# QUERY: zebrafish danRer10
+SEQ2_DIR=/hive/data/genomes/danRer10/danRer10.2bit
+SEQ2_LEN=/hive/data/genomes/danRer10/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/hg19/bed/lastzDanRer10.2015-09-18
+TMPDIR=/dev/shm' > DEF
+
+    #	establish a screen to control this job
+    screen
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > do.log 2>&1
+    #	real    2282m56.714s
+    # chaining hg19 manually (ran out of memory on ku nodes):
+    #  real    166m31.444s
+    # -rw-rw-r-- 1 991457195 Sep 24 14:55 chr19.nib:chr19:.chain
+    # continuing:
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-continue=chainMerge -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) \
+      > chainMerge.log 2>&1
+    # real    43m9.651s
+
+    cat fb.hg19.chainDanRer10Link.txt
+    #	83602869 bases of 2897316137 (2.886%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hg19 danRer10) > rbest.log 2>&1 &
+    # real    7m40.903s
+
+    #	running the swap
+    mkdir /hive/data/genomes/danRer10/bed/blastz.hg19.swap
+    cd /hive/data/genomes/danRer10/bed/blastz.hg19.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzDanRer10.2015-09-18/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-swap) > swap.log 2>&1
+    #	real    43m15.435s
+
+    cat fb.danRer10.chainHg19Link.txt
+    #	83856287 bases of 1369683683 (6.122%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` danRer10 hg19) > rbest.log 2>&1
+    # real    8m8.619s
+
+##############################################################################
