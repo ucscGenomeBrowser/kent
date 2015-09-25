@@ -390,7 +390,7 @@ for (i = 0, dsRef = dataSources;  dsRef != NULL;  i++, dsRef = dsRef->next)
                                                            ANNO_NO_LIMIT, NULL, agoNoConstraint);
         if (grator)
             {
-            annoStreamerSetName((struct annoStreamer *)grator, table);
+            annoStreamerSetName((struct annoStreamer *)grator, track);
             slAddHead(&gratorList, grator);
             }
         else
