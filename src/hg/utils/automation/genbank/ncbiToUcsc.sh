@@ -458,6 +458,12 @@ fi
   ${inside}/scripts/assemblyDescription.pl "${inside}/${D}"
   printf "# %s %s.gap.html\n" "${dateStamp}" "${B}" 1>&2
   ${inside}/scripts/gapDescription.pl "${inside}/${D}"
+  printf "# %s %s.cpgIslands.html\n" "${dateStamp}" "${B}" 1>&2
+  ${inside}/scripts/cpgDescription.pl "${inside}/${D}"
+  printf "# %s %s.gc5Base.html\n" "${dateStamp}" "${B}" 1>&2
+  ${inside}/scripts/gc5Description.pl "${inside}/${D}"
+  printf "# %s %s.repeatMasker.html\n" "${dateStamp}" "${B}" 1>&2
+  ${inside}/scripts/rmskDescription.pl "${inside}/${D}"
 
 fi
 
