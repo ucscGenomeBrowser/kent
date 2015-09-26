@@ -61,7 +61,8 @@ options:
                           (necessary when continuing at a later date).
     -maskedSeq seq.2bit   Use seq.2bit as the masked input sequence instead
                           of default ($maskedSeq).
-    -chromSizes chrom.sizes   Use chrom.sizes instead of default ($chromSizes).
+    -chromSizes chrom.sizes   Use chrom.sizes instead of
+                          default ($chromSizes).
     -tableName name       Load table 'name' instead of default cpgIslandExt
                           e.g.: -tableName cpgIslandExtUnmasked
 _EOF_
