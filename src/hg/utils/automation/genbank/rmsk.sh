@@ -25,7 +25,7 @@ if [ -d "${destDir}" ]; then
   rm -fr classBed rmskClass ${accessionAsmName}.rmsk.tab bbi/*.rmsk.*.bb
   mkdir classBed rmskClass
   rm -f ${accessionAsmName}.rm.out
-  printf "# %s processing %s\n" "${dateStamp}" "${rmOutFIle}" 1>&2
+  printf "# %s processing %s\n" "${dateStamp}" "${rmOutFile}" 1>&2
   export rmOutTmp=`mktemp -p /dev/shm rmskProcess.${accessionAsmName}.XXXXX`
   printf "%s\n" '   SW  perc perc perc  query      position in query           matching       repeat              position in  repeat
 score  div. del. ins.  sequence    begin     end    (left)    repeat         class/family         begin  end (left)   ID
@@ -39,7 +39,7 @@ score  div. del. ins.  sequence    begin     end    (left)    repeat         cla
   do
     fileCount=`(ls rmskClass/${T}*.tab 2> /dev/null || true) | wc -l`
     if [ "$fileCount" -gt 0 ]; then
-       printf "# %s bedToBigBed on: " "${dateStamp}"
+       printf "# %s bedToBigBed on: rmskClass/%s*.tab " "${dateStamp}" "${T}"
        ls rmskClass/${T}*.tab | xargs echo
        $HOME/kent/src/hg/utils/automation/rmskBed6+10.pl rmskClass/${T}*.tab \
         | sort -k1,1 -k2,2n > classBed/${accessionAsmName}.rmsk.${T}.bed
@@ -50,7 +50,7 @@ score  div. del. ins.  sequence    begin     end    (left)    repeat         cla
   done
   fileCount=`(ls rmskClass/*RNA.tab 2> /dev/null || true) | wc -l`
   if [ "$fileCount" -gt 0 ]; then
-    printf "# %s bedToBigBed on: " "${dateStamp}"
+    printf "# %s bedToBigBed on rmskClass/*RNA.tab: " "${dateStamp}"
     ls rmskClass/*RNA.tab | xargs echo
     $HOME/kent/src/hg/utils/automation/rmskBed6+10.pl rmskClass/*RNA.tab \
        | sort -k1,1 -k2,2n > classBed/${accessionAsmName}.rmsk.RNA.bed
@@ -58,13 +58,17 @@ score  div. del. ins.  sequence    begin     end    (left)    repeat         cla
        classBed/${accessionAsmName}.rmsk.RNA.bed *.ncbi.chrom.sizes \
           bbi/${accessionAsmName}.rmsk.RNA.bb
   fi
-  printf "# %s bedToBigBed on: " "${dateStamp}"
-  ls rmskClass/*.tab | egrep -v "/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab" | xargs echo
-  $HOME/kent/src/hg/utils/automation/rmskBed6+10.pl `ls rmskClass/*.tab | egrep -v "/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab"` \
+  printf "# %s checking ls rmskClass/*.tab | egrep -v \"/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab\" " "${dateStamp}"
+  otherCount=`(ls rmskClass/*.tab 2> /dev/null || true | egrep -v "/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab" || true) | wc -l`
+  if [ "${otherCount}" -gt 0 ]; then
+    printf "# %s bedToBigBed on: " "${dateStamp}"
+    ls rmskClass/*.tab | egrep -v "/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab" | xargs echo | sed -e 's#rmskClass/##g;'
+    $HOME/kent/src/hg/utils/automation/rmskBed6+10.pl `ls rmskClass/*.tab | egrep -v "/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab" | sed -e 's/^/"/; s/$/"/;'|xargs echo` \
         | sort -k1,1 -k2,2n > classBed/${accessionAsmName}.rmsk.Other.bed
-  bedToBigBed -tab -type=bed6+10 -as=$HOME/kent/src/hg/lib/rmskBed6+10.as \
-    classBed/${accessionAsmName}.rmsk.Other.bed *.ncbi.chrom.sizes \
-      bbi/${accessionAsmName}.rmsk.Other.bb
+    bedToBigBed -tab -type=bed6+10 -as=$HOME/kent/src/hg/lib/rmskBed6+10.as \
+      classBed/${accessionAsmName}.rmsk.Other.bed *.ncbi.chrom.sizes \
+        bbi/${accessionAsmName}.rmsk.Other.bb
+  fi
 
   export bbiCount=`for F in bbi/*.rmsk.*.bb; do bigBedInfo $F | grep itemCount; done | awk '{print $NF}' | sed -e 's/,//g' | ave stdin | grep total | awk '{print $2}' | sed -e 's/.000000//'`
 

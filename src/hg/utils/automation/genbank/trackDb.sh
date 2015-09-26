@@ -3,15 +3,22 @@
 set -beEu -o pipefail
 
 if [ $# -lt 2 ]; then
-  echo "usage: trackDb.sh <dbPrefix> <pathTo/assembly files> > trackDb.txt" 1>&2
-  echo "expecting to find *.ucsc.2bit and bbi/ files at given path" 1>&2
+  printf "usage: trackDb.sh [ncbi|ucsc] <dbPrefix> <inside/pathTo/assembly files> > trackDb.txt\n" 1>&2
+  printf "expecting to find *.ucsc.2bit and bbi/ files at given path\n" 1>&2
+  printf "the ncbi|ucsc selects the naming scheme\n" 1>&2
   exit 255
 fi
 
-export dbPrefix=$1
-export buildDir=$2
+export ncbiUcsc=$1
+export dbPrefix=$2
+export buildDir=$3
 
-if [ -s ${buildDir}/bbi/${dbPrefix}.assembly.bb ]; then
+export suffix=""
+if [ "${ncbiUcsc}" = "ncbi" ]; then
+  suffix=".ncbi"
+fi
+
+if [ -s ${buildDir}/bbi/${dbPrefix}.assembly${suffix}.bb ]; then
 printf "track assembly
 longLabel Assembly 
 shortLabel Assembly 
@@ -20,28 +27,28 @@ visibility pack
 colorByStrand 150,100,30 230,170,40
 color 150,100,30
 altColor 230,170,40
-bigDataUrl bbi/%s.assembly.bb
+bigDataUrl bbi/%s.assembly%s.bb
 type bigBed 6
-html ../trackDescriptions/assembly
+html %s.assembly
 url http://www.ncbi.nlm.nih.gov/nuccore/\$\$
 urlLabel NCBI Nucleotide database
-group map\n\n" "${dbPrefix}"
+group map\n\n" "${dbPrefix}" "${suffix}" "${dbPrefix}"
 fi
 
-if [ -s ${buildDir}/bbi/${dbPrefix}.gap.bb ]; then
+if [ -s ${buildDir}/bbi/${dbPrefix}.gap${suffix}.bb ]; then
 printf "track gap
 longLabel Gap 
 shortLabel Gap 
 priority 11
 visibility dense
 color 0,0,0 
-bigDataUrl bbi/%s.gap.bb
+bigDataUrl bbi/%s.gap%s.bb
 type bigBed 4
 group map
-html ../trackDescriptions/gap\n\n" "${dbPrefix}"
+html %s.gap\n\n" "${dbPrefix}" "${suffix}" "${dbPrefix}"
 fi
 
-if [ -s ${buildDir}/bbi/${dbPrefix}.gc5Base.bw ]; then
+if [ -s ${buildDir}/bbi/${dbPrefix}.gc5Base${suffix}.bw ]; then
 printf "track gc5Base
 shortLabel GC Percent
 longLabel GC Percent in 5-Base Windows
@@ -57,10 +64,13 @@ color 0,0,0
 altColor 128,128,128
 viewLimits 30:70
 type bigWig 0 100
-bigDataUrl bbi/%s.gc5Base.bw
-html ../trackDescriptions/gc5Base\n\n" "${dbPrefix}"
+bigDataUrl bbi/%s.gc5Base%s.bw
+html %s.gc5Base\n\n" "${dbPrefix}" "${suffix}" "${dbPrefix}"
 fi
 
+if [ "${ncbiUcsc}" != "ncbi" ]; then
+  exit 0
+fi
 export rmskCount=`(ls ${buildDir}/bbi/${dbPrefix}.rmsk.*.bb | wc -l) || true`
 
 # if [ -s ${buildDir}/bbi/${dbPrefix}.rmsk.SINE.bb -o -s ${buildDir}/bbi/${dbPrefix}.rmsk.LINE.bb ]; then
@@ -75,7 +85,7 @@ priority 149.1
 visibility dense
 type bed 3 .
 noInherit on
-html ../trackDescriptions/repeatMasker\n\n"
+html %s.repeatMasker\n\n" "${dbPrefix}"
 fi
 
 if [ -s ${buildDir}/bbi/${dbPrefix}.rmsk.SINE.bb ]; then
@@ -193,4 +203,39 @@ printf "    track repeatMaskerOther
     colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
     bigDataUrl bbi/%s.rmsk.Other.bb\n\n" "${dbPrefix}"
+fi
+
+###################################################################
+# CpG Islands composite
+if [ -s ${buildDir}/bbi/${dbPrefix}.cpgIslandExtUnmasked${suffix}.bb -o -s ${buildDir}/bbi/${dbPrefix}.cpgIslandExt${suffix}.bb ]; then
+printf "track cpgIslands
+compositeTrack on
+shortLabel CpG Islands
+longLabel CpG Islands (Islands < 300 Bases are Light Green)
+group regulation
+priority 90
+visibility pack
+type bed 3 .
+noInherit on
+html %s.cpgIslands\n\n" "${dbPrefix}"
+fi
+
+if [ -s ${buildDir}/bbi/${dbPrefix}.cpgIslandExt${suffix}.bb ]; then
+printf "    track cpgIslandExt
+    parent cpgIslands
+    shortLabel CpG Islands
+    longLabel CpG Islands (Islands < 300 Bases are Light Green)
+    priority 1
+    type bigBed 4 +
+    bigDataUrl bbi/%s.cpgIslandExt%s.bb\n\n" "${dbPrefix}" "${suffix}"
+fi
+
+if [ -s ${buildDir}/bbi/${dbPrefix}.cpgIslandExtUnmasked${suffix}.bb ]; then
+printf "    track cpgIslandExtUnmasked
+    parent cpgIslands
+    shortLabel Unmasked CpG
+    longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
+    priority 2
+    type bigBed 4 +
+    bigDataUrl bbi/%s.cpgIslandExtUnmasked%s.bb\n\n" "${dbPrefix}" "${suffix}"
 fi
