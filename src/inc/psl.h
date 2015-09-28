@@ -294,6 +294,9 @@ void pslGrow(struct psl *psl, int *blockSpacePtr);
  * should point the the current maximum number of blocks and will be
  * updated to with the new amount of space. */
 
+void pslComputeInsertCounts(struct psl *psl);
+/* compute numInsert and baseInsert fields from the blocks */
+
 struct psl* pslFromGff3Cigar(char *qName, int qSize, int qStart, int qEnd,
                              char *tName, int tSize, int tStart, int tEnd,
                              char* strand, char *cigar);
