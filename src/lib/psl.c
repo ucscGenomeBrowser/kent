@@ -1442,12 +1442,11 @@ va_end(args);
 static void chkBlkRanges(char* pslDesc, FILE* out, struct psl* psl,
                          char* pName, char* pLabel, char pCLabel, char pStrand,
                          unsigned pSize, unsigned pStart, unsigned pEnd,
-                         unsigned iBlk, unsigned* blockSizes,
-                         unsigned* pBlockStarts, int* errCount)
+                         unsigned iBlk, unsigned* pBlockStarts, int* errCount)
 /* check the target or query ranges in a PSL incrementing errorCnt */
 {
 unsigned blkStart = pBlockStarts[iBlk];
-unsigned blkEnd = blkStart+blockSizes[iBlk];
+unsigned blkEnd = blkStart+psl->blockSizes[iBlk];
 /* translate stand to genomic coords */
 unsigned gBlkStart = (pStrand == '+') ? blkStart : (pSize - blkEnd);
 unsigned gBlkEnd = (pStrand == '+') ? blkEnd : (pSize - blkStart);
@@ -1474,7 +1473,7 @@ if (gBlkEnd > pEnd)
              pName, pLabel, iBlk, gBlkEnd, pCLabel, pEnd);
 if (iBlk > 0)
     {
-    unsigned prevBlkEnd = pBlockStarts[iBlk-1]+blockSizes[iBlk-1];
+    unsigned prevBlkEnd = pBlockStarts[iBlk-1]+psl->blockSizes[iBlk-1];
     if (blkStart < prevBlkEnd)
         chkError(pslDesc, out, psl, errCount,
                  "\t%s %s block %u start %u < previous block end %u\n",
@@ -1485,7 +1484,6 @@ if (iBlk > 0)
 static void chkRanges(char* pslDesc, FILE* out, struct psl* psl,
                       char* pName, char* pLabel, char pCLabel, char pStrand,
                       unsigned pSize, unsigned pStart, unsigned pEnd,
-                      unsigned blockCount, unsigned* blockSizes,
                       unsigned* pBlockStarts, int blockSizeMult, int* errCount)
 /* check the target or query ranges in a PSL, increment errorCnt */
 {
@@ -1502,15 +1500,15 @@ if (pEnd > pSize)
 unsigned pStartStrand = pStart, pEndStrand = pEnd;
 if (pStrand != '+')
     reverseUnsignedRange(&pStartStrand, &pEndStrand, pSize);
-unsigned lastBlkEnd = pBlockStarts[blockCount-1] + (blockSizeMult * blockSizes[blockCount-1]);
+unsigned lastBlkEnd = pBlockStarts[psl->blockCount-1] + (blockSizeMult * psl->blockSizes[psl->blockCount-1]);
 if ((pStartStrand != pBlockStarts[0]) || (pEndStrand != lastBlkEnd))
     chkError(pslDesc, out, psl, errCount,
              "\t%s strand \"%c\" adjusted %cStart-%cEnd range %u-%u != block range %u-%u\n",
              pName, pStrand, pCLabel, pCLabel, pStartStrand, pEndStrand, pBlockStarts[0], lastBlkEnd);
 
-for (iBlk = 0; iBlk < blockCount; iBlk++)
+for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     chkBlkRanges(pslDesc, out, psl, pName, pLabel, pCLabel, pStrand,
-                 pSize, pStart, pEnd, iBlk, blockSizes, pBlockStarts, errCount);
+                 pSize, pStart, pEnd, iBlk, pBlockStarts, errCount);
 }
 
 
@@ -1564,12 +1562,12 @@ if (VALID_STRANDS[i] == NULL)
 
 /* check target */
 chkRanges(pslDesc, out, psl, psl->tName, "target", 't', pslTStrand(psl), psl->tSize, psl->tStart, psl->tEnd,
-          psl->blockCount, psl->blockSizes, psl->tStarts, tBlockSizeMult, &errCount);
+          psl->tStarts, tBlockSizeMult, &errCount);
 chkInsertCounts(pslDesc, out, psl, psl->tName, 't', psl->tStarts, psl->tNumInsert, psl->tBaseInsert, &errCount);
 
 /* check query */
 chkRanges(pslDesc, out, psl, psl->qName, "query", 'q', pslQStrand(psl), psl->qSize, psl->qStart, psl->qEnd,
-          psl->blockCount, psl->blockSizes, psl->qStarts, 1, &errCount);
+          psl->qStarts, 1, &errCount);
 chkInsertCounts(pslDesc, out, psl, psl->qName, 'q', psl->qStarts, psl->qNumInsert, psl->qBaseInsert, &errCount);
 
 return errCount;
