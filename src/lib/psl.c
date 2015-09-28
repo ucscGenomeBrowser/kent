@@ -1513,6 +1513,35 @@ for (iBlk = 0; iBlk < blockCount; iBlk++)
                  pSize, pStart, pEnd, iBlk, blockSizes, pBlockStarts, errCount);
 }
 
+
+static void chkInsertCounts(char* pslDesc, FILE* out, struct psl* psl,
+                            char* pName, char pCLabel, unsigned* pBlockStarts,
+                            unsigned pNumInsert, unsigned pBaseInsert,
+                            int* errCount)
+/* check the insert counts, incrementing errorCnt */
+{
+unsigned numInsert = 0, baseInsert = 0;
+int iBlk;
+
+for (iBlk = 1; iBlk < psl->blockCount; iBlk++)
+    {
+    unsigned gapSize = pBlockStarts[iBlk] - (pBlockStarts[iBlk-1]+psl->blockSizes[iBlk-1]);
+    if (gapSize > 0)
+        {
+        numInsert++;
+        baseInsert += gapSize;
+        }
+    }
+if (numInsert != pNumInsert)
+    chkError(pslDesc, out, psl, errCount,
+             "\t%s %cNumInsert %u != expected %u\n",
+             pName, pCLabel, pNumInsert, numInsert);
+if (baseInsert != pBaseInsert)
+    chkError(pslDesc, out, psl, errCount,
+             "\t%s %cBaseInsert %u != expected %u\n",
+             pName, pCLabel, pBaseInsert, baseInsert);
+}
+
 int pslCheck(char *pslDesc, FILE* out, struct psl* psl)
 /* Validate a PSL for consistency.  pslDesc is printed the error messages
  * to file out (open /dev/null to discard). Return count of errors. */
@@ -1536,10 +1565,12 @@ if (VALID_STRANDS[i] == NULL)
 /* check target */
 chkRanges(pslDesc, out, psl, psl->tName, "target", 't', pslTStrand(psl), psl->tSize, psl->tStart, psl->tEnd,
           psl->blockCount, psl->blockSizes, psl->tStarts, tBlockSizeMult, &errCount);
+chkInsertCounts(pslDesc, out, psl, psl->tName, 't', psl->tStarts, psl->tNumInsert, psl->tBaseInsert, &errCount);
 
 /* check query */
 chkRanges(pslDesc, out, psl, psl->qName, "query", 'q', pslQStrand(psl), psl->qSize, psl->qStart, psl->qEnd,
           psl->blockCount, psl->blockSizes, psl->qStarts, 1, &errCount);
+chkInsertCounts(pslDesc, out, psl, psl->qName, 'q', psl->qStarts, psl->qNumInsert, psl->qBaseInsert, &errCount);
 
 return errCount;
 }
