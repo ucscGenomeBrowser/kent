@@ -1560,15 +1560,15 @@ if (VALID_STRANDS[i] == NULL)
     chkError(pslDesc, out, psl, &errCount,
              "\tinvalid PSL strand: \"%s\"\n", psl->strand);
 
-/* check target */
-chkRanges(pslDesc, out, psl, psl->tName, "target", 't', pslTStrand(psl), psl->tSize, psl->tStart, psl->tEnd,
-          psl->tStarts, tBlockSizeMult, &errCount);
-chkInsertCounts(pslDesc, out, psl, psl->tName, 't', psl->tStarts, psl->tNumInsert, psl->tBaseInsert, &errCount);
-
 /* check query */
 chkRanges(pslDesc, out, psl, psl->qName, "query", 'q', pslQStrand(psl), psl->qSize, psl->qStart, psl->qEnd,
           psl->qStarts, 1, &errCount);
 chkInsertCounts(pslDesc, out, psl, psl->qName, 'q', psl->qStarts, psl->qNumInsert, psl->qBaseInsert, &errCount);
+
+/* check target */
+chkRanges(pslDesc, out, psl, psl->tName, "target", 't', pslTStrand(psl), psl->tSize, psl->tStart, psl->tEnd,
+          psl->tStarts, tBlockSizeMult, &errCount);
+chkInsertCounts(pslDesc, out, psl, psl->tName, 't', psl->tStarts, psl->tNumInsert, psl->tBaseInsert, &errCount);
 
 return errCount;
 }
@@ -1839,6 +1839,30 @@ if (psl->qSequence != NULL)
 *blockSpacePtr = newSpace;
 }
 
+void pslComputeInsertCounts(struct psl *psl)
+/* compute numInsert and baseInsert fields from the blocks */
+{
+psl->qNumInsert = psl->qBaseInsert = 0;
+psl->tNumInsert = psl->tBaseInsert = 0;
+int iBlk;
+
+for (iBlk = 1; iBlk < psl->blockCount; iBlk++)
+    {
+    unsigned qGapSize = psl->qStarts[iBlk] - (psl->qStarts[iBlk-1]+psl->blockSizes[iBlk-1]);
+    if (qGapSize != 0)
+        {
+        psl->qNumInsert++;
+        psl->qBaseInsert += qGapSize;
+        }
+    unsigned tGapSize = psl->tStarts[iBlk] - (psl->tStarts[iBlk-1]+psl->blockSizes[iBlk-1]);
+    if (tGapSize != 0)
+        {
+        psl->tNumInsert++;
+        psl->tBaseInsert += tGapSize;
+        }
+    }
+}
+
 static boolean getNextCigarOp(char *startPtr, boolean reverse, char **ptr, char *op, int *size)
 /* gets one cigar op out of the CIGAR string.  Reverse the order if asked */
 {
@@ -1965,6 +1989,7 @@ if (qNext != qBlkEnd)
 if (tNext != tBlkEnd)
     errAbort("CIGAR target length does not match specified target range %s:%d-%d", tName, tStart, tEnd);
 psl->match = totalSize;
+pslComputeInsertCounts(psl);
 return psl;
 }
 
