@@ -824,7 +824,9 @@ supported for HTTP. Note that passwords included in URLs are not protected. If a
 password contains a non-alphanumeric character, such as &#36;, the character must be
 replaced by the hexadecimal representation for that character. For example, in
 the password mypwd&#36;wk, the &#36; character should be replaced by %24, resulting in
-the modified password mypwd%24wk.
+the modified password mypwd%24wk.</LI>
+<LI>For integration into your own website e.g. in an html IFRAME, you can obtain the track image only, without the rest of the genome browser user interface, by replacing hgTracks in the URL with hgRenderTracks, like in this example:  <tt><a href="http://genome.ucsc.edu/cgi-bin/hgRenderTracks?db=hg19&position=chr9%3A136130563-136150630">http://genome.ucsc.edu/cgi-bin/hgRenderTracks?db=hg19&position=chr9%3A136130563-136150630</a></tt>.</LI>
+
 </UL>
 
 <P>Combine the above pieces of information into a URL of the following
