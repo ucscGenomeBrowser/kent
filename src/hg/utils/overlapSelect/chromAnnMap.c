@@ -90,7 +90,7 @@ if (cam != NULL)
     {
     struct hashCookie chromCookie = hashFirst(cam->ranges->hash);
     struct hashEl *chromEl;
-    for (chromEl = hashNext(&chromCookie); chromEl != NULL; chromEl = chromEl->next)
+    while ((chromEl = hashNext(&chromCookie)) != NULL)
         {
         struct range *r, *ranges = genomeRangeTreeList(cam->ranges, chromEl->name);
         for (r = ranges; r != NULL; r = r->next)
