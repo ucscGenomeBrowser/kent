@@ -3027,7 +3027,7 @@ tableBrowser off
 
 track omimGene2
 shortLabel OMIM Genes
-longLabel OMIM Genes - Dark Green Are Disease-causing
+longLabel OMIM Genes - Dark Green Can Be Disease-causing
 group phenDis
 visibility hide
 color 0, 80, 0

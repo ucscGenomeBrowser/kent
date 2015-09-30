@@ -969,3 +969,64 @@ http://genome.crg.es/genepredictions/R.norvegicus/rn6/SGP2/hg38/rn6.sgp2.gff3
 # refGene:CDS 0.963%, sgpGene 1.399%, both 0.821%, cover 85.27%, enrich 60.93x
 
 ###########################################################################
+# lastz zebrafish danRer10 (DONE - 2015-09-18,14 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S rn6DanRer10
+    mkdir /hive/data/genomes/rn6/bed/lastzDanRer10.2015-09-18
+    cd /hive/data/genomes/rn6/bed/lastzDanRer10.2015-09-18
+
+    printf "%s\n" \
+'# Rat vs. zebrafish
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Rat Rn6
+SEQ1_DIR=/hive/data/genomes/rn6/rn6.2bit
+SEQ1_LEN=/hive/data/genomes/rn6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=15
+
+# QUERY: zebrafish danRer10
+SEQ2_DIR=/hive/data/genomes/danRer10/danRer10.2bit
+SEQ2_LEN=/hive/data/genomes/danRer10/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/rn6/bed/lastzDanRer10.2015-09-18
+TMPDIR=/dev/shm' > DEF
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    #	real    272m42.068s
+
+    cat fb.rn6.chainDanRer10Link.txt
+    #	88237547 bases of 2729860805 (3.232%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` rn6 danRer10) > rbest.log 2>&1 &
+    #  real    7m47.791s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/danRer10/bed/blastz.rn6.swap
+    cd /hive/data/genomes/danRer10/bed/blastz.rn6.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn6/bed/lastzDanRer10.2015-09-18/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+    #	real    20m40.003s
+
+    cat  fb.danRer10.chainRn6Link.txt
+    #	79649796 bases of 1369683683 (5.815%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` danRer10 rn6) > rbest.log 2>&1
+    # real    7m59.071s
+
+#########################################################################

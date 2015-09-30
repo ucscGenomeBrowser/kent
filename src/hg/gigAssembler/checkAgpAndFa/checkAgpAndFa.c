@@ -340,8 +340,8 @@ while (lineFileNextReal(lfAgp, &line))
     if (dnaOffset != 0 && agpFrag->chromStart != dnaOffset)
 	{
 	fflush(stdout);
-	errAbort("3Start %d doesn't match previous end %d, line %d of %s",
-		 agpFrag->chromStart, dnaOffset, lfAgp->lineIx,
+	errAbort("%s start %d doesn't match previous end %d, line %d of %s",
+		 agpFrag->chrom, agpFrag->chromStart, dnaOffset, lfAgp->lineIx,
 		 lfAgp->fileName);
 	}
    

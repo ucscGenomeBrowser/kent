@@ -315,9 +315,6 @@ if (sSelf->chrom != NULL)
     sqlDyStringPrintf(query, "%s = '%s' and ", self->chromField, sSelf->chrom);
     if (self->hasBin)
 	{
-	if (self->doNextChunk && self->gotFinestBin)
-	    // It would be way more elegant to make a hAddBinTopLevelOnly but this will do:
-	    dyStringPrintf(query, "bin > %d and ", self->minFinestBin);
 	hAddBinToQuery(start, sSelf->regionEnd, query);
 	}
     if (self->doNextChunk)
@@ -377,9 +374,6 @@ else
 	    dyStringAppend(query, "and ");
 	    if (self->hasBin)
 		{
-		if (self->doNextChunk && self->gotFinestBin)
-		    // It would be way more elegant to make a hAddBinTopLevelOnly but this will do:
-		    dyStringPrintf(query, "bin > %d and ", self->minFinestBin);
 		hAddBinToQuery(start, end, query);
 		}
 	    if (self->doNextChunk)
