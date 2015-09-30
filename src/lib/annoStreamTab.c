@@ -73,6 +73,15 @@ else
     }
 }
 
+static void reuseRow(struct annoStreamTab *self)
+// When a row falls after the region, undo the damage of lineFileChopNext,
+// tell lf to reuse the line, and set EOF - we are all done until & unless the region changes.
+{
+unChop(self->asWords, self->streamer.numCols);
+lineFileReuse(self->lf);
+self->eof = TRUE;
+}
+
 INLINE boolean isAllDigits(char *s)
 {
 return (isNotEmpty(s) && countLeadingDigits(s) == strlen(s));
@@ -143,23 +152,35 @@ while (!done)
 	uint thisStart = atoll(self->asWords[self->omitBin + self->startIx]);
 	uint thisEnd = atoll(self->asWords[self->omitBin + self->endIx]);
 	int chromDif = strcmp(thisChrom, regionChrom);
-	if (chromDif < 0 ||
-	    (chromDif == 0 && thisEnd <= regionStart))
-	    // This row precedes the region -- keep looking.
+	if (chromDif < 0)
+	    // This chrom precedes the region -- keep looking.
 	    continue;
-	else if (chromDif == 0 && thisEnd > regionStart && thisStart < regionEnd)
-	    // This row overlaps region; return it.
-	    done = TRUE;
-	else
+	else if (chromDif > 0)
 	    {
-	    // This row falls after the region. Undo the damage of lineFileChopNext,
-            // tell lf to reuse the line, set EOF and return NULL - we are all done
-	    // until & unless region changes.
-	    unChop(self->asWords, sSelf->numCols);
-	    lineFileReuse(self->lf);
-	    self->eof = TRUE;
+            // This chrom falls after the end of region -- done.
+            reuseRow(self);
 	    return NULL;
 	    }
+        else
+            {
+            // Same chromosome -- check coords.
+            if (thisEnd > regionStart && thisStart < regionEnd)
+                // This row overlaps region; return it.
+                done = TRUE;
+            else if (thisStart == thisEnd &&
+                     (thisEnd == regionStart || thisStart == regionEnd))
+                // This row is an insertion adjacent to region; return it.
+                done = TRUE;
+            else if (thisEnd <= regionStart)
+                // This row precedes the region -- keep looking.
+                continue;
+            else
+                {
+                // This row falls after the end of region -- done.
+                reuseRow(self);
+                return NULL;
+                }
+            }
 	}
     }
 return self->asWords + self->omitBin;
