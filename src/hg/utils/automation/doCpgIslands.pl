@@ -18,6 +18,7 @@ use vars @HgStepManager::optionVars;
 use vars qw/
     $opt_buildDir
     $opt_maskedSeq
+    $opt_chromSizes
     $opt_tableName
     /;
 
@@ -40,6 +41,7 @@ my $workhorse = 'hgwdev';
 my $dbHost = 'hgwdev';
 my $defaultWorkhorse = 'hgwdev';
 my $maskedSeq = "$HgAutomate::clusterData/\$db/\$db.2bit";
+my $chromSizes = "$HgAutomate::clusterData/\$db/chrom.sizes";
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -59,6 +61,8 @@ options:
                           (necessary when continuing at a later date).
     -maskedSeq seq.2bit   Use seq.2bit as the masked input sequence instead
                           of default ($maskedSeq).
+    -chromSizes chrom.sizes   Use chrom.sizes instead of
+                          default ($chromSizes).
     -tableName name       Load table 'name' instead of default cpgIslandExt
                           e.g.: -tableName cpgIslandExtUnmasked
 _EOF_
@@ -99,6 +103,7 @@ sub checkOptions {
   my $ok = GetOptions(@HgStepManager::optionSpec,
 		      'buildDir=s',
 		      'maskedSeq=s',
+		      'chromSizes=s',
 		      'tableName=s',
 		      @HgAutomate::commonOptionSpec,
 		      );
@@ -260,7 +265,7 @@ catDir -r results \\
      | awk \'\{\$2 = \$2 - 1; width = \$3 - \$2;  printf\(\"\%s\\t\%d\\t\%s\\t\%s \%s\\t\%s\\t\%s\\t\%0.0f\\t\%0.1f\\t\%s\\t\%s\\n\", \$1, \$2, \$3, \$5, \$6, width, \$6, width\*\$7\*0.01, 100.0\*2\*\$6\/width, \$7, \$9\);}\' \\
      | sort -k1,1 -k2,2n > cpgIsland.bed
 bedToBigBed -tab -type=bed4+6 -as=\$HOME/kent/src/hg/lib/cpgIslandExt.as \\
-  cpgIsland.bed ../../chrom.sizes $db.$tableName.bb
+  cpgIsland.bed $chromSizes $db.$tableName.bb
 _EOF_
   );
   $bossScript->execute();
@@ -328,6 +333,8 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
   "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/cpgIslands";
 $maskedSeq = $opt_maskedSeq ? $opt_maskedSeq :
   "$HgAutomate::clusterData/$db/$db.2bit";
+$chromSizes = $opt_chromSizes ? $opt_chromSizes :
+  "$HgAutomate::clusterData/$db/chrom.sizes";
 $tableName = $opt_tableName ? $opt_tableName : "cpgIslandExt";
 
 # Do everything.

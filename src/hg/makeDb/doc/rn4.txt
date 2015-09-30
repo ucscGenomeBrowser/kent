@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 
-# This file describes how we made the browser database on the Rattus 
+# This file describes how we made the browser database on the Rattus
 # Norvegicus genome, November 2004 update (Rnor3.4) from Baylor.
 
 #  NOTE:  this doc may have genePred loads that fail to include
@@ -31,15 +31,15 @@
 # DOWNLOAD MITOCHONDRION GENOME SEQUENCE (DONE 1/27/06 angie)
     mkdir /cluster/data/rn4/M
     cd /cluster/data/rn4/M
-    # go to http://www.ncbi.nih.gov/ and search Nucleotide for 
-    # "Rattus norvegicus mitochondrion complete genome".  
+    # go to http://www.ncbi.nih.gov/ and search Nucleotide for
+    # "Rattus norvegicus mitochondrion complete genome".
     # There are more than one of those... I picked NC_001665 whose gi # is
     # 5835177
     # Use that number in the entrez linking interface to get fasta:
     wget -O chrM.fa \
       'http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Text&db=Nucleotide&uid=5835177&dopt=FASTA'
-    # Edit chrM.fa: make sure the long fancy header line says it's the 
-    # Rattus norvegicus mitochondrion complete genome, and then replace the 
+    # Edit chrM.fa: make sure the long fancy header line says it's the
+    # Rattus norvegicus mitochondrion complete genome, and then replace the
     # header line with just ">chrM".
 
 
@@ -81,7 +81,7 @@
       mv chr${c}.agp ../$c/
     end
 #mv: cannot stat `chrUn.agp': No such file or directory
-    # No agp for Un, nor *_random.... guess we'll have to use hgFakeAgp 
+    # No agp for Un, nor *_random.... guess we'll have to use hgFakeAgp
     # to at least get gaps for those.
 
     # checkAgpAndFa prints out way too much info -- keep the end/stderr only:
@@ -99,12 +99,12 @@
 
 
 # MAKE FAKE AGP WHERE NECESSARY (DONE 1/27/06 angie)
-    # In the chromosomal AGP, all gaps are marked "fragment" *except* for 
+    # In the chromosomal AGP, all gaps are marked "fragment" *except* for
     # gaps of exactly 50000 which are "clone".  There are gaps of >>50000
     # marked "fragment"!  However, in the chr*_random and chrUn here,
-    # that just seems wrong... chrUn has a gap of 2602000, how could that 
+    # that just seems wrong... chrUn has a gap of 2602000, how could that
     # possibly be bridged?  (Why are they wasting that kind of space?)
-    # So just count >= 50000 as "clone no", even though that is not what 
+    # So just count >= 50000 as "clone no", even though that is not what
     # they do in their AGP for the chroms.
     ssh kkstore01
     cd /cluster/data/rn4
@@ -129,7 +129,7 @@
       cp -p $fa $fa.bak
       splitFaIntoContigs $agp $fa . -nSize=5000000
     end
-    # splitFaIntoContigs makes new dirs for _randoms.  Move their contents 
+    # splitFaIntoContigs makes new dirs for _randoms.  Move their contents
     # back into the main chrom dirs and get rid of the _random dirs.
     foreach d (*_random)
       set base = `echo $d | sed -e 's/_random$//'`
@@ -157,27 +157,27 @@
 
 
 # MAKE JKSTUFF AND BED DIRECTORIES (DONE 1/27/06 angie)
-    # This used to hold scripts -- better to keep them inline here so 
-    # they're in CVS.  Now it should just hold lift file(s) and 
-    # temporary scripts made by copy-paste from this file.  
+    # This used to hold scripts -- better to keep them inline here so
+    # they're in CVS.  Now it should just hold lift file(s) and
+    # temporary scripts made by copy-paste from this file.
     mkdir /cluster/data/rn4/jkStuff
     # This is where most tracks will be built:
     mkdir /cluster/data/rn4/bed
 
 
 # REPEAT MASKING (DONE 3/16/06 angie)
-    # Originally run 1/30/06.  Coverage was a bit low (43.020%, compared to 
+    # Originally run 1/30/06.  Coverage was a bit low (43.020%, compared to
     # 43.463% for rn3) so I made a test case (see below) for Robert Hubley,
-    # who fixed a bug and re-released RepeatMasker 3/14/06.  So I'm 
-    # re-running... original chr*.fa.out have been moved to .bak and 
-    # lower-level .fa.out's have been removed.  Added -ali at Robert H's 
-    # request.  
+    # who fixed a bug and re-released RepeatMasker 3/14/06.  So I'm
+    # re-running... original chr*.fa.out have been moved to .bak and
+    # lower-level .fa.out's have been removed.  Added -ali at Robert H's
+    # request.
     # Record RM version used:
     ls -l /cluster/bluearc/RepeatMasker
 #lrwxrwxrwx  1 angie protein 18 Mar 14 16:56 /cluster/bluearc/RepeatMasker -> RepeatMasker060314/
     grep RELEASE /cluster/bluearc/RepeatMasker/Libraries/RepeatMaskerLib.embl
 #CC   RELEASE 20060314;                                            *
-    # Run RepeatMasker on a dummy input, just to make it initialize its 
+    # Run RepeatMasker on a dummy input, just to make it initialize its
     # rat libraries once before the cluster run:
     /cluster/bluearc/RepeatMasker/RepeatMasker -spec rat /dev/null
 #Building species libraries in: /cluster/bluearc/RepeatMasker060314/Libraries/20060314/rattus
@@ -244,8 +244,8 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
 #Average job time:                4291s      71.52m     1.19h    0.05d
 #Longest finished job:            6361s     106.02m     1.77h    0.07d
 #Submission to last job:        133586s    2226.43m    37.11h    1.55d
-    # The one crash was a divide-by-zero error on chr1_24_04 -- the patch 
-    # that Robert send for open-3-1-3 was missing from open-3-1-4.  So I 
+    # The one crash was a divide-by-zero error on chr1_24_04 -- the patch
+    # that Robert send for open-3-1-3 was missing from open-3-1-4.  So I
     # applied it to open-3-1-4 and manually ran ProcessRepeats on the .cat.
 
     #- Lift up the 500KB chunk .out's to 5MB ("pseudo-contig") level
@@ -280,16 +280,16 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
     # Many warnings like this one:
 #Strange perc. field -7282.5 line 396666 of 1/chr1.fa.out
 #Strange perc. field -143.1 line 396666 of 1/chr1.fa.out
-    # That's from chr1_49, not chr1_24 so it is independent of the tweak to 
+    # That's from chr1_49, not chr1_24 so it is independent of the tweak to
     # ProcessRepeats.
     # There was also this warning at the end:
 #note: 249 records dropped due to repStart > repEnd
 #      run with -verbose=2 for details
     # Ran with -verbose=2 on kolossus... these are some of the warnings:
-#bad rep range [4533, 4532] line 955 of 14/chr14.fa.out 
-#bad rep range [6936, 6935] line 15888 of 14/chr14.fa.out 
-#bad rep range [458, 457] line 30645 of 14/chr14.fa.out 
-#bad rep range [5798, 5797] line 85282 of 14/chr14.fa.out 
+#bad rep range [4533, 4532] line 955 of 14/chr14.fa.out
+#bad rep range [6936, 6935] line 15888 of 14/chr14.fa.out
+#bad rep range [458, 457] line 30645 of 14/chr14.fa.out
+#bad rep range [5798, 5797] line 85282 of 14/chr14.fa.out
 #TODO: send those on to Robert too.
     nice featureBits rn4 rmsk
 #1137387810 bases of 2571531505 (44.230%) in intersection
@@ -334,7 +334,7 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
 #19994056 bases of 49409453 (40.466%) in intersection
     featureBits rn4 -chrom=chr20 /tmp/rn4.chr20_rmskLifted.bed
 #20117851 bases of 49409453 (40.717%) in intersection
-    # Wow, even after some small liftOver losses, the rn3 rmsk run is 
+    # Wow, even after some small liftOver losses, the rn3 rmsk run is
     # still bigger than the rn4 run!  Look for large missing pieces:
     featureBits rn4 -chrom=chr20 /tmp/rn4.chr20_rmskLifted.bed \!rmsk \
       -minSize=500 -bed=stdout
@@ -348,9 +348,9 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
 #chr20   53898688        53899203        chr20.8
 #chr20   54856700        54857268        chr20.9
 #634331 bases of 49409453 (1.284%) in intersection
-    # For the first such region above, the rn3 location is the same 
+    # For the first such region above, the rn3 location is the same
     # (chr20:107998-108538) and is covered by a LINE... 34.1% divergence.
-    # Well, that should make for a handy little test case because the 
+    # Well, that should make for a handy little test case because the
     # sequence has not changed at all -- only the RM version.
     mkdir /cluster/data/rn4/RMTest
     cd /cluster/data/rn4/RMTest
@@ -390,8 +390,8 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
     hgGoldGapGl -noGl rn4 /cluster/data/rn4 .
     # Wow, tons of warnings like this:
 #unexpected coords (6960, 6960) for frag chrX_random_2 in chrom chrX_random
-    # -- There really are little single non-N bases between large blocks 
-    # of N in the random fasta!  Sheesh, what a mess.  But randoms are 
+    # -- There really are little single non-N bases between large blocks
+    # of N in the random fasta!  Sheesh, what a mess.  But randoms are
     # the dregs...
 
 
@@ -435,9 +435,9 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
 
 
 # SET UP DB ON KOLOSSUS (DONE 1/30/06 angie)
-    # to spare hgwdev, make an rn4 on kolossus so that we have the 
-    # option of loading there and pushing to hgwdev.  It will need the 
-    # gap tables and also chromInfo (added below) so that we can run 
+    # to spare hgwdev, make an rn4 on kolossus so that we have the
+    # option of loading there and pushing to hgwdev.  It will need the
+    # gap tables and also chromInfo (added below) so that we can run
     # featureBits on it.
     hgsql '' -e 'create database rn4'
     cd /cluster/data/rn4
@@ -456,7 +456,7 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
       rn4 cytoBand cytoBand.bed
     hgLoadBed -noBin -sqlTable=$HOME/kent/src/hg/lib/cytoBandIdeo.sql \
       rn4 cytoBandIdeo cytoBand.bed
-    # Doh, the file does not have stain information!  All of the bands 
+    # Doh, the file does not have stain information!  All of the bands
     # are the same as in rn3, so grab stain info from there.
     hgsql rn4 -e '\
       create table bandToStain select name,gieStain from rn3.cytoBand; \
@@ -473,11 +473,11 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
      cd /cluster/data/rn4/bed
      mkdir microsat
      cd microsat
-     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' ../simpleRepeat/simpleRepeat.bed > microsat.bed 
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' ../simpleRepeat/simpleRepeat.bed > microsat.bed
     /cluster/bin/i386/hgLoadBed rn4 microsat microsat.bed
 
 # PROCESS SIMPLE REPEATS INTO MASK (DONE 1/30/06 angie)
-    # After the simpleRepeats track has been built, make a filtered version 
+    # After the simpleRepeats track has been built, make a filtered version
     # of the trf output: keep trf's with period <= 12:
     ssh kkstore01
     cd /cluster/data/rn4/bed/simpleRepeat
@@ -514,8 +514,8 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
     # Originally done 1/30 -- redoing after re-run of RepeatMasker.
     ssh kkstore01
     cd /cluster/data/rn4
-    # Soft-mask (lower-case) the contig and chr .fa's, 
-    # then make hard-masked versions from the soft-masked.  
+    # Soft-mask (lower-case) the contig and chr .fa's,
+    # then make hard-masked versions from the soft-masked.
     set trfCtg=bed/simpleRepeat/trfMask
     set trfChr=bed/simpleRepeat/trfMaskChrom
     foreach f (?{,?}/chr*.fa)
@@ -636,7 +636,7 @@ cd ../..
     # << this line makes emacs coloring happy
     csh -ef ./jkStuff/zipAll.csh >& zipAll.log &
     tail -f zipAll.log
-    #- Look at zipAll.log to make sure all file lists look reasonable.  
+    #- Look at zipAll.log to make sure all file lists look reasonable.
     cd bigZips
     md5sum *.gz > md5sum.txt
     # Make a README.txt
@@ -722,7 +722,7 @@ rn4.mgcTables.mgc = all
     cvsup
     # add rn4 to:
         etc/align.dbs
-        etc/hgwdev.dbs 
+        etc/hgwdev.dbs
     cvs commit
     make etc-update
 
@@ -738,7 +738,7 @@ rn4.mgcTables.mgc = all
     cd /cluster/data/rn4/bed/genscan
     # Make 3 subdirectories for genscan to put their output files in
     mkdir gtf pep subopt
-    # Generate a list file, genome.list, of all the hard-masked contigs that 
+    # Generate a list file, genome.list, of all the hard-masked contigs that
     # *do not* consist of all-N's (which would cause genscan to blow up)
     cp /dev/null genome.list
     foreach f ( `ls -1S /cluster/data/rn4/*/chr*_*/chr*_?{,?}.fa.masked` )
@@ -764,8 +764,8 @@ rn4.mgcTables.mgc = all
 #Average job time:                 203s       3.38m     0.06h    0.00d
 #Longest finished job:            4230s      70.50m     1.18h    0.05d
 #Submission to last job:         11260s     187.67m     3.13h    0.13d
-    # If there are crashes, diagnose with "para problems" / "para crashed".  
-    # If a job crashes due to genscan running out of memory, re-run it 
+    # If there are crashes, diagnose with "para problems" / "para crashed".
+    # If a job crashes due to genscan running out of memory, re-run it
     # manually with "-window=1200000" instead of "-window=2400000".
     ssh kkr5u00
     cd /cluster/data/rn4/bed/genscan
@@ -804,15 +804,15 @@ rn4.mgcTables.mgc = all
 # ENSEMBL GENES (DONE 1/30/06 angie - UPDATED 6/13/06)
     mkdir /cluster/data/rn4/bed/ensembl
     cd /cluster/data/rn4/bed/ensembl
-    # Get the ensembl gene data from 
+    # Get the ensembl gene data from
     # http://www.ensembl.org/Rattus_norvegicus/martview
     # Follow this sequence through the pages:
     # Page 1) Make sure that the Rattus_norvegicus choice is selected. Hit next.
     # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
-    # Page 3) Choose the "Structures" box. 
+    # Page 3) Choose the "Structures" box.
     # Page 4) Choose GTF as the ouput.  choose gzip compression.  hit export.
     # Save as ensembl.gff.gz
-    # Add "chr" to front of each line in the gene data gtf file to make 
+    # Add "chr" to front of each line in the gene data gtf file to make
     # it compatible with our software.
     gunzip -c ensembl.gff.gz \
     | perl -wpe 's/^([0-9]+|X|Y|M|Un(_random)?)/chr$1/ \
@@ -823,10 +823,10 @@ rn4.mgcTables.mgc = all
     ldHgGene -gtf -genePredExt rn4 ensGene \
       /cluster/data/rn4/bed/ensembl/ensGene.gtf
 
-    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
+    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and
     # hgKnownToSuper.  Use ensMart to create it as above, except:
-    # Page 3) Choose the "Features" box. In "Ensembl Attributes", check 
-    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
+    # Page 3) Choose the "Features" box. In "Ensembl Attributes", check
+    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.
     # Choose Text, tab-separated as the output format.  Result name ensGtp.
     # Save file as ensGtp.txt.gz
     gunzip ensGtp.txt.gz
@@ -834,7 +834,7 @@ rn4.mgcTables.mgc = all
 
     # Load Ensembl peptides:
     # Get them from ensembl as above in the gene section except for
-    # Page 3) Choose the "Sequences" box. 
+    # Page 3) Choose the "Sequences" box.
     # Page 4) Transcripts/Proteins.  Peptide.  Format = FASTA.
     # Save file as ensemblPep.fa.gz
     gunzip -c ensemblPep.fa.gz \
@@ -852,7 +852,7 @@ rn4.mgcTables.mgc = all
     cd hg3rdParty/cpgIslands
     make
     mv cpglh.exe /cluster/data/rn4/bed/cpgIsland/
-    
+
     ssh kolossus
     cd /cluster/data/rn4/bed/cpgIsland
     foreach f (../../*/chr*.fa.masked)
@@ -927,8 +927,8 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 
 
 # LIFTOVER RGD (DONE 2/9/06 angie)
-    # ftp://rgd.mcw.edu/pub/RGD_genome_annotations/ still has 3.1 (rn3) not 
-    # 3.4 (rn4).  Jim said these are interesting enough that we should lift 
+    # ftp://rgd.mcw.edu/pub/RGD_genome_annotations/ still has 3.1 (rn3) not
+    # 3.4 (rn4).  Jim said these are interesting enough that we should lift
     # over at least the QTLs.
     ssh kolossus
     mkdir /cluster/data/rn4/bed/rgdLiftover
@@ -947,8 +947,8 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #   rgdQtl.bed rgdQtl.unmapped
     # liftOver of rgdQtl_rn3.bed did not go well -- out of 903 qtls,
     # only 95 were successfully mapped.  772 got "Partially split in new."
-    # Since these are enormous, presumably fuzzy-edged regions, just lift 
-    # start and end.  If the start and end of each feature seems to be 
+    # Since these are enormous, presumably fuzzy-edged regions, just lift
+    # start and end.  If the start and end of each feature seems to be
     # liftOver'd coherently, "chain" those back up into big regions in rn4.
     perl -we 'while (<>) { \
                 chomp;  ($chr, $start, $end, $name) = split; \
@@ -960,11 +960,11 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
       /cluster/data/rn3/bed/blat.rn4.2006-02-07/rn3ToRn4.over.chain.gz \
       rgdQtl_endpoints.bed rgdQtl_endpoints.unmapped
     # Now 1706 out of 1806 survive... but 100 are deleted in new?!
-    # I manually checked 10 of them and they all are either in a gap 
-    # or off the end of a chrom.  Makes me wonder if these really are 
-    # rn3 coords...  oh well, I guess we can load them up and ask 
-    # RGD about them in the meantime.  I submitted a question using their 
-    # online form -- my message ID is 439 and I can email rgd@rgd.mcw.edu 
+    # I manually checked 10 of them and they all are either in a gap
+    # or off the end of a chrom.  Makes me wonder if these really are
+    # rn3 coords...  oh well, I guess we can load them up and ask
+    # RGD about them in the meantime.  I submitted a question using their
+    # online form -- my message ID is 439 and I can email rgd@rgd.mcw.edu
     # with that ID if I don't hear from them in 3 biz days.
     perl -we 'while (<>) { \
                 chomp;  ($chr, $start, $end, $name) = split; \
@@ -995,15 +995,15 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     hgsql rn4 < ~/kent/src/hg/lib/rgdQtlLink.sql
     hgsql rn4 -e \
       'load data local infile "rgdQtlLink.tab" into table rn4.rgdQtlLink;'
- 
+
 
 # MAKE LINEAGE-SPECIFIC REPEATS VS. HUMAN, MOUSE (DONE 2/8/06 angie)
     ssh kolossus
     mkdir /cluster/data/rn4/rmsk
     cd /cluster/data/rn4/rmsk
     ln -s ../?{,?}/chr*.fa.out .
-    # Run Arian's DateRepsinRMoutput.pl to add extra columns telling 
-    # whether repeats in -query are also expected in -comp species.  
+    # Run Arian's DateRepsinRMoutput.pl to add extra columns telling
+    # whether repeats in -query are also expected in -comp species.
     # Human in extra column 1, Mouse in extra column 2
     foreach outfl ( *.out )
         echo "$outfl"
@@ -1048,8 +1048,8 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 
 
 # MAKE LINEAGE-SPECIFIC REPEATS FOR NON-MAMMALS (DONE 2/13/06 angie)
-    # In an email 2/13/04 to Angie, Arian said we could treat all 
-    # human repeats as lineage-specific for human-chicken blastz.  
+    # In an email 2/13/04 to Angie, Arian said we could treat all
+    # human repeats as lineage-specific for human-chicken blastz.
     # Extrapolate to any mammal vs. anything at least as distant as chicken.
     ssh kkr1u00
     mkdir /iscratch/i/rn4/linSpecRep.notInNonMammal
@@ -1063,7 +1063,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     ssh kk
     mkdir /cluster/data/rn4/bed/blastz.galGal2.2006-02-13
     cd /cluster/data/rn4/bed/blastz.galGal2.2006-02-13
-    # Set L=10000 (higher threshold on blastz's outer loop) and abridge 
+    # Set L=10000 (higher threshold on blastz's outer loop) and abridge
     # repeats.
     cat << '_EOF_' > DEF
 #rat vs. chicken
@@ -1114,7 +1114,7 @@ BASE=/cluster/data/rn4/bed/blastz.galGal2.2006-02-13
     wget --timestamping \
 	ftp://ftp.ncbi.nih.gov/genomes/CLONEEND/rattus_norvegicus/\*
     cd ..
-    # Extract unversioned accessions from headers and combine into one 
+    # Extract unversioned accessions from headers and combine into one
     # uncompressed file which we will link to from /gbdb/:
     zcat ncbi/*ends*.mfa.gz \
     | perl -wpe 'if (/^>/) { \
@@ -1266,12 +1266,12 @@ rm -fr /scratch/tmp/${root1}_${root2}
 
     # To diagnose:
     echo select \* from all_bacends | hgsql -N rn4 > psl.tab.loaded
-    diff psl.tab* 
+    diff psl.tab*
 #1491015c1491015
 #< 120   908     82      0       0       3       -124    6       278579  -       BZ232973        866     0       866     chr17   97296363        49307517   49587086 8       21,5,71,86,327,250,116,114,     0,21,27,98,184,382,632,752,     49307517,49307539,49307544,49335694,49336333,49470455,49586851,49586972,
 #---
 #> 120   908     82      0       0       3       0       6       278579  -       BZ232973        866     0       866     chr17   97296363        49307517   49587086 8       21,5,71,86,327,250,116,114,     0,21,27,98,184,382,632,752,     49307517,49307539,49307544,49335694,49336333,49470455,49586851,49586972,
-    # Q gap bases was -124 in... clipped to 0 in the db.  
+    # Q gap bases was -124 in... clipped to 0 in the db.
     # Identify and save the out/*.psl file that contains the -124:
     grep '^>BZ232973' /cluster/bluearc/rn4/cloneEnds/*.fa
 #/cluster/bluearc/rn4/cloneEnds/cloneEnds079.fa:>BZ232973
@@ -1323,8 +1323,8 @@ rm -fr /scratch/tmp/${root1}_${root2}
     mkdir /cluster/data/rn4/rmsk
     cd /cluster/data/rn4/rmsk
     ln -s ../?{,?}/chr*.fa.out .
-    # Run Arian's DateRepsinRMoutput.pl to add extra columns telling 
-    # whether repeats in -query are also expected in -comp species.  
+    # Run Arian's DateRepsinRMoutput.pl to add extra columns telling
+    # whether repeats in -query are also expected in -comp species.
     # Dog in extra column 1, mouse in 2, rabbit in 3
     foreach outfl ( *.out )
         echo "$outfl"
@@ -1396,21 +1396,21 @@ BASE=/cluster/data/rn4/bed/blastz.canFam2.2006-02-24
     doBlastzChainNet.pl DEF -bigClusterHub=pk \
       -blastzOutRoot /san/sanvol1/scratch/blastzRn4CanFam2Out >& do.log &
     tail -f do.log
-    ln -s blastz.canFam2.2006-02-24 /cluster/data/rn4/bed/blastz.canFam2 
+    ln -s blastz.canFam2.2006-02-24 /cluster/data/rn4/bed/blastz.canFam2
 
 
 ##########################################################################
 # STS MARKERS
-# NOTE: Instead of using UniSTS_rat.sts as usual, I made a local version 
-# which uses the name given in UniSTS.sts if none is given in UniSTS_rat.sts 
-# and "UniSTS:$id" if no name is given in UniSTS.sts.  Some inconsistencies 
-# between UniSTS.sts and UniSTS_rat.sts reported 2/21/06; haven't heard 
+# NOTE: Instead of using UniSTS_rat.sts as usual, I made a local version
+# which uses the name given in UniSTS.sts if none is given in UniSTS_rat.sts
+# and "UniSTS:$id" if no name is given in UniSTS.sts.  Some inconsistencies
+# between UniSTS.sts and UniSTS_rat.sts reported 2/21/06; haven't heard
 # back from them yet so I'll just forge ahead with latest UniSTS files.
 
 # MAKE STSINFORAT (DONE 3/6/06 angie)
     # This method was developed by Yontao.  ytlu/script is under CVS control
-    # so I'm using ~/ytlu/script/perl/script/match but have copied several 
-    # other scripts from /cluster/store4/ratMarker/code into 
+    # so I'm using ~/ytlu/script/perl/script/match but have copied several
+    # other scripts from /cluster/store4/ratMarker/code into
     # kent/src/hg/stsMarkers/ to get them in CVS too.
     ssh kkstore01
     mkdir /cluster/data/rn4/bed/stsMarkers
@@ -1462,10 +1462,10 @@ while (<>) {
     # << emacs
     chmod a+x extractRat.pl
     ./extractRat.pl UniSTS_rat.sts > UniSTS_rat.rat_extracted.sts
-    # Many warnings about different name given in UniSTS_rat.sts vs. 
+    # Many warnings about different name given in UniSTS_rat.sts vs.
     # UniSTS.sts -- reported to NCBI.
     # Make UniSTS_rat.alias by joining the first columns of
-    # UniSTS_rat.rat_extracted.sts and UniSTS.aliases so we get just the 
+    # UniSTS_rat.rat_extracted.sts and UniSTS.aliases so we get just the
     # aliases of items in UniSTS_rat.rat_extracted.sts:
     /cluster/home/ytlu/ytlu/script/perl/script/match \
       UniSTS_rat.rat_extracted.sts 1 UniSTS.aliases 1 \
@@ -1473,8 +1473,8 @@ while (<>) {
     # Extract these columns from RHv3_4_MapData.txt:
     # RGD_Sym TEMPL_SEQ FORWARD_PRIMER REVERSE_PRIMER EXP_SIZE
     awk '{print $2,$1,$17,$8,$9,$10}' RHv3_4_MapData.txt | sed s/" "/"\t"/g \
-      > inMapData.txt 
-    # Find entries not in RAW_MARKER_SEQINFO.txt but in inMapData.txt, 
+      > inMapData.txt
+    # Find entries not in RAW_MARKER_SEQINFO.txt but in inMapData.txt,
     /cluster/home/ytlu/ytlu/script/perl/script/match -M \
       RAW_MARKER_SEQINFO.txt 1 inMapData.txt 1 > inMapDataOnly.txt
     cat inMapDataOnly.txt RAW_MARKER_SEQINFO.txt > marker_seqinfo.txt
@@ -1490,15 +1490,15 @@ while (<>) {
     cd ..
     ~/kent/src/hg/stsMarkers/luConvertPrimerToFa stsInfoRat.withSeq.tab \
       ratPrimer.fa ratSeq.fa ratPrimer.info -a 200
-    # Strip the sequence column off so that it isn't loaded into the db 
-    # (causing mysql warnings due to truncation).  The seq column is not 
+    # Strip the sequence column off so that it isn't loaded into the db
+    # (causing mysql warnings due to truncation).  The seq column is not
     # used from here on out:
     perl -wpe '@w=split("\t"); $w[24] = ""; $_ = join("\t", @w) . "\n";' \
       stsInfoRat.withSeq.tab > stsInfoRat.tab
 
 
 # BLAT CLONE SEQUENCES (DONE 3/8/06 angie)
-    # Based on what was done for hg17, I think the thing to do is not use 
+    # Based on what was done for hg17, I think the thing to do is not use
     # ooc, but filter out the results with tGapSize > 1000.
     ssh kkstore01
     cd /cluster/data/rn4
@@ -1551,7 +1551,7 @@ while (<>) {
     ssh kk
     mkdir /cluster/data/rn4/bed/stsMarkers/primer
     cd /cluster/data/rn4/bed/stsMarkers/primer
-    # PLEASE NOTE /cluster/bin/i386/blat.2 SPECIFICALLY IS USED HERE. 
+    # PLEASE NOTE /cluster/bin/i386/blat.2 SPECIFICALLY IS USED HERE.
     cat << '_EOF_' > gsub
 #LOOP
 /cluster/bin/i386/blat.2 {check in line+ $(path1)} {check in line+ /cluster/bluearc/rn4/ratPrimer.fa} -ooc=/cluster/bluearc/rn4/11.ooc  -minMatch=1 -minScore=0 -minIdentity=80 -oneOff {check out line+ primers.out/$(root1).psl}
@@ -1637,21 +1637,21 @@ while (<>) {
     # create accession_info.rdb: AGP info.
     /cluster/bin/scripts/compileAccInfo -rat /cluster/data/rn4 /dev/null
 #0 processed
-    # "0 processed" sounds a little scary but it's 0 because we didn't pass 
+    # "0 processed" sounds a little scary but it's 0 because we didn't pass
     # in a -pre rdb.
     mv accession_info.rdb accession_info.rdb.tmp
     /cluster/bin/scripts/sorttbl Chr Ord Start < accession_info.rdb.tmp \
       > accession_info.rdb
-    # some lines have "chrN_random_M" in the Contig column but "chrN" 
-    # (not chrN_random) in the chrom column.... looks weird, but reading 
+    # some lines have "chrN_random_M" in the Contig column but "chrN"
+    # (not chrN_random) in the chrom column.... looks weird, but reading
     # compileAccInfo it seems intentional to lump ordered and random.
     rm accession_info.rdb.tmp
     # Would compare to rn3 if I could find it...
     wc accession_info.rdb
 # 138571 1524285 9921966 accession_info.rdb
 
-    # filterSTSPrimers combines blat.2 and epcr results.  
-    # For human there is a program pslFilterPrimers that combines isPcr and 
+    # filterSTSPrimers combines blat.2 and epcr results.
+    # For human there is a program pslFilterPrimers that combines isPcr and
     # epcr results... might be interesting to try that next time around.
     /cluster/bin/scripts/filterSTSPrimers -rat \
       ../stsInfoRat.tab primers.psl.100.unlifted \
@@ -1664,7 +1664,7 @@ while (<>) {
     wc primers.psl.filter.blat
 #  38707  812847 4100619 primers.psl.filter.blat
 
-    # filterSTSPrimers creates epcr.not.found which actually contains 
+    # filterSTSPrimers creates epcr.not.found which actually contains
     # items that *were* found by epcr but not by blat.  Translate to PSL:
     /cluster/bin/scripts/epcrToPsl -rat epcr.not.found ../ratPrimer.info \
       accession_info.rdb /cluster/data/rn4
@@ -1718,14 +1718,14 @@ while (<>) {
     # Combine clone sequence alignments with primer alignments
     cd /cluster/data/rn4/bed/stsMarkers
     /cluster/bin/scripts/combineSeqPrimerPos \
-      clone/clones.final primer/primers.final 
+      clone/clones.final primer/primers.final
     # creates stsMarkers_pos.rdb
     # Would compare to rn3 if I could find it...
     wc stsMarkers_pos.rdb
 #  39291  275037 1893500 stsMarkers_pos.rdb
 
-    # 6/15/06: re-running from here after fixing createStsMapRat to make 
-    # empty chroms instead of "0" when the chrom is not specified -- 
+    # 6/15/06: re-running from here after fixing createStsMapRat to make
+    # empty chroms instead of "0" when the chrom is not specified --
     # hgTracks.c code depends on this.
     ~/kent/src/hg/stsMarkers/createStsMapRat \
       stsInfoRat.tab  stsMarkers_pos.rdb > stsMapRat.bed
@@ -1735,8 +1735,8 @@ while (<>) {
 
     ~/kent/src/hg/stsMarkers/createStsAlias stsInfoRat.tab \
     | sort -u > stsAlias.tab
-    # Warnings about aliases with multiple trueNames... would be good to 
-    # pass that on to NCBI, if we ever get a resolution for the previous 
+    # Warnings about aliases with multiple trueNames... would be good to
+    # pass that on to NCBI, if we ever get a resolution for the previous
     # questions.
     # Would compare to rn3 if I could find it...
     wc stsAlias.tab
@@ -1766,8 +1766,8 @@ while (<>) {
     # PLEASE NOTE: if re-running hgLoadSeq, you MUST add
     #	-replace
     #	hgLoadSeq -replace rn4 /gbdb/rn4/stsMarker/ratPrimer.fa
-    # otherwise there will be a problem that the seq and extFile tables 
-    # will be out of sync. 
+    # otherwise there will be a problem that the seq and extFile tables
+    # will be out of sync.
     hgLoadSeq rn4 /gbdb/rn4/stsMarker/ratPrimer.fa
     hgLoadSeq rn4 /gbdb/rn4/stsMarker/ratSeq.fa
     hgLoadSqlTab rn4 stsAlias \
@@ -1775,16 +1775,16 @@ while (<>) {
     hgLoadSqlTab rn4 stsInfoRat \
       ~/kent/src/hg/lib/stsInfoRat.sql stsInfoRat.tab
 
-    # After some work on the stsInfoRat creation process which should help 
+    # After some work on the stsInfoRat creation process which should help
     # next time around (do not do this part next time, just for the record):
     hgLoadSqlTab rn4 stsInfoRat \
       ~/kent/src/hg/lib/stsInfoRat.sql stsInfoRat.tab.new
 #Warning: load of stsInfoRat did not go as planned: 48048 record(s), 0 row(s) skipped, 5 warning(s) loading stsInfoRat.tab
     echo 'select * from stsInfoRat' | hgsql -N rn4 > /tmp/tmp
-    # compare /tmp/tmp and stsInfoRat.tmp -- looks like 5 alias fields are 
+    # compare /tmp/tmp and stsInfoRat.tmp -- looks like 5 alias fields are
     # truncated at 255 chars, not so terrible because we have stsAlias.
-    # -- But since the IDs are off-by-one for a large stretch of that due 
-    # -- to getting rid of a garbage line, I reloaded and manually deleted 
+    # -- But since the IDs are off-by-one for a large stretch of that due
+    # -- to getting rid of a garbage line, I reloaded and manually deleted
     # -- the unused and often truncated clone sequence values:
     hgLoadSqlTab rn4 stsInfoRat \
       ~/kent/src/hg/lib/stsInfoRat.sql stsInfoRat.tab
@@ -1811,7 +1811,7 @@ while (<>) {
     # Clean up.
     rm -r primer/primers.out/ primer/primers.psl.100.unlifted clone/clone.out/
 
-# end STS MARKERS 
+# end STS MARKERS
 ##########################################################################
 
 
@@ -1820,8 +1820,8 @@ while (<>) {
 
 # Use protein databases built by Fan: sp060115 and proteins060115
 # See makeProteins060115.doc for details.
-# Ask cluster-admin to rync sp060115 and proteins060115 to kolossus 
-# so that database work can be done there; then final results will be 
+# Ask cluster-admin to rync sp060115 and proteins060115 to kolossus
+# so that database work can be done there; then final results will be
 # rsync'd back to hgwdev.
 
     # Create working subdirectories and temporary databases (kgRn4A)
@@ -1830,7 +1830,7 @@ while (<>) {
     ln -s /cluster/data/rn4/bed/kgRn4A /cluster/store6/kgDB/bed/kgRn4A
     ln -s /cluster/data/rn4/bed/kgRn4A /cluster/store11/kg/kgRn4A
 
-    hgsql rn4 -e "create database kgRn4A"   
+    hgsql rn4 -e "create database kgRn4A"
     hgsql rn4 -e "create database kgRn4ATemp"
 
     mkdir /cluster/bluearc/kgDB/kgRn4A
@@ -1838,8 +1838,8 @@ while (<>) {
     ln -s /cluster/bluearc/kgDB/kgRn4A/protBlat \
       /cluster/data/rn4/bed/kgRn4A/protBlat
 
-    # Save a copy of several genbank tables so that we can produce consistent 
-    # results if we need to add more tables later.  First, ask cluster-admin 
+    # Save a copy of several genbank tables so that we can produce consistent
+    # results if we need to add more tables later.  First, ask cluster-admin
     # to rsync the tables from hgwdev rn4 --> kolossus.  Save files too:
     mkdir /cluster/data/rn4/bed/kgRn4A/genbankBackup
     cd /cluster/data/rn4/bed/kgRn4A/genbankBackup
@@ -1909,7 +1909,7 @@ while (<>) {
     pslReps -minCover=0.40 -minAli=0.97 -nearTop=0.002 all_mrna.psl \
       tight_mrna.psl /dev/null
 
-    # Use overlapSelect to get protein and mRNA alignment overlaps   
+    # Use overlapSelect to get protein and mRNA alignment overlaps
     overlapSelect  -statsOutput  -dropped=protOut.psl -overlapThreshold=0.90 \
       -selectFmt=psl -inFmt=psl tight_mrna.psl  protBlat.psl protMrna.stat
     overlapSelect  -mergeOutput  -dropped=protOut.psl -overlapThreshold=0.90 \
@@ -2051,7 +2051,7 @@ while (<>) {
       kgCandidate.tab
     hgsql kgRn4ATemp -e 'create index alignID on kgCandidate(alignID)'
 
-    # Construct the kgCandidateX table that has alignID in the name field. 
+    # Construct the kgCandidateX table that has alignID in the name field.
     cut -f 2-10 kgCandidate.tab > j2.tmp
     cut -f 11 kgCandidate.tab > j1.tmp
     paste j1.tmp j2.tmp > kgCandidateX.tab
@@ -2082,7 +2082,7 @@ while (<>) {
       kgCandidateZ.tab
     hgsql kgRn4ATemp -e 'create index cdsId on kgCandidateZ(cdsId)'
 
-    # Run kgPick to pick the representative a mrna/protein pair for each 
+    # Run kgPick to pick the representative a mrna/protein pair for each
     # unique CDS structure.
     kgPick kgRn4ATemp rn4 sp060115 kg3.tmp stdout \
     | sort -u > dupSpMrna.tab
@@ -2118,7 +2118,7 @@ while (<>) {
       where r.attr="translExcept" and r.acc=r2.acc and r2.attr="rss" and \
         r2.val="rev" and r2.val="rev" and r3.acc=r.acc and r3.attr="org" and \
         r3.val="Rattus norvegicus"' \
-     >> kgPutBack2.tab 
+     >> kgPutBack2.tab
      hgsql rn4 -N -e \
      'select r.acc, r.attr, r.val from refRa r, refRa r2, refRa r3 \
       where r.attr="exception" and r.acc=r2.acc and r2.attr="rss" and \
@@ -2162,7 +2162,7 @@ while (<>) {
     hgPepPred rn4 tab knownGeneMrna knownGeneMrna.tab
     hgLoadSqlTab rn4 knownGenePep ~/kent/src/hg/lib/knownGenePep.sql knownGenePep.tab
 
-    # Use hgwdev's entrez database (loaded by Fan, see makeHg18.doc) 
+    # Use hgwdev's entrez database (loaded by Fan, see makeHg18.doc)
     # to buid the mrnaRefseq table.
     ssh hgwdev
     hgsql entrez -N -e \
@@ -2248,7 +2248,7 @@ while (<>) {
     hgLoadSqlTab rn4 kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql \
       rn4.kgSpAlias.tab
 
-    # Ask cluster-admin to rsync the following tables from kolossus rn4 
+    # Ask cluster-admin to rsync the following tables from kolossus rn4
     # back to hgwdev rn4:
     dupSpMrna
     kgAlias
@@ -2274,7 +2274,7 @@ while (<>) {
 
 
 # CREATE FULL TEXT INDEX FOR KNOWN GENES (DONE 3/6/06 angie)
-    # This depends on the go and uniProt databases as well as 
+    # This depends on the go and uniProt databases as well as
     # the kgAlias and kgProAlias tables.
     ssh hgwdev
     mkdir /cluster/data/rn4/bed/kgRn4A/index
@@ -2323,12 +2323,12 @@ BASE=/cluster/data/rn4/bed/blastz.danRer3.2006-03-02
     doBlastzChainNet.pl DEF -bigClusterHub=pk \
       -blastzOutRoot /san/sanvol1/scratch/blastzRn4DanRer3Out >& do.log &
     tail -f do.log
-    ln -s blastz.danRer3.2006-03-02 /cluster/data/rn4/bed/blastz.danRer3 
+    ln -s blastz.danRer3.2006-03-02 /cluster/data/rn4/bed/blastz.danRer3
 
 
 # BLASTZ/CHAIN/NET DANRER3 - WITH LINSPECREP (DONE 3/3/06 angie)
     # The coverage decreased so I ended up not using this run.
-    # It would be interesting to try a run that uses all repeats 
+    # It would be interesting to try a run that uses all repeats
     # *except for simple* as lineage-specific too sometime.
     ssh kkstore01
     # Set up rn4/linSpecRep.notInNonMammal
@@ -2386,14 +2386,14 @@ BASE=/cluster/data/rn4/bed/blastz.danRer3.2006-03-03
     doBlastzChainNet.pl DEF -bigClusterHub=pk \
       -blastzOutRoot /san/sanvol1/scratch/blastzRn4DanRer3Out >& do.log &
     tail -f do.log
-    ln -s blastz.danRer3.2006-03-03 /cluster/data/rn4/bed/blastz.danRer3 
+    ln -s blastz.danRer3.2006-03-03 /cluster/data/rn4/bed/blastz.danRer3
 
 
 # COMPARE danRer3 runs, without vs. with LSR (DONE 3/13/06 angie)
     ssh kolossus
     cd /cluster/data/rn4/bed
-    # have to use redirect because vprintf doesn't like being called 
-    # twice on x86_64... should fix that sometime.  
+    # have to use redirect because vprintf doesn't like being called
+    # twice on x86_64... should fix that sometime.
     netStats /dev/null blastz.danRer3.2006-03-02/axtChain/rn4.danRer3.net.gz \
       > blastz.danRer3.2006-03-02/axtChain/netStats.out
     netStats /dev/null blastz.danRer3.2006-03-03/axtChain/rn4.danRer3.net.gz \
@@ -2417,30 +2417,30 @@ BASE=/cluster/data/rn4/bed/blastz.danRer3.2006-03-03
 #513894027 bases of 2571531505 (19.984%) in intersection
     featureBits rn4 blastz.danRer3.2006-03-03/axtChain/net.bed
 #509076601 bases of 2571531505 (19.797%) in intersection
-    # OK, so coverage drops with LSR.  Maybe some repeats are being snipped 
-    # that could be aligned (ancestral)?  
+    # OK, so coverage drops with LSR.  Maybe some repeats are being snipped
+    # that could be aligned (ancestral)?
     # Eyeball the one place where level == 11 in the 02 set
     # ("select * from netDanRer3NoLSR where level >= 11;" on hgwdev):
     # chr3  | 97071076 | 97071655, zoom out 1.5
-    # NoLSR has a lot more chains... more levels filled.  
-    # with LSR gets a "Level 2" chain that NoLSR does not get at all.  
-    # Who's to say which is right???  NoLSR looks messier to me but that 
-    # is a very subjective judgment.  
+    # NoLSR has a lot more chains... more levels filled.
+    # with LSR gets a "Level 2" chain that NoLSR does not get at all.
+    # Who's to say which is right???  NoLSR looks messier to me but that
+    # is a very subjective judgment.
     # Interestingly, there are no repeats on rn4 in that region.
-    # Panning to the right a ways, just long gaps for NoLSR but a few 
-    # blocks for with.  NoLSR gets some sizable alignments where with 
-    # does not... a stretch of simple/low-complexity repeats there.  
-    # Those should probably be excluded when we are using all repeats 
-    # as lin-spec!  Hopping over to a danRer3 region aligned only by 
-    # NoLSR I see some more low-complexity.  Should run that by Arian.  
+    # Panning to the right a ways, just long gaps for NoLSR but a few
+    # blocks for with.  NoLSR gets some sizable alignments where with
+    # does not... a stretch of simple/low-complexity repeats there.
+    # Those should probably be excluded when we are using all repeats
+    # as lin-spec!  Hopping over to a danRer3 region aligned only by
+    # NoLSR I see some more low-complexity.  Should run that by Arian.
     # Could do yet another run with all repeats except simple/low-complexity
-    # (what is DNA? maybe that too?) as linSpec.  
+    # (what is DNA? maybe that too?) as linSpec.
     # Panning to the right some more, a long dry spell for with LSR.
-    # There are olfactory receptor genes around which could indicate a 
+    # There are olfactory receptor genes around which could indicate a
     # tougher job than usual.  Not much agreement between the nets though,
     # yikes.  High precision, but at what accuracy?
     # I just worry about the reliability of what comes out of the pipeline...
-    # so sensitive to parameters.  
+    # so sensitive to parameters.
     # chr3:97,345,533-97,360,012 there is a withLSR chain but the net is empty.
 
     # Since the coverage is higher without LSR, go with that for now.
@@ -2529,7 +2529,7 @@ BASE=/cluster/data/rn4/bed/blastz.rheMac2.2006-03-22
 
 BLASTZ=/cluster/bin/penn/x86_64/blastz.v7.x86_64
 
-# Mammal to non-mammal -- well, I guess non-placental-mammal, with 
+# Mammal to non-mammal -- well, I guess non-placental-mammal, with
 # high L like chicken, and low M to guard against pileups w/monDom4:
 BLASTZ_H=2000
 BLASTZ_Y=3400
@@ -2630,9 +2630,9 @@ BASE=/cluster/data/rn4/bed/blastz.rn4.2006-03-24
       -bigClusterHub=pk -workhorse=kkr7u00 DEF \
       >& do.log & tail -f do.log
     # It died during loading because hgwdev /var/lib/mysql ran out of room!
-    # There is enough space now but I deleted the tables anyway -- can load 
-    # later if anyone wants to browse.  Did -continue download so that the 
-    # ancestor-reconstruction folks who requested this can find the chains 
+    # There is enough space now but I deleted the tables anyway -- can load
+    # later if anyone wants to browse.  Did -continue download so that the
+    # ancestor-reconstruction folks who requested this can find the chains
     # in the usual place.
     ln -s blastz.rn4.2006-03-24 /cluster/data/rn4/bed/blastz.rn4
 
@@ -2732,7 +2732,7 @@ pepPredToFa rn4 knownGenePep known.faa
       --prune-all-but=rat_rn3,mouse_mm7,human_hg17,dog_canFam2,cow_bosTau2,monodelphis_monDom2,chicken_galGal2,xenopus_xenTro1,zebrafish_danRer3 \
       --rename="rat_rn3 -> rat_rn4 ; mouse_mm7 -> mouse_mm8 ; human_hg17 -> human_hg18 ; monodelphis_monDom2 -> monodelphis_monDom4" \
       /cluster/data/hg17/bed/multiz17way/17way.nh > 9way.nh
-    # *carefully* edit 9way.nh to move hg18 to appear after (rat mouse), 
+    # *carefully* edit 9way.nh to move hg18 to appear after (rat mouse),
     # save as 9way_ratFirst.nh, and make a tree picture:
     /cluster/bin/phast/draw_tree 9way_ratFirst.nh > 9way.ps
     ps2pdf 9way.ps > 9way.pdf
@@ -2762,7 +2762,7 @@ pepPredToFa rn4 knownGenePep known.faa
     mkdir maf run
     cd run
 
-    # stash binaries 
+    # stash binaries
     mkdir penn
     cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/multiz penn
     cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/maf_project penn
@@ -2822,7 +2822,7 @@ cat  << 'EOF' > spec
 #Submission to last job:          6173s     102.88m     1.71h    0.07d
 
     # Make .jpg for tree and install in htdocs/images/phylo/... don't forget
-    # to request a push of that file.  The treeImage setting in trackDb.ra 
+    # to request a push of that file.  The treeImage setting in trackDb.ra
     # is phylo/rn4_9way.jpg (relative to htdocs/images).
     ssh hgwdev
     cd /cluster/data/rn4/bed/multiz9way.2006-03-30
@@ -2853,7 +2853,7 @@ cat  << 'EOF' > spec
       echo nice mafAddIRows -nBeds=nBeds -sizes=sizes $f \
         /cluster/data/rn4/rn4.2bit ../maf/`basename $f` >> jobs.csh
       echo "echo $f" >> jobs.csh
-    end 
+    end
     echo date >> jobs.csh
     csh -efx jobs.csh >&! jobs.log & tail -f jobs.log
     # 1.5 hrs.
@@ -2871,7 +2871,7 @@ date
 'EOF'
     # << emacs
     csh -efx loadMaf.csh >&! loadMaf.log & tail -f loadMaf.log
-    # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
+    # Do the computation-intensive part of hgLoadMafSummary on a workhorse
     # machine and then load on hgwdev:
     ssh kkr7u00
     cd /cluster/data/rn4/bed/multiz9way.2006-03-30/anno/maf
@@ -2895,7 +2895,7 @@ date
     ssh hgwdev
     mkdir /cluster/data/rn4/bed/multiz9way.2006-03-30/mafDownloads
     cd /cluster/data/rn4/bed/multiz9way.2006-03-30/mafDownloads
-    # upstream mafs 
+    # upstream mafs
 cat > mafFrags.csh << 'EOF'
     date
     foreach i (1000 2000 5000)
@@ -3078,7 +3078,7 @@ cat > downloads.csh << 'EOF'
 # --expected-length
 # --target-coverage
 # Also, instead of generating cons and noncons tree models,
-# we use a single, pre-existing tree model -- Elliot Margulies' model 
+# we use a single, pre-existing tree model -- Elliot Margulies' model
 # from the (37-way) ENCODE alignments.
 #
     # NOTE: reusing cluster-friendly chrom fasta files created earlier
@@ -3131,11 +3131,11 @@ cat > downloads.csh << 'EOF'
     chmod +x doSplit.csh
 
     rm -f jobList
-    foreach f (../../maf/*.maf) 
+    foreach f (../../maf/*.maf)
       set c = $f:t:r
       echo "doSplit.csh $c {check out line+ $WINDOWS/$c.done}" >> jobList
     end
-    
+
     para make jobList
     para time
 #Completed: 45 of 45 jobs
@@ -3155,9 +3155,9 @@ cat > downloads.csh << 'EOF'
         -o phyloFit.tree
     # Comment from makeHg17.doc:
     # # he ok'ed the results -- not necessary for next human run
-    # TODO: maybe run these by Adam... the numbers in the RATE_MAT and 
+    # TODO: maybe run these by Adam... the numbers in the RATE_MAT and
     # TREE are different between the phyloFit and elliotsEncode models,
-    # not sure if the differences are significant.  I will proceed with 
+    # not sure if the differences are significant.  I will proceed with
     # elliotsEncode as in makeHg17.doc.
 
     # Run phastCons
@@ -3222,7 +3222,7 @@ doPhast.csh $(root1) $(file1) 14 .007 .27
     ssh kolossus
     cd /san/sanvol1/scratch/rn4/multiz9way.2006-03-30/phastCons
     #	The sed's and the sort get the file names in chrom,start order
-    # (Hiram tricks -- split into columns on [.-/] with 
+    # (Hiram tricks -- split into columns on [.-/] with
     #    identifying x,y,z, to allow column sorting and
     #    restoring the filename.  Warning: the sort column
     # will depend on how deep you are in the dir
@@ -3265,7 +3265,7 @@ doPhast.csh $(root1) $(file1) 14 .007 .27
     #	pk is currently closer to the san than any other machine
     ssh kolossus
     cd /san/sanvol1/scratch/rn4/multiz9way.2006-03-30/phastCons/
-    # sort by chromName, chromStart so that items are in numerical order 
+    # sort by chromName, chromStart so that items are in numerical order
     #  for wigEncode
     #next time try Angie's simpler sort, below
     time find ./pp -name "chr*.pp" | \
@@ -3363,7 +3363,7 @@ cat > downloads.csh << 'EOF'
 
 
 # AFFYRAE230 (DONE 4/11/06 angie)
-    # Rachel already set up consensus sequences in 
+    # Rachel already set up consensus sequences in
     # /iscratch/i/affy/RAE230_all.fa - see makeRn3.doc.
 
     # Align consensus sequences to genome.
@@ -3389,36 +3389,36 @@ cat > downloads.csh << 'EOF'
     # Do sort, best in genome filter, and convert to chromosome coordinates
     # to create affyRAE230.psl
     pslSort dirs raw.psl tmp psl
-    # only use alignments that cover 30% of sequence and have at least 
-    # 95% identity in aligned region. minAli = 0.97 too high. 
+    # only use alignments that cover 30% of sequence and have at least
+    # 95% identity in aligned region. minAli = 0.97 too high.
     # low minCover as a lot of n's in these sequences
     pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl contig.psl \
         /dev/null
     liftUp affyRAE230.psl ../../jkStuff/liftAll.lft warn contig.psl
-    
+
     # shorten names in psl file
     sed -e 's/RAE230//' affyRAE230.psl > affyRAE230.psl.bak
     mv affyRAE230.psl.bak affyRAE230.psl
-    
+
     ssh hgwdev
     cd /cluster/data/rn4/bed/affyRat.2006-04-11
     # Rachel already set up /gbdb/hgFixed/affyProbes/RAE230_all.fa -
     # see makeRn3.doc.
     hgLoadSeq -abbr=RAE230 rn4 /gbdb/hgFixed/affyProbes/RAE230_all.fa
-   
+
     # load track into database
     hgLoadPsl rn4 affyRAE230.psl
 
     # Load knownToRAE230:
     hgMapToGene rn4 affyRAE230 knownGene knownToRAE230
 
-    # Clean up    
+    # Clean up
     rm -r psl tmp err batch.bak contig.psl raw.psl seq.tab
 
 
 # AFFYRGU34A (DONE 4/11/06 angie)
 # RG-U34A is the chip used for the GNF Atlas 2 expression data for Rat
-    # Rachel already set up consensus sequences in 
+    # Rachel already set up consensus sequences in
     # /iscratch/i/affy/RG-U34A_all.fa -see makeRn3.doc.
 
     # Align consensus sequences to genome.
@@ -3444,30 +3444,30 @@ cat > downloads.csh << 'EOF'
     # to create affyRGU34A.psl
     pslSort dirs raw.psl tmp psl
 
-    # only use alignments that cover 30% of sequence and have at least 
-    # 95% identity in aligned region. minAli = 0.97 too high. 
+    # only use alignments that cover 30% of sequence and have at least
+    # 95% identity in aligned region. minAli = 0.97 too high.
     # low minCover as a lot of n's in these sequences
     pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl contig.psl \
       /dev/null
     liftUp affyU34A.psl ../../jkStuff/liftAll.lft warn contig.psl
-    
+
     # shorten names in psl file
     sed -e 's/RG-U34A://' affyU34A.psl > affyU34A.psl.bak
     mv affyU34A.psl.bak affyU34A.psl
-    
+
     ssh hgwdev
     cd /cluster/data/rn4/bed/affyU34A
     # Rachel already set up /gbdb/hgFixed/affyProbes/RG-U34A_all.fa -
     # see makeRn3.doc.
     hgLoadSeq -abbr=RG-U34A: rn4 /gbdb/hgFixed/affyProbes/RG-U34A_all.fa
-   
+
     # load track into database
     hgLoadPsl rn4 affyU34A.psl
 
     # create and load knownToU34A
     hgMapToGene rn4 affyU34A knownGene knownToU34A
 
-    # Clean up    
+    # Clean up
     rm -r psl tmp err batch.bak contig.psl raw.psl seq.tab
 
 
@@ -3511,11 +3511,11 @@ sacCer1Fa /cluster/data/sacCer1/bed/blastp/sgdPep.faa
 buildDir /cluster/data/rn4/bed/hgNearBlastp
 scratchDir /san/sanvol1/scratch/rn4HgNearBlastp
 _EOF_
-    # Do -targetOnly until rn4 has been released -- then it will be OK to 
+    # Do -targetOnly until rn4 has been released -- then it will be OK to
     # update rnBlastTab in the other species.
     doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
 # *** Check these tables in rn4:
-# *** knownBaseBlastTab hgBlastTab mmBlastTab drBlastTab dmBlastTab ceBlastTab scBlastTab 
+# *** knownBaseBlastTab hgBlastTab mmBlastTab drBlastTab dmBlastTab ceBlastTab scBlastTab
 
 
 # HGNEAR PROTEIN BLAST TABLES -- QUERIES (DONE 6/26/06 angie)
@@ -3525,7 +3525,7 @@ _EOF_
     doHgNearBlastp.pl -queryOnly config.ra >& do.queries.log &
     tail -f do.queries.log
 # *** Check rnBlastTab in these databases:
-# *** hg18 mm8 danRer3 dm2 ce2 sacCer1 
+# *** hg18 mm8 danRer3 dm2 ce2 sacCer1
 
 
 # MORE HGNEAR TABLES (DONE 4/13/06 angie)
@@ -3540,7 +3540,7 @@ _EOF_
 
 # MGI?
 
-# Recomb rate - no doc, but ls -l /cluster/bin/scripts/*ecomb* and see 
+# Recomb rate - no doc, but ls -l /cluster/bin/scripts/*ecomb* and see
 # ftp://ftp.ncbi.nih.gov/genomes/R_norvegicus/Mapping_data/
 
 # SNPS - TBD by Heather's new process.
@@ -3656,14 +3656,14 @@ BASE=/cluster/data/rn4/bed/blastz.galGal3.2006-05-24
 # go back to hgwdev
 
    hgKegg3 rn4 rn4
- 
+
    hgsql rn4 -e "drop table keggMapDesc"
    hgsql rn4 -e "drop table keggPathway"
    hgsql rn4 <~/src/hg/lib/keggMapDesc.sql
    hgsql rn4 <~/src/hg/lib/keggPathway.sql
    hgsql rn4 -e 'load data local infile "keggMapDesc.tab" into table keggMapDesc'
    hgsql rn4 -e 'load data local infile "keggPathway.tab" into table keggPathway'
-  
+
 #########################################################################
 # BUILD SOME KNOWNTO... TABLES, DONE 6/12/06 Fan.
 
@@ -3680,7 +3680,7 @@ hgMapViaSwissProt rn4 knownGene name proteinID Pfam knownToPfam
 hgsql -e "select count(*) from knownToPfam;" rn4
 
 #########################################################################
-# BLASTZ/CHAIN/NET DANRER4 - NO LINSPECREP (DONE, 2006-06-19, hartera) 
+# BLASTZ/CHAIN/NET DANRER4 - NO LINSPECREP (DONE, 2006-06-19, hartera)
     ssh pk
     mkdir /cluster/data/rn4/bed/blastz.danRer4.2006-06-19
     cd /cluster/data/rn4/bed/blastz.danRer4.2006-06-19
@@ -3724,7 +3724,7 @@ BASE=/cluster/data/rn4/bed/blastz.danRer4.2006-06-19
         `pwd`/DEF >& do.log &
     tail -f do.log
     # Took 2 hours and 50 minutes to run.
-    ln -s blastz.danRer4.2006-06-19 /cluster/data/rn4/bed/blastz.danRer4 
+    ln -s blastz.danRer4.2006-06-19 /cluster/data/rn4/bed/blastz.danRer4
     # Do swap to create danRer4 vs rn4:
     ssh pk
     cd /cluster/data/rn4/bed/blastz.danRer4.2006-06-19
@@ -3733,28 +3733,28 @@ BASE=/cluster/data/rn4/bed/blastz.danRer4.2006-06-19
         -swap `pwd`/DEF >& swap.log &
     # Took about 10 minutes to run.
     rm *.log
-    # Check README.txt is correct for alignment downloads. 
+    # Check README.txt is correct for alignment downloads.
     featureBits rn4 chainDanRer4Link
-    # 67765280 bases of 2571531505 (2.635%) in intersection 
+    # 67765280 bases of 2571531505 (2.635%) in intersection
     featureBits rn4 refGene:cds chainDanRer4Link -chrom=chr1 -enrichment
-    # refGene:cds 0.731%, chainDanRer4Link 3.337%, both 0.518%, 
+    # refGene:cds 0.731%, chainDanRer4Link 3.337%, both 0.518%,
     # cover 70.86%, enrich 21.24x
     featureBits rn4 refGene:cds chainDanRer3Link -chrom=chr1 -enrichment
-    # refGene:cds 0.731%, chainDanRer3Link 2.699%, both 0.475%, 
+    # refGene:cds 0.731%, chainDanRer3Link 2.699%, both 0.475%,
     # cover 64.89%, enrich 24.04x
     featureBits rn4 refGene:cds netDanRer4 -chrom=chr1 -enrichment
-    # refGene:cds 0.731%, netDanRer4 29.999%, both 0.575%, cover 78.65%, 
+    # refGene:cds 0.731%, netDanRer4 29.999%, both 0.575%, cover 78.65%,
     # enrich 2.62x
     featureBits rn4 refGene:cds netDanRer3 -chrom=chr1 -enrichment
-    # refGene:cds 0.731%, netDanRer3 25.934%, both 0.530%, cover 72.52%, 
+    # refGene:cds 0.731%, netDanRer3 25.934%, both 0.530%, cover 72.52%,
     # enrich 2.80x
 
 #########################################################################
 #### REBUILD kgProtMap TABLE (DONE. 6/19/06 Fan)
-# Existing kgProtMap table only had 33 entries. 
+# Existing kgProtMap table only had 33 entries.
 
     ssh kolossus
-   
+
     cd /cluster/store9/rn4/bed/kgRn4A
     ~/kent/src/hg/protein/kgProtMap2.sh kgRn4A rn4 060115
 
@@ -3794,7 +3794,7 @@ BASE=/cluster/data/rn4/bed/blastz.danRer4.2006-06-19
 
    hgsql rn4 < ~/src/hg/lib/sfAssign.sql
 
-   cd /cluster/data/superfamily/060619  
+   cd /cluster/data/superfamily/060619
    hgsql rn4 -e 'load data local infile "ass_18-Jun-2006.tab" into table rn4.sfAssign;'
 
 # If rn4.sfDes already exists, drop it.
@@ -3803,7 +3803,7 @@ BASE=/cluster/data/rn4/bed/blastz.danRer4.2006-06-19
    hgsql rn4 < ~/src/hg/lib/sfDes.sql
    hgsql rn4 -e 'load data local infile "sfDes.tab" into table sfDes'
 
-# Build ensemblXref3 
+# Build ensemblXref3
 
     # Get the ensembl gene/protein cross-reference data from Ensembl BioMart
     # http://www.ensembl.org/Multi/martview
@@ -3849,14 +3849,14 @@ BASE=/cluster/data/rn4/bed/blastz.danRer4.2006-06-19
 
 # Create knownToSuperfamily table
 # Note hs is changed into ht for this Superfamily release.
-   
+
    cat /cluster/data/superfamily/060619/ass_18-Jun-2006.tab \
    | hgKnownToSuper rn4 rn stdin
 # created 25287 rows in knownToSuper
 
 # Build tables needed by pbGlobal in proteins060115
 
-   cd /cluster/data/superfamily/060619  
+   cd /cluster/data/superfamily/060619
    hgsql proteins060115 -e 'delete from sfAssign'
    hgsql proteins060115 -e 'delete from sfDes'
    hgsql proteins060115 -e 'load data local infile "ass_18-Jun-2006.tab" into table sfAssign'
@@ -3865,11 +3865,11 @@ BASE=/cluster/data/rn4/bed/blastz.danRer4.2006-06-19
 ########################################################################
 # Build rn4 PROTEOME BROWSER TABLES (DONE 6/20/06, Fan)
 
-# These are instructions for building tables 
-# needed for the Proteome Browser. 
- 
+# These are instructions for building tables
+# needed for the Proteome Browser.
+
 # DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
-# ARE REBUILT.  
+# ARE REBUILT.
 # This build is based on proteins DBs dated 060115.
 
 # Create the working directory
@@ -3952,8 +3952,8 @@ o Build the pepPi table
 # Adjust drawing parameters for Proteome Browser stamps
 
   Now invoke Proteome Browser and adjust various drawing parameters
-  (mostly the ymax of each stamp) if necessary, by updating the 
-  pbStamp.tab file and then delete and reload the pbStamp table. 
+  (mostly the ymax of each stamp) if necessary, by updating the
+  pbStamp.tab file and then delete and reload the pbStamp table.
 
   hgsql rn4 -e "drop table pbStamp"
   hgsql rn4 < ~/src/hg/lib/pbStamp.sql
@@ -3963,7 +3963,7 @@ o Build the pepPi table
   notify QA for formal review.
 
 ################################################################################
-# BUILD KNOWN GENE LIST FOR GOOGLE. (DONE, 6/6/06, Fan)  
+# BUILD KNOWN GENE LIST FOR GOOGLE. (DONE, 6/6/06, Fan)
 # make knownGeneLists.html rn4GeneList.html mm5GeneList.html rm3GeneList.html
 
     cd /cluster/data/rn4/bed
@@ -4019,7 +4019,7 @@ o Build the pepPi table
 # but not for chrUn.  chrUn has contig coords only, and without ctgPos
 # for supercontigs, I can't translate the chrUn contig coords into chrom coords.
 # Also note: rn4 has no chrY, and there were no SNPs for chrM.
-# Not having ctgPos also meant I couldn't process the new locTypes 
+# Not having ctgPos also meant I couldn't process the new locTypes
 # (4,5,6: rangeInsertion, rangeSubstitution, rangeDeletion)
 # because those are also only given in contig coords
 # These were a small number.
@@ -4073,7 +4073,7 @@ foreach file (rs_ch*.fas)
     echo $file
     zcat $file >> rsAll.fas
 end
-'_EOF_' 
+'_EOF_'
 # << emacs
 #snpCleanSeq strips the header and skips duplicates
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpCleanSeq rsAll.fas snp.fa
@@ -4119,17 +4119,17 @@ cd /cluster/data/dbSNP/125/organisms/rat_10116/rs_fasta
 
 # load on kkr5u00
 ssh kkr5u00
-hgsql -e mysql 'create database rn4snp125' 
+hgsql -e mysql 'create database rn4snp125'
 cd /cluster/data/dbSNP/125/organisms/rat_10116/schema
 hgsql rn4snp125 < table.sql
 cd ../data
 /bin/csh load.csh
 
 # note rowcount
-# ContigLoc        94945 
-# SNP              41658 
-# MapInfo          41658 
-# ContigLocusId    32954 
+# ContigLoc        94945
+# SNP              41658
+# MapInfo          41658
+# ContigLocusId    32954
 
 # Get UniVariation from 126 (recently downloaded for mm8snp126)
 cd /cluster/data/dbSNP/126/shared
@@ -4147,7 +4147,7 @@ cd rat
 cp /cluster/data/dbSNP/125/organisms/rat_10116/rs_fasta/*.gnl .
 
 # examine ContigInfo for group_term and edit pipeline.csh
-# use "ref_assembly" 
+# use "ref_assembly"
 
 # filter ContigLoc into ContigLocFilter
 # this lifts from contig coords to chrom coords
@@ -4170,7 +4170,7 @@ mysql> desc ContigLocFilter;
 #  | orientation   | tinyint(4)  | NO   |     |         |       |
 #  | allele        | blob        | YES  |     | NULL    |       |
 #  +---------------+-------------+------+-----+---------+-------+
- 
+
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpContigLocFilter125 rn4snp125 ref_assembly RGSC_v3.4.0
 # note rowcount
 # ContigLocFilter  45735
@@ -4191,12 +4191,12 @@ mysql> select count(*), loc_type from ContigLocFilter group by loc_type;
 # filter ContigLocusId into ContigLocusIdFilter
 # need to filter on contig_acc because ctg_id = 0 for all rows in ContigLocusId
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpContigLocusIdFilter125 rn4snp125 ref_assembly
-# note rowcount 
+# note rowcount
 # 32954 (same as ContigLocusId)
 
 # condense ContigLocusIdFilter into ContigLocusIdCondense (one SNP can have multiple functions)
 # assumes SNPs are in numerical order; will errAbort if not true
-/cluster/home/heather/kent/src/hg/snp/snpLoad/snpContigLocusIdCondense rn4snp125 
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpContigLocusIdCondense rn4snp125
 # note rowcount; expect about 50% (ascertainment bias for SNPs within genes)
 # actually we get about 80% here
 # ContigLocusIdCondense 23754
@@ -4205,12 +4205,12 @@ mysql> select count(*), loc_type from ContigLocFilter group by loc_type;
 # create chrN_snpFasta tables from *.gnl files
 # we are just using molType, but also storing class and observed
 # need chromInfo for this
-/cluster/home/heather/kent/src/hg/snp/snpLoad/snpLoadFasta rn4snp125 
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpLoadFasta rn4snp125
 
 # (could start using pipeline.csh here)
 # (pipeline.csh takes about 5 minutes to run)
 
-# split ContigLocFilter by chrom 
+# split ContigLocFilter by chrom
 # create the first chrN_snpTmp
 # we will reuse this table name, adding/changing columns as we go
 # at this point chrN_snpTmp will have the same description as ContigLocFilter
@@ -4219,15 +4219,15 @@ mysql> select count(*), loc_type from ContigLocFilter group by loc_type;
 
 # check coords using loc_type
 # possible errors logged to snpLocType.error:
-# Unknown locType 
-# Between with allele != '-' 
+# Unknown locType
+# Between with allele != '-'
 # Exact with end != start + 1
-# Range with end < start 
+# Range with end < start
 # possible exceptions logged to snpLocType.exceptions:
 # RefAlleleWrongSize
 # This run no errors, no exceptions
 
-# morph chrN_snpTmp 
+# morph chrN_snpTmp
 
 mysql> desc chr1_snpTmp;
 
@@ -4259,7 +4259,7 @@ mysql> desc chr1_snpTmp;
 # sort by position
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpSort rn4snp125 ref_assembly
 
-# get nib files 
+# get nib files
 ssh hgwdev
 cd /cluster/data/rn4
 cp rn4.2bit /cluster/home/heather/transfer/snp/rn4
@@ -4276,7 +4276,7 @@ cp /cluster/home/heather/transfer/snp/rn4/rn4.2bit .
 # This run no errors
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpRefUCSC rn4snp125
 
-# morph chrN_snpTmp 
+# morph chrN_snpTmp
 
 mysql> desc chr1_snpTmp;
 
@@ -4310,7 +4310,7 @@ mysql> desc chr1_snpTmp;
 # add class and observed using univar_id from SNP table
 # to get class (subsnp_class) and observed (var_str) from UniVariation
 # log errors to snpClassAndObserved.errors
-# errors detected: 
+# errors detected:
 # class = 0 in UniVariation
 # class > 8 in UniVariation
 # univar_id = 0 in SNP
@@ -4318,8 +4318,8 @@ mysql> desc chr1_snpTmp;
 # This run we got:
 # 3 class = 0 in UniVariation
 # 0 class > 8 in UniVariation
-# 0 univar_id = 0 in SNP 
-# 0 no row in SNP for snp_id in chrN_snpTmp 
+# 0 univar_id = 0 in SNP
+# 0 no row in SNP for snp_id in chrN_snpTmp
 # dbSNP has class = 'in-del'
 # we promote this to 'deletion' for locType 1&2 and to 'insertion' for locType 3
 
@@ -4348,8 +4348,8 @@ mysql> desc chr1_snpTmp;
 # NamedClassWrongLocType
 
 # ObservedWrongFormat
-# ObservedWrongSize 
-# ObservedMismatch 
+# ObservedWrongSize
+# ObservedMismatch
 
 # RangeSubstitutionLocTypeExactMatch
 
@@ -4393,8 +4393,8 @@ cp snp125.tab /cluster/home/heather/transfer/snp/rn4
 hgsql rn4snp125 -e 'select * from snp125Exceptions' > /cluster/home/heather/transfer/snp/rn4/snp125Exceptions.tab
 ssh hgwdev
 cd transfer/snp/rn4
-mysql> load data local infile 'snp125.tab' into table snp125; 
-mysql> load data local infile 'snp125Exceptions.tab' into table snp125Exceptions; 
+mysql> load data local infile 'snp125.tab' into table snp125;
+mysql> load data local infile 'snp125Exceptions.tab' into table snp125Exceptions;
 
 # create indexes
 mysql> alter table snp125 add index name (name);
@@ -4431,12 +4431,12 @@ mysql> select count(*), exception from snp125Exceptions group by exception;
 # We are starting with xxBlastTab tables already built in the usual way with
 # blastall/blastp, probably with doHgNearBlastp.pl script.
 #
-# we want to update rn4 for human and mouse, 
+# we want to update rn4 for human and mouse,
 # so check ./hgGeneData/Rat/rn4/otherOrgs.ra for current settings
 
 ssh hgwdev
 
-synBlastp.csh rn4 hg18 
+synBlastp.csh rn4 hg18
 #rn4.hgBlastTab:
 #new number of unique query values:
 #7379
@@ -4523,15 +4523,15 @@ BLASTZ_M=50
 
 # TARGET: Horse equCab1
 SEQ1_DIR=/san/sanvol1/scratch/equCab1/equCab1.2bit
-SEQ1_LEN=/san/sanvol1/scratch/equCab1/chrom.sizes       
+SEQ1_LEN=/san/sanvol1/scratch/equCab1/chrom.sizes
 # Maximum number of scaffolds that can be lumped together
-SEQ1_LIMIT=500     
+SEQ1_LIMIT=500
 SEQ1_CHUNK=30000000
 SEQ1_LAP=10000
 
 # QUERY: Mouse rn4
 SEQ2_DIR=/scratch/hg/rn4/nib
-SEQ2_LEN=/cluster/data/rn4/chrom.sizes 
+SEQ2_LEN=/cluster/data/rn4/chrom.sizes
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
 
@@ -4652,8 +4652,8 @@ TMPDIR=/scratch/tmp
       QTLS
     ssh hgwdev
     cd /cluster/data/rn4/bed/rgdQtl
-    # 9/26/07: RGD said that the duplicate Gluco13 was supposed to be 
-    # Gluco13 + Gluco31.  Edited rgdQtl.bed to change Gluco13 -> 31 for 
+    # 9/26/07: RGD said that the duplicate Gluco13 was supposed to be
+    # Gluco13 + Gluco31.  Edited rgdQtl.bed to change Gluco13 -> 31 for
     # the chr15 copy, and rgdQtlLink.txt for id 631516.
     # 10/3/13: Steve found a joinerCheck error about duplicate Gluco13,
     # and somehow Gluco31 is no longer in the database tables.  Re-running:
@@ -4678,7 +4678,7 @@ TMPDIR=/scratch/tmp
     # this is a custom track, not a pure BED
     tail +2 contrast.rn4.bed | hgLoadBed -tab rn4 contrastGene stdin
 
-    # verify 
+    # verify
     # load track db (ra and contrastGene.html are global
     # request push of contrastGene
 
@@ -4832,7 +4832,7 @@ see doc/builds.txt for specific details.
 
 
 #############################################################################
-# RAT TISSUE EXON ARRAYS (Melissa Cline, cline@biology.ucsc.edu, 10/14/08)  
+# RAT TISSUE EXON ARRAYS (Melissa Cline, cline@biology.ucsc.edu, 10/14/08)
 # (to build the affyExonTissues track, see the steps outlined in hg18.txt)
 #############################################################################
 
@@ -4921,7 +4921,7 @@ TMPDIR=/scratch/tmp
 	-chainMinScore=5000 -chainLinearGap=medium \
 	-debug -swap -continue=load -stop=load > load.log 2>&1 &
     #	real    27m24.819s
-    cat fb.mm9.chainRn4LastzLink.txt 
+    cat fb.mm9.chainRn4LastzLink.txt
     #	1713323126 bases of 2620346127 (65.385%) in intersection
 
 #############################################################################
@@ -5006,7 +5006,7 @@ TMPDIR=/scratch/tmp
 	-smallClusterHub=memk -chainLinearGap=medium -noLoadChainSplit \
 	-syntenicNet > cat.log 2>&1 &
     #	real    107m32.779s
-    cat fb.rn4.chainBosTau4Link.txt 
+    cat fb.rn4.chainBosTau4Link.txt
     #	649931321 bases of 2571531505 (25.274%) in intersection
 
     mkdir /cluster/data/bosTau4/bed/blastz.rn4.swap
@@ -5017,7 +5017,7 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	    -swap -syntenicNet > swap.log 2>&1 &
     #	real    77m18.645s
-    cat fb.bosTau4.chainRn4Link.txt 
+    cat fb.bosTau4.chainRn4Link.txt
     #	664253901 bases of 2731830700 (24.315%) in intersection
 
 #########################################################################
@@ -5063,7 +5063,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
 	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
     #	real    501m27.760s
-    cat fb.rn4.chainAilMel1Link.txt 
+    cat fb.rn4.chainAilMel1Link.txt
     #	708197812 bases of 2571531505 (27.540%) in intersection
 
     mkdir /hive/data/genomes/ailMel1/bed/blastz.rn4.swap
@@ -5074,7 +5074,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    73m37.751s
-    cat fb.ailMel1.chainRn4Link.txt 
+    cat fb.ailMel1.chainRn4Link.txt
     #	695366144 bases of 2245312831 (30.970%) in intersection
 
 ############################################################################
@@ -5105,7 +5105,7 @@ TMPDIR=/scratch/tmp
 
 #####################################################################
 # INITIAL RGD GENES BUILD (2010-02-12, Fan, DONE)
-# 
+#
 # NOTE: THE BUILD PIPELINE IS DEVELOPED.  SEVERAL MAJOR PROBLEMS WERE
 # DISCOVERED IN THE ORIGINAL SOURCE DATA FILE.  RGD IS LOOKING INTO THEM.
 #
@@ -5129,7 +5129,7 @@ hgsql rn4 < ~/kent/src/hg/lib/rgdGeneRaw0.sql
 hgsql rn4 -e 'load data local infile "RGDgenes_all.gff3" into table rgdGeneRaw0'
 
 
-# build the rgdId.tab file 
+# build the rgdId.tab file
 hgsql rn4 -N -e 'select "RGD:",seqname from rgdGeneRaw0 '|cut -f 1 >j.rgd
 hgsql rn4 -N -e 'select * from rgdGeneRaw0 '|cut -f 9 >j.0
 
@@ -5142,7 +5142,7 @@ rm j.*
 # fix some currently known problems of RGD Genes
 
 # First, remove gene records that contains exons of different strands.
-# create two temp tables rgdGeneRaw2 and rgdGeneRaw3 
+# create two temp tables rgdGeneRaw2 and rgdGeneRaw3
 
 cut -f 1-8 RGDgenes_all.gff3  >j.temp8
 paste j.temp8 rgdId.tab >rgdGeneRaw2.tab
@@ -5298,7 +5298,7 @@ _EOF_
     doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
 # *** All done!
 # *** Check these tables in rn4:
-# *** knownBlastTab hgBlastTab mmBlastTab drBlastTab dmBlastTab ceBlastTab scBlastTab 
+# *** knownBlastTab hgBlastTab mmBlastTab drBlastTab dmBlastTab ceBlastTab scBlastTab
 #######################################################################################
 # RGD GENES BUILD (2010-10-05, Fan, STARTED)
 
@@ -5310,7 +5310,7 @@ mkdir –p /hive/data/outside/rgd/rat/093010
 cd /hive/data/outside/rgd/rat/093010
 
 # ftp over all files under ftp://rgd.mcw.edu/pub/data_release/GFF/Corrected_GFF3/
- 
+
 cd /hive/data/genomes/rn4/bed
 mkdir rgdGene
 cd rgdGene
@@ -5326,7 +5326,7 @@ hgsql rn4 -e 'drop table rgdGeneRaw0'
 hgsql rn4 < ~/kent/src/hg/lib/rgdGeneRaw0.sql
 hgsql rn4 -e 'load data local infile "RGDgenes_all.gff3" into table rgdGeneRaw0'
 
-# build the rgdId.tab file 
+# build the rgdId.tab file
 hgsql rn4 -N -e 'select "RGD:",seqname from rgdGeneRaw0 where feature="gene"'|cut -f 1 >j.rgd
 hgsql rn4 -N -e 'select * from rgdGeneRaw0 where feature = "gene"'|cut -f 9 >j.0
 
@@ -5339,7 +5339,7 @@ rm j.*
 # fix some currently known problems of RGD Genes
 
 # First, remove gene records that contains exons of different strands.
-# create two temp tables rgdGeneRaw2 and rgdGeneRaw3 
+# create two temp tables rgdGeneRaw2 and rgdGeneRaw3
 
 hgsql rn4 -N -e 'select * from rgdGeneRaw0 where feature = "gene" or feature ="CDS" or feature = "exon"' >j.tmp
 
@@ -5446,7 +5446,7 @@ cd /hive/data/genomes/rn4/bed/rgdGene/093010
 cp -P /hive/data/outside/rgd/rat/093010/GENES_RAT .
 
 hgsql rn4 -e 'drop table genes_rat'
-hgsql rn4 < ~/kent/src/hg/lib/genes_rat.sql 
+hgsql rn4 < ~/kent/src/hg/lib/genes_rat.sql
 hgsql rn4 -e \
 'load data local infile "GENES_RAT" into table genes_rat ignore 1 lines'
 
@@ -5486,7 +5486,7 @@ hgsql rn4 -e 'load data local infile "rgdGene2Pep.tab" into table rgdGene2Pep'
     #	hg/hgGene/rgdInfo.c
     #	hg/makeDb/schema/all.joiner
     cd /hive/data/genomes/rn4/bed/rgdGene/093010
-    hgsql rn4 < ~/kent/src/hg/lib/rgdGene2Raw.sql 
+    hgsql rn4 < ~/kent/src/hg/lib/rgdGene2Raw.sql
     hgsql rn4 -e \
      'load data local infile "GENES_RAT" into table rgdGene2Raw ignore 1 lines'
 
@@ -5800,7 +5800,7 @@ while (my $line = <>) {
 #############################################################################
 # RE-BUILD HGNEAR PROTEIN BLAST TABLES for RGD GENES -- TARGET (DONE 10/18/10, Fan)
     ssh hgwdev
-    
+
     mkdir /hive/data/genomes/rn4/bed/blastpRgdGene2
     cd /hive/data/genomes/rn4/bed/blastpRgdGene2
 
@@ -5808,7 +5808,7 @@ while (my $line = <>) {
     sed -e 's/\t/\n/'|sed -e 's/RGD\:/\>RGD\:/' > rgdGene2Pep.faa
 
     /hive/data/outside/blast229/formatdb -i rgdGene2Pep.faa -t rgdGene2Pep -n rgdGene2Pep
-    
+
     mkdir /hive/data/genomes/rn4/bed/hgNearBlastp/101018rgdGene2
     cd /hive/data/genomes/rn4/bed/hgNearBlastp/101018rgdGene2
     cat << _EOF_ > config.ra
@@ -5819,7 +5819,7 @@ targetGenesetPrefix rgdGene2
 targetDb rn4
 queryDbs hg19 mm9 danRer6 dm3 ce6 sacCer2
 
-rn4Fa /hive/data/genomes/rn4/bed/blastpRgdGene2/rgdGene2Pep.faa 
+rn4Fa /hive/data/genomes/rn4/bed/blastpRgdGene2/rgdGene2Pep.faa
 hg19Fa /hive/data/genomes/hg19/bed/ucsc.12/ucscGenes.faa
 mm9Fa  /hive/data/genomes/mm9/bed/ucsc.12/ucscGenes.faa
 danRer6Fa /hive/data/genomes/danRer6/bed/blastp/danRer6.ensPep.faa
@@ -5833,7 +5833,7 @@ _EOF_
     doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
 # *** All done!
 # *** Check these tables in rn4:
-# *** rgdGene2BlastTab hgBlastTab mmBlastTab drBlastTab dmBlastTab ceBlastTab scBlastTab 
+# *** rgdGene2BlastTab hgBlastTab mmBlastTab drBlastTab dmBlastTab ceBlastTab scBlastTab
 
 ###################################
 # Build tables for hgNear with RGD Genes as the main gene set for rn4
@@ -5907,7 +5907,7 @@ fgrep "NM_" j > rgdGene2ToRefseq.txt
 hgMapToGene rn4 rgdGene2 rgdGene2 rgdGene2ToRefSeq -lookup=rgdGene2ToRefseq.txt
 
 # build rgdGene2ToCdsSnp table
-    
+
 hgMapToGene rn4 snp130 rgdGene2 rgdGene2ToCdsSnp -all -cds
 
 # build rgdGene2ToSuper table
@@ -5976,7 +5976,7 @@ hgsql rn4 -e 'load data local infile "rgdGene2ToKeggEntrez.tab" into table rgdGe
 cd /hive/data/genomes/rn4/bed/agilentCgh/
 # FTP download from ftp.agilent.com using given user/pass from Anniek De-witte
 # (anniek_de-witte@agilent.com)
-# downloaded files are gzipped beds. The files are typically located in a 
+# downloaded files are gzipped beds. The files are typically located in a
 # directory called "FOR_UCSC" or something like that.  The user/pass and the
 # directory are deleted after it's confirmed they're received, so it's not
 # too helpful to mention specifics here.
@@ -6031,7 +6031,7 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/rn4/bed
     ln -s lastzMelGal1.2011-04-04 lastz.melGal1
 
-    #   running the swap 
+    #   running the swap
     mkdir /hive/data/genomes/melGal1/bed/blastz.rn4.swap
     cd /hive/data/genomes/melGal1/bed/blastz.rn4.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -6143,7 +6143,7 @@ BASE=/hive/data/genomes/rn4/bed/lastzXenTro3.2011-09-22
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
         -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
     #	real    549m35.173s
-    cat fb.rn4.chainXenTro3Link.txt 
+    cat fb.rn4.chainXenTro3Link.txt
     #	66202042 bases of 2571531505 (2.574%) in intersection
 
     cd /hive/data/genomes/rn4/bed
@@ -6159,7 +6159,7 @@ BASE=/hive/data/genomes/rn4/bed/lastzXenTro3.2011-09-22
         -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
     #	Elapsed time: 20m33s
 
-    cat fb.xenTro3.chainRn4Link.txt 
+    cat fb.xenTro3.chainRn4Link.txt
     #	70846825 bases of 1358334882 (5.216%) in intersection
 
     cd /hive/data/genomes/xenTro3/bed
@@ -6265,16 +6265,16 @@ BASE=/hive/data/genomes/rn4/bed/lastzXenTro3.2011-09-22
     db=rn4
 
     for j in `awk '{print $1}' /cluster/data/rn4/chrom.sizes`
-    do  
+    do
         echo "select chrom, chromStart, chromEnd, transcript from
 $cb where chrom='$j'" | hgsql $db | tail -n +2 > $j.known.bed
     done
 
     mkdir exonAA exonNuc ppredAA ppredNuc
     for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
-    do  
-        echo "date" 
-        echo "mafGene -geneBeds=$j.known.bed  $db $mz $gp order.lst stdout | \  
+    do
+        echo "date"
+        echo "mafGene -geneBeds=$j.known.bed  $db $mz $gp order.lst stdout | \
             gzip -c > ppredAA/$j.ppredAA.fa.gz"
         echo "mafGene -geneBeds=$j.known.bed -noTrans $db $mz $gp order.lst stdout | \
             gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
@@ -6389,7 +6389,7 @@ export PATH=/cluster/home/max/bin/x86_64:/cluster/bin/x86_64:/cluster/home/max/s
 # pmc
 cd /hive/data/inside/literature/pubtools/runs/pmcBlat/
 pubBlat init /hive/data/inside/literature/blat/pmc/ /hive/data/inside/literature/text/pmc
-ssh swarm 
+ssh swarm
 cd /hive/data/inside/literature/pubtools/runs/pmcBlat/
 pubBlat steps:annot-tables
 exit
@@ -6398,7 +6398,7 @@ pubBlat load
 # elsevier
 cd /hive/data/inside/literature/pubtools/runs/elsBlat/
 pubBlat init /hive/data/inside/literature/blat/elsevier/ /hive/data/inside/literature/text/elsevier
-ssh swarm 
+ssh swarm
 cd /hive/data/inside/literature/pubtools/runs/elsBlat/
 pubBlat steps:annot-tables
 exit
@@ -6424,7 +6424,7 @@ pubBlat load
 # NUMTS TRACK (DONE 2013-06-16 - Chin)
 
 # copy and unzip
-# http://193.204.182.50/files/tracks.zip and 
+# http://193.204.182.50/files/tracks.zip and
 # http://193.204.182.50/files/other%20NumtS%20tracks.zip
 # to /hive/data/outside/NumtS/2012/tracks
 
@@ -6447,3 +6447,128 @@ pubBlat load
 
 
 #############################################################################
+# LASTZ dog canFam3 (DONE - 2015-09-25 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S rn4CanFam3
+    mkdir /hive/data/genomes/rn4/bed/lastzCanFam3.2015-09-25
+    cd /hive/data/genomes/rn4/bed/lastzCanFam3.2015-09-25
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    printf "%s\n" \
+'# rat vs. dog
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: rat Rn4
+SEQ1_DIR=/scratch/data/rn4/rn4.2bit
+SEQ1_LEN=/scratch/data/rn4/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=80
+
+# QUERY: dog CanFam3
+SEQ2_DIR=/hive/data/genomes/canFam3/canFam3.2bit
+SEQ2_LEN=/hive/data/genomes/canFam3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=80
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/rn4/bed/lastzCanFam3.2015-09-25
+TMPDIR=/dev/shm' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	 -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    #	real    427m33.650s
+
+    cat fb.rn4.chainCanFam3Link.txt
+    #	731313832 bases of 2571531505 (28.439%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` rn4 canFam3) > rbest.log 2>&1 &
+    # real    32m48.521s
+
+    mkdir /hive/data/genomes/canFam3/bed/blastz.rn4.swap
+    cd /hive/data/genomes/canFam3/bed/blastz.rn4.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn4/bed/lastzCanFam3.2015-09-25/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    # continuing after hive difficulties and finishing the load step manually
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn4/bed/lastzCanFam3.2015-09-25/DEF \
+	-continue=download -swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > download.log 2>&1
+    #	real    13m20.144s
+
+    cat fb.canFam3.chainRn4Link.txt
+    #	715119803 bases of 2392715236 (29.887%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` canFam3 rn4) \
+        > rbest.log 2>&1
+    # real    34m18.287s
+
+##############################################################################
+# lastz chicken galGal4 (DONE - 2015-09-25 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S rn4GalGal4
+    mkdir /hive/data/genomes/rn4/bed/lastzGalGal4.2015-09-25
+    cd /hive/data/genomes/rn4/bed/lastzGalGal4.2015-09-25
+
+    printf "%s\n" \
+'# rat vs. chicken
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: rat Rn4
+SEQ1_DIR=/scratch/data/rn4/rn4.2bit
+SEQ1_LEN=/scratch/data/rn4/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=25
+
+# QUERY: chicken galGal4
+SEQ2_DIR=/hive/data/genomes/galGal4/galGal4.2bit
+SEQ2_LEN=/hive/data/genomes/galGal4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/rn4/bed/lastzGalGal4.2015-09-25
+TMPDIR=/dev/shm' > DEF
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    #	real    329m26.996s
+
+    cat fb.rn4.chainGalGal4Link.txt
+    #	93157441 bases of 2571531505 (3.623%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` rn4 galGal4) > rbest.log 2>&1 &
+    #  real    20m58.616s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/galGal4/bed/blastz.rn4.swap
+    cd /hive/data/genomes/galGal4/bed/blastz.rn4.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rn4/bed/lastzGalGal4.2015-09-25/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet -swap -chainMinScore=5000 -chainLinearGap=loose) \
+        > swap.log 2>&1
+    # real    9m7.862s
+
+    cat  fb.galGal4.chainRn4Link.txt
+    #	79788956 bases of 1032854810 (7.725%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` galGal4 rn4) > rbest.log 2>&1
+    # lost rbest.log contents due to hive glitches
+
+#########################################################################

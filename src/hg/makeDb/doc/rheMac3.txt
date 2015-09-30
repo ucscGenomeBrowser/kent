@@ -98,7 +98,7 @@ while (my $line = <FH>) {
     if ($line =~ m/^#/) {
         print UC $line;
     } else {
-        $line =~ s/\.1//;    
+        $line =~ s/\.1//;
         printf UC "chrUn_%s", $line;
     }
 }
@@ -206,7 +206,7 @@ taxId 9544
 	rheMac3 > do.log 2>&1 &
     #	real    113m25.254s
 
-    cat fb.simpleRepeat 
+    cat fb.simpleRepeat
     #	61072049 bases of 2792623296 (2.187%) in intersection
 
     # add to rmsk after it is done:
@@ -377,7 +377,7 @@ close (FH);
 ########################################################################
 # MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE 2012-01-09 - Chin)
 # Create kluster run files (
-    # numerator is rheMac3 gapless bases "real" as reported by: 
+    # numerator is rheMac3 gapless bases "real" as reported by:
     featureBits -noRandom -noHap rheMac3 gap
     # 323705474 bases of 2562964352 (12.630%) in intersection
 
@@ -561,7 +561,7 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
     # based on result of
     # hgsql -N -e "select type from ctgPos2;" rheMac3 | sort | uniq
     # W
-    # prepare the src/hg/makeDb/trackDb/cow/rheMac3/ctgPos2.html 
+    # prepare the src/hg/makeDb/trackDb/cow/rheMac3/ctgPos2.html
 
 ############################################################################
 # running cpgIsland business (DONE -2012-01-18 - Chin)
@@ -809,7 +809,7 @@ TMPDIR=/scratch/tmp
     cd /cluster/data/rheMac3/bed/blastz.rn5.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
         /cluster/data/rn5/bed/lastz.rheMac3.2012-07-10/DEF \
-        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \      
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium \
         -swap -syntenicNet > swap.log 2>&1 &
     #   real    69m12.752s
@@ -883,7 +883,7 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/panTro4/bed
     ln -s lastzRheMac3.2012-07-19 lastz.rheMac3
 
-    #   running the swap  
+    #   running the swap
     mkdir /hive/data/genomes/rheMac3/bed/blastz.panTro4.swap
     cd /hive/data/genomes/rheMac3/bed/blastz.panTro4.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -950,7 +950,7 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/rheMac3/bed
     ln -s lastzCalJac3.2012-07-19 lastz.calJac3
 
-    #   running the swap 
+    #   running the swap
     mkdir /hive/data/genomes/calJac3/bed/blastz.rheMac3.swap
     cd /hive/data/genomes/calJac3/bed/blastz.rheMac3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -967,7 +967,7 @@ TMPDIR=/scratch/tmp
 
 
 ***********************************************************************
-* TODOain/net 
+* TODOain/net
  *** Make sure that goldenPath/ponAbe2/vsRheMac3/README.txt is accurate.
  *** Add {chain,net}RheMac3 tracks to trackDb.ra if necessary.
 
@@ -1241,3 +1241,136 @@ http://genome.crg.es/genepredictions/M.mulatta/rheMac3/geneid_v1.4/rheMac3.genei
 #    enrich 59.31x
 
 ##########################################################################
+# LASTZ rhesus/rheMac3 dog/canFam3 - (DONE - 2015-09-25 - Hiram)
+    mkdir /hive/data/genomes/rheMac3/bed/lastzCanFam3.2015-09-25
+    cd /hive/data/genomes/rheMac3/bed/lastzCanFam3.2015-09-25
+
+    printf "%s\n" \
+'# rhesus vs dog
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: Rhesus RheMac3
+SEQ1_DIR=/scratch/data/rheMac3/rheMac3.2bit
+SEQ1_LEN=/scratch/data/rheMac3/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Dog CanFam3
+SEQ2_DIR=/hive/data/genomes/canFam3/canFam3.2bit
+SEQ2_LEN=/hive/data/genomes/canFam3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/rheMac3/bed/lastzCanFam3.2015-09-25
+TMPDIR=/dev/shm' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -syntenicNet -workhorse=hgwdev -smallClusterHub=ku \
+        -bigClusterHub=ku -fileServer=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    # real    849m2.453s
+
+    cat fb.rheMac3.chainCanFam3Link.txt
+    # 1421649657 bases of 2639145830 (53.868%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` rheMac3 canFam3) > rbest.log 2>&1 &
+    # lost end of rbest.log file due to hive difficulties
+
+    # and for the swap:
+    mkdir /hive/data/genomes/canFam3/bed/blastz.rheMac3.swap
+    cd /hive/data/genomes/canFam3/bed/blastz.rheMac3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/rheMac3/bed/lastzCanFam3.2015-09-25/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # continuing after hive difficulties and finish the net step manually
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/rheMac3/bed/lastzCanFam3.2015-09-25/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -continue=load -syntenicNet) > load.log 2>&1
+    #  real    48m13.671s
+
+    cat fb.canFam3.chainRheMac3Link.txt
+    # 1415605354 bases of 2392715236 (59.163%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` canFam3 rheMac3) \
+        > rbest.log 2>&1
+XXX - running - Tue Sep 29 12:22:16 PDT 2015
+    # real    43m54.042s
+
+#########################################################################
+# LASTZ rhesus/rheMac3 vs. chicken/galGal4 - (DONE - 2015-09-25 - Hiram)
+    mkdir /hive/data/genomes/rheMac3/bed/lastzGalGal4.2015-09-25
+    cd /hive/data/genomes/rheMac3/bed/lastzGalGal4.2015-09-25
+
+    printf "%s\n" \
+'# rhesus vs chicken
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+#      A    C    G    T
+#     91  -90  -25 -100
+#    -90  100 -100  -25
+#    -25 -100  100  -90
+#   -100  -25  -90  91
+
+# TARGET: rhesus rheMac3
+SEQ1_DIR=/scratch/data/rheMac3/rheMac3.2bit
+SEQ1_LEN=/scratch/data/rheMac3/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: chicken galGal4
+SEQ2_DIR=/hive/data/genomes/galGal4/galGal4.2bit
+SEQ2_LEN=/hive/data/genomes/galGal4/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/rheMac3/bed/lastzGalGal4.2015-09-25
+TMPDIR=/dev/shm' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    214m36.652s
+
+    cat fb.rheMac3.chainGalGal4Link.txt
+    # 114693597 bases of 2639145830 (4.346%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` rheMac3 galGal4) > rbest.log 2>&1 &
+    # real    15m38.646s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/galGal4/bed/blastz.rheMac3.swap
+    cd /hive/data/genomes/galGal4/bed/blastz.rheMac3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/rheMac3/bed/lastzGalGal4.2015-09-25/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    11m39.434s
+
+    cat fb.galGal4.chainRheMac3Link.txt
+    # 102687176 bases of 1032854810 (9.942%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` galGal4 rheMac3) > rbest.log 2>&1
+    # continuing after hive difficulties and finishing the recipBest step
+    # manually
+    time (doRecipBest.pl -workhorse=hgwdev -continue=download  -buildDir=`pwd` \
+      galGal4 rheMac3) > download.log 2>&1
+    # real    0m4.349s
+
+#########################################################################

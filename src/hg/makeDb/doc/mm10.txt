@@ -11070,11 +11070,11 @@ tawk '{print $1}'  attrs | sort | uniq > meta
 wc -l meta
 # 110847 meta
 for i in product Dbxref gene gbkey
-do 
+do
     echo $i
     tawk -v attr=$i '$2==attr {print $1,$3}' attrs | sort | uniq | join -t $'\t' /dev/stdin meta > out
     mv out meta
-done  
+done
 wc -l meta
 # 109420 meta
 
@@ -11216,7 +11216,7 @@ http://genome.crg.es/genepredictions/M.musculus/mm10/SGP2/hg38/mm10.sgp2.gff3
     mkdir -p /hive/data/genomes/mm10/bed/gencodeVM5
     cd /hive/data/genomes/mm10/bed/gencodeVM5
 
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set 
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set
     # release and transcript support versions
 
 
@@ -11254,5 +11254,67 @@ http://genome.crg.es/genepredictions/M.musculus/mm10/SGP2/hg38/mm10.sgp2.gff3
     # output in check/joiner.out
     cd /hive/data/genomes/mm10/bed/gencodeVM5
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+#########################################################################
+# lastz zebrafish danRer10 (DONE - 2015-09-11 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S mm10DanRer10
+    mkdir /hive/data/genomes/mm10/bed/lastzDanRer10.2015-09-11
+    cd /hive/data/genomes/mm10/bed/lastzDanRer10.2015-09-11
+
+    cat << '_EOF_' > DEF
+# Mouse vs. zebrafish
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: zebrafish danRer10
+SEQ2_DIR=/hive/data/genomes/danRer10/danRer10.2bit
+SEQ2_LEN=/hive/data/genomes/danRer10/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/mm10/bed/lastzDanRer10.2015-09-11
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    # adjust the SEQ2_LIMIT with -stop=partition to get a reasonable
+    #	number of jobs, 50,000 to something under 100,000
+    # when not present, SEQ2_LIMIT is a default 100
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    #	real    198m3.073s
+
+    cat fb.mm10.chainDanRer10Link.txt
+    #	73464192 bases of 2652783500 (2.769%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` mm10 danRer10) > rbest.log 2>&1 &
+    #    real    7m8.599s
+
+    #	and for the swap
+    mkdir /hive/data/genomes/danRer10/bed/blastz.mm10.swap
+    cd /hive/data/genomes/danRer10/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzDanRer10.2015-09-11/DEF \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -swap -chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1 &
+    #	real    16m8.387s
+
+    cat  fb.danRer10.chainMm10Link.txt
+    #	71611488 bases of 1369683683 (5.228%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` danRer10 mm10) > rbest.log 2>&1
+    #    real    7m34.259s
 
 #########################################################################

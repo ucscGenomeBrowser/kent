@@ -17,8 +17,8 @@
 #############################################################################
 # Fetch sequence from genbank (DONE - 2012-01-04 - Hiram)
 
-    mkdir -p /hive/data/genomes/galGal4/genbank
-    cd /hive/data/genomes/galGal4/genbank
+    mkdir -p /hive/data/genomes/canFam3/genbank
+    cd /hive/data/genomes/canFam3/genbank
 
     wget --timestamping -r --cut-dirs=6 --level=0 -nH -x \
         --no-remove-listing -np \
@@ -888,3 +888,66 @@ http://genome.crg.es/genepredictions/C.familiaris/canFam3/geneid_v1.4/canFam3.ge
 #     enrich 53.04x
 
 ##########################################################################
+# LASTZ chicken galGal4 (DONE - 2015-09-25 - Hiram)
+    # establish a screen to control this job with a name to indicate what it is
+    screen -S canFam3GalGal4
+    mkdir /hive/data/genomes/canFam3/bed/lastzGalGal4.2015-09-25
+    cd /hive/data/genomes/canFam3/bed/lastzGalGal4.2015-09-25
+
+    printf "%s\n" \
+'# dog vs chicken
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: dog CanFam3
+SEQ1_DIR=/hive/data/genomes/canFam3/canFam3.2bit
+SEQ1_LEN=/hive/data/genomes/canFam3/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: chicken GalGal4
+SEQ2_DIR=/hive/data/genomes/galGal4/galGal4.2bit
+SEQ2_LEN=/hive/data/genomes/galGal4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/canFam3/bed/lastzGalGal4.2015-09-25
+TMPDIR=/dev/shm' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=5000 -chainLinearGap=loose) > do.log 2>&1
+    #	real    247m1.571s
+
+    cat fb.canFam3.chainGalGal4Link.txt
+    #	73335538 bases of 2392715236 (3.065%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` canFam3 galGal4) > rbest.log 2>&1 &
+    # lost the end of rbest.log due to hive difficulties
+
+    mkdir /hive/data/genomes/galGal4/bed/blastz.canFam3.swap
+    cd /hive/data/genomes/galGal4/bed/blastz.canFam3.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/canFam3/bed/lastzGalGal4.2015-09-25/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=5000 -chainLinearGap=loose) > swap.log 2>&1
+    # real    6m50.282s
+
+    cat fb.galGal4.chainCanFam3Link.txt
+    #	65384958 bases of 1032854810 (6.331%) in intersection
+
+    # set sym link to indicate this is the lastz for this genome:
+    cd /hive/data/genomes/galGal4/bed
+    ln -s blastz.canFam3.swap lastz.canFam3
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` galGal4 canFam3) \
+      > rbest.log 2>&1
+    # continuing after hive difficulties and finishing the recipBest step
+    # manually
+    time (doRecipBest.pl -workhorse=hgwdev -continue=download -buildDir=`pwd` \
+     galGal4 canFam3) > download.log 2>&1
+    # real    0m4.400s
+
+##############################################################################
