@@ -1,0 +1,53 @@
+Source Primary
+Species Human
+Genotype Normal
+Enrichment Dissection
+Region Cortex
+Sex NULL
+Clone NULL
+Experiment NULL
+Sister_organoid NULL
+Protocol NULL
+Size_distribution NULL
+Viability NULL
+C1_chip_size Small IFC
+Controller NULL
+Lab Kriegstein
+
+        Chip 1771015133
+        Sample GW16.7-F2
+        Sample2 AP2
+        Age_GW 16.7
+        Hemisphere Left
+        Lobe Frontal
+        Area PFC
+        Layer SVZ
+        Post_mortem Same day
+        Site_of_origin SFGH
+        Date 3/26/2014
+        Notes NULL
+
+                Chamber 1771015133-A1
+                Barcodes TAAGGCGA-TAGATCGC
+                ID_full O10-A1
+                ID 930
+
+                Chamber 1771015133-A11
+                Barcodes AAGAGGCA-TAGATCGC
+                ID_full O10-A11
+                ID 1010
+
+                Chamber 1771015133-A12
+                Barcodes GTAGAGGA-TAGATCGC
+                ID_full O10-A12
+                ID 1018
+
+                Chamber 1771015133-A3
+                Barcodes AGGCAGAA-TAGATCGC
+                ID_full O10-A3
+                ID 946
+
+                Chamber 1771015133-A4
+                Barcodes TCCTGAGC-TAGATCGC
+                ID_full O10-A4
+                ID 954
