@@ -2355,7 +2355,7 @@ release beta,public
 shortLabel PeptideAtlas
 html peptideAtlas
 longLabel Peptide sequences identified from MS spectra of 971 samples by PeptideAtlas
-visibility squish
+visibility hide
 type bed 12
 url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=433&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
 urlLabel Link to PeptideAtlas:
