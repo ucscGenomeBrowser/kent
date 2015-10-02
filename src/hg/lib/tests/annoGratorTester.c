@@ -37,6 +37,7 @@ static const char *snpBigWigToTabOut = "snpBigWigToTabOut";
 static const char *vepOut = "vepOut";
 static const char *vepOutIndelTrim = "vepOutIndelTrim";
 static const char *gpFx = "gpFx";
+static const char *insertions = "insertions";
 
 void usage()
 /* explain usage and exit */
@@ -59,9 +60,11 @@ errAbort(
     "    %s\n"
     "    %s\n"
     "    %s\n"
+    "    %s\n"
     , pgSnpDbToTabOut, pgSnpKgDbToTabOutShort, pgSnpKgDbToTabOutLong,
     snpConsDbToTabOutShort, snpConsDbToTabOutLong,
-    vcfEx1, vcfEx2, bigBedToTabOut, snpBigWigToTabOut, vepOut, vepOutIndelTrim, gpFx
+    vcfEx1, vcfEx2, bigBedToTabOut, snpBigWigToTabOut, vepOut, vepOutIndelTrim, gpFx,
+    insertions
     );
 }
 
@@ -184,6 +187,26 @@ annoGratorQueryExecute(query);
 annoGratorQueryFree(&query);
 }
 
+void doInsertionsRegions(struct streamerInfo *infoList)
+/* Perform a series of region queries on infoList for the 'insertions' test. */
+{
+// Entire range of features in both primary and secondary:
+puts("# region: chr1   0  500");
+dbToTabOut(infoList, "stdout", "chr1", 0, 500, FALSE);
+// Region to the left of insLeft:
+puts("# region: chr1 100  200");
+dbToTabOut(infoList, "stdout", "chr1", 100, 200, FALSE);
+// Region to the right of insLeft and left of insRight:
+puts("# region: chr1 200  300");
+dbToTabOut(infoList, "stdout", "chr1", 200, 300, FALSE);
+// Region to the right of insRight and left of pi (and insPi):
+puts("# region: chr1 300  400");
+dbToTabOut(infoList, "stdout", "chr1", 300, 400, FALSE);
+// Region to the right of pi (and insPi):
+puts("# region: chr1 400  500");
+dbToTabOut(infoList, "stdout", "chr1", 400, 500, FALSE);
+}
+
 int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, optionSpecs);
@@ -207,7 +230,8 @@ if (!doAllTests)
 	sameString(argv[2], snpBigWigToTabOut) ||
 	sameString(argv[2], vepOut) ||
 	sameString(argv[2], vepOutIndelTrim) ||
-	sameString(argv[2], gpFx))
+	sameString(argv[2], gpFx) ||
+	sameString(argv[2], insertions))
 	test = cloneString(argv[2]);
     else
 	{
@@ -398,6 +422,44 @@ if (doAllTests || sameString(test, gpFx))
     annoGratorQuerySetRegion(query, "chr19", 45405960, 45419476);
     annoGratorQueryExecute(query);
     annoGratorQueryFree(&query);
+    }
+
+if (doAllTests || sameString(test, insertions))
+    {
+    struct asObject *bed4AS = asParseFile("../bed.as");
+    struct streamerInfo primary = { NULL, assembly, NULL,
+                                    "input/annoGrator/insertionsPrimary.bed",
+                                    arWords, bed4AS };
+    struct streamerInfo secondary = { NULL, assembly, NULL,
+                                      "input/annoGrator/insertionsSecondary.bed",
+                                      arWords, bed4AS };
+    primary.next = &secondary;
+
+    // Plain BED files
+    puts("# BED files");
+    doInsertionsRegions(&primary);
+
+    // BigBed versions of same files
+    puts("# BigBed files");
+    primary.tableFileUrl = "input/annoGrator/insertionsPrimary.bb";
+    secondary.tableFileUrl = "input/annoGrator/insertionsSecondary.bb";
+    doInsertionsRegions(&primary);
+
+    // Mysql tables from BED files
+    puts("# BED tables");
+    primary.sqlDb = secondary.sqlDb = "test";
+    primary.tableFileUrl = "insertionsPrimary";
+    secondary.tableFileUrl = "insertionsSecondary";
+    doInsertionsRegions(&primary);
+
+    // Uncompressed VCF with same features as BED files
+    puts("# VCF files (uncompressed)");
+    knetUdcInstall();
+    primary.sqlDb = secondary.sqlDb = NULL;
+    primary.tableFileUrl = "input/annoGrator/insertionsPrimary.vcf";
+    secondary.tableFileUrl = "input/annoGrator/insertionsSecondary.vcf";
+    primary.asObj = secondary.asObj = vcfAsObj();
+    doInsertionsRegions(&primary);
     }
 
 return 0;

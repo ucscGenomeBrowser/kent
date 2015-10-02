@@ -5,10 +5,7 @@
 sort $1| grep -v '#' | uniq >  decipherRawNew.txt 
 
 hgsql hg19 -e 'drop table if exists decipherRawNew'
-hgsql hg19 -e 'create table decipherRawNew select * from decipherRaw limit 0'
-
-hgsql hg19 -e \
-'load data local infile "decipherRawNew.txt" into table decipherRawNew'
+hgLoadSqlTab hg19 decipherRawNew ../decipherRaw.sql decipherRawNew.txt
 
 hgsql hg19 -N -e 'select "chr", chr, start-1, end, id from decipherRawNew ' |\
 sed -e 's/chr\t/chr/' |sort -u>j.tmp

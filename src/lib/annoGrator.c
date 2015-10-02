@@ -76,9 +76,12 @@ INLINE void agFetchToEnd(struct annoGrator *self, char *chrom, uint start, uint 
 {
 while (!self->eof &&
        (self->qTail == NULL || strcmp(self->qTail->chrom, chrom) < 0 ||
-	(sameString(self->qTail->chrom, chrom) && self->qTail->start < end)))
+	(sameString(self->qTail->chrom, chrom) && self->qTail->start <= end)))
     {
-    struct annoRow *newRow = self->mySource->nextRow(self->mySource, chrom, start, self->qLm);
+    // If primary row is a zero-length insertion, we will want to pick up items adjacent
+    // to it on the left, so move minEnd one base to the left:
+    uint minEnd = (start == end) ? start - 1 : start;
+    struct annoRow *newRow = self->mySource->nextRow(self->mySource, chrom, minEnd, self->qLm);
     if (newRow == NULL)
 	self->eof = TRUE;
     else
@@ -119,6 +122,18 @@ while (!self->eof &&
     }
 }
 
+static boolean handleRJFail(boolean rjFail, boolean *retRJFilterFailed)
+/* If retRJFilterFailed is non-NULL and rjFail is TRUE then set *retRJFilterFailed to TRUE
+ * and return TRUE.  Otherwise do nothing and return FALSE. */
+{
+if (retRJFilterFailed != NULL && rjFail)
+    {
+    *retRJFilterFailed = TRUE;
+    return TRUE;
+    }
+return FALSE;
+}
+
 struct annoRow *annoGratorIntegrate(struct annoGrator *self, struct annoStreamRows *primaryData,
 				    boolean *retRJFilterFailed, struct lm *callerLm)
 /* Given a single row from the primary source, get all overlapping rows from internal
@@ -132,34 +147,45 @@ struct annoRow *annoGratorIntegrate(struct annoGrator *self, struct annoStreamRo
 struct annoRow *primaryRow = primaryData->rowList;
 struct annoRow *rowList = NULL;
 agCheckPrimarySorting(self, primaryRow);
-// In order to catch the intersection of two 0-length elements (i.e. two insertions),
-// we have to broaden our search a little:
 int pStart = primaryRow->start, pEnd = primaryRow->end;
-if (pStart == pEnd)
-    {
-    pStart--;
-    pEnd++;
-    }
 char *pChrom = primaryRow->chrom;
 agTrimToStart(self, pChrom, pStart);
 agFetchToEnd(self, pChrom, pStart, pEnd);
 boolean rjFailHard = (retRJFilterFailed != NULL);
 if (rjFailHard)
     *retRJFilterFailed = FALSE;
+int numCols = self->mySource->numCols;
+enum annoRowType rowType = self->mySource->rowType;
 struct annoRow *qRow;
-for (qRow = self->qHead;  qRow != NULL;  qRow = qRow->next)
+if (pStart == pEnd)
     {
-    if (qRow->start < pEnd && qRow->end > pStart && sameString(qRow->chrom, pChrom))
-	{
-	int numCols = self->mySource->numCols;
-	enum annoRowType rowType = self->mySource->rowType;
-	slAddHead(&rowList, annoRowClone(qRow, rowType, numCols, callerLm));
-	if (rjFailHard && qRow->rightJoinFail)
-	    {
-	    *retRJFilterFailed = TRUE;
-	    break;
-	    }
-	}
+    // If the primary feature is an insertion, catch any feature that is adjacent to it,
+    // not only those that overlap.
+    for (qRow = self->qHead;  qRow != NULL;  qRow = qRow->next)
+        {
+        if (qRow->start <= pEnd && qRow->end >= pStart)
+            {
+            slAddHead(&rowList, annoRowClone(qRow, rowType, numCols, callerLm));
+            if (handleRJFail(qRow->rightJoinFail, retRJFilterFailed))
+                break;
+            }
+        }
+    }
+else
+    {
+    for (qRow = self->qHead;  qRow != NULL;  qRow = qRow->next)
+        {
+        if (((qRow->start < pEnd && qRow->end > pStart) ||
+             // Make sure to include q insertions at pStart or pEnd:
+             (qRow->start == qRow->end &&
+              (qRow->start == pEnd || qRow->end == pStart))) &&
+            sameString(qRow->chrom, pChrom))
+            {
+            slAddHead(&rowList, annoRowClone(qRow, rowType, numCols, callerLm));
+            if (handleRJFail(qRow->rightJoinFail, retRJFilterFailed))
+                break;
+            }
+        }
     }
 slReverse(&rowList);
 // If no rows overlapped primary, and there is a right-join, !isExclude (i.e. isInclude) filter,

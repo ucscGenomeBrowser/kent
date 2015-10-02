@@ -3057,8 +3057,8 @@ if (hash == NULL)
 if ((hti = hashFindVal(hash, rootName)) == NULL)
     {
     safecpy(fullName, sizeof(fullName), rootName);
-    if ((sameString(rootName, "mrna") && sqlTableExists(conn, "all_mrna")) ||
-	(sameString(rootName, "est") && sqlTableExists(conn, "all_est")))
+    if ((sameString(rootName, "mrna") && hTableExists(db, "all_mrna")) ||
+	(sameString(rootName, "est") && hTableExists(db, "all_est")))
 	{
 	safef(fullName, sizeof(fullName), "all_%s", rootName);
 	rootName = fullName;
@@ -3071,17 +3071,19 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
             // In 2013, very few assemblies have split tables
             // This avoids dozens of mostly useless chrX_table lookups
             isSplit = TRUE;
-	    if (sqlTableExists(conn, fullName))
+	    if (hTableExists(db, fullName))
 		isSplit = FALSE;
             else 
                 {
                 safef(fullName, sizeof(fullName), "%s_%s", chrom, rootName);
-                if (sqlTableExists(conn, fullName))
+                if (hTableExists(db, fullName))
                     isSplit = TRUE; 
                 else
                     return NULL;
                 }
 	    }
+        else if (! hTableExists(db, fullName))
+            return NULL;
 	}
     AllocVar(hti);
     hashAddSaveName(hash, rootName, hti, &hti->rootName);
