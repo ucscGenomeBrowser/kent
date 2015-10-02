@@ -321,17 +321,14 @@ freeMem(scoreTrack);
 void processBestSingle(char *acc, struct psl *pslList, FILE *bestFile, FILE *repFile)
 /* Find single best psl in list. */
 {
-struct psl *bestPsl = NULL, *psl;
+struct psl *psl;
 int bestScore = 0, score, threshold;
 
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
     score = pslScore(psl);
     if (score > bestScore)
-        {
 	bestScore = score;
-	bestPsl = psl;
-	}
     }
 threshold = round((1.0 - nearTop)*bestScore);
 for (psl = pslList; psl != NULL; psl = psl->next)
