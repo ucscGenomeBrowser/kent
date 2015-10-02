@@ -365,14 +365,12 @@ unsigned qNumInsert = 0;	/* Number of inserts in query */
 int qBaseInsert = 0;	/* Number of bases inserted in query */
 unsigned tNumInsert = 0;	/* Number of inserts in target */
 int tBaseInsert = 0;	/* Number of bases inserted in target */
-boolean eitherInsert = FALSE;	/* True if either in insert state. */
 int qOffset = 0;
 int tOffset = 0;
 static boolean qIsNib = FALSE;
 static boolean tIsNib  = FALSE;
 int blockCount = 1, blockIx=0;
 int i,j;
-int qs,qe,ts,te;
 int *blocks = NULL, *qStarts = NULL, *tStarts = NULL;
 struct cBlock *b, *nextB;
 int qbSize = 0, tbSize = 0; /* sum of block sizes */
@@ -418,9 +416,8 @@ AllocArray(qStarts, blockCount);
 AllocArray(tStarts, blockCount);
 
 /* Figure block sizes and starts. */
-eitherInsert = FALSE;
-qs = qe = qStart;
-ts = te = tStart;
+// qs = qe = qStart; not needed
+// ts = te = tStart; not needed
 nextB = NULL;
 for (b = chain->blockList; b != NULL; b = nextB)
     {
@@ -451,7 +448,6 @@ for (b = chain->blockList; b != NULL; b = nextB)
                     ++misMatch;
                 }
 	    ++blockIx;
-	    eitherInsert = TRUE;
         nextB = b->next;
     }
 
@@ -525,8 +521,6 @@ freez(&tStarts);
 void chainToPsl(char *inName, char *tSizeFile, char *qSizeFile,  char *targetList, char *queryList, char *outName)
 /* chainToPsl - Convert chain file to psl format. */
 {
-struct hash *tSizeHash = readSizes(tSizeFile);
-struct hash *qSizeHash = readSizes(qSizeFile);
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 FILE *f = mustOpen(outName, "w");
 struct hash *fileHash = newHash(0);  /* No value. */
@@ -534,7 +528,6 @@ struct hash *tHash = newHash(20);  /* seqFilePos value. */
 struct hash *qHash = newHash(20);  /* seqFilePos value. */
 struct dlList *fileCache = newDlList();
 struct chain *chain;
-int q,t;
 
 verbose(1, "Scanning %s\n", targetList);
 hashFileList(targetList, fileHash, tHash);
@@ -544,9 +537,6 @@ verbose(1, "Converting %s\n", inName);
 
 while ((chain = chainRead(lf)) != NULL)
     {
-    //uglyf("chain %s %s \n",chain->tName,chain->qName); 
-    q = findSize(qSizeHash, chain->qName);
-    t = findSize(tSizeHash, chain->tName);
     aliStringToPsl(lf, chain->qName, chain->tName, chain->qSize, chain->tSize,
 	min(chain->tEnd-chain->tStart, chain->qEnd-chain->qStart), chain->qStart, chain->qEnd, chain->tStart, chain->tEnd,
         chain->qStrand, f, chain, tHash, qHash, fileCache);
