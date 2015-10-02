@@ -1457,7 +1457,7 @@ else if (retProfile != NULL)
     double minSd = 1.0;
     double sd;
     int shiftLeftEnd = 0, shiftRightEnd = 0;
-    int rcShiftLeftEnd = 0, rcShiftRightEnd = 0;
+    int rcShiftLeftEnd = 0;
     int newProfScore;
     struct position *pos;
     boolean doResize = (constrainer < 900.0);
@@ -1545,7 +1545,6 @@ else if (retProfile != NULL)
                 if (rcNewProf)
                     {
                     removeLastColumn(rcNewProf);
-                    rcShiftRightEnd = -1;
                     }
                 }
             }
@@ -1597,10 +1596,6 @@ else if (retProfile != NULL)
                     newProf->locale.mean -= 1.0;
                     shiftLeftEnd = -1;
                     profScore = newProfScore;
-                    if (rcNewProf)
-                        {
-                        rcShiftRightEnd = 1;
-                        }
                     }
                 else
                     {
