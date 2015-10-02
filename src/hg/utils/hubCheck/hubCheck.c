@@ -132,7 +132,7 @@ return result;
 static char *suggestSetting(char *setting, struct trackHubCheckOptions *options)
 /* Suggest a similar word from settings lists.  Suggest only if there is a single good match */
 {
-char *best;
+char *best = NULL;
 int bestScore = 0;
 int bestCount = 0;
 struct slName *suggest;
