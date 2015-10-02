@@ -193,7 +193,7 @@ void sqlExecProgProfile(char *profile, char *prog, char **progArgs, int userArgc
  * The program is execvp-ed, this function does not return. 
  */
 {
-int i, j = 0, nargc=cntArgv(progArgs)+userArgc+6, defaultFileNo, returnStatus;
+int i, j = 0, nargc=cntArgv(progArgs)+userArgc+6, returnStatus;
 pid_t child_id;
 char **nargv, defaultFileName[256], defaultFileArg[256], *homeDir;
 
@@ -211,7 +211,8 @@ for (i = 0; i < userArgc; i++)
 	profile=cloneString(userArgv[i]+strlen("-profile="));
 
 safef(defaultFileName, sizeof(defaultFileName), "%s/.hgsql.cnf-XXXXXX", homeDir);
-defaultFileNo=sqlMakeDefaultsFile(defaultFileName, profile, "client");
+// discard returned fileNo
+(void) sqlMakeDefaultsFile(defaultFileName, profile, "client");
 
 safef(defaultFileArg, sizeof(defaultFileArg), "--defaults-file=%s", defaultFileName);
 

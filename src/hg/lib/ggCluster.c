@@ -467,7 +467,7 @@ if ((ma = *pMaRef) != NULL)
 void maRefFreeList(struct maRef **pMaRef)
 {
 struct maRef *ma, *next;
-for(ma = *pMaRef; ma != NULL; ma = ma->next)
+for(ma = *pMaRef; ma != NULL; ma = next)
     {
     next = ma->next;
     maRefFree(&ma);

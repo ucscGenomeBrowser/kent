@@ -758,7 +758,6 @@ dyStringPrintf(content, "\n\n%s<BR>\n", comments);
  */
 if (!(wpTextbox1->curVal && (strlen(wpTextbox1->curVal) > 2)))
     {
-    boolean recreateHeader = FALSE;
     char position[128];
     char *newPos;
     char *userSignature;
@@ -774,7 +773,6 @@ if (!(wpTextbox1->curVal && (strlen(wpTextbox1->curVal) > 2)))
 	dyStringPrintf(tt, "[[User:%s|%s]] ", item->owner, item->owner);
 	dyStringPrintf(tt, "%s", item->creationDate);
 	userSignature = dyStringCannibalize(&tt);
-	recreateHeader = TRUE;
 	}
     safef(position, 128, "%s:%d-%d", seqName, winStart+1, winEnd);
     newPos = addCommasToPos(database, position);
