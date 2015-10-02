@@ -32,11 +32,9 @@ struct nt4Seq *newNt4(DNA *dna, int size, char *name)
 /* Create a new DNA seq with 2 bits per base pair. */
 {
 bits32 *packed;
-DNA *unpacked;
 char last[16];
 struct nt4Seq *seq = allocNt4(size, name);
 packed = seq->bases;
-unpacked = dna;
 while (size > 16)
     {
     *packed++ = packDna16(dna);
