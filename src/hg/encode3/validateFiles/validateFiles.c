@@ -663,11 +663,10 @@ boolean checkFloat(struct lineFile *lf, char *row, char *val, char *name)
 // taken from sqlNum.c
 {
 char* end;
-double discardMe = strtod(val, &end);
+(void) strtod(val, &end);  // ignore return value
 if ((end == val) || (*end != '\0'))
     {
     reportWarn("Error [file=%s, line=%d]: invalid %s '%s' [%s]", lf->fileName, lf->lineIx,name, val, row);
-    discardMe = 0.0;
     return FALSE;
     }
 return TRUE;
@@ -1626,11 +1625,13 @@ for(ii=0; ii < head->n_targets; ii++)
     char position[256];
     safef(position, sizeof position, "%s:%d-%d",head->target_name[ii], 0, head->target_len[ii]);
     int chromId, start, end;
-    int ret = bam_parse_region(fh->header, position, &chromId, &start, &end);
+    // ignore return code from bam_parse_region()
+    (void) bam_parse_region(fh->header, position, &chromId, &start, &end);
 
     bd->chrom = head->target_name[ii];
     verbose(2,"asking for alignments on %s\n",bd->chrom);
-    ret = bam_fetch(fh->x.bam, idx, chromId, start, end, bd, parseBamRecord);
+    // ignore return code from bam_fetch()
+    (void) bam_fetch(fh->x.bam, idx, chromId, start, end, bd, parseBamRecord);
 
     }
 
