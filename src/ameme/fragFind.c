@@ -168,7 +168,6 @@ static int fuzzValOne(int *table, int oligoSize, int *rcTable)
 int tableSize = (1<<(oligoSize+oligoSize));
 int tableIx;
 int bestVal = -0x3ffffff;
-int bestIx;
 
 for (tableIx = 0; tableIx < tableSize; ++tableIx)
     {
@@ -205,7 +204,6 @@ for (tableIx = 0; tableIx < tableSize; ++tableIx)
     if (acc > bestVal)
         {
         bestVal = acc;
-        bestIx = tableIx;
         }
     }
 return tableIx;
@@ -498,7 +496,6 @@ void fragFind(struct seqList *goodSeq, char *badName, int fragSize, int mismatch
 int *goodTable, *badTable = NULL;
 int goodCount, badCount = 0;
 int goodIx;
-long startTime;
 DNA unpacked[17];
 
 if (mismatchesAllowed > 3)
@@ -506,7 +503,6 @@ if (mismatchesAllowed > 3)
 if (fragSize > 10)
     errAbort("Sorry, fragFind can only handle fragments up to 10 bases.");
 
-startTime = clock1000();
 makeOligoHistogram(NULL, goodSeq, fragSize, &goodTable, &goodCount);
 if (badName)
     makeOligoHistogram(badName, NULL, fragSize, &badTable, &badCount);
