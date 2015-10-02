@@ -14,7 +14,7 @@
 #                                                 ><insJBInsPi
 #                                                   ><insJAInsPi
 # track name=secondary
-chr1    20      jBPil	N	A	1	PASS	.
+chr1	20	jBPil	N	A	1	PASS	.
 chr1	30	before	<INS>	<DEL>	1	PASS	END=50
 chr1	150	justBefore	<INS>	<DEL>	1	PASS	END=200
 chr1	196	jBS5	NNNNN	AAAAA	1	PASS	.
