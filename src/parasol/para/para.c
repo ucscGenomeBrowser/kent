@@ -1790,11 +1790,10 @@ void removeChilledSubmissions(char *batch)
  * asked them to chill out. */
 {
 struct jobDb *db = readBatch(batch);
-int chillCount;
 
 markQueuedJobs(db);
 markRunJobStatus(db);
-chillCount = cleanTrackingErrors(db);
+(void) cleanTrackingErrors(db);  // ignore returned chillCount
 atomicWriteBatch(db, batch);
 }
 
@@ -1947,7 +1946,6 @@ struct jobDb *db = readBatch(batch);
 double totalCpu = 0, totalWall = 0;
 double oneWall, longestWall = 0;
 struct job *job;
-char *longestWallId = NULL;
 struct submission *sub;
 int jobCount = 0;
 int runningCount = 0;
@@ -2000,7 +1998,6 @@ for (job = db->jobList; job != NULL; job = job->next)
 	   if (oneWall > longestWall) 
 	       {
 	       longestWall = oneWall;
-	       longestWallId = sub->id;
 	       }
 	   }
        else
