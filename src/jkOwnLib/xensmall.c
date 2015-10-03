@@ -220,7 +220,6 @@ struct phmmState *hf, *lf, *iq, *it, *c1, *c2, *c3;
 int qIx, tIx, sIx;  /* Query, target, and state indices */
 int rowOffset, newCellOffset;
 struct phmmAliPair *pairList;
-int matchOff, qSlipOff, tSlipOff;
 int bestScore = -0x4fffffff;
 struct phmmMommy *bestCell = NULL;
 int c1c2PairScore, c3PairScore, loFiPairScore, hiFiPairScore;
@@ -245,9 +244,9 @@ c1 = phmmNameState(a, c1Ix, "frame1", '1');
 c2 = phmmNameState(a, c2Ix, "frame2", '2');
 c3 = phmmNameState(a, c3Ix, "frame3", '3');
 
-qSlipOff = -a->qDim;
-tSlipOff = -1;
-matchOff = qSlipOff + tSlipOff;
+// int qSlipOff = -a->qDim;  unnecessary
+// int tSlipOff = -1;  unnecessary
+// int matchOff = qSlipOff + tSlipOff;  unnecessary
 
 for (tIx = 1; tIx < a->tDim; tIx += 1)
     {

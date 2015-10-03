@@ -21,20 +21,16 @@ int mulFactor = (isProt ? 3 : 1);
 DNA *dna = NULL;	/* Mixed case version of genomic DNA. */
 int qSize = qSeq->size;
 char *qLetters = cloneString(qSeq->dna);
-int qbafStart, qbafEnd, tbafStart, tbafEnd;
-int qcfmStart, qcfmEnd, tcfmStart, tcfmEnd;
+int qbafStart, tbafStart;
+int qcfmStart, tcfmStart;
 
 int lineWidth = isProt ? 60 : 50;
 
 tbafStart = tStart;
-tbafEnd   = tEnd;
 tcfmStart = tStart;
-tcfmEnd   = tEnd;
 
 qbafStart = qStart;
-qbafEnd   = qEnd;
 qcfmStart = qStart;
-qcfmEnd   = qEnd;
 
 /* Deal with minus strand. */
 if (tIsRc)
@@ -43,9 +39,7 @@ if (tIsRc)
     reverseComplement(tSeq->dna, tSeq->size);
 
     tbafStart = tEnd;
-    tbafEnd   = tStart;
     tcfmStart = tEnd;
-    tcfmEnd   = tStart;
 
     temp = psl->tSize - tEnd;
     tEnd = psl->tSize - tStart;
@@ -58,9 +52,7 @@ if (qIsRc)
     reverseComplement(qLetters, qSeq->size);
 
     qcfmStart = qEnd;
-    qcfmEnd   = qStart;
     qbafStart = qEnd;
-    qbafEnd   = qStart;
     
     temp = psl->qSize - qEnd;
     qEnd = psl->qSize - qStart;

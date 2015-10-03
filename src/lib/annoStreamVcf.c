@@ -28,7 +28,7 @@ struct annoStreamVcf
 
 
 static void asvSetRegion(struct annoStreamer *vSelf, char *chrom, uint regionStart, uint regionEnd)
-/* Set region -- and free current sqlResult if there is one. */
+/* Set region and reset internal state. */
 {
 annoStreamerSetRegion(vSelf, chrom, regionStart, regionEnd);
 struct annoStreamVcf *self = (struct annoStreamVcf *)vSelf;
@@ -36,6 +36,9 @@ self->indelQ = self->nextPosQ = NULL;
 self->eof = FALSE;
 if (self->isTabix && chrom != NULL)
     {
+    // In order to include insertions at the start of region, decrement regionStart.
+    if (regionStart > 0)
+        regionStart--;
     // If this region is not in tabix index, set self->eof so we won't keep grabbing rows
     // from the old position.
     boolean gotRegion = lineFileSetTabixRegion(self->vcff->lf, chrom, regionStart, regionEnd);

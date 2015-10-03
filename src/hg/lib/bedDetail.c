@@ -393,14 +393,11 @@ if (wordCount > 10)
 if (wordCount > 11)
     {
     int i;
-    int lastEnd, lastStart;
     sqlSignedDynamicArray(row[11], &item->chromStarts, &count);
     if (count != item->blockCount)
         lineFileAbort(lf, "expecting %d elements in array", item->blockCount);
     // tell the user if they appear to be using absolute starts rather than
     // relative... easy to forget!  Also check block order, coord ranges...
-    lastStart = -1;
-    lastEnd = 0;
     for (i=0;  i < item->blockCount;  i++)
         {
         if (item->chromStarts[i]+item->chromStart >= item->chromEnd)
@@ -414,8 +411,6 @@ if (wordCount > 11)
                 lineFileAbort(lf,
                     "BED chromStarts[i]+chromStart must be less than chromEnd.");
             }
-        lastStart = item->chromStarts[i];
-        lastEnd = item->chromStart + item->chromStarts[i] + item->blockSizes[i];
         }
     if (item->chromStarts[0] != 0)
         lineFileAbort(lf,

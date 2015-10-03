@@ -4285,17 +4285,16 @@ char *db = cartString(cart, "db");
 
 // The subtracks need to be sorted by priority but only sortable and dragable will have
 // non-default (cart) priorities to sort on
-boolean preSorted = FALSE;
 if (sortOrder != NULL || useDragAndDrop)
     {
-    // preserves user's prev sort/drags
-    preSorted = tdbRefSortPrioritiesFromCart(cart, &subtrackRefList);
+    // preserves user's prev sort/drags, ignore returned value about where
+    //  priorities come from
+    (void) tdbRefSortPrioritiesFromCart(cart, &subtrackRefList);
     printf("<TBODY class='%saltColors'>\n", (sortOrder != NULL ? "sortable " : "") );
     }
 else
     {
     slSort(&subtrackRefList, trackDbRefCmp);  // straight from trackDb.ra
-    preSorted = TRUE;
     puts("<TBODY>");
     }
 
@@ -5672,13 +5671,12 @@ cfgEndBox(boxed);
 // Moved from hgTrackUi for consistency
 static void filterByChromCfgUi(struct cart *cart, struct trackDb *tdb)
 {
-char *filterSetting;
 char filterVar[256];
 char *filterVal = "";
 
 printf("<p><b>Filter by chromosome (e.g. chr10):</b> ");
 safef(filterVar, sizeof(filterVar), "%s.chromFilter", tdb->track);
-filterSetting = cartUsualString(cart, filterVar, filterVal);
+(void) cartUsualString(cart, filterVar, filterVal);  // ignore returned setting
 cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 15);
 }
 
@@ -6404,7 +6402,6 @@ void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title,
 /* UI for maf/wiggle track
  * NOTE: calls wigCfgUi */
 {
-bool lowerFirstChar = TRUE;
 int i;
 char option[MAX_SP_SIZE];
 boolean parentLevel = isNameAtParentLevel(tdb,name);
@@ -6414,14 +6411,8 @@ boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 char *defaultCodonSpecies = trackDbSetting(tdb, SPECIES_CODON_DEFAULT);
 char *framesTable = trackDbSetting(tdb, "frames");
 char *snpTable = trackDbSetting(tdb, "snpTable");
-char *firstCase = trackDbSetting(tdb, ITEM_FIRST_CHAR_CASE);
-if (firstCase != NULL)
-    {
-    if (sameWord(firstCase, "noChange")) lowerFirstChar = FALSE;
-    }
 char *treeImage = NULL;
 struct consWiggle *consWig, *consWiggles = wigMafWiggles(db, tdb);
-
 
 boolean isWigMafProt = FALSE;
 

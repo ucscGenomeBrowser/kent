@@ -597,7 +597,6 @@ else
     char *bp=NULL;
     int size=0;
     boolean hasZeros=FALSE;
-    boolean toobig=FALSE;
     boolean asFile=FALSE;
     boolean convert=FALSE;
     FILE *f = NULL;
@@ -629,7 +628,6 @@ else
 	//    }
 	if (!asFile && p->size+size > MAXPARTSIZE)
 	    {
-	    toobig = TRUE;
 	    convert=TRUE;
 	    }
 	if (convert)

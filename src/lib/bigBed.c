@@ -557,8 +557,8 @@ int i;
 struct slInt *intList = NULL, *intEl;
 for (i=0; i<bbi->extraIndexCount; ++i)
     {
-    bits16 type,fieldCount;
-    type = udcReadBits16(udc, isSwapped);
+    bits16 fieldCount;
+    udcReadBits16(udc, isSwapped);  // type
     fieldCount = udcReadBits16(udc, isSwapped);
     udcSeekCur(udc, sizeof(bits64));  // skip over fileOffset
     udcSeekCur(udc, 4);    // skip over reserved bits

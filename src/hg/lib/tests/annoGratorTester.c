@@ -243,6 +243,7 @@ if (!doAllTests)
 if (udcCacheTimeout() < 300)
     udcSetCacheTimeout(300);
 udcSetDefaultDir("./udcCache");
+knetUdcInstall();
 
 struct annoAssembly *assembly = getAnnoAssembly(db);
 
@@ -280,7 +281,6 @@ if (doAllTests || sameString(test, snpConsDbToTabOutShort) ||
 // Fifth test: VCF with genotypes
 if (doAllTests || sameString(test, vcfEx1))
     {
-    knetUdcInstall();
     struct streamerInfo vcfEx1 = { NULL, assembly, NULL,
 			   "http://genome.ucsc.edu/goldenPath/help/examples/vcfExample.vcf.gz",
 				   arWords, vcfAsObj() };
@@ -452,13 +452,18 @@ if (doAllTests || sameString(test, insertions))
     secondary.tableFileUrl = "insertionsSecondary";
     doInsertionsRegions(&primary);
 
-    // Uncompressed VCF with same features as BED files
+    // Uncompressed VCF
     puts("# VCF files (uncompressed)");
-    knetUdcInstall();
     primary.sqlDb = secondary.sqlDb = NULL;
     primary.tableFileUrl = "input/annoGrator/insertionsPrimary.vcf";
     secondary.tableFileUrl = "input/annoGrator/insertionsSecondary.vcf";
     primary.asObj = secondary.asObj = vcfAsObj();
+    doInsertionsRegions(&primary);
+
+    // VCF+tabix
+    puts("# VCF files (tabix)");
+    primary.tableFileUrl = "input/annoGrator/insertionsPrimary.vcf.gz";
+    secondary.tableFileUrl = "input/annoGrator/insertionsSecondary.vcf.gz";
     doInsertionsRegions(&primary);
     }
 

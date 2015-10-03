@@ -290,6 +290,8 @@ faWrite(tmpFa, seq->name, seq->dna, seq->size);
 dyStringClear(cmd);
 dyStringPrintf(cmd, "%s %s %s > %s", _bestOrfExe, _bestOrfParam, tmpFa, tmpOrf);
 retVal = system(cmd->string);
+if (0 != retVal)
+  errAbort("borfFromGenomeBed: failing command: '%s'\n", cmd->string);
 borf = borfFromBestorfOutput(tmpOrf);
 remove(tmpFa);
 remove(tmpOrf);

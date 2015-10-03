@@ -494,13 +494,11 @@ char **row;
 boolean ok = FALSE;
 struct hgPosTable *table = NULL;
 struct hgPos *pos = NULL;
-int rowOffset;
 char *localName;
 
 localName = spec;
 if (!hTableExists(db, tableName))
     return FALSE;
-rowOffset = hOffsetPastBin(db, NULL, tableName);
 conn = hAllocConn(db);
 sqlSafef(query, sizeof query, "SELECT chrom, txStart, txEnd, name FROM %s WHERE name='%s'", 
 				tableName, localName);
@@ -783,13 +781,11 @@ char **row;
 boolean ok = FALSE;
 struct hgPosTable *table = NULL;
 struct hgPos *pos = NULL;
-int rowOffset;
 char *localName;
 
 localName = spec;
 if (!hTableExists(db, tableName))
     return FALSE;
-rowOffset = hOffsetPastBin(db, NULL, tableName);
 conn = hAllocConn(db);
 query = newDyString(256);
 sqlDyStringPrintf(query, "SELECT chrom, txStart, txEnd, name, description FROM %s, kgXref "
@@ -830,13 +826,11 @@ char **row;
 boolean ok = FALSE;
 struct hgPosTable *table = NULL;
 struct hgPos *pos = NULL;
-int rowOffset;
 char *localName;
 
 localName = spec;
 if (!hTableExists(db, tableName))
     return FALSE;
-rowOffset = hOffsetPastBin(db, NULL, tableName);
 conn = hAllocConn(db);
 query = newDyString(256);
 sqlDyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s "
@@ -2311,13 +2305,9 @@ struct dyString *query;
 char **row;
 boolean ok = FALSE;
 struct hgPos *pos = NULL;
-int rowOffset;
-char *localName;
 
-localName = pattern;
 if (!hTableExists(db, tableName))
     return FALSE;
-rowOffset = hOffsetPastBin(db, NULL, tableName);
 conn = hAllocConn(db);
 query = newDyString(256);
 sqlDyStringPrintf(query,
@@ -2823,10 +2813,9 @@ void truncatef(char *buf, int size, char *format, ...)
 /* Like safef, but truncates the formatted string instead of barfing on 
  * overflow. */
 {
-int sz;
 va_list args;
 va_start(args, format);
-sz = vatruncatef(buf, size, format, args);
+vatruncatef(buf, size, format, args);  // ignore returned size
 va_end(args);
 }
 
