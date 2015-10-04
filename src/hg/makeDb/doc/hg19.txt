@@ -30645,6 +30645,7 @@ hgsql hg19 -Ne 'select count(*) from knownToGencodeV19'
 
 
 hgGtexGeneBed hg19 -gencodeVersion=V19 gtexGene >&! log.txt
+# reload 9/23/15 to repair tissue ordering problem
 
 # GTEX gene models are based on GENCODE V18.  Need a knownToGencodeV18 table to make this work
 #hgGtexGeneBed hg19 -gencodeVersion=V18 gtexGene >&! log.v18.txt

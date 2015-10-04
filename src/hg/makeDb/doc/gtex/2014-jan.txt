@@ -170,7 +170,6 @@ set dataDir = /hive/data/outside/GTEx/2014-01-17
     $dataDir/GTEx_Data_2014-01-17_Annotations_SampleAttributesDS.txt \
     $dataDir/GTEx_Data_2014-01-17_Annotations_SubjectPhenotypes_DS.txt \
     $dataDir/portal/gtexColorTissue.dec.tab
-
 hgLoadSqlTab hgFixed gtex2SampleData ~/kent/src/hg/lib/gtexSampleData.sql slimGtex/gtex2SampleData.tab
 
 # oops, -dropZeros left in 55 zero values!  Drop these
@@ -190,5 +189,13 @@ hgsql hgFixed -e "select geneId, gtexSampleData_old.tissue, score, gender, age, 
        where gtexSampleData_old.sample=gtexSample.sampleId \
                and gtexSample.donor=gtexDonor.name" > allExprDf.txt
 
+
+# Get list of highest expressed genes for comparison with portal display
+
+# Reload medians table to fix incorrect ordering of tissues in list
+# hgGtex was fixed 7/31/15, but table wasn't reloaded
+# Looks like fixed data was created in outDirs/output6, load that for now
+cd /hive/data/outside/GTEx/2014-01-17/outDirs/
+hgLoadSqlTab hgFixed gtex2TissueMedian ~/kent/src/hg/lib/gtexTissueMedian.sql output6/gtex2TissueMedian.tab
 
 
