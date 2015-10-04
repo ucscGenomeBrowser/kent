@@ -160,7 +160,7 @@ return (barWidth * count) + (padding * (count-1)) + labelWidth + 2;
 }
 
 
-static int valToHeight(double val, double maxVal, int maxHeight)
+static int valToHeight(double val, double maxVal, int maxHeight, boolean doLogTransform)
 /* Log-scale and Convert a value from 0 to maxVal to 0 to maxHeight-1 */
 // TODO: support linear or log scale
 {
@@ -168,7 +168,11 @@ if (val == 0.0)
     return 0;
 // smallest counts are 1x10e-3, translate to counter negativity
 //double scaled = (log10(val) + 3.001)/(log10(maxVal) + 3.001);
-double scaled = log10(val+1.0) / log10(maxVal+1.0);
+double scaled = 0.0;
+if (doLogTransform)
+    scaled = log10(val+1.0) / log10(maxVal+1.0);
+else
+    scaled = val/maxVal;
 if (scaled < 0)
     warn("scaled=%f\n", scaled);
 //uglyf("%.2f -> %.2f height %d", val, scaled, (int)scaled * (maxHeight-1));
@@ -421,6 +425,8 @@ static void gtexGeneDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int 
 {
 struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
 struct gtexGeneBed *geneBed = geneInfo->geneBed;
+boolean doLogTransform = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, GTEX_LOG_TRANSFORM, 
+                                                GTEX_LOG_TRANSFORM_DEFAULT);
 
 // Color in dense mode using transcriptClass
 Color statusColor = getTranscriptStatusColor(hvg, geneBed);
@@ -431,13 +437,10 @@ if (vis != tvFull && vis != tvPack)
     }
 
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
-if ((extras->isComparison) &&
-        (tg->visibility == tvFull || tg->visibility == tvPack))
+if (extras->isComparison && (tg->visibility == tvFull || tg->visibility == tvPack))
         //&& gtexGraphHeight() != MIN_GRAPH_HEIGHT)
-    {
     // compute medians based on configuration (comparisons, and later, filters)
     loadComputedMedians(geneInfo, extras);
-    }
 int heightPer = tg->heightPer;
 
 int graphX = gtexGraphX(geneBed);
@@ -490,6 +493,11 @@ if (geneInfo->medians2)
     x1 = startX;
     }
 
+/* TODO:  Remove DEBUG code here */
+struct gtexTissue *tissues = getTissues();
+struct gtexTissue *tissue = tissues;
+/* DEBUG */
+
 for (i=0; i<expCount; i++)
     {
     struct rgbColor fillColor = extras->colors[i];
@@ -506,7 +514,11 @@ for (i=0; i<expCount; i++)
     if (expScore < 1)
         expScore = 0.0;
         */
-    int height = valToHeight(expScore, maxMedian, gtexGraphHeight());
+    // DEBUG code here
+    //uglyf("%s: score=%.2f<br>", tissue->description, expScore);
+    tissue = tissue->next;
+    // END DEBUG
+    int height = valToHeight(expScore, maxMedian, gtexGraphHeight(), doLogTransform);
     // TODO: adjust yGene to get gene track distance as desired
     //if (i ==0) uglyf("DRAW: expScore=%.2f, maxMedian=%.2f, graphHeight=%d, y=%d<br>", expScore, maxMedian, gtexGraphHeight(), y);
     //if (i ==0) uglyf("DRAW: yZero=%d, yMedian=%d, height=%d<br>", yZero, yMedian, height);
@@ -552,7 +564,7 @@ for (i=0; i<expCount; i++)
     double expScore = geneInfo->medians2[i];
     //if (expScore < 1)
         //expScore = 0.0;
-    int height = valToHeight(expScore, maxMedian, gtexGraphHeight());
+    int height = valToHeight(expScore, maxMedian, gtexGraphHeight(), doLogTransform);
     // TODO: adjust yGene instead of yMedian+1 to get gene track distance as desired
     //if (i ==0) uglyf("DRAW2: expScore=%.2f, maxMedian=%.2f, graphHeight=%d, y=%d<br>", expScore, maxMedian, gtexGraphHeight(), y);
     //if (i ==0) uglyf("DRAW2: yZero=%d, height=%d<br>", yZero, height);
@@ -591,13 +603,11 @@ if (vis != tvFull && vis != tvPack)
     }
 
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
-if ((extras->isComparison) &&
-        (tg->visibility == tvFull || tg->visibility == tvPack))
+if (extras->isComparison && (tg->visibility == tvFull || tg->visibility == tvPack))
         //&& gtexGraphHeight() != MIN_GRAPH_HEIGHT)
-    {
     // compute medians based on configuration (comparisons, and later, filters)
     loadComputedMedians(geneInfo, extras);
-    }
+
 int i;
 int expCount = geneBed->expCount;
 double maxMedian = ((struct gtexGeneExtras *)tg->extraUiData)->maxMedian;
@@ -661,7 +671,7 @@ for (i=0; i<expCount; i++)
     if (expScore < 1)
         expScore = 0.0;
         */
-    int height = valToHeight(expScore, maxMedian, gtexGraphHeight());
+    int height = valToHeight(expScore, maxMedian, gtexGraphHeight(), doLogTransform);
     // TODO: adjust yGene to get gene track distance as desired
     //if (i ==0) uglyf("DRAW: expScore=%.2f, maxMedian=%.2f, graphHeight=%d, y=%d<br>", expScore, maxMedian, gtexGraphHeight(), y);
     //if (i ==0) uglyf("DRAW: yZero=%d, yMedian=%d, height=%d<br>", yZero, yMedian, height);
@@ -707,7 +717,7 @@ for (i=0; i<expCount; i++)
     double expScore = geneInfo->medians2[i];
     //if (expScore < 1)
         //expScore = 0.0;
-    int height = valToHeight(expScore, maxMedian, gtexGraphHeight());
+    int height = valToHeight(expScore, maxMedian, gtexGraphHeight(), doLogTransform);
     // TODO: adjust yGene instead of yMedian+1 to get gene track distance as desired
     //if (i ==0) uglyf("DRAW2: expScore=%.2f, maxMedian=%.2f, graphHeight=%d, y=%d<br>", expScore, maxMedian, gtexGraphHeight(), y);
     //if (i ==0) uglyf("DRAW2: yZero=%d, height=%d<br>", yZero, height);

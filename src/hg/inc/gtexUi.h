@@ -15,6 +15,10 @@
 #define GTEX_COLORS_GTEX        "gtex"
 #define GTEX_COLORS_DEFAULT     GTEX_COLORS_GTEX
 
+// Data transform
+#define GTEX_LOG_TRANSFORM       "logTransform"
+#define GTEX_LOG_TRANSFORM_DEFAULT       TRUE
+
 // Graph type
 #define GTEX_GRAPH              "graphType"
 #define GTEX_GRAPH_RAW          "raw"
