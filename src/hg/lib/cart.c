@@ -1764,13 +1764,12 @@ void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart
  * invocations of the cgi-script. */
 {
 struct cart *cart;
-char *db, *org, *pos, *clade=NULL;
+char *db, *org, *pos;
 char titlePlus[128];
 char extra[128];
 pushWarnHandler(cartEarlyWarningHandler);
 cart = cartAndCookie(cookieName, exclude, oldVars);
 getDbAndGenome(cart, &db, &org, oldVars);
-clade = hClade(org);
 pos = cartGetPosition(cart, db);
 pos = addCommasToPos(db, stripCommas(pos));
 if(pos != NULL && oldVars != NULL)

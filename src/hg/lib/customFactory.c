@@ -403,19 +403,13 @@ if (wordCount > 10)
 if (wordCount > 11)
     {
     int i;
-    int lastEnd, lastStart;
     sqlSignedDynamicArray(row[11], &bed->chromStarts, &count);
     if (count != bed->blockCount)
 	lineFileAbort(lf, "expecting %d elements in array", bed->blockCount);
     // tell the user if they appear to be using absolute starts rather than
     // relative... easy to forget!  Also check block order, coord ranges...
-    lastStart = -1;
-    lastEnd = 0;
     for (i=0;  i < bed->blockCount;  i++)
 	{
-/*
-printf("%d:%d %s %s s:%d c:%u cs:%u ce:%u csI:%d bsI:%d ls:%d le:%d<BR>\n", lineIx, i, bed->chrom, bed->name, bed->score, bed->blockCount, bed->chromStart, bed->chromEnd, bed->chromStarts[i], bed->blockSizes[i], lastStart, lastEnd);
-*/
 	if (bed->chromStarts[i]+bed->chromStart >= bed->chromEnd)
 	    {
 	    if (bed->chromStarts[i] >= bed->chromStart)
@@ -427,8 +421,6 @@ printf("%d:%d %s %s s:%d c:%u cs:%u ce:%u csI:%d bsI:%d ls:%d le:%d<BR>\n", line
 		lineFileAbort(lf,
 		    "BED chromStarts[i]+chromStart must be less than chromEnd.");
 	    }
-	lastStart = bed->chromStarts[i];
-	lastEnd = bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i];
 	}
     if (bed->chromStarts[0] != 0)
 	lineFileAbort(lf,

@@ -49,9 +49,9 @@ if (isNotEmpty(hfs->termRegex))
     {
     char buf[256];
     safef(buf, sizeof(buf), "hfsPolish: search %s: termRegex", hfs->searchName);
-    const regex_t *compiledExp = regexCompile(hfs->termRegex, buf,
-					      (REG_EXTENDED | REG_ICASE | REG_NOSUB));
-    compiledExp = NULL;  // Avoid compiler warning about unused variable / return value
+    // Discard returned compiled expression
+    (void) regexCompile(hfs->termRegex, buf,
+				(REG_EXTENDED | REG_ICASE | REG_NOSUB));
     }
 }
 

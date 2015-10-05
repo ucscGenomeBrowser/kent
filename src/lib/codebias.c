@@ -101,7 +101,6 @@ int codonFindFrame(DNA *dna, int dnaSize, struct codonBias *forBias)
  * Beware this routine will replace N's with T's in the input dna.*/
 {
 double logOneFourth = log(0.25);
-double logProbs[3];
 int frame;
 int dnaIx;
 double logP;
@@ -133,7 +132,6 @@ for (frame=0; frame<3; ++frame)
         }
     /* Partial last codon gets even background score. */
     logP += (dnaSize-dnaIx)*logOneFourth;
-    logProbs[frame] = logP;
     if (logP > bestLogP)
         {
         bestLogP = logP;

@@ -1,0 +1,44 @@
+##fileformat=VCFv4.0
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    
+# Test intersections of nonzero regions (some adjacent but not overlapping,
+# some substitutions and some deletions) and zero-length insertions:
+# primary    ><pil       -------p------            ><pi
+#                  -----pl------
+#                               -----pr-----
+# secondary  - <-> <---->   <>         <>   <>  <->
+#                                               <----->
+#                                                   <->
+#                       -jBS*          -jAS*       -leftPiS*
+#                        -leftS*      -rightS*      -rightPiS*
+#                       ><insLeft     ><insRight   ><insPi
+#                                                 ><insJBInsPi
+#                                                   ><insJAInsPi
+# track name=secondary
+chr1	20	jBPil	N	A	1	PASS	.
+chr1	30	before	<INS>	<DEL>	1	PASS	END=50
+chr1	150	justBefore	<INS>	<DEL>	1	PASS	END=200
+chr1	196	jBS5	NNNNN	AAAAA	1	PASS	.
+chr1	197	leftS5	NNNNN	AAAAA	1	PASS	.
+chr1	200	jBS1	N	A	1	PASS	.
+chr1	200	insLeft	N	NA	1	PASS	.
+chr1	201	leftS1	N	A	1	PASS	.
+chr1	220	inThere	<INS>	<DEL>	1	PASS	END=230
+chr1	300	rightS1a	N	A	1	PASS	.
+chr1	300	insRight	N	NA	1	PASS	.
+chr1	300	justAfter	<INS>	<DEL>	1	PASS	END=320
+chr1	300	rightS1b	N	A	1	PASS	.
+chr1	300	rightS5	NNNNN	AAAAA	1	PASS	.
+chr1	301	jAS1	N	A	1	PASS	.
+chr1	301	jAS5	NNNNN	AAAAA	1	PASS	.
+chr1	350	after	<INS>	<DEL>	1	PASS	END=360
+chr1	380	jBInsPi	<INS>	<DEL>	1	PASS	END=400
+chr1	380	aroundPi	<INS>	<DEL>	1	PASS	END=420
+chr1	396	leftPiS5	NNNNN	AAAAA	1	PASS	.
+chr1	399	insJBInsPi	N	NA	1	PASS	.
+chr1	400	leftPiS1	N	A	1	PASS	.
+chr1	400	aroundPiS2	NN	AA	1	PASS	.
+chr1	400	insPi	N	NA	1	PASS	.
+chr1	400	jAInsPi	<INS>	<DEL>	1	PASS	END=420
+chr1	401	rightPiS1	N	A	1	PASS	.
+chr1	401	rightPiS5	NNNNN	AAAAA	1	PASS	.
+chr1	401	insJAInsPi	N	NA	1	PASS	.

@@ -2350,15 +2350,32 @@ track ucsfRnaSeqBrainSmartCoverage override
 release alpha,beta,public
 type bigWig 1 141
 
+track peptideAtlas2014
+release beta,public
+shortLabel PeptideAtlas
+html peptideAtlas
+longLabel Peptide sequences identified from MS spectra of 971 samples by PeptideAtlas
+visibility hide
+type bed 12
+url https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/GetPeptide?atlas_build_id=433&searchWithinThis=Peptide+Name&searchForThis=$$&action=QUERY
+urlLabel Link to PeptideAtlas:
+group expression
+spectrum on
+minGrayLevel 4
+scoreMax 51
+scoreMin 1
+color 100, 82, 160
+
 track peptideAtlasSuper
+release alpha
 html peptideAtlas
 superTrack on
 group expression
 shortLabel PeptideAtlas
 longLabel Peptide sequences identified by tandem MS from PeptideAtlas
 
-    track peptideAtlas
-    table peptideAtlas2014
+    track peptideAtlas2014
+    release alpha
     parent peptideAtlasSuper
     shortLabel PeptideAtlas
     html peptideAtlas

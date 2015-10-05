@@ -609,8 +609,8 @@ if (haveVal)
     }
 
 // calling for the side-effect of checking for duplicate file_names.
-struct hash *mFileNameHash = NULL;  // split on two lines to suppress compiler warning : unused var
-mFileNameHash = makeFileNameHash(manifestRecs, mFileNameIdx);
+// ignore return code
+(void) makeFileNameHash(manifestRecs, mFileNameIdx);
 
 // hash old validated records by file_name for quick lookup.
 struct hash *valHash = NULL;

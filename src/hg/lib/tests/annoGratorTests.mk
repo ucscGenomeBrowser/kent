@@ -9,7 +9,7 @@ OUT_DIR = output/annoGrator
 DB=hg19
 
 test: pgSnpDbToTabOut pgSnpKgDbToTabOutShort pgSnpKgDbToGpFx snpConsDbToTabOutShort vcfEx1 vcfEx2 \
-      bigBedToTabOut snpBigWigToTabOut vepOut vepOutIndelTrim gpFx
+      bigBedToTabOut snpBigWigToTabOut vepOut vepOutIndelTrim gpFx insertions
 
 pgSnpDbToTabOut: mkout
 	${TESTER} ${DB} $@ > ${OUT_DIR}/$@.txt
@@ -54,6 +54,20 @@ vepOutIndelTrim: mkout
 gpFx: mkout
 	${TESTER} ${DB} $@ | grep -v 'Output produced at' > ${OUT_DIR}/$@.txt
 	diff -u ${EXP_DIR}/$@.txt ${OUT_DIR}/$@.txt
+
+insertions: mkout
+	hgsql test -e 'drop table if exists chromInfo; \
+	               create table chromInfo select * from hg19.chromInfo;'
+	hgLoadBed -verbose=0 -allowStartEqualEnd \
+                  test insertionsPrimary input/annoGrator/insertionsPrimary.bed
+	hgLoadBed -verbose=0 -allowStartEqualEnd \
+                  test insertionsSecondary input/annoGrator/insertionsSecondary.bed
+	${TESTER} ${DB} $@ > ${OUT_DIR}/$@.txt
+	diff -u ${EXP_DIR}/$@.txt ${OUT_DIR}/$@.txt
+	hgsql test -e 'drop table chromInfo; \
+                       drop table insertionsPrimary; \
+                       drop table insertionsSecondary;'
+	rm -f bed.tab
 
 mkout:
 	@${MKDIR} ${OUT_DIR}

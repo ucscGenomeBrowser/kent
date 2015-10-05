@@ -105,7 +105,7 @@ void getResultsFile(char results[PATH_LEN])
 char curDir[PATH_LEN];
 char defaultResults[PATH_LEN];
 
-getcwd(curDir, sizeof(curDir));
+(void) getcwd(curDir, sizeof(curDir));  // ignore return value
 safef(defaultResults, sizeof(defaultResults), "%s/results", curDir);
 safecpy(results, PATH_LEN, optionVal("results", defaultResults));
 }
@@ -265,7 +265,7 @@ char *err = optionVal("err", NULL);
 char *jobIdString;
 int i;
 char curDir[PATH_LEN];
-getcwd(curDir, sizeof(curDir));
+(void) getcwd(curDir, sizeof(curDir)); // ignore return value
 char *dir = optionVal("dir", curDir);
 char results[PATH_LEN];
 getResultsFile(results);

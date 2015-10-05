@@ -283,13 +283,12 @@ for (;;)
     /* Read block header,  break if we are leaf. */
     UBYTE isLeaf;
     UBYTE reserved;
-    bits16 childCount;
     udcMustReadOne(bpt->udc, isLeaf);
     if (isLeaf)
          break;
     udcMustReadOne(bpt->udc, reserved);
     boolean isSwapped = bpt->isSwapped;
-    childCount = udcReadBits16(bpt->udc, isSwapped);
+    udcReadBits16(bpt->udc, isSwapped);  // childCount
 
     /* Read and discard first key. */
     char keyBuf[bpt->keySize];

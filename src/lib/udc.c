@@ -608,19 +608,17 @@ if (magic != udcBitmapSig)
     }
 
 /* Allocate bitmap object, fill it in, and return it. */
-bits32 reserved32;
-bits64 reserved64;
 struct udcBitmap *bits;
 AllocVar(bits);
 bits->blockSize = fdReadBits32(fd, isSwapped);
 bits->remoteUpdate = fdReadBits64(fd, isSwapped);
 bits->fileSize = fdReadBits64(fd, isSwapped);
 bits->version = fdReadBits32(fd, isSwapped);
-reserved32 = fdReadBits32(fd, isSwapped);
-reserved64 = fdReadBits64(fd, isSwapped);
-reserved64 = fdReadBits64(fd, isSwapped);
-reserved64 = fdReadBits64(fd, isSwapped);
-reserved64 = fdReadBits64(fd, isSwapped);
+fdReadBits32(fd, isSwapped); // ignore result
+fdReadBits64(fd, isSwapped); // ignore result
+fdReadBits64(fd, isSwapped); // ignore result
+fdReadBits64(fd, isSwapped); // ignore result
+fdReadBits64(fd, isSwapped); // ignore result
 bits->localUpdate = status.st_mtime;
 bits->localAccess = status.st_atime;
 bits->isSwapped = isSwapped;

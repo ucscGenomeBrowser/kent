@@ -264,7 +264,6 @@ struct rmskOut2 *rmskOut2ReadNext(struct lineFile *lf)
 {
 char *words[32];
 int wordCount;
-char id;
 struct rmskOut2 *ret;
 char *class, *family;
 
@@ -273,7 +272,6 @@ if ((wordCount = lineFileChop(lf, words)) == 0)
 if (wordCount != 15 )
     errAbort("Expecting 15 words - line %d of %s", lf->lineIx, lf->fileName);
 
-id = words[14][0];
 AllocVar(ret);
 ret->swScore = lineFileNeedNum(lf, words, 0);
 ret->milliDiv = round(10.0*atof(words[1]));

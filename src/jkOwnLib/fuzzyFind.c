@@ -1167,7 +1167,6 @@ int haySize = he - hs;
 int needleSize = ne - ns;
 int numTiles = 0;
 int bestWeaveVal;
-int tileIx;
 struct ffAli *hitList = NULL;
 struct ffAli *bestAli;
 struct ffAli *ali;
@@ -1180,7 +1179,6 @@ tileProbOne = probMax/possibleTiles;
 
 searchOffset = 0;
 endTileOffset = 0;
-tileIx = 0;
 for (;;)
     {
     DNA *tile;
