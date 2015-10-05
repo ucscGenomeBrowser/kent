@@ -1,0 +1,26 @@
+# Test intersections of nonzero regions (some adjacent but not overlapping)
+# and zero-length insertions:
+# primary    ><pil       -------p------            ><pi
+#                  -----pl------
+#                               -----pr-----
+# secondary  - --  ------   --         --   --  ---
+#                                               -------
+#                                                   ---
+#                       ><insLeft     ><insRight   ><insPi
+#                                                 ><insJBInsPi
+#                                                   ><insJAInsPi
+# track name=secondary
+chr1   19  20  jBPil
+chr1   30  50  before
+chr1  150 200  justBefore
+chr1  200 200  insLeft
+chr1  220 230  inThere
+chr1  300 300  insRight
+chr1  300 320  justAfter
+chr1  350 360  after
+chr1  380 400  jBInsPi
+chr1  380 420  aroundPi
+chr1  399 399  insJBInsPi
+chr1  400 400  insPi
+chr1  400 420  jAInsPi
+chr1  401 401  insJAInsPi

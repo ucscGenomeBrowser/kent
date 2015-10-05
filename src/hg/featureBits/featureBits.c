@@ -540,7 +540,6 @@ void chromFeatureSeq(struct sqlConnection *conn,
 boolean hasBin;
 char t[512], *s = NULL;
 char table[HDB_MAX_TABLE_STRING];
-boolean isSplit;
 struct featureBits *fbList = NULL, *fb;
 
 if (trackSpec[0] == '!')
@@ -550,7 +549,8 @@ s = strchr(t, '.');
 if (s != NULL)
     errAbort("Sorry, only database (not file) tracks allowed with "
              "fa output unless you use faMerge");
-isSplit = hFindSplitTable(database, chrom, t, table, &hasBin);
+// ignore isSplit return from hFindSplitTable()
+(void) hFindSplitTable(database, chrom, t, table, &hasBin);
 fbList = fbGetRangeQuery(database, trackSpec, chrom, 0, hChromSize(database, chrom),
 			 where, TRUE, TRUE);
 for (fb = fbList; fb != NULL; fb = fb->next)

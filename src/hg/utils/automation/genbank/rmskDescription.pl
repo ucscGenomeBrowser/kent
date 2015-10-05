@@ -23,7 +23,7 @@ chdir $wrkDir;
 # print STDERR `ls`;
 my $accAsm = basename($wrkDir);
 
-my $bbiCount = `ls bbi/*rmsk*.bb | wc -l`;
+my $bbiCount = `ls bbi/*rmsk*.bb 2> /dev/null | wc -l`;
 chomp $bbiCount;
 exit 0 if ( $bbiCount < 1);
 

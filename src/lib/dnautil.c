@@ -996,7 +996,6 @@ int i;
 int score = 10;
 int bestScore = 10;
 int bestPos = -1;
-int pastPoly = 0;
 int trimSize = 0;
 
 for (i=0; i<size; ++i)
@@ -1025,7 +1024,6 @@ for (i=0; i<size; ++i)
 	}
     if (score < 0)
 	{
-	pastPoly = i;
         break;
 	}
     }

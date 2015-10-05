@@ -40,9 +40,12 @@ struct bigBedInterval *bigBedIntervalQuery(struct bbiFile *bbi, char *chrom,
 struct bigBedInterval *el, *list = NULL;
 int itemCount = 0;
 bbiAttachUnzoomedCir(bbi);
+// Find blocks with padded start and end to make sure we include zero-length insertions:
+bits32 paddedStart = (start > 0) ? start-1 : start;
+bits32 paddedEnd = end+1;
 bits32 chromId;
 struct fileOffsetSize *blockList = bbiOverlappingBlocks(bbi, bbi->unzoomedCir,
-	chrom, start, end, &chromId);
+	chrom, paddedStart, paddedEnd, &chromId);
 struct fileOffsetSize *block, *beforeGap, *afterGap;
 struct udcFile *udc = bbi->udc;
 boolean isSwapped = bbi->isSwapped;
@@ -84,7 +87,7 @@ for (block = blockList; block != NULL; )
 	while (blockPt < blockEnd)
 	    {
 	    /* Read next record into local variables. */
-	    bits32 chr = memReadBits32(&blockPt, isSwapped);	// Read and discard chromId
+	    bits32 chr = memReadBits32(&blockPt, isSwapped);
 	    bits32 s = memReadBits32(&blockPt, isSwapped);
 	    bits32 e = memReadBits32(&blockPt, isSwapped);
 
@@ -92,7 +95,10 @@ for (block = blockList; block != NULL; )
 	    int restLen = strlen(blockPt);
 
 	    /* If we're actually in range then copy it into a new  element and add to list. */
-	    if (chr == chromId && s < end && e > start)
+	    if (chr == chromId &&
+                ((s < end && e > start)
+                // Make sure to include zero-length insertion elements at start or end:
+                 || (s == e && (s == end || e == start))))
 		{
 		++itemCount;
 		if (maxItems > 0 && itemCount > maxItems)
@@ -551,8 +557,8 @@ int i;
 struct slInt *intList = NULL, *intEl;
 for (i=0; i<bbi->extraIndexCount; ++i)
     {
-    bits16 type,fieldCount;
-    type = udcReadBits16(udc, isSwapped);
+    bits16 fieldCount;
+    udcReadBits16(udc, isSwapped);  // type
     fieldCount = udcReadBits16(udc, isSwapped);
     udcSeekCur(udc, sizeof(bits64));  // skip over fileOffset
     udcSeekCur(udc, 4);    // skip over reserved bits

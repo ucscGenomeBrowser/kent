@@ -155,9 +155,9 @@ void shortStats(struct chromSizes *cs)
 /* Display short form of stats. */
 {
 int i;
-double totalCov, twoOrMore, tenOrMore=0, hundredOrMore=0;
+double totalCov, tenOrMore=0, hundredOrMore=0;
 totalCov = cs->totalCov;
-twoOrMore = totalCov - cs->histogram[1];
+// twoOrMore = totalCov - cs->histogram[1]; not necessary
 for (i=10; i<=100; ++i)
     tenOrMore += cs->histogram[i];
 hundredOrMore = cs->histogram[100];

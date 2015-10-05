@@ -382,10 +382,10 @@ if (!startsWith("multipart/form-data",ct))
 
 for(mp=mp->multi;mp;mp=mp->next)
     {
-    char *cd = NULL, *cdMain = NULL, *cdName = NULL, *cdFileName = NULL, *ct = NULL;
+    char *cd = NULL, *cdMain = NULL, *cdName = NULL, *cdFileName = NULL;
     cd = hashFindVal(mp->hdr,"content-disposition");
-    ct = hashFindVal(mp->hdr,"content-type");
     //debug
+    // char *ct = hashFindVal(mp->hdr,"content-type");
     //fprintf(stderr,"GALT: content-disposition: %s\n",cd);
     //fprintf(stderr,"GALT: content-type: %s\n",ct);
     //fflush(stderr);

@@ -11318,3 +11318,47 @@ TMPDIR=/dev/shm
     #    real    7m34.259s
 
 #########################################################################
+2015-10-02: import of UCSC GENCODE group processing of GENCODE VM7 (markd)
+    # download files
+    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM7
+    cd /hive/data/genomes/mm10/bed/gencodeVM7
+
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set 
+    # release and transcript support versions
+
+
+    # download, build and load tables
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.
+        make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk cmpRelease >gencode-cmp.tsv
+
+    ## Copy and update trackDb files from previous release.
+    ## Change version and use lower priority so it sorts to top of
+    ## super track page.
+    ## Important to make sure filter attrs.transcriptType matches current set
+    ## figured out with
+    select distinct transcriptType from wgEncodeGencodeAttrsVM7 order by transcriptType;
+    cd kent/src/hg/makeDb/trackDb
+    cp mouse/mm10/wgEncodeGencodeVM4.ra mouse/mm10/wgEncodeGencodeVM7.ra
+    cp mouse/mm10/wgEncodeGencodeVM4.html mouse/mm10/wgEncodeGencodeVM7.html
+
+    # edit these plus mouse/mm10/trackDb.wgEncode.ra
+    # - set priorities in wgEncodeGencodeVM7.ra tracks so newest shows up first
+    #     priority - set to previous version priority minus 0.001
+    #     searchPriority - set each to previous minus 0.001
+    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
+    #     superTrack wgEncodeGencodeSuper pack
+    # - Update wgEncodeGencodeSuper.html to describe new release and to
+    #   pick up other updates.
+
+    # update all.joiner and validate
+    # look for the last section `begin Gencode V??' in all.joiner
+    # and copy and update version
+    # repeat this until happy, editing minCheck as needed
+    # output in check/joiner.out
+    cd /hive/data/genomes/mm10/bed/gencodeVM7
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+#########################################################################

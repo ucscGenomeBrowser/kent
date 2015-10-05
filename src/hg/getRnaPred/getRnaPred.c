@@ -163,7 +163,6 @@ int findGeneOff(struct genePred *gp, int chrPos)
 /* find the mrna offset containing the specified position.*/
 {
 int iRna = 0, iExon;
-int prevEnd = gp->exonStarts[0];
 
 for (iExon = 0; iExon < gp->exonCount; iExon++)
     {
@@ -177,7 +176,6 @@ for (iExon = 0; iExon < gp->exonCount; iExon++)
         return iRna + (chrPos - gp->exonStarts[iExon]);
         }
     iRna += (gp->exonEnds[iExon] - gp->exonStarts[iExon]);
-    prevEnd = gp->exonEnds[iExon];
     }
 return iRna-1;
 }

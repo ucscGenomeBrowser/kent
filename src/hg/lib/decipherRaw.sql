@@ -7,5 +7,5 @@ CREATE TABLE decipherRaw (
   classification_type varchar(255),
   phenotype varchar(255),
   key id (id)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 

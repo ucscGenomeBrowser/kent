@@ -882,7 +882,6 @@ while (fgets(line, sizeof(line), in))
         char *targetString;
         char queryStrand, targetStrand;
         char *parts[8];
-        int partCount;
 
         /* Do some preliminary checking of this line. */
 	if (newFormat)
@@ -907,8 +906,9 @@ while (fgets(line, sizeof(line), in))
 
         /* Extract the name of the query sequence.  If it's new,
          * then write out contigs on previous query we've accumulated
-         * so far and start a new list. */
-        partCount = chopString(queryString, ":-", parts, ArraySize(parts));
+         * so far and start a new list.  Ignore partCount return
+         * from chopString. */
+        chopString(queryString, ":-", parts, ArraySize(parts));
         if (!sameString(parts[0], queryName))
             {
             /* Allocate new name and keep track of it. */

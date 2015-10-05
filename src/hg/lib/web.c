@@ -140,10 +140,10 @@ else
     }
 if (db == NULL)
     db = hDefaultDb();
-boolean dbIsFound = hDbExists(db);
-boolean haveBlat = FALSE;
-if (dbIsFound)
-    haveBlat = hIsBlatIndexedDatabase(db);
+// boolean dbIsFound = hDbExists(db);
+// boolean haveBlat = FALSE;  unfortunately this feature has disappeared
+// if (dbIsFound)             this needs to be resurrected in the new menu
+//    haveBlat = hIsBlatIndexedDatabase(db);   bar system in menuBar()
 
 if (scriptName == NULL)
     scriptName = cloneString("");

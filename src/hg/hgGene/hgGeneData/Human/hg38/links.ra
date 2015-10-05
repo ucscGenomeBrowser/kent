@@ -30,11 +30,3 @@ idSql select value from knownToGencodeV20 where name = '%s';
 url http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s
 priority 10
 
-name gtex
-shortLabel GTEx
-tables wgEncodeGencodeAttrsV22 knownToGencodeV22
-idSql select wgEncodeGencodeAttrsV22.geneName from knownToGencodeV22, wgEncodeGencodeAttrsV22 where knownToGencodeV22.name = '%s' and wgEncodeGencodeAttrsV22.transcriptId = knownToGencodeV22.value; 
-url http://www.gtexportal.org/home/gene/%s
-priority 10
-
-

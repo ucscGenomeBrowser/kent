@@ -14,6 +14,11 @@ struct annoFormatTab
     FILE *f;                            // Output file handle
     struct hash *columnVis;             // Hash of columns that have been explicitly selected
                                         // or deselected by user.
+    boolean **columnFlags;              // 2D array[sources][columns] of flags for whether each
+                                        // column of each source is to be included in output.
+    int *columnFlagLengths;             // array[sources] of column counts (lengths of subarrays),
+                                        // for bounds-checking
+    int sourceCount;                    // Number of sources (primary + grators)
     boolean needHeader;			// TRUE if we should print out the header
     };
 
@@ -39,7 +44,7 @@ makeFullColumnName(fullName, sizeof(fullName), sourceName, colName);
 hashAddInt(self->columnVis, fullName, enabled);
 }
 
-static boolean columnIsIncluded(struct annoFormatTab *self, char *sourceName, char *colName)
+static boolean columnNameIsIncluded(struct annoFormatTab *self, char *sourceName, char *colName)
 // Return TRUE if column has not been explicitly deselected.
 {
 if (self->columnVis)
@@ -53,17 +58,60 @@ if (self->columnVis)
 return TRUE;
 }
 
+static void addColumnFlagsForSource(struct annoFormatTab *self, struct annoStreamer *streamer)
+/* Make an array of flags for whether to include each column from streamer. */
+{
+uint sourceIx = self->sourceCount;
+int colCount = slCount(streamer->asObj->columnList);
+AllocArray(self->columnFlags[sourceIx], colCount);
+self->columnFlagLengths[sourceIx] = colCount;
+struct asColumn *col;
+uint colIx;
+for (colIx = 0, col = streamer->asObj->columnList;  col != NULL;  col = col->next, colIx++)
+    self->columnFlags[sourceIx][colIx] = columnNameIsIncluded(self, streamer->name, col->name);
+self->sourceCount++;
+}
+
+static void makeColumnFlags(struct annoFormatTab *self, struct annoStreamer *primary,
+                            struct annoStreamer *integrators)
+/* Build arrays of flags for whether each column from each source is to be included
+ * in the output.  */
+{
+int sourceCount = 1 + slCount(integrators);
+AllocArray(self->columnFlags, sourceCount);
+AllocArray(self->columnFlagLengths, sourceCount);
+// self->sourceCount is incremented by each call to addColumnFlags
+self->sourceCount = 0;
+addColumnFlagsForSource(self, primary);
+struct annoStreamer *grator;
+for (grator = integrators;  grator != NULL;  grator = grator->next)
+    addColumnFlagsForSource(self, grator);
+assert(self->sourceCount == sourceCount);
+}
+
+INLINE boolean columnIsIncluded(struct annoFormatTab *self, uint sourceIx, uint colIx)
+/* Look up flag for whether this source's column is included in output. */
+{
+if (sourceIx >= self->sourceCount)
+    errAbort("annoFormatTab: illegal sourceIx %d (count is %d)", sourceIx, self->sourceCount);
+if (colIx >= self->columnFlagLengths[sourceIx])
+    errAbort("annoFormatTab: illegal colIx %d (lengths[%d] is %d) -- out-of-order sources?",
+             colIx, sourceIx, self->columnFlagLengths[sourceIx]);
+return self->columnFlags[sourceIx][colIx];
+}
+
 static void printHeaderColumns(struct annoFormatTab *self, struct annoStreamer *source,
-                               boolean *pIsFirst)
+                               uint sourceIx, boolean *pIsFirst)
 /* Print names of included columns from this source. */
 {
 FILE *f = self->f;
 char *sourceName = source->name;
 boolean isFirst = (pIsFirst && *pIsFirst);
+uint colIx;
 struct asColumn *col;
-for (col = source->asObj->columnList;  col != NULL;  col = col->next)
+for (colIx = 0, col = source->asObj->columnList;  col != NULL;  col = col->next, colIx++)
     {
-    if (columnIsIncluded(self, sourceName, col->name))
+    if (columnIsIncluded(self, sourceIx, colIx))
         {
         if (isFirst)
             isFirst = FALSE;
@@ -80,9 +128,12 @@ if (pIsFirst != NULL)
 
 static void aftInitialize(struct annoFormatter *vSelf, struct annoStreamer *primary,
 			  struct annoStreamer *integrators)
-/* Print header, regardless of whether we get any data after this. */
+/* Print header, regardless of whether we get any data after this.
+ * Also build arrays of flags for whether each column from each source is to be included
+ * in the output.  */
 {
 struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
+makeColumnFlags(self, primary, integrators);
 if (self->needHeader)
     {
     char *primaryHeader = primary->getHeader(primary);
@@ -90,10 +141,11 @@ if (self->needHeader)
     if (isNotEmpty(primaryHeader))
 	fprintf(self->f, "# Header from primary input:\n%s", primaryHeader);
     fputc('#', self->f);
-    printHeaderColumns(self, primary, &isFirst);
+    printHeaderColumns(self, primary, 0, &isFirst);
+    uint sourceIx;
     struct annoStreamer *grator;
-    for (grator = integrators;  grator != NULL;  grator = grator->next)
-	printHeaderColumns(self, grator, &isFirst);
+    for (sourceIx = 1, grator = integrators;  grator != NULL;  grator = grator->next, sourceIx++)
+	printHeaderColumns(self, grator, sourceIx, &isFirst);
     fputc('\n', self->f);
     self->needHeader = FALSE;
     }
@@ -169,32 +221,31 @@ return words;
 }
 
 static void printColumns(struct annoFormatTab *self, struct annoStreamer *streamer,
-			 struct annoRow *row, boolean isFirst)
+			 uint sourceIx, struct annoRow *row, boolean isFirst)
 /* Print columns in streamer's row (if NULL, print the right number of empty fields). */
 {
 FILE *f = self->f;
-char *sourceName = streamer->name;
 boolean freeWhenDone = FALSE;
 char **words = wordsFromRow(row, streamer, &freeWhenDone);
 struct asColumn *col;
-int i;
-for (col = streamer->asObj->columnList, i = 0;  col != NULL;  col = col->next, i++)
+uint colIx;
+for (col = streamer->asObj->columnList, colIx = 0;  col != NULL;  col = col->next, colIx++)
     {
-    if (columnIsIncluded(self, sourceName, col->name))
+    if (columnIsIncluded(self, sourceIx, colIx))
         {
         if (isFirst)
             isFirst = FALSE;
         else
             fputc('\t', f);
         if (words != NULL)
-            fputs((words[i] ? words[i] : ""), f);
+            fputs((words[colIx] ? words[colIx] : ""), f);
         }
     }
-int wordCount = i;
+int wordCount = colIx;
 if (freeWhenDone)
     {
-    for (i = 0;  i < wordCount;  i++)
-        freeMem(words[i]);
+    for (colIx = 0;  colIx < wordCount;  colIx++)
+        freeMem(words[colIx]);
     freeMem(words);
     }
 }
@@ -216,7 +267,7 @@ static void aftFormatOne(struct annoFormatter *vSelf, struct annoStreamRows *pri
 struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
 // Got one row from primary; what's the largest # of rows from any grator?
 int maxRows = 1;
-int iG;
+uint iG;
 for (iG = 0;  iG < gratorCount;  iG++)
     {
     int gratorRowCount = slCount(gratorData[iG].rowList);
@@ -227,11 +278,11 @@ for (iG = 0;  iG < gratorCount;  iG++)
 int iR;
 for (iR = 0;  iR < maxRows;  iR++)
     {
-    printColumns(self, primaryData->streamer, primaryData->rowList, TRUE);
+    printColumns(self, primaryData->streamer, 0, primaryData->rowList, TRUE);
     for (iG = 0;  iG < gratorCount;  iG++)
 	{
 	struct annoRow *gratorRow = slElementFromIx(gratorData[iG].rowList, iR);
-	printColumns(self, gratorData[iG].streamer, gratorRow, FALSE);
+	printColumns(self, gratorData[iG].streamer, 1+iG, gratorRow, FALSE);
 	}
     fputc('\n', self->f);
     }

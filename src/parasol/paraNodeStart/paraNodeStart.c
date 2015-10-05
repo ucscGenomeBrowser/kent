@@ -97,7 +97,7 @@ while (lineFileRow(lf, row))
     carryMultiOption("env", dy);
     carryOption("randomDelay", dy);
     printf("%s\n", dy->string);
-    system(dy->string);
+    (void) system(dy->string); // ignore return value
     }
 lineFileClose(&lf);
 freeDyString(&dy);
