@@ -227,7 +227,7 @@ if (!hashLookup(rUniqParentLinkHash, linkUniqName))
 	upperAt = strlen(parentTable->name) + 2;
 	joinedName[upperAt] = toupper(joinedName[upperAt]);
 	assocTableName = renameUnique(tableHash, joinedName);
-	assocTable = tableNew(joinedName, NULL, NULL);
+	assocTable = tableNew(assocTableName, NULL, NULL);
 	assocTable->isAssoc = TRUE;
 	addFieldToTable(assocTable, parentTable->name, parentTable->name,
 	    parentTable->primaryKey->attStat, TRUE, TRUE, 
