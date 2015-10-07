@@ -22,7 +22,7 @@ int margin = 1;
 //int graphHeight = 400;
 int graphHeight = 325;
 //int barWidth = 3;
-int barWidth = 9;
+int barWidth = 12;
 
 /* Dimensions of image overall and our portion within it. */
 int imageWidth, imageHeight, innerWidth, innerHeight, innerXoff, innerYoff;
@@ -88,12 +88,25 @@ for (i=0; i<size; ++i)
         }
     }
 }
-void drawBoxAndWhiskers(struct hvGfx *hvg, int fillColorIx, int lineColorIx, int x, int y, 
-                        struct tissueSampleVals *tsv, double maxExp)
+
+int cmpTissueSampleValsMedianScore(const void *va, const void *vb)
+/* Compare RPKM scores */
+{
+const struct tissueSampleVals *a = *((struct tissueSampleVals **)va);
+const struct tissueSampleVals *b = *((struct tissueSampleVals **)vb);
+if (a->median == b->median)
+    return 0;
+return (a->median > b->median ? 1: -1);
+}
+
+void drawBoxAndWhiskers(struct hvGfx *hvg, int fillColorIx, int x, int y, 
+                struct tissueSampleVals *tsv, double maxExp)
 /* Draw a Tukey-type box plot. JK */
 {
-int medianColorIx = lineColorIx;
-int whiskColorIx = lineColorIx;
+struct rgbColor lineColor = {.r=128, .g=128, .b=128};
+int lineColorIx = hvGfxFindColorIx(hvg, lineColor.r, lineColor.g, lineColor.b);
+int medianColorIx = hvGfxFindColorIx(hvg,0,0,0);
+int whiskColorIx = hvGfxFindColorIx(hvg,192,192,192);
 double xCen = x + barWidth/2;
 if (tsv->count > 1)
     {
@@ -238,9 +251,10 @@ for (tis = tissues; tis != NULL; tis = tis->next)
     slAddHead(&tsList, tsv);
     }
 
-slReverse(&tsList);
 // Tissue list is now sorted by GTEx tissue ordering.  
 // TODO: Option to sort by score descending.
+slSort(&tsList, cmpTissueSampleValsMedianScore);
+slReverse(&tsList);
 
 // Initialize graphics for Box-and-whiskers plot
 setImageDims(slCount(tsList));
@@ -251,15 +265,12 @@ trashDirFile(&pngTn, "hgc", "gtexGene", ".png");
 struct hvGfx *hvg = hvGfxOpenPng(imageWidth, imageHeight, pngTn.forCgi, FALSE);
 //hvGfxSetClip(hvg, 0, 0, imageWidth, imageHeight); // needed ?
 
-struct rgbColor lineColor = {.r=0};
-int lineColorIx = hvGfxFindColorIx(hvg, lineColor.r, lineColor.g, lineColor.b);
-
 int x=innerXoff + pad, y = innerYoff + pad;
 for (tsv = tsList; tsv != NULL; tsv = tsv->next)
     {
     struct rgbColor fillColor = rgbFromIntColor(tsv->color);
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
-    drawBoxAndWhiskers(hvg, fillColorIx, lineColorIx, x, y, tsv, maxVal);
+    drawBoxAndWhiskers(hvg, fillColorIx, x, y, tsv, maxVal);
     x += barWidth + pad;
     }
 
