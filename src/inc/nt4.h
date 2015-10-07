@@ -1,8 +1,8 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
+/* nt4 - routines to access DNA stored 2 bits at a time (N's can't be stored) 
+ *
+ * This file is copyright 2000 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #ifndef NT4_H
 #define NT4_H
 

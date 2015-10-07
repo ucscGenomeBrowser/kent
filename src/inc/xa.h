@@ -1,9 +1,8 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
-/* xa.h - manage cross species alignments stored in database. */
+/* xa.h - manage cross species alignments stored in database.
+ *
+ * This file is copyright 2000 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #ifndef XA_H
 #define XA_H
 

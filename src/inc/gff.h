@@ -1,9 +1,8 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
-/* gff.h Parse a GFF or GTF file. */
+/* gff.h Parse a GFF or GTF file. 
+ *
+ * This file is copyright 2000 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 
 #ifndef GFF_H
 #define GFF_H

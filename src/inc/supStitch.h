@@ -1,13 +1,12 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* supStitch stitches together a bundle of ffAli alignments that share
  * a common query and target sequence into larger alignments if possible.
  * This is commonly used when the query sequence was broken up into
  * overlapping blocks in the initial alignment, and also to look for
- * introns larger than fuzzyFinder can handle. */
+ * introns larger than fuzzyFinder can handle. 
+ *
+ * This file is copyright 2000 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 
 #ifndef SUPSTITCH_H
 #define SUPSTITCH_H

@@ -1,9 +1,8 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
-/* hgdb - Stuff to access human genome database. */
+/* hgdb - Stuff to access human genome database. 
+ *
+ * This file is copyright 2000 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #ifndef HGDB_H
 #define HGDB_H
 

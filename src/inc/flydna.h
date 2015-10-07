@@ -1,9 +1,8 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
-/* flydna.h - routines for accessing fly genome and cDNA sequences. */
+/* flydna.h - routines for accessing fly genome and cDNA sequences. 
+ *
+ * This file is copyright 2000 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 
 #ifndef FLYDNA_H
 #define FLYDNA_H
