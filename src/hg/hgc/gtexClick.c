@@ -23,19 +23,27 @@ int margin = 1;
 int graphHeight = 325;
 //int barWidth = 3;
 int barWidth = 12;
+int titleHeight = 30;
+
+int xAxisHeight = 100;
+int yAxisWidth = 50;
+int axisMargin = 5;
 
 /* Dimensions of image overall and our portion within it. */
 int imageWidth, imageHeight, innerWidth, innerHeight, innerXoff, innerYoff;
+int plotWidth, plotHeight;      /* just the plot */
 
 void setImageDims(int expCount)
 /* Set up image according to count */
 {
 innerHeight = graphHeight + 2*pad;
 innerWidth = pad + expCount*(pad + barWidth);
-imageWidth = innerWidth + 2*margin;
-imageHeight = innerHeight + 2*margin;
-innerXoff = margin;
-innerYoff = margin;
+plotWidth = innerWidth + 2*margin;
+plotHeight = innerHeight + 2*margin;
+imageWidth = plotWidth + yAxisWidth;
+imageHeight = plotHeight + xAxisHeight + titleHeight;
+innerXoff = yAxisWidth + margin;
+innerYoff = titleHeight + margin;
 }
 
 struct rgbColor rgbFromIntColor(int color)
@@ -189,9 +197,11 @@ genericHeader(tdb, item);
 
 if (gtexGene != NULL)
     {
-    printf("<b>Gene name:</b> %s<br>\n", gtexGene->name);
-    printf("<b>Ensembl gene:</b> %s<br>\n", gtexGene->geneId);
-    printf("<b>Ensembl transcript:</b> %s<br>\n", gtexGene->transcriptId);
+    // TODO: link to UCSC gene
+    printf("<b>Gene:</b> %s</a></br>", gtexGene->name);
+    printf("<b>Ensembl ID:</b> %s<br>\n", gtexGene->geneId);
+    printf("<a target='_blank' href='http://www.gtexportal.org/home/gene/%s'>View at GTEx portal</a><br>\n", gtexGene->geneId);
+    puts("<p>");
     }
 
 // Get full sample data for this gene
@@ -252,7 +262,7 @@ for (tis = tissues; tis != NULL; tis = tis->next)
     }
 
 // Tissue list is now sorted by GTEx tissue ordering.  
-// TODO: Option to sort by score descending.
+// Sort by score descending.
 slSort(&tsList, cmpTissueSampleValsMedianScore);
 slReverse(&tsList);
 
@@ -273,8 +283,22 @@ for (tsv = tsList; tsv != NULL; tsv = tsv->next)
     drawBoxAndWhiskers(hvg, fillColorIx, x, y, tsv, maxVal);
     x += barWidth + pad;
     }
-
 //hvGfxUnclip(hvg);
+
+/* Draw title */
+int blackColorIx = hvGfxFindColorIx(hvg, 0,0,0);
+char title[256];
+safef(title, sizeof(title), "GTEx V4 Tissue Expression in %s", gtexGene->name);
+hvGfxTextCentered(hvg, 0, innerYoff, imageWidth, titleHeight, blackColorIx, mgMediumFont(), title);
+
+/* Draw axes */
+x = innerXoff - margin;
+// Y axis
+hvGfxLine(hvg, x, innerYoff, x, plotHeight, blackColorIx);
+// X axis
+y = innerYoff + plotHeight;
+hvGfxLine(hvg, innerXoff, y, plotWidth, y, blackColorIx);
+
 hvGfxClose(&hvg);
 printf("<IMG SRC = \"%s\" BORDER=1><BR>\n", pngTn.forHtml);
 /*printf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d><BR>\n",
