@@ -1,5 +1,10 @@
 #this keeps information for links for the hgc cgi
 
+name NCBIGene
+url http://www.ncbi.nlm.nih.gov/gene/%s
+label NCBI Gene
+acc yes
+
 name ORegAnno
 url http://www.oreganno.org/oregano/recordview.action?recid=%s
 label ORegAnno
@@ -78,6 +83,11 @@ dataLinkCol 2
 name EntrezGene
 label Entrez Gene
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=full_report&list_uids=%s
+acc yes
+
+name EnsemblId
+label Ensembl
+url http://www.ensembl.org/id/%s
 acc yes
 
 name EnsemblGene

@@ -225,6 +225,7 @@ allButtonPair on
 
 include trackDb.tf.ra
 include trackDb.dnase.ra
+include trackDb.project.ra
 
 searchTable repNames
 searchType bed

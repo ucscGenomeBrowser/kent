@@ -61,6 +61,9 @@ while (lineFileNext(lf, &line, NULL))
         }
     }
 
+// Close input
+lineFileClose(&lf);
+
 // Close output
 carefulClose(&f);
 }
