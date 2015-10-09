@@ -107,6 +107,42 @@ static struct rgbColor veryLightRainbowTable[30] = {
    {255,174,191},
 };
 
+
+static struct rgbColor whiteToBlackRainbowTable[30] = {
+/* This is a rainbow from white to black. There are no colors, only varying
+ * shades of grey. It is good for displays that are not meant to draw attention. */
+   {255,255,255},
+   {247,247,247},
+   {238,238,238},
+   {230,230,230},
+   {221,221,221},
+   {213,213,213},
+   {204,204,204},
+   {196,196,196},
+   {187,187,187},
+   {179,179,179},
+   {170,170,170},
+   {162,162,162},
+   {153,153,153},
+   {145,145,145},
+   {136,136,136},
+   {128,128,128},
+   {119,119,119},
+   {111,111,111},
+   {102,102,102},
+   {93,93,93},
+   {85,85,85},
+   {76,76,76},
+   {68,68,68},
+   {59,59,59},
+   {50,50,50},
+   {42,42,42},
+   {33,33,33},
+   {25,25,25},
+   {16,16,16},
+   {0,0,0},
+};
+
 static struct rgbColor interpolatedHue(struct rgbColor *table, int tableSize, double pos)
 /* Given pos, a number between 0 and 1, return interpolated color, doing interpolation
  * between first and last color for numbers close to 1. */
@@ -151,3 +187,9 @@ struct rgbColor saturatedRainbowAtPos(double pos)
 return interpolatedHue(saturatedRainbowTable, ArraySize(saturatedRainbowTable), pos);
 }
 
+struct rgbColor whiteToBlackRainbowAtPos(double pos)
+/* Given pos, a number between 0 and 1, return a blackToWhite rainbow rgbColor
+ * where 0 maps to white,  0.1 is grey, and 1 is black. */
+{
+return interpolatedHue(whiteToBlackRainbowTable, ArraySize(whiteToBlackRainbowTable), pos);
+}
