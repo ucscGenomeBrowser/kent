@@ -288,16 +288,63 @@ for (tsv = tsList; tsv != NULL; tsv = tsv->next)
 /* Draw title */
 int blackColorIx = hvGfxFindColorIx(hvg, 0,0,0);
 char title[256];
-safef(title, sizeof(title), "GTEx V4 Tissue Expression in %s", gtexGene->name);
+// TODO: get tissue count and release from tables 
+safef(title, sizeof(title), "%s Gene Expression in 53 Tissues from GTEx (V4 release, 2014) - %s", 
+                gtexGene->name, doLogTransform ? "log10(RPKM+1)" : "(RPKM)");
 hvGfxTextCentered(hvg, 0, innerYoff, imageWidth, titleHeight, blackColorIx, mgMediumFont(), title);
 
 /* Draw axes */
 x = innerXoff - margin;
-// Y axis
+
+// Y axis, tick marks, and labels
 hvGfxLine(hvg, x, innerYoff, x, plotHeight, blackColorIx);
+
+// for now, just mark the max value
+char buf[16];
+safef(buf, sizeof(buf), "%d -", round(maxVal));
+hvGfxText(hvg, x-24, innerYoff-8, blackColorIx, mgMediumFont(), buf);
+
 // X axis
 y = innerYoff + plotHeight;
 hvGfxLine(hvg, innerXoff, y, plotWidth, y, blackColorIx);
+
+// Draw vertical labels on separate graphics object, rotate, then merge
+/*
+struct memGvx *mg = mgNew(imageHeight, imageWidth);
+MgFont *font = mgMediumFont();
+int lineHeight = mgFontLineHeight(font)-1;
+y += lineHeight;
+mgTextRight(mg, 0+1, y+1, width-1, lineHeight, MG_BLACK, font, labels[i]);
+hvGfxMergeWithPng(hvg, mgRotate90(mg));
+// or try using mg lib entirely, via mgSavePng.
+*/
+
+#ifdef TICKS
+/* Figure tick intervals.  GTEx portal uses .5 for log, 2, 5, 10, 20, 50, 100  for linear.
+ * With 7-12 ticks.  5-10 seems nicer to me. Here's how it's done for browser ruler */
+
+static long figureTickSpan(long totalLength, int maxNumTicks)
+/* Figure out whether ticks on ruler should be 1, 5, 10, 50, 100, 500, 
+ * 1000, etc. units apart.  */
+{
+int roughTickLen = totalLength/maxNumTicks;
+int i;
+int tickLen = 1;
+
+for (i=0; i<9; ++i)
+    {
+    if (roughTickLen < tickLen)
+        return tickLen;
+    tickLen *= 5;
+    if (roughTickLen < tickLen)
+        return tickLen;
+    tickLen *= 2;
+    }
+return 1000000000;
+}
+#endif
+
+
 
 hvGfxClose(&hvg);
 printf("<IMG SRC = \"%s\" BORDER=1><BR>\n", pngTn.forHtml);
