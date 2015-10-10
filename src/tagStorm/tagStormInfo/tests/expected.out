@@ -1,0 +1,5 @@
+stanzas	34
+tags	110
+storm	1274
+types	15
+fields	access,age,age_units,assay,biosample_date,donor,file,format,lab,lab_kent_disassociation_protocol,lab_kent_quality,life_stage,organ,part,sex
