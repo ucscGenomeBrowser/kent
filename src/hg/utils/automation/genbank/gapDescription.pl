@@ -24,7 +24,9 @@ chdir $wrkDir;
 my $accAsm = basename($wrkDir);
 exit 0 if ( ! -s "bbi/${accAsm}.gap.ncbi.bb" );
 my $groupName = $wrkDir;
-$groupName =~ s#.*/genbank/##;
+my $asmType = "genbank";
+$asmType = "refseq" if ( $groupName =~ m#/refseq/#);
+$groupName =~ s#.*/$asmType/##;
 $groupName =~ s#/.*##;
 my $selfUrl = "${groupName}/${accAsm}";
 
@@ -60,7 +62,7 @@ target="_blank">specific information about this assembly</a>.
 <p>
 The definition of the gaps in this assembly is from the AGP file(s):<br>
 $agpFiles<br>
-in this <a href="http://genome-test.cse.ucsc.edu/~hiram/hubs/genbank/$selfUrl/" target=_blank>build directory</a><br>
+in this <a href="http://genome-test.cse.ucsc.edu/~hiram/hubs/$asmType/$selfUrl/" target=_blank>build directory</a><br>
 The NCBI document
 <a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/agp/AGP_Specification.shtml"
 target=_blank>AGP Specification</a> describes the format of the AGP file.
@@ -73,7 +75,7 @@ it is a <em>bridged</em> gap and a white line is drawn
 through the black box representing the gap. 
 </p>
 <p>
-Return to <a href="http://genome-test.cse.ucsc.edu/~hiram/hubs/genbank/${groupName}/${groupName}.ncbi.html">$groupName</a> assembly hub index.
+Return to <a href="http://genome-test.cse.ucsc.edu/~hiram/hubs/$asmType/$groupName/${groupName}.ncbi.html">$groupName</a> assembly hub index.
 </p>
 _EOF_
    ;

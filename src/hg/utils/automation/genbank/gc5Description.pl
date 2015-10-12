@@ -26,7 +26,9 @@ my $accAsm = basename($wrkDir);
 exit 0 if ( ! -s "bbi/${accAsm}.gc5Base.ncbi.bw" );
 
 my $groupName = $wrkDir;
-$groupName =~ s#.*/genbank/##;
+my $asmType = "genbank";
+$asmType = "refseq" if ( $groupName =~ m#/refseq/#);
+$groupName =~ s#.*/$asmType/##;
 $groupName =~ s#/.*##;
 my $selfUrl = "${groupName}/${accAsm}";
 
@@ -46,10 +48,19 @@ This track may be configured in a variety of ways to highlight different aspects
 of the displayed information. Click the &quot;Graph configuration help&quot; link
 for an explanation of the configuration options.
 
+<h2>Downloads</h2>
+<p>
+The data for this track can be found in the files
+in this <a href="http://genome-test.cse.ucsc.edu/~hiram/hubs/$asmType/$selfUrl/" target=_blank>build directory</a>, specifically:<br>
+<b>bigWig file format: </b><a href="http://genome-test.cse.ucsc.edu/~hiram/hubs/$asmType/$selfUrl/bbi/$accAsm.gc5Base.ncbi.bw" target=_blank>$accAsm.gc5Base.ncbi.bw</a><br>
+</p>
 <h2>Credits</h2>
 <p> The data and presentation of this graph were prepared by
 <a href="mailto:&#104;&#105;&#114;a&#109;&#64;&#115;&#111;&#101;
 .&#117;&#99;&#115;&#99;.&#101;&#100;u">Hiram Clawson</a>.
+</p>
+<p>
+Return to <a href="http://genome-test.cse.ucsc.edu/~hiram/hubs/$asmType/$groupName/${groupName}.ncbi.html">$groupName</a> assembly hub index.
 </p>
 _EOF_
    ;

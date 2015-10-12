@@ -2,22 +2,41 @@
 
 set -beEu -o pipefail
 
-export outside="/hive/data/outside/ncbi/genomes/genbank"
-export inside="/hive/data/inside/ncbi/genomes/genbank"
+function usage() {
+  printf "usage: ucscToNcbi.sh <genbank|refseq> <pathTo>/*_genomic.fna.gz
+  select genbank or refseq assembly hierarchy,
+  the unrooted <pathTo> is to a file in .../all_assembly_versions/...
+  relative to the directory hierarchy:
+    %s
+expecting to find corresponding files in the same directory path
+  with .../latest_assembly_versions/... instead of /all_.../
+  results will be constructing files in corresponding directory
+  relative to the directory hierarchy:
+    %s\n" "${outside}" "${inside}" 1>&2
+}
+
+export outside="/hive/data/outside/ncbi/genomes/[refseq|genbank]"
+export inside="/hive/data/inside/ncbi/genomes/[refseq|genbank]"
 export dateStamp=`date "+%FT%T %s"`
 
-if [ $# -lt 1 ]; then
-  echo "usage: ucscToNcbi.sh <pathTo>/*_genomic.fna.gz" 1>&2
-  echo "  that unrooted <pathTo> is to a file in .../all_assembly_versions/..." 1>&2
-  echo "  relative to the directory hierarchy: $outside" 1>&2
-  echo "expecting to find corresponding files in the same directory path" 1>&2
-  echo "  with .../latest_assembly_versions/... instead of /all_.../" 1>&2
-  echo "results will be constructing files in corresponding directory" 1>&2
-  echo "  relative to the directory hierarchy: $inside" 1>&2
+if [ $# -lt 2 ]; then
+  usage
   exit 255
 fi
 
-export fnaFile=$1
+export asmType=$1
+
+if [ "${asmType}" != "genbank" -a "${asmType}" != "refseq" ]; then
+  printf "ERROR: select genbank or refseq assemblies update\n" 1>&2
+  usage
+  exit 255
+fi
+
+outside="/hive/data/outside/ncbi/genomes/$asmType"
+inside="/hive/data/inside/ncbi/genomes/$asmType"
+
+export fnaFile=$2
+
 printf "# %s ncbiToUcsc.sh %s\n" "${dateStamp}" "${fnaFile}" 1>&2
 
 B=`basename "${fnaFile}" | sed -e 's/_genomic.fna.gz//;'`
@@ -26,6 +45,7 @@ asmReport=`echo "${fnaFile}" | sed -e 's/_genomic.fna.gz/_assembly_report.txt/;'
 primaryAsm="${outside}/${D}/${B}_assembly_structure/Primary_Assembly"
 asmStructure="${outside}/${D}/${B}_assembly_structure"
 rmOut="${outside}/${D}/${B}_rm.out.gz"
+gffFile="${outside}/${D}/${B}_genomic.gff.gz"
 chr2acc="${primaryAsm}/assembled_chromosomes/chr2acc"
 unplacedScafAgp="${primaryAsm}/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz"
 chr2scaf="${primaryAsm}/unlocalized_scaffolds/unlocalized.chr2scaf"
@@ -36,6 +56,11 @@ nonNucChr2scaf="${nonNucAsm}/unlocalized_scaffolds/unlocalized.chr2scaf"
 export partCount=0
 # assembly is unplaced contigs only if there are no other parts
 export unplacedOnly=1
+
+if [ ! -s "${outside}/${asmReport}" ]; then
+  printf "# ERROR: missing assembly report %s\n" "${asmReport}" 1>&2
+  exit 255
+fi
 
 # if checkAgpStatusOK.txt does not exist, run through that construction
 #   procedure, else continue with bbi file construction
@@ -229,7 +254,8 @@ fi
 # this assembly.  For no parts, make a noStructure assembly.
 echo "# ${dateStamp} partCount: ${partCount}" 1>&2
 
-if [ 0 -eq 1 ]; then
+# XXX temporary avoid UCSC 2bit construction
+### if [ 0 -eq 1 ]; then
 if [ ${partCount} -eq 0 ]; then
   echo "# ${dateStamp} constructing no structure assembly" 1>&2
   echo "# ${dateStamp} rm -f \"${inside}/${D}/${B}_noStructure.agp.ncbi.gz\"" 1>&2
@@ -241,16 +267,21 @@ if [ ${partCount} -eq 0 ]; then
   if [ "${outside}/${asmReport}" -nt "${inside}/${D}/${B}_noStructure.agp.gz" ]; then
     contigCount=`(grep -v "^#" ${outside}/${asmReport} | wc -l) || true`
     if [ "${contigCount}" -gt 0 ]; then
+### XXX temporary disable UCSC construction
+if [ 0 -eq 1 ]; then
     echo "${inside}/scripts/noStructureAgp.pl ucsc \"${outside}/${asmReport}\" \"${inside}/${D}/${B}.ncbi.chrom.sizes\" | gzip -c > \"${inside}/${D}/${B}_noStructure.agp.gz\"" 1>&2
     ${inside}/scripts/noStructureAgp.pl ucsc "${outside}/${asmReport}" \
       "${inside}/${D}/${B}.ncbi.chrom.sizes" | gzip -c \
         > "${inside}/${D}/${B}_noStructure.agp.gz"
     touch -r "${outside}/${asmReport}" "${inside}/${D}/${B}_noStructure.agp.gz"
+fi ### XXX temporary disable UCSC construction
     echo "${inside}/scripts/noStructureAgp.pl ncbi \"${outside}/${asmReport}\" \"${inside}/${D}/${B}.ncbi.chrom.sizes\" | gzip -c > \"${inside}/${D}/${B}_noStructure..agp.ncbi.gz\"" 1>&2
     ${inside}/scripts/noStructureAgp.pl ncbi "${outside}/${asmReport}" \
       "${inside}/${D}/${B}.ncbi.chrom.sizes" | gzip -c \
         > "${inside}/${D}/${B}_noStructure.agp.ncbi.gz"
     touch -r "${outside}/${asmReport}" "${inside}/${D}/${B}_noStructure.agp.ncbi.gz"
+### XXX temporary disable UCSC construction
+if [ 0 -eq 1 ]; then
     echo "${inside}/scripts/noStructureFasta.pl ucsc \"${inside}/${D}/${B}_noStructure.agp.gz\" \"${outside}/${fnaFile}\" | faToTwoBit stdin \"${inside}/${D}/${B}.ucsc.2bit\"" 1>&2
     ${inside}/scripts/noStructureFasta.pl ucsc \
       "${inside}/${D}/${B}_noStructure.agp.gz" "${outside}/${fnaFile}" \
@@ -263,11 +294,15 @@ if [ ${partCount} -eq 0 ]; then
         "${inside}/${D}/${B}.ucsc.chrom.sizes"
     # verify contig name lengths are less than 31
     maxNameLength=`cut -f1 "${inside}/${D}/${B}.ucsc.chrom.sizes" | awk '{print length($1)}' | sort -nr | head -1`
+fi ### XXX temporary disable UCSC construction
+       maxNameLength=32
     else
        maxNameLength=32
     fi
     # if not, then rebuild ucsc.2bit from ncbi.2bit
     if [ "${maxNameLength}" -gt 31 ]; then
+### XXX temporary disable UCSC construction
+if [ 0 -eq 1 ]; then
        echo "# ${dateStamp} rebuilding UCSC no structure assembly from ncbi $maxNameLength" 1>&2
        rm -f "${inside}/${D}/${B}.ucsc.2bit"
        rm -f "${inside}/${D}/${B}.ucsc.chrom.sizes"
@@ -281,6 +316,7 @@ if [ ${partCount} -eq 0 ]; then
        twoBitToFa "${inside}/${D}/${B}.ucsc.2bit" stdout \
          | hgFakeAgp stdin stdout | gzip -c > "${inside}/${D}/${B}.fake.agp.gz"
      touch -r "${inside}/${D}/${B}.ucsc.2bit" "${inside}/${D}/${B}.fake.agp.gz"
+fi ### XXX temporary disable UCSC construction
        rm -f ${inside}/${D}/*agp.ncbi.gz
        twoBitToFa "${inside}/${D}/${B}.ncbi.2bit" stdout \
     | hgFakeAgp stdin stdout | gzip -c > "${inside}/${D}/${B}.fake.agp.ncbi.gz"
@@ -291,6 +327,8 @@ else
   if [ -s "${nonNucChr2scaf}" -o -s "${nonNucChr2acc}" ]; then
     rm -f "${inside}/${D}/${B}.ucsc.2bit"
   fi
+### XXX temporary disable UCSC construction
+if [ 0 -eq 1 ]; then
   echo "# ${dateStamp} constructing UCSC 2bit file ${B}" 1>&2
   if [ ! -s "${inside}/${D}/${B}.ucsc.2bit" ]; then
     faToTwoBit ${inside}/${D}/${B}.*.fa.gz \
@@ -317,10 +355,11 @@ else
      touch -r "${inside}/${D}/${B}.ucsc.2bit" "${inside}/${D}/${B}.fake.agp.gz"
     fi
   fi
+fi ### XXX temporary disable UCSC construction
 fi
 
 # XXX temporary avoid UCSC 2bit construction
-fi
+### fi
 
 ###########################################################################
 # error report
@@ -435,9 +474,23 @@ fi
      fi
   fi
 
+  # ncbiGene.sh will do its own checking to see if it needs to run
+  printf "# %s ncbiGene.sh %s\n" "${dateStamp}" "${B}" 1>&2
+  ${inside}/scripts/ncbiGene.sh "${gffFile}" "${inside}/${D}/"
+
   # cpg.sh will do its own checking to see if it needs to run
-  printf "# %s cpg.sh %s\n" "${dateStamp}" "${B}" 1>&2
-  ${inside}/scripts/cpg.sh "${inside}/${D}"
+#   printf "# %s cpg.sh %s\n" "${dateStamp}" "${B}" 1>&2
+#   ${inside}/scripts/cpg.sh "${inside}/${D}"
+
+  # construct a signature from faCount totals to compare with UCSC existing
+  #  genome browsers
+
+  if [ ! -s ${inside}/${D}/${B}.faCount.signature.txt ]; then
+     twoBitToFa ${inside}/${D}/${B}.ncbi.2bit stdout | faCount stdin \
+       |  grep -P "^total\t" > ${inside}/${D}/${B}.faCount.signature.txt
+     touch -r ${inside}/${D}/${B}.ncbi.2bit \
+       ${inside}/${D}/${B}.faCount.signature.txt
+  fi
 
   # XXX always rebuild trackDb.txt
   rm -f "${inside}/${D}/trackDb.txt"
@@ -464,6 +517,8 @@ fi
   ${inside}/scripts/gc5Description.pl "${inside}/${D}"
   printf "# %s %s.repeatMasker.html\n" "${dateStamp}" "${B}" 1>&2
   ${inside}/scripts/rmskDescription.pl "${inside}/${D}"
+  printf "# %s %s.ncbiGene.html\n" "${dateStamp}" "${B}" 1>&2
+  ${inside}/scripts/ncbiGeneDescription.pl "${inside}/${D}"
 
 fi
 

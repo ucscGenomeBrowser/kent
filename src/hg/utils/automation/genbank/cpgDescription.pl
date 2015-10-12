@@ -26,7 +26,9 @@ exit 0 if ( ! ( -s "bbi/${accAsm}.cpgIslandExtUnmasked.ncbi.bb" ||
    -s "bbi/${accAsm}.cpgIslandExt.ncbi.bb" ) );
 
 my $groupName = $wrkDir;
-$groupName =~ s#.*/genbank/##;
+my $asmType = "genbank";
+$asmType = "refseq" if ( $groupName =~ m#/refseq/#);
+$groupName =~ s#.*/$asmType/##;
 $groupName =~ s#/.*##;
 my $selfUrl = "${groupName}/${accAsm}";
 

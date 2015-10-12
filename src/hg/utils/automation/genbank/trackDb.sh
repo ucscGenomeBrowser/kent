@@ -35,6 +35,25 @@ urlLabel NCBI Nucleotide database
 group map\n\n" "${dbPrefix}" "${suffix}" "${dbPrefix}"
 fi
 
+if [ -s ${buildDir}/bbi/${dbPrefix}.ncbiGene${suffix}.bb ]; then
+printf "track ncbiGene
+longLabel ncbiGene - gene predictions delivered with assembly from NCBI
+shortLabel ncbiGene
+priority 12
+visibility pack
+color 0,80,150
+altColor 150,80,0
+colorByStrand 0,80,150 150,80,0
+bigDataUrl bbi/%s.ncbiGene%s.bb
+type bigGenePred
+html %s.ncbiGene
+searchIndex name
+searchTrix %s.ncbiGene.ix
+url http://www.ncbi.nlm.nih.gov/nuccore/\$\$
+urlLabel NCBI Nucleotide database
+group genes\n\n" "${dbPrefix}" "${suffix}" "${dbPrefix}" "${dbPrefix}"
+fi
+
 if [ -s ${buildDir}/bbi/${dbPrefix}.gap${suffix}.bb ]; then
 printf "track gap
 longLabel Gap 

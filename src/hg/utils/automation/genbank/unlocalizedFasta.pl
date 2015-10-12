@@ -56,7 +56,7 @@ while (my $line = <FH>) {
       my $acc = $line;
       $acc =~ s/\./v/ if ($ncbiUcsc ne "ncbi");
       my $ucscName = "chr${chrN}_${acc}_random";
-      my $ucscName = ${acc} if ($ncbiUcsc eq "ncbi");
+      $ucscName = ${acc} if ($ncbiUcsc eq "ncbi");
       printf ">%s\n", $ucscName;
    } else {
       print $line;

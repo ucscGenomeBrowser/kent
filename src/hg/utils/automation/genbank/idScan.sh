@@ -1,7 +1,7 @@
 #!/bin/sh
 
-export outside="/hive/data/outside/ncbi/genomes/genbank"
-export inside="/hive/data/inside/ncbi/genomes/genbank"
+export outside="/hive/data/outside/ncbi/genomes/refseq"
+export inside="/hive/data/inside/ncbi/genomes/refseq"
 
 # for T in archaea bacteria fungi invertebrate other plant protozoa vertebrate_mammalian vertebrate_other
 for T in vertebrate_mammalian vertebrate_other
