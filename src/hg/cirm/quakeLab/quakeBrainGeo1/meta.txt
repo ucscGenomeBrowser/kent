@@ -10,21 +10,13 @@ organ brain
 pipeline quakeRnaPipeline2.txt
 submission_date Apr 14 2015
 update_date Jul 02 2015
-GEO_Sample_library_selection cDNA
-GEO_Sample_series_id GSE67835
-GEO_Sample_type SRA
+GEO_Series_geo_accession GSE67835
 GEO_Sample_extract_protocol_ch1 C1 autoprep standard protocol
-GEO_Sample_library_source transcriptomic
-GEO_Sample_status Public on May 20 2015
 GEO_Series_summary We used single cell RNA sequencing on 466 cells to capture the cellular complexity of the adult and fetal human brain at a whole transcriptome level. Healthy adult temporal lobe tissue was obtained from epileptic patients during temporal lobectomy for medically refractory seizures. We were able to classify individual cells into all of the major neuronal, glial, and vascular cell types in the brain.
-GEO_Platform_technology high-throughput sequencing
 GEO_Series_relation BioProject: http://www.ncbi.nlm.nih.gov/bioproject/PRJNA281204
-GEO_Series_type Expression profiling by high throughput sequencing
 GEO_Series_status Public on May 20 2015
 GEO_Series_supplementary_file ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByStudy/sra/SRP/SRP057/SRP057196
 GEO_Series_overall_design Examination of cell types in healthy human brain samples.
-GEO_Series_geo_accession GSE67835
-
 
 	GEO_Sample_c1_chip_id 1772078217
 	GEO_Sample_age postnatal 54 years
@@ -37,6 +29,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_tissue cortex (temporal lobe)
 	body_part healthy temporal lobe cortex
 	sequencer Illumina NextSeq 500
+	sub_tissue cortex
 
 		meta GSM1657871
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995861
@@ -313,6 +306,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_tissue cortex (temporal lobe)
 	body_part healthy temporal lobe cortex
 	sequencer Illumina NextSeq 500
+	sub_tissue hippocampus
 
 		meta GSM1657904
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995894
@@ -525,6 +519,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_tissue cortex (temporal lobe)
 	body_part healthy temporal lobe cortex
 	sequencer Illumina NextSeq 500
+	sub_tissue cortex
 
 		meta GSM1657929
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995919
@@ -800,15 +795,16 @@ GEO_Series_geo_accession GSE67835
 
 	GEO_Sample_c1_chip_id 1772078237
 	GEO_Sample_age postnatal 37 years
-	age 37 
+	age 37
 	age_unit year
-	life_stage postpartum 
+	life_stage postpartum
 	GEO_Sample_platform_id GPL18573
 	GEO_Sample_experiment_sample_name AB_S11
 	donor AB_S11
 	GEO_Sample_tissue cortex (temporal lobe)
 	body_part healthy temporal lobe cortex
 	sequencer Illumina NextSeq 500
+	sub_tissue cortex
 
 		meta GSM1657963
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995953
@@ -1053,6 +1049,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_tissue cortex (temporal lobe)
 	body_part healthy temporal lobe cortex
 	sequencer Illumina MiSeq
+	sub_tissue cortex
 
 		meta GSM1657992
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995982
@@ -1105,6 +1102,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_tissue cortex (temporal lobe)
 	body_part healthy temporal lobe cortex
 	sequencer Illumina MiSeq
+	sub_tissue cortex
 
 		meta GSM1657997
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995987
@@ -1157,6 +1155,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_tissue cortex (temporal lobe)
 	body_part healthy temporal lobe cortex
 	sequencer Illumina MiSeq
+	sub_tissue cortex
 
 		meta GSM1658002
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995992
@@ -1201,6 +1200,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_tissue cortex (temporal lobe)
 	body_part healthy temporal lobe cortex
 	sequencer Illumina NextSeq 500
+	sub_tissue cortex
 
 		meta GSM1658006
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX995/SRX995996
@@ -1829,6 +1829,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_tissue cortex (temporal lobe)
 	body_part healthy temporal lobe cortex
 	sequencer Illumina NextSeq 500
+	sub_tissue cortex
 
 		meta GSM1658083
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX996/SRX996073
@@ -2105,6 +2106,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_tissue cortex (temporal lobe)
 	body_part healthy temporal lobe cortex
 	sequencer Illumina NextSeq 500
+	sub_tissue hippocampus
 
 		meta GSM1658116
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX996/SRX996106
@@ -2205,6 +2207,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_tissue cortex (temporal lobe)
 	body_part healthy temporal lobe cortex
 	sequencer Illumina NextSeq 500
+	sub_tissue cortex
 
 		meta GSM1658127
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX996/SRX996117
@@ -2673,6 +2676,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_tissue cortex (temporal lobe)
 	body_part healthy temporal lobe cortex
 	sequencer Illumina MiSeq
+	sub_tissue cortex
 
 		meta GSM1658184
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX996/SRX996174
@@ -2837,6 +2841,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_tissue cortex
 	body_part healthy brain cortex
 	sequencer Illumina MiSeq
+	sub_tissue cortex
 
 		meta GSM1658203
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX996/SRX996193
@@ -3057,6 +3062,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_tissue cortex
 	body_part healthy brain cortex
 	sequencer Illumina MiSeq
+	sub_tissue cortex
 
 		meta GSM1658229
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX996/SRX996219
@@ -3438,6 +3444,7 @@ GEO_Series_geo_accession GSE67835
 	body_part healthy temporal lobe cortex
 	cell_type nonreplicating fetal neuron
 	sequencer Illumina MiSeq
+	sub_tissue cortex
 
 		meta GSM1658305
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX996/SRX996265
@@ -3681,6 +3688,7 @@ GEO_Series_geo_accession GSE67835
 	GEO_Sample_tissue cortex (temporal lobe)
 	body_part healthy temporal lobe cortex
 	sequencer Illumina NextSeq 500
+	sub_tissue cortex
 
 		meta GSM1658338
 		GEO_Sample_supplementary_file_2 ftp://ftp-trace.ncbi.nlm.nih.gov/sra/sra-instant/reads/ByExp/sra/SRX/SRX996/SRX996298
