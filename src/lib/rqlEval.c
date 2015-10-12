@@ -274,6 +274,8 @@ switch (p->op)
 	break;
     case rqlOpStringToInt:
 	res = rqlLocalEval(p->children, record, lookup, lm);
+	if (isEmpty(res.val.s))
+	    errAbort("Expecting an integer value but got undefined symbol.");
 	res.type = rqlTypeInt;
 	res.val.i = atoll(res.val.s);
 	break;
