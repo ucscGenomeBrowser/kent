@@ -65,7 +65,10 @@ fi
 # check if we're on VBox and if yes, if auto-updates were deactivated from the Vbox host via a property
 if which VBoxControl > /dev/null; then
    if VBoxControl guestproperty get gbibAutoUpdateOff | grep -xq "Value: yes" ; then
-       exit 6
+   # exit only if no argument specified on command line = run from cronjob
+       if [ "$#" -eq 0 ] ; then
+           exit 6
+       fi
    fi
 fi
 
