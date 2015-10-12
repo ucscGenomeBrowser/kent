@@ -94,6 +94,12 @@ struct hash *tagStormUniqueIndex(struct tagStorm *tagStorm, char *tag);
 /* Produce a hash of stanzas containing a tag where tag is unique across
  * stanzas */
 
+struct hash *tagStormIndexExtended(struct tagStorm *tagStorm, char *tag, 
+    boolean unique, boolean inherit);
+/* Produce a hash of stanzas containing a tag keyed by tag value. 
+ * If unique parameter is set then the tag values must all be unique
+ * If inherit is set then tags set in parent stanzas will be considered too. */
+
 void tagStormUpdateTag(struct tagStorm *tagStorm, struct tagStanza *stanza, char *tag, char *val);
 /* Add tag to stanza in storm, replacing existing tag if any. If tag is added it's added to
  * end. */
